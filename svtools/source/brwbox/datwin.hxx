@@ -109,28 +109,28 @@ public:
     sal_Bool*           pDtorNotify;
     AutoTimer       aMouseTimer;    // recalls MouseMove on dragging out
     MouseEvent      aRepeatEvt;     // a MouseEvent to repeat
-    Point           aLastMousePos;  // verhindert pseudo-MouseMoves
+    Point           aLastMousePos;  // prevents pseudo-MouseMoves
 
-    OUString        aRealRowCount;  // zur Anzeige im VScrollBar
+    OUString        aRealRowCount;  // to show in VScrollBar
 
     RectangleList   aInvalidRegion; // invalidated Rectangles during !UpdateMode
     bool            bInPaint;       // TRUE while in Paint
     bool            bInCommand;     // TRUE while in Command
-    bool            bNoScrollBack;  // nur vorwaerts scrollen
-    bool            bNoHScroll;     // kein horizontaler Scrollbar
+    bool            bNoScrollBack;  // only scroll forward
+    bool            bNoHScroll;     // no horizontal scrollbar
     bool            bNoVScroll;     // no vertical scrollbar
     bool            bAutoHScroll;   // autohide horizontaler Scrollbar
     bool            bAutoVScroll;   // autohide horizontaler Scrollbar
-    bool            bUpdateMode;    // nicht SV-UpdateMode wegen Invalidate()
+    bool            bUpdateMode;    // not SV-UpdateMode because of Invalidate()
     bool            bAutoSizeLastCol; // last column always fills up window
     bool            bResizeOnPaint;   // outstanding resize-event
     bool            bUpdateOnUnlock;  // Update() while locked
-    bool            bInUpdateScrollbars;  // Rekursionsschutz
-    bool            bHadRecursion;        // Rekursion war aufgetreten
+    bool            bInUpdateScrollbars;  // prevents recursions
+    bool            bHadRecursion;        // a recursion occured
     bool            bOwnDataChangedHdl;   // dont change colors in DataChanged
     bool            bCallingDropCallback; // we're in a callback to AcceptDrop or ExecuteDrop curently
     sal_uInt16          nUpdateLock;    // lock count, dont call Control::Update()!
-    short           nCursorHidden;  // new conuter for DoHide/ShowCursor
+    short           nCursorHidden;  // new counter for DoHide/ShowCursor
 
     long            m_nDragRowDividerLimit;
     long            m_nDragRowDividerOffset;

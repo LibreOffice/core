@@ -730,7 +730,7 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
     long nVirHeight = n1+nDist+n2;
     if ( nVirHeight > aSize.Height() )
         aSize.Height() = nVirHeight;
-    // negative Breiten muss und darf man nicht painten
+    // negative width should not be drawn
     if ( aSize.Width() > 0 )
     {
         Size aVirSize = aVirDev.LogicToPixel( aSize );
@@ -1644,7 +1644,7 @@ void FontStyleBox::Fill( const OUString& rName, const FontList* pList )
     }
     else
     {
-        // Wenn Font nicht, dann Standard-Styles einfuegen
+        // insert standard styles if no font
         InsertEntry( pList->GetNormalStr() );
         InsertEntry( pList->GetItalicStr() );
         InsertEntry( pList->GetBoldStr() );
