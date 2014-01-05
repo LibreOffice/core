@@ -291,10 +291,10 @@ GLint OpenGLRender::LoadShaders(const char *vertexShader,const char *fragmentSha
             std::vector<char> VertexShaderErrorMessage(InfoLogLength+1);
             glGetShaderInfoLog(VertexShaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
             VertexShaderErrorMessage.push_back('\0');
-            cout << "vertex shader compile fail : " << &VertexShaderErrorMessage[0] << endl;
+            SAL_INFO("chart2.opengl", "vertex shader compile fail : " << &VertexShaderErrorMessage[0]);
         }
         else
-            cout << "vertex shader compile failed without error log" << endl;
+            SAL_INFO("chart2.opengl", "vertex shader compile failed without error log");
     }
 
 
@@ -314,10 +314,10 @@ GLint OpenGLRender::LoadShaders(const char *vertexShader,const char *fragmentSha
             std::vector<char> FragmentShaderErrorMessage(InfoLogLength+1);
             glGetShaderInfoLog(FragmentShaderID, InfoLogLength, NULL, &FragmentShaderErrorMessage[0]);
             FragmentShaderErrorMessage.push_back('\0');
-            cout << "fragment shader compile fail : " << &FragmentShaderErrorMessage[0] << endl;
+            SAL_INFO("chart2.opengl", "fragment shader compile fail : " << &FragmentShaderErrorMessage[0]);
         }
         else
-            cout << "fragment shader compile failed without error log" << endl;
+            SAL_INFO("chart2.opengl", "fragment shader compile failed without error log");
     }
 
     // Link the program
@@ -336,10 +336,10 @@ GLint OpenGLRender::LoadShaders(const char *vertexShader,const char *fragmentSha
             std::vector<char> ProgramErrorMessage(InfoLogLength+1);
             glGetProgramInfoLog(ProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
             ProgramErrorMessage.push_back('\0');
-            cout << "Shader Program fail : " << &ProgramErrorMessage[0] << endl;
+            SAL_INFO("chart2.opengl", "Shader Program fail : " << &ProgramErrorMessage[0]);
         }
         else
-            cout << "shader program link failed without error log" << endl;
+            SAL_INFO("chart2.opengl", "shader program link failed without error log");
     }
 
     glDeleteShader(VertexShaderID);
@@ -354,17 +354,16 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
     glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK)
     {
-        cout << "Failed to initialize GLEW" << endl;
+        SAL_WARN("chart2.opengl", "Failed to initialize GLEW");
         return -1;
     }
 
     // These guys don't just check support but setup the vtables.
     if (glewIsSupported("framebuffer_object") != GLEW_OK)
     {
-        cout << "GL stack has no framebuffer support" << endl;
+        SAL_WARN("chart2.opengl", "GL stack has no framebuffer support");
         return -1;
     }
-    cerr << "Initialized openGL successfully" << endl;
 
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_CULL_FACE);
@@ -586,13 +585,13 @@ void OpenGLRender::renderToBitmap()
         status = glCheckFramebufferStatus(GL_READ_FRAMEBUFFER);
         if (status != GL_FRAMEBUFFER_COMPLETE)
         {
-            cout << "The frame buffer status is not complete!" << endl;
+            SAL_INFO("chart2.opengl", "The frame buffer status is not complete!");
         }
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_FboID[m_iFboIdx % 2]);
         status = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
         if (status != GL_FRAMEBUFFER_COMPLETE)
         {
-            cout << "The frame buffer status is not complete!" << endl;
+            SAL_INFO("chart2.opengl", "The frame buffer status is not complete!");
         }
         glBlitFramebuffer(0, 0 ,m_iWidth, m_iHeight, 0, 0,m_iWidth ,m_iHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
         glBindFramebuffer(GL_READ_FRAMEBUFFER,0);
@@ -1555,7 +1554,6 @@ int OpenGLRender::RenderArea2DShape()
 {
     glDisable(GL_MULTISAMPLE);
     int listNum = m_Area2DShapePointList.size();
-    cout << "listNum = " << listNum << endl;
     PosVecf3 trans = {0.0f, 0.0f, 0.0f};
     PosVecf3 angle = {0.0f, 0.0f, 0.0f};
     PosVecf3 scale = {1.0f, 1.0f, 1.0f};
