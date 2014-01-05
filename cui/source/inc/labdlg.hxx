@@ -62,7 +62,6 @@ private:
 
     sal_uInt16          nAnsatzRelPos;
     sal_uInt16          nAnsatzTypePos;
-    sal_uInt16          nWinkelTypePos;
 
     void            SetupAnsatz_Impl( sal_uInt16 nType );
     void            SetupType_Impl( sal_uInt16 nType );
