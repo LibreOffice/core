@@ -1707,18 +1707,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
 //              cm: 0,5  1,0  1,5  2,0   2,5   3,0   3,5   4,0   4,5   5,0
                     283, 567, 850, 1134, 1417, 1701, 1984, 2268, 2551, 2835
                 };
-#ifdef USE_MEASUREMENT
-            static const sal_uInt16 aAbsSpaceInch[ MAXLEVEL ] =
-                {
-                    283, 567, 850, 1134, 1417, 1701, 1984, 2268, 2551, 2835
-                };
-            const sal_uInt16* pArr = MEASURE_METRIC ==
-                                SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
-                                    ? aAbsSpace
-                                    : aAbsSpaceInch;
-#else
             const sal_uInt16* pArr = aAbsSpace;
-#endif
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
@@ -1756,21 +1745,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                    1588, 1758                   // 2.80, 3.10
                 };
 
-#ifdef USE_MEASUREMENT
-            static const sal_uInt16 aAbsSpaceInch[ MAXLEVEL ] =
-                {
-                    385,  385,  770,  963,
-                   1155, 1386, 1771, 2002,
-                   2156, 2387
-                };
-
-            const sal_uInt16* pArr = MEASURE_METRIC ==
-                                SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
-                                    ? aAbsSpace
-                                    : aAbsSpaceInch;
-#else
             const sal_uInt16* pArr = aAbsSpace;
-#endif
             SwNumFmt aFmt;
 
             aFmt.SetPositionAndSpaceMode( eNumberFormatPositionAndSpaceMode );
@@ -1856,18 +1831,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
 //              cm: 0,5  1,0  1,5  2,0   2,5   3,0   3,5   4,0   4,5   5,0
                     283, 567, 850, 1134, 1417, 1701, 1984, 2268, 2551, 2835
                 };
-#ifdef USE_MEASUREMENT
-            static const sal_uInt16 aAbsSpaceInch[ MAXLEVEL ] =
-                {
-                    283, 567, 850, 1134, 1417, 1701, 1984, 2268, 2551, 2835
-                };
-            const sal_uInt16* pArr = MEASURE_METRIC ==
-                                SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
-                                    ? aAbsSpace
-                                    : aAbsSpaceInch;
-#else
             const sal_uInt16* pArr = aAbsSpace;
-#endif
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
@@ -1907,20 +1871,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                     255,  879       // 0.45, 1.55
                 };
 
-#ifdef USE_MEASUREMENT
-            static const sal_uInt16 aAbsSpaceInch0to2[] =
-                {
-                    308,  308,
-                    501,  847,
-                    347, 1194
-                };
-            const sal_uInt16* pArr0to2 = MEASURE_METRIC ==
-                            SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
-                                ? aAbsSpace0to2
-                                : aAbsSpaceInch0to2;
-#else
             const sal_uInt16* pArr0to2 = aAbsSpace0to2;
-#endif
             SwNumFmt aFmt;
 
             aFmt.SetPositionAndSpaceMode( eNumberFormatPositionAndSpaceMode );
@@ -2038,18 +1989,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
 //              cm: 0,4  0,8  1,2  1,6  2,0   2,4   2,8   3,2   3,6   4,0
                     227, 454, 680, 907, 1134, 1361, 1587, 1814, 2041, 2268
                 };
-#ifdef USE_MEASUREMENT
-            static const sal_uInt16 aAbsSpaceInch[ MAXLEVEL ] =
-                {
-                    227, 454, 680, 907, 1134, 1361, 1587, 1814, 2041, 2268
-                };
-            const sal_uInt16* pArr = MEASURE_METRIC ==
-                                SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
-                                    ? aAbsSpace
-                                    : aAbsSpaceInch;
-#else
             const sal_uInt16* pArr = aAbsSpace;
-#endif
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
@@ -2094,18 +2034,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
 //              cm: 0,3  0,6  0,9  1,2  1,5  1,8   2,1   2,4   2,7   3,0
                     170, 340, 510, 680, 850, 1020, 1191, 1361, 1531, 1701
                 };
-#ifdef USE_MEASUREMENT
-            static const sal_uInt16 aAbsSpaceInch[ MAXLEVEL ] =
-                {
-                    170, 340, 510, 680, 850, 1020, 1191, 1361, 1531, 1701
-                };
-            const sal_uInt16* pArr = MEASURE_METRIC ==
-                                SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
-                                    ? aAbsSpace
-                                    : aAbsSpaceInch;
-#else
             const sal_uInt16* pArr = aAbsSpace;
-#endif
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
@@ -2191,18 +2120,8 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
 //              cm: 0,4  0,8  1,2  1,6  2,0   2,4   2,8   3,2   3,6   4,0
                     227, 454, 680, 907, 1134, 1361, 1587, 1814, 2041, 2268
                 };
-#ifdef USE_MEASUREMENT
-            static const sal_uInt16 aAbsSpaceInch[ MAXLEVEL ] =
-                {
-                    227, 454, 680, 907, 1134, 1361, 1587, 1814, 2041, 2268
-                };
-            const sal_uInt16* pArr = MEASURE_METRIC ==
-                                SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
-                                    ? aAbsSpace
-                                    : aAbsSpaceInch;
-#else
+
             const sal_uInt16* pArr = aAbsSpace;
-#endif
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
@@ -2254,18 +2173,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
 //              cm: 0,4  0,8  1,2  1,6  2,0   2,4   2,8   3,2   3,6   4,0
                     227, 454, 680, 907, 1134, 1361, 1587, 1814, 2041, 2268
                 };
-#ifdef USE_MEASUREMENT
-            static const sal_uInt16 aAbsSpaceInch[ MAXLEVEL ] =
-                {
-                    227, 454, 680, 907, 1134, 1361, 1587, 1814, 2041, 2268
-                };
-            const sal_uInt16* pArr = MEASURE_METRIC ==
-                                SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
-                                    ? aAbsSpace
-                                    : aAbsSpaceInch;
-#else
             const sal_uInt16* pArr = aAbsSpace;
-#endif
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {

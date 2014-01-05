@@ -28,13 +28,7 @@
 
 inline sal_uInt16 GetMetricVal( int n )
 {
-#ifdef USE_MEASUREMENT
-    sal_uInt16 nVal = MEASURE_METRIC == SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
-                    ? 567       // 1 cm
-                    : 770;      // 1/2 Inch
-#else
     sal_uInt16 nVal = 567;      // 1 cm
-#endif
 
     if( CM_01 == n )
         nVal /= 10;
