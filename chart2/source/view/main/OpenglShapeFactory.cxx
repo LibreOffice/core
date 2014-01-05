@@ -423,22 +423,6 @@ uno::Reference< drawing::XShape >
     return uno::Reference< drawing::XShape >();
 }
 
-void OpenglShapeFactory::createSeries( const uno::Reference<
-        drawing::XShapes> & ,
-        const DataSeriesState& )
-{
-    SAL_WARN("chart2.opengl", "OpenglShapeFactory::createSeries()-----test:");
-}
-
-void OpenglShapeFactory::renderSeries( const uno::Reference<
-        drawing::XShapes> & ,
-        const DataSeriesState& ,
-        const DataSeriesState&,
-        double )
-{
-    SAL_WARN("chart2.opengl", "OpenglShapeFactory::renderSeries()-----test:");
-}
-
 void OpenglShapeFactory::render(uno::Reference< drawing::XShapes > xRootShape)
 {
     dummy::DummyChart* pChart = dynamic_cast<dummy::DummyChart*>(xRootShape.get());

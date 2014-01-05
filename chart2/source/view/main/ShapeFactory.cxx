@@ -2132,26 +2132,6 @@ uno::Reference< drawing::XShape >
     return xShape;
 }
 
-void ShapeFactory::createSeries( const uno::Reference<
-        drawing::XShapes> & ,
-        const DataSeriesState& )
-{
-    // unsupported for now
-    throw uno::RuntimeException();
-}
-
-void ShapeFactory::renderSeries( const uno::Reference<
-        drawing::XShapes> & ,
-        const DataSeriesState& ,
-        const DataSeriesState&,
-        double )
-{
-    // unsupported for now
-    // do we actually want to support this in the normal
-    // rendering code?
-    throw uno::RuntimeException();
-}
-
 uno::Reference< drawing::XShape >
         ShapeFactory::createText( const uno::Reference< drawing::XShapes >& xTarget,
                 const awt::Size& rSize,

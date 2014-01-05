@@ -243,56 +243,45 @@ public:
      */
     virtual void render(com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > xRootShape) = 0;
 
-
-    virtual void createSeries( const com::sun::star::uno::Reference<
-            com::sun::star::drawing::XShapes> & xTarget,
-            const DataSeriesState& rSeriesState ) = 0;
-
-    virtual void renderSeries( const com::sun::star::uno::Reference<
-            com::sun::star::drawing::XShapes> & xTarget,
-            const DataSeriesState& rOldSeriesState,
-            const DataSeriesState& rNewSeriesState,
-            double nPercent ) = 0;
-
     static ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
          getChartRootShape( const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XDrawPage>& xPage );
 
     //------
     static void makeShapeInvisible( const ::com::sun::star::uno::Reference<
-                                     ::com::sun::star::drawing::XShape >& xShape );
+            ::com::sun::star::drawing::XShape >& xShape );
 
-     static void setShapeName( const ::com::sun::star::uno::Reference<
-                                     ::com::sun::star::drawing::XShape >& xShape
-                             , const OUString& rName );
+    static void setShapeName( const ::com::sun::star::uno::Reference<
+            ::com::sun::star::drawing::XShape >& xShape
+            , const OUString& rName );
 
-     static OUString getShapeName( const ::com::sun::star::uno::Reference<
-                                     ::com::sun::star::drawing::XShape >& xShape );
+    static OUString getShapeName( const ::com::sun::star::uno::Reference<
+            ::com::sun::star::drawing::XShape >& xShape );
 
-     static ::com::sun::star::uno::Any makeTransformation( const ::com::sun::star::awt::Point& rScreenPosition2D, double fRotationAnglePi=0.0 );
+    static ::com::sun::star::uno::Any makeTransformation( const ::com::sun::star::awt::Point& rScreenPosition2D, double fRotationAnglePi=0.0 );
 
-     static OUString getStackedString( const OUString& rString, bool bStacked=true );
+    static OUString getStackedString( const OUString& rString, bool bStacked=true );
 
-     static bool hasPolygonAnyLines( ::com::sun::star::drawing::PolyPolygonShape3D& rPoly );
-     static bool isPolygonEmptyOrSinglePoint( ::com::sun::star::drawing::PolyPolygonShape3D& rPoly );
-     static void closePolygon( ::com::sun::star::drawing::PolyPolygonShape3D& rPoly );
+    static bool hasPolygonAnyLines( ::com::sun::star::drawing::PolyPolygonShape3D& rPoly );
+    static bool isPolygonEmptyOrSinglePoint( ::com::sun::star::drawing::PolyPolygonShape3D& rPoly );
+    static void closePolygon( ::com::sun::star::drawing::PolyPolygonShape3D& rPoly );
 
-     static ::com::sun::star::awt::Size calculateNewSizeRespectingAspectRatio(
-           const ::com::sun::star::awt::Size& rTargetSize
-         , const ::com::sun::star::awt::Size& rSourceSizeWithCorrectAspectRatio );
+    static ::com::sun::star::awt::Size calculateNewSizeRespectingAspectRatio(
+            const ::com::sun::star::awt::Size& rTargetSize
+            , const ::com::sun::star::awt::Size& rSourceSizeWithCorrectAspectRatio );
 
-     static ::com::sun::star::awt::Point calculateTopLeftPositionToCenterObject(
-           const ::com::sun::star::awt::Point& rTargetAreaPosition
-         , const ::com::sun::star::awt::Size& rTargetAreaSize
-         , const ::com::sun::star::awt::Size& rObjectSize );
+    static ::com::sun::star::awt::Point calculateTopLeftPositionToCenterObject(
+            const ::com::sun::star::awt::Point& rTargetAreaPosition
+            , const ::com::sun::star::awt::Size& rTargetAreaSize
+            , const ::com::sun::star::awt::Size& rObjectSize );
 
-     static ::basegfx::B2IRectangle getRectangleOfShape(
-         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape );
+    static ::basegfx::B2IRectangle getRectangleOfShape(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape );
 
-     static ::com::sun::star::awt::Size getSizeAfterRotation(
-         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, double fRotationAngleDegree );
+    static ::com::sun::star::awt::Size getSizeAfterRotation(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, double fRotationAngleDegree );
 
-     static void removeSubShapes( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xShapes );
+    static void removeSubShapes( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xShapes );
 
 };
 
