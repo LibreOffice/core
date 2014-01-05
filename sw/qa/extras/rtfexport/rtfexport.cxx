@@ -579,6 +579,13 @@ DECLARE_RTFEXPORT_TEST(testFdo66743, "fdo66743.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xd8d8d8), getProperty<sal_Int32>(xCell, "BackColor"));
 }
 
+DECLARE_RTFEXPORT_TEST(testFdo68787, "fdo68787.rtf")
+{
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    // This was 0, the 'lack of \chftnsep' <-> '0 line width' mapping was missing in the RTF tokenizer / exporter.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(25), getProperty<sal_Int32>(xPageStyle, "FootnoteLineRelativeWidth"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

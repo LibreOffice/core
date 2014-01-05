@@ -382,6 +382,18 @@ void RtfExport::WriteStyles()
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " end");
 }
 
+void RtfExport::WriteFootnoteSettings()
+{
+    const SwPageFtnInfo& rFtnInfo = pDoc->GetPageDesc(0).GetFtnInfo();
+    // Request a separator only in case the width is larger than zero.
+    bool bSeparator = double(rFtnInfo.GetWidth()) > 0;
+
+    Strm() << '{' << OOO_STRING_SVTOOLS_RTF_IGNORE << OOO_STRING_SVTOOLS_RTF_FTNSEP;
+    if (bSeparator)
+        Strm() << OOO_STRING_SVTOOLS_RTF_CHFTNSEP;
+    Strm() << '}';
+}
+
 void RtfExport::WriteMainText()
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " start");
@@ -695,6 +707,8 @@ void RtfExport::ExportDocument_Impl()
     }
 
     Strm() << SAL_NEWLINE_STRING;
+
+    WriteFootnoteSettings();
 
     WriteMainText();
 

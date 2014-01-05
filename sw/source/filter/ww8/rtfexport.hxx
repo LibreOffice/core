@@ -173,6 +173,7 @@ private:
 
     void WriteFonts();
     void WriteStyles();
+    void WriteFootnoteSettings();
     void WriteMainText();
     void WriteInfo();
     /// Writes the writer-specific \pgdsctbl group.
