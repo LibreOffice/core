@@ -1616,7 +1616,7 @@ void FontStyleBox::Fill( const OUString& rName, const FontList* pList )
         if ( bInsert )
             InsertEntry( aStyleText );
 
-        // Bestimmte Styles als Nachbildung
+        // certain style as copy
         if ( bNormal )
         {
             if ( !bItalic )
