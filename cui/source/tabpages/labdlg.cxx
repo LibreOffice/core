@@ -50,6 +50,10 @@
 #define AT_MITTE        1
 #define AT_UNTEN        2
 
+#define BMP_CAPTTYPE_1  1
+#define BMP_CAPTTYPE_2  2
+#define BMP_CAPTTYPE_3  3
+
 // static ----------------------------------------------------------------
 
 static sal_uInt16 pCaptionRanges[] =
@@ -70,71 +74,60 @@ static sal_uInt16 pCaptionRanges[] =
 // -----------------------------------------------------------------------
 
 SvxCaptionTabPage::SvxCaptionTabPage(Window* pParent, const SfxItemSet& rInAttrs)
- :  SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_CAPTION ), rInAttrs ),
-
-    aCT_CAPTTYPE(       this, CUI_RES( CT_CAPTTYPE ) ),
-    aFT_ABSTAND(        this, CUI_RES( FT_ABSTAND ) ),
-    aMF_ABSTAND(        this, CUI_RES( MF_ABSTAND ) ),
-    aFT_ANSATZ(         this, CUI_RES( FT_ANSATZ ) ),
-    aLB_ANSATZ(         this, CUI_RES( LB_ANSATZ ) ),
-    aFT_UM(             this, CUI_RES( FT_UM ) ),
-    aMF_ANSATZ(         this, CUI_RES( MF_ANSATZ ) ),
-    aFT_ANSATZ_REL(     this, CUI_RES( FT_ANSATZ_REL ) ),
-    aLB_ANSATZ_REL(     this, CUI_RES( LB_ANSATZ_REL ) ),
-    aFT_LAENGE(         this, CUI_RES( FT_LAENGE ) ),
-    aMF_LAENGE(         this, CUI_RES( MF_LAENGE ) ),
-    aCB_LAENGE(         this, CUI_RES( CB_LAENGE ) ),
-
-    aStrHorzList( CUI_RES(STR_HORZ_LIST) ),
-    aStrVertList( CUI_RES(STR_VERT_LIST) ),
-
-    rOutAttrs       ( rInAttrs )
+    : SfxTabPage(pParent, "CalloutPage", "cui/ui/calloutpage.ui", rInAttrs)
+    , rOutAttrs(rInAttrs)
 {
-    //------------correct positions-------------------------
-    aFT_ANSATZ_REL.SetPosPixel( aFT_UM.GetPosPixel() );
-    aLB_ANSATZ_REL.SetPosPixel(
-        Point(
-            aFT_ANSATZ_REL.GetPosPixel().X()+aFT_ANSATZ_REL.GetSizePixel().Width()+6,
-            aLB_ANSATZ.GetPosPixel().Y() )
-        );
+    get(m_pCT_CAPTTYPE, "valueset");
 
-    aMF_ANSATZ.SetPosPixel(
-        Point(
-            aFT_UM.GetPosPixel().X()+aFT_UM.GetSizePixel().Width()+6,
-            aLB_ANSATZ.GetPosPixel().Y() )
-        );
+    Size aSize(m_pCT_CAPTTYPE->LogicToPixel(Size(187, 38), MAP_APPFONT));
+    m_pCT_CAPTTYPE->set_width_request(aSize.Width());
+    m_pCT_CAPTTYPE->set_height_request(aSize.Height());
 
-    sal_uInt16 nBitmap;
-    for( nBitmap = 0; nBitmap < CAPTYPE_BITMAPS_COUNT; nBitmap++ )
-        mpBmpCapTypes[nBitmap]  = new Image(Bitmap(CUI_RES(BMP_CAPTTYPE_1   + nBitmap)), COL_LIGHTMAGENTA );
+    get(m_pMF_ABSTAND, "spacing");
+    get(m_pLB_ANSATZ, "extension");
+    get(m_pFT_UM, "byft");
+    get(m_pMF_ANSATZ, "by");
+    get(m_pFT_ANSATZ_REL, "positionft");
+    get(m_pLB_ANSATZ_REL, "position");
+
+    assert(m_pLB_ANSATZ_REL->GetEntryCount() == 6);
+    for (int i = 0;  i < 3; ++i)
+        m_aStrHorzList.push_back(m_pLB_ANSATZ_REL->GetEntry(i));
+    for (int i = 3;  i < 6; ++i)
+        m_aStrVertList.push_back(m_pLB_ANSATZ_REL->GetEntry(i));
+    m_pLB_ANSATZ_REL->Clear();
+
+    ListBox *pLineTypes = get<ListBox>("linetypes");
+    assert(pLineTypes->GetEntryCount() == 3);
+    for (int i = 0;  i < 3; ++i)
+        m_aLineTypes.push_back(pLineTypes->GetEntry(i));
+
+    get(m_pFT_LAENGE, "lengthft");
+    get(m_pMF_LAENGE, "length");
+    get(m_pCB_LAENGE, "optimal");
+
+    for(sal_uInt16 nBitmap = 0; nBitmap < CAPTYPE_BITMAPS_COUNT; ++nBitmap)
+    {
+        FixedImage *pImage = get<FixedImage>(OString("legtyp") + OString::number(nBitmap+1));
+        m_aBmpCapTypes[nBitmap] = pImage->GetImage();
+    }
 
     //------------install ValueSet--------------------------
-    aCT_CAPTTYPE.SetStyle( aCT_CAPTTYPE.GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER | WB_NAMEFIELD );
-    aCT_CAPTTYPE.SetColCount(5);//XXX
-    aCT_CAPTTYPE.SetLineCount(1);
-    aCT_CAPTTYPE.SetSelectHdl(LINK( this, SvxCaptionTabPage, SelectCaptTypeHdl_Impl));
+    m_pCT_CAPTTYPE->SetStyle( m_pCT_CAPTTYPE->GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER | WB_NAMEFIELD );
+    m_pCT_CAPTTYPE->SetColCount(5);//XXX
+    m_pCT_CAPTTYPE->SetLineCount(1);
+    m_pCT_CAPTTYPE->SetSelectHdl(LINK( this, SvxCaptionTabPage, SelectCaptTypeHdl_Impl));
 
     Image aImage;
-    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_1, aImage, OUString(CUI_RES(STR_CAPTTYPE_1)));
-    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_2, aImage, OUString(CUI_RES(STR_CAPTTYPE_2)));
-    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_3, aImage, OUString(CUI_RES(STR_CAPTTYPE_3)));
+    m_pCT_CAPTTYPE->InsertItem(BMP_CAPTTYPE_1, aImage, m_aLineTypes[0]);
+    m_pCT_CAPTTYPE->InsertItem(BMP_CAPTTYPE_2, aImage, m_aLineTypes[1]);
+    m_pCT_CAPTTYPE->InsertItem(BMP_CAPTTYPE_3, aImage, m_aLineTypes[2]);
 
     FillValueSet();
 
-    aLB_ANSATZ.SetSelectHdl(LINK(this,SvxCaptionTabPage,AnsatzSelectHdl_Impl));
-    aLB_ANSATZ_REL.SetSelectHdl(LINK(this,SvxCaptionTabPage,AnsatzRelSelectHdl_Impl));
-    aCB_LAENGE.SetClickHdl(LINK(this,SvxCaptionTabPage,LineOptHdl_Impl));
-
-    FreeResource();
-}
-
-// -----------------------------------------------------------------------
-
-SvxCaptionTabPage::~SvxCaptionTabPage()
-{
-    sal_uInt16 nBitmap;
-    for( nBitmap = 0; nBitmap < CAPTYPE_BITMAPS_COUNT; nBitmap++ )
-        delete mpBmpCapTypes[nBitmap];
+    m_pLB_ANSATZ->SetSelectHdl(LINK(this,SvxCaptionTabPage,AnsatzSelectHdl_Impl));
+    m_pLB_ANSATZ_REL->SetSelectHdl(LINK(this,SvxCaptionTabPage,AnsatzRelSelectHdl_Impl));
+    m_pCB_LAENGE->SetClickHdl(LINK(this,SvxCaptionTabPage,LineOptHdl_Impl));
 }
 
 // -----------------------------------------------------------------------
@@ -154,14 +147,14 @@ sal_Bool SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
 
     SfxMapUnit      eUnit;
 
-    nCaptionType = aCT_CAPTTYPE.GetSelectItemId()-1;
+    nCaptionType = m_pCT_CAPTTYPE->GetSelectItemId()-1;
 
     _rOutAttrs.Put( SdrCaptionTypeItem( (SdrCaptionType) nCaptionType ) );
 
-    if( aMF_ABSTAND.IsValueModified() )
+    if( m_pMF_ABSTAND->IsValueModified() )
     {
         eUnit = pPool->GetMetric( GetWhich( SDRATTR_CAPTIONGAP ) );
-        _rOutAttrs.Put( SdrCaptionGapItem( GetCoreValue(aMF_ABSTAND, eUnit ) ) );
+        _rOutAttrs.Put( SdrCaptionGapItem( GetCoreValue(*m_pMF_ABSTAND, eUnit ) ) );
     }
 
     // special treatment!!! XXX
@@ -176,14 +169,14 @@ sal_Bool SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
 
     _rOutAttrs.Put( SdrCaptionEscDirItem( (SdrCaptionEscDir)nEscDir ) );
 
-    bEscRel = aLB_ANSATZ_REL.IsVisible();
+    bEscRel = m_pLB_ANSATZ_REL->IsVisible();
     _rOutAttrs.Put( SdrCaptionEscIsRelItem( bEscRel ) );
 
     if( bEscRel )
     {
         long    nVal = 0;
 
-        switch( aLB_ANSATZ_REL.GetSelectEntryPos() )
+        switch( m_pLB_ANSATZ_REL->GetSelectEntryPos() )
         {
             case AT_OBEN:   nVal=0;break;
             case AT_MITTE:  nVal=5000;break;
@@ -193,22 +186,22 @@ sal_Bool SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
     }
     else
     {
-        if( aMF_ANSATZ.IsValueModified() )
+        if( m_pMF_ANSATZ->IsValueModified() )
         {
             eUnit = pPool->GetMetric( GetWhich( SDRATTR_CAPTIONESCABS ) );
-            _rOutAttrs.Put( SdrCaptionEscAbsItem( GetCoreValue(aMF_ANSATZ, eUnit ) ) );
+            _rOutAttrs.Put( SdrCaptionEscAbsItem( GetCoreValue(*m_pMF_ANSATZ, eUnit ) ) );
         }
     }
 
-    bFitLineLen = aCB_LAENGE.IsChecked();
+    bFitLineLen = m_pCB_LAENGE->IsChecked();
     _rOutAttrs.Put( SdrCaptionFitLineLenItem( bFitLineLen ) );
 
     if( ! bFitLineLen )
     {
-        if( aMF_LAENGE.IsValueModified() )
+        if( m_pMF_LAENGE->IsValueModified() )
         {
             eUnit = pPool->GetMetric( GetWhich( SDRATTR_CAPTIONLINELEN ) );
-            _rOutAttrs.Put( SdrCaptionLineLenItem( GetCoreValue(aMF_LAENGE, eUnit ) ) );
+            _rOutAttrs.Put( SdrCaptionLineLenItem( GetCoreValue(*m_pMF_LAENGE, eUnit ) ) );
         }
     }
 
@@ -235,9 +228,9 @@ void SvxCaptionTabPage::Reset( const SfxItemSet&  )
             break;
         default: ;//prevent warning
     }
-    SetFieldUnit( aMF_ABSTAND, eFUnit );
-    SetFieldUnit( aMF_ANSATZ, eFUnit );
-    SetFieldUnit( aMF_LAENGE, eFUnit );
+    SetFieldUnit( *m_pMF_ABSTAND, eFUnit );
+    SetFieldUnit( *m_pMF_ANSATZ, eFUnit );
+    SetFieldUnit( *m_pMF_LAENGE, eFUnit );
 
     SfxItemPool*    pPool = rOutAttrs.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
@@ -248,8 +241,8 @@ void SvxCaptionTabPage::Reset( const SfxItemSet&  )
     nWhich = GetWhich( SDRATTR_CAPTIONESCABS );
     eUnit = pPool->GetMetric( nWhich );
     nEscAbs = ( ( const SdrCaptionEscAbsItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
-    SetMetricValue( aMF_ANSATZ, nEscAbs, eUnit );
-    nEscAbs = static_cast<long>(aMF_ANSATZ.GetValue());
+    SetMetricValue( *m_pMF_ANSATZ, nEscAbs, eUnit );
+    nEscAbs = static_cast<long>(m_pMF_ANSATZ->GetValue());
 
     nWhich = GetWhich( SDRATTR_CAPTIONESCREL );
     nEscRel = (long)( ( const SdrCaptionEscRelItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
@@ -258,15 +251,15 @@ void SvxCaptionTabPage::Reset( const SfxItemSet&  )
     nWhich = GetWhich( SDRATTR_CAPTIONLINELEN );
     eUnit = pPool->GetMetric( nWhich );
     nLineLen = ( ( const SdrCaptionLineLenItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
-    SetMetricValue( aMF_LAENGE, nLineLen, eUnit );
-    nLineLen = static_cast<long>(aMF_LAENGE.GetValue());
+    SetMetricValue( *m_pMF_LAENGE, nLineLen, eUnit );
+    nLineLen = static_cast<long>(m_pMF_LAENGE->GetValue());
 
     //------- distance to box ----------
     nWhich = GetWhich( SDRATTR_CAPTIONGAP );
     eUnit = pPool->GetMetric( nWhich );
     nGap = ( ( const SdrCaptionGapItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
-    SetMetricValue( aMF_ABSTAND, nGap, eUnit );
-    nGap = static_cast<long>(aMF_ABSTAND.GetValue());
+    SetMetricValue( *m_pMF_ABSTAND, nGap, eUnit );
+    nGap = static_cast<long>(m_pMF_ABSTAND->GetValue());
 
     nCaptionType = (short)( ( const SdrCaptionTypeItem& ) rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONTYPE ) ) ).GetValue();
     bFitLineLen = ( ( const SfxBoolItem& ) rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONFITLINELEN ) ) ).GetValue();
@@ -286,7 +279,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet&  )
     nAnsatzRelPos=AT_MITTE;
     nAnsatzTypePos=AZ_OPTIMAL;
 
-    aMF_ABSTAND.SetValue( nGap );
+    m_pMF_ABSTAND->SetValue( nGap );
 
     if( nEscDir == SDRCAPT_ESCHORIZONTAL )
     {
@@ -301,7 +294,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet&  )
         else
         {
             nAnsatzTypePos = AZ_VON_OBEN;
-            aMF_ANSATZ.SetValue( nEscAbs );
+            m_pMF_ANSATZ->SetValue( nEscAbs );
         }
     }
     else if( nEscDir == SDRCAPT_ESCVERTICAL )
@@ -317,7 +310,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet&  )
         else
         {
             nAnsatzTypePos = AZ_VON_LINKS;
-            aMF_ANSATZ.SetValue( nEscAbs );
+            m_pMF_ANSATZ->SetValue( nEscAbs );
         }
     }
     else if( nEscDir == SDRCAPT_ESCBESTFIT )
@@ -325,13 +318,13 @@ void SvxCaptionTabPage::Reset( const SfxItemSet&  )
         nAnsatzTypePos = AZ_OPTIMAL;
     }
 
-    aCB_LAENGE.Check( bFitLineLen );
-    aMF_LAENGE.SetValue( nLineLen );
+    m_pCB_LAENGE->Check( bFitLineLen );
+    m_pMF_LAENGE->SetValue( nLineLen );
 
-    aLB_ANSATZ.SelectEntryPos( nAnsatzTypePos );
+    m_pLB_ANSATZ->SelectEntryPos( nAnsatzTypePos );
 
     SetupAnsatz_Impl( nAnsatzTypePos );
-    aCT_CAPTTYPE.SelectItem( nCaptionType+1 ); // Enum starts at 0!
+    m_pCT_CAPTTYPE->SelectItem( nCaptionType+1 ); // Enum starts at 0!
     SetupType_Impl( nCaptionType+1 );
 }
 
@@ -354,61 +347,55 @@ sal_uInt16* SvxCaptionTabPage::GetRanges()
 
 void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
 {
-    sal_Int32 nCnt=0, nIdx=0;
-
     switch( nType )
     {
         case AZ_OPTIMAL:
-//      aMF_ANSATZ.Hide(); //XXX in case of OPTIMAL also absolute values are taken
-//      aFT_UM.Hide();
-        aMF_ANSATZ.Show();
-        aFT_UM.Show();
-        aFT_ANSATZ_REL.Hide();
-        aLB_ANSATZ_REL.Hide();
+        m_pMF_ANSATZ->Show();
+        m_pFT_UM->Show();
+        m_pFT_ANSATZ_REL->Hide();
+        m_pLB_ANSATZ_REL->Hide();
         nEscDir = SDRCAPT_ESCBESTFIT;
         break;
 
         case AZ_VON_OBEN:
-        aMF_ANSATZ.Show();
-        aFT_UM.Show();
-        aFT_ANSATZ_REL.Hide();
-        aLB_ANSATZ_REL.Hide();
+        m_pMF_ANSATZ->Show();
+        m_pFT_UM->Show();
+        m_pFT_ANSATZ_REL->Hide();
+        m_pLB_ANSATZ_REL->Hide();
         nEscDir = SDRCAPT_ESCHORIZONTAL;
         break;
 
         case AZ_VON_LINKS:
-        aMF_ANSATZ.Show();
-        aFT_UM.Show();
-        aFT_ANSATZ_REL.Hide();
-        aLB_ANSATZ_REL.Hide();
+        m_pMF_ANSATZ->Show();
+        m_pFT_UM->Show();
+        m_pFT_ANSATZ_REL->Hide();
+        m_pLB_ANSATZ_REL->Hide();
         nEscDir = SDRCAPT_ESCVERTICAL;
         break;
 
         case AZ_HORIZONTAL:
-        aLB_ANSATZ_REL.Clear();
-        nCnt = comphelper::string::getTokenCount(aStrHorzList, ';');
-        for( nIdx=0 ; nIdx<nCnt ; nIdx++ )
-            aLB_ANSATZ_REL.InsertEntry( aStrHorzList.getToken(nIdx, ';') );
-        aLB_ANSATZ_REL.SelectEntryPos( nAnsatzRelPos );
+        m_pLB_ANSATZ_REL->Clear();
+        for (size_t i = 0 ; i < m_aStrHorzList.size(); ++i)
+            m_pLB_ANSATZ_REL->InsertEntry(m_aStrHorzList[i]);
+        m_pLB_ANSATZ_REL->SelectEntryPos(nAnsatzRelPos);
 
-        aMF_ANSATZ.Hide();
-        aFT_UM.Hide();
-        aFT_ANSATZ_REL.Show();
-        aLB_ANSATZ_REL.Show();
+        m_pMF_ANSATZ->Hide();
+        m_pFT_UM->Hide();
+        m_pFT_ANSATZ_REL->Show();
+        m_pLB_ANSATZ_REL->Show();
         nEscDir = SDRCAPT_ESCHORIZONTAL;
         break;
 
         case AZ_VERTIKAL:
-        aLB_ANSATZ_REL.Clear();
-        nCnt = comphelper::string::getTokenCount(aStrVertList, ';');
-        for( nIdx=0 ; nIdx<nCnt ; nIdx++ )
-            aLB_ANSATZ_REL.InsertEntry( aStrVertList.getToken(nIdx, ';') );
-        aLB_ANSATZ_REL.SelectEntryPos( nAnsatzRelPos );
+        m_pLB_ANSATZ_REL->Clear();
+        for (size_t i = 0 ; i < m_aStrVertList.size(); ++i)
+            m_pLB_ANSATZ_REL->InsertEntry(m_aStrVertList[i]);
+        m_pLB_ANSATZ_REL->SelectEntryPos(nAnsatzRelPos);
 
-        aMF_ANSATZ.Hide();
-        aFT_UM.Hide();
-        aFT_ANSATZ_REL.Show();
-        aLB_ANSATZ_REL.Show();
+        m_pMF_ANSATZ->Hide();
+        m_pFT_UM->Hide();
+        m_pFT_ANSATZ_REL->Show();
+        m_pLB_ANSATZ_REL->Show();
         nEscDir = SDRCAPT_ESCVERTICAL;
         break;
     }
@@ -418,9 +405,9 @@ void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
 
 IMPL_LINK_INLINE_START( SvxCaptionTabPage, AnsatzSelectHdl_Impl, ListBox *, pListBox )
 {
-    if( pListBox == &aLB_ANSATZ )
+    if (pListBox == m_pLB_ANSATZ)
     {
-        SetupAnsatz_Impl( aLB_ANSATZ.GetSelectEntryPos() );
+        SetupAnsatz_Impl( m_pLB_ANSATZ->GetSelectEntryPos() );
     }
     return 0;
 }
@@ -430,9 +417,9 @@ IMPL_LINK_INLINE_END( SvxCaptionTabPage, AnsatzSelectHdl_Impl, ListBox *, pListB
 
 IMPL_LINK_INLINE_START( SvxCaptionTabPage, AnsatzRelSelectHdl_Impl, ListBox *, pListBox )
 {
-    if( pListBox == &aLB_ANSATZ_REL )
+    if (pListBox == m_pLB_ANSATZ_REL)
     {
-        nAnsatzRelPos = aLB_ANSATZ_REL.GetSelectEntryPos();
+        nAnsatzRelPos = m_pLB_ANSATZ_REL->GetSelectEntryPos();
     }
     return 0;
 }
@@ -442,17 +429,17 @@ IMPL_LINK_INLINE_END( SvxCaptionTabPage, AnsatzRelSelectHdl_Impl, ListBox *, pLi
 
 IMPL_LINK( SvxCaptionTabPage, LineOptHdl_Impl, Button *, pButton )
 {
-    if( pButton == &aCB_LAENGE )
+    if (pButton == m_pCB_LAENGE)
     {
-        if( aCB_LAENGE.IsChecked() || ! aCB_LAENGE.IsEnabled() )
+        if( m_pCB_LAENGE->IsChecked() || ! m_pCB_LAENGE->IsEnabled() )
         {
-            aFT_LAENGE.Disable();
-            aMF_LAENGE.Disable();
+            m_pFT_LAENGE->Disable();
+            m_pMF_LAENGE->Disable();
         }
         else
         {
-            aFT_LAENGE.Enable();
-            aMF_LAENGE.Enable();
+            m_pFT_LAENGE->Enable();
+            m_pMF_LAENGE->Enable();
         }
     }
     return 0;
@@ -462,7 +449,7 @@ IMPL_LINK( SvxCaptionTabPage, LineOptHdl_Impl, Button *, pButton )
 
 IMPL_LINK_NOARG_INLINE_START(SvxCaptionTabPage, SelectCaptTypeHdl_Impl)
 {
-    SetupType_Impl( aCT_CAPTTYPE.GetSelectItemId() );
+    SetupType_Impl( m_pCT_CAPTTYPE->GetSelectItemId() );
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(SvxCaptionTabPage, SelectCaptTypeHdl_Impl)
@@ -474,27 +461,27 @@ void SvxCaptionTabPage::SetupType_Impl( sal_uInt16 nType )
     switch( nType-1 )
     {
         case SDRCAPT_TYPE1:
-        aFT_LAENGE.Disable();
-        aCB_LAENGE.Disable();
-        LineOptHdl_Impl( &aCB_LAENGE );
+        m_pFT_LAENGE->Disable();
+        m_pCB_LAENGE->Disable();
+        LineOptHdl_Impl( m_pCB_LAENGE );
         break;
 
         case SDRCAPT_TYPE2:
-        aFT_LAENGE.Disable();
-        aCB_LAENGE.Disable();
-        LineOptHdl_Impl( &aCB_LAENGE );
+        m_pFT_LAENGE->Disable();
+        m_pCB_LAENGE->Disable();
+        LineOptHdl_Impl( m_pCB_LAENGE );
         break;
 
         case SDRCAPT_TYPE3:
-        aFT_LAENGE.Enable();
-        aCB_LAENGE.Enable();
-        LineOptHdl_Impl( &aCB_LAENGE );
+        m_pFT_LAENGE->Enable();
+        m_pCB_LAENGE->Enable();
+        LineOptHdl_Impl( m_pCB_LAENGE );
         break;
 
         case SDRCAPT_TYPE4:
-        aFT_LAENGE.Enable();
-        aCB_LAENGE.Enable();
-        LineOptHdl_Impl( &aCB_LAENGE );
+        m_pFT_LAENGE->Enable();
+        m_pCB_LAENGE->Enable();
+        LineOptHdl_Impl( m_pCB_LAENGE );
         break;
     }
 }
@@ -513,10 +500,9 @@ void SvxCaptionTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SvxCaptionTabPage::FillValueSet()
 {
-    Image** ppBitmaps = mpBmpCapTypes;
-    aCT_CAPTTYPE.SetItemImage(BMP_CAPTTYPE_1, *(ppBitmaps[0]) );
-    aCT_CAPTTYPE.SetItemImage(BMP_CAPTTYPE_2, *(ppBitmaps[1]) );
-    aCT_CAPTTYPE.SetItemImage(BMP_CAPTTYPE_3, *(ppBitmaps[2]) );
+    m_pCT_CAPTTYPE->SetItemImage(BMP_CAPTTYPE_1, m_aBmpCapTypes[0] );
+    m_pCT_CAPTTYPE->SetItemImage(BMP_CAPTTYPE_2, m_aBmpCapTypes[1] );
+    m_pCT_CAPTTYPE->SetItemImage(BMP_CAPTTYPE_3, m_aBmpCapTypes[2] );
 }
 
 //========================================================================

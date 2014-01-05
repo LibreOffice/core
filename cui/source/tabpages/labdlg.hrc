@@ -23,33 +23,4 @@
 #define BTN_CANCEL              1
 #define BTN_HELP                1
 
-#define FT_ABSTAND              1
-#define FT_ANSATZ               3
-#define FT_LAENGE               4
-#define FT_UM                   5
-#define FT_ANSATZ_REL           6
-
-#define CT_CAPTTYPE             1
-
-#define MF_ABSTAND              1
-#define MF_ANSATZ               2
-#define MF_LAENGE               3
-
-#define CB_LAENGE               1
-
-#define LB_ANSATZ               2
-#define LB_ANSATZ_REL           3
-
-#define STR_CAPTTYPE_1          1
-#define STR_CAPTTYPE_2          2
-#define STR_CAPTTYPE_3          3
-#define STR_CAPTTYPE_4          4
-#define STR_HORZ_LIST           10
-#define STR_VERT_LIST           11
-
-#define BMP_CAPTTYPE_1          1
-#define BMP_CAPTTYPE_2          2
-#define BMP_CAPTTYPE_3          3
-#define BMP_CAPTTYPE_4          4
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

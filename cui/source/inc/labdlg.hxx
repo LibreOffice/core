@@ -33,27 +33,26 @@ const sal_uInt16 CAPTYPE_BITMAPS_COUNT = 3;
 class SvxCaptionTabPage : public SfxTabPage
 {
 private:
-    ValueSet        aCT_CAPTTYPE;
-    FixedText       aFT_ABSTAND;
-    MetricField     aMF_ABSTAND;
-    FixedText       aFT_ANSATZ;
-    ListBox         aLB_ANSATZ;
-    FixedText       aFT_UM;
-    MetricField     aMF_ANSATZ;
-    FixedText       aFT_ANSATZ_REL;
-    ListBox         aLB_ANSATZ_REL;
-    FixedText       aFT_LAENGE;
-    MetricField     aMF_LAENGE;
-    CheckBox        aCB_LAENGE;
+    ValueSet*       m_pCT_CAPTTYPE;
+    MetricField*    m_pMF_ABSTAND;
+    ListBox*        m_pLB_ANSATZ;
+    FixedText*      m_pFT_UM;
+    MetricField*    m_pMF_ANSATZ;
+    FixedText*      m_pFT_ANSATZ_REL;
+    ListBox*        m_pLB_ANSATZ_REL;
+    FixedText*      m_pFT_LAENGE;
+    MetricField*    m_pMF_LAENGE;
+    CheckBox*       m_pCB_LAENGE;
 
-    Image*          mpBmpCapTypes[CAPTYPE_BITMAPS_COUNT];
+    Image           m_aBmpCapTypes[CAPTYPE_BITMAPS_COUNT];
 
-    OUString        aStrHorzList;
-    OUString        aStrVertList;
+    std::vector<OUString> m_aStrHorzList;
+    std::vector<OUString> m_aStrVertList;
+    std::vector<OUString> m_aLineTypes;
 
-    short           nCaptionType;
+    short               nCaptionType;
     sal_Int32           nGap;
-    short           nEscDir;
+    short               nEscDir;
     sal_Bool            bEscRel;
     sal_Int32           nEscAbs;
     sal_Int32           nEscRel;
@@ -75,7 +74,6 @@ private:
 
 public:
     SvxCaptionTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
-    virtual ~SvxCaptionTabPage();
 
     static SfxTabPage*  Create( Window*, const SfxItemSet& );
     static sal_uInt16*      GetRanges();
