@@ -101,8 +101,6 @@ WPXSvInputStreamImpl::WPXSvInputStreamImpl( Reference< XInputStream > xStream ) 
 
 WPXSvInputStreamImpl::~WPXSvInputStreamImpl()
 {
-    if (mpReadBuffer)
-        delete [] mpReadBuffer;
 }
 
 const unsigned char *WPXSvInputStreamImpl::read(unsigned long numBytes, unsigned long &numBytesRead)
@@ -252,7 +250,6 @@ void WPXSvInputStreamImpl::invalidateReadBuffer()
     if (mpReadBuffer)
     {
         seek((long) tell() + (long)mnReadBufferPos - (long)mnReadBufferLength);
-        delete [] mpReadBuffer;
         mpReadBuffer = 0;
         mnReadBufferPos = 0;
         mnReadBufferLength = 0;
@@ -310,11 +307,10 @@ const unsigned char *WPXSvInputStream::read(unsigned long numBytes, unsigned lon
             mpImpl->mnReadBufferLength = mpImpl->mnLength - curpos;
     }
     else
-        return mpImpl->read(numBytes, numBytesRead);
+        mpImpl->mnReadBufferLength = numBytes;
 
-    mpImpl->mpReadBuffer = new unsigned char[mpImpl->mnReadBufferLength];
     unsigned long tmpNumBytes(0);
-    const unsigned char *pTmp = mpImpl->read(mpImpl->mnReadBufferLength, tmpNumBytes);
+    mpImpl->mpReadBuffer = const_cast<unsigned char*>(mpImpl->read(mpImpl->mnReadBufferLength, tmpNumBytes));
     if (tmpNumBytes != mpImpl->mnReadBufferLength)
         mpImpl->mnReadBufferLength = tmpNumBytes;
 
@@ -325,7 +321,6 @@ const unsigned char *WPXSvInputStream::read(unsigned long numBytes, unsigned lon
     numBytesRead = numBytes;
 
     mpImpl->mnReadBufferPos += numBytesRead;
-    memcpy(mpImpl->mpReadBuffer, pTmp, mpImpl->mnReadBufferLength);
     return const_cast<const unsigned char *>(mpImpl->mpReadBuffer);
 }
 
