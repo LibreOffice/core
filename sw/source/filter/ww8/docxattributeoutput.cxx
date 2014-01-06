@@ -266,158 +266,6 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
     m_bParagraphOpened = true;
 }
 
-void lcl_TextFrameShadow(FSHelperPtr pSerializer, const SwFrmFmt& rFrmFmt)
-{
-    SvxShadowItem aShadowItem = rFrmFmt.GetShadow();
-    if (aShadowItem.GetLocation() == SVX_SHADOW_NONE)
-        return;
-
-    OString aShadowWidth( OString::number( double( aShadowItem.GetWidth() ) / 20) + "pt");
-    OString aOffset;
-    switch (aShadowItem.GetLocation())
-    {
-        case SVX_SHADOW_TOPLEFT: aOffset = "-" + aShadowWidth + ",-" + aShadowWidth; break;
-        case SVX_SHADOW_TOPRIGHT: aOffset = aShadowWidth + ",-" + aShadowWidth; break;
-        case SVX_SHADOW_BOTTOMLEFT: aOffset = "-" + aShadowWidth + "," + aShadowWidth; break;
-        case SVX_SHADOW_BOTTOMRIGHT: aOffset = aShadowWidth + "," + aShadowWidth; break;
-        case SVX_SHADOW_NONE:
-        case SVX_SHADOW_END:
-            break;
-    }
-    if (aOffset.isEmpty())
-        return;
-
-    OString aShadowColor = msfilter::util::ConvertColor(aShadowItem.GetColor());
-    pSerializer->singleElementNS(XML_v, XML_shadow,
-            XML_on, "t",
-            XML_color, "#" + aShadowColor,
-            XML_offset, aOffset,
-            FSEND);
-}
-
-class ExportDataSaveRestore
-{
-private:
-    DocxExport& m_rExport;
-public:
-    ExportDataSaveRestore(DocxExport& rExport, sal_uLong nStt, sal_uLong nEnd, sw::Frame *pParentFrame)
-        : m_rExport(rExport)
-    {
-        m_rExport.SaveData(nStt, nEnd);
-        m_rExport.mpParentFrame = pParentFrame;
-    }
-    ~ExportDataSaveRestore()
-    {
-        m_rExport.RestoreData();
-    }
-};
-
-// Undo the text direction mangling done by the frame btLr handler in writerfilter::dmapper::DomainMapper::lcl_startCharacterGroup()
-bool lcl_checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttributeList* pTextboxAttrList = 0, sax_fastparser::FastAttributeList* pBodyPrAttrList = 0)
-{
-    // The intended usage is to pass either a valid VML or DML attribute list.
-    assert(pTextboxAttrList || pBodyPrAttrList);
-
-    if (!pStartNode->IsTxtNode())
-        return false;
-
-    SwTxtNode* pTxtNode = static_cast<SwTxtNode*>(pStartNode);
-
-    const SfxPoolItem* pItem = 0; // explicitly init to avoid warnings
-    bool bItemSet = false;
-    if (pTxtNode->HasSwAttrSet())
-    {
-        const SwAttrSet& rAttrSet = pTxtNode->GetSwAttrSet();
-        bItemSet = rAttrSet.GetItemState(RES_CHRATR_ROTATE, true, &pItem) == SFX_ITEM_SET;
-    }
-
-    if (!bItemSet)
-    {
-        if (!pTxtNode->HasHints())
-            return false;
-
-        SwTxtAttr* pTxtAttr = pTxtNode->GetTxtAttrAt(0, RES_TXTATR_AUTOFMT);
-
-        if (!pTxtAttr || pTxtAttr->Which() != RES_TXTATR_AUTOFMT)
-            return false;
-
-        boost::shared_ptr<SfxItemSet> pItemSet = pTxtAttr->GetAutoFmt().GetStyleHandle();
-        bItemSet = pItemSet->GetItemState(RES_CHRATR_ROTATE, true, &pItem) == SFX_ITEM_SET;
-    }
-
-    if (bItemSet)
-    {
-        const SvxCharRotateItem& rCharRotate = static_cast<const SvxCharRotateItem&>(*pItem);
-        if (rCharRotate.GetValue() == 900)
-        {
-            if (pTextboxAttrList)
-                pTextboxAttrList->add(XML_style, "mso-layout-flow-alt:bottom-to-top");
-            else
-                pBodyPrAttrList->add(XML_vert, "vert270");
-            return true;
-        }
-    }
-    return false;
-}
-
-void DocxAttributeOutput::WriteVMLTextFrame(sw::Frame* pParentFrame)
-{
-    const SwFrmFmt& rFrmFmt = pParentFrame->GetFrmFmt( );
-    const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
-
-    sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
-    sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
-
-    //Save data here and restore when out of scope
-    ExportDataSaveRestore aDataGuard(m_rExport, nStt, nEnd, pParentFrame);
-
-    // When a frame has some low height, but automatically expanded due
-    // to lots of contents, this size contains the real size.
-    const Size aSize = pParentFrame->GetSize();
-    m_pFlyFrameSize = &aSize;
-
-    m_bTextFrameSyntax = true;
-    m_pFlyAttrList = m_pSerializer->createAttrList( );
-    m_pTextboxAttrList = m_pSerializer->createAttrList();
-    m_aTextFrameStyle = "position:absolute";
-    m_rExport.OutputFormat( pParentFrame->GetFrmFmt(), false, false, true );
-    m_pFlyAttrList->add(XML_style, m_aTextFrameStyle.makeStringAndClear());
-    XFastAttributeListRef xFlyAttrList( m_pFlyAttrList );
-    m_pFlyAttrList = NULL;
-    m_bFrameBtLr = lcl_checkFrameBtlr(m_rExport.pDoc->GetNodes()[nStt], m_pTextboxAttrList);
-    XFastAttributeListRef xTextboxAttrList(m_pTextboxAttrList);
-    m_pTextboxAttrList = NULL;
-    m_bTextFrameSyntax = false;
-    m_pFlyFrameSize = 0;
-    m_rExport.mpParentFrame = NULL;
-
-    m_pSerializer->startElementNS( XML_w, XML_pict, FSEND );
-    m_pSerializer->startElementNS( XML_v, XML_rect, xFlyAttrList );
-    lcl_TextFrameShadow(m_pSerializer, rFrmFmt);
-    if (m_pFlyFillAttrList)
-    {
-        XFastAttributeListRef xFlyFillAttrList(m_pFlyFillAttrList);
-        m_pFlyFillAttrList = NULL;
-        m_pSerializer->singleElementNS(XML_v, XML_fill, xFlyFillAttrList);
-    }
-    m_pSerializer->startElementNS( XML_v, XML_textbox, xTextboxAttrList );
-    m_pSerializer->startElementNS( XML_w, XML_txbxContent, FSEND );
-    m_rExport.WriteText( );
-    m_pSerializer->endElementNS( XML_w, XML_txbxContent );
-    m_pSerializer->endElementNS( XML_v, XML_textbox );
-
-    if (m_pFlyWrapAttrList)
-    {
-        XFastAttributeListRef xFlyWrapAttrList(m_pFlyWrapAttrList);
-        m_pFlyWrapAttrList = NULL;
-        m_pSerializer->singleElementNS(XML_w10, XML_wrap, xFlyWrapAttrList);
-    }
-
-    m_pSerializer->endElementNS( XML_v, XML_rect );
-    m_pSerializer->endElementNS( XML_w, XML_pict );
-    m_bFrameBtLr = false;
-}
-
 void DocxAttributeOutput::WriteDMLTextFrame(sw::Frame* pParentFrame)
 {
     const SwFrmFmt& rFrmFmt = pParentFrame->GetFrmFmt( );
@@ -480,9 +328,9 @@ void DocxAttributeOutput::WriteDMLTextFrame(sw::Frame* pParentFrame)
     m_pSerializer->startElementNS( XML_wps, XML_txbx, FSEND );
     m_pSerializer->startElementNS( XML_w, XML_txbxContent, FSEND );
 
-    m_bFrameBtLr = lcl_checkFrameBtlr(m_rExport.pDoc->GetNodes()[nStt], 0, m_pBodyPrAttrList);
+    m_rExport.SdrExporter().setFrameBtLr(m_rExport.SdrExporter().checkFrameBtlr(m_rExport.pDoc->GetNodes()[nStt], 0, m_pBodyPrAttrList));
     m_rExport.WriteText( );
-    m_bFrameBtLr = false;
+    m_rExport.SdrExporter().setFrameBtLr(false);
 
     m_pSerializer->endElementNS( XML_w, XML_txbxContent );
     m_pSerializer->endElementNS( XML_wps, XML_txbx );
@@ -528,7 +376,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
         m_rExport.mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
 
         m_pSerializer->startElementNS(XML_mc, XML_Fallback, FSEND);
-        WriteVMLTextFrame(pParentFrame);
+        m_rExport.SdrExporter().writeVMLTextFrame(pParentFrame);
         m_pSerializer->endElementNS(XML_mc, XML_Fallback);
         m_pSerializer->endElementNS(XML_mc, XML_AlternateContent);
 
@@ -681,10 +529,10 @@ void DocxAttributeOutput::InitCollectedParagraphProperties()
 
 void DocxAttributeOutput::WriteCollectedParagraphProperties()
 {
-    if ( m_pFlyAttrList )
+    if ( m_rExport.SdrExporter().getFlyAttrList() )
     {
-        XFastAttributeListRef xAttrList( m_pFlyAttrList );
-        m_pFlyAttrList = NULL;
+        XFastAttributeListRef xAttrList( m_rExport.SdrExporter().getFlyAttrList() );
+        m_rExport.SdrExporter().setFlyAttrList(NULL);
 
         m_pSerializer->singleElementNS( XML_w, XML_framePr, xAttrList );
     }
@@ -1703,24 +1551,24 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
 
                     m_pSerializer->startElementNS( XML_w, XML_pPr, FSEND );
 
-                    // The 'm_pFlyAttrList', 'm_pParagraphSpacingAttrList' are used to hold information
+                    // The 'm_rExport.SdrExporter().getFlyAttrList()', 'm_pParagraphSpacingAttrList' are used to hold information
                     // that should be collected by different properties in the core, and are all flushed together
                     // to the DOCX when the function 'WriteCollectedParagraphProperties' gets called.
                     // So we need to store the current status of these lists, so that we can revert back to them when
                     // we are done exporting the redline attributes.
-                    ::sax_fastparser::FastAttributeList *pFlyAttrList_Original              = m_pFlyAttrList;
+                    ::sax_fastparser::FastAttributeList *pFlyAttrList_Original              = m_rExport.SdrExporter().getFlyAttrList();
                     ::sax_fastparser::FastAttributeList *pParagraphSpacingAttrList_Original = m_pParagraphSpacingAttrList;
-                    m_pFlyAttrList              = NULL;
+                    m_rExport.SdrExporter().setFlyAttrList(NULL);
                     m_pParagraphSpacingAttrList = NULL;
 
                     // Output the redline item set
                     m_rExport.OutputItemSet( *pChangesSet, true, false, i18n::ScriptType::LATIN, m_rExport.mbExportModeRTF );
 
-                    // Write the collected paragraph properties that are stored in 'm_pFlyAttrList', 'm_pParagraphSpacingAttrList'
+                    // Write the collected paragraph properties that are stored in 'm_rExport.SdrExporter().getFlyAttrList()', 'm_pParagraphSpacingAttrList'
                     WriteCollectedParagraphProperties();
 
-                    // Revert back the original values that were stored in 'm_pFlyAttrList', 'm_pParagraphSpacingAttrList'
-                    m_pFlyAttrList              = pFlyAttrList_Original;
+                    // Revert back the original values that were stored in 'm_rExport.SdrExporter().getFlyAttrList()', 'm_pParagraphSpacingAttrList'
+                    m_rExport.SdrExporter().setFlyAttrList(pFlyAttrList_Original);
                     m_pParagraphSpacingAttrList = pParagraphSpacingAttrList_Original;
 
                     m_pSerializer->endElementNS( XML_w, XML_pPr );
@@ -4591,7 +4439,7 @@ void DocxAttributeOutput::CharWeightCTL( const SvxWeightItem& rWeight )
 void DocxAttributeOutput::CharRotate( const SvxCharRotateItem& rRotate)
 {
     // Not rorated or we the rotation already handled?
-    if ( !rRotate.GetValue() || m_bBtLr || m_bFrameBtLr)
+    if ( !rRotate.GetValue() || m_bBtLr || m_rExport.SdrExporter().getFrameBtLr())
         return;
 
     AddToAttrList( m_pEastAsianLayoutAttrList, FSNS( XML_w, XML_vert ), "true" );
@@ -5308,10 +5156,11 @@ void DocxAttributeOutput::ParaSnapToGrid( const SvxParaGridItem& rGrid )
 
 void DocxAttributeOutput::FormatFrameSize( const SwFmtFrmSize& rSize )
 {
-    if (m_bTextFrameSyntax && m_pFlyFrameSize)
+    if (m_rExport.SdrExporter().getTextFrameSyntax() && m_rExport.SdrExporter().getFlyFrameSize())
     {
-        m_aTextFrameStyle.append(";width:").append(double(m_pFlyFrameSize->Width()) / 20);
-        m_aTextFrameStyle.append("pt;height:").append(double(m_pFlyFrameSize->Height()) / 20).append("pt");
+        const Size* pSize = m_rExport.SdrExporter().getFlyFrameSize();
+        m_rExport.SdrExporter().getTextFrameStyle().append(";width:").append(double(pSize->Width()) / 20);
+        m_rExport.SdrExporter().getTextFrameStyle().append("pt;height:").append(double(pSize->Height()) / 20).append("pt");
     }
     else if (m_bDMLTextFrameSyntax)
     {
@@ -5319,7 +5168,7 @@ void DocxAttributeOutput::FormatFrameSize( const SwFmtFrmSize& rSize )
     else if ( m_rExport.bOutFlyFrmAttrs )
     {
         if ( rSize.GetWidth() && rSize.GetWidthSizeType() == ATT_FIX_SIZE )
-            AddToAttrList( m_pFlyAttrList,
+            AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(),
                     FSNS( XML_w, XML_w ), OString::number( rSize.GetWidth( ) ).getStr() );
 
         if ( rSize.GetHeight() )
@@ -5327,7 +5176,7 @@ void DocxAttributeOutput::FormatFrameSize( const SwFmtFrmSize& rSize )
             OString sRule( "exact" );
             if ( rSize.GetHeightSizeType() == ATT_MIN_SIZE )
                 sRule = OString( "atLeast" );
-            AddToAttrList( m_pFlyAttrList, 2,
+            AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), 2,
                     FSNS( XML_w, XML_hRule ), sRule.getStr(),
                     FSNS( XML_w, XML_h ), OString::number( rSize.GetHeight( ) ).getStr() );
         }
@@ -5357,17 +5206,17 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
 {
     bool bEcma = m_rExport.GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
 
-    if (m_bTextFrameSyntax)
+    if (m_rExport.SdrExporter().getTextFrameSyntax())
     {
-        m_aTextFrameStyle.append(";mso-wrap-distance-left:").append(double(rLRSpace.GetLeft()) / 20).append("pt");
-        m_aTextFrameStyle.append(";mso-wrap-distance-right:").append(double(rLRSpace.GetRight()) / 20).append("pt");
+        m_rExport.SdrExporter().getTextFrameStyle().append(";mso-wrap-distance-left:").append(double(rLRSpace.GetLeft()) / 20).append("pt");
+        m_rExport.SdrExporter().getTextFrameStyle().append(";mso-wrap-distance-right:").append(double(rLRSpace.GetRight()) / 20).append("pt");
     }
     else if (m_bDMLTextFrameSyntax)
     {
     }
     else if ( m_rExport.bOutFlyFrmAttrs )
     {
-        AddToAttrList( m_pFlyAttrList, FSNS( XML_w, XML_hSpace ),
+        AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_hSpace ),
                 OString::number(
                     ( rLRSpace.GetLeft() + rLRSpace.GetRight() ) / 2 ).getStr() );
     }
@@ -5411,17 +5260,17 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
 void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
 {
 
-    if (m_bTextFrameSyntax)
+    if (m_rExport.SdrExporter().getTextFrameSyntax())
     {
-        m_aTextFrameStyle.append(";mso-wrap-distance-top:").append(double(rULSpace.GetUpper()) / 20).append("pt");
-        m_aTextFrameStyle.append(";mso-wrap-distance-bottom:").append(double(rULSpace.GetLower()) / 20).append("pt");
+        m_rExport.SdrExporter().getTextFrameStyle().append(";mso-wrap-distance-top:").append(double(rULSpace.GetUpper()) / 20).append("pt");
+        m_rExport.SdrExporter().getTextFrameStyle().append(";mso-wrap-distance-bottom:").append(double(rULSpace.GetLower()) / 20).append("pt");
     }
     else if (m_bDMLTextFrameSyntax)
     {
     }
     else if ( m_rExport.bOutFlyFrmAttrs )
     {
-        AddToAttrList( m_pFlyAttrList, FSNS( XML_w, XML_vSpace ),
+        AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_vSpace ),
                 OString::number(
                     ( rULSpace.GetLower() + rULSpace.GetUpper() ) / 2 ).getStr() );
     }
@@ -5492,7 +5341,7 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
 
 void DocxAttributeOutput::FormatSurround( const SwFmtSurround& rSurround )
 {
-    if (m_bTextFrameSyntax)
+    if (m_rExport.SdrExporter().getTextFrameSyntax())
     {
         OString sType, sSide;
         switch (rSurround.GetSurround())
@@ -5522,11 +5371,11 @@ void DocxAttributeOutput::FormatSurround( const SwFmtSurround& rSurround )
         }
         if (!sType.isEmpty() || !sSide.isEmpty())
         {
-            m_pFlyWrapAttrList = m_pSerializer->createAttrList();
+            m_rExport.SdrExporter().setFlyWrapAttrList(m_pSerializer->createAttrList());
             if (!sType.isEmpty())
-                m_pFlyWrapAttrList->add(XML_type, sType);
+                m_rExport.SdrExporter().getFlyWrapAttrList()->add(XML_type, sType);
             if (!sSide.isEmpty())
-                m_pFlyWrapAttrList->add(XML_side, sSide);
+                m_rExport.SdrExporter().getFlyWrapAttrList()->add(XML_side, sSide);
         }
     }
     else if (m_bDMLTextFrameSyntax)
@@ -5551,15 +5400,15 @@ void DocxAttributeOutput::FormatSurround( const SwFmtSurround& rSurround )
                 sWrap = OString( "around" );
         }
 
-        AddToAttrList( m_pFlyAttrList, FSNS( XML_w, XML_wrap ), sWrap.getStr() );
+        AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_wrap ), sWrap.getStr() );
     }
 }
 
 void DocxAttributeOutput::FormatVertOrientation( const SwFmtVertOrient& rFlyVert )
 {
-    if (m_bTextFrameSyntax)
+    if (m_rExport.SdrExporter().getTextFrameSyntax())
     {
-        m_aTextFrameStyle.append(";margin-top:").append(double(rFlyVert.GetPos()) / 20).append("pt");
+        m_rExport.SdrExporter().getTextFrameStyle().append(";margin-top:").append(double(rFlyVert.GetPos()) / 20).append("pt");
     }
     else if (m_bDMLTextFrameSyntax)
     {
@@ -5587,9 +5436,9 @@ void DocxAttributeOutput::FormatVertOrientation( const SwFmtVertOrient& rFlyVert
         }
 
         if ( !sAlign.isEmpty() )
-            AddToAttrList( m_pFlyAttrList, FSNS( XML_w, XML_yAlign ), sAlign.getStr() );
+            AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_yAlign ), sAlign.getStr() );
         else
-            AddToAttrList( m_pFlyAttrList, FSNS( XML_w, XML_y ),
+            AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_y ),
                 OString::number( rFlyVert.GetPos() ).getStr() );
 
         OString sVAnchor( "page" );
@@ -5613,15 +5462,15 @@ void DocxAttributeOutput::FormatVertOrientation( const SwFmtVertOrient& rFlyVert
                 break;
         }
 
-        AddToAttrList( m_pFlyAttrList, FSNS( XML_w, XML_vAnchor ), sVAnchor.getStr() );
+        AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_vAnchor ), sVAnchor.getStr() );
     }
 }
 
 void DocxAttributeOutput::FormatHorizOrientation( const SwFmtHoriOrient& rFlyHori )
 {
-    if (m_bTextFrameSyntax)
+    if (m_rExport.SdrExporter().getTextFrameSyntax())
     {
-        m_aTextFrameStyle.append(";margin-left:").append(double(rFlyHori.GetPos()) / 20).append("pt");
+        m_rExport.SdrExporter().getTextFrameStyle().append(";margin-left:").append(double(rFlyHori.GetPos()) / 20).append("pt");
     }
     else if (m_bDMLTextFrameSyntax)
     {
@@ -5647,9 +5496,9 @@ void DocxAttributeOutput::FormatHorizOrientation( const SwFmtHoriOrient& rFlyHor
         }
 
         if ( !sAlign.isEmpty() )
-            AddToAttrList( m_pFlyAttrList, FSNS( XML_w, XML_xAlign ), sAlign.getStr() );
+            AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_xAlign ), sAlign.getStr() );
         else
-            AddToAttrList( m_pFlyAttrList, FSNS( XML_w, XML_x ),
+            AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_x ),
                 OString::number( rFlyHori.GetPos() ).getStr() );
 
         OString sHAnchor( "page" );
@@ -5672,7 +5521,7 @@ void DocxAttributeOutput::FormatHorizOrientation( const SwFmtHoriOrient& rFlyHor
                 break;
         }
 
-        AddToAttrList( m_pFlyAttrList, FSNS( XML_w, XML_hAnchor ), sHAnchor.getStr() );
+        AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_hAnchor ), sHAnchor.getStr() );
     }
 }
 
@@ -5702,7 +5551,7 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
 {
     OString sColor = msfilter::util::ConvertColor( rBrush.GetColor( ) );
     boost::optional<sal_Int32> oAlpha = lcl_getDmlAlpha(rBrush);
-    if (m_bTextFrameSyntax)
+    if (m_rExport.SdrExporter().getTextFrameSyntax())
     {
         // Handle 'Opacity'
         if (oAlpha)
@@ -5712,11 +5561,11 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
             double fOpacity = (double)(*oAlpha) * 65535 / ::oox::drawingml::MAX_PERCENT;
             OUString sOpacity = OUString::number(fOpacity) + "f";
 
-            AddToAttrList( m_pFlyFillAttrList, XML_opacity, OUStringToOString(sOpacity, RTL_TEXTENCODING_UTF8).getStr() );
+            AddToAttrList( m_rExport.SdrExporter().getFlyFillAttrList(), XML_opacity, OUStringToOString(sOpacity, RTL_TEXTENCODING_UTF8).getStr() );
         }
 
         sColor = "#" + sColor;
-        AddToAttrList( m_pFlyAttrList, XML_fillcolor, sColor.getStr() );
+        AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), XML_fillcolor, sColor.getStr() );
     }
     else if (m_bDMLTextFrameSyntax)
     {
@@ -5779,7 +5628,7 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
 {
     if (m_oFillStyle && *m_oFillStyle == XFILL_GRADIENT && !m_bDMLTextFrameSyntax)
     {
-        AddToAttrList( m_pFlyFillAttrList, XML_type, "gradient" );
+        AddToAttrList( m_rExport.SdrExporter().getFlyFillAttrList(), XML_type, "gradient" );
 
         const XGradient& rGradient = rFillGradient.GetGradientValue();
         OString sStartColor = msfilter::util::ConvertColor(rGradient.GetStartColor());
@@ -5794,7 +5643,7 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
         nReverseAngle = nReverseAngle / 10;
         nReverseAngle = (270 - nReverseAngle) % 360;
         if (nReverseAngle != 0)
-            AddToAttrList( m_pFlyFillAttrList,
+            AddToAttrList( m_rExport.SdrExporter().getFlyFillAttrList(),
                     XML_angle, OString::number( nReverseAngle ).getStr() );
 
         OString sColor1 = sStartColor;
@@ -5803,7 +5652,7 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
         switch (rGradient.GetGradientStyle())
         {
             case XGRAD_AXIAL:
-                AddToAttrList( m_pFlyFillAttrList, XML_focus, "50%" );
+                AddToAttrList( m_rExport.SdrExporter().getFlyFillAttrList(), XML_focus, "50%" );
                 // If it is an 'axial' gradient - swap the colors
                 // (because in the import process they were imported swapped)
                 sColor1 = sEndColor;
@@ -5818,8 +5667,8 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
 
         sColor1 = "#" + sColor1;
         sColor2 = "#" + sColor2;
-        AddToAttrList( m_pFlyAttrList, XML_fillcolor, sColor1.getStr() );
-        AddToAttrList( m_pFlyFillAttrList, XML_color2, sColor2.getStr() );
+        AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), XML_fillcolor, sColor1.getStr() );
+        AddToAttrList( m_rExport.SdrExporter().getFlyFillAttrList(), XML_color2, sColor2.getStr() );
     }
     else if (m_oFillStyle && *m_oFillStyle == XFILL_GRADIENT && m_bDMLTextFrameSyntax)
     {
@@ -5858,7 +5707,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         }
         m_bIgnoreNextFill = true;
     }
-    if (m_bTextFrameSyntax || m_bDMLTextFrameSyntax)
+    if (m_rExport.SdrExporter().getTextFrameSyntax() || m_bDMLTextFrameSyntax)
     {
         const SvxBorderLine* pLeft = rBox.GetLeft( );
         const SvxBorderLine* pTop = rBox.GetTop( );
@@ -5872,9 +5721,9 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
             editeng::SvxBorderStyle eBorderStyle = pTop->GetBorderLineStyle();
             if (eBorderStyle == table::BorderLineStyle::NONE)
             {
-                if (m_bTextFrameSyntax)
+                if (m_rExport.SdrExporter().getTextFrameSyntax())
                 {
-                    AddToAttrList( m_pFlyAttrList, 2,
+                    AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), 2,
                             XML_stroked, "f", XML_strokeweight, "0pt" );
                 }
             }
@@ -5883,12 +5732,12 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
                 OString sColor(msfilter::util::ConvertColor(pTop->GetColor()));
                 double const fConverted(editeng::ConvertBorderWidthToWord(pTop->GetBorderLineStyle(), pTop->GetWidth()));
 
-                if (m_bTextFrameSyntax)
+                if (m_rExport.SdrExporter().getTextFrameSyntax())
                 {
                     sColor = "#" + sColor;
                     sal_Int32 nWidth = sal_Int32(fConverted / 20);
                     OString sWidth = OString::number(nWidth) + "pt";
-                    AddToAttrList( m_pFlyAttrList, 2,
+                    AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), 2,
                             XML_strokecolor, sColor.getStr(),
                             XML_strokeweight, sWidth.getStr() );
                 }
@@ -5947,7 +5796,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
             aInset.insert(0, OString::number(fDistanceLeftInch) + "in");
 
         if (!aInset.isEmpty())
-            m_pTextboxAttrList->add(XML_inset, aInset.makeStringAndClear());
+            m_rExport.SdrExporter().getTextboxAttrList()->add(XML_inset, aInset.makeStringAndClear());
 
         return;
     }
@@ -6260,14 +6109,9 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pSectionSpacingAttrList( NULL ),
       m_pParagraphSpacingAttrList( NULL ),
       m_pHyperlinkAttrList( NULL ),
-      m_pFlyAttrList( NULL ),
       m_pBodyPrAttrList( NULL ),
-      m_pFlyFillAttrList( NULL ),
-      m_pFlyWrapAttrList( NULL ),
-      m_pTextboxAttrList( NULL ),
       m_pColorAttrList( NULL ),
       m_pBackgroundAttrList( NULL ),
-      m_pFlyFrameSize(0),
       m_pFootnotesList( new ::docx::FootnotesList() ),
       m_pEndnotesList( new ::docx::FootnotesList() ),
       m_footnoteEndnoteRefTag( 0 ),
@@ -6284,7 +6128,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pTableWrt( NULL ),
       m_bParagraphOpened( false ),
       m_nColBreakStatus( COLBRK_NONE ),
-      m_bTextFrameSyntax( false ),
       m_bDMLTextFrameSyntax( false ),
       m_closeHyperlinkInThisRun( false ),
       m_closeHyperlinkInPreviousRun( false ),
@@ -6303,7 +6146,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_oldTableReference(new TableReference()),
       m_bIgnoreNextFill(false),
       m_bBtLr(false),
-      m_bFrameBtLr(false),
       m_pTableStyleExport(new DocxTableStyleExport(rExport.pDoc, pSerializer)),
       m_bParaBeforeAutoSpacing(false),
       m_bParaAfterAutoSpacing(false),
@@ -6321,9 +6163,7 @@ DocxAttributeOutput::~DocxAttributeOutput()
     delete m_pSectionSpacingAttrList, m_pSectionSpacingAttrList = NULL;
     delete m_pParagraphSpacingAttrList, m_pParagraphSpacingAttrList = NULL;
     delete m_pHyperlinkAttrList, m_pHyperlinkAttrList = NULL;
-    delete m_pFlyAttrList, m_pFlyAttrList = NULL;
     delete m_pBodyPrAttrList, m_pBodyPrAttrList = NULL;
-    delete m_pTextboxAttrList, m_pTextboxAttrList = NULL;
     delete m_pColorAttrList, m_pColorAttrList = NULL;
     delete m_pBackgroundAttrList, m_pBackgroundAttrList = NULL;
 

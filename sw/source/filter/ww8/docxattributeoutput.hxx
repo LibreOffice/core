@@ -389,8 +389,6 @@ private:
     /// checks whether the current component is a diagram
     bool IsDiagram (const SdrObject* sdrObject);
 
-    /// Writes text frame in VML format.
-    void WriteVMLTextFrame(sw::Frame* pParentFrame);
     /// Writes text frame in DML format.
     void WriteDMLTextFrame(sw::Frame* pParentFrame);
 
@@ -680,19 +678,12 @@ private:
     ::sax_fastparser::FastAttributeList *m_pSectionSpacingAttrList;
     ::sax_fastparser::FastAttributeList *m_pParagraphSpacingAttrList;
     ::sax_fastparser::FastAttributeList *m_pHyperlinkAttrList;
-    ::sax_fastparser::FastAttributeList *m_pFlyAttrList;
     /// Attributes of <wps:bodyPr>, used during DML export of text frames.
     ::sax_fastparser::FastAttributeList *m_pBodyPrAttrList;
-    ::sax_fastparser::FastAttributeList *m_pFlyFillAttrList;
-    ::sax_fastparser::FastAttributeList *m_pFlyWrapAttrList;
-    /// Attributes of the next v:textbox element.
-    ::sax_fastparser::FastAttributeList *m_pTextboxAttrList;
     /// Attributes of the run color
     ::sax_fastparser::FastAttributeList *m_pColorAttrList;
     /// Attributes of the paragraph background
     ::sax_fastparser::FastAttributeList *m_pBackgroundAttrList;
-    /// When exporting fly frames, this holds the real size of the frame.
-    const Size* m_pFlyFrameSize;
 
     ::docx::FootnotesList *m_pFootnotesList;
     ::docx::FootnotesList *m_pEndnotesList;
@@ -746,9 +737,7 @@ private:
     DocxColBreakStatus m_nColBreakStatus;
 
     std::vector<sw::Frame> m_aParentFrames;
-    bool m_bTextFrameSyntax;
     bool m_bDMLTextFrameSyntax;
-    OStringBuffer m_aTextFrameStyle;
     // close of hyperlink needed
     bool m_closeHyperlinkInThisRun;
     bool m_closeHyperlinkInPreviousRun;
@@ -809,8 +798,6 @@ private:
 
     /// Is fake rotation detected, so rotation with 90 degrees should be ignored in this cell?
     bool m_bBtLr;
-    /// Same, but for textframe rotation.
-    bool m_bFrameBtLr;
 
     PageMargins m_pageMargins;
 

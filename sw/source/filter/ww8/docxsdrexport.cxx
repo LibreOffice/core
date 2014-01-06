@@ -16,6 +16,7 @@
 #include <editeng/opaqitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/unoprnms.hxx>
+#include <editeng/charrotateitem.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdogrp.hxx>
@@ -30,13 +31,30 @@
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
+#include <fmtcntnt.hxx>
+#include <ndtxt.hxx>
+#include <txatbase.hxx>
+#include <fmtautofmt.hxx>
 
 #include <docxsdrexport.hxx>
 #include <docxexport.hxx>
 #include <docxexportfilter.hxx>
+#include <writerhelper.hxx>
 
 using namespace com::sun::star;
 using namespace oox;
+
+ExportDataSaveRestore::ExportDataSaveRestore(DocxExport& rExport, sal_uLong nStt, sal_uLong nEnd, sw::Frame* pParentFrame)
+    : m_rExport(rExport)
+{
+    m_rExport.SaveData(nStt, nEnd);
+    m_rExport.mpParentFrame = pParentFrame;
+}
+
+ExportDataSaveRestore::~ExportDataSaveRestore()
+{
+    m_rExport.RestoreData();
+}
 
 /// Holds data used by DocxSdrExport only.
 struct DocxSdrExport::Impl
@@ -45,16 +63,39 @@ struct DocxSdrExport::Impl
     DocxExport& m_rExport;
     sax_fastparser::FSHelperPtr m_pSerializer;
     oox::drawingml::DrawingML* m_pDrawingML;
+    const Size* m_pFlyFrameSize;
+    bool m_bTextFrameSyntax;
+    sax_fastparser::FastAttributeList* m_pFlyAttrList;
+    sax_fastparser::FastAttributeList* m_pTextboxAttrList;
+    OStringBuffer m_aTextFrameStyle;
+    bool m_bFrameBtLr;
+    sax_fastparser::FastAttributeList* m_pFlyFillAttrList;
+    sax_fastparser::FastAttributeList* m_pFlyWrapAttrList;
 
     Impl(DocxSdrExport& rSdrExport, DocxExport& rExport, sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML)
         : m_rSdrExport(rSdrExport),
           m_rExport(rExport),
           m_pSerializer(pSerializer),
-          m_pDrawingML(pDrawingML)
+          m_pDrawingML(pDrawingML),
+          m_pFlyFrameSize(0),
+          m_bTextFrameSyntax(false),
+          m_pFlyAttrList(0),
+          m_pTextboxAttrList(0),
+          m_bFrameBtLr(false),
+          m_pFlyFillAttrList(0),
+          m_pFlyWrapAttrList(0)
     {
     }
+
+    ~Impl()
+    {
+        delete m_pFlyAttrList, m_pFlyAttrList = NULL;
+        delete m_pTextboxAttrList, m_pTextboxAttrList = NULL;
+    }
+
     /// Writes wp wrapper code around an SdrObject, which itself is written using drawingML syntax.
     void writeDMLDrawing(const SdrObject* pSdrObj, const SwFrmFmt* pFrmFmt, int nAnchorId);
+    void textFrameShadow(const SwFrmFmt& rFrmFmt);
 };
 
 DocxSdrExport::DocxSdrExport(DocxExport& rExport, sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML)
@@ -69,6 +110,61 @@ DocxSdrExport::~DocxSdrExport()
 void DocxSdrExport::setSerializer(sax_fastparser::FSHelperPtr pSerializer)
 {
     m_pImpl->m_pSerializer = pSerializer;
+}
+
+const Size* DocxSdrExport::getFlyFrameSize()
+{
+    return m_pImpl->m_pFlyFrameSize;
+}
+
+bool DocxSdrExport::getTextFrameSyntax()
+{
+    return m_pImpl->m_bTextFrameSyntax;
+}
+
+sax_fastparser::FastAttributeList*& DocxSdrExport::getFlyAttrList()
+{
+    return m_pImpl->m_pFlyAttrList;
+}
+
+void DocxSdrExport::setFlyAttrList(sax_fastparser::FastAttributeList* pAttrList)
+{
+    m_pImpl->m_pFlyAttrList = pAttrList;
+}
+
+sax_fastparser::FastAttributeList* DocxSdrExport::getTextboxAttrList()
+{
+    return m_pImpl->m_pTextboxAttrList;
+}
+
+OStringBuffer& DocxSdrExport::getTextFrameStyle()
+{
+    return m_pImpl->m_aTextFrameStyle;
+}
+
+bool DocxSdrExport::getFrameBtLr()
+{
+    return m_pImpl->m_bFrameBtLr;
+}
+
+void DocxSdrExport::setFrameBtLr(bool bFrameBtLr)
+{
+    m_pImpl->m_bFrameBtLr = bFrameBtLr;
+}
+
+sax_fastparser::FastAttributeList*& DocxSdrExport::getFlyFillAttrList()
+{
+    return m_pImpl->m_pFlyFillAttrList;
+}
+
+sax_fastparser::FastAttributeList* DocxSdrExport::getFlyWrapAttrList()
+{
+    return m_pImpl->m_pFlyWrapAttrList;
+}
+
+void DocxSdrExport::setFlyWrapAttrList(sax_fastparser::FastAttributeList* pAttrList)
+{
+    m_pImpl->m_pFlyWrapAttrList = pAttrList;
 }
 
 void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rSize)
@@ -362,6 +458,43 @@ void DocxSdrExport::Impl::writeDMLDrawing(const SdrObject* pSdrObject, const SwF
     m_rSdrExport.endDMLAnchorInline(pFrmFmt);
 }
 
+void DocxSdrExport::Impl::textFrameShadow(const SwFrmFmt& rFrmFmt)
+{
+    SvxShadowItem aShadowItem = rFrmFmt.GetShadow();
+    if (aShadowItem.GetLocation() == SVX_SHADOW_NONE)
+        return;
+
+    OString aShadowWidth(OString::number(double(aShadowItem.GetWidth()) / 20) + "pt");
+    OString aOffset;
+    switch (aShadowItem.GetLocation())
+    {
+    case SVX_SHADOW_TOPLEFT:
+        aOffset = "-" + aShadowWidth + ",-" + aShadowWidth;
+        break;
+    case SVX_SHADOW_TOPRIGHT:
+        aOffset = aShadowWidth + ",-" + aShadowWidth;
+        break;
+    case SVX_SHADOW_BOTTOMLEFT:
+        aOffset = "-" + aShadowWidth + "," + aShadowWidth;
+        break;
+    case SVX_SHADOW_BOTTOMRIGHT:
+        aOffset = aShadowWidth + "," + aShadowWidth;
+        break;
+    case SVX_SHADOW_NONE:
+    case SVX_SHADOW_END:
+        break;
+    }
+    if (aOffset.isEmpty())
+        return;
+
+    OString aShadowColor = msfilter::util::ConvertColor(aShadowItem.GetColor());
+    m_pSerializer->singleElementNS(XML_v, XML_shadow,
+                                   XML_on, "t",
+                                   XML_color, "#" + aShadowColor,
+                                   XML_offset, aOffset,
+                                   FSEND);
+}
+
 void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrmFmt& rFrmFmt,const Point& rNdTopLeft, int nAnchorId)
 {
     // Depending on the shape type, we actually don't write the shape as DML.
@@ -637,4 +770,109 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const Size& size)
     }
 }
 
+void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame)
+{
+    sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
+    const SwFrmFmt& rFrmFmt = pParentFrame->GetFrmFmt();
+    const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
+
+    sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
+    sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
+
+    //Save data here and restore when out of scope
+    ExportDataSaveRestore aDataGuard(m_pImpl->m_rExport, nStt, nEnd, pParentFrame);
+
+    // When a frame has some low height, but automatically expanded due
+    // to lots of contents, this size contains the real size.
+    const Size aSize = pParentFrame->GetSize();
+    m_pImpl->m_pFlyFrameSize = &aSize;
+
+    m_pImpl->m_bTextFrameSyntax = true;
+    m_pImpl->m_pFlyAttrList = pFS->createAttrList();
+    m_pImpl->m_pTextboxAttrList = pFS->createAttrList();
+    m_pImpl->m_aTextFrameStyle = "position:absolute";
+    m_pImpl->m_rExport.OutputFormat(pParentFrame->GetFrmFmt(), false, false, true);
+    m_pImpl->m_pFlyAttrList->add(XML_style, m_pImpl->m_aTextFrameStyle.makeStringAndClear());
+    sax_fastparser::XFastAttributeListRef xFlyAttrList(m_pImpl->m_pFlyAttrList);
+    m_pImpl->m_pFlyAttrList = NULL;
+    m_pImpl->m_bFrameBtLr = checkFrameBtlr(m_pImpl->m_rExport.pDoc->GetNodes()[nStt], m_pImpl->m_pTextboxAttrList);
+    sax_fastparser::XFastAttributeListRef xTextboxAttrList(m_pImpl->m_pTextboxAttrList);
+    m_pImpl->m_pTextboxAttrList = NULL;
+    m_pImpl->m_bTextFrameSyntax = false;
+    m_pImpl->m_pFlyFrameSize = 0;
+    m_pImpl->m_rExport.mpParentFrame = NULL;
+
+    pFS->startElementNS(XML_w, XML_pict, FSEND);
+    pFS->startElementNS(XML_v, XML_rect, xFlyAttrList);
+    m_pImpl->textFrameShadow(rFrmFmt);
+    if (m_pImpl->m_pFlyFillAttrList)
+    {
+        sax_fastparser::XFastAttributeListRef xFlyFillAttrList(m_pImpl->m_pFlyFillAttrList);
+        m_pImpl->m_pFlyFillAttrList = NULL;
+        pFS->singleElementNS(XML_v, XML_fill, xFlyFillAttrList);
+    }
+    pFS->startElementNS(XML_v, XML_textbox, xTextboxAttrList);
+    pFS->startElementNS(XML_w, XML_txbxContent, FSEND);
+    m_pImpl->m_rExport.WriteText();
+    pFS->endElementNS(XML_w, XML_txbxContent);
+    pFS->endElementNS(XML_v, XML_textbox);
+
+    if (m_pImpl->m_pFlyWrapAttrList)
+    {
+        sax_fastparser::XFastAttributeListRef xFlyWrapAttrList(m_pImpl->m_pFlyWrapAttrList);
+        m_pImpl->m_pFlyWrapAttrList = NULL;
+        pFS->singleElementNS(XML_w10, XML_wrap, xFlyWrapAttrList);
+    }
+
+    pFS->endElementNS(XML_v, XML_rect);
+    pFS->endElementNS(XML_w, XML_pict);
+    m_pImpl->m_bFrameBtLr = false;
+}
+
+bool DocxSdrExport::checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttributeList* pTextboxAttrList, sax_fastparser::FastAttributeList* pBodyPrAttrList)
+{
+    // The intended usage is to pass either a valid VML or DML attribute list.
+    assert(pTextboxAttrList || pBodyPrAttrList);
+
+    if (!pStartNode->IsTxtNode())
+        return false;
+
+    SwTxtNode* pTxtNode = static_cast<SwTxtNode*>(pStartNode);
+
+    const SfxPoolItem* pItem = 0; // explicitly init to avoid warnings
+    bool bItemSet = false;
+    if (pTxtNode->HasSwAttrSet())
+    {
+        const SwAttrSet& rAttrSet = pTxtNode->GetSwAttrSet();
+        bItemSet = rAttrSet.GetItemState(RES_CHRATR_ROTATE, true, &pItem) == SFX_ITEM_SET;
+    }
+
+    if (!bItemSet)
+    {
+        if (!pTxtNode->HasHints())
+            return false;
+
+        SwTxtAttr* pTxtAttr = pTxtNode->GetTxtAttrAt(0, RES_TXTATR_AUTOFMT);
+
+        if (!pTxtAttr || pTxtAttr->Which() != RES_TXTATR_AUTOFMT)
+            return false;
+
+        boost::shared_ptr<SfxItemSet> pItemSet = pTxtAttr->GetAutoFmt().GetStyleHandle();
+        bItemSet = pItemSet->GetItemState(RES_CHRATR_ROTATE, true, &pItem) == SFX_ITEM_SET;
+    }
+
+    if (bItemSet)
+    {
+        const SvxCharRotateItem& rCharRotate = static_cast<const SvxCharRotateItem&>(*pItem);
+        if (rCharRotate.GetValue() == 900)
+        {
+            if (pTextboxAttrList)
+                pTextboxAttrList->add(XML_style, "mso-layout-flow-alt:bottom-to-top");
+            else
+                pBodyPrAttrList->add(XML_vert, "vert270");
+            return true;
+        }
+    }
+    return false;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

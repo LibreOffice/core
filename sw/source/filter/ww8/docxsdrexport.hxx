@@ -24,9 +24,24 @@ class Size;
 class Point;
 class SdrObject;
 
+namespace sw
+{
+class Frame;
+}
 class SwFrmFmt;
+class SwNode;
 
 class DocxExport;
+
+/// Helper class, so that the DocxExport::RestoreData() call will always happen.
+class ExportDataSaveRestore
+{
+private:
+    DocxExport& m_rExport;
+public:
+    ExportDataSaveRestore(DocxExport& rExport, sal_uLong nStt, sal_uLong nEnd, sw::Frame* pParentFrame);
+    ~ExportDataSaveRestore();
+};
 
 /// Handles DOCX export of drawings.
 class DocxSdrExport
@@ -38,6 +53,20 @@ public:
     ~DocxSdrExport();
 
     void setSerializer(sax_fastparser::FSHelperPtr pSerializer);
+    /// When exporting fly frames, this holds the real size of the frame.
+    const Size* getFlyFrameSize();
+    bool getTextFrameSyntax();
+    sax_fastparser::FastAttributeList*& getFlyAttrList();
+    void setFlyAttrList(sax_fastparser::FastAttributeList* pAttrList);
+    /// Attributes of the next v:textbox element.
+    sax_fastparser::FastAttributeList* getTextboxAttrList();
+    OStringBuffer& getTextFrameStyle();
+    /// Same, as DocxAttributeOutput::m_bBtLr, but for textframe rotation.
+    bool getFrameBtLr();
+    void setFrameBtLr(bool bFrameBtLr);
+    sax_fastparser::FastAttributeList*& getFlyFillAttrList();
+    sax_fastparser::FastAttributeList* getFlyWrapAttrList();
+    void setFlyWrapAttrList(sax_fastparser::FastAttributeList* pAttrList);
 
     void startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rSize);
     void endDMLAnchorInline(const SwFrmFmt* pFrmFmt);
@@ -49,6 +78,10 @@ public:
     void writeDiagram(const SdrObject* sdrObject, const Size& size);
     /// Write <a:effectLst>, the effect list.
     void writeDMLEffectLst(const SwFrmFmt& rFrmFmt);
+    /// Writes text frame in VML format.
+    void writeVMLTextFrame(sw::Frame* pParentFrame);
+    /// Undo the text direction mangling done by the frame btLr handler in writerfilter::dmapper::DomainMapper::lcl_startCharacterGroup()
+    bool checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttributeList* pTextboxAttrList = 0, sax_fastparser::FastAttributeList* pBodyPrAttrList = 0);
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXSDREXPORT_HXX
