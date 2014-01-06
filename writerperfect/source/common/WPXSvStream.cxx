@@ -310,9 +310,7 @@ const unsigned char *WPXSvInputStream::read(unsigned long numBytes, unsigned lon
             mpImpl->mnReadBufferLength = mpImpl->mnLength - curpos;
     }
     else
-        mpImpl->mnReadBufferLength = numBytes;
-
-    mpImpl->seek((long) curpos);
+        return mpImpl->read(numBytes, numBytesRead);
 
     mpImpl->mpReadBuffer = new unsigned char[mpImpl->mnReadBufferLength];
     unsigned long tmpNumBytes(0);
@@ -360,7 +358,7 @@ int WPXSvInputStream::seek(long offset, WPX_SEEK_TYPE seekType)
     if (tmpOffset < mpImpl->tell() && (unsigned long)tmpOffset >= (unsigned long)mpImpl->tell() - mpImpl->mnReadBufferLength)
     {
         mpImpl->mnReadBufferPos = (unsigned long)(tmpOffset + (long) mpImpl->mnReadBufferLength - (long) mpImpl->tell());
-        return 0;
+        return retVal;
     }
 
     mpImpl->invalidateReadBuffer();
