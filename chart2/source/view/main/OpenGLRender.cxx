@@ -409,7 +409,7 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glClearColor (1.0f, 1.0f, 1.0f, 1.0f);
+    glClearColor (m_ClearColor.r, m_ClearColor.g, m_ClearColor.b, m_ClearColor.a);
     glClear(GL_COLOR_BUFFER_BIT);
     glClearDepth(1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -917,6 +917,12 @@ OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
     m_TextTexCoordID(1)
 {
     memset(&m_Line2DPointList, 0, sizeof(Line2DPointList));
+    memset(&m_Bubble2DPointList, 0, sizeof(m_Bubble2DPointList));
+    memset(&m_Bubble2DCircle, 0, sizeof(m_Bubble2DCircle));
+    memset(&m_TextInfo, 0, sizeof(TextInfo));
+    memset(&m_Area2DPointList, 0, sizeof(m_Area2DPointList));
+    memset(&m_RectangleList, 0, sizeof(RectanglePointList));
+
     m_iFboIdx = 0;
     m_FboID[0] = 0;
     m_FboID[1] = 0;
@@ -924,6 +930,14 @@ OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
     m_TextureObj[1] = 0;
     m_RboID[0] = 0;
     m_RboID[1] = 0;
+    m_iArbMultisampleSupported = 0;
+    m_iArbMultisampleFormat = 0;
+    m_ClearColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+
+    for (size_t i = 0; i < sizeof(m_BackgroundColor) / sizeof(float); i++)
+    {
+        m_BackgroundColor[i] = 1.0;
+    }
 
     mxRenderTarget->setPosition(awt::Point(0,0));
 }
@@ -1358,37 +1372,52 @@ int OpenGLRender::RenderRectangleShape()
         RectanglePointList &pointList = m_RectangleShapePointList.front();
         PosVecf3 trans = {pointList.x, pointList.y, pointList.z};
         PosVecf3 angle = {0.0f, 0.0f, 0.0f};
-        PosVecf3 scale = {pointList.xScale, pointList.yScale, 1.0f};
+        PosVecf3 scale = {pointList.xScale / 2, pointList.yScale / 2, 1.0f};
         MoveModelf(trans, angle, scale);
         m_MVP = m_Projection * m_View * m_Model;
+
         //render to fbo
         //fill vertex buffer
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, sizeof(square2DVertices), square2DVertices, GL_STATIC_DRAW);
 
-        glUseProgram(m_CommonProID);
+        glBindBuffer(GL_ARRAY_BUFFER, m_ColorBuffer);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(m_BackgroundColor), m_BackgroundColor, GL_STATIC_DRAW);
+        glUseProgram(m_BackgroundProID);
 
-        glUniform4fv(m_2DColorID, 1, &m_2DColor[0]);
-        glUniformMatrix4fv(m_MatrixID, 1, GL_FALSE, &m_MVP[0][0]);
+        glUniformMatrix4fv(m_BackgroundMatrixID, 1, GL_FALSE, &m_MVP[0][0]);
         // 1rst attribute buffer : vertices
-        glEnableVertexAttribArray(m_2DVertexID);
+        glEnableVertexAttribArray(m_BackgroundVertexID);
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         glVertexAttribPointer(
-            m_2DVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+            m_BackgroundVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
             2,                  // size
             GL_FLOAT,           // type
             GL_FALSE,           // normalized?
             0,                  // stride
             (void*)0            // array buffer offset
             );
+        // 2nd attribute buffer : color
+        glEnableVertexAttribArray(m_BackgroundColorID);
+        glBindBuffer(GL_ARRAY_BUFFER, m_ColorBuffer);
+        glVertexAttribPointer(
+            m_BackgroundColorID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+            4,                  // size
+            GL_FLOAT,           // type
+            GL_FALSE,           // normalized?
+            0,                  // stride
+            (void*)0            // array buffer offset
+            );
         glDrawArrays(GL_QUADS, 0, 4);
-        glDisableVertexAttribArray(m_2DVertexID);
+        glDisableVertexAttribArray(m_BackgroundVertexID);
+        glDisableVertexAttribArray(m_BackgroundColorID);
         glUseProgram(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         m_RectangleShapePointList.pop_front();
     }
     return 0;
 }
+
 
 int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color, const Font& rFont, awt::Point aPos, awt::Size aSize, long rotation)
 {
@@ -1648,5 +1677,39 @@ int OpenGLRender::RenderArea2DShape()
     m_fZStep += 0.01f;
     return 0;
 }
+
+void OpenGLRender::SetBackGroundColor(long color1, long color2)
+{
+    sal_uInt8 r = (color1 & 0x00FF0000) >> 16;
+    sal_uInt8 g = (color1 & 0x0000FF00) >> 8;
+    sal_uInt8 b = (color1 & 0x000000FF);
+
+    m_BackgroundColor[0] = (float)r / 255.0f;
+    m_BackgroundColor[1] = (float)g / 255.0f;
+    m_BackgroundColor[2] = (float)b / 255.0f;
+    m_BackgroundColor[3] = 1.0;
+
+    m_BackgroundColor[4] = (float)r / 255.0f;
+    m_BackgroundColor[5] = (float)g / 255.0f;
+    m_BackgroundColor[6] = (float)b / 255.0f;
+    m_BackgroundColor[7] = 1.0;
+
+    r = (color2 & 0x00FF0000) >> 16;
+    g = (color2 & 0x0000FF00) >> 8;
+    b = (color2 & 0x000000FF);
+
+    m_BackgroundColor[8] = (float)r / 255.0f;
+    m_BackgroundColor[9] = (float)g / 255.0f;
+    m_BackgroundColor[10] = (float)b / 255.0f;
+    m_BackgroundColor[11] = 1.0;
+
+    m_BackgroundColor[12] = (float)r / 255.0f;
+    m_BackgroundColor[13] = (float)g / 255.0f;
+    m_BackgroundColor[14] = (float)b / 255.0f;
+    m_BackgroundColor[15] = 1.0;
+    cout << "color1 = " << color1 << ", color2 = " << color2 << endl;
+
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
