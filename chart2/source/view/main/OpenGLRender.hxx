@@ -264,7 +264,7 @@ private:
 
     int m_iPointNum;
 
-    Line2DPointList m_Line2DPoitList;
+    Line2DPointList m_Line2DPointList;
 
     int m_iFboIdx;
 
@@ -322,6 +322,11 @@ private:
 
     Area2DPointList m_Area2DPointList;
     std::list <Area2DPointList> m_Area2DShapePointList;
+
+    GLint m_BackgroundProID;
+    GLint m_BackgroundMatrixID;
+    GLint m_BackgroundVertexID;
+    GLint m_BackgroundColorID;
 
 };
 

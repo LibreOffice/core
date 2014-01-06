@@ -58,33 +58,7 @@ using namespace std;
 #define WGL_SAMPLES_ARB          0x2042
 #endif
 
-const char *ColorFragmemtShader = OPENGL_SHADER (
-
-varying vec3 fragmentColor;
-
-void main()
-{
-    gl_FragColor = vec4(fragmentColor, 1);
-}
-
-);
-
-const char *TransformVertexShader = OPENGL_SHADER (
-
-attribute vec3 vertexPosition_modelspace;
-attribute vec3 vertexColor;
-varying vec3 fragmentColor;
-uniform mat4 MVP;
-
-void main()
-{
-    gl_Position =  MVP * vec4(vertexPosition_modelspace,1);
-    fragmentColor = vertexColor;
-}
-
-);
-
-const char *Line2DFragmemtShader = OPENGL_SHADER (
+const char *CommonFragmemtShader = OPENGL_SHADER (
 
 varying vec4 fragmentColor;
 
@@ -95,19 +69,48 @@ void main()
 
 );
 
-const char *Line2DVertexShader = OPENGL_SHADER (
+const char *CommonVertexShader = OPENGL_SHADER (
 
-attribute vec4 vPosition;
-uniform vec4 vLineColor;
+attribute vec3 vPosition;
+uniform mat4 MVP;
+uniform vec4 vColor;
 varying vec4 fragmentColor;
 
 void main()
 {
-    gl_Position =  vPosition;
-    fragmentColor = vLineColor;
+    gl_Position =  MVP * vec4(vPosition, 1);
+    fragmentColor = vColor;
 }
 
 );
+
+
+const char *BackgroundFragmemtShader = OPENGL_SHADER (
+
+varying vec4 fragmentColor;
+
+void main()
+{
+    gl_FragColor = fragmentColor;
+}
+
+);
+
+const char *BackgroundVertexShader = OPENGL_SHADER (
+
+attribute vec3 vPosition;
+uniform mat4 MVP;
+attribute vec4 vColor;
+varying vec4 fragmentColor;
+
+void main()
+{
+    gl_Position =  MVP * vec4(vPosition, 1);
+    fragmentColor = vColor;
+}
+
+);
+
 
 const char *RenderFragmentShader = OPENGL_SHADER (
 
@@ -116,7 +119,7 @@ varying vec2 vTexCoord;
 
 void main()
 {
-    gl_FragColor = vec4(texture2D(RenderTex, vTexCoord).rgb, 1);
+    gl_FragColor = vec4(texture2D(RenderTex, vTexCoord).rgb, 1.0);
 }
 
 );
@@ -134,6 +137,31 @@ void main()
 }
 
 );
+
+const char *TextFragmentShader = OPENGL_SHADER (
+uniform sampler2D TextTex;
+varying vec2 vTexCoord;
+void main()
+{
+    gl_FragColor = vec4(texture2D(TextTex, vTexCoord).rgba);
+}
+
+);
+
+const char *TextVertexShader = OPENGL_SHADER (
+
+attribute vec3 vPosition;
+uniform mat4 MVP;
+attribute vec2 texCoord;
+varying vec2 vTexCoord;
+void main()
+{
+    gl_Position =  MVP * vec4(vPosition, 1);
+    vTexCoord = texCoord;
+}
+
+);
+
 
 
 static GLfloat squareVertices[] = {
@@ -392,21 +420,32 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
                                glm::vec3(0,0,0), // and looks at the origin
                                glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)
                                );
-    m_ProgramID = LoadShaders(TransformVertexShader, ColorFragmemtShader);
+    m_MVP = m_Projection * m_View * m_Model;
     glGenBuffers(1, &m_VertexBuffer);
     glGenBuffers(1, &m_ColorBuffer);
-    m_MatrixID = glGetUniformLocation(m_ProgramID, "MVP");
-    m_VertexID = glGetAttribLocation(m_ProgramID, "vertexPosition_modelspace");
-    m_ColorID = glGetAttribLocation(m_ProgramID, "vertexColor");
 
     m_RenderProID = LoadShaders(RenderVertexShader, RenderFragmentShader);
     m_RenderVertexID = glGetAttribLocation(m_RenderProID, "vPosition");
     m_RenderTexCoordID = glGetAttribLocation(m_RenderProID, "texCoord");
     m_RenderTexID = glGetUniformLocation(m_RenderProID, "RenderTex");
 
-    m_Line2DProID = LoadShaders(Line2DVertexShader, Line2DFragmemtShader);
-    m_Line2DVertexID = glGetAttribLocation(m_Line2DProID, "vPosition");
-    m_Line2DColorID = glGetUniformLocation(m_Line2DProID, "vLineColor");
+    m_CommonProID = LoadShaders(CommonVertexShader, CommonFragmemtShader);
+    m_MatrixID = glGetUniformLocation(m_CommonProID, "MVP");
+    m_2DVertexID = glGetAttribLocation(m_CommonProID, "vPosition");
+    m_2DColorID = glGetUniformLocation(m_CommonProID, "vColor");
+
+    m_BackgroundProID = LoadShaders(BackgroundVertexShader, BackgroundFragmemtShader);
+    m_BackgroundMatrixID = glGetUniformLocation(m_BackgroundProID, "MVP");
+    m_BackgroundVertexID = glGetAttribLocation(m_BackgroundProID, "vPosition");
+    m_BackgroundColorID = glGetAttribLocation(m_BackgroundProID, "vColor");
+
+    m_TextProID = LoadShaders(TextVertexShader, TextFragmentShader);
+    m_TextMatrixID = glGetUniformLocation(m_TextProID, "MVP");
+    m_TextVertexID = glGetAttribLocation(m_TextProID, "vPosition");
+    m_TextTexCoordID = glGetAttribLocation(m_TextProID, "texCoord");
+    m_TextTexID = glGetUniformLocation(m_TextProID, "TextTex");
+
+    CHECK_GL_ERROR();
 
     glGenBuffers(1, &m_RenderVertexBuf);
     glBindBuffer(GL_ARRAY_BUFFER, m_RenderVertexBuf);
@@ -417,6 +456,12 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
     glBindBuffer(GL_ARRAY_BUFFER, m_RenderTexCoordBuf);
     glBufferData(GL_ARRAY_BUFFER, sizeof(coordVertices), coordVertices, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glGenBuffers(1, &m_TextTexCoordBuf);
+    glBindBuffer(GL_ARRAY_BUFFER, m_TextTexCoordBuf);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(coordVertices), coordVertices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
 #if defined( WNT )
     SwapBuffers(glWin.hDC);
     glFlush();
@@ -482,22 +527,30 @@ BitmapEx OpenGLRender::GetAsBitmap()
 
 int OpenGLRender::SetLine2DShapePoint(float x, float y, int listLength)
 {
-    if (!m_Line2DPoitList.pointBuf)
+    if (!m_Line2DPointList.pointBuf)
     {
         //a new point buffer should be alloc, we should push the old buffer first
-        m_Line2DPoitList.bufLen = listLength * sizeof(float) * 2;
-        m_Line2DPoitList.pointBuf = (float *)malloc(m_Line2DPoitList.bufLen);
+        m_Line2DPointList.bufLen = listLength * sizeof(float) * 3;
+        m_Line2DPointList.pointBuf = (float *)malloc(m_Line2DPointList.bufLen);
+        m_iPointNum = 0;
     }
+    float actualX = (x / OPENGL_SCALE_VALUE) - ((float)m_iWidth / 2);
+    float actualY = (y / OPENGL_SCALE_VALUE) - ((float)m_iHeight / 2);
+    m_Line2DPointList.pointBuf[m_iPointNum++] = actualX;
+    m_Line2DPointList.pointBuf[m_iPointNum++] = actualY;
+    m_Line2DPointList.pointBuf[m_iPointNum++] = m_fZStep;
+    m_fPicLeft = actualX < m_fPicLeft ? actualX : m_fPicLeft;
 
-    float zeroX = (float)m_iWidth * 10;
-    float zeroY = (float)m_iHeight * 10;
-    m_Line2DPoitList.pointBuf[m_iPointNum++] = 3.5 * ((x - zeroX) / zeroX + 0.3);
-    m_Line2DPoitList.pointBuf[m_iPointNum++] = 3.5 * ((y - zeroY) / zeroY + 0.25);
+    m_fPicRight = actualX > m_fPicRight ? actualX : m_fPicRight;
 
-    if (m_iPointNum == (listLength << 1))
+    m_fPicBottom = actualY < m_fPicBottom ? actualY : m_fPicBottom;
+
+    m_fPicTop = actualY > m_fPicTop ? actualY : m_fPicTop;
+
+    if (m_iPointNum == (listLength * 3))
     {
-        m_Line2DShapePointList.push_back(m_Line2DPoitList);
-        m_Line2DPoitList.pointBuf = NULL;
+        m_Line2DShapePointList.push_back(m_Line2DPointList);
+        m_Line2DPointList.pointBuf = NULL;
         m_iPointNum = 0;
     }
     return 0;
@@ -862,7 +915,7 @@ OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
     m_TextVertexID(0),
     m_TextTexCoordID(1)
 {
-    memset(&m_Line2DPoitList, 0, sizeof(Line2DPointList));
+    memset(&m_Line2DPointList, 0, sizeof(Line2DPointList));
     m_iFboIdx = 0;
     m_FboID[0] = 0;
     m_FboID[1] = 0;
