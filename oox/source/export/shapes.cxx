@@ -272,8 +272,14 @@ ShapeExport& ShapeExport::WriteGroupShape(uno::Reference<drawing::XShape> xShape
     {
         uno::Reference<drawing::XShape> xChild(xGroupShape->getByIndex(i), uno::UNO_QUERY_THROW);
         sal_Int32 nSavedNamespace = mnXmlNamespace;
-        mnXmlNamespace = XML_wps;
+
+        uno::Reference<lang::XServiceInfo> xServiceInfo(xChild, uno::UNO_QUERY_THROW);
+        if (xServiceInfo->supportsService("com.sun.star.drawing.GraphicObjectShape"))
+            mnXmlNamespace = XML_pic;
+        else
+            mnXmlNamespace = XML_wps;
         WriteShape(xChild);
+
         mnXmlNamespace = nSavedNamespace;
     }
     m_xParent = xParent;
