@@ -20,45 +20,6 @@
 #include "cfg.hrc"
 #include "helpid.hrc"
 
-TabDialog RID_SVXDLG_CUSTOMIZE
-{
-    OutputSize = TRUE ;
-    Text [ en-US ] = "Customize" ;
-    Moveable = TRUE ;
-    SvLook = TRUE ;
-    TabControl 1
-    {
-        OutputSize = TRUE ;
-        PageList =
-        {
-            PageItem
-            {
-                Identifier = RID_SVXPAGE_MENUS ;
-                Text [ en-US ] = "Menus" ;
-                PageResID = 300 ;
-            };
-            PageItem
-            {
-                Identifier = RID_SVXPAGE_KEYBOARD ;
-                Text [ en-US ] = "Keyboard" ;
-                PageResID = 301 ;
-            };
-            PageItem
-            {
-                Identifier = RID_SVXPAGE_TOOLBARS ;
-                Text [ en-US ] = "Toolbars" ;
-                PageResID = 302 ;
-            };
-            PageItem
-            {
-                Identifier = RID_SVXPAGE_EVENTS ;
-                Text [ en-US ] = "Events" ;
-                PageResID = 303 ;
-            };
-        };
-    };
-};
-
 #define TEXT_MENU \
     Text [ en-US ] = "Menu" ;\
 

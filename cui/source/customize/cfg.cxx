@@ -782,23 +782,23 @@ sal_Bool impl_showKeyConfigTabPage( const css::uno::Reference< css::frame::XFram
  * key bindings.
  *
  *****************************************************************************/
-SvxConfigDialog::SvxConfigDialog(
-    Window * pParent, const SfxItemSet* pSet_ )
-    :
-        SfxTabDialog( pParent,
-            CUI_RES( RID_SVXDLG_CUSTOMIZE ), pSet_ )
+SvxConfigDialog::SvxConfigDialog(Window * pParent, const SfxItemSet* pInSet)
+    : SfxTabDialog(pParent, "CustomizeDialog",
+        "cui/ui/customizedialog.ui", pInSet)
+    , m_nMenusPageId(0)
+    , m_nKeyboardPageId(0)
+    , m_nToolbarsPageId(0)
+    , m_nEventsPageId(0)
 {
-    FreeResource();
-
     InitImageType();
 
-    AddTabPage( RID_SVXPAGE_MENUS, CreateSvxMenuConfigPage, NULL );
-    AddTabPage( RID_SVXPAGE_KEYBOARD, CreateKeyboardConfigPage, NULL );
-    AddTabPage( RID_SVXPAGE_TOOLBARS, CreateSvxToolbarConfigPage, NULL );
-    AddTabPage( RID_SVXPAGE_EVENTS, CreateSvxEventConfigPage, NULL );
+    m_nMenusPageId = AddTabPage("menus", CreateSvxMenuConfigPage, NULL);
+    m_nKeyboardPageId = AddTabPage("keyboard", CreateKeyboardConfigPage, NULL);
+    m_nToolbarsPageId = AddTabPage("toolbars", CreateSvxToolbarConfigPage, NULL);
+    m_nEventsPageId = AddTabPage("events", CreateSvxEventConfigPage, NULL);
 
     const SfxPoolItem* pItem =
-        pSet_->GetItem( pSet_->GetPool()->GetWhich( SID_CONFIG ) );
+        pInSet->GetItem( pInSet->GetPool()->GetWhich( SID_CONFIG ) );
 
     if ( pItem )
     {
@@ -806,7 +806,7 @@ SvxConfigDialog::SvxConfigDialog(
 
         if (text.startsWith( ITEM_TOOLBAR_URL ) )
         {
-            SetCurPageId( RID_SVXPAGE_TOOLBARS );
+            SetCurPageId(m_nToolbarsPageId);
         }
     }
 }
@@ -816,38 +816,19 @@ void SvxConfigDialog::SetFrame(const ::com::sun::star::uno::Reference< ::com::su
     m_xFrame = xFrame;
 
     if (!impl_showKeyConfigTabPage( xFrame ))
-        RemoveTabPage( RID_SVXPAGE_KEYBOARD );
-}
-
-SvxConfigDialog::~SvxConfigDialog()
-{
-}
-
-short SvxConfigDialog::Ok()
-{
-    return SfxTabDialog::Ok();
+        RemoveTabPage(m_nKeyboardPageId);
 }
 
 void SvxConfigDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
 {
-    (void)rPage;
-
-    switch ( nId )
+    if (nId == m_nMenusPageId || nId == m_nKeyboardPageId ||
+        nId == m_nToolbarsPageId)
     {
-        case RID_SVXPAGE_MENUS:
-        case RID_SVXPAGE_TOOLBARS:
-        case RID_SVXPAGE_KEYBOARD:
-            {
-                rPage.SetFrame(m_xFrame);
-            }
-            break;
-        case RID_SVXPAGE_EVENTS:
-            {
-                dynamic_cast< SvxEventConfigPage& >( rPage ).LateInit( m_xFrame );
-            };
-            break;
-        default:
-            break;
+        rPage.SetFrame(m_xFrame);
+    }
+    else if (nId == m_nEventsPageId)
+    {
+        dynamic_cast< SvxEventConfigPage& >( rPage ).LateInit( m_xFrame );
     }
 }
 

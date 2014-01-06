@@ -58,14 +58,15 @@ class SvxConfigDialog : public SfxTabDialog
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
+    sal_uInt16 m_nMenusPageId;
+    sal_uInt16 m_nKeyboardPageId;
+    sal_uInt16 m_nToolbarsPageId;
+    sal_uInt16 m_nEventsPageId;
 
 public:
     SvxConfigDialog( Window*, const SfxItemSet* );
-    ~SvxConfigDialog();
 
     virtual void                PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
-    virtual short               Ok();
-
     void SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
 };
 
