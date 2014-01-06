@@ -662,7 +662,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             ImplFlipBoundingBox( rObj, aPropOpt );
 
         aPropOpt.CreateShapeProperties( rObj.GetShapeRef() );
-        mpEscherEx->Commit( aPropOpt, rObj.GetRect() );
+        mpEscherEx->Commit( aPropOpt, rObj.GetRect(), rObj.GetSdrObject() );
         if( mpEscherEx->GetGroupLevel() > 1 )
             mpEscherEx->AddChildAnchor( rObj.GetRect() );
 
@@ -760,7 +760,7 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
         }
         rObj.SetAngle( nAngle );
         aPropOpt.CreateShapeProperties( rObj.GetShapeRef() );
-        mpEscherEx->Commit( aPropOpt, rObj.GetRect() );
+        mpEscherEx->Commit( aPropOpt, rObj.GetRect(), rObj.GetSdrObject());
 
         // write the childanchor
         mpEscherEx->AddChildAnchor( rObj.GetRect() );
@@ -1037,7 +1037,7 @@ ImplEESdrObject::ImplEESdrObject( ImplEESdrWriter& rEx,
     mbValid( sal_False ),
     mbPresObj( sal_False ),
     mbEmptyPresObj( sal_False ),
-    mbOOXML(false)
+    mbOOXML(true)
 {
     Init( rEx );
 }
