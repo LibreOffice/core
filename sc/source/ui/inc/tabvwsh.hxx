@@ -165,7 +165,9 @@ private:
 
     SbxObject*              pScSbxObject;
 
-    sal_Bool                    bChartAreaValid;            // if chart is drawn
+    sal_Bool                bChartAreaValid; // if chart is drawn
+    sal_Bool                bForceFocusOnCurCell; // #i123629#
+
     OUString                aEditChartName;
     ScRangeListRef          aChartSource;
     Rectangle               aChartPos;
@@ -182,7 +184,6 @@ private:
     bool    mbInSwitch;
     OUString   maName;
     OUString   maScope;
-
 private:
     void    Construct( sal_uInt8 nForceDesignMode = SC_FORCEMODE_NONE );
 
@@ -418,6 +419,9 @@ public:
 
     // ugly hack to call Define Names from Manage Names
     void    SwitchBetweenRefDialogs(SfxModelessDialog* pDialog);
+    // #i123629#
+    sal_Bool    GetForceFocusOnCurCell() const { return bForceFocusOnCurCell; }
+    void SetForceFocusOnCurCell(sal_Bool bFlag) { bForceFocusOnCurCell=bFlag; }
 };
 
 //==================================================================

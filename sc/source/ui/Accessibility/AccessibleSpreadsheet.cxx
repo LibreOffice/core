@@ -472,7 +472,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                         pAccDoc->CommitChange(aEvent);
                     }
                 }
-                sal_Bool bNewPosCell = (aNewCell != maActiveCell);
+                sal_Bool bNewPosCell = (aNewCell != maActiveCell) || mpViewShell->GetForceFocusOnCurCell(); // #i123629#
                 sal_Bool bNewPosCellFocus=sal_False;
                 if ( bNewPosCell && IsFocused() && aNewCell.Tab() == maActiveCell.Tab() )
                 {//single Focus
