@@ -1673,7 +1673,7 @@ public:
                 // a ESCHER_Sp is being written ( a ESCHER_DgContainer has to be opened for this purpose!)
     virtual void AddShape( sal_uInt32 nShpInstance, sal_uInt32 nFlagIds, sal_uInt32 nShapeID = 0 );
 
-    virtual void Commit( EscherPropertyContainer& rProps, const Rectangle& rRect );
+    virtual void Commit( EscherPropertyContainer& rProps, const Rectangle& rRect, const SdrObject* pSdrObject = NULL);
 
     sal_uInt32  GetColor( const sal_uInt32 nColor, sal_Bool bSwap = sal_True );
     sal_uInt32  GetColor( const Color& rColor, sal_Bool bSwap = sal_True );
