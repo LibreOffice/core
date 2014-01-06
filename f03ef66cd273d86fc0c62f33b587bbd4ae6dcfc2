@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1abeadc6_f347d049",
+        "filename": "filter/source/msfilter/eschesdo.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1040,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-06T08:59:28Z",
+      "side": 1,
+      "message": "This is problematic, existing code reads mbOOXML to perform actions which is problematic in the binary export case, and you didn\u0027t adjust all binary export call sites to set this flag to false. I would suggest not setting the default, instead adjust OOXML call sites to set this flag to true.",
+      "revId": "f03ef66cd273d86fc0c62f33b587bbd4ae6dcfc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
