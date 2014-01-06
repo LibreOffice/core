@@ -1,7 +1,7 @@
 build with GCC on AIX
 
---- Python-3.3.0/configure	2012-11-28 09:05:45.990529603 +0000
-+++ Python-3.3.0/configure	2012-11-28 09:06:23.037963934 +0000
+--- Python-3.3.3/configure	2012-11-28 09:05:45.990529603 +0000
++++ Python-3.3.3/configure	2012-11-28 09:06:23.037963934 +0000
 @@ -3426,8 +3426,6 @@
  else
  
@@ -49,8 +49,8 @@ build with GCC on AIX
  		;;
  	IRIX/5*) LDSHARED="ld -shared";;
  	IRIX*/6*) LDSHARED="ld ${SGI_ABI} -shared -all";;
---- Python-3.3.0/configure.ac	2012-11-28 09:05:45.990529603 +0000
-+++ Python-3.3.0/configure.ac	2012-11-28 09:06:23.038963946 +0000
+--- Python-3.3.3/configure.ac	2012-11-28 09:05:45.990529603 +0000
++++ Python-3.3.3/configure.ac	2012-11-28 09:06:23.038963946 +0000
 @@ -545,8 +545,6 @@
  		without_gcc=$withval;;
  	esac], [
@@ -98,8 +98,8 @@ build with GCC on AIX
  		;;
  	IRIX/5*) LDSHARED="ld -shared";;
  	IRIX*/6*) LDSHARED="ld ${SGI_ABI} -shared -all";;
---- Python-3.3.0/Makefile.pre.in	2012-11-28 09:05:45.861528086 +0000
-+++ Python-3.3.0/Makefile.pre.in	2012-11-28 09:06:23.046964040 +0000
+--- Python-3.3.3/Makefile.pre.in	2012-11-28 09:05:45.861528086 +0000
++++ Python-3.3.3/Makefile.pre.in	2012-11-28 09:06:23.046964040 +0000
 @@ -493,14 +493,20 @@
  
  libpython$(LDVERSION).so: $(LIBRARY_OBJS)
@@ -130,21 +130,10 @@ build with GCC on AIX
 +	export LD_LIBRARY_PATH; LD_LIBRARY_PATH="`pwd`${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"; \
 +	export LIBPATH; LIBPATH="`pwd`${LIBPATH:+:$LIBPATH}"; \
  	export EXE; EXE="$(BUILDEXE)"; \
- 	cd $(srcdir)/Lib/$(PLATDIR); $(RUNSHARED) ./regen
- 
---- Python-3.3.0/Modules/_ctypes/libffi/fficonfig.py.in	2012-11-28 09:05:45.889528418 +0000
-+++ Python-3.3.0/Modules/_ctypes/libffi/fficonfig.py.in	2012-11-28 09:06:23.046964040 +0000
-@@ -16,7 +16,7 @@
-     'M32R': ['src/m32r/sysv.S', 'src/m32r/ffi.c'],
-     'M68K': ['src/m68k/ffi.c', 'src/m68k/sysv.S'],
-     'POWERPC': ['src/powerpc/ffi.c', 'src/powerpc/sysv.S', 'src/powerpc/ppc_closure.S', 'src/powerpc/linux64.S', 'src/powerpc/linux64_closure.S'],
--    'POWERPC_AIX': ['src/powerpc/ffi.c', 'src/powerpc/aix.S', 'src/powerpc/aix_closure.S'],
-+    'POWERPC_AIX': ['src/powerpc/ffi_darwin.c', 'src/powerpc/aix.S', 'src/powerpc/aix_closure.S'],
-     'POWERPC_FREEBSD': ['src/powerpc/ffi.c', 'src/powerpc/sysv.S', 'src/powerpc/ppc_closure.S'],
-     'ARM': ['src/arm/sysv.S', 'src/arm/ffi.c'],
-     'LIBFFI_CRIS': ['src/cris/sysv.S', 'src/cris/ffi.c'],
---- Python-3.3.0/Modules/Setup.dist	2012-11-28 09:05:45.935528957 +0000
-+++ Python-3.3.0/Modules/Setup.dist	2012-11-28 09:06:23.052964111 +0000
+ 	if [ -n "$(MULTIARCH)" ]; then export MULTIARCH; MULTIARCH=$(MULTIARCH); fi; \
+ 	export PYTHON_FOR_BUILD; \
+--- Python-3.3.3/Modules/Setup.dist	2012-11-28 09:05:45.935528957 +0000
++++ Python-3.3.3/Modules/Setup.dist	2012-11-28 09:06:23.052964111 +0000
 @@ -177,7 +177,7 @@
  #_bisect _bisectmodule.c	# Bisection algorithms
  #_heapq _heapqmodule.c	# Heap queue algorithm
