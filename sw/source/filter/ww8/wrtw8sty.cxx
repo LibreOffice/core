@@ -2238,13 +2238,6 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                         }
                         SwWW8Writer::WriteLong( *rWrt.pTableStrm, aRangeEndPos[i-1] + 1);
 
-                        // Commented text ranges additional informations (Plcfbkl.aFBKF)
-                        for ( i = 0; i < aRangeEndPos.size(); ++i )
-                        {
-                            SwWW8Writer::WriteShort( *rWrt.pTableStrm, i ); // FBKF.ibkl
-                            SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0 ); // FBKF.bkc
-                        }
-
                         nFcStart = rWrt.pTableStrm->Tell();
                         rFib.lcbPlcfAtnbkl = nFcStart - rFib.fcPlcfAtnbkl;
 
