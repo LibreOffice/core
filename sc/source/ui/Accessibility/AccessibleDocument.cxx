@@ -69,6 +69,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/docfile.hxx>
 #include <svx/unoshcol.hxx>
 #include <svx/unoshape.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
@@ -1867,30 +1868,33 @@ OUString SAL_CALL
     ScAccessibleDocument::getAccessibleName(void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    OUString sName = ScResId(STR_ACC_DOC_SPREADSHEET);
+    OUString aName = ScResId(STR_ACC_DOC_SPREADSHEET);
     ScDocument* pScDoc = GetDocument();
-    if ( pScDoc )
+    if (!pScDoc)
+        return aName;
+
+    SfxObjectShell* pObjSh = pScDoc->GetDocumentShell();
+    if (!pObjSh)
+        return aName;
+
+    OUString aFileName;
+    SfxMedium* pMed = pObjSh->GetMedium();
+    if (pMed)
+        aFileName = pMed->GetName();
+
+    if (aFileName.isEmpty())
+        aFileName = pObjSh->GetTitle(SFX_TITLE_APINAME);
+
+
+    if (!aFileName.isEmpty())
     {
-        OUString sFileName = pScDoc->getDocAccTitle();
-        if ( !sFileName.getLength() )
-        {
-            SfxObjectShell* pObjSh = pScDoc->GetDocumentShell();
-            if ( pObjSh )
-            {
-                sFileName = pObjSh->GetTitle( SFX_TITLE_APINAME );
-            }
-        }
-        OUString sReadOnly;
-        if (pScDoc->getDocReadOnly())
-        {
-            sReadOnly = ScResId(STR_ACC_DOC_SPREADSHEET_READONLY);
-        }
-        if ( sFileName.getLength() )
-        {
-            sName = sFileName + sReadOnly + " - " + sName;
-        }
+        OUString aReadOnly;
+        if (pObjSh->IsReadOnly())
+            aReadOnly = ScResId(STR_ACC_DOC_SPREADSHEET_READONLY);
+
+        aName = aFileName + aReadOnly + " - " + aName;
     }
-    return sName;
+    return aName;
 }
 
 ///=====  XAccessibleSelection  ===========================================

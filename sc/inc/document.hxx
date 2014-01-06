@@ -446,18 +446,7 @@ private:
 
     bool                mbUseEmbedFonts;
 
-    OUString msDocAccTitle;
-
 public:
-    void setDocAccTitle( const OUString& rTitle ) { msDocAccTitle = rTitle; }
-    const OUString getDocAccTitle() const { return msDocAccTitle; }
-
-private:
-    bool mbReadOnly;
-
-public:
-    void setDocReadOnly(bool b){ mbReadOnly = b; }
-    bool getDocReadOnly() const { return mbReadOnly; }
     sal_Bool IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBoder);
     void GetCellChangeTrackNote(const ScAddress &cell, OUString &strTrackText, sal_Bool &pbLeftEdge);
     bool              IsUsingEmbededFonts() { return mbUseEmbedFonts; }

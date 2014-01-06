@@ -1607,7 +1607,6 @@ sal_Bool ScDocShell::Save()
 
     PrepareSaveGuard aPrepareGuard( *this);
 
-    aDocument.setDocAccTitle(OUString());
     SfxViewFrame* pFrame1 = SfxViewFrame::GetFirst( this );
     if (pFrame1)
     {

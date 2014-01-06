@@ -220,8 +220,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mbStreamValidLocked( false ),
         mbUserInteractionEnabled(true),
         mnNamedRangesLockCount(0),
-        mbUseEmbedFonts(false),
-        mbReadOnly(false)
+        mbUseEmbedFonts(false)
 {
     SetStorageGrammar( formula::FormulaGrammar::GRAM_STORAGE_DEFAULT);
 
