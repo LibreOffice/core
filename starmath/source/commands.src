@@ -48,7 +48,7 @@ String RID_NEGX_HELP
 String RID_XPLUSY           { Text = "<?> + <?> " ; };
 String RID_XPLUSY_HELP
 {
-    Text [ en-US ] = "Addition + " ;
+    Text [ en-US ] = "Addition +" ;
 };
 String RID_XMINUSY          { Text = "<?> - <?> " ; };
 String RID_XMINUSY_HELP
@@ -281,7 +281,7 @@ String RID_FACTX_HELP
 String RID_SQRTX            { Text = "sqrt{<?>} " ; };
 String RID_SQRTX_HELP
 {
-    Text [ en-US ] = "Square Root " ;
+    Text [ en-US ] = "Square Root" ;
 };
 String RID_NROOTXY          { Text = "nroot{<?>}{<?>} " ; };
 String RID_NROOTXY_HELP
@@ -336,7 +336,7 @@ String RID_ARCSINX_HELP
 String RID_ARCCOSX          { Text = "arccos(<?>) " ; };
 String RID_ARCCOSX_HELP
 {
-    Text [ en-US ] = "Arccosise" ;
+    Text [ en-US ] = "Arccosine" ;
 };
 String RID_ARCTANX          { Text = "arctan(<?>) " ; };
 String RID_ARCTANX_HELP
@@ -401,7 +401,7 @@ String RID_SUM_FROMX_HELP
 String RID_SUM_TOX          { Text = "sum to{<?>} <?> " ; };
 String RID_SUM_TOX_HELP
 {
-    Text [ en-US ] = "Sum SuperScript Top" ;
+    Text [ en-US ] = "Sum Superscript Top" ;
 };
 String RID_SUM_FROMTOX      { Text = "sum from{<?>} to{<?>} <?> " ; };
 String RID_SUM_FROMTOX_HELP
@@ -436,7 +436,7 @@ String RID_COPRODX_HELP
 String RID_COPROD_FROMX     { Text = "coprod from{<?>} <?> " ; };
 String RID_COPROD_FROMX_HELP
 {
-    Text [ en-US ] = "Coproduct " ;
+    Text [ en-US ] = "Coproduct Subscript Bottom" ;
 };
 String RID_COPROD_TOX       { Text = "coprod to{<?>} <?> " ; };
 String RID_COPROD_TOX_HELP
@@ -456,24 +456,24 @@ String RID_LIMX_HELP
 String RID_LIM_FROMX        { Text = "lim from{<?>} <?> " ; };
 String RID_LIM_FROMX_HELP
 {
-    Text [ en-US ] = "Lime Subscript Bottom" ;
+    Text [ en-US ] = "Limes Subscript Bottom" ;
 };
 String RID_LIM_TOX          { Text = "lim to{<?>} <?> " ; };
 String RID_LIM_TOX_HELP
 {
-    Text [ en-US ] = "Lime Superscript Top" ;
+    Text [ en-US ] = "Limes Superscript Top" ;
 };
 String RID_LIM_FROMTOX      { Text = "lim from{<?>} to{<?>} <?> " ; };
 String RID_LIM_FROMTOX_HELP
 {
-    Text [ en-US ] = "Lime Sup/Sub script" ;
+    Text [ en-US ] = "Limes Sup/Sub script" ;
 };
 String RID_LIMINFX          { Text = "liminf <?> " ; };
 String RID_LIMSUPX          { Text = "limsup <?> " ; };
 String RID_EXISTS           { Text = "exists " ; };
 String RID_EXISTS_HELP
 {
-    Text [ en-US ] = "There exists" ;
+    Text [ en-US ] = "There Exists" ;
 };
 String RID_NOTEXISTS        { Text = "notexists " ; };
 String RID_NOTEXISTS_HELP
@@ -493,7 +493,7 @@ String RID_INTX_HELP
 String RID_INT_FROMX        { Text = "int from{<?>} <?> " ; };
 String RID_INT_FROMX_HELP
 {
-    Text [ en-US ] = "Integral Subscript Top" ;
+    Text [ en-US ] = "Integral Subscript Bottom" ;
 };
 String RID_INT_TOX          { Text = "int to{<?>} <?> " ; };
 String RID_INT_TOX_HELP
@@ -603,7 +603,7 @@ String RID_LLLINT_TOX_HELP
 String RID_LLLINT_FROMTOX   { Text = "lllint from{<?>} to{<?>} <?> " ; };
 String RID_LLLINT_FROMTOX_HELP
 {
-    Text [ en-US ] = "Trile Curve Integral Sup/Sub script" ;
+    Text [ en-US ] = "Triple Curve Integral Sup/Sub script" ;
 };
 String RID_FROMX            { Text = "from{<?>} <?> " ; };
 String RID_TOX              { Text = "to{<?>} <?> " ; };
@@ -646,7 +646,7 @@ String RID_DDOTX_HELP
 String RID_DDDOTX           { Text = "dddot <?> " ; };
 String RID_DDDOTX_HELP
 {
-    Text [ en-US ] = "Triple Dot " ;
+    Text [ en-US ] = "Triple Dot" ;
 };
 String RID_GRAVEX           { Text = "grave <?> " ; };
 String RID_GRAVEX_HELP
@@ -752,12 +752,12 @@ String RID_LRGROUPX_HELP
 String RID_LRPARENTX        { Text = "(<?>) " ; };
 String RID_LRPARENTX_HELP
 {
-    Text [ en-US ] = "Round Brackets (Scalable)" ;
+    Text [ en-US ] = "Round Brackets" ;
 };
 String RID_LRBRACKETX       { Text = "[<?>] " ; };
 String RID_LRBRACKETX_HELP
 {
-    Text [ en-US ] = "Square Brackets (Scalable)" ;
+    Text [ en-US ] = "Square Brackets" ;
 };
 String RID_LRDBRACKETX      { Text = "ldbracket <?> rdbracket " ; };
 String RID_LRDBRACKETX_HELP
@@ -827,12 +827,12 @@ String RID_SLRANGLEX_HELP
 String RID_SLRCEILX         { Text = "left lceil <?> right rceil " ; };
 String RID_SLRCEILX_HELP
 {
-    Text [ en-US ] = "Minor ceil" ;
+    Text [ en-US ] = "Ceiling (Scalable)" ;
 };
 String RID_SLRFLOORX        { Text = "left lfloor <?> right rfloor " ; };
 String RID_SLRFLOORX_HELP
 {
-    Text [ en-US ] = "Minor floor" ;
+    Text [ en-US ] = "Floor (Scalable)" ;
 };
 String RID_SLRLINEX         { Text = "left lline <?> right rline " ; };
 String RID_SLRLINEX_HELP
@@ -902,7 +902,7 @@ String RID_BLANK_HELP
 String RID_NEWLINE          { Text = "newline " ; };
 String RID_NEWLINE_HELP
 {
-    Text [ en-US ] = "New Line " ;
+    Text [ en-US ] = "New Line" ;
 };
 String RID_BINOMXY          { Text = "binom{<?>}{<?>} " ; };
 String RID_BINOMXY_HELP
@@ -1007,12 +1007,12 @@ String RID_XCIRCY_HELP
 String RID_XWIDESLASHY      { Text = "{<?>} wideslash {<?>} " ; };
 String RID_XWIDESLASHY_HELP
 {
-    Text [ en-US ] = "Division (wideslash) " ;
+    Text [ en-US ] = "Division (wideslash)" ;
 };
 String RID_XWIDEBSLASHY     { Text = "<?> widebslash <?> " ; };
 String RID_XWIDEBSLASHY_HELP
 {
-    Text [ en-US ] = "Division (counter wideslash) " ;
+    Text [ en-US ] = "Division (counter wideslash)" ;
 };
 String RID_XDIVIDESY        { Text = "<?> divides <?> " ; };
 String RID_XDIVIDESY_HELP
