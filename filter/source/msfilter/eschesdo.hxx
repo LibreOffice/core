@@ -87,6 +87,7 @@ public:
     sal_uInt32              ImplGetText();
     sal_Bool                ImplHasText() const;
     bool GetOOXML() const;
+    void setOOXML(bool bOOXML);
 };
 
 

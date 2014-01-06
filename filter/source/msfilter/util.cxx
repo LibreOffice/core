@@ -1093,6 +1093,7 @@ static struct {
 } const pDMLToVMLTable[] = {
     {"notPrimitive", mso_sptNotPrimitive},
     {"rectangle", mso_sptRectangle},
+    {"rect", mso_sptRectangle},
     {"roundRectangle", mso_sptRoundRectangle},
     {"ellipse", mso_sptEllipse},
     {"diamond", mso_sptDiamond},

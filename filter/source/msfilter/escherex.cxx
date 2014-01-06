@@ -5285,7 +5285,7 @@ sal_uInt32 EscherEx::EnterGroup( const OUString& rShapeName, const Rectangle* pB
         if( rShapeName.getLength() > 0 )
             aPropOpt.AddOpt( ESCHER_Prop_wzName, rShapeName );
 
-        Commit( aPropOpt, aRect );
+        Commit( aPropOpt, aRect);
         if ( mnGroupLevel > 1 )
             AddChildAnchor( aRect );
 
@@ -5363,7 +5363,7 @@ void EscherEx::AddShape( sal_uInt32 nShpInstance, sal_uInt32 nFlags, sal_uInt32 
     *mpOutStrm << nShapeID << nFlags;
 }
 
-void EscherEx::Commit( EscherPropertyContainer& rProps, const Rectangle& )
+void EscherEx::Commit( EscherPropertyContainer& rProps, const Rectangle&, const SdrObject* )
 {
     rProps.Commit( GetStream() );
 }
