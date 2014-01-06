@@ -510,7 +510,7 @@ void ScAccessibleCell::AddRelation(const ScRange& rRange,
 }
 
 uno::Any SAL_CALL ScAccessibleCell::getExtendedAttributes()
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, com::sun::star::ucb::CommandFailedException)
 {
     uno::Any strRet;
     if (mpViewShell)

@@ -28,6 +28,9 @@
 #include "AccessibleTableBase.hxx"
 #include "viewdata.hxx"
 
+#include <com/sun/star/ucb/CommandFailedException.hpp>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
+
 #include <vector>
 
 #include "rangelst.hxx"
@@ -243,13 +246,13 @@ public:
         throw (com::sun::star::uno::RuntimeException);
     //=====  XAccessibleTableSelection  ============================================
     virtual sal_Bool SAL_CALL selectRow( sal_Int32 row )
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, ::com::sun::star::ucb::CommandFailedException, com::sun::star::ucb::ContentCreationException) ;
     virtual sal_Bool SAL_CALL selectColumn( sal_Int32 column )
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, ::com::sun::star::ucb::CommandFailedException, com::sun::star::ucb::ContentCreationException) ;
     virtual sal_Bool SAL_CALL unselectRow( sal_Int32 row )
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, ::com::sun::star::ucb::CommandFailedException, com::sun::star::ucb::ContentCreationException) ;
     virtual sal_Bool SAL_CALL unselectColumn( sal_Int32 column )
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, ::com::sun::star::ucb::CommandFailedException, com::sun::star::ucb::ContentCreationException) ;
 
 protected:
     /// Return the object's current bounding box relative to the desktop.

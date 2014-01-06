@@ -177,6 +177,8 @@ private:
     static const int        MASTERENUMCOMMANDS = 6;
     String                  aCurrShapeEnumCommand[ MASTERENUMCOMMANDS ];
 
+    sal_Bool    bForceFocusOnCurCell; // i123629
+
 private:
     void    Construct( sal_uInt8 nForceDesignMode = SC_FORCEMODE_NONE );
 
@@ -426,6 +428,10 @@ public:
     sal_Bool IsActive(){ return bIsActive; }
     rtl::OUString GetFormula(ScAddress& rAddress);
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & GetForms() const;
+
+    // i123629
+    sal_Bool    GetForceFocusOnCurCell(){return bForceFocusOnCurCell;}
+    void        SetForceFocusOnCurCell(sal_Bool bFlag){bForceFocusOnCurCell=bFlag;}
 };
 
 //==================================================================

@@ -257,12 +257,12 @@ public:
 
     virtual ::accessibility::AccessibleControlShape* GetAccControlShapeFromModel
         (::com::sun::star::beans::XPropertySet* pSet)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, com::sun::star::ucb::CommandFailedException);
     virtual  ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessible>
         GetAccessibleCaption (const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XShape>& xShape)
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, com::sun::star::ucb::CommandFailedException);
     ///=====  Internal  ========================================================
     void SetDrawBroadcaster();
 
@@ -483,7 +483,7 @@ sal_Bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurr
     return bResult;
 }
 
-::accessibility::AccessibleControlShape * ScChildrenShapes::GetAccControlShapeFromModel(::com::sun::star::beans::XPropertySet* pSet) throw (::com::sun::star::uno::RuntimeException)
+::accessibility::AccessibleControlShape * ScChildrenShapes::GetAccControlShapeFromModel(::com::sun::star::beans::XPropertySet* pSet) throw (::com::sun::star::uno::RuntimeException, com::sun::star::ucb::CommandFailedException)
 {
     sal_Int32 count = GetCount();
     for (sal_Int32 index=0;index<count;index++)
@@ -504,7 +504,7 @@ sal_Bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurr
 }
 ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessible >
 ScChildrenShapes::GetAccessibleCaption (const ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShape>& xShape)
-            throw (::com::sun::star::uno::RuntimeException)
+            throw (::com::sun::star::uno::RuntimeException, com::sun::star::ucb::CommandFailedException)
 {
     sal_Int32 count = GetCount();
     for (sal_Int32 index=0;index<count;index++)
@@ -1014,10 +1014,13 @@ sal_Bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawin
             ++aDataItr;
     }
     bool bWinFocus=false;
-    ScGridWindow* pWin = static_cast<ScGridWindow*>(mpViewShell->GetWindowByPos(meSplitPos));
-    if (pWin)
+    if (mpViewShell)
     {
-        bWinFocus = pWin->HasFocus();
+        ScGridWindow* pWin = static_cast<ScGridWindow*>(mpViewShell->GetWindowByPos(meSplitPos));
+        if (pWin)
+        {
+            bWinFocus = pWin->HasFocus();
+        }
     }
     const SdrMarkList* pMarkList = NULL;
     SdrObject* pMarkedObj = NULL;

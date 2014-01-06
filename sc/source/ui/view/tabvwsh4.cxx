@@ -1588,6 +1588,7 @@ FASTBOOL __EXPORT ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
     pScSbxObject(NULL),         \
     /*bChartDlgIsEdit(sal_False),*/     \
     bChartAreaValid(sal_False),     \
+    bForceFocusOnCurCell(sal_False),    \
     nCurRefDlgId(0),            \
     pAccessibilityBroadcaster(NULL)
 
