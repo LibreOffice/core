@@ -69,12 +69,16 @@ Any SAL_CALL java_sql_CallableStatement::queryInterface( const Type & rType ) th
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_CallableStatement::wasNull(  ) throw(starsdbc::SQLException, RuntimeException)
 {
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    createStatement(t.pEnv);
     static jmethodID mID(NULL);
     return callBooleanMethod( "wasNull", mID );
 }
 
 sal_Bool SAL_CALL java_sql_CallableStatement::getBoolean( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    createStatement(t.pEnv);
     static jmethodID mID(NULL);
     return callBooleanMethodWithIntArg( "getBoolean", mID,columnIndex );
 }
