@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1abeadc6_b36478e6",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1027,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-06T10:08:53Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we check if m_hyperlinkAnchor is empty here? Probably \"PAGEREF \" is not valid.",
+      "range": {
+        "startLine": 1027,
+        "startChar": 24,
+        "endLine": 1027,
+        "endChar": 26
+      },
+      "revId": "3b9156b2f1fc47765b16ee8149d98b2401430e32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_d361f4d4",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-06T10:08:53Z",
+      "side": 1,
+      "message": "You should clear m_hyperlinkAnchor somewhere else as well, probably in EndURL() or so: otherwise if you have a hyperlink, then a table of contents, you\u0027ll include the URL of the independent URL field in case the table of contents itself has no URL\u0027s.",
+      "revId": "3b9156b2f1fc47765b16ee8149d98b2401430e32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
