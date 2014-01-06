@@ -1490,7 +1490,7 @@ Rectangle ScAccessibleSpreadsheet::GetVisCells(const Rectangle& rVisArea)
         return Rectangle();
 }
 sal_Bool SAL_CALL ScAccessibleSpreadsheet::selectRow( sal_Int32 row )
-        throw (lang::IndexOutOfBoundsException, uno::RuntimeException, ucb::CommandFailedException, ucb::ContentCreationException)
+throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     if (IsFormulaMode())
     {
@@ -1506,7 +1506,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::selectRow( sal_Int32 row )
 }
 
 sal_Bool SAL_CALL ScAccessibleSpreadsheet::selectColumn( sal_Int32 column )
-        throw (lang::IndexOutOfBoundsException, uno::RuntimeException, ucb::CommandFailedException, ucb::ContentCreationException)
+        throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     if (IsFormulaMode())
     {
@@ -1522,7 +1522,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::selectColumn( sal_Int32 column )
 }
 
 sal_Bool SAL_CALL ScAccessibleSpreadsheet::unselectRow( sal_Int32 row )
-        throw (lang::IndexOutOfBoundsException, uno::RuntimeException, ucb::CommandFailedException, ucb::ContentCreationException)
+        throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     if (IsFormulaMode())
     {
@@ -1539,7 +1539,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::unselectRow( sal_Int32 row )
 }
 
 sal_Bool SAL_CALL ScAccessibleSpreadsheet::unselectColumn( sal_Int32 column )
-        throw (lang::IndexOutOfBoundsException, uno::RuntimeException, ucb::CommandFailedException, ucb::ContentCreationException)
+        throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     if (IsFormulaMode())
     {

@@ -35,7 +35,6 @@
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XAccessibleExtendedAttributes_HPP_
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #endif
-#include <com/sun/star/ucb/CommandFailedException.hpp>
 
 class ScTabViewShell;
 class ScAccessibleDocument;
@@ -143,7 +142,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::uno::Any SAL_CALL getExtendedAttributes()
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, com::sun::star::ucb::CommandFailedException) ;
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
 
     // Override this method to handle cell's ParaIndent attribute specially.
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes )
