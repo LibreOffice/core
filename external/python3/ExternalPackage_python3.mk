@@ -114,6 +114,13 @@ endif
 # headers are not delivered, but used from unpacked dir Include/
 # (+ toplevel for pyconfig.h)
 
+# that one is generated...
+ifneq ($(OS)-$(COM),WNT-MSC)
+$(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib,\
+	LO_lib/_sysconfigdata.py \
+))
+endif
+
 # packages not shipped:
 # dbm, sqlite3 - need some database stuff
 # curses - need curses to build the C module
@@ -147,13 +154,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/plat-aix4/regen \
 	Lib/plat-aix4/IN.py \
 ))
-
-# that one is generated...
-ifneq ($(OS)-$(COM),WNT-MSC)
-$(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib,\
-	Lib/_sysconfigdata.py \
-))
-endif
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib,\
 	LICENSE \
