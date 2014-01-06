@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1abeadc6_333148a3",
+        "filename": "svtools/source/inc/documentcloser.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-01-06T16:48:59Z",
+      "side": 0,
+      "message": "...which means you can also drop the #include \u003ccom/sun/star/uno/XComponentContext.hpp\u003e",
+      "revId": "732c0f929fc0229b6da37d4ec4b6de8994fcea46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_5326c469",
+        "filename": "svtools/source/uno/miscservices.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-01-06T16:48:59Z",
+      "side": 0,
+      "message": "the corresponding addition of a constructor argument is missing from svtools/util/svt.component",
+      "revId": "732c0f929fc0229b6da37d4ec4b6de8994fcea46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

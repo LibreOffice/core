@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1abeadc6_735d80e9",
+        "filename": "svtools/source/hatchwindow/documentcloser.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-01-06T16:48:59Z",
+      "side": 1,
+      "message": "as long as the definition of ODocumentCloser is not in an anonymous namespace (i.e., unnecessarily remains in a documentcloser.hxx include file), the below definitions of ODocumentCloser member functions should not be, either",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 9
+      },
+      "revId": "cb88380ab3e0b03e1a306bec87f447a2d35f023f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_93f85cc6",
+        "filename": "svtools/source/hatchwindow/documentcloser.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-01-06T16:48:59Z",
+      "side": 1,
+      "message": "Better use either a single rtl::Reference\u003cODocumentCloser\u003e or a single css::uno::Reference\u003ccss::uno::XInitialization\u003e, instead of x and xx.",
+      "revId": "cb88380ab3e0b03e1a306bec87f447a2d35f023f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_b3f558cd",
+        "filename": "svtools/source/hatchwindow/documentcloser.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-01-06T16:48:59Z",
+      "side": 1,
+      "message": "Would look better to keep the \"magic\" x-\u003eacquire() together with the return statement.",
+      "range": {
+        "startLine": 251,
+        "startChar": 7,
+        "endLine": 251,
+        "endChar": 14
+      },
+      "revId": "cb88380ab3e0b03e1a306bec87f447a2d35f023f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_d302d4b3",
+        "filename": "svtools/source/hatchwindow/documentcloser.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-01-06T16:48:59Z",
+      "side": 1,
+      "message": "This is wrong, the temporary Sequence must not take ownership of arguments; cf. OUString::unaquired.",
+      "revId": "cb88380ab3e0b03e1a306bec87f447a2d35f023f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_132c4c4a",
+        "filename": "svtools/source/inc/documentcloser.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-01-06T16:48:59Z",
+      "side": 1,
+      "message": "Introducing an anonymous namespace in a header is fishy at best.",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 9
+      },
+      "revId": "cb88380ab3e0b03e1a306bec87f447a2d35f023f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
