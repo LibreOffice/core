@@ -215,16 +215,14 @@ public:
 class LibPage: public TabPage
 {
 protected:
-    FixedText           aBasicsText;
-    ListBox             aBasicsBox;
-    FixedText           aLibText;
-    CheckBox            aLibBox;
-    PushButton          aEditButton;
-    PushButton          aPasswordButton;
-    PushButton          aNewLibButton;
-    PushButton          aInsertLibButton;
-    PushButton          aExportButton;
-    PushButton          aDelButton;
+    ListBox*            m_pBasicsBox;
+    CheckBox*           m_pLibBox;
+    PushButton*         m_pEditButton;
+    PushButton*         m_pPasswordButton;
+    PushButton*         m_pNewLibButton;
+    PushButton*         m_pInsertLibButton;
+    PushButton*         m_pExportButton;
+    PushButton*         m_pDelButton;
 
     ScriptDocument      m_aCurDocument;
     LibraryLocation     m_eCurLocation;

@@ -482,7 +482,8 @@ IMPL_LINK_NOARG(ExportDialog, OkButtonHandler)
 }
 
 ExportDialog::ExportDialog(Window * pParent)
-    : ModalDialog(pParent, "ExportDialog", "modules/BasicIDE/ui/exportdialog.ui")
+    : ModalDialog(pParent, "ExportDialog",
+        "modules/BasicIDE/ui/exportdialog.ui")
     , mbExportAsPackage(false)
 {
     get(m_pExportAsPackageButton, "extension");
@@ -496,43 +497,45 @@ ExportDialog::ExportDialog(Window * pParent)
 //  LibPage
 //----------------------------------------------------------------------------
 
-LibPage::LibPage( Window * pParent )
-    :TabPage( pParent, IDEResId( RID_TP_LIBS ) )
-    ,aBasicsText( this, IDEResId( RID_STR_BASICS ) )
-    ,aBasicsBox( this, IDEResId( RID_LB_BASICS ) )
-    ,aLibText( this, IDEResId( RID_STR_LIB ) )
-    ,aLibBox( this, IDEResId( RID_TRLBOX ) )
-    ,aEditButton( this, IDEResId( RID_PB_EDIT ) )
-    ,aPasswordButton( this, IDEResId( RID_PB_PASSWORD ) )
-    ,aNewLibButton( this, IDEResId( RID_PB_NEWLIB ) )
-    ,aInsertLibButton( this, IDEResId( RID_PB_APPEND ) )
-    ,aExportButton( this, IDEResId( RID_PB_EXPORT ) )
-    ,aDelButton( this, IDEResId( RID_PB_DELETE ) )
-    ,m_aCurDocument( ScriptDocument::getApplicationScriptDocument() )
-    ,m_eCurLocation( LIBRARY_LOCATION_UNKNOWN )
+LibPage::LibPage(Window * pParent)
+    : TabPage(pParent, "LibPage",
+        "modules/BasicIDE/ui/libpage.ui")
+    , m_aCurDocument(ScriptDocument::getApplicationScriptDocument())
+    , m_eCurLocation(LIBRARY_LOCATION_UNKNOWN)
 {
-    FreeResource();
+    get(m_pBasicsBox, "location");
+    get(m_pLibBox, "library");
+    Size aSize(m_pLibBox->LogicToPixel(Size(130, 87), MAP_APPFONT));
+    m_pLibBox->set_height_request(aSize.Height());
+    m_pLibBox->set_width_request(aSize.Width());
+    get(m_pEditButton, "edit");
+    get(m_pPasswordButton, "password");
+    get(m_pNewLibButton, "new");
+    get(m_pInsertLibButton, "import");
+    get(m_pExportButton, "export");
+    get(m_pDelButton, "delete");
+
     pTabDlg = 0;
 
-    aEditButton.SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
-    aNewLibButton.SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
-    aPasswordButton.SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
-    aExportButton.SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
-    aInsertLibButton.SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
-    aDelButton.SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
-    aLibBox.SetSelectHdl( LINK( this, LibPage, TreeListHighlightHdl ) );
+    m_pEditButton->SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
+    m_pNewLibButton->SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
+    m_pPasswordButton->SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
+    m_pExportButton->SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
+    m_pInsertLibButton->SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
+    m_pDelButton->SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
+    m_pLibBox->SetSelectHdl( LINK( this, LibPage, TreeListHighlightHdl ) );
 
-    aBasicsBox.SetSelectHdl( LINK( this, LibPage, BasicSelectHdl ) );
+    m_pBasicsBox->SetSelectHdl( LINK( this, LibPage, BasicSelectHdl ) );
 
-    aLibBox.SetMode(ObjectMode::Module);
-    aLibBox.EnableInplaceEditing(true);
-    aLibBox.SetStyle( WB_HSCROLL | WB_BORDER | WB_TABSTOP );
+    m_pLibBox->SetMode(ObjectMode::Module);
+    m_pLibBox->EnableInplaceEditing(true);
+    m_pLibBox->SetStyle( WB_HSCROLL | WB_BORDER | WB_TABSTOP );
 
     long aTabs[] = { 2, 30, 120 };
-    aLibBox.SetTabs( aTabs, MAP_PIXEL );
+    m_pLibBox->SetTabs( aTabs, MAP_PIXEL );
 
     FillListBox();
-    aBasicsBox.SelectEntryPos( 0 );
+    m_pBasicsBox->SelectEntryPos( 0 );
     SetCurLib();
 
     CheckButtons();
@@ -542,10 +545,10 @@ LibPage::LibPage( Window * pParent )
 
 LibPage::~LibPage()
 {
-    sal_uInt16 nCount = aBasicsBox.GetEntryCount();
+    sal_uInt16 nCount = m_pBasicsBox->GetEntryCount();
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
-        DocumentEntry* pEntry = (DocumentEntry*)aBasicsBox.GetEntryData( i );
+        DocumentEntry* pEntry = (DocumentEntry*)m_pBasicsBox->GetEntryData( i );
         delete pEntry;
     }
 }
@@ -554,51 +557,51 @@ LibPage::~LibPage()
 
 void LibPage::CheckButtons()
 {
-    SvTreeListEntry* pCur = aLibBox.GetCurEntry();
+    SvTreeListEntry* pCur = m_pLibBox->GetCurEntry();
     if ( pCur )
     {
-        OUString aLibName = aLibBox.GetEntryText( pCur, 0 );
+        OUString aLibName = m_pLibBox->GetEntryText( pCur, 0 );
         Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
         Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aCurDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
 
         if ( m_eCurLocation == LIBRARY_LOCATION_SHARE )
         {
-            aPasswordButton.Disable();
-            aNewLibButton.Disable();
-            aInsertLibButton.Disable();
-            aDelButton.Disable();
+            m_pPasswordButton->Disable();
+            m_pNewLibButton->Disable();
+            m_pInsertLibButton->Disable();
+            m_pDelButton->Disable();
         }
         else if ( aLibName.equalsIgnoreAsciiCase( "Standard" ) )
         {
-            aPasswordButton.Disable();
-            aNewLibButton.Enable();
-            aInsertLibButton.Enable();
-            aExportButton.Disable();
-            aDelButton.Disable();
+            m_pPasswordButton->Disable();
+            m_pNewLibButton->Enable();
+            m_pInsertLibButton->Enable();
+            m_pExportButton->Disable();
+            m_pDelButton->Disable();
         }
         else if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) ) ||
                   ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) ) )
         {
-            aPasswordButton.Disable();
-            aNewLibButton.Enable();
-            aInsertLibButton.Enable();
+            m_pPasswordButton->Disable();
+            m_pNewLibButton->Enable();
+            m_pInsertLibButton->Enable();
             if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) && !xModLibContainer->isLibraryLink( aLibName ) ) ||
                  ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) && !xDlgLibContainer->isLibraryLink( aLibName ) ) )
-                aDelButton.Disable();
+                m_pDelButton->Disable();
             else
-                aDelButton.Enable();
+                m_pDelButton->Enable();
         }
         else
         {
             if ( xModLibContainer.is() && !xModLibContainer->hasByName( aLibName ) )
-                aPasswordButton.Disable();
+                m_pPasswordButton->Disable();
             else
-                aPasswordButton.Enable();
+                m_pPasswordButton->Enable();
 
-            aNewLibButton.Enable();
-            aInsertLibButton.Enable();
-            aExportButton.Enable();
-            aDelButton.Enable();
+            m_pNewLibButton->Enable();
+            m_pInsertLibButton->Enable();
+            m_pExportButton->Enable();
+            m_pDelButton->Enable();
         }
     }
 }
@@ -643,16 +646,16 @@ IMPL_LINK_INLINE_END( LibPage, BasicSelectHdl, ListBox *, pBox )
 
 IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
 {
-    if ( pButton == &aEditButton )
+    if (pButton == m_pEditButton)
     {
         SfxAllItemSet aArgs( SFX_APP()->GetPool() );
         SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
         SFX_APP()->ExecuteSlot( aRequest );
 
         SfxUsrAnyItem aDocItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, makeAny( m_aCurDocument.getDocumentOrNull() ) );
-        SvTreeListEntry* pCurEntry = aLibBox.GetCurEntry();
+        SvTreeListEntry* pCurEntry = m_pLibBox->GetCurEntry();
         DBG_ASSERT( pCurEntry, "Entry?!" );
-        OUString aLibName( aLibBox.GetEntryText( pCurEntry, 0 ) );
+        OUString aLibName( m_pLibBox->GetEntryText( pCurEntry, 0 ) );
         SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
         if (SfxDispatcher* pDispatcher = GetDispatcher())
             pDispatcher->Execute( SID_BASICIDE_LIBSELECTED,
@@ -660,18 +663,18 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
         EndTabDialog( 1 );
         return 0;
     }
-    else if ( pButton == &aNewLibButton )
+    else if (pButton == m_pNewLibButton)
         NewLib();
-    else if ( pButton == &aInsertLibButton )
+    else if (pButton == m_pInsertLibButton)
         InsertLib();
-    else if ( pButton == &aExportButton )
+    else if (pButton == m_pExportButton)
         Export();
-    else if ( pButton == &aDelButton )
+    else if (pButton == m_pDelButton)
         DeleteCurrent();
-    else if ( pButton == &aPasswordButton )
+    else if (pButton == m_pPasswordButton)
     {
-        SvTreeListEntry* pCurEntry = aLibBox.GetCurEntry();
-        OUString aLibName( aLibBox.GetEntryText( pCurEntry, 0 ) );
+        SvTreeListEntry* pCurEntry = m_pLibBox->GetCurEntry();
+        OUString aLibName( m_pLibBox->GetEntryText( pCurEntry, 0 ) );
 
         // load module library (if not loaded)
         Reference< script::XLibraryContainer > xModLibContainer = m_aCurDocument.getLibraryContainer( E_SCRIPTS );
@@ -715,10 +718,10 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
 
                     if ( bNewProtected != bProtected )
                     {
-                        sal_uLong nPos = (sal_uLong)aLibBox.GetModel()->GetAbsPos( pCurEntry );
-                        aLibBox.GetModel()->Remove( pCurEntry );
+                        sal_uLong nPos = (sal_uLong)m_pLibBox->GetModel()->GetAbsPos( pCurEntry );
+                        m_pLibBox->GetModel()->Remove( pCurEntry );
                         ImpInsertLibEntry( aLibName, nPos );
-                        aLibBox.SetCurEntry( aLibBox.GetEntry( nPos ) );
+                        m_pLibBox->SetCurEntry( m_pLibBox->GetEntry( nPos ) );
                     }
 
                     MarkDocumentModified( m_aCurDocument );
@@ -737,8 +740,8 @@ IMPL_LINK_INLINE_START( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg )
 {
     long nRet = 0;
 
-    SvTreeListEntry* pCurEntry = aLibBox.GetCurEntry();
-    OUString aLibName( aLibBox.GetEntryText( pCurEntry, 0 ) );
+    SvTreeListEntry* pCurEntry = m_pLibBox->GetCurEntry();
+    OUString aLibName( m_pLibBox->GetEntryText( pCurEntry, 0 ) );
     Reference< script::XLibraryContainerPassword > xPasswd( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
 
     if ( xPasswd.is() )
@@ -763,7 +766,7 @@ IMPL_LINK_INLINE_END( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg )
 
 void LibPage::NewLib()
 {
-    createLibImpl( static_cast<Window*>( this ), m_aCurDocument, &aLibBox, NULL);
+    createLibImpl( static_cast<Window*>( this ), m_aCurDocument, m_pLibBox, NULL);
 }
 
 //----------------------------------------------------------------------------
@@ -894,7 +897,7 @@ void LibPage::InsertLib()
 
                 if ( pLibDlg->Execute() )
                 {
-                    sal_uLong nNewPos = aLibBox.GetEntryCount();
+                    sal_uLong nNewPos = m_pLibBox->GetEntryCount();
                     bool bRemove = false;
                     bool bReplace = pLibDlg->IsReplace();
                     bool bReference = pLibDlg->IsReference();
@@ -975,9 +978,9 @@ void LibPage::InsertLib()
                             if ( bRemove )
                             {
                                 // remove listbox entry
-                                SvTreeListEntry* pEntry_ = aLibBox.FindEntry( aLibName );
+                                SvTreeListEntry* pEntry_ = m_pLibBox->FindEntry( aLibName );
                                 if ( pEntry_ )
-                                    aLibBox.SvTreeListBox::GetModel()->Remove( pEntry_ );
+                                    m_pLibBox->SvTreeListBox::GetModel()->Remove( pEntry_ );
 
                                 // remove module library
                                 if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) )
@@ -1110,14 +1113,14 @@ void LibPage::InsertLib()
                             }
 
                             // insert listbox entry
-                            ImpInsertLibEntry( aLibName, aLibBox.GetEntryCount() );
+                            ImpInsertLibEntry( aLibName, m_pLibBox->GetEntryCount() );
                             bChanges = true;
                         }
                     }
 
-                    SvTreeListEntry* pFirstNew = aLibBox.GetEntry( nNewPos );
+                    SvTreeListEntry* pFirstNew = m_pLibBox->GetEntry( nNewPos );
                     if ( pFirstNew )
-                        aLibBox.SetCurEntry( pFirstNew );
+                        m_pLibBox->SetCurEntry( pFirstNew );
                 }
 
                 delete pLibDlg;
@@ -1132,8 +1135,8 @@ void LibPage::InsertLib()
 
 void LibPage::Export( void )
 {
-    SvTreeListEntry* pCurEntry = aLibBox.GetCurEntry();
-    OUString aLibName( aLibBox.GetEntryText( pCurEntry, 0 ) );
+    SvTreeListEntry* pCurEntry = m_pLibBox->GetCurEntry();
+    OUString aLibName( m_pLibBox->GetEntryText( pCurEntry, 0 ) );
 
     // Password verification
     OUString aOULibName( aLibName );
@@ -1377,8 +1380,8 @@ void LibPage::ExportAsBasic( const OUString& aLibName )
 
 void LibPage::DeleteCurrent()
 {
-    SvTreeListEntry* pCurEntry = aLibBox.GetCurEntry();
-    OUString aLibName( aLibBox.GetEntryText( pCurEntry, 0 ) );
+    SvTreeListEntry* pCurEntry = m_pLibBox->GetCurEntry();
+    OUString aLibName( m_pLibBox->GetEntryText( pCurEntry, 0 ) );
 
     // check, if library is link
     bool bIsLibraryLink = false;
@@ -1406,7 +1409,7 @@ void LibPage::DeleteCurrent()
         if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) )
             xDlgLibContainer->removeLibrary( aOULibName );
 
-        static_cast<SvTreeListBox&>(aLibBox).GetModel()->Remove( pCurEntry );
+        static_cast<SvTreeListBox&>(*m_pLibBox).GetModel()->Remove( pCurEntry );
         MarkDocumentModified( m_aCurDocument );
     }
 }
@@ -1442,16 +1445,16 @@ void LibPage::FillListBox()
 void LibPage::InsertListBoxEntry( const ScriptDocument& rDocument, LibraryLocation eLocation )
 {
     OUString aEntryText( rDocument.getTitle( eLocation ) );
-    sal_uInt16 nPos = aBasicsBox.InsertEntry( aEntryText, LISTBOX_APPEND );
-    aBasicsBox.SetEntryData( nPos, new DocumentEntry(rDocument, eLocation) );
+    sal_uInt16 nPos = m_pBasicsBox->InsertEntry( aEntryText, LISTBOX_APPEND );
+    m_pBasicsBox->SetEntryData( nPos, new DocumentEntry(rDocument, eLocation) );
 }
 
 //----------------------------------------------------------------------------
 
 void LibPage::SetCurLib()
 {
-    sal_uInt16 nSelPos = aBasicsBox.GetSelectEntryPos();
-    DocumentEntry* pEntry = (DocumentEntry*)aBasicsBox.GetEntryData( nSelPos );
+    sal_uInt16 nSelPos = m_pBasicsBox->GetSelectEntryPos();
+    DocumentEntry* pEntry = (DocumentEntry*)m_pBasicsBox->GetEntryData( nSelPos );
     if ( pEntry )
     {
         ScriptDocument aDocument( pEntry->GetDocument() );
@@ -1463,8 +1466,8 @@ void LibPage::SetCurLib()
         {
             m_aCurDocument = aDocument;
             m_eCurLocation = eLocation;
-            aLibBox.SetDocument( aDocument );
-            aLibBox.Clear();
+            m_pLibBox->SetDocument( aDocument );
+            m_pLibBox->Clear();
 
             // get a sorted list of library names
             Sequence< OUString > aLibNames = aDocument.getLibraryNames();
@@ -1478,10 +1481,10 @@ void LibPage::SetCurLib()
                     ImpInsertLibEntry( aLibName, i );
             }
 
-            SvTreeListEntry* pEntry_ = aLibBox.FindEntry( OUString( "Standard" ) );
+            SvTreeListEntry* pEntry_ = m_pLibBox->FindEntry( OUString( "Standard" ) );
             if ( !pEntry_ )
-                pEntry_ = aLibBox.GetEntry( 0 );
-            aLibBox.SetCurEntry( pEntry_ );
+                pEntry_ = m_pLibBox->GetEntry( 0 );
+            m_pLibBox->SetCurEntry( pEntry_ );
         }
     }
 }
@@ -1503,21 +1506,21 @@ SvTreeListEntry* LibPage::ImpInsertLibEntry( const OUString& rLibName, sal_uLong
         }
     }
 
-    SvTreeListEntry* pNewEntry = aLibBox.DoInsertEntry( rLibName, nPos );
+    SvTreeListEntry* pNewEntry = m_pLibBox->DoInsertEntry( rLibName, nPos );
     pNewEntry->SetUserData( new LibUserData(m_aCurDocument) );
 
     if (bProtected)
     {
         Image aImage(IDEResId(RID_IMG_LOCKED));
-        aLibBox.SetExpandedEntryBmp(pNewEntry, aImage);
-        aLibBox.SetCollapsedEntryBmp(pNewEntry, aImage);
+        m_pLibBox->SetExpandedEntryBmp(pNewEntry, aImage);
+        m_pLibBox->SetCollapsedEntryBmp(pNewEntry, aImage);
     }
 
     // check, if library is link
     if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryLink( aOULibName ) )
     {
         OUString aLinkURL = xModLibContainer->getLibraryLinkURL( aOULibName );
-        aLibBox.SetEntryText( aLinkURL, pNewEntry, 1 );
+        m_pLibBox->SetEntryText( aLinkURL, pNewEntry, 1 );
     }
 
     return pNewEntry;
