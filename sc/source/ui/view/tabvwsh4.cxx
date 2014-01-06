@@ -1509,6 +1509,7 @@ bool ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
     bReadOnly(false),           \
     pScSbxObject(NULL),         \
     bChartAreaValid(false),     \
+    bForceFocusOnCurCell(false),\
     nCurRefDlgId(0),            \
     pAccessibilityBroadcaster(NULL), \
     mbInSwitch(false)
