@@ -124,7 +124,6 @@ private:
     void                Init();
 
 public:
-    CheckBox(Window* pParent, const ResId& rResId);
     CheckBox(Window* pParent, WinBits nStyle);
     ~CheckBox();
 

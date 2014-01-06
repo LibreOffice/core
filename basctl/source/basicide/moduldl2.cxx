@@ -162,17 +162,6 @@ void LibLBoxString::Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDa
 //  basctl::CheckBox
 //----------------------------------------------------------------------------
 
-CheckBox::CheckBox( Window* pParent, const ResId& rResId )
-    :SvTabListBox( pParent, rResId )
-    ,eMode(ObjectMode::Module)
-    ,m_aDocument( ScriptDocument::getApplicationScriptDocument() )
-{
-    long aTabs_[] = { 1, 12 };  // TabPos needs at least one...
-                                // 12 because of the CheckBox
-    SetTabs( aTabs_ );
-    Init();
-}
-
 CheckBox::CheckBox(Window* pParent, WinBits nStyle)
     : SvTabListBox(pParent, nStyle)
     , eMode(ObjectMode::Module)
