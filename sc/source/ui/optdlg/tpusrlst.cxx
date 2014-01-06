@@ -333,14 +333,14 @@ void ScTpUserLists::MakeListStr( OUString& rListStr )
     while ( c < nLen )
     {
         rListStr += OUString(aStr[c]);
-        c++;
+        ++c;
 
-        if ( aStr[c] == cDelimiter )
+        if ((c < nLen) && (aStr[c] == cDelimiter))
         {
             rListStr += OUString(aStr[c]);
 
-            while ( (c < nLen) && (aStr[c] == cDelimiter) )
-                c++;
+            while ((c < nLen) && (aStr[c] == cDelimiter))
+                ++c;
         }
     }
 
