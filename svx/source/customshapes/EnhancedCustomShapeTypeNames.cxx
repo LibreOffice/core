@@ -334,6 +334,7 @@ static const ACCNameTypeTable pACCNameTypeTableArray[] =
     { "pentagon-right", "Pentagon" },
     { "cube", "Cube" },
     { "mso-spt21", "Doorplate" },
+    { "ooxml-rect", "Rectangle"},
     /*{ "mso-spt17", mso_sptBalloon },
     { "mso-spt18", mso_sptSeal },
     { "mso-spt19", mso_sptArc },

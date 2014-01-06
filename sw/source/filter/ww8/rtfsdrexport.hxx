@@ -74,7 +74,7 @@ protected:
     using EscherEx::EndShape;
     void        EndShape( sal_Int32 nShapeElement );
 
-    virtual void        Commit( EscherPropertyContainer& rProps, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void        Commit( EscherPropertyContainer& rProps, const Rectangle& rRect, const SdrObject* pSdrObject = NULL) SAL_OVERRIDE;
 
 private:
 

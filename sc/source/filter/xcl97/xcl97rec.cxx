@@ -534,7 +534,7 @@ class VmlCommentExporter : public VMLExport
 public:
                         VmlCommentExporter ( sax_fastparser::FSHelperPtr p, ScAddress aScPos, SdrCaptionObj* pCaption, bool bVisible, Rectangle &aFrom, Rectangle &aTo );
 protected:
-    virtual void        Commit( EscherPropertyContainer& rProps, const Rectangle& rRect );
+    virtual void        Commit( EscherPropertyContainer& rProps, const Rectangle& rRect, const SdrObject* = NULL );
     using VMLExport::StartShape;
     virtual sal_Int32   StartShape();
     using VMLExport::EndShape;
@@ -553,7 +553,7 @@ VmlCommentExporter::VmlCommentExporter( sax_fastparser::FSHelperPtr p, ScAddress
 {
 }
 
-void VmlCommentExporter::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect )
+void VmlCommentExporter::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect, const SdrObject* pSdrObject )
 {
     lcl_FillProps( rProps, mpCaption, mbVisible );
     rProps.AddOpt( ESCHER_Prop_fHidden, mbVisible );            // bool field
@@ -571,7 +571,7 @@ void VmlCommentExporter::Commit( EscherPropertyContainer& rProps, const Rectangl
     // once from XclObjComment::ProcessEscherObj #TODO look into that also
     rProps.AddOpt( ESCHER_Prop_fshadowObscured, 0x00030003 ); // force value for comments
 
-    VMLExport::Commit( rProps, rRect );
+    VMLExport::Commit( rProps, rRect, pSdrObject );
 }
 
 sal_Int32 VmlCommentExporter::StartShape()

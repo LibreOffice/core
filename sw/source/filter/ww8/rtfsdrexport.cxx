@@ -138,7 +138,7 @@ inline sal_Int32 impl_GetPointComponent( const sal_uInt8* &pVal, sal_uInt16 nPoi
     return nRet;
 }
 
-void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect )
+void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect, const SdrObject* pSdrObject )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
