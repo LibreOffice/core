@@ -1912,7 +1912,14 @@ class StrCellIterator
     const ScDocument* mpDoc;
 public:
     StrCellIterator(const sc::CellStoreType& rCells, SCROW nStart, const ScDocument* pDoc) :
-        maPos(rCells.position(nStart)), miBeg(rCells.begin()), miEnd(rCells.end()), mpDoc(pDoc) {}
+        miBeg(rCells.begin()), miEnd(rCells.end()), mpDoc(pDoc)
+    {
+        if (ValidRow(nStart))
+            maPos = rCells.position(nStart);
+        else
+            // Make this iterator invalid.
+            maPos.first = miEnd;
+    }
 
     bool valid() const { return (maPos.first != miEnd); }
 
