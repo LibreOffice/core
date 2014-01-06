@@ -65,7 +65,7 @@ extern "C" void SAL_CALL createRegistryInfo_dbaxml()
 
 //---------------------------------------------------------------------------------------
 
-extern "C" void DBACCESS_DLLPUBLIC component_getImplementationEnvironment(
+extern "C" DBACCESS_DLLPUBLIC void component_getImplementationEnvironment(
                 const sal_Char  **ppEnvTypeName,
                 uno_Environment **
             )
@@ -75,7 +75,8 @@ extern "C" void DBACCESS_DLLPUBLIC component_getImplementationEnvironment(
 }
 
 //---------------------------------------------------------------------------------------
-extern "C" void* DBACCESS_DLLPUBLIC component_getFactory(
+
+extern "C" DBACCESS_DLLPUBLIC void* component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,
                     void* /*pRegistryKey*/)
