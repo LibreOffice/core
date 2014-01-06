@@ -51,6 +51,7 @@
 #include <svx/unoshape.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/svapp.hxx>
+#include <sfx2/docfile.hxx>
 #include <comphelper/servicehelper.hxx>
 
 #include <vector>
@@ -1699,28 +1700,31 @@ ScShapeChildren* ScAccessibleDocumentPagePreview::GetShapeChildren()
 OUString ScAccessibleDocumentPagePreview::getAccessibleName(void)
 throw (::com::sun::star::uno::RuntimeException)
 {
-    OUString sName = ScResId(STR_ACC_DOC_SPREADSHEET);
+    OUString aName = ScResId(STR_ACC_DOC_SPREADSHEET);
     ScDocument* pScDoc = mpViewShell->GetDocument();
-    if ( pScDoc )
-    {
-        OUString sFileName = pScDoc->getDocAccTitle();
-        if ( !sFileName.getLength() )
-        {
-            SfxObjectShell* pObjSh = pScDoc->GetDocumentShell();
-            if ( pObjSh )
-            {
-                sFileName = pObjSh->GetTitle( SFX_TITLE_APINAME );
-            }
-        }
-        if ( sFileName.getLength() )
-        {
-            sName = sFileName + " - " + sName;
-            sName += ScResId(STR_ACC_DOC_PREVIEW_SUFFIX);
+    if (!pScDoc)
+        return aName;
 
-        }
+    SfxObjectShell* pObjSh = pScDoc->GetDocumentShell();
+    if (!pObjSh)
+        return aName;
+
+    OUString aFileName;
+    SfxMedium* pMed = pObjSh->GetMedium();
+    if (pMed)
+        aFileName = pMed->GetName();
+
+    if (aFileName.isEmpty())
+        aFileName = pObjSh->GetTitle(SFX_TITLE_APINAME);
+
+    if (!aFileName.isEmpty())
+    {
+        aName = aFileName + " - " + aName;
+        aName += ScResId(STR_ACC_DOC_PREVIEW_SUFFIX);
+
     }
 
-    return sName;
+    return aName;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
