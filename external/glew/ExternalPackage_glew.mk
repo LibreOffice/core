@@ -14,6 +14,9 @@ $(eval $(call gb_ExternalPackage_use_external_project,glew,glew))
 ifeq ($(OS),MACOSX)
 else ifeq ($(OS)-$(COM),WNT-GCC)
 else ifeq ($(COM),MSC)
+$(eval $(call gb_ExternalPackage_add_files,glew,$(LIBO_LIB_FOLDER), \
+	bin/$(if $(MSVC_USE_DEBUG_RUNTIME),Debug/Win32/glew32d.dll,Release/Win32/glew32.dll) \
+))
 else ifeq ($(filter IOS ANDROID,$(OS)),)
 $(eval $(call gb_ExternalPackage_add_file,glew,$(LIBO_LIB_FOLDER)/libGLEW.so.1.10,lib/libGLEW.so.1.10.0))
 endif
