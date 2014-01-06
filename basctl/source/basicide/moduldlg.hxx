@@ -111,7 +111,8 @@ protected:
                         SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos, sal_Bool bMove );
 
 public:
-    ExtTreeListBox( Window* pParent, const ResId& rRes );
+    ExtTreeListBox(Window* pParent, const ResId& rRes);
+    ExtTreeListBox(Window* pParent, WinBits nStyle);
     ~ExtTreeListBox();
 };
 
@@ -182,12 +183,11 @@ public:
 class ObjectPage: public TabPage
 {
 protected:
-    FixedText           aLibText;
-    ExtTreeListBox      aBasicBox;
-    PushButton          aEditButton;
-    PushButton          aNewModButton;
-    PushButton          aNewDlgButton;
-    PushButton          aDelButton;
+    ExtTreeListBox*     m_pBasicBox;
+    PushButton*         m_pEditButton;
+    PushButton*         m_pNewModButton;
+    PushButton*         m_pNewDlgButton;
+    PushButton*         m_pDelButton;
 
     DECL_LINK( BasicBoxHighlightHdl, TreeListBox * );
     DECL_LINK( ButtonHdl, Button * );
@@ -204,7 +204,7 @@ protected:
     virtual void        DeactivatePage();
 
 public:
-                        ObjectPage( Window* pParent, const ResId& rResId, sal_uInt16 nMode );
+    ObjectPage(Window* pParent, const OString& rName, sal_uInt16 nMode);
 
     void                SetCurrentEntry( EntryDescriptor& rDesc );
     void                SetTabDlg( TabDialog* p ) { pTabDlg = p;}

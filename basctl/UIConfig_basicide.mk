@@ -31,11 +31,13 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/BasicIDE,\
 $(eval $(call gb_UIConfig_add_uifiles,modules/BasicIDE,\
 	basctl/uiconfig/basicide/ui/basicmacrodialog \
 	basctl/uiconfig/basicide/ui/defaultlanguage \
+	basctl/uiconfig/basicide/ui/dialogpage \
 	basctl/uiconfig/basicide/ui/exportdialog \
 	basctl/uiconfig/basicide/ui/gotolinedialog \
 	basctl/uiconfig/basicide/ui/importlibdialog \
 	basctl/uiconfig/basicide/ui/libpage \
 	basctl/uiconfig/basicide/ui/managebreakpoints \
+	basctl/uiconfig/basicide/ui/modulepage \
 	basctl/uiconfig/basicide/ui/newlibdialog \
 	basctl/uiconfig/basicide/ui/organizedialog \
 ))

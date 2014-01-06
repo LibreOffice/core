@@ -20,7 +20,6 @@
 #include <vcl/layout.hxx>
 #include <sot/storinfo.hxx>
 
-#include <moduldlg.hrc>
 #include <moduldlg.hxx>
 #include <basidesh.hrc>
 #include <basidesh.hxx>
