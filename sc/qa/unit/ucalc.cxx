@@ -635,6 +635,46 @@ void Test::testInput()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testDataEntries()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    m_pDoc->SetString(ScAddress(0,5,0), "Andy");
+    m_pDoc->SetString(ScAddress(0,6,0), "Bruce");
+    m_pDoc->SetString(ScAddress(0,7,0), "Charlie");
+    m_pDoc->SetString(ScAddress(0,10,0), "Andy");
+
+    std::vector<ScTypedStrData> aEntries;
+    m_pDoc->GetDataEntries(0, 0, 0, true, aEntries); // Try at the very top.
+
+    // Entries are supposed to be sorted in ascending order, and are all unique.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aEntries.size());
+    std::vector<ScTypedStrData>::const_iterator it = aEntries.begin();
+    CPPUNIT_ASSERT_EQUAL(OUString("Andy"), it->GetString());
+    ++it;
+    CPPUNIT_ASSERT_EQUAL(OUString("Bruce"), it->GetString());
+    ++it;
+    CPPUNIT_ASSERT_EQUAL(OUString("Charlie"), it->GetString());
+    ++it;
+    CPPUNIT_ASSERT_MESSAGE("The entries should have ended here.", it == aEntries.end());
+
+    aEntries.clear();
+    m_pDoc->GetDataEntries(0, MAXROW, 0, true, aEntries); // Try at the very bottom.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aEntries.size());
+
+    // Make sure we get the same set of suggestions.
+    it = aEntries.begin();
+    CPPUNIT_ASSERT_EQUAL(OUString("Andy"), it->GetString());
+    ++it;
+    CPPUNIT_ASSERT_EQUAL(OUString("Bruce"), it->GetString());
+    ++it;
+    CPPUNIT_ASSERT_EQUAL(OUString("Charlie"), it->GetString());
+    ++it;
+    CPPUNIT_ASSERT_MESSAGE("The entries should have ended here.", it == aEntries.end());
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testCopyAttributes()
 {
     CPPUNIT_ASSERT_MESSAGE ("mashed up attributes", !(IDF_ATTRIB & IDF_CONTENTS));
