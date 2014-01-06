@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1abeadc6_53a5e402",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5719,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-06T10:24:42Z",
+      "side": 1,
+      "message": "This would be more readable as:\n\nbool bImageBackground \u003d false;",
+      "revId": "3b7e899d670dd957214266f66ff7fb925938333d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
