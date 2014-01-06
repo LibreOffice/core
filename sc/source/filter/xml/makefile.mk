@@ -36,10 +36,11 @@ PROJECTPCHSOURCE=..\pch\filt_pch
 
 # --- Settings -----------------------------------------------------
 
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
+
 .INCLUDE :  scpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sc.mk
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
 
