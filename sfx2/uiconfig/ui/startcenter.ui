@@ -38,6 +38,7 @@
                     <property name="margin_left">6</property>
                     <property name="margin_right">6</property>
                     <property name="margin_top">6</property>
+                    <property name="image">open_all_image</property>
                     <property name="relief">none</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
@@ -56,6 +57,7 @@
                     <property name="receives_default">True</property>
                     <property name="margin_left">6</property>
                     <property name="margin_right">6</property>
+                    <property name="image">templates_all_image</property>
                     <property name="relief">none</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
@@ -364,6 +366,16 @@
         <property name="position">0</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkImage" id="open_all_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">framework/res/folder_32.png</property>
+  </object>
+  <object class="GtkImage" id="templates_all_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">framework/res/templates_32.png</property>
   </object>
   <object class="GtkImage" id="database_all_image">
     <property name="visible">True</property>
