@@ -10,6 +10,7 @@
 #include "WpgContext.hxx"
 #include <oox/drawingml/shapepropertiescontext.hxx>
 #include <oox/drawingml/shapegroupcontext.hxx>
+#include <oox/drawingml/graphicshapecontext.hxx>
 
 using namespace com::sun::star;
 
@@ -54,6 +55,9 @@ oox::core::ContextHandlerRef WpgContext::onCreateContext(sal_Int32 nElementToken
         return new oox::drawingml::ShapeContext(*this, mpShape, pShape);
     }
     break;
+    case XML_pic:
+        return new oox::drawingml::GraphicShapeContext(*this, mpShape, oox::drawingml::ShapePtr(new oox::drawingml::Shape("com.sun.star.drawing.GraphicObjectShape")));
+        break;
     case XML_grpSp:
     {
         oox::drawingml::ShapePtr pShape(new oox::drawingml::Shape("com.sun.star.drawing.GroupShape"));
