@@ -57,9 +57,6 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL fps_aqua_component_getFactory(
 
     if( pSrvManager )
     {
-            // FIXME: PJ: when we do not need native file and folder picker...
-            if (0) return 0;
-
             Reference< XSingleServiceFactory > xFactory;
 
             if (0 == rtl_str_compare(pImplName, FILE_PICKER_IMPL_NAME))
