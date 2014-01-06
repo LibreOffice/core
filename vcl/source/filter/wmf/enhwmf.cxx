@@ -730,7 +730,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                         sal_Bool bTransparent = sal_False;
                         sal_uInt16 nDashCount = 0;
                         sal_uInt16 nDotCount = 0;
-                        switch( nStyle )
+                        switch( nStyle & 0xFF )
                         {
                             case PS_DASHDOTDOT :
                                 nDotCount++;
@@ -750,6 +750,32 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                             case PS_INSIDEFRAME :
                             case PS_SOLID :
                                 aLineInfo.SetStyle( LINE_SOLID );
+                        }
+                        switch( nStyle & 0xF00 )
+                        {
+                            case PS_ENDCAP_ROUND :
+                                aLineInfo.SetLineCap( com::sun::star::drawing::LineCap_ROUND );
+                            break;
+                            case PS_ENDCAP_SQUARE :
+                                aLineInfo.SetLineCap( com::sun::star::drawing::LineCap_SQUARE );
+                            break;
+                            case PS_ENDCAP_FLAT :
+                            default :
+                                aLineInfo.SetLineCap( com::sun::star::drawing::LineCap_BUTT );
+                        }
+                        switch( nStyle & 0xF000 )
+                        {
+                            case PS_JOIN_ROUND :
+                                aLineInfo.SetLineJoin ( basegfx::B2DLINEJOIN_ROUND );
+                            break;
+                            case PS_JOIN_MITER :
+                                aLineInfo.SetLineJoin ( basegfx::B2DLINEJOIN_MITER );
+                            break;
+                            case PS_JOIN_BEVEL :
+                                aLineInfo.SetLineJoin ( basegfx::B2DLINEJOIN_BEVEL );
+                            break;
+                            default :
+                                aLineInfo.SetLineJoin ( basegfx::B2DLINEJOIN_NONE );
                         }
                         if ( nDashCount | nDotCount )
                         {
