@@ -748,9 +748,9 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                                 bTransparent = sal_True;
                                 aLineInfo.SetStyle( LINE_NONE );
                             break;
-                            default :
                             case PS_INSIDEFRAME :
                             case PS_SOLID :
+                            default :
                                 aLineInfo.SetStyle( LINE_SOLID );
                         }
                         if ( nDashCount | nDotCount )
@@ -802,9 +802,9 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                                 aLineInfo.SetStyle( LINE_NONE );
                             break;
 
-                            default :
                             case PS_INSIDEFRAME :
                             case PS_SOLID :
+                            default :
                                 aLineInfo.SetStyle( LINE_SOLID );
                         }
                         if ( nDashCount | nDotCount )
@@ -1378,7 +1378,6 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 }
                 break;
 
-                default :                           SAL_INFO("vcl.emf", "Unknown Meta Action");                                     break;
                 case EMR_MASKBLT :                  SAL_INFO("vcl.emf", "not implemented '" << "MaskBlt" << "'");                   break;
                 case EMR_PLGBLT :                   SAL_INFO("vcl.emf", "not implemented '" << "PlgBlt" << "'");                    break;
                 case EMR_SETDIBITSTODEVICE :        SAL_INFO("vcl.emf", "not implemented '" << "SetDIBitsToDevice" << "'");         break;
@@ -1433,6 +1432,8 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 case EMR_GDICOMMENT :
                 case EMR_HEADER :               // has already been read at ReadHeader()
                 break;
+
+                default :                           SAL_INFO("vcl.emf", "Unknown Meta Action");                                     break;
             }
         }
         pWMF->Seek( nNextPos );
