@@ -185,10 +185,10 @@ sal_Int32 SwWrongList::NextWrong( sal_Int32 nChk ) const
  */
 sal_uInt16 SwWrongList::GetWrongPos( sal_Int32 nValue ) const
 {
-    sal_uInt16 nOben = Count();
-    sal_uInt16 nUnten = 0;
+    sal_uInt16 nMax = Count();
+    sal_uInt16 nMin = 0;
 
-    if( nOben > 0 )
+    if( nMax > 0 )
     {
         // For smart tag lists, we may not use a binary search. We return the
         // position of the first smart tag which coveres nValue
@@ -203,45 +203,45 @@ sal_uInt16 SwWrongList::GetWrongPos( sal_Int32 nValue ) const
                 if ( nSTPos > nValue )
                     break;
 
-                ++nUnten;
+                ++nMin;
             }
-            return nUnten;
+            return nMin;
         }
 
-        --nOben;
-        sal_uInt16 nMitte = 0;
-        while( nUnten <= nOben )
+        --nMax;
+        sal_uInt16 nMid = 0;
+        while( nMin <= nMax )
         {
-            nMitte = nUnten + ( nOben - nUnten ) / 2;
-            const sal_Int32 nTmp = Pos( nMitte );
+            nMid = nMin + ( nMax - nMin ) / 2;
+            const sal_Int32 nTmp = Pos( nMid );
             if( nTmp == nValue )
             {
-                nUnten = nMitte;
+                nMin = nMid;
                 break;
             }
             else if( nTmp < nValue )
             {
-                if( nTmp + Len( nMitte ) >= nValue )
+                if( nTmp + Len( nMid ) >= nValue )
                 {
-                    nUnten = nMitte;
+                    nMin = nMid;
                     break;
                 }
-                nUnten = nMitte + 1;
+                nMin = nMid + 1;
             }
-            else if( nMitte == 0 )
+            else if( nMid == 0 )
             {
                 break;
             }
             else
-                nOben = nMitte - 1;
+                nMax = nMid - 1;
         }
     }
 
-    // nUnten now points to an index i into the wrong list which
+    // nMin now points to an index i into the wrong list which
     // 1. nValue is inside [ Area[i].pos, Area[i].pos + Area[i].len ] (inclusive!!!)
     // 2. nValue < Area[i].pos
 
-    return nUnten;
+    return nMin;
 }
 
 void SwWrongList::_Invalidate( sal_Int32 nBegin, sal_Int32 nEnd )
