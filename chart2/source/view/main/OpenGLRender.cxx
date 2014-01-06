@@ -815,7 +815,8 @@ int OpenGLRender::SetViewPoint(PosVeci3 camPos, PosVeci3 orgPos, int headUpFlag)
                          glm::vec3(orgPos.x, orgPos.y ,orgPos.z), // and looks at the origin
                          glm::vec3(0, (headUpFlag >= 0 ? 1 : -1) , 0)  // Head is up (set to 0,-1,0 to look upside-down)
                          );
-    m_Projection = glm::perspective(45.0f, (float)m_iWidth / (float)m_iHeight, 0.1f, 100.0f);
+    //m_Projection = glm::perspective(45.0f, (float)m_iWidth / (float)m_iHeight, 0.1f, 100.0f);
+    m_Projection = glm::ortho((-(float)m_iWidth) / 2, ((float)m_iWidth) / 2, -((float)m_iHeight) / 2, ((float)m_iHeight) / 2, -2.0f, 100.0f); // In world coordinates
     return 0;
 }
 
