@@ -86,13 +86,25 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
             for (size_t i = 0; i < SAL_N_ELEMENTS(aProps); ++i)
                 if (oInsets[i])
                     xPropertySet->setPropertyValue(aProps[i], uno::makeAny(*oInsets[i]));
+            return this;
         }
         break;
+    case XML_noAutofit:
+    case XML_spAutoFit:
+    {
+        // We can't use oox::drawingml::TextBodyPropertiesContext here, as this
+        // is a child context of bodyPr, so the shape is already sent: we need
+        // to alter the XShape directly.
+        uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
+        if (xPropertySet.is())
+            xPropertySet->setPropertyValue("FrameIsAutomaticHeight", uno::makeAny(getBaseToken(nElementToken) == XML_spAutoFit));
+    }
+    break;
     case XML_txbx:
         mpShape->setServiceName("com.sun.star.text.TextFrame");
         break;
     default:
-        SAL_WARN("oox", "WpsContext::createFastChildContext: unhandled element:" << getBaseToken(nElementToken));
+        SAL_WARN("oox", "WpsContext::createFastChildContext: unhandled element: " << getBaseToken(nElementToken));
         break;
     }
     return 0;
