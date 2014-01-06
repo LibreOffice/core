@@ -676,6 +676,145 @@ void Test::testDataEntries()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testSelectionFunction()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    // Insert values into B2:B4.
+    m_pDoc->SetString(ScAddress(1,1,0), "=1"); // formula
+    m_pDoc->SetValue(ScAddress(1,2,0), 2.0);
+    m_pDoc->SetValue(ScAddress(1,3,0), 3.0);
+
+    // Insert strings into B5:B8.
+    m_pDoc->SetString(ScAddress(1,4,0), "A");
+    m_pDoc->SetString(ScAddress(1,5,0), "B");
+    m_pDoc->SetString(ScAddress(1,6,0), "=\"C\""); // formula
+    m_pDoc->SetString(ScAddress(1,7,0), "D");
+
+    // Insert values into D2:D4.
+    m_pDoc->SetValue(ScAddress(3,1,0), 4.0);
+    m_pDoc->SetValue(ScAddress(3,2,0), 5.0);
+    m_pDoc->SetValue(ScAddress(3,3,0), 6.0);
+
+    // Insert edit text into D5.
+    ScFieldEditEngine& rEE = m_pDoc->GetEditEngine();
+    rEE.SetText("Rich Text");
+    m_pDoc->SetEditText(ScAddress(3,4,0), rEE.CreateTextObject());
+
+    // Insert Another string into D6.
+    m_pDoc->SetString(ScAddress(3,5,0), "E");
+
+    // Select B2:B8 & D2:D8 disjoint region.
+    ScRangeList aRanges;
+    aRanges.Append(ScRange(1,1,0,1,7,0)); // B2:B8
+    aRanges.Append(ScRange(3,1,0,3,7,0)); // D2:D8
+    ScMarkData aMark;
+    aMark.MarkFromRangeList(aRanges, true);
+
+    struct Check
+    {
+        ScSubTotalFunc meFunc;
+        double mfExpected;
+    };
+
+    {
+        Check aChecks[] =
+        {
+            { SUBTOTAL_FUNC_AVE,              3.5 },
+            { SUBTOTAL_FUNC_CNT2,            12.0 },
+            { SUBTOTAL_FUNC_CNT,              6.0 },
+            { SUBTOTAL_FUNC_MAX,              6.0 },
+            { SUBTOTAL_FUNC_MIN,              1.0 },
+            { SUBTOTAL_FUNC_SUM,             21.0 },
+            { SUBTOTAL_FUNC_SELECTION_COUNT, 14.0 }
+        };
+
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        {
+            double fRes = 0.0;
+            bool bRes = m_pDoc->GetSelectionFunction(aChecks[i].meFunc, ScAddress(), aMark, fRes);
+            CPPUNIT_ASSERT_MESSAGE("Failed to fetch selection function result.", bRes);
+            CPPUNIT_ASSERT_EQUAL(aChecks[i].mfExpected, fRes);
+        }
+    }
+
+    // Hide rows 4 and 6 and check the results again.
+
+    m_pDoc->SetRowHidden(3, 3, 0, true);
+    m_pDoc->SetRowHidden(5, 5, 0, true);
+    CPPUNIT_ASSERT_MESSAGE("This row should be hidden.", m_pDoc->RowHidden(3, 0));
+    CPPUNIT_ASSERT_MESSAGE("This row should be hidden.", m_pDoc->RowHidden(5, 0));
+
+    {
+        Check aChecks[] =
+        {
+            { SUBTOTAL_FUNC_AVE,              3.0 },
+            { SUBTOTAL_FUNC_CNT2,             8.0 },
+            { SUBTOTAL_FUNC_CNT,              4.0 },
+            { SUBTOTAL_FUNC_MAX,              5.0 },
+            { SUBTOTAL_FUNC_MIN,              1.0 },
+            { SUBTOTAL_FUNC_SUM,             12.0 },
+            { SUBTOTAL_FUNC_SELECTION_COUNT, 10.0 }
+        };
+
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        {
+            double fRes = 0.0;
+            bool bRes = m_pDoc->GetSelectionFunction(aChecks[i].meFunc, ScAddress(), aMark, fRes);
+            CPPUNIT_ASSERT_MESSAGE("Failed to fetch selection function result.", bRes);
+            CPPUNIT_ASSERT_EQUAL(aChecks[i].mfExpected, fRes);
+        }
+    }
+
+    // Make sure that when no selection is present, use the current cursor position.
+    ScMarkData aEmpty;
+
+    {
+        // D3 (numeric cell containing 5.)
+        ScAddress aPos(3, 2, 0);
+
+        Check aChecks[] =
+        {
+            { SUBTOTAL_FUNC_AVE,             5.0 },
+            { SUBTOTAL_FUNC_CNT2,            1.0 },
+            { SUBTOTAL_FUNC_CNT,             1.0 },
+            { SUBTOTAL_FUNC_MAX,             5.0 },
+            { SUBTOTAL_FUNC_MIN,             5.0 },
+            { SUBTOTAL_FUNC_SUM,             5.0 },
+            { SUBTOTAL_FUNC_SELECTION_COUNT, 1.0 }
+        };
+
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        {
+            double fRes = 0.0;
+            bool bRes = m_pDoc->GetSelectionFunction(aChecks[i].meFunc, aPos, aEmpty, fRes);
+            CPPUNIT_ASSERT_MESSAGE("Failed to fetch selection function result.", bRes);
+            CPPUNIT_ASSERT_EQUAL(aChecks[i].mfExpected, fRes);
+        }
+    }
+
+    {
+        // B7 (string formula cell containing ="C".)
+        ScAddress aPos(1, 6, 0);
+
+        Check aChecks[] =
+        {
+            { SUBTOTAL_FUNC_CNT2,            1.0 },
+            { SUBTOTAL_FUNC_SELECTION_COUNT, 1.0 }
+        };
+
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        {
+            double fRes = 0.0;
+            bool bRes = m_pDoc->GetSelectionFunction(aChecks[i].meFunc, aPos, aEmpty, fRes);
+            CPPUNIT_ASSERT_MESSAGE("Failed to fetch selection function result.", bRes);
+            CPPUNIT_ASSERT_EQUAL(aChecks[i].mfExpected, fRes);
+        }
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testCopyAttributes()
 {
     CPPUNIT_ASSERT_MESSAGE ("mashed up attributes", !(IDF_ATTRIB & IDF_CONTENTS));

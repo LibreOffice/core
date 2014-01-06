@@ -542,9 +542,7 @@ public:
                         double nStepValue, double nMaxValue, ScProgress* pProgress);
     OUString    GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW nEndY );
 
-    void        UpdateSelectionFunction( ScFunctionData& rData,
-                        SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                        const ScMarkData& rMark );
+    void UpdateSelectionFunction( ScFunctionData& rData, const ScMarkData& rMark );
 
     void        AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                     sal_uInt16 nFormatNo );

@@ -237,13 +237,8 @@ public:
 
     ScAttrIterator* CreateAttrIterator( SCROW nStartRow, SCROW nEndRow ) const;
 
-                //     UpdateSelectionFunction: multi-select
     void UpdateSelectionFunction(
-        const ScMarkData& rMark, ScFunctionData& rData, ScFlatBoolRowSegments& rHiddenRows,
-        bool bDoExclude, SCROW nExStartRow, SCROW nExEndRow );
-
-    void UpdateAreaFunction(
-        ScFunctionData& rData, ScFlatBoolRowSegments& rHiddenRows, SCROW nStartRow, SCROW nEndRow);
+        const ScMarkData& rMark, ScFunctionData& rData, ScFlatBoolRowSegments& rHiddenRows );
 
     void CopyToColumn(
         sc::CopyToDocContext& rCxt, SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bMarked,

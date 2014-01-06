@@ -2308,30 +2308,15 @@ xub_StrLen ScTable::GetMaxNumberStringLen(
         return 0;
 }
 
-void ScTable::UpdateSelectionFunction( ScFunctionData& rData,
-                        SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                        const ScMarkData& rMark )
+void ScTable::UpdateSelectionFunction( ScFunctionData& rData, const ScMarkData& rMark )
 {
-    //  Cursor neben einer Markierung nicht beruecksichtigen:
-    //! nur noch MarkData uebergeben, Cursorposition ggf. hineinselektieren!!!
-    bool bSingle = ( rMark.IsMarked() || !rMark.IsMultiMarked() );
+    for (SCCOL nCol = 0; nCol <= MAXCOL && !rData.bError; ++nCol)
+    {
+        if (pColFlags && ColHidden(nCol))
+            continue;
 
-    // Mehrfachselektion:
-
-    SCCOL nCol;
-    if ( rMark.IsMultiMarked() )
-        for (nCol=0; nCol<=MAXCOL && !rData.bError; nCol++)
-            if ( !pColFlags || !ColHidden(nCol) )
-                aCol[nCol].UpdateSelectionFunction( rMark, rData, *mpHiddenRows,
-                                                    bSingle && ( nCol >= nStartCol && nCol <= nEndCol ),
-                                                    nStartRow, nEndRow );
-
-    //  Einfachselektion (oder Cursor) nur wenn nicht negativ (und s.o.):
-
-    if ( bSingle && !rMark.IsMarkNegative() )
-        for (nCol=nStartCol; nCol<=nEndCol && !rData.bError; nCol++)
-            if ( !pColFlags || !ColHidden(nCol) )
-                aCol[nCol].UpdateAreaFunction( rData, *mpHiddenRows, nStartRow, nEndRow );
+        aCol[nCol].UpdateSelectionFunction(rMark, rData, *mpHiddenRows);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

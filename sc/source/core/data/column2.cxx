@@ -3254,7 +3254,6 @@ namespace {
 class UpdateSubTotalHandler
 {
     ScFunctionData& mrData;
-    ScFlatBoolRowSegments& mrHiddenRows;
 
     void update(double fVal, bool bVal)
     {
@@ -3311,22 +3310,25 @@ class UpdateSubTotalHandler
     }
 
 public:
-    UpdateSubTotalHandler(ScFunctionData& rData, ScFlatBoolRowSegments& rHiddenRows) :
-        mrData(rData), mrHiddenRows(rHiddenRows) {}
+    UpdateSubTotalHandler(ScFunctionData& rData) : mrData(rData) {}
 
-    void operator() (size_t nRow, double fVal)
+    void operator() (size_t /*nRow*/, double fVal)
     {
-        if (mrHiddenRows.getValue(nRow))
-            return;
-
         update(fVal, true);
     }
 
-    void operator() (size_t nRow, ScFormulaCell* pCell)
+    void operator() (size_t /*nRow*/, const svl::SharedString&)
     {
-        if (mrHiddenRows.getValue(nRow))
-            return;
+        update(0.0, false);
+    }
 
+    void operator() (size_t /*nRow*/, const EditTextObject*)
+    {
+        update(0.0, false);
+    }
+
+    void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
+    {
         double fVal = 0.0;
         bool bVal = false;
         if (mrData.eFunc != SUBTOTAL_FUNC_CNT2) // it doesn't interest us
@@ -3353,99 +3355,63 @@ public:
 
 //  multiple selections:
 void ScColumn::UpdateSelectionFunction(
-    const ScMarkData& rMark, ScFunctionData& rData, ScFlatBoolRowSegments& rHiddenRows,
-    bool bDoExclude, SCROW nExStartRow, SCROW nExEndRow)
+    const ScMarkData& rMark, ScFunctionData& rData, ScFlatBoolRowSegments& rHiddenRows )
 {
-    if ( rData.eFunc != SUBTOTAL_FUNC_SELECTION_COUNT )
-    {
-        sc::SingleColumnSpanSet aSpanSet;
-        aSpanSet.scan(rMark, nTab, nCol);
-        if (bDoExclude)
-        {
-            aSpanSet.set(0, nExStartRow, false);
-            aSpanSet.set(nExEndRow+1, MAXROWCOUNT, false);
-        }
+    sc::SingleColumnSpanSet aSpanSet;
+    aSpanSet.scan(rMark, nTab, nCol); // mark all selected rows.
 
-        sc::SingleColumnSpanSet::SpansType aSpans;
-        aSpanSet.getSpans(aSpans);
-        UpdateSubTotalHandler aFunc(rData, rHiddenRows);
-        sc::CellStoreType::iterator itCellPos = maCells.begin();
-        sc::SingleColumnSpanSet::SpansType::const_iterator it = aSpans.begin(), itEnd = aSpans.end();
-        for (; it != itEnd; ++it)
-        {
-            itCellPos = sc::ProcessFormulaNumeric(
-                itCellPos, maCells, it->mnRow1, it->mnRow2, aFunc);
-        }
+    // Exclude all hidden rows.
+    ScFlatBoolRowSegments::RangeData aRange;
+    SCROW nRow = 0;
+    while (nRow <= MAXROW)
+    {
+        if (!rHiddenRows.getRangeData(nRow, aRange))
+            break;
+
+        if (aRange.mbValue)
+            // Hidden range detected.
+            aSpanSet.set(nRow, aRange.mnRow2, false);
+
+        nRow = aRange.mnRow2 + 1;
     }
-    else
+
+    sc::SingleColumnSpanSet::SpansType aSpans;
+    aSpanSet.getSpans(aSpans);
+
+    sc::SingleColumnSpanSet::SpansType::const_iterator it = aSpans.begin(), itEnd = aSpans.end();
+
+    switch (rData.eFunc)
     {
-        SCROW nTop, nBottom;
-
-        // ScMarkData::GetArray() returns a valid array only if
-        // 'rMark.IsMultiMarked()' returns true.
-        // Since ScTable::UpdateSelectionFunction() already checked that first
-        // before calling this method it does not need to be repeated here.
-
-        ScMarkArrayIter aIter(rMark.GetArray() + nCol);
-        ScFlatBoolRowSegments::RangeData aData;
-
-        while (aIter.Next( nTop, nBottom ))
+        case SUBTOTAL_FUNC_SELECTION_COUNT:
         {
-            sal_Int32 nCellCount = 0;    // to get the count of selected visible cells
-            SCROW nRow = nTop;
-
-            while ( nRow <= nBottom )
+            // Simply count selected rows regardless of cell contents.
+            for (; it != itEnd; ++it)
+                rData.nCount += it->mnRow2 - it->mnRow1 + 1;
+        }
+        break;
+        case SUBTOTAL_FUNC_CNT2:
+        {
+            // We need to parse all non-empty cells.
+            sc::CellStoreType::const_iterator itCellPos = maCells.begin();
+            UpdateSubTotalHandler aFunc(rData);
+            for (; it != itEnd; ++it)
             {
-                if (!rHiddenRows.getRangeData(nRow, aData))     // failed to get range data
-                    break;
-
-                if (aData.mnRow2 > nBottom)
-                    aData.mnRow2 = nBottom;
-
-                if (!aData.mbValue)
-                {
-                    nCellCount += aData.mnRow2 - nRow + 1;
-
-                    // Till this point, nCellCount also includes count of those cells which are excluded
-                    // So, they should be decremented now.
-
-                    if ( bDoExclude && nExStartRow >= nRow && nExEndRow <= aData.mnRow2 )
-                        nCellCount -= nExEndRow - nExStartRow + 1;
-                }
-                nRow = aData.mnRow2 + 1;
+                itCellPos = sc::ParseAllNonEmpty(
+                    itCellPos, maCells, it->mnRow1, it->mnRow2, aFunc);
             }
-            rData.nCount += nCellCount;
         }
-    }
-}
-
-//  with bNoMarked ignore the multiple selections
-void ScColumn::UpdateAreaFunction(
-    ScFunctionData& rData, ScFlatBoolRowSegments& rHiddenRows, SCROW nStartRow, SCROW nEndRow)
-{
-    if ( rData.eFunc != SUBTOTAL_FUNC_SELECTION_COUNT )
-    {
-        UpdateSubTotalHandler aFunc(rData, rHiddenRows);
-        sc::ProcessFormulaNumeric(
-            maCells.begin(), maCells, nStartRow, nEndRow, aFunc);
-    }
-    else
-    {
-        sal_Int32 nCellCount = 0;    // to get the count of selected visible cells
-        SCROW nRow = nStartRow;
-        ScFlatBoolRowSegments::RangeData aData;
-
-        while (nRow <= nEndRow)
+        break;
+        default:
         {
-            if (!rHiddenRows.getRangeData(nRow, aData))
-               break;
-
-            if (!aData.mbValue)
-                nCellCount += (aData.mnRow2 <= nEndRow ? aData.mnRow2 : nEndRow) - nRow + 1;
-
-            nRow = aData.mnRow2 + 1;
+            // We need to parse only numeric values.
+            sc::CellStoreType::const_iterator itCellPos = maCells.begin();
+            UpdateSubTotalHandler aFunc(rData);
+            for (; it != itEnd; ++it)
+            {
+                itCellPos = sc::ParseFormulaNumeric(
+                    itCellPos, maCells, it->mnRow1, it->mnRow2, aFunc);
+            }
         }
-        rData.nCount += nCellCount;
     }
 }
 
