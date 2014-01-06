@@ -613,22 +613,17 @@ bool ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
 {
     ScFunctionData aData(eFunc);
 
-    ScRange aSingle( rCursor );
-    if ( rMark.IsMarked() )
-        rMark.GetMarkArea(aSingle);
-
-    SCCOL nStartCol = aSingle.aStart.Col();
-    SCROW nStartRow = aSingle.aStart.Row();
-    SCCOL nEndCol = aSingle.aEnd.Col();
-    SCROW nEndRow = aSingle.aEnd.Row();
+    ScMarkData aMark(rMark);
+    aMark.MarkToMulti();
+    if (!aMark.IsMultiMarked())
+        aMark.SetMarkArea(rCursor);
 
     SCTAB nMax = static_cast<SCTAB>(maTabs.size());
-    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
+    ScMarkData::const_iterator itr = aMark.begin(), itrEnd = aMark.end();
 
     for (; itr != itrEnd && *itr < nMax && !aData.bError; ++itr)
         if (maTabs[*itr])
-            maTabs[*itr]->UpdateSelectionFunction( aData,
-                            nStartCol, nStartRow, nEndCol, nEndRow, rMark );
+            maTabs[*itr]->UpdateSelectionFunction(aData, aMark);
 
             //! rMark an UpdateSelectionFunction uebergeben !!!!!
 

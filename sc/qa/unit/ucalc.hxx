@@ -90,6 +90,12 @@ public:
      */
     void testDataEntries();
 
+    /**
+     * Selection function is responsible for displaying quick calculation
+     * results in the status bar.
+     */
+    void testSelectionFunction();
+
     void testFormulaCreateStringFromTokens();
     void testFormulaParseReference();
     void testFetchVectorRefArray();
@@ -304,6 +310,7 @@ public:
     CPPUNIT_TEST(testRangeList);
     CPPUNIT_TEST(testInput);
     CPPUNIT_TEST(testDataEntries);
+    CPPUNIT_TEST(testSelectionFunction);
     CPPUNIT_TEST(testFormulaCreateStringFromTokens);
     CPPUNIT_TEST(testFormulaParseReference);
     CPPUNIT_TEST(testFetchVectorRefArray);
