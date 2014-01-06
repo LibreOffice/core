@@ -90,10 +90,13 @@ void SwWrongList::ClearList()
     maList.clear();
 }
 
-/*************************************************************************
- * sal_Bool SwWrongList::InWrongWord() gibt den Anfang und die Laenge des
- * Wortes zurueck, wenn es als falsch markiert ist.
- *************************************************************************/
+/** If a word is incorrectly selected, this method returns begin and length of it.
+
+    @param[in,out] rChk starting position of the word to check
+    @param[out]    rLn  length of the word
+
+    @return <true> if incorrectly selected, <false> otherwise
+ */
 sal_Bool SwWrongList::InWrongWord( sal_Int32 &rChk, sal_Int32 &rLn ) const
 {
     MSHORT nPos = GetWrongPos( rChk );
@@ -109,9 +112,13 @@ sal_Bool SwWrongList::InWrongWord( sal_Int32 &rChk, sal_Int32 &rLn ) const
     return sal_False;
 }
 
-/*************************************************************************
- * sal_Bool SwWrongList::Check() liefert den ersten falschen Bereich
- *************************************************************************/
+/** Calculate first incorrectly selected area.
+
+    @param[in,out] rChk starting position of the word to check
+    @param[in,out] rLn  length of the word
+
+    @return <true> if incorrectly selected area was found, <false> otherwise
+ */
 sal_Bool SwWrongList::Check( sal_Int32 &rChk, sal_Int32 &rLn ) const
 {
     MSHORT nPos = GetWrongPos( rChk );
@@ -143,10 +150,12 @@ sal_Bool SwWrongList::Check( sal_Int32 &rChk, sal_Int32 &rLn ) const
     return sal_False;
 }
 
-/*************************************************************************
- * sal_Int32 SwWrongList::NextWrong() liefert die naechste Fehlerposition
- *************************************************************************/
+/** Find next incorrectly selected position.
 
+    @param[in] rChk starting position of the word to check
+
+    @return starting position of incorrectly selected area, <STRING_LEN> otherwise
+ */
 sal_Int32 SwWrongList::NextWrong( sal_Int32 nChk ) const
 {
     sal_Int32 nRet = STRING_LEN;
@@ -167,12 +176,13 @@ sal_Int32 SwWrongList::NextWrong( sal_Int32 nChk ) const
     return nRet;
 }
 
-/*************************************************************************
- *                 sal_uInt16 SwWrongList::GetWrongPos( sal_Int32 nValue )
- *  sucht die erste Position im Array, die groessergleich nValue ist,
- * dies kann natuerlich auch hinter dem letzten Element sein!
- *************************************************************************/
+/** Find the first position that is greater or equal to the given value.
 
+    @note Resulting position might be behind the last element of the array.
+    @param[in] nValue value for comparison
+
+    @return first position that is greater or equal to the given value
+ */
 sal_uInt16 SwWrongList::GetWrongPos( sal_Int32 nValue ) const
 {
     sal_uInt16 nOben = Count();
@@ -228,7 +238,7 @@ sal_uInt16 SwWrongList::GetWrongPos( sal_Int32 nValue ) const
     }
 
     // nUnten now points to an index i into the wrong list which
-    // 1. nValue is inside [ Area[i].pos, Area[i].pos + Area[i].len ] (inkl!!!)
+    // 1. nValue is inside [ Area[i].pos, Area[i].pos + Area[i].len ] (inclusive!!!)
     // 2. nValue < Area[i].pos
 
     return nUnten;
@@ -248,13 +258,13 @@ void SwWrongList::SetInvalid( sal_Int32 nBegin, sal_Int32 nEnd )
     nEndInvalid = nEnd;
 }
 
+/** Change all values after the given postion.
 
-/*************************************************************************
- *                      SwWrongList::Move( sal_Int32 nPos, sal_Int32 nDiff )
- *  veraendert alle Positionen ab nPos um den angegebenen Wert,
- *  wird nach Einfuegen oder Loeschen von Buchstaben benoetigt.
- *************************************************************************/
+   Needed after insert/deletion of characters.
 
+   @param nPos  position after that everything should be changed
+   @param nDiff amount how much the positions should be moved
+ */
 void SwWrongList::Move( sal_Int32 nPos, sal_Int32 nDiff )
 {
     MSHORT i = GetWrongPos( nPos );
@@ -305,8 +315,8 @@ void SwWrongList::Move( sal_Int32 nPos, sal_Int32 nDiff )
             if( nEndInvalid >= nPos )
                 nEndInvalid += nDiff;
         }
-        // Wenn wir mitten in einem falschen Wort stehen, muss vom Wortanfang
-        // invalidiert werden.
+        // If the pointer is in the middle of a wrong word,
+        // invalidation must happen from the beginning of that word.
         if( i < Count() )
         {
             const sal_Int32 nWrPos = Pos( i );
@@ -327,13 +337,22 @@ void SwWrongList::Move( sal_Int32 nPos, sal_Int32 nDiff )
     }
 }
 
-/*************************************************************************
- *                      SwWrongList::Fresh
- *
- * For a given range [nPos, nPos + nLen[ and an index nIndex, this function
- * basically counts the number of SwWrongArea entries starting with nIndex
- * up to nPos + nLen. All these entries are removed.
- *************************************************************************/
+// TODO: Complete documentation
+/** Remove given range of entries
+
+   For a given range [nPos, nPos + nLen[ and an index nIndex, this function
+   basically counts the number of SwWrongArea entries starting with nIndex
+   up to nPos + nLen. All these entries are removed.
+
+   @param rStart     ???
+   @param rEnd       ???
+   @param nPos       starting position of the range
+   @param nLen       length of the range
+   @param nIndex     index to start lookup at
+   @param nCursorPos ???
+
+   @return <true> if ???
+ */
 sal_Bool SwWrongList::Fresh( sal_Int32 &rStart, sal_Int32 &rEnd, sal_Int32 nPos,
                              sal_Int32 nLen, MSHORT nIndex, sal_Int32 nCursorPos )
 {
