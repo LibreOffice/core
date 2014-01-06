@@ -1813,7 +1813,7 @@ void ScDocument::SetDocProtection(const ScDocProtection* pProtect)
     if (pProtect)
         pDocProtection.reset(new ScDocProtection(*pProtect));
     else
-        pDocProtection.reset(NULL);
+        pDocProtection.reset();
 }
 
 sal_Bool ScDocument::IsDocProtected() const

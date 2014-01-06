@@ -268,7 +268,7 @@ bool AquaSalBitmap::AllocateUserData()
     catch( const std::bad_alloc& )
     {
         DBG_ERROR( "vcl::AquaSalBitmap::AllocateUserData: bad alloc" );
-        maUserBuffer.reset( NULL );
+        maUserBuffer.reset();
         mnBytesPerRow = 0;
     }
 

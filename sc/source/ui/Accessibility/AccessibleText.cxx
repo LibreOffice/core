@@ -1891,7 +1891,7 @@ SvxTextForwarder* ScAccessibleCsvTextData::GetTextForwarder()
             mpTextForwarder.reset( new SvxEditEngineForwarder( *mpEditEngine ) );
     }
     else
-        mpTextForwarder.reset( NULL );
+        mpTextForwarder.reset();
     return mpTextForwarder.get();
 }
 

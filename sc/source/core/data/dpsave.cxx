@@ -165,7 +165,7 @@ const OUString* ScDPSaveMember::GetLayoutName() const
 
 void ScDPSaveMember::RemoveLayoutName()
 {
-    mpLayoutName.reset(NULL);
+    mpLayoutName.reset();
 }
 
 void ScDPSaveMember::WriteToSource( const uno::Reference<uno::XInterface>& xMember, sal_Int32 nPosition )
@@ -465,7 +465,7 @@ const OUString* ScDPSaveDimension::GetLayoutName() const
 
 void ScDPSaveDimension::RemoveLayoutName()
 {
-    mpLayoutName.reset(NULL);
+    mpLayoutName.reset();
 }
 
 void ScDPSaveDimension::SetReferenceValue(const sheet::DataPilotFieldReference* pNew)

@@ -166,7 +166,7 @@ void SAL_CALL AccessibleSlideSorterView::disposing (void)
         comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( mnClientId, *this );
         mnClientId = 0;
     }
-    mpImpl.reset(NULL);
+    mpImpl.reset();
 }
 
 

@@ -917,7 +917,7 @@ namespace pcr
         // handlers are obsolete, so is our "composer" for their UI requests
         if ( m_pUIRequestComposer.get() )
             m_pUIRequestComposer->dispose();
-        m_pUIRequestComposer.reset( NULL );
+        m_pUIRequestComposer.reset();
 
         // clean up the property handlers
         PropertyHandlerArray aAllHandlers;  // will contain every handler exactly once

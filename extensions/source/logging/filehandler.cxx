@@ -257,7 +257,7 @@ namespace logging
                 impl_writeString_nothrow( sTail );
         }
 
-        m_pFile.reset( NULL );
+        m_pFile.reset();
         m_aHandlerHelper.setFormatter( NULL );
     }
 
