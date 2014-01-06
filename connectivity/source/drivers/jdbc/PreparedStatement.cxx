@@ -96,6 +96,8 @@ sal_Bool SAL_CALL java_sql_PreparedStatement::execute(  ) throw(::com::sun::star
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
 
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    createStatement(t.pEnv);
     static jmethodID mID(NULL);
     return callBooleanMethod( "execute", mID );
 }
@@ -106,6 +108,9 @@ sal_Int32 SAL_CALL java_sql_PreparedStatement::executeUpdate(  ) throw(::com::su
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     m_aLogger.log( LogLevel::FINE, STR_LOG_EXECUTING_PREPARED_UPDATE );
+
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    createStatement(t.pEnv);
     static jmethodID mID(NULL);
     return callIntMethod("executeUpdate",mID);
 }
