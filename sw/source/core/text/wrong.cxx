@@ -22,10 +22,6 @@
 
 #include "SwGrammarMarkUp.hxx"
 
-/*************************************************************************
- *SwWrongArea::SwWrongArea
- *************************************************************************/
-
 SwWrongArea::SwWrongArea( const rtl::OUString& rType, WrongListType listType,
         com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
         sal_Int32 nPos,
@@ -50,9 +46,6 @@ SwWrongArea::SwWrongArea( const rtl::OUString& rType,
     }
 }
 
-/*************************************************************************
- * SwWrongList::SwWrongList()
- *************************************************************************/
 SwWrongList::SwWrongList( WrongListType eType ) :
     meType       (eType),
     nBeginInvalid(STRING_LEN),  // everything correct... (the invalid area starts beyond the string)
@@ -66,20 +59,12 @@ SwWrongList::~SwWrongList()
     ClearList();
 }
 
-/*************************************************************************
- * SwWrongList* SwWrongList::Clone()
- *************************************************************************/
-
 SwWrongList* SwWrongList::Clone()
 {
     SwWrongList* pClone = new SwWrongList( meType );
     pClone->CopyFrom( *this );
     return pClone;
 }
-
-/*************************************************************************
- * void SwWrongList::CopyFrom( const SwWrongList& rCopy )
- *************************************************************************/
 
 void SwWrongList::CopyFrom( const SwWrongList& rCopy )
 {
@@ -94,9 +79,6 @@ void SwWrongList::CopyFrom( const SwWrongList& rCopy )
     }
 }
 
-/*************************************************************************
- * SwWrongList::ClearList()
- *************************************************************************/
 void SwWrongList::ClearList()
 {
     for ( size_t i = 0; i < maList.size(); ++i)
@@ -251,10 +233,6 @@ sal_uInt16 SwWrongList::GetWrongPos( sal_Int32 nValue ) const
 
     return nUnten;
 }
-
-/*************************************************************************
- *                 void SwWrongList::_Invalidate()
- *************************************************************************/
 
 void SwWrongList::_Invalidate( sal_Int32 nBegin, sal_Int32 nEnd )
 {
@@ -518,7 +496,6 @@ void SwWrongList::JoinList( SwWrongList* pNext, sal_Int32 nInsertPos )
     Invalidate( nInsertPos ? nInsertPos - 1 : nInsertPos, nInsertPos + 1 );
 }
 
-
 void SwWrongList::InsertSubList( sal_Int32 nNewPos, sal_Int32 nNewLen, sal_uInt16 nWhere, SwWrongList* pSubList )
 {
     if (pSubList)
@@ -532,7 +509,6 @@ void SwWrongList::InsertSubList( sal_Int32 nNewPos, sal_Int32 nNewLen, sal_uInt1
         i += nWhere;
     maList.insert(i, SwWrongArea( OUString(), 0, nNewPos, nNewLen, pSubList ) );
 }
-
 
 // New functions: Necessary because SwWrongList has been changed to use std::vector
 void SwWrongList::Insert(sal_uInt16 nWhere, std::vector<SwWrongArea>::iterator startPos, std::vector<SwWrongArea>::iterator endPos)
@@ -647,18 +623,14 @@ void SwWrongList::Insert( const OUString& rType,
                     // insert at current position
                     break;
                 }
-
                 ++aIter;
             }
-
             break;
         }
-
         ++aIter;
     }
 
     maList.insert(aIter, SwWrongArea( rType, meType, xPropertyBag, nNewPos, nNewLen) );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
