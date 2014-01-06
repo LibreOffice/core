@@ -89,6 +89,7 @@ public:
     sal_uInt32 AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri = -1,
             sal_Int16 eVOri = -1, sal_Int16 eHRel = -1,
             sal_Int16 eVRel = -1, const Point* pNdTopLeft = 0, const sal_Bool bOOxmlExport = false );
+    virtual void  AddSdrObjectVMLObject( const SdrObject& rObj);
 
 protected:
     /// Add an attribute to the generated <v:shape/> element.
@@ -109,7 +110,6 @@ protected:
     ///
     /// The parameter is just what we got from StartShape().
     virtual void        EndShape( sal_Int32 nShapeElement );
-
     virtual void        Commit( EscherPropertyContainer& rProps, const Rectangle& rRect );
 
 private:
