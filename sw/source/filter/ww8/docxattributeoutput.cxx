@@ -488,7 +488,11 @@ void DocxAttributeOutput::WriteDMLTextFrame(sw::Frame* pParentFrame)
     m_pSerializer->endElementNS( XML_wps, XML_txbx );
     XFastAttributeListRef xBodyPrAttrList(m_pBodyPrAttrList);
     m_pBodyPrAttrList = NULL;
-    m_pSerializer->singleElementNS( XML_wps, XML_bodyPr, xBodyPrAttrList );
+    m_pSerializer->startElementNS( XML_wps, XML_bodyPr, xBodyPrAttrList );
+    // AutoSize of the Text Frame.
+    const SwFmtFrmSize& rSize = rFrmFmt.GetFrmSize();
+    m_pSerializer->singleElementNS(XML_a, (rSize.GetHeightSizeType() == ATT_VAR_SIZE ? XML_spAutoFit : XML_noAutofit), FSEND);
+    m_pSerializer->endElementNS( XML_wps, XML_bodyPr );
 
     m_pSerializer->endElementNS(XML_wps, XML_wsp);
     m_pSerializer->endElementNS(XML_a, XML_graphicData);
