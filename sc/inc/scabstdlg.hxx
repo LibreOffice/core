@@ -342,12 +342,6 @@ public:
                                                                 sal_Bool bCol = false,
                                                                 sal_Bool bRow = false) = 0;
 
-    virtual VclAbstractDialog * CreateScColOrRowDlg( Window*            pParent,
-                                                    const OUString&   rStrTitle,
-                                                    const OUString&   rStrLabel,
-                                                    int nId,
-                                                    sal_Bool                bColDefault = sal_True ) = 0;
-
     virtual AbstractScSortWarningDlg * CreateScSortWarningDlg(Window* pParent, const OUString& rExtendText, const OUString& rCurrentText ) = 0;
 
     virtual AbstractScCondFormatManagerDlg* CreateScCondFormatMgrDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList,

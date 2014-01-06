@@ -657,27 +657,6 @@ AbstractScColRowLabelDlg *  ScAbstractDialogFactory_Impl::CreateScColRowLabelDlg
     return 0;
 }
 
-VclAbstractDialog *  ScAbstractDialogFactory_Impl::CreateScColOrRowDlg(Window*          pParent,
-                                                    const OUString&   rStrTitle,
-                                                    const OUString&   rStrLabel,
-                                                    int nId,
-                                                    sal_Bool                bColDefault)
-{
-    Dialog * pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_COLORROW :
-            pDlg = new ScColOrRowDlg( pParent, rStrTitle,rStrLabel,bColDefault );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new ScVclAbstractDialog_Impl( pDlg );
-    return 0;
-}
-
 AbstractScSortWarningDlg* ScAbstractDialogFactory_Impl::CreateScSortWarningDlg( Window* pParent, const OUString& rExtendText, const OUString& rCurrentText )
 {
     ScSortWarningDlg* pDlg = new ScSortWarningDlg(pParent, rExtendText, rCurrentText );
