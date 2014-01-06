@@ -224,66 +224,6 @@ ModalDialog RID_SCDLG_INSCONT
     };
 };
 
-#define TXT_COLS \
-    Text [ en-US ] = "~Columns" ; \
-
-
-#define TXT_ROWS \
-    Text [ en-US ] = "~Rows" ;  \
-
-
- // RID_SCDLG_COLORROW wird nur in der Optionen-Sortierlisten-Seite benutzt
-
-ModalDialog RID_SCDLG_COLORROW
-{
-    HelpID = "sc:ModalDialog:RID_SCDLG_COLORROW";
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 148 , 63 ) ;
-    Moveable = TRUE ;
-    Closeable = FALSE ;
-    OKButton BTN_OK
-    {
-        Pos = MAP_APPFONT ( 92 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT ( 92 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    HelpButton BTN_HELP
-    {
-        Pos = MAP_APPFONT ( 92 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    RadioButton BTN_GROUP_ROWS
-    {
-        HelpID = "sc:RadioButton:RID_SCDLG_COLORROW:BTN_GROUP_ROWS";
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 71 , 10 ) ;
-        TXT_ROWS
-        TabStop = TRUE ;
-    };
-    RadioButton BTN_GROUP_COLS
-    {
-        HelpID = "sc:RadioButton:RID_SCDLG_COLORROW:BTN_GROUP_COLS";
-        Pos = MAP_APPFONT ( 12 , 28 ) ;
-        Size = MAP_APPFONT ( 71 , 10 ) ;
-        TXT_COLS
-        TabStop = TRUE ;
-    };
-    FixedLine FL_FRAME
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
-    };
-};
-
 ModalDialog RID_SCDLG_CHARTCOLROW
 {
     HelpID = "sc:ModalDialog:RID_SCDLG_CHARTCOLROW";

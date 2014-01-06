@@ -17,62 +17,38 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
-
-
-
-//------------------------------------------------------------------
 
 #include "crdlg.hxx"
 #include "scresid.hxx"
 #include "miscdlgs.hrc"
 
-
-//==================================================================
-
-ScColOrRowDlg::ScColOrRowDlg( Window*       pParent,
-                              const OUString& rStrTitle,
-                              const OUString& rStrLabel,
-                              sal_Bool          bColDefault )
-
-    :   ModalDialog     ( pParent, ScResId( RID_SCDLG_COLORROW ) ),
-        //
-        aFlFrame        ( this, ScResId( FL_FRAME ) ),
-        aBtnRows        ( this, ScResId( BTN_GROUP_ROWS ) ),
-        aBtnCols        ( this, ScResId( BTN_GROUP_COLS ) ),
-        aBtnOk          ( this, ScResId( BTN_OK ) ),
-        aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp        ( this, ScResId( BTN_HELP ) )
+ScColOrRowDlg::ScColOrRowDlg(Window* pParent, const OUString& rStrTitle,
+    const OUString& rStrLabel, bool bColDefault)
+    : ModalDialog(pParent, "ColOrRowDialog",
+        "modules/scalc/ui/colorrowdialog.ui")
 {
-    SetText( rStrTitle );
-    aFlFrame.SetText( rStrLabel );
+    get(m_pBtnOk, "ok");
+    get(m_pBtnCols, "columns");
+    get(m_pBtnRows, "rows");
+    get(m_pFrame, "frame");
 
-    if ( bColDefault )
-        aBtnCols.Check();
+    SetText(rStrTitle);
+    m_pFrame->set_label(rStrLabel);
+
+    if (bColDefault)
+        m_pBtnCols->Check();
     else
-        aBtnRows.Check();
+        m_pBtnRows->Check();
 
-    aBtnOk.SetClickHdl( LINK( this, ScColOrRowDlg, OkHdl ) );
-
-    FreeResource();
+    m_pBtnOk->SetClickHdl( LINK( this, ScColOrRowDlg, OkHdl ) );
 }
-
-//------------------------------------------------------------------------
-
-ScColOrRowDlg::~ScColOrRowDlg()
-{
-}
-
-//------------------------------------------------------------------------
 
 IMPL_LINK_NOARG_INLINE_START(ScColOrRowDlg, OkHdl)
 {
-    EndDialog( aBtnCols.IsChecked() ? SCRET_COLS : SCRET_ROWS );
+    EndDialog( m_pBtnCols->IsChecked() ? SCRET_COLS : SCRET_ROWS );
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(ScColOrRowDlg, OkHdl)
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

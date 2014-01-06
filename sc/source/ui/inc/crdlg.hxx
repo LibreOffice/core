@@ -23,34 +23,23 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
 #include "scui_def.hxx"
-
-//------------------------------------------------------------------------
 
 class ScColOrRowDlg : public ModalDialog
 {
 public:
-            ScColOrRowDlg( Window*          pParent,
-                           const OUString&    rStrTitle,
-                           const OUString&    rStrLabel,
-                           sal_Bool             bColDefault = sal_True );
-            ~ScColOrRowDlg();
-
+    ScColOrRowDlg(Window* pParent, const OUString& rStrTitle,
+        const OUString& rStrLabel, bool bColDefault = true);
 private:
-    FixedLine       aFlFrame;
-    RadioButton     aBtnRows;
-    RadioButton     aBtnCols;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    VclFrame*       m_pFrame;
+    RadioButton*    m_pBtnRows;
+    RadioButton*    m_pBtnCols;
+    OKButton*       m_pBtnOk;
 
     DECL_LINK(OkHdl, void *);
 };
 
-
 #endif
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
