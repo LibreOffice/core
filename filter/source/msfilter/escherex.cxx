@@ -5285,7 +5285,7 @@ sal_uInt32 EscherEx::EnterGroup( const OUString& rShapeName, const Rectangle* pB
         if( rShapeName.getLength() > 0 )
             aPropOpt.AddOpt( ESCHER_Prop_wzName, rShapeName );
 
-        Commit( aPropOpt, aRect );
+        Commit( aPropOpt, aRect);
         if ( mnGroupLevel > 1 )
             AddChildAnchor( aRect );
 

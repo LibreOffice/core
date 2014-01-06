@@ -166,7 +166,7 @@ void VMLExport::AddShape( sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uIn
 {
     m_nShapeType = nShapeType;
     m_nShapeFlags = nShapeFlags;
-
+    m_pShapeAttrList->add( XML_name, ShapeIdString( nShapeId ) );
     m_pShapeAttrList->add( XML_id, ShapeIdString( nShapeId ) );
 }
 
@@ -313,6 +313,10 @@ inline sal_Int32 impl_GetPointComponent( const sal_uInt8* &pVal, sal_uInt16 nPoi
     return nRet;
 }
 
+void  VMLExport::AddSdrObjectVMLObject( const SdrObject& rObj)
+{
+   m_pSdrObject = &rObj;
+}
 void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect )
 {
     if ( m_nShapeType == ESCHER_ShpInst_Nil )
@@ -376,11 +380,11 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                         nTop = it->nPropValue;
                         rProps.GetOpt( ESCHER_Prop_geoLeft, nLeft );
                     }
-
-                    m_pShapeAttrList->add( XML_coordorigin,
-                            OStringBuffer( 20 ).append( sal_Int32( nLeft ) )
-                            .append( "," ).append( sal_Int32( nTop ) )
-                            .makeStringAndClear() );
+                    if(nTop!=0 && nLeft!=0)
+                        m_pShapeAttrList->add( XML_coordorigin,
+                                OStringBuffer( 20 ).append( sal_Int32( nLeft ) )
+                                .append( "," ).append( sal_Int32( nTop ) )
+                                .makeStringAndClear() );
                 }
                 bAlreadyWritten[ ESCHER_Prop_geoLeft ] = true;
                 bAlreadyWritten[ ESCHER_Prop_geoTop ] = true;
@@ -405,10 +409,11 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                         rProps.GetOpt( ESCHER_Prop_geoRight, nRight );
                     }
 
-                    m_pShapeAttrList->add( XML_coordsize,
-                            OStringBuffer( 20 ).append( sal_Int32( nRight ) - sal_Int32( nLeft ) )
-                            .append( "," ).append( sal_Int32( nBottom ) - sal_Int32( nTop ) )
-                            .makeStringAndClear() );
+                    if(nTop!=0 && nLeft!=0 &&  nBottom!=0 &&  nRight!=0 )
+                        m_pShapeAttrList->add( XML_coordsize,
+                                OStringBuffer( 20 ).append( sal_Int32( nRight ) - sal_Int32( nLeft ) )
+                                .append( "," ).append( sal_Int32( nBottom ) - sal_Int32( nTop ) )
+                                .makeStringAndClear() );
                 }
                 bAlreadyWritten[ ESCHER_Prop_geoRight ] = true;
                 bAlreadyWritten[ ESCHER_Prop_geoBottom ] = true;
@@ -442,7 +447,8 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                                     {
                                         sal_Int32 nX = impl_GetPointComponent( pVerticesIt, nPointSize );
                                         sal_Int32 nY = impl_GetPointComponent( pVerticesIt, nPointSize );
-                                        aPath.append( "m" ).append( nX ).append( "," ).append( nY );
+                                        if (nX > 0 && nY > 0 )
+                                            aPath.append( "m" ).append( nX ).append( "," ).append( nY );
                                     }
                                     break;
                                 case 0xb300:
@@ -486,13 +492,14 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                                     {
                                         sal_Int32 nX = impl_GetPointComponent(pVerticesIt, nPointSize);
                                         sal_Int32 nY = impl_GetPointComponent(pVerticesIt, nPointSize);
-                                        aPath.append("l").append(nX).append(",").append(nY);
+                                        if (nX >= 0 && nY >= 0 )
+                                            aPath.append("l").append(nX).append(",").append(nY);
                                     }
                                     break;
                             }
                         }
 
-                        if ( !aPath.isEmpty() )
+                        if ( !aPath.isEmpty() && aPath.makeStringAndClear() != "xe" )
                             m_pShapeAttrList->add( XML_path, aPath.getStr() );
                     }
 #if OSL_DEBUG_LEVEL > 0
@@ -763,6 +770,17 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                     // See DffPropertyReader::ApplyLineAttributes().
                     impl_AddBool( m_pShapeAttrList, XML_stroked, it->nPropValue & 8 );
                     bAlreadyWritten[ESCHER_Prop_fNoLineDrawDash] = true;
+                }
+                break;
+            case ESCHER_Prop_wzName:
+                {
+                    SvMemoryStream aStream;
+                    aStream.Write(it->pBuf, it->nPropSize);
+                    aStream.Seek(0);
+                    OUString idStr = SvxMSDffManager::MSDFFReadZString(aStream, it->nPropSize, true);
+                    aStream.Seek(0);
+                    m_pShapeAttrList->add(XML_ID, OUStringToOString(idStr, RTL_TEXTENCODING_UTF8));
+                    bAlreadyWritten[ESCHER_Prop_wzName] = true;
                 }
                 break;
             default:

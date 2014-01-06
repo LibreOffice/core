@@ -2350,6 +2350,15 @@ DECLARE_OOXMLEXPORT_TEST(testPreserveZfield,"preserve_Z_field_TOC.docx")
     CPPUNIT_ASSERT(contents.match(" TOC \\z \\f \\o \"1-3\" \\h"));
 }
 
+
+DECLARE_OOXMLEXPORT_TEST(testFdo69616, "fdo69616.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    // VML
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Fallback/w:pict/v:group", "coordorigin").match("696,725"));
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

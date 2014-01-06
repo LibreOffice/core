@@ -534,7 +534,7 @@ class VmlCommentExporter : public VMLExport
 public:
                         VmlCommentExporter ( sax_fastparser::FSHelperPtr p, ScAddress aScPos, SdrCaptionObj* pCaption, bool bVisible, Rectangle &aFrom, Rectangle &aTo );
 protected:
-    virtual void        Commit( EscherPropertyContainer& rProps, const Rectangle& rRect );
+    virtual void        Commit( EscherPropertyContainer& rProps, const Rectangle& rRect);
     using VMLExport::StartShape;
     virtual sal_Int32   StartShape();
     using VMLExport::EndShape;
@@ -553,7 +553,7 @@ VmlCommentExporter::VmlCommentExporter( sax_fastparser::FSHelperPtr p, ScAddress
 {
 }
 
-void VmlCommentExporter::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect )
+void VmlCommentExporter::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect)
 {
     lcl_FillProps( rProps, mpCaption, mbVisible );
     rProps.AddOpt( ESCHER_Prop_fHidden, mbVisible );            // bool field
