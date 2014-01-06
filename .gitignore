@@ -19,13 +19,14 @@
 # should not catch anything but possibly /external/tarballs
 #
 
-# where stuff are built
+# where stuff is built
 /instdir
 /instdir_for_build
 /workdir
 /workdir_for_build
+/test-install
 
-# where the external downloads maybe located
+# default location for external downloads
 /external/tarballs
 
 # autoconf generated stuff
