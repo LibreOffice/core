@@ -233,7 +233,10 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                     ImplEESdrObject aObj( *this, *(Reference< XShape >*)
                                     xXIndexAccess->getByIndex( n ).getValue() );
                     if( aObj.IsValid() )
+                    {
+                        aObj.SetOOXML(bOOxmlExport);
                         ImplWriteShape( aObj, rSolverContainer, ePageType, bOOxmlExport );
+                    }
                 }
                 mpEscherEx->LeaveGroup();
             }
@@ -686,7 +689,9 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             ImplFlipBoundingBox( rObj, aPropOpt );
 
         aPropOpt.CreateShapeProperties( rObj.GetShapeRef() );
-        mpEscherEx->Commit( aPropOpt, rObj.GetRect() );
+        const SdrObject* sdrObj = rObj.GetSdrObject();
+        mpEscherEx->AddSdrObjectVMLObject(*sdrObj );
+        mpEscherEx->Commit( aPropOpt, rObj.GetRect());
         if( mpEscherEx->GetGroupLevel() > 1 )
             mpEscherEx->AddChildAnchor( rObj.GetRect() );
 
@@ -784,7 +789,9 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
         }
         rObj.SetAngle( nAngle );
         aPropOpt.CreateShapeProperties( rObj.GetShapeRef() );
-        mpEscherEx->Commit( aPropOpt, rObj.GetRect() );
+        const SdrObject* sdrObj = rObj.GetSdrObject();
+        mpEscherEx->AddSdrObjectVMLObject(*sdrObj );
+        mpEscherEx->Commit( aPropOpt, rObj.GetRect());
 
         // write the childanchor
         mpEscherEx->AddChildAnchor( rObj.GetRect() );
@@ -1286,6 +1293,11 @@ sal_Bool ImplEESdrObject::ImplHasText() const
 bool ImplEESdrObject::GetOOXML() const
 {
     return mbOOXML;
+}
+
+void ImplEESdrObject::SetOOXML(bool bOOXML)
+{
+    mbOOXML = bOOXML;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2594,6 +2594,15 @@ DECLARE_OOXMLEXPORT_TEST(testFDO73546, "FDO73546.docx")
     assertXPath(pXmlDoc, "/w:hdr/w:p[1]/w:r[3]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor", "distL","0");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo69616, "fdo69616.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    // VML
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Fallback/w:pict/v:group", "coordorigin").match("696,725"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

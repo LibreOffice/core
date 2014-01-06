@@ -1675,7 +1675,7 @@ public:
                 // a ESCHER_Sp is being written ( a ESCHER_DgContainer has to be opened for this purpose!)
     virtual void AddShape( sal_uInt32 nShpInstance, sal_uInt32 nFlagIds, sal_uInt32 nShapeID = 0 );
 
-    virtual void Commit( EscherPropertyContainer& rProps, const Rectangle& rRect );
+    virtual void Commit( EscherPropertyContainer& rProps, const Rectangle& rRect);
 
     sal_uInt32  GetColor( const sal_uInt32 nColor, sal_Bool bSwap = sal_True );
     sal_uInt32  GetColor( const Color& rColor, sal_Bool bSwap = sal_True );
@@ -1687,6 +1687,10 @@ public:
 
                 /// returns the ShapeID
     sal_uInt32  AddSdrObject( const SdrObject& rObj, bool ooxmlExport = false );
+    virtual void  AddSdrObjectVMLObject( const SdrObject& /*rObj*/)
+    {
+        // Required for Exporting VML shape
+    }
 
                 /// If objects are written through AddSdrObject the
                 /// SolverContainer has to be written, and maybe some
