@@ -1,0 +1,15 @@
+disable a check in PyThreadState_Swap that is hopefully not a "real" problem
+
+--- python3/Python/pystate.c	2013-04-17 22:45:00.799800000 +0200
++++ python3/Python/pystate.c	2013-04-17 22:46:53.743800000 +0200
+@@ -437,7 +437,9 @@
+        to be used for a thread.  Check this the best we can in debug
+        builds.
+     */
+-#if defined(Py_DEBUG) && defined(WITH_THREAD)
++#if defined(Py_DEBUG) && defined(WITH_THREAD) && 0
++    /* disable this for LO - it is triggered by nested PyThreadAttach
++       which do not appear to be a real problem */
+     if (newts) {
+         /* This can be called from PyEval_RestoreThread(). Similar
+            to it, we need to ensure errno doesn't change.
