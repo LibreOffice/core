@@ -250,7 +250,7 @@ namespace pcr
         Reference< frame::XModel > xDocument( impl_getContextDocument_nothrow() );
         DBG_ASSERT( xDocument.is(), "SubmissionPropertyHandler::onNewComponent: no document!" );
 
-        m_pHelper.reset( NULL );
+        m_pHelper.reset();
 
         if ( SubmissionHelper::canTriggerSubmissions( m_xComponent, xDocument ) )
         {

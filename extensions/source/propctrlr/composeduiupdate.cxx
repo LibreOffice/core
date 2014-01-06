@@ -825,7 +825,7 @@ namespace pcr
         {
             singleUI->second->dispose();
         }
-        m_pCollectedUIs.reset( NULL );
+        m_pCollectedUIs.reset();
         m_xDelegatorUI.set( NULL );
     }
 

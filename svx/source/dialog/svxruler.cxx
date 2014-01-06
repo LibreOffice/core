@@ -674,7 +674,7 @@ void SvxRuler::UpdateFrame(const SvxLongLRSpaceItem *pItem) // new value LRSpace
         if(pItem)
             mpLRSpaceItem.reset(new SvxLongLRSpaceItem(*pItem));
         else
-            mpLRSpaceItem.reset(NULL);
+            mpLRSpaceItem.reset();
         StartListening_Impl();
     }
 }
@@ -687,7 +687,7 @@ void SvxRuler::UpdateFrameMinMax(const SfxRectangleItem *pItem) // value for Min
         if(pItem)
             mpMinMaxItem.reset(new SfxRectangleItem(*pItem));
         else
-            mpMinMaxItem.reset(NULL);
+            mpMinMaxItem.reset();
     }
 }
 
@@ -700,7 +700,7 @@ void SvxRuler::UpdateFrame(const SvxLongULSpaceItem *pItem) // new value
         if(pItem)
             mpULSpaceItem.reset(new SvxLongULSpaceItem(*pItem));
         else
-            mpULSpaceItem.reset(NULL);
+            mpULSpaceItem.reset();
         StartListening_Impl();
     }
 }
@@ -746,7 +746,7 @@ void SvxRuler::Update(
         //if mpColumnItem is already set with one of the ids then a NULL pItem argument
         //must not delete it
         {
-            mpColumnItem.reset(NULL);
+            mpColumnItem.reset();
             mpRulerImpl->bIsTableRows = sal_False;
         }
         StartListening_Impl();
@@ -908,7 +908,7 @@ void SvxRuler::UpdatePara(const SvxLRSpaceItem *pItem) // new value of paragraph
         if(pItem)
             mpParaItem.reset(new SvxLRSpaceItem(*pItem));
         else
-            mpParaItem.reset(NULL);
+            mpParaItem.reset();
         StartListening_Impl();
     }
 }
@@ -921,7 +921,7 @@ void SvxRuler::UpdateParaBorder(const SvxLRSpaceItem * pItem )
         if(pItem)
             mpParaBorderItem.reset(new SvxLRSpaceItem(*pItem));
         else
-            mpParaBorderItem.reset(NULL);
+            mpParaBorderItem.reset();
         StartListening_Impl();
     }
 }
@@ -989,7 +989,7 @@ void SvxRuler::Update(const SvxPagePosSizeItem *pItem) // new value of page attr
         if(pItem)
             mpPagePosItem.reset(new SvxPagePosSizeItem(*pItem));
         else
-            mpPagePosItem.reset(NULL);
+            mpPagePosItem.reset();
         StartListening_Impl();
     }
 }
@@ -1185,7 +1185,7 @@ void SvxRuler::Update(const SvxTabStopItem *pItem) // new value for tabs
         }
         else
         {
-            mpTabStopItem.reset(NULL);
+            mpTabStopItem.reset();
         }
         StartListening_Impl();
     }
@@ -1199,7 +1199,7 @@ void SvxRuler::Update(const SvxObjectItem *pItem) // new value for objects
         if(pItem)
             mpObjectItem.reset(new SvxObjectItem(*pItem));
         else
-            mpObjectItem.reset(NULL);
+            mpObjectItem.reset();
         StartListening_Impl();
     }
 }

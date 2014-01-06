@@ -1059,7 +1059,7 @@ void ScTable::SetProtection(const ScTableProtection* pProtect)
     if (pProtect)
         pTabProtection.reset(new ScTableProtection(*pProtect));
     else
-        pTabProtection.reset(NULL);
+        pTabProtection.reset();
 
     if (IsStreamValid())
         SetStreamValid(false);

@@ -96,7 +96,7 @@ static const TokenTable aTokTable_Basic [] = {
     { ERASE,    "Erase" },
     { _ERROR_,  "Error" },
     { EXIT,     "Exit" },
-    { EXPLICIT, "Explicit" },
+    { BASIC_EXPLICIT, "Explicit" },
     { FOR,      "For" },
     { FUNCTION, "Function" },
     { GET,      "Get" },
@@ -192,7 +192,7 @@ TokenLabelInfo::TokenLabelInfo( void )
     }
     // Token accepted as label by VBA
     SbiToken eLabelToken[] = { ACCESS, ALIAS, APPEND, BASE, BINARY, CLASSMODULE,
-                               COMPARE, COMPATIBLE, DEFERR, _ERROR_, EXPLICIT, LIB, LINE, LPRINT, NAME,
+                               COMPARE, COMPATIBLE, DEFERR, _ERROR_, BASIC_EXPLICIT, LIB, LINE, LPRINT, NAME,
                                TOBJECT, OUTPUT, PROPERTY, RANDOM, READ, STEP, STOP, TEXT, VBASUPPORT, NIL };
     SbiToken* pTok = eLabelToken;
     SbiToken eTok;

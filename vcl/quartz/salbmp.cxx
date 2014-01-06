@@ -280,7 +280,7 @@ bool QuartzSalBitmap::AllocateUserData()
     catch( const std::bad_alloc& )
     {
         OSL_FAIL( "vcl::QuartzSalBitmap::AllocateUserData: bad alloc" );
-        maUserBuffer.reset( static_cast<sal_uInt8*>(NULL) );
+        maUserBuffer.reset();
         mnBytesPerRow = 0;
     }
 

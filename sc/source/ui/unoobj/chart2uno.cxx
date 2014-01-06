@@ -499,7 +499,7 @@ private:
 void Chart2Positioner::invalidateGlue()
 {
     meGlue = GLUETYPE_NA;
-    mpPositionMap.reset(NULL);
+    mpPositionMap.reset();
 }
 
 void Chart2Positioner::glueState()
@@ -708,7 +708,7 @@ void Chart2Positioner::calcGlueState(SCCOL nColSize, SCROW nRowSize)
 void Chart2Positioner::createPositionMap()
 {
     if (meGlue == GLUETYPE_NA && mpPositionMap.get())
-        mpPositionMap.reset(NULL);
+        mpPositionMap.reset();
 
     if (mpPositionMap.get())
         return;
@@ -2771,7 +2771,7 @@ void ScChart2DataSequence::StopListeningToAllExternalRefs()
     for (; itr != itrEnd; ++itr)
         pRefMgr->removeLinkListener(*itr, m_pExtRefListener.get());
 
-    m_pExtRefListener.reset(NULL);
+    m_pExtRefListener.reset();
 }
 
 void ScChart2DataSequence::CopyData(const ScChart2DataSequence& r)

@@ -758,7 +758,7 @@ void SbiParser::Option()
 {
     switch( Next() )
     {
-        case EXPLICIT:
+        case BASIC_EXPLICIT:
             bExplicit = true; break;
         case BASE:
             if( Next() == NUMBER )
