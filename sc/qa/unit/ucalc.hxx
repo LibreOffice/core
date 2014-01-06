@@ -84,6 +84,12 @@ public:
     void testRangeList();
     void testInput();
 
+    /**
+     * The 'data entries' data is a list of strings used for suggestions as
+     * the user types in new cell value.
+     */
+    void testDataEntries();
+
     void testFormulaCreateStringFromTokens();
     void testFormulaParseReference();
     void testFetchVectorRefArray();
@@ -299,6 +305,7 @@ public:
     CPPUNIT_TEST(testSharedStringPool);
     CPPUNIT_TEST(testRangeList);
     CPPUNIT_TEST(testInput);
+    CPPUNIT_TEST(testDataEntries);
     CPPUNIT_TEST(testFormulaCreateStringFromTokens);
     CPPUNIT_TEST(testFormulaParseReference);
     CPPUNIT_TEST(testFetchVectorRefArray);
