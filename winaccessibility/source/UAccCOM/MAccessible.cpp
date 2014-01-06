@@ -216,6 +216,7 @@ pUNOInterface(NULL)
     m_sLocation.m_dWidth=0;
     m_sLocation.m_dHeight=0;
     CEnumVariant::Create(&m_pEnumVar);
+    m_containedObjects.clear();
 }
 
 CMAccessible::~CMAccessible()
