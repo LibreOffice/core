@@ -120,7 +120,7 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
                 aBodyText += "\"/>";
             }
 
-            aBodyText = "<prop>" + aBodyText + "</prop>" );
+            aBodyText = "<prop>" + aBodyText + "</prop>";
         }
         else
         {
