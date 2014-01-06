@@ -204,10 +204,10 @@ if (SYSTEM_PYTHON != YES)
     URL1 = http://www.python.org/ftp/python/2.7.5/Python-2.7.5.tar.bz2
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
-if (SYSTEM_BOOST!=YES || (OS==SOLARIS && COM!=GCC))
-    MD5 = d1e9a7a7f532bb031a3c175d86688d95
-    name = boost_1_48_0.tar.bz2
-    URL1 = http://sourceforge.net/projects/boost/files/boost/1.48.0/boost_1_48_0.tar.bz2/download
+if (SYSTEM_BOOST != YES)
+    MD5 = d6eef4b4cacb2183f2bf265a5a03a354
+    name = boost_1_55_0.tar.bz2
+    URL1 = http://sourceforge.net/projects/boost/files/boost/1.55.0/boost_1_55_0.tar.bz2/download
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_VIGRA != YES)
