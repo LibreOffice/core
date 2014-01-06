@@ -942,16 +942,30 @@ bool checkHorizontalIterator(ScDocument* pDoc, const char* pData[][_Size], size_
     for (ScRefCellValue* pCell = aIter.GetNext(nCol, nRow); pCell; pCell = aIter.GetNext(nCol, nRow), ++i)
     {
         if (i >= nCheckCount)
+        {
+            cerr << "hit invalid check " << i << " of " << nCheckCount << endl;
             CPPUNIT_FAIL("Iterator claims there is more data than there should be.");
+            return false;
+        }
 
         if (pChecks[i].nCol != nCol)
+        {
+            cerr << "Column mismatch " << pChecks[i].nCol << " vs. " << nCol << endl;
             return false;
+        }
 
         if (pChecks[i].nRow != nRow)
+        {
+            cerr << "Row mismatch " << pChecks[i].nRow << " vs. " << nRow << endl;
             return false;
+        }
 
         if (OUString::createFromAscii(pChecks[i].pVal) != pCell->getString(pDoc))
+        {
+            cerr << "String mismatch " << pChecks[i].pVal << " vs. " <<
+                OUStringToOString(pCell->getString(pDoc), RTL_TEXTENCODING_UTF8).getStr() << endl;
             return false;
+        }
     }
 
     return true;
@@ -964,7 +978,7 @@ void Test::testHorizontalIterator()
     m_pDoc->InsertTab(0, "test");
 
     {
-        // Raw data
+        // Raw data - mixed types
         const char* aData[][2] = {
             { "A", "B" },
             { "C", "1" },
@@ -987,11 +1001,11 @@ void Test::testHorizontalIterator()
             m_pDoc, aData, SAL_N_ELEMENTS(aData), aChecks, SAL_N_ELEMENTS(aChecks));
 
         if (!bRes)
-            CPPUNIT_FAIL("Failed on test 1.");
+            CPPUNIT_FAIL("Failed on test mixed.");
     }
 
     {
-        // Raw data
+        // Raw data - 'hole' data
         const char* aData[][2] = {
             { "A", "B" },
             { "C",  0  },
@@ -1010,7 +1024,96 @@ void Test::testHorizontalIterator()
             m_pDoc, aData, SAL_N_ELEMENTS(aData), aChecks, SAL_N_ELEMENTS(aChecks));
 
         if (!bRes)
-            CPPUNIT_FAIL("Failed on test 2.");
+            CPPUNIT_FAIL("Failed on test hole.");
+    }
+
+    {
+        // Very holy data
+        const char* aData[][2] = {
+            {  0,  "A" },
+            {  0,   0  },
+            {  0,  "1" },
+            { "B",  0  },
+            { "C", "2" },
+            { "D", "3" },
+            { "E",  0  },
+            {  0,  "G" },
+            {  0,   0  },
+        };
+
+        HoriIterCheck aChecks[] = {
+            { 1, 0, "A" },
+            { 1, 2, "1" },
+            { 0, 3, "B" },
+            { 0, 4, "C" },
+            { 1, 4, "2" },
+            { 0, 5, "D" },
+            { 1, 5, "3" },
+            { 0, 6, "E" },
+            { 1, 7, "G" },
+        };
+
+        bool bRes = checkHorizontalIterator(
+            m_pDoc, aData, SAL_N_ELEMENTS(aData), aChecks, SAL_N_ELEMENTS(aChecks));
+
+        if (!bRes)
+            CPPUNIT_FAIL("Failed on test holy.");
+    }
+
+    {
+        // Degenerate case
+        const char* aData[][2] = {
+            {  0,   0 },
+            {  0,   0 },
+            {  0,   0 },
+        };
+
+        bool bRes = checkHorizontalIterator(
+            m_pDoc, aData, SAL_N_ELEMENTS(aData), NULL, 0);
+
+        if (!bRes)
+            CPPUNIT_FAIL("Failed on test degenerate.");
+    }
+
+    {
+        // Data at end
+        const char* aData[][2] = {
+            {  0,   0 },
+            {  0,   0 },
+            {  0,  "A" },
+        };
+
+        HoriIterCheck aChecks[] = {
+            { 1, 2, "A" },
+        };
+
+        bool bRes = checkHorizontalIterator(
+            m_pDoc, aData, SAL_N_ELEMENTS(aData), aChecks, SAL_N_ELEMENTS(aChecks));
+
+        if (!bRes)
+            CPPUNIT_FAIL("Failed on test at end.");
+    }
+
+    {
+        // Data in middle
+        const char* aData[][2] = {
+            {  0,   0  },
+            {  0,   0  },
+            {  0,  "A" },
+            {  0,  "1" },
+            {  0,   0  },
+        };
+
+        HoriIterCheck aChecks[] = {
+            { 1, 2, "A" },
+            { 1, 3, "1" },
+        };
+
+        bool bRes = checkHorizontalIterator(
+            m_pDoc, aData, SAL_N_ELEMENTS(aData), aChecks, SAL_N_ELEMENTS(aChecks));
+
+        if (!bRes)
+            CPPUNIT_FAIL("Failed on test in middle.");
     }
 
     m_pDoc->DeleteTab(0);

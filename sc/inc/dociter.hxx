@@ -413,8 +413,10 @@ class ScHorizontalCellIterator      // walk through all non empty cells in an ar
     {
         sc::CellStoreType::const_iterator maPos;
         sc::CellStoreType::const_iterator maEnd;
+        SCCOL mnCol;
     };
 
+    std::vector<ColParam>::iterator maColPos;
     std::vector<ColParam> maColPositions;
 
     ScDocument*     pDoc;
@@ -428,7 +430,7 @@ class ScHorizontalCellIterator      // walk through all non empty cells in an ar
     SCCOL           mnCol;
     SCROW           mnRow;
     ScRefCellValue  maCurCell;
-    bool            bMore;
+    bool            mbMore;
 
 public:
     ScHorizontalCellIterator(ScDocument* pDocument, SCTAB nTable,
@@ -442,6 +444,9 @@ public:
 
 private:
     void            Advance();
+    void            SkipInvalid();
+    bool            SkipInvalidInRow();
+    SCROW           FindNextNonEmptyRow();
 };
 
 

@@ -49,6 +49,10 @@ using ::rtl::math::approxEqual;
 using ::std::vector;
 using ::std::set;
 
+// iterators have very high frequency use -> custom debug.
+// #define debugiter(...) fprintf(stderr, __VA_ARGS__)
+#define debugiter(...)
+
 // STATIC DATA -----------------------------------------------------------
 
 namespace {
@@ -1751,7 +1755,6 @@ bool ScQueryCellIterator::BinarySearch()
 
 ScHorizontalCellIterator::ScHorizontalCellIterator(ScDocument* pDocument, SCTAB nTable,
                                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) :
-    maColPositions(nCol2-nCol1+1),
     pDoc( pDocument ),
     mnTab( nTable ),
     nStartCol( nCol1 ),
@@ -1760,13 +1763,14 @@ ScHorizontalCellIterator::ScHorizontalCellIterator(ScDocument* pDocument, SCTAB 
     nEndRow( nRow2 ),
     mnCol( nCol1 ),
     mnRow( nRow1 ),
-    bMore(false)
+    mbMore( false )
 {
     if (mnTab >= pDoc->GetTableCount())
         OSL_FAIL("try to access index out of bounds, FIX IT");
 
     pNextRows = new SCROW[ nCol2-nCol1+1 ];
     pNextIndices = new SCSIZE[ nCol2-nCol1+1 ];
+    maColPositions.reserve( nCol2-nCol1+1 );
 
     SetTab( mnTab );
 }
@@ -1779,44 +1783,60 @@ ScHorizontalCellIterator::~ScHorizontalCellIterator()
 
 void ScHorizontalCellIterator::SetTab( SCTAB nTabP )
 {
-    bMore = false;
+    mbMore = false;
     mnTab = nTabP;
     mnRow = nStartRow;
     mnCol = nStartCol;
+    maColPositions.resize(0);
 
     // Set the start position in each column.
     for (SCCOL i = nStartCol; i <= nEndCol; ++i)
     {
         ScColumn* pCol = &pDoc->maTabs[mnTab]->aCol[i];
-        ColParam& rParam = maColPositions[i-nStartCol];
-        rParam.maPos = pCol->maCells.position(nStartRow).first;
-        rParam.maEnd = pCol->maCells.end();
-        if (rParam.maPos != rParam.maEnd)
-            bMore = true;
+        ColParam aParam;
+        aParam.maPos = pCol->maCells.position(nStartRow).first;
+        aParam.maEnd = pCol->maCells.end();
+        aParam.mnCol = i;
+
+        // find first non-empty element.
+        while (aParam.maPos != aParam.maEnd) {
+            if (aParam.maPos->type == sc::element_type_empty)
+                ++aParam.maPos;
+            else
+            {
+                maColPositions.push_back( aParam );
+                break;
+            }
+        }
     }
 
-    if (!bMore)
+    if (maColPositions.size() == 0)
         return;
 
-    ColParam& rParam = maColPositions[0];
-    if (rParam.maPos == rParam.maEnd || rParam.maPos->type == sc::element_type_empty)
-        // Skip to the first non-empty cell.
-        Advance();
+    maColPos = maColPositions.begin();
+    mbMore = true;
+    SkipInvalid();
 }
 
 ScRefCellValue* ScHorizontalCellIterator::GetNext( SCCOL& rCol, SCROW& rRow )
 {
-    if (!bMore)
+    if (!mbMore)
+    {
+        debugiter("no more !\n");
         return NULL;
+    }
 
     // Return the current non-empty cell, and move the cursor to the next one.
-    rCol = mnCol;
-    rRow = mnRow;
+    ColParam& r = *maColPos;
 
-    ColParam& r = maColPositions[mnCol-nStartCol];
+    rCol = mnCol = r.mnCol;
+    rRow = mnRow;
+    debugiter("return col %d row %d\n", (int)rCol, (int)rRow);
+
     size_t nOffset = static_cast<size_t>(mnRow) - r.maPos->position;
     maCurCell = sc::toRefCell(r.maPos, nOffset);
     Advance();
+    debugiter("advance to: col %d row %d\n", (int)maColPos->mnCol, (int)mnRow);
 
     return &maCurCell;
 }
@@ -1825,13 +1845,16 @@ bool ScHorizontalCellIterator::GetPos( SCCOL& rCol, SCROW& rRow )
 {
     rCol = mnCol;
     rRow = mnRow;
-    return bMore;
+    return mbMore;
 }
 
 namespace {
 
-bool advanceBlock(size_t nRow, sc::CellStoreType::const_iterator& rPos, const sc::CellStoreType::const_iterator& rEnd)
+inline bool advanceNonEmptyBlock(size_t nRow, sc::CellStoreType::const_iterator& rPos,
+                                 const sc::CellStoreType::const_iterator& rEnd)
 {
+    assert (rPos->type != sc::element_type_empty);
+
     if (nRow < rPos->position + rPos->size)
         // Block already contains the specified row. Nothing to do.
         return true;
@@ -1839,8 +1862,9 @@ bool advanceBlock(size_t nRow, sc::CellStoreType::const_iterator& rPos, const sc
     // This block is behind the current row position. Advance the block.
     for (++rPos; rPos != rEnd; ++rPos)
     {
-        if (nRow < rPos->position + rPos->size)
-            // Found the block that contains the specified row.
+        if (nRow < rPos->position + rPos->size &&
+            rPos->type == sc::element_type_empty)
+            // Found a non-empty block that contains the specified row.
             return true;
     }
 
@@ -1850,89 +1874,140 @@ bool advanceBlock(size_t nRow, sc::CellStoreType::const_iterator& rPos, const sc
 
 }
 
+// Skip any invalid / empty cells across the current row,
+// we only advance the cursor if the current entry is invalid.
+// if we return true we have a valid cursor (or hit the end)
+bool ScHorizontalCellIterator::SkipInvalidInRow()
+{
+    assert (mbMore);
+    assert (maColPos != maColPositions.end());
+
+    // Find the next non-empty cell in the current row.
+    while( maColPos != maColPositions.end() )
+    {
+        ColParam& r = *maColPos;
+        assert (r.maPos != r.maEnd);
+
+        size_t nRow = static_cast<size_t>(mnRow);
+
+        if (nRow >= r.maPos->position)
+        {
+            if (nRow < r.maPos->position + r.maPos->size)
+            {
+                mnCol = maColPos->mnCol;
+                debugiter("found valid cell at column %d, row %d\n",
+                          (int)mnCol, (int)mnRow);
+                assert(r.maPos->type != sc::element_type_empty);
+                return true;
+            }
+            else
+            {
+                bool bMoreBlocksInColumn = false;
+                // This block is behind the current row position. Advance the block.
+                for (++r.maPos; r.maPos != r.maEnd; ++r.maPos)
+                {
+                    if (nRow < r.maPos->position + r.maPos->size &&
+                        r.maPos->type != sc::element_type_empty)
+                    {
+                        bMoreBlocksInColumn = true;
+                        break;
+                    }
+                }
+                if (!bMoreBlocksInColumn)
+                {
+                    debugiter("remove column %d at row %d\n",
+                              (int)maColPos->mnCol, (int)nRow);
+                    maColPos = maColPositions.erase(maColPos);
+                    if (maColPositions.size() == 0)
+                    {
+                        debugiter("no more columns\n");
+                        mbMore = false;
+                    }
+                }
+                else
+                {
+                    debugiter("advanced column %d to block starting row %d, retying\n",
+                              (int)maColPos->mnCol, r.maPos->position);
+                }
+            }
+        }
+        else
+        {
+            debugiter("skip empty cells at column %d, row %d\n",
+                      (int)maColPos->mnCol, (int)nRow);
+            maColPos++;
+        }
+    }
+
+    // No more columns with anything interesting in them ?
+    if (maColPositions.size() == 0)
+    {
+        debugiter("no more live columns left - done\n");
+        mbMore = false;
+        return true;
+    }
+
+    return false;
+}
+
+/// Find the next row that has some real content in one of it's columns.
+SCROW ScHorizontalCellIterator::FindNextNonEmptyRow()
+{
+    size_t nNextRow = MAXROW+1;
+
+    for (std::vector<ColParam>::iterator it = maColPositions.begin();
+         it != maColPositions.end(); ++it)
+    {
+        ColParam& r = *it;
+
+        assert(static_cast<size_t>(mnRow) <= r.maPos->position);
+        nNextRow = std::min (nNextRow, static_cast<size_t>(r.maPos->position));
+    }
+
+    SCROW nRow = std::max(static_cast<SCROW>(nNextRow), mnRow);
+    debugiter("Next non empty row is %d\n", (int) nRow);
+    return nRow;
+}
+
 void ScHorizontalCellIterator::Advance()
 {
-    // Find the next non-empty cell in the current row.
-    for (SCCOL i = mnCol+1; i <= nEndCol; ++i)
+    assert (mbMore);
+    assert (maColPos != maColPositions.end());
+
+    maColPos++;
+
+    SkipInvalid();
+}
+
+void ScHorizontalCellIterator::SkipInvalid()
+{
+    if (maColPos == maColPositions.end() ||
+        !SkipInvalidInRow())
     {
-        ColParam& r = maColPositions[i-nStartCol];
-        if (r.maPos == r.maEnd)
-            continue;
+        mnRow++;
 
-        size_t nRow = static_cast<size_t>(mnRow);
-        if (nRow < r.maPos->position)
-            continue;
-
-        if (!advanceBlock(nRow, r.maPos, r.maEnd))
-            continue;
-
-        if (r.maPos->type == sc::element_type_empty)
-            continue;
-
-        // Found in the current row.
-        mnCol = i;
-        bMore = true;
-        return;
-    }
-
-    // Move to the next row that has at least one non-empty cell.
-    ++mnRow;
-    while (mnRow <= nEndRow)
-    {
-        size_t nRow = static_cast<size_t>(mnRow);
-        size_t nNextRow = MAXROW+1;
-        size_t nNextRowPos = 0;
-        for (size_t i = nNextRowPos, n = maColPositions.size(); i < n; ++i)
+        if (mnRow > nEndRow)
         {
-            ColParam& r = maColPositions[i];
-            if (r.maPos == r.maEnd)
-                // This column has ended.
-                continue;
-
-            if (nRow < r.maPos->position)
-            {
-                // This block is ahread of the current row position. Skip it.
-                if (r.maPos->position < nNextRow)
-                {
-                    nNextRow = r.maPos->position;
-                    nNextRowPos = i;
-                }
-                continue;
-            }
-
-            if (!advanceBlock(nRow, r.maPos, r.maEnd))
-                continue;
-
-            if (r.maPos->type == sc::element_type_empty)
-            {
-                // Empty block. Move to the next block and try next column.
-                ++r.maPos;
-                if (r.maPos->position < nNextRow)
-                {
-                    nNextRow = r.maPos->position;
-                    nNextRowPos = i;
-                }
-                continue;
-            }
-
-            // Found a non-empty cell block!
-            mnCol = i + nStartCol;
-            mnRow = nRow;
-            bMore = true;
+            mbMore = false;
             return;
         }
 
-        if (nNextRow > static_cast<size_t>(MAXROW))
+        maColPos = maColPositions.begin();
+        debugiter("moving to next row\n");
+        if (SkipInvalidInRow())
         {
-            // No more blocks to search.
-            bMore = false;
+            debugiter("moved to valid cell in next row (or end)\n");
             return;
         }
 
-        mnRow = nNextRow; // move to the next non-empty row.
+        mnRow = FindNextNonEmptyRow();
+        maColPos = maColPositions.begin();
+        bool bCorrect = SkipInvalidInRow();
+        assert (bCorrect); (void) bCorrect;
     }
 
-    bMore = false;
+    if (mnRow > nEndRow)
+        mbMore = false;
 }
 
 //------------------------------------------------------------------------
