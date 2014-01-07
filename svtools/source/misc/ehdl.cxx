@@ -31,17 +31,17 @@
 //=========================================================================
 
 static sal_uInt16 aWndFunc(
-    Window *pWin,            // Parent des Dialoges
+    Window *pWin,            // Parent of the dialog
     sal_uInt16 nFlags,
-    const OUString &rErr,      // Fehlertext
-    const OUString &rAction)   // Actiontext
+    const OUString &rErr,      // error text
+    const OUString &rAction)   // action text
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Bringt eine Fehlerbox auf den Schirm. Je nach nFlags werden
-    Error/ Info usw. Boxen mit den gewuenschten Buttons angezeigt
+    Draw an errorbox on the screen. Depending on nFlags
+    Error/Info etc. boxes with the requested buttosn are shown.
 
-    Rueckgabewert ist der gedrueckte Button
+    Returnvalue is the button pressed
 
     */
 
@@ -49,7 +49,7 @@ static sal_uInt16 aWndFunc(
 {
     SolarMutexGuard aGuard;
 
-    // aus den Flags die benoetigten WinBits ermitteln
+    // determine necessary WinBits from the flags
     WinBits eBits=0;
     if ( (ERRCODE_BUTTON_CANCEL|ERRCODE_BUTTON_RETRY) == (nFlags & (ERRCODE_BUTTON_CANCEL|ERRCODE_BUTTON_RETRY)) )
         eBits = WB_RETRY_CANCEL;
@@ -167,9 +167,9 @@ SfxErrorHandler::~SfxErrorHandler()
 bool SfxErrorHandler::CreateString(
     const ErrorInfo *pErr, OUString &rStr, sal_uInt16& nFlags) const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Der Fehlerstring fuer die ErrorInfo pErr wird zusammengesetzt.
+    Assemble error string for the ErrorInfo pErr.
 
     */
 
@@ -213,10 +213,10 @@ bool SfxErrorHandler::CreateString(
 
 class ResString: public OUString
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Hilfsklasse zum Auslesen eines Strings und optionaler ExtraData aus
-    einer String Resource.
+    Helpclass to read a string and optional ExtraData from
+    a string Resource.
 
     */
 
@@ -246,9 +246,9 @@ ResString::ResString(ResId & rId):
 
 struct ErrorResource_Impl : private Resource
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Hilfsklasse zum Zugriff auf String SubResourcen einer Resource
+    Helpclass for access to string sub-resources of a resource
     */
 
 {
@@ -268,10 +268,10 @@ struct ErrorResource_Impl : private Resource
 
 sal_Bool SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr) const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Erzeugt den String fuer die Klasse des Fehlers. Wird immer aus der
-    Resource des Sfx gelesen
+    Creates the string for the class of the error. Will always
+    be read from the resource of the Sfx.
 
     */
 
@@ -297,9 +297,9 @@ sal_Bool SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr) con
 sal_Bool SfxErrorHandler::GetMessageString(
     sal_uLong lErrId, OUString &rStr, sal_uInt16 &nFlags) const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Erzeugt den String fuer die Ausgabe in einer MessageBox
+    Creates the string to output a message box
 
     */
 
@@ -327,9 +327,10 @@ sal_Bool SfxErrorHandler::GetMessageString(
 sal_Bool SfxErrorHandler::GetErrorString(
     sal_uLong lErrId, OUString &rStr, sal_uInt16 &nFlags) const
 
-/*  [Beschreibung]
-    Erzeugt den Fehlerstring fuer den eigentlichen Fehler ohne
-    dessen Klasse
+/*  [Description]
+
+    Creates the error string for the actual error
+    without its class
 
     */
 
@@ -395,9 +396,9 @@ SfxErrorContext::SfxErrorContext(
 
 bool SfxErrorContext::GetString(sal_uLong nErrId, OUString &rStr)
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Baut die Beschreibung eines ErrorContextes auf
+    Constructs the description of a error context
     */
 
 {

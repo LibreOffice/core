@@ -53,10 +53,10 @@ SfxItemDesruptor_Impl::SfxItemDesruptor_Impl( SfxPoolItem *pItemToDesrupt ):
 {
     DBG_CTOR(SfxItemDesruptor_Impl, 0);
 
-    DBG_ASSERT( 0 == pItem->GetRefCount(), "desrupting pooled item" );
+    DBG_ASSERT( 0 == pItem->GetRefCount(), "disrupting pooled item" );
     pItem->SetKind( SFX_ITEMS_DELETEONIDLE );
 
-    // im Idle abarbeiten
+    // process in Idle
     GetpApp()->InsertIdleHdl( aLink, 1 );
 }
 
@@ -65,12 +65,12 @@ SfxItemDesruptor_Impl::~SfxItemDesruptor_Impl()
 {
     DBG_DTOR(SfxItemDesruptor_Impl, 0);
 
-    // aus Idle-Handler austragen
+    // remove from Idle-Handler
     GetpApp()->RemoveIdleHdl( aLink );
 
     // reset RefCount (was set to SFX_ITEMS_SPECIAL before!)
     pItem->SetRefCount( 0 );
-    //DBG_CHKOBJ( pItem, SfxPoolItem, 0 );
+
     delete pItem;
 }
 

@@ -640,8 +640,9 @@ void EmbeddedObjectRef::DrawPaintReplacement( const Rectangle &rRect, const OUSt
     pOut->SetFont( aFnt );
 
     Point aPt;
-    // Nun den Text so skalieren, dass er in das Rect passt.
-    // Wir fangen mit der Defaultsize an und gehen 1-AppFont runter
+
+    // Now scale text such that it fits in the rectangle
+    // We start with the default size and decrease 1-AppFont
     for( sal_uInt16 i = 8; i > 2; i-- )
     {
         aPt.X() = (rRect.GetWidth()  - pOut->GetTextWidth( rText )) / 2;
@@ -652,7 +653,7 @@ void EmbeddedObjectRef::DrawPaintReplacement( const Rectangle &rRect, const OUSt
         if( aPt.Y() < 0 ) bTiny = true, aPt.Y() = 0;
         if( bTiny )
         {
-            // heruntergehen bei kleinen Bildern
+            // decrease for small images
             aFnt.SetSize( Size( 0, aAppFontSz.Height() * i / 8 ) );
             pOut->SetFont( aFnt );
         }
@@ -668,23 +669,23 @@ void EmbeddedObjectRef::DrawPaintReplacement( const Rectangle &rRect, const OUSt
         aPt.Y() = nHeight;
         Point   aP = rRect.TopLeft();
         Size    aBmpSize = aBmp.GetSizePixel();
-        // Bitmap einpassen
+        // fit bitmap in
         if( nHeight * 10 / nWidth
           > aBmpSize.Height() * 10 / aBmpSize.Width() )
         {
-            // nach der Breite ausrichten
-            // Proportion beibehalten
+            // adjust to the width
+            // keep proportions
             long nH = nWidth * aBmpSize.Height() / aBmpSize.Width();
-            // zentrieren
+            // center
             aP.Y() += (nHeight - nH) / 2;
             nHeight = nH;
         }
         else
         {
-            // nach der H"ohe ausrichten
-            // Proportion beibehalten
+            // adjust to the height
+            // keep proportions
             long nW = nHeight * aBmpSize.Width() / aBmpSize.Height();
-            // zentrieren
+            // center
             aP.X() += (nWidth - nW) / 2;
             nWidth = nW;
         }
