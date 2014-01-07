@@ -2262,6 +2262,7 @@ uno::Reference < XAccessible >
         mpAccessibleSpreadsheet->acquire();
         mpAccessibleSpreadsheet->Init();
         mbCompleteSheetSelected = IsTableSelected();
+        mpAccessibleSpreadsheet->FireFirstCellFocus(); // i123622
     }
     return mpAccessibleSpreadsheet;
 }
