@@ -269,6 +269,18 @@ public:
     void FillDouble( double fVal,
             SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, SCSIZE nR2 );
 
+    /** Put a column vector of doubles, starting at row nR, must fit into dimensions. */
+    void PutDoubleVector( const ::std::vector< double > & rVec, SCSIZE nC, SCSIZE nR );
+
+    /** Put a column vector of strings, starting at row nR, must fit into dimensions. */
+    void PutStringVector( const ::std::vector< svl::SharedString > & rVec, SCSIZE nC, SCSIZE nR );
+
+    /** Put a column vector of empties, starting at row nR, must fit into dimensions. */
+    void PutEmptyVector( SCSIZE nCount, SCSIZE nC, SCSIZE nR );
+
+    /** Put a column vector of empty paths, starting at row nR, must fit into dimensions. */
+    void PutEmptyPathVector( SCSIZE nCount, SCSIZE nC, SCSIZE nR );
+
     /** May be used before obtaining the double value of an element to avoid
         passing its NAN around.
         @ATTENTION: MUST NOT be used if the element is a string!

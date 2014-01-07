@@ -20,6 +20,11 @@
 #include "jumpmatrix.hxx"
 #include "scmatrix.hxx"
 
+namespace {
+// Don't bother with buffer overhead for less than y rows.
+const SCSIZE kBufferThreshhold = 128;
+}
+
 ScJumpMatrix::ScJumpMatrix(SCSIZE nColsP, SCSIZE nRowsP)
     : pJump(new ScJumpMatrixEntry[nColsP * nRowsP])
     , pMat(new ScMatrix(nColsP, nRowsP))
@@ -31,6 +36,10 @@ ScJumpMatrix::ScJumpMatrix(SCSIZE nColsP, SCSIZE nRowsP)
     , nResMatCols(nColsP)
     , nResMatRows(nRowsP)
     , bStarted(false)
+    , mnBufferCol(0)
+    , mnBufferRowStart(0)
+    , mnBufferEmptyCount(0)
+    , mnBufferEmptyPathCount(0)
 {
     // Initialize result matrix in case of
     // a premature end of the interpreter
@@ -106,11 +115,6 @@ const ScTokenVec* ScJumpMatrix::GetJumpParameters() const
     return pParams;
 }
 
-ScMatrix* ScJumpMatrix::GetResultMatrix() const
-{
-    return pMat.get();
-}
-
 void ScJumpMatrix::GetPos(SCSIZE& rCol, SCSIZE& rRow) const
 {
     rCol = nCurCol;
@@ -146,6 +150,7 @@ void ScJumpMatrix::SetNewResMat(SCSIZE nNewCols, SCSIZE nNewRows)
 {
     if (nNewCols > nResMatCols || nNewRows > nResMatRows)
     {
+        FlushBufferOtherThan( BUFFER_NONE, 0, 0);
         pMat = pMat->CloneAndExtend(nNewCols, nNewRows);
         if (nResMatCols < nNewCols)
         {
@@ -169,5 +174,109 @@ void ScJumpMatrix::SetNewResMat(SCSIZE nNewCols, SCSIZE nNewRows)
     }
 }
 
+bool ScJumpMatrix::HasResultMatrix() const
+{
+    // We now always have a matrix but caller logic may still want to check it.
+    return pMat.get() != NULL;
+}
+
+void ScJumpMatrix::FlushBufferOtherThan( ScJumpMatrix::BufferType eType, SCSIZE nC, SCSIZE nR )
+{
+    if (!mvBufferDoubles.empty() &&
+            (eType != BUFFER_DOUBLE || nC != mnBufferCol || nR != mnBufferRowStart + mvBufferDoubles.size()))
+    {
+        pMat->PutDoubleVector( mvBufferDoubles, mnBufferCol, mnBufferRowStart);
+        mvBufferDoubles.clear();
+    }
+    if (!mvBufferStrings.empty() &&
+            (eType != BUFFER_STRING || nC != mnBufferCol || nR != mnBufferRowStart + mvBufferStrings.size()))
+    {
+        pMat->PutStringVector( mvBufferStrings, mnBufferCol, mnBufferRowStart);
+        mvBufferStrings.clear();
+    }
+    if (mnBufferEmptyCount &&
+            (eType != BUFFER_EMPTY || nC != mnBufferCol || nR != mnBufferRowStart + mnBufferEmptyCount))
+    {
+        pMat->PutEmptyVector( mnBufferEmptyCount, mnBufferCol, mnBufferRowStart);
+        mnBufferEmptyCount = 0;
+    }
+    if (mnBufferEmptyPathCount &&
+            (eType != BUFFER_EMPTYPATH || nC != mnBufferCol || nR != mnBufferRowStart + mnBufferEmptyPathCount))
+    {
+        pMat->PutEmptyPathVector( mnBufferEmptyPathCount, mnBufferCol, mnBufferRowStart);
+        mnBufferEmptyPathCount = 0;
+    }
+}
+
+ScMatrix* ScJumpMatrix::GetResultMatrix()
+{
+    if (nResMatRows >= kBufferThreshhold)
+        FlushBufferOtherThan( BUFFER_NONE, 0, 0);
+    return pMat.get();
+}
+
+void ScJumpMatrix::PutResultDouble( double fVal, SCSIZE nC, SCSIZE nR )
+{
+    if (nResMatRows < kBufferThreshhold)
+        pMat->PutDouble( fVal, nC, nR);
+    else
+    {
+        FlushBufferOtherThan( BUFFER_DOUBLE, nC, nR);
+        if (mvBufferDoubles.empty())
+        {
+            mnBufferCol = nC;
+            mnBufferRowStart = nR;
+        }
+        mvBufferDoubles.push_back( fVal);
+    }
+}
+
+void ScJumpMatrix::PutResultString( const svl::SharedString& rStr, SCSIZE nC, SCSIZE nR )
+{
+    if (nResMatRows < kBufferThreshhold)
+        pMat->PutString( rStr, nC, nR);
+    else
+    {
+        FlushBufferOtherThan( BUFFER_STRING, nC, nR);
+        if (mvBufferStrings.empty())
+        {
+            mnBufferCol = nC;
+            mnBufferRowStart = nR;
+        }
+        mvBufferStrings.push_back( rStr);
+    }
+}
+
+void ScJumpMatrix::PutResultEmpty( SCSIZE nC, SCSIZE nR )
+{
+    if (nResMatRows < kBufferThreshhold)
+        pMat->PutEmpty( nC, nR);
+    else
+    {
+        FlushBufferOtherThan( BUFFER_EMPTY, nC, nR);
+        if (!mnBufferEmptyCount)
+        {
+            mnBufferCol = nC;
+            mnBufferRowStart = nR;
+        }
+        ++mnBufferEmptyCount;
+    }
+}
+
+void ScJumpMatrix::PutResultEmptyPath( SCSIZE nC, SCSIZE nR )
+{
+    if (nResMatRows < kBufferThreshhold)
+        pMat->PutEmptyPath( nC, nR);
+    else
+    {
+        FlushBufferOtherThan( BUFFER_EMPTYPATH, nC, nR);
+        if (!mnBufferEmptyPathCount)
+        {
+            mnBufferCol = nC;
+            mnBufferRowStart = nR;
+        }
+        ++mnBufferEmptyPathCount;
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
