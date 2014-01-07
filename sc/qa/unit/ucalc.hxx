@@ -123,6 +123,7 @@ public:
     void testFuncINDIRECT();
     void testFuncIFERROR();
     void testFuncGETPIVOTDATA();
+    void testFuncGETPIVOTDATALeafAccess();
     void testCopyAttributes();
 
     void testCopyToDocument();
@@ -340,6 +341,7 @@ public:
     CPPUNIT_TEST(testFuncINDIRECT);
     CPPUNIT_TEST(testFuncIFERROR);
     CPPUNIT_TEST(testFuncGETPIVOTDATA);
+    CPPUNIT_TEST(testFuncGETPIVOTDATALeafAccess);
     CPPUNIT_TEST(testCopyToDocument);
     CPPUNIT_TEST(testSheetsFunc);
     CPPUNIT_TEST(testVolatileFunc);

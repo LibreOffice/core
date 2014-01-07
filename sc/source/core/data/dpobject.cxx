@@ -1328,8 +1328,8 @@ public:
     {
         // Layout name takes precedence.
         const OUString* pLayoutName = pDim->GetLayoutName();
-        if (pLayoutName)
-            return *pLayoutName == maName;
+        if (pLayoutName && *pLayoutName == maName)
+            return true;
 
         sheet::GeneralFunction eGenFunc = static_cast<sheet::GeneralFunction>(pDim->GetFunction());
         ScSubTotalFunc eFunc = ScDPUtil::toSubTotalFunc(eGenFunc);
