@@ -112,6 +112,8 @@ public:
     virtual Size GetOptimalSize() const;
 
     void setOwningFrame( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame );
+
+    void clearRecentFileList();
 };
 
 #endif

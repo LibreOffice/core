@@ -544,4 +544,9 @@ Size BackingWindow::GetOptimalSize() const
     return Window::GetOptimalSize();
 }
 
+void BackingWindow::clearRecentFileList()
+{
+    mpAllRecentThumbnails->Clear();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab:*/
