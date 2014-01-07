@@ -15,6 +15,7 @@
 #include <map>
 #include <vector>
 #include <boost/noncopyable.hpp>
+#include <boost/unordered_map.hpp>
 
 
 namespace com { namespace sun { namespace star { namespace sheet {
@@ -85,6 +86,15 @@ private:
 #endif
     };
 
+    typedef std::pair<OUString, OUString> NamePairType;
+
+    struct NamePairHash
+    {
+        size_t operator() (const NamePairType& rPair) const;
+    };
+    typedef boost::unordered_map<NamePairType, double, NamePairHash> LeafValuesType;
+    LeafValuesType maLeafValues;
+
     OUString maPrimaryDimName;
     MemberNode* mpRoot;
 
@@ -114,6 +124,8 @@ public:
     const ValuesType* getResults(
         const com::sun::star::uno::Sequence<
             com::sun::star::sheet::DataPilotFieldFilter>& rFilters) const;
+
+    double getLeafResult(const com::sun::star::sheet::DataPilotFieldFilter& rFilter) const;
 
 #if DEBUG_PIVOT_TABLE
     void dump() const;
