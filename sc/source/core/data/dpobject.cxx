@@ -1321,24 +1321,24 @@ namespace {
 
 class FindByName : std::unary_function<const ScDPSaveDimension*, bool>
 {
-    OUString maName;
+    OUString maName; // must be all uppercase.
 public:
     FindByName(const OUString& rName) : maName(rName) {}
     bool operator() (const ScDPSaveDimension* pDim) const
     {
         // Layout name takes precedence.
         const OUString* pLayoutName = pDim->GetLayoutName();
-        if (pLayoutName && *pLayoutName == maName)
+        if (pLayoutName && ScGlobal::pCharClass->uppercase(*pLayoutName) == maName)
             return true;
 
         sheet::GeneralFunction eGenFunc = static_cast<sheet::GeneralFunction>(pDim->GetFunction());
         ScSubTotalFunc eFunc = ScDPUtil::toSubTotalFunc(eGenFunc);
         OUString aSrcName = ScDPUtil::getSourceDimensionName(pDim->GetName());
         OUString aFuncName = ScDPUtil::getDisplayedMeasureName(aSrcName, eFunc);
-        if (maName == aFuncName)
+        if (maName == ScGlobal::pCharClass->uppercase(aFuncName))
             return true;
 
-        return maName == aSrcName;
+        return maName == ScGlobal::pCharClass->uppercase(aSrcName);
     }
 };
 
@@ -1382,7 +1382,9 @@ double ScDPObject::GetPivotData(const OUString& rDataFieldName, std::vector<shee
         return fRet;
 
     std::vector<const ScDPSaveDimension*>::iterator it = std::find_if(
-        aDataDims.begin(), aDataDims.end(), FindByName(rDataFieldName));
+        aDataDims.begin(), aDataDims.end(),
+        FindByName(ScGlobal::pCharClass->uppercase(rDataFieldName)));
+
     if (it == aDataDims.end())
         return fRet;
 
