@@ -515,7 +515,7 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_writeJNI
         {
             ThrowException(env,
                            "com/sun/star/io/IOException",
-                           "native pipe is failed to write");
+                           "native pipe: failed to write");
             goto error;
         }
     }
