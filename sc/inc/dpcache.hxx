@@ -139,6 +139,15 @@ public:
     void GetGroupDimMemberIds(long nDim, std::vector<SCROW>& rIds) const;
     void ClearGroupFields();
     const ScDPNumGroupInfo* GetNumGroupInfo(long nDim) const;
+
+    /**
+     * Return a group type identifier.  The values correspond with
+     * com::sun::star::sheet::DataPilotFieldGroupBy constant values.
+     *
+     * @param nDim 0-based dimension index.
+     *
+     * @return group type identifier, or 0 on failure.
+     */
     sal_Int32 GetGroupType(long nDim) const;
 
     SCCOL GetDimensionIndex(const OUString& sName) const;
@@ -162,6 +171,9 @@ public:
     long GetColumnCount() const;
 
     const ScDPItemData* GetItemDataById( long nDim, SCROW nId ) const;
+
+    size_t GetFieldCount() const;
+    size_t GetGroupFieldCount() const;
 
     ScDPCache(ScDocument* pDoc);
     ~ScDPCache();

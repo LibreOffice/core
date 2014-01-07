@@ -287,8 +287,7 @@ public:
         void updateReference(
             UpdateRefMode eMode, const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
 
-    private:
-        ScDPCache* getExistingCache(const ScRange& rRange);
+        SC_DLLPUBLIC ScDPCache* getExistingCache(const ScRange& rRange);
 
         void updateCache(const ScRange& rRange, std::set<ScDPObject*>& rRefs);
         bool remove(const ScDPCache* p);

@@ -46,11 +46,13 @@
 #include "cellvalue.hxx"
 #include "attrib.hxx"
 #include "dpsave.hxx"
+#include "dpshttab.hxx"
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -1717,6 +1719,47 @@ void ScFiltersTest::testPivotTableSharedCacheGroupODS()
     ScDPCollection* pDPs = pDoc->GetDPCollection();
     ScDPCollection::SheetCaches& rSheetCaches = pDPs->GetSheetCaches();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rSheetCaches.size());
+
+    // Make sure that the cache contains all group field data upon load.
+    const ScSheetSourceDesc* pDesc = pDPObj->GetSheetDesc();
+    CPPUNIT_ASSERT_MESSAGE("Failed to get the pivot source description instance.", pDesc);
+    const ScDPCache* pCache = rSheetCaches.getExistingCache(pDesc->GetSourceRange());
+    CPPUNIT_ASSERT_MESSAGE("Pivot cache should exist for this range.", pCache);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(9), pCache->GetFieldCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pCache->GetGroupFieldCount());
+
+    SCCOL nDim = pCache->GetDimensionIndex("StartDate");
+    CPPUNIT_ASSERT_MESSAGE("Dimension 'StartDate' doesn't exist in the cache.", nDim >= 0);
+    sal_Int32 nGrpType = pCache->GetGroupType(nDim);
+    CPPUNIT_ASSERT_EQUAL(sheet::DataPilotFieldGroupBy::DAYS, nGrpType);
+    const ScDPNumGroupInfo* pInfo = pCache->GetNumGroupInfo(nDim);
+    CPPUNIT_ASSERT_MESSAGE("Number group info doesn't exist in cache for 'StartDate'.", pInfo);
+
+    // We should have two additional group fields and one should be years and
+    // the other should be month.  The order is not guaranteed.
+
+    bool bHasYears = false;
+    bool bHasMonths = false;
+
+    for (long nGrpDim = 9; nGrpDim <= 10; ++nGrpDim)
+    {
+        nGrpType = pCache->GetGroupType(nGrpDim);
+        switch (nGrpType)
+        {
+            case sheet::DataPilotFieldGroupBy::MONTHS:
+                bHasMonths = true;
+            break;
+            case sheet::DataPilotFieldGroupBy::YEARS:
+                bHasYears = true;
+            break;
+            default:
+                ;
+        }
+    }
+
+    CPPUNIT_ASSERT_MESSAGE("Pivot cache doesn't have an additional year group.", bHasYears);
+    CPPUNIT_ASSERT_MESSAGE("Pivot cache doesn't have an additional month group.", bHasMonths);
 
     xDocSh->DoClose();
 }

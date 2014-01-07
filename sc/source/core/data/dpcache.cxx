@@ -821,6 +821,16 @@ const ScDPItemData* ScDPCache::GetItemDataById(long nDim, SCROW nId) const
     return &rGI[nItemId];
 }
 
+size_t ScDPCache::GetFieldCount() const
+{
+    return maFields.size();
+}
+
+size_t ScDPCache::GetGroupFieldCount() const
+{
+    return maGroupFields.size();
+}
+
 SCROW ScDPCache::GetRowCount() const
 {
     return mnRowCount;
