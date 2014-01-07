@@ -44,6 +44,9 @@
 #include <svx/lathe3d.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
+#include <svx/svdundo.hxx>
+#include "svx/svdglob.hxx"
+#include "svx/svdstr.hrc"
 
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -240,6 +243,7 @@ void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
     if( (mpModel == 0) || (mpPage == 0) )
         throw lang::DisposedException();
 
+    mpModel->BegUndo( ImpGetResStr( STR_EditDelete ) );
     SvxShape* pShape = SvxShape::getImplementation( xShape );
 
     if(pShape)
@@ -253,16 +257,18 @@ void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
             {
                 if(mpPage->GetObj(nNum) == pObj)
                 {
+                    SdrUndoAction * action = mpModel->GetSdrUndoFactory().CreateUndoRemoveObject( *pObj );
+                    mpModel->AddUndo(action);
                     OSL_VERIFY( mpPage->RemoveObject( nNum ) == pObj );
-                    SdrObject::Free( pObj );
+                    pShape->InvalidateSdrObject();
                     break;
                 }
             }
         }
     }
 
-    if( mpModel )
-        mpModel->SetChanged();
+    mpModel->SetChanged();
+    mpModel->EndUndo();
 }
 
 // ::com::sun::star::container::XIndexAccess
