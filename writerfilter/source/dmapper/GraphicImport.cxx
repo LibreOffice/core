@@ -455,7 +455,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_LCB: break;//byte count
         case NS_rtf::LN_CBHEADER: break;//ignored
         case NS_rtf::LN_MFP: //MetafilePict
-        case NS_rtf::LN_shpfbse: //BLIP store entry
         case NS_rtf::LN_BRCTOP: //top border
         case NS_rtf::LN_BRCLEFT: //left border
         case NS_rtf::LN_BRCBOTTOM: //bottom border
@@ -609,8 +608,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
             break;// Shape has an anchor of some kind
         case NS_rtf::LN_shpfBackground:
             break;// Background shape
-        case NS_rtf::LN_shpfHaveSpt:
-            break;// Shape has a shape type property
         case NS_rtf::LN_shpfBid:
             break; //ignored
         case NS_rtf::LN_shpfComplex:
