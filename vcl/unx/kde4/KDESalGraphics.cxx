@@ -779,7 +779,11 @@ sal_Bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart p
                     break;
                 }
                 case PART_BUTTON_DOWN:
-                    //the entire control can be used as the "down" button
+                    contentRect = kapp->style()->subControlRect(
+                        QStyle::CC_ComboBox, &cbo, QStyle::SC_ComboBoxArrow );
+
+                    contentRect.translate( boundingRect.left(), boundingRect.top() );
+
                     retVal = true;
                     break;
                 case PART_SUB_EDIT:
