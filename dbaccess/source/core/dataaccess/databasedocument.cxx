@@ -1615,7 +1615,7 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
         { OUString("BaseURI"), 0, ::getCppuType( (OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("StreamName"), 0, ::getCppuType( (OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("UsePrettyPrinting"), 0, ::getCppuType((sal_Bool*)0), beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString("Version"), 0,&::getCppuType( (OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
+        { OUString("Version"), 0, ::getCppuType( (OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
