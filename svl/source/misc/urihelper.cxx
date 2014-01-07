@@ -243,7 +243,7 @@ OUString normalize(
                 buf.append(ref->getPathSegment(j));
             }
             if (ref->hasQuery()) {
-                buf.append'?');
+                buf.append('?');
                 buf.append(ref->getQuery());
             }
             if (ref->hasFragment()) {
