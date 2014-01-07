@@ -140,6 +140,7 @@ public:
 
     void testPivotTableBasicODS();
     void testPivotTableSharedCacheGroupODS();
+    void testGetPivotDataXLS();
 
     void testFormulaDependency();
 
@@ -202,6 +203,7 @@ public:
 
     CPPUNIT_TEST(testPivotTableBasicODS);
     CPPUNIT_TEST(testPivotTableSharedCacheGroupODS);
+    CPPUNIT_TEST(testGetPivotDataXLS);
     CPPUNIT_TEST(testRowHeightODS);
     CPPUNIT_TEST(testFormulaDependency);
     CPPUNIT_TEST(testRichTextContentODS);
@@ -1715,6 +1717,22 @@ void ScFiltersTest::testPivotTableSharedCacheGroupODS()
     ScDPCollection* pDPs = pDoc->GetDPCollection();
     ScDPCollection::SheetCaches& rSheetCaches = pDPs->GetSheetCaches();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rSheetCaches.size());
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testGetPivotDataXLS()
+{
+    ScDocShellRef xDocSh = loadDoc("pivot-getpivotdata.", XLS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+    pDoc->CalcAll();
+
+    // Check GETPIVOTDATA results in E3:E20. Expected results are given in
+    // F3:F20.
+
+    for (SCROW nRow = 2; nRow <= 19; ++nRow)
+        CPPUNIT_ASSERT_EQUAL(pDoc->GetValue(ScAddress(4,nRow,1)), pDoc->GetValue(ScAddress(5,nRow,1)));
 
     xDocSh->DoClose();
 }
