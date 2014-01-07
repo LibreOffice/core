@@ -27,9 +27,9 @@ enum DesktopType {
     DESKTOP_UNITY,
     DESKTOP_XFCE,
     DESKTOP_MATE,
+    DESKTOP_TDE,
     DESKTOP_KDE,
-    DESKTOP_KDE4,
-    DESKTOP_TDE
+    DESKTOP_KDE4
 }; // keep in sync with desktop_strings[] in salplug.cxx
 
 #endif // INCLUDED_VCL_INC_UNX_DESKTOPS_HXX
