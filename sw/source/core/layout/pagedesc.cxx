@@ -156,13 +156,16 @@ void SwPageDesc::ResetAllAttr( sal_Bool bLeft )
 |*
 *************************************************************************/
 
-
-    // gets information from Modify
+// gets information from Modify
 bool SwPageDesc::GetInfo( SfxPoolItem & rInfo ) const
 {
     if( !aMaster.GetInfo( rInfo ) )
-            return false;       // found
-    return aLeft.GetInfo( rInfo );
+        return false;       // found
+    if ( !aLeft.GetInfo( rInfo ) )
+        return false ;
+    if ( !m_FirstMaster.GetInfo( rInfo ) )
+        return false;
+    return m_FirstLeft.GetInfo( rInfo );
 }
 
 /*************************************************************************
