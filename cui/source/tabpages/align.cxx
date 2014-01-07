@@ -366,6 +366,9 @@ void AlignmentTabPage::UpdateEnableControls()
 
     // hyphenation only for automatic line breaks or for block alignment
     m_pBtnHyphen->Enable( m_pBtnWrap->IsChecked() || bHorBlock );
+    if(m_pBtnWrap->IsChecked()){
+        m_pBtnHyphen->Check();
+    }
 
     // shrink only without automatic line break, and not for block, fill or distribute.
     m_pBtnShrink->Enable( (m_pBtnWrap->GetState() == STATE_NOCHECK) && !bHorBlock && !bHorFill && !bHorDist );
