@@ -698,18 +698,21 @@ OUString SAL_CALL SvxShowCharSetItemAcc::getAccessibleDescription()
     ensureAlive();
     OUString sDescription = SVX_RESSTR( RID_SVXSTR_CHARACTER_CODE );
 
-    sal_Unicode c = mpParent->maText[0];
+    const OUString aCharStr( mpParent->maText);
+    sal_Int32 nStrIndex = 0;
+    const sal_UCS4 c = aCharStr.iterateCodePoints( &nStrIndex );
+    const int tmp_len = (c < 0x10000) ? 4 : 6;
     char buf[16] = "0x0000";
-    sal_Unicode c_Shifted = c;
-    for( int i = 0; i < 4; ++i )
+    sal_UCS4 c_Shifted = c;
+    for( int i = 0; i < tmp_len; ++i )
     {
         char h = (char)(c_Shifted & 0x0F);
-        buf[5-i] = (h > 9) ? (h - 10 + 'A') : (h + '0');
+        buf[tmp_len+1-i] = (h > 9) ? (h - 10 + 'A') : (h + '0');
         c_Shifted >>= 4;
     }
     if( c < 256 )
         snprintf( buf+6, 10, " (%d)", c );
-    sDescription += OUString(buf, strlen(buf), RTL_TEXTENCODING_ASCII_US);
+    sDescription += " " + OUString(buf, strlen(buf), RTL_TEXTENCODING_ASCII_US);
 
     return sDescription;
 }
