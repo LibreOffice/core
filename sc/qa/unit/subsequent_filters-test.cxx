@@ -138,6 +138,8 @@ public:
     void testCellAnchoredShapesODS();
 
     void testPivotTableBasicODS();
+    void testGetPivotDataXLS();
+
     void testFormulaDependency();
 
     void testRowHeightODS();
@@ -198,6 +200,7 @@ public:
     CPPUNIT_TEST(testCellAnchoredShapesODS);
 
     CPPUNIT_TEST(testPivotTableBasicODS);
+    CPPUNIT_TEST(testGetPivotDataXLS);
     CPPUNIT_TEST(testRowHeightODS);
     CPPUNIT_TEST(testFormulaDependency);
     CPPUNIT_TEST(testRichTextContentODS);
@@ -1642,6 +1645,22 @@ void ScFiltersTest::testPivotTableBasicODS()
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Function for the data field should be COUNT.",
         sal_uInt16(sheet::GeneralFunction_COUNT), pDim->GetFunction());
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testGetPivotDataXLS()
+{
+    ScDocShellRef xDocSh = loadDoc("pivot-getpivotdata.", XLS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+    pDoc->CalcAll();
+
+    // Check GETPIVOTDATA results in E3:E20. Expected results are given in
+    // F3:F20.
+
+    for (SCROW nRow = 2; nRow <= 19; ++nRow)
+        CPPUNIT_ASSERT_EQUAL(pDoc->GetValue(ScAddress(4,nRow,1)), pDoc->GetValue(ScAddress(5,nRow,1)));
 
     xDocSh->DoClose();
 }
