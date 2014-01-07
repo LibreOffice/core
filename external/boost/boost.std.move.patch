@@ -1,15 +1,15 @@
 --- foo/foo/foo/boost/config/compiler/clang.hpp
 +++ foo/foo/foo/boost/config/compiler/clang.hpp
-@@ -8,6 +8,8 @@
+@@ -10,6 +10,8 @@
  
- // Clang compiler setup.
+ #define BOOST_HAS_PRAGMA_ONCE
  
 +#include <utility>
 +
  #if !__has_feature(cxx_exceptions) && !defined(BOOST_NO_EXCEPTIONS)
  #  define BOOST_NO_EXCEPTIONS
  #endif
-@@ -108,7 +108,7 @@
+@@ -128,7 +130,7 @@
  #  define BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX
  #endif
  

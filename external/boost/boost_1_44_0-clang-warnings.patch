@@ -1,14 +1,3 @@
---- misc/boost_1_44_0/boost/math/tools/fraction.hpp
-+++ misc/build/boost_1_44_0/boost/math/tools/fraction.hpp
-@@ -33,7 +33,7 @@
-        typedef typename Gen::result_type result_type;
-        typedef typename Gen::result_type value_type;
- 
--       static result_type a(const value_type& v)
-+       static result_type a(const value_type&)
-        {
-           return 1;
-        }
 --- misc/boost_1_44_0/boost/random/lagged_fibonacci.hpp
 +++ misc/build/boost_1_44_0/boost/random/lagged_fibonacci.hpp
 @@ -16,6 +16,12 @@
