@@ -709,7 +709,7 @@ OUString SAL_CALL SvxShowCharSetItemAcc::getAccessibleDescription()
         c_Shifted >>= 4;
     }
     if( c < 256 )
-        snprintf( buf+6, 10, " (%d)", c );
+        snprintf( buf+6, 10, " (%" SAL_PRIuUINT32 ")", c );
     sDescription += " " + OUString(buf, strlen(buf), RTL_TEXTENCODING_ASCII_US);
 
     return sDescription;
