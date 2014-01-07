@@ -740,7 +740,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
         case '\t':
             if( '\t'==nNextCh && bReadPRE && '>'!=cBreak )
             {
-                // In <PRE>: Tabs nach oben durchreichen
+                // Pass Tabs up in <PRE>
                 bContinue = false;
                 break;
             }

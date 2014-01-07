@@ -45,11 +45,11 @@ static const short SinTab[16]=
 |*
 |*    ImpMultBig2()
 |*
-|*    Beschreibung       Multiplikation fuer FixPoint-Berechnungen
+|*    Description       Multiplier for FixPoint-calculations
 |*
 **************************************************************************/
 
-//  first parameter should be the bigger one
+//  first parameter should be the larger one
 
 Fix ImpMultBig2( const Fix& a, const Fix& b )
 {
@@ -62,7 +62,7 @@ Fix ImpMultBig2( const Fix& a, const Fix& b )
 |*
 |*    ImpSqrt()
 |*
-|*    Beschreibung       Wurzelfunktion fuer FixPoint-Berechnungen
+|*    Description       SquareRoot function for FixPoint-calculations
 |*
 **************************************************************************/
 
@@ -80,9 +80,9 @@ sal_uInt16 ImpSqrt( sal_uLong nRadi )
         sup >>= 1;
         inf <<= 1;
     }
-    sqr = (sup+inf) >> 1;               // Anfangswert der Iteration
+    sqr = (sup+inf) >> 1;               // startvalue for iteration
 
-    sqr = (nRadi/sqr + sqr) >> 1;       // 2 Newton-Iterationen reichen fuer
+    sqr = (nRadi/sqr + sqr) >> 1;       // 2 Newton-Iterations suffice for
     sqr = (nRadi/sqr + sqr) >> 1;       // +- 1 Digit
 
     return sal::static_int_cast< sal_uInt16 >(sqr);
@@ -92,11 +92,11 @@ sal_uInt16 ImpSqrt( sal_uLong nRadi )
 |*
 |*    ImpExPI()
 |*
-|*    Beschreibung       EXPI-Funktion fuer FixPoint-Berechnungen
+|*    Description       EXPI funktion or FixPoint-calculations
 |*
 **************************************************************************/
 
-// e**(i*nPhi), Einheit nPhi: 2**16 == 360 Grad
+// e**(i*nPhi), unit nPhi: 2**16 == 360 degrees
 
 FixCpx ImpExPI( sal_uInt16 nPhi )
 {

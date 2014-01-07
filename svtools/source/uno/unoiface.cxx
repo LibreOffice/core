@@ -621,8 +621,8 @@ void VCLXFileControl::setText( const OUString& aText ) throw(::com::sun::star::u
     {
         pWindow->SetText( aText );
 
-        // In JAVA wird auch ein textChanged ausgeloest, in VCL nicht.
-        // ::com::sun::star::awt::Toolkit soll JAVA-komform sein...
+        // also in Java a textChanged is triggered, not in VCL.
+        // ::com::sun::star::awt::Toolkit should be JAVA-compliant...
         ModifyHdl( NULL );
     }
 }
@@ -1245,7 +1245,7 @@ void SVTXFormattedField::SetTreatAsNumber(sal_Bool bSet)
     }
     else
     {
-        if (!pField->GetText().isEmpty())    // empty wird erst mal standardmaessig als void nach draussen gereicht
+        if (!pField->GetText().isEmpty())    // empty is returned as void by default
             aReturn <<= pField->GetValue();
     }
 
@@ -1313,7 +1313,7 @@ void SVTXFormattedField::setFormatsSupplier(const ::com::sun::star::uno::Referen
     }
 
     if (!pNew)
-        return;     // TODO : wie das behandeln ?
+        return;     // TODO : how to process ?
 
     if (m_pCurrentSupplier)
         m_pCurrentSupplier->release();
@@ -1321,7 +1321,7 @@ void SVTXFormattedField::setFormatsSupplier(const ::com::sun::star::uno::Referen
     m_pCurrentSupplier->acquire();
     if (pField)
     {
-        // den aktuellen Value mit hinueberretten
+        // save the actual value
         ::com::sun::star::uno::Any aCurrent = GetValue();
         pField->SetFormatter(m_pCurrentSupplier->GetNumberFormatter(), sal_False);
         if (nKeyToSetDelayed != -1)
@@ -1350,9 +1350,10 @@ void SVTXFormattedField::setFormatKey(sal_Int32 nKey)
         if (pField->GetFormatter())
             pField->SetFormatKey(nKey);
         else
-        {   // Wahrscheinlich bin ich gerade in einem Block, in dem erst der Key und dann der Formatter gesetzt
-            // wird, das passiert initial mit ziemlicher Sicherheit, da die Properties in alphabetischer Reihenfolge
-            // gesetzt werden, und der FormatsSupplier nun mal vor dem FormatKey kommt
+        {
+            // probably I am in a block, in which first the key and next the formatter will be set,
+            // initially this happens quite certain, as the properties are set in alphabettic sequence,
+            // and the FormatsSupplier is processed before the FormatKey
             nKeyToSetDelayed = nKey;
         }
         NotifyTextListeners();

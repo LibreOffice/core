@@ -559,7 +559,7 @@ SvStream& HTMLOutFuncs::Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nL
     if( nLen>=sizeof(aNToABuf) )
         nLen = (sizeof(aNToABuf)-1);
 
-    // Pointer an das Bufferende setzen
+    // set pointer to end of buffer
     sal_Char *pStr = aNToABuf + (sizeof(aNToABuf)-1);
     for( sal_uInt8 n = 0; n < nLen; ++n )
     {
@@ -788,7 +788,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
     if( RTL_TEXTENCODING_DONTKNOW == eDestEnc )
         eDestEnc = osl_getThreadTextEncoding();
 
-    // Script wird komplett nicht eingerueckt!
+    // script is not indented!
     OStringBuffer sOut;
     sOut.append('<')
         .append(OOO_STRING_SVTOOLS_HTML_script);
@@ -866,8 +866,8 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
 
         if( !rSource.isEmpty() )
         {
-            // Wir schreiben das Modul mm ANSI-Zeichensatz, aber mit
-            // System-Zeilenumbruechen raus.
+            // we write the module in ANSI-charset, but with
+            // the system new line.
             const OString sSource(OUStringToOString(rSource, eDestEnc));
             rStrm << sSource.getStr() << SAL_NEWLINE_STRING;
         }
@@ -875,9 +875,8 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
 
         if( JAVASCRIPT != eScriptType )
         {
-            // MIB/MM: Wenn es kein StarBasic ist, kann ein // natuerlich
-            // falsch sein. Da der Kommentar aber beim Einlesen wider
-            // entfernt wird, schickt uns das nicht weiter ...
+            // MIB/MM: if it is not StarBasic, a // could be wrong.
+            // As the comment is removed during reading, it is not helping us....
             rStrm << (STARBASIC == eScriptType ? "' -->" : "// -->")
                   << SAL_NEWLINE_STRING;
         }
@@ -933,7 +932,7 @@ OString HTMLOutFuncs::CreateTableDataOptionsValNum(
 
     if ( bValue )
     {
-        // printf / scanf ist zu ungenau
+        // printf / scanf is not precise enough
         OUString aValStr;
         rFormatter.GetInputLineString( fVal, 0, aValStr );
         OString sTmp(OUStringToOString(aValStr, eDestEnc));
@@ -949,7 +948,7 @@ OString HTMLOutFuncs::CreateTableDataOptionsValNum(
             append("=\"").
             append(static_cast<sal_Int32>(
                 Application::GetSettings().GetLanguageTag().getLanguageType())).
-            append(';'); // Language fuer Format 0
+            append(';'); // Language for Format 0
         if ( nFormat )
         {
             OString aNumStr;
