@@ -705,11 +705,12 @@ sal_Int16 SAL_CALL SvxShowCharSetItemAcc::getAccessibleRole()
     ensureAlive();
     String sDescription = SVX_RESSTR( RID_SVXSTR_CHARACTER_CODE );
 
-    sal_Unicode c = mpParent->maText.GetChar(0);
+    const rtl::OUString aCharStr( mpParent->maText);
+    sal_Int32 nStrIndex = 0;
+    const sal_UCS4 c = aCharStr.iterateCodePoints( &nStrIndex );
+    const int tmp_len = (c < 0x10000) ? 4 : 6;
     char buf[16] = "0x0000";
-    sal_Unicode c_Shifted = c;
-    int tmp_len = 4;
-    if(c_Shifted>0xFFFF) tmp_len = 8;
+    sal_UCS4 c_Shifted = c;
     for( int i = 0; i < tmp_len; ++i )
     {
         char h = c_Shifted & 0x0F;
