@@ -1,0 +1,164 @@
+--- misc/boost_1_55_0/boost/unordered/detail/equivalent.hpp	2012-12-05 23:06:57.000000000 +0100
++++ misc/build/boost_1_55_0/boost/unordered/detail/equivalent.hpp	2014-01-07 10:33:59.550621750 +0100
+@@ -534,11 +534,11 @@
+             }
+ 
+             node_pointer first_node = static_cast<node_pointer>(prev->next_);
+-            link_pointer end = first_node->group_prev_->next_;
++            link_pointer end_var = first_node->group_prev_->next_;
+ 
+-            std::size_t count = this->delete_nodes(prev, end);
++            std::size_t count_var = this->delete_nodes(prev, end_var);
+             this->fix_bucket(bucket_index, prev);
+-            return count;
++            return count_var;
+         }
+ 
+         iterator erase(c_iterator r)
+@@ -557,21 +557,21 @@
+             return iterator(r2.node_);
+         }
+ 
+-        link_pointer erase_nodes(node_pointer begin, node_pointer end)
++        link_pointer erase_nodes(node_pointer begin_arg, node_pointer end_arg)
+         {
+-            std::size_t bucket_index = this->hash_to_bucket(begin->hash_);
++            std::size_t bucket_index = this->hash_to_bucket(begin_arg->hash_);
+ 
+-            // Split the groups containing 'begin' and 'end'.
++            // Split the groups containing 'begin_arg' and 'end_arg'.
+             // And get the pointer to the node before begin while
+             // we're at it.
+-            link_pointer prev = split_groups(begin, end);
++            link_pointer prev = split_groups(begin_arg, end_arg);
+ 
+-            // If we don't have a 'prev' it means that begin is at the
++            // If we don't have a 'prev' it means that begin_arg is at the
+             // beginning of a block, so search through the blocks in the
+             // same bucket.
+             if (!prev) {
+                 prev = this->get_previous_start(bucket_index);
+-                while (prev->next_ != begin)
++                while (prev->next_ != begin_arg)
+                     prev = static_cast<node_pointer>(prev->next_)->group_prev_;
+             }
+ 
+@@ -581,24 +581,24 @@
+                     static_cast<node_pointer>(prev->next_)->group_prev_->next_;
+                 this->delete_nodes(prev, group_end);
+                 bucket_index = this->fix_bucket(bucket_index, prev);
+-            } while(prev->next_ != end);
++            } while(prev->next_ != end_arg);
+ 
+             return prev;
+         }
+ 
+-        static link_pointer split_groups(node_pointer begin, node_pointer end)
++        static link_pointer split_groups(node_pointer begin_arg, node_pointer end_arg)
+         {
+-            node_pointer prev = begin->group_prev_;
+-            if (prev->next_ != begin) prev = node_pointer();
++            node_pointer prev = begin_arg->group_prev_;
++            if (prev->next_ != begin_arg) prev = node_pointer();
+ 
+-            if (end) {
+-                node_pointer first = end;
+-                while (first != begin && first->group_prev_->next_ == first) {
++            if (end_arg) {
++                node_pointer first = end_arg;
++                while (first != begin_arg && first->group_prev_->next_ == first) {
+                     first = first->group_prev_;
+                 }
+ 
+-                boost::swap(first->group_prev_, end->group_prev_);
+-                if (first == begin) return prev;
++                boost::swap(first->group_prev_, end_arg->group_prev_);
++                if (first == begin_arg) return prev;
+             }
+ 
+             if (prev) {
+@@ -606,7 +606,7 @@
+                 while (first->group_prev_->next_ == first) {
+                     first = first->group_prev_;
+                 }
+-                boost::swap(first->group_prev_, begin->group_prev_);
++                boost::swap(first->group_prev_, begin_arg->group_prev_);
+             }
+ 
+             return prev;
+--- misc/boost_1_55_0/boost/unordered/detail/table.hpp	2013-08-18 11:44:14.000000000 +0200
++++ misc/build/boost_1_55_0/boost/unordered/detail/table.hpp	2014-01-07 10:18:27.862432325 +0100
+@@ -257,9 +257,9 @@
+             return prev ? iterator(prev->next_) : iterator();
+         }
+         
+-        std::size_t hash_to_bucket(std::size_t hash) const
++        std::size_t hash_to_bucket(std::size_t hash_arg) const
+         {
+-            return policy::to_bucket(bucket_count_, hash);
++            return policy::to_bucket(bucket_count_, hash_arg);
+         }
+ 
+         float load_factor() const
+@@ -655,8 +655,8 @@
+             // assign_nodes takes ownership of the container's elements,
+             // assigning to them if possible, and deleting any that are
+             // left over.
+-            assign_nodes<table> assign(*this);
+-            table_impl::fill_buckets(x.begin(), *this, assign);
++            assign_nodes<table> assign_var(*this);
++            table_impl::fill_buckets(x.begin(), *this, assign_var);
+         }
+ 
+         void assign(table const& x, true_type)
+@@ -730,9 +730,9 @@
+                 // move_assign_nodes takes ownership of the container's
+                 // elements, assigning to them if possible, and deleting
+                 // any that are left over.
+-                move_assign_nodes<table> assign(*this);
++                move_assign_nodes<table> assign_var(*this);
+                 node_holder<node_allocator> nodes(x);
+-                table_impl::fill_buckets(nodes.begin(), *this, assign);
++                table_impl::fill_buckets(nodes.begin(), *this, assign_var);
+             }
+         }
+         
+--- misc/boost_1_55_0/boost/unordered/detail/unique.hpp	2013-08-18 11:44:14.000000000 +0200
++++ misc/build/boost_1_55_0/boost/unordered/detail/unique.hpp	2014-01-07 10:18:27.865432217 +0100
+@@ -529,9 +529,9 @@
+ 
+             link_pointer end = static_cast<node_pointer>(prev->next_)->next_;
+ 
+-            std::size_t count = this->delete_nodes(prev, end);
++            std::size_t count_var = this->delete_nodes(prev, end);
+             this->fix_bucket(bucket_index, prev);
+-            return count;
++            return count_var;
+         }
+ 
+         iterator erase(c_iterator r)
+@@ -550,19 +550,19 @@
+             return iterator(r2.node_);
+         }
+ 
+-        void erase_nodes(node_pointer begin, node_pointer end)
++        void erase_nodes(node_pointer begin_arg, node_pointer end_arg)
+         {
+-            std::size_t bucket_index = this->hash_to_bucket(begin->hash_);
++            std::size_t bucket_index = this->hash_to_bucket(begin_arg->hash_);
+ 
+-            // Find the node before begin.
++            // Find the node before begin_arg
+             link_pointer prev = this->get_previous_start(bucket_index);
+-            while(prev->next_ != begin) prev = prev->next_;
++            while(prev->next_ != begin_arg) prev = prev->next_;
+ 
+             // Delete the nodes.
+             do {
+                 this->delete_node(prev);
+                 bucket_index = this->fix_bucket(bucket_index, prev);
+-            } while (prev->next_ != end);
++            } while (prev->next_ != end_arg);
+         }
+ 
+         ////////////////////////////////////////////////////////////////////////
