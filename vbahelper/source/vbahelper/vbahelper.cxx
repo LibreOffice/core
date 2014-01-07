@@ -607,7 +607,7 @@ OUString VBAToRegexp(const OUString &rIn, bool bForLike )
                         case '[':
                         case '?':
                         case '*':
-                        sResult.append(('\\');
+                        sResult.append('\\');
                         sResult.append(*start);
                             break;
                         case ']':
