@@ -10,6 +10,8 @@
 #include "dpresfilter.hxx"
 #include "global.hxx"
 
+#include <rtl/math.hxx>
+
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 
 using namespace com::sun::star;
@@ -20,6 +22,12 @@ ScDPResultFilter::ScDPResultFilter(const OUString& rDimName, bool bDataLayout) :
 
 ScDPResultFilterContext::ScDPResultFilterContext() :
     mnCol(0), mnRow(0) {}
+
+size_t ScDPResultTree::NamePairHash::operator() (const NamePairType& rPair) const
+{
+    OUStringHash aHash;
+    return aHash(rPair.first) + aHash(rPair.second);
+}
 
 ScDPResultTree::DimensionNode::DimensionNode(const MemberNode* pParent) :
     mpParent(pParent) {}
@@ -89,6 +97,8 @@ void ScDPResultTree::add(
 {
     // TODO: I'll work on the col / row to value node mapping later.
 
+    const OUString* pDimName = NULL;
+    const OUString* pMemName = NULL;
     MemberNode* pMemNode = mpRoot;
 
     std::vector<ScDPResultFilter>::const_iterator itFilter = rFilters.begin(), itFilterEnd = rFilters.end();
@@ -117,6 +127,8 @@ void ScDPResultTree::add(
             itDim = r.first;
         }
 
+        pDimName = &itDim->first;
+
         // Now, see if this dimension member exists.
         DimensionNode* pDim = itDim->second;
         MembersType& rMembers = pDim->maChildMembers;
@@ -135,7 +147,24 @@ void ScDPResultTree::add(
             itMem = r.first;
         }
 
+        pMemName = &itMem->first;
         pMemNode = itMem->second;
+    }
+
+    if (pDimName && pMemName)
+    {
+        NamePairType aNames(*pDimName, *pMemName);
+        LeafValuesType::iterator it = maLeafValues.find(aNames);
+        if (it == maLeafValues.end())
+        {
+            // This name pair doesn't exist.  Associate a new value for it.
+            maLeafValues.insert(LeafValuesType::value_type(aNames, fVal));
+        }
+        else
+        {
+            // This name pair already exists. Set the value to NaN.
+            rtl::math::setNan(&it->second);
+        }
     }
 
     pMemNode->maValues.push_back(fVal);
@@ -145,6 +174,7 @@ void ScDPResultTree::swap(ScDPResultTree& rOther)
 {
     std::swap(maPrimaryDimName, rOther.maPrimaryDimName);
     std::swap(mpRoot, rOther.mpRoot);
+    maLeafValues.swap(rOther.maLeafValues);
 }
 
 bool ScDPResultTree::empty() const
@@ -182,6 +212,20 @@ const ScDPResultTree::ValuesType* ScDPResultTree::getResults(
     }
 
     return &pMember->maValues;
+}
+
+double ScDPResultTree::getLeafResult(const com::sun::star::sheet::DataPilotFieldFilter& rFilter) const
+{
+    NamePairType aPair(rFilter.FieldName, rFilter.MatchValue);
+    LeafValuesType::const_iterator it = maLeafValues.find(aPair);
+    if (it != maLeafValues.end())
+        // Found!
+        return it->second;
+
+    // Not found.  Return an NaN.
+    double fNan;
+    rtl::math::setNan(&fNan);
+    return fNan;
 }
 
 #if DEBUG_PIVOT_TABLE
