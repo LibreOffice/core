@@ -2856,6 +2856,9 @@ const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange, co
             return NULL;
         }
 
+        if (pDimData)
+            pDimData->WriteToCache(*itCache->second);
+
         return itCache->second;
     }
 
