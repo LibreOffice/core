@@ -72,9 +72,7 @@ protected:
 
 private:
     DataSourceTabControl* m_pTabControl;
-    OKButton              m_aBtnOK;
-    CancelButton          m_aBtnCancel;
-    HelpButton            m_aBtnHelp;
+    OKButton*             m_pBtnOK;
 
     RangeChooserTabPage * m_pRangeChooserTabePage;
     DataSourceTabPage *   m_pDataSourceTabPage;

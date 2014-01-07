@@ -29,8 +29,8 @@
 #include "tp_RangeChooser.hxx"
 #include "tp_DataSource.hxx"
 
-// for RET_OK
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
+#include <vcl/msgbox.hxx> // for RET_OK
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -85,8 +85,7 @@ Reference< chart2::XChartTypeTemplate > DocumentChartTypeTemplateProvider::getCu
 class DataSourceTabControl : public TabControl
 {
 public:
-    DataSourceTabControl( Window* pParent, const ResId& rResId );
-    ~DataSourceTabControl();
+    DataSourceTabControl(Window* pParent);
 
     virtual long DeactivatePage();
 
@@ -97,13 +96,11 @@ private:
     bool m_bTogglingEnabled;
 };
 
-DataSourceTabControl::DataSourceTabControl( Window* pParent, const ResId& rResId ) :
-        TabControl( pParent, rResId ),
-        m_bTogglingEnabled( true )
-{}
-
-DataSourceTabControl::~DataSourceTabControl()
-{}
+DataSourceTabControl::DataSourceTabControl(Window* pParent)
+    : TabControl(pParent)
+    , m_bTogglingEnabled(true)
+{
+}
 
 // Note that the result is long, but is intended to be a bool
 long DataSourceTabControl::DeactivatePage()
@@ -127,31 +124,25 @@ void DataSourceTabControl::EnableTabToggling()
 
 sal_uInt16 DataSourceDialog::m_nLastPageId = 0;
 
-DataSourceDialog::DataSourceDialog(
-    Window * pParent,
+DataSourceDialog::DataSourceDialog(Window * pParent,
     const Reference< XChartDocument > & xChartDocument,
-    const Reference< uno::XComponentContext > & xContext ) :
-
-        TabDialog( pParent, SchResId( DLG_DATA_SOURCE )),
-
-        m_xChartDocument( xChartDocument ),
-        m_xContext( xContext ),
-        m_apDocTemplateProvider( new DocumentChartTypeTemplateProvider( xChartDocument )),
-        m_apDialogModel( new DialogModel( xChartDocument, xContext )),
-
-        m_pTabControl( new DataSourceTabControl( this, SchResId( TABCTRL ) )),
-        m_aBtnOK( this, SchResId( BTN_OK ) ),
-        m_aBtnCancel( this, SchResId( BTN_CANCEL ) ),
-        m_aBtnHelp( this, SchResId( BTN_HELP ) ),
-
-        m_pRangeChooserTabePage(0),
-        m_pDataSourceTabPage(0),
-        m_bRangeChooserTabIsValid( true ),
-        m_bDataSourceTabIsValid( true )
+    const Reference< uno::XComponentContext > & xContext)
+    : TabDialog(pParent, "DataRangeDialog",
+        "modules/schart/ui/datarangedialog.ui")
+    , m_xChartDocument(xChartDocument)
+    , m_xContext(xContext)
+    , m_apDocTemplateProvider(new DocumentChartTypeTemplateProvider(xChartDocument))
+    , m_apDialogModel(new DialogModel(xChartDocument, xContext))
+    , m_pTabControl(new DataSourceTabControl(get_content_area()))
+    , m_pRangeChooserTabePage(0)
+    , m_pDataSourceTabPage(0)
+    , m_bRangeChooserTabIsValid(true)
+    , m_bDataSourceTabIsValid(true)
 {
-    FreeResource();
+    get(m_pBtnOK, "ok");
 
-    //don't create the tabpages before FreeResource, otherwise the help ids are not matched correctly
+    m_pTabControl->Show();
+
     m_pRangeChooserTabePage = new RangeChooserTabPage( m_pTabControl, *(m_apDialogModel.get()),
                                      m_apDocTemplateProvider.get(), this, true /* bHideDescription */ );
     m_pDataSourceTabPage = new DataSourceTabPage( m_pTabControl, *(m_apDialogModel.get()),
@@ -164,8 +155,6 @@ DataSourceDialog::DataSourceDialog(
     m_pTabControl->SetTabPage( TP_RANGECHOOSER, m_pRangeChooserTabePage );
 
     m_pTabControl->SelectTabPage( m_nLastPageId );
-
-    SetHelpId( HID_SCH_DLG_RANGES );
 }
 
 DataSourceDialog::~DataSourceDialog()
@@ -199,7 +188,7 @@ void DataSourceDialog::setInvalidPage( TabPage * pTabPage )
 
     if( ! (m_bRangeChooserTabIsValid && m_bDataSourceTabIsValid ))
     {
-        m_aBtnOK.Enable( sal_False );
+        m_pBtnOK->Enable( sal_False );
         OSL_ASSERT( m_pTabControl );
         // note: there seems to be no suitable mechanism to address pages by
         // identifier, at least it is unclear what the page identifiers are.
@@ -221,7 +210,7 @@ void DataSourceDialog::setValidPage( TabPage * pTabPage )
 
     if( m_bRangeChooserTabIsValid && m_bDataSourceTabIsValid )
     {
-        m_aBtnOK.Enable( sal_True );
+        m_pBtnOK->Enable( sal_True );
         OSL_ASSERT( m_pTabControl );
         m_pTabControl->EnableTabToggling();
     }
