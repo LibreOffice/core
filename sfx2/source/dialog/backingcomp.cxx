@@ -102,7 +102,9 @@ css::uno::Any SAL_CALL BackingComp::queryInterface( /*IN*/ const css::uno::Type&
                 static_cast< css::frame::XController* >(this),
                 static_cast< css::lang::XComponent* >(this),
                 static_cast< css::lang::XEventListener* >(this),
-                static_cast< css::awt::XKeyListener* >(static_cast< css::lang::XEventListener* >(this)));
+                static_cast< css::awt::XKeyListener* >(static_cast< css::lang::XEventListener* >(this)),
+                static_cast< css::frame::XDispatchProvider* >(this),
+                static_cast< css::frame::XDispatch* >(this) );
 
     // then look for supported window interfaces
     // Note: They exist only, if this instance was initialized
@@ -183,6 +185,8 @@ css::uno::Sequence< css::uno::Type > SAL_CALL BackingComp::getTypes()
                     ::getCppuType((const ::com::sun::star::uno::Reference< css::lang::XServiceInfo >*)NULL ),
                     ::getCppuType((const ::com::sun::star::uno::Reference< css::frame::XController >*)NULL ),
                     ::getCppuType((const ::com::sun::star::uno::Reference< css::lang::XComponent >*)NULL ),
+                    ::getCppuType((const ::com::sun::star::uno::Reference< css::frame::XDispatchProvider >*)NULL ),
+                    ::getCppuType((const ::com::sun::star::uno::Reference< css::frame::XDispatch >*)NULL ),
                     lWindowTypes);
 
             pTypeCollection = &aTypeCollection;
@@ -261,7 +265,8 @@ sal_Bool SAL_CALL BackingComp::supportsService( /*IN*/ const OUString& sServiceN
 {
     return (
             sServiceName.equals("com.sun.star.frame.StartModule") ||
-            sServiceName.equals(SERVICENAME_FRAMECONTROLLER)
+            sServiceName.equals(SERVICENAME_FRAMECONTROLLER) ||
+            sServiceName.equals("com.sun.star.frame.ProtocolHandler")
            );
 }
 
@@ -317,8 +322,9 @@ OUString BackingComp::impl_getStaticImplementationName()
 
 css::uno::Sequence< OUString > BackingComp::impl_getStaticSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > lNames(1);
+    css::uno::Sequence< OUString > lNames(2);
     lNames[0] = "com.sun.star.frame.StartModule";
+    lNames[1] = "com.sun.star.frame.ProtocolHandler";
     return lNames;
 }
 
@@ -798,6 +804,48 @@ void SAL_CALL BackingComp::keyReleased( /*IN*/ const css::awt::KeyEvent& )
         - and it's first event will be a keyRealeased() for the already well known event, which switched to the backing mode!
         So it will be handled twice! document => backing mode => exit app ...
      */
+}
+
+// XDispatchProvider
+css::uno::Reference< css::frame::XDispatch > SAL_CALL BackingComp::queryDispatch( const css::util::URL& aURL, const OUString& /*sTargetFrameName*/, sal_Int32 /*nSearchFlags*/ ) throw( css::uno::RuntimeException )
+{
+    css::uno::Reference< css::frame::XDispatch > xDispatch;
+    if ( aURL.Protocol == "vnd.org.libreoffice.recentdocs:" )
+        xDispatch = this;
+
+    return xDispatch;
+}
+
+css::uno::Sequence < css::uno::Reference< css::frame::XDispatch > > SAL_CALL BackingComp::queryDispatches( const css::uno::Sequence < css::frame::DispatchDescriptor >& seqDescripts ) throw( css::uno::RuntimeException )
+{
+    sal_Int32 nCount = seqDescripts.getLength();
+    css::uno::Sequence < css::uno::Reference < XDispatch > > lDispatcher( nCount );
+
+    for( sal_Int32 i=0; i<nCount; ++i )
+        lDispatcher[i] = queryDispatch( seqDescripts[i].FeatureURL, seqDescripts[i].FrameName, seqDescripts[i].SearchFlags );
+
+    return lDispatcher;
+}
+
+// XDispatch
+void SAL_CALL BackingComp::dispatch( const css::util::URL& aURL, const css::uno::Sequence < css::beans::PropertyValue >& /*lArgs*/ ) throw( css::uno::RuntimeException )
+{
+    // vnd.org.libreoffice.recentdocs:ClearRecentFileList  - clear recent files
+    if ( aURL.Path == "ClearRecentFileList" )
+    {
+        Window* pWindow = VCLUnoHelper::GetWindow(m_xWindow);
+        BackingWindow* pBack = dynamic_cast<BackingWindow*>(pWindow );
+        if( pBack )
+            pBack->clearRecentFileList();
+    }
+}
+
+void SAL_CALL BackingComp::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xControl*/, const css::util::URL& /*aURL*/ ) throw ( css::uno::RuntimeException )
+{
+}
+
+void SAL_CALL BackingComp::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xControl*/, const css::util::URL& /*aURL*/ ) throw ( css::uno::RuntimeException )
+{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
