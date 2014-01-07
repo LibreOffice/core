@@ -2235,4 +2235,97 @@ void Test::testFuncGETPIVOTDATA()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFuncGETPIVOTDATALeafAccess()
+{
+    m_pDoc->InsertTab(0, "Data");
+    m_pDoc->InsertTab(1, "Table");
+
+    // Raw data
+    const char* aData[][3] = {
+        { "Type", "Member", "Value" },
+        { "A", "Anna", "1" },
+        { "B", "Brittany", "2" },
+        { "A", "Cecilia", "3" },
+        { "B", "Donna", "4" },
+    };
+
+    ScAddress aPos(1,1,0);
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+
+    ScDPObject* pDPObj = NULL;
+
+    // Dimension definition
+    DPFieldDef aFields[] = {
+        { "Type", sheet::DataPilotFieldOrientation_ROW, 0 },
+        { "Member", sheet::DataPilotFieldOrientation_ROW, 0 },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
+    };
+
+    // Create pivot table at A1 on 2nd sheet.
+    pDPObj = createDPFromRange(m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    bool bSuccess = pDPs->InsertNewTable(pDPObj);
+
+    CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
+    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
+                           pDPs->GetCount() == 1);
+    pDPObj->SetName(pDPs->CreateNewName());
+    ScRange aOutRange = refresh(pDPObj);
+
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][3] = {
+            { "Type",         "Member",     0  },
+            { "A",            "Anna",     "1"  },
+            {  0,             "Cecilia",  "3"  },
+            { "B",            "Brittany", "2"  },
+            {  0,             "Donna",    "4"  },
+            { "Total Result",  0,         "10" },
+        };
+
+        bSuccess = checkDPTableOutput<3>(m_pDoc, aOutRange, aOutputCheck, "Pivot table refreshed");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    // Insert formulas with GETPIVOTDATA in column E, and check their results.
+
+    struct Check
+    {
+        const char* mpFormula;
+        double mfResult;
+    };
+
+    Check aChecks[] = {
+        { "=GETPIVOTDATA($A$1;\"Member[Anna]\")",     1.0 },
+        { "=GETPIVOTDATA($A$1;\"Member[Brittany]\")", 2.0 },
+        { "=GETPIVOTDATA($A$1;\"Member[Cecilia]\")",  3.0 },
+        { "=GETPIVOTDATA($A$1;\"Member[Donna]\")",    4.0 },
+    };
+
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        m_pDoc->SetString(ScAddress(4,i,1), OUString::createFromAscii(aChecks[i].mpFormula));
+
+    m_pDoc->CalcAll();
+
+    const sal_uInt16 nNoError = 0; // no error
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+    {
+        sal_uInt16 nErr = m_pDoc->GetErrCode(ScAddress(4,i,1));
+        CPPUNIT_ASSERT_EQUAL(nNoError, nErr);
+        double fVal = m_pDoc->GetValue(ScAddress(4,i,1));
+        CPPUNIT_ASSERT_EQUAL(aChecks[i].mfResult, fVal);
+    }
+
+    pDPs->FreeTable(pDPObj);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
+                           pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

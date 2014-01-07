@@ -423,15 +423,29 @@ uno::Sequence<double> ScDPSource::getFilteredResults(
 
     // Get result values from the tree.
     const ScDPResultTree::ValuesType* pVals = maResFilterSet.getResults(aFilters);
-    if (!pVals)
-        return uno::Sequence<double>();
+    if (pVals)
+    {
+        size_t n = pVals->size();
+        uno::Sequence<double> aRet(n);
+        for (size_t i = 0; i < n; ++i)
+            aRet[i] = (*pVals)[i];
 
-    size_t n = pVals->size();
-    uno::Sequence<double> aRet(n);
-    for (size_t i = 0; i < n; ++i)
-        aRet[i] = (*pVals)[i];
+        return aRet;
+    }
 
-    return aRet;
+    if (aFilters.getLength() == 1)
+    {
+        // Try to get result from the leaf nodes.
+        double fVal = maResFilterSet.getLeafResult(aFilters[0]);
+        if (!rtl::math::isNan(fVal))
+        {
+            uno::Sequence<double> aRet(1);
+            aRet[0] = fVal;
+            return aRet;
+        }
+    }
+
+    return uno::Sequence<double>();
 }
 
 void SAL_CALL ScDPSource::refresh() throw(uno::RuntimeException)
