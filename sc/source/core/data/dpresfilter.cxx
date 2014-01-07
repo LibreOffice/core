@@ -10,6 +10,7 @@
 #include "dpresfilter.hxx"
 #include "global.hxx"
 
+#include <unotools/charclass.hxx>
 #include <rtl/math.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
@@ -113,12 +114,13 @@ void ScDPResultTree::add(
 
         // See if this dimension exists.
         DimensionsType& rDims = pMemNode->maChildDimensions;
-        DimensionsType::iterator itDim = rDims.find(filter.maDimName);
+        OUString aUpperName = ScGlobal::pCharClass->uppercase(filter.maDimName);
+        DimensionsType::iterator itDim = rDims.find(aUpperName);
         if (itDim == rDims.end())
         {
             // New dimenison.  Insert it.
             std::pair<DimensionsType::iterator, bool> r =
-                rDims.insert(DimensionsType::value_type(filter.maDimName, new DimensionNode(pMemNode)));
+                rDims.insert(DimensionsType::value_type(aUpperName, new DimensionNode(pMemNode)));
 
             if (!r.second)
                 // Insertion failed!
@@ -132,13 +134,14 @@ void ScDPResultTree::add(
         // Now, see if this dimension member exists.
         DimensionNode* pDim = itDim->second;
         MembersType& rMembers = pDim->maChildMembers;
-        MembersType::iterator itMem = rMembers.find(filter.maValue);
+        aUpperName = ScGlobal::pCharClass->uppercase(filter.maValue);
+        MembersType::iterator itMem = rMembers.find(aUpperName);
         if (itMem == rMembers.end())
         {
             // New member.  Insert it.
             std::pair<MembersType::iterator, bool> r =
                 rMembers.insert(
-                    MembersType::value_type(filter.maValue, new MemberNode(pDim)));
+                    MembersType::value_type(aUpperName, new MemberNode(pDim)));
 
             if (!r.second)
                 // Insertion failed!
@@ -153,7 +156,10 @@ void ScDPResultTree::add(
 
     if (pDimName && pMemName)
     {
-        NamePairType aNames(*pDimName, *pMemName);
+        NamePairType aNames(
+            ScGlobal::pCharClass->uppercase(*pDimName),
+            ScGlobal::pCharClass->uppercase(*pMemName));
+
         LeafValuesType::iterator it = maLeafValues.find(aNames);
         if (it == maLeafValues.end())
         {
@@ -197,13 +203,17 @@ const ScDPResultTree::ValuesType* ScDPResultTree::getResults(
     const MemberNode* pMember = mpRoot;
     for (; p != pEnd; ++p)
     {
-        DimensionsType::const_iterator itDim = pMember->maChildDimensions.find(p->FieldName);
+        DimensionsType::const_iterator itDim = pMember->maChildDimensions.find(
+            ScGlobal::pCharClass->uppercase(p->FieldName));
+
         if (itDim == pMember->maChildDimensions.end())
             // Specified dimension not found.
             return NULL;
 
         const DimensionNode* pDim = itDim->second;
-        MembersType::const_iterator itMem = pDim->maChildMembers.find(p->MatchValue);
+        MembersType::const_iterator itMem = pDim->maChildMembers.find(
+            ScGlobal::pCharClass->uppercase(p->MatchValue));
+
         if (itMem == pDim->maChildMembers.end())
             // Specified member not found.
             return NULL;
@@ -216,7 +226,10 @@ const ScDPResultTree::ValuesType* ScDPResultTree::getResults(
 
 double ScDPResultTree::getLeafResult(const com::sun::star::sheet::DataPilotFieldFilter& rFilter) const
 {
-    NamePairType aPair(rFilter.FieldName, rFilter.MatchValue);
+    NamePairType aPair(
+        ScGlobal::pCharClass->uppercase(rFilter.FieldName),
+        ScGlobal::pCharClass->uppercase(rFilter.MatchValue));
+
     LeafValuesType::const_iterator it = maLeafValues.find(aPair);
     if (it != maLeafValues.end())
         // Found!
