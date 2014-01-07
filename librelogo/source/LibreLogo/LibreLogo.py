@@ -275,9 +275,9 @@ def MessageBox(parent, message, title, msgtype = "messbox", buttons = __OK__):
     d.WindowAttributes = buttons
     tk = parent.getToolkit()
     msgbox = tk.createWindow(d)
-    msgbox.setMessageText(message)
+    msgbox.MessageText = message
     if title:
-        msgbox.setCaptionText(title)
+        msgbox.CaptionText = title
     return msgbox.execute()
 
 def Random(r):
