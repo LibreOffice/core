@@ -137,8 +137,6 @@ ScDocShell& Test::getDocShell()
 
 void Test::setUp()
 {
-    osl_clearEnvironment(OUString("SC_BACKGROUND_COMPILATION").pData);
-
     BootstrapFixture::setUp();
 
     ScDLL::Init();

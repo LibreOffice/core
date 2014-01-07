@@ -415,18 +415,14 @@ ScFormulaCellGroup::ScFormulaCellGroup() :
     mbSubTotal(false),
     meCalcState(sc::GroupCalcEnabled)
 {
-    static bool bBackgroundCompilation = getenv("SC_BACKGROUND_COMPILATION") != NULL;
-    if (bBackgroundCompilation)
+    if (ScInterpreter::GetGlobalConfig().mbOpenCLEnabled)
     {
-        if (ScInterpreter::GetGlobalConfig().mbOpenCLEnabled)
+        osl::MutexGuard aGuard(getOpenCLCompilationThreadMutex());
+        if (snCount++ == 0)
         {
-            osl::MutexGuard aGuard(getOpenCLCompilationThreadMutex());
-            if (snCount++ == 0)
-            {
-                assert(!sxCompilationThread.is());
-                sxCompilationThread.set(new sc::CLBuildKernelThread);
-                sxCompilationThread->launch();
-            }
+            assert(!sxCompilationThread.is());
+            sxCompilationThread.set(new sc::CLBuildKernelThread);
+            sxCompilationThread->launch();
         }
     }
 }
