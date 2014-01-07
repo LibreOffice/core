@@ -44,6 +44,9 @@
 #include <svx/lathe3d.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
+#include <svx/svdundo.hxx>
+#include "svx/svdglob.hxx"
+#include "svx/svdstr.hrc"
 
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -247,22 +250,23 @@ void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
         SdrObject*  pObj = pShape->GetSdrObject();
         if(pObj)
         {
-            // SdrObject aus der Page loeschen
+            // remove SdrObject from page
             sal_uInt32 nCount = mpPage->GetObjCount();
             for( sal_uInt32 nNum = 0; nNum < nCount; nNum++ )
             {
                 if(mpPage->GetObj(nNum) == pObj)
                 {
+                    mpModel->BegUndo( ImpGetResStr( STR_EditDelete ) );
+                    SdrUndoAction *action = mpModel->GetSdrUndoFactory().CreateUndoRemoveObject( *pObj );
+                    mpModel->AddUndo(action);
+                    mpModel->EndUndo();
                     OSL_VERIFY( mpPage->RemoveObject( nNum ) == pObj );
-                    SdrObject::Free( pObj );
+                    pShape->InvalidateSdrObject();
                     break;
                 }
             }
         }
     }
-
-    if( mpModel )
-        mpModel->SetChanged();
 }
 
 // ::com::sun::star::container::XIndexAccess
