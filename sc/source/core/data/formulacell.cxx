@@ -3501,13 +3501,15 @@ bool ScFormulaCell::InterpretFormulaGroup()
         aTopPos.SetRow(mxGroup->mpTopCell->aPos.Row());
         ScGroupTokenConverter aConverter(aCode, *pDocument, *this, mxGroup->mpTopCell->aPos);
         if (!aConverter.convert(*pCode))
-            {
-                mxGroup->meCalcState = sc::GroupCalcDisabled;
-                return false;
-            }
+        {
+            SAL_INFO("sc.opencl", "conversion of group " << this << " failed, disabling");
+            mxGroup->meCalcState = sc::GroupCalcDisabled;
+            return false;
+        }
         mxGroup->meCalcState = sc::GroupCalcRunning;
         if (!sc::FormulaGroupInterpreter::getStatic()->interpret(*pDocument, mxGroup->mpTopCell->aPos, mxGroup, aCode))
         {
+            SAL_INFO("sc.opencl", "interpreting group " << mxGroup << " (state " << mxGroup->meCalcState << ") failed, disabling");
             mxGroup->meCalcState = sc::GroupCalcDisabled;
             return false;
         }
@@ -3517,10 +3519,11 @@ bool ScFormulaCell::InterpretFormulaGroup()
     {
         ScTokenArray aDummy;
         if (!sc::FormulaGroupInterpreter::getStatic()->interpret(*pDocument, mxGroup->mpTopCell->aPos, mxGroup, aDummy))
-            {
-                mxGroup->meCalcState = sc::GroupCalcDisabled;
-                return false;
-            }
+        {
+            SAL_INFO("sc.opencl", "interpreting group " << mxGroup << " (state " << mxGroup->meCalcState << ") failed, disabling");
+            mxGroup->meCalcState = sc::GroupCalcDisabled;
+            return false;
+        }
     }
 
     return true;
