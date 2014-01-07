@@ -32,10 +32,13 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
+#include <svx/svdstr.hrc>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
+#include <svx/svdundo.hxx>
 #include <svx/unopage.hxx>
 #include "shapeimpl.hxx"
+#include "svdglob.hxx"
 #include "svx/globl3d.hxx"
 #include <svx/polysc3d.hxx>
 #include <svx/unoprov.hxx>
@@ -285,27 +288,43 @@ void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
 
     SvxShape* pShape = SvxShape::getImplementation( xShape );
 
-    if(pShape)
+    if (pShape)
     {
-        SdrObject*  pObj = pShape->GetSdrObject();
-        if(pObj)
+        SdrObject* pObj = pShape->GetSdrObject();
+        if (pObj)
         {
-            // SdrObject aus der Page loeschen
+            // remove SdrObject from page
             sal_uInt32 nCount = mpPage->GetObjCount();
             for( sal_uInt32 nNum = 0; nNum < nCount; nNum++ )
             {
                 if(mpPage->GetObj(nNum) == pObj)
                 {
+                    const bool bUndoEnabled = mpModel->IsUndoEnabled();
+
+                    if (bUndoEnabled)
+                    {
+                        mpModel->BegUndo(ImpGetResStr(STR_EditDelete),
+                            pObj->TakeObjNameSingul(), SDRREPFUNC_OBJ_DELETE);
+
+                        SdrUndoAction * pAction = mpModel->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj);
+                        mpModel->AddUndo(pAction);
+                    }
+
                     OSL_VERIFY( mpPage->RemoveObject( nNum ) == pObj );
-                    SdrObject::Free( pObj );
+
+                    if (!bUndoEnabled)
+                        SdrObject::Free(pObj);
+
+                    if (bUndoEnabled)
+                        mpModel->EndUndo();
+
                     break;
                 }
             }
         }
     }
 
-    if( mpModel )
-        mpModel->SetChanged();
+    mpModel->SetChanged();
 }
 
 // ::com::sun::star::container::XIndexAccess
