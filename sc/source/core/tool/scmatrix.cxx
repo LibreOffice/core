@@ -252,6 +252,10 @@ public:
     void MatCopy(ScMatrixImpl& mRes) const;
     void MatTrans(ScMatrixImpl& mRes) const;
     void FillDouble( double fVal, SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, SCSIZE nR2 );
+    void PutDoubleVector( const ::std::vector< double > & rVec, SCSIZE nC, SCSIZE nR );
+    void PutStringVector( const ::std::vector< svl::SharedString > & rVec, SCSIZE nC, SCSIZE nR );
+    void PutEmptyVector( SCSIZE nCount, SCSIZE nC, SCSIZE nR );
+    void PutEmptyPathVector( SCSIZE nCount, SCSIZE nC, SCSIZE nR );
     void CompareEqual();
     void CompareNotEqual();
     void CompareLess();
@@ -761,6 +765,60 @@ void ScMatrixImpl::FillDouble( double fVal, SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, 
     else
     {
         OSL_FAIL("ScMatrixImpl::FillDouble: dimension error");
+    }
+}
+
+void ScMatrixImpl::PutDoubleVector( const ::std::vector< double > & rVec, SCSIZE nC, SCSIZE nR )
+{
+    if (!rVec.empty() && ValidColRow( nC, nR) && ValidColRow( nC, nR + rVec.size() - 1))
+    {
+        maMat.set(nR, nC, rVec.begin(), rVec.end());
+    }
+    else
+    {
+        OSL_FAIL("ScMatrixImpl::PutDoubleVector: dimension error");
+    }
+}
+
+void ScMatrixImpl::PutStringVector( const ::std::vector< svl::SharedString > & rVec, SCSIZE nC, SCSIZE nR )
+{
+    if (!rVec.empty() && ValidColRow( nC, nR) && ValidColRow( nC, nR + rVec.size() - 1))
+    {
+        maMat.set(nR, nC, rVec.begin(), rVec.end());
+    }
+    else
+    {
+        OSL_FAIL("ScMatrixImpl::PutStringVector: dimension error");
+    }
+}
+
+void ScMatrixImpl::PutEmptyVector( SCSIZE nCount, SCSIZE nC, SCSIZE nR )
+{
+    if (nCount && ValidColRow( nC, nR) && ValidColRow( nC, nR + nCount - 1))
+    {
+        maMat.set_empty(nR, nC, nCount);
+        // zero flag to indicate that this is 'empty', not 'empty path'.
+        std::vector<bool> aVals(nCount, false);
+        maMatFlag.set(nR, nC, aVals.begin(), aVals.end());
+    }
+    else
+    {
+        OSL_FAIL("ScMatrixImpl::PutEmptyVector: dimension error");
+    }
+}
+
+void ScMatrixImpl::PutEmptyPathVector( SCSIZE nCount, SCSIZE nC, SCSIZE nR )
+{
+    if (nCount && ValidColRow( nC, nR) && ValidColRow( nC, nR + nCount - 1))
+    {
+        maMat.set_empty(nR, nC, nCount);
+        // non-zero flag to indicate empty 'path'.
+        std::vector<bool> aVals(nCount, true);
+        maMatFlag.set(nR, nC, aVals.begin(), aVals.end());
+    }
+    else
+    {
+        OSL_FAIL("ScMatrixImpl::PutEmptyPathVector: dimension error");
     }
 }
 
@@ -2030,6 +2088,26 @@ void ScMatrix::MatTrans(ScMatrix& mRes) const
 void ScMatrix::FillDouble( double fVal, SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, SCSIZE nR2 )
 {
     pImpl->FillDouble(fVal, nC1, nR1, nC2, nR2);
+}
+
+void ScMatrix::PutDoubleVector( const ::std::vector< double > & rVec, SCSIZE nC, SCSIZE nR )
+{
+    pImpl->PutDoubleVector(rVec, nC, nR);
+}
+
+void ScMatrix::PutStringVector( const ::std::vector< svl::SharedString > & rVec, SCSIZE nC, SCSIZE nR )
+{
+    pImpl->PutStringVector(rVec, nC, nR);
+}
+
+void ScMatrix::PutEmptyVector( SCSIZE nCount, SCSIZE nC, SCSIZE nR )
+{
+    pImpl->PutEmptyVector(nCount, nC, nR);
+}
+
+void ScMatrix::PutEmptyPathVector( SCSIZE nCount, SCSIZE nC, SCSIZE nR )
+{
+    pImpl->PutEmptyPathVector(nCount, nC, nR);
 }
 
 void ScMatrix::CompareEqual()
