@@ -2266,6 +2266,28 @@ DECLARE_OOXMLEXPORT_TEST(testTextBoxPictureFill, "textbox_picturefill.docx")
     CPPUNIT_ASSERT(!(getProperty<OUString>(xFrame,"BackGraphicURL")).isEmpty());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testSmartArtAnchoredInline, "fdo73227.docx")
+{
+    /* Given file conatins 3 DrawingML objects as 1Picture,1SmartArt and 1Shape.
+     * Check for SmartArt.
+    *  SmartArt shoould get written as "Floating Object" i.e. inside <wp:anchor> tag.
+    *  Also check for value of attribute "id" of <wp:docPr> . It should be unique for
+    *  all 3 DrawingML objects in a document.
+    */
+
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing[1]/wp:anchor/wp:docPr","id","1");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing[1]/wp:anchor/wp:docPr","name","Diagram1");
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp:docPr","id","2");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp:docPr","name","10-Point Star 3");
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing[2]/wp:anchor/wp:docPr","id","3");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing[2]/wp:anchor/wp:docPr","name","Picture");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -74,10 +74,10 @@ public:
     void writeVMLDrawing(const SdrObject* sdrObj, const SwFrmFmt& rFrmFmt,const Point& rNdTopLeft);
     /// Writes shape in both DML and VML format.
     void writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrmFmt& rFrmFmt,const Point& rNdTopLeft, int nAnchorId);
-    /// Writes a diagram (smartart).
-    void writeDiagram(const SdrObject* sdrObject, const Size& size);
     /// Write <a:effectLst>, the effect list.
     void writeDMLEffectLst(const SwFrmFmt& rFrmFmt);
+    /// Writes a diagram (smartart).
+    void writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFrmFmt,  int nAnchorId = -1);
     /// Writes text frame in VML format.
     void writeVMLTextFrame(sw::Frame* pParentFrame);
     /// Undo the text direction mangling done by the frame btLr handler in writerfilter::dmapper::DomainMapper::lcl_startCharacterGroup()
