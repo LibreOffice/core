@@ -157,7 +157,7 @@ class Loader( XImplementationLoader, XServiceInfo, unohelper.Base ):
         return g_implementationName
 
     def supportsService( self, ServiceName ):
-        return ServiceName in self.serviceNames
+        return ServiceName in self.getSupportedServiceNames()
 
     def getSupportedServiceNames( self ):
         return g_supportedServices
