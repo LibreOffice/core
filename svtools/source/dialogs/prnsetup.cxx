@@ -354,10 +354,10 @@ short PrinterSetupDialog::Execute()
     ImplSetInfo();
     maStatusTimer.Start();
 
-    // Dialog starten
+    // start dialog
     short nRet = ModalDialog::Execute();
 
-    // Wenn Dialog mit OK beendet wurde, dann die Daten updaten
+    // update data if the dialog was terminated with OK
     if ( nRet == sal_True )
     {
         if ( mpTempPrinter )

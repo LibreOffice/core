@@ -28,7 +28,7 @@
 /*************************************************************************
 |*    SvResizeHelper::SvResizeHelper()
 |*
-|*    Beschreibung
+|*    Description
 *************************************************************************/
 SvResizeHelper::SvResizeHelper()
     : aBorder( 5, 5 )
@@ -40,40 +40,40 @@ SvResizeHelper::SvResizeHelper()
 /*************************************************************************
 |*    SvResizeHelper::FillHandleRects()
 |*
-|*    Beschreibung: Die acht Handles zum vergroessern
+|*    Description: the eight handles to magnify
 *************************************************************************/
 void SvResizeHelper::FillHandleRectsPixel( Rectangle aRects[ 8 ] ) const
 {
-    // nur wegen EMPTY_RECT
+    // only because of EMPTY_RECT
     Point aBottomRight = aOuter.BottomRight();
 
-    // Links Oben
+    // upper left
     aRects[ 0 ] = Rectangle( aOuter.TopLeft(), aBorder );
-    // Oben Mitte
+    // upper middle
     aRects[ 1 ] = Rectangle( Point( aOuter.Center().X() - aBorder.Width() / 2,
                                     aOuter.Top() ),
                             aBorder );
-    // Oben Rechts
+    // upper right
     aRects[ 2 ] = Rectangle( Point( aBottomRight.X() - aBorder.Width() +1,
                                     aOuter.Top() ),
                             aBorder );
-    // Mitte Rechts
+    // middle right
     aRects[ 3 ] = Rectangle( Point( aBottomRight.X() - aBorder.Width() +1,
                                     aOuter.Center().Y() - aBorder.Height() / 2 ),
                             aBorder );
-    // Unten Rechts
+    // lower right
     aRects[ 4 ] = Rectangle( Point( aBottomRight.X() - aBorder.Width() +1,
                                     aBottomRight.Y() - aBorder.Height() +1 ),
                             aBorder );
-    // Mitte Unten
+    // lower middle
     aRects[ 5 ] = Rectangle( Point( aOuter.Center().X() - aBorder.Width() / 2,
                                     aBottomRight.Y() - aBorder.Height() +1),
                             aBorder );
-    // Links Unten
+    // lower left
     aRects[ 6 ] = Rectangle( Point( aOuter.Left(),
                                     aBottomRight.Y() - aBorder.Height() +1),
                             aBorder );
-    // Mitte Links
+    // middle left
     aRects[ 7 ] = Rectangle( Point( aOuter.Left(),
                                     aOuter.Center().Y() - aBorder.Height() / 2 ),
                             aBorder );
@@ -82,20 +82,20 @@ void SvResizeHelper::FillHandleRectsPixel( Rectangle aRects[ 8 ] ) const
 /*************************************************************************
 |*    SvResizeHelper::FillMoveRectsPixel()
 |*
-|*    Beschreibung: Die vier Kanten werden berechnet
+|*    Description: the four edges are calculated
 *************************************************************************/
 void SvResizeHelper::FillMoveRectsPixel( Rectangle aRects[ 4 ] ) const
 {
-    // Oben
+    // upper
     aRects[ 0 ] = aOuter;
     aRects[ 0 ].Bottom() = aRects[ 0 ].Top() + aBorder.Height() -1;
-    // Rechts
+    // right
     aRects[ 1 ] = aOuter;
     aRects[ 1 ].Left() = aRects[ 1 ].Right() - aBorder.Width() -1;
-    //Unten
+    // lower
     aRects[ 2 ] = aOuter;
     aRects[ 2 ].Top() = aRects[ 2 ].Bottom() - aBorder.Height() -1;
-    //Links
+    // left
     aRects[ 3 ] = aOuter;
     aRects[ 3 ].Right() = aRects[ 3 ].Left() + aBorder.Width() -1;
 }
@@ -103,7 +103,7 @@ void SvResizeHelper::FillMoveRectsPixel( Rectangle aRects[ 4 ] ) const
 /*************************************************************************
 |*    SvResizeHelper::Draw()
 |*
-|*    Beschreibung
+|*    Description
 *************************************************************************/
 void SvResizeHelper::Draw( OutputDevice * pDev )
 {
@@ -122,7 +122,7 @@ void SvResizeHelper::Draw( OutputDevice * pDev )
         pDev->DrawRect( aMoveRects[ i ] );
     if( bResizeable )
     {
-        // Handles malen
+        // draw handles
         pDev->SetFillColor( aColBlack );
         Rectangle   aRects[ 8 ];
         FillHandleRectsPixel( aRects );
@@ -135,7 +135,7 @@ void SvResizeHelper::Draw( OutputDevice * pDev )
 /*************************************************************************
 |*    SvResizeHelper::InvalidateBorder()
 |*
-|*    Beschreibung
+|*    Description
 *************************************************************************/
 void SvResizeHelper::InvalidateBorder( Window * pWin )
 {
@@ -148,7 +148,7 @@ void SvResizeHelper::InvalidateBorder( Window * pWin )
 /*************************************************************************
 |*    SvResizeHelper::SelectBegin()
 |*
-|*    Beschreibung
+|*    Description
 *************************************************************************/
 sal_Bool SvResizeHelper::SelectBegin( Window * pWin, const Point & rPos )
 {
@@ -157,7 +157,7 @@ sal_Bool SvResizeHelper::SelectBegin( Window * pWin, const Point & rPos )
         nGrab = SelectMove( pWin, rPos );
         if( -1 != nGrab )
         {
-            aSelPos = rPos; // Start-Position merken
+            aSelPos = rPos; // store start position
             pWin->CaptureMouse();
             return sal_True;
         }
@@ -168,7 +168,7 @@ sal_Bool SvResizeHelper::SelectBegin( Window * pWin, const Point & rPos )
 /*************************************************************************
 |*    SvResizeHelper::SelectMove()
 |*
-|*    Beschreibung
+|*    Description
 *************************************************************************/
 short SvResizeHelper::SelectMove( Window * pWin, const Point & rPos )
 {
@@ -182,7 +182,7 @@ short SvResizeHelper::SelectMove( Window * pWin, const Point & rPos )
                 if( aRects[ i ].IsInside( rPos ) )
                     return i;
         }
-        // Move-Rect ueberlappen Handles
+        // Move-Rect overlaps Handles
         Rectangle aMoveRects[ 4 ];
         FillMoveRectsPixel( aMoveRects );
         for( sal_uInt16 i = 0; i < 4; i++ )
@@ -201,12 +201,12 @@ short SvResizeHelper::SelectMove( Window * pWin, const Point & rPos )
 
 Point SvResizeHelper::GetTrackPosPixel( const Rectangle & rRect ) const
 {
-    // wie das Rechteck zurueckkommt ist egal, es zaehlt welches Handle
-    // initial angefasst wurde
+    // not important how the rectangle is returned, it is important
+    // which handle has been touched
     Point aPos;
     Rectangle aRect( rRect );
     aRect.Justify();
-    // nur wegen EMPTY_RECT
+    // only because of EMPTY_RECT
     Point aBR = aOuter.BottomRight();
     Point aTR = aOuter.TopRight();
     Point aBL = aOuter.BottomLeft();
@@ -265,7 +265,7 @@ Point SvResizeHelper::GetTrackPosPixel( const Rectangle & rRect ) const
 /*************************************************************************
 |*    SvResizeHelper::GetTrackRectPixel()
 |*
-|*    Beschreibung
+|*    Description
 *************************************************************************/
 Rectangle SvResizeHelper::GetTrackRectPixel( const Point & rTrackPos ) const
 {
@@ -418,7 +418,7 @@ void SvResizeHelper::ValidateRect( Rectangle & rValidate ) const
 /*************************************************************************
 |*    SvResizeHelper::SelectRelease()
 |*
-|*    Beschreibung
+|*    Description
 *************************************************************************/
 sal_Bool SvResizeHelper::SelectRelease( Window * pWin, const Point & rPos,
                                     Rectangle & rOutPosSize )
@@ -438,7 +438,7 @@ sal_Bool SvResizeHelper::SelectRelease( Window * pWin, const Point & rPos,
 /*************************************************************************
 |*    SvResizeHelper::Release()
 |*
-|*    Beschreibung
+|*    Description
 *************************************************************************/
 void SvResizeHelper::Release( Window * pWin )
 {
@@ -453,7 +453,7 @@ void SvResizeHelper::Release( Window * pWin )
 /*************************************************************************
 |*    SvResizeWindow::SvResizeWindow()
 |*
-|*    Beschreibung
+|*    Description
 *************************************************************************/
 SvResizeWindow::SvResizeWindow
 (
@@ -474,7 +474,7 @@ SvResizeWindow::SvResizeWindow
 /*************************************************************************
 |*    SvResizeWindow::SetHatchBorderPixel()
 |*
-|*    Beschreibung
+|*    Description
 *************************************************************************/
 void SvResizeWindow::SetHatchBorderPixel( const Size & rSize )
 {
@@ -484,7 +484,7 @@ void SvResizeWindow::SetHatchBorderPixel( const Size & rSize )
 /*************************************************************************
 |*    SvResizeWindow::SelectMouse()
 |*
-|*    Beschreibung
+|*    Description
 *************************************************************************/
 void SvResizeWindow::SelectMouse( const Point & rPos )
 {
@@ -492,7 +492,7 @@ void SvResizeWindow::SelectMouse( const Point & rPos )
     if( nGrab >= 4 )
         nGrab -= 4;
     if( m_nMoveGrab != nGrab )
-    { // Pointer hat sich geaendert
+    { // Pointer did change
         if( -1 == nGrab )
             SetPointer( m_aOldPointer );
         else
@@ -506,7 +506,7 @@ void SvResizeWindow::SelectMouse( const Point & rPos )
                 aStyle = POINTER_SSIZE;
             else if( nGrab == 0 )
                 aStyle = POINTER_SESIZE;
-            if( m_nMoveGrab == -1 ) // das erste mal
+            if( m_nMoveGrab == -1 ) // the first time
             {
                 m_aOldPointer = GetPointer();
                 SetPointer( Pointer( aStyle ) );
@@ -521,7 +521,7 @@ void SvResizeWindow::SelectMouse( const Point & rPos )
 /*************************************************************************
 |*    SvResizeWindow::MouseButtonDown()
 |*
-|*    Beschreibung
+|*    Description
 *************************************************************************/
 void SvResizeWindow::MouseButtonDown( const MouseEvent & rEvt )
 {
@@ -532,7 +532,7 @@ void SvResizeWindow::MouseButtonDown( const MouseEvent & rEvt )
 /*************************************************************************
 |*    SvResizeWindow::MouseMove()
 |*
-|*    Beschreibung
+|*    Description
 *************************************************************************/
 void SvResizeWindow::MouseMove( const MouseEvent & rEvt )
 {
@@ -556,7 +556,7 @@ void SvResizeWindow::MouseMove( const MouseEvent & rEvt )
 /*************************************************************************
 |*    SvResizeWindow::MouseButtonUp()
 |*
-|*    Beschreibung
+|*    Description
 *************************************************************************/
 void SvResizeWindow::MouseButtonUp( const MouseEvent & rEvt )
 {
@@ -583,7 +583,7 @@ void SvResizeWindow::MouseButtonUp( const MouseEvent & rEvt )
 /*************************************************************************
 |*    SvResizeWindow::KeyEvent()
 |*
-|*    Beschreibung
+|*    Description
 *************************************************************************/
 void SvResizeWindow::KeyInput( const KeyEvent & rEvt )
 {
@@ -597,19 +597,19 @@ void SvResizeWindow::KeyInput( const KeyEvent & rEvt )
 /*************************************************************************
 |*    SvResizeWindow::Resize()
 |*
-|*    Beschreibung
+|*    Description
 *************************************************************************/
 void SvResizeWindow::Resize()
 {
-    m_aResizer.InvalidateBorder( this ); // alten Bereich
+    m_aResizer.InvalidateBorder( this ); // old area
     m_aResizer.SetOuterRectPixel( Rectangle( Point(), GetOutputSizePixel() ) );
-    m_aResizer.InvalidateBorder( this ); // neuen Bereich
+    m_aResizer.InvalidateBorder( this ); // new area
 }
 
 /*************************************************************************
 |*    SvResizeWindow::Paint()
 |*
-|*    Beschreibung
+|*    Description
 *************************************************************************/
 void SvResizeWindow::Paint( const Rectangle & /*rRect*/ )
 {

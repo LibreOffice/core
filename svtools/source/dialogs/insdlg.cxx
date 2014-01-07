@@ -93,10 +93,9 @@ void SvObjectServerList::Remove( const SvGlobalName & rName )
 
 //---------------------------------------------------------------------
 void SvObjectServerList::FillInsertObjects()
-/* [Beschreibung]
+/* [Description]
 
-    Die Liste wird mit allen Typen gef"ullt, die im Insert-Dialog
-    ausgew"ahlt werden k"onnen.
+    The list is filled with all types which can be selected in the insert-dialog.
 */
 {
     try{
