@@ -281,7 +281,12 @@ void SAL_CALL RecentFilesMenuController::itemSelected( const css::awt::MenuEvent
                    OUStringToOString( aCommand, RTL_TEXTENCODING_UTF8 ).getStr() );
 
         if ( aCommand.startsWith( CMD_CLEAR_LIST ) )
+        {
             SvtHistoryOptions().Clear( ePICKLIST );
+            dispatchCommand(
+                "vnd.org.libreoffice.recentdocs:ClearRecentFileList",
+                ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >() );
+        }
         else
             executeEntry( rEvent.MenuId-1 );
     }
