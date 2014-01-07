@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1abeadc6_138fec24",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 14494,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-01-07T20:57:11Z",
+      "side": 1,
+      "message": "does the API compatibility check really complain about adding an optional interface to a published service? that would be rather odd...",
+      "revId": "c2651cf71ba78d551c141d54a60eaf826dd1dccc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_3394e836",
+        "filename": "sw/source/ui/inc/unomailmerge.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-01-07T20:57:11Z",
+      "side": 1,
+      "message": "why does this need a new mutex?",
+      "revId": "c2651cf71ba78d551c141d54a60eaf826dd1dccc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_739e6058",
+        "filename": "sw/source/ui/inc/unomailmerge.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-01-07T20:57:11Z",
+      "side": 1,
+      "message": "should be \"m_pMgr\" or perhaps \"m_pDBManager\" or ...",
+      "revId": "c2651cf71ba78d551c141d54a60eaf826dd1dccc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_93a21c99",
+        "filename": "sw/source/ui/uno/unomailmerge.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-01-07T20:57:11Z",
+      "side": 1,
+      "message": "it\u0027s not necessary to derive this from SolarMutexGuard - the usage just needs to be below SolarMutexGuard in the execute method",
+      "revId": "c2651cf71ba78d551c141d54a60eaf826dd1dccc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_33bb08c6",
+        "filename": "sw/source/ui/uno/unomailmerge.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-01-07T20:57:11Z",
+      "side": 1,
+      "message": "ah that\u0027s what the mutex is for - you want to call cancel on thread A while execute is working on thread B?  perhaps best to add a comment about that.\n\n... not sure that is actually safe; it protects pMgr but not the pMgr-\u003ebCancel member ... where is that checked ... SwNewDBMgr::MergeMailFiles? ... technically that would need to lock the mutex too when checking the flag... but that appears rather difficult to do...\n\nit would be really nice if oslInterlockedCount had an atomic get function so it could be used for the flag ... but it only has increment/decrement, how lame, /me wants g_atomic_int.\n\nhmm... perhaps it\u0027s good enough doing a non-atomic update, probably a race would only delay the cancellation by 1 iteration, not much of a problem - but bCancel must not be a bitfield in that case but a full integer, because a race updating bitfields may cause \"collateral damage\" on other variables.",
+      "revId": "c2651cf71ba78d551c141d54a60eaf826dd1dccc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
