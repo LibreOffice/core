@@ -30,6 +30,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
 
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
@@ -57,6 +59,8 @@ class BackingComp : public  css::lang::XTypeProvider
                   , public  css::lang::XInitialization
                   , public  css::frame::XController  // => XComponent
                   , public  css::awt::XKeyListener // => XEventListener
+                  , public css::frame::XDispatchProvider
+                  , public css::frame::XDispatch
                   , public  ::cppu::OWeakObject
 {
     //______________________________________
@@ -118,6 +122,15 @@ class BackingComp : public  css::lang::XTypeProvider
         virtual void SAL_CALL dispose            (                                                                   ) throw(css::uno::RuntimeException);
         virtual void SAL_CALL addEventListener   ( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw(css::uno::RuntimeException);
         virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw(css::uno::RuntimeException);
+
+        // XDispatchProvider
+        virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch( const css::util::URL& aURL, const OUString& sTargetFrameName , sal_Int32 nSearchFlags ) throw( css::uno::RuntimeException );
+        virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions    ) throw( css::uno::RuntimeException );
+
+        // XDispatch
+        virtual void SAL_CALL dispatch( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException );
+        virtual void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener, const css::util::URL& aURL ) throw( css::uno::RuntimeException );
+        virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener, const css::util::URL& aURL ) throw( css::uno::RuntimeException );
 
     //______________________________________
     // helper
