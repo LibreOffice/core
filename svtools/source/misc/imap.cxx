@@ -68,7 +68,7 @@ IMapObject::IMapObject( const OUString& rURL, const OUString& rAltText, const OU
 
 /******************************************************************************
 |*
-|* Freigabe des internen Speichers
+|* release internal memory
 |*
 \******************************************************************************/
 
@@ -105,7 +105,7 @@ void IMapObject::Write( SvStream& rOStm, const OUString& rBaseURL ) const
 
 /******************************************************************************
 |*
-|*  Binaer-Import
+|*  Binary import
 |*
 \******************************************************************************/
 
@@ -114,7 +114,7 @@ void IMapObject::Read( SvStream& rIStm, const OUString& rBaseURL )
     IMapCompat*         pCompat;
     rtl_TextEncoding    nTextEncoding;
 
-    // Typ und Version ueberlesen wir
+    // read on type and version
     rIStm.SeekRel( 2 );
     rIStm >> nReadVersion;
     rIStm >> nTextEncoding;
@@ -123,18 +123,18 @@ void IMapObject::Read( SvStream& rIStm, const OUString& rBaseURL )
     rIStm >> bActive;
     aTarget = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStm, nTextEncoding);
 
-    // URL absolut machen
+    // make URL absolute
     aURL = URIHelper::SmartRel2Abs( INetURLObject(rBaseURL), aURL, URIHelper::GetMaybeFileHdl(), true, false, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS );
     pCompat = new IMapCompat( rIStm, STREAM_READ );
 
     ReadIMapObject( rIStm );
 
-    // ab Version 4 lesen wir eine EventListe
+    // from version 4 onwards we read a eventlist
     if ( nReadVersion >= 0x0004 )
     {
         aEventList.Read(rIStm);
 
-        // ab Version 5 kann ein Objektname vorhanden sein
+        // from version 5 onwards an objectname could be available
         if ( nReadVersion >= 0x0005 )
             aName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStm, nTextEncoding);
     }
@@ -176,7 +176,7 @@ void IMapRectangleObject::ImpConstruct( const Rectangle& rRect, sal_Bool bPixel 
 
 /******************************************************************************
 |*
-|* Binaer-Export
+|* Binary export
 |*
 \******************************************************************************/
 
@@ -188,7 +188,7 @@ void IMapRectangleObject::WriteIMapObject( SvStream& rOStm ) const
 
 /******************************************************************************
 |*
-|* Binaer-Import
+|* Binary import
 |*
 \******************************************************************************/
 
@@ -200,7 +200,7 @@ void IMapRectangleObject::ReadIMapObject( SvStream& rIStm )
 
 /******************************************************************************
 |*
-|* Typ-Rueckgabe
+|* return type
 |*
 \******************************************************************************/
 
@@ -212,7 +212,7 @@ sal_uInt16 IMapRectangleObject::GetType() const
 
 /******************************************************************************
 |*
-|* Hit-Test
+|* Hit test
 |*
 \******************************************************************************/
 
@@ -284,7 +284,7 @@ void IMapCircleObject::ImpConstruct( const Point& rCenter, sal_uLong nRad, sal_B
 
 /******************************************************************************
 |*
-|* Binaer-Export
+|* Binary export
 |*
 \******************************************************************************/
 
@@ -299,7 +299,7 @@ void IMapCircleObject::WriteIMapObject( SvStream& rOStm ) const
 
 /******************************************************************************
 |*
-|* Binaer-Import
+|* Binary import
 |*
 \******************************************************************************/
 
@@ -316,7 +316,7 @@ void IMapCircleObject::ReadIMapObject( SvStream& rIStm )
 
 /******************************************************************************
 |*
-|* Typ-Rueckgabe
+|* return type
 |*
 \******************************************************************************/
 
@@ -425,7 +425,7 @@ void IMapPolygonObject::ImpConstruct( const Polygon& rPoly, sal_Bool bPixel )
 
 /******************************************************************************
 |*
-|* Binaer-Export
+|* Binary export
 |*
 \******************************************************************************/
 
@@ -439,7 +439,7 @@ void IMapPolygonObject::WriteIMapObject( SvStream& rOStm ) const
 
 /******************************************************************************
 |*
-|* Binaer-Import
+|* Binary import
 |*
 \******************************************************************************/
 
@@ -447,7 +447,7 @@ void IMapPolygonObject::ReadIMapObject( SvStream& rIStm )
 {
     rIStm >> aPoly;
 
-    // Version >= 2 hat zusaetzlich Ellipsen-Information
+    // Version >= 2 has additional ellipses information
     if ( nReadVersion >= 2 )
     {
         rIStm >> bEllipse;
@@ -458,7 +458,7 @@ void IMapPolygonObject::ReadIMapObject( SvStream& rIStm )
 
 /******************************************************************************
 |*
-|* Typ-Rueckgabe
+|* return type
 |*
 \******************************************************************************/
 
@@ -470,7 +470,7 @@ sal_uInt16 IMapPolygonObject::GetType() const
 
 /******************************************************************************
 |*
-|* Hit-Test
+|* hit test
 |*
 \******************************************************************************/
 
@@ -628,7 +628,7 @@ ImageMap::~ImageMap()
 
 /******************************************************************************
 |*
-|* Freigabe des internen Speichers
+|* release internal memory
 |*
 \******************************************************************************/
 
@@ -644,7 +644,7 @@ void ImageMap::ClearImageMap()
 
 /******************************************************************************
 |*
-|* Zuweisungsoperator
+|* assignment operator
 |*
 \******************************************************************************/
 
@@ -685,7 +685,7 @@ ImageMap& ImageMap::operator=( const ImageMap& rImageMap )
 
 /******************************************************************************
 |*
-|* Vergleichsoperator I
+|* compare operator I
 |*
 \******************************************************************************/
 
@@ -747,7 +747,7 @@ sal_Bool ImageMap::operator==( const ImageMap& rImageMap )
 
 /******************************************************************************
 |*
-|* Vergleichsoperator II
+|* compare operator II
 |*
 \******************************************************************************/
 
@@ -759,7 +759,7 @@ sal_Bool ImageMap::operator!=( const ImageMap& rImageMap )
 
 /******************************************************************************
 |*
-|* Freigabe des internen Speichers
+|* release internal memory
 |*
 \******************************************************************************/
 
@@ -771,7 +771,7 @@ sal_uInt16 ImageMap::GetVersion() const
 
 /******************************************************************************
 |*
-|* Einfuegen eines neuen Objekts
+|* insert new object
 |*
 \******************************************************************************/
 
@@ -799,7 +799,7 @@ void ImageMap::InsertIMapObject( const IMapObject& rIMapObject )
 
 /******************************************************************************
 |*
-|* Hit-Test
+|* hit test
 |*
 \******************************************************************************/
 
@@ -811,8 +811,7 @@ IMapObject* ImageMap::GetHitIMapObject( const Size& rTotalSize,
     Point aRelPoint( rTotalSize.Width() * rRelHitPoint.X() / rDisplaySize.Width(),
                      rTotalSize.Height() * rRelHitPoint.Y() / rDisplaySize.Height() );
 
-    // Falls Flags zur Spiegelung etc. angegeben sind, wird
-    // der zu pruefende Punkt vor der Pruefung entspr. transformiert
+    // transform point to check before checking if flags to mirror etc. are set,
     if ( nFlags )
     {
         if ( nFlags & IMAP_MIRROR_HORZ )
@@ -822,7 +821,7 @@ IMapObject* ImageMap::GetHitIMapObject( const Size& rTotalSize,
             aRelPoint.Y() = rTotalSize.Height() - aRelPoint.Y();
     }
 
-    // Alle Objekte durchlaufen und HitTest ausfuehren
+    // walk over all objects and execute HitTest
     IMapObject* pObj = NULL;
     for( size_t i = 0, n = maList.size(); i < n; ++i ) {
         if ( maList[ i ]->IsHit( aRelPoint ) ) {
@@ -865,7 +864,7 @@ void ImageMap::Scale( const Fraction& rFracX, const Fraction& rFracY )
 
 /******************************************************************************
 |*
-|* Objekte nacheinander wegschreiben
+|* sequentially write objects
 |*
 \******************************************************************************/
 
@@ -884,7 +883,7 @@ void ImageMap::ImpWriteImageMap( SvStream& rOStm, const OUString& rBaseURL ) con
 
 /******************************************************************************
 |*
-|* Objekte nacheinander lesen
+|* sequentially read objects
 |*
 \******************************************************************************/
 
@@ -933,7 +932,7 @@ void ImageMap::ImpReadImageMap( SvStream& rIStm, size_t nCount, const OUString& 
 
 /******************************************************************************
 |*
-|* Binaer speichern
+|* store binary
 |*
 \******************************************************************************/
 
@@ -947,7 +946,7 @@ void ImageMap::Write( SvStream& rOStm, const OUString& rBaseURL ) const
 
     rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
-    // MagicCode schreiben
+    // write MagicCode
     rOStm << IMAPMAGIC;
     rOStm << GetVersion();
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStm, aImageName, eEncoding);
@@ -957,7 +956,7 @@ void ImageMap::Write( SvStream& rOStm, const OUString& rBaseURL ) const
 
     pCompat = new IMapCompat( rOStm, STREAM_WRITE );
 
-    // hier kann in neueren Versionen eingefuegt werden
+    // here one can insert in newer versions
 
     delete pCompat;
 
@@ -969,7 +968,7 @@ void ImageMap::Write( SvStream& rOStm, const OUString& rBaseURL ) const
 
 /******************************************************************************
 |*
-|* Binaer laden
+|* load binary
 |*
 \******************************************************************************/
 
@@ -986,10 +985,10 @@ void ImageMap::Read( SvStream& rIStm, const OUString& rBaseURL )
     {
         IMapCompat* pCompat;
 
-        // alten Inhalt loeschen
+        // delete old content
         ClearImageMap();
 
-        // Version ueberlesen wir
+        // read on version
         rIStm.SeekRel( 2 );
 
         aName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStm, osl_getThreadTextEncoding());
@@ -999,7 +998,7 @@ void ImageMap::Read( SvStream& rIStm, const OUString& rBaseURL )
 
         pCompat = new IMapCompat( rIStm, STREAM_READ );
 
-        // hier kann in neueren Versionen gelesen werden
+        // here one can read in newer versions
 
         delete pCompat;
         ImpReadImageMap( rIStm, nCount, rBaseURL );

@@ -238,7 +238,7 @@ sal_uLong ImageMap::Read( SvStream& rIStm, sal_uLong nFormat, const OUString& rB
 
 sal_uLong ImageMap::ImpReadCERN( SvStream& rIStm, const OUString& rBaseURL )
 {
-    // alten Inhalt loeschen
+    // delete old content
     ClearImageMap();
 
     OString aStr;
@@ -258,7 +258,7 @@ void ImageMap::ImpReadCERNLine( const OString& rLine, const OUString& rBaseURL  
     const char* pStr = aStr.getStr();
     char        cChar = *pStr++;
 
-    // Anweisung finden
+    // find instruction
     OStringBuffer aBuf;
     while( ( cChar >= 'a' ) && ( cChar <= 'z' ) && NOTEOL( cChar ) )
     {
@@ -380,7 +380,7 @@ OUString ImageMap::ImpReadCERNURL( const char** ppStr, const OUString& rBaseURL 
 
 sal_uLong ImageMap::ImpReadNCSA( SvStream& rIStm, const OUString& rBaseURL )
 {
-    // alten Inhalt loeschen
+    // delete old content
     ClearImageMap();
 
     OString aStr;
@@ -400,7 +400,7 @@ void ImageMap::ImpReadNCSALine( const OString& rLine, const OUString& rBaseURL )
     const char* pStr = aStr.getStr();
     char        cChar = *pStr++;
 
-    // Anweisung finden
+    // find instruction
     OStringBuffer aBuf;
     while( ( cChar >= 'a' ) && ( cChar <= 'z' ) && NOTEOL( cChar ) )
     {
@@ -512,8 +512,8 @@ sal_uLong ImageMap::ImpDetectFormat( SvStream& rIStm )
 
     rIStm.Read( cMagic, sizeof( cMagic ) );
 
-    // Falls wir kein internes Format haben,
-    // untersuchen wir das Format
+    // if we do not have an internal formats
+    // we check the format
     if ( memcmp( cMagic, IMAPMAGIC, sizeof( cMagic ) ) )
     {
         long        nCount = 128;
