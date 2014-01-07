@@ -756,9 +756,9 @@ private:
     std::list< PostponedGraphic >* m_postponedGraphic;
     struct PostponedDiagram
     {
-        PostponedDiagram( const SdrObject* o, Size s ) : object( o ), size( s ) {};
+        PostponedDiagram( const SdrObject* o, const SwFrmFmt* frm ) : object( o ), frame( frm ) {};
         const SdrObject* object;
-        Size size;
+        const SwFrmFmt* frame;
     };
     std::list< PostponedDiagram >* m_postponedDiagram;
 

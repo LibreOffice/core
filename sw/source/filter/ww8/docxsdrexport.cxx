@@ -588,7 +588,7 @@ void DocxSdrExport::writeDMLEffectLst(const SwFrmFmt& rFrmFmt)
 
 }
 
-void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const Size& size)
+void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFrmFmt,  int nAnchorId)
 {
     sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
     uno::Reference< drawing::XShape > xShape(((SdrObject*)sdrObject)->getUnoShape(), uno::UNO_QUERY);
@@ -625,32 +625,20 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const Size& size)
         return;
 
     // write necessary tags to document.xml
-    pFS->startElementNS(XML_w, XML_drawing,
-                        FSEND);
-    pFS->startElementNS(XML_wp, XML_inline,
-                        XML_distT, "0", XML_distB, "0", XML_distL, "0", XML_distR, "0",
-                        FSEND);
-
-    OString aWidth(OString::number(TwipsToEMU(size.Width())));
-    OString aHeight(OString::number(TwipsToEMU(size.Height())));
-    pFS->singleElementNS(XML_wp, XML_extent,
-                         XML_cx, aWidth.getStr(),
-                         XML_cy, aHeight.getStr(),
-                         FSEND);
-    // TODO - the right effectExtent, extent including the effect
-    pFS->singleElementNS(XML_wp, XML_effectExtent,
-                         XML_l, "0", XML_t, "0", XML_r, "0", XML_b, "0",
-                         FSEND);
+    Size aSize(sdrObject->GetSnapRect().GetWidth(), sdrObject->GetSnapRect().GetHeight());
+    startDMLAnchorInline(&rFrmFmt, aSize);
 
     // generate an unique id
-    static sal_Int32 diagramCount = 0;
-    diagramCount++;
-    OUString sName = "Diagram" + OUString::number(diagramCount);
+    sax_fastparser::FastAttributeList* pDocPrAttrList = pFS->createAttrList();
+    pDocPrAttrList->add(XML_id, OString::number(nAnchorId).getStr());
+    OUString sName = "Diagram" + OUString::number(nAnchorId);
+    pDocPrAttrList->add(XML_name, OUStringToOString(sName, RTL_TEXTENCODING_UTF8).getStr());
+    sax_fastparser::XFastAttributeListRef xDocPrAttrListRef(pDocPrAttrList);
+    pFS->singleElementNS(XML_wp, XML_docPr, xDocPrAttrListRef);
 
-    pFS->singleElementNS(XML_wp, XML_docPr,
-                         XML_id, I32S(diagramCount),
-                         XML_name, USS(sName),
-                         FSEND);
+
+    sal_Int32 diagramCount;
+    diagramCount = nAnchorId;
 
     pFS->singleElementNS(XML_wp, XML_cNvGraphicFramePr,
                          FSEND);
@@ -725,8 +713,7 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const Size& size)
 
     pFS->endElementNS(XML_a, XML_graphicData);
     pFS->endElementNS(XML_a, XML_graphic);
-    pFS->endElementNS(XML_wp, XML_inline);
-    pFS->endElementNS(XML_w, XML_drawing);
+    endDMLAnchorInline(&rFrmFmt);
 
     uno::Reference< xml::sax::XSAXSerializable > serializer;
     uno::Reference< xml::sax::XWriter > writer = xml::sax::Writer::create(comphelper::getProcessComponentContext());

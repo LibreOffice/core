@@ -1248,7 +1248,7 @@ void DocxAttributeOutput::WritePostponedDiagram()
     for( std::list< PostponedDiagram >::const_iterator it = m_postponedDiagram->begin();
          it != m_postponedDiagram->end();
          ++it )
-        m_rExport.SdrExporter().writeDiagram( it->object, it->size );
+        m_rExport.SdrExporter().writeDiagram( it->object, *(it->frame), m_anchorId++ );
     delete m_postponedDiagram;
     m_postponedDiagram = NULL;
 }
@@ -3269,10 +3269,10 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                     if ( IsDiagram( pSdrObj ) )
                     {
                         if ( m_postponedDiagram == NULL )
-                            m_rExport.SdrExporter().writeDiagram( pSdrObj, rFrame.GetLayoutSize() );
+                            m_rExport.SdrExporter().writeDiagram( pSdrObj, rFrame.GetFrmFmt(), m_anchorId++);
                         else // we are writing out attributes, but w:drawing should not be inside w:rPr,
                         {    // so write it out later
-                            m_postponedDiagram->push_back( PostponedDiagram( pSdrObj, rFrame.GetSize() ) );
+                            m_postponedDiagram->push_back( PostponedDiagram( pSdrObj, &(rFrame.GetFrmFmt()) ));
                         }
                     }
                     else
