@@ -991,7 +991,7 @@ ExportDialog::~ExportDialog()
 
 /*************************************************************************
 |*
-|* Speichert eingestellte Werte in ini-Datei
+|* stores values set in the ini-file
 |*
 \************************************************************************/
 IMPL_LINK_NOARG(ExportDialog, UpdateHdl)

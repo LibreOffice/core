@@ -37,7 +37,7 @@
 
 /*************************************************************************
 |*
-|* Dialog zum Einstellen von Filteroptionen bei Pixelformaten
+|* dialog to set filter options for pixel formats
 |*
 \************************************************************************/
 

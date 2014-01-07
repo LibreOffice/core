@@ -29,7 +29,7 @@ class SvResizeHelper
 {
     Size        aBorder;
     Rectangle   aOuter;
-    short       nGrab; // -1 kein Grab,  0 - 7, 8 = Move, siehe FillHandle...
+    short       nGrab; // -1 no Grab,  0 - 7, 8 = Move, see FillHandle...
     Point       aSelPos;
     sal_Bool        bResizeable;
 public:
@@ -53,7 +53,8 @@ public:
                     aRect.Right()  -= aBorder.Width();
                     return aRect;
                 }
-                // Im Uhrzeigersinn, beginnend bei Linksoben
+                // Clockwise, start at upper left
+                //
     void        FillHandleRectsPixel( Rectangle aRects[ 8 ] ) const;
     void        FillMoveRectsPixel( Rectangle aRects[ 4 ] ) const;
     void        Draw( OutputDevice * );
@@ -73,7 +74,7 @@ class VCLXHatchWindow;
 class SvResizeWindow : public Window
 {
     Pointer         m_aOldPointer;
-    short           m_nMoveGrab;  // Letzer Pointertyp
+    short           m_nMoveGrab;  // last pointer type
     SvResizeHelper  m_aResizer;
     sal_Bool        m_bActive;
 

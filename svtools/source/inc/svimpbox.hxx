@@ -285,7 +285,7 @@ public:
     SvTreeListEntry*        GetCurrentEntry() const { return pCursor; }
     bool IsEntryInView( SvTreeListEntry* pEntry ) const;
     SvTreeListEntry*        GetEntry( const Point& rPos ) const;
-    // gibt letzten Eintrag zurueck, falls Pos unter letztem Eintrag
+    // returns last entry, if Pos below last entry
     SvTreeListEntry*        GetClickedEntry( const Point& ) const;
     SvTreeListEntry*        GetCurEntry() const { return pCursor; }
     void                SetCurEntry( SvTreeListEntry* );
