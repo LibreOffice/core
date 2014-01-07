@@ -861,8 +861,8 @@ void ODBExport::exportComponent(XPropertySet* _xProp)
     else
         sValue = "reports/" + sValue;
 
-    AddAttribute(XML_NAMESPACE_XLINK, XML_HREF,sValue);
-    AddAttribute(XML_NAMESPACE_DB, XML_TYPE, XML_SIMPLE);
+    AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sValue);
+    AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
     sal_Bool bAsTemplate = sal_False;
     _xProp->getPropertyValue(PROPERTY_AS_TEMPLATE) >>= bAsTemplate;
     AddAttribute(XML_NAMESPACE_DB, XML_AS_TEMPLATE,bAsTemplate ? XML_TRUE : XML_FALSE);
