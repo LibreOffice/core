@@ -67,6 +67,29 @@ class ScJumpMatrix
     SCSIZE              nResMatRows;
     bool                bStarted;
 
+    // Buffer result ranges to be able to set a range of identically typed
+    // values at the result matrix in order to avoid multiple shrinks and
+    // growths of multi_type_vector segments, which is a major performance
+    // bottleneck, see fdo#72929
+    ::std::vector< svl::SharedString >  mvBufferStrings;
+    ::std::vector< double >             mvBufferDoubles;
+    SCSIZE                              mnBufferCol;
+    SCSIZE                              mnBufferRowStart;
+    SCSIZE                              mnBufferEmptyCount;
+    SCSIZE                              mnBufferEmptyPathCount;
+
+    enum BufferType
+    {
+        BUFFER_NONE,
+        BUFFER_DOUBLE,
+        BUFFER_STRING,
+        BUFFER_EMPTY,
+        BUFFER_EMPTYPATH
+    };
+
+    /** Flush different types or non-consecutive buffers. */
+    void FlushBufferOtherThan( BufferType eType, SCSIZE nC, SCSIZE nR );
+
     // not implemented, prevent usage
     ScJumpMatrix( const ScJumpMatrix& );
     ScJumpMatrix& operator=( const ScJumpMatrix& );
@@ -80,11 +103,17 @@ public:
     void SetAllJumps( double fBool, short nStart, short nNext, short nStop = SHRT_MAX );
     void SetJumpParameters( ScTokenVec* p );
     const ScTokenVec* GetJumpParameters() const;
-    ScMatrix* GetResultMatrix() const;
+    bool HasResultMatrix() const;
+    ScMatrix* GetResultMatrix();        ///< also applies pending buffered values
     void GetPos( SCSIZE& rCol, SCSIZE& rRow ) const;
     bool Next( SCSIZE& rCol, SCSIZE& rRow );
     void GetResMatDimensions( SCSIZE& rCols, SCSIZE& rRows );
     void SetNewResMat( SCSIZE nNewCols, SCSIZE nNewRows );
+
+    void PutResultDouble( double fVal, SCSIZE nC, SCSIZE nR );
+    void PutResultString( const svl::SharedString& rStr, SCSIZE nC, SCSIZE nR );
+    void PutResultEmpty( SCSIZE nC, SCSIZE nR );
+    void PutResultEmptyPath( SCSIZE nC, SCSIZE nR );
 };
 
 #endif // SC_JUMPMATRIX_HXX
