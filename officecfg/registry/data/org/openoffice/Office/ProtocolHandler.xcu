@@ -70,5 +70,10 @@
         <value>vnd.com.sun.star.comp.PresentationMinimizer:*</value>
       </prop>
     </node>
+    <node oor:name="com.sun.star.comp.sfx2.BackingComp" oor:op="replace" install:module="start">
+      <prop oor:name="Protocols">
+        <value>vnd.org.libreoffice.recentdocs:*</value>
+      </prop>
+    </node>
   </node>
 </oor:component-data>
