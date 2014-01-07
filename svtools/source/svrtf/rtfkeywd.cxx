@@ -25,7 +25,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-// die Tabelle muss noch sortiert werden
+// the table is still to be sorted
 struct RTF_TokenEntry
 {
     union{
@@ -35,7 +35,7 @@ struct RTF_TokenEntry
     int nToken;
 };
 
-// Flag: RTF-Token Tabelle wurde schon sortiert
+// Flag: RTF-token table has been sorted
 static int bSortKeyWords = sal_False;
 
 static RTF_TokenEntry aRTFTokenTab[] = {
@@ -1077,7 +1077,7 @@ static RTF_TokenEntry aRTFTokenTab[] = {
         {{OOO_STRING_SVTOOLS_RTF_NOOVERFLOW},    RTF_NOOVERFLOW},
         {{OOO_STRING_SVTOOLS_RTF_ASPALPHA},      RTF_ASPALPHA},
 
-// SWG spezifische Attribute
+// SWG specific attributes
         {{OOO_STRING_SVTOOLS_RTF_GRFALIGNV},     RTF_GRF_ALIGNV},
         {{OOO_STRING_SVTOOLS_RTF_GRFALIGNH},     RTF_GRF_ALIGNH},
         {{OOO_STRING_SVTOOLS_RTF_GRFMIRROR},     RTF_GRF_MIRROR},
@@ -1094,7 +1094,7 @@ static RTF_TokenEntry aRTFTokenTab[] = {
         {{OOO_STRING_SVTOOLS_RTF_PRTDATA},       RTF_SWG_PRTDATA},
         {{OOO_STRING_SVTOOLS_RTF_BKMKKEY},       RTF_BKMK_KEY},
 
-// Attribute fuer die freifliegenden Rahmen
+// Attributes for fly frames
         {{OOO_STRING_SVTOOLS_RTF_FLYPRINT},      RTF_FLYPRINT},
         {{OOO_STRING_SVTOOLS_RTF_FLYOPAQUE},     RTF_FLYOPAQUE},
         {{OOO_STRING_SVTOOLS_RTF_FLYPRTCTD},     RTF_FLYPRTCTD},

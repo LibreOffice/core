@@ -24,19 +24,18 @@
 #include <rtl/textcvt.h>
 #include <rtl/tencinfo.h>
 
-// Struktur, um sich die akt. Daten zumerken
+// structure to store the actuel data
 struct SvParser_Impl
 {
-    OUString          aToken;             // gescanntes Token
-    sal_uLong           nFilePos;           // akt. Position im Stream
-    sal_uLong           nlLineNr;           // akt. Zeilen Nummer
-    sal_uLong           nlLinePos;          // akt. Spalten Nummer
-    long            nTokenValue;        // zusaetzlicher Wert (RTF)
-    sal_Bool            bTokenHasValue;     // indicates whether nTokenValue is valid
-    int             nToken;             // akt. Token
-    sal_Unicode     nNextCh;            // akt. Zeichen
-
-    int             nSaveToken;         // das Token vom Continue
+    OUString        aToken;             // gescanntes Token
+    sal_uLong       nFilePos;           // actual position in stream
+    sal_uLong       nlLineNr;           // actual line number
+    sal_uLong       nlLinePos;          // actual column number
+    long            nTokenValue;        // extra value (RTF)
+    sal_Bool        bTokenHasValue;     // indicates whether nTokenValue is valid
+    int             nToken;             // actual Token
+    sal_Unicode     nNextCh;            // actual character
+    int             nSaveToken;         // the token from Continue
 
     rtl_TextToUnicodeConverter hConv;
     rtl_TextToUnicodeContext   hContext;
@@ -50,7 +49,7 @@ struct SvParser_Impl
 
 
 
-// Konstruktor
+// Construktor
 SvParser::SvParser( SvStream& rIn, sal_uInt8 nStackSize )
     : rInput( rIn )
     , nlLineNr( 1 )
@@ -382,8 +381,8 @@ int SvParser::GetNextToken()
 
     if( !nTokenStackPos )
     {
-        aToken = "";     // Token-Buffer loeschen
-        nTokenValue = -1;   // Kennzeichen fuer kein Value gelesen
+        aToken = "";     // empty token buffer
+        nTokenValue = -1;   // marker for no value read
         bTokenHasValue = false;
 
         nRet = _GetNextToken();
@@ -395,7 +394,7 @@ int SvParser::GetNextToken()
     if( pTokenStackPos == pTokenStack + nTokenStackSize )
         pTokenStackPos = pTokenStack;
 
-    // vom Stack holen ??
+    // pop from stack ??
     if( nTokenStackPos )
     {
         --nTokenStackPos;
@@ -404,7 +403,7 @@ int SvParser::GetNextToken()
         aToken = pTokenStackPos->sToken;
         nRet = pTokenStackPos->nTokenId;
     }
-    // nein, dann das aktuelle auf den Stack
+    // no, now push actual value on stack
     else if( SVPAR_WORKING == eState )
     {
         pTokenStackPos->sToken = aToken;
@@ -413,12 +412,12 @@ int SvParser::GetNextToken()
         pTokenStackPos->nTokenId = nRet;
     }
     else if( SVPAR_ACCEPTED != eState && SVPAR_PENDING != eState )
-        eState = SVPAR_ERROR;       // irgend ein Fehler
+        eState = SVPAR_ERROR;       // an error occured
 
     return nRet;
 }
 
-int SvParser::SkipToken( short nCnt )       // n Tokens zurueck "skippen"
+int SvParser::SkipToken( short nCnt )       // "skip" n Tokens backward
 {
     pTokenStackPos = GetStackPtr( nCnt );
     short nTmp = nTokenStackPos - nCnt;
@@ -428,7 +427,7 @@ int SvParser::SkipToken( short nCnt )       // n Tokens zurueck "skippen"
         nTmp = nTokenStackSize;
     nTokenStackPos = sal_uInt8(nTmp);
 
-    // und die Werte zurueck
+    // restore values
     aToken = pTokenStackPos->sToken;
     nTokenValue = pTokenStackPos->nTokenValue;
     bTokenHasValue = pTokenStackPos->bTokenHasValue;
@@ -462,13 +461,13 @@ SvParser::TokenStackType* SvParser::GetStackPtr( short nCnt )
     return pTokenStack + nAktPos;
 }
 
-// wird fuer jedes Token gerufen, das in CallParser erkannt wird
+// is called for each token which is recognised by CallParser
 void SvParser::NextToken( int )
 {
 }
 
 
-// fuers asynchrone lesen aus dem SvStream
+// to read asynchronous from SvStream
 
 int SvParser::GetSaveToken() const
 {
@@ -477,7 +476,7 @@ int SvParser::GetSaveToken() const
 
 void SvParser::SaveState( int nToken )
 {
-    // aktuellen Status merken
+    // save actual status
     if( !pImplData )
     {
         pImplData = new SvParser_Impl;
@@ -497,7 +496,7 @@ void SvParser::SaveState( int nToken )
 
 void SvParser::RestoreState()
 {
-    // alten Status wieder zurueck setzen
+    // restore old status
     if( pImplData )
     {
         if( ERRCODE_IO_PENDING == rInput.GetError() )
@@ -531,19 +530,19 @@ void SvParser::BuildWhichTbl( std::vector<sal_uInt16> &rWhichMap,
             aNewRange[0] = aNewRange[1] = *pWhichIds;
             sal_Bool bIns = sal_True;
 
-            // Position suchen
+            // search position
             for ( sal_uInt16 nOfs = 0; rWhichMap[nOfs]; nOfs += 2 )
             {
                 if( *pWhichIds < rWhichMap[nOfs] - 1 )
                 {
-                    // neuen Range davor
+                    // new range before
                     rWhichMap.insert( rWhichMap.begin() + nOfs, aNewRange, aNewRange + 2 );
                     bIns = sal_False;
                     break;
                 }
                 else if( *pWhichIds == rWhichMap[nOfs] - 1 )
                 {
-                    // diesen Range nach unten erweitern
+                    // extend range downwards
                     rWhichMap[nOfs] = *pWhichIds;
                     bIns = sal_False;
                     break;
@@ -552,20 +551,20 @@ void SvParser::BuildWhichTbl( std::vector<sal_uInt16> &rWhichMap,
                 {
                     if( rWhichMap[nOfs+2] != 0 && rWhichMap[nOfs+2] == *pWhichIds + 1 )
                     {
-                        // mit dem naechsten Bereich mergen
+                        // merge with next field
                         rWhichMap[nOfs+1] = rWhichMap[nOfs+3];
                         rWhichMap.erase( rWhichMap.begin() + nOfs + 2,
                                 rWhichMap.begin() + nOfs + 4 );
                     }
                     else
-                        // diesen Range nach oben erweitern
+                        // extend range upwards
                         rWhichMap[nOfs+1] = *pWhichIds;
                     bIns = sal_False;
                     break;
                 }
             }
 
-            // einen Range hinten anhaengen
+            // append range
             if( bIns )
             {
                 rWhichMap.insert( rWhichMap.begin() + rWhichMap.size() - 1,
@@ -580,8 +579,8 @@ IMPL_STATIC_LINK( SvParser, NewDataRead, void*, EMPTYARG )
     switch( pThis->eState )
     {
     case SVPAR_PENDING:
-        // Wenn gerade ein File geladen wird duerfen wir nicht weiterlaufen,
-        // sondern muessen den Aufruf ignorieren.
+        // if file is loaded we are not allowed to continue
+        // instead should ignore the call.
         if( pThis->IsDownloadingFile() )
             break;
 
@@ -594,7 +593,7 @@ IMPL_STATIC_LINK( SvParser, NewDataRead, void*, EMPTYARG )
             pThis->rInput.ResetError();
 
         if( SVPAR_PENDING != pThis->eState )
-            pThis->ReleaseRef();                    // ansonsten sind wir fertig!
+            pThis->ReleaseRef();                    // ready otherwise!
         break;
 
     case SVPAR_WAITFORDATA:
@@ -606,7 +605,7 @@ IMPL_STATIC_LINK( SvParser, NewDataRead, void*, EMPTYARG )
         break;
 
     default:
-        pThis->ReleaseRef();                    // ansonsten sind wir fertig!
+        pThis->ReleaseRef();                    // ready otherwise!
         break;
     }
 

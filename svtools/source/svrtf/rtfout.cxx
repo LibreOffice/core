@@ -166,7 +166,7 @@ SvStream& RTFOutFuncs::Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nLe
     if( nLen >= sizeof(aNToABuf) )
         nLen = (sizeof(aNToABuf)-1);
 
-    // Pointer an das Bufferende setzen
+    // set pointer to end of buffer
     sal_Char* pStr = aNToABuf + (sizeof(aNToABuf)-1);
     for( sal_uInt8 n = 0; n < nLen; ++n )
     {
