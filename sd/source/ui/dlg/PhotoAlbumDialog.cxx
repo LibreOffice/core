@@ -481,7 +481,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl)
                 // Store full path, show filename only. Use INetURLObject to display spaces in filename correctly
                 INetURLObject aUrl = INetURLObject(aFilesArr[i]);
                 sal_Int16 nPos = pImagesLst->InsertEntry( aUrl.GetLastName(INetURLObject::DECODE_WITH_CHARSET, RTL_TEXTENCODING_UTF8) );
-                pImagesLst->SetEntryData(nPos, (OUString*) new OUString(aUrl.GetMainURL(INetURLObject::DECODE_WITH_CHARSET, RTL_TEXTENCODING_UTF8)));
+                pImagesLst->SetEntryData(nPos, new OUString(aUrl.GetMainURL(INetURLObject::DECODE_WITH_CHARSET, RTL_TEXTENCODING_UTF8)));
             }
         }
     }
@@ -509,10 +509,10 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, UpHdl)
         pImagesLst->RemoveEntry( sUpperEntry );
 
         pImagesLst->InsertEntry( sActEntry, nActPos - 1 );
-        pImagesLst->SetEntryData( nActPos - 1, (void*) new OUString(sAct));
+        pImagesLst->SetEntryData( nActPos - 1, new OUString(sAct));
 
         pImagesLst->InsertEntry( sUpperEntry, nActPos );
-        pImagesLst->SetEntryData( nActPos, (void*) new OUString(sUpper));
+        pImagesLst->SetEntryData( nActPos, new OUString(sUpper));
 
         pImagesLst->SelectEntryPos(nActPos - 1);
     }
@@ -538,10 +538,10 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, DownHdl)
         pImagesLst->RemoveEntry( sDownEntry );
 
         pImagesLst->InsertEntry( sDownEntry, nActPos );
-        pImagesLst->SetEntryData( nActPos, (void*) new OUString(sDown));
+        pImagesLst->SetEntryData( nActPos, new OUString(sDown));
 
         pImagesLst->InsertEntry( sActEntry, nActPos + 1 );
-        pImagesLst->SetEntryData( nActPos + 1, (void*) new OUString(sAct));
+        pImagesLst->SetEntryData( nActPos + 1, new OUString(sAct));
 
         pImagesLst->SelectEntryPos(nActPos + 1);
 

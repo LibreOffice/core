@@ -1076,7 +1076,7 @@ IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl)
             nIdx = 0;
             OUString* pURL = new OUString( rRow.getToken( 2, '\t', nIdx ) );
             sal_uInt16 nPos = aResultsLB.InsertEntry( aTitle );
-            aResultsLB.SetEntryData( nPos, (void*)(sal_uIntPtr)pURL );
+            aResultsLB.SetEntryData( nPos, pURL );
         }
         LeaveWait();
 
@@ -1279,7 +1279,7 @@ void BookmarksBox_Impl::DoAction( sal_uInt16 nAction )
                     OUString aImageURL = IMAGE_URL;
                     aImageURL += INetURLObject( *pURL ).GetHost();
                     nPos = InsertEntry( aDlg.GetTitle(), SvFileInformationManager::GetImage( INetURLObject(aImageURL), false ) );
-                    SetEntryData( nPos, (void*)(sal_uIntPtr)( new OUString( *pURL ) ) );
+                    SetEntryData( nPos, new OUString( *pURL ) );
                     SelectEntryPos( nPos );
                     delete pURL;
                 }
@@ -1452,7 +1452,7 @@ void BookmarksTabPage_Impl::AddBookmarks( const OUString& rTitle, const OUString
     OUString aImageURL = IMAGE_URL;
     aImageURL += INetURLObject( rURL ).GetHost();
     sal_uInt16 nPos = aBookmarksBox.InsertEntry( rTitle, SvFileInformationManager::GetImage( INetURLObject(aImageURL), false ) );
-    aBookmarksBox.SetEntryData( nPos, (void*)(sal_uIntPtr)( new OUString( rURL ) ) );
+    aBookmarksBox.SetEntryData( nPos, new OUString( rURL ) );
 }
 
 OUString SfxHelpWindow_Impl::buildHelpURL(const OUString& sFactory        ,
@@ -1593,7 +1593,7 @@ void SfxHelpIndexWindow_Impl::Initialize()
         OUString aURL = rRow.getToken( 2, '\t', nIdx );
         OUString* pFactory = new OUString( INetURLObject( aURL ).GetHost() );
         sal_uInt16 nPos = aActiveLB.InsertEntry( aTitle );
-        aActiveLB.SetEntryData( nPos, (void*)(sal_uIntPtr)pFactory );
+        aActiveLB.SetEntryData( nPos, pFactory );
     }
 
     aActiveLB.SetDropDownLineCount( (sal_uInt16)aFactories.size() );

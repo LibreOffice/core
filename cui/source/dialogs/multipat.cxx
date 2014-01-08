@@ -120,7 +120,7 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl)
             else
             {
                 sal_uInt16 nPos = aPathLB.InsertEntry( sInsPath, LISTBOX_APPEND );
-                aPathLB.SetEntryData( nPos, (void*)new OUString( aURL ) );
+                aPathLB.SetEntryData( nPos, new OUString( aURL ) );
             }
         }
         SelectHdl_Impl( NULL );
@@ -296,7 +296,7 @@ void SvxMultiPathDialog::SetPath( const OUString& rPath )
                 nPos = aPathLB.InsertEntry( sSystemPath, LISTBOX_APPEND );
             else
                 nPos = aPathLB.InsertEntry( sPath, LISTBOX_APPEND );
-            aPathLB.SetEntryData( nPos, (void*)new OUString( sPath ) );
+            aPathLB.SetEntryData( nPos, new OUString( sPath ) );
         }
     }
 

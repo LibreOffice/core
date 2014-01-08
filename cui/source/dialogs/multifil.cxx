@@ -117,7 +117,7 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
         else
         {
             sal_uInt16 nPos = aPathLB.InsertEntry( sInsFile, LISTBOX_APPEND );
-            aPathLB.SetEntryData( nPos, (void*) new OUString( sInsFile ) );
+            aPathLB.SetEntryData( nPos, new OUString( sInsFile ) );
         }
 
     } // end of if ( aDlg.Execute() == ERRCODE_NONE )
