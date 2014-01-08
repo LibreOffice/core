@@ -361,8 +361,8 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
 
 SmXMLExport::SmXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
-    sal_uInt16 nExportFlags)
-:   SvXMLExport(util::MeasureUnit::INCH, xContext, XML_MATH,
+    OUString const & implementationName, sal_uInt16 nExportFlags)
+:   SvXMLExport(util::MeasureUnit::INCH, xContext, implementationName, XML_MATH,
                 nExportFlags)
 ,   pTree(0) ,
     bSuccess(sal_False)
@@ -411,7 +411,7 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExport_createInstance(
     // EXPORT_OASIS is required here allthough there is no differrence between
     // OOo and OASIS, because without the flag, a transformation to OOo would
     // be chained in.
-    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), EXPORT_OASIS|EXPORT_ALL );
+    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), SmXMLExport_getImplementationName(), EXPORT_OASIS|EXPORT_ALL );
 }
 
 OUString SAL_CALL SmXMLExportMetaOOO_getImplementationName() throw()
@@ -431,7 +431,7 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportMetaOOO_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), EXPORT_META );
+    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), SmXMLExportMetaOOO_getImplementationName(), EXPORT_META );
 }
 
 OUString SAL_CALL SmXMLExportMeta_getImplementationName() throw()
@@ -451,7 +451,7 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportMeta_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), EXPORT_OASIS|EXPORT_META );
+    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), SmXMLExportMeta_getImplementationName(), EXPORT_OASIS|EXPORT_META );
 }
 
 OUString SAL_CALL SmXMLExportSettingsOOO_getImplementationName() throw()
@@ -471,7 +471,7 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportSettingsOOO_createInstance
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), EXPORT_SETTINGS );
+    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), SmXMLExportSettingsOOO_getImplementationName(), EXPORT_SETTINGS );
 }
 
 OUString SAL_CALL SmXMLExportSettings_getImplementationName() throw()
@@ -491,7 +491,7 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportSettings_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), EXPORT_OASIS|EXPORT_SETTINGS );
+    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), SmXMLExportSettings_getImplementationName(), EXPORT_OASIS|EXPORT_SETTINGS );
 }
 
 OUString SAL_CALL SmXMLExportContent_getImplementationName() throw()
@@ -513,32 +513,7 @@ throw( uno::Exception )
 {
     // The EXPORT_OASIS flag is only required to avoid that a transformer is
     // chanied in
-    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), EXPORT_OASIS|EXPORT_CONTENT );
-}
-
-// XServiceInfo
-// override empty method from parent class
-OUString SAL_CALL SmXMLExport::getImplementationName()
-throw(uno::RuntimeException)
-{
-    OUString aTxt;
-    switch( getExportFlags() )
-    {
-        case EXPORT_META:
-            aTxt = SmXMLExportMeta_getImplementationName();
-            break;
-        case EXPORT_SETTINGS:
-            aTxt = SmXMLExportSettings_getImplementationName();
-            break;
-        case EXPORT_CONTENT:
-            aTxt = SmXMLExportContent_getImplementationName();
-            break;
-        case EXPORT_ALL:
-        default:
-            aTxt = SmXMLExport_getImplementationName();
-            break;
-    }
-    return aTxt;
+    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), SmXMLExportContent_getImplementationName(), EXPORT_OASIS|EXPORT_CONTENT );
 }
 
 sal_uInt32 SmXMLExport::exportDoc(enum XMLTokenEnum eClass)

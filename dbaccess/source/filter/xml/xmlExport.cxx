@@ -27,6 +27,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include "xmlstrings.hrc"
@@ -187,7 +188,7 @@ namespace dbaxml
         }
     };
 ODBExport::ODBExport(const Reference< XComponentContext >& _rxContext,sal_uInt16 nExportFlag)
-: SvXMLExport( util::MeasureUnit::MM_10TH, _rxContext, XML_DATABASE,
+: SvXMLExport( util::MeasureUnit::MM_10TH, _rxContext, getImplementationName_Static(), XML_DATABASE,
         EXPORT_OASIS | nExportFlag)
 ,m_aTypeCollection(_rxContext)
 ,m_bAllreadyFilled(sal_False)
@@ -252,9 +253,19 @@ ODBExport::ODBExport(const Reference< XComponentContext >& _rxContext,sal_uInt16
         OUString(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX ));
 }
 
-IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(ODBExport, "com.sun.star.comp.sdb.DBExportFilter")
-IMPLEMENT_SERVICE_INFO_SUPPORTS(ODBExport)
-IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(ODBExport, "com.sun.star.document.ExportFilter")
+OUString ODBExport::getImplementationName_Static()
+    throw (css::uno::RuntimeException)
+{
+    return OUString("com.sun.star.comp.sdb.DBExportFilter");
+}
+
+css::uno::Sequence<OUString> ODBExport::getSupportedServiceNames_Static()
+    throw (css::uno::RuntimeException)
+{
+    css::uno::Sequence<OUString> s(1);
+    s[0] = "com.sun.star.document.ExportFilter";
+    return s;
+}
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
     SAL_CALL ODBExport::Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB)

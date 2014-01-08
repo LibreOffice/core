@@ -171,6 +171,7 @@ protected:
 public:
     SdXMLExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+        OUString const & implementationName,
         sal_Bool bIsDraw, sal_uInt16 nExportFlags = EXPORT_ALL );
     virtual ~SdXMLExport();
 
@@ -196,9 +197,6 @@ public:
     virtual void exportDataStyles();
     virtual void exportAutoDataStyles();
     virtual OUString getDataStyleName(const sal_Int32 nNumberFormat, sal_Bool bTimeFormat = sal_False ) const;
-
-    // XServiceInfo ( : SvXMLExport )
-    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
 };
 
 #endif  //  _SDXMLEXP_HXX

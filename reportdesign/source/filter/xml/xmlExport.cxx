@@ -26,7 +26,6 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <comphelper/types.hxx>
-#include <cppuhelper/supportsservice.hxx>
 #include "xmlEnums.hxx"
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/numehelp.hxx>
@@ -74,7 +73,7 @@ namespace rptxml
     //---------------------------------------------------------------------
     Reference< XInterface > ORptExportHelper::create(Reference< XComponentContext > const & xContext)
     {
-        return static_cast< XServiceInfo* >(new ORptExport(xContext,EXPORT_SETTINGS ));
+        return static_cast< XServiceInfo* >(new ORptExport(xContext, getImplementationName_Static(), EXPORT_SETTINGS ));
     }
     //---------------------------------------------------------------------
     OUString ORptExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
@@ -91,7 +90,7 @@ namespace rptxml
     //---------------------------------------------------------------------
     Reference< XInterface > ORptContentExportHelper::create(Reference< XComponentContext > const & xContext)
     {
-        return static_cast< XServiceInfo* >(new ORptExport(xContext,EXPORT_CONTENT ));
+        return static_cast< XServiceInfo* >(new ORptExport(xContext, getImplementationName_Static(), EXPORT_CONTENT ));
     }
     //---------------------------------------------------------------------
     OUString ORptContentExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
@@ -109,7 +108,7 @@ namespace rptxml
     //---------------------------------------------------------------------
     Reference< XInterface > ORptStylesExportHelper::create(Reference< XComponentContext > const & xContext)
     {
-        return static_cast< XServiceInfo* >(new ORptExport(xContext,EXPORT_STYLES | EXPORT_MASTERSTYLES | EXPORT_AUTOSTYLES |
+        return static_cast< XServiceInfo* >(new ORptExport(xContext, getImplementationName_Static(), EXPORT_STYLES | EXPORT_MASTERSTYLES | EXPORT_AUTOSTYLES |
             EXPORT_FONTDECLS|EXPORT_OASIS ));
     }
     //---------------------------------------------------------------------
@@ -128,7 +127,7 @@ namespace rptxml
     //---------------------------------------------------------------------
     Reference< XInterface > ORptMetaExportHelper::create(Reference< XComponentContext > const & xContext)
     {
-        return static_cast< XServiceInfo* >(new ORptExport(xContext, EXPORT_META ));
+        return static_cast< XServiceInfo* >(new ORptExport(xContext, getImplementationName_Static(), EXPORT_META ));
     }
     //---------------------------------------------------------------------
     OUString ORptMetaExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
@@ -146,7 +145,7 @@ namespace rptxml
     //---------------------------------------------------------------------
     Reference< XInterface > ODBFullExportHelper::create(Reference< XComponentContext > const & xContext)
     {
-        return static_cast< XServiceInfo* >(new ORptExport(xContext,EXPORT_ALL));
+        return static_cast< XServiceInfo* >(new ORptExport(xContext, getImplementationName_Static(), EXPORT_ALL));
     }
     //---------------------------------------------------------------------
     OUString ODBFullExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
@@ -214,8 +213,8 @@ void lcl_adjustColumnSpanOverRows(ORptExport::TSectionsGrid& _rGrid)
     }
 }
 // -----------------------------------------------------------------------------
-ORptExport::ORptExport(const Reference< XComponentContext >& _rxContext,sal_uInt16 nExportFlag)
-: SvXMLExport( util::MeasureUnit::MM_100TH, _rxContext, XML_REPORT, EXPORT_OASIS)
+ORptExport::ORptExport(const Reference< XComponentContext >& _rxContext, OUString const & implementationName, sal_uInt16 nExportFlag)
+: SvXMLExport( util::MeasureUnit::MM_100TH, _rxContext, implementationName, XML_REPORT, EXPORT_OASIS)
 ,m_bAllreadyFilled(sal_False)
 {
     setExportFlags( EXPORT_OASIS | nExportFlag);
@@ -306,7 +305,7 @@ ORptExport::ORptExport(const Reference< XComponentContext >& _rxContext,sal_uInt
 // -----------------------------------------------------------------------------
 Reference< XInterface > ORptExport::create(Reference< XComponentContext > const & xContext)
 {
-    return *(new ORptExport(xContext));
+    return *(new ORptExport(xContext, getImplementationName_Static(), EXPORT_CONTENT | EXPORT_AUTOSTYLES | EXPORT_FONTDECLS));
 }
 
 // -----------------------------------------------------------------------------
@@ -316,11 +315,6 @@ OUString ORptExport::getImplementationName_Static(  ) throw(uno::RuntimeExceptio
 }
 
 //--------------------------------------------------------------------------
-OUString SAL_CALL ORptExport::getImplementationName(  ) throw(uno::RuntimeException)
-{
-    return getImplementationName_Static();
-}
-//--------------------------------------------------------------------------
 uno::Sequence< OUString > ORptExport::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aServices(1);
@@ -328,16 +322,7 @@ uno::Sequence< OUString > ORptExport::getSupportedServiceNames_Static(  ) throw(
 
     return aServices;
 }
-//--------------------------------------------------------------------------
-uno::Sequence< OUString > SAL_CALL ORptExport::getSupportedServiceNames(  ) throw(uno::RuntimeException)
-{
-    return getSupportedServiceNames_Static();
-}
-//------------------------------------------------------------------------------
-sal_Bool SAL_CALL ORptExport::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
-{
-    return cppu::supportsService(this, ServiceName);
-}
+
 // -----------------------------------------------------------------------------
 void ORptExport::exportFunctions(const Reference<XIndexAccess>& _xFunctions)
 {

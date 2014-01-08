@@ -383,13 +383,6 @@ void ConvDicXMLExport::_ExportContent()
     }
 }
 
-OUString SAL_CALL ConvDicXMLExport::getImplementationName()
-    throw( uno::RuntimeException )
-{
-    return OUString( "com.sun.star.lingu2.ConvDicXMLExport" );
-}
-
-
 void SAL_CALL ConvDicXMLImport::startDocument(void)
     throw( xml::sax::SAXException, uno::RuntimeException )
 {

@@ -80,8 +80,8 @@ using namespace ::xmloff::token;
 
 SwXMLExport::SwXMLExport(
     const uno::Reference< uno::XComponentContext > xContext,
-    sal_uInt16 nExportFlags)
-:   SvXMLExport( util::MeasureUnit::INCH, xContext, XML_TEXT,
+    OUString const & implementationName, sal_uInt16 nExportFlags)
+:   SvXMLExport( util::MeasureUnit::INCH, xContext, implementationName, XML_TEXT,
         nExportFlags ),
     pTableItemMapper( 0 ),
     pTableLines( 0 ),
@@ -534,7 +534,7 @@ Reference< XInterface > SAL_CALL SwXMLExportOOO_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), EXPORT_ALL);
+    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), SwXMLExportOOO_getImplementationName(), EXPORT_ALL);
 }
 
 OUString SAL_CALL SwXMLExportStylesOOO_getImplementationName() throw()
@@ -555,7 +555,7 @@ Reference< XInterface > SAL_CALL SwXMLExportStylesOOO_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr),
+    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), SwXMLExportStylesOOO_getImplementationName(),
         EXPORT_STYLES | EXPORT_MASTERSTYLES | EXPORT_AUTOSTYLES |
         EXPORT_FONTDECLS );
 }
@@ -578,7 +578,7 @@ Reference< XInterface > SAL_CALL SwXMLExportContentOOO_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr),
+    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), SwXMLExportContentOOO_getImplementationName(),
         EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_SCRIPTS |
         EXPORT_FONTDECLS );
 }
@@ -601,7 +601,7 @@ Reference< XInterface > SAL_CALL SwXMLExportMetaOOO_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), EXPORT_META);
+    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), SwXMLExportMetaOOO_getImplementationName(), EXPORT_META);
 }
 
 OUString SAL_CALL SwXMLExportSettingsOOO_getImplementationName() throw()
@@ -622,7 +622,7 @@ Reference< XInterface > SAL_CALL SwXMLExportSettingsOOO_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), EXPORT_SETTINGS);
+    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), SwXMLExportSettingsOOO_getImplementationName(), EXPORT_SETTINGS);
 }
 
 // OASIS
@@ -644,7 +644,7 @@ Reference< XInterface > SAL_CALL SwXMLExport_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), EXPORT_ALL|EXPORT_OASIS);
+    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), SwXMLExport_getImplementationName(), EXPORT_ALL|EXPORT_OASIS);
 }
 
 OUString SAL_CALL SwXMLExportStyles_getImplementationName() throw()
@@ -665,7 +665,7 @@ Reference< XInterface > SAL_CALL SwXMLExportStyles_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr),
+    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), SwXMLExportStyles_getImplementationName(),
         EXPORT_STYLES | EXPORT_MASTERSTYLES | EXPORT_AUTOSTYLES |
         EXPORT_FONTDECLS|EXPORT_OASIS );
 }
@@ -689,7 +689,7 @@ Reference< XInterface > SAL_CALL SwXMLExportContent_createInstance(
     throw( Exception )
 {
     return (cppu::OWeakObject*)new SwXMLExport(
-        comphelper::getComponentContext(rSMgr),
+        comphelper::getComponentContext(rSMgr), SwXMLExportContent_getImplementationName(),
         EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_SCRIPTS |
         EXPORT_FONTDECLS|EXPORT_OASIS );
 }
@@ -712,7 +712,7 @@ Reference< XInterface > SAL_CALL SwXMLExportMeta_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), EXPORT_META|EXPORT_OASIS);
+    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), SwXMLExportMeta_getImplementationName(), EXPORT_META|EXPORT_OASIS);
 }
 
 OUString SAL_CALL SwXMLExportSettings_getImplementationName() throw()
@@ -733,7 +733,7 @@ Reference< XInterface > SAL_CALL SwXMLExportSettings_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), EXPORT_SETTINGS|EXPORT_OASIS);
+    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), SwXMLExportSettings_getImplementationName(), EXPORT_SETTINGS|EXPORT_OASIS);
 }
 
 namespace
@@ -756,31 +756,6 @@ sal_Int64 SAL_CALL SwXMLExport::getSomething( const Sequence< sal_Int8 >& rId )
         return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
     }
     return SvXMLExport::getSomething( rId );
-}
-
-
-// XServiceInfo
-// override empty method from parent class
-OUString SAL_CALL SwXMLExport::getImplementationName()
-    throw(RuntimeException)
-{
-    switch( getExportFlags() )
-    {
-        case EXPORT_ALL:
-            return SwXMLExport_getImplementationName();
-        case (EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS):
-            return SwXMLExportStyles_getImplementationName();
-        case (EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS):
-            return SwXMLExportContent_getImplementationName();
-        case EXPORT_META:
-            return SwXMLExportMeta_getImplementationName();
-        case EXPORT_SETTINGS:
-            return SwXMLExportSettings_getImplementationName();
-        default:
-            // generic name for 'unknown' cases
-            return OUString(
-                "com.sun.star.comp.Writer.SwXMLExport" );
-    }
 }
 
 SwDoc* SwXMLExport::getDoc()

@@ -38,7 +38,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
-#include "apitools.hxx"
 #include "dsntypes.hxx"
 #include <comphelper/stl_types.hxx>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
@@ -175,8 +174,15 @@ protected:
 public:
 
     ODBExport(const Reference< XComponentContext >& _rxContext, sal_uInt16 nExportFlag = EXPORT_CONTENT | EXPORT_AUTOSTYLES | EXPORT_PRETTY | EXPORT_FONTDECLS | EXPORT_SCRIPTS );
-    // XServiceInfo
-    DECLARE_SERVICE_INFO_STATIC( );
+
+    static OUString SAL_CALL getImplementationName_Static()
+        throw (css::uno::RuntimeException);
+
+    static css::uno::Sequence<OUString> SAL_CALL
+    getSupportedServiceNames_Static() throw (css::uno::RuntimeException);
+
+    static css::uno::Reference<css::uno::XInterface> SAL_CALL Create(
+        css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxORB);
 
     UniReference < XMLPropertySetMapper > GetColumnStylesPropertySetMapper() const;
     UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() const;

@@ -119,7 +119,7 @@ protected:
 public:
     SwXMLExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
-        sal_uInt16 nExportFlags = EXPORT_ALL);
+        OUString const & implementationName, sal_uInt16 nExportFlags);
 
     virtual ~SwXMLExport();
 
@@ -143,10 +143,6 @@ public:
     // XUnoTunnel
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
-
-    // XServiceInfo (override parent method)
-    OUString SAL_CALL getImplementationName()
-        throw( ::com::sun::star::uno::RuntimeException );
 
     const SwDoc* getDoc() const;
     SwDoc* getDoc();

@@ -108,6 +108,7 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public ::cppu::WeakImplHelper6<
     SvXMLExport_Impl            *mpImpl;            // dummy
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
+    OUString m_implementationName;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxModel;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >            mxHandler;      // the handlers
@@ -266,17 +267,20 @@ public:
     SvXMLExport(
         sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+        OUString const & implementationName,
         const enum ::xmloff::token::XMLTokenEnum eClass = xmloff::token::XML_TOKEN_INVALID,
         sal_uInt16 nExportFlag = EXPORT_ALL );
 
     SvXMLExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+        OUString const & implementationName,
         const OUString& rFileName,
         sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
 		const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler);
 
     SvXMLExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+        OUString const & implementationName,
         const OUString& rFileName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > &,
@@ -302,9 +306,9 @@ public:
     virtual void SAL_CALL setName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) SAL_FINAL;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException) SAL_FINAL;
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException) SAL_FINAL;
 
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);

@@ -315,7 +315,7 @@ SVGExport::SVGExport(
     const Reference< XDocumentHandler >& rxHandler,
     const Sequence< PropertyValue >& rFilterData )
     : SvXMLExport( util::MeasureUnit::MM_100TH,
-                   xContext,
+                   xContext, "",
                    xmloff::token::XML_TOKEN_INVALID,
                    EXPORT_META|EXPORT_PRETTY )
 {

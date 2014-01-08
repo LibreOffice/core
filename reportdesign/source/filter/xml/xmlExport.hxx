@@ -184,11 +184,7 @@ protected:
     virtual                 ~ORptExport(){};
 public:
 
-    ORptExport(const Reference< XComponentContext >& _rxContext, sal_uInt16 nExportFlag = (EXPORT_CONTENT | EXPORT_AUTOSTYLES | EXPORT_FONTDECLS));
-    // XServiceInfo
-    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    ORptExport(const Reference< XComponentContext >& _rxContext, OUString const & implementationName, sal_uInt16 nExportFlag);
 
     static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
     static OUString getImplementationName_Static(void) throw( ::com::sun::star::uno::RuntimeException );

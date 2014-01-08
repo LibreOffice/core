@@ -54,13 +54,11 @@ public:
     // #110680#
     SchXMLExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+        OUString const & implementationName,
         sal_uInt16 nExportFlags = EXPORT_ALL );
     virtual ~SchXMLExport();
 
     UniReference< XMLPropertySetMapper > GetPropertySetMapper() const;
-
-    // XServiceInfo ( : SvXMLExport )
-    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
 };
 
 #endif // INCLUDED_XMLOFF_INC_SCHXMLEXPORT_HXX

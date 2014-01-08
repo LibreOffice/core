@@ -47,8 +47,9 @@ void Test::setUp()
 {
     BootstrapFixture::setUp();
 
-    pExport = new SchXMLExport(/* util::MeasureUnit::CM, */
-                               comphelper::getProcessComponentContext());
+    pExport = new SchXMLExport(
+        comphelper::getProcessComponentContext(), "SchXMLExport.Compact",
+        EXPORT_ALL);
 }
 
 void Test::tearDown()

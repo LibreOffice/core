@@ -43,8 +43,8 @@ using namespace ::xmloff::token;
 
 XMLMetaExportComponent::XMLMetaExportComponent(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
-        sal_uInt16 nFlags )
-:   SvXMLExport( util::MeasureUnit::CM, xContext, XML_TEXT, nFlags )
+    OUString const & implementationName, sal_uInt16 nFlags )
+:   SvXMLExport( util::MeasureUnit::CM, xContext, implementationName, XML_TEXT, nFlags )
 {
 }
 
@@ -199,7 +199,7 @@ uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportComponent_createInstance
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new XMLMetaExportComponent( comphelper::getComponentContext(rSMgr), EXPORT_META|EXPORT_OASIS);
+    return (cppu::OWeakObject*)new XMLMetaExportComponent( comphelper::getComponentContext(rSMgr), XMLMetaExportComponent_getImplementationName(), EXPORT_META|EXPORT_OASIS);
 }
 
 uno::Sequence< OUString > SAL_CALL XMLMetaExportOOO_getSupportedServiceNames()
@@ -220,7 +220,7 @@ uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportOOO_createInstance(
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new XMLMetaExportComponent( comphelper::getComponentContext(rSMgr), EXPORT_META);
+    return (cppu::OWeakObject*)new XMLMetaExportComponent( comphelper::getComponentContext(rSMgr), XMLMetaExportOOO_getImplementationName(), EXPORT_META);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

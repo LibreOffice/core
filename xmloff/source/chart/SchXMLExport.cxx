@@ -3516,8 +3516,8 @@ void SchXMLExportHelper_Impl::exportText( const OUString& rText, bool bConvertTa
 
 SchXMLExport::SchXMLExport(
     const Reference< uno::XComponentContext >& xContext,
-    sal_uInt16 nExportFlags )
-:   SvXMLExport( util::MeasureUnit::CM, xContext,
+    OUString const & implementationName, sal_uInt16 nExportFlags )
+:   SvXMLExport( util::MeasureUnit::CM, xContext, implementationName,
         ::xmloff::token::XML_CHART, nExportFlags ),
     maAutoStylePool( *this ),
     maExportHelper( *this, maAutoStylePool )
@@ -3715,7 +3715,7 @@ Reference< uno::XInterface > SAL_CALL SchXMLExport_createInstance(const Referenc
 {
     // #110680#
     // #103997# removed some flags from EXPORT_ALL
-    return (cppu::OWeakObject*)new SchXMLExport( comphelper::getComponentContext(rSMgr), EXPORT_ALL ^ ( EXPORT_SETTINGS | EXPORT_MASTERSTYLES | EXPORT_SCRIPTS ));
+    return (cppu::OWeakObject*)new SchXMLExport( comphelper::getComponentContext(rSMgr), SchXMLExport_getImplementationName(), EXPORT_ALL ^ ( EXPORT_SETTINGS | EXPORT_MASTERSTYLES | EXPORT_SCRIPTS ));
 }
 
 // Oasis format
@@ -3735,6 +3735,7 @@ Reference< uno::XInterface > SAL_CALL SchXMLExport_Oasis_createInstance(const Re
 {
     // #103997# removed some flags from EXPORT_ALL
     return (cppu::OWeakObject*)new SchXMLExport( comphelper::getComponentContext(rSMgr),
+        SchXMLExport_Oasis_getImplementationName(),
         (EXPORT_ALL ^ ( EXPORT_SETTINGS | EXPORT_MASTERSTYLES | EXPORT_SCRIPTS )) | EXPORT_OASIS );
 }
 
@@ -3755,7 +3756,7 @@ OUString SAL_CALL SchXMLExport_Styles_getImplementationName() throw()
 Reference< uno::XInterface > SAL_CALL SchXMLExport_Styles_createInstance(const Reference< lang::XMultiServiceFactory >& rSMgr) throw( uno::Exception )
 {
     // #110680#
-    return (cppu::OWeakObject*)new SchXMLExport( comphelper::getComponentContext(rSMgr), EXPORT_STYLES );
+    return (cppu::OWeakObject*)new SchXMLExport( comphelper::getComponentContext(rSMgr), SchXMLExport_Styles_getImplementationName(), EXPORT_STYLES );
 }
 
 // Oasis format
@@ -3773,7 +3774,7 @@ OUString SAL_CALL SchXMLExport_Oasis_Styles_getImplementationName() throw()
 
 Reference< uno::XInterface > SAL_CALL SchXMLExport_Oasis_Styles_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SchXMLExport( comphelper::getComponentContext(rSMgr), EXPORT_STYLES | EXPORT_OASIS );
+    return (cppu::OWeakObject*)new SchXMLExport( comphelper::getComponentContext(rSMgr), SchXMLExport_Oasis_Styles_getImplementationName(), EXPORT_STYLES | EXPORT_OASIS );
 }
 
 Sequence< OUString > SAL_CALL SchXMLExport_Content_getSupportedServiceNames() throw()
@@ -3791,7 +3792,7 @@ OUString SAL_CALL SchXMLExport_Content_getImplementationName() throw()
 Reference< uno::XInterface > SAL_CALL SchXMLExport_Content_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
     // #110680#
-    return (cppu::OWeakObject*)new SchXMLExport( comphelper::getComponentContext(rSMgr), EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_FONTDECLS );
+    return (cppu::OWeakObject*)new SchXMLExport( comphelper::getComponentContext(rSMgr), SchXMLExport_Content_getImplementationName(), EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_FONTDECLS );
 }
 
 // Oasis format
@@ -3809,7 +3810,7 @@ OUString SAL_CALL SchXMLExport_Oasis_Content_getImplementationName() throw()
 
 Reference< uno::XInterface > SAL_CALL SchXMLExport_Oasis_Content_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SchXMLExport( comphelper::getComponentContext(rSMgr), EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_FONTDECLS | EXPORT_OASIS );
+    return (cppu::OWeakObject*)new SchXMLExport( comphelper::getComponentContext(rSMgr), SchXMLExport_Oasis_Content_getImplementationName(), EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_FONTDECLS | EXPORT_OASIS );
 }
 
 // Oasis format
@@ -3827,36 +3828,7 @@ OUString SAL_CALL SchXMLExport_Oasis_Meta_getImplementationName() throw()
 
 Reference< uno::XInterface > SAL_CALL SchXMLExport_Oasis_Meta_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SchXMLExport( comphelper::getComponentContext(rSMgr), EXPORT_META | EXPORT_OASIS  );
-}
-
-// XServiceInfo
-OUString SAL_CALL SchXMLExport::getImplementationName() throw( uno::RuntimeException )
-{
-    switch( getExportFlags())
-    {
-        case EXPORT_ALL:
-            return SchXMLExport_getImplementationName();
-        case EXPORT_STYLES:
-            return SchXMLExport_Styles_getImplementationName();
-        case ( EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_FONTDECLS ):
-            return SchXMLExport_Content_getImplementationName();
-
-        // Oasis format
-        case ( EXPORT_ALL | EXPORT_OASIS ):
-            return SchXMLExport_Oasis_getImplementationName();
-        case ( EXPORT_STYLES | EXPORT_OASIS ):
-            return SchXMLExport_Oasis_Styles_getImplementationName();
-        case ( EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_FONTDECLS | EXPORT_OASIS  ):
-            return SchXMLExport_Oasis_Content_getImplementationName();
-        case ( EXPORT_META | EXPORT_OASIS ):
-            return SchXMLExport_Oasis_Meta_getImplementationName();
-
-        case EXPORT_SETTINGS:
-        // there is no settings component in chart
-        default:
-            return OUString( "SchXMLExport" );
-    }
+    return (cppu::OWeakObject*)new SchXMLExport( comphelper::getComponentContext(rSMgr), SchXMLExport_Oasis_Meta_getImplementationName(), EXPORT_META | EXPORT_OASIS  );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

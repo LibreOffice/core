@@ -32,7 +32,7 @@ SwXMLBlockListExport::SwXMLBlockListExport(
     SwXMLTextBlocks & rBlocks,
     const OUString &rFileName,
     uno::Reference< xml::sax::XDocumentHandler> &rHandler)
-:   SvXMLExport( xContext, rFileName, util::MeasureUnit::CM, rHandler ),
+:   SvXMLExport( xContext, "", rFileName, util::MeasureUnit::CM, rHandler ),
     rBlockList(rBlocks)
 {
     _GetNamespaceMap().Add( GetXMLToken ( XML_NP_BLOCK_LIST ),
@@ -83,7 +83,7 @@ SwXMLTextBlockExport::SwXMLTextBlockExport(
     SwXMLTextBlocks & rBlocks,
     const OUString &rFileName,
     uno::Reference< xml::sax::XDocumentHandler> &rHandler)
-:   SvXMLExport( xContext, rFileName, util::MeasureUnit::CM, rHandler ),
+:   SvXMLExport( xContext, "", rFileName, util::MeasureUnit::CM, rHandler ),
     rBlockList(rBlocks)
 {
     _GetNamespaceMap().Add( GetXMLToken ( XML_NP_BLOCK_LIST ),

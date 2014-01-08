@@ -388,8 +388,9 @@ ImpXMLAutoLayoutInfo::ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterI
 // #110680#
 SdXMLExport::SdXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+    OUString const & implementationName,
     sal_Bool bIsDraw, sal_uInt16 nExportFlags )
-:   SvXMLExport( util::MeasureUnit::CM, xContext,
+:   SvXMLExport( util::MeasureUnit::CM, xContext, implementationName,
         (bIsDraw) ? XML_GRAPHICS : XML_PRESENTATION, nExportFlags ),
     mnDocMasterPageCount(0L),
     mnDocDrawPageCount(0L),
@@ -2743,7 +2744,7 @@ OUString SAL_CALL classname##_getImplementationName() throw()\
 }\
 uno::Reference< uno::XInterface > SAL_CALL classname##_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )\
 {\
-    return (cppu::OWeakObject*)new SdXMLExport( comphelper::getComponentContext(rSMgr), draw, flags );\
+    return (cppu::OWeakObject*)new SdXMLExport( comphelper::getComponentContext(rSMgr), implementationname, draw, flags ); \
 }
 
 SERVICE( XMLImpressExportOasis, "com.sun.star.comp.Impress.XMLOasisExporter", "XMLImpressExportOasis", sal_False, EXPORT_OASIS|EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
@@ -2772,74 +2773,6 @@ SERVICE( XMLDrawSettingsExportOOO, "com.sun.star.comp.Draw.XMLSettingsExporter",
 
 SERVICE( XMLDrawingLayerExport, "com.sun.star.comp.DrawingLayer.XMLExporter", "XMLDrawingLayerExport", sal_True, EXPORT_OASIS|EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
 SERVICE( XMLImpressClipboardExport, "com.sun.star.comp.Impress.XMLClipboardExporter", "XMLImpressClipboardExport", sal_False, EXPORT_OASIS|EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
-
-// XServiceInfo
-OUString SAL_CALL SdXMLExport::getImplementationName() throw( uno::RuntimeException )
-{
-    if( IsDraw())
-    {
-        // Draw
-
-        switch( getExportFlags())
-        {
-            case EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED:
-                return XMLDrawExportOOO_getImplementationName();
-            case EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS:
-                return XMLDrawStylesExportOOO_getImplementationName();
-            case EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS:
-                return XMLDrawContentExportOOO_getImplementationName();
-            case EXPORT_META:
-                return XMLDrawMetaExportOOO_getImplementationName();
-            case EXPORT_SETTINGS:
-                return XMLDrawSettingsExportOOO_getImplementationName();
-
-            case EXPORT_OASIS|EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED:
-                return XMLDrawExportOasis_getImplementationName();
-            case EXPORT_OASIS|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS:
-                return XMLDrawStylesExportOasis_getImplementationName();
-            case EXPORT_OASIS|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS:
-                return XMLDrawContentExportOasis_getImplementationName();
-            case EXPORT_OASIS|EXPORT_META:
-                return XMLDrawMetaExportOasis_getImplementationName();
-            case EXPORT_OASIS|EXPORT_SETTINGS:
-                return XMLDrawSettingsExportOasis_getImplementationName();
-
-            default:
-                return XMLDrawExportOOO_getImplementationName();
-        }
-    }
-    else
-    {
-        // Impress
-
-        switch( getExportFlags())
-        {
-            case EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED:
-                return XMLImpressExportOOO_getImplementationName();
-            case EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS:
-                return XMLImpressStylesExportOOO_getImplementationName();
-            case EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS:
-                return XMLImpressContentExportOOO_getImplementationName();
-            case EXPORT_META:
-                return XMLImpressMetaExportOOO_getImplementationName();
-            case EXPORT_SETTINGS:
-                return XMLImpressSettingsExportOOO_getImplementationName();
-            case EXPORT_OASIS|EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED:
-                return XMLImpressExportOasis_getImplementationName();
-            case EXPORT_OASIS|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS:
-                return XMLImpressStylesExportOasis_getImplementationName();
-            case EXPORT_OASIS|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS:
-                return XMLImpressContentExportOasis_getImplementationName();
-            case EXPORT_OASIS|EXPORT_META:
-                return XMLImpressMetaExportOasis_getImplementationName();
-            case EXPORT_OASIS|EXPORT_SETTINGS:
-                return XMLImpressSettingsExportOasis_getImplementationName();
-
-            default:
-                return XMLImpressExportOOO_getImplementationName();
-        }
-    }
-}
 
 XMLFontAutoStylePool* SdXMLExport::CreateFontAutoStylePool()
 {

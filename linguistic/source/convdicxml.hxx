@@ -47,7 +47,7 @@ public:
     ConvDicXMLExport( ConvDic &rConvDic,
         const OUString &rFileName,
         com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > &rHandler) :
-        SvXMLExport ( comphelper::getProcessComponentContext(), rFileName,
+        SvXMLExport ( comphelper::getProcessComponentContext(), "com.sun.star.lingu2.ConvDicXMLExport", rFileName,
                       ::com::sun::star::util::MeasureUnit::CM, rHandler ),
         rDic        ( rConvDic ),
         bSuccess    ( sal_False )
@@ -56,9 +56,6 @@ public:
     virtual ~ConvDicXMLExport()
     {
     }
-
-    // XServiceInfo (override parent method)
-    OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
 
     // SvXMLExport
     void _ExportAutoStyles()    {}

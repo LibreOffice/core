@@ -71,6 +71,7 @@
 #include "XMLBasicExportFilter.hxx"
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/servicehelper.hxx>
 #include "PropertySetMerger.hxx"
@@ -431,9 +432,10 @@ void SvXMLExport::_DetermineModelType()
 SvXMLExport::SvXMLExport(
     sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
     const uno::Reference< uno::XComponentContext >& xContext,
+    OUString const & implementationName,
     const enum XMLTokenEnum eClass, sal_uInt16 nExportFlags )
 :   mpImpl( new SvXMLExport_Impl ),
-    m_xContext(xContext),
+    m_xContext(xContext), m_implementationName(implementationName),
     mpAttrList( new SvXMLAttributeList ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
     mpUnitConv( new SvXMLUnitConverter( xContext,
@@ -456,11 +458,12 @@ SvXMLExport::SvXMLExport(
 
 SvXMLExport::SvXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+    OUString const & implementationName,
     const OUString &rFileName,
     sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
     const uno::Reference< xml::sax::XDocumentHandler > & rHandler)
 :   mpImpl( new SvXMLExport_Impl ),
-    m_xContext(xContext),
+    m_xContext(xContext), m_implementationName(implementationName),
     mxHandler( rHandler ),
     mxExtHandler( rHandler, uno::UNO_QUERY ),
     mpAttrList( new SvXMLAttributeList ),
@@ -490,12 +493,13 @@ SvXMLExport::SvXMLExport(
 
 SvXMLExport::SvXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+    OUString const & implementationName,
     const OUString &rFileName,
     const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
     const Reference< XModel >& rModel,
     sal_Int16 const eDefaultFieldUnit)
 :   mpImpl( new SvXMLExport_Impl ),
-    m_xContext(xContext),
+    m_xContext(xContext), m_implementationName(implementationName),
     mxModel( rModel ),
     mxHandler( rHandler ),
     mxExtHandler( rHandler, uno::UNO_QUERY ),
@@ -858,15 +862,12 @@ void SAL_CALL SvXMLExport::setName( const OUString& )
 // XServiceInfo
 OUString SAL_CALL SvXMLExport::getImplementationName(  ) throw(uno::RuntimeException)
 {
-    OUString aStr;
-    return aStr;
+    return m_implementationName;
 }
 
 sal_Bool SAL_CALL SvXMLExport::supportsService( const OUString& rServiceName ) throw(uno::RuntimeException)
 {
-    return
-        (rServiceName == "com.sun.star.document.ExportFilter") ||
-        (rServiceName == "com.sun.star.xml.XMLExportFilter");
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SvXMLExport::getSupportedServiceNames(  )
