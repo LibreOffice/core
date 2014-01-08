@@ -12,6 +12,15 @@
 
 #include <boost/noncopyable.hpp>
 
+class ScDocument;
+class SfxObjectShell;
+
+namespace sfx2 {
+
+class LinkManager;
+
+}
+
 namespace sc {
 
 class DataStream;
@@ -22,11 +31,21 @@ class DocumentLinkManager : boost::noncopyable
     DocumentLinkManagerImpl* mpImpl;
 
 public:
-    DocumentLinkManager();
+    DocumentLinkManager( ScDocument& rDoc, SfxObjectShell* pShell );
 
     void setDataStream( DataStream* p );
     DataStream* getDataStream();
     const DataStream* getDataStream() const;
+
+    /**
+     * @param bCreate if true, create a new link manager instance in case one
+     *                does not exist.
+     *
+     * @return link manager instance.
+     */
+    sfx2::LinkManager* getLinkManager( bool bCreate = true );
+
+    const sfx2::LinkManager* getExistingLinkManager() const;
 };
 
 }

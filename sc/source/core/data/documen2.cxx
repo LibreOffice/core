@@ -139,7 +139,6 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         pFormatExchangeList( NULL ),
         pRangeName(NULL),
         pDPCollection( NULL ),
-        pLinkManager( NULL ),
         pFormulaTree( NULL ),
         pEOFormulaTree( NULL ),
         pFormulaTrack( NULL ),
@@ -228,9 +227,6 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
 
     if ( eMode == SCDOCMODE_DOCUMENT )
     {
-        if ( pDocShell )
-            pLinkManager = new sfx2::LinkManager( pDocShell );
-
         xPoolHelper = new ScPoolHelper( this );
 
         pBASM = new ScBroadcastAreaSlotMachine( this );
@@ -257,27 +253,26 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
     aTrackTimer.SetTimeout( 100 );
 }
 
-sfx2::LinkManager*  ScDocument::GetLinkManager()  const
+sfx2::LinkManager* ScDocument::GetLinkManager()
 {
-    if ( bAutoCalc && !pLinkManager && pShell)
-    {
-        pLinkManager = new sfx2::LinkManager( pShell );
-    }
-    return pLinkManager;
+    return GetDocLinkManager().getLinkManager(bAutoCalc);
+}
+
+const sfx2::LinkManager* ScDocument::GetLinkManager() const
+{
+    return GetDocLinkManager().getExistingLinkManager();
 }
 
 sc::DocumentLinkManager& ScDocument::GetDocLinkManager()
 {
     if (!mpDocLinkMgr)
-        mpDocLinkMgr.reset(new sc::DocumentLinkManager);
+        mpDocLinkMgr.reset(new sc::DocumentLinkManager(*this, pShell));
     return *mpDocLinkMgr;
 }
 
 const sc::DocumentLinkManager& ScDocument::GetDocLinkManager() const
 {
-    if (!mpDocLinkMgr)
-        mpDocLinkMgr.reset(new sc::DocumentLinkManager);
-    return *mpDocLinkMgr;
+    return const_cast<ScDocument*>(this)->GetDocLinkManager();
 }
 
 void ScDocument::SetStorageGrammar( formula::FormulaGrammar::Grammar eGram )
@@ -386,19 +381,6 @@ ScDocument::~ScDocument()
         delete pRefreshTimerControl, pRefreshTimerControl = NULL;
     }
 
-    // Links aufrauemen
-
-    if ( GetLinkManager() )
-    {
-        // BaseLinks freigeben
-        ::sfx2::SvLinkSources aTemp(pLinkManager->GetServers());
-        for( ::sfx2::SvLinkSources::const_iterator it = aTemp.begin(); it != aTemp.end(); ++it )
-            (*it)->Closed();
-
-        if ( pLinkManager->GetLinks().size() )
-            pLinkManager->Remove( 0, pLinkManager->GetLinks().size() );
-    }
-
     mxFormulaParserPool.reset();
     // Destroy the external ref mgr instance here because it has a timer
     // which needs to be stopped before the app closes.
@@ -438,7 +420,6 @@ ScDocument::~ScDocument()
     delete pPrinter;
     ImplDeleteOptions();
     delete pConsolidateDlgData;
-    delete pLinkManager;
     delete pClipData;
     delete pDetOpList;                  // loescht auch die Eintraege
     delete pChangeTrack;

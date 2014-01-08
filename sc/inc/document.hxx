@@ -280,7 +280,6 @@ private:
     ScChartCollection*  pChartCollection;
     std::auto_ptr< ScTemporaryChartLock > apTemporaryChartLock;
     ScPatternAttr*      pSelectionAttr;                 // Attributes of a block
-    mutable sfx2::LinkManager*      pLinkManager;
     ScFormulaCell*      pFormulaTree;                   // formula tree (start)
     ScFormulaCell*      pEOFormulaTree;                 // formula tree (end), last cell
     ScFormulaCell*      pFormulaTrack;                  // BroadcastTrack (start)
@@ -469,7 +468,8 @@ public:
     SC_DLLPUBLIC void  InitDrawLayer( SfxObjectShell* pDocShell = NULL );
     rtl::Reference<XColorList>          GetColorList();
 
-    SC_DLLPUBLIC sfx2::LinkManager*     GetLinkManager() const;
+    SC_DLLPUBLIC sfx2::LinkManager* GetLinkManager();
+    SC_DLLPUBLIC const sfx2::LinkManager* GetLinkManager() const;
 
     sc::DocumentLinkManager& GetDocLinkManager();
     const sc::DocumentLinkManager& GetDocLinkManager() const;

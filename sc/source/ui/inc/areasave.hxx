@@ -47,7 +47,7 @@ public:
     bool        IsEqualSource( const ScAreaLink& rCompare ) const;
 
     void        WriteToLink( ScAreaLink& rLink ) const;
-    void        InsertNewLink( ScDocument* pDoc ) const;
+    void InsertNewLink( ScDocument* pDoc );
 };
 
 
@@ -62,11 +62,12 @@ public:
 
 
     bool        IsEqual( const ScDocument* pDoc ) const;
-    void        Restore( ScDocument* pDoc ) const;
+    void Restore( ScDocument* pDoc );
 
     // returns NULL if empty
     static ScAreaLinkSaveCollection* CreateFromDoc( const ScDocument* pDoc );
 
+    ScAreaLinkSaver* operator[](size_t nIndex);
     const ScAreaLinkSaver* operator[](size_t nIndex) const;
     size_t size() const;
     void push_back(ScAreaLinkSaver* p);

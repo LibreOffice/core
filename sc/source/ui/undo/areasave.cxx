@@ -22,6 +22,7 @@
 #include "areasave.hxx"
 #include "arealink.hxx"
 #include "document.hxx"
+#include <documentlinkmgr.hxx>
 
 // -----------------------------------------------------------------------
 
@@ -67,7 +68,7 @@ void ScAreaLinkSaver::WriteToLink( ScAreaLink& rLink ) const
     rLink.SetDestArea( aDestArea );
 }
 
-void ScAreaLinkSaver::InsertNewLink( ScDocument* pDoc ) const
+void ScAreaLinkSaver::InsertNewLink( ScDocument* pDoc )
 {
     // (see ScUndoRemoveAreaLink::Undo)
 
@@ -99,7 +100,7 @@ bool ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
     // IsEqual can be checked in sequence.
     // Neither ref-update nor removing links will change the order.
 
-    sfx2::LinkManager* pLinkManager = const_cast<ScDocument*>(pDoc)->GetLinkManager();
+    const sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
     if (pLinkManager)
     {
         size_t nPos = 0;
@@ -138,21 +139,21 @@ static ScAreaLink* lcl_FindLink( const ::sfx2::SvBaseLinks& rLinks, const ScArea
     return NULL;    // not found
 }
 
-void ScAreaLinkSaveCollection::Restore( ScDocument* pDoc ) const
+void ScAreaLinkSaveCollection::Restore( ScDocument* pDoc )
 {
     // The save collection may contain additional entries that are not in the document.
     // They must be inserted again.
     // Entries from the save collection must be searched via source data, as the order
     // of links changes if deleted entries are re-added to the link manager (always at the end).
 
-    sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
+    sfx2::LinkManager* pLinkManager = pDoc->GetDocLinkManager().getLinkManager(false);
     if (pLinkManager)
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         size_t nSaveCount = size();
         for (size_t nPos=0; nPos<nSaveCount; ++nPos)
         {
-            const ScAreaLinkSaver* pSaver = (*this)[nPos];
+            ScAreaLinkSaver* pSaver = (*this)[nPos];
             ScAreaLink* pLink = lcl_FindLink( rLinks, *pSaver );
             if ( pLink )
                 pSaver->WriteToLink( *pLink );          // restore output position
@@ -186,6 +187,11 @@ ScAreaLinkSaveCollection* ScAreaLinkSaveCollection::CreateFromDoc( const ScDocum
     }
 
     return pColl;
+}
+
+ScAreaLinkSaver* ScAreaLinkSaveCollection::operator [](size_t nIndex)
+{
+    return &maData[nIndex];
 }
 
 const ScAreaLinkSaver* ScAreaLinkSaveCollection::operator [](size_t nIndex) const

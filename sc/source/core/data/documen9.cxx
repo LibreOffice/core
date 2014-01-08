@@ -54,6 +54,7 @@
 #include "postit.hxx"
 #include "charthelper.hxx"
 #include "interpre.hxx"
+#include <documentlinkmgr.hxx>
 
 using namespace ::com::sun::star;
 #include <stdio.h>
@@ -130,8 +131,10 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
         if ( pShell && !pShell->IsLoading() )       // don't call GetTitle while loading
             aName = pShell->GetTitle();
         pDrawLayer = new ScDrawLayer( this, aName );
-        if (GetLinkManager())
-            pDrawLayer->SetLinkManager( pLinkManager );
+
+        sfx2::LinkManager* pMgr = GetDocLinkManager().getLinkManager(bAutoCalc);
+        if (pMgr)
+            pDrawLayer->SetLinkManager(pMgr);
 
         //  Drawing pages are accessed by table number, so they must also be present
         //  for preceding table numbers, even if the tables aren't allocated

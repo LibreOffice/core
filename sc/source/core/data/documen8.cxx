@@ -86,6 +86,7 @@
 #include "columniterator.hxx"
 #include "globalnames.hxx"
 #include "stringutil.hxx"
+#include <documentlinkmgr.hxx>
 
 #include <memory>
 #include <boost/scoped_ptr.hpp>
@@ -750,9 +751,10 @@ bool ScDocument::IdleCheckLinks()           // true = demnaechst wieder versuche
 {
     bool bAnyLeft = false;
 
-    if (GetLinkManager())
+    sfx2::LinkManager* pMgr = GetLinkManager();
+    if (pMgr)
     {
-        const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+        const ::sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
         sal_uInt16 nCount = rLinks.size();
         for (sal_uInt16 i=0; i<nCount; i++)
         {
@@ -814,29 +816,32 @@ void ScDocument::SaveDdeLinks(SvStream& rStream) const
 
 void ScDocument::LoadDdeLinks(SvStream& rStream)
 {
+    sfx2::LinkManager* pMgr = GetDocLinkManager().getLinkManager(bAutoCalc);
+    if (!pMgr)
+        return;
+
     ScMultipleReadHeader aHdr( rStream );
 
-    GetLinkManager();
     sal_uInt16 nCount;
     rStream >> nCount;
     for (sal_uInt16 i=0; i<nCount; i++)
     {
         ScDdeLink* pLink = new ScDdeLink( this, rStream, aHdr );
-        pLinkManager->InsertDDELink( pLink,
-                            pLink->GetAppl(), pLink->GetTopic(), pLink->GetItem() );
+        pMgr->InsertDDELink(pLink, pLink->GetAppl(), pLink->GetTopic(), pLink->GetItem());
     }
 }
 
 bool ScDocument::HasDdeLinks() const
 {
-    if (GetLinkManager())           // Clipboard z.B. hat keinen LinkManager
-    {
-        const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.size();
-        for (sal_uInt16 i=0; i<nCount; i++)
-            if ((*rLinks[i])->ISA(ScDdeLink))
-                return true;
-    }
+    const sfx2::LinkManager* pMgr = GetDocLinkManager().getExistingLinkManager();
+    if (!pMgr)
+        return false;
+
+    const ::sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
+    sal_uInt16 nCount = rLinks.size();
+    for (sal_uInt16 i=0; i<nCount; i++)
+        if ((*rLinks[i])->ISA(ScDdeLink))
+            return true;
 
     return false;
 }
@@ -856,10 +861,11 @@ bool ScDocument::IsInLinkUpdate() const
 
 void ScDocument::UpdateExternalRefLinks(Window* pWin)
 {
-    if (!GetLinkManager())
+    sfx2::LinkManager* pMgr = GetDocLinkManager().getLinkManager(bAutoCalc);
+    if (!pMgr)
         return;
 
-    const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+    const ::sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
     sal_uInt16 nCount = rLinks.size();
 
     bool bAny = false;
@@ -876,7 +882,7 @@ void ScDocument::UpdateExternalRefLinks(Window* pWin)
                 // Update failed.  Notify the user.
 
                 OUString aFile;
-                pLinkManager->GetDisplayNames(pRefLink, NULL, &aFile, NULL, NULL);
+                pMgr->GetDisplayNames(pRefLink, NULL, &aFile, NULL, NULL);
                 // Decode encoded URL for display friendliness.
                 INetURLObject aUrl(aFile,INetURLObject::WAS_ENCODED);
                 aFile = aUrl.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
@@ -911,56 +917,57 @@ void ScDocument::UpdateExternalRefLinks(Window* pWin)
 
 void ScDocument::UpdateDdeLinks(Window* pWin)
 {
-    if (GetLinkManager())
+    sfx2::LinkManager* pMgr = GetDocLinkManager().getLinkManager(bAutoCalc);
+    if (!pMgr)
+        return;
+
+    const ::sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
+    sal_uInt16 nCount = rLinks.size();
+    sal_uInt16 i;
+
+    //  falls das Updaten laenger dauert, erstmal alle Werte
+    //  zuruecksetzen, damit nichts altes (falsches) stehen bleibt
+    bool bAny = false;
+    for (i=0; i<nCount; i++)
     {
-        const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.size();
-        sal_uInt16 i;
-
-        //  falls das Updaten laenger dauert, erstmal alle Werte
-        //  zuruecksetzen, damit nichts altes (falsches) stehen bleibt
-        bool bAny = false;
-        for (i=0; i<nCount; i++)
+        ::sfx2::SvBaseLink* pBase = *rLinks[i];
+        ScDdeLink* pDdeLink = dynamic_cast<ScDdeLink*>(pBase);
+        if (pDdeLink)
         {
-            ::sfx2::SvBaseLink* pBase = *rLinks[i];
-            ScDdeLink* pDdeLink = dynamic_cast<ScDdeLink*>(pBase);
-            if (pDdeLink)
+            if (pDdeLink->Update())
+                bAny = true;
+            else
             {
-                if (pDdeLink->Update())
-                    bAny = true;
-                else
-                {
-                    // Update failed.  Notify the user.
-                    OUString aFile = pDdeLink->GetTopic();
-                    OUString aElem = pDdeLink->GetItem();
-                    OUString aType = pDdeLink->GetAppl();
+                // Update failed.  Notify the user.
+                OUString aFile = pDdeLink->GetTopic();
+                OUString aElem = pDdeLink->GetItem();
+                OUString aType = pDdeLink->GetAppl();
 
-                    OUStringBuffer aBuf;
-                    aBuf.append(OUString(ScResId(SCSTR_DDEDOC_NOT_LOADED)));
-                    aBuf.appendAscii("\n\n");
-                    aBuf.appendAscii("Source : ");
-                    aBuf.append(aFile);
-                    aBuf.appendAscii("\nElement : ");
-                    aBuf.append(aElem);
-                    aBuf.appendAscii("\nType : ");
-                    aBuf.append(aType);
-                    ErrorBox aBox(pWin, WB_OK, aBuf.makeStringAndClear());
-                    aBox.Execute();
-                }
+                OUStringBuffer aBuf;
+                aBuf.append(OUString(ScResId(SCSTR_DDEDOC_NOT_LOADED)));
+                aBuf.appendAscii("\n\n");
+                aBuf.appendAscii("Source : ");
+                aBuf.append(aFile);
+                aBuf.appendAscii("\nElement : ");
+                aBuf.append(aElem);
+                aBuf.appendAscii("\nType : ");
+                aBuf.append(aType);
+                ErrorBox aBox(pWin, WB_OK, aBuf.makeStringAndClear());
+                aBox.Execute();
             }
         }
-        if (bAny)
-        {
-            //  Formeln berechnen und painten wie im TrackTimeHdl
-            TrackFormulas();
-            pShell->Broadcast( SfxSimpleHint( FID_DATACHANGED ) );
-
-            //  wenn FID_DATACHANGED irgendwann mal asynchron werden sollte
-            //  (z.B. mit Invalidate am Window), muss hier ein Update erzwungen werden.
-        }
-
-        pLinkManager->CloseCachedComps();
     }
+    if (bAny)
+    {
+        //  Formeln berechnen und painten wie im TrackTimeHdl
+        TrackFormulas();
+        pShell->Broadcast( SfxSimpleHint( FID_DATACHANGED ) );
+
+        //  wenn FID_DATACHANGED irgendwann mal asynchron werden sollte
+        //  (z.B. mit Invalidate am Window), muss hier ein Update erzwungen werden.
+    }
+
+    pMgr->CloseCachedComps();
 }
 
 bool ScDocument::UpdateDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem )
@@ -969,43 +976,47 @@ bool ScDocument::UpdateDdeLink( const OUString& rAppl, const OUString& rTopic, c
     //  ResetValue() fuer einzelnen Link nicht noetig
     //! wenn's mal alles asynchron wird, aber auch hier
 
+    sfx2::LinkManager* pMgr = GetDocLinkManager().getLinkManager(bAutoCalc);
+    if (!pMgr)
+        return false;
+
     bool bFound = false;
-    if (GetLinkManager())
+
+    const ::sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
+    sal_uInt16 nCount = rLinks.size();
+    for (sal_uInt16 i=0; i<nCount; i++)
     {
-        const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.size();
-        for (sal_uInt16 i=0; i<nCount; i++)
+        ::sfx2::SvBaseLink* pBase = *rLinks[i];
+        if (pBase->ISA(ScDdeLink))
         {
-            ::sfx2::SvBaseLink* pBase = *rLinks[i];
-            if (pBase->ISA(ScDdeLink))
+            ScDdeLink* pDdeLink = (ScDdeLink*)pBase;
+            if ( OUString(pDdeLink->GetAppl()) == rAppl &&
+                 OUString(pDdeLink->GetTopic()) == rTopic &&
+                 OUString(pDdeLink->GetItem()) == rItem )
             {
-                ScDdeLink* pDdeLink = (ScDdeLink*)pBase;
-                if ( OUString(pDdeLink->GetAppl()) == rAppl &&
-                     OUString(pDdeLink->GetTopic()) == rTopic &&
-                     OUString(pDdeLink->GetItem()) == rItem )
-                {
-                    pDdeLink->TryUpdate();
-                    bFound = true;          // koennen theoretisch mehrere sein (Mode), darum weitersuchen
-                }
+                pDdeLink->TryUpdate();
+                bFound = true;          // koennen theoretisch mehrere sein (Mode), darum weitersuchen
             }
         }
-        pLinkManager->CloseCachedComps();
     }
+    pMgr->CloseCachedComps();
+
     return bFound;
 }
 
 void ScDocument::DisconnectDdeLinks()
 {
-    if (GetLinkManager())
+    sfx2::LinkManager* pMgr = GetDocLinkManager().getLinkManager(bAutoCalc);
+    if (!pMgr)
+        return;
+
+    const ::sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
+    sal_uInt16 nCount = rLinks.size();
+    for (sal_uInt16 i=0; i<nCount; i++)
     {
-        const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.size();
-        for (sal_uInt16 i=0; i<nCount; i++)
-        {
-            ::sfx2::SvBaseLink* pBase = *rLinks[i];
-            if (pBase->ISA(ScDdeLink))
-                pBase->Disconnect();            // bleibt im LinkManager eingetragen
-        }
+        ::sfx2::SvBaseLink* pBase = *rLinks[i];
+        if (pBase->ISA(ScDdeLink))
+            pBase->Disconnect();            // bleibt im LinkManager eingetragen
     }
 }
 
@@ -1018,31 +1029,42 @@ void ScDocument::CopyDdeLinks( ScDocument* pDestDoc ) const
             pClipData->Seek(0);
             pDestDoc->LoadDdeLinks(*pClipData);
         }
-    }
-    else if (GetLinkManager())              // Links direkt kopieren
-    {
-        const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        size_t nCount = rLinks.size();
-        for (size_t i=0; i<nCount; i++)
-        {
-            ::sfx2::SvBaseLink* pBase = *rLinks[i];
-            if (pBase->ISA(ScDdeLink))
-            {
-                ScDdeLink* pNew = new ScDdeLink( pDestDoc, *(ScDdeLink*)pBase );
 
-                pDestDoc->pLinkManager->InsertDDELink( pNew,
-                                pNew->GetAppl(), pNew->GetTopic(), pNew->GetItem() );
-            }
+        return;
+    }
+
+    const sfx2::LinkManager* pMgr = GetDocLinkManager().getExistingLinkManager();
+    if (!pMgr)
+        return;
+
+    sfx2::LinkManager* pDestMgr = pDestDoc->GetDocLinkManager().getLinkManager(pDestDoc->bAutoCalc);
+    if (!pDestMgr)
+        return;
+
+    const sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
+    for (size_t i = 0, n = rLinks.size(); i < n; ++i)
+    {
+        const sfx2::SvBaseLink* pBase = *rLinks[i];
+        if (pBase->ISA(ScDdeLink))
+        {
+            const ScDdeLink* p = static_cast<const ScDdeLink*>(pBase);
+            ScDdeLink* pNew = new ScDdeLink(pDestDoc, *p);
+            pDestMgr->InsertDDELink(
+                pNew, pNew->GetAppl(), pNew->GetTopic(), pNew->GetItem());
         }
     }
 }
 
 size_t ScDocument::GetDdeLinkCount() const
 {
+    const sfx2::LinkManager* pMgr = GetDocLinkManager().getExistingLinkManager();
+    if (!pMgr)
+        return 0;
+
     size_t nDdeCount = 0;
     if (GetLinkManager())
     {
-        const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+        const ::sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
         size_t nCount = rLinks.size();
         for (size_t i=0; i<nCount; i++)
             if ((*rLinks[i])->ISA(ScDdeLink))
@@ -1155,14 +1177,19 @@ bool ScDocument::CreateDdeLink( const OUString& rAppl, const OUString& rTopic, c
         on existing and new links. */
     //! store DDE links additionally at document (for efficiency)?
     OSL_ENSURE( nMode != SC_DDE_IGNOREMODE, "ScDocument::CreateDdeLink - SC_DDE_IGNOREMODE not allowed here" );
-    if( GetLinkManager() && (nMode != SC_DDE_IGNOREMODE) )
+
+    sfx2::LinkManager* pMgr = GetDocLinkManager().getLinkManager(bAutoCalc);
+    if (!pMgr)
+        return false;
+
+    if (nMode != SC_DDE_IGNOREMODE)
     {
-        ScDdeLink* pDdeLink = lclGetDdeLink( pLinkManager, rAppl, rTopic, rItem, nMode );
+        ScDdeLink* pDdeLink = lclGetDdeLink(pMgr, rAppl, rTopic, rItem, nMode);
         if( !pDdeLink )
         {
             // create a new DDE link, but without TryUpdate
             pDdeLink = new ScDdeLink( this, rAppl, rTopic, rItem, nMode );
-            pLinkManager->InsertDDELink( pDdeLink, rAppl, rTopic, rItem );
+            pMgr->InsertDDELink(pDdeLink, rAppl, rTopic, rItem);
         }
 
         // insert link results
@@ -1188,117 +1215,121 @@ bool ScDocument::SetDdeLinkResultMatrix( size_t nDdePos, ScMatrixRef pResults )
 
 bool ScDocument::HasAreaLinks() const
 {
-    if (GetLinkManager())           // Clipboard z.B. hat keinen LinkManager
-    {
-        const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.size();
-        for (sal_uInt16 i=0; i<nCount; i++)
-            if ((*rLinks[i])->ISA(ScAreaLink))
-                return true;
-    }
+    const sfx2::LinkManager* pMgr = GetDocLinkManager().getExistingLinkManager();
+    if (!pMgr)
+        return false;
+
+    const ::sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
+    sal_uInt16 nCount = rLinks.size();
+    for (sal_uInt16 i=0; i<nCount; i++)
+        if ((*rLinks[i])->ISA(ScAreaLink))
+            return true;
 
     return false;
 }
 
 void ScDocument::UpdateAreaLinks()
 {
-    if (GetLinkManager())
+    sfx2::LinkManager* pMgr = GetDocLinkManager().getLinkManager(false);
+    if (!pMgr)
+        return;
+
+    const ::sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
+    for (sal_uInt16 i=0; i<rLinks.size(); i++)
     {
-        const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        for (sal_uInt16 i=0; i<rLinks.size(); i++)
-        {
-            ::sfx2::SvBaseLink* pBase = *rLinks[i];
-            if (pBase->ISA(ScAreaLink))
-                pBase->Update();
-        }
+        ::sfx2::SvBaseLink* pBase = *rLinks[i];
+        if (pBase->ISA(ScAreaLink))
+            pBase->Update();
     }
 }
 
 void ScDocument::DeleteAreaLinksOnTab( SCTAB nTab )
 {
-    if (GetLinkManager())
+    sfx2::LinkManager* pMgr = GetDocLinkManager().getLinkManager(false);
+    if (!pMgr)
+        return;
+
+    const ::sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
+    sal_uInt16 nPos = 0;
+    while ( nPos < rLinks.size() )
     {
-        const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nPos = 0;
-        while ( nPos < rLinks.size() )
-        {
-            const ::sfx2::SvBaseLink* pBase = *rLinks[nPos];
-            if ( pBase->ISA(ScAreaLink) &&
-                 static_cast<const ScAreaLink*>(pBase)->GetDestArea().aStart.Tab() == nTab )
-                pLinkManager->Remove( nPos );
-            else
-                ++nPos;
-        }
+        const ::sfx2::SvBaseLink* pBase = *rLinks[nPos];
+        if ( pBase->ISA(ScAreaLink) &&
+             static_cast<const ScAreaLink*>(pBase)->GetDestArea().aStart.Tab() == nTab )
+            pMgr->Remove(nPos);
+        else
+            ++nPos;
     }
 }
 
 void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
                              const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
-    if (GetLinkManager())
+    sfx2::LinkManager* pMgr = GetDocLinkManager().getLinkManager(false);
+    if (!pMgr)
+        return;
+
+    bool bAnyUpdate = false;
+
+    const ::sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
+    sal_uInt16 nCount = rLinks.size();
+    for (sal_uInt16 i=0; i<nCount; i++)
     {
-        bool bAnyUpdate = false;
-
-        const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.size();
-        for (sal_uInt16 i=0; i<nCount; i++)
+        ::sfx2::SvBaseLink* pBase = *rLinks[i];
+        if (pBase->ISA(ScAreaLink))
         {
-            ::sfx2::SvBaseLink* pBase = *rLinks[i];
-            if (pBase->ISA(ScAreaLink))
+            ScAreaLink* pLink = (ScAreaLink*) pBase;
+            ScRange aOutRange = pLink->GetDestArea();
+
+            SCCOL nCol1 = aOutRange.aStart.Col();
+            SCROW nRow1 = aOutRange.aStart.Row();
+            SCTAB nTab1 = aOutRange.aStart.Tab();
+            SCCOL nCol2 = aOutRange.aEnd.Col();
+            SCROW nRow2 = aOutRange.aEnd.Row();
+            SCTAB nTab2 = aOutRange.aEnd.Tab();
+
+            ScRefUpdateRes eRes =
+                ScRefUpdate::Update( this, eUpdateRefMode,
+                    rRange.aStart.Col(), rRange.aStart.Row(), rRange.aStart.Tab(),
+                    rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aEnd.Tab(), nDx, nDy, nDz,
+                    nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+            if ( eRes != UR_NOTHING )
             {
-                ScAreaLink* pLink = (ScAreaLink*) pBase;
-                ScRange aOutRange = pLink->GetDestArea();
-
-                SCCOL nCol1 = aOutRange.aStart.Col();
-                SCROW nRow1 = aOutRange.aStart.Row();
-                SCTAB nTab1 = aOutRange.aStart.Tab();
-                SCCOL nCol2 = aOutRange.aEnd.Col();
-                SCROW nRow2 = aOutRange.aEnd.Row();
-                SCTAB nTab2 = aOutRange.aEnd.Tab();
-
-                ScRefUpdateRes eRes =
-                    ScRefUpdate::Update( this, eUpdateRefMode,
-                        rRange.aStart.Col(), rRange.aStart.Row(), rRange.aStart.Tab(),
-                        rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aEnd.Tab(), nDx, nDy, nDz,
-                        nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-                if ( eRes != UR_NOTHING )
-                {
-                    pLink->SetDestArea( ScRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 ) );
-                    bAnyUpdate = true;
-                }
+                pLink->SetDestArea( ScRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 ) );
+                bAnyUpdate = true;
             }
         }
+    }
 
-        if ( bAnyUpdate )
+    if ( bAnyUpdate )
+    {
+        // #i52120# Look for duplicates (after updating all positions).
+        // If several links start at the same cell, the one with the lower index is removed
+        // (file format specifies only one link definition for a cell).
+
+        sal_uInt16 nFirstIndex = 0;
+        while ( nFirstIndex < nCount )
         {
-            // #i52120# Look for duplicates (after updating all positions).
-            // If several links start at the same cell, the one with the lower index is removed
-            // (file format specifies only one link definition for a cell).
-
-            sal_uInt16 nFirstIndex = 0;
-            while ( nFirstIndex < nCount )
+            bool bFound = false;
+            ::sfx2::SvBaseLink* pFirst = *rLinks[nFirstIndex];
+            if ( pFirst->ISA(ScAreaLink) )
             {
-                bool bFound = false;
-                ::sfx2::SvBaseLink* pFirst = *rLinks[nFirstIndex];
-                if ( pFirst->ISA(ScAreaLink) )
+                ScAddress aFirstPos = static_cast<ScAreaLink*>(pFirst)->GetDestArea().aStart;
+                for ( sal_uInt16 nSecondIndex = nFirstIndex + 1; nSecondIndex < nCount && !bFound; ++nSecondIndex )
                 {
-                    ScAddress aFirstPos = static_cast<ScAreaLink*>(pFirst)->GetDestArea().aStart;
-                    for ( sal_uInt16 nSecondIndex = nFirstIndex + 1; nSecondIndex < nCount && !bFound; ++nSecondIndex )
+                    ::sfx2::SvBaseLink* pSecond = *rLinks[nSecondIndex];
+                    if ( pSecond->ISA(ScAreaLink) &&
+                         static_cast<ScAreaLink*>(pSecond)->GetDestArea().aStart == aFirstPos )
                     {
-                        ::sfx2::SvBaseLink* pSecond = *rLinks[nSecondIndex];
-                        if ( pSecond->ISA(ScAreaLink) &&
-                             static_cast<ScAreaLink*>(pSecond)->GetDestArea().aStart == aFirstPos )
-                        {
-                            // remove the first link, exit the inner loop, don't increment nFirstIndex
-                            pLinkManager->Remove( pFirst );
-                            nCount = rLinks.size();
-                            bFound = true;
-                        }
+                        // remove the first link, exit the inner loop, don't increment nFirstIndex
+                        pMgr->Remove(pFirst);
+                        nCount = rLinks.size();
+                        bFound = true;
                     }
                 }
-                if (!bFound)
-                    ++nFirstIndex;
             }
+            if (!bFound)
+                ++nFirstIndex;
         }
     }
 }
