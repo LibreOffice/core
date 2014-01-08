@@ -23,6 +23,7 @@ class DocumentLinkManager : boost::noncopyable
 
 public:
     DocumentLinkManager();
+    ~DocumentLinkManager();
 
     void setDataStream( DataStream* p );
     DataStream* getDataStream();
