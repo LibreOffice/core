@@ -16,6 +16,7 @@
 #include "compiler.hxx"
 #include "interpre.hxx"
 #include "scmatrix.hxx"
+#include "globalnames.hxx"
 
 #include "formula/vectortoken.hxx"
 #include "rtl/bootstrap.hxx"
@@ -593,7 +594,7 @@ void FormulaGroupInterpreter::fillOpenCLInfo(std::vector<OpenclPlatformInfo>& rP
 bool FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool bAutoSelect, bool bForceEvaluation)
 {
     bool bOpenCLEnabled = ScInterpreter::GetGlobalConfig().mbOpenCLEnabled;
-    if(!bOpenCLEnabled || rDeviceId == "Software")
+    if (!bOpenCLEnabled || rDeviceId == OPENCL_SOFTWARE_DEVICE_CONFIG_NAME)
     {
         if(msInstance)
         {
