@@ -34,7 +34,8 @@
       constructor="com_sun_star_comp_svtools_uno_Wizard_get_implementation">
     <service name="com.sun.star.ui.dialogs.Wizard"/>
   </implementation>
-  <implementation name="com.sun.star.graphic.GraphicObject">
+  <implementation name="com.sun.star.graphic.GraphicObject"
+      constructor="com_sun_star_graphic_GraphicObject_get_implementation">
     <service name="com.sun.star.graphic.GraphicObject"/>
   </implementation>
   <implementation name="com.sun.star.svtools.SvFilterOptionsDialog"

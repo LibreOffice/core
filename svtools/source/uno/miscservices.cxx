@@ -37,13 +37,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::lang;
 
-
-namespace sdecl = comphelper::service_decl;
-
-namespace unographic {
-extern sdecl::ServiceDecl const serviceDecl;
-}
-
 // for CreateInstance functions implemented elsewhere, while the function is within a namespace
 #define DECLARE_CREATEINSTANCE_NAMESPACE( nmspe, ImplName ) \
     namespace nmspe {   \
@@ -56,7 +49,7 @@ extern "C"
 {
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL svt_component_getFactory (
-    const sal_Char * pImplementationName, void * _pServiceManager, void * pRegistryKey)
+    const sal_Char * pImplementationName, void * _pServiceManager, void * )
 {
     void * pResult = 0;
     if ( _pServiceManager )
@@ -75,14 +68,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svt_component_getFactory (
                 OUString::createFromAscii( pImplementationName ),
                 svt::OAddressBookSourceDialogUno_CreateInstance,
                 aServiceNames);
-        }
-        else
-        {
-            pResult = comphelper::service_decl::component_getFactoryHelper(
-                pImplementationName,
-                static_cast<css::lang::XMultiServiceFactory *>(_pServiceManager),
-                static_cast<css::registry::XRegistryKey *>(pRegistryKey),
-                unographic::serviceDecl );
         }
 
         if ( xFactory.is() )

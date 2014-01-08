@@ -17,18 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <comphelper/servicedecl.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/graphic/XGraphicObject.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <svtools/grfmgr.hxx>
+#include <rtl/ref.hxx>
 
 using namespace com::sun::star;
 
-namespace unographic {
+namespace {
 
-typedef ::cppu::WeakImplHelper1< graphic::XGraphicObject > GObjectAccess_BASE;
+typedef ::cppu::WeakImplHelper2< graphic::XGraphicObject, css::lang::XServiceInfo > GObjectAccess_BASE;
  // Simple uno wrapper around the GraphicObject class to allow basic
  // access. ( and solves a horrible cyclic link problem between
  // goodies/toolkit/extensions )
@@ -37,15 +39,36 @@ class GObjectImpl : public GObjectAccess_BASE
      ::osl::Mutex m_aMutex;
      std::auto_ptr< GraphicObject > mpGObject;
 public:
-     GObjectImpl( uno::Sequence< uno::Any > const & args, uno::Reference< uno::XComponentContext > const & xComponentContext ) throw (uno::RuntimeException);
+     GObjectImpl( uno::Sequence< uno::Any > const & args ) throw (uno::RuntimeException);
 
      // XGraphicObject
     virtual uno::Reference< graphic::XGraphic > SAL_CALL getGraphic() throw (uno::RuntimeException);
     virtual void SAL_CALL setGraphic( const uno::Reference< graphic::XGraphic >& _graphic ) throw (uno::RuntimeException);
     OUString SAL_CALL getUniqueID() throw (uno::RuntimeException);
+
+    virtual OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException)
+    {
+        return OUString("com.sun.star.graphic.GraphicObject");
+    }
+
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException)
+    {
+        return cppu::supportsService(this, ServiceName);
+    }
+
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException)
+    {
+        uno::Sequence< OUString > aRet(1);
+        OUString* pArray = aRet.getArray();
+        pArray[0] = OUString("com.sun.star.graphic.GraphicObject");
+        return aRet;
+    }
 };
 
-GObjectImpl::GObjectImpl( uno::Sequence< uno::Any > const & args, uno::Reference< uno::XComponentContext > const & /*xComponentContext*/ ) throw (uno::RuntimeException)
+GObjectImpl::GObjectImpl( uno::Sequence< uno::Any > const & args) throw (uno::RuntimeException)
 {
     if ( args.getLength() == 1 )
     {
@@ -85,11 +108,16 @@ OUString SAL_CALL GObjectImpl::getUniqueID() throw (uno::RuntimeException)
     return sId;
 }
 
+}
 
-namespace sdecl = comphelper::service_decl;
-sdecl::class_<GObjectImpl, sdecl::with_args<true> > serviceBI;
-extern sdecl::ServiceDecl const serviceDecl( serviceBI, "com.sun.star.graphic.GraphicObject", "com.sun.star.graphic.GraphicObject" );
-
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_graphic_GraphicObject_get_implementation(
+        SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
+        css::uno::Sequence<css::uno::Any> const &arguments)
+{
+    rtl::Reference<GObjectImpl> x(new GObjectImpl(arguments));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
