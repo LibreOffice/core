@@ -173,16 +173,8 @@ sal_Bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
 
         // make the subsetter provide the requested subset
         FILE* pOutFile = fopen( aToFile.getStr(), "wb" );
-#ifdef __LP64__
-        long *pLongGlyphIDs = (long*)alloca(nGlyphCount * sizeof(long));
-        for (int i = 0; i < nGlyphCount; i++)
-            pLongGlyphIDs[i] = pGlyphIds[i];
-        bool bRC = rInfo.CreateFontSubset( FontSubsetInfo::TYPE1_PFB, pOutFile, NULL,
-            pLongGlyphIDs, pEncoding, nGlyphCount, pGlyphWidths );
-#else
         bool bRC = rInfo.CreateFontSubset( FontSubsetInfo::TYPE1_PFB, pOutFile, NULL,
             pGlyphIds, pEncoding, nGlyphCount, pGlyphWidths );
-#endif
         fclose( pOutFile );
         return bRC;
     }
