@@ -477,7 +477,13 @@ public:
         , m_pStream(i_pStream)
     { };
 
-    virtual ~librdf_GraphResult() {}
+    virtual ~librdf_GraphResult()
+    {
+        ::osl::MutexGuard g(m_rMutex); // lock mutex when destroying members
+        const_cast<boost::shared_ptr<librdf_stream>& >(m_pStream).reset();
+        const_cast<boost::shared_ptr<librdf_node>& >(m_pContext).reset();
+        const_cast<boost::shared_ptr<librdf_query>& >(m_pQuery).reset();
+    }
 
     // ::com::sun::star::container::XEnumeration:
     virtual ::sal_Bool SAL_CALL hasMoreElements()
@@ -584,7 +590,13 @@ public:
         , m_BindingNames(i_rBindingNames)
     { };
 
-    virtual ~librdf_QuerySelectResult() {}
+    virtual ~librdf_QuerySelectResult()
+    {
+        ::osl::MutexGuard g(m_rMutex); // lock mutex when destroying members
+        const_cast<boost::shared_ptr<librdf_query_results>& >(m_pQueryResult)
+            .reset();
+        const_cast<boost::shared_ptr<librdf_query>& >(m_pQuery).reset();
+    }
 
     // ::com::sun::star::container::XEnumeration:
     virtual ::sal_Bool SAL_CALL hasMoreElements()
@@ -864,6 +876,8 @@ librdf_Repository::librdf_Repository(
 
 librdf_Repository::~librdf_Repository()
 {
+    ::osl::MutexGuard g(m_aMutex);
+
     // must destroy these before world!
     m_pModel.reset();
     m_pStorage.reset();
@@ -872,7 +886,6 @@ librdf_Repository::~librdf_Repository()
     //   (via raptor_sax2_finish) call xmlCleanupParser, which will
     //   free libxml2's globals! ARRRGH!!! => never call librdf_free_world
 #if 0
-    ::osl::MutexGuard g(m_aMutex);
     if (!--m_NumInstances) {
         m_pWorld.reset();
     }
