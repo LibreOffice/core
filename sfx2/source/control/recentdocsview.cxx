@@ -18,7 +18,7 @@
  */
 
 #include <sfx2/recentdocsview.hxx>
-
+#include <vcl/svapp.hxx>
 #include <sfx2/templateabstractview.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfx.hrc>
@@ -41,7 +41,7 @@ using namespace com::sun::star::beans;
 RecentDocsView::RecentDocsView( Window* pParent )
     : ThumbnailView(pParent)
     , mnFileTypes(TYPE_NONE)
-    , mnItemMaxSize(256)
+    , mnItemMaxSize(Application::GetScreenPosSizePixel(Application::GetDisplayBuiltInScreen()).GetWidth() > 800 ? 256 : 192)
     , mnTextHeight(30)
     , mnItemPadding(5)
     , mnItemMaxTextLength(30)
