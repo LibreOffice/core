@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "1abeadc6_7303c073",
+        "filename": "offapi/com/sun/star/text/MailMerge.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-01-08T09:05:51Z",
+      "side": 1,
+      "message": "please add a @since tag",
+      "revId": "c2651cf71ba78d551c141d54a60eaf826dd1dccc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1abeadc6_138fec24",
         "filename": "offapi/type_reference/offapi.idl",
         "patchSetId": 1
@@ -13,6 +30,24 @@
       "writtenOn": "2014-01-07T20:57:11Z",
       "side": 1,
       "message": "does the API compatibility check really complain about adding an optional interface to a published service? that would be rather odd...",
+      "revId": "c2651cf71ba78d551c141d54a60eaf826dd1dccc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_53fec46c",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 14494,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-01-08T09:05:51Z",
+      "side": 1,
+      "message": "that was a bug fixed now with 54101206ec3a4a5d8e2948d411dc8b51992add0e, so changing this file will no longer be necessary",
+      "parentUuid": "1abeadc6_138fec24",
       "revId": "c2651cf71ba78d551c141d54a60eaf826dd1dccc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
