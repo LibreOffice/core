@@ -290,16 +290,19 @@ OUString ScDPUtil::getNumGroupName(
 }
 
 sal_Int32 ScDPUtil::getDatePartValue(
-    double fValue, const ScDPNumGroupInfo& rInfo, sal_Int32 nDatePart,
+    double fValue, const ScDPNumGroupInfo* pInfo, sal_Int32 nDatePart,
     SvNumberFormatter* pFormatter)
 {
     // Start and end are inclusive
     // (End date without a time value is included, with a time value it's not)
 
-    if (fValue < rInfo.mfStart && !rtl::math::approxEqual(fValue, rInfo.mfStart))
-        return ScDPItemData::DateFirst;
-    if (fValue > rInfo.mfEnd && !rtl::math::approxEqual(fValue, rInfo.mfEnd))
-        return ScDPItemData::DateLast;
+    if (pInfo)
+    {
+        if (fValue < pInfo->mfStart && !rtl::math::approxEqual(fValue, pInfo->mfStart))
+            return ScDPItemData::DateFirst;
+        if (fValue > pInfo->mfEnd && !rtl::math::approxEqual(fValue, pInfo->mfEnd))
+            return ScDPItemData::DateLast;
+    }
 
     sal_Int32 nResult = 0;
 
