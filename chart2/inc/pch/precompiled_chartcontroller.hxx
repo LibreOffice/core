@@ -273,7 +273,6 @@
 #include <svx/unopage.hxx>
 #include <svx/unoprov.hxx>
 #include <svx/unoshape.hxx>
-#include <svx/unoshcol.hxx>
 #include <svx/unoshtxt.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xflbmtit.hxx>

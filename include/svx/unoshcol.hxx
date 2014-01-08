@@ -34,8 +34,6 @@ public:
     ::osl::Mutex maMutex;
 };
 
-SVX_DLLPUBLIC com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SvxShapeCollection_NewInstance() throw();
-
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/

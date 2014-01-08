@@ -930,7 +930,6 @@
 #include <svx/unomodel.hxx>
 #include <svx/unoprov.hxx>
 #include <svx/unoshape.hxx>
-#include <svx/unoshcol.hxx>
 #include <svx/verttexttbxctrl.hxx>
 #include <svx/viewlayoutitem.hxx>
 #include <svx/xbtmpit.hxx>

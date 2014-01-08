@@ -18,6 +18,7 @@
  */
 
 #include "AccessibleDrawDocumentView.hxx"
+#include <com/sun/star/drawing/ShapeCollection.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -30,6 +31,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <comphelper/processfactory.hxx>
 #include <rtl/ustring.h>
 #include<sfx2/viewfrm.hxx>
 
@@ -38,7 +40,6 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/unoapi.hxx>
-#include <svx/unoshcol.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include "Window.hxx"
 #include <vcl/svapp.hxx>
@@ -751,7 +752,8 @@ void
                 xSel->select( aAny );
             else
             {
-                uno::Reference< drawing::XShapes > xShapes( new SvxShapeCollection() );
+                uno::Reference< drawing::XShapes > xShapes = drawing::ShapeCollection::create(
+                        comphelper::getProcessComponentContext());
 
                 for(sal_Int32 i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
                 {
@@ -800,7 +802,8 @@ void
                     }
                     else
                         // Create an empty selection to add the shape to.
-                        xShapes = new SvxShapeCollection();
+                        xShapes = drawing::ShapeCollection::create(
+                                comphelper::getProcessComponentContext());
 
                     // Update the selection.
                     if( !bFound && bSelect )

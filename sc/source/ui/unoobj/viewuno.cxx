@@ -19,6 +19,7 @@
 
 
 #include <com/sun/star/awt/MouseButton.hpp>
+#include <com/sun/star/drawing/ShapeCollection.hpp>
 #include <com/sun/star/script/vba/VBAEventId.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/view/DocumentZoomType.hpp>
@@ -32,7 +33,6 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
 #include <svx/unoshape.hxx>
-#include <svx/unoshcol.hxx>
 #include <svx/fmshell.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -897,8 +897,10 @@ uno::Any SAL_CALL ScTabViewObj::getSelection() throw(uno::RuntimeException)
                 //  ShapeCollection erzeugen (wie in SdXImpressView::getSelection im Draw)
                 //  Zurueckgegeben wird XInterfaceRef, das muss das UsrObject-XInterface sein
 
-                SvxShapeCollection* pShapes = new SvxShapeCollection();
-                uno::Reference<uno::XInterface> xRet(static_cast<cppu::OWeakObject*>(pShapes));
+                uno::Reference< drawing::XShapes > xShapes = drawing::ShapeCollection::create(
+                        comphelper::getProcessComponentContext());
+
+                uno::Reference<uno::XInterface> xRet(xShapes);
 
                 for (sal_uLong i=0; i<nMarkCount; i++)
                 {
@@ -907,7 +909,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection() throw(uno::RuntimeException)
                     {
                         uno::Reference<drawing::XShape> xShape( pDrawObj->getUnoShape(), uno::UNO_QUERY );
                         if (xShape.is())
-                            pShapes->add(xShape);
+                            xShapes->add(xShape);
                     }
                 }
                 return uno::makeAny(xRet);

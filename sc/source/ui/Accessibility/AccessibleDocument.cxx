@@ -55,6 +55,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/drawing/ShapeCollection.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 
@@ -70,7 +71,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfile.hxx>
-#include <svx/unoshcol.hxx>
 #include <svx/unoshape.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <toolkit/helper/convert.hxx>
@@ -710,7 +710,8 @@ void ScChildrenShapes::Select(sal_Int32 nIndex)
         xSelectionSupplier->getSelection() >>= xShapes;
 
         if (!xShapes.is())
-            xShapes = new SvxShapeCollection();
+            xShapes = drawing::ShapeCollection::create(
+                    comphelper::getProcessComponentContext());
 
         xShapes->add(maZOrderedShapes[nIndex]->xShape);
 
@@ -757,8 +758,8 @@ void ScChildrenShapes::SelectAll()
 
     if (maZOrderedShapes.size() > 1)
     {
-        uno::Reference<drawing::XShapes> xShapes;
-        xShapes = new SvxShapeCollection();
+        uno::Reference<drawing::XShapes> xShapes = drawing::ShapeCollection::create(
+                comphelper::getProcessComponentContext());
 
         try
         {

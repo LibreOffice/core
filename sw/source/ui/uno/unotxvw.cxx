@@ -54,7 +54,6 @@
 #include <IMark.hxx>
 #include <unotxdoc.hxx>
 #include <unodraw.hxx>
-#include <svx/unoshcol.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/svdpagv.hxx>
 #include <swerror.h>
@@ -63,6 +62,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <crsskip.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/drawing/ShapeCollection.hpp>
 #include <editeng/outliner.hxx>
 #include <editeng/editview.hxx>
 #include <unoparagraph.hxx>
@@ -72,6 +72,7 @@
 #include <switerator.hxx>
 #include "swdtflvr.hxx"
 #include <vcl/svapp.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -405,7 +406,8 @@ uno::Any SwXTextView::getSelection(void) throw( uno::RuntimeException )
                                 getSomething(SwXTextDocument::getUnoTunnelId()));
 
                 SwFmDrawPage* pSvxDrawPage =    pTextDoc->GetDrawPage()->GetSvxPage();
-                uno::Reference< drawing::XShapes >  xShCol = new SvxShapeCollection();
+                uno::Reference< drawing::XShapes >  xShCol = drawing::ShapeCollection::create(
+                        comphelper::getProcessComponentContext());
 
                 const SdrMarkList& rMarkList = rSh.GetDrawView()->GetMarkedObjectList();
                 for(sal_uInt16 i = 0; i < rMarkList.GetMarkCount(); i++)

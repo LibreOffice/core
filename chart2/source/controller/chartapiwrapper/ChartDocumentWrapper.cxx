@@ -51,10 +51,10 @@
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <comphelper/InlineContainer.hxx>
-// header for function SvxShapeCollection_NewInstance
-#include <svx/unoshcol.hxx>
+#include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 
+#include <com/sun/star/drawing/ShapeCollection.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -1100,7 +1100,8 @@ Reference< drawing::XShapes > ChartDocumentWrapper::getAdditionalShapes() const
     if( !aShapeVector.empty() )
     {
         // create a shape collection
-        xFoundShapes = uno::Reference< drawing::XShapes >( SvxShapeCollection_NewInstance(), uno::UNO_QUERY );
+        xFoundShapes = uno::Reference< drawing::XShapes >( drawing::ShapeCollection::create(
+                    comphelper::getProcessComponentContext()), uno::UNO_QUERY );
 
         OSL_ENSURE( xFoundShapes.is(), "Couldn't create a shape collection!" );
         if( xFoundShapes.is())

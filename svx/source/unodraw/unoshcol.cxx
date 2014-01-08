@@ -44,15 +44,6 @@ SvxShapeCollection::~SvxShapeCollection() throw()
 {
 }
 
-
-//----------------------------------------------------------------------
-Reference< uno::XInterface > SvxShapeCollection_NewInstance() throw()
-{
-    Reference< drawing::XShapes > xShapes( new SvxShapeCollection() );
-    Reference< uno::XInterface > xRef( xShapes, UNO_QUERY );
-    return xRef;
-}
-
 // XInterface
 void SvxShapeCollection::release() throw()
 {

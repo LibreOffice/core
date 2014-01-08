@@ -30,15 +30,16 @@
 #include "Window.hxx"
 #include "pres.hxx"
 
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/proptypehlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/unoshape.hxx>
-#include <svx/unoshcol.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <com/sun/star/drawing/DrawViewMode.hpp>
+#include <com/sun/star/drawing/ShapeCollection.hpp>
 #include <com/sun/star/drawing/XLayerManager.hpp>
 #include <com/sun/star/view/DocumentZoomType.hpp>
 
@@ -287,7 +288,8 @@ Any SAL_CALL SdUnoDrawView::getSelection()
         sal_uInt32 nCount = rMarkList.GetMarkCount();
         if( nCount )
         {
-            Reference< drawing::XShapes > xShapes( SvxShapeCollection_NewInstance(), UNO_QUERY );
+            Reference< drawing::XShapes > xShapes( drawing::ShapeCollection::create(
+                        comphelper::getProcessComponentContext()), UNO_QUERY );
             for( sal_uInt32 nNum = 0; nNum < nCount; nNum++)
             {
                 SdrMark *pMark = rMarkList.GetMark(nNum);

@@ -752,7 +752,6 @@
 #include <svx/unopool.hxx>
 #include <svx/unoprov.hxx>
 #include <svx/unoshape.hxx>
-#include <svx/unoshcol.hxx>
 #include <svx/unoshprp.hxx>
 #include <svx/verttexttbxctrl.hxx>
 #include <svx/view3d.hxx>
