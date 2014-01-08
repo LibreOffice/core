@@ -105,7 +105,7 @@ namespace
         sal_uInt64 whereToWriteEndOfSwBlock = rStream.Tell();
 
         sal_uInt64 endOfSwBlock = 0;
-        rStream << endOfSwBlock;
+        rStream.WriteUInt64( endOfSwBlock );
 
         return whereToWriteEndOfSwBlock;
     }
@@ -116,7 +116,7 @@ namespace
     {
         sal_uInt64 endOfSwBlock = rStream.Tell();
         rStream.Seek(whereToWriteEndOfSwBlock);
-        rStream << endOfSwBlock;
+        rStream.WriteUInt64( endOfSwBlock );
         rStream.Seek(endOfSwBlock);
     }
 
@@ -536,46 +536,46 @@ sal_Bool SwBoxAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
     // --- from 680/dr25 on: store strings as UTF-8
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStream, sNumFmtString,
         RTL_TEXTENCODING_UTF8);
-    rStream << (sal_uInt16)eSysLanguage << (sal_uInt16)eNumFmtLanguage;
+    rStream.WriteUInt16( (sal_uInt16)eSysLanguage ).WriteUInt16( (sal_uInt16)eNumFmtLanguage );
 
     return 0 == rStream.GetError();
 }
 
 sal_Bool SwBoxAutoFmt::SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion ) const
 {
-    rStream << aFont.GetVersion( fileVersion );
-    rStream << aHeight.GetVersion( fileVersion );
-    rStream << aWeight.GetVersion( fileVersion );
-    rStream << aPosture.GetVersion( fileVersion );
-    rStream << aUnderline.GetVersion( fileVersion );
-    rStream << aOverline.GetVersion( fileVersion );
-    rStream << aCrossedOut.GetVersion( fileVersion );
-    rStream << aContour.GetVersion( fileVersion );
-    rStream << aShadowed.GetVersion( fileVersion );
-    rStream << aColor.GetVersion( fileVersion );
-    rStream << aBox.GetVersion( fileVersion );
-    rStream << aTLBR.GetVersion( fileVersion );
-    rStream << aBackground.GetVersion( fileVersion );
+    rStream.WriteUInt16( aFont.GetVersion( fileVersion ) );
+    rStream.WriteUInt16( aHeight.GetVersion( fileVersion ) );
+    rStream.WriteUInt16( aWeight.GetVersion( fileVersion ) );
+    rStream.WriteUInt16( aPosture.GetVersion( fileVersion ) );
+    rStream.WriteUInt16( aUnderline.GetVersion( fileVersion ) );
+    rStream.WriteUInt16( aOverline.GetVersion( fileVersion ) );
+    rStream.WriteUInt16( aCrossedOut.GetVersion( fileVersion ) );
+    rStream.WriteUInt16( aContour.GetVersion( fileVersion ) );
+    rStream.WriteUInt16( aShadowed.GetVersion( fileVersion ) );
+    rStream.WriteUInt16( aColor.GetVersion( fileVersion ) );
+    rStream.WriteUInt16( aBox.GetVersion( fileVersion ) );
+    rStream.WriteUInt16( aTLBR.GetVersion( fileVersion ) );
+    rStream.WriteUInt16( aBackground.GetVersion( fileVersion ) );
 
-    rStream << aAdjust.GetVersion( fileVersion );
+    rStream.WriteUInt16( aAdjust.GetVersion( fileVersion ) );
 
     if (fileVersion >= SOFFICE_FILEFORMAT_50)
     {
         WriterSpecificAutoFormatBlock block(rStream);
 
-        rStream << m_aTextOrientation.GetVersion(fileVersion);
-        rStream << m_aVerticalAlignment.GetVersion(fileVersion);
+        rStream.WriteUInt16( m_aTextOrientation.GetVersion(fileVersion) );
+        rStream.WriteUInt16( m_aVerticalAlignment.GetVersion(fileVersion) );
     }
 
-    rStream << aHorJustify.GetVersion( fileVersion );
-    rStream << aVerJustify.GetVersion( fileVersion );
-    rStream << SvxOrientationItem(SVX_ORIENTATION_STANDARD, 0).GetVersion( fileVersion );
-    rStream << aMargin.GetVersion( fileVersion );
-    rStream << aLinebreak.GetVersion( fileVersion );
-    rStream << aRotateAngle.GetVersion( fileVersion );
-    rStream << aRotateMode.GetVersion( fileVersion );
+    rStream.WriteUInt16( aHorJustify.GetVersion( fileVersion ) );
+    rStream.WriteUInt16( aVerJustify.GetVersion( fileVersion ) );
+    rStream.WriteUInt16( SvxOrientationItem(SVX_ORIENTATION_STANDARD, 0).GetVersion( fileVersion ) );
+    rStream.WriteUInt16( aMargin.GetVersion( fileVersion ) );
+    rStream.WriteUInt16( aLinebreak.GetVersion( fileVersion ) );
+    rStream.WriteUInt16( aRotateAngle.GetVersion( fileVersion ) );
+    rStream.WriteUInt16( aRotateMode.GetVersion( fileVersion ) );
 
-    rStream << (sal_uInt16)0;       // NumberFormat
+    rStream.WriteUInt16( (sal_uInt16)0 );       // NumberFormat
 
     return 0 == rStream.GetError();
 }
@@ -964,17 +964,17 @@ sal_Bool SwTableAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
 {
     sal_uInt16 nVal = AUTOFORMAT_DATA_ID;
     sal_Bool b;
-    rStream << nVal;
+    rStream.WriteUInt16( nVal );
     // --- from 680/dr25 on: store strings as UTF-8
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStream, m_aName,
         RTL_TEXTENCODING_UTF8 );
-    rStream << nStrResId;
-    rStream << ( b = bInclFont );
-    rStream << ( b = bInclJustify );
-    rStream << ( b = bInclFrame );
-    rStream << ( b = bInclBackground );
-    rStream << ( b = bInclValueFormat );
-    rStream << ( b = bInclWidthHeight );
+    rStream.WriteUInt16( nStrResId );
+    rStream.WriteUChar( ( b = bInclFont ) );
+    rStream.WriteUChar( ( b = bInclJustify ) );
+    rStream.WriteUChar( ( b = bInclFrame ) );
+    rStream.WriteUChar( ( b = bInclBackground ) );
+    rStream.WriteUChar( ( b = bInclValueFormat ) );
+    rStream.WriteUChar( ( b = bInclWidthHeight ) );
 
     {
         WriterSpecificAutoFormatBlock block(rStream);
@@ -982,7 +982,7 @@ sal_Bool SwTableAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
         m_aBreak.Store(rStream, m_aBreak.GetVersion(fileVersion));
         m_aPageDesc.Store(rStream, m_aPageDesc.GetVersion(fileVersion));
         m_aKeepWithNextPara.Store(rStream, m_aKeepWithNextPara.GetVersion(fileVersion));
-        rStream << m_aRepeatHeading << m_bLayoutSplit << m_bRowSplit << m_bCollapsingBorders;
+        rStream.WriteUInt16( m_aRepeatHeading ).WriteUChar( m_bLayoutSplit ).WriteUChar( m_bRowSplit ).WriteUChar( m_bCollapsingBorders );
         m_aShadow.Store(rStream, m_aShadow.GetVersion(fileVersion));
     }
 
@@ -1202,9 +1202,9 @@ sal_Bool SwTableAutoFmtTbl::Save( SvStream& rStream ) const
 
         // Attention: We need to save a general Header here
         sal_uInt16 nVal = AUTOFORMAT_ID;
-        rStream << nVal
-                << (sal_uInt8)2 // Character count of the Header including this value
-                << (sal_uInt8)GetStoreCharSet( ::osl_getThreadTextEncoding() );
+        rStream.WriteUInt16( nVal )
+               .WriteUChar( (sal_uInt8)2 ) // Character count of the Header including this value
+               .WriteUChar( (sal_uInt8)GetStoreCharSet( ::osl_getThreadTextEncoding() ) );
 
         bRet = 0 == rStream.GetError();
 
@@ -1212,7 +1212,7 @@ sal_Bool SwTableAutoFmtTbl::Save( SvStream& rStream ) const
         m_pImpl->m_AutoFormats[0].GetBoxFmt(0).SaveVersionNo(
                 rStream, AUTOFORMAT_FILE_VERSION);
 
-        rStream << static_cast<sal_uInt16>(m_pImpl->m_AutoFormats.size() - 1);
+        rStream.WriteUInt16( static_cast<sal_uInt16>(m_pImpl->m_AutoFormats.size() - 1) );
         bRet = 0 == rStream.GetError();
 
         for (sal_uInt16 i = 1; bRet && i < m_pImpl->m_AutoFormats.size(); ++i)

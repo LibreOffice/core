@@ -62,7 +62,7 @@ SfxFlagItem::SfxFlagItem( const SfxFlagItem& rItem ) :
 SvStream& SfxFlagItem::Store(SvStream &rStream, sal_uInt16) const
 {
     DBG_CHKTHIS(SfxFlagItem, 0);
-    rStream << nVal;
+    rStream.WriteUInt16( nVal );
     return rStream;
 }
 

@@ -80,7 +80,7 @@ SvStream& SvxGrfCrop::Store( SvStream& rStrm, sal_uInt16 nVersion ) const
     if( GRFCROP_VERSION_SWDEFAULT == nVersion )
         top = -top, bottom = -bottom, left = -left, right = -right;
 
-    rStrm << top << left << right << bottom;
+    rStrm.WriteInt32( top ).WriteInt32( left ).WriteInt32( right ).WriteInt32( bottom );
 
     return rStrm;
 }

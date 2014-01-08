@@ -224,7 +224,7 @@ void XclExpDffAnchorBase::SetSdrObject( const SdrObject& rSdrObj )
 void XclExpDffAnchorBase::WriteDffData( EscherEx& rEscherEx ) const
 {
     rEscherEx.AddAtom( 18, ESCHER_ClientAnchor );
-    rEscherEx.GetStream() << mnFlags << maAnchor;
+    rEscherEx.GetStream().WriteUInt16( mnFlags ) << maAnchor;
 }
 
 void XclExpDffAnchorBase::WriteData( EscherEx& rEscherEx, const Rectangle& rRect )

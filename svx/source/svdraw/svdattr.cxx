@@ -697,8 +697,8 @@ SfxPoolItem* SdrFractionItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
 
 SvStream& SdrFractionItem::Store(SvStream& rOut, sal_uInt16 /*nItemVers*/) const
 {
-    rOut<<sal_Int32(nValue.GetNumerator());
-    rOut<<sal_Int32(nValue.GetDenominator());
+    rOut.WriteInt32( sal_Int32(nValue.GetNumerator()) );
+    rOut.WriteInt32( sal_Int32(nValue.GetDenominator()) );
     return rOut;
 }
 
@@ -1420,7 +1420,7 @@ SvStream& SdrTextFixedCellHeightItem::Store( SvStream& rOut, sal_uInt16 nItemVer
     if ( nItemVersion )
     {
         sal_Bool bValue = (sal_Bool)GetValue();
-        rOut << bValue;
+        rOut.WriteUChar( bValue );
     }
     return rOut;
 }
@@ -1520,9 +1520,9 @@ SvStream& SdrCustomShapeAdjustmentItem::Store( SvStream& rOut, sal_uInt16 nItemV
     if ( nItemVersion )
     {
         sal_uInt32 i, nCount = GetCount();
-        rOut << nCount;
+        rOut.WriteUInt32( nCount );
         for ( i = 0; i < nCount; i++ )
-            rOut << GetValue( i ).nValue;
+            rOut.WriteUInt32( GetValue( i ).nValue );
     }
     return rOut;
 }

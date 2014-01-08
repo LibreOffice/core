@@ -328,10 +328,10 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
 
     if ( mnPreview & EPS_PREVIEW_TIFF )
     {
-        rTargetStream << (sal_uInt32)0xC6D3D0C5;
+        rTargetStream.WriteUInt32( (sal_uInt32)0xC6D3D0C5 );
         nStreamPosition = rTargetStream.Tell();
-        rTargetStream << (sal_uInt32)0 << (sal_uInt32)0 << (sal_uInt32)0 << (sal_uInt32)0
-            << nStreamPosition + 26 << (sal_uInt32)0 << (sal_uInt16)0xffff;
+        rTargetStream.WriteUInt32( (sal_uInt32)0 ).WriteUInt32( (sal_uInt32)0 ).WriteUInt32( (sal_uInt32)0 ).WriteUInt32( (sal_uInt32)0 )
+           .WriteUInt32( nStreamPosition + 26 ).WriteUInt32( (sal_uInt32)0 ).WriteUInt16( (sal_uInt16)0xffff );
 
         sal_uInt32 nErrCode;
         if ( mbGrayScale )
@@ -348,7 +348,7 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
             rTargetStream.Seek( STREAM_SEEK_TO_END );
             nPSPosition = rTargetStream.Tell();
             rTargetStream.Seek( nStreamPosition + 20 );
-            rTargetStream << nPSPosition - 30;  // size of tiff gfx
+            rTargetStream.WriteUInt32( nPSPosition - 30 );  // size of tiff gfx
             rTargetStream.Seek( nPSPosition );
         }
         else
@@ -412,8 +412,8 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
         {
             sal_uInt32 nPosition = rTargetStream.Tell();
             rTargetStream.Seek( nStreamPosition );
-            rTargetStream << nPSPosition;
-            rTargetStream << nPosition - nPSPosition;
+            rTargetStream.WriteUInt32( nPSPosition );
+            rTargetStream.WriteUInt32( nPosition - nPSPosition );
             rTargetStream.Seek( nPosition );
         }
         while( pChrSetList )
@@ -455,7 +455,7 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
 void PSWriter::ImplWriteProlog( const Graphic* pPreview )
 {
     ImplWriteLine( "%!PS-Adobe-3.0 EPSF-3.0 " );
-    *mpPS << "%%BoundingBox: ";                         // BoundingBox
+    mpPS->WriteCharPtr( "%%BoundingBox: " );                         // BoundingBox
     ImplWriteLong( 0 );
     ImplWriteLong( 0 );
     Size aSizePoint = Application::GetDefaultDevice()->LogicToLogic( pMTF->GetPrefSize(),
@@ -471,7 +471,7 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
 
 // defaults
 
-    *mpPS << "%%LanguageLevel: ";                       // Language level
+    mpPS->WriteCharPtr( "%%LanguageLevel: " );                       // Language level
     ImplWriteLong( mnLevel, PS_RET );
     if ( !mbGrayScale && mnLevel == 1 )
         ImplWriteLine( "%%Extensions: CMYK" );          // CMYK extension is to set in color mode in level 1
@@ -485,10 +485,10 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
         BitmapReadAccess* pAcc = aTmpBitmap.AcquireReadAccess();
         if ( pAcc )
         {
-            *mpPS << "%%BeginPreview: ";                    // BoundingBox
+            mpPS->WriteCharPtr( "%%BeginPreview: " );                    // BoundingBox
             ImplWriteLong( aSizeBitmap.Width() );
             ImplWriteLong( aSizeBitmap.Height() );
-            *mpPS << "1 ";
+            mpPS->WriteCharPtr( "1 " );
             sal_Int32 nLines = aSizeBitmap.Width() / 312;
             if ( ( nLines * 312 ) != aSizeBitmap.Width() )
                 nLines++;
@@ -506,7 +506,7 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
                     if ( !nCount2 )
                     {
                         ImplExecMode( PS_RET );
-                        *mpPS << "%";
+                        mpPS->WriteCharPtr( "%" );
                         nCount2 = 312;
                     }
                     nVal <<= 1;
@@ -518,7 +518,7 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
                             nVal += 'A' - 10;
                         else
                             nVal += '0';
-                        *mpPS << nVal;
+                        mpPS->WriteChar( nVal );
                         nVal = 0;
                         nCount += 4;
                     }
@@ -1306,12 +1306,12 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                                             ImplAddPath( aPolyPoly.GetObject( i ) );
                                             if ( ++i < nPolyCount )
                                             {
-                                                *mpPS << "p";
+                                                mpPS->WriteCharPtr( "p" );
                                                 mnCursorPos += 2;
                                                 ImplExecMode( PS_RET );
                                             }
                                         }
-                                        *mpPS << "p ef";
+                                        mpPS->WriteCharPtr( "p ef" );
                                         mnCursorPos += 4;
                                         ImplExecMode( PS_RET );
                                     }
@@ -1445,7 +1445,7 @@ void PSWriter::ImplCurveTo( const Point& rP1, const Point& rP2, const Point& rP3
     ImplWritePoint( rP1 );
     ImplWritePoint( rP2 );
     ImplWritePoint( rP3 );
-    *mpPS << "ct ";
+    mpPS->WriteCharPtr( "ct " );
     ImplExecMode( nMode );
 }
 
@@ -1483,14 +1483,14 @@ void PSWriter::ImplRect( const Rectangle & rRect )
         ImplWriteLineColor( PS_SPACE );
         ImplMoveTo( rRect.TopLeft() );
         ImplWriteDouble( nWidth );
-        *mpPS << "0 rl 0 ";
+        mpPS->WriteCharPtr( "0 rl 0 " );
         ImplWriteDouble( nHeight );
-        *mpPS << "rl ";
+        mpPS->WriteCharPtr( "rl " );
         ImplWriteDouble( nWidth );
-        *mpPS << "neg 0 rl ";
+        mpPS->WriteCharPtr( "neg 0 rl " );
         ImplClosePathDraw();
     }
-    *mpPS << (sal_uInt8)10;
+    mpPS->WriteUChar( (sal_uInt8)10 );
     mnCursorPos = 0;
 }
 
@@ -1504,12 +1504,12 @@ void PSWriter::ImplRectFill( const Rectangle & rRect )
     ImplWriteFillColor( PS_SPACE );
     ImplMoveTo( rRect.TopLeft() );
     ImplWriteDouble( nWidth );
-    *mpPS << "0 rl 0 ";
+    mpPS->WriteCharPtr( "0 rl 0 " );
     ImplWriteDouble( nHeight );
-    *mpPS << "rl ";
+    mpPS->WriteCharPtr( "rl " );
     ImplWriteDouble( nWidth );
-    *mpPS << "neg 0 rl ef ";
-    *mpPS << "p ef";
+    mpPS->WriteCharPtr( "neg 0 rl ef " );
+    mpPS->WriteCharPtr( "p ef" );
     mnCursorPos += 2;
     ImplExecMode( PS_RET );
 }
@@ -1549,7 +1549,7 @@ void PSWriter::ImplIntersect( const PolyPolygon& rPolyPoly )
         ImplAddPath( rPolyPoly.GetObject( i ) );
         if ( ++i < nPolyCount )
         {
-            *mpPS << "p";
+            mpPS->WriteCharPtr( "p" );
             mnCursorPos += 2;
             ImplExecMode( PS_RET );
         }
@@ -1586,12 +1586,12 @@ void PSWriter::ImplPolyPoly( const PolyPolygon & rPolyPoly, sal_Bool bTextOutlin
                 ImplAddPath( rPolyPoly.GetObject( i ) );
                 if ( ++i < nPolyCount )
                 {
-                    *mpPS << "p";
+                    mpPS->WriteCharPtr( "p" );
                     mnCursorPos += 2;
                     ImplExecMode( PS_RET );
                 }
             }
-            *mpPS << "p ef";
+            mpPS->WriteCharPtr( "p ef" );
             mnCursorPos += 4;
             ImplExecMode( PS_RET );
         }
@@ -1834,14 +1834,14 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
         {
             ImplWriteLong( nWidth );
             ImplWriteLong( nHeight );
-            *mpPS << "8 [";
+            mpPS->WriteCharPtr( "8 [" );
             ImplWriteLong( nWidth );
-            *mpPS << "0 0 ";
+            mpPS->WriteCharPtr( "0 0 " );
             ImplWriteLong( -nHeight );
             ImplWriteLong( 0 );
             ImplWriteLong( nHeight );
             ImplWriteLine( "]" );
-            *mpPS << "{currentfile ";
+            mpPS->WriteCharPtr( "{currentfile " );
             ImplWriteLong( nWidth );
             ImplWriteLine( "string readhexstring pop}" );
             ImplWriteLine( "image" );
@@ -1852,7 +1852,7 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
                     ImplWriteHexByte( pAcc->GetPixelIndex( y, x ) );
                 }
             }
-            *mpPS << (sal_uInt8)10;
+            mpPS->WriteUChar( (sal_uInt8)10 );
         }
         else    // Level 2
         {
@@ -1861,15 +1861,15 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
                 ImplWriteLine( "/DeviceGray setcolorspace" );
                 ImplWriteLine( "<<" );
                 ImplWriteLine( "/ImageType 1" );
-                *mpPS << "/Width ";
+                mpPS->WriteCharPtr( "/Width " );
                 ImplWriteLong( nWidth, PS_RET );
-                *mpPS << "/Height ";
+                mpPS->WriteCharPtr( "/Height " );
                 ImplWriteLong( nHeight, PS_RET );
                 ImplWriteLine( "/BitsPerComponent 8" );
                 ImplWriteLine( "/Decode[0 1]" );
-                *mpPS << "/ImageMatrix[";
+                mpPS->WriteCharPtr( "/ImageMatrix[" );
                 ImplWriteLong( nWidth );
-                *mpPS << "0 0 ";
+                mpPS->WriteCharPtr( "0 0 " );
                 ImplWriteLong( -nHeight );
                 ImplWriteLong( 0 );
                 ImplWriteLong( nHeight, PS_NONE );
@@ -1924,15 +1924,15 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
                     ImplWriteLine( "] setcolorspace" );
                     ImplWriteLine( "<<" );
                     ImplWriteLine( "/ImageType 1" );
-                    *mpPS << "/Width ";
+                    mpPS->WriteCharPtr( "/Width " );
                     ImplWriteLong( nWidth, PS_RET );
-                    *mpPS << "/Height ";
+                    mpPS->WriteCharPtr( "/Height " );
                     ImplWriteLong( nHeight, PS_RET );
                     ImplWriteLine( "/BitsPerComponent 8" );
                     ImplWriteLine( "/Decode[0 255]" );
-                    *mpPS << "/ImageMatrix[";
+                    mpPS->WriteCharPtr( "/ImageMatrix[" );
                     ImplWriteLong( nWidth );
-                    *mpPS << "0 0 ";
+                    mpPS->WriteCharPtr( "0 0 " );
                     ImplWriteLong( -nHeight );
                     ImplWriteLong( 0);
                     ImplWriteLong( nHeight, PS_NONE );
@@ -1971,15 +1971,15 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
                     ImplWriteLine( "/DeviceRGB setcolorspace" );
                     ImplWriteLine( "<<" );
                     ImplWriteLine( "/ImageType 1" );
-                    *mpPS << "/Width ";
+                    mpPS->WriteCharPtr( "/Width " );
                     ImplWriteLong( nWidth, PS_RET );
-                    *mpPS << "/Height ";
+                    mpPS->WriteCharPtr( "/Height " );
                     ImplWriteLong( nHeight, PS_RET );
                     ImplWriteLine( "/BitsPerComponent 8" );
                     ImplWriteLine( "/Decode[0 1 0 1 0 1]" );
-                    *mpPS << "/ImageMatrix[";
+                    mpPS->WriteCharPtr( "/ImageMatrix[" );
                     ImplWriteLong( nWidth );
-                    *mpPS << "0 0 ";
+                    mpPS->WriteCharPtr( "0 0 " );
                     ImplWriteLong( -nHeight );
                     ImplWriteLong( 0 );
                     ImplWriteLong( nHeight, PS_NONE );
@@ -2122,7 +2122,7 @@ void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const sa
             if ( nRotation )
             {
                 ImplWriteF( nRotation, 1 );
-                *mpPS << "r ";
+                mpPS->WriteCharPtr( "r " );
             }
             std::vector<PolyPolygon>::iterator aIter( aPolyPolyVec.begin() );
             while ( aIter != aPolyPolyVec.end() )
@@ -2169,7 +2169,7 @@ void PSWriter::ImplSetAttrForText( const Point& rPoint )
         maLastFont = maFont;
         aSize = maFont.GetSize();
         ImplWriteDouble( aSize.Height() );
-        *mpPS << "sf ";
+        mpPS->WriteCharPtr( "sf " );
     }
     if ( eTextAlign != ALIGN_BASELINE )
     {                                                       // PostScript kennt kein FontAlignment
@@ -2181,9 +2181,9 @@ void PSWriter::ImplSetAttrForText( const Point& rPoint )
     ImplMoveTo( aPoint );
     if ( nRotation )
     {
-        *mpPS << "gs ";
+        mpPS->WriteCharPtr( "gs " );
         ImplWriteF( nRotation, 1 );
-        *mpPS << "r ";
+        mpPS->WriteCharPtr( "r " );
     }
 }
 
@@ -2191,21 +2191,21 @@ void PSWriter::ImplSetAttrForText( const Point& rPoint )
 
 void PSWriter::ImplDefineFont( const char* pOriginalName, const char* pItalic )
 {
-    *mpPS << (sal_uInt8)'/';             //convert the font pOriginalName using ISOLatin1Encoding
-    *mpPS << pOriginalName;
+    mpPS->WriteUChar( (sal_uInt8)'/' );             //convert the font pOriginalName using ISOLatin1Encoding
+    mpPS->WriteCharPtr( pOriginalName );
     switch ( maFont.GetWeight() )
     {
         case WEIGHT_SEMIBOLD :
         case WEIGHT_BOLD :
         case WEIGHT_ULTRABOLD :
         case WEIGHT_BLACK :
-            *mpPS << "-Bold";
+            mpPS->WriteCharPtr( "-Bold" );
             if ( maFont.GetItalic() != ITALIC_NONE )
-                *mpPS << pItalic;
+                mpPS->WriteCharPtr( pItalic );
             break;
         default:
             if ( maFont.GetItalic() != ITALIC_NONE )
-                *mpPS << pItalic;
+                mpPS->WriteCharPtr( pItalic );
             break;
     }
     ImplWriteLine( " f" );
@@ -2217,14 +2217,14 @@ void PSWriter::ImplDefineFont( const char* pOriginalName, const char* pItalic )
 
 void PSWriter::ImplClosePathDraw( sal_uLong nMode )
 {
-    *mpPS << "pc";
+    mpPS->WriteCharPtr( "pc" );
     mnCursorPos += 2;
     ImplExecMode( nMode );
 }
 
 void PSWriter::ImplPathDraw()
 {
-    *mpPS << "ps";
+    mpPS->WriteCharPtr( "ps" );
     mnCursorPos += 2;
     ImplExecMode( PS_RET );
 }
@@ -2281,7 +2281,7 @@ void PSWriter::ImplWriteColor( sal_uLong nMode )
         ImplWriteB1 ( (sal_uInt8)aColor.GetGreen() );
         ImplWriteB1 ( (sal_uInt8)aColor.GetBlue() );
     }
-    *mpPS << "c";                               // ( c is defined as setrgbcolor or setgray )
+    mpPS->WriteCharPtr( "c" );                               // ( c is defined as setrgbcolor or setgray )
     ImplExecMode( nMode );
 }
 
@@ -2354,18 +2354,18 @@ inline void PSWriter::ImplExecMode( sal_uLong nMode )
         if ( mnCursorPos >= PS_LINESIZE )
         {
             mnCursorPos = 0;
-            *mpPS << (sal_uInt8)0xa;
+            mpPS->WriteUChar( (sal_uInt8)0xa );
             return;
         }
     }
     if ( nMode & PS_SPACE )
     {
-            *mpPS << (sal_uInt8)32;
+            mpPS->WriteUChar( (sal_uInt8)32 );
             mnCursorPos++;
     }
     if ( nMode & PS_RET )
     {
-        *mpPS << (sal_uInt8)0xa;
+        mpPS->WriteUChar( (sal_uInt8)0xa );
         mnCursorPos = 0;
     }
 }
@@ -2377,7 +2377,7 @@ inline void PSWriter::ImplWriteLine( const char* pString, sal_uLong nMode )
     sal_uLong i = 0;
     while ( pString[ i ] )
     {
-        *mpPS << (sal_uInt8)pString[ i++ ];
+        mpPS->WriteUChar( (sal_uInt8)pString[ i++ ] );
     }
     mnCursorPos += i;
     ImplExecMode( nMode );
@@ -2484,7 +2484,7 @@ void PSWriter::ImplWriteLong(sal_Int32 nNumber, sal_uLong nMode)
 {
     const OString aNumber(OString::number(nNumber));
     mnCursorPos += aNumber.getLength();
-    *mpPS << aNumber.getStr();
+    mpPS->WriteCharPtr( aNumber.getStr() );
     ImplExecMode(nMode);
 }
 
@@ -2496,16 +2496,16 @@ void PSWriter::ImplWriteDouble( double fNumber, sal_uLong nMode )
     sal_Int32   nATemp = labs( (sal_Int32)( ( fNumber - nPTemp ) * 100000 ) );
 
     if ( !nPTemp && nATemp && ( fNumber < 0.0 ) )
-        *mpPS << (sal_Char)'-';
+        mpPS->WriteChar( (sal_Char)'-' );
 
     const OString aNumber1(OString::number(nPTemp));
-    *mpPS << aNumber1.getStr();
+    mpPS->WriteCharPtr( aNumber1.getStr() );
     mnCursorPos += aNumber1.getLength();
 
     if ( nATemp )
     {
         int zCount = 0;
-        *mpPS << (sal_uInt8)'.';
+        mpPS->WriteUChar( (sal_uInt8)'.' );
         mnCursorPos++;
         const OString aNumber2(OString::number(nATemp));
 
@@ -2515,13 +2515,13 @@ void PSWriter::ImplWriteDouble( double fNumber, sal_uLong nMode )
             mnCursorPos += 6 - nLen;
             for ( n = 0; n < ( 5 - nLen ); n++ )
             {
-                *mpPS << (sal_uInt8)'0';
+                mpPS->WriteUChar( (sal_uInt8)'0' );
             }
         }
         mnCursorPos += nLen;
         for ( n = 0; n < nLen; n++ )
         {
-            *mpPS << aNumber2[n];
+            mpPS->WriteChar( aNumber2[n] );
             zCount--;
             if ( aNumber2[n] != '0' )
                 zCount = 0;
@@ -2540,7 +2540,7 @@ void PSWriter::ImplWriteF( sal_Int32 nNumber, sal_uLong nCount, sal_uLong nMode 
 {
     if ( nNumber < 0 )
     {
-        *mpPS << (sal_uInt8)'-';
+        mpPS->WriteUChar( (sal_uInt8)'-' );
         nNumber = -nNumber;
         mnCursorPos++;
     }
@@ -2549,15 +2549,15 @@ void PSWriter::ImplWriteF( sal_Int32 nNumber, sal_uLong nCount, sal_uLong nMode 
     long nStSize =  ( nCount + 1 ) - nLen;
     if ( nStSize >= 1 )
     {
-        *mpPS << (sal_uInt8)'0';
+        mpPS->WriteUChar( (sal_uInt8)'0' );
         mnCursorPos++;
     }
     if ( nStSize >= 2 )
     {
-        *mpPS << (sal_uInt8)'.';
+        mpPS->WriteUChar( (sal_uInt8)'.' );
         for ( long i = 1; i < nStSize; i++ )
         {
-            *mpPS << (sal_uInt8)'0';
+            mpPS->WriteUChar( (sal_uInt8)'0' );
             mnCursorPos++;
         }
     }
@@ -2566,10 +2566,10 @@ void PSWriter::ImplWriteF( sal_Int32 nNumber, sal_uLong nCount, sal_uLong nMode 
     {
         if ( n == nLen - nCount )
         {
-            *mpPS << (sal_uInt8)'.';
+            mpPS->WriteUChar( (sal_uInt8)'.' );
             mnCursorPos++;
         }
-        *mpPS << aScaleFactor[n];
+        mpPS->WriteChar( aScaleFactor[n] );
     }
     ImplExecMode( nMode );
 }
@@ -2578,7 +2578,7 @@ void PSWriter::ImplWriteF( sal_Int32 nNumber, sal_uLong nCount, sal_uLong nMode 
 
 void PSWriter::ImplWriteByte( sal_uInt8 nNumb, sal_uLong nMode )
 {
-    *mpPS << ( nNumb );
+    mpPS->WriteUChar( ( nNumb ) );
     mnCursorPos++;
     ImplExecMode( nMode );
 }
@@ -2588,14 +2588,14 @@ void PSWriter::ImplWriteByte( sal_uInt8 nNumb, sal_uLong nMode )
 void PSWriter::ImplWriteHexByte( sal_uInt8 nNumb, sal_uLong nMode )
 {
     if ( ( nNumb >> 4 ) > 9 )
-        *mpPS << (sal_uInt8)( ( nNumb >> 4 ) + 'A' - 10 );
+        mpPS->WriteUChar( (sal_uInt8)( ( nNumb >> 4 ) + 'A' - 10 ) );
     else
-        *mpPS << (sal_uInt8)( ( nNumb >> 4 ) + '0' );
+        mpPS->WriteUChar( (sal_uInt8)( ( nNumb >> 4 ) + '0' ) );
 
     if ( ( nNumb & 0xf ) > 9 )
-        *mpPS << (sal_uInt8)( ( nNumb & 0xf ) + 'A' - 10 );
+        mpPS->WriteUChar( (sal_uInt8)( ( nNumb & 0xf ) + 'A' - 10 ) );
     else
-        *mpPS << (sal_uInt8)( ( nNumb & 0xf ) + '0' );
+        mpPS->WriteUChar( (sal_uInt8)( ( nNumb & 0xf ) + '0' ) );
     mnCursorPos += 2;
     ImplExecMode( nMode );
 }

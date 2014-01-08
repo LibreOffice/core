@@ -121,20 +121,20 @@ SvStream& operator<<( SvStream& rOStm, const TransferableObjectDescriptor& rObjD
 
     rOStm.SeekRel( 4 );
     rOStm << rObjDesc.maClassName;
-    rOStm << nViewAspect;
+    rOStm.WriteUInt32( nViewAspect );
     //#fdo39428 Remove SvStream operator<<(long)
-    rOStm << sal::static_int_cast<sal_Int32>(rObjDesc.maSize.Width());
-    rOStm << sal::static_int_cast<sal_Int32>(rObjDesc.maSize.Height());
-    rOStm << sal::static_int_cast<sal_Int32>(rObjDesc.maDragStartPos.X());
-    rOStm << sal::static_int_cast<sal_Int32>(rObjDesc.maDragStartPos.Y());
+    rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(rObjDesc.maSize.Width()) );
+    rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(rObjDesc.maSize.Height()) );
+    rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(rObjDesc.maDragStartPos.X()) );
+    rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(rObjDesc.maDragStartPos.Y()) );
     rOStm.WriteUniOrByteString( rObjDesc.maTypeName, osl_getThreadTextEncoding() );
     rOStm.WriteUniOrByteString( rObjDesc.maDisplayName, osl_getThreadTextEncoding() );
-    rOStm << nSig1 << nSig2;
+    rOStm.WriteUInt32( nSig1 ).WriteUInt32( nSig2 );
 
     const sal_uInt32 nLastPos = rOStm.Tell();
 
     rOStm.Seek( nFirstPos );
-    rOStm << ( nLastPos - nFirstPos );
+    rOStm.WriteUInt32(  nLastPos - nFirstPos  );
     rOStm.Seek( nLastPos );
 
     return rOStm;

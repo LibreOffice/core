@@ -105,14 +105,16 @@ SvStream& operator<<( SvStream& rOStm, const GraphicAttr& rAttr )
     VersionCompat       aCompat( rOStm, STREAM_WRITE, 2 );
     const sal_uInt32    nTmp32 = 0;
 
-    rOStm << nTmp32 << nTmp32 << rAttr.mfGamma << rAttr.mnMirrFlags << rAttr.mnRotate10;
-    rOStm << rAttr.mnContPercent << rAttr.mnLumPercent << rAttr.mnRPercent << rAttr.mnGPercent << rAttr.mnBPercent;
-    rOStm << rAttr.mbInvert << rAttr.mcTransparency << (sal_uInt16) rAttr.meDrawMode;
+    rOStm.WriteUInt32( nTmp32 ).WriteUInt32( nTmp32 );
+    rOStm << rAttr.mfGamma;
+    rOStm.WriteUInt32( rAttr.mnMirrFlags ).WriteUInt16( rAttr.mnRotate10 );
+    rOStm.WriteInt16( rAttr.mnContPercent ).WriteInt16( rAttr.mnLumPercent ).WriteInt16( rAttr.mnRPercent ).WriteInt16( rAttr.mnGPercent ).WriteInt16( rAttr.mnBPercent );
+    rOStm.WriteUChar( rAttr.mbInvert ).WriteUChar( rAttr.mcTransparency ).WriteUInt16( (sal_uInt16) rAttr.meDrawMode );
     //#fdo39428 SvStream no longer supports operator<<(long)
-    rOStm << sal::static_int_cast<sal_Int32>(rAttr.mnLeftCrop)
-          << sal::static_int_cast<sal_Int32>(rAttr.mnTopCrop)
-          << sal::static_int_cast<sal_Int32>(rAttr.mnRightCrop)
-          << sal::static_int_cast<sal_Int32>(rAttr.mnBottomCrop);
+    rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(rAttr.mnLeftCrop) )
+         .WriteInt32( sal::static_int_cast<sal_Int32>(rAttr.mnTopCrop) )
+         .WriteInt32( sal::static_int_cast<sal_Int32>(rAttr.mnRightCrop) )
+         .WriteInt32( sal::static_int_cast<sal_Int32>(rAttr.mnBottomCrop) );
 
     return rOStm;
 }

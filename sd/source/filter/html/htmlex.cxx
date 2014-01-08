@@ -1109,7 +1109,7 @@ bool HtmlExport::WriteHtml( const OUString& rFileName, bool bAddExtension, const
     {
         OString aStr(OUStringToOString(rHtmlData,
             RTL_TEXTENCODING_UTF8));
-        *pStr << aStr.getStr();
+        pStr->WriteCharPtr( aStr.getStr() );
         nErr = aFile.close();
     }
 
@@ -2754,7 +2754,7 @@ OUString HtmlExport::StringToHTMLString( const OUString& rString )
 {
     SvMemoryStream aMemStm;
     HTMLOutFuncs::Out_String( aMemStm, rString, RTL_TEXTENCODING_UTF8 );
-    aMemStm << (char) 0;
+    aMemStm.WriteChar( (char) 0 );
     sal_Int32 nLength = strlen((char*)aMemStm.GetData());
     return OUString( (char*)aMemStm.GetData(), nLength, RTL_TEXTENCODING_UTF8 );
 }
@@ -2832,7 +2832,7 @@ bool HtmlExport::CopyScript( const OUString& rPath, const OUString& rSource, con
         {
             OString aStr(OUStringToOString(aScript,
                 RTL_TEXTENCODING_UTF8));
-            *pStr << aStr.getStr();
+            pStr->WriteCharPtr( aStr.getStr() );
 
             nErr = aFile.close();
         }
@@ -2922,7 +2922,7 @@ bool HtmlExport::CreateImageNumberFile()
     sal_uLong nErr = aFile.createStream(aFull, pStr);
     if(nErr == 0)
     {
-        *pStr << (const char *)"1";
+        pStr->WriteCharPtr( (const char *)"1" );
         nErr = aFile.close();
     }
 

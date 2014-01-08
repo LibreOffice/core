@@ -1193,7 +1193,7 @@ SvStream& SwFmtVertOrient::Store(SvStream &rStream, sal_uInt16 /*version*/) cons
 #else
     rStream << static_cast<sal_Int32>(nYPos);
 #endif
-    rStream << eOrient << eRelation;
+    rStream.WriteInt16( eOrient ).WriteInt16( eRelation );
     return rStream;
 }
 

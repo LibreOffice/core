@@ -136,7 +136,7 @@ TYPEINIT1(SfxEnumItem, SfxEnumItemInterface)
 // virtual
 SvStream & SfxEnumItem::Store(SvStream & rStream, sal_uInt16) const
 {
-    rStream << m_nValue;
+    rStream.WriteUInt16( m_nValue );
     return rStream;
 }
 
@@ -229,7 +229,7 @@ SfxPoolItem * SfxBoolItem::Create(SvStream & rStream, sal_uInt16) const
 // virtual
 SvStream & SfxBoolItem::Store(SvStream & rStream, sal_uInt16) const
 {
-    rStream << static_cast<sal_Bool>(m_bValue); // not bool for serialization!
+    rStream.WriteUChar( static_cast<sal_Bool>(m_bValue) ); // not bool for serialization!
     return rStream;
 }
 

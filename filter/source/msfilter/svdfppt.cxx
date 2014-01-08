@@ -2025,8 +2025,8 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                                                                 rStCtrl.Seek( pPersistPtr[ nPersistPtr ] );
                                                                 rStCtrl >> *pHd;
 
-                                                                *xOriginal  << nIDoNotKnow1
-                                                                                << nIDoNotKnow2;
+                                                                xOriginal->WriteUInt32( nIDoNotKnow1 )
+                                                                          .WriteUInt32( nIDoNotKnow2 );
 
                                                                 sal_uInt32 nToCopy, nBufSize;
                                                                 nToCopy = pHd->nRecLen;

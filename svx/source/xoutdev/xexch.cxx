@@ -59,7 +59,7 @@ SvStream& operator<<( SvStream& rOStm, const XFillExchangeData& rData )
         sal_uInt32          nItemCount = 0;
         sal_Size            nFirstPos = rOStm.Tell();
 
-        rOStm << nItemCount;
+        rOStm.WriteUInt32( nItemCount );
 
         while( nWhich )
         {
@@ -68,7 +68,7 @@ SvStream& operator<<( SvStream& rOStm, const XFillExchangeData& rData )
                 VersionCompat   aCompat( rOStm, STREAM_WRITE );
                 const sal_uInt16    nItemVersion2 = pItem->GetVersion( (sal_uInt16) rOStm.GetVersion() );
 
-                rOStm << nWhich << nItemVersion2;
+                rOStm.WriteUInt16( nWhich ).WriteUInt16( nItemVersion2 );
                 pItem->Store( rOStm, nItemVersion2 );
 
                 nItemCount++;
@@ -79,7 +79,7 @@ SvStream& operator<<( SvStream& rOStm, const XFillExchangeData& rData )
 
         const sal_uIntPtr nLastPos = rOStm.Tell();
         rOStm.Seek( nFirstPos );
-        rOStm << nItemCount;
+        rOStm.WriteUInt32( nItemCount );
         rOStm.Seek( nLastPos );
     }
 

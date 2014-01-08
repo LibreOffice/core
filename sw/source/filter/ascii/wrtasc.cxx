@@ -156,13 +156,12 @@ sal_uLong SwASCWriter::WriteStream()
                         switch(GetAsciiOptions().GetCharSet())
                         {
                             case RTL_TEXTENCODING_UTF8:
-                                Strm() << sal_uInt8(0xEF) << sal_uInt8(0xBB) <<
-                                    sal_uInt8(0xBF);
+                                Strm().WriteUChar( sal_uInt8(0xEF) ).WriteUChar( sal_uInt8(0xBB) ).                                    WriteUChar( sal_uInt8(0xBF) );
                                 break;
                             case RTL_TEXTENCODING_UCS2:
                                 Strm().SetEndianSwap(sal_False);
 #ifdef OSL_LITENDIAN
-                                Strm() << sal_uInt8(0xFF) << sal_uInt8(0xFE);
+                                Strm().WriteUChar( sal_uInt8(0xFF) ).WriteUChar( sal_uInt8(0xFE) );
 #else
                                 Strm() << sal_uInt8(0xFE) << sal_uInt8(0xFF);
 #endif

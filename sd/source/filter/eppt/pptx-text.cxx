@@ -214,7 +214,7 @@ void PortionObj::Write( SvStream* pStrm, sal_Bool bLast )
     if ( bLast && mbLastPortion )
         nCount--;
     for ( sal_uInt32 i = 0; i < nCount; i++ )
-        *pStrm << (sal_uInt16)mpText[ i ];
+        pStrm->WriteUInt16( (sal_uInt16)mpText[ i ] );
 }
 
 void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool bGetPropStateValue )

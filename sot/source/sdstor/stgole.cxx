@@ -144,16 +144,16 @@ bool StgCompObjStream::Store()
         return false;
     Seek( 0L );
     OString aAsciiUserName(OUStringToOString(aUserName, RTL_TEXTENCODING_MS_1252));
-    *this << (sal_Int16) 1          // Version?
-              << (sal_Int16) -2                     // 0xFFFE = Byte Order Indicator
-              << (sal_Int32) 0x0A03         // Windows 3.10
-              << (sal_Int32) -1L
-              << aClsId             // Class ID
-              << (sal_Int32) (aAsciiUserName.getLength() + 1)
-              << (const char *)aAsciiUserName.getStr()
-              << (sal_uInt8) 0;             // string terminator
+    WriteInt16( (sal_Int16) 1 );          // Version?
+    WriteInt16( (sal_Int16) -2 );                     // 0xFFFE = Byte Order Indicator
+    WriteInt32( (sal_Int32) 0x0A03 );         // Windows 3.10
+    WriteInt32( (sal_Int32) -1L );
+    *this << aClsId;             // Class ID
+    WriteInt32( (sal_Int32) (aAsciiUserName.getLength() + 1) );
+    WriteCharPtr( (const char *)aAsciiUserName.getStr() );
+    WriteUChar( (sal_uInt8) 0 );             // string terminator
     WriteClipboardFormat( *this, nCbFormat );
-    *this << (sal_Int32) 0;             // terminator
+    WriteInt32( (sal_Int32) 0 );             // terminator
     Commit();
     return GetError() == SVSTREAM_OK;
 }
@@ -184,11 +184,11 @@ bool StgOleStream::Store()
         return false;
 
     Seek( 0L );
-    *this << (sal_Int32) 0x02000001         // OLE version, format
-          << (sal_Int32) nFlags             // Object flags
-          << (sal_Int32) 0                  // Update Options
-          << (sal_Int32) 0                  // reserved
-          << (sal_Int32) 0;                 // Moniker 1
+    WriteInt32( (sal_Int32) 0x02000001 );         // OLE version, format
+    WriteInt32( (sal_Int32) nFlags );             // Object flags
+    WriteInt32( (sal_Int32) 0 );                  // Update Options
+    WriteInt32( (sal_Int32) 0 );                  // reserved
+    WriteInt32( (sal_Int32) 0 );                 // Moniker 1
     Commit();
     return GetError() == SVSTREAM_OK;
 }

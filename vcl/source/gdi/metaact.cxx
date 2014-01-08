@@ -140,7 +140,7 @@ sal_Bool MetaAction::Compare( const MetaAction& ) const
 
 void MetaAction::Write( SvStream& rOStm, ImplMetaWriteData* )
 {
-    rOStm << mnType;
+    rOStm.WriteUInt16( mnType );
 }
 
 // ------------------------------------------------------------------------
@@ -588,7 +588,8 @@ sal_Bool MetaRoundRectAction::Compare( const MetaAction& rMetaAction ) const
 void MetaRoundRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    rOStm << maRect << mnHorzRound << mnVertRound;
+    rOStm << maRect;
+    rOStm.WriteUInt32( mnHorzRound ).WriteUInt32( mnVertRound );
 }
 
 // ------------------------------------------------------------------------
@@ -967,7 +968,7 @@ void MetaPolyLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm << maLineInfo;                                // Version 2
 
     sal_uInt8 bHasPolyFlags = maPoly.HasFlags();        // Version 3
-    rOStm << bHasPolyFlags;
+    rOStm.WriteUChar( bHasPolyFlags );
     if ( bHasPolyFlags )
         maPoly.Write( rOStm );
 }
@@ -1053,7 +1054,7 @@ void MetaPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm << aSimplePoly;
 
     sal_uInt8 bHasPolyFlags = maPoly.HasFlags();    // Version 2
-    rOStm << bHasPolyFlags;
+    rOStm.WriteUChar( bHasPolyFlags );
     if ( bHasPolyFlags )
         maPoly.Write( rOStm );
 }
@@ -1135,7 +1136,7 @@ void MetaPolyPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     sal_uInt16 i, nPolyCount = maPolyPoly.Count();
 
     Polygon aSimplePoly;                                // Version 1
-    rOStm << nPolyCount;
+    rOStm.WriteUInt16( nPolyCount );
     for ( i = 0; i < nPolyCount; i++ )
     {
         const Polygon& rPoly = maPolyPoly.GetObject( i );
@@ -1145,13 +1146,13 @@ void MetaPolyPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
         rOStm << aSimplePoly;
     }
 
-    rOStm << nNumberOfComplexPolygons;                  // Version 2
+    rOStm.WriteUInt16( nNumberOfComplexPolygons );                  // Version 2
     for ( i = 0; nNumberOfComplexPolygons && ( i < nPolyCount ); i++ )
     {
         const Polygon& rPoly = maPolyPoly.GetObject( i );
         if ( rPoly.HasFlags() )
         {
-            rOStm << i;
+            rOStm.WriteUInt16( i );
             rPoly.Write( rOStm );
 
             nNumberOfComplexPolygons--;
@@ -1243,8 +1244,8 @@ void MetaTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     WRITE_BASE_COMPAT( rOStm, 2, pData );
     rOStm   << maPt;
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
-    rOStm   << mnIndex;
-    rOStm   << mnLen;
+    rOStm  .WriteUInt16( mnIndex );
+    rOStm  .WriteUInt16( mnLen );
 
     write_lenPrefixed_uInt16s_FromOUString<sal_uInt16>(rOStm, maStr); // version 2
 }
@@ -1380,12 +1381,12 @@ void MetaTextArrayAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     WRITE_BASE_COMPAT( rOStm, 2, pData );
     rOStm   << maStartPt;
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
-    rOStm   << mnIndex;
-    rOStm   << mnLen;
-    rOStm   << nAryLen;
+    rOStm  .WriteUInt16( mnIndex );
+    rOStm  .WriteUInt16( mnLen );
+    rOStm  .WriteUInt32( nAryLen );
 
     for( sal_uLong i = 0UL; i < nAryLen; i++ )
-        rOStm << mpDXAry[ i ];
+        rOStm.WriteInt32( mpDXAry[ i ] );
 
     write_lenPrefixed_uInt16s_FromOUString<sal_uInt16>(rOStm, maStr); // version 2
 }
@@ -1517,9 +1518,9 @@ void MetaStretchTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     WRITE_BASE_COMPAT( rOStm, 2, pData );
     rOStm   << maPt;
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
-    rOStm   << mnWidth;
-    rOStm   << mnIndex;
-    rOStm   << mnLen;
+    rOStm  .WriteUInt32( mnWidth );
+    rOStm  .WriteUInt16( mnIndex );
+    rOStm  .WriteUInt16( mnLen );
 
     write_lenPrefixed_uInt16s_FromOUString<sal_uInt16>(rOStm, maStr); // version 2
 }
@@ -1600,7 +1601,7 @@ void MetaTextRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     WRITE_BASE_COMPAT( rOStm, 2, pData );
     rOStm   << maRect;
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
-    rOStm   << mnStyle;
+    rOStm  .WriteUInt16( mnStyle );
 
     write_lenPrefixed_uInt16s_FromOUString<sal_uInt16>(rOStm, maStr); // version 2
 }
@@ -1687,11 +1688,11 @@ void MetaTextLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
     //#fdo39428 SvStream no longer supports operator<<(long)
     rOStm << maPos;
-    rOStm << sal::static_int_cast<sal_Int32>(mnWidth);
-    rOStm << static_cast<sal_uInt32>(meStrikeout);
-    rOStm << static_cast<sal_uInt32>(meUnderline);
+    rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(mnWidth) );
+    rOStm.WriteUInt32( static_cast<sal_uInt32>(meStrikeout) );
+    rOStm.WriteUInt32( static_cast<sal_uInt32>(meUnderline) );
     // new in version 2
-    rOStm << static_cast<sal_uInt32>(meOverline);
+    rOStm.WriteUInt32( static_cast<sal_uInt32>(meOverline) );
 }
 
 // ------------------------------------------------------------------------
@@ -2782,7 +2783,8 @@ sal_Bool MetaClipRegionAction::Compare( const MetaAction& rMetaAction ) const
 void MetaClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    rOStm << maRegion << mbClip;
+    rOStm << maRegion;
+    rOStm.WriteUChar( mbClip );
 }
 
 // ------------------------------------------------------------------------
@@ -2974,7 +2976,7 @@ void MetaMoveClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData 
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
     //#fdo39428 SvStream no longer supports operator<<(long)
-    rOStm << sal::static_int_cast<sal_Int32>(mnHorzMove) << sal::static_int_cast<sal_Int32>(mnVertMove);
+    rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(mnHorzMove) ).WriteInt32( sal::static_int_cast<sal_Int32>(mnVertMove) );
 }
 
 // ------------------------------------------------------------------------
@@ -3035,7 +3037,7 @@ void MetaLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
     maColor.Write( rOStm, sal_True );
-    rOStm << mbSet;
+    rOStm.WriteUChar( mbSet );
 }
 
 // ------------------------------------------------------------------------
@@ -3093,7 +3095,7 @@ void MetaFillColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
     maColor.Write( rOStm, sal_True );
-    rOStm << mbSet;
+    rOStm.WriteUChar( mbSet );
 }
 
 // ------------------------------------------------------------------------
@@ -3202,7 +3204,7 @@ void MetaTextFillColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
     maColor.Write( rOStm, sal_True );
-    rOStm << mbSet;
+    rOStm.WriteUChar( mbSet );
 }
 
 // ------------------------------------------------------------------------
@@ -3260,7 +3262,7 @@ void MetaTextLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
     maColor.Write( rOStm, sal_True );
-    rOStm << mbSet;
+    rOStm.WriteUChar( mbSet );
 }
 
 // ------------------------------------------------------------------------
@@ -3318,7 +3320,7 @@ void MetaOverlineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
     maColor.Write( rOStm, sal_True );
-    rOStm << mbSet;
+    rOStm.WriteUChar( mbSet );
 }
 
 // ------------------------------------------------------------------------
@@ -3370,7 +3372,7 @@ sal_Bool MetaTextAlignAction::Compare( const MetaAction& rMetaAction ) const
 void MetaTextAlignAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    rOStm << (sal_uInt16) maAlign;
+    rOStm.WriteUInt16( (sal_uInt16) maAlign );
 }
 
 // ------------------------------------------------------------------------
@@ -3560,7 +3562,7 @@ sal_Bool MetaPushAction::Compare( const MetaAction& rMetaAction ) const
 void MetaPushAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    rOStm << mnFlags;
+    rOStm.WriteUInt16( mnFlags );
 }
 
 // ------------------------------------------------------------------------
@@ -3645,7 +3647,7 @@ sal_Bool MetaRasterOpAction::Compare( const MetaAction& rMetaAction ) const
 void MetaRasterOpAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    rOStm << (sal_uInt16) meRasterOp;
+    rOStm.WriteUInt16( (sal_uInt16) meRasterOp );
 }
 
 // ------------------------------------------------------------------------
@@ -3729,7 +3731,7 @@ void MetaTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     maPolyPoly.AdaptiveSubdivide(aNoCurvePolyPolygon);
 
     rOStm << aNoCurvePolyPolygon;
-    rOStm << mnTransPercent;
+    rOStm.WriteUInt16( mnTransPercent );
 }
 
 // ------------------------------------------------------------------------
@@ -3944,7 +3946,8 @@ sal_Bool MetaRefPointAction::Compare( const MetaAction& rMetaAction ) const
 void MetaRefPointAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    rOStm << maRefPoint << mbSet;
+    rOStm << maRefPoint;
+    rOStm.WriteUChar( mbSet );
 }
 
 // ------------------------------------------------------------------------
@@ -4135,9 +4138,9 @@ void MetaCommentAction::Scale( double fXScale, double fYScale )
                 m21 *= fYScale;
 
                 // prepare new data
-                aDest << nLeft << nTop << nRight << nBottom;
-                aDest << nPixX << nPixY << nMillX << nMillY;
-                aDest << m11 << m12 << m21 << m22 << mdx << mdy;
+                aDest.WriteInt32( nLeft ).WriteInt32( nTop ).WriteInt32( nRight ).WriteInt32( nBottom );
+                aDest.WriteInt32( nPixX ).WriteInt32( nPixY ).WriteInt32( nMillX ).WriteInt32( nMillY );
+                aDest.WriteFloat( m11 ).WriteFloat( m12 ).WriteFloat( m21 ).WriteFloat( m22 ).WriteFloat( mdx ).WriteFloat( mdy );
 
                 // save them
                 ImplInitDynamicData( static_cast<const sal_uInt8*>( aDest.GetData() ), aDest.Tell() );
@@ -4162,7 +4165,7 @@ void MetaCommentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
     write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStm, maComment);
-    rOStm << mnValue << mnDataSize;
+    rOStm.WriteInt32( mnValue ).WriteUInt32( mnDataSize );
 
     if ( mnDataSize )
         rOStm.Write( mpData, mnDataSize );
@@ -4229,7 +4232,7 @@ sal_Bool MetaLayoutModeAction::Compare( const MetaAction& rMetaAction ) const
 void MetaLayoutModeAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    rOStm << mnLayoutMode;
+    rOStm.WriteUInt32( mnLayoutMode );
 }
 
 // ------------------------------------------------------------------------
@@ -4280,7 +4283,7 @@ sal_Bool MetaTextLanguageAction::Compare( const MetaAction& rMetaAction ) const
 void MetaTextLanguageAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    rOStm << meTextLanguage;
+    rOStm.WriteUInt16( meTextLanguage );
 }
 
 // ------------------------------------------------------------------------

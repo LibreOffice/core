@@ -680,7 +680,7 @@ int RTFDocumentImpl::resolvePict(bool bInline)
                 count--;
                 if (!count)
                 {
-                    aStream << (char)b;
+                    aStream.WriteChar( (char)b );
                     count = 2;
                     b = 0;
                 }
@@ -890,11 +890,11 @@ int RTFDocumentImpl::resolveChars(char ch)
     if (m_aStates.top().nInternalState == INTERNAL_BIN)
     {
         m_pBinaryData.reset(new SvMemoryStream());
-        *m_pBinaryData << ch;
+        m_pBinaryData->WriteChar( ch );
         for (int i = 0; i < m_aStates.top().nBinaryToRead - 1; ++i)
         {
             Strm() >> ch;
-            *m_pBinaryData << ch;
+            m_pBinaryData->WriteChar( ch );
         }
         m_aStates.top().nInternalState = INTERNAL_NORMAL;
         return 0;
@@ -4173,7 +4173,7 @@ int RTFDocumentImpl::popState()
                         count--;
                         if (!count)
                         {
-                            *m_pObjectData << (char)b;
+                            m_pObjectData->WriteChar( (char)b );
                             count = 2;
                             b = 0;
                         }

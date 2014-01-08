@@ -54,17 +54,17 @@ SvStream& operator >>( SvStream& r, ClsId& rId )
 SvStream& operator <<( SvStream& r, const ClsId& rId )
 {
     return
-       r  << (sal_Int32) rId.n1
-          << (sal_Int16) rId.n2
-          << (sal_Int16) rId.n3
-          << (sal_uInt8) rId.n4
-          << (sal_uInt8) rId.n5
-          << (sal_uInt8) rId.n6
-          << (sal_uInt8) rId.n7
-          << (sal_uInt8) rId.n8
-          << (sal_uInt8) rId.n9
-          << (sal_uInt8) rId.n10
-          << (sal_uInt8) rId.n11;
+       r .WriteInt32( (sal_Int32) rId.n1 )
+         .WriteInt16( (sal_Int16) rId.n2 )
+         .WriteInt16( (sal_Int16) rId.n3 )
+         .WriteUChar( (sal_uInt8) rId.n4 )
+         .WriteUChar( (sal_uInt8) rId.n5 )
+         .WriteUChar( (sal_uInt8) rId.n6 )
+         .WriteUChar( (sal_uInt8) rId.n7 )
+         .WriteUChar( (sal_uInt8) rId.n8 )
+         .WriteUChar( (sal_uInt8) rId.n9 )
+         .WriteUChar( (sal_uInt8) rId.n10 )
+         .WriteUChar( (sal_uInt8) rId.n11 );
 }
 
 ///////////////////////////// class StgHeader ////////////////////////////
@@ -159,22 +159,22 @@ bool StgHeader::Store( StgIo& rIo )
     SvStream& r = *rIo.GetStrm();
     r.Seek( 0L );
     r.Write( cSignature, 8 );
-    r << aClsId                     // 08 Class ID
-      << nVersion                   // 1A version number
-      << nByteOrder                 // 1C Unicode byte order indicator
-      << nPageSize                  // 1E 1 << nPageSize = block size
-      << nDataPageSize              // 20 1 << this size == data block size
-      << (sal_Int32) 0 << (sal_Int32) 0 << (sal_Int16) 0
-      << nFATSize                   // 2C total number of FAT pages
-      << nTOCstrm                   // 30 starting page for the TOC stream
-      << nReserved                  // 34
-      << nThreshold                 // 38 minimum file size for big data
-      << nDataFAT                   // 3C page # of 1st data FAT block
-      << nDataFATSize               // 40 # of data FAT pages
-      << nMasterChain               // 44 chain to the next master block
-      << nMaster;                   // 48 # of additional master blocks
+    r << aClsId;                     // 08 Class ID
+    r.WriteInt32( nVersion )                   // 1A version number
+     .WriteUInt16( nByteOrder )                 // 1C Unicode byte order indicator
+     .WriteInt16( nPageSize )                  // 1E 1 << nPageSize = block size
+     .WriteInt16( nDataPageSize )              // 20 1 << this size == data block size
+     .WriteInt32( (sal_Int32) 0 ).WriteInt32( (sal_Int32) 0 ).WriteInt16( (sal_Int16) 0 )
+     .WriteInt32( nFATSize )                   // 2C total number of FAT pages
+     .WriteInt32( nTOCstrm )                   // 30 starting page for the TOC stream
+     .WriteInt32( nReserved )                  // 34
+     .WriteInt32( nThreshold )                 // 38 minimum file size for big data
+     .WriteInt32( nDataFAT )                   // 3C page # of 1st data FAT block
+     .WriteInt32( nDataFATSize )               // 40 # of data FAT pages
+     .WriteInt32( nMasterChain )               // 44 chain to the next master block
+     .WriteInt32( nMaster );                   // 48 # of additional master blocks
     for( short i = 0; i < cFATPagesInHeader; i++ )
-        r << nMasterFAT[ i ];
+        r.WriteInt32( nMasterFAT[ i ] );
     bDirty = !rIo.Good();
     return !bDirty;
 }
@@ -420,22 +420,22 @@ void StgEntry::Store( void* pTo )
 {
     SvMemoryStream r( (sal_Char *)pTo, 128, STREAM_WRITE );
     for( short i = 0; i < 32; i++ )
-        r << nName[ i ];            // 00 name as WCHAR
-    r << nNameLen                   // 40 size of name in bytes including 00H
-      << cType                      // 42 entry type
-      << cFlags                     // 43 0 or 1 (tree balance?)
-      << nLeft                      // 44 left node entry
-      << nRight                     // 48 right node entry
-      << nChild                     // 4C 1st child entry if storage;
-      << aClsId                     // 50 class ID (optional)
-      << nFlags                     // 60 state flags(?)
-      << nMtime[ 0 ]                // 64 modification time
-      << nMtime[ 1 ]                // 64 modification time
-      << nAtime[ 0 ]                // 6C creation and access time
-      << nAtime[ 1 ]                // 6C creation and access time
-      << nPage1                     // 74 starting block (either direct or translated)
-      << nSize                      // 78 file size
-      << nUnknown;                  // 7C unknown
+        r.WriteUInt16( nName[ i ] );            // 00 name as WCHAR
+    r.WriteUInt16( nNameLen )                   // 40 size of name in bytes including 00H
+     .WriteUChar( cType )                      // 42 entry type
+     .WriteUChar( cFlags )                     // 43 0 or 1 (tree balance?)
+     .WriteInt32( nLeft )                      // 44 left node entry
+     .WriteInt32( nRight )                     // 48 right node entry
+     .WriteInt32( nChild );                    // 4C 1st child entry if storage;
+    r << aClsId;                               // 50 class ID (optional)
+    r.WriteInt32( nFlags )                     // 60 state flags(?)
+     .WriteInt32( nMtime[ 0 ] )                // 64 modification time
+     .WriteInt32( nMtime[ 1 ] )                // 64 modification time
+     .WriteInt32( nAtime[ 0 ] )                // 6C creation and access time
+     .WriteInt32( nAtime[ 1 ] )                // 6C creation and access time
+     .WriteInt32( nPage1 )                     // 74 starting block (either direct or translated)
+     .WriteInt32( nSize )                      // 78 file size
+     .WriteInt32( nUnknown );                  // 7C unknown
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

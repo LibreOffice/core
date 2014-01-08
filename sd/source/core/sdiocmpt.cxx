@@ -46,7 +46,7 @@ void old_SdrDownCompat::Read()
 
 void old_SdrDownCompat::Write()
 {
-    rStream << nSubRecSiz;
+    rStream.WriteUInt32( nSubRecSiz );
 }
 
 void old_SdrDownCompat::OpenSubRecord()
@@ -107,7 +107,7 @@ SdIOCompat::SdIOCompat(SvStream& rNewStream, sal_uInt16 nNewMode, sal_uInt16 nVe
     {
         DBG_ASSERT(nVer != SDIOCOMPAT_VERSIONDONTKNOW,
                    "can´t write unknown version");
-        rNewStream << nVersion;
+        rNewStream.WriteUInt16( nVersion );
     }
     else if (nNewMode == STREAM_READ)
     {

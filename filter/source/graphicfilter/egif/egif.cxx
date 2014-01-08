@@ -307,18 +307,18 @@ void GIFWriter::WriteGlobalHeader( const Size& rSize )
         const sal_uInt8     cFlags = 128 | ( 7 << 4 );
 
         // write values
-        m_rGIF << nWidth;
-        m_rGIF << nHeight;
-        m_rGIF << cFlags;
-        m_rGIF << (sal_uInt8) 0x00;
-        m_rGIF << (sal_uInt8) 0x00;
+        m_rGIF.WriteUInt16( nWidth );
+        m_rGIF.WriteUInt16( nHeight );
+        m_rGIF.WriteUChar( cFlags );
+        m_rGIF.WriteUChar( (sal_uInt8) 0x00 );
+        m_rGIF.WriteUChar( (sal_uInt8) 0x00 );
 
         // write dummy palette with two entries (black/white);
         // we do this only because of a bug in Photoshop, since those can't
         // read pictures without a global color palette
-        m_rGIF << (sal_uInt16) 0;
-        m_rGIF << (sal_uInt16) 255;
-        m_rGIF << (sal_uInt16) 65535;
+        m_rGIF.WriteUInt16( (sal_uInt16) 0 );
+        m_rGIF.WriteUInt16( (sal_uInt16) 255 );
+        m_rGIF.WriteUInt16( (sal_uInt16) 65535 );
 
         if( m_rGIF.GetError() )
             bStatus = sal_False;
@@ -346,15 +346,15 @@ void GIFWriter::WriteLoopExtension( const Animation& rAnimation )
         const sal_uInt8 cLoByte = (const sal_uInt8) nLoopCount;
         const sal_uInt8 cHiByte = (const sal_uInt8) ( nLoopCount >> 8 );
 
-        m_rGIF << (sal_uInt8) 0x21;
-        m_rGIF << (sal_uInt8) 0xff;
-        m_rGIF << (sal_uInt8) 0x0b;
+        m_rGIF.WriteUChar( (sal_uInt8) 0x21 );
+        m_rGIF.WriteUChar( (sal_uInt8) 0xff );
+        m_rGIF.WriteUChar( (sal_uInt8) 0x0b );
         m_rGIF.Write( "NETSCAPE2.0", 11 );
-        m_rGIF << (sal_uInt8) 0x03;
-        m_rGIF << (sal_uInt8) 0x01;
-        m_rGIF << cLoByte;
-        m_rGIF << cHiByte;
-        m_rGIF << (sal_uInt8) 0x00;
+        m_rGIF.WriteUChar( (sal_uInt8) 0x03 );
+        m_rGIF.WriteUChar( (sal_uInt8) 0x01 );
+        m_rGIF.WriteUChar( cLoByte );
+        m_rGIF.WriteUChar( cHiByte );
+        m_rGIF.WriteUChar( (sal_uInt8) 0x00 );
     }
 }
 
@@ -365,15 +365,15 @@ void GIFWriter::WriteLogSizeExtension( const Size& rSize100 )
     // writer PrefSize in 100th-mm as ApplicationExtension
     if( rSize100.Width() && rSize100.Height() )
     {
-        m_rGIF << (sal_uInt8) 0x21;
-        m_rGIF << (sal_uInt8) 0xff;
-        m_rGIF << (sal_uInt8) 0x0b;
+        m_rGIF.WriteUChar( (sal_uInt8) 0x21 );
+        m_rGIF.WriteUChar( (sal_uInt8) 0xff );
+        m_rGIF.WriteUChar( (sal_uInt8) 0x0b );
         m_rGIF.Write( "STARDIV 5.0", 11 );
-        m_rGIF << (sal_uInt8) 0x09;
-        m_rGIF << (sal_uInt8) 0x01;
-        m_rGIF << (sal_uInt32) rSize100.Width();
-        m_rGIF << (sal_uInt32) rSize100.Height();
-        m_rGIF << (sal_uInt8) 0x00;
+        m_rGIF.WriteUChar( (sal_uInt8) 0x09 );
+        m_rGIF.WriteUChar( (sal_uInt8) 0x01 );
+        m_rGIF.WriteUInt32( (sal_uInt32) rSize100.Width() );
+        m_rGIF.WriteUInt32( (sal_uInt32) rSize100.Height() );
+        m_rGIF.WriteUChar( (sal_uInt8) 0x00 );
     }
 }
 
@@ -396,13 +396,13 @@ void GIFWriter::WriteImageExtension( long nTimer, Disposal eDisposal )
         else if( eDisposal == DISPOSE_PREVIOUS )
             cFlags |= ( 3 << 2 );
 
-        m_rGIF << (sal_uInt8) 0x21;
-        m_rGIF << (sal_uInt8) 0xf9;
-        m_rGIF << (sal_uInt8) 0x04;
-        m_rGIF << cFlags;
-        m_rGIF << nDelay;
-        m_rGIF << (sal_uInt8) m_pAcc->GetBestPaletteIndex( BMP_COL_TRANS );
-        m_rGIF << (sal_uInt8) 0x00;
+        m_rGIF.WriteUChar( (sal_uInt8) 0x21 );
+        m_rGIF.WriteUChar( (sal_uInt8) 0xf9 );
+        m_rGIF.WriteUChar( (sal_uInt8) 0x04 );
+        m_rGIF.WriteUChar( cFlags );
+        m_rGIF.WriteUInt16( nDelay );
+        m_rGIF.WriteUChar( (sal_uInt8) m_pAcc->GetBestPaletteIndex( BMP_COL_TRANS ) );
+        m_rGIF.WriteUChar( (sal_uInt8) 0x00 );
 
         if( m_rGIF.GetError() )
             bStatus = sal_False;
@@ -429,12 +429,12 @@ void GIFWriter::WriteLocalHeader()
         cFlags |= 0x80;
 
         // alles rausschreiben
-        m_rGIF << (sal_uInt8) 0x2c;
-        m_rGIF << nPosX;
-        m_rGIF << nPosY;
-        m_rGIF << nWidth;
-        m_rGIF << nHeight;
-        m_rGIF << cFlags;
+        m_rGIF.WriteUChar( (sal_uInt8) 0x2c );
+        m_rGIF.WriteUInt16( nPosX );
+        m_rGIF.WriteUInt16( nPosY );
+        m_rGIF.WriteUInt16( nWidth );
+        m_rGIF.WriteUInt16( nHeight );
+        m_rGIF.WriteUChar( cFlags );
 
         if( m_rGIF.GetError() )
             bStatus = sal_False;
@@ -454,9 +454,9 @@ void GIFWriter::WritePalette()
         {
             const BitmapColor& rColor = m_pAcc->GetPaletteColor( i );
 
-            m_rGIF << rColor.GetRed();
-            m_rGIF << rColor.GetGreen();
-            m_rGIF << rColor.GetBlue();
+            m_rGIF.WriteUChar( rColor.GetRed() );
+            m_rGIF.WriteUChar( rColor.GetGreen() );
+            m_rGIF.WriteUChar( rColor.GetBlue() );
         }
 
         // fill up the rest with 0
@@ -549,7 +549,7 @@ void GIFWriter::WriteTerminator()
 {
     if( bStatus )
     {
-        m_rGIF << (sal_uInt8) 0x3b;
+        m_rGIF.WriteUChar( (sal_uInt8) 0x3b );
 
         if( m_rGIF.GetError() )
             bStatus = sal_False;

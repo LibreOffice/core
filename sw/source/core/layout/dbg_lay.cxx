@@ -721,7 +721,8 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
                                 break;
                             }
     }
-    *pStream << aOut.getStr() << endl;  // output
+    pStream->WriteCharPtr( aOut.getStr() );
+    (*pStream) << endl;  // output
     pStream->Flush();   // to the disk, so we can read it immediately
     if( ++nLineCount >= nMaxLines )     // max number of lines reached?
         SwProtocol::SetRecord( 0 );        // => end f logging

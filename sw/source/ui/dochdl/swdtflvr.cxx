@@ -744,7 +744,7 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
         SwWriter aWrt( *xStream, *pDoc );
         if( !IsError( aWrt.Write( xWrt )) )
         {
-            *xStream << '\0';               // terminate with a zero
+            xStream->WriteChar( '\0' );               // terminate with a zero
             xStream->Commit();
             bRet = sal_True;
         }

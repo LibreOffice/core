@@ -106,13 +106,13 @@ namespace
     /// Store a border line to a stream.
     SvStream& StoreBorderLine(SvStream &stream, const SvxBorderLine &l, sal_uInt16 version)
     {
-        stream << l.GetColor()
-               << l.GetOutWidth()
-               << l.GetInWidth()
-               << l.GetDistance();
+        stream << l.GetColor();
+        stream.WriteUInt16( l.GetOutWidth() )
+              .WriteUInt16( l.GetInWidth() )
+              .WriteUInt16( l.GetDistance() );
 
         if (version >= BORDER_LINE_WITH_STYLE_VERSION)
-               stream << static_cast<sal_uInt16>(l.GetBorderLineStyle());
+               stream.WriteUInt16( static_cast<sal_uInt16>(l.GetBorderLineStyle()) );
 
         return stream;
     }
@@ -167,7 +167,7 @@ SfxPoolItem* SvxPaperBinItem::Clone( SfxItemPool* ) const
 
 SvStream& SvxPaperBinItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm << GetValue();
+    rStrm.WriteUChar( GetValue() );
     return rStrm;
 }
 
@@ -370,8 +370,8 @@ SfxItemPresentation SvxSizeItem::GetPresentation
 SvStream& SvxSizeItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
     //#fdo39428 SvStream no longer supports operator<<(long)
-    rStrm << sal::static_int_cast<sal_Int32>(aSize.Width());
-    rStrm << sal::static_int_cast<sal_Int32>(aSize.Height());
+    rStrm.WriteInt32( sal::static_int_cast<sal_Int32>(aSize.Width()) );
+    rStrm.WriteInt32( sal::static_int_cast<sal_Int32>(aSize.Height()) );
     return rStrm;
 }
 
@@ -675,38 +675,38 @@ SvStream& SvxLRSpaceItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) con
     sal_uInt16 nMargin = 0;
     if( nLeftMargin > 0 )
         nMargin = sal_uInt16( nLeftMargin );
-    rStrm << nMargin;
-    rStrm << nPropLeftMargin;
+    rStrm.WriteUInt16( nMargin );
+    rStrm.WriteUInt16( nPropLeftMargin );
     if( nRightMargin > 0 )
         nMargin = sal_uInt16( nRightMargin );
     else
         nMargin = 0;
-    rStrm << nMargin;
-    rStrm << nPropRightMargin;
-    rStrm << nFirstLineOfst;
-    rStrm << nPropFirstLineOfst;
+    rStrm.WriteUInt16( nMargin );
+    rStrm.WriteUInt16( nPropRightMargin );
+    rStrm.WriteInt16( nFirstLineOfst );
+    rStrm.WriteUInt16( nPropFirstLineOfst );
     if( nTxtLeft > 0 )
         nMargin = sal_uInt16( nTxtLeft );
     else
         nMargin = 0;
-    rStrm << nMargin;
+    rStrm.WriteUInt16( nMargin );
     if( nItemVersion >= LRSPACE_AUTOFIRST_VERSION )
     {
         sal_Int8 nAutoFirst = bAutoFirst ? 1 : 0;
         if( nItemVersion >= LRSPACE_NEGATIVE_VERSION &&
             ( nLeftMargin < 0 || nRightMargin < 0 || nTxtLeft < 0 ) )
             nAutoFirst |= 0x80;
-        rStrm << nAutoFirst;
+        rStrm.WriteSChar( nAutoFirst );
 
         // From 6.0 onwards, do not write Magic numbers...
         DBG_ASSERT( rStrm.GetVersion() <= SOFFICE_FILEFORMAT_50, "Change File format SvxLRSpaceItem!" );
-        rStrm << (sal_uInt32) BULLETLR_MARKER;
-        rStrm << nSaveFI;
+        rStrm.WriteUInt32( (sal_uInt32) BULLETLR_MARKER );
+        rStrm.WriteInt16( nSaveFI );
 
         if( 0x80 & nAutoFirst )
         {
-            rStrm << static_cast<sal_Int32>(nLeftMargin);
-            rStrm << static_cast<sal_Int32>(nRightMargin);
+            rStrm.WriteInt32( static_cast<sal_Int32>(nLeftMargin) );
+            rStrm.WriteInt32( static_cast<sal_Int32>(nRightMargin) );
         }
     }
 
@@ -1002,10 +1002,10 @@ SfxItemPresentation SvxULSpaceItem::GetPresentation
 
 SvStream& SvxULSpaceItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm << GetUpper()
-          << GetPropUpper()
-          << GetLower()
-          << GetPropLower();
+    rStrm.WriteUInt16( GetUpper() )
+         .WriteUInt16( GetPropUpper() )
+         .WriteUInt16( GetLower() )
+         .WriteUInt16( GetPropLower() );
     return rStrm;
 }
 
@@ -1067,7 +1067,7 @@ SfxPoolItem* SvxPrintItem::Clone( SfxItemPool* ) const
 
 SvStream& SvxPrintItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm << (sal_Int8)GetValue();
+    rStrm.WriteSChar( (sal_Int8)GetValue() );
     return rStrm;
 }
 
@@ -1122,7 +1122,7 @@ SfxPoolItem* SvxOpaqueItem::Clone( SfxItemPool* ) const
 
 SvStream& SvxOpaqueItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm << (sal_Int8)GetValue();
+    rStrm.WriteSChar( (sal_Int8)GetValue() );
     return rStrm;
 }
 
@@ -1267,7 +1267,7 @@ SvStream& SvxProtectItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ )
     if( IsPosProtected() )   cProt |= 0x01;
     if( IsSizeProtected() )  cProt |= 0x02;
     if( IsCntntProtected() ) cProt |= 0x04;
-    rStrm << (sal_Int8) cProt;
+    rStrm.WriteSChar( (sal_Int8) cProt );
     return rStrm;
 }
 
@@ -1510,12 +1510,12 @@ SfxItemPresentation SvxShadowItem::GetPresentation
 
 SvStream& SvxShadowItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm << (sal_Int8) GetLocation()
-          << (sal_uInt16) GetWidth()
-          << (sal_Bool)(aShadowColor.GetTransparency() > 0)
+    rStrm.WriteSChar( (sal_Int8) GetLocation() )
+         .WriteUInt16( (sal_uInt16) GetWidth() )
+         .WriteUChar( (sal_Bool)(aShadowColor.GetTransparency() > 0) )
           << GetColor()
-          << GetColor()
-          << (sal_Int8)(aShadowColor.GetTransparency() > 0 ? 0 : 1); //BRUSH_NULL : BRUSH_SOLID
+          << GetColor();
+    rStrm.WriteSChar( (sal_Int8)(aShadowColor.GetTransparency() > 0 ? 0 : 1) ); //BRUSH_NULL : BRUSH_SOLID
     return rStrm;
 }
 
@@ -2200,7 +2200,7 @@ SfxItemPresentation SvxBoxItem::GetPresentation
 
 SvStream& SvxBoxItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
 {
-    rStrm << (sal_uInt16) GetDistance();
+    rStrm.WriteUInt16( (sal_uInt16) GetDistance() );
     const SvxBorderLine* pLine[ 4 ];    // top, left, right, bottom
     pLine[ 0 ] = GetTop();
     pLine[ 1 ] = GetLeft();
@@ -2212,7 +2212,7 @@ SvStream& SvxBoxItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
         const SvxBorderLine* l = pLine[ i ];
         if( l )
         {
-            rStrm << static_cast<sal_Int8>(i);
+            rStrm.WriteSChar( static_cast<sal_Int8>(i) );
             StoreBorderLine(rStrm, *l, BorderLineVersionFromBoxVersion(nItemVersion));
         }
     }
@@ -2225,14 +2225,14 @@ SvStream& SvxBoxItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
         cLine |= 0x10;
     }
 
-    rStrm << cLine;
+    rStrm.WriteSChar( cLine );
 
     if( nItemVersion >= BOX_4DISTS_VERSION && (cLine & 0x10) != 0 )
     {
-        rStrm << (sal_uInt16)nTopDist
-              << (sal_uInt16)nLeftDist
-              << (sal_uInt16)nRightDist
-              << (sal_uInt16)nBottomDist;
+        rStrm.WriteUInt16( (sal_uInt16)nTopDist )
+             .WriteUInt16( (sal_uInt16)nLeftDist )
+             .WriteUInt16( (sal_uInt16)nRightDist )
+             .WriteUInt16( (sal_uInt16)nBottomDist );
     }
 
     return rStrm;
@@ -2601,8 +2601,8 @@ SvStream& SvxBoxInfoItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ )
         cFlags |= 0x02;
     if ( IsMinDist() )
         cFlags |= 0x04;
-    rStrm << (sal_Int8)   cFlags
-          << (sal_uInt16) GetDefDist();
+    rStrm.WriteSChar( (sal_Int8)   cFlags )
+         .WriteUInt16( (sal_uInt16) GetDefDist() );
     const SvxBorderLine* pLine[ 2 ];
     pLine[ 0 ] = GetHori();
     pLine[ 1 ] = GetVert();
@@ -2612,14 +2612,14 @@ SvStream& SvxBoxInfoItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ )
         const SvxBorderLine* l = pLine[ i ];
         if( l )
         {
-            rStrm << (char) i
-                  << l->GetColor()
-                  << (short) l->GetOutWidth()
-                  << (short) l->GetInWidth()
-                  << (short) l->GetDistance();
+            rStrm.WriteChar( (char) i )
+                  << l->GetColor();
+            rStrm.WriteInt16( (short) l->GetOutWidth() )
+                 .WriteInt16( (short) l->GetInWidth() )
+                 .WriteInt16( (short) l->GetDistance() );
         }
     }
-    rStrm << (char) 2;
+    rStrm.WriteChar( (char) 2 );
     return rStrm;
 }
 
@@ -3012,9 +3012,9 @@ SfxPoolItem* SvxFmtBreakItem::Clone( SfxItemPool* ) const
 
 SvStream& SvxFmtBreakItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
 {
-    rStrm << (sal_Int8)GetValue();
+    rStrm.WriteSChar( (sal_Int8)GetValue() );
     if( FMTBREAK_NOAUTO > nItemVersion )
-        rStrm << (sal_Int8)0x01;
+        rStrm.WriteSChar( (sal_Int8)0x01 );
     return rStrm;
 }
 
@@ -3059,7 +3059,7 @@ SfxPoolItem* SvxFmtKeepItem::Clone( SfxItemPool* ) const
 
 SvStream& SvxFmtKeepItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm << (sal_Int8)GetValue();
+    rStrm.WriteSChar( (sal_Int8)GetValue() );
     return rStrm;
 }
 
@@ -3257,13 +3257,16 @@ SvStream& SvxLineItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) co
 {
     if( pLine )
     {
-        rStrm << pLine->GetColor()
-              << (short)pLine->GetOutWidth()
-              << (short)pLine->GetInWidth()
-              << (short)pLine->GetDistance();
+        rStrm << pLine->GetColor();
+        rStrm.WriteInt16( (short)pLine->GetOutWidth() )
+             .WriteInt16( (short)pLine->GetInWidth() )
+             .WriteInt16( (short)pLine->GetDistance() );
     }
     else
-        rStrm << Color() << (short)0 << (short)0 << (short)0;
+    {
+        rStrm << Color();
+        rStrm.WriteInt16( (short)0 ).WriteInt16( (short)0 ).WriteInt16( (short)0 );
+    }
     return rStrm;
 }
 
@@ -3897,10 +3900,10 @@ SfxPoolItem* SvxBrushItem::Create( SvStream& rStream, sal_uInt16 nVersion ) cons
 
 SvStream& SvxBrushItem::Store( SvStream& rStream , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStream << (sal_Bool)sal_False;
+    rStream.WriteUChar( (sal_Bool)sal_False );
     rStream << aColor;
     rStream << aColor;
-    rStream << (sal_Int8)(aColor.GetTransparency() > 0 ? 0 : 1); //BRUSH_NULL : BRUSH_SOLID
+    rStream.WriteSChar( (sal_Int8)(aColor.GetTransparency() > 0 ? 0 : 1) ); //BRUSH_NULL : BRUSH_SOLID
 
     sal_uInt16 nDoLoad = 0;
 
@@ -3910,7 +3913,7 @@ SvStream& SvxBrushItem::Store( SvStream& rStream , sal_uInt16 /*nItemVersion*/ )
         nDoLoad |= LOAD_LINK;
     if ( !maStrFilter.isEmpty() )
         nDoLoad |= LOAD_FILTER;
-    rStream << nDoLoad;
+    rStream.WriteUInt16( nDoLoad );
 
     if ( pImpl->pGraphicObject && maStrLink.isEmpty() )
         rStream << pImpl->pGraphicObject->GetGraphic();
@@ -3927,7 +3930,7 @@ SvStream& SvxBrushItem::Store( SvStream& rStream , sal_uInt16 /*nItemVersion*/ )
         // UNICODE: rStream << maStrFilter;
         rStream.WriteUniOrByteString(maStrFilter, rStream.GetStreamCharSet());
     }
-    rStream << (sal_Int8)eGraphicPos;
+    rStream.WriteSChar( (sal_Int8)eGraphicPos );
     return rStream;
 }
 
@@ -4185,7 +4188,7 @@ SfxPoolItem* SvxFrameDirectionItem::Create( SvStream & rStrm, sal_uInt16 /*nVer*
 SvStream& SvxFrameDirectionItem::Store( SvStream & rStrm, sal_uInt16 /*nIVer*/ ) const
 {
     sal_uInt16 nValue = GetValue();
-    rStrm << nValue;
+    rStrm.WriteUInt16( nValue );
     return rStrm;
 }
 

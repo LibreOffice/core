@@ -618,7 +618,7 @@ sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 
 sal_Bool SbxVariable::StoreData( SvStream& rStrm ) const
 {
-    rStrm << (sal_uInt8) 0xFF;      // Marker
+    rStrm.WriteUChar( (sal_uInt8) 0xFF );      // Marker
     sal_Bool bValStore;
     if( this->IsA( TYPE(SbxMethod) ) )
     {
@@ -646,15 +646,15 @@ sal_Bool SbxVariable::StoreData( SvStream& rStrm ) const
     }
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStrm, maName,
                                                       RTL_TEXTENCODING_ASCII_US);
-    rStrm << (sal_uInt32)nUserData;
+    rStrm.WriteUInt32( (sal_uInt32)nUserData );
     if( pInfo.Is() )
     {
-        rStrm << (sal_uInt8) 2;     // Version 2: with UserData!
+        rStrm.WriteUChar( (sal_uInt8) 2 );     // Version 2: with UserData!
         pInfo->StoreData( rStrm );
     }
     else
     {
-        rStrm << (sal_uInt8) 0;
+        rStrm.WriteUChar( (sal_uInt8) 0 );
     }
     // Save private data only, if it is a SbxVariable
     if( GetClass() == SbxCLASS_VARIABLE )
@@ -736,19 +736,19 @@ void SbxAlias::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
 void SbxVariable::Dump( SvStream& rStrm, sal_Bool bFill )
 {
     OString aBNameStr(OUStringToOString(GetName( SbxNAME_SHORT_TYPES ), RTL_TEXTENCODING_ASCII_US));
-    rStrm << "Variable( "
-          << OString::number(reinterpret_cast<sal_Int64>(this)).getStr() << "=="
-          << aBNameStr.getStr();
+    rStrm.WriteCharPtr( "Variable( " )
+         .WriteCharPtr( OString::number(reinterpret_cast<sal_Int64>(this)).getStr() ).WriteCharPtr( "==" )
+         .WriteCharPtr( aBNameStr.getStr() );
     OString aBParentNameStr(OUStringToOString(GetParent()->GetName(), RTL_TEXTENCODING_ASCII_US));
     if ( GetParent() )
     {
-        rStrm << " in parent '" << aBParentNameStr.getStr() << "'";
+        rStrm.WriteCharPtr( " in parent '" ).WriteCharPtr( aBParentNameStr.getStr() ).WriteCharPtr( "'" );
     }
     else
     {
-        rStrm << " no parent";
+        rStrm.WriteCharPtr( " no parent" );
     }
-    rStrm << " ) ";
+    rStrm.WriteCharPtr( " ) " );
 
     // output also the object at object-vars
     if ( GetValues_Impl().eType == SbxOBJECT &&
@@ -756,7 +756,7 @@ void SbxVariable::Dump( SvStream& rStrm, sal_Bool bFill )
             GetValues_Impl().pObj != this &&
             GetValues_Impl().pObj != GetParent() )
     {
-        rStrm << " contains ";
+        rStrm.WriteCharPtr( " contains " );
         ((SbxObject*) GetValues_Impl().pObj)->Dump( rStrm, bFill );
     }
     else

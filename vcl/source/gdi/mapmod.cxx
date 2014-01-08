@@ -59,11 +59,11 @@ SvStream& operator<<( SvStream& rOStm, const ImplMapMode& rImplMapMode )
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );
 
-    rOStm << (sal_uInt16) rImplMapMode.meUnit <<
+    rOStm.WriteUInt16( (sal_uInt16) rImplMapMode.meUnit ) <<
              rImplMapMode.maOrigin <<
              rImplMapMode.maScaleX <<
-             rImplMapMode.maScaleY <<
-             rImplMapMode.mbSimple;
+             rImplMapMode.maScaleY;
+    rOStm.WriteUChar( rImplMapMode.mbSimple );
 
     return rOStm;
 }

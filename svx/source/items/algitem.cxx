@@ -324,10 +324,10 @@ SfxPoolItem* SvxMarginItem::Create( SvStream& rStream, sal_uInt16 ) const
 
 SvStream& SvxMarginItem::Store( SvStream &rStream, sal_uInt16 /*nItemVersion*/) const
 {
-    rStream << nLeftMargin;
-    rStream << nTopMargin;
-    rStream << nRightMargin;
-    rStream << nBottomMargin;
+    rStream.WriteInt16( nLeftMargin );
+    rStream.WriteInt16( nTopMargin );
+    rStream.WriteInt16( nRightMargin );
+    rStream.WriteInt16( nBottomMargin );
     return rStream;
 }
 

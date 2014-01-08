@@ -182,8 +182,8 @@ SfxPoolItem* SfxHyphenRegionItem::Create(SvStream& rStrm, sal_uInt16 ) const
 
 SvStream& SfxHyphenRegionItem::Store( SvStream& rStrm, sal_uInt16 ) const
 {
-    rStrm << (sal_uInt8) GetMinLead()
-          << (sal_uInt8) GetMinTrail();
+    rStrm.WriteUChar( (sal_uInt8) GetMinLead() )
+         .WriteUChar( (sal_uInt8) GetMinTrail() );
     return rStrm;
 }
 

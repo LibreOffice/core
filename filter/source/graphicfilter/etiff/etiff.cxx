@@ -159,9 +159,9 @@ sal_Bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, FilterConfigItem* pFilt
     // we will use the BIG Endian Mode
     // TIFF header
     m_rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
-    m_rOStm << (sal_uInt32)0x4d4d002a;      // TIFF identifier
+    m_rOStm.WriteUInt32( (sal_uInt32)0x4d4d002a );      // TIFF identifier
     mnLatestIfdPos = m_rOStm.Tell();
-    m_rOStm << (sal_uInt32)0;
+    m_rOStm.WriteUInt32( (sal_uInt32)0 );
 
     Animation   aAnimation;
     Bitmap      aBmp;
@@ -211,7 +211,7 @@ sal_Bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, FilterConfigItem* pFilt
                 }
                 sal_uInt32 nCurPos = m_rOStm.Tell();
                 m_rOStm.Seek( mnCurrentTagCountPos );
-                m_rOStm << mnTagCount;
+                m_rOStm.WriteUInt16( mnTagCount );
                 m_rOStm.Seek( nCurPos );
 
                 aBmp.ReleaseAccess( mpAcc );
@@ -256,12 +256,12 @@ sal_Bool TIFFWriter::ImplWriteHeader( sal_Bool bMultiPage )
     {
         sal_uInt32 nCurrentPos = m_rOStm.Tell();
         m_rOStm.Seek( mnLatestIfdPos );
-        m_rOStm << (sal_uInt32)( nCurrentPos - mnStreamOfs );   // offset to the IFD
+        m_rOStm.WriteUInt32( (sal_uInt32)( nCurrentPos - mnStreamOfs ) );   // offset to the IFD
         m_rOStm.Seek( nCurrentPos );
 
         // (OFS8) TIFF image file directory (IFD)
         mnCurrentTagCountPos = m_rOStm.Tell();
-        m_rOStm << (sal_uInt16)0;               // the number of tagentrys is to insert later
+        m_rOStm.WriteUInt16( (sal_uInt16)0 );               // the number of tagentrys is to insert later
 
         sal_uInt32 nSubFileFlags = 0;
         if ( bMultiPage )
@@ -311,7 +311,7 @@ sal_Bool TIFFWriter::ImplWriteHeader( sal_Bool bMultiPage )
 
         // and last we write zero to close the num dir entries list
         mnLatestIfdPos = m_rOStm.Tell();
-        m_rOStm << (sal_uInt32)0;               // there are no more IFD
+        m_rOStm.WriteUInt32( (sal_uInt32)0 );               // there are no more IFD
     }
     else
         mbStatus = sal_False;
@@ -326,23 +326,23 @@ void TIFFWriter::ImplWritePalette()
     sal_uInt16 i;
     sal_uLong nCurrentPos = m_rOStm.Tell();
     m_rOStm.Seek( mnPalPos + 8 );           // the palette tag entry needs the offset
-    m_rOStm << static_cast<sal_uInt32>(nCurrentPos - mnStreamOfs);  // to the palette colors
+    m_rOStm.WriteUInt32( static_cast<sal_uInt32>(nCurrentPos - mnStreamOfs) );  // to the palette colors
     m_rOStm.Seek( nCurrentPos );
 
     for ( i = 0; i < mnColors; i++ )
     {
         const BitmapColor& rColor = mpAcc->GetPaletteColor( i );
-        m_rOStm << (sal_uInt16)( rColor.GetRed() << 8 );
+        m_rOStm.WriteUInt16( (sal_uInt16)( rColor.GetRed() << 8 ) );
     }
     for ( i = 0; i < mnColors; i++ )
     {
         const BitmapColor& rColor = mpAcc->GetPaletteColor( i );
-        m_rOStm << (sal_uInt16)( rColor.GetGreen() << 8 );
+        m_rOStm.WriteUInt16( (sal_uInt16)( rColor.GetGreen() << 8 ) );
     }
     for ( i = 0; i < mnColors; i++ )
     {
         const BitmapColor& rColor = mpAcc->GetPaletteColor( i );
-        m_rOStm << (sal_uInt16)( rColor.GetBlue() << 8 );
+        m_rOStm.WriteUInt16( (sal_uInt16)( rColor.GetBlue() << 8 ) );
     }
 }
 
@@ -356,7 +356,7 @@ sal_Bool TIFFWriter::ImplWriteBody()
 
     sal_uLong nGfxBegin = m_rOStm.Tell();
     m_rOStm.Seek( mnBitmapPos + 8 );        // the strip offset tag entry needs the offset
-    m_rOStm << static_cast<sal_uInt32>(nGfxBegin - mnStreamOfs);        // to the bitmap data
+    m_rOStm.WriteUInt32( static_cast<sal_uInt32>(nGfxBegin - mnStreamOfs) );        // to the bitmap data
     m_rOStm.Seek( nGfxBegin );
 
     StartCompression();
@@ -448,7 +448,7 @@ sal_Bool TIFFWriter::ImplWriteBody()
     {
         sal_uLong nGfxEnd = m_rOStm.Tell();
         m_rOStm.Seek( mnStripByteCountPos + 8 );
-        m_rOStm << static_cast<sal_uInt32>( nGfxEnd - nGfxBegin );      // mnStripByteCountPos needs the size of the compression data
+        m_rOStm.WriteUInt32( static_cast<sal_uInt32>( nGfxEnd - nGfxBegin ) );      // mnStripByteCountPos needs the size of the compression data
         m_rOStm.Seek( nGfxEnd );
     }
     return mbStatus;
@@ -460,10 +460,10 @@ void TIFFWriter::ImplWriteResolution( sal_uLong nStreamPos, sal_uInt32 nResoluti
 {
     sal_uLong nCurrentPos = m_rOStm.Tell();
     m_rOStm.Seek( nStreamPos + 8 );
-    m_rOStm << (sal_uInt32)nCurrentPos - mnStreamOfs;
+    m_rOStm.WriteUInt32( (sal_uInt32)nCurrentPos - mnStreamOfs );
     m_rOStm.Seek( nCurrentPos );
-    m_rOStm << (sal_uInt32)1;
-    m_rOStm << nResolutionUnit;
+    m_rOStm.WriteUInt32( (sal_uInt32)1 );
+    m_rOStm.WriteUInt32( nResolutionUnit );
 }
 
 // ------------------------------------------------------------------------
@@ -472,12 +472,12 @@ void TIFFWriter::ImplWriteTag( sal_uInt16 nTagID, sal_uInt16 nDataType, sal_uInt
 {
         mnTagCount++;
 
-        m_rOStm << nTagID;
-        m_rOStm << nDataType;
-        m_rOStm << nNumberOfItems;
+        m_rOStm.WriteUInt16( nTagID );
+        m_rOStm.WriteUInt16( nDataType );
+        m_rOStm.WriteUInt32( nNumberOfItems );
         if ( nDataType == 3 )
             nValue <<=16;           // in Big Endian Mode WORDS needed to be shifted to a DWORD
-        m_rOStm << nValue;
+        m_rOStm.WriteUInt32( nValue );
 }
 
 // ------------------------------------------------------------------------
@@ -488,13 +488,13 @@ inline void TIFFWriter::WriteBits( sal_uInt16 nCode, sal_uInt16 nCodeLen )
     nOffset -= nCodeLen;
     while ( nOffset < 24 )
     {
-        m_rOStm << (sal_uInt8)( dwShift >> 24 );
+        m_rOStm.WriteUChar( (sal_uInt8)( dwShift >> 24 ) );
         dwShift <<= 8;
         nOffset += 8;
     }
     if ( nCode == 257 && nOffset != 32 )
     {
-        m_rOStm << (sal_uInt8)( dwShift >> 24 );
+        m_rOStm.WriteUChar( (sal_uInt8)( dwShift >> 24 ) );
     }
 }
 

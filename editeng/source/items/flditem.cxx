@@ -429,9 +429,9 @@ void SvxDateField::Load( SvPersistStream & rStm )
 
 void SvxDateField::Save( SvPersistStream & rStm )
 {
-    rStm << nFixDate;
-    rStm << (sal_uInt16)eType;
-    rStm << (sal_uInt16)eFormat;
+    rStm.WriteUInt32( nFixDate );
+    rStm.WriteUInt16( (sal_uInt16)eType );
+    rStm.WriteUInt16( (sal_uInt16)eFormat );
 }
 
 // -----------------------------------------------------------------------
@@ -555,7 +555,7 @@ int SvxURLField::operator==( const SvxFieldData& rOther ) const
 static void write_unicode( SvPersistStream & rStm, const OUString& rString )
 {
     sal_uInt16 nL =  sal::static_int_cast<sal_uInt16>(rString.getLength());
-    rStm << nL;
+    rStm.WriteUInt16( nL );
     //endian specific?, yipes!
     rStm.Write( rString.getStr(), nL*sizeof(sal_Unicode) );
 }
@@ -591,7 +591,7 @@ void SvxURLField::Load( SvPersistStream & rStm )
 
 void SvxURLField::Save( SvPersistStream & rStm )
 {
-    rStm << (sal_uInt16)eFormat;
+    rStm.WriteUInt16( (sal_uInt16)eFormat );
 
     write_unicode( rStm, aURL );
     write_unicode( rStm, aRepresentation );
@@ -810,8 +810,8 @@ void SvxExtTimeField::Load( SvPersistStream & rStm )
 void SvxExtTimeField::Save( SvPersistStream & rStm )
 {
     rStm.WriteInt64(m_nFixTime);
-    rStm << (sal_uInt16) eType;
-    rStm << (sal_uInt16) eFormat;
+    rStm.WriteUInt16( (sal_uInt16) eType );
+    rStm.WriteUInt16( (sal_uInt16) eFormat );
 }
 
 //----------------------------------------------------------------------------
@@ -958,8 +958,8 @@ void SvxExtFileField::Save( SvPersistStream & rStm )
     // UNICODE: rStm << aFile;
     rStm.WriteUniOrByteString(aFile, rStm.GetStreamCharSet());
 
-    rStm << (sal_uInt16) eType;
-    rStm << (sal_uInt16) eFormat;
+    rStm.WriteUInt16( (sal_uInt16) eType );
+    rStm.WriteUInt16( (sal_uInt16) eFormat );
 }
 
 //----------------------------------------------------------------------------
@@ -1114,8 +1114,8 @@ void SvxAuthorField::Save( SvPersistStream & rStm )
     write_unicode( rStm, aFirstName );
     write_unicode( rStm, aShortName );
 
-    rStm << (sal_uInt16) eType;
-    rStm << (sal_uInt16) eFormat;
+    rStm.WriteUInt16( (sal_uInt16) eType );
+    rStm.WriteUInt16( (sal_uInt16) eFormat );
 }
 
 //----------------------------------------------------------------------------

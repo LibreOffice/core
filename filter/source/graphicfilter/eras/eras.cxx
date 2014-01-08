@@ -146,17 +146,17 @@ sal_Bool RASWriter::ImplWriteHeader()
     }
         if ( mbStatus && mnWidth && mnHeight && mnDepth )
     {
-        m_rOStm << (sal_uInt32)0x59a66a95 << (sal_uInt32)mnWidth << (sal_uInt32)mnHeight
-            << (sal_uInt32)mnDepth
-            << (sal_uInt32)(( ( ( ( mnWidth * mnDepth ) + 15 ) >> 4 ) << 1 ) * mnHeight)
-            << (sal_uInt32)2;
+        m_rOStm.WriteUInt32( (sal_uInt32)0x59a66a95 ).WriteUInt32( (sal_uInt32)mnWidth ).WriteUInt32( (sal_uInt32)mnHeight )
+           .WriteUInt32( (sal_uInt32)mnDepth )
+           .WriteUInt32( (sal_uInt32)(( ( ( ( mnWidth * mnDepth ) + 15 ) >> 4 ) << 1 ) * mnHeight) )
+           .WriteUInt32( (sal_uInt32)2 );
 
         if ( mnDepth > 8 )
-            m_rOStm << (sal_uInt32)0 << (sal_uInt32)0;
+            m_rOStm.WriteUInt32( (sal_uInt32)0 ).WriteUInt32( (sal_uInt32)0 );
         else
         {
 
-            m_rOStm << (sal_uInt32)1 << (sal_uInt32)( mnColors * 3 );
+            m_rOStm.WriteUInt32( (sal_uInt32)1 ).WriteUInt32( (sal_uInt32)( mnColors * 3 ) );
         }
     }
     else mbStatus = sal_False;
@@ -170,9 +170,9 @@ void RASWriter::ImplWritePalette()
 {
     sal_uInt16 i;
 
-    for ( i = 0; i < mnColors; m_rOStm << mpAcc->GetPaletteColor( i++ ).GetRed() ) ;
-    for ( i = 0; i < mnColors; m_rOStm << mpAcc->GetPaletteColor( i++ ).GetGreen() ) ;
-    for ( i = 0; i < mnColors; m_rOStm << mpAcc->GetPaletteColor( i++ ).GetBlue() ) ;
+    for ( i = 0; i < mnColors; m_rOStm.WriteUChar( mpAcc->GetPaletteColor( i++ ).GetRed() ) ) ;
+    for ( i = 0; i < mnColors; m_rOStm.WriteUChar( mpAcc->GetPaletteColor( i++ ).GetGreen() ) ) ;
+    for ( i = 0; i < mnColors; m_rOStm.WriteUChar( mpAcc->GetPaletteColor( i++ ).GetBlue() ) ) ;
 }
 
 // ------------------------------------------------------------------------
@@ -247,15 +247,15 @@ void RASWriter::ImplPutByte( sal_uInt8 nPutThis )
         {
             if ( mnRepCount == 0 )
             {
-                m_rOStm << (sal_uInt8)mnRepVal;
+                m_rOStm.WriteUChar( (sal_uInt8)mnRepVal );
                 if ( mnRepVal == 0x80 )
-                    m_rOStm << (sal_uInt8)0;
+                    m_rOStm.WriteUChar( (sal_uInt8)0 );
             }
             else
             {
-                m_rOStm << (sal_uInt8)0x80;
-                m_rOStm << (sal_uInt8)mnRepCount;
-                m_rOStm << (sal_uInt8)mnRepVal;
+                m_rOStm.WriteUChar( (sal_uInt8)0x80 );
+                m_rOStm.WriteUChar( (sal_uInt8)mnRepCount );
+                m_rOStm.WriteUChar( (sal_uInt8)mnRepVal );
             }
             mnRepVal = nPutThis;
             mnRepCount = 0;
