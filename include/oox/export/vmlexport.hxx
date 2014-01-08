@@ -133,7 +133,7 @@ private:
     void AddLineDimensions( const Rectangle& rRectangle );
 
     /// Add position and size to the OStringBuffer.
-    void AddRectangleDimensions( OStringBuffer& rBuffer, const Rectangle& rRectangle );
+    void AddRectangleDimensions( OStringBuffer& rBuffer, const Rectangle& rRectangle, sal_Bool rbAbsolutePos = true );
 };
 
 } // namespace vml

@@ -2274,6 +2274,15 @@ DECLARE_OOXMLEXPORT_TEST(testFDO73034, "FDO73034.docx")
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:rPr/w:u", "val").match("single"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo65833, "fdo65833.docx")
+{
+    // The "editas" attribute for vml group shape was not preserved.
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:group", "editas", "canvas");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

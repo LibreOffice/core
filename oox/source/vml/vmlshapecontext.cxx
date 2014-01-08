@@ -312,6 +312,8 @@ ShapeTypeContext::ShapeTypeContext( ContextHandler2Helper& rParent, ShapeType& r
 
     // For roundrect we may have a arcsize attribute to read
     mrTypeModel.maArcsize = rAttribs.getString( XML_arcsize,OUString( ) );
+    // editas
+    mrTypeModel.maEditAs = rAttribs.getString(XML_editas, OUString());
 }
 
 ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )

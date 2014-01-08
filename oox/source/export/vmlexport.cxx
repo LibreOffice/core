@@ -129,9 +129,18 @@ sal_uInt32 VMLExport::EnterGroup( const OUString& rShapeName, const Rectangle* p
     if ( rShapeName.getLength() )
         pAttrList->add( XML_alt, OUStringToOString( rShapeName, RTL_TEXTENCODING_UTF8 ) );
 
+    sal_Bool rbAbsolutePos = true;
+    //editAs
+    OUString rEditAs = EscherEx::GetEditAs();
+    if (!rEditAs.isEmpty())
+    {
+        pAttrList->add(XML_editas, OUStringToOString( rEditAs, RTL_TEXTENCODING_UTF8 ));
+        rbAbsolutePos = false;
+    }
+
     // style
     if ( pRect )
-        AddRectangleDimensions( aStyle, *pRect );
+        AddRectangleDimensions( aStyle, *pRect, rbAbsolutePos );
 
     if ( !aStyle.isEmpty() )
         pAttrList->add( XML_style, aStyle.makeStringAndClear() );
@@ -844,12 +853,15 @@ void VMLExport::AddLineDimensions( const Rectangle& rRectangle )
             .makeStringAndClear() );
 }
 
-void VMLExport::AddRectangleDimensions( OStringBuffer& rBuffer, const Rectangle& rRectangle )
+void VMLExport::AddRectangleDimensions( OStringBuffer& rBuffer, const Rectangle& rRectangle, sal_Bool rbAbsolutePos)
 {
     if ( !rBuffer.isEmpty() )
         rBuffer.append( ";" );
 
-    rBuffer.append( "position:absolute;" );
+    if (rbAbsolutePos)
+    {
+        rBuffer.append( "position:absolute;" );
+    }
 
     if ( mnGroupLevel == 1 )
     {

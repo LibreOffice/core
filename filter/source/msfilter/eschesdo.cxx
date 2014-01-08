@@ -191,6 +191,30 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         if( const SdrObject* pSdrObj = rObj.GetSdrObject() )
             if (!pSdrObj->GetName().isEmpty())
                 aShapeName = pSdrObj->GetName();
+        uno::Reference< drawing::XShape> mXShape(rObj.GetShapeRef(), uno::UNO_QUERY);
+        if (mXShape.is())
+        {
+            uno::Reference<beans::XPropertySet> xPropertySet(mXShape, uno::UNO_QUERY);
+            if (xPropertySet.is())
+            {
+                uno::Sequence<beans::PropertyValue> aGrabBag;
+                uno::Reference< XPropertySetInfo > xPropInfo = xPropertySet->getPropertySetInfo();
+                if ( xPropInfo.is() && xPropInfo->hasPropertyByName( "InteropGrabBag" ) )
+                {
+                    xPropertySet->getPropertyValue( "InteropGrabBag" ) >>= aGrabBag;
+                    for (int i=0; i< aGrabBag.getLength();  i++)
+                    {
+                        if (aGrabBag[i].Name == "mso-edit-as")
+                        {
+                            OUString rEditAs;
+                            aGrabBag[i].Value >>= rEditAs;
+                            mpEscherEx->SetEditAs(rEditAs);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
 
         Point aTextRefPoint;
 
