@@ -1295,7 +1295,9 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             connectNumericFormatterAdjustment(id, sAdjustment);
             OString sUnit = extractUnit(sPattern);
             FieldUnit eUnit = detectMetricUnit(sUnit);
-            SAL_WARN("vcl.layout", "making metric box for " << name.getStr() << " " << sUnit.getStr()
+            SAL_WARN("vcl.layout", "making metric box for type: " << name.getStr()
+                << " unit: " << sUnit.getStr()
+                << " name: " << id.getStr()
                 << " use a VclComboBoxNumeric instead");
             MetricBox *pBox = new MetricBox(pParent, nBits);
             pBox->EnableAutoSize(true);
