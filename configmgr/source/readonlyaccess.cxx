@@ -131,7 +131,8 @@ OUString getImplementationName() {
 }
 
 css::uno::Sequence< OUString > getSupportedServiceNames() {
-    return css::uno::Sequence< OUString >();
+    OUString name("com.sun.star.configuration.ReadOnlyAccess");
+    return css::uno::Sequence< OUString >(&name, 1);
 }
 
 } }

@@ -60,6 +60,7 @@
 #include "components.hxx"
 #include "configurationprovider.hxx"
 #include "lock.hxx"
+#include "defaultprovider.hxx"
 #include "rootaccess.hxx"
 
 namespace configmgr { namespace configuration_provider {
@@ -90,10 +91,19 @@ class Service:
 {
 public:
     Service(
+        css::uno::Reference< css::uno::XComponentContext > const context):
+        ServiceBase(*static_cast< osl::Mutex * >(this)), context_(context),
+        default_(true)
+    {
+        lock_ = lock();
+        assert(context.is());
+    }
+
+    Service(
         css::uno::Reference< css::uno::XComponentContext > const context,
         OUString const & locale):
         ServiceBase(*static_cast< osl::Mutex * >(this)), context_(context),
-        locale_(locale)
+        locale_(locale), default_(false)
     {
         lock_ = lock();
         assert(context.is());
@@ -106,7 +116,11 @@ private:
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException)
-    { return configuration_provider::getImplementationName(); }
+    {
+        return default_
+            ? default_provider::getImplementationName()
+            : configuration_provider::getImplementationName();
+    }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
         throw (css::uno::RuntimeException)
@@ -114,7 +128,11 @@ private:
 
     virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException)
-    { return configuration_provider::getSupportedServiceNames(); }
+    {
+        return default_
+            ? default_provider::getSupportedServiceNames()
+            : configuration_provider::getSupportedServiceNames();
+    }
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
         OUString const & aServiceSpecifier)
@@ -159,6 +177,7 @@ private:
 
     css::uno::Reference< css::uno::XComponentContext > context_;
     OUString locale_;
+    bool default_;
     boost::shared_ptr<osl::Mutex> lock_;
 };
 
@@ -444,7 +463,7 @@ Factory::createInstanceWithArgumentsAndContext(
 css::uno::Reference< css::uno::XInterface > createDefault(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
-    return static_cast< cppu::OWeakObject * >(new Service(context, ""));
+    return static_cast< cppu::OWeakObject * >(new Service(context));
 }
 
 OUString getImplementationName() {
