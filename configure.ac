@@ -8760,7 +8760,7 @@ AC_SUBST(SYSTEM_BOOST)
 dnl ===================================================================
 dnl Check for system mdds
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([mdds], [MDDS], [mdds >= 0.9.1])
+libo_CHECK_SYSTEM_MODULE([mdds], [MDDS], [mdds >= 0.10.1])
 
 dnl ===================================================================
 dnl Determine which hash container mdds shall use
