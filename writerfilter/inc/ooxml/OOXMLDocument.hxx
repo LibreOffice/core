@@ -242,7 +242,7 @@ public:
     virtual uno::Reference<io::XInputStream> getInputStreamForId( const ::rtl::OUString & rId ) = 0;
 
     virtual void setIDForXNoteStream( const sal_Int32 nID ) = 0;
-    virtual const sal_Int32 getIDForXNoteStream() const = 0;
+    virtual sal_Int32 getIDForXNoteStream() const = 0;
 
     virtual const ::rtl::OUString & getTarget() const = 0;
 };

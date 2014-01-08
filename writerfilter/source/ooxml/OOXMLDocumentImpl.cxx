@@ -132,7 +132,7 @@ void OOXMLDocumentImpl::setIDForXNoteStream( const sal_Int32 nID )
     mnIDForXNoteStream = nID;
 }
 
-const sal_Int32 OOXMLDocumentImpl::getIDForXNoteStream() const
+sal_Int32 OOXMLDocumentImpl::getIDForXNoteStream() const
 {
     return mnIDForXNoteStream;
 }
