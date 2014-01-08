@@ -1351,14 +1351,14 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
 
         if (!sPattern.isEmpty())
         {
+            connectNumericFormatterAdjustment(id, sAdjustment);
             OString sUnit = extractUnit(sPattern);
             FieldUnit eUnit = detectMetricUnit(sUnit);
             SAL_INFO("vcl.layout", "making metric box for " << name.getStr() << " " << sUnit.getStr());
-            connectNumericFormatterAdjustment(id, sAdjustment);
-            MetricBox *pBox = new MetricBox(pParent, nBits|WB_BORDER);
-            if (bDropdown)
-                pBox->EnableAutoSize(true);
+            MetricBox *pBox = new MetricBox(pParent, nBits);
+            pBox->EnableAutoSize(true);
             pBox->SetUnit(eUnit);
+            pBox->SetDecimalDigits(extractDecimalDigits(sPattern));
             if (eUnit == FUNIT_CUSTOM)
                 pBox->SetCustomUnitText(OStringToOUString(sUnit, RTL_TEXTENCODING_UTF8));
             pWindow = pBox;
