@@ -2847,10 +2847,10 @@ SvStream& GDIMetaFile::Write( SvStream& rOStm )
 
     pCompat = new VersionCompat( rOStm, STREAM_WRITE, 1 );
 
-    rOStm << nStmCompressMode;
+    rOStm.WriteUInt32( nStmCompressMode );
     rOStm << aPrefMapMode;
     rOStm << aPrefSize;
-    rOStm << (sal_uInt32) GetActionSize();
+    rOStm.WriteUInt32( (sal_uInt32) GetActionSize() );
 
     delete pCompat;
 

@@ -276,7 +276,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name).
                 append("=\"");
-            rWrt.Strm() << sOut.makeStringAndClear().getStr();
+            rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
             HTMLOutFuncs::Out_String( rWrt.Strm(), aName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             sOut.append('\"');
         }
@@ -284,7 +284,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_value).
                 append("=\"");
-            rWrt.Strm() << sOut.makeStringAndClear().getStr();
+            rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
             HTMLOutFuncs::Out_String( rWrt.Strm(), aValue, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             sOut.append('\"');
         }
@@ -301,7 +301,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_sdfixed);
         }
         sOut.append('>');
-        rWrt.Strm() << sOut.makeStringAndClear().getStr();
+        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
     }
 
     // Inhalt des Feldes ausgeben
@@ -448,14 +448,14 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
             return rWrt;
 
         OUString rTxt(comphelper::string::strip(pFld->GetPar2(), ' '));
-        rWrt.Strm() << '<';
+        rWrt.Strm().WriteChar( '<' );
         if( !bOn )
-            rWrt.Strm() << '/';
+            rWrt.Strm().WriteChar( '/' );
         // TODO: HTML-Tags are written without entitities, that for, characters
         // not contained in the destination encoding are lost!
         OString sTmp(OUStringToOString(rTxt,
             ((SwHTMLWriter&)rWrt).eDestEnc));
-        rWrt.Strm() << sTmp.getStr() << '>';
+        rWrt.Strm().WriteCharPtr( sTmp.getStr() ).WriteChar( '>' );
     }
     else if( RES_POSTITFLD == pFldTyp->Which() )
     {
@@ -476,7 +476,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
             // characters not contained in the destination encoding are lost!
             OString sTmp(OUStringToOString(sComment,
                 ((SwHTMLWriter&)rWrt).eDestEnc));
-            rWrt.Strm() << sTmp.getStr();
+            rWrt.Strm().WriteCharPtr( sTmp.getStr() );
             bWritten = true;
         }
         else if( rComment.getLength() >= 7 &&
@@ -492,7 +492,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
                 // lost!
                 OString sTmp(OUStringToOString(sComment,
                     ((SwHTMLWriter&)rWrt).eDestEnc));
-                rWrt.Strm() << sTmp.getStr();
+                rWrt.Strm().WriteCharPtr( sTmp.getStr() );
                 bWritten = true;
             }
 
@@ -506,7 +506,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
             sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_comment)
                 .append(' ').append(OUStringToOString(sComment,
                     ((SwHTMLWriter&)rWrt).eDestEnc)).append(" -->");
-            rWrt.Strm() << sOut.getStr();
+            rWrt.Strm().WriteCharPtr( sOut.getStr() );
         }
     }
     else if( RES_SCRIPTFLD == pFldTyp->Which() )

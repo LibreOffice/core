@@ -310,16 +310,15 @@ SvStream& operator<<( SvStream& rOStm, const Impl_Gradient& rImpl_Gradient )
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );
 
-    rOStm << (sal_uInt16) rImpl_Gradient.meStyle <<
-             rImpl_Gradient.maStartColor <<
-             rImpl_Gradient.maEndColor <<
-             rImpl_Gradient.mnAngle <<
-             rImpl_Gradient.mnBorder <<
-             rImpl_Gradient.mnOfsX <<
-             rImpl_Gradient.mnOfsY <<
-             rImpl_Gradient.mnIntensityStart <<
-             rImpl_Gradient.mnIntensityEnd <<
-             rImpl_Gradient.mnStepCount;
+    rOStm.WriteUInt16( (sal_uInt16) rImpl_Gradient.meStyle );
+    rOStm << rImpl_Gradient.maStartColor << rImpl_Gradient.maEndColor;
+    rOStm.WriteUInt16( rImpl_Gradient.mnAngle )
+         .WriteUInt16( rImpl_Gradient.mnBorder )
+         .WriteUInt16( rImpl_Gradient.mnOfsX )
+         .WriteUInt16( rImpl_Gradient.mnOfsY )
+         .WriteUInt16( rImpl_Gradient.mnIntensityStart )
+         .WriteUInt16( rImpl_Gradient.mnIntensityEnd )
+         .WriteUInt16( rImpl_Gradient.mnStepCount );
 
     return rOStm;
 }

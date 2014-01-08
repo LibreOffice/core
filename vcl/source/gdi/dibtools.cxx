@@ -933,8 +933,8 @@ bool ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, bool bRLE4 )
         rOStm.Write( pBuf, nBufCount );
     }
 
-    rOStm << (sal_uInt8) 0;
-    rOStm << (sal_uInt8) 1;
+    rOStm.WriteUChar( (sal_uInt8) 0 );
+    rOStm.WriteUChar( (sal_uInt8) 1 );
 
     delete[] pBuf;
 
@@ -1208,49 +1208,49 @@ bool ImplWriteDIBBody(const Bitmap& rBitmap, SvStream& rOStm, BitmapReadAccess& 
     aHeader.nColsUsed = ((!pAccAlpha && aHeader.nBitCount <= 8) ? rAcc.GetPaletteEntryCount() : 0);
     aHeader.nColsImportant = 0;
 
-    rOStm << aHeader.nSize;
-    rOStm << aHeader.nWidth;
-    rOStm << aHeader.nHeight;
-    rOStm << aHeader.nPlanes;
-    rOStm << aHeader.nBitCount;
-    rOStm << aHeader.nCompression;
+    rOStm.WriteUInt32( aHeader.nSize );
+    rOStm.WriteInt32( aHeader.nWidth );
+    rOStm.WriteInt32( aHeader.nHeight );
+    rOStm.WriteUInt16( aHeader.nPlanes );
+    rOStm.WriteUInt16( aHeader.nBitCount );
+    rOStm.WriteUInt32( aHeader.nCompression );
 
     nImageSizePos = rOStm.Tell();
     rOStm.SeekRel( sizeof( aHeader.nSizeImage ) );
 
-    rOStm << aHeader.nXPelsPerMeter;
-    rOStm << aHeader.nYPelsPerMeter;
-    rOStm << aHeader.nColsUsed;
-    rOStm << aHeader.nColsImportant;
+    rOStm.WriteInt32( aHeader.nXPelsPerMeter );
+    rOStm.WriteInt32( aHeader.nYPelsPerMeter );
+    rOStm.WriteUInt32( aHeader.nColsUsed );
+    rOStm.WriteUInt32( aHeader.nColsImportant );
 
     if(pAccAlpha) // only write DIBV5 when asked to do so
     {
         aHeader.nV5CSType = 0x57696E20; // LCS_WINDOWS_COLOR_SPACE
         aHeader.nV5Intent = 0x00000004; // LCS_GM_IMAGES
 
-        rOStm << aHeader.nV5RedMask;
-        rOStm << aHeader.nV5GreenMask;
-        rOStm << aHeader.nV5BlueMask;
-        rOStm << aHeader.nV5AlphaMask;
-        rOStm << aHeader.nV5CSType;
+        rOStm.WriteUInt32( aHeader.nV5RedMask );
+        rOStm.WriteUInt32( aHeader.nV5GreenMask );
+        rOStm.WriteUInt32( aHeader.nV5BlueMask );
+        rOStm.WriteUInt32( aHeader.nV5AlphaMask );
+        rOStm.WriteUInt32( aHeader.nV5CSType );
 
-        rOStm << aHeader.aV5Endpoints.aXyzRed.aXyzX;
-        rOStm << aHeader.aV5Endpoints.aXyzRed.aXyzY;
-        rOStm << aHeader.aV5Endpoints.aXyzRed.aXyzZ;
-        rOStm << aHeader.aV5Endpoints.aXyzGreen.aXyzX;
-        rOStm << aHeader.aV5Endpoints.aXyzGreen.aXyzY;
-        rOStm << aHeader.aV5Endpoints.aXyzGreen.aXyzZ;
-        rOStm << aHeader.aV5Endpoints.aXyzBlue.aXyzX;
-        rOStm << aHeader.aV5Endpoints.aXyzBlue.aXyzY;
-        rOStm << aHeader.aV5Endpoints.aXyzBlue.aXyzZ;
+        rOStm.WriteInt32( aHeader.aV5Endpoints.aXyzRed.aXyzX );
+        rOStm.WriteInt32( aHeader.aV5Endpoints.aXyzRed.aXyzY );
+        rOStm.WriteInt32( aHeader.aV5Endpoints.aXyzRed.aXyzZ );
+        rOStm.WriteInt32( aHeader.aV5Endpoints.aXyzGreen.aXyzX );
+        rOStm.WriteInt32( aHeader.aV5Endpoints.aXyzGreen.aXyzY );
+        rOStm.WriteInt32( aHeader.aV5Endpoints.aXyzGreen.aXyzZ );
+        rOStm.WriteInt32( aHeader.aV5Endpoints.aXyzBlue.aXyzX );
+        rOStm.WriteInt32( aHeader.aV5Endpoints.aXyzBlue.aXyzY );
+        rOStm.WriteInt32( aHeader.aV5Endpoints.aXyzBlue.aXyzZ );
 
-        rOStm << aHeader.nV5GammaRed;
-        rOStm << aHeader.nV5GammaGreen;
-        rOStm << aHeader.nV5GammaBlue;
-        rOStm << aHeader.nV5Intent;
-        rOStm << aHeader.nV5ProfileData;
-        rOStm << aHeader.nV5ProfileSize;
-        rOStm << aHeader.nV5Reserved;
+        rOStm.WriteUInt32( aHeader.nV5GammaRed );
+        rOStm.WriteUInt32( aHeader.nV5GammaGreen );
+        rOStm.WriteUInt32( aHeader.nV5GammaBlue );
+        rOStm.WriteUInt32( aHeader.nV5Intent );
+        rOStm.WriteUInt32( aHeader.nV5ProfileData );
+        rOStm.WriteUInt32( aHeader.nV5ProfileSize );
+        rOStm.WriteUInt32( aHeader.nV5Reserved );
     }
 
     if(ZCOMPRESS == aHeader.nCompression)
@@ -1286,7 +1286,7 @@ bool ImplWriteDIBBody(const Bitmap& rBitmap, SvStream& rOStm, BitmapReadAccess& 
         nLastPos = rOStm.Tell();
         nCodedSize = nLastPos - nCodedPos - 12;
         rOStm.Seek(nCodedPos);
-        rOStm << nCodedSize << nUncodedSize << nCompression;
+        rOStm.WriteUInt32( nCodedSize ).WriteUInt32( nUncodedSize ).WriteUInt32( nCompression );
         rOStm.Seek(nLastPos);
 
         if(bRet)
@@ -1306,7 +1306,7 @@ bool ImplWriteDIBBody(const Bitmap& rBitmap, SvStream& rOStm, BitmapReadAccess& 
 
     nEndPos = rOStm.Tell();
     rOStm.Seek(nImageSizePos);
-    rOStm << aHeader.nSizeImage;
+    rOStm.WriteUInt32( aHeader.nSizeImage );
     rOStm.Seek(nEndPos);
 
     return bRet;
@@ -1317,11 +1317,11 @@ bool ImplWriteDIBFileHeader(SvStream& rOStm, BitmapReadAccess& rAcc, bool bUseDI
     const sal_uInt32 nPalCount((rAcc.HasPalette() ? rAcc.GetPaletteEntryCount() : isBitfieldCompression(rAcc.GetScanlineFormat()) ? 3UL : 0UL));
     const sal_uInt32 nOffset(14 + (bUseDIBV5 ? DIBV5HEADERSIZE : DIBINFOHEADERSIZE) + nPalCount * 4UL);
 
-    rOStm << (sal_uInt16)0x4D42; // 'MB' from BITMAPFILEHEADER
-    rOStm << (sal_uInt32)(nOffset + (rAcc.Height() * rAcc.GetScanlineSize()));
-    rOStm << (sal_uInt16)0;
-    rOStm << (sal_uInt16)0;
-    rOStm << nOffset;
+    rOStm.WriteUInt16( (sal_uInt16)0x4D42 ); // 'MB' from BITMAPFILEHEADER
+    rOStm.WriteUInt32( (sal_uInt32)(nOffset + (rAcc.Height() * rAcc.GetScanlineSize())) );
+    rOStm.WriteUInt16( (sal_uInt16)0 );
+    rOStm.WriteUInt16( (sal_uInt16)0 );
+    rOStm.WriteUInt32( nOffset );
 
     return( rOStm.GetError() == 0UL );
 }
@@ -1550,9 +1550,9 @@ bool WriteDIBBitmapEx(
 {
     if(ImplWriteDIB(rSource.GetBitmap(), 0, rOStm, true, true))
     {
-        rOStm << (sal_uInt32)0x25091962;
-        rOStm << (sal_uInt32)0xACB20201;
-        rOStm << (sal_uInt8)rSource.eTransparent;
+        rOStm.WriteUInt32( (sal_uInt32)0x25091962 );
+        rOStm.WriteUInt32( (sal_uInt32)0xACB20201 );
+        rOStm.WriteUChar( (sal_uInt8)rSource.eTransparent );
 
         if(TRANSPARENT_BITMAP == rSource.eTransparent)
         {

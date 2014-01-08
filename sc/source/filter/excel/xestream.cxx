@@ -135,7 +135,7 @@ XclExpStream& XclExpStream::operator<<( sal_Int8 nValue )
     if (mbUseEncrypter && HasValidEncrypter())
         mxEncrypter->Encrypt(mrStrm, nValue);
     else
-        mrStrm << nValue;
+        mrStrm.WriteSChar( nValue );
     return *this;
 }
 
@@ -145,7 +145,7 @@ XclExpStream& XclExpStream::operator<<( sal_uInt8 nValue )
     if (mbUseEncrypter && HasValidEncrypter())
         mxEncrypter->Encrypt(mrStrm, nValue);
     else
-        mrStrm << nValue;
+        mrStrm.WriteUChar( nValue );
     return *this;
 }
 
@@ -155,7 +155,7 @@ XclExpStream& XclExpStream::operator<<( sal_Int16 nValue )
     if (mbUseEncrypter && HasValidEncrypter())
         mxEncrypter->Encrypt(mrStrm, nValue);
     else
-        mrStrm << nValue;
+        mrStrm.WriteInt16( nValue );
     return *this;
 }
 
@@ -165,7 +165,7 @@ XclExpStream& XclExpStream::operator<<( sal_uInt16 nValue )
     if (mbUseEncrypter && HasValidEncrypter())
         mxEncrypter->Encrypt(mrStrm, nValue);
     else
-        mrStrm << nValue;
+        mrStrm.WriteUInt16( nValue );
     return *this;
 }
 
@@ -175,7 +175,7 @@ XclExpStream& XclExpStream::operator<<( sal_Int32 nValue )
     if (mbUseEncrypter && HasValidEncrypter())
         mxEncrypter->Encrypt(mrStrm, nValue);
     else
-        mrStrm << nValue;
+        mrStrm.WriteInt32( nValue );
     return *this;
 }
 
@@ -185,7 +185,7 @@ XclExpStream& XclExpStream::operator<<( sal_uInt32 nValue )
     if (mbUseEncrypter && HasValidEncrypter())
         mxEncrypter->Encrypt(mrStrm, nValue);
     else
-        mrStrm << nValue;
+        mrStrm.WriteUInt32( nValue );
     return *this;
 }
 
@@ -195,7 +195,7 @@ XclExpStream& XclExpStream::operator<<( float fValue )
     if (mbUseEncrypter && HasValidEncrypter())
         mxEncrypter->Encrypt(mrStrm, fValue);
     else
-        mrStrm << fValue;
+        mrStrm.WriteFloat( fValue );
     return *this;
 }
 
@@ -387,11 +387,11 @@ sal_Size XclExpStream::SetSvStreamPos( sal_Size nPos )
 void XclExpStream::InitRecord( sal_uInt16 nRecId )
 {
     mrStrm.Seek( STREAM_SEEK_TO_END );
-    mrStrm << nRecId;
+    mrStrm.WriteUInt16( nRecId );
 
     mnLastSizePos = mrStrm.Tell();
     mnHeaderSize = static_cast< sal_uInt16 >( ::std::min< sal_Size >( mnPredictSize, mnCurrMaxSize ) );
-    mrStrm << mnHeaderSize;
+    mrStrm.WriteUInt16( mnHeaderSize );
     mnCurrSize = mnSliceSize = 0;
 }
 
@@ -400,7 +400,7 @@ void XclExpStream::UpdateRecSize()
     if( mnCurrSize != mnHeaderSize )
     {
         mrStrm.Seek( mnLastSizePos );
-        mrStrm << mnCurrSize;
+        mrStrm.WriteUInt16( mnCurrSize );
     }
 }
 
@@ -458,7 +458,7 @@ void XclExpStream::WriteRawZeroBytes( sal_Size nBytes )
     sal_Size nBytesLeft = nBytes;
     while( nBytesLeft >= sizeof( nData ) )
     {
-        mrStrm << nData;
+        mrStrm.WriteUInt32( nData );
         nBytesLeft -= sizeof( nData );
     }
     if( nBytesLeft )

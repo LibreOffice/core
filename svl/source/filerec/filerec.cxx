@@ -41,14 +41,18 @@
     um Calls zu sparen.
 */
 
-#define SFX_REC_MINI_HEADER(nPreTag,nStartPos,nEndPos) \
-                    ( sal_uInt32(nPreTag) | \
-                      sal_uInt32(nEndPos-nStartPos-SFX_REC_HEADERSIZE_MINI) << 8 )
+static void lclWriteMiniHeader(SvStream *p, sal_uInt32 nPreTag, sal_uInt32 nStartPos, sal_uInt32 nEndPos)
+{
+   (*p) << ( sal_uInt32(nPreTag) |
+             sal_uInt32(nEndPos-nStartPos-SFX_REC_HEADERSIZE_MINI) << 8 );
+}
 
-#define SFX_REC_HEADER(nRecType,nContentTag,nContentVer) \
-                    ( sal_uInt32(nRecType) | \
-                      ( sal_uInt32(nContentVer) << 8 ) | \
-                      ( sal_uInt32(nContentTag) << 16 ) )
+static void lclWriteHeader(SvStream *p, sal_uInt32 nRecType, sal_uInt32 nContentTag, sal_uInt32 nContentVer)
+{
+    (*p) << ( sal_uInt32(nRecType) |
+             ( sal_uInt32(nContentVer) << 8 ) |
+             ( sal_uInt32(nContentTag) << 16 ) );
+}
 
 #define SFX_REC_CONTENT_HEADER(nContentVer,n1StStartPos,nCurStartPos) \
                     ( sal_uInt32(nContentVer) | \
@@ -94,7 +98,7 @@ sal_uInt32 SfxMiniRecordWriter::Close
         // Header an den Anfang des Records schreiben
         sal_uInt32 nEndPos = _pStream->Tell();
         _pStream->Seek( _nStartPos );
-        *_pStream << SFX_REC_MINI_HEADER( _nPreTag, _nStartPos, nEndPos );
+        lclWriteMiniHeader(_pStream, _nPreTag, _nStartPos, nEndPos );
 
         // je nachdem ans Ende des Records seeken oder hinter Header bleiben
         if ( bSeekToEndOfRec )
@@ -241,7 +245,7 @@ SfxSingleRecordWriter::SfxSingleRecordWriter
 :   SfxMiniRecordWriter( pStream, SFX_REC_PRETAG_EXT )
 {
     // Erweiterten Header hiner den des SfxMiniRec schreiben
-    *pStream << SFX_REC_HEADER(nRecordType, nContentTag, nContentVer);
+    lclWriteHeader(pStream, nRecordType, nContentTag, nContentVer);
 }
 
 
@@ -376,8 +380,8 @@ sal_uInt32 SfxMultiFixRecordWriter::Close( bool bSeekToEndOfRec )
         sal_uInt32 nEndPos = SfxSingleRecordWriter::Close( sal_False );
 
         // gegen"uber SfxSingleRecord erweiterten Header schreiben
-        *_pStream << _nContentCount;
-        *_pStream << _nContentSize;
+        _pStream->WriteUInt16( _nContentCount );
+        _pStream->WriteUInt32( _nContentSize );
 
         // je nachdem ans Ende des Records seeken oder hinter Header bleiben
         if ( bSeekToEndOfRec )
@@ -500,18 +504,18 @@ sal_uInt32 SfxMultiVarRecordWriter::Close( bool bSeekToEndOfRec )
         sal_uInt32 nContentOfsPos = _pStream->Tell();
         //! darf man das so einr"ucken?
         for ( sal_uInt16 n = 0; n < _nContentCount; ++n )
-            *_pStream << _aContentOfs[n];
+            _pStream->WriteUInt32( _aContentOfs[n] );
 
         // SfxMultiFixRecordWriter::Close() "uberspringen!
         sal_uInt32 nEndPos = SfxSingleRecordWriter::Close( sal_False );
 
         // eigenen Header schreiben
-        *_pStream << _nContentCount;
+        _pStream->WriteUInt16( _nContentCount );
         if ( SFX_REC_TYPE_VARSIZE_RELOC == _nPreTag ||
              SFX_REC_TYPE_MIXTAGS_RELOC == _nPreTag )
-            *_pStream << static_cast<sal_uInt32>(nContentOfsPos - ( _pStream->Tell() + sizeof(sal_uInt32) ));
+            _pStream->WriteUInt32( static_cast<sal_uInt32>(nContentOfsPos - ( _pStream->Tell() + sizeof(sal_uInt32) )) );
         else
-            *_pStream << nContentOfsPos;
+            _pStream->WriteUInt32( nContentOfsPos );
 
         // ans Ende des Records seeken bzw. am Ende des Headers bleiben
         if ( bSeekToEndOfRec )
@@ -545,7 +549,7 @@ void SfxMultiMixRecordWriter::NewContent
     // Tag vor den Content schreiben, Version und Startposition merken
     _nContentStartPos = _pStream->Tell();
     ++_nContentCount;
-    *_pStream << nContentTag;
+    _pStream->WriteUInt16( nContentTag );
     _nContentVer = nContentVer;
 }
 

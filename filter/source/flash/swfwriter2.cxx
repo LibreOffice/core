@@ -121,7 +121,7 @@ void BitStream::writeTo( SvStream& out )
     const vector< sal_uInt8>::iterator aEnd( maData.end() );
     while(aIter != aEnd)
     {
-        out << (*aIter++);
+        out.WriteUChar( (*aIter++) );
     }
 }
 
@@ -153,20 +153,20 @@ void Tag::write( SvStream &out )
 
         sal_uInt16 nCode = ( mnTagId << 6 ) | ( bLarge ? 0x3f : _uInt16(nSz) );
 
-        out << (sal_uInt8)nCode;
-        out << (sal_uInt8)(nCode >> 8);
+        out.WriteUChar( (sal_uInt8)nCode );
+        out.WriteUChar( (sal_uInt8)(nCode >> 8) );
 
         if( bLarge )
         {
             sal_uInt32 nTmp = nSz;
 
-            out << (sal_uInt8)nTmp;
+            out.WriteUChar( (sal_uInt8)nTmp );
             nTmp >>= 8;
-            out << (sal_uInt8)nTmp;
+            out.WriteUChar( (sal_uInt8)nTmp );
             nTmp >>= 8;
-            out << (sal_uInt8)nTmp;
+            out.WriteUChar( (sal_uInt8)nTmp );
             nTmp >>= 8;
-            out << (sal_uInt8)nTmp;
+            out.WriteUChar( (sal_uInt8)nTmp );
         }
     }
 
@@ -184,7 +184,7 @@ void Tag::addI32( sal_Int32 nValue )
 
 void Tag::addUI32( sal_uInt32 nValue )
 {
-    *this << nValue;
+    WriteUInt32( nValue );
 }
 #if 0
 // -----------------------------------------------------------------------------
@@ -198,15 +198,15 @@ void Tag::addI16( sal_Int16 nValue )
 
 void Tag::addUI16( sal_uInt16 nValue )
 {
-    *this << (sal_uInt8)nValue;
-    *this << (sal_uInt8)(nValue >> 8);
+    WriteUChar( (sal_uInt8)nValue );
+    WriteUChar( (sal_uInt8)(nValue >> 8) );
 }
 
 // -----------------------------------------------------------------------------
 
 void Tag::addUI8( sal_uInt8 nValue )
 {
-    *this << (sal_uInt8)nValue;
+    WriteUChar( (sal_uInt8)nValue );
 }
 
 // -----------------------------------------------------------------------------

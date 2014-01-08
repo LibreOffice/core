@@ -711,7 +711,7 @@ SvStream& operator<<( SvStream& rOStm, const Animation& rAnimation )
             WriteDIBBitmapEx(rAnimation.GetBitmapEx(), rOStm);
 
         // Write identifier ( SDANIMA1 )
-        rOStm << (sal_uInt32) 0x5344414e << (sal_uInt32) 0x494d4931;
+        rOStm.WriteUInt32( (sal_uInt32) 0x5344414e ).WriteUInt32( (sal_uInt32) 0x494d4931 );
 
         for( sal_uInt16 i = 0; i < nCount; i++ )
         {
@@ -723,15 +723,15 @@ SvStream& operator<<( SvStream& rOStm, const Animation& rAnimation )
             rOStm << rAnimBmp.aPosPix;
             rOStm << rAnimBmp.aSizePix;
             rOStm << rAnimation.maGlobalSize;
-            rOStm << (sal_uInt16) ( ( ANIMATION_TIMEOUT_ON_CLICK == rAnimBmp.nWait ) ? 65535 : rAnimBmp.nWait );
-            rOStm << (sal_uInt16) rAnimBmp.eDisposal;
-            rOStm << (sal_uInt8) rAnimBmp.bUserInput;
-            rOStm << (sal_uInt32) rAnimation.mnLoopCount;
-            rOStm << nDummy32; // Unused
-            rOStm << nDummy32; // Unused
-            rOStm << nDummy32; // Unused
+            rOStm.WriteUInt16( (sal_uInt16) ( ( ANIMATION_TIMEOUT_ON_CLICK == rAnimBmp.nWait ) ? 65535 : rAnimBmp.nWait ) );
+            rOStm.WriteUInt16( (sal_uInt16) rAnimBmp.eDisposal );
+            rOStm.WriteUChar( (sal_uInt8) rAnimBmp.bUserInput );
+            rOStm.WriteUInt32( (sal_uInt32) rAnimation.mnLoopCount );
+            rOStm.WriteUInt32( nDummy32 ); // Unused
+            rOStm.WriteUInt32( nDummy32 ); // Unused
+            rOStm.WriteUInt32( nDummy32 ); // Unused
             write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStm, OString()); // dummy
-            rOStm << nRest; // Count of remaining structures
+            rOStm.WriteUInt16( nRest ); // Count of remaining structures
         }
     }
 

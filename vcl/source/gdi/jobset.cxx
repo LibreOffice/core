@@ -321,7 +321,7 @@ SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
     {
         sal_uInt16 nLen = 0;
         if ( !rJobSetup.mpData )
-            rOStream << nLen;
+            rOStream.WriteUInt16( nLen );
         else
         {
             sal_uInt16 nSystem = JOBSET_FILE605_SYSTEM;
@@ -346,8 +346,8 @@ SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
             strncpy( aOldData.cDriverName, aDriverByteName.getStr(), 31 );
 //          nLen = sizeof( aOldData ) + 4 + nOldJobDataSize + pJobData->mnDriverDataLen;
             int nPos = rOStream.Tell();
-            rOStream << nLen;
-            rOStream << nSystem;
+            rOStream.WriteUInt16( nLen );
+            rOStream.WriteUInt16( nSystem );
             rOStream.Write( (char*)&aOldData, sizeof( aOldData ) );
             rOStream.Write( (char*)&aOldJobData, nOldJobDataSize );
             rOStream.Write( (char*)pJobData->mpDriverData, pJobData->mnDriverDataLen );
@@ -375,7 +375,7 @@ SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
             }
             nLen = sal::static_int_cast<sal_uInt16>(rOStream.Tell() - nPos);
             rOStream.Seek( nPos );
-            rOStream << nLen;
+            rOStream.WriteUInt16( nLen );
             rOStream.Seek( nPos + nLen );
         }
     }

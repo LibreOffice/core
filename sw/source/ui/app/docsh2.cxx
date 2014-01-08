@@ -711,7 +711,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         OUString aCmd("SendOutlineToImpress");
                         uno::Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create(xContext) );
                         pStrm->Seek( STREAM_SEEK_TO_END );
-                        *pStrm << '\0';
+                        pStrm->WriteChar( '\0' );
                         pStrm->Seek( STREAM_SEEK_TO_BEGIN );
 
                         // Transfer ownership of stream to a lockbytes object
@@ -768,7 +768,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 if( !ERRCODE_TOERROR( eErr ) )
                 {
                     pStrm->Seek( STREAM_SEEK_TO_END );
-                    *pStrm << '\0';
+                    pStrm->WriteChar( '\0' );
                     pStrm->Seek( STREAM_SEEK_TO_BEGIN );
                     if ( nWhich == FN_OUTLINE_TO_IMPRESS )
                     {
@@ -778,7 +778,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         OUString aCmd("SendOutlineToImpress");
                         uno::Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create(xContext) );
                         pStrm->Seek( STREAM_SEEK_TO_END );
-                        *pStrm << '\0';
+                        pStrm->WriteChar( '\0' );
                         pStrm->Seek( STREAM_SEEK_TO_BEGIN );
 
                         // Transfer ownership of stream to a lockbytes object

@@ -110,7 +110,7 @@ ScMultipleWriteHeader::ScMultipleWriteHeader(SvStream& rNewStream, sal_uInt32 nD
     aMemStream( 4096, 4096 )
 {
     nDataSize = nDefault;
-    rStream << nDataSize;
+    rStream.WriteUInt32( nDataSize );
 
     nDataPos = rStream.Tell();
     nEntryStart = nDataPos;
@@ -120,8 +120,8 @@ ScMultipleWriteHeader::~ScMultipleWriteHeader()
 {
     sal_uLong nDataEnd = rStream.Tell();
 
-    rStream << (sal_uInt16) SCID_SIZES;
-    rStream << static_cast<sal_uInt32>(aMemStream.Tell());
+    rStream.WriteUInt16( (sal_uInt16) SCID_SIZES );
+    rStream.WriteUInt32( static_cast<sal_uInt32>(aMemStream.Tell()) );
     rStream.Write( aMemStream.GetData(), aMemStream.Tell() );
 
     if ( nDataEnd - nDataPos != nDataSize )                 // matched default ?
@@ -129,7 +129,7 @@ ScMultipleWriteHeader::~ScMultipleWriteHeader()
         nDataSize = nDataEnd - nDataPos;
         sal_uLong nPos = rStream.Tell();
         rStream.Seek(nDataPos-sizeof(sal_uInt32));
-        rStream << nDataSize;                               // record size at the beginning
+        rStream.WriteUInt32( nDataSize );                               // record size at the beginning
         rStream.Seek(nPos);
     }
 }
@@ -137,7 +137,7 @@ ScMultipleWriteHeader::~ScMultipleWriteHeader()
 void ScMultipleWriteHeader::EndEntry()
 {
     sal_uLong nPos = rStream.Tell();
-    aMemStream << static_cast<sal_uInt32>(nPos - nEntryStart);
+    aMemStream.WriteUInt32( static_cast<sal_uInt32>(nPos - nEntryStart) );
 }
 
 void ScMultipleWriteHeader::StartEntry()

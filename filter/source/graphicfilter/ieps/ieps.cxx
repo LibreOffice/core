@@ -362,9 +362,9 @@ void CreateMtfReplacementAction( GDIMetaFile& rMtf, SvStream& rStrm, sal_uInt32 
         sal_uInt32 nWPos = nSizeWMF ? 28 : 0;
         sal_uInt32 nTPos = nSizeTIFF ? 28 + nSizeWMF : 0;
 
-        aReplacement << nMagic << nPPos << nPSSize
-                     << nWPos << nSizeWMF
-                     << nTPos << nSizeTIFF;
+        aReplacement.WriteUInt32( nMagic ).WriteUInt32( nPPos ).WriteUInt32( nPSSize )
+                    .WriteUInt32( nWPos ).WriteUInt32( nSizeWMF )
+                    .WriteUInt32( nTPos ).WriteUInt32( nSizeTIFF );
         if ( nSizeWMF )
         {
             sal_uInt8* pBuf = new sal_uInt8[ nSizeWMF ];

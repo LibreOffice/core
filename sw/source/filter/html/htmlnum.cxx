@@ -824,7 +824,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
         {
             // Unordered list: <UL>
             sOut.append(OOO_STRING_SVTOOLS_HTML_unorderlist);
-            rWrt.Strm() << sOut.makeStringAndClear().getStr();
+            rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
             OutHTML_BulletImage( rWrt,
                                     0,
                                     rNumFmt.GetBrush(),
@@ -873,12 +873,12 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
         }
 
         if (!sOut.isEmpty())
-            rWrt.Strm() << sOut.makeStringAndClear().getStr();
+            rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
         if( rWrt.bCfgOutStyles )
             OutCSS1_NumBulListStyleOpt( rWrt, *rInfo.GetNumRule(), (sal_uInt8)i );
 
-        rWrt.Strm() << '>';
+        rWrt.Strm().WriteChar( '>' );
 
         rWrt.IncIndentLevel(); // Inhalt von <OL> einruecken
     }

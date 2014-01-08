@@ -86,9 +86,9 @@ SfxPoolItem* SvxZoomItem::Create( SvStream& rStrm, sal_uInt16 /*nVersion*/ ) con
 
 SvStream& SvxZoomItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm << (sal_uInt16)GetValue()
-          << nValueSet
-          << (sal_Int8)eType;
+    rStrm.WriteUInt16( (sal_uInt16)GetValue() )
+         .WriteUInt16( nValueSet )
+         .WriteSChar( (sal_Int8)eType );
     return rStrm;
 }
 

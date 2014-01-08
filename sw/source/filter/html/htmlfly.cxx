@@ -446,7 +446,7 @@ void SwHTMLWriter::OutFrmFmt( sal_uInt8 nMode, const SwFrmFmt& rFrmFmt,
         sOut.append('<').append(pCntnrStr).append(' ')
             .append(OOO_STRING_SVTOOLS_HTML_O_class).append("=\"")
             .append("sd-abs-pos").append('\"');
-        Strm() << sOut.makeStringAndClear().getStr();
+        Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
         // Fuer Nicht-Zeichenobekte eine Breite ausgeben
         sal_uLong nFrmFlags = HTML_FRMOPTS_CNTNR;
@@ -458,7 +458,7 @@ void SwHTMLWriter::OutFrmFmt( sal_uInt8 nMode, const SwFrmFmt& rFrmFmt,
         if( IsHTMLMode( HTMLMODE_BORDER_NONE ) )
            nFrmFlags |= HTML_FRMOPT_S_NOBORDER;
         OutCSS1_FrmFmtOptions( rFrmFmt, nFrmFlags, pSdrObject );
-        Strm() << '>';
+        Strm().WriteChar( '>' );
 
         if( HTML_CNTNR_DIV == nCntnrMode )
         {
@@ -543,7 +543,7 @@ OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
             (nFrmOpts & HTML_FRMOPT_ID) ? OOO_STRING_SVTOOLS_HTML_O_id : OOO_STRING_SVTOOLS_HTML_O_name;
         sOut.append(' ').append(pStr).
             append("=\"");
-        Strm() << sOut.makeStringAndClear().getStr();
+        Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
         HTMLOutFuncs::Out_String( Strm(), rFrmFmt.GetName(), eDestEnc, &aNonConvertableCharacters );
         sOut.append('\"');
     }
@@ -552,7 +552,7 @@ OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
     if( nFrmOpts & HTML_FRMOPT_DIR )
     {
         sal_uInt16 nDir = GetHTMLDirection( rItemSet );
-        Strm() << sOut.makeStringAndClear().getStr();
+        Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
         OutDirection( nDir );
     }
 
@@ -562,7 +562,7 @@ OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_alt).
             append("=\"");
-        Strm() << sOut.makeStringAndClear().getStr();
+        Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
         HTMLOutFuncs::Out_String( Strm(), rAlternateTxt, eDestEnc, &aNonConvertableCharacters );
         sOut.append('\"');
     }
@@ -743,7 +743,7 @@ OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
     }
 
     if (!sOut.isEmpty())
-        Strm() << sOut.makeStringAndClear().getStr();
+        Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
     // Umlauf fuer absatzgeb. Grafiken als <BR CLEAR=...> in den String
     // schreiben
@@ -998,7 +998,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             {
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_href).
                     append("=\"");
-                rWrt.Strm() << sOut.makeStringAndClear().getStr();
+                rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
                 rHTMLWrt.OutHyperlinkHRefValue( aMapURL );
                 sOut.append('\"');
             }
@@ -1007,7 +1007,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             {
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name).
                     append("=\"");
-                rWrt.Strm() << sOut.makeStringAndClear().getStr();
+                rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
                 HTMLOutFuncs::Out_String( rWrt.Strm(), aName,
                                           rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
                 sOut.append('\"');
@@ -1017,14 +1017,14 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             {
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_target).
                     append("=\"");
-                rWrt.Strm() << sOut.makeStringAndClear().getStr();
+                rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
                 HTMLOutFuncs::Out_String( rWrt.Strm(), aTarget,
                                           rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
                 sOut.append('\"');
             }
 
             if (!sOut.isEmpty())
-                rWrt.Strm() << sOut.makeStringAndClear().getStr();
+                rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
             if( pMacItem )
             {
@@ -1037,7 +1037,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
                                         &rHTMLWrt.aNonConvertableCharacters );
             }
 
-            rWrt.Strm() << ">";
+            rWrt.Strm().WriteCharPtr( ">" );
             aEndTags = OStringBuffer().append("</").
                 append(OOO_STRING_SVTOOLS_HTML_anchor).
                 append(">").append(aEndTags).
@@ -1108,9 +1108,9 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             sOut.append('<');
             sOut.append(OOO_STRING_SVTOOLS_HTML_font).append(' ').
                 append(OOO_STRING_SVTOOLS_HTML_O_color).append("=");
-            rWrt.Strm() << sOut.makeStringAndClear().getStr();
+            rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
             HTMLOutFuncs::Out_Color( rWrt.Strm(),
-                                     pColBorderLine->GetColor(), rHTMLWrt.eDestEnc ) << '>';
+                                     pColBorderLine->GetColor(), rHTMLWrt.eDestEnc ).WriteChar( '>' );
 
             aEndTags = OStringBuffer().
                 append("</").
@@ -1123,7 +1123,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
     sOut.append(OOO_STRING_SVTOOLS_HTML_image).append(' ').
         append(OOO_STRING_SVTOOLS_HTML_O_src).
         append("=\"").append(OOO_STRING_SVTOOLS_HTML_O_data).append(":");
-    rWrt.Strm() << sOut.makeStringAndClear().getStr();
+    rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
     OUString aGraphicInBase64;
     sal_uLong nErr = XOutBitmap::GraphicToBase64(rGraphic, aGraphicInBase64);
@@ -1131,7 +1131,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
     {
         rHTMLWrt.nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
     }
-    HTMLOutFuncs::Out_String( rWrt.Strm(), aGraphicInBase64, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ) << '\"';
+    HTMLOutFuncs::Out_String( rWrt.Strm(), aGraphicInBase64, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ).WriteChar( '\"' );
 
     // Events
     if( SFX_ITEM_SET == rItemSet.GetItemState( RES_FRMMACRO, sal_True, &pItem ))
@@ -1154,26 +1154,26 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_border).
             append("=\"").append(static_cast<sal_Int32>(nBorderWidth)).append("\"");
-        rWrt.Strm() << sOut.makeStringAndClear().getStr();
+        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
     }
 
     if( pURLItem && pURLItem->IsServerMap() )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_ismap);
-        rWrt.Strm() << sOut.makeStringAndClear().getStr();
+        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
     }
     if( !aIMapName.isEmpty() )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_usemap).
             append("=\"#");
-        rWrt.Strm() << sOut.makeStringAndClear().getStr();
-        HTMLOutFuncs::Out_String( rWrt.Strm(), aIMapName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ) << '\"';
+        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        HTMLOutFuncs::Out_String( rWrt.Strm(), aIMapName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ).WriteChar( '\"' );
     }
 
-    rHTMLWrt.Strm() << '>';
+    rHTMLWrt.Strm().WriteChar( '>' );
 
     if( !aEndTags.isEmpty() )
-        rWrt.Strm() << aEndTags.getStr();
+        rWrt.Strm().WriteCharPtr( aEndTags.getStr() );
 
     if( !rHTMLWrt.aINetFmts.empty() )
     {
@@ -1215,7 +1215,7 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
     sOut.append(' ');
     sOut.append(OOO_STRING_SVTOOLS_HTML_O_src).append("=\"").
     append(OOO_STRING_SVTOOLS_HTML_O_data).append(":");
-    rWrt.Strm() << sOut.makeStringAndClear().getStr();
+    rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
     HTMLOutFuncs::Out_String( rWrt.Strm(), aGraphicInBase64, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
     sOut.append('\"');
 
@@ -1269,7 +1269,7 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
 
     if (pTag)
         sOut.append('>');
-    rWrt.Strm() << sOut.makeStringAndClear().getStr();
+    rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
     return rWrt;
 }
@@ -1366,7 +1366,7 @@ static Writer & OutHTML_FrmFmtAsMulticol( Writer& rWrt,
             append("=\"").append(static_cast<sal_Int32>(nGutter)).append("\"");
     }
 
-    rWrt.Strm() << sOut.makeStringAndClear().getStr();
+    rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
     // WIDTH
     sal_uLong nFrmFlags = bInCntnr ? HTML_FRMOPTS_MULTICOL_CNTNR
@@ -1377,7 +1377,7 @@ static Writer & OutHTML_FrmFmtAsMulticol( Writer& rWrt,
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bInCntnr )
         rHTMLWrt.OutCSS1_FrmFmtOptions( rFrmFmt, nFrmFlags );
 
-    rWrt.Strm() << '>';
+    rWrt.Strm().WriteChar( '>' );
 
     rHTMLWrt.bLFPossible = sal_True;
     rHTMLWrt.IncIndentLevel();  // den Inhalt von Multicol einruecken;
@@ -1418,14 +1418,14 @@ static Writer& OutHTML_FrmFmtAsSpacer( Writer& rWrt, const SwFrmFmt& rFrmFmt )
     sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_spacer).append(' ')
         .append(OOO_STRING_SVTOOLS_HTML_O_type).append("=\"")
         .append(OOO_STRING_SVTOOLS_HTML_SPTYPE_block).append("\"");
-    rWrt.Strm() << sOut.makeStringAndClear().getStr();
+    rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
     // ALIGN, WIDTH, HEIGHT
     OString aEndTags = rHTMLWrt.OutFrmFmtOptions( rFrmFmt, aEmptyOUStr, HTML_FRMOPTS_SPACER );
 
-    rWrt.Strm() << '>';
+    rWrt.Strm().WriteChar( '>' );
     if( !aEndTags.isEmpty() )
-        rWrt.Strm() << aEndTags.getStr();
+        rWrt.Strm().WriteCharPtr( aEndTags.getStr() );
 
     return rWrt;
 }
@@ -1454,13 +1454,13 @@ static Writer& OutHTML_FrmFmtAsDivOrSpan( Writer& rWrt,
     OStringBuffer sOut;
     sOut.append('<').append(pStr);
 
-    rWrt.Strm() << sOut.makeStringAndClear().getStr();
+    rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
     sal_uLong nFrmFlags = HTML_FRMOPTS_DIV;
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_BORDER_NONE ) )
        nFrmFlags |= HTML_FRMOPT_S_NOBORDER;
     OString aEndTags = rHTMLWrt.OutFrmFmtOptions( rFrmFmt, aEmptyOUStr, nFrmFlags );
     rHTMLWrt.OutCSS1_FrmFmtOptions( rFrmFmt, nFrmFlags );
-    rWrt.Strm() << '>';
+    rWrt.Strm().WriteChar( '>' );
 
     rHTMLWrt.IncIndentLevel();  // den Inhalt einruecken
     rHTMLWrt.bLFPossible = sal_True;
@@ -1490,7 +1490,7 @@ static Writer& OutHTML_FrmFmtAsDivOrSpan( Writer& rWrt,
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), pStr, sal_False );
 
     if( !aEndTags.isEmpty() )
-        rWrt.Strm() << aEndTags.getStr();
+        rWrt.Strm().WriteCharPtr( aEndTags.getStr() );
 
     return rWrt;
 }

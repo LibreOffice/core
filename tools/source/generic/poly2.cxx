@@ -630,7 +630,7 @@ SvStream& operator<<( SvStream& rOStream, const PolyPolygon& rPolyPoly )
 
     // Write number of polygons
     sal_uInt16 nPolyCount = rPolyPoly.mpImplPolyPolygon->mnCount;
-    rOStream << nPolyCount;
+    rOStream.WriteUInt16( nPolyCount );
 
     // output polygons
     for ( sal_uInt16 i = 0; i < nPolyCount; i++ )
@@ -681,7 +681,7 @@ void PolyPolygon::Write( SvStream& rOStream ) const
 
     // Write number of polygons
     sal_uInt16 nPolyCount = mpImplPolyPolygon->mnCount;
-    rOStream << nPolyCount;
+    rOStream.WriteUInt16( nPolyCount );
 
     // Output polygons
     for ( sal_uInt16 i = 0; i < nPolyCount; i++ )

@@ -10065,7 +10065,7 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
     }
 
     SvMemoryStream* pStream = new SvMemoryStream;
-    *pStream << rDCTData;
+    pStream->WriteStream( rDCTData );
     pStream->Seek( STREAM_SEEK_TO_END );
 
     BitmapID aID;

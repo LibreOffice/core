@@ -316,7 +316,7 @@ sal_Bool SbxStdCollection::StoreData( SvStream& rStrm ) const
     {
         write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStrm, aElemClass,
             RTL_TEXTENCODING_ASCII_US);
-        rStrm << bAddRemoveOk;
+        rStrm.WriteUChar( bAddRemoveOk );
     }
     return bRes;
 }

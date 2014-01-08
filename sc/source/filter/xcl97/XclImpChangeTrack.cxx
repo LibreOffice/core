@@ -189,7 +189,7 @@ void XclImpChangeTrack::ReadFormula( ScTokenArray*& rpTokenArray, const ScAddres
     // to the Convert() routine (to prevent the construction/destruction of the
     // converter in each formula)
     SvMemoryStream aMemStrm;
-    aMemStrm << (sal_uInt16) 0x0001 << nFmlSize;
+    aMemStrm.WriteUInt16( (sal_uInt16) 0x0001 ).WriteUInt16( nFmlSize );
     size_t nRead = pStrm->CopyToStream( aMemStrm, nFmlSize );
 
     // survive reading invalid streams!

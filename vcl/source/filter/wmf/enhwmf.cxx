@@ -1014,12 +1014,12 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                             char* pBuf = new char[ nSize ];
                             SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
                             aTmp.ObjectOwnsMemory( sal_True );
-                            aTmp << (sal_uInt8)'B'
-                                 << (sal_uInt8)'M'
-                                 << (sal_uInt32)cbBitsSrc
-                                 << (sal_uInt16)0
-                                 << (sal_uInt16)0
-                                 << (sal_uInt32)cbBmiSrc + 14;
+                            aTmp.WriteUChar( (sal_uInt8)'B' )
+                                .WriteUChar( (sal_uInt8)'M' )
+                                .WriteUInt32( (sal_uInt32)cbBitsSrc )
+                                .WriteUInt16( (sal_uInt16)0 )
+                                .WriteUInt16( (sal_uInt16)0 )
+                                .WriteUInt32( (sal_uInt32)cbBmiSrc + 14 );
                             pWMF->Seek( nStart + offBmiSrc );
                             pWMF->Read( pBuf + 14, cbBmiSrc );
                             pWMF->Seek( nStart + offBitsSrc );
@@ -1077,12 +1077,12 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                             char* pBuf = new char[ nSize ];
                             SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
                             aTmp.ObjectOwnsMemory( sal_True );
-                            aTmp << (sal_uInt8)'B'
-                                 << (sal_uInt8)'M'
-                                 << (sal_uInt32)cbBitsSrc
-                                 << (sal_uInt16)0
-                                 << (sal_uInt16)0
-                                 << (sal_uInt32)cbBmiSrc + 14;
+                            aTmp.WriteUChar( (sal_uInt8)'B' )
+                                .WriteUChar( (sal_uInt8)'M' )
+                                .WriteUInt32( (sal_uInt32)cbBitsSrc )
+                                .WriteUInt16( (sal_uInt16)0 )
+                                .WriteUInt16( (sal_uInt16)0 )
+                                .WriteUInt32( (sal_uInt32)cbBmiSrc + 14 );
                             pWMF->Seek( nStart + offBmiSrc );
                             pWMF->Read( pBuf + 14, cbBmiSrc );
                             pWMF->Seek( nStart + offBitsSrc );
@@ -1147,12 +1147,12 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                             char* pBuf = new char[ nSize ];
                             SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
                             aTmp.ObjectOwnsMemory( sal_True );
-                            aTmp << (sal_uInt8)'B'
-                                << (sal_uInt8)'M'
-                                << (sal_uInt32)cbBitsSrc
-                                << (sal_uInt16)0
-                                << (sal_uInt16)0
-                                << (sal_uInt32)cbBmiSrc + 14;
+                            aTmp.WriteUChar( (sal_uInt8)'B' )
+                               .WriteUChar( (sal_uInt8)'M' )
+                               .WriteUInt32( (sal_uInt32)cbBitsSrc )
+                               .WriteUInt16( (sal_uInt16)0 )
+                               .WriteUInt16( (sal_uInt16)0 )
+                               .WriteUInt32( (sal_uInt32)cbBmiSrc + 14 );
                             pWMF->Seek( nStart + offBmiSrc );
                             pWMF->Read( pBuf + 14, cbBmiSrc );
                             pWMF->Seek( nStart + offBitsSrc );
@@ -1384,12 +1384,12 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 
                                 SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
                                 aTmp.ObjectOwnsMemory( sal_True );
-                                aTmp << (sal_uInt8)'B'
-                                     << (sal_uInt8)'M'
-                                     << (sal_uInt32)cbBits
-                                     << (sal_uInt16)0
-                                     << (sal_uInt16)0
-                                     << (sal_uInt32)cbBmi + 14;
+                                aTmp.WriteUChar( (sal_uInt8)'B' )
+                                    .WriteUChar( (sal_uInt8)'M' )
+                                    .WriteUInt32( (sal_uInt32)cbBits )
+                                    .WriteUInt16( (sal_uInt16)0 )
+                                    .WriteUInt16( (sal_uInt16)0 )
+                                    .WriteUInt32( (sal_uInt32)cbBmi + 14 );
                                 pWMF->Seek( nStart + offBmi );
                                 pWMF->Read( pBuf + 14, cbBmi );
                                 pWMF->Seek( nStart + offBits );

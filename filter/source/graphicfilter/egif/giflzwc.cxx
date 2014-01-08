@@ -81,7 +81,7 @@ GIFImageDataOutputStream::GIFImageDataOutputStream( SvStream & rGIF, sal_uInt8 n
     nBlockBufSize = 0;
     nBitsBufSize = 0;
     nBitsBuf = 0;
-    rStream << nLZWDataSize;
+    rStream.WriteUChar( nLZWDataSize );
 }
 
 // ------------------------------------------------------------------------
@@ -92,7 +92,7 @@ GIFImageDataOutputStream::~GIFImageDataOutputStream()
     WriteBits(0,7);
     FlushBitsBufsFullBytes();
     FlushBlockBuf();
-    rStream << (sal_uInt8)0;
+    rStream.WriteUChar( (sal_uInt8)0 );
     delete[] pBlockBuf;
 }
 
@@ -102,7 +102,7 @@ void GIFImageDataOutputStream::FlushBlockBuf()
 {
     if( nBlockBufSize )
     {
-        rStream << (sal_uInt8) nBlockBufSize;
+        rStream.WriteUChar( (sal_uInt8) nBlockBufSize );
         rStream.Write( pBlockBuf,nBlockBufSize );
         nBlockBufSize = 0;
     }

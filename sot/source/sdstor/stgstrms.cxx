@@ -1241,7 +1241,7 @@ void StgTmpStrm::SetSize( sal_uLong n )
             {
                 sal_uLong nCur = Tell();
                 Seek( nEndOfData - 1 );
-                *this << (sal_uInt8) 0;
+                WriteUChar( (sal_uInt8) 0 );
                 Seek( nCur );
             }
             else

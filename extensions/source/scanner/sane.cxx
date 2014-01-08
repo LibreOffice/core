@@ -603,25 +603,25 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
     aConverter.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
     // write bitmap stream header
-    aConverter << 'B' << 'M';
-    aConverter << (sal_uInt32) 0;
-    aConverter << (sal_uInt32) 0;
-    aConverter << (sal_uInt32) 60;
+    aConverter.WriteChar( 'B' ).WriteChar( 'M' );
+    aConverter.WriteUInt32( (sal_uInt32) 0 );
+    aConverter.WriteUInt32( (sal_uInt32) 0 );
+    aConverter.WriteUInt32( (sal_uInt32) 60 );
 
     // write BITMAPINFOHEADER
-    aConverter << (sal_uInt32)40;
-    aConverter << (sal_uInt32)0; // fill in width later
-    aConverter << (sal_uInt32)0; // fill in height later
-    aConverter << (sal_uInt16)1;
+    aConverter.WriteUInt32( (sal_uInt32)40 );
+    aConverter.WriteUInt32( (sal_uInt32)0 ); // fill in width later
+    aConverter.WriteUInt32( (sal_uInt32)0 ); // fill in height later
+    aConverter.WriteUInt16( (sal_uInt16)1 );
     // create header for 24 bits
     // correct later if necessary
-    aConverter << (sal_uInt16)24;
-    aConverter << (sal_uInt32)0;
-    aConverter << (sal_uInt32)0;
-    aConverter << (sal_uInt32)0;
-    aConverter << (sal_uInt32)0;
-    aConverter << (sal_uInt32)0;
-    aConverter << (sal_uInt32)0;
+    aConverter.WriteUInt16( (sal_uInt16)24 );
+    aConverter.WriteUInt32( (sal_uInt32)0 );
+    aConverter.WriteUInt32( (sal_uInt32)0 );
+    aConverter.WriteUInt32( (sal_uInt32)0 );
+    aConverter.WriteUInt32( (sal_uInt32)0 );
+    aConverter.WriteUInt32( (sal_uInt32)0 );
+    aConverter.WriteUInt32( (sal_uInt32)0 );
 
     for( nStream=0; nStream < 3 && bSuccess ; nStream++ )
     {
@@ -762,11 +762,11 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
 #endif
 
                 aConverter.Seek( 18 );
-                aConverter << (sal_uInt32)nWidth;
-                aConverter << (sal_uInt32)nHeight;
+                aConverter.WriteUInt32( (sal_uInt32)nWidth );
+                aConverter.WriteUInt32( (sal_uInt32)nHeight );
                 aConverter.Seek( 38 );
-                aConverter << (sal_uInt32)(1000*nWidth/nWidthMM);
-                aConverter << (sal_uInt32)(1000*nHeight/nHeightMM);
+                aConverter.WriteUInt32( (sal_uInt32)(1000*nWidth/nWidthMM) );
+                aConverter.WriteUInt32( (sal_uInt32)(1000*nHeight/nHeightMM) );
                 bWidthSet = sal_True;
             }
             aConverter.Seek(60);
@@ -774,31 +774,31 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
             if( eType == FrameStyle_BW )
             {
                 aConverter.Seek( 10 );
-                aConverter << (sal_uInt32)64;
+                aConverter.WriteUInt32( (sal_uInt32)64 );
                 aConverter.Seek( 28 );
-                aConverter << (sal_uInt16) 1;
+                aConverter.WriteUInt16( (sal_uInt16) 1 );
                 aConverter.Seek( 54 );
                 // write color table
-                aConverter << (sal_uInt16)0xffff;
-                aConverter << (sal_uInt8)0xff;
-                aConverter << (sal_uInt8)0;
-                aConverter << (sal_uInt32)0;
+                aConverter.WriteUInt16( (sal_uInt16)0xffff );
+                aConverter.WriteUChar( (sal_uInt8)0xff );
+                aConverter.WriteUChar( (sal_uInt8)0 );
+                aConverter.WriteUInt32( (sal_uInt32)0 );
                 aConverter.Seek( 64 );
             }
             else if( eType == FrameStyle_Gray )
             {
                  aConverter.Seek( 10 );
-                 aConverter << (sal_uInt32)1084;
+                 aConverter.WriteUInt32( (sal_uInt32)1084 );
                 aConverter.Seek( 28 );
-                aConverter << (sal_uInt16) 8;
+                aConverter.WriteUInt16( (sal_uInt16) 8 );
                 aConverter.Seek( 54 );
                 // write color table
                 for( nLine = 0; nLine < 256; nLine++ )
                 {
-                    aConverter << (sal_uInt8)nLine;
-                    aConverter << (sal_uInt8)nLine;
-                    aConverter << (sal_uInt8)nLine;
-                    aConverter << (sal_uInt8)0;
+                    aConverter.WriteUChar( (sal_uInt8)nLine );
+                    aConverter.WriteUChar( (sal_uInt8)nLine );
+                    aConverter.WriteUChar( (sal_uInt8)nLine );
+                    aConverter.WriteUChar( (sal_uInt8)0 );
                 }
                 aConverter.Seek( 1084 );
             }
@@ -823,7 +823,7 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
                     for( i = 0; i < (aParams.pixels_per_line); i++ )
                     {
                         sal_uInt8 nGray = _ReadValue( pFrame, aParams.depth );
-                        aConverter << nGray;
+                        aConverter.WriteUChar( nGray );
                     }
                 }
                 else if( eType == FrameStyle_RGB )
@@ -834,9 +834,9 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
                         nRed    = _ReadValue( pFrame, aParams.depth );
                         nGreen  = _ReadValue( pFrame, aParams.depth );
                         nBlue   = _ReadValue( pFrame, aParams.depth );
-                        aConverter << nBlue;
-                        aConverter << nGreen;
-                        aConverter << nRed;
+                        aConverter.WriteUChar( nBlue );
+                        aConverter.WriteUChar( nGreen );
+                        aConverter.WriteUChar( nRed );
                     }
                 }
                 else if( eType == FrameStyle_Separated )
@@ -848,15 +848,15 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
                         {
                             case SANE_FRAME_RED:
                                 aConverter.SeekRel( 2 );
-                                aConverter << nValue;
+                                aConverter.WriteUChar( nValue );
                                 break;
                             case SANE_FRAME_GREEN:
                                 aConverter.SeekRel( 1 );
-                                aConverter << nValue;
+                                aConverter.WriteUChar( nValue );
                                 aConverter.SeekRel( 1 );
                                 break;
                             case SANE_FRAME_BLUE:
-                                aConverter << nValue;
+                                aConverter.WriteUChar( nValue );
                                 aConverter.SeekRel( 2 );
                                 break;
                             case SANE_FRAME_GRAY:
@@ -881,7 +881,7 @@ sal_Bool Sane::Start( BitmapTransporter& rBitmap )
     int nPos = aConverter.Tell();
 
     aConverter.Seek( 2 );
-    aConverter << (sal_uInt32) nPos+1;
+    aConverter.WriteUInt32( (sal_uInt32) nPos+1 );
     aConverter.Seek( 0 );
 
     rBitmap.unlock();

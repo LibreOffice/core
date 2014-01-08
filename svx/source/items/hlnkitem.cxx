@@ -44,17 +44,17 @@ SvStream& SvxHyperlinkItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ 
     // UNICODE: rStrm << sTarget;
     rStrm.WriteUniOrByteString(sTarget, rStrm.GetStreamCharSet());
 
-    rStrm << (sal_uInt32) eType;
+    rStrm.WriteUInt32( (sal_uInt32) eType );
 
     // marker for versioninfo
-    rStrm << (sal_uInt32) HYPERLINKFF_MARKER;
+    rStrm.WriteUInt32( (sal_uInt32) HYPERLINKFF_MARKER );
 
     // new data
     // UNICODE: rStrm << sIntName;
     rStrm.WriteUniOrByteString(sIntName, rStrm.GetStreamCharSet());
 
     // macro-events
-    rStrm << nMacroEvents;
+    rStrm.WriteUInt16( nMacroEvents );
 
     // store macros
     sal_uInt16 nCnt = pMacroTable ? (sal_uInt16)pMacroTable->size() : 0;
@@ -67,7 +67,7 @@ SvStream& SvxHyperlinkItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ 
                 --nCnt;
     }
 
-    rStrm << nCnt;
+    rStrm.WriteUInt16( nCnt );
 
     if( nCnt )
     {
@@ -78,7 +78,7 @@ SvStream& SvxHyperlinkItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ 
             const SvxMacro& rMac = it->second;
             if( STARBASIC == rMac.GetScriptType() )
             {
-                rStrm << (sal_uInt16)it->first;
+                rStrm.WriteUInt16( (sal_uInt16)it->first );
 
                 // UNICODE: rStrm << pMac->GetLibName();
                 rStrm.WriteUniOrByteString(rMac.GetLibName(), rStrm.GetStreamCharSet());
@@ -90,7 +90,7 @@ SvStream& SvxHyperlinkItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ 
     }
 
     nCnt = nMax - nCnt;
-    rStrm << nCnt;
+    rStrm.WriteUInt16( nCnt );
     if( nCnt )
     {
         // 2. ::com::sun::star::script::JavaScript-Macros
@@ -100,7 +100,7 @@ SvStream& SvxHyperlinkItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ 
             const SvxMacro& rMac = it->second;
             if( STARBASIC != rMac.GetScriptType() )
             {
-                rStrm << (sal_uInt16)it->first;
+                rStrm.WriteUInt16( (sal_uInt16)it->first );
 
                 // UNICODE: rStrm << pMac->GetLibName();
                 rStrm.WriteUniOrByteString(rMac.GetLibName(), rStrm.GetStreamCharSet());
@@ -108,7 +108,7 @@ SvStream& SvxHyperlinkItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ 
                 // UNICODE: rStrm << pMac->GetMacName();
                 rStrm.WriteUniOrByteString(rMac.GetMacName(), rStrm.GetStreamCharSet());
 
-                rStrm << (sal_uInt16)rMac.GetScriptType();
+                rStrm.WriteUInt16( (sal_uInt16)rMac.GetScriptType() );
             }
         }
     }

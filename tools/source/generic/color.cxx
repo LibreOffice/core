@@ -225,7 +225,7 @@ SvStream& Color::Read( SvStream& rIStm, bool bNewFormat )
 SvStream& Color::Write( SvStream& rOStm, bool bNewFormat )
 {
     if ( bNewFormat )
-        rOStm << mnColor;
+        rOStm.WriteUInt32( mnColor );
     else
         rOStm << *this;
 
@@ -312,10 +312,10 @@ SvStream& operator<<( SvStream& rOStream, const Color& rColor )
     nGreen  = (nGreen<<8) + nGreen;
     nBlue   = (nBlue<<8) + nBlue;
 
-    rOStream << nColorName;
-    rOStream << nRed;
-    rOStream << nGreen;
-    rOStream << nBlue;
+    rOStream.WriteUInt16( nColorName );
+    rOStream.WriteUInt16( nRed );
+    rOStream.WriteUInt16( nGreen );
+    rOStream.WriteUInt16( nBlue );
 
     return rOStream;
 }

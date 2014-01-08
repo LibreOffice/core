@@ -257,8 +257,8 @@ SvStream& operator<<( SvStream& rOStream, const QueueInfo& rInfo )
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStream, rInfo.maDriver, RTL_TEXTENCODING_UTF8);
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStream, rInfo.maLocation, RTL_TEXTENCODING_UTF8);
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStream, rInfo.maComment, RTL_TEXTENCODING_UTF8);
-    rOStream << rInfo.mnStatus;
-    rOStream << rInfo.mnJobs;
+    rOStream.WriteUInt32( rInfo.mnStatus );
+    rOStream.WriteUInt32( rInfo.mnJobs );
 
     return rOStream;
 }

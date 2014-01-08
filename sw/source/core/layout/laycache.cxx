@@ -210,9 +210,9 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                             aIo.OpenFlagRec( bFollow ? 0x01 : 0x00,
                                             bFollow ? 8 : 4 );
                             nNdIdx -= nStartOfContent;
-                            aIo.GetStream() << static_cast<sal_uInt32>(nNdIdx);
+                            aIo.GetStream().WriteUInt32( static_cast<sal_uInt32>(nNdIdx) );
                             if( bFollow )
-                                aIo.GetStream() << static_cast<sal_uInt32>(((SwTxtFrm*)pTmp)->GetOfst());
+                                aIo.GetStream().WriteUInt32( static_cast<sal_uInt32>(((SwTxtFrm*)pTmp)->GetOfst()) );
                             aIo.CloseFlagRec();
                             /*  Close Paragraph Record */
                             aIo.CloseRec( SW_LAYCACHE_IO_REC_PARA );
@@ -251,8 +251,8 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                                 aIo.OpenRec( SW_LAYCACHE_IO_REC_TABLE );
                                 aIo.OpenFlagRec( 0, 8 );
                                 nNdIdx -= nStartOfContent;
-                                aIo.GetStream() << static_cast<sal_uInt32>(nNdIdx)
-                                                << static_cast<sal_uInt32>(nOfst);
+                                aIo.GetStream().WriteUInt32( static_cast<sal_uInt32>(nNdIdx) )
+                                               .WriteUInt32( static_cast<sal_uInt32>(nOfst) );
                                 aIo.CloseFlagRec();
                                 /* Close Table Record  */
                                 aIo.CloseRec( SW_LAYCACHE_IO_REC_TABLE );
@@ -315,10 +315,10 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                                 SwRect &rRct = pFly->Frm();
                                 sal_Int32 nX = rRct.Left() - pPage->Frm().Left();
                                 sal_Int32 nY = rRct.Top() - pPage->Frm().Top();
-                                aIo.GetStream() << nPageNum << nOrdNum
-                                                << nX << nY
-                                                << static_cast<sal_Int32>(rRct.Width())
-                                                << static_cast<sal_Int32>(rRct.Height());
+                                aIo.GetStream().WriteUInt16( nPageNum ).WriteUInt32( nOrdNum )
+                                               .WriteInt32( nX ).WriteInt32( nY )
+                                               .WriteInt32( static_cast<sal_Int32>(rRct.Width()) )
+                                               .WriteInt32( static_cast<sal_Int32>(rRct.Height()) );
                                 /* Close Fly Record  */
                                 aIo.CloseRec( SW_LAYCACHE_IO_REC_FLY );
                             }
@@ -1094,8 +1094,8 @@ SwLayCacheIoImpl::SwLayCacheIoImpl( SvStream& rStrm, bool bWrtMd ) :
     bError( false  )
 {
     if( bWriteMode )
-        *pStream << nMajorVersion
-                 << nMinorVersion;
+        pStream->WriteUInt16( nMajorVersion )
+                .WriteUInt16( nMinorVersion );
 
     else
         *pStream >> nMajorVersion
@@ -1109,7 +1109,7 @@ bool SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
     if( bWriteMode )
     {
         aRecords.push_back( RecTypeSize(cType, nPos) );
-        *pStream << (sal_uInt32) 0;
+        pStream->WriteUInt32( (sal_uInt32) 0 );
     }
     else
     {
@@ -1149,7 +1149,7 @@ bool SwLayCacheIoImpl::CloseRec( sal_uInt8 )
             pStream->Seek( nBgn );
             sal_uInt32 nSize = nPos - nBgn;
             sal_uInt32 nVal = ( nSize << 8 ) | aRecords.back().type;
-            *pStream << nVal;
+            pStream->WriteUInt32( nVal );
             pStream->Seek( nPos );
             if( pStream->GetError() != SVSTREAM_OK )
                  bRes = false;
@@ -1229,7 +1229,7 @@ void SwLayCacheIoImpl::OpenFlagRec( sal_uInt8 nFlags, sal_uInt8 nLen )
     OSL_ENSURE( (nFlags & 0xF0) == 0, "illegal flags set" );
     OSL_ENSURE( nLen < 16, "wrong flag record length" );
     sal_uInt8 cFlags = (nFlags << 4) + nLen;
-    *pStream << cFlags;
+    pStream->WriteUChar( cFlags );
     nFlagRecEnd = pStream->Tell() + nLen;
 }
 

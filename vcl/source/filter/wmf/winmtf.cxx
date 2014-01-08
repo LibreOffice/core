@@ -2180,8 +2180,8 @@ void WinMtfOutput::PassEMFPlusHeaderInfo()
     nBottom = mrclFrame.Bottom();
 
     // emf header info
-    mem << nLeft << nTop << nRight << nBottom;
-    mem << mnPixX << mnPixY << mnMillX << mnMillY;
+    mem.WriteInt32( nLeft ).WriteInt32( nTop ).WriteInt32( nRight ).WriteInt32( nBottom );
+    mem.WriteInt32( mnPixX ).WriteInt32( mnPixY ).WriteInt32( mnMillX ).WriteInt32( mnMillY );
 
     float one, zero;
 
@@ -2190,7 +2190,7 @@ void WinMtfOutput::PassEMFPlusHeaderInfo()
 
     // add transformation matrix to be used in vcl's metaact.cxx for
     // rotate and scale operations
-    mem << one << zero << zero << one << zero << zero;
+    mem.WriteFloat( one ).WriteFloat( zero ).WriteFloat( zero ).WriteFloat( one ).WriteFloat( zero ).WriteFloat( zero );
 
     // need to flush the stream, otherwise GetEndOfData will return 0
     // on windows where the function parameters are probably resolved in reverse order

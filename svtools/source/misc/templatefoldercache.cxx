@@ -59,14 +59,14 @@ namespace svt
     SvStream& operator << ( SvStream& _rStorage, const util::DateTime& _rDate )
     {
         sal_uInt16 hundredthSeconds = static_cast< sal_uInt16 >( _rDate.NanoSeconds / Time::nanoPerCenti );
-        _rStorage << hundredthSeconds;
+        _rStorage.WriteUInt16( hundredthSeconds );
 
-        _rStorage << _rDate.Seconds;
-        _rStorage << _rDate.Minutes;
-        _rStorage << _rDate.Hours;
-        _rStorage << _rDate.Day;
-        _rStorage << _rDate.Month;
-        _rStorage << _rDate.Year;
+        _rStorage.WriteUInt16( _rDate.Seconds );
+        _rStorage.WriteUInt16( _rDate.Minutes );
+        _rStorage.WriteUInt16( _rDate.Hours );
+        _rStorage.WriteUInt16( _rDate.Day );
+        _rStorage.WriteUInt16( _rDate.Month );
+        _rStorage.WriteInt16( _rDate.Year );
 
         return _rStorage;
     }
@@ -357,7 +357,7 @@ namespace svt
 
             // store the info about the children
             // the number
-            m_rStorage << (sal_Int32)_rContent.size();
+            m_rStorage.WriteInt32( (sal_Int32)_rContent.size() );
             // their URLs ( the local name is not enough, since URL might be not a hierarchical one, "expand:" for example )
             ::std::for_each(
                 _rContent.getSubContents().begin(),
@@ -559,11 +559,11 @@ namespace svt
 
         if ( m_bValidCurrentState && openCacheStream( sal_False ) )
         {
-            *m_pCacheStream << getMagicNumber();
+            m_pCacheStream->WriteInt32( getMagicNumber() );
 
             // store the template root folders
             // the size
-            *m_pCacheStream << (sal_Int32)m_aCurrentState.size();
+            m_pCacheStream->WriteInt32( (sal_Int32)m_aCurrentState.size() );
             // the complete URLs
             ::std::for_each(
                 m_aCurrentState.begin(),

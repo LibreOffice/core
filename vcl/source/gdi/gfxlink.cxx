@@ -274,7 +274,7 @@ SvStream& operator<<( SvStream& rOStream, const GfxLink& rGfxLink )
     VersionCompat* pCompat = new VersionCompat( rOStream, STREAM_WRITE, 2 );
 
     // Version 1
-    rOStream << (sal_uInt16) rGfxLink.GetType() << rGfxLink.GetDataSize() << rGfxLink.GetUserId();
+    rOStream.WriteUInt16( (sal_uInt16) rGfxLink.GetType() ).WriteUInt32( rGfxLink.GetDataSize() ).WriteUInt32( rGfxLink.GetUserId() );
 
     // Version 2
     rOStream << rGfxLink.GetPrefSize() << rGfxLink.GetPrefMapMode();

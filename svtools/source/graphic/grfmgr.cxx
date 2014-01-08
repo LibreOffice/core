@@ -1134,7 +1134,8 @@ SvStream& operator<<( SvStream& rOStm, const GraphicObject& rGraphicObj )
     VersionCompat   aCompat( rOStm, STREAM_WRITE, 1 );
     const sal_Bool      bLink =  rGraphicObj.HasLink();
 
-    rOStm << rGraphicObj.GetGraphic() << rGraphicObj.GetAttr() << bLink;
+    rOStm << rGraphicObj.GetGraphic() << rGraphicObj.GetAttr();
+    rOStm.WriteUChar( bLink );
 
     if( bLink )
         write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStm, rGraphicObj.GetLink(), RTL_TEXTENCODING_UTF8);
