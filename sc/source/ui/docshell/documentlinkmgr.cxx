@@ -44,6 +44,11 @@ struct DocumentLinkManagerImpl : boost::noncopyable
 DocumentLinkManager::DocumentLinkManager( ScDocument& rDoc, SfxObjectShell* pShell ) :
     mpImpl(new DocumentLinkManagerImpl(rDoc, pShell)) {}
 
+DocumentLinkManager::~DocumentLinkManager()
+{
+    delete mpImpl;
+}
+
 void DocumentLinkManager::setDataStream( DataStream* p )
 {
     mpImpl->mpDataStream.reset(p);

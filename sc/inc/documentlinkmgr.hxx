@@ -32,6 +32,7 @@ class DocumentLinkManager : boost::noncopyable
 
 public:
     DocumentLinkManager( ScDocument& rDoc, SfxObjectShell* pShell );
+    ~DocumentLinkManager();
 
     void setDataStream( DataStream* p );
     DataStream* getDataStream();
