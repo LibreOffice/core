@@ -163,7 +163,7 @@ public class ConfigExamples
 
     }
 
-    /** Do some simple checks, if tehre is a valid ConfigurationProvider
+    /** Do some simple checks, if there is a valid ConfigurationProvider
     */
     public static boolean checkProvider(XMultiServiceFactory xProvider)
     {
