@@ -13,7 +13,8 @@ $(eval $(call gb_ExternalProject_use_autoconf,liborcus,build))
 
 $(eval $(call gb_ExternalProject_use_externals,liborcus, \
     boost_headers \
-    boostsystem \
+    boost_iostreams \
+    boost_system \
     zlib \
 ))
 
@@ -38,7 +39,7 @@ endif
 ifneq ($(SYSTEM_BOOST),)
 liborcus_LIBS+=$(BOOST_SYSTEM_LIB)
 else
-liborcus_LIBS+=-L$(gb_StaticLibrary_WORKDIR) -lboostsystem
+liborcus_LIBS+=-L$(gb_StaticLibrary_WORKDIR) -lboost_system -lboost_iostreams
 endif
 ifeq ($(OS),ANDROID)
 liborcus_LIBS+=-lgnustl_shared -lm
@@ -95,8 +96,8 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 			$(if $(filter TRUE,$(ENABLE_DEBUG)),--enable-debug,--disable-debug) \
 			--disable-spreadsheet-model \
 			--disable-werror \
+			$(if $(SYSTEM_BOOST),,--with-boost=$(WORKDIR)/UnpackedTarball/boost) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-			$(if $(SYSTEM_BOOST),,--with-boost-system=boostsystem) \
 		&& $(if $(VERBOSE)$(verbose),V=1) \
 		   $(MAKE) \
 	)
