@@ -16,13 +16,10 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,liborcus,0))
 liborcus_patches :=
 
 # make config.sub recognize arm-linux-androideabi
-liborcus_patches += liborcus_0.1.0-configure.patch
+# liborcus_patches += liborcus_0.1.0-configure.patch
 
 # don't use dllimport
 liborcus_patches += liborcus_0.1.0-dllimport.patch
-
-# fdo#63844
-liborcus_patches += liborcus-handle-invalid-xml.patch.1
 
 ifeq ($(OS),MACOSX)
 # no "tac" command on OS X, but "tail -r"

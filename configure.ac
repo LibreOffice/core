@@ -8724,6 +8724,7 @@ if test "$with_system_boost" = "yes"; then
     SYSTEM_BOOST=YES
     AX_BOOST_BASE(1.47)
     AX_BOOST_DATE_TIME
+    AX_BOOST_IOSTREAMS
     mingw_boost_date_time_dll=`echo $BOOST_DATE_TIME_LIB | sed -e 's/^-l//' -e 's/\.dll$//'`
     libo_MINGW_TRY_DLL([$mingw_boost_date_time_dll])
     if test -z "$MINGW_BOOST_DATE_TIME_DLL"; then

@@ -33,6 +33,7 @@ $(eval $(call gb_Library_use_externals,scfilt,\
 	orcus-parser \
 	boost_headers \
 	boostsystem \
+	boostiostreams \
 	mdds_headers \
 	zlib \
 ))
