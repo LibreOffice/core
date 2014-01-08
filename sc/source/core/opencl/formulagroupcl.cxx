@@ -3356,20 +3356,15 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
 #endif
     }
     return true;
-} // namespace opencl
+}
 
-}} // namespace sc
+}} // namespace sc::opencl
 
 extern "C" {
 
 SAL_DLLPUBLIC_EXPORT sc::FormulaGroupInterpreter* SAL_CALL
                    createFormulaGroupOpenCLInterpreter()
 {
-#if 0// USE_GROUNDWATER_INTERPRETER
-    if (getenv("SC_GROUNDWATER"))
-        return new sc::opencl::FormulaGroupInterpreterGroundwater();
-#endif
-
     return new sc::opencl::FormulaGroupInterpreterOpenCL();
 }
 
