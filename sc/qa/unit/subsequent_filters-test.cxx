@@ -1741,6 +1741,7 @@ void ScFiltersTest::testPivotTableSharedCacheGroupODS()
 
     bool bHasYears = false;
     bool bHasMonths = false;
+    std::vector<SCROW> aMemberIds;
 
     for (long nGrpDim = 9; nGrpDim <= 10; ++nGrpDim)
     {
@@ -1748,10 +1749,66 @@ void ScFiltersTest::testPivotTableSharedCacheGroupODS()
         switch (nGrpType)
         {
             case sheet::DataPilotFieldGroupBy::MONTHS:
+            {
                 bHasMonths = true;
+                aMemberIds.clear();
+                pCache->GetGroupDimMemberIds(nGrpDim, aMemberIds);
+
+                // There should be a total of 14 items for the month group: 12
+                // months plus the start and end value items.
+
+                CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(14), aMemberIds.size());
+
+                std::vector<sal_Int32> aGrpValues;
+                for (size_t i = 0, n = aMemberIds.size(); i < n; ++i)
+                {
+                    const ScDPItemData* pItem = pCache->GetItemDataById(nGrpDim, aMemberIds[i]);
+                    CPPUNIT_ASSERT_MESSAGE("Failed to get pivot item.", pItem);
+                    CPPUNIT_ASSERT_EQUAL(ScDPItemData::GroupValue, pItem->GetType());
+                    ScDPItemData::GroupValueAttr aGrpVal = pItem->GetGroupValue();
+                    CPPUNIT_ASSERT_EQUAL(sheet::DataPilotFieldGroupBy::MONTHS, aGrpVal.mnGroupType);
+                    aGrpValues.push_back(aGrpVal.mnValue);
+                }
+
+                std::sort(aGrpValues.begin(), aGrpValues.end());
+                std::vector<sal_Int32> aChecks;
+                aChecks.push_back(ScDPItemData::DateFirst);
+                for (sal_Int32 i = 1; i <= 12; ++i)
+                    aChecks.push_back(i); // January through December.
+                aChecks.push_back(ScDPItemData::DateLast);
+                CPPUNIT_ASSERT_MESSAGE("Unexpected group values for the month group.", aGrpValues == aChecks);
+            }
             break;
             case sheet::DataPilotFieldGroupBy::YEARS:
+            {
                 bHasYears = true;
+                aMemberIds.clear();
+                pCache->GetGroupDimMemberIds(nGrpDim, aMemberIds);
+
+                // There should be a total of 4 items and they should be 2012,
+                // 2013 and the start and end value items.
+
+                CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), aMemberIds.size());
+
+                std::vector<sal_Int32> aGrpValues;
+                for (size_t i = 0, n = aMemberIds.size(); i < n; ++i)
+                {
+                    const ScDPItemData* pItem = pCache->GetItemDataById(nGrpDim, aMemberIds[i]);
+                    CPPUNIT_ASSERT_MESSAGE("Failed to get pivot item.", pItem);
+                    CPPUNIT_ASSERT_EQUAL(ScDPItemData::GroupValue, pItem->GetType());
+                    ScDPItemData::GroupValueAttr aGrpVal = pItem->GetGroupValue();
+                    CPPUNIT_ASSERT_EQUAL(sheet::DataPilotFieldGroupBy::YEARS, aGrpVal.mnGroupType);
+                    aGrpValues.push_back(aGrpVal.mnValue);
+                }
+
+                std::sort(aGrpValues.begin(), aGrpValues.end());
+                std::vector<sal_Int32> aChecks;
+                aChecks.push_back(ScDPItemData::DateFirst);
+                aChecks.push_back(2012);
+                aChecks.push_back(2013);
+                aChecks.push_back(ScDPItemData::DateLast);
+                CPPUNIT_ASSERT_MESSAGE("Unexpected group values for the year group.", aGrpValues == aChecks);
+            }
             break;
             default:
                 ;
