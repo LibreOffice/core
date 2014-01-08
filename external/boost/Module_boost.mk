@@ -11,7 +11,8 @@ $(eval $(call gb_Module_Module,boost))
 
 $(eval $(call gb_Module_add_targets,boost,\
 	StaticLibrary_boostdatetime \
-	StaticLibrary_boostsystem \
+	StaticLibrary_boost_system \
+	StaticLibrary_boost_iostreams \
 	UnpackedTarball_boost \
 ))
 

@@ -135,7 +135,7 @@ class ReaderThread : public salhelper::Thread
     osl::Condition maCondConsume;
 
 #if ENABLE_ORCUS
-    orcus::csv_parser_config maConfig;
+    orcus::csv::parser_config maConfig;
 #endif
 
 public:
