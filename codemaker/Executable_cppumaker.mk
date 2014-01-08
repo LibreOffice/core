@@ -13,7 +13,6 @@ $(eval $(call gb_Executable_use_external,cppumaker,boost_headers))
 
 $(eval $(call gb_Executable_use_libraries,cppumaker,\
     sal \
-    sal_textenc \
     salhelper \
     unoidl \
 ))

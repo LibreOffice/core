@@ -3085,6 +3085,12 @@ $(call gb_Executable_add_runtime_dependencies,climaker,\
 )
 endef
 
+define gb_Executable__register_cppumaker
+$(call gb_Executable_add_runtime_dependencies,cppumaker,\
+	$(if $(filter-out ANDROID,$(OS)),$(call gb_Library_get_target,sal_textenc)) \
+)
+endef
+
 gb_Gallery__UNO_COMPONENTS := \
 	comphelper/util/comphelp \
 	configmgr/source/configmgr \
