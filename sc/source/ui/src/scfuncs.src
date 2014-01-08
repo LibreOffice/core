@@ -5647,6 +5647,70 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The percentage rate of the quantile between 0 and 1." ;
         };
     };
+     // -=*# Resource for function PERCENTILE.EXC #*=-
+    Resource SC_OPCODE_PERCENTILE_EXC
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns the alpha percentile of a sample." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_PERCENTILE_EXC );
+            2;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "data" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The array of the data in the sample." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "Alpha" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The percentile value, range 0...1, exclusive." ;
+        };
+    };
+     // -=*# Resource for function PERCENTILE.INC #*=-
+    Resource SC_OPCODE_PERCENTILE_INC
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns the alpha percentile of a sample." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_PERCENTILE_INC );
+            2;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "data" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The array of the data in the sample." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "Alpha" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The percentile value, range 0...1, inclusive." ;
+        };
+    };
      // -=*# Resource for function QUARTILE #*=-
     Resource SC_OPCODE_QUARTILE
     {
@@ -5659,6 +5723,70 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             0;
             ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_QUARTILE );
+            2;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "data" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The array of the data in the sample." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "Type" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The type of the quartile (0 = MIN, 1 = 25%, 2 = 50 %, 3 = 75 %, 4 =MAX)." ;
+        };
+    };
+     // -=*# Resource for function QUARTILE.EXC #*=-
+    Resource SC_OPCODE_QUARTILE_EXC
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns the quartile of a sample." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_QUARTILE_EXC );
+            2;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "data" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The array of the data in the sample." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "Type" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The type of the quartile (1 = 25%, 2 = 50 %, 3 = 75 %)." ;
+        };
+    };
+     // -=*# Resource for function QUARTILE.INC #*=-
+    Resource SC_OPCODE_QUARTILE_INC
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns the quartile of a sample." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_QUARTILE_INC );
             2;  0;  0;
             0;
         };
@@ -5775,6 +5903,86 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The value for which percentage ranking is to be determined." ;
         };
     };
+     // -=*# Resource for function PERCENTRANK.EXC #*=-
+    Resource SC_OPCODE_PERCENT_RANK_EXC
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns the percentage rank (0..1, exclusive) of a value in a sample." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_PERCENTRANK_EXC );
+            3;  0;  0;  1;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "data" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The array of the data in the sample." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "value" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The value for which percentage ranking is to be determined." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "significance" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "The number of significant digits for the returned percentage: if ommitted, a value of 3 is used." ;
+        };
+    };
+     // -=*# Resource for function PERCENTRANK.INC #*=-
+    Resource SC_OPCODE_PERCENT_RANK_INC
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns the percentage rank (0..1, inclusive) of a value in a sample." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_PERCENTRANK_INC );
+            3;  0;  0;  1;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "data" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The array of the data in the sample." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "value" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The value for which percentage ranking is to be determined." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "significance" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "The number of significant digits for the returned percentage: if ommitted, a value of 3 is used." ;
+        };
+    };
      // -=*# Resource for function RANG #*=-
     Resource SC_OPCODE_RANK
     {
@@ -5787,6 +5995,86 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             0;
             ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_RANG );
+            3;  0;  0;  1;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "value" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The value for which the rank is to be determined." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "Data" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The array of the data in the sample." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "Type" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "Sequence order: 0 or omitted means descending, any other value than 0 means ascending." ;
+        };
+    };
+     // -=*# Resource for function RANK.EQ #*=-
+    Resource SC_OPCODE_RANK_EQ
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns the ranking of a value in a sample; if more than one value has the same rank, the top rank of that set of values is returned." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_RANK_EQ );
+            3;  0;  0;  1;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "value" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The value for which the rank is to be determined." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "Data" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The array of the data in the sample." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "Type" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "Sequence order: 0 or omitted means descending, any other value than 0 means ascending." ;
+        };
+    };
+     // -=*# Resource for function RANK.AVG #*=-
+    Resource SC_OPCODE_RANK_AVG
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns the ranking of a value in a sample; if more than one value has the same rank, the average rank is returned." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_RANK_AVG );
             3;  0;  0;  1;
             0;
         };

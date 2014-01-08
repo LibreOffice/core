@@ -448,8 +448,16 @@
 #define SC_OPCODE_T_INV_2T          450
 #define SC_OPCODE_T_INV_MS          451
 #define SC_OPCODE_T_TEST_MS         452
+#define SC_OPCODE_PERCENTILE_INC    453
+#define SC_OPCODE_PERCENT_RANK_INC  454
+#define SC_OPCODE_QUARTILE_INC      455
+#define SC_OPCODE_RANK_EQ           456
+#define SC_OPCODE_PERCENTILE_EXC    457
+#define SC_OPCODE_PERCENT_RANK_EXC  458
+#define SC_OPCODE_QUARTILE_EXC      459
+#define SC_OPCODE_RANK_AVG          460
 
-#define SC_OPCODE_STOP_2_PAR        453     /* last function with two or more parameters' OpCode + 1 */
+#define SC_OPCODE_STOP_2_PAR        461     /* last function with two or more parameters' OpCode + 1 */
 #define SC_OPCODE_STOP_FUNCTION     SC_OPCODE_STOP_2_PAR            /* last function's OpCode + 1 */
 #define SC_OPCODE_LAST_OPCODE_ID    (SC_OPCODE_STOP_FUNCTION - 1)   /* last OpCode */
 

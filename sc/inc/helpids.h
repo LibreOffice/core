@@ -708,5 +708,13 @@
 #define HID_FUNC_TINV_2T                                        "SC_HID_FUNC_TINV_2T"
 #define HID_FUNC_TINV_MS                                        "SC_HID_FUNC_TINV_MS"
 #define HID_FUNC_TTEST_MS                                       "SC_HID_FUNC_TTEST_MS"
+#define HID_FUNC_PERCENTILE_EXC                                 "SC_HID_FUNC_PERCENTILE_EXC"
+#define HID_FUNC_PERCENTILE_INC                                 "SC_HID_FUNC_PERCENTILE_INC"
+#define HID_FUNC_PERCENTRANK_EXC                                "SC_HID_FUNC_PERCENTRANK_EXC"
+#define HID_FUNC_PERCENTRANK_INC                                "SC_HID_FUNC_PERCENTRANK_INC"
+#define HID_FUNC_QUARTILE_INC                                   "SC_HID_FUNC_QUARTILE_INC"
+#define HID_FUNC_QUARTILE_EXC                                   "SC_HID_FUNC_QUARTILE_EXC"
+#define HID_FUNC_RANK_EQ                                        "SC_HID_FUNC_RANK_EQ"
+#define HID_FUNC_RANK_AVG                                       "SC_HID_FUNC_RANK_AVG"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

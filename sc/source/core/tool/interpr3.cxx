@@ -3356,34 +3356,71 @@ double ScInterpreter::GetPercentile( vector<double> & rArray, double fPercentile
     }
 }
 
-void ScInterpreter::ScPercentile()
+double ScInterpreter::GetPercentileExclusive( vector<double> & rArray, double fPercentile )
+{
+    size_t nSize1 = rArray.size() + 1;
+    if ( rArray.empty() || nSize1 == 1 || nGlobalError )
+    {
+        SetError( errNoValue );
+        return 0.0;
+    }
+    if ( fPercentile * nSize1 < 1.0 || fPercentile * nSize1 > (double) ( nSize1 - 1 ) )
+    {
+        SetError( errIllegalParameter );
+        return 0.0;
+    }
+
+    size_t nIndex = (size_t)::rtl::math::approxFloor( fPercentile * nSize1 - 1 );
+    double fDiff = fPercentile *  nSize1 - 1 - ::rtl::math::approxFloor( fPercentile * nSize1 - 1 );
+    OSL_ENSURE(nIndex < ( nSize1 - 1 ), "GetPercentile: wrong index(1)");
+    vector<double>::iterator iter = rArray.begin() + nIndex;
+    ::std::nth_element( rArray.begin(), iter, rArray.end());
+    if (fDiff == 0.0)
+        return *iter;
+    else
+    {
+        OSL_ENSURE(nIndex < nSize1, "GetPercentile: wrong index(2)");
+        double fVal = *iter;
+        iter = rArray.begin() + nIndex + 1;
+        ::std::nth_element( rArray.begin(), iter, rArray.end());
+        return fVal + fDiff * (*iter - fVal);
+    }
+}
+
+void ScInterpreter::ScPercentile( bool bInclusive )
 {
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
     double alpha = GetDouble();
-    if (alpha < 0.0 || alpha > 1.0)
+    if ( bInclusive ? ( alpha < 0.0 || alpha > 1.0 ) : ( alpha <= 0.0 || alpha >= 1.0 ) )
     {
         PushIllegalArgument();
         return;
     }
     vector<double> aArray;
     GetNumberSequenceArray( 1, aArray);
-    PushDouble( GetPercentile( aArray, alpha));
+    if ( bInclusive )
+        PushDouble( GetPercentile( aArray, alpha ));
+    else
+        PushDouble( GetPercentileExclusive( aArray, alpha ));
 }
 
-void ScInterpreter::ScQuartile()
+void ScInterpreter::ScQuartile( bool bInclusive )
 {
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
     double fFlag = ::rtl::math::approxFloor(GetDouble());
-    if (fFlag < 0.0 || fFlag > 4.0)
+    if ( bInclusive ? ( fFlag < 0.0 || fFlag > 4.0 ) : ( fFlag <= 0.0 || fFlag >= 4.0 ) )
     {
         PushIllegalArgument();
         return;
     }
     vector<double> aArray;
     GetNumberSequenceArray( 1, aArray);
-    PushDouble( fFlag == 2.0 ? GetMedian( aArray) : GetPercentile( aArray, 0.25 * fFlag));
+    if ( bInclusive )
+        PushDouble( fFlag == 2.0 ? GetMedian( aArray ) : GetPercentile( aArray, 0.25 * fFlag ) );
+    else
+        PushDouble( fFlag == 2.0 ? GetMedian( aArray ) : GetPercentileExclusive( aArray, 0.25 * fFlag ) );
 }
 
 void ScInterpreter::ScModalValue()
@@ -3489,44 +3526,95 @@ void ScInterpreter::ScPercentrank()
         else if ( nSize == 1 )
             PushDouble(1.0);            // fNum == pSortArray[0], see test above
         else
+            PushDouble( GetPercentrank( aSortArray, fNum, true ) );
+    }
+}
+
+void ScInterpreter::ScPercentrank_MS( bool bInclusive )
+{
+    sal_uInt8 nParamCount = GetByte();
+    if ( !MustHaveParamCount( nParamCount, 2, 3 ) )
+        return;
+    double fSignificance = ( nParamCount == 3 ? ::rtl::math::approxFloor( GetDouble() ) : 3.0 );
+    double fNum = GetDouble();
+    vector<double> aSortArray;
+    GetSortArray( 1, aSortArray );
+    SCSIZE nSize = aSortArray.size();
+    if ( aSortArray.empty() || nSize == 0 || nGlobalError )
+        PushNoValue();
+    else
+    {
+        if ( fNum < aSortArray[ 0 ] || fNum > aSortArray[ nSize - 1 ] )
+            PushNoValue();
+        else
         {
             double fRes;
-            SCSIZE nOldCount = 0;
-            double fOldVal = aSortArray[0];
-            SCSIZE i;
-            for (i = 1; i < nSize && aSortArray[i] < fNum; i++)
-            {
-                if (aSortArray[i] != fOldVal)
-                {
-                    nOldCount = i;
-                    fOldVal = aSortArray[i];
-                }
-            }
-            if (aSortArray[i] != fOldVal)
-                nOldCount = i;
-            if (fNum == aSortArray[i])
-                fRes = (double)nOldCount/(double)(nSize-1);
+            if ( nSize == 1 )
+                fRes = 1.0;            // fNum == aSortArray[ 0 ], see test above
             else
-            {
-                //  nOldCount is the count of smaller entries
-                //  fNum is between pSortArray[nOldCount-1] and pSortArray[nOldCount]
-                //  use linear interpolation to find a position between the entries
-
-                if ( nOldCount == 0 )
-                {
-                    OSL_FAIL("should not happen");
-                    fRes = 0.0;
-                }
-                else
-                {
-                    double fFract = ( fNum - aSortArray[nOldCount-1] ) /
-                        ( aSortArray[nOldCount] - aSortArray[nOldCount-1] );
-                    fRes = ( (double)(nOldCount-1)+fFract )/(double)(nSize-1);
-                }
-            }
-            PushDouble(fRes);
+                fRes = GetPercentrank( aSortArray, fNum, bInclusive );
+            double fExp = ::rtl::math::approxFloor( log( fRes ) );
+            fRes = ::rtl::math::round( fRes * pow( 10, -fExp + fSignificance - 1 ) ) / pow( 10, -fExp + fSignificance - 1 );
+            PushDouble( fRes );
         }
     }
+}
+
+double ScInterpreter::GetPercentrank( ::std::vector<double> & rArray, double fVal, bool bInclusive )
+{
+    SCSIZE nSize = rArray.size();
+    double fRes;
+    if ( fVal == rArray[ 0 ] )
+    {
+        if ( bInclusive )
+            fRes = 0.0;
+        else
+            fRes = 1.0 / ( double )( nSize + 1 );
+    }
+    else
+    {
+        SCSIZE nOldCount = 0;
+        double fOldVal = rArray[ 0 ];
+        SCSIZE i;
+        for ( i = 1; i < nSize && rArray[ i ] < fVal; i++ )
+        {
+            if ( rArray[ i ] != fOldVal )
+            {
+                nOldCount = i;
+                fOldVal = rArray[ i ];
+            }
+        }
+        if ( rArray[ i ] != fOldVal )
+            nOldCount = i;
+        if ( fVal == rArray[ i ] )
+        {
+            if ( bInclusive )
+                fRes = ( double )nOldCount / ( double )( nSize - 1 );
+            else
+                fRes = ( double )( i + 1 ) / ( double )( nSize + 1 );
+        }
+        else
+        {
+            //  nOldCount is the count of smaller entries
+            //  fVal is between rArray[ nOldCount - 1 ] and rArray[ nOldCount ]
+            //  use linear interpolation to find a position between the entries
+            if ( nOldCount == 0 )
+            {
+                OSL_FAIL( "should not happen" );
+                fRes = 0.0;
+            }
+            else
+            {
+                double fFract = ( fVal - rArray[ nOldCount - 1 ] ) /
+                    ( rArray[ nOldCount ] - rArray[ nOldCount - 1 ] );
+                if ( bInclusive )
+                    fRes = ( ( double )( nOldCount - 1 ) + fFract ) / ( double )( nSize - 1 );
+                else
+                    fRes = ( ( double )nOldCount + fFract ) / ( double )( nSize + 1 );
+            }
+        }
+    }
+    return fRes;
 }
 
 void ScInterpreter::ScTrimMean()
@@ -3733,126 +3821,66 @@ void ScInterpreter::QuickSort( vector<double>& rSortArray, vector<long>* pIndexO
     lcl_QuickSort(0, n-1, rSortArray, pIndexOrder);
 }
 
-void ScInterpreter::ScRank()
+void ScInterpreter::ScRank( bool bAverage )
 {
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 2, 3 ) )
         return;
-    bool bDescending;
-    if (nParamCount == 3)
-        bDescending = GetBool();
+    bool bAscending;
+    if ( nParamCount == 3 )
+        bAscending = GetBool();
     else
-        bDescending = false;
-    double fCount = 1.0;
-    bool bValid = false;
-    switch (GetStackType())
+        bAscending = false;
+
+    vector<double> aSortArray;
+    GetSortArray( 1, aSortArray );
+    double fVal = GetDouble();
+    SCSIZE nSize = aSortArray.size();
+    if ( aSortArray.empty() || nSize == 0 || nGlobalError )
+        PushNoValue();
+    else
     {
-        case formula::svDouble    :
+        if ( fVal < aSortArray[ 0 ] || fVal > aSortArray[ nSize - 1 ] )
+            PushNoValue();
+        else
         {
-            double x = GetDouble();
-            double fVal = GetDouble();
-            if (x == fVal)
-                bValid = true;
-            break;
-        }
-        case svSingleRef :
-        {
-            ScAddress aAdr;
-            PopSingleRef( aAdr );
-            double fVal = GetDouble();
-            ScRefCellValue aCell;
-            aCell.assign(*pDok, aAdr);
-            if (aCell.hasNumeric())
+            double fLastPos, fFirstPos = -1.0;
+            bool bFinished = false;
+            SCSIZE i;
+            for ( i = 0; i < nSize && !bFinished && !nGlobalError; i++ )
             {
-                double x = GetCellValue(aAdr, aCell);
-                if (x == fVal)
-                    bValid = true;
-            }
-            break;
-        }
-        case formula::svDoubleRef :
-        case svRefList :
-        {
-            ScRange aRange;
-            short nParam = 1;
-            size_t nRefInList = 0;
-            while (nParam-- > 0)
-            {
-                sal_uInt16 nErr = 0;
-                // Preserve stack until all RefList elements are done!
-                sal_uInt16 nSaveSP = sp;
-                PopDoubleRef( aRange, nParam, nRefInList);
-                if (nParam)
-                    --sp;   // simulate pop
-                double fVal = GetDouble();
-                if (nParam)
-                    sp = nSaveSP;
-                double nCellVal;
-                ScValueIterator aValIter(pDok, aRange, glSubTotal);
-                if (aValIter.GetFirst(nCellVal, nErr))
+                if ( aSortArray[ i ] == fVal )
                 {
-                    if (nCellVal == fVal)
-                        bValid = true;
-                    else if ((!bDescending && nCellVal > fVal) ||
-                            (bDescending && nCellVal < fVal) )
-                        fCount++;
-                    SetError(nErr);
-                    while ((nErr == 0) && aValIter.GetNext(nCellVal, nErr))
-                    {
-                        if (nCellVal == fVal)
-                            bValid = true;
-                        else if ((!bDescending && nCellVal > fVal) ||
-                                (bDescending && nCellVal < fVal) )
-                            fCount++;
-                    }
-                }
-                SetError(nErr);
-            }
-        }
-        break;
-        case svMatrix :
-        case svExternalSingleRef:
-        case svExternalDoubleRef:
-        {
-            ScMatrixRef pMat = GetMatrix();
-            double fVal = GetDouble();
-            if (pMat)
-            {
-                SCSIZE nCount = pMat->GetElementCount();
-                if (pMat->IsNumeric())
-                {
-                    for (SCSIZE i = 0; i < nCount; i++)
-                    {
-                        double x = pMat->GetDouble(i);
-                        if (x == fVal)
-                            bValid = true;
-                        else if ((!bDescending && x > fVal) ||
-                                    (bDescending && x < fVal) )
-                            fCount++;
-                    }
+                    if ( fFirstPos < 0 )
+                        fFirstPos = i + 1.0;
                 }
                 else
                 {
-                    for (SCSIZE i = 0; i < nCount; i++)
-                        if (!pMat->IsString(i))
-                        {
-                            double x = pMat->GetDouble(i);
-                            if (x == fVal)
-                                bValid = true;
-                            else if ((!bDescending && x > fVal) ||
-                                        (bDescending && x < fVal) )
-                                fCount++;
-                        }
+                    if ( aSortArray[ i ] > fVal )
+                    {
+                        fLastPos = i;
+                        bFinished = true;
+                    }
                 }
             }
+            if ( !bFinished )
+                fLastPos = i;
+            if ( !bAverage )
+            {
+                if ( bAscending )
+                    PushDouble( fFirstPos );
+                else
+                    PushDouble( nSize + 1.0 - fLastPos );
+            }
+            else
+            {
+                if ( bAscending )
+                    PushDouble( ( fFirstPos + fLastPos ) / 2.0 );
+                else
+                    PushDouble( nSize + 1.0 - ( fFirstPos + fLastPos ) / 2.0 );
+            }
         }
-        break;
-        default : SetError(errIllegalParameter); break;
     }
-    if (bValid)
-        PushDouble(fCount);
-    else
-        PushNoValue();
 }
 
 void ScInterpreter::ScAveDev()
