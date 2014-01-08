@@ -46,6 +46,8 @@ namespace frm
     //--------------------------------------------------------------------
     RichTextEngine* RichTextEngine::Create()
     {
+        SolarMutexGuard g;
+
         SfxItemPool* pPool = EditEngine::CreatePool();
         pPool->FreezeIdRanges();
 
