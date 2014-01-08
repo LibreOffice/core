@@ -99,9 +99,9 @@ void PPTExCharSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, sal_Bo
     if ( bSimpleText )
         nCharFlags = 0x7ffff;
 
-    rSt << nCharFlags
-        << rLev.mnFlags
-        << rLev.mnFont;
+    rSt.WriteUInt32( nCharFlags )
+       .WriteUInt16( rLev.mnFlags )
+       .WriteUInt16( rLev.mnFont );
 
     sal_uInt32 nFontColor = rLev.mnFontColor;
     if ( nFontColor == COL_AUTO )
@@ -116,17 +116,17 @@ void PPTExCharSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, sal_Bo
     nFontColor |= 0xfe000000;
     if ( bSimpleText )
     {
-        rSt << rLev.mnFontHeight
-            << nFontColor;
+        rSt.WriteUInt16( rLev.mnFontHeight )
+           .WriteUInt32( nFontColor );
     }
     else
     {
-        rSt << rLev.mnAsianOrComplexFont
-            << (sal_uInt16)0xffff       // unknown
-            << (sal_uInt16)0xffff       // unknown
-            << rLev.mnFontHeight
-            << nFontColor
-            << rLev.mnEscapement;
+        rSt.WriteUInt16( rLev.mnAsianOrComplexFont )
+           .WriteUInt16( (sal_uInt16)0xffff )       // unknown
+           .WriteUInt16( (sal_uInt16)0xffff )       // unknown
+           .WriteUInt16( rLev.mnFontHeight )
+           .WriteUInt32( nFontColor )
+           .WriteUInt16( rLev.mnEscapement );
     }
 }
 
@@ -325,18 +325,18 @@ void PPTExParaSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, sal_Bo
         SvStream& rOut = rBuProv.aBuExMasterStream;
         if ( !nLev )
         {
-            rOut << (sal_uInt32)( ( EPP_PST_ExtendedParagraphMasterAtom << 16 ) | ( mnInstance << 4 ) )
-                 << (sal_uInt32)( 5 * 16 + 2 )
-                 << (sal_uInt16)5;              // depth
+            rOut.WriteUInt32( (sal_uInt32)( ( EPP_PST_ExtendedParagraphMasterAtom << 16 ) | ( mnInstance << 4 ) ) )
+                .WriteUInt32( (sal_uInt32)( 5 * 16 + 2 ) )
+                .WriteUInt16( (sal_uInt16)5 );              // depth
         }
         sal_uInt16 nBulletId = rLev.mnBulletId;
         if ( rLev.mnNumberingType != SVX_NUM_BITMAP )
             nBulletId = 0xffff;
-        rOut << (sal_uInt32)0x03800000
-             << (sal_uInt16)nBulletId
-             << (sal_uInt32)rLev.mnMappedNumType
-             << (sal_uInt16)rLev.mnBulletStart
-             << (sal_uInt32)0;
+        rOut.WriteUInt32( (sal_uInt32)0x03800000 )
+            .WriteUInt16( (sal_uInt16)nBulletId )
+            .WriteUInt32( (sal_uInt32)rLev.mnMappedNumType )
+            .WriteUInt16( (sal_uInt16)rLev.mnBulletStart )
+            .WriteUInt32( (sal_uInt32)0 );
     }
 
     sal_uInt32 nParaFlags = 0x3ffdff;
@@ -357,31 +357,31 @@ void PPTExParaSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, sal_Bo
     }
     nBulletColor &= 0xffffff;
     nBulletColor |= 0xfe000000;
-    rSt << nParaFlags
-        << nBulletFlags
-        << rLev.mnBulletChar
-        << rLev.mnBulletFont
-        << rLev.mnBulletHeight
-        << nBulletColor
-        << rLev.mnAdjust
-        << rLev.mnLineFeed
-        << rLev.mnUpperDist
-        << rLev.mnLowerDist
-        << rLev.mnTextOfs
-        << rLev.mnBulletOfs;
+    rSt.WriteUInt32( nParaFlags )
+       .WriteUInt16( nBulletFlags )
+       .WriteUInt16( rLev.mnBulletChar )
+       .WriteUInt16( rLev.mnBulletFont )
+       .WriteUInt16( rLev.mnBulletHeight )
+       .WriteUInt32( nBulletColor )
+       .WriteUInt16( rLev.mnAdjust )
+       .WriteUInt16( rLev.mnLineFeed )
+       .WriteUInt16( rLev.mnUpperDist )
+       .WriteUInt16( rLev.mnLowerDist )
+       .WriteUInt16( rLev.mnTextOfs )
+       .WriteUInt16( rLev.mnBulletOfs );
 
     if ( bSimpleText || nLev )
     {
         if ( nParaFlags & 0x200000 )
-            rSt << rLev.mnBiDi;
+            rSt.WriteUInt16( rLev.mnBiDi );
     }
     else
     {
-        rSt << rLev.mnDefaultTab
-            << (sal_uInt16)0
-            << (sal_uInt16)0
-            << rLev.mnAsianSettings
-            << rLev.mnBiDi;
+        rSt.WriteUInt16( rLev.mnDefaultTab )
+           .WriteUInt16( (sal_uInt16)0 )
+           .WriteUInt16( (sal_uInt16)0 )
+           .WriteUInt16( rLev.mnAsianSettings )
+           .WriteUInt16( rLev.mnBiDi );
     }
 }
 
@@ -485,14 +485,14 @@ void PPTExStyleSheet::WriteTxCFStyleAtom( SvStream& rSt )
     sal_uInt32 nCharFlags = rCharStyle.mnFlags;
     nCharFlags &= CharAttr_Italic | CharAttr_Bold | CharAttr_Underline | CharAttr_Shadow;
 
-    rSt << (sal_uInt32)( EPP_TxCFStyleAtom << 16 )  // recordheader
-        << SizeOfTxCFStyleAtom() - 8
-        << (sal_uInt16)( 0x80 | nCharFlags )
-        << (sal_uInt16)nFlags
-        << (sal_uInt16)nCharFlags
-        << (sal_Int32)-1                            // ?
-        << rCharStyle.mnFontHeight
-        << rCharStyle.mnFontColor;
+    rSt.WriteUInt32( (sal_uInt32)( EPP_TxCFStyleAtom << 16 ) )  // recordheader
+       .WriteUInt32( SizeOfTxCFStyleAtom() - 8 )
+       .WriteUInt16( (sal_uInt16)( 0x80 | nCharFlags ) )
+       .WriteUInt16( (sal_uInt16)nFlags )
+       .WriteUInt16( (sal_uInt16)nCharFlags )
+       .WriteInt32( (sal_Int32)-1 )                            // ?
+       .WriteUInt16( rCharStyle.mnFontHeight )
+       .WriteUInt32( rCharStyle.mnFontColor );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

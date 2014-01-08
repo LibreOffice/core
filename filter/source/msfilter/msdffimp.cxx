@@ -152,17 +152,17 @@ static sal_uInt32 nMSOleObjCntr = 0;
 void Impl_OlePres::Write( SvStream & rStm )
 {
     WriteClipboardFormat( rStm, FORMAT_GDIMETAFILE );
-    rStm << (sal_Int32)(nJobLen +4);       // a TargetDevice that's always empty
+    rStm.WriteInt32( (sal_Int32)(nJobLen +4) );       // a TargetDevice that's always empty
     if( nJobLen )
         rStm.Write( pJob, nJobLen );
-    rStm << (sal_uInt32)nAspect;
-    rStm << (sal_Int32)-1;      //L-Index always -1
-    rStm << (sal_Int32)nAdvFlags;
-    rStm << (sal_Int32)0;       //Compression
-    rStm << (sal_Int32)aSize.Width();
-    rStm << (sal_Int32)aSize.Height();
+    rStm.WriteUInt32( (sal_uInt32)nAspect );
+    rStm.WriteInt32( (sal_Int32)-1 );      //L-Index always -1
+    rStm.WriteInt32( (sal_Int32)nAdvFlags );
+    rStm.WriteInt32( (sal_Int32)0 );       //Compression
+    rStm.WriteInt32( (sal_Int32)aSize.Width() );
+    rStm.WriteInt32( (sal_Int32)aSize.Height() );
     sal_uLong nPos = rStm.Tell();
-    rStm << (sal_Int32)0;
+    rStm.WriteInt32( (sal_Int32)0 );
 
     if( GetFormat() == FORMAT_GDIMETAFILE && pMtf )
     {
@@ -194,7 +194,7 @@ void Impl_OlePres::Write( SvStream & rStm )
     }
     sal_uLong nEndPos = rStm.Tell();
     rStm.Seek( nPos );
-    rStm << (sal_uInt32)(nEndPos - nPos - 4);
+    rStm.WriteUInt32( (sal_uInt32)(nEndPos - nPos - 4) );
     rStm.Seek( nEndPos );
 }
 
@@ -6648,7 +6648,7 @@ sal_Bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
                 rStm.Read( pData, nDataLen );
 
                 // write to ole10 stream
-                *xOle10Stm << nDataLen;
+                xOle10Stm->WriteUInt32( nDataLen );
                 xOle10Stm->Write( pData, nDataLen );
                 xOle10Stm = SotStorageStreamRef();
 

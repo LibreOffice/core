@@ -173,9 +173,9 @@ void XclExpSstImpl::Save( XclExpStream& rStrm )
             // write bucket info before string to get correct record position
             sal_uInt32 nStrmPos = static_cast< sal_uInt32 >( rStrm.GetSvStreamPos() );
             sal_uInt16 nRecPos = rStrm.GetRawRecPos() + 4;
-            aExtSst << nStrmPos             // stream position
-                    << nRecPos              // position from start of SST or CONTINUE
-                    << sal_uInt16( 0 );     // reserved
+            aExtSst.WriteUInt32( nStrmPos )             // stream position
+                   .WriteUInt16( nRecPos )              // position from start of SST or CONTINUE
+                   .WriteUInt16( sal_uInt16( 0 ) );     // reserved
         }
 
         rStrm << **aIt;

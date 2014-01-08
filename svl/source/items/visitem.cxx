@@ -94,7 +94,7 @@ SfxPoolItem * SfxVisibilityItem::Create(SvStream & rStream, sal_uInt16) const
 SvStream & SfxVisibilityItem::Store(SvStream & rStream, sal_uInt16) const
 {
     DBG_CHKTHIS(SfxVisibilityItem, 0);
-    rStream << m_nValue.bVisible;
+    rStream.WriteUChar( m_nValue.bVisible );
     return rStream;
 }
 

@@ -178,7 +178,7 @@ SfxPoolItem* ScPatternAttr::Create( SvStream& rStream, sal_uInt16 /* nVersion */
 
 SvStream& ScPatternAttr::Store(SvStream& rStream, sal_uInt16 /* nItemVersion */) const
 {
-    rStream << (sal_Bool)sal_True;
+    rStream.WriteUChar( (sal_Bool)sal_True );
 
     if ( pStyle )
         rStream.WriteUniOrByteString( pStyle->GetName(), rStream.GetStreamCharSet() );
@@ -188,7 +188,7 @@ SvStream& ScPatternAttr::Store(SvStream& rStream, sal_uInt16 /* nItemVersion */)
         rStream.WriteUniOrByteString( ScGlobal::GetRscString(STR_STYLENAME_STANDARD),
                                     rStream.GetStreamCharSet() );
 
-    rStream << (short)SFX_STYLE_FAMILY_PARA;  // wg. altem Dateiformat
+    rStream.WriteInt16( (short)SFX_STYLE_FAMILY_PARA );  // wg. altem Dateiformat
 
     GetItemSet().Store( rStream );
 

@@ -52,7 +52,7 @@ SvStream& lcl_OutLongExt( SvStream& rStrm, sal_uLong nVal, bool bNeg )
     if (bNeg)
         aBuf[--i] = '-';
 
-    return rStrm << &aBuf[i];
+    return rStrm.WriteCharPtr( &aBuf[i] );
 }
 
 }

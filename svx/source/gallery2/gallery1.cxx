@@ -246,7 +246,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
 
             if( pTestStm )
             {
-                *pTestStm << sal_Int32(1);
+                pTestStm->WriteInt32( sal_Int32(1) );
 
                 if( pTestStm->GetError() )
                     rbDirIsReadOnly = sal_True;

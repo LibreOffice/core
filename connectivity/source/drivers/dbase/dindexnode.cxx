@@ -680,9 +680,9 @@ void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
 {
     const ODbaseIndex& rIndex = rPage.GetIndex();
     if (!rIndex.isUnique() || rPage.IsLeaf())
-        rStream << (sal_uInt32)aKey.nRecord; // key
+        rStream.WriteUInt32( (sal_uInt32)aKey.nRecord ); // key
     else
-        rStream << (sal_uInt32)0;   // key
+        rStream.WriteUInt32( (sal_uInt32)0 );   // key
 
     if (rIndex.getHeader().db_keytype) // double
     {
@@ -793,7 +793,7 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPagePtr& rPag
 // -----------------------------------------------------------------------------
 SvStream& connectivity::dbase::operator << (SvStream &rStream, const ONDXPagePtr& rPage)
 {
-    rStream << rPage.nPagePos;
+    rStream.WriteUInt32( rPage.nPagePos );
     return rStream;
 }
 // -----------------------------------------------------------------------------
@@ -862,7 +862,7 @@ SvStream& connectivity::dbase::operator << (SvStream &rStream, const ONDXPage& r
     OSL_UNUSED( nCurrentPos );
 
     nValue = rPage.nCount;
-    rStream << nValue << rPage.aChild;
+    rStream.WriteUInt32( nValue ) << rPage.aChild;
 
     sal_uInt16 i = 0;
     for (; i < rPage.nCount; i++)

@@ -155,26 +155,26 @@ void ImpSvNumberformatInfo::Save(SvStream& rStream, sal_uInt16 nAnz) const
         {
             // The fight with versions before SV_NUMBERFORMATTER_VERSION_NEW_CURR
             case NF_SYMBOLTYPE_CURRENCY :
-                rStream << short( NF_SYMBOLTYPE_STRING );
+                rStream.WriteInt16( short( NF_SYMBOLTYPE_STRING ) );
             break;
             case NF_SYMBOLTYPE_CURRDEL :
             case NF_SYMBOLTYPE_CURREXT :
-                rStream << short(0); // will be ignored (hopefully ...)
+                rStream.WriteInt16( short(0) ); // will be ignored (hopefully ...)
                 break;
             default:
                 if ( nType > NF_KEY_LASTKEYWORD_SO5 )
                 {
-                    rStream << short( NF_SYMBOLTYPE_STRING );  // all new keywords are string
+                    rStream.WriteInt16( short( NF_SYMBOLTYPE_STRING ) );  // all new keywords are string
                 }
                 else
                 {
-                    rStream << nType;
+                    rStream.WriteInt16( nType );
                 }
         }
 
     }
-    rStream << eScannedType << sal_Bool(bThousand) << nThousand
-            << nCntPre << nCntPost << nCntExp;
+    rStream.WriteInt16( eScannedType ).WriteUChar( sal_Bool(bThousand) ).WriteUInt16( nThousand )
+           .WriteUInt16( nCntPre ).WriteUInt16( nCntPost ).WriteUInt16( nCntExp );
 }
 
 void ImpSvNumberformatInfo::Load(SvStream& rStream, sal_uInt16 nAnz)
@@ -443,7 +443,7 @@ void ImpSvNumFor::Copy( const ImpSvNumFor& rNumFor, ImpSvNumberformatScan* pSc )
 
 void ImpSvNumFor::Save(SvStream& rStream) const
 {
-    rStream << nAnzStrings;
+    rStream.WriteUInt16( nAnzStrings );
     aI.Save(rStream, nAnzStrings);
     rStream.WriteUniOrByteString( sColorName, rStream.GetStreamCharSet() );
 }
@@ -510,7 +510,7 @@ void ImpSvNumFor::SaveNewCurrencyMap( SvStream& rStream ) const
             break;
         }
     }
-    rStream << nCnt;
+    rStream.WriteUInt16( nCnt );
     for ( j=0; j<nAnzStrings; j++ )
     {
         switch ( aI.nTypeArray[j] )
@@ -518,7 +518,7 @@ void ImpSvNumFor::SaveNewCurrencyMap( SvStream& rStream ) const
         case NF_SYMBOLTYPE_CURRENCY :
         case NF_SYMBOLTYPE_CURRDEL :
         case NF_SYMBOLTYPE_CURREXT :
-            rStream << j << aI.nTypeArray[j];
+            rStream.WriteUInt16( j ).WriteInt16( aI.nTypeArray[j] );
             break;
         }
     }
@@ -1971,18 +1971,18 @@ void SvNumberformat::Save( SvStream& rStream, ImpSvNumMultipleWriteHeader& rHdr 
 
     rHdr.StartEntry();
     rStream.WriteUniOrByteString( aFormatstring, rStream.GetStreamCharSet() );
-    rStream << eType << fLimit1 << fLimit2 << (sal_uInt16) eOp1 << (sal_uInt16) eOp2
-            << sal_Bool(bOldStandard) << sal_Bool(bIsUsed);
+    rStream.WriteInt16( eType ).WriteDouble( fLimit1 ).WriteDouble( fLimit2 ).WriteUInt16( (sal_uInt16) eOp1 ).WriteUInt16( (sal_uInt16) eOp2 )
+           .WriteUChar( sal_Bool(bOldStandard) ).WriteUChar( sal_Bool(bIsUsed) );
     for (sal_uInt16 i = 0; i < 4; i++)
     {
         NumFor[i].Save(rStream);
     }
     // As of SV_NUMBERFORMATTER_VERSION_NEWSTANDARD
     rStream.WriteUniOrByteString( aComment.makeStringAndClear(), rStream.GetStreamCharSet() );
-    rStream << nNewStandardDefined;
+    rStream.WriteUInt16( nNewStandardDefined );
     // As of SV_NUMBERFORMATTER_VERSION_NEW_CURR
-    rStream << nNewCurrencyVersionId;
-    rStream << sal_Bool(bNewCurrency);
+    rStream.WriteUInt16( nNewCurrencyVersionId );
+    rStream.WriteUChar( sal_Bool(bNewCurrency) );
     if ( bNewCurrency )
     {
         for ( sal_uInt16 j=0; j<4; j++ )
@@ -1994,8 +1994,8 @@ void SvNumberformat::Save( SvStream& rStream, ImpSvNumMultipleWriteHeader& rHdr 
     // the real standard flag to load with versions >638 if different
     if ( bStandard != bOldStandard )
     {
-        rStream << nNewStandardFlagVersionId;
-        rStream << (sal_Bool)bStandard;
+        rStream.WriteUInt16( nNewStandardFlagVersionId );
+        rStream.WriteUChar( (sal_Bool)bStandard );
     }
 
     rHdr.EndEntry();

@@ -132,20 +132,20 @@ SvStream& SvxMacroTableDtor::Write( SvStream& rStream ) const
                                     : SVX_MACROTBL_AKTVERSION;
 
     if( SVX_MACROTBL_VERSION40 <= nVersion )
-        rStream << nVersion;
+        rStream.WriteUInt16( nVersion );
 
-    rStream << (sal_uInt16)aSvxMacroTable.size();
+    rStream.WriteUInt16( (sal_uInt16)aSvxMacroTable.size() );
 
     SvxMacroTable::const_iterator it = aSvxMacroTable.begin();
     while( it != aSvxMacroTable.end() && rStream.GetError() == SVSTREAM_OK )
     {
         const SvxMacro& rMac = it->second;
-        rStream << it->first;
+        rStream.WriteUInt16( it->first );
         SfxPoolItem::writeByteString(rStream, rMac.GetLibName());
         SfxPoolItem::writeByteString(rStream, rMac.GetMacName());
 
         if( SVX_MACROTBL_VERSION40 <= nVersion )
-            rStream << (sal_uInt16)rMac.GetScriptType();
+            rStream.WriteUInt16( (sal_uInt16)rMac.GetScriptType() );
         ++it;
     }
     return rStream;

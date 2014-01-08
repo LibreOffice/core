@@ -92,7 +92,7 @@ sal_Bool SwServerObject::GetData( uno::Any & rData,
             SwWriter aWrt( aMemStm, *pPam, sal_False );
             if( !IsError( aWrt.Write( xWrt )) )
             {
-                aMemStm << '\0';        // append a zero char
+                aMemStm.WriteChar( '\0' );        // append a zero char
                 rData <<= uno::Sequence< sal_Int8 >(
                                         (sal_Int8*)aMemStm.GetData(),
                                         aMemStm.Seek( STREAM_SEEK_TO_END ) );

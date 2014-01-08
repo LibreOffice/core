@@ -269,9 +269,9 @@ void RegionBand::save(SvStream& rOStrm) const
     while(pBand)
     {
         // put boundaries
-        rOStrm << (sal_uInt16)STREAMENTRY_BANDHEADER;
-        rOStrm << static_cast<sal_Int32>(pBand->mnYTop);
-        rOStrm << static_cast<sal_Int32>(pBand->mnYBottom);
+        rOStrm.WriteUInt16( (sal_uInt16)STREAMENTRY_BANDHEADER );
+        rOStrm.WriteInt32( static_cast<sal_Int32>(pBand->mnYTop) );
+        rOStrm.WriteInt32( static_cast<sal_Int32>(pBand->mnYBottom) );
 
         // put separations of current band
         ImplRegionBandSep* pSep = pBand->mpFirstSep;
@@ -279,9 +279,9 @@ void RegionBand::save(SvStream& rOStrm) const
         while(pSep)
         {
             // put separation
-            rOStrm << (sal_uInt16)STREAMENTRY_SEPARATION;
-            rOStrm << static_cast<sal_Int32>(pSep->mnXLeft);
-            rOStrm << static_cast<sal_Int32>(pSep->mnXRight);
+            rOStrm.WriteUInt16( (sal_uInt16)STREAMENTRY_SEPARATION );
+            rOStrm.WriteInt32( static_cast<sal_Int32>(pSep->mnXLeft) );
+            rOStrm.WriteInt32( static_cast<sal_Int32>(pSep->mnXRight) );
 
             // next separation from current band
             pSep = pSep->mpNextSep;
@@ -291,7 +291,7 @@ void RegionBand::save(SvStream& rOStrm) const
     }
 
     // put endmarker
-    rOStrm << (sal_uInt16)STREAMENTRY_END;
+    rOStrm.WriteUInt16( (sal_uInt16)STREAMENTRY_END );
 }
 
 bool RegionBand::isSingleRectangle() const

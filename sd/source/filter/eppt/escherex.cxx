@@ -40,8 +40,8 @@ sal_uInt32 PptEscherEx::DrawingGroupContainerSize()
 void PptEscherEx::WriteDrawingGroupContainer( SvStream& rSt )
 {
     sal_uInt32 nSize = DrawingGroupContainerSize();
-    rSt << (sal_uInt32)( 0xf | ( 1035 << 16 ) )     // EPP_PPDrawingGroup
-        << (sal_uInt32)( nSize - 8 );
+    rSt.WriteUInt32( (sal_uInt32)( 0xf | ( 1035 << 16 ) ) )     // EPP_PPDrawingGroup
+       .WriteUInt32( (sal_uInt32)( nSize - 8 ) );
 
     ImplWriteDggContainer( rSt );
 }
@@ -65,8 +65,8 @@ void PptEscherEx::ImplWriteDggContainer( SvStream& rSt )
     sal_uInt32 nSize = ImplDggContainerSize();
     if ( nSize )
     {
-        rSt << (sal_uInt32)( 0xf | ( ESCHER_DggContainer << 16 ) )
-            << (sal_uInt32)( nSize - 8 );
+        rSt.WriteUInt32( (sal_uInt32)( 0xf | ( ESCHER_DggContainer << 16 ) ) )
+           .WriteUInt32( (sal_uInt32)( nSize - 8 ) );
 
         mxGlobal->SetDggContainer();
         mxGlobal->WriteDggAtom( rSt );
@@ -93,14 +93,14 @@ void PptEscherEx::ImplWriteOptAtom( SvStream& rSt )
     sal_uInt32 nSize = ImplOptAtomSize();
     if ( nSize )
     {
-        rSt << (sal_uInt32)( ( ESCHER_OPT << 16 ) | ( ESCHER_OPT_COUNT << 4 ) | 0x3 )
-            << (sal_uInt32)( nSize - 8 )
-            << (sal_uInt16)ESCHER_Prop_fillColor            << (sal_uInt32)0xffb800
-            << (sal_uInt16)ESCHER_Prop_fillBackColor        << (sal_uInt32)0
-            << (sal_uInt16)ESCHER_Prop_fNoFillHitTest       << (sal_uInt32)0x00100010
-            << (sal_uInt16)ESCHER_Prop_lineColor            << (sal_uInt32)0x8000001
-            << (sal_uInt16)ESCHER_Prop_fNoLineDrawDash      << (sal_uInt32)0x00080008
-            << (sal_uInt16)ESCHER_Prop_shadowColor          << (sal_uInt32)0x8000002;
+        rSt.WriteUInt32( (sal_uInt32)( ( ESCHER_OPT << 16 ) | ( ESCHER_OPT_COUNT << 4 ) | 0x3 ) )
+           .WriteUInt32( (sal_uInt32)( nSize - 8 ) )
+           .WriteUInt16( (sal_uInt16)ESCHER_Prop_fillColor )           .WriteUInt32( (sal_uInt32)0xffb800 )
+           .WriteUInt16( (sal_uInt16)ESCHER_Prop_fillBackColor )       .WriteUInt32( (sal_uInt32)0 )
+           .WriteUInt16( (sal_uInt16)ESCHER_Prop_fNoFillHitTest )      .WriteUInt32( (sal_uInt32)0x00100010 )
+           .WriteUInt16( (sal_uInt16)ESCHER_Prop_lineColor )           .WriteUInt32( (sal_uInt32)0x8000001 )
+           .WriteUInt16( (sal_uInt16)ESCHER_Prop_fNoLineDrawDash )     .WriteUInt32( (sal_uInt32)0x00080008 )
+           .WriteUInt16( (sal_uInt16)ESCHER_Prop_shadowColor )         .WriteUInt32( (sal_uInt32)0x8000002 );
     }
 }
 
@@ -121,12 +121,12 @@ void PptEscherEx::ImplWriteSplitMenuColorsAtom( SvStream& rSt )
     sal_uInt32 nSize = ImplSplitMenuColorsAtomSize();
     if ( nSize )
     {
-        rSt << (sal_uInt32)( ( ESCHER_SplitMenuColors << 16 ) | ( ESCHER_SPLIT_MENU_COLORS_COUNT << 4 ) )
-            << (sal_uInt32)( nSize - 8 )
-            << (sal_uInt32)0x08000004
-            << (sal_uInt32)0x08000001
-            << (sal_uInt32)0x08000002
-            << (sal_uInt32)0x100000f7;
+        rSt.WriteUInt32( (sal_uInt32)( ( ESCHER_SplitMenuColors << 16 ) | ( ESCHER_SPLIT_MENU_COLORS_COUNT << 4 ) ) )
+           .WriteUInt32( (sal_uInt32)( nSize - 8 ) )
+           .WriteUInt32( (sal_uInt32)0x08000004 )
+           .WriteUInt32( (sal_uInt32)0x08000001 )
+           .WriteUInt32( (sal_uInt32)0x08000002 )
+           .WriteUInt32( (sal_uInt32)0x100000f7 );
     }
 
 }
@@ -141,7 +141,7 @@ PptEscherEx::~PptEscherEx()
 
 void PptEscherEx::OpenContainer( sal_uInt16 n_EscherContainer, int nRecInstance )
 {
-    *mpOutStrm << (sal_uInt16)( ( nRecInstance << 4 ) | 0xf  ) << n_EscherContainer << (sal_uInt32)0;
+    mpOutStrm->WriteUInt16( (sal_uInt16)( ( nRecInstance << 4 ) | 0xf  ) ).WriteUInt16( n_EscherContainer ).WriteUInt32( (sal_uInt32)0 );
     mOffsets.push_back( mpOutStrm->Tell() - 4 );
     mRecTypes.push_back( n_EscherContainer );
 
@@ -155,8 +155,8 @@ void PptEscherEx::OpenContainer( sal_uInt16 n_EscherContainer, int nRecInstance 
                 mnCurrentDg = mxGlobal->GenerateDrawingId();
                 AddAtom( 8, ESCHER_Dg, 0, mnCurrentDg );
                 PtReplaceOrInsert( ESCHER_Persist_Dg | mnCurrentDg, mpOutStrm->Tell() );
-                *mpOutStrm << (sal_uInt32)0     // The number of shapes in this drawing
-                           << (sal_uInt32)0;    // The last MSOSPID given to an SP in this DG
+                mpOutStrm->WriteUInt32( (sal_uInt32)0 )     // The number of shapes in this drawing
+                          .WriteUInt32( (sal_uInt32)0 );    // The last MSOSPID given to an SP in this DG
             }
         }
         break;
@@ -188,7 +188,7 @@ void PptEscherEx::CloseContainer()
         sal_uInt32 nSize, nPos = mpOutStrm->Tell();
         nSize = ( nPos - mOffsets.back() ) - 4;
         mpOutStrm->Seek( mOffsets.back() );
-        *mpOutStrm << nSize;
+        mpOutStrm->WriteUInt32( nSize );
 
         switch( mRecTypes.back() )
         {
@@ -198,7 +198,7 @@ void PptEscherEx::CloseContainer()
                 {
                     mbEscherDg = sal_False;
                     if ( DoSeek( ESCHER_Persist_Dg | mnCurrentDg ) )
-                        *mpOutStrm << mxGlobal->GetDrawingShapeCount( mnCurrentDg ) << mxGlobal->GetLastShapeId( mnCurrentDg );
+                        mpOutStrm->WriteUInt32( mxGlobal->GetDrawingShapeCount( mnCurrentDg ) ).WriteUInt32( mxGlobal->GetLastShapeId( mnCurrentDg ) );
                 }
             }
             break;
@@ -241,10 +241,10 @@ sal_uInt32 PptEscherEx::EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClie
         OpenContainer( ESCHER_SpContainer );
         AddAtom( 16, ESCHER_Spgr, 1 );
         PtReplaceOrInsert( ESCHER_Persist_Grouping_Snap | mnGroupLevel, mpOutStrm->Tell() );
-        *mpOutStrm  << (sal_Int32)aRect.Left()  // bounding box for the grouped shapes to which they are attached
-                    << (sal_Int32)aRect.Top()
-                    << (sal_Int32)aRect.Right()
-                    << (sal_Int32)aRect.Bottom();
+        mpOutStrm ->WriteInt32( (sal_Int32)aRect.Left() )  // bounding box for the grouped shapes to which they are attached
+                   .WriteInt32( (sal_Int32)aRect.Top() )
+                   .WriteInt32( (sal_Int32)aRect.Right() )
+                   .WriteInt32( (sal_Int32)aRect.Bottom() );
 
         nShapeId = GenerateShapeId();
         if ( !mnGroupLevel )
@@ -256,16 +256,16 @@ sal_uInt32 PptEscherEx::EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClie
             {
                 AddAtom( 8, ESCHER_ClientAnchor );
                 PtReplaceOrInsert( ESCHER_Persist_Grouping_Logic | mnGroupLevel, mpOutStrm->Tell() );
-                *mpOutStrm << (sal_Int16)aRect.Top() << (sal_Int16)aRect.Left() << (sal_Int16)aRect.Right() << (sal_Int16)aRect.Bottom();
+                mpOutStrm->WriteInt16( (sal_Int16)aRect.Top() ).WriteInt16( (sal_Int16)aRect.Left() ).WriteInt16( (sal_Int16)aRect.Right() ).WriteInt16( (sal_Int16)aRect.Bottom() );
             }
             else
             {
                 AddAtom( 16, ESCHER_ChildAnchor );
                 PtReplaceOrInsert( ESCHER_Persist_Grouping_Snap | mnGroupLevel, mpOutStrm->Tell() );
-                *mpOutStrm  << (sal_Int32)aRect.Left()
-                            << (sal_Int32)aRect.Top()
-                            << (sal_Int32)aRect.Right()
-                            << (sal_Int32)aRect.Bottom();
+                mpOutStrm ->WriteInt32( (sal_Int32)aRect.Left() )
+                           .WriteInt32( (sal_Int32)aRect.Top() )
+                           .WriteInt32( (sal_Int32)aRect.Right() )
+                           .WriteInt32( (sal_Int32)aRect.Bottom() );
             }
         }
         if ( pClientData )
@@ -274,8 +274,8 @@ sal_uInt32 PptEscherEx::EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClie
             sal_uInt32 nSize = pClientData->Tell();
             if ( nSize )
             {
-                *mpOutStrm << (sal_uInt32)( ( ESCHER_ClientData << 16 ) | 0xf )
-                        << nSize;
+                mpOutStrm->WriteUInt32( (sal_uInt32)( ( ESCHER_ClientData << 16 ) | 0xf ) )
+                       .WriteUInt32( nSize );
                 mpOutStrm->Write( pClientData->GetData(), nSize );
             }
         }

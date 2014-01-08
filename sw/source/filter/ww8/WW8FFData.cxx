@@ -72,7 +72,7 @@ void WW8FFData::WriteOUString(SvStream * pDataStrm, const OUString & rStr,
     bool bAddZero)
 {
     sal_uInt16 nStrLen = msword_cast<sal_uInt16>(rStr.getLength());
-    *pDataStrm << nStrLen;
+    pDataStrm->WriteUInt16( nStrLen );
     SwWW8Writer::WriteString16(*pDataStrm, rStr, bAddZero);
 }
 
@@ -131,7 +131,7 @@ void WW8FFData::Write(SvStream * pDataStrm)
     if (mnType == 0)
         WriteOUString(pDataStrm, msDefault, true);
     else
-        *pDataStrm << mnDefault;
+        pDataStrm->WriteUInt16( mnDefault );
 
     WriteOUString(pDataStrm, msFormat, true);
     WriteOUString(pDataStrm, msHelp, true);
@@ -145,7 +145,7 @@ void WW8FFData::Write(SvStream * pDataStrm)
         pDataStrm->Write(aData1, sizeof(aData1));
 
         sal_uInt32 nListboxEntries = msListEntries.size();
-        *pDataStrm << nListboxEntries;
+        pDataStrm->WriteUInt32( nListboxEntries );
 
         ::std::vector< OUString >::const_iterator aIt = msListEntries.begin();
 

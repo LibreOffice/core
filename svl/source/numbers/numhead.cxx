@@ -106,7 +106,7 @@ ImpSvNumMultipleWriteHeader::ImpSvNumMultipleWriteHeader(SvStream& rNewStream,
     aMemStream( 4096, 4096 )
 {
     nDataSize = nDefault;
-    rStream << nDataSize;
+    rStream.WriteUInt32( nDataSize );
 
     nDataPos = rStream.Tell();
     nEntryStart = nDataPos;
@@ -118,8 +118,8 @@ ImpSvNumMultipleWriteHeader::~ImpSvNumMultipleWriteHeader()
 {
     sal_uLong nDataEnd = rStream.Tell();
 
-    rStream << (sal_uInt16) SV_NUMID_SIZES;
-    rStream << static_cast<sal_uInt32>(aMemStream.Tell());
+    rStream.WriteUInt16( (sal_uInt16) SV_NUMID_SIZES );
+    rStream.WriteUInt32( static_cast<sal_uInt32>(aMemStream.Tell()) );
     rStream.Write( aMemStream.GetData(), aMemStream.Tell() );
 
     if ( nDataEnd - nDataPos != nDataSize ) // Hit Default?
@@ -127,7 +127,7 @@ ImpSvNumMultipleWriteHeader::~ImpSvNumMultipleWriteHeader()
         nDataSize = nDataEnd - nDataPos;
         sal_uLong nPos = rStream.Tell();
         rStream.Seek(nDataPos-sizeof(sal_uInt32));
-        rStream << nDataSize; // Add size at the start
+        rStream.WriteUInt32( nDataSize ); // Add size at the start
         rStream.Seek(nPos);
     }
 }
@@ -137,7 +137,7 @@ ImpSvNumMultipleWriteHeader::~ImpSvNumMultipleWriteHeader()
 void ImpSvNumMultipleWriteHeader::EndEntry()
 {
     sal_uLong nPos = rStream.Tell();
-    aMemStream << static_cast<sal_uInt32>(nPos - nEntryStart);
+    aMemStream.WriteUInt32( static_cast<sal_uInt32>(nPos - nEntryStart) );
 }
 
 //#pragma SEG_FUNCDEF(numhead_0e)

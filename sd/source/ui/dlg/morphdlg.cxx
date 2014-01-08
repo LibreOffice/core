@@ -100,9 +100,9 @@ void MorphDlg::SaveSettings() const
     {
         SdIOCompat aCompat( *xOStm, STREAM_WRITE, 1 );
 
-        *xOStm << (sal_uInt16) m_pMtfSteps->GetValue()
-               << m_pCbxOrientation->IsChecked()
-               << m_pCbxAttributes->IsChecked();
+        xOStm->WriteUInt16( (sal_uInt16) m_pMtfSteps->GetValue() )
+              .WriteUChar( m_pCbxOrientation->IsChecked() )
+              .WriteUChar( m_pCbxAttributes->IsChecked() );
     }
 }
 

@@ -212,7 +212,7 @@ void SwBasicEscherEx::WriteHyperlinkWithinFly( SvMemoryStream& rStrm, const SwFm
         SwWW8Writer::WriteLong(tmpStrm, rTarFrm.getLength()+1);
         SwWW8Writer::WriteString16(tmpStrm, rTarFrm, false);
 
-        tmpStrm << sal_uInt16( 0 );
+        tmpStrm.WriteUInt16( sal_uInt16( 0 ) );
 
         mnFlags |= WW8_HLINK_FRAME;
     }
@@ -230,7 +230,7 @@ void SwBasicEscherEx::WriteHyperlinkWithinFly( SvMemoryStream& rStrm, const SwFm
         mnFlags |= WW8_HLINK_BODY;
 
         tmpStrm.Write( maGuidFileMoniker,sizeof(maGuidFileMoniker) );
-        tmpStrm << nLevel;
+        tmpStrm.WriteUInt16( nLevel );
         SwWW8Writer::WriteLong(tmpStrm, aFileName.getLength()+1);
         SwWW8Writer::WriteString8( tmpStrm, aFileName, true, RTL_TEXTENCODING_MS_1252 );
         tmpStrm.Write( maGuidFileTail,sizeof(maGuidFileTail) );
@@ -238,7 +238,7 @@ void SwBasicEscherEx::WriteHyperlinkWithinFly( SvMemoryStream& rStrm, const SwFm
         //For UNICODE
         SwWW8Writer::WriteLong(tmpStrm, 2*aFileName.getLength()+6);
         SwWW8Writer::WriteLong(tmpStrm, 2*aFileName.getLength());
-        tmpStrm << sal_uInt16(0x0003);
+        tmpStrm.WriteUInt16( sal_uInt16(0x0003) );
         SwWW8Writer::WriteString16(tmpStrm, aFileName, false);
     }
     else if( eProtocol != INET_PROT_NOT_VALID )
@@ -270,8 +270,8 @@ void SwBasicEscherEx::WriteHyperlinkWithinFly( SvMemoryStream& rStrm, const SwFm
     }
 
     rStrm.Write( maGuidStdLink,16 );
-    rStrm  << sal_uInt32( 2 )
-           << mnFlags;
+    rStrm .WriteUInt32( sal_uInt32( 2 ) )
+          .WriteUInt32( mnFlags );
     tmpStrm.Seek( STREAM_SEEK_TO_BEGIN );
     sal_uInt32 nStrmPos = tmpStrm.Tell();
     tmpStrm.Seek( STREAM_SEEK_TO_END );
@@ -1423,19 +1423,19 @@ void WinwordAnchoring::WriteData( EscherEx& rEx ) const
         if (mbInline)
         {
             rEx.AddAtom(18, DFF_msofbtUDefProp, 3, 3); //Prop id is 0xF122
-            rSt << (sal_uInt16)0x0390 << sal_uInt32(3);
-            rSt << (sal_uInt16)0x0392 << sal_uInt32(3);
+            rSt.WriteUInt16( (sal_uInt16)0x0390 ).WriteUInt32( sal_uInt32(3) );
+            rSt.WriteUInt16( (sal_uInt16)0x0392 ).WriteUInt32( sal_uInt32(3) );
             //This sub property is required to be in the dummy inline frame as
             //well
-            rSt << (sal_uInt16)0x053F << nInlineHack;
+            rSt.WriteUInt16( (sal_uInt16)0x053F ).WriteUInt32( nInlineHack );
         }
         else
         {
             rEx.AddAtom(24, DFF_msofbtUDefProp, 3, 4 ); //Prop id is 0xF122
-            rSt << (sal_uInt16)0x038F << mnXAlign;
-            rSt << (sal_uInt16)0x0390 << mnXRelTo;
-            rSt << (sal_uInt16)0x0391 << mnYAlign;
-            rSt << (sal_uInt16)0x0392 << mnYRelTo;
+            rSt.WriteUInt16( (sal_uInt16)0x038F ).WriteUInt32( mnXAlign );
+            rSt.WriteUInt16( (sal_uInt16)0x0390 ).WriteUInt32( mnXRelTo );
+            rSt.WriteUInt16( (sal_uInt16)0x0391 ).WriteUInt32( mnYAlign );
+            rSt.WriteUInt16( (sal_uInt16)0x0392 ).WriteUInt32( mnYRelTo );
         }
     }
 }
@@ -1515,7 +1515,7 @@ SwBasicEscherEx::~SwBasicEscherEx()
 void SwBasicEscherEx::WriteFrmExtraData(const SwFrmFmt&)
 {
     AddAtom(4, ESCHER_ClientAnchor);
-    GetStream() << (sal_uInt32)0x80000000;
+    GetStream().WriteUInt32( (sal_uInt32)0x80000000 );
 }
 
 void SwBasicEscherEx::WriteEmptyFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nShapeId)
@@ -1526,7 +1526,7 @@ void SwBasicEscherEx::WriteEmptyFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nShape
     WriteFrmExtraData(rFmt);
 
     AddAtom(6, DFF_msofbtUDefProp, 3, 1); //Prop id is 0xF122
-    GetStream() << (sal_uInt16)0x053F << nInlineHack;
+    GetStream().WriteUInt16( (sal_uInt16)0x053F ).WriteUInt32( nInlineHack );
 
     CloseContainer();   // ESCHER_SpContainer
 }
@@ -1598,7 +1598,7 @@ sal_Int32 SwBasicEscherEx::WriteGrfBullet(const Graphic& rGrf)
     aPropOpt.AddOpt( ESCHER_Prop_pictureActive, 0 );
     aPropOpt.Commit( GetStream() );
     AddAtom(4, ESCHER_ClientAnchor);
-    GetStream() << (sal_uInt32)0x80000000;
+    GetStream().WriteUInt32( (sal_uInt32)0x80000000 );
     CloseContainer();
 
     return 0;
@@ -2173,13 +2173,13 @@ sal_Int32 SwEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType
                 aPolyDump.SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
 
                 sal_uInt16 nLen = aPoly.GetSize();
-                aPolyDump << nLen;
-                aPolyDump << nLen;
-                aPolyDump << sal_uInt16(8);
+                aPolyDump.WriteUInt16( nLen );
+                aPolyDump.WriteUInt16( nLen );
+                aPolyDump.WriteUInt16( sal_uInt16(8) );
                 for (sal_uInt16 nI = 0; nI < nLen; ++nI)
                 {
-                    aPolyDump << sal_uInt32(aPoly[nI].X());
-                    aPolyDump << sal_uInt32(aPoly[nI].Y());
+                    aPolyDump.WriteUInt32( sal_uInt32(aPoly[nI].X()) );
+                    aPolyDump.WriteUInt32( sal_uInt32(aPoly[nI].Y()) );
                 }
 
                 sal_uInt16 nArrLen = msword_cast<sal_uInt16>(aPolyDump.Tell());
@@ -2256,13 +2256,13 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
     OpenContainer( ESCHER_DggContainer );
 
     sal_uInt16 nColorCount = 4;
-    *pStrm  << (sal_uInt16)( nColorCount << 4 )     // instance
-            << (sal_uInt16)ESCHER_SplitMenuColors   // record type
-            << (sal_uInt32)( nColorCount * 4 )      // size
-            << (sal_uInt32)0x08000004
-            << (sal_uInt32)0x08000001
-            << (sal_uInt32)0x08000002
-            << (sal_uInt32)0x100000f7;
+    pStrm ->WriteUInt16( (sal_uInt16)( nColorCount << 4 ) )     // instance
+           .WriteUInt16( (sal_uInt16)ESCHER_SplitMenuColors )   // record type
+           .WriteUInt32( (sal_uInt32)( nColorCount * 4 ) )      // size
+           .WriteUInt32( (sal_uInt32)0x08000004 )
+           .WriteUInt32( (sal_uInt32)0x08000001 )
+           .WriteUInt32( (sal_uInt32)0x08000002 )
+           .WriteUInt32( (sal_uInt32)0x100000f7 );
 
     CloseContainer();   // ESCHER_DggContainer
 
@@ -2281,7 +2281,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
     for( ; i--; pSdrObjs = rWrt.pSdrObjs, pTxtBxs = rWrt.pTxtBxs )
     {
         // "dummy char" (or any Count ?) - why? This knows only M$
-        GetStream() << (sal_Char)i;
+        GetStream().WriteChar( (sal_Char)i );
 
         OpenContainer( ESCHER_DgContainer );
 
@@ -2392,7 +2392,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
             aPropOpt.Commit( *pStrm );
 
             AddAtom( 4, ESCHER_ClientData );
-            GetStream() << static_cast<sal_Int32>(1);
+            GetStream().WriteInt32( static_cast<sal_Int32>(1) );
 
             CloseContainer();   // ESCHER_SpContainer
         }
@@ -2861,10 +2861,10 @@ void SwEscherEx::WriteFrmExtraData( const SwFrmFmt& rFmt )
     aWinwordAnchoring.WriteData(*this);
 
     AddAtom(4, ESCHER_ClientAnchor);
-    GetStream() << static_cast<sal_Int32>(0);
+    GetStream().WriteInt32( static_cast<sal_Int32>(0) );
 
     AddAtom(4, ESCHER_ClientData);
-    GetStream() << static_cast<sal_Int32>(1);
+    GetStream().WriteInt32( static_cast<sal_Int32>(1) );
 }
 
 sal_Int32 SwEscherEx::WriteFlyFrm(const DrawObj &rObj, sal_uInt32 &rShapeId,
@@ -3018,7 +3018,7 @@ sal_Int32 SwEscherEx::WriteTxtFlyFrame(const DrawObj &rObj, sal_uInt32 nShapeId,
     // store anchor attribute
     WriteFrmExtraData( rFmt );
 
-    AddAtom( 4, ESCHER_ClientTextbox ); GetStream() << nTxtBox;
+    AddAtom( 4, ESCHER_ClientTextbox ); GetStream().WriteUInt32( nTxtBox );
 
     CloseContainer();   // ESCHER_SpContainer
     return nBorderThick;

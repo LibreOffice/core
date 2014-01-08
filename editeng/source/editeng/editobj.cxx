@@ -387,17 +387,17 @@ bool EditTextObject::Store( SvStream& rOStream ) const
     sal_Size nStartPos = rOStream.Tell();
 
     sal_uInt16 nWhich = static_cast<sal_uInt16>(EE_FORMAT_BIN);
-    rOStream << nWhich;
+    rOStream.WriteUInt16( nWhich );
 
     sal_uInt32 nStructSz = 0;
-    rOStream << nStructSz;
+    rOStream.WriteUInt32( nStructSz );
 
     StoreData( rOStream );
 
     sal_Size nEndPos = rOStream.Tell();
     nStructSz = nEndPos - nStartPos - sizeof( nWhich ) - sizeof( nStructSz );
     rOStream.Seek( nStartPos + sizeof( nWhich ) );
-    rOStream << nStructSz;
+    rOStream.WriteUInt32( nStructSz );
     rOStream.Seek( nEndPos );
 
     return rOStream.GetError() ? false : true;
@@ -1106,9 +1106,9 @@ public:
 void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
 {
     sal_uInt16 nVer = 602;
-    rOStream << nVer;
+    rOStream.WriteUInt16( nVer );
 
-    rOStream << static_cast<sal_Bool>(bOwnerOfPool);
+    rOStream.WriteUChar( static_cast<sal_Bool>(bOwnerOfPool) );
 
     // First store the pool, later only the Surregate
     if ( bOwnerOfPool )
@@ -1119,14 +1119,14 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
 
     // Store Current text encoding ...
     rtl_TextEncoding eEncoding = GetSOStoreTextEncoding( osl_getThreadTextEncoding() );
-    rOStream << (sal_uInt16) eEncoding;
+    rOStream.WriteUInt16( (sal_uInt16) eEncoding );
 
     // The number of paragraphs ...
     size_t nParagraphs = aContents.size();
     // FIXME: this truncates, check usage of stream and if it can be changed,
     // i.e. is not persistent, adapt this and reader.
     sal_uInt16 nParagraphs_Stream = static_cast<sal_uInt16>(nParagraphs);
-    rOStream << nParagraphs_Stream;
+    rOStream.WriteUInt16( nParagraphs_Stream );
 
     sal_Unicode nUniChar = CH_FEATURE;
     char cFeatureConverted = OString(&nUniChar, 1, eEncoding).toChar();
@@ -1223,14 +1223,14 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
 
         // StyleName and Family...
         write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStream, rC.GetStyle(), eEncoding);
-        rOStream << static_cast<sal_uInt16>(rC.GetFamily());
+        rOStream.WriteUInt16( static_cast<sal_uInt16>(rC.GetFamily()) );
 
         // Paragraph attributes ...
         rC.GetParaAttribs().Store( rOStream );
 
         // The number of attributes ...
         size_t nAttribs = rC.aAttribs.size();
-        rOStream << static_cast<sal_uInt16>(nAttribs);
+        rOStream.WriteUInt16( static_cast<sal_uInt16>(nAttribs) );
 
         // And the individual attributes
         // Items as Surregate => always 8 bytes per Attribute
@@ -1239,36 +1239,36 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
         {
             const XEditAttribute& rX = rC.aAttribs[nAttr];
 
-            rOStream << rX.GetItem()->Which();
+            rOStream.WriteUInt16( rX.GetItem()->Which() );
             GetPool()->StoreSurrogate(rOStream, rX.GetItem());
-            rOStream << rX.GetStart();
-            rOStream << rX.GetEnd();
+            rOStream.WriteUInt16( rX.GetStart() );
+            rOStream.WriteUInt16( rX.GetEnd() );
         }
     }
 
-    rOStream << nMetric;
+    rOStream.WriteUInt16( nMetric );
 
-    rOStream << nUserType;
-    rOStream << nObjSettings;
+    rOStream.WriteUInt16( nUserType );
+    rOStream.WriteUInt32( nObjSettings );
 
-    rOStream << static_cast<sal_Bool>(bVertical);
-    rOStream << nScriptType;
+    rOStream.WriteUChar( static_cast<sal_Bool>(bVertical) );
+    rOStream.WriteUInt16( nScriptType );
 
-    rOStream << static_cast<sal_Bool>(bStoreUnicodeStrings);
+    rOStream.WriteUChar( static_cast<sal_Bool>(bStoreUnicodeStrings) );
     if ( bStoreUnicodeStrings )
     {
         for ( size_t nPara = 0; nPara < nParagraphs_Stream; nPara++ )
         {
             const ContentInfo& rC = aContents[nPara];
             sal_uInt16 nL = rC.GetText().getLength();
-            rOStream << nL;
+            rOStream.WriteUInt16( nL );
             rOStream.Write(rC.GetText().getStr(), nL*sizeof(sal_Unicode));
 
             // StyleSheetName must be Unicode too!
             // Copy/Paste from EA3 to BETA or from BETA to EA3 not possible, not needed...
             // If needed, change nL back to sal_uLong and increase version...
             nL = rC.GetStyle().getLength();
-            rOStream << nL;
+            rOStream.WriteUInt16( nL );
             rOStream.Write(rC.GetStyle().getStr(), nL*sizeof(sal_Unicode));
         }
     }

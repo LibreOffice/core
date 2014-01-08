@@ -1040,7 +1040,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_src)
                 .append("=\"");
-            rWrt.Strm() << sOut.makeStringAndClear().getStr();
+            rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
             HTMLOutFuncs::Out_String( rWrt.Strm(), aURL, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             sOut.append('\"');
         }
@@ -1051,7 +1051,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_type)
                 .append("=\"");
-            rWrt.Strm() << sOut.makeStringAndClear().getStr();
+            rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
             HTMLOutFuncs::Out_String( rWrt.Strm(), aType, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             sOut.append('\"');
         }
@@ -1086,7 +1086,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             {
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_codebase)
                     .append("=\"");
-                rWrt.Strm() << sOut.makeStringAndClear().getStr();
+                rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
                 HTMLOutFuncs::Out_String( rWrt.Strm(), sCodeBase, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
                 sOut.append('\"');
             }
@@ -1098,7 +1098,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         aAny >>= aClass;
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_code)
             .append("=\"");
-        rWrt.Strm() << sOut.makeStringAndClear().getStr();
+        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
         HTMLOutFuncs::Out_String( rWrt.Strm(), aClass, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         sOut.append('\"');
 
@@ -1110,7 +1110,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name)
                 .append("=\"");
-            rWrt.Strm() << sOut.makeStringAndClear().getStr();
+            rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
             HTMLOutFuncs::Out_String( rWrt.Strm(), aAppletName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             sOut.append('\"');
         }
@@ -1129,7 +1129,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         // oder das Flating-Frame spezifische
 
         sOut.append(OOO_STRING_SVTOOLS_HTML_iframe);
-        rWrt.Strm() << sOut.makeStringAndClear().getStr();
+        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
         SfxFrameHTMLWriter::Out_FrameDescriptor( rWrt.Strm(), rWrt.GetBaseURL(),
                                         xSet,
@@ -1140,7 +1140,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                             : HTML_FRMOPTS_IFRAME;
     }
 
-    rWrt.Strm() << sOut.makeStringAndClear().getStr();
+    rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
     // ALT, WIDTH, HEIGHT, HSPACE, VSPACE, ALIGN
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bHiddenEmbed )
@@ -1170,10 +1170,10 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             if( SWHTML_OPTTYPE_TAG == nType )
             {
                 const OUString& rValue = rCommand.GetArgument();
-                rWrt.Strm() << ' ';
+                rWrt.Strm().WriteChar( ' ' );
                 HTMLOutFuncs::Out_String( rWrt.Strm(), rName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-                rWrt.Strm() << "=\"";
-                HTMLOutFuncs::Out_String( rWrt.Strm(), rValue, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ) << '\"';
+                rWrt.Strm().WriteCharPtr( "=\"" );
+                HTMLOutFuncs::Out_String( rWrt.Strm(), rValue, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ).WriteChar( '\"' );
             }
             else if( SWHTML_OPTTYPE_PARAM == nType )
             {
@@ -1181,7 +1181,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             }
         }
 
-        rHTMLWrt.Strm() << '>';
+        rHTMLWrt.Strm().WriteChar( '>' );
 
         rHTMLWrt.IncIndentLevel(); // Inhalt von Applet einruecken
 
@@ -1196,12 +1196,12 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             sBuf.append('<').append(OOO_STRING_SVTOOLS_HTML_param)
                 .append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name)
                 .append("=\"");
-            rWrt.Strm() << sBuf.makeStringAndClear().getStr();
+            rWrt.Strm().WriteCharPtr( sBuf.makeStringAndClear().getStr() );
             HTMLOutFuncs::Out_String( rWrt.Strm(), rName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             sBuf.append("\" ").append(OOO_STRING_SVTOOLS_HTML_O_value)
                 .append("=\"");
-            rWrt.Strm() << sBuf.makeStringAndClear().getStr();
-            HTMLOutFuncs::Out_String( rWrt.Strm(), rValue, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ) << "\">";
+            rWrt.Strm().WriteCharPtr( sBuf.makeStringAndClear().getStr() );
+            HTMLOutFuncs::Out_String( rWrt.Strm(), rValue, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ).WriteCharPtr( "\">" );
         }
 
         rHTMLWrt.DecIndentLevel(); // Inhalt von Applet einruecken
@@ -1227,25 +1227,25 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             if( SwApplet_Impl::GetOptionType( rName, sal_False ) == SWHTML_OPTTYPE_TAG )
             {
                 const OUString& rValue = rCommand.GetArgument();
-                rWrt.Strm() << ' ';
+                rWrt.Strm().WriteChar( ' ' );
                 HTMLOutFuncs::Out_String( rWrt.Strm(), rName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-                rWrt.Strm() << "=\"";
-                HTMLOutFuncs::Out_String( rWrt.Strm(), rValue, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ) << '\"';
+                rWrt.Strm().WriteCharPtr( "=\"" );
+                HTMLOutFuncs::Out_String( rWrt.Strm(), rValue, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ).WriteChar( '\"' );
             }
         }
-        rHTMLWrt.Strm() << '>';
+        rHTMLWrt.Strm().WriteChar( '>' );
     }
     else
     {
         // und fuer Floating-Frames einfach noch ein </IFRAME>
         // ausgeben
 
-        rHTMLWrt.Strm() << '>';
+        rHTMLWrt.Strm().WriteChar( '>' );
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_iframe, sal_False );
     }
 
     if( !aEndTags.isEmpty() )
-        rWrt.Strm() << aEndTags.getStr();
+        rWrt.Strm().WriteCharPtr( aEndTags.getStr() );
 
     return rWrt;
 }

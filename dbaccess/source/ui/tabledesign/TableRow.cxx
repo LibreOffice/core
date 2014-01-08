@@ -108,11 +108,11 @@ namespace dbaui
 {
     SvStream& operator<<( SvStream& _rStr, const OTableRow& _rRow )
     {
-        _rStr << _rRow.m_nPos;
+        _rStr.WriteInt32( _rRow.m_nPos );
         OFieldDescription* pFieldDesc = _rRow.GetActFieldDescr();
         if(pFieldDesc)
         {
-            _rStr << (sal_Int32)1;
+            _rStr.WriteInt32( (sal_Int32)1 );
             _rStr.WriteUniOrByteString(pFieldDesc->GetName(), _rStr.GetStreamCharSet());
             _rStr.WriteUniOrByteString(pFieldDesc->GetDescription(), _rStr.GetStreamCharSet());
             _rStr.WriteUniOrByteString(pFieldDesc->GetHelpText(), _rStr.GetStreamCharSet());
@@ -120,28 +120,28 @@ namespace dbaui
             Any aValue = pFieldDesc->GetControlDefault();
             if ( aValue >>= nValue )
             {
-                _rStr << sal_Int32(1);
+                _rStr.WriteInt32( sal_Int32(1) );
                 _rStr << nValue;
             }
             else
             {
-                _rStr << sal_Int32(2);
+                _rStr.WriteInt32( sal_Int32(2) );
                 _rStr.WriteUniOrByteString(::comphelper::getString(aValue), _rStr.GetStreamCharSet());
             }
 
-            _rStr << pFieldDesc->GetType();
+            _rStr.WriteInt32( pFieldDesc->GetType() );
 
-            _rStr << pFieldDesc->GetPrecision();
-            _rStr << pFieldDesc->GetScale();
-            _rStr << pFieldDesc->GetIsNullable();
-            _rStr << pFieldDesc->GetFormatKey();
-            _rStr << (sal_Int32)pFieldDesc->GetHorJustify();
-            _rStr << sal_Int32(pFieldDesc->IsAutoIncrement() ? 1 : 0);
-            _rStr << sal_Int32(pFieldDesc->IsPrimaryKey() ? 1 : 0);
-            _rStr << sal_Int32(pFieldDesc->IsCurrency() ? 1 : 0);
+            _rStr.WriteInt32( pFieldDesc->GetPrecision() );
+            _rStr.WriteInt32( pFieldDesc->GetScale() );
+            _rStr.WriteInt32( pFieldDesc->GetIsNullable() );
+            _rStr.WriteInt32( pFieldDesc->GetFormatKey() );
+            _rStr.WriteInt32( (sal_Int32)pFieldDesc->GetHorJustify() );
+            _rStr.WriteInt32( sal_Int32(pFieldDesc->IsAutoIncrement() ? 1 : 0) );
+            _rStr.WriteInt32( sal_Int32(pFieldDesc->IsPrimaryKey() ? 1 : 0) );
+            _rStr.WriteInt32( sal_Int32(pFieldDesc->IsCurrency() ? 1 : 0) );
         }
         else
-            _rStr << (sal_Int32)0;
+            _rStr.WriteInt32( (sal_Int32)0 );
         return _rStr;
     }
     SvStream& operator>>( SvStream& _rStr, OTableRow& _rRow )

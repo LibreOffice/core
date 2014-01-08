@@ -120,16 +120,16 @@ sal_Bool PGMWriter::ImplWriteHeader()
     if ( mnWidth && mnHeight )
     {
         if ( mnMode == 0 )
-            m_rOStm << "P5\x0a";
+            m_rOStm.WriteCharPtr( "P5\x0a" );
         else
-            m_rOStm << "P2\x0a";
+            m_rOStm.WriteCharPtr( "P2\x0a" );
 
         ImplWriteNumber( mnWidth );
-        m_rOStm << (sal_uInt8)32;
+        m_rOStm.WriteUChar( (sal_uInt8)32 );
         ImplWriteNumber( mnHeight );
-        m_rOStm << (sal_uInt8)32;
+        m_rOStm.WriteUChar( (sal_uInt8)32 );
         ImplWriteNumber( 255 );         // max. gray value
-        m_rOStm << (sal_uInt8)10;
+        m_rOStm.WriteUChar( (sal_uInt8)10 );
     }
     else
         mbStatus = sal_False;
@@ -147,7 +147,7 @@ void PGMWriter::ImplWriteBody()
         {
             for ( sal_uLong x = 0; x < mnWidth; x++ )
             {
-                m_rOStm << mpAcc->GetPixelIndex( y, x );
+                m_rOStm.WriteUChar( mpAcc->GetPixelIndex( y, x ) );
             }
         }
     }
@@ -162,18 +162,18 @@ void PGMWriter::ImplWriteBody()
                 if ( nCount < 0 )
                 {
                     nCount = 69;
-                    m_rOStm << (sal_uInt8)10;
+                    m_rOStm.WriteUChar( (sal_uInt8)10 );
                 }
                 nDat = mpAcc->GetPixelIndex( y, x );
                 nNumb = nDat / 100;
                 if ( nNumb )
                 {
-                    m_rOStm << (sal_uInt8)( nNumb + '0' );
+                    m_rOStm.WriteUChar( (sal_uInt8)( nNumb + '0' ) );
                     nDat -= ( nNumb * 100 );
                     nNumb = nDat / 10;
-                    m_rOStm << (sal_uInt8)( nNumb + '0' );
+                    m_rOStm.WriteUChar( (sal_uInt8)( nNumb + '0' ) );
                     nDat -= ( nNumb * 10 );
-                    m_rOStm << (sal_uInt8)( nDat + '0' );
+                    m_rOStm.WriteUChar( (sal_uInt8)( nDat + '0' ) );
                     nCount -= 4;
                 }
                 else
@@ -181,20 +181,20 @@ void PGMWriter::ImplWriteBody()
                     nNumb = nDat / 10;
                     if ( nNumb )
                     {
-                        m_rOStm << (sal_uInt8)( nNumb + '0' );
+                        m_rOStm.WriteUChar( (sal_uInt8)( nNumb + '0' ) );
                         nDat -= ( nNumb * 10 );
-                        m_rOStm << (sal_uInt8)( nDat + '0' );
+                        m_rOStm.WriteUChar( (sal_uInt8)( nDat + '0' ) );
                         nCount -= 3;
                     }
                     else
                     {
-                        m_rOStm << (sal_uInt8)( nDat + '0' );
+                        m_rOStm.WriteUChar( (sal_uInt8)( nDat + '0' ) );
                         nCount -= 2;
                     }
                 }
-                m_rOStm << (sal_uInt8)' ';
+                m_rOStm.WriteUChar( (sal_uInt8)' ' );
             }
-            m_rOStm << (sal_uInt8)10;
+            m_rOStm.WriteUChar( (sal_uInt8)10 );
         }
     }
 }
@@ -204,7 +204,7 @@ void PGMWriter::ImplWriteBody()
 void PGMWriter::ImplWriteNumber(sal_Int32 nNumber)
 {
     const OString aNum(OString::number(nNumber));
-    m_rOStm << aNum.getStr();
+    m_rOStm.WriteCharPtr( aNum.getStr() );
 }
 
 // ------------------------------------------------------------------------

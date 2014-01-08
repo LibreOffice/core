@@ -664,7 +664,7 @@ void WW8AttributeOutput::StartStyles()
     sal_uLong nCurPos = m_rWW8Export.pTableStrm->Tell();
     if ( nCurPos & 1 )                   // Start auf gerader
     {
-        *m_rWW8Export.pTableStrm << (char)0;        // Adress
+        m_rWW8Export.pTableStrm->WriteChar( (char)0 );        // Adress
         ++nCurPos;
     }
     rFib.fcStshfOrig = rFib.fcStshf = nCurPos;
@@ -2324,7 +2324,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                     for ( i = 0; i < aStrArr.size(); ++i )
                     {
                         const OUString& sAuthor = aStrArr[i].first;
-                        *rWrt.pTableStrm << (sal_uInt8)sAuthor.getLength();
+                        rWrt.pTableStrm->WriteUChar( (sal_uInt8)sAuthor.getLength() );
                         SwWW8Writer::WriteString8(*rWrt.pTableStrm, sAuthor, false,
                                 RTL_TEXTENCODING_MS_1252);
                     }
@@ -2521,7 +2521,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 }
                 else
                 {
-                    *rWrt.pTableStrm << nInitialsLen;
+                    rWrt.pTableStrm->WriteUChar( nInitialsLen );
                     SwWW8Writer::WriteString8(*rWrt.pTableStrm, sInitials,
                             false, RTL_TEXTENCODING_MS_1252);
                     SwWW8Writer::FillCount(*rWrt.pTableStrm, 9 - nInitialsLen);

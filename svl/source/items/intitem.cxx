@@ -122,7 +122,7 @@ SfxPoolItem * SfxInt16Item::Create(SvStream & rStream, sal_uInt16) const
 SvStream & SfxInt16Item::Store(SvStream & rStream, sal_uInt16) const
 {
     DBG_CHKTHIS(SfxInt16Item, 0);
-    rStream << short(m_nValue);
+    rStream.WriteInt16( short(m_nValue) );
     return rStream;
 }
 

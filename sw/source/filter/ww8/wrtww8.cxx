@@ -1292,7 +1292,7 @@ void WW8_WrPct::WritePc( WW8Export& rWrt )
     boost::ptr_vector<WW8_WrPc>::iterator aIter;
 
     nPctStart = rWrt.pTableStrm->Tell();                    // Start piece table
-    *rWrt.pTableStrm << ( char )0x02;                       // Status byte PCT
+    rWrt.pTableStrm->WriteChar( ( char )0x02 );                       // Status byte PCT
     nOldPos = nPctStart + 1;                                // remember Position
     SwWW8Writer::WriteLong( *rWrt.pTableStrm, 0 );          // then the length
 
@@ -1590,7 +1590,7 @@ void WW8Export::WriteAsStringTable(const std::vector<OUString>& rStrings,
             {
                 const OUString &rString = rStrings[n];
                 const OUString aNm(rString.copy(0, std::min<sal_Int32>(rString.getLength(), 255)));
-                rStrm << (sal_uInt8)aNm.getLength();
+                rStrm.WriteUChar( (sal_uInt8)aNm.getLength() );
                 SwWW8Writer::WriteString8(rStrm, aNm, false,
                     RTL_TEXTENCODING_MS_1252);
                 if (nExtraLen)
@@ -1796,9 +1796,9 @@ void WW8Export::WriteCR(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo
 void WW8Export::WriteChar( sal_Unicode c )
 {
     if( pPiece->IsUnicode() )
-        Strm() << c;
+        Strm().WriteUInt16( c );
     else
-        Strm() << (sal_uInt8)c;
+        Strm().WriteUChar( (sal_uInt8)c );
 }
 
 void MSWordExportBase::SaveData( sal_uLong nStt, sal_uLong nEnd )
@@ -3185,7 +3185,7 @@ void WW8Export::ExportDocument_Impl()
         // EncryptionVersionInfo (4 bytes): A Version structure where Version.vMajor MUST be 0x0001, and Version.vMinor MUST be 0x0001.
         pTableStrmTemp->Seek( 0 );
         sal_uInt32 nEncType = 0x10001;
-        *pTableStrmTemp << nEncType;
+        pTableStrmTemp->WriteUInt32( nEncType );
 
         sal_uInt8 pDocId[16];
         aCtx.GetDocId( pDocId );
@@ -3717,20 +3717,20 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         }
     }
 
-    *pDataStrm << slen;
+    pDataStrm->WriteUInt32( slen );
 
     int len = sizeof( aFldData );
     OSL_ENSURE( len == 0x44-sizeof(sal_uInt32), "SwWW8Writer::WriteFormData(..) - wrong aFldData length" );
     pDataStrm->Write( aFldData, len );
 
-    *pDataStrm << aFldHeader.version << aFldHeader.bits << aFldHeader.cch << aFldHeader.hps;
+    pDataStrm->WriteUInt32( aFldHeader.version ).WriteUInt16( aFldHeader.bits ).WriteUInt16( aFldHeader.cch ).WriteUInt16( aFldHeader.hps );
 
     SwWW8Writer::WriteString_xstz( *pDataStrm, ffname, true ); // Form field name
 
     if ( !type )
         SwWW8Writer::WriteString_xstz( *pDataStrm, ffdeftext, true );
     if ( type )
-        *pDataStrm << sal_uInt16(0);
+        pDataStrm->WriteUInt16( sal_uInt16(0) );
 
 
     SwWW8Writer::WriteString_xstz( *pDataStrm, OUString( ffformat ), true );
@@ -3739,9 +3739,9 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     SwWW8Writer::WriteString_xstz( *pDataStrm, OUString( ffentrymcr ), true );
     SwWW8Writer::WriteString_xstz( *pDataStrm, OUString( ffexitmcr ), true );
     if (type==2) {
-        *pDataStrm<<(sal_uInt16)0xFFFF;
+        pDataStrm->WriteUInt16( (sal_uInt16)0xFFFF );
         const int items=aListItems.size();
-        *pDataStrm<<(sal_uInt32)items;
+        pDataStrm->WriteUInt32( (sal_uInt32)items );
         for(int i=0;i<items;i++) {
             OUString item=aListItems[i];
             SwWW8Writer::WriteString_xstz( *pDataStrm, item, false );

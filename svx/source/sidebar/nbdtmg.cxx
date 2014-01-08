@@ -224,19 +224,19 @@ void NBOTypeMgrBase::ImplStore(OUString filename)
         sal_uInt32                      nVersion;
         sal_Int32                       nNumIndex;
         nVersion = DEFAULT_NUMBERING_CACHE_FORMAT_VERSION;
-        *pOStm << nVersion;
+        pOStm->WriteUInt32( nVersion );
         for(sal_Int32 nItem = 0; nItem < DEFAULT_NUM_VALUSET_COUNT; nItem++ ) {
             if (IsCustomized(nItem)) {
                 SvxNumRule aDefNumRule( NUM_BULLET_REL_SIZE|NUM_CONTINUOUS|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE|NUM_SYMBOL_ALIGNMENT,10, sal_False ,
                     SVX_RULETYPE_NUMBERING,SvxNumberFormat::LABEL_ALIGNMENT);
                 sal_uInt16 mLevel = 0x1;
-                *pOStm << nItem;
+                pOStm->WriteInt32( nItem );
                 ApplyNumRule(aDefNumRule,nItem,mLevel,false,true);
                 aDefNumRule.Store(*pOStm);
             }
         }
         nNumIndex = -1;
-        *pOStm << nNumIndex;  //write end flag
+        pOStm->WriteInt32( nNumIndex );  //write end flag
         delete pOStm;
     }
     eCoreUnit = eOldCoreUnit;

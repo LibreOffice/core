@@ -124,7 +124,7 @@ sal_Bool XPMWriter::WriteXPM( const Graphic& rGraphic, FilterConfigItem* pFilter
         {
             ImplWritePalette();
             ImplWriteBody();
-            m_rOStm << "\x22XPMENDEXT\x22\x0a};";
+            m_rOStm.WriteCharPtr( "\x22XPMENDEXT\x22\x0a};" );
         }
 
         m_rOStm.SetNumberFormatInt(nOStmOldModus);
@@ -149,15 +149,15 @@ sal_Bool XPMWriter::ImplWriteHeader()
     mnHeight = mpAcc->Height();
     if ( mnWidth && mnHeight && mnColors )
     {
-        m_rOStm << "/* XPM */\x0astatic char * image[] = \x0a{\x0a\x22";
+        m_rOStm.WriteCharPtr( "/* XPM */\x0astatic char * image[] = \x0a{\x0a\x22" );
         ImplWriteNumber( mnWidth );
-        m_rOStm << (sal_uInt8)32;
+        m_rOStm.WriteUChar( (sal_uInt8)32 );
         ImplWriteNumber( mnHeight );
-        m_rOStm << (sal_uInt8)32;
+        m_rOStm.WriteUChar( (sal_uInt8)32 );
         ImplWriteNumber( mnColors );
-        m_rOStm << (sal_uInt8)32;
+        m_rOStm.WriteUChar( (sal_uInt8)32 );
         ImplWriteNumber( ( mnColors > 26 ) ? 2 : 1 );
-        m_rOStm << "\x22,\x0a";
+        m_rOStm.WriteCharPtr( "\x22,\x0a" );
     }
     else mbStatus = sal_False;
     return mbStatus;
@@ -173,16 +173,16 @@ void XPMWriter::ImplWritePalette()
         nTransIndex = mpAcc->GetBestPaletteIndex( BMP_COL_TRANS );
     for ( sal_uInt16 i = 0; i < mnColors; i++ )
     {
-        m_rOStm << "\x22";
+        m_rOStm.WriteCharPtr( "\x22" );
         ImplWritePixel( i );
-        m_rOStm << (sal_uInt8)32;
+        m_rOStm.WriteUChar( (sal_uInt8)32 );
         if ( nTransIndex != i )
         {
             ImplWriteColor( i );
-            m_rOStm << "\x22,\x0a";
+            m_rOStm.WriteCharPtr( "\x22,\x0a" );
         }
         else
-            m_rOStm << "c none\x22,\x0a";
+            m_rOStm.WriteCharPtr( "c none\x22,\x0a" );
     }
 }
 
@@ -193,12 +193,12 @@ void XPMWriter::ImplWriteBody()
     for ( sal_uLong y = 0; y < mnHeight; y++ )
     {
         ImplCallback( (sal_uInt16)( ( 100 * y ) / mnHeight ) );         // processing output in percent
-        m_rOStm << (sal_uInt8)0x22;
+        m_rOStm.WriteUChar( (sal_uInt8)0x22 );
         for ( sal_uLong x = 0; x < mnWidth; x++ )
         {
             ImplWritePixel( mpAcc->GetPixelIndex( y, x ) );
         }
-        m_rOStm << "\x22,\x0a";
+        m_rOStm.WriteCharPtr( "\x22,\x0a" );
     }
 }
 
@@ -208,7 +208,7 @@ void XPMWriter::ImplWriteBody()
 void XPMWriter::ImplWriteNumber(sal_Int32 nNumber)
 {
     const OString aNum(OString::number(nNumber));
-    m_rOStm << aNum.getStr();
+    m_rOStm.WriteCharPtr( aNum.getStr() );
 }
 
 // ------------------------------------------------------------------------
@@ -218,11 +218,11 @@ void XPMWriter::ImplWritePixel( sal_uLong nCol ) const
     if ( mnColors > 26 )
     {
         sal_uInt8 nDiff = (sal_uInt8) ( nCol / 26 );
-        m_rOStm << (sal_uInt8)( nDiff + 'A' );
-        m_rOStm << (sal_uInt8)( nCol - ( nDiff*26 ) + 'A' );
+        m_rOStm.WriteUChar( (sal_uInt8)( nDiff + 'A' ) );
+        m_rOStm.WriteUChar( (sal_uInt8)( nCol - ( nDiff*26 ) + 'A' ) );
     }
     else
-        m_rOStm << (sal_uInt8)( nCol + 'A' );
+        m_rOStm.WriteUChar( (sal_uInt8)( nCol + 'A' ) );
 }
 
 // ------------------------------------------------------------------------
@@ -232,7 +232,7 @@ void XPMWriter::ImplWriteColor( sal_uInt16 nNumber )
     sal_uLong   nTmp;
     sal_uInt8   j;
 
-    m_rOStm << "c #";   // # indicates a following hex value
+    m_rOStm.WriteCharPtr( "c #" );   // # indicates a following hex value
     const BitmapColor& rColor = mpAcc->GetPaletteColor( nNumber );
     nTmp = ( rColor.GetRed() << 16 ) | ( rColor.GetGreen() << 8 ) | rColor.GetBlue();
     for ( signed char i = 20; i >= 0 ; i-=4 )
@@ -241,7 +241,7 @@ void XPMWriter::ImplWriteColor( sal_uInt16 nNumber )
             j += 'A' - 10;
         else
             j += '0';
-        m_rOStm << j;
+        m_rOStm.WriteUChar( j );
     }
 }
 

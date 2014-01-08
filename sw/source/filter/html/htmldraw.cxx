@@ -812,12 +812,12 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
             ((const XFillColorItem&)rItemSet.Get(XATTR_FILLCOLOR)).GetColorValue();
 
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_bgcolor).append("=");
-        rWrt.Strm() << sOut.makeStringAndClear().getStr();
+        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
         HTMLOutFuncs::Out_Color( rWrt.Strm(), rFillColor, rHTMLWrt.eDestEnc );
     }
 
     if (!sOut.isEmpty())
-        rWrt.Strm() << sOut.makeStringAndClear().getStr();
+        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
     // und nun noch ALIGN, HSPACE und VSPACE
     sal_uInt32 nFrmFlags = HTML_FRMOPTS_MARQUEE;
@@ -828,7 +828,7 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
         rHTMLWrt.OutCSS1_FrmFmtOptions( rFmt, nFrmFlags, &rSdrObject );
 
 
-    rWrt.Strm() << '>';
+    rWrt.Strm().WriteChar( '>' );
 
     // Was jetzt kommt ist das Gegenstueck zu SdrTextObjectt::SetText()
     Outliner aOutliner(0, OUTLINERMODE_TEXTOBJECT);
@@ -842,7 +842,7 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_marquee, sal_False );
 
     if( !aEndTags.isEmpty() )
-        rWrt.Strm() << aEndTags.getStr();
+        rWrt.Strm().WriteCharPtr( aEndTags.getStr() );
 
     return rWrt;
 }

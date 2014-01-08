@@ -181,14 +181,14 @@ SvStream& SfxStringListItem::Store( SvStream & rStream, sal_uInt16 ) const
     if( !pImp )
     {
         //fdo#39428 SvStream no longer supports operator<<(long)
-        rStream << (sal_Int32) 0;
+        rStream.WriteInt32( (sal_Int32) 0 );
         return rStream;
     }
 
     DBG_ASSERT(pImp->nRefCount!=0xffff,"ImpList not valid");
 
     sal_uInt32 nCount = pImp->aList.size();
-    rStream << nCount;
+    rStream.WriteUInt32( nCount );
 
     for( sal_uInt32 i=0; i < nCount; i++ )
         writeByteString(rStream, pImp->aList[i]);
