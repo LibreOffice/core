@@ -4148,13 +4148,21 @@ StackVar ScInterpreter::Interpret()
                 case ocTTest_MS         : ScTTest();                    break;
                 case ocFTest            :
                 case ocFTest_MS         : ScFTest();                    break;
-                case ocRank             : ScRank();                     break;
-                case ocPercentile       : ScPercentile();               break;
+                case ocRank             :
+                case ocRank_Eq          : ScRank( false );              break;
+                case ocRank_Avg         : ScRank( true );               break;
+                case ocPercentile       :
+                case ocPercentile_Inc   : ScPercentile( true );         break;
+                case ocPercentile_Exc   : ScPercentile( false );        break;
                 case ocPercentrank      : ScPercentrank();              break;
+                case ocPercentrank_Inc  : ScPercentrank_MS( true );     break;
+                case ocPercentrank_Exc  : ScPercentrank_MS( false );    break;
                 case ocLarge            : ScLarge();                    break;
                 case ocSmall            : ScSmall();                    break;
                 case ocFrequency        : ScFrequency();                break;
-                case ocQuartile         : ScQuartile();                 break;
+                case ocQuartile         :
+                case ocQuartile_Inc     : ScQuartile( true );           break;
+                case ocQuartile_Exc     : ScQuartile( false );          break;
                 case ocNormInv          :
                 case ocNormInv_MS       : ScNormInv();                  break;
                 case ocSNormInv         :

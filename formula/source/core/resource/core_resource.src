@@ -319,6 +319,14 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_RANK { Text = "RANK" ; };
     String SC_OPCODE_PERCENTILE { Text = "PERCENTILE" ; };
     String SC_OPCODE_PERCENT_RANK { Text = "PERCENTRANK" ; };
+    String SC_OPCODE_PERCENTILE_INC { Text = "COM.MICROSOFT.PERCENTILE.INC" ; };
+    String SC_OPCODE_PERCENT_RANK_INC { Text = "COM.MICROSOFT.PERCENTRANK.INC" ; };
+    String SC_OPCODE_QUARTILE_INC { Text = "COM.MICROSOFT.QUARTILE.INC" ; };
+    String SC_OPCODE_RANK_EQ { Text = "COM.MICROSOFT.RANK.EQ" ; };
+    String SC_OPCODE_PERCENTILE_EXC { Text = "COM.MICROSOFT.PERCENTILE.EXC" ; };
+    String SC_OPCODE_PERCENT_RANK_EXC { Text = "COM.MICROSOFT.PERCENTRANK.EXC" ; };
+    String SC_OPCODE_QUARTILE_EXC { Text = "COM.MICROSOFT.QUARTILE.EXC" ; };
+    String SC_OPCODE_RANK_AVG { Text = "COM.MICROSOFT.RANK.AVG" ; };
     String SC_OPCODE_LARGE { Text = "LARGE" ; };
     String SC_OPCODE_SMALL { Text = "SMALL" ; };
     String SC_OPCODE_FREQUENCY { Text = "FREQUENCY" ; };
@@ -705,6 +713,14 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_RANK { Text = "RANK" ; };
     String SC_OPCODE_PERCENTILE { Text = "PERCENTILE" ; };
     String SC_OPCODE_PERCENT_RANK { Text = "PERCENTRANK" ; };
+    String SC_OPCODE_PERCENTILE_INC { Text = "_xlfn.PERCENTILE.INC" ; };
+    String SC_OPCODE_PERCENT_RANK_INC { Text = "_xlfn.PERCENTRANK.INC" ; };
+    String SC_OPCODE_QUARTILE_INC { Text = "_xlfn.QUARTILE.INC" ; };
+    String SC_OPCODE_RANK_EQ { Text = "_xlfn.RANK.EQ" ; };
+    String SC_OPCODE_PERCENTILE_EXC { Text = "_xlfn.PERCENTILE.EXC" ; };
+    String SC_OPCODE_PERCENT_RANK_EXC { Text = "_xlfn.PERCENTRANK.EXC" ; };
+    String SC_OPCODE_QUARTILE_EXC { Text = "_xlfn.QUARTILE.EXC" ; };
+    String SC_OPCODE_RANK_AVG { Text = "_xlfn.RANK.AVG" ; };
     String SC_OPCODE_LARGE { Text = "LARGE" ; };
     String SC_OPCODE_SMALL { Text = "SMALL" ; };
     String SC_OPCODE_FREQUENCY { Text = "FREQUENCY" ; };
@@ -1093,6 +1109,14 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_RANK { Text = "RANK" ; };
     String SC_OPCODE_PERCENTILE { Text = "PERCENTILE" ; };
     String SC_OPCODE_PERCENT_RANK { Text = "PERCENTRANK" ; };
+    String SC_OPCODE_PERCENTILE_INC { Text = "PERCENTILE.INC" ; };
+    String SC_OPCODE_PERCENT_RANK_INC { Text = "PERCENTRANK.INC" ; };
+    String SC_OPCODE_QUARTILE_INC { Text = "QUARTILE.INC" ; };
+    String SC_OPCODE_RANK_EQ { Text = "RANK.EQ" ; };
+    String SC_OPCODE_PERCENTILE_EXC { Text = "PERCENTILE.EXC" ; };
+    String SC_OPCODE_PERCENT_RANK_EXC { Text = "PERCENTRANK.EXC" ; };
+    String SC_OPCODE_QUARTILE_EXC { Text = "QUARTILE.EXC" ; };
+    String SC_OPCODE_RANK_AVG { Text = "RANK.AVG" ; };
     String SC_OPCODE_LARGE { Text = "LARGE" ; };
     String SC_OPCODE_SMALL { Text = "SMALL" ; };
     String SC_OPCODE_FREQUENCY { Text = "FREQUENCY" ; };
@@ -2296,6 +2320,38 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_PERCENT_RANK
     {
         Text [ en-US ] = "PERCENTRANK" ;
+    };
+    String SC_OPCODE_PERCENTILE_INC
+    {
+        Text [ en-US ] = "PERCENTILE.INC" ;
+    };
+    String SC_OPCODE_PERCENT_RANK_INC
+    {
+        Text [ en-US ] = "PERCENTRANK.INC" ;
+    };
+    String SC_OPCODE_QUARTILE_INC
+    {
+        Text [ en-US ] = "QUARTILE.INC" ;
+    };
+    String SC_OPCODE_RANK_EQ
+    {
+        Text [ en-US ] = "RANK.EQ" ;
+    };
+    String SC_OPCODE_PERCENTILE_EXC
+    {
+        Text [ en-US ] = "PERCENTILE.EXC" ;
+    };
+    String SC_OPCODE_PERCENT_RANK_EXC
+    {
+        Text [ en-US ] = "PERCENTRANK.EXC" ;
+    };
+    String SC_OPCODE_QUARTILE_EXC
+    {
+        Text [ en-US ] = "QUARTILE.EXC" ;
+    };
+    String SC_OPCODE_RANK_AVG
+    {
+        Text [ en-US ] = "RANK.AVG" ;
     };
     String SC_OPCODE_LARGE
     {
