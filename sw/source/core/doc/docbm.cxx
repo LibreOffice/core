@@ -841,13 +841,13 @@ namespace sw { namespace mark
                 m_vAllMarks.begin(),
                 m_vAllMarks.end(),
                 pMark->GetMarkStart(),
-                bind(&IMark::StartsBefore, _1, _2) );
+                sw::mark::CompareIMarkStartsBefore());
         iterator_t pMarkHigh = m_vAllMarks.end();
         iterator_t pMarkFound =
             find_if(
                 pMarkLow,
                 pMarkHigh,
-                bind(equal_to<const IMark*>(), bind(&boost::shared_ptr<IMark>::get, _1), pMark) );
+                boost::bind(equal_to<const IMark*>(), bind(&boost::shared_ptr<IMark>::get, _1), pMark) );
         if(pMarkFound != pMarkHigh)
             deleteMark(pMarkFound);
     }
