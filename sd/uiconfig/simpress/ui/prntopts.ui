@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.0 on Wed Jan  8 18:58:38 2014 -->
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkBox" id="prntopts">
@@ -12,11 +13,11 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="spacing">12</property>
-        <property name="homogeneous">True</property>
         <child>
           <object class="GtkFrame" id="printframe">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
@@ -124,6 +125,7 @@
           <object class="GtkFrame" id="frame3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
@@ -308,11 +310,11 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="spacing">12</property>
-        <property name="homogeneous">True</property>
         <child>
           <object class="GtkFrame" id="contentframe">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
@@ -415,6 +417,7 @@
           <object class="GtkFrame" id="qualityframe">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
@@ -510,5 +513,18 @@
         <property name="position">2</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <property name="ignore_hidden">True</property>
+    <widgets>
+      <widget name="printframe"/>
+      <widget name="contentframe"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup2">
+    <widgets>
+      <widget name="frame3"/>
+      <widget name="qualityframe"/>
+    </widgets>
   </object>
 </interface>
