@@ -847,7 +847,7 @@ namespace sw { namespace mark
             find_if(
                 pMarkLow,
                 pMarkHigh,
-                boost::bind(equal_to<const IMark*>(), bind(&boost::shared_ptr<IMark>::get, _1), pMark) );
+                boost::bind(equal_to<const IMark*>(), boost::bind(&boost::shared_ptr<IMark>::get, _1), pMark) );
         if(pMarkFound != pMarkHigh)
             deleteMark(pMarkFound);
     }
