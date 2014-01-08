@@ -22,6 +22,7 @@
 # Mac OSX specific defines
 
 PROCESSOR_DEFINES=-DX86_64
+BUILD64=1
 
 DLLPOSTFIX=
 
