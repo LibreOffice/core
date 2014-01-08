@@ -26,35 +26,24 @@
 
 class SvxDistributePage : public SvxTabPage
 {
-    SvxDistributeHorizontal     meDistributeHor;
-    SvxDistributeVertical       meDistributeVer;
+    SvxDistributeHorizontal     m_eDistributeHor;
+    SvxDistributeVertical       m_eDistributeVer;
 
-    FixedLine                   maFlHorizontal      ;
-    RadioButton                 maBtnHorNone        ;
-    RadioButton                 maBtnHorLeft        ;
-    RadioButton                 maBtnHorCenter      ;
-    RadioButton                 maBtnHorDistance    ;
-    RadioButton                 maBtnHorRight       ;
-    FixedImage                  maHorLow            ;
-    FixedImage                  maHorCenter         ;
-    FixedImage                  maHorDistance       ;
-    FixedImage                  maHorHigh           ;
-    FixedLine                   maFlVertical        ;
-    RadioButton                 maBtnVerNone        ;
-    RadioButton                 maBtnVerTop         ;
-    RadioButton                 maBtnVerCenter      ;
-    RadioButton                 maBtnVerDistance    ;
-    RadioButton                 maBtnVerBottom      ;
-    FixedImage                  maVerLow            ;
-    FixedImage                  maVerCenter         ;
-    FixedImage                  maVerDistance       ;
-    FixedImage                  maVerHigh           ;
+    RadioButton*                m_pBtnHorNone;
+    RadioButton*                m_pBtnHorLeft;
+    RadioButton*                m_pBtnHorCenter;
+    RadioButton*                m_pBtnHorDistance;
+    RadioButton*                m_pBtnHorRight;
+    RadioButton*                m_pBtnVerNone;
+    RadioButton*                m_pBtnVerTop;
+    RadioButton*                m_pBtnVerCenter;
+    RadioButton*                m_pBtnVerDistance;
+    RadioButton*                m_pBtnVerBottom;
 
 public:
     SvxDistributePage(Window* pWindow, const SfxItemSet& rInAttrs,
         SvxDistributeHorizontal eHor = SvxDistributeHorizontalNone,
         SvxDistributeVertical eVer = SvxDistributeVerticalNone);
-    ~SvxDistributePage();
 
     static SfxTabPage* Create(Window*, const SfxItemSet&,
         SvxDistributeHorizontal eHor, SvxDistributeVertical eVer);
@@ -63,8 +52,8 @@ public:
     virtual void Reset(const SfxItemSet&);
     virtual void PointChanged(Window* pWindow, RECT_POINT eRP);
 
-    SvxDistributeHorizontal GetDistributeHor() const { return meDistributeHor; }
-    SvxDistributeVertical GetDistributeVer() const { return meDistributeVer; }
+    SvxDistributeHorizontal GetDistributeHor() const { return m_eDistributeHor; }
+    SvxDistributeVertical GetDistributeVer() const { return m_eDistributeVer; }
 };
 
 class SvxDistributeDialog : public SfxNoLayoutSingleTabDialog

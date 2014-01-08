@@ -1778,8 +1778,6 @@ GetTabPageRanges AbstractDialogFactory_Impl::GetTabPageRangesFunc( sal_uInt16 nI
     {
         case RID_SVXPAGE_TEXTANIMATION :
             return SvxTextAnimationPage::GetRanges;
-        case RID_SVXPAGE_DISTRIBUTE:
-            return SvxDistributePage::GetRanges;
         case RID_SVXPAGE_TRANSPARENCE :
             return SvxTransparenceTabPage::GetRanges;
         case RID_SVXPAGE_AREA :
