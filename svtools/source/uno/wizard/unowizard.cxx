@@ -18,26 +18,29 @@
  */
 
 
-#include "../unowizard.hxx"
 #include "wizardshell.hxx"
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
+#include <com/sun/star/ui/dialogs/XWizard.hpp>
 #include <com/sun/star/ui/dialogs/XWizardController.hpp>
 #include <com/sun/star/ui/dialogs/WizardButton.hpp>
 
+#include <cppuhelper/implbase1.hxx>
+#include <svtools/genericunodialog.hxx>
 #include <tools/diagnose_ex.h>
+#include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 
-//......................................................................................................................
-namespace svt { namespace uno
-{
-//......................................................................................................................
+using namespace ::com::sun::star;
+using namespace ::svt::uno;
+
+namespace {
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -85,10 +88,63 @@ namespace svt { namespace uno
         }
     }
 
-    //==================================================================================================================
-    //= Wizard - implementation
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    typedef ::cppu::ImplInheritanceHelper1  <   ::svt::OGenericUnoDialog
+                                            ,   ui::dialogs::XWizard
+                                            >   Wizard_Base;
+    class Wizard;
+    typedef ::comphelper::OPropertyArrayUsageHelper< Wizard >  Wizard_PBase;
+    class Wizard    : public Wizard_Base
+                    , public Wizard_PBase
+    {
+    public:
+        Wizard( const uno::Reference< uno::XComponentContext >& i_rContext );
+
+        // lang::XServiceInfo
+        virtual OUString SAL_CALL getImplementationName() throw(uno::RuntimeException);
+        virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(uno::RuntimeException);
+
+        // beans::XPropertySet
+        virtual uno::Reference< beans::XPropertySetInfo >  SAL_CALL getPropertySetInfo() throw(uno::RuntimeException);
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+
+        // OPropertyArrayUsageHelper
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
+
+        // ui::dialogs::XWizard
+        virtual OUString SAL_CALL getHelpURL() throw (uno::RuntimeException);
+        virtual void SAL_CALL setHelpURL( const OUString& _helpurl ) throw (uno::RuntimeException);
+        virtual uno::Reference< awt::XWindow > SAL_CALL getDialogWindow() throw (uno::RuntimeException);
+        virtual uno::Reference< ui::dialogs::XWizardPage > SAL_CALL getCurrentPage(  ) throw (uno::RuntimeException);
+        virtual void SAL_CALL enableButton( ::sal_Int16 WizardButton, ::sal_Bool Enable ) throw (uno::RuntimeException);
+        virtual void SAL_CALL setDefaultButton( ::sal_Int16 WizardButton ) throw (uno::RuntimeException);
+        virtual ::sal_Bool SAL_CALL travelNext(  ) throw (uno::RuntimeException);
+        virtual ::sal_Bool SAL_CALL travelPrevious(  ) throw (uno::RuntimeException);
+        virtual void SAL_CALL enablePage( ::sal_Int16 PageID, ::sal_Bool Enable ) throw (container::NoSuchElementException, util::InvalidStateException, uno::RuntimeException);
+        virtual void SAL_CALL updateTravelUI(  ) throw (uno::RuntimeException);
+        virtual ::sal_Bool SAL_CALL advanceTo( ::sal_Int16 PageId ) throw (uno::RuntimeException);
+        virtual ::sal_Bool SAL_CALL goBackTo( ::sal_Int16 PageId ) throw (uno::RuntimeException);
+        virtual void SAL_CALL activatePath( ::sal_Int16 PathIndex, ::sal_Bool Final ) throw (container::NoSuchElementException, util::InvalidStateException, uno::RuntimeException);
+
+        // ui::dialogs::XExecutableDialog
+        virtual void SAL_CALL setTitle( const OUString& aTitle ) throw (uno::RuntimeException);
+        virtual ::sal_Int16 SAL_CALL execute(  ) throw (uno::RuntimeException);
+
+        // lang::XInitialization
+        virtual void SAL_CALL initialize( const uno::Sequence< uno::Any >& aArguments ) throw (uno::Exception, uno::RuntimeException);
+
+   protected:
+        ~Wizard();
+
+    protected:
+        virtual Dialog* createDialog( Window* _pParent );
+        virtual void destroyDialog();
+
+    private:
+        uno::Sequence< uno::Sequence< sal_Int16 > >         m_aWizardSteps;
+        uno::Reference< ui::dialogs::XWizardController >    m_xController;
+        OUString                                            m_sHelpURL;
+    };
+
     Wizard::Wizard( const Reference< XComponentContext >& _rxContext )
         :Wizard_Base( _rxContext )
     {
@@ -105,12 +161,6 @@ namespace svt { namespace uno
             if ( m_pDialog )
                 destroyDialog();
         }
-    }
-
-    //--------------------------------------------------------------------
-    Reference< XInterface > SAL_CALL Wizard::Create( const Reference< XComponentContext >& _rxContext )
-    {
-        return *(new Wizard( _rxContext ) );
     }
 
     //--------------------------------------------------------------------
@@ -236,29 +286,17 @@ namespace svt { namespace uno
     }
 
     //--------------------------------------------------------------------
-    OUString SAL_CALL Wizard::getImplementationName_static() throw(RuntimeException)
-    {
-        return OUString( "com.sun.star.comp.svtools.uno.Wizard" );
-    }
-
-    //--------------------------------------------------------------------
-    Sequence< OUString > SAL_CALL Wizard::getSupportedServiceNames_static() throw(RuntimeException)
-    {
-        Sequence< OUString > aServices(1);
-        aServices[0] = "com.sun.star.ui.dialogs.Wizard";
-        return aServices;
-    }
-
-    //--------------------------------------------------------------------
     OUString SAL_CALL Wizard::getImplementationName() throw(RuntimeException)
     {
-        return getImplementationName_static();
+        return OUString("com.sun.star.comp.svtools.uno.Wizard");
     }
 
     //--------------------------------------------------------------------
     Sequence< OUString > SAL_CALL Wizard::getSupportedServiceNames() throw(RuntimeException)
     {
-        return getSupportedServiceNames_static();
+        Sequence< OUString > aServices(1);
+        aServices[0] = "com.sun.star.ui.dialogs.Wizard";
+        return aServices;
     }
 
     //--------------------------------------------------------------------
@@ -457,8 +495,21 @@ namespace svt { namespace uno
         return Wizard_Base::OGenericUnoDialog::execute();
     }
 
-//......................................................................................................................
-} } // namespace svt::uno
-//......................................................................................................................
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_svtools_uno_Wizard_get_implementation(
+        css::uno::XComponentContext *context,
+        uno_Sequence * arguments)
+{
+    assert(arguments != 0);
+    rtl::Reference<Wizard> x(new Wizard(context));
+    css::uno::Sequence<css::uno::Any> aArgs(
+            reinterpret_cast<css::uno::Any *>(arguments->elements),
+            arguments->nElements);
+    x->initialize(aArgs);
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
