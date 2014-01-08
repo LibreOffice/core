@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1abeadc6_13044c7d",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1027,
+      "author": {
+        "id": 1000572
+      },
+      "writtenOn": "2014-01-08T07:56:25Z",
+      "side": 1,
+      "message": "Hi, \nThanks for the review comments. \nI have made the necessary changes and new patch is available.\nI could not understand one point:- \"Probably \"PAGEREF \" is not valid.\" \nIt would be great if you could elaborate it. Thanks :)",
+      "parentUuid": "1abeadc6_b36478e6",
+      "range": {
+        "startLine": 1027,
+        "startChar": 24,
+        "endLine": 1027,
+        "endChar": 26
+      },
+      "revId": "3b9156b2f1fc47765b16ee8149d98b2401430e32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1abeadc6_d361f4d4",
         "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
         "patchSetId": 2
