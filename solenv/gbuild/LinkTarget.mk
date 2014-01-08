@@ -448,6 +448,10 @@ define gb_LinkTarget_set_ldflags
 $(call gb_LinkTarget_get_target,$(1)) : LDFLAGS := $(2)
 endef
 
+define gb_LinkTarget_add_ldflags
+$(call gb_LinkTarget_get_target,$(1)) : LDFLAGS:=$$(LDFLAGS) $(2)
+endef
+
 define gb_LinkTarget_add_linked_libs
 ifneq (,$$(filter-out $(gb_Library_KNOWNLIBS),$(2)))
 $$(eval $$(call gb_Output_info,currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)),ALL))

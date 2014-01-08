@@ -310,11 +310,13 @@ my_components += \
 
 .IF "$(OS)" == "MACOSX"
 my_components += \
-    avmediaQuickTime \
     fps_aqua \
     macab1 \
     macbe1 \
     MacOSXSpell
+.IF "${MACOSX_DEPLOYMENT_TARGET:s/.//}"<"107"
+    my_components += avmediaQuickTime
+.END
 .END
 
 .IF "$(OS)" == "WNT"

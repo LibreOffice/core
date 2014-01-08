@@ -25,7 +25,8 @@ PRJ=..$/..
 PRJNAME=avmedia
 TARGET=avmediaQuickTime
 
-.IF "$(GUIBASE)"=="aqua"
+# the QuickTime API has been removed in OSX SDK 10.7
+.IF "$(GUIBASE)"=="aqua" && "${MACOSX_DEPLOYMENT_TARGET:s/.//}"<"107"
 
 # --- Settings ----------------------------------
 
@@ -43,10 +44,10 @@ SLOFILES= \
         $(SLO)$/quicktimeuno.obj  \
         $(SLO)$/manager.obj       \
         $(SLO)$/window.obj        \
-        $(SLO)$/framegrabber.obj        \
         $(SLO)$/player.obj
 
 EXCEPTIONSFILES= \
+        $(SLO)$/framegrabber.obj        \
         $(SLO)$/quicktimeuno.obj
 
 SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
@@ -87,3 +88,4 @@ $(MISC)/avmediaQuickTime.component .ERRREMOVE : \
     $(XSLTPROC) --nonet --stringparam uri \
         '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt avmediaQuickTime.component
+
