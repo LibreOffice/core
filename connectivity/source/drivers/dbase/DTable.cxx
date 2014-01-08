@@ -1206,16 +1206,16 @@ sal_Bool ODbaseTable::CreateFile(const INetURLObject& aFile, sal_Bool& bCreateMe
     memset(aBuffer,0,sizeof(aBuffer));
 
     m_pFileStream->Seek(0L);
-    (*m_pFileStream) << (sal_uInt8) nDbaseType;                              // dBase format
-    (*m_pFileStream) << (sal_uInt8) (aDate.GetYear() % 100);                 // current date
+    (*m_pFileStream).WriteUChar( (sal_uInt8) nDbaseType );                              // dBase format
+    (*m_pFileStream).WriteUChar( (sal_uInt8) (aDate.GetYear() % 100) );                 // current date
 
 
-    (*m_pFileStream) << (sal_uInt8) aDate.GetMonth();
-    (*m_pFileStream) << (sal_uInt8) aDate.GetDay();
-    (*m_pFileStream) << (sal_uInt32)0;                                             // number of data records
-    (*m_pFileStream) << (sal_uInt16)((m_pColumns->getCount()+1) * 32 + 1);  // header information,
+    (*m_pFileStream).WriteUChar( (sal_uInt8) aDate.GetMonth() );
+    (*m_pFileStream).WriteUChar( (sal_uInt8) aDate.GetDay() );
+    (*m_pFileStream).WriteUInt32( (sal_uInt32)0 );                                             // number of data records
+    (*m_pFileStream).WriteUInt16( (sal_uInt16)((m_pColumns->getCount()+1) * 32 + 1) );  // header information,
                                                                         // pColumns contains always an additional column
-    (*m_pFileStream) << (sal_uInt16) 0;                                     // record length will be determined later
+    (*m_pFileStream).WriteUInt16( (sal_uInt16) 0 );                                     // record length will be determined later
     m_pFileStream->Write(aBuffer, 20);
 
     sal_uInt16 nRecLength = 1;                                              // Length 1 for deleted flag
@@ -1243,7 +1243,7 @@ sal_Bool ODbaseTable::CreateFile(const INetURLObject& aFile, sal_Bool& bCreateMe
                 throwInvalidColumnType( STR_INVALID_COLUMN_NAME_LENGTH, aName );
             }
 
-            (*m_pFileStream) << aCol.getStr();
+            (*m_pFileStream).WriteCharPtr( aCol.getStr() );
             m_pFileStream->Write(aBuffer, 11 - aCol.getLength());
 
             sal_Int32 nPrecision = 0;
@@ -1297,9 +1297,9 @@ sal_Bool ODbaseTable::CreateFile(const INetURLObject& aFile, sal_Bool& bCreateMe
                     }
             }
 
-            (*m_pFileStream) << cTyp;
+            (*m_pFileStream).WriteChar( cTyp );
             if ( nDbaseType == VisualFoxPro )
-                (*m_pFileStream) << sal_uInt32(nRecLength-1);
+                (*m_pFileStream).WriteUInt32( sal_uInt32(nRecLength-1) );
             else
                 m_pFileStream->Write(aBuffer, 4);
 
@@ -1311,9 +1311,9 @@ sal_Bool ODbaseTable::CreateFile(const INetURLObject& aFile, sal_Bool& bCreateMe
                     {
                         throwInvalidColumnType(STR_INVALID_COLUMN_PRECISION, aName);
                     }
-                    (*m_pFileStream) << (sal_uInt8) std::min((unsigned)nPrecision, 255U);      // field length
+                    (*m_pFileStream).WriteUChar( (sal_uInt8) std::min((unsigned)nPrecision, 255U) );      // field length
                     nRecLength = nRecLength + (sal_uInt16)::std::min((sal_uInt16)nPrecision, (sal_uInt16)255UL);
-                    (*m_pFileStream) << (sal_uInt8)0;                                                                // decimals
+                    (*m_pFileStream).WriteUChar( (sal_uInt8)0 );                                                                // decimals
                     break;
                 case 'F':
                 case 'N':
@@ -1325,41 +1325,41 @@ sal_Bool ODbaseTable::CreateFile(const INetURLObject& aFile, sal_Bool& bCreateMe
                     }
                     if (getBOOL(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)))) // Currency will be treated separately
                     {
-                        (*m_pFileStream) << (sal_uInt8)10;          // standard length
-                        (*m_pFileStream) << (sal_uInt8)4;
+                        (*m_pFileStream).WriteUChar( (sal_uInt8)10 );          // standard length
+                        (*m_pFileStream).WriteUChar( (sal_uInt8)4 );
                         nRecLength += 10;
                     }
                     else
                     {
                         sal_Int32 nPrec = SvDbaseConverter::ConvertPrecisionToDbase(nPrecision,nScale);
 
-                        (*m_pFileStream) << (sal_uInt8)( nPrec);
-                        (*m_pFileStream) << (sal_uInt8)nScale;
+                        (*m_pFileStream).WriteUChar( (sal_uInt8)( nPrec) );
+                        (*m_pFileStream).WriteUChar( (sal_uInt8)nScale );
                         nRecLength += (sal_uInt16)nPrec;
                     }
                     break;
                 case 'L':
-                    (*m_pFileStream) << (sal_uInt8)1;
-                    (*m_pFileStream) << (sal_uInt8)0;
+                    (*m_pFileStream).WriteUChar( (sal_uInt8)1 );
+                    (*m_pFileStream).WriteUChar( (sal_uInt8)0 );
                     ++nRecLength;
                     break;
                 case 'I':
-                    (*m_pFileStream) << (sal_uInt8)4;
-                    (*m_pFileStream) << (sal_uInt8)0;
+                    (*m_pFileStream).WriteUChar( (sal_uInt8)4 );
+                    (*m_pFileStream).WriteUChar( (sal_uInt8)0 );
                     nRecLength += 4;
                     break;
                 case 'Y':
                 case 'B':
                 case 'T':
                 case 'D':
-                    (*m_pFileStream) << (sal_uInt8)8;
-                    (*m_pFileStream) << (sal_uInt8)0;
+                    (*m_pFileStream).WriteUChar( (sal_uInt8)8 );
+                    (*m_pFileStream).WriteUChar( (sal_uInt8)0 );
                     nRecLength += 8;
                     break;
                 case 'M':
                     bCreateMemo = sal_True;
-                    (*m_pFileStream) << (sal_uInt8)10;
-                    (*m_pFileStream) << (sal_uInt8)0;
+                    (*m_pFileStream).WriteUChar( (sal_uInt8)10 );
+                    (*m_pFileStream).WriteUChar( (sal_uInt8)0 );
                     nRecLength += 10;
                     if ( bBinary )
                         aBuffer[0] = 0x06;
@@ -1371,18 +1371,18 @@ sal_Bool ODbaseTable::CreateFile(const INetURLObject& aFile, sal_Bool& bCreateMe
             aBuffer[0] = 0x00;
         }
 
-        (*m_pFileStream) << (sal_uInt8)FIELD_DESCRIPTOR_TERMINATOR;              // end of header
-        (*m_pFileStream) << (char)DBF_EOL;
+        (*m_pFileStream).WriteUChar( (sal_uInt8)FIELD_DESCRIPTOR_TERMINATOR );              // end of header
+        (*m_pFileStream).WriteChar( (char)DBF_EOL );
         m_pFileStream->Seek(10L);
-        (*m_pFileStream) << nRecLength;                                     // set record length afterwards
+        (*m_pFileStream).WriteUInt16( nRecLength );                                     // set record length afterwards
 
         if (bCreateMemo)
         {
             m_pFileStream->Seek(0L);
             if (nDbaseType == VisualFoxPro)
-                (*m_pFileStream) << (sal_uInt8) FoxProMemo;
+                (*m_pFileStream).WriteUChar( (sal_uInt8) FoxProMemo );
             else
-                (*m_pFileStream) << (sal_uInt8) dBaseIIIMemo;
+                (*m_pFileStream).WriteUChar( (sal_uInt8) dBaseIIIMemo );
         } // if (bCreateMemo)
     }
     catch ( const Exception& e )
@@ -1414,7 +1414,7 @@ sal_Bool ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
     m_pMemoStream->SetStreamSize(512);
 
     m_pMemoStream->Seek(0L);
-    (*m_pMemoStream) << sal_uInt32(1);                  // pointer to the first free block
+    (*m_pMemoStream).WriteUInt32( sal_uInt32(1) );                  // pointer to the first free block
 
     m_pMemoStream->Flush();
     delete m_pMemoStream;
@@ -1526,10 +1526,10 @@ sal_Bool ODbaseTable::InsertRow(OValueRefVector& rRow, sal_Bool bFlush,const Ref
         }
         else
         {
-            (*m_pFileStream) << (char)DBF_EOL; // write EOL
+            (*m_pFileStream).WriteChar( (char)DBF_EOL ); // write EOL
             // raise number of datasets in the header:
             m_pFileStream->Seek( 4L );
-            (*m_pFileStream) << (m_aHeader.db_anz + 1);
+            (*m_pFileStream).WriteUInt32( m_aHeader.db_anz + 1 );
 
             // if AppendOnly no flush!
             if (bFlush)
@@ -1626,7 +1626,7 @@ sal_Bool ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
     }
 
     m_pFileStream->Seek(nFilePos);
-    (*m_pFileStream) << (sal_uInt8)'*'; // mark the row in the table as deleted
+    (*m_pFileStream).WriteUChar( (sal_uInt8)'*' ); // mark the row in the table as deleted
     m_pFileStream->Flush();
     return sal_True;
 }
@@ -2081,33 +2081,33 @@ sal_Bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, sal_uIntPtr& rBlo
             const char cEOF = (char) DBF_EOL;
             nSize++;
             m_pMemoStream->Write( aStr.getStr(), aStr.getLength() );
-            (*m_pMemoStream) << cEOF << cEOF;
+            (*m_pMemoStream).WriteChar( cEOF ).WriteChar( cEOF );
         } break;
         case MemoFoxPro:
         case MemodBaseIV: // dBase IV-Memofeld with length
         {
             if ( MemodBaseIV == m_aMemoHeader.db_typ )
-                (*m_pMemoStream) << (sal_uInt8)0xFF
-                                 << (sal_uInt8)0xFF
-                                 << (sal_uInt8)0x08;
+                (*m_pMemoStream).WriteUChar( (sal_uInt8)0xFF )
+                                .WriteUChar( (sal_uInt8)0xFF )
+                                .WriteUChar( (sal_uInt8)0x08 );
             else
-                (*m_pMemoStream) << (sal_uInt8)0x00
-                                 << (sal_uInt8)0x00
-                                 << (sal_uInt8)0x00;
+                (*m_pMemoStream).WriteUChar( (sal_uInt8)0x00 )
+                                .WriteUChar( (sal_uInt8)0x00 )
+                                .WriteUChar( (sal_uInt8)0x00 );
 
             sal_uInt32 nWriteSize = nSize;
             if (m_aMemoHeader.db_typ == MemoFoxPro)
             {
                 if ( bBinary )
-                    (*m_pMemoStream) << (sal_uInt8) 0x00; // Picture
+                    (*m_pMemoStream).WriteUChar( (sal_uInt8) 0x00 ); // Picture
                 else
-                    (*m_pMemoStream) << (sal_uInt8) 0x01; // Memo
+                    (*m_pMemoStream).WriteUChar( (sal_uInt8) 0x01 ); // Memo
                 for (int i = 4; i > 0; nWriteSize >>= 8)
                     nHeader[--i] = (sal_uInt8) (nWriteSize % 256);
             }
             else
             {
-                (*m_pMemoStream) << (sal_uInt8) 0x00;
+                (*m_pMemoStream).WriteUChar( (sal_uInt8) 0x00 );
                 nWriteSize += 8;
                 for (int i = 0; i < 4; nWriteSize >>= 8)
                     nHeader[i++] = (sal_uInt8) (nWriteSize % 256);
@@ -2131,7 +2131,7 @@ sal_Bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, sal_uIntPtr& rBlo
 
         // Write the new block number
         m_pMemoStream->Seek(0L);
-        (*m_pMemoStream) << m_aMemoHeader.db_next;
+        (*m_pMemoStream).WriteUInt32( m_aMemoHeader.db_next );
         m_pMemoStream->Flush();
     }
     return sal_True;

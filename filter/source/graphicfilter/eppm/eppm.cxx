@@ -120,16 +120,16 @@ sal_Bool PPMWriter::ImplWriteHeader()
     if ( mnWidth && mnHeight )
     {
         if ( mnMode == 0 )
-            m_rOStm << "P6\x0a";
+            m_rOStm.WriteCharPtr( "P6\x0a" );
         else
-            m_rOStm << "P3\x0a";
+            m_rOStm.WriteCharPtr( "P3\x0a" );
 
         ImplWriteNumber( mnWidth );
-        m_rOStm << (sal_uInt8)32;
+        m_rOStm.WriteUChar( (sal_uInt8)32 );
         ImplWriteNumber( mnHeight );
-        m_rOStm << (sal_uInt8)32;
+        m_rOStm.WriteUChar( (sal_uInt8)32 );
         ImplWriteNumber( 255 );         // max. col.
-        m_rOStm << (sal_uInt8)10;
+        m_rOStm.WriteUChar( (sal_uInt8)10 );
     }
     else
         mbStatus = sal_False;
@@ -148,9 +148,9 @@ void PPMWriter::ImplWriteBody()
             for ( sal_uLong x = 0; x < mnWidth; x++ )
             {
                 const BitmapColor& rColor = mpAcc->GetPixel( y, x );
-                m_rOStm << rColor.GetRed();
-                m_rOStm << rColor.GetGreen();
-                m_rOStm << rColor.GetBlue();
+                m_rOStm.WriteUChar( rColor.GetRed() );
+                m_rOStm.WriteUChar( rColor.GetGreen() );
+                m_rOStm.WriteUChar( rColor.GetBlue() );
             }
         }
     }
@@ -165,7 +165,7 @@ void PPMWriter::ImplWriteBody()
                 if ( nCount < 0 )
                 {
                     nCount = 69;
-                    m_rOStm << (sal_uInt8)10;
+                    m_rOStm.WriteUChar( (sal_uInt8)10 );
                 }
                 nDat[0] = mpAcc->GetPixel( y, x ).GetRed();
                 nDat[1] = mpAcc->GetPixel( y, x ).GetGreen();
@@ -175,12 +175,12 @@ void PPMWriter::ImplWriteBody()
                     nNumb = nDat[ i ] / 100;
                     if ( nNumb )
                     {
-                        m_rOStm << (sal_uInt8)( nNumb + '0' );
+                        m_rOStm.WriteUChar( (sal_uInt8)( nNumb + '0' ) );
                         nDat[ i ] -= ( nNumb * 100 );
                         nNumb = nDat[ i ] / 10;
-                        m_rOStm << (sal_uInt8)( nNumb + '0' );
+                        m_rOStm.WriteUChar( (sal_uInt8)( nNumb + '0' ) );
                         nDat[ i ] -= ( nNumb * 10 );
-                        m_rOStm << (sal_uInt8)( nDat[ i ] + '0' );
+                        m_rOStm.WriteUChar( (sal_uInt8)( nDat[ i ] + '0' ) );
                         nCount -= 4;
                     }
                     else
@@ -188,21 +188,21 @@ void PPMWriter::ImplWriteBody()
                         nNumb = nDat[ i ] / 10;
                         if ( nNumb )
                         {
-                            m_rOStm << (sal_uInt8)( nNumb + '0' );
+                            m_rOStm.WriteUChar( (sal_uInt8)( nNumb + '0' ) );
                             nDat[ i ] -= ( nNumb * 10 );
-                            m_rOStm << (sal_uInt8)( nDat[ i ] + '0' );
+                            m_rOStm.WriteUChar( (sal_uInt8)( nDat[ i ] + '0' ) );
                             nCount -= 3;
                         }
                         else
                         {
-                            m_rOStm << (sal_uInt8)( nDat[ i ] + '0' );
+                            m_rOStm.WriteUChar( (sal_uInt8)( nDat[ i ] + '0' ) );
                             nCount -= 2;
                         }
                     }
-                    m_rOStm << (sal_uInt8)' ';
+                    m_rOStm.WriteUChar( (sal_uInt8)' ' );
                 }
             }
-            m_rOStm << (sal_uInt8)10;
+            m_rOStm.WriteUChar( (sal_uInt8)10 );
         }
     }
 }
@@ -213,7 +213,7 @@ void PPMWriter::ImplWriteBody()
 void PPMWriter::ImplWriteNumber(sal_Int32 nNumber)
 {
     const OString aNum(OString::number(nNumber));
-    m_rOStm << aNum.getStr();
+    m_rOStm.WriteCharPtr( aNum.getStr() );
 }
 
 // ------------------------------------------------------------------------

@@ -688,7 +688,7 @@ void SbiStream::ExpandFile()
             char c = 0;
             while( nDiff-- )
             {
-                *pStrm << c;
+                pStrm->WriteChar( c );
             }
         }
         else

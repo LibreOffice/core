@@ -161,10 +161,11 @@ SvStream& operator<<( SvStream& rOStm, const ImplWallpaper& rImplWallpaper )
     sal_Bool            bDummy = sal_False;
 
     // version 1
-    rOStm << rImplWallpaper.maColor << (sal_uInt16) rImplWallpaper.meStyle;
+    rOStm << rImplWallpaper.maColor;
+    rOStm.WriteUInt16( (sal_uInt16) rImplWallpaper.meStyle );
 
     // version 2
-    rOStm << bRect << bGrad << bBmp << bDummy << bDummy << bDummy;
+    rOStm.WriteUChar( bRect ).WriteUChar( bGrad ).WriteUChar( bBmp ).WriteUChar( bDummy ).WriteUChar( bDummy ).WriteUChar( bDummy );
 
     if( bRect )
         rOStm << *rImplWallpaper.mpRect;

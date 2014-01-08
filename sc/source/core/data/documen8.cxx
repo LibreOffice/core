@@ -768,7 +768,7 @@ void ScDocument::SaveDdeLinks(SvStream& rStream) const
     //  Header
 
     ScMultipleWriteHeader aHdr( rStream );
-    rStream << nDdeCount;
+    rStream.WriteUInt16( nDdeCount );
 
     //  Links speichern
 

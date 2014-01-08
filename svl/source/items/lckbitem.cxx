@@ -105,8 +105,8 @@ SvStream& SfxLockBytesItem::Store(SvStream &rStream, sal_uInt16 ) const
     sal_uInt32 nSize = aLockBytesStream.Seek( STREAM_SEEK_TO_END );
     aLockBytesStream.Seek( 0L );
 
-    rStream << nSize;
-    rStream << aLockBytesStream;
+    rStream.WriteUInt32( nSize );
+    rStream.WriteStream( aLockBytesStream );
 
     return rStream;
 }

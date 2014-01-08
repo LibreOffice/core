@@ -713,31 +713,31 @@ SvStream& operator<<( SvStream& rOStm, const Impl_Font& rImpl_Font )
     rOStm.WriteUniOrByteString( rImpl_Font.maStyleName, rOStm.GetStreamCharSet() );
     rOStm << rImpl_Font.maSize;
 
-    rOStm << (sal_uInt16) GetStoreCharSet( rImpl_Font.meCharSet );
-    rOStm << (sal_uInt16) rImpl_Font.meFamily;
-    rOStm << (sal_uInt16) rImpl_Font.mePitch;
-    rOStm << (sal_uInt16) rImpl_Font.meWeight;
-    rOStm << (sal_uInt16) rImpl_Font.meUnderline;
-    rOStm << (sal_uInt16) rImpl_Font.meStrikeout;
-    rOStm << (sal_uInt16) rImpl_Font.meItalic;
-    rOStm << (sal_uInt16) rImpl_Font.maLanguageTag.getLanguageType( false);
-    rOStm << (sal_uInt16) rImpl_Font.meWidthType;
+    rOStm.WriteUInt16( (sal_uInt16) GetStoreCharSet( rImpl_Font.meCharSet ) );
+    rOStm.WriteUInt16( (sal_uInt16) rImpl_Font.meFamily );
+    rOStm.WriteUInt16( (sal_uInt16) rImpl_Font.mePitch );
+    rOStm.WriteUInt16( (sal_uInt16) rImpl_Font.meWeight );
+    rOStm.WriteUInt16( (sal_uInt16) rImpl_Font.meUnderline );
+    rOStm.WriteUInt16( (sal_uInt16) rImpl_Font.meStrikeout );
+    rOStm.WriteUInt16( (sal_uInt16) rImpl_Font.meItalic );
+    rOStm.WriteUInt16( (sal_uInt16) rImpl_Font.maLanguageTag.getLanguageType( false) );
+    rOStm.WriteUInt16( (sal_uInt16) rImpl_Font.meWidthType );
 
-    rOStm << rImpl_Font.mnOrientation;
+    rOStm.WriteInt16( rImpl_Font.mnOrientation );
 
-    rOStm << (sal_Bool) rImpl_Font.mbWordLine;
-    rOStm << (sal_Bool) rImpl_Font.mbOutline;
-    rOStm << (sal_Bool) rImpl_Font.mbShadow;
-    rOStm << (sal_uInt8) rImpl_Font.mnKerning;
+    rOStm.WriteUChar( (sal_Bool) rImpl_Font.mbWordLine );
+    rOStm.WriteUChar( (sal_Bool) rImpl_Font.mbOutline );
+    rOStm.WriteUChar( (sal_Bool) rImpl_Font.mbShadow );
+    rOStm.WriteUChar( (sal_uInt8) rImpl_Font.mnKerning );
 
     // new in version 2
-    rOStm << (sal_uInt8)        rImpl_Font.meRelief;
-    rOStm << (sal_uInt16)   rImpl_Font.maCJKLanguageTag.getLanguageType( false);
-    rOStm << (sal_Bool)     rImpl_Font.mbVertical;
-    rOStm << (sal_uInt16)   rImpl_Font.meEmphasisMark;
+    rOStm.WriteUChar( (sal_uInt8)        rImpl_Font.meRelief );
+    rOStm.WriteUInt16( (sal_uInt16)   rImpl_Font.maCJKLanguageTag.getLanguageType( false) );
+    rOStm.WriteUChar( (sal_Bool)     rImpl_Font.mbVertical );
+    rOStm.WriteUInt16( (sal_uInt16)   rImpl_Font.meEmphasisMark );
 
     // new in version 3
-    rOStm << (sal_uInt16) rImpl_Font.meOverline;
+    rOStm.WriteUInt16( (sal_uInt16) rImpl_Font.meOverline );
 
     return rOStm;
 }

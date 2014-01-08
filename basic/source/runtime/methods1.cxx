@@ -993,9 +993,9 @@ static sal_Bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
     case SbxBYTE:
         if( bIsVariant )
         {
-            *pStrm << (sal_uInt16)SbxBYTE; // VarType Id
+            pStrm->WriteUInt16( (sal_uInt16)SbxBYTE ); // VarType Id
         }
-        *pStrm << rVar.GetByte();
+        pStrm->WriteUChar( rVar.GetByte() );
         break;
 
     case SbxEMPTY:
@@ -1007,33 +1007,33 @@ static sal_Bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
     case SbxUINT:
         if( bIsVariant )
         {
-            *pStrm << (sal_uInt16)SbxINTEGER; // VarType Id
+            pStrm->WriteUInt16( (sal_uInt16)SbxINTEGER ); // VarType Id
         }
-        *pStrm << rVar.GetInteger();
+        pStrm->WriteInt16( rVar.GetInteger() );
         break;
 
     case SbxLONG:
     case SbxULONG:
         if( bIsVariant )
         {
-            *pStrm << (sal_uInt16)SbxLONG; // VarType Id
+            pStrm->WriteUInt16( (sal_uInt16)SbxLONG ); // VarType Id
         }
-        *pStrm << rVar.GetLong();
+        pStrm->WriteInt32( rVar.GetLong() );
         break;
     case SbxSALINT64:
     case SbxSALUINT64:
         if( bIsVariant )
         {
-            *pStrm << (sal_uInt16)SbxSALINT64; // VarType Id
+            pStrm->WriteUInt16( (sal_uInt16)SbxSALINT64 ); // VarType Id
         }
-        *pStrm << (sal_uInt64)rVar.GetInt64();
+        pStrm->WriteUInt64( (sal_uInt64)rVar.GetInt64() );
         break;
     case SbxSINGLE:
         if( bIsVariant )
         {
-            *pStrm << (sal_uInt16)eType; // VarType Id
+            pStrm->WriteUInt16( (sal_uInt16)eType ); // VarType Id
         }
-        *pStrm << rVar.GetSingle();
+        pStrm->WriteFloat( rVar.GetSingle() );
         break;
 
     case SbxDOUBLE:
@@ -1041,7 +1041,7 @@ static sal_Bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
     case SbxDATE:
         if( bIsVariant )
         {
-            *pStrm << (sal_uInt16)eType; // VarType Id
+            pStrm->WriteUInt16( (sal_uInt16)eType ); // VarType Id
         }
         *pStrm << rVar.GetDouble();
         break;
@@ -1054,7 +1054,7 @@ static sal_Bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
             {
                 if( bIsVariant )
                 {
-                    *pStrm << (sal_uInt16)SbxSTRING;
+                    pStrm->WriteUInt16( (sal_uInt16)SbxSTRING );
                 }
                 pStrm->WriteUniOrByteString( rStr, osl_getThreadTextEncoding() );
             }
@@ -1063,7 +1063,7 @@ static sal_Bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
                 // without any length information! without end-identifier!
                 // What does that mean for Unicode?! Choosing conversion to ByteString...
                 OString aByteStr(OUStringToOString(rStr, osl_getThreadTextEncoding()));
-                *pStrm << (const char*)aByteStr.getStr();
+                pStrm->WriteCharPtr( (const char*)aByteStr.getStr() );
             }
         }
         break;

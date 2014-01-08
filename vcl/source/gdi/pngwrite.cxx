@@ -238,8 +238,8 @@ sal_Bool PNGWriterImpl::Write( SvStream& rOStm )
    /* png signature is always an array of 8 bytes */
     sal_uInt16 nOldMode = rOStm.GetNumberFormatInt();
     rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
-    rOStm << static_cast<sal_uInt32>(0x89504e47);
-    rOStm << static_cast<sal_uInt32>(0x0d0a1a0a);
+    rOStm.WriteUInt32( static_cast<sal_uInt32>(0x89504e47) );
+    rOStm.WriteUInt32( static_cast<sal_uInt32>(0x0d0a1a0a) );
 
     std::vector< vcl::PNGWriter::ChunkData >::iterator aBeg( maChunkSeq.begin() );
     std::vector< vcl::PNGWriter::ChunkData >::iterator aEnd( maChunkSeq.end() );
@@ -253,11 +253,11 @@ sal_Bool PNGWriterImpl::Write( SvStream& rOStm )
         sal_uInt32 nDataSize = aBeg->aData.size();
         if ( nDataSize )
             nCRC = rtl_crc32( nCRC, &aBeg->aData[ 0 ], nDataSize );
-        rOStm << nDataSize
-              << aBeg->nType;
+        rOStm.WriteUInt32( nDataSize )
+             .WriteUInt32( aBeg->nType );
         if ( nDataSize )
             rOStm.Write( &aBeg->aData[ 0 ], nDataSize );
-        rOStm << nCRC;
+        rOStm.WriteUInt32( nCRC );
         ++aBeg;
     }
     rOStm.SetNumberFormatInt( nOldMode );

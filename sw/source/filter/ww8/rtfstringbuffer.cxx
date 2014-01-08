@@ -26,7 +26,7 @@ RtfStringBufferValue::RtfStringBufferValue(const SwFlyFrmFmt* pFlyFrmFmt, const 
 void RtfStringBufferValue::makeStringAndClear(RtfAttributeOutput* pAttributeOutput)
 {
     if (!isGraphic())
-        pAttributeOutput->m_rExport.Strm() << m_aBuffer.makeStringAndClear().getStr();
+        pAttributeOutput->m_rExport.Strm().WriteCharPtr( m_aBuffer.makeStringAndClear().getStr() );
     else
         pAttributeOutput->FlyFrameGraphic(m_pFlyFrmFmt, m_pGrfNode);
 }

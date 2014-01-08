@@ -96,7 +96,7 @@ SfxPoolItem * CntByteItem::Create(SvStream & rStream, sal_uInt16) const
 SvStream & CntByteItem::Store(SvStream & rStream, sal_uInt16) const
 {
     DBG_CHKTHIS(CntByteItem, 0);
-    rStream << short(m_nValue);
+    rStream.WriteInt16( short(m_nValue) );
     return rStream;
 }
 
@@ -215,7 +215,7 @@ SfxPoolItem * CntUInt16Item::Create(SvStream & rStream, sal_uInt16) const
 SvStream & CntUInt16Item::Store(SvStream &rStream, sal_uInt16) const
 {
     DBG_CHKTHIS(CntUInt16Item, 0);
-    rStream << sal_uInt16(m_nValue);
+    rStream.WriteUInt16( sal_uInt16(m_nValue) );
     return rStream;
 }
 
@@ -331,7 +331,7 @@ SvStream & CntInt32Item::Store(SvStream &rStream, sal_uInt16) const
 {
     DBG_CHKTHIS(CntInt32Item, 0);
     //fdo#39428 SvStream no longer supports operator<<(long)
-    rStream << m_nValue;
+    rStream.WriteInt32( m_nValue );
     return rStream;
 }
 
@@ -451,7 +451,7 @@ SfxPoolItem * CntUInt32Item::Create(SvStream & rStream, sal_uInt16) const
 SvStream & CntUInt32Item::Store(SvStream &rStream, sal_uInt16) const
 {
     DBG_CHKTHIS(CntUInt32Item, 0);
-    rStream << static_cast<sal_uInt32>(m_nValue);
+    rStream.WriteUInt32( static_cast<sal_uInt32>(m_nValue) );
     return rStream;
 }
 

@@ -124,7 +124,7 @@ SfxPoolItem* NameOrIndex::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
 SvStream& NameOrIndex::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 {
     SfxStringItem::Store( rOut, nItemVersion );
-    rOut << nPalIndex;
+    rOut.WriteInt32( nPalIndex );
     return rOut;
 }
 
@@ -720,12 +720,12 @@ SvStream& XLineDashItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 
     if (!IsIndex())
     {
-        rOut << (sal_Int32) aDash.GetDashStyle();
-        rOut << aDash.GetDots();
-        rOut << (sal_uInt32) aDash.GetDotLen();
-        rOut << aDash.GetDashes();
-        rOut << (sal_uInt32) aDash.GetDashLen();
-        rOut << (sal_uInt32) aDash.GetDistance();
+        rOut.WriteInt32( (sal_Int32) aDash.GetDashStyle() );
+        rOut.WriteUInt16( aDash.GetDots() );
+        rOut.WriteUInt32( (sal_uInt32) aDash.GetDotLen() );
+        rOut.WriteUInt16( aDash.GetDashes() );
+        rOut.WriteUInt32( (sal_uInt32) aDash.GetDashLen() );
+        rOut.WriteUInt32( (sal_uInt32) aDash.GetDistance() );
     }
 
     return rOut;
@@ -1183,7 +1183,7 @@ namespace
     void streamOutB2DPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon, SvStream& rOut)
     {
         const sal_uInt32 nPolygonCount(rPolyPolygon.count());
-        rOut << nPolygonCount;
+        rOut.WriteUInt32( nPolygonCount );
 
         for(sal_uInt32 a(0L); a < nPolygonCount; a++)
         {
@@ -1191,9 +1191,9 @@ namespace
             const sal_uInt32 nPointCount(aCandidate.count());
             const sal_uInt8 bClosed(aCandidate.isClosed() ? 1 : 0);
             const sal_uInt8 bControlPoints(aCandidate.areControlPointsUsed() ? 1 : 0);
-            rOut << nPointCount;
-            rOut << bClosed;
-            rOut << bControlPoints;
+            rOut.WriteUInt32( nPointCount );
+            rOut.WriteUChar( bClosed );
+            rOut.WriteUChar( bControlPoints );
 
             for(sal_uInt32 b(0L); b < nPointCount; b++)
             {
@@ -1204,7 +1204,7 @@ namespace
                 if(bControlPoints)
                 {
                     const sal_uInt8 bEdgeIsCurve(aCandidate.isPrevControlPointUsed(b) || aCandidate.isNextControlPointUsed(b) ? 1 : 0);
-                    rOut << bEdgeIsCurve;
+                    rOut.WriteUChar( bEdgeIsCurve );
 
                     if(bEdgeIsCurve)
                     {
@@ -2626,24 +2626,24 @@ SvStream& XFillGradientItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) co
 
     if (!IsIndex())
     {
-        rOut << (sal_Int16)aGradient.GetGradientStyle();
+        rOut.WriteInt16( (sal_Int16)aGradient.GetGradientStyle() );
 
         sal_uInt16 nTmp;
 
-        nTmp = VCLTOSVCOL( aGradient.GetStartColor().GetRed() ); rOut << nTmp;
-        nTmp = VCLTOSVCOL( aGradient.GetStartColor().GetGreen() ); rOut << nTmp;
-        nTmp = VCLTOSVCOL( aGradient.GetStartColor().GetBlue() ); rOut << nTmp;
-        nTmp = VCLTOSVCOL( aGradient.GetEndColor().GetRed() ); rOut << nTmp;
-        nTmp = VCLTOSVCOL( aGradient.GetEndColor().GetGreen() ); rOut << nTmp;
-        nTmp = VCLTOSVCOL( aGradient.GetEndColor().GetBlue() ); rOut << nTmp;
+        nTmp = VCLTOSVCOL( aGradient.GetStartColor().GetRed() ); rOut.WriteUInt16( nTmp );
+        nTmp = VCLTOSVCOL( aGradient.GetStartColor().GetGreen() ); rOut.WriteUInt16( nTmp );
+        nTmp = VCLTOSVCOL( aGradient.GetStartColor().GetBlue() ); rOut.WriteUInt16( nTmp );
+        nTmp = VCLTOSVCOL( aGradient.GetEndColor().GetRed() ); rOut.WriteUInt16( nTmp );
+        nTmp = VCLTOSVCOL( aGradient.GetEndColor().GetGreen() ); rOut.WriteUInt16( nTmp );
+        nTmp = VCLTOSVCOL( aGradient.GetEndColor().GetBlue() ); rOut.WriteUInt16( nTmp );
 
-        rOut << (sal_Int32) aGradient.GetAngle();
-        rOut << aGradient.GetBorder();
-        rOut << aGradient.GetXOffset();
-        rOut << aGradient.GetYOffset();
-        rOut << aGradient.GetStartIntens();
-        rOut << aGradient.GetEndIntens();
-        rOut << aGradient.GetSteps();
+        rOut.WriteInt32( (sal_Int32) aGradient.GetAngle() );
+        rOut.WriteUInt16( aGradient.GetBorder() );
+        rOut.WriteUInt16( aGradient.GetXOffset() );
+        rOut.WriteUInt16( aGradient.GetYOffset() );
+        rOut.WriteUInt16( aGradient.GetStartIntens() );
+        rOut.WriteUInt16( aGradient.GetEndIntens() );
+        rOut.WriteUInt16( aGradient.GetSteps() );
     }
 
     return rOut;
@@ -3127,15 +3127,15 @@ SvStream& XFillHatchItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 
     if (!IsIndex())
     {
-        rOut << (sal_Int16)aHatch.GetHatchStyle();
+        rOut.WriteInt16( (sal_Int16)aHatch.GetHatchStyle() );
 
         sal_uInt16 nTmp;
-        nTmp = VCLTOSVCOL( aHatch.GetColor().GetRed() ); rOut << nTmp;
-        nTmp = VCLTOSVCOL( aHatch.GetColor().GetGreen() ); rOut << nTmp;
-        nTmp = VCLTOSVCOL( aHatch.GetColor().GetBlue() ); rOut << nTmp;
+        nTmp = VCLTOSVCOL( aHatch.GetColor().GetRed() ); rOut.WriteUInt16( nTmp );
+        nTmp = VCLTOSVCOL( aHatch.GetColor().GetGreen() ); rOut.WriteUInt16( nTmp );
+        nTmp = VCLTOSVCOL( aHatch.GetColor().GetBlue() ); rOut.WriteUInt16( nTmp );
 
-        rOut << (sal_Int32) aHatch.GetDistance();
-        rOut << (sal_Int32) aHatch.GetAngle();
+        rOut.WriteInt32( (sal_Int32) aHatch.GetDistance() );
+        rOut.WriteInt32( (sal_Int32) aHatch.GetAngle() );
     }
 
     return rOut;

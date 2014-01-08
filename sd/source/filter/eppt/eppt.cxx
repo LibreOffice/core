@@ -168,12 +168,12 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
     mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_Slide | nPageNum, mpStrm->Tell() );
     mpPptEscherEx->OpenContainer( EPP_Slide );
     mpPptEscherEx->AddAtom( 24, EPP_SlideAtom, 2 );
-    *mpStrm << rLayout.nLayout;
+    mpStrm->WriteInt32( rLayout.nLayout );
     mpStrm->Write( rLayout.nPlaceHolder, 8 );       // placeholderIDs (8 parts)
-    *mpStrm << (sal_uInt32)(nMasterNum | 0x80000000)// master ID (equals 0x80000000 on a master page)
-            << (sal_uInt32)nPageNum + 0x100         // notes ID (equals null if no notes are present)
-            << nMode
-            << (sal_uInt16)0;                       // padword
+    mpStrm->WriteUInt32( (sal_uInt32)(nMasterNum | 0x80000000) )// master ID (equals 0x80000000 on a master page)
+           .WriteUInt32( (sal_uInt32)nPageNum + 0x100 )         // notes ID (equals null if no notes are present)
+           .WriteUInt16( nMode )
+           .WriteUInt16( (sal_uInt16)0 );                       // padword
 
     mnDiaMode = 0;
     sal_Bool bVisible = sal_True;
@@ -262,13 +262,13 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
             nSlideTime = *(sal_Int32*)aAny.getValue() << 10;        // in ticks
 
         mpPptEscherEx->AddAtom( 16, EPP_SSSlideInfoAtom );
-        *mpStrm << nSlideTime       // standtime in ticks
-                << nSoundRef
-                << nDirection
-                << nTransitionType
-                << nBuildFlags
-                << nSpeed
-                << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0;
+        mpStrm->WriteInt32( nSlideTime )       // standtime in ticks
+               .WriteUInt32( nSoundRef )
+               .WriteUChar( nDirection )
+               .WriteUChar( nTransitionType )
+               .WriteUInt16( nBuildFlags )
+               .WriteUChar( nSpeed )
+               .WriteUChar( (sal_uInt8)0 ).WriteUChar( (sal_uInt8)0 ).WriteUChar( (sal_uInt8)0 );
     }
 
     ImplCreateHeaderFooters( mXPagePropSet );
@@ -302,7 +302,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
     mpPptEscherEx->CloseContainer();    // ESCHER_DgContainer
     mpPptEscherEx->CloseContainer();    // EPP_Drawing
     mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 1 );
-    *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0x99cc00 << (sal_uInt32)0xcc3333 << (sal_uInt32)0xffcccc << (sal_uInt32)0xb2b2b2;
+    mpStrm->WriteUInt32( (sal_uInt32)0xffffff ).WriteUInt32( (sal_uInt32)0x000000 ).WriteUInt32( (sal_uInt32)0x808080 ).WriteUInt32( (sal_uInt32)0x000000 ).WriteUInt32( (sal_uInt32)0x99cc00 ).WriteUInt32( (sal_uInt32)0xcc3333 ).WriteUInt32( (sal_uInt32)0xffcccc ).WriteUInt32( (sal_uInt32)0xb2b2b2 );
 
     SvMemoryStream aBinaryTagData10Atom;
     ImplExportComments( mXDrawPage, aBinaryTagData10Atom );
@@ -316,12 +316,12 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
         {
             {
                 EscherExAtom aMagic2( aBinaryTagData10Atom, 0x2eeb );
-                aBinaryTagData10Atom << (sal_uInt32)0x01c45df9
-                                     << (sal_uInt32)0xe1471b30;
+                aBinaryTagData10Atom.WriteUInt32( (sal_uInt32)0x01c45df9 )
+                                    .WriteUInt32( (sal_uInt32)0xe1471b30 );
             }
             {
                 EscherExAtom aMagic( aBinaryTagData10Atom, 0x2b00 );
-                aBinaryTagData10Atom << (sal_uInt32)0;
+                aBinaryTagData10Atom.WriteUInt32( (sal_uInt32)0 );
             }
             aBinaryTagData10Atom.Write( amsofbtAnimGroup.GetData(), amsofbtAnimGroup.Tell() );
             {
@@ -335,11 +335,11 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
         EscherExContainer aProgBinaryTag( *mpStrm, EPP_ProgBinaryTag );
         {
             EscherExAtom aCString( *mpStrm, EPP_CString );
-            *mpStrm << (sal_uInt32)0x5f005f
-                    << (sal_uInt32)0x50005f
-                    << (sal_uInt32)0x540050
-                    << (sal_uInt16)0x31
-                    << (sal_uInt16)0x30;
+            mpStrm->WriteUInt32( (sal_uInt32)0x5f005f )
+                   .WriteUInt32( (sal_uInt32)0x50005f )
+                   .WriteUInt32( (sal_uInt32)0x540050 )
+                   .WriteUInt16( (sal_uInt16)0x31 )
+                   .WriteUInt16( (sal_uInt16)0x30 );
         }
         {
             EscherExAtom aBinaryTagData( *mpStrm, EPP_BinaryTagData );
@@ -356,27 +356,27 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
     mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_MainMaster | nPageNum, mpStrm->Tell() );
     mpPptEscherEx->OpenContainer( EPP_MainMaster );
     mpPptEscherEx->AddAtom( 24, EPP_SlideAtom, 2 );
-    *mpStrm << (sal_Int32)EPP_LAYOUT_TITLEANDBODYSLIDE  // slide layout -> title and body slide
-            << (sal_uInt8)1 << (sal_uInt8)2 << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0     // placeholderID
-            << (sal_uInt32)0        // master ID (equals null at a master page)
-            << (sal_uInt32)0        // notes ID (equals null if no notes are present)
-            << (sal_uInt16)0        // Bit 1: Follow master objects, Bit 2: Follow master scheme, Bit 3: Follow master background
-            << (sal_uInt16)0;       // padword
+    mpStrm->WriteInt32( (sal_Int32)EPP_LAYOUT_TITLEANDBODYSLIDE )  // slide layout -> title and body slide
+           .WriteUChar( (sal_uInt8)1 ).WriteUChar( (sal_uInt8)2 ).WriteUChar( (sal_uInt8)0 ).WriteUChar( (sal_uInt8)0 ).WriteUChar( (sal_uInt8)0 ).WriteUChar( (sal_uInt8)0 ).WriteUChar( (sal_uInt8)0 ).WriteUChar( (sal_uInt8)0 )     // placeholderID
+           .WriteUInt32( (sal_uInt32)0 )        // master ID (equals null at a master page)
+           .WriteUInt32( (sal_uInt32)0 )        // notes ID (equals null if no notes are present)
+           .WriteUInt16( (sal_uInt16)0 )        // Bit 1: Follow master objects, Bit 2: Follow master scheme, Bit 3: Follow master background
+           .WriteUInt16( (sal_uInt16)0 );       // padword
 
     mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 6 );
-    *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0x99cc00 << (sal_uInt32)0xcc3333 << (sal_uInt32)0xffcccc << (sal_uInt32)0xb2b2b2;
+    mpStrm->WriteUInt32( (sal_uInt32)0xffffff ).WriteUInt32( (sal_uInt32)0x000000 ).WriteUInt32( (sal_uInt32)0x808080 ).WriteUInt32( (sal_uInt32)0x000000 ).WriteUInt32( (sal_uInt32)0x99cc00 ).WriteUInt32( (sal_uInt32)0xcc3333 ).WriteUInt32( (sal_uInt32)0xffcccc ).WriteUInt32( (sal_uInt32)0xb2b2b2 );
     mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 6 );
-    *mpStrm << (sal_uInt32)0xff0000 << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x00ffff << (sal_uInt32)0x0099ff << (sal_uInt32)0xffff00 << (sal_uInt32)0x0000ff << (sal_uInt32)0x969696;
+    mpStrm->WriteUInt32( (sal_uInt32)0xff0000 ).WriteUInt32( (sal_uInt32)0xffffff ).WriteUInt32( (sal_uInt32)0x000000 ).WriteUInt32( (sal_uInt32)0x00ffff ).WriteUInt32( (sal_uInt32)0x0099ff ).WriteUInt32( (sal_uInt32)0xffff00 ).WriteUInt32( (sal_uInt32)0x0000ff ).WriteUInt32( (sal_uInt32)0x969696 );
     mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 6 );
-    *mpStrm << (sal_uInt32)0xccffff << (sal_uInt32)0x000000 << (sal_uInt32)0x336666 << (sal_uInt32)0x008080 << (sal_uInt32)0x339933 << (sal_uInt32)0x000080 << (sal_uInt32)0xcc3300 << (sal_uInt32)0x66ccff;
+    mpStrm->WriteUInt32( (sal_uInt32)0xccffff ).WriteUInt32( (sal_uInt32)0x000000 ).WriteUInt32( (sal_uInt32)0x336666 ).WriteUInt32( (sal_uInt32)0x008080 ).WriteUInt32( (sal_uInt32)0x339933 ).WriteUInt32( (sal_uInt32)0x000080 ).WriteUInt32( (sal_uInt32)0xcc3300 ).WriteUInt32( (sal_uInt32)0x66ccff );
     mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 6 );
-    *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x333333 << (sal_uInt32)0x000000 << (sal_uInt32)0xdddddd << (sal_uInt32)0x808080 << (sal_uInt32)0x4d4d4d << (sal_uInt32)0xeaeaea;
+    mpStrm->WriteUInt32( (sal_uInt32)0xffffff ).WriteUInt32( (sal_uInt32)0x000000 ).WriteUInt32( (sal_uInt32)0x333333 ).WriteUInt32( (sal_uInt32)0x000000 ).WriteUInt32( (sal_uInt32)0xdddddd ).WriteUInt32( (sal_uInt32)0x808080 ).WriteUInt32( (sal_uInt32)0x4d4d4d ).WriteUInt32( (sal_uInt32)0xeaeaea );
     mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 6 );
-    *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0x66ccff << (sal_uInt32)0xff0000 << (sal_uInt32)0xcc00cc << (sal_uInt32)0xc0c0c0;
+    mpStrm->WriteUInt32( (sal_uInt32)0xffffff ).WriteUInt32( (sal_uInt32)0x000000 ).WriteUInt32( (sal_uInt32)0x808080 ).WriteUInt32( (sal_uInt32)0x000000 ).WriteUInt32( (sal_uInt32)0x66ccff ).WriteUInt32( (sal_uInt32)0xff0000 ).WriteUInt32( (sal_uInt32)0xcc00cc ).WriteUInt32( (sal_uInt32)0xc0c0c0 );
     mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 6 );
-    *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0xc0c0c0 << (sal_uInt32)0xff6600 << (sal_uInt32)0x0000ff << (sal_uInt32)0x009900;
+    mpStrm->WriteUInt32( (sal_uInt32)0xffffff ).WriteUInt32( (sal_uInt32)0x000000 ).WriteUInt32( (sal_uInt32)0x808080 ).WriteUInt32( (sal_uInt32)0x000000 ).WriteUInt32( (sal_uInt32)0xc0c0c0 ).WriteUInt32( (sal_uInt32)0xff6600 ).WriteUInt32( (sal_uInt32)0x0000ff ).WriteUInt32( (sal_uInt32)0x009900 );
     mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 6 );
-    *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0xff9933 << (sal_uInt32)0xccff99 << (sal_uInt32)0xcc00cc << (sal_uInt32)0xb2b2b2;
+    mpStrm->WriteUInt32( (sal_uInt32)0xffffff ).WriteUInt32( (sal_uInt32)0x000000 ).WriteUInt32( (sal_uInt32)0x808080 ).WriteUInt32( (sal_uInt32)0x000000 ).WriteUInt32( (sal_uInt32)0xff9933 ).WriteUInt32( (sal_uInt32)0xccff99 ).WriteUInt32( (sal_uInt32)0xcc00cc ).WriteUInt32( (sal_uInt32)0xb2b2b2 );
 
     for ( int nInstance = EPP_TEXTTYPE_Title; nInstance <= EPP_TEXTTYPE_QuarterBody; nInstance++ )
     {
@@ -394,7 +394,7 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
         sal_Bool bFirst = sal_True;
         sal_Bool bSimpleText = sal_False;
 
-        *mpStrm << (sal_uInt16)5;                           // paragraph count
+        mpStrm->WriteUInt16( (sal_uInt16)5 );                           // paragraph count
 
         for ( sal_uInt16 nLev = 0; nLev < 5; nLev++ )
         {
@@ -402,7 +402,7 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
             {
                 bFirst = sal_False;
                 bSimpleText = sal_True;
-                *mpStrm << nLev;
+                mpStrm->WriteUInt16( nLev );
             }
             mpStyleSheet->mpParaSheet[ nInstance ]->Write( *mpStrm, mpPptEscherEx, nLev, bFirst, bSimpleText, mXPagePropSet );
             mpStyleSheet->mpCharSheet[ nInstance ]->Write( *mpStrm, mpPptEscherEx, nLev, bFirst, bSimpleText, mXPagePropSet );
@@ -428,7 +428,7 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
     mpPptEscherEx->CloseContainer();    // ESCHER_DgContainer
     mpPptEscherEx->CloseContainer();    // EPP_Drawing
     mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 1 );
-    *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0x99cc00 << (sal_uInt32)0xcc3333 << (sal_uInt32)0xffcccc << (sal_uInt32)0xb2b2b2;
+    mpStrm->WriteUInt32( (sal_uInt32)0xffffff ).WriteUInt32( (sal_uInt32)0x000000 ).WriteUInt32( (sal_uInt32)0x808080 ).WriteUInt32( (sal_uInt32)0x000000 ).WriteUInt32( (sal_uInt32)0x99cc00 ).WriteUInt32( (sal_uInt32)0xcc3333 ).WriteUInt32( (sal_uInt32)0xffcccc ).WriteUInt32( (sal_uInt32)0xb2b2b2 );
 
     if ( aBuExMasterStream.Tell() )
     {
@@ -469,22 +469,22 @@ sal_Bool PPTWriter::ImplCreateCurrentUserStream()
     sal_uInt32 nLenOfUserName = strlen( pUserName );
     sal_uInt32 nSizeOfRecord = 0x14 + ( ( nLenOfUserName + 4 ) & ~ 3 );
 
-    *mpCurUserStrm << (sal_uInt16)0 << (sal_uInt16)EPP_CurrentUserAtom << nSizeOfRecord;
-    *mpCurUserStrm << (sal_uInt32)0x14                  // Len
-                   << (sal_uInt32)0xe391c05f;           // Magic
+    mpCurUserStrm->WriteUInt16( (sal_uInt16)0 ).WriteUInt16( (sal_uInt16)EPP_CurrentUserAtom ).WriteUInt32( nSizeOfRecord );
+    mpCurUserStrm->WriteUInt32( (sal_uInt32)0x14 )                  // Len
+                  .WriteUInt32( (sal_uInt32)0xe391c05f );           // Magic
 
     sal_uInt32 nEditPos = mpCurUserStrm->Tell();
-    *mpCurUserStrm << (sal_uInt32)0x0                   // OffsetToCurrentEdit;
-                   << (sal_uInt16)nLenOfUserName        //
-                   << (sal_uInt16)0x3f4                 // DocFileVersion
-                   << (sal_uInt8)3                      // MajorVersion
-                   << (sal_uInt8)0                      // MinorVersion
-                   << (sal_uInt16)0;                    // Pad Word
+    mpCurUserStrm->WriteUInt32( (sal_uInt32)0x0 )                   // OffsetToCurrentEdit;
+                  .WriteUInt16( (sal_uInt16)nLenOfUserName )        //
+                  .WriteUInt16( (sal_uInt16)0x3f4 )                 // DocFileVersion
+                  .WriteUChar( (sal_uInt8)3 )                      // MajorVersion
+                  .WriteUChar( (sal_uInt8)0 )                      // MinorVersion
+                  .WriteUInt16( (sal_uInt16)0 );                    // Pad Word
     pUserName[ nLenOfUserName ] = 8;
     mpCurUserStrm->Write( pUserName, nLenOfUserName + 1 );
     for ( sal_uInt32 i = 0x15 + nLenOfUserName; i < nSizeOfRecord; i++ )
     {
-        *mpCurUserStrm << (sal_uInt8)0;                 // pad bytes
+        mpCurUserStrm->WriteUChar( (sal_uInt8)0 );                 // pad bytes
     };
     mpCurUserStrm->Seek( nEditPos );
     return sal_True;
@@ -549,11 +549,11 @@ void PPTWriter::ImplWriteExtParaHeader( SvMemoryStream& rSt, sal_uInt32 nRef, sa
 {
     if ( rSt.Tell() )
     {
-        aBuExOutlineStream << (sal_uInt32)( ( EPP_PST_ExtendedParagraphHeaderAtom << 16 )
-                                | ( nRef << 4 ) )
-                            << (sal_uInt32)8
-                            << (sal_uInt32)nSlideId
-                            << (sal_uInt32)nInstance;
+        aBuExOutlineStream.WriteUInt32( (sal_uInt32)( ( EPP_PST_ExtendedParagraphHeaderAtom << 16 )
+                                | ( nRef << 4 ) ) )
+                           .WriteUInt32( (sal_uInt32)8 )
+                           .WriteUInt32( (sal_uInt32)nSlideId )
+                           .WriteUInt32( (sal_uInt32)nInstance );
         aBuExOutlineStream.Write( rSt.GetData(), rSt.Tell() );
     }
 }
@@ -662,7 +662,7 @@ void PPTWriter::ImplCreateHeaderFooters( ::com::sun::star::uno::Reference< ::com
 
         mpPptEscherEx->OpenContainer( EPP_HeadersFooters, 0 );
         mpPptEscherEx->AddAtom( 4, EPP_HeadersFootersAtom );
-        *mpStrm << nVal;
+        mpStrm->WriteUInt32( nVal );
         ImplCreateHeaderFooterStrings( *mpStrm, rXPagePropSet );
         mpPptEscherEx->CloseContainer();
     }
@@ -690,32 +690,32 @@ sal_Bool PPTWriter::ImplCreateDocument()
     mpPptEscherEx->OpenContainer( EPP_Document );
     // CREATE DOCUMENT ATOM
     mpPptEscherEx->AddAtom( 40, EPP_DocumentAtom, 1 );
-    *mpStrm << nWidth                           // Slide Size in Master coordinates X
-            << nHeight                          //   "     "   "    "        "      Y
-            << (sal_Int32)maNotesPageSize.Width     // Notes Page Size                  X
-            << (sal_Int32)maNotesPageSize.Height    //   "     "   "                    Y
-            << (sal_Int32)1 << (sal_Int32)2;            // the scale used when the Powerpoint document is embedded. the default is 1:2
+    mpStrm->WriteUInt32( nWidth )                           // Slide Size in Master coordinates X
+           .WriteUInt32( nHeight )                          //   "     "   "    "        "      Y
+           .WriteInt32( (sal_Int32)maNotesPageSize.Width )     // Notes Page Size                  X
+           .WriteInt32( (sal_Int32)maNotesPageSize.Height )    //   "     "   "                    Y
+           .WriteInt32( (sal_Int32)1 ).WriteInt32( (sal_Int32)2 );            // the scale used when the Powerpoint document is embedded. the default is 1:2
     mpPptEscherEx->InsertPersistOffset( EPP_MAINNOTESMASTER_PERSIST_KEY, mpStrm->Tell() );
-    *mpStrm << (sal_uInt32)0                        // Reference to NotesMaster ( 0 if none );
-            << (sal_uInt32)0                        // Reference to HandoutMaster ( 0 if none );
-            << (sal_Int16)1                         // Number of the first slide;
-            << nSlideType                           // Size of the document slides ( default: EPP_SLIDESIZETYPEONSCREEN )
-            << (sal_uInt8)0                         // bool1 indicates if document was saved with embedded true type fonts
-            << (sal_uInt8)0                         // bool1 indicates if the placeholders on the title slide are omitted
-            << (sal_uInt8)0                         // bool1 right to left ( flag for Bidi version )
-            << (sal_uInt8)1;                            // bool1 visibility of comments shapes
+    mpStrm->WriteUInt32( (sal_uInt32)0 )                        // Reference to NotesMaster ( 0 if none );
+           .WriteUInt32( (sal_uInt32)0 )                        // Reference to HandoutMaster ( 0 if none );
+           .WriteInt16( (sal_Int16)1 )                         // Number of the first slide;
+           .WriteUInt16( nSlideType )                           // Size of the document slides ( default: EPP_SLIDESIZETYPEONSCREEN )
+           .WriteUChar( (sal_uInt8)0 )                         // bool1 indicates if document was saved with embedded true type fonts
+           .WriteUChar( (sal_uInt8)0 )                         // bool1 indicates if the placeholders on the title slide are omitted
+           .WriteUChar( (sal_uInt8)0 )                         // bool1 right to left ( flag for Bidi version )
+           .WriteUChar( (sal_uInt8)1 );                            // bool1 visibility of comments shapes
 
     mpPptEscherEx->PtInsert( EPP_Persist_Document, mpStrm->Tell() );
 
     mpPptEscherEx->OpenContainer( EPP_HeadersFooters, 3 );  //Master footer (default)
     mpPptEscherEx->AddAtom( 4, EPP_HeadersFootersAtom );
-    *mpStrm << (sal_uInt32)0x25000d;
+    mpStrm->WriteUInt32( (sal_uInt32)0x25000d );
     if ( GetPageByIndex( 0, MASTER ) )
         ImplCreateHeaderFooterStrings( *mpStrm, mXPagePropSet );
     mpPptEscherEx->CloseContainer();
     mpPptEscherEx->OpenContainer( EPP_HeadersFooters, 4 );  //NotesMaster footer (default)
     mpPptEscherEx->AddAtom( 4, EPP_HeadersFootersAtom );
-    *mpStrm << (sal_uInt32)0x3d000d;
+    mpStrm->WriteUInt32( (sal_uInt32)0x3d000d );
     if ( GetPageByIndex( 0, NOTICE ) )
         ImplCreateHeaderFooterStrings( *mpStrm, mXPagePropSet );
     mpPptEscherEx->CloseContainer();
@@ -726,11 +726,11 @@ sal_Bool PPTWriter::ImplCreateDocument()
     {
         mpPptEscherEx->AddAtom( 20, EPP_SlidePersistAtom );
         mpPptEscherEx->InsertPersistOffset( EPP_MAINSLIDE_PERSIST_KEY | i, mpStrm->Tell() );
-        *mpStrm << (sal_uInt32)0                                // psrReference - logical reference to the slide persist object ( EPP_MAINSLIDE_PERSIST_KEY )
-                << (sal_uInt32)4                                // flags - only bit 3 used, if set then slide contains shapes other than placeholders
-                << (sal_Int32)0                                     // numberTexts - number of placeholder texts stored with the persist object.  Allows to display outline view without loading the slide persist objects
-                << (sal_Int32)i + 0x100                             // slideId - Unique slide identifier, used for OLE link monikers for example
-                << (sal_uInt32)0;                               // reserved, usualy 0
+        mpStrm->WriteUInt32( (sal_uInt32)0 )                                // psrReference - logical reference to the slide persist object ( EPP_MAINSLIDE_PERSIST_KEY )
+               .WriteUInt32( (sal_uInt32)4 )                                // flags - only bit 3 used, if set then slide contains shapes other than placeholders
+               .WriteInt32( (sal_Int32)0 )                                     // numberTexts - number of placeholder texts stored with the persist object.  Allows to display outline view without loading the slide persist objects
+               .WriteInt32( (sal_Int32)i + 0x100 )                             // slideId - Unique slide identifier, used for OLE link monikers for example
+               .WriteUInt32( (sal_uInt32)0 );                               // reserved, usualy 0
 
         if ( !GetPageByIndex( i, NORMAL ) )                     // very exciting: once again through all pages
             return sal_False;
@@ -751,11 +751,11 @@ sal_Bool PPTWriter::ImplCreateDocument()
     {
         mpPptEscherEx->AddAtom( 20, EPP_SlidePersistAtom );
         mpPptEscherEx->InsertPersistOffset( EPP_MAINNOTES_PERSIST_KEY | i, mpStrm->Tell() );
-        *mpStrm << (sal_uInt32)0
-                << (sal_uInt32)4
-                << (sal_Int32)0
-                << (sal_Int32)i + 0x100
-                << (sal_uInt32)0;
+        mpStrm->WriteUInt32( (sal_uInt32)0 )
+               .WriteUInt32( (sal_uInt32)4 )
+               .WriteInt32( (sal_Int32)0 )
+               .WriteInt32( (sal_Int32)i + 0x100 )
+               .WriteUInt32( (sal_uInt32)0 );
     }
     mpPptEscherEx->CloseContainer();        // EPP_SlideListWithText
 
@@ -836,7 +836,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                 }
 
                 mpPptEscherEx->AddAtom( 80, EPP_SSDocInfoAtom, 1 );
-                *mpStrm << nPenColor << nRestartTime << nStartSlide << nEndSlide;
+                mpStrm->WriteUInt32( nPenColor ).WriteInt32( nRestartTime ).WriteInt16( nStartSlide ).WriteInt16( nEndSlide );
 
                 sal_uInt32 nCustomShowNameLen = aCustomShow.getLength();
                 if ( nCustomShowNameLen > 31 )
@@ -846,12 +846,12 @@ sal_Bool PPTWriter::ImplCreateDocument()
                     const sal_Unicode* pCustomShow = aCustomShow.getStr();
                     for ( i = 0; i < nCustomShowNameLen; i++ )
                     {
-                        *mpStrm << (sal_uInt16)( pCustomShow[ i ] );
+                        mpStrm->WriteUInt16( (sal_uInt16)( pCustomShow[ i ] ) );
                     }
                 }
-                for ( i = nCustomShowNameLen; i < 32; i++, *mpStrm << (sal_uInt16)0 ) ;
+                for ( i = nCustomShowNameLen; i < 32; i++, mpStrm->WriteUInt16( (sal_uInt16)0 ) ) ;
 
-                *mpStrm << nFlags;
+                mpStrm->WriteUInt32( nFlags );
                 ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XCustomPresentationSupplier >
                     aXCPSup( mXModel, ::com::sun::star::uno::UNO_QUERY );
                 if ( aXCPSup.is() )
@@ -878,7 +878,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                                         nNamedShowLen = 31;
                                     mpPptEscherEx->AddAtom( nNamedShowLen << 1, EPP_CString );
                                     const sal_Unicode* pCustomShowName = pUString[ i ].getStr();
-                                    for ( sal_uInt32 k = 0; k < nNamedShowLen; *mpStrm << (sal_uInt16)( pCustomShowName[ k++ ] ) ) ;
+                                    for ( sal_uInt32 k = 0; k < nNamedShowLen; mpStrm->WriteUInt16( (sal_uInt16)( pCustomShowName[ k++ ] ) ) ) ;
                                     mAny = aXCont->getByName( pUString[ i ] );
                                     if ( mAny.getValue() )
                                     {
@@ -910,7 +910,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                                                             if (pIter != maSlideNameList.end())
                                                             {
                                                                 sal_uInt32 nPageNumber = pIter - maSlideNameList.begin();
-                                                                *mpStrm << (sal_uInt32)( nPageNumber + 0x100 ); // unique slide id
+                                                                mpStrm->WriteUInt32( (sal_uInt32)( nPageNumber + 0x100 ) ); // unique slide id
                                                             }
                                                         }
                                                     }
@@ -941,18 +941,18 @@ sal_Bool PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
     sal_uInt32 nCurrentOfs, nParaOfs, nParaCount = 0;
 
     nParaOfs = rStrm.Tell();
-    rStrm << (sal_uInt32)0;         // property size
-    rStrm << (sal_uInt32)0;         // property count
+    rStrm.WriteUInt32( (sal_uInt32)0 );         // property size
+    rStrm.WriteUInt32( (sal_uInt32)0 );         // property count
 
     for ( std::vector<EPPTHyperlink>::const_iterator pIter = maHyperlink.begin(); pIter != maHyperlink.end(); ++pIter )
     {
         nParaCount += 6;
-        rStrm   << (sal_uInt32)3    // Type VT_I4
-                << (sal_uInt32)7    // (VTI4 - Private1)
-                << (sal_uInt32)3    // Type VT_I4
-                << (sal_uInt32)6    // (VTI4 - Private2)
-                << (sal_uInt32)3    // Type VT_I4
-                << (sal_uInt32)0;   // (VTI4 - Private3)
+        rStrm  .WriteUInt32( (sal_uInt32)3 )    // Type VT_I4
+               .WriteUInt32( (sal_uInt32)7 )    // (VTI4 - Private1)
+               .WriteUInt32( (sal_uInt32)3 )    // Type VT_I4
+               .WriteUInt32( (sal_uInt32)6 )    // (VTI4 - Private2)
+               .WriteUInt32( (sal_uInt32)3 )    // Type VT_I4
+               .WriteUInt32( (sal_uInt32)0 );   // (VTI4 - Private3)
 
         // INFO
         // HIWORD:  = 0 : do not change anything
@@ -973,46 +973,46 @@ sal_Bool PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
 
         sal_uInt32 nInfo = 7;
 
-        rStrm   << (sal_uInt32)3    // Type VT_I4
-                << nInfo;       // Info
+        rStrm  .WriteUInt32( (sal_uInt32)3 )    // Type VT_I4
+               .WriteUInt32( nInfo );       // Info
 
         switch( pIter->nType & 0xff )
         {
             case 1 :        // click action to slidenumber
             {
-                rStrm << (sal_uInt32)0x1f << (sal_uInt32)1 << (sal_uInt32)0;    // path
-                rStrm << (sal_uInt32)0x1f << (sal_uInt32)( nUrlLen + 1 );
+                rStrm.WriteUInt32( (sal_uInt32)0x1f ).WriteUInt32( (sal_uInt32)1 ).WriteUInt32( (sal_uInt32)0 );    // path
+                rStrm.WriteUInt32( (sal_uInt32)0x1f ).WriteUInt32( (sal_uInt32)( nUrlLen + 1 ) );
                 for ( sal_Int32 i = 0; i < nUrlLen; i++ )
                 {
-                    rStrm << rUrl[ i ];
+                    rStrm.WriteUInt16( rUrl[ i ] );
                 }
-                rStrm << (sal_uInt16)0;
+                rStrm.WriteUInt16( (sal_uInt16)0 );
             }
             break;
             case 2 :
             {
                 sal_Int32 i;
 
-                rStrm   << (sal_uInt32)0x1f
-                        << (sal_uInt32)( nUrlLen + 1 );
+                rStrm  .WriteUInt32( (sal_uInt32)0x1f )
+                       .WriteUInt32( (sal_uInt32)( nUrlLen + 1 ) );
                 for ( i = 0; i < nUrlLen; i++ )
                 {
-                    rStrm << rUrl[ i ];
+                    rStrm.WriteUInt16( rUrl[ i ] );
                 }
                 if ( ! ( i & 1 ) )
-                    rStrm << (sal_uInt16)0;
-                rStrm   << (sal_uInt16)0
-                        << (sal_uInt32)0x1f
-                        << (sal_uInt32)1
-                        << (sal_uInt32)0;
+                    rStrm.WriteUInt16( (sal_uInt16)0 );
+                rStrm  .WriteUInt16( (sal_uInt16)0 )
+                       .WriteUInt32( (sal_uInt32)0x1f )
+                       .WriteUInt32( (sal_uInt32)1 )
+                       .WriteUInt32( (sal_uInt32)0 );
             }
             break;
         }
     }
     nCurrentOfs = rStrm.Tell();
     rStrm.Seek( nParaOfs );
-    rStrm << (sal_uInt32)( nCurrentOfs - ( nParaOfs + 4 ) );
-    rStrm << nParaCount;
+    rStrm.WriteUInt32( (sal_uInt32)( nCurrentOfs - ( nParaOfs + 4 ) ) );
+    rStrm.WriteUInt32( nParaCount );
     rStrm.Seek( nCurrentOfs );
     return sal_True;
 }
@@ -1026,8 +1026,8 @@ sal_Bool PPTWriter::ImplCreateMainNotes()
     mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_MainNotes, mpStrm->Tell() );
     mpPptEscherEx->OpenContainer( EPP_Notes );
     mpPptEscherEx->AddAtom( 8, EPP_NotesAtom, 1 );
-    *mpStrm << (sal_uInt32)0x80000001                                               // Number that identifies this slide
-            << (sal_uInt32)0;                                                       // follow nothing
+    mpStrm->WriteUInt32( (sal_uInt32)0x80000001 )                                               // Number that identifies this slide
+           .WriteUInt32( (sal_uInt32)0 );                                                       // follow nothing
     mpPptEscherEx->OpenContainer( EPP_PPDrawing );
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
     mpPptEscherEx->EnterGroup(0,0);
@@ -1054,7 +1054,7 @@ sal_Bool PPTWriter::ImplCreateMainNotes()
     mpPptEscherEx->CloseContainer();    // ESCHER_DgContainer
     mpPptEscherEx->CloseContainer();    // EPP_Drawing
     mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 1 );
-    *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0x99cc00 << (sal_uInt32)0xcc3333 << (sal_uInt32)0xffcccc << (sal_uInt32)0xb2b2b2;
+    mpStrm->WriteUInt32( (sal_uInt32)0xffffff ).WriteUInt32( (sal_uInt32)0x000000 ).WriteUInt32( (sal_uInt32)0x808080 ).WriteUInt32( (sal_uInt32)0x000000 ).WriteUInt32( (sal_uInt32)0x99cc00 ).WriteUInt32( (sal_uInt32)0xcc3333 ).WriteUInt32( (sal_uInt32)0xffcccc ).WriteUInt32( (sal_uInt32)0xb2b2b2 );
     mpPptEscherEx->CloseContainer();    // EPP_Notes
     return sal_True;
 }
@@ -1127,17 +1127,17 @@ void ImplExportComments( uno::Reference< drawing::XDrawPage > xPage, SvMemoryStr
 
                 sal_Int16 nMilliSeconds = static_cast<sal_Int16>(::rtl::math::round(static_cast<double>(aDateTime.NanoSeconds) / 1000000000.0));
                 EscherExAtom aCommentAtom10( rBinaryTagData10Atom, EPP_CommentAtom10 );
-                rBinaryTagData10Atom << nIndex++
-                                     << aDateTime.Year
-                                     << aDateTime.Month
-                                     << aDateTime.Day   // todo: day of week
-                                     << aDateTime.Day
-                                     << aDateTime.Hours
-                                     << aDateTime.Minutes
-                                     << aDateTime.Seconds
-                                     << nMilliSeconds
-                                     << static_cast< sal_Int32 >( aPoint.X() )
-                                     << static_cast< sal_Int32 >( aPoint.Y() );
+                rBinaryTagData10Atom.WriteInt32( nIndex++ )
+                                    .WriteInt16( aDateTime.Year )
+                                    .WriteUInt16( aDateTime.Month )
+                                    .WriteUInt16( aDateTime.Day )   // todo: day of week
+                                    .WriteUInt16( aDateTime.Day )
+                                    .WriteUInt16( aDateTime.Hours )
+                                    .WriteUInt16( aDateTime.Minutes )
+                                    .WriteUInt16( aDateTime.Seconds )
+                                    .WriteInt16( nMilliSeconds )
+                                    .WriteInt32( static_cast< sal_Int32 >( aPoint.X() ) )
+                                    .WriteInt32( static_cast< sal_Int32 >( aPoint.Y() ) );
             }
         }
     }
@@ -1153,9 +1153,9 @@ void PPTWriter::ImplWriteNotes( sal_uInt32 nPageNum )
     mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_Notes | nPageNum, mpStrm->Tell() );
     mpPptEscherEx->OpenContainer( EPP_Notes );
     mpPptEscherEx->AddAtom( 8, EPP_NotesAtom, 1 );
-    *mpStrm << (sal_uInt32)nPageNum + 0x100
-            << (sal_uInt16)3                                        // follow master ....
-            << (sal_uInt16)0;
+    mpStrm->WriteUInt32( (sal_uInt32)nPageNum + 0x100 )
+           .WriteUInt16( (sal_uInt16)3 )                                        // follow master ....
+           .WriteUInt16( (sal_uInt16)0 );
 
     ImplCreateHeaderFooters( mXPagePropSet );
 
@@ -1187,7 +1187,7 @@ void PPTWriter::ImplWriteNotes( sal_uInt32 nPageNum )
     mpPptEscherEx->CloseContainer();    // ESCHER_DgContainer
     mpPptEscherEx->CloseContainer();    // EPP_Drawing
     mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 1 );
-    *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0x99cc00 << (sal_uInt32)0xcc3333 << (sal_uInt32)0xffcccc << (sal_uInt32)0xb2b2b2;
+    mpStrm->WriteUInt32( (sal_uInt32)0xffffff ).WriteUInt32( (sal_uInt32)0x000000 ).WriteUInt32( (sal_uInt32)0x808080 ).WriteUInt32( (sal_uInt32)0x000000 ).WriteUInt32( (sal_uInt32)0x99cc00 ).WriteUInt32( (sal_uInt32)0xcc3333 ).WriteUInt32( (sal_uInt32)0xffcccc ).WriteUInt32( (sal_uInt32)0xb2b2b2 );
     mpPptEscherEx->CloseContainer();    // EPP_Notes
 };
 
@@ -1305,15 +1305,15 @@ void PPTWriter::ImplWriteOLE( )
                         // create a dummy content stream, the dummy content is necessary for ppt, but not for
                         // doc files, so we can't share code.
                         SotStorageStreamRef xStm = xCleanStorage->OpenSotStream( aPersistStream, STREAM_STD_READWRITE );
-                        *xStm   << (sal_uInt32)0        // no ClipboardId
-                                << (sal_uInt32)4        // no target device
-                                << (sal_uInt32)1        // aspect ratio
-                                << (sal_Int32)-1        // L-Index
-                                << (sal_uInt32)0        // Advanced Flags
-                                << (sal_uInt32)0        // compression
-                                << (sal_uInt32)0        // Size
-                                << (sal_uInt32)0        //  "
-                                << (sal_uInt32)0;
+                        xStm->WriteUInt32( (sal_uInt32)0 )        // no ClipboardId
+                               .WriteUInt32( (sal_uInt32)4 )        // no target device
+                               .WriteUInt32( (sal_uInt32)1 )        // aspect ratio
+                               .WriteInt32( (sal_Int32)-1 )        // L-Index
+                               .WriteUInt32( (sal_uInt32)0 )        // Advanced Flags
+                               .WriteUInt32( (sal_uInt32)0 )        // compression
+                               .WriteUInt32( (sal_uInt32)0 )        // Size
+                               .WriteUInt32( (sal_uInt32)0 )        //  "
+                               .WriteUInt32( (sal_uInt32)0 );
                         pStrm = xCleanStorage->CreateMemoryStream();
                     }
                 }
@@ -1339,7 +1339,7 @@ void PPTWriter::ImplWriteOLE( )
             mpPptEscherEx->BeginAtom();
             pStrm->Seek( STREAM_SEEK_TO_END );
             sal_uInt32 npStrmSize = pStrm->Tell();
-            *mpStrm << npStrmSize;                  // uncompressed size
+            mpStrm->WriteUInt32( npStrmSize );                  // uncompressed size
 
             pStrm->Seek( 0 );
             ZCodec aZCodec( 0x8000, 0x8000 );
@@ -1362,18 +1362,18 @@ sal_Bool PPTWriter::ImplWriteAtomEnding()
 
     sal_uInt32  i, nPos, nOfs, nPersistOfs = mpStrm->Tell();
     sal_uInt32  nPersistEntrys = 0;
-    *mpStrm << (sal_uInt32)0 << (sal_uInt32)0 << (sal_uInt32)0;         // skip record header and first entry
+    mpStrm->WriteUInt32( (sal_uInt32)0 ).WriteUInt32( (sal_uInt32)0 ).WriteUInt32( (sal_uInt32)0 );         // skip record header and first entry
 
     // write document persist
         nPersistEntrys++;
-        *mpStrm << (sal_uInt32)0;
+        mpStrm->WriteUInt32( (sal_uInt32)0 );
     // write MasterPages persists
     for ( i = 0; i < mnMasterPages; i++ )
     {
         nOfs = mpPptEscherEx->PtGetOffsetByID( EPP_Persist_MainMaster | i );
         if ( nOfs )
         {
-            *mpStrm << nOfs;
+            mpStrm->WriteUInt32( nOfs );
             mpPptEscherEx->InsertAtPersistOffset( EPP_MAINMASTER_PERSIST_KEY | i, ++nPersistEntrys );
         }
     }
@@ -1381,7 +1381,7 @@ sal_Bool PPTWriter::ImplWriteAtomEnding()
     nOfs = mpPptEscherEx->PtGetOffsetByID( EPP_Persist_MainNotes );
     if ( nOfs )
     {
-        *mpStrm << nOfs;
+        mpStrm->WriteUInt32( nOfs );
         mpPptEscherEx->InsertAtPersistOffset( EPP_MAINNOTESMASTER_PERSIST_KEY, ++nPersistEntrys );
     }
     // write slide persists -> we have to write a valid value into EPP_SlidePersistAtome too
@@ -1390,7 +1390,7 @@ sal_Bool PPTWriter::ImplWriteAtomEnding()
         nOfs = mpPptEscherEx->PtGetOffsetByID( EPP_Persist_Slide | i );
         if ( nOfs )
         {
-            *mpStrm << nOfs;
+            mpStrm->WriteUInt32( nOfs );
             mpPptEscherEx->InsertAtPersistOffset( EPP_MAINSLIDE_PERSIST_KEY | i, ++nPersistEntrys );
         }
     }
@@ -1400,7 +1400,7 @@ sal_Bool PPTWriter::ImplWriteAtomEnding()
         nOfs = mpPptEscherEx->PtGetOffsetByID( EPP_Persist_Notes | i );
         if ( nOfs )
         {
-            *mpStrm << nOfs;
+            mpStrm->WriteUInt32( nOfs );
             mpPptEscherEx->InsertAtPersistOffset( EPP_MAINNOTES_PERSIST_KEY | i, ++nPersistEntrys );
         }
     }
@@ -1412,11 +1412,11 @@ sal_Bool PPTWriter::ImplWriteAtomEnding()
         if ( nOfs )
         {
             nPersistEntrys++;
-            *mpStrm << pPtr->nOfsB;
+            mpStrm->WriteUInt32( pPtr->nOfsB );
             sal_uInt32 nOldPos, nPersOfs = nOfs + pPtr->nOfsA + 16 + 8;     // 8 bytes atom header, +16 to the persist entry
             nOldPos = mpStrm->Tell();
             mpStrm->Seek( nPersOfs );
-            *mpStrm << nPersistEntrys;
+            mpStrm->WriteUInt32( nPersistEntrys );
             mpStrm->Seek( nOldPos );
         }
     }
@@ -1433,12 +1433,12 @@ sal_Bool PPTWriter::ImplWriteAtomEnding()
             *mpVBA >> n1
                    >> n2;
 
-            *mpStrm << mnVBAOleOfs;
+            mpStrm->WriteUInt32( mnVBAOleOfs );
             sal_uInt32 nOldPos = mpStrm->Tell();
             mpStrm->Seek( nOfs );               // Fill the VBAInfoAtom with the correct index to the persisttable
-            *mpStrm << nPersistEntrys
-                    << n1
-                    << sal_Int32(2);
+            mpStrm->WriteUInt32( nPersistEntrys )
+                   .WriteUInt32( n1 )
+                   .WriteInt32( sal_Int32(2) );
             mpStrm->Seek( nOldPos );
 
         }
@@ -1446,19 +1446,19 @@ sal_Bool PPTWriter::ImplWriteAtomEnding()
     nPos = mpStrm->Tell();
     mpStrm->Seek( nPersistOfs );
     mpPptEscherEx->AddAtom( ( nPersistEntrys + 1 ) << 2, EPP_PersistPtrIncrementalBlock );      // insert Record Header
-    *mpStrm << (sal_uInt32)( ( nPersistEntrys << 20 ) | 1 );
+    mpStrm->WriteUInt32( (sal_uInt32)( ( nPersistEntrys << 20 ) | 1 ) );
     mpStrm->Seek( nPos );
 
-    *mpCurUserStrm << (sal_uInt32)nPos;             // set offset to current edit
+    mpCurUserStrm->WriteUInt32( (sal_uInt32)nPos );             // set offset to current edit
     mpPptEscherEx->AddAtom( 28, EPP_UserEditAtom );
-    *mpStrm << (sal_Int32)0x100                     // last slide ID
-            << (sal_uInt32)0x03000dbc               // minor and major app version that did the save
-            << (sal_uInt32)0                        // offset last save, 0 after a full save
-            << nPersistOfs                      // File offset to persist pointers for this save operation
-            << (sal_uInt32)1                        // Persist reference to the document persist object
-            << (sal_uInt32)nPersistEntrys           // max persists written, Seed value for persist object id management
-            << (sal_Int16)EPP_LastViewTypeSlideView // last view type
-            << (sal_Int16)0x12;                     // padword
+    mpStrm->WriteInt32( (sal_Int32)0x100 )                     // last slide ID
+           .WriteUInt32( (sal_uInt32)0x03000dbc )               // minor and major app version that did the save
+           .WriteUInt32( (sal_uInt32)0 )                        // offset last save, 0 after a full save
+           .WriteUInt32( nPersistOfs )                      // File offset to persist pointers for this save operation
+           .WriteUInt32( (sal_uInt32)1 )                        // Persist reference to the document persist object
+           .WriteUInt32( (sal_uInt32)nPersistEntrys )           // max persists written, Seed value for persist object id management
+           .WriteInt16( (sal_Int16)EPP_LastViewTypeSlideView ) // last view type
+           .WriteInt16( (sal_Int16)0x12 );                     // padword
 
     return sal_True;
 }

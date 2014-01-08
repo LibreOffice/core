@@ -99,7 +99,7 @@ using namespace ::com::sun::star;
 EscherExContainer::EscherExContainer( SvStream& rSt, const sal_uInt16 nRecType, const sal_uInt16 nInstance ) :
     rStrm   ( rSt )
 {
-    rStrm << (sal_uInt32)( ( 0xf | ( nInstance << 4 ) ) | ( nRecType << 16 ) ) << (sal_uInt32)0;
+    rStrm.WriteUInt32( (sal_uInt32)( ( 0xf | ( nInstance << 4 ) ) | ( nRecType << 16 ) ) ).WriteUInt32( (sal_uInt32)0 );
     nContPos = rStrm.Tell();
 }
 EscherExContainer::~EscherExContainer()
@@ -109,7 +109,7 @@ EscherExContainer::~EscherExContainer()
     if ( nSize )
     {
         rStrm.Seek( nContPos - 4 );
-        rStrm << nSize;
+        rStrm.WriteUInt32( nSize );
         rStrm.Seek( nPos );
     }
 }
@@ -117,7 +117,7 @@ EscherExContainer::~EscherExContainer()
 EscherExAtom::EscherExAtom( SvStream& rSt, const sal_uInt16 nRecType, const sal_uInt16 nInstance, const sal_uInt8 nVersion ) :
     rStrm   ( rSt )
 {
-    rStrm << (sal_uInt32)( ( nVersion | ( nInstance << 4 ) ) | ( nRecType << 16 ) ) << (sal_uInt32)0;
+    rStrm.WriteUInt32( (sal_uInt32)( ( nVersion | ( nInstance << 4 ) ) | ( nRecType << 16 ) ) ).WriteUInt32( (sal_uInt32)0 );
     nContPos = rStrm.Tell();
 }
 EscherExAtom::~EscherExAtom()
@@ -127,7 +127,7 @@ EscherExAtom::~EscherExAtom()
     if ( nSize )
     {
         rStrm.Seek( nContPos - 4 );
-        rStrm << nSize;
+        rStrm.WriteUInt32( nSize );
         rStrm.Seek( nPos );
     }
 }
@@ -300,7 +300,7 @@ extern "C" int SAL_CALL EscherPropSortFunc( const void* p1, const void* p2 )
 
 void EscherPropertyContainer::Commit( SvStream& rSt, sal_uInt16 nVersion, sal_uInt16 nRecType )
 {
-    rSt << (sal_uInt16)( ( nCountCount << 4 ) | ( nVersion & 0xf ) ) << nRecType << nCountSize;
+    rSt.WriteUInt16( (sal_uInt16)( ( nCountCount << 4 ) | ( nVersion & 0xf ) ) ).WriteUInt16( nRecType ).WriteUInt32( nCountSize );
     if ( nSortCount )
     {
         qsort( pSortStruct, nSortCount, sizeof( EscherPropSortStruct ), EscherPropSortFunc );
@@ -311,8 +311,8 @@ void EscherPropertyContainer::Commit( SvStream& rSt, sal_uInt16 nVersion, sal_uI
             sal_uInt32 nPropValue = pSortStruct[ i ].nPropValue;
             sal_uInt16 nPropId = pSortStruct[ i ].nPropId;
 
-            rSt << nPropId
-                << nPropValue;
+            rSt.WriteUInt16( nPropId )
+               .WriteUInt32( nPropValue );
         }
         if ( bHasComplexData )
         {
@@ -3005,18 +3005,18 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             sal_uInt16 nElementSize = 8;
                             sal_uInt32 nStreamSize = nElementSize * nElements + 6;
                             SvMemoryStream aOut( nStreamSize );
-                            aOut << nElements
-                                << nElements
-                                << nElementSize;
+                            aOut.WriteUInt16( nElements )
+                               .WriteUInt16( nElements )
+                               .WriteUInt16( nElementSize );
 
                             std::vector< EnhancedCustomShapeEquation >::const_iterator aIter( aEquations.begin() );
                             std::vector< EnhancedCustomShapeEquation >::const_iterator aEnd ( aEquations.end() );
                             while( aIter != aEnd )
                             {
-                                aOut << (sal_uInt16)aIter->nOperation
-                                     << (sal_Int16)aIter->nPara[ 0 ]
-                                     << (sal_Int16)aIter->nPara[ 1 ]
-                                     << (sal_Int16)aIter->nPara[ 2 ];
+                                aOut.WriteUInt16( (sal_uInt16)aIter->nOperation )
+                                    .WriteInt16( (sal_Int16)aIter->nPara[ 0 ] )
+                                    .WriteInt16( (sal_Int16)aIter->nPara[ 1 ] )
+                                    .WriteInt16( (sal_Int16)aIter->nPara[ 2 ] );
                                 ++aIter;
                             }
                             sal_uInt8* pBuf = new sal_uInt8[ nStreamSize ];
@@ -3113,15 +3113,15 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                             sal_uInt16 j, nElementSize = 8;
                                             sal_uInt32 nStreamSize = nElementSize * nElements + 6;
                                             SvMemoryStream aOut( nStreamSize );
-                                            aOut << nElements
-                                                << nElements
-                                                << nElementSize;
+                                            aOut.WriteUInt16( nElements )
+                                               .WriteUInt16( nElements )
+                                               .WriteUInt16( nElementSize );
                                             for( j = 0; j < nElements; j++ )
                                             {
                                                 sal_Int32 X = GetValueForEnhancedCustomShapeParameter( aGluePoints[ j ].First, aEquationOrder );
                                                 sal_Int32 Y = GetValueForEnhancedCustomShapeParameter( aGluePoints[ j ].Second, aEquationOrder );
-                                                aOut << X
-                                                    << Y;
+                                                aOut.WriteInt32( X )
+                                                   .WriteInt32( Y );
                                             }
                                             sal_uInt8* pBuf = new sal_uInt8[ nStreamSize ];
                                             memcpy( pBuf, aOut.GetData(), nStreamSize );
@@ -3155,9 +3155,9 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                             sal_uInt16 nElementSize = 2;
                                             sal_uInt32 nStreamSize = nElementSize * nElements + 6;
                                             SvMemoryStream aOut( nStreamSize );
-                                            aOut << nElements
-                                                << nElements
-                                                << nElementSize;
+                                            aOut.WriteUInt16( nElements )
+                                               .WriteUInt16( nElements )
+                                               .WriteUInt16( nElementSize );
                                             for ( j = 0; j < nElements; j++ )
                                             {
                                                 sal_uInt16 nVal = (sal_uInt16)aSegments[ j ].Count;
@@ -3242,7 +3242,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                                     }
                                                     break;
                                                 }
-                                                aOut << nVal;
+                                                aOut.WriteUInt16( nVal );
                                             }
                                             sal_uInt8* pBuf = new sal_uInt8[ nStreamSize ];
                                             memcpy( pBuf, aOut.GetData(), nStreamSize );
@@ -3287,9 +3287,9 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                             sal_uInt16 nElementSize = 16;
                                             sal_uInt32 nStreamSize = nElementSize * nElements + 6;
                                             SvMemoryStream aOut( nStreamSize );
-                                            aOut << nElements
-                                                << nElements
-                                                << nElementSize;
+                                            aOut.WriteUInt16( nElements )
+                                               .WriteUInt16( nElements )
+                                               .WriteUInt16( nElementSize );
                                             for ( j = 0; j < nElements; j++ )
                                             {
                                                 sal_Int32 nLeft = GetValueForEnhancedCustomShapeParameter( aPathTextFrames[ j ].TopLeft.First, aEquationOrder );
@@ -3297,10 +3297,10 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                                 sal_Int32 nRight = GetValueForEnhancedCustomShapeParameter( aPathTextFrames[ j ].BottomRight.First, aEquationOrder );
                                                 sal_Int32 nBottom = GetValueForEnhancedCustomShapeParameter( aPathTextFrames[ j ].BottomRight.Second, aEquationOrder );
 
-                                                aOut << nLeft
-                                                    << nTop
-                                                    << nRight
-                                                    << nBottom;
+                                                aOut.WriteInt32( nLeft )
+                                                   .WriteInt32( nTop )
+                                                   .WriteInt32( nRight )
+                                                   .WriteInt32( nBottom );
                                             }
                                             sal_uInt8* pBuf = new sal_uInt8[ nStreamSize ];
                                             memcpy( pBuf, aOut.GetData(), nStreamSize );
@@ -3530,9 +3530,9 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                 sal_uInt16 k, j, nElementSize = 36;
                                 sal_uInt32 nStreamSize = nElementSize * nElements + 6;
                                 SvMemoryStream aOut( nStreamSize );
-                                aOut << nElements
-                                    << nElements
-                                    << nElementSize;
+                                aOut.WriteUInt16( nElements )
+                                   .WriteUInt16( nElements )
+                                   .WriteUInt16( nElementSize );
 
                                 for ( k = 0; k < nElements; k++ )
                                 {
@@ -3678,15 +3678,15 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                             }
                                         }
                                     }
-                                    aOut << nFlags
-                                        << nXPosition
-                                        << nYPosition
-                                        << nXMap
-                                        << nYMap
-                                        << nXRangeMin
-                                        << nXRangeMax
-                                        << nYRangeMin
-                                        << nYRangeMax;
+                                    aOut.WriteUInt32( nFlags )
+                                       .WriteInt32( nXPosition )
+                                       .WriteInt32( nYPosition )
+                                       .WriteInt32( nXMap )
+                                       .WriteInt32( nYMap )
+                                       .WriteInt32( nXRangeMin )
+                                       .WriteInt32( nXRangeMax )
+                                       .WriteInt32( nYRangeMin )
+                                       .WriteInt32( nYRangeMax );
 
                                     if ( nFlags & 8 )
                                         nAdjustmentsWhichNeedsToBeConverted |= ( 1 << ( nYPosition - 0x100 ) );
@@ -3737,15 +3737,15 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                         sal_uInt16 nElementSize = 8;
                         sal_uInt32 nStreamSize = nElementSize * nElements + 6;
                         SvMemoryStream aOut( nStreamSize );
-                        aOut << nElements
-                            << nElements
-                            << nElementSize;
+                        aOut.WriteUInt16( nElements )
+                           .WriteUInt16( nElements )
+                           .WriteUInt16( nElementSize );
                         for( j = 0; j < nElements; j++ )
                         {
                             sal_Int32 X = GetValueForEnhancedCustomShapeParameter( aCoordinates[ j ].First, aEquationOrder, sal_True );
                             sal_Int32 Y = GetValueForEnhancedCustomShapeParameter( aCoordinates[ j ].Second, aEquationOrder, sal_True );
-                            aOut << X
-                                << Y;
+                            aOut.WriteInt32( X )
+                               .WriteInt32( Y );
                         }
                         sal_uInt8* pBuf = new sal_uInt8[ nStreamSize ];
                         memcpy( pBuf, aOut.GetData(), nStreamSize );
@@ -4023,21 +4023,21 @@ EscherBlibEntry::EscherBlibEntry( sal_uInt32 nPictureOffset, const GraphicObject
                                     || pGraphicAttr->IsAdjusted() )
             {
                 SvMemoryStream aSt( sizeof( GraphicAttr ) );
-                aSt << static_cast<sal_uInt16>(pGraphicAttr->GetDrawMode())
-                    << static_cast<sal_uInt32>(pGraphicAttr->GetMirrorFlags())
-                    << static_cast<sal_Int32>(pGraphicAttr->GetLeftCrop())
-                    << static_cast<sal_Int32>(pGraphicAttr->GetTopCrop())
-                    << static_cast<sal_Int32>(pGraphicAttr->GetRightCrop())
-                    << static_cast<sal_Int32>(pGraphicAttr->GetBottomCrop())
-                    << pGraphicAttr->GetRotation()
-                    << pGraphicAttr->GetLuminance()
-                    << pGraphicAttr->GetContrast()
-                    << pGraphicAttr->GetChannelR()
-                    << pGraphicAttr->GetChannelG()
-                    << pGraphicAttr->GetChannelB()
-                    << pGraphicAttr->GetGamma()
-                    << (sal_Bool)( pGraphicAttr->IsInvert() == sal_True )
-                    << pGraphicAttr->GetTransparency();
+                aSt.WriteUInt16( static_cast<sal_uInt16>(pGraphicAttr->GetDrawMode()) )
+                   .WriteUInt32( static_cast<sal_uInt32>(pGraphicAttr->GetMirrorFlags()) )
+                   .WriteInt32( static_cast<sal_Int32>(pGraphicAttr->GetLeftCrop()) )
+                   .WriteInt32( static_cast<sal_Int32>(pGraphicAttr->GetTopCrop()) )
+                   .WriteInt32( static_cast<sal_Int32>(pGraphicAttr->GetRightCrop()) )
+                   .WriteInt32( static_cast<sal_Int32>(pGraphicAttr->GetBottomCrop()) )
+                   .WriteUInt16( pGraphicAttr->GetRotation() )
+                   .WriteInt16( pGraphicAttr->GetLuminance() )
+                   .WriteInt16( pGraphicAttr->GetContrast() )
+                   .WriteInt16( pGraphicAttr->GetChannelR() )
+                   .WriteInt16( pGraphicAttr->GetChannelG() )
+                   .WriteInt16( pGraphicAttr->GetChannelB() )
+                    << pGraphicAttr->GetGamma();
+                aSt.WriteUChar( (sal_Bool)( pGraphicAttr->IsInvert() == sal_True ) )
+                   .WriteUChar( pGraphicAttr->GetTransparency() );
                 mnIdentifier[ 1 ] = rtl_crc32( 0, aSt.GetData(), aSt.Tell() );
             }
             else
@@ -4064,26 +4064,26 @@ void EscherBlibEntry::WriteBlibEntry( SvStream& rSt, sal_Bool bWritePictureOffse
 {
     sal_uInt32  nPictureOffset = ( bWritePictureOffset ) ? mnPictureOffset : 0;
 
-    rSt << (sal_uInt32)( ( ESCHER_BSE << 16 ) | ( ( (sal_uInt16)meBlibType << 4 ) | 2 ) )
-        << (sal_uInt32)( 36 + nResize )
-        << (sal_uInt8)meBlibType;
+    rSt.WriteUInt32( (sal_uInt32)( ( ESCHER_BSE << 16 ) | ( ( (sal_uInt16)meBlibType << 4 ) | 2 ) ) )
+       .WriteUInt32( (sal_uInt32)( 36 + nResize ) )
+       .WriteUChar( (sal_uInt8)meBlibType );
 
     switch ( meBlibType )
     {
         case EMF :
         case WMF :  // converting EMF/WMF on OS2 to Pict
-            rSt << (sal_uInt8)PICT;
+            rSt.WriteUChar( (sal_uInt8)PICT );
         break;
         default:
-            rSt << (sal_uInt8)meBlibType;
+            rSt.WriteUChar( (sal_uInt8)meBlibType );
     };
 
     rSt.Write( &mnIdentifier[ 0 ], 16 );
-    rSt << (sal_uInt16)0
-        << (sal_uInt32)( mnSize + mnSizeExtra )
-        << mnRefCount
-        << nPictureOffset
-        << (sal_uInt32)0;
+    rSt.WriteUInt16( (sal_uInt16)0 )
+       .WriteUInt32( (sal_uInt32)( mnSize + mnSizeExtra ) )
+       .WriteUInt32( mnRefCount )
+       .WriteUInt32( nPictureOffset )
+       .WriteUInt32( (sal_uInt32)0 );
 }
 
 EscherBlibEntry::~EscherBlibEntry()
@@ -4165,8 +4165,8 @@ void EscherGraphicProvider::WriteBlibStoreContainer( SvStream& rSt, SvStream* pM
     sal_uInt32  nSize = GetBlibStoreContainerSize( pMergePicStreamBSE );
     if ( nSize )
     {
-        rSt << (sal_uInt32)( ( ESCHER_BstoreContainer << 16 ) | 0x1f )
-            << (sal_uInt32)( nSize - 8 );
+        rSt.WriteUInt32( (sal_uInt32)( ( ESCHER_BstoreContainer << 16 ) | 0x1f ) )
+           .WriteUInt32( (sal_uInt32)( nSize - 8 ) );
 
         if ( pMergePicStreamBSE )
         {
@@ -4187,16 +4187,16 @@ void EscherGraphicProvider::WriteBlibStoreContainer( SvStream& rSt, SvStream* pM
                 sal_uInt16 n16;
                 // record version and instance
                 *pMergePicStreamBSE >> n16;
-                rSt << n16;
+                rSt.WriteUInt16( n16 );
                 // record type
                 *pMergePicStreamBSE >> n16;
-                rSt << sal_uInt16( ESCHER_BlipFirst + nBlibType );
+                rSt.WriteUInt16( sal_uInt16( ESCHER_BlipFirst + nBlibType ) );
                 DBG_ASSERT( n16 == ESCHER_BlipFirst + nBlibType , "EscherGraphicProvider::WriteBlibStoreContainer: BLIP record types differ" );
                 sal_uInt32 n32;
                 // record size
                 *pMergePicStreamBSE >> n32;
                 nBlipSize -= 8;
-                rSt << nBlipSize;
+                rSt.WriteUInt32( nBlipSize );
                 DBG_ASSERT( nBlipSize == n32, "EscherGraphicProvider::WriteBlibStoreContainer: BLIP sizes differ" );
                 // record
                 while ( nBlipSize )
@@ -4356,17 +4356,17 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
 
             if ( mnFlags & _E_GRAPH_PROV_USE_INSTANCES )
             {
-                rPicOutStrm << (sal_uInt32)( 0x7f90000 | (sal_uInt16)( mnBlibEntrys << 4 ) )
-                            << (sal_uInt32)0;
+                rPicOutStrm.WriteUInt32( (sal_uInt32)( 0x7f90000 | (sal_uInt16)( mnBlibEntrys << 4 ) ) )
+                           .WriteUInt32( (sal_uInt32)0 );
                 nAtomSize = rPicOutStrm.Tell();
                  if ( eBlibType == PNG )
-                    rPicOutStrm << (sal_uInt16)0x0606;
+                    rPicOutStrm.WriteUInt16( (sal_uInt16)0x0606 );
                 else if ( eBlibType == WMF )
-                    rPicOutStrm << (sal_uInt16)0x0403;
+                    rPicOutStrm.WriteUInt16( (sal_uInt16)0x0403 );
                 else if ( eBlibType == EMF )
-                    rPicOutStrm << (sal_uInt16)0x0402;
+                    rPicOutStrm.WriteUInt16( (sal_uInt16)0x0402 );
                 else if ( eBlibType == PEG )
-                    rPicOutStrm << (sal_uInt16)0x0505;
+                    rPicOutStrm.WriteUInt16( (sal_uInt16)0x0505 );
             }
             // fdo#69607 do not compress WMF files if we are in OOXML export
             if ( ( eBlibType == PEG ) || ( eBlibType == PNG ) ||
@@ -4375,9 +4375,9 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
                 nExtra = 17;
                 p_EscherBlibEntry->mnSizeExtra = nExtra + 8;
                 nInstance = ( eBlibType == PNG ) ? 0xf01e6e00 : 0xf01d46a0;
-                rPicOutStrm << nInstance << (sal_uInt32)( p_EscherBlibEntry->mnSize + nExtra );
+                rPicOutStrm.WriteUInt32( nInstance ).WriteUInt32( (sal_uInt32)( p_EscherBlibEntry->mnSize + nExtra ) );
                 rPicOutStrm.Write( p_EscherBlibEntry->mnIdentifier, 16 );
-                rPicOutStrm << (sal_uInt8)0xff;
+                rPicOutStrm.WriteUChar( (sal_uInt8)0xff );
                 rPicOutStrm.Write( pGraphicAry, p_EscherBlibEntry->mnSize );
             }
             else
@@ -4395,7 +4395,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
                     nExtra = eBlibType == WMF ? 0x42 : 0x32;                                    // !EMF -> no change
                     p_EscherBlibEntry->mnSizeExtra = nExtra + 8;
                     nInstance = ( eBlibType == WMF ) ? 0xf01b2170 : 0xf01a3d40;                 // !EMF -> no change
-                    rPicOutStrm << nInstance << (sal_uInt32)( p_EscherBlibEntry->mnSize + nExtra );
+                    rPicOutStrm.WriteUInt32( nInstance ).WriteUInt32( (sal_uInt32)( p_EscherBlibEntry->mnSize + nExtra ) );
                     if ( eBlibType == WMF )                                                     // !EMF -> no change
                         rPicOutStrm.Write( p_EscherBlibEntry->mnIdentifier, 16 );
                     rPicOutStrm.Write( p_EscherBlibEntry->mnIdentifier, 16 );
@@ -4425,15 +4425,15 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
                         nWidth = aPrefSize.Width() * 360;
                         nHeight = aPrefSize.Height() * 360;
                     }
-                    rPicOutStrm << nUncompressedSize // WMFSize without FileHeader
-                    << (sal_Int32)0     // since we can't find out anymore what the original size of
-                    << (sal_Int32)0     // the WMF (without Fileheader) was we write 10cm / x
-                    << nPrefWidth
-                    << nPrefHeight
-                    << nWidth
-                    << nHeight
-                    << p_EscherBlibEntry->mnSize
-                    << (sal_uInt16)0xfe00;  // compression Flags
+                    rPicOutStrm.WriteUInt32( nUncompressedSize ) // WMFSize without FileHeader
+                   .WriteInt32( (sal_Int32)0 )     // since we can't find out anymore what the original size of
+                   .WriteInt32( (sal_Int32)0 )     // the WMF (without Fileheader) was we write 10cm / x
+                   .WriteUInt32( nPrefWidth )
+                   .WriteUInt32( nPrefHeight )
+                   .WriteUInt32( nWidth )
+                   .WriteUInt32( nHeight )
+                   .WriteUInt32( p_EscherBlibEntry->mnSize )
+                   .WriteUInt16( (sal_uInt16)0xfe00 );  // compression Flags
                     rPicOutStrm.Write( pGraphicAry, p_EscherBlibEntry->mnSize );
                 }
             }
@@ -4441,7 +4441,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
             {
                 sal_uInt32  nPos = rPicOutStrm.Tell();
                 rPicOutStrm.Seek( nAtomSize - 4 );
-                rPicOutStrm << (sal_uInt32)( nPos - nAtomSize );
+                rPicOutStrm.WriteUInt32( (sal_uInt32)( nPos - nAtomSize ) );
                 rPicOutStrm.Seek( nPos );
             }
             nBlibId = ImplInsertBlib( p_EscherBlibEntry ), p_EscherBlibEntry = NULL;
@@ -4764,9 +4764,9 @@ void EscherSolverContainer::WriteSolver( SvStream& rStrm )
     if ( nCount )
     {
         sal_uInt32  nRecHdPos, nCurrentPos, nSize;
-        rStrm   << (sal_uInt16)( ( nCount << 4 ) | 0xf )    // open an ESCHER_SolverContainer
-                << (sal_uInt16)ESCHER_SolverContainer       //
-                << (sal_uInt32)0;                           //
+        rStrm  .WriteUInt16( (sal_uInt16)( ( nCount << 4 ) | 0xf ) )    // open an ESCHER_SolverContainer
+               .WriteUInt16( (sal_uInt16)ESCHER_SolverContainer )       //
+               .WriteUInt32( (sal_uInt32)0 );                           //
 
         nRecHdPos = rStrm.Tell() - 4;
 
@@ -4787,14 +4787,14 @@ void EscherSolverContainer::WriteSolver( SvStream& rStrm )
                 if ( aConnectorRule.nShapeB )
                     aConnectorRule.ncptiB = pPtr->GetConnectorRule( sal_False );
             }
-            rStrm   << (sal_uInt32)( ( ESCHER_ConnectorRule << 16 ) | 1 )   // atom hd
-                    << (sal_uInt32)24                                       //
-                    << aConnectorRule.nRuleId
-                    << aConnectorRule.nShapeA
-                    << aConnectorRule.nShapeB
-                    << aConnectorRule.nShapeC
-                    << aConnectorRule.ncptiA
-                    << aConnectorRule.ncptiB;
+            rStrm  .WriteUInt32( (sal_uInt32)( ( ESCHER_ConnectorRule << 16 ) | 1 ) )   // atom hd
+                   .WriteUInt32( (sal_uInt32)24 )                                       //
+                   .WriteUInt32( aConnectorRule.nRuleId )
+                   .WriteUInt32( aConnectorRule.nShapeA )
+                   .WriteUInt32( aConnectorRule.nShapeB )
+                   .WriteUInt32( aConnectorRule.nShapeC )
+                   .WriteUInt32( aConnectorRule.ncptiA )
+                   .WriteUInt32( aConnectorRule.ncptiB );
 
             aConnectorRule.nRuleId += 2;
         }
@@ -4802,7 +4802,7 @@ void EscherSolverContainer::WriteSolver( SvStream& rStrm )
         nCurrentPos = rStrm.Tell();             // close the ESCHER_SolverContainer
         nSize = ( nCurrentPos - nRecHdPos ) - 4;//
         rStrm.Seek( nRecHdPos );                //
-        rStrm << nSize;                         //
+        rStrm.WriteUInt32( nSize );                         //
         rStrm.Seek( nCurrentPos );              //
     }
 }
@@ -4896,7 +4896,7 @@ void EscherExGlobal::WriteDggAtom( SvStream& rStrm ) const
     sal_uInt32 nDggSize = GetDggAtomSize();
 
     // write the DGG record header (do not include the 8 bytes of the header in the data size)
-    rStrm << static_cast< sal_uInt32 >( ESCHER_Dgg << 16 ) << static_cast< sal_uInt32 >( nDggSize - 8 );
+    rStrm.WriteUInt32( static_cast< sal_uInt32 >( ESCHER_Dgg << 16 ) ).WriteUInt32( static_cast< sal_uInt32 >( nDggSize - 8 ) );
 
     // claculate and write the fixed DGG data
     sal_uInt32 nShapeCount = 0;
@@ -4909,11 +4909,11 @@ void EscherExGlobal::WriteDggAtom( SvStream& rStrm ) const
     // the non-existing cluster with index #0 is counted too
     sal_uInt32 nClusterCount = static_cast< sal_uInt32 >( maClusterTable.size() + 1 );
     sal_uInt32 nDrawingCount = static_cast< sal_uInt32 >( maDrawingInfos.size() );
-    rStrm << nLastShapeId << nClusterCount << nShapeCount << nDrawingCount;
+    rStrm.WriteUInt32( nLastShapeId ).WriteUInt32( nClusterCount ).WriteUInt32( nShapeCount ).WriteUInt32( nDrawingCount );
 
     // write the cluster table
     for( ClusterTable::const_iterator aIt = maClusterTable.begin(), aEnd = maClusterTable.end(); aIt != aEnd; ++aIt )
-        rStrm << aIt->mnDrawingId << aIt->mnNextShapeId;
+        rStrm.WriteUInt32( aIt->mnDrawingId ).WriteUInt32( aIt->mnNextShapeId );
 }
 
 SvStream* EscherExGlobal::QueryPictureStream()
@@ -5041,7 +5041,7 @@ void EscherEx::InsertAtCurrentPos( sal_uInt32 nBytes, bool bExpandEndOfAtom )
         if ( (nCurPos < nEndOfRecord) || ((nCurPos == nEndOfRecord) && (bContainer || bExpandEndOfAtom)) )
         {
             mpOutStrm->SeekRel( -4 );
-            *mpOutStrm << (sal_uInt32)( nSize + nBytes );
+            mpOutStrm->WriteUInt32( (sal_uInt32)( nSize + nBytes ) );
             if ( !bContainer )
                 mpOutStrm->SeekRel( nSize );
         }
@@ -5111,7 +5111,7 @@ sal_Bool EscherEx::InsertAtPersistOffset( sal_uInt32 nKey, sal_uInt32 nValue )
     sal_Bool    bRetValue = SeekToPersistOffset( nKey );
     if ( bRetValue )
     {
-        *mpOutStrm << nValue;
+        mpOutStrm->WriteUInt32( nValue );
         mpOutStrm->Seek( nOldPos );
     }
     return bRetValue;
@@ -5119,7 +5119,7 @@ sal_Bool EscherEx::InsertAtPersistOffset( sal_uInt32 nKey, sal_uInt32 nValue )
 
 void EscherEx::OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance )
 {
-    *mpOutStrm << (sal_uInt16)( ( nRecInstance << 4 ) | 0xf  ) << nEscherContainer << (sal_uInt32)0;
+    mpOutStrm->WriteUInt16( (sal_uInt16)( ( nRecInstance << 4 ) | 0xf  ) ).WriteUInt16( nEscherContainer ).WriteUInt32( (sal_uInt32)0 );
     mOffsets.push_back( mpOutStrm->Tell() - 4 );
     mRecTypes.push_back( nEscherContainer );
     switch( nEscherContainer )
@@ -5147,8 +5147,8 @@ void EscherEx::OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance )
                     mnCurrentDg = mxGlobal->GenerateDrawingId();
                     AddAtom( 8, ESCHER_Dg, 0, mnCurrentDg );
                     PtReplaceOrInsert( ESCHER_Persist_Dg | mnCurrentDg, mpOutStrm->Tell() );
-                    *mpOutStrm << (sal_uInt32)0     // The number of shapes in this drawing
-                               << (sal_uInt32)0;    // The last MSOSPID given to an SP in this DG
+                    mpOutStrm->WriteUInt32( (sal_uInt32)0 )     // The number of shapes in this drawing
+                              .WriteUInt32( (sal_uInt32)0 );    // The last MSOSPID given to an SP in this DG
                 }
             }
         }
@@ -5178,7 +5178,7 @@ void EscherEx::CloseContainer()
     sal_uInt32 nSize, nPos = mpOutStrm->Tell();
     nSize = ( nPos - mOffsets.back() ) - 4;
     mpOutStrm->Seek( mOffsets.back() );
-    *mpOutStrm << nSize;
+    mpOutStrm->WriteUInt32( nSize );
 
     switch( mRecTypes.back() )
     {
@@ -5188,7 +5188,7 @@ void EscherEx::CloseContainer()
             {
                 mbEscherDg = sal_False;
                 if ( DoSeek( ESCHER_Persist_Dg | mnCurrentDg ) )
-                    *mpOutStrm << mxGlobal->GetDrawingShapeCount( mnCurrentDg ) << mxGlobal->GetLastShapeId( mnCurrentDg );
+                    mpOutStrm->WriteUInt32( mxGlobal->GetDrawingShapeCount( mnCurrentDg ) ).WriteUInt32( mxGlobal->GetLastShapeId( mnCurrentDg ) );
             }
         }
         break;
@@ -5214,7 +5214,7 @@ void EscherEx::CloseContainer()
 void EscherEx::BeginAtom()
 {
     mnCountOfs = mpOutStrm->Tell();
-    *mpOutStrm << (sal_uInt32)0 << (sal_uInt32)0;       // record header wird spaeter geschrieben
+    mpOutStrm->WriteUInt32( (sal_uInt32)0 ).WriteUInt32( (sal_uInt32)0 );       // record header wird spaeter geschrieben
 }
 
 void EscherEx::EndAtom( sal_uInt16 nRecType, int nRecVersion, int nRecInstance )
@@ -5222,31 +5222,31 @@ void EscherEx::EndAtom( sal_uInt16 nRecType, int nRecVersion, int nRecInstance )
     sal_uInt32  nOldPos = mpOutStrm->Tell();
     mpOutStrm->Seek( mnCountOfs );
     sal_uInt32 nSize = nOldPos - mnCountOfs;
-    *mpOutStrm << (sal_uInt16)( ( nRecInstance << 4 ) | ( nRecVersion & 0xf ) ) << nRecType << (sal_uInt32)( nSize - 8 );
+    mpOutStrm->WriteUInt16( (sal_uInt16)( ( nRecInstance << 4 ) | ( nRecVersion & 0xf ) ) ).WriteUInt16( nRecType ).WriteUInt32( (sal_uInt32)( nSize - 8 ) );
     mpOutStrm->Seek( nOldPos );
 }
 
 void EscherEx::AddAtom( sal_uInt32 nAtomSize, sal_uInt16 nRecType, int nRecVersion, int nRecInstance )
 {
-    *mpOutStrm << (sal_uInt16)( ( nRecInstance << 4 ) | ( nRecVersion & 0xf ) ) << nRecType << nAtomSize;
+    mpOutStrm->WriteUInt16( (sal_uInt16)( ( nRecInstance << 4 ) | ( nRecVersion & 0xf ) ) ).WriteUInt16( nRecType ).WriteUInt32( nAtomSize );
 }
 
 void EscherEx::AddChildAnchor( const Rectangle& rRect )
 {
     AddAtom( 16, ESCHER_ChildAnchor );
-    *mpOutStrm  << (sal_Int32)rRect.Left()
-                << (sal_Int32)rRect.Top()
-                << (sal_Int32)rRect.Right()
-                << (sal_Int32)rRect.Bottom();
+    mpOutStrm ->WriteInt32( (sal_Int32)rRect.Left() )
+               .WriteInt32( (sal_Int32)rRect.Top() )
+               .WriteInt32( (sal_Int32)rRect.Right() )
+               .WriteInt32( (sal_Int32)rRect.Bottom() );
 }
 
 void EscherEx::AddClientAnchor( const Rectangle& rRect )
 {
     AddAtom( 8, ESCHER_ClientAnchor );
-    *mpOutStrm << (sal_Int16)rRect.Top()
-               << (sal_Int16)rRect.Left()
-               << (sal_Int16)( rRect.GetWidth()  + rRect.Left() )
-               << (sal_Int16)( rRect.GetHeight() + rRect.Top() );
+    mpOutStrm->WriteInt16( (sal_Int16)rRect.Top() )
+              .WriteInt16( (sal_Int16)rRect.Left() )
+              .WriteInt16( (sal_Int16)( rRect.GetWidth()  + rRect.Left() ) )
+              .WriteInt16( (sal_Int16)( rRect.GetHeight() + rRect.Top() ) );
 }
 
 EscherExHostAppData* EscherEx::EnterAdditionalTextGroup()
@@ -5265,10 +5265,10 @@ sal_uInt32 EscherEx::EnterGroup( const OUString& rShapeName, const Rectangle* pB
     AddAtom( 16, ESCHER_Spgr, 1 );
     PtReplaceOrInsert( ESCHER_Persist_Grouping_Snap | mnGroupLevel,
                         mpOutStrm->Tell() );
-    *mpOutStrm  << (sal_Int32)aRect.Left()  // Bounding box for the grouped shapes to which they will be attached
-                << (sal_Int32)aRect.Top()
-                << (sal_Int32)aRect.Right()
-                << (sal_Int32)aRect.Bottom();
+    mpOutStrm ->WriteInt32( (sal_Int32)aRect.Left() )  // Bounding box for the grouped shapes to which they will be attached
+               .WriteInt32( (sal_Int32)aRect.Top() )
+               .WriteInt32( (sal_Int32)aRect.Right() )
+               .WriteInt32( (sal_Int32)aRect.Bottom() );
 
     sal_uInt32 nShapeId = GenerateShapeId();
     if ( !mnGroupLevel )
@@ -5315,10 +5315,10 @@ sal_Bool EscherEx::SetGroupSnapRect( sal_uInt32 nGroupLevel, const Rectangle& rR
         sal_uInt32 nCurrentPos = mpOutStrm->Tell();
         if ( DoSeek( ESCHER_Persist_Grouping_Snap | ( nGroupLevel - 1 ) ) )
         {
-            *mpOutStrm  << (sal_Int32)rRect.Left()  // Bounding box for the grouped shapes to which they will be attached
-                        << (sal_Int32)rRect.Top()
-                        << (sal_Int32)rRect.Right()
-                        << (sal_Int32)rRect.Bottom();
+            mpOutStrm ->WriteInt32( (sal_Int32)rRect.Left() )  // Bounding box for the grouped shapes to which they will be attached
+                       .WriteInt32( (sal_Int32)rRect.Top() )
+                       .WriteInt32( (sal_Int32)rRect.Right() )
+                       .WriteInt32( (sal_Int32)rRect.Bottom() );
             mpOutStrm->Seek( nCurrentPos );
         }
     }
@@ -5333,7 +5333,7 @@ sal_Bool EscherEx::SetGroupLogicRect( sal_uInt32 nGroupLevel, const Rectangle& r
         sal_uInt32 nCurrentPos = mpOutStrm->Tell();
         if ( DoSeek( ESCHER_Persist_Grouping_Logic | ( nGroupLevel - 1 ) ) )
         {
-            *mpOutStrm << (sal_Int16)rRect.Top() << (sal_Int16)rRect.Left() << (sal_Int16)rRect.Right() << (sal_Int16)rRect.Bottom();
+            mpOutStrm->WriteInt16( (sal_Int16)rRect.Top() ).WriteInt16( (sal_Int16)rRect.Left() ).WriteInt16( (sal_Int16)rRect.Right() ).WriteInt16( (sal_Int16)rRect.Bottom() );
             mpOutStrm->Seek( nCurrentPos );
         }
     }
@@ -5360,7 +5360,7 @@ void EscherEx::AddShape( sal_uInt32 nShpInstance, sal_uInt32 nFlags, sal_uInt32 
         if ( mnGroupLevel > 1 )
             nFlags |= 2;                        // this not a topmost shape
     }
-    *mpOutStrm << nShapeID << nFlags;
+    mpOutStrm->WriteUInt32( nShapeID ).WriteUInt32( nFlags );
 }
 
 void EscherEx::Commit( EscherPropertyContainer& rProps, const Rectangle& )

@@ -58,7 +58,7 @@ void ScNumFormatAbbrev::Load( SvStream& rStream, rtl_TextEncoding eByteStrSet )
 void ScNumFormatAbbrev::Save( SvStream& rStream, rtl_TextEncoding eByteStrSet ) const
 {
     rStream.WriteUniOrByteString( sFormatstring, eByteStrSet );
-    rStream << (sal_uInt16) eSysLnge << (sal_uInt16) eLnge;
+    rStream.WriteUInt16( (sal_uInt16) eSysLnge ).WriteUInt16( (sal_uInt16) eLnge );
 }
 
 void ScNumFormatAbbrev::PutFormatIndex(sal_uLong nFormat,

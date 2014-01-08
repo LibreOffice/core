@@ -304,13 +304,13 @@ SvStream& operator << (SvStream& rOut, const SdPublishingDesign& rDesign)
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, rDesign.m_aDesignName,
         RTL_TEXTENCODING_UTF8);
 
-    rOut << (sal_uInt16)rDesign.m_eMode;
-    rOut << rDesign.m_bContentPage;
-    rOut << rDesign.m_bNotes;
-    rOut << rDesign.m_nResolution;
+    rOut.WriteUInt16( (sal_uInt16)rDesign.m_eMode );
+    rOut.WriteUChar( rDesign.m_bContentPage );
+    rOut.WriteUChar( rDesign.m_bNotes );
+    rOut.WriteUInt16( rDesign.m_nResolution );
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, rDesign.m_aCompression,
         RTL_TEXTENCODING_UTF8);
-    rOut << (sal_uInt16)rDesign.m_eFormat;
+    rOut.WriteUInt16( (sal_uInt16)rDesign.m_eFormat );
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, rDesign.m_aAuthor,
         RTL_TEXTENCODING_UTF8);
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, rDesign.m_aEMail,
@@ -319,29 +319,29 @@ SvStream& operator << (SvStream& rOut, const SdPublishingDesign& rDesign)
         RTL_TEXTENCODING_UTF8);
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, rDesign.m_aMisc,
         RTL_TEXTENCODING_UTF8);
-    rOut << rDesign.m_bDownload;
-    rOut << rDesign.m_bCreated;     // not used
-    rOut << rDesign.m_nButtonThema;
-    rOut << rDesign.m_bUserAttr;
+    rOut.WriteUChar( rDesign.m_bDownload );
+    rOut.WriteUChar( rDesign.m_bCreated );     // not used
+    rOut.WriteInt16( rDesign.m_nButtonThema );
+    rOut.WriteUChar( rDesign.m_bUserAttr );
     rOut << rDesign.m_aBackColor;
     rOut << rDesign.m_aTextColor;
     rOut << rDesign.m_aLinkColor;
     rOut << rDesign.m_aVLinkColor;
     rOut << rDesign.m_aALinkColor;
-    rOut << rDesign.m_bUseAttribs;
-    rOut << rDesign.m_bUseColor;
+    rOut.WriteUChar( rDesign.m_bUseAttribs );
+    rOut.WriteUChar( rDesign.m_bUseColor );
 
-    rOut << (sal_uInt16)rDesign.m_eScript;
+    rOut.WriteUInt16( (sal_uInt16)rDesign.m_eScript );
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, rDesign.m_aURL,
         RTL_TEXTENCODING_UTF8);
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, rDesign.m_aCGI,
         RTL_TEXTENCODING_UTF8);
 
-    rOut << rDesign.m_bAutoSlide;
-    rOut << rDesign.m_nSlideDuration;
-    rOut << rDesign.m_bEndless;
-    rOut << rDesign.m_bSlideSound;
-    rOut << rDesign.m_bHiddenSlides;
+    rOut.WriteUChar( rDesign.m_bAutoSlide );
+    rOut.WriteUInt32( rDesign.m_nSlideDuration );
+    rOut.WriteUChar( rDesign.m_bEndless );
+    rOut.WriteUChar( rDesign.m_bSlideSound );
+    rOut.WriteUChar( rDesign.m_bHiddenSlides );
 
     return rOut;
 }
@@ -1558,14 +1558,14 @@ sal_Bool SdPublishingDlg::Save()
         return( sal_False );
 
     sal_uInt16 aCheck = nMagic;
-    *pStream << aCheck;
+    pStream->WriteUInt16( aCheck );
 
     // Destroys the SdIOCompat before the Stream is being destributed
     {
         SdIOCompat aIO(*pStream, STREAM_WRITE, 0);
 
         sal_uInt16 nDesigns = (sal_uInt16) m_aDesignList.size();
-        *pStream << nDesigns;
+        pStream->WriteUInt16( nDesigns );
 
         for( sal_uInt16 nIndex = 0;
              pStream->GetError() == SVSTREAM_OK && nIndex < nDesigns;

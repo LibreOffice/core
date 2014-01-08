@@ -320,7 +320,7 @@ sal_Bool SwEditShell::GetSelectedText( OUString &rBuf, int nHndlParaBrk )
                 STRING_MAXLEN > (( lLen  = aStream.GetSize() )
                                         / sizeof( sal_Unicode )) + 1 )
             {
-                aStream << (sal_Unicode)'\0';
+                aStream.WriteUInt16( (sal_Unicode)'\0' );
 
                 const sal_Unicode *p = (sal_Unicode*)aStream.GetBuffer();
                 if( p )

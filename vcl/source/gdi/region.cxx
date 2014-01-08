@@ -1623,7 +1623,7 @@ SvStream& operator<<( SvStream& rOStrm, const Region& rRegion )
     VersionCompat aCompat(rOStrm, STREAM_WRITE, nVersion);
 
     // put version
-    rOStrm << nVersion;
+    rOStrm.WriteUInt16( nVersion );
 
     // put type
     enum RegionType { REGION_NULL, REGION_EMPTY, REGION_RECTANGLE, REGION_COMPLEX };
@@ -1655,7 +1655,7 @@ SvStream& operator<<( SvStream& rOStrm, const Region& rRegion )
         aRegionType = REGION_RECTANGLE;
     }
 
-    rOStrm << (sal_uInt16)aRegionType;
+    rOStrm.WriteUInt16( (sal_uInt16)aRegionType );
 
     // get RegionBand
     const RegionBand* pRegionBand = rRegion.getRegionBand();
@@ -1675,7 +1675,7 @@ SvStream& operator<<( SvStream& rOStrm, const Region& rRegion )
 
     // write polypolygon if available
     const sal_Bool bHasPolyPolygon(rRegion.HasPolyPolygonOrB2DPolyPolygon());
-    rOStrm << bHasPolyPolygon;
+    rOStrm.WriteUChar( bHasPolyPolygon );
 
     if(bHasPolyPolygon)
     {

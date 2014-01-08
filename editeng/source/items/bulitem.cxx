@@ -39,24 +39,24 @@ void SvxBulletItem::StoreFont( SvStream& rStream, const Font& rFont )
     sal_uInt16 nTemp;
 
     rStream << rFont.GetColor();
-    nTemp = (sal_uInt16)rFont.GetFamily(); rStream << nTemp;
+    nTemp = (sal_uInt16)rFont.GetFamily(); rStream.WriteUInt16( nTemp );
 
     nTemp = (sal_uInt16)GetSOStoreTextEncoding((rtl_TextEncoding)rFont.GetCharSet());
-    rStream << nTemp;
+    rStream.WriteUInt16( nTemp );
 
-    nTemp = (sal_uInt16)rFont.GetPitch(); rStream << nTemp;
-    nTemp = (sal_uInt16)rFont.GetAlign(); rStream << nTemp;
-    nTemp = (sal_uInt16)rFont.GetWeight(); rStream << nTemp;
-    nTemp = (sal_uInt16)rFont.GetUnderline(); rStream << nTemp;
-    nTemp = (sal_uInt16)rFont.GetStrikeout(); rStream << nTemp;
-    nTemp = (sal_uInt16)rFont.GetItalic(); rStream << nTemp;
+    nTemp = (sal_uInt16)rFont.GetPitch(); rStream.WriteUInt16( nTemp );
+    nTemp = (sal_uInt16)rFont.GetAlign(); rStream.WriteUInt16( nTemp );
+    nTemp = (sal_uInt16)rFont.GetWeight(); rStream.WriteUInt16( nTemp );
+    nTemp = (sal_uInt16)rFont.GetUnderline(); rStream.WriteUInt16( nTemp );
+    nTemp = (sal_uInt16)rFont.GetStrikeout(); rStream.WriteUInt16( nTemp );
+    nTemp = (sal_uInt16)rFont.GetItalic(); rStream.WriteUInt16( nTemp );
 
     // UNICODE: rStream << rFont.GetName();
     rStream.WriteUniOrByteString(rFont.GetName(), rStream.GetStreamCharSet());
 
-    rStream << rFont.IsOutline();
-    rStream << rFont.IsShadow();
-    rStream << rFont.IsTransparent();
+    rStream.WriteUChar( rFont.IsOutline() );
+    rStream.WriteUChar( rFont.IsShadow() );
+    rStream.WriteUChar( rFont.IsTransparent() );
 }
 
 // -----------------------------------------------------------------------
@@ -321,7 +321,7 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
         const_cast< SvxBulletItem* >( this )->nStyle = BS_NONE;
     }
 
-    rStrm << nStyle;
+    rStrm.WriteUInt16( nStyle );
 
     if( nStyle != BS_BMP )
         StoreFont( rStrm, aFont );
@@ -351,11 +351,11 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
         if ( (nEnd-_nStart) > 0xFF00 )
             rStrm.Seek( _nStart );
     }
-    rStrm << static_cast<sal_Int32>(nWidth);
-    rStrm << nStart;
-    rStrm << nJustify;
-    rStrm << OUStringToOString(OUString(cSymbol), aFont.GetCharSet()).toChar();
-    rStrm << nScale;
+    rStrm.WriteInt32( static_cast<sal_Int32>(nWidth) );
+    rStrm.WriteUInt16( nStart );
+    rStrm.WriteUChar( nJustify );
+    rStrm.WriteChar( OUStringToOString(OUString(cSymbol), aFont.GetCharSet()).toChar() );
+    rStrm.WriteUInt16( nScale );
 
     // UNICODE: rStrm << aPrevText;
     rStrm.WriteUniOrByteString(aPrevText, rStrm.GetStreamCharSet());

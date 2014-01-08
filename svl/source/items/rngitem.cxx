@@ -107,8 +107,8 @@ SfxPoolItem* SfxRangeItem::Create(SvStream &rStream, sal_uInt16) const
 
 SvStream& SfxRangeItem::Store(SvStream &rStream, sal_uInt16) const
 {
-    rStream << nFrom;
-    rStream << nTo;
+    rStream.WriteUInt16( nFrom );
+    rStream.WriteUInt16( nTo );
     return rStream;
 }
 

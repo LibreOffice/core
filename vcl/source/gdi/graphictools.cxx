@@ -142,18 +142,18 @@ SvStream& operator<<( SvStream& rOStm, const SvtGraphicStroke& rClass )
     rClass.maPath.Write( rOStm );
     rClass.maStartArrow.Write( rOStm );
     rClass.maEndArrow.Write( rOStm );
-    rOStm << rClass.mfTransparency;
-    rOStm << rClass.mfStrokeWidth;
+    rOStm.WriteDouble( rClass.mfTransparency );
+    rOStm.WriteDouble( rClass.mfStrokeWidth );
     sal_uInt16 nTmp = sal::static_int_cast<sal_uInt16>( rClass.maCapType );
-    rOStm << nTmp;
+    rOStm.WriteUInt16( nTmp );
     nTmp = sal::static_int_cast<sal_uInt16>( rClass.maJoinType );
-    rOStm << nTmp;
-    rOStm << rClass.mfMiterLimit;
+    rOStm.WriteUInt16( nTmp );
+    rOStm.WriteDouble( rClass.mfMiterLimit );
 
-    rOStm << static_cast<sal_uInt32>(rClass.maDashArray.size());
+    rOStm.WriteUInt32( static_cast<sal_uInt32>(rClass.maDashArray.size()) );
     size_t i;
     for(i=0; i<rClass.maDashArray.size(); ++i)
-        rOStm << rClass.maDashArray[i];
+        rOStm.WriteDouble( rClass.maDashArray[i] );
 
     return rOStm;
 }
@@ -293,24 +293,24 @@ SvStream& operator<<( SvStream& rOStm, const SvtGraphicFill& rClass )
 
     rClass.maPath.Write( rOStm );
     rOStm << rClass.maFillColor;
-    rOStm << rClass.mfTransparency;
+    rOStm.WriteDouble( rClass.mfTransparency );
     sal_uInt16 nTmp = sal::static_int_cast<sal_uInt16>( rClass.maFillRule );
-    rOStm << nTmp;
+    rOStm.WriteUInt16( nTmp );
     nTmp = sal::static_int_cast<sal_uInt16>( rClass.maFillType );
-    rOStm << nTmp;
+    rOStm.WriteUInt16( nTmp );
     int i;
     for(i=0; i<SvtGraphicFill::Transform::MatrixSize; ++i)
-        rOStm << rClass.maFillTransform.matrix[i];
+        rOStm.WriteDouble( rClass.maFillTransform.matrix[i] );
     nTmp = rClass.mbTiling;
-    rOStm << nTmp;
+    rOStm.WriteUInt16( nTmp );
     nTmp = sal::static_int_cast<sal_uInt16>( rClass.maHatchType );
-    rOStm << nTmp;
+    rOStm.WriteUInt16( nTmp );
     rOStm << rClass.maHatchColor;
     nTmp = sal::static_int_cast<sal_uInt16>( rClass.maGradientType );
-    rOStm << nTmp;
+    rOStm.WriteUInt16( nTmp );
     rOStm << rClass.maGradient1stColor;
     rOStm << rClass.maGradient2ndColor;
-    rOStm << rClass.maGradientStepCount;
+    rOStm.WriteInt32( rClass.maGradientStepCount );
     rOStm << rClass.maFillGraphic;
 
     return rOStm;

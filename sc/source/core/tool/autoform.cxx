@@ -107,7 +107,7 @@ namespace
     SvStream& operator<<(SvStream &stream, AutoFormatSwBlob &blob)
     {
         const sal_uInt64 endOfBlob = stream.Tell() + sizeof(sal_uInt64) + blob.size;
-        stream << endOfBlob;
+        stream.WriteUInt64( endOfBlob );
         if (blob.size)
             stream.Write(blob.pData, blob.size);
 
@@ -176,33 +176,33 @@ void ScAfVersions::Load( SvStream& rStream, sal_uInt16 nVer )
 
 void ScAfVersions::Write(SvStream& rStream, sal_uInt16 fileVersion)
 {
-    rStream << SvxFontItem(ATTR_FONT).GetVersion(fileVersion);
-    rStream << SvxFontHeightItem(240, 100, ATTR_FONT_HEIGHT).GetVersion(fileVersion);
-    rStream << SvxWeightItem(WEIGHT_NORMAL, ATTR_FONT_WEIGHT).GetVersion(fileVersion);
-    rStream << SvxPostureItem(ITALIC_NONE, ATTR_FONT_POSTURE).GetVersion(fileVersion);
-    rStream << SvxUnderlineItem(UNDERLINE_NONE, ATTR_FONT_UNDERLINE).GetVersion(fileVersion);
-    rStream << SvxOverlineItem(UNDERLINE_NONE, ATTR_FONT_OVERLINE).GetVersion(fileVersion);
-    rStream << SvxCrossedOutItem(STRIKEOUT_NONE, ATTR_FONT_CROSSEDOUT).GetVersion(fileVersion);
-    rStream << SvxContourItem(false, ATTR_FONT_CONTOUR).GetVersion(fileVersion);
-    rStream << SvxShadowedItem(false, ATTR_FONT_SHADOWED).GetVersion(fileVersion);
-    rStream << SvxColorItem(ATTR_FONT_COLOR).GetVersion(fileVersion);
-    rStream << SvxBoxItem(ATTR_BORDER).GetVersion(fileVersion);
-    rStream << SvxLineItem(SID_FRAME_LINESTYLE).GetVersion(fileVersion);
-    rStream << SvxBrushItem(ATTR_BACKGROUND).GetVersion(fileVersion);
+    rStream.WriteUInt16( SvxFontItem(ATTR_FONT).GetVersion(fileVersion) );
+    rStream.WriteUInt16( SvxFontHeightItem(240, 100, ATTR_FONT_HEIGHT).GetVersion(fileVersion) );
+    rStream.WriteUInt16( SvxWeightItem(WEIGHT_NORMAL, ATTR_FONT_WEIGHT).GetVersion(fileVersion) );
+    rStream.WriteUInt16( SvxPostureItem(ITALIC_NONE, ATTR_FONT_POSTURE).GetVersion(fileVersion) );
+    rStream.WriteUInt16( SvxUnderlineItem(UNDERLINE_NONE, ATTR_FONT_UNDERLINE).GetVersion(fileVersion) );
+    rStream.WriteUInt16( SvxOverlineItem(UNDERLINE_NONE, ATTR_FONT_OVERLINE).GetVersion(fileVersion) );
+    rStream.WriteUInt16( SvxCrossedOutItem(STRIKEOUT_NONE, ATTR_FONT_CROSSEDOUT).GetVersion(fileVersion) );
+    rStream.WriteUInt16( SvxContourItem(false, ATTR_FONT_CONTOUR).GetVersion(fileVersion) );
+    rStream.WriteUInt16( SvxShadowedItem(false, ATTR_FONT_SHADOWED).GetVersion(fileVersion) );
+    rStream.WriteUInt16( SvxColorItem(ATTR_FONT_COLOR).GetVersion(fileVersion) );
+    rStream.WriteUInt16( SvxBoxItem(ATTR_BORDER).GetVersion(fileVersion) );
+    rStream.WriteUInt16( SvxLineItem(SID_FRAME_LINESTYLE).GetVersion(fileVersion) );
+    rStream.WriteUInt16( SvxBrushItem(ATTR_BACKGROUND).GetVersion(fileVersion) );
 
-    rStream << SvxAdjustItem(SVX_ADJUST_LEFT, 0).GetVersion(fileVersion);
+    rStream.WriteUInt16( SvxAdjustItem(SVX_ADJUST_LEFT, 0).GetVersion(fileVersion) );
     if (fileVersion >= SOFFICE_FILEFORMAT_50)
         rStream << swVersions;
 
-    rStream << SvxHorJustifyItem(SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY).GetVersion(fileVersion);
-    rStream << SvxVerJustifyItem(SVX_VER_JUSTIFY_STANDARD, ATTR_VER_JUSTIFY).GetVersion(fileVersion);
-    rStream << SvxOrientationItem(SVX_ORIENTATION_STANDARD, 0).GetVersion(fileVersion);
-    rStream << SvxMarginItem(ATTR_MARGIN).GetVersion(fileVersion);
-    rStream << SfxBoolItem(ATTR_LINEBREAK).GetVersion(fileVersion);
-    rStream << SfxInt32Item(ATTR_ROTATE_VALUE).GetVersion(fileVersion);
-    rStream << SvxRotateModeItem(SVX_ROTATE_MODE_STANDARD,0).GetVersion(fileVersion);
+    rStream.WriteUInt16( SvxHorJustifyItem(SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY).GetVersion(fileVersion) );
+    rStream.WriteUInt16( SvxVerJustifyItem(SVX_VER_JUSTIFY_STANDARD, ATTR_VER_JUSTIFY).GetVersion(fileVersion) );
+    rStream.WriteUInt16( SvxOrientationItem(SVX_ORIENTATION_STANDARD, 0).GetVersion(fileVersion) );
+    rStream.WriteUInt16( SvxMarginItem(ATTR_MARGIN).GetVersion(fileVersion) );
+    rStream.WriteUInt16( SfxBoolItem(ATTR_LINEBREAK).GetVersion(fileVersion) );
+    rStream.WriteUInt16( SfxInt32Item(ATTR_ROTATE_VALUE).GetVersion(fileVersion) );
+    rStream.WriteUInt16( SvxRotateModeItem(SVX_ROTATE_MODE_STANDARD,0).GetVersion(fileVersion) );
 
-    rStream << (sal_uInt16)0;       // Num-Format
+    rStream.WriteUInt16( (sal_uInt16)0 );       // Num-Format
 }
 
 ScAutoFormatDataField::ScAutoFormatDataField() :
@@ -792,17 +792,17 @@ bool ScAutoFormatData::Save(SvStream& rStream, sal_uInt16 fileVersion)
 {
     sal_uInt16 nVal = AUTOFORMAT_DATA_ID;
     sal_Bool b;
-    rStream << nVal;
+    rStream.WriteUInt16( nVal );
     // --- from 680/dr25 on: store strings as UTF-8
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStream, aName, RTL_TEXTENCODING_UTF8);
 
-    rStream << nStrResId;
-    rStream << ( b = bIncludeFont );
-    rStream << ( b = bIncludeJustify );
-    rStream << ( b = bIncludeFrame );
-    rStream << ( b = bIncludeBackground );
-    rStream << ( b = bIncludeValueFormat );
-    rStream << ( b = bIncludeWidthHeight );
+    rStream.WriteUInt16( nStrResId );
+    rStream.WriteUChar( ( b = bIncludeFont ) );
+    rStream.WriteUChar( ( b = bIncludeJustify ) );
+    rStream.WriteUChar( ( b = bIncludeFrame ) );
+    rStream.WriteUChar( ( b = bIncludeBackground ) );
+    rStream.WriteUChar( ( b = bIncludeValueFormat ) );
+    rStream.WriteUChar( ( b = bIncludeWidthHeight ) );
 
     if (fileVersion >= SOFFICE_FILEFORMAT_50)
         rStream << m_swFields;
@@ -1084,15 +1084,15 @@ bool ScAutoFormat::Save()
 
         // Attention: A common header has to be saved
         sal_uInt16 nVal = AUTOFORMAT_ID;
-        rStream << nVal
-                << (sal_uInt8)2         // Number of chars of the header including this
-                << (sal_uInt8)::GetSOStoreTextEncoding(
-                    osl_getThreadTextEncoding() );
+        rStream.WriteUInt16( nVal )
+               .WriteUChar( (sal_uInt8)2 )         // Number of chars of the header including this
+               .WriteUChar( (sal_uInt8)::GetSOStoreTextEncoding(
+                    osl_getThreadTextEncoding() ) );
         m_aVersions.Write(rStream, fileVersion);
 
         bRet &= (rStream.GetError() == 0);
 
-        rStream << (sal_uInt16)(maData.size() - 1);
+        rStream.WriteUInt16( (sal_uInt16)(maData.size() - 1) );
         bRet &= (rStream.GetError() == 0);
         MapType::iterator it = maData.begin(), itEnd = maData.end();
         if (it != itEnd)

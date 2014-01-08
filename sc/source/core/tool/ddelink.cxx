@@ -110,10 +110,10 @@ void ScDdeLink::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
     rStream.WriteUniOrByteString( aItem, eCharSet );
 
     sal_Bool bHasValue = ( pResult != 0 );
-    rStream << bHasValue;
+    rStream.WriteUChar( bHasValue );
 
     if( rStream.GetVersion() > SOFFICE_FILEFORMAT_40 )      // nicht bei 4.0 Export
-        rStream << nMode;                                   // seit 388b
+        rStream.WriteUChar( nMode );                                   // seit 388b
 
     //  Links mit Mode != SC_DDE_DEFAULT werden bei 4.0 Export komplett weggelassen
     //  (aus ScDocument::SaveDdeLinks)

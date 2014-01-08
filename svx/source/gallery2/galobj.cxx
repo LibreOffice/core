@@ -171,8 +171,8 @@ void SgaObject::WriteData( SvStream& rOut, const OUString& rDestDir ) const
 {
     static const sal_uInt32 nInventor = COMPAT_FORMAT( 'S', 'G', 'A', '3' );
 
-    rOut << nInventor << (sal_uInt16) 0x0004 << GetVersion() << (sal_uInt16) GetObjKind();
-    rOut << bIsThumbBmp;
+    rOut.WriteUInt32( nInventor ).WriteUInt16( (sal_uInt16) 0x0004 ).WriteUInt16( GetVersion() ).WriteUInt16( (sal_uInt16) GetObjKind() );
+    rOut.WriteUChar( bIsThumbBmp );
 
     if( bIsThumbBmp )
     {
@@ -370,7 +370,7 @@ BitmapEx SgaObjectSound::GetThumbBmp() const
 void SgaObjectSound::WriteData( SvStream& rOut, const OUString& rDestDir ) const
 {
     SgaObject::WriteData( rOut, rDestDir );
-    rOut << (sal_uInt16) eSoundType;
+    rOut.WriteUInt16( (sal_uInt16) eSoundType );
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, aTitle, RTL_TEXTENCODING_UTF8);
 }
 

@@ -1512,7 +1512,7 @@ SvStream &SfxItemSet::Store
 
     // Position des Counts merken, um ggf. zu korrigieren
     sal_uLong nCountPos = rStream.Tell();
-    rStream << _nCount;
+    rStream.WriteUInt16( _nCount );
 
     // wenn nichts zu speichern ist, auch keinen ItemIter aufsetzen!
     if ( _nCount )
@@ -1540,7 +1540,7 @@ SvStream &SfxItemSet::Store
             // tats"achlichen Count im Stream ablegen
             sal_uLong nPos = rStream.Tell();
             rStream.Seek( nCountPos );
-            rStream << nWrittenCount;
+            rStream.WriteUInt16( nWrittenCount );
             rStream.Seek( nPos );
         }
     }

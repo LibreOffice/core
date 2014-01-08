@@ -1604,7 +1604,7 @@ SvStream& operator<<( SvStream& rOStream, const Polygon& rPoly )
     sal_uInt16          nPoints = rPoly.GetSize();
 
     // Write number of points
-    rOStream << nPoints;
+    rOStream.WriteUInt16( nPoints );
 
     {
         // Determine whether we need to write through operators
@@ -1621,8 +1621,8 @@ SvStream& operator<<( SvStream& rOStream, const Polygon& rPoly )
             for( i = 0; i < nPoints; i++ )
             {
                 //fdo#39428 SvStream no longer supports operator<<(long)
-                rOStream << sal::static_int_cast<sal_Int32>( rPoly.mpImplPolygon->mpPointAry[i].X() )
-                         << sal::static_int_cast<sal_Int32>( rPoly.mpImplPolygon->mpPointAry[i].Y() );
+                rOStream.WriteInt32( sal::static_int_cast<sal_Int32>( rPoly.mpImplPolygon->mpPointAry[i].X() ) )
+                        .WriteInt32( sal::static_int_cast<sal_Int32>( rPoly.mpImplPolygon->mpPointAry[i].Y() ) );
             }
         }
         else
@@ -1659,8 +1659,8 @@ void Polygon::Read( SvStream& rIStream )
 void Polygon::ImplWrite( SvStream& rOStream ) const
 {
     sal_uInt8   bHasPolyFlags = mpImplPolygon->mpFlagAry != NULL;
-    rOStream << *this
-             << bHasPolyFlags;
+    rOStream << *this;
+    rOStream.WriteUChar( bHasPolyFlags );
 
     if ( bHasPolyFlags )
         rOStream.Write( mpImplPolygon->mpFlagAry, mpImplPolygon->mnPoints );

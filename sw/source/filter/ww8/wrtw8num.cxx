@@ -166,7 +166,7 @@ void WW8AttributeOutput::NumberingDefinition( sal_uInt16 nId, const SwNumRule &r
     if ( rRule.IsContinusNum() )
         nFlags |= 0x1;
 
-    *m_rWW8Export.pTableStrm << nFlags << nDummy;
+    m_rWW8Export.pTableStrm->WriteUChar( nFlags ).WriteUChar( nDummy );
 }
 
 void MSWordExportBase::NumberingDefinitions()
@@ -204,7 +204,7 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
     SwWW8Writer::WriteLong( *m_rWW8Export.pTableStrm, nStart );
 
     // Type
-    *m_rWW8Export.pTableStrm << WW8Export::GetNumId( nNumberingType );
+    m_rWW8Export.pTableStrm->WriteUChar( WW8Export::GetNumId( nNumberingType ) );
 
     // Justification
     sal_uInt8 nAlign;
@@ -220,14 +220,14 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
         nAlign = 0;
         break;
     }
-    *m_rWW8Export.pTableStrm << nAlign;
+    m_rWW8Export.pTableStrm->WriteUChar( nAlign );
 
     // Write the rgbxchNums[9], positions of placeholders for paragraph
     // numbers in the text
     m_rWW8Export.pTableStrm->Write( pNumLvlPos, WW8ListManager::nMaxLevel );
 
     // Type of the character between the bullet and the text
-    *m_rWW8Export.pTableStrm << nFollow;
+    m_rWW8Export.pTableStrm->WriteUChar( nFollow );
 
     // dxaSoace/dxaIndent (Word 6 compatibility)
     SwWW8Writer::WriteLong( *m_rWW8Export.pTableStrm, 0 );
@@ -270,7 +270,7 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
 
         m_rWW8Export.pO = pOldpO;
     }
-    *m_rWW8Export.pTableStrm << sal_uInt8( aCharAtrs.size() );
+    m_rWW8Export.pTableStrm->WriteUChar( sal_uInt8( aCharAtrs.size() ) );
 
     // cbGrpprlPapx
     sal_uInt8 aPapSprms [] = {
@@ -278,7 +278,7 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
         0x60, 0x84, 0, 0,               // sprmPDxaLeft1
         0x15, 0xc6, 0x05, 0x00, 0x01, 0, 0, 0x06
     };
-    *m_rWW8Export.pTableStrm << sal_uInt8( sizeof( aPapSprms ) );
+    m_rWW8Export.pTableStrm->WriteUChar( sal_uInt8( sizeof( aPapSprms ) ) );
 
     // reserved
     SwWW8Writer::WriteShort( *m_rWW8Export.pTableStrm, 0 );

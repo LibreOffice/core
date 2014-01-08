@@ -278,11 +278,11 @@ SfxPoolItem* SvxLineSpacingItem::Create(SvStream& rStrm, sal_uInt16) const
 
 SvStream& SvxLineSpacingItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm << (sal_Int8)  GetPropLineSpace()
-          << (short)  GetInterLineSpace()
-          << (sal_uInt16) GetLineHeight()
-          << (sal_Int8)   GetLineSpaceRule()
-          << (sal_Int8)   GetInterLineSpaceRule();
+    rStrm.WriteSChar( (sal_Int8)  GetPropLineSpace() )
+         .WriteInt16( (short)  GetInterLineSpace() )
+         .WriteUInt16( (sal_uInt16) GetLineHeight() )
+         .WriteSChar( (sal_Int8)   GetLineSpaceRule() )
+         .WriteSChar( (sal_Int8)   GetInterLineSpaceRule() );
     return rStrm;
 }
 
@@ -509,7 +509,7 @@ SfxPoolItem* SvxAdjustItem::Create(SvStream& rStrm, sal_uInt16 nVersion) const
 
 SvStream& SvxAdjustItem::Store( SvStream& rStrm, sal_uInt16 nItemVersion ) const
 {
-    rStrm << (char)GetAdjust();
+    rStrm.WriteChar( (char)GetAdjust() );
     if ( nItemVersion >= ADJUST_LASTBLOCK_VERSION )
     {
         sal_Int8 nFlags = 0;
@@ -519,7 +519,7 @@ SvStream& SvxAdjustItem::Store( SvStream& rStrm, sal_uInt16 nItemVersion ) const
             nFlags |= 0x0002;
         if ( bLastBlock )
             nFlags |= 0x0004;
-        rStrm << (sal_Int8) nFlags;
+        rStrm.WriteSChar( (sal_Int8) nFlags );
     }
     return rStrm;
 }
@@ -551,7 +551,7 @@ SfxPoolItem* SvxWidowsItem::Create(SvStream& rStrm, sal_uInt16) const
 
 SvStream& SvxWidowsItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm << (sal_Int8)GetValue();
+    rStrm.WriteSChar( (sal_Int8)GetValue() );
     return rStrm;
 }
 
@@ -621,7 +621,7 @@ SfxPoolItem* SvxOrphansItem::Create(SvStream& rStrm, sal_uInt16) const
 
 SvStream& SvxOrphansItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm << (sal_Int8) GetValue();
+    rStrm.WriteSChar( (sal_Int8) GetValue() );
     return rStrm;
 }
 
@@ -823,11 +823,11 @@ SfxPoolItem* SvxHyphenZoneItem::Create(SvStream& rStrm, sal_uInt16) const
 
 SvStream& SvxHyphenZoneItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm << (sal_Int8) IsHyphen()
-          << (sal_Int8) IsPageEnd()
-          << (sal_Int8) GetMinLead()
-          << (sal_Int8) GetMinTrail()
-          << (sal_Int8) GetMaxHyphens();
+    rStrm.WriteSChar( (sal_Int8) IsHyphen() )
+         .WriteSChar( (sal_Int8) IsPageEnd() )
+         .WriteSChar( (sal_Int8) GetMinLead() )
+         .WriteSChar( (sal_Int8) GetMinTrail() )
+         .WriteSChar( (sal_Int8) GetMaxHyphens() );
     return rStrm;
 }
 
@@ -1187,24 +1187,24 @@ SvStream& SvxTabStopItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) 
         nCount = (sal_uInt16)(nNew < lA3Width ? ( lA3Width - nNew ) / nDefDist + 1 : 0);
     }
 
-    rStrm << (sal_Int8) ( nTabs + nCount );
+    rStrm.WriteSChar( (sal_Int8) ( nTabs + nCount ) );
     for ( short i = 0; i < nTabs; i++ )
     {
         const SvxTabStop& rTab = (*this)[ i ];
-        rStrm << rTab.GetTabPos()
-              << (sal_Int8) rTab.GetAdjustment()
-              << (unsigned char) rTab.GetDecimal()
-              << (unsigned char) rTab.GetFill();
+        rStrm.WriteInt32( rTab.GetTabPos() )
+             .WriteSChar( (sal_Int8) rTab.GetAdjustment() )
+             .WriteUChar( (unsigned char) rTab.GetDecimal() )
+             .WriteUChar( (unsigned char) rTab.GetFill() );
     }
 
     if ( bStoreDefTabs )
         for( ; nCount; --nCount )
         {
             SvxTabStop aSwTabStop(nNew, SVX_TAB_ADJUST_DEFAULT);
-            rStrm << aSwTabStop.GetTabPos()
-                  << (sal_Int8) aSwTabStop.GetAdjustment()
-                  << (unsigned char) aSwTabStop.GetDecimal()
-                  << (unsigned char) aSwTabStop.GetFill();
+            rStrm.WriteInt32( aSwTabStop.GetTabPos() )
+                 .WriteSChar( (sal_Int8) aSwTabStop.GetAdjustment() )
+                 .WriteUChar( (unsigned char) aSwTabStop.GetDecimal() )
+                 .WriteUChar( (unsigned char) aSwTabStop.GetFill() );
             nNew += nDefDist;
         }
 
@@ -1252,7 +1252,7 @@ SfxPoolItem* SvxFmtSplitItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxFmtSplitItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm << (sal_Int8)GetValue();
+    rStrm.WriteSChar( (sal_Int8)GetValue() );
     return rStrm;
 }
 
@@ -1548,7 +1548,7 @@ SfxPoolItem* SvxParaVertAlignItem::Create( SvStream& rStrm, sal_uInt16 ) const
 
 SvStream& SvxParaVertAlignItem::Store( SvStream & rStrm, sal_uInt16 ) const
 {
-    rStrm << GetValue();
+    rStrm.WriteUInt16( GetValue() );
     return rStrm;
 }
 
