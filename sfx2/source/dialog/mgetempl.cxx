@@ -416,6 +416,7 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet& /*rAttrSet*/ )
     if ( sCmp != aName )
         pStyle->SetName( aName );
     m_pNameRw->SetText( aName );
+    m_pNameRw->SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
 
     if ( m_pFollowLb->IsEnabled() )
     {
