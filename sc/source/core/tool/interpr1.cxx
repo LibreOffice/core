@@ -216,20 +216,20 @@ void ScInterpreter::ScIfJump()
     is the result matrix of a jump matrix. All arguments must be valid and are
     not checked. */
 static void lcl_storeJumpMatResult(
-    const ScMatrix* pMat, ScMatrix* pResMat, SCSIZE nC, SCSIZE nR )
+    const ScMatrix* pMat, ScJumpMatrix* pJumpMat, SCSIZE nC, SCSIZE nR )
 {
     if ( pMat->IsValue( nC, nR ) )
     {
         double fVal = pMat->GetDouble( nC, nR );
-        pResMat->PutDouble( fVal, nC, nR );
+        pJumpMat->PutResultDouble( fVal, nC, nR );
     }
     else if ( pMat->IsEmpty( nC, nR ) )
     {
-        pResMat->PutEmpty( nC, nR );
+        pJumpMat->PutResultEmpty( nC, nR );
     }
     else
     {
-        pResMat->PutString(pMat->GetString(nC, nR), nC, nR);
+        pJumpMat->PutResultString(pMat->GetString(nC, nR), nC, nR);
     }
 }
 
@@ -334,7 +334,6 @@ void ScInterpreter::ScIfError( bool bNAonly )
                 {
                     const ScMatrix* pMatPtr = pMat.get();
                     ScJumpMatrix* pJumpMat = new ScJumpMatrix( nCols, nRows );
-                    ScMatrix* pResMatPtr = pJumpMat->GetResultMatrix();
                     // Init all jumps to no error to save single calls. Error
                     // is the exceptional condition.
                     const double fFlagResult = CreateDoubleError( errJumpMatHasResult);
@@ -346,7 +345,7 @@ void ScInterpreter::ScIfError( bool bNAonly )
                     {
                         for ( ; nR < nRows && (nC != nErrorCol || nR != nErrorRow); ++nR)
                         {
-                            lcl_storeJumpMatResult(pMatPtr, pResMatPtr, nC, nR);
+                            lcl_storeJumpMatResult(pMatPtr, pJumpMat, nC, nR);
                         }
                         if (nC != nErrorCol || nR != nErrorRow)
                             ++nC;
@@ -363,7 +362,7 @@ void ScInterpreter::ScIfError( bool bNAonly )
                             }
                             else
                             {   // FALSE, EMPTY path, store result instead
-                                lcl_storeJumpMatResult(pMatPtr, pResMatPtr, nC, nR);
+                                lcl_storeJumpMatResult(pMatPtr, pJumpMat, nC, nR);
                             }
                         }
                     }
@@ -492,7 +491,7 @@ void ScInterpreter::ScChoseJump()
         aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
 }
 
-static void lcl_AdjustJumpMatrix( ScJumpMatrix* pJumpM, ScMatrixRef& pResMat, SCSIZE nParmCols, SCSIZE nParmRows )
+static void lcl_AdjustJumpMatrix( ScJumpMatrix* pJumpM, SCSIZE nParmCols, SCSIZE nParmRows )
 {
     SCSIZE nJumpCols, nJumpRows;
     SCSIZE nResCols, nResRows;
@@ -518,14 +517,13 @@ static void lcl_AdjustJumpMatrix( ScJumpMatrix* pJumpM, ScMatrixRef& pResMat, SC
             nAdjustRows = nParmRows;
         }
         pJumpM->SetNewResMat( nAdjustCols, nAdjustRows );
-        pResMat = pJumpM->GetResultMatrix();
     }
 }
 
 bool ScInterpreter::JumpMatrix( short nStackLevel )
 {
     pJumpMatrix = static_cast<ScToken*>(pStack[sp-nStackLevel])->GetJumpMatrix();
-    ScMatrixRef pResMat = pJumpMatrix->GetResultMatrix();
+    bool bHasResMat = pJumpMatrix->HasResultMatrix();
     SCSIZE nC, nR;
     if ( nStackLevel == 2 )
     {
@@ -536,7 +534,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
             OSL_FAIL( "ScInterpreter::JumpMatrix: pop goes the weasel" );
         }
 
-        if ( !pResMat )
+        if ( !bHasResMat )
         {
             Pop();
             SetError( errUnknownStackVariable );
@@ -554,7 +552,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                         fVal = CreateDoubleError( nGlobalError );
                         nGlobalError = 0;
                     }
-                    pResMat->PutDouble( fVal, nC, nR );
+                    pJumpMatrix->PutResultDouble( fVal, nC, nR );
                 }
                 break;
                 case svString:
@@ -562,12 +560,12 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                     svl::SharedString aStr = GetString();
                     if ( nGlobalError )
                     {
-                        pResMat->PutDouble( CreateDoubleError( nGlobalError),
+                        pJumpMatrix->PutResultDouble( CreateDoubleError( nGlobalError),
                                 nC, nR);
                         nGlobalError = 0;
                     }
                     else
-                        pResMat->PutString(aStr, nC, nR);
+                        pJumpMatrix->PutResultString(aStr, nC, nR);
                 }
                 break;
                 case svSingleRef:
@@ -576,7 +574,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                     PopSingleRef( aAdr );
                     if ( nGlobalError )
                     {
-                        pResMat->PutDouble( CreateDoubleError( nGlobalError),
+                        pJumpMatrix->PutResultDouble( CreateDoubleError( nGlobalError),
                                 nC, nR);
                         nGlobalError = 0;
                     }
@@ -585,7 +583,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                         ScRefCellValue aCell;
                         aCell.assign(*pDok, aAdr);
                         if (aCell.hasEmptyValue())
-                            pResMat->PutEmpty( nC, nR );
+                            pJumpMatrix->PutResultEmpty( nC, nR );
                         else if (aCell.hasNumeric())
                         {
                             double fVal = GetCellValue(aAdr, aCell);
@@ -595,7 +593,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                                         nGlobalError);
                                 nGlobalError = 0;
                             }
-                            pResMat->PutDouble( fVal, nC, nR );
+                            pJumpMatrix->PutResultDouble( fVal, nC, nR );
                         }
                         else
                         {
@@ -603,12 +601,12 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                             GetCellString(aStr, aCell);
                             if ( nGlobalError )
                             {
-                                pResMat->PutDouble( CreateDoubleError(
+                                pJumpMatrix->PutResultDouble( CreateDoubleError(
                                             nGlobalError), nC, nR);
                                 nGlobalError = 0;
                             }
                             else
-                                pResMat->PutString(aStr, nC, nR);
+                                pJumpMatrix->PutResultString(aStr, nC, nR);
                         }
                     }
                 }
@@ -622,7 +620,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                     {
                         fVal = CreateDoubleError( nGlobalError );
                         nGlobalError = 0;
-                        pResMat->PutDouble( fVal, nC, nR );
+                        pJumpMatrix->PutResultDouble( fVal, nC, nR );
                     }
                     else
                     {
@@ -637,7 +635,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                                     aRange.aEnd.Row() != aRange.aStart.Row()))
                           {
                             fVal = CreateDoubleError( NOTAVAILABLE );
-                            pResMat->PutDouble( fVal, nC, nR );
+                            pJumpMatrix->PutResultDouble( fVal, nC, nR );
                           }
                           else
                           {
@@ -653,7 +651,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                             ScRefCellValue aCell;
                             aCell.assign(*pDok, aAdr);
                             if (aCell.hasEmptyValue())
-                                pResMat->PutEmpty( nC, nR );
+                                pJumpMatrix->PutResultEmpty( nC, nR );
                             else if (aCell.hasNumeric())
                               {
                                 double fCellVal = GetCellValue(aAdr, aCell);
@@ -663,7 +661,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                                             nGlobalError);
                                     nGlobalError = 0;
                                 }
-                                pResMat->PutDouble( fCellVal, nC, nR );
+                                pJumpMatrix->PutResultDouble( fCellVal, nC, nR );
                               }
                               else
                               {
@@ -671,17 +669,17 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                                 GetCellString(aStr, aCell);
                                 if ( nGlobalError )
                                 {
-                                    pResMat->PutDouble( CreateDoubleError(
+                                    pJumpMatrix->PutResultDouble( CreateDoubleError(
                                                 nGlobalError), nC, nR);
                                     nGlobalError = 0;
                                 }
                                 else
-                                    pResMat->PutString(aStr, nC, nR);
+                                    pJumpMatrix->PutResultString(aStr, nC, nR);
                             }
                           }
                         SCSIZE nParmCols = aRange.aEnd.Col() - aRange.aStart.Col() + 1;
                         SCSIZE nParmRows = aRange.aEnd.Row() - aRange.aStart.Row() + 1;
-                        lcl_AdjustJumpMatrix( pJumpMatrix, pResMat, nParmCols, nParmRows );
+                        lcl_AdjustJumpMatrix( pJumpMatrix, nParmCols, nParmRows );
                     }
                 }
                 break;
@@ -693,12 +691,12 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                     {
                         fVal = CreateDoubleError( nGlobalError );
                         nGlobalError = 0;
-                        pResMat->PutDouble( fVal, nC, nR );
+                        pJumpMatrix->PutResultDouble( fVal, nC, nR );
                     }
                     else if ( !pMat )
                     {
                         fVal = CreateDoubleError( errUnknownVariable );
-                        pResMat->PutDouble( fVal, nC, nR );
+                        pJumpMatrix->PutResultDouble( fVal, nC, nR );
                     }
                     else
                     {
@@ -708,13 +706,13 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                             (nRows <= nR && nRows != 1))
                         {
                             fVal = CreateDoubleError( NOTAVAILABLE );
-                            pResMat->PutDouble( fVal, nC, nR );
+                            pJumpMatrix->PutResultDouble( fVal, nC, nR );
                         }
                         else
                         {
-                            lcl_storeJumpMatResult(pMat.get(), pResMat.get(), nC, nR);
+                            lcl_storeJumpMatResult(pMat.get(), pJumpMatrix, nC, nR);
                         }
-                        lcl_AdjustJumpMatrix( pJumpMatrix, pResMat, nCols, nRows );
+                        lcl_AdjustJumpMatrix( pJumpMatrix, nCols, nRows );
                     }
                 }
                 break;
@@ -723,14 +721,14 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                     PopError();
                     double fVal = CreateDoubleError( nGlobalError);
                     nGlobalError = 0;
-                    pResMat->PutDouble( fVal, nC, nR );
+                    pJumpMatrix->PutResultDouble( fVal, nC, nR );
                 }
                 break;
                 default:
                 {
                     Pop();
                     double fVal = CreateDoubleError( errIllegalArgument);
-                    pResMat->PutDouble( fVal, nC, nR );
+                    pJumpMatrix->PutResultDouble( fVal, nC, nR );
                 }
             }
         }
@@ -743,13 +741,13 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
         pJumpMatrix->GetJump( nC, nR, fBool, nStart, nNext, nStop );
         while ( bCont && nStart == nNext )
         {   // push all results that have no jump path
-            if ( pResMat && (GetDoubleErrorValue( fBool) != errJumpMatHasResult) )
+            if ( bHasResMat && (GetDoubleErrorValue( fBool) != errJumpMatHasResult) )
             {
                 // a false without path results in an empty path value
                 if ( fBool == 0.0 )
-                    pResMat->PutEmptyPath( nC, nR );
+                    pJumpMatrix->PutResultEmptyPath( nC, nR );
                 else
-                    pResMat->PutDouble( fBool, nC, nR );
+                    pJumpMatrix->PutResultDouble( fBool, nC, nR );
             }
             bCont = pJumpMatrix->Next( nC, nR );
             if ( bCont )
@@ -774,6 +772,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
     }
     if ( !bCont )
     {   // we're done with it, throw away jump matrix, keep result
+        ScMatrix* pResMat = pJumpMatrix->GetResultMatrix();
         pJumpMatrix = NULL;
         Pop();
         PushMatrix( pResMat );
