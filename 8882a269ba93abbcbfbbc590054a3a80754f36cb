@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1abeadc6_b3f47888",
+        "filename": "sw/source/filter/ww8/attributeoutputbase.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-08T09:08:58Z",
+      "side": 1,
+      "message": "Please use the \u0027p\u0027 prefix for pointers \u0027a\u0027 is for instances.",
+      "revId": "8882a269ba93abbcbfbbc590054a3a80754f36cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_d3f1f496",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-08T09:08:58Z",
+      "side": 1,
+      "message": "It helps to name this pSfxPoolItem or just pItem to be consistent with the surrounding code style.",
+      "revId": "8882a269ba93abbcbfbbc590054a3a80754f36cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
