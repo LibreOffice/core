@@ -465,7 +465,7 @@ function patch_deb {
 OLDIFS=$IFS
 IFS=$'\n'
 
-SOURCE="ooo-orig"
+SOURCE="lo-orig"
 DEBFILES=$(ls -1 "$DIR_IN"/main/*${DEBVER}*.deb "$DIR_IN"/sdk/*${DEBVER}*.deb)
 patch_deb
 
