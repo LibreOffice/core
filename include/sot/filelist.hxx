@@ -24,7 +24,8 @@
 #include <tools/stream.hxx>
 
 #include <vector>
-typedef ::std::vector< OUString* > FileStringList;
+
+typedef ::std::vector< OUString > FileStringList;
 
 class SOT_DLLPUBLIC FileList : public SvDataCopyStream
 {

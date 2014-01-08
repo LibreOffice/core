@@ -39,8 +39,6 @@ FileList::~FileList()
 
 void FileList::ClearAll( void )
 {
-    for ( size_t i = 0, n = aStrList.size(); i < n; ++i )
-        delete aStrList[ i ];
     aStrList.clear();
 }
 
@@ -53,7 +51,7 @@ void FileList::ClearAll( void )
 FileList& FileList::operator=( const FileList& rFileList )
 {
     for ( size_t i = 0, n = rFileList.aStrList.size(); i < n; ++i )
-        aStrList.push_back( new OUString( *rFileList.aStrList[ i ] ) );
+        aStrList.push_back( rFileList.aStrList[ i ] );
     return *this;
 }
 
@@ -137,14 +135,14 @@ SvStream& operator>>( SvStream& rIStm, FileList& rFileList )
 
 void FileList::AppendFile( const OUString& rStr )
 {
-    aStrList.push_back( new OUString( rStr ) );
+    aStrList.push_back( rStr );
 }
 
 OUString FileList::GetFile( size_t i ) const
 {
     OUString aStr;
     if( i < aStrList.size() )
-        aStr = *aStrList[ i ];
+        aStr = aStrList[ i ];
     return aStr;
 }
 
