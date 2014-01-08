@@ -23,6 +23,10 @@
 // set (in nScriptType) if type has not been determined yet
 #define SC_SCRIPTTYPE_UNKNOWN 0x08
 
+// Device name used to represent the software group interpreter for OpenCL
+// mode. This string gets stored in use configuration as the device name.
+#define OPENCL_SOFTWARE_DEVICE_CONFIG_NAME "Software"
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

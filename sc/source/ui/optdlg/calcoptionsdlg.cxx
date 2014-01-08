@@ -16,6 +16,7 @@
 
 #if HAVE_FEATURE_OPENCL
 #include "formulagroup.hxx"
+#include "globalnames.hxx"
 #endif
 
 namespace {
@@ -200,7 +201,7 @@ void ScCalcOptionsDialog::fillOpenclList()
 {
     mpOpenclInfoList->SetUpdateMode(false);
     mpOpenclInfoList->Clear();
-    mpOpenclInfoList->InsertEntry(maSoftware);
+    SvTreeListEntry* pSoftwareEntry = mpOpenclInfoList->InsertEntry(maSoftware);
 
     OUString aStoredDevice = maConfig.maOpenCLDevice;
 
@@ -225,10 +226,12 @@ void ScCalcOptionsDialog::fillOpenclList()
 
     mpOpenclInfoList->SetUpdateMode(true);
     mpOpenclInfoList->GetModel()->GetView(0)->SelectAll(false, false);
-    if(pSelectedEntry)
-    {
-        mpOpenclInfoList->GetModel()->GetView(0)->Select(pSelectedEntry);
-    }
+
+    if (pSelectedEntry)
+        mpOpenclInfoList->Select(pSelectedEntry);
+    else if (aStoredDevice == OPENCL_SOFTWARE_DEVICE_CONFIG_NAME)
+        mpOpenclInfoList->Select(pSoftwareEntry);
+
     SelectedDeviceChanged();
 }
 
@@ -404,7 +407,7 @@ void ScCalcOptionsDialog::SelectedDeviceChanged()
     OUString aDevice = dynamic_cast<SvLBoxString*>(pEntry->GetItem(1))->GetText();
     // use english string for configuration
     if(aDevice == maSoftware)
-        aDevice = "Software";
+        aDevice = OPENCL_SOFTWARE_DEVICE_CONFIG_NAME;
 
     maConfig.maOpenCLDevice = aDevice;
 #endif
