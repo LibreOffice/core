@@ -142,6 +142,21 @@ void MarkManager::dumpAsXml( xmlTextWriterPtr w )
         writer.endElement();
     }
     writer.endElement();
+
+    writer.startElement("annotationmarks");
+    for (const_iterator_t it = m_vAnnotationMarks.begin(); it != m_vAnnotationMarks.end(); ++it)
+    {
+        pMark_t pMark = *it;
+        writer.startElement("annotationmark");
+        writer.writeFormatAttribute("startNode", TMP_FORMAT, pMark->GetMarkStart().nNode.GetIndex());
+        writer.writeFormatAttribute("startOffset", TMP_FORMAT_I32, pMark->GetMarkStart().nContent.GetIndex());
+        writer.writeFormatAttribute("endNode", TMP_FORMAT, pMark->GetMarkEnd().nNode.GetIndex());
+        writer.writeFormatAttribute("endOffset", TMP_FORMAT_I32, pMark->GetMarkEnd().nContent.GetIndex());
+        OString txt8 = OUStringToOString(pMark->GetName(), RTL_TEXTENCODING_UTF8);
+        writer.writeFormatAttribute("name", "%s", BAD_CAST( txt8.getStr()));
+        writer.endElement();
+    }
+    writer.endElement();
     writer.endElement();
 }
 } // namespace mark
@@ -421,6 +436,9 @@ void SwTxtNode::dumpAsXml( xmlTextWriterPtr w )
             {
                 case RES_TXTATR_AUTOFMT:
                     pWhich = "autofmt";
+                    break;
+                case RES_TXTATR_ANNOTATION:
+                    pWhich = "annotation";
                     break;
                 default:
                     break;
