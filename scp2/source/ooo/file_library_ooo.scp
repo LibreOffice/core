@@ -135,20 +135,10 @@ End
 #ifndef SYSTEM_LCMS2
 
 File gid_File_Lib_Lcms2
-    PACKED_LIB_FILE_BODY;
-  #ifdef UNX
-    #ifdef MACOSX
-       Name = STRING(CONCAT3(liblcms2,.2,UNXSUFFIX));
-    #else
-       Name = STRING(CONCAT3(liblcms2,UNXSUFFIX,.2));
-    #endif
-  #elif defined(WNT)
-    #ifdef _gcc3
-       Name = "liblcms2-2.dll";
-    #else
-       Name = "lcms2.dll";
-    #endif
-  #endif
+    LIB_FILE_BODY;
+    Styles = (FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "lcms2.filelist";
 End
 
 #endif
@@ -156,33 +146,19 @@ End
 #ifdef NEED_CAIRO
 
 File gid_File_Lib_Cairo
-    PACKED_LIB_FILE_BODY;
-  #ifdef UNX
-    #ifdef MACOSX
-       Name = STRING(CONCAT3(libcairo,.2,UNXSUFFIX));
-    #else
-       Name = STRING(CONCAT3(libcairo,UNXSUFFIX,.2));
-    #endif
-  #elif defined(WNT)
-    #ifdef _gcc3
-       Name = "libcairo-2.dll";
-    #else
-       Name = "cairo.dll";
-    #endif
-  #endif
+    LIB_FILE_BODY;
+    Styles = (FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "cairo.filelist";
 End
 
 #ifndef WNT
 
 File gid_File_Lib_Pixman
-    PACKED_LIB_FILE_BODY;
-  #ifdef UNX
-    #ifdef MACOSX
-       Name = STRING(CONCAT2(libpixman-1,UNXSUFFIX));
-    #else
-       Name = STRING(CONCAT3(libpixman-1,UNXSUFFIX,.0));
-    #endif
-  #endif
+    LIB_FILE_BODY;
+    Styles = (FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "pixman.filelist";
 End
 
 #endif
@@ -296,20 +272,10 @@ End
 
 #ifndef SYSTEM_LIBXSLT
 File gid_File_Lib_Xslt
-    PACKED_LIB_FILE_BODY;
-  #ifdef UNX
-    #ifdef MACOSX
-       Name = STRING(CONCAT4(libxslt,.,LIBXSLT_MAJOR,UNXSUFFIX));
-    #else
-       Name = STRING(CONCAT4(libxslt,UNXSUFFIX,.,LIBXSLT_MAJOR));
-    #endif
-  #else
-   #ifdef _gcc3
-    Name = "libxslt-1.dll";
-   #else
-    Name = "libxslt.dll";
-   #endif
-  #endif
+    LIB_FILE_BODY;
+    Styles = (FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "libxlst.filelist";
 End
 File gid_File_Lib_eXslt
     PACKED_LIB_FILE_BODY;
@@ -404,54 +370,24 @@ End
 
 #ifndef SYSTEM_REDLAND
 File gid_File_Lib_Raptor
-    PACKED_LIB_FILE_BODY;
-  #ifdef UNX
-    #ifdef MACOSX
-       Name = STRING(CONCAT4(libraptor2-lo,.,RAPTOR_MAJOR,UNXSUFFIX));
-    #else
-       Name = STRING(CONCAT4(libraptor2-lo,UNXSUFFIX,.,RAPTOR_MAJOR));
-    #endif
-  #else
-   #ifdef _gcc3
-    Name = "libraptor2-1.dll";
-   #else
-    Name = "raptor2.dll";
-   #endif
-  #endif
+    LIB_FILE_BODY;
+    Styles = (FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "raptor.filelist";
 End
 
 File gid_File_Lib_Rasqal
-    PACKED_LIB_FILE_BODY;
-  #ifdef UNX
-    #ifdef MACOSX
-       Name = STRING(CONCAT4(librasqal-lo,.,RASQAL_MAJOR,UNXSUFFIX));
-    #else
-       Name = STRING(CONCAT4(librasqal-lo,UNXSUFFIX,.,RASQAL_MAJOR));
-    #endif
-  #else
-   #ifdef _gcc3
-       Name = STRING(CONCAT3(librasqal-,RASQAL_MAJOR,.dll));
-   #else
-    Name = "rasqal.dll";
-   #endif
-  #endif
+    LIB_FILE_BODY;
+    Styles = (FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "rasqal.filelist";
 End
 
 File gid_File_Lib_Rdf
-    PACKED_LIB_FILE_BODY;
-  #ifdef UNX
-    #ifdef MACOSX
-       Name = STRING(CONCAT4(librdf-lo,.,REDLAND_MAJOR,UNXSUFFIX));
-    #else
-       Name = STRING(CONCAT4(librdf-lo,UNXSUFFIX,.,REDLAND_MAJOR));
-    #endif
-  #else
-   #ifdef _gcc3
-    Name = "librdf-0.dll";
-   #else
-    Name = "librdf.dll";
-   #endif
-  #endif
+    LIB_FILE_BODY;
+    Styles = (FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "redland.filelist";
 End
 #endif // SYSTEM_REDLAND
 
