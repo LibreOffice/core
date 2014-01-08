@@ -26,7 +26,8 @@ fi
 configure=1
 build=1
 devinst=""
-kde="kde4"
+enable_kde="kde4"
+disable_kde="kde"
 clean=0
 
 while getopts bcdklw opt
@@ -34,7 +35,8 @@ while getopts bcdklw opt
   b) build=0;;
   c) configure=0;;
   d) devinst="dev-install";;
-  k) kde="kde";;
+  k) enable_kde="kde"
+     disable_kde="kde4";;
   l) clean=1;;
   w) windows=1;;
   [?]) error "$USAGE";;
@@ -105,7 +107,7 @@ do_configure()
 			--enable-extension-integration \
 			--enable-odk \
 			--enable-lockdown \
-			--enable-kde4 \
+			--enable-${enable_kde}\
 			--enable-evolution2 \
 			--disable-gnome-vfs \
 			--enable-ext-wiki-publisher \
@@ -115,7 +117,7 @@ do_configure()
 			--enable-python=internal \
 			--disable-online-update \
 			--disable-randr-link \
-			--disable-kde \
+			--disable-${disable_kde} \
 			--disable-dbus \
 			--without-junit \
 			--with-package-format=deb \
