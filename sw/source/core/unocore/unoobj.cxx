@@ -1300,22 +1300,6 @@ throw (uno::RuntimeException)
         throw uno::RuntimeException();
     }
 
-    SwStartNodeType eSearchNodeType = SwNormalStartNode;
-    switch (m_pImpl->m_eType)
-    {
-        case CURSOR_FRAME:      eSearchNodeType = SwFlyStartNode;       break;
-        case CURSOR_TBLTEXT:    eSearchNodeType = SwTableBoxStartNode;  break;
-        case CURSOR_FOOTNOTE:   eSearchNodeType = SwFootnoteStartNode;  break;
-        case CURSOR_HEADER:     eSearchNodeType = SwHeaderStartNode;    break;
-        case CURSOR_FOOTER:     eSearchNodeType = SwFooterStartNode;    break;
-        //case CURSOR_INVALID:
-        //case CURSOR_BODY:
-        default:
-            ;
-    }
-    const SwStartNode* pOwnStartNode =
-        rOwnCursor.GetNode()->FindSttNodeByType(eSearchNodeType);
-
     SwPaM aPam(GetDoc()->GetNodes());
     const SwPaM * pPam(0);
     if (pCursor)
@@ -1334,21 +1318,51 @@ throw (uno::RuntimeException)
     {
         throw uno::RuntimeException();
     }
-    const SwStartNode* pTmp =
-        pPam->GetNode()->FindSttNodeByType(eSearchNodeType);
 
-    //SectionNodes ueberspringen
-    while(pTmp && pTmp->IsSectionNode())
     {
-        pTmp = pTmp->StartOfSectionNode();
-    }
-    while(pOwnStartNode && pOwnStartNode->IsSectionNode())
-    {
-        pOwnStartNode = pOwnStartNode->StartOfSectionNode();
-    }
-    if(pOwnStartNode != pTmp)
-    {
-        throw uno::RuntimeException();
+        SwStartNodeType eSearchNodeType = SwNormalStartNode;
+        switch (m_pImpl->m_eType)
+        {
+        case CURSOR_FRAME:      eSearchNodeType = SwFlyStartNode;       break;
+        case CURSOR_TBLTEXT:    eSearchNodeType = SwTableBoxStartNode;  break;
+        case CURSOR_FOOTNOTE:   eSearchNodeType = SwFootnoteStartNode;  break;
+        case CURSOR_HEADER:     eSearchNodeType = SwHeaderStartNode;    break;
+        case CURSOR_FOOTER:     eSearchNodeType = SwFooterStartNode;    break;
+            //case CURSOR_INVALID:
+            //case CURSOR_BODY:
+        default:
+            ;
+        }
+
+        const SwStartNode* pOwnStartNode = rOwnCursor.GetNode()->FindSttNodeByType(eSearchNodeType);
+        while ( pOwnStartNode != NULL
+                && pOwnStartNode->IsSectionNode())
+        {
+            pOwnStartNode = pOwnStartNode->StartOfSectionNode();
+        }
+
+        const SwStartNode* pTmp =
+            pPam->GetNode()->FindSttNodeByType(eSearchNodeType);
+        while ( pTmp != NULL
+                && pTmp->IsSectionNode() )
+        {
+            pTmp = pTmp->StartOfSectionNode();
+        }
+
+        if ( eSearchNodeType == SwTableBoxStartNode )
+        {
+            if ( pOwnStartNode->FindTableNode() != pTmp->FindTableNode() )
+            {
+                throw uno::RuntimeException();
+            }
+        }
+        else
+        {
+            if ( pOwnStartNode != pTmp )
+            {
+                throw uno::RuntimeException();
+            }
+        }
     }
 
     if (CURSOR_META == m_pImpl->m_eType)

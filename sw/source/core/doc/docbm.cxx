@@ -161,18 +161,34 @@ namespace
         return max_element(vCandidates.begin(), vCandidates.end(), &lcl_MarkOrderingByEnd)->get();
     }
 
-    static bool lcl_FixCorrectedMark(bool bChangedPos, bool bChangedOPos, MarkBase* io_pMark)
+    static bool lcl_FixCorrectedMark(
+        const bool bChangedPos,
+        const bool bChangedOPos,
+        MarkBase* io_pMark )
     {
-        if( (bChangedPos || bChangedOPos) && io_pMark->IsExpanded() &&
-            io_pMark->GetOtherMarkPos().nNode.GetNode().FindTableBoxStartNode() !=
-            io_pMark->GetMarkPos().nNode.GetNode().FindTableBoxStartNode() )
+        if ( IDocumentMarkAccess::GetType(*io_pMark) == IDocumentMarkAccess::ANNOTATIONMARK )
         {
-            if(!bChangedOPos)
-                io_pMark->SetMarkPos(io_pMark->GetOtherMarkPos());
+            // annotation marks are allowed to span a table cell range.
+            // but trigger sorting to be save
+            return true;
+        }
+
+        if ( ( bChangedPos || bChangedOPos )
+             && io_pMark->IsExpanded()
+             && io_pMark->GetOtherMarkPos().nNode.GetNode().FindTableBoxStartNode() !=
+                    io_pMark->GetMarkPos().nNode.GetNode().FindTableBoxStartNode() )
+        {
+            if ( !bChangedOPos )
+            {
+                io_pMark->SetMarkPos( io_pMark->GetOtherMarkPos() );
+            }
             io_pMark->ClearOtherMarkPos();
             DdeBookmark * const pDdeBkmk = dynamic_cast< DdeBookmark*>(io_pMark);
-            if(pDdeBkmk && pDdeBkmk->IsServer())
+            if ( pDdeBkmk != NULL
+                 && pDdeBkmk->IsServer() )
+            {
                 pDdeBkmk->SetRefObject(NULL);
+            }
             return true;
         }
         return false;
@@ -645,14 +661,14 @@ namespace sw { namespace mark
                 lcl_GreaterThan(pMark->GetOtherMarkPos(), rStt, pSttIdx) &&
                 lcl_Lower(pMark->GetOtherMarkPos(), rEnd, pEndIdx));
             // special case: completely in range, touching the end?
-            if(pEndIdx &&
-                    ((isOtherPosInRange
-                    && pMark->GetMarkPos().nNode == rEnd
-                    && pMark->GetMarkPos().nContent == *pEndIdx)
-                || (isPosInRange
-                    && pMark->IsExpanded()
-                    && pMark->GetOtherMarkPos().nNode == rEnd
-                    && pMark->GetOtherMarkPos().nContent == *pEndIdx)))
+            if ( pEndIdx != NULL
+                 && ( ( isOtherPosInRange
+                        && pMark->GetMarkPos().nNode == rEnd
+                        && pMark->GetMarkPos().nContent == *pEndIdx )
+                      || ( isPosInRange
+                           && pMark->IsExpanded()
+                           && pMark->GetOtherMarkPos().nNode == rEnd
+                           && pMark->GetOtherMarkPos().nContent == *pEndIdx ) ) )
             {
                 isPosInRange = true, isOtherPosInRange = true;
             }
@@ -679,39 +695,51 @@ namespace sw { namespace mark
                     vMarksToDelete.push_back(ppMark);
                 }
             }
-            else if(isPosInRange ^ isOtherPosInRange)
+            else if ( isPosInRange ^ isOtherPosInRange )
             {
                 // the bookmark is partitially in the range
                 // move position of that is in the range out of it
-                auto_ptr<SwPosition> pNewPos;
-                if(pEndIdx)
-                    pNewPos = auto_ptr<SwPosition>(new SwPosition(
-                        rEnd,
-                        *pEndIdx));
-                else
-                    pNewPos = lcl_FindExpelPosition(
-                        rStt,
-                        rEnd,
-                        isPosInRange ? pMark->GetOtherMarkPos() : pMark->GetMarkPos());
 
-                // --> OD 2009-08-06 #i92125#
-                // no move of position for cross-reference bookmarks,
-                // if move occurs inside a certain node
-                if ( ( IDocumentMarkAccess::GetType(*pMark) !=
-                                IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK &&
-                       IDocumentMarkAccess::GetType(*pMark) !=
-                                IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK ) ||
-                     pMark->GetMarkPos().nNode != pNewPos->nNode )
+                auto_ptr< SwPosition > pNewPos;
                 {
-                    if(isPosInRange)
+                    if ( pEndIdx != NULL )
+                    {
+                        pNewPos = auto_ptr< SwPosition >( new SwPosition( rEnd, *pEndIdx ) );
+                    }
+                    else
+                    {
+                        pNewPos = lcl_FindExpelPosition( rStt, rEnd, isPosInRange ? pMark->GetOtherMarkPos() : pMark->GetMarkPos() );
+                    }
+                }
+
+                bool bMoveMark = true;
+                {
+                    switch ( IDocumentMarkAccess::GetType( *pMark ) )
+                    {
+                    case IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK:
+                    case IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK:
+                        // no move of cross-reference bookmarks, if move occurs inside a certain node
+                        bMoveMark = pMark->GetMarkPos().nNode != pNewPos->nNode;
+                        break;
+                    case IDocumentMarkAccess::ANNOTATIONMARK:
+                        // no move of annotation marks, if method is called to collect deleted marks
+                        bMoveMark = pSaveBkmk == NULL;
+                        break;
+                    default:
+                        bMoveMark = true;
+                        break;
+                    }
+                }
+                if ( bMoveMark )
+                {
+                    if ( isPosInRange )
                         pMark->SetMarkPos(*pNewPos);
                     else
                         pMark->SetOtherMarkPos(*pNewPos);
 
                     // illegal selection? collapse the mark and restore sorting later
-                    isSortingNeeded |= lcl_FixCorrectedMark(isPosInRange, isOtherPosInRange, pMark);
+                    isSortingNeeded |= lcl_FixCorrectedMark( isPosInRange, isOtherPosInRange, pMark );
                 }
-                // <--
             }
         }
 
@@ -827,7 +855,7 @@ namespace sw { namespace mark
             find_if(
                 pMarkLow,
                 pMarkHigh,
-                bind(equal_to<const IMark*>(), bind(&boost::shared_ptr<IMark>::get, _1), pMark) );
+                bind( equal_to<const IMark*>(), bind(&boost::shared_ptr<IMark>::get, _1), pMark) );
         if(pMarkFound != pMarkHigh)
             deleteMark(pMarkFound);
     }

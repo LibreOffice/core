@@ -60,6 +60,7 @@ namespace sw { namespace mark
         SwTxtFld* pTxtFld =
             GetMarkEnd().nNode.GetNode().GetTxtNode()->GetFldTxtAttrAt(
             GetMarkEnd().nContent.GetIndex()-1, true );
+        ASSERT( pTxtFld != NULL, "<AnnotationMark::InitDoc(..)> - missing text attribute for annotation field!" );
         if ( pTxtFld != NULL )
         {
             const SwPostItField* pPostItField = dynamic_cast< const SwPostItField* >(pTxtFld->GetFmtFld().GetField());

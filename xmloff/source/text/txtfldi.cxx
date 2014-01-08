@@ -3776,8 +3776,8 @@ void XMLAnnotationImportContext::EndElement()
                 // let's create a text range covering the start and the current position.
                 uno::Reference< text::XText > xText = GetImportHelper().GetText();
                 uno::Reference< text::XTextCursor > xCursor =
-                    xText->createTextCursorByRange( xPrevField->getAnchor() );
-                xCursor->gotoRange( GetImportHelper().GetCursorAsRange(), true );
+                    xText->createTextCursorByRange( GetImportHelper().GetCursorAsRange() );
+                xCursor->gotoRange( xPrevField->getAnchor(), true );
                 uno::Reference< text::XTextRange > xTextRange( xCursor, uno::UNO_QUERY );
 
                 xText->insertTextContent( xTextRange, xPrevField, !xCursor->isCollapsed() );

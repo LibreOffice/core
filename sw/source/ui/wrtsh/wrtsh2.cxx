@@ -94,10 +94,23 @@ void SwWrtShell::Insert( SwField& rFld )
         {
             // for annotation fields:
             // - keep the current selection in order to create a corresponding annotation mark
-            // - collapse cursur to its point
-            const SwPaM& rCurrPaM = GetCurrentShellCursor();
-            pAnnotationTextRange = new SwPaM( *rCurrPaM.GetPoint(), *rCurrPaM.GetMark() );
-            ClearMark();
+            // - collapse cursor to its end
+            if ( IsTableMode() )
+            {
+                GetTblCrs()->Normalize( sal_False );
+                const SwPosition rStartPos( *(GetTblCrs()->GetMark()->nNode.GetNode().GetCntntNode()), 0 );
+                KillPams();
+                EndPara();
+                const SwPosition rEndPos( *GetCurrentShellCursor().GetPoint() );
+                pAnnotationTextRange = new SwPaM( rStartPos, rEndPos );
+            }
+            else
+            {
+                NormalizePam( sal_False );
+                const SwPaM& rCurrPaM = GetCurrentShellCursor();
+                pAnnotationTextRange = new SwPaM( *rCurrPaM.GetPoint(), *rCurrPaM.GetMark() );
+                ClearMark();
+            }
         }
         else
         {

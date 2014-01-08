@@ -1491,18 +1491,32 @@ public:
         // wie z.B. die ::com::sun::star::text::Bookmarks oder die Verzeichnisse.
         // JP 22.06.95: ist bMoveCrsr gesetzt, verschiebe auch die Crsr
 
-        // Setzt alles in rOldNode auf rNewPos + Offset
-    void CorrAbs( const SwNodeIndex& rOldNode, const SwPosition& rNewPos,
-                    const xub_StrLen nOffset = 0, sal_Bool bMoveCrsr = sal_False );
-        // Setzt alles im Bereich von [rStartNode, rEndNode] nach rNewPos
-    void CorrAbs( const SwNodeIndex& rStartNode, const SwNodeIndex& rEndNode,
-                    const SwPosition& rNewPos, sal_Bool bMoveCrsr = sal_False );
-        // Setzt alles im Bereich von rRange nach rNewPos
-    void CorrAbs( const SwPaM& rRange, const SwPosition& rNewPos,
-                    sal_Bool bMoveCrsr = sal_False );
-        // Setzt alles in rOldNode auf relative Pos
-    void CorrRel( const SwNodeIndex& rOldNode, const SwPosition& rNewPos,
-                    const xub_StrLen nOffset = 0, sal_Bool bMoveCrsr = sal_False );
+    // Setzt alles in rOldNode auf rNewPos + Offset
+    void CorrAbs(
+        const SwNodeIndex& rOldNode,
+        const SwPosition& rNewPos,
+        const xub_StrLen nOffset = 0,
+        sal_Bool bMoveCrsr = sal_False );
+
+    // Setzt alles im Bereich von [rStartNode, rEndNode] nach rNewPos
+    void CorrAbs(
+        const SwNodeIndex& rStartNode,
+        const SwNodeIndex& rEndNode,
+        const SwPosition& rNewPos,
+        sal_Bool bMoveCrsr = sal_False );
+
+    // Setzt alles im Bereich von rRange nach rNewPos
+    void CorrAbs(
+        const SwPaM& rRange,
+        const SwPosition& rNewPos,
+        sal_Bool bMoveCrsr = sal_False );
+
+    // Setzt alles in rOldNode auf relative Pos
+    void CorrRel(
+        const SwNodeIndex& rOldNode,
+        const SwPosition& rNewPos,
+        const xub_StrLen nOffset = 0,
+        sal_Bool bMoveCrsr = sal_False );
 
         // GliederungsRegeln erfragen / setzen
     // --> OD 2005-11-02 #i51089 - TUNING#

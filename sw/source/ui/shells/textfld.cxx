@@ -367,9 +367,8 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                             if( !(sAuthor = aUserOpt.GetID()).Len() )
                                 sAuthor = String( SW_RES( STR_REDLINE_UNKNOWN_AUTHOR ));
 
-                        if( rSh.HasSelection() )
+                        if ( rSh.HasSelection() && !rSh.IsTableMode() )
                         {
-                            rSh.NormalizePam( sal_False );
                             rSh.KillPams();
                         }
 

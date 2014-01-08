@@ -593,11 +593,26 @@ void SwSidebarWin::SetPosAndSize()
                 SwNodes& rNds = pTxtNode->GetDoc()->GetNodes();
                 SwCntntNode* const pCntntNd = rNds[mrSidebarItem.maLayoutInfo.mnStartNodeIdx]->GetCntntNode();
                 SwPosition aStartPos( *pCntntNd, mrSidebarItem.maLayoutInfo.mnStartContent );
-                ::boost::scoped_ptr<SwShellCrsr> pTmpCrsrForAnnotationTextRange(
-                    new SwShellCrsr( DocView().GetWrtShell(), aStartPos ) );
-                pTmpCrsrForAnnotationTextRange->SetMark();
-                pTmpCrsrForAnnotationTextRange->GetMark()->nNode = *pTxtNode;
-                pTmpCrsrForAnnotationTextRange->GetMark()->nContent.Assign( pTxtNode, *(pTxtAnnotationFld->GetStart())+1 );
+                SwShellCrsr* pTmpCrsr = NULL;
+                const bool bTableCrsrNeeded = pTxtNode->FindTableBoxStartNode() != pCntntNd->FindTableBoxStartNode();
+                if ( bTableCrsrNeeded )
+                {
+                    SwShellTableCrsr* pTableCrsr = new SwShellTableCrsr( DocView().GetWrtShell(), aStartPos );
+                    pTableCrsr->SetMark();
+                    pTableCrsr->GetMark()->nNode = *pTxtNode;
+                    pTableCrsr->GetMark()->nContent.Assign( pTxtNode, *(pTxtAnnotationFld->GetStart())+1 );
+                    pTableCrsr->NewTableSelection();
+                    pTmpCrsr = pTableCrsr;
+                }
+                else
+                {
+                    SwShellCrsr* pCrsr = new SwShellCrsr( DocView().GetWrtShell(), aStartPos );
+                    pCrsr->SetMark();
+                    pCrsr->GetMark()->nNode = *pTxtNode;
+                    pCrsr->GetMark()->nContent.Assign( pTxtNode, *(pTxtAnnotationFld->GetStart())+1 );
+                    pTmpCrsr = pCrsr;
+                }
+                ::boost::scoped_ptr<SwShellCrsr> pTmpCrsrForAnnotationTextRange( pTmpCrsr );
 
                 pTmpCrsrForAnnotationTextRange->FillRects();
 

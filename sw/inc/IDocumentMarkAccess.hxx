@@ -260,7 +260,7 @@ class IDocumentMarkAccess
         virtual const_iterator_t findAnnotationMark( const ::rtl::OUString& rName ) const = 0;
 
         // Returns the MarkType used to create the mark
-        static MarkType SAL_DLLPUBLIC_EXPORT GetType(const ::sw::mark::IMark& rMark);
+        static SAL_DLLPUBLIC_EXPORT MarkType GetType(const ::sw::mark::IMark& rMark);
 
         static SAL_DLLPUBLIC_EXPORT const ::rtl::OUString& GetCrossRefHeadingBookmarkNamePrefix();
         static SAL_DLLPUBLIC_EXPORT bool IsLegalPaMForCrossRefHeadingBookmark( const SwPaM& );
