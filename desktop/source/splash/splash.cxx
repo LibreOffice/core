@@ -26,9 +26,11 @@
 #include <vcl/salnativewidgets.hxx>
 
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/math.hxx>
@@ -46,7 +48,7 @@ using namespace ::com::sun::star::uno;
 namespace {
 
 class  SplashScreen
-    : public ::cppu::WeakImplHelper2< XStatusIndicator, XInitialization >
+    : public ::cppu::WeakImplHelper3< XStatusIndicator, XInitialization, XServiceInfo >
     , public IntroWindow
 {
 private:
@@ -98,6 +100,18 @@ public:
     // XInitialize
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& aArguments )
         throw ( RuntimeException );
+
+    virtual OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException)
+    { return desktop::splash::getImplementationName(); }
+
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException)
+    { return cppu::supportsService(this, ServiceName); }
+
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException)
+    { return desktop::splash::getSupportedServiceNames(); }
 
     // workwindow
     virtual void Paint( const Rectangle& );

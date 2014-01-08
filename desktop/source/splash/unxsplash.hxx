@@ -16,7 +16,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <osl/mutex.hxx>
@@ -29,7 +29,7 @@ using namespace ::com::sun::star::uno;
 
 namespace desktop {
 
-class  UnxSplashScreen : public ::cppu::WeakImplHelper2< css::task::XStatusIndicator, css::lang::XInitialization >
+class  UnxSplashScreen : public ::cppu::WeakImplHelper3< css::task::XStatusIndicator, css::lang::XInitialization, css::lang::XServiceInfo >
 {
 private:
     // don't allow anybody but ourselves to create instances of this class
@@ -58,6 +58,15 @@ public:
 
     // XInitialize
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any>& aArguments ) throw ( css::uno::RuntimeException );
+
+    virtual OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException);
+
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException);
 };
 
 }

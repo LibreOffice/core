@@ -22,6 +22,7 @@
 #include <osl/process.h>
 //#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 
@@ -118,6 +119,25 @@ UnxSplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::
         }
     }
 }
+
+OUString UnxSplashScreen::getImplementationName()
+    throw (css::uno::RuntimeException)
+{
+    return UnxSplash_getImplementationName();
+}
+
+sal_Bool UnxSplashScreen::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> UnxSplashScreen::getSupportedServiceNames()
+    throw (css::uno::RuntimeException)
+{
+    return UnxSplash_getSupportedServiceNames();
+}
+
 }
 
 using namespace desktop;
