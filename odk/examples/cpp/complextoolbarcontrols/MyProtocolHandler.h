@@ -43,6 +43,7 @@ namespace com
                 class XModel;
                 class XFrame;
             }
+            namespace uno { class XComponentContext; }
         }
     }
 }
