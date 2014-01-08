@@ -9,6 +9,7 @@
 
 #include "sal/config.h"
 
+#include <algorithm>
 #include <cassert>
 #include <cstdlib>
 #include <iostream>
@@ -136,6 +137,16 @@ OUString showDirection(
         assert(false); for (;;) { std::abort(); } // this cannot happen
     }
 }
+
+struct EqualsAnnotation {
+    EqualsAnnotation(OUString const & name): name_(name) {}
+
+    bool operator ()(unoidl::AnnotatedReference const & ref)
+    { return ref.name == name_; }
+
+private:
+    OUString name_;
+};
 
 void checkMap(
     rtl::Reference<unoidl::Provider> const & providerB, OUString const & prefix,
@@ -697,12 +708,12 @@ void checkMap(
                         }
                     }
                     if (ent2A->getDirectOptionalBaseServices().size()
-                        != ent2B->getDirectOptionalBaseServices().size())
+                        > ent2B->getDirectOptionalBaseServices().size())
                     {
                         std::cerr
                             << "accumulation-based service " << name
                             << (" number of direct optional base services"
-                                " changed from ")
+                                " shrank from ")
                             << ent2A->getDirectOptionalBaseServices().size()
                             << " to "
                             << ent2B->getDirectOptionalBaseServices().size()
@@ -710,21 +721,20 @@ void checkMap(
                         std::exit(EXIT_FAILURE);
                     }
                     for (std::vector<unoidl::AnnotatedReference>::const_iterator
-                             i(ent2A->getDirectOptionalBaseServices().begin()),
-                             j(ent2B->getDirectOptionalBaseServices().begin());
+                             i(ent2A->getDirectOptionalBaseServices().begin());
                          i != ent2A->getDirectOptionalBaseServices().end();
-                         ++i, ++j)
+                         ++i)
                     {
-                        if (i->name != j->name) {
+                        if (std::find_if(
+                                ent2B->getDirectOptionalBaseServices().begin(),
+                                ent2B->getDirectOptionalBaseServices().end(),
+                                EqualsAnnotation(i->name))
+                            == ent2B->getDirectOptionalBaseServices().end())
+                        {
                             std::cerr
                                 << "accumulation-based service " << name
-                                << " direct optional base service #"
-                                << (i
-                                    - (ent2A->getDirectOptionalBaseServices()
-                                       .begin())
-                                    + 1)
-                                << " changed from " << i->name << " to "
-                                << j->name << std::endl;
+                                << " direct optional base service " << i->name
+                                << " was removed" << std::endl;
                             std::exit(EXIT_FAILURE);
                         }
                     }
@@ -763,12 +773,12 @@ void checkMap(
                         }
                     }
                     if (ent2A->getDirectOptionalBaseInterfaces().size()
-                        != ent2B->getDirectOptionalBaseInterfaces().size())
+                        > ent2B->getDirectOptionalBaseInterfaces().size())
                     {
                         std::cerr
                             << "accumulation-based service " << name
                             << (" number of direct optional base interfaces"
-                                " changed from ")
+                                " shrank from ")
                             << ent2A->getDirectOptionalBaseInterfaces().size()
                             << " to "
                             << ent2B->getDirectOptionalBaseInterfaces().size()
@@ -777,22 +787,21 @@ void checkMap(
                     }
                     for (std::vector<unoidl::AnnotatedReference>::const_iterator
                              i(ent2A->getDirectOptionalBaseInterfaces()
-                               .begin()),
-                             j(ent2B->getDirectOptionalBaseInterfaces()
                                .begin());
                          i != ent2A->getDirectOptionalBaseInterfaces().end();
-                         ++i, ++j)
+                         ++i)
                     {
-                        if (i->name != j->name) {
+                        if (std::find_if(
+                                (ent2B->getDirectOptionalBaseInterfaces()
+                                 .begin()),
+                                ent2B->getDirectOptionalBaseInterfaces().end(),
+                                EqualsAnnotation(i->name))
+                            == ent2B->getDirectOptionalBaseInterfaces().end())
+                        {
                             std::cerr
                                 << "accumulation-based service " << name
-                                << " direct optional base interface #"
-                                << (i
-                                    - (ent2A->getDirectOptionalBaseInterfaces()
-                                       .begin())
-                                    + 1)
-                                << " changed from " << i->name << " to "
-                                << j->name << std::endl;
+                                << " direct optional base interface " << i->name
+                                << " was removed" << std::endl;
                             std::exit(EXIT_FAILURE);
                         }
                     }
