@@ -27,7 +27,6 @@
 #include <osl/diagnose.h>
 #include <uno/mapping.hxx>
 #include "hatchwindow.hxx"
-#include "unowizard.hxx"
 
 #include "comphelper/servicedecl.hxx"
 
@@ -50,20 +49,6 @@ extern sdecl::ServiceDecl const serviceDecl;
     namespace nmspe {   \
         Reference< XInterface > SAL_CALL ImplName##_CreateInstance( const Reference< XMultiServiceFactory >& ); \
     }
-
-namespace
-{
-    static const struct ::cppu::ImplementationEntry s_aServiceEntries[] =
-    {
-        {
-            ::svt::uno::Wizard::Create,
-            ::svt::uno::Wizard::getImplementationName_static,
-            ::svt::uno::Wizard::getSupportedServiceNames_static,
-            ::cppu::createSingleComponentFactory, NULL, 0
-        },
-        { 0, 0, 0, 0, 0, 0 }
-    };
-}
 
 DECLARE_CREATEINSTANCE_NAMESPACE( svt, OAddressBookSourceDialogUno )
 
@@ -98,11 +83,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svt_component_getFactory (
                 static_cast<css::lang::XMultiServiceFactory *>(_pServiceManager),
                 static_cast<css::registry::XRegistryKey *>(pRegistryKey),
                 unographic::serviceDecl );
-            if ( !pResult )
-                pResult = cppu::component_getFactoryHelper(pImplementationName,
-                                                        _pServiceManager,
-                                                        pRegistryKey,
-                                                        s_aServiceEntries);
         }
 
         if ( xFactory.is() )
