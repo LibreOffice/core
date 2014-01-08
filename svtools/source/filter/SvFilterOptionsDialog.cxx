@@ -18,62 +18,100 @@
  */
 
 
-#include "SvFilterOptionsDialog.hxx"
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/svapp.hxx>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
+#include <rtl/ref.hxx>
 #include <svl/solar.hrc>
 #include <vcl/fltcall.hxx>
 #include "exportdialog.hxx"
 #include <uno/mapping.hxx>
+#include <tools/fldunit.hxx>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/beans/XPropertyAccess.hpp>
+#include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Any.h>
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <unotools/syslocale.hxx>
 #include <comphelper/processfactory.hxx>
-#include "vcl/svapp.hxx"
+#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 
-// -------------------------
-// - SvFilterOptionsDialog -
-// -------------------------
+namespace {
 
-uno::Reference< uno::XInterface >
-    SAL_CALL SvFilterOptionsDialog_CreateInstance(
-        const uno::Reference< lang::XMultiServiceFactory > & _rxFactory )
+class SvFilterOptionsDialog : public cppu::WeakImplHelper5
+<
+    document::XExporter,
+    ui::dialogs::XExecutableDialog,
+    beans::XPropertyAccess,
+    lang::XInitialization,
+    lang::XServiceInfo
+>
 {
-    return static_cast< ::cppu::OWeakObject* > ( new SvFilterOptionsDialog( comphelper::getComponentContext(_rxFactory) ) );
-}
+    const uno::Reference< uno::XComponentContext >
+        mxContext;
+    uno::Sequence< beans::PropertyValue >
+        maMediaDescriptor;
+    uno::Sequence< beans::PropertyValue >
+        maFilterDataSequence;
+    uno::Reference< lang::XComponent >
+        mxSourceDocument;
 
-OUString SvFilterOptionsDialog_getImplementationName()
-    throw( uno::RuntimeException )
-{
-    return OUString( "com.sun.star.comp.svtools.SvFilterOptionsDialog" );
-}
-#define SERVICE_NAME "com.sun.star.ui.dialog.FilterOptionsDialog"
-sal_Bool SAL_CALL SvFilterOptionsDialog_supportsService( const OUString& ServiceName )
-    throw( uno::RuntimeException )
-{
-    return ServiceName == SERVICE_NAME;
-}
+    OUString        maDialogTitle;
+    FieldUnit       meFieldUnit;
+    sal_Bool        mbExportSelection;
 
-uno::Sequence< OUString > SAL_CALL SvFilterOptionsDialog_getSupportedServiceNames()
-    throw( uno::RuntimeException )
-{
-    uno::Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( SERVICE_NAME );
-    return aRet;
-}
-#undef SERVICE_NAME
+public:
 
-// -----------------------------------------------------------------------------
+    SvFilterOptionsDialog( const uno::Reference< uno::XComponentContext >& _rxORB );
+    ~SvFilterOptionsDialog();
+
+    // XInterface
+    virtual void SAL_CALL acquire() throw();
+    virtual void SAL_CALL release() throw();
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const uno::Sequence< uno::Any > & aArguments )
+        throw ( uno::Exception, uno::RuntimeException );
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName()
+        throw ( uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+        throw ( uno::RuntimeException );
+    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+        throw ( uno::RuntimeException );
+
+    // XPropertyAccess
+    virtual uno::Sequence< beans::PropertyValue > SAL_CALL getPropertyValues()
+        throw ( uno::RuntimeException );
+    virtual void SAL_CALL setPropertyValues( const uno::Sequence< beans::PropertyValue > & aProps )
+        throw ( beans::UnknownPropertyException, beans::PropertyVetoException,
+                lang::IllegalArgumentException, lang::WrappedTargetException,
+                uno::RuntimeException );
+
+    // XExecuteDialog
+    virtual sal_Int16 SAL_CALL execute()
+        throw ( uno::RuntimeException );
+    virtual void SAL_CALL setTitle( const OUString& aTitle )
+        throw ( uno::RuntimeException );
+
+    // XExporter
+    virtual void SAL_CALL setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )
+        throw ( lang::IllegalArgumentException, uno::RuntimeException );
+
+};
 
 SvFilterOptionsDialog::SvFilterOptionsDialog( const uno::Reference< uno::XComponentContext >& rxContext ) :
     mxContext           ( rxContext ),
@@ -112,19 +150,21 @@ void SAL_CALL SvFilterOptionsDialog::initialize( const uno::Sequence< uno::Any >
 OUString SAL_CALL SvFilterOptionsDialog::getImplementationName()
     throw( uno::RuntimeException )
 {
-    return SvFilterOptionsDialog_getImplementationName();
+    return OUString( "com.sun.star.svtools.SvFilterOptionsDialog" );
 }
 sal_Bool SAL_CALL SvFilterOptionsDialog::supportsService( const OUString& rServiceName )
     throw( uno::RuntimeException )
 {
-    return SvFilterOptionsDialog_supportsService( rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
 uno::Sequence< OUString > SAL_CALL SvFilterOptionsDialog::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {
-    return SvFilterOptionsDialog_getSupportedServiceNames();
+    uno::Sequence< OUString > aRet(1);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = OUString("com.sun.star.ui.dialog.FilterOptionsDialog");
+    return aRet;
 }
-
 
 // XPropertyAccess
 uno::Sequence< beans::PropertyValue > SvFilterOptionsDialog::getPropertyValues()
@@ -255,6 +295,18 @@ void SvFilterOptionsDialog::setSourceDocument( const uno::Reference< lang::XComp
             meFieldUnit = (FieldUnit)aConfigItem.ReadInt32( aPropertyName, FUNIT_CM );
         }
     }
+}
+
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_svtools_SvFilterOptionsDialog_get_implementation(
+        css::uno::XComponentContext * context,
+        css::uno::Sequence<css::uno::Any> const &)
+{
+    rtl::Reference<SvFilterOptionsDialog> x(new SvFilterOptionsDialog(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

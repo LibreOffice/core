@@ -45,10 +45,6 @@ namespace unographic {
 extern sdecl::ServiceDecl const serviceDecl;
 }
 
-// for CreateInstance functions implemented elsewhere
-#define DECLARE_CREATEINSTANCE( ImplName ) \
-    Reference< XInterface > SAL_CALL ImplName##_CreateInstance( const Reference< XMultiServiceFactory >& );
-
 // for CreateInstance functions implemented elsewhere, while the function is within a namespace
 #define DECLARE_CREATEINSTANCE_NAMESPACE( nmspe, ImplName ) \
     namespace nmspe {   \
@@ -70,7 +66,6 @@ namespace
 }
 
 DECLARE_CREATEINSTANCE_NAMESPACE( svt, OAddressBookSourceDialogUno )
-DECLARE_CREATEINSTANCE( SvFilterOptionsDialog )
 
 extern "C"
 {
@@ -94,18 +89,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svt_component_getFactory (
             xFactory = ::cppu::createSingleFactory (xSMgr,
                 OUString::createFromAscii( pImplementationName ),
                 svt::OAddressBookSourceDialogUno_CreateInstance,
-                aServiceNames);
-        }
-        else if (rtl_str_compare (
-                     pImplementationName, "com.sun.star.svtools.SvFilterOptionsDialog") == 0)
-        {
-            Sequence< OUString > aServiceNames(1);
-            aServiceNames.getArray()[0] =
-                OUString( "com.sun.star.ui.dialogs.FilterOptionsDialog" );
-
-            xFactory = ::cppu::createSingleFactory (xSMgr,
-                OUString::createFromAscii( pImplementationName ),
-                SvFilterOptionsDialog_CreateInstance,
                 aServiceNames);
         }
         else

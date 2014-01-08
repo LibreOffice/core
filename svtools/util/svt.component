@@ -36,7 +36,8 @@
   <implementation name="com.sun.star.graphic.GraphicObject">
     <service name="com.sun.star.graphic.GraphicObject"/>
   </implementation>
-  <implementation name="com.sun.star.svtools.SvFilterOptionsDialog">
+  <implementation name="com.sun.star.svtools.SvFilterOptionsDialog"
+      constructor="com_sun_star_svtools_SvFilterOptionsDialog_get_implementation">
     <service name="com.sun.star.ui.dialogs.FilterOptionsDialog"/>
   </implementation>
   <implementation name="com.sun.star.comp.svt.FilePicker"
