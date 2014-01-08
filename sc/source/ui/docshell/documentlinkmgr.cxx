@@ -24,6 +24,11 @@ struct DocumentLinkManagerImpl : boost::noncopyable
 
 DocumentLinkManager::DocumentLinkManager() : mpImpl(new DocumentLinkManagerImpl) {}
 
+DocumentLinkManager::~DocumentLinkManager()
+{
+    delete mpImpl;
+}
+
 void DocumentLinkManager::setDataStream( DataStream* p )
 {
     mpImpl->mpDataStream.reset(p);
