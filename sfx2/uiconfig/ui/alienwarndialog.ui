@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.0 on Wed Jan  8 12:08:58 2014 -->
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkMessageDialog" id="AlienWarnDialog">
@@ -22,7 +23,7 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="ok">
+              <object class="GtkButton" id="save">
                 <property name="label" translatable="yes">_Use %FORMATNAME Format</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -81,7 +82,7 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="1">ok</action-widget>
+      <action-widget response="1">save</action-widget>
       <action-widget response="0">cancel</action-widget>
     </action-widgets>
   </object>

@@ -28,7 +28,7 @@ SfxAlienWarningDialog::SfxAlienWarningDialog(Window* pParent, const OUString& _r
     : MessageDialog(pParent, "AlienWarnDialog", "sfx/ui/alienwarndialog.ui")
 {
     get(m_pWarningOnBox, "ask");
-    get(m_pKeepCurrentBtn, "ok");
+    get(m_pKeepCurrentBtn, "save");
 
     // replace formatname (text)
     OUString sInfoText = get_primary_text();
