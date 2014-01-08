@@ -18,7 +18,7 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="svt" xmlns="http://openoffice.org/2010/uno-components">
+    xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.graphic.GraphicProvider"
       constructor="com_sun_star_comp_graphic_GraphicProvider_get_implementation">
     <service name="com.sun.star.graphic.GraphicProvider"/>
@@ -27,7 +27,8 @@
       constructor="com_sun_star_comp_graphic_GraphicRendererVCL_get_implementation">
     <service name="com.sun.star.graphic.GraphicRendererVCL"/>
   </implementation>
-  <implementation name="com.sun.star.comp.svtools.OAddressBookSourceDialogUno">
+  <implementation name="com.sun.star.comp.svtools.OAddressBookSourceDialogUno"
+      constructor="com_sun_star_comp_svtools_OAddressBookSourceDialogUno_get_implementation">
     <service name="com.sun.star.ui.AddressBookSourceDialog"/>
   </implementation>
   <implementation name="com.sun.star.comp.svtools.uno.Wizard"

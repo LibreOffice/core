@@ -41,7 +41,6 @@ core_factory_list = [
     ("libsotlo.a", "sot_component_getFactory"),
     ("libspelllo.a", "spell_component_getFactory"),
     ("libsvllo.a", "svl_component_getFactory"),
-    ("libsvtlo.a", "svt_component_getFactory"),
     ("libtklo.a", "tk_component_getFactory"),
     ("libucb1.a", "ucb_component_getFactory"),
     ("libucpexpand1lo.a", "ucpexpand1_component_getFactory"),
