@@ -309,6 +309,8 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
     KeyCode aCode( rKEvt.GetKeyCode() );
     bool    bProc = false;
 
+    Dialog* pDialog = GetParentDialog();
+
     switch ( aCode.GetCode() )
     {
         case KEY_DELETE:
@@ -318,8 +320,8 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
             {
                 pView->DeleteMarked();
                 bProc = true;
-                if( !pView->AreObjectsMarked() )
-                    GetParentDialog()->GrabFocusToFirstControl();
+                if (!pView->AreObjectsMarked() && pDialog)
+                    pDialog->GrabFocusToFirstControl();
             }
         }
         break;
@@ -328,9 +330,11 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
         {
             if ( bSdrMode )
             {
+                bool bGrabFocusToFirstControl = true;
                 if ( pView->IsAction() )
                 {
                     pView->BrkAction();
+                    bGrabFocusToFirstControl = false;
                 }
                 else if ( pView->AreObjectsMarked() )
                 {
@@ -340,16 +344,11 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                     if(pHdl)
                     {
                         ((SdrHdlList&)rHdlList).ResetFocusHdl();
-                    }
-                    else
-                    {
-                        GetParentDialog()->GrabFocusToFirstControl();
+                        bGrabFocusToFirstControl = false;
                     }
                 }
-                else
-                {
-                    GetParentDialog()->GrabFocusToFirstControl();
-                }
+                if (bGrabFocusToFirstControl && pDialog)
+                    pDialog->GrabFocusToFirstControl();
                 bProc = true;
             }
         }
