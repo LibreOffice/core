@@ -782,7 +782,6 @@ sal_Bool GtkSalGraphics::drawNativeControl(    ControlType nType,
                             const ImplControlValue& aValue,
                             const OUString& rCaption )
 {
-    sal_Bool            returnVal = sal_False;
     // get a GC with current clipping region set
     GetFontGC();
 
@@ -839,6 +838,11 @@ sal_Bool GtkSalGraphics::drawNativeControl(    ControlType nType,
         }
     }
 
+    assert(gdkDrawable); //rhbz#1050162
+    if (gdkDrawable == 0)
+        return false;
+
+    sal_Bool            returnVal = sal_False;
     if ( (nType==CTRL_PUSHBUTTON) && (nPart==PART_ENTIRE_CONTROL) )
     {
         returnVal = NWPaintGTKButton( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
