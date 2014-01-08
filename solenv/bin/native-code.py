@@ -36,7 +36,6 @@ core_factory_list = [
     ("libsfxlo.a", "sfx_component_getFactory"),
     ("libsotlo.a", "sot_component_getFactory"),
     ("libspelllo.a", "spell_component_getFactory"),
-    ("libsvtlo.a", "svt_component_getFactory"),
     ("libtklo.a", "tk_component_getFactory"),
     ("libucb1.a", "ucb_component_getFactory"),
     ("libucpfile1.a", "ucpfile_component_getFactory"),

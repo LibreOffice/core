@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svtools/genericunodialog.hxx"
 #include <svtools/addresstemplate.hxx>
+#include <svtools/genericunodialog.hxx>
 #include <comphelper/extract.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/sdbc/XDataSource.hpp>
+#include <rtl/ref.hxx>
 
-// .......................................................................
-namespace svt
-{
-// .......................................................................
+using namespace svt;
+
+namespace {
 
 #define UNODIALOG_PROPERTY_ID_ALIASES       100
 #define UNODIALOG_PROPERTY_ALIASES          "FieldMapping"
@@ -39,36 +39,26 @@ namespace svt
     using namespace com::sun::star::beans;
     using namespace com::sun::star::sdbc;
 
-    //=========================================================================
-    //= OAddressBookSourceDialogUno
-    //=========================================================================
     typedef OGenericUnoDialog OAddressBookSourceDialogUnoBase;
     class OAddressBookSourceDialogUno
             :public OAddressBookSourceDialogUnoBase
             ,public ::comphelper::OPropertyArrayUsageHelper< OAddressBookSourceDialogUno >
     {
-    protected:
+    private:
         Sequence< AliasProgrammaticPair >   m_aAliases;
         Reference< XDataSource >            m_xDataSource;
         OUString                     m_sDataSourceName;
         OUString                     m_sTable;
 
-    protected:
+    public:
         OAddressBookSourceDialogUno(const Reference< XComponentContext >& _rxORB);
 
-    public:
         // XTypeProvider
         virtual Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(RuntimeException);
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
         virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(RuntimeException);
-
-        // XServiceInfo - static methods
-        static Sequence< OUString > getSupportedServiceNames_Static(void) throw( RuntimeException );
-        static OUString getImplementationName_Static(void) throw( RuntimeException );
-        static Reference< XInterface >
-                SAL_CALL Create(const Reference< com::sun::star::lang::XMultiServiceFactory >&);
 
         // XPropertySet
         virtual Reference< XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(RuntimeException);
@@ -88,15 +78,6 @@ namespace svt
         virtual void executedDialog(sal_Int16 _nExecutionResult);
     };
 
-
-    //=========================================================================
-    //= OAddressBookSourceDialogUno
-    //=========================================================================
-    Reference< XInterface > SAL_CALL OAddressBookSourceDialogUno_CreateInstance( const Reference< XMultiServiceFactory >& _rxFactory)
-    {
-        return OAddressBookSourceDialogUno::Create(_rxFactory);
-    }
-
     //-------------------------------------------------------------------------
     OAddressBookSourceDialogUno::OAddressBookSourceDialogUno(const Reference< XComponentContext >& _rxORB)
         :OGenericUnoDialog(_rxORB)
@@ -113,31 +94,13 @@ namespace svt
     }
 
     //-------------------------------------------------------------------------
-    Reference< XInterface > SAL_CALL OAddressBookSourceDialogUno::Create(const Reference< XMultiServiceFactory >& _rxFactory)
-    {
-        return *(new OAddressBookSourceDialogUno( comphelper::getComponentContext(_rxFactory)));
-    }
-
-    //-------------------------------------------------------------------------
     OUString SAL_CALL OAddressBookSourceDialogUno::getImplementationName() throw(RuntimeException)
-    {
-        return getImplementationName_Static();
-    }
-
-    //-------------------------------------------------------------------------
-    OUString OAddressBookSourceDialogUno::getImplementationName_Static() throw(RuntimeException)
     {
         return OUString( "com.sun.star.comp.svtools.OAddressBookSourceDialogUno" );
     }
 
     //-------------------------------------------------------------------------
     ::comphelper::StringSequence SAL_CALL OAddressBookSourceDialogUno::getSupportedServiceNames() throw(RuntimeException)
-    {
-        return getSupportedServiceNames_Static();
-    }
-
-    //-------------------------------------------------------------------------
-    ::comphelper::StringSequence OAddressBookSourceDialogUno::getSupportedServiceNames_Static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
         aSupported.getArray()[0] = "com.sun.star.ui.AddressBookSourceDialog";
@@ -258,8 +221,16 @@ namespace svt
             return new AddressBookSourceDialog( _pParent, m_aContext );
     }
 
-// .......................................................................
-}   // namespace svt
-// .......................................................................
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_svtools_OAddressBookSourceDialogUno_get_implementation(
+        css::uno::XComponentContext * context,
+        css::uno::Sequence<css::uno::Any> const &)
+{
+    rtl::Reference<OAddressBookSourceDialogUno> x(new OAddressBookSourceDialogUno(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
