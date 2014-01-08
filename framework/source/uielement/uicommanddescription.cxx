@@ -735,7 +735,7 @@ throw (::com::sun::star::uno::RuntimeException)
     ModuleToCommandFileMap::const_iterator pIter = m_aModuleToCommandFileMap.begin();
     while ( pIter != m_aModuleToCommandFileMap.end() )
     {
-        aSeq[n] = pIter->first;
+        aSeq[n++] = pIter->first;
         ++pIter;
     }
 
