@@ -18,22 +18,69 @@
  */
 
 #include <com/sun/star/document/EventObject.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <svx/unoprov.hxx>
-#include <svx/unoshcol.hxx>
+#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <osl/mutex.hxx>
+#include <svx/unoprov.hxx>
 
-using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::drawing;
 
-/***********************************************************************
-*                                                                      *
-***********************************************************************/
+namespace {
+
+class SvxShapeCollectionMutex
+{
+public:
+    ::osl::Mutex maMutex;
+};
+
+class SvxShapeCollection :
+    public cppu::WeakAggImplHelper3<drawing::XShapes, lang::XServiceInfo, lang::XComponent>,
+    public SvxShapeCollectionMutex
+{
+private:
+    cppu::OInterfaceContainerHelper maShapeContainer;
+
+    cppu::OBroadcastHelper mrBHelper;
+
+    virtual void disposing() throw();
+
+public:
+    SvxShapeCollection() throw();
+    virtual ~SvxShapeCollection() throw();
+
+    // XInterface
+    virtual void SAL_CALL release() throw();
+
+    // XComponent
+    virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XIndexAccess
+    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException) ;
+    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    // XElementAccess
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException);
+
+    // XShapes
+    virtual void SAL_CALL add( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL remove( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
+};
+
 SvxShapeCollection::SvxShapeCollection() throw()
 : maShapeContainer( maMutex ), mrBHelper( maMutex )
 {
@@ -184,7 +231,7 @@ uno::Any SAL_CALL SvxShapeCollection::getByIndex( sal_Int32 Index )
     uno::Sequence< Reference< uno::XInterface> > xElements( maShapeContainer.getElements() );
 
 
-    return uno::makeAny( Reference< XShape>(static_cast< drawing::XShape* >( xElements.getArray()[Index].get())) );
+    return uno::makeAny( Reference< drawing::XShape>(static_cast< drawing::XShape* >( xElements.getArray()[Index].get())) );
 }
 
 // XElementAccess
@@ -217,6 +264,8 @@ uno::Sequence< OUString > SAL_CALL SvxShapeCollection::getSupportedServiceNames(
     aSeq.getArray()[0] = "com.sun.star.drawing.Shapes";
     aSeq.getArray()[1] = "com.sun.star.drawing.ShapeCollection";
     return aSeq;
+}
+
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
