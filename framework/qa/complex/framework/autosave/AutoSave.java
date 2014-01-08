@@ -208,7 +208,7 @@ public class AutoSave
 
             // prepare AutoSave
             // make sure it will be started every 1 min
-            ConfigHelper aConfig = new ConfigHelper(m_xSMGR, "org.openoffice.Office.Recovery", false);
+            ConfigHelper aConfig = new ConfigHelper(connection.getComponentContext(), "org.openoffice.Office.Recovery", false);
             aConfig.writeRelativeKey("AutoSave", "Enabled"      , Boolean.TRUE  );
             aConfig.writeRelativeKey("AutoSave", "TimeIntervall", new Integer(1)); // 1 min
             aConfig.flush();

@@ -20,6 +20,7 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.configuration.theDefaultProvider;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.embed.VisualRepresentation;
 import com.sun.star.embed.XStorage;
@@ -29,7 +30,6 @@ import com.sun.star.io.XOutputStream;
 import com.sun.star.io.XStream;
 import com.sun.star.io.XTruncate;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.uno.AnyConverter;
@@ -987,9 +987,7 @@ public final class OwnEmbeddedObject extends WeakBase
         {
             try
             {
-                XMultiComponentFactory xFactory = m_xContext.getServiceManager();
-                Object obj = xFactory.createInstanceWithContext( "com.sun.star.configuration.ConfigurationProvider", m_xContext );
-                XMultiServiceFactory xConfProvider = UnoRuntime.queryInterface( XMultiServiceFactory.class, obj );
+                XMultiServiceFactory xConfProvider = theDefaultProvider.get(m_xContext);
                 if ( xConfProvider == null )
                     throw new com.sun.star.uno.RuntimeException();
 

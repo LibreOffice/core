@@ -32,6 +32,7 @@
  *
  *************************************************************************/
 
+import com.sun.star.configuration.theDefaultProvider;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
@@ -79,11 +80,7 @@ public class DisableCommandsTest extends java.lang.Object {
             xTransformer = UnoRuntime.queryInterface(com.sun.star.util.XURLTransformer.class,
                                       transformer );
 
-            Object configProvider = xRemoteServiceManager.createInstanceWithContext(
-                          "com.sun.star.configuration.ConfigurationProvider",
-                          xRemoteContext );
-            xConfigProvider = UnoRuntime.queryInterface(
-                com.sun.star.lang.XMultiServiceFactory.class, configProvider );
+            xConfigProvider = theDefaultProvider.get(xRemoteContext);
 
             // create a new test document
             Object oDesktop = xRemoteServiceManager.createInstanceWithContext(

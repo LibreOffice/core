@@ -1334,8 +1334,9 @@ void JavaVirtualMachine::registerConfigChangesListener()
     try
     {
         css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider(
-            m_xContext->getServiceManager()->createInstanceWithContext( OUString(
-                "com.sun.star.configuration.ConfigurationProvider"), m_xContext), css::uno::UNO_QUERY);
+            m_xContext->getValueByName(
+                "/singletons/com.sun.star.configuration.theDefaultProvider"),
+            css::uno::UNO_QUERY);
 
         if (xConfigProvider.is())
         {

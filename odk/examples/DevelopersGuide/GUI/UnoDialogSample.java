@@ -76,6 +76,7 @@ import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XMultiPropertySet;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.configuration.theDefaultProvider;
 import com.sun.star.container.XIndexContainer;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
@@ -193,13 +194,11 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
      */
     public XNameAccess getRegistryKeyContent(String _sKeyName){
         try {
-            Object oConfigProvider;
             PropertyValue[] aNodePath = new PropertyValue[1];
-            oConfigProvider = m_xMCF.createInstanceWithContext("com.sun.star.configuration.ConfigurationProvider", this.m_xContext);
+            XMultiServiceFactory xMSFConfig = theDefaultProvider.get(m_xContext);
             aNodePath[0] = new PropertyValue();
             aNodePath[0].Name = "nodepath";
             aNodePath[0].Value = _sKeyName;
-            XMultiServiceFactory xMSFConfig = UnoRuntime.queryInterface(XMultiServiceFactory.class, oConfigProvider);
             Object oNode = xMSFConfig.createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", aNodePath);
             XNameAccess xNameAccess = UnoRuntime.queryInterface(XNameAccess.class, oNode);
             return xNameAccess;

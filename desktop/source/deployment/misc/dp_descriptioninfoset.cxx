@@ -27,6 +27,7 @@
 #include "comphelper/makesequence.hxx"
 #include "comphelper/processfactory.hxx"
 #include "boost/optional.hpp"
+#include "com/sun/star/configuration/theDefaultProvider.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/beans/Optional.hpp"
 #include "com/sun/star/beans/PropertyValue.hpp"
@@ -374,12 +375,6 @@ void DescriptionInfoset::checkBlacklist() const
         if (currentversion.getLength() == 0)
             return;  // nothing to check
 
-        css::uno::Reference< css::lang::XMultiComponentFactory > manager(
-            m_context->getServiceManager(), css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::lang::XMultiServiceFactory> provider(
-            manager->createInstanceWithContext("com.sun.star.configuration.ConfigurationProvider", m_context),
-                css::uno::UNO_QUERY_THROW);
-
         css::uno::Sequence< css::uno::Any > args = css::uno::Sequence< css::uno::Any >(1);
         css::beans::PropertyValue prop;
         prop.Name = "nodepath";
@@ -387,8 +382,10 @@ void DescriptionInfoset::checkBlacklist() const
         args[0] <<= prop;
 
         css::uno::Reference< css::container::XNameAccess > blacklist(
-            provider->createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", args),
-                css::uno::UNO_QUERY_THROW);
+            (css::configuration::theDefaultProvider::get(m_context)
+             ->createInstanceWithArguments(
+                 "com.sun.star.configuration.ConfigurationAccess", args)),
+            css::uno::UNO_QUERY_THROW);
 
         // check first if a blacklist entry is available
         if (blacklist.is() && blacklist->hasByName(*id)) {
@@ -412,7 +409,7 @@ void DescriptionInfoset::checkBlacklist() const
                 OString xmlDependencies = OUStringToOString(udeps, RTL_TEXTENCODING_UNICODE);
 
                 css::uno::Reference< css::xml::dom::XDocumentBuilder> docbuilder(
-                    manager->createInstanceWithContext("com.sun.star.xml.dom.DocumentBuilder", m_context),
+                    m_context->getServiceManager()->createInstanceWithContext("com.sun.star.xml.dom.DocumentBuilder", m_context),
                     css::uno::UNO_QUERY_THROW);
 
                 css::uno::Sequence< sal_Int8 > byteSeq((const sal_Int8*)xmlDependencies.getStr(), xmlDependencies.getLength());

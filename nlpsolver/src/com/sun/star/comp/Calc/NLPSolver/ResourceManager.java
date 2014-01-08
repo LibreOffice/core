@@ -30,6 +30,7 @@ package com.sun.star.comp.Calc.NLPSolver;
 import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.configuration.theDefaultProvider;
 import com.sun.star.deployment.PackageInformationProvider;
 import com.sun.star.deployment.XPackageInformationProvider;
 import com.sun.star.lang.Locale;
@@ -60,8 +61,7 @@ public class ResourceManager {
         m_resourceBaseUrl = m_oxtRoot + relativeResourceBaseUrl;
 
         try {
-            XMultiServiceFactory xConfig = UnoRuntime.queryInterface(XMultiServiceFactory.class,
-                m_context.getServiceManager().createInstanceWithContext("com.sun.star.configuration.ConfigurationProvider", m_context));
+            XMultiServiceFactory xConfig = theDefaultProvider.get(m_context);
 
             Object[] args = new Object[1];
             args[0] = new PropertyValue("nodepath", 0, "/org.openoffice.Setup/L10N", PropertyState.DIRECT_VALUE);

@@ -141,7 +141,7 @@ def __getprop__(name, value):
     p, p.Name, p.Value = __property__(), name, value
     return p
 
-__uilocale__ = uno.getComponentContext().ServiceManager.createInstance("com.sun.star.configuration.ConfigurationProvider").\
+__uilocale__ = uno.getComponentContext().getValueByName("/singletons/com.sun.star.configuration.theDefaultProvider").\
     createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess",\
     (__getprop__("nodepath", "/org.openoffice.Setup/L10N"),)).getByName("ooLocale") + '-' # handle missing Country of locale 'eo'
 

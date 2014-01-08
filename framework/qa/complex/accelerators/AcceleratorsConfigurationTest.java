@@ -21,6 +21,7 @@ package complex.accelerators;
 import com.sun.star.awt.KeyEvent;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.configuration.theDefaultProvider;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.embed.XStorage;
 import com.sun.star.embed.XTransactedObject;
@@ -750,7 +751,8 @@ public class AcceleratorsConfigurationTest
             boolean bReadOnly)
             throws java.lang.Exception
     {
-        XMultiServiceFactory xConfigRoot = UnoRuntime.queryInterface(XMultiServiceFactory.class, xSMGR.createInstance("com.sun.star.configuration.ConfigurationProvider"));
+        XMultiServiceFactory xConfigRoot = theDefaultProvider.get(
+            connection.getComponentContext());
 
         PropertyValue[] lParams = new PropertyValue[2];
         lParams[0] = new PropertyValue();

@@ -20,24 +20,22 @@ package complex.framework.autosave;
 
 import com.sun.star.uno.*;
 import com.sun.star.lang.*;
+import com.sun.star.configuration.theDefaultProvider;
 import com.sun.star.container.*;
 import com.sun.star.beans.*;
 import com.sun.star.util.*;
 
 class ConfigHelper
 {
-    private XMultiServiceFactory m_xSMGR = null;
     private XHierarchicalNameAccess m_xConfig = null;
 
     //-----------------------------------------------
-    public ConfigHelper(XMultiServiceFactory xSMGR       ,
+    public ConfigHelper(XComponentContext context,
                         String               sConfigPath ,
                         boolean              bReadOnly   )
         throws com.sun.star.uno.Exception
     {
-        m_xSMGR = xSMGR;
-
-        XMultiServiceFactory xConfigRoot = UnoRuntime.queryInterface(XMultiServiceFactory.class, m_xSMGR.createInstance("com.sun.star.configuration.ConfigurationProvider"));
+        XMultiServiceFactory xConfigRoot = theDefaultProvider.get(context);
 
         PropertyValue[] lParams = new PropertyValue[1];
         lParams[0] = new PropertyValue();
