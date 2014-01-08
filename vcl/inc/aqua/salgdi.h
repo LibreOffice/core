@@ -40,8 +40,13 @@
 class AquaSalFrame;
 class AquaSalBitmap;
 class ImplDevFontAttributes;
+class ImplMacTextStyle;
 
-class CGRect;
+struct CGRect;
+
+#ifndef CGFLOAT_TYPE
+typedef float CGFloat;
+#endif
 
 // mac specific physically available font face
 class ImplMacFontData : public ImplFontData
@@ -77,11 +82,16 @@ class RGBAColor
 public:
     RGBAColor( SalColor );
     RGBAColor( float fRed, float fGreen, float fBlue, float fAlpha ); //NOTUSEDYET
-    const float* AsArray() const    { return &mfRed; }
-    bool IsVisible() const          { return (mfAlpha > 0); }
-    void SetAlpha( float fAlpha )   { mfAlpha = fAlpha; }
-private:
-    float mfRed, mfGreen, mfBlue, mfAlpha;
+    void SetAlpha( float fAlpha ) { mfRGBA[3] = fAlpha; }
+
+    bool IsVisible() const        { return (mfRGBA[3] > 0); }
+    const CGFloat* AsArray() const  { return mfRGBA; }
+    CGFloat GetRed() const   { return mfRGBA[0]; }
+    CGFloat GetGreen() const { return mfRGBA[1]; }
+    CGFloat GetBlue() const  { return mfRGBA[2]; }
+    CGFloat GetAlpha() const { return mfRGBA[3]; }
+ private:
+    CGFloat mfRGBA[4]; // RGBA
 };
 
 // -------------------
@@ -402,17 +412,20 @@ inline void AquaSalGraphics::RefreshRect( const NSRect& rRect )
 }
 
 inline RGBAColor::RGBAColor( SalColor nSalColor )
-:   mfRed( SALCOLOR_RED(nSalColor) * (1.0/255))
-,   mfGreen( SALCOLOR_GREEN(nSalColor) * (1.0/255))
-,   mfBlue( SALCOLOR_BLUE(nSalColor) * (1.0/255))
-,   mfAlpha( 1.0 )  // opaque
-{}
+{
+    mfRGBA[0] = SALCOLOR_RED(  nSalColor) * (1.0/255);
+    mfRGBA[1] = SALCOLOR_GREEN(nSalColor) * (1.0/255);
+    mfRGBA[2] = SALCOLOR_BLUE( nSalColor) * (1.0/255);
+    mfRGBA[3] = 1.0; // default to opaque
+}
 
 inline RGBAColor::RGBAColor( float fRed, float fGreen, float fBlue, float fAlpha )
-:   mfRed( fRed )
-,   mfGreen( fGreen )
-,   mfBlue( fBlue )
-,   mfAlpha( fAlpha )
-{}
+{
+    mfRGBA[0] = fRed;
+    mfRGBA[1] = fGreen;
+    mfRGBA[2] = fBlue;
+    mfRGBA[3] = fAlpha;
+}
 
 #endif // _SV_SALGDI_H
+

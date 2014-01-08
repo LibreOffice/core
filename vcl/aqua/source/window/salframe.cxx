@@ -1191,7 +1191,7 @@ static Color getColor( NSColor* pSysColor, const Color& rDefault, NSWindow* pWin
         NSColor* pRBGColor = [pSysColor colorUsingColorSpaceName: NSDeviceRGBColorSpace device: [pWin deviceDescription]];
         if( pRBGColor )
         {
-            float r = 0, g = 0, b = 0, a = 0;
+            CGFloat r = 0, g = 0, b = 0, a = 0;
             [pRBGColor getRed: &r green: &g blue: &b alpha: &a];
             aRet = Color( int(r*255.999), int(g*255.999), int(b*255.999) );
             /*

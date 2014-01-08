@@ -710,11 +710,11 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 // Perhaps some other HIThemeButtonDrawInfo setting would do the trick ?
 
                 CGContextSetShouldAntialias( mrContext, true );
-                float aGrey[] = { 0.45, 0.45, 0.45, 1.0 };
+                CGFloat aGrey[] = { 0.45, 0.45, 0.45, 1.0 };
                 CGContextSetFillColor( mrContext, aGrey );
                 CGContextBeginPath( mrContext );
-                float x = rc.origin.x + rc.size.width;
-                float y = rc.origin.y;
+                CGFloat x = rc.origin.x + rc.size.width;
+                CGFloat y = rc.origin.y;
                 CGContextMoveToPoint( mrContext, x, y );
                 y += rc.size.height;
                 CGContextAddLineToPoint( mrContext, x, y );

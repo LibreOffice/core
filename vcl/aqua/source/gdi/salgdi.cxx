@@ -1368,7 +1368,7 @@ static void DrawPattern50( void*, CGContextRef rContext )
 
 void AquaSalGraphics::Pattern50Fill()
 {
-    static const float aFillCol[4] = { 1,1,1,1 };
+    static const CGFloat aFillCol[4] = { 1,1,1,1 };
     static const CGPatternCallbacks aCallback = { 0, &DrawPattern50, NULL };
     if( ! GetSalData()->mxP50Space )
         GetSalData()->mxP50Space = CGColorSpaceCreatePattern( GetSalData()->mxRGBSpace );
@@ -1392,7 +1392,7 @@ void AquaSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalIn
 
         if ( nFlags & SAL_INVERT_TRACKFRAME )
         {
-            const float dashLengths[2]  = { 4.0, 4.0 };     // for drawing dashed line
+            const CGFloat dashLengths[2]  = { 4.0, 4.0 };     // for drawing dashed line
             CGContextSetBlendMode( mrContext, kCGBlendModeDifference );
             CGContextSetRGBStrokeColor ( mrContext, 1.0, 1.0, 1.0, 1.0 );
             CGContextSetLineDash ( mrContext, 0, dashLengths, 2 );
@@ -1429,7 +1429,7 @@ void AquaSalGraphics::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInv
         CGContextAddLines ( mrContext, CGpoints, nPoints );
         if ( nSalFlags & SAL_INVERT_TRACKFRAME )
         {
-            const float dashLengths[2]  = { 4.0, 4.0 };     // for drawing dashed line
+            const CGFloat dashLengths[2]  = { 4.0, 4.0 };     // for drawing dashed line
             CGContextSetBlendMode( mrContext, kCGBlendModeDifference );
             CGContextSetRGBStrokeColor ( mrContext, 1.0, 1.0, 1.0, 1.0 );
             CGContextSetLineDash ( mrContext, 0, dashLengths, 2 );
