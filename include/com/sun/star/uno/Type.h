@@ -52,7 +52,7 @@ enum UnoType_NoAcquire
 
     @see typelib_TypeDescriptionReference
 */
-class Type
+class SAL_WARN_UNUSED Type
 {
     /** the C typelib reference pointer
     */

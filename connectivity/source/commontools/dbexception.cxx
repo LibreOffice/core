@@ -140,8 +140,6 @@ SQLExceptionInfo::SQLExceptionInfo(const staruno::Any& _rError)
 //------------------------------------------------------------------------------
 void SQLExceptionInfo::implDetermineType()
 {
-    staruno::Type aContentType = m_aContent.getValueType();
-
     const Type& aSQLExceptionType = ::getCppuType( static_cast< SQLException* >( 0 ) );
     const Type& aSQLWarningType = ::getCppuType( static_cast< SQLWarning* >( 0 ) );
     const Type& aSQLContextType  = ::getCppuType( static_cast< SQLContext* >( 0 ) );
