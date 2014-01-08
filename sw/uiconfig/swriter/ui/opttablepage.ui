@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.0 on Wed Jan  8 18:48:05 2014 -->
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkAdjustment" id="adjustment">
@@ -337,8 +338,12 @@
                       <object class="GtkLabel" id="label11">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Changes affect the adjacent area only</property>
+                        <property name="wrap">True</property>
+                        <property name="wrap_mode">char</property>
+                        <property name="max_width_chars">50</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -351,8 +356,11 @@
                       <object class="GtkLabel" id="label12">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Changes affect the entire table</property>
+                        <property name="wrap">True</property>
+                        <property name="max_width_chars">50</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -365,8 +373,11 @@
                       <object class="GtkLabel" id="label13">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Changes affect the table size</property>
+                        <property name="wrap">True</property>
+                        <property name="max_width_chars">50</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -501,7 +512,6 @@
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
                             <property name="invisible_char">●</property>
-                            <property name="invisible_char_set">True</property>
                             <property name="adjustment">adjustment</property>
                             <property name="digits">2</property>
                           </object>
@@ -518,7 +528,6 @@
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
                             <property name="invisible_char">●</property>
-                            <property name="invisible_char_set">True</property>
                             <property name="adjustment">adjustment</property>
                             <property name="digits">2</property>
                           </object>
