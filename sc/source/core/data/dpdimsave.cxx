@@ -337,8 +337,8 @@ void fillDateGroupDimension(
     {
         case sheet::DataPilotFieldGroupBy::YEARS:
             nStart = ScDPUtil::getDatePartValue(
-                fSourceMin, rDateInfo, sheet::DataPilotFieldGroupBy::YEARS, pFormatter);
-            nEnd = ScDPUtil::getDatePartValue(fSourceMax, rDateInfo, sheet::DataPilotFieldGroupBy::YEARS, pFormatter);
+                fSourceMin, NULL, sheet::DataPilotFieldGroupBy::YEARS, pFormatter);
+            nEnd = ScDPUtil::getDatePartValue(fSourceMax, NULL, sheet::DataPilotFieldGroupBy::YEARS, pFormatter);
             break;
         case sheet::DataPilotFieldGroupBy::QUARTERS: nStart = 1; nEnd = 4;   break;
         case sheet::DataPilotFieldGroupBy::MONTHS:   nStart = 1; nEnd = 12;  break;
