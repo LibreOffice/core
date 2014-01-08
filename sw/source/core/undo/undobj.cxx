@@ -826,12 +826,21 @@ void SwUndoSaveSection::SaveSection( SwDoc* pDoc, const SwNodeIndex& rSttIdx )
     SaveSection( pDoc, aRg );
 }
 
-void SwUndoSaveSection::SaveSection( SwDoc* , const SwNodeRange& rRange )
+void SwUndoSaveSection::SaveSection(
+    SwDoc* pDoc,
+    const SwNodeRange& rRange )
 {
     SwPaM aPam( rRange.aStart, rRange.aEnd );
 
-    // delete all Footnotes / FlyFrames / Bookmarks / Directories
+    // delete all footnotes, fly frames, bookmarks and indexes
     DelCntntIndex( *aPam.GetMark(), *aPam.GetPoint() );
+    {
+        // move certain indexes out of deleted range
+        SwNodeIndex aSttIdx( aPam.Start()->nNode.GetNode() );
+        SwNodeIndex aEndIdx( aPam.End()->nNode.GetNode() );
+        SwNodeIndex aMvStt( aEndIdx, 1 );
+        pDoc->CorrAbs( aSttIdx, aEndIdx, SwPosition( aMvStt ), sal_True );
+    }
 
     pRedlSaveData = new SwRedlineSaveDatas;
     if( !SwUndo::FillSaveData( aPam, *pRedlSaveData, sal_True, sal_True ))

@@ -1451,20 +1451,31 @@ public:
     // If bMoveCrsr is set move Crsr too.
 
     /// Set everything in rOldNode on rNewPos + Offset.
-    void CorrAbs( const SwNodeIndex& rOldNode, const SwPosition& rNewPos,
-                    const xub_StrLen nOffset = 0, sal_Bool bMoveCrsr = sal_False );
+    void CorrAbs(
+        const SwNodeIndex& rOldNode,
+        const SwPosition& rNewPos,
+        const xub_StrLen nOffset = 0,
+        sal_Bool bMoveCrsr = sal_False );
 
     /// Set everything in the range of [rStartNode, rEndNode] to rNewPos.
-    void CorrAbs( const SwNodeIndex& rStartNode, const SwNodeIndex& rEndNode,
-                    const SwPosition& rNewPos, sal_Bool bMoveCrsr = sal_False );
+    void CorrAbs(
+        const SwNodeIndex& rStartNode,
+        const SwNodeIndex& rEndNode,
+        const SwPosition& rNewPos,
+        sal_Bool bMoveCrsr = sal_False );
 
     /// Set everything in this range from rRange to rNewPos.
-    void CorrAbs( const SwPaM& rRange, const SwPosition& rNewPos,
-                    sal_Bool bMoveCrsr = sal_False );
+    void CorrAbs(
+        const SwPaM& rRange,
+        const SwPosition& rNewPos,
+        sal_Bool bMoveCrsr = sal_False );
 
     /// Set everything in rOldNode to relative Pos.
-    void CorrRel( const SwNodeIndex& rOldNode, const SwPosition& rNewPos,
-                    const xub_StrLen nOffset = 0, sal_Bool bMoveCrsr = sal_False );
+    void CorrRel(
+        const SwNodeIndex& rOldNode,
+        const SwPosition& rNewPos,
+        const xub_StrLen nOffset = 0,
+        sal_Bool bMoveCrsr = sal_False );
 
     /// Query / set rules for Outline.
     inline SwNumRule* GetOutlineNumRule() const
