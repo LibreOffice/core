@@ -1068,6 +1068,28 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
     catch( Exception& )
     {
     }
+
+    if (!maTypeModel.maEditAs.isEmpty())
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(xGroupShape, uno::UNO_QUERY);
+        uno::Sequence<beans::PropertyValue> aGrabBag;
+        xPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+        beans::PropertyValue aPair;
+        aPair.Name = "mso-edit-as";
+        aPair.Value = uno::makeAny(maTypeModel.maEditAs);
+       if (aGrabBag.hasElements())
+       {
+            sal_Int32 nLength = aGrabBag.getLength();
+            aGrabBag.realloc(nLength + 1);
+            aGrabBag[nLength] = aPair;
+       }
+       else
+       {
+           aGrabBag.realloc(1);
+           aGrabBag[0] = aPair;
+       }
+       xPropertySet->setPropertyValue("InteropGrabBag", uno::makeAny(aGrabBag));
+    }
     // Make sure group shapes are inline as well, unless there is an explicit different style.
     PropertySet aPropertySet(xGroupShape);
     lcl_SetAnchorType(aPropertySet, maTypeModel);

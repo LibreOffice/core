@@ -84,6 +84,7 @@ struct OOX_DLLPUBLIC ShapeTypeModel
     sal_Bool            mbVisible;              ///< Visible or Hidden
     OUString     maWrapStyle;            ///< Wrapping mode for text.
     OUString     maArcsize;              ///< round rectangles arc size
+    OUString     maEditAs;               ///< Edit As type (e.g. "canvas" etc)
 
     StrokeModel         maStrokeModel;          ///< Border line formatting.
     FillModel           maFillModel;            ///< Shape fill formatting.
@@ -205,6 +206,7 @@ struct ShapeModel
     OUString     maControl1;         ///< Bezier control point 1
     OUString     maControl2;         ///< Bezier control point 2
     OUString     maVmlPath;          ///< VML path for this shape
+    OUString     maEditAs;           ///< VML EditAs for shape
 
     explicit            ShapeModel();
                         ~ShapeModel();

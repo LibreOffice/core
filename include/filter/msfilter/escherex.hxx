@@ -1588,6 +1588,7 @@ class MSFILTER_DLLPUBLIC EscherEx : public EscherPersistTable
         sal_Bool                    mbEscherDg;
         sal_Bool                    mbOleEmf;                   // OLE is EMF instead of WMF
         bool                        mbOOXML;
+        OUString                    mEditAs;
 
 
         virtual sal_Bool DoSeek( sal_uInt32 nKey );
@@ -1643,7 +1644,8 @@ public:
     sal_Bool        SeekToPersistOffset( sal_uInt32 nKey );
     virtual sal_Bool InsertAtPersistOffset( sal_uInt32 nKey, sal_uInt32 nValue );   // nValue is being inserted into the Stream where it's appropriate (overwrite modus), without that the
                                                                                     // current StreamPosition changes
-
+    void            SetEditAs( OUString rEditAs );
+    rtl::OUString   GetEditAs() { return mEditAs; }
     SvStream&       GetStream() const   { return *mpOutStrm; }
     sal_uLong       GetStreamPos() const    { return mpOutStrm->Tell(); }
 

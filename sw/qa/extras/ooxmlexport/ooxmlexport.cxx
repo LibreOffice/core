@@ -2394,6 +2394,16 @@ DECLARE_OOXMLEXPORT_TEST(testPreserveXfieldTOC, "PreserveXfieldTOC.docx")
     OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
    CPPUNIT_ASSERT(contents.match(" TOC \\x \\f \\o \"1-3\" \\h"));
 }
+
+DECLARE_OOXMLEXPORT_TEST(testFdo65833, "fdo65833.docx")
+{
+    // The "editas" attribute for vml group shape was not preserved.
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:group", "editas", "canvas");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
