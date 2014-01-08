@@ -38,27 +38,15 @@ static sal_uInt16 pRanges[] =
 |*
 \************************************************************************/
 
-SvxDistributeDialog::SvxDistributeDialog(
-    Window* pParent,
-    const SfxItemSet& rInAttrs,
-    SvxDistributeHorizontal eHor,
+SvxDistributeDialog::SvxDistributeDialog(Window* pParent,
+    const SfxItemSet& rInAttrs, SvxDistributeHorizontal eHor,
     SvxDistributeVertical eVer)
-:   SfxNoLayoutSingleTabDialog(pParent, rInAttrs, RID_SVXPAGE_DISTRIBUTE ),
-    mpPage(0L)
+    : SfxSingleTabDialog(pParent, rInAttrs, "DistributionDialog",
+        "cui/ui/distributiondialog.ui")
+    , mpPage(NULL)
 {
-    mpPage = new SvxDistributePage(this, rInAttrs, eHor, eVer);
-    SetTabPage(mpPage);
-    SetText(mpPage->GetText());
-}
-
-/*************************************************************************
-|*
-|* Dtor
-|*
-\************************************************************************/
-
-SvxDistributeDialog::~SvxDistributeDialog()
-{
+    mpPage = new SvxDistributePage(get_content_area(), rInAttrs, eHor, eVer);
+    setTabPage(mpPage);
 }
 
 /*************************************************************************
@@ -97,12 +85,12 @@ SvxDistributePage::SvxDistributePage(Window* pWindow,
 SfxTabPage* SvxDistributePage::Create(Window* pWindow, const SfxItemSet& rAttrs,
     SvxDistributeHorizontal eHor, SvxDistributeVertical eVer)
 {
-    return(new SvxDistributePage(pWindow, rAttrs, eHor, eVer));
+    return new SvxDistributePage(pWindow, rAttrs, eHor, eVer);
 }
 
 sal_uInt16* SvxDistributePage::GetRanges()
 {
-    return(pRanges);
+    return pRanges;
 }
 
 void SvxDistributePage::PointChanged(Window* /*pWindow*/, RECT_POINT /*eRP*/)

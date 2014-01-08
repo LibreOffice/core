@@ -56,15 +56,14 @@ public:
     SvxDistributeVertical GetDistributeVer() const { return m_eDistributeVer; }
 };
 
-class SvxDistributeDialog : public SfxNoLayoutSingleTabDialog
+class SvxDistributeDialog : public SfxSingleTabDialog
 {
-    SvxDistributePage*          mpPage;
+    SvxDistributePage* mpPage;
 
 public:
     SvxDistributeDialog(Window* pParent, const SfxItemSet& rAttr,
         SvxDistributeHorizontal eHor = SvxDistributeHorizontalNone,
         SvxDistributeVertical eVer = SvxDistributeVerticalNone);
-    ~SvxDistributeDialog();
 
     SvxDistributeHorizontal GetDistributeHor() const { return mpPage->GetDistributeHor(); }
     SvxDistributeVertical GetDistributeVer() const { return mpPage->GetDistributeVer(); }
