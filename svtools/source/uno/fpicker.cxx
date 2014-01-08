@@ -94,7 +94,7 @@ com_sun_star_comp_svt_FilePicker_get_implementation(
         svt::addFilePicker (xResult);
     }
     css::uno::Reference< css::lang::XInitialization > xx(xResult, css::uno::UNO_QUERY);
-    if (xx.is())
+    if (xx.is() && arguments->nElements)
     {
         css::uno::Sequence<css::uno::Any> aArgs(
                 reinterpret_cast<css::uno::Any *>(arguments->elements),
@@ -126,7 +126,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_svt_FolderPicker_get_implementation(
         css::uno::XComponentContext *context, uno_Sequence * arguments)
 {
-    assert(arguments != 0);
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
     Reference< css::uno::XInterface > xResult;
     Reference< css::lang::XMultiComponentFactory > xFactory (context->getServiceManager());
     if (xFactory.is() && SvtMiscOptions().UseSystemFileDialog())
@@ -157,14 +157,6 @@ com_sun_star_comp_svt_FolderPicker_get_implementation(
     {
         // Add to FolderPicker history.
         svt::addFolderPicker (xResult);
-    }
-    css::uno::Reference< css::lang::XInitialization > xx(xResult, css::uno::UNO_QUERY);
-    if (xx.is())
-    {
-        css::uno::Sequence<css::uno::Any> aArgs(
-                reinterpret_cast<css::uno::Any *>(arguments->elements),
-                arguments->nElements);
-        xx->initialize(aArgs);
     }
     xResult->acquire();
     return xResult.get();
