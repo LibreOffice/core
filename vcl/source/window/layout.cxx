@@ -1124,12 +1124,12 @@ void VclGrid::setAllocation(const Size& rAllocation)
         //We don't fit and there is no volunteer to be shrunk
         if (!nExpandables && rAllocation.Width() < aRequisition.Width())
         {
-            //first reduce spacing, to a min of 3
-            while (nColSpacing >= 6)
+            //first reduce spacing
+            while (nColSpacing)
             {
                 nColSpacing /= 2;
                 aRequisition = calculateRequisitionForSpacings(nRowSpacing, nColSpacing);
-                if (aRequisition.Width() >= rAllocation.Width())
+                if (aRequisition.Width() <= rAllocation.Width())
                     break;
             }
 
@@ -1167,12 +1167,12 @@ void VclGrid::setAllocation(const Size& rAllocation)
         //We don't fit and there is no volunteer to be shrunk
         if (!nExpandables && rAllocation.Height() < aRequisition.Height())
         {
-            //first reduce spacing, to a min of 3
-            while (nRowSpacing >= 6)
+            //first reduce spacing
+            while (nRowSpacing)
             {
                 nRowSpacing /= 2;
                 aRequisition = calculateRequisitionForSpacings(nRowSpacing, nColSpacing);
-                if (aRequisition.Height() >= rAllocation.Height())
+                if (aRequisition.Height() <= rAllocation.Height())
                     break;
             }
 
