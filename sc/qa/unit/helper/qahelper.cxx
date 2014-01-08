@@ -112,7 +112,7 @@ void loadFile(const OUString& aFileName, std::string& aContent)
 void testFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab, StringType aStringFormat)
 {
     csv_handler aHandler(pDoc, nTab, aStringFormat);
-    orcus::csv_parser_config aConfig;
+    orcus::csv::parser_config aConfig;
     aConfig.delimiters.push_back(',');
     aConfig.delimiters.push_back(';');
     aConfig.text_qualifier = '"';
@@ -126,7 +126,7 @@ void testFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab, StringType aStr
     {
         parser.parse();
     }
-    catch (const orcus::csv_parse_error& e)
+    catch (const orcus::csv::parse_error& e)
     {
         std::cout << "reading csv content file failed: " << e.what() << std::endl;
         OStringBuffer aErrorMsg("csv parser error: ");
@@ -138,7 +138,7 @@ void testFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab, StringType aStr
 void testCondFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
 {
     conditional_format_handler aHandler(pDoc, nTab);
-    orcus::csv_parser_config aConfig;
+    orcus::csv::parser_config aConfig;
     aConfig.delimiters.push_back(',');
     aConfig.delimiters.push_back(';');
     aConfig.text_qualifier = '"';
@@ -149,7 +149,7 @@ void testCondFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
     {
         parser.parse();
     }
-    catch (const orcus::csv_parse_error& e)
+    catch (const orcus::csv::parse_error& e)
     {
         std::cout << "reading csv content file failed: " << e.what() << std::endl;
         OStringBuffer aErrorMsg("csv parser error: ");

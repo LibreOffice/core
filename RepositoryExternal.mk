@@ -615,7 +615,23 @@ $(call gb_LinkTarget_add_libs,$(1),\
 
 endef
 
-define gb_LinkTarget__use_boostsystem
+define gb_LinkTarget__use_boost_iostreams
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(BOOST_CPPFLAGS) \
+)
+
+$(call gb_LinkTarget_add_ldflags,$(1),\
+	$(BOOST_LDFLAGS) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(BOOST_IOSTREAMS_LIB) \
+)
+
+endef
+
+define gb_LinkTarget__use_boost_system
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 	$(BOOST_CPPFLAGS) \
@@ -631,7 +647,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 
 endef
 
-gb_ExternalProject__use_boostsystem :=
+gb_ExternalProject__use_boost_system :=
 
 define gb_LinkTarget__use_boost_headers
 $(call gb_LinkTarget_set_include,$(1),\
@@ -668,19 +684,34 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 
 endef
 
-define gb_LinkTarget__use_boostsystem
+define gb_LinkTarget__use_boost_iostreams
 $(call gb_LinkTarget_add_defs,$(1),\
 	-DBOOST_ALL_NO_LIB \
 )
 
 $(call gb_LinkTarget_use_static_libraries,$(1),\
-	boostsystem \
+	boost_iostreams \
 )
 
 endef
 
-define gb_ExternalProject__use_boostsystem
-$(call gb_ExternalProject_use_static_libraries,$(1),boostsystem)
+define gb_ExternalProject__use_boost_iostreams
+$(call gb_ExternalProject_use_static_libraries,$(1),boost_iostreams)
+endef
+
+define gb_LinkTarget__use_boost_system
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DBOOST_ALL_NO_LIB \
+)
+
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	boost_system \
+)
+
+endef
+
+define gb_ExternalProject__use_boost_system
+$(call gb_ExternalProject_use_static_libraries,$(1),boost_system)
 endef
 
 define gb_LinkTarget__use_boost_headers
@@ -2755,7 +2786,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,liborcus)/src/liborcus/.libs/liborcus-0.6$(gb_StaticLibrary_PLAINEXT) \
+	$(call gb_UnpackedTarball_get_dir,liborcus)/src/liborcus/.libs/liborcus-0.8$(gb_StaticLibrary_PLAINEXT) \
 )
 
 $(if $(SYSTEM_BOOST), \
@@ -2772,7 +2803,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,liborcus)/src/parser/.libs/liborcus-parser-0.6$(gb_StaticLibrary_PLAINEXT) \
+	$(call gb_UnpackedTarball_get_dir,liborcus)/src/parser/.libs/liborcus-parser-0.8$(gb_StaticLibrary_PLAINEXT) \
 )
 
 endef

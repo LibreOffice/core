@@ -13,7 +13,9 @@ $(eval $(call gb_ExternalProject_use_autoconf,liborcus,build))
 
 $(eval $(call gb_ExternalProject_use_externals,liborcus, \
     boost_headers \
-    boostsystem \
+    boost_iostreams \
+    boost_system \
+	mdds_headers \
     zlib \
 ))
 
@@ -36,9 +38,9 @@ ifneq ($(SYSTEM_ZLIB),)
 liborcus_LIBS+=-lz
 endif
 ifneq ($(SYSTEM_BOOST),)
-liborcus_LIBS+=$(BOOST_SYSTEM_LIB)
+liborcus_LIBS+=$(BOOST_SYSTEM_LIB) $(BOOST_IOSTREAMS_LIB)
 else
-liborcus_LIBS+=-L$(gb_StaticLibrary_WORKDIR) -lboostsystem
+liborcus_LIBS+=-L$(gb_StaticLibrary_WORKDIR) -lboost_system -lboost_iostreams
 endif
 ifeq ($(OS),ANDROID)
 liborcus_LIBS+=-lgnustl_shared -lm
@@ -88,15 +90,18 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 		$(if $(liborcus_CXXFLAGS),CXXFLAGS='$(liborcus_CXXFLAGS)') \
 		$(if $(liborcus_CPPFLAGS),CPPFLAGS='$(liborcus_CPPFLAGS)') \
 		$(if $(liborcus_LDFLAGS),LDFLAGS='$(liborcus_LDFLAGS)') \
+		MDDS_CFLAGS='$(MDDS_CFLAGS)' \
+		MDDS_LIBS=' ' \
 		./configure \
 			--with-pic \
 			--enable-static \
 			--disable-shared \
 			$(if $(filter TRUE,$(ENABLE_DEBUG)),--enable-debug,--disable-debug) \
 			--disable-spreadsheet-model \
+			--without-tools \
 			--disable-werror \
+			$(if $(SYSTEM_BOOST),,--with-boost=$(WORKDIR)/UnpackedTarball/boost) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-			$(if $(SYSTEM_BOOST),,--with-boost-system=boostsystem) \
 		&& $(if $(VERBOSE)$(verbose),V=1) \
 		   $(MAKE) \
 	)

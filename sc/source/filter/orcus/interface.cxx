@@ -86,6 +86,23 @@ orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::get_sheet(const char* s
     return &maSheets.back();
 }
 
+orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::get_sheet(orcus::spreadsheet::sheet_t sheet_index)
+{
+    SCTAB nTab = static_cast<SCTAB>(sheet_index);
+    // See if we already have an orcus sheet instance by that index.
+    boost::ptr_vector<ScOrcusSheet>::iterator it =
+        std::find_if(maSheets.begin(), maSheets.end(), FindSheetByIndex(nTab));
+
+    if (it != maSheets.end())
+        // We already have one. Return it.
+        return &(*it);
+
+    // Create a new orcus sheet instance for this.
+    maSheets.push_back(new ScOrcusSheet(maDoc, nTab, *this));
+    return &maSheets.back();
+
+}
+
 orcus::spreadsheet::iface::import_global_settings* ScOrcusFactory::get_global_settings()
 {
     return &maGlobalSettings;
@@ -367,6 +384,10 @@ size_t ScOrcusSharedStrings::add(const char* s, size_t n)
     return mrFactory.addString(aNewString);
 }
 
+void ScOrcusSharedStrings::set_segment_font(size_t /*font_index*/)
+{
+}
+
 void ScOrcusSharedStrings::set_segment_bold(bool /*b*/)
 {
 }
@@ -380,6 +401,13 @@ void ScOrcusSharedStrings::set_segment_font_name(const char* /*s*/, size_t /*n*/
 }
 
 void ScOrcusSharedStrings::set_segment_font_size(double /*point*/)
+{
+}
+
+void ScOrcusSharedStrings::set_segment_font_color(orcus::spreadsheet::color_elem_t alpha,
+            orcus::spreadsheet::color_elem_t red,
+            orcus::spreadsheet::color_elem_t green,
+            orcus::spreadsheet::color_elem_t blue)
 {
 }
 
@@ -416,6 +444,13 @@ void ScOrcusStyles::set_font_size(double /*point*/)
 }
 
 void ScOrcusStyles::set_font_underline(orcus::spreadsheet::underline_t /*e*/)
+{
+}
+
+void ScOrcusStyles::set_font_color(orcus::spreadsheet::color_elem_t alpha,
+            orcus::spreadsheet::color_elem_t red,
+            orcus::spreadsheet::color_elem_t green,
+            orcus::spreadsheet::color_elem_t blue)
 {
 }
 
@@ -462,6 +497,15 @@ void ScOrcusStyles::set_border_style(orcus::spreadsheet::border_direction_t /*di
     // implement later
 }
 
+void ScOrcusStyles::set_border_color(orcus::spreadsheet::border_direction_t /*dir*/,
+            orcus::spreadsheet::color_elem_t alpha,
+            orcus::spreadsheet::color_elem_t red,
+            orcus::spreadsheet::color_elem_t green,
+            orcus::spreadsheet::color_elem_t blue)
+{
+    // implement later
+}
+
 size_t ScOrcusStyles::commit_border()
 {
     return 0;
@@ -482,7 +526,15 @@ size_t ScOrcusStyles::commit_cell_protection()
     return 0;
 }
 
-void ScOrcusStyles::set_number_format(const char* /*s*/, size_t /*n*/)
+void ScOrcusStyles::set_number_format_count(size_t)
+{
+}
+
+void ScOrcusStyles::set_number_format_identifier(size_t)
+{
+}
+
+void ScOrcusStyles::set_number_format_code(const char* /*s*/, size_t /*n*/)
 {
 }
 
@@ -541,6 +593,18 @@ void ScOrcusStyles::set_xf_protection(size_t /*index*/)
 }
 
 void ScOrcusStyles::set_xf_style_xf(size_t /*index*/)
+{
+}
+
+void ScOrcusStyles::set_xf_apply_alignment(bool /*b*/)
+{
+}
+
+void ScOrcusStyles::set_xf_horizontal_alignment(orcus::spreadsheet::hor_alignment_t /*align*/)
+{
+}
+
+void ScOrcusStyles::set_xf_vertical_alignment(orcus::spreadsheet::ver_alignment_t /*align*/)
 {
 }
 

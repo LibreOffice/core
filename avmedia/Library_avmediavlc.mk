@@ -22,7 +22,7 @@ $(eval $(call gb_Library_use_sdk_api,avmediavlc))
 
 $(eval $(call gb_Library_use_externals,avmediavlc,\
 	boost_headers \
-	boostsystem \
+	boost_system \
 ))
 
 $(eval $(call gb_Library_use_libraries,avmediavlc,\
