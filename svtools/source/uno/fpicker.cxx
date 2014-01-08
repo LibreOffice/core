@@ -57,22 +57,19 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_svt_FilePicker_get_implementation(
         css::uno::XComponentContext *context, uno_Sequence * arguments)
 {
-    assert(arguments != 0 && (arguments->nElements == 0 || arguments->nElements == 1));
-    css::uno::Sequence<css::uno::Any> aArgs(reinterpret_cast<css::uno::Any *>(arguments->elements),
-        arguments->nElements);
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
     Reference< css::uno::XInterface > xResult;
     Reference< css::lang::XMultiComponentFactory > xFactory (context->getServiceManager());
     if (xFactory.is() && SvtMiscOptions().UseSystemFileDialog())
     {
-        xResult = Reference<css::uno::XInterface>(Application::createFilePicker(aArgs, context));
+        xResult = Reference< css::uno::XInterface >( Application::createFilePicker( context ) );
 
         if (!xResult.is())
         {
             try
             {
-                xResult = xFactory->createInstanceWithArgumentsAndContext(
+                xResult = xFactory->createInstanceWithContext (
                         FilePicker_getSystemPickerServiceName(),
-                        aArgs,
                         context);
             }
             catch (css::uno::Exception const &)
@@ -86,9 +83,8 @@ com_sun_star_comp_svt_FilePicker_get_implementation(
     if (!xResult.is() && xFactory.is())
     {
         // Always fall back to OfficeFilePicker.
-        xResult = xFactory->createInstanceWithArgumentsAndContext(
-                "com.sun.star.ui.dialogs.OfficeFilePicker",
-                aArgs,
+        xResult = xFactory->createInstanceWithContext (
+                OUString( "com.sun.star.ui.dialogs.OfficeFilePicker"),
                 context);
     }
     if (xResult.is())

@@ -62,7 +62,6 @@
 #include "com/sun/star/uno/Reference.h"
 #include "com/sun/star/awt/XToolkit.hpp"
 #include "com/sun/star/uno/XNamingService.hpp"
-#include "com/sun/star/lang/XInitialization.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "comphelper/solarmutex.hxx"
 #include "osl/process.h"
@@ -1648,17 +1647,10 @@ bool Application::hasNativeFileSelection()
 }
 
 Reference< ui::dialogs::XFilePicker2 >
-Application::createFilePicker(const uno::Sequence<uno::Any>& rArguments,
-    const Reference< uno::XComponentContext >& xSM)
+Application::createFilePicker( const Reference< uno::XComponentContext >& xSM )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    Reference< ui::dialogs::XFilePicker2 > xRet(pSVData->mpDefInst->createFilePicker(xSM));
-    if (xRet.is() && rArguments.getLength())
-    {
-        uno::Reference<lang::XInitialization> xInit(xRet, uno::UNO_QUERY_THROW);
-        xInit->initialize(rArguments);
-    }
-    return xRet;
+    return pSVData->mpDefInst->createFilePicker( xSM );
 }
 
 Reference< ui::dialogs::XFolderPicker2 >
