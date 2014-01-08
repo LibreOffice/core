@@ -1319,7 +1319,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 pNewSet->Put( SwFmtHoriOrient( 0, text::HoriOrientation::CENTER ) );
 
                 aFrmSize = pOldFmt->GetFrmSize();
-                aFrmSize.SetWidthPercent( 100 );
+                aFrmSize.SetWidthPercent( 0 );
                 aFrmSize.SetHeightPercent( 255 );
                 pNewSet->Put( aFrmSize );
 
