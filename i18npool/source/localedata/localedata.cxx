@@ -32,8 +32,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star;
 
-static const sal_Char clocaledata[] = "com.sun.star.i18n.LocaleData";
-
 typedef sal_Unicode**   (SAL_CALL * MyFunc_Type)( sal_Int16&);
 typedef sal_Unicode***  (SAL_CALL * MyFunc_Type2)( sal_Int16&, sal_Int16& );
 typedef sal_Unicode**** (SAL_CALL * MyFunc_Type3)( sal_Int16&, sal_Int16&, sal_Int16& );
@@ -1618,7 +1616,7 @@ sal_Bool OutlineNumbering::hasElements(  ) throw(RuntimeException)
 OUString SAL_CALL
 LocaleDataImpl::getImplementationName() throw( RuntimeException )
 {
-    return OUString(clocaledata);
+    return OUString("com.sun.star.i18n.LocaleDataImpl");
 }
 
 sal_Bool SAL_CALL LocaleDataImpl::supportsService(const OUString& rServiceName)
@@ -1631,7 +1629,7 @@ Sequence< OUString > SAL_CALL
 LocaleDataImpl::getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString(clocaledata);
+    aRet[0] = "com.sun.star.i18n.LocaleData";
     return aRet;
 }
 
