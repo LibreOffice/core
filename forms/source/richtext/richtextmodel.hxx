@@ -99,7 +99,7 @@ namespace frm
     public:
         static  RichTextEngine* getEditEngine( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& _rxModel );
 
-    protected:
+    private:
         DECLARE_DEFAULT_LEAF_XTOR( ORichTextModel );
 
         // UNO
