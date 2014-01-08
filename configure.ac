@@ -336,7 +336,7 @@ if test -n "$with_android_ndk"; then
         ANDROID_APP_ABI=x86
         ANDROIDCFLAGS="-march=atom"
     fi
-    ANDROIDCFLAGS="$ANDROIDCFLAGS -ffunction-sections"
+    ANDROIDCFLAGS="$ANDROIDCFLAGS -ffunction-sections -fdata-sections"
     ANDROIDCFLAGS="$ANDROIDCFLAGS -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}libs/$ANDROID_APP_ABI"
     ANDROIDCFLAGS="$ANDROIDCFLAGS --sysroot $ANDROID_NDK_HOME/platforms/android-9/arch-$android_cpu"
     ANDROIDCFLAGS="$ANDROIDCFLAGS -Wl,--fix-cortex-a8"
