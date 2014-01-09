@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1abeadc6_b63d46be",
+        "filename": "compilerplugins/clang/svstreamoutputoperators.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-01-09T14:02:47Z",
+      "side": 1,
+      "message": "there is code using \"endl\" for binary serialization???",
+      "revId": "e809b43387a6e694682b5768f53f761d71cdd361",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_d661e2d4",
+        "filename": "tools/source/stream/stream.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2204,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-01-09T14:02:47Z",
+      "side": 1,
+      "message": "nUnits cast to sal_uInt16 will be rStr.getLength() % 2^16 so the std::min is unnecessary... i wonder if it would be better to use std::min\u003csal_Int32\u003e or something instead so we get 2^16 if it\u0027s a large string?",
+      "revId": "e809b43387a6e694682b5768f53f761d71cdd361",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_f65ede11",
+        "filename": "tools/source/stream/stream.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2205,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-01-09T14:02:47Z",
+      "side": 1,
+      "message": "shouldn\u0027t cast rStr.getLength() to sal_uInt16 since that comparison will always be true.",
+      "revId": "e809b43387a6e694682b5768f53f761d71cdd361",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_169b5aca",
+        "filename": "tools/source/stream/stream.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2211,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-01-09T14:02:47Z",
+      "side": 1,
+      "message": "should be sizeof(sal_uInt16)",
+      "revId": "e809b43387a6e694682b5768f53f761d71cdd361",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
