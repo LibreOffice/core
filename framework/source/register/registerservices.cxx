@@ -42,7 +42,6 @@
 #include <services/sessionlistener.hxx>
 #include <services/taskcreatorsrv.hxx>
 
-#include <services/substitutepathvars.hxx>
 #include <services/ContextChangeEventMultiplexer.hxx>
 
 COMPONENTGETFACTORY ( fwk,
@@ -55,7 +54,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::SessionListener                         )   else
                         IFFACTORY( ::framework::SessionListener                         )   else
                         IFFACTORY( ::framework::TaskCreatorService                      )   else
-                        IFFACTORY( ::framework::SubstitutePathVariables                 )   else
                         IFFACTORY( ::framework::ContextChangeEventMultiplexer           )
             )
 
