@@ -17,66 +17,89 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accelerators/globalacceleratorconfiguration.hxx>
-
+#include <accelerators/acceleratorconfiguration.hxx>
+#include <accelerators/presethandler.hxx>
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
-#include "helper/mischelper.hxx"
+#include <helper/mischelper.hxx>
 
 #include <acceleratorconst.h>
-#include <services.h>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
+#include <cppuhelper/supportsservice.hxx>
+#include <rtl/ref.hxx>
 #include <vcl/svapp.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
-namespace framework
+using namespace framework;
+
+namespace {
+
+/**
+    implements a read/write access to the global
+    accelerator configuration.
+ */
+typedef ::cppu::ImplInheritanceHelper1<
+             XCUBasedAcceleratorConfiguration,
+             css::lang::XServiceInfo > GlobalAcceleratorConfiguration_BASE;
+class GlobalAcceleratorConfiguration : public GlobalAcceleratorConfiguration_BASE
 {
+public:
 
-//-----------------------------------------------
-// XInterface, XTypeProvider, XServiceInfo
+    /** initialize this instance and fill the internal cache.
 
-DEFINE_XSERVICEINFO_MULTISERVICE_2(GlobalAcceleratorConfiguration                   ,
-                                   ::cppu::OWeakObject                              ,
-                                   "com.sun.star.ui.GlobalAcceleratorConfiguration" ,
-                                   OUString("com.sun.star.comp.framework.GlobalAcceleratorConfiguration"))
+        @param  xSMGR
+                reference to an uno service manager, which is used internaly.
+     */
+    GlobalAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
-DEFINE_INIT_SERVICE(GlobalAcceleratorConfiguration,
-                    {
-                        /*Attention
-                        I think we don't need any mutex or lock here ... because we are called by our own static method impl_createInstance()
-                        to create a new instance of this class by our own supported service factory.
-                        see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further information!
-                        */
-                        impl_ts_fillCache();
-                    }
-                   )
+    /** TODO */
+    virtual ~GlobalAcceleratorConfiguration() {}
 
-//-----------------------------------------------
+    virtual OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException)
+    {
+        return OUString("com.sun.star.comp.framework.GlobalAcceleratorConfiguration");
+    }
+
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException)
+    {
+        return cppu::supportsService(this, ServiceName);
+    }
+
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException)
+    {
+        css::uno::Sequence< OUString > aSeq(1);
+        aSeq[0] = OUString("com.sun.star.ui.GlobalAcceleratorConfiguration");
+        return aSeq;
+    }
+
+    // XComponent
+    virtual  void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
+
+    void impl_ts_fillCache();
+
+private:
+
+    OUString m_sLocale;
+
+    /** helper to listen for configuration changes without ownership cycle problems */
+    css::uno::Reference< css::util::XChangesListener > m_xCfgListener;
+};
+
 GlobalAcceleratorConfiguration::GlobalAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : GlobalAcceleratorConfiguration_BASE(xContext)
 {
 }
 
-//-----------------------------------------------
-GlobalAcceleratorConfiguration::~GlobalAcceleratorConfiguration()
-{
-}
-
-void SAL_CALL GlobalAcceleratorConfiguration::initialize(const css::uno::Sequence< css::uno::Any >& /*lArguments*/)
-    throw(css::uno::Exception       ,
-          css::uno::RuntimeException)
-{
-}
-
-//-----------------------------------------------
 void GlobalAcceleratorConfiguration::impl_ts_fillCache()
 {
+    /** read all data into the cache. */
+
 #if 0
     // get current office locale ... but dont cache it.
     // Otherwise we must be listener on the configuration layer
@@ -120,6 +143,17 @@ void SAL_CALL GlobalAcceleratorConfiguration::dispose()
     {}
 }
 
-} // namespace framework
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_GlobalAcceleratorConfiguration_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    rtl::Reference<GlobalAcceleratorConfiguration> x(new GlobalAcceleratorConfiguration(context));
+    x->impl_ts_fillCache();
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

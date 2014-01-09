@@ -43,7 +43,6 @@
 #include <uiconfiguration/moduleuicfgsupplier.hxx>
 #include <uiconfiguration/moduleuiconfigurationmanager.hxx>
 #include <uifactory/menubarfactory.hxx>
-#include <accelerators/globalacceleratorconfiguration.hxx>
 #include <accelerators/moduleacceleratorconfiguration.hxx>
 #include <accelerators/documentacceleratorconfiguration.hxx>
 #include <uifactory/toolboxfactory.hxx>
@@ -71,7 +70,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::ModuleUIConfigurationManagerSupplier    )   else
                         IFFACTORY( ::framework::ModuleUIConfigurationManager            )   else
                         IFFACTORY( ::framework::MenuBarFactory                          )   else
-                        IFFACTORY( ::framework::GlobalAcceleratorConfiguration          )   else
                         IFFACTORY( ::framework::ModuleAcceleratorConfiguration          )   else
                         IFFACTORY( ::framework::DocumentAcceleratorConfiguration        )   else
                         IFFACTORY( ::framework::ToolBoxFactory                          )   else
