@@ -50,7 +50,6 @@
 #include <services/sessionlistener.hxx>
 
 #include <uiconfiguration/imagemanager.hxx>
-#include <services/substitutepathvars.hxx>
 #include <services/pathsettings.hxx>
 #include <services/ContextChangeEventMultiplexer.hxx>
 
@@ -72,7 +71,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::SessionListener                         )   else
                         IFFACTORY( ::framework::SessionListener                         )   else
                         IFFACTORY( ::framework::ImageManager                            )   else
-                        IFFACTORY( ::framework::SubstitutePathVariables                 )   else
                         IFFACTORY( ::framework::PathSettings                            )   else
                         IFFACTORY( ::framework::ContextChangeEventMultiplexer           )
             )
