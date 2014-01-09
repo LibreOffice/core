@@ -41,7 +41,6 @@
 #include <uielement/recentfilesmenucontroller.hxx>
 #include <services/sessionlistener.hxx>
 
-#include <uiconfiguration/imagemanager.hxx>
 #include <services/ContextChangeEventMultiplexer.hxx>
 
 COMPONENTGETFACTORY ( fwk,
@@ -53,7 +52,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::RecentFilesMenuController               )   else
                         IFFACTORY( ::framework::SessionListener                         )   else
                         IFFACTORY( ::framework::SessionListener                         )   else
-                        IFFACTORY( ::framework::ImageManager                            )   else
                         IFFACTORY( ::framework::ContextChangeEventMultiplexer           )
             )
 

@@ -48,7 +48,8 @@
   <implementation name="com.sun.star.comp.framework.GlobalAcceleratorConfiguration">
     <service name="com.sun.star.ui.GlobalAcceleratorConfiguration"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.ImageManager">
+  <implementation name="com.sun.star.comp.framework.ImageManager"
+      constructor="com_sun_star_comp_framework_ImageManager_get_implementation">
     <service name="com.sun.star.ui.ImageManager"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.JobExecutor"
