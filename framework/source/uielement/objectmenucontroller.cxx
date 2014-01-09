@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <uielement/objectmenucontroller.hxx>
-
 #include <threadhelp/resetableguard.hxx>
-#include "services.h"
+#include <macros/xserviceinfo.hxx>
+#include <stdtypes.h>
+#include <services.h>
 
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -28,25 +28,54 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 
 #include <com/sun/star/embed/VerbAttributes.hpp>
+#include <com/sun/star/embed/VerbDescriptor.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XStatusListener.hpp>
+#include <com/sun/star/frame/XPopupMenuController.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
+#include <svtools/popupmenucontrollerbase.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
+#include <cppuhelper/weak.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/mutex.hxx>
-
-//_________________________________________________________________________________________________________________
-//  Defines
-//_________________________________________________________________________________________________________________
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
+using namespace framework;
 
-namespace framework
+namespace {
+
+class ObjectMenuController :  public svt::PopupMenuControllerBase
 {
+    using svt::PopupMenuControllerBase::disposing;
+
+    public:
+        ObjectMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+        virtual ~ObjectMenuController();
+
+        // XServiceInfo
+        DECLARE_XSERVICEINFO
+
+        // XStatusListener
+        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException );
+
+        // XEventListener
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException );
+
+    private:
+        void fillPopupMenu( const css::uno::Sequence< css::embed::VerbDescriptor >& rVerbCommandSeq, css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
+        virtual void impl_select(const css::uno::Reference< css::frame::XDispatch >& _xDispatch,const css::util::URL& aURL);
+
+        css::uno::Reference< css::frame::XDispatch >  m_xObjectUpdateDispatch;
+};
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2      (   ObjectMenuController                    ,
                                             OWeakObject                             ,
@@ -133,6 +162,21 @@ void ObjectMenuController::impl_select(const Reference< XDispatch >& _xDispatch,
         _xDispatch->dispatch( aTargetURL, aArgs );
 }
 
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_ObjectMenuController_get_implementation(
+        css::uno::XComponentContext * context,
+        uno_Sequence * arguments)
+{
+    assert(arguments != 0);
+    rtl::Reference<ObjectMenuController> x(new ObjectMenuController(context));
+    css::uno::Sequence<css::uno::Any> aArgs(
+            reinterpret_cast<css::uno::Any *>(arguments->elements),
+            arguments->nElements);
+    x->initialize(aArgs);
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
