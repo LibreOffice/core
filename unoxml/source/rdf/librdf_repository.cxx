@@ -2128,7 +2128,9 @@ librdf_uri* librdf_TypeConverter::mkURI_Lock( librdf_world* i_pWorld,
 librdf_TypeConverter::extractResource_NoLock(
     const uno::Reference< rdf::XResource > & i_xResource) const
 {
-    if (!i_xResource.is()) return 0;
+    if (!i_xResource.is()) {
+        return ::boost::shared_ptr<Resource>();
+    }
     uno::Reference< rdf::XBlankNode > xBlankNode(i_xResource, uno::UNO_QUERY);
     if (xBlankNode.is()) {
         const OString label(
@@ -2181,7 +2183,9 @@ librdf_node* librdf_TypeConverter::mkResource_Lock( librdf_world* i_pWorld,
 librdf_TypeConverter::extractNode_NoLock(
     const uno::Reference< rdf::XNode > & i_xNode) const
 {
-    if (!i_xNode.is()) return 0;
+    if (!i_xNode.is()) {
+        return ::boost::shared_ptr<Node>();
+    }
     uno::Reference< rdf::XResource > xResource(i_xNode, uno::UNO_QUERY);
     if (xResource.is()) {
         return extractResource_NoLock(xResource);
@@ -2189,7 +2193,9 @@ librdf_TypeConverter::extractNode_NoLock(
     uno::Reference< rdf::XLiteral> xLiteral(i_xNode, uno::UNO_QUERY);
     OSL_ENSURE(xLiteral.is(),
         "mkNode: someone invented a new rdf.XNode and did not tell me");
-    if (!xLiteral.is()) return 0;
+    if (!xLiteral.is()) {
+        return ::boost::shared_ptr<Node>();
+    }
     const OString val(
         OUStringToOString(xLiteral->getValue(),
         RTL_TEXTENCODING_UTF8) );
