@@ -489,21 +489,6 @@ sub get_children
 }
 
 ################################################################################
-# Using different HostName for language packs
-################################################################################
-
-sub use_langpack_hostname
-{
-    my ($dirsref) = @_;
-
-    for ( my $i = 0; $i <= $#{$dirsref}; $i++ )
-    {
-        my $onedir = ${$dirsref}[$i];
-        if (( $onedir->{'LangPackHostName'} ) && ( $onedir->{'LangPackHostName'} ne "" )) { $onedir->{'HostName'} = $onedir->{'LangPackHostName'}; }
-    }
-}
-
-################################################################################
 # Using langpack copy action for language packs
 ################################################################################
 
