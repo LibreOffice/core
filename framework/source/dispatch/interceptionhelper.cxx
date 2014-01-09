@@ -18,6 +18,8 @@
  */
 
 #include <dispatch/interceptionhelper.hxx>
+#include <threadhelp/readguard.hxx>
+#include <threadhelp/writeguard.hxx>
 
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
 

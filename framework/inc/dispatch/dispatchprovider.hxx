@@ -20,8 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_DISPATCH_DISPATCHPROVIDER_HXX
 #define INCLUDED_FRAMEWORK_INC_DISPATCH_DISPATCHPROVIDER_HXX
 
-#include <services/frame.hxx>
-
 #include <classes/protocolhandlercache.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 
@@ -35,7 +33,9 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weakref.hxx>
