@@ -11650,11 +11650,7 @@ fi
 AC_SUBST(ENABLE_SILENT_MSI)
 
 AC_MSG_CHECKING([whether and how to use Xinerama])
-if test "$_os" = "Darwin"; then
-    USE_XINERAMA=YES
-    XINERAMA_LINK=dynamic
-    AC_MSG_RESULT([yes])
-elif test "$_os" = "Linux" -o "$_os" = "FreeBSD"; then
+if test "$_os" = "Linux" -o "$_os" = "FreeBSD"; then
     if test "$x_libraries" = "default_x_libraries"; then
         XINERAMALIB=`$PKG_CONFIG --variable=libdir xinerama`
         if test "x$XINERAMALIB" = x; then
