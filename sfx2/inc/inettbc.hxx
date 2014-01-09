@@ -30,7 +30,6 @@ class SvtURLBox;
 class SfxURLToolBoxControl_Impl : public SfxToolBoxControl
 {
 private:
-    ::svt::AcceleratorExecute*  pAccExec;
 
     SvtURLBox*              GetURLBox() const;
     void                    OpenURL( const OUString& rName, sal_Bool bNew ) const;
