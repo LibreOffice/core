@@ -211,8 +211,8 @@ public:
     // close the FILE* returned by startSpool and does the actual spooling
     // set bBanner to "false" will attempt to suppress banner printing
     // set bBanner to "true" will rely on the system default
-    // returns a numerical job id
-    virtual int endSpool( const OUString& rPrinterName, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner );
+    // returns true on success
+    virtual bool endSpool( const OUString& rPrinterName, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner );
 
     // for spadmin: whether adding or removing a printer is possible
     virtual bool addOrRemovePossible() const;
