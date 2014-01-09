@@ -9,6 +9,7 @@
 # Make sure variables in this Makefile do not conflict with other variables (e.g. from gbuild).
 
 # You may occassionally want to override some of these
+CLANGCXX=$(filter-out -m32 -m64,$(CXX))
 
 # Compile flags ('make CLANGCXXFLAGS=-g' if you need to debug the plugin)
 CLANGCXXFLAGS=-O2 -Wall -Wextra -g
@@ -73,7 +74,7 @@ CLANGOBJS=
 define clangbuildsrc
 $(3): $(2) $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp
 	@echo [build CXX] $(subst $(SRCDIR)/,,$(2))
-	$(QUIET)$(CXX) $(CLANGCXXFLAGS) $(CLANGWERROR) $(CLANGDEFS) $(CLANGINCLUDES) -I$(BUILDDIR)/config_host $(2) -fPIC $(CXXFLAGS_CXX11) -c -o $(3) -MMD -MT $(3) -MP -MF $(CLANGOUTDIR)/$(1).d
+	$(QUIET)$(CLANGCXX) $(CLANGCXXFLAGS) $(CLANGWERROR) $(CLANGDEFS) $(CLANGINCLUDES) -I$(BUILDDIR)/config_host $(2) -fPIC $(CXXFLAGS_CXX11) -c -o $(3) -MMD -MT $(3) -MP -MF $(CLANGOUTDIR)/$(1).d
 
 -include $(CLANGOUTDIR)/$(1).d
 
@@ -85,7 +86,7 @@ $(foreach src, $(CLANGSRC), $(eval $(call clangbuildsrc,$(src),$(CLANGINDIR)/$(s
 
 $(CLANGOUTDIR)/plugin.so: $(CLANGOBJS)
 	@echo [build LNK] $(subst $(BUILDDIR)/,,$@)
-	$(QUIET)$(CXX) -shared $(CLANGOBJS) -o $@
+	$(QUIET)$(CLANGCXX) -shared $(CLANGOBJS) -o $@
 
 # Clang most probably doesn't maintain binary compatibility, so rebuild when clang changes.
 $(CLANGOUTDIR)/clang-timestamp: $(CLANGBUILD)/bin/clang
