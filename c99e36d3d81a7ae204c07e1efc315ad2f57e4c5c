@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1abeadc6_f6b5fe31",
+        "filename": "sc/inc/documentlinkmgr.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-01-09T14:18:52Z",
+      "side": 1,
+      "message": "why not use boost::scoped_ptr instead? don\u0027t need extra ctor then...",
+      "revId": "c99e36d3d81a7ae204c07e1efc315ad2f57e4c5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
