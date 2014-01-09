@@ -21,19 +21,10 @@
 #define INCLUDED_FRAMEWORK_INC_UICONFIGURATION_IMAGEMANAGER_HXX
 
 
-/** Attention: stl headers must(!) be included at first. Otherwise it can make trouble
-               with solaris headers ...
-*/
-#include <vector>
-#include <list>
 #include <boost/unordered_map.hpp>
 #include <memory>
 
 #include <threadhelp/threadhelpbase.hxx>
-#include <macros/generic.hxx>
-#include <macros/xinterface.hxx>
-#include <macros/xtypeprovider.hxx>
-#include <macros/xserviceinfo.hxx>
 #include <stdtypes.h>
 #include <uiconfiguration/imagetype.hxx>
 
@@ -47,9 +38,11 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustring.hxx>
 
 #include <vcl/image.hxx>
@@ -62,11 +55,28 @@ namespace framework
                             public ::cppu::WeakImplHelper2< ::com::sun::star::ui::XImageManager, css::lang::XServiceInfo>
     {
         public:
-            //  XInterface, XTypeProvider, XServiceInfo
-            DECLARE_XSERVICEINFO
-
             ImageManager( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
             virtual ~ImageManager();
+
+            virtual OUString SAL_CALL getImplementationName()
+                throw (css::uno::RuntimeException)
+            {
+                return OUString("com.sun.star.comp.framework.ImageManager");
+            }
+
+            virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+                throw (css::uno::RuntimeException)
+            {
+                return cppu::supportsService(this, ServiceName);
+            }
+
+            virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+                throw (css::uno::RuntimeException)
+            {
+                css::uno::Sequence< OUString > aSeq(1);
+                aSeq[0] = OUString("com.sun.star.ui.ImageManager");
+                return aSeq;
+            }
 
             // XComponent
             virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);

@@ -22,7 +22,6 @@
 #include <threadhelp/resetableguard.hxx>
 #include <xml/imagesconfiguration.hxx>
 #include <uiconfiguration/graphicnameaccess.hxx>
-#include <services.h>
 #include "imagemanagerimpl.hxx"
 
 #include "properties.h"
@@ -34,16 +33,13 @@
 #include <com/sun/star/io/XStream.hpp>
 
 #include <vcl/svapp.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/sequence.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/pngwrite.hxx>
-
-//_________________________________________________________________________________________________________________
-//  namespaces
-//_________________________________________________________________________________________________________________
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::XInterface;
@@ -62,17 +58,6 @@ using namespace ::com::sun::star::beans;
 
 namespace framework
 {
-
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
-DEFINE_XSERVICEINFO_MULTISERVICE_2      (   ImageManager                        ,
-                                            ::cppu::OWeakObject                 ,
-                                            "com.sun.star.ui.ImageManager"      ,
-                                            OUString("com.sun.star.comp.framework.ImageManager")
-                                        )
-
-DEFINE_INIT_SERVICE                     (   ImageManager, {} )
 
 ImageManager::ImageManager( const uno::Reference< uno::XComponentContext >& rxContext ) :
     ThreadHelpBase( &Application::GetSolarMutex() )
@@ -221,5 +206,15 @@ sal_Bool SAL_CALL ImageManager::isReadOnly() throw (::com::sun::star::uno::Runti
 }
 
 } // namespace framework
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_ImageManager_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    rtl::Reference<framework::ImageManager> x(new framework::ImageManager(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
