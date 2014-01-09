@@ -516,12 +516,6 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    void ToolPanelDeck::SetAccessibleParentWindow( Window* i_pAccessibleParent )
-    {
-        m_pImpl->SetAccessibleParentWindow( i_pAccessibleParent );
-    }
-
-    //--------------------------------------------------------------------
     Window* ToolPanelDeck::GetAccessibleParentWindow() const
     {
         Window* pAccessibleParent( m_pImpl->GetAccessibleParentWindow() );

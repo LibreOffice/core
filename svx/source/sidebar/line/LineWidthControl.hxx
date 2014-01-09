@@ -38,7 +38,6 @@ public:
     virtual void Paint(const Rectangle& rect);
 
     void SetWidthSelect( long lValue, bool bValuable, SfxMapUnit eMapUnit);
-    ValueSet& GetValueSet();
     bool IsCloseByEdit();
     long GetTmpCustomWidth();
 

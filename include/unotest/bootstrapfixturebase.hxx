@@ -62,12 +62,9 @@ public:
   // return a Path to a given c-str path from the source directory
   OUString getPathFromSrc( const char *pPath );
 
-
   // return a URL to a given c-str path from the workdir directory
   OUString getURLFromWorkdir( const char *pPath );
 
-  // return a Path to a given c-str path from the workdir directory
-  OUString getPathFromWorkdir( const char *pPath );
   virtual void setUp();
   virtual void tearDown();
 

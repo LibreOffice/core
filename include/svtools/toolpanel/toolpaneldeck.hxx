@@ -155,7 +155,6 @@ namespace svt
 
             Calling this method has no effect if CreateAccessible had always been called.
         */
-        void                SetAccessibleParentWindow( ::Window* i_pAccessibleParent );
         ::Window*           GetAccessibleParentWindow() const;
 
         // IToolPanelDeck
