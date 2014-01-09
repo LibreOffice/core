@@ -70,7 +70,8 @@
       constructor="com_sun_star_comp_framework_LayoutManager_get_implementation">
     <service name="com.sun.star.frame.LayoutManager"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.MenuBarFactory">
+  <implementation name="com.sun.star.comp.framework.MenuBarFactory"
+      constructor="com_sun_star_comp_framework_MenuBarFactory_get_implementation">
     <service name="com.sun.star.ui.UIElementFactory"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.ModuleAcceleratorConfiguration"
@@ -117,7 +118,8 @@
     <service name="com.sun.star.frame.StatusbarControllerFactory"/>
     <singleton name="com.sun.star.frame.theStatusbarControllerFactory"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.StatusBarFactory">
+  <implementation name="com.sun.star.comp.framework.StatusBarFactory"
+      constructor="com_sun_star_comp_framework_StatusBarFactory_get_implementation">
     <service name="com.sun.star.ui.StatusBarFactory"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.StatusIndicatorFactory"
@@ -133,7 +135,8 @@
     <service name="com.sun.star.frame.ToolbarControllerFactory"/>
     <singleton name="com.sun.star.frame.theToolbarControllerFactory"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.ToolBarFactory">
+  <implementation name="com.sun.star.comp.framework.ToolBarFactory"
+      constructor="com_sun_star_comp_framework_ToolBarFactory_get_implementation">
     <service name="com.sun.star.ui.ToolBarFactory"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.UICategoryDescription"

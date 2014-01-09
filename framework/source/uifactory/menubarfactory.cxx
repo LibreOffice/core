@@ -19,25 +19,19 @@
 
 #include <uifactory/menubarfactory.hxx>
 
-#include <threadhelp/resetableguard.hxx>
-#include "services.h"
 #include <uielement/menubarwrapper.hxx>
 
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
-
-//_________________________________________________________________________________________________________________
-//  Defines
-//_________________________________________________________________________________________________________________
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -49,27 +43,8 @@ using namespace ::com::sun::star::ui;
 namespace framework
 {
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   MenuBarFactory                                  ,
-                                            ::cppu::OWeakObject                             ,
-                                            SERVICENAME_MENUBARFACTORY                      ,
-                                            IMPLEMENTATIONNAME_MENUBARFACTORY
-                                        )
-
-DEFINE_INIT_SERVICE                     (   MenuBarFactory, {} )
-
-MenuBarFactory::MenuBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
-    ThreadHelpBase()
-    , m_xContext( xContext )
-    , m_xModuleManager( ModuleManager::create( xContext ) )
-{
-}
-MenuBarFactory::MenuBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,bool ) :
-    ThreadHelpBase(&Application::GetSolarMutex())
-    , m_xContext( xContext )
-    , m_xModuleManager( ModuleManager::create( xContext ) )
+MenuBarFactory::MenuBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext )
+    : m_xContext( xContext )
 {
 }
 
@@ -84,11 +59,11 @@ Reference< XUIElement > SAL_CALL MenuBarFactory::createUIElement(
 throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException )
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    SolarMutexClearableGuard g;
     MenuBarWrapper* pMenuBarWrapper = new MenuBarWrapper( m_xContext );
     Reference< ::com::sun::star::ui::XUIElement > xMenuBar( (OWeakObject *)pMenuBarWrapper, UNO_QUERY );
-    Reference< ::com::sun::star::frame::XModuleManager2 > xModuleManager = m_xModuleManager;
-    aLock.unlock();
+    Reference< ::com::sun::star::frame::XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
+    g.clear();
     CreateUIElement(ResourceURL, Args, "MenuOnly", "private:resource/menubar/", xMenuBar, xModuleManager, m_xContext);
     return xMenuBar;
 }
@@ -183,5 +158,13 @@ void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
 }
 
 } // namespace framework
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_MenuBarFactory_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new framework::MenuBarFactory(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

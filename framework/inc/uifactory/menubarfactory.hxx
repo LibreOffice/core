@@ -20,36 +20,48 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UIFACTORY_MENUBARFACTORY_HXX
 #define INCLUDED_FRAMEWORK_INC_UIFACTORY_MENUBARFACTORY_HXX
 
-#include <stdtypes.h>
-#include <threadhelp/threadhelpbase.hxx>
-#include <macros/generic.hxx>
-#include <macros/xinterface.hxx>
-#include <macros/xtypeprovider.hxx>
-#include <macros/xserviceinfo.hxx>
-
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <toolkit/awt/vclxmenu.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustring.hxx>
 
 namespace framework
 {
-    class MenuBarFactory :  protected ThreadHelpBase                                    ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
-                            public ::cppu::WeakImplHelper2< com::sun::star::lang::XServiceInfo,
-                                                            ::com::sun::star::ui::XUIElementFactory>
+typedef ::cppu::WeakImplHelper2<
+    css::lang::XServiceInfo,
+    css::ui::XUIElementFactory> MenuBarFactory_BASE;
+
+    class MenuBarFactory : public MenuBarFactory_BASE
     {
         public:
             MenuBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
             virtual ~MenuBarFactory();
 
-            //  XInterface, XTypeProvider, XServiceInfo
-            DECLARE_XSERVICEINFO
+            virtual OUString SAL_CALL getImplementationName()
+                throw (css::uno::RuntimeException)
+            {
+                return OUString("com.sun.star.comp.framework.MenuBarFactory");
+            }
+
+            virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+                throw (css::uno::RuntimeException)
+            {
+                return cppu::supportsService(this, ServiceName);
+            }
+
+            virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+                throw (css::uno::RuntimeException)
+            {
+                css::uno::Sequence< OUString > aSeq(1);
+                aSeq[0] = OUString("com.sun.star.ui.UIElementFactory");
+                return aSeq;
+            }
 
             // XUIElementFactory
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > SAL_CALL createUIElement( const OUString& ResourceURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Args ) throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
@@ -63,10 +75,7 @@ namespace framework
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
 
         protected:
-            MenuBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,bool );
-
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >     m_xContext;
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager2 >     m_xModuleManager;
     };
 }
 

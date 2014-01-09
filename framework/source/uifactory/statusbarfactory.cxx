@@ -17,26 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <uifactory/statusbarfactory.hxx>
+#include <com/sun/star/frame/ModuleManager.hpp>
+
 #include <uifactory/menubarfactory.hxx>
-
 #include <uielement/statusbarwrapper.hxx>
-#include <threadhelp/resetableguard.hxx>
 
-#include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
-
-#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
-
-//_________________________________________________________________________________________________________________
-//  Defines
-//_________________________________________________________________________________________________________________
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -45,22 +33,41 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 using namespace ::com::sun::star::ui;
 
-namespace framework
+using namespace framework;
+
+namespace {
+
+class StatusBarFactory :  public MenuBarFactory
 {
+public:
+    StatusBarFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   StatusBarFactory                                ,
-                                            ::cppu::OWeakObject                             ,
-                                            SERVICENAME_STATUSBARFACTORY                    ,
-                                            IMPLEMENTATIONNAME_STATUSBARFACTORY
-                                        )
+    virtual OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException)
+    {
+        return OUString("com.sun.star.comp.framework.StatusBarFactory");
+    }
 
-DEFINE_INIT_SERVICE                     (   StatusBarFactory, {} )
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException)
+    {
+        return cppu::supportsService(this, ServiceName);
+    }
+
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException)
+    {
+        css::uno::Sequence< OUString > aSeq(1);
+        aSeq[0] = OUString("com.sun.star.ui.StatusBarFactory");
+        return aSeq;
+    }
+
+    // XUIElementFactory
+    virtual css::uno::Reference< css::ui::XUIElement > SAL_CALL createUIElement( const OUString& ResourceURL, const css::uno::Sequence< css::beans::PropertyValue >& Args ) throw ( css::container::NoSuchElementException, css::lang::IllegalArgumentException, css::uno::RuntimeException );
+};
 
 StatusBarFactory::StatusBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
-    MenuBarFactory( xContext,true )
+    MenuBarFactory( xContext )
 {
 }
 
@@ -71,15 +78,23 @@ Reference< XUIElement > SAL_CALL StatusBarFactory::createUIElement(
 throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException )
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    SolarMutexClearableGuard g;
     StatusBarWrapper* pWrapper = new StatusBarWrapper( m_xContext );
     Reference< ::com::sun::star::ui::XUIElement > xMenuBar( (OWeakObject *)pWrapper, UNO_QUERY );
-    Reference< ::com::sun::star::frame::XModuleManager2 > xModuleManager = m_xModuleManager;
-    aLock.unlock();
+    Reference< ::com::sun::star::frame::XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
+    g.clear();
     MenuBarFactory::CreateUIElement(ResourceURL, Args, NULL, "private:resource/statusbar/", xMenuBar, xModuleManager, m_xContext );
     return xMenuBar;
 }
 
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_StatusBarFactory_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new StatusBarFactory(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

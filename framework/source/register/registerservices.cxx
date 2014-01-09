@@ -34,20 +34,14 @@
                              )
 =================================================================================================================*/
 #include <services/desktop.hxx>
-#include <uifactory/menubarfactory.hxx>
-#include <uifactory/toolboxfactory.hxx>
 #include "uiconfiguration/windowstateconfiguration.hxx"
-#include <uifactory/statusbarfactory.hxx>
 #include <services/sessionlistener.hxx>
 
 #include <services/ContextChangeEventMultiplexer.hxx>
 
 COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::Desktop                                 )   else
-                        IFFACTORY( ::framework::MenuBarFactory                          )   else
-                        IFFACTORY( ::framework::ToolBoxFactory                          )   else
                         IFFACTORY( ::framework::WindowStateConfiguration                )   else
-                        IFFACTORY( ::framework::StatusBarFactory                        )   else
                         IFFACTORY( ::framework::SessionListener                         )   else
                         IFFACTORY( ::framework::SessionListener                         )   else
                         IFFACTORY( ::framework::ContextChangeEventMultiplexer           )
