@@ -1153,7 +1153,7 @@ public:
                 &err);
             if (err != CL_SUCCESS)
                 throw OpenCLError(err, __FILE__, __LINE__);
-                for (int i=0 ; i < w; i++)
+            for (int i=0 ; i < w; i++)
                 pAllBuffer[i+w] = resbuf[i];
             err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpClmem2, resbuf, 0, NULL, NULL);
             if (mpClmem2)
