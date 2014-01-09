@@ -18,6 +18,7 @@ ifeq ($(COM),GCC)
 $(call gb_ExternalProject_get_state_target,xml2,build):
 	$(call gb_ExternalProject_run,build,\
 		./configure --disable-ipv6 --without-python --without-zlib \
+			--without-lzma \
 			--disable-static --without-debug lt_cv_cc_dll_switch="-shared" \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			CC="$(CC) -mthreads $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
@@ -39,6 +40,7 @@ else # OS!=WNT
 $(call gb_ExternalProject_get_state_target,xml2,build):
 	$(call gb_ExternalProject_run,build,\
 		./configure --disable-ipv6 --without-python --without-zlib --with-sax1 \
+			--without-lzma \
 			$(if $(debug),--with-run-debug) \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________URELIB) \
