@@ -300,7 +300,7 @@ protected:
     SFX2_DLLPRIVATE void         ImplInitScrollBar();
     SFX2_DLLPRIVATE void         ImplDeleteItems();
     SFX2_DLLPRIVATE void         ImplDraw();
-    SFX2_DLLPRIVATE size_t       ImplGetItem( const Point& rPoint, bool bMove = false ) const;
+    SFX2_DLLPRIVATE size_t       ImplGetItem( const Point& rPoint ) const;
     SFX2_DLLPRIVATE ThumbnailViewItem*    ImplGetItem( size_t nPos );
     SFX2_DLLPRIVATE sal_uInt16          ImplGetVisibleItemCount() const;
     SFX2_DLLPRIVATE ThumbnailViewItem*    ImplGetVisibleItem( sal_uInt16 nVisiblePos );
@@ -328,7 +328,6 @@ protected:
 
     int mnFineness;
 
-    sal_uInt16 mnHighItemId;
     sal_uInt16 mnCols;
     sal_uInt16 mnFirstLine;
     sal_uInt16 mnSpacing;
