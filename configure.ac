@@ -9190,6 +9190,10 @@ if test "$WANT_X11" = "yes"; then
     AC_CHECK_HEADERS(X11/Composite.h,[],[AC_MSG_ERROR([Xt headers not found])],
      [#include <X11/Intrinsic.h>])
 
+    # ENABLE_NPAPI_FROM_BROWSER requires Xt library
+    AC_CHECK_LIB([Xt], [XtToolkitInitialize], [:],
+        [AC_MSG_ERROR(Xt library not found)])
+
     dnl ===================================================================
     dnl Check for extension headers
     dnl ===================================================================
