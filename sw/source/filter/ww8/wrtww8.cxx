@@ -1389,7 +1389,6 @@ void WW8Export::AppendBookmarks( const SwTxtNode& rNd, sal_Int32 nAktPos, sal_In
 
 void WW8Export::AppendAnnotationMarks(const SwTxtNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen)
 {
-    std::vector<OUString> aStarts;
     IMarkVector aMarks;
     if (GetAnnotationMarks(rNode, nAktPos, nAktPos + nLen, aMarks))
     {
