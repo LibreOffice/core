@@ -2488,10 +2488,6 @@ void WW8AttributeOutput::PostitField( const SwField* pFld )
     m_rWW8Export.WritePostItBegin( m_rWW8Export.pO );
 }
 
-void WW8AttributeOutput::WritePostitFieldStart()
-{
-}
-
 bool WW8AttributeOutput::DropdownField( const SwField* pFld )
 {
     bool bExpand = true;

@@ -71,10 +71,6 @@ public:
     /// Called after we end outputting the attributes.
     virtual void EndRunProperties( const SwRedlineData* pRedlineData );
 
-    virtual void WritePostitFieldStart() SAL_OVERRIDE;
-
-    virtual void WritePostitFieldEnd() SAL_OVERRIDE;
-
     /// Output text (inside a run).
     virtual void RunText( const OUString& rText, rtl_TextEncoding eCharSet = RTL_TEXTENCODING_UTF8 );
 

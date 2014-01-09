@@ -1706,10 +1706,6 @@ bool MSWordExportBase::GetBookmarks( const SwTxtNode& rNd, sal_Int32 nStt,
             bool bIsStartOk = ( pMark->GetMarkStart().nNode == nNd ) && ( nBStart >= nStt ) && ( nBStart <= nEnd );
             bool bIsEndOk = ( pMark->GetMarkEnd().nNode == nNd ) && ( nBEnd >= nStt ) && ( nBEnd <= nEnd );
 
-            IFieldmark* pFieldmark = dynamic_cast<IFieldmark*>(pMark);
-            if (pFieldmark && pFieldmark->GetFieldname() == ODF_COMMENTRANGE)
-                continue;
-
             if ( bIsStartOk || bIsEndOk )
             {
                 rArr.push_back( pMark );
@@ -2030,18 +2026,13 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                     }
                 }
 
-                bool bCommentRange = pFieldmark && pFieldmark->GetFieldname() == ODF_COMMENTRANGE;
-                if (bCommentRange)
-                    AttrOutput().WritePostitFieldStart();
-                else
-                    OutputField( NULL, eFieldId, sCode, WRITEFIELD_START | WRITEFIELD_CMD_START );
+                OutputField( NULL, eFieldId, sCode, WRITEFIELD_START | WRITEFIELD_CMD_START );
 
                 if ( pFieldmark && pFieldmark->GetFieldname( ) == ODF_FORMTEXT )
                     WriteFormData( *pFieldmark );
                 else if ( pFieldmark && pFieldmark->GetFieldname( ) == ODF_HYPERLINK )
                     WriteHyperlinkData( *pFieldmark );
-                if (!bCommentRange)
-                    OutputField( NULL, lcl_getFieldId( pFieldmark ), OUString(), WRITEFIELD_CMD_END );
+                OutputField( NULL, lcl_getFieldId( pFieldmark ), OUString(), WRITEFIELD_CMD_END );
 
                 if ( pFieldmark && pFieldmark->GetFieldname() == ODF_UNHANDLED )
                 {
@@ -2076,10 +2067,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                     }
                 }
 
-                if (pFieldmark && pFieldmark->GetFieldname() == ODF_COMMENTRANGE)
-                    AttrOutput().WritePostitFieldEnd();
-                else
-                    OutputField( NULL, eFieldId, OUString(), WRITEFIELD_CLOSE );
+                OutputField( NULL, eFieldId, OUString(), WRITEFIELD_CLOSE );
 
                 if ( pFieldmark && pFieldmark->GetFieldname() == ODF_FORMTEXT )
                     AppendBookmark( pFieldmark->GetName(), false );

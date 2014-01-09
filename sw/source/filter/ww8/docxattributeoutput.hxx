@@ -161,10 +161,6 @@ public:
 
     virtual void WritePostitFieldReference();
 
-    virtual void WritePostitFieldStart();
-
-    virtual void WritePostitFieldEnd();
-
     /// Output text (inside a run).
     virtual void RunText( const OUString& rText, rtl_TextEncoding eCharSet = RTL_TEXTENCODING_UTF8 );
 

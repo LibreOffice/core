@@ -73,8 +73,6 @@ public:
     void testSwScanner();
     void testUserPerceivedCharCount();
     void testGraphicAnchorDeletion();
-    void testFdo57938();
-    void testFdo59573();
     void testTransliterate();
 
     CPPUNIT_TEST_SUITE(SwDocTest);
@@ -87,8 +85,6 @@ public:
     CPPUNIT_TEST(testSwScanner);
     CPPUNIT_TEST(testUserPerceivedCharCount);
     CPPUNIT_TEST(testGraphicAnchorDeletion);
-    CPPUNIT_TEST(testFdo57938);
-    CPPUNIT_TEST(testFdo59573);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -853,44 +849,6 @@ void SwDocTest::randomTest()
         xmlFreeTextWriter( writer );
 #endif
     }
-}
-
-void SwDocTest::testFdo57938()
-{
-    SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
-    SwPaM aPaM(aIdx);
-
-    // Insert "atest" and create a fieldmark around "test".
-    OUString aTest("atest");
-    m_pDoc->InsertString(aPaM, aTest);
-    aPaM.SetMark();
-    aPaM.GetPoint()->nContent = 1;
-    IDocumentMarkAccess* pMarksAccess = m_pDoc->getIDocumentMarkAccess();
-    pMarksAccess->makeFieldBookmark(aPaM, "", ODF_COMMENTRANGE);
-    aPaM.GetPoint()->nContent = 0;
-    aPaM.GetMark()->nContent = 1;
-    // The problem was that "a" was considered read-only, so could not be deleted.
-    CPPUNIT_ASSERT_EQUAL(false, aPaM.HasReadonlySel(false));
-}
-
-void SwDocTest::testFdo59573()
-{
-    SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
-    SwPaM aPaM(aIdx);
-
-    // Insert "abc" and create a fieldmark around "b".
-    OUString aTest("abc");
-    m_pDoc->InsertString(aPaM, aTest);
-    aPaM.SetMark();
-    aPaM.GetPoint()->nContent = 1;
-    aPaM.GetMark()->nContent = 2;
-    IDocumentMarkAccess* pMarksAccess = m_pDoc->getIDocumentMarkAccess();
-    pMarksAccess->makeFieldBookmark(aPaM, "", ODF_COMMENTRANGE);
-    aPaM.GetPoint()->nContent = 4;
-    aPaM.GetMark()->nContent = 4;
-    // The problem was that the position after the fieldmark end and before the
-    // annotation anchor wasn't read-only.
-    CPPUNIT_ASSERT_EQUAL(true, aPaM.HasReadonlySel(false));
 }
 
 static OUString

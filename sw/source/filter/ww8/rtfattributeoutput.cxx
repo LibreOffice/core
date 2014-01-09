@@ -3255,14 +3255,6 @@ void RtfAttributeOutput::PostitField( const SwField* pFld )
     m_aRunText->append('}');
 }
 
-void RtfAttributeOutput::WritePostitFieldStart()
-{
-}
-
-void RtfAttributeOutput::WritePostitFieldEnd()
-{
-}
-
 bool RtfAttributeOutput::DropdownField( const SwField* /*pFld*/ )
 {
     // this is handled in OutputFlyFrame_Impl()

@@ -665,7 +665,6 @@ bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
     sw::mark::IMark* pA = NULL;
     sw::mark::IMark* pB = NULL;
     bool bUnhandledMark = false;
-    bool bCommentrangeMark = false;
     const IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
     if ( pDoc )
     {
@@ -674,18 +673,7 @@ bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
 
         sw::mark::IFieldmark* pFieldmark = pMarksAccess->getFieldmarkFor( *GetPoint() );
         if ( pFieldmark )
-        {
             bUnhandledMark = pFieldmark->GetFieldname( ) == ODF_UNHANDLED;
-            if (!bUnhandledMark)
-                bCommentrangeMark = pFieldmark->GetFieldname() == ODF_COMMENTRANGE;
-        }
-        // Allow editing selection right before a commented range.
-        if (!bCommentrangeMark && GetMark())
-        {
-            pFieldmark = pMarksAccess->getFieldmarkFor(*GetMark());
-            if (pFieldmark)
-                bCommentrangeMark = pFieldmark->GetFieldname() == ODF_COMMENTRANGE;
-        }
     }
 
     if (!bRet)
@@ -693,8 +681,7 @@ bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
         // Unhandled fieldmarks case shouldn't be edited manually to avoid breaking anything
         if ( ( pA == pB ) && bUnhandledMark )
             bRet = true;
-        // Allow editing of commented ranges.
-        else if (!bCommentrangeMark)
+        else
         {
             // Form protection case
             bool bAtStartA = pA != NULL && pA->GetMarkStart() == *GetPoint();

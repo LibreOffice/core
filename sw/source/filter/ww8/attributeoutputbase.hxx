@@ -187,12 +187,6 @@ public:
     /// for docx w:commentReference
     virtual void WritePostitFieldReference() {};
 
-    /// for docx w:commentRangeStart
-    virtual void WritePostitFieldStart() {};
-
-    /// for docx w:commentRangeEnd
-    virtual void WritePostitFieldEnd() {};
-
     /// Output text (inside a run).
     virtual void RunText( const OUString& rText, rtl_TextEncoding eCharSet ) = 0;
 

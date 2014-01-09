@@ -4657,14 +4657,6 @@ void DocxAttributeOutput::WritePostitFieldReference()
     }
 }
 
-void DocxAttributeOutput::WritePostitFieldStart()
-{
-}
-
-void DocxAttributeOutput::WritePostitFieldEnd()
-{
-}
-
 void DocxAttributeOutput::WritePostitFields()
 {
     for( unsigned int i = 0;
