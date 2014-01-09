@@ -38,7 +38,11 @@ RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rUR
         Size aExtSize(aExt.GetSizePixel());
 
         // attempt to make it appear as if it is on a piece of paper
-        static PaperInfo aInfo(PaperInfo::getSystemDefaultPaper());
+        INetURLObject aUrl(rURL);
+        PaperInfo aInfo(
+            RecentDocsView::typeMatchesExtension(TYPE_IMPRESS, aUrl.getExtension())
+            ? PAPER_SCREEN_4_3
+            : PaperInfo::getSystemDefaultPaper());
         double ratio = double(nThumbnailSize) / double(std::max(aInfo.getWidth(), aInfo.getHeight()));
         Size aThumbnailSize(aInfo.getWidth() * ratio, aInfo.getHeight() * ratio);
 
