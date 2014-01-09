@@ -17,29 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <uifactory/uielementfactorymanager.hxx>
-#include <uifactory/windowcontentfactorymanager.hxx>
-#include <threadhelp/resetableguard.hxx>
-#include "services.h"
+#include <sal/config.h>
 
-#include "helper/mischelper.hxx"
+#include <uifactory/windowcontentfactorymanager.hxx>
+#include <uifactory/configurationaccessfactorymanager.hxx>
+#include <helper/mischelper.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/container/XContainerListener.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XModuleManager2.hpp>
+#include <com/sun/star/ui/XUIElementFactoryManager.hpp>
 
 #include <rtl/ustrbuf.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
-
-//_________________________________________________________________________________________________________________
-//  Defines
-//_________________________________________________________________________________________________________________
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -49,16 +47,13 @@ using namespace com::sun::star::configuration;
 using namespace com::sun::star::container;
 using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::frame;
-
-//_________________________________________________________________________________________________________________
-//  Namespace
-//_________________________________________________________________________________________________________________
+using namespace framework;
 
 namespace framework
 {
 
 // global function needed by both implementations
-OUString getHashKeyFromStrings( const OUString& aType, const OUString& aName, const OUString& aModuleName )
+static OUString getHashKeyFromStrings( const OUString& aType, const OUString& aName, const OUString& aModuleName )
 {
     OUStringBuffer aKey( aType );
     aKey.appendAscii( "^" );
@@ -69,13 +64,7 @@ OUString getHashKeyFromStrings( const OUString& aType, const OUString& aName, co
 }
 
 
-//*****************************************************************************************************************
-//  Configuration access class for UIElementFactoryManager implementation
-//*****************************************************************************************************************
-
-
 ConfigurationAccess_FactoryManager::ConfigurationAccess_FactoryManager( const Reference< XComponentContext >& rxContext, const OUString& _sRoot ) :
-    ThreadHelpBase(),
     m_aPropType( "Type" ),
     m_aPropName( "Name" ),
     m_aPropModule( "Module" ),
@@ -89,7 +78,7 @@ ConfigurationAccess_FactoryManager::ConfigurationAccess_FactoryManager( const Re
 ConfigurationAccess_FactoryManager::~ConfigurationAccess_FactoryManager()
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(m_aMutex);
 
     Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
     if ( xContainer.is() )
@@ -99,7 +88,7 @@ ConfigurationAccess_FactoryManager::~ConfigurationAccess_FactoryManager()
 OUString ConfigurationAccess_FactoryManager::getFactorySpecifierFromTypeNameModule( const OUString& rType, const OUString& rName, const OUString& rModule ) const
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(m_aMutex);
 
     FactoryManagerMap::const_iterator pIter =
         m_aFactoryManagerMap.find( getHashKeyFromStrings( rType, rName, rModule ));
@@ -134,7 +123,7 @@ OUString ConfigurationAccess_FactoryManager::getFactorySpecifierFromTypeNameModu
 void ConfigurationAccess_FactoryManager::addFactorySpecifierToTypeNameModule( const OUString& rType, const OUString& rName, const OUString& rModule, const OUString& rServiceSpecifier )
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(m_aMutex);
 
     OUString aHashKey = getHashKeyFromStrings( rType, rName, rModule );
 
@@ -150,7 +139,7 @@ void ConfigurationAccess_FactoryManager::addFactorySpecifierToTypeNameModule( co
 void ConfigurationAccess_FactoryManager::removeFactorySpecifierFromTypeNameModule( const OUString& rType, const OUString& rName, const OUString& rModule )
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(m_aMutex);
 
     OUString aHashKey = getHashKeyFromStrings( rType, rName, rModule );
 
@@ -165,7 +154,7 @@ void ConfigurationAccess_FactoryManager::removeFactorySpecifierFromTypeNameModul
 Sequence< Sequence< PropertyValue > > ConfigurationAccess_FactoryManager::getFactoriesDescription() const
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(m_aMutex);
 
     Sequence< Sequence< PropertyValue > > aSeqSeq;
 
@@ -213,7 +202,7 @@ void SAL_CALL ConfigurationAccess_FactoryManager::elementInserted( const Contain
     OUString   aService;
 
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(m_aMutex);
 
     if ( impl_getElementProps( aEvent.Element, aType, aName, aModule, aService ))
     {
@@ -232,7 +221,7 @@ void SAL_CALL ConfigurationAccess_FactoryManager::elementRemoved ( const Contain
     OUString   aService;
 
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(m_aMutex);
 
     if ( impl_getElementProps( aEvent.Element, aType, aName, aModule, aService ))
     {
@@ -251,7 +240,7 @@ void SAL_CALL ConfigurationAccess_FactoryManager::elementReplaced( const Contain
     OUString   aService;
 
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(m_aMutex);
 
     if ( impl_getElementProps( aEvent.Element, aType, aName, aModule, aService ))
     {
@@ -268,14 +257,14 @@ void SAL_CALL ConfigurationAccess_FactoryManager::disposing( const EventObject& 
 {
     // SAFE
     // remove our reference to the config access
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(m_aMutex);
     m_xConfigAccess.clear();
 }
 
 void ConfigurationAccess_FactoryManager::readConfigurationData()
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(m_aMutex);
 
     if ( !m_bConfigAccessInitialized )
     {
@@ -288,7 +277,8 @@ void ConfigurationAccess_FactoryManager::readConfigurationData()
 
         try
         {
-            m_xConfigAccess.set( m_xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGREADACCESS,aArgs ), UNO_QUERY );
+            m_xConfigAccess.set( m_xConfigProvider->createInstanceWithArguments(
+                        "com.sun.star.configuration.ConfigurationAccess", aArgs ), UNO_QUERY );
         }
         catch ( const WrappedTargetException& )
         {
@@ -319,8 +309,6 @@ void ConfigurationAccess_FactoryManager::readConfigurationData()
         }
 
         Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
-        aLock.unlock();
-        // UNSAFE
         if ( xContainer.is() )
         {
             m_xConfigListener = new WeakContainerListener(this);
@@ -356,33 +344,81 @@ sal_Bool ConfigurationAccess_FactoryManager::impl_getElementProps( const Any& aE
     return sal_True;
 }
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2  (   UIElementFactoryManager                         ,
-                                            ::cppu::OWeakObject                             ,
-                                            "com.sun.star.ui.UIElementFactoryManager",
-                                            IMPLEMENTATIONNAME_UIELEMENTFACTORYMANAGER
-                                        )
+} // framework
 
-DEFINE_INIT_SERVICE                     (   UIElementFactoryManager, {} )
+namespace {
+
+typedef ::cppu::WeakComponentImplHelper2<
+    css::lang::XServiceInfo,
+    css::ui::XUIElementFactoryManager> UIElementFactoryManager_BASE;
+
+class UIElementFactoryManager : private osl::Mutex,
+                                public UIElementFactoryManager_BASE
+{
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+public:
+    UIElementFactoryManager( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    virtual ~UIElementFactoryManager();
+
+    virtual OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException)
+    {
+        return OUString("com.sun.star.comp.framework.UIElementFactoryManager");
+    }
+
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException)
+    {
+        return cppu::supportsService(this, ServiceName);
+    }
+
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException)
+    {
+        css::uno::Sequence< OUString > aSeq(1);
+        aSeq[0] = OUString("com.sun.star.ui.UIElementFactoryManager");
+        return aSeq;
+    }
+
+    // XUIElementFactory
+    virtual css::uno::Reference< css::ui::XUIElement > SAL_CALL createUIElement( const OUString& ResourceURL, const css::uno::Sequence< css::beans::PropertyValue >& Args ) throw (css::container::NoSuchElementException, css::lang::IllegalArgumentException, css::uno::RuntimeException);
+
+    // XUIElementFactoryRegistration
+    virtual css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getRegisteredFactories(  ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< css::ui::XUIElementFactory > SAL_CALL getFactory( const OUString& ResourceURL, const OUString& ModuleIdentifier ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL registerFactory( const OUString& aType, const OUString& aName, const OUString& aModuleIdentifier, const OUString& aFactoryImplementationName ) throw (css::container::ElementExistException, css::uno::RuntimeException);
+    virtual void SAL_CALL deregisterFactory( const OUString& aType, const OUString& aName, const OUString& aModuleIdentifier ) throw (css::container::NoSuchElementException, css::uno::RuntimeException);
+
+private:
+    sal_Bool                                                  m_bConfigRead;
+    css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+    ConfigurationAccess_FactoryManager*                       m_pConfigAccess;
+};
 
 UIElementFactoryManager::UIElementFactoryManager( const Reference< XComponentContext >& rxContext ) :
-    ThreadHelpBase( &Application::GetSolarMutex() ),
+    UIElementFactoryManager_BASE(*static_cast<osl::Mutex *>(this)),
     m_bConfigRead( sal_False ),
     m_xContext(rxContext)
 {
-    m_pConfigAccess = new ConfigurationAccess_FactoryManager( rxContext, OUString( "/org.openoffice.Office.UI.Factories/Registered/UIElementFactories" ) );
+    m_pConfigAccess = new ConfigurationAccess_FactoryManager(rxContext,
+            "/org.openoffice.Office.UI.Factories/Registered/UIElementFactories");
     m_pConfigAccess->acquire();
-    m_xModuleManager = ModuleManager::create( rxContext );
 }
 
 UIElementFactoryManager::~UIElementFactoryManager()
 {
-    ResetableGuard aLock( m_aLock );
+    disposing();
+}
 
-    // reduce reference count
-    m_pConfigAccess->release();
+void SAL_CALL UIElementFactoryManager::disposing()
+{
+    osl::MutexGuard g(rBHelper.rMutex);
+    if (m_pConfigAccess)
+    {
+        // reduce reference count
+        m_pConfigAccess->release();
+        m_pConfigAccess = 0;
+    }
 }
 
 // XUIElementFactory
@@ -391,8 +427,9 @@ Reference< XUIElement > SAL_CALL UIElementFactoryManager::createUIElement(
     const Sequence< PropertyValue >& Args )
 throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException )
 {
-    // SAFE
-    ResetableGuard aLock( m_aLock );
+    Reference< XFrame > xFrame;
+    { // SAFE
+    osl::MutexGuard g(rBHelper.rMutex);
 
     if ( !m_bConfigRead )
     {
@@ -400,27 +437,22 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
         m_pConfigAccess->readConfigurationData();
     }
 
-    const OUString aPropFrame( "Frame" );
-
-    OUString   aModuleId;
-    PropertyValue   aPropValue;
-    Reference< XFrame > xFrame;
-
     // Retrieve the frame instance from the arguments to determine the module identifier. This must be provided
     // to the search function. An empty module identifier is provided if the frame is missing or the module id cannot
     // retrieve from it.
     for ( int i = 0; i < Args.getLength(); i++ )
     {
-        if ( Args[i].Name.equals( aPropFrame ))
+        if ( Args[i].Name == "Frame")
             Args[i].Value >>= xFrame;
     }
+    } // SAFE
 
-    Reference< XModuleManager2 > xManager( m_xModuleManager );
-    aLock.unlock();
+    Reference< XModuleManager2 > xManager = ModuleManager::create( m_xContext );
 
     // Determine the module identifier
     try
     {
+        OUString aModuleId;
         if ( xFrame.is() && xManager.is() )
             aModuleId = xManager->identify( xFrame );
 
@@ -440,7 +472,7 @@ Sequence< Sequence< PropertyValue > > SAL_CALL UIElementFactoryManager::getRegis
 throw ( RuntimeException )
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(rBHelper.rMutex);
 
     if ( !m_bConfigRead )
     {
@@ -454,7 +486,9 @@ throw ( RuntimeException )
 Reference< XUIElementFactory > SAL_CALL UIElementFactoryManager::getFactory( const OUString& aResourceURL, const OUString& aModuleId )
 throw ( RuntimeException )
 {
-    ResetableGuard aLock( m_aLock );
+    OUString aServiceSpecifier;
+    { // SAFE
+    osl::MutexGuard g(rBHelper.rMutex);
 
     if ( !m_bConfigRead )
     {
@@ -467,13 +501,11 @@ throw ( RuntimeException )
 
     WindowContentFactoryManager::RetrieveTypeNameFromResourceURL( aResourceURL, aType, aName );
 
-    Reference< XComponentContext > xContext( m_xContext );
+    aServiceSpecifier = m_pConfigAccess->getFactorySpecifierFromTypeNameModule( aType, aName, aModuleId );
+    } // SAFE
 
-    OUString aServiceSpecifier = m_pConfigAccess->getFactorySpecifierFromTypeNameModule( aType, aName, aModuleId );
-
-    aLock.unlock();
     if ( !aServiceSpecifier.isEmpty() )
-        return Reference< XUIElementFactory >( xContext->getServiceManager()->createInstanceWithContext(aServiceSpecifier, xContext), UNO_QUERY );
+        return Reference< XUIElementFactory >( m_xContext->getServiceManager()->createInstanceWithContext(aServiceSpecifier, m_xContext), UNO_QUERY );
     else
         return Reference< XUIElementFactory >();
 }
@@ -482,7 +514,7 @@ void SAL_CALL UIElementFactoryManager::registerFactory( const OUString& aType, c
 throw ( ElementExistException, RuntimeException )
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(rBHelper.rMutex);
 
     if ( !m_bConfigRead )
     {
@@ -498,7 +530,7 @@ void SAL_CALL UIElementFactoryManager::deregisterFactory( const OUString& aType,
 throw ( NoSuchElementException, RuntimeException )
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(rBHelper.rMutex);
 
     if ( !m_bConfigRead )
     {
@@ -510,6 +542,31 @@ throw ( NoSuchElementException, RuntimeException )
     // SAFE
 }
 
-} // namespace framework
+struct Instance {
+    explicit Instance(
+        css::uno::Reference<css::uno::XComponentContext> const & context):
+        instance(static_cast<cppu::OWeakObject *>(
+                    new UIElementFactoryManager(context)))
+    {
+    }
+
+    css::uno::Reference<css::uno::XInterface> instance;
+};
+
+struct Singleton:
+    public rtl::StaticWithArg<
+        Instance, css::uno::Reference<css::uno::XComponentContext>, Singleton>
+{};
+
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_UIElementFactoryManager_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(static_cast<cppu::OWeakObject *>(
+            Singleton::get(context).instance.get()));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

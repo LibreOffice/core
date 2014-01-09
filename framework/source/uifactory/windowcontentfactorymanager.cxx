@@ -18,7 +18,8 @@
  */
 
 #include <uifactory/windowcontentfactorymanager.hxx>
-#include <uifactory/uielementfactorymanager.hxx>
+
+#include <uifactory/configurationaccessfactorymanager.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 
@@ -29,8 +30,9 @@
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/awt/XControlModel.hpp>
-#include <com/sun/star/awt/XControl.hpp>
+#include <com/sun/star/frame/XModuleManager2.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/weak.hxx>

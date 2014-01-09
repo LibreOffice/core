@@ -34,7 +34,6 @@
                              )
 =================================================================================================================*/
 #include <services/desktop.hxx>
-#include <uifactory/uielementfactorymanager.hxx>
 #include <uiconfiguration/moduleuicfgsupplier.hxx>
 #include <uifactory/menubarfactory.hxx>
 #include <uifactory/toolboxfactory.hxx>
@@ -49,7 +48,6 @@
 
 COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::Desktop                                 )   else
-                        IFFACTORY( ::framework::UIElementFactoryManager                 )   else
                         IFFACTORY( ::framework::ModuleUIConfigurationManagerSupplier    )   else
                         IFFACTORY( ::framework::MenuBarFactory                          )   else
                         IFFACTORY( ::framework::ToolBoxFactory                          )   else
