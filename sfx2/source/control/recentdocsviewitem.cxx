@@ -39,12 +39,23 @@ RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rUR
 
         // attempt to make it appear as if it is on a piece of paper
         INetURLObject aUrl(rURL);
-        PaperInfo aInfo(
-            RecentDocsView::typeMatchesExtension(TYPE_IMPRESS, aUrl.getExtension())
-            ? PAPER_SCREEN_4_3
-            : PaperInfo::getSystemDefaultPaper());
-        double ratio = double(nThumbnailSize) / double(std::max(aInfo.getWidth(), aInfo.getHeight()));
-        Size aThumbnailSize(aInfo.getWidth() * ratio, aInfo.getHeight() * ratio);
+        long nPaperHeight;
+        long nPaperWidth;
+        if( RecentDocsView::typeMatchesExtension(TYPE_IMPRESS, aUrl.getExtension()) )
+        {
+            // Swap width and height (PAPER_SCREEN_4_3 definition make it needed)
+            PaperInfo aInfo(PAPER_SCREEN_4_3);
+            nPaperHeight = aInfo.getWidth();
+            nPaperWidth = aInfo.getHeight();
+        }
+        else
+        {
+            PaperInfo aInfo(PaperInfo::getSystemDefaultPaper());
+            nPaperHeight = aInfo.getHeight();
+            nPaperWidth = aInfo.getWidth();
+        }
+        double ratio = double(nThumbnailSize) / double(std::max(nPaperHeight, nPaperWidth));
+        Size aThumbnailSize(nPaperWidth * ratio, nPaperHeight * ratio);
 
         if (aExtSize.Width() > aThumbnailSize.Width() || aExtSize.Height() > aThumbnailSize.Height())
         {

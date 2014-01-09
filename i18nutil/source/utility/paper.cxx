@@ -82,7 +82,7 @@ static const PageDesc aDinTab[] =
     { MM2MM100( 114 ),   MM2MM100( 229 ),    "EnvC65", NULL },
     { MM2MM100( 110 ),   MM2MM100( 220 ),    "EnvDL",  "DL" },
     { MM2MM100( 180),    MM2MM100( 270 ),    NULL,  NULL }, //Dia
-    { MM2MM100( 280),    MM2MM100( 210 ),    NULL,  NULL }, //Screen 4:3
+    { MM2MM100( 210),    MM2MM100( 280 ),    NULL,  NULL }, //Screen 4:3
     { IN2MM100( 17 ),    IN2MM100( 22 ),     "AnsiC",  "CSheet" },
     { IN2MM100( 22 ),    IN2MM100( 34 ),     "AnsiD",  "DSheet" },
     { IN2MM100( 34 ),    IN2MM100( 44 ),     "AnsiE",  "ESheet" },
