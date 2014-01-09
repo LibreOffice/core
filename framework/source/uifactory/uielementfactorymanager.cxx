@@ -17,8 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <uifactory/uielementfactorymanager.hxx>
+#include <uifactory/configurationaccessfactorymanager.hxx>
 #include <threadhelp/resetableguard.hxx>
+#include <macros/xserviceinfo.hxx>
 #include "services.h"
 
 #include "helper/mischelper.hxx"
@@ -26,19 +27,20 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/container/XContainerListener.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XModuleManager2.hpp>
+#include <com/sun/star/ui/XUIElementFactoryManager.hpp>
 
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/weak.hxx>
 #include <vcl/svapp.hxx>
-
-//_________________________________________________________________________________________________________________
-//  Defines
-//_________________________________________________________________________________________________________________
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -48,16 +50,13 @@ using namespace com::sun::star::configuration;
 using namespace com::sun::star::container;
 using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::frame;
-
-//_________________________________________________________________________________________________________________
-//  Namespace
-//_________________________________________________________________________________________________________________
+using namespace framework;
 
 namespace framework
 {
 
 // global function needed by both implementations
-OUString getHashKeyFromStrings( const OUString& aType, const OUString& aName, const OUString& aModuleName )
+static OUString getHashKeyFromStrings( const OUString& aType, const OUString& aName, const OUString& aModuleName )
 {
     OUStringBuffer aKey( aType );
     aKey.appendAscii( "^" );
@@ -66,11 +65,6 @@ OUString getHashKeyFromStrings( const OUString& aType, const OUString& aName, co
     aKey.append( aModuleName );
     return aKey.makeStringAndClear();
 }
-
-
-//*****************************************************************************************************************
-//  Configuration access class for UIElementFactoryManager implementation
-//*****************************************************************************************************************
 
 
 ConfigurationAccess_FactoryManager::ConfigurationAccess_FactoryManager( const Reference< XComponentContext >& rxContext, const OUString& _sRoot ) :
@@ -355,9 +349,37 @@ sal_Bool ConfigurationAccess_FactoryManager::impl_getElementProps( const Any& aE
     return sal_True;
 }
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
+} // framework
+
+namespace {
+
+class UIElementFactoryManager :  private ThreadHelpBase,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+                                 public ::cppu::WeakImplHelper2< css::lang::XServiceInfo,
+                                                                 css::ui::XUIElementFactoryManager>
+{
+public:
+    UIElementFactoryManager( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    virtual ~UIElementFactoryManager();
+
+    //  XInterface, XTypeProvider, XServiceInfo
+    DECLARE_XSERVICEINFO
+
+    // XUIElementFactory
+    virtual css::uno::Reference< css::ui::XUIElement > SAL_CALL createUIElement( const OUString& ResourceURL, const css::uno::Sequence< css::beans::PropertyValue >& Args ) throw (css::container::NoSuchElementException, css::lang::IllegalArgumentException, css::uno::RuntimeException);
+
+    // XUIElementFactoryRegistration
+    virtual css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getRegisteredFactories(  ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< css::ui::XUIElementFactory > SAL_CALL getFactory( const OUString& ResourceURL, const OUString& ModuleIdentifier ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL registerFactory( const OUString& aType, const OUString& aName, const OUString& aModuleIdentifier, const OUString& aFactoryImplementationName ) throw (css::container::ElementExistException, css::uno::RuntimeException);
+    virtual void SAL_CALL deregisterFactory( const OUString& aType, const OUString& aName, const OUString& aModuleIdentifier ) throw (css::container::NoSuchElementException, css::uno::RuntimeException);
+
+private:
+    sal_Bool                                                  m_bConfigRead;
+    css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+    css::uno::Reference< css::frame::XModuleManager2 >        m_xModuleManager;
+    ConfigurationAccess_FactoryManager*                       m_pConfigAccess;
+};
+
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2  (   UIElementFactoryManager                         ,
                                             ::cppu::OWeakObject                             ,
                                             "com.sun.star.ui.UIElementFactoryManager",
@@ -509,6 +531,17 @@ throw ( NoSuchElementException, RuntimeException )
     // SAFE
 }
 
-} // namespace framework
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_UIElementFactoryManager_get_implementation(
+        css::uno::XComponentContext * context,
+        uno_Sequence * arguments)
+{
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    rtl::Reference<UIElementFactoryManager> x(new UIElementFactoryManager(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

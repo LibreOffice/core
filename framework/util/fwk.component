@@ -124,7 +124,8 @@
   <implementation name="com.sun.star.comp.framework.UIConfigurationManager">
     <service name="com.sun.star.ui.UIConfigurationManager"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.UIElementFactoryManager">
+  <implementation name="com.sun.star.comp.framework.UIElementFactoryManager"
+      constructor="com_sun_star_comp_framework_UIElementFactoryManager_get_implementation">
     <service name="com.sun.star.ui.UIElementFactoryManager"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.URLTransformer"
