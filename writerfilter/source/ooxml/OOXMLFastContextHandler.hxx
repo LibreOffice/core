@@ -151,8 +151,6 @@ public:
     virtual void setToken(Token_t nToken);
     virtual Token_t getToken() const;
 
-    void mark(const Id & rId, OOXMLValue::Pointer_t pVal);
-
     void resolveFootnote(const sal_Int32 nId);
     void resolveEndnote(const sal_Int32 nId);
     void resolveComment(const sal_Int32 nId);
