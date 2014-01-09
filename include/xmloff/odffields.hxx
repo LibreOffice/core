@@ -42,7 +42,6 @@
 #define ODF_OLE_PARAM "vnd.oasis.opendocument.field.ole"
 #define ODF_ID_PARAM "vnd.oasis.opendocument.field.id"
 #define ODF_CODE_PARAM "vnd.oasis.opendocument.field.code"
-#define ODF_COMMENTRANGE "vnd.oasis.opendocument.field.COMMENTRANGE"
 
 #endif // INCLUDED_XMLOFF_ODFFIELDS_HXX
 
