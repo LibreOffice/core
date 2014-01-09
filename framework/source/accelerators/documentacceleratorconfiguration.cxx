@@ -17,40 +17,90 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accelerators/documentacceleratorconfiguration.hxx>
+#include <accelerators/acceleratorconfiguration.hxx>
+#include <accelerators/istoragelistener.hxx>
+#include <accelerators/presethandler.hxx>
 
 #include <xml/acceleratorconfigurationreader.hxx>
-
 #include <xml/acceleratorconfigurationwriter.hxx>
-
 #include <xml/saxnamespacefilter.hxx>
 
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
-
+#include <macros/xinterface.hxx>
+#include <macros/xtypeprovider.hxx>
+#include <macros/xserviceinfo.hxx>
 #include <acceleratorconst.h>
 #include <services.h>
 
-#include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 
-#include <com/sun/star/io/XSeekable.hpp>
-
-#include <com/sun/star/io/XTruncate.hpp>
-
-#include <com/sun/star/embed/ElementModes.hpp>
-
-#include <com/sun/star/xml/sax/InputSource.hpp>
-
-#include <com/sun/star/xml/sax/XParser.hpp>
-
+#include <cppuhelper/implbase2.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <rtl/ref.hxx>
 
-namespace framework
+using namespace framework;
+
+namespace {
+
+/**
+    implements a read/write access to a document
+    based accelerator configuration.
+ */
+
+typedef ::cppu::ImplInheritanceHelper2<
+             XMLBasedAcceleratorConfiguration,
+             css::lang::XServiceInfo,
+             css::lang::XInitialization > DocumentAcceleratorConfiguration_BASE;
+
+class DocumentAcceleratorConfiguration : public DocumentAcceleratorConfiguration_BASE
 {
+private:
 
-//-----------------------------------------------
-// XInterface, XTypeProvider, XServiceInfo
+    //----------------------------------
+    /** points to the root storage of the outside document,
+        where we can read/save our configuration data. */
+    css::uno::Reference< css::embed::XStorage > m_xDocumentRoot;
+
+//______________________________________
+// interface
+
+public:
+
+    /** initialize this instance and fill the internal cache.
+
+        @param  xSMGR
+                reference to an uno service manager, which is used internaly.
+     */
+    DocumentAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+    virtual ~DocumentAcceleratorConfiguration();
+
+    // XInterface, XTypeProvider, XServiceInfo
+    DECLARE_XSERVICEINFO
+
+    // XInitialization
+    virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
+        throw(css::uno::Exception       ,
+              css::uno::RuntimeException);
+
+    // XUIConfigurationStorage
+    virtual void SAL_CALL setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
+        throw(css::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL hasStorage()
+        throw(css::uno::RuntimeException);
+
+private:
+
+    /** read all data into the cache. */
+    void impl_ts_fillCache();
+
+    /** forget all currently cached data AND(!)
+        forget all currently used storages. */
+    void impl_ts_clearCache();
+};
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2(DocumentAcceleratorConfiguration                   ,
                                    ::cppu::OWeakObject                                ,
@@ -184,5 +234,21 @@ void DocumentAcceleratorConfiguration::impl_ts_clearCache()
 }
 
 } // namespace framework
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_DocumentAcceleratorConfiguration_get_implementation(
+        css::uno::XComponentContext * context,
+        uno_Sequence * arguments)
+{
+    assert(arguments != 0);
+    rtl::Reference<DocumentAcceleratorConfiguration> x(
+            new DocumentAcceleratorConfiguration(context));
+    css::uno::Sequence<css::uno::Any> aArgs(
+            reinterpret_cast<css::uno::Any *>(arguments->elements),
+            arguments->nElements);
+    x->initialize(aArgs);
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

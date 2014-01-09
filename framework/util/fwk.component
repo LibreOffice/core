@@ -36,7 +36,8 @@
   <implementation name="com.sun.star.comp.framework.Desktop">
     <service name="com.sun.star.frame.Desktop"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.DocumentAcceleratorConfiguration">
+  <implementation name="com.sun.star.comp.framework.DocumentAcceleratorConfiguration"
+      constructor="com_sun_star_comp_framework_DocumentAcceleratorConfiguration_get_implementation">
     <service name="com.sun.star.ui.DocumentAcceleratorConfiguration"/>
   </implementation>
   <implementation name="org.apache.openoffice.comp.framework.ContextChangeEventMultiplexer">
