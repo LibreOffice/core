@@ -24,8 +24,12 @@
 #include <sot/storage.hxx>
 #include <svtools/parhtml.hxx>
 #include <tools/urlobj.hxx>
+#include <unotools/moduleoptions.hxx>
 
-bool IsDocShellRegistered();
+static bool IsDocShellRegistered()
+{
+    return SvtModuleOptions().IsWriter();
+}
 
 SwIoDetect aFilterDetect[] =
 {

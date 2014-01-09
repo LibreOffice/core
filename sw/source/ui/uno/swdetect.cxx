@@ -56,8 +56,7 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/ihwrapnofilter.hxx>
-
-#include <swdll.hxx>
+#include <iodetect.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -416,6 +415,39 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
 
 
     return aTypeName;
+}
+
+sal_uLong SwFilterDetect::DetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilter )
+{
+    sal_uLong nRet = ERRCODE_NONE;
+    if( *ppFilter )
+    {
+        // verify the given filter
+        OUString aPrefFlt = (*ppFilter)->GetUserData();
+
+        // detection for TextFilter needs an additional checking
+        sal_Bool bDetected = SwIoSystem::IsFileFilter(rMedium, aPrefFlt);
+        return bDetected ? nRet : ERRCODE_ABORT;
+    }
+
+    // mba: without preselection there is no PrefFlt
+    OUString aPrefFlt;
+    const SfxFilter* pTmp = SwIoSystem::GetFileFilter( rMedium.GetPhysicalName(), aPrefFlt, &rMedium );
+    if( !pTmp )
+        return ERRCODE_ABORT;
+
+    else
+    {
+        //Bug 41417: JP 09.07.97: HTML documents should be loaded by WebWriter
+        SfxFilterContainer aFilterContainer( OUString("swriter/web") );
+        if( !pTmp->GetUserData().equals(sHTML) ||
+            pTmp->GetServiceName() == "com.sun.star.text.WebDocument" ||
+            0 == ( (*ppFilter) = SwIoSystem::GetFilterOfFormat( OUString(sHTML),
+                    &aFilterContainer ) ) )
+            *ppFilter = pTmp;
+    }
+
+    return nRet;
 }
 
 /* XServiceInfo */
