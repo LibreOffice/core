@@ -1,0 +1,20 @@
+===========
+Dbghelp.dll
+===========
+
+For Windows 2000 systems, use the system-supplied dbghelp.dll. Do not 
+install a new dbghelp.dll over the system-supplied version (it will fail 
+due to Windows File Protection). 
+
+For Windows NT 4.0, Windows 95, and Windows 98, and if a newer version 
+of dbghelp.dll is available that is needed to install on a Windows 2000 
+system, install dbghelp.dll into the private directory of the application, 
+not into the system directory.
+
+In addition to the rights granted in Section 1 of the Agreement ("Agreement"), 
+with respect to Dbghelp.dll for Windows 95, Windows 98, and Windows NT
+Redistributable Code, you have the following non-exclusive, royalty free 
+rights subject to the Distribution Requirements detailed in Section 1 
+of the Agreement:
+
+(1)  You may distribute DbgHelp.DLL.

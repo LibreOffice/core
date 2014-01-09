@@ -2987,7 +2987,7 @@ find_msvc()
     vs_versions_to_check "$1"
 
     for ver in $vsversions; do
-        reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VC/ProductDir
+        reg_get_value HKEY_CURRENT_USER/SOFTWARE/Microsoft/VisualStudio/${ver}_Config/Setup/VC/ProductDir
         if test -n "$regvalue"; then
             vctest=$regvalue
             break
@@ -4832,7 +4832,7 @@ find_winsdk()
 find_msms()
 {
     for ver in 9.0 10.0 11.0; do
-        reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/MSMDir
+        reg_get_value HKEY_CURRENT_USER/SOFTWARE/Microsoft/VisualStudio/${ver}_Config/Setup/VS/MSMDir
         if test -n "$regvalue"; then
             if test -e "$regvalue/Microsoft_VC${VCVER}_CRT_x86.msm"; then
                 msmdir=$regvalue
