@@ -40,7 +40,6 @@
 #include "uiconfiguration/windowstateconfiguration.hxx"
 #include <uifactory/statusbarfactory.hxx>
 #include <services/sessionlistener.hxx>
-#include <services/taskcreatorsrv.hxx>
 
 #include <services/ContextChangeEventMultiplexer.hxx>
 
@@ -53,7 +52,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::StatusBarFactory                        )   else
                         IFFACTORY( ::framework::SessionListener                         )   else
                         IFFACTORY( ::framework::SessionListener                         )   else
-                        IFFACTORY( ::framework::TaskCreatorService                      )   else
                         IFFACTORY( ::framework::ContextChangeEventMultiplexer           )
             )
 

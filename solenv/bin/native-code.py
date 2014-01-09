@@ -59,6 +59,7 @@ core_constructor_list = [
     "com_sun_star_comp_framework_PathSettings_get_implementation",
     "com_sun_star_comp_framework_PathSubstitution_get_implementation",
     "com_sun_star_comp_framework_StatusIndicatorFactory_get_implementation",
+    "com_sun_star_comp_framework_TaskCreator_get_implementation",
     "com_sun_star_comp_framework_ToolBarControllerFactory_get_implementation",
     "com_sun_star_comp_framework_UIConfigurationManager_get_implementation",
     "com_sun_star_comp_framework_UIElementFactoryManager_get_implementation",

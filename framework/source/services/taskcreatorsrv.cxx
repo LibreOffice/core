@@ -17,58 +17,107 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "services/taskcreatorsrv.hxx"
-
 #include <helper/persistentwindowstate.hxx>
 #include <helper/tagwindowasmodified.hxx>
 #include <helper/titlebarupdate.hxx>
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
 #include <loadenv/targethelper.hxx>
-#include <services.h>
+#include <taskcreatordefs.hxx>
 
 #include <com/sun/star/frame/Frame.hpp>
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XFrame2.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
-#include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/WindowDescriptor.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
+#include <comphelper/sequenceashashmap.hxx>
+#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <svtools/colorcfg.hxx>
-#include <vcl/svapp.hxx>
-
 #include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
-//_______________________________________________
-// namespaces
+using namespace framework;
 
-namespace framework
+namespace {
+
+typedef ::cppu::WeakComponentImplHelper2<
+    css::lang::XServiceInfo,
+    css::lang::XSingleServiceFactory> TaskCreatorService_BASE;
+
+class TaskCreatorService : private osl::Mutex,
+                           public TaskCreatorService_BASE
 {
-//-----------------------------------------------
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(TaskCreatorService                ,
-                                       ::cppu::OWeakObject               ,
-                                       "com.sun.star.frame.TaskCreator",
-                                       IMPLEMENTATIONNAME_FWK_TASKCREATOR)
+private:
 
-//-----------------------------------------------
-DEFINE_INIT_SERVICE(
-                    TaskCreatorService,
-                    {
-                        /*Attention
-                            I think we don't need any mutex or lock here ... because we are called by our own static method impl_createInstance()
-                            to create a new instance of this class by our own supported service factory.
-                            see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further information!
-                        */
-                    }
-                   )
+    //---------------------------------------
+    /** @short  the global uno service manager.
+        @descr  Must be used to create own needed services.
+     */
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+
+public:
+
+             TaskCreatorService(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+    virtual ~TaskCreatorService(                                                                   );
+
+    virtual OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException)
+    {
+        return OUString("com.sun.star.comp.framework.TaskCreator");
+    }
+
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException)
+    {
+        return cppu::supportsService(this, ServiceName);
+    }
+
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException)
+    {
+        css::uno::Sequence< OUString > aSeq(1);
+        aSeq[0] = OUString("com.sun.star.frame.TaskCreator");
+        return aSeq;
+    }
+
+    // XSingleServiceFactory
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance()
+        throw(css::uno::Exception       ,
+              css::uno::RuntimeException);
+
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments(const css::uno::Sequence< css::uno::Any >& lArguments)
+        throw(css::uno::Exception       ,
+              css::uno::RuntimeException);
+
+private:
+
+    css::uno::Reference< css::awt::XWindow > implts_createContainerWindow( const css::uno::Reference< css::awt::XWindow >& xParentWindow ,
+                                                                           const css::awt::Rectangle&                      aPosSize      ,
+                                                                                 sal_Bool                                  bTopWindow    );
+
+    void implts_applyDocStyleToWindow(const css::uno::Reference< css::awt::XWindow >& xWindow) const;
+
+    css::uno::Reference< css::frame::XFrame2 > implts_createFrame( const css::uno::Reference< css::frame::XFrame >& xParentFrame     ,
+                                                                  const css::uno::Reference< css::awt::XWindow >&  xContainerWindow ,
+                                                                  const OUString&                           sName            );
+
+    void implts_establishWindowStateListener( const css::uno::Reference< css::frame::XFrame2 >& xFrame );
+    void implts_establishTitleBarUpdate( const css::uno::Reference< css::frame::XFrame2 >& xFrame );
+
+    void implts_establishDocModifyListener( const css::uno::Reference< css::frame::XFrame2 >& xFrame );
+
+    OUString impl_filterNames( const OUString& sName );
+};
 
 //-----------------------------------------------
 TaskCreatorService::TaskCreatorService(const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    : ThreadHelpBase     (&Application::GetSolarMutex())
+    : TaskCreatorService_BASE(*static_cast<osl::Mutex *>(this))
     , m_xContext         (xContext                     )
 {
 }
@@ -185,14 +234,8 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
                                                                                            const css::awt::Rectangle&                      aPosSize      ,
                                                                                                  sal_Bool                                  bTopWindow    )
 {
-    // SAFE  ->
-    ReadGuard aReadLock( m_aLock );
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    aReadLock.unlock();
-    // <- SAFE
-
     // get toolkit to create task container window
-    css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( xContext );
+    css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( m_xContext );
 
     // Check if child frames can be created really. We need at least a valid window at the parent frame ...
     css::uno::Reference< css::awt::XWindowPeer > xParentWindowPeer;
@@ -248,14 +291,8 @@ css::uno::Reference< css::frame::XFrame2 > TaskCreatorService::implts_createFram
                                                                                   const css::uno::Reference< css::awt::XWindow >&  xContainerWindow,
                                                                                   const OUString&                           sName           )
 {
-    // SAFE  ->
-    ReadGuard aReadLock( m_aLock );
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    aReadLock.unlock();
-    // <- SAFE
-
     // create new frame.
-    css::uno::Reference< css::frame::XFrame2 > xNewFrame = css::frame::Frame::create( xContext );
+    css::uno::Reference< css::frame::XFrame2 > xNewFrame = css::frame::Frame::create( m_xContext );
 
     // Set window on frame.
     // Do it before calling any other interface methods ...
@@ -281,17 +318,11 @@ css::uno::Reference< css::frame::XFrame2 > TaskCreatorService::implts_createFram
 //-----------------------------------------------
 void TaskCreatorService::implts_establishWindowStateListener( const css::uno::Reference< css::frame::XFrame2 >& xFrame )
 {
-    // SAFE  ->
-    ReadGuard aReadLock( m_aLock );
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    aReadLock.unlock();
-    // <- SAFE
-
     // Special feature: It's allowed for frames using a top level window only!
     // We must create a special listener service and couple it with the new created task frame.
     // He will restore or save the window state of it ...
     // See used classes for further information too.
-    PersistentWindowState* pPersistentStateHandler = new PersistentWindowState( xContext );
+    PersistentWindowState* pPersistentStateHandler = new PersistentWindowState( m_xContext );
     css::uno::Reference< css::lang::XInitialization > xInit(static_cast< ::cppu::OWeakObject* >(pPersistentStateHandler), css::uno::UNO_QUERY_THROW);
 
     css::uno::Sequence< css::uno::Any > lInitData(1);
@@ -316,13 +347,7 @@ void TaskCreatorService::implts_establishDocModifyListener( const css::uno::Refe
 //-----------------------------------------------
 void TaskCreatorService::implts_establishTitleBarUpdate( const css::uno::Reference< css::frame::XFrame2 >& xFrame )
 {
-    // SAFE  ->
-    ReadGuard aReadLock( m_aLock );
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    aReadLock.unlock();
-    // <- SAFE
-
-    TitleBarUpdate* pHelper = new TitleBarUpdate (xContext);
+    TitleBarUpdate* pHelper = new TitleBarUpdate (m_xContext);
     css::uno::Reference< css::lang::XInitialization > xInit(static_cast< ::cppu::OWeakObject* >(pHelper), css::uno::UNO_QUERY_THROW);
 
     css::uno::Sequence< css::uno::Any > lInitData(1);
@@ -338,6 +363,31 @@ OUString TaskCreatorService::impl_filterNames( const OUString& sName )
     return sFiltered;
 }
 
-} // namespace framework
+struct Instance {
+    explicit Instance(
+        css::uno::Reference<css::uno::XComponentContext> const & context):
+        instance(
+            static_cast<cppu::OWeakObject *>(new TaskCreatorService(context)))
+    {
+    }
+
+    css::uno::Reference<css::uno::XInterface> instance;
+};
+
+struct Singleton:
+    public rtl::StaticWithArg<
+        Instance, css::uno::Reference<css::uno::XComponentContext>, Singleton>
+{};
+
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_TaskCreator_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(static_cast<cppu::OWeakObject *>(
+                Singleton::get(context).instance.get()));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
