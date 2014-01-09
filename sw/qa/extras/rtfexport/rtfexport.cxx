@@ -134,8 +134,6 @@ DECLARE_RTFEXPORT_TEST(testFdo48335, "fdo48335.odt")
 
 DECLARE_RTFEXPORT_TEST(testFdo38244, "fdo38244.rtf")
 {
-#if 0
-    // FIXME port to AnnotationMarks
     // See ooxmlexport's testFdo38244().
     // Test comment range feature.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -145,10 +143,10 @@ DECLARE_RTFEXPORT_TEST(testFdo38244, "fdo38244.rtf")
     uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
     xRunEnum->nextElement();
     uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("TextFieldStart"), getProperty<OUString>(xPropertySet, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Annotation"), getProperty<OUString>(xPropertySet, "TextPortionType"));
     xRunEnum->nextElement();
     xPropertySet.set(xRunEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("TextFieldEnd"), getProperty<OUString>(xPropertySet, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("AnnotationEnd"), getProperty<OUString>(xPropertySet, "TextPortionType"));
 
     // Test initials.
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
@@ -156,7 +154,6 @@ DECLARE_RTFEXPORT_TEST(testFdo38244, "fdo38244.rtf")
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
     xPropertySet.set(xFields->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("M"), getProperty<OUString>(xPropertySet, "Initials"));
-#endif
 }
 
 DECLARE_RTFEXPORT_TEST(testMathAccents, "math-accents.rtf")

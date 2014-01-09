@@ -212,6 +212,7 @@ public:
 
     void WriteField_Impl( const SwField* pFld, ww::eField eType, const OUString& rFldCmd, sal_uInt8 nMode );
     void WriteBookmarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );
+    void WriteAnnotationMarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );
     void WriteHeaderFooter_Impl( const SwFrmFmt& rFmt, bool bHeader, const sal_Char* pStr, bool bTitlepg );
 
 protected:
@@ -501,6 +502,10 @@ private:
      * We just get a "end of strike" mark at the end of strike, store here what to finish: single or double strike.
      */
     bool m_bStrikeDouble;
+
+    sal_Int32 m_nNextAnnotationMarkId;
+    /// Map of the annotation marks ids
+    std::map< OString, std::pair<sal_uInt16, const SwPostItField*> > m_rOpenedAnnotationMarksIds;
 
     /*
      * The current table helper.
