@@ -1710,5 +1710,12 @@ void OpenGLRender::SetBackGroundColor(long color1, long color2)
     cout << "color1 = " << color1 << ", color2 = " << color2 << endl;
 
 }
-
+void OpenGLRender::SetChartTransparencyGradient(long transparencyGradient)
+{
+    if (transparencyGradient == 1)
+    {
+        m_BackgroundColor[11] = 0.0;
+        m_BackgroundColor[15] = 0.0;
+    }
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

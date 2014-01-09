@@ -561,6 +561,18 @@ void DummyRectangle::render()
         sal_Int32 nColorValue = co.get<sal_Int32>();
         pChart->m_GLRender.SetColor(nColorValue);
     }
+
+    //TODO: moggi: correct handling of gradients
+    itr =  maProperties.find("FillTransparenceGradientName");
+    if (itr != maProperties.end())
+    {
+        uno::Any co = itr->second;
+        rtl::OUString aGradientValue = co.get<rtl::OUString>();
+        if (aGradientValue.endsWithAsciiL("1", 1))
+        {
+            pChart->m_GLRender.SetChartTransparencyGradient(1);
+        }
+    }
     pChart->m_GLRender.RectangleShapePoint(maPosition.X, maPosition.Y, maSize.Width, maSize.Height);
     pChart->m_GLRender.RenderRectangleShape();
 }

@@ -182,6 +182,8 @@ public:
 
     int SetArea2DShapePoint(float x, float y, int listLength);
     int RenderArea2DShape();
+    void SetChartTransparencyGradient(long transparencyGradient);
+
 private:
     GLint LoadShaders(const char *vertexShader,const char *fragmentShader);
     int CreateTextureObj(int width, int height);
