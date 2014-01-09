@@ -150,7 +150,6 @@ void ThumbnailView::ImplInit()
     mnFineness          = 5;
     mnFirstLine         = 0;
     mnCols              = 0;
-    mnSpacing           = 0;
     mbScroll            = false;
     mbHasVisibleItems   = false;
     mbShowTooltips      = false;

@@ -330,7 +330,6 @@ protected:
 
     sal_uInt16 mnCols;
     sal_uInt16 mnFirstLine;
-    sal_uInt16 mnSpacing;
     bool mbScroll : 1;
     bool mbIsTransientChildrenDisabled : 1;
     bool mbHasVisibleItems : 1;
