@@ -35,7 +35,6 @@
 =================================================================================================================*/
 #include <services/desktop.hxx>
 #include <services/frame.hxx>
-#include <services/modulemanager.hxx>
 #include <jobs/jobexecutor.hxx>
 #include <services/layoutmanager.hxx>
 #include <uifactory/uielementfactorymanager.hxx>
@@ -72,7 +71,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::PopupMenuControllerFactory              )   else
                         IFFACTORY( ::framework::ControlMenuController                   )   else
                         IFFACTORY( ::framework::UICommandDescription                    )   else
-                        IFFACTORY( ::framework::ModuleManager                           )   else
                         IFFACTORY( ::framework::ModuleUIConfigurationManagerSupplier    )   else
                         IFFACTORY( ::framework::ModuleUIConfigurationManager            )   else
                         IFFACTORY( ::framework::MenuBarFactory                          )   else
