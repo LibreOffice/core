@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1abeadc6_765c8e26",
+        "filename": "scp2/source/ooo/file_library_ooo.scp",
+        "patchSetId": 1
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-01-09T13:09:26Z",
+      "side": 1,
+      "message": "typo: it\u0027s called \"libxslt\"",
+      "revId": "b977dff3e129807aab39b70701c9bccfcf009d2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
