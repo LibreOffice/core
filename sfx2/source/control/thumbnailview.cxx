@@ -149,7 +149,6 @@ void ThumbnailView::ImplInit()
     mnLines             = 0;
     mnFineness          = 5;
     mnFirstLine         = 0;
-    mnHighItemId        = 0;
     mnCols              = 0;
     mnSpacing           = 0;
     mbScroll            = false;
@@ -450,7 +449,7 @@ void ThumbnailView::CalculateItemPositions ()
     delete pDelScrBar;
 }
 
-size_t ThumbnailView::ImplGetItem( const Point& rPos, bool bMove ) const
+size_t ThumbnailView::ImplGetItem( const Point& rPos ) const
 {
     if ( !mbHasVisibleItems )
     {
@@ -463,13 +462,6 @@ size_t ThumbnailView::ImplGetItem( const Point& rPos, bool bMove ) const
         {
             if (mFilteredItemList[i]->isVisible() && mFilteredItemList[i]->getDrawArea().IsInside(rPos))
                 return i;
-        }
-
-        // return the previously selected item if spacing is set and
-        // the mouse hasn't left the window yet
-        if ( bMove && mnSpacing && mnHighItemId )
-        {
-            return GetItemPos( mnHighItemId );
         }
     }
 
@@ -926,22 +918,7 @@ void ThumbnailView::GetFocus()
 
 void ThumbnailView::LoseFocus()
 {
-    if (mnHighItemId)
-    {
-        size_t nPos = GetItemPos(mnHighItemId);
-
-        if (nPos != THUMBNAILVIEW_ITEM_NOTFOUND)
-        {
-            ThumbnailViewItem *pOld = mItemList[nPos];
-
-            pOld->setHighlight(false);
-
-            if (!pOld->isSelected())
-                DrawItem(pOld);
-        }
-
-        mnHighItemId = 0;
-    }
+    deselectItems();
 
     Control::LoseFocus();
 
@@ -1049,12 +1026,6 @@ void ThumbnailView::RemoveItem( sal_uInt16 nItemId )
         mpStartSelRange = mFilteredItemList.end();
     }
 
-    // reset variables
-    if ( mnHighItemId == nItemId )
-    {
-        mnHighItemId    = 0;
-    }
-
     CalculateItemPositions();
 
     if ( IsReallyVisible() && IsUpdateMode() )
@@ -1067,7 +1038,6 @@ void ThumbnailView::Clear()
 
     // reset variables
     mnFirstLine     = 0;
-    mnHighItemId    = 0;
 
     CalculateItemPositions();
 
@@ -1081,7 +1051,6 @@ void ThumbnailView::updateItems (const std::vector<ThumbnailViewItem*> &items)
 
     // reset variables
     mnFirstLine     = 0;
-    mnHighItemId    = 0;
 
     mItemList = items;
 
