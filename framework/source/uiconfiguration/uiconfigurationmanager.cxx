@@ -17,19 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <uiconfiguration/uiconfigurationmanager.hxx>
 #include <threadhelp/resetableguard.hxx>
-#include <services.h>
+#include <threadhelp/threadhelpbase.hxx>
+#include <uiconfiguration/imagemanager.hxx>
 #include <uielement/rootitemcontainer.hxx>
 #include <uielement/constitemcontainer.hxx>
 #include <uielement/uielementtypenames.hxx>
 #include <framework/menuconfiguration.hxx>
+#include <framework/statusbarconfiguration.hxx>
 #include <framework/toolboxconfiguration.hxx>
 
-#include <framework/statusbarconfiguration.hxx>
-
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -38,13 +37,18 @@
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
 #include <com/sun/star/ui/DocumentAcceleratorConfiguration.hpp>
+#include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
+#include <com/sun/star/ui/XUIConfigurationManager2.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 
-//_________________________________________________________________________________________________________________
-//  namespaces
-//_________________________________________________________________________________________________________________
+#include <boost/unordered_map.hpp>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
@@ -52,22 +56,151 @@ using namespace com::sun::star::embed;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
-using namespace ::com::sun::star::ui;
+using namespace com::sun::star::ui;
+using namespace framework;
 
-namespace framework
+namespace {
+
+class UIConfigurationManager :   private ThreadHelpBase,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+                                 public ::cppu::WeakImplHelper2<
+                                        css::lang::XServiceInfo  ,
+                                        css::ui::XUIConfigurationManager2 >
 {
+public:
+    virtual OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException)
+    {
+        return OUString("com.sun.star.comp.framework.UIConfigurationManager");
+    }
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
-DEFINE_XSERVICEINFO_MULTISERVICE_2        (   UIConfigurationManager                      ,
-                                            ::cppu::OWeakObject                         ,
-                                            OUString("com.sun.star.ui.UIConfigurationManager"),
-                                            OUString("com.sun.star.comp.framework.UIConfigurationManager")
-                                        )
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException)
+    {
+        return cppu::supportsService(this, ServiceName);
+    }
 
-DEFINE_INIT_SERVICE                     (   UIConfigurationManager, {} )
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException)
+    {
+        css::uno::Sequence< OUString > aSeq(1);
+        aSeq[0] = OUString("com.sun.star.ui.UIConfigurationManager");
+        return aSeq;
+    }
 
+    UIConfigurationManager( const css::uno::Reference< css::uno::XComponentContext > & rxContext );
+    virtual ~UIConfigurationManager();
+
+    // XComponent
+    virtual void SAL_CALL dispose() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException);
+
+    // XUIConfiguration
+    virtual void SAL_CALL addConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL removeConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) throw (css::uno::RuntimeException);
+
+    // XUIConfigurationManager
+    virtual void SAL_CALL reset() throw (css::uno::RuntimeException);
+    virtual css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getUIElementsInfo( sal_Int16 ElementType ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    virtual css::uno::Reference< css::container::XIndexContainer > SAL_CALL createSettings(  ) throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasSettings( const OUString& ResourceURL ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    virtual css::uno::Reference< css::container::XIndexAccess > SAL_CALL getSettings( const OUString& ResourceURL, sal_Bool bWriteable ) throw (css::container::NoSuchElementException, css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    virtual void SAL_CALL replaceSettings( const OUString& ResourceURL, const css::uno::Reference< css::container::XIndexAccess >& aNewData ) throw (css::container::NoSuchElementException, css::lang::IllegalArgumentException, css::lang::IllegalAccessException, css::uno::RuntimeException);
+    virtual void SAL_CALL removeSettings( const OUString& ResourceURL ) throw (css::container::NoSuchElementException, css::lang::IllegalArgumentException, css::lang::IllegalAccessException, css::uno::RuntimeException);
+    virtual void SAL_CALL insertSettings( const OUString& NewResourceURL, const css::uno::Reference< css::container::XIndexAccess >& aNewData ) throw (css::container::ElementExistException, css::lang::IllegalArgumentException, css::lang::IllegalAccessException, css::uno::RuntimeException);
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getImageManager() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< css::ui::XAcceleratorConfiguration > SAL_CALL getShortCutManager() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getEventsManager() throw (css::uno::RuntimeException);
+
+    // XUIConfigurationPersistence
+    virtual void SAL_CALL reload() throw (css::uno::Exception, css::uno::RuntimeException);
+    virtual void SAL_CALL store() throw (css::uno::Exception, css::uno::RuntimeException);
+    virtual void SAL_CALL storeToStorage( const css::uno::Reference< css::embed::XStorage >& Storage ) throw (css::uno::Exception, css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isModified() throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isReadOnly() throw (css::uno::RuntimeException);
+
+    // XUIConfigurationStorage
+    virtual void SAL_CALL setStorage( const css::uno::Reference< css::embed::XStorage >& Storage ) throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasStorage() throw (css::uno::RuntimeException);
+
+private:
+    // private data types
+    enum NotifyOp
+    {
+        NotifyOp_Remove,
+        NotifyOp_Insert,
+        NotifyOp_Replace
+    };
+
+    struct UIElementInfo
+    {
+        UIElementInfo( const OUString& rResourceURL, const OUString& rUIName ) :
+            aResourceURL( rResourceURL), aUIName( rUIName ) {}
+        OUString   aResourceURL;
+        OUString   aUIName;
+    };
+
+    struct UIElementData
+    {
+        UIElementData() : bModified( false ), bDefault( true ) {};
+
+        OUString aResourceURL;
+        OUString aName;
+        bool          bModified;        // has been changed since last storing
+        bool          bDefault;         // default settings
+        css::uno::Reference< css::container::XIndexAccess > xSettings;
+    };
+
+    struct UIElementType;
+    friend struct UIElementType;
+    typedef ::boost::unordered_map< OUString, UIElementData, OUStringHash, ::std::equal_to< OUString > > UIElementDataHashMap;
+
+    struct UIElementType
+    {
+        UIElementType() : bModified( false ),
+                          bLoaded( false ),
+                          bDefaultLayer( false ),
+                          nElementType( css::ui::UIElementType::UNKNOWN ) {}
+
+
+        bool                                                              bModified;
+        bool                                                              bLoaded;
+        bool                                                              bDefaultLayer;
+        sal_Int16                                                         nElementType;
+        UIElementDataHashMap                                              aElementsHashMap;
+        css::uno::Reference< css::embed::XStorage > xStorage;
+    };
+
+    typedef ::std::vector< UIElementType > UIElementTypesVector;
+    typedef ::std::vector< css::ui::ConfigurationEvent > ConfigEventNotifyContainer;
+    typedef ::boost::unordered_map< OUString, UIElementInfo, OUStringHash, ::std::equal_to< OUString > > UIElementInfoHashMap;
+
+    // private methods
+    void            impl_Initialize();
+    void            implts_notifyContainerListener( const css::ui::ConfigurationEvent& aEvent, NotifyOp eOp );
+    void            impl_fillSequenceWithElementTypeInfo( UIElementInfoHashMap& aUIElementInfoCollection, sal_Int16 nElementType );
+    void            impl_preloadUIElementTypeList( sal_Int16 nElementType );
+    UIElementData*  impl_findUIElementData( const OUString& aResourceURL, sal_Int16 nElementType, bool bLoad = true );
+    void            impl_requestUIElementData( sal_Int16 nElementType, UIElementData& aUIElementData );
+    void            impl_storeElementTypeData( css::uno::Reference< css::embed::XStorage >& xStorage, UIElementType& rElementType, bool bResetModifyState = true );
+    void            impl_resetElementTypeData( UIElementType& rDocElementType, ConfigEventNotifyContainer& rRemoveNotifyContainer );
+    void            impl_reloadElementTypeData( UIElementType& rDocElementType, ConfigEventNotifyContainer& rRemoveNotifyContainer, ConfigEventNotifyContainer& rReplaceNotifyContainer );
+
+    UIElementTypesVector                                      m_aUIElements;
+    css::uno::Reference< css::embed::XStorage >               m_xDocConfigStorage;
+    bool                                                      m_bReadOnly;
+    bool                                                      m_bModified;
+    bool                                                      m_bConfigRead;
+    bool                                                      m_bDisposed;
+    OUString                                                  m_aXMLPostfix;
+    OUString                                                  m_aPropUIName;
+    OUString                                                  m_aPropResourceURL;
+    OUString                                                  m_aModuleIdentifier;
+    css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+    cppu::OMultiTypeInterfaceContainerHelper                  m_aListenerContainer;   /// container for ALL Listener
+    css::uno::Reference< css::lang::XComponent >              m_xImageManager;
+    css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xAccConfig;
+};
 
 // important: The order and position of the elements must match the constant
 // definition of "::com::sun::star::ui::UIElementType"
@@ -1292,6 +1425,16 @@ void UIConfigurationManager::implts_notifyContainerListener( const Configuration
     }
 }
 
-} // namespace framework
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_UIConfigurationManager_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    rtl::Reference<UIConfigurationManager> x(new UIConfigurationManager(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

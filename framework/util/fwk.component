@@ -115,7 +115,8 @@
   <implementation name="com.sun.star.comp.framework.UICommandDescription">
     <service name="com.sun.star.frame.UICommandDescription"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.UIConfigurationManager">
+  <implementation name="com.sun.star.comp.framework.UIConfigurationManager"
+      constructor="com_sun_star_comp_framework_UIConfigurationManager_get_implementation">
     <service name="com.sun.star.ui.UIConfigurationManager"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.UIElementFactoryManager">
