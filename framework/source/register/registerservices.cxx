@@ -35,7 +35,6 @@
 =================================================================================================================*/
 #include <services/urltransformer.hxx>
 #include <services/desktop.hxx>
-#include <services/tabwindowservice.hxx>
 #include <services/frame.hxx>
 #include <services/modulemanager.hxx>
 #include <jobs/jobexecutor.hxx>
@@ -107,7 +106,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::ImageManager                            )   else
                         IFFACTORY( ::framework::LangSelectionStatusbarController        )   else
                         IFFACTORY( ::framework::WindowContentFactoryManager             )   else
-                        IFFACTORY( ::framework::TabWindowService                        )   else
                         IFFACTORY( ::framework::SubstitutePathVariables                 )   else
                         IFFACTORY( ::framework::PathSettings                            )   else
                         IFFACTORY( ::framework::ContextChangeEventMultiplexer           )
