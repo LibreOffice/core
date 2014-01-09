@@ -550,16 +550,6 @@ Token_t OOXMLFastContextHandler::getToken() const
     return mnToken;
 }
 
-void OOXMLFastContextHandler::mark(const Id & rId, OOXMLValue::Pointer_t pVal)
-{
-    OOXMLPropertySetImpl::Pointer_t pPropSet(new OOXMLPropertySetImpl());
-    OOXMLPropertyImpl::Pointer_t pProperty
-        (new OOXMLPropertyImpl(rId, pVal, OOXMLPropertyImpl::ATTRIBUTE));
-
-    pPropSet->add(pProperty);
-    mpStream->props(pPropSet);
-}
-
 void OOXMLFastContextHandler::setParent
 (OOXMLFastContextHandler * pParent)
 {
