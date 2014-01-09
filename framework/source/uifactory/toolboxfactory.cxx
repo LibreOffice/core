@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <uifactory/toolboxfactory.hxx>
-
 #include <uielement/toolbarwrapper.hxx>
 #include <threadhelp/resetableguard.hxx>
 
@@ -27,15 +25,16 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
-
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 
+#include <cppuhelper/weak.hxx>
 #include <vcl/svapp.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 
-//_________________________________________________________________________________________________________________
-//  Defines
-//_________________________________________________________________________________________________________________
+#include <macros/xserviceinfo.hxx>
+#include <services.h>
+#include <uifactory/menubarfactory.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -43,13 +42,22 @@ using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 using namespace ::com::sun::star::ui;
+using namespace framework;
 
-namespace framework
+namespace {
+
+class ToolBoxFactory :  public MenuBarFactory
 {
+    public:
+        ToolBoxFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
+        //  XInterface, XTypeProvider, XServiceInfo
+        DECLARE_XSERVICEINFO
+
+        // XUIElementFactory
+        virtual css::uno::Reference< css::ui::XUIElement > SAL_CALL createUIElement( const OUString& ResourceURL, const css::uno::Sequence< css::beans::PropertyValue >& Args ) throw ( css::container::NoSuchElementException, css::lang::IllegalArgumentException, css::uno::RuntimeException );
+};
+
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   ToolBoxFactory                                  ,
                                             ::cppu::OWeakObject                             ,
                                             SERVICENAME_TOOLBARFACTORY                      ,
@@ -78,6 +86,17 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
     return xMenuBar;
 }
 
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_ToolBarFactory_get_implementation(
+        css::uno::XComponentContext * context,
+        uno_Sequence * arguments)
+{
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    rtl::Reference<ToolBoxFactory> x(new ToolBoxFactory(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

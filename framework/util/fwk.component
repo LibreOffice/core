@@ -111,7 +111,8 @@
       constructor="com_sun_star_comp_framework_ToolBarControllerFactory_get_implementation">
     <service name="com.sun.star.frame.ToolbarControllerFactory"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.ToolBarFactory">
+  <implementation name="com.sun.star.comp.framework.ToolBarFactory"
+      constructor="com_sun_star_comp_framework_ToolBarFactory_get_implementation">
     <service name="com.sun.star.ui.ToolBarFactory"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.UICategoryDescription">

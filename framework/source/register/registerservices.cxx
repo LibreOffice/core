@@ -51,7 +51,6 @@
 #include <accelerators/globalacceleratorconfiguration.hxx>
 #include <accelerators/moduleacceleratorconfiguration.hxx>
 #include <accelerators/documentacceleratorconfiguration.hxx>
-#include <uifactory/toolboxfactory.hxx>
 #include "uiconfiguration/windowstateconfiguration.hxx"
 #include <uielement/recentfilesmenucontroller.hxx>
 #include <uiconfiguration/uicategorydescription.hxx>
@@ -83,7 +82,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::GlobalAcceleratorConfiguration          )   else
                         IFFACTORY( ::framework::ModuleAcceleratorConfiguration          )   else
                         IFFACTORY( ::framework::DocumentAcceleratorConfiguration        )   else
-                        IFFACTORY( ::framework::ToolBoxFactory                          )   else
                         IFFACTORY( ::framework::WindowStateConfiguration                )   else
                         IFFACTORY( ::framework::RecentFilesMenuController               )   else
                         IFFACTORY( ::framework::UICategoryDescription                   )   else
