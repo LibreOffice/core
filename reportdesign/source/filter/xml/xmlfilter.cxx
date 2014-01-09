@@ -41,7 +41,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <unotools/mediadescriptor.hxx>
-#include <cppuhelper/supportsservice.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -359,7 +358,7 @@ Sequence< OUString > ORptMetaImportHelper::getSupportedServiceNames_Static(  ) t
 // -------------
 DBG_NAME(rpt_ORptFilter)
 ORptFilter::ORptFilter( const uno::Reference< XComponentContext >& _rxContext,sal_uInt16 nImportFlags )
-    :SvXMLImport(_rxContext,nImportFlags)
+    :SvXMLImport(_rxContext, getImplementationName_Static(), nImportFlags)
 {
     DBG_CTOR(rpt_ORptFilter,NULL);
     GetMM100UnitConverter().SetCoreMeasureUnit(util::MeasureUnit::MM_100TH);
@@ -397,12 +396,6 @@ OUString ORptFilter::getImplementationName_Static(  ) throw(uno::RuntimeExceptio
     return OUString("com.sun.star.comp.report.OReportFilter");
 }
 
-//--------------------------------------------------------------------------
-OUString SAL_CALL ORptFilter::getImplementationName(  ) throw(uno::RuntimeException)
-{
-    return getImplementationName_Static();
-}
-//--------------------------------------------------------------------------
 uno::Sequence< OUString > ORptFilter::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aServices(1);
@@ -411,17 +404,6 @@ uno::Sequence< OUString > ORptFilter::getSupportedServiceNames_Static(  ) throw(
     return aServices;
 }
 
-//--------------------------------------------------------------------------
-uno::Sequence< OUString > SAL_CALL ORptFilter::getSupportedServiceNames(  ) throw(uno::RuntimeException)
-{
-    return getSupportedServiceNames_Static();
-}
-//------------------------------------------------------------------------------
-sal_Bool SAL_CALL ORptFilter::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
-{
-    return cppu::supportsService(this, ServiceName);
-}
-// -----------------------------------------------------------------------------
 sal_Bool SAL_CALL ORptFilter::filter( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException)
 {

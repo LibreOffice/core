@@ -164,12 +164,9 @@ public:
     // #110680#
     SchXMLImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
-        sal_uInt16 nImportFlags = IMPORT_ALL );
+        OUString const & implementationName, sal_uInt16 nImportFlags );
 
     virtual ~SchXMLImport() throw ();
-
-    // XServiceInfo ( : SvXMLExport )
-    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
 
     SvXMLImportContext* CreateStylesContext( const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );

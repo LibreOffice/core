@@ -34,7 +34,7 @@ sal_Char const sXML_np__text[] = "_otext";
 SwXMLSectionList::SwXMLSectionList(
     const uno::Reference< uno::XComponentContext > xContext,
     std::vector<OUString*> &rNewSectionList)
-:   SvXMLImport( xContext ),
+:   SvXMLImport( xContext, "" ),
     rSectionList ( rNewSectionList )
 {
     GetNamespaceMap().Add( OUString( sXML_np__office ),

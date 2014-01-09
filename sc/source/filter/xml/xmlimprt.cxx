@@ -120,7 +120,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_createInstance(
 {
     // #110680#
     // return (cppu::OWeakObject*)new ScXMLImport(IMPORT_ALL);
-    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), IMPORT_ALL );
+    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_getImplementationName(), IMPORT_ALL );
 }
 
 OUString SAL_CALL ScXMLImport_Meta_getImplementationName() throw()
@@ -139,7 +139,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Meta_createInstance(
 {
     // #110680#
     // return (cppu::OWeakObject*)new ScXMLImport(IMPORT_META);
-    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), IMPORT_META );
+    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_Meta_getImplementationName(), IMPORT_META );
 }
 
 OUString SAL_CALL ScXMLImport_Styles_getImplementationName() throw()
@@ -158,7 +158,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Styles_createInstance(
 {
     // #110680#
     // return (cppu::OWeakObject*)new ScXMLImport(IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES|IMPORT_FONTDECLS);
-    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES|IMPORT_FONTDECLS);
+    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_Styles_getImplementationName(), IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES|IMPORT_FONTDECLS);
 }
 
 OUString SAL_CALL ScXMLImport_Content_getImplementationName() throw()
@@ -177,7 +177,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Content_createInstance(
 {
     // #110680#
     // return (cppu::OWeakObject*)new ScXMLImport(IMPORT_META|IMPORT_STYLES|IMPORT_MASTERSTYLES|IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_SETTINGS|IMPORT_FONTDECLS);
-    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS);
+    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_Content_getImplementationName(), IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS);
 }
 
 OUString SAL_CALL ScXMLImport_Settings_getImplementationName() throw()
@@ -196,7 +196,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Settings_createInstance(
 {
     // #110680#
     // return (cppu::OWeakObject*)new ScXMLImport(IMPORT_SETTINGS);
-    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), IMPORT_SETTINGS );
+    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_Settings_getImplementationName(), IMPORT_SETTINGS );
 }
 
 const SvXMLTokenMap& ScXMLImport::GetTableRowCellAttrTokenMap()
@@ -1992,8 +1992,8 @@ SvXMLImportContext *ScXMLImport::CreateContext( sal_uInt16 nPrefix,
 
 ScXMLImport::ScXMLImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
-    const sal_uInt16 nImportFlag)
-:   SvXMLImport( xContext, nImportFlag ),
+    OUString const & implementationName, sal_uInt16 nImportFlag)
+:   SvXMLImport( xContext, implementationName, nImportFlag ),
     pDoc( NULL ),
     pChangeTrackingImportHelper(NULL),
     pStylesImportHelper(NULL),
@@ -2976,28 +2976,6 @@ throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::R
     uno::Reference<document::XActionLockable> xActionLockable(xDoc, uno::UNO_QUERY);
     if (xActionLockable.is())
         xActionLockable->addActionLock();
-}
-
-// XServiceInfo
-OUString SAL_CALL ScXMLImport::getImplementationName(  )
-throw(::com::sun::star::uno::RuntimeException)
-{
-    switch( getImportFlags() )
-    {
-    case IMPORT_ALL:
-        return ScXMLImport_getImplementationName();
-    case (IMPORT_STYLES|IMPORT_MASTERSTYLES|IMPORT_AUTOSTYLES|IMPORT_FONTDECLS):
-        return ScXMLImport_Styles_getImplementationName();
-    case (IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS):
-        return ScXMLImport_Content_getImplementationName();
-    case IMPORT_META:
-        return ScXMLImport_Meta_getImplementationName();
-    case IMPORT_SETTINGS:
-        return ScXMLImport_Settings_getImplementationName();
-    default:
-        // generic name for 'unknown' cases
-        return ScXMLImport_getImplementationName();
-    }
 }
 
 // ::com::sun::star::xml::sax::XDocumentHandler

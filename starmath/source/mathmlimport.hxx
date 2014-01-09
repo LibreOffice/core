@@ -88,11 +88,8 @@ class SmXMLImport : public SvXMLImport
 public:
     SmXMLImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
-        sal_uInt16 nImportFlags=IMPORT_ALL);
+        OUString const & implementationName, sal_uInt16 nImportFlags);
     virtual ~SmXMLImport() throw ();
-
-    // XServiceInfo (override parent method)
-    OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
 
     // XUnoTunnel
     sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException);

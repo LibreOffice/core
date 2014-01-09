@@ -347,7 +347,7 @@ sal_Int32 ReadThroughComponent(
 DBG_NAME(ODBFilter)
 
 ODBFilter::ODBFilter( const uno::Reference< XComponentContext >& _rxContext )
-    :SvXMLImport(_rxContext)
+    :SvXMLImport(_rxContext, getImplementationName_Static())
     ,m_bNewFormat(false)
 {
     DBG_CTOR(ODBFilter,NULL);
@@ -369,9 +369,19 @@ ODBFilter::~ODBFilter() throw()
     DBG_DTOR(ODBFilter,NULL);
 }
 
-IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(ODBFilter, "com.sun.star.comp.sdb.DBFilter")
-IMPLEMENT_SERVICE_INFO_SUPPORTS(ODBFilter)
-IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(ODBFilter, "com.sun.star.document.ImportFilter")
+OUString ODBFilter::getImplementationName_Static()
+    throw (css::uno::RuntimeException)
+{
+    return OUString("com.sun.star.comp.sdb.DBFilter");
+}
+
+css::uno::Sequence<OUString> ODBFilter::getSupportedServiceNames_Static()
+    throw (css::uno::RuntimeException)
+{
+    css::uno::Sequence<OUString> s(1);
+    s[0] = "com.sun.star.document.ImportFilter";
+    return s;
+}
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
     SAL_CALL ODBFilter::Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB)

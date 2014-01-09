@@ -127,7 +127,7 @@ private:
 SvxXMLXTextImportComponent::SvxXMLXTextImportComponent(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
     const uno::Reference< XText > & xText )
-:   SvXMLImport(xContext),
+:   SvXMLImport(xContext, ""),
     mxText( xText )
 {
     GetTextImport()->SetCursor( mxText->createTextCursor() );

@@ -187,6 +187,7 @@ public:
     // SvXMLImport( sal_uInt16 nImportFlags = IMPORT_ALL ) throw();
     SvXMLImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+        OUString const & implementationName,
         sal_uInt16 nImportFlags = IMPORT_ALL ) throw();
 
     virtual ~SvXMLImport() throw();
@@ -238,11 +239,11 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException) SAL_FINAL;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException) SAL_FINAL;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException) SAL_FINAL;
 
     // may be called by certain subclasses that handle document meta-data
     // override to provide customized handling of document statistics

@@ -266,7 +266,7 @@ OUString SAL_CALL classname##_getImplementationName() throw()\
 }\
 uno::Reference< uno::XInterface > SAL_CALL classname##_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )\
 {\
-    return (cppu::OWeakObject*)new SdXMLImport( comphelper::getComponentContext(rSMgr), draw, flags );\
+    return (cppu::OWeakObject*)new SdXMLImport( comphelper::getComponentContext(rSMgr), implementationname, draw, flags ); \
 }
 
 SERVICE( XMLImpressImportOasis, "com.sun.star.comp.Impress.XMLOasisImporter", "XMLImpressImportOasis", sal_False, IMPORT_ALL )
@@ -287,8 +287,9 @@ SERVICE( XMLDrawSettingsImportOasis, "com.sun.star.comp.Draw.XMLOasisSettingsImp
 // #110680#
 SdXMLImport::SdXMLImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+    OUString const & implementationName,
     sal_Bool bIsDraw, sal_uInt16 nImportFlags )
-:   SvXMLImport( xContext, nImportFlags ),
+:   SvXMLImport( xContext, implementationName, nImportFlags ),
     mpMasterStylesContext(0L),
     mpDocElemTokenMap(0L),
     mpBodyElemTokenMap(0L),
@@ -890,51 +891,6 @@ void SdXMLImport::SetStatistics(
     {
         GetProgressBarHelper()->SetReference(nCount);
         GetProgressBarHelper()->SetValue(0);
-    }
-}
-
-// XServiceInfo
-OUString SAL_CALL SdXMLImport::getImplementationName() throw( uno::RuntimeException )
-{
-    if( IsDraw())
-    {
-        // Draw
-
-        switch( getImportFlags())
-        {
-            case IMPORT_ALL:
-                return XMLDrawImportOasis_getImplementationName();
-            case (IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES):
-                return XMLDrawStylesImportOasis_getImplementationName();
-            case (IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS):
-                return XMLDrawContentImportOasis_getImplementationName();
-            case IMPORT_META:
-                return XMLDrawMetaImportOasis_getImplementationName();
-            case IMPORT_SETTINGS:
-                return XMLDrawSettingsImportOasis_getImplementationName();
-            default:
-                return XMLDrawImportOasis_getImplementationName();
-        }
-    }
-    else
-    {
-        // Impress
-
-        switch( getImportFlags())
-        {
-            case IMPORT_ALL:
-                return XMLImpressImportOasis_getImplementationName();
-            case (IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES):
-                return XMLImpressStylesImportOasis_getImplementationName();
-            case (IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS):
-                return XMLImpressContentImportOasis_getImplementationName();
-            case IMPORT_META:
-                return XMLImpressMetaImportOasis_getImplementationName();
-            case IMPORT_SETTINGS:
-                return XMLImpressSettingsImportOasis_getImplementationName();
-            default:
-                return XMLImpressImportOasis_getImplementationName();
-        }
     }
 }
 

@@ -84,7 +84,7 @@ public:
 
     //!!  see comment for pDic member
     ConvDicXMLImport( ConvDic *pConvDic, const OUString /*&rFileName*/ ) :
-        SvXMLImport ( comphelper::getProcessComponentContext(), IMPORT_ALL ),
+        SvXMLImport ( comphelper::getProcessComponentContext(), "com.sun.star.lingu2.ConvDicXMLImport", IMPORT_ALL ),
         pDic        ( pConvDic )
     {
         nLanguage       = LANGUAGE_NONE;
@@ -95,9 +95,6 @@ public:
     virtual ~ConvDicXMLImport() throw ()
     {
     }
-
-    // XServiceInfo (override parent method)
-    OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
 
     virtual void SAL_CALL startDocument(void) throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL endDocument(void) throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );

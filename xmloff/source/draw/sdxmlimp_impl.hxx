@@ -220,7 +220,8 @@ protected:
 public:
     SdXMLImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
-        sal_Bool bIsDraw, sal_uInt16 nImportFlags = IMPORT_ALL );
+        OUString const & implementationName,
+        sal_Bool bIsDraw, sal_uInt16 nImportFlags );
     ~SdXMLImport() throw ();
 
     // XImporter
@@ -289,9 +290,6 @@ public:
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue> & i_rStats);
 
     sal_Bool IsPreview() const { return mbPreview; }
-
-    // XServiceInfo ( : SvXMLExport )
-    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
 
     void AddHeaderDecl( const OUString& rName, const OUString& rText );
     void AddFooterDecl( const OUString& rName, const OUString& rText );

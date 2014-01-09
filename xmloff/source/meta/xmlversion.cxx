@@ -102,7 +102,7 @@ sal_uInt32 XMLVersionListExport::exportDoc( enum ::xmloff::token::XMLTokenEnum )
 XMLVersionListImport::XMLVersionListImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
     com::sun::star::uno::Sequence < com::sun::star::util::RevisionTag >& rVersions )
-:   SvXMLImport(xContext),
+:   SvXMLImport(xContext, ""),
     maVersions( rVersions )
 {
     GetNamespaceMap().AddAtIndex( XML_NAMESPACE_FRAMEWORK_IDX, xmloff::token::GetXMLToken(xmloff::token::XML_NP_VERSIONS_LIST),

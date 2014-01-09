@@ -979,7 +979,7 @@ public:
     // #110680#
     ScXMLImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
-        const sal_uInt16 nImportFlag);
+        OUString const & implementationName, sal_uInt16 nImportFlag);
 
     ~ScXMLImport() throw();
 
@@ -1175,9 +1175,6 @@ public:
 
     // XImporter
     virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL startDocument(void)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );

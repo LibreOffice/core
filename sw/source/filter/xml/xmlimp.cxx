@@ -408,8 +408,8 @@ SvXMLImportContext *SwXMLImport::CreateContext(
 
 SwXMLImport::SwXMLImport(
     const uno::Reference< uno::XComponentContext > xContext,
-    sal_uInt16 nImportFlags)
-:   SvXMLImport( xContext, nImportFlags ),
+    OUString const & implementationName, sal_uInt16 nImportFlags)
+:   SvXMLImport( xContext, implementationName, nImportFlags ),
     pSttNdIdx( 0 ),
     pTableItemMapper( 0 ),
     pDocElemTokenMap( 0 ),
@@ -1541,7 +1541,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImport_createInstance(
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLImport( comphelper::getComponentContext(rSMgr), IMPORT_ALL );
+    return (cppu::OWeakObject*)new SwXMLImport( comphelper::getComponentContext(rSMgr), SwXMLImport_getImplementationName(), IMPORT_ALL );
 }
 
 OUString SAL_CALL SwXMLImportStyles_getImplementationName() throw()
@@ -1564,6 +1564,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportStyles_createInstance(
 {
     return (cppu::OWeakObject*)new SwXMLImport(
         comphelper::getComponentContext(rSMgr),
+        SwXMLImportStyles_getImplementationName(),
         IMPORT_STYLES | IMPORT_MASTERSTYLES | IMPORT_AUTOSTYLES |
         IMPORT_FONTDECLS );
 }
@@ -1588,6 +1589,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportContent_createInstance(
 {
     return (cppu::OWeakObject*)new SwXMLImport(
         comphelper::getComponentContext(rSMgr),
+        SwXMLImportContent_getImplementationName(),
         IMPORT_AUTOSTYLES | IMPORT_CONTENT | IMPORT_SCRIPTS |
         IMPORT_FONTDECLS );
 }
@@ -1610,7 +1612,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportMeta_createInstance(
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLImport( comphelper::getComponentContext(rSMgr), IMPORT_META );
+    return (cppu::OWeakObject*)new SwXMLImport( comphelper::getComponentContext(rSMgr), SwXMLImportMeta_getImplementationName(), IMPORT_META );
 }
 
 OUString SAL_CALL SwXMLImportSettings_getImplementationName() throw()
@@ -1631,32 +1633,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportSettings_createInstance(
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLImport( comphelper::getComponentContext(rSMgr), IMPORT_SETTINGS );
-}
-
-
-// XServiceInfo
-// override empty method from parent class
-OUString SAL_CALL SwXMLImport::getImplementationName()
-    throw(RuntimeException)
-{
-    switch( getImportFlags() )
-    {
-        case IMPORT_ALL:
-            return SwXMLImport_getImplementationName();
-        case (IMPORT_STYLES|IMPORT_MASTERSTYLES|IMPORT_AUTOSTYLES|IMPORT_FONTDECLS):
-            return SwXMLImportStyles_getImplementationName();
-        case (IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS):
-            return SwXMLImportContent_getImplementationName();
-        case IMPORT_META:
-            return SwXMLImportMeta_getImplementationName();
-        case IMPORT_SETTINGS:
-            return SwXMLImportSettings_getImplementationName();
-        default:
-            // generic name for 'unknown' cases
-            return OUString(
-                "com.sun.star.comp.Writer.SwXMLImport" );
-    }
+    return (cppu::OWeakObject*)new SwXMLImport( comphelper::getComponentContext(rSMgr), SwXMLImportSettings_getImplementationName(), IMPORT_SETTINGS );
 }
 
 SwDoc* SwImport::GetDocFromXMLImport( SvXMLImport& rImport )

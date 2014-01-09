@@ -31,7 +31,7 @@ using namespace ::xmloff::token;
 // #110680#
 XMLMetaImportComponent::XMLMetaImportComponent(
     const uno::Reference< uno::XComponentContext >& xContext) throw()
-    :   SvXMLImport(xContext), mxDocProps()
+    :   SvXMLImport(xContext, ""), mxDocProps()
 {
 }
 

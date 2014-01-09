@@ -110,7 +110,7 @@ protected:
 public:
     SwXMLImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
-        sal_uInt16 nImportFlags = IMPORT_ALL);
+        OUString const & implementationName, sal_uInt16 nImportFlags);
 
     ~SwXMLImport() throw();
 
@@ -126,10 +126,6 @@ public:
 
     // XInitialization
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-
-    // XServiceInfo (override parent method)
-    OUString SAL_CALL getImplementationName()
-        throw( ::com::sun::star::uno::RuntimeException );
 
     void                    InsertStyles( sal_Bool bAuto );
     void                    FinishStyles();

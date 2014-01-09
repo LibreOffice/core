@@ -50,6 +50,7 @@
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentconstants.hxx>
@@ -268,6 +269,7 @@ public:
     sal_Bool mbTextDocInOOoFileFormat;
 
     const uno::Reference< uno::XComponentContext > mxComponentContext;
+    OUString implementationName;
 
     uno::Reference< embed::XStorage > mxSourceStorage;
 
@@ -275,7 +277,8 @@ public:
 
     std::auto_ptr< DocumentInfo > mpDocumentInfo;
 
-    SvXMLImport_Impl( const uno::Reference< uno::XComponentContext >& rxContext)
+    SvXMLImport_Impl( const uno::Reference< uno::XComponentContext >& rxContext,
+                      OUString const & theImplementationName)
         : hBatsFontConv( 0 )
         , hMathFontConv( 0 )
         , mbOwnGraphicResolver( false )
@@ -285,6 +288,7 @@ public:
         , mbShapePositionInHoriL2R( sal_False )
         , mbTextDocInOOoFileFormat( sal_False )
         , mxComponentContext( rxContext )
+        , implementationName(theImplementationName)
         , mpRDFaHelper() // lazy
         , mpDocumentInfo() // lazy
     {
@@ -383,8 +387,8 @@ void SvXMLImport::_InitCtor()
 
 SvXMLImport::SvXMLImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
-    sal_uInt16 nImportFlags ) throw ()
-:   mpImpl( new SvXMLImport_Impl(xContext) ),
+    OUString const & implementationName, sal_uInt16 nImportFlags ) throw ()
+:   mpImpl( new SvXMLImport_Impl(xContext, implementationName) ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
 
     mpUnitConv( new SvXMLUnitConverter( xContext,
@@ -965,16 +969,13 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
 OUString SAL_CALL SvXMLImport::getImplementationName()
     throw(uno::RuntimeException)
 {
-    OUString aStr;
-    return aStr;
+    return mpImpl->implementationName;
 }
 
 sal_Bool SAL_CALL SvXMLImport::supportsService( const OUString& rServiceName )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return
-        (rServiceName == "com.sun.star.document.ImportFilter") ||
-        (rServiceName == "com.sun.star.xml.XMLImportFilter");
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SvXMLImport::getSupportedServiceNames(  )

@@ -33,7 +33,7 @@ sal_Char const sXML_np__text[] = "_otext";
 SwXMLBlockListImport::SwXMLBlockListImport(
     const uno::Reference< uno::XComponentContext > xContext,
     SwXMLTextBlocks &rBlocks )
-:   SvXMLImport( xContext, 0 ),
+:   SvXMLImport( xContext, "", 0 ),
     rBlockList (rBlocks)
 {
     GetNamespaceMap().Add( OUString ( sXML_np__block_list ),
@@ -66,7 +66,7 @@ SwXMLTextBlockImport::SwXMLTextBlockImport(
     SwXMLTextBlocks &rBlocks,
     OUString & rNewText,
     sal_Bool bNewTextOnly )
-:   SvXMLImport(xContext, IMPORT_ALL ),
+:   SvXMLImport(xContext, "", IMPORT_ALL ),
     rBlockList ( rBlocks ),
     bTextOnly ( bNewTextOnly ),
     m_rText ( rNewText )

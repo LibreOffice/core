@@ -411,12 +411,4 @@ SvXMLImportContext * ConvDicXMLImport::CreateContext(
     return pContext;
 }
 
-
-OUString SAL_CALL ConvDicXMLImport::getImplementationName()
-    throw( uno::RuntimeException )
-{
-    return OUString( "com.sun.star.lingu2.ConvDicXMLImport" );
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

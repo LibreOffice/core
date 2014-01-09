@@ -32,7 +32,7 @@ SvXMLAutoCorrectImport::SvXMLAutoCorrectImport(
     SvxAutocorrWordList *pNewAutocorr_List,
     SvxAutoCorrect &rNewAutoCorrect,
     const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rNewStorage)
-:   SvXMLImport( xContext ),
+:   SvXMLImport( xContext, "" ),
     pAutocorr_List (pNewAutocorr_List),
     rAutoCorrect ( rNewAutoCorrect ),
     xStorage ( rNewStorage )
@@ -146,7 +146,7 @@ SvXMLWordContext::~SvXMLWordContext ( void )
 SvXMLExceptionListImport::SvXMLExceptionListImport(
     const uno::Reference< uno::XComponentContext > xContext,
     SvStringsISortDtor & rNewList )
-:   SvXMLImport( xContext ),
+:   SvXMLImport( xContext, "" ),
     rList (rNewList)
 {
     GetNamespaceMap().Add(

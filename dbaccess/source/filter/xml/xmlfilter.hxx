@@ -37,7 +37,6 @@
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <xmloff/xmlimp.hxx>
-#include "apitools.hxx"
 
 #include <map>
 #include <memory>
@@ -114,8 +113,14 @@ public:
     // XFilter
     virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& rDescriptor ) throw(RuntimeException);
 
-    // XServiceInfo
-    DECLARE_SERVICE_INFO_STATIC( );
+    static OUString SAL_CALL getImplementationName_Static()
+        throw (css::uno::RuntimeException);
+
+    static css::uno::Sequence<OUString> SAL_CALL
+    getSupportedServiceNames_Static() throw (css::uno::RuntimeException);
+
+    static css::uno::Reference<css::uno::XInterface> SAL_CALL Create(
+        css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxORB);
 
     // helper class
     virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);

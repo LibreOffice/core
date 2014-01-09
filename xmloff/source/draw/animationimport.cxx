@@ -85,6 +85,18 @@ using ::com::sun::star::container::XEnumeration;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::lang::XInitialization;
 
+Sequence< OUString > SAL_CALL AnimationsImport_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( "com.sun.star.comp.Xmloff.AnimationsImport" );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL AnimationsImport_getImplementationName() throw()
+{
+    return OUString( "xmloff::AnimationsImport" );
+}
+
 namespace xmloff
 {
 
@@ -1256,17 +1268,12 @@ public:
     // XAnimationNodeSupplier
     Reference< XAnimationNode > SAL_CALL getAnimationNode() throw (RuntimeException);
 
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
-
 private:
     Reference< XAnimationNode > mxRootNode;
 };
 
 AnimationsImport::AnimationsImport( const Reference< XComponentContext > & rxContext )
-: SvXMLImport( rxContext , true )
+: SvXMLImport( rxContext, AnimationsImport_getImplementationName(), true )
 {
     // add namespaces
     GetNamespaceMap().Add(
@@ -1416,41 +1423,9 @@ void AnimationNodeContext::postProcessRootNode( SvXMLImport& /*rImport*/, const 
 
 } // namespace xmloff
 
-Sequence< OUString > SAL_CALL AnimationsImport_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( "com.sun.star.comp.Xmloff.AnimationsImport" );
-    const Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-OUString SAL_CALL AnimationsImport_getImplementationName() throw()
-{
-    return OUString( "xmloff::AnimationsImport" );
-}
-
 Reference< XInterface > SAL_CALL AnimationsImport_createInstance(const Reference< XMultiServiceFactory > & rSMgr) throw( Exception )
 {
     return (cppu::OWeakObject*)new xmloff::AnimationsImport( comphelper::getComponentContext(rSMgr) );
 }
-
-namespace xmloff
-{
-
-OUString SAL_CALL AnimationsImport::getImplementationName() throw(RuntimeException)
-{
-    return AnimationsImport_getImplementationName();
-}
-
-sal_Bool SAL_CALL AnimationsImport::supportsService( const OUString& ServiceName ) throw(RuntimeException)
-{
-    return ServiceName == "com.sun.star.comp.Xmloff.AnimationsImport";
-}
-
-Sequence< OUString > SAL_CALL AnimationsImport::getSupportedServiceNames() throw(RuntimeException)
-{
-    return AnimationsImport_getSupportedServiceNames();
-}
-
-} // namespace xmloff
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

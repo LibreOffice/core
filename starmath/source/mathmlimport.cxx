@@ -409,8 +409,8 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
 
 SmXMLImport::SmXMLImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
-    sal_uInt16 nImportFlags)
-:   SvXMLImport( xContext, nImportFlags ),
+    OUString const & implementationName, sal_uInt16 nImportFlags)
+:   SvXMLImport( xContext, implementationName, nImportFlags ),
     pPresLayoutElemTokenMap(0),
     pPresLayoutAttrTokenMap(0),
     pFencedAttrTokenMap(0),
@@ -451,7 +451,7 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImport_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SmXMLImport(comphelper::getComponentContext(rSMgr), IMPORT_ALL);
+    return (cppu::OWeakObject*)new SmXMLImport(comphelper::getComponentContext(rSMgr), SmXMLImport_getImplementationName(), IMPORT_ALL);
 }
 
 ////////////////////////////////////////////////////////////
@@ -473,7 +473,7 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImportMeta_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SmXMLImport( comphelper::getComponentContext(rSMgr), IMPORT_META );
+    return (cppu::OWeakObject*)new SmXMLImport( comphelper::getComponentContext(rSMgr), SmXMLImportMeta_getImplementationName(), IMPORT_META );
 }
 
 ////////////////////////////////////////////////////////////
@@ -495,33 +495,8 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImportSettings_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SmXMLImport( comphelper::getComponentContext(rSMgr), IMPORT_SETTINGS );
+    return (cppu::OWeakObject*)new SmXMLImport( comphelper::getComponentContext(rSMgr), SmXMLImportSettings_getImplementationName(), IMPORT_SETTINGS );
 }
-
-////////////////////////////////////////////////////////////
-
-// XServiceInfo
-// override empty method from parent class
-OUString SAL_CALL SmXMLImport::getImplementationName()
-    throw(uno::RuntimeException)
-{
-    OUString aTxt;
-    switch( getImportFlags() )
-    {
-        case IMPORT_META:
-            aTxt = SmXMLImportMeta_getImplementationName();
-            break;
-        case IMPORT_SETTINGS:
-            aTxt = SmXMLImportSettings_getImplementationName();
-            break;
-        case IMPORT_ALL:
-        default:
-            aTxt = SmXMLImport_getImplementationName();
-            break;
-    }
-    return aTxt;
-}
-
 
 sal_Int64 SAL_CALL SmXMLImport::getSomething(
     const uno::Sequence< sal_Int8 >&rId )
