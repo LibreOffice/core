@@ -118,7 +118,8 @@
   <implementation name="com.sun.star.comp.framework.UICategoryDescription">
     <service name="com.sun.star.ui.UICategoryDescription"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.UICommandDescription">
+  <implementation name="com.sun.star.comp.framework.UICommandDescription"
+      constructor="com_sun_star_comp_framework_UICommandDescription_get_implementation">
     <service name="com.sun.star.frame.UICommandDescription"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.UIConfigurationManager"

@@ -33,6 +33,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <unotools/configmgr.hxx>
@@ -766,5 +767,16 @@ throw (::com::sun::star::uno::RuntimeException)
 }
 
 } // namespace framework
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_UICommandDescription_get_implementation(
+        css::uno::XComponentContext * context,
+        uno_Sequence * arguments)
+{
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    rtl::Reference<framework::UICommandDescription> x(new framework::UICommandDescription(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
