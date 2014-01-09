@@ -27,6 +27,7 @@
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase1.hxx>
 
