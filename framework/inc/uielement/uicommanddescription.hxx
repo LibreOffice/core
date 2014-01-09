@@ -20,41 +20,51 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_UICOMMANDDESCRIPTION_HXX
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_UICOMMANDDESCRIPTION_HXX
 
-/** Attention: stl headers must(!) be included at first. Otherwise it can make trouble
-               with solaris headers ...
-*/
-#include <vector>
-#include <list>
 #include <boost/unordered_map.hpp>
 
-#include <threadhelp/threadhelpbase.hxx>
-#include <macros/generic.hxx>
-#include <macros/xinterface.hxx>
-#include <macros/xtypeprovider.hxx>
-#include <macros/xserviceinfo.hxx>
 #include <stdtypes.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustring.hxx>
 
 namespace framework
 {
-class UICommandDescription :  private ThreadHelpBase                        ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
-                              public ::cppu::WeakImplHelper2< com::sun::star::lang::XServiceInfo        ,
-                                                              com::sun::star::container::XNameAccess >
+typedef ::cppu::WeakComponentImplHelper2< com::sun::star::lang::XServiceInfo,
+        com::sun::star::container::XNameAccess > UICommandDescription_BASE;
+
+class UICommandDescription : private osl::Mutex,
+                             public UICommandDescription_BASE
 {
     public:
         UICommandDescription( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
         virtual ~UICommandDescription();
 
-        //  XInterface, XTypeProvider, XServiceInfo
-        DECLARE_XSERVICEINFO
+        virtual OUString SAL_CALL getImplementationName()
+            throw (css::uno::RuntimeException)
+        {
+            return OUString("com.sun.star.comp.framework.UICommandDescription");
+        }
+
+        virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+            throw (css::uno::RuntimeException)
+        {
+            return cppu::supportsService(this, ServiceName);
+        }
+
+        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+            throw (css::uno::RuntimeException)
+        {
+            css::uno::Sequence< OUString > aSeq(1);
+            aSeq[0] = OUString("com.sun.star.frame.UICommandDescription");
+            return aSeq;
+        }
+
 private:
         // XNameAccess
         virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )

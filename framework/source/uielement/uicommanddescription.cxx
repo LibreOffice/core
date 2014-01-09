@@ -18,8 +18,6 @@
  */
 
 #include "uielement/uicommanddescription.hxx"
-#include <threadhelp/resetableguard.hxx>
-#include "services.h"
 
 #include "properties.h"
 
@@ -40,10 +38,6 @@
 #include <vcl/mnemonic.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
-
-//_________________________________________________________________________________________________________________
-//  Defines
-//_________________________________________________________________________________________________________________
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -89,9 +83,9 @@ namespace framework
 //*****************************************************************************************************************
 
 class ConfigurationAccess_UICommand : // Order is necessary for right initialization!
-                                        private ThreadHelpBase                           ,
                                         public  ::cppu::WeakImplHelper2<XNameAccess,XContainerListener>
 {
+    osl::Mutex m_aMutex;
     public:
                                   ConfigurationAccess_UICommand( const OUString& aModuleName, const Reference< XNameAccess >& xGenericUICommands, const Reference< XComponentContext >& rxContext );
         virtual                   ~ConfigurationAccess_UICommand();
@@ -189,7 +183,6 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
 //  XInterface, XTypeProvider
 //*****************************************************************************************************************
 ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const OUString& aModuleName, const Reference< XNameAccess >& rGenericUICommands, const Reference< XComponentContext>& rxContext ) :
-    ThreadHelpBase(),
     m_aConfigCmdAccess( CONFIGURATION_ROOT_ACCESS ),
     m_aConfigPopupAccess( CONFIGURATION_ROOT_ACCESS ),
     m_aPropUILabel( CONFIGURATION_PROPERTY_LABEL ),
@@ -217,7 +210,7 @@ ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const OUString& aM
 ConfigurationAccess_UICommand::~ConfigurationAccess_UICommand()
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(m_aMutex);
     Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
     if ( xContainer.is() )
         xContainer->removeContainerListener(m_xConfigListener);
@@ -232,7 +225,7 @@ Any SAL_CALL ConfigurationAccess_UICommand::getByNameImpl( const OUString& rComm
 {
     static sal_Int32 nRequests  = 0;
 
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(m_aMutex);
     if ( !m_bConfigAccessInitialized )
     {
         initializeConfigAccess();
@@ -473,7 +466,7 @@ Any ConfigurationAccess_UICommand::getInfoFromCommand( const OUString& rCommandU
 Sequence< OUString > ConfigurationAccess_UICommand::getAllCommands()
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(m_aMutex);
 
     if ( !m_bConfigAccessInitialized )
     {
@@ -528,7 +521,8 @@ sal_Bool ConfigurationAccess_UICommand::initializeConfigAccess()
         aPropValue.Value <<= m_aConfigCmdAccess;
         aArgs[0] <<= aPropValue;
 
-        m_xConfigAccess = Reference< XNameAccess >( m_xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGREADACCESS,aArgs ),UNO_QUERY );
+        m_xConfigAccess = Reference< XNameAccess >( m_xConfigProvider->createInstanceWithArguments(
+                    "com.sun.star.configuration.ConfigurationAccess", aArgs ),UNO_QUERY );
         if ( m_xConfigAccess.is() )
         {
             // Add as container listener
@@ -542,7 +536,8 @@ sal_Bool ConfigurationAccess_UICommand::initializeConfigAccess()
 
         aPropValue.Value <<= m_aConfigPopupAccess;
         aArgs[0] <<= aPropValue;
-        m_xConfigAccessPopups = Reference< XNameAccess >( m_xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGREADACCESS,aArgs ),UNO_QUERY );
+        m_xConfigAccessPopups = Reference< XNameAccess >( m_xConfigProvider->createInstanceWithArguments(
+                    "com.sun.star.configuration.ConfigurationAccess", aArgs ),UNO_QUERY );
         if ( m_xConfigAccessPopups.is() )
         {
             // Add as container listener
@@ -569,21 +564,21 @@ sal_Bool ConfigurationAccess_UICommand::initializeConfigAccess()
 // container.XContainerListener
 void SAL_CALL ConfigurationAccess_UICommand::elementInserted( const ContainerEvent& ) throw(RuntimeException)
 {
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(m_aMutex);
     m_bCacheFilled = sal_False;
     fillCache();
 }
 
 void SAL_CALL ConfigurationAccess_UICommand::elementRemoved( const ContainerEvent& ) throw(RuntimeException)
 {
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(m_aMutex);
     m_bCacheFilled = sal_False;
     fillCache();
 }
 
 void SAL_CALL ConfigurationAccess_UICommand::elementReplaced( const ContainerEvent& ) throw(RuntimeException)
 {
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(m_aMutex);
     m_bCacheFilled = sal_False;
     fillCache();
 }
@@ -593,7 +588,7 @@ void SAL_CALL ConfigurationAccess_UICommand::disposing( const EventObject& aEven
 {
     // SAFE
     // remove our reference to the config access
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(m_aMutex);
 
     Reference< XInterface > xIfac1( aEvent.Source, UNO_QUERY );
     Reference< XInterface > xIfac2( m_xConfigAccess, UNO_QUERY );
@@ -607,19 +602,8 @@ void SAL_CALL ConfigurationAccess_UICommand::disposing( const EventObject& aEven
     }
 }
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2  (   UICommandDescription                    ,
-                                            ::cppu::OWeakObject                     ,
-                                            "com.sun.star.frame.UICommandDescription",
-                                            IMPLEMENTATIONNAME_UICOMMANDDESCRIPTION
-                                        )
-
-DEFINE_INIT_SERVICE                     (   UICommandDescription, {} )
-
 UICommandDescription::UICommandDescription( const Reference< XComponentContext >& rxContext ) :
-    ThreadHelpBase(),
+    UICommandDescription_BASE(*static_cast<osl::Mutex *>(this)),
     m_aPrivateResourceURL( PRIVATE_RESOURCE_URL ),
     m_xContext( rxContext )
 {
@@ -635,13 +619,13 @@ UICommandDescription::UICommandDescription( const Reference< XComponentContext >
         pIter->second = m_xGenericUICommands;
 }
 UICommandDescription::UICommandDescription( const Reference< XComponentContext >& rxContext, bool ) :
-    ThreadHelpBase(),
+    UICommandDescription_BASE(*static_cast<osl::Mutex *>(this)),
     m_xContext( rxContext )
 {
 }
 UICommandDescription::~UICommandDescription()
 {
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(rBHelper.rMutex);
     m_aModuleToCommandFileMap.clear();
     m_aUICommandsHashMap.clear();
     m_xGenericUICommands.clear();
@@ -688,7 +672,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
 {
     Any a;
 
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(rBHelper.rMutex);
 
     ModuleToCommandFileMap::const_iterator pM2CIter = m_aModuleToCommandFileMap.find( aName );
     if ( pM2CIter != m_aModuleToCommandFileMap.end() )
@@ -727,7 +711,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
 Sequence< OUString > SAL_CALL UICommandDescription::getElementNames()
 throw (::com::sun::star::uno::RuntimeException)
 {
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(rBHelper.rMutex);
 
     Sequence< OUString > aSeq( m_aModuleToCommandFileMap.size() );
 
@@ -745,7 +729,7 @@ throw (::com::sun::star::uno::RuntimeException)
 sal_Bool SAL_CALL UICommandDescription::hasByName( const OUString& aName )
 throw (::com::sun::star::uno::RuntimeException)
 {
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(rBHelper.rMutex);
 
     ModuleToCommandFileMap::const_iterator pIter = m_aModuleToCommandFileMap.find( aName );
     return ( pIter != m_aModuleToCommandFileMap.end() );
@@ -765,6 +749,31 @@ throw (::com::sun::star::uno::RuntimeException)
     return sal_True;
 }
 
+struct Instance {
+    explicit Instance(
+        css::uno::Reference<css::uno::XComponentContext> const & context):
+        instance(static_cast<cppu::OWeakObject *>(
+                    new UICommandDescription(context)))
+    {
+    }
+
+    css::uno::Reference<css::uno::XInterface> instance;
+};
+
+struct Singleton:
+    public rtl::StaticWithArg<
+        Instance, css::uno::Reference<css::uno::XComponentContext>, Singleton>
+{};
+
 } // namespace framework
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_UICommandDescription_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(static_cast<cppu::OWeakObject *>(
+                framework::Singleton::get(context).instance.get()));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
