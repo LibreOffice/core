@@ -501,6 +501,22 @@ void DummyLine2D::render()
     else
         SAL_WARN("chart2.opengl", "no line width set");
 
+    //add style and transparency
+    itr =  maProperties.find(UNO_NAME_LINESTYLE);
+    if (itr != maProperties.end())
+    {
+        uno::Any cow = itr->second;
+        sal_Int32 nStyle = cow.get<sal_Int32>();
+        if (0 == nStyle)
+        {
+            pChart->m_GLRender.SetTransparency(0);
+        }
+        else
+        {
+            pChart->m_GLRender.SetTransparency(255);
+        }
+    }
+
     sal_Int32 pointsscount = maPoints.getLength();
     for(sal_Int32 i = 0; i < pointsscount; i++)
     {
