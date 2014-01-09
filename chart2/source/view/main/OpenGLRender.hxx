@@ -197,7 +197,7 @@ private:
     int WGLisExtensionSupported(const char *extension);
 	int CreateMultiSampleFrameBufObj();
     int Create2DCircle(int detail);
-    void SetBackGroundColor(long color1, long color2);
+    void SetBackGroundColor(sal_uInt32 color1, sal_uInt32 color2);
 
 private:
     // Projection matrix : default 45 degree Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units

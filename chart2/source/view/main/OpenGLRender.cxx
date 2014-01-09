@@ -290,8 +290,8 @@ int static checkGLError(const char *file, int line)
 #define CHECK_GL_FRAME_BUFFER_STATUS() \
     status = glCheckFramebufferStatus(GL_FRAMEBUFFER);\
     if( status != GL_FRAMEBUFFER_COMPLETE ) {\
-    printf(" error at line(%d) '%d'\n", __LINE__, status );\
-    return -1;\
+        SAL_WARN("chart2.opengl", "OpenGL error: " << status );\
+        return -1;\
     }
 
 GLint OpenGLRender::LoadShaders(const char *vertexShader,const char *fragmentShader)
@@ -1038,7 +1038,7 @@ int OpenGLRender::InitMultisample(PIXELFORMATDESCRIPTOR pfd)
     //create a temp windwo to check whether support multi-sample, if support, get the format
     if (InitTempWindow(&hWnd, m_iWidth, m_iHeight, pfd) < 0)
     {
-        printf("Can't create temp window to test\n");
+        SAL_WARN("chart2.opengl", "Can't create temp window to test\n");
         return false;
     }
 
@@ -1046,7 +1046,7 @@ int OpenGLRender::InitMultisample(PIXELFORMATDESCRIPTOR pfd)
     if (!WGLisExtensionSupported("WGL_ARB_multisample"))
     {
         m_iArbMultisampleSupported = 0;
-        printf("Device doesn't support multi sample\n");
+        SAL_WARN("chart2.opengl", "Device doesn't support multi sample\n");
         return false;
     }
     // Get Our Pixel Format
@@ -1678,7 +1678,7 @@ int OpenGLRender::RenderArea2DShape()
     return 0;
 }
 
-void OpenGLRender::SetBackGroundColor(long color1, long color2)
+void OpenGLRender::SetBackGroundColor(sal_uInt32 color1, sal_uInt32 color2)
 {
     sal_uInt8 r = (color1 & 0x00FF0000) >> 16;
     sal_uInt8 g = (color1 & 0x0000FF00) >> 8;
@@ -1707,7 +1707,7 @@ void OpenGLRender::SetBackGroundColor(long color1, long color2)
     m_BackgroundColor[13] = (float)g / 255.0f;
     m_BackgroundColor[14] = (float)b / 255.0f;
     m_BackgroundColor[15] = 1.0;
-    cout << "color1 = " << color1 << ", color2 = " << color2 << endl;
+    SAL_INFO("chart2.opengl", "color1 = " << color1 << ", color2 = " << color2);
 
 }
 void OpenGLRender::SetChartTransparencyGradient(long transparencyGradient)
