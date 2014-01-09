@@ -432,11 +432,6 @@ void DialControl::SetModifyHdl( const Link& rLink )
     mpImpl->maModifyHdl = rLink;
 }
 
-const Link& DialControl::GetModifyHdl() const
-{
-    return mpImpl->maModifyHdl;
-}
-
 // private --------------------------------------------------------------------
 
 void DialControl::Init( const Size& rWinSize, const Font& rWinFont )

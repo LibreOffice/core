@@ -174,9 +174,5 @@ std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace
 std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr<formula::FormulaTokenArray>&)
 std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr_ref<formula::FormulaTokenArray>)
 svl::SharedStringPool::SharedStringPool()
-svt::ToolPanelDeck::SetAccessibleParentWindow(Window*)
-svx::DialControl::GetModifyHdl() const
-svx::sidebar::LineWidthControl::GetValueSet()
-test::BootstrapFixtureBase::getPathFromWorkdir(char const*)
 utl::toISO8601(com::sun::star::util::Time const&)
 vclmain::createApplication()
