@@ -39,7 +39,6 @@
 #include <jobs/jobexecutor.hxx>
 #include <services/layoutmanager.hxx>
 #include <uielement/controlmenucontroller.hxx>
-#include <uiconfiguration/moduleuicfgsupplier.hxx>
 #include <uiconfiguration/moduleuiconfigurationmanager.hxx>
 #include <uifactory/menubarfactory.hxx>
 #include <accelerators/globalacceleratorconfiguration.hxx>
@@ -58,7 +57,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::LayoutManager                           )   else
                         IFFACTORY( ::framework::ControlMenuController                   )   else
                         IFFACTORY( ::framework::ModuleManager                           )   else
-                        IFFACTORY( ::framework::ModuleUIConfigurationManagerSupplier    )   else
                         IFFACTORY( ::framework::ModuleUIConfigurationManager            )   else
                         IFFACTORY( ::framework::MenuBarFactory                          )   else
                         IFFACTORY( ::framework::GlobalAcceleratorConfiguration          )   else

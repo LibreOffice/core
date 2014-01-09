@@ -17,8 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <uiconfiguration/moduleuicfgsupplier.hxx>
 #include <threadhelp/resetableguard.hxx>
+#include <threadhelp/threadhelpbase.hxx>
+#include <macros/xserviceinfo.hxx>
+#include <stdtypes.h>
 #include <services.h>
 
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -31,9 +33,20 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/embed/XPackageStructureCreator.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManager.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/XUIConfigurationManager.hpp>
+#include <com/sun/star/ui/XModuleUIConfigurationManager2.hpp>
+#include <com/sun/star/frame/XModuleManager2.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase3.hxx>
+#include <rtl/ref.hxx>
 #include <vcl/svapp.hxx>
+
+#include <boost/unordered_map.hpp>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
@@ -43,35 +56,53 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::embed;
 using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::frame;
+using namespace framework;
 
-namespace framework
-{
+namespace {
 
-class RootStorageWrapper :  public ::cppu::WeakImplHelper1< com::sun::star::embed::XTransactedObject >
+class ModuleUIConfigurationManagerSupplier : private ThreadHelpBase                     ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+                                             public cppu::WeakImplHelper3<
+                                                 css::lang::XServiceInfo  ,
+                                                 css::lang::XComponent    ,
+                                                 css::ui::XModuleUIConfigurationManagerSupplier >
 {
     public:
-        //  XInterface, XTypeProvider
-        RootStorageWrapper( const Reference< XTransactedObject >& xRootCommit ) : m_xRootCommit( xRootCommit ) {}
-        virtual ~RootStorageWrapper() {}
+        //  XInterface, XTypeProvider, XServiceInfo
+        DECLARE_XSERVICEINFO
 
-        // XTransactedObject
-        virtual void SAL_CALL commit() throw ( com::sun::star::io::IOException, com::sun::star::lang::WrappedTargetException )
-        {
-            m_xRootCommit->commit();
-        }
+        ModuleUIConfigurationManagerSupplier( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+        virtual ~ModuleUIConfigurationManagerSupplier();
 
-        virtual void SAL_CALL revert() throw ( com::sun::star::io::IOException, com::sun::star::lang::WrappedTargetException )
-        {
-            m_xRootCommit->revert();
-        }
+        // XComponent
+        virtual void SAL_CALL dispose()
+            throw (css::uno::RuntimeException);
+        virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
+            throw (css::uno::RuntimeException);
+        virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener )
+            throw (css::uno::RuntimeException);
+
+        // XModuleUIConfigurationManagerSupplier
+        virtual css::uno::Reference< css::ui::XUIConfigurationManager > SAL_CALL getUIConfigurationManager( const OUString& ModuleIdentifier )
+            throw (css::container::NoSuchElementException, css::uno::RuntimeException);
 
     private:
-        Reference< XTransactedObject > m_xRootCommit;
-};
+        typedef ::boost::unordered_map< OUString, css::uno::Reference< css::ui::XModuleUIConfigurationManager2 >, OUStringHash, ::std::equal_to< OUString > > ModuleToModuleCfgMgr;
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
+//TODO_AS            void impl_initStorages();
+
+        // private methods
+        ModuleToModuleCfgMgr                                                                m_aModuleToModuleUICfgMgrMap;
+        bool                                                                                m_bDisposed;
+// TODO_AS            bool                                                                                m_bInit;
+        OUString                                                                       m_aDefaultConfigURL;
+        OUString                                                                       m_aUserConfigURL;
+        css::uno::Reference< css::embed::XStorage >                   m_xDefaultCfgRootStorage;
+        css::uno::Reference< css::embed::XStorage >                   m_xUserCfgRootStorage;
+        css::uno::Reference< css::embed::XTransactedObject >          m_xUserRootCommit;
+        css::uno::Reference< css::frame::XModuleManager2 >          m_xModuleMgr;
+        css::uno::Reference< css::uno::XComponentContext >            m_xContext;
+        ::cppu::OMultiTypeInterfaceContainerHelper                                          m_aListenerContainer;   /// container for ALL Listener
+};
 
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   ModuleUIConfigurationManagerSupplier                    ,
                                             ::cppu::OWeakObject                                     ,
@@ -203,6 +234,18 @@ throw ( NoSuchElementException, RuntimeException)
     return pIter->second;
 }
 
-} // namespace framework
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_ModuleUIConfigurationManagerSupplier_get_implementation(
+        css::uno::XComponentContext * context,
+        uno_Sequence * arguments)
+{
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    rtl::Reference<ModuleUIConfigurationManagerSupplier> x(
+            new ModuleUIConfigurationManagerSupplier(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
