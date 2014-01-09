@@ -130,7 +130,8 @@
   <implementation name="com.sun.star.comp.framework.WindowStateConfiguration">
     <service name="com.sun.star.ui.WindowStateConfiguration"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.jobs.JobDispatch">
+  <implementation name="com.sun.star.comp.framework.jobs.JobDispatch"
+      constructor="com_sun_star_comp_framework_jobs_JobDispatch_get_implementation">
     <service name="com.sun.star.frame.ProtocolHandler"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.TabWindowService"
