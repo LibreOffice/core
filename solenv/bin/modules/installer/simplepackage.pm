@@ -289,23 +289,21 @@ sub create_package
 
         if (( $installer::globals::languagepack ) || ( $installer::globals::helppack ))
         {
+            # LanguagePack and HelpPack files are collected in $srcfolder, packaged into
+            # tarball.tar.bz2 and finally the Language Pack.app is assembled in $appfolder
             $localtempdir = "$tempdir/$packagename";
-            if ( $installer::globals::helppack ) { $volume_name = "$volume_name Help Pack"; }
-            if ( $installer::globals::languagepack )
-            {
-                $volume_name = "$volume_name Language Pack";
-                $volume_name_classic = "$volume_name_classic Language Pack";
-                $volume_name_classic_app = "$volume_name_classic_app Language Pack";
-            }
+            my $srcfolder = $localtempdir . "/" . $volume_name_classic_app . "\.app";
 
-            # Create tar ball named tarball.tar.bz2
-            # my $appfolder = $localtempdir . "/" . $volume_name . "\.app";
+            $volume_name             .= " Language Pack";
+            $volume_name_classic     .= " Language Pack";
+            $volume_name_classic_app .= " Language Pack";
+
             my $appfolder = $localtempdir . "/" . $volume_name_classic_app . "\.app";
             my $contentsfolder = $appfolder . "/Contents";
             my $tarballname = "tarball.tar.bz2";
 
             my $localfrom = cwd();
-            chdir $appfolder;
+            chdir $srcfolder;
 
             $systemcall = "tar -cjf $tarballname Contents/";
 
@@ -325,14 +323,15 @@ sub create_package
                 push( @installer::globals::logfileinfo, $infoline);
             }
 
-            my $sourcefile = $appfolder . "/" . $tarballname;
+            my $sourcefile = $srcfolder . "/" . $tarballname;
             my $destfile = $contentsfolder . "/" . $tarballname;
 
-            installer::systemactions::remove_complete_directory($contentsfolder);
+            installer::systemactions::remove_complete_directory($appfolder);
+            installer::systemactions::create_directory($appfolder);
             installer::systemactions::create_directory($contentsfolder);
 
             installer::systemactions::copy_one_file($sourcefile, $destfile);
-            unlink($sourcefile);
+            installer::systemactions::remove_complete_directory($srcfolder);
 
             # Copy two files into installation set next to the tar ball
             # 1. "osx_install.applescript"

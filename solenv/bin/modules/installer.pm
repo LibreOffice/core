@@ -291,8 +291,6 @@ sub run {
 
     my $dirsinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "Directory");
 
-    if ( $installer::globals::languagepack ) { installer::scriptitems::use_langpack_hostname($dirsinproductarrayref); }
-
     if ( $allvariableshashref->{'SHIFT_BASIS_INTO_BRAND_LAYER'} ) { $dirsinproductarrayref = installer::scriptitems::shift_basis_directory_parents($dirsinproductarrayref); }
     if ( $allvariableshashref->{'OFFICEDIRECTORYNAME'} ) { installer::scriptitems::set_officedirectory_name($dirsinproductarrayref, $allvariableshashref->{'OFFICEDIRECTORYNAME'}); }
 
