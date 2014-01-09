@@ -1680,12 +1680,12 @@ void WW8AttributeOutput::TextINetFormat( const SwFmtINetFmt& rINet )
 {
     if ( rINet.GetValue().Len() )
     {
-        sal_uInt16 nId;
+        const sal_uInt16 nId = rINet.GetINetFmtId();
         const String& rStr = rINet.GetINetFmt();
-        if ( rStr.Len() )
-            nId = rINet.GetINetFmtId();
-        else
-            nId = RES_POOLCHR_INET_NORMAL;
+        if ( rStr.Len() == 0 )
+        {
+            ASSERT( false, "WW8AttributeOutput::TextINetFormat(..) - missing unvisited character format at hyperlink attribute" );
+        }
 
         const SwCharFmt* pFmt = IsPoolUserFmt( nId )
                         ? m_rWW8Export.pDoc->FindCharFmtByName( rStr )
