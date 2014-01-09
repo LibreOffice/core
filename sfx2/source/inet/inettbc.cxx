@@ -62,15 +62,13 @@ using namespace ::com::sun::star::task;
 SFX_IMPL_TOOLBOX_CONTROL(SfxURLToolBoxControl_Impl,SfxStringItem)
 
 SfxURLToolBoxControl_Impl::SfxURLToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox )
-    : SfxToolBoxControl( nSlotId, nId, rBox ),
-    pAccExec( 0 )
+    : SfxToolBoxControl( nSlotId, nId, rBox )
 {
     addStatusListener( OUString( ".uno:CurrentURL" ));
 }
 
 SfxURLToolBoxControl_Impl::~SfxURLToolBoxControl_Impl()
 {
-    delete pAccExec;
 }
 
 SvtURLBox* SfxURLToolBoxControl_Impl::GetURLBox() const
