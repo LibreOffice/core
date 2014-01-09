@@ -29,6 +29,7 @@
 #include <com/sun/star/container/XContainer.hpp>
 
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ref.hxx>
 #include <cppuhelper/weak.hxx>
 
 using namespace com::sun::star::uno;
@@ -246,6 +247,21 @@ ToolbarControllerFactory::ToolbarControllerFactory( const Reference< XComponentC
 {
 }
 
+} // namespace framework
+
+using namespace framework;
+
+namespace {
+
+class StatusbarControllerFactory :  public UIControllerFactory
+{
+    public:
+        StatusbarControllerFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+
+        //  XInterface, XTypeProvider, XServiceInfo
+        DECLARE_XSERVICEINFO
+};
+
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   StatusbarControllerFactory                      ,
                                             ::cppu::OWeakObject                             ,
                                             SERVICENAME_STATUSBARCONTROLLERFACTORY          ,
@@ -261,6 +277,17 @@ StatusbarControllerFactory::StatusbarControllerFactory( const Reference< XCompon
 {
 }
 
-} // namespace framework
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_StatusBarControllerFactory_get_implementation(
+        css::uno::XComponentContext * context,
+        uno_Sequence * arguments)
+{
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    rtl::Reference<StatusbarControllerFactory> x(new StatusbarControllerFactory(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

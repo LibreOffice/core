@@ -95,7 +95,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::StatusBarFactory                        )   else
                         IFFACTORY( ::framework::UICategoryDescription                   )   else
                         IFFACTORY( ::framework::SessionListener                         )   else
-                        IFFACTORY( ::framework::StatusbarControllerFactory              )   else
                         IFFACTORY( ::framework::SessionListener                         )   else
                         IFFACTORY( ::framework::TaskCreatorService                      )   else
                         IFFACTORY( ::framework::ImageManager                            )   else
