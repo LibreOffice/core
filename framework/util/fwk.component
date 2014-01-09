@@ -85,7 +85,8 @@
   <implementation name="com.sun.star.comp.framework.PathSubstitution">
     <service name="com.sun.star.util.PathSubstitution"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.PopupMenuControllerFactory">
+  <implementation name="com.sun.star.comp.framework.PopupMenuControllerFactory"
+      constructor="com_sun_star_comp_framework_PopupMenuControllerFactory_get_implementation">
     <service name="com.sun.star.frame.PopupMenuControllerFactory"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.RecentFilesMenuController">

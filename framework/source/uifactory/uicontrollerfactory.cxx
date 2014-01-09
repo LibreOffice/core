@@ -17,29 +17,66 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <uifactory/uicontrollerfactory.hxx>
 #include <uifactory/factoryconfiguration.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/frame/XUIControllerFactory.hpp>
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ref.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/weak.hxx>
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::container;
-using namespace ::com::sun::star::frame;
+#include <threadhelp/threadhelpbase.hxx>
+#include <macros/generic.hxx>
+#include <macros/xinterface.hxx>
+#include <macros/xtypeprovider.hxx>
+#include <macros/xserviceinfo.hxx>
 
-namespace framework
+using namespace css::uno;
+using namespace css::lang;
+using namespace css::beans;
+using namespace css::container;
+using namespace css::frame;
+using namespace framework;
+
+namespace framework { class ConfigurationAccess_ControllerFactory; }
+
+namespace {
+
+class UIControllerFactory :  protected ThreadHelpBase, // Struct for right initalization of mutex member! Must be first of baseclasses.
+                             public ::cppu::WeakImplHelper2<
+                                 css::lang::XServiceInfo,
+                                 css::frame::XUIControllerFactory >
 {
+    public:
+        virtual ~UIControllerFactory();
+
+        // XServiceInfo
+        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException) = 0;
+        virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (css::uno::RuntimeException) = 0;
+        virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException) = 0;
+
+        // XMultiComponentFactory
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithContext( const OUString& aServiceSpecifier, const css::uno::Reference< css::uno::XComponentContext >& Context ) throw (css::uno::Exception, css::uno::RuntimeException);
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext( const OUString& ServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments, const css::uno::Reference< css::uno::XComponentContext >& Context ) throw (css::uno::Exception, css::uno::RuntimeException);
+        virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() throw (css::uno::RuntimeException);
+
+        // XUIControllerRegistration
+        virtual sal_Bool SAL_CALL hasController( const OUString& aCommandURL, const OUString& aModuleName ) throw (css::uno::RuntimeException);
+        virtual void SAL_CALL registerController( const OUString& aCommandURL, const OUString& aModuleName, const OUString& aControllerImplementationName ) throw (css::uno::RuntimeException);
+        virtual void SAL_CALL deregisterController( const OUString& aCommandURL, const OUString& aModuleName ) throw (css::uno::RuntimeException);
+
+    protected:
+        UIControllerFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext, const rtl::OUString &rUINode  );
+        sal_Bool                                                                         m_bConfigRead;
+        css::uno::Reference< css::uno::XComponentContext >     m_xContext;
+        ConfigurationAccess_ControllerFactory*                                           m_pConfigAccess;
+};
 
 UIControllerFactory::UIControllerFactory(
     const Reference< XComponentContext >& xContext,
@@ -166,7 +203,7 @@ throw (RuntimeException)
 sal_Bool SAL_CALL UIControllerFactory::hasController(
     const OUString& aCommandURL,
     const OUString& aModuleName )
-throw (::com::sun::star::uno::RuntimeException)
+throw (css::uno::RuntimeException)
 {
     ResetableGuard aLock( m_aLock );
 
@@ -216,6 +253,14 @@ throw (RuntimeException)
     // SAFE
 }
 
+class PopupMenuControllerFactory :  public UIControllerFactory
+{
+    public:
+        PopupMenuControllerFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+
+        //  XInterface, XTypeProvider, XServiceInfo
+        DECLARE_XSERVICEINFO
+};
 
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   PopupMenuControllerFactory                      ,
                                             ::cppu::OWeakObject                             ,
@@ -231,12 +276,6 @@ PopupMenuControllerFactory::PopupMenuControllerFactory( const Reference< XCompon
         OUString( "PopupMenu") )
 {
 }
-
-} // namespace framework
-
-using namespace framework;
-
-namespace {
 
 class ToolbarControllerFactory :  public UIControllerFactory
 {
@@ -286,6 +325,17 @@ StatusbarControllerFactory::StatusbarControllerFactory( const Reference< XCompon
 {
 }
 
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_PopupMenuControllerFactory_get_implementation(
+        css::uno::XComponentContext * context,
+        uno_Sequence * arguments)
+{
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    rtl::Reference<PopupMenuControllerFactory> x(new PopupMenuControllerFactory(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
