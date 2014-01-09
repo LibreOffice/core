@@ -507,7 +507,7 @@ void DummyLine2D::render()
     {
         uno::Any cow = itr->second;
         sal_Int32 nStyle = cow.get<sal_Int32>();
-        if (0 == nStyle)
+        if (drawing::LineStyle_NONE == nStyle)
         {
             pChart->m_GLRender.SetTransparency(0);
         }
