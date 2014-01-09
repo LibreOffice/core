@@ -21,6 +21,7 @@
 #include <general.h>
 #include <framework/menuconfiguration.hxx>
 #include <framework/addonmenu.hxx>
+#include <threadhelp/resetableguard.hxx>
 #include <services.h>
 
 #include <com/sun/star/frame/FrameSearchFlag.hpp>

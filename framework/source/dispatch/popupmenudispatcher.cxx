@@ -21,10 +21,14 @@
 #include <general.h>
 #include <framework/menuconfiguration.hxx>
 #include <framework/addonmenu.hxx>
+#include <threadhelp/readguard.hxx>
+#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/writeguard.hxx>
 #include <services.h>
 #include <properties.h>
 
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/frame/XLayoutManager2.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/WindowDescriptor.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
@@ -34,6 +38,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
+#include <com/sun/star/ui/XUIElement.hpp>
 
 #include <ucbhelper/content.hxx>
 #include <osl/mutex.hxx>

@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_DISPATCH_MENUDISPATCHER_HXX
 
 #include <classes/taskcreator.hxx>
-#include <services/frame.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
@@ -40,6 +39,7 @@
 #include <com/sun/star/frame/XLoadEventListener.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 
 #include <cppuhelper/implbase2.hxx>

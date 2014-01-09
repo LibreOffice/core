@@ -34,7 +34,6 @@
                              )
 =================================================================================================================*/
 #include <services/desktop.hxx>
-#include <services/frame.hxx>
 #include <jobs/jobexecutor.hxx>
 #include <uifactory/uielementfactorymanager.hxx>
 #include <uifactory/uicontrollerfactory.hxx>
@@ -61,7 +60,6 @@
 
 COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::Desktop                                 )   else
-                        IFFACTORY( ::framework::Frame                                   )   else
                         IFFACTORY( ::framework::JobExecutor                             )   else
                         IFFACTORY( ::framework::UIElementFactoryManager                 )   else
                         IFFACTORY( ::framework::PopupMenuControllerFactory              )   else
