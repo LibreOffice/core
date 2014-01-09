@@ -9199,6 +9199,14 @@ if test "$WANT_X11" = "yes"; then
     dnl ===================================================================
     AC_CHECK_HEADERS(X11/extensions/shape.h,[],[AC_MSG_ERROR([libXext headers not found])],
      [#include <X11/extensions/shape.h>])
+
+    # vcl needs ICE and SM
+    AC_CHECK_HEADERS(X11/ICE/ICElib.h,[],[AC_MSG_ERROR([libICE headers not found])])
+    AC_CHECK_LIB([ICE], [IceConnectionNumber], [:],
+        [AC_MSG_ERROR(ICE library not found)])
+    AC_CHECK_HEADERS(X11/SM/SMlib.h,[],[AC_MSG_ERROR([libSM headers not found])])
+    AC_CHECK_LIB([SM], [SmcOpenConnection], [:],
+        [AC_MSG_ERROR(SM library not found)])
 fi
 
 dnl ===================================================================
