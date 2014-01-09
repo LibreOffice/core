@@ -59,15 +59,6 @@ namespace framework
         com::sun::star::uno::Reference< com::sun::star::frame::XPopupMenuController > m_xPopupMenuController;
     };
 
-    class OpenToolbarController : public PopupMenuToolbarController
-    {
-    public:
-        OpenToolbarController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
-
-        // XServiceInfo
-        DECLARE_XSERVICEINFO
-    };
-
     class WizardsToolbarController : public PopupMenuToolbarController
     {
     public:

@@ -227,13 +227,25 @@ sal_uInt16 WizardsToolbarController::getDropDownStyle() const
     return TIB_DROPDOWNONLY;
 }
 
-DEFINE_XSERVICEINFO_MULTISERVICE_2( OpenToolbarController,
-                                    ::cppu::OWeakObject,
-                                    "com.sun.star.frame.ToolbarController",
-                                    OUString("org.apache.openoffice.comp.framework.OpenToolbarController")
-                                   )
+} // framework
 
-DEFINE_INIT_SERVICE( OpenToolbarController, {} )
+namespace {
+
+class OpenToolbarController : public PopupMenuToolbarController
+{
+public:
+    OpenToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+
+    // XServiceInfo
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException);
+
+    sal_Bool SAL_CALL supportsService(OUString const & rServiceName)
+        throw (css::uno::RuntimeException);
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException);
+};
 
 OpenToolbarController::OpenToolbarController(
     const css::uno::Reference< css::uno::XComponentContext >& xContext )
@@ -241,9 +253,26 @@ OpenToolbarController::OpenToolbarController(
 {
 }
 
-} // framework
+OUString OpenToolbarController::getImplementationName()
+    throw (css::uno::RuntimeException)
+{
+    return OUString("org.apache.openoffice.comp.framework.OpenToolbarController");
+}
 
-namespace {
+sal_Bool OpenToolbarController::supportsService(OUString const & rServiceName)
+    throw (css::uno::RuntimeException)
+{
+    return rServiceName == "com.sun.star.frame.ToolbarController";
+}
+
+css::uno::Sequence<OUString> OpenToolbarController::getSupportedServiceNames()
+    throw (css::uno::RuntimeException)
+{
+    css::uno::Sequence< OUString > aRet(1);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = "com.sun.star.frame.ToolbarController";
+    return aRet;
+}
 
 class NewToolbarController : public PopupMenuToolbarController
 {
@@ -483,6 +512,21 @@ void NewToolbarController::setItemImage( const OUString &rCommand )
     m_aLastURL = aURL;
 }
 
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+org_apache_openoffice_comp_framework_OpenToolbarController_get_implementation(
+        css::uno::XComponentContext * context,
+        uno_Sequence * arguments)
+{
+    assert(arguments != 0);
+    rtl::Reference<OpenToolbarController> x(new OpenToolbarController(context));
+    css::uno::Sequence<css::uno::Any> aArgs(
+            reinterpret_cast<css::uno::Any *>(arguments->elements),
+            arguments->nElements);
+    x->initialize(aArgs);
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL

@@ -112,7 +112,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::SubstitutePathVariables                 )   else
                         IFFACTORY( ::framework::PathSettings                            )   else
                         IFFACTORY( ::framework::ContextChangeEventMultiplexer           )   else
-                        IFFACTORY( ::framework::OpenToolbarController                   )   else
                         IFFACTORY( ::framework::WizardsToolbarController                )
             )
 
