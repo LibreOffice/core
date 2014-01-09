@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "uiconfiguration/uicategorydescription.hxx"
-#include <threadhelp/resetableguard.hxx>
-#include "services.h"
+#include <uielement/uicommanddescription.hxx>
 
 #include "properties.h"
 
@@ -31,17 +29,17 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <unotools/configmgr.hxx>
 
 #include <vcl/mnemonic.hxx>
 #include <comphelper/sequence.hxx>
 
-//_________________________________________________________________________________________________________________
-//  Defines
-//_________________________________________________________________________________________________________________
+#include <boost/unordered_map.hpp>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -49,10 +47,9 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::configuration;
 using namespace com::sun::star::container;
 using namespace ::com::sun::star::frame;
+using namespace framework;
 
-//_________________________________________________________________________________________________________________
-//  Namespace
-//_________________________________________________________________________________________________________________
+namespace {
 
 struct ModuleToCategory
 {
@@ -65,17 +62,9 @@ static const char CONFIGURATION_ROOT_ACCESS[]               = "/org.openoffice.O
 static const char CONFIGURATION_CATEGORY_ELEMENT_ACCESS[]   = "/Commands/Categories";
 static const char CONFIGURATION_PROPERTY_NAME[]             = "Name";
 
-namespace framework
+class ConfigurationAccess_UICategory : public ::cppu::WeakImplHelper2<XNameAccess,XContainerListener>
 {
-
-//*****************************************************************************************************************
-//  Configuration access class for PopupMenuControllerFactory implementation
-//*****************************************************************************************************************
-
-class ConfigurationAccess_UICategory : // Order is necessary for right initialization!
-                                        private ThreadHelpBase                           ,
-                                        public  ::cppu::WeakImplHelper2<XNameAccess,XContainerListener>
-{
+    osl::Mutex aMutex;
     public:
                                   ConfigurationAccess_UICategory( const OUString& aModuleName, const Reference< XNameAccess >& xGenericUICommands, const Reference< XComponentContext >& rxContext );
         virtual                   ~ConfigurationAccess_UICategory();
@@ -135,7 +124,6 @@ class ConfigurationAccess_UICategory : // Order is necessary for right initializ
 //*****************************************************************************************************************
 
 ConfigurationAccess_UICategory::ConfigurationAccess_UICategory( const OUString& aModuleName, const Reference< XNameAccess >& rGenericUICategories, const Reference< XComponentContext >& rxContext ) :
-    ThreadHelpBase(),
     m_aConfigCategoryAccess( CONFIGURATION_ROOT_ACCESS ),
     m_aPropUIName( CONFIGURATION_PROPERTY_NAME ),
     m_xGenericUICategories( rGenericUICategories ),
@@ -152,7 +140,7 @@ ConfigurationAccess_UICategory::ConfigurationAccess_UICategory( const OUString& 
 ConfigurationAccess_UICategory::~ConfigurationAccess_UICategory()
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(aMutex);
     Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
     if ( xContainer.is() )
         xContainer->removeContainerListener(m_xConfigListener);
@@ -162,7 +150,7 @@ ConfigurationAccess_UICategory::~ConfigurationAccess_UICategory()
 Any SAL_CALL ConfigurationAccess_UICategory::getByName( const OUString& rId )
 throw ( NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(aMutex);
     if ( !m_bConfigAccessInitialized )
     {
         initializeConfigAccess();
@@ -290,7 +278,7 @@ Any ConfigurationAccess_UICategory::getUINameFromCache( const OUString& rId )
 Sequence< OUString > ConfigurationAccess_UICategory::getAllIds()
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(aMutex);
 
     if ( !m_bConfigAccessInitialized )
     {
@@ -345,7 +333,8 @@ sal_Bool ConfigurationAccess_UICategory::initializeConfigAccess()
         aPropValue.Value <<= m_aConfigCategoryAccess;
         aArgs[0] <<= aPropValue;
 
-        m_xConfigAccess = Reference< XNameAccess >( m_xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGREADACCESS,aArgs ),UNO_QUERY );
+        m_xConfigAccess = Reference< XNameAccess >( m_xConfigProvider->createInstanceWithArguments(
+                    "com.sun.star.configuration.ConfigurationAccess", aArgs ),UNO_QUERY );
         if ( m_xConfigAccess.is() )
         {
             // Add as container listener
@@ -387,7 +376,7 @@ void SAL_CALL ConfigurationAccess_UICategory::disposing( const EventObject& aEve
 {
     // SAFE
     // remove our reference to the config access
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(aMutex);
 
     Reference< XInterface > xIfac1( aEvent.Source, UNO_QUERY );
     Reference< XInterface > xIfac2( m_xConfigAccess, UNO_QUERY );
@@ -395,17 +384,35 @@ void SAL_CALL ConfigurationAccess_UICategory::disposing( const EventObject& aEve
         m_xConfigAccess.clear();
 }
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
+class UICategoryDescription :  public UICommandDescription
+{
+public:
+    UICategoryDescription( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    virtual ~UICategoryDescription();
 
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2  ( UICategoryDescription                  ,
-                                            ::cppu::OWeakObject                    ,
-                                            "com.sun.star.ui.UICategoryDescription",
-                                            OUString("com.sun.star.comp.framework.UICategoryDescription")
-                                        )
+    virtual OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException)
+    {
+        return OUString("com.sun.star.comp.framework.UICategoryDescription");
+    }
 
-DEFINE_INIT_SERVICE                     (   UICategoryDescription, {} )
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException)
+    {
+        return cppu::supportsService(this, ServiceName);
+    }
+
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException)
+    {
+        css::uno::Sequence< OUString > aSeq(1);
+        aSeq[0] = OUString("com.sun.star.ui.UICategoryDescription");
+        return aSeq;
+    }
+
+private:
+    virtual css::uno::Reference< css::container::XNameAccess > impl_createConfigAccess(const OUString& _sName);
+};
 
 UICategoryDescription::UICategoryDescription( const Reference< XComponentContext >& rxContext ) :
     UICommandDescription(rxContext,true)
@@ -433,6 +440,30 @@ Reference< XNameAccess > UICategoryDescription::impl_createConfigAccess(const OU
     return new ConfigurationAccess_UICategory( _sName, m_xGenericUICommands, m_xContext );
 }
 
-} // namespace framework
+struct Instance {
+    explicit Instance(
+        css::uno::Reference<css::uno::XComponentContext> const & context):
+        instance(static_cast<cppu::OWeakObject *>(
+                    new UICategoryDescription(context)))
+    {
+    }
+
+    css::uno::Reference<css::uno::XInterface> instance;
+};
+
+struct Singleton:
+    public rtl::StaticWithArg<
+        Instance, css::uno::Reference<css::uno::XComponentContext>, Singleton>
+{};
+
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_UICategoryDescription_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(static_cast<cppu::OWeakObject *>(Singleton::get(context).instance.get()));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

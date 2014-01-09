@@ -42,7 +42,6 @@
 #include <uifactory/toolboxfactory.hxx>
 #include "uiconfiguration/windowstateconfiguration.hxx"
 #include <uifactory/statusbarfactory.hxx>
-#include <uiconfiguration/uicategorydescription.hxx>
 #include <services/sessionlistener.hxx>
 #include <services/taskcreatorsrv.hxx>
 
@@ -61,7 +60,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::WindowStateConfiguration                )   else
                         IFFACTORY( ::framework::ToolbarControllerFactory                )   else
                         IFFACTORY( ::framework::StatusBarFactory                        )   else
-                        IFFACTORY( ::framework::UICategoryDescription                   )   else
                         IFFACTORY( ::framework::SessionListener                         )   else
                         IFFACTORY( ::framework::StatusbarControllerFactory              )   else
                         IFFACTORY( ::framework::SessionListener                         )   else
