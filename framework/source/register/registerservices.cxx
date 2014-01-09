@@ -70,7 +70,6 @@
 #include <services/substitutepathvars.hxx>
 #include <services/pathsettings.hxx>
 #include <services/ContextChangeEventMultiplexer.hxx>
-#include <uielement/popuptoolbarcontroller.hxx>
 
 COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::URLTransformer                          )   else
@@ -111,8 +110,7 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::TabWindowService                        )   else
                         IFFACTORY( ::framework::SubstitutePathVariables                 )   else
                         IFFACTORY( ::framework::PathSettings                            )   else
-                        IFFACTORY( ::framework::ContextChangeEventMultiplexer           )   else
-                        IFFACTORY( ::framework::WizardsToolbarController                )
+                        IFFACTORY( ::framework::ContextChangeEventMultiplexer           )
             )
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
