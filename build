@@ -55,10 +55,10 @@ fi
 do_configure()
 {
 	if [ "_$windows" = "_1" ]; then
-		if [ -f /cygdrive/c/Programme/Java/jdk1.5.0_22/bin/javac.exe ] ; then 
-			JDK_HOME="/cygdrive/c/Programme/Java/jdk1.5.0_22"
+		if [ -f  /cygdrive/c/EigeneProgramme/Java/Java1.7.0_45_32/bin/javac.exe ] ; then 
+			JDK_HOME="/cygdrive/c/EigeneProgramme/Java/Java1.7.0_45_32/"
 		else 
-			echo "Kein JDK unter /cygdrive/c/Programme/Java/jdk1.5.0_22/bin/ gefunden!"
+			echo "Kein JDK unter  /cygdrive/c/EigeneProgramme/Java/Java1.7.0_45_32/bin/ gefunden!"
 		fi
 
 		./autogen.sh \
@@ -67,25 +67,18 @@ do_configure()
 			--with-lang="en-US de fr es it pt " \
 			--with-jdk-home=${JDK_HOME} \
 			--with-java \
-			--with-java-target-version=1.5 \
+			--with-lang="en-US de fr es it pt" \
 			--enable-release-build \
-			--disable-build-mozilla \
-                        --disable-online-update \
-			--with-mozilla-build="/cygdrive/e/Programme/mozilla-build" \
-                        --enable-extension-integration \
-                        --enable-ext-scripting-beanshell \
-                        --enable-ext-wiki-publisher \
-                        --enable-ext-report-builder \
-                        --enable-ext-presenter-minimizer \
-                        --enable-ext-nlpsolver \
+			--disable-online-update \
+			--enable-extension-integration \
+			--enable-ext-wiki-publisher \
+			--enable-ext-presenter-minimizer \
+			--enable-ext-nlpsolver \
 			--with-ant-home=/cygdrive/c/ant \
-                        --without-junit \
+			--without-junit \
 			--with-system-dicts \
 			--with-myspell-dicts \
 			--with-help \
-			--with-cl-home="/cygdrive/c/Programme/Microsoft Visual Studio 9.0/VC/"  \
-			--with-midl-path="/cygdrive/c/Programme/Microsoft SDKs/Windows/v7.0/Bin/Midl.exe" \
-			--with-windows-sdk-home="/cygdrive/c/Programme/Microsoft SDKs/Windows/v7.0" \
 			|| echo autogen.sh ist fehlgeschlagen 
 	else
 		if [ -f /usr/lib/j2sdk1.5-sun/bin/javac  ]; then
