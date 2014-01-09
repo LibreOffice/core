@@ -75,6 +75,7 @@
 #include <rtl/instance.hxx>
 #include <unotools/cmdoptions.hxx>
 
+#include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
 
 #include <algorithm>
@@ -3223,5 +3224,16 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL LayoutManager::getPropertySet
 }
 
 } // namespace framework
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_LayoutManager_get_implementation(
+        css::uno::XComponentContext * context,
+        uno_Sequence * arguments)
+{
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    rtl::Reference<framework::LayoutManager> x(new framework::LayoutManager(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
