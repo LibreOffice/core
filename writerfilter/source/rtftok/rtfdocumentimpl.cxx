@@ -1095,6 +1095,7 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_OBJDATA:
         case DESTINATION_ANNOTATIONDATE:
         case DESTINATION_ANNOTATIONAUTHOR:
+        case DESTINATION_ANNOTATIONREFERENCE:
         case DESTINATION_FALT:
         case DESTINATION_PARAGRAPHNUMBERING_TEXTAFTER:
         case DESTINATION_PARAGRAPHNUMBERING_TEXTBEFORE:
@@ -1577,6 +1578,9 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_ATNAUTHOR:
             m_aStates.top().nDestinationState = DESTINATION_ANNOTATIONAUTHOR;
+            break;
+        case RTF_ATNREF:
+            m_aStates.top().nDestinationState = DESTINATION_ANNOTATIONREFERENCE;
             break;
         case RTF_FALT:
             m_aStates.top().nDestinationState = DESTINATION_FALT;
@@ -4246,6 +4250,14 @@ int RTFDocumentImpl::popState()
             break;
         case DESTINATION_ATNID:
             m_aAuthorInitials = m_aStates.top().aDestinationText.makeStringAndClear();
+            break;
+        case DESTINATION_ANNOTATIONREFERENCE:
+            {
+                OUString aStr = m_aStates.top().aDestinationText.makeStringAndClear();
+                RTFSprms aAnnAttributes;
+                aAnnAttributes.set(NS_ooxml::LN_CT_Markup_id, RTFValue::Pointer_t(new RTFValue(aStr)));
+                Mapper().props(writerfilter::Reference<Properties>::Pointer_t(new RTFReferenceProperties(aAnnAttributes)));
+            }
             break;
         case DESTINATION_FALT:
             {
