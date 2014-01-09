@@ -41,7 +41,6 @@
 #include <uiconfiguration/moduleuicfgsupplier.hxx>
 #include <uifactory/menubarfactory.hxx>
 #include <accelerators/moduleacceleratorconfiguration.hxx>
-#include <accelerators/documentacceleratorconfiguration.hxx>
 #include <uifactory/toolboxfactory.hxx>
 #include "uiconfiguration/windowstateconfiguration.hxx"
 #include <services/autorecovery.hxx>
@@ -64,7 +63,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::ModuleUIConfigurationManagerSupplier    )   else
                         IFFACTORY( ::framework::MenuBarFactory                          )   else
                         IFFACTORY( ::framework::ModuleAcceleratorConfiguration          )   else
-                        IFFACTORY( ::framework::DocumentAcceleratorConfiguration        )   else
                         IFFACTORY( ::framework::ToolBoxFactory                          )   else
                         IFFACTORY( ::framework::WindowStateConfiguration                )   else
                         IFFACTORY( ::framework::ToolbarControllerFactory                )   else

@@ -17,74 +17,105 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accelerators/documentacceleratorconfiguration.hxx>
+#include <accelerators/acceleratorconfiguration.hxx>
+#include <accelerators/istoragelistener.hxx>
+#include <accelerators/presethandler.hxx>
 
 #include <xml/acceleratorconfigurationreader.hxx>
-
 #include <xml/acceleratorconfigurationwriter.hxx>
-
 #include <xml/saxnamespacefilter.hxx>
 
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
-
 #include <acceleratorconst.h>
-#include <services.h>
 
-#include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 
-#include <com/sun/star/io/XSeekable.hpp>
-
-#include <com/sun/star/io/XTruncate.hpp>
-
-#include <com/sun/star/embed/ElementModes.hpp>
-
-#include <com/sun/star/xml/sax/InputSource.hpp>
-
-#include <com/sun/star/xml/sax/XParser.hpp>
-
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <rtl/ref.hxx>
 
-namespace framework
+using namespace framework;
+
+namespace {
+
+/**
+    implements a read/write access to a document
+    based accelerator configuration.
+ */
+
+typedef ::cppu::ImplInheritanceHelper1<
+             XMLBasedAcceleratorConfiguration,
+             css::lang::XServiceInfo> DocumentAcceleratorConfiguration_BASE;
+
+class DocumentAcceleratorConfiguration : public DocumentAcceleratorConfiguration_BASE
 {
+private:
+
+    //----------------------------------
+    /** points to the root storage of the outside document,
+        where we can read/save our configuration data. */
+    css::uno::Reference< css::embed::XStorage > m_xDocumentRoot;
+
+public:
+
+    /** initialize this instance and fill the internal cache.
+
+        @param  xSMGR
+                reference to an uno service manager, which is used internaly.
+     */
+    DocumentAcceleratorConfiguration(
+            const css::uno::Reference< css::uno::XComponentContext >& xContext,
+            const css::uno::Sequence< css::uno::Any >& lArguments);
+
+    virtual ~DocumentAcceleratorConfiguration();
+
+    virtual OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException)
+    {
+        return OUString("com.sun.star.comp.framework.DocumentAcceleratorConfiguration");
+    }
+
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException)
+    {
+        return cppu::supportsService(this, ServiceName);
+    }
+
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException)
+    {
+        css::uno::Sequence< OUString > aSeq(1);
+        aSeq[0] = OUString("com.sun.star.ui.DocumentAcceleratorConfiguration");
+        return aSeq;
+    }
+
+    // XUIConfigurationStorage
+    virtual void SAL_CALL setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
+        throw(css::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL hasStorage()
+        throw(css::uno::RuntimeException);
+
+private:
+
+    /** read all data into the cache. */
+    void impl_ts_fillCache();
+
+    /** forget all currently cached data AND(!)
+        forget all currently used storages. */
+    void impl_ts_clearCache();
+};
 
 //-----------------------------------------------
-// XInterface, XTypeProvider, XServiceInfo
-
-DEFINE_XSERVICEINFO_MULTISERVICE_2(DocumentAcceleratorConfiguration                   ,
-                                   ::cppu::OWeakObject                                ,
-                                   "com.sun.star.ui.DocumentAcceleratorConfiguration" ,
-                                   OUString("com.sun.star.comp.framework.DocumentAcceleratorConfiguration"))
-
-DEFINE_INIT_SERVICE(DocumentAcceleratorConfiguration,
-                    {
-                        /*Attention
-                        I think we don't need any mutex or lock here ... because we are called by our own static method impl_createInstance()
-                        to create a new instance of this class by our own supported service factory.
-                        see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further information!
-                        */
-                    }
-                   )
-
-//-----------------------------------------------
-DocumentAcceleratorConfiguration::DocumentAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext)
+DocumentAcceleratorConfiguration::DocumentAcceleratorConfiguration(
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Sequence< css::uno::Any >& lArguments)
     : DocumentAcceleratorConfiguration_BASE(xContext)
 {
-}
-
-//-----------------------------------------------
-DocumentAcceleratorConfiguration::~DocumentAcceleratorConfiguration()
-{
-    m_aPresetHandler.removeStorageListener(this);
-}
-
-//-----------------------------------------------
-void SAL_CALL DocumentAcceleratorConfiguration::initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
-    throw(css::uno::Exception       ,
-          css::uno::RuntimeException)
-{
-    // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
 
     css::uno::Reference<css::embed::XStorage> xRoot;
@@ -101,9 +132,14 @@ void SAL_CALL DocumentAcceleratorConfiguration::initialize(const css::uno::Seque
     }
 
     aWriteLock.unlock();
-    // <- SAFE ----------------------------------
 
     impl_ts_fillCache();
+}
+
+//-----------------------------------------------
+DocumentAcceleratorConfiguration::~DocumentAcceleratorConfiguration()
+{
+    m_aPresetHandler.removeStorageListener(this);
 }
 
 //-----------------------------------------------
@@ -184,5 +220,15 @@ void DocumentAcceleratorConfiguration::impl_ts_clearCache()
 }
 
 } // namespace framework
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_DocumentAcceleratorConfiguration_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &arguments)
+{
+    rtl::Reference<DocumentAcceleratorConfiguration> x(new DocumentAcceleratorConfiguration(context, arguments));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
