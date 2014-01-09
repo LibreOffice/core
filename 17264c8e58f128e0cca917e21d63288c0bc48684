@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1abeadc6_b647061d",
+        "filename": "svtools/source/svrtf/rtfkeywd.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1097,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-09T18:10:25Z",
+      "side": 1,
+      "message": "See the below lines, these are \"fly frames\", not \"free frames\".",
+      "revId": "17264c8e58f128e0cca917e21d63288c0bc48684",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
