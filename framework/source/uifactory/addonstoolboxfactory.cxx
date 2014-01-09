@@ -17,26 +17,30 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <uifactory/addonstoolboxfactory.hxx>
-
 #include <uielement/addonstoolbarwrapper.hxx>
 #include <threadhelp/resetableguard.hxx>
 
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
-
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/XUIElementFactory.hpp>
 
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 
-//_________________________________________________________________________________________________________________
-//  Defines
-//_________________________________________________________________________________________________________________
+#include <macros/generic.hxx>
+#include <macros/xinterface.hxx>
+#include <macros/xtypeprovider.hxx>
+#include <macros/xserviceinfo.hxx>
+#include <services.h>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -44,20 +48,48 @@ using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 using namespace ::com::sun::star::ui;
+using namespace framework;
 
-namespace framework
+namespace {
+
+class AddonsToolBoxFactory :  protected ThreadHelpBase,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+                              public ::cppu::WeakImplHelper2< css::lang::XServiceInfo ,
+                                                              css::ui::XUIElementFactory >
 {
+public:
+    AddonsToolBoxFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    virtual ~AddonsToolBoxFactory();
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
-PRIVATE_DEFINE_XSERVICEINFO_NEWSTYLE( AddonsToolBoxFactory,
-                                      ::cppu::OWeakObject,
-                                      SERVICENAME_TOOLBARFACTORY,
-                                      IMPLEMENTATIONNAME_ADDONSTOOLBARFACTORY )
-PRIVATE_DEFINE_ONEINSTANCEFACTORY( AddonsToolBoxFactory )
+    virtual OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException)
+    {
+        return OUString("com.sun.star.comp.framework.AddonsToolBarFactory");
+    }
 
-DEFINE_INIT_SERVICE                     (   AddonsToolBoxFactory, {} )
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException)
+    {
+        return cppu::supportsService(this, ServiceName);
+    }
+
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException)
+    {
+        css::uno::Sequence< OUString > aSeq(1);
+        aSeq[0] = OUString("com.sun.star.ui.ToolBarFactory");
+        return aSeq;
+    }
+
+    // XUIElementFactory
+    virtual css::uno::Reference< css::ui::XUIElement > SAL_CALL createUIElement( const OUString& ResourceURL, const css::uno::Sequence< css::beans::PropertyValue >& Args ) throw ( css::container::NoSuchElementException, css::lang::IllegalArgumentException, css::uno::RuntimeException );
+
+    sal_Bool hasButtonsInContext( const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& rPropSeq,
+                                  const css::uno::Reference< css::frame::XFrame >& rFrame );
+
+private:
+    css::uno::Reference< css::uno::XComponentContext >     m_xContext;
+    css::uno::Reference< css::frame::XModuleManager2 >     m_xModuleManager;
+};
 
 AddonsToolBoxFactory::AddonsToolBoxFactory(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
@@ -195,6 +227,16 @@ throw ( ::com::sun::star::container::NoSuchElementException,
     return xToolBar;
 }
 
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_AddonsToolBarFactory_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    rtl::Reference<AddonsToolBoxFactory> x(new AddonsToolBoxFactory(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -53,7 +53,6 @@
 #include <accelerators/moduleacceleratorconfiguration.hxx>
 #include <accelerators/documentacceleratorconfiguration.hxx>
 #include <uifactory/toolboxfactory.hxx>
-#include <uifactory/addonstoolboxfactory.hxx>
 #include "uiconfiguration/windowstateconfiguration.hxx"
 #include <services/autorecovery.hxx>
 #include <helper/statusindicatorfactory.hxx>
@@ -91,7 +90,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::ModuleAcceleratorConfiguration          )   else
                         IFFACTORY( ::framework::DocumentAcceleratorConfiguration        )   else
                         IFFACTORY( ::framework::ToolBoxFactory                          )   else
-                        IFFACTORY( ::framework::AddonsToolBoxFactory                    )   else
                         IFFACTORY( ::framework::WindowStateConfiguration                )   else
                         IFFACTORY( ::framework::ToolbarControllerFactory                )   else
                         IFFACTORY( ::framework::AutoRecovery                            )   else
