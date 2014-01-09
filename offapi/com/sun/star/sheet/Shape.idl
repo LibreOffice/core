@@ -34,7 +34,7 @@ service Shape
     /** contains the object where this shape is anchored on.
         <p> Possible objects are XSpreadsheet and XCell.</p>
     */
-    [readonly, property] com::sun::star::uno::XInterface Anchor;
+    [property] com::sun::star::uno::XInterface Anchor;
     /** contains the horizontal position of the object (1/100 mm).
         <p> The position is relative to the anchor object.</p>
         <p> If the underlying table layout direction is left to right
