@@ -41,7 +41,6 @@
 #include <uielement/objectmenucontroller.hxx>
 #include <uielement/controlmenucontroller.hxx>
 #include <uielement/uicommanddescription.hxx>
-#include <uiconfiguration/uiconfigurationmanager.hxx>
 #include <uiconfiguration/moduleuicfgsupplier.hxx>
 #include <uiconfiguration/moduleuiconfigurationmanager.hxx>
 #include <uifactory/menubarfactory.hxx>
@@ -67,7 +66,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::ControlMenuController                   )   else
                         IFFACTORY( ::framework::UICommandDescription                    )   else
                         IFFACTORY( ::framework::ModuleManager                           )   else
-                        IFFACTORY( ::framework::UIConfigurationManager                  )   else
                         IFFACTORY( ::framework::ModuleUIConfigurationManagerSupplier    )   else
                         IFFACTORY( ::framework::ModuleUIConfigurationManager            )   else
                         IFFACTORY( ::framework::MenuBarFactory                          )   else
