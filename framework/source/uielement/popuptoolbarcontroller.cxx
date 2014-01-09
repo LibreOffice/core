@@ -20,6 +20,7 @@
 #include <framework/menuconfiguration.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <comphelper/processfactory.hxx>
+#include <rtl/ref.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/miscopt.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -33,6 +34,8 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 
 #define UNO_COMMAND_RECENT_FILE_LIST    ".uno:RecentFileList"
+
+using namespace framework;
 
 namespace framework
 {
@@ -238,19 +241,61 @@ OpenToolbarController::OpenToolbarController(
 {
 }
 
+} // framework
 
-DEFINE_XSERVICEINFO_MULTISERVICE_2( NewToolbarController,
-                                    ::cppu::OWeakObject,
-                                    "com.sun.star.frame.ToolbarController",
-                                    OUString("org.apache.openoffice.comp.framework.NewToolbarController")
-                                   )
+namespace {
 
-DEFINE_INIT_SERVICE( NewToolbarController, {} )
+class NewToolbarController : public PopupMenuToolbarController
+{
+public:
+    NewToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+
+    // XServiceInfo
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException);
+
+    sal_Bool SAL_CALL supportsService(OUString const & rServiceName)
+        throw (css::uno::RuntimeException);
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException);
+
+    void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException);
+
+private:
+    void functionExecuted( const OUString &rCommand );
+    void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException );
+    void SAL_CALL execute( sal_Int16 KeyModifier ) throw (css::uno::RuntimeException);
+    void setItemImage( const OUString &rCommand );
+
+    OUString m_aLastURL;
+};
 
 NewToolbarController::NewToolbarController(
     const css::uno::Reference< css::uno::XComponentContext >& xContext )
     : PopupMenuToolbarController( xContext )
 {
+}
+
+OUString NewToolbarController::getImplementationName()
+    throw (css::uno::RuntimeException)
+{
+    return OUString("org.apache.openoffice.comp.framework.NewToolbarController");
+}
+
+sal_Bool NewToolbarController::supportsService(OUString const & rServiceName)
+    throw (css::uno::RuntimeException)
+{
+    return rServiceName == "com.sun.star.frame.ToolbarController";
+}
+
+css::uno::Sequence<OUString> NewToolbarController::getSupportedServiceNames()
+    throw (css::uno::RuntimeException)
+{
+    css::uno::Sequence< OUString > aRet(1);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = "com.sun.star.frame.ToolbarController";
+    return aRet;
 }
 
 void SAL_CALL
@@ -438,5 +483,19 @@ void NewToolbarController::setItemImage( const OUString &rCommand )
     m_aLastURL = aURL;
 }
 
+}
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+org_apache_openoffice_comp_framework_NewToolbarController_get_implementation(
+        css::uno::XComponentContext * context,
+        uno_Sequence * arguments)
+{
+    assert(arguments != 0);
+    rtl::Reference<NewToolbarController> x(new NewToolbarController(context));
+    css::uno::Sequence<css::uno::Any> aArgs(
+            reinterpret_cast<css::uno::Any *>(arguments->elements),
+            arguments->nElements);
+    x->initialize(aArgs);
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }

@@ -68,23 +68,6 @@ namespace framework
         DECLARE_XSERVICEINFO
     };
 
-    class NewToolbarController : public PopupMenuToolbarController
-    {
-    public:
-        NewToolbarController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
-
-        // XServiceInfo
-        DECLARE_XSERVICEINFO
-    private:
-        void functionExecuted( const OUString &rCommand );
-        void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-        void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& rEvent ) throw ( ::com::sun::star::uno::RuntimeException );
-        void SAL_CALL execute( sal_Int16 KeyModifier ) throw (::com::sun::star::uno::RuntimeException);
-        void setItemImage( const OUString &rCommand );
-
-        OUString m_aLastURL;
-    };
-
     class WizardsToolbarController : public PopupMenuToolbarController
     {
     public:
