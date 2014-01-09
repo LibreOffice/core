@@ -2243,19 +2243,19 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
         sTxt, sInitials, OUString(), aDate );
     aPostIt.SetTextObject(pOutliner);
 
+    SwPaM aEnd(*pPaM->End(), *pPaM->End());
+    pCtrlStck->NewAttr(*aEnd.GetPoint(), SvxCharHiddenItem(false, RES_CHRATR_HIDDEN));
+    rDoc.InsertPoolItem(aEnd, SwFmtFld(aPostIt), 0);
+    pCtrlStck->SetAttr(*aEnd.GetPoint(), RES_CHRATR_HIDDEN);
+
     // If this is a range, create the associated fieldmark.
     if (pPaM->HasMark())
     {
         IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess();
-        sw::mark::IFieldmark* pFieldmark = pMarksAccess->makeFieldBookmark(*pPaM, OUString(), ODF_COMMENTRANGE);
-        aPostIt.SetName(pFieldmark->GetName());
+        pMarksAccess->makeAnnotationMark(*pPaM, aPostIt.GetName());
         pPaM->Exchange();
         pPaM->DeleteMark();
     }
-
-    pCtrlStck->NewAttr(*pPaM->GetPoint(), SvxCharHiddenItem(false, RES_CHRATR_HIDDEN));
-    rDoc.InsertPoolItem(*pPaM, SwFmtFld(aPostIt), 0);
-    pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_CHRATR_HIDDEN);
 
     return 0;
 }
