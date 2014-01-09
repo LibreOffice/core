@@ -35,12 +35,6 @@
 #include <stdio.h>
 #include <tchar.h>
 
-#if OSL_DEBUG_LEVEL > 0
-#define OSL_ENSURE_FILE( cond, msg, file ) ( (cond) ?  (void)0 : _osl_warnFile( msg, file ) )
-#else
-#define OSL_ENSURE_FILE( cond, msg, file ) ((void)0)
-#endif
-
 #define WSTR_SYSTEM_ROOT_PATH               L"\\\\.\\"
 #define WSTR_LONG_PATH_PREFIX               L"\\\\?\\"
 #define WSTR_LONG_PATH_PREFIX_UNC           L"\\\\?\\UNC\\"
