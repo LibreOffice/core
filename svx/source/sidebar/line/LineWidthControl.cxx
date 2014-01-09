@@ -192,14 +192,6 @@ void LineWidthControl::GetFocus()
 
 
 
-ValueSet& LineWidthControl::GetValueSet()
-{
-    return maVSWidth;
-}
-
-
-
-
 void LineWidthControl::SetWidthSelect( long lValue, bool bValuable, SfxMapUnit eMapUnit)
 {
     mbVSFocus = true;
