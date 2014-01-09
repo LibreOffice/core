@@ -510,13 +510,14 @@ ifeq ($(GUIBASE),aqua)
 $(eval $(call gb_Library_add_linked_libs,vcl,\
     AppleRemote \
 ))
-$(eval $(call gb_Library_add_ldflags,vcl,\
+$(eval $(call gb_Library_set_ldflags,vcl,\
+    $$(LDFLAGS) \
     -framework Cocoa \
     -framework Carbon \
     -framework CoreFoundation \
 ))
 ifneq ($(MACOSX_DEPLOYMENT_TARGET),10.7)
-$(eval $(call gb_Library_add_ldflags,vcl, -framework QuickTime ))
+$(eval $(call gb_Library_set_ldflags,vcl, $$(LDFLAGS) -framework QuickTime ))
 endif
 endif
 
