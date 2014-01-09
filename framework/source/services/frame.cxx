@@ -25,7 +25,6 @@
 #include <dispatch/windowcommanddispatch.hxx>
 #include <loadenv/loadenv.hxx>
 #include <helper/oframes.hxx>
-#include <helper/statusindicatorfactory.hxx>
 #include <framework/titlehelper.hxx>
 #include <svtools/openfiledroptargetlistener.hxx>
 #include <classes/taskcreator.hxx>

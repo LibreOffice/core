@@ -53,7 +53,6 @@
 #include <accelerators/documentacceleratorconfiguration.hxx>
 #include <uifactory/toolboxfactory.hxx>
 #include "uiconfiguration/windowstateconfiguration.hxx"
-#include <helper/statusindicatorfactory.hxx>
 #include <uielement/recentfilesmenucontroller.hxx>
 #include <uiconfiguration/uicategorydescription.hxx>
 #include <services/sessionlistener.hxx>
@@ -86,7 +85,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::DocumentAcceleratorConfiguration        )   else
                         IFFACTORY( ::framework::ToolBoxFactory                          )   else
                         IFFACTORY( ::framework::WindowStateConfiguration                )   else
-                        IFFACTORY( ::framework::StatusIndicatorFactory                  )   else
                         IFFACTORY( ::framework::RecentFilesMenuController               )   else
                         IFFACTORY( ::framework::UICategoryDescription                   )   else
                         IFFACTORY( ::framework::SessionListener                         )   else

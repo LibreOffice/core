@@ -44,6 +44,7 @@
 #include <unotools/mediadescriptor.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
 
 #include <officecfg/Office/Common.hxx>
 
@@ -618,5 +619,20 @@ void StatusIndicatorFactory::impl_stopWakeUpThread()
 }
 
 } // namespace framework
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_StatusIndicatorFactory_get_implementation(
+        css::uno::XComponentContext * context,
+        uno_Sequence * arguments)
+{
+    assert(arguments != 0);
+    rtl::Reference<framework::StatusIndicatorFactory> x(new framework::StatusIndicatorFactory(context));
+    css::uno::Sequence<css::uno::Any> aArgs(
+            reinterpret_cast<css::uno::Any *>(arguments->elements),
+            arguments->nElements);
+    x->initialize(aArgs);
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
