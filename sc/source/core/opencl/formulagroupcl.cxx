@@ -761,6 +761,45 @@ protected:
     DynamicKernelSlidingArgument<VectorRef> mDoubleArgument;
     DynamicKernelSlidingArgument<DynamicKernelStringArgument> mStringArgument;
 };
+/// Holds the symbol table for a given dynamic kernel
+class SymbolTable {
+public:
+    typedef std::map<const formula::FormulaToken *,
+        boost::shared_ptr<DynamicKernelArgument> > ArgumentMap;
+    // This avoids instability caused by using pointer as the key type
+    typedef std::list< boost::shared_ptr<DynamicKernelArgument> > ArgumentList;
+    SymbolTable(void):mCurId(0) {}
+    template <class T>
+    const DynamicKernelArgument *DeclRefArg(FormulaTreeNodeRef, SlidingFunctionBase* pCodeGen);
+    /// Used to generate sliding window helpers
+    void DumpSlidingWindowFunctions(std::stringstream &ss)
+    {
+        for(ArgumentList::iterator it = mParams.begin(), e= mParams.end(); it!=e;
+            ++it) {
+            (*it)->GenSlidingWindowFunction(ss);
+            ss << "\n";
+        }
+    }
+    /// Memory mapping from host to device and pass buffers to the given kernel as
+    /// arguments
+    void Marshal(cl_kernel, int, cl_program);
+    // number of result items.
+    static int nR;
+private:
+    unsigned int mCurId;
+    ArgumentMap mSymbols;
+    ArgumentList mParams;
+};
+int SymbolTable::nR = 0;
+
+void SymbolTable::Marshal(cl_kernel k, int nVectorWidth, cl_program pProgram)
+{
+    int i = 1; //The first argument is reserved for results
+    for(ArgumentList::iterator it = mParams.begin(), e= mParams.end(); it!=e;
+            ++it) {
+        i+=(*it)->Marshal(k, i, nVectorWidth, pProgram);
+    }
+}
 
 /// Handling a Double Vector that is used as a sliding window input
 /// Performs parallel reduction based on given operator
@@ -783,6 +822,8 @@ public:
     }
     /// Emit the definition for the auxiliary reduction kernel
     virtual void GenSlidingWindowFunction(std::stringstream &ss) {
+      if ( !dynamic_cast<OpAverage*>(mpCodeGen.get()))
+      {
         std::string name = Base::GetName();
         ss << "__kernel void "<<name;
         ss << "_reduction(__global double* A, "
@@ -844,9 +885,119 @@ public:
         ss << "    if (lidx == 0)\n";
         ss << "        result[writePos] = current_result;\n";
         ss << "}\n";
+      }
+      else{
+        std::string name = Base::GetName();
+        /*sum reduction*/
+        ss << "__kernel void "<<name<<"_sum";
+        ss << "_reduction(__global double* A, "
+            "__global double *result,int arrayLength,int windowSize){\n";
+        ss << "    double tmp, current_result =" <<
+            mpCodeGen->GetBottom();
+        ss << ";\n";
+        ss << "    int writePos = get_group_id(1);\n";
+        ss << "    int lidx = get_local_id(0);\n";
+        ss << "    __local double shm_buf[256];\n";
+        if (mpDVR->IsStartFixed())
+            ss << "    int offset = 0;\n";
+        else // if (!mpDVR->IsStartFixed())
+            ss << "    int offset = get_group_id(1);\n";
+        if (mpDVR->IsStartFixed() && mpDVR->IsEndFixed())
+            ss << "    int end = windowSize;\n";
+        else if (!mpDVR->IsStartFixed() && !mpDVR->IsEndFixed())
+            ss << "    int end = offset + windowSize;\n";
+        else if (mpDVR->IsStartFixed() && !mpDVR->IsEndFixed())
+            ss << "    int end = windowSize + get_group_id(1);\n";
+        else if (!mpDVR->IsStartFixed() && mpDVR->IsEndFixed())
+            ss << "    int end = windowSize;\n";
+        ss << "    end = min(end, arrayLength);\n";
+        ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
+        ss << "    int loop = arrayLength/512 + 1;\n";
+        ss << "    for (int l=0; l<loop; l++){\n";
+        ss << "    tmp = "<< mpCodeGen->GetBottom() << ";\n";
+        ss << "    int loopOffset = l*512;\n";
+        ss << "    if((loopOffset + lidx + offset + 256) < end) {\n";
+        ss << "        tmp = legalize(";
+        ss << "(A[loopOffset + lidx + offset]+ tmp)";
+        ss << ", tmp);\n";
+        ss << "        tmp = legalize((A[loopOffset + lidx + offset + 256]+ tmp)";
+        ss << ", tmp);\n";
+        ss << "    } else if ((loopOffset + lidx + offset) < end)\n";
+        ss << "        tmp = legalize((A[loopOffset + lidx + offset] + tmp)";
+        ss << ", tmp);\n";
+        ss << "    shm_buf[lidx] = tmp;\n";
+        ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
+        ss << "    for (int i = 128; i >0; i/=2) {\n";
+        ss << "        if (lidx < i)\n";
+        ss << "            shm_buf[lidx] = ";
+        ss << "shm_buf[lidx] + shm_buf[lidx + i];\n";
+        ss << "        barrier(CLK_LOCAL_MEM_FENCE);\n";
+        ss << "    }\n";
+        ss << "        if (lidx == 0)\n";
+        ss << "            current_result =";
+        ss << "current_result + shm_buf[0]";
+        ss << ";\n";
+        ss << "        barrier(CLK_LOCAL_MEM_FENCE);\n";
+        ss << "    }\n";
+        ss << "    if (lidx == 0)\n";
+        ss << "        result[writePos] = current_result;\n";
+        ss << "}\n";
+        /*count reduction*/
+        ss << "__kernel void "<<name<<"_count";
+        ss << "_reduction(__global double* A, "
+            "__global double *result,int arrayLength,int windowSize){\n";
+        ss << "    double tmp, current_result =" <<
+            mpCodeGen->GetBottom();
+        ss << ";\n";
+        ss << "    int writePos = get_group_id(1);\n";
+        ss << "    int lidx = get_local_id(0);\n";
+        ss << "    __local double shm_buf[256];\n";
+        if (mpDVR->IsStartFixed())
+            ss << "    int offset = 0;\n";
+        else // if (!mpDVR->IsStartFixed())
+            ss << "    int offset = get_group_id(1);\n";
+        if (mpDVR->IsStartFixed() && mpDVR->IsEndFixed())
+            ss << "    int end = windowSize;\n";
+        else if (!mpDVR->IsStartFixed() && !mpDVR->IsEndFixed())
+            ss << "    int end = offset + windowSize;\n";
+        else if (mpDVR->IsStartFixed() && !mpDVR->IsEndFixed())
+            ss << "    int end = windowSize + get_group_id(1);\n";
+        else if (!mpDVR->IsStartFixed() && mpDVR->IsEndFixed())
+            ss << "    int end = windowSize;\n";
+        ss << "    end = min(end, arrayLength);\n";
+        ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
+        ss << "    int loop = arrayLength/512 + 1;\n";
+        ss << "    for (int l=0; l<loop; l++){\n";
+        ss << "    tmp = "<< mpCodeGen->GetBottom() << ";\n";
+        ss << "    int loopOffset = l*512;\n";
+        ss << "    if((loopOffset + lidx + offset + 256) < end) {\n";
+        ss << "        tmp = legalize((isNan(A[loopOffset + lidx + offset])?tmp:tmp+1.0)";
+        ss << ", tmp);\n";
+        ss << "        tmp = legalize((isNan(A[loopOffset + lidx + offset+256])?tmp:tmp+1.0)";
+        ss << ", tmp);\n";
+        ss << "    } else if ((loopOffset + lidx + offset) < end)\n";
+        ss << "        tmp = legalize((isNan(A[loopOffset + lidx + offset])?tmp:tmp+1.0)";
+        ss << ", tmp);\n";
+        ss << "    shm_buf[lidx] = tmp;\n";
+        ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
+        ss << "    for (int i = 128; i >0; i/=2) {\n";
+        ss << "        if (lidx < i)\n";
+        ss << "            shm_buf[lidx] = ";
+        ss << "shm_buf[lidx] + shm_buf[lidx + i];\n";
+        ss << "        barrier(CLK_LOCAL_MEM_FENCE);\n";
+        ss << "    }\n";
+        ss << "        if (lidx == 0)\n";
+        ss << "            current_result =";
+        ss << "current_result + shm_buf[0];";
+        ss << ";\n";
+        ss << "        barrier(CLK_LOCAL_MEM_FENCE);\n";
+        ss << "    }\n";
+        ss << "    if (lidx == 0)\n";
+        ss << "        result[writePos] = current_result;\n";
+        ss << "}\n";
      }
 
-
+    }
     virtual std::string GenSlidingWindowDeclRef(bool=false) const
     {
         std::stringstream ss;
@@ -865,7 +1016,14 @@ public:
         std::string temp = Base::GetName() + "[gid0]";
         ss << "tmp = ";
         // Special case count
-        if (dynamic_cast<OpCount*>(mpCodeGen.get()))
+        if ( dynamic_cast<OpAverage*>(mpCodeGen.get()))
+        {
+            ss << mpCodeGen->Gen2(temp, "tmp")<<";\n";
+            ss <<"nCount = nCount-1;\n";
+            ss <<"nCount = nCount +";/*re-assign nCount from count reduction*/
+            ss << Base::GetName()<<"[gid0+"<<SymbolTable::nR<<"]"<<";\n";
+        }
+        else if (dynamic_cast<OpCount*>(mpCodeGen.get()))
             ss << temp << "+ tmp";
         else
             ss << mpCodeGen->Gen2(temp, "tmp");
@@ -893,12 +1051,17 @@ public:
                 (cl_mem_flags) CL_MEM_READ_ONLY|CL_MEM_USE_HOST_PTR,
                 szHostBuffer,
                 pHostBuffer, &err);
-        mpClmem2 = clCreateBuffer(kEnv.mpkContext, CL_MEM_WRITE_ONLY,
+        mpClmem2 = clCreateBuffer(kEnv.mpkContext,
+        CL_MEM_READ_WRITE|CL_MEM_ALLOC_HOST_PTR,
                 sizeof(double)*w, NULL, NULL);
         if (CL_SUCCESS != err)
             throw OpenCLError(err);
         // reproduce the reduction function name
-        std::string kernelName = Base::GetName() + "_reduction";
+        std::string kernelName;
+        if ( !dynamic_cast<OpAverage*>(mpCodeGen.get()))
+           kernelName = Base::GetName() + "_reduction";
+        else
+           kernelName = Base::GetName() + "_sum_reduction";
 
         cl_kernel redKernel = clCreateKernel(mpProgram, kernelName.c_str(), &err);
         if (err != CL_SUCCESS)
@@ -933,7 +1096,79 @@ public:
         err = clFinish(kEnv.mpkCmdQueue);
         if (CL_SUCCESS != err)
             throw OpenCLError(err);
+        if ( dynamic_cast<OpAverage*>(mpCodeGen.get()))
+        {
+             /*average need more reduction kernel for count computing*/
+             double *pAllBuffer  = new double[2*w];
+             double *resbuf = (double*)clEnqueueMapBuffer(kEnv.mpkCmdQueue,
+                mpClmem2,
+                CL_TRUE, CL_MAP_READ, 0,
+                sizeof(double)*w, 0, NULL, NULL,
+                &err);
+            if (err != CL_SUCCESS)
+                throw OpenCLError(err, __FILE__, __LINE__);
 
+            for (int i=0 ; i < w; i++)
+                pAllBuffer[i] = resbuf[i];
+            err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpClmem2, resbuf, 0, NULL, NULL);
+            if (err != CL_SUCCESS)
+                throw OpenCLError(err, __FILE__, __LINE__);
+
+            kernelName = Base::GetName() + "_count_reduction";
+            redKernel = clCreateKernel(mpProgram, kernelName.c_str(), &err);
+            if (err != CL_SUCCESS)
+                throw OpenCLError(err, __FILE__, __LINE__);
+            // set kernel arg of reduction kernel
+            buf = Base::GetCLBuffer();
+            err = clSetKernelArg(redKernel, 0, sizeof(cl_mem),
+                    (void *)&buf);
+            if (CL_SUCCESS != err)
+                throw OpenCLError(err, __FILE__, __LINE__);
+
+            err = clSetKernelArg(redKernel, 1, sizeof(cl_mem), (void *)&mpClmem2);
+            if (CL_SUCCESS != err)
+                throw OpenCLError(err, __FILE__, __LINE__);
+
+            err = clSetKernelArg(redKernel, 2, sizeof(cl_int), (void*)&nInput);
+            if (CL_SUCCESS != err)
+                throw OpenCLError(err, __FILE__, __LINE__);
+
+            err = clSetKernelArg(redKernel, 3, sizeof(cl_int), (void*)&nCurWindowSize);
+            if (CL_SUCCESS != err)
+                throw OpenCLError(err, __FILE__, __LINE__);
+
+            // set work group size and execute
+            size_t global_work_size1[] = {256, (size_t)w };
+            size_t local_work_size1[] = {256, 1};
+            err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, NULL,
+                    global_work_size1, local_work_size1, 0, NULL, NULL);
+            if (CL_SUCCESS != err)
+                throw OpenCLError(err, __FILE__, __LINE__);
+            err = clFinish(kEnv.mpkCmdQueue);
+            if (CL_SUCCESS != err)
+                throw OpenCLError(err, __FILE__, __LINE__);
+            resbuf = (double*)clEnqueueMapBuffer(kEnv.mpkCmdQueue,
+                mpClmem2,
+                CL_TRUE, CL_MAP_READ, 0,
+                sizeof(double)*w, 0, NULL, NULL,
+                &err);
+            if (err != CL_SUCCESS)
+                throw OpenCLError(err, __FILE__, __LINE__);
+                for (int i=0 ; i < w; i++)
+                pAllBuffer[i+w] = resbuf[i];
+            err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpClmem2, resbuf, 0, NULL, NULL);
+            if (mpClmem2)
+            {
+                clReleaseMemObject(mpClmem2);
+                mpClmem2 = NULL;
+            }
+            mpClmem2 = clCreateBuffer(kEnv.mpkContext,
+                (cl_mem_flags) CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
+                w*sizeof(double)*2, pAllBuffer, &err);
+            if (CL_SUCCESS != err)
+                throw OpenCLError(err, __FILE__, __LINE__);
+            delete pAllBuffer;
+        }
         // set kernel arg
         err = clSetKernelArg(k, argno, sizeof(cl_mem), (void*)&(mpClmem2));
         if (CL_SUCCESS != err)
@@ -1804,10 +2039,11 @@ DynamicKernelArgument *VectorRefFactory(const std::string &s,
         return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
     }
     // AVERAGE is not supported yet
-    else if (dynamic_cast<OpAverage*>(pCodeGen.get()))
+    //Average has been supported by reduction kernel
+    /*else if (dynamic_cast<OpAverage*>(pCodeGen.get()))
     {
         return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
-    }
+    }*/
     // MUL is not supported yet
     else if (dynamic_cast<OpMul*>(pCodeGen.get()))
     {
@@ -2861,43 +3097,6 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
     }
 }
 
-/// Holds the symbol table for a given dynamic kernel
-class SymbolTable {
-public:
-    typedef std::map<const formula::FormulaToken *,
-        boost::shared_ptr<DynamicKernelArgument> > ArgumentMap;
-    // This avoids instability caused by using pointer as the key type
-    typedef std::list< boost::shared_ptr<DynamicKernelArgument> > ArgumentList;
-    SymbolTable(void):mCurId(0) {}
-    template <class T>
-    const DynamicKernelArgument *DeclRefArg(FormulaTreeNodeRef, SlidingFunctionBase* pCodeGen);
-    /// Used to generate sliding window helpers
-    void DumpSlidingWindowFunctions(std::stringstream &ss)
-    {
-        for(ArgumentList::iterator it = mParams.begin(), e= mParams.end(); it!=e;
-            ++it) {
-            (*it)->GenSlidingWindowFunction(ss);
-            ss << "\n";
-        }
-    }
-    /// Memory mapping from host to device and pass buffers to the given kernel as
-    /// arguments
-    void Marshal(cl_kernel, int, cl_program);
-private:
-    unsigned int mCurId;
-    ArgumentMap mSymbols;
-    ArgumentList mParams;
-};
-
-void SymbolTable::Marshal(cl_kernel k, int nVectorWidth, cl_program pProgram)
-{
-    int i = 1; //The first argument is reserved for results
-    for(ArgumentList::iterator it = mParams.begin(), e= mParams.end(); it!=e;
-            ++it) {
-        i+=(*it)->Marshal(k, i, nVectorWidth, pProgram);
-    }
-}
-
 class DynamicKernel : public CompiledFormula
 {
 public:
@@ -3216,6 +3415,7 @@ CompiledFormula* FormulaGroupInterpreterOpenCL::createCompiledFormula(ScDocument
         delete pCode;
         return NULL;
     }
+    SymbolTable::nR = xGroup->mnLength;
 
     DynamicKernel *result = DynamicKernel::create(rDoc, rTopPos, *pCode);
     if ( result )
