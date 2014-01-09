@@ -53,7 +53,6 @@ $(eval $(call gb_SrsTarget_add_files,dbaccess/dbu,\
     dbaccess/source/ui/dlg/indexdialog.src \
     dbaccess/source/ui/dlg/paramdialog.src \
     dbaccess/source/ui/dlg/queryfilter.src \
-    dbaccess/source/ui/dlg/queryorder.src \
     dbaccess/source/ui/dlg/RelationDlg.src \
     dbaccess/source/ui/dlg/sqlmessage.src \
     dbaccess/source/ui/dlg/textconnectionsettings.src \

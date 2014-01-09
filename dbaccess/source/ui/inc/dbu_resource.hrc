@@ -82,7 +82,6 @@
 #define DLG_DATASOURCE_SELECTION        RID_DIALOG_START +  4
 #define DLG_PARAMETERS                  RID_DIALOG_START +  5
 #define DLG_FILTERCRIT                  RID_DIALOG_START +  6
-#define DLG_ORDERCRIT                   RID_DIALOG_START +  7
 
 #define DLG_ATTR                        RID_DIALOG_START + 10
 #define DLG_SAVE_AS                     RID_DIALOG_START + 11

@@ -59,21 +59,12 @@ namespace dbaui
     class DlgOrderCrit : public ModalDialog
     {
     protected:
-        ListBox         aLB_ORDERFIELD1;
-        ListBox         aLB_ORDERVALUE1;
-        ListBox         aLB_ORDERFIELD2;
-        ListBox         aLB_ORDERVALUE2;
-        ListBox         aLB_ORDERFIELD3;
-        ListBox         aLB_ORDERVALUE3;
-        FixedText       aFT_ORDERFIELD;
-        FixedText       aFT_ORDERAFTER1;
-        FixedText       aFT_ORDERAFTER2;
-        FixedText       aFT_ORDEROPER;
-        FixedText       aFT_ORDERDIR;
-        OKButton        aBT_OK;
-        CancelButton    aBT_CANCEL;
-        HelpButton      aBT_HELP;
-        FixedLine       aFL_ORDER;
+        ListBox*        m_pLB_ORDERFIELD1;
+        ListBox*        m_pLB_ORDERVALUE1;
+        ListBox*        m_pLB_ORDERFIELD2;
+        ListBox*        m_pLB_ORDERVALUE2;
+        ListBox*        m_pLB_ORDERFIELD3;
+        ListBox*        m_pLB_ORDERVALUE3;
         OUString        aSTR_NOENTRY;
         OUString        m_sOrgOrder;
 

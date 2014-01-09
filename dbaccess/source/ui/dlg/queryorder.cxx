@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "queryorder.hrc"
+#include "dbu_tbl.hrc"
 #include "queryorder.hxx"
 #include "dbustrings.hrc"
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
@@ -44,32 +44,24 @@ using namespace ::com::sun::star::beans;
 
 DBG_NAME(DlgOrderCrit)
 
-DlgOrderCrit::DlgOrderCrit( Window * pParent,
-                            const Reference< XConnection>& _rxConnection,
-                            const Reference< XSingleSelectQueryComposer >& _rxComposer,
-                            const Reference< XNameAccess>& _rxCols)
-             :ModalDialog( pParent, ModuleRes(DLG_ORDERCRIT) )
-            ,aLB_ORDERFIELD1(   this, ModuleRes( LB_ORDERFIELD1 ) )
-            ,aLB_ORDERVALUE1(   this, ModuleRes( LB_ORDERVALUE1 ) )
-            ,aLB_ORDERFIELD2(   this, ModuleRes( LB_ORDERFIELD2 ) )
-            ,aLB_ORDERVALUE2(   this, ModuleRes( LB_ORDERVALUE2 ) )
-            ,aLB_ORDERFIELD3(   this, ModuleRes( LB_ORDERFIELD3 ) )
-            ,aLB_ORDERVALUE3(   this, ModuleRes( LB_ORDERVALUE3 ) )
-            ,aFT_ORDERFIELD(    this, ModuleRes( FT_ORDERFIELD ) )
-            ,aFT_ORDERAFTER1(   this, ModuleRes( FT_ORDERAFTER1 ) )
-            ,aFT_ORDERAFTER2(   this, ModuleRes( FT_ORDERAFTER2 ) )
-            ,aFT_ORDEROPER(     this, ModuleRes( FT_ORDEROPER ) )
-            ,aFT_ORDERDIR(      this, ModuleRes( FT_ORDERDIR ) )
-            ,aBT_OK(            this, ModuleRes( BT_OK ) )
-            ,aBT_CANCEL(        this, ModuleRes( BT_CANCEL ) )
-            ,aBT_HELP(          this, ModuleRes( BT_HELP ) )
-            ,aFL_ORDER(         this, ModuleRes( FL_ORDER ) )
-            ,aSTR_NOENTRY(      ModuleRes( STR_NOENTRY ) )
-            ,m_xQueryComposer( _rxComposer )
-            ,m_xColumns(_rxCols)
-            ,m_xConnection(_rxConnection)
+DlgOrderCrit::DlgOrderCrit(Window * pParent,
+    const Reference< XConnection>& _rxConnection,
+    const Reference< XSingleSelectQueryComposer >& _rxComposer,
+    const Reference< XNameAccess>& _rxCols)
+    : ModalDialog(pParent, "SortDialog", "dbaccess/ui/sortdialog.ui")
+    , aSTR_NOENTRY(ModuleRes(STR_VALUE_NONE))
+    , m_xQueryComposer(_rxComposer)
+    , m_xColumns(_rxCols)
+    , m_xConnection(_rxConnection)
 {
     DBG_CTOR(DlgOrderCrit,NULL);
+
+    get(m_pLB_ORDERFIELD1, "field1");
+    get(m_pLB_ORDERVALUE1, "value1");
+    get(m_pLB_ORDERFIELD2, "field2");
+    get(m_pLB_ORDERVALUE2, "value2");
+    get(m_pLB_ORDERFIELD3, "field3");
+    get(m_pLB_ORDERVALUE3, "value3");
 
     AllSettings aSettings( GetSettings() );
     StyleSettings aStyle( aSettings.GetStyleSettings() );
@@ -77,21 +69,20 @@ DlgOrderCrit::DlgOrderCrit( Window * pParent,
     aSettings.SetStyleSettings( aStyle );
     SetSettings( aSettings );
 
-    m_aColumnList[0] = &aLB_ORDERFIELD1;
-    m_aColumnList[1] = &aLB_ORDERFIELD2;
-    m_aColumnList[2] = &aLB_ORDERFIELD3;
+    m_aColumnList[0] = m_pLB_ORDERFIELD1;
+    m_aColumnList[1] = m_pLB_ORDERFIELD2;
+    m_aColumnList[2] = m_pLB_ORDERFIELD3;
 
-    m_aValueList[0] = &aLB_ORDERVALUE1;
-    m_aValueList[1] = &aLB_ORDERVALUE2;
-    m_aValueList[2] = &aLB_ORDERVALUE3;
+    m_aValueList[0] = m_pLB_ORDERVALUE1;
+    m_aValueList[1] = m_pLB_ORDERVALUE2;
+    m_aValueList[2] = m_pLB_ORDERVALUE3;
 
-    xub_StrLen j;
-    for(j=0 ; j < DOG_ROWS ; j++ )
+    for (int j=0; j < DOG_ROWS; ++j)
     {
         m_aColumnList[j]->InsertEntry( aSTR_NOENTRY );
     }
 
-    for( j=0 ; j < DOG_ROWS ; j++ )
+    for (int j=0; j < DOG_ROWS; ++j)
     {
         m_aColumnList[j]->SelectEntryPos(0);
         m_aValueList[j]->SelectEntryPos(0);
@@ -114,7 +105,7 @@ DlgOrderCrit::DlgOrderCrit( Window * pParent,
                 sal_Int32 eColumnSearch = dbtools::getSearchColumnFlag(m_xConnection,nDataType);
                 if(eColumnSearch != ColumnSearch::NONE)
                 {
-                    for( j=0 ; j < DOG_ROWS ; j++ )
+                    for (int j=0; j < DOG_ROWS; ++j)
                     {
                         m_aColumnList[j]->InsertEntry(*pIter);
                     }
@@ -131,10 +122,8 @@ DlgOrderCrit::DlgOrderCrit( Window * pParent,
     }
     EnableLines();
 
-    aLB_ORDERFIELD1.SetSelectHdl(LINK(this,DlgOrderCrit,FieldListSelectHdl));
-    aLB_ORDERFIELD2.SetSelectHdl(LINK(this,DlgOrderCrit,FieldListSelectHdl));
-
-    FreeResource();
+    m_pLB_ORDERFIELD1->SetSelectHdl(LINK(this,DlgOrderCrit,FieldListSelectHdl));
+    m_pLB_ORDERFIELD2->SetSelectHdl(LINK(this,DlgOrderCrit,FieldListSelectHdl));
 }
 
 DlgOrderCrit::~DlgOrderCrit()
@@ -187,32 +176,32 @@ void DlgOrderCrit::EnableLines()
 {
     DBG_CHKTHIS(DlgOrderCrit,NULL);
 
-    if ( aLB_ORDERFIELD1.GetSelectEntryPos() == 0 )
+    if ( m_pLB_ORDERFIELD1->GetSelectEntryPos() == 0 )
     {
-        aLB_ORDERFIELD2.Disable();
-        aLB_ORDERVALUE2.Disable();
+        m_pLB_ORDERFIELD2->Disable();
+        m_pLB_ORDERVALUE2->Disable();
 
-        aLB_ORDERFIELD2.SelectEntryPos( 0 );
-        aLB_ORDERVALUE2.SelectEntryPos( 0 );
+        m_pLB_ORDERFIELD2->SelectEntryPos( 0 );
+        m_pLB_ORDERVALUE2->SelectEntryPos( 0 );
     }
     else
     {
-        aLB_ORDERFIELD2.Enable();
-        aLB_ORDERVALUE2.Enable();
+        m_pLB_ORDERFIELD2->Enable();
+        m_pLB_ORDERVALUE2->Enable();
     }
 
-    if ( aLB_ORDERFIELD2.GetSelectEntryPos() == 0 )
+    if ( m_pLB_ORDERFIELD2->GetSelectEntryPos() == 0 )
     {
-        aLB_ORDERFIELD3.Disable();
-        aLB_ORDERVALUE3.Disable();
+        m_pLB_ORDERFIELD3->Disable();
+        m_pLB_ORDERVALUE3->Disable();
 
-        aLB_ORDERFIELD3.SelectEntryPos( 0 );
-        aLB_ORDERVALUE3.SelectEntryPos( 0 );
+        m_pLB_ORDERFIELD3->SelectEntryPos( 0 );
+        m_pLB_ORDERVALUE3->SelectEntryPos( 0 );
     }
     else
     {
-        aLB_ORDERFIELD3.Enable();
-        aLB_ORDERVALUE3.Enable();
+        m_pLB_ORDERFIELD3->Enable();
+        m_pLB_ORDERVALUE3->Enable();
     }
 }
 
