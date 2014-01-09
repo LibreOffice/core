@@ -38,7 +38,6 @@
 #include <jobs/jobexecutor.hxx>
 #include <services/layoutmanager.hxx>
 #include <uielement/controlmenucontroller.hxx>
-#include <uifactory/menubarfactory.hxx>
 #include <accelerators/globalacceleratorconfiguration.hxx>
 #include <accelerators/documentacceleratorconfiguration.hxx>
 #include <uielement/recentfilesmenucontroller.hxx>
@@ -53,7 +52,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::JobExecutor                             )   else
                         IFFACTORY( ::framework::LayoutManager                           )   else
                         IFFACTORY( ::framework::ControlMenuController                   )   else
-                        IFFACTORY( ::framework::MenuBarFactory                          )   else
                         IFFACTORY( ::framework::GlobalAcceleratorConfiguration          )   else
                         IFFACTORY( ::framework::DocumentAcceleratorConfiguration        )   else
                         IFFACTORY( ::framework::RecentFilesMenuController               )   else
