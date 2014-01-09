@@ -18,13 +18,13 @@
  */
 
 #include <toolbarlayoutmanager.hxx>
+#include <uiconfiguration/windowstateproperties.hxx>
 #include <uielement/addonstoolbarwrapper.hxx>
 #include <helpers.hxx>
 #include <services.h>
 #include <services/layoutmanager.hxx>
 #include <classes/resource.hrc>
 #include <classes/fwkresid.hxx>
-#include <uiconfiguration/windowstateconfiguration.hxx>
 
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>

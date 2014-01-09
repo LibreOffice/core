@@ -36,7 +36,6 @@
 #include <properties.h>
 #include <stdtypes.h>
 #include <uielement/menubarmanager.hxx>
-#include <uiconfiguration/windowstateconfiguration.hxx>
 #include <framework/addonsoptions.hxx>
 #include <uielement/uielement.hxx>
 #include <helper/ilayoutnotifications.hxx>

@@ -25,12 +25,12 @@
 #include <framework/sfxhelperfunctions.hxx>
 #include <uielement/menubarwrapper.hxx>
 #include <framework/addonsoptions.hxx>
-#include <uiconfiguration/windowstateconfiguration.hxx>
 #include <classes/fwkresid.hxx>
 #include <classes/resource.hrc>
 #include <toolkit/helper/convert.hxx>
 #include <uielement/progressbarwrapper.hxx>
 #include <uiconfiguration/globalsettings.hxx>
+#include <uiconfiguration/windowstateproperties.hxx>
 #include <toolbarlayoutmanager.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>

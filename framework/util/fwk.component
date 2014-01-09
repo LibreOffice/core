@@ -133,7 +133,8 @@
   <implementation name="com.sun.star.comp.framework.WindowContentFactoryManager">
     <service name="com.sun.star.ui.WindowContentFactoryManager"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.WindowStateConfiguration">
+  <implementation name="com.sun.star.comp.framework.WindowStateConfiguration"
+      constructor="com_sun_star_comp_framework_WindowStateConfiguration_get_implementation">
     <service name="com.sun.star.ui.WindowStateConfiguration"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.jobs.JobDispatch"

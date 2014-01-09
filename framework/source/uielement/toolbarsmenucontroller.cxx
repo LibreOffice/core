@@ -25,9 +25,9 @@
 #include "services.h"
 #include <classes/resource.hrc>
 #include <classes/fwkresid.hxx>
-#include <uiconfiguration/windowstateconfiguration.hxx>
 #include <framework/imageproducer.hxx>
 #include <framework/sfxhelperfunctions.hxx>
+#include <uiconfiguration/windowstateproperties.hxx>
 
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

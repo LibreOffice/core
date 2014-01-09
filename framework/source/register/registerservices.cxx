@@ -50,7 +50,6 @@
 #include <accelerators/globalacceleratorconfiguration.hxx>
 #include <accelerators/moduleacceleratorconfiguration.hxx>
 #include <accelerators/documentacceleratorconfiguration.hxx>
-#include "uiconfiguration/windowstateconfiguration.hxx"
 #include <uielement/recentfilesmenucontroller.hxx>
 #include <uiconfiguration/uicategorydescription.hxx>
 #include <services/sessionlistener.hxx>
@@ -80,7 +79,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::GlobalAcceleratorConfiguration          )   else
                         IFFACTORY( ::framework::ModuleAcceleratorConfiguration          )   else
                         IFFACTORY( ::framework::DocumentAcceleratorConfiguration        )   else
-                        IFFACTORY( ::framework::WindowStateConfiguration                )   else
                         IFFACTORY( ::framework::RecentFilesMenuController               )   else
                         IFFACTORY( ::framework::UICategoryDescription                   )   else
                         IFFACTORY( ::framework::SessionListener                         )   else

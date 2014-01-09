@@ -17,8 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "uiconfiguration/windowstateconfiguration.hxx"
+#include <uiconfiguration/windowstateproperties.hxx>
 #include <threadhelp/resetableguard.hxx>
+#include <threadhelp/threadhelpbase.hxx>
+#include <macros/generic.hxx>
+#include <macros/xinterface.hxx>
+#include <macros/xtypeprovider.hxx>
+#include <macros/xserviceinfo.hxx>
 #include "services.h"
 
 #include "helper/mischelper.hxx"
@@ -29,19 +34,22 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/ui/DockingArea.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 
+#include <cppuhelper/implbase2.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/weak.hxx>
 #include <tools/debug.hxx>
 
-//_________________________________________________________________________________________________________________
-//  Defines
-//_________________________________________________________________________________________________________________
+#include <vector>
+#include <boost/unordered_map.hpp>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -51,32 +59,11 @@ using namespace com::sun::star::configuration;
 using namespace com::sun::star::container;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::ui;
+using namespace framework;
 
 #undef WINDOWSTATE_MASK_POS
 
-//_________________________________________________________________________________________________________________
-//  Namespace
-//_________________________________________________________________________________________________________________
-
-static const char CONFIGURATION_ROOT_ACCESS[]               = "/org.openoffice.Office.UI.";
-static const char CONFIGURATION_WINDOWSTATE_ACCESS[]        = "/UIElements/States";
-
-static const char CONFIGURATION_PROPERTY_LOCKED[]           = WINDOWSTATE_PROPERTY_LOCKED;
-static const char CONFIGURATION_PROPERTY_DOCKED[]           = WINDOWSTATE_PROPERTY_DOCKED;
-static const char CONFIGURATION_PROPERTY_VISIBLE[]          = WINDOWSTATE_PROPERTY_VISIBLE;
-static const char CONFIGURATION_PROPERTY_DOCKINGAREA[]      = WINDOWSTATE_PROPERTY_DOCKINGAREA;
-static const char CONFIGURATION_PROPERTY_DOCKPOS[]          = WINDOWSTATE_PROPERTY_DOCKPOS;
-static const char CONFIGURATION_PROPERTY_DOCKSIZE[]         = WINDOWSTATE_PROPERTY_DOCKSIZE;
-static const char CONFIGURATION_PROPERTY_POS[]              = WINDOWSTATE_PROPERTY_POS;
-static const char CONFIGURATION_PROPERTY_SIZE[]             = WINDOWSTATE_PROPERTY_SIZE;
-static const char CONFIGURATION_PROPERTY_UINAME[]           = WINDOWSTATE_PROPERTY_UINAME;
-static const char CONFIGURATION_PROPERTY_INTERNALSTATE[]    = WINDOWSTATE_PROPERTY_INTERNALSTATE;
-static const char CONFIGURATION_PROPERTY_STYLE[]            = WINDOWSTATE_PROPERTY_STYLE;
-static const char CONFIGURATION_PROPERTY_CONTEXT[]          = WINDOWSTATE_PROPERTY_CONTEXT;
-static const char CONFIGURATION_PROPERTY_HIDEFROMMENU[]     = WINDOWSTATE_PROPERTY_HIDEFROMENU;
-static const char CONFIGURATION_PROPERTY_NOCLOSE[]          = WINDOWSTATE_PROPERTY_NOCLOSE;
-static const char CONFIGURATION_PROPERTY_SOFTCLOSE[]        = WINDOWSTATE_PROPERTY_SOFTCLOSE;
-static const char CONFIGURATION_PROPERTY_CONTEXTACTIVE[]    = WINDOWSTATE_PROPERTY_CONTEXTACTIVE;
+namespace {
 
 // Zero based indexes, order must be the same as WindowStateMask && CONFIGURATION_PROPERTIES!
 static const sal_Int16 PROPERTY_LOCKED                  = 0;
@@ -99,27 +86,24 @@ static const sal_Int16 PROPERTY_DOCKSIZE                = 15;
 // Order must be the same as WindowStateMask!!
 static const char* CONFIGURATION_PROPERTIES[]           =
 {
-    CONFIGURATION_PROPERTY_LOCKED,
-    CONFIGURATION_PROPERTY_DOCKED,
-    CONFIGURATION_PROPERTY_VISIBLE,
-    CONFIGURATION_PROPERTY_CONTEXT,
-    CONFIGURATION_PROPERTY_HIDEFROMMENU,
-    CONFIGURATION_PROPERTY_NOCLOSE,
-    CONFIGURATION_PROPERTY_SOFTCLOSE,
-    CONFIGURATION_PROPERTY_CONTEXTACTIVE,
-    CONFIGURATION_PROPERTY_DOCKINGAREA,
-    CONFIGURATION_PROPERTY_POS,
-    CONFIGURATION_PROPERTY_SIZE,
-    CONFIGURATION_PROPERTY_UINAME,
-    CONFIGURATION_PROPERTY_INTERNALSTATE,
-    CONFIGURATION_PROPERTY_STYLE,
-    CONFIGURATION_PROPERTY_DOCKPOS,
-    CONFIGURATION_PROPERTY_DOCKSIZE,
+    WINDOWSTATE_PROPERTY_LOCKED,
+    WINDOWSTATE_PROPERTY_DOCKED,
+    WINDOWSTATE_PROPERTY_VISIBLE,
+    WINDOWSTATE_PROPERTY_CONTEXT,
+    WINDOWSTATE_PROPERTY_HIDEFROMENU,
+    WINDOWSTATE_PROPERTY_NOCLOSE,
+    WINDOWSTATE_PROPERTY_SOFTCLOSE,
+    WINDOWSTATE_PROPERTY_CONTEXTACTIVE,
+    WINDOWSTATE_PROPERTY_DOCKINGAREA,
+    WINDOWSTATE_PROPERTY_POS,
+    WINDOWSTATE_PROPERTY_SIZE,
+    WINDOWSTATE_PROPERTY_UINAME,
+    WINDOWSTATE_PROPERTY_INTERNALSTATE,
+    WINDOWSTATE_PROPERTY_STYLE,
+    WINDOWSTATE_PROPERTY_DOCKPOS,
+    WINDOWSTATE_PROPERTY_DOCKSIZE,
     0
 };
-
-namespace framework
-{
 
 //*****************************************************************************************************************
 //  Configuration access class for WindowState supplier implementation
@@ -250,13 +234,13 @@ class ConfigurationAccess_WindowState : // Order is necessary for right initiali
 
 ConfigurationAccess_WindowState::ConfigurationAccess_WindowState( const OUString& aModuleName, const Reference< XComponentContext >& rxContext ) :
     ThreadHelpBase(),
-    m_aConfigWindowAccess( CONFIGURATION_ROOT_ACCESS ),
+    m_aConfigWindowAccess( "/org.openoffice.Office.UI." ),
     m_bConfigAccessInitialized( sal_False ),
     m_bModified( sal_False )
 {
     // Create configuration hierachical access name
     m_aConfigWindowAccess += aModuleName;
-    m_aConfigWindowAccess += CONFIGURATION_WINDOWSTATE_ACCESS;
+    m_aConfigWindowAccess += "/UIElements/States";
     m_xConfigProvider = theDefaultProvider::get( rxContext );
 
     // Initialize access array with property names.
@@ -1295,9 +1279,49 @@ sal_Bool ConfigurationAccess_WindowState::impl_initializeConfigAccess()
 }
 
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
+class WindowStateConfiguration :  private ThreadHelpBase, // Struct for right initalization of mutex member! Must be first of baseclasses.
+                                  public ::cppu::WeakImplHelper2< css::container::XNameAccess, css::lang::XServiceInfo>
+{
+    public:
+        WindowStateConfiguration( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+        virtual ~WindowStateConfiguration();
+
+        //  XInterface, XTypeProvider, XServiceInfo
+        DECLARE_XSERVICEINFO
+
+        // XNameAccess
+        virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
+            throw ( css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+
+        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames()
+            throw (css::uno::RuntimeException);
+
+        virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
+            throw (css::uno::RuntimeException);
+
+        // XElementAccess
+        virtual css::uno::Type SAL_CALL getElementType()
+            throw (css::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL hasElements()
+            throw (css::uno::RuntimeException);
+
+        typedef ::boost::unordered_map< OUString,
+                                 OUString,
+                                 OUStringHash,
+                                 ::std::equal_to< OUString > > ModuleToWindowStateFileMap;
+
+        typedef ::boost::unordered_map< OUString,
+                                 css::uno::Reference< css::container::XNameAccess >,
+                                 OUStringHash,
+                                 ::std::equal_to< OUString > > ModuleToWindowStateConfigHashMap;
+
+    private:
+        css::uno::Reference< css::uno::XComponentContext>         m_xContext;
+        ModuleToWindowStateFileMap                                m_aModuleToFileHashMap;
+        ModuleToWindowStateConfigHashMap                          m_aModuleToWindowStateHashMap;
+        css::uno::Reference< css::frame::XModuleManager2 >        m_xModuleManager;
+};
+
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   WindowStateConfiguration                    ,
                                             ::cppu::OWeakObject                         ,
                                             "com.sun.star.ui.WindowStateConfiguration"  ,
@@ -1432,6 +1456,17 @@ throw (::com::sun::star::uno::RuntimeException)
     return sal_True;
 }
 
-} // namespace framework
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_WindowStateConfiguration_get_implementation(
+        css::uno::XComponentContext * context,
+        uno_Sequence * arguments)
+{
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    rtl::Reference<WindowStateConfiguration> x(new WindowStateConfiguration(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
