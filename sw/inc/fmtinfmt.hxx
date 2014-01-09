@@ -33,15 +33,15 @@ class SW_DLLPUBLIC SwFmtINetFmt: public SfxPoolItem
 {
     friend class SwTxtINetFmt;
 
-    OUString aURL;                  ///< URL.
-    OUString aTargetFrame;          ///< Target frame for URL.
-    OUString aINetFmt;
-    OUString aVisitedFmt;
-    OUString aName;                 ///< Name of the link.
-    SvxMacroTableDtor* pMacroTbl;
-    SwTxtINetFmt* pTxtAttr;         ///< My TextAttribute.
-    sal_uInt16 nINetId;
-    sal_uInt16 nVisitedId;
+    OUString msURL;                  ///< URL.
+    OUString msTargetFrame;          ///< Target frame for URL.
+    OUString msINetFmtName;
+    OUString msVisitedFmtName;
+    OUString msHyperlinkName;        ///< Name of the link.
+    SvxMacroTableDtor* mpMacroTbl;
+    SwTxtINetFmt* mpTxtAttr;         ///< My TextAttribute.
+    sal_uInt16 mnINetFmtId;
+    sal_uInt16 mnVisitedFmtId;
 public:
     SwFmtINetFmt( const OUString& rURL, const OUString& rTarget );
     SwFmtINetFmt( const SwFmtINetFmt& rAttr );
@@ -65,34 +65,81 @@ public:
                                         sal_uInt8 nMemberId = 0 );
 
 
-    const SwTxtINetFmt* GetTxtINetFmt() const   { return pTxtAttr; }
-    SwTxtINetFmt* GetTxtINetFmt()               { return pTxtAttr; }
+    const SwTxtINetFmt* GetTxtINetFmt() const
+    {
+        return mpTxtAttr;
+    }
+    SwTxtINetFmt* GetTxtINetFmt()
+    {
+        return mpTxtAttr;
+    }
 
-    OUString GetValue() const               { return aURL; }
+    const OUString& GetValue() const
+    {
+        return msURL;
+    }
 
-    OUString GetName() const                { return aName; }
-    void SetName( const OUString& rNm )     { aName = rNm; }
+    const OUString& GetName() const
+    {
+        return msHyperlinkName;
+    }
+    void SetName( const OUString& rNm )
+    {
+        msHyperlinkName = rNm;
+    }
 
-    OUString GetTargetFrame() const         { return aTargetFrame; }
+    const OUString& GetTargetFrame() const
+    {
+        return msTargetFrame;
+    }
 
-    OUString GetINetFmt() const             { return aINetFmt; }
-    void SetINetFmt( const OUString& rNm )  { aINetFmt = rNm; }
+    void SetINetFmtAndId(
+            const OUString& rNm,
+            const sal_uInt16 nId )
+    {
+        msINetFmtName = rNm;
+        mnINetFmtId = nId;
+    }
 
-    OUString GetVisitedFmt() const            { return aVisitedFmt; }
-    void SetVisitedFmt( const OUString& rNm ) { aVisitedFmt = rNm; }
+    const OUString& GetINetFmt() const
+    {
+        return msINetFmtName;
+    }
 
-    sal_uInt16 GetINetFmtId() const             { return nINetId; }
-    void SetINetFmtId( sal_uInt16 nNew )        { nINetId = nNew; }
+    sal_uInt16 GetINetFmtId() const
+    {
+        return mnINetFmtId;
+    }
 
-    sal_uInt16 GetVisitedFmtId() const          { return nVisitedId; }
-    void SetVisitedFmtId( sal_uInt16 nNew )     { nVisitedId = nNew; }
+    void SetVisitedFmtAndId(
+            const OUString& rNm,
+            const sal_uInt16 nId )
+    {
+        msVisitedFmtName = rNm;
+        mnVisitedFmtId = nId;
+    }
+
+    const OUString& GetVisitedFmt() const
+    {
+        return msVisitedFmtName;
+    }
+
+    sal_uInt16 GetVisitedFmtId() const
+    {
+        return mnVisitedFmtId;
+    }
 
     /// Set a new MacroTable or clear the current one.
     void SetMacroTbl( const SvxMacroTableDtor* pTbl = 0 );
-    const SvxMacroTableDtor* GetMacroTbl() const    { return pMacroTbl; }
+    const SvxMacroTableDtor* GetMacroTbl() const
+    {
+        return mpMacroTbl;
+    }
 
     /// Macro getter and setter.
-    void SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro );
+    void SetMacro(
+            sal_uInt16 nEvent,
+            const SvxMacro& rMacro );
     const SvxMacro* GetMacro( sal_uInt16 nEvent ) const;
 };
 

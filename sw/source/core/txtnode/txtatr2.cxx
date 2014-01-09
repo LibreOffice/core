@@ -117,7 +117,7 @@ SwTxtINetFmt::SwTxtINetFmt( SwFmtINetFmt& rAttr,
     , m_bVisited( false )
     , m_bVisitedValid( false )
 {
-    rAttr.pTxtAttr  = this;
+    rAttr.mpTxtAttr  = this;
     SetCharFmtAttr( true );
 }
 
@@ -130,7 +130,7 @@ SwCharFmt* SwTxtINetFmt::GetCharFmt()
     const SwFmtINetFmt& rFmt = SwTxtAttrEnd::GetINetFmt();
     SwCharFmt* pRet = NULL;
 
-    if( !rFmt.GetValue().isEmpty() )
+    if (!rFmt.GetValue().isEmpty())
     {
         const SwDoc* pDoc = GetTxtNode().GetDoc();
         if( !IsVisitedValid() )
@@ -138,38 +138,38 @@ SwCharFmt* SwTxtINetFmt::GetCharFmt()
             SetVisited( pDoc->IsVisitedURL( rFmt.GetValue() ) );
             SetVisitedValid( true );
         }
-        sal_uInt16 nId;
-        const OUString rStr = IsVisited() ? rFmt.GetVisitedFmt()
-                                           : rFmt.GetINetFmt();
-        if( !rStr.isEmpty() )
-            nId = IsVisited() ? rFmt.GetVisitedFmtId() : rFmt.GetINetFmtId();
-        else
-            nId = static_cast<sal_uInt16>(IsVisited() ? RES_POOLCHR_INET_VISIT : RES_POOLCHR_INET_NORMAL);
+
+        const sal_uInt16 nId = IsVisited() ? rFmt.GetVisitedFmtId() : rFmt.GetINetFmtId();
+        const OUString& rStr = IsVisited() ? rFmt.GetVisitedFmt() : rFmt.GetINetFmt();
+        if (rStr.isEmpty())
+        {
+            OSL_ENSURE( false, "<SwTxtINetFmt::GetCharFmt()> - missing character format at hyperlink attribute");
+        }
 
         // JP 10.02.2000, Bug 72806: dont modify the doc for getting the
         //      correct charstyle.
         bool bResetMod = !pDoc->IsModified();
         Link aOle2Lnk;
-        if( bResetMod )
+        if ( bResetMod )
         {
             aOle2Lnk = pDoc->GetOle2Link();
-            ((SwDoc*)pDoc)->SetOle2Link( Link() );
+            ( (SwDoc*) pDoc )->SetOle2Link( Link() );
         }
 
         pRet = IsPoolUserFmt( nId )
-                ? ((SwDoc*)pDoc)->FindCharFmtByName( rStr )
-                : ((SwDoc*)pDoc)->GetCharFmtFromPool( nId );
+               ? ( (SwDoc*) pDoc )->FindCharFmtByName( rStr )
+               : ( (SwDoc*) pDoc )->GetCharFmtFromPool( nId );
 
-        if( bResetMod )
+        if ( bResetMod )
         {
-            ((SwDoc*)pDoc)->ResetModified();
-            ((SwDoc*)pDoc)->SetOle2Link( aOle2Lnk );
+            ( (SwDoc*) pDoc )->ResetModified();
+            ( (SwDoc*) pDoc )->SetOle2Link( aOle2Lnk );
         }
     }
 
-    if( pRet )
+    if ( pRet )
         pRet->Add( this );
-    else if( GetRegisteredIn() )
+    else if ( GetRegisteredIn() )
         GetRegisteredInNonConst()->Remove( this );
 
     return pRet;

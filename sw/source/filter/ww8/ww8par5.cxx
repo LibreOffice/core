@@ -2076,13 +2076,11 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, OUString& rStr )
             OUString sURL = OUString(INET_MARK_TOKEN) + sBookmarkName;
             const OUString sTarget;
             SwFmtINetFmt aURL( sURL, sTarget );
-            OUString sLinkStyle("Index Link");
-            sal_uInt16 nPoolId =
+            const OUString sLinkStyle("Index Link");
+            const sal_uInt16 nPoolId =
                 SwStyleNameMapper::GetPoolIdFromUIName( sLinkStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
-            aURL.SetVisitedFmt(sLinkStyle);
-            aURL.SetINetFmt(sLinkStyle);
-            aURL.SetVisitedFmtId(nPoolId);
-            aURL.SetINetFmtId(nPoolId);
+            aURL.SetVisitedFmtAndId( sLinkStyle, nPoolId);
+            aURL.SetINetFmtAndId( sLinkStyle, nPoolId );
             pCtrlStck->NewAttr( *pPaM->GetPoint(), aURL );
         }
         return FLD_TEXT;
@@ -3460,10 +3458,8 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr 
         OUString sLinkStyle("Index Link");
         sal_uInt16 nPoolId =
             SwStyleNameMapper::GetPoolIdFromUIName( sLinkStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
-        aURL.SetVisitedFmt(sLinkStyle);
-        aURL.SetINetFmt(sLinkStyle);
-        aURL.SetVisitedFmtId(nPoolId);
-        aURL.SetINetFmtId(nPoolId);
+        aURL.SetVisitedFmtAndId( sLinkStyle, nPoolId );
+        aURL.SetINetFmtAndId( sLinkStyle, nPoolId );
     }
 
     //As an attribute this needs to be closed, and that'll happen from

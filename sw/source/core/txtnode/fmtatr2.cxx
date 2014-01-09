@@ -18,7 +18,8 @@
  */
 
 
-#include "hintids.hxx"
+#include <hintids.hxx>
+#include <poolfmt.hxx>
 #include "unomid.h"
 
 #include <basic/sbxvar.hxx>
@@ -178,43 +179,53 @@ bool SwFmtAutoFmt::PutValue( const uno::Any& , sal_uInt8 )
 *************************************************************************/
 
 SwFmtINetFmt::SwFmtINetFmt()
-    : SfxPoolItem( RES_TXTATR_INETFMT ),
-    pMacroTbl( 0 ),
-    pTxtAttr( 0 ),
-    nINetId( 0 ),
-    nVisitedId( 0 )
+    : SfxPoolItem( RES_TXTATR_INETFMT )
+    , msURL()
+    , msTargetFrame()
+    , msINetFmtName()
+    , msVisitedFmtName()
+    , msHyperlinkName()
+    , mpMacroTbl( 0 )
+    , mpTxtAttr( 0 )
+    , mnINetFmtId( 0 )
+    , mnVisitedFmtId( 0 )
 {}
 
 SwFmtINetFmt::SwFmtINetFmt( const OUString& rURL, const OUString& rTarget )
-    : SfxPoolItem( RES_TXTATR_INETFMT ),
-    aURL( rURL ),
-    aTargetFrame( rTarget ),
-    pMacroTbl( 0 ),
-    pTxtAttr( 0 ),
-    nINetId( 0 ),
-    nVisitedId( 0 )
+    : SfxPoolItem( RES_TXTATR_INETFMT )
+    , msURL( rURL )
+    , msTargetFrame( rTarget )
+    , msINetFmtName()
+    , msVisitedFmtName()
+    , msHyperlinkName()
+    , mpMacroTbl( 0 )
+    , mpTxtAttr( 0 )
+    , mnINetFmtId( RES_POOLCHR_INET_NORMAL )
+    , mnVisitedFmtId( RES_POOLCHR_INET_VISIT )
 {
+    SwStyleNameMapper::FillUIName( mnINetFmtId, msINetFmtName );
+    SwStyleNameMapper::FillUIName( mnVisitedFmtId, msVisitedFmtName );
 }
 
 SwFmtINetFmt::SwFmtINetFmt( const SwFmtINetFmt& rAttr )
-    : SfxPoolItem( RES_TXTATR_INETFMT ),
-    aURL( rAttr.GetValue() ),
-    aTargetFrame( rAttr.aTargetFrame ),
-    aINetFmt( rAttr.aINetFmt ),
-    aVisitedFmt( rAttr.aVisitedFmt ),
-    aName( rAttr.aName ),
-    pMacroTbl( 0 ),
-    pTxtAttr( 0 ),
-    nINetId( rAttr.nINetId ),
-    nVisitedId( rAttr.nVisitedId )
+    : SfxPoolItem( RES_TXTATR_INETFMT )
+    , msURL( rAttr.GetValue() )
+    , msTargetFrame( rAttr.msTargetFrame )
+    , msINetFmtName( rAttr.msINetFmtName )
+    , msVisitedFmtName( rAttr.msVisitedFmtName )
+    , msHyperlinkName( rAttr.msHyperlinkName )
+    , mpMacroTbl( 0 )
+    , mpTxtAttr( 0 )
+    , mnINetFmtId( rAttr.mnINetFmtId )
+    , mnVisitedFmtId( rAttr.mnVisitedFmtId )
 {
-    if( rAttr.GetMacroTbl() )
-        pMacroTbl = new SvxMacroTableDtor( *rAttr.GetMacroTbl() );
+    if ( rAttr.GetMacroTbl() )
+        mpMacroTbl = new SvxMacroTableDtor( *rAttr.GetMacroTbl() );
 }
 
 SwFmtINetFmt::~SwFmtINetFmt()
 {
-    delete pMacroTbl;
+    delete mpMacroTbl;
 }
 
 
@@ -223,24 +234,24 @@ int SwFmtINetFmt::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     bool bRet = SfxPoolItem::operator==( (SfxPoolItem&) rAttr )
-                && aURL == ((SwFmtINetFmt&)rAttr).aURL
-                && aName == ((SwFmtINetFmt&)rAttr).aName
-                && aTargetFrame == ((SwFmtINetFmt&)rAttr).aTargetFrame
-                && aINetFmt == ((SwFmtINetFmt&)rAttr).aINetFmt
-                && aVisitedFmt == ((SwFmtINetFmt&)rAttr).aVisitedFmt
-                && nINetId == ((SwFmtINetFmt&)rAttr).nINetId
-                && nVisitedId == ((SwFmtINetFmt&)rAttr).nVisitedId;
+                && msURL == ((SwFmtINetFmt&)rAttr).msURL
+                && msHyperlinkName == ((SwFmtINetFmt&)rAttr).msHyperlinkName
+                && msTargetFrame == ((SwFmtINetFmt&)rAttr).msTargetFrame
+                && msINetFmtName == ((SwFmtINetFmt&)rAttr).msINetFmtName
+                && msVisitedFmtName == ((SwFmtINetFmt&)rAttr).msVisitedFmtName
+                && mnINetFmtId == ((SwFmtINetFmt&)rAttr).mnINetFmtId
+                && mnVisitedFmtId == ((SwFmtINetFmt&)rAttr).mnVisitedFmtId;
 
     if( !bRet )
         return sal_False;
 
-    const SvxMacroTableDtor* pOther = ((SwFmtINetFmt&)rAttr).pMacroTbl;
-    if( !pMacroTbl )
+    const SvxMacroTableDtor* pOther = ((SwFmtINetFmt&)rAttr).mpMacroTbl;
+    if( !mpMacroTbl )
         return ( !pOther || pOther->empty() );
     if( !pOther )
-        return pMacroTbl->empty();
+        return mpMacroTbl->empty();
 
-    const SvxMacroTableDtor& rOwn = *pMacroTbl;
+    const SvxMacroTableDtor& rOwn = *mpMacroTbl;
     const SvxMacroTableDtor& rOther = *pOther;
 
     return rOwn == rOther;
@@ -259,23 +270,23 @@ void SwFmtINetFmt::SetMacroTbl( const SvxMacroTableDtor* pNewTbl )
 {
     if( pNewTbl )
     {
-        if( pMacroTbl )
-            *pMacroTbl = *pNewTbl;
+        if( mpMacroTbl )
+            *mpMacroTbl = *pNewTbl;
         else
-            pMacroTbl = new SvxMacroTableDtor( *pNewTbl );
+            mpMacroTbl = new SvxMacroTableDtor( *pNewTbl );
     }
     else
-        delete pMacroTbl, pMacroTbl = 0;
+        delete mpMacroTbl, mpMacroTbl = 0;
 }
 
 
 
 void SwFmtINetFmt::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
 {
-    if( !pMacroTbl )
-        pMacroTbl = new SvxMacroTableDtor;
+    if( !mpMacroTbl )
+        mpMacroTbl = new SvxMacroTableDtor;
 
-     pMacroTbl->Insert( nEvent, rMacro );
+    mpMacroTbl->Insert( nEvent, rMacro );
 }
 
 
@@ -283,8 +294,8 @@ void SwFmtINetFmt::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
 const SvxMacro* SwFmtINetFmt::GetMacro( sal_uInt16 nEvent ) const
 {
     const SvxMacro* pRet = 0;
-    if( pMacroTbl && pMacroTbl->IsKeyValid( nEvent ) )
-        pRet = pMacroTbl->Get( nEvent );
+    if( mpMacroTbl && mpMacroTbl->IsKeyValid( nEvent ) )
+        pRet = mpMacroTbl->Get( nEvent );
     return pRet;
 }
 
@@ -296,19 +307,19 @@ bool SwFmtINetFmt::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     switch(nMemberId)
     {
         case MID_URL_URL:
-            rVal <<= aURL;
+            rVal <<= msURL;
         break;
         case MID_URL_TARGET:
-            rVal <<= aTargetFrame;
+            rVal <<= msTargetFrame;
         break;
         case MID_URL_HYPERLINKNAME:
-            rVal <<= aName;
+            rVal <<= msHyperlinkName;
         break;
         case MID_URL_VISITED_FMT:
         {
-            OUString sVal = aVisitedFmt;
-            if (sVal.isEmpty() && nVisitedId != 0)
-                SwStyleNameMapper::FillUIName(nVisitedId, sVal);
+            OUString sVal = msVisitedFmtName;
+            if (sVal.isEmpty() && mnVisitedFmtId != 0)
+                SwStyleNameMapper::FillUIName(mnVisitedFmtId, sVal);
             if (!sVal.isEmpty())
                 SwStyleNameMapper::FillProgName(sVal, sVal,
                         nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true);
@@ -317,9 +328,9 @@ bool SwFmtINetFmt::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_URL_UNVISITED_FMT:
         {
-            OUString sVal = aINetFmt;
-            if (sVal.isEmpty() && nINetId != 0)
-                SwStyleNameMapper::FillUIName(nINetId, sVal);
+            OUString sVal = msVisitedFmtName;
+            if (sVal.isEmpty() && mnVisitedFmtId != 0)
+                SwStyleNameMapper::FillUIName(mnVisitedFmtId, sVal);
             if (!sVal.isEmpty())
                 SwStyleNameMapper::FillProgName(sVal, sVal,
                         nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true);
@@ -380,13 +391,13 @@ bool SwFmtINetFmt::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
         switch(nMemberId)
         {
             case MID_URL_URL:
-                rVal >>= aURL;
+                rVal >>= msURL;
                 break;
             case MID_URL_TARGET:
-                rVal >>= aTargetFrame;
+                rVal >>= msTargetFrame;
                 break;
             case MID_URL_HYPERLINKNAME:
-                rVal >>= aName;
+                rVal >>= msHyperlinkName;
                 break;
             case MID_URL_VISITED_FMT:
             {
@@ -394,8 +405,8 @@ bool SwFmtINetFmt::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
                 rVal >>= sVal;
                 OUString aString;
                 SwStyleNameMapper::FillUIName( sVal, aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
-                aVisitedFmt = aString;
-                nVisitedId = SwStyleNameMapper::GetPoolIdFromUIName( aVisitedFmt,
+                msVisitedFmtName = aString;
+                mnVisitedFmtId = SwStyleNameMapper::GetPoolIdFromUIName( msVisitedFmtName,
                                                nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
             }
             break;
@@ -405,8 +416,8 @@ bool SwFmtINetFmt::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
                 rVal >>= sVal;
                 OUString aString;
                 SwStyleNameMapper::FillUIName( sVal, aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
-                aINetFmt = aString;
-                nINetId = SwStyleNameMapper::GetPoolIdFromUIName( aINetFmt, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+                msINetFmtName = aString;
+                mnINetFmtId = SwStyleNameMapper::GetPoolIdFromUIName( msINetFmtName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
             }
             break;
             default:

@@ -179,37 +179,42 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
     SwTxtFmtColl* pColl = 0;
 
     // Is only set if the whole paragraph is selected and AutoUpdateFmt is set.
-    if( rWrtSh.HasSelection() && rWrtSh.IsSelFullPara() )
+    if (rWrtSh.HasSelection() && rWrtSh.IsSelFullPara())
     {
         pColl = rWrtSh.GetCurTxtFmtColl();
-        if(pColl && !pColl->IsAutoUpdateFmt())
+        if ( pColl && !pColl->IsAutoUpdateFmt() )
             pColl = 0;
     }
     SfxItemPool& rPool = GetPool();
-    sal_uInt16 nWhich = rPool.GetWhich(nSlot);
-    switch ( nSlot )
+    sal_uInt16 nWhich = rPool.GetWhich( nSlot );
+    switch (nSlot)
     {
         case FN_TXTATR_INET:
         // Special treatment of the PoolId of the SwFmtInetFmt
         if(bArgs)
         {
-            const SfxPoolItem& rItem = pArgs->Get(nWhich );
+            const SfxPoolItem& rItem = pArgs->Get( nWhich );
 
-            SwFmtINetFmt aINetFmt((const SwFmtINetFmt&)rItem);
-            if( USHRT_MAX == aINetFmt.GetVisitedFmtId() )
+            SwFmtINetFmt aINetFmt( (const SwFmtINetFmt&) rItem );
+            if ( USHRT_MAX == aINetFmt.GetVisitedFmtId() )
             {
-                aINetFmt.SetVisitedFmtId(
-                        SwStyleNameMapper::GetPoolIdFromUIName( aINetFmt.GetVisitedFmt(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT));
+                OSL_ENSURE( false, "<SwTextShell::ExecCharAttrArgs(..)> - unexpected visited character format ID at hyperlink attribute" );
+                aINetFmt.SetVisitedFmtAndId(
+                        aINetFmt.GetVisitedFmt(),
+                        SwStyleNameMapper::GetPoolIdFromUIName( aINetFmt.GetVisitedFmt(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT ) );
             }
-            if( USHRT_MAX == aINetFmt.GetINetFmtId() )
+            if ( USHRT_MAX == aINetFmt.GetINetFmtId() )
             {
-                aINetFmt.SetINetFmtId(
-                        SwStyleNameMapper::GetPoolIdFromUIName( aINetFmt.GetINetFmt(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT));
+                OSL_ENSURE( false, "<SwTextShell::ExecCharAttrArgs(..)> - unexpected unvisited character format ID at hyperlink attribute" );
+                aINetFmt.SetINetFmtAndId(
+                        aINetFmt.GetINetFmt(),
+                        SwStyleNameMapper::GetPoolIdFromUIName( aINetFmt.GetINetFmt(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT ) );
             }
 
             if ( pColl )
                 pColl->SetFmtAttr( aINetFmt );
-            else rWrtSh.SetAttrItem( aINetFmt );
+            else
+                rWrtSh.SetAttrItem( aINetFmt );
             rReq.Done();
         }
         break;
