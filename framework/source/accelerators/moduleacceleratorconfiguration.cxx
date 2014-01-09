@@ -17,65 +17,99 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accelerators/moduleacceleratorconfiguration.hxx>
-
+#include <accelerators/acceleratorconfiguration.hxx>
+#include <accelerators/presethandler.hxx>
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 #include "helper/mischelper.hxx"
 
 #include <acceleratorconst.h>
-#include <services.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 
+#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/util/XChangesNotifier.hpp>
 
-
+#include <cppuhelper/implbase1.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/logfile.h>
 
-namespace framework
+using namespace framework;
+
+namespace {
+
+/**
+    implements a read/write access to a module
+    dependend accelerator configuration.
+ */
+typedef ::cppu::ImplInheritanceHelper1<
+            XCUBasedAcceleratorConfiguration,
+            css::lang::XServiceInfo > ModuleAcceleratorConfiguration_BASE;
+
+class ModuleAcceleratorConfiguration : public ModuleAcceleratorConfiguration_BASE
 {
+private:
+    /** identify the application module, where this accelerator
+        configuration cache should work on. */
+    OUString m_sModule;
+    OUString m_sLocale;
 
-//-----------------------------------------------
-// XInterface, XTypeProvider, XServiceInfo
+public:
 
-DEFINE_XSERVICEINFO_MULTISERVICE_2(ModuleAcceleratorConfiguration                   ,
-                                   ::cppu::OWeakObject                              ,
-                                   "com.sun.star.ui.ModuleAcceleratorConfiguration" ,
-                                   OUString("com.sun.star.comp.framework.ModuleAcceleratorConfiguration"))
+    /** initialize this instance and fill the internal cache.
 
-DEFINE_INIT_SERVICE(ModuleAcceleratorConfiguration,
-                    {
-                        /*Attention
-                        I think we don't need any mutex or lock here ... because we are called by our own static method impl_createInstance()
-                        to create a new instance of this class by our own supported service factory.
-                        see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further information!
-                        */
-                    }
-                   )
+        @param  xSMGR
+                reference to an uno service manager, which is used internaly.
+     */
+    ModuleAcceleratorConfiguration(
+            const css::uno::Reference< css::uno::XComponentContext >& xContext,
+            const css::uno::Sequence< css::uno::Any >& lArguments);
 
-//-----------------------------------------------
-ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext)
+    /** TODO */
+    virtual ~ModuleAcceleratorConfiguration();
+
+    virtual OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException)
+    {
+        return OUString("com.sun.star.comp.framework.ModuleAcceleratorConfiguration");
+    }
+
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException)
+    {
+        return cppu::supportsService(this, ServiceName);
+    }
+
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException)
+    {
+        css::uno::Sequence< OUString > aSeq(1);
+        aSeq[0] = OUString("com.sun.star.ui.ModuleAcceleratorConfiguration");
+        return aSeq;
+    }
+
+    // XComponent
+    virtual  void SAL_CALL dispose() throw (css::uno::RuntimeException);
+
+    /** read all data into the cache. */
+    void impl_ts_fillCache();
+
+private:
+    /** helper to listen for configuration changes without ownership cycle problems */
+    css::uno::Reference< css::util::XChangesListener > m_xCfgListener;
+};
+
+ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration(
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Sequence< css::uno::Any >& lArguments)
     : ModuleAcceleratorConfiguration_BASE(xContext)
 {
-}
-
-//-----------------------------------------------
-ModuleAcceleratorConfiguration::~ModuleAcceleratorConfiguration()
-{
-}
-
-//-----------------------------------------------
-void SAL_CALL ModuleAcceleratorConfiguration::initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
-    throw(css::uno::Exception       ,
-          css::uno::RuntimeException)
-{
-    // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
 
     OUString sModule;
@@ -95,12 +129,12 @@ void SAL_CALL ModuleAcceleratorConfiguration::initialize(const css::uno::Sequenc
                 static_cast< ::cppu::OWeakObject* >(this));
 
     aWriteLock.unlock();
-    // <- SAFE ----------------------------------
-
-    impl_ts_fillCache();
 }
 
-//-----------------------------------------------
+ModuleAcceleratorConfiguration::~ModuleAcceleratorConfiguration()
+{
+}
+
 void ModuleAcceleratorConfiguration::impl_ts_fillCache()
 {
     // SAFE -> ----------------------------------
@@ -153,6 +187,17 @@ void SAL_CALL ModuleAcceleratorConfiguration::dispose()
     {}
 }
 
-} // namespace framework
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_ModuleAcceleratorConfiguration_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &arguments)
+{
+    rtl::Reference<ModuleAcceleratorConfiguration> x(new ModuleAcceleratorConfiguration(context, arguments));
+    x->impl_ts_fillCache();
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
