@@ -47,6 +47,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#include <com/sun/star/chart2/XFormattedString.hpp>
 
 #include "PropertyMapper.hxx"
 #include "VLineProperties.hxx"
@@ -384,6 +385,20 @@ public:
 private:
     OUString maText;
     uno::Any maTrans;
+};
+
+class DummyFormattedText : public DummyXShape
+{
+public:
+    DummyFormattedText(uno::Sequence< uno::Reference<
+        chart2::XFormattedString > >& rFormattedString,
+        uno::Reference< beans::XPropertySet > xPropSet, double fRotation);
+
+private:
+    com::sun::star::uno::Sequence< com::sun::star::uno::Reference<
+        chart2::XFormattedString > > maFormattedString;
+
+    double mfRotation;
 };
 
 

@@ -164,7 +164,7 @@ public:
         createText( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget2D,
                 const com::sun::star::awt::Size& rSize,
                 const com::sun::star::awt::Point& rPosition,
-                com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::chart2::XFormattedString > > xFormattedString,
+                com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::chart2::XFormattedString > >& xFormattedString,
                 const com::sun::star::uno::Reference<
                 com::sun::star::beans::XPropertySet > xTextProperties,
                 double nRotation, const OUString& aName );

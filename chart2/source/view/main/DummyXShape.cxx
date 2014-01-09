@@ -618,6 +618,16 @@ void DummyText::render()
     pChart->m_GLRender.RenderTextShape();
 }
 
+DummyFormattedText::DummyFormattedText(uno::Sequence< uno::Reference<
+        chart2::XFormattedString > >& rFormattedString,
+        uno::Reference< beans::XPropertySet > , double fRotation):
+    maFormattedString(rFormattedString),
+    mfRotation(fRotation)
+{
+}
+
+
+
 DummyGroup3D::DummyGroup3D(const OUString& rName)
 {
     setName(rName);

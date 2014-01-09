@@ -2136,7 +2136,7 @@ uno::Reference< drawing::XShape >
         ShapeFactory::createText( const uno::Reference< drawing::XShapes >& xTarget,
                 const awt::Size& rSize,
                 const awt::Point& rPos,
-                uno::Sequence< uno::Reference< chart2::XFormattedString > > xFormattedString,
+                uno::Sequence< uno::Reference< chart2::XFormattedString > >& xFormattedString,
                 const uno::Reference<
                 beans::XPropertySet > xTextProperties,
                 double nRotation, const OUString& aName )

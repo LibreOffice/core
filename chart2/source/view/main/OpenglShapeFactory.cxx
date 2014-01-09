@@ -413,14 +413,19 @@ uno::Reference< drawing::XShape >
 
 
 uno::Reference< drawing::XShape >
-        OpenglShapeFactory::createText( const uno::Reference< drawing::XShapes >& ,
-                const awt::Size& , const awt::Point& ,
-                uno::Sequence< uno::Reference< chart2::XFormattedString > > ,
-                const uno::Reference< beans::XPropertySet > ,
-                double , const OUString& )
+        OpenglShapeFactory::createText( const uno::Reference< drawing::XShapes >& xTarget,
+                const awt::Size& rSize, const awt::Point& rPos,
+                uno::Sequence< uno::Reference< chart2::XFormattedString > >& rFormattedString,
+                const uno::Reference< beans::XPropertySet > xPropSet,
+                double fRotation, const OUString& rName)
 {
-    // how the hell should we support that?
-    return uno::Reference< drawing::XShape >();
+    dummy::DummyFormattedText* pText = new dummy::DummyFormattedText( rFormattedString,
+            xPropSet, fRotation );
+    pText->setPosition(rPos);
+    pText->setSize(rSize);
+    pText->setName(rName);
+    xTarget->add(pText);
+    return pText;
 }
 
 void OpenglShapeFactory::render(uno::Reference< drawing::XShapes > xRootShape)
