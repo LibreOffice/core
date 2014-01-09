@@ -2239,9 +2239,9 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
             case ocGauss:
                 mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpGauss));
                 break;
-            case ocGeoMean:
+            /*case ocGeoMean:
                 mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpGeoMean));
-                break;
+                break;*/
             case ocHarMean:
                 mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpHarMean));
                 break;
@@ -2314,10 +2314,10 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i], new OpWeibull));
                 break;
-            case ocMedian:
+            /*case ocMedian:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i],new OpMedian));
-                break;
+                break;*/
             case ocGDA:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i],new OpDDB));
@@ -2330,18 +2330,18 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i],new OpSumIfs));
                  break;
-            case ocVBD:
+            /*case ocVBD:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i],new OpVDB));
-                 break;
+                 break;*/
             case ocKurt:
                 mvSubArguments.push_back(SoPHelper(ts,
                         ft->Children[i], new OpKurt));
                  break;
-            case ocZZR:
+            /*case ocZZR:
                 mvSubArguments.push_back(SoPHelper(ts,
                         ft->Children[i], new OpNper));
-                 break;
+                 break;*/
             case ocNormDist:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i],new OpNormdist));
@@ -2450,10 +2450,10 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i], new OpLogNormDist));
                 break;
-            case ocGammaDist:
+            /*case ocGammaDist:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i], new OpGammaDist));
-                break;
+                break;*/
             case ocLn:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i],new OpLn));
@@ -2478,10 +2478,10 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i], new OpVar));
                 break;
-            case ocChiDist:
+            /*case ocChiDist:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i],new OpChiDist));
-                break;
+                break;*/
             case ocPow:
             case ocPower:
                 mvSubArguments.push_back(SoPHelper(ts,
@@ -2491,7 +2491,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i], new OpOdd));
                 break;
-            case ocChiSqDist:
+            /*case ocChiSqDist:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i],new OpChiSqDist));
                 break;
@@ -2502,15 +2502,15 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
             case ocGammaInv:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i], new OpGammaInv));
-                break;
+                break;*/
             case ocFloor:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i], new OpFloor));
                 break;
-            case ocFInv:
+            /*case ocFInv:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i], new OpFInv));
-                break;
+                break;*/
             case ocFTest:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i], new OpFTest));
@@ -2591,10 +2591,10 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 mvSubArguments.push_back(SoPHelper(ts,
                     ft->Children[i], new OpBitXor));
                 break;
-            case ocChiInv:
+            /*case ocChiInv:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i],new OpChiInv));
-                break;
+                break;*/
             case ocPoissonDist:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i],new OpPoisson));
@@ -2657,10 +2657,10 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i], new OpProduct));
                 break;
-            case ocHypGeomDist:
+            /*case ocHypGeomDist:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i],new OpHypGeomDist));
-                break;
+                break;*/
             case ocSumX2MY2:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i],new OpSumX2MY2));
@@ -2669,10 +2669,10 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i],new OpSumX2PY2));
                  break;
-            case ocBetaInv:
+            /*case ocBetaInv:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i],new OpBetainv));
-                 break;
+                 break;*/
             case ocTTest:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i], new OpTTest));
@@ -2681,10 +2681,10 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i], new OpTDist));
                  break;
-            case ocTInv:
+            /*case ocTInv:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i], new OpTInv));
-                 break;
+                 break;*/
             case ocSumXMY2:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i],new OpSumXMY2));
@@ -2845,10 +2845,10 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i], new OpSumIf));
                  break;
-            case ocNegSub:
+            /*case ocNegSub:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i], new OpNegSub));
-                 break;
+                 break;*/
             case ocAveDev:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i], new OpAveDev));
@@ -2909,11 +2909,11 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 {
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpFvschedule));
                 }
-                else if ( !(pChild->GetExternal().compareTo(OUString(
+                /*else if ( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getYield"))))
                 {
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpYield));
-                }
+                }*/
                 else if ( !(pChild->GetExternal().compareTo(OUString(
                    "com.sun.star.sheet.addin.Analysis.getYielddisc"))))
                 {
@@ -2976,12 +2976,12 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
                         new OpCoupnum));
                 }
-                else if ( !(pChild->GetExternal().compareTo(OUString(
+                /*else if ( !(pChild->GetExternal().compareTo(OUString(
                    "com.sun.star.sheet.addin.Analysis.getDuration"))))
                 {
                     mvSubArguments.push_back(
                         SoPHelper(ts, ft->Children[i], new OpDuration_ADD));
-                }
+                }*/
                 else if ( !(pChild->GetExternal().compareTo(OUString(
                    "com.sun.star.sheet.addin.Analysis.getAmordegrc"))))
                 {
@@ -3089,6 +3089,8 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
                         new OpBesselj));
                 }
+                else
+                    throw UnhandledToken(pChild, "unhandled opcode");
                 break;
 
             default:
