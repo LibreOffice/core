@@ -122,8 +122,6 @@ namespace gb { namespace types
             void set_dll_target(Path dlltarget);
             /// Set additional flags for the link command.
             void set_ldflags(List<Path> ldflags);
-            /// Add additional flags for the link command.
-            void add_ldflags(List<Path> ldflags);
     };
     /// A target that delivers headers of some kind.
     class DeliversHeaders
