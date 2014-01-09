@@ -54,7 +54,6 @@
 #include <accelerators/documentacceleratorconfiguration.hxx>
 #include <uifactory/toolboxfactory.hxx>
 #include "uiconfiguration/windowstateconfiguration.hxx"
-#include <services/autorecovery.hxx>
 #include <helper/statusindicatorfactory.hxx>
 #include <uielement/recentfilesmenucontroller.hxx>
 #include <uifactory/statusbarfactory.hxx>
@@ -92,7 +91,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::ToolBoxFactory                          )   else
                         IFFACTORY( ::framework::WindowStateConfiguration                )   else
                         IFFACTORY( ::framework::ToolbarControllerFactory                )   else
-                        IFFACTORY( ::framework::AutoRecovery                            )   else
                         IFFACTORY( ::framework::StatusIndicatorFactory                  )   else
                         IFFACTORY( ::framework::RecentFilesMenuController               )   else
                         IFFACTORY( ::framework::StatusBarFactory                        )   else
