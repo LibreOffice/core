@@ -130,7 +130,8 @@
   <implementation name="com.sun.star.comp.framework.jobs.JobDispatch">
     <service name="com.sun.star.frame.ProtocolHandler"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.TabWindowService">
+  <implementation name="com.sun.star.comp.framework.TabWindowService"
+      constructor="com_sun_star_comp_framework_TabWindowService_get_implementation">
     <service name="com.sun.star.ui.dialogs.TabContainerWindow"/>
   </implementation>
   <implementation name="org.apache.openoffice.comp.framework.OpenToolbarController"
