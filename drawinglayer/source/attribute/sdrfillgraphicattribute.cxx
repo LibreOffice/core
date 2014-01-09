@@ -42,6 +42,7 @@ namespace drawinglayer
 
             // data definitions
             Graphic                                 maFillGraphic;
+            basegfx::B2DVector                      maGraphicLogicSize;
             basegfx::B2DVector                      maSize;
             basegfx::B2DVector                      maOffset;
             basegfx::B2DVector                      maOffsetPosition;
@@ -54,6 +55,7 @@ namespace drawinglayer
 
             ImpSdrFillGraphicAttribute(
                 const Graphic& rFillGraphic,
+                const basegfx::B2DVector& rGraphicLogicSize,
                 const basegfx::B2DVector& rSize,
                 const basegfx::B2DVector& rOffset,
                 const basegfx::B2DVector& rOffsetPosition,
@@ -63,6 +65,7 @@ namespace drawinglayer
                 bool bLogSize)
             :   mnRefCount(0),
                 maFillGraphic(rFillGraphic),
+                maGraphicLogicSize(rGraphicLogicSize),
                 maSize(rSize),
                 maOffset(rOffset),
                 maOffsetPosition(rOffsetPosition),
@@ -75,6 +78,7 @@ namespace drawinglayer
 
             // data read access
             const Graphic& getFillGraphic() const { return maFillGraphic; }
+            const basegfx::B2DVector& getGraphicLogicSize() const { return maGraphicLogicSize; }
             const basegfx::B2DVector& getSize() const { return maSize; }
             const basegfx::B2DVector& getOffset() const { return maOffset; }
             const basegfx::B2DVector& getOffsetPosition() const { return maOffsetPosition; }
@@ -86,6 +90,7 @@ namespace drawinglayer
             bool operator==(const ImpSdrFillGraphicAttribute& rCandidate) const
             {
                 return (getFillGraphic() == rCandidate.getFillGraphic()
+                    && getGraphicLogicSize() == rCandidate.getGraphicLogicSize()
                     && getSize() == rCandidate.getSize()
                     && getOffset() == rCandidate.getOffset()
                     && getOffsetPosition() == rCandidate.getOffsetPosition()
@@ -107,6 +112,7 @@ namespace drawinglayer
                         basegfx::B2DVector(),
                         basegfx::B2DVector(),
                         basegfx::B2DVector(),
+                        basegfx::B2DVector(),
                         false,
                         false,
                         false);
@@ -121,6 +127,7 @@ namespace drawinglayer
 
         SdrFillGraphicAttribute::SdrFillGraphicAttribute(
             const Graphic& rFillGraphic,
+            const basegfx::B2DVector& rGraphicLogicSize,
             const basegfx::B2DVector& rSize,
             const basegfx::B2DVector& rOffset,
             const basegfx::B2DVector& rOffsetPosition,
@@ -131,6 +138,7 @@ namespace drawinglayer
         :   mpSdrFillGraphicAttribute(
                 new ImpSdrFillGraphicAttribute(
                     rFillGraphic,
+                    rGraphicLogicSize,
                     rSize,
                     rOffset,
                     rOffsetPosition,
@@ -210,6 +218,11 @@ namespace drawinglayer
             return mpSdrFillGraphicAttribute->getFillGraphic();
         }
 
+        const basegfx::B2DVector& SdrFillGraphicAttribute::getGraphicLogicSize() const
+        {
+            return mpSdrFillGraphicAttribute->getGraphicLogicSize();
+        }
+
         const basegfx::B2DVector& SdrFillGraphicAttribute::getSize() const
         {
             return mpSdrFillGraphicAttribute->getSize();
@@ -249,7 +262,6 @@ namespace drawinglayer
         {
             // get logical size of bitmap (before expanding eventually)
             Graphic aGraphic(getFillGraphic());
-            const basegfx::B2DVector aLogicalSize(aGraphic.GetPrefSize().getWidth(), aGraphic.GetPrefSize().getHeight());
 
             // init values with defaults
             basegfx::B2DPoint aBitmapSize(1.0, 1.0);
@@ -277,7 +289,9 @@ namespace drawinglayer
                 }
                 else
                 {
-                    aBitmapSize.setX(aLogicalSize.getX());
+                    // #124002# use GraphicLogicSize directly, do not try to use GetPrefSize
+                    // of the graphic, that may not be adapted to the MapMode of the target
+                    aBitmapSize.setX(getGraphicLogicSize().getX());
                 }
 
                 if(0.0 != getSize().getY())
@@ -293,7 +307,9 @@ namespace drawinglayer
                 }
                 else
                 {
-                    aBitmapSize.setY(aLogicalSize.getY());
+                    // #124002# use GraphicLogicSize directly, do not try to use GetPrefSize
+                    // of the graphic, that may not be adapted to the MapMode of the target
+                    aBitmapSize.setY(getGraphicLogicSize().getY());
                 }
 
                 // get values, force to centered if necessary

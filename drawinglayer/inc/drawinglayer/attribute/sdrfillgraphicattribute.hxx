@@ -56,6 +56,7 @@ namespace drawinglayer
             /// constructors/assignmentoperator/destructor
             SdrFillGraphicAttribute(
                 const Graphic& rFillGraphic,
+                const basegfx::B2DVector& rGraphicLogicSize,
                 const basegfx::B2DVector& rSize,
                 const basegfx::B2DVector& rOffset,
                 const basegfx::B2DVector& rOffsetPosition,
@@ -76,6 +77,7 @@ namespace drawinglayer
 
             // data read access
             const Graphic& getFillGraphic() const;
+            const basegfx::B2DVector& getGraphicLogicSize() const;
             const basegfx::B2DVector& getSize() const;
             const basegfx::B2DVector& getOffset() const;
             const basegfx::B2DVector& getOffsetPosition() const;
