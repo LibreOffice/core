@@ -545,6 +545,19 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet)
     get(m_pIconSizeLB, "iconsize");
     get(m_pIconStyleLB, "iconstyle");
     get(m_pSystemFont, "systemfont");
+
+    VclContainer *pRef = get<VclContainer>("refgrid");
+    //fdo#65595, we need height-for-width support here, but for now we can
+    //bodge it
+    Size aPrefSize(m_pSystemFont->get_preferred_size());
+    Size aSize(pRef->get_preferred_size());
+    if (aPrefSize.Width() > aSize.Width())
+    {
+        aSize = m_pSystemFont->CalcMinimumSize(aSize.Width());
+        m_pSystemFont->set_width_request(aSize.Width());
+        m_pSystemFont->set_height_request(aSize.Height());
+    }
+
     get(m_pFontAntiAliasing, "aafont");
     get(m_pAAPointLimitLabel, "aafrom");
     get(m_pAAPointLimit, "aanf");
