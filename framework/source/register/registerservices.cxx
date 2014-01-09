@@ -48,7 +48,6 @@
 #include <accelerators/documentacceleratorconfiguration.hxx>
 #include <uielement/recentfilesmenucontroller.hxx>
 #include <services/sessionlistener.hxx>
-#include <services/taskcreatorsrv.hxx>
 
 #include <uiconfiguration/imagemanager.hxx>
 #include <services/substitutepathvars.hxx>
@@ -72,7 +71,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::RecentFilesMenuController               )   else
                         IFFACTORY( ::framework::SessionListener                         )   else
                         IFFACTORY( ::framework::SessionListener                         )   else
-                        IFFACTORY( ::framework::TaskCreatorService                      )   else
                         IFFACTORY( ::framework::ImageManager                            )   else
                         IFFACTORY( ::framework::SubstitutePathVariables                 )   else
                         IFFACTORY( ::framework::PathSettings                            )   else

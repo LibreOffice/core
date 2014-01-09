@@ -30,6 +30,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <unotools/moduleoptions.hxx>
 #include <cppuhelper/implbase2.hxx>

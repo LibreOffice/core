@@ -18,10 +18,10 @@
  */
 
 #include <classes/taskcreator.hxx>
-#include "services/taskcreatorsrv.hxx"
 #include <threadhelp/readguard.hxx>
 #include <loadenv/targethelper.hxx>
 #include <services.h>
+#include <taskcreatordefs.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/TaskCreator.hpp>
