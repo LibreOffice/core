@@ -52,10 +52,6 @@ public:
     static void newProperty(OOXMLFastContextHandler * pHandler,
                             Id nId, sal_Int32 nValue);
 
-    static void mark(OOXMLFastContextHandler * pHandler,
-                     Id nId,
-                     const OUString & rValue);
-
     static void attributes
     (OOXMLFastContextHandler * pContext,
      const uno::Reference < xml::sax::XFastAttributeList > & Attribs);
@@ -216,30 +212,6 @@ void OOXMLFastHelper<T>::newProperty(OOXMLFastContextHandler * pHandler,
     pHandler->newProperty(nId, pVal);
 }
 
-template <class T>
-void OOXMLFastHelper<T>::mark(OOXMLFastContextHandler * pHandler,
-                              Id nId,
-                              const OUString & rValue)
-{
-    OOXMLValue::Pointer_t pVal(new T(rValue));
-
-#ifdef DEBUG_HELPER
-    string aStr = (*QNameToString::Instance())(nId);
-
-    debug_logger->startElement("helper.mark");
-    debug_logger->attribute("name", aStr);
-    debug_logger->attribute("value",
-        OUStringToOString
-        (rValue, RTL_TEXTENCODING_ASCII_US).getStr());
-
-    if (aStr.empty())
-        debug_logger->element("unknown-qname");
-
-    debug_logger->endElement();
-#endif
-
-    pHandler->mark(nId, pVal);
-}
 }}
 #endif // INCLUDED_FAST_HELPER_HXX
 
