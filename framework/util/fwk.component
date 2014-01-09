@@ -99,7 +99,8 @@
   <implementation name="com.sun.star.comp.framework.PathSubstitution">
     <service name="com.sun.star.util.PathSubstitution"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.PopupMenuControllerFactory">
+  <implementation name="com.sun.star.comp.framework.PopupMenuControllerFactory"
+      constructor="com_sun_star_comp_framework_PopupMenuControllerFactory_get_implementation">
     <service name="com.sun.star.frame.PopupMenuControllerFactory"/>
     <singleton name="com.sun.star.frame.thePopupMenuControllerFactory"/>
   </implementation>
@@ -107,7 +108,8 @@
       constructor="com_sun_star_comp_framework_RecentFilesMenuController_get_implementation">
     <service name="com.sun.star.frame.PopupMenuController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.StatusBarControllerFactory">
+  <implementation name="com.sun.star.comp.framework.StatusBarControllerFactory"
+      constructor="com_sun_star_comp_framework_StatusBarControllerFactory_get_implementation">
     <service name="com.sun.star.frame.StatusbarControllerFactory"/>
     <singleton name="com.sun.star.frame.theStatusbarControllerFactory"/>
   </implementation>
@@ -121,7 +123,8 @@
   <implementation name="com.sun.star.comp.framework.TaskCreator">
     <service name="com.sun.star.frame.TaskCreator"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.ToolBarControllerFactory">
+  <implementation name="com.sun.star.comp.framework.ToolBarControllerFactory"
+      constructor="com_sun_star_comp_framework_ToolBarControllerFactory_get_implementation">
     <service name="com.sun.star.frame.ToolbarControllerFactory"/>
     <singleton name="com.sun.star.frame.theToolbarControllerFactory"/>
   </implementation>
