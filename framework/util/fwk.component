@@ -70,7 +70,8 @@
   <implementation name="com.sun.star.comp.framework.ModuleManager">
     <service name="com.sun.star.frame.ModuleManager"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.ModuleUIConfigurationManager">
+  <implementation name="com.sun.star.comp.framework.ModuleUIConfigurationManager"
+      constructor="com_sun_star_comp_framework_ModuleUIConfigurationManager_get_implementation">
     <service name="com.sun.star.ui.ModuleUIConfigurationManager"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.ModuleUIConfigurationManagerSupplier"
