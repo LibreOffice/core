@@ -161,6 +161,33 @@ void DocxExport::AppendBookmark( const OUString& rName, bool /*bSkip*/ )
     m_pAttrOutput->WriteBookmarks_Impl( aStarts, aEnds );
 }
 
+void DocxExport::AppendAnnotationMarks( const SwTxtNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen )
+{
+    std::vector< OUString > aStarts;
+    std::vector< OUString > aEnds;
+
+    IMarkVector aMarks;
+    if ( GetAnnotationMarks( rNode, nAktPos, nAktPos + nLen, aMarks ) )
+    {
+        for ( IMarkVector::const_iterator it = aMarks.begin(), end = aMarks.end();
+              it != end; ++it )
+        {
+            IMark* pMark = (*it);
+
+            const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
+            const sal_Int32 nEnd = pMark->GetMarkEnd().nContent.GetIndex();
+
+            if ( nStart == nAktPos )
+                aStarts.push_back( pMark->GetName() );
+
+            if ( nEnd == nAktPos )
+                aEnds.push_back( pMark->GetName() );
+        }
+    }
+
+    m_pAttrOutput->WriteAnnotationMarks_Impl( aStarts, aEnds );
+}
+
 void DocxExport::ExportGrfBullet(const SwTxtNode&)
 {
     // Just collect the bullets for now, numbering.xml is not yet started.

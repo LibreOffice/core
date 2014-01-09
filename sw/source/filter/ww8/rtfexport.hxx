@@ -69,6 +69,8 @@ public:
 
     virtual void AppendBookmark( const OUString& rName, bool bSkip = false );
 
+    virtual void AppendAnnotationMarks( const SwTxtNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen );
+
     //For i120928,add an interface to export graphic of bullet
     virtual void ExportGrfBullet(const SwTxtNode& rNd);
 

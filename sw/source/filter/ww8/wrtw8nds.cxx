@@ -1660,13 +1660,16 @@ sal_Int32 MSWordExportBase::GetNextPos( SwWW8AttrIter* aAttrIter, const SwTxtNod
     // Get the bookmarks for the normal run
     const sal_Int32 nNextPos = aAttrIter->WhereNext();
     sal_Int32 nNextBookmark = nNextPos;
+    sal_Int32 nNextAnnotationMark = nNextPos;
 
     if( nNextBookmark > nAktPos ) //no need to search for bookmarks otherwise (checked in UpdatePosition())
     {
         GetSortedBookmarks( rNode, nAktPos, nNextBookmark - nAktPos );
         NearestBookmark( nNextBookmark, nAktPos, false );
+        GetSortedAnnotationMarks( rNode, nAktPos, nNextAnnotationMark - nAktPos );
+        NearestAnnotationMark( nNextAnnotationMark, nAktPos, false );
     }
-    return std::min( nNextPos, nNextBookmark );
+    return std::min( nNextPos, std::min( nNextBookmark, nNextAnnotationMark ) );
 }
 
 void MSWordExportBase::UpdatePosition( SwWW8AttrIter* aAttrIter, sal_Int32 nAktPos, sal_Int32 /*nEnd*/ )
@@ -1716,6 +1719,37 @@ bool MSWordExportBase::GetBookmarks( const SwTxtNode& rNd, sal_Int32 nStt,
     return ( rArr.size() > 0 );
 }
 
+bool MSWordExportBase::GetAnnotationMarks( const SwTxtNode& rNd, sal_Int32 nStt,
+                    sal_Int32 nEnd, IMarkVector& rArr )
+{
+    IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+    sal_uLong nNd = rNd.GetIndex( );
+
+    const sal_Int32 nMarks = pMarkAccess->getAnnotationMarksCount();
+    for ( sal_Int32 i = 0; i < nMarks; i++ )
+    {
+        IMark* pMark = ( pMarkAccess->getAnnotationMarksBegin() + i )->get();
+
+        // Only keep the bookmarks starting or ending in this node
+        if ( pMark->GetMarkStart().nNode == nNd ||
+             pMark->GetMarkEnd().nNode == nNd )
+        {
+            const sal_Int32 nBStart = pMark->GetMarkStart().nContent.GetIndex();
+            const sal_Int32 nBEnd = pMark->GetMarkEnd().nContent.GetIndex();
+
+            // Keep only the bookmars starting or ending in the snippet
+            bool bIsStartOk = ( pMark->GetMarkStart().nNode == nNd ) && ( nBStart >= nStt ) && ( nBStart <= nEnd );
+            bool bIsEndOk = ( pMark->GetMarkEnd().nNode == nNd ) && ( nBEnd >= nStt ) && ( nBEnd <= nEnd );
+
+            if ( bIsStartOk || bIsEndOk )
+            {
+                rArr.push_back( pMark );
+            }
+        }
+    }
+    return ( rArr.size() > 0 );
+}
+
 class CompareMarksEnd : public std::binary_function < const IMark *, const IMark *, bool >
 {
 public:
@@ -1732,9 +1766,9 @@ bool MSWordExportBase::NearestBookmark( sal_Int32& rNearest, const sal_Int32 nAk
 {
     bool bHasBookmark = false;
 
-    if ( !m_rSortedMarksStart.empty() )
+    if ( !m_rSortedBookmarksStart.empty() )
     {
-        IMark* pMarkStart = m_rSortedMarksStart.front();
+        IMark* pMarkStart = m_rSortedBookmarksStart.front();
         const sal_Int32 nNext = pMarkStart->GetMarkStart().nContent.GetIndex();
         if( !bNextPositionOnly || (nNext > nAktPos ))
         {
@@ -1743,9 +1777,9 @@ bool MSWordExportBase::NearestBookmark( sal_Int32& rNearest, const sal_Int32 nAk
         }
     }
 
-    if ( !m_rSortedMarksEnd.empty() )
+    if ( !m_rSortedBookmarksEnd.empty() )
     {
-        IMark* pMarkEnd = m_rSortedMarksEnd[0];
+        IMark* pMarkEnd = m_rSortedBookmarksEnd[0];
         const sal_Int32 nNext = pMarkEnd->GetMarkEnd().nContent.GetIndex();
         if( !bNextPositionOnly || nNext > nAktPos )
         {
@@ -1758,6 +1792,74 @@ bool MSWordExportBase::NearestBookmark( sal_Int32& rNearest, const sal_Int32 nAk
     }
 
     return bHasBookmark;
+}
+
+bool MSWordExportBase::NearestAnnotationMark( sal_Int32& rNearest, const sal_Int32 nAktPos, bool bNextPositionOnly )
+{
+    bool bHasAnnotationMark = false;
+
+    if ( !m_rSortedAnnotationMarksStart.empty() )
+    {
+        IMark* pMarkStart = m_rSortedAnnotationMarksStart.front();
+        const sal_Int32 nNext = pMarkStart->GetMarkStart().nContent.GetIndex();
+        if( !bNextPositionOnly || (nNext > nAktPos ))
+        {
+            rNearest = nNext;
+            bHasAnnotationMark = true;
+        }
+    }
+
+    if ( !m_rSortedAnnotationMarksEnd.empty() )
+    {
+        IMark* pMarkEnd = m_rSortedAnnotationMarksEnd[0];
+        const sal_Int32 nNext = pMarkEnd->GetMarkEnd().nContent.GetIndex();
+        if( !bNextPositionOnly || nNext > nAktPos )
+        {
+            if ( !bHasAnnotationMark )
+                rNearest = nNext;
+            else
+                rNearest = std::min( rNearest, nNext );
+            bHasAnnotationMark = true;
+        }
+    }
+
+    return bHasAnnotationMark;
+}
+
+void MSWordExportBase::GetSortedAnnotationMarks( const SwTxtNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen )
+{
+    IMarkVector aMarksStart;
+    if ( GetAnnotationMarks( rNode, nAktPos, nAktPos + nLen, aMarksStart ) )
+    {
+        IMarkVector aSortedEnd;
+        IMarkVector aSortedStart;
+        for ( IMarkVector::const_iterator it = aMarksStart.begin(), end = aMarksStart.end();
+              it != end; ++it )
+        {
+            IMark* pMark = (*it);
+
+            // Remove the positions egals to the current pos
+            const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
+            const sal_Int32 nEnd = pMark->GetMarkEnd().nContent.GetIndex();
+
+            if ( nStart > nAktPos && ( pMark->GetMarkStart().nNode == rNode.GetIndex()) )
+                aSortedStart.push_back( pMark );
+
+            if ( nEnd > nAktPos && nEnd <= ( nAktPos + nLen ) && (pMark->GetMarkEnd().nNode == rNode.GetIndex()) )
+                aSortedEnd.push_back( pMark );
+        }
+
+        // Sort the bookmarks by end position
+        std::sort( aSortedEnd.begin(), aSortedEnd.end(), CompareMarksEnd() );
+
+        m_rSortedAnnotationMarksStart.swap( aSortedStart );
+        m_rSortedAnnotationMarksEnd.swap( aSortedEnd );
+    }
+    else
+    {
+        m_rSortedAnnotationMarksStart.clear( );
+        m_rSortedAnnotationMarksEnd.clear( );
+    }
 }
 
 void MSWordExportBase::GetSortedBookmarks( const SwTxtNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen )
@@ -1786,13 +1888,13 @@ void MSWordExportBase::GetSortedBookmarks( const SwTxtNode& rNode, sal_Int32 nAk
         // Sort the bookmarks by end position
         std::sort( aSortedEnd.begin(), aSortedEnd.end(), CompareMarksEnd() );
 
-        m_rSortedMarksStart.swap( aSortedStart );
-        m_rSortedMarksEnd.swap( aSortedEnd );
+        m_rSortedBookmarksStart.swap( aSortedStart );
+        m_rSortedBookmarksEnd.swap( aSortedEnd );
     }
     else
     {
-        m_rSortedMarksStart.clear( );
-        m_rSortedMarksEnd.clear( );
+        m_rSortedBookmarksStart.clear( );
+        m_rSortedBookmarksEnd.clear( );
     }
 }
 
@@ -1890,6 +1992,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         // Append bookmarks in this range after flys, exclusive of final
         // position of this range
         AppendBookmarks( rNode, nAktPos, nNextAttr - nAktPos );
+        AppendAnnotationMarks( rNode, nAktPos, nNextAttr - nAktPos );
         bool bTxtAtr = aAttrIter.IsTxtAttr( nAktPos );
         nOpenAttrWithRange += aAttrIter.OutAttrWithRange(nAktPos);
 
@@ -2040,6 +2143,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                     aAttrIter.OutFlys( nEnd );
                     // insert final bookmarks if any before CR and after flys
                     AppendBookmarks( rNode, nEnd, 1 );
+                    AppendAnnotationMarks( rNode, nEnd, 1 );
                     if ( pTOXSect )
                     {
                         m_aCurrentCharPropStarts.pop();
@@ -2088,6 +2192,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 aAttrIter.OutFlys( nEnd );
                 // insert final bookmarks if any before CR and after flys
                 AppendBookmarks( rNode, nEnd, 1 );
+                AppendAnnotationMarks( rNode, nEnd, 1 );
                 WriteCR( pTextNodeInfoInner );
                 // #i120928 - position of the bullet's graphic is at end of doc
                 if (bLastCR && (!bExported))

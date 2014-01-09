@@ -548,8 +548,10 @@ public:
 
     /// Used to split the runs according to the bookmarks start and ends
     typedef std::vector< ::sw::mark::IMark* > IMarkVector;
-    IMarkVector m_rSortedMarksStart;
-    IMarkVector m_rSortedMarksEnd;
+    IMarkVector m_rSortedBookmarksStart;
+    IMarkVector m_rSortedBookmarksEnd;
+    IMarkVector m_rSortedAnnotationMarksStart;
+    IMarkVector m_rSortedAnnotationMarksEnd;
 
 public:
     /// The main function to export the document.
@@ -647,6 +649,9 @@ public:
     virtual void AppendBookmarks( const SwTxtNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen ) = 0;
 
     virtual void AppendBookmark( const OUString& rName, bool bSkip = false ) = 0;
+
+    virtual void AppendAnnotationMarks( const SwTxtNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen ) = 0;
+
     //For i120928,add this interface to export graphic of bullet
     virtual void ExportGrfBullet(const SwTxtNode& rNd) = 0;
 
@@ -820,6 +825,16 @@ protected:
     void GetSortedBookmarks( const SwTxtNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen );
 
     bool GetBookmarks( const SwTxtNode& rNd, sal_Int32 nStt, sal_Int32 nEnd,
+            IMarkVector& rArr );
+
+    /// Find the nearest annotation mark from the current position.
+    ///
+    /// Returns false when there is no annotation mark.
+    bool NearestAnnotationMark( sal_Int32& rNearest, const sal_Int32 nAktPos, bool bNextPositionOnly );
+
+    void GetSortedAnnotationMarks( const SwTxtNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen );
+
+    bool GetAnnotationMarks( const SwTxtNode& rNd, sal_Int32 nStt, sal_Int32 nEnd,
             IMarkVector& rArr );
 
     const NfKeywordTable & GetNfKeywordTable();
@@ -1016,6 +1031,8 @@ public:
 
     virtual void AppendBookmarks( const SwTxtNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen );
     virtual void AppendBookmark( const OUString& rName, bool bSkip = false );
+
+    virtual void AppendAnnotationMarks( const SwTxtNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen );
 
     virtual void ExportGrfBullet(const SwTxtNode& rNd);
     void OutGrfBullets(const sw::Frame &rFrame);

@@ -163,6 +163,10 @@ void RtfExport::AppendBookmark( const OUString& rName, bool /*bSkip*/ )
     m_pAttrOutput->WriteBookmarks_Impl(aStarts, aEnds);
 }
 
+void RtfExport::AppendAnnotationMarks( const SwTxtNode& /*rNode*/, sal_Int32 /*nAktPos*/, sal_Int32 /*nLen*/ )
+{
+}
+
 //For i120928,to export graphic of bullet for RTF filter
 void RtfExport::ExportGrfBullet(const SwTxtNode&)
 {

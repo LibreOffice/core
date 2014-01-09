@@ -118,6 +118,8 @@ public:
 
     virtual void AppendBookmark( const OUString& rName, bool bSkip = false );
 
+    virtual void AppendAnnotationMarks( const SwTxtNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen );
+
     virtual void ExportGrfBullet(const SwTxtNode&);
 
     /// Returns the relationd id

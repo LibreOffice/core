@@ -1387,6 +1387,10 @@ void WW8Export::AppendBookmarks( const SwTxtNode& rNd, sal_Int32 nAktPos, sal_In
     }
 }
 
+void WW8Export::AppendAnnotationMarks( const SwTxtNode& /*rNd*/, sal_Int32 /*nAktPos*/, sal_Int32 /*nLen*/ )
+{
+}
+
 void WW8Export::MoveFieldMarks(WW8_CP nFrom, WW8_CP nTo)
 {
     pBkmks->MoveFieldMarks(nFrom, nTo);

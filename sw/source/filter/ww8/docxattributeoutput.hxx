@@ -346,6 +346,7 @@ public:
     void WriteFormData_Impl( const ::sw::mark::IFieldmark& rFieldmark );
 
     void WriteBookmarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );
+    void WriteAnnotationMarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );
 
 private:
     /// Initialize the structures where we are going to collect some of the paragraph properties.
@@ -657,13 +658,13 @@ protected:
 private:
 
     void DoWriteBookmarks( );
+    void DoWriteAnnotationMarks( );
     void WritePostponedGraphic();
     void WritePostponedMath();
     void WritePostponedDiagram();
     void WritePostponedChart();
     void WritePostponedVMLDrawing();
     void WritePostponedDMLDrawing();
-    void WriteCommentRanges();
 
     void StartField_Impl( FieldInfos& rInfos, bool bWriteRun = sal_False );
     void DoWriteCmd( const OUString& rCmd );
@@ -706,26 +707,32 @@ private:
     /// Field data to remember in the text run
     std::vector< FieldInfos > m_Fields;
     OUString m_sFieldBkm;
-    sal_Int32 m_nNextMarkId;
+    sal_Int32 m_nNextBookmarkId;
+    sal_Int32 m_nNextAnnotationMarkId;
 
     /// Bookmarks to output
-    std::vector<OString> m_rMarksStart;
-    std::vector<OString> m_rMarksEnd;
+    std::vector<OString> m_rBookmarksStart;
+    std::vector<OString> m_rBookmarksEnd;
 
-    /// Is there a postit start to output?
-    bool m_bPostitStart;
-    /// Is there a postit end to output?
-    bool m_bPostitEnd;
+    /// Annotation marks to output
+    std::vector<OString> m_rAnnotationMarksStart;
+    std::vector<OString> m_rAnnotationMarksEnd;
 
     /// Maps of the bookmarks ids
-    std::map<OString, sal_uInt16> m_rOpenedMarksIds;
+    std::map<OString, sal_uInt16> m_rOpenedBookmarksIds;
 
     /// Name of the last opened bookmark.
-    OString m_sLastOpenedMark;
+    OString m_sLastOpenedBookmark;
+
+    /// Maps of the annotation marks ids
+    std::map<OString, sal_uInt16> m_rOpenedAnnotationMarksIds;
+
+    /// Name of the last opened annotation mark.
+    OString m_sLastOpenedAnnotationMark;
 
     /// If there are bookmarks around sequence fields, this map contains the
     /// names of these bookmarks for each sequence.
-    std::map<OUString, std::vector<OString> > m_aSeqMarksNames;
+    std::map<OUString, std::vector<OString> > m_aSeqBookmarksNames;
 
     /// The current table helper
     SwWriteTable *m_pTableWrt;

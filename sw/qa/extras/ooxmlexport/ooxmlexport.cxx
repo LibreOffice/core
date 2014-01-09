@@ -210,18 +210,16 @@ DECLARE_OOXMLEXPORT_TEST(defaultTabStopNotInStyles, "empty.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo38244, "fdo38244.docx")
 {
-#if 0
-    // FIXME port to AnnotationMarks
     /*
-     * Comments attached to a range was imported without the range, check for the fieldmark start/end positions.
+     * Comments attached to a range was imported without the range, check for the annotation mark start/end positions.
      *
      * oParas = ThisComponent.Text.createEnumeration
      * oPara = oParas.nextElement
      * oRuns = oPara.createEnumeration
      * oRun = oRuns.nextElement
-     * oRun = oRuns.nextElement 'TextFieldStart
+     * oRun = oRuns.nextElement 'Annotation
      * oRun = oRuns.nextElement
-     * oRun = oRuns.nextElement 'TextFieldEnd
+     * oRun = oRuns.nextElement 'AnnotationEnd
      * xray oRun.TextPortionType
      */
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -231,10 +229,10 @@ DECLARE_OOXMLEXPORT_TEST(testFdo38244, "fdo38244.docx")
     uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
     xRunEnum->nextElement();
     uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("TextFieldStart"), getProperty<OUString>(xPropertySet, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Annotation"), getProperty<OUString>(xPropertySet, "TextPortionType"));
     xRunEnum->nextElement();
     xPropertySet.set(xRunEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("TextFieldEnd"), getProperty<OUString>(xPropertySet, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("AnnotationEnd"), getProperty<OUString>(xPropertySet, "TextPortionType"));
 
     /*
      * Initials were not imported.
@@ -272,7 +270,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo38244, "fdo38244.docx")
         bCaught = true;
     }
     CPPUNIT_ASSERT_EQUAL(true, bCaught);
-#endif
 }
 
 DECLARE_OOXMLEXPORT_TEST(testMathEscape, "math-escape.docx")

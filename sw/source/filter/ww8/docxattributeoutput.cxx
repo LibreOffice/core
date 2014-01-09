@@ -726,7 +726,7 @@ void DocxAttributeOutput::EndRun()
     StartRedline( m_pRedlineData );
 
     DoWriteBookmarks( );
-    WriteCommentRanges();
+    DoWriteAnnotationMarks( );
 
     m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
     m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_PREPEND ); // merges with "postponed run start", see above
@@ -764,59 +764,87 @@ void DocxAttributeOutput::EndRun()
     }
 }
 
-void DocxAttributeOutput::WriteCommentRanges()
-{
-    if (m_bPostitStart)
-    {
-        m_bPostitStart = false;
-        OString idstr = OString::number( m_postitFieldsMaxId);
-        m_pSerializer->singleElementNS( XML_w, XML_commentRangeStart, FSNS( XML_w, XML_id ), idstr.getStr(), FSEND );
-    }
-    if (m_bPostitEnd)
-    {
-        m_bPostitEnd = false;
-        OString idstr = OString::number( m_postitFieldsMaxId);
-        m_pSerializer->singleElementNS( XML_w, XML_commentRangeEnd, FSNS( XML_w, XML_id ), idstr.getStr(), FSEND );
-    }
-}
-
 void DocxAttributeOutput::DoWriteBookmarks()
 {
     // Write the start bookmarks
-    for ( std::vector< OString >::const_iterator it = m_rMarksStart.begin(), end = m_rMarksStart.end();
+    for ( std::vector< OString >::const_iterator it = m_rBookmarksStart.begin(), end = m_rBookmarksStart.end();
           it != end; ++it )
     {
         const OString& rName = *it;
 
         // Output the bookmark
-        sal_uInt16 nId = m_nNextMarkId++;
-        m_rOpenedMarksIds[rName] = nId;
+        sal_uInt16 nId = m_nNextBookmarkId++;
+        m_rOpenedBookmarksIds[rName] = nId;
         m_pSerializer->singleElementNS( XML_w, XML_bookmarkStart,
             FSNS( XML_w, XML_id ), OString::number( nId ).getStr(  ),
             FSNS( XML_w, XML_name ), rName.getStr(),
             FSEND );
-        m_sLastOpenedMark = rName;
+        m_sLastOpenedBookmark = rName;
     }
-    m_rMarksStart.clear();
+    m_rBookmarksStart.clear();
 
     // export the end bookmarks
-    for ( std::vector< OString >::const_iterator it = m_rMarksEnd.begin(), end = m_rMarksEnd.end();
+    for ( std::vector< OString >::const_iterator it = m_rBookmarksEnd.begin(), end = m_rBookmarksEnd.end();
           it != end; ++it )
     {
         const OString& rName = *it;
 
         // Get the id of the bookmark
-        std::map< OString, sal_uInt16 >::iterator pPos = m_rOpenedMarksIds.find( rName );
-        if ( pPos != m_rOpenedMarksIds.end(  ) )
+        std::map< OString, sal_uInt16 >::iterator pPos = m_rOpenedBookmarksIds.find( rName );
+        if ( pPos != m_rOpenedBookmarksIds.end(  ) )
         {
             sal_uInt16 nId = ( *pPos ).second;
             m_pSerializer->singleElementNS( XML_w, XML_bookmarkEnd,
                 FSNS( XML_w, XML_id ), OString::number( nId ).getStr(  ),
                 FSEND );
-            m_rOpenedMarksIds.erase( rName );
+            m_rOpenedBookmarksIds.erase( rName );
         }
     }
-    m_rMarksEnd.clear();
+    m_rBookmarksEnd.clear();
+}
+
+void DocxAttributeOutput::DoWriteAnnotationMarks()
+{
+    // Write the start annotation marks
+    for ( std::vector< OString >::const_iterator it = m_rAnnotationMarksStart.begin(), end = m_rAnnotationMarksStart.end();
+          it != end; ++it )
+    {
+        const OString& rName = *it;
+
+        // Output the annotation mark
+        sal_uInt16 nId = m_nNextAnnotationMarkId++;
+        m_rOpenedAnnotationMarksIds[rName] = nId;
+        m_pSerializer->singleElementNS( XML_w, XML_commentRangeStart,
+            FSNS( XML_w, XML_id ), OString::number( nId ).getStr(  ),
+            FSEND );
+        m_sLastOpenedAnnotationMark = rName;
+    }
+    m_rAnnotationMarksStart.clear();
+
+    // export the end annotation marks
+    for ( std::vector< OString >::const_iterator it = m_rAnnotationMarksEnd.begin(), end = m_rAnnotationMarksEnd.end();
+          it != end; ++it )
+    {
+        const OString& rName = *it;
+
+        // Get the id of the annotation mark
+        std::map< OString, sal_uInt16 >::iterator pPos = m_rOpenedAnnotationMarksIds.find( rName );
+        if ( pPos != m_rOpenedAnnotationMarksIds.end(  ) )
+        {
+            sal_uInt16 nId = ( *pPos ).second;
+            m_pSerializer->singleElementNS( XML_w, XML_commentRangeEnd,
+                FSNS( XML_w, XML_id ), OString::number( nId ).getStr(  ),
+                FSEND );
+            m_rOpenedAnnotationMarksIds.erase( rName );
+
+            m_pSerializer->startElementNS(XML_w, XML_r, FSEND);
+            m_pSerializer->singleElementNS( XML_w, XML_commentReference, FSNS( XML_w, XML_id ),
+                                            OString::number( nId ).getStr(),
+                                            FSEND );
+            m_pSerializer->endElementNS(XML_w, XML_r);
+        }
+    }
+    m_rAnnotationMarksEnd.clear();
 }
 
 void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
@@ -929,7 +957,7 @@ void DocxAttributeOutput::DoWriteCmd( const OUString& rCmd )
     if (sCmd.startsWith("SEQ"))
     {
         OUString sSeqName = msfilter::util::findQuotedText(sCmd, "SEQ ", '\\').trim();
-        m_aSeqMarksNames[sSeqName].push_back(m_sLastOpenedMark);
+        m_aSeqBookmarksNames[sSeqName].push_back(m_sLastOpenedBookmark);
     }
     // Write the Field command
     m_pSerializer->startElementNS( XML_w, XML_instrText, FSEND );
@@ -986,7 +1014,7 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
     if ( !aBkmName.isEmpty() )
     {
         m_pSerializer->singleElementNS( XML_w, XML_bookmarkStart,
-               FSNS( XML_w, XML_id ), OString::number( m_nNextMarkId ).getStr( ),
+               FSNS( XML_w, XML_id ), OString::number( m_nNextBookmarkId ).getStr( ),
                FSNS( XML_w, XML_name ), OUStringToOString( aBkmName, RTL_TEXTENCODING_UTF8 ).getStr( ),
                FSEND );
     }
@@ -1007,10 +1035,10 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
     if ( !aBkmName.isEmpty() )
     {
         m_pSerializer->singleElementNS( XML_w, XML_bookmarkEnd,
-               FSNS( XML_w, XML_id ), OString::number( m_nNextMarkId ).getStr( ),
+               FSNS( XML_w, XML_id ), OString::number( m_nNextBookmarkId ).getStr( ),
                FSEND );
 
-        m_nNextMarkId++;
+        m_nNextBookmarkId++;
     }
 
     // Write the Field end
@@ -1449,8 +1477,8 @@ bool DocxAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarge
                     OUString aSequenceName = OUString('"') + sMark.copy(0, nPos) + OUString('"');
                     // Extract <index>.
                     sal_uInt32 nIndex = sMark.copy(nPos + 1, sMark.getLength() - nPos - sizeof("|sequence")).toInt32();
-                    std::map<OUString, std::vector<OString> >::iterator it = m_aSeqMarksNames.find(aSequenceName);
-                    if (it != m_aSeqMarksNames.end())
+                    std::map<OUString, std::vector<OString> >::iterator it = m_aSeqBookmarksNames.find(aSequenceName);
+                    if (it != m_aSeqBookmarksNames.end())
                     {
                         std::vector<OString>& rNames = it->second;
                         if (rNames.size() > nIndex)
@@ -4618,19 +4646,23 @@ void DocxAttributeOutput::WritePostitFieldReference()
     while( m_postitFieldsMaxId < m_postitFields.size())
     {
         OString idstr = OString::number( m_postitFieldsMaxId);
-        m_pSerializer->singleElementNS( XML_w, XML_commentReference, FSNS( XML_w, XML_id ), idstr.getStr(), FSEND );
+
+        // In case this file is inside annotation marks, we want to write the
+        // comment reference after the annotation mark is closed, not here.
+        OString idname = OUStringToOString(m_postitFields[m_postitFieldsMaxId]->GetName(), RTL_TEXTENCODING_UTF8);
+        std::map< OString, sal_uInt16 >::iterator it = m_rOpenedAnnotationMarksIds.find( idname );
+        if ( it == m_rOpenedAnnotationMarksIds.end(  ) )
+            m_pSerializer->singleElementNS( XML_w, XML_commentReference, FSNS( XML_w, XML_id ), idstr.getStr(), FSEND );
         ++m_postitFieldsMaxId;
     }
 }
 
 void DocxAttributeOutput::WritePostitFieldStart()
 {
-    m_bPostitStart = true;
 }
 
 void DocxAttributeOutput::WritePostitFieldEnd()
 {
-    m_bPostitEnd = true;
 }
 
 void DocxAttributeOutput::WritePostitFields()
@@ -4750,14 +4782,32 @@ void DocxAttributeOutput::WriteBookmarks_Impl( std::vector< OUString >& rStarts,
     for ( std::vector< OUString >::const_iterator it = rStarts.begin(), end = rStarts.end(); it != end; ++it )
     {
         OString rName = OUStringToOString( *it, RTL_TEXTENCODING_UTF8 ).getStr( );
-        m_rMarksStart.push_back( rName );
+        m_rBookmarksStart.push_back( rName );
     }
     rStarts.clear();
 
     for ( std::vector< OUString >::const_iterator it = rEnds.begin(), end = rEnds.end(); it != end; ++it )
     {
         OString rName = OUStringToOString( *it, RTL_TEXTENCODING_UTF8 ).getStr( );
-        m_rMarksEnd.push_back( rName );
+        m_rBookmarksEnd.push_back( rName );
+    }
+    rEnds.clear();
+}
+
+void DocxAttributeOutput::WriteAnnotationMarks_Impl( std::vector< OUString >& rStarts,
+        std::vector< OUString >& rEnds )
+{
+    for ( std::vector< OUString >::const_iterator it = rStarts.begin(), end = rStarts.end(); it != end; ++it )
+    {
+        OString rName = OUStringToOString( *it, RTL_TEXTENCODING_UTF8 ).getStr( );
+        m_rAnnotationMarksStart.push_back( rName );
+    }
+    rStarts.clear();
+
+    for ( std::vector< OUString >::const_iterator it = rEnds.begin(), end = rEnds.end(); it != end; ++it )
+    {
+        OString rName = OUStringToOString( *it, RTL_TEXTENCODING_UTF8 ).getStr( );
+        m_rAnnotationMarksEnd.push_back( rName );
     }
     rEnds.clear();
 }
@@ -6157,9 +6207,8 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_bOpenedSectPr( false ),
       m_bWritingHeaderFooter( false ),
       m_sFieldBkm( ),
-      m_nNextMarkId( 0 ),
-      m_bPostitStart(false),
-      m_bPostitEnd(false),
+      m_nNextBookmarkId( 0 ),
+      m_nNextAnnotationMarkId( 0 ),
       m_pTableWrt( NULL ),
       m_bParagraphOpened( false ),
       m_nColBreakStatus( COLBRK_NONE ),
