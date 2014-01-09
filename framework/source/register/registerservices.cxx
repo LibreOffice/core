@@ -40,7 +40,6 @@
 #include <services/layoutmanager.hxx>
 #include <uifactory/uielementfactorymanager.hxx>
 #include <uifactory/uicontrollerfactory.hxx>
-#include <uielement/objectmenucontroller.hxx>
 #include <uielement/controlmenucontroller.hxx>
 #include <uielement/uicommanddescription.hxx>
 #include <uiconfiguration/moduleuicfgsupplier.hxx>
@@ -71,7 +70,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::LayoutManager                           )   else
                         IFFACTORY( ::framework::UIElementFactoryManager                 )   else
                         IFFACTORY( ::framework::PopupMenuControllerFactory              )   else
-                        IFFACTORY( ::framework::ObjectMenuController                    )   else
                         IFFACTORY( ::framework::ControlMenuController                   )   else
                         IFFACTORY( ::framework::UICommandDescription                    )   else
                         IFFACTORY( ::framework::ModuleManager                           )   else

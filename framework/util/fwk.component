@@ -75,7 +75,8 @@
   <implementation name="com.sun.star.comp.framework.ModuleUIConfigurationManagerSupplier">
     <service name="com.sun.star.ui.ModuleUIConfigurationManagerSupplier"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.ObjectMenuController">
+  <implementation name="com.sun.star.comp.framework.ObjectMenuController"
+      constructor="com_sun_star_comp_framework_ObjectMenuController_get_implementation">
     <service name="com.sun.star.frame.PopupMenuController"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.PathSettings">
