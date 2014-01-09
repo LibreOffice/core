@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.0 on Thu Jan  9 11:17:49 2014 -->
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkAdjustment" id="adjustment1">
@@ -27,7 +28,6 @@
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="spacing">12</property>
-    <property name="homogeneous">True</property>
     <child>
       <object class="GtkBox" id="box3">
         <property name="visible">True</property>
@@ -79,7 +79,6 @@
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
                             <property name="invisible_char">•</property>
-                            <property name="invisible_char_set">True</property>
                             <property name="adjustment">adjustment1</property>
                           </object>
                           <packing>
@@ -109,8 +108,6 @@
                           <object class="GtkComboBoxText" id="iconsize">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="entry_text_column">0</property>
-                            <property name="id_column">1</property>
                             <items>
                               <item translatable="yes">Automatic</item>
                               <item translatable="yes">Small</item>
@@ -128,8 +125,6 @@
                           <object class="GtkComboBoxText" id="iconstyle">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="entry_text_column">0</property>
-                            <property name="id_column">1</property>
                             <items>
                               <item translatable="yes">Automatic</item>
                               <item translatable="yes">Galaxy</item>
@@ -219,7 +214,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">•</property>
-                            <property name="invisible_char_set">True</property>
                             <property name="adjustment">adjustment2</property>
                           </object>
                           <packing>
@@ -294,8 +288,6 @@
                       <object class="GtkComboBoxText" id="menuicons">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="entry_text_column">0</property>
-                        <property name="id_column">1</property>
                         <items>
                           <item translatable="yes">Automatic</item>
                           <item translatable="yes">Hide</item>
@@ -413,6 +405,8 @@
       <object class="GtkBox" id="box4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">center</property>
+        <property name="hexpand">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">18</property>
         <child>
@@ -491,18 +485,21 @@
           <object class="GtkFrame" id="frame4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
               <object class="GtkAlignment" id="alignment4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
                 <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
                 <child>
                   <object class="GtkGrid" id="grid7">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="label11">
@@ -540,8 +537,8 @@
                       <object class="GtkComboBoxText" id="mousepos">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="entry_text_column">0</property>
-                        <property name="id_column">1</property>
+                        <property name="halign">start</property>
+                        <property name="hexpand">True</property>
                         <items>
                           <item translatable="yes">Default button</item>
                           <item translatable="yes">Dialog center</item>
@@ -559,8 +556,8 @@
                       <object class="GtkComboBoxText" id="mousemiddle">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="entry_text_column">0</property>
-                        <property name="id_column">1</property>
+                        <property name="halign">start</property>
+                        <property name="hexpand">True</property>
                         <items>
                           <item translatable="yes">No function</item>
                           <item translatable="yes">Automatic scrolling</item>
@@ -634,7 +631,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">•</property>
-                        <property name="invisible_char_set">True</property>
                         <property name="adjustment">adjustment3</property>
                       </object>
                       <packing>
@@ -672,5 +668,12 @@
         <property name="position">1</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <property name="ignore_hidden">True</property>
+    <widgets>
+      <widget name="mousepos"/>
+      <widget name="mousemiddle"/>
+    </widgets>
   </object>
 </interface>
