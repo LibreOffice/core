@@ -96,7 +96,8 @@
   <implementation name="com.sun.star.comp.framework.StatusBarFactory">
     <service name="com.sun.star.ui.StatusBarFactory"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.StatusIndicatorFactory">
+  <implementation name="com.sun.star.comp.framework.StatusIndicatorFactory"
+      constructor="com_sun_star_comp_framework_StatusIndicatorFactory_get_implementation">
     <service name="com.sun.star.task.StatusIndicatorFactory"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.TaskCreator">

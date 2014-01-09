@@ -44,6 +44,7 @@
 #include <unotools/mediadescriptor.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
 
 #include <officecfg/Office/Common.hxx>
 
@@ -52,23 +53,6 @@ namespace framework{
 
 sal_Int32 StatusIndicatorFactory::m_nInReschedule = 0;  /// static counter for rescheduling
 const char PROGRESS_RESOURCE[] = "private:resource/progressbar/progressbar";
-
-//-----------------------------------------------
-
-DEFINE_XSERVICEINFO_MULTISERVICE_2(StatusIndicatorFactory                   ,
-                                   ::cppu::OWeakObject                      ,
-                                   OUString("com.sun.star.task.StatusIndicatorFactory"),
-                                   OUString("com.sun.star.comp.framework.StatusIndicatorFactory"))
-
-DEFINE_INIT_SERVICE(StatusIndicatorFactory,
-                    {
-                        /*Attention
-                            I think we don't need any mutex or lock here ... because we are called by our own static method impl_createInstance()
-                            to create a new instance of this class by our own supported service factory.
-                            see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further information!
-                        */
-                    }
-                   )
 
 //-----------------------------------------------
 StatusIndicatorFactory::StatusIndicatorFactory(const css::uno::Reference< css::uno::XComponentContext >& xContext)
@@ -618,5 +602,15 @@ void StatusIndicatorFactory::impl_stopWakeUpThread()
 }
 
 } // namespace framework
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_StatusIndicatorFactory_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    rtl::Reference<framework::StatusIndicatorFactory> x(new framework::StatusIndicatorFactory(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -48,11 +48,9 @@
 #include <com/sun/star/awt/WindowEvent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-
 #include <com/sun/star/util/XUpdatable.hpp>
 
-//_______________________________________________
-// include others
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/status.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <osl/thread.hxx>
@@ -208,14 +206,27 @@ class StatusIndicatorFactory : private ThreadHelpBase
     // interface
 
     public:
-
-        //---------------------------------------
-        // ctor
         StatusIndicatorFactory(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
-        //---------------------------------------
-        // XInterface, XTypeProvider, XServiceInfo
-        DECLARE_XSERVICEINFO
+        virtual OUString SAL_CALL getImplementationName()
+            throw (css::uno::RuntimeException)
+        {
+            return OUString("com.sun.star.comp.framework.StatusIndicatorFactory");
+        }
+
+        virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+            throw (css::uno::RuntimeException)
+        {
+            return cppu::supportsService(this, ServiceName);
+        }
+
+        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+            throw (css::uno::RuntimeException)
+        {
+            css::uno::Sequence< OUString > aSeq(1);
+            aSeq[0] = OUString("com.sun.star.task.StatusIndicatorFactory");
+            return aSeq;
+        }
 
         //---------------------------------------
         // XInitialization

@@ -26,6 +26,7 @@
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
+#include <vcl/status.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
