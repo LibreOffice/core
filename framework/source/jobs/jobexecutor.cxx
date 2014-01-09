@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <jobs/jobexecutor.hxx>
 #include <jobs/job.hxx>
 #include <jobs/joburl.hxx>
-
+#include <jobs/configaccess.hxx>
 #include <classes/converter.hxx>
 #include <threadhelp/transactionguard.hxx>
+#include <threadhelp/threadhelpbase.hxx>
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 #include <general.h>
-#include <services.h>
+#include <stdtypes.h>
 
 #include "helper/mischelper.hxx"
 
@@ -34,56 +34,100 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/task/XJobExecutor.hpp>
+#include <com/sun/star/container/XContainerListener.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/document/XEventListener.hpp>
+#include <com/sun/star/frame/XModuleManager2.hpp>
 
+#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <unotools/configpaths.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 
+using namespace framework;
 
-namespace framework{
+namespace {
 
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2( JobExecutor                   ,
-                                          ::cppu::OWeakObject           ,
-                                          "com.sun.star.task.JobExecutor",
-                                          IMPLEMENTATIONNAME_JOBEXECUTOR
-                                        )
+/**
+    @short  implements a job executor, which can be triggered from any code
+    @descr  It uses the given trigger event to locate any registered job service
+            inside the configuration and execute it. Of course it controls the
+            liftime of such jobs too.
+ */
+class JobExecutor : private ThreadHelpBase
+                  , public  ::cppu::WeakImplHelper5<
+                                css::lang::XServiceInfo
+                              , css::task::XJobExecutor
+                              , css::lang::XInitialization
+                              , css::container::XContainerListener // => lang.XEventListener
+                              , css::document::XEventListener >
+{
+private:
 
-DEFINE_INIT_SERVICE( JobExecutor,
-                     {
-                         m_xModuleManager = css::frame::ModuleManager::create( m_xContext );
+    /** reference to the uno service manager */
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-                         /*Attention
-                             I think we don't need any mutex or lock here ... because we are called by our own static method impl_createInstance()
-                             to create a new instance of this class by our own supported service factory.
-                             see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further information!
-                         */
-                        // read the list of all currently registered events inside configuration.
-                        // e.g. "/org.openoffice.Office.Jobs/Events/<event name>"
-                        // We need it later to check if an incoming event request can be executed successfully
-                        // or must be rejected. It's an optimization! Of course we must implement updating of this
-                        // list too ... Be listener at the configuration.
+    /** reference to the module info service */
+    css::uno::Reference< css::frame::XModuleManager2 > m_xModuleManager;
 
-                        m_aConfig.open(ConfigAccess::E_READONLY);
-                        if (m_aConfig.getMode() == ConfigAccess::E_READONLY)
-                        {
-                            css::uno::Reference< css::container::XNameAccess > xRegistry(m_aConfig.cfg(), css::uno::UNO_QUERY);
-                            if (xRegistry.is())
-                                m_lEvents = Converter::convert_seqOUString2OUStringList(xRegistry->getElementNames());
+    /** cached list of all registered event names of cfg for call optimization. */
+    OUStringList m_lEvents;
 
-                            css::uno::Reference< css::container::XContainer > xNotifier(m_aConfig.cfg(), css::uno::UNO_QUERY);
-                            if (xNotifier.is())
-                            {
-                                m_xConfigListener = new WeakContainerListener(this);
-                                xNotifier->addContainerListener(m_xConfigListener);
-                            }
+    /** we listen at the configuration for changes at the event list. */
+    ConfigAccess m_aConfig;
 
-                            // don't close cfg here!
-                            // It will be done inside disposing ...
-                        }
-                     }
-                   )
+    /** helper to allow us listen to the configuration without a cyclic dependency */
+    com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> m_xConfigListener;
 
-//________________________________
+public:
+
+             JobExecutor( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    virtual ~JobExecutor();
+
+    virtual OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException)
+    {
+        return OUString("com.sun.star.comp.framework.JobExecutor");
+    }
+
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException)
+    {
+        return cppu::supportsService(this, ServiceName);
+    }
+
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException)
+    {
+        css::uno::Sequence< OUString > aSeq(1);
+        aSeq[0] = OUString("com.sun.star.task.JobExecutor");
+        return aSeq;
+    }
+
+    // task.XJobExecutor
+    virtual void SAL_CALL trigger( const OUString& sEvent ) throw(css::uno::RuntimeException);
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException);
+
+    // document.XEventListener
+    virtual void SAL_CALL notifyEvent( const css::document::EventObject& aEvent ) throw(css::uno::RuntimeException);
+
+    // container.XContainerListener
+    virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& aEvent ) throw(css::uno::RuntimeException);
+    virtual void SAL_CALL elementRemoved ( const css::container::ContainerEvent& aEvent ) throw(css::uno::RuntimeException);
+    virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& aEvent ) throw(css::uno::RuntimeException);
+
+    // lang.XEventListener
+    virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException);
+
+    void onCreate();
+};
 
 /**
     @short      standard ctor
@@ -95,11 +139,39 @@ DEFINE_INIT_SERVICE( JobExecutor,
 JobExecutor::JobExecutor( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xContext )
     : ThreadHelpBase      (&Application::GetSolarMutex()                                   )
     , m_xContext          (xContext                                                        )
-    , m_xModuleManager    (                                                                )
+    , m_xModuleManager    (css::frame::ModuleManager::create( m_xContext ))
     , m_aConfig           (xContext, OUString::createFromAscii(JobData::EVENTCFG_ROOT) )
 {
-    // Don't do any reference related code here! Do it inside special
-    // impl_ method() ... see DEFINE_INIT_SERVICE() macro for further information.
+}
+
+void JobExecutor::initialize(const css::uno::Sequence< css::uno::Any >& ) throw (css::uno::Exception, css::uno::RuntimeException)
+{
+    // read the list of all currently registered events inside configuration.
+    // e.g. "/org.openoffice.Office.Jobs/Events/<event name>"
+    // We need it later to check if an incoming event request can be executed successfully
+    // or must be rejected. It's an optimization! Of course we must implement updating of this
+    // list too ... Be listener at the configuration.
+
+    m_aConfig.open(ConfigAccess::E_READONLY);
+    if (m_aConfig.getMode() == ConfigAccess::E_READONLY)
+    {
+        css::uno::Reference< css::container::XNameAccess > xRegistry(
+                m_aConfig.cfg(), css::uno::UNO_QUERY);
+        if (xRegistry.is())
+            m_lEvents = Converter::convert_seqOUString2OUStringList(
+                    xRegistry->getElementNames());
+
+        css::uno::Reference< css::container::XContainer > xNotifier(
+                m_aConfig.cfg(), css::uno::UNO_QUERY);
+        if (xNotifier.is())
+        {
+            m_xConfigListener = new WeakContainerListener(this);
+            xNotifier->addContainerListener(m_xConfigListener);
+        }
+
+        // don't close cfg here!
+        // It will be done inside disposing ...
+    }
 }
 
 JobExecutor::~JobExecutor()
@@ -329,6 +401,14 @@ void SAL_CALL JobExecutor::disposing( const css::lang::EventObject& aEvent ) thr
     /* } SAFE */
 }
 
-} // namespace framework
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_JobExecutor_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return static_cast<cppu::OWeakObject *>(new JobExecutor(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

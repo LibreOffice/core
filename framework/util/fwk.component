@@ -55,7 +55,8 @@
       constructor="com_sun_star_comp_framework_ImageManager_get_implementation">
     <service name="com.sun.star.ui.ImageManager"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.JobExecutor">
+  <implementation name="com.sun.star.comp.framework.JobExecutor"
+      constructor="com_sun_star_comp_framework_JobExecutor_get_implementation">
     <service name="com.sun.star.task.JobExecutor"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.LangSelectionStatusbarController"
