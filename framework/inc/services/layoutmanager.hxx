@@ -20,19 +20,12 @@
 #ifndef INCLUDED_FRAMEWORK_INC_SERVICES_LAYOUTMANAGER_HXX
 #define INCLUDED_FRAMEWORK_INC_SERVICES_LAYOUTMANAGER_HXX
 
-/** Attention: stl headers must(!) be included at first. Otherwise it can make trouble
-               with solaris headers ...
-*/
-#include <vector>
-
 #include <threadhelp/threadhelpbase.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include <threadhelp/writeguard.hxx>
 #include <threadhelp/readguard.hxx>
-#include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
-#include <macros/xserviceinfo.hxx>
 #include <properties.h>
 #include <stdtypes.h>
 #include <uielement/menubarmanager.hxx>
@@ -62,6 +55,7 @@
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <tools/wintypes.hxx>
 #include <svtools/miscopt.hxx>
@@ -99,7 +93,25 @@ namespace framework
             /** declaration of XInterface, XTypeProvider, XServiceInfo */
             FWK_DECLARE_XINTERFACE
             FWK_DECLARE_XTYPEPROVIDER
-            DECLARE_XSERVICEINFO
+            virtual OUString SAL_CALL getImplementationName()
+                throw (css::uno::RuntimeException)
+            {
+                return OUString("com.sun.star.comp.framework.LayoutManager");
+            }
+
+            virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+                throw (css::uno::RuntimeException)
+            {
+                return cppu::supportsService(this, ServiceName);
+            }
+
+            virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+                throw (css::uno::RuntimeException)
+            {
+                css::uno::Sequence< OUString > aSeq(1);
+                aSeq[0] = OUString("com.sun.star.frame.LayoutManager");
+                return aSeq;
+            }
 
             //---------------------------------------------------------------------------------------------------------
             // XLayoutManager

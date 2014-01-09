@@ -57,7 +57,8 @@
       constructor="com_sun_star_comp_framework_LangSelectionStatusbarController_get_implementation">
     <service name="com.sun.star.frame.StatusbarController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.LayoutManager">
+  <implementation name="com.sun.star.comp.framework.LayoutManager"
+      constructor="com_sun_star_comp_framework_LayoutManager_get_implementation">
     <service name="com.sun.star.frame.LayoutManager"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.MenuBarFactory">

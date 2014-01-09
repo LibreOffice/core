@@ -20,7 +20,6 @@
 #include <services/layoutmanager.hxx>
 #include <helpers.hxx>
 #include <threadhelp/resetableguard.hxx>
-#include <services.h>
 
 #include <framework/sfxhelperfunctions.hxx>
 #include <uielement/menubarwrapper.hxx>
@@ -75,6 +74,7 @@
 #include <rtl/instance.hxx>
 #include <unotools/cmdoptions.hxx>
 
+#include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
 
 #include <algorithm>
@@ -98,8 +98,6 @@ namespace framework
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( LayoutManager, LayoutManager_Base, LayoutManager_PBase )
 IMPLEMENT_FORWARD_XINTERFACE2( LayoutManager, LayoutManager_Base, LayoutManager_PBase )
-DEFINE_XSERVICEINFO_MULTISERVICE_2( LayoutManager, ::cppu::OWeakObject, "com.sun.star.frame.LayoutManager", OUString("com.sun.star.comp.framework.LayoutManager"))
-DEFINE_INIT_SERVICE( LayoutManager, {} )
 
 LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) : LayoutManager_Base()
         , ThreadHelpBase( &Application::GetSolarMutex())
@@ -3223,5 +3221,15 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL LayoutManager::getPropertySet
 }
 
 } // namespace framework
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_LayoutManager_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    rtl::Reference<framework::LayoutManager> x(new framework::LayoutManager(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
