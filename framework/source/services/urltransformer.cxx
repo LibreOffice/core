@@ -17,53 +17,65 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <services/urltransformer.hxx>
-#include <threadhelp/resetableguard.hxx>
 #include <services.h>
 
+#include <cppuhelper/implbase2.hxx>
 #include <tools/urlobj.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <vcl/svapp.hxx>
+#include <macros/xserviceinfo.hxx>
 
-namespace framework{
+#include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/util/URL.hpp>
 
-using namespace ::osl                           ;
-using namespace ::cppu                          ;
-using namespace ::com::sun::star::uno           ;
-using namespace ::com::sun::star::lang          ;
-using namespace ::com::sun::star::util          ;
+using namespace ::osl;
+using namespace ::cppu;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
 
-//*****************************************************************************************************************
-//  constructor
-//*****************************************************************************************************************
-URLTransformer::URLTransformer( const Reference< XMultiServiceFactory >& /*xFactory*/ )
+namespace {
+
+class URLTransformer : public ::cppu::WeakImplHelper2< ::com::sun::star::util::XURLTransformer, css::lang::XServiceInfo>
 {
-    // Safe impossible cases.
-    // Method not defined for all incoming parameter.
-    //SAL_WARN_IF( !xFactory.is(), "fwk", "URLTransformer::URLTransformer(): Invalid parameter detected!" );
-}
+public:
+    URLTransformer() {}
 
-//*****************************************************************************************************************
-//  destructor
-//*****************************************************************************************************************
-URLTransformer::~URLTransformer()
-{
-}
+    virtual ~URLTransformer() {}
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
+    virtual OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException)
+    {
+        return OUString("com.sun.star.comp.framework.URLTransformer");
+    }
 
-DEFINE_XSERVICEINFO_MULTISERVICE    (   URLTransformer                      ,
-                                        OWeakObject                         ,
-                                        "com.sun.star.util.URLTransformer"  ,
-                                        IMPLEMENTATIONNAME_URLTRANSFORMER
-                                    )
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException)
+    {
+        return ServiceName == "com.sun.star.util.URLTransformer";
+    }
 
-DEFINE_INIT_SERVICE                 (   URLTransformer,
-                                        {
-                                        }
-                                    )
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException)
+    {
+        css::uno::Sequence< OUString > aRet(1);
+        OUString* pArray = aRet.getArray();
+        pArray[0] = "com.sun.star.util.URLTransformer";
+        return aRet;
+    }
+
+    virtual sal_Bool SAL_CALL parseStrict( css::util::URL& aURL )
+        throw( css::uno::RuntimeException );
+
+    virtual sal_Bool SAL_CALL parseSmart( css::util::URL& aURL, const OUString& sSmartProtocol )
+        throw( css::uno::RuntimeException );
+
+    virtual sal_Bool SAL_CALL assemble( css::util::URL& aURL )
+        throw( css::uno::RuntimeException );
+
+    virtual OUString SAL_CALL getPresentation( const css::util::URL& aURL, sal_Bool bWithPassword )
+        throw( css::uno::RuntimeException );
+};
 
 namespace
 {
@@ -325,6 +337,17 @@ OUString SAL_CALL URLTransformer::getPresentation(   const   URL&        aURL   
         return OUString();
 }
 
-}       //  namespace framework
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_URLTransformer_get_implementation(
+        SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
+        uno_Sequence * arguments)
+{
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    rtl::Reference<URLTransformer> x(new URLTransformer());
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
