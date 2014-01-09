@@ -64,7 +64,8 @@
   <implementation name="com.sun.star.comp.framework.MenuBarFactory">
     <service name="com.sun.star.ui.UIElementFactory"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.ModuleAcceleratorConfiguration">
+  <implementation name="com.sun.star.comp.framework.ModuleAcceleratorConfiguration"
+      constructor="com_sun_star_comp_framework_ModuleAcceleratorConfiguration_get_implementation">
     <service name="com.sun.star.ui.ModuleAcceleratorConfiguration"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.ModuleManager"

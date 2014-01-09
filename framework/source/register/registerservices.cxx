@@ -40,7 +40,6 @@
 #include <uielement/controlmenucontroller.hxx>
 #include <uifactory/menubarfactory.hxx>
 #include <accelerators/globalacceleratorconfiguration.hxx>
-#include <accelerators/moduleacceleratorconfiguration.hxx>
 #include <accelerators/documentacceleratorconfiguration.hxx>
 #include <uielement/recentfilesmenucontroller.hxx>
 #include <services/sessionlistener.hxx>
@@ -56,7 +55,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::ControlMenuController                   )   else
                         IFFACTORY( ::framework::MenuBarFactory                          )   else
                         IFFACTORY( ::framework::GlobalAcceleratorConfiguration          )   else
-                        IFFACTORY( ::framework::ModuleAcceleratorConfiguration          )   else
                         IFFACTORY( ::framework::DocumentAcceleratorConfiguration        )   else
                         IFFACTORY( ::framework::RecentFilesMenuController               )   else
                         IFFACTORY( ::framework::SessionListener                         )   else
