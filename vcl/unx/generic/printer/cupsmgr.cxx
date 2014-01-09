@@ -640,7 +640,7 @@ void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner
     }
 }
 
-int CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner )
+bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner )
 {
     OSL_TRACE( "endSpool: %s, %s, copy count = %d",
                OUStringToOString( rPrintername, RTL_TEXTENCODING_UTF8 ).getStr(),
@@ -699,7 +699,7 @@ int CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTit
             cupsFreeOptions( nNumOptions, pOptions );
     }
 
-    return nJobID;
+    return nJobID != 0;
 }
 
 

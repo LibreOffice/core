@@ -147,7 +147,7 @@ FILE* PrinterInfoManager::startSpool( const OUString& /* rPrintername */, bool /
     return NULL;
 }
 
-int PrinterInfoManager::endSpool( const OUString& /*rPrintername*/, const OUString& /*rJobTitle*/, FILE* /* pFile */, const JobData& /*rDocumentJobData*/, bool /*bBanner*/ )
+bool PrinterInfoManager::endSpool( const OUString& /*rPrintername*/, const OUString& /*rJobTitle*/, FILE* /* pFile */, const JobData& /*rDocumentJobData*/, bool /*bBanner*/ )
 {
     return true;
 }
