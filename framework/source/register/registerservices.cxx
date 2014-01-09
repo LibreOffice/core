@@ -35,7 +35,6 @@
 =================================================================================================================*/
 #include <services/desktop.hxx>
 #include <services/frame.hxx>
-#include <jobs/jobexecutor.hxx>
 #include <uielement/controlmenucontroller.hxx>
 #include <accelerators/globalacceleratorconfiguration.hxx>
 #include <accelerators/documentacceleratorconfiguration.hxx>
@@ -48,7 +47,6 @@
 COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::Desktop                                 )   else
                         IFFACTORY( ::framework::Frame                                   )   else
-                        IFFACTORY( ::framework::JobExecutor                             )   else
                         IFFACTORY( ::framework::ControlMenuController                   )   else
                         IFFACTORY( ::framework::GlobalAcceleratorConfiguration          )   else
                         IFFACTORY( ::framework::DocumentAcceleratorConfiguration        )   else

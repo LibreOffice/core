@@ -17,16 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <jobs/jobexecutor.hxx>
 #include <jobs/job.hxx>
 #include <jobs/joburl.hxx>
-
+#include <jobs/configaccess.hxx>
+#include <macros/xserviceinfo.hxx>
 #include <classes/converter.hxx>
 #include <threadhelp/transactionguard.hxx>
+#include <threadhelp/threadhelpbase.hxx>
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 #include <general.h>
 #include <services.h>
+#include <stdtypes.h>
 
 #include "helper/mischelper.hxx"
 
@@ -34,13 +36,78 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/task/XJobExecutor.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/container/XContainerListener.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/document/XEventListener.hpp>
+#include <com/sun/star/frame/XModuleManager2.hpp>
 
+#include <cppuhelper/implbase4.hxx>
 #include <unotools/configpaths.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 
+using namespace framework;
 
-namespace framework{
+namespace {
+
+/**
+    @short  implements a job executor, which can be triggered from any code
+    @descr  It uses the given trigger event to locate any registered job service
+            inside the configuration and execute it. Of course it controls the
+            liftime of such jobs too.
+ */
+class JobExecutor : private ThreadHelpBase
+                  , public  ::cppu::WeakImplHelper4<
+                                css::lang::XServiceInfo
+                              , css::task::XJobExecutor
+                              , css::container::XContainerListener // => lang.XEventListener
+                              , css::document::XEventListener >
+{
+private:
+
+    /** reference to the uno service manager */
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+
+    /** reference to the module info service */
+    css::uno::Reference< css::frame::XModuleManager2 > m_xModuleManager;
+
+    /** cached list of all registered event names of cfg for call optimization. */
+    OUStringList m_lEvents;
+
+    /** we listen at the configuration for changes at the event list. */
+    ConfigAccess m_aConfig;
+
+    /** helper to allow us listen to the configuration without a cyclic dependency */
+    com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> m_xConfigListener;
+
+public:
+
+              JobExecutor( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+     virtual ~JobExecutor(                                                                     );
+
+public:
+
+    // XInterface, XTypeProvider, XServiceInfo
+    DECLARE_XSERVICEINFO
+
+    // task.XJobExecutor
+    virtual void SAL_CALL trigger( const OUString& sEvent ) throw(css::uno::RuntimeException);
+
+    // document.XEventListener
+    virtual void SAL_CALL notifyEvent( const css::document::EventObject& aEvent ) throw(css::uno::RuntimeException);
+
+    // container.XContainerListener
+    virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& aEvent ) throw(css::uno::RuntimeException);
+    virtual void SAL_CALL elementRemoved ( const css::container::ContainerEvent& aEvent ) throw(css::uno::RuntimeException);
+    virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& aEvent ) throw(css::uno::RuntimeException);
+
+    // lang.XEventListener
+    virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException);
+};
 
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2( JobExecutor                   ,
                                           ::cppu::OWeakObject           ,
@@ -329,6 +396,17 @@ void SAL_CALL JobExecutor::disposing( const css::lang::EventObject& aEvent ) thr
     /* } SAFE */
 }
 
-} // namespace framework
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_JobExecutor_get_implementation(
+        css::uno::XComponentContext * context,
+        uno_Sequence * arguments)
+{
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    rtl::Reference<JobExecutor> x(new JobExecutor(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
