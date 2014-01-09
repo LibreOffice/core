@@ -130,7 +130,8 @@
   <implementation name="com.sun.star.comp.framework.URLTransformer">
     <service name="com.sun.star.util.URLTransformer"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.WindowContentFactoryManager">
+  <implementation name="com.sun.star.comp.framework.WindowContentFactoryManager"
+      constructor="com_sun_star_comp_framework_WindowContentFactoryManager_get_implementation">
     <service name="com.sun.star.ui.WindowContentFactoryManager"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.WindowStateConfiguration"

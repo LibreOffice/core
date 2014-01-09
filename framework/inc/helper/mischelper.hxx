@@ -88,6 +88,34 @@ inline bool IsScriptTypeMatchingToLanguage( sal_Int16 nScriptType, LanguageType 
     return 0 != (nScriptType & SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ));
 }
 
+inline void RetrieveTypeNameFromResourceURL( const OUString& aResourceURL, OUString& aType, OUString& aName )
+{
+    const sal_Int32 RESOURCEURL_PREFIX_SIZE = 17;
+    const char      RESOURCEURL_PREFIX[] = "private:resource/";
+
+    if (( aResourceURL.startsWith( RESOURCEURL_PREFIX ) ) &&
+        ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))
+    {
+        OUString aTmpStr( aResourceURL.copy( RESOURCEURL_PREFIX_SIZE ));
+        sal_Int32 nToken = 0;
+        sal_Int32 nPart  = 0;
+        do
+        {
+            OUString sToken = aTmpStr.getToken( 0, '/', nToken);
+            if ( !sToken.isEmpty() )
+            {
+                if ( nPart == 0 )
+                    aType = sToken;
+                else if ( nPart == 1 )
+                    aName = sToken;
+                else
+                    break;
+                nPart++;
+            }
+        }
+        while( nToken >=0 );
+    }
+}
 
 class FWI_DLLPUBLIC LanguageGuessingHelper
 {

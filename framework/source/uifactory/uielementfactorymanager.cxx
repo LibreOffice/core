@@ -18,7 +18,6 @@
  */
 
 #include <uifactory/uielementfactorymanager.hxx>
-#include <uifactory/windowcontentfactorymanager.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 
@@ -465,7 +464,7 @@ throw ( RuntimeException )
     OUString aType;
     OUString aName;
 
-    WindowContentFactoryManager::RetrieveTypeNameFromResourceURL( aResourceURL, aType, aName );
+    RetrieveTypeNameFromResourceURL( aResourceURL, aType, aName );
 
     Reference< XComponentContext > xContext( m_xContext );
 

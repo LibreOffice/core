@@ -56,7 +56,6 @@
 #include <services/taskcreatorsrv.hxx>
 
 #include <uiconfiguration/imagemanager.hxx>
-#include <uifactory/windowcontentfactorymanager.hxx>
 #include <services/substitutepathvars.hxx>
 #include <services/pathsettings.hxx>
 #include <services/ContextChangeEventMultiplexer.hxx>
@@ -85,7 +84,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::SessionListener                         )   else
                         IFFACTORY( ::framework::TaskCreatorService                      )   else
                         IFFACTORY( ::framework::ImageManager                            )   else
-                        IFFACTORY( ::framework::WindowContentFactoryManager             )   else
                         IFFACTORY( ::framework::SubstitutePathVariables                 )   else
                         IFFACTORY( ::framework::PathSettings                            )   else
                         IFFACTORY( ::framework::ContextChangeEventMultiplexer           )
