@@ -18,7 +18,6 @@
  */
 
 
-#include <uielement/langselectionstatusbarcontroller.hxx>
 #include <classes/fwkresid.hxx>
 #include <services.h>
 #include <classes/resource.hrc>
@@ -33,6 +32,7 @@
 #include <com/sun/star/awt/PopupMenu.hpp>
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
 #include <svtools/langtab.hxx>
+#include <svtools/statusbarcontroller.hxx>
 #include "sal/types.h"
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/document/XDocumentLanguages.hpp>
@@ -49,28 +49,70 @@
 #include <tools/gen.hxx>
 #include <com/sun/star/awt/Command.hpp>
 #include <svl/languageoptions.hxx>
-#include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 
 #include "helper/mischelper.hxx"
 
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ref.hxx>
+
+#include <macros/generic.hxx>
+#include <macros/xinterface.hxx>
+#include <macros/xtypeprovider.hxx>
+#include <macros/xserviceinfo.hxx>
+#include <stdtypes.h>
 
 #include <map>
 #include <set>
 
 using namespace ::cppu;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::i18n;
-using namespace ::com::sun::star::document;
+using namespace css::uno;
+using namespace css::lang;
+using namespace css::frame;
+using namespace css::i18n;
+using namespace css::document;
+using namespace framework;
 
-using ::rtl::OUStringBuffer;
+class SvtLanguageTable;
 
+namespace {
 
-namespace framework
+class LangSelectionStatusbarController : public svt::StatusbarController
 {
+    public:
+        explicit LangSelectionStatusbarController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+
+        // XServiceInfo
+        DECLARE_XSERVICEINFO
+
+        // XInitialization
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException);
+
+        // XStatusListener
+        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException );
+
+        // XStatusbarController
+        virtual void SAL_CALL command( const css::awt::Point& aPos,
+                                       ::sal_Int32 nCommand,
+                                       ::sal_Bool bMouseEvent,
+                                       const css::uno::Any& aData ) throw (css::uno::RuntimeException);
+        virtual void SAL_CALL click( const css::awt::Point& aPos ) throw (css::uno::RuntimeException);
+
+    private:
+        virtual ~LangSelectionStatusbarController() {}
+        LangSelectionStatusbarController(LangSelectionStatusbarController &); // not defined
+        void operator =(LangSelectionStatusbarController &); // not defined
+
+
+        sal_Bool            m_bShowMenu;        // if the menu is to be displayed or not (depending on the selected object/text)
+        sal_Int16           m_nScriptType;      // the flags for the different script types available in the selection, LATIN = 0x0001, ASIAN = 0x0002, COMPLEX = 0x0004
+        OUString     m_aCurLang;         // the language of the current selection, "*" if there are more than one languages
+        OUString     m_aKeyboardLang;    // the keyboard language
+        OUString     m_aGuessedTextLang;     // the 'guessed' language for the selection, "" if none could be guessed
+        LanguageGuessingHelper      m_aLangGuessHelper;
+
+        void LangMenu( const css::awt::Point& aPos ) throw (css::uno::RuntimeException);
+};
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2      (   LangSelectionStatusbarController            ,
                                             OWeakObject                             ,
@@ -88,8 +130,8 @@ LangSelectionStatusbarController::LangSelectionStatusbarController( const uno::R
 {
 }
 
-void SAL_CALL LangSelectionStatusbarController::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL LangSelectionStatusbarController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+throw (css::uno::Exception, css::uno::RuntimeException)
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -102,8 +144,8 @@ throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException
 }
 
 void LangSelectionStatusbarController::LangMenu(
-    const ::com::sun::star::awt::Point& aPos )
-throw (::com::sun::star::uno::RuntimeException)
+    const css::awt::Point& aPos )
+throw (css::uno::RuntimeException)
 {
     if (!m_bShowMenu)
         return;
@@ -237,11 +279,11 @@ throw (::com::sun::star::uno::RuntimeException)
 }
 
 void SAL_CALL LangSelectionStatusbarController::command(
-    const ::com::sun::star::awt::Point& aPos,
+    const css::awt::Point& aPos,
     ::sal_Int32 nCommand,
     ::sal_Bool /*bMouseEvent*/,
-    const ::com::sun::star::uno::Any& /*aData*/ )
-throw (::com::sun::star::uno::RuntimeException)
+    const css::uno::Any& /*aData*/ )
+throw (css::uno::RuntimeException)
 {
     if ( nCommand & ::awt::Command::CONTEXTMENU )
     {
@@ -250,8 +292,8 @@ throw (::com::sun::star::uno::RuntimeException)
 }
 
 void SAL_CALL LangSelectionStatusbarController::click(
-    const ::com::sun::star::awt::Point& aPos )
-throw (::com::sun::star::uno::RuntimeException)
+    const css::awt::Point& aPos )
+throw (css::uno::RuntimeException)
 {
     LangMenu( aPos );
 }
@@ -309,6 +351,21 @@ throw ( RuntimeException )
     }
 }
 
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_LangSelectionStatusbarController_get_implementation(
+        css::uno::XComponentContext * context,
+        uno_Sequence * arguments)
+{
+    assert(arguments != 0);
+    rtl::Reference<LangSelectionStatusbarController> x(new LangSelectionStatusbarController(context));
+    css::uno::Sequence<css::uno::Any> aArgs(
+            reinterpret_cast<css::uno::Any *>(arguments->elements),
+            arguments->nElements);
+    x->initialize(aArgs);
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

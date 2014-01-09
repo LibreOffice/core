@@ -54,7 +54,8 @@
   <implementation name="com.sun.star.comp.framework.JobExecutor">
     <service name="com.sun.star.task.JobExecutor"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.LangSelectionStatusbarController">
+  <implementation name="com.sun.star.comp.framework.LangSelectionStatusbarController"
+      constructor="com_sun_star_comp_framework_LangSelectionStatusbarController_get_implementation">
     <service name="com.sun.star.frame.StatusbarController"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.LayoutManager">
