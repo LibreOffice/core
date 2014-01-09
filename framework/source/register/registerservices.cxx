@@ -33,7 +33,6 @@
                                 IFFACTORIE( Service2 )
                              )
 =================================================================================================================*/
-#include <services/urltransformer.hxx>
 #include <services/desktop.hxx>
 #include <services/frame.hxx>
 #include <services/modulemanager.hxx>
@@ -67,7 +66,6 @@
 #include <services/ContextChangeEventMultiplexer.hxx>
 
 COMPONENTGETFACTORY ( fwk,
-                        IFFACTORY( ::framework::URLTransformer                          )   else
                         IFFACTORY( ::framework::Desktop                                 )   else
                         IFFACTORY( ::framework::Frame                                   )   else
                         IFFACTORY( ::framework::JobExecutor                             )   else
