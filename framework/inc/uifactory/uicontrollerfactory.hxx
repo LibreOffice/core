@@ -76,15 +76,6 @@ class PopupMenuControllerFactory :  public UIControllerFactory
         DECLARE_XSERVICEINFO
 };
 
-class ToolbarControllerFactory :  public UIControllerFactory
-{
-    public:
-        ToolbarControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
-
-        //  XInterface, XTypeProvider, XServiceInfo
-        DECLARE_XSERVICEINFO
-};
-
 }
 
 #endif // INCLUDED_FRAMEWORK_INC_UIFACTORY_UICONTROLLERFACTORY_HXX

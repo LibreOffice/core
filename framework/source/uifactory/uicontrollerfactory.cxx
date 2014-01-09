@@ -232,6 +232,21 @@ PopupMenuControllerFactory::PopupMenuControllerFactory( const Reference< XCompon
 {
 }
 
+} // namespace framework
+
+using namespace framework;
+
+namespace {
+
+class ToolbarControllerFactory :  public UIControllerFactory
+{
+    public:
+        ToolbarControllerFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+
+        //  XInterface, XTypeProvider, XServiceInfo
+        DECLARE_XSERVICEINFO
+};
+
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   ToolbarControllerFactory                     ,
                                             ::cppu::OWeakObject                             ,
                                             SERVICENAME_TOOLBARCONTROLLERFACTORY            ,
@@ -246,12 +261,6 @@ ToolbarControllerFactory::ToolbarControllerFactory( const Reference< XComponentC
         OUString( "ToolBar" ))
 {
 }
-
-} // namespace framework
-
-using namespace framework;
-
-namespace {
 
 class StatusbarControllerFactory :  public UIControllerFactory
 {
@@ -277,6 +286,17 @@ StatusbarControllerFactory::StatusbarControllerFactory( const Reference< XCompon
 {
 }
 
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_ToolBarControllerFactory_get_implementation(
+        css::uno::XComponentContext * context,
+        uno_Sequence * arguments)
+{
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    rtl::Reference<ToolbarControllerFactory> x(new ToolbarControllerFactory(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
