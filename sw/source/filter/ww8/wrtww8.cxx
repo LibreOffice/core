@@ -1387,8 +1387,23 @@ void WW8Export::AppendBookmarks( const SwTxtNode& rNd, sal_Int32 nAktPos, sal_In
     }
 }
 
-void WW8Export::AppendAnnotationMarks( const SwTxtNode& /*rNd*/, sal_Int32 /*nAktPos*/, sal_Int32 /*nLen*/ )
+void WW8Export::AppendAnnotationMarks(const SwTxtNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen)
 {
+    std::vector<OUString> aStarts;
+    IMarkVector aMarks;
+    if (GetAnnotationMarks(rNode, nAktPos, nAktPos + nLen, aMarks))
+    {
+        for (IMarkVector::const_iterator it = aMarks.begin(), end = aMarks.end(); it != end; ++it)
+        {
+            sw::mark::IMark* pMark = (*it);
+            const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
+            if (nStart == nAktPos)
+            {
+                pAtn->AddRangeStartPosition(Fc2Cp(Strm().Tell()));
+                return;
+            }
+        }
+    }
 }
 
 void WW8Export::MoveFieldMarks(WW8_CP nFrom, WW8_CP nTo)

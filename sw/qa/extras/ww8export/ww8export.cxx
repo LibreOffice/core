@@ -152,8 +152,6 @@ DECLARE_WW8EXPORT_TEST(testCharacterBorder, "charborder.odt")
 
 DECLARE_WW8EXPORT_TEST(testFdo59530, "fdo59530.doc")
 {
-#if 0
-    // FIXME port to AnnotationMarks
     // See ooxmlexport's testFdo38244().
     // Test comment range feature.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -163,10 +161,10 @@ DECLARE_WW8EXPORT_TEST(testFdo59530, "fdo59530.doc")
     uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
     xRunEnum->nextElement();
     uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("TextFieldStart"), getProperty<OUString>(xPropertySet, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Annotation"), getProperty<OUString>(xPropertySet, "TextPortionType"));
     xRunEnum->nextElement();
     xPropertySet.set(xRunEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("TextFieldEnd"), getProperty<OUString>(xPropertySet, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("AnnotationEnd"), getProperty<OUString>(xPropertySet, "TextPortionType"));
 
     // Test initials.
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
@@ -181,14 +179,13 @@ DECLARE_WW8EXPORT_TEST(testFdo59530, "fdo59530.doc")
     xRunEnum = xRunEnumAccess->createEnumeration();
     xRunEnum->nextElement();
     xPropertySet.set(xRunEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("TextFieldStart"), getProperty<OUString>(xPropertySet, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Annotation"), getProperty<OUString>(xPropertySet, "TextPortionType"));
     // Comment ends in the third paragraph
     xRunEnumAccess.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     xRunEnum = xRunEnumAccess->createEnumeration();
     xRunEnum->nextElement();
     xPropertySet.set(xRunEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("TextFieldEnd"), getProperty<OUString>(xPropertySet, "TextPortionType"));
-#endif
+    CPPUNIT_ASSERT_EQUAL(OUString("AnnotationEnd"), getProperty<OUString>(xPropertySet, "TextPortionType"));
 }
 
 #endif

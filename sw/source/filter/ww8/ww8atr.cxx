@@ -2490,7 +2490,6 @@ void WW8AttributeOutput::PostitField( const SwField* pFld )
 
 void WW8AttributeOutput::WritePostitFieldStart()
 {
-    m_rWW8Export.pAtn->AddRangeStartPosition( m_rWW8Export.Fc2Cp( m_rWW8Export.Strm().Tell() ) );
 }
 
 bool WW8AttributeOutput::DropdownField( const SwField* pFld )
