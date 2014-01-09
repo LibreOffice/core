@@ -16,13 +16,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <uielement/popuptoolbarcontroller.hxx>
 #include <framework/menuconfiguration.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/miscopt.hxx>
+#include <svtools/toolboxcontroller.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -30,15 +31,49 @@
 #include <vcl/toolbox.hxx>
 
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
+#include <com/sun/star/awt/XPopupMenu.hpp>
 #include <com/sun/star/frame/PopupMenuControllerFactory.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XPopupMenuController.hpp>
+#include <com/sun/star/frame/XUIControllerFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 #define UNO_COMMAND_RECENT_FILE_LIST    ".uno:RecentFileList"
 
 using namespace framework;
 
-namespace framework
+namespace {
+
+class PopupMenuToolbarController : public svt::ToolboxController
 {
+public:
+    virtual ~PopupMenuToolbarController();
+
+    // XComponent
+    virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException );
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException);
+    // XToolbarController
+    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() throw (css::uno::RuntimeException);
+    // XStatusListener
+    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException );
+
+protected:
+    PopupMenuToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                                const OUString &rPopupCommand = OUString() );
+    virtual void functionExecuted( const OUString &rCommand );
+    virtual sal_uInt16 getDropDownStyle() const;
+    void createPopupMenuController();
+
+    css::uno::Reference< css::uno::XComponentContext >      m_xContext;
+    sal_Bool                                                m_bHasController;
+    css::uno::Reference< css::awt::XPopupMenu >             m_xPopupMenu;
+
+private:
+    OUString m_aPopupCommand;
+    css::uno::Reference< css::frame::XUIControllerFactory > m_xPopupMenuFactory;
+    css::uno::Reference< css::frame::XPopupMenuController > m_xPopupMenuController;
+};
 
 PopupMenuToolbarController::PopupMenuToolbarController(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
@@ -208,13 +243,24 @@ void PopupMenuToolbarController::createPopupMenuController()
     }
 }
 
-DEFINE_XSERVICEINFO_MULTISERVICE_2( WizardsToolbarController,
-                                    ::cppu::OWeakObject,
-                                    "com.sun.star.frame.ToolbarController",
-                                    OUString("org.apache.openoffice.comp.framework.WizardsToolbarController")
-                                   )
+class WizardsToolbarController : public PopupMenuToolbarController
+{
+public:
+    WizardsToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
-DEFINE_INIT_SERVICE( WizardsToolbarController, {} )
+    // XServiceInfo
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException);
+
+    sal_Bool SAL_CALL supportsService(OUString const & rServiceName)
+        throw (css::uno::RuntimeException);
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException);
+
+private:
+    sal_uInt16 getDropDownStyle() const;
+};
 
 WizardsToolbarController::WizardsToolbarController(
     const css::uno::Reference< css::uno::XComponentContext >& xContext )
@@ -222,14 +268,31 @@ WizardsToolbarController::WizardsToolbarController(
 {
 }
 
+OUString WizardsToolbarController::getImplementationName()
+    throw (css::uno::RuntimeException)
+{
+    return OUString("org.apache.openoffice.comp.framework.WizardsToolbarController");
+}
+
+sal_Bool WizardsToolbarController::supportsService(OUString const & rServiceName)
+    throw (css::uno::RuntimeException)
+{
+    return rServiceName == "com.sun.star.frame.ToolbarController";
+}
+
+css::uno::Sequence<OUString> WizardsToolbarController::getSupportedServiceNames()
+    throw (css::uno::RuntimeException)
+{
+    css::uno::Sequence< OUString > aRet(1);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = "com.sun.star.frame.ToolbarController";
+    return aRet;
+}
+
 sal_uInt16 WizardsToolbarController::getDropDownStyle() const
 {
     return TIB_DROPDOWNONLY;
 }
-
-} // framework
-
-namespace {
 
 class OpenToolbarController : public PopupMenuToolbarController
 {
@@ -512,6 +575,16 @@ void NewToolbarController::setItemImage( const OUString &rCommand )
     m_aLastURL = aURL;
 }
 
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+org_apache_openoffice_comp_framework_WizardsToolbarController_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    rtl::Reference<WizardsToolbarController> x(new WizardsToolbarController(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL

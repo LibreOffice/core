@@ -141,7 +141,8 @@
       constructor="org_apache_openoffice_comp_framework_NewToolbarController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
-  <implementation name="org.apache.openoffice.comp.framework.WizardsToolbarController">
+  <implementation name="org.apache.openoffice.comp.framework.WizardsToolbarController"
+      constructor="org_apache_openoffice_comp_framework_WizardsToolbarController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
 </component>
