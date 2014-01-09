@@ -39,7 +39,6 @@
 #include <uifactory/uicontrollerfactory.hxx>
 #include <uielement/uicommanddescription.hxx>
 #include <uiconfiguration/moduleuicfgsupplier.hxx>
-#include <uiconfiguration/moduleuiconfigurationmanager.hxx>
 #include <uifactory/menubarfactory.hxx>
 #include <accelerators/moduleacceleratorconfiguration.hxx>
 #include <accelerators/documentacceleratorconfiguration.hxx>
@@ -63,7 +62,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::PopupMenuControllerFactory              )   else
                         IFFACTORY( ::framework::UICommandDescription                    )   else
                         IFFACTORY( ::framework::ModuleUIConfigurationManagerSupplier    )   else
-                        IFFACTORY( ::framework::ModuleUIConfigurationManager            )   else
                         IFFACTORY( ::framework::MenuBarFactory                          )   else
                         IFFACTORY( ::framework::ModuleAcceleratorConfiguration          )   else
                         IFFACTORY( ::framework::DocumentAcceleratorConfiguration        )   else

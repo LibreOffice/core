@@ -1,6 +1,5 @@
 "ModuleUIConfigurationManager";"com::sun::star::ui::XModuleUIConfigurationManager";"isDefaultSettings()"
 "ModuleUIConfigurationManager";"com::sun::star::ui::XModuleUIConfigurationManager";"getDefaultSettings()"
-"ModuleUIConfigurationManager";"com::sun::star::lang::XInitialization";"initialize()"
 "ModuleUIConfigurationManager";"com::sun::star::ui::XUIConfiguration";"addConfigurationListener()"
 "ModuleUIConfigurationManager";"com::sun::star::ui::XUIConfiguration";"removeConfigurationListener()"
 "ModuleUIConfigurationManager";"com::sun::star::ui::XUIConfigurationManager";"reset()"
