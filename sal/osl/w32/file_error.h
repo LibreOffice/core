@@ -21,20 +21,12 @@
 #define INCLUDED_OSL_FILE_ERROR_H
 
 #include "osl/file.h"
-#include "rtl/ustring.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 oslFileError oslTranslateFileError (/*DWORD*/ unsigned long dwError);
-
-#if OSL_DEBUG_LEVEL > 0
-void _osl_warnFile (const char * message, rtl_uString * ustrFile);
-#define OSL_ENSURE_FILE( cond, msg, file ) ( (cond) ?  (void)0 : _osl_warnFile( msg, file ) )
-#else
-#define OSL_ENSURE_FILE( cond, msg, file ) ((void)0)
-#endif
 
 #ifdef __cplusplus
 }

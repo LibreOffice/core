@@ -711,10 +711,11 @@ oslFileError _osl_getSystemPathFromFileURL( rtl_uString *strURL, rtl_uString **p
 
     /* If the length of strUTF8 and strURL differs it indicates that the URL was not correct encoded */
 
-    OSL_ENSURE_FILE(
-        strUTF8->length == strURL->length ||
-        0 != rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( strURL->buffer, strURL->length, "file:\\\\", 7 )
-        ,"osl_getSystemPathFromFileURL: \"%s\" is not encoded !!!", strURL );
+    SAL_WARN_IF(
+        strUTF8->length != strURL->length &&
+        0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( strURL->buffer, strURL->length, "file:\\\\", 7 )
+        , "sal.osl"
+        ,"osl_getSystemPathFromFileURL: \"" << strURL << "\" is not encoded !!!");
 
     bValidEncoded = _osl_decodeURL( strUTF8, &strDecodedURL );
 
@@ -809,10 +810,9 @@ oslFileError _osl_getSystemPathFromFileURL( rtl_uString *strURL, rtl_uString **p
             if ( IsValidFilePath( strTempPath, NULL, VALIDATEPATH_ALLOW_RELATIVE | VALIDATEPATH_ALLOW_ELLIPSE, &strTempPath ) )
                 nError = osl_File_E_None;
         }
-        /*
-          else
-          OSL_ENSURE_FILE( !nError, "osl_getSystemPathFromFileURL: \"%s\" is not an absolute FileURL !!!", strURL );
-        */
+        else
+          SAL_INFO_IF(nError, "sal.osl",
+              "osl_getSystemPathFromFileURL: \"" << strURL << "\" is not an absolute FileURL");
 
     }
 
@@ -825,9 +825,8 @@ oslFileError _osl_getSystemPathFromFileURL( rtl_uString *strURL, rtl_uString **p
     if ( strTempPath )
         rtl_uString_release( strTempPath );
 
-    /*
-      OSL_ENSURE_FILE( !nError, "osl_getSystemPathFromFileURL: \"%s\" is not a FileURL !!!", strURL );
-    */
+    SAL_INFO_IF(nError, "sal.osl",
+        "osl_getSystemPathFromFileURL: \"" << strURL << "\" is not a FileURL");
 
     return nError;
 }
@@ -933,9 +932,8 @@ oslFileError _osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** 
     if ( strTempURL )
         rtl_uString_release( strTempURL );
 
-    /*
-      OSL_ENSURE_FILE( !nError, "osl_getFileURLFromSystemPath: \"%s\" is not a systemPath !!!", strPath );
-    */
+    SAL_INFO_IF(nError, "sal.osl",
+        "osl_getFileURLFromSystemPath: \"" << strPath << "\" is not a systemPath");
     return nError;
 }
 

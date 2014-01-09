@@ -122,25 +122,4 @@ oslFileError oslTranslateFileError (/*DWORD*/ unsigned long dwError)
         return osl_File_E_INVAL;
 }
 
-//#####################################################
-#if OSL_DEBUG_LEVEL > 0
-void _osl_warnFile( const char *message, rtl_uString *ustrFile )
-{
-    char szBuffer[2048];
-
-    if (ustrFile)
-    {
-        rtl_String  *strFile = NULL;
-
-        rtl_uString2String( &strFile, rtl_uString_getStr( ustrFile ), rtl_uString_getLength( ustrFile ),
-                            osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
-        snprintf( szBuffer, sizeof(szBuffer), message, strFile->buffer );
-        rtl_string_release( strFile );
-
-        message = szBuffer;
-    }
-    OSL_FAIL( message );
-}
-#endif /* OSL_DEBUG_LEVEL */
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
