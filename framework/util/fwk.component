@@ -96,7 +96,8 @@
       constructor="com_sun_star_comp_framework_StatusBarControllerFactory_get_implementation">
     <service name="com.sun.star.frame.StatusbarControllerFactory"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.StatusBarFactory">
+  <implementation name="com.sun.star.comp.framework.StatusBarFactory"
+      constructor="com_sun_star_comp_framework_StatusBarFactory_get_implementation">
     <service name="com.sun.star.ui.StatusBarFactory"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.StatusIndicatorFactory">

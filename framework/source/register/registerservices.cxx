@@ -55,7 +55,6 @@
 #include "uiconfiguration/windowstateconfiguration.hxx"
 #include <helper/statusindicatorfactory.hxx>
 #include <uielement/recentfilesmenucontroller.hxx>
-#include <uifactory/statusbarfactory.hxx>
 #include <uiconfiguration/uicategorydescription.hxx>
 #include <services/sessionlistener.hxx>
 #include <services/taskcreatorsrv.hxx>
@@ -89,7 +88,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::WindowStateConfiguration                )   else
                         IFFACTORY( ::framework::StatusIndicatorFactory                  )   else
                         IFFACTORY( ::framework::RecentFilesMenuController               )   else
-                        IFFACTORY( ::framework::StatusBarFactory                        )   else
                         IFFACTORY( ::framework::UICategoryDescription                   )   else
                         IFFACTORY( ::framework::SessionListener                         )   else
                         IFFACTORY( ::framework::SessionListener                         )   else

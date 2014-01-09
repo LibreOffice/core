@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <uifactory/statusbarfactory.hxx>
 #include <uifactory/menubarfactory.hxx>
 
 #include <uielement/statusbarwrapper.hxx>
@@ -32,11 +31,10 @@
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 
 #include <vcl/svapp.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
-
-//_________________________________________________________________________________________________________________
-//  Defines
-//_________________________________________________________________________________________________________________
+#include <macros/xserviceinfo.hxx>
+#include <services.h>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -45,12 +43,23 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 using namespace ::com::sun::star::ui;
 
-namespace framework
-{
+using namespace framework;
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
+namespace {
+
+class StatusBarFactory :  public MenuBarFactory
+{
+    public:
+        StatusBarFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+
+        //  XInterface, XTypeProvider, XServiceInfo
+        DECLARE_XSERVICEINFO
+
+        // XUIElementFactory
+        virtual css::uno::Reference< css::ui::XUIElement > SAL_CALL createUIElement( const OUString& ResourceURL, const css::uno::Sequence< css::beans::PropertyValue >& Args ) throw ( css::container::NoSuchElementException, css::lang::IllegalArgumentException, css::uno::RuntimeException );
+
+};
+
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   StatusBarFactory                                ,
                                             ::cppu::OWeakObject                             ,
                                             SERVICENAME_STATUSBARFACTORY                    ,
@@ -80,6 +89,17 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
     return xMenuBar;
 }
 
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_StatusBarFactory_get_implementation(
+        css::uno::XComponentContext * context,
+        uno_Sequence * arguments)
+{
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    rtl::Reference<StatusBarFactory> x(new StatusBarFactory(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
