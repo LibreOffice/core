@@ -41,7 +41,6 @@
 #include <uifactory/menubarfactory.hxx>
 #include <uifactory/toolboxfactory.hxx>
 #include "uiconfiguration/windowstateconfiguration.hxx"
-#include <services/autorecovery.hxx>
 #include <uifactory/statusbarfactory.hxx>
 #include <uiconfiguration/uicategorydescription.hxx>
 #include <services/sessionlistener.hxx>
@@ -62,7 +61,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::ToolBoxFactory                          )   else
                         IFFACTORY( ::framework::WindowStateConfiguration                )   else
                         IFFACTORY( ::framework::ToolbarControllerFactory                )   else
-                        IFFACTORY( ::framework::AutoRecovery                            )   else
                         IFFACTORY( ::framework::StatusBarFactory                        )   else
                         IFFACTORY( ::framework::UICategoryDescription                   )   else
                         IFFACTORY( ::framework::SessionListener                         )   else
