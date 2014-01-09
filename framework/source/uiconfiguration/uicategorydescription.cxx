@@ -17,9 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "uiconfiguration/uicategorydescription.hxx"
 #include <threadhelp/resetableguard.hxx>
+#include <threadhelp/threadhelpbase.hxx>
 #include "services.h"
+#include <macros/xserviceinfo.hxx>
+#include <uielement/uicommanddescription.hxx>
 
 #include "properties.h"
 
@@ -31,7 +33,9 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <unotools/configmgr.hxx>
@@ -39,9 +43,7 @@
 #include <vcl/mnemonic.hxx>
 #include <comphelper/sequence.hxx>
 
-//_________________________________________________________________________________________________________________
-//  Defines
-//_________________________________________________________________________________________________________________
+#include <boost/unordered_map.hpp>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -49,10 +51,9 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::configuration;
 using namespace com::sun::star::container;
 using namespace ::com::sun::star::frame;
+using namespace framework;
 
-//_________________________________________________________________________________________________________________
-//  Namespace
-//_________________________________________________________________________________________________________________
+namespace {
 
 struct ModuleToCategory
 {
@@ -64,13 +65,6 @@ static const char GENERIC_MODULE_NAME[]                     = "generic";
 static const char CONFIGURATION_ROOT_ACCESS[]               = "/org.openoffice.Office.UI.";
 static const char CONFIGURATION_CATEGORY_ELEMENT_ACCESS[]   = "/Commands/Categories";
 static const char CONFIGURATION_PROPERTY_NAME[]             = "Name";
-
-namespace framework
-{
-
-//*****************************************************************************************************************
-//  Configuration access class for PopupMenuControllerFactory implementation
-//*****************************************************************************************************************
 
 class ConfigurationAccess_UICategory : // Order is necessary for right initialization!
                                         private ThreadHelpBase                           ,
@@ -395,9 +389,16 @@ void SAL_CALL ConfigurationAccess_UICategory::disposing( const EventObject& aEve
         m_xConfigAccess.clear();
 }
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
+class UICategoryDescription :  public UICommandDescription
+{
+    public:
+        UICategoryDescription( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+        virtual ~UICategoryDescription();
+
+        DECLARE_XSERVICEINFO
+    private:
+        virtual css::uno::Reference< css::container::XNameAccess > impl_createConfigAccess(const OUString& _sName);
+};
 
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2  ( UICategoryDescription                  ,
                                             ::cppu::OWeakObject                    ,
@@ -433,6 +434,17 @@ Reference< XNameAccess > UICategoryDescription::impl_createConfigAccess(const OU
     return new ConfigurationAccess_UICategory( _sName, m_xGenericUICommands, m_xContext );
 }
 
-} // namespace framework
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_UICategoryDescription_get_implementation(
+        css::uno::XComponentContext * context,
+        uno_Sequence * arguments)
+{
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    rtl::Reference<UICategoryDescription> x(new UICategoryDescription(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
