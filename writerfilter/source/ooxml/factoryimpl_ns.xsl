@@ -532,16 +532,6 @@ CreateElementMapPointer </xsl:text>
     <xsl:value-of select="@value"/>
     <xsl:text>");</xsl:text>
         </xsl:when>
-        <xsl:when test="@action='mark'">
-          <xsl:text>
-    OOXMLFastHelper&lt;OOXMLIntegerValue&gt;::mark(pHandler, </xsl:text>
-    <xsl:call-template name="idtoqname">
-      <xsl:with-param name="id" select="@sendtokenid"/>
-    </xsl:call-template>
-    <xsl:text>, "</xsl:text>
-    <xsl:value-of select="@value"/>
-    <xsl:text>");</xsl:text>
-        </xsl:when>
         <xsl:when test="@action='tokenproperty'">
           <xsl:text>
     OOXMLFastHelper&lt;OOXMLIntegerValue&gt;::newProperty(pHandler, </xsl:text>
