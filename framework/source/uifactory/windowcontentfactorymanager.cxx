@@ -17,96 +17,95 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <uifactory/windowcontentfactorymanager.hxx>
+#include <sal/config.h>
 
 #include <uifactory/configurationaccessfactorymanager.hxx>
-#include <threadhelp/resetableguard.hxx>
-#include "services.h"
+#include <helper/mischelper.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include "com/sun/star/frame/XModuleManager2.hpp"
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <rtl/ustrbuf.hxx>
-#include <cppuhelper/weak.hxx>
-#include <tools/urlobj.hxx>
+#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/svapp.hxx>
-
-//_________________________________________________________________________________________________________________
-//  Defines
-//_________________________________________________________________________________________________________________
 
 using namespace ::com::sun::star;
+using namespace framework;
 
-//_________________________________________________________________________________________________________________
-//  Namespace
-//_________________________________________________________________________________________________________________
+namespace {
 
-namespace framework
+typedef ::cppu::WeakComponentImplHelper2<
+    com::sun::star::lang::XServiceInfo,
+    com::sun::star::lang::XSingleComponentFactory > WindowContentFactoryManager_BASE;
+
+class WindowContentFactoryManager : private osl::Mutex,
+                                    public WindowContentFactoryManager_BASE
 {
+public:
+    WindowContentFactoryManager( const css::uno::Reference< css::uno::XComponentContext>& rxContext );
+    virtual ~WindowContentFactoryManager();
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2  (   WindowContentFactoryManager                     ,
-                                            ::cppu::OWeakObject                             ,
-                                            "com.sun.star.ui.WindowContentFactoryManager",
-                                            IMPLEMENTATIONNAME_WINDOWCONTENTFACTORYMANAGER
-                                        )
+    virtual OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException)
+    {
+        return OUString("com.sun.star.comp.framework.WindowContentFactoryManager");
+    }
 
-DEFINE_INIT_SERVICE                     (   WindowContentFactoryManager, {} )
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException)
+    {
+        return cppu::supportsService(this, ServiceName);
+    }
+
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException)
+    {
+        css::uno::Sequence< OUString > aSeq(1);
+        aSeq[0] = OUString("com.sun.star.ui.WindowContentFactoryManager");
+        return aSeq;
+    }
+
+    // XSingleComponentFactory
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithContext( const css::uno::Reference< css::uno::XComponentContext >& Context ) throw (css::uno::Exception, css::uno::RuntimeException);
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext( const css::uno::Sequence< css::uno::Any >& Arguments, const css::uno::Reference< css::uno::XComponentContext >& Context ) throw (css::uno::Exception, css::uno::RuntimeException);
+
+private:
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+
+    css::uno::Reference< css::uno::XComponentContext >     m_xContext;
+    sal_Bool                                               m_bConfigRead;
+    ConfigurationAccess_FactoryManager*                    m_pConfigAccess;
+};
 
 WindowContentFactoryManager::WindowContentFactoryManager( const uno::Reference< uno::XComponentContext >& rxContext ) :
-    ThreadHelpBase( &Application::GetSolarMutex() ),
+    WindowContentFactoryManager_BASE(*static_cast<osl::Mutex *>(this)),
+    m_xContext( rxContext ),
     m_bConfigRead( sal_False )
 {
-    m_pConfigAccess = new ConfigurationAccess_FactoryManager( rxContext, OUString( "/org.openoffice.Office.UI.WindowContentFactories/Registered/ContentFactories" ) );
+    m_pConfigAccess = new ConfigurationAccess_FactoryManager( m_xContext,
+            "/org.openoffice.Office.UI.WindowContentFactories/Registered/ContentFactories" );
     m_pConfigAccess->acquire();
-    m_xModuleManager = frame::ModuleManager::create( rxContext );
 }
 
 WindowContentFactoryManager::~WindowContentFactoryManager()
 {
-    ResetableGuard aLock( m_aLock );
-
-    // reduce reference count
-    m_pConfigAccess->release();
+    disposing();
 }
 
-void WindowContentFactoryManager::RetrieveTypeNameFromResourceURL( const OUString& aResourceURL, OUString& aType, OUString& aName )
+void SAL_CALL WindowContentFactoryManager::disposing()
 {
-    const sal_Int32 RESOURCEURL_PREFIX_SIZE = 17;
-    const char      RESOURCEURL_PREFIX[] = "private:resource/";
+    osl::MutexGuard g(rBHelper.rMutex);
 
-    if (( aResourceURL.startsWith( RESOURCEURL_PREFIX ) ) &&
-        ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))
+    if (m_pConfigAccess)
     {
-        OUString aTmpStr( aResourceURL.copy( RESOURCEURL_PREFIX_SIZE ));
-        sal_Int32 nToken = 0;
-        sal_Int32 nPart  = 0;
-        do
-        {
-            OUString sToken = aTmpStr.getToken( 0, '/', nToken);
-            if ( !sToken.isEmpty() )
-            {
-                if ( nPart == 0 )
-                    aType = sToken;
-                else if ( nPart == 1 )
-                    aName = sToken;
-                else
-                    break;
-                nPart++;
-            }
-        }
-        while( nToken >=0 );
+        // reduce reference count
+        m_pConfigAccess->release();
+        m_pConfigAccess = 0;
     }
 }
 
@@ -139,18 +138,12 @@ throw (uno::Exception, uno::RuntimeException)
         }
     }
 
-    uno::Reference< frame::XModuleManager2 > xModuleManager;
-    // SAFE
-    {
-        ResetableGuard aLock( m_aLock );
-        xModuleManager = m_xModuleManager;
-    }
-    // UNSAFE
-
     // Determine the module identifier
     OUString aType;
     OUString aName;
     OUString aModuleId;
+    uno::Reference< frame::XModuleManager2 > xModuleManager =
+        frame::ModuleManager::create( m_xContext );
     try
     {
         if ( xFrame.is() && xModuleManager.is() )
@@ -170,21 +163,18 @@ throw (uno::Exception, uno::RuntimeException)
 
         // Detetmine the implementation name of the window content factory dependent on the
         // module identifier, user interface element type and name
-        // SAFE
-        ResetableGuard aLock( m_aLock );
-
+        { // SAFE
+        osl::MutexGuard g(rBHelper.rMutex);
         if ( !m_bConfigRead )
         {
             m_bConfigRead = sal_True;
             m_pConfigAccess->readConfigurationData();
         }
-
         aImplementationName = m_pConfigAccess->getFactorySpecifierFromTypeNameModule( aType, aName, aModuleId );
+        } // SAFE
+
         if ( !aImplementationName.isEmpty() )
         {
-            aLock.unlock();
-            // UNSAFE
-
             uno::Reference< lang::XMultiServiceFactory > xServiceManager( Context->getServiceManager(), uno::UNO_QUERY );
             if ( xServiceManager.is() )
             {
@@ -216,6 +206,31 @@ throw (uno::Exception, uno::RuntimeException)
     return xWindow;
 }
 
-} // namespace framework
+struct Instance {
+    explicit Instance(
+        css::uno::Reference<css::uno::XComponentContext> const & context):
+        instance(static_cast<cppu::OWeakObject *>(
+                    new WindowContentFactoryManager(context)))
+    {
+    }
+
+    css::uno::Reference<css::uno::XInterface> instance;
+};
+
+struct Singleton:
+    public rtl::StaticWithArg<
+        Instance, css::uno::Reference<css::uno::XComponentContext>, Singleton>
+{};
+
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_WindowContentFactoryManager_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(static_cast<cppu::OWeakObject *>(
+                Singleton::get(context).instance.get()));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

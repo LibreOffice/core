@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <uifactory/windowcontentfactorymanager.hxx>
 #include <uifactory/configurationaccessfactorymanager.hxx>
 #include <helper/mischelper.hxx>
 
@@ -499,7 +498,7 @@ throw ( RuntimeException )
     OUString aType;
     OUString aName;
 
-    WindowContentFactoryManager::RetrieveTypeNameFromResourceURL( aResourceURL, aType, aName );
+    RetrieveTypeNameFromResourceURL( aResourceURL, aType, aName );
 
     aServiceSpecifier = m_pConfigAccess->getFactorySpecifierFromTypeNameModule( aType, aName, aModuleId );
     } // SAFE
