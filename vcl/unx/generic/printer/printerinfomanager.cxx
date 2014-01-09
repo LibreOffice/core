@@ -1117,7 +1117,7 @@ FILE* PrinterInfoManager::startSpool( const OUString& rPrintername, bool bQuickC
     return popen (aShellCommand.getStr(), "w");
 }
 
-int PrinterInfoManager::endSpool( const OUString& /*rPrintername*/, const OUString& /*rJobTitle*/, FILE* pFile, const JobData& /*rDocumentJobData*/, bool /*bBanner*/ )
+bool PrinterInfoManager::endSpool( const OUString& /*rPrintername*/, const OUString& /*rJobTitle*/, FILE* pFile, const JobData& /*rDocumentJobData*/, bool /*bBanner*/ )
 {
     return (0 == pclose( pFile ));
 }
