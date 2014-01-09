@@ -35,7 +35,6 @@
 =================================================================================================================*/
 #include <services/desktop.hxx>
 #include <services/frame.hxx>
-#include <services/modulemanager.hxx>
 #include <jobs/jobexecutor.hxx>
 #include <services/layoutmanager.hxx>
 #include <uielement/controlmenucontroller.hxx>
@@ -55,7 +54,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::JobExecutor                             )   else
                         IFFACTORY( ::framework::LayoutManager                           )   else
                         IFFACTORY( ::framework::ControlMenuController                   )   else
-                        IFFACTORY( ::framework::ModuleManager                           )   else
                         IFFACTORY( ::framework::MenuBarFactory                          )   else
                         IFFACTORY( ::framework::GlobalAcceleratorConfiguration          )   else
                         IFFACTORY( ::framework::ModuleAcceleratorConfiguration          )   else

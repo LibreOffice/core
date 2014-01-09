@@ -18,10 +18,10 @@
  */
 
 
-#include "services/modulemanager.hxx"
-#include "services/frame.hxx"
+#include <sal/config.h>
 
 #include <threadhelp/readguard.hxx>
+#include <threadhelp/threadhelpbase.hxx>
 #include <threadhelp/writeguard.hxx>
 #include <services.h>
 
@@ -29,43 +29,162 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XModule.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/frame/XModuleManager2.hpp>
+#include <com/sun/star/container/XNameReplace.hpp>
+#include <com/sun/star/container/XContainerQuery.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+
+#include <cppuhelper/implbase3.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequenceasvector.hxx>
 #include <comphelper/enumhelper.hxx>
+#include <rtl/ref.hxx>
 
+#include <boost/noncopyable.hpp>
 
-namespace framework
-{
+using namespace framework;
+
+namespace {
 
 static const char CFGPATH_FACTORIES[] = "/org.openoffice.Setup/Office/Factories";
 static const char MODULEPROP_IDENTIFIER[] = "ooSetupFactoryModuleIdentifier";
 
-OUString ModuleManager::impl_getStaticImplementationName() {
-    return IMPLEMENTATIONNAME_MODULEMANAGER;
-}
-
-css::uno::Reference< css::lang::XSingleServiceFactory >
-ModuleManager::impl_createFactory(
-    css::uno::Reference< css::lang::XMultiServiceFactory > const & manager)
+class ModuleManager:
+    public cppu::WeakImplHelper3<
+        css::lang::XServiceInfo,
+        css::frame::XModuleManager2,
+        css::container::XContainerQuery >,
+    private ThreadHelpBase, private boost::noncopyable
 {
-    return cppu::createSingleFactory(
-        manager, impl_getStaticImplementationName(), &impl_createInstance,
-        impl_getSupportedServiceNames());
-}
+private:
 
-css::uno::Sequence< OUString >
-ModuleManager::impl_getSupportedServiceNames() {
-    css::uno::Sequence< OUString > s(1);
-    s[0] = "com.sun.star.frame.ModuleManager";
-    return s;
-}
+    //---------------------------------------
+    /** the global uno service manager.
+        Must be used to create own needed services.
+     */
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-css::uno::Reference< css::uno::XInterface > ModuleManager::impl_createInstance(
-    css::uno::Reference< css::lang::XMultiServiceFactory > const & manager)
-{
-    return static_cast< cppu::OWeakObject * >(new ModuleManager( comphelper::getComponentContext(manager) ));
-}
+    //---------------------------------------
+    /** points to the underlying configuration.
+        This ModuleManager does not cache - it calls directly the
+        configuration API!
+      */
+    css::uno::Reference< css::container::XNameAccess > m_xCFG;
+
+//___________________________________________
+// interface
+
+public:
+
+    ModuleManager(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+
+    virtual ~ModuleManager();
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL supportsService(
+        OUString const & ServiceName)
+        throw (css::uno::RuntimeException);
+
+    virtual css::uno::Sequence< OUString > SAL_CALL
+    getSupportedServiceNames() throw (css::uno::RuntimeException);
+
+    // XModuleManager
+    virtual OUString SAL_CALL identify(const css::uno::Reference< css::uno::XInterface >& xModule)
+        throw(css::lang::IllegalArgumentException,
+              css::frame::UnknownModuleException,
+              css::uno::RuntimeException         );
+
+    // XNameReplace
+    virtual void SAL_CALL replaceByName(const OUString& sName ,
+                                        const css::uno::Any&   aValue)
+        throw (css::lang::IllegalArgumentException   ,
+               css::container::NoSuchElementException,
+               css::lang::WrappedTargetException     ,
+               css::uno::RuntimeException            );
+
+    // XNameAccess
+    virtual css::uno::Any SAL_CALL getByName(const OUString& sName)
+        throw(css::container::NoSuchElementException,
+              css::lang::WrappedTargetException     ,
+              css::uno::RuntimeException            );
+
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames()
+        throw(css::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL hasByName(const OUString& sName)
+        throw(css::uno::RuntimeException);
+
+    // XElementAccess
+    virtual css::uno::Type SAL_CALL getElementType()
+        throw(css::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL hasElements()
+        throw(css::uno::RuntimeException);
+
+    // XContainerQuery
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery(const OUString& sQuery)
+        throw(css::uno::RuntimeException);
+
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByProperties(const css::uno::Sequence< css::beans::NamedValue >& lProperties)
+        throw(css::uno::RuntimeException);
+//___________________________________________
+// helper
+
+private:
+
+    //---------------------------------------
+    /** @short  open the underlying configuration.
+
+        @descr  This method must be called every time
+                a (reaonly!) configuration is needed. Because
+                method works together with the member
+                m_xCFG, open it on demand and cache it
+                afterwards.
+
+                Note: A writable configuration access
+                must be created explicitly. Otherwise
+                we cant make sure that broken write requests
+                wont affect our read access !
+
+        @return [com.sun.star.container.XNameAccess]
+                the configuration object
+
+        @throw  [com.sun.star.uno.RuntimeException]
+                if config could not be opened successfully!
+
+        @threadsafe
+      */
+    css::uno::Reference< css::container::XNameAccess > implts_getConfig()
+        throw(css::uno::RuntimeException);
+
+    //---------------------------------------
+    /** @short  makes the real identification of the module.
+
+        @descr  It checks for the optional but preferred interface
+                XModule first. If this module does not exists at the
+                given component it tries to use XServiceInfo instead.
+
+                Note: This method try to locate a suitable module name.
+                Nothing else. Selecting the right component and throwing suitable
+                exceptions must be done outside.
+
+        @see    identify()
+
+        @param  xComponent
+                the module for identification.
+
+        @return The identifier of the given module.
+                Can be empty if given component is not a real module !
+
+        @threadsafe
+     */
+    OUString implts_identify(const css::uno::Reference< css::uno::XInterface >& xComponent);
+};
 
 ModuleManager::ModuleManager(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : ThreadHelpBase(     )
@@ -82,7 +201,7 @@ ModuleManager::~ModuleManager()
 OUString ModuleManager::getImplementationName()
     throw (css::uno::RuntimeException)
 {
-    return impl_getStaticImplementationName();
+    return OUString("com.sun.star.comp.framework.ModuleManager");
 }
 
 sal_Bool ModuleManager::supportsService(OUString const & ServiceName)
@@ -100,7 +219,9 @@ sal_Bool ModuleManager::supportsService(OUString const & ServiceName)
 css::uno::Sequence< OUString > ModuleManager::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
-    return impl_getSupportedServiceNames();
+    css::uno::Sequence< OUString > s(1);
+    s[0] = "com.sun.star.frame.ModuleManager";
+    return s;
 }
 
 OUString SAL_CALL ModuleManager::identify(const css::uno::Reference< css::uno::XInterface >& xModule)
@@ -372,6 +493,17 @@ OUString ModuleManager::implts_identify(const css::uno::Reference< css::uno::XIn
     return OUString();
 }
 
-} // namespace framework
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_ModuleManager_get_implementation(
+        css::uno::XComponentContext * context,
+        uno_Sequence * arguments)
+{
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    rtl::Reference<ModuleManager> x(new ModuleManager(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
