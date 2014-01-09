@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.0 on Thu Jan  9 14:52:53 2014 -->
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">30</property>
     <property name="upper">600</property>
@@ -41,7 +43,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -76,6 +77,7 @@
                       <object class="cuilo-DriverListControl" id="driverlist">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="vexpand">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -128,7 +130,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -164,7 +165,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">●</property>
-                            <property name="invisible_char_set">True</property>
                             <property name="adjustment">adjustment1</property>
                           </object>
                           <packing>
@@ -195,7 +195,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Registered databases</property>
+            <property name="label" translatable="yes">Connection pool</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
