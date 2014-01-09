@@ -36,7 +36,6 @@
 #include <services/desktop.hxx>
 #include <services/frame.hxx>
 #include <uielement/controlmenucontroller.hxx>
-#include <accelerators/globalacceleratorconfiguration.hxx>
 #include <accelerators/documentacceleratorconfiguration.hxx>
 #include <uielement/recentfilesmenucontroller.hxx>
 #include <services/sessionlistener.hxx>
@@ -47,7 +46,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::Desktop                                 )   else
                         IFFACTORY( ::framework::Frame                                   )   else
                         IFFACTORY( ::framework::ControlMenuController                   )   else
-                        IFFACTORY( ::framework::GlobalAcceleratorConfiguration          )   else
                         IFFACTORY( ::framework::DocumentAcceleratorConfiguration        )   else
                         IFFACTORY( ::framework::RecentFilesMenuController               )   else
                         IFFACTORY( ::framework::SessionListener                         )   else

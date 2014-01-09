@@ -17,29 +17,65 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accelerators/globalacceleratorconfiguration.hxx>
+#include <accelerators/acceleratorconfiguration.hxx>
+#include <accelerators/presethandler.hxx>
+#include <macros/xserviceinfo.hxx>
 
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
-#include "helper/mischelper.hxx"
+#include <helper/mischelper.hxx>
 
 #include <acceleratorconst.h>
 #include <services.h>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
 
+#include <rtl/ref.hxx>
 #include <vcl/svapp.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
-namespace framework
-{
+using namespace framework;
 
-//-----------------------------------------------
-// XInterface, XTypeProvider, XServiceInfo
+namespace {
+
+/**
+    implements a read/write access to the global
+    accelerator configuration.
+ */
+typedef ::cppu::ImplInheritanceHelper1<
+             XCUBasedAcceleratorConfiguration,
+             css::lang::XServiceInfo > GlobalAcceleratorConfiguration_BASE;
+class GlobalAcceleratorConfiguration : public GlobalAcceleratorConfiguration_BASE
+{
+public:
+
+    /** initialize this instance and fill the internal cache.
+
+        @param  xSMGR
+                reference to an uno service manager, which is used internaly.
+     */
+    GlobalAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+
+    /** TODO */
+    virtual ~GlobalAcceleratorConfiguration();
+
+    // XInterface, XTypeProvider, XServiceInfo
+    DECLARE_XSERVICEINFO
+
+    // XComponent
+    virtual  void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
+
+private:
+
+    OUString m_sLocale;
+
+    /** helper to listen for configuration changes without ownership cycle problems */
+    css::uno::Reference< css::util::XChangesListener > m_xCfgListener;
+
+    //----------------------------------
+    /** read all data into the cache. */
+    void impl_ts_fillCache();
+};
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2(GlobalAcceleratorConfiguration                   ,
                                    ::cppu::OWeakObject                              ,
@@ -65,12 +101,6 @@ GlobalAcceleratorConfiguration::GlobalAcceleratorConfiguration(const css::uno::R
 
 //-----------------------------------------------
 GlobalAcceleratorConfiguration::~GlobalAcceleratorConfiguration()
-{
-}
-
-void SAL_CALL GlobalAcceleratorConfiguration::initialize(const css::uno::Sequence< css::uno::Any >& /*lArguments*/)
-    throw(css::uno::Exception       ,
-          css::uno::RuntimeException)
 {
 }
 
@@ -120,6 +150,18 @@ void SAL_CALL GlobalAcceleratorConfiguration::dispose()
     {}
 }
 
-} // namespace framework
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_GlobalAcceleratorConfiguration_get_implementation(
+        css::uno::XComponentContext * context,
+        uno_Sequence * arguments)
+{
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    rtl::Reference<GlobalAcceleratorConfiguration> x(
+            new GlobalAcceleratorConfiguration(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
