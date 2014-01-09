@@ -17,11 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "uiconfiguration/windowstateconfiguration.hxx"
-#include <threadhelp/resetableguard.hxx>
-#include "services.h"
-
-#include "helper/mischelper.hxx"
+#include <uiconfiguration/windowstateproperties.hxx>
+#include <helper/mischelper.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -29,19 +26,23 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/ui/DockingArea.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <rtl/ustrbuf.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <tools/debug.hxx>
 
-//_________________________________________________________________________________________________________________
-//  Defines
-//_________________________________________________________________________________________________________________
+#include <vector>
+#include <boost/unordered_map.hpp>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -51,32 +52,11 @@ using namespace com::sun::star::configuration;
 using namespace com::sun::star::container;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::ui;
+using namespace framework;
 
 #undef WINDOWSTATE_MASK_POS
 
-//_________________________________________________________________________________________________________________
-//  Namespace
-//_________________________________________________________________________________________________________________
-
-static const char CONFIGURATION_ROOT_ACCESS[]               = "/org.openoffice.Office.UI.";
-static const char CONFIGURATION_WINDOWSTATE_ACCESS[]        = "/UIElements/States";
-
-static const char CONFIGURATION_PROPERTY_LOCKED[]           = WINDOWSTATE_PROPERTY_LOCKED;
-static const char CONFIGURATION_PROPERTY_DOCKED[]           = WINDOWSTATE_PROPERTY_DOCKED;
-static const char CONFIGURATION_PROPERTY_VISIBLE[]          = WINDOWSTATE_PROPERTY_VISIBLE;
-static const char CONFIGURATION_PROPERTY_DOCKINGAREA[]      = WINDOWSTATE_PROPERTY_DOCKINGAREA;
-static const char CONFIGURATION_PROPERTY_DOCKPOS[]          = WINDOWSTATE_PROPERTY_DOCKPOS;
-static const char CONFIGURATION_PROPERTY_DOCKSIZE[]         = WINDOWSTATE_PROPERTY_DOCKSIZE;
-static const char CONFIGURATION_PROPERTY_POS[]              = WINDOWSTATE_PROPERTY_POS;
-static const char CONFIGURATION_PROPERTY_SIZE[]             = WINDOWSTATE_PROPERTY_SIZE;
-static const char CONFIGURATION_PROPERTY_UINAME[]           = WINDOWSTATE_PROPERTY_UINAME;
-static const char CONFIGURATION_PROPERTY_INTERNALSTATE[]    = WINDOWSTATE_PROPERTY_INTERNALSTATE;
-static const char CONFIGURATION_PROPERTY_STYLE[]            = WINDOWSTATE_PROPERTY_STYLE;
-static const char CONFIGURATION_PROPERTY_CONTEXT[]          = WINDOWSTATE_PROPERTY_CONTEXT;
-static const char CONFIGURATION_PROPERTY_HIDEFROMMENU[]     = WINDOWSTATE_PROPERTY_HIDEFROMENU;
-static const char CONFIGURATION_PROPERTY_NOCLOSE[]          = WINDOWSTATE_PROPERTY_NOCLOSE;
-static const char CONFIGURATION_PROPERTY_SOFTCLOSE[]        = WINDOWSTATE_PROPERTY_SOFTCLOSE;
-static const char CONFIGURATION_PROPERTY_CONTEXTACTIVE[]    = WINDOWSTATE_PROPERTY_CONTEXTACTIVE;
+namespace {
 
 // Zero based indexes, order must be the same as WindowStateMask && CONFIGURATION_PROPERTIES!
 static const sal_Int16 PROPERTY_LOCKED                  = 0;
@@ -99,36 +79,30 @@ static const sal_Int16 PROPERTY_DOCKSIZE                = 15;
 // Order must be the same as WindowStateMask!!
 static const char* CONFIGURATION_PROPERTIES[]           =
 {
-    CONFIGURATION_PROPERTY_LOCKED,
-    CONFIGURATION_PROPERTY_DOCKED,
-    CONFIGURATION_PROPERTY_VISIBLE,
-    CONFIGURATION_PROPERTY_CONTEXT,
-    CONFIGURATION_PROPERTY_HIDEFROMMENU,
-    CONFIGURATION_PROPERTY_NOCLOSE,
-    CONFIGURATION_PROPERTY_SOFTCLOSE,
-    CONFIGURATION_PROPERTY_CONTEXTACTIVE,
-    CONFIGURATION_PROPERTY_DOCKINGAREA,
-    CONFIGURATION_PROPERTY_POS,
-    CONFIGURATION_PROPERTY_SIZE,
-    CONFIGURATION_PROPERTY_UINAME,
-    CONFIGURATION_PROPERTY_INTERNALSTATE,
-    CONFIGURATION_PROPERTY_STYLE,
-    CONFIGURATION_PROPERTY_DOCKPOS,
-    CONFIGURATION_PROPERTY_DOCKSIZE,
+    WINDOWSTATE_PROPERTY_LOCKED,
+    WINDOWSTATE_PROPERTY_DOCKED,
+    WINDOWSTATE_PROPERTY_VISIBLE,
+    WINDOWSTATE_PROPERTY_CONTEXT,
+    WINDOWSTATE_PROPERTY_HIDEFROMENU,
+    WINDOWSTATE_PROPERTY_NOCLOSE,
+    WINDOWSTATE_PROPERTY_SOFTCLOSE,
+    WINDOWSTATE_PROPERTY_CONTEXTACTIVE,
+    WINDOWSTATE_PROPERTY_DOCKINGAREA,
+    WINDOWSTATE_PROPERTY_POS,
+    WINDOWSTATE_PROPERTY_SIZE,
+    WINDOWSTATE_PROPERTY_UINAME,
+    WINDOWSTATE_PROPERTY_INTERNALSTATE,
+    WINDOWSTATE_PROPERTY_STYLE,
+    WINDOWSTATE_PROPERTY_DOCKPOS,
+    WINDOWSTATE_PROPERTY_DOCKSIZE,
     0
 };
-
-namespace framework
-{
 
 //*****************************************************************************************************************
 //  Configuration access class for WindowState supplier implementation
 //*****************************************************************************************************************
 
-class ConfigurationAccess_WindowState : // Order is necessary for right initialization!
-                                        private ThreadHelpBase                           ,
-                                        // interfaces
-                                        public  ::cppu::WeakImplHelper2< XNameContainer, XContainerListener >
+class ConfigurationAccess_WindowState : public  ::cppu::WeakImplHelper2< XNameContainer, XContainerListener >
 {
     public:
                                   ConfigurationAccess_WindowState( const OUString& aWindowStateConfigFile, const Reference< XComponentContext >& rxContext );
@@ -236,6 +210,7 @@ class ConfigurationAccess_WindowState : // Order is necessary for right initiali
                                  OUStringHash,
                                  ::std::equal_to< OUString > > ResourceURLToInfoCache;
 
+        osl::Mutex m_aMutex;
         OUString                     m_aConfigWindowAccess;
         Reference< XMultiServiceFactory > m_xConfigProvider;
         Reference< XNameAccess >          m_xConfigAccess;
@@ -249,14 +224,13 @@ class ConfigurationAccess_WindowState : // Order is necessary for right initiali
 //*****************************************************************************************************************
 
 ConfigurationAccess_WindowState::ConfigurationAccess_WindowState( const OUString& aModuleName, const Reference< XComponentContext >& rxContext ) :
-    ThreadHelpBase(),
-    m_aConfigWindowAccess( CONFIGURATION_ROOT_ACCESS ),
+    m_aConfigWindowAccess( "/org.openoffice.Office.UI." ),
     m_bConfigAccessInitialized( sal_False ),
     m_bModified( sal_False )
 {
     // Create configuration hierachical access name
     m_aConfigWindowAccess += aModuleName;
-    m_aConfigWindowAccess += CONFIGURATION_WINDOWSTATE_ACCESS;
+    m_aConfigWindowAccess += "/UIElements/States";
     m_xConfigProvider = theDefaultProvider::get( rxContext );
 
     // Initialize access array with property names.
@@ -271,7 +245,7 @@ ConfigurationAccess_WindowState::ConfigurationAccess_WindowState( const OUString
 ConfigurationAccess_WindowState::~ConfigurationAccess_WindowState()
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(m_aMutex);
     Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
     if ( xContainer.is() )
         xContainer->removeContainerListener(m_xConfigListener);
@@ -282,7 +256,7 @@ Any SAL_CALL ConfigurationAccess_WindowState::getByName( const OUString& rResour
 throw ( NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(m_aMutex);
 
     ResourceURLToInfoCache::const_iterator pIter = m_aResourceURLToInfoCache.find( rResourceURL );
     if ( pIter != m_aResourceURLToInfoCache.end() )
@@ -301,7 +275,7 @@ Sequence< OUString > SAL_CALL ConfigurationAccess_WindowState::getElementNames()
 throw ( RuntimeException )
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(m_aMutex);
 
     if ( !m_bConfigAccessInitialized )
     {
@@ -319,7 +293,7 @@ sal_Bool SAL_CALL ConfigurationAccess_WindowState::hasByName( const OUString& rR
 throw (::com::sun::star::uno::RuntimeException)
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(m_aMutex);
 
     ResourceURLToInfoCache::const_iterator pIter = m_aResourceURLToInfoCache.find( rResourceURL );
     if ( pIter != m_aResourceURLToInfoCache.end() )
@@ -345,7 +319,7 @@ sal_Bool SAL_CALL ConfigurationAccess_WindowState::hasElements()
 throw ( RuntimeException )
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(m_aMutex);
 
     if ( !m_bConfigAccessInitialized )
     {
@@ -364,7 +338,7 @@ void SAL_CALL ConfigurationAccess_WindowState::removeByName( const OUString& rRe
 throw( NoSuchElementException, WrappedTargetException, RuntimeException )
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    osl::ResettableMutexGuard g(m_aMutex);
 
     ResourceURLToInfoCache::iterator pIter = m_aResourceURLToInfoCache.find( rResourceURL );
     if ( pIter != m_aResourceURLToInfoCache.end() )
@@ -382,7 +356,7 @@ throw( NoSuchElementException, WrappedTargetException, RuntimeException )
         Reference< XNameContainer > xNameContainer( m_xConfigAccess, UNO_QUERY );
         if ( xNameContainer.is() )
         {
-            aLock.unlock();
+            g.clear();
 
             xNameContainer->removeByName( rResourceURL );
             Reference< XChangesBatch > xFlush( m_xConfigAccess, UNO_QUERY );
@@ -399,7 +373,7 @@ void SAL_CALL ConfigurationAccess_WindowState::insertByName( const OUString& rRe
 throw( IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException )
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    osl::ResettableMutexGuard g(m_aMutex);
 
     Sequence< PropertyValue > aPropSet;
     if ( aPropertySet >>= aPropSet )
@@ -431,7 +405,7 @@ throw( IllegalArgumentException, ElementExistException, WrappedTargetException, 
                     if ( xNameContainer.is() )
                     {
                         Reference< XSingleServiceFactory > xFactory( m_xConfigAccess, UNO_QUERY );
-                        aLock.unlock();
+                        g.clear();
 
                         try
                         {
@@ -464,7 +438,7 @@ void SAL_CALL ConfigurationAccess_WindowState::replaceByName( const OUString& rR
 throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException )
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    osl::ResettableMutexGuard g(m_aMutex);
 
     Sequence< PropertyValue > aPropSet;
     if ( aPropertySet >>= aPropSet )
@@ -507,7 +481,7 @@ throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException,
                 WindowStateInfo aWinStateInfo( pIter->second );
                 OUString        aResourceURL( pIter->first );
                 m_bModified = sal_False;
-                aLock.unlock();
+                g.clear();
 
                 try
                 {
@@ -550,7 +524,7 @@ void SAL_CALL ConfigurationAccess_WindowState::disposing( const EventObject& aEv
 {
     // SAFE
     // remove our reference to the config access
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(m_aMutex);
 
     Reference< XInterface > xIfac1( aEvent.Source, UNO_QUERY );
     Reference< XInterface > xIfac2( m_xConfigAccess, UNO_QUERY );
@@ -1269,8 +1243,7 @@ sal_Bool ConfigurationAccess_WindowState::impl_initializeConfigAccess()
         aArgs[1] <<= aPropValue;
 
         m_xConfigAccess = Reference< XNameAccess >( m_xConfigProvider->createInstanceWithArguments(
-                                                        SERVICENAME_CFGUPDATEACCESS, aArgs ),
-                                                    UNO_QUERY );
+                    "com.sun.star.configuration.ConfigurationUpdateAccess", aArgs ), UNO_QUERY );
         if ( m_xConfigAccess.is() )
         {
             // Add as container listener
@@ -1294,28 +1267,79 @@ sal_Bool ConfigurationAccess_WindowState::impl_initializeConfigAccess()
     return sal_False;
 }
 
+typedef ::cppu::WeakComponentImplHelper2< css::container::XNameAccess,
+        css::lang::XServiceInfo> WindowStateConfiguration_BASE;
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   WindowStateConfiguration                    ,
-                                            ::cppu::OWeakObject                         ,
-                                            "com.sun.star.ui.WindowStateConfiguration"  ,
-                                            IMPLEMENTATIONNAME_WINDOWSTATECONFIGURATION
-                                        )
+class WindowStateConfiguration : private osl::Mutex,
+                                 public WindowStateConfiguration_BASE
+{
+public:
+    WindowStateConfiguration( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    virtual ~WindowStateConfiguration();
 
-DEFINE_INIT_SERVICE                     (   WindowStateConfiguration, {} )
+    virtual OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException)
+    {
+        return OUString("com.sun.star.comp.framework.WindowStateConfiguration");
+    }
+
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException)
+    {
+        return cppu::supportsService(this, ServiceName);
+    }
+
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException)
+    {
+        css::uno::Sequence< OUString > aSeq(1);
+        aSeq[0] = OUString("com.sun.star.ui.WindowStateConfiguration");
+        return aSeq;
+    }
+
+    // XNameAccess
+    virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
+        throw ( css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames()
+        throw (css::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
+        throw (css::uno::RuntimeException);
+
+    // XElementAccess
+    virtual css::uno::Type SAL_CALL getElementType()
+        throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements()
+        throw (css::uno::RuntimeException);
+
+    typedef ::boost::unordered_map< OUString,
+                             OUString,
+                             OUStringHash,
+                             ::std::equal_to< OUString > > ModuleToWindowStateFileMap;
+
+    typedef ::boost::unordered_map< OUString,
+                             css::uno::Reference< css::container::XNameAccess >,
+                             OUStringHash,
+                             ::std::equal_to< OUString > > ModuleToWindowStateConfigHashMap;
+
+private:
+    css::uno::Reference< css::uno::XComponentContext>         m_xContext;
+    ModuleToWindowStateFileMap                                m_aModuleToFileHashMap;
+    ModuleToWindowStateConfigHashMap                          m_aModuleToWindowStateHashMap;
+};
 
 WindowStateConfiguration::WindowStateConfiguration( const Reference< XComponentContext >& rxContext ) :
-    ThreadHelpBase(),
+    WindowStateConfiguration_BASE(*static_cast<osl::Mutex *>(this)),
     m_xContext( rxContext )
 {
-    m_xModuleManager = ModuleManager::create( m_xContext );
+    css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
+        ModuleManager::create( m_xContext );
     Reference< XNameAccess > xEmptyNameAccess;
     Sequence< OUString > aElementNames;
     try
     {
-        aElementNames = m_xModuleManager->getElementNames();
+        aElementNames = xModuleManager->getElementNames();
     }
     catch (const ::com::sun::star::uno::RuntimeException &)
     {
@@ -1326,7 +1350,7 @@ WindowStateConfiguration::WindowStateConfiguration( const Reference< XComponentC
     for ( sal_Int32 i = 0; i < aElementNames.getLength(); i++ )
     {
         aModuleIdentifier = aElementNames[i];
-        if ( m_xModuleManager->getByName( aModuleIdentifier ) >>= aSeq )
+        if ( xModuleManager->getByName( aModuleIdentifier ) >>= aSeq )
         {
             OUString aWindowStateFileStr;
             for ( sal_Int32 y = 0; y < aSeq.getLength(); y++ )
@@ -1354,7 +1378,7 @@ WindowStateConfiguration::WindowStateConfiguration( const Reference< XComponentC
 
 WindowStateConfiguration::~WindowStateConfiguration()
 {
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
     m_aModuleToFileHashMap.clear();
     m_aModuleToWindowStateHashMap.clear();
 }
@@ -1362,7 +1386,7 @@ WindowStateConfiguration::~WindowStateConfiguration()
 Any SAL_CALL WindowStateConfiguration::getByName( const OUString& aModuleIdentifier )
 throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     ModuleToWindowStateFileMap::const_iterator pIter = m_aModuleToFileHashMap.find( aModuleIdentifier );
     if ( pIter != m_aModuleToFileHashMap.end() )
@@ -1394,7 +1418,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
 Sequence< OUString > SAL_CALL WindowStateConfiguration::getElementNames()
 throw (::com::sun::star::uno::RuntimeException)
 {
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     Sequence< OUString > aSeq( m_aModuleToFileHashMap.size() );
 
@@ -1412,7 +1436,7 @@ throw (::com::sun::star::uno::RuntimeException)
 sal_Bool SAL_CALL WindowStateConfiguration::hasByName( const OUString& aName )
 throw (::com::sun::star::uno::RuntimeException)
 {
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     ModuleToWindowStateFileMap::const_iterator pIter = m_aModuleToFileHashMap.find( aName );
     return ( pIter != m_aModuleToFileHashMap.end() );
@@ -1432,6 +1456,31 @@ throw (::com::sun::star::uno::RuntimeException)
     return sal_True;
 }
 
-} // namespace framework
+struct Instance {
+    explicit Instance(
+        css::uno::Reference<css::uno::XComponentContext> const & context):
+        instance(static_cast<cppu::OWeakObject *>(
+                    new WindowStateConfiguration(context)))
+    {
+    }
+
+    css::uno::Reference<css::uno::XInterface> instance;
+};
+
+struct Singleton:
+    public rtl::StaticWithArg<
+        Instance, css::uno::Reference<css::uno::XComponentContext>, Singleton>
+{};
+
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_WindowStateConfiguration_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(static_cast<cppu::OWeakObject *>(
+                Singleton::get(context).instance.get()));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

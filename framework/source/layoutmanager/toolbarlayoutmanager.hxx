@@ -36,7 +36,6 @@
 #include <stdtypes.h>
 #include <properties.h>
 #include <uiconfiguration/globalsettings.hxx>
-#include <uiconfiguration/windowstateconfiguration.hxx>
 #include <framework/addonsoptions.hxx>
 #include <uielement/uielement.hxx>
 #include <helper/ilayoutnotifications.hxx>

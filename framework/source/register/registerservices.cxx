@@ -34,14 +34,12 @@
                              )
 =================================================================================================================*/
 #include <services/desktop.hxx>
-#include "uiconfiguration/windowstateconfiguration.hxx"
 #include <services/sessionlistener.hxx>
 
 #include <services/ContextChangeEventMultiplexer.hxx>
 
 COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::Desktop                                 )   else
-                        IFFACTORY( ::framework::WindowStateConfiguration                )   else
                         IFFACTORY( ::framework::SessionListener                         )   else
                         IFFACTORY( ::framework::SessionListener                         )   else
                         IFFACTORY( ::framework::ContextChangeEventMultiplexer           )

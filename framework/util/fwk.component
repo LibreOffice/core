@@ -167,7 +167,8 @@
     <service name="com.sun.star.ui.WindowContentFactoryManager"/>
     <singleton name="com.sun.star.ui.theWindowContentFactoryManager"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.WindowStateConfiguration">
+  <implementation name="com.sun.star.comp.framework.WindowStateConfiguration"
+      constructor="com_sun_star_comp_framework_WindowStateConfiguration_get_implementation">
     <service name="com.sun.star.ui.WindowStateConfiguration"/>
     <singleton name="com.sun.star.ui.theWindowStateConfiguration"/>
   </implementation>
