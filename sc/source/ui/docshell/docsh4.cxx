@@ -96,6 +96,7 @@ using namespace ::com::sun::star;
 #include "sharedocdlg.hxx"
 #include "conditio.hxx"
 #include "sheetevents.hxx"
+#include <documentlinkmgr.hxx>
 
 //------------------------------------------------------------------
 
@@ -444,7 +445,19 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 {
                     ReloadTabLinks();
                     aDocument.UpdateExternalRefLinks(GetActiveDialogParent());
-                    aDocument.UpdateDdeLinks(GetActiveDialogParent());
+
+                    bool bAny = aDocument.GetDocLinkManager().updateDdeLinks(GetActiveDialogParent());
+
+                    if (bAny)
+                    {
+                        //  Formeln berechnen und painten wie im TrackTimeHdl
+                        aDocument.TrackFormulas();
+                        Broadcast(SfxSimpleHint(FID_DATACHANGED));
+
+                        //  wenn FID_DATACHANGED irgendwann mal asynchron werden sollte
+                        //  (z.B. mit Invalidate am Window), muss hier ein Update erzwungen werden.
+                    }
+
                     aDocument.UpdateAreaLinks();
 
                     //! Test, ob Fehler

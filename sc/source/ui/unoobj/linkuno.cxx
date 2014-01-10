@@ -33,6 +33,7 @@
 #include "rangeseq.hxx"
 #include "token.hxx"
 #include "scmatrix.hxx"
+#include <documentlinkmgr.hxx>
 
 #include <vector>
 #include <climits>
@@ -1136,9 +1137,8 @@ void SAL_CALL ScDDELinkObj::refresh() throw(uno::RuntimeException)
     SolarMutexGuard aGuard;
     if (pDocShell)
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        (void)pDoc->UpdateDdeLink( aAppl, aTopic, aItem );
-        //! Fehler abfragen
+        sc::DocumentLinkManager& rMgr = pDocShell->GetDocument()->GetDocLinkManager();
+        rMgr.updateDdeLink(aAppl, aTopic, aItem);
     }
 }
 
@@ -1300,7 +1300,7 @@ ScDDELinkObj* ScDDELinksObj::GetObjectByName_Impl(const OUString& aName)
         OUString aAppl, aTopic, aItem;
 
         ScDocument* pDoc = pDocShell->GetDocument();
-        size_t nCount = pDoc->GetDdeLinkCount();
+        size_t nCount = pDoc->GetDocLinkManager().getDdeLinkCount();
         for (size_t i=0; i<nCount; i++)
         {
             pDoc->GetDdeLinkData( i, aAppl, aTopic, aItem );
@@ -1327,7 +1327,7 @@ sal_Int32 SAL_CALL ScDDELinksObj::getCount() throw(uno::RuntimeException)
     SolarMutexGuard aGuard;
     sal_Int32 nAreaCount = 0;
     if (pDocShell)
-        nAreaCount = pDocShell->GetDocument()->GetDdeLinkCount();
+        nAreaCount = pDocShell->GetDocument()->GetDocLinkManager().getDdeLinkCount();
     return nAreaCount;
 }
 
@@ -1375,7 +1375,7 @@ uno::Sequence<OUString> SAL_CALL ScDDELinksObj::getElementNames() throw(uno::Run
         OUString aAppl, aTopic, aItem;
 
         ScDocument* pDoc = pDocShell->GetDocument();
-        size_t nCount = pDoc->GetDdeLinkCount();
+        size_t nCount = pDocShell->GetDocument()->GetDocLinkManager().getDdeLinkCount();
         uno::Sequence<OUString> aSeq(nCount);
         OUString* pAry = aSeq.getArray();
 
@@ -1399,7 +1399,7 @@ sal_Bool SAL_CALL ScDDELinksObj::hasByName( const OUString& aName )
         OUString aAppl, aTopic, aItem;
 
         ScDocument* pDoc = pDocShell->GetDocument();
-        size_t nCount = pDoc->GetDdeLinkCount();
+        size_t nCount = pDocShell->GetDocument()->GetDocLinkManager().getDdeLinkCount();
         for (size_t i=0; i<nCount; i++)
         {
             pDoc->GetDdeLinkData( i, aAppl, aTopic, aItem );

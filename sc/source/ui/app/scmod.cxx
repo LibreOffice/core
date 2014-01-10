@@ -103,6 +103,7 @@
 #include "scabstdlg.hxx"
 #include "formula/errorcodes.hxx"
 #include "formulagroup.hxx"
+#include <documentlinkmgr.hxx>
 
 #define SC_IDLE_MIN     150
 #define SC_IDLE_MAX     3000
@@ -1948,7 +1949,8 @@ IMPL_LINK_NOARG(ScModule, IdleHandler)
         if (pDocSh->IsReadOnly())
             bAutoSpell = false;
 
-        sal_Bool bLinks = pDoc->IdleCheckLinks();
+        sc::DocumentLinkManager& rLinkMgr = pDoc->GetDocLinkManager();
+        bool bLinks = rLinkMgr.idleCheckLinks();
         sal_Bool bWidth = pDoc->IdleCalcTextWidth();
 
         bMore = bLinks || bWidth;         // ueberhaupt noch was?

@@ -471,7 +471,7 @@ void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
 
                         // Links in Stream speichern
     delete pClipData;
-    if (pSourceDoc->HasDdeLinks())
+    if (pSourceDoc->GetDocLinkManager().hasDdeLinks())
     {
         pClipData = new SvMemoryStream;
         pSourceDoc->SaveDdeLinks(*pClipData);

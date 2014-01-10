@@ -84,6 +84,7 @@
 #include "markdata.hxx"
 #include "preview.hxx"
 #include "docoptio.hxx"
+#include <documentlinkmgr.hxx>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
@@ -1652,8 +1653,11 @@ void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
                         bLink = true;
             }
             if (!bLink)
-                if (pDoc->HasDdeLinks() || pDoc->HasAreaLinks())
-                    bLink = sal_True;
+            {
+                const sc::DocumentLinkManager& rMgr = pDoc->GetDocLinkManager();
+                if (rMgr.hasDdeLinks() || pDoc->HasAreaLinks())
+                    bLink = true;
+            }
             if (bLink)
             {
                 if ( !pFirst )

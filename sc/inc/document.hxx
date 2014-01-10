@@ -683,10 +683,8 @@ public:
         on first call. */
     ScFormulaParserPool& GetFormulaParserPool() const;
 
-    bool            HasDdeLinks() const;
     bool            HasAreaLinks() const;
     void            UpdateExternalRefLinks(Window* pWin);
-    void            UpdateDdeLinks(Window* pWin);
     void            UpdateAreaLinks();
 
                     // originating DDE links
@@ -695,11 +693,6 @@ public:
     bool            IsInDdeLinkUpdate() const   { return nInDdeLinkUpdate != 0; }
 
     SC_DLLPUBLIC void           CopyDdeLinks( ScDocument* pDestDoc ) const;
-    void            DisconnectDdeLinks();
-
-                    // for StarOne Api:
-    size_t          GetDdeLinkCount() const;
-    bool            UpdateDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem );
 
     /** Tries to find a DDE link with the specified connection data.
         @param rnDdePos  (out-param) Returns the index of the DDE link (does not include other links from link manager).
@@ -1685,7 +1678,6 @@ public:
     void            InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* pAdrTo, bool bNumFormatChanged );
 
     bool            IdleCalcTextWidth();
-    bool            IdleCheckLinks();
 
     void            RepaintRange( const ScRange& rRange );
     void            RepaintRange( const ScRangeList& rRange );

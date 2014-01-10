@@ -745,36 +745,6 @@ void ScDocument::RepaintRange( const ScRangeList& rRange )
     }
 }
 
-//------------------------------------------------------------------------
-
-bool ScDocument::IdleCheckLinks()           // true = demnaechst wieder versuchen
-{
-    bool bAnyLeft = false;
-
-    sfx2::LinkManager* pMgr = GetLinkManager();
-    if (pMgr)
-    {
-        const ::sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
-        sal_uInt16 nCount = rLinks.size();
-        for (sal_uInt16 i=0; i<nCount; i++)
-        {
-            ::sfx2::SvBaseLink* pBase = *rLinks[i];
-            if (pBase->ISA(ScDdeLink))
-            {
-                ScDdeLink* pDdeLink = (ScDdeLink*)pBase;
-                if (pDdeLink->NeedsUpdate())
-                {
-                    pDdeLink->TryUpdate();
-                    if (pDdeLink->NeedsUpdate())        // war nix?
-                        bAnyLeft = true;
-                }
-            }
-        }
-    }
-
-    return bAnyLeft;
-}
-
 void ScDocument::SaveDdeLinks(SvStream& rStream) const
 {
     //  bei 4.0-Export alle mit Modus != DEFAULT weglassen
@@ -829,21 +799,6 @@ void ScDocument::LoadDdeLinks(SvStream& rStream)
         ScDdeLink* pLink = new ScDdeLink( this, rStream, aHdr );
         pMgr->InsertDDELink(pLink, pLink->GetAppl(), pLink->GetTopic(), pLink->GetItem());
     }
-}
-
-bool ScDocument::HasDdeLinks() const
-{
-    const sfx2::LinkManager* pMgr = GetDocLinkManager().getExistingLinkManager();
-    if (!pMgr)
-        return false;
-
-    const ::sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
-    sal_uInt16 nCount = rLinks.size();
-    for (sal_uInt16 i=0; i<nCount; i++)
-        if ((*rLinks[i])->ISA(ScDdeLink))
-            return true;
-
-    return false;
 }
 
 void ScDocument::SetInLinkUpdate(bool bSet)
@@ -915,111 +870,6 @@ void ScDocument::UpdateExternalRefLinks(Window* pWin)
     }
 }
 
-void ScDocument::UpdateDdeLinks(Window* pWin)
-{
-    sfx2::LinkManager* pMgr = GetDocLinkManager().getLinkManager(bAutoCalc);
-    if (!pMgr)
-        return;
-
-    const ::sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
-    sal_uInt16 nCount = rLinks.size();
-    sal_uInt16 i;
-
-    //  falls das Updaten laenger dauert, erstmal alle Werte
-    //  zuruecksetzen, damit nichts altes (falsches) stehen bleibt
-    bool bAny = false;
-    for (i=0; i<nCount; i++)
-    {
-        ::sfx2::SvBaseLink* pBase = *rLinks[i];
-        ScDdeLink* pDdeLink = dynamic_cast<ScDdeLink*>(pBase);
-        if (pDdeLink)
-        {
-            if (pDdeLink->Update())
-                bAny = true;
-            else
-            {
-                // Update failed.  Notify the user.
-                OUString aFile = pDdeLink->GetTopic();
-                OUString aElem = pDdeLink->GetItem();
-                OUString aType = pDdeLink->GetAppl();
-
-                OUStringBuffer aBuf;
-                aBuf.append(OUString(ScResId(SCSTR_DDEDOC_NOT_LOADED)));
-                aBuf.appendAscii("\n\n");
-                aBuf.appendAscii("Source : ");
-                aBuf.append(aFile);
-                aBuf.appendAscii("\nElement : ");
-                aBuf.append(aElem);
-                aBuf.appendAscii("\nType : ");
-                aBuf.append(aType);
-                ErrorBox aBox(pWin, WB_OK, aBuf.makeStringAndClear());
-                aBox.Execute();
-            }
-        }
-    }
-    if (bAny)
-    {
-        //  Formeln berechnen und painten wie im TrackTimeHdl
-        TrackFormulas();
-        pShell->Broadcast( SfxSimpleHint( FID_DATACHANGED ) );
-
-        //  wenn FID_DATACHANGED irgendwann mal asynchron werden sollte
-        //  (z.B. mit Invalidate am Window), muss hier ein Update erzwungen werden.
-    }
-
-    pMgr->CloseCachedComps();
-}
-
-bool ScDocument::UpdateDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem )
-{
-    //  fuer refresh() per StarOne Api
-    //  ResetValue() fuer einzelnen Link nicht noetig
-    //! wenn's mal alles asynchron wird, aber auch hier
-
-    sfx2::LinkManager* pMgr = GetDocLinkManager().getLinkManager(bAutoCalc);
-    if (!pMgr)
-        return false;
-
-    bool bFound = false;
-
-    const ::sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
-    sal_uInt16 nCount = rLinks.size();
-    for (sal_uInt16 i=0; i<nCount; i++)
-    {
-        ::sfx2::SvBaseLink* pBase = *rLinks[i];
-        if (pBase->ISA(ScDdeLink))
-        {
-            ScDdeLink* pDdeLink = (ScDdeLink*)pBase;
-            if ( OUString(pDdeLink->GetAppl()) == rAppl &&
-                 OUString(pDdeLink->GetTopic()) == rTopic &&
-                 OUString(pDdeLink->GetItem()) == rItem )
-            {
-                pDdeLink->TryUpdate();
-                bFound = true;          // koennen theoretisch mehrere sein (Mode), darum weitersuchen
-            }
-        }
-    }
-    pMgr->CloseCachedComps();
-
-    return bFound;
-}
-
-void ScDocument::DisconnectDdeLinks()
-{
-    sfx2::LinkManager* pMgr = GetDocLinkManager().getLinkManager(bAutoCalc);
-    if (!pMgr)
-        return;
-
-    const ::sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
-    sal_uInt16 nCount = rLinks.size();
-    for (sal_uInt16 i=0; i<nCount; i++)
-    {
-        ::sfx2::SvBaseLink* pBase = *rLinks[i];
-        if (pBase->ISA(ScDdeLink))
-            pBase->Disconnect();            // bleibt im LinkManager eingetragen
-    }
-}
-
 void ScDocument::CopyDdeLinks( ScDocument* pDestDoc ) const
 {
     if (bIsClip)        // aus Stream erzeugen
@@ -1054,26 +904,6 @@ void ScDocument::CopyDdeLinks( ScDocument* pDestDoc ) const
         }
     }
 }
-
-size_t ScDocument::GetDdeLinkCount() const
-{
-    const sfx2::LinkManager* pMgr = GetDocLinkManager().getExistingLinkManager();
-    if (!pMgr)
-        return 0;
-
-    size_t nDdeCount = 0;
-    if (GetLinkManager())
-    {
-        const ::sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
-        size_t nCount = rLinks.size();
-        for (size_t i=0; i<nCount; i++)
-            if ((*rLinks[i])->ISA(ScDdeLink))
-                ++nDdeCount;
-    }
-    return nDdeCount;
-}
-
-// ----------------------------------------------------------------------------
 
 namespace {
 

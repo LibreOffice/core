@@ -2563,7 +2563,7 @@ void ScDocShell::PrepareReload()
     //  werden. Dabei verklemmt sicht dann irgendwas.
     //  -> Beim Reload die DDE-Links des alten Dokuments vorher disconnecten
 
-    aDocument.DisconnectDdeLinks();
+    aDocument.GetDocLinkManager().disconnectDdeLinks();
 }
 
 

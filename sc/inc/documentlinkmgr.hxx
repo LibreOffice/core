@@ -11,9 +11,11 @@
 #define SC_DOCUMENTLINKMGR_HXX
 
 #include <boost/noncopyable.hpp>
+#include <rtl/ustring.hxx>
 
 class ScDocument;
 class SfxObjectShell;
+class Window;
 
 namespace sfx2 {
 
@@ -47,6 +49,18 @@ public:
     sfx2::LinkManager* getLinkManager( bool bCreate = true );
 
     const sfx2::LinkManager* getExistingLinkManager() const;
+
+    bool idleCheckLinks();
+
+    bool hasDdeLinks() const;
+
+    bool updateDdeLinks( Window* pWin );
+
+    bool updateDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem );
+
+    size_t getDdeLinkCount() const;
+
+    void disconnectDdeLinks();
 };
 
 }
