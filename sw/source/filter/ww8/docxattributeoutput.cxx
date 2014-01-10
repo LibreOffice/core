@@ -368,6 +368,23 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
         m_pSerializer->startElementNS(XML_mc, XML_Choice,
                 XML_Requires, "wps",
                 FSEND);
+        /** FDO#71834 :
+           We should probably be renaming the function
+           switchHeaderFooter to something like SaveRetrieveTableReference.
+           Save the table reference attributes before calling WriteDMLTextFrame,
+           otherwise the StartParagraph function will use the previous existing
+           table reference attributes since the variable is being shared.
+        */
+        switchHeaderFooter(true,1);
+        /** Save the table info's before writing the shape
+            as there might be a new table that might get
+            spawned from within the VML & DML block and alter
+            the contents.
+        */
+        ww8::WW8TableInfo::Pointer_t pOldTableInfo = m_rExport.mpTableInfo;
+        //Reset the table infos after saving.
+        m_rExport.mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
+
         WriteDMLTextFrame(pParentFrame);
         m_pSerializer->endElementNS(XML_mc, XML_Choice);
 
@@ -375,9 +392,17 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
         // in case the text frame had table(s) and we try to export the
         // same table second time.
         m_rExport.mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
+        //reset the tableReference.
+        switchHeaderFooter(false,0);
 
         m_pSerializer->startElementNS(XML_mc, XML_Fallback, FSEND);
         m_rExport.SdrExporter().writeVMLTextFrame(pParentFrame);
+        /* FDO#71834 :Restore the data here after having written the Shape
+           for further processing.
+        */
+        switchHeaderFooter(false,-1);
+        m_rExport.mpTableInfo = pOldTableInfo;
+
         m_pSerializer->endElementNS(XML_mc, XML_Fallback);
         m_pSerializer->endElementNS(XML_mc, XML_AlternateContent);
 
@@ -563,6 +588,9 @@ void DocxAttributeOutput::EndParagraphProperties( const boost::shared_ptr<SfxIte
 
     WriteCollectedParagraphProperties();
 
+    // Merge the marks for the ordered elements
+    m_pSerializer->mergeTopMarks( );
+
     // Write 'Paragraph Mark' properties
     if ( pRedlineParagraphMarkerDeleted || pRedlineParagraphMarkerInserted || pParagraphMarkerProperties)
     {
@@ -616,9 +644,6 @@ void DocxAttributeOutput::EndParagraphProperties( const boost::shared_ptr<SfxIte
 
         m_pSerializer->endElementNS( XML_w, XML_rPr );
     }
-
-    // Merge the marks for the ordered elements
-    m_pSerializer->mergeTopMarks( );
 
     m_pSerializer->endElementNS( XML_w, XML_pPr );
 
@@ -2146,7 +2171,7 @@ void DocxAttributeOutput::switchHeaderFooter(bool isHeaderFooter, sal_Int32 inde
     }
     else if( index == -1)
     {
-        m_tableReference = m_oldTableReference;
+        *m_tableReference = *m_oldTableReference;
     }
     else
     {
@@ -2154,6 +2179,7 @@ void DocxAttributeOutput::switchHeaderFooter(bool isHeaderFooter, sal_Int32 inde
         m_tableReference->m_nTableDepth = 0;
     }
 }
+
 void DocxAttributeOutput::StartTable( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
 {
     m_pSerializer->startElementNS( XML_w, XML_tbl, FSEND );
