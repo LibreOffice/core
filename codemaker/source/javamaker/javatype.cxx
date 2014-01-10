@@ -1977,7 +1977,7 @@ void handleConstantGroup(
         switch (i->value.type) {
         case unoidl::ConstantValue::TYPE_BOOLEAN:
             type = "boolean";
-            valueIndex = cf->addIntegerInfo(i->value.booleanValue);
+            valueIndex = cf->addIntegerInfo(sal_Int32(i->value.booleanValue));
             break;
         case unoidl::ConstantValue::TYPE_BYTE:
             type = "byte";
