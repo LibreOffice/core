@@ -270,7 +270,7 @@ static const GLfloat g_color_buffer_data[] = {
 int static checkGLError(const char *file, int line)
 {
     GLenum glErr;
-    int    retCode = 0;
+    int retCode = 0;
     glErr = glGetError();
     while (glErr != GL_NO_ERROR)
     {
@@ -564,8 +564,8 @@ int OpenGLRender::SetLine2DShapePoint(float x, float y, int listLength)
 int OpenGLRender::RenderLine2FBO(int)
 {
     glLineWidth(m_fLineWidth);
-    int listNum = m_Line2DShapePointList.size();
-    for (int i = 0; i < listNum; i++)
+    size_t listNum = m_Line2DShapePointList.size();
+    for (size_t i = 0; i < listNum; i++)
     {
         Line2DPointList &pointList = m_Line2DShapePointList.front();
         //fill vertex buffer
@@ -1285,8 +1285,8 @@ int OpenGLRender::Bubble2DShapePoint(float x, float y, float directionX, float d
 
 int OpenGLRender::RenderBubble2FBO(int)
 {
-    int listNum = m_Bubble2DShapePointList.size();
-    for (int i = 0; i < listNum; i++)
+    size_t listNum = m_Bubble2DShapePointList.size();
+    for (size_t i = 0; i < listNum; i++)
     {
         //move the circle to the pos, and scale using the xScale and Y scale
         Bubble2DPointList &pointList = m_Bubble2DShapePointList.front();
@@ -1366,8 +1366,8 @@ int OpenGLRender::RectangleShapePoint(float x, float y, float directionX, float 
 
 int OpenGLRender::RenderRectangleShape()
 {
-    int listNum = m_RectangleShapePointList.size();
-    for (int i = 0; i < listNum; i++)
+    size_t listNum = m_RectangleShapePointList.size();
+    for (size_t i = 0; i < listNum; i++)
     {
         //move the circle to the pos, and scale using the xScale and Y scale
         RectanglePointList &pointList = m_RectangleShapePointList.front();
@@ -1525,8 +1525,8 @@ int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color,
 int OpenGLRender::RenderTextShape()
 {
     m_fZStep += 0.01f;
-    int listNum = m_TextInfoList.size();
-    for (int i = 0; i < listNum; i++)
+    size_t listNum = m_TextInfoList.size();
+    for (size_t i = 0; i < listNum; i++)
     {
         TextInfo &textInfo = m_TextInfoList.front();
         PosVecf3 trans = {textInfo.x, textInfo.y, textInfo.z};
@@ -1639,13 +1639,13 @@ int OpenGLRender::SetArea2DShapePoint(float x, float y, int listLength)
 int OpenGLRender::RenderArea2DShape()
 {
     glDisable(GL_MULTISAMPLE);
-    int listNum = m_Area2DShapePointList.size();
+    size_t listNum = m_Area2DShapePointList.size();
     PosVecf3 trans = {0.0f, 0.0f, 0.0f};
     PosVecf3 angle = {0.0f, 0.0f, 0.0f};
     PosVecf3 scale = {1.0f, 1.0f, 1.0f};
     MoveModelf(trans, angle, scale);
     m_MVP = m_Projection * m_View * m_Model;
-    for (int i = 0; i < listNum; i++)
+    for (size_t i = 0; i < listNum; i++)
     {
         Area2DPointList &pointList = m_Area2DShapePointList.front();
         //fill vertex buffer
