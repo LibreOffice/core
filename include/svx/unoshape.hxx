@@ -33,6 +33,9 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/drawing/PolygonKind.hpp>
+#include <com/sun/star/drawing/XShapes2.hpp>
+#include <com/sun/star/drawing/XShapeGroup.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -374,19 +377,18 @@ public:
     // XServiceInfo
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 };
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/drawing/XShapeGroup.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
 class SvxShapeGroup : public SvxShape,
                       public ::com::sun::star::drawing::XShapeGroup,
-                      public ::com::sun::star::drawing::XShapes
+                      public ::com::sun::star::drawing::XShapes2
 {
 private:
     rtl::Reference< SvxDrawPage> mxPage;
+
+    void addUnoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, sal_uIntPtr nPos );
 
 public:
     SvxShapeGroup( SdrObject* pObj,SvxDrawPage* pDrawPage ) throw ();
@@ -403,6 +405,10 @@ public:
     // XShapes
     virtual void SAL_CALL add( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL remove( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XShapes2
+    virtual void SAL_CALL addTop( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addBottom( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape ) throw(::com::sun::star::uno::RuntimeException);
 
     // XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw(::com::sun::star::uno::RuntimeException);

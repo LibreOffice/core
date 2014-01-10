@@ -23,7 +23,7 @@
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/drawing/XShapes2.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
@@ -59,6 +59,8 @@ class Stripe;
 class AbstractShapeFactory
 {
 public:
+
+    enum StackPosition { Top, Bottom };
 
     static AbstractShapeFactory* getOrCreateShapeFactory(::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> xFactory);
 
@@ -211,12 +213,13 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createRectangle(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xTarget
-                , const ::com::sun::star::awt::Size& rSize
-                , const ::com::sun::star::awt::Point& rPosition
-                , const tNameSequence& rPropNames
-                , const tAnySequence& rPropValues ) = 0;
+            const com::sun::star::uno::Reference<
+                com::sun::star::drawing::XShapes >& xTarget,
+            const com::sun::star::awt::Size& rSize,
+            const com::sun::star::awt::Point& rPosition,
+            const tNameSequence& rPropNames,
+            const tAnySequence& rPropValues,
+            StackPosition ePos = Top ) = 0;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createRectangle(
