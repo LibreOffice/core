@@ -621,7 +621,7 @@ void ImplLayoutArgs::AddRun( int nCharPos0, int nCharPos1, bool bRTL )
 bool ImplLayoutArgs::PrepareFallback()
 {
     // short circuit if no fallback is needed
-    if( maReruns.IsEmpty() )
+    if( maFallbackRuns.IsEmpty() )
     {
         maRuns.Clear();
         return false;
@@ -635,11 +635,11 @@ bool ImplLayoutArgs::PrepareFallback()
     typedef std::vector<int> IntVector;
     IntVector aPosVector;
     aPosVector.reserve( mnLength );
-    maReruns.ResetPos();
-    for(; maReruns.GetRun( &nMin, &nEnd, &bRTL ); maReruns.NextRun() )
+    maFallbackRuns.ResetPos();
+    for(; maFallbackRuns.GetRun( &nMin, &nEnd, &bRTL ); maFallbackRuns.NextRun() )
         for( int i = nMin; i < nEnd; ++i )
             aPosVector.push_back( i );
-    maReruns.Clear();
+    maFallbackRuns.Clear();
 
     // sort the individual fallback requests
     std::sort( aPosVector.begin(), aPosVector.end() );

@@ -99,7 +99,7 @@ public:
 
     // data for bidi and glyph+script fallback
     ImplLayoutRuns      maRuns;
-    ImplLayoutRuns      maReruns;
+    ImplLayoutRuns      maFallbackRuns;
 
 public:
                 ImplLayoutArgs( const sal_Unicode* pStr, int nLength,
@@ -115,12 +115,12 @@ public:
                     { return maRuns.GetNextPos( nCharPos, bRTL ); }
     bool        GetNextRun( int* nMinRunPos, int* nEndRunPos, bool* bRTL );
     bool        NeedFallback( int nCharPos, bool bRTL )
-                    { return maReruns.AddPos( nCharPos, bRTL ); }
+                    { return maFallbackRuns.AddPos( nCharPos, bRTL ); }
     bool        NeedFallback( int nMinRunPos, int nEndRunPos, bool bRTL )
-                    { return maReruns.AddRun( nMinRunPos, nEndRunPos, bRTL ); }
+                    { return maFallbackRuns.AddRun( nMinRunPos, nEndRunPos, bRTL ); }
     // methods used by BiDi and glyph fallback
     bool        NeedFallback() const
-                    { return !maReruns.IsEmpty(); }
+                    { return !maFallbackRuns.IsEmpty(); }
     bool        PrepareFallback();
 
 protected:
