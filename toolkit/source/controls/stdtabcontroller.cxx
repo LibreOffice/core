@@ -137,7 +137,7 @@ void StdTabController::ImplActivateControl( sal_Bool bFirst ) const
     const Reference< XControl > * pControls = aCtrls.getConstArray();
     sal_uInt32 nCount = aCtrls.getLength();
 
-    for ( sal_uInt32 n = bFirst ? 0 : nCount; bFirst ? ( n < nCount ) : n; )
+    for ( sal_uInt32 n = bFirst ? 0 : nCount; bFirst ? n < nCount : n != 0; )
     {
         sal_uInt32 nCtrl = bFirst ? n++ : --n;
         DBG_ASSERT( pControls[nCtrl].is(), "Control nicht im Container!" );
