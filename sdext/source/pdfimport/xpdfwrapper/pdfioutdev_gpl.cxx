@@ -868,7 +868,7 @@ void PDFOutDev::drawImageMask(GfxState* pState, Object*, Stream* str,
             writePng_( aBuf, str, width, height, zeroColor, oneColor, true, true );
     }
     else
-        writeMaskLF(aBuf, str, width, height, invert != 0);
+        writeMaskLF(aBuf, str, width, height, invert);
     writeBinaryBuffer(aBuf);
 }
 
