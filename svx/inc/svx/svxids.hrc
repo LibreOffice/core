@@ -1249,6 +1249,10 @@
 #define SID_CHAR_DLG_PREVIEW_STRING                     (SID_SVX_START+1090)
 #define SID_RECHECK_DOCUMENT                            (SID_SVX_START+1091)
 
+// 1092: CAUTION! This slot looks free, butr it is used by SID_ATTR_PARA_OUTLINE_LEVEL in
+// editeng, used in SW. Do NOT use (!), this WILL collide in SfxRequest::GetItem when
+// converted to WhichID using the ItemInfos from Writer's ItemPool
+
 #define SID_OBJECT_MIRROR                               (SID_SVX_START+1093)
 
 #define SID_DELETE_POSTIT                               (SID_SVX_START+1094)
