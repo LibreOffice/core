@@ -119,7 +119,7 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper5
 
     sal_Bool m_bReadOnly;
 
-    sal_Int32 m_bDisposed;
+    bool m_bDisposed;
     sal_Int32 m_nObjectState;
     sal_Int32 m_nTargetState;
     sal_Int32 m_nUpdateMode;
