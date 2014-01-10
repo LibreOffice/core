@@ -616,7 +616,7 @@ Sequence< OUString > SvtDynamicMenuOptions_Impl::impl_GetPropertyNames( sal_uInt
 class CountWithPrefixSort
 {
     public:
-        int operator() ( const OUString& s1 ,
+        bool operator() ( const OUString& s1 ,
                          const OUString& s2 ) const
         {
             // Get order numbers from entry name without prefix.
