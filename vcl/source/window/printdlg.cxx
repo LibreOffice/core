@@ -1513,7 +1513,7 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
     if( pButton == mpOKButton || pButton == mpCancelButton )
     {
         storeToSettings();
-        EndDialog( pButton == mpOKButton );
+        EndDialog( pButton == mpOKButton ? RET_OK : RET_CANCEL );
     }
     else if( pButton == mpHelpButton )
     {

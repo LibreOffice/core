@@ -58,12 +58,12 @@ private:
 };
 
 IMPL_LINK_NOARG(RestartDialog, hdlYes) {
-    EndDialog(true);
+    EndDialog(RET_OK);
     return 0;
 }
 
 IMPL_LINK_NOARG(RestartDialog, hdlNo) {
-    EndDialog(false);
+    EndDialog(RET_CANCEL);
     return 0;
 }
 
