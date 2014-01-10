@@ -780,7 +780,7 @@ sal_Bool SwTxtInputFldPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &r
     {
         --nLen;
     }
-    rTxt = rInf.GetTxt().copy( nIdx, nLen );
+    rTxt = rInf.GetTxt().copy( nIdx, std::min( nLen, rInf.GetTxt().getLength() - nIdx ) );
 
     return sal_True;
 }
