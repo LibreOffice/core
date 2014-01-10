@@ -315,8 +315,6 @@ static sal_Bool lcl_GetColumnCnt(SwDSParam* pParam,
  --------------------------------------------------------------------*/
 sal_Bool SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
 {
-    SetMergeType( rMergeDesc.nMergeType );
-
     OSL_ENSURE(!bInMerge && !pImpl->pMergeData, "merge already activated!");
 
     SwDBData aData;
@@ -708,7 +706,6 @@ sal_Bool SwNewDBMgr::GetColumnNames(ListBox* pListBox,
     Description: CTOR
  --------------------------------------------------------------------*/
 SwNewDBMgr::SwNewDBMgr() :
-            nMergeType(DBMGR_INSERT),
             bInitDBFields(sal_False),
             bInMerge(sal_False),
             bMergeSilent(sal_False),
@@ -1350,8 +1347,6 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
 
             SW_MOD()->SetView(&pSourceShell->GetView());
         }
-
-        nMergeType = DBMGR_INSERT;
     }
 
     if(bEMail)

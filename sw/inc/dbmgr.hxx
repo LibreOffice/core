@@ -191,7 +191,6 @@ friend class SwConnectionDisposedListener_Impl;
     String              sEMailAddrFld;      ///< Mailing: Column name of email address.
     String              sSubject;           ///< Mailing: Subject
     String              sAttached;          ///< Mailing: Attached Files.
-    sal_uInt16          nMergeType;
     sal_Bool            bInitDBFields : 1;
     sal_Bool            bSingleJobs : 1;    ///< Printing job when called from Basic.
     sal_Bool            bCancel : 1;        ///< Mail merge save canceled.
@@ -224,10 +223,6 @@ friend class SwConnectionDisposedListener_Impl;
 public:
     SwNewDBMgr();
     ~SwNewDBMgr();
-
-    /// Current merge type. Cf. DBMgrOptions-enum.
-    inline sal_uInt16   GetMergeType() const            { return nMergeType; }
-    inline void     SetMergeType( sal_uInt16 nTyp )     { nMergeType = nTyp; }
 
     /// MailMergeEvent source
     const SwXMailMerge *    GetMailMergeEvtSrc() const  { return pMergeEvtSrc; }

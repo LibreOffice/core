@@ -1058,7 +1058,6 @@ void SwView::Execute(SfxRequest &rReq)
                     rSh.EnterStdMode(); // Wechsel in Textshell erzwingen; ist fuer
                                         // das Mischen von DB-Feldern notwendig.
                     AttrChangedNotify( &rSh );
-                    pNewDBMgr->SetMergeType( DBMGR_MERGE );
 
                     Sequence<PropertyValue> aProperties(3);
                     PropertyValue* pValues = aProperties.getArray();
@@ -2384,8 +2383,6 @@ void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
 
         if (pNewDBMgr)
         {
-            pNewDBMgr->SetMergeType( DBMGR_MERGE );
-
             Sequence<PropertyValue> aProperties(3);
             PropertyValue* pValues = aProperties.getArray();
             pValues[0].Name = "DataSourceName";

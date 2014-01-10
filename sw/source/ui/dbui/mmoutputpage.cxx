@@ -910,7 +910,6 @@ IMPL_LINK_NOARG(SwMailMergeOutputPage, PrintHdl_Impl)
     sPages += OUString(" - ");
     sPages += OUString::valueOf(  rEndInfo.nEndPageInTarget );
 
-    SwWrtShell& rSh = pTargetView->GetWrtShell();
     pTargetView->SetMailMergeConfigItem(&rConfigItem, 0, sal_False);
     if(m_pTempPrinter)
     {
@@ -923,7 +922,6 @@ IMPL_LINK_NOARG(SwMailMergeOutputPage, PrintHdl_Impl)
 
     SfxObjectShell* pObjSh = pTargetView->GetViewFrame()->GetObjectShell();
     SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE), pObjSh));
-    rSh.GetNewDBMgr()->SetMergeType( DBMGR_MERGE_DOCUMENTS );
     SfxBoolItem aMergeSilent(SID_SILENT, sal_False);
     m_pWizard->enableButtons(WZB_CANCEL, sal_False);
 
