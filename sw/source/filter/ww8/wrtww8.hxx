@@ -464,6 +464,7 @@ public:
     SwMSConvertControls* pOCXExp;
     WW8OleMap m_aOleMap;    // To remember all already exported ole objects
     ww8::WW8TableInfo::Pointer_t mpTableInfo;
+    ww8::WW8TableInfo::Pointer_t mpOldTableInfo ;
 
     sal_uInt16 nCharFmtStart;
     sal_uInt16 nFmtCollStart;

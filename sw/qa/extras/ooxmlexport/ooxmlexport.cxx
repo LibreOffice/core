@@ -2274,6 +2274,14 @@ DECLARE_OOXMLEXPORT_TEST(testFDO73034, "FDO73034.docx")
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:rPr/w:u", "val").match("single"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO71834, "FDO71834.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[4]/w:tr[2]/w:tc[1]/w:tcPr[1]/w:tcW[1]","type", "dxa");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
