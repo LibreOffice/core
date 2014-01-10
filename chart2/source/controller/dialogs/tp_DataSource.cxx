@@ -58,11 +58,16 @@ const OUString lcl_aLabelRole( "label" );
 OUString lcl_GetRoleLBEntry(
     const OUString & rRole, const OUString & rRange )
 {
-    OUStringBuffer aEntry(::chart::DialogModel::ConvertRoleFromInternalToUI(rRole));
+    OUStringBuffer aEntry( rRole );
     aEntry.append( "\t" );
-    aEntry.append(rRange);
+    aEntry.append( OUString(
+        ::chart::DialogModel::ConvertRoleFromInternalToUI( rRole )) );
+    aEntry.append( "\t" );
+    aEntry.append(OUString( rRange ));
 
-    return aEntry.makeStringAndClear();
+    OUString sFoo = aEntry.makeStringAndClear();
+    fprintf(stderr, "ConvertRoleFromInternalToUI :%s:\n", OUStringToOString(sFoo, RTL_TEXTENCODING_UTF8).getStr());
+    return sFoo;
 }
 
 void lcl_UpdateCurrentRange(
@@ -126,8 +131,8 @@ OUString lcl_GetSequenceNameForLabel( ::chart::SeriesEntry * pEntry )
 }
 
 static long lcl_pRoleListBoxTabs[] =
-    {   2,        // Number of Tabs
-        0, 75
+    {   3,        // Number of Tabs
+        0, 0, 75
     };
 
 void lcl_ShowChooserButton(
