@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa98f980_b29f0050",
+        "filename": "chart2/source/view/main/ShapeFactory.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2065,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-01-10T18:56:26Z",
+      "side": 1,
+      "message": "If it is not an XShapes2 target, shouldn\u0027t xShape then be added nevertheless, i.e. by adding\n\n else\n     xTarget-\u003eadd(xShape);\n\nhere?",
+      "revId": "f87a4cf3320be40e725b225a4b701e217f6c7866",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
