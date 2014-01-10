@@ -732,7 +732,7 @@ namespace basegfx
                         stack[2] = rCandidate.getB2DPoint(nIndex);
 
                         // clipping judgement
-                        clipflag |= !(rRange.isInside(stack[2]));
+                        clipflag |= unsigned(!(rRange.isInside(stack[2])));
 
                         if(nIndex > 1)
                         {
