@@ -1078,7 +1078,7 @@ sal_Int32 StgSmallStrm::Write( const void* pBuf, sal_Int32 n )
     {
         sal_Int32 nOld = nPos;
         if( !SetSize( nPos + n ) )
-            return false;
+            return 0;
         Pos2Page( nOld );
     }
     while( n )
