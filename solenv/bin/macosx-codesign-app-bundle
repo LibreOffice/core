@@ -36,7 +36,7 @@ APP_BUNDLE=$1
 # that codesign will contact the timestamp server just once for all
 # mentioned on the command line.
 
-find $APP_BUNDLE \( -name '*.dylib' -or -name '*.so' \) ! -type l | \
+find $APP_BUNDLE \( -name '*.dylib' -or -name '*.so' \) ! -type l | grep -v "LibreOfficePython\.framework" | \
 xargs codesign --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY"
 
 find $APP_BUNDLE -name '*.dylib.*' ! -type l | \
