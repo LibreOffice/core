@@ -87,11 +87,8 @@ OString createFileNameFromType( const OString& destination,
     length += prefix.getLength() + type.getLength() + postfix.getLength();
 
     sal_Bool withSeparator = sal_False;
-    if (!destination.isEmpty() &&
-        destination[destination.getLength() - 1] != '\\' &&
-        destination[destination.getLength() - 1] != '/' &&
-        type[0] != '\\' &&
-        type[0] != '/')
+    if (!(destination.endsWith("\\") || destination.endsWith("/"))
+        && !(type.startsWith("\\") || type.startsWith("/")))
     {
         length++;
         withSeparator = sal_True;
