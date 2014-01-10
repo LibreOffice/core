@@ -83,7 +83,7 @@ HWPPara::~HWPPara(void)
 }
 
 
-int HWPPara::Read(HWPFile & hwpf, unsigned char flag)
+bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
 {
     unsigned char same_cshape;
     int ii;

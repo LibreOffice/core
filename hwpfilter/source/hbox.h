@@ -59,7 +59,7 @@ struct HBox
  * @param hwpf HWPFile Object having all information for a hwp file.
  * @returns True if reading from stream is successful.
  */
-        virtual int   Read(HWPFile &hwpf);
+        virtual bool Read(HWPFile &hwpf);
 
         virtual hchar_string GetString();
     private:
@@ -77,7 +77,7 @@ struct SkipData: public HBox
 
     SkipData(hchar);
     virtual ~SkipData();
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 struct DateCode;
 struct FieldCode : public HBox
@@ -95,7 +95,7 @@ struct FieldCode : public HBox
 
     FieldCode();
     virtual ~FieldCode();
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 /**
  * Kind of BOOKMARK
@@ -120,7 +120,7 @@ struct Bookmark: public HBox
 
     Bookmark();
     virtual ~Bookmark();
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 // date format(7)
@@ -135,7 +135,7 @@ struct DateFormat: public HBox
     hchar dummy;
 
     DateFormat();
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 /**
@@ -157,7 +157,7 @@ struct DateCode: public HBox
     unsigned char key;
 
     DateCode();
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 
     virtual hchar_string GetString();
 };
@@ -172,7 +172,7 @@ struct Tab: public HBox
     hchar dummy;
 
     Tab();
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 // tbox(10) TABLE BOX MATH BUTTON HYPERTEXT
@@ -385,7 +385,7 @@ struct TxtBox: public FBox
  */
     virtual int Type()    { return type;  }
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 
     virtual hunit  Height(CharShape *csty);
 };
@@ -656,7 +656,7 @@ struct Picture: public FBox
     virtual ~Picture();
 
     virtual int   Type    ();
-    virtual int   Read    (HWPFile &hwpf);
+    virtual bool Read    (HWPFile &hwpf);
 
     virtual hunit  Height (CharShape *sty);
 };
@@ -677,7 +677,7 @@ struct Line: public FBox
 
     Line();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 // hidden(15)
@@ -695,7 +695,7 @@ struct Hidden: public HBox
     Hidden();
     virtual ~Hidden();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 /**
@@ -724,7 +724,7 @@ struct HeaderFooter: public HBox
     HeaderFooter();
     virtual ~HeaderFooter();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 /**
@@ -757,7 +757,7 @@ struct Footnote: public HBox
     Footnote();
     virtual ~Footnote();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 // auto number(18)
@@ -785,7 +785,7 @@ struct AutoNum: public HBox
 
     AutoNum();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 /**
@@ -799,7 +799,7 @@ struct NewNum: public HBox
 
     NewNum();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 // page numger(20)
@@ -821,7 +821,7 @@ struct ShowPageNum: public HBox
 
     ShowPageNum();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 /* È¦¼öÂÊ½ÃÀÛ (21) */
@@ -846,7 +846,7 @@ struct PageNumCtrl: public HBox
 
     PageNumCtrl();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 // mail merge(22)
@@ -861,7 +861,7 @@ struct MailMerge: public HBox
 
     MailMerge();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
     virtual hchar_string GetString();
 };
 
@@ -877,7 +877,7 @@ struct Compose: public HBox
 
     Compose();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 // hyphen(24)
@@ -894,7 +894,7 @@ struct Hyphen: public HBox
 
     Hyphen();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 // toc mark(25)
@@ -910,7 +910,7 @@ struct TocMark: public HBox
 
     TocMark();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 // index mark(26)
@@ -928,7 +928,7 @@ struct IndexMark: public HBox
 
     IndexMark();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 // outline(28)
@@ -999,7 +999,7 @@ class Outline: public HBox
 
         Outline();
 
-        virtual int   Read(HWPFile &hwpf);
+        virtual bool Read(HWPFile &hwpf);
         hchar_string GetUnicode() const;
 };
 
@@ -1015,7 +1015,7 @@ struct KeepSpace: public HBox
 
     KeepSpace();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 /* °íÁ¤Æø ºóÄ­(31) */
@@ -1028,7 +1028,7 @@ struct FixedSpace: public HBox
 
     FixedSpace();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 #endif                                            /* _HBOX_H_ */
 

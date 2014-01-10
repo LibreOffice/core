@@ -34,16 +34,16 @@ static short fboxnum = 1;
 static int zindex = 1;
 static int lnnumber = 0;
 
-int HBox::Read(HWPFile & )
+bool HBox::Read(HWPFile & )
 {
 // already read
-    return 1;
+    return true;
 }
 
 
 // skip block
 
-int SkipData::Read(HWPFile & hwpf)
+bool SkipData::Read(HWPFile & hwpf)
 {
     hwpf.Read4b(&data_block_len, 1);
     hwpf.Read2b(&dummy, 1);
@@ -59,7 +59,7 @@ int SkipData::Read(HWPFile & hwpf)
 
 
 // Field code(5)
-int FieldCode::Read(HWPFile & hwpf)
+bool FieldCode::Read(HWPFile & hwpf)
 {
     ulong size;
     hchar dummy;
@@ -116,7 +116,7 @@ int FieldCode::Read(HWPFile & hwpf)
 
 
 // book mark(6)
-int Bookmark::Read(HWPFile & hwpf)
+bool Bookmark::Read(HWPFile & hwpf)
 {
     long len;
 
@@ -134,13 +134,13 @@ int Bookmark::Read(HWPFile & hwpf)
     hwpf.Read2b(id, BMK_COMMENT_LEN + 1);
     hwpf.Read2b(&type, 1);
 //return hwpf.Read2b(&type, 1);
-    return 1;
+    return true;
 }
 
 
 // date format(7)
 
-int DateFormat::Read(HWPFile & hwpf)
+bool DateFormat::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(format, DATE_SIZE);
     dummy = sal::static_int_cast<hchar>(hwpf.Read2b());
@@ -153,7 +153,7 @@ int DateFormat::Read(HWPFile & hwpf)
 
 // date code(8)
 
-int DateCode::Read(HWPFile & hwpf)
+bool DateCode::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(format, DATE_SIZE);
     hwpf.Read2b(date, 6);
@@ -168,7 +168,7 @@ int DateCode::Read(HWPFile & hwpf)
 
 // tab(9)
 
-int Tab::Read(HWPFile & hwpf)
+bool Tab::Read(HWPFile & hwpf)
 {
     width = hwpf.Read2b();
     leader = sal::static_int_cast<unsigned short>(hwpf.Read2b());
@@ -211,7 +211,7 @@ void Cell::Read(HWPFile & hwpf)
 }
 
 
-int TxtBox::Read(HWPFile & hwpf)
+bool TxtBox::Read(HWPFile & hwpf)
 {
     int ii, ncell;
 
@@ -369,7 +369,7 @@ int TxtBox::Read(HWPFile & hwpf)
 
 
 // picture(11)
-int Picture::Read(HWPFile & hwpf)
+bool Picture::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(reserved, 2);
     hwpf.Read2b(&dummy, 1);
@@ -468,7 +468,7 @@ Line::Line():FBox(CH_LINE)
 }
 
 
-int Line::Read(HWPFile & hwpf)
+bool Line::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(reserved, 2);
     hwpf.Read2b(&dummy, 1);
@@ -528,7 +528,7 @@ Hidden::Hidden():HBox(CH_HIDDEN)
 }
 
 
-int Hidden::Read(HWPFile & hwpf)
+bool Hidden::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(reserved, 2);
     hwpf.Read2b(&dummy, 1);
@@ -550,7 +550,7 @@ HeaderFooter::HeaderFooter():HBox(CH_HEADER_FOOTER)
 }
 
 
-int HeaderFooter::Read(HWPFile & hwpf)
+bool HeaderFooter::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(reserved, 2);
     hwpf.Read2b(&dummy, 1);
@@ -578,7 +578,7 @@ Footnote::Footnote():HBox(CH_FOOTNOTE)
 }
 
 
-int Footnote::Read(HWPFile & hwpf)
+bool Footnote::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(reserved, 2);
     hwpf.Read2b(&dummy, 1);
@@ -602,7 +602,7 @@ AutoNum::AutoNum():HBox(CH_AUTO_NUM)
 }
 
 
-int AutoNum::Read(HWPFile & hwpf)
+bool AutoNum::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(&type, 1);
     hwpf.Read2b(&number, 1);
@@ -621,7 +621,7 @@ NewNum::NewNum():HBox(CH_NEW_NUM)
 }
 
 
-int NewNum::Read(HWPFile & hwpf)
+bool NewNum::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(&type, 1);
     hwpf.Read2b(&number, 1);
@@ -640,7 +640,7 @@ ShowPageNum::ShowPageNum():HBox(CH_SHOW_PAGE_NUM)
 }
 
 
-int ShowPageNum::Read(HWPFile & hwpf)
+bool ShowPageNum::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(&where, 1);
     hwpf.Read2b(&shape, 1);
@@ -662,7 +662,7 @@ PageNumCtrl::PageNumCtrl():HBox(CH_PAGE_NUM_CTRL)
 }
 
 
-int PageNumCtrl::Read(HWPFile & hwpf)
+bool PageNumCtrl::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(&kind, 1);
     hwpf.Read2b(&what, 1);
@@ -681,7 +681,7 @@ MailMerge::MailMerge():HBox(CH_MAIL_MERGE)
 }
 
 
-int MailMerge::Read(HWPFile & hwpf)
+bool MailMerge::Read(HWPFile & hwpf)
 {
     hwpf.Read1b(field_name, 20);
     hwpf.Read2b(&dummy, 1);
@@ -699,7 +699,7 @@ Compose::Compose():HBox(CH_COMPOSE)
 }
 
 
-int Compose::Read(HWPFile & hwpf)
+bool Compose::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(compose, 3);
     hwpf.Read2b(&dummy, 1);
@@ -717,7 +717,7 @@ Hyphen::Hyphen():HBox(CH_HYPHEN)
 }
 
 
-int Hyphen::Read(HWPFile & hwpf)
+bool Hyphen::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(&width, 1);
     hwpf.Read2b(&dummy, 1);
@@ -735,7 +735,7 @@ TocMark::TocMark():HBox(CH_TOC_MARK)
 }
 
 
-int TocMark::Read(HWPFile & hwpf)
+bool TocMark::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(&kind, 1);
     hwpf.Read2b(&dummy, 1);
@@ -753,7 +753,7 @@ IndexMark::IndexMark():HBox(CH_INDEX_MARK)
 }
 
 
-int IndexMark::Read(HWPFile & hwpf)
+bool IndexMark::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(&keyword1, 60);
     hwpf.Read2b(&keyword2, 60);
@@ -773,7 +773,7 @@ Outline::Outline():HBox(CH_OUTLINE)
 }
 
 
-int Outline::Read(HWPFile & hwpf)
+bool Outline::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(&kind, 1);
     hwpf.Read1b(&shape, 1);
@@ -796,7 +796,7 @@ KeepSpace::KeepSpace():HBox(CH_KEEP_SPACE)
 }
 
 
-int KeepSpace::Read(HWPFile & hwpf)
+bool KeepSpace::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(&dummy, 1);
 
@@ -813,7 +813,7 @@ FixedSpace::FixedSpace():HBox(CH_FIXED_SPACE)
 }
 
 
-int FixedSpace::Read(HWPFile & hwpf)
+bool FixedSpace::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(&dummy, 1);
 
