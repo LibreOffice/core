@@ -2105,6 +2105,19 @@ void ScTabView::PaintRangeFinderEntry (ScRangeFindData* pData, const SCTAB nTab)
     }
 }
 
+void ScTabView::UpdateGrid()
+{
+    if (!aViewData.IsActive())
+        return;
+
+    if (!UpdateVisibleRange())
+        // Visible range hasn't changed. No need to re-paint.
+        return;
+
+    SC_MOD()->AnythingChanged();                // if visible area has changed
+    PaintGrid();
+}
+
 void ScTabView::PaintRangeFinder( long nNumber )
 {
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl( aViewData.GetViewShell() );
