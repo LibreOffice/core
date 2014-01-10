@@ -299,7 +299,7 @@ bool x86_64::return_in_hidden_param( typelib_TypeDescriptionReference *pTypeRef 
 {
     int g, s;
 
-    return examine_argument( pTypeRef, true, g, s ) == 0;
+    return !examine_argument( pTypeRef, true, g, s );
 }
 
 void x86_64::fill_struct( typelib_TypeDescriptionReference *pTypeRef, const sal_uInt64 *pGPR, const double *pSSE, void *pStruct ) throw ()
