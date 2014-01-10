@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa98f980_92ae7ce6",
+        "filename": "filter/source/msfilter/eschesdo.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-10T14:08:15Z",
+      "side": 1,
+      "message": "Sorry, this is still unacceptable. ImplEESdrWriter::ImplWriteShape() is used by both the binary export and the OOXML filter, you need to set the OOXML flag in the OOXML filter. Jut put a breakpoint on this line in the debugger, see its backtrace, and set the flag in the first method that is already OOXML-specific, and pass the bool around till this line.",
+      "revId": "3822281323dac6b5efae9f9db4ec7f81f05fc71f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_7281184a",
+        "filename": "oox/source/export/vmlexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-10T14:08:15Z",
+      "side": 1,
+      "message": "Why not writing id anymore? id has no default value, so if you want to write name, I would suggest just writing both, if that suits you.",
+      "revId": "3822281323dac6b5efae9f9db4ec7f81f05fc71f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_32879063",
+        "filename": "oox/source/export/vmlexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-10T14:08:15Z",
+      "side": 1,
+      "message": "Are you sure this is correct? Think about a \"moveto 0,0 -\u003e lineto 1,0\"; if the previous position was 0,1, then this will result in a different line.",
+      "revId": "3822281323dac6b5efae9f9db4ec7f81f05fc71f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_527c1473",
+        "filename": "oox/source/export/vmlexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-10T14:08:15Z",
+      "side": 1,
+      "message": "Same here, why ignoring a lineto that has the end at 0,0?",
+      "revId": "3822281323dac6b5efae9f9db4ec7f81f05fc71f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_d2b8042d",
+        "filename": "oox/source/export/vmlexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-10T14:08:15Z",
+      "side": 1,
+      "message": "If you call makeStringAndClear(), then -- as the method name says -- the buffer will be cleared, so it no longer makes sense to call getStr() on it.",
+      "revId": "3822281323dac6b5efae9f9db4ec7f81f05fc71f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_52f3340a",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-10T14:08:15Z",
+      "side": 1,
+      "message": "Given that so far you only have a DOCX file, I would really recommend not touching what it does. If you add a new optional parameter to the \"Commit()\" method, then fine, adjust the signature of derived classes, but you should not do more.",
+      "revId": "3822281323dac6b5efae9f9db4ec7f81f05fc71f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_92dcbc76",
+        "filename": "svx/source/customshapes/EnhancedCustomShapeTypeNames.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-10T14:08:15Z",
+      "side": 1,
+      "message": "Sounds fishy, why is this needed? None of the other ooxml- types are handled here. Maybe you have to use the pCustomShapeTypeTranslationTable from filter/source/msfilter/util.cxx that already has the ooxml-rect mapping?",
+      "revId": "3822281323dac6b5efae9f9db4ec7f81f05fc71f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_b2d9c085",
+        "filename": "sw/source/filter/ww8/rtfsdrexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-10T14:08:15Z",
+      "side": 1,
+      "message": "Please use /*pSdrObject*/, otherwise this will raise an unused parameter warning. In general, it\u0027s good to build using --enable-werror, so you notice these problems.",
+      "revId": "3822281323dac6b5efae9f9db4ec7f81f05fc71f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
