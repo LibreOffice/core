@@ -227,7 +227,7 @@ private:
     double                  fFocalLength;
     double                  fBankAngle;
 
-    unsigned                bUseFocalLength         : 1;
+    bool                    bUseFocalLength         : 1;
 
 public:
     B3dCamera(
