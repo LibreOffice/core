@@ -359,7 +359,7 @@ rtl_cache_slab_destroy (
  *
  *  @precond cache->m_slab_lock acquired.
  */
-int
+bool
 rtl_cache_slab_populate (
     rtl_cache_type * cache
 )
@@ -704,7 +704,7 @@ rtl_cache_depot_exchange_free (
  *
  *  @precond cache->m_depot_lock acquired.
  */
-int
+bool
 rtl_cache_depot_populate (
     rtl_cache_type * cache
 )
@@ -913,7 +913,7 @@ rtl_cache_deactivate (
 {
     /* remove from cache list */
     RTL_MEMORY_LOCK_ACQUIRE(&(g_cache_list.m_lock));
-    int active = QUEUE_STARTED_NAMED(cache, cache_) == 0;
+    bool active = !QUEUE_STARTED_NAMED(cache, cache_);
     QUEUE_REMOVE_NAMED(cache, cache_);
     RTL_MEMORY_LOCK_RELEASE(&(g_cache_list.m_lock));
 
@@ -1268,7 +1268,7 @@ SAL_CALL rtl_cache_free (
                 continue;
             }
 
-            if (rtl_cache_depot_populate(cache) != 0)
+            if (rtl_cache_depot_populate(cache))
             {
                 continue;
             }

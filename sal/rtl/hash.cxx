@@ -135,7 +135,7 @@ rtl_str_hash_resize (sal_uInt32        nNewSize)
     rtl_str_hash_free (pNewHash);
 }
 
-static int
+static bool
 compareEqual (rtl_uString *pStringA, rtl_uString *pStringB)
 {
     if (pStringA == pStringB)

@@ -123,7 +123,7 @@ rtl_arena_segment_destructor (void * obj)
  *
  *  @precond  arena->m_lock acquired.
  */
-int
+bool
 rtl_arena_segment_populate (
     rtl_arena_type * arena
 )
@@ -420,7 +420,7 @@ rtl_arena_hash_remove (
  *  @precond arena->m_lock acquired
  *  @precond (*ppSegment == 0)
  */
-int
+bool
 rtl_arena_segment_alloc (
     rtl_arena_type *          arena,
     sal_Size                  size,
