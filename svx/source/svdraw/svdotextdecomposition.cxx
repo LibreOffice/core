@@ -18,8 +18,10 @@
  */
 
 
-#include <svx/svdotext.hxx>
+#include <svx/svdetc.hxx>
 #include <svx/svdoutl.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdotext.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <svx/sdr/primitive2d/sdrtextprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
@@ -882,6 +884,36 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     rOutliner.SetMinAutoPaperSize(aNullSize);
     rOutliner.SetMaxAutoPaperSize(Size(1000000,1000000));
 
+    // Resolves: fdo#35779 set background color of this shape as the editeng background if there
+    // is one. Check the shape itself, then the host page, then that page's master page.
+    // That color needs to be restored on leaving this method
+    Color aOriginalBackColor(rOutliner.GetBackgroundColor());
+    const SfxItemSet* pBackgroundFillSet = &GetObjectItemSet();
+
+    if (XFILL_NONE == ((const XFillStyleItem&)pBackgroundFillSet->Get(XATTR_FILLSTYLE)).GetValue())
+    {
+        SdrPage *pOwnerPage = GetPage();
+        if (pOwnerPage)
+        {
+            pBackgroundFillSet = &pOwnerPage->getSdrPageProperties().GetItemSet();
+
+            if (XFILL_NONE == ((const XFillStyleItem&)pBackgroundFillSet->Get(XATTR_FILLSTYLE)).GetValue())
+            {
+                if (!pOwnerPage->IsMasterPage() && pOwnerPage->TRG_HasMasterPage())
+                {
+                    pBackgroundFillSet = &pOwnerPage->TRG_GetMasterPage().getSdrPageProperties().GetItemSet();
+                }
+            }
+        }
+    }
+
+    if (XFILL_NONE != ((const XFillStyleItem&)pBackgroundFillSet->Get(XATTR_FILLSTYLE)).GetValue())
+    {
+        Color aColor(rOutliner.GetBackgroundColor());
+        GetDraftFillColor(*pBackgroundFillSet, aColor);
+        rOutliner.SetBackgroundColor(aColor);
+    }
+
     // add one to rage sizes to get back to the old Rectangle and outliner measurements
     const sal_uInt32 nAnchorTextWidth(FRound(aAnchorTextRange.getWidth() + 1L));
     const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1L));
@@ -1058,6 +1090,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     aConverter.decomposeBlockTextPrimitive(aNewTransformA, aNewTransformB, aClipRange);
 
     // cleanup outliner
+    rOutliner.SetBackgroundColor(aOriginalBackColor);
     rOutliner.Clear();
     rOutliner.setVisualizedPage(0);
 
