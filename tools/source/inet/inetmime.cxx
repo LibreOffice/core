@@ -375,7 +375,7 @@ bool INetMIME::isAtomChar(sal_uInt32 nChar)
 // static
 bool INetMIME::isTokenChar(sal_uInt32 nChar)
 {
-    static const sal_Char aMap[128]
+    static const bool aMap[128]
         = { false, false, false, false, false, false, false, false,
             false, false, false, false, false, false, false, false,
             false, false, false, false, false, false, false, false,
@@ -399,7 +399,7 @@ bool INetMIME::isTokenChar(sal_uInt32 nChar)
 // static
 bool INetMIME::isEncodedWordTokenChar(sal_uInt32 nChar)
 {
-    static const sal_Char aMap[128]
+    static const bool aMap[128]
         = { false, false, false, false, false, false, false, false,
             false, false, false, false, false, false, false, false,
             false, false, false, false, false, false, false, false,
@@ -423,7 +423,7 @@ bool INetMIME::isEncodedWordTokenChar(sal_uInt32 nChar)
 // static
 bool INetMIME::isIMAPAtomChar(sal_uInt32 nChar)
 {
-    static const sal_Char aMap[128]
+    static const bool aMap[128]
         = { false, false, false, false, false, false, false, false,
             false, false, false, false, false, false, false, false,
             false, false, false, false, false, false, false, false,
