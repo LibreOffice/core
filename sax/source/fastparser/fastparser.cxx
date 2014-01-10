@@ -216,7 +216,7 @@ public:
     void callbackStartElement( const XML_Char* name, const XML_Char** atts );
     void callbackEndElement( const XML_Char* name );
     void callbackCharacters( const XML_Char* s, int nLen );
-    int  callbackExternalEntityRef( XML_Parser parser, const XML_Char *openEntityNames, const XML_Char *base, const XML_Char *systemId, const XML_Char *publicId);
+    bool callbackExternalEntityRef( XML_Parser parser, const XML_Char *openEntityNames, const XML_Char *base, const XML_Char *systemId, const XML_Char *publicId);
     void callbackEntityDecl(const XML_Char *entityName, int is_parameter_entity,
             const XML_Char *value, int value_length, const XML_Char *base,
             const XML_Char *systemId, const XML_Char *publicId,
@@ -1270,7 +1270,7 @@ void FastSaxParserImpl::callbackEntityDecl(
     }
 }
 
-int FastSaxParserImpl::callbackExternalEntityRef(
+bool FastSaxParserImpl::callbackExternalEntityRef(
     XML_Parser parser, const XML_Char *context,
     SAL_UNUSED_PARAMETER const XML_Char * /*base*/, const XML_Char *systemId,
     const XML_Char *publicId )
