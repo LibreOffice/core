@@ -2483,10 +2483,10 @@ double ConvertDataLinear::ConvertFromBase( double f, sal_Int16 n ) const
 
 ConvertDataList::ConvertDataList( void )
 {
-#define NEWD(str,unit,cl)   Append(new ConvertData(str,unit,cl))
-#define NEWDP(str,unit,cl)  Append(new ConvertData(str,unit,cl,sal_True))
-#define NEWL(str,unit,offs,cl)  Append(new ConvertDataLinear(str,unit,offs,cl))
-#define NEWLP(str,unit,offs,cl) Append(new ConvertDataLinear(str,unit,offs,cl,sal_True))
+#define NEWD(str,unit,cl)   maVector.push_back(new ConvertData(str,unit,cl))
+#define NEWDP(str,unit,cl)  maVector.push_back(new ConvertData(str,unit,cl,sal_True))
+#define NEWL(str,unit,offs,cl)  maVector.push_back(new ConvertDataLinear(str,unit,offs,cl))
+#define NEWLP(str,unit,offs,cl) maVector.push_back(new ConvertDataLinear(str,unit,offs,cl,sal_True))
 
     // *** are extra and not standard Excel Analysis Addin!
 
@@ -2663,8 +2663,8 @@ ConvertDataList::ConvertDataList( void )
 
 ConvertDataList::~ConvertDataList()
 {
-    for( ConvertData* p = First() ; p ; p = Next() )
-        delete p;
+    for( std::vector<ConvertData*>::const_iterator it = maVector.begin(); it != maVector.end(); ++it )
+        delete *it;
 }
 
 
@@ -2677,9 +2677,10 @@ double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUStr
     sal_Int16       nLevelFrom = 0;
     sal_Int16       nLevelTo = 0;
 
-    ConvertData*    p = First();
-    while( p && ( bSearchFrom || bSearchTo ) )
+    std::vector<ConvertData*>::iterator it = maVector.begin();
+    while( it != maVector.end() && ( bSearchFrom || bSearchTo ) )
     {
+        ConvertData*    p = *it;
         if( bSearchFrom )
         {
             sal_Int16   n = p->GetMatchingLevel( rFrom );
@@ -2718,7 +2719,7 @@ double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUStr
             }
         }
 
-        p = Next();
+        ++it;
     }
 
     if( pFrom && pTo )

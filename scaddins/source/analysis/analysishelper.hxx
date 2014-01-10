@@ -566,12 +566,10 @@ public:
 
 
 
-class ConvertDataList : protected MyList
+class ConvertDataList
 {
 private:
-protected:
-    inline ConvertData*     First( void );
-    inline ConvertData*     Next( void );
+    std::vector<ConvertData*> maVector;
 public:
                             ConvertDataList( void );
     virtual                 ~ConvertDataList();
@@ -826,17 +824,6 @@ inline ConvertDataLinear::ConvertDataLinear( const sal_Char* p, double fC, doubl
 
 
 
-
-inline ConvertData* ConvertDataList::First( void )
-{
-    return ( ConvertData* ) MyList::First();
-}
-
-
-inline ConvertData* ConvertDataList::Next( void )
-{
-    return ( ConvertData* ) MyList::Next();
-}
 
 //-----------------------------------------------------------------------------
 
