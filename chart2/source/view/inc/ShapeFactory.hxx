@@ -177,12 +177,13 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createRectangle(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xTarget
-                , const ::com::sun::star::awt::Size& rSize
-                , const ::com::sun::star::awt::Point& rPosition
-                , const tNameSequence& rPropNames
-                , const tAnySequence& rPropValues );
+            const com::sun::star::uno::Reference<
+                com::sun::star::drawing::XShapes >& xTarget,
+            const com::sun::star::awt::Size& rSize,
+            const com::sun::star::awt::Point& rPosition,
+            const tNameSequence& rPropNames,
+            const tAnySequence& rPropValues,
+            StackPosition ePos = Top );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createRectangle(
