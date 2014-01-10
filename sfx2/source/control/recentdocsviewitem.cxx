@@ -21,6 +21,7 @@ RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rUR
 {
     OUString aTitle(rTitle);
     INetURLObject aURLObj(rURL);
+    m_sHelpText = aURLObj.GetURLPath();
     RecentDocsView& rRecentView = dynamic_cast<RecentDocsView&>(rView);
     long nThumbnailSize = rRecentView.GetThumbnailSize();
 
@@ -38,10 +39,9 @@ RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rUR
         Size aExtSize(aExt.GetSizePixel());
 
         // attempt to make it appear as if it is on a piece of paper
-        INetURLObject aUrl(rURL);
         long nPaperHeight;
         long nPaperWidth;
-        if( RecentDocsView::typeMatchesExtension(TYPE_IMPRESS, aUrl.getExtension()) )
+        if( RecentDocsView::typeMatchesExtension(TYPE_IMPRESS, aURLObj.getExtension()) )
         {
             // Swap width and height (PAPER_SCREEN_4_3 definition make it needed)
             PaperInfo aInfo(PAPER_SCREEN_4_3);
@@ -86,7 +86,7 @@ void RecentDocsViewItem::setEditTitle (bool edit, bool bChangeFocus)
 
 OUString RecentDocsViewItem::getHelpText() const
 {
-    return maURL;
+    return m_sHelpText;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
