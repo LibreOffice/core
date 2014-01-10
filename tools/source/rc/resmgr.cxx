@@ -626,7 +626,7 @@ void InternalResMgr::FreeGlobalRes( void * pResHandle, void * pResource )
 OUString GetTypeRes_Impl( const ResId& rTypeId )
 {
     // Return on resource errors
-    static int bInUse = false;
+    static bool bInUse = false;
     OUString aTypStr(OUString::number(rTypeId.GetId()));
 
     if ( !bInUse )
