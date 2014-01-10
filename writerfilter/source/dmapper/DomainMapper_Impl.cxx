@@ -1820,9 +1820,9 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             if (xSInfo->supportsService("com.sun.star.text.TextFrame"))
             {
                 // Extract the special "btLr text frame" mode, requested by oox, if needed.
-                uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+                uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
                 uno::Sequence<beans::PropertyValue> aGrabBag;
-                xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
+                xShapePropertySet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
                 for (int i = 0; i < aGrabBag.getLength(); ++i)
                 {
                     if (aGrabBag[i].Name == "mso-layout-flow-alt")
@@ -1835,6 +1835,10 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                 uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY_THROW);
                 uno::Reference<text::XTextRange> xTextRange(xTextAppend->createTextCursorByRange(xTextAppend->getEnd()), uno::UNO_QUERY_THROW);
                 xTextAppend->insertTextContent(xTextRange, xTextContent, sal_False);
+
+                uno::Reference<beans::XPropertySet> xPropertySet(xTextContent, uno::UNO_QUERY);
+                // we need to re-set this value to xTextContent, then only values are preserved.
+                xPropertySet->setPropertyValue("FrameInteropGrabBag",uno::makeAny(aGrabBag));
             }
             else if (nAnchorType != text::TextContentAnchorType_AS_CHARACTER)
             {

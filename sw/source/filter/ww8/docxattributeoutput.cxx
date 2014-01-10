@@ -304,9 +304,43 @@ void DocxAttributeOutput::WriteDMLTextFrame(sw::Frame* pParentFrame)
             XML_txBox, "1",
             FSEND);
 
+    uno::Any aRotation ;
+    const SdrObject* pSdrObj = rFrmFmt.FindRealSdrObject();
+    uno::Reference< drawing::XShape > xShape( ((SdrObject*)pSdrObj)->getUnoShape(), uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xPropertySet( xShape, uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropertySet->getPropertySetInfo();
+    OUString pName = "FrameInteropGrabBag";
+    sal_Int32 nRotation = 0;
+
+    if ( xPropSetInfo->hasPropertyByName( pName ) )
+    {
+        uno::Sequence< beans::PropertyValue > propList;
+        xPropertySet->getPropertyValue( pName ) >>= propList;
+        for ( sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp )
+        {
+            OUString propName = propList[nProp].Name;
+            if ( propName == "mso-rotation-angle")
+            {
+                aRotation = propList[nProp].Value ;
+                break;
+            }
+        }
+    }
+    aRotation >>= nRotation ;
+    OString sRotation(OString::number(nRotation));
     // Shape properties
     m_pSerializer->startElementNS(XML_wps, XML_spPr, FSEND);
-    m_pSerializer->startElementNS(XML_a, XML_xfrm, FSEND);
+    if(nRotation)
+    {
+        m_pSerializer->startElementNS(XML_a, XML_xfrm,
+            XML_rot, sRotation.getStr(),
+            FSEND);
+
+    }
+    else
+    {
+        m_pSerializer->startElementNS(XML_a, XML_xfrm, FSEND);
+    }
     m_pSerializer->singleElementNS(XML_a, XML_off,
             XML_x, "0",
             XML_y, "0",

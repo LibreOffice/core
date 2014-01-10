@@ -2404,6 +2404,15 @@ DECLARE_OOXMLEXPORT_TEST(testFdo65833, "fdo65833.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:group", "editas", "canvas");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo73247, "fdo73247.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:xfrm",
+        "rot", "1969698");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
