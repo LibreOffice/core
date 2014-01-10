@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "fa98f980_92403c37",
+        "filename": "offapi/com/sun/star/text/MailMerge.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-01-10T12:35:47Z",
+      "side": 1,
+      "message": "LO 4.2.0 is already in triple-review mode, so I\u0027d only introduce this into master towards LO 4.3.",
+      "parentUuid": "1abeadc6_16e99a1a",
+      "revId": "c2651cf71ba78d551c141d54a60eaf826dd1dccc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1abeadc6_138fec24",
         "filename": "offapi/type_reference/offapi.idl",
         "patchSetId": 1
