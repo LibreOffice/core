@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.0 on Fri Jan 10 20:45:20 2014 -->
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
@@ -32,6 +33,7 @@
                   <object class="svtlo-SvSimpleTableContainer" id="pathctrl">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="vexpand">True</property>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection" id="Simple Table Container-selection1"/>
                     </child>
