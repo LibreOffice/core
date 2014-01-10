@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1abeadc6_16e99a1a",
+        "filename": "offapi/com/sun/star/text/MailMerge.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2014-01-10T12:00:55Z",
+      "side": 1,
+      "message": "Is this still ok for LO 4.2?",
+      "parentUuid": "1abeadc6_7303c073",
+      "revId": "c2651cf71ba78d551c141d54a60eaf826dd1dccc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1abeadc6_138fec24",
         "filename": "offapi/type_reference/offapi.idl",
         "patchSetId": 1
@@ -105,6 +123,24 @@
     },
     {
       "key": {
+        "uuid": "1abeadc6_d68f2274",
+        "filename": "sw/source/ui/uno/unomailmerge.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2014-01-10T12:00:55Z",
+      "side": 1,
+      "message": "I\u0027ll use a second object for \"finalization\".",
+      "parentUuid": "1abeadc6_93a21c99",
+      "revId": "c2651cf71ba78d551c141d54a60eaf826dd1dccc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1abeadc6_33bb08c6",
         "filename": "sw/source/ui/uno/unomailmerge.cxx",
         "patchSetId": 1
@@ -116,6 +152,24 @@
       "writtenOn": "2014-01-07T20:57:11Z",
       "side": 1,
       "message": "ah that\u0027s what the mutex is for - you want to call cancel on thread A while execute is working on thread B?  perhaps best to add a comment about that.\n\n... not sure that is actually safe; it protects pMgr but not the pMgr-\u003ebCancel member ... where is that checked ... SwNewDBMgr::MergeMailFiles? ... technically that would need to lock the mutex too when checking the flag... but that appears rather difficult to do...\n\nit would be really nice if oslInterlockedCount had an atomic get function so it could be used for the flag ... but it only has increment/decrement, how lame, /me wants g_atomic_int.\n\nhmm... perhaps it\u0027s good enough doing a non-atomic update, probably a race would only delay the cancellation by 1 iteration, not much of a problem - but bCancel must not be a bitfield in that case but a full integer, because a race updating bitfields may cause \"collateral damage\" on other variables.",
+      "revId": "c2651cf71ba78d551c141d54a60eaf826dd1dccc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1abeadc6_b692a69d",
+        "filename": "sw/source/ui/uno/unomailmerge.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2014-01-10T12:00:55Z",
+      "side": 1,
+      "message": "Yup - that\u0027s what we do in Wollmux. We run the MM in a Java thread and I would like to cancel it from another thread.\n\nI don\u0027t see a reason to protect the bCancel. I didn\u0027t check bCancel for being a bit variable, so I\u0027ll change that.\n\nMy problem is a cancelled MM job of 15000 documents, which would otherwise continue to run in the background for hours with 100% CPU on one core. The additional second / millisecond in the case, where you hit the exact moment of the main bCancel check, feels negligible.",
+      "parentUuid": "1abeadc6_33bb08c6",
       "revId": "c2651cf71ba78d551c141d54a60eaf826dd1dccc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
