@@ -23,11 +23,13 @@ public:
     //EDITING: undo search&replace corrupt text when searching backward
     void testReplaceBackward();
     void testFdo69893();
+    void testFdo70807();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
     CPPUNIT_TEST(testReplaceBackward);
     CPPUNIT_TEST(testFdo69893);
+    CPPUNIT_TEST(testFdo70807);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -111,6 +113,27 @@ void SwUiWriterTest::testFdo69893()
     SwTxtNode& rEnd = dynamic_cast<SwTxtNode&>(pShellCrsr->End()->nNode.GetNode());
     // Selection did not include the para after table, this was "B1".
     CPPUNIT_ASSERT_EQUAL(OUString("Para after table."), rEnd.GetTxt());
+}
+
+void SwUiWriterTest::testFdo70807()
+{
+    load(DATA_DIRECTORY, "fdo70807.odt");
+
+    uno::Reference<container::XIndexAccess> stylesIter(getStyles("PageStyles"), uno::UNO_QUERY);
+
+    for (sal_Int32 i = 0; i < stylesIter->getCount(); ++i)
+    {
+        uno::Reference<style::XStyle> xStyle(stylesIter->getByIndex(i), uno::UNO_QUERY);
+        uno::Reference<container::XNamed> xName(xStyle, uno::UNO_QUERY);
+
+        sal_Bool isUsed = xStyle->isInUse();
+        sal_Bool used = sal_False; // just "Right Page" is used
+
+        if (xName->getName() == "Right Page")
+            used = sal_True;
+
+        CPPUNIT_ASSERT_EQUAL(used, isUsed);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
