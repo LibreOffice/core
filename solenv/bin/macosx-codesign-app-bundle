@@ -21,7 +21,7 @@ done
 
 echo "codesigning using MACSOX_CODESIGNING_IDENTITY=[${MACOSX_CODESIGNING_IDENTITY?}]"
 
-APP_BUNDLE=$1
+APP_BUNDLE="$1"
 
 # Sign dylibs
 #
@@ -76,6 +76,6 @@ if test "$ENABLE_MACOSX_SANDBOX" = "TRUE"; then
     entitlements="--entitlements $BUILDDIR/lo.xcent"
 fi
 
-codesign --force --verbose --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements $APP_BUNDLE
+codesign --force --verbose --identifier="${MACOSX_BUNDLE_IDENTIFIER}.$(basename ${APP_BUNDLE})" --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements $APP_BUNDLE
 
 exit 0
