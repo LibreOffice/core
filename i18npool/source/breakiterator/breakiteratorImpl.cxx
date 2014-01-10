@@ -326,7 +326,7 @@ sal_Int32  SAL_CALL BreakIteratorImpl::previousScript( const OUString& Text,
 
     sal_uInt32 ch=0;
     while (numberOfChange > 0 && iterateCodePoints(Text, nStartPos, -1, ch) >= 0) {
-        if ((((numberOfChange % 2) == 0) ^ (ScriptType != getScriptClass(ch))))
+        if ((((numberOfChange % 2) == 0) != (ScriptType != getScriptClass(ch))))
             numberOfChange--;
         else if (nStartPos == 0) {
             if (numberOfChange > 0)
@@ -399,7 +399,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::nextCharBlock( const OUString& Text, sal_I
 
     sal_uInt32 ch=0;
     while (numberOfChange > 0 && iterateCodePoints(Text, nStartPos, 1, ch) < strLen) {
-        if ((CharType != (sal_Int16)u_charType(ch)) ^ (numberOfChange == 1))
+        if ((CharType != (sal_Int16)u_charType(ch)) != (numberOfChange == 1))
             numberOfChange--;
     }
     return numberOfChange == 0 ? nStartPos : -1;
@@ -415,7 +415,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::previousCharBlock( const OUString& Text, s
 
     sal_uInt32 ch=0;
     while (numberOfChange > 0 && iterateCodePoints(Text, nStartPos, -1, ch) >= 0) {
-        if (((numberOfChange % 2) == 0) ^ (CharType != (sal_Int16)u_charType(ch)))
+        if (((numberOfChange % 2) == 0) != (CharType != (sal_Int16)u_charType(ch)))
             numberOfChange--;
         if (nStartPos == 0 && numberOfChange > 0) {
             numberOfChange--;
