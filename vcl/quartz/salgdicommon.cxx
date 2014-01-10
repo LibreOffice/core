@@ -1452,7 +1452,8 @@ void AquaSalGraphics::SetLineColor()
     maLineColor.SetAlpha( 0.0 );   // transparent
     if( CheckContext() )
     {
-        CGContextSetStrokeColor( mrContext, maLineColor.AsArray() );
+        CGContextSetRGBStrokeColor( mrContext, maLineColor.GetRed(), maLineColor.GetGreen(),
+                                    maLineColor.GetBlue(), maLineColor.GetAlpha() );
     }
 }
 
@@ -1461,7 +1462,8 @@ void AquaSalGraphics::SetLineColor( SalColor nSalColor )
     maLineColor = RGBAColor( nSalColor );
     if( CheckContext() )
     {
-        CGContextSetStrokeColor( mrContext, maLineColor.AsArray() );
+        CGContextSetRGBStrokeColor( mrContext, maLineColor.GetRed(), maLineColor.GetGreen(),
+                                   maLineColor.GetBlue(), maLineColor.GetAlpha() );
     }
 }
 
@@ -1470,7 +1472,8 @@ void AquaSalGraphics::SetFillColor()
     maFillColor.SetAlpha( 0.0 );   // transparent
     if( CheckContext() )
     {
-        CGContextSetFillColor( mrContext, maFillColor.AsArray() );
+        CGContextSetRGBFillColor( mrContext, maFillColor.GetRed(), maFillColor.GetGreen(),
+                                  maFillColor.GetBlue(), maFillColor.GetAlpha() );
     }
 }
 
@@ -1479,7 +1482,8 @@ void AquaSalGraphics::SetFillColor( SalColor nSalColor )
     maFillColor = RGBAColor( nSalColor );
     if( CheckContext() )
     {
-        CGContextSetFillColor( mrContext, maFillColor.AsArray() );
+        CGContextSetRGBFillColor( mrContext, maFillColor.GetRed(), maFillColor.GetGreen(),
+                                 maFillColor.GetBlue(), maFillColor.GetAlpha() );
     }
 }
 
