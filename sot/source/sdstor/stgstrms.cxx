@@ -236,7 +236,9 @@ sal_Int32 StgFAT::AllocPages( sal_Int32 nBgn, sal_Int32 nPgs )
             if( !rStrm.SetSize( ( nPages + nPgs ) << 2 ) )
                 return STG_EOF;
             if( !bPhys && !InitNew( nPages ) )
-                return false;
+                return 0;
+                    // FIXME: this was originally "FALSE", whether or not that
+                    // makes sense (or should be STG_EOF instead, say?)
             nPages = rStrm.GetSize() >> 2;
             nPasses++;
         }
