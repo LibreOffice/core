@@ -116,7 +116,7 @@ class DLLEXPORT HWPPara
         HWPPara(void);
         ~HWPPara(void);
 
-        int   Read(HWPFile &hwpf, unsigned char flag = 0);
+        bool  Read(HWPFile &hwpf, unsigned char flag = 0);
         int   Write(CTextOut &txtf);
         int   Write(CHTMLOut &html);
 
