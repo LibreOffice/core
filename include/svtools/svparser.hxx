@@ -130,7 +130,7 @@ public:
     sal_Unicode GetNextChar();
     void RereadLookahead();
 
-    inline int  IsParserWorking() const { return SVPAR_WORKING == eState; }
+    inline bool IsParserWorking() const { return SVPAR_WORKING == eState; }
 
     Link GetAsynchCallLink() const
         { return STATIC_LINK( this, SvParser, NewDataRead ); }

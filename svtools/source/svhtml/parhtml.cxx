@@ -421,13 +421,13 @@ int HTMLParser::FilterToken( int nToken )
 int HTMLParser::ScanText( const sal_Unicode cBreak )
 {
     OUStringBuffer sTmpBuffer( MAX_LEN );
-    int bContinue = true;
-    int bEqSignFound = false;
+    bool bContinue = true;
+    bool bEqSignFound = false;
     sal_Unicode cQuote = 0U;
 
     while( bContinue && IsParserWorking() )
     {
-        int bNextCh = true;
+        bool bNextCh = true;
         switch( nNextCh )
         {
         case '&':
@@ -844,12 +844,12 @@ int HTMLParser::_GetNextRawToken()
     }
 
     // Default return value: HTML_RAWDATA
-    int bContinue = true;
+    bool bContinue = true;
     int nToken = HTML_RAWDATA;
     SaveState( 0 );
     while( bContinue && IsParserWorking() )
     {
-        int bNextCh = true;
+        bool bNextCh = true;
         switch( nNextCh )
         {
         case '<':
@@ -865,7 +865,7 @@ int HTMLParser::_GetNextRawToken()
                 sal_uLong nLinePos = GetLinePos();
 
                 // Start of an end token?
-                int bOffState = false;
+                bool bOffState = false;
                 if( '/' == (nNextCh = GetNextChar()) )
                 {
                     bOffState = true;
@@ -1089,7 +1089,7 @@ int HTMLParser::_GetNextToken()
     }
 
     do {
-        int bNextCh = true;
+        bool bNextCh = true;
         switch( nNextCh )
         {
         case '<':
@@ -1098,7 +1098,7 @@ int HTMLParser::_GetNextToken()
                 sal_uLong nLineNr = GetLineNr();
                 sal_uLong nLinePos = GetLinePos();
 
-                int bOffState = false;
+                bool bOffState = false;
                 if( '/' == (nNextCh = GetNextChar()) )
                 {
                     bOffState = true;

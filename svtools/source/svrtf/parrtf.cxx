@@ -54,7 +54,7 @@ int SvRTFParser::_GetNextToken()
 {
     int nRet = 0;
     do {
-        int bNextCh = true;
+        bool bNextCh = true;
         switch( nNextCh )
         {
         case '\\':
@@ -116,7 +116,7 @@ int SvRTFParser::_GetNextToken()
                         }
 
                         // minus before numeric parameters
-                        int bNegValue = false;
+                        bool bNegValue = false;
                         if( '-' == nNextCh )
                         {
                             bNegValue = true;
@@ -304,10 +304,10 @@ sal_Unicode SvRTFParser::GetHexValue()
 void SvRTFParser::ScanText( const sal_Unicode cBreak )
 {
     OUStringBuffer aStrBuffer;
-    int bContinue = true;
+    bool bContinue = true;
     while( bContinue && IsParserWorking() && aStrBuffer.getLength() < MAX_STRING_LEN)
     {
-        int bNextCh = true;
+        bool bNextCh = true;
         switch( nNextCh )
         {
         case '\\':
