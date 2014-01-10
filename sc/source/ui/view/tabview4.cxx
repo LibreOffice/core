@@ -424,15 +424,7 @@ void ScTabView::UpdateScrollBars()
     }
 
     //      set visible area for online spelling
-
-    if ( aViewData.IsActive() )
-    {
-        if (UpdateVisibleRange())
-        {
-            SC_MOD()->AnythingChanged();                // if visible area has changed
-            PaintGrid();
-        }
-    }
+    UpdateGrid();
 }
 
 #ifndef HDR_SLIDERSIZE
