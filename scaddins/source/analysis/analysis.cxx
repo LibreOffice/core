@@ -978,7 +978,7 @@ OUString SAL_CALL AnalysisAddIn::getHex2Oct( const uno::Reference< beans::XPrope
 
 sal_Int32 SAL_CALL AnalysisAddIn::getDelta( const uno::Reference< beans::XPropertySet >& xOpt, double fNum1, const uno::Any& rNum2 ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
-    return fNum1 == aAnyConv.getDouble( xOpt, rNum2, 0.0 );
+    return sal_Int32(fNum1 == aAnyConv.getDouble( xOpt, rNum2, 0.0 ));
 }
 
 
@@ -1001,7 +1001,7 @@ double SAL_CALL AnalysisAddIn::getErfc( double f ) throw( uno::RuntimeException,
 
 sal_Int32 SAL_CALL AnalysisAddIn::getGestep( const uno::Reference< beans::XPropertySet >& xOpt, double fNum, const uno::Any& rStep ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
-    return fNum >= aAnyConv.getDouble( xOpt, rStep, 0.0 );
+    return sal_Int32(fNum >= aAnyConv.getDouble( xOpt, rStep, 0.0 ));
 }
 
 
