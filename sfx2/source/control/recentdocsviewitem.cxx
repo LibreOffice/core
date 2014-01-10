@@ -21,6 +21,7 @@ RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rUR
 {
     OUString aTitle(rTitle);
     INetURLObject aURLObj(rURL);
+    m_sHelpText = aURLObj.GetURLPath();
     RecentDocsView& rRecentView = dynamic_cast<RecentDocsView&>(rView);
     long nThumbnailSize = rRecentView.GetThumbnailSize();
 
@@ -71,7 +72,7 @@ void RecentDocsViewItem::setEditTitle (bool edit, bool bChangeFocus)
 
 OUString RecentDocsViewItem::getHelpText() const
 {
-    return maURL;
+    return m_sHelpText;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
