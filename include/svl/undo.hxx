@@ -220,11 +220,8 @@ namespace svl
     class SAL_NO_VTABLE IUndoManager
     {
     public:
-        enum
-        {
-            CurrentLevel = true,
-            TopLevel = false
-        };
+        static bool const CurrentLevel = true;
+        static bool const TopLevel = false;
 
         virtual                 ~IUndoManager() { };
 

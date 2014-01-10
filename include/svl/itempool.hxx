@@ -216,9 +216,9 @@ public:
     void                            SetFileFormatVersion( sal_uInt16 nFileFormatVersion );
     bool                            IsCurrentVersionLoading() const;
 
-    static int                      IsWhich(sal_uInt16 nId) {
+    static bool                     IsWhich(sal_uInt16 nId) {
                                         return nId && nId <= SFX_WHICH_MAX; }
-    static int                      IsSlot(sal_uInt16 nId) {
+    static bool                     IsSlot(sal_uInt16 nId) {
                                         return nId && nId > SFX_WHICH_MAX; }
 
     static const SfxItemPool*       GetStoringPool();

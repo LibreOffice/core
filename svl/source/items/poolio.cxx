@@ -820,7 +820,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
 
         rStream >> nSlot;
         sal_uInt16 nMappedWhich = GetWhich(nSlot, sal_False);
-        int bKnownItem = bOwnPool || IsWhich(nMappedWhich);
+        bool bKnownItem = bOwnPool || IsWhich(nMappedWhich);
 
         sal_uInt16 nRef(0), nCount(0), nVersion(0);
         sal_uInt32 nAttrSize(0);
@@ -915,7 +915,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
             *ppArr = pNewArr;
 
             // die Items merken, die schon im Pool sind
-            int bEmpty = sal_True;
+            bool bEmpty = true;
             if ( 0 != pOldArr )
                 for ( size_t n = 0; bEmpty && n < pOldArr->size(); ++n )
                     bEmpty = pOldArr->operator[](n) == 0;
@@ -968,7 +968,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
 
         rStream >> nSlot;
         sal_uInt16 nMappedWhich = GetWhich(nSlot, sal_False);
-        int bKnownItem = bOwnPool || IsWhich(nMappedWhich);
+        bool bKnownItem = bOwnPool || IsWhich(nMappedWhich);
 
         sal_uLong nPos = nLastPos;
         sal_uInt32 nSize(0);
