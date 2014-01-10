@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa98f980_72aaf8d5",
+        "filename": "cui/source/options/optinet2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-01-10T13:43:08Z",
+      "side": 1,
+      "message": "really? ;-)",
+      "range": {
+        "startLine": 594,
+        "startChar": 25,
+        "endLine": 594,
+        "endChar": 28
+      },
+      "revId": "4b83be4d3e5b94b355149c73480bd103410d0edf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
