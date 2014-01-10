@@ -286,10 +286,11 @@ public:
 //-----------------------------------------------------------------------------
 
 /// sorted list with unique sal_Int32 values
-class SortedIndividualInt32List : private MyList
+class SortedIndividualInt32List
 {
+private:
+    std::vector<sal_Int32>      maVector;
 protected:
-    using MyList::Insert;
     void                        Insert( sal_Int32 nDay );
     void                        Insert( sal_Int32 nDay, sal_Int32 nNullDate, sal_Bool bInsertOnWeekend );
     void                        Insert( double fDay, sal_Int32 nNullDate, sal_Bool bInsertOnWeekend )
@@ -307,11 +308,12 @@ public:
                                 SortedIndividualInt32List();
     virtual                     ~SortedIndividualInt32List();
 
-                                using MyList::Count;
+    inline sal_uInt32           Count() const
+                                    { return maVector.size(); }
 
                                 /// @return  element on position nIndex or 0 on invalid index
-    inline sal_Int32            Get( sal_uInt32 nIndex ) const
-                                    { return (sal_Int32)(sal_IntPtr) MyList::GetObject( nIndex ); }
+    inline sal_Int32            Get( sal_uInt32 n ) const
+                                    { return maVector[n]; }
 
                                 /// @return  sal_True if nVal (internal date representation) is contained
     sal_Bool                    Find( sal_Int32 nVal ) const;
