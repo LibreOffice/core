@@ -26,6 +26,7 @@
 #include "svtools/treelistentry.hxx"
 #include <cuires.hrc>
 #include <vcl/field.hxx>
+#include <vcl/layout.hxx>
 #include <svl/eitem.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Exception.hpp>
@@ -74,13 +75,12 @@ RegistrationItemSetHolder::~RegistrationItemSetHolder()
 // class DatabaseRegistrationDialog  ------------------------------------------------
 
 DatabaseRegistrationDialog::DatabaseRegistrationDialog( Window* pParent, const SfxItemSet& rInAttrs )
-    :RegistrationItemSetHolder( rInAttrs )
-    ,SfxNoLayoutSingleTabDialog( pParent, getRegistrationItems(), RID_SFXPAGE_DBREGISTER )
+    : RegistrationItemSetHolder(rInAttrs)
+    , SfxSingleTabDialog(pParent, getRegistrationItems())
 {
-    SfxTabPage* page = DbRegistrationOptionsPage::Create( this, getRegistrationItems() );
-
-    SetTabPage( page );
-    SetText( page->GetText() );
+    SfxTabPage* page = DbRegistrationOptionsPage::Create(get_content_area(), getRegistrationItems());
+    setTabPage(page);
+    SetText(page->get<VclFrame>("frame1")->get_label());
 }
 
 DatabaseRegistrationDialog::~DatabaseRegistrationDialog()
@@ -89,7 +89,7 @@ DatabaseRegistrationDialog::~DatabaseRegistrationDialog()
 
 short DatabaseRegistrationDialog::Execute()
 {
-    short result = SfxNoLayoutSingleTabDialog::Execute();
+    short result = SfxSingleTabDialog::Execute();
     if ( result == RET_OK )
     {
         DBG_ASSERT( GetOutputItemSet(), "DatabaseRegistrationDialog::Execute: no output items!" );

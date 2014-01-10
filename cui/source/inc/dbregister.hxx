@@ -125,7 +125,7 @@ namespace svx
     //= DatabaseRegistrationDialog
     //====================================================================
     class DatabaseRegistrationDialog    :public RegistrationItemSetHolder
-                                        ,public SfxNoLayoutSingleTabDialog
+                                        ,public SfxSingleTabDialog
     {
     public:
         DatabaseRegistrationDialog( Window* pParent, const SfxItemSet& rAttr );
