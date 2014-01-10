@@ -387,7 +387,7 @@ resource_definition
           RscExpType aExpType;
           RscExpression * pExpr;
 
-          aExpType.cUnused = 0;
+          aExpType.cUnused = false;
           aExpType.cType = RSCEXP_NOTHING;
           aExpType.SetLong( 0 );
           aExpType.cType = RSCEXP_LONG;

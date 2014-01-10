@@ -49,7 +49,7 @@ public:
         } aLong;
     } aExp;
     char cType;
-    char cUnused;
+    bool cUnused;
     bool IsNumber()    const { return( RSCEXP_LONG     == cType ); }
     bool IsExpression()const { return( RSCEXP_EXP      == cType ); }
     bool IsDefinition()const { return( RSCEXP_DEF      == cType ); }

@@ -136,8 +136,7 @@ public:
     bool            IsDefault( const RSCINST & rInst)
                         {
                             //cUnused wird fuer Defaultkennung verwendet
-                            return ((RscId*)rInst.pData)->aExp.cUnused
-                                ? true : false;
+                            return ((RscId*)rInst.pData)->aExp.cUnused;
                         }
                     // Als Default setzen
     bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
