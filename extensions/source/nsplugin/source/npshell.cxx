@@ -873,7 +873,6 @@ NPP_Print(NPP instance, NPPrint* printInfo)
         msg.instance_id = (plugin_Int32)instance;
         if(!sendMsg(&msg, sizeof(PLUGIN_MSG), 1))
             debug_fprintf(NSP_LOG_APPEND, "NPP_StreamAsFile send SO_SET_WINDOW return failure \n");
-       printInfo->mode = TRUE;
     /**************************************/
 
         if (printInfo->mode == NP_FULL) {
