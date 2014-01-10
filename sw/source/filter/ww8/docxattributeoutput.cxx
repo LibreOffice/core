@@ -562,7 +562,8 @@ void DocxAttributeOutput::EndParagraphProperties( const boost::shared_ptr<SfxIte
     Redline( pRedlineData );
 
     WriteCollectedParagraphProperties();
-
+    // Merge the marks for the ordered elements
+       m_pSerializer->mergeTopMarks( );
     // Write 'Paragraph Mark' properties
     if ( pRedlineParagraphMarkerDeleted || pRedlineParagraphMarkerInserted || pParagraphMarkerProperties)
     {
@@ -617,8 +618,7 @@ void DocxAttributeOutput::EndParagraphProperties( const boost::shared_ptr<SfxIte
         m_pSerializer->endElementNS( XML_w, XML_rPr );
     }
 
-    // Merge the marks for the ordered elements
-    m_pSerializer->mergeTopMarks( );
+
 
     m_pSerializer->endElementNS( XML_w, XML_pPr );
 
