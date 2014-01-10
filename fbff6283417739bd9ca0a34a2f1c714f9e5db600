@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa98f980_12052cc2",
+        "filename": "sfx2/source/control/recentdocsviewitem.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-01-10T14:55:28Z",
+      "side": 1,
+      "message": "I\u0027m not convinced of the use of GetURLPath() here as it strips not only protocol but also server information, so things like \"smb://host.example.org\" or \"file://ftp.example.org\" are lost.\n\nIMHO GetMainURL() should be used instead.",
+      "range": {
+        "startLine": 24,
+        "startChar": 26,
+        "endLine": 24,
+        "endChar": 36
+      },
+      "revId": "fbff6283417739bd9ca0a34a2f1c714f9e5db600",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
