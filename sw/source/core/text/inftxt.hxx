@@ -268,7 +268,7 @@ public:
     inline const  SwViewOption &GetOpt() const { return *m_pOpt; }
     inline const OUString &GetTxt() const { return *m_pTxt; }
     inline sal_Unicode GetChar( const sal_Int32 nPos ) const
-    { if (m_pTxt && !m_pTxt->isEmpty()) return (*m_pTxt)[ nPos ]; return 0; }
+    { if (m_pTxt && nPos < m_pTxt->getLength()) return (*m_pTxt)[ nPos ]; return 0; }
 
     KSHORT      GetTxtHeight() const;
 
