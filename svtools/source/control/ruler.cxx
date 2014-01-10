@@ -1535,7 +1535,7 @@ sal_Bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
                 nStyle &= RULER_INDENT_STYLE;
                 n1 = mpData->pIndents[i-1].nPos;
 
-                if ( (nStyle == RULER_INDENT_BOTTOM) ^ (!bIsHori) )
+                if ( (nStyle == RULER_INDENT_BOTTOM) != !bIsHori )
                 {
                     aRect.Left()    = n1-nIndentWidth2;
                     aRect.Right()   = n1+nIndentWidth2;

@@ -3085,8 +3085,8 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
     sal_Bool bInUse = pEntry->HasInUseEmphasis();
     // if a ClipRegion was set from outside, we don't have to reset it
     const WinBits nWindowStyle = GetStyle();
-    const sal_Bool bResetClipRegion = !bHasClipRegion;
-    const sal_Bool bHideSelection = ((nWindowStyle & WB_HIDESELECTION) && !HasFocus())!=0;
+    const bool bResetClipRegion = !bHasClipRegion;
+    const bool bHideSelection = (nWindowStyle & WB_HIDESELECTION) !=0 && !HasFocus();
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
 
     Font aHighlightFont( GetFont() );
