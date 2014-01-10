@@ -734,7 +734,7 @@ static Bcp47CountryEntry const aImplBcp47CountryEntries[] =
 };
 
 static IsoLanguageCountryEntry aLastResortFallbackEntry =
-{ LANGUAGE_ENGLISH_US, "en", "US", false };
+{ LANGUAGE_ENGLISH_US, "en", "US", 0 };
 
 OUString IsoLanguageCountryEntry::getTagString() const
 {
