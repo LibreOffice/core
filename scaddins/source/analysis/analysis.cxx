@@ -478,8 +478,8 @@ uno::Sequence< sheet::LocalizedName > SAL_CALL AnalysisAddIn::getCompatibilityNa
     if( !p )
         return uno::Sequence< sheet::LocalizedName >( 0 );
 
-    const StringList&           r = p->GetCompNameList();
-    sal_uInt32                  nCount = r.Count();
+    const std::vector<OUString>& r = p->GetCompNameList();
+    sal_uInt32                   nCount = r.size();
 
     uno::Sequence< sheet::LocalizedName >                aRet( nCount );
 
@@ -487,7 +487,7 @@ uno::Sequence< sheet::LocalizedName > SAL_CALL AnalysisAddIn::getCompatibilityNa
 
     for( sal_uInt32 n = 0 ; n < nCount ; n++ )
     {
-        pArray[ n ] = sheet::LocalizedName( GetLocale( n ), *r.Get( n ) );
+        pArray[ n ] = sheet::LocalizedName( GetLocale( n ), r[n] );
     }
 
     return aRet;

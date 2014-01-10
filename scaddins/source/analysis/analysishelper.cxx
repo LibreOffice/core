@@ -1441,13 +1441,6 @@ void MyList::Insert( void* p, sal_uInt32 n )
 
 
 
-StringList::~StringList()
-{
-    for( OUString* p = ( OUString* ) First() ; p ; p = ( OUString* ) Next() )
-        delete p;
-}
-
-
 class AnalysisRscStrArrLoader : public Resource
 {
 private:
@@ -1480,10 +1473,10 @@ FuncData::FuncData( const FuncDataBase& r, ResMgr& rResMgr ) :
     const ResStringArray&   rArr = aArrLoader.GetStringArray();
 
     sal_uInt16              nCount = sal::static_int_cast<sal_uInt16>( rArr.Count() );
-    sal_uInt16              n;
 
-    for( n = 0 ; n < nCount ; n++ )
-        aCompList.Append( rArr.GetString( n ) );
+    aCompList.resize( nCount );
+    for( sal_uInt16 n = 0 ; n < nCount ; n++ )
+        aCompList[n] = rArr.GetString( n );
 }
 
 

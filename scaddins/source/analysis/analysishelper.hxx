@@ -177,27 +177,6 @@ public:
 };
 
 
-
-
-class StringList : protected MyList
-{
-public:
-    virtual                 ~StringList();
-
-    inline const OUString*    First( void );
-    inline const OUString*    Next( void );
-    inline const OUString*    Get( sal_uInt32 nIndex ) const;
-
-    using MyList::Append;
-    inline void             Append( OUString* pNew );
-    inline void             Append( const OUString& rNew );
-
-    using MyList::Count;
-};
-
-
-
-
 enum FDCategory
 {
     FDCat_AddIn,
@@ -235,7 +214,7 @@ private:
 
     sal_uInt16              nParam;             // num of parameters
     sal_uInt16              nCompID;
-    StringList              aCompList;          // list of all valid names
+    std::vector<OUString>  aCompList;          // list of all valid names
     FDCategory              eCat;               // function category
 public:
                             FuncData( const FuncDataBase& rBaseData, ResMgr& );
@@ -249,7 +228,8 @@ public:
     sal_uInt16              GetStrIndex( sal_uInt16 nParamNum ) const;
     inline sal_Bool         Is( const OUString& rCompareTo ) const;
 
-    inline const StringList&    GetCompNameList( void ) const;
+    inline const std::vector<OUString> &
+                            GetCompNameList( void ) const;
 
     inline FDCategory       GetCategory( void ) const;
 };
@@ -700,38 +680,6 @@ inline sal_uInt32 MyList::Count( void ) const
 
 
 
-inline const OUString* StringList::First( void )
-{
-    return ( const OUString* ) MyList::First();
-}
-
-
-inline const OUString* StringList::Next( void )
-{
-    return ( const OUString* ) MyList::Next();
-}
-
-
-inline const OUString* StringList::Get( sal_uInt32 n ) const
-{
-    return ( const OUString* ) MyList::GetObject( n );
-}
-
-
-inline void StringList::Append( OUString* p )
-{
-    MyList::Append( p );
-}
-
-
-inline void StringList::Append( const OUString& r )
-{
-    MyList::Append( new OUString( r ) );
-}
-
-
-
-
 inline sal_uInt16 FuncData::GetUINameID( void ) const
 {
     return nUINameID;
@@ -762,7 +710,7 @@ inline sal_Bool FuncData::Is( const OUString& r ) const
 }
 
 
-inline const StringList& FuncData::GetCompNameList( void ) const
+inline const std::vector<OUString> & FuncData::GetCompNameList( void ) const
 {
     return aCompList;
 }
