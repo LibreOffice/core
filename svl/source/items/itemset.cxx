@@ -863,7 +863,7 @@ void SfxItemSet::SetRanges( const sal_uInt16 *pNewRanges )
 
 // -----------------------------------------------------------------------
 
-int SfxItemSet::Set
+bool SfxItemSet::Set
 (
     const SfxItemSet&   rSet,   /*  das SfxItemSet, dessen SfxPoolItems
                                     "ubernommen werden sollen */
@@ -892,10 +892,10 @@ int SfxItemSet::Set
 
     [R"uckgabewert]
 
-    int                             sal_True
+    bool                            true
                                     es wurden SfxPoolItems "ubernommen
 
-                                    sal_False
+                                    false
                                     es wurden keine SfxPoolItems "ubernommen,
                                     da z.B. die Which-Bereiche der SfxItemSets
                                     keine Schnittmenge haben oder in der
@@ -906,7 +906,7 @@ int SfxItemSet::Set
 
 {
     DBG_CHKTHIS(SfxItemSet, DbgCheckItemSet);
-    int bRet = sal_False;
+    bool bRet = false;
     if ( _nCount )
         ClearItem();
     if ( bDeep )

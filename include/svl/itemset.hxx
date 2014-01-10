@@ -133,7 +133,7 @@ public:
                                              SfxItemState eDontCareAs = SFX_ITEM_UNKNOWN,
                                              SfxItemState eDefaultAs = SFX_ITEM_UNKNOWN );
 
-    virtual int                 Set( const SfxItemSet&, sal_Bool bDeep = sal_True );
+    virtual bool                Set( const SfxItemSet&, sal_Bool bDeep = sal_True );
 
     virtual void                Intersect( const SfxItemSet& rSet );
     virtual void                MergeValues( const SfxItemSet& rSet, sal_Bool bOverwriteDefaults = sal_False );
