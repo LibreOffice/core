@@ -2468,6 +2468,10 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
     pView->SetPendingRelTabBarWidth( rDocSett.mfTabBarWidth );
 
     // sheet settings
+    SCTAB nLastTab = rDocOpt.GetLastTab();
+    if (static_cast<SCTAB>(maTabData.size()) <= nLastTab)
+        maTabData.resize(nLastTab+1);
+
     for( SCTAB nTab = 0; nTab < static_cast<SCTAB>(maTabData.size()); ++nTab )
     {
         if( const ScExtTabSettings* pTabSett = rDocOpt.GetTabSettings( nTab ) )

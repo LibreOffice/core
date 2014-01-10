@@ -68,6 +68,8 @@ public:
     const ScExtTabSettings* GetTabSettings( SCTAB nTab ) const;
     ScExtTabSettings&   GetOrCreateTabSettings( SCTAB nTab );
 
+    SCTAB GetLastTab() const;
+
 private:
     typedef ::boost::shared_ptr< ScExtTabSettings >     ScExtTabSettingsRef;
     typedef ::std::map< SCTAB, ScExtTabSettingsRef >    ScExtTabSettingsMap;
@@ -107,6 +109,11 @@ ScExtTabSettings& ScExtTabSettingsCont::GetOrCreateTabSettings( SCTAB nTab )
     if( !rxTabSett )
         rxTabSett.reset( new ScExtTabSettings );
     return *rxTabSett;
+}
+
+SCTAB ScExtTabSettingsCont::GetLastTab() const
+{
+    return maMap.empty() ? -1 : maMap.rbegin()->first;
 }
 
 void ScExtTabSettingsCont::CopyFromMap( const ScExtTabSettingsMap& rMap )
@@ -181,6 +188,11 @@ ScExtDocSettings& ScExtDocOptions::GetDocSettings()
 const ScExtTabSettings* ScExtDocOptions::GetTabSettings( SCTAB nTab ) const
 {
     return mxImpl->maTabSett.GetTabSettings( nTab );
+}
+
+SCTAB ScExtDocOptions::GetLastTab() const
+{
+    return mxImpl->maTabSett.GetLastTab();
 }
 
 ScExtTabSettings& ScExtDocOptions::GetOrCreateTabSettings( SCTAB nTab )
