@@ -75,7 +75,7 @@ public:
     virtual void  v_enter(void);
     virtual void  v_leave(void);
 
-    virtual int  v_isValid(rtl::OUString * pReason);
+    virtual bool v_isValid(rtl::OUString * pReason);
 
     void innerDispatch(void);
     void outerDispatch(int loop);
@@ -317,9 +317,9 @@ void AffineBridge::v_leave(void)
     m_innerMutex.release();
 }
 
-int  AffineBridge::v_isValid(rtl::OUString * pReason)
+bool AffineBridge::v_isValid(rtl::OUString * pReason)
 {
-    int result = m_enterCount > 0;
+    bool result = m_enterCount > 0;
     if (!result)
         *pReason = rtl::OUString("not entered");
 

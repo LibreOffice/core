@@ -103,7 +103,7 @@ public:
     virtual void v_leave     (void);
     virtual void v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam);
     virtual void v_callOut_v (uno_EnvCallee * pCallee, va_list * pParam);
-    virtual int  v_isValid   (rtl::OUString * pReason);
+    virtual bool v_isValid   (rtl::OUString * pReason);
 
 protected:
     oslInterlockedCount    m_nRef;
@@ -512,7 +512,7 @@ void Base::v_callOut_v(uno_EnvCallee * pCallee, va_list * pParam)
     m_pEnterable->callOut_v(pCallee, pParam);
 }
 
-int Base::v_isValid(rtl::OUString * pReason)
+bool Base::v_isValid(rtl::OUString * pReason)
 {
     return m_pEnterable->isValid(pReason);
 }

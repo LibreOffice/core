@@ -52,7 +52,7 @@ protected:
     virtual void v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam);
     virtual void v_callOut_v (uno_EnvCallee * pCallee, va_list * pParam);
 
-    virtual int  v_isValid   (rtl::OUString * pReason);
+    virtual bool v_isValid   (rtl::OUString * pReason);
 };
 
 TestEnv::TestEnv()
@@ -91,9 +91,9 @@ void TestEnv::v_leave(void)
     -- m_inCount;
 }
 
-int  TestEnv::v_isValid(rtl::OUString * pReason)
+bool TestEnv::v_isValid(rtl::OUString * pReason)
 {
-    int result = m_inCount & 1;
+    bool result = m_inCount & 1;
 
     if (result)
         *pReason = rtl::OUString("OK");

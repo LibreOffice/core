@@ -50,7 +50,7 @@ public:
     virtual void v_enter(void);
     virtual void v_leave(void);
 
-    virtual int  v_isValid(rtl::OUString * pReason);
+    virtual bool v_isValid(rtl::OUString * pReason);
 };
 
 LogBridge::LogBridge(void)
@@ -107,9 +107,9 @@ void LogBridge::v_leave(void)
     m_mutex.release();
 }
 
-int LogBridge::v_isValid(rtl::OUString * pReason)
+bool LogBridge::v_isValid(rtl::OUString * pReason)
 {
-    int result = m_count > 0;
+    bool result = m_count > 0;
     if (!result)
     {
         *pReason = rtl::OUString("not entered");

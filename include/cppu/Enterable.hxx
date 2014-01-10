@@ -40,7 +40,7 @@ public:
     virtual void v_leave     (void)                                      = 0;
     virtual void v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam) = 0;
     virtual void v_callOut_v (uno_EnvCallee * pCallee, va_list * pParam) = 0;
-    virtual int  v_isValid   (rtl::OUString * pReason)                   = 0;
+    virtual bool v_isValid   (rtl::OUString * pReason)                   = 0;
 
     virtual ~Enterable() {}
 
