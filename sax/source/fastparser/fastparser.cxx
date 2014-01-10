@@ -1432,10 +1432,7 @@ com_sun_star_comp_extensions_xml_sax_FastParser(
     uno_Sequence * arguments)
 {
     assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
-    css::uno::Reference<css::uno::XInterface> x(
-        static_cast<cppu::OWeakObject *>(new FastSaxParser));
-    x->acquire();
-    return x.get();
+    return static_cast<cppu::OWeakObject *>(new FastSaxParser);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

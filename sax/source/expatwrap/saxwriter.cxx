@@ -1378,10 +1378,7 @@ com_sun_star_extensions_xml_sax_Writer(
     uno_Sequence * arguments)
 {
     assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
-    css::uno::Reference<css::uno::XInterface> x(
-        static_cast<cppu::OWeakObject *>(new SAXWriter));
-    x->acquire();
-    return x.get();
+    return static_cast<cppu::OWeakObject *>(new SAXWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
