@@ -96,6 +96,13 @@ public:
 
     /** @return read access to the settings of a sheet, if extant; otherwise 0. */
     const ScExtTabSettings* GetTabSettings( SCTAB nTab ) const;
+
+    /**
+     * @return index of the last sheet that has settings, or -1 if no tab
+     *         settings are present.
+     */
+    SCTAB GetLastTab() const;
+
     /** @return read/write access to the settings of a sheet, may create a new struct. */
     ScExtTabSettings&   GetOrCreateTabSettings( SCTAB nTab );
 
