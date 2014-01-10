@@ -108,7 +108,7 @@ struct XtorType
 struct DebugData
 {
     DbgData                 aDbgData;
-    sal_uInt16              bInit;
+    bool                    bInit;
     DbgPrintLine            pDbgPrintMsgBox;
     DbgPrintLine            pDbgPrintWindow;
     DbgPrintLine            pDbgPrintTestTool;
@@ -160,7 +160,7 @@ struct DebugData
 
 static DebugData aDebugData;
 static sal_Char aCurPath[260];
-static int bDbgImplInMain = false;
+static bool bDbgImplInMain = false;
 
 #if defined( WNT )
 static CRITICAL_SECTION aImplCritDbgSection;
@@ -372,7 +372,7 @@ namespace
         return strlen( _pValue );
     }
 
-    void lcl_tryReadConfigBoolean( const sal_Char* _pLine, size_t _nLineLen, const sal_Char* _pKeyName, sal_uIntPtr* _out_pnValue )
+    void lcl_tryReadConfigBoolean( const sal_Char* _pLine, size_t _nLineLen, const sal_Char* _pKeyName, bool* _out_pnValue )
     {
         sal_Char aBuf[2];
         size_t nValueLen = lcl_tryReadConfigString( _pLine, _nLineLen, _pKeyName, aBuf, sizeof( aBuf ) );
@@ -784,8 +784,8 @@ static int ImplStrSearch( const sal_Char* pSearchStr, int nSearchLen,
     return 0;
 }
 
-static int ImplDbgFilter( const sal_Char* pFilter, const sal_Char* pMsg,
-                          int bEmpty )
+static bool ImplDbgFilter( const sal_Char* pFilter, const sal_Char* pMsg,
+                           bool bEmpty )
 {
     int nStrLen = strlen( pFilter );
     if ( !nStrLen )

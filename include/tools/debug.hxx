@@ -76,11 +76,11 @@ typedef void (*DbgTestSolarMutexProc)();
 struct DbgData
 {
     sal_uIntPtr       nTestFlags;
-    sal_uIntPtr       bOverwrite;
+    bool              bOverwrite;
     sal_uIntPtr       nTraceOut;
     sal_uIntPtr       nWarningOut;
     sal_uIntPtr       nErrorOut;
-    sal_uIntPtr       bHookOSLAssert;
+    bool              bHookOSLAssert;
     sal_Char    aDebugName[260];
     sal_Char    aInclFilter[512];
     sal_Char    aExclFilter[512];
@@ -187,7 +187,7 @@ inline bool DbgFilterMessage( const char* pMsg )
     return (bool)(long) DbgFunc( DBG_FUNC_FILTERMESSAGE, (void*)pMsg );
 }
 
-inline int DbgIsAllErrorOut()
+inline bool DbgIsAllErrorOut()
 {
     return (DbgFunc( DBG_FUNC_ALLERROROUT ) != 0);
 }
@@ -202,31 +202,22 @@ inline void DbgSaveData( const DbgData& rData )
     DbgFunc( DBG_FUNC_SAVEDATA, (void*)&rData );
 }
 
-inline sal_uIntPtr DbgIsTraceOut()
+inline bool DbgIsTraceOut()
 {
     DbgData* pData = DbgGetData();
-    if ( pData )
-        return (pData->nTraceOut != DBG_OUT_NULL);
-    else
-        return sal_False;
+    return pData && pData->nTraceOut != DBG_OUT_NULL;
 }
 
-inline sal_uIntPtr DbgIsWarningOut()
+inline bool DbgIsWarningOut()
 {
     DbgData* pData = DbgGetData();
-    if ( pData )
-        return (pData->nWarningOut != DBG_OUT_NULL);
-    else
-        return sal_False;
+    return pData && pData->nWarningOut != DBG_OUT_NULL;
 }
 
-inline sal_uIntPtr DbgIsErrorOut()
+inline bool DbgIsErrorOut()
 {
     DbgData* pData = DbgGetData();
-    if ( pData )
-        return (pData->nErrorOut != DBG_OUT_NULL);
-    else
-        return sal_False;
+    return pData && pData->nErrorOut != DBG_OUT_NULL;
 }
 
 inline sal_uIntPtr DbgGetErrorOut()   // Testtool: test whether to collect OSL_ASSERTions as well
@@ -238,12 +229,12 @@ inline sal_uIntPtr DbgGetErrorOut()   // Testtool: test whether to collect OSL_A
         return DBG_OUT_NULL;
 }
 
-inline sal_uIntPtr DbgIsAssertWarning()
+inline bool DbgIsAssertWarning()
 {
     return DbgIsWarningOut();
 }
 
-inline sal_uIntPtr DbgIsAssert()
+inline bool DbgIsAssert()
 {
     return DbgIsErrorOut();
 }
