@@ -2413,6 +2413,15 @@ DECLARE_OOXMLEXPORT_TEST(testFdo73247, "fdo73247.docx")
         "rot", "1969698");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo70942, "fdo70942.docx")
+{
+     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
+                "prst", "ellipse");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

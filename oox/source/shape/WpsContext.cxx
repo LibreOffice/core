@@ -101,6 +101,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
     }
     break;
     case XML_txbx:
+        mpShape->getCustomShapeProperties()->setShapeTypeOverride(true);
         mpShape->setServiceName("com.sun.star.text.TextFrame");
         break;
     default:

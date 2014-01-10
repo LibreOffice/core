@@ -135,6 +135,8 @@ public:
     sal_Int32 getShapePresetType() const { return mnShapePresetType; }
     OUString getShapePresetTypeName() const;
     void setShapePresetType( sal_Int32 nShapePresetType ){ mnShapePresetType = nShapePresetType; };
+    sal_Bool                            getShapeTypeOverride(){ return mbShapeTypeOverride; };
+    void                                setShapeTypeOverride( sal_Bool bShapeTypeOverride ) { mbShapeTypeOverride = bShapeTypeOverride; };
 
     std::vector< CustomShapeGuide >&    getAdjustmentGuideList(){ return maAdjustmentGuideList; };
     std::vector< CustomShapeGuide >&    getGuideList(){ return maGuideList; };
@@ -155,6 +157,7 @@ public:
 private:
 
     sal_Int32                       mnShapePresetType;
+    sal_Bool                        mbShapeTypeOverride;
     std::vector< CustomShapeGuide > maAdjustmentGuideList;
     std::vector< CustomShapeGuide > maGuideList;
     std::vector< AdjustHandle >     maAdjustHandleList;

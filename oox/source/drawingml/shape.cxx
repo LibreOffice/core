@@ -621,6 +621,18 @@ Reference< XShape > Shape::createAndInsert(
         {
             if (aServiceName == "com.sun.star.text.TextFrame")
             {
+                if (mpCustomShapePropertiesPtr != NULL && mpCustomShapePropertiesPtr->getShapeTypeOverride())
+                {
+                    uno::Reference<beans::XPropertySet> propertySet (mxShape, uno::UNO_QUERY);
+                    uno::Sequence<beans::PropertyValue> aGrabBag;
+                    propertySet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
+                    sal_Int32 length = aGrabBag.getLength();
+                    aGrabBag.realloc( length+1);
+                    aGrabBag[length].Name = "mso-orig-shape-type";
+                    aGrabBag[length].Value = uno::makeAny(mpCustomShapePropertiesPtr->getShapePresetTypeName());
+                    propertySet->setPropertyValue("FrameInteropGrabBag",uno::makeAny(aGrabBag));
+                }
+
                 // TextFrames have BackColor, not FillColor
                 if (aShapeProps.hasProperty(PROP_FillColor))
                 {
