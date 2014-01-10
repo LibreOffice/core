@@ -316,7 +316,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     for ( size_t k = 0, n = aTmpList.size(); k < n; ++k )
         unlink( aTmpList[ k ]->getStr() );
 
-    return bError;
+    return bError ? EXIT_FAILURE : EXIT_SUCCESS;
 }
 
 void RscExit( sal_uInt32 nExit )

@@ -86,7 +86,7 @@ public:
     ERRTYPE         SetBool( const RSCINST & rInst, bool bValue )
                         {
                             if( bValue )
-                                return( pRefClass->SetConst( rInst, nConstId, bValue ) );
+                                return( pRefClass->SetConst( rInst, nConstId, sal_Int32(bValue) ) );
                             else
                                 return( pRefClass->
                                         SetNotConst( rInst, nConstId ) );
