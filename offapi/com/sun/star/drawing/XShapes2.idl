@@ -1,0 +1,38 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef __com_sun_star_drawing_XShapes2_idl__
+#define __com_sun_star_drawing_XShapes2_idl__
+
+#include <com/sun/star/drawing/XShapes.idl>
+
+module com {  module sun {  module star { module drawing {
+
+interface XShapes2 : com::sun::star::drawing::XShapes
+{
+    /**
+     * Insert a new shape to the top of the stack.
+     *
+     * @param xShape shape to be inserted.
+     */
+    void addTop( [in] com::sun::star::drawing::XShape xShape );
+
+    /**
+     * Insert a new shape to the bottom of the stack.
+     *
+     * @param xShape shape to be inserted.
+     */
+    void addBottom( [in] com::sun::star::drawing::XShape xShape );
+};
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

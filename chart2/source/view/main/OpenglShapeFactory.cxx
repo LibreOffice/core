@@ -364,15 +364,17 @@ uno::Reference< drawing::XShape > OpenglShapeFactory::createInvisibleRectangle(
 }
 
 uno::Reference< drawing::XShape > OpenglShapeFactory::createRectangle(
-        const uno::Reference< drawing::XShapes >& xTarget
-        , const awt::Size& rSize
-        , const awt::Point& rPosition
-        , const tNameSequence& rPropNames
-        , const tAnySequence& rPropValues )
+    const uno::Reference< drawing::XShapes >& xTarget,
+    const awt::Size& rSize,
+    const awt::Point& rPosition,
+    const tNameSequence& rPropNames,
+    const tAnySequence& rPropValues,
+    StackPosition /*ePos*/ )
 {
     dummy::DummyRectangle* pRectangle = new dummy::DummyRectangle(rSize, rPosition,
             rPropNames, rPropValues);
 
+    // TODO : Honor stack position.
     xTarget->add(pRectangle);
     return pRectangle;
 }
