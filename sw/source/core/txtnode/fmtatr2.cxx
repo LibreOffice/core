@@ -328,9 +328,9 @@ bool SwFmtINetFmt::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_URL_UNVISITED_FMT:
         {
-            OUString sVal = msVisitedFmtName;
-            if (sVal.isEmpty() && mnVisitedFmtId != 0)
-                SwStyleNameMapper::FillUIName(mnVisitedFmtId, sVal);
+            OUString sVal = msINetFmtName;
+            if (sVal.isEmpty() && mnINetFmtId != 0)
+                SwStyleNameMapper::FillUIName(mnINetFmtId, sVal);
             if (!sVal.isEmpty())
                 SwStyleNameMapper::FillProgName(sVal, sVal,
                         nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true);
