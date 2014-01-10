@@ -591,7 +591,6 @@ SvxSecurityTabPage::SvxSecurityTabPage(Window* pParent, const SfxItemSet& rSet)
     Size aSize(m_pSavePasswordsCB->CalcMinimumSize(56*approximate_char_width()));
     if (aPrefSize.Width() > aSize.Width())
     {
-        fprintf(stderr, "FOO\n");
         m_pSavePasswordsCB->set_width_request(aSize.Width());
         m_pSavePasswordsCB->set_height_request(aSize.Height());
     }
