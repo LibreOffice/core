@@ -107,7 +107,7 @@ public:
                             bSet = true;
                         }
     bool            IsSet() const       { return bSet; }
-    void            SetDate( bool bDateP )   { bDate = (bDateP != 0); }
+    void            SetDate( bool bDateP )   { bDate = bDateP; }
 };
 
 class CharClass;
