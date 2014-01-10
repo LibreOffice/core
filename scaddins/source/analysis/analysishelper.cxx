@@ -2195,8 +2195,8 @@ void Complex::Csch(void) throw( uno::RuntimeException, lang::IllegalArgumentExce
 
 ComplexList::~ComplexList()
 {
-    for( Complex* p = ( Complex* ) First() ; p ; p = ( Complex* ) Next() )
-        delete p;
+    for( sal_uInt32 i = 0; i < maVector.size(); ++i )
+        delete maVector[i];
 }
 
 

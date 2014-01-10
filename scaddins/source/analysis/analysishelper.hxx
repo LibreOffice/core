@@ -466,18 +466,20 @@ enum ComplListAppendHandl
 };
 
 
-class ComplexList : protected MyList
+class ComplexList
 {
+private:
+    std::vector<Complex*>  maVector;
 public:
     virtual                 ~ComplexList();
 
     inline const Complex*   Get( sal_uInt32 nIndex ) const;
-    inline const Complex*   First( void );
-    inline const Complex*   Next( void );
 
-    using MyList::Count;
+    inline bool             empty( void ) const
+                                { return maVector.empty(); }
+    inline sal_uInt32       Count( void ) const
+                                { return maVector.size(); }
 
-    using MyList::Append;
     inline void             Append( Complex* pNew );
     void                    Append( const css::uno::Sequence< css::uno::Sequence< OUString > >& rComplexNumList, ComplListAppendHandl eAH = AH_EmpyAs0 ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
     void                    Append( const css::uno::Sequence< css::uno::Any >& aMultPars,ComplListAppendHandl eAH = AH_EmpyAs0 ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
@@ -791,25 +793,13 @@ inline void Complex::Add( const Complex& rAdd )
 
 inline const Complex* ComplexList::Get( sal_uInt32 n ) const
 {
-    return ( const Complex* ) MyList::GetObject( n );
-}
-
-
-inline const Complex* ComplexList::First( void )
-{
-    return ( const Complex* ) MyList::First();
-}
-
-
-inline const Complex* ComplexList::Next( void )
-{
-    return ( const Complex* ) MyList::Next();
+    return maVector[n];
 }
 
 
 inline void ComplexList::Append( Complex* p )
 {
-    MyList::Append( p );
+    maVector.push_back(p);
 }
 
 
