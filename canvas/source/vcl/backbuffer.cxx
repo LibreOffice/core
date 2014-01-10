@@ -26,7 +26,7 @@ namespace vclcanvas
     BackBuffer::BackBuffer( const OutputDevice& rRefDevice,
                             bool                bMonochromeBuffer ) :
         maVDev( new VirtualDevice( rRefDevice,
-                                   bMonochromeBuffer ) )
+                                   sal_uInt16(bMonochromeBuffer) ) )
     {
         if( !bMonochromeBuffer )
         {

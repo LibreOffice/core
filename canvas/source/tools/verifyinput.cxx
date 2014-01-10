@@ -215,12 +215,12 @@ namespace canvas
 
 #if OSL_DEBUG_LEVEL > 0
             const sal_Int32 nBinaryState(
-                100000 * !::rtl::math::isFinite( matrix.m00 ) +
-                 10000 * !::rtl::math::isFinite( matrix.m01 ) +
-                  1000 * !::rtl::math::isFinite( matrix.m02 ) +
-                   100 * !::rtl::math::isFinite( matrix.m10 ) +
-                    10 * !::rtl::math::isFinite( matrix.m11 ) +
-                     1 * !::rtl::math::isFinite( matrix.m12 ) );
+                100000 * int(!::rtl::math::isFinite( matrix.m00 )) +
+                 10000 * int(!::rtl::math::isFinite( matrix.m01 )) +
+                  1000 * int(!::rtl::math::isFinite( matrix.m02 )) +
+                   100 * int(!::rtl::math::isFinite( matrix.m10 )) +
+                    10 * int(!::rtl::math::isFinite( matrix.m11 )) +
+                     1 * int(!::rtl::math::isFinite( matrix.m12 )) );
 
             if( nBinaryState )
             {
@@ -252,10 +252,10 @@ namespace canvas
 
 #if OSL_DEBUG_LEVEL > 0
             const sal_Int32 nBinaryState(
-                1000 * !::rtl::math::isFinite( matrix.m00 ) +
-                 100 * !::rtl::math::isFinite( matrix.m01 ) +
-                  10 * !::rtl::math::isFinite( matrix.m10 ) +
-                   1 * !::rtl::math::isFinite( matrix.m11 ) );
+                1000 * int(!::rtl::math::isFinite( matrix.m00 )) +
+                 100 * int(!::rtl::math::isFinite( matrix.m01 )) +
+                  10 * int(!::rtl::math::isFinite( matrix.m10 )) +
+                   1 * int(!::rtl::math::isFinite( matrix.m11 )) );
 
             if( nBinaryState )
             {

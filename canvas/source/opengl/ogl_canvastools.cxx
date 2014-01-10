@@ -69,7 +69,7 @@ namespace oglcanvas
             const ::basegfx::B2DPolygon& rPolygon( aPolyPoly.getB2DPolygon(i) );
 
             const sal_uInt32 nPts=rPolygon.count();
-            const sal_uInt32 nExtPts=nPts + rPolygon.isClosed();
+            const sal_uInt32 nExtPts=nPts + int(rPolygon.isClosed());
             for( sal_uInt32 j=0; j<nExtPts; j++ )
             {
                 const ::basegfx::B2DPoint& rPt( rPolygon.getB2DPoint( j % nPts ) );

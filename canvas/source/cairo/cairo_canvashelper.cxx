@@ -983,7 +983,7 @@ namespace cairocanvas
             // to correctly render closed curves, need to output first
             // point twice (so output one additional point)
             const sal_uInt32 nExtendedPointCount( nPointCount +
-                                                  aPolygon.isClosed()*aPolygon.areControlPointsUsed() );
+                                                  int(aPolygon.isClosed() && aPolygon.areControlPointsUsed()) );
 
             if( nPointCount > 1)
             {
