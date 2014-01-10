@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa98f980_92675cea",
+        "filename": "svx/source/unodraw/unopage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-01-10T13:25:35Z",
+      "side": 1,
+      "message": "I think the Begin/EndUndo should be moved into the block that is executed for a matched shape, otherwise it would create an empty Undo if (mpPage-\u003eGetObj(nNum) \u003d\u003d pObj) was not found.",
+      "range": {
+        "startLine": 246,
+        "startChar": 21,
+        "endLine": 246,
+        "endChar": 22
+      },
+      "revId": "47029636eb7a816933d9b78790945b2d6202e93e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
