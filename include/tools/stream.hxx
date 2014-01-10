@@ -283,7 +283,7 @@ public:
     /// Enable/disable swapping of endians, may be needed for Unicode import/export
     inline void     SetEndianSwap( bool bVal );
     /// returns status of endian swap flag
-    bool            IsEndianSwap() const { return 0 != bSwap; }
+    bool            IsEndianSwap() const { return bSwap; }
 
     void            SetCompressMode( sal_uInt16 nNewMode )
                         { nCompressMode = nNewMode; }
