@@ -406,7 +406,7 @@ static NPError l_NPN_GetValue( NPP, NPNVariable variable, void* value )
             break;
         case NPNVSupportsXEmbedBool:
             // asking xembed
-            *(int*)value = true;
+            *(int*)value = int(true);
             SAL_INFO("extensions.plugin", "xembed requested");
             break;
         case NPNVToolkit:
