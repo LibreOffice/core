@@ -523,7 +523,7 @@ void lcl_formatCharsGR(const sal_Unicode table[], int n, OUString& s )
 }
 
 static
-int should_ignore( OUString s )
+bool should_ignore( OUString s )
 {
         // return true if blank or null
         return s == " " || (!s.isEmpty() && s[0]==0);
