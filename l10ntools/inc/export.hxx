@@ -214,7 +214,7 @@ public:
         sTitle[ rId ] = rTitle;
         bTitleFirst[ rId ] = true;
     }
-    sal_Bool GetText( OString &rReturn, sal_uInt16 nTyp, const OString &nLangIndex, sal_Bool bDel = sal_False );
+    bool GetText( OString &rReturn, sal_uInt16 nTyp, const OString &nLangIndex, sal_Bool bDel = sal_False );
 
     /**
       Generate QTZ string with ResData

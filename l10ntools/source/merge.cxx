@@ -96,11 +96,10 @@ ResData::ResData( const OString &rGId, const OString &rFilename)
 // class MergeEntrys
 //
 
-sal_Bool MergeEntrys::GetText( OString &rReturn,
+bool MergeEntrys::GetText( OString &rReturn,
     sal_uInt16 nTyp, const OString &nLangIndex, sal_Bool bDel )
 {
-
-    sal_Bool bReturn=sal_True;
+    bool bReturn = true;
     switch ( nTyp ) {
         case STRING_TYP_TEXT :
             rReturn = sText[ nLangIndex ];
