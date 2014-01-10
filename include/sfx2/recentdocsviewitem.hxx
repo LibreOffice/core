@@ -23,6 +23,9 @@ public:
     virtual OUString getHelpText() const;
 
     OUString maURL;
+
+private:
+    OUString m_sHelpText;
 };
 
 #endif // INCLUDED_SFX2_RECENTDOCSVIEWITEM_HXX
