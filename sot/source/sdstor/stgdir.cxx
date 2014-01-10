@@ -561,7 +561,7 @@ bool StgDirEntry::Revert()
             {
                 op->aEntry = op->aSave;
                 op->bDirty = false;
-                bSomeRenamed = ( bSomeRenamed | op->bRenamed );
+                bSomeRenamed = ( bSomeRenamed || op->bRenamed );
                 // Remove any new entries
                 if( op->bCreated )
                 {
