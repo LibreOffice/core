@@ -75,7 +75,7 @@ sal_Size ImplConvertUtf8ToUnicode(
        RTL_TEXTENCODING_UTF8 and RTL_TEXTENCODING_JAVA_UTF8.
       */
 
-    int bJavaUtf8 = pData != NULL;
+    bool bJavaUtf8 = pData != NULL;
     sal_uInt32 nUtf32 = 0;
     int nShift = -1;
     bool bCheckBom = true;
@@ -95,7 +95,7 @@ sal_Size ImplConvertUtf8ToUnicode(
     while (pSrcBufPtr < pSrcBufEnd)
     {
         bool bUndefined = false;
-        int bConsume = true;
+        bool bConsume = true;
         sal_uInt32 nChar = *pSrcBufPtr++;
         if (nShift < 0)
             if (nChar <= 0x7F)
@@ -271,7 +271,7 @@ sal_Size ImplConvertUnicodeToUtf8(
     sal_Size nSrcChars, char * pDestBuf, sal_Size nDestBytes, sal_uInt32 nFlags,
     sal_uInt32 * pInfo, sal_Size * pSrcCvtChars)
 {
-    int bJavaUtf8 = pData != NULL;
+    bool bJavaUtf8 = pData != NULL;
     sal_Unicode nHighSurrogate = 0xFFFF;
     sal_uInt32 nInfo = 0;
     sal_Unicode const * pSrcBufPtr = pSrcBuf;

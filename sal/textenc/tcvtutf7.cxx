@@ -437,7 +437,7 @@ sal_Size ImplUnicodeToUTF7( SAL_UNUSED_PARAMETER const void*, void* pContext,
     sal_Unicode                 c = '\0';
     int                         bEnd = sal_False;
     int                         bShifted;
-    int                         bNeedShift;
+    bool                        bNeedShift;
     sal_uInt32                  nBitBuffer;
     sal_uInt32                  nBitBufferTemp;
     sal_uInt32                  nBufferBits;
@@ -496,7 +496,7 @@ sal_Size ImplUnicodeToUTF7( SAL_UNUSED_PARAMETER const void*, void* pContext,
         else
         {
             bEnd = sal_True;
-            bNeedShift = sal_False;
+            bNeedShift = false;
         }
 
         if ( bShifted )
