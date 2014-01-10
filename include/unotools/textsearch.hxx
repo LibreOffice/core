@@ -56,12 +56,12 @@ private:
 
     SearchType m_eSrchType;       // search normal/regular/LevDist
 
-    int m_bWordOnly   : 1;        // used by normal search
-    int m_bSrchInSel  : 1;        // search only in the selection
-    int m_bCaseSense  : 1;        //
+    bool m_bWordOnly   : 1;        // used by normal search
+    bool m_bSrchInSel  : 1;        // search only in the selection
+    bool m_bCaseSense  : 1;        //
 
     // values for the "weight Levenshtein-Distance"
-    int bLEV_Relaxed : 1;
+    bool bLEV_Relaxed : 1;
     int nLEV_OtherX;
     int nLEV_ShorterY;
     int nLEV_LongerZ;
@@ -84,9 +84,9 @@ public:
     const OUString& GetReplaceStr() const       { return sReplaceStr; }
     SearchType      GetSrchType() const         { return m_eSrchType; }
 
-    int             IsCaseSensitive() const     { return m_bCaseSense; }
-    int             IsSrchInSelection() const   { return m_bSrchInSel; }
-    int             IsSrchWordOnly() const      { return m_bWordOnly; }
+    bool            IsCaseSensitive() const     { return m_bCaseSense; }
+    bool            IsSrchInSelection() const   { return m_bSrchInSel; }
+    bool            IsSrchWordOnly() const      { return m_bWordOnly; }
 
 
     void SetSrchStr( const OUString& rStr )     { sSrchStr = rStr; }
@@ -97,7 +97,7 @@ public:
     void SetSrchInSelection( int bFlag )        { m_bSrchInSel = bFlag; }
     void SetSrchWordOnly( int bFlag )           { m_bWordOnly = bFlag; }
 
-    int             IsSrchRelaxed() const       { return bLEV_Relaxed; }
+    bool            IsSrchRelaxed() const       { return bLEV_Relaxed; }
     int             GetLEVOther() const         { return nLEV_OtherX; }
     int             GetLEVShorter() const       { return nLEV_ShorterY; }
     int             GetLEVLonger() const        { return nLEV_LongerZ; }
