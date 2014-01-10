@@ -78,7 +78,7 @@ namespace drawinglayer
             /** flag if given 3D geometry is already cheched for shadow definitions and 2d shadows
                 are created in maShadowPrimitives
              */
-            unsigned                                            mbShadow3DChecked : 1;
+            bool                                                mbShadow3DChecked : 1;
 
             /// the last used NewDiscreteSize and NewUnitVisiblePart definitions for decomposition
             double                                              mfOldDiscreteSizeX;

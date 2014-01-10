@@ -44,7 +44,7 @@ namespace drawinglayer
             basegfx::B2DPolyPolygonVector           maExtractedLineFills;
 
             /// bitfield
-            unsigned                                mbInLineGeometry : 1;
+            bool                                    mbInLineGeometry : 1;
 
             /// tooling methods
             void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);

@@ -61,7 +61,7 @@ namespace drawinglayer
 
             /// bitfield
             /// flag to allow keeping the aspect ratio
-            unsigned                                    mbKeepAspectRatio : 1;
+            bool                                        mbKeepAspectRatio : 1;
 
         protected:
             /// local decomposition. Implementation will just return children

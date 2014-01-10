@@ -40,9 +40,9 @@ namespace drawinglayer
             basegfx::B2DVector                      maRectPoint;
 
             // bitfield
-            unsigned                                mbTiling : 1;
-            unsigned                                mbStretch : 1;
-            unsigned                                mbLogSize : 1;
+            bool                                    mbTiling : 1;
+            bool                                    mbStretch : 1;
+            bool                                    mbLogSize : 1;
 
             ImpSdrFillGraphicAttribute(
                 const Graphic& rFillGraphic,

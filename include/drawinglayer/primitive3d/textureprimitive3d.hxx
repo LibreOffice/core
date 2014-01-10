@@ -48,10 +48,10 @@ namespace drawinglayer
 
             /// bitfield
             /// flag if texture shall be modulated with white interpolated color
-            unsigned                                    mbModulate : 1;
+            bool                                        mbModulate : 1;
 
             /// flag if texture shall be filtered
-            unsigned                                    mbFilter : 1;
+            bool                                        mbFilter : 1;
 
         public:
             /// constructor

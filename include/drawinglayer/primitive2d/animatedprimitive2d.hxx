@@ -65,7 +65,7 @@ namespace drawinglayer
             /** flag if this is a text or graphic animation. Necessary since SdrViews need to differentiate
                 between both types if they are on/off
              */
-            unsigned                                        mbIsTextAnimation : 1;
+            bool                                            mbIsTextAnimation : 1;
 
         public:
             /// constructor

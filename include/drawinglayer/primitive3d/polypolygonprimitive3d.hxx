@@ -50,7 +50,7 @@ namespace drawinglayer
             attribute::MaterialAttribute3D              maMaterial;
 
             /// bitfield
-            unsigned                                    mbDoubleSided : 1;
+            bool                                        mbDoubleSided : 1;
 
         public:
             /// constructor
