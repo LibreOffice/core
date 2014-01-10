@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa98f980_72cf58b1",
+        "filename": "sfx2/source/control/recentdocsview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-01-10T14:28:25Z",
+      "side": 1,
+      "message": "What about triple clicks then? ;-)",
+      "range": {
+        "startLine": 184,
+        "startChar": 27,
+        "endLine": 184,
+        "endChar": 29
+      },
+      "revId": "0239dd50130737c294e90d15f6f6fab91fa21a26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
