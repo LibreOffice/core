@@ -21,7 +21,12 @@ RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rUR
 {
     OUString aTitle(rTitle);
     INetURLObject aURLObj(rURL);
-    m_sHelpText = aURLObj.GetURLPath();
+
+    if( aURLObj.GetProtocol() == INET_PROT_FILE )
+        m_sHelpText = aURLObj.getFSysPath(INetURLObject::FSYS_DETECT);
+    if( m_sHelpText.isEmpty() )
+        m_sHelpText = aURLObj.GetURLNoPass();
+
     RecentDocsView& rRecentView = dynamic_cast<RecentDocsView&>(rView);
     long nThumbnailSize = rRecentView.GetThumbnailSize();
 
