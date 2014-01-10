@@ -1150,7 +1150,7 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
  helper function for osl_joinProcessWithTimeout
  **********************************************/
 
-static int is_timeout(const struct timeval* tend)
+static bool is_timeout(const struct timeval* tend)
 {
     struct timeval tcurrent;
     gettimeofday(&tcurrent, NULL);
@@ -1164,7 +1164,7 @@ static int is_timeout(const struct timeval* tend)
  a zombie.
  *********************************************/
 
-static int is_process_dead(pid_t pid)
+static bool is_process_dead(pid_t pid)
 {
     return ((-1 == kill(pid, 0)) && (ESRCH == errno));
 }
@@ -1213,14 +1213,14 @@ oslProcessError SAL_CALL osl_joinProcessWithTimeout(oslProcess Process, const Ti
 
         if (pTimeout)
         {
-            int timeout = 0;
+            bool timeout = false;
             struct timeval tend;
 
             gettimeofday(&tend, NULL);
 
             tend.tv_sec += pTimeout->Seconds;
 
-            while (!is_process_dead(pid) && ((timeout = is_timeout(&tend)) == 0))
+            while (!is_process_dead(pid) && !(timeout = is_timeout(&tend)))
                 sleep(1);
 
             if (timeout)
