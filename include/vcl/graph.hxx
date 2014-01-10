@@ -49,10 +49,10 @@ private:
     Size            maSizePixel;            // default is (0,0)
 
     // bitfield
-    unsigned        mbUnlimitedSize : 1;    // default is false
-    unsigned        mbAntiAliase : 1;       // default is false
-    unsigned        mbSnapHorVerLines : 1;  // default is false
-    unsigned        mbScaleHighQuality : 1; // default is false
+    bool mbUnlimitedSize : 1;    // default is false
+    bool mbAntiAliase : 1;       // default is false
+    bool mbSnapHorVerLines : 1;  // default is false
+    bool mbScaleHighQuality : 1; // default is false
 
 public:
     GraphicConversionParameters(

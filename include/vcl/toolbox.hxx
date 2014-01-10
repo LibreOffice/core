@@ -178,7 +178,7 @@ private:
     sal_uInt16              mnConfigItem;
     sal_uInt16              mnMouseClicks;
     sal_uInt16              mnMouseModifier;
-    unsigned int        mbDrag:1,
+    bool                mbDrag:1,
                         mbSelection:1,
                         mbCommandDrag:1,
                         mbUpper:1,
@@ -492,7 +492,7 @@ public:
     // read configuration to determine locking behaviour
     static sal_Bool         AlwaysLocked();
 
-    void                EnableMenuStrings( sal_Bool bEnable = sal_True ) { mbMenuStrings = (bEnable != 0); }
+    void                EnableMenuStrings( bool bEnable = true ) { mbMenuStrings = bEnable; }
     sal_Bool                IsMenuStringsEnabled() const { return mbMenuStrings; }
 
     void                SetOutStyle( sal_uInt16 nNewStyle );
