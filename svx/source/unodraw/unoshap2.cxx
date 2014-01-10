@@ -106,6 +106,7 @@ uno::Any SAL_CALL SvxShapeGroup::queryAggregation( const uno::Type & rType ) thr
 
     QUERYINT( drawing::XShapeGroup );
     else QUERYINT( drawing::XShapes );
+    else QUERYINT( drawing::XShapes2 );
     else QUERYINT( container::XIndexAccess );
     else QUERYINT( container::XElementAccess );
     else
@@ -192,14 +193,8 @@ void SAL_CALL SvxShapeGroup::leaveGroup(  ) throw(uno::RuntimeException)
 //  pDrView->LeaveOneGroup();
 }
 
-//----------------------------------------------------------------------
-
-// XShapes
-void SAL_CALL SvxShapeGroup::add( const uno::Reference< drawing::XShape >& xShape )
-    throw( uno::RuntimeException )
+void SvxShapeGroup::addUnoShape( const uno::Reference< drawing::XShape >& xShape, sal_uIntPtr nPos )
 {
-    ::SolarMutexGuard aGuard;
-
     SvxShape* pShape = SvxShape::getImplementation( xShape );
 
     if( mpObj.is()&& mxPage.is() && pShape )
@@ -211,7 +206,7 @@ void SAL_CALL SvxShapeGroup::add( const uno::Reference< drawing::XShape >& xShap
         if( pSdrShape->IsInserted() )
             pSdrShape->GetObjList()->RemoveObject( pSdrShape->GetOrdNum() );
 
-        mpObj->GetSubList()->InsertObject( pSdrShape );
+        mpObj->GetSubList()->InsertObject(pSdrShape, nPos);
         pSdrShape->SetModel(mpObj->GetModel());
 
         // #85922# It makes no sense to set the layer asked
@@ -234,6 +229,16 @@ void SAL_CALL SvxShapeGroup::add( const uno::Reference< drawing::XShape >& xShap
     {
         OSL_FAIL("could not add XShape to group shape!");
     }
+}
+
+// XShapes
+void SAL_CALL SvxShapeGroup::add( const uno::Reference< drawing::XShape >& xShape )
+    throw( uno::RuntimeException )
+{
+    ::SolarMutexGuard aGuard;
+
+    // Add to the top of the stack (i.e. bottom of the list) by default.
+    addUnoShape(xShape, 0xFFFF);
 }
 
 //----------------------------------------------------------------------
@@ -287,6 +292,24 @@ void SAL_CALL SvxShapeGroup::remove( const uno::Reference< drawing::XShape >& xS
 
     if( mpModel )
         mpModel->SetChanged();
+}
+
+void SAL_CALL SvxShapeGroup::addTop( const uno::Reference< drawing::XShape >& xShape )
+    throw( uno::RuntimeException )
+{
+    SolarMutexGuard aGuard;
+
+    // Add to the top of the stack (i.e. bottom of the list).
+    addUnoShape(xShape, 0xFFFF);
+}
+
+void SAL_CALL SvxShapeGroup::addBottom( const uno::Reference< drawing::XShape >& xShape )
+    throw( uno::RuntimeException )
+{
+    SolarMutexGuard aGuard;
+
+    // Add to the bottom of the stack (i.e. top of the list).
+    addUnoShape(xShape, 0);
 }
 
 // XIndexAccess

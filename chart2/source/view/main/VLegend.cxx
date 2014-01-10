@@ -913,7 +913,7 @@ void VLegend::createShapes(
                         aLegendSize,
                         awt::Point(0,0),
                         aLineFillProperties.first,
-                        aLineFillProperties.second );
+                        aLineFillProperties.second, AbstractShapeFactory::Bottom );
 
             //because of this name this border will be used for marking the legend
             AbstractShapeFactory::setShapeName( xBorder, "MarkHandles" );

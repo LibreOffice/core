@@ -2047,17 +2047,26 @@ uno::Reference< drawing::XShape > ShapeFactory::createInvisibleRectangle(
 }
 
 uno::Reference< drawing::XShape > ShapeFactory::createRectangle(
-        const uno::Reference< drawing::XShapes >& xTarget
-        , const awt::Size& rSize
-        , const awt::Point& rPosition
-        , const tNameSequence& rPropNames
-        , const tAnySequence& rPropValues )
+    const uno::Reference< drawing::XShapes >& xTarget,
+    const awt::Size& rSize,
+    const awt::Point& rPosition,
+    const tNameSequence& rPropNames,
+    const tAnySequence& rPropValues,
+    StackPosition ePos )
 {
     uno::Reference< drawing::XShape > xShape( m_xShapeFactory->createInstance(
                 "com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY );
     if( xShape.is())
     {
-        xTarget->add( xShape );
+        if (ePos == Bottom)
+        {
+            uno::Reference<drawing::XShapes2> xTarget2(xTarget, uno::UNO_QUERY);
+            if (xTarget2.is())
+                xTarget2->addBottom(xShape);
+        }
+        else
+            xTarget->add(xShape);
+
         xShape->setSize( rSize );
         xShape->setPosition( rPosition );
         uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY_THROW );
