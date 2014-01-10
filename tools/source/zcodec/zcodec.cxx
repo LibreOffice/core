@@ -273,7 +273,7 @@ long ZCodec::ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize
             if ( ( nMaxPos - nStreamPos ) < nInToRead )
             {
                 rIStm.SetError( ERRCODE_IO_PENDING );
-                err= ! Z_STREAM_END; // TODO What is appropriate code for this?
+                err= int(!Z_STREAM_END); // TODO What is appropriate code for this?
                 break;
             }
 
