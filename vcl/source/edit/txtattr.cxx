@@ -28,7 +28,7 @@ TextAttrib::~TextAttrib()
 {
 }
 
-int TextAttrib::operator==( const TextAttrib& rAttr ) const
+bool TextAttrib::operator==( const TextAttrib& rAttr ) const
 {
     return mnWhich == rAttr.mnWhich;
 }
@@ -58,7 +58,7 @@ TextAttrib* TextAttribFontColor::Clone() const
     return new TextAttribFontColor( *this );
 }
 
-int TextAttribFontColor::operator==( const TextAttrib& rAttr ) const
+bool TextAttribFontColor::operator==( const TextAttrib& rAttr ) const
 {
     return ( ( TextAttrib::operator==(rAttr ) ) &&
                 ( maColor == ((const TextAttribFontColor&)rAttr).maColor ) );
@@ -88,7 +88,7 @@ TextAttrib* TextAttribFontWeight::Clone() const
     return new TextAttribFontWeight( *this );
 }
 
-int TextAttribFontWeight::operator==( const TextAttrib& rAttr ) const
+bool TextAttribFontWeight::operator==( const TextAttrib& rAttr ) const
 {
     return ( ( TextAttrib::operator==(rAttr ) ) &&
                 ( meWeight == ((const TextAttribFontWeight&)rAttr).meWeight ) );
@@ -116,7 +116,7 @@ TextAttrib* TextAttribHyperLink::Clone() const
     return new TextAttribHyperLink( *this );
 }
 
-int TextAttribHyperLink::operator==( const TextAttrib& rAttr ) const
+bool TextAttribHyperLink::operator==( const TextAttrib& rAttr ) const
 {
     return ( ( TextAttrib::operator==(rAttr ) ) &&
                 ( maURL == ((const TextAttribHyperLink&)rAttr).maURL ) &&
@@ -147,7 +147,7 @@ TextAttrib*     TextAttribProtect::Clone() const
     return new TextAttribProtect();
 }
 
-int TextAttribProtect::operator==( const TextAttrib& rAttr ) const
+bool TextAttribProtect::operator==( const TextAttrib& rAttr ) const
 {
     return ( TextAttrib::operator==(rAttr ) );
 }

@@ -54,8 +54,8 @@ public:
     virtual void            SetFont( Font& rFont ) const = 0;
     virtual TextAttrib*     Clone() const = 0;
 
-    virtual int             operator==( const TextAttrib& rAttr ) const = 0;
-    int                     operator!=( const TextAttrib& rAttr ) const
+    virtual bool            operator==( const TextAttrib& rAttr ) const = 0;
+    bool                    operator!=( const TextAttrib& rAttr ) const
                                 { return !(*this == rAttr ); }
 };
 
@@ -75,7 +75,7 @@ public:
 
     virtual void            SetFont( Font& rFont ) const;
     virtual TextAttrib*     Clone() const;
-    virtual int             operator==( const TextAttrib& rAttr ) const;
+    virtual bool            operator==( const TextAttrib& rAttr ) const;
 
 };
 
@@ -91,7 +91,7 @@ public:
 
     virtual void            SetFont( Font& rFont ) const;
     virtual TextAttrib*     Clone() const;
-    virtual int             operator==( const TextAttrib& rAttr ) const;
+    virtual bool            operator==( const TextAttrib& rAttr ) const;
 
     inline FontWeight getFontWeight() const { return meWeight; }
 };
@@ -119,7 +119,7 @@ public:
 
     virtual void            SetFont( Font& rFont ) const;
     virtual TextAttrib*     Clone() const;
-    virtual int             operator==( const TextAttrib& rAttr ) const;
+    virtual bool            operator==( const TextAttrib& rAttr ) const;
 };
 
 class VCL_DLLPUBLIC TextAttribProtect : public TextAttrib
@@ -131,7 +131,7 @@ public:
 
     virtual void            SetFont( Font& rFont ) const;
     virtual TextAttrib*     Clone() const;
-    virtual int             operator==( const TextAttrib& rAttr ) const;
+    virtual bool            operator==( const TextAttrib& rAttr ) const;
 
 };
 
