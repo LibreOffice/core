@@ -241,7 +241,7 @@ int gz_read(gz_stream * file, voidp buf, unsigned len)
 int gz_flush(gz_stream * file, int flush)
 {
     uInt len;
-    int done = 0;
+    bool done = false;
     gz_stream *s = (gz_stream *) file;
 
     if (s == NULL || s->mode != 'w')
