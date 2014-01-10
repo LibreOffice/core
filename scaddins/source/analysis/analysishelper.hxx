@@ -237,18 +237,6 @@ public:
 
 
 
-class CStrList : private MyList
-{
-public:
-    using MyList::Append;
-    inline void             Append( const sal_Char* pNew );
-    inline const sal_Char*  Get( sal_uInt32 nIndex ) const;
-    using MyList::Count;
-};
-
-
-
-
 class FuncDataList : private MyList
 {
     OUString         aLastName;
@@ -720,22 +708,6 @@ inline FDCategory FuncData::GetCategory( void ) const
 {
     return eCat;
 }
-
-
-
-
-inline void CStrList::Append( const sal_Char* p )
-{
-    MyList::Append( ( void* ) p );
-}
-
-
-inline const sal_Char* CStrList::Get( sal_uInt32 n ) const
-{
-    return ( const sal_Char* ) MyList::GetObject( n );
-}
-
-
 
 
 inline void FuncDataList::Append( FuncData* p )
