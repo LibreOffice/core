@@ -315,8 +315,29 @@ void DocxAttributeOutput::WriteDMLTextFrame(sw::Frame* pParentFrame)
             XML_cy, aHeight.getStr(),
             FSEND);
     m_pSerializer->endElementNS(XML_a, XML_xfrm);
+    const SdrObject* pSdrObj = rFrmFmt.FindRealSdrObject();
+    uno::Reference< drawing::XShape > xShape( ((SdrObject*)pSdrObj)->getUnoShape(), uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xPropertySet( xShape, uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropertySet->getPropertySetInfo();
+    OUString pName = "FrameInteropGrabBag";
+    OUString shapeType = "rect";
+    if ( xPropSetInfo->hasPropertyByName( pName ) )
+    {
+        uno::Sequence< beans::PropertyValue > propList;
+        xPropertySet->getPropertyValue( pName ) >>= propList;
+        for ( sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp )
+        {
+            OUString propName = propList[nProp].Name;
+            if ( propName == "mso-orig-shape-type")
+            {
+                propList[nProp].Value >>= shapeType;
+                break;
+            }
+        }
+    }
+
     m_pSerializer->singleElementNS(XML_a, XML_prstGeom,
-            XML_prst, "rect",
+            XML_prst, OUStringToOString( shapeType, RTL_TEXTENCODING_UTF8 ).getStr(),
             FSEND);
     m_bDMLTextFrameSyntax = true;
     m_pBodyPrAttrList = m_pSerializer->createAttrList();
