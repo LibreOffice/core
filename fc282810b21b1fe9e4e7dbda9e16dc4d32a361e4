@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa98f980_b23620e6",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-10T12:09:00Z",
+      "side": 1,
+      "message": "Sorry, If I put \"\u0026\u0026 0\" here, then the testcase doesn\u0027t fail, so seems it tests something else?",
+      "range": {
+        "startLine": 924,
+        "startChar": 31,
+        "endLine": 924,
+        "endChar": 35
+      },
+      "revId": "fc282810b21b1fe9e4e7dbda9e16dc4d32a361e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
