@@ -21,13 +21,11 @@
 
 /** Tests, whether a wildcard in pWild will match for pStr.
  *
- * If they match, return 1, otherwise 0.
- *
  * '*' in pWild means n chars for n > 0.
  * '?' in pWild mean match exactly one character.
  *
  */
-sal_uInt16 WildCard::ImpMatch( const char *pWild, const char *pStr ) const
+bool WildCard::ImpMatch( const char *pWild, const char *pStr ) const
 {
     int    pos=0;
     int    flag=0;
@@ -38,7 +36,7 @@ sal_uInt16 WildCard::ImpMatch( const char *pWild, const char *pStr ) const
         {
             case '?':
                 if ( *pStr == '\0' )
-                    return 0;
+                    return false;
                 break;
 
             default:
@@ -46,7 +44,7 @@ sal_uInt16 WildCard::ImpMatch( const char *pWild, const char *pStr ) const
                     pWild++;
                 if ( *pWild != *pStr )
                     if ( !pos )
-                        return 0;
+                        return false;
                     else
                         pWild += pos;
                 else
@@ -56,7 +54,7 @@ sal_uInt16 WildCard::ImpMatch( const char *pWild, const char *pStr ) const
                 while ( *pWild == '*' )
                     pWild++;
                 if ( *pWild == '\0' )
-                    return 1;
+                    return true;
                 flag = 1;
                 pos  = 0;
                 if ( *pStr == '\0' )
