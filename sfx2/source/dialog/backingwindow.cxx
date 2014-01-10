@@ -230,7 +230,6 @@ void BackingWindow::initControls()
     setupButton( mpImpressAllButton );
     setupButton( mpMathAllButton );
 
-    mpHelpButton->SetClickHdl(LINK(this, BackingWindow, ExtLinkClickHdl));
     mpExtensionsButton->SetClickHdl(LINK(this, BackingWindow, ExtLinkClickHdl));
 
     // setup nice colors
@@ -360,8 +359,6 @@ IMPL_LINK(BackingWindow, ExtLinkClickHdl, Button*, pButton)
 
     if (pButton == mpExtensionsButton)
         aNode = "AddFeatureURL";
-    else if (pButton == mpHelpButton)
-        aNode = "InfoURL";
 
     if (!aNode.isEmpty())
     {
