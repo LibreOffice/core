@@ -191,7 +191,7 @@ namespace basegfx
             double                 mfShearX;
 
             // bitfield
-            unsigned               mbDecomposed : 1;
+            bool                   mbDecomposed : 1;
 
             void impCheckDecompose()
             {
