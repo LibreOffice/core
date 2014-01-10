@@ -410,14 +410,14 @@ HWPDODefaultFunc(int , HWPDrawingObject * , int cmd, void *, int)
 {
     if (cmd == OBJFUNC_LOAD)
         return OBJRET_FILE_NO_PRIVATE_BLOCK;
-    return true;
+    return OBJRET_FILE_OK;
 }
 
 
 static int
 HWPDOLineFunc(int type, HWPDrawingObject * hdo, int cmd, void *argp, int argv)
 {
-    int ret = true;
+    int ret = OBJRET_FILE_OK;
     switch (cmd)
     {
         case OBJFUNC_LOAD:
@@ -477,7 +477,7 @@ int cmd, void *argp, int argv)
         default:
             return HWPDODefaultFunc(type, hdo, cmd, argp, argv);
     }
-    return true;
+    return OBJRET_FILE_OK;
 }
 
 
@@ -500,14 +500,14 @@ HWPDOArcFunc(int type, HWPDrawingObject * hdo, int cmd, void *argp, int argv)
         default:
             return HWPDODefaultFunc(type, hdo, cmd, argp, argv);
     }
-    return true;
+    return OBJRET_FILE_OK;
 }
 
 
 static int
 HWPDOArc2Func(int type, HWPDrawingObject * hdo, int cmd, void *argp, int argv)
 {
-    int ret = true;
+    int ret = OBJRET_FILE_OK;
     switch (cmd)
     {
         case OBJFUNC_LOAD:
@@ -574,7 +574,7 @@ int cmd, void *argp, int argv)
         default:
             return HWPDODefaultFunc(type, hdo, cmd, argp, argv);
     }
-    return true;
+    return OBJRET_FILE_OK;
 }
 
 
@@ -628,7 +628,7 @@ int cmd, void *argp, int argv)
         default:
             return HWPDODefaultFunc(type, hdo, cmd, argp, argv);
     }
-    return true;
+    return OBJRET_FILE_OK;
 }
 
 
