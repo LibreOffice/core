@@ -58,8 +58,6 @@ typedef int (*HWPDOFuncType) (int, HWPDrawingObject *, int, void *, int);
 
 #define HWPDOFunc(hdo, cmd, argp, argv) \
     (HWPDOFuncTbl[(hdo)->type]((hdo)->type, (hdo), (cmd), (argp), (argv)))
-#define HWPDOFunc2(type, cmd, argp, argv) \
-    (HWPDOFuncTbl[(type)]((type), NULL, (cmd), (argp), (argv)))
 
 static int HWPDOLineFunc(int, HWPDrawingObject *, int, void *, int);
 static int HWPDORectFunc(int, HWPDrawingObject *, int, void *, int);
