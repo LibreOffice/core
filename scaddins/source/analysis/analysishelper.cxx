@@ -1391,56 +1391,6 @@ double GetCoupnum( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_I
 
 
 
-const sal_uInt32 MyList::nStartSize = 16;
-const sal_uInt32 MyList::nIncrSize = 16;
-
-
-void MyList::_Grow( void )
-{
-    nSize += nIncrSize;
-
-    void**          pNewData = new void*[ nSize ];
-    memcpy( pNewData, pData, nNew * sizeof( void* ) );
-
-    delete[] pData;
-    pData = pNewData;
-}
-
-
-MyList::MyList( void )
-{
-    nSize = nStartSize;
-    pData = new void*[ nSize ];
-    nNew = nAct = 0;
-}
-
-
-MyList::~MyList()
-{
-    delete[] pData;
-}
-
-
-void MyList::Insert( void* p, sal_uInt32 n )
-{
-    if( n >= nNew )
-        Append( p );
-    else
-    {
-        Grow();
-
-        void**      pIns = pData + n;
-        memmove( pIns + 1, pIns, ( nNew - n ) * sizeof( void* ) );
-
-        *pIns = p;
-
-        nNew++;
-    }
-}
-
-
-
-
 class AnalysisRscStrArrLoader : public Resource
 {
 private:

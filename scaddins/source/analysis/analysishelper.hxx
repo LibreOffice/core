@@ -148,35 +148,6 @@ double              GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int
 
 
 
-class MyList
-{
-private:
-    static const sal_uInt32 nStartSize;
-    static const sal_uInt32 nIncrSize;
-
-    void**                  pData;          // pointer array
-    sal_uInt32              nSize;          // array size
-    sal_uInt32              nNew;           // next index to be inserted at
-    sal_uInt32              nAct;           // actual for iterations
-
-    void                    _Grow( void );
-    inline void             Grow( void );
-protected:
-public:
-                            MyList( void );
-    virtual                 ~MyList();
-
-    inline const void*      GetObject( sal_uInt32 nIndex ) const;
-    inline const void*      First( void );
-    inline const void*      Next( void );
-
-    inline void             Append( void* pNewElement );
-    void                    Insert( void* pNewLement, sal_uInt32 nPlace );
-
-    inline sal_uInt32       Count( void ) const;
-};
-
-
 enum FDCategory
 {
     FDCat_AddIn,
@@ -614,61 +585,6 @@ inline void AlignDate( sal_uInt16& rD, sal_uInt16 nM, sal_uInt16 nY )
     if( rD > nMax )
         rD = nMax;
 }
-
-
-inline void MyList::Grow( void )
-{
-    if( nNew >= nSize )
-        _Grow();
-}
-
-
-inline const void* MyList::GetObject( sal_uInt32 n ) const
-{
-    if( n < nNew )
-        return pData[ n ];
-    else
-        return NULL;
-}
-
-
-inline const void* MyList::First( void )
-{
-    nAct = 0;
-    if( nNew )
-        return pData[ 0 ];
-    else
-        return NULL;
-}
-
-
-inline const void* MyList::Next( void )
-{
-    nAct++;
-    if( nAct < nNew )
-        return pData[ nAct ];
-    else
-    {
-        nAct--;
-        return NULL;
-    }
-}
-
-
-inline void MyList::Append( void* p )
-{
-    Grow();
-    pData[ nNew ] = p;
-    nNew++;
-}
-
-
-inline sal_uInt32 MyList::Count( void ) const
-{
-    return nNew;
-}
-
-
 
 
 inline sal_uInt16 FuncData::GetUINameID( void ) const
