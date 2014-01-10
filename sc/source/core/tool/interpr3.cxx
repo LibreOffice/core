@@ -905,7 +905,8 @@ double ScInterpreter::GetBetaDistPDF(double fX, double fA, double fB)
 
 /*
                 x^a * (1-x)^b
-    Ix(a,b)    * result of ContFrac                a * Beta(a,b)
+    I_x(a,b) = ----------------  * result of ContFrac
+                a * Beta(a,b)
 */
 static double lcl_GetBetaHelperContFrac(double fX, double fA, double fB)
 {   // like old version
