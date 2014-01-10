@@ -156,7 +156,7 @@ struct yy_buffer_state
      * instead of fread(), to make sure we stop fetching input after
      * each newline.
      */
-    int yy_is_interactive;
+    bool yy_is_interactive;
 
     /* Whether we're considered to be at the beginning of a line.
      * If so, '^' rules will be active on the next match, otherwise
@@ -1696,7 +1696,7 @@ static yy_state_type yy_try_NUL_trans( yy_current_state )
 yy_state_type yy_current_state;
 #endif
     {
-    int yy_is_jam;
+    bool yy_is_jam;
     char *yy_cp = yy_c_buf_p;
 
     YY_CHAR yy_c = 1;
@@ -1848,12 +1848,12 @@ FILE *file;
     b->yy_fill_buffer = 1;
 
 #if YY_ALWAYS_INTERACTIVE
-    b->yy_is_interactive = 1;
+    b->yy_is_interactive = true;
 #else
 #if YY_NEVER_INTERACTIVE
-    b->yy_is_interactive = 0;
+    b->yy_is_interactive = false;
 #else
-    b->yy_is_interactive = file ? (isatty( fileno(file) ) > 0) : 0;
+    b->yy_is_interactive = file && isatty( fileno(file) ) > 0;
 #endif
 #endif
     }
@@ -1915,7 +1915,7 @@ yy_size_t size;
     b->yy_is_our_buffer = 0;
     b->yy_input_file = 0;
     b->yy_n_chars = b->yy_buf_size;
-    b->yy_is_interactive = 0;
+    b->yy_is_interactive = false;
     b->yy_at_bol = 1;
     b->yy_fill_buffer = 0;
     b->yy_buffer_status = YY_BUFFER_NEW;

@@ -407,7 +407,8 @@ static char *make_keyword( char *keyword, const char *token)
 {
   assert(keyword);
   char  *ptr;
-  int   result = true, len = strlen(token);
+  bool result = true;
+  int len = strlen(token);
 
   if( 255 < len )
     strncpy(keyword, token, 255);
