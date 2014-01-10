@@ -110,9 +110,6 @@ namespace svt { namespace table
         /// the number of rows in the table control. Cached model value.
         TableSize               m_nRowCount;
 
-        /// denotes whether or not the columns fitted into the available width, last time we checked
-        long                    m_bColumnsFit;
-
         ColPos                  m_nCurColumn;
         RowPos                  m_nCurRow;
         ColPos                  m_nLeftColumn;

@@ -435,7 +435,6 @@ namespace svt { namespace table
         ,m_nRowHeaderWidthPixel ( 0                             )
         ,m_nColumnCount         ( 0                             )
         ,m_nRowCount            ( 0                             )
-        ,m_bColumnsFit          ( true                          )
         ,m_nCurColumn           ( COL_INVALID                   )
         ,m_nCurRow              ( ROW_INVALID                   )
         ,m_nLeftColumn          ( 0                             )
