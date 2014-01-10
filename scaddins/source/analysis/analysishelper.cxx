@@ -1508,8 +1508,8 @@ FuncDataList::FuncDataList( ResMgr& rResMgr )
 
 FuncDataList::~FuncDataList()
 {
-    for( FuncData* p = ( FuncData* ) First() ; p ; p = ( FuncData* ) Next() )
-        delete p;
+    for( std::vector<FuncData*>::iterator it = maVector.begin(); it != maVector.end(); ++it )
+        delete *it;
 }
 
 

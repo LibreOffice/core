@@ -237,17 +237,19 @@ public:
 
 
 
-class FuncDataList : private MyList
+class FuncDataList
 {
-    OUString         aLastName;
+    OUString                aLastName;
     sal_uInt32              nLast;
+    std::vector<FuncData*>  maVector;
 public:
                             FuncDataList( ResMgr& );
     virtual                 ~FuncDataList();
-    using MyList::Append;
+
     inline void             Append( FuncData* pNew );
     inline const FuncData*  Get( sal_uInt32 nIndex ) const;
-    using MyList::Count;
+    inline sal_uInt32       Count() const
+                                { return maVector.size(); }
 
     const FuncData*         Get( const OUString& aProgrammaticName ) const;
 };
@@ -712,13 +714,13 @@ inline FDCategory FuncData::GetCategory( void ) const
 
 inline void FuncDataList::Append( FuncData* p )
 {
-    MyList::Append( p );
+    maVector.push_back( p );
 }
 
 
 inline const FuncData* FuncDataList::Get( sal_uInt32 n ) const
 {
-    return ( const FuncData* ) MyList::GetObject( n );
+    return maVector[n];
 }
 
 
