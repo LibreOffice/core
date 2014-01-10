@@ -42,6 +42,7 @@ CFLAGSCXX+=$(OBJCXXFLAGS)
 
 SLOFILES= \
         $(SLO)$/quicktimeuno.obj  \
+        $(SLO)$/framegrabber.obj        \
         $(SLO)$/manager.obj       \
         $(SLO)$/window.obj        \
         $(SLO)$/player.obj
