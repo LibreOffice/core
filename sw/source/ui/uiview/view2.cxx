@@ -1056,7 +1056,6 @@ void SwView::Execute(SfxRequest &rReq)
                     aData = rSh.GetDBData();
                     rSh.EnterStdMode(); // force change in text shell; necessary for mixing DB fields
                     AttrChangedNotify( &rSh );
-                    pNewDBMgr->SetMergeType( DBMGR_MERGE );
 
                     Sequence<PropertyValue> aProperties(3);
                     PropertyValue* pValues = aProperties.getArray();
@@ -2346,8 +2345,6 @@ void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
 
         if (pNewDBMgr)
         {
-            pNewDBMgr->SetMergeType( DBMGR_MERGE );
-
             Sequence<PropertyValue> aProperties(3);
             PropertyValue* pValues = aProperties.getArray();
             pValues[0].Name = "DataSourceName";
