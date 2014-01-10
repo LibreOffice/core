@@ -275,23 +275,7 @@ File gid_File_Lib_Xslt
     LIB_FILE_BODY;
     Styles = (FILELIST);
     Dir = FILELIST_DIR;
-    Name = "libxslt.filelist";
-End
-File gid_File_Lib_eXslt
-    PACKED_LIB_FILE_BODY;
-  #ifdef UNX
-    #ifdef MACOSX
-       Name = STRING(CONCAT4(libexslt,.,0,UNXSUFFIX));
-    #else
-       Name = STRING(CONCAT4(libexslt,UNXSUFFIX,.,0));
-    #endif
-  #else
-   #ifdef _gcc3
-    Name = "libexslt-0.dll";
-   #else
-    Name = "libexslt.dll";
-   #endif
-  #endif
+    Name = "xslt.filelist";
 End
 #endif
 
@@ -369,6 +353,7 @@ End
 #endif
 
 #ifndef SYSTEM_REDLAND
+#ifndef WNT
 File gid_File_Lib_Raptor
     LIB_FILE_BODY;
     Styles = (FILELIST);
@@ -389,5 +374,6 @@ File gid_File_Lib_Rdf
     Dir = FILELIST_DIR;
     Name = "redland.filelist";
 End
+#endif // WNT
 #endif // SYSTEM_REDLAND
 

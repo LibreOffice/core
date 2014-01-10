@@ -986,7 +986,7 @@ endef
 ifneq ($(OS),ANDROID)
 
 ifeq ($(COM),MSC)
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	raptor2 \
 	rasqal \
 	rdf \
