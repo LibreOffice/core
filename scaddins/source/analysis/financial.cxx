@@ -461,8 +461,8 @@ double SAL_CALL AnalysisAddIn::getOddlyield( const css::uno::Reference< css::bea
 // ============================================================================
 // XIRR helper functions
 
-#define V_(i) (*rValues.Get(i))
-#define D_(i) (*rDates.Get(i))
+#define V_(i) (rValues.Get(i))
+#define D_(i) (rDates.Get(i))
 
 /** Calculates the resulting amount for the passed interest rate and the given XIRR parameters. */
 static double lcl_sca_XirrResult( const ScaDoubleList& rValues, const ScaDoubleList& rDates, double fRate )
@@ -579,11 +579,11 @@ double SAL_CALL AnalysisAddIn::getXnpv(
         throw css::lang::IllegalArgumentException();
 
     double              fRet = 0.0;
-    double              fNull = *aDateList.Get( 0 );
+    double              fNull = aDateList.Get( 0 );
     fRate++;
 
     for( sal_Int32 i = 0 ; i < nNum ; i++ )
-        fRet += *aValList.Get( i ) / ( pow( fRate, ( *aDateList.Get( i ) - fNull ) / 365.0 ) );
+        fRet += aValList.Get( i ) / ( pow( fRate, ( aDateList.Get( i ) - fNull ) / 365.0 ) );
 
     RETURN_FINITE( fRet );
 }
@@ -654,8 +654,8 @@ double SAL_CALL AnalysisAddIn::getFvschedule( double fPrinc, const css::uno::Seq
 
     aSchedList.Append( rSchedule );
 
-    for( const double* p = aSchedList.First() ; p ; p = aSchedList.Next() )
-        fPrinc *= 1.0 + *p;
+    for( sal_uInt32 i = 0; i < aSchedList.Count(); ++i )
+        fPrinc *= 1.0 + aSchedList.Get(i);
 
     RETURN_FINITE( fPrinc );
 }

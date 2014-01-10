@@ -331,12 +331,13 @@ public:
 
 //-----------------------------------------------------------------------------
 
-class ScaDoubleList : protected MyList
+class ScaDoubleList
 {
+private:
+    std::vector<double>         maVector;
 protected:
-    inline void                 ListAppend( double fValue ) { MyList::Append( new double( fValue ) ); }
+    inline void                 ListAppend( double fValue ) { maVector.push_back(fValue); }
 
-    using MyList::Append;
     inline void                 Append( double fValue ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException )
                                     { if( CheckInsert( fValue ) ) ListAppend( fValue ); }
 
@@ -362,14 +363,12 @@ protected:
                                     sal_Bool bIgnoreEmpty ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
 public:
-    virtual                     ~ScaDoubleList();
+    virtual                     ~ScaDoubleList() {}
 
-                                using MyList::Count;
-    inline const double*        Get( sal_uInt32 nIndex ) const
-                                        { return static_cast< const double* >( MyList::GetObject( nIndex ) ); }
-
-    inline const double*        First() { return static_cast< const double* >( MyList::First() ); }
-    inline const double*        Next()  { return static_cast< const double* >( MyList::Next() ); }
+    inline sal_uInt32           Count() const
+                                    { return maVector.size(); }
+    inline double               Get( sal_uInt32 n ) const
+                                        { return maVector[n]; }
 
     void                        Append( const css::uno::Sequence< css::uno::Sequence< double > >& rValueArr )
                                     throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );

@@ -683,9 +683,10 @@ AnalysisAddIn::getMultinomial( const uno::Reference< beans::XPropertySet >& xOpt
     double nZ = 0;
     double fRet = 1.0;
 
-    for( const double *p = aValList.First(); p; p = aValList.Next() )
+    for( sal_uInt32 i = 0; i < aValList.Count(); ++i )
     {
-        double n = (*p >= 0.0) ? rtl::math::approxFloor( *p ) : rtl::math::approxCeil( *p );
+        const double d = aValList.Get(i);
+        double n = (d >= 0.0) ? rtl::math::approxFloor( d ) : rtl::math::approxCeil( d );
         if ( n < 0.0 )
             throw lang::IllegalArgumentException();
 
@@ -787,15 +788,10 @@ double SAL_CALL AnalysisAddIn::getGcd( const uno::Reference< beans::XPropertySet
     if( aValList.Count() == 0 )
         return 0.0;
 
-    const double*   p = aValList.First();
-    double          f = *p;
-
-    p = aValList.Next();
-
-    while( p )
+    double          f = aValList.Get(0);
+    for( sal_uInt32 i = 1; i < aValList.Count(); ++i )
     {
-        f = GetGcd( *p, f );
-        p = aValList.Next();
+        f = GetGcd( aValList.Get(i), f );
     }
 
     RETURN_FINITE( f );
@@ -812,22 +808,18 @@ double SAL_CALL AnalysisAddIn::getLcm( const uno::Reference< beans::XPropertySet
     if( aValList.Count() == 0 )
         return 0.0;
 
-    const double*   p = aValList.First();
-    double          f = *p;
+    double          f = aValList.Get(0);
 
     if( f == 0.0 )
         return f;
 
-    p = aValList.Next();
-
-    while( p )
+    for( sal_uInt32 i = 1; i < aValList.Count(); ++i )
     {
-        double      fTmp = *p;
+        double      fTmp = aValList.Get(i);
         if( f == 0.0 )
             return f;
         else
             f = fTmp * f / GetGcd( fTmp, f );
-        p = aValList.Next();
     }
 
     RETURN_FINITE( f );

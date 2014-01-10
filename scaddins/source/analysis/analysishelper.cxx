@@ -1660,13 +1660,6 @@ void SortedIndividualInt32List::InsertHolidayList(
 
 //-----------------------------------------------------------------------------
 
-ScaDoubleList::~ScaDoubleList()
-{
-    for( double* pDbl = const_cast< double* >( First() ); pDbl; pDbl = const_cast< double* >( Next() ) )
-        delete pDbl;
-}
-
-
 void ScaDoubleList::Append(
         const uno::Sequence< uno::Sequence< double > >& rValueSeq ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
