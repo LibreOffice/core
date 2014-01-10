@@ -183,7 +183,7 @@ void RecentDocsView::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeft() )
     {
-        if( rMEvt.GetClicks() == 2 )
+        if( rMEvt.GetClicks() > 1 )
             return;
 
         size_t nPos = ImplGetItem(rMEvt.GetPosPixel());
