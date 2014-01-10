@@ -45,6 +45,7 @@ using namespace com::sun::star;
 using namespace std;
 
 #define RENDER_TO_FILE 0
+#define DEBUG_PNG 0
 #define BMP_HEADER_LEN 54
 
 #define OPENGL_SHADER( ... )# __VA_ARGS__
@@ -305,8 +306,6 @@ GLint OpenGLRender::LoadShaders(const char *vertexShader,const char *fragmentSha
     GLint Result = GL_FALSE;
     int InfoLogLength;
 
-
-
     // Compile Vertex Shader
     char const * VertexSourcePointer = vertexShader;
     glShaderSource(VertexShaderID, 1, &VertexSourcePointer , NULL);
@@ -322,13 +321,13 @@ GLint OpenGLRender::LoadShaders(const char *vertexShader,const char *fragmentSha
             std::vector<char> VertexShaderErrorMessage(InfoLogLength+1);
             glGetShaderInfoLog(VertexShaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
             VertexShaderErrorMessage.push_back('\0');
-            SAL_INFO("chart2.opengl", "vertex shader compile fail : " << &VertexShaderErrorMessage[0]);
+            SAL_WARN("chart2.opengl", "vertex shader compile failed : " << &VertexShaderErrorMessage[0]);
         }
         else
-            SAL_INFO("chart2.opengl", "vertex shader compile failed without error log");
+            SAL_WARN("chart2.opengl", "vertex shader compile failed without error log");
+
+        return 0;
     }
-
-
 
     // Compile Fragment Shader
     char const * FragmentSourcePointer = fragmentShader;
@@ -345,10 +344,13 @@ GLint OpenGLRender::LoadShaders(const char *vertexShader,const char *fragmentSha
             std::vector<char> FragmentShaderErrorMessage(InfoLogLength+1);
             glGetShaderInfoLog(FragmentShaderID, InfoLogLength, NULL, &FragmentShaderErrorMessage[0]);
             FragmentShaderErrorMessage.push_back('\0');
-            SAL_INFO("chart2.opengl", "fragment shader compile fail : " << &FragmentShaderErrorMessage[0]);
+            SAL_WARN("chart2.opengl", "fragment shader compile failed : " << &FragmentShaderErrorMessage[0]);
         }
         else
-            SAL_INFO("chart2.opengl", "fragment shader compile failed without error log");
+            SAL_WARN("chart2.opengl", "fragment shader compile failed without error log");
+
+
+        return 0;
     }
 
     // Link the program
@@ -367,10 +369,12 @@ GLint OpenGLRender::LoadShaders(const char *vertexShader,const char *fragmentSha
             std::vector<char> ProgramErrorMessage(InfoLogLength+1);
             glGetProgramInfoLog(ProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
             ProgramErrorMessage.push_back('\0');
-            SAL_INFO("chart2.opengl", "Shader Program fail : " << &ProgramErrorMessage[0]);
+            SAL_WARN("chart2.opengl", "Shader Program failed : " << &ProgramErrorMessage[0]);
         }
         else
-            SAL_INFO("chart2.opengl", "shader program link failed without error log");
+            SAL_WARN("chart2.opengl", "shader program link failed without error log");
+
+        return 0;
     }
 
     glDeleteShader(VertexShaderID);
@@ -403,7 +407,6 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
     glEnable(GL_DEPTH_TEST);
     // Accept fragment if it closer to the camera than the former one
     glDepthFunc(GL_LESS);
-    //[mod] by gaowei
     glEnable(GL_POINT_SMOOTH);
     glEnable(GL_LINE_SMOOTH);
     glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
@@ -466,10 +469,10 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
 
 #if defined( WNT )
     SwapBuffers(glWin.hDC);
-    glFlush();
 #elif defined( UNX )
     unx::glXSwapBuffers(glWin.dpy, glWin.win);
 #endif
+    glFlush();
     glEnable(GL_LIGHTING);
     GLfloat light_direction[] = { 0.0 , 0.0 , 1.0 };
     GLfloat materialDiffuse[] = { 1.0 , 1.0 , 1.0 , 1.0};
@@ -511,7 +514,7 @@ BitmapEx OpenGLRender::GetAsBitmap()
 
     BitmapEx aBmp(aBitmap, aAlpha);
 
-#if 0 // debug PNG writing
+#if DEBUG_PNG // debug PNG writing
     static int nIdx = 0;
     OUString aName = OUString( "file://c/temp/image" ) + OUString::number( nIdx++ ) + ".png";
     try {
@@ -520,7 +523,7 @@ BitmapEx OpenGLRender::GetAsBitmap()
         aWriter.Write( sOutput );
         sOutput.Close();
     } catch (...) {
-        SAL_INFO("slideshow.opengl", "Error writing png to " << aName);
+        SAL_WARN("slideshow.opengl", "Error writing png to " << aName);
     }
 #endif
 
@@ -676,10 +679,10 @@ void OpenGLRender::renderToBitmap()
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 #if defined( WNT )
     SwapBuffers(glWin.hDC);
-    glFlush();
 #elif defined( UNX )
     unx::glXSwapBuffers(glWin.dpy, glWin.win);
 #endif
+    glFlush();
     RenderTexture(m_TextureObj[m_iFboIdx % 2]);
     m_iFboIdx++;
 
@@ -757,10 +760,10 @@ int OpenGLRender::RenderTexture(GLuint TexID)
     glUseProgram(0);
 #if defined( WNT )
     SwapBuffers(glWin.hDC);
-    glFlush();
 #elif defined( UNX )
     unx::glXSwapBuffers(glWin.dpy, glWin.win);
 #endif
+    glFlush();
     return 0;
 }
 
@@ -902,12 +905,12 @@ void OpenGLRender::Release()
 #endif
 }
 
-
 OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
     m_Model(glm::mat4(1.0f)),
     m_TranslationMatrix(glm::translate(m_Model, glm::vec3(0.0f, 0.0f, 0.0f))),
     m_RotationMatrix(glm::eulerAngleYXZ(0.0f, 0.0f, 0.0f)),
     m_ScaleMatrix(glm::scale(m_Model, glm::vec3(1.0f, 1.0f, 1.0f))),
+    m_Line2DProID(0), // TODO: moggi: why is it unused?
     m_Line2DColor(glm::vec4(1.0, 0.0, 0.0, 1.0)),
     m_iWidth(0),
     m_iHeight(0),
@@ -916,8 +919,10 @@ OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
     m_fLineAlpha(1.0),
     mxRenderTarget(xTarget),
     m_TextVertexID(0),
-    m_TextTexCoordID(1)
+    m_TextTexCoordID(1),
+    m_ClearColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f))
 {
+    //TODO: moggi: use STL
     memset(&m_Line2DPointList, 0, sizeof(Line2DPointList));
     memset(&m_Bubble2DPointList, 0, sizeof(m_Bubble2DPointList));
     memset(&m_Bubble2DCircle, 0, sizeof(m_Bubble2DCircle));
@@ -934,8 +939,8 @@ OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
     m_RboID[1] = 0;
     m_iArbMultisampleSupported = 0;
     m_iArbMultisampleFormat = 0;
-    m_ClearColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
+    //TODO: moggi: use STL
     for (size_t i = 0; i < sizeof(m_BackgroundColor) / sizeof(float); i++)
     {
         m_BackgroundColor[i] = 1.0;
@@ -943,14 +948,17 @@ OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
 
     mxRenderTarget->setPosition(awt::Point(0,0));
 }
+
 OpenGLRender::~OpenGLRender()
 {
+    Release();
 }
 
 void OpenGLRender::SetWidth(int width)
 {
     m_iWidth = width;
 }
+
 void OpenGLRender::SetHeight(int height)
 {
     m_iHeight = height;
@@ -960,10 +968,12 @@ int OpenGLRender::GetWidth()
 {
     return m_iWidth;
 }
+
 int OpenGLRender::GetHeight()
 {
     return m_iHeight;
 }
+
 int OpenGLRender::CreateBMPHeader(sal_uInt8 *bmpHeader, int xsize, int ysize)
 {
     unsigned char header[BMP_HEADER_LEN] = {
@@ -1032,7 +1042,6 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
         return DefWindowProc(hwnd, message, wParam, lParam);
     }
 }
-
 
 int OpenGLRender::InitMultisample(PIXELFORMATDESCRIPTOR pfd)
 {
@@ -1130,6 +1139,7 @@ int OpenGLRender::GetMSAAFormat()
 }
 
 #if defined( _WIN32 )
+//TODO: moggi: why the hell do we need another implementation here?
 int OpenGLRender::InitTempWindow(HWND *hwnd, int width, int height, PIXELFORMATDESCRIPTOR inPfd)
 {
     PIXELFORMATDESCRIPTOR  pfd = inPfd;
@@ -1187,6 +1197,7 @@ int OpenGLRender::WGLisExtensionSupported(const char *extension)
     // If That Failed Too, Must Be No Extensions Supported
     if (supported == NULL)
         return 0;
+
     // Begin Examination At Start Of String, Increment By 1 On False Match
     for (const char* p = supported; ; p++)
     {
@@ -1437,6 +1448,7 @@ int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color,
     Bitmap aBitmap( aBitmapEx.GetBitmap());
     int bitmapsize = aBitmap.GetSizeBytes();
     boost::scoped_array<sal_uInt8> bitmapBuf(new sal_uInt8[bitmapsize * 4 / 3 + BMP_HEADER_LEN]);
+    //TODO:moggi: why do we need the BMP header?
     CreateBMPHeaderRGBA(bitmapBuf.get(), bmpWidth, bmpHeight);
     BitmapReadAccess* pRAcc = aBitmap.AcquireReadAccess();
     sal_uInt8 red = (color & 0x00FF0000) >> 16;
@@ -1712,6 +1724,7 @@ void OpenGLRender::SetBackGroundColor(sal_uInt32 color1, sal_uInt32 color2)
     SAL_INFO("chart2.opengl", "color1 = " << color1 << ", color2 = " << color2);
 
 }
+
 void OpenGLRender::SetChartTransparencyGradient(long transparencyGradient)
 {
     if (transparencyGradient == 1)
