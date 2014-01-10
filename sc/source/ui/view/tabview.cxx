@@ -1236,6 +1236,8 @@ void ScTabView::ScrollX( long nDeltaX, ScHSplitPos eWhich, bool bUpdBars )
         if (pColOutline[eWhich]) pColOutline[eWhich]->ScrollPixel( nDiff );
         if (bUpdBars)
             UpdateScrollBars();
+        else
+            UpdateGrid();
     }
 
     if (nDeltaX==1 || nDeltaX==-1)
@@ -1321,6 +1323,8 @@ void ScTabView::ScrollY( long nDeltaY, ScVSplitPos eWhich, bool bUpdBars )
         if (pRowOutline[eWhich]) pRowOutline[eWhich]->ScrollPixel( nDiff );
         if (bUpdBars)
             UpdateScrollBars();
+        else
+            UpdateGrid();
     }
 
     if (nDeltaY==1 || nDeltaY==-1)
