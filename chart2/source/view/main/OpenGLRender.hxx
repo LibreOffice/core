@@ -145,7 +145,6 @@ public:
             com::sun::star::drawing::XShape > xTarget );
     ~OpenGLRender();
     int InitOpenGL(GLWindow);
-    int SetViewPoint(PosVeci3 camPos, PosVeci3 orgPos, int headUpFlag);
     int MoveModelf(PosVecf3 trans, PosVecf3 angle, PosVecf3 scale);
     void SetWidth(int width);
     void SetHeight(int height);
@@ -195,7 +194,7 @@ private:
     int InitTempWindow(HWND *hwnd, int width, int height, PIXELFORMATDESCRIPTOR inPfd);
 #endif
     int WGLisExtensionSupported(const char *extension);
-	int CreateMultiSampleFrameBufObj();
+    int CreateMultiSampleFrameBufObj();
     int Create2DCircle(int detail);
     void SetBackGroundColor(sal_uInt32 color1, sal_uInt32 color2);
 

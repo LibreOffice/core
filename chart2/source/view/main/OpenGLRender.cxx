@@ -814,17 +814,6 @@ int OpenGLRender::CreateRenderObj(int width, int height)
     return 0;
 }
 
-int OpenGLRender::SetViewPoint(PosVeci3 camPos, PosVeci3 orgPos, int headUpFlag)
-{
-    m_View = glm::lookAt(glm::vec3(camPos.x, camPos.y, camPos.z), // Camera is at (4,3,-3), in World Space
-                         glm::vec3(orgPos.x, orgPos.y ,orgPos.z), // and looks at the origin
-                         glm::vec3(0, (headUpFlag >= 0 ? 1 : -1) , 0)  // Head is up (set to 0,-1,0 to look upside-down)
-                         );
-    //m_Projection = glm::perspective(45.0f, (float)m_iWidth / (float)m_iHeight, 0.1f, 100.0f);
-    m_Projection = glm::ortho((-(float)m_iWidth) / 2, ((float)m_iWidth) / 2, -((float)m_iHeight) / 2, ((float)m_iHeight) / 2, -2.0f, 100.0f); // In world coordinates
-    return 0;
-}
-
 int OpenGLRender::MoveModelf(PosVecf3 trans, PosVecf3 angle, PosVecf3 scale)
 {
     m_TranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
@@ -833,7 +822,6 @@ int OpenGLRender::MoveModelf(PosVecf3 trans, PosVecf3 angle, PosVecf3 scale)
     m_Model = m_TranslationMatrix * m_RotationMatrix * m_ScaleMatrix;
     return 0;
 }
-
 
 int OpenGLRender::CreateFrameBufferObj()
 {
