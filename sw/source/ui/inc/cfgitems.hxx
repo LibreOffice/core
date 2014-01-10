@@ -71,7 +71,7 @@ public:
 
 
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
-    virtual int                 operator==( const SfxPoolItem& ) const;
+    virtual bool                operator==( const SfxPoolItem& ) const;
     void                        operator=( const SwDocDisplayItem& );
     void                        FillViewOptions( SwViewOption& rVOpt) const;
 };
@@ -109,7 +109,7 @@ public:
 
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
     void                    operator=( const SwElemItem& );
 
     void                    FillViewOptions( SwViewOption& rVOpt) const;
@@ -133,7 +133,7 @@ public:
 
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
 
-    virtual int          operator==( const SfxPoolItem& ) const;
+    virtual bool         operator==( const SfxPoolItem& ) const;
 
     const OUString &GetFax() const              { return sFaxName; }
     void          SetFax( const OUString& rFax) { sFaxName = rFax; }
@@ -178,7 +178,7 @@ public:
 
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
     void                    operator=( const SwShadowCursorItem& );
 
     void FillViewOptions( SwViewOption& rVOpt) const;
@@ -217,7 +217,7 @@ public:
                             SwTestItem( const SwTestItem& pTestItem);
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
 
 };
 #endif

@@ -28,7 +28,7 @@ struct SfxImageItem_Impl
     OUString aURL;
     long    nAngle;
     bool    bMirrored;
-    int     operator == ( const SfxImageItem_Impl& rOther ) const
+    bool    operator == ( const SfxImageItem_Impl& rOther ) const
             { return nAngle == rOther.nAngle && bMirrored == rOther.bMirrored; }
 };
 
@@ -59,7 +59,7 @@ SfxPoolItem* SfxImageItem::Clone( SfxItemPool* ) const
 }
 
 
-int SfxImageItem::operator==( const SfxPoolItem& rItem ) const
+bool SfxImageItem::operator==( const SfxPoolItem& rItem ) const
 {
     return( ((SfxImageItem&) rItem).GetValue() == GetValue() && (*pImp == *(((SfxImageItem&)rItem).pImp) ) );
 }

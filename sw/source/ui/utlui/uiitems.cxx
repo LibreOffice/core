@@ -53,7 +53,7 @@ SfxPoolItem*  SwPageFtnInfoItem::Clone( SfxItemPool * /*pPool*/ ) const
     return new SwPageFtnInfoItem( *this );
 }
 
-int  SwPageFtnInfoItem::operator==( const SfxPoolItem& rAttr ) const
+bool SwPageFtnInfoItem::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( Which() == rAttr.Which(), "no equal attributes" );
     return ( aFtnInfo == ((SwPageFtnInfoItem&)rAttr).GetPageFtnInfo());
@@ -223,7 +223,7 @@ SfxPoolItem* SwPtrItem::Clone( SfxItemPool * /*pPool*/ ) const
     return new SwPtrItem( *this );
 }
 
-int SwPtrItem::operator==( const SfxPoolItem& rAttr ) const
+bool SwPtrItem::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==(rAttr), "unequal types" );
     const SwPtrItem& rItem = (SwPtrItem&)rAttr;
@@ -253,7 +253,7 @@ SfxPoolItem*  SwUINumRuleItem::Clone( SfxItemPool * /*pPool*/ ) const
     return new SwUINumRuleItem( *this );
 }
 
-int  SwUINumRuleItem::operator==( const SfxPoolItem& rAttr ) const
+bool SwUINumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==(rAttr), "unequal types" );
     return *pRule == *((SwUINumRuleItem&)rAttr).pRule;
@@ -307,7 +307,7 @@ SfxPoolItem* SwPaMItem::Clone( SfxItemPool * /*pPool*/ ) const
     return new SwPaMItem( *this );
 }
 
-int SwPaMItem::operator==( const SfxPoolItem& rAttr ) const
+bool SwPaMItem::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==(rAttr), "unequal types" );
     const SwPaMItem& rItem = (SwPaMItem&)rAttr;

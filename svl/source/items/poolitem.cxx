@@ -148,7 +148,7 @@ int SfxPoolItem::Compare( const SfxPoolItem& rWith, const IntlWrapper& ) const
 }
 
 // ------------------------------------------------------------------------
-int SfxPoolItem::operator==( const SfxPoolItem& rCmp ) const
+bool SfxPoolItem::operator==( const SfxPoolItem& rCmp ) const
 {
     DBG_CHKTHIS(SfxPoolItem, 0);
     return rCmp.Type() == Type();
@@ -274,7 +274,7 @@ SfxVoidItem::SfxVoidItem( const SfxVoidItem& rCopy):
 }
 
 // ------------------------------------------------------------------------
-int SfxVoidItem::operator==( const SfxPoolItem&
+bool SfxVoidItem::operator==( const SfxPoolItem&
 #ifdef DBG_UTIL
 rCmp
 #endif
@@ -282,7 +282,7 @@ rCmp
 {
     DBG_CHKTHIS(SfxVoidItem, 0);
     DBG_ASSERT( SfxPoolItem::operator==( rCmp ), "unequal type" );
-    return sal_True;
+    return true;
 }
 
 // ------------------------------------------------------------------------

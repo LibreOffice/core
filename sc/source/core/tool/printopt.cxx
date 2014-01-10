@@ -92,7 +92,7 @@ OUString ScTpPrintItem::GetValueText() const
     return OUString("ScTpPrintItem");
 }
 
-int ScTpPrintItem::operator==( const SfxPoolItem& rItem ) const
+bool ScTpPrintItem::operator==( const SfxPoolItem& rItem ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 

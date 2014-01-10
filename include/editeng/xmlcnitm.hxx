@@ -40,7 +40,7 @@ public:
     SvXMLAttrContainerItem( const SvXMLAttrContainerItem& );
     virtual ~SvXMLAttrContainerItem();
 
-    virtual int operator==( const SfxPoolItem& ) const;
+    virtual bool operator==( const SfxPoolItem& ) const;
     using SfxPoolItem::Compare;
     virtual int Compare( const SfxPoolItem &rWith ) const;
 

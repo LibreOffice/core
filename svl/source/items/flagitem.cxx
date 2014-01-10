@@ -104,7 +104,7 @@ SfxPoolItem* SfxFlagItem::Create(SvStream &, sal_uInt16) const
 
 // -----------------------------------------------------------------------
 
-int SfxFlagItem::operator==( const SfxPoolItem& rItem ) const
+bool SfxFlagItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_CHKTHIS(SfxFlagItem, 0);
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );

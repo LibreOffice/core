@@ -238,7 +238,7 @@ static bool operator == ( const SearchOptions& rItem1, const SearchOptions& rIte
 }
 
 
-int SvxSearchItem::operator==( const SfxPoolItem& rItem ) const
+bool SvxSearchItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal which or type" );
     const SvxSearchItem &rSItem = (SvxSearchItem &) rItem;

@@ -34,7 +34,7 @@ DBG_NAME(SfxEnumItemInterface)
 TYPEINIT1(SfxEnumItemInterface, SfxPoolItem)
 
 // virtual
-int SfxEnumItemInterface::operator ==(const SfxPoolItem & rItem) const
+bool SfxEnumItemInterface::operator ==(const SfxPoolItem & rItem) const
 {
     SFX_ASSERT(SfxPoolItem::operator ==(rItem), Which(), "unequal type");
     return GetEnumValue()
@@ -103,7 +103,7 @@ sal_Bool SfxEnumItemInterface::IsEnabled(sal_uInt16) const
 }
 
 // virtual
-int SfxEnumItemInterface::HasBoolValue() const
+bool SfxEnumItemInterface::HasBoolValue() const
 {
     return false;
 }
@@ -175,7 +175,7 @@ SfxBoolItem::SfxBoolItem(sal_uInt16 const nWhich, SvStream & rStream)
 }
 
 // virtual
-int SfxBoolItem::operator ==(const SfxPoolItem & rItem) const
+bool SfxBoolItem::operator ==(const SfxPoolItem & rItem) const
 {
     DBG_ASSERT(rItem.ISA(SfxBoolItem),
                "SfxBoolItem::operator ==(): Bad type");

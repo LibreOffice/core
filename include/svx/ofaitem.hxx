@@ -34,7 +34,7 @@ public:
                              OfaPtrItem( sal_uInt16 nWhich, void *pPtr );
                              OfaPtrItem( const OfaPtrItem& );
 
-    virtual int              operator==( const SfxPoolItem& ) const;
+    virtual bool             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
 
     void*                    GetValue() const { return pPtr; }
@@ -55,7 +55,7 @@ public:
     OfaRefItem( const OfaRefItem& rItem )
         : SfxPoolItem( rItem.Which() ), mxRef( rItem.mxRef )
     {}
-    virtual int operator==( const SfxPoolItem& rItem ) const
+    virtual bool operator==( const SfxPoolItem& rItem ) const
     {
         return mxRef == ((OfaRefItem<reference_type> &)rItem).mxRef;
     }

@@ -34,7 +34,7 @@ public:
     virtual                 ~SfxImageItem();
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 

@@ -301,7 +301,7 @@ public:
     virtual SfxPoolItem*     Create(SvStream &rStream, sal_uInt16 nItemVersion) const;
     sal_uInt16  GetVersion( sal_uInt16 nFileVersion ) const;
     virtual SvStream&        Store(SvStream &rStream, sal_uInt16 nItemVersion ) const;
-    virtual int              operator==( const SfxPoolItem& ) const;
+    virtual bool             operator==( const SfxPoolItem& ) const;
 
     SvxNumRule*             GetNumRule() const {return pNumRule;}
 

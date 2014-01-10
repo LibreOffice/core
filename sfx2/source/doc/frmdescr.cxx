@@ -186,7 +186,7 @@ TYPEINIT1(SfxFrameDescriptorItem, SfxPoolItem);
 SfxFrameDescriptorItem::~SfxFrameDescriptorItem()
 {}
 
-int SfxFrameDescriptorItem::operator==( const SfxPoolItem& rAttr ) const
+bool SfxFrameDescriptorItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 

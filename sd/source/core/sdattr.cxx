@@ -133,7 +133,7 @@ SfxPoolItem* DiaTimeItem::Clone( SfxItemPool* ) const
 }
 
 
-int DiaTimeItem::operator==( const SfxPoolItem& rItem ) const
+bool DiaTimeItem::operator==( const SfxPoolItem& rItem ) const
 {
     return( ( (DiaTimeItem&) rItem ).GetValue() == GetValue() );
 }

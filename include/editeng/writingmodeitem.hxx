@@ -40,7 +40,7 @@ public:
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
     virtual SvStream&       Store(SvStream & rStrm, sal_uInt16 nIVer) const;
     virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const;
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

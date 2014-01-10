@@ -128,7 +128,7 @@ SwFmtFtn::SwFmtFtn( bool bEndNote )
 }
 
 
-int SwFmtFtn::operator==( const SfxPoolItem& rAttr ) const
+bool SwFmtFtn::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return m_nNumber  == ((SwFmtFtn&)rAttr).m_nNumber &&

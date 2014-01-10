@@ -114,7 +114,7 @@ MediaItem::~MediaItem()
 
 // ------------------------------------------------------------------------------
 
-int MediaItem::operator==( const SfxPoolItem& rItem ) const
+bool MediaItem::operator==( const SfxPoolItem& rItem ) const
 {
     assert( SfxPoolItem::operator==(rItem));
     MediaItem const& rOther(static_cast< const MediaItem& >(rItem));

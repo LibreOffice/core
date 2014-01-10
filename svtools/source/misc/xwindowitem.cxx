@@ -54,7 +54,7 @@ SfxPoolItem * XWindowItem::Clone( SfxItemPool* /*pPool*/ ) const
 }
 
 
-int XWindowItem::operator == ( const SfxPoolItem & rAttr ) const
+bool XWindowItem::operator == ( const SfxPoolItem & rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 

@@ -37,7 +37,7 @@ public:
 
     SwLabItem& operator =(const SwLabItem& rItem);
 
-    virtual int operator ==(const SfxPoolItem& rItem) const;
+    virtual bool operator ==(const SfxPoolItem& rItem) const;
 
     virtual SfxPoolItem*     Clone(SfxItemPool* = 0) const;
 

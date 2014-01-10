@@ -37,7 +37,7 @@ public:
                                 SfxRangeItem();
                                 SfxRangeItem( sal_uInt16 nWID, sal_uInt16 nFrom, sal_uInt16 nTo );
                                 SfxRangeItem( const SfxRangeItem& rItem );
-    virtual int                 operator==( const SfxPoolItem& ) const;
+    virtual bool                operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -66,7 +66,7 @@ public:
                                 SfxUShortRangesItem( sal_uInt16 nWID, SvStream &rStream );
                                 SfxUShortRangesItem( const SfxUShortRangesItem& rItem );
     virtual                     ~SfxUShortRangesItem();
-    virtual int                 operator==( const SfxPoolItem& ) const;
+    virtual bool                operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,

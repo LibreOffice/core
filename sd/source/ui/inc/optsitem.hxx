@@ -163,7 +163,7 @@ public:
                             SdOptionsLayoutItem( sal_uInt16 nWhich, SdOptions* pOpts, ::sd::FrameView* pView = NULL );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
 
     void                    SetOptions( SdOptions* pOpts ) const;
 
@@ -196,7 +196,7 @@ public:
                             SdOptionsContentsItem( sal_uInt16 nWhich, SdOptions* pOpts, ::sd::FrameView* pView = NULL );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
 
     void                    SetOptions( SdOptions* pOpts ) const;
 
@@ -345,7 +345,7 @@ public:
                             SdOptionsMiscItem( sal_uInt16 nWhich, SdOptions* pOpts, ::sd::FrameView* pView = NULL );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
 
     void                    SetOptions( SdOptions* pOpts ) const;
 
@@ -414,7 +414,7 @@ public:
                             SdOptionsSnapItem( sal_uInt16 nWhich, SdOptions* pOpts, ::sd::FrameView* pView = NULL );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
 
     void                    SetOptions( SdOptions* pOpts ) const;
 
@@ -587,7 +587,7 @@ public:
                             SdOptionsPrintItem( sal_uInt16 nWhich, SdOptions* pOpts, ::sd::FrameView* pView = NULL );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
 
     void                    SetOptions( SdOptions* pOpts ) const;
 

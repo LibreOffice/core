@@ -211,7 +211,7 @@ public:
     virtual ~SwFltAnchor();
 
     // "pure virtual Methoden" vom SfxPoolItem
-    virtual int operator==(const SfxPoolItem&) const;
+    virtual bool operator==(const SfxPoolItem&) const;
     virtual SfxPoolItem* Clone(SfxItemPool* = 0) const;
     void SetFrmFmt(SwFrmFmt * _pFrmFmt);
     const SwFrmFmt* GetFrmFmt() const;
@@ -264,7 +264,7 @@ public:
         nAutorNoPrev(   rCpy.nAutorNoPrev )
         {}
     // "pure virtual Methoden" vom SfxPoolItem
-    virtual int operator==(const SfxPoolItem& rItem) const;
+    virtual bool operator==(const SfxPoolItem& rItem) const;
     virtual SfxPoolItem* Clone(SfxItemPool* = 0) const;
 };
 
@@ -286,7 +286,7 @@ public:
     SwFltBookmark( const SwFltBookmark& );
 
     // "pure virtual Methoden" vom SfxPoolItem
-    virtual int operator==(const SfxPoolItem&) const;
+    virtual bool operator==(const SfxPoolItem&) const;
     virtual SfxPoolItem* Clone(SfxItemPool* = 0) const;
 
     long GetHandle() const              { return mnHandle; }
@@ -308,7 +308,7 @@ public:
     SwFltTOX(SwTOXBase* pBase, sal_uInt16 _nCols = 0);
     SwFltTOX(const SwFltTOX&);
     // "pure virtual Methoden" vom SfxPoolItem
-    virtual int operator==(const SfxPoolItem&) const;
+    virtual bool operator==(const SfxPoolItem&) const;
     virtual SfxPoolItem* Clone(SfxItemPool* = 0) const;
     SwTOXBase* GetBase()            { return pTOXBase; }
     sal_uInt16 GetCols() const          { return nCols; }
@@ -326,7 +326,7 @@ public:
     SwFltSection( SwSectionData *const pSect );
     SwFltSection( const SwFltSection& );
     // "pure virtual Methoden" vom SfxPoolItem
-    virtual int operator==(const SfxPoolItem&) const;
+    virtual bool operator==(const SfxPoolItem&) const;
     virtual SfxPoolItem* Clone(SfxItemPool* = 0) const;
     SwSectionData * GetSectionData()    { return m_pSection; }
 };

@@ -173,7 +173,7 @@ void SwFmtFld::ClearTxtFld()
     mpTxtFld = NULL;
 }
 
-int SwFmtFld::operator==( const SfxPoolItem& rAttr ) const
+bool SwFmtFld::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return ( ( mpField && ((SwFmtFld&)rAttr).GetField()

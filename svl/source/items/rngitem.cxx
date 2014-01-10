@@ -77,7 +77,7 @@ SfxItemPresentation SfxRangeItem::GetPresentation
 
 // -----------------------------------------------------------------------
 
-int SfxRangeItem::operator==( const SfxPoolItem& rItem ) const
+bool SfxRangeItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
     SfxRangeItem* pT = (SfxRangeItem*)&rItem;
@@ -146,7 +146,7 @@ SfxUShortRangesItem::~SfxUShortRangesItem()
 }
 
 
-int SfxUShortRangesItem::operator==( const SfxPoolItem &rItem ) const
+bool SfxUShortRangesItem::operator==( const SfxPoolItem &rItem ) const
 {
     const SfxUShortRangesItem &rOther = (const SfxUShortRangesItem&) rItem;
     if ( !_pRanges && !rOther._pRanges )

@@ -36,7 +36,7 @@ public:
                         sal_Bool bAuto = sal_False );
 
     // "pure virtual methods" of SfxPoolItem
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
     inline SwTblBoxNumFormat& operator=( const SwTblBoxNumFormat& rAttr )
@@ -60,7 +60,7 @@ public:
     ~SwTblBoxFormula() {};
 
     // "pure virtual methods" of SfxPoolItem
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
     inline const SwModify* GetDefinedIn() const { return pDefinedIn; }
@@ -85,7 +85,7 @@ public:
     SwTblBoxValue( const double aVal );
 
     // "pure virtual methods" of SfxPoolItem
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
     inline SwTblBoxValue& operator=( const SwTblBoxValue& rCmp )

@@ -77,7 +77,7 @@ SfxPoolItem* TbxImageItem::Clone( SfxItemPool* ) const
     return new TbxImageItem( *this );
 }
 
-int TbxImageItem::operator==( const SfxPoolItem& rItem ) const
+bool TbxImageItem::operator==( const SfxPoolItem& rItem ) const
 {
     return( ( (TbxImageItem&) rItem ).GetValue() == GetValue() );
 }

@@ -194,8 +194,8 @@ public:
     sal_uInt16                   Which() const {
                                  DBG_CHKTHIS(SfxPoolItem, 0);
                                  return m_nWhich; }
-    virtual int              operator==( const SfxPoolItem& ) const = 0;
-    int                      operator!=( const SfxPoolItem& rItem ) const
+    virtual bool             operator==( const SfxPoolItem& ) const = 0;
+    bool                     operator!=( const SfxPoolItem& rItem ) const
                              { return !(*this == rItem); }
     virtual int              Compare( const SfxPoolItem &rWith ) const;
     virtual int              Compare( const SfxPoolItem &rWith, const IntlWrapper& rIntlWrapper ) const;
@@ -301,27 +301,27 @@ inline sal_uLong SfxPoolItem::ReleaseRef( sal_uLong n ) const
 
 // -----------------------------------------------------------------------
 
-inline int IsPoolDefaultItem(const SfxPoolItem *pItem )
+inline bool IsPoolDefaultItem(const SfxPoolItem *pItem )
 {
     return pItem && pItem->GetKind() == SFX_ITEMS_POOLDEFAULT;
 }
 
-inline int IsStaticDefaultItem(const SfxPoolItem *pItem )
+inline bool IsStaticDefaultItem(const SfxPoolItem *pItem )
 {
     return pItem && pItem->GetKind() == SFX_ITEMS_STATICDEFAULT;
 }
 
-inline int IsDefaultItem( const SfxPoolItem *pItem )
+inline bool IsDefaultItem( const SfxPoolItem *pItem )
 {
     return pItem && pItem->GetKind() >= SFX_ITEMS_STATICDEFAULT;
 }
 
-inline int IsPooledItem( const SfxPoolItem *pItem )
+inline bool IsPooledItem( const SfxPoolItem *pItem )
 {
     return pItem && pItem->GetRefCount() > 0 && pItem->GetRefCount() <= SFX_ITEMS_MAXREF;
 }
 
-inline int IsInvalidItem(const SfxPoolItem *pItem)
+inline bool IsInvalidItem(const SfxPoolItem *pItem)
 {
     return pItem == (SfxPoolItem *)-1;
 }
@@ -338,7 +338,7 @@ public:
                             SfxVoidItem( const SfxVoidItem& );
                             ~SfxVoidItem();
 
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -366,7 +366,7 @@ public:
                             SfxSetItem( const SfxSetItem&, SfxItemPool *pPool = 0 );
                             ~SfxSetItem();
 
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

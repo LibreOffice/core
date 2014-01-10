@@ -137,7 +137,7 @@ public:
     explicit inline SvxMacroItem ( const sal_uInt16 nId );
 
     // "pure virtual Methoden" vom SfxPoolItem
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,

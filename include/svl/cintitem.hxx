@@ -43,7 +43,7 @@ public:
 
     virtual ~CntByteItem() { DBG_DTOR(CntByteItem, 0); }
 
-    virtual int operator ==(const SfxPoolItem & rItem) const;
+    virtual bool operator ==(const SfxPoolItem & rItem) const;
 
     using SfxPoolItem::Compare;
     virtual int Compare(const SfxPoolItem & rWith) const;
@@ -105,7 +105,7 @@ public:
 
     virtual ~CntUInt16Item() { DBG_DTOR(CntUInt16Item, 0); }
 
-    virtual int operator ==(const SfxPoolItem & rItem) const;
+    virtual bool operator ==(const SfxPoolItem & rItem) const;
 
     using SfxPoolItem::Compare;
     virtual int Compare(const SfxPoolItem & rWith) const;
@@ -167,7 +167,7 @@ public:
 
     virtual ~CntInt32Item() { DBG_DTOR(CntInt32Item, 0); }
 
-    virtual int operator ==(const SfxPoolItem & rItem) const;
+    virtual bool operator ==(const SfxPoolItem & rItem) const;
 
     using SfxPoolItem::Compare;
     virtual int Compare(const SfxPoolItem & rWith) const;
@@ -229,7 +229,7 @@ public:
 
     virtual ~CntUInt32Item() { DBG_DTOR(CntUInt32Item, 0); }
 
-    virtual int operator ==(const SfxPoolItem & rItem) const;
+    virtual bool operator ==(const SfxPoolItem & rItem) const;
 
     using SfxPoolItem::Compare;
     virtual int Compare(const SfxPoolItem & rWith) const;

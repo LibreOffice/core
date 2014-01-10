@@ -59,7 +59,7 @@ SfxMacroInfoItem::SfxMacroInfoItem(const SfxMacroInfoItem& rCopy):
 
 // op ==
 
-int SfxMacroInfoItem::operator==( const SfxPoolItem& rCmp) const
+bool SfxMacroInfoItem::operator==( const SfxPoolItem& rCmp) const
 {
     return SfxPoolItem::operator==(rCmp) &&
             pBasicManager == ((const SfxMacroInfoItem&)rCmp).pBasicManager &&

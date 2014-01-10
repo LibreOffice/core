@@ -140,7 +140,7 @@ inline bool EqualPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )
     return ( 0 == memcmp( pItems1, pItems2, (ATTR_PATTERN_END - ATTR_PATTERN_START + 1) * sizeof(pItems1[0]) ) );
 }
 
-int ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
+bool ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
 {
     // #i62090# Use quick comparison between ScPatternAttr's ItemSets
 

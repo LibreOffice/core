@@ -303,7 +303,7 @@ public:
                                 pFrame( pViewFrame)
                             {}
 
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
     virtual OUString        GetValueText() const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
@@ -323,7 +323,7 @@ public:
 
                             SfxVerbListItem( sal_uInt16 nWhichId, const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& );
 
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;

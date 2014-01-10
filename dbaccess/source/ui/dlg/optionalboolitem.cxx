@@ -36,7 +36,7 @@ namespace dbaui
     {
     }
 
-    int OptionalBoolItem::operator==( const SfxPoolItem& _rItem ) const
+    bool OptionalBoolItem::operator==( const SfxPoolItem& _rItem ) const
     {
         const OptionalBoolItem* pCompare = PTR_CAST( OptionalBoolItem, &_rItem );
         if ( !pCompare )

@@ -79,7 +79,7 @@ SfxPoolItem* SwDocDisplayItem::Clone( SfxItemPool*  ) const
     return new SwDocDisplayItem( *this );
 }
 
-int SwDocDisplayItem::operator==( const SfxPoolItem& rAttr ) const
+bool SwDocDisplayItem::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==(rAttr), "different types" );
 
@@ -170,7 +170,7 @@ SfxPoolItem* SwElemItem::Clone( SfxItemPool* ) const
     return new SwElemItem( *this );
 }
 
-int SwElemItem::operator==( const SfxPoolItem& rAttr ) const
+bool SwElemItem::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==(rAttr), "different types" );
 
@@ -257,7 +257,7 @@ SfxPoolItem* SwAddPrinterItem::Clone( SfxItemPool* ) const
     return new SwAddPrinterItem( *this );
 }
 
-int SwAddPrinterItem::operator==( const SfxPoolItem& rAttr ) const
+bool SwAddPrinterItem::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==(rAttr), "different types" );
 
@@ -297,7 +297,7 @@ SfxPoolItem* SwShadowCursorItem::Clone( SfxItemPool* ) const
     return new SwShadowCursorItem( *this );
 }
 
-int SwShadowCursorItem::operator==( const SfxPoolItem& rCmp ) const
+bool SwShadowCursorItem::operator==( const SfxPoolItem& rCmp ) const
 {
     return  IsOn() == ((SwShadowCursorItem&)rCmp).IsOn() &&
             GetMode() == ((SwShadowCursorItem&)rCmp).GetMode();
@@ -337,7 +337,7 @@ SfxPoolItem* SwTestItem::Clone( SfxItemPool* ) const
     return new SwTestItem( *this );
 }
 
-int SwTestItem::operator==( const SfxPoolItem& rAttr ) const
+bool SwTestItem::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==(rAttr), "different types" );
 

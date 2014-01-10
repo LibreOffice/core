@@ -1621,7 +1621,7 @@ void SfxViewFrame::DoAdjustPosSizePixel //! divide on Inner.../Outer...
 
 //========================================================================
 
-int SfxViewFrameItem::operator==( const SfxPoolItem &rItem ) const
+bool SfxViewFrameItem::operator==( const SfxPoolItem &rItem ) const
 {
      return PTR_CAST(SfxViewFrameItem, &rItem)->pFrame== pFrame;
 }

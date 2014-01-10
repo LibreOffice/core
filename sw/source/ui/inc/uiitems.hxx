@@ -42,7 +42,7 @@ public:
     ~SwPageFtnInfoItem();
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -66,7 +66,7 @@ public:
     SwPtrItem( const SwPtrItem& rItem );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
 
     void    SetValue(void * pPtr)   { pMisc= pPtr; }
     void*   GetValue() const        { return pMisc; }
@@ -82,7 +82,7 @@ public:
     virtual ~SwUINumRuleItem();
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
 
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
@@ -108,7 +108,7 @@ public:
     SwPaMItem( const SwPaMItem& rItem );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
 
     void    SetValue(SwPaM * pPaM)   { m_pPaM= pPaM; }
     SwPaM*   GetValue() const        { return m_pPaM; }

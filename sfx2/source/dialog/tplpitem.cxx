@@ -57,7 +57,7 @@ SfxTemplateItem::SfxTemplateItem( const SfxTemplateItem& rCopy ) :
 
 // op ==
 
-int SfxTemplateItem::operator==( const SfxPoolItem& rCmp ) const
+bool SfxTemplateItem::operator==( const SfxPoolItem& rCmp ) const
 {
     return ( SfxFlagItem::operator==( rCmp ) &&
              aStyle == ( (const SfxTemplateItem&)rCmp ).aStyle );

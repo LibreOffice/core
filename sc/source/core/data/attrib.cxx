@@ -137,7 +137,7 @@ OUString ScMergeAttr::GetValueText() const
 
 //------------------------------------------------------------------------
 
-int ScMergeAttr::operator==( const SfxPoolItem& rItem ) const
+bool ScMergeAttr::operator==( const SfxPoolItem& rItem ) const
 {
     OSL_ENSURE( Which() != rItem.Which() || Type() == rItem.Type(), "which ==, type !=" );
     return (Which() == rItem.Which())
@@ -376,7 +376,7 @@ SfxItemPresentation ScProtectionAttr::GetPresentation
 
 //------------------------------------------------------------------------
 
-int ScProtectionAttr::operator==( const SfxPoolItem& rItem ) const
+bool ScProtectionAttr::operator==( const SfxPoolItem& rItem ) const
 {
     OSL_ENSURE( Which() != rItem.Which() || Type() == rItem.Type(), "which ==, type !=" );
     return (Which() == rItem.Which())
@@ -446,7 +446,7 @@ bool ScProtectionAttr::SetHidePrint( bool bHPrint)
 //      ScRangeItem - Tabellenbereich
 // -----------------------------------------------------------------------
 
-int ScRangeItem::operator==( const SfxPoolItem& rAttr ) const
+bool ScRangeItem::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==(rAttr), "unequal types" );
 
@@ -544,7 +544,7 @@ ScTableListItem& ScTableListItem::operator=( const ScTableListItem& rCpy )
 
 // -----------------------------------------------------------------------
 
-int ScTableListItem::operator==( const SfxPoolItem& rAttr ) const
+bool ScTableListItem::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==(rAttr), "unequal types" );
 
@@ -724,7 +724,7 @@ OUString ScPageHFItem::GetValueText() const
 
 //------------------------------------------------------------------------
 
-int ScPageHFItem::operator==( const SfxPoolItem& rItem ) const
+bool ScPageHFItem::operator==( const SfxPoolItem& rItem ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -1074,7 +1074,7 @@ OUString ScDoubleItem::GetValueText() const
 
 //------------------------------------------------------------------------
 
-int ScDoubleItem::operator==( const SfxPoolItem& rItem ) const
+bool ScDoubleItem::operator==( const SfxPoolItem& rItem ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
     const ScDoubleItem& _rItem = (const ScDoubleItem&)rItem;
@@ -1132,7 +1132,7 @@ ScPageScaleToItem* ScPageScaleToItem::Clone( SfxItemPool* ) const
     return new ScPageScaleToItem( *this );
 }
 
-int ScPageScaleToItem::operator==( const SfxPoolItem& rCmp ) const
+bool ScPageScaleToItem::operator==( const SfxPoolItem& rCmp ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rCmp ), "ScPageScaleToItem::operator== - unequal wid or type" );
     const ScPageScaleToItem& rPageCmp = static_cast< const ScPageScaleToItem& >( rCmp );
@@ -1234,7 +1234,7 @@ ScCondFormatItem::~ScCondFormatItem()
 {
 }
 
-int ScCondFormatItem::operator==( const SfxPoolItem& rCmp ) const
+bool ScCondFormatItem::operator==( const SfxPoolItem& rCmp ) const
 {
     return maIndex == static_cast<const ScCondFormatItem&>(rCmp).maIndex;
 }

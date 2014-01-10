@@ -52,7 +52,7 @@ const std::map<OUString, uno::Any>& SfxGrabBagItem::GetGrabBag() const
     return m_aMap;
 }
 
-int SfxGrabBagItem::operator==(const SfxPoolItem& rItem) const
+bool SfxGrabBagItem::operator==(const SfxPoolItem& rItem) const
 {
     SfxGrabBagItem* pItem = (SfxGrabBagItem*)&rItem;
 

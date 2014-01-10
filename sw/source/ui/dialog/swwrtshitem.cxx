@@ -30,7 +30,7 @@ SwWrtShellItem::SwWrtShellItem( const SwWrtShellItem& rItem) :
 {
 }
 
-int SwWrtShellItem::operator==( const SfxPoolItem& rItem) const
+bool SwWrtShellItem::operator==( const SfxPoolItem& rItem) const
 {
     return ((SwWrtShellItem&)rItem).pWrtSh == pWrtSh;
 }

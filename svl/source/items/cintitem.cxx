@@ -30,7 +30,7 @@ DBG_NAME(CntByteItem)
 TYPEINIT1_AUTOFACTORY(CntByteItem, SfxPoolItem);
 
 // virtual
-int CntByteItem::operator ==(const SfxPoolItem & rItem) const
+bool CntByteItem::operator ==(const SfxPoolItem & rItem) const
 {
     DBG_CHKTHIS(CntByteItem, 0);
     DBG_ASSERT(rItem.ISA(CntByteItem),
@@ -146,7 +146,7 @@ CntUInt16Item::CntUInt16Item(sal_uInt16 which, SvStream & rStream) :
 }
 
 // virtual
-int CntUInt16Item::operator ==(const SfxPoolItem & rItem) const
+bool CntUInt16Item::operator ==(const SfxPoolItem & rItem) const
 {
     DBG_CHKTHIS(CntUInt16Item, 0);
     DBG_ASSERT(rItem.ISA(CntUInt16Item),
@@ -264,7 +264,7 @@ CntInt32Item::CntInt32Item(sal_uInt16 which, SvStream & rStream) :
 }
 
 // virtual
-int CntInt32Item::operator ==(const SfxPoolItem & rItem) const
+bool CntInt32Item::operator ==(const SfxPoolItem & rItem) const
 {
     DBG_CHKTHIS(CntInt32Item, 0);
     DBG_ASSERT(rItem.ISA(CntInt32Item),
@@ -381,7 +381,7 @@ CntUInt32Item::CntUInt32Item(sal_uInt16 which, SvStream & rStream) :
 }
 
 // virtual
-int CntUInt32Item::operator ==(const SfxPoolItem & rItem) const
+bool CntUInt32Item::operator ==(const SfxPoolItem & rItem) const
 {
     DBG_CHKTHIS(CntUInt32Item, 0);
     DBG_ASSERT(rItem.ISA(CntUInt32Item),

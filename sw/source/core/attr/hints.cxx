@@ -118,7 +118,7 @@ SwMsgPoolItem::SwMsgPoolItem( sal_uInt16 nWhch )
 }
 
 // "Overhead" of SfxPoolItem
-int SwMsgPoolItem::operator==( const SfxPoolItem& ) const
+bool SwMsgPoolItem::operator==( const SfxPoolItem& ) const
 {
     OSL_FAIL( "SwMsgPoolItem knows no ==" );
     return 0;

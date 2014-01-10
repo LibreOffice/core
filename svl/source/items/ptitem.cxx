@@ -81,7 +81,7 @@ SfxItemPresentation SfxPointItem::GetPresentation
 
 // -----------------------------------------------------------------------
 
-int SfxPointItem::operator==( const SfxPoolItem& rItem ) const
+bool SfxPointItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_CHKTHIS(SfxPointItem, 0);
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );

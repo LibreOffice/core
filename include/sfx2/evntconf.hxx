@@ -78,7 +78,7 @@ public:
 
     SfxEventNamesItem ( const sal_uInt16 nId ) : SfxPoolItem( nId ) {}
 
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,

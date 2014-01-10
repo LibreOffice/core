@@ -347,7 +347,7 @@ SfxPoolItem* XFillBitmapItem::Clone(SfxItemPool* /*pPool*/) const
     return new XFillBitmapItem(*this);
 }
 
-int XFillBitmapItem::operator==(const SfxPoolItem& rItem) const
+bool XFillBitmapItem::operator==(const SfxPoolItem& rItem) const
 {
     return (NameOrIndex::operator==(rItem)
         && maGraphicObject == ((const XFillBitmapItem&)rItem).maGraphicObject);

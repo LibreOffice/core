@@ -123,7 +123,7 @@ SwLabItem& SwLabItem::operator =(const SwLabItem& rItem)
     return *this;
 }
 
-int SwLabItem::operator ==(const SfxPoolItem& rItem) const
+bool SwLabItem::operator ==(const SfxPoolItem& rItem) const
 {
     const SwLabItem& rLab = (const SwLabItem&) rItem;
 

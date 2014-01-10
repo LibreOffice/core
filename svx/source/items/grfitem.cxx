@@ -47,7 +47,7 @@ SvxGrfCrop::~SvxGrfCrop()
 {
 }
 
-int SvxGrfCrop::operator==( const SfxPoolItem& rAttr ) const
+bool SvxGrfCrop::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rAttr ), "not equal attributes" );
     return nLeft    == ((const SvxGrfCrop&)rAttr).GetLeft() &&

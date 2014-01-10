@@ -37,7 +37,7 @@ public:
                             SfxGlobalNameItem( sal_uInt16 nWhich, const SvGlobalName& );
                             ~SfxGlobalNameItem();
 
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     SvGlobalName            GetValue() const { return m_aName; }
 

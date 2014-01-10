@@ -36,7 +36,7 @@ SvxWritingModeItem::~SvxWritingModeItem()
 {
 }
 
-int SvxWritingModeItem::operator==( const SfxPoolItem& rCmp ) const
+bool SvxWritingModeItem::operator==( const SfxPoolItem& rCmp ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rCmp), "unequal types" );
 

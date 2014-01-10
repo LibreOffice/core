@@ -290,7 +290,7 @@ SfxPoolItem* SvxChartColorTableItem::Clone( SfxItemPool * ) const
     return new SvxChartColorTableItem( *this );
 }
 
-int SvxChartColorTableItem::operator==( const SfxPoolItem& rAttr ) const
+bool SvxChartColorTableItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rAttr ), "SvxChartColorTableItem::operator== : types differ" );
 

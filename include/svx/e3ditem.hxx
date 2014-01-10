@@ -40,7 +40,7 @@ public:
                             SvxB3DVectorItem( const SvxB3DVectorItem& );
                             ~SvxB3DVectorItem();
 
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16 nVersion) const;
     virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion ) const;

@@ -58,7 +58,7 @@ public:
 
     virtual OUString        GetValueText() const;
 
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const;
 
@@ -118,7 +118,7 @@ public:
                                     OUString& rText,
                                     const IntlWrapper* pIntl = 0 ) const;
 
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const;
 
@@ -163,7 +163,7 @@ public:
     inline ScRangeItem& operator=( const ScRangeItem &rCpy );
 
     // "pure virtual methods" from SfxPoolItem
-    virtual int                 operator==( const SfxPoolItem& ) const;
+    virtual bool                operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreMetric,
                                                  SfxMapUnit ePresMetric,
@@ -218,7 +218,7 @@ public:
     ScTableListItem& operator=( const ScTableListItem &rCpy );
 
     // "pure virtual Methoden" from SfxPoolItem
-    virtual int                 operator==( const SfxPoolItem& ) const;
+    virtual bool                operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreMetric,
                                                  SfxMapUnit ePresMetric,
@@ -254,7 +254,7 @@ public:
                 ~ScPageHFItem();
 
     virtual OUString        GetValueText() const;
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
     virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const;
@@ -308,7 +308,7 @@ public:
                 ~ScDoubleItem();
 
     virtual OUString        GetValueText() const;
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
     virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const;
@@ -340,7 +340,7 @@ public:
 
     virtual ScPageScaleToItem*  Clone( SfxItemPool* = 0 ) const;
 
-    virtual int                 operator==( const SfxPoolItem& rCmp ) const;
+    virtual bool                operator==( const SfxPoolItem& rCmp ) const;
 
     inline sal_uInt16           GetWidth() const { return mnWidth; }
     inline sal_uInt16           GetHeight() const { return mnHeight; }
@@ -376,7 +376,7 @@ public:
 
     virtual ~ScCondFormatItem();
 
-    virtual int operator==(const SfxPoolItem& rCmp ) const;
+    virtual bool operator==(const SfxPoolItem& rCmp ) const;
     virtual ScCondFormatItem*  Clone( SfxItemPool* = 0 ) const;
 
     const std::vector<sal_uInt32>& GetCondFormatData() const;

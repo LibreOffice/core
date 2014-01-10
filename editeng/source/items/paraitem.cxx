@@ -94,7 +94,7 @@ SvxLineSpacingItem::SvxLineSpacingItem( sal_uInt16 nHeight, const sal_uInt16 nId
 
 // -----------------------------------------------------------------------
 
-int SvxLineSpacingItem::operator==( const SfxPoolItem& rAttr ) const
+bool SvxLineSpacingItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
@@ -355,7 +355,7 @@ SvxAdjustItem::SvxAdjustItem(const SvxAdjust eAdjst, const sal_uInt16 nId )
 
 // -----------------------------------------------------------------------
 
-int SvxAdjustItem::operator==( const SfxPoolItem& rAttr ) const
+bool SvxAdjustItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
@@ -726,7 +726,7 @@ bool SvxHyphenZoneItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 // -----------------------------------------------------------------------
 
-int SvxHyphenZoneItem::operator==( const SfxPoolItem& rAttr ) const
+bool SvxHyphenZoneItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
@@ -1077,7 +1077,7 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 }
 // -----------------------------------------------------------------------
 
-int SvxTabStopItem::operator==( const SfxPoolItem& rAttr ) const
+bool SvxTabStopItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
@@ -1608,7 +1608,7 @@ bool SvxParaVertAlignItem::PutValue( const com::sun::star::uno::Any& rVal,
         return sal_False;
 }
 
-int SvxParaVertAlignItem::operator==( const SfxPoolItem& rItem ) const
+bool SvxParaVertAlignItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
     return SfxUInt16Item::operator==( rItem );

@@ -59,7 +59,7 @@ TextAttrib*     SpellErrorAttrib::Clone() const
 }
 
 //-----------------------------------------------------------------------
-int SpellErrorAttrib::operator==( const TextAttrib& rAttr ) const
+bool SpellErrorAttrib::operator==( const TextAttrib& rAttr ) const
 {
     return Which() == rAttr.Which() &&
             m_aSpellErrorDescription == static_cast<const SpellErrorAttrib&>(rAttr).m_aSpellErrorDescription;
@@ -97,7 +97,7 @@ TextAttrib* SpellLanguageAttrib::Clone() const
 }
 
 //-----------------------------------------------------------------------
-int SpellLanguageAttrib::operator==( const TextAttrib& rAttr ) const
+bool SpellLanguageAttrib::operator==( const TextAttrib& rAttr ) const
 {
     return Which() == rAttr.Which() &&
             m_eLanguage == static_cast<const SpellLanguageAttrib&>(rAttr).m_eLanguage;
@@ -135,7 +135,7 @@ TextAttrib* SpellBackgroundAttrib::Clone() const
 }
 
 //-----------------------------------------------------------------------
-int  SpellBackgroundAttrib::operator==( const TextAttrib& rAttr ) const
+bool SpellBackgroundAttrib::operator==( const TextAttrib& rAttr ) const
 {
     return Which() == rAttr.Which() &&
             m_aBackgroundColor == static_cast<const SpellBackgroundAttrib&>(rAttr).m_aBackgroundColor;

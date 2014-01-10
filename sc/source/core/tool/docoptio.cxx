@@ -121,7 +121,7 @@ OUString ScTpCalcItem::GetValueText() const
     return OUString("ScTpCalcItem");
 }
 
-int ScTpCalcItem::operator==( const SfxPoolItem& rItem ) const
+bool ScTpCalcItem::operator==( const SfxPoolItem& rItem ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 

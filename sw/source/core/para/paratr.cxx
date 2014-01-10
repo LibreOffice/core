@@ -115,7 +115,7 @@ bool SwFmtDrop::GetInfo( SfxPoolItem& ) const
     return true; // Continue
 }
 
-int SwFmtDrop::operator==( const SfxPoolItem& rAttr ) const
+bool SwFmtDrop::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "No mathing attributes" );
     return ( nLines == ((SwFmtDrop&)rAttr).GetLines() &&
@@ -231,7 +231,7 @@ SfxPoolItem* SwNumRuleItem::Clone( SfxItemPool * ) const
 {
     return new SwNumRuleItem( *this );
 }
-int SwNumRuleItem::operator==( const SfxPoolItem& rAttr ) const
+bool SwNumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "No matching attributes" );
 

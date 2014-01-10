@@ -133,7 +133,7 @@ const std::vector<OUString>& SfxStringListItem::GetList () const
 }
 
 
-int SfxStringListItem::operator==( const SfxPoolItem& rItem ) const
+bool SfxStringListItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
 

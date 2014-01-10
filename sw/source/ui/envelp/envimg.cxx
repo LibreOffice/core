@@ -148,7 +148,7 @@ SwEnvItem& SwEnvItem::operator =(const SwEnvItem& rItem)
     return *this;
 }
 
-int SwEnvItem::operator ==(const SfxPoolItem& rItem) const
+bool SwEnvItem::operator ==(const SfxPoolItem& rItem) const
 {
     const SwEnvItem& rEnv = (const SwEnvItem&) rItem;
 

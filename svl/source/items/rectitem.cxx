@@ -81,7 +81,7 @@ SfxItemPresentation SfxRectangleItem::GetPresentation
 
 // -----------------------------------------------------------------------
 
-int SfxRectangleItem::operator==( const SfxPoolItem& rItem ) const
+bool SfxRectangleItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_CHKTHIS(SfxRectangleItem, 0);
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );

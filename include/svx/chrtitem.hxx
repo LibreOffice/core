@@ -317,7 +317,7 @@ public:
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0) const;
 
-    virtual int              operator == (const SfxPoolItem&) const;
+    virtual bool             operator == (const SfxPoolItem&) const;
     virtual SfxPoolItem* Clone(SfxItemPool *pPool = NULL) const;
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVersion) const;
     virtual SvStream& Store(SvStream& rOut, sal_uInt16 nItemVersion ) const;

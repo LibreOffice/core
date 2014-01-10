@@ -48,7 +48,7 @@ public:
                                     OUString &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellChecker1 >
@@ -73,7 +73,7 @@ public:
     SfxHyphenRegionItem( const sal_uInt16 nId  );
     SfxHyphenRegionItem( const SfxHyphenRegionItem& rItem );
 
-    virtual int              operator==( const SfxPoolItem& ) const;
+    virtual bool             operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,

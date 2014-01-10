@@ -35,7 +35,7 @@ public:
                              TYPEINFO();
                              SfxObjectItem( sal_uInt16 nWhich=0, SfxShell *pSh=0 );
 
-    virtual int              operator==( const SfxPoolItem& ) const;
+    virtual bool             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
 
     SfxShell*                GetShell() const

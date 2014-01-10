@@ -352,7 +352,7 @@ SvStream& SvxFieldItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) co
 
 // -----------------------------------------------------------------------
 
-int SvxFieldItem::operator==( const SfxPoolItem& rItem ) const
+bool SvxFieldItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal which or type" );
 

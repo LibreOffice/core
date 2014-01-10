@@ -66,7 +66,7 @@ bool SvxSmartTagItem::PutValue( const uno::Any& /*rVal*/, sal_uInt8 /* nMemberId
 
 // -----------------------------------------------------------------------
 
-int SvxSmartTagItem::operator==( const SfxPoolItem& rAttr ) const
+bool SvxSmartTagItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 

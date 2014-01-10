@@ -73,7 +73,7 @@ SfxPoolItem* SvxPageItem::Clone( SfxItemPool * ) const
     Beschreibung: Abfrage auf Gleichheit
  --------------------------------------------------------------------*/
 
-int SvxPageItem::operator==( const SfxPoolItem& rAttr ) const
+bool SvxPageItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
     const SvxPageItem& rItem = (SvxPageItem&)rAttr;

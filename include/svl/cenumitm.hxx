@@ -38,7 +38,7 @@ protected:
 public:
     TYPEINFO();
 
-    virtual int operator ==(const SfxPoolItem & rItem) const;
+    virtual bool operator ==(const SfxPoolItem & rItem) const;
 
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation,
                                                 SfxMapUnit, SfxMapUnit,
@@ -74,7 +74,7 @@ public:
 
     virtual void SetEnumValue(sal_uInt16 nValue) = 0;
 
-    virtual int HasBoolValue() const;
+    virtual bool HasBoolValue() const;
 
     virtual sal_Bool GetBoolValue() const;
 

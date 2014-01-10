@@ -44,7 +44,7 @@ namespace dbaui
     {
     }
 
-    int OPropertySetItem::operator==(const SfxPoolItem& _rItem) const
+    bool OPropertySetItem::operator==(const SfxPoolItem& _rItem) const
     {
         const OPropertySetItem* pCompare = PTR_CAST(OPropertySetItem, &_rItem);
         if ((!pCompare) || (pCompare->m_xSet.get() != m_xSet.get()))

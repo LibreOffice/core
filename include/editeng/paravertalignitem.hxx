@@ -60,7 +60,7 @@ public:
         return *this;
     }
 
-    virtual int              operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
 
 };
 

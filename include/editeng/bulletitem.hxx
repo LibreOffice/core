@@ -116,7 +116,7 @@ public:
     void                SetScale( sal_uInt16 nNew ) { nScale = nNew; }
 
     virtual sal_uInt16      GetVersion(sal_uInt16 nFileVersion) const;
-    virtual int         operator==( const SfxPoolItem& ) const;
+    virtual bool        operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,

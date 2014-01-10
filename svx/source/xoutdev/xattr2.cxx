@@ -236,7 +236,7 @@ AffineMatrixItem::~AffineMatrixItem()
 {
 }
 
-int AffineMatrixItem::operator==(const SfxPoolItem& rRef) const
+bool AffineMatrixItem::operator==(const SfxPoolItem& rRef) const
 {
     if(!SfxPoolItem::operator==(rRef))
     {

@@ -52,7 +52,7 @@ public:
             NameOrIndex(const NameOrIndex& rNameOrIndex);
            ~NameOrIndex() {};
 
-    virtual int          operator==(const SfxPoolItem& rItem) const;
+    virtual bool         operator==(const SfxPoolItem& rItem) const;
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const;
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const;
     virtual SvStream&    Store(SvStream& rOut, sal_uInt16 nItemVersion ) const;

@@ -347,7 +347,7 @@ SfxPoolItem* SdOptionsLayoutItem::Clone( SfxItemPool* ) const
 
 // ----------------------------------------------------------------------
 
-int SdOptionsLayoutItem::operator==( const SfxPoolItem& rAttr ) const
+bool SdOptionsLayoutItem::operator==( const SfxPoolItem& rAttr ) const
 {
     const bool bSameType = SfxPoolItem::operator==( rAttr );
     DBG_ASSERT( bSameType, "SdOptionsLayoutItem::operator==(), different pool item type!" );
@@ -450,7 +450,7 @@ SfxPoolItem* SdOptionsContentsItem::Clone( SfxItemPool* ) const
 
 // ----------------------------------------------------------------------
 
-int SdOptionsContentsItem::operator==( const SfxPoolItem& rAttr ) const
+bool SdOptionsContentsItem::operator==( const SfxPoolItem& rAttr ) const
 {
     const bool bSameType = SfxPoolItem::operator==(rAttr);
     DBG_ASSERT( bSameType, "SdOptionsContentsItem::operator==(), different pool item type!" );
@@ -779,7 +779,7 @@ SfxPoolItem* SdOptionsMiscItem::Clone( SfxItemPool* ) const
 
 // ----------------------------------------------------------------------
 
-int SdOptionsMiscItem::operator==( const SfxPoolItem& rAttr ) const
+bool SdOptionsMiscItem::operator==( const SfxPoolItem& rAttr ) const
 {
     const bool bSameType = SfxPoolItem::operator==(rAttr);
     DBG_ASSERT( bSameType, "SdOptionsMiscItem::operator==(), different pool item type!" );
@@ -981,7 +981,7 @@ SfxPoolItem* SdOptionsSnapItem::Clone( SfxItemPool* ) const
 
 // ----------------------------------------------------------------------
 
-int SdOptionsSnapItem::operator==( const SfxPoolItem& rAttr ) const
+bool SdOptionsSnapItem::operator==( const SfxPoolItem& rAttr ) const
 {
     const bool bSameType = SfxPoolItem::operator==(rAttr);
     DBG_ASSERT( bSameType, "SdOptionsSnapItem::operator==(), different pool item type!" );
@@ -1511,7 +1511,7 @@ SfxPoolItem* SdOptionsPrintItem::Clone( SfxItemPool* ) const
 
 // ----------------------------------------------------------------------
 
-int SdOptionsPrintItem::operator==( const SfxPoolItem& rAttr ) const
+bool SdOptionsPrintItem::operator==( const SfxPoolItem& rAttr ) const
 {
     const bool bSameType = SfxPoolItem::operator==(rAttr);
     DBG_ASSERT( bSameType, "SdOptionsPrintItem::operator==(), different pool item type!" );

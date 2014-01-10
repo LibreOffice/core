@@ -49,7 +49,7 @@ public:
     ~SvxColorItem();
 
     // "pure virtual Methods" from SfxPoolItem
-    virtual int              operator==( const SfxPoolItem& ) const;
+    virtual bool                operator==( const SfxPoolItem& ) const;
     virtual bool                QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool                PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
     virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const;

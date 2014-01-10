@@ -55,7 +55,7 @@ public:
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    virtual int             HasBoolValue() const;
+    virtual bool            HasBoolValue() const;
     virtual sal_Bool        GetBoolValue() const;
     virtual void            SetBoolValue( sal_Bool bVal );
 

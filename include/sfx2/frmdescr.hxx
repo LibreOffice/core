@@ -237,7 +237,7 @@ public:
 
     virtual                             ~SfxFrameDescriptorItem();
 
-    virtual int                         operator ==( const SfxPoolItem& ) const;
+    virtual bool                        operator ==( const SfxPoolItem& ) const;
     SfxFrameDescriptorItem&             operator =( const SfxFrameDescriptorItem & );
 
     virtual SfxItemPresentation         GetPresentation( SfxItemPresentation ePres,

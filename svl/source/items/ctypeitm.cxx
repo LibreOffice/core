@@ -93,7 +93,7 @@ SvStream & CntContentTypeItem::Store(SvStream & rStream, sal_uInt16) const
 }
 
 // virtual
-int CntContentTypeItem::operator==( const SfxPoolItem& rOrig ) const
+bool CntContentTypeItem::operator==( const SfxPoolItem& rOrig ) const
 {
     const CntContentTypeItem& rOther = (const CntContentTypeItem&)rOrig;
 

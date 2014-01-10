@@ -654,7 +654,7 @@ SdrFractionItem::SdrFractionItem(sal_uInt16 nId, SvStream& rIn):
     nValue=Fraction(nMul,nDiv);
 }
 
-int SdrFractionItem::operator==(const SfxPoolItem& rCmp) const
+bool SdrFractionItem::operator==(const SfxPoolItem& rCmp) const
 {
     return SfxPoolItem::operator==(rCmp) &&
            ((SdrFractionItem&)rCmp).GetValue()==nValue;
@@ -1077,7 +1077,7 @@ SfxItemPresentation SdrTextFitToSizeTypeItem::GetPresentation(SfxItemPresentatio
     return ePres;
 }
 
-int SdrTextFitToSizeTypeItem::HasBoolValue() const { return sal_True; }
+bool SdrTextFitToSizeTypeItem::HasBoolValue() const { return sal_True; }
 
 sal_Bool SdrTextFitToSizeTypeItem::GetBoolValue() const { return GetValue()!=SDRTEXTFIT_NONE; }
 
@@ -1473,7 +1473,7 @@ SdrCustomShapeAdjustmentItem::~SdrCustomShapeAdjustmentItem()
 {
 }
 
-int SdrCustomShapeAdjustmentItem::operator==( const SfxPoolItem& rCmp ) const
+bool SdrCustomShapeAdjustmentItem::operator==( const SfxPoolItem& rCmp ) const
 {
     int bRet = SfxPoolItem::operator==( rCmp );
     if ( bRet )

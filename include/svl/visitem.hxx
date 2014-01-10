@@ -50,7 +50,7 @@ public:
 
     virtual ~SfxVisibilityItem() { DBG_DTOR(SfxVisibilityItem, 0); }
 
-    virtual int operator ==(const SfxPoolItem & rItem) const;
+    virtual bool operator ==(const SfxPoolItem & rItem) const;
 
     using SfxPoolItem::Compare;
     virtual int Compare(const SfxPoolItem & rWith) const;

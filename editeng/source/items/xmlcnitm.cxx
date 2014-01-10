@@ -49,7 +49,7 @@ SvXMLAttrContainerItem::~SvXMLAttrContainerItem()
     delete pImpl;
 }
 
-int SvXMLAttrContainerItem::operator==( const SfxPoolItem& rItem ) const
+bool SvXMLAttrContainerItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( rItem.ISA(SvXMLAttrContainerItem),
                "SvXMLAttrContainerItem::operator ==(): Bad type");

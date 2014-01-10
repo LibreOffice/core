@@ -549,7 +549,7 @@ SfxFrameItem::SfxFrameItem( SfxFrame *p ):
 {
 }
 
-int SfxFrameItem::operator==( const SfxPoolItem &rItem ) const
+bool SfxFrameItem::operator==( const SfxPoolItem &rItem ) const
 {
      return ((SfxFrameItem&)rItem).pFrame == pFrame &&
          ((SfxFrameItem&)rItem).wFrame == wFrame;
@@ -609,7 +609,7 @@ SfxUsrAnyItem::SfxUsrAnyItem( sal_uInt16 nWhichId, const ::com::sun::star::uno::
     aValue = rAny;
 }
 
-int SfxUsrAnyItem::operator==( const SfxPoolItem& /*rItem*/ ) const
+bool SfxUsrAnyItem::operator==( const SfxPoolItem& /*rItem*/ ) const
 {
     return sal_False;
 }
@@ -643,7 +643,7 @@ SfxUnoFrameItem::SfxUnoFrameItem( sal_uInt16 nWhichId, const ::com::sun::star::u
 {
 }
 
-int SfxUnoFrameItem::operator==( const SfxPoolItem& i_rItem ) const
+bool SfxUnoFrameItem::operator==( const SfxPoolItem& i_rItem ) const
 {
     return i_rItem.ISA( SfxUnoFrameItem ) && static_cast< const SfxUnoFrameItem& >( i_rItem ).m_xFrame == m_xFrame;
 }

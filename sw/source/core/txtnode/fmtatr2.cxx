@@ -85,7 +85,7 @@ SwFmtCharFmt::~SwFmtCharFmt() {}
 
 
 
-int SwFmtCharFmt::operator==( const SfxPoolItem& rAttr ) const
+bool SwFmtCharFmt::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return GetCharFmt() == ((SwFmtCharFmt&)rAttr).GetCharFmt();
@@ -148,7 +148,7 @@ SwFmtAutoFmt::~SwFmtAutoFmt()
 {
 }
 
-int SwFmtAutoFmt::operator==( const SfxPoolItem& rAttr ) const
+bool SwFmtAutoFmt::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "different attributes" );
     return mpHandle == ((SwFmtAutoFmt&)rAttr).mpHandle;
@@ -230,7 +230,7 @@ SwFmtINetFmt::~SwFmtINetFmt()
 
 
 
-int SwFmtINetFmt::operator==( const SfxPoolItem& rAttr ) const
+bool SwFmtINetFmt::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     bool bRet = SfxPoolItem::operator==( (SfxPoolItem&) rAttr )
@@ -468,7 +468,7 @@ SwFmtRuby& SwFmtRuby::operator=( const SwFmtRuby& rAttr )
     return *this;
 }
 
-int SwFmtRuby::operator==( const SfxPoolItem& rAttr ) const
+bool SwFmtRuby::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return sRubyTxt == ((SwFmtRuby&)rAttr).sRubyTxt &&
@@ -598,7 +598,7 @@ SwFmtMeta::~SwFmtMeta()
     }
 }
 
-int SwFmtMeta::operator==( const SfxPoolItem & i_rOther ) const
+bool SwFmtMeta::operator==( const SfxPoolItem & i_rOther ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( i_rOther ), "i just copied this assert" );
     return SfxPoolItem::operator==( i_rOther )

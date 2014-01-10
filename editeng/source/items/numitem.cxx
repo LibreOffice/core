@@ -961,7 +961,7 @@ SvxNumBulletItem::~SvxNumBulletItem()
     delete pNumRule;
 }
 
-int  SvxNumBulletItem::operator==( const SfxPoolItem& rCopy) const
+bool SvxNumBulletItem::operator==( const SfxPoolItem& rCopy) const
 {
     return *pNumRule == *((SvxNumBulletItem&)rCopy).pNumRule;
 }

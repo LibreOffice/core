@@ -288,7 +288,7 @@ SfxItemPresentation SvxMarginItem::GetPresentation
 
 //------------------------------------------------------------------------
 
-int SvxMarginItem::operator==( const SfxPoolItem& rItem ) const
+bool SvxMarginItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
 

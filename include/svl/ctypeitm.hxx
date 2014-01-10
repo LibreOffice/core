@@ -41,7 +41,7 @@ public:
                                  sal_uInt16 nItemVersion ) const;
     virtual SvStream & Store(SvStream & rStream, sal_uInt16) const;
 
-    virtual int          operator==( const SfxPoolItem& rOrig ) const;
+    virtual bool         operator==( const SfxPoolItem& rOrig ) const;
 
     virtual sal_uInt16 GetVersion(sal_uInt16) const;
 

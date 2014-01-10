@@ -38,7 +38,7 @@ OStringListItem::OStringListItem(const OStringListItem& _rSource)
 {
 }
 
-int OStringListItem::operator==(const SfxPoolItem& _rItem) const
+bool OStringListItem::operator==(const SfxPoolItem& _rItem) const
 {
     const OStringListItem* pCompare = PTR_CAST(OStringListItem, &_rItem);
     if ((!pCompare) || (pCompare->m_aList.getLength() != m_aList.getLength()))

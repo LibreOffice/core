@@ -264,7 +264,7 @@ SfxItemPresentation SvxDoubleItem::GetPresentation
 
 // -----------------------------------------------------------------------
 
-int SvxDoubleItem::operator == (const SfxPoolItem& rItem) const
+bool SvxDoubleItem::operator == (const SfxPoolItem& rItem) const
 {
     return (((SvxDoubleItem&)rItem).fVal == fVal);
 }

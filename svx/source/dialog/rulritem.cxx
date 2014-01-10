@@ -31,7 +31,7 @@ TYPEINIT1(SvxObjectItem, SfxPoolItem);
 
 /* SvxLongLRSpaceItem */
 
-int SvxLongLRSpaceItem::operator==( const SfxPoolItem& rCmp) const
+bool SvxLongLRSpaceItem::operator==( const SfxPoolItem& rCmp) const
 {
     return SfxPoolItem::operator==(rCmp) &&
         mlLeft  == ((const SvxLongLRSpaceItem &)rCmp).mlLeft &&
@@ -176,7 +176,7 @@ void SvxLongLRSpaceItem::SetRight(long lArgRight)
 
 /* SvxLongULSpaceItem */
 
-int SvxLongULSpaceItem::operator==( const SfxPoolItem& rCmp) const
+bool SvxLongULSpaceItem::operator==( const SfxPoolItem& rCmp) const
 {
     return SfxPoolItem::operator==(rCmp) &&
         mlLeft == ((const SvxLongULSpaceItem&)rCmp).mlLeft &&
@@ -317,7 +317,7 @@ void SvxLongULSpaceItem::SetLower(long lArgRight)
 
 /* SvxPagePosSizeItem */
 
-int SvxPagePosSizeItem::operator==( const SfxPoolItem& rCmp) const
+bool SvxPagePosSizeItem::operator==( const SfxPoolItem& rCmp) const
 {
     return SfxPoolItem::operator==(rCmp) &&
         aPos == ((const SvxPagePosSizeItem &)rCmp).aPos &&
@@ -435,7 +435,7 @@ SvxPagePosSizeItem::SvxPagePosSizeItem() :
 
 /* SvxColumnItem */
 
-int SvxColumnItem::operator==(const SfxPoolItem& rCmp) const
+bool SvxColumnItem::operator==(const SfxPoolItem& rCmp) const
 {
     if(!SfxPoolItem::operator==(rCmp) ||
        nActColumn != ((const SvxColumnItem&)rCmp).nActColumn ||
@@ -742,7 +742,7 @@ sal_Bool SvxColumnItem::IsConsistent() const
     return nActColumn < aColumns.size();
 }
 
-int SvxObjectItem::operator==( const SfxPoolItem& rCmp ) const
+bool SvxObjectItem::operator==( const SfxPoolItem& rCmp ) const
 {
     return SfxPoolItem::operator==(rCmp) &&
        nStartX == ((const SvxObjectItem&)rCmp).nStartX &&

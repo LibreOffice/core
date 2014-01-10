@@ -30,7 +30,7 @@ OfaPtrItem::OfaPtrItem( const OfaPtrItem& rItem)
 {
 }
 
-int OfaPtrItem::operator==( const SfxPoolItem& rItem) const
+bool OfaPtrItem::operator==( const SfxPoolItem& rItem) const
 {
     return ((OfaPtrItem&)rItem).pPtr == pPtr;
 }

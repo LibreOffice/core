@@ -92,7 +92,7 @@ bool SvxClipboardFmtItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_
     return false;
 }
 
-int SvxClipboardFmtItem::operator==( const SfxPoolItem& rComp ) const
+bool SvxClipboardFmtItem::operator==( const SfxPoolItem& rComp ) const
 {
     const SvxClipboardFmtItem& rCmp = (SvxClipboardFmtItem&)rComp;
     if(rCmp.pImpl->aFmtNms.size() != pImpl->aFmtNms.size())

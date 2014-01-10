@@ -31,7 +31,7 @@ class SVX_DLLPUBLIC SvxLongLRSpaceItem : public SfxPoolItem
 
   protected:
 
-    virtual int              operator==( const SfxPoolItem& ) const;
+    virtual bool             operator==( const SfxPoolItem& ) const;
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
@@ -65,7 +65,7 @@ class SVX_DLLPUBLIC SvxLongULSpaceItem : public SfxPoolItem
 
   protected:
 
-    virtual int              operator==( const SfxPoolItem& ) const;
+    virtual bool             operator==( const SfxPoolItem& ) const;
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
@@ -98,7 +98,7 @@ class SVX_DLLPUBLIC SvxPagePosSizeItem : public SfxPoolItem
     long lWidth;
     long lHeight;
 protected:
-    virtual int              operator==( const SfxPoolItem& ) const;
+    virtual bool             operator==( const SfxPoolItem& ) const;
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
@@ -159,7 +159,7 @@ class SVX_DLLPUBLIC SvxColumnItem : public SfxPoolItem
     sal_uInt8  bOrtho;      // evenly spread columns
 
 protected:
-    virtual int operator==( const SfxPoolItem& ) const;
+    virtual bool operator==( const SfxPoolItem& ) const;
 
     virtual OUString GetValueText() const;
 
@@ -217,7 +217,7 @@ private:
     sal_Bool bLimits; /* boundary limit control by the application */
 
 protected:
-    virtual int              operator==( const SfxPoolItem& ) const;
+    virtual bool             operator==( const SfxPoolItem& ) const;
 
     virtual OUString         GetValueText() const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,

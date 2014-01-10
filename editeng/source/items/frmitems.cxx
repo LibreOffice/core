@@ -312,7 +312,7 @@ SvxSizeItem::SvxSizeItem( const sal_uInt16 nId ) :
 
 // -----------------------------------------------------------------------
 
-int SvxSizeItem::operator==( const SfxPoolItem& rAttr ) const
+bool SvxSizeItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
@@ -558,7 +558,7 @@ void SvxLRSpaceItem::AdjustLeft()
 
 // -----------------------------------------------------------------------
 
-int SvxLRSpaceItem::operator==( const SfxPoolItem& rAttr ) const
+bool SvxLRSpaceItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
@@ -925,7 +925,7 @@ bool SvxULSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 // -----------------------------------------------------------------------
 
-int SvxULSpaceItem::operator==( const SfxPoolItem& rAttr ) const
+bool SvxULSpaceItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
@@ -1168,7 +1168,7 @@ SfxItemPresentation SvxOpaqueItem::GetPresentation
 
 // class SvxProtectItem --------------------------------------------------
 
-int SvxProtectItem::operator==( const SfxPoolItem& rAttr ) const
+bool SvxProtectItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
@@ -1398,7 +1398,7 @@ bool SvxShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 // -----------------------------------------------------------------------
 
-int SvxShadowItem::operator==( const SfxPoolItem& rAttr ) const
+bool SvxShadowItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
@@ -1655,7 +1655,7 @@ inline sal_Bool CmpBrdLn( const SvxBorderLine* pBrd1, const SvxBorderLine* pBrd2
 
 // -----------------------------------------------------------------------
 
-int SvxBoxItem::operator==( const SfxPoolItem& rAttr ) const
+bool SvxBoxItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
@@ -2528,7 +2528,7 @@ SvxBoxInfoItem &SvxBoxInfoItem::operator=( const SvxBoxInfoItem& rCpy )
 
 // -----------------------------------------------------------------------
 
-int SvxBoxInfoItem::operator==( const SfxPoolItem& rAttr ) const
+bool SvxBoxInfoItem::operator==( const SfxPoolItem& rAttr ) const
 {
     SvxBoxInfoItem& rBoxInfo = (SvxBoxInfoItem&)rAttr;
 
@@ -2914,7 +2914,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 // class SvxFmtBreakItem -------------------------------------------------
 
-int SvxFmtBreakItem::operator==( const SfxPoolItem& rAttr ) const
+bool SvxFmtBreakItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rAttr ), "unequal types" );
 
@@ -3140,7 +3140,7 @@ SvxLineItem& SvxLineItem::operator=( const SvxLineItem& rLine )
 
 // -----------------------------------------------------------------------
 
-int SvxLineItem::operator==( const SfxPoolItem& rAttr ) const
+bool SvxLineItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
@@ -3844,7 +3844,7 @@ SvxBrushItem& SvxBrushItem::operator=( const SvxBrushItem& rItem )
 
 // -----------------------------------------------------------------------
 
-int SvxBrushItem::operator==( const SfxPoolItem& rAttr ) const
+bool SvxBrushItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
@@ -4166,7 +4166,7 @@ SvxFrameDirectionItem::~SvxFrameDirectionItem()
 {
 }
 
-int SvxFrameDirectionItem::operator==( const SfxPoolItem& rCmp ) const
+bool SvxFrameDirectionItem::operator==( const SfxPoolItem& rCmp ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rCmp), "unequal types" );
 

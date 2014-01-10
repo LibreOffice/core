@@ -114,7 +114,7 @@ public:
 
     virtual void            SetFont( Font& rFont ) const;
     virtual TextAttrib*     Clone() const;
-    virtual int             operator==( const TextAttrib& rAttr ) const;
+    virtual bool            operator==( const TextAttrib& rAttr ) const;
 };
 
 //-------------------------------------------------
@@ -137,7 +137,7 @@ public:
 
     virtual void            SetFont( Font& rFont ) const;
     virtual TextAttrib*     Clone() const;
-    virtual int             operator==( const TextAttrib& rAttr ) const;
+    virtual bool            operator==( const TextAttrib& rAttr ) const;
 };
 
 //-------------------------------------------------
@@ -159,7 +159,7 @@ public:
 
     virtual void            SetFont( Font& rFont ) const;
     virtual TextAttrib*     Clone() const;
-    virtual int             operator==( const TextAttrib& rAttr ) const;
+    virtual bool            operator==( const TextAttrib& rAttr ) const;
 };
 }//namespace svx
 #endif

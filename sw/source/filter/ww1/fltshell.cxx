@@ -885,7 +885,7 @@ SwFrmFmt * SwFltAnchor::GetFrmFmt()
     return pFrmFmt;
 }
 
-int SwFltAnchor::operator==(const SfxPoolItem& rItem) const
+bool SwFltAnchor::operator==(const SfxPoolItem& rItem) const
 {
     return pFrmFmt == ((SwFltAnchor&)rItem).pFrmFmt;
 }
@@ -919,7 +919,7 @@ void  SwFltAnchorClient::Modify(const SfxPoolItem *, const SfxPoolItem * pNew)
 }
 
 //------ hier stehen die Methoden von SwFltRedline -----------
-int SwFltRedline::operator==(const SfxPoolItem& rItem) const
+bool SwFltRedline::operator==(const SfxPoolItem& rItem) const
 {
     return this == &rItem;
 }
@@ -960,7 +960,7 @@ SwFltBookmark::SwFltBookmark(const SwFltBookmark& rCpy)
 {
 }
 
-int SwFltBookmark::operator==(const SfxPoolItem& rItem) const
+bool SwFltBookmark::operator==(const SfxPoolItem& rItem) const
 {
     return ( maName == ((SwFltBookmark&)rItem).maName)
             && (mnHandle == ((SwFltBookmark&)rItem).mnHandle);
@@ -985,7 +985,7 @@ SwFltTOX::SwFltTOX(const SwFltTOX& rCpy)
 {
 }
 
-int SwFltTOX::operator==(const SfxPoolItem& rItem) const
+bool SwFltTOX::operator==(const SfxPoolItem& rItem) const
 {
     return pTOXBase == ((SwFltTOX&)rItem).pTOXBase;
 }
@@ -1009,7 +1009,7 @@ SwFltSection::SwFltSection(const SwFltSection& rCpy)
 {
 }
 
-int SwFltSection::operator==(const SfxPoolItem& rItem) const
+bool SwFltSection::operator==(const SfxPoolItem& rItem) const
 {
     return m_pSection == ((SwFltSection&)rItem).m_pSection;
 }

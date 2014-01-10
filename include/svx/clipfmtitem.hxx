@@ -30,7 +30,7 @@ class SVX_DLLPUBLIC SvxClipboardFmtItem : public SfxPoolItem
     SvxClipboardFmtItem_Impl* pImpl;
 protected:
 
-    virtual int              operator==( const SfxPoolItem& ) const;
+    virtual bool             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
 
 public:

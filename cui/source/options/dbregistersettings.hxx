@@ -76,7 +76,7 @@ namespace svx
 
         DatabaseMapItem( sal_uInt16 _nId, const DatabaseRegistrations& _rRegistrations );
 
-        virtual int              operator==( const SfxPoolItem& ) const;
+        virtual bool             operator==( const SfxPoolItem& ) const;
         virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
 
         const DatabaseRegistrations&

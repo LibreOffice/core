@@ -40,7 +40,7 @@ SwTblBoxNumFormat::SwTblBoxNumFormat( sal_uInt32 nFormat, sal_Bool bFlag )
 {
 }
 
-int SwTblBoxNumFormat::operator==( const SfxPoolItem& rAttr ) const
+bool SwTblBoxNumFormat::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "no matching attributes" );
     return GetValue() == ( (SwTblBoxNumFormat&) rAttr ).GetValue() &&
@@ -63,7 +63,7 @@ SwTblBoxFormula::SwTblBoxFormula( const OUString& rFormula )
 {
 }
 
-int SwTblBoxFormula::operator==( const SfxPoolItem& rAttr ) const
+bool SwTblBoxFormula::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return GetFormula() == ( (SwTblBoxFormula&) rAttr ).GetFormula() &&
@@ -210,7 +210,7 @@ SwTblBoxValue::SwTblBoxValue( const double nVal )
 {
 }
 
-int SwTblBoxValue::operator==( const SfxPoolItem& rAttr ) const
+bool SwTblBoxValue::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==(rAttr), "SwTblBoxValue: item not equal" );
     SwTblBoxValue const& rOther( static_cast<SwTblBoxValue const&>(rAttr) );

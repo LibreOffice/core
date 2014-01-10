@@ -65,7 +65,7 @@ public:
     virtual SfxPoolItem*    Create(SvStream& rStream, sal_uInt16 nVersion) const;
     virtual SvStream&       Store(SvStream& rStream, sal_uInt16 nItemVersion) const;
 
-    virtual int             operator==(const SfxPoolItem& rCmp) const;
+    virtual bool            operator==(const SfxPoolItem& rCmp) const;
 
     const SfxPoolItem&      GetItem( sal_uInt16 nWhichP ) const
                                         { return GetItemSet().Get(nWhichP); }

@@ -29,7 +29,7 @@ SvxGraphicItem::SvxGraphicItem( const SvxGraphicItem& rItem)
 {
 }
 
-int SvxGraphicItem::operator==( const SfxPoolItem& rItem) const
+bool SvxGraphicItem::operator==( const SfxPoolItem& rItem) const
 {
     return ((SvxGraphicItem&)rItem).aGraphic == aGraphic;
 }

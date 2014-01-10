@@ -32,7 +32,7 @@ DBG_NAME(CntUnencodedStringItem)
 TYPEINIT1_AUTOFACTORY(CntUnencodedStringItem, SfxPoolItem)
 
 // virtual
-int CntUnencodedStringItem::operator ==(const SfxPoolItem & rItem) const
+bool CntUnencodedStringItem::operator ==(const SfxPoolItem & rItem) const
 {
     DBG_CHKTHIS(CntUnencodedStringItem, 0);
     DBG_ASSERT(rItem.ISA(CntUnencodedStringItem),

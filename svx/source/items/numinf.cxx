@@ -131,7 +131,7 @@ SfxItemPresentation SvxNumberInfoItem::GetPresentation
 
 // -----------------------------------------------------------------------
 
-int SvxNumberInfoItem::operator==( const SfxPoolItem& rItem ) const
+bool SvxNumberInfoItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal which or type" );
 

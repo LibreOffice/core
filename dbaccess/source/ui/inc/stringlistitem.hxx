@@ -40,7 +40,7 @@ public:
     OStringListItem(sal_Int16 nWhich, const ::com::sun::star::uno::Sequence< OUString >& _rList);
     OStringListItem(const OStringListItem& _rSource);
 
-    virtual int              operator==(const SfxPoolItem& _rItem) const;
+    virtual bool             operator==(const SfxPoolItem& _rItem) const;
     virtual SfxPoolItem*     Clone(SfxItemPool* _pPool = NULL) const;
 
     ::com::sun::star::uno::Sequence< OUString >  getList() const { return m_aList; }

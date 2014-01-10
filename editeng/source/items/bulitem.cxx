@@ -268,7 +268,7 @@ void SvxBulletItem::CopyValidProperties( const SvxBulletItem& rCopyFrom )
 
 // -----------------------------------------------------------------------
 
-int SvxBulletItem::operator==( const SfxPoolItem& rItem ) const
+bool SvxBulletItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT(rItem.ISA(SvxBulletItem),"operator==Types not matching");
     const SvxBulletItem& rBullet = (const SvxBulletItem&)rItem;

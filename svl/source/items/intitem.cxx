@@ -56,7 +56,7 @@ SfxInt16Item::SfxInt16Item(sal_uInt16 which, SvStream & rStream):
 }
 
 // virtual
-int SfxInt16Item::operator ==(const SfxPoolItem & rItem) const
+bool SfxInt16Item::operator ==(const SfxPoolItem & rItem) const
 {
     DBG_CHKTHIS(SfxInt16Item, 0);
     DBG_ASSERT(SfxPoolItem::operator ==(rItem), "unequal type");

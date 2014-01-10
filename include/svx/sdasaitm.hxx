@@ -48,7 +48,7 @@ class SdrCustomShapeAdjustmentItem : public SfxPoolItem
             SdrCustomShapeAdjustmentItem( SvStream& rIn, sal_uInt16 nVersion );
             SVX_DLLPUBLIC ~SdrCustomShapeAdjustmentItem();
 
-            virtual int                 operator==( const SfxPoolItem& ) const;
+            virtual bool                operator==( const SfxPoolItem& ) const;
             virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePresentation,
                                             SfxMapUnit eCoreMetric, SfxMapUnit ePresentationMetric,
                                             OUString &rText, const IntlWrapper * = 0) const;

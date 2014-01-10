@@ -67,7 +67,7 @@ public:
                                 TYPEINFO();
 
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
-    virtual int                 operator==( const SfxPoolItem& ) const;
+    virtual bool                operator==( const SfxPoolItem& ) const;
 
     static const CommandStruct* GetCmds();
 

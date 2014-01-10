@@ -70,7 +70,7 @@ public:
                             MediaItem( const MediaItem& rMediaItem );
     virtual                 ~MediaItem();
 
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreUnit,

@@ -126,7 +126,7 @@ bool SvxGalleryItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /* nMemberId
     return true;
 }
 
-int SvxGalleryItem::operator==( const SfxPoolItem& rAttr ) const
+bool SvxGalleryItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 

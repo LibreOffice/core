@@ -64,7 +64,7 @@ public:
         return *this;
     }
 
-    virtual int              operator==( const SfxPoolItem& ) const;
+    virtual bool             operator==( const SfxPoolItem& ) const;
 
     // our currently only degree values
     void SetTopToBotton()                   { SetValue( 2700 ); }

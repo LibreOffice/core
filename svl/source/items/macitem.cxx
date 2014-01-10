@@ -192,7 +192,7 @@ sal_Bool SvxMacroTableDtor::Erase(sal_uInt16 nEvent)
 
 // -----------------------------------------------------------------------
 
-int SvxMacroItem::operator==( const SfxPoolItem& rAttr ) const
+bool SvxMacroItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 

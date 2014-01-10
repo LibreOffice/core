@@ -106,7 +106,7 @@ class SfxLinkItem : public SfxPoolItem
 public:
     virtual SfxPoolItem*     Clone( SfxItemPool* = 0 ) const
     {   return new SfxLinkItem( *this ); }
-    virtual int              operator==( const SfxPoolItem& rL) const
+    virtual bool             operator==( const SfxPoolItem& rL) const
     {   return ((SfxLinkItem&)rL).aLink == aLink; }
     SfxLinkItem( sal_uInt16 nWhichId, const Link& rValue ) : SfxPoolItem( nWhichId )
     {   aLink = rValue; }

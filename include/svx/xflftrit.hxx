@@ -41,7 +41,7 @@ public:
                             XFillFloatTransparenceItem(SfxItemPool* pPool, const XGradient& rTheGradient, sal_Bool bEnable = sal_True );
                             XFillFloatTransparenceItem( const XFillFloatTransparenceItem& rItem );
 
-    virtual int             operator==( const SfxPoolItem& rItem ) const;
+    virtual bool            operator==( const SfxPoolItem& rItem ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
     virtual sal_uInt16          GetVersion( sal_uInt16 nFileFormatVersion ) const;
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;

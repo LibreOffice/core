@@ -85,7 +85,7 @@ SfxPoolItem*  SvxGridItem::Clone( SfxItemPool* ) const
     return new SvxGridItem( *this );
 }
 
-int SvxGridItem::operator==( const SfxPoolItem& rAttr ) const
+bool SvxGridItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "different types ");
 

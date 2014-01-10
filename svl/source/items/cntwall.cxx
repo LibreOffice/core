@@ -89,18 +89,15 @@ CntWallpaperItem::~CntWallpaperItem()
 }
 
 // -----------------------------------------------------------------------
-int CntWallpaperItem::operator==( const SfxPoolItem& rItem ) const
+bool CntWallpaperItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
 
     const CntWallpaperItem& rWallItem = (const CntWallpaperItem&)rItem;
 
-    if( ( rWallItem._nStyle == _nStyle ) &&
+    return ( rWallItem._nStyle == _nStyle ) &&
         ( rWallItem._nColor == _nColor ) &&
-        ( rWallItem._aURL == _aURL ) )
-        return sal_True;
-    else
-        return sal_False;
+        ( rWallItem._aURL == _aURL );
 }
 
 // virtual

@@ -64,7 +64,7 @@ public:
                      const OUString& rRangeText );
 
     // "pure virtual Methoden" vom SfxPoolItem
-    virtual int              operator==( const SfxPoolItem& ) const;
+    virtual bool             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const; // leer
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const; // leer

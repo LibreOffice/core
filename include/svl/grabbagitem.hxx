@@ -33,7 +33,7 @@ public:
     void SetGrabBag(const std::map<OUString, com::sun::star::uno::Any>& rMap);
     const std::map<OUString, com::sun::star::uno::Any>& GetGrabBag() const;
 
-    virtual int operator==(const SfxPoolItem&) const;
+    virtual bool operator==(const SfxPoolItem&) const;
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const;
 
     virtual bool PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0);

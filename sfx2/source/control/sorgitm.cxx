@@ -59,7 +59,7 @@ SfxPoolItem* SfxScriptOrganizerItem::Clone( SfxItemPool * ) const
 
 //------------------------------------------------------------------------
 
-int SfxScriptOrganizerItem::operator==( const SfxPoolItem& rItem) const
+bool SfxScriptOrganizerItem::operator==( const SfxPoolItem& rItem) const
 {
      return rItem.Type() == Type() &&
          SfxStringItem::operator==(rItem) &&

@@ -104,7 +104,7 @@ NameOrIndex::NameOrIndex(const NameOrIndex& rNameOrIndex) :
 {
 }
 
-int NameOrIndex::operator==(const SfxPoolItem& rItem) const
+bool NameOrIndex::operator==(const SfxPoolItem& rItem) const
 {
     return ( SfxStringItem::operator==(rItem) &&
             ((const NameOrIndex&) rItem).nPalIndex == nPalIndex );
@@ -303,7 +303,7 @@ SfxPoolItem* XColorItem::Clone(SfxItemPool* /*pPool*/) const
     return new XColorItem(*this);
 }
 
-int XColorItem::operator==(const SfxPoolItem& rItem) const
+bool XColorItem::operator==(const SfxPoolItem& rItem) const
 {
     return ( NameOrIndex::operator==(rItem) &&
             ((const XColorItem&) rItem).aColor == aColor );
@@ -703,7 +703,7 @@ SfxPoolItem* XLineDashItem::Clone(SfxItemPool* /*pPool*/) const
     return new XLineDashItem(*this);
 }
 
-int XLineDashItem::operator==(const SfxPoolItem& rItem) const
+bool XLineDashItem::operator==(const SfxPoolItem& rItem) const
 {
     return ( NameOrIndex::operator==(rItem) &&
              aDash == ((const XLineDashItem&) rItem).aDash );
@@ -1313,7 +1313,7 @@ SfxPoolItem* XLineStartItem::Clone(SfxItemPool* /*pPool*/) const
     return new XLineStartItem(*this);
 }
 
-int XLineStartItem::operator==(const SfxPoolItem& rItem) const
+bool XLineStartItem::operator==(const SfxPoolItem& rItem) const
 {
     return ( NameOrIndex::operator==(rItem) && ((const XLineStartItem&) rItem).maPolyPolygon == maPolyPolygon );
 }
@@ -1671,7 +1671,7 @@ SfxPoolItem* XLineEndItem::Clone(SfxItemPool* /*pPool*/) const
     return new XLineEndItem(*this);
 }
 
-int XLineEndItem::operator==(const SfxPoolItem& rItem) const
+bool XLineEndItem::operator==(const SfxPoolItem& rItem) const
 {
     return ( NameOrIndex::operator==(rItem) && ((const XLineEndItem&) rItem).maPolyPolygon == maPolyPolygon );
 }
@@ -2609,7 +2609,7 @@ SfxPoolItem* XFillGradientItem::Clone(SfxItemPool* /*pPool*/) const
     return new XFillGradientItem(*this);
 }
 
-int XFillGradientItem::operator==(const SfxPoolItem& rItem) const
+bool XFillGradientItem::operator==(const SfxPoolItem& rItem) const
 {
     return ( NameOrIndex::operator==(rItem) &&
              aGradient == ((const XFillGradientItem&) rItem).aGradient );
@@ -2961,7 +2961,7 @@ XFillFloatTransparenceItem::XFillFloatTransparenceItem(SfxItemPool* /*pPool*/, c
     SetWhich( XATTR_FILLFLOATTRANSPARENCE );
 }
 
-int XFillFloatTransparenceItem::operator==( const SfxPoolItem& rItem ) const
+bool XFillFloatTransparenceItem::operator==( const SfxPoolItem& rItem ) const
 {
     return ( NameOrIndex::operator==(rItem) ) &&
             ( GetGradientValue() == ((const XFillGradientItem&)rItem).GetGradientValue() ) &&
@@ -3110,7 +3110,7 @@ SfxPoolItem* XFillHatchItem::Clone(SfxItemPool* /*pPool*/) const
     return new XFillHatchItem(*this);
 }
 
-int XFillHatchItem::operator==(const SfxPoolItem& rItem) const
+bool XFillHatchItem::operator==(const SfxPoolItem& rItem) const
 {
     return ( NameOrIndex::operator==(rItem) &&
              aHatch == ((const XFillHatchItem&) rItem).aHatch );

@@ -57,7 +57,7 @@ SfxPoolItem *SbxItem::Clone(SfxItemPool*) const
     return new SbxItem(*this);
 }
 
-int SbxItem::operator==(const SfxPoolItem& rCmp) const
+bool SbxItem::operator==(const SfxPoolItem& rCmp) const
 {
     SbxItem const* pSbxItem = dynamic_cast<SbxItem const*>(&rCmp);
     DBG_ASSERT(pSbxItem, "==: no SbxItem!" );

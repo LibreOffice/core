@@ -49,7 +49,7 @@ public:
     SvxNumberInfoItem( const SvxNumberInfoItem& );
     ~SvxNumberInfoItem();
 
-    virtual int              operator==( const SfxPoolItem& ) const;
+    virtual bool             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*     Create( SvStream& rStream, sal_uInt16 nVer ) const;
     virtual SvStream&        Store( SvStream& , sal_uInt16 nItemVersion ) const;

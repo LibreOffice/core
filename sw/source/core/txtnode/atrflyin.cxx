@@ -42,7 +42,7 @@ SwFmtFlyCnt::SwFmtFlyCnt( SwFrmFmt *pFrmFmt )
 {
 }
 
-int SwFmtFlyCnt::operator==( const SfxPoolItem& rAttr ) const
+bool SwFmtFlyCnt::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return( pTxtAttr && ((SwFmtFlyCnt&)rAttr).pTxtAttr &&

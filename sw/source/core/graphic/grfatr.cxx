@@ -55,7 +55,7 @@ sal_uInt16 SwMirrorGrf::GetValueCount() const
     return RES_MIRROR_GRAPH_END - RES_MIRROR_GRAPH_BEGIN;
 }
 
-int SwMirrorGrf::operator==( const SfxPoolItem& rItem) const
+bool SwMirrorGrf::operator==( const SfxPoolItem& rItem) const
 {
     return SfxEnumItem::operator==(rItem) &&
             ((SwMirrorGrf&)rItem).IsGrfToggle() == IsGrfToggle();
@@ -171,7 +171,7 @@ SfxPoolItem* SwRotationGrf::Clone( SfxItemPool * ) const
     return new SwRotationGrf( GetValue(), aUnrotatedSize );
 }
 
-int SwRotationGrf::operator==( const SfxPoolItem& rCmp ) const
+bool SwRotationGrf::operator==( const SfxPoolItem& rCmp ) const
 {
     return SfxUInt16Item::operator==( rCmp ) &&
         GetUnrotatedSize() == ((SwRotationGrf&)rCmp).GetUnrotatedSize();
@@ -235,7 +235,7 @@ SfxPoolItem* SwGammaGrf::Clone( SfxItemPool * ) const
 
 // SwGammaGrf
 
-int SwGammaGrf::operator==( const SfxPoolItem& rCmp ) const
+bool SwGammaGrf::operator==( const SfxPoolItem& rCmp ) const
 {
     return SfxPoolItem::operator==( rCmp ) &&
         nValue == ((SwGammaGrf&)rCmp).GetValue();

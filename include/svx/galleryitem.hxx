@@ -60,7 +60,7 @@ public:
     const com::sun::star::uno::Reference< com::sun::star::graphic::XGraphic > GetGraphic() const { return m_xGraphic; }
 
     // pure virtual methods from SfxPoolItem
-    virtual int          operator==( const SfxPoolItem& ) const;
+    virtual bool         operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
     // bridge to UNO
     virtual bool         QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;

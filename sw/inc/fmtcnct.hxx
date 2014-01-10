@@ -42,7 +42,7 @@ public:
     inline SwFmtChain &operator=( const SwFmtChain& );
 
     /// "Pure virtual methods" of SfxPoolItem.
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

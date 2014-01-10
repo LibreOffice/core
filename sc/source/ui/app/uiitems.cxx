@@ -79,7 +79,7 @@ OUString ScInputStatusItem::GetValueText() const
     return OUString("InputStatus");
 }
 
-int ScInputStatusItem::operator==( const SfxPoolItem& rItem ) const
+bool ScInputStatusItem::operator==( const SfxPoolItem& rItem ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -199,7 +199,7 @@ OUString ScSortItem::GetValueText() const
 
 //------------------------------------------------------------------------
 
-int ScSortItem::operator==( const SfxPoolItem& rItem ) const
+bool ScSortItem::operator==( const SfxPoolItem& rItem ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -306,7 +306,7 @@ OUString ScQueryItem::GetValueText() const
 
 //------------------------------------------------------------------------
 
-int ScQueryItem::operator==( const SfxPoolItem& rItem ) const
+bool ScQueryItem::operator==( const SfxPoolItem& rItem ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -370,7 +370,7 @@ OUString ScSubTotalItem::GetValueText() const
 
 //------------------------------------------------------------------------
 
-int ScSubTotalItem::operator==( const SfxPoolItem& rItem ) const
+bool ScSubTotalItem::operator==( const SfxPoolItem& rItem ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -431,7 +431,7 @@ OUString ScUserListItem::GetValueText() const
 
 //------------------------------------------------------------------------
 
-int ScUserListItem::operator==( const SfxPoolItem& rItem ) const
+bool ScUserListItem::operator==( const SfxPoolItem& rItem ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -497,7 +497,7 @@ OUString ScConsolidateItem::GetValueText() const
 
 //------------------------------------------------------------------------
 
-int ScConsolidateItem::operator==( const SfxPoolItem& rItem ) const
+bool ScConsolidateItem::operator==( const SfxPoolItem& rItem ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -558,7 +558,7 @@ OUString ScPivotItem::GetValueText() const
 
 //------------------------------------------------------------------------
 
-int ScPivotItem::operator==( const SfxPoolItem& rItem ) const
+bool ScPivotItem::operator==( const SfxPoolItem& rItem ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -611,7 +611,7 @@ OUString ScSolveItem::GetValueText() const
 
 //------------------------------------------------------------------------
 
-int ScSolveItem::operator==( const SfxPoolItem& rItem ) const
+bool ScSolveItem::operator==( const SfxPoolItem& rItem ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -661,7 +661,7 @@ OUString ScTabOpItem::GetValueText() const
 
 //------------------------------------------------------------------------
 
-int ScTabOpItem::operator==( const SfxPoolItem& rItem ) const
+bool ScTabOpItem::operator==( const SfxPoolItem& rItem ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 

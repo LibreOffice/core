@@ -37,7 +37,7 @@ public:
     virtual ~SvxGrfCrop();
 
     // "pure virtual methods" from SfxPoolItem
-    virtual int                 operator==( const SfxPoolItem& ) const;
+    virtual bool                operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*        Create(SvStream &, sal_uInt16 nVer) const;
     virtual SvStream&           Store(SvStream &, sal_uInt16 nIVer) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,

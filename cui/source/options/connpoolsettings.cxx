@@ -63,7 +63,7 @@ namespace offapp
     }
 
     //--------------------------------------------------------------------
-    int DriverPoolingSettingsItem::operator==( const SfxPoolItem& _rCompare ) const
+    bool DriverPoolingSettingsItem::operator==( const SfxPoolItem& _rCompare ) const
     {
         const DriverPoolingSettingsItem* pItem = PTR_CAST(DriverPoolingSettingsItem, &_rCompare);
         if (!pItem)

@@ -48,7 +48,7 @@ SwFmtWrapInfluenceOnObjPos& SwFmtWrapInfluenceOnObjPos::operator=( const SwFmtWr
     return *this;
 }
 
-int SwFmtWrapInfluenceOnObjPos::operator==( const SfxPoolItem& _rAttr ) const
+bool SwFmtWrapInfluenceOnObjPos::operator==( const SfxPoolItem& _rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( _rAttr ), "no matching attributes" );
     return ( mnWrapInfluenceOnPosition ==

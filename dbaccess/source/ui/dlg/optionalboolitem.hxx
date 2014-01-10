@@ -37,7 +37,7 @@ namespace dbaui
         OptionalBoolItem( sal_Int16 nWhich );
         OptionalBoolItem( const OptionalBoolItem& _rSource );
 
-        virtual int              operator==( const SfxPoolItem& _rItem ) const;
+        virtual bool             operator==( const SfxPoolItem& _rItem ) const;
         virtual SfxPoolItem*     Clone( SfxItemPool* _pPool = NULL ) const;
 
         bool    HasValue() const                { return !!m_aValue; }

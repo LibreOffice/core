@@ -47,7 +47,7 @@ public:
 
     virtual ~CntUnencodedStringItem() { DBG_DTOR(CntUnencodedStringItem, 0); }
 
-    virtual int operator ==(const SfxPoolItem & rItem) const;
+    virtual bool operator ==(const SfxPoolItem & rItem) const;
 
     virtual int Compare(const SfxPoolItem & rWith) const;
 

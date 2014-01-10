@@ -39,7 +39,7 @@ public:
     inline SwFmtSurround &operator=( const SwFmtSurround &rCpy );
 
     // "Pure virtual Methods" of SfxPoolItem.
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual sal_uInt16          GetValueCount() const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,

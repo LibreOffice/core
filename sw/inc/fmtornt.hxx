@@ -43,7 +43,7 @@ public:
     inline SwFmtVertOrient &operator=( const SwFmtVertOrient &rCpy );
 
     /// "Pure virtual methods" of SfxPoolItem.
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -79,7 +79,7 @@ public:
     inline SwFmtHoriOrient &operator=( const SwFmtHoriOrient &rCpy );
 
     /// "Pure virtual methods" of SfxPoolItem.
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

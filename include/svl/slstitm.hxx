@@ -53,7 +53,7 @@ public:
     void                    SetStringList( const com::sun::star::uno::Sequence< OUString >& rList );
     void                    GetStringList( com::sun::star::uno::Sequence< OUString >& rList ) const;
 
-    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual bool            operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,

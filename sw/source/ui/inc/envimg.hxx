@@ -63,7 +63,7 @@ public:
 
     SwEnvItem& operator =(const SwEnvItem& rItem);
 
-    virtual int operator ==(const SfxPoolItem& rItem) const;
+    virtual bool operator ==(const SfxPoolItem& rItem) const;
 
     virtual SfxPoolItem*     Clone(SfxItemPool* = 0) const;
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
