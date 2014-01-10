@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 on Tue Jan  7 09:24:43 2014 -->
+<!-- Generated with glade 3.16.0 on Fri Jan 10 20:18:05 2014 -->
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="DataRangeDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Customize</property>
+    <property name="title" translatable="yes">Data Ranges</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
