@@ -236,7 +236,7 @@ namespace basebmp
                     detail::Vertex&       rV1( **currVertex );
                     detail::Vertex const& rV2( **++currVertex );
 
-                    nWindingNumber += -1 + 2*rV1.mbDownwards;
+                    nWindingNumber += -1 + 2*int(rV1.mbDownwards);
 
                     // calc fill status for both rules. might save a
                     // few percent runtime to specialize here...

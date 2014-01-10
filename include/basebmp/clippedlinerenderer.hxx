@@ -85,11 +85,11 @@ inline bool prepareClip( sal_Int32  a1,
         }
 
         if( clipCount1 == 2 )
-            clipCode1 &= (ca + da < cb + !bRoundTowardsPt2) ? ~(aMinFlag|aMaxFlag) : ~(bMinFlag|bMaxFlag);
+            clipCode1 &= (ca + da < cb + int(!bRoundTowardsPt2)) ? ~(aMinFlag|aMaxFlag) : ~(bMinFlag|bMaxFlag);
 
         if( clipCode1 & (aMinFlag|aMaxFlag) )
         {
-            cb = (ca + da - !bRoundTowardsPt2) / (2*da);
+            cb = (ca + da - int(!bRoundTowardsPt2)) / (2*da);
 
             if( sb >= 0 )
             {
@@ -108,7 +108,7 @@ inline bool prepareClip( sal_Int32  a1,
         }
         else
         {
-            ca = (cb - da + 2*db - bRoundTowardsPt2) / (2*db);
+            ca = (cb - da + 2*db - int(bRoundTowardsPt2)) / (2*db);
             if( sa >= 0 )
             {
                 o_as = a1 + ca;
@@ -136,7 +136,7 @@ inline bool prepareClip( sal_Int32  a1,
         {
             ca = 2*db*((clipCode2 & aMinFlag) ? a1 - aMin : aMax - a1);
             cb = 2*da*((clipCode2 & bMinFlag) ? b1 - bMin : bMax - b1);
-            clipCode2 &= (cb + da < ca + bRoundTowardsPt2) ? ~(aMinFlag|aMaxFlag) : ~(bMinFlag|bMaxFlag);
+            clipCode2 &= (cb + da < ca + int(bRoundTowardsPt2)) ? ~(aMinFlag|aMaxFlag) : ~(bMinFlag|bMaxFlag);
         }
 
         if( clipCode2 & (aMinFlag|aMaxFlag) )
@@ -249,7 +249,7 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
     if( adx >= ady )
     {
         // semi-horizontal line
-        sal_Int32 rem = 2*ady - adx - !bRoundTowardsPt2;
+        sal_Int32 rem = 2*ady - adx - int(!bRoundTowardsPt2);
 
         if( !prepareClip(x1, x2, y1, adx, ady, xs, ys, sx, sy,
                          rem, n, clipCode1, clipCount1, clipCode2, clipCount2,
@@ -327,7 +327,7 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
     else
     {
         // semi-vertical line
-        sal_Int32 rem = 2*adx - ady - !bRoundTowardsPt2;
+        sal_Int32 rem = 2*adx - ady - int(!bRoundTowardsPt2);
 
         if( !prepareClip(y1, y2, x1, ady, adx, ys, xs, sy, sx,
                          rem, n, clipCode1, clipCount1, clipCode2, clipCount2,
