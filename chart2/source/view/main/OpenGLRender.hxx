@@ -159,9 +159,9 @@ public:
     void SetLine2DWidth(int width);
     BitmapEx GetAsBitmap();
 #if defined( _WIN32 )
-    int InitMultisample(PIXELFORMATDESCRIPTOR pfd);
+    bool InitMultisample(PIXELFORMATDESCRIPTOR pfd);
 #endif
-    int GetMSAASupport();
+    bool GetMSAASupport();
     int GetMSAAFormat();
     void SetColor(sal_uInt32 color);
     int Bubble2DShapePoint(float x, float y, float directionX, float directionY);
@@ -192,8 +192,8 @@ private:
     int RenderTexture2FBO(GLuint TexID);
 #if defined( _WIN32 )
     int InitTempWindow(HWND *hwnd, int width, int height, PIXELFORMATDESCRIPTOR inPfd);
+    bool WGLisExtensionSupported(const char *extension);
 #endif
-    int WGLisExtensionSupported(const char *extension);
     int CreateMultiSampleFrameBufObj();
     int Create2DCircle(int detail);
     void SetBackGroundColor(sal_uInt32 color1, sal_uInt32 color2);
@@ -277,10 +277,10 @@ private:
     std::list <Line2DPointList> m_Line2DShapePointList;
 
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxRenderTarget;
-	int m_iArbMultisampleSupported;
-	int m_iArbMultisampleFormat;
-	GLint m_iSampleBufs;
-	GLint m_iSamples;
+    bool m_iArbMultisampleSupported;
+    int m_iArbMultisampleFormat;
+    GLint m_iSampleBufs;
+    GLint m_iSamples;
 
     glm::vec4 m_2DColor;
 	GLuint m_frameBufferMS;

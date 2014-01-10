@@ -906,6 +906,7 @@ OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
     m_iFboIdx(0),
     m_fLineAlpha(1.0),
     mxRenderTarget(xTarget),
+    m_iArbMultisampleSupported(false),
     m_TextVertexID(0),
     m_TextTexCoordID(1),
     m_ClearColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f))
@@ -925,7 +926,6 @@ OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
     m_TextureObj[1] = 0;
     m_RboID[0] = 0;
     m_RboID[1] = 0;
-    m_iArbMultisampleSupported = 0;
     m_iArbMultisampleFormat = 0;
 
     //TODO: moggi: use STL
@@ -1031,7 +1031,7 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
     }
 }
 
-int OpenGLRender::InitMultisample(PIXELFORMATDESCRIPTOR pfd)
+bool OpenGLRender::InitMultisample(PIXELFORMATDESCRIPTOR pfd)
 {
     HWND hWnd = NULL;
     //create a temp windwo to check whether support multi-sample, if support, get the format
@@ -1044,7 +1044,7 @@ int OpenGLRender::InitMultisample(PIXELFORMATDESCRIPTOR pfd)
     // See If The String Exists In WGL!
     if (!WGLisExtensionSupported("WGL_ARB_multisample"))
     {
-        m_iArbMultisampleSupported = 0;
+        m_iArbMultisampleSupported = false;
         SAL_WARN("chart2.opengl", "Device doesn't support multi sample\n");
         return false;
     }
@@ -1052,7 +1052,7 @@ int OpenGLRender::InitMultisample(PIXELFORMATDESCRIPTOR pfd)
     PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC)wglGetProcAddress("wglChoosePixelFormatARB");
     if (!wglChoosePixelFormatARB)
     {
-        m_iArbMultisampleSupported = 0;
+        m_iArbMultisampleSupported = false;
         return false;
     }
     // Get Our Current Device Context
@@ -1086,7 +1086,7 @@ int OpenGLRender::InitMultisample(PIXELFORMATDESCRIPTOR pfd)
     // If We Returned True, And Our Format Count Is Greater Than 1
     if (valid && numFormats >= 1)
     {
-        m_iArbMultisampleSupported = 1;
+        m_iArbMultisampleSupported = true;
         m_iArbMultisampleFormat = pixelFormat;
         wglMakeCurrent(NULL, NULL);
         wglDeleteContext(glWin.hRC);
@@ -1099,7 +1099,7 @@ int OpenGLRender::InitMultisample(PIXELFORMATDESCRIPTOR pfd)
     valid = wglChoosePixelFormatARB(hDC,iAttributes,fAttributes,1,&pixelFormat,&numFormats);
     if (valid && numFormats >= 1)
     {
-        m_iArbMultisampleSupported = 1;
+        m_iArbMultisampleSupported = true;
         m_iArbMultisampleFormat = pixelFormat;
         wglMakeCurrent(NULL, NULL);
         wglDeleteContext(glWin.hRC);
@@ -1116,7 +1116,7 @@ int OpenGLRender::InitMultisample(PIXELFORMATDESCRIPTOR pfd)
 }
 #endif
 
-int OpenGLRender::GetMSAASupport()
+bool OpenGLRender::GetMSAASupport()
 {
     return m_iArbMultisampleSupported;
 }
@@ -1169,7 +1169,7 @@ int OpenGLRender::InitTempWindow(HWND *hwnd, int width, int height, PIXELFORMATD
     return 0;
 }
 
-int OpenGLRender::WGLisExtensionSupported(const char *extension)
+bool OpenGLRender::WGLisExtensionSupported(const char *extension)
 {
     const size_t extlen = strlen(extension);
     const char *supported = NULL;
