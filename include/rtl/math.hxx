@@ -319,7 +319,7 @@ inline double approxCeil(double a)
  */
 inline bool isFinite(double d)
 {
-    return SAL_MATH_FINITE(d) != 0;
+    return SAL_MATH_FINITE(d);
 }
 
 /** If a value represents +INF or -INF.
@@ -331,7 +331,7 @@ inline bool isFinite(double d)
 inline bool isInf(double d)
 {
     // exponent==0x7ff fraction==0
-    return (SAL_MATH_FINITE(d) == 0) &&
+    return !SAL_MATH_FINITE(d) &&
         (reinterpret_cast< sal_math_Double * >(&d)->inf_parts.fraction_hi == 0)
         && (reinterpret_cast< sal_math_Double * >(&d)->inf_parts.fraction_lo
             == 0);
@@ -342,7 +342,7 @@ inline bool isInf(double d)
 inline bool isNan(double d)
 {
     // exponent==0x7ff fraction!=0
-    return (SAL_MATH_FINITE(d) == 0) && (
+    return !SAL_MATH_FINITE(d) && (
         (reinterpret_cast< sal_math_Double * >(&d)->inf_parts.fraction_hi != 0)
         || (reinterpret_cast< sal_math_Double * >(&d)->inf_parts.fraction_lo
             != 0) );
