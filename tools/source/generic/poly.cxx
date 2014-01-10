@@ -1164,7 +1164,7 @@ public:
 
     Point               EdgeSection( const Point& rPoint, int nEdge ) const;
     int                 VisibleSide( const Point& rPoint ) const;
-    int                 IsPolygon() const
+    bool                IsPolygon() const
                             { return maFirstPoint == maLastPoint; }
 
     virtual void        Input( const Point& rPoint );
@@ -1658,9 +1658,9 @@ void Polygon::Read( SvStream& rIStream )
 
 void Polygon::ImplWrite( SvStream& rOStream ) const
 {
-    sal_uInt8   bHasPolyFlags = mpImplPolygon->mpFlagAry != NULL;
+    bool bHasPolyFlags = mpImplPolygon->mpFlagAry != NULL;
     rOStream << *this;
-    rOStream.WriteUChar( bHasPolyFlags );
+    rOStream.WriteUChar(sal_uInt8(bHasPolyFlags));
 
     if ( bHasPolyFlags )
         rOStream.Write( mpImplPolygon->mpFlagAry, mpImplPolygon->mnPoints );
