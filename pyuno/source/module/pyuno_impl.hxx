@@ -66,14 +66,14 @@ inline char * PyStr_AsString(PyObject *object)
     return PyUnicode_AsUTF8(object);
 }
 
-inline int PyStr_Check(PyObject *object)
+inline bool PyStr_Check(PyObject *object)
 {
     return PyUnicode_Check(object);
 }
 
 // compatibility wrappers for Python non-Unicode string/buffer type
 // (PyBytes in 3, PyString in 2)
-inline int PyStrBytes_Check(PyObject *object)
+inline bool PyStrBytes_Check(PyObject *object)
 {
     return PyBytes_Check(object);
 }
@@ -103,11 +103,11 @@ inline PyObject* PyStr_FromString(const char *string)
     return PyString_FromString(string);
 }
 
-inline int PyStr_Check(PyObject *object)
+inline bool PyStr_Check(PyObject *object)
 {
     return PyString_Check(object);
 }
-inline int PyStrBytes_Check(PyObject *object)
+inline bool PyStrBytes_Check(PyObject *object)
 {
     return PyString_Check(object);
 }
