@@ -657,7 +657,28 @@ Reference< XShape > Shape::createAndInsert(
                     }
                     aShapeProps.erase(PROP_LineColor);
                 }
-
+                if(mnRotation)
+                {
+                    uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
+                    const OUString aGrabBagPropName = "FrameInteropGrabBag";
+                    uno::Sequence<beans::PropertyValue> aGrabBag;
+                    xPropertySet->getPropertyValue(aGrabBagPropName) >>= aGrabBag;
+                    beans::PropertyValue aPair;
+                    aPair.Name = "mso-rotation-angle";
+                    aPair.Value = uno::makeAny(mnRotation);
+                    if (aGrabBag.hasElements())
+                    {
+                        sal_Int32 nLength = aGrabBag.getLength();
+                        aGrabBag.realloc(nLength + 1);
+                        aGrabBag[nLength] = aPair;
+                    }
+                    else
+                    {
+                        aGrabBag.realloc(1);
+                        aGrabBag[0] = aPair;
+                    }
+                    xPropertySet->setPropertyValue(aGrabBagPropName, uno::makeAny(aGrabBag));
+                }
                 // TextFrames have ShadowFormat, not individual shadow properties.
                 boost::optional<sal_Int32> oShadowDistance;
                 if (aShapeProps.hasProperty(PROP_ShadowXDistance))
