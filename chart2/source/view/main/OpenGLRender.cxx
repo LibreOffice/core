@@ -9,7 +9,6 @@
 
 #include <GL/glew.h>
 #include <vector>
-#include <iostream>
 #include "OpenGLRender.hxx"
 #include <vcl/bitmapex.hxx>
 #include <vcl/bmpacc.hxx>
@@ -35,14 +34,13 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <editeng/unoprnms.hxx>
-#include <boost/scoped_array.hpp>
 #include <vcl/virdev.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/bmpacc.hxx>
 
-using namespace com::sun::star;
-
 #include <boost/scoped_array.hpp>
+
+using namespace com::sun::star;
 
 using namespace std;
 
@@ -57,6 +55,8 @@ using namespace std;
 #define WGL_SAMPLE_BUFFERS_ARB   0x2041
 #define WGL_SAMPLES_ARB          0x2042
 #endif
+
+//begin shaders
 
 const char *CommonFragmemtShader = OPENGL_SHADER (
 
@@ -162,7 +162,7 @@ void main()
 
 );
 
-
+// end shaders
 
 static GLfloat squareVertices[] = {
     -1.0f, -1.0f, -1.0,
@@ -184,6 +184,7 @@ static GLfloat square2DVertices[] = {
     1.0f,  1.0f,
     -1.0f,  1.0f
 };
+
 #if 0
 static const GLfloat g_vertex_buffer_data[] = {
     -1.0f,-1.0f,-1.0f,
@@ -264,6 +265,7 @@ static const GLfloat g_color_buffer_data[] = {
     0.982f,  0.099f,  0.879f
 };
 #endif
+
 int static checkGLError(const char *file, int line)
 {
     GLenum glErr;
