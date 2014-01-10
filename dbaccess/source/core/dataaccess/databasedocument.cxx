@@ -1624,30 +1624,32 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
     if ( aSaveOpt.IsSaveRelFSys() )
         xInfoSet->setPropertyValue("BaseURI", uno::makeAny(_rMediaDescriptor.getOrDefault("URL",OUString())));
 
-    OUString aVersion;
-    SvtSaveOptions::ODFDefaultVersion nDefVersion = aSaveOpt.GetODFDefaultVersion();
-
-    // older versions can not have this property set, it exists only starting from ODF1.2
-    if ( nDefVersion >= SvtSaveOptions::ODFVER_012 )
-        aVersion = ODFVER_012_TEXT;
-
-    if ( !aVersion.isEmpty() )
-    {
-        try
-        {
-            xInfoSet->setPropertyValue( "Version" , uno::makeAny( aVersion ) );
-        }
-        catch( const uno::Exception& )
-        {
-        }
-    }
-
     sal_Int32 nArgsLen = aDelegatorArguments.getLength();
     aDelegatorArguments.realloc(nArgsLen+1);
     aDelegatorArguments[nArgsLen++] <<= xInfoSet;
 
     Reference< XPropertySet > xProp( _rxTargetStorage, UNO_QUERY_THROW );
     xProp->setPropertyValue( INFO_MEDIATYPE, makeAny( (OUString)MIMETYPE_OASIS_OPENDOCUMENT_DATABASE ) );
+
+    OUString aVersion;
+    SvtSaveOptions::ODFDefaultVersion const nDefVersion =
+        aSaveOpt.GetODFDefaultVersion();
+    // older versions can not have this property set,
+    // it exists only starting from ODF1.2
+    if (nDefVersion >= SvtSaveOptions::ODFVER_012)
+        aVersion = ODFVER_012_TEXT;
+
+    if (!aVersion.isEmpty())
+    {
+        try
+        {
+            xProp->setPropertyValue("Version" , uno::makeAny(aVersion));
+        }
+        catch (const uno::Exception& e)
+        {
+            SAL_WARN("dbaccess", "exception setting Version: " << e.Message);
+        }
+    }
 
     Reference< XComponent > xComponent( *const_cast< ODatabaseDocument* >( this ), UNO_QUERY_THROW );
 
