@@ -2175,14 +2175,14 @@ void ScColumn::UpdateNoteCaptions()
     sc::cellnote_block::const_iterator itData, itDataEnd;
 
     SCROW curRow = 0;
-    for (;itBlk==itBlkEnd;++itBlk)
+    for (;itBlk!=itBlkEnd;++itBlk)
     {
         if (itBlk->data)
         {
             // non empty block
             itData = sc::cellnote_block::begin(*itBlk->data);
             itDataEnd = sc::cellnote_block::end(*itBlk->data);
-            for(;itData==itDataEnd; ++itData)
+            for(;itData!=itDataEnd; ++itData)
             {
                 ScPostIt* pNote = *itData;
                 pNote->UpdateCaptionPos(ScAddress(nCol, curRow, nTab));
