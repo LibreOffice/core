@@ -563,6 +563,7 @@ int OpenGLRender::SetLine2DShapePoint(float x, float y, int listLength)
 
 int OpenGLRender::RenderLine2FBO(int)
 {
+    CHECK_GL_ERROR();
     glLineWidth(m_fLineWidth);
     size_t listNum = m_Line2DShapePointList.size();
     for (size_t i = 0; i < listNum; i++)
@@ -595,6 +596,7 @@ int OpenGLRender::RenderLine2FBO(int)
     }
     m_iPointNum = 0;
     GLenum status;
+    CHECK_GL_ERROR();
     CHECK_GL_FRAME_BUFFER_STATUS();
     return 0;
 }
@@ -690,6 +692,7 @@ void OpenGLRender::renderToBitmap()
 
 int OpenGLRender::RenderTexture2FBO(GLuint TexID)
 {
+    CHECK_GL_ERROR();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glDepthMask(GL_FALSE);
     glUseProgram(m_RenderProID);
@@ -721,6 +724,7 @@ int OpenGLRender::RenderTexture2FBO(GLuint TexID)
     glBindTexture(GL_TEXTURE_2D, 0);
     glUseProgram(0);
     glDepthMask(GL_TRUE);
+    CHECK_GL_ERROR();
     return 0;
 }
 
@@ -1285,6 +1289,7 @@ int OpenGLRender::Bubble2DShapePoint(float x, float y, float directionX, float d
 
 int OpenGLRender::RenderBubble2FBO(int)
 {
+    CHECK_GL_ERROR();
     size_t listNum = m_Bubble2DShapePointList.size();
     for (size_t i = 0; i < listNum; i++)
     {
@@ -1329,8 +1334,10 @@ int OpenGLRender::RenderBubble2FBO(int)
     GLenum fbResult = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if( fbResult != GL_FRAMEBUFFER_COMPLETE )
     {
+        SAL_WARN("chart2.opengl", "error");
         return -1;
     }
+    CHECK_GL_ERROR();
     return 0;
 }
 
@@ -1532,6 +1539,7 @@ int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color,
 
 int OpenGLRender::RenderTextShape()
 {
+    CHECK_GL_ERROR();
     m_fZStep += 0.01f;
     size_t listNum = m_TextInfoList.size();
     for (size_t i = 0; i < listNum; i++)
@@ -1580,6 +1588,7 @@ int OpenGLRender::RenderTextShape()
         glDeleteTextures(1, &textInfo.texture);
         m_TextInfoList.pop_front();
     }
+    CHECK_GL_ERROR();
     return 0;
 }
 
@@ -1646,6 +1655,8 @@ int OpenGLRender::SetArea2DShapePoint(float x, float y, int listLength)
 
 int OpenGLRender::RenderArea2DShape()
 {
+    CHECK_GL_ERROR();
+
     glDisable(GL_MULTISAMPLE);
     size_t listNum = m_Area2DShapePointList.size();
     PosVecf3 trans = {0.0f, 0.0f, 0.0f};
@@ -1685,6 +1696,9 @@ int OpenGLRender::RenderArea2DShape()
     }
     glEnable(GL_MULTISAMPLE);
     m_fZStep += 0.01f;
+
+    CHECK_GL_ERROR();
+
     return 0;
 }
 
