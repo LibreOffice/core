@@ -4037,7 +4037,6 @@ void GtkSalFrame::IMHandler::sendEmptyCommit()
     aEmptyEv.maText             = "";
     aEmptyEv.mnCursorPos        = 0;
     aEmptyEv.mnCursorFlags      = 0;
-    aEmptyEv.mnDeltaStart       = 0;
     aEmptyEv.mbOnlyCursor       = False;
     m_pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&aEmptyEv );
     if( ! aDel.isDeleted() )
@@ -4230,7 +4229,6 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* CONTEXT_ARG, gchar* p
         pThis->m_aInputEvent.maText             = OUString( pText, strlen(pText), RTL_TEXTENCODING_UTF8 );
         pThis->m_aInputEvent.mnCursorPos        = pThis->m_aInputEvent.maText.getLength();
         pThis->m_aInputEvent.mnCursorFlags      = 0;
-        pThis->m_aInputEvent.mnDeltaStart       = 0;
         pThis->m_aInputEvent.mbOnlyCursor       = False;
 
         pThis->m_aInputFlags.clear();
@@ -4317,7 +4315,6 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
     pThis->m_aInputEvent.maText             = OUString( pText, strlen(pText), RTL_TEXTENCODING_UTF8 );
     pThis->m_aInputEvent.mnCursorPos        = nCursorPos;
     pThis->m_aInputEvent.mnCursorFlags      = 0;
-    pThis->m_aInputEvent.mnDeltaStart       = 0;
     pThis->m_aInputEvent.mbOnlyCursor       = False;
 
     pThis->m_aInputFlags = std::vector<sal_uInt16>( std::max( 1, (int)pThis->m_aInputEvent.maText.getLength() ), 0 );

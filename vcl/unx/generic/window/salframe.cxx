@@ -2974,7 +2974,6 @@ void X11SalFrame::beginUnicodeSequence()
         aEv.maText          = rSeq;
         aEv.mpTextAttr      = &nTextAttr;
         aEv.mnCursorPos     = 0;
-        aEv.mnDeltaStart    = 0;
         aEv.mnCursorFlags   = 0;
         aEv.mbOnlyCursor    = sal_False;
 
@@ -3004,7 +3003,6 @@ bool X11SalFrame::appendUnicodeSequence( sal_Unicode c )
             aEv.maText          = rSeq;
             aEv.mpTextAttr      = &attribs[0];
             aEv.mnCursorPos     = 0;
-            aEv.mnDeltaStart    = 0;
             aEv.mnCursorFlags   = 0;
             aEv.mbOnlyCursor    = sal_False;
 
@@ -3037,7 +3035,6 @@ bool X11SalFrame::endUnicodeSequence()
             aEv.maText          = OUString( sal_Unicode(nValue) );
             aEv.mpTextAttr      = &nTextAttr;
             aEv.mnCursorPos     = 0;
-            aEv.mnDeltaStart    = 0;
             aEv.mnCursorFlags   = 0;
             aEv.mbOnlyCursor    = sal_False;
             CallCallback(SALEVENT_EXTTEXTINPUT, (void*)&aEv);

@@ -50,7 +50,6 @@ static void sendEmptyCommit( SalFrame* pFrame )
     aEmptyEv.maText             = "";
     aEmptyEv.mnCursorPos        = 0;
     aEmptyEv.mnCursorFlags      = 0;
-    aEmptyEv.mnDeltaStart       = 0;
     aEmptyEv.mbOnlyCursor       = False;
     pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&aEmptyEv );
     if( ! aDel.isDeleted() )
@@ -170,7 +169,6 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
     maClientData.aInputEv.mnTime            = 0;
     maClientData.aInputEv.mpTextAttr        = NULL;
     maClientData.aInputEv.mnCursorPos       = 0;
-    maClientData.aInputEv.mnDeltaStart      = 0;
     maClientData.aInputEv.mnCursorFlags     = 0;
     maClientData.aInputEv.mbOnlyCursor      = sal_False;
 
@@ -570,7 +568,6 @@ SalI18N_InputContext::CommitKeyEvent(sal_Unicode* pText, sal_Size nLength)
         aTextEvent.mnCursorPos   = nLength;
         aTextEvent.maText        = OUString(pText, nLength);
         aTextEvent.mnCursorFlags = 0;
-        aTextEvent.mnDeltaStart  = 0;
         aTextEvent.mbOnlyCursor  = False;
 
         maClientData.pFrame->CallCallback(SALEVENT_EXTTEXTINPUT,    (void*)&aTextEvent);

@@ -1084,7 +1084,6 @@ private:
                 aEvent.maText           = aInsertString;
                 aEvent.mpTextAttr       = NULL;
                 aEvent.mnCursorPos      = aInsertString.getLength();
-                aEvent.mnDeltaStart     = 0;
                 aEvent.mnCursorFlags    = 0;
                 aEvent.mbOnlyCursor     = FALSE;
                 mpFrame->CallCallback( SALEVENT_EXTTEXTINPUT, &aEvent );
@@ -1099,7 +1098,6 @@ private:
             aEvent.maText           = OUString();
             aEvent.mpTextAttr       = NULL;
             aEvent.mnCursorPos      = 0;
-            aEvent.mnDeltaStart     = 0;
             aEvent.mnCursorFlags    = 0;
             aEvent.mbOnlyCursor     = FALSE;
             mpFrame->CallCallback( SALEVENT_EXTTEXTINPUT, &aEvent );
@@ -1612,7 +1610,6 @@ private:
     int len = [aString length];
     SalExtTextInputEvent aInputEvent;
     aInputEvent.mnTime = mpFrame->mnLastEventTime;
-    aInputEvent.mnDeltaStart = 0;
     aInputEvent.mbOnlyCursor = FALSE;
     if( len > 0 ) {
         NSString *pString = [aString string];

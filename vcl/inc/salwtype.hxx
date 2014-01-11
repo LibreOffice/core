@@ -177,7 +177,6 @@ struct SalExtTextInputEvent
     OUString            maText;         // Text
     const sal_uInt16*   mpTextAttr;     // Text-Attribute
     sal_uLong           mnCursorPos;    // Cursor-Position
-    sal_uLong           mnDeltaStart;   // Start-Position of last change
     sal_uInt8           mnCursorFlags;  // EXTTEXTINPUT_CURSOR_xxx
     sal_Bool            mbOnlyCursor;   // sal_True: Only Cursor-Position has been changed
 };

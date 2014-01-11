@@ -386,7 +386,6 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
     pPreeditData->aInputEv.maText = OUString(pPreeditData->aText.pUnicodeBuffer,
                                 pPreeditData->aText.nLength);
     pPreeditData->aInputEv.mnCursorFlags    = 0; // default: make cursor visible
-    pPreeditData->aInputEv.mnDeltaStart = 0; // call_data->chg_first;
     pPreeditData->aInputEv.mbOnlyCursor = False;
 
     if ( pPreeditData->eState == ePreeditStatusActive && pPreeditData->pFrame )

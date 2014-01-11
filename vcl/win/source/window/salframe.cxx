@@ -5194,7 +5194,6 @@ static sal_Bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
     aEvt.mnTime             = GetMessageTime();
     aEvt.mpTextAttr         = NULL;
     aEvt.mnCursorPos        = 0;
-    aEvt.mnDeltaStart       = 0;
     aEvt.mbOnlyCursor       = FALSE;
     aEvt.mnCursorFlags      = 0;
 
@@ -5339,7 +5338,6 @@ static sal_Bool ImplHandleIMEComposition( HWND hWnd, LPARAM lParam )
             aEvt.mnTime             = GetMessageTime();
             aEvt.mpTextAttr         = NULL;
             aEvt.mnCursorPos        = 0;
-            aEvt.mnDeltaStart       = 0;
             aEvt.mbOnlyCursor       = FALSE;
             aEvt.mnCursorFlags      = 0;
             pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&aEvt );
