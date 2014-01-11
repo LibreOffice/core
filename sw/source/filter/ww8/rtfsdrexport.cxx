@@ -115,13 +115,14 @@ inline sal_uInt16 impl_GetUInt16( const sal_uInt8* &pVal )
     return nRet;
 }
 
-inline sal_Int32 impl_GetPointComponent( const sal_uInt8* &pVal, sal_uInt16 nPointSize )
+inline sal_Int32 impl_GetPointComponent( const sal_uInt8* &pVal, sal_Size& rVerticesPos, sal_uInt16 nPointSize )
 {
     sal_Int32 nRet = 0;
     if ( ( nPointSize == 0xfff0 ) || ( nPointSize == 4 ) )
     {
         sal_uInt16 nUnsigned = *pVal++;
         nUnsigned += ( *pVal++ ) << 8;
+        rVerticesPos += 2;
 
         nRet = sal_Int16( nUnsigned );
     }
@@ -131,6 +132,7 @@ inline sal_Int32 impl_GetPointComponent( const sal_uInt8* &pVal, sal_uInt16 nPoi
         nUnsigned += ( *pVal++ ) << 8;
         nUnsigned += ( *pVal++ ) << 16;
         nUnsigned += ( *pVal++ ) << 24;
+        rVerticesPos += 4;
 
         nRet = nUnsigned;
     }
@@ -261,6 +263,7 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
                          rProps.GetOpt( ESCHER_Prop_pSegmentInfo, aSegments ) )
                     {
                         const sal_uInt8 *pVerticesIt = aVertices.pBuf + 6;
+                        sal_Size nVerticesPos = 0;
                         const sal_uInt8 *pSegmentIt = aSegments.pBuf;
 
                         OStringBuffer aSegmentInfo( 512 );
@@ -283,8 +286,8 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
                                 case 0x0001: // lineto
                                 case 0x4000: // moveto
                                     {
-                                        sal_Int32 nX = impl_GetPointComponent( pVerticesIt, nPointSize );
-                                        sal_Int32 nY = impl_GetPointComponent( pVerticesIt, nPointSize );
+                                        sal_Int32 nX = impl_GetPointComponent( pVerticesIt, nVerticesPos, nPointSize );
+                                        sal_Int32 nY = impl_GetPointComponent( pVerticesIt, nVerticesPos, nPointSize );
                                         aVerticies.append( ";(" ).append( nX ).append( "," ).append( nY ).append( ")" );
                                         nVertices ++;
                                     }
@@ -293,8 +296,8 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
                                     {
                                         for (int i = 0; i < 3; i++)
                                         {
-                                            sal_Int32 nX = impl_GetPointComponent( pVerticesIt, nPointSize );
-                                            sal_Int32 nY = impl_GetPointComponent( pVerticesIt, nPointSize );
+                                            sal_Int32 nX = impl_GetPointComponent( pVerticesIt, nVerticesPos, nPointSize );
+                                            sal_Int32 nY = impl_GetPointComponent( pVerticesIt, nVerticesPos, nPointSize );
                                             aVerticies.append( ";(" ).append( nX ).append( "," ).append( nY ).append( ")" );
                                             nVertices ++;
                                         }
@@ -311,8 +314,10 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
                                     // See EscherPropertyContainer::CreateCustomShapeProperties, by default nSeg is simply the number of points.
                                     for (int i = 0; i < nSeg; ++i)
                                     {
-                                        sal_Int32 nX = impl_GetPointComponent(pVerticesIt, nPointSize);
-                                        sal_Int32 nY = impl_GetPointComponent(pVerticesIt, nPointSize);
+                                        if (nVerticesPos >= aVertices.nPropSize)
+                                            break;
+                                        sal_Int32 nX = impl_GetPointComponent(pVerticesIt, nVerticesPos, nPointSize);
+                                        sal_Int32 nY = impl_GetPointComponent(pVerticesIt, nVerticesPos, nPointSize);
                                         aVerticies.append(";(").append(nX).append(",").append(nY).append(")");
                                         ++nVertices;
                                     }
