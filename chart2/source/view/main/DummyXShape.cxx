@@ -28,6 +28,8 @@
 
 #include <algorithm>
 
+#define ENABLE_DEBUG_PROPERTIES 0
+
 using namespace com::sun::star;
 
 using namespace std;
@@ -40,10 +42,16 @@ namespace {
 
 struct PrintProperties
 {
+#if ENABLE_DEBUG_PROPERTIES
     void operator()(const std::pair<OUString, uno::Any>& rProp)
     {
         SAL_WARN("chart2.opengl", "Property: " << rProp.first);
     }
+#else
+    void operator()(const std::pair<OUString, uno::Any>&)
+    {
+    }
+#endif
 };
 
 void debugProperties(std::map<OUString, uno::Any>& rProperties)
