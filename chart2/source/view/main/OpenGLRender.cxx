@@ -1510,14 +1510,21 @@ int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color,
     }
 
     glGenTextures(1, &m_TextInfo.texture);
+    CHECK_GL_ERROR();
     glBindTexture(GL_TEXTURE_2D, m_TextInfo.texture);
+    CHECK_GL_ERROR();
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    CHECK_GL_ERROR();
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    CHECK_GL_ERROR();
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    CHECK_GL_ERROR();
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    CHECK_GL_ERROR();
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bmpWidth, bmpHeight, 0, GL_BGRA, GL_UNSIGNED_BYTE, bitmapBuf.get() + BMP_HEADER_LEN);
     CHECK_GL_ERROR();
     glBindTexture(GL_TEXTURE_2D, 0);
+    CHECK_GL_ERROR();
     m_TextInfoList.push_back(m_TextInfo);
     return 0;
 }
