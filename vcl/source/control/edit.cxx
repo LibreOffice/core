@@ -1297,12 +1297,12 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
 
     GetCaretPositions( aText, pDX, 0, aText.getLength() );
     long nX = rWindowPos.X() - mnXOffset - ImplGetExtraOffset();
-    for( int i = 0; i < aText.getLength(); i++ )
+    for( sal_Int32 i = 0; i < aText.getLength(); i++ )
     {
         if( (pDX[2*i] >= nX && pDX[2*i+1] <= nX) ||
             (pDX[2*i+1] >= nX && pDX[2*i] <= nX))
         {
-            nIndex = sal::static_int_cast<xub_StrLen>(i);
+            nIndex = i;
             if( pDX[2*i] < pDX[2*i+1] )
             {
                 if( nX > (pDX[2*i]+pDX[2*i+1])/2 )
@@ -1320,13 +1320,13 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
     {
         nIndex = 0;
         long nDiff = std::abs( pDX[0]-nX );
-        for( int i = 1; i < aText.getLength(); i++ )
+        for( sal_Int32 i = 1; i < aText.getLength(); i++ )
         {
             long nNewDiff = std::abs( pDX[2*i]-nX );
 
             if( nNewDiff < nDiff )
             {
-                nIndex = sal::static_int_cast<xub_StrLen>(i);
+                nIndex = i;
                 nDiff = nNewDiff;
             }
         }
@@ -2270,7 +2270,7 @@ void Edit::Command( const CommandEvent& rCEvt )
     {
         if ( mpIMEInfos )
         {
-            xub_StrLen nCursorPos = (sal_uInt16)GetSelection().Max();
+            sal_Int32 nCursorPos = GetSelection().Max();
             SetCursorRect( NULL, GetTextWidth( maText.toString(), nCursorPos, mpIMEInfos->nPos+mpIMEInfos->nLen-nCursorPos ) );
         }
         else

@@ -394,7 +394,7 @@ IMPL_LINK_NOARG(ComboBox, ImplSelectHdl)
                 if ( (nP != LISTBOX_ENTRY_NOTFOUND) && (!mpImplLB->GetEntryList()->IsEntryPosSelected( nP )) )
                 {
                     aText = aText.replaceAt( nPrevIndex, nTokenLen, "" );
-                    nIndex = sal::static_int_cast<xub_StrLen>(nIndex - nTokenLen);
+                    nIndex = nIndex - nTokenLen;
                     sal_Int32 nSepCount=0;
                     if ( (nPrevIndex+nSepCount < aText.getLength()) && (aText[nPrevIndex+nSepCount] == mcMultiSep) )
                     {

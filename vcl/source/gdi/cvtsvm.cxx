@@ -281,13 +281,13 @@ void ImplReadUnicodeComment( sal_uInt32 nStrmPos, SvStream& rIStm, OUString& rSt
     {
         sal_uInt16  nType;
         sal_uInt32  nActionSize;
-        xub_StrLen  nStringLen;
+        sal_Size    nStringLen;
 
         rIStm.Seek( nStrmPos );
         rIStm   >> nType
                 >> nActionSize;
 
-        nStringLen = sal::static_int_cast<xub_StrLen>(( nActionSize - 4 ) >> 1);
+        nStringLen = (nActionSize - 4) >> 1;
 
         if ( nStringLen && ( nType == GDI_UNICODE_COMMENT ) )
             rString = read_uInt16s_ToOUString(rIStm, nStringLen);

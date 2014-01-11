@@ -1282,7 +1282,7 @@ static long ImplHandleExtTextInput( Window* pWindow,
             nDeltaStart = 0;
         else
         {
-            xub_StrLen i = 0;
+            sal_Int32 i = 0;
             while ( i < nDeltaStart )
             {
                 if ( pWinData->mpExtOldAttrAry[i] != pTextAttr[i] )
@@ -1300,7 +1300,7 @@ static long ImplHandleExtTextInput( Window* pWindow,
 
     // Call Event and store the information
     CommandExtTextInputData aData( rText, pTextAttr,
-                                   (xub_StrLen)nCursorPos, nCursorFlags,
+                                   nCursorPos, nCursorFlags,
                                    nDeltaStart, pWinData->mpExtOldText->getLength(),
                                    bOnlyCursor );
     *pWinData->mpExtOldText = rText;

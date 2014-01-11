@@ -91,7 +91,7 @@ private:
     ScrollBarBox*       mpScrollBox;
 
     Point               maTextWindowOffset;
-    xub_StrLen          mnTextWidth;
+    sal_Int32           mnTextWidth;
     mutable Selection   maSelection;
 
 protected:
@@ -286,7 +286,7 @@ void ImpVclMEdit::ImpSetScrollBarRanges()
         // Es gibt kein Notify bei Breiten-Aenderung...
 //      sal_uLong nW = Max( (sal_uLong)mpTextWindow->GetOutputSizePixel().Width()*5, (sal_uLong)nTextWidth );
 //      mpHScrollBar->SetRange( Range( 0, (long)nW ) );
-        mpHScrollBar->SetRange( Range( 0, (long)mnTextWidth-1 ) );
+        mpHScrollBar->SetRange( Range( 0, mnTextWidth-1 ) );
     }
 }
 
@@ -547,11 +547,11 @@ void ImpVclMEdit::Notify( SfxBroadcaster&, const SfxHint& rHint )
         {
             if ( mpHScrollBar )
             {
-                sal_uLong nWidth = mpTextWindow->GetTextEngine()->CalcTextWidth();
+                sal_Int32 nWidth = mpTextWindow->GetTextEngine()->CalcTextWidth();
                 if ( nWidth != mnTextWidth )
                 {
-                    mnTextWidth = sal::static_int_cast< xub_StrLen >(nWidth);
-                    mpHScrollBar->SetRange( Range( 0, (long)mnTextWidth-1 ) );
+                    mnTextWidth = nWidth;
+                    mpHScrollBar->SetRange( Range( 0, mnTextWidth-1 ) );
                     ImpSetHScrollBarThumbPos();
                 }
             }
