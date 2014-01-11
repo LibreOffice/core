@@ -5778,7 +5778,7 @@ void QuickHelpData::Start( SwWrtShell& rSh, sal_uInt16 nWrdLen )
                                 EXTTEXTINPUT_ATTR_HIGHLIGHT;
         const std::vector<sal_uInt16> aAttrs( nL, nVal );
         CommandExtTextInputData aCETID( sStr, &aAttrs[0], nL,
-                                        0, 0, 0, sal_False );
+                                        0, false );
 
         //fdo#33092. If the current input language is the default
         //language that text would appear in if typed, then don't

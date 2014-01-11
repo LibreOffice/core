@@ -1301,7 +1301,6 @@ static long ImplHandleExtTextInput( Window* pWindow,
     // Call Event and store the information
     CommandExtTextInputData aData( rText, pTextAttr,
                                    nCursorPos, nCursorFlags,
-                                   nDeltaStart, pWinData->mpExtOldText->getLength(),
                                    bOnlyCursor );
     *pWinData->mpExtOldText = rText;
     if ( pWinData->mpExtOldAttrAry )

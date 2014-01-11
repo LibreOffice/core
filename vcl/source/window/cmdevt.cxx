@@ -26,8 +26,6 @@ CommandExtTextInputData::CommandExtTextInputData( const OUString& rText,
                                                   const sal_uInt16* pTextAttr,
                                                   sal_Int32 nCursorPos,
                                                   sal_uInt16 nCursorFlags,
-                                                  sal_Int32 nDeltaStart,
-                                                  sal_Int32 nOldTextLen,
                                                   sal_Bool bOnlyCursor ) :
     maText( rText )
 {
@@ -39,8 +37,6 @@ CommandExtTextInputData::CommandExtTextInputData( const OUString& rText,
     else
         mpTextAttr = NULL;
     mnCursorPos     = nCursorPos;
-    mnDeltaStart    = nDeltaStart;
-    mnOldTextLen    = nOldTextLen;
     mnCursorFlags   = nCursorFlags;
     mbOnlyCursor    = bOnlyCursor;
 }
@@ -58,8 +54,6 @@ CommandExtTextInputData::CommandExtTextInputData( const CommandExtTextInputData&
     else
         mpTextAttr = NULL;
     mnCursorPos     = rData.mnCursorPos;
-    mnDeltaStart    = rData.mnDeltaStart;
-    mnOldTextLen    = rData.mnOldTextLen;
     mnCursorFlags   = rData.mnCursorFlags;
     mbOnlyCursor    = rData.mbOnlyCursor;
 }

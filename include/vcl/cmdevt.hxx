@@ -48,8 +48,6 @@ private:
     OUString            maText;
     sal_uInt16*             mpTextAttr;
     xub_StrLen          mnCursorPos;
-    xub_StrLen          mnDeltaStart;
-    xub_StrLen          mnOldTextLen;
     sal_uInt16              mnCursorFlags;
     sal_Bool                mbOnlyCursor;
 
@@ -58,8 +56,6 @@ public:
                                                  const sal_uInt16* pTextAttr,
                                                  sal_Int32 nCursorPos,
                                                  sal_uInt16 nCursorFlags,
-                                                 sal_Int32 nDeltaStart,
-                                                 sal_Int32 nOldTextLen,
                                                  sal_Bool bOnlyCursor );
                         CommandExtTextInputData( const CommandExtTextInputData& rData );
                         ~CommandExtTextInputData();
@@ -71,8 +67,6 @@ public:
     sal_Bool                IsCursorVisible() const { return (mnCursorFlags & EXTTEXTINPUT_CURSOR_INVISIBLE) == 0; }
     sal_Bool                IsCursorOverwrite() const { return (mnCursorFlags & EXTTEXTINPUT_CURSOR_OVERWRITE) != 0; }
     sal_uInt16              GetCursorFlags() const { return mnCursorFlags; }
-    xub_StrLen          GetDeltaStart() const { return mnDeltaStart; }
-    xub_StrLen          GetOldTextLen() const { return mnOldTextLen; }
     sal_Bool                IsOnlyCursorChanged() const { return mbOnlyCursor; }
 };
 
