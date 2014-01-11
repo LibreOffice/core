@@ -707,7 +707,7 @@ Size ToolBox::ImplCalcSize( const ToolBox* pThis, sal_uInt16 nCalcLines, sal_uIn
     long            nBottom = 0;
     Size            aSize;
     WindowAlign     eOldAlign = pThis->meAlign;
-    sal_Bool            bOldHorz = pThis->mbHorz;
+    bool            bOldHorz = pThis->mbHorz;
     sal_Bool            bOldAssumeDocked = pThis->mpData->mbAssumeDocked;
     sal_Bool            bOldAssumeFloating = pThis->mpData->mbAssumeFloating;
 
@@ -1596,13 +1596,13 @@ void ToolBox::ImplLoadRes( const ResId& rResId )
 
     if ( nObjMask & RSC_TOOLBOX_CUSTOMIZE )
     {
-        sal_Bool bCust = (sal_Bool)ReadShortRes();
+        bool bCust = ReadShortRes();
         EnableCustomize( bCust );
     }
 
     if ( nObjMask & RSC_TOOLBOX_MENUSTRINGS )
     {
-        sal_Bool bCust = (sal_Bool)ReadShortRes();
+        bool bCust = ReadShortRes();
         EnableMenuStrings( bCust );
     }
 
@@ -3514,7 +3514,7 @@ sal_Bool ToolBox::ImplHandleMouseMove( const MouseEvent& rMEvt, sal_Bool bRepeat
 
     if ( mbUpper )
     {
-        sal_Bool bNewIn = maUpperRect.IsInside( aMousePos );
+        bool bNewIn = maUpperRect.IsInside( aMousePos );
         if ( bNewIn != mbIn )
         {
             mbIn = bNewIn;
@@ -3525,7 +3525,7 @@ sal_Bool ToolBox::ImplHandleMouseMove( const MouseEvent& rMEvt, sal_Bool bRepeat
 
     if ( mbLower )
     {
-        sal_Bool bNewIn = maLowerRect.IsInside( aMousePos );
+        bool bNewIn = maLowerRect.IsInside( aMousePos );
         if ( bNewIn != mbIn )
         {
             mbIn = bNewIn;
@@ -4582,7 +4582,7 @@ void ToolBox::ToggleFloatingMode()
 {
     DockingWindow::ToggleFloatingMode();
 
-    sal_Bool mbOldHorz = mbHorz;
+    bool mbOldHorz = mbHorz;
 
     if ( ImplIsFloatingMode() )
     {
@@ -4934,7 +4934,7 @@ Size ToolBox::CalcMinimumWindowSizePixel() const
 
 // -----------------------------------------------------------------------
 
-void ToolBox::EnableCustomize( sal_Bool bEnable )
+void ToolBox::EnableCustomize( bool bEnable )
 {
     if ( bEnable != mbCustomize )
     {

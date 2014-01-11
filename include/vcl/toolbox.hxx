@@ -498,7 +498,7 @@ public:
     void                SetOutStyle( sal_uInt16 nNewStyle );
     sal_uInt16              GetOutStyle() const { return mnOutStyle; }
 
-    void                EnableCustomize( sal_Bool bEnable = sal_True );
+    void                EnableCustomize( bool bEnable = true );
     sal_Bool                IsCustomize() { return mbCustomize; }
     sal_Bool                IsInCustomizeMode() const { return mbCustomizeMode; }
 
