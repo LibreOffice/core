@@ -135,19 +135,6 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     Reference<XDesktop2> xDesktop = Desktop::create( comphelper::getProcessComponentContext() );
     mxDesktopDispatchProvider = xDesktop;
 
-    mpOpenButton->SetHelpId( ".HelpId:StartCenter:OpenButton" );
-    mpTemplateButton->SetHelpId( ".HelpId:StartCenter:TemplateButton" );
-
-    mpWriterAllButton->SetHelpId( ".HelpId:StartCenter:WriterButton" );
-    mpCalcAllButton->SetHelpId( ".HelpId:StartCenter:CalcButton" );
-    mpImpressAllButton->SetHelpId( ".HelpId:StartCenter:ImpressButton" );
-    mpDrawAllButton->SetHelpId( ".HelpId:StartCenter:DrawButton" );
-    mpDBAllButton->SetHelpId( ".HelpId:StartCenter:DBButton" );
-    mpMathAllButton->SetHelpId( ".HelpId:StartCenter:MathButton" );
-
-    mpHelpButton->SetHelpId(".HelpId:StartCenter:Info");
-    mpExtensionsButton->SetHelpId(".HelpId:StartCenter:Extensions");
-
     // init background
     SetBackground();
 }
