@@ -159,9 +159,11 @@ namespace cmis
                             ALFRESCO_CLOUD_SCOPE, ALFRESCO_CLOUD_REDIRECT_URI,
                             ALFRESCO_CLOUD_CLIENT_ID, ALFRESCO_CLOUD_CLIENT_SECRET ) );
 
+                    OUString pURL =  m_aURL.getBindingUrl( );
+
                     libcmis::Session* session = libcmis::SessionFactory::createSession(
-                            OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ),
-                            rUsername, rPassword, "", sal_False, oauth2Data );
+                            OUSTR_TO_STDSTR(pURL),
+                            rUsername, rPassword, "", pURL.startsWith("https")?true:false, oauth2Data );
                     if (session == NULL )
                         ucbhelper::cancelCommandExecution(
                                             ucb::IOErrorCode_INVALID_DEVICE,
