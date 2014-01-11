@@ -568,7 +568,7 @@ sal_Bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
 {
     bool bAttrsChanged = SfxTabPage::FillItemSet( rCoreAttrs );
 
-    sal_Bool                  bPut          = sal_True;
+    bool                  bPut          = true;
     sal_uInt16                nBoxWhich     = GetWhich( SID_ATTR_BORDER_OUTER );
     sal_uInt16                nBoxInfoWhich = rCoreAttrs.GetPool()->GetWhich( SID_ATTR_BORDER_INNER, sal_False );
     const SfxItemSet&     rOldSet       = GetItemSet();
