@@ -30,6 +30,8 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/syslocale.hxx>
 
+#include <boost/shared_ptr.hpp>
+
 class CollatorWrapper;
 class LocaleDataWrapper;
 
@@ -44,12 +46,11 @@ namespace vcl {
 class ImplMouseData
 {
     friend class MouseSettings;
-
+public:
                                     ImplMouseData();
                                     ImplMouseData( const ImplMouseData& rData );
 
 private:
-    sal_uLong                           mnRefCount;
     sal_uLong                           mnOptions;
     sal_uLong                           mnDoubleClkTime;
     long                            mnDoubleClkWidth;
@@ -97,7 +98,7 @@ class VCL_DLLPUBLIC MouseSettings
     void                            CopyData();
 
 private:
-    ImplMouseData*                  mpData;
+    boost::shared_ptr<ImplMouseData>                  mpData;
 
 public:
                                     MouseSettings();
@@ -241,13 +242,12 @@ class ImplStyleData
 {
     friend class StyleSettings;
 
+public:
                                     ImplStyleData();
                                     ImplStyleData( const ImplStyleData& rData );
-    void                            SetStandardStyles();
 
 private:
-    sal_uLong                           mnRefCount;
-
+    void                            SetStandardStyles();
     Color                           maActiveBorderColor;
     Color                           maActiveColor;
     Color                           maActiveColor2;
@@ -434,7 +434,7 @@ class VCL_DLLPUBLIC StyleSettings
     void                            CopyData();
 
 private:
-    ImplStyleData*                  mpData;
+    boost::shared_ptr<ImplStyleData>                  mpData;
 
 public:
                                     StyleSettings();
@@ -833,8 +833,8 @@ public:
 
     void                            SetOptions( sal_uLong nOptions )
                                         { CopyData(); mpData->mnOptions = nOptions; }
-    sal_uLong                           GetOptions() const
-                                        { return mpData->mnOptions; }
+    sal_uLong                           GetOptions() const;
+
     void                            SetAutoMnemonic( bool bAutoMnemonic )
                                         { CopyData(); mpData->mnAutoMnemonic = (sal_uInt16)bAutoMnemonic; }
     bool                            GetAutoMnemonic() const
@@ -958,15 +958,15 @@ protected:
 class ImplMiscData
 {
     friend class MiscSettings;
+public:
 
                                     ImplMiscData();
                                     ImplMiscData( const ImplMiscData& rData );
 
 private:
-    sal_uLong                           mnRefCount;
-    AutoState                          mnEnableATT;
+    AutoState                       mnEnableATT;
     bool                            mbEnableLocalizedDecimalSep;
-    AutoState                          mnDisablePrinting;
+    AutoState                       mnDisablePrinting;
 };
 
 // ----------------
@@ -978,7 +978,7 @@ class VCL_DLLPUBLIC MiscSettings
     void                            CopyData();
 
 private:
-    ImplMiscData*                   mpData;
+    boost::shared_ptr<ImplMiscData>                   mpData;
 
 public:
                                     MiscSettings();
@@ -1006,12 +1006,11 @@ public:
 class ImplHelpData
 {
     friend class HelpSettings;
-
+public:
                                     ImplHelpData();
                                     ImplHelpData( const ImplHelpData& rData );
 
 private:
-    sal_uLong                           mnRefCount;
     sal_uLong                           mnOptions;
     sal_uLong                           mnTipDelay;
     sal_uLong                           mnTipTimeout;
@@ -1027,7 +1026,7 @@ class VCL_DLLPUBLIC HelpSettings
     void                            CopyData();
 
 private:
-    ImplHelpData*                   mpData;
+    boost::shared_ptr<ImplHelpData>                   mpData;
 
 public:
                                     HelpSettings();
@@ -1063,14 +1062,13 @@ public:
 // -----------------------
 class ImplAllSettingsData
 {
+public:
+    ImplAllSettingsData();
+    ImplAllSettingsData( const ImplAllSettingsData& rData );
+    ~ImplAllSettingsData();
+
     friend class    AllSettings;
-
-                    ImplAllSettingsData();
-                    ImplAllSettingsData( const ImplAllSettingsData& rData );
-                    ~ImplAllSettingsData();
-
 private:
-    sal_uLong                               mnRefCount;
     MouseSettings                           maMouseSettings;
     StyleSettings                           maStyleSettings;
     MiscSettings                            maMiscSettings;
@@ -1111,7 +1109,7 @@ class VCL_DLLPUBLIC AllSettings
     void                                    CopyData();
 
 private:
-    ImplAllSettingsData*                    mpData;
+    boost::shared_ptr<ImplAllSettingsData>                    mpData;
 
 public:
                                             AllSettings();
@@ -1125,8 +1123,7 @@ public:
 
     void                                    SetStyleSettings( const StyleSettings& rSet )
                                                 { CopyData(); mpData->maStyleSettings = rSet; }
-    const StyleSettings&                    GetStyleSettings() const
-                                                { return mpData->maStyleSettings; }
+    const StyleSettings&                    GetStyleSettings() const;
 
     void                                    SetMiscSettings( const MiscSettings& rSet )
                                                 { CopyData(); mpData->maMiscSettings = rSet; }

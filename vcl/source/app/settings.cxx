@@ -48,6 +48,9 @@ using namespace ::com::sun::star;
 
 #include "svdata.hxx"
 #include "impimagetree.hxx"
+
+#include <boost/make_shared.hpp>
+
 // =======================================================================
 
 
@@ -55,7 +58,6 @@ using namespace ::com::sun::star;
 
 ImplMouseData::ImplMouseData()
 {
-    mnRefCount                  = 1;
     mnOptions                   = 0;
     mnDoubleClkTime             = 500;
     mnDoubleClkWidth            = 2;
@@ -83,7 +85,6 @@ ImplMouseData::ImplMouseData()
 
 ImplMouseData::ImplMouseData( const ImplMouseData& rData )
 {
-    mnRefCount                  = 1;
     mnOptions                   = rData.mnOptions;
     mnDoubleClkTime             = rData.mnDoubleClkTime;
     mnDoubleClkWidth            = rData.mnDoubleClkWidth;
@@ -110,49 +111,28 @@ ImplMouseData::ImplMouseData( const ImplMouseData& rData )
 // -----------------------------------------------------------------------
 
 MouseSettings::MouseSettings()
+: mpData(boost::make_shared<ImplMouseData>())
 {
-    mpData = new ImplMouseData();
 }
 
 // -----------------------------------------------------------------------
 
 MouseSettings::MouseSettings( const MouseSettings& rSet )
 {
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "MouseSettings: RefCount overflow" );
-
-    // copy shared instance data and increment reference counter
     mpData = rSet.mpData;
-    mpData->mnRefCount++;
 }
 
 // -----------------------------------------------------------------------
 
 MouseSettings::~MouseSettings()
 {
-    // delete data if last reference
-    if ( mpData->mnRefCount == 1 )
-        delete mpData;
-    else
-        mpData->mnRefCount--;
 }
 
 // -----------------------------------------------------------------------
 
 const MouseSettings& MouseSettings::operator =( const MouseSettings& rSet )
 {
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "MouseSettings: RefCount overflow" );
-
-    // increment reference counter first, to be able to assign oneself
-    rSet.mpData->mnRefCount++;
-
-    // delete data if last reference
-    if ( mpData->mnRefCount == 1 )
-        delete mpData;
-    else
-        mpData->mnRefCount--;
-
     mpData = rSet.mpData;
-
     return *this;
 }
 
@@ -160,11 +140,9 @@ const MouseSettings& MouseSettings::operator =( const MouseSettings& rSet )
 
 void MouseSettings::CopyData()
 {
-    // copy if another references exist
-    if ( mpData->mnRefCount != 1 )
-    {
-        mpData->mnRefCount--;
-        mpData = new ImplMouseData( *mpData );
+    // copy if other references exist
+    if ( ! mpData.unique() ) {
+        mpData = boost::make_shared<ImplMouseData>(*mpData);
     }
 }
 
@@ -208,7 +186,6 @@ ImplStyleData::ImplStyleData() :
     maPersonaHeaderBitmap(),
     maPersonaFooterBitmap()
 {
-    mnRefCount                  = 1;
     mnScrollBarSize             = 16;
     mnMinThumbSize              = 16;
     mnSplitSize                 = 3;
@@ -318,7 +295,6 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maPersonaHeaderBitmap( rData.maPersonaHeaderBitmap ),
     maPersonaFooterBitmap( rData.maPersonaFooterBitmap )
 {
-    mnRefCount                  = 1;
     mnBorderSize                = rData.mnBorderSize;
     mnTitleHeight               = rData.mnTitleHeight;
     mnFloatTitleHeight          = rData.mnFloatTitleHeight;
@@ -463,30 +439,21 @@ void ImplStyleData::SetStandardStyles()
 // -----------------------------------------------------------------------
 
 StyleSettings::StyleSettings()
+: mpData(boost::make_shared<ImplStyleData>())
 {
-    mpData = new ImplStyleData();
 }
 
 // -----------------------------------------------------------------------
 
 StyleSettings::StyleSettings( const StyleSettings& rSet )
 {
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "StyleSettings: RefCount overflow" );
-
-    // copy shared instance data and increment reference counter
     mpData = rSet.mpData;
-    mpData->mnRefCount++;
 }
 
 // -----------------------------------------------------------------------
 
 StyleSettings::~StyleSettings()
 {
-    // if last reference then delete data
-    if ( mpData->mnRefCount == 1 )
-        delete mpData;
-    else
-        mpData->mnRefCount--;
 }
 
 const Size& StyleSettings::GetListBoxPreviewDefaultPixelSize() const
@@ -853,19 +820,7 @@ Color StyleSettings::GetSeparatorColor() const
 
 const StyleSettings& StyleSettings::operator =( const StyleSettings& rSet )
 {
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "StyleSettings: RefCount overflow" );
-
-    // increase reference counter first, to be able to assign oneself
-    rSet.mpData->mnRefCount++;
-
-    // if last reference then delete data
-    if ( mpData->mnRefCount == 1 )
-        delete mpData;
-    else
-        mpData->mnRefCount--;
-
     mpData = rSet.mpData;
-
     return *this;
 }
 
@@ -874,10 +829,8 @@ const StyleSettings& StyleSettings::operator =( const StyleSettings& rSet )
 void StyleSettings::CopyData()
 {
     // copy if other references exist
-    if ( mpData->mnRefCount != 1 )
-    {
-        mpData->mnRefCount--;
-        mpData = new ImplStyleData( *mpData );
+    if ( ! mpData.unique() ) {
+        mpData = boost::make_shared<ImplStyleData>(*mpData);
     }
 }
 
@@ -1002,7 +955,6 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
 
 ImplMiscData::ImplMiscData()
 {
-    mnRefCount                  = 1;
     mnEnableATT                 = AUTO_STATE_AUTO;
     mnDisablePrinting           = AUTO_STATE_AUTO;
     static const char* pEnv = getenv("SAL_DECIMALSEP_ENABLED" ); // set default without UI
@@ -1013,7 +965,6 @@ ImplMiscData::ImplMiscData()
 
 ImplMiscData::ImplMiscData( const ImplMiscData& rData )
 {
-    mnRefCount                  = 1;
     mnEnableATT                 = rData.mnEnableATT;
     mnDisablePrinting           = rData.mnDisablePrinting;
     mbEnableLocalizedDecimalSep = rData.mbEnableLocalizedDecimalSep;
@@ -1022,49 +973,28 @@ ImplMiscData::ImplMiscData( const ImplMiscData& rData )
 // -----------------------------------------------------------------------
 
 MiscSettings::MiscSettings()
+: mpData(boost::make_shared<ImplMiscData>())
 {
-    mpData = new ImplMiscData();
 }
 
 // -----------------------------------------------------------------------
 
 MiscSettings::MiscSettings( const MiscSettings& rSet )
 {
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "MiscSettings: RefCount overflow" );
-
-    // copy shared instance data and increment reference counter
     mpData = rSet.mpData;
-    mpData->mnRefCount++;
 }
 
 // -----------------------------------------------------------------------
 
 MiscSettings::~MiscSettings()
 {
-    // if last reference then delete data
-    if ( mpData->mnRefCount == 1 )
-        delete mpData;
-    else
-        mpData->mnRefCount--;
 }
 
 // -----------------------------------------------------------------------
 
 const MiscSettings& MiscSettings::operator =( const MiscSettings& rSet )
 {
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "MiscSettings: RefCount overflow" );
-
-    //  increase reference counter first, to be able to assign oneself
-    rSet.mpData->mnRefCount++;
-
-    // if last reference then delete data
-    if ( mpData->mnRefCount == 1 )
-        delete mpData;
-    else
-        mpData->mnRefCount--;
-
     mpData = rSet.mpData;
-
     return *this;
 }
 
@@ -1073,10 +1003,8 @@ const MiscSettings& MiscSettings::operator =( const MiscSettings& rSet )
 void MiscSettings::CopyData()
 {
     // copy if other references exist
-    if ( mpData->mnRefCount != 1 )
-    {
-        mpData->mnRefCount--;
-        mpData = new ImplMiscData( *mpData );
+    if ( ! mpData.unique() ) {
+        mpData = boost::make_shared<ImplMiscData>(*mpData);
     }
 }
 
@@ -1251,7 +1179,6 @@ bool MiscSettings::GetEnableLocalizedDecimalSep() const
 
 ImplHelpData::ImplHelpData()
 {
-    mnRefCount                  = 1;
     mnOptions                   = 0;
     mnTipDelay                  = 500;
     mnTipTimeout                = 3000;
@@ -1262,7 +1189,6 @@ ImplHelpData::ImplHelpData()
 
 ImplHelpData::ImplHelpData( const ImplHelpData& rData )
 {
-    mnRefCount                  = 1;
     mnOptions                   = rData.mnOptions;
     mnTipDelay                  = rData.mnTipDelay;
     mnTipTimeout                = rData.mnTipTimeout;
@@ -1272,49 +1198,28 @@ ImplHelpData::ImplHelpData( const ImplHelpData& rData )
 // -----------------------------------------------------------------------
 
 HelpSettings::HelpSettings()
+: mpData(boost::make_shared<ImplHelpData>())
 {
-    mpData = new ImplHelpData();
 }
 
 // -----------------------------------------------------------------------
 
 HelpSettings::HelpSettings( const HelpSettings& rSet )
 {
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "HelpSettings: RefCount overflow" );
-
-    // copy shared instance data and increment reference counter
     mpData = rSet.mpData;
-    mpData->mnRefCount++;
 }
 
 // -----------------------------------------------------------------------
 
 HelpSettings::~HelpSettings()
 {
-    // if last reference then delete data
-    if ( mpData->mnRefCount == 1 )
-        delete mpData;
-    else
-        mpData->mnRefCount--;
 }
 
 // -----------------------------------------------------------------------
 
 const HelpSettings& HelpSettings::operator =( const HelpSettings& rSet )
 {
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "HelpSettings: RefCount overflow" );
-
-    // increase reference counter first, to be able to assign oneself
-    rSet.mpData->mnRefCount++;
-
-    // delete data if last reference
-    if ( mpData->mnRefCount == 1 )
-        delete mpData;
-    else
-        mpData->mnRefCount--;
-
     mpData = rSet.mpData;
-
     return *this;
 }
 
@@ -1322,11 +1227,9 @@ const HelpSettings& HelpSettings::operator =( const HelpSettings& rSet )
 
 void HelpSettings::CopyData()
 {
-    // copy of other references exist
-    if ( mpData->mnRefCount != 1 )
-    {
-        mpData->mnRefCount--;
-        mpData = new ImplHelpData( *mpData );
+    // copy if other references exist
+    if ( ! mpData.unique() ) {
+        mpData = boost::make_shared<ImplHelpData>(*mpData);
     }
 }
 
@@ -1353,7 +1256,6 @@ ImplAllSettingsData::ImplAllSettingsData()
         maLocale( LANGUAGE_SYSTEM ),
         maUILocale( LANGUAGE_SYSTEM )
 {
-    mnRefCount                  = 1;
     mnSystemUpdate              = SETTINGS_ALLSETTINGS;
     mnWindowUpdate              = SETTINGS_ALLSETTINGS;
     mpLocaleDataWrapper         = NULL;
@@ -1373,7 +1275,6 @@ ImplAllSettingsData::ImplAllSettingsData( const ImplAllSettingsData& rData ) :
     maLocale( rData.maLocale ),
     maUILocale( rData.maUILocale )
 {
-    mnRefCount                  = 1;
     mnSystemUpdate              = rData.mnSystemUpdate;
     mnWindowUpdate              = rData.mnWindowUpdate;
     // Pointer couldn't shared and objects haven't a copy ctor
@@ -1400,51 +1301,28 @@ ImplAllSettingsData::~ImplAllSettingsData()
 // -----------------------------------------------------------------------
 
 AllSettings::AllSettings()
+: mpData(boost::make_shared<ImplAllSettingsData>())
 {
-
-    mpData = new ImplAllSettingsData();
 }
 
 // -----------------------------------------------------------------------
 
 AllSettings::AllSettings( const AllSettings& rSet )
 {
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "Settings: RefCount overflow" );
-
-    // copy shared instance data and increse reference counter
     mpData = rSet.mpData;
-    mpData->mnRefCount++;
 }
 
 // -----------------------------------------------------------------------
 
 AllSettings::~AllSettings()
 {
-
-    // if last reference then delete data
-    if ( mpData->mnRefCount == 1 )
-        delete mpData;
-    else
-        mpData->mnRefCount--;
 }
 
 // -----------------------------------------------------------------------
 
 const AllSettings& AllSettings::operator =( const AllSettings& rSet )
 {
-    DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "AllSettings: RefCount overflow" );
-
-    // increase reference counter first, to be able to assign oneself
-    rSet.mpData->mnRefCount++;
-
-    // if last reference then delete data
-    if ( mpData->mnRefCount == 1 )
-        delete mpData;
-    else
-        mpData->mnRefCount--;
-
     mpData = rSet.mpData;
-
     return *this;
 }
 
@@ -1452,13 +1330,11 @@ const AllSettings& AllSettings::operator =( const AllSettings& rSet )
 
 void AllSettings::CopyData()
 {
-
     // copy if other references exist
-    if ( mpData->mnRefCount != 1 )
-    {
-        mpData->mnRefCount--;
-        mpData = new ImplAllSettingsData( *mpData );
+    if ( ! mpData.unique() ) {
+        mpData = boost::make_shared<ImplAllSettingsData>(*mpData);
     }
+
 }
 
 // -----------------------------------------------------------------------
@@ -1745,6 +1621,18 @@ void AllSettings::LocaleSettingsChanged( sal_uInt32 nHint )
         aAllSettings.SetLanguageTag( aAllSettings.mpData->maSysLocale.GetOptions().GetLanguageTag() );
 
     Application::SetSettings( aAllSettings );
+}
+
+const StyleSettings&
+AllSettings::GetStyleSettings() const
+{
+    return mpData->maStyleSettings;
+}
+
+sal_uLong
+StyleSettings::GetOptions() const
+{
+    return mpData->mnOptions;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
