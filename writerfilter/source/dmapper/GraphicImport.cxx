@@ -671,50 +671,7 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_YABOTTOM:
             m_pImpl->nBottomPosition = ConversionHelper::convertTwipToMM100(nIntValue);
             break;//bottom position
-        case NS_rtf::LN_FHDR:
-        case NS_rtf::LN_XAlign:
-            if( nIntValue < 6 && nIntValue > 0 )
-            {
-                static const sal_Int16 aHoriOrientTab[ 6 ] =
-                {
-                    text::HoriOrientation::NONE,
-                    text::HoriOrientation::LEFT,
-                    text::HoriOrientation::CENTER,
-                    text::HoriOrientation::RIGHT,
-                    text::HoriOrientation::INSIDE,
-                    text::HoriOrientation::OUTSIDE
-                };
-                m_pImpl->nHoriOrient = aHoriOrientTab[nIntValue];
-                m_pImpl->bPageToggle = nIntValue > 3;
-            }
-        break;
-        case NS_rtf::LN_YAlign:
-            if( nIntValue < 6 && nIntValue > 0)
-            {
-                static const sal_Int16 aVertOrientTab[ 6 ] =
-                {
-                    text::VertOrientation::NONE,         // From Top position
-                    text::VertOrientation::TOP,          // top
-                    text::VertOrientation::CENTER,       // centered
-                    text::VertOrientation::BOTTOM,       // bottom
-                    text::VertOrientation::LINE_TOP,     // inside (obscure)
-                    text::VertOrientation::LINE_BOTTOM   // outside (obscure)
-                };
-                static const sal_Int16 aToLineVertOrientTab[ 6 ] =
-                {
-                    text::VertOrientation::NONE,         // below
-                    text::VertOrientation::LINE_BOTTOM,  // top
-                    text::VertOrientation::LINE_CENTER,  // centered
-                    text::VertOrientation::LINE_TOP,     // bottom
-                    text::VertOrientation::LINE_BOTTOM,  // inside (obscure)
-                    text::VertOrientation::LINE_TOP      // outside (obscure)
-                };
-                m_pImpl->nVertOrient = m_pImpl->nVertRelation == text::RelOrientation::TEXT_LINE ?
-                    aToLineVertOrientTab[nIntValue] : aVertOrientTab[nIntValue];
-            }
-        break;
         case NS_rtf::LN_LayoutInTableCell: break; //currently unknown
-        case NS_rtf::LN_XRelTo:
         case NS_rtf::LN_BX: //hori orient relation
             switch( nIntValue )
             {
@@ -725,7 +682,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                 default:m_pImpl->nHoriRelation = text::RelOrientation::CHAR;
             }
         break;
-        case NS_rtf::LN_YRelTo:
         case NS_rtf::LN_BY: //vert orient relation
             switch( nIntValue )
             {
