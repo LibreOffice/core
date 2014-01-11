@@ -366,6 +366,7 @@ DummyArea2D::DummyArea2D(const drawing::PointSequenceSequence& rShape):
 
 void DummyArea2D::render()
 {
+    SAL_WARN("chart2.opengl", "render DummyArea2D");
     DummyChart* pChart = getRootShape();
     sal_Int32 nPointssCount = maShapes.getLength();
     for(sal_Int32 i = 0; i < nPointssCount; i++)
@@ -406,6 +407,7 @@ DummyCircle::DummyCircle(const awt::Point& rPos, const awt::Size& rSize)
 
 void DummyCircle::render()
 {
+    SAL_WARN("chart2.opengl", "render DummyCircle");
     debugProperties(maProperties);
     DummyChart* pChart = getRootShape();
     std::map<OUString, uno::Any>::const_iterator itr = maProperties.find("FillColor");
@@ -560,6 +562,7 @@ DummyRectangle::DummyRectangle(const awt::Size& rSize, const awt::Point& rPoint,
 
 void DummyRectangle::render()
 {
+    SAL_WARN("chart2.opengl", "render DummyRectangle");
     debugProperties(maProperties);
     DummyChart* pChart = getRootShape();
     std::map< OUString, uno::Any >::const_iterator itr = maProperties.find("FillColor");
@@ -644,6 +647,7 @@ private:
 
 void DummyText::render()
 {
+    SAL_WARN("chart2.opengl", "render DummyText");
     debugProperties(maProperties);
 
     Font aFont;
@@ -783,6 +787,7 @@ uno::Any DummyXShapes::getByIndex(sal_Int32 nIndex)
 
 void DummyXShapes::render()
 {
+    SAL_WARN("chart2.opengl", "render DummyShapes");
     for(std::vector<DummyXShape*>::iterator itr = maShapes.begin(),
             itrEnd = maShapes.end(); itr != itrEnd; ++itr)
     {
@@ -1203,6 +1208,7 @@ void DummyChart::setSize( const awt::Size& aSize )
 
 void DummyChart::render()
 {
+    SAL_WARN("chart2.opengl", "render chart");
     m_GLRender.prepareToRender();
     DummyXShapes::render();
     m_GLRender.renderToBitmap();
