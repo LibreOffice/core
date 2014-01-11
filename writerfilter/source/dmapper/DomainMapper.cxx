@@ -192,13 +192,11 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_FWRITERESERVATION:
         case NS_rtf::LN_FLOADOVERRIDE:
         case NS_rtf::LN_FFAREAST:
-        case NS_rtf::LN_FCRYPTO:
         case NS_rtf::LN_NFIBBACK:
         case NS_rtf::LN_LKEY:
         case NS_rtf::LN_ENVR:
         case NS_rtf::LN_FMAC:
         case NS_rtf::LN_FWORD97SAVED:
-        case NS_rtf::LN_FCMAC:
         case NS_rtf::LN_PNFBPCHPFIRST_W6:
         case NS_rtf::LN_PNCHPFIRST_W6:
         case NS_rtf::LN_CPNBTECHP_W6:
@@ -215,85 +213,45 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_PNFBPCHPFIRST:
         case NS_rtf::LN_PNFBPPAPFIRST:
         case NS_rtf::LN_PNFBPLVCFIRST:
-        case NS_rtf::LN_FCISLANDFIRST:
-        case NS_rtf::LN_FCISLANDLIM:
-        case NS_rtf::LN_FCSTSHFORIG:
         case NS_rtf::LN_LCBSTSHFORIG:
-        case NS_rtf::LN_FCPLCFPAD:
         case NS_rtf::LN_LCBPLCFPAD:
-        case NS_rtf::LN_FCSTTBFGLSY:
         case NS_rtf::LN_LCBSTTBFGLSY:
-        case NS_rtf::LN_FCPLCFGLSY:
         case NS_rtf::LN_LCBPLCFGLSY:
-        case NS_rtf::LN_FCPLCFSEA:
         case NS_rtf::LN_LCBPLCFSEA:
-        case NS_rtf::LN_FCPLCFFLDMCR:
         case NS_rtf::LN_LCBPLCFFLDMCR:
-        case NS_rtf::LN_FCCMDS:
         case NS_rtf::LN_LCBCMDS:
-        case NS_rtf::LN_FCPLCMCR:
         case NS_rtf::LN_LCBPLCMCR:
-        case NS_rtf::LN_FCSTTBFMCR:
         case NS_rtf::LN_LCBSTTBFMCR:
-        case NS_rtf::LN_FCPRDRVR:
         case NS_rtf::LN_LCBPRDRVR:
-        case NS_rtf::LN_FCPRENVPORT:
         case NS_rtf::LN_LCBPRENVPORT:
-        case NS_rtf::LN_FCPRENVLAND:
         case NS_rtf::LN_LCBPRENVLAND:
-        case NS_rtf::LN_FCWSS:
         case NS_rtf::LN_LCBWSS:
-        case NS_rtf::LN_FCPLCFPGDFTN:
         case NS_rtf::LN_LCBPLCFPGDFTN:
-        case NS_rtf::LN_FCAUTOSAVESOURCE:
         case NS_rtf::LN_LCBAUTOSAVESOURCE:
-        case NS_rtf::LN_FCPLCDOAMOM:
         case NS_rtf::LN_LCBPLCDOAMOM:
-        case NS_rtf::LN_FCPLCDOAHDR:
         case NS_rtf::LN_LCBPLCDOAHDR:
-        case NS_rtf::LN_FCPMS:
         case NS_rtf::LN_LCBPMS:
-        case NS_rtf::LN_FCPLCFPGDEDN:
         case NS_rtf::LN_LCBPLCFPGDEDN:
-        case NS_rtf::LN_FCPLCFWKB:
         case NS_rtf::LN_LCBPLCFWKB:
-        case NS_rtf::LN_FCPLCFSPL:
         case NS_rtf::LN_LCBPLCFSPL:
-        case NS_rtf::LN_FCSTWUSER:
         case NS_rtf::LN_LCBSTWUSER:
-        case NS_rtf::LN_FCUNUSED:
         case NS_rtf::LN_LCBUNUSED:
-        case NS_rtf::LN_FCSTTBFINTLFLD:
         case NS_rtf::LN_LCBSTTBFINTLFLD:
-        case NS_rtf::LN_FCROUTESLIP:
         case NS_rtf::LN_LCBROUTESLIP:
-        case NS_rtf::LN_FCSTTBSAVEDBY:
         case NS_rtf::LN_LCBSTTBSAVEDBY:
-        case NS_rtf::LN_FCSTTBFNM:
         case NS_rtf::LN_LCBSTTBFNM:
-        case NS_rtf::LN_FCDOCUNDO:
         case NS_rtf::LN_LCBDOCUNDO:
-        case NS_rtf::LN_FCRGBUSE:
         case NS_rtf::LN_LCBRGBUSE:
-        case NS_rtf::LN_FCUSP:
         case NS_rtf::LN_LCBUSP:
-        case NS_rtf::LN_FCUSKF:
         case NS_rtf::LN_LCBUSKF:
-        case NS_rtf::LN_FCPLCUPCRGBUSE:
         case NS_rtf::LN_LCBPLCUPCRGBUSE:
-        case NS_rtf::LN_FCPLCUPCUSP:
         case NS_rtf::LN_LCBPLCUPCUSP:
-        case NS_rtf::LN_FCPLGOSL:
         case NS_rtf::LN_LCBPLGOSL:
-        case NS_rtf::LN_FCPLCOCX:
         case NS_rtf::LN_LCBPLCOCX:
         case NS_rtf::LN_DWLOWDATETIME:
         case NS_rtf::LN_DWHIGHDATETIME:
-        case NS_rtf::LN_FCPLCASUMY:
         case NS_rtf::LN_LCBPLCASUMY:
-        case NS_rtf::LN_FCPLCFGRAM:
         case NS_rtf::LN_LCBPLCFGRAM:
-        case NS_rtf::LN_FCSTTBFUSSR:
             break;
 
         case NS_rtf::LN_ISTD: //index of applied style
@@ -421,7 +379,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_PNNEXT:
         case NS_rtf::LN_FDOT:
         case NS_rtf::LN_FGLSY:
-        case NS_rtf::LN_FCOMPLEX:
         case NS_rtf::LN_FHASPIC:
         case NS_rtf::LN_CQUICKSAVES:
         case NS_rtf::LN_FENCRYPTED:
@@ -433,7 +390,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_FFUTURESAVEDUNDO:
         case NS_rtf::LN_FSPARE0:
         case NS_rtf::LN_CHSTABLES:
-        case NS_rtf::LN_FCMIN:
         case NS_rtf::LN_CSW:
         case NS_rtf::LN_WMAGICCREATED:
         case NS_rtf::LN_WMAGICREVISED:
@@ -455,112 +411,59 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_PNLVCFIRST:
         case NS_rtf::LN_CPNBTELVC:
         case NS_rtf::LN_CFCLCB:
-        case NS_rtf::LN_FCSTSHF:
         case NS_rtf::LN_LCBSTSHF:
-        case NS_rtf::LN_FCPLCFFNDREF:
         case NS_rtf::LN_LCBPLCFFNDREF:
-        case NS_rtf::LN_FCPLCFFNDTXT:
         case NS_rtf::LN_LCBPLCFFNDTXT:
-        case NS_rtf::LN_FCPLCFANDREF:
         case NS_rtf::LN_LCBPLCFANDREF:
-        case NS_rtf::LN_FCPLCFANDTXT:
         case NS_rtf::LN_LCBPLCFANDTXT:
-        case NS_rtf::LN_FCPLCFSED:
         case NS_rtf::LN_LCBPLCFSED:
-        case NS_rtf::LN_FCPLCFPHE:
         case NS_rtf::LN_LCBPLCFPHE:
-        case NS_rtf::LN_FCPLCFHDD:
         case NS_rtf::LN_LCBPLCFHDD:
-        case NS_rtf::LN_FCPLCFBTECHPX:
         case NS_rtf::LN_LCBPLCFBTECHPX:
-        case NS_rtf::LN_FCPLCFBTEPAPX:
         case NS_rtf::LN_LCBPLCFBTEPAPX:
-        case NS_rtf::LN_FCSTTBFFFN:
         case NS_rtf::LN_LCBSTTBFFFN:
-        case NS_rtf::LN_FCPLCFFLDMOM:
         case NS_rtf::LN_LCBPLCFFLDMOM:
-        case NS_rtf::LN_FCPLCFFLDHDR:
         case NS_rtf::LN_LCBPLCFFLDHDR:
-        case NS_rtf::LN_FCPLCFFLDFTN:
         case NS_rtf::LN_LCBPLCFFLDFTN:
-        case NS_rtf::LN_FCPLCFFLDATN:
         case NS_rtf::LN_LCBPLCFFLDATN:
-        case NS_rtf::LN_FCSTTBFBKMK:
         case NS_rtf::LN_LCBSTTBFBKMK:
-        case NS_rtf::LN_FCPLCFBKF:
         case NS_rtf::LN_LCBPLCFBKF:
-        case NS_rtf::LN_FCPLCFBKL:
         case NS_rtf::LN_LCBPLCFBKL:
-        case NS_rtf::LN_FCDOP:
         case NS_rtf::LN_LCBDOP:
-        case NS_rtf::LN_FCSTTBFASSOC:
         case NS_rtf::LN_LCBSTTBFASSOC:
-        case NS_rtf::LN_FCCLX:
         case NS_rtf::LN_LCBCLX:
-        case NS_rtf::LN_FCGRPXSTATNOWNERS:
         case NS_rtf::LN_LCBGRPXSTATNOWNERS:
-        case NS_rtf::LN_FCSTTBFATNBKMK:
         case NS_rtf::LN_LCBSTTBFATNBKMK:
-        case NS_rtf::LN_FCPLCSPAMOM:
         case NS_rtf::LN_LCBPLCSPAMOM:
-        case NS_rtf::LN_FCPLCSPAHDR:
         case NS_rtf::LN_LCBPLCSPAHDR:
-        case NS_rtf::LN_FCPLCFATNBKF:
         case NS_rtf::LN_LCBPLCFATNBKF:
-        case NS_rtf::LN_FCPLCFATNBKL:
         case NS_rtf::LN_LCBPLCFATNBKL:
-        case NS_rtf::LN_FCFORMFLDSTTBF:
         case NS_rtf::LN_LCBFORMFLDSTTBF:
-        case NS_rtf::LN_FCPLCFENDREF:
         case NS_rtf::LN_LCBPLCFENDREF:
-        case NS_rtf::LN_FCPLCFENDTXT:
         case NS_rtf::LN_LCBPLCFENDTXT:
-        case NS_rtf::LN_FCPLCFFLDEDN:
         case NS_rtf::LN_LCBPLCFFLDEDN:
-        case NS_rtf::LN_FCDGGINFO:
         case NS_rtf::LN_LCBDGGINFO:
-        case NS_rtf::LN_FCSTTBFRMARK:
         case NS_rtf::LN_LCBSTTBFRMARK:
-        case NS_rtf::LN_FCSTTBFCAPTION:
         case NS_rtf::LN_LCBSTTBFCAPTION:
-        case NS_rtf::LN_FCSTTBFAUTOCAPTION:
         case NS_rtf::LN_LCBSTTBFAUTOCAPTION:
         case NS_rtf::LN_LCBPLCFTXBXTXT:
-        case NS_rtf::LN_FCPLCFFLDTXBX:
         case NS_rtf::LN_LCBPLCFFLDTXBX:
-        case NS_rtf::LN_FCPLCFHDRTXBXTXT:
         case NS_rtf::LN_LCBPLCFHDRTXBXTXT:
-        case NS_rtf::LN_FCPLCFFLDHDRTXBX:
         case NS_rtf::LN_LCBPLCFFLDHDRTXBX:
-        case NS_rtf::LN_FCSTTBTTMBD:
         case NS_rtf::LN_LCBSTTBTTMBD:
-        case NS_rtf::LN_FCPGDMOTHER:
         case NS_rtf::LN_LCBPGDMOTHER:
-        case NS_rtf::LN_FCBKDMOTHER:
         case NS_rtf::LN_LCBBKDMOTHER:
-        case NS_rtf::LN_FCPGDFTN:
         case NS_rtf::LN_LCBPGDFTN:
-        case NS_rtf::LN_FCBKDFTN:
         case NS_rtf::LN_LCBBKDFTN:
-        case NS_rtf::LN_FCPGDEDN:
         case NS_rtf::LN_LCBPGDEDN:
-        case NS_rtf::LN_FCBKDEDN:
         case NS_rtf::LN_LCBBKDEDN:
-        case NS_rtf::LN_FCPLCFLST:
         case NS_rtf::LN_LCBPLCFLST:
-        case NS_rtf::LN_FCPLFLFO:
         case NS_rtf::LN_LCBPLFLFO:
-        case NS_rtf::LN_FCPLCFTXBXBKD:
         case NS_rtf::LN_LCBPLCFTXBXBKD:
-        case NS_rtf::LN_FCPLCFTXBXHDRBKD:
         case NS_rtf::LN_LCBPLCFTXBXHDRBKD:
-        case NS_rtf::LN_FCSTTBGLSYSTYLE:
         case NS_rtf::LN_LCBSTTBGLSYSTYLE:
-        case NS_rtf::LN_FCPLCFBTELVC:
         case NS_rtf::LN_LCBPLCFBTELVC:
-        case NS_rtf::LN_FCPLCFLVC:
         case NS_rtf::LN_LCBPLCFLVC:
-        case NS_rtf::LN_FCSTTBLISTNAMES:
         case NS_rtf::LN_LCBSTTBLISTNAMES:
         case NS_rtf::LN_LCBSTTBFUSSR:
             {
@@ -645,8 +548,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_FPUB:
             break;
         case NS_rtf::LN_ITCLIM:
-            break;
-        case NS_rtf::LN_FCOL:
             break;
         case NS_rtf::LN_LINECOLOR:
             break;
