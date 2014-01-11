@@ -452,7 +452,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
     sal_Int32 nIntValue = val.getInt();
     switch( nName )
     {
-        case NS_rtf::LN_LCB: break;//byte count
         case NS_rtf::LN_CBHEADER: break;//ignored
         case NS_rtf::LN_MFP: //MetafilePict
         case NS_rtf::LN_BRCTOP: //top border

@@ -213,45 +213,8 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_PNFBPCHPFIRST:
         case NS_rtf::LN_PNFBPPAPFIRST:
         case NS_rtf::LN_PNFBPLVCFIRST:
-        case NS_rtf::LN_LCBSTSHFORIG:
-        case NS_rtf::LN_LCBPLCFPAD:
-        case NS_rtf::LN_LCBSTTBFGLSY:
-        case NS_rtf::LN_LCBPLCFGLSY:
-        case NS_rtf::LN_LCBPLCFSEA:
-        case NS_rtf::LN_LCBPLCFFLDMCR:
-        case NS_rtf::LN_LCBCMDS:
-        case NS_rtf::LN_LCBPLCMCR:
-        case NS_rtf::LN_LCBSTTBFMCR:
-        case NS_rtf::LN_LCBPRDRVR:
-        case NS_rtf::LN_LCBPRENVPORT:
-        case NS_rtf::LN_LCBPRENVLAND:
-        case NS_rtf::LN_LCBWSS:
-        case NS_rtf::LN_LCBPLCFPGDFTN:
-        case NS_rtf::LN_LCBAUTOSAVESOURCE:
-        case NS_rtf::LN_LCBPLCDOAMOM:
-        case NS_rtf::LN_LCBPLCDOAHDR:
-        case NS_rtf::LN_LCBPMS:
-        case NS_rtf::LN_LCBPLCFPGDEDN:
-        case NS_rtf::LN_LCBPLCFWKB:
-        case NS_rtf::LN_LCBPLCFSPL:
-        case NS_rtf::LN_LCBSTWUSER:
-        case NS_rtf::LN_LCBUNUSED:
-        case NS_rtf::LN_LCBSTTBFINTLFLD:
-        case NS_rtf::LN_LCBROUTESLIP:
-        case NS_rtf::LN_LCBSTTBSAVEDBY:
-        case NS_rtf::LN_LCBSTTBFNM:
-        case NS_rtf::LN_LCBDOCUNDO:
-        case NS_rtf::LN_LCBRGBUSE:
-        case NS_rtf::LN_LCBUSP:
-        case NS_rtf::LN_LCBUSKF:
-        case NS_rtf::LN_LCBPLCUPCRGBUSE:
-        case NS_rtf::LN_LCBPLCUPCUSP:
-        case NS_rtf::LN_LCBPLGOSL:
-        case NS_rtf::LN_LCBPLCOCX:
         case NS_rtf::LN_DWLOWDATETIME:
         case NS_rtf::LN_DWHIGHDATETIME:
-        case NS_rtf::LN_LCBPLCASUMY:
-        case NS_rtf::LN_LCBPLCFGRAM:
             break;
 
         case NS_rtf::LN_ISTD: //index of applied style
@@ -411,60 +374,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_PNLVCFIRST:
         case NS_rtf::LN_CPNBTELVC:
         case NS_rtf::LN_CFCLCB:
-        case NS_rtf::LN_LCBSTSHF:
-        case NS_rtf::LN_LCBPLCFFNDREF:
-        case NS_rtf::LN_LCBPLCFFNDTXT:
-        case NS_rtf::LN_LCBPLCFANDREF:
-        case NS_rtf::LN_LCBPLCFANDTXT:
-        case NS_rtf::LN_LCBPLCFSED:
-        case NS_rtf::LN_LCBPLCFPHE:
-        case NS_rtf::LN_LCBPLCFHDD:
-        case NS_rtf::LN_LCBPLCFBTECHPX:
-        case NS_rtf::LN_LCBPLCFBTEPAPX:
-        case NS_rtf::LN_LCBSTTBFFFN:
-        case NS_rtf::LN_LCBPLCFFLDMOM:
-        case NS_rtf::LN_LCBPLCFFLDHDR:
-        case NS_rtf::LN_LCBPLCFFLDFTN:
-        case NS_rtf::LN_LCBPLCFFLDATN:
-        case NS_rtf::LN_LCBSTTBFBKMK:
-        case NS_rtf::LN_LCBPLCFBKF:
-        case NS_rtf::LN_LCBPLCFBKL:
-        case NS_rtf::LN_LCBDOP:
-        case NS_rtf::LN_LCBSTTBFASSOC:
-        case NS_rtf::LN_LCBCLX:
-        case NS_rtf::LN_LCBGRPXSTATNOWNERS:
-        case NS_rtf::LN_LCBSTTBFATNBKMK:
-        case NS_rtf::LN_LCBPLCSPAMOM:
-        case NS_rtf::LN_LCBPLCSPAHDR:
-        case NS_rtf::LN_LCBPLCFATNBKF:
-        case NS_rtf::LN_LCBPLCFATNBKL:
-        case NS_rtf::LN_LCBFORMFLDSTTBF:
-        case NS_rtf::LN_LCBPLCFENDREF:
-        case NS_rtf::LN_LCBPLCFENDTXT:
-        case NS_rtf::LN_LCBPLCFFLDEDN:
-        case NS_rtf::LN_LCBDGGINFO:
-        case NS_rtf::LN_LCBSTTBFRMARK:
-        case NS_rtf::LN_LCBSTTBFCAPTION:
-        case NS_rtf::LN_LCBSTTBFAUTOCAPTION:
-        case NS_rtf::LN_LCBPLCFTXBXTXT:
-        case NS_rtf::LN_LCBPLCFFLDTXBX:
-        case NS_rtf::LN_LCBPLCFHDRTXBXTXT:
-        case NS_rtf::LN_LCBPLCFFLDHDRTXBX:
-        case NS_rtf::LN_LCBSTTBTTMBD:
-        case NS_rtf::LN_LCBPGDMOTHER:
-        case NS_rtf::LN_LCBBKDMOTHER:
-        case NS_rtf::LN_LCBPGDFTN:
-        case NS_rtf::LN_LCBBKDFTN:
-        case NS_rtf::LN_LCBPGDEDN:
-        case NS_rtf::LN_LCBBKDEDN:
-        case NS_rtf::LN_LCBPLCFLST:
-        case NS_rtf::LN_LCBPLFLFO:
-        case NS_rtf::LN_LCBPLCFTXBXBKD:
-        case NS_rtf::LN_LCBPLCFTXBXHDRBKD:
-        case NS_rtf::LN_LCBSTTBGLSYSTYLE:
-        case NS_rtf::LN_LCBPLCFBTELVC:
-        case NS_rtf::LN_LCBPLCFLVC:
-        case NS_rtf::LN_LCBSTTBLISTNAMES:
         case NS_rtf::LN_LCBSTTBFUSSR:
             {
                 m_pImpl->GetFIB().SetData( nName, nIntValue );
@@ -562,8 +471,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_YEXT:
             break;
         case NS_rtf::LN_HMF:
-            break;
-        case NS_rtf::LN_LCB:
             break;
         case NS_rtf::LN_CBHEADER:
             break;
