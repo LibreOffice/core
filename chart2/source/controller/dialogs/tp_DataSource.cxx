@@ -66,7 +66,6 @@ OUString lcl_GetRoleLBEntry(
     aEntry.append(OUString( rRange ));
 
     OUString sFoo = aEntry.makeStringAndClear();
-    fprintf(stderr, "ConvertRoleFromInternalToUI :%s:\n", OUStringToOString(sFoo, RTL_TEXTENCODING_UTF8).getStr());
     return sFoo;
 }
 
