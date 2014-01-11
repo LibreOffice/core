@@ -2957,12 +2957,12 @@ Size Edit::CalcSize( xub_StrLen nChars ) const
 
 // -----------------------------------------------------------------------
 
-xub_StrLen Edit::GetMaxVisChars() const
+sal_Int32 Edit::GetMaxVisChars() const
 {
     const Window* pW = mpSubEdit ? mpSubEdit : this;
-    long nOutWidth = pW->GetOutputSizePixel().Width();
-    long nCharWidth = GetTextWidth( OUString('x') );
-    return nCharWidth ? (xub_StrLen)(nOutWidth/nCharWidth) : 0;
+    sal_Int32 nOutWidth = pW->GetOutputSizePixel().Width();
+    sal_Int32 nCharWidth = GetTextWidth( OUString('x') );
+    return nCharWidth ? nOutWidth/nCharWidth : 0;
 }
 
 // -----------------------------------------------------------------------

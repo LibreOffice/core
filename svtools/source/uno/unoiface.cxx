@@ -788,7 +788,7 @@ void VCLXFileControl::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) 
     nLines = 1;
     FileControl* pControl = (FileControl*) GetWindow();
     if ( pControl )
-        nCols = (sal_Int16) pControl->GetEdit().GetMaxVisChars();
+        nCols = pControl->GetEdit().GetMaxVisChars();
 }
 
 void VCLXFileControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
