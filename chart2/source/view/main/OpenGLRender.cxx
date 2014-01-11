@@ -571,15 +571,21 @@ int OpenGLRender::RenderLine2FBO(int)
         Line2DPointList &pointList = m_Line2DShapePointList.front();
         //fill vertex buffer
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+        CHECK_GL_ERROR();
         glBufferData(GL_ARRAY_BUFFER, pointList.bufLen, pointList.pointBuf, GL_STATIC_DRAW);
+        CHECK_GL_ERROR();
         // Use our shader
         glUseProgram(m_Line2DProID);
+        CHECK_GL_ERROR();
 
         glUniform4fv(m_Line2DColorID, 1, &m_Line2DColor[0]);
+        CHECK_GL_ERROR();
 
         // 1rst attribute buffer : vertices
         glEnableVertexAttribArray(m_Line2DVertexID);
+        CHECK_GL_ERROR();
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+        CHECK_GL_ERROR();
         glVertexAttribPointer(
             m_Line2DVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
             2,                  // size
@@ -589,8 +595,12 @@ int OpenGLRender::RenderLine2FBO(int)
             (void*)0            // array buffer offset
             );
         glDrawArrays(GL_LINE_STRIP, 0, pointList.bufLen / sizeof(float) / 2); // 12*3 indices starting at 0 -> 12 triangles
+        CHECK_GL_ERROR();
         glDisableVertexAttribArray(m_Line2DWholeVertexID);
+        CHECK_GL_ERROR();
         glUseProgram(0);
+        CHECK_GL_ERROR();
+        free(pointList.pointBuf);
         m_Line2DShapePointList.pop_front();
         free(pointList.pointBuf);
     }
