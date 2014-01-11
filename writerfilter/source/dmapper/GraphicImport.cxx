@@ -545,40 +545,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
             break; // y-size
         case NS_rtf::LN_HMF: break; //identifier - ignored
 
-        //sprm 0xf004 and 0xf008, 0xf00b
-        case NS_rtf::LN_dfftype://
-            m_pImpl->nDffType = nIntValue;
-        break;
-        case NS_rtf::LN_dffinstance:
-            //todo: does this still work for PICF?
-            //in case of LN_dfftype == 0xf01f the instance contains the bitmap type:
-            if(m_pImpl->nDffType == 0xf01f)
-                switch( nIntValue )
-                {
-                    case 0x216 :            // Metafile header then compressed WMF
-
-                    case 0x3D4 :           // Metafile header then compressed EMF
-
-                    case 0x542 :            // Metafile hd. then compressed PICT
-
-                    {
-
-                    }
-
-                    break;
-
-                    case 0x46A :            break;// One byte tag then JPEG (= JFIF) data
-
-                    case 0x6E0 :            break;// One byte tag then PNG data
-
-                    case 0x7A8 : m_pImpl->bIsBitmap = true;
-                    break;
-
-                }
-        break;
-        case NS_rtf::LN_dffversion://  ignored
-        break;
-
         //sprm 0xf008
         case NS_rtf::LN_shptype:
             break;
@@ -671,7 +637,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_YABOTTOM:
             m_pImpl->nBottomPosition = ConversionHelper::convertTwipToMM100(nIntValue);
             break;//bottom position
-        case NS_rtf::LN_LayoutInTableCell: break; //currently unknown
         case NS_rtf::LN_BX: //hori orient relation
             switch( nIntValue )
             {
@@ -743,7 +708,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_FANCHORLOCK:
         case NS_rtf::LN_CTXBX:
         break;
-        case NS_rtf::LN_dffheader: break;
         case NS_ooxml::LN_CT_PositiveSize2D_cx:// 90407;
         case NS_ooxml::LN_CT_PositiveSize2D_cy:// 90408;
         {
