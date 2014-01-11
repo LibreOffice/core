@@ -1509,6 +1509,7 @@ int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color,
 
     }
 
+    CHECK_GL_ERROR();
     glGenTextures(1, &m_TextInfo.texture);
     CHECK_GL_ERROR();
     glBindTexture(GL_TEXTURE_2D, m_TextInfo.texture);
