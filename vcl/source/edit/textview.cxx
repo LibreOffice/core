@@ -1335,43 +1335,22 @@ TextSelection TextView::ImpMoveCursor( const KeyEvent& rKeyEvent )
 
 void TextView::InsertText( const OUString& rStr, sal_Bool bSelect )
 {
-//  HideSelection();
     mpImpl->mpTextEngine->UndoActionStart();
 
-    /* #i87633#
-    break inserted text into chunks that fit into the underlying String
-    based API (which has a maximum length of 65534 elements
+    TextSelection aNewSel( mpImpl->maSelection );
+    TextPaM aPaM = mpImpl->mpTextEngine->ImpInsertText( mpImpl->maSelection, rStr );
 
-    note: this will of course still cause problems for lines longer than those
-    65534 elements, but those cases will hopefully be few.
-    In the long run someone should switch the TextEngine to OUString instead of String
-    */
-    sal_Int32 nLen = rStr.getLength();
-    sal_Int32 nPos = 0;
-    do
+    if ( bSelect )
     {
-        sal_Int32 nChunkLen = nLen > 65534 ? 65534 : nLen;
-        OUString aChunk( rStr.copy( nPos, nChunkLen ) );
-
-        TextSelection aNewSel( mpImpl->maSelection );
-
-        TextPaM aPaM = mpImpl->mpTextEngine->ImpInsertText( mpImpl->maSelection, aChunk );
-
-        if ( bSelect )
-        {
-            aNewSel.Justify();
-            aNewSel.GetEnd() = aPaM;
-        }
-        else
-        {
-            aNewSel = aPaM;
-        }
-
-        ImpSetSelection( aNewSel );
-        nLen -= nChunkLen;
-        nPos += nChunkLen;
+        aNewSel.Justify();
+        aNewSel.GetEnd() = aPaM;
     }
-    while( nLen );
+    else
+    {
+        aNewSel = aPaM;
+    }
+
+    ImpSetSelection( aNewSel );
 
     mpImpl->mpTextEngine->UndoActionEnd();
 
@@ -1952,14 +1931,8 @@ bool TextView::ImplTruncateNewText( OUString& rNewText ) const
 {
     bool bTruncated = false;
 
-    if( rNewText.getLength() > 65534 ) // limit to String API
-    {
-        rNewText = rNewText.copy( 0, 65534 );
-        bTruncated = true;
-    }
-
     sal_uLong nMaxLen = mpImpl->mpTextEngine->GetMaxTextLen();
-    // 0 means unlimited, there is just the String API limit handled above
+    // 0 means unlimited
     if( nMaxLen != 0 )
     {
         sal_uLong nCurLen = mpImpl->mpTextEngine->GetTextLen();
