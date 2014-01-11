@@ -134,8 +134,8 @@ namespace svt
         virtual sal_Bool            IsReadOnly() const = 0;
         virtual void                SetReadOnly( sal_Bool bReadOnly ) = 0;
 
-        virtual xub_StrLen          GetMaxTextLen() const = 0;
-        virtual void                SetMaxTextLen( xub_StrLen _nMaxLen ) = 0;
+        virtual sal_Int32           GetMaxTextLen() const = 0;
+        virtual void                SetMaxTextLen( sal_Int32 _nMaxLen ) = 0;
 
         virtual Selection           GetSelection() const = 0;
         virtual void                SetSelection( const Selection& _rSelection ) = 0;
@@ -170,8 +170,8 @@ namespace svt
         virtual sal_Bool            IsReadOnly() const;
         virtual void                SetReadOnly( sal_Bool bReadOnly );
 
-        virtual xub_StrLen          GetMaxTextLen() const;
-        virtual void                SetMaxTextLen( xub_StrLen _nMaxLen );
+        virtual sal_Int32           GetMaxTextLen() const;
+        virtual void                SetMaxTextLen( sal_Int32 _nMaxLen );
 
         virtual Selection           GetSelection() const;
         virtual void                SetSelection( const Selection& _rSelection );

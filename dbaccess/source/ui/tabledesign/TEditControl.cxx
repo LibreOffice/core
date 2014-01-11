@@ -219,7 +219,7 @@ void OTableEditorCtrl::InitCellController()
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     // Cell Field name
-    xub_StrLen nMaxTextLen = EDIT_NOLIMIT;
+    sal_Int32 nMaxTextLen = EDIT_NOLIMIT;
     OUString sExtraNameChars;
     Reference<XConnection> xCon;
     try
@@ -227,7 +227,7 @@ void OTableEditorCtrl::InitCellController()
         xCon = GetView()->getController().getConnection();
         Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : Reference< XDatabaseMetaData>();
 
-        nMaxTextLen = ((xub_StrLen)xMetaData.is() ? static_cast<xub_StrLen>(xMetaData->getMaxColumnNameLength()) : 0);
+        nMaxTextLen = xMetaData.is() ? xMetaData->getMaxColumnNameLength() : 0;
 
         if( nMaxTextLen == 0 )
             nMaxTextLen = EDIT_NOLIMIT;
@@ -312,7 +312,7 @@ sal_Bool OTableEditorCtrl::SetDataPtr( long nRow )
     if(nRow == -1)
         return sal_False;
 
-    OSL_ENSURE((xub_StrLen)nRow < m_pRowList->size(),"Row is greater than size!");
+    OSL_ENSURE(nRow < (long)m_pRowList->size(),"Row is greater than size!");
     if(nRow >= (long)m_pRowList->size())
         return sal_False;
     pActRow = (*m_pRowList)[nRow];
@@ -806,7 +806,7 @@ OUString OTableEditorCtrl::GenerateName( const OUString& rName )
     Reference<XConnection> xCon = GetView()->getController().getConnection();
     Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : Reference< XDatabaseMetaData>();
 
-    xub_StrLen nMaxTextLen((xub_StrLen)( xMetaData.is() ? xMetaData->getMaxColumnNameLength() : 0));
+    sal_Int32 nMaxTextLen(xMetaData.is() ? xMetaData->getMaxColumnNameLength() : 0);
 
     if( (rName.getLength()+2) >nMaxTextLen )
         aBaseName = rName.copy( 0, nMaxTextLen-2 );

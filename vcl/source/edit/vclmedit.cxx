@@ -112,8 +112,8 @@ public:
     void        SetReadOnly( sal_Bool bRdOnly );
     sal_Bool        IsReadOnly() const;
 
-    void        SetMaxTextLen( xub_StrLen nLen );
-    xub_StrLen  GetMaxTextLen() const;
+    void        SetMaxTextLen(sal_Int32 nLen);
+    sal_Int32   GetMaxTextLen() const;
 
     void        SetMaxTextWidth( sal_uLong nMaxWidth );
 
@@ -376,15 +376,14 @@ sal_Bool ImpVclMEdit::IsReadOnly() const
     return mpTextWindow->GetTextView()->IsReadOnly();
 }
 
-void ImpVclMEdit::SetMaxTextLen( xub_StrLen nLen )
+void ImpVclMEdit::SetMaxTextLen(sal_Int32 nLen)
 {
-    mpTextWindow->GetTextEngine()->SetMaxTextLen( nLen );
+    mpTextWindow->GetTextEngine()->SetMaxTextLen(nLen);
 }
 
-xub_StrLen ImpVclMEdit::GetMaxTextLen() const
+sal_Int32 ImpVclMEdit::GetMaxTextLen() const
 {
-    return sal::static_int_cast< xub_StrLen >(
-        mpTextWindow->GetTextEngine()->GetMaxTextLen());
+    return mpTextWindow->GetTextEngine()->GetMaxTextLen();
 }
 
 void ImpVclMEdit::InsertText( const OUString& rStr )
@@ -718,7 +717,7 @@ TextWindow::TextWindow( Window* pParent ) : Window( pParent )
     SetPointer( Pointer( POINTER_TEXT ) );
 
     mpExtTextEngine = new ExtTextEngine;
-    mpExtTextEngine->SetMaxTextLen( STRING_MAXLEN );
+    mpExtTextEngine->SetMaxTextLen(EDIT_NOLIMIT);
     if( pParent->GetStyle() & WB_BORDER )
         mpExtTextEngine->SetLeftMargin( 2 );
     mpExtTextEngine->SetLocale( GetSettings().GetLanguageTag().getLocale() );
@@ -949,7 +948,7 @@ VclMultiLineEdit::VclMultiLineEdit( Window* pParent, const ResId& rResId )
     ImplInitSettings( sal_True, sal_True, sal_True );
     pUpdateDataTimer = 0;
 
-    sal_uInt16 nMaxLen = Edit::GetMaxTextLen();
+    sal_Int32 nMaxLen = Edit::GetMaxTextLen();
     if ( nMaxLen )
         SetMaxTextLen( nMaxLen );
 
@@ -1114,9 +1113,9 @@ sal_Bool VclMultiLineEdit::IsReadOnly() const
     return pImpVclMEdit->IsReadOnly();
 }
 
-void VclMultiLineEdit::SetMaxTextLen( xub_StrLen nMaxLen )
+void VclMultiLineEdit::SetMaxTextLen(sal_Int32 nMaxLen)
 {
-    pImpVclMEdit->SetMaxTextLen( nMaxLen );
+    pImpVclMEdit->SetMaxTextLen(nMaxLen);
 }
 
 void VclMultiLineEdit::SetMaxTextWidth( sal_uLong nMaxWidth )
@@ -1124,7 +1123,7 @@ void VclMultiLineEdit::SetMaxTextWidth( sal_uLong nMaxWidth )
     pImpVclMEdit->SetMaxTextWidth(nMaxWidth );
 }
 
-xub_StrLen VclMultiLineEdit::GetMaxTextLen() const
+sal_Int32 VclMultiLineEdit::GetMaxTextLen() const
 {
     return pImpVclMEdit->GetMaxTextLen();
 }

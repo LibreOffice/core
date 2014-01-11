@@ -381,11 +381,11 @@ protected:
     virtual void implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
 
 protected:
-    inline void implSetMaxTextLen( sal_Int16 _nMaxLen )
+    void implSetMaxTextLen( sal_Int16 _nMaxLen )
     {
         implSetEffectiveMaxTextLen( _nMaxLen ? _nMaxLen : EDIT_NOLIMIT );
     }
-    virtual void implSetEffectiveMaxTextLen( sal_Int16 _nMaxLen );
+    virtual void implSetEffectiveMaxTextLen( sal_Int32 _nMaxLen );
 };
 
 //==================================================================
@@ -419,7 +419,7 @@ protected:
     virtual sal_Bool    commitControl( );
     virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
     // DbLimitedLengthField
-    virtual void        implSetEffectiveMaxTextLen( sal_Int16 _nMaxLen );
+    virtual void        implSetEffectiveMaxTextLen( sal_Int32 _nMaxLen );
 };
 
 //==================================================================

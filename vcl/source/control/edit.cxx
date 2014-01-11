@@ -867,14 +867,12 @@ void Edit::ShowTruncationWarning( Window* pParent )
 
 // -----------------------------------------------------------------------
 
-bool Edit::ImplTruncateToMaxLen( OUString& rStr, sal_uInt32 nSelectionLen ) const
+bool Edit::ImplTruncateToMaxLen( OUString& rStr, sal_Int32 nSelectionLen ) const
 {
     bool bWasTruncated = false;
-    const sal_uInt32 nMaxLen = mnMaxTextLen < 65534 ? mnMaxTextLen : 65534;
-    sal_uInt32 nLenAfter = static_cast<sal_uInt32>(maText.getLength()) + rStr.getLength() - nSelectionLen;
-    if ( nLenAfter > nMaxLen )
+    if (maText.getLength() - nSelectionLen > mnMaxTextLen - rStr.getLength())
     {
-        sal_uInt32 nErasePos = nMaxLen - static_cast<sal_uInt32>(maText.getLength()) + nSelectionLen;
+        sal_Int32 nErasePos = mnMaxTextLen - maText.getLength() + nSelectionLen;
         rStr = rStr.copy( 0, nErasePos );
         bWasTruncated = true;
     }
@@ -2594,7 +2592,7 @@ sal_Bool Edit::IsInsertMode() const
 
 // -----------------------------------------------------------------------
 
-void Edit::SetMaxTextLen( xub_StrLen nMaxLen )
+void Edit::SetMaxTextLen(sal_Int32 nMaxLen)
 {
     mnMaxTextLen = nMaxLen ? nMaxLen : EDIT_NOLIMIT;
 

@@ -896,7 +896,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             return;
         m_nPos++;
         {
-            sal_uInt32 nMax = EDIT_NOLIMIT;
+            sal_Int32 nMax = EDIT_NOLIMIT;
             OUString aTmpString;
             try
             {
@@ -907,7 +907,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
                     aTmpString = xMetaData->getExtraNameCharacters();
                 }
             }
-            catch(Exception&)
+            catch (const Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION();
             }
@@ -917,7 +917,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
                                                     STR_HELP_DEFAULT_VALUE,
                                                     FIELD_PRPOERTY_COLUMNNAME,
                                                     WB_BORDER );
-            m_pColumnName->SetMaxTextLen(xub_StrLen( nMax ? nMax : EDIT_NOLIMIT));
+            m_pColumnName->SetMaxTextLen(nMax ? nMax : EDIT_NOLIMIT);
             m_pColumnName->setCheck( isSQL92CheckEnabled(getConnection()) );
         }
 

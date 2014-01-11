@@ -1067,7 +1067,7 @@ void DbLimitedLengthField::implAdjustGenericFieldSetting( const Reference< XProp
 }
 
 //------------------------------------------------------------------------------
-void DbLimitedLengthField::implSetEffectiveMaxTextLen( sal_Int16 _nMaxLen )
+void DbLimitedLengthField::implSetEffectiveMaxTextLen( sal_Int32 _nMaxLen )
 {
     dynamic_cast< Edit* >( m_pWindow )->SetMaxTextLen( _nMaxLen );
     if ( m_pPainter )
@@ -1212,7 +1212,7 @@ void DbTextField::updateFromModel( Reference< XPropertySet > _rxModel )
     OUString sText;
     _rxModel->getPropertyValue( FM_PROP_TEXT ) >>= sText;
 
-    xub_StrLen nMaxTextLen = m_pEdit->GetMaxTextLen();
+    sal_Int32 nMaxTextLen = m_pEdit->GetMaxTextLen();
     if ( EDIT_NOLIMIT != nMaxTextLen && sText.getLength() > nMaxTextLen )
     {
         sal_Int32 nDiff = sText.getLength() - nMaxTextLen;
@@ -1229,7 +1229,7 @@ sal_Bool DbTextField::commitControl()
 {
     OUString aText( m_pEdit->GetText( getModelLineEndSetting( m_rColumn.getModel() ) ) );
     // we have to check if the length before we can decide if the value was modified
-    xub_StrLen nMaxTextLen = m_pEdit->GetMaxTextLen();
+    sal_Int32 nMaxTextLen = m_pEdit->GetMaxTextLen();
     if ( EDIT_NOLIMIT != nMaxTextLen )
     {
         OUString sOldValue;
@@ -1243,7 +1243,7 @@ sal_Bool DbTextField::commitControl()
 }
 
 //------------------------------------------------------------------------------
-void DbTextField::implSetEffectiveMaxTextLen( sal_Int16 _nMaxLen )
+void DbTextField::implSetEffectiveMaxTextLen( sal_Int32 _nMaxLen )
 {
     if ( m_pEdit )
         m_pEdit->SetMaxTextLen( _nMaxLen );

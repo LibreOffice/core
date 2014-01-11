@@ -71,7 +71,7 @@ OCopyTable::OCopyTable( Window * pParent )
 {
     DBG_CTOR(OCopyTable,NULL);
 
-    m_edTableName.SetMaxTextLen( EDIT_NOLIMIT );
+    m_edTableName.SetMaxTextLen(EDIT_NOLIMIT);
 
     if ( m_pParent->m_xDestConnection.is() )
     {
@@ -98,7 +98,7 @@ OCopyTable::OCopyTable( Window * pParent )
         m_edKeyName.SetText(sKeyName);
 
         sal_Int32 nMaxLen = m_pParent->getMaxColumnNameLength();
-        m_edKeyName.SetMaxTextLen(nMaxLen ? (xub_StrLen)nMaxLen : EDIT_NOLIMIT);
+        m_edKeyName.SetMaxTextLen(nMaxLen ? nMaxLen : EDIT_NOLIMIT);
     }
 
     FreeResource();

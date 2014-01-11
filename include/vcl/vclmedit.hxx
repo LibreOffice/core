@@ -79,8 +79,8 @@ public:
 
     void            EnableFocusSelectionHide( sal_Bool bHide );
 
-    virtual void    SetMaxTextLen( xub_StrLen nMaxLen = 0 );
-    virtual xub_StrLen GetMaxTextLen() const;
+    virtual void    SetMaxTextLen(sal_Int32 nMaxLen = 0);
+    virtual sal_Int32 GetMaxTextLen() const;
 
     void            SetMaxTextWidth( sal_uLong nMaxWidth );
 

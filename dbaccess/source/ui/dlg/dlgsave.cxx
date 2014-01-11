@@ -271,7 +271,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                 m_pImpl->m_aPB_CANCEL.SetPosPixel(Point(m_pImpl->m_aPB_CANCEL.GetPosPixel().X(),aPos.Y()));
                 m_pImpl->m_aPB_HELP.SetPosPixel(Point(m_pImpl->m_aPB_HELP.GetPosPixel().X(),aPos.Y()));
 
-                sal_uInt16 nLength =  m_pImpl->m_xMetaData.is() ? static_cast<sal_uInt16>(m_pImpl->m_xMetaData->getMaxTableNameLength()) : 0;
+                sal_Int32 nLength =  m_pImpl->m_xMetaData.is() ? m_pImpl->m_xMetaData->getMaxTableNameLength() : 0;
                 nLength = nLength ? nLength : EDIT_NOLIMIT;
 
                 m_pImpl->m_aTitle.SetMaxTextLen(nLength);

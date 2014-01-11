@@ -44,7 +44,7 @@ struct Impl_IMEInfos;
 // - Edit-Types -
 // --------------
 
-#define EDIT_NOLIMIT                STRING_LEN
+#define EDIT_NOLIMIT                SAL_MAX_INT32
 #define EDIT_UPDATEDATA_TIMEOUT     350
 
 typedef OUString (*FncGetSpecialChars)( Window* pWin, const Font& rFont );
@@ -70,7 +70,7 @@ private:
     long                mnXOffset;
     Selection           maSelection;
     sal_uInt16          mnAlign;
-    xub_StrLen          mnMaxTextLen;
+    sal_Int32           mnMaxTextLen;
     sal_Int32           mnWidthInChars;
     sal_Int32           mnMaxWidthChars;
     AutocompleteAction  meAutocompleteAction;
@@ -89,7 +89,7 @@ private:
 
     DECL_DLLPRIVATE_LINK(      ImplUpdateDataHdl, void* );
 
-    SAL_DLLPRIVATE bool        ImplTruncateToMaxLen( OUString&, sal_uInt32 nSelectionLen ) const;
+    SAL_DLLPRIVATE bool        ImplTruncateToMaxLen( OUString&, sal_Int32 nSelectionLen ) const;
     SAL_DLLPRIVATE void        ImplInitEditData();
     SAL_DLLPRIVATE void        ImplModified();
     SAL_DLLPRIVATE OUString    ImplGetText() const;
@@ -189,8 +189,8 @@ public:
     void                SetInsertMode( sal_Bool bInsert );
     sal_Bool                IsInsertMode() const;
 
-    virtual void        SetMaxTextLen( xub_StrLen nMaxLen = EDIT_NOLIMIT );
-    virtual xub_StrLen  GetMaxTextLen() const { return mnMaxTextLen; }
+    virtual void        SetMaxTextLen( sal_Int32 nMaxLen = EDIT_NOLIMIT );
+    virtual sal_Int32   GetMaxTextLen() const { return mnMaxTextLen; }
 
     void                SetWidthInChars(sal_Int32 nWidthInChars);
     sal_Int32           GetWidthInChars() const { return mnWidthInChars; }

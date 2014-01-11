@@ -101,16 +101,16 @@ OUString GenericEditImplementation< EDIT >::GetSelected( LineEnd ) const
 
 //----------------------------------------------------------------------
 template <class EDIT>
-void GenericEditImplementation< EDIT >::SetMaxTextLen( xub_StrLen _nMaxLen )
+void GenericEditImplementation< EDIT >::SetMaxTextLen( sal_Int32 _nMaxLen )
 {
     m_rEdit.SetMaxTextLen( _nMaxLen );
 }
 
 //----------------------------------------------------------------------
 template <class EDIT>
-xub_StrLen GenericEditImplementation< EDIT >::GetMaxTextLen() const
+sal_Int32 GenericEditImplementation< EDIT >::GetMaxTextLen() const
 {
-    return (xub_StrLen)m_rEdit.GetMaxTextLen( );
+    return m_rEdit.GetMaxTextLen( );
 }
 
 //----------------------------------------------------------------------
