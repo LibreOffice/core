@@ -243,11 +243,11 @@ private:
 
     GLuint m_RenderTexCoordBuf;
 
-    GLuint m_TextureObj[2];
+    GLuint m_TextureObj;
 
-    GLuint m_FboID[2];
+    GLuint m_FboID;
 
-    GLuint m_RboID[2];
+    GLuint m_RboID;
 
     int m_iWidth;
 
@@ -260,8 +260,6 @@ private:
     int m_iExternRC;
 
     Line2DPointList m_Line2DPointList;
-
-    int m_iFboIdx;
 
     float m_fLineWidth;
 

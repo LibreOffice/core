@@ -619,7 +619,7 @@ void OpenGLRender::prepareToRender()
     glClearDepth(1.0f);
     // Clear the screen
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    if ((!m_FboID[0]) || (!m_FboID[1]))
+    if (!m_FboID)
     {
         // create a texture object
         CreateTextureObj(m_iWidth, m_iHeight);
@@ -639,7 +639,7 @@ void OpenGLRender::prepareToRender()
     }
     else
     {
-        glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[m_iFboIdx % 2]);
+        glBindFramebuffer(GL_FRAMEBUFFER, m_FboID);
     }
 
     // Clear the screen
@@ -658,7 +658,7 @@ void OpenGLRender::renderToBitmap()
         {
             SAL_INFO("chart2.opengl", "The frame buffer status is not complete!");
         }
-        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_FboID[m_iFboIdx % 2]);
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_FboID);
         status = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
         if (status != GL_FRAMEBUFFER_COMPLETE)
         {
@@ -667,12 +667,12 @@ void OpenGLRender::renderToBitmap()
         glBlitFramebuffer(0, 0 ,m_iWidth, m_iHeight, 0, 0,m_iWidth ,m_iHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
         glBindFramebuffer(GL_READ_FRAMEBUFFER,0);
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER,0);
-        glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[m_iFboIdx % 2]);
+        glBindFramebuffer(GL_FRAMEBUFFER, m_FboID);
     }
 
 #if RENDER_TO_FILE
     char fileName[256] = {0};
-    sprintf(fileName, "D:\\shaderout_%d_%d_%d.bmp", m_iWidth, m_iHeight, m_iFboIdx);
+    sprintf(fileName, "D:\\shaderout_%d_%d.bmp", m_iWidth, m_iHeight);
     sal_uInt8 *buf = (sal_uInt8 *)malloc(m_iWidth * m_iHeight * 3 + BMP_HEADER_LEN);
     CreateBMPHeader(buf, m_iWidth, m_iHeight);
     glReadPixels(0, 0, m_iWidth, m_iHeight, GL_BGR, GL_UNSIGNED_BYTE, buf + BMP_HEADER_LEN);
@@ -695,8 +695,6 @@ void OpenGLRender::renderToBitmap()
     unx::glXSwapBuffers(glWin.dpy, glWin.win);
 #endif
     glFlush();
-    m_iFboIdx++;
-
 }
 
 int OpenGLRender::RenderTexture2FBO(GLuint TexID)
@@ -785,18 +783,8 @@ int OpenGLRender::RenderTexture(GLuint TexID)
 
 int OpenGLRender::CreateTextureObj(int width, int height)
 {
-    glGenTextures(1, &m_TextureObj[0]);
-    glBindTexture(GL_TEXTURE_2D, m_TextureObj[0]);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-    CHECK_GL_ERROR();
-    glBindTexture(GL_TEXTURE_2D, 0);
-
-    glGenTextures(1, &m_TextureObj[1]);
-    glBindTexture(GL_TEXTURE_2D, m_TextureObj[1]);
+    glGenTextures(1, &m_TextureObj);
+    glBindTexture(GL_TEXTURE_2D, m_TextureObj);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -809,18 +797,9 @@ int OpenGLRender::CreateTextureObj(int width, int height)
 
 int OpenGLRender::CreateRenderObj(int width, int height)
 {
-    glGenRenderbuffers(1, &m_RboID[0]);
+    glGenRenderbuffers(1, &m_RboID);
     CHECK_GL_ERROR();
-    glBindRenderbuffer(GL_RENDERBUFFER, m_RboID[0]);
-    CHECK_GL_ERROR();
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
-    CHECK_GL_ERROR();
-    glBindRenderbuffer(GL_RENDERBUFFER, 0);
-    CHECK_GL_ERROR();
-
-    glGenRenderbuffers(1, &m_RboID[1]);
-    CHECK_GL_ERROR();
-    glBindRenderbuffer(GL_RENDERBUFFER, m_RboID[1]);
+    glBindRenderbuffer(GL_RENDERBUFFER, m_RboID);
     CHECK_GL_ERROR();
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
     CHECK_GL_ERROR();
@@ -842,32 +821,17 @@ int OpenGLRender::CreateFrameBufferObj()
 {
     GLenum status;
     // create a framebuffer object, you need to delete them when program exits.
-    glGenFramebuffers(1, &m_FboID[0]);
+    glGenFramebuffers(1, &m_FboID);
     CHECK_GL_FRAME_BUFFER_STATUS();
-    glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[0]);
-    glBindTexture(GL_TEXTURE_2D, m_TextureObj[0]);
+    glBindFramebuffer(GL_FRAMEBUFFER, m_FboID);
+    glBindTexture(GL_TEXTURE_2D, m_TextureObj);
     // attach a texture to FBO color attachement point
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_TextureObj[0], 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_TextureObj, 0);
     CHECK_GL_FRAME_BUFFER_STATUS();
     glBindTexture(GL_TEXTURE_2D, 0);
     // attach a renderbuffer to depth attachment point
-    glBindRenderbuffer(GL_RENDERBUFFER, m_RboID[0]);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_RboID[0]);
-    CHECK_GL_FRAME_BUFFER_STATUS();
-    glBindRenderbuffer(GL_RENDERBUFFER, 0);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-    glGenFramebuffers(1, &m_FboID[1]);
-    CHECK_GL_FRAME_BUFFER_STATUS();
-    glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[1]);
-    glBindTexture(GL_TEXTURE_2D, m_TextureObj[1]);
-    // attach a texture to FBO color attachement point
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_TextureObj[1], 0);
-    CHECK_GL_FRAME_BUFFER_STATUS();
-    glBindTexture(GL_TEXTURE_2D, 0);
-    // attach a renderbuffer to depth attachment point
-    glBindRenderbuffer(GL_RENDERBUFFER, m_RboID[1]);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_RboID[1]);
+    glBindRenderbuffer(GL_RENDERBUFFER, m_RboID);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_RboID);
     CHECK_GL_FRAME_BUFFER_STATUS();
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -883,12 +847,9 @@ void OpenGLRender::Release()
     glDeleteBuffers(1, &m_RenderVertexBuf);
     glDeleteBuffers(1, &m_RenderTexCoordBuf);
     glDeleteProgram(m_RenderProID);
-    glDeleteFramebuffers(1, &m_FboID[0]);
-    glDeleteFramebuffers(1, &m_FboID[1]);
-    glDeleteTextures(1, &m_TextureObj[0]);
-    glDeleteTextures(1, &m_TextureObj[1]);
-    glDeleteRenderbuffers(1, &m_RboID[0]);
-    glDeleteRenderbuffers(1, &m_RboID[1]);
+    glDeleteFramebuffers(1, &m_FboID);
+    glDeleteTextures(1, &m_TextureObj);
+    glDeleteRenderbuffers(1, &m_RboID);
 #if defined( WNT )
     wglMakeCurrent(NULL, NULL);
     if (!m_iExternRC)
@@ -915,9 +876,11 @@ OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
     m_ScaleMatrix(glm::scale(m_Model, glm::vec3(1.0f, 1.0f, 1.0f))),
     m_Line2DProID(0), // TODO: moggi: why is it unused?
     m_Line2DColor(glm::vec4(1.0, 0.0, 0.0, 1.0)),
+    m_TextureObj(0),
+    m_FboID(0),
+    m_RboID(0),
     m_iWidth(0),
     m_iHeight(0),
-    m_iFboIdx(0),
     m_fLineAlpha(1.0),
     mxRenderTarget(xTarget),
     mbArbMultisampleSupported(false),
@@ -931,13 +894,6 @@ OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
     memset(&m_TextInfo, 0, sizeof(TextInfo));
     memset(&m_RectangleList, 0, sizeof(RectanglePointList));
 
-    m_iFboIdx = 0;
-    m_FboID[0] = 0;
-    m_FboID[1] = 0;
-    m_TextureObj[0] = 0;
-    m_TextureObj[1] = 0;
-    m_RboID[0] = 0;
-    m_RboID[1] = 0;
     m_iArbMultisampleFormat = 0;
 
     //TODO: moggi: use STL
