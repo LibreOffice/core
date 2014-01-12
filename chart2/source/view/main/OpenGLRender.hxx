@@ -259,8 +259,6 @@ private:
 
     float m_fLineWidth;
 
-    float m_fLineAlpha;
-
     std::list <Line2DPointList> m_Line2DShapePointList;
 
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxRenderTarget;

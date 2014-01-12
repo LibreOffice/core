@@ -881,7 +881,6 @@ OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
     m_RboID(0),
     m_iWidth(0),
     m_iHeight(0),
-    m_fLineAlpha(1.0),
     mxRenderTarget(xTarget),
     mbArbMultisampleSupported(false),
     m_TextVertexID(0),
@@ -963,7 +962,7 @@ int OpenGLRender::CreateBMPHeader(sal_uInt8 *bmpHeader, int xsize, int ysize)
 
 void OpenGLRender::SetLine2DColor(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b)
 {
-    m_Line2DColor = glm::vec4((float)r / 255.0f, (float)g / 255.0f, (float)b / 255.0f, m_fLineAlpha);
+    m_Line2DColor = glm::vec4((float)r / 255.0f, (float)g / 255.0f, (float)b / 255.0f, m_fAlpha);
 }
 
 void OpenGLRender::SetLine2DWidth(int width)
@@ -1180,7 +1179,7 @@ void OpenGLRender::SetColor(sal_uInt32 color)
     sal_uInt8 r = (color & 0x00FF0000) >> 16;
     sal_uInt8 g = (color & 0x0000FF00) >> 8;
     sal_uInt8 b = (color & 0x000000FF);
-    m_2DColor = glm::vec4((float)r / 255.0f, (float)g / 255.0f, (float)b / 255.0f, m_fLineAlpha);
+    m_2DColor = glm::vec4((float)r / 255.0f, (float)g / 255.0f, (float)b / 255.0f, m_fAlpha);
 }
 
 int OpenGLRender::CreateMultiSampleFrameBufObj()
