@@ -137,18 +137,18 @@ void TestApplication::impl_testDynamicMenuOptions()
 
     if( lNewMenu.getLength() < 1 )
     {
-        aCFG.AppendItem( E_NEWMENU, "private:factory/swriter", "new writer", "icon_writer", "_blank";
-        aCFG.AppendItem( E_NEWMENU, "private:factory/scalc",   "new calc",   "icon_calc",   "_blank";
-        aCFG.AppendItem( E_NEWMENU, "private:factory/sdraw",   "new draw",   "icon_draw",   "_blank";
+        aCFG.AppendItem( E_NEWMENU, "private:factory/swriter", "new writer", "icon_writer", "_blank");
+        aCFG.AppendItem( E_NEWMENU, "private:factory/scalc",   "new calc",   "icon_calc",   "_blank");
+        aCFG.AppendItem( E_NEWMENU, "private:factory/sdraw",   "new draw",   "icon_draw",   "_blank");
 
         lNewMenu = aCFG.GetMenu( E_NEWMENU );
     }
 
     if( lWizardMenu.getLength() < 1 )
     {
-        aCFG.AppendItem( E_WIZARDMENU, "file://a", "system file", "icon_file", "_self";
-        aCFG.AppendItem( E_WIZARDMENU, "ftp://b",  "ftp host",    "icon_ftp",  "_self";
-        aCFG.AppendItem( E_WIZARDMENU, "http://c", "www",         "icon_www",  "_self";
+        aCFG.AppendItem( E_WIZARDMENU, "file://a", "system file", "icon_file", "_self");
+        aCFG.AppendItem( E_WIZARDMENU, "ftp://b",  "ftp host",    "icon_ftp",  "_self");
+        aCFG.AppendItem( E_WIZARDMENU, "http://c", "www",         "icon_www",  "_self");
 
         lWizardMenu = aCFG.GetMenu( E_WIZARDMENU );
     }
