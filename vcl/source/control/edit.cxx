@@ -1283,7 +1283,7 @@ void Edit::ImplAlignAndPaint()
 
 sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
 {
-    sal_Int32 nIndex = STRING_LEN;
+    sal_Int32 nIndex = EDIT_NOLIMIT;
     OUString aText = ImplGetText();
 
     sal_Int32   nDXBuffer[256];
@@ -1316,7 +1316,7 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
             break;
         }
     }
-    if( nIndex == STRING_LEN )
+    if( nIndex == EDIT_NOLIMIT )
     {
         nIndex = 0;
         long nDiff = std::abs( pDX[0]-nX );
@@ -1331,7 +1331,7 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
             }
         }
         if( nIndex == aText.getLength()-1 && std::abs( pDX[2*nIndex+1] - nX ) < nDiff )
-            nIndex = STRING_LEN;
+            nIndex = EDIT_NOLIMIT;
     }
 
     if( pDXBuffer )
@@ -1437,7 +1437,7 @@ void Edit::MouseButtonDown( const MouseEvent& rMEvt )
         mbClickedInSelection = sal_False;
         if ( rMEvt.GetClicks() == 3 )
         {
-            ImplSetSelection( Selection( 0, STRING_LEN ) );
+            ImplSetSelection( Selection( 0, EDIT_NOLIMIT) );
             ImplCopyToSelectionClipboard();
 
         }
@@ -1713,7 +1713,7 @@ sal_Bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                     }
                     else if ( bGoEnd )
                     {
-                        aSel.Max() = STRING_LEN;
+                        aSel.Max() = EDIT_NOLIMIT;
                     }
 
                     if ( !bSelect )
