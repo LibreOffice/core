@@ -189,32 +189,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_UNUSED1_3:
         case NS_rtf::LN_UNUSED1_7:
         case NS_rtf::LN_UNUSED8_3:
-        case NS_rtf::LN_FWRITERESERVATION:
-        case NS_rtf::LN_FLOADOVERRIDE:
-        case NS_rtf::LN_FFAREAST:
-        case NS_rtf::LN_NFIBBACK:
-        case NS_rtf::LN_LKEY:
-        case NS_rtf::LN_ENVR:
-        case NS_rtf::LN_FMAC:
-        case NS_rtf::LN_FWORD97SAVED:
-        case NS_rtf::LN_PNFBPCHPFIRST_W6:
-        case NS_rtf::LN_PNCHPFIRST_W6:
-        case NS_rtf::LN_CPNBTECHP_W6:
-        case NS_rtf::LN_PNFBPPAPFIRST_W6:
-        case NS_rtf::LN_PNPAPFIRST_W6:
-        case NS_rtf::LN_CPNBTEPAP_W6:
-        case NS_rtf::LN_PNFBPLVCFIRST_W6:
-        case NS_rtf::LN_PNLVCFIRST_W6:
-        case NS_rtf::LN_CPNBTELVC_W6:
-        case NS_rtf::LN_CBMAC:
-        case NS_rtf::LN_LPRODUCTCREATED:
-        case NS_rtf::LN_LPRODUCTREVISED:
-        case NS_rtf::LN_CCPMCR:
-        case NS_rtf::LN_PNFBPCHPFIRST:
-        case NS_rtf::LN_PNFBPPAPFIRST:
-        case NS_rtf::LN_PNFBPLVCFIRST:
-        case NS_rtf::LN_DWLOWDATETIME:
-        case NS_rtf::LN_DWHIGHDATETIME:
             break;
 
         case NS_rtf::LN_ISTD: //index of applied style
@@ -334,46 +308,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_FHIDDEN:
             break;
         case NS_rtf::LN_WIDENT:
-
-        case NS_rtf::LN_NFIB:
-
-        case NS_rtf::LN_NPRODUCT:
         case NS_rtf::LN_LID:
-        case NS_rtf::LN_PNNEXT:
-        case NS_rtf::LN_FDOT:
-        case NS_rtf::LN_FGLSY:
-        case NS_rtf::LN_FHASPIC:
-        case NS_rtf::LN_CQUICKSAVES:
-        case NS_rtf::LN_FENCRYPTED:
-        case NS_rtf::LN_FWHICHTBLSTM:
-        case NS_rtf::LN_FREADONLYRECOMMENDED:
-        case NS_rtf::LN_FEXTCHAR:
-        case NS_rtf::LN_FEMPTYSPECIAL:
-        case NS_rtf::LN_FLOADOVERRIDEPAGE:
-        case NS_rtf::LN_FFUTURESAVEDUNDO:
-        case NS_rtf::LN_FSPARE0:
-        case NS_rtf::LN_CHSTABLES:
-        case NS_rtf::LN_CSW:
-        case NS_rtf::LN_WMAGICCREATED:
-        case NS_rtf::LN_WMAGICREVISED:
-        case NS_rtf::LN_WMAGICCREATEDPRIVATE:
-        case NS_rtf::LN_WMAGICREVISEDPRIVATE:
-        case NS_rtf::LN_LIDFE:
-        case NS_rtf::LN_CLW:
-        case NS_rtf::LN_CCPTEXT:
-        case NS_rtf::LN_CCPFTN:
-        case NS_rtf::LN_CCPHDD:
-        case NS_rtf::LN_CCPATN:
-        case NS_rtf::LN_CCPEDN:
-        case NS_rtf::LN_CCPTXBX:
-        case NS_rtf::LN_CCPHDRTXBX:
-        case NS_rtf::LN_PNCHPFIRST:
-        case NS_rtf::LN_CPNBTECHP:
-        case NS_rtf::LN_PNPAPFIRST:
-        case NS_rtf::LN_CPNBTEPAP:
-        case NS_rtf::LN_PNLVCFIRST:
-        case NS_rtf::LN_CPNBTELVC:
-        case NS_rtf::LN_CFCLCB:
         case NS_rtf::LN_LCBSTTBFUSSR:
             {
                 m_pImpl->GetFIB().SetData( nName, nIntValue );
