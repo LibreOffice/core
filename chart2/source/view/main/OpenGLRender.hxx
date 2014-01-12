@@ -270,7 +270,7 @@ private:
     std::list <Line2DPointList> m_Line2DShapePointList;
 
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxRenderTarget;
-    bool m_iArbMultisampleSupported;
+    bool mbArbMultisampleSupported;
     int m_iArbMultisampleFormat;
     GLint m_iSampleBufs;
     GLint m_iSamples;
