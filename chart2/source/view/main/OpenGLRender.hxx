@@ -53,7 +53,7 @@ namespace unx
 #include "glm/gtx/quaternion.hpp"
 
 #define OPENGL_SCALE_VALUE 20
-#define DEBUG_POSITIONING 1
+#define DEBUG_POSITIONING 0
 
 typedef struct PosVeci3
 {
