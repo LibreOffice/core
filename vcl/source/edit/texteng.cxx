@@ -676,99 +676,96 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
     TextPaM aPaM( rCurSel.GetStart() );
     TextNode* pNode = mpDoc->GetNodes().GetObject( aPaM.GetPara() );
 
-    if ( pNode->GetText().getLength() < STRING_MAXLEN )
+    bool bDoOverwrite = ( bOverwrite &&
+            ( aPaM.GetIndex() < pNode->GetText().getLength() ) );
+
+    bool bUndoAction = ( rCurSel.HasRange() || bDoOverwrite );
+
+    if ( bUndoAction )
+        UndoActionStart();
+
+    if ( rCurSel.HasRange() )
     {
-        bool bDoOverwrite = ( bOverwrite &&
-                ( aPaM.GetIndex() < pNode->GetText().getLength() ) );
-
-        bool bUndoAction = ( rCurSel.HasRange() || bDoOverwrite );
-
-        if ( bUndoAction )
-            UndoActionStart();
-
-        if ( rCurSel.HasRange() )
-        {
-            aPaM = ImpDeleteText( rCurSel );
-        }
-        else if ( bDoOverwrite )
-        {
-            // if selection, then don't overwrite a character
-            TextSelection aTmpSel( aPaM );
-            aTmpSel.GetEnd().GetIndex()++;
-            ImpDeleteText( aTmpSel );
-        }
-
-        if (bIsUserInput && IsInputSequenceCheckingRequired( c, rCurSel ))
-        {
-            uno::Reference < i18n::XExtendedInputSequenceChecker > xISC = GetInputSequenceChecker();
-            SvtCTLOptions aCTLOptions;
-
-            if (xISC.is())
-            {
-                xub_StrLen nTmpPos = aPaM.GetIndex();
-                sal_Int16 nCheckMode = aCTLOptions.IsCTLSequenceCheckingRestricted() ?
-                        i18n::InputSequenceCheckMode::STRICT : i18n::InputSequenceCheckMode::BASIC;
-
-                // the text that needs to be checked is only the one
-                // before the current cursor position
-                OUString aOldText( mpDoc->GetText( aPaM.GetPara() ).copy(0, nTmpPos) );
-                OUString aNewText( aOldText );
-                if (aCTLOptions.IsCTLSequenceCheckingTypeAndReplace())
-                {
-                    xISC->correctInputSequence( aNewText, nTmpPos - 1, c, nCheckMode );
-
-                    // find position of first character that has changed
-                    sal_Int32 nOldLen = aOldText.getLength();
-                    sal_Int32 nNewLen = aNewText.getLength();
-                    const sal_Unicode *pOldTxt = aOldText.getStr();
-                    const sal_Unicode *pNewTxt = aNewText.getStr();
-                    sal_Int32 nChgPos = 0;
-                    while ( nChgPos < nOldLen && nChgPos < nNewLen &&
-                            pOldTxt[nChgPos] == pNewTxt[nChgPos] )
-                        ++nChgPos;
-
-                    OUString aChgText( aNewText.copy( nChgPos ) );
-
-                    // select text from first pos to be changed to current pos
-                    TextSelection aSel( TextPaM( aPaM.GetPara(), (sal_uInt16) nChgPos ), aPaM );
-
-                    if (!aChgText.isEmpty())
-                        // ImpInsertText implicitly handles undo...
-                        return ImpInsertText( aSel, aChgText );
-                    else
-                        return aPaM;
-                }
-                else
-                {
-                    // should the character be ignored (i.e. not get inserted) ?
-                    if (!xISC->checkInputSequence( aOldText, nTmpPos - 1, c, nCheckMode ))
-                        return aPaM;    // nothing to be done -> no need for undo
-                }
-            }
-
-            // at this point now we will insert the character 'normally' some lines below...
-        }
-
-
-        if ( IsUndoEnabled() && !IsInUndo() )
-        {
-            TextUndoInsertChars* pNewUndo = new TextUndoInsertChars( this, aPaM, OUString(c) );
-            sal_Bool bTryMerge = ( !bDoOverwrite && ( c != ' ' ) ) ? sal_True : sal_False;
-            InsertUndo( pNewUndo, bTryMerge );
-        }
-
-        TEParaPortion* pPortion = mpTEParaPortions->GetObject( aPaM.GetPara() );
-        pPortion->MarkInvalid( aPaM.GetIndex(), 1 );
-        if ( c == '\t' )
-            pPortion->SetNotSimpleInvalid();
-        aPaM = mpDoc->InsertText( aPaM, c );
-        ImpCharsInserted( aPaM.GetPara(), aPaM.GetIndex()-1, 1 );
-
-        TextModified();
-
-        if ( bUndoAction )
-            UndoActionEnd();
+        aPaM = ImpDeleteText( rCurSel );
     }
+    else if ( bDoOverwrite )
+    {
+        // if selection, then don't overwrite a character
+        TextSelection aTmpSel( aPaM );
+        aTmpSel.GetEnd().GetIndex()++;
+        ImpDeleteText( aTmpSel );
+    }
+
+    if (bIsUserInput && IsInputSequenceCheckingRequired( c, rCurSel ))
+    {
+        uno::Reference < i18n::XExtendedInputSequenceChecker > xISC = GetInputSequenceChecker();
+        SvtCTLOptions aCTLOptions;
+
+        if (xISC.is())
+        {
+            xub_StrLen nTmpPos = aPaM.GetIndex();
+            sal_Int16 nCheckMode = aCTLOptions.IsCTLSequenceCheckingRestricted() ?
+                    i18n::InputSequenceCheckMode::STRICT : i18n::InputSequenceCheckMode::BASIC;
+
+            // the text that needs to be checked is only the one
+            // before the current cursor position
+            OUString aOldText( mpDoc->GetText( aPaM.GetPara() ).copy(0, nTmpPos) );
+            OUString aNewText( aOldText );
+            if (aCTLOptions.IsCTLSequenceCheckingTypeAndReplace())
+            {
+                xISC->correctInputSequence( aNewText, nTmpPos - 1, c, nCheckMode );
+
+                // find position of first character that has changed
+                sal_Int32 nOldLen = aOldText.getLength();
+                sal_Int32 nNewLen = aNewText.getLength();
+                const sal_Unicode *pOldTxt = aOldText.getStr();
+                const sal_Unicode *pNewTxt = aNewText.getStr();
+                sal_Int32 nChgPos = 0;
+                while ( nChgPos < nOldLen && nChgPos < nNewLen &&
+                        pOldTxt[nChgPos] == pNewTxt[nChgPos] )
+                    ++nChgPos;
+
+                OUString aChgText( aNewText.copy( nChgPos ) );
+
+                // select text from first pos to be changed to current pos
+                TextSelection aSel( TextPaM( aPaM.GetPara(), (sal_uInt16) nChgPos ), aPaM );
+
+                if (!aChgText.isEmpty())
+                    // ImpInsertText implicitly handles undo...
+                    return ImpInsertText( aSel, aChgText );
+                else
+                    return aPaM;
+            }
+            else
+            {
+                // should the character be ignored (i.e. not get inserted) ?
+                if (!xISC->checkInputSequence( aOldText, nTmpPos - 1, c, nCheckMode ))
+                    return aPaM;    // nothing to be done -> no need for undo
+            }
+        }
+
+        // at this point now we will insert the character 'normally' some lines below...
+    }
+
+
+    if ( IsUndoEnabled() && !IsInUndo() )
+    {
+        TextUndoInsertChars* pNewUndo = new TextUndoInsertChars( this, aPaM, OUString(c) );
+        sal_Bool bTryMerge = ( !bDoOverwrite && ( c != ' ' ) ) ? sal_True : sal_False;
+        InsertUndo( pNewUndo, bTryMerge );
+    }
+
+    TEParaPortion* pPortion = mpTEParaPortions->GetObject( aPaM.GetPara() );
+    pPortion->MarkInvalid( aPaM.GetIndex(), 1 );
+    if ( c == '\t' )
+        pPortion->SetNotSimpleInvalid();
+    aPaM = mpDoc->InsertText( aPaM, c );
+    ImpCharsInserted( aPaM.GetPara(), aPaM.GetIndex()-1, 1 );
+
+    TextModified();
+
+    if ( bUndoAction )
+        UndoActionEnd();
 
     return aPaM;
 }
