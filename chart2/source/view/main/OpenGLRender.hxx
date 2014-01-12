@@ -213,8 +213,6 @@ private:
 
     GLint m_RenderProID;
 
-    GLint m_Line2DProID;
-
     glm::vec4 m_Line2DColor;
 
     GLuint m_VertexBuffer;

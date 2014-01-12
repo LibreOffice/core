@@ -874,7 +874,6 @@ OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
     m_TranslationMatrix(glm::translate(m_Model, glm::vec3(0.0f, 0.0f, 0.0f))),
     m_RotationMatrix(glm::eulerAngleYXZ(0.0f, 0.0f, 0.0f)),
     m_ScaleMatrix(glm::scale(m_Model, glm::vec3(1.0f, 1.0f, 1.0f))),
-    m_Line2DProID(0), // TODO: moggi: why is it unused?
     m_Line2DColor(glm::vec4(1.0, 0.0, 0.0, 1.0)),
     m_TextureObj(0),
     m_FboID(0),
