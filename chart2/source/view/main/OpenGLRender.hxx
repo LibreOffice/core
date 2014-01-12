@@ -277,14 +277,6 @@ private:
     GLuint m_renderBufferColorMS;
     GLuint m_renderBufferDepthMS;
 
-    float m_fPicRight;
-
-    float m_fPicLeft;
-
-    float m_fPicBottom;
-
-    float m_fPicTop;
-
     Bubble2DCircle m_Bubble2DCircle;
 
     Bubble2DPointList m_Bubble2DPointList;
@@ -293,7 +285,6 @@ private:
     GLint m_CommonProID;
     GLint m_2DVertexID;
     GLint m_2DColorID;
-
 
     float m_fZStep;
 

@@ -581,11 +581,6 @@ int OpenGLRender::SetLine2DShapePoint(float x, float y, int listLength)
     m_Line2DPointList.push_back(actualY);
     m_Line2DPointList.push_back(0);
 
-    m_fPicLeft = std::min(m_fPicLeft, actualX);
-    m_fPicRight = std::max(m_fPicRight, actualX);
-    m_fPicBottom = std::min(m_fPicBottom, actualY);
-    m_fPicTop = std::max(m_fPicTop, actualY);
-
     if (m_Line2DPointList.size() == size_t(listLength * 3))
     {
         m_Line2DShapePointList.push_back(m_Line2DPointList);
@@ -1300,11 +1295,6 @@ int OpenGLRender::Bubble2DShapePoint(float x, float y, float directionX, float d
     m_Bubble2DPointList.xScale = directionX / OPENGL_SCALE_VALUE;
     m_Bubble2DPointList.yScale = directionY / OPENGL_SCALE_VALUE;
 
-    m_fPicLeft = std::min(m_fPicLeft, actualX);
-    m_fPicRight = std::max(m_fPicRight, actualX);
-    m_fPicBottom = std::min(m_fPicBottom, actualY);
-    m_fPicTop = std::max(m_fPicTop, actualY);
-
     m_Bubble2DShapePointList.push_back(m_Bubble2DPointList);
     return 0;
 }
@@ -1379,11 +1369,6 @@ int OpenGLRender::RectangleShapePoint(float x, float y, float directionX, float 
     m_RectangleList.z = m_fZStep;
     m_RectangleList.xScale = directionX / OPENGL_SCALE_VALUE;
     m_RectangleList.yScale = directionY / OPENGL_SCALE_VALUE;
-
-    m_fPicLeft = std::min(m_fPicLeft, actualX);
-    m_fPicRight = std::max(m_fPicRight, actualX);
-    m_fPicBottom = std::min(m_fPicBottom, actualY);
-    m_fPicTop = std::max(m_fPicTop, actualY);
 
     m_RectangleShapePointList.push_back(m_RectangleList);
     return 0;
@@ -1512,15 +1497,7 @@ int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color,
     m_TextInfo.vertex[6] = (float)(-aSize.Width / 2) / OPENGL_SCALE_VALUE;
     m_TextInfo.vertex[7] = (float)(aSize.Height / 2) / OPENGL_SCALE_VALUE;
 
-    m_fPicLeft = (m_TextInfo.x + m_TextInfo.vertex[0])< m_fPicLeft ? (m_TextInfo.x + m_TextInfo.vertex[0]) : m_fPicLeft;
-
-    m_fPicRight = (m_TextInfo.x + m_TextInfo.vertex[2]) > m_fPicRight ? (m_TextInfo.x + m_TextInfo.vertex[2]) : m_fPicRight;
-
-    m_fPicBottom = (m_TextInfo.y + m_TextInfo.vertex[1]) < m_fPicBottom ? (m_TextInfo.y + m_TextInfo.vertex[1]) : m_fPicBottom;
-
-    m_fPicTop = (m_TextInfo.y + m_TextInfo.vertex[5]) > m_fPicTop ? (m_TextInfo.y + m_TextInfo.vertex[5]) : m_fPicTop;
     //if has ratotion, we must re caculate the central pos
-
     if (rotation)
     {
         //use left top
@@ -1657,11 +1634,6 @@ int OpenGLRender::SetArea2DShapePoint(float x, float y, int listLength)
     m_Area2DPointList.push_back(actualX);
     m_Area2DPointList.push_back(actualY);
     m_Area2DPointList.push_back(m_fZStep);
-
-    m_fPicLeft = std::min(m_fPicLeft, actualX);
-    m_fPicRight = std::max(m_fPicRight, actualX);
-    m_fPicBottom = std::min(m_fPicBottom, actualY);
-    m_fPicTop = std::max(m_fPicTop, actualY);
 
     if (m_Area2DPointList.size() == size_t(listLength * 3))
     {
