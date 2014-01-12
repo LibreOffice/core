@@ -1294,12 +1294,12 @@ int OpenGLRender::Bubble2DShapePoint(float x, float y, float directionX, float d
         Create2DCircle(100);
     }
 
-    float actualX = (x / 10.0f);
-    float actualY = (y / 10.0f);
+    float actualX = (x / OPENGL_SCALE_VALUE);
+    float actualY = (y / OPENGL_SCALE_VALUE);
     m_Bubble2DPointList.x = actualX;
     m_Bubble2DPointList.y = actualY;
-    m_Bubble2DPointList.xScale = directionX / 10.0f;
-    m_Bubble2DPointList.yScale = directionY / 10.0f;
+    m_Bubble2DPointList.xScale = directionX / OPENGL_SCALE_VALUE;
+    m_Bubble2DPointList.yScale = directionY / OPENGL_SCALE_VALUE;
 
     m_fPicLeft = std::min(m_fPicLeft, actualX);
     m_fPicRight = std::max(m_fPicRight, actualX);
