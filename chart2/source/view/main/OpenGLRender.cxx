@@ -63,6 +63,34 @@ using namespace std;
 
 //begin shaders
 
+#if DEBUG_POSITIONING
+
+const char* DebugVertexShader = OPENGL_SHADER (
+
+attribute vec3 vPosition;
+uniform vec4 vColor;
+varying vec4 fragmentColor;
+
+void main()
+{
+    gl_Position = vec4(vPosition, 1);
+}
+
+);
+
+const char* DebugFragmentShader = OPENGL_SHADER (
+
+varying vec4 fragmentColor;
+
+void main()
+{
+    gl_FragColor = vec4(1.0, 1.0, 0.0, 0.5);
+}
+
+);
+
+#endif
+
 const char *CommonFragmemtShader = OPENGL_SHADER (
 
 varying vec4 fragmentColor;
@@ -442,6 +470,13 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
     m_MatrixID = glGetUniformLocation(m_CommonProID, "MVP");
     m_2DVertexID = glGetAttribLocation(m_CommonProID, "vPosition");
     m_2DColorID = glGetUniformLocation(m_CommonProID, "vColor");
+    CHECK_GL_ERROR();
+
+#if DEBUG_POSITIONING
+    m_DebugProID = LoadShaders(DebugVertexShader, DebugFragmentShader);
+    m_DebugVertexID = glGetAttribLocation(m_DebugProID, "vPosition");
+#endif
+    CHECK_GL_ERROR();
 
     m_BackgroundProID = LoadShaders(BackgroundVertexShader, BackgroundFragmemtShader);
     m_BackgroundMatrixID = glGetUniformLocation(m_BackgroundProID, "MVP");
@@ -520,7 +555,7 @@ BitmapEx OpenGLRender::GetAsBitmap()
 
 #if DEBUG_PNG // debug PNG writing
     static int nIdx = 0;
-    OUString aName = OUString( "file://c/temp/image" ) + OUString::number( nIdx++ ) + ".png";
+    OUString aName = OUString( "file:///home/moggi/Documents/work/" ) + OUString::number( nIdx++ ) + ".png";
     try {
         vcl::PNGWriter aWriter( aBmp );
         SvFileStream sOutput( aName, STREAM_WRITE );
@@ -544,7 +579,7 @@ int OpenGLRender::SetLine2DShapePoint(float x, float y, int listLength)
     float actualY = (y / OPENGL_SCALE_VALUE);
     m_Line2DPointList.push_back(actualX);
     m_Line2DPointList.push_back(actualY);
-    m_Line2DPointList.push_back(m_fZStep);
+    m_Line2DPointList.push_back(0);
 
     m_fPicLeft = std::min(m_fPicLeft, actualX);
     m_fPicRight = std::max(m_fPicRight, actualX);
@@ -568,7 +603,6 @@ int OpenGLRender::RenderLine2FBO(int)
     PosVecf3 angle = {0.0f, 0.0f, 0.0f};
     PosVecf3 scale = {1.0f, 1.0f, 1.0f};
     MoveModelf(trans, angle, scale);
-    m_Projection = glm::ortho(0.f, float(m_iWidth), 0.f, float(m_iHeight), -1.f, 1.f);
     m_MVP = m_Projection * m_View * m_Model;
     for (size_t i = 0; i < listNum; i++)
     {
@@ -582,15 +616,13 @@ int OpenGLRender::RenderLine2FBO(int)
         glUseProgram(m_CommonProID);
         CHECK_GL_ERROR();
 
-        glUniform4fv(m_2DColorID, 1, &m_Line2DColor[0]);
+        glm::vec4 aColor(1.0,0.5,0.5,0.5);
+        glUniform4fv(m_2DColorID, 1, &aColor[0]);
         CHECK_GL_ERROR();
         glUniformMatrix4fv(m_MatrixID, 1, GL_FALSE, &m_MVP[0][0]);
-        CHECK_GL_ERROR();
+        //CHECK_GL_ERROR();
 
         // 1rst attribute buffer : vertices
-        glEnableVertexAttribArray(m_2DVertexID);
-        CHECK_GL_ERROR();
-        glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         CHECK_GL_ERROR();
         glVertexAttribPointer(
             m_2DVertexID,
@@ -600,11 +632,11 @@ int OpenGLRender::RenderLine2FBO(int)
             0,                  // stride
             (void*)0            // array buffer offset
             );
+        glEnableVertexAttribArray(m_2DVertexID);
         glDrawArrays(GL_LINE_STRIP, 0, pointList.size()/3); // 12*3 indices starting at 0 -> 12 triangles
         CHECK_GL_ERROR();
-        glDisableVertexAttribArray(m_2DVertexID);
-        CHECK_GL_ERROR();
         glUseProgram(0);
+        glDisableVertexAttribArray(m_2DVertexID);
         CHECK_GL_ERROR();
         m_Line2DShapePointList.pop_front();
     }
@@ -613,6 +645,35 @@ int OpenGLRender::RenderLine2FBO(int)
     CHECK_GL_FRAME_BUFFER_STATUS();
     return 0;
 }
+
+#if DEBUG_POSITIONING
+void OpenGLRender::renderDebug()
+{
+    CHECK_GL_ERROR();
+
+    GLfloat vertices[4][3] = {
+        {-0.9, -0.9, 0 },
+        {-0.6, -0.2, 0 },
+        {0.3, 0.3, 0 },
+        {0.9, 0.9, 0 } };
+
+    glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+    CHECK_GL_ERROR();
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    CHECK_GL_ERROR();
+    glUseProgram(m_DebugProID);
+    CHECK_GL_ERROR();
+    glVertexAttribPointer(m_DebugVertexID, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+    CHECK_GL_ERROR();
+    glEnableVertexAttribArray(m_DebugVertexID);
+
+    glDrawArrays(GL_LINE_STRIP, 0, 3);
+    CHECK_GL_ERROR();
+    glDisableVertexAttribArray(m_DebugVertexID);
+
+    CHECK_GL_ERROR();
+}
+#endif
 
 void OpenGLRender::prepareToRender()
 {
@@ -913,11 +974,13 @@ OpenGLRender::~OpenGLRender()
 void OpenGLRender::SetWidth(int width)
 {
     m_iWidth = width;
+    m_Projection = glm::ortho(0.f, float(m_iWidth), 0.f, float(m_iHeight), -4.f, 3.f);
 }
 
 void OpenGLRender::SetHeight(int height)
 {
     m_iHeight = height;
+    m_Projection = glm::ortho(0.f, float(m_iWidth), 0.f, float(m_iHeight), -4.f, 3.f);
 }
 
 int OpenGLRender::GetWidth()
@@ -1231,8 +1294,8 @@ int OpenGLRender::Bubble2DShapePoint(float x, float y, float directionX, float d
         Create2DCircle(100);
     }
 
-    float actualX = (x / 10.0f) - ((float)m_iWidth / 2);
-    float actualY = (y / 10.0f) - ((float)m_iHeight / 2);
+    float actualX = (x / 10.0f);
+    float actualY = (y / 10.0f);
     m_Bubble2DPointList.x = actualX;
     m_Bubble2DPointList.y = actualY;
     m_Bubble2DPointList.xScale = directionX / 10.0f;
@@ -1434,8 +1497,8 @@ int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color,
         }
     }
     aBitmap.ReleaseAccess(pRAcc);
-    m_TextInfo.x = (float)(aPos.X + aSize.Width / 2) / OPENGL_SCALE_VALUE - ((float)m_iWidth / 2);
-    m_TextInfo.y = (float)(aPos.Y + aSize.Height / 2) / OPENGL_SCALE_VALUE - ((float)m_iHeight / 2);
+    m_TextInfo.x = (float)(aPos.X + aSize.Width / 2) / OPENGL_SCALE_VALUE;
+    m_TextInfo.y = (float)(aPos.Y + aSize.Height / 2) / OPENGL_SCALE_VALUE;
     m_TextInfo.z = m_fZStep;
     m_TextInfo.rotation = -(double)rotation * GL_PI / 18000.0f;
     m_TextInfo.vertex[0] = (float)(-aSize.Width / 2) / OPENGL_SCALE_VALUE;

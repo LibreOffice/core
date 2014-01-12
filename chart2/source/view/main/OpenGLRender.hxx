@@ -53,6 +53,7 @@ namespace unx
 #include "glm/gtx/quaternion.hpp"
 
 #define OPENGL_SCALE_VALUE 20
+#define DEBUG_POSITIONING 1
 
 typedef struct PosVeci3
 {
@@ -67,7 +68,7 @@ typedef struct PosVecf3
     float z;
 }PosVecf3;
 
-typedef std::vector<float> Line2DPointList;
+typedef std::vector<GLfloat> Line2DPointList;
 
 typedef struct Bubble2DPointList
 {
@@ -102,7 +103,7 @@ typedef struct TextInfo
     float vertex[8];
 }TextInfo;
 
-typedef std::vector<float> Area2DPointList;
+typedef std::vector<GLfloat> Area2DPointList;
 
 /// Holds the information of our new child window
 struct GLWindow
@@ -177,6 +178,10 @@ public:
     int SetArea2DShapePoint(float x, float y, int listLength);
     int RenderArea2DShape();
     void SetChartTransparencyGradient(long transparencyGradient);
+
+#if DEBUG_POSITIONING
+    void renderDebug();
+#endif
 
 private:
     GLint LoadShaders(const char *vertexShader,const char *fragmentShader);
@@ -317,6 +322,12 @@ private:
 
     float m_BackgroundColor[16];
     glm::vec4 m_ClearColor;
+
+#if DEBUG_POSITIONING
+    GLuint m_DebugProID;
+    GLuint m_DebugVertexID;
+    GLuint m_DebugColorID;
+#endif
 
 };
 
