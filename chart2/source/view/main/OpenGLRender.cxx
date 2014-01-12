@@ -685,7 +685,7 @@ void OpenGLRender::renderToBitmap()
     uno::Reference< awt::XBitmap> xBmp( aGraphic.GetXGraphic(), uno::UNO_QUERY );
     uno::Reference < beans::XPropertySet > xPropSet ( mxRenderTarget, uno::UNO_QUERY );
     xPropSet->setPropertyValue("Graphic", uno::makeAny(aGraphic.GetXGraphic()));
-    mxRenderTarget->setSize(awt::Size(m_iWidth, m_iHeight));
+    mxRenderTarget->setSize(awt::Size(m_iWidth*OPENGL_SCALE_VALUE, m_iHeight*OPENGL_SCALE_VALUE));
     mxRenderTarget->setPosition(awt::Point(0,0));
 #endif
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
