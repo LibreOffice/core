@@ -1437,10 +1437,9 @@ bool DiagramHelper::isSeriesMoveable(
     const Reference< XDataSeries >& xGivenDataSeries,
     bool bForward )
 {
-    bool bIsMoveable = false;
     const bool bDoMove = false;
 
-    bIsMoveable = lcl_moveSeriesOrCheckIfMoveIsAllowed(
+    bool bIsMoveable = lcl_moveSeriesOrCheckIfMoveIsAllowed(
         xDiagram, xGivenDataSeries, bForward, bDoMove );
 
     return bIsMoveable;
@@ -1448,10 +1447,9 @@ bool DiagramHelper::isSeriesMoveable(
 
 bool DiagramHelper::moveSeries( const Reference< XDiagram >& xDiagram, const Reference< XDataSeries >& xGivenDataSeries, bool bForward )
 {
-    bool bMoved = false;
     const bool bDoMove = true;
 
-    bMoved = lcl_moveSeriesOrCheckIfMoveIsAllowed(
+    bool bMoved = lcl_moveSeriesOrCheckIfMoveIsAllowed(
         xDiagram, xGivenDataSeries, bForward, bDoMove );
 
     return bMoved;

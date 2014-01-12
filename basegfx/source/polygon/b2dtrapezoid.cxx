@@ -406,10 +406,9 @@ namespace basegfx
                     B2DPoint* pNewPoint = bAIsLonger
                         ? maNewPoints.allocatePoint(aEdgeA.getStart() + (fCutA * aDeltaA))
                         : maNewPoints.allocatePoint(aEdgeB.getStart() + (fCutB * aDeltaB));
-                    bool bRetval = false;
 
                     // try to split both edges
-                    bRetval = splitEdgeAtGivenPoint(aEdgeA, *pNewPoint, aCurrent);
+                    bool bRetval = splitEdgeAtGivenPoint(aEdgeA, *pNewPoint, aCurrent);
                     bRetval |= splitEdgeAtGivenPoint(aEdgeB, *pNewPoint, aCurrent);
 
                     if(!bRetval)

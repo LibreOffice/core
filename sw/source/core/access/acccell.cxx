@@ -398,8 +398,7 @@ uno::Any SwAccessibleCell::getMinimumValue(  )
 
 static OUString ReplaceOneChar(OUString oldOUString, OUString replacedChar, OUString replaceStr)
 {
-    int iReplace = -1;
-    iReplace = oldOUString.lastIndexOf(replacedChar);
+    int iReplace = oldOUString.lastIndexOf(replacedChar);
     if (iReplace > -1)
     {
         for(;iReplace>-1;)
