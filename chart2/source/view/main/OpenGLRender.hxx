@@ -100,11 +100,9 @@ typedef struct TextInfo
     double rotation;
     float vertex[8];
 }TextInfo;
-typedef struct Area2DPointList
-{
-    float *pointBuf;
-    int bufLen;
-}Area2DPointList;
+
+typedef std::vector<float> Area2DPointList;
+
 /// Holds the information of our new child window
 struct GLWindow
 {

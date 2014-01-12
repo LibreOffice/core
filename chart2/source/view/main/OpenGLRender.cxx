@@ -909,7 +909,6 @@ OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
     m_Line2DColor(glm::vec4(1.0, 0.0, 0.0, 1.0)),
     m_iWidth(0),
     m_iHeight(0),
-    m_iPointNum(0),
     m_iFboIdx(0),
     m_fLineAlpha(1.0),
     mxRenderTarget(xTarget),
@@ -922,7 +921,6 @@ OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
     memset(&m_Bubble2DPointList, 0, sizeof(m_Bubble2DPointList));
     memset(&m_Bubble2DCircle, 0, sizeof(m_Bubble2DCircle));
     memset(&m_TextInfo, 0, sizeof(TextInfo));
-    memset(&m_Area2DPointList, 0, sizeof(m_Area2DPointList));
     memset(&m_RectangleList, 0, sizeof(RectanglePointList));
 
     m_iFboIdx = 0;
@@ -1627,17 +1625,15 @@ int OpenGLRender::CreateBMPHeaderRGBA(sal_uInt8 *bmpHeader, int xsize, int ysize
 
 int OpenGLRender::SetArea2DShapePoint(float x, float y, int listLength)
 {
-    if (!m_Area2DPointList.pointBuf)
+    if (m_Area2DPointList.empty())
     {
-        //a new point buffer should be alloc, we should push the old buffer first
-        m_Area2DPointList.bufLen = listLength * sizeof(float) * 3;
-        m_Area2DPointList.pointBuf = (float *)malloc(m_Area2DPointList.bufLen);
+        m_Area2DPointList.reserve(listLength);
     }
     float actualX = (x / OPENGL_SCALE_VALUE) - ((float)m_iWidth / 2);
     float actualY = (y / OPENGL_SCALE_VALUE) - ((float)m_iHeight / 2);
-    m_Area2DPointList.pointBuf[m_iPointNum++] = actualX;
-    m_Area2DPointList.pointBuf[m_iPointNum++] = actualY;
-    m_Area2DPointList.pointBuf[m_iPointNum++] = m_fZStep;
+    m_Area2DPointList.push_back(actualX);
+    m_Area2DPointList.push_back(actualY);
+    m_Area2DPointList.push_back(m_fZStep);
     m_fPicLeft = actualX < m_fPicLeft ? actualX : m_fPicLeft;
 
     m_fPicRight = actualX > m_fPicRight ? actualX : m_fPicRight;
@@ -1646,11 +1642,9 @@ int OpenGLRender::SetArea2DShapePoint(float x, float y, int listLength)
 
     m_fPicTop = actualY > m_fPicTop ? actualY : m_fPicTop;
 
-    if (m_iPointNum == (listLength * 3))
+    if (m_Area2DPointList.size() == size_t((listLength * 3) -1))
     {
         m_Area2DShapePointList.push_back(m_Area2DPointList);
-        m_Area2DPointList.pointBuf = NULL;
-        m_iPointNum = 0;
     }
     return 0;
 }
@@ -1666,12 +1660,12 @@ int OpenGLRender::RenderArea2DShape()
     PosVecf3 scale = {1.0f, 1.0f, 1.0f};
     MoveModelf(trans, angle, scale);
     m_MVP = m_Projection * m_View * m_Model;
-    for (size_t i = 0; i < listNum; i++)
+    for (size_t i = 0; i < listNum; ++i)
     {
         Area2DPointList &pointList = m_Area2DShapePointList.front();
         //fill vertex buffer
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
-        glBufferData(GL_ARRAY_BUFFER, pointList.bufLen, pointList.pointBuf, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, pointList.size() * sizeof(float), &pointList[0], GL_STATIC_DRAW);
         // Use our shader
         glUseProgram(m_CommonProID);
 
@@ -1690,11 +1684,10 @@ int OpenGLRender::RenderArea2DShape()
             0,                  // stride
             (void*)0            // array buffer offset
             );
-        glDrawArrays(GL_POLYGON, 0, pointList.bufLen / sizeof(float) / 3); // 12*3 indices starting at 0 -> 12 triangles
+        glDrawArrays(GL_POLYGON, 0, pointList.size() / 3); // 12*3 indices starting at 0 -> 12 triangles
         glDisableVertexAttribArray(m_2DVertexID);
         glUseProgram(0);
         m_Area2DShapePointList.pop_front();
-        free(pointList.pointBuf);
     }
     glEnable(GL_MULTISAMPLE);
     m_fZStep += 0.01f;
