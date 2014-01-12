@@ -559,6 +559,11 @@ int OpenGLRender::RenderLine2FBO(int)
     CHECK_GL_ERROR();
     glLineWidth(m_fLineWidth);
     size_t listNum = m_Line2DShapePointList.size();
+    PosVecf3 trans = {0.0f, 0.0f, 0.0f};
+    PosVecf3 angle = {0.0f, 0.0f, 0.0f};
+    PosVecf3 scale = {1.0f, 1.0f, 1.0f};
+    MoveModelf(trans, angle, scale);
+    m_MVP = m_Projection * m_View * m_Model;
     for (size_t i = 0; i < listNum; i++)
     {
         Line2DPointList &pointList = m_Line2DShapePointList.front();
@@ -571,16 +576,18 @@ int OpenGLRender::RenderLine2FBO(int)
         glUseProgram(m_Line2DProID);
         CHECK_GL_ERROR();
 
-        glUniform4fv(m_Line2DColorID, 1, &m_Line2DColor[0]);
+        glUniform4fv(m_2DColorID, 1, &m_Line2DColor[0]);
+        CHECK_GL_ERROR();
+        glUniformMatrix4fv(m_MatrixID, 1, GL_FALSE, &m_MVP[0][0]);
         CHECK_GL_ERROR();
 
         // 1rst attribute buffer : vertices
-        glEnableVertexAttribArray(m_Line2DVertexID);
+        glEnableVertexAttribArray(m_2DVertexID);
         CHECK_GL_ERROR();
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         CHECK_GL_ERROR();
         glVertexAttribPointer(
-            m_Line2DVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+            m_2DVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
             3,                  // size
             GL_FLOAT,           // type
             GL_FALSE,           // normalized?
@@ -589,7 +596,7 @@ int OpenGLRender::RenderLine2FBO(int)
             );
         glDrawArrays(GL_LINE_STRIP, 0, pointList.size()/3); // 12*3 indices starting at 0 -> 12 triangles
         CHECK_GL_ERROR();
-        glDisableVertexAttribArray(m_Line2DWholeVertexID);
+        glDisableVertexAttribArray(m_2DVertexID);
         CHECK_GL_ERROR();
         glUseProgram(0);
         CHECK_GL_ERROR();
