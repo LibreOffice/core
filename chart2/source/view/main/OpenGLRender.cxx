@@ -45,8 +45,12 @@ using namespace com::sun::star;
 using namespace std;
 
 #define RENDER_TO_FILE 0
-#define DEBUG_PNG 0
+#define DEBUG_PNG 1
 #define BMP_HEADER_LEN 54
+
+#if DEBUG_PNG
+#include <vcl/pngwrite.hxx>
+#endif
 
 #define OPENGL_SHADER( ... )# __VA_ARGS__
 
