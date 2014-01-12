@@ -1437,7 +1437,7 @@ void Edit::MouseButtonDown( const MouseEvent& rMEvt )
         mbClickedInSelection = sal_False;
         if ( rMEvt.GetClicks() == 3 )
         {
-            ImplSetSelection( Selection( 0, 0xFFFF ) );
+            ImplSetSelection( Selection( 0, STRING_LEN ) );
             ImplCopyToSelectionClipboard();
 
         }
@@ -1713,7 +1713,7 @@ sal_Bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                     }
                     else if ( bGoEnd )
                     {
-                        aSel.Max() = 0xFFFF;
+                        aSel.Max() = STRING_LEN;
                     }
 
                     if ( !bSelect )
