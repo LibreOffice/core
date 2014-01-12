@@ -424,7 +424,7 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //Init the Projection matrix
-    m_Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
+    m_Projection = glm::ortho(0.f, float(m_iWidth), 0.f, float(m_iHeight), -1.f, 1.f);
     m_View       = glm::lookAt(glm::vec3(0,0,1), // Camera is at (4,3,-3), in World Space
                                glm::vec3(0,0,0), // and looks at the origin
                                glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)
@@ -540,8 +540,8 @@ int OpenGLRender::SetLine2DShapePoint(float x, float y, int listLength)
     {
         m_Line2DPointList.reserve(listLength*3);
     }
-    float actualX = (x / OPENGL_SCALE_VALUE) - ((float)m_iWidth / 2);
-    float actualY = (y / OPENGL_SCALE_VALUE) - ((float)m_iHeight / 2);
+    float actualX = (x / OPENGL_SCALE_VALUE);
+    float actualY = (y / OPENGL_SCALE_VALUE);
     m_Line2DPointList.push_back(actualX);
     m_Line2DPointList.push_back(actualY);
     m_Line2DPointList.push_back(m_fZStep);
@@ -568,6 +568,7 @@ int OpenGLRender::RenderLine2FBO(int)
     PosVecf3 angle = {0.0f, 0.0f, 0.0f};
     PosVecf3 scale = {1.0f, 1.0f, 1.0f};
     MoveModelf(trans, angle, scale);
+    m_Projection = glm::ortho(0.f, float(m_iWidth), 0.f, float(m_iHeight), -1.f, 1.f);
     m_MVP = m_Projection * m_View * m_Model;
     for (size_t i = 0; i < listNum; i++)
     {
