@@ -541,13 +541,11 @@ int OpenGLRender::SetLine2DShapePoint(float x, float y, int listLength)
     m_Line2DPointList.push_back(actualX);
     m_Line2DPointList.push_back(actualY);
     m_Line2DPointList.push_back(m_fZStep);
-    m_fPicLeft = actualX < m_fPicLeft ? actualX : m_fPicLeft;
 
-    m_fPicRight = actualX > m_fPicRight ? actualX : m_fPicRight;
-
-    m_fPicBottom = actualY < m_fPicBottom ? actualY : m_fPicBottom;
-
-    m_fPicTop = actualY > m_fPicTop ? actualY : m_fPicTop;
+    m_fPicLeft = std::min(m_fPicLeft, actualX);
+    m_fPicRight = std::max(m_fPicRight, actualX);
+    m_fPicBottom = std::min(m_fPicBottom, actualY);
+    m_fPicTop = std::max(m_fPicTop, actualY);
 
     if (m_Line2DPointList.size() == size_t((listLength * 3) - 1))
     {
@@ -1274,13 +1272,11 @@ int OpenGLRender::Bubble2DShapePoint(float x, float y, float directionX, float d
     m_Bubble2DPointList.xScale = directionX / 10.0f;
     m_Bubble2DPointList.yScale = directionY / 10.0f;
 
-    m_fPicLeft = actualX < m_fPicLeft ? actualX : m_fPicLeft;
 
-    m_fPicRight = actualX > m_fPicRight ? actualX : m_fPicRight;
-
-    m_fPicBottom = actualY < m_fPicBottom ? actualY : m_fPicBottom;
-
-    m_fPicTop = actualY > m_fPicTop ? actualY : m_fPicTop;
+    m_fPicLeft = std::min(m_fPicLeft, actualX);
+    m_fPicRight = std::max(m_fPicRight, actualX);
+    m_fPicBottom = std::min(m_fPicBottom, actualY);
+    m_fPicTop = std::max(m_fPicTop, actualY);
 
     m_Bubble2DShapePointList.push_back(m_Bubble2DPointList);
     return 0;
@@ -1357,13 +1353,10 @@ int OpenGLRender::RectangleShapePoint(float x, float y, float directionX, float 
     m_RectangleList.xScale = directionX / OPENGL_SCALE_VALUE;
     m_RectangleList.yScale = directionY / OPENGL_SCALE_VALUE;
 
-    m_fPicLeft = actualX < m_fPicLeft ? actualX : m_fPicLeft;
-
-    m_fPicRight = actualX > m_fPicRight ? actualX : m_fPicRight;
-
-    m_fPicBottom = actualY < m_fPicBottom ? actualY : m_fPicBottom;
-
-    m_fPicTop = actualY > m_fPicTop ? actualY : m_fPicTop;
+    m_fPicLeft = std::min(m_fPicLeft, actualX);
+    m_fPicRight = std::max(m_fPicRight, actualX);
+    m_fPicBottom = std::min(m_fPicBottom, actualY);
+    m_fPicTop = std::max(m_fPicTop, actualY);
 
     m_RectangleShapePointList.push_back(m_RectangleList);
     return 0;
@@ -1633,13 +1626,11 @@ int OpenGLRender::SetArea2DShapePoint(float x, float y, int listLength)
     m_Area2DPointList.push_back(actualX);
     m_Area2DPointList.push_back(actualY);
     m_Area2DPointList.push_back(m_fZStep);
-    m_fPicLeft = actualX < m_fPicLeft ? actualX : m_fPicLeft;
 
-    m_fPicRight = actualX > m_fPicRight ? actualX : m_fPicRight;
-
-    m_fPicBottom = actualY < m_fPicBottom ? actualY : m_fPicBottom;
-
-    m_fPicTop = actualY > m_fPicTop ? actualY : m_fPicTop;
+    m_fPicLeft = std::min(m_fPicLeft, actualX);
+    m_fPicRight = std::max(m_fPicRight, actualX);
+    m_fPicBottom = std::min(m_fPicBottom, actualY);
+    m_fPicTop = std::max(m_fPicTop, actualY);
 
     if (m_Area2DPointList.size() == size_t((listLength * 3) -1))
     {
