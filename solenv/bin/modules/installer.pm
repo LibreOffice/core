@@ -1651,7 +1651,7 @@ sub run {
                 if ( $allvariableshashref->{'OOODOWNLOADNAME'} ) { $$downloadname = installer::download::set_download_filename($languagestringref, $allvariableshashref); }
                 else { $$downloadname = installer::download::resolve_variables_in_downloadname($allvariableshashref, $$downloadname, $languagestringref); }
                 installer::systemactions::rename_one_file( $finalinstalldir . $installer::globals::separator . $installer::globals::shortmsidatabasename, $finalinstalldir . $installer::globals::separator . $$downloadname . ".msi" );
-                if ( defined($ENV{'WINDOWS_BUILD_SIGNING'}) && ($ENV{'WINDOWS_BUILD_SIGNING'} eq 'TRUE') )
+                if ( defined($ENV{'WINDOWS_BUILD_SIGNING'}) && ($ENV{'WINDOWS_BUILD_SIGNING'} eq 'TRUE') && ( $allvariableshashref->{'CREATE_MSP_INSTALLSET'} eq '0'))
                 {
                     my $systemcall = "signtool.exe sign ";
                     if ( defined($ENV{'PFXFILE'}) ) { $systemcall .= "-f $ENV{'PFXFILE'} "; }
