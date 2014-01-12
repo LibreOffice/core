@@ -974,16 +974,6 @@ void OpenGLRender::SetHeight(int height)
     m_Projection = glm::ortho(0.f, float(m_iWidth), 0.f, float(m_iHeight), -4.f, 3.f);
 }
 
-int OpenGLRender::GetWidth()
-{
-    return m_iWidth;
-}
-
-int OpenGLRender::GetHeight()
-{
-    return m_iHeight;
-}
-
 int OpenGLRender::CreateBMPHeader(sal_uInt8 *bmpHeader, int xsize, int ysize)
 {
     unsigned char header[BMP_HEADER_LEN] = {

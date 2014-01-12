@@ -144,8 +144,6 @@ public:
     int MoveModelf(PosVecf3 trans, PosVecf3 angle, PosVecf3 scale);
     void SetWidth(int width);
     void SetHeight(int height);
-    int GetWidth();
-    int GetHeight();
     void Release();
     int CreateBMPHeader(sal_uInt8 *bmpHeader, int xsize, int ysize);
     int CreateBMPHeaderRGBA(sal_uInt8 *bmpHeader, int xsize, int ysize);
