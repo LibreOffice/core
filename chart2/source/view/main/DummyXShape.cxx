@@ -1220,6 +1220,12 @@ void DummyChart::render()
     m_GLRender.renderToBitmap();
 }
 
+void DummyChart::clear()
+{
+    maUNOShapes.clear();
+    maShapes.clear();
+}
+
 }
 
 }

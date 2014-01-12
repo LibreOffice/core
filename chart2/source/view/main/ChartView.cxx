@@ -2412,6 +2412,7 @@ void ChartView::createShapes()
         OSL_FAIL("could not set page size correctly");
     }
     pShapeFactory->setPageSize(mxRootShape, aPageSize);
+    pShapeFactory->clearPage(mxRootShape);
 
     {
         SolarMutexGuard aSolarGuard;

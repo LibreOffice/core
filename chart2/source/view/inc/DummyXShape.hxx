@@ -426,7 +426,7 @@ public:
     // normal methods
     virtual void render();
 
-private:
+protected:
     std::vector<com::sun::star::uno::Reference< com::sun::star::drawing::XShape > > maUNOShapes;
     std::vector<DummyXShape*> maShapes;
 };
@@ -442,6 +442,8 @@ public:
     virtual void SAL_CALL setSize( const ::com::sun::star::awt::Size& aSize ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException);
 
     virtual void render() SAL_OVERRIDE;
+
+    void clear();
 
 private:
 
