@@ -496,7 +496,7 @@ OUString Edit::ImplGetText() const
 
 // -----------------------------------------------------------------------
 
-void Edit::ImplInvalidateOrRepaint( sal_Int32 nStart, sal_Int32 nEnd )
+void Edit::ImplInvalidateOrRepaint()
 {
     if( IsPaintTransparent() )
     {
@@ -506,7 +506,7 @@ void Edit::ImplInvalidateOrRepaint( sal_Int32 nStart, sal_Int32 nEnd )
             Update();
     }
     else
-        ImplRepaint( nStart, nEnd );
+        ImplRepaint();
 }
 
 // -----------------------------------------------------------------------
@@ -522,14 +522,14 @@ long Edit::ImplGetTextYPosition() const
 
 // -----------------------------------------------------------------------
 
-void Edit::ImplRepaint( sal_Int32 nStart, sal_Int32 nEnd, bool bLayout )
+void Edit::ImplRepaint(bool bLayout)
 {
     if ( !IsReallyVisible() )
         return;
 
     OUString aText = ImplGetText();
-    nStart = 0;
-    nEnd = aText.getLength();
+    sal_Int32 nStart = 0;
+    sal_Int32 nEnd = aText.getLength();
 
     sal_Int32   nDXBuffer[256];
     sal_Int32*  pDXBuffer = NULL;
@@ -1275,7 +1275,7 @@ void Edit::ImplAlign()
 void Edit::ImplAlignAndPaint()
 {
     ImplAlign();
-    ImplInvalidateOrRepaint( 0, STRING_LEN );
+    ImplInvalidateOrRepaint();
     ImplShowCursor();
 }
 
@@ -1861,7 +1861,7 @@ void Edit::KeyInput( const KeyEvent& rKEvt )
 void Edit::FillLayoutData() const
 {
     mpControlData->mpLayoutData = new vcl::ControlLayoutData();
-    const_cast<Edit*>(this)->ImplRepaint( 0, STRING_LEN, true );
+    const_cast<Edit*>(this)->ImplRepaint(true);
 }
 
 // -----------------------------------------------------------------------
@@ -2343,7 +2343,7 @@ void Edit::StateChanged( StateChangedType nType )
         if ( !mpSubEdit )
         {
             // change text color only
-            ImplInvalidateOrRepaint( 0, 0xFFFF );
+            ImplInvalidateOrRepaint();
         }
     }
     else if ( nType == STATE_CHANGE_STYLE || nType == STATE_CHANGE_MIRRORING )
@@ -2648,7 +2648,7 @@ void Edit::ImplSetSelection( const Selection& rSelection, sal_Bool bPaint )
                 maSelection = aNew;
 
                 if ( bPaint && ( aOld.Len() || aNew.Len() || IsPaintTransparent() ) )
-                    ImplInvalidateOrRepaint( 0, maText.getLength() );
+                    ImplInvalidateOrRepaint();
                 ImplShowCursor();
 
                 sal_Bool bCaret = sal_False, bSelection = sal_False;

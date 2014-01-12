@@ -93,8 +93,8 @@ private:
     SAL_DLLPRIVATE void        ImplInitEditData();
     SAL_DLLPRIVATE void        ImplModified();
     SAL_DLLPRIVATE OUString    ImplGetText() const;
-    SAL_DLLPRIVATE void        ImplRepaint( sal_Int32 nStart = 0, sal_Int32 nEnd = STRING_LEN, bool bLayout = false );
-    SAL_DLLPRIVATE void        ImplInvalidateOrRepaint( sal_Int32 nStart = 0, sal_Int32 nEnd = STRING_LEN );
+    SAL_DLLPRIVATE void        ImplRepaint(bool bLayout = false);
+    SAL_DLLPRIVATE void        ImplInvalidateOrRepaint();
     SAL_DLLPRIVATE void        ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uInt8 nMode );
     SAL_DLLPRIVATE void        ImplSetText( const OUString& rStr, const Selection* pNewSelection = 0 );
     SAL_DLLPRIVATE void        ImplInsertText( const OUString& rStr, const Selection* pNewSelection = 0, sal_Bool bIsUserInput = sal_False );
