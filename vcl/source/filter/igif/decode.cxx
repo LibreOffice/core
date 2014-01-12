@@ -153,7 +153,7 @@ bool GIFLZWDecompressor::ProcessOneCode()
 
     if ( !bEndOfBlock )
     {
-        // Einen Code aus dem Eingabe-Buffer holen:
+        // get a code from the input buffer
         nCode = sal::static_int_cast< sal_uInt16 >(
             ( (sal_uInt16) nInputBitsBuf ) & ( ~( 0xffff << nCodeSize ) ));
         nInputBitsBuf >>= nCodeSize;
@@ -188,7 +188,7 @@ bool GIFLZWDecompressor::ProcessOneCode()
 
         nOldCode = nCode;
 
-        // Zeichen(/-folge) des Codes nCode in den Ausgabe-Buffer schreiben:
+        // write character(/-sequence) of the code nCode in the output buffer
         pE = pTable + nCode;
         do
         {

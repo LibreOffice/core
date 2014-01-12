@@ -410,12 +410,12 @@ private:
     ScrollBarBox*       mpScrollBarBox;
 
     /// bitfield
-    bool mbVScroll : 1;     // VScroll an oder aus
-    bool mbHScroll : 1;     // HScroll an oder aus
-    bool mbAutoHScroll : 1; // AutoHScroll an oder aus
+    bool mbVScroll : 1;      // VScroll on or off
+    bool mbHScroll : 1;      // HScroll on or off
+    bool mbAutoHScroll : 1;  // AutoHScroll on or off
     bool mbEdgeBlending : 1;
 
-    Link                maScrollHdl;    // Weil der vom ImplListBoxWindow selbst benoetigt wird.
+    Link                maScrollHdl;    // is also needed by ImplListBoxWindow self
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDNDListenerContainer;
 
 protected:

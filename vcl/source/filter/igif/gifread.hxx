@@ -66,27 +66,27 @@ class GIFReader : public GraphicReader
     sal_uInt32          nLogWidth100;
     sal_uInt32          nLogHeight100;
     sal_uInt16              nTimer;
-    sal_uInt16              nGlobalWidth;           // maximale Bildbreite aus Header
-    sal_uInt16              nGlobalHeight;          // maximale Bildhoehe aus Header
-    sal_uInt16              nImageWidth;            // maximale Bildbreite aus Header
-    sal_uInt16              nImageHeight;           // maximale Bildhoehe aus Header
+    sal_uInt16              nGlobalWidth;           // maximum imagewidth from header
+    sal_uInt16              nGlobalHeight;          // maximum imageheight from header
+    sal_uInt16              nImageWidth;            // maximum screenwidth from header
+    sal_uInt16              nImageHeight;           // maximum screenheight from header
     sal_uInt16              nImagePosX;
     sal_uInt16              nImagePosY;
-    sal_uInt16              nImageX;                // maximale Bildbreite aus Header
-    sal_uInt16              nImageY;                // maximale Bildhoehe aus Header
+    sal_uInt16              nImageX;                // maximum screenwidth from header
+    sal_uInt16              nImageY;                // maximum screenheight from header
     sal_uInt16              nLastImageY;
     sal_uInt16              nLastInterCount;
     sal_uInt16              nLoops;
     GIFAction           eActAction;
     bool                bStatus;
-    bool                bGCTransparent;         // Ob das Bild Transparent ist, wenn ja:
+    bool                bGCTransparent;             // is the image transperant, if yes:
     bool                bInterlaced;
     bool                bOverreadBlock;
     bool                bImGraphicReady;
     bool                bGlobalPalette;
-    sal_uInt8               nBackgroundColor;       // Hintergrundfarbe
-    sal_uInt8               nGCTransparentIndex;    // Pixel von diesem Index sind durchsichtig
-    sal_uInt8               nGCDisposalMethod;      // 'Disposal Method' (siehe GIF-Doku)
+    sal_uInt8               nBackgroundColor;       // backgroundcolour
+    sal_uInt8               nGCTransparentIndex;    // pixelx of this index are transperant
+    sal_uInt8               nGCDisposalMethod;      // 'Disposal Method' (see GIF docs)
     sal_uInt8               cTransIndex1;
     sal_uInt8               cNonTransIndex1;
 
