@@ -549,7 +549,7 @@ int OpenGLRender::SetLine2DShapePoint(float x, float y, int listLength)
 
     m_fPicTop = actualY > m_fPicTop ? actualY : m_fPicTop;
 
-    if (m_iPointNum == ((listLength * 3) - 1))
+    if (m_Line2DPointList.size() == size_t((listLength * 3) - 1))
     {
         m_Line2DShapePointList.push_back(m_Line2DPointList);
     }
@@ -597,7 +597,6 @@ int OpenGLRender::RenderLine2FBO(int)
         CHECK_GL_ERROR();
         m_Line2DShapePointList.pop_front();
     }
-    m_iPointNum = 0;
     GLenum status;
     CHECK_GL_ERROR();
     CHECK_GL_FRAME_BUFFER_STATUS();

@@ -91,6 +91,7 @@ typedef struct RectanglePointList
     float xScale;
     float yScale;
 }RectanglePointList;
+
 typedef struct TextInfo
 {
     GLuint texture;
@@ -257,8 +258,6 @@ private:
     int m_iExternDC;
 
     int m_iExternRC;
-
-    int m_iPointNum;
 
     Line2DPointList m_Line2DPointList;
 
