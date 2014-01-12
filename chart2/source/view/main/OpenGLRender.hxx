@@ -272,9 +272,9 @@ private:
     GLint m_iSamples;
 
     glm::vec4 m_2DColor;
-	GLuint m_frameBufferMS;
-	GLuint m_renderBufferColorMS;
-	GLuint m_renderBufferDepthMS;
+    GLuint m_frameBufferMS;
+    GLuint m_renderBufferColorMS;
+    GLuint m_renderBufferDepthMS;
 
     float m_fPicRight;
 
