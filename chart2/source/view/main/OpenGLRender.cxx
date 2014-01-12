@@ -616,8 +616,7 @@ int OpenGLRender::RenderLine2FBO(int)
         glUseProgram(m_CommonProID);
         CHECK_GL_ERROR();
 
-        glm::vec4 aColor(1.0,0.5,0.5,0.5);
-        glUniform4fv(m_2DColorID, 1, &aColor[0]);
+        glUniform4fv(m_2DColorID, 1, &m_Line2DColor[0]);
         CHECK_GL_ERROR();
         glUniformMatrix4fv(m_MatrixID, 1, GL_FALSE, &m_MVP[0][0]);
         //CHECK_GL_ERROR();
