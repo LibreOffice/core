@@ -551,7 +551,7 @@ int OpenGLRender::SetLine2DShapePoint(float x, float y, int listLength)
     m_fPicBottom = std::min(m_fPicBottom, actualY);
     m_fPicTop = std::max(m_fPicTop, actualY);
 
-    if (m_Line2DPointList.size() == size_t((listLength * 3) - 1))
+    if (m_Line2DPointList.size() == size_t(listLength * 3))
     {
         m_Line2DShapePointList.push_back(m_Line2DPointList);
     }
@@ -1648,7 +1648,7 @@ int OpenGLRender::SetArea2DShapePoint(float x, float y, int listLength)
     m_fPicBottom = std::min(m_fPicBottom, actualY);
     m_fPicTop = std::max(m_fPicTop, actualY);
 
-    if (m_Area2DPointList.size() == size_t((listLength * 3) -1))
+    if (m_Area2DPointList.size() == size_t(listLength * 3))
     {
         m_Area2DShapePointList.push_back(m_Area2DPointList);
     }
