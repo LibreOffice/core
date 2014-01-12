@@ -101,7 +101,7 @@ struct DDInfo
 {
     Cursor          aCursor;
     Selection       aDndStartSel;
-    xub_StrLen      nDropPos;
+    sal_Int32       nDropPos;
     bool            bStarterOfDD;
     bool            bDroppedInMe;
     bool            bVisCursor;
@@ -3165,7 +3165,7 @@ void Edit::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEv
 
     Point aMousePos( rDTDE.LocationX, rDTDE.LocationY );
 
-    xub_StrLen nPrevDropPos = mpDDInfo->nDropPos;
+    sal_Int32 nPrevDropPos = mpDDInfo->nDropPos;
     mpDDInfo->nDropPos = ImplGetCharPos( aMousePos );
 
     /*
