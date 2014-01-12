@@ -718,6 +718,7 @@ int OpenGLRender::RenderTexture2FBO(GLuint TexID)
         );
     glBindTexture(GL_TEXTURE_2D, TexID);
     glUniform1i(m_RenderTexID, 0);
+    //TODO: moggi: get rid fo GL_QUADS
     glDrawArrays(GL_QUADS, 0, 4);
     glDisableVertexAttribArray(m_RenderTexCoordID);
     glDisableVertexAttribArray(m_RenderVertexID);
@@ -757,6 +758,7 @@ int OpenGLRender::RenderTexture(GLuint TexID)
         );
     glBindTexture(GL_TEXTURE_2D, TexID);
     glUniform1i(m_RenderTexID, 0);
+    //TODO: moggi: get rid fo GL_QUADS
     glDrawArrays(GL_QUADS, 0, 4);
     glDisableVertexAttribArray(m_RenderTexCoordID);
     glDisableVertexAttribArray(m_RenderVertexID);
@@ -1083,7 +1085,7 @@ bool OpenGLRender::InitMultisample(PIXELFORMATDESCRIPTOR pfd)
         0,0
     };
     // First We Check To See If We Can Get A Pixel Format For 4 Samples
-    valid = wglChoosePixelFormatARB(hDC,iAttributes,fAttributes,1,&pixelFormat,&numFormats);
+    valid = wglChoosePixelFormatARB(hDC, iAttributes, fAttributes, 1, &pixelFormat, &numFormats);
     // If We Returned True, And Our Format Count Is Greater Than 1
     if (valid && numFormats >= 1)
     {
@@ -1097,7 +1099,7 @@ bool OpenGLRender::InitMultisample(PIXELFORMATDESCRIPTOR pfd)
     }
     // Our Pixel Format With 4 Samples Failed, Test For 2 Samples
     iAttributes[19] = 2;
-    valid = wglChoosePixelFormatARB(hDC,iAttributes,fAttributes,1,&pixelFormat,&numFormats);
+    valid = wglChoosePixelFormatARB(hDC, iAttributes, fAttributes, 1, &pixelFormat, &numFormats);
     if (valid && numFormats >= 1)
     {
         mbArbMultisampleSupported = true;
@@ -1272,7 +1274,6 @@ int OpenGLRender::Bubble2DShapePoint(float x, float y, float directionX, float d
     m_Bubble2DPointList.xScale = directionX / 10.0f;
     m_Bubble2DPointList.yScale = directionY / 10.0f;
 
-
     m_fPicLeft = std::min(m_fPicLeft, actualX);
     m_fPicRight = std::max(m_fPicRight, actualX);
     m_fPicBottom = std::min(m_fPicBottom, actualY);
@@ -1397,6 +1398,7 @@ int OpenGLRender::RenderRectangleShape()
             0,                  // stride
             (void*)0            // array buffer offset
             );
+
         // 2nd attribute buffer : color
         glEnableVertexAttribArray(m_BackgroundColorID);
         glBindBuffer(GL_ARRAY_BUFFER, m_ColorBuffer);
@@ -1408,6 +1410,7 @@ int OpenGLRender::RenderRectangleShape()
             0,                  // stride
             (void*)0            // array buffer offset
             );
+        //TODO: moggi: get rid of GL_QUADS
         glDrawArrays(GL_QUADS, 0, 4);
         glDisableVertexAttribArray(m_BackgroundVertexID);
         glDisableVertexAttribArray(m_BackgroundColorID);
@@ -1573,6 +1576,7 @@ int OpenGLRender::RenderTextShape()
         //texture
         glBindTexture(GL_TEXTURE_2D, textInfo.texture);
         glUniform1i(m_TextTexID, 0);
+        //TODO: moggi: get rid fo GL_QUADS
         glDrawArrays(GL_QUADS, 0, 4);
         glDisableVertexAttribArray(m_TextTexCoordID);
         glDisableVertexAttribArray(m_TextVertexID);
