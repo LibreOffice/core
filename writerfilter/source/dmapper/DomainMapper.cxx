@@ -556,50 +556,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_STYLESHEET:
             break;
 
-        case NS_rtf::LN_fcEastAsianLayout:
-        /*  it seems that the value is following:
-                ???? XX YYYY ZZ
-            where
-                XX seems to be the run id
-                ZZ is the length of the function that is normally 6
-                Lower byte of YYYY determines whether it is
-                    vertical text flow (0x01), or
-                    two lines in one layout (0x02).
-                For 0x01, if the higher byte of YYYY is zero, the text is not scaled to fit the line height,
-                    in opposite case, it is to be scaled.
-                For 0x02, the higher byte of YYYY is determining the prefix and suffix of the run:
-                    no brackets (0x00) ,
-                    () round brackets (0x01),
-                    [] square brackets (0x02),
-                    <> angle brackets (0x03) and
-                    {} curly brackets (0x04).
-                ???? is different and we do not know its signification
-          */
-
-            if ((nIntValue & 0x000000FF) == 6)
-            {
-                switch ((nIntValue & 0x0000FF00) >> 8)
-                {
-                case 1: // vertical text
-                    if (m_pImpl->GetTopContext())
-                    {
-                        m_pImpl->GetTopContext()->Insert(PROP_CHAR_ROTATION, uno::makeAny ( sal_Int16(900) ));
-                        m_pImpl->GetTopContext()->Insert(PROP_CHAR_ROTATION_IS_FIT_TO_LINE, uno::makeAny (((nIntValue & 0x00FF0000) >> 16) != 0));
-                    }
-                    break;
-                case 2: // two lines in one
-                    if (m_pImpl->GetTopContext())
-                    {
-                        m_pImpl->GetTopContext()->Insert(PROP_CHAR_COMBINE_IS_ON, uno::makeAny ( true ));
-                        m_pImpl->GetTopContext()->Insert(PROP_CHAR_COMBINE_PREFIX, uno::makeAny ( getBracketStringFromEnum((nIntValue & 0x00FF0000) >> 16)));
-                        m_pImpl->GetTopContext()->Insert(PROP_CHAR_COMBINE_SUFFIX, uno::makeAny ( getBracketStringFromEnum((nIntValue & 0x00FF0000) >> 16, false)));
-                    }
-                    break;
-                default:
-                    break;
-                }
-            }
-            break;
         case NS_rtf::LN_FRD :
             //footnote reference descriptor, if nIntValue > 0 then automatic, custom otherwise
             //ignored
