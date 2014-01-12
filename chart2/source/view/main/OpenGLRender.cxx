@@ -1031,7 +1031,7 @@ void OpenGLRender::SetLine2DColor(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b)
 
 void OpenGLRender::SetLine2DWidth(int width)
 {
-    m_fLineWidth = std::max((float)width / 10.0f, 0.001f);
+    m_fLineWidth = std::max((float)width / OPENGL_SCALE_VALUE, 0.001f);
 }
 
 #if defined( _WIN32 )
