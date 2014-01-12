@@ -843,10 +843,12 @@ void OpenGLRender::Release()
 {
     glDeleteBuffers(1, &m_VertexBuffer);
     glDeleteBuffers(1, &m_ColorBuffer);
-    glDeleteProgram(m_ProgramID);
     glDeleteBuffers(1, &m_RenderVertexBuf);
     glDeleteBuffers(1, &m_RenderTexCoordBuf);
     glDeleteProgram(m_RenderProID);
+    glDeleteProgram(m_CommonProID);
+    glDeleteProgram(m_TextProID);
+    glDeleteProgram(m_BackgroundProID);
     glDeleteFramebuffers(1, &m_FboID);
     glDeleteTextures(1, &m_TextureObj);
     glDeleteRenderbuffers(1, &m_RboID);

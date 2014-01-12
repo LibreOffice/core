@@ -209,8 +209,6 @@ private:
 
     glm::mat4 m_ScaleMatrix;
 
-    GLuint m_ProgramID;
-
     GLint m_RenderProID;
 
     glm::vec4 m_Line2DColor;
