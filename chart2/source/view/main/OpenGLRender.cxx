@@ -532,18 +532,15 @@ BitmapEx OpenGLRender::GetAsBitmap()
 
 int OpenGLRender::SetLine2DShapePoint(float x, float y, int listLength)
 {
-    if (!m_Line2DPointList.pointBuf)
+    if (m_Line2DPointList.empty())
     {
-        //a new point buffer should be alloc, we should push the old buffer first
-        m_Line2DPointList.bufLen = listLength * sizeof(float) * 3;
-        m_Line2DPointList.pointBuf = (float *)malloc(m_Line2DPointList.bufLen);
-        m_iPointNum = 0;
+        m_Line2DPointList.reserve(listLength);
     }
     float actualX = (x / OPENGL_SCALE_VALUE) - ((float)m_iWidth / 2);
     float actualY = (y / OPENGL_SCALE_VALUE) - ((float)m_iHeight / 2);
-    m_Line2DPointList.pointBuf[m_iPointNum++] = actualX;
-    m_Line2DPointList.pointBuf[m_iPointNum++] = actualY;
-    m_Line2DPointList.pointBuf[m_iPointNum++] = m_fZStep;
+    m_Line2DPointList.push_back(actualX);
+    m_Line2DPointList.push_back(actualY);
+    m_Line2DPointList.push_back(m_fZStep);
     m_fPicLeft = actualX < m_fPicLeft ? actualX : m_fPicLeft;
 
     m_fPicRight = actualX > m_fPicRight ? actualX : m_fPicRight;
@@ -552,11 +549,9 @@ int OpenGLRender::SetLine2DShapePoint(float x, float y, int listLength)
 
     m_fPicTop = actualY > m_fPicTop ? actualY : m_fPicTop;
 
-    if (m_iPointNum == (listLength * 3))
+    if (m_iPointNum == ((listLength * 3) - 1))
     {
         m_Line2DShapePointList.push_back(m_Line2DPointList);
-        m_Line2DPointList.pointBuf = NULL;
-        m_iPointNum = 0;
     }
     return 0;
 }
@@ -572,7 +567,7 @@ int OpenGLRender::RenderLine2FBO(int)
         //fill vertex buffer
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         CHECK_GL_ERROR();
-        glBufferData(GL_ARRAY_BUFFER, pointList.bufLen, pointList.pointBuf, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, pointList.size() * sizeof(float), &pointList[0], GL_STATIC_DRAW);
         CHECK_GL_ERROR();
         // Use our shader
         glUseProgram(m_Line2DProID);
@@ -588,21 +583,19 @@ int OpenGLRender::RenderLine2FBO(int)
         CHECK_GL_ERROR();
         glVertexAttribPointer(
             m_Line2DVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
-            2,                  // size
+            3,                  // size
             GL_FLOAT,           // type
             GL_FALSE,           // normalized?
             0,                  // stride
             (void*)0            // array buffer offset
             );
-        glDrawArrays(GL_LINE_STRIP, 0, pointList.bufLen / sizeof(float) / 2); // 12*3 indices starting at 0 -> 12 triangles
+        glDrawArrays(GL_LINE_STRIP, 0, pointList.size()/3); // 12*3 indices starting at 0 -> 12 triangles
         CHECK_GL_ERROR();
         glDisableVertexAttribArray(m_Line2DWholeVertexID);
         CHECK_GL_ERROR();
         glUseProgram(0);
         CHECK_GL_ERROR();
-        free(pointList.pointBuf);
         m_Line2DShapePointList.pop_front();
-        free(pointList.pointBuf);
     }
     m_iPointNum = 0;
     GLenum status;
@@ -926,7 +919,6 @@ OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
     m_ClearColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f))
 {
     //TODO: moggi: use STL
-    memset(&m_Line2DPointList, 0, sizeof(Line2DPointList));
     memset(&m_Bubble2DPointList, 0, sizeof(m_Bubble2DPointList));
     memset(&m_Bubble2DCircle, 0, sizeof(m_Bubble2DCircle));
     memset(&m_TextInfo, 0, sizeof(TextInfo));

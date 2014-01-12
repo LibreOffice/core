@@ -67,11 +67,7 @@ typedef struct PosVecf3
     float z;
 }PosVecf3;
 
-typedef struct Line2DPointList
-{
-    float *pointBuf;;
-    int bufLen;
-}Line2DPointList;
+typedef std::vector<float> Line2DPointList;
 
 typedef struct Bubble2DPointList
 {
