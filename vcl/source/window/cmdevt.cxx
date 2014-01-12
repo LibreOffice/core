@@ -23,11 +23,9 @@
 #include <vcl/cmdevt.hxx>
 
 CommandExtTextInputData::CommandExtTextInputData( const OUString& rText,
-                                                  const sal_uInt16* pTextAttr,
-                                                  sal_Int32 nCursorPos,
-                                                  sal_uInt16 nCursorFlags,
-                                                  sal_Bool bOnlyCursor ) :
-    maText( rText )
+    const sal_uInt16* pTextAttr, sal_Int32 nCursorPos, sal_uInt16 nCursorFlags,
+    bool bOnlyCursor)
+    : maText(rText)
 {
     if ( pTextAttr && !maText.isEmpty() )
     {
@@ -62,8 +60,7 @@ CommandExtTextInputData::CommandExtTextInputData( const CommandExtTextInputData&
 
 CommandExtTextInputData::~CommandExtTextInputData()
 {
-    if ( mpTextAttr )
-        delete [] mpTextAttr;
+    delete [] mpTextAttr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

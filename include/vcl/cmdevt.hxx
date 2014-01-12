@@ -46,37 +46,37 @@ class VCL_DLLPUBLIC CommandExtTextInputData
 {
 private:
     OUString            maText;
-    sal_uInt16*             mpTextAttr;
-    xub_StrLen          mnCursorPos;
-    sal_uInt16              mnCursorFlags;
-    sal_Bool                mbOnlyCursor;
+    sal_uInt16*         mpTextAttr;
+    sal_Int32           mnCursorPos;
+    sal_uInt16          mnCursorFlags;
+    bool                mbOnlyCursor;
 
 public:
                         CommandExtTextInputData( const OUString& rText,
                                                  const sal_uInt16* pTextAttr,
                                                  sal_Int32 nCursorPos,
                                                  sal_uInt16 nCursorFlags,
-                                                 sal_Bool bOnlyCursor );
+                                                 bool bOnlyCursor );
                         CommandExtTextInputData( const CommandExtTextInputData& rData );
                         ~CommandExtTextInputData();
 
     const OUString&     GetText() const { return maText; }
-    const sal_uInt16*       GetTextAttr() const { return mpTextAttr; }
-    sal_uInt16              GetCharTextAttr( sal_uInt16 nIndex ) const;
-    xub_StrLen          GetCursorPos() const { return mnCursorPos; }
-    sal_Bool                IsCursorVisible() const { return (mnCursorFlags & EXTTEXTINPUT_CURSOR_INVISIBLE) == 0; }
-    sal_Bool                IsCursorOverwrite() const { return (mnCursorFlags & EXTTEXTINPUT_CURSOR_OVERWRITE) != 0; }
-    sal_uInt16              GetCursorFlags() const { return mnCursorFlags; }
-    sal_Bool                IsOnlyCursorChanged() const { return mbOnlyCursor; }
-};
+    const sal_uInt16*   GetTextAttr() const { return mpTextAttr; }
+    sal_uInt16          GetCharTextAttr(sal_Int32 nIndex) const
+    {
+        assert(nIndex >= 0);
+        if (mpTextAttr && nIndex < maText.getLength() && nIndex >=0)
+            return mpTextAttr[nIndex];
+        else
+            return 0;
+    }
 
-inline sal_uInt16 CommandExtTextInputData::GetCharTextAttr( sal_uInt16 nIndex ) const
-{
-    if ( mpTextAttr && (nIndex < maText.getLength()) )
-        return mpTextAttr[nIndex];
-    else
-        return 0;
-}
+    sal_Int32           GetCursorPos() const { return mnCursorPos; }
+    bool                IsCursorVisible() const { return (mnCursorFlags & EXTTEXTINPUT_CURSOR_INVISIBLE) == 0; }
+    bool                IsCursorOverwrite() const { return (mnCursorFlags & EXTTEXTINPUT_CURSOR_OVERWRITE) != 0; }
+    sal_uInt16          GetCursorFlags() const { return mnCursorFlags; }
+    bool                IsOnlyCursorChanged() const { return mbOnlyCursor; }
+};
 
 // ---------------------------
 // - CommandInputContextData -

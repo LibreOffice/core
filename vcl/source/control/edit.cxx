@@ -2257,7 +2257,7 @@ void Edit::Command( const CommandEvent& rCEvt )
         }
 
         ImplAlignAndPaint();
-        xub_StrLen nCursorPos = mpIMEInfos->nPos + pData->GetCursorPos();
+        sal_Int32 nCursorPos = mpIMEInfos->nPos + pData->GetCursorPos();
         SetSelection( Selection( nCursorPos, nCursorPos ) );
         SetInsertMode( !pData->IsCursorOverwrite() );
 
