@@ -124,22 +124,22 @@ struct Impl_IMEInfos
 {
     OUString      aOldTextAfterStartPos;
     sal_uInt16*   pAttribs;
-    xub_StrLen    nPos;
-    xub_StrLen    nLen;
+    sal_Int32     nPos;
+    sal_Int32     nLen;
     bool          bCursor;
     bool          bWasCursorOverwrite;
 
-                Impl_IMEInfos( xub_StrLen nPos, const OUString& rOldTextAfterStartPos );
-                ~Impl_IMEInfos();
+    Impl_IMEInfos(sal_Int32 nPos, const OUString& rOldTextAfterStartPos);
+    ~Impl_IMEInfos();
 
-    void        CopyAttribs( const xub_StrLen* pA, xub_StrLen nL );
+    void        CopyAttribs(const sal_uInt16* pA, sal_Int32 nL);
     void        DestroyAttribs();
 };
 
 // -----------------------------------------------------------------------
 
-Impl_IMEInfos::Impl_IMEInfos( xub_StrLen nP, const OUString& rOldTextAfterStartPos )
- : aOldTextAfterStartPos( rOldTextAfterStartPos )
+Impl_IMEInfos::Impl_IMEInfos(sal_Int32 nP, const OUString& rOldTextAfterStartPos)
+    : aOldTextAfterStartPos(rOldTextAfterStartPos)
 {
     nPos = nP;
     nLen = 0;
@@ -157,7 +157,7 @@ Impl_IMEInfos::~Impl_IMEInfos()
 
 // -----------------------------------------------------------------------
 
-void Impl_IMEInfos::CopyAttribs( const xub_StrLen* pA, xub_StrLen nL )
+void Impl_IMEInfos::CopyAttribs(const sal_uInt16* pA, sal_Int32 nL)
 {
     nLen = nL;
     delete[] pAttribs;
@@ -1182,7 +1182,7 @@ void Edit::ImplShowCursor( sal_Bool bOnlyIfVisible )
 
     long nCursorWidth = 0;
     if ( !mbInsertMode && !maSelection.Len() && (maSelection.Max() < aText.getLength()) )
-        nCursorWidth = GetTextWidth( aText, (xub_StrLen)maSelection.Max(), 1 );
+        nCursorWidth = GetTextWidth(aText, maSelection.Max(), 1);
     long nCursorPosX = nTextPos + mnXOffset + ImplGetExtraOffset();
 
     // cursor should land in visible area
@@ -1357,7 +1357,7 @@ void Edit::ImplLoadRes( const ResId& rResId )
 {
     Control::ImplLoadRes( rResId );
 
-    xub_StrLen nTextLength = ReadShortRes();
+    sal_uInt16 nTextLength = ReadShortRes();
     if ( nTextLength )
         SetMaxTextLen( nTextLength );
 }
