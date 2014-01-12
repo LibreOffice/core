@@ -538,7 +538,7 @@ int OpenGLRender::SetLine2DShapePoint(float x, float y, int listLength)
 {
     if (m_Line2DPointList.empty())
     {
-        m_Line2DPointList.reserve(listLength);
+        m_Line2DPointList.reserve(listLength*3);
     }
     float actualX = (x / OPENGL_SCALE_VALUE) - ((float)m_iWidth / 2);
     float actualY = (y / OPENGL_SCALE_VALUE) - ((float)m_iHeight / 2);
@@ -592,7 +592,7 @@ int OpenGLRender::RenderLine2FBO(int)
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         CHECK_GL_ERROR();
         glVertexAttribPointer(
-            m_2DVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+            m_2DVertexID,
             3,                  // size
             GL_FLOAT,           // type
             GL_FALSE,           // normalized?
@@ -616,9 +616,6 @@ int OpenGLRender::RenderLine2FBO(int)
 void OpenGLRender::prepareToRender()
 {
     glViewport(0, 0, m_iWidth, m_iHeight);
-    glClearDepth(1.0f);
-    // Clear the screen
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     if (!m_FboID)
     {
         // create a texture object
@@ -643,7 +640,9 @@ void OpenGLRender::prepareToRender()
     }
 
     // Clear the screen
+    glClearDepth(1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    m_fZStep = 0;
 }
 
 void OpenGLRender::renderToBitmap()
@@ -667,8 +666,8 @@ void OpenGLRender::renderToBitmap()
         glBlitFramebuffer(0, 0 ,m_iWidth, m_iHeight, 0, 0,m_iWidth ,m_iHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
         glBindFramebuffer(GL_READ_FRAMEBUFFER,0);
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER,0);
-        glBindFramebuffer(GL_FRAMEBUFFER, m_FboID);
     }
+    glBindFramebuffer(GL_FRAMEBUFFER, m_FboID);
 
 #if RENDER_TO_FILE
     char fileName[256] = {0};
