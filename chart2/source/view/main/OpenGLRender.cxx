@@ -44,7 +44,7 @@ using namespace com::sun::star;
 
 using namespace std;
 
-#define RENDER_TO_FILE 0
+#define RENDER_TO_FILE 1
 #define DEBUG_PNG 1
 #define BMP_HEADER_LEN 54
 
@@ -578,7 +578,7 @@ int OpenGLRender::RenderLine2FBO(int)
         glBufferData(GL_ARRAY_BUFFER, pointList.size() * sizeof(float), &pointList[0], GL_STATIC_DRAW);
         CHECK_GL_ERROR();
         // Use our shader
-        glUseProgram(m_Line2DProID);
+        glUseProgram(m_CommonProID);
         CHECK_GL_ERROR();
 
         glUniform4fv(m_2DColorID, 1, &m_Line2DColor[0]);
@@ -644,8 +644,6 @@ void OpenGLRender::prepareToRender()
 
     // Clear the screen
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    RenderTexture2FBO(m_TextureObj[(m_iFboIdx - 1) % 2]);
 }
 
 void OpenGLRender::renderToBitmap()
@@ -697,7 +695,6 @@ void OpenGLRender::renderToBitmap()
     unx::glXSwapBuffers(glWin.dpy, glWin.win);
 #endif
     glFlush();
-    RenderTexture(m_TextureObj[m_iFboIdx % 2]);
     m_iFboIdx++;
 
 }
