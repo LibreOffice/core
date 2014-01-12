@@ -1226,7 +1226,7 @@ static long ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
 static long ImplHandleExtTextInput( Window* pWindow,
                                     const OUString& rText,
                                     const sal_uInt16* pTextAttr,
-                                    sal_uLong nCursorPos, sal_uInt16 nCursorFlags )
+                                    sal_Int32 nCursorPos, sal_uInt16 nCursorFlags )
 {
     ImplSVData* pSVData = ImplGetSVData();
     Window*     pChild = NULL;

@@ -176,9 +176,9 @@ struct SalExtTextInputEvent
     sal_uLong           mnTime;         // Time in ms, when event is created
     OUString            maText;         // Text
     const sal_uInt16*   mpTextAttr;     // Text-Attribute
-    sal_uLong           mnCursorPos;    // Cursor-Position
+    sal_Int32           mnCursorPos;    // Cursor-Position
     sal_uInt8           mnCursorFlags;  // EXTTEXTINPUT_CURSOR_xxx
-    sal_Bool            mbOnlyCursor;   // sal_True: Only Cursor-Position has been changed
+    bool                mbOnlyCursor;   // true: Only Cursor-Position has been changed
 };
 
 // EXTTEXTINPUTPOS
