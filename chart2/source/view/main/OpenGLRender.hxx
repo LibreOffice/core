@@ -208,12 +208,6 @@ private:
     // Our ModelViewProjection : multiplication of our 3 matrices
     glm::mat4 m_MVP;
 
-    glm::mat4 m_TranslationMatrix;
-
-    glm::mat4 m_RotationMatrix;
-
-    glm::mat4 m_ScaleMatrix;
-
     GLint m_RenderProID;
 
     glm::vec4 m_Line2DColor;

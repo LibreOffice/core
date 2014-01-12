@@ -865,10 +865,10 @@ int OpenGLRender::CreateRenderObj(int width, int height)
 
 int OpenGLRender::MoveModelf(PosVecf3 trans, PosVecf3 angle, PosVecf3 scale)
 {
-    m_TranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
-    m_ScaleMatrix = glm::scale(glm::vec3(scale.x, scale.y, scale.z));
-    m_RotationMatrix = glm::eulerAngleYXZ(angle.y, angle.x, angle.z);
-    m_Model = m_TranslationMatrix * m_RotationMatrix * m_ScaleMatrix;
+    glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
+    glm::mat4 aScaleMatrix = glm::scale(glm::vec3(scale.x, scale.y, scale.z));
+    glm::mat4 aRotationMatrix = glm::eulerAngleYXZ(angle.y, angle.x, angle.z);
+    m_Model = aTranslationMatrix * aRotationMatrix * aScaleMatrix;
     return 0;
 }
 
@@ -928,9 +928,6 @@ void OpenGLRender::Release()
 
 OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
     m_Model(glm::mat4(1.0f)),
-    m_TranslationMatrix(glm::translate(m_Model, glm::vec3(0.0f, 0.0f, 0.0f))),
-    m_RotationMatrix(glm::eulerAngleYXZ(0.0f, 0.0f, 0.0f)),
-    m_ScaleMatrix(glm::scale(m_Model, glm::vec3(1.0f, 1.0f, 1.0f))),
     m_Line2DColor(glm::vec4(1.0, 0.0, 0.0, 1.0)),
     m_TextureObj(0),
     m_FboID(0),
