@@ -554,6 +554,7 @@ int OpenGLRender::SetLine2DShapePoint(float x, float y, int listLength)
     if (m_Line2DPointList.size() == size_t(listLength * 3))
     {
         m_Line2DShapePointList.push_back(m_Line2DPointList);
+        m_Line2DPointList.clear();
     }
     return 0;
 }
@@ -1651,6 +1652,7 @@ int OpenGLRender::SetArea2DShapePoint(float x, float y, int listLength)
     if (m_Area2DPointList.size() == size_t(listLength * 3))
     {
         m_Area2DShapePointList.push_back(m_Area2DPointList);
+        m_Area2DPointList.clear();
     }
     return 0;
 }
