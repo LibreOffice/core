@@ -459,14 +459,7 @@ void TextDoc::DestroyTextNodes()
 
 OUString TextDoc::GetText( const sal_Unicode* pSep ) const
 {
-    sal_uLong nLen = GetTextLen( pSep );
     sal_uLong nNodes = maTextNodes.Count();
-
-    if ( nLen > STRING_MAXLEN )
-    {
-        OSL_FAIL( "Text zu gross fuer String" );
-        return OUString();
-    }
 
     OUString aASCIIText;
     sal_uLong nLastNode = nNodes-1;
