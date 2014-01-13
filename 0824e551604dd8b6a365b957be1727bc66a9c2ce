@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa98f980_150516c2",
+        "filename": "filter/source/msfilter/eschesdo.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-13T16:23:15Z",
+      "side": 1,
+      "message": "I still find this problematic. Can\u0027t you just do:\n\naObj.setOOXML(bOOxmlExport)\n\ninstead?",
+      "revId": "0824e551604dd8b6a365b957be1727bc66a9c2ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_550f9ee1",
+        "filename": "filter/source/msfilter/eschesdo.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-13T16:23:15Z",
+      "side": 1,
+      "message": "Existing methods in this call start with a capital letter, please follow that convention: SetOOXML().",
+      "revId": "0824e551604dd8b6a365b957be1727bc66a9c2ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_b5f52acd",
+        "filename": "oox/source/export/vmlexport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-13T16:23:15Z",
+      "side": 1,
+      "message": "This must be XML_id, not XML_Id.",
+      "revId": "0824e551604dd8b6a365b957be1727bc66a9c2ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_35313aa3",
+        "filename": "oox/source/export/vmlexport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-13T16:23:15Z",
+      "side": 1,
+      "message": "If, if the whole point of modifying the Commit() interface is to add the SdrObject here, then I think you could do that in a cleaner way: see how RtfSdrExport (it has the same base class as VMLExport) overwrites AddSdrObject() instead. Then you could avoid any changes in e.g. sc.\n\nCould you please do that?",
+      "revId": "0824e551604dd8b6a365b957be1727bc66a9c2ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_5526be69",
+        "filename": "sw/source/filter/ww8/rtfsdrexport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-13T16:23:15Z",
+      "side": 1,
+      "message": "And then these changes won\u0027t be necessary, either.",
+      "revId": "0824e551604dd8b6a365b957be1727bc66a9c2ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
