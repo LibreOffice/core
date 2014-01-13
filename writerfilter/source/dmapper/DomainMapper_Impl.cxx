@@ -2699,12 +2699,11 @@ void DomainMapper_Impl::handleToc
     bool bIsTabEntry = false ;
 
     sal_Int16 nMaxLevel = 10;
-    bool bBookmark=false;
     OUString sTemplate;
     OUString sChapterNoSeparator;
     OUString sFigureSequence;
     uno::Reference< beans::XPropertySet > xTOC;
-    OUString nBookmarkName;
+    OUString aBookmarkName;
 
 //                  \a Builds a table of figures but does not include the captions's label and number
     if( lcl_FindInCommand( pContext->GetCommand(), 'a', sValue ))
@@ -2714,8 +2713,7 @@ void DomainMapper_Impl::handleToc
 //                  \b Uses a bookmark to specify area of document from which to build table of contents
     if( lcl_FindInCommand( pContext->GetCommand(), 'b', sValue ))
     {
-        bBookmark = true;
-        nBookmarkName = sValue;
+        aBookmarkName = sValue;
     }
     if( lcl_FindInCommand( pContext->GetCommand(), 'c', sValue ))
 //                  \c Builds a table of figures of the given label
@@ -2815,8 +2813,8 @@ void DomainMapper_Impl::handleToc
                 uno::UNO_QUERY_THROW);
     if (xTOC.is())
         xTOC->setPropertyValue(rPropNameSupplier.GetName( PROP_TITLE ), uno::makeAny(OUString()));
-    if(bBookmark)
-        xTOC->setPropertyValue(rPropNameSupplier.GetName( PROP_TOC_BOOKMARK ), uno::makeAny(nBookmarkName));
+    if (!aBookmarkName.isEmpty())
+        xTOC->setPropertyValue(rPropNameSupplier.GetName(PROP_TOC_BOOKMARK), uno::makeAny(aBookmarkName));
     if( !bTableOfFigures && xTOC.is() )
     {
         xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_LEVEL ), uno::makeAny( nMaxLevel ) );
