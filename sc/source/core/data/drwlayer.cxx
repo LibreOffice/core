@@ -274,10 +274,16 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
     // #95129# SJ: set FontHeight pool defaults without changing static SdrEngineDefaults
     SfxItemPool* pOutlinerPool = rOutliner.GetEditTextObjectPool();
     if ( pOutlinerPool )
+    {
          pItemPool->SetPoolDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT ));           // 12Pt
+         pItemPool->SetPoolDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT_CJK ));           // 12Pt
+    }
     SfxItemPool* pHitOutlinerPool = rHitOutliner.GetEditTextObjectPool();
     if ( pHitOutlinerPool )
+    {
          pHitOutlinerPool->SetPoolDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT ));    // 12Pt
+         pHitOutlinerPool->SetPoolDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT_CJK ));    // 12Pt
+    }
 
     // initial undo mode as in Calc document
     if( pDoc )
