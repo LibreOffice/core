@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa98f980_1231ac0b",
+        "filename": "filter/source/msfilter/eschesdo.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000531
+      },
+      "writtenOn": "2014-01-13T10:30:56Z",
+      "side": 1,
+      "message": "This for loop gets called in case of group shape.\nSo for individual shape, this method gets called internally by this binary export.",
+      "parentUuid": "fa98f980_92ae7ce6",
+      "revId": "3822281323dac6b5efae9f9db4ec7f81f05fc71f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa98f980_7281184a",
         "filename": "oox/source/export/vmlexport.cxx",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2014-01-10T14:08:15Z",
       "side": 1,
       "message": "Why not writing id anymore? id has no default value, so if you want to write name, I would suggest just writing both, if that suits you.",
+      "revId": "3822281323dac6b5efae9f9db4ec7f81f05fc71f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_523b34eb",
+        "filename": "oox/source/export/vmlexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000531
+      },
+      "writtenOn": "2014-01-13T10:30:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa98f980_7281184a",
       "revId": "3822281323dac6b5efae9f9db4ec7f81f05fc71f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -104,6 +140,24 @@
     },
     {
       "key": {
+        "uuid": "fa98f980_d22e44a5",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1000531
+      },
+      "writtenOn": "2014-01-13T10:30:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa98f980_52f3340a",
+      "revId": "3822281323dac6b5efae9f9db4ec7f81f05fc71f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa98f980_92dcbc76",
         "filename": "svx/source/customshapes/EnhancedCustomShapeTypeNames.cxx",
         "patchSetId": 3
@@ -132,6 +186,24 @@
       "writtenOn": "2014-01-10T14:08:15Z",
       "side": 1,
       "message": "Please use /*pSdrObject*/, otherwise this will raise an unused parameter warning. In general, it\u0027s good to build using --enable-werror, so you notice these problems.",
+      "revId": "3822281323dac6b5efae9f9db4ec7f81f05fc71f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_1218cc83",
+        "filename": "sw/source/filter/ww8/rtfsdrexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000531
+      },
+      "writtenOn": "2014-01-13T10:30:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa98f980_b2d9c085",
       "revId": "3822281323dac6b5efae9f9db4ec7f81f05fc71f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
