@@ -42,11 +42,48 @@
 
 #include <math.h>
 
-// ========================================================================
-
 DBG_NAMEEX( OutputDevice )
 
-// ------------------------------------------------------------------------
+namespace {
+
+/**
+ * Perform a safe approximation of a polygon from double-precision
+ * coordinates to integer coordinates, to ensure that it has at least 2
+ * pixels in both X and Y directions.
+ */
+Polygon toPolygon( const basegfx::B2DPolygon& rPoly )
+{
+    basegfx::B2DRange aRange = rPoly.getB2DRange();
+    double fW = aRange.getWidth(), fH = aRange.getHeight();
+    if (0.0 < fW && 0.0 < fH && (fW <= 1.0 || fH <= 1.0))
+    {
+        // This polygon not empty but is too small to display.  Approximate it
+        // with a rectangle large enough to be displayed.
+        double nX = aRange.getMinX(), nY = aRange.getMinY();
+        double nW = std::max<double>(1.0, rtl::math::round(fW));
+        double nH = std::max<double>(1.0, rtl::math::round(fH));
+
+        Polygon aTarget;
+        aTarget.Insert(0, Point(nX, nY));
+        aTarget.Insert(1, Point(nX+nW, nY));
+        aTarget.Insert(2, Point(nX+nW, nY+nH));
+        aTarget.Insert(3, Point(nX, nY+nH));
+        aTarget.Insert(4, Point(nX, nY));
+        return aTarget;
+    }
+    return Polygon(rPoly);
+}
+
+PolyPolygon toPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly )
+{
+    PolyPolygon aTarget;
+    for (sal_uInt32 i = 0; i < rPolyPoly.count(); ++i)
+        aTarget.Insert(toPolygon(rPolyPoly.getB2DPolygon(i)));
+
+    return aTarget;
+}
+
+}
 
 void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLong nFlags )
 {
@@ -204,7 +241,7 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
     }
 
     // fallback to old polygon drawing if needed
-    DrawTransparent(PolyPolygon(rB2DPolyPoly), static_cast< sal_uInt16 >(fTransparency * 100.0));
+    DrawTransparent(toPolyPolygon(rB2DPolyPoly), static_cast<sal_uInt16>(fTransparency * 100.0));
 }
 
 // ------------------------------------------------------------------------
