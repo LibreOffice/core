@@ -843,6 +843,19 @@ namespace drawinglayer
                     RenderSvgRadialAtomPrimitive2D(static_cast< const primitive2d::SvgRadialAtomPrimitive2D& >(rCandidate));
                     break;
                 }
+                case PRIMITIVE2D_ID_BORDERLINEPRIMITIVE2D:
+                {
+                    // process recursively, but turn off anti-aliasing. Border
+                    // lines are always rectangular, and look horrible when
+                    // the anti-aliasing is enabled.
+                    sal_uInt16 nAntiAliasing = mpOutputDevice->GetAntialiasing();
+                    mpOutputDevice->SetAntialiasing(nAntiAliasing & ~ANTIALIASING_ENABLE_B2DDRAW);
+
+                    process(rCandidate.get2DDecomposition(getViewInformation2D()));
+
+                    mpOutputDevice->SetAntialiasing(nAntiAliasing);
+                    break;
+                }
                 default :
                 {
                     // process recursively
