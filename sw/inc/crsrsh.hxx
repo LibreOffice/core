@@ -60,7 +60,7 @@ class SwFmtINetFmt;
 class SwTxtAttr;
 class SwTableBox;
 class SwTOXMark;
-class SwRedline;
+class SwRangeRedline;
 class IBlockCursor;
 class SwCntntNode;
 class SwPostItField;
@@ -108,7 +108,7 @@ struct SwContentAtPos
     union {
         const SwField* pFld;
         const SfxPoolItem* pAttr;
-        const SwRedline* pRedl;
+        const SwRangeRedline* pRedl;
         SwCntntNode * pNode;
         const sw::mark::IFieldmark* pFldmark;
     } aFnd;
@@ -263,7 +263,7 @@ private:
 typedef sal_Bool (SwCursor:: *FNCrsr)();
     SW_DLLPRIVATE sal_Bool CallCrsrFN( FNCrsr );
 
-    SW_DLLPRIVATE const SwRedline* _GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect );
+    SW_DLLPRIVATE const SwRangeRedline* _GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect );
 
 protected:
 
@@ -817,9 +817,9 @@ public:
                             SwRect& rRect, short& rOrient );
     sal_Bool SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode );
 
-    const SwRedline* SelNextRedline();
-    const SwRedline* SelPrevRedline();
-    const SwRedline* GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect = sal_False );
+    const SwRangeRedline* SelNextRedline();
+    const SwRangeRedline* SelPrevRedline();
+    const SwRangeRedline* GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect = sal_False );
 
     // is cursor or the point in/over a vertical formatted text?
     bool IsInVerticalText( const Point* pPt = 0 ) const;

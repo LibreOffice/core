@@ -47,7 +47,7 @@
 
 class SwFmtFld;
 class SwFrmFmt;
-class SwRedline;
+class SwRangeRedline;
 class SwTxtRuby;
 
 
@@ -314,7 +314,7 @@ protected:
 class SwXRedlinePortion : public SwXTextPortion
 {
 private:
-    SwRedline const& m_rRedline;
+    SwRangeRedline const& m_rRedline;
 
     void Validate() throw (::com::sun::star::uno::RuntimeException);
 
@@ -324,17 +324,17 @@ private:
 
 public:
     SwXRedlinePortion(
-        SwRedline const& rRedline,
+        SwRangeRedline const& rRedline,
         SwUnoCrsr const* pPortionCrsr,
         ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
             const& xParent,
         bool const bIsStart);
 
     static ::com::sun::star::uno::Any  GetPropertyValue(
-            OUString const& PropertyName, SwRedline const& rRedline) throw();
+            OUString const& PropertyName, SwRangeRedline const& rRedline) throw();
     static ::com::sun::star::uno::Sequence<
         ::com::sun::star::beans::PropertyValue > CreateRedlineProperties(
-                SwRedline const& rRedline, sal_Bool const bIsStart) throw();
+                SwRangeRedline const& rRedline, sal_Bool const bIsStart) throw();
 
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
         getImplementationId() throw (::com::sun::star::uno::RuntimeException);

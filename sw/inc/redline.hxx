@@ -105,7 +105,7 @@ public:
 
 class SW_DLLPUBLIC SwRedlineData
 {
-    friend class SwRedline;
+    friend class SwRangeRedline;
     SwRedlineData* pNext;       // Points to other data.
     SwRedlineExtraData* pExtraData;
 
@@ -181,7 +181,7 @@ public:
 };
 
 
-class SW_DLLPUBLIC SwRedline : public SwPaM
+class SW_DLLPUBLIC SwRangeRedline : public SwPaM
 {
     SwRedlineData* pRedlineData;
     SwNodeIndex* pCntntSect;
@@ -195,17 +195,17 @@ class SW_DLLPUBLIC SwRedline : public SwPaM
     void MoveFromSection();
 
 public:
-    SwRedline( RedlineType_t eType, const SwPaM& rPam );
-    SwRedline( const SwRedlineData& rData, const SwPaM& rPam );
-    SwRedline( const SwRedlineData& rData, const SwPosition& rPos );
+    SwRangeRedline( RedlineType_t eType, const SwPaM& rPam );
+    SwRangeRedline( const SwRedlineData& rData, const SwPaM& rPam );
+    SwRangeRedline( const SwRedlineData& rData, const SwPosition& rPos );
     // For sw3io: pData is taken over!
-    SwRedline(SwRedlineData* pData, const SwPosition& rPos, sal_Bool bVsbl,
+    SwRangeRedline(SwRedlineData* pData, const SwPosition& rPos, sal_Bool bVsbl,
                sal_Bool bDelLP, sal_Bool bIsPD) :
         SwPaM( rPos ), pRedlineData( pData ), pCntntSect( 0 ),
         bDelLastPara( bDelLP ), bIsLastParaDelete( bIsPD ), bIsVisible( bVsbl )
     {}
-    SwRedline( const SwRedline& );
-    virtual ~SwRedline();
+    SwRangeRedline( const SwRangeRedline& );
+    virtual ~SwRangeRedline();
 
     SwNodeIndex* GetContentIdx() const { return pCntntSect; }
     // For Undo.
@@ -275,11 +275,11 @@ public:
     /// Initiate the layout.
     void InvalidateRange();
 
-    sal_Bool IsOwnRedline( const SwRedline& rRedl ) const
+    sal_Bool IsOwnRedline( const SwRangeRedline& rRedl ) const
         { return GetAuthor() == rRedl.GetAuthor(); }
-    sal_Bool CanCombine( const SwRedline& rRedl ) const;
+    sal_Bool CanCombine( const SwRangeRedline& rRedl ) const;
 
-    void PushData( const SwRedline& rRedl, sal_Bool bOwnAsNext = sal_True );
+    void PushData( const SwRangeRedline& rRedl, sal_Bool bOwnAsNext = sal_True );
     sal_Bool PopData();
 
     /**
@@ -295,8 +295,8 @@ public:
      */
     OUString GetDescr(sal_uInt16 nPos = 0);
 
-    int operator==( const SwRedline& ) const;
-    int operator<( const SwRedline& ) const;
+    int operator==( const SwRangeRedline& ) const;
+    int operator<( const SwRangeRedline& ) const;
 };
 
 class SW_DLLPUBLIC SwRedlineHint : public SfxHint
@@ -307,19 +307,19 @@ class SW_DLLPUBLIC SwRedlineHint : public SfxHint
 #define SWREDLINE_CHANGED   4
 #define SWREDLINE_LANGUAGE  5
 
-    const SwRedline* pRedline;
+    const SwRangeRedline* pRedline;
     sal_Int16 nWhich;
     const SwView* pView;
 
 public:
-    SwRedlineHint( const SwRedline* p, sal_Int16 n, const SwView* pV = 0)
+    SwRedlineHint( const SwRangeRedline* p, sal_Int16 n, const SwView* pV = 0)
         : pRedline(p)
         , nWhich(n)
         , pView(pV)
         {}
 
     TYPEINFO();
-    const SwRedline* GetRedline() const { return pRedline; }
+    const SwRangeRedline* GetRedline() const { return pRedline; }
     sal_Int16 Which() const { return nWhich; }
         const SwView* GetView() const { return pView; }
 };

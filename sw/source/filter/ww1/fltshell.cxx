@@ -657,7 +657,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                                         aEmptyOUStr,
                                         0
                                         );
-                    pDoc->AppendRedline(new SwRedline(aData, aRegion), true);
+                    pDoc->AppendRedline(new SwRangeRedline(aData, aRegion), true);
                 }
                 SwRedlineData aData(rFltRedline.eType,
                                     rFltRedline.nAutorNo,
@@ -665,7 +665,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                                     aEmptyOUStr,
                                     0
                                     );
-                pDoc->AppendRedline( new SwRedline(aData, aRegion), true );
+                pDoc->AppendRedline( new SwRangeRedline(aData, aRegion), true );
                 pDoc->SetRedlineMode((RedlineMode_t)( nsRedlineMode_t::REDLINE_NONE
                                                 | nsRedlineMode_t::REDLINE_SHOW_INSERT
                                                 | nsRedlineMode_t::REDLINE_SHOW_DELETE ));

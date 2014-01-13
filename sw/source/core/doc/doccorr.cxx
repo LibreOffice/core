@@ -192,7 +192,7 @@ void SwDoc::CorrAbs(const SwNodeIndex& rOldNode,
         for (sal_uInt16 n = 0; n < rTbl.size(); )
         {
             // is on position ??
-            SwRedline *const pRedline( rTbl[ n ] );
+            SwRangeRedline *const pRedline( rTbl[ n ] );
             bool const bChanged =
                 lcl_PaMCorrAbs(*pRedline, *aPam.Start(), *aPam.End(), aNewPos);
             // clean up empty redlines: docredln.cxx asserts these as invalid

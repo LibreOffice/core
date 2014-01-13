@@ -113,7 +113,7 @@ uno::Sequence< OUString > SwXRedlines::getSupportedServiceNames(void)
     return uno::Sequence< OUString >();
 }
 
-beans::XPropertySet*    SwXRedlines::GetObject( SwRedline& rRedline, SwDoc& rDoc )
+beans::XPropertySet*    SwXRedlines::GetObject( SwRangeRedline& rRedline, SwDoc& rDoc )
 {
     SwPageDesc* pStdDesc = rDoc.GetPageDescFromPool(RES_POOLPAGE_STANDARD);
     SwIterator<SwXRedline,SwPageDesc> aIter(*pStdDesc);

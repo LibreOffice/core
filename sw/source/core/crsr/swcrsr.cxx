@@ -1403,7 +1403,7 @@ static OUString lcl_MaskDeletedRedlines( const SwTxtNode* pTxtNd )
             sal_uInt16 nAct = rDoc.GetRedlinePos( *pTxtNd, USHRT_MAX );
             for ( ; nAct < rDoc.GetRedlineTbl().size(); nAct++ )
             {
-                const SwRedline* pRed = rDoc.GetRedlineTbl()[ nAct ];
+                const SwRangeRedline* pRed = rDoc.GetRedlineTbl()[ nAct ];
                 if ( pRed->Start()->nNode > pTxtNd->GetIndex() )
                     break;
 

@@ -468,7 +468,7 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     sal_Bool GotoNextTOXBase( const OUString* pName = 0);
     bool GotoTable( const OUString& rName );
     sal_Bool GotoFld( const SwFmtFld& rFld );
-    const SwRedline* GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect = sal_False);
+    const SwRangeRedline* GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect = sal_False);
 
     void ChangeHeaderOrFooter(const OUString& rStyleName, sal_Bool bHeader, sal_Bool bOn, sal_Bool bShowWarning);
     virtual void SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow );

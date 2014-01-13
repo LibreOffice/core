@@ -333,7 +333,7 @@ void SwUndoInsTbl::RedoImpl(::sw::UndoRedoContext & rContext)
             RedlineMode_t eOld = rDoc.GetRedlineMode();
             rDoc.SetRedlineMode_intern((RedlineMode_t)(eOld & ~nsRedlineMode_t::REDLINE_IGNORE));
 
-            rDoc.AppendRedline( new SwRedline( *pRedlData, aPam ), true);
+            rDoc.AppendRedline( new SwRangeRedline( *pRedlData, aPam ), true);
             rDoc.SetRedlineMode_intern( eOld );
         }
         else
@@ -2745,7 +2745,7 @@ SwUndo* SwUndoTblCpyTbl::PrepareRedline( SwDoc* pDoc, const SwTableBox& rBox,
     {   // If the old (deleted) part is not empty, here we are...
         SwPaM aDeletePam( aDeleteStart, aCellEnd );
         pUndo = new SwUndoRedlineDelete( aDeletePam, UNDO_DELETE );
-        pDoc->AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_DELETE, aDeletePam ), true );
+        pDoc->AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_DELETE, aDeletePam ), true );
     }
     else if( !rJoin ) // If the old part is empty and joined, we are finished
     {   // if it is not joined, we have to delete this empty paragraph
@@ -2761,7 +2761,7 @@ SwUndo* SwUndoTblCpyTbl::PrepareRedline( SwDoc* pDoc, const SwTableBox& rBox,
     if( aCellStart != aInsertEnd ) // An empty insertion will not been marked
     {
         SwPaM aTmpPam( aCellStart, aInsertEnd );
-        pDoc->AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_INSERT, aTmpPam ), true );
+        pDoc->AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, aTmpPam ), true );
     }
 
     pDoc->SetRedlineMode_intern( eOld );

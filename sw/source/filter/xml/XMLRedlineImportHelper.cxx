@@ -215,7 +215,7 @@ public:
     OUString sAuthor;               /// change author string
     OUString sComment;              /// change comment string
     util::DateTime aDateTime;       /// change DateTime
-    sal_Bool bMergeLastParagraph;   /// the SwRedline::IsDelLastPara flag
+    sal_Bool bMergeLastParagraph;   /// the SwRangeRedline::IsDelLastPara flag
 
     // each position can may be either empty, an XTextRange, or an SwNodeIndex
 
@@ -680,10 +680,10 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
     {
         // regular file loading: insert redline
 
-        // create redline (using pRedlineData which gets copied in SwRedline())
+        // create redline (using pRedlineData which gets copied in SwRangeRedline())
         SwRedlineData* pRedlineData = ConvertRedline(pRedlineInfo, pDoc);
-        SwRedline* pRedline =
-            new SwRedline( pRedlineData, *aPaM.GetPoint(), sal_True,
+        SwRangeRedline* pRedline =
+            new SwRangeRedline( pRedlineData, *aPaM.GetPoint(), sal_True,
                            !pRedlineInfo->bMergeLastParagraph, sal_False );
 
         // set mark

@@ -27,7 +27,7 @@
 
  #include <com/sun/star/uno/Sequence.hxx>
 
- class SwRedline;
+ class SwRangeRedline;
  class SwRedlineTbl;
  class SwPaM;
  struct SwPosition;
@@ -141,7 +141,7 @@ public:
 
         @returns
     */
-    virtual bool AppendRedline(/*[in]*/SwRedline* pPtr, /*[in]*/bool bCallDelete) = 0;
+    virtual bool AppendRedline(/*[in]*/SwRangeRedline* pPtr, /*[in]*/bool bCallDelete) = 0;
 
     virtual bool SplitRedline(/*[in]*/const SwPaM& rPam) = 0;
 
@@ -161,7 +161,7 @@ public:
 
     virtual void CompressRedlines() = 0;
 
-    virtual const SwRedline* GetRedline(
+    virtual const SwRangeRedline* GetRedline(
         /*[in]*/const SwPosition& rPos,
         /*[in]*/sal_uInt16* pFndPos) const = 0;
 
@@ -177,9 +177,9 @@ public:
 
     virtual bool RejectRedline(/*[in]*/const SwPaM& rPam, /*[in]*/bool bCallDelete) = 0;
 
-    virtual const SwRedline* SelNextRedline(/*[in]*/SwPaM& rPam) const = 0;
+    virtual const SwRangeRedline* SelNextRedline(/*[in]*/SwPaM& rPam) const = 0;
 
-    virtual const SwRedline* SelPrevRedline(/*[in]*/SwPaM& rPam) const = 0;
+    virtual const SwRangeRedline* SelPrevRedline(/*[in]*/SwPaM& rPam) const = 0;
 
     // Representation has changed, invalidate all Redlines.
     virtual void UpdateRedlineAttr() = 0;

@@ -33,7 +33,7 @@ class SwTOXType;
 class SwUndo;
 class SwSectionFmt;
 class SwNumRule;
-class SwRedline;
+class SwRangeRedline;
 class SwUnoCrsr;
 class SwOLENode;
 class SwTxtFmtColl;
@@ -140,10 +140,10 @@ public:
 
 struct CompareSwRedlineTbl
 {
-    bool operator()(SwRedline* const &lhs, SwRedline* const &rhs) const;
+    bool operator()(SwRangeRedline* const &lhs, SwRangeRedline* const &rhs) const;
 };
 class _SwRedlineTbl
-    : public o3tl::sorted_vector<SwRedline*, CompareSwRedlineTbl,
+    : public o3tl::sorted_vector<SwRangeRedline*, CompareSwRedlineTbl,
                 o3tl::find_partialorder_ptrequals>
 {
 public:
@@ -153,15 +153,15 @@ public:
 class SwRedlineTbl : private _SwRedlineTbl
 {
 public:
-    bool Contains(const SwRedline* p) const { return find(const_cast<SwRedline* const>(p)) != end(); }
-    sal_uInt16 GetPos(const SwRedline* p) const;
+    bool Contains(const SwRangeRedline* p) const { return find(const_cast<SwRangeRedline* const>(p)) != end(); }
+    sal_uInt16 GetPos(const SwRangeRedline* p) const;
 
-    bool Insert( SwRedline* p, bool bIns = true );
-    bool Insert( SwRedline* p, sal_uInt16& rInsPos, bool bIns = true );
-    bool InsertWithValidRanges( SwRedline* p, sal_uInt16* pInsPos = 0 );
+    bool Insert( SwRangeRedline* p, bool bIns = true );
+    bool Insert( SwRangeRedline* p, sal_uInt16& rInsPos, bool bIns = true );
+    bool InsertWithValidRanges( SwRangeRedline* p, sal_uInt16* pInsPos = 0 );
 
     void Remove( sal_uInt16 nPos );
-    bool Remove( const SwRedline* p );
+    bool Remove( const SwRangeRedline* p );
     void DeleteAndDestroy( sal_uInt16 nPos, sal_uInt16 nLen = 1 );
     void DeleteAndDestroyAll();
 

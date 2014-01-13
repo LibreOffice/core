@@ -52,7 +52,7 @@ sal_uInt16 SwEditShell::GetRedlineCount() const
     return GetDoc()->GetRedlineTbl().size();
 }
 
-const SwRedline& SwEditShell::GetRedline( sal_uInt16 nPos ) const
+const SwRangeRedline& SwEditShell::GetRedline( sal_uInt16 nPos ) const
 {
     return *GetDoc()->GetRedlineTbl()[ nPos ];
 }
@@ -102,7 +102,7 @@ sal_Bool SwEditShell::SetRedlineComment( const OUString& rS )
     return bRet;
 }
 
-const SwRedline* SwEditShell::GetCurrRedline() const
+const SwRangeRedline* SwEditShell::GetCurrRedline() const
 {
     return GetDoc()->GetRedline( *GetCrsr()->GetPoint(), 0 );
 }

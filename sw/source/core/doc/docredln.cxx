@@ -104,8 +104,8 @@ TYPEINIT1(SwRedlineHint, SfxHint);
         // verify proper redline sorting
         for( sal_uInt16 n = 1; n < rTbl.size(); ++n )
         {
-            const SwRedline* pPrev = rTbl[ n-1 ];
-            const SwRedline* pCurrent = rTbl[ n ];
+            const SwRangeRedline* pPrev = rTbl[ n-1 ];
+            const SwRangeRedline* pCurrent = rTbl[ n ];
 
             // check redline sorting
             SAL_WARN_IF( *pPrev->Start() > *pCurrent->Start(), "sw",
@@ -126,8 +126,8 @@ TYPEINIT1(SwRedlineHint, SfxHint);
         for( sal_uInt16 n = 0; n < rTbl.size(); ++n )
         {
             sal_uInt16 nDummy = 0;
-            const SwRedline* pCurrent = rTbl[ n ];
-            const SwRedline* pNext = n+1 < (sal_uInt16)rTbl.size() ? rTbl[ n+1 ] : 0;
+            const SwRangeRedline* pCurrent = rTbl[ n ];
+            const SwRangeRedline* pNext = n+1 < (sal_uInt16)rTbl.size() ? rTbl[ n+1 ] : 0;
             if( pCurrent == pNext )
                 ++nDummy;
             if( n == nWatch )
@@ -156,22 +156,22 @@ void SwDoc::SetRedlineMode( RedlineMode_t eMode )
             bool bSaveInXMLImportFlag = IsInXMLImport();
             SetInXMLImport( false );
             // and then hide/display everything
-            void (SwRedline::*pFnc)( sal_uInt16 ) = 0;
+            void (SwRangeRedline::*pFnc)( sal_uInt16 ) = 0;
 
             switch( nsRedlineMode_t::REDLINE_SHOW_MASK & eMode )
             {
             case nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE :
-                pFnc = &SwRedline::Show;
+                pFnc = &SwRangeRedline::Show;
                 break;
             case nsRedlineMode_t::REDLINE_SHOW_INSERT:
-                pFnc = &SwRedline::Hide;
+                pFnc = &SwRangeRedline::Hide;
                 break;
             case nsRedlineMode_t::REDLINE_SHOW_DELETE:
-                pFnc = &SwRedline::ShowOriginal;
+                pFnc = &SwRangeRedline::ShowOriginal;
                 break;
 
             default:
-                pFnc = &SwRedline::Hide;
+                pFnc = &SwRangeRedline::Hide;
                 eMode = (RedlineMode_t)(eMode | nsRedlineMode_t::REDLINE_SHOW_INSERT);
                 break;
             }
@@ -285,7 +285,7 @@ Behaviour of Delete-Redline:
                                           other Insert is overlapped by
                                           the Delete
 */
-bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
+bool SwDoc::AppendRedline( SwRangeRedline* pNewRedl, bool bCallDelete )
 {
     bool bMerged = false;
     _CHECK_REDLINE( this )
@@ -360,7 +360,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
         {
             bDec = false;
 
-            SwRedline* pRedl = (*mpRedlineTbl)[ n ];
+            SwRangeRedline* pRedl = (*mpRedlineTbl)[ n ];
             SwPosition* pRStt = pRedl->Start(),
                       * pREnd = pRStt == pRedl->GetPoint() ? pRedl->GetMark()
                                                            : pRedl->GetPoint();
@@ -457,7 +457,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                         // split up
                         if( *pEnd != *pREnd )
                         {
-                            SwRedline* pCpy = new SwRedline( *pRedl );
+                            SwRangeRedline* pCpy = new SwRangeRedline( *pRedl );
                             pCpy->SetStart( *pEnd );
                             mpRedlineTbl->Insert( pCpy );
                         }
@@ -482,7 +482,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                         // split up the new redline, since it covers the
                         // existing redline. Insert the first part, and
                         // progress with the remainder as usual
-                        SwRedline* pSplit = new SwRedline( *pNewRedl );
+                        SwRangeRedline* pSplit = new SwRangeRedline( *pNewRedl );
                         pSplit->SetEnd( *pRStt );
                         pNewRedl->SetStart( *pREnd );
                         mpRedlineTbl->Insert( pSplit );
@@ -517,7 +517,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                         // split up
                         if( *pEnd != *pREnd )
                         {
-                            SwRedline* pCpy = new SwRedline( *pRedl );
+                            SwRangeRedline* pCpy = new SwRangeRedline( *pRedl );
                             pCpy->SetStart( *pEnd );
                             mpRedlineTbl->Insert( pCpy );
                         }
@@ -542,7 +542,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                         // split up the new redline, since it covers the
                         // existing redline. Insert the first part, and
                         // progress with the remainder as usual
-                        SwRedline* pSplit = new SwRedline( *pNewRedl );
+                        SwRangeRedline* pSplit = new SwRangeRedline( *pNewRedl );
                         pSplit->SetEnd( *pRStt );
                         pNewRedl->SetStart( *pREnd );
                         mpRedlineTbl->Insert( pSplit );
@@ -600,7 +600,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                         {
                             if( *pEnd != *pRStt )
                             {
-                                SwRedline* pNew = new SwRedline( *pRedl );
+                                SwRangeRedline* pNew = new SwRangeRedline( *pRedl );
                                 pNew->SetStart( *pEnd );
                                 pRedl->SetEnd( *pStt, pREnd );
                                 if( *pStt == *pRStt && pRedl->GetContentIdx() == NULL )
@@ -634,7 +634,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                             // split the new one
                             if( *pEnd != *pREnd )
                             {
-                                SwRedline* pNew = new SwRedline( *pNewRedl );
+                                SwRangeRedline* pNew = new SwRangeRedline( *pNewRedl );
                                 pNew->SetStart( *pREnd );
                                 pNewRedl->SetEnd( *pRStt, pEnd );
                                 AppendRedline( pNew, bCallDelete );
@@ -851,7 +851,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                         // two. In this case, pRedl will be changed to cover
                         // only part of it's former range, and pNew will cover
                         // the remainder.
-                        SwRedline* pNew = 0;
+                        SwRangeRedline* pNew = 0;
 
                         switch( eCmpPos )
                         {
@@ -886,7 +886,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                                     pNewRedl->PushData( *pRedl, sal_False );
                                     if( *pREnd != *pEnd )
                                     {
-                                        pNew = new SwRedline( *pRedl );
+                                        pNew = new SwRangeRedline( *pRedl );
                                         pNew->SetStart( *pEnd );
                                     }
                                     pRedl->SetEnd( *pStt, pREnd );
@@ -907,7 +907,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                                     pNewRedl->SetEnd( *pRStt, pEnd );
                                 else
                                 {
-                                    pNew = new SwRedline( *pNewRedl );
+                                    pNew = new SwRangeRedline( *pNewRedl );
                                     pNew->SetEnd( *pRStt );
                                     pNewRedl->SetStart( *pREnd, pStt );
                                 }
@@ -930,7 +930,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                                 }
                                 else
                                 {
-                                    pNew = new SwRedline( *pRedl );
+                                    pNew = new SwRangeRedline( *pRedl );
                                     pNew->PushData( *pNewRedl );
                                     pNew->SetEnd( *pEnd );
                                     pNewRedl->SetEnd( *pRStt, pEnd );
@@ -958,7 +958,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                                 }
                                 else
                                 {
-                                    pNew = new SwRedline( *pRedl );
+                                    pNew = new SwRangeRedline( *pRedl );
                                     pNew->PushData( *pNewRedl );
                                     pNew->SetStart( *pStt );
                                     pNewRedl->SetStart( *pREnd, pStt );
@@ -1024,7 +1024,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                         {
                             if( *pEnd != *pRStt )
                             {
-                                SwRedline* pNew = new SwRedline( *pRedl );
+                                SwRangeRedline* pNew = new SwRangeRedline( *pRedl );
                                 pNew->SetStart( *pEnd );
                                 pRedl->SetEnd( *pStt, pREnd );
                                 if( ( *pStt == *pRStt ) &&
@@ -1074,7 +1074,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                         {
                             if( *pEnd != *pRStt )
                             {
-                                SwRedline* pNew = new SwRedline( *pNewRedl );
+                                SwRangeRedline* pNew = new SwRangeRedline( *pNewRedl );
                                 pNew->SetStart( *pREnd );
                                 pNewRedl->SetEnd( *pRStt, pEnd );
                                 AppendRedline( pNew, bCallDelete );
@@ -1124,7 +1124,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                         {
                             // If it lies completely within the current one
                             // we need to split it
-                            SwRedline* pNew = new SwRedline( *pRedl );
+                            SwRangeRedline* pNew = new SwRangeRedline( *pRedl );
                             pNew->SetStart( *pEnd );
                             pRedl->SetEnd( *pStt, pREnd );
                             AppendRedline( pNew, bCallDelete );
@@ -1233,21 +1233,21 @@ void SwDoc::CompressRedlines()
 {
     _CHECK_REDLINE( this )
 
-    void (SwRedline::*pFnc)(sal_uInt16) = 0;
+    void (SwRangeRedline::*pFnc)(sal_uInt16) = 0;
     switch( nsRedlineMode_t::REDLINE_SHOW_MASK & meRedlineMode )
     {
     case nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE:
-        pFnc = &SwRedline::Show;
+        pFnc = &SwRangeRedline::Show;
         break;
     case nsRedlineMode_t::REDLINE_SHOW_INSERT:
-        pFnc = &SwRedline::Hide;
+        pFnc = &SwRangeRedline::Hide;
         break;
     }
 
     // Try to merge identical ones
     for( sal_uInt16 n = 1; n < mpRedlineTbl->size(); ++n )
     {
-        SwRedline* pPrev = (*mpRedlineTbl)[ n-1 ],
+        SwRangeRedline* pPrev = (*mpRedlineTbl)[ n-1 ],
                     * pCur = (*mpRedlineTbl)[ n ];
         const SwPosition* pPrevStt = pPrev->Start(),
                         * pPrevEnd = pPrevStt == pPrev->GetPoint()
@@ -1284,7 +1284,7 @@ bool SwDoc::SplitRedline( const SwPaM& rRange )
     GetRedline( *pStt, &n );
     for( ; n < mpRedlineTbl->size() ; ++n )
     {
-        SwRedline* pTmp = (*mpRedlineTbl)[ n ];
+        SwRangeRedline* pTmp = (*mpRedlineTbl)[ n ];
         SwPosition* pTStt = pTmp->Start(),
                   * pTEnd = pTStt == pTmp->GetPoint() ? pTmp->GetMark()
                                                       : pTmp->GetPoint();
@@ -1298,11 +1298,11 @@ bool SwDoc::SplitRedline( const SwPaM& rRange )
             if( *pEnd == *pTEnd )
                 nn += 2;
 
-            SwRedline* pNew = 0;
+            SwRangeRedline* pNew = 0;
             switch( nn )
             {
             case 0:
-                pNew = new SwRedline( *pTmp );
+                pNew = new SwRangeRedline( *pTmp );
                 pTmp->SetEnd( *pStt, pTEnd );
                 pNew->SetStart( *pEnd );
                 break;
@@ -1363,7 +1363,7 @@ bool SwDoc::DeleteRedline( const SwPaM& rRange, bool bSaveInUndo,
     GetRedline( *pStt, &n );
     for( ; n < mpRedlineTbl->size() ; ++n )
     {
-        SwRedline* pRedl = (*mpRedlineTbl)[ n ];
+        SwRangeRedline* pRedl = (*mpRedlineTbl)[ n ];
         if( USHRT_MAX != nDelType && nDelType != pRedl->GetType() )
             continue;
 
@@ -1414,10 +1414,10 @@ bool SwDoc::DeleteRedline( const SwPaM& rRange, bool bSaveInUndo,
                 }
                 else
                 {
-                    SwRedline* pCpy;
+                    SwRangeRedline* pCpy;
                     if( *pREnd != *pEnd )
                     {
-                        pCpy = new SwRedline( *pRedl );
+                        pCpy = new SwRangeRedline( *pRedl );
                         pCpy->SetStart( *pEnd );
                     }
                     else
@@ -1463,7 +1463,7 @@ sal_uInt16 SwDoc::GetRedlinePos( const SwNode& rNd, sal_uInt16 nType ) const
     const sal_uLong nNdIdx = rNd.GetIndex();
     for( sal_uInt16 n = 0; n < mpRedlineTbl->size() ; ++n )
     {
-        const SwRedline* pTmp = (*mpRedlineTbl)[ n ];
+        const SwRangeRedline* pTmp = (*mpRedlineTbl)[ n ];
         sal_uLong nPt = pTmp->GetPoint()->nNode.GetIndex(),
               nMk = pTmp->GetMark()->nNode.GetIndex();
         if( nPt < nMk ) { long nTmp = nMk; nMk = nPt; nPt = nTmp; }
@@ -1478,7 +1478,7 @@ sal_uInt16 SwDoc::GetRedlinePos( const SwNode& rNd, sal_uInt16 nType ) const
     return USHRT_MAX;
 }
 
-const SwRedline* SwDoc::GetRedline( const SwPosition& rPos,
+const SwRangeRedline* SwDoc::GetRedline( const SwPosition& rPos,
                                     sal_uInt16* pFndPos ) const
 {
     sal_uInt16 nO = mpRedlineTbl->size(), nM, nU = 0;
@@ -1488,7 +1488,7 @@ const SwRedline* SwDoc::GetRedline( const SwPosition& rPos,
         while( nU <= nO )
         {
             nM = nU + ( nO - nU ) / 2;
-            const SwRedline* pRedl = (*mpRedlineTbl)[ nM ];
+            const SwRangeRedline* pRedl = (*mpRedlineTbl)[ nM ];
             const SwPosition* pStt = pRedl->Start();
             const SwPosition* pEnd = pStt == pRedl->GetPoint()
                                         ? pRedl->GetMark()
@@ -1557,7 +1557,7 @@ static sal_Bool lcl_AcceptRedline( SwRedlineTbl& rArr, sal_uInt16& rPos,
                         const SwPosition* pEndRng = 0 )
 {
     sal_Bool bRet = sal_True;
-    SwRedline* pRedl = rArr[ rPos ];
+    SwRangeRedline* pRedl = rArr[ rPos ];
     SwPosition *pRStt = 0, *pREnd = 0;
     SwComparePosition eCmp = POS_OUTSIDE;
     if( pSttRng && pEndRng )
@@ -1585,7 +1585,7 @@ static sal_Bool lcl_AcceptRedline( SwRedlineTbl& rArr, sal_uInt16& rPos,
                     if( *pEndRng != *pREnd )
                     {
                         // split up
-                        SwRedline* pNew = new SwRedline( *pRedl );
+                        SwRangeRedline* pNew = new SwRangeRedline( *pRedl );
                         pNew->SetStart( *pEndRng );
                         rArr.Insert( pNew ); ++rPos;
                     }
@@ -1716,7 +1716,7 @@ static sal_Bool lcl_RejectRedline( SwRedlineTbl& rArr, sal_uInt16& rPos,
                         const SwPosition* pEndRng = 0 )
 {
     sal_Bool bRet = sal_True;
-    SwRedline* pRedl = rArr[ rPos ];
+    SwRangeRedline* pRedl = rArr[ rPos ];
     SwPosition *pRStt = 0, *pREnd = 0;
     SwComparePosition eCmp = POS_OUTSIDE;
     if( pSttRng && pEndRng )
@@ -1811,7 +1811,7 @@ static sal_Bool lcl_RejectRedline( SwRedlineTbl& rArr, sal_uInt16& rPos,
         break;
     case nsRedlineType_t::REDLINE_DELETE:
         {
-            SwRedline* pNew = 0;
+            SwRangeRedline* pNew = 0;
             bool bCheck = false, bReplace = false;
 
             switch( eCmp )
@@ -1820,7 +1820,7 @@ static sal_Bool lcl_RejectRedline( SwRedlineTbl& rArr, sal_uInt16& rPos,
                 {
                     if( 1 < pRedl->GetStackCount() )
                     {
-                        pNew = new SwRedline( *pRedl );
+                        pNew = new SwRangeRedline( *pRedl );
                         pNew->PopData();
                     }
                     if( *pSttRng == *pRStt )
@@ -1835,7 +1835,7 @@ static sal_Bool lcl_RejectRedline( SwRedlineTbl& rArr, sal_uInt16& rPos,
                         if( *pEndRng != *pREnd )
                         {
                             // split up
-                            SwRedline* pCpy = new SwRedline( *pRedl );
+                            SwRangeRedline* pCpy = new SwRangeRedline( *pRedl );
                             pCpy->SetStart( *pEndRng );
                             rArr.Insert( pCpy ); ++rPos;
                             if( pNew )
@@ -1853,7 +1853,7 @@ static sal_Bool lcl_RejectRedline( SwRedlineTbl& rArr, sal_uInt16& rPos,
             case POS_OVERLAP_BEFORE:
                 if( 1 < pRedl->GetStackCount() )
                 {
-                    pNew = new SwRedline( *pRedl );
+                    pNew = new SwRangeRedline( *pRedl );
                     pNew->PopData();
                 }
                 pRedl->SetStart( *pEndRng, pRStt );
@@ -1865,7 +1865,7 @@ static sal_Bool lcl_RejectRedline( SwRedlineTbl& rArr, sal_uInt16& rPos,
             case POS_OVERLAP_BEHIND:
                 if( 1 < pRedl->GetStackCount() )
                 {
-                    pNew = new SwRedline( *pRedl );
+                    pNew = new SwRangeRedline( *pRedl );
                     pNew->PopData();
                 }
                 pRedl->SetEnd( *pSttRng, pREnd );
@@ -1914,15 +1914,15 @@ static sal_Bool lcl_RejectRedline( SwRedlineTbl& rArr, sal_uInt16& rPos,
     return bRet;
 }
 
-static const SwRedline* lcl_FindCurrRedline( const SwPosition& rSttPos,
+static const SwRangeRedline* lcl_FindCurrRedline( const SwPosition& rSttPos,
                                         sal_uInt16& rPos,
                                         bool bNext = true )
 {
-    const SwRedline* pFnd = 0;
+    const SwRangeRedline* pFnd = 0;
     const SwRedlineTbl& rArr = rSttPos.nNode.GetNode().GetDoc()->GetRedlineTbl();
     for( ; rPos < rArr.size() ; ++rPos )
     {
-        const SwRedline* pTmp = rArr[ rPos ];
+        const SwRangeRedline* pTmp = rArr[ rPos ];
         if( pTmp->HasMark() && pTmp->IsVisible() )
         {
             const SwPosition* pRStt = pTmp->Start(),
@@ -1953,7 +1953,7 @@ static int lcl_AcceptRejectRedl( Fn_AcceptReject fn_AcceptReject,
     const SwPosition* pStt = rPam.Start(),
                     * pEnd = pStt == rPam.GetPoint() ? rPam.GetMark()
                                                      : rPam.GetPoint();
-    const SwRedline* pFnd = lcl_FindCurrRedline( *pStt, n, true );
+    const SwRangeRedline* pFnd = lcl_FindCurrRedline( *pStt, n, true );
     if( pFnd &&     // Is new a part of it?
         ( *pFnd->Start() != *pStt || *pFnd->End() > *pEnd ))
     {
@@ -1965,7 +1965,7 @@ static int lcl_AcceptRejectRedl( Fn_AcceptReject fn_AcceptReject,
 
     for( ; n < rArr.size(); ++n )
     {
-        SwRedline* pTmp = rArr[ n ];
+        SwRangeRedline* pTmp = rArr[ n ];
         if( pTmp->HasMark() && pTmp->IsVisible() )
         {
             if( *pTmp->End() <= *pEnd )
@@ -2000,7 +2000,7 @@ static void lcl_AdjustRedlineRange( SwPaM& rPam )
     if( !pStt->nContent.GetIndex() &&
         !pDoc->GetNodes()[ pStt->nNode.GetIndex() - 1 ]->IsCntntNode() )
     {
-        const SwRedline* pRedl = pDoc->GetRedline( *pStt, 0 );
+        const SwRangeRedline* pRedl = pDoc->GetRedline( *pStt, 0 );
         if( pRedl )
         {
             const SwPosition* pRStt = pRedl->Start();
@@ -2013,7 +2013,7 @@ static void lcl_AdjustRedlineRange( SwPaM& rPam )
         !pDoc->GetNodes()[ pEnd->nNode.GetIndex() + 1 ]->IsCntntNode() &&
         pEnd->nContent.GetIndex() == pEnd->nNode.GetNode().GetCntntNode()->Len()    )
     {
-        const SwRedline* pRedl = pDoc->GetRedline( *pEnd, 0 );
+        const SwRangeRedline* pRedl = pDoc->GetRedline( *pEnd, 0 );
         if( pRedl )
         {
             const SwPosition* pREnd = pRedl->End();
@@ -2033,7 +2033,7 @@ bool SwDoc::AcceptRedline( sal_uInt16 nPos, bool bCallDelete )
         (nsRedlineMode_t::REDLINE_SHOW_MASK & meRedlineMode) )
       SetRedlineMode( (RedlineMode_t)(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE | meRedlineMode));
 
-    SwRedline* pTmp = (*mpRedlineTbl)[ nPos ];
+    SwRangeRedline* pTmp = (*mpRedlineTbl)[ nPos ];
     if( pTmp->HasMark() && pTmp->IsVisible() )
     {
         if (GetIDocumentUndoRedo().DoesUndo())
@@ -2143,7 +2143,7 @@ bool SwDoc::RejectRedline( sal_uInt16 nPos, bool bCallDelete )
         (nsRedlineMode_t::REDLINE_SHOW_MASK & meRedlineMode) )
       SetRedlineMode( (RedlineMode_t)(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE | meRedlineMode));
 
-    SwRedline* pTmp = (*mpRedlineTbl)[ nPos ];
+    SwRangeRedline* pTmp = (*mpRedlineTbl)[ nPos ];
     if( pTmp->HasMark() && pTmp->IsVisible() )
     {
         if (GetIDocumentUndoRedo().DoesUndo())
@@ -2245,7 +2245,7 @@ bool SwDoc::RejectRedline( const SwPaM& rPam, bool bCallDelete )
     return nRet != 0;
 }
 
-const SwRedline* SwDoc::SelNextRedline( SwPaM& rPam ) const
+const SwRangeRedline* SwDoc::SelNextRedline( SwPaM& rPam ) const
 {
     rPam.DeleteMark();
     rPam.SetMark();
@@ -2257,7 +2257,7 @@ const SwRedline* SwDoc::SelNextRedline( SwPaM& rPam ) const
     // If the starting positon points to the last valid ContentNode,
     // we take the next Redline in any case.
     sal_uInt16 n = 0;
-    const SwRedline* pFnd = lcl_FindCurrRedline( rSttPos, n, true );
+    const SwRangeRedline* pFnd = lcl_FindCurrRedline( rSttPos, n, true );
     if( pFnd )
     {
         const SwPosition* pEnd = pFnd->End();
@@ -2296,7 +2296,7 @@ const SwRedline* SwDoc::SelNextRedline( SwPaM& rPam ) const
             const SwPosition* pPrevEnd = pFnd->End();
             while( ++n < mpRedlineTbl->size() )
             {
-                const SwRedline* pTmp = (*mpRedlineTbl)[ n ];
+                const SwRangeRedline* pTmp = (*mpRedlineTbl)[ n ];
                 if( pTmp->HasMark() && pTmp->IsVisible() )
                 {
                     const SwPosition *pRStt;
@@ -2316,7 +2316,7 @@ const SwRedline* SwDoc::SelNextRedline( SwPaM& rPam ) const
 
         if( pFnd )
         {
-            const SwRedline* pSaveFnd = pFnd;
+            const SwRangeRedline* pSaveFnd = pFnd;
 
             SwCntntNode* pCNd;
             SwNodeIndex* pIdx = &rPam.GetMark()->nNode;
@@ -2362,7 +2362,7 @@ const SwRedline* SwDoc::SelNextRedline( SwPaM& rPam ) const
     return pFnd;
 }
 
-const SwRedline* SwDoc::SelPrevRedline( SwPaM& rPam ) const
+const SwRangeRedline* SwDoc::SelPrevRedline( SwPaM& rPam ) const
 {
     rPam.DeleteMark();
     rPam.SetMark();
@@ -2374,7 +2374,7 @@ const SwRedline* SwDoc::SelPrevRedline( SwPaM& rPam ) const
     // If the starting positon points to the last valid ContentNode,
     // we take the previous Redline in any case.
     sal_uInt16 n = 0;
-    const SwRedline* pFnd = lcl_FindCurrRedline( rSttPos, n, false );
+    const SwRangeRedline* pFnd = lcl_FindCurrRedline( rSttPos, n, false );
     if( pFnd )
     {
         const SwPosition* pStt = pFnd->Start();
@@ -2412,7 +2412,7 @@ const SwRedline* SwDoc::SelPrevRedline( SwPaM& rPam ) const
             const SwPosition* pNextStt = pFnd->Start();
             while( 0 < n )
             {
-                const SwRedline* pTmp = (*mpRedlineTbl)[ --n ];
+                const SwRangeRedline* pTmp = (*mpRedlineTbl)[ --n ];
                 if( pTmp->HasMark() && pTmp->IsVisible() )
                 {
                     const SwPosition *pREnd;
@@ -2435,7 +2435,7 @@ const SwRedline* SwDoc::SelPrevRedline( SwPaM& rPam ) const
 
         if( pFnd )
         {
-            const SwRedline* pSaveFnd = pFnd;
+            const SwRangeRedline* pSaveFnd = pFnd;
 
             SwCntntNode* pCNd;
             SwNodeIndex* pIdx = &rPam.GetMark()->nNode;
@@ -2494,7 +2494,7 @@ bool SwDoc::SetRedlineComment( const SwPaM& rPaM, const OUString& rS )
         for( ; n < mpRedlineTbl->size(); ++n )
         {
             bRet = true;
-            SwRedline* pTmp = (*mpRedlineTbl)[ n ];
+            SwRangeRedline* pTmp = (*mpRedlineTbl)[ n ];
             if( pStt != pEnd && *pTmp->Start() > *pEnd )
                 break;
 
@@ -2526,7 +2526,7 @@ void SwDoc::UpdateRedlineAttr()
     const SwRedlineTbl& rTbl = GetRedlineTbl();
     for( sal_uInt16 n = 0; n < rTbl.size(); ++n )
     {
-        SwRedline* pRedl = rTbl[ n ];
+        SwRangeRedline* pRedl = rTbl[ n ];
         if( pRedl->IsVisible() )
             pRedl->InvalidateRange();
     }
@@ -2559,7 +2559,7 @@ void SwDoc::SetRedlinePassword(
     SetModified();
 }
 
-bool SwRedlineTbl::Insert( SwRedline* p, bool bIns )
+bool SwRedlineTbl::Insert( SwRangeRedline* p, bool bIns )
 {
     bool bRet = false;
     if( p->HasValidRange() )
@@ -2576,7 +2576,7 @@ bool SwRedlineTbl::Insert( SwRedline* p, bool bIns )
     return bRet;
 }
 
-bool SwRedlineTbl::Insert( SwRedline* p, sal_uInt16& rP, bool bIns )
+bool SwRedlineTbl::Insert( SwRangeRedline* p, sal_uInt16& rP, bool bIns )
 {
     bool bRet = false;
     if( p->HasValidRange() )
@@ -2595,7 +2595,7 @@ bool SwRedlineTbl::Insert( SwRedline* p, sal_uInt16& rP, bool bIns )
     return bRet;
 }
 
-bool SwRedlineTbl::InsertWithValidRanges( SwRedline* p, sal_uInt16* pInsPos )
+bool SwRedlineTbl::InsertWithValidRanges( SwRangeRedline* p, sal_uInt16* pInsPos )
 {
     // Create valid "sub-ranges" from the Selection
     bool bAnyIns = false;
@@ -2614,13 +2614,13 @@ bool SwRedlineTbl::InsertWithValidRanges( SwRedline* p, sal_uInt16* pInsPos )
             aNewStt.nNode = rNds.GetEndOfContent();
     }
 
-    SwRedline* pNew = 0;
+    SwRangeRedline* pNew = 0;
     sal_uInt16 nInsPos;
 
     if( aNewStt < *pEnd )
         do {
             if( !pNew )
-                pNew = new SwRedline( p->GetRedlineData(), aNewStt );
+                pNew = new SwRangeRedline( p->GetRedlineData(), aNewStt );
             else
             {
                 pNew->DeleteMark();
@@ -2706,7 +2706,7 @@ bool SwRedlineTbl::InsertWithValidRanges( SwRedline* p, sal_uInt16* pInsPos )
     return bAnyIns;
 }
 
-bool CompareSwRedlineTbl::operator()(SwRedline* const &lhs, SwRedline* const &rhs) const
+bool CompareSwRedlineTbl::operator()(SwRangeRedline* const &lhs, SwRangeRedline* const &rhs) const
 {
     return *lhs < *rhs;
 }
@@ -2716,15 +2716,15 @@ _SwRedlineTbl::~_SwRedlineTbl()
     DeleteAndDestroyAll();
 }
 
-sal_uInt16 SwRedlineTbl::GetPos(const SwRedline* p) const
+sal_uInt16 SwRedlineTbl::GetPos(const SwRangeRedline* p) const
 {
-    const_iterator it = find(const_cast<SwRedline* const>(p));
+    const_iterator it = find(const_cast<SwRangeRedline* const>(p));
     if( it == end() )
         return USHRT_MAX;
     return it - begin();
 }
 
-bool SwRedlineTbl::Remove( const SwRedline* p )
+bool SwRedlineTbl::Remove( const SwRangeRedline* p )
 {
     sal_uInt16 nPos = GetPos(p);
     if (nPos != USHRT_MAX)
@@ -3091,7 +3091,7 @@ OUString SwRedlineData::GetDescr() const
     return aResult;
 }
 
-SwRedline::SwRedline(RedlineType_t eTyp, const SwPaM& rPam )
+SwRangeRedline::SwRangeRedline(RedlineType_t eTyp, const SwPaM& rPam )
     : SwPaM( *rPam.GetMark(), *rPam.GetPoint() ),
     pRedlineData( new SwRedlineData( eTyp, GetDoc()->GetRedlineAuthor() ) ),
     pCntntSect( 0 )
@@ -3102,7 +3102,7 @@ SwRedline::SwRedline(RedlineType_t eTyp, const SwPaM& rPam )
         DeleteMark();
 }
 
-SwRedline::SwRedline( const SwRedlineData& rData, const SwPaM& rPam )
+SwRangeRedline::SwRangeRedline( const SwRedlineData& rData, const SwPaM& rPam )
     : SwPaM( *rPam.GetMark(), *rPam.GetPoint() ),
     pRedlineData( new SwRedlineData( rData )),
     pCntntSect( 0 )
@@ -3113,7 +3113,7 @@ SwRedline::SwRedline( const SwRedlineData& rData, const SwPaM& rPam )
         DeleteMark();
 }
 
-SwRedline::SwRedline( const SwRedlineData& rData, const SwPosition& rPos )
+SwRangeRedline::SwRangeRedline( const SwRedlineData& rData, const SwPosition& rPos )
     : SwPaM( rPos ),
     pRedlineData( new SwRedlineData( rData )),
     pCntntSect( 0 )
@@ -3122,7 +3122,7 @@ SwRedline::SwRedline( const SwRedlineData& rData, const SwPosition& rPos )
     bIsVisible = sal_True;
 }
 
-SwRedline::SwRedline( const SwRedline& rCpy )
+SwRangeRedline::SwRangeRedline( const SwRangeRedline& rCpy )
     : SwPaM( *rCpy.GetMark(), *rCpy.GetPoint() ),
     pRedlineData( new SwRedlineData( *rCpy.pRedlineData )),
     pCntntSect( 0 )
@@ -3133,7 +3133,7 @@ SwRedline::SwRedline( const SwRedline& rCpy )
         DeleteMark();
 }
 
-SwRedline::~SwRedline()
+SwRangeRedline::~SwRangeRedline()
 {
     if( pCntntSect )
     {
@@ -3146,7 +3146,7 @@ SwRedline::~SwRedline()
 }
 
 /// Do we have a valid Selection?
-sal_Bool SwRedline::HasValidRange() const
+sal_Bool SwRangeRedline::HasValidRange() const
 {
     const SwNode* pPtNd = &GetPoint()->nNode.GetNode(),
                 * pMkNd = &GetMark()->nNode.GetNode();
@@ -3161,7 +3161,7 @@ sal_Bool SwRedline::HasValidRange() const
     return sal_False;
 }
 
-void SwRedline::CallDisplayFunc( sal_uInt16 nLoop )
+void SwRangeRedline::CallDisplayFunc( sal_uInt16 nLoop )
 {
     switch( nsRedlineMode_t::REDLINE_SHOW_MASK & GetDoc()->GetRedlineMode() )
     {
@@ -3177,7 +3177,7 @@ void SwRedline::CallDisplayFunc( sal_uInt16 nLoop )
     }
 }
 
-void SwRedline::Show( sal_uInt16 nLoop )
+void SwRangeRedline::Show( sal_uInt16 nLoop )
 {
     if( 1 <= nLoop )
     {
@@ -3209,7 +3209,7 @@ void SwRedline::Show( sal_uInt16 nLoop )
     }
 }
 
-void SwRedline::Hide( sal_uInt16 nLoop )
+void SwRangeRedline::Hide( sal_uInt16 nLoop )
 {
     SwDoc* pDoc = GetDoc();
     RedlineMode_t eOld = pDoc->GetRedlineMode();
@@ -3245,7 +3245,7 @@ void SwRedline::Hide( sal_uInt16 nLoop )
     pDoc->SetRedlineMode_intern( eOld );
 }
 
-void SwRedline::ShowOriginal( sal_uInt16 nLoop )
+void SwRangeRedline::ShowOriginal( sal_uInt16 nLoop )
 {
     SwDoc* pDoc = GetDoc();
     RedlineMode_t eOld = pDoc->GetRedlineMode();
@@ -3287,7 +3287,7 @@ void SwRedline::ShowOriginal( sal_uInt16 nLoop )
     pDoc->SetRedlineMode_intern( eOld );
 }
 
-void SwRedline::InvalidateRange()       // trigger the Layout
+void SwRangeRedline::InvalidateRange()       // trigger the Layout
 {
     sal_uLong nSttNd = GetMark()->nNode.GetIndex(),
             nEndNd = GetPoint()->nNode.GetIndex();
@@ -3318,7 +3318,7 @@ void SwRedline::InvalidateRange()       // trigger the Layout
 
 /** Calculates the start and end position of the intersection rTmp and
     text node nNdIdx */
-void SwRedline::CalcStartEnd( sal_uLong nNdIdx, xub_StrLen& rStart, xub_StrLen& rEnd ) const
+void SwRangeRedline::CalcStartEnd( sal_uLong nNdIdx, xub_StrLen& rStart, xub_StrLen& rEnd ) const
 {
     const SwPosition *pRStt = Start(), *pREnd = End();
     if( pRStt->nNode < nNdIdx )
@@ -3351,7 +3351,7 @@ void SwRedline::CalcStartEnd( sal_uLong nNdIdx, xub_StrLen& rStart, xub_StrLen& 
     }
 }
 
-void SwRedline::MoveToSection()
+void SwRangeRedline::MoveToSection()
 {
     if( !pCntntSect )
     {
@@ -3370,7 +3370,7 @@ void SwRedline::MoveToSection()
             const SwRedlineTbl& rTbl = pDoc->GetRedlineTbl();
             for( sal_uInt16 n = 0; n < rTbl.size(); ++n )
             {
-                SwRedline* pRedl = rTbl[ n ];
+                SwRangeRedline* pRedl = rTbl[ n ];
                 if( pRedl->GetBound(sal_True) == *pStt )
                     pRedl->GetBound(sal_True) = *pEnd;
                 if( pRedl->GetBound(sal_False) == *pStt )
@@ -3425,7 +3425,7 @@ void SwRedline::MoveToSection()
         InvalidateRange();
 }
 
-void SwRedline::CopyToSection()
+void SwRangeRedline::CopyToSection()
 {
     if( !pCntntSect )
     {
@@ -3504,7 +3504,7 @@ void SwRedline::CopyToSection()
     }
 }
 
-void SwRedline::DelCopyOfSection()
+void SwRangeRedline::DelCopyOfSection()
 {
     if( pCntntSect )
     {
@@ -3523,7 +3523,7 @@ void SwRedline::DelCopyOfSection()
             const SwRedlineTbl& rTbl = pDoc->GetRedlineTbl();
             for( sal_uInt16 n = 0; n < rTbl.size(); ++n )
             {
-                SwRedline* pRedl = rTbl[ n ];
+                SwRangeRedline* pRedl = rTbl[ n ];
                 if( pRedl->GetBound(sal_True) == *pStt )
                     pRedl->GetBound(sal_True) = *pEnd;
                 if( pRedl->GetBound(sal_False) == *pStt )
@@ -3592,7 +3592,7 @@ void SwRedline::DelCopyOfSection()
     }
 }
 
-void SwRedline::MoveFromSection()
+void SwRangeRedline::MoveFromSection()
 {
     if( pCntntSect )
     {
@@ -3685,7 +3685,7 @@ void SwRedline::MoveFromSection()
         }
         // #i95771#
         // Under certain conditions the previous <SwDoc::Move(..)> has already
-        // removed the change tracking section of this <SwRedline> instance from
+        // removed the change tracking section of this <SwRangeRedline> instance from
         // the change tracking nodes area.
         // Thus, check if <pCntntSect> still points to the change tracking section
         // by comparing it with the "indexed" <SwNode> instance copied before
@@ -3709,7 +3709,7 @@ void SwRedline::MoveFromSection()
 }
 
 // for Undo
-void SwRedline::SetContentIdx( const SwNodeIndex* pIdx )
+void SwRangeRedline::SetContentIdx( const SwNodeIndex* pIdx )
 {
     if( pIdx && !pCntntSect )
     {
@@ -3723,17 +3723,17 @@ void SwRedline::SetContentIdx( const SwNodeIndex* pIdx )
     }
     else
     {
-        OSL_FAIL("SwRedline::SetContentIdx: invalid state");
+        OSL_FAIL("SwRangeRedline::SetContentIdx: invalid state");
     }
 }
 
-sal_Bool SwRedline::CanCombine( const SwRedline& rRedl ) const
+sal_Bool SwRangeRedline::CanCombine( const SwRangeRedline& rRedl ) const
 {
     return  IsVisible() && rRedl.IsVisible() &&
             pRedlineData->CanCombine( *rRedl.pRedlineData );
 }
 
-void SwRedline::PushData( const SwRedline& rRedl, sal_Bool bOwnAsNext )
+void SwRangeRedline::PushData( const SwRangeRedline& rRedl, sal_Bool bOwnAsNext )
 {
     SwRedlineData* pNew = new SwRedlineData( *rRedl.pRedlineData, sal_False );
     if( bOwnAsNext )
@@ -3748,7 +3748,7 @@ void SwRedline::PushData( const SwRedline& rRedl, sal_Bool bOwnAsNext )
     }
 }
 
-sal_Bool SwRedline::PopData()
+sal_Bool SwRangeRedline::PopData()
 {
     if( !pRedlineData->pNext )
         return sal_False;
@@ -3759,7 +3759,7 @@ sal_Bool SwRedline::PopData()
     return sal_True;
 }
 
-sal_uInt16 SwRedline::GetStackCount() const
+sal_uInt16 SwRangeRedline::GetStackCount() const
 {
     sal_uInt16 nRet = 1;
     for( SwRedlineData* pCur = pRedlineData; pCur->pNext; ++nRet )
@@ -3767,37 +3767,37 @@ sal_uInt16 SwRedline::GetStackCount() const
     return nRet;
 }
 
-sal_uInt16 SwRedline::GetAuthor( sal_uInt16 nPos ) const
+sal_uInt16 SwRangeRedline::GetAuthor( sal_uInt16 nPos ) const
 {
     return GetRedlineData(nPos).nAuthor;
 }
 
-OUString SwRedline::GetAuthorString( sal_uInt16 nPos ) const
+OUString SwRangeRedline::GetAuthorString( sal_uInt16 nPos ) const
 {
     return SW_MOD()->GetRedlineAuthor(GetRedlineData(nPos).nAuthor);
 }
 
-const DateTime& SwRedline::GetTimeStamp( sal_uInt16 nPos ) const
+const DateTime& SwRangeRedline::GetTimeStamp( sal_uInt16 nPos ) const
 {
     return GetRedlineData(nPos).aStamp;
 }
 
-RedlineType_t SwRedline::GetRealType( sal_uInt16 nPos ) const
+RedlineType_t SwRangeRedline::GetRealType( sal_uInt16 nPos ) const
 {
     return GetRedlineData(nPos).eType;
 }
 
-const OUString& SwRedline::GetComment( sal_uInt16 nPos ) const
+const OUString& SwRangeRedline::GetComment( sal_uInt16 nPos ) const
 {
     return GetRedlineData(nPos).sComment;
 }
 
-int SwRedline::operator==( const SwRedline& rCmp ) const
+int SwRangeRedline::operator==( const SwRangeRedline& rCmp ) const
 {
     return this == &rCmp;
 }
 
-int SwRedline::operator<( const SwRedline& rCmp ) const
+int SwRangeRedline::operator<( const SwRangeRedline& rCmp ) const
 {
     sal_Bool nResult = sal_False;
 
@@ -3810,7 +3810,7 @@ int SwRedline::operator<( const SwRedline& rCmp ) const
     return nResult;
 }
 
-const SwRedlineData & SwRedline::GetRedlineData(sal_uInt16 nPos) const
+const SwRedlineData & SwRangeRedline::GetRedlineData(sal_uInt16 nPos) const
 {
     SwRedlineData * pCur = pRedlineData;
 
@@ -3826,7 +3826,7 @@ const SwRedlineData & SwRedline::GetRedlineData(sal_uInt16 nPos) const
     return *pCur;
 }
 
-OUString SwRedline::GetDescr(sal_uInt16 nPos)
+OUString SwRangeRedline::GetDescr(sal_uInt16 nPos)
 {
     OUString aResult;
 

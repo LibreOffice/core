@@ -675,9 +675,9 @@ sal_Bool SwWrtShell::GotoFld( const SwFmtFld& rFld ) {
     return bRet;
 }
 
-const SwRedline* SwWrtShell::GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect ) {
+const SwRangeRedline* SwWrtShell::GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect ) {
     SwPosition aPos = *GetCrsr()->GetPoint();
-    const SwRedline *pRedline = SwCrsrShell::GotoRedline(nArrPos, bSelect);
+    const SwRangeRedline *pRedline = SwCrsrShell::GotoRedline(nArrPos, bSelect);
     if (pRedline)
         aNavigationMgr.addEntry(aPos);
     return pRedline;

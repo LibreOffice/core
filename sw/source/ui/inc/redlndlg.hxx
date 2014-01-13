@@ -105,13 +105,13 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     SW_DLLPRIVATE DECL_LINK( CommandHdl,        void* );
 
     SW_DLLPRIVATE sal_uInt16            CalcDiff(sal_uInt16 nStart, sal_Bool bChild);
-    SW_DLLPRIVATE void          InsertChildren(SwRedlineDataParent *pParent, const SwRedline& rRedln, const sal_uInt16 nAutoFmt);
+    SW_DLLPRIVATE void          InsertChildren(SwRedlineDataParent *pParent, const SwRangeRedline& rRedln, const sal_uInt16 nAutoFmt);
     SW_DLLPRIVATE void          InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd = USHRT_MAX);
     SW_DLLPRIVATE void          RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd);
     SW_DLLPRIVATE void          InitAuthors();
 
-    SW_DLLPRIVATE OUString      GetRedlineText(const SwRedline& rRedln, DateTime &rDateTime, sal_uInt16 nStack = 0);
-    SW_DLLPRIVATE OUString      GetActionText(const SwRedline& rRedln, sal_uInt16 nStack = 0);
+    SW_DLLPRIVATE OUString      GetRedlineText(const SwRangeRedline& rRedln, DateTime &rDateTime, sal_uInt16 nStack = 0);
+    SW_DLLPRIVATE OUString      GetActionText(const SwRangeRedline& rRedln, sal_uInt16 nStack = 0);
     SW_DLLPRIVATE sal_uInt16    GetRedlinePos( const SvTreeListEntry& rEntry) const;
 
 public:
