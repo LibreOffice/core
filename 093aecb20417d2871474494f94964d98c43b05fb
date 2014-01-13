@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa98f980_15827652",
+        "filename": "sw/inc/unomap.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-13T13:51:55Z",
+      "side": 1,
+      "message": "1024 is already used by WID_TAB_IN_TOC",
+      "revId": "093aecb20417d2871474494f94964d98c43b05fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
