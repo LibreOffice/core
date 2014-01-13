@@ -41,6 +41,8 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
+#include <com/sun/star/table/BorderLineStyle.hpp>
+
 #include <rtl/bootstrap.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
@@ -527,7 +529,7 @@ Color ImpLineListData::GetColorDist( const Color& rMain, const Color& rDefault )
 
 sal_uInt16 LineListBox::GetSelectEntryStyle( sal_uInt16 nSelIndex ) const
 {
-    sal_uInt16 nStyle = STYLE_SOLID;
+    sal_uInt16 nStyle = table::BorderLineStyle::SOLID;
     sal_uInt16 nPos = GetSelectEntryPos( nSelIndex );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -588,7 +590,7 @@ namespace svtools
         ::std::vector < double >aPattern;
         switch ( nDashing )
         {
-            case STYLE_DOTTED:
+            case table::BorderLineStyle::DOTTED:
                 if ( eUnit == MAP_TWIP )
                 {
                     aPattern.push_back( 30.0 );
@@ -605,7 +607,7 @@ namespace svtools
                     aPattern.push_back( 3.0 );
                 }
                 break;
-            case STYLE_DASHED:
+            case table::BorderLineStyle::DASHED:
                 if ( eUnit == MAP_TWIP )
                 {
                     aPattern.push_back( 110 );
@@ -622,7 +624,7 @@ namespace svtools
                     aPattern.push_back( 20 );
                 }
                 break;
-            case STYLE_FINE_DASHED:
+            case table::BorderLineStyle::FINE_DASHED:
                 if ( eUnit == MAP_PIXEL )
                 {
                     aPattern.push_back( 8 );
@@ -748,7 +750,7 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
         {
             double y2 =  n1 + nDist + double( n2 ) / 2;
             aVirDev.SetFillColor( aColor2 );
-            svtools::DrawLine( aVirDev, basegfx::B2DPoint( 0, y2 ), basegfx::B2DPoint( aSize.Width(), y2 ), n2, STYLE_SOLID );
+            svtools::DrawLine( aVirDev, basegfx::B2DPoint( 0, y2 ), basegfx::B2DPoint( aSize.Width(), y2 ), n2, table::BorderLineStyle::SOLID );
         }
         rBmp = aVirDev.GetBitmap( Point(), Size( aSize.Width(), n1+nDist+n2 ) );
     }
@@ -923,7 +925,7 @@ sal_uInt16 LineListBox::GetEntryPos( sal_uInt16 nStyle ) const
 sal_uInt16 LineListBox::GetEntryStyle( sal_uInt16 nPos ) const
 {
     ImpLineListData* pData = (nPos < pLineList->size()) ? (*pLineList)[ nPos ] : NULL;
-    return ( pData ) ? pData->GetStyle() : STYLE_NONE;
+    return ( pData ) ? pData->GetStyle() : table::BorderLineStyle::NONE;
 }
 
 // -----------------------------------------------------------------------

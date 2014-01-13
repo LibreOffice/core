@@ -26,7 +26,8 @@
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <svtools/ctrlbox.hxx>
+
+#include <com/sun/star/table/BorderLineStyle.hpp>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -74,7 +75,7 @@ namespace drawinglayer
 
             bool isSolidLine() const
             {
-                return (mnStyle==STYLE_SOLID);
+                return mnStyle == com::sun::star::table::BorderLineStyle::SOLID;
             }
 
             bool isInsideUsed() const

@@ -29,6 +29,8 @@
 #include <vcl/metric.hxx>
 #include <vcl/field.hxx>
 
+#include <com/sun/star/table/BorderLineStyle.hpp>
+
 class FontList;
 class ImplColorListData;
 class ImpLineListData;
@@ -36,15 +38,6 @@ class ImpLineListData;
 typedef ::std::vector< ImplColorListData*    > ImpColorList;
 typedef ::std::vector< ImpLineListData*      > ImpLineList;
 typedef ::std::vector< FontInfo              > ImplFontList;
-
-// FIXME: STYLE_* duplicate values from editeng::SvxBorderStyle,
-// which in turn duplicates values from com::sun::star::table::BorderLineStyle:
-// this needs cleaning up on master
-#define STYLE_SOLID                ( ( sal_uInt16 ) 0 )
-#define STYLE_DOTTED               ( ( sal_uInt16 ) 1 )
-#define STYLE_DASHED               ( ( sal_uInt16 ) 2 )
-#define STYLE_FINE_DASHED          ( ( sal_uInt16 ) 14 )
-#define STYLE_NONE                 ( ( sal_uInt16 ) -1)
 
 #define CHANGE_LINE1               ( ( sal_uInt16 ) 1 )
 #define CHANGE_LINE2               ( ( sal_uInt16 ) 2 )
@@ -339,17 +332,17 @@ public:
     virtual void    Clear();
 
     using ListBox::GetEntryPos;
-    virtual sal_uInt16  GetEntryPos( sal_uInt16 nStyle = STYLE_SOLID ) const;
+    virtual sal_uInt16 GetEntryPos( sal_uInt16 nStyle = com::sun::star::table::BorderLineStyle::SOLID ) const;
     sal_uInt16          GetEntryStyle( sal_uInt16 nPos ) const;
 
     void            SelectEntry( const OUString& rStr, sal_Bool bSelect = sal_True ) { ListBox::SelectEntry( rStr, bSelect ); }
-    void            SelectEntry( sal_uInt16 nStyle = STYLE_SOLID, sal_Bool bSelect = sal_True );
+    void SelectEntry( sal_uInt16 nStyle = com::sun::star::table::BorderLineStyle::SOLID, sal_Bool bSelect = sal_True );
     sal_uInt16          GetSelectEntryStyle( sal_uInt16 nSelIndex = 0 ) const;
     bool            IsEntrySelected(const OUString& rStr) const
     {
         return ListBox::IsEntrySelected(rStr);
     }
-    bool            IsEntrySelected(sal_uInt16 nStyle = STYLE_SOLID) const
+    bool IsEntrySelected( sal_uInt16 nStyle = com::sun::star::table::BorderLineStyle::SOLID ) const
     {
         sal_uInt16 nPos = GetEntryPos( nStyle );
         if ( nPos != LISTBOX_ENTRY_NOTFOUND )
