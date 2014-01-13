@@ -68,7 +68,7 @@ public:
     SalClipRegion   maClipRegion;
     sal_Bool            mbVisible;
 
-    static VCL_DLLPUBLIC long Dispatch( XEvent* pEvent );
+    static VCL_DLLPUBLIC bool Dispatch( XEvent* pEvent );
     static VCL_DLLPUBLIC X11SalObject* CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow = sal_True );
 
     X11SalObject();

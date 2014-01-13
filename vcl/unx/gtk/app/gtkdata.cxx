@@ -222,7 +222,7 @@ GtkSalDisplay::initScreen( SalX11Screen nXScreen ) const
     return pSD;
 }
 
-long GtkSalDisplay::Dispatch( XEvent* pEvent )
+bool GtkSalDisplay::Dispatch( XEvent* pEvent )
 {
     if( GetDisplay() == pEvent->xany.display )
     {
@@ -236,7 +236,7 @@ long GtkSalDisplay::Dispatch( XEvent* pEvent )
         }
     }
 
-    return GDK_FILTER_CONTINUE;
+    return false;
 }
 #endif
 

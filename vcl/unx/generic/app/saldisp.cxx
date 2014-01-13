@@ -1864,7 +1864,7 @@ void SalX11Display::Yield()
     GetX11SalData()->ResetXErrorOccurred();
 }
 
-long SalX11Display::Dispatch( XEvent *pEvent )
+bool SalX11Display::Dispatch( XEvent *pEvent )
 {
     if( pEvent->type == XLIB_KeyPress || pEvent->type == KeyRelease )
     {
@@ -1883,12 +1883,12 @@ long SalX11Display::Dispatch( XEvent *pEvent )
         if( it != m_aFrames.end() )
         {
             if ( mpInputMethod->FilterEvent( pEvent , aWindow ) )
-                return 0;
+                return false;
         }
     }
     else
         if ( mpInputMethod->FilterEvent( pEvent, None ) )
-            return 0;
+            return false;
 
     SalInstance* pInstance = GetSalData()->m_pInstance;
     pInstance->CallEventCallback( pEvent, sizeof( XEvent ) );
@@ -1913,7 +1913,7 @@ long SalX11Display::Dispatch( XEvent *pEvent )
                         std::list< SalFrame* >::const_iterator it;
                         for( it = m_aFrames.begin(); it != m_aFrames.end(); ++it )
                             (*it)->CallCallback( SALEVENT_SETTINGSCHANGED, NULL );
-                        return 0;
+                        return false;
                     }
                 }
             }
@@ -1939,7 +1939,7 @@ long SalX11Display::Dispatch( XEvent *pEvent )
                 && GetKbdExtension()->GetEventBase() == pEvent->type )
             {
                 GetKbdExtension()->Dispatch( pEvent );
-                return 1;
+                return true;
             }
             break;
     }
@@ -1968,7 +1968,7 @@ long SalX11Display::Dispatch( XEvent *pEvent )
     // is this perhaps a root window that changed size ?
     processRandREvent( pEvent );
 
-    return 0;
+    return false;
 }
 
 #ifdef DBG_UTIL

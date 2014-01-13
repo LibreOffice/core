@@ -171,7 +171,7 @@ public:
 #if GTK_CHECK_VERSION(3,0,0)
     guint32 GetLastUserEventTime( bool /* b */ ) { return GDK_CURRENT_TIME; } // horrible hack
 #else
-    virtual long Dispatch( XEvent *pEvent );
+    virtual bool Dispatch( XEvent *pEvent );
 #endif
 };
 

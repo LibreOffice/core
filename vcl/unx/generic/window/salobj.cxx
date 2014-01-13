@@ -440,7 +440,7 @@ static sal_uInt16 sal_GetCode( int state )
     return nCode;
 }
 
-long X11SalObject::Dispatch( XEvent* pEvent )
+bool X11SalObject::Dispatch( XEvent* pEvent )
 {
     std::list< SalObject* >& rObjects = GetGenericData()->GetSalDisplay()->getSalObjects();
 
@@ -501,26 +501,26 @@ long X11SalObject::Dispatch( XEvent* pEvent )
                 {
                     case UnmapNotify:
                     pObject->mbVisible = sal_False;
-                    return 1;
+                    return true;
                     case MapNotify:
                     pObject->mbVisible = sal_True;
-                    return 1;
+                    return true;
                     case ButtonPress:
                     pObject->CallCallback( SALOBJ_EVENT_TOTOP, NULL );
-                    return 1;
+                    return true;
                     case FocusIn:
                     pObject->CallCallback( SALOBJ_EVENT_GETFOCUS, NULL );
-                    return 1;
+                    return true;
                     case FocusOut:
                     pObject->CallCallback( SALOBJ_EVENT_LOSEFOCUS, NULL );
-                    return 1;
+                    return true;
                     default: break;
                 }
             }
-            return 0;
+            return false;
         }
     }
-    return 0;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

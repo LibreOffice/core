@@ -280,7 +280,7 @@ protected:
 
     mutable XLIB_Time  m_nLastUserEventTime; // mutable because changed on first access
 
-    virtual long    Dispatch( XEvent *pEvent ) = 0;
+    virtual bool    Dispatch( XEvent *pEvent ) = 0;
     void            InitXinerama();
     void            InitRandR( XLIB_Window aRoot ) const;
     void            DeInitRandR();
@@ -399,7 +399,7 @@ public:
              SalX11Display( Display* pDisp );
     virtual ~SalX11Display();
 
-    virtual long        Dispatch( XEvent *pEvent );
+    virtual bool        Dispatch( XEvent *pEvent );
     virtual void        Yield();
     virtual void        PostUserEvent();
 
