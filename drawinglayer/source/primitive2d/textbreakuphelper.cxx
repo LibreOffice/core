@@ -57,7 +57,7 @@ namespace drawinglayer
         {
         }
 
-        void TextBreakupHelper::breakupPortion(Primitive2DVector& rTempResult, sal_uInt32 nIndex, sal_uInt32 nLength, bool bWordLineMode)
+        void TextBreakupHelper::breakupPortion(Primitive2DVector& rTempResult, sal_Int32 nIndex, sal_Int32 nLength, bool bWordLineMode)
         {
             if(nLength && !(nIndex == mrSource.getTextPosition() && nLength == mrSource.getTextLength()))
             {
@@ -87,7 +87,7 @@ namespace drawinglayer
                     else
                     {
                         // get from DXArray
-                        const sal_uInt32 nIndex2(static_cast< sal_uInt32 >(nIndex - mrSource.getTextPosition()));
+                        const sal_Int32 nIndex2(nIndex - mrSource.getTextPosition());
                         fOffset = mrSource.getDXArray()[nIndex2 - 1];
                     }
 

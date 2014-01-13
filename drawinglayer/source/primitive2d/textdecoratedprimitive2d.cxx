@@ -39,8 +39,8 @@ namespace drawinglayer
             std::vector< Primitive2DReference >& rTarget,
             basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans,
             const OUString& rText,
-            xub_StrLen aTextPosition,
-            xub_StrLen aTextLength,
+            sal_Int32 nTextPosition,
+            sal_Int32 nTextLength,
             const ::std::vector< double >& rDXArray,
             const attribute::FontAttribute& rFontAttribute) const
         {
@@ -49,8 +49,8 @@ namespace drawinglayer
                 new TextSimplePortionPrimitive2D(
                     rDecTrans.getB2DHomMatrix(),
                     rText,
-                    aTextPosition,
-                    aTextLength,
+                    nTextPosition,
+                    nTextLength,
                     rDXArray,
                     rFontAttribute,
                     getLocale(),
@@ -79,7 +79,7 @@ namespace drawinglayer
 
                 if(rDXArray.empty())
                 {
-                    fTextWidth = aTextLayouter.getTextWidth(rText, aTextPosition, aTextLength);
+                    fTextWidth = aTextLayouter.getTextWidth(rText, nTextPosition, nTextLength);
                 }
                 else
                 {
@@ -308,12 +308,11 @@ namespace drawinglayer
         }
 
         TextDecoratedPortionPrimitive2D::TextDecoratedPortionPrimitive2D(
-
             // TextSimplePortionPrimitive2D parameters
             const basegfx::B2DHomMatrix& rNewTransform,
             const OUString& rText,
-            xub_StrLen aTextPosition,
-            xub_StrLen aTextLength,
+            sal_Int32 nTextPosition,
+            sal_Int32 nTextLength,
             const ::std::vector< double >& rDXArray,
             const attribute::FontAttribute& rFontAttribute,
             const ::com::sun::star::lang::Locale& rLocale,
@@ -332,7 +331,7 @@ namespace drawinglayer
             bool bEmphasisMarkBelow,
             TextRelief eTextRelief,
             bool bShadow)
-        :   TextSimplePortionPrimitive2D(rNewTransform, rText, aTextPosition, aTextLength, rDXArray, rFontAttribute, rLocale, rFontColor),
+        :   TextSimplePortionPrimitive2D(rNewTransform, rText, nTextPosition, nTextLength, rDXArray, rFontAttribute, rLocale, rFontColor),
             maOverlineColor(rOverlineColor),
             maTextlineColor(rTextlineColor),
             meFontOverline(eFontOverline),

@@ -73,8 +73,8 @@ namespace drawinglayer
                 std::vector< Primitive2DReference >& rTarget,
                 basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans,
                 const OUString& rText,
-                xub_StrLen aTextPosition,
-                xub_StrLen aTextLength,
+                sal_Int32 nTextPosition,
+                sal_Int32 nTextLength,
                 const ::std::vector< double >& rDXArray,
                 const attribute::FontAttribute& rFontAttribute) const;
 
@@ -85,12 +85,11 @@ namespace drawinglayer
         public:
             /// constructor
             TextDecoratedPortionPrimitive2D(
-
                 /// TextSimplePortionPrimitive2D parameters
                 const basegfx::B2DHomMatrix& rNewTransform,
                 const OUString& rText,
-                xub_StrLen aTextPosition,
-                xub_StrLen aTextLength,
+                sal_Int32 nTextPosition,
+                sal_Int32 nTextLength,
                 const ::std::vector< double >& rDXArray,
                 const attribute::FontAttribute& rFontAttribute,
                 const ::com::sun::star::lang::Locale& rLocale,

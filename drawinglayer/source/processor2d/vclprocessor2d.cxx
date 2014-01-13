@@ -263,8 +263,8 @@ namespace drawinglayer
                     mpOutputDevice->SetTextColor(Color(aRGBFontColor));
 
                     OUString aText( rTextCandidate.getText() );
-                    xub_StrLen nPos = rTextCandidate.getTextPosition();
-                    xub_StrLen nLen = rTextCandidate.getTextLength();
+                    sal_Int32 nPos = rTextCandidate.getTextPosition();
+                    sal_Int32 nLen = rTextCandidate.getTextLength();
 
                     sal_Int32* pDXArray = aTransformedDXArray.size() ? &(aTransformedDXArray[0]) : NULL ;
 
@@ -283,7 +283,7 @@ namespace drawinglayer
                             nChars = nWidthToFill / nWidth;
 
                         OUStringBuffer aFilled;
-                        comphelper::string::padToLength(aFilled, (sal_uInt16)nChars, aText[0]);
+                        comphelper::string::padToLength(aFilled, nChars, aText[0]);
                         aText = aFilled.makeStringAndClear();
                         nPos = 0;
                         nLen = nChars;

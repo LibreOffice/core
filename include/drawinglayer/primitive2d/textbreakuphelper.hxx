@@ -50,7 +50,7 @@ namespace drawinglayer
             bool                                    mbNoDXArray : 1;
 
             /// create a portion from nIndex to nLength and append to rTempResult
-            void breakupPortion(Primitive2DVector& rTempResult, sal_uInt32 nIndex, sal_uInt32 nLength, bool bWordLineMode);
+            void breakupPortion(Primitive2DVector& rTempResult, sal_Int32 nIndex, sal_Int32 nLength, bool bWordLineMode);
 
             /// breakup complete primitive
             void breakup(BreakupUnit aBreakupUnit);

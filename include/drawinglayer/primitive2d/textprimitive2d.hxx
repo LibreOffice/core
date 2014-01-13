@@ -100,10 +100,10 @@ namespace drawinglayer
             OUString                                maText;
 
             /// The index from where on maText is used
-            xub_StrLen                              maTextPosition;
+            sal_Int32                               mnTextPosition;
 
             /// The length for maText usage, starting from maTextPosition
-            xub_StrLen                              maTextLength;
+            sal_Int32                               mnTextLength;
 
             /// The DX array in logic units
             ::std::vector< double >                 maDXArray;
@@ -131,8 +131,8 @@ namespace drawinglayer
             TextSimplePortionPrimitive2D(
                 const basegfx::B2DHomMatrix& rNewTransform,
                 const OUString& rText,
-                xub_StrLen aTextPosition,
-                xub_StrLen aTextLength,
+                sal_Int32 nTextPosition,
+                sal_Int32 nTextLength,
                 const ::std::vector< double >& rDXArray,
                 const attribute::FontAttribute& rFontAttribute,
                 const ::com::sun::star::lang::Locale& rLocale,
@@ -149,8 +149,8 @@ namespace drawinglayer
             /// data read access
             const basegfx::B2DHomMatrix& getTextTransform() const { return maTextTransform; }
             const OUString& getText() const { return maText; }
-            xub_StrLen getTextPosition() const { return maTextPosition; }
-            xub_StrLen getTextLength() const { return maTextLength; }
+            sal_Int32 getTextPosition() const { return mnTextPosition; }
+            sal_Int32 getTextLength() const { return mnTextLength; }
             const ::std::vector< double >& getDXArray() const { return maDXArray; }
             const attribute::FontAttribute& getFontAttribute() const { return maFontAttribute; }
             const ::com::sun::star::lang::Locale& getLocale() const { return  maLocale; }
