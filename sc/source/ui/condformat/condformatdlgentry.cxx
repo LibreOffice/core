@@ -43,7 +43,16 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc, const ScAddr
     mpDoc(pDoc),
     maPos(rPos)
 {
-    SetControlBackground(GetSettings().GetStyleSettings().GetDialogColor());
+    Color aBack(GetSettings().GetStyleSettings().GetWindowColor());
+
+    SetControlBackground(aBack);
+    SetBackground(GetControlBackground());
+
+    maFtCondNr.SetControlBackground(aBack);
+    maFtCondNr.SetBackground(maFtCondNr.GetControlBackground());
+
+    maFtCondition.SetControlBackground(aBack);
+    maFtCondition.SetBackground(maFtCondition.GetControlBackground());
 
     maLbType.SetSelectHdl( LINK( pParent, ScCondFormatList, TypeListHdl ) );
     maClickHdl = LINK( pParent, ScCondFormatList, EntrySelectHdl );

@@ -67,8 +67,14 @@ private:
     void DoScroll(long nDiff);
 
 public:
-    ScCondFormatList( Window* pParent, const ResId& rResId, ScDocument* pDoc, const ScConditionalFormat* pFormat,
-            const ScRangeList& rRanges, const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType);
+    ScCondFormatList(Window* pParent, WinBits nStyle);
+
+    void init(ScDocument* pDoc, const ScConditionalFormat* pFormat,
+        const ScRangeList& rRanges, const ScAddress& rPos,
+        condformat::dialog::ScCondFormatDialogType eType);
+
+    virtual Size GetOptimalSize() const;
+    virtual void Resize();
 
     ScConditionalFormat* GetConditionalFormat() const;
     void RecalcAll();
@@ -85,15 +91,13 @@ public:
 class ScCondFormatDlg : public ScAnyRefModalDlg
 {
 private:
-    PushButton maBtnAdd;
-    PushButton maBtnRemove;
-    FixedText maFtRange;
-    formula::RefEdit maEdRange;
-    formula::RefButton maRbRange;
-    OKButton maBtnOk;
-    CancelButton maBtnCancel;
+    PushButton* mpBtnAdd;
+    PushButton* mpBtnRemove;
+    FixedText* mpFtRange;
+    formula::RefEdit* mpEdRange;
+    formula::RefButton* mpRbRange;
 
-    ScCondFormatList maCondFormList;
+    ScCondFormatList* mpCondFormList;
 
     ScAddress maPos;
     ScDocument* mpDoc;

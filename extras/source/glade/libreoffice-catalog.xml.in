@@ -574,6 +574,10 @@
                         generic-name="CropExample" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
 
+    <glade-widget-class title="ScCondFormatList" name="scuilo-ScCondFormatList"
+                        generic-name="CondFormatList" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
+
     <glade-widget-class title="Recent Documents View" name="sfxlo-RecentDocsView"
                         generic-name="Icon View" parent="GtkIconView"
                         icon-name="widget-gtk-iconview"/>

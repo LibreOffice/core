@@ -33,17 +33,23 @@
 
 #include "globstr.hrc"
 
-ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocument* pDoc, const ScConditionalFormat* pFormat,
-                                const ScRangeList& rRanges, const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType):
-    Control(pParent, rResId),
-    mbHasScrollBar(false),
-    mpScrollBar(new ScrollBar(this, WB_VERT )),
-    mpDoc(pDoc),
-    maPos(rPos),
-    maRanges(rRanges)
+ScCondFormatList::ScCondFormatList(Window* pParent, WinBits nStyle)
+    : Control(pParent, nStyle | WB_DIALOGCONTROL)
+    , mbHasScrollBar(false)
+    , mpScrollBar(new ScrollBar(this, WB_VERT ))
 {
     mpScrollBar->SetScrollHdl( LINK( this, ScCondFormatList, ScrollHdl ) );
     mpScrollBar->EnableDrag();
+    SetControlBackground( GetSettings().GetStyleSettings().GetWindowColor() );
+    SetBackground(GetControlBackground());
+}
+
+void ScCondFormatList::init(ScDocument* pDoc, const ScConditionalFormat* pFormat,
+    const ScRangeList& rRanges, const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType)
+{
+    mpDoc = pDoc;
+    maPos = rPos;
+    maRanges = rRanges;
 
     if(pFormat)
     {
@@ -113,6 +119,29 @@ ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocum
     if (!maEntries.empty())
         maEntries.begin()->SetActive();
 
+    RecalcAll();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScCondFormatList(Window *pParent,
+    VclBuilder::stringmap &rMap)
+{
+    WinBits nWinBits = 0;
+
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+       nWinBits |= WB_BORDER;
+
+    return new ScCondFormatList(pParent, nWinBits);
+}
+
+Size ScCondFormatList::GetOptimalSize() const
+{
+    return LogicToPixel(Size(290, 185), MAP_APPFONT);
+}
+
+void ScCondFormatList::Resize()
+{
+    Control::Resize();
     RecalcAll();
 }
 
@@ -353,35 +382,41 @@ IMPL_LINK_NOARG( ScCondFormatList, ScrollHdl )
 //ScCondFormatDlg
 //---------------------------------------------------
 
-ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormat* pFormat, const ScRangeList& rRange,
-                                    const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType):
-    ScAnyRefModalDlg(pParent, ScResId(RID_SCDLG_CONDFORMAT) ),
-    maBtnAdd( this, ScResId( BTN_ADD ) ),
-    maBtnRemove( this, ScResId( BTN_REMOVE ) ),
-    maFtRange( this, ScResId( FT_RANGE ) ),
-    maEdRange( this, this, &maFtRange, ScResId( ED_RANGE ) ),
-    maRbRange( this, ScResId( RB_RANGE ), &maEdRange, this ),
-    maBtnOk( this, ScResId( BTN_OK ) ),
-    maBtnCancel( this, ScResId( BTN_CANCEL ) ),
-    maCondFormList( this, ScResId( CTRL_LIST ), pDoc, pFormat, rRange, rPos, eType ),
-    maPos(rPos),
-    mpDoc(pDoc),
-    mpLastEdit(NULL)
+ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc,
+    const ScConditionalFormat* pFormat, const ScRangeList& rRange,
+    const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType)
+    : ScAnyRefModalDlg(pParent, "ConditionalFormatDialog",
+        "modules/scalc/ui/conditionalformatdialog.ui")
+    , maPos(rPos)
+    , mpDoc(pDoc)
+    , mpLastEdit(NULL)
 {
+    get(mpBtnAdd, "add");
+    get(mpBtnRemove, "delete");
+
+    get(mpFtRange, "ftassign");
+    get(mpEdRange, "edassign");
+    mpEdRange->SetReferences(this, mpFtRange);
+
+    get(mpRbRange, "rbassign");
+    mpRbRange->SetReferences(this, mpEdRange);
+
+    get(mpCondFormList, "list");
+    mpCondFormList->init(pDoc, pFormat, rRange, rPos, eType);
+
     OUStringBuffer aTitle( GetText() );
     aTitle.append(" ");
     OUString aRangeString;
     rRange.Format(aRangeString, SCA_VALID, pDoc, pDoc->GetAddressConvention());
     aTitle.append(aRangeString);
     SetText(aTitle.makeStringAndClear());
-    maBtnAdd.SetClickHdl( LINK( &maCondFormList, ScCondFormatList, AddBtnHdl ) );
-    maBtnRemove.SetClickHdl( LINK( &maCondFormList, ScCondFormatList, RemoveBtnHdl ) );
-    maEdRange.SetModifyHdl( LINK( this, ScCondFormatDlg, EdRangeModifyHdl ) );
-    maEdRange.SetGetFocusHdl( LINK( this, ScCondFormatDlg, RangeGetFocusHdl ) );
-    maEdRange.SetLoseFocusHdl( LINK( this, ScCondFormatDlg, RangeLoseFocusHdl ) );
-    FreeResource();
+    mpBtnAdd->SetClickHdl( LINK( mpCondFormList, ScCondFormatList, AddBtnHdl ) );
+    mpBtnRemove->SetClickHdl( LINK( mpCondFormList, ScCondFormatList, RemoveBtnHdl ) );
+    mpEdRange->SetModifyHdl( LINK( this, ScCondFormatDlg, EdRangeModifyHdl ) );
+    mpEdRange->SetGetFocusHdl( LINK( this, ScCondFormatDlg, RangeGetFocusHdl ) );
+    mpEdRange->SetLoseFocusHdl( LINK( this, ScCondFormatDlg, RangeLoseFocusHdl ) );
 
-    maEdRange.SetText(aRangeString);
+    mpEdRange->SetText(aRangeString);
 
     SC_MOD()->PushNewAnyRefDlg(this);
 }
@@ -396,7 +431,7 @@ void ScCondFormatDlg::SetActive()
     if(mpLastEdit)
         mpLastEdit->GrabFocus();
     else
-        maEdRange.GrabFocus();
+        mpEdRange->GrabFocus();
 
     RefInputDone();
 }
@@ -408,7 +443,7 @@ void ScCondFormatDlg::RefInputDone( sal_Bool bForced )
 
 sal_Bool ScCondFormatDlg::IsTableLocked() const
 {
-    if(mpLastEdit && mpLastEdit != &maEdRange)
+    if (mpLastEdit && mpLastEdit != mpEdRange)
         return sal_False;
 
     return sal_True;
@@ -416,7 +451,7 @@ sal_Bool ScCondFormatDlg::IsTableLocked() const
 
 sal_Bool ScCondFormatDlg::IsRefInputMode() const
 {
-    return maEdRange.IsEnabled();
+    return mpEdRange->IsEnabled();
 }
 
 #define ABS_SREF          SCA_VALID \
@@ -428,8 +463,8 @@ sal_Bool ScCondFormatDlg::IsRefInputMode() const
 void ScCondFormatDlg::SetReference(const ScRange& rRef, ScDocument*)
 {
     formula::RefEdit* pEdit = mpLastEdit;
-    if(!mpLastEdit)
-        pEdit = &maEdRange;
+    if (!mpLastEdit)
+        pEdit = mpEdRange;
 
     if( pEdit->IsEnabled() )
     {
@@ -437,7 +472,7 @@ void ScCondFormatDlg::SetReference(const ScRange& rRef, ScDocument*)
             RefInputStart(pEdit);
 
         sal_uInt16 n = 0;
-        if(mpLastEdit && mpLastEdit != &maEdRange)
+        if (mpLastEdit && mpLastEdit != mpEdRange)
             n = ABS_DREF3D;
         else
             n = ABS_DREF;
@@ -449,13 +484,13 @@ void ScCondFormatDlg::SetReference(const ScRange& rRef, ScDocument*)
 
 ScConditionalFormat* ScCondFormatDlg::GetConditionalFormat() const
 {
-    OUString aRangeStr = maEdRange.GetText();
+    OUString aRangeStr = mpEdRange->GetText();
     if(aRangeStr.isEmpty())
         return NULL;
 
     ScRangeList aRange;
     sal_uInt16 nFlags = aRange.Parse(aRangeStr, mpDoc, SCA_VALID, mpDoc->GetAddressConvention(), maPos.Tab());
-    ScConditionalFormat* pFormat = maCondFormList.GetConditionalFormat();
+    ScConditionalFormat* pFormat = mpCondFormList->GetConditionalFormat();
 
     if(nFlags & SCA_VALID && !aRange.empty() && pFormat)
         pFormat->AddRange(aRange);

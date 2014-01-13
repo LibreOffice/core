@@ -1031,9 +1031,12 @@ void ScRefHandler::RefInputDone( sal_Bool bForced )
 
 //-------------------------------------------------------------------------------
 
-ScRefHdlModalImpl::ScRefHdlModalImpl( Window* pParent, const ResId& rResId )
-    : ModalDialog( pParent, rResId ),
-    ScRefHandler(dynamic_cast<Window&>(*this), NULL, true) {}
+ScRefHdlModalImpl::ScRefHdlModalImpl(Window* pParent, const OString& rID,
+    const OUString& rUIXMLDescription)
+    : ModalDialog( pParent, rID, rUIXMLDescription)
+    , ScRefHandler(dynamic_cast<Window&>(*this), NULL, true)
+{
+}
 
 long ScRefHdlModalImpl::PreNotify( NotifyEvent& rNEvt )
 {
@@ -1047,7 +1050,10 @@ void ScRefHdlModalImpl::StateChanged( StateChangedType nStateChange )
     ScRefHandler::stateChanged( nStateChange, true );
 }
 
-ScAnyRefModalDlg::ScAnyRefModalDlg( Window* pParent, const ResId &rResId ):
-    ScRefHdlModalImpl( pParent, rResId ) {}
+ScAnyRefModalDlg::ScAnyRefModalDlg(Window* pParent, const OString& rID,
+    const OUString& rUIXMLDescription)
+    : ScRefHdlModalImpl(pParent, rID, rUIXMLDescription)
+{
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
