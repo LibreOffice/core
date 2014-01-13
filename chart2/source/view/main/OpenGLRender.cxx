@@ -37,6 +37,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/bmpacc.hxx>
+#include <vcl/svapp.hxx>
 
 #include <boost/scoped_array.hpp>
 
@@ -1460,49 +1461,40 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
 
 int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color, const Font& rFont, awt::Point aPos, awt::Size aSize, long rotation)
 {
-    VirtualDevice aDevice;
-    aDevice.SetFont(rFont);
+    VirtualDevice aDevice(*Application::GetDefaultDevice(), 0, 0);
+    aDevice.Erase();
     Rectangle aRect;
+    aDevice.SetFont(rFont);
     aDevice.GetTextBoundRect(aRect, textValue);
     int screenWidth = (aRect.BottomRight().X() + 3) & ~3;
     int screenHeight = (aRect.BottomRight().Y() + 3) & ~3;
     aDevice.SetOutputSizePixel(Size(screenWidth * 3, screenHeight));
+    aDevice.SetBackground(Wallpaper(COL_TRANSPARENT));
     aDevice.DrawText(Point(0, 0), textValue);
     int bmpWidth = (aRect.Right() - aRect.Left() + 3) & ~3;
     int bmpHeight = (aRect.Bottom() - aRect.Top() + 3) & ~3;
-    BitmapEx aBitmapEx(aDevice.GetBitmap(aRect.TopLeft(), Size(bmpWidth, bmpHeight)));
-    Bitmap aBitmap( aBitmapEx.GetBitmap());
-    int bitmapsize = aBitmap.GetSizeBytes();
-    boost::scoped_array<sal_uInt8> bitmapBuf(new sal_uInt8[bitmapsize * 4 / 3 ]);
-    BitmapReadAccess* pRAcc = aBitmap.AcquireReadAccess();
-    sal_uInt8 red = (color & 0x00FF0000) >> 16;
-    sal_uInt8 g = (color & 0x0000FF00) >> 8;
-    sal_uInt8 b = (color & 0x000000FF);
+    BitmapEx aBitmapEx(aDevice.GetBitmapEx(aRect.TopLeft(), Size(bmpWidth, bmpHeight)));
 
-    SAL_WARN("chart2.opengl", "r = " << (int)red << ", g = " << (int)g << ", b = " << (int)b );
+    Bitmap aBitmap (aBitmapEx.GetBitmap());
+    AlphaMask aAlpha (aBitmapEx.GetAlpha());
+    boost::scoped_array<sal_uInt8> bitmapBuf(new sal_uInt8[4* bmpWidth * bmpHeight ]);
+    Bitmap::ScopedReadAccess pReadAccces( aBitmap );
+    AlphaMask::ScopedReadAccess pAlphaReadAccess( aAlpha );
+
+    size_t i = 0;
     for (long ny = 0; ny < bmpHeight; ny++)
     {
+        Scanline pAScan = pAlphaReadAccess->GetScanline(ny);
         for(long nx = 0; nx < bmpWidth; nx++)
         {
-           sal_uInt8 *pm = pRAcc->GetScanline(ny) + nx * 3;
-           sal_uInt8 *mk = bitmapBuf.get() + ny * bmpWidth * 4 + nx * 4;
-           if ((*pm == 0xFF) && (*(pm + 1) == 0xFF) && (*(pm + 2) == 0xFF))
-           {
-               *mk = *pm;
-               *(mk + 1) = *(pm + 1);
-               *(mk + 2) = *(pm + 2);
-               *(mk + 3) = 0;
-           }
-           else
-           {
-               *mk = b;
-               *(mk + 1) = g;
-               *(mk + 2) = red;
-               *(mk + 3) = ((0xFF - *pm) + (0xFF - *(pm + 1)) + (0xFF - *(pm + 2))) / 3;
-           }
+            BitmapColor aCol = pReadAccces->GetColor( ny, nx );
+            bitmapBuf[i++] = aCol.GetRed();
+            bitmapBuf[i++] = aCol.GetGreen();
+            bitmapBuf[i++] = aCol.GetBlue();
+            bitmapBuf[i++] = *pAScan++;
         }
     }
-    aBitmap.ReleaseAccess(pRAcc);
+
     TextInfo aTextInfo;
     aTextInfo.x = (float)(aPos.X + aSize.Width / 2) / OPENGL_SCALE_VALUE;
     aTextInfo.y = (float)(aPos.Y + aSize.Height / 2) / OPENGL_SCALE_VALUE;
@@ -1551,11 +1543,12 @@ int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color,
     CHECK_GL_ERROR();
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     CHECK_GL_ERROR();
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bmpWidth, bmpHeight, 0, GL_BGRA, GL_UNSIGNED_BYTE, bitmapBuf.get());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bmpWidth, bmpHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, bitmapBuf.get());
     CHECK_GL_ERROR();
     glBindTexture(GL_TEXTURE_2D, 0);
     CHECK_GL_ERROR();
     m_TextInfoList.push_back(aTextInfo);
+    aDevice.Erase();
     return 0;
 }
 
@@ -1692,12 +1685,12 @@ void OpenGLRender::SetBackGroundColor(sal_uInt32 color1, sal_uInt32 color2)
     m_BackgroundColor[0] = (float)r / 255.0f;
     m_BackgroundColor[1] = (float)g / 255.0f;
     m_BackgroundColor[2] = (float)b / 255.0f;
-    m_BackgroundColor[3] = 1.0;
+    m_BackgroundColor[3] = m_fAlpha;
 
     m_BackgroundColor[4] = (float)r / 255.0f;
     m_BackgroundColor[5] = (float)g / 255.0f;
     m_BackgroundColor[6] = (float)b / 255.0f;
-    m_BackgroundColor[7] = 1.0;
+    m_BackgroundColor[7] = m_fAlpha;
 
     r = (color2 & 0x00FF0000) >> 16;
     g = (color2 & 0x0000FF00) >> 8;
