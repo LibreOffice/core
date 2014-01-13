@@ -41,6 +41,8 @@
 
 #include <rtl/bootstrap.hxx>
 
+#include <com/sun/star/table/BorderLineStyle.hpp>
+
 #if OSL_DEBUG_LEVEL > 1
 #include <cstdio>
 #endif
@@ -56,6 +58,21 @@
 #define FONTNAMEBOXMRUENTRIESFILE "/user/config/fontnameboxmruentries"
 
 using namespace ::com::sun::star;
+
+namespace {
+
+class ApplyScale : std::unary_function<double, void>
+{
+    double mfScale;
+public:
+    ApplyScale( double fScale ) : mfScale(fScale) {}
+    void operator() ( double& rVal )
+    {
+        rVal *= mfScale;
+    }
+};
+
+}
 
 // ========================================================================
 // ColorListBox
@@ -564,7 +581,13 @@ void lclDrawPolygon( OutputDevice& rDev, const basegfx::B2DPolygon& rPolygon, lo
     sal_uInt16 nOldAA = rDev.GetAntialiasing();
     rDev.SetAntialiasing( nOldAA & ~ANTIALIASING_ENABLE_B2DDRAW );
 
-    basegfx::B2DPolyPolygon aPolygons = svtools::ApplyLineDashing( rPolygon, nDashing, rDev.GetMapMode().GetMapUnit() );
+    long nPix = rDev.PixelToLogic(Size(1, 1)).Width();
+    basegfx::B2DPolyPolygon aPolygons = svtools::ApplyLineDashing(rPolygon, nDashing, nPix);
+
+    // Handle problems of width 1px in Pixel mode: 0.5px gives a 1px line
+    if (rDev.GetMapMode().GetMapUnit() == MAP_PIXEL && nWidth == nPix)
+        nWidth = 0;
+
     for ( sal_uInt32 i = 0; i < aPolygons.count( ); i++ )
     {
         basegfx::B2DPolygon aDash = aPolygons.getB2DPolygon( i );
@@ -574,11 +597,6 @@ void lclDrawPolygon( OutputDevice& rDev, const basegfx::B2DPolygon& rPolygon, lo
         basegfx::B2DVector aVector( aEnd - aStart );
         aVector.normalize( );
         const basegfx::B2DVector aPerpendicular(basegfx::getPerpendicular(aVector));
-
-        // Handle problems of width 1px in Pixel mode: 0.5px gives a 1px line
-        long nPix = rDev.PixelToLogic( Size( 0, 1 ) ).Height();
-        if ( rDev.GetMapMode().GetMapUnit() == MAP_PIXEL && nWidth == nPix )
-            nWidth = 0;
 
         const basegfx::B2DVector aWidthOffset( double( nWidth ) / 2 * aPerpendicular);
         basegfx::B2DPolygon aDashPolygon;
@@ -596,85 +614,41 @@ void lclDrawPolygon( OutputDevice& rDev, const basegfx::B2DPolygon& rPolygon, lo
 
 namespace svtools
 {
-    std::vector < double > GetDashing( sal_uInt16 nDashing, MapUnit eUnit )
+    std::vector < double > GetDashing( sal_uInt16 nDashing )
     {
         ::std::vector < double >aPattern;
         switch ( nDashing )
         {
             case STYLE_DOTTED:
-                if ( eUnit == MAP_TWIP )
-                {
-                    aPattern.push_back( 30.0 );
-                    aPattern.push_back( 110.0 );
-                }
-                else if ( eUnit == MAP_100TH_MM )
-                {
-                    aPattern.push_back( 50 );
-                    aPattern.push_back( 200 );
-                }
-                else if ( eUnit == MAP_PIXEL )
-                {
-                    aPattern.push_back( 1.0 );
-                    aPattern.push_back( 3.0 );
-                }
-                break;
+                aPattern.push_back( 1.0 );
+                aPattern.push_back( 2.0 );
+            break;
             case STYLE_DASHED:
-                if ( eUnit == MAP_TWIP )
-                {
-                    aPattern.push_back( 110 );
-                    aPattern.push_back( 110 );
-                }
-                else if ( eUnit == MAP_100TH_MM )
-                {
-                    aPattern.push_back( 200 );
-                    aPattern.push_back( 200 );
-                }
-                else if ( eUnit == MAP_PIXEL )
-                {
-                    aPattern.push_back( 10 );
-                    aPattern.push_back( 20 );
-                }
-                break;
+                aPattern.push_back( 16.0 );
+                aPattern.push_back( 5.0 );
+            break;
             case STYLE_FINE_DASHED:
-                if ( eUnit == MAP_PIXEL )
-                {
-                    aPattern.push_back( 4 );
-                    aPattern.push_back( 1 );
-                }
-                break;
+                aPattern.push_back( 6.0 );
+                aPattern.push_back( 2.0 );
+            break;
             default:
-                break;
+                ;
         }
 
         return aPattern;
     }
 
-    basegfx::B2DPolyPolygon ApplyLineDashing( const basegfx::B2DPolygon& rPolygon, sal_uInt16 nDashing, MapUnit eUnit )
+    basegfx::B2DPolyPolygon ApplyLineDashing( const basegfx::B2DPolygon& rPolygon, sal_uInt16 nDashing, double fScale )
     {
-        std::vector< double > aPattern = GetDashing( nDashing, eUnit );
-        basegfx::B2DPolyPolygon aPolygons;
-        if ( ! aPattern.empty() )
-            basegfx::tools::applyLineDashing( rPolygon, aPattern, &aPolygons );
-        else
-            aPolygons.append( rPolygon );
-
-        return aPolygons;
-    }
-
-    basegfx::B2DPolyPolygon ApplyLineDashing( const basegfx::B2DPolygon& rPolygon, sal_uInt16 nDashing, MapUnit eUnit, double fScale )
-    {
-        std::vector< double > aPattern = GetDashing( nDashing, eUnit );
-        std::vector< double >::iterator i = aPattern.begin();
-        while( i != aPattern.end() ) {
-            (*i) *= fScale;
-            ++i;
-        }
+        std::vector<double> aPattern = GetDashing(nDashing);
+        std::for_each(aPattern.begin(), aPattern.end(), ApplyScale(fScale));
 
         basegfx::B2DPolyPolygon aPolygons;
-        if ( ! aPattern.empty() )
-            basegfx::tools::applyLineDashing( rPolygon, aPattern, &aPolygons );
+
+        if (aPattern.empty())
+            aPolygons.append(rPolygon);
         else
-            aPolygons.append( rPolygon );
+            basegfx::tools::applyLineDashing(rPolygon, aPattern, &aPolygons);
 
         return aPolygons;
     }

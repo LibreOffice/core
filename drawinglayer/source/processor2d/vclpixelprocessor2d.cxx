@@ -104,6 +104,28 @@ namespace drawinglayer
             mpOutputDevice->SetAntialiasing(m_pImpl->m_nOrigAntiAliasing);
         }
 
+        bool VclPixelProcessor2D::tryDrawPolyPolygonColorPrimitive2DDirect(const drawinglayer::primitive2d::PolyPolygonColorPrimitive2D& rSource, double fTransparency)
+        {
+            basegfx::B2DPolyPolygon aLocalPolyPolygon(rSource.getB2DPolyPolygon());
+
+            if(!aLocalPolyPolygon.count())
+            {
+                // no geometry, done
+                return true;
+            }
+
+            const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(rSource.getBColor()));
+
+            mpOutputDevice->SetFillColor(Color(aPolygonColor));
+            mpOutputDevice->SetLineColor();
+            aLocalPolyPolygon.transform(maCurrentTransformation);
+            mpOutputDevice->DrawTransparent(
+                aLocalPolyPolygon,
+                fTransparency);
+
+            return true;
+        }
+
         void VclPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
         {
             switch(rCandidate.getPrimitive2DID())
@@ -211,8 +233,53 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D :
                 {
-                    // direct draw of PolyPolygon with color
-                    RenderPolyPolygonColorPrimitive2D(static_cast< const primitive2d::PolyPolygonColorPrimitive2D& >(rCandidate));
+                    // try to use directly
+                    const primitive2d::PolyPolygonColorPrimitive2D& rPolyPolygonColorPrimitive2D = static_cast< const primitive2d::PolyPolygonColorPrimitive2D& >(rCandidate);
+                    basegfx::B2DPolyPolygon aLocalPolyPolygon;
+                    static bool bAllowed(true);
+
+                    if(bAllowed && tryDrawPolyPolygonColorPrimitive2DDirect(rPolyPolygonColorPrimitive2D, 0.0))
+                    {
+                        // okay, done. In this case no gaps should have to be repaired, too
+                    }
+                    else
+                    {
+                        // direct draw of PolyPolygon with color
+                        const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(rPolyPolygonColorPrimitive2D.getBColor()));
+
+                        mpOutputDevice->SetFillColor(Color(aPolygonColor));
+                        mpOutputDevice->SetLineColor();
+                        aLocalPolyPolygon = rPolyPolygonColorPrimitive2D.getB2DPolyPolygon();
+                        aLocalPolyPolygon.transform(maCurrentTransformation);
+                        mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
+                    }
+
+                    // when AA is on and this filled polygons are the result of stroked line geometry,
+                    // draw the geometry once extra as lines to avoid AA 'gaps' between partial polygons
+                    // Caution: This is needed in both cases (!)
+                    if(mnPolygonStrokePrimitive2D
+                        && getOptionsDrawinglayer().IsAntiAliasing()
+                        && (mpOutputDevice->GetAntialiasing() & ANTIALIASING_ENABLE_B2DDRAW))
+                    {
+                        const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(rPolyPolygonColorPrimitive2D.getBColor()));
+                        sal_uInt32 nCount(aLocalPolyPolygon.count());
+
+                        if(!nCount)
+                        {
+                            aLocalPolyPolygon = rPolyPolygonColorPrimitive2D.getB2DPolyPolygon();
+                            aLocalPolyPolygon.transform(maCurrentTransformation);
+                            nCount = aLocalPolyPolygon.count();
+                        }
+
+                        mpOutputDevice->SetFillColor();
+                        mpOutputDevice->SetLineColor(Color(aPolygonColor));
+
+                        for(sal_uInt32 a(0); a < nCount; a++)
+                        {
+                            mpOutputDevice->DrawPolyLine(aLocalPolyPolygon.getB2DPolygon(a), 0.0);
+                        }
+                    }
+
                     break;
                 }
                 case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :
@@ -588,6 +655,19 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_SVGRADIALATOMPRIMITIVE2D:
                 {
                     RenderSvgRadialAtomPrimitive2D(static_cast< const primitive2d::SvgRadialAtomPrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_BORDERLINEPRIMITIVE2D:
+                {
+                    // process recursively, but turn off anti-aliasing. Border
+                    // lines are always rectangular, and look horrible when
+                    // the anti-aliasing is enabled.
+                    sal_uInt16 nAntiAliasing = mpOutputDevice->GetAntialiasing();
+                    mpOutputDevice->SetAntialiasing(nAntiAliasing & ~ANTIALIASING_ENABLE_B2DDRAW);
+
+                    process(rCandidate.get2DDecomposition(getViewInformation2D()));
+
+                    mpOutputDevice->SetAntialiasing(nAntiAliasing);
                     break;
                 }
                 default :
