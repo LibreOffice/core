@@ -29,7 +29,7 @@ class SwContentType;
 class SwFmtFld;
 class SwTxtINetFmt;
 class SwTOXBase;
-class SwRedline;
+class SwRangeRedline;
 
 //----------------------------------------------------------------------------
 //  helper classes
@@ -111,7 +111,7 @@ public:
 class SwPostItContent : public SwContent
 {
     const SwFmtFld*     pFld;
-    SwRedline*          pRedline;
+    SwRangeRedline*          pRedline;
     bool                mbPostIt;
 public:
     SwPostItContent( const SwContentType* pCnt,
@@ -122,13 +122,13 @@ public:
     {}
     SwPostItContent( const SwContentType* pCnt,
                             const OUString& rName,
-                            SwRedline* pRed,
+                            SwRangeRedline* pRed,
                             long nYPos )
         : SwContent( pCnt, rName, nYPos ), pRedline( pRed ),mbPostIt(false)
     {}
 
     const SwFmtFld* GetPostIt()     { return pFld; }
-    SwRedline* GetRedline() { return pRedline; }
+    SwRangeRedline* GetRedline() { return pRedline; }
     virtual sal_Bool    IsProtect()     const;
     bool            IsPostIt()      {return mbPostIt; }
 };

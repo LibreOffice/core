@@ -23,7 +23,7 @@
 #include <undobj.hxx>
 
 struct SwSortOptions;
-class SwRedline;
+class SwRangeRedline;
 class SwRedlineSaveDatas;
 class SwUndoDelete;
 
@@ -120,7 +120,7 @@ class SwUndoCompDoc : public SwUndo, public SwUndRng
 
 public:
     SwUndoCompDoc( const SwPaM& rRg, sal_Bool bIns );
-    SwUndoCompDoc( const SwRedline& rRedl );
+    SwUndoCompDoc( const SwRangeRedline& rRedl );
 
     virtual ~SwUndoCompDoc();
 

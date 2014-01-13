@@ -118,7 +118,7 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
                 const IDocumentRedlineAccess* pIDRA = pTxtNode->getIDocumentRedlineAccess();
                 if( IDocumentRedlineAccess::IsShowChanges( pIDRA->GetRedlineMode() ) )
                 {
-                    const SwRedline* pRedline = pIDRA->GetRedline( rAnchorPos, 0 );
+                    const SwRangeRedline* pRedline = pIDRA->GetRedline( rAnchorPos, 0 );
                     if( pRedline )
                     {
                         if( nsRedlineType_t::REDLINE_INSERT == pRedline->GetType() )

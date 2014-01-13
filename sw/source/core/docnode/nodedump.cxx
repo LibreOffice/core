@@ -473,7 +473,7 @@ void SwRedlineTbl::dumpAsXml( xmlTextWriterPtr w )
     for( sal_uInt16 nCurRedlinePos = 0; nCurRedlinePos < size(); ++nCurRedlinePos )
     {
         const SwRedlineTbl& redlineTbl = (*this);
-        const SwRedline* pRedline = redlineTbl[ nCurRedlinePos ];
+        const SwRangeRedline* pRedline = redlineTbl[ nCurRedlinePos ];
 
         writer.startElement( "swredline" );
         writer.writeFormatAttribute( "ptr", "%p", pRedline );

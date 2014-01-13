@@ -107,7 +107,7 @@ lcl_MaskRedlines( const SwTxtNode& rNode, OUStringBuffer& rText,
 
     for ( ; nAct < rDoc.GetRedlineTbl().size(); nAct++ )
     {
-        const SwRedline* pRed = rDoc.GetRedlineTbl()[ nAct ];
+        const SwRangeRedline* pRed = rDoc.GetRedlineTbl()[ nAct ];
 
         if ( pRed->Start()->nNode > rNode.GetIndex() )
             break;

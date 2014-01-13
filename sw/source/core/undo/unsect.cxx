@@ -189,7 +189,7 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
         rDoc.SetRedlineMode_intern((RedlineMode_t)(eOld & ~nsRedlineMode_t::REDLINE_IGNORE));
 
         SwPaM aPam( *pSectNd->EndOfSectionNode(), *pSectNd, 1 );
-        rDoc.AppendRedline( new SwRedline( *m_pRedlData, aPam ), true);
+        rDoc.AppendRedline( new SwRangeRedline( *m_pRedlData, aPam ), true);
         rDoc.SetRedlineMode_intern( eOld );
     }
     else if( !( nsRedlineMode_t::REDLINE_IGNORE & GetRedlineMode() ) &&

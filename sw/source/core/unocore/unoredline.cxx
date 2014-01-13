@@ -181,7 +181,7 @@ sal_Bool SwXRedlineText::hasElements(  ) throw(uno::RuntimeException)
     return sal_True;    // we always have a content index
 }
 
-SwXRedlinePortion::SwXRedlinePortion(SwRedline const& rRedline,
+SwXRedlinePortion::SwXRedlinePortion(SwRangeRedline const& rRedline,
         SwUnoCrsr const*const pPortionCrsr,
         uno::Reference< text::XText > const& xParent, bool const bStart)
     : SwXTextPortion(pPortionCrsr, xParent,
@@ -222,7 +222,7 @@ static OUString lcl_RedlineTypeToOUString(RedlineType_t eType)
     return sRet;
 }
 
-static uno::Sequence<beans::PropertyValue> lcl_GetSuccessorProperties(const SwRedline& rRedline)
+static uno::Sequence<beans::PropertyValue> lcl_GetSuccessorProperties(const SwRangeRedline& rRedline)
 {
     uno::Sequence<beans::PropertyValue> aValues(4);
 
@@ -301,7 +301,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SwXRedlinePortion::getImplementationId(  ) th
     return theSwXRedlinePortionImplementationId::get().getSeq();
 }
 
-uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, const SwRedline& rRedline ) throw()
+uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, const SwRangeRedline& rRedline ) throw()
 {
     uno::Any aRet;
     if(rPropertyName == UNO_NAME_REDLINE_AUTHOR)
@@ -342,7 +342,7 @@ uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, co
 }
 
 uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties(
-    const SwRedline& rRedline, sal_Bool bIsStart ) throw()
+    const SwRangeRedline& rRedline, sal_Bool bIsStart ) throw()
 {
     uno::Sequence< beans::PropertyValue > aRet(11);
     const SwRedlineData* pNext = rRedline.GetRedlineData().Next();
@@ -396,7 +396,7 @@ uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties
 }
 
 TYPEINIT1(SwXRedline, SwClient);
-SwXRedline::SwXRedline(SwRedline& rRedline, SwDoc& rDoc) :
+SwXRedline::SwXRedline(SwRangeRedline& rRedline, SwDoc& rDoc) :
     SwXText(&rDoc, CURSOR_REDLINE),
     pDoc(&rDoc),
     pRedline(&rRedline)

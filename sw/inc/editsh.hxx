@@ -86,7 +86,7 @@ class SwTxtINetFmt;
 class SwSeqFldList;
 class SwGlblDocContent;
 class SwGlblDocContents;
-class SwRedline;
+class SwRangeRedline;
 class SwRedlineData;
 class SwFtnInfo;
 class SwEndNoteInfo;
@@ -891,7 +891,7 @@ public:
     void SetRedlineMode( sal_uInt16 eMode );
     sal_Bool IsRedlineOn() const;
     sal_uInt16 GetRedlineCount() const;
-    const SwRedline& GetRedline( sal_uInt16 nPos ) const;
+    const SwRangeRedline& GetRedline( sal_uInt16 nPos ) const;
     sal_Bool AcceptRedline( sal_uInt16 nPos );
     sal_Bool RejectRedline( sal_uInt16 nPos );
 
@@ -903,7 +903,7 @@ public:
 
     /// Set comment to Redline at position.
     sal_Bool SetRedlineComment( const OUString& rS );
-    const SwRedline* GetCurrRedline() const;
+    const SwRangeRedline* GetCurrRedline() const;
 
     /// Redline attributes have been changed. Updated views.
     void UpdateRedlineAttr();

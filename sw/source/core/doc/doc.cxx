@@ -874,7 +874,7 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
             aPam.SetMark();
             aPam.Move( fnMoveBackward );
             if( IsRedlineOn() )
-                AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
+                AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
             else
                 SplitRedline( aPam );
         }
@@ -912,7 +912,7 @@ bool SwDoc::AppendTxtNode( SwPosition& rPos )
         aPam.SetMark();
         aPam.Move( fnMoveBackward );
         if( IsRedlineOn() )
-            AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
+            AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
         else
             SplitRedline( aPam );
     }
@@ -1004,7 +1004,7 @@ bool SwDoc::InsertString( const SwPaM &rRg, const OUString &rStr,
         if( IsRedlineOn() )
         {
             AppendRedline(
-                new SwRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
+                new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
         }
         else
         {

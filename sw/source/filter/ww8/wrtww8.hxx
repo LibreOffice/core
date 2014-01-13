@@ -1481,7 +1481,7 @@ private:
     sal_uInt16 mnScript;
     bool mbCharIsRTL;
 
-    const SwRedline* pCurRedline;
+    const SwRangeRedline* pCurRedline;
     sal_Int32 nAktSwPos;
     sal_uInt16 nCurRedlinePos;
 

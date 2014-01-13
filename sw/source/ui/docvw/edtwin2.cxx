@@ -69,7 +69,7 @@
 #include <IDocumentMarkAccess.hxx>
 #include <ndtxt.hxx>
 
-static OUString lcl_GetRedlineHelp( const SwRedline& rRedl, sal_Bool bBalloon )
+static OUString lcl_GetRedlineHelp( const SwRangeRedline& rRedl, sal_Bool bBalloon )
 {
     sal_uInt16 nResId = 0;
     switch( rRedl.GetType() )

@@ -644,10 +644,10 @@ static void lcl_ExportSoftPageBreak(
 
 struct SwXRedlinePortion_Impl
 {
-    const SwRedline*    m_pRedline;
+    const SwRangeRedline*    m_pRedline;
     const bool          m_bStart;
 
-    SwXRedlinePortion_Impl ( const SwRedline* pRed, const bool bIsStart )
+    SwXRedlinePortion_Impl ( const SwRangeRedline* pRed, const bool bIsStart )
     : m_pRedline(pRed)
     , m_bStart(bIsStart)
     {
@@ -1037,7 +1037,7 @@ static void lcl_FillRedlineArray(
 
         for(sal_uInt16 nRed = 0; nRed < nRedTblCount; nRed++)
         {
-            const SwRedline* pRedline = rRedTbl[nRed];
+            const SwRangeRedline* pRedline = rRedTbl[nRed];
             const SwPosition* pRedStart = pRedline->Start();
             const SwNodeIndex nRedNode = pRedStart->nNode;
             if ( nOwnNode == nRedNode )

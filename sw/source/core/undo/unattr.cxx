@@ -870,14 +870,14 @@ void SwUndoAttr::RedoImpl(::sw::UndoRedoContext & rContext)
             rPam.SetMark();
             if ( rPam.Move( fnMoveBackward ) )
             {
-                rDoc.AppendRedline( new SwRedline( *m_pRedlineData, rPam ),
+                rDoc.AppendRedline( new SwRangeRedline( *m_pRedlineData, rPam ),
                         true);
             }
             rPam.DeleteMark();
         }
         else
         {
-            rDoc.AppendRedline( new SwRedline( *m_pRedlineData, rPam ), true);
+            rDoc.AppendRedline( new SwRangeRedline( *m_pRedlineData, rPam ), true);
         }
 
         rDoc.SetRedlineMode_intern( eOld );

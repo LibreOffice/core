@@ -239,7 +239,7 @@ short SwRedlineItr::_Seek( SwFont& rFnt, xub_StrLen nNew, xub_StrLen nOld )
                 if( nNew >= nStart ) // der einzig moegliche Kandidat
                 {
                     bOn = sal_True;
-                    const SwRedline *pRed = rDoc.GetRedlineTbl()[ nAct ];
+                    const SwRangeRedline *pRed = rDoc.GetRedlineTbl()[ nAct ];
 
                     if (pSet)
                         pSet->ClearItem();

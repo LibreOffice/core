@@ -315,7 +315,7 @@ static uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimp
             const SwRedlineTbl& rRedTbl = pFmt->GetDoc()->GetRedlineTbl();
             for(sal_uInt16 nRed = 0; nRed < rRedTbl.size(); nRed++)
             {
-                const SwRedline* pRedline = rRedTbl[nRed];
+                const SwRangeRedline* pRedline = rRedTbl[nRed];
                 const SwNode* pRedPointNode = pRedline->GetNode(sal_True);
                 const SwNode* pRedMarkNode = pRedline->GetNode(sal_False);
                 if(pRedPointNode == pTblNode || pRedMarkNode == pTblNode)

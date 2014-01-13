@@ -321,7 +321,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
         SwPaM aPam( *pNewSectNode->EndOfSectionNode(), *pNewSectNode, 1 );
         if( IsRedlineOn() )
         {
-            AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
+            AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
         }
         else
         {
