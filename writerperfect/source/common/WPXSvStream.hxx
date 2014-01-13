@@ -25,12 +25,20 @@ public:
                       ::com::sun::star::io::XInputStream > xStream );
     virtual ~WPXSvInputStream();
 
-    virtual bool isOLEStream();
-    virtual WPXInputStream * getDocumentOLEStream(const char *name);
+    virtual bool isStructured();
+    virtual unsigned subStreamCount();
+    virtual const char * subStreamName(unsigned id);
+    virtual bool existsSubStream(const char *name);
+    virtual WPXInputStream * getSubStreamByName(const char *name);
+    virtual WPXInputStream * getSubStreamById(unsigned id);
 
     virtual const unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead);
     virtual int seek(long offset, WPX_SEEK_TYPE seekType);
     virtual long tell();
+    virtual bool isEnd();
+
+    virtual bool isOLEStream();
+    virtual WPXInputStream * getDocumentOLEStream(const char *name);
     virtual bool atEOS();
 
 private:
