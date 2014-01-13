@@ -19,52 +19,24 @@
 
 $(eval $(call gb_Module_Module,writerperfect))
 
-ifneq (,$(SYSTEM_WPD))
-ifneq (,$(SYSTEM_WPS))
-ifneq (,$(SYSTEM_ODFGEN))
 $(eval $(call gb_Module_add_targets,writerperfect,\
 	Library_wpftwriter \
 ))
-endif
-endif
-endif
 
-ifneq (,$(SYSTEM_WPD))
-ifneq (,$(SYSTEM_WPG))
-ifneq (,$(SYSTEM_VISIO))
-ifneq (,$(SYSTEM_CDR))
-ifneq (,$(SYSTEM_MSPUB))
-ifneq (,$(SYSTEM_FREEHAND))
-ifneq (,$(SYSTEM_ODFGEN))
 $(eval $(call gb_Module_add_targets,writerperfect,\
 	Library_wpftdraw \
 ))
-endif
-endif
-endif
-endif
-endif
-endif
-endif
 
 $(eval $(call gb_Module_add_targets,writerperfect,\
 	Library_wpftimpress \
 ))
 
-ifneq (,$(SYSTEM_WPD))
-ifneq (,$(SYSTEM_WPG))
-ifneq (,$(SYSTEM_ODFGEN))
 $(eval $(call gb_Module_add_targets,writerperfect,\
 	StaticLibrary_writerperfect \
 ))
-endif
-endif
-endif
 
-ifneq (,$(SYSTEM_WPD))
 $(eval $(call gb_Module_add_check_targets,writerperfect,\
 	CppunitTest_writerperfect_stream \
 ))
-endif
 
 # vim: set noet sw=4 ts=4:
