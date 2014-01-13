@@ -96,7 +96,7 @@ void LimitBox::ReformatAll()
 
 Size LimitBox::GetOptimalSize() const
 {
-    return CalcSize(10,1);
+    return CalcBlockSize(10,1);
 }
 
 ///Initialize entries

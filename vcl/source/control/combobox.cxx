@@ -1114,7 +1114,7 @@ Size ComboBox::CalcAdjustedSize( const Size& rPrefSize ) const
     aSz.Height() -= nTop+nBottom;
     if ( !IsDropDownBox() )
     {
-        long nEntryHeight = CalcSize( 1, 1 ).Height();
+        long nEntryHeight = CalcBlockSize( 1, 1 ).Height();
         long nLines = aSz.Height() / nEntryHeight;
         if ( nLines < 1 )
             nLines = 1;
@@ -1133,7 +1133,7 @@ Size ComboBox::CalcAdjustedSize( const Size& rPrefSize ) const
 
 // -----------------------------------------------------------------------
 
-Size ComboBox::CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
+Size ComboBox::CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
 {
     // show ScrollBars where appropriate
     Size aMinSz = CalcMinimumSize();

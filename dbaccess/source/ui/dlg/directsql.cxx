@@ -43,17 +43,17 @@ DBG_NAME(DirectSQLDialog)
         ,m_xConnection(_rxConn)
     {
         get(m_pSQL,"sql");
-        Size aSize(m_pSQL->CalcSize(60, 7));
+        Size aSize(m_pSQL->CalcBlockSize(60, 7));
         m_pSQL->set_width_request(aSize.Width());
         m_pSQL->set_height_request(aSize.Height());
         get(m_pExecute,"execute");
         get(m_pSQLHistory,"sqlhistory");
         get(m_pStatus,"status");
-        aSize  = m_pStatus->CalcSize(60, 5);
+        aSize  = m_pStatus->CalcBlockSize(60, 5);
         m_pStatus->set_height_request(aSize.Height());
         get(m_pShowOutput,"showoutput");
         get(m_pOutput,"output");
-        aSize  = m_pOutput->CalcSize(60, 5);
+        aSize  = m_pOutput->CalcBlockSize(60, 5);
         m_pOutput->set_height_request(aSize.Height());
         get(m_pClose,"close");
 

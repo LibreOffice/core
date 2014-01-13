@@ -196,7 +196,7 @@ public:
     Size                CalcMinimumSize() const;    //size of lstbox area, i.e. including scrollbar/dropdown
     virtual Size        GetOptimalSize() const;
     Size                CalcAdjustedSize( const Size& rPrefSize ) const;
-    Size                CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
+    Size                CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
     void                GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
 
     sal_uInt16          GetMRUCount() const;

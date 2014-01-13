@@ -2842,7 +2842,7 @@ void CodeCompleteWindow::ResizeAndPositionListBox()
         const sal_uInt16& nColumns = aLongestEntry.getLength();
         const sal_uInt16& nLines = std::min( (sal_uInt16) 6, pListBox->GetEntryCount() );
 
-        Size aSize = pListBox->CalcSize( nColumns, nLines );
+        Size aSize = pListBox->CalcBlockSize( nColumns, nLines );
         //set the size
         SetSizePixel( aSize );
         //1 px smaller, to see the border

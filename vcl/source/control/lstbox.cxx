@@ -1351,7 +1351,7 @@ Size ListBox::CalcAdjustedSize( const Size& rPrefSize ) const
     aSz.Height() -= nTop+nBottom;
     if ( !IsDropDownBox() )
     {
-        long nEntryHeight = CalcSize( 1, 1 ).Height();
+        long nEntryHeight = CalcBlockSize( 1, 1 ).Height();
         long nLines = aSz.Height() / nEntryHeight;
         if ( nLines < 1 )
             nLines = 1;
@@ -1368,7 +1368,7 @@ Size ListBox::CalcAdjustedSize( const Size& rPrefSize ) const
 }
 
 
-Size ListBox::CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
+Size ListBox::CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
 {
     // ScrollBars are shown if needed
     Size aMinSz = CalcMinimumSize();

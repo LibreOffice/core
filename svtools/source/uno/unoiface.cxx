@@ -366,7 +366,7 @@ OUString VCLXMultiLineEdit::getTextLines() throw(::com::sun::star::uno::RuntimeE
     ::com::sun::star::awt::Size aSz;
     MultiLineEdit* pEdit = (MultiLineEdit*) GetWindow();
     if ( pEdit )
-        aSz = AWTSize(pEdit->CalcSize( nCols, nLines ));
+        aSz = AWTSize(pEdit->CalcBlockSize( nCols, nLines ));
     return aSz;
 }
 

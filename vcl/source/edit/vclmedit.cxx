@@ -143,7 +143,7 @@ public:
     void        Enable( sal_Bool bEnable );
 
     Size        CalcMinimumSize() const;
-    Size        CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
+    Size        CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
     void        GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
 
     void        SetAlign( WinBits nWinStyle );
@@ -646,7 +646,7 @@ Size ImpVclMEdit::CalcMinimumSize() const
     return aSz;
 }
 
-Size ImpVclMEdit::CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
+Size ImpVclMEdit::CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
 {
     static const sal_Unicode sampleChar = 'X';
 
@@ -1227,7 +1227,7 @@ Size VclMultiLineEdit::CalcAdjustedSize( const Size& rPrefSize ) const
     // center vertically for whole lines
 
     long nHeight = aSz.Height() - nTop - nBottom;
-    long nLineHeight = pImpVclMEdit->CalcSize( 1, 1 ).Height();
+    long nLineHeight = pImpVclMEdit->CalcBlockSize( 1, 1 ).Height();
     long nLines = nHeight / nLineHeight;
     if ( nLines < 1 )
         nLines = 1;
@@ -1238,9 +1238,9 @@ Size VclMultiLineEdit::CalcAdjustedSize( const Size& rPrefSize ) const
     return aSz;
 }
 
-Size VclMultiLineEdit::CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
+Size VclMultiLineEdit::CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
 {
-    Size aSz = pImpVclMEdit->CalcSize( nColumns, nLines );
+    Size aSz = pImpVclMEdit->CalcBlockSize( nColumns, nLines );
 
     sal_Int32 nLeft, nTop, nRight, nBottom;
     ((Window*)this)->GetBorder( nLeft, nTop, nRight, nBottom );

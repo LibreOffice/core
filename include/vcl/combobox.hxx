@@ -172,8 +172,7 @@ public:
     Size            CalcMinimumSize() const;
     virtual Size    GetOptimalSize() const;
     Size            CalcAdjustedSize( const Size& rPrefSize ) const;
-    using Edit::CalcSize;
-    Size            CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
+    Size            CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
     void            GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
 
     void            SetMRUEntries( const OUString& rEntries, sal_Unicode cSep = ';' );

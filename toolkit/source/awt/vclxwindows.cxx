@@ -2015,7 +2015,7 @@ void VCLXListBox::setProperty( const OUString& PropertyName, const ::com::sun::s
     Size aSz;
     ListBox* pListBox = (ListBox*) GetWindow();
     if ( pListBox )
-        aSz = pListBox->CalcSize( nCols, nLines );
+        aSz = pListBox->CalcBlockSize( nCols, nLines );
     return AWTSize(aSz);
 }
 
@@ -4522,7 +4522,7 @@ void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     Size aSz;
     ComboBox* pComboBox = (ComboBox*) GetWindow();
     if ( pComboBox )
-        aSz = pComboBox->CalcSize( nCols, nLines );
+        aSz = pComboBox->CalcBlockSize( nCols, nLines );
     return AWTSize(aSz);
 }
 
