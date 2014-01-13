@@ -74,8 +74,7 @@ public:
     OUString CalcCaseMap(const OUString &rTxt) const;
 
     // Handle upper case letters
-    void DoOnCapitals( SvxDoCapitals &rDo,
-                       const sal_uInt16 nPartLen = USHRT_MAX ) const;
+    void DoOnCapitals(SvxDoCapitals &rDo) const;
 
     void SetPhysFont( OutputDevice *pOut ) const;
     Font ChgPhysFont( OutputDevice *pOut ) const;

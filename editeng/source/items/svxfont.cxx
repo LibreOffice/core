@@ -199,11 +199,11 @@ void SvxDoCapitals::SetSpace() { }
  * calls the method SvxDoCapitals::Do( ).
  *************************************************************************/
 
-void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
+void SvxFont::DoOnCapitals(SvxDoCapitals &rDo) const
 {
     const OUString &rTxt = rDo.GetTxt();
     const xub_StrLen nIdx = rDo.GetIdx();
-    const sal_Int32 nLen = STRING_LEN == nPartLen ? rDo.GetLen() : nPartLen;
+    const sal_Int32 nLen = rDo.GetLen();
 
     const OUString aTxt( CalcCaseMap( rTxt ) );
     const sal_uInt16 nTxtLen = std::min( rTxt.getLength(), nLen );
