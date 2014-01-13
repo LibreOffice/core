@@ -248,10 +248,6 @@ private:
 
     GLWindow glWin;
 
-    int m_iExternDC;
-
-    int m_iExternRC;
-
     Line2DPointList m_Line2DPointList;
 
     float m_fLineWidth;
