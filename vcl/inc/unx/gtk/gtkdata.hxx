@@ -155,8 +155,7 @@ public:
     int          GetXScreenCount() { return m_pSys->GetDisplayXScreenCount(); }
 #if GTK_CHECK_VERSION(3,0,0)
 //    int          GetScreenCount() { return m_pSys->GetDisplayScreenCount(); }
-#endif
-#if !GTK_CHECK_VERSION(3,0,0)
+#else
     virtual ScreenData *initScreen( SalX11Screen nXScreen ) const;
 #endif
 
@@ -169,10 +168,10 @@ public:
 
     virtual void PostUserEvent();
 
-#if !GTK_CHECK_VERSION(3,0,0)
-    virtual long Dispatch( XEvent *pEvent );
-#else
+#if GTK_CHECK_VERSION(3,0,0)
     guint32 GetLastUserEventTime( bool /* b */ ) { return GDK_CURRENT_TIME; } // horrible hack
+#else
+    virtual long Dispatch( XEvent *pEvent );
 #endif
 };
 
@@ -184,8 +183,6 @@ inline GdkDisplay *GtkData::GetGdkDisplay()
 {
     return GetGtkDisplay()->GetGdkDisplay();
 }
-#if !GTK_CHECK_VERSION(3,0,0)
-#endif
 
 #endif // INCLUDED_VCL_INC_UNX_GTK_GTKDATA_HXX
 
