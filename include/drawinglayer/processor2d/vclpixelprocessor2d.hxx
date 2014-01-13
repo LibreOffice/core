@@ -51,6 +51,9 @@ namespace drawinglayer
              */
             virtual void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
 
+            // some helpers to try direct paints (shortcuts)
+            bool tryDrawPolyPolygonColorPrimitive2DDirect(const drawinglayer::primitive2d::PolyPolygonColorPrimitive2D& rSource, double fTransparency);
+
         public:
             /// constructor/destructor
             VclPixelProcessor2D(
