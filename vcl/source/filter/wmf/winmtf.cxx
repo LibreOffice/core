@@ -1548,7 +1548,7 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, sal_Int32* pDXAr
             aVDev.SetFont( maLatestFont );
             aVDev.GetTextArray( rText, pDX, 0, rText.getLength());
         }
-        mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition, rText, pDX, 0, STRING_LEN ) );
+        mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition, rText, pDX, 0, rText.getLength() ) );
         if ( !pDXArry )     // this means we have created our own array
             delete[] pDX;   // which must be deleted
     }
