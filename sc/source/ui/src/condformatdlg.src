@@ -14,32 +14,32 @@ ModalDialog RID_SCDLG_CONDFORMAT
     HelpID = "sc:ModalDialog:RID_SCDLG_CONDFORMAT";
     OutputSize = TRUE;
     Hide = TRUE;
-    Size = MAP_APPFONT ( 300, 300 );
+    Size = MAP_APPFONT ( 300, 265 );
     Text [ en-US ] = "Conditional Formatting for";
     Moveable = TRUE;
     Closeable = TRUE;
     OkButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 190, 280 );
+        Pos = MAP_APPFONT ( 190, 245 );
         Size = MAP_APPFONT ( 50, 14 );
         TabStop = TRUE;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 245, 280 );
+        Pos = MAP_APPFONT ( 245, 245 );
         Size = MAP_APPFONT ( 50, 14 );
         TabStop = TRUE;
     };
     PushButton BTN_ADD
     {
-        Pos = MAP_APPFONT( 5, 245 );
+        Pos = MAP_APPFONT( 5, 210 );
         Size = MAP_APPFONT( 50, 14 );
         Text [ en-US ] = "Add";
         TabStop = TRUE;
     };
     PushButton BTN_REMOVE
     {
-        Pos = MAP_APPFONT( 60, 245 );
+        Pos = MAP_APPFONT( 60, 210 );
         Size = MAP_APPFONT( 50, 14 );
         Text [ en-US ] = "Remove";
         TabStop = TRUE;
@@ -47,26 +47,26 @@ ModalDialog RID_SCDLG_CONDFORMAT
     Control CTRL_LIST
     {
         Pos = MAP_APPFONT( 5, 20 );
-        Size = MAP_APPFONT( 290, 220 );
+        Size = MAP_APPFONT( 290, 185 );
         DialogControl = TRUE;
         Border = TRUE;
     };
     FixedText FT_RANGE
     {
-        Pos = MAP_APPFONT( 5, 262 );
+        Pos = MAP_APPFONT( 5, 227 );
         Size = MAP_APPFONT( 50, 16 );
         Text [ en-US ] = "Range:";
     };
     Edit ED_RANGE
     {
-        Pos = MAP_APPFONT( 60, 262 );
+        Pos = MAP_APPFONT( 60, 227 );
         Size = MAP_APPFONT( 182, 14 );
         Border = TRUE;
         TabStop = TRUE;
     };
     ImageButton RB_RANGE
     {
-        Pos = MAP_APPFONT( 245, 262 );
+        Pos = MAP_APPFONT( 245, 227 );
         Size = MAP_APPFONT( 14, 14 );
         Border = TRUE;
         TabStop = TRUE;
