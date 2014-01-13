@@ -31,6 +31,7 @@
 #include "cppuhelper/implementationentry.hxx"
 #include "sal/types.h"
 
+#include "AbiWordImportFilter.hxx"
 #include "EBookImportFilter.hxx"
 #include "WordPerfectImportFilter.hxx"
 #include "MSWorksImportFilter.hxx"
@@ -39,6 +40,9 @@
 namespace {
 
 static cppu::ImplementationEntry const services[] = {
+    { &AbiWordImportFilter_createInstance, &AbiWordImportFilter_getImplementationName,
+      &AbiWordImportFilter_getSupportedServiceNames,
+      &cppu::createSingleComponentFactory, 0, 0 },
     { &WordPerfectImportFilter_createInstance, &WordPerfectImportFilter_getImplementationName,
       &WordPerfectImportFilter_getSupportedServiceNames,
       &cppu::createSingleComponentFactory, 0, 0 },
