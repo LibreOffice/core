@@ -533,6 +533,7 @@ void SwTxtNode::RstTxtAttr(
                 else // Fall: 3
                 {
                     m_pSwpHints->NoteInHistory( pHt );
+                    // UGLY: this may temporarily destroy the sorting!
                     *pHt->GetStart() = nEnd;
                     m_pSwpHints->NoteInHistory( pHt, sal_True );
 
@@ -542,6 +543,10 @@ void SwTxtNode::RstTxtAttr(
                                 *pStyleHandle, nAttrStart, nEnd );
                         InsertHint( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
                     }
+
+                    // this case appears to rely on InsertHint not re-sorting
+                    // and pNew being inserted behind pHt
+                    assert(pHt == m_pSwpHints->GetTextHint(i));
 
                     bChanged = true;
                 }
@@ -562,6 +567,7 @@ void SwTxtNode::RstTxtAttr(
                     const sal_Int32 nAttrEnd = *pAttrEnd;
 
                     m_pSwpHints->NoteInHistory( pHt );
+                    // UGLY: this may temporarily destroy the sorting!
                     *pAttrEnd = nStt;
                     m_pSwpHints->NoteInHistory( pHt, sal_True );
 
@@ -571,6 +577,10 @@ void SwTxtNode::RstTxtAttr(
                             *pStyleHandle, nStt, nAttrEnd );
                         InsertHint( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
                     }
+
+                    // this case appears to rely on InsertHint not re-sorting
+                    // and pNew being inserted behind pHt
+                    assert(pHt == m_pSwpHints->GetTextHint(i));
                 }
                 else if( nLen ) // Fall: 4
                 {
@@ -583,6 +593,7 @@ void SwTxtNode::RstTxtAttr(
                     bChanged = true;
                     const sal_Int32 nTmpEnd = *pAttrEnd;
                     m_pSwpHints->NoteInHistory( pHt );
+                    // UGLY: this may temporarily destroy the sorting!
                     *pAttrEnd = nStt;
                     m_pSwpHints->NoteInHistory( pHt, sal_True );
 
@@ -611,6 +622,10 @@ void SwTxtNode::RstTxtAttr(
                         // ein anderes auf die Position geschoben hat !
                         continue;
                     }
+
+                    // this case appears to rely on InsertHint not re-sorting
+                    // and pNew being inserted behind pHt
+                    assert(pHt == m_pSwpHints->GetTextHint(i));
                 }
             }
         }
