@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "fa98f980_d5546ecc",
+        "filename": "sw/inc/unomap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-13T15:45:31Z",
+      "side": 1,
+      "message": "Please keep the define list sorted, otherwise it\u0027s easy to introduce two defines with the same value.",
+      "revId": "da812bbecec443b4783f1f45741f108359e4a2da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa98f980_d5bd4e04",
         "filename": "sw/source/ui/index/cntex.cxx",
         "patchSetId": 1
