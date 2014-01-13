@@ -79,7 +79,6 @@
 #include "mtftools.hxx"
 #include "outdevstate.hxx"
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <tools/string.hxx>
 
 using namespace ::com::sun::star;
 
@@ -2480,11 +2479,13 @@ namespace cppcanvas
                         if (rVDev.GetDigitLanguage())
                             sText = convertToLocalizedNumerals(sText, rVDev.GetDigitLanguage());
 
+                        const sal_Int32 nLen = std::min(pAct->GetLen(), pAct->GetText().getLength() - pAct->GetIndex());
+
                         createTextAction(
                             pAct->GetPoint(),
                             sText,
                             pAct->GetIndex(),
-                            pAct->GetLen() == (sal_uInt16)STRING_LEN ? pAct->GetText().getLength() - pAct->GetIndex() : pAct->GetLen(),
+                            nLen,
                             NULL,
                             rFactoryParms,
                             bSubsettableActions );
@@ -2499,11 +2500,13 @@ namespace cppcanvas
                         if (rVDev.GetDigitLanguage())
                             sText = convertToLocalizedNumerals(sText, rVDev.GetDigitLanguage());
 
+                        const sal_Int32 nLen = std::min(pAct->GetLen(), pAct->GetText().getLength() - pAct->GetIndex());
+
                         createTextAction(
                             pAct->GetPoint(),
                             sText,
                             pAct->GetIndex(),
-                            pAct->GetLen() == (sal_uInt16)STRING_LEN ? pAct->GetText().getLength() - pAct->GetIndex() : pAct->GetLen(),
+                            nLen,
                             pAct->GetDXArray(),
                             rFactoryParms,
                             bSubsettableActions );
@@ -2577,8 +2580,7 @@ namespace cppcanvas
                         if (rVDev.GetDigitLanguage())
                             sText = convertToLocalizedNumerals(sText, rVDev.GetDigitLanguage());
 
-                        const sal_uInt16 nLen( pAct->GetLen() == (sal_uInt16)STRING_LEN ?
-                                           pAct->GetText().getLength() - pAct->GetIndex() : pAct->GetLen() );
+                        const sal_Int32 nLen = std::min(pAct->GetLen(), pAct->GetText().getLength() - pAct->GetIndex());
 
                         // #i70897# Nothing to do, actually...
                         if( nLen == 0 )
@@ -2598,7 +2600,7 @@ namespace cppcanvas
 
                         // Last entry of pDXArray contains total width of the text
                         sal_Int32* p=pDXArray.get();
-                        for( sal_uInt16 i=1; i<=nLen; ++i )
+                        for (sal_Int32 i=1; i<=nLen; ++i)
                         {
                             // calc ratio for every array entry, to
                             // distribute rounding errors 'evenly'
@@ -2613,7 +2615,7 @@ namespace cppcanvas
                             pAct->GetPoint(),
                             sText,
                             pAct->GetIndex(),
-                            pAct->GetLen() == (sal_uInt16)STRING_LEN ? pAct->GetText().getLength() - pAct->GetIndex() : pAct->GetLen(),
+                            nLen,
                             pDXArray.get(),
                             rFactoryParms,
                             bSubsettableActions );
