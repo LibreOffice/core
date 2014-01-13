@@ -1405,9 +1405,12 @@ bool beginsWithRTLCharacter(const OUString& rStr)
     right alignment is returned.
  */
 static SvxCellHorJustify getAlignmentFromContext( SvxCellHorJustify eInHorJust,
-        bool bCellIsValue, const OUString& rText)
+        bool bCellIsValue, const OUString& rText,
+        const ScPatternAttr& rPattern, const SfxItemSet* pCondSet,
+        const ScDocument* pDoc, SCTAB nTab )
 {
     SvxCellHorJustify eHorJustContext = eInHorJust;
+    bool bUseWritingDirection = false;
     if (eInHorJust == SVX_HOR_JUSTIFY_STANDARD)
     {
         // fdo#32530: Default alignment depends on value vs
@@ -1415,6 +1418,23 @@ static SvxCellHorJustify getAlignmentFromContext( SvxCellHorJustify eInHorJust,
         if (beginsWithRTLCharacter( rText))
             eHorJustContext = bCellIsValue ? SVX_HOR_JUSTIFY_LEFT : SVX_HOR_JUSTIFY_RIGHT;
         else if (bCellIsValue)
+            eHorJustContext = SVX_HOR_JUSTIFY_RIGHT;
+        else
+            bUseWritingDirection = true;
+    }
+
+    if (bUseWritingDirection ||
+            eInHorJust == SVX_HOR_JUSTIFY_BLOCK || eInHorJust == SVX_HOR_JUSTIFY_REPEAT)
+    {
+        sal_uInt16 nDirection = lcl_GetValue<SvxFrameDirectionItem, sal_uInt16>( rPattern, ATTR_WRITINGDIR, pCondSet);
+        if (nDirection == FRMDIR_HORI_LEFT_TOP || nDirection == FRMDIR_VERT_TOP_LEFT)
+            eHorJustContext = SVX_HOR_JUSTIFY_LEFT;
+        else if (nDirection == FRMDIR_ENVIRONMENT)
+        {
+            SAL_WARN_IF( !pDoc, "sc.ui", "getAlignmentFromContext - pDoc==NULL");
+            eHorJustContext = (pDoc && pDoc->IsLayoutRTL(nTab)) ? SVX_HOR_JUSTIFY_RIGHT : SVX_HOR_JUSTIFY_LEFT;
+        }
+        else
             eHorJustContext = SVX_HOR_JUSTIFY_RIGHT;
     }
     return eHorJustContext;
@@ -1694,7 +1714,8 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                         bCellIsValue = pFCell->IsRunning() || pFCell->IsValue();
                     }
 
-                    eOutHorJust = getAlignmentFromContext( aVars.GetHorJust(), bCellIsValue, aVars.GetString());
+                    eOutHorJust = getAlignmentFromContext( aVars.GetHorJust(), bCellIsValue, aVars.GetString(),
+                            *pPattern, pCondSet, mpDoc, nTab);
 
                     bool bBreak = ( aVars.GetLineBreak() || aVars.GetHorJust() == SVX_HOR_JUSTIFY_BLOCK );
                     // #i111387# #o11817313# disable automatic line breaks only for "General" number format
@@ -4623,7 +4644,7 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
 
                         DrawEditParam aParam(pPattern, pCondSet, lcl_SafeIsValue(aCell));
                         aParam.meHorJustContext = getAlignmentFromContext( aParam.meHorJustAttr,
-                                aParam.mbCellIsValue, aStr);
+                                aParam.mbCellIsValue, aStr, *pPattern, pCondSet, mpDoc, nTab);
                         aParam.meHorJustResult = (aParam.meHorJustAttr == SVX_HOR_JUSTIFY_BLOCK) ?
                                 SVX_HOR_JUSTIFY_BLOCK : aParam.meHorJustContext;
                         aParam.mbPixelToLogic = bPixelToLogic;
