@@ -11321,7 +11321,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 2 // Name of Parameter 1
         {
-            Text [ en-US ] = "Number" ;
+            Text [ en-US ] = "Number1" ;
         };
         String 3 // Description of Parameter 1
         {
@@ -11329,7 +11329,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 4 // Name of Parameter 2
         {
-            Text [ en-US ] = "Number" ;
+            Text [ en-US ] = "Number2" ;
         };
         String 5 // Description of Parameter 2
         {
@@ -11352,7 +11352,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 2 // Name of Parameter 1
         {
-            Text [ en-US ] = "Number" ;
+            Text [ en-US ] = "Number1" ;
         };
         String 3 // Description of Parameter 1
         {
@@ -11360,7 +11360,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 4 // Name of Parameter 2
         {
-            Text [ en-US ] = "Number" ;
+            Text [ en-US ] = "Number2" ;
         };
         String 5 // Description of Parameter 2
         {
@@ -11383,7 +11383,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 2 // Name of Parameter 1
         {
-            Text [ en-US ] = "Number" ;
+            Text [ en-US ] = "Number1" ;
         };
         String 3 // Description of Parameter 1
         {
@@ -11391,7 +11391,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 4 // Name of Parameter 2
         {
-            Text [ en-US ] = "Number" ;
+            Text [ en-US ] = "Number2" ;
         };
         String 5 // Description of Parameter 2
         {
