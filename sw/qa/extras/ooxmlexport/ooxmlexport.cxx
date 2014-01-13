@@ -83,6 +83,12 @@ protected:
     void assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfNodes);
 
     /**
+     * Assert that rXPath exists, and has exactly nNumberOfChildNodes child nodes.
+     * Useful for checking that we do have a no child nodes to a specific node (nNumberOfChildNodes == 0).
+     */
+    void assertXPathChildren(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfChildNodes);
+
+    /**
      * Same as the assertXPath(), but don't assert: return the string instead.
      */
     OUString getXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute);
@@ -152,6 +158,18 @@ void Test::assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfNo
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         OString("XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
         nNumberOfNodes, xmlXPathNodeSetGetLength(pXmlNodes));
+}
+
+void Test::assertXPathChildren(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfChildNodes)
+{
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        OString("XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
+        1, xmlXPathNodeSetGetLength(pXmlNodes));
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        OString("XPath '" + rXPath + "' number of child-nodes is incorrect").getStr(),
+        nNumberOfChildNodes, (int)xmlChildElementCount(pXmlNode));
 }
 
 OUString Test::getXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute)
@@ -2150,6 +2168,14 @@ DECLARE_OOXMLEXPORT_TEST(testTrackChangesInsertedParagraphMark, "testTrackChange
     if (!pXmlDoc)
         return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:rPr/w:ins");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTrackChangesParagraphProperties, "testTrackChangesParagraphProperties.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPathChildren(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pPrChange", 0);
 }
 
 #endif
