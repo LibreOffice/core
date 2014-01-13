@@ -1264,7 +1264,7 @@ static SpellContentPositions lcl_CollectDeletedRedlines(SwEditShell* pSh)
         const sal_Int32 nStartIndex = pStartPos->nContent.GetIndex();
         for ( ; nAct < pDoc->GetRedlineTbl().size(); nAct++ )
         {
-            const SwRedline* pRed = pDoc->GetRedlineTbl()[ nAct ];
+            const SwRangeRedline* pRed = pDoc->GetRedlineTbl()[ nAct ];
 
             if ( pRed->Start()->nNode > pTxtNode->GetIndex() )
                 break;

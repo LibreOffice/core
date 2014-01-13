@@ -1177,7 +1177,7 @@ void _DelBookmarks(
     for(sal_uInt16 nCnt = 0; nCnt < rTbl.size(); ++nCnt )
     {
         // Is at position?
-        SwRedline* pRedl = rTbl[ nCnt ];
+        SwRangeRedline* pRedl = rTbl[ nCnt ];
 
         SwPosition *pRStt = &pRedl->GetBound(sal_True),
                    *pREnd = &pRedl->GetBound(sal_False);
@@ -1287,7 +1287,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
     const SwRedlineTbl& rRedlTbl = pDoc->GetRedlineTbl();
     for( ; aSave.GetCount() < rRedlTbl.size(); aSave.IncCount() )
     {
-        const SwRedline* pRdl = rRedlTbl[ aSave.GetCount() ];
+        const SwRangeRedline* pRdl = rRedlTbl[ aSave.GetCount() ];
         int nPointPos = lcl_RelativePosition( *pRdl->GetPoint(), nNode, nCntnt );
         int nMarkPos = pRdl->HasMark() ? lcl_RelativePosition( *pRdl->GetMark(), nNode, nCntnt ) :
                                           nPointPos;

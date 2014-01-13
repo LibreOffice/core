@@ -271,7 +271,7 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
 
         for ( ; nRedLinePos < m_rExport.pDoc->GetRedlineTbl().size(); ++nRedLinePos )
         {
-            const SwRedline* pRedl = m_rExport.pDoc->GetRedlineTbl()[ nRedLinePos ];
+            const SwRangeRedline* pRedl = m_rExport.pDoc->GetRedlineTbl()[ nRedLinePos ];
 
             const SwPosition* pStt = pRedl->Start();
             const SwPosition* pEnd = pStt == pRedl->GetPoint()
@@ -1213,7 +1213,7 @@ const SwRedlineData* SwWW8AttrIter::GetParagraphLevelRedline( )
     // ToDo : this is not the most ideal ... should start maybe from 'nCurRedlinePos'
     for( sal_uInt16 nRedlinePos = 0; nRedlinePos < m_rExport.pDoc->GetRedlineTbl().size(); ++nRedlinePos )
     {
-        const SwRedline* pRedl = m_rExport.pDoc->GetRedlineTbl()[ nRedlinePos ];
+        const SwRangeRedline* pRedl = m_rExport.pDoc->GetRedlineTbl()[ nRedlinePos ];
 
         const SwPosition* pCheckedStt = pRedl->Start();
 
@@ -1268,7 +1268,7 @@ const SwRedlineData* SwWW8AttrIter::GetRunLevelRedline( sal_Int32 nPos )
         for( ; nCurRedlinePos < m_rExport.pDoc->GetRedlineTbl().size();
                 ++nCurRedlinePos )
         {
-            const SwRedline* pRedl = m_rExport.pDoc->GetRedlineTbl()[ nCurRedlinePos ];
+            const SwRangeRedline* pRedl = m_rExport.pDoc->GetRedlineTbl()[ nCurRedlinePos ];
 
             const SwPosition* pStt = pRedl->Start();
             const SwPosition* pEnd = pStt == pRedl->GetPoint()
@@ -1530,7 +1530,7 @@ static SwTxtFmtColl& lcl_getFormatCollection( MSWordExportBase& rExport, const S
     sal_uInt16 nMax = rExport.pDoc->GetRedlineTbl().size();
     while( nPos < nMax )
     {
-        const SwRedline* pRedl = rExport.pDoc->GetRedlineTbl()[ nPos++ ];
+        const SwRangeRedline* pRedl = rExport.pDoc->GetRedlineTbl()[ nPos++ ];
         const SwPosition* pStt = pRedl->Start();
         const SwPosition* pEnd = pStt == pRedl->GetPoint()
                                     ? pRedl->GetMark()

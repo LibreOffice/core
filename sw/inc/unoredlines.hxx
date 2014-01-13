@@ -23,7 +23,7 @@
 #include <unobaseclass.hxx>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 
-class SwRedline;
+class SwRangeRedline;
 namespace com{ namespace sun{ namespace star{
         namespace beans{
             class XPropertySet;
@@ -62,7 +62,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
-    static ::com::sun::star::beans::XPropertySet*           GetObject( SwRedline& rRedline, SwDoc& rDoc );
+    static ::com::sun::star::beans::XPropertySet*           GetObject( SwRangeRedline& rRedline, SwDoc& rDoc );
 };
 
 class SwXRedlineEnumeration

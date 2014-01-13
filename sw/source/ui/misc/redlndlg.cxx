@@ -265,7 +265,7 @@ void SwRedlineAcceptDlg::InitAuthors()
     // determine authors
     for ( i = 0; i < nCount; i++)
     {
-        const SwRedline& rRedln = pSh->GetRedline(i);
+        const SwRangeRedline& rRedln = pSh->GetRedline(i);
 
         if( bOnlyFormatedRedlines && nsRedlineType_t::REDLINE_FORMAT != rRedln.GetType() )
             bOnlyFormatedRedlines = sal_False;
@@ -298,7 +298,7 @@ void SwRedlineAcceptDlg::InitAuthors()
         sal_uInt16 nPos = GetRedlinePos(*pSelEntry);
         if( nPos != USHRT_MAX )
         {
-            const SwRedline& rRedln = pSh->GetRedline( nPos );
+            const SwRangeRedline& rRedln = pSh->GetRedline( nPos );
 
             bIsNotFormated |= nsRedlineType_t::REDLINE_FORMAT != rRedln.GetType();
         }
@@ -312,7 +312,7 @@ void SwRedlineAcceptDlg::InitAuthors()
                                 !bOnlyFormatedRedlines );
 }
 
-OUString SwRedlineAcceptDlg::GetRedlineText( const SwRedline& rRedln,
+OUString SwRedlineAcceptDlg::GetRedlineText( const SwRangeRedline& rRedln,
                                         DateTime &rDateTime, sal_uInt16 nStack)
 {
     OUString sEntry(GetActionText(rRedln, nStack));
@@ -331,7 +331,7 @@ OUString SwRedlineAcceptDlg::GetRedlineText( const SwRedline& rRedln,
     return sEntry;
 }
 
-OUString SwRedlineAcceptDlg::GetActionText(const SwRedline& rRedln, sal_uInt16 nStack)
+OUString SwRedlineAcceptDlg::GetActionText(const SwRangeRedline& rRedln, sal_uInt16 nStack)
 {
     switch( rRedln.GetType(nStack) )
     {
@@ -374,7 +374,7 @@ void SwRedlineAcceptDlg::Activate()
 
     for ( i = 0; i < nCount; i++)
     {
-        const SwRedline& rRedln = pSh->GetRedline(i);
+        const SwRangeRedline& rRedln = pSh->GetRedline(i);
 
         if (i >= aRedlineParents.size())
         {
@@ -430,7 +430,7 @@ void SwRedlineAcceptDlg::Activate()
     // check comment
     for (i = 0; i < nCount; i++)
     {
-        const SwRedline& rRedln = pSh->GetRedline(i);
+        const SwRangeRedline& rRedln = pSh->GetRedline(i);
         pParent = &aRedlineParents[i];
 
         if(rRedln.GetComment() != pParent->sComment)
@@ -461,7 +461,7 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, sal_Bool bChild)
     SwWrtShell* pSh = pView->GetWrtShellPtr();
     sal_uInt16 nAutoFmt = HasRedlineAutoFmt() ? nsRedlineType_t::REDLINE_FORM_AUTOFMT : 0;
     SwRedlineDataParent *pParent = &aRedlineParents[nStart];
-    const SwRedline& rRedln = pSh->GetRedline(nStart);
+    const SwRangeRedline& rRedln = pSh->GetRedline(nStart);
 
     if (bChild)     // should actually never happen, but just in case...
     {
@@ -527,7 +527,7 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, sal_Bool bChild)
     return USHRT_MAX;
 }
 
-void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRedline& rRedln, const sal_uInt16 nAutoFmt)
+void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRangeRedline& rRedln, const sal_uInt16 nAutoFmt)
 {
     OUString sChild;
     SwRedlineDataChild *pLastRedlineChild = 0;
@@ -701,7 +701,7 @@ void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
     RedlinData *pData;
     SvTreeListEntry *pParent;
     SwRedlineDataParent* pRedlineParent;
-    const SwRedline* pCurrRedline;
+    const SwRangeRedline* pCurrRedline;
     if( !nStart && !pTable->FirstSelected() )
     {
         pCurrRedline = pSh->GetCurrRedline();
@@ -718,7 +718,7 @@ void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
 
     for (sal_uInt16 i = nStart; i <= nEnd; i++)
     {
-        const SwRedline& rRedln = pSh->GetRedline(i);
+        const SwRangeRedline& rRedln = pSh->GetRedline(i);
         const SwRedlineData *pRedlineData = &rRedln.GetRedlineData();
 
         pRedlineParent = new SwRedlineDataParent;
@@ -963,7 +963,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl)
             if( nPos != USHRT_MAX )
             {
 
-                const SwRedline& rRedln = pSh->GetRedline( nPos );
+                const SwRangeRedline& rRedln = pSh->GetRedline( nPos );
                 bIsNotFormated |= nsRedlineType_t::REDLINE_FORMAT != rRedln.GetType();
 
                 if (pSh->GotoRedline(nPos, sal_True))
@@ -998,7 +998,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
         {
             SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
             SvTreeListEntry* pEntry = pTable->FirstSelected();
-            const SwRedline *pRed = 0;
+            const SwRangeRedline *pRed = 0;
 
             if (pEntry)
             {
@@ -1055,14 +1055,14 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
                         if (nPos == USHRT_MAX)
                             break;
 
-                        const SwRedline &rRedline = pSh->GetRedline(nPos);
+                        const SwRangeRedline &rRedline = pSh->GetRedline(nPos);
 
 
                         /* enable again once we have redline comments in the margin
                         sComment = rRedline.GetComment();
                         if ( !sComment.Len() )
                             GetActiveView()->GetDocShell()->Broadcast(SwRedlineHint(&rRedline,SWREDLINE_INSERTED));
-                        const_cast<SwRedline&>(rRedline).Broadcast(SwRedlineHint(&rRedline,SWREDLINE_FOCUS));
+                        const_cast<SwRangeRedline&>(rRedline).Broadcast(SwRedlineHint(&rRedline,SWREDLINE_FOCUS));
                         */
 
                         OUString sComment = convertLineEnd(rRedline.GetComment(), GetSystemLineEnd());

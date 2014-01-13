@@ -1022,7 +1022,7 @@ void SwTxtNode::Update(
         const SwRedlineTbl& rTbl = GetDoc()->GetRedlineTbl();
         for ( sal_uInt16 i = 0; i < rTbl.size(); ++i )
         {
-            SwRedline *const pRedl = rTbl[ i ];
+            SwRangeRedline *const pRedl = rTbl[ i ];
             if ( pRedl->HasMark() )
             {
                 SwPosition* const pEnd = pRedl->End();
@@ -2089,7 +2089,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
                             m_Text.copy(nTxtStartIdx, nLen));
         m_Text = m_Text.replaceAt(nTxtStartIdx, nLen, "");
         if (m_Text.getLength() > TXTNODE_MAX)
-        {   // FIXME: could only happen when called from SwRedline::Show.
+        {   // FIXME: could only happen when called from SwRangeRedline::Show.
             // unfortunately can't really do anything here to handle that...
             abort();
         }
@@ -3320,7 +3320,7 @@ OUString SwTxtNode::GetRedlineTxt( sal_Int32 nIdx, sal_Int32 nLen,
         const sal_uLong nNdIdx = GetIndex();
         for( ; nRedlPos < pDoc->GetRedlineTbl().size() ; ++nRedlPos )
         {
-            const SwRedline* pTmp = pDoc->GetRedlineTbl()[ nRedlPos ];
+            const SwRangeRedline* pTmp = pDoc->GetRedlineTbl()[ nRedlPos ];
             if( nsRedlineType_t::REDLINE_DELETE == pTmp->GetType() )
             {
                 const SwPosition *pRStt = pTmp->Start(), *pREnd = pTmp->End();

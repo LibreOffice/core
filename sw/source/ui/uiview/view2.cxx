@@ -648,7 +648,7 @@ void SwView::Execute(SfxRequest &rReq)
             SwPaM *pCursor = m_pWrtShell->GetCrsr();
 
             sal_uInt16 nRedline = 0;
-            const SwRedline *pRedline = pDoc->GetRedline(*pCursor->Start(), &nRedline);
+            const SwRangeRedline *pRedline = pDoc->GetRedline(*pCursor->Start(), &nRedline);
             assert(pRedline != 0);
             if (pRedline)
             {
@@ -662,8 +662,8 @@ void SwView::Execute(SfxRequest &rReq)
 
         case FN_REDLINE_NEXT_CHANGE:
         {
-            const SwRedline *pCurrent = m_pWrtShell->GetCurrRedline();
-            const SwRedline *pNext = m_pWrtShell->SelNextRedline();
+            const SwRangeRedline *pCurrent = m_pWrtShell->GetCurrRedline();
+            const SwRangeRedline *pNext = m_pWrtShell->SelNextRedline();
 
             // FN_REDLINE_PREV_CHANGE leaves the selection point at the start of the redline.
             // In such cases, SelNextRedline (which starts searching from the selection point)
@@ -683,7 +683,7 @@ void SwView::Execute(SfxRequest &rReq)
         {
             const SwPaM *pCursor = m_pWrtShell->GetCrsr();
             const SwPosition initialCursorStart = *pCursor->Start();
-            const SwRedline *pPrev = m_pWrtShell->SelPrevRedline();
+            const SwRangeRedline *pPrev = m_pWrtShell->SelPrevRedline();
 
             if (pPrev)
             {

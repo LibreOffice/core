@@ -715,9 +715,9 @@ short SwAccessibleParagraph::GetTOCLevel()
 }
 
 //the function is to check whether the position is in a redline range.
-const SwRedline* SwAccessibleParagraph::GetRedlineAtIndex( sal_Int32 )
+const SwRangeRedline* SwAccessibleParagraph::GetRedlineAtIndex( sal_Int32 )
 {
-    const SwRedline* pRedline = NULL;
+    const SwRangeRedline* pRedline = NULL;
     SwPaM* pCrSr = GetCursor( true );
     if ( pCrSr )
     {
@@ -2281,7 +2281,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
 {
     PropertyValue ChangeAttr, ChangeAttrColor;
 
-    const SwRedline* pRedline = GetRedlineAtIndex( nIndex );
+    const SwRangeRedline* pRedline = GetRedlineAtIndex( nIndex );
     if ( pRedline )
     {
 

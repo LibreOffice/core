@@ -54,12 +54,12 @@ using namespace ::com::sun::star::i18n;
 
 struct _SaveRedline
 {
-    SwRedline* pRedl;
+    SwRangeRedline* pRedl;
     sal_uInt32 nStt, nEnd;
     sal_Int32 nSttCnt;
     sal_Int32 nEndCnt;
 
-    _SaveRedline( SwRedline* pR, const SwNodeIndex& rSttIdx )
+    _SaveRedline( SwRangeRedline* pR, const SwNodeIndex& rSttIdx )
         : pRedl( pR )
     {
         const SwPosition* pStt = pR->Start(),
@@ -79,7 +79,7 @@ struct _SaveRedline
         pRedl->GetMark()->nContent.Assign( 0, 0 );
     }
 
-    _SaveRedline( SwRedline* pR, const SwPosition& rPos )
+    _SaveRedline( SwRangeRedline* pR, const SwPosition& rPos )
         : pRedl( pR )
     {
         const SwPosition* pStt = pR->Start(),
@@ -465,7 +465,7 @@ static void lcl_SaveRedlines( const SwPaM& aPam, _SaveRedlines& rArr )
     SwRedlineTbl& rRedlineTable = const_cast<SwRedlineTbl&>( pDoc->GetRedlineTbl() );
     for( ; nCurrentRedline < rRedlineTable.size(); nCurrentRedline++ )
     {
-        SwRedline* pCurrent = rRedlineTable[ nCurrentRedline ];
+        SwRangeRedline* pCurrent = rRedlineTable[ nCurrentRedline ];
         SwComparePosition eCompare =
             ComparePosition( *pCurrent->Start(), *pCurrent->End(),
                              *pStart, *pEnd);
@@ -484,7 +484,7 @@ static void lcl_SaveRedlines( const SwPaM& aPam, _SaveRedlines& rArr )
             if( eCompare == POS_OVERLAP_BEFORE  ||
                 eCompare == POS_OUTSIDE )
             {
-                SwRedline* pNewRedline = new SwRedline( *pCurrent );
+                SwRangeRedline* pNewRedline = new SwRangeRedline( *pCurrent );
                 *pNewRedline->End() = *pStart;
                 *pCurrent->Start() = *pStart;
                 pDoc->AppendRedline( pNewRedline, true );
@@ -494,7 +494,7 @@ static void lcl_SaveRedlines( const SwPaM& aPam, _SaveRedlines& rArr )
             if( eCompare == POS_OVERLAP_BEHIND  ||
                 eCompare == POS_OUTSIDE )
             {
-                SwRedline* pNewRedline = new SwRedline( *pCurrent );
+                SwRangeRedline* pNewRedline = new SwRangeRedline( *pCurrent );
                 *pNewRedline->Start() = *pEnd;
                 *pCurrent->End() = *pEnd;
                 pDoc->AppendRedline( pNewRedline, true );
@@ -540,7 +540,7 @@ static void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
     SwRedlineTbl& rRedlTbl = (SwRedlineTbl&)pDoc->GetRedlineTbl();
 
     do {
-        SwRedline* pTmp = rRedlTbl[ nRedlPos ];
+        SwRangeRedline* pTmp = rRedlTbl[ nRedlPos ];
 
         const SwPosition* pRStt = pTmp->Start(),
                         * pREnd = pTmp->GetMark() == pRStt
@@ -552,7 +552,7 @@ static void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
             {
                 // Create a copy and set the end of the original to the end of the MoveArea.
                 // The copy is moved too.
-                SwRedline* pNewRedl = new SwRedline( *pTmp );
+                SwRangeRedline* pNewRedl = new SwRangeRedline( *pTmp );
                 SwPosition* pTmpPos = pNewRedl->Start();
                 pTmpPos->nNode = rRg.aStart;
                 pTmpPos->nContent.Assign(
@@ -587,7 +587,7 @@ static void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
             else
             {
                 // split
-                SwRedline* pNewRedl = new SwRedline( *pTmp );
+                SwRangeRedline* pNewRedl = new SwRangeRedline( *pTmp );
                 SwPosition* pTmpPos = pNewRedl->End();
                 pTmpPos->nNode = rRg.aEnd;
                 pTmpPos->nContent.Assign(
@@ -638,7 +638,7 @@ _SaveRedlEndPosForRestore::_SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx
         sal_uInt16 nFndPos;
         const SwPosition* pEnd;
         SwPosition aSrcPos( rInsIdx, SwIndex( rNd.GetCntntNode(), nCnt ));
-        const SwRedline* pRedl = pDest->GetRedline( aSrcPos, &nFndPos );
+        const SwRangeRedline* pRedl = pDest->GetRedline( aSrcPos, &nFndPos );
         while( nFndPos--
               && *( pEnd = ( pRedl = pDest->GetRedlineTbl()[ nFndPos ] )->End() ) == aSrcPos
               && *pRedl->Start() < aSrcPos )
@@ -798,7 +798,7 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const OUString &rStr )
         // FIXME: this redline is WRONG: there is no DELETE, and the skipped
         // characters are also included in aPam
         SwPaM aPam( rPt.nNode, nStart, rPt.nNode, rPt.nContent.GetIndex() );
-        AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
+        AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
     }
 
     SetModified();
@@ -1096,7 +1096,7 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
     }
 
     _SaveRedlines aSaveRedl;
-    std::vector<SwRedline*> aSavRedlInsPosArr;
+    std::vector<SwRangeRedline*> aSavRedlInsPosArr;
     if( DOC_MOVEREDLINES & eMvFlags && !GetRedlineTbl().empty() )
     {
         lcl_SaveRedlines( rRange, aSaveRedl );
@@ -1108,7 +1108,7 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
         {
             const SwPosition *pRStt, *pREnd;
             do {
-                SwRedline* pTmp = GetRedlineTbl()[ nRedlPos ];
+                SwRangeRedline* pTmp = GetRedlineTbl()[ nRedlPos ];
                 pRStt = pTmp->Start();
                 pREnd = pTmp->End();
                 if( pREnd->nNode == rPos && pRStt->nNode < rPos )
@@ -1167,7 +1167,7 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
         SwNode* pNewNd = &aIdx.GetNode();
         for( sal_uInt16 n = 0; n < aSavRedlInsPosArr.size(); ++n )
         {
-            SwRedline* pTmp = aSavRedlInsPosArr[ n ];
+            SwRangeRedline* pTmp = aSavRedlInsPosArr[ n ];
             if( GetRedlineTbl().Contains( pTmp ) )
             {
                 SwPosition* pEnd = pTmp->End();
@@ -1493,7 +1493,7 @@ bool SwDoc::DeleteAndJoinWithRedlineImpl( SwPaM & rPam, const bool )
             GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
         if( *rPam.GetPoint() != *rPam.GetMark() )
-            AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_DELETE, rPam ), true);
+            AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_DELETE, rPam ), true);
         SetModified();
 
         if( pUndo )
@@ -2360,7 +2360,7 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const OUString& rStr,
                     new SwUndoRedlineDelete( aDelPam, UNDO_REPLACE );
                 GetIDocumentUndoRedo().AppendUndo(pUndoRD);
             }
-            AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_DELETE, aDelPam ), true);
+            AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_DELETE, aDelPam ), true);
 
             *rPam.GetMark() = *aDelPam.GetMark();
             if (GetIDocumentUndoRedo().DoesUndo())

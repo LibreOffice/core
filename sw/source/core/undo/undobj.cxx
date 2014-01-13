@@ -45,7 +45,7 @@ class SwRedlineSaveData : public SwUndRng, public SwRedlineData,
 public:
     SwRedlineSaveData( SwComparePosition eCmpPos,
                         const SwPosition& rSttPos, const SwPosition& rEndPos,
-                        SwRedline& rRedl, sal_Bool bCopyNext );
+                        SwRangeRedline& rRedl, sal_Bool bCopyNext );
     ~SwRedlineSaveData();
     void RedlineToDoc( SwPaM& rPam );
     SwNodeIndex* GetMvSttIdx() const
@@ -885,7 +885,7 @@ void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, const SwNodeIndex& rInsPos 
 SwRedlineSaveData::SwRedlineSaveData( SwComparePosition eCmpPos,
                                         const SwPosition& rSttPos,
                                         const SwPosition& rEndPos,
-                                        SwRedline& rRedl,
+                                        SwRangeRedline& rRedl,
                                         sal_Bool bCopyNext )
     : SwUndRng( rRedl ),
     SwRedlineData( rRedl.GetRedlineData(), bCopyNext )
@@ -939,7 +939,7 @@ SwRedlineSaveData::~SwRedlineSaveData()
 void SwRedlineSaveData::RedlineToDoc( SwPaM& rPam )
 {
     SwDoc& rDoc = *rPam.GetDoc();
-    SwRedline* pRedl = new SwRedline( *this, rPam );
+    SwRangeRedline* pRedl = new SwRangeRedline( *this, rPam );
 
     if( GetMvSttIdx() )
     {
@@ -979,7 +979,7 @@ sal_Bool SwUndo::FillSaveData( const SwPaM& rRange, SwRedlineSaveDatas& rSData,
     rRange.GetDoc()->GetRedline( *pStt, &n );
     for( ; n < rTbl.size(); ++n )
     {
-        SwRedline* pRedl = rTbl[ n ];
+        SwRangeRedline* pRedl = rTbl[ n ];
         const SwPosition *pRStt = pRedl->Start(), *pREnd = pRedl->End();
 
         SwComparePosition eCmpPos = ComparePosition( *pStt, *pEnd, *pRStt, *pREnd );
@@ -1007,7 +1007,7 @@ sal_Bool SwUndo::FillSaveDataForFmt( const SwPaM& rRange, SwRedlineSaveDatas& rS
     rRange.GetDoc()->GetRedline( *pStt, &n );
     for( ; n < rTbl.size(); ++n )
     {
-        SwRedline* pRedl = rTbl[ n ];
+        SwRangeRedline* pRedl = rTbl[ n ];
         if( nsRedlineType_t::REDLINE_FORMAT == pRedl->GetType() )
         {
             const SwPosition *pRStt = pRedl->Start(), *pREnd = pRedl->End();

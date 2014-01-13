@@ -403,18 +403,18 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 /*  this code can be used once we want redline comments in the margin, all other stuff can
                     then be deleted
                 String sComment;
-                const SwRedline *pRedline = rSh.GetCurrRedline();
+                const SwRangeRedline *pRedline = rSh.GetCurrRedline();
 
                 if (pRedline)
                 {
                     sComment = pRedline->GetComment();
                     if ( !sComment.Len() )
                         GetView().GetDocShell()->Broadcast(SwRedlineHint(pRedline,SWREDLINE_INSERTED));
-                    const_cast<SwRedline*>(pRedline)->Broadcast(SwRedlineHint(pRedline,SWREDLINE_FOCUS,&GetView()));
+                    const_cast<SwRangeRedline*>(pRedline)->Broadcast(SwRedlineHint(pRedline,SWREDLINE_FOCUS,&GetView()));
                 }
                 */
 
-                const SwRedline *pRedline = rSh.GetCurrRedline();
+                const SwRangeRedline *pRedline = rSh.GetCurrRedline();
 
                 if (pRedline)
                 {
@@ -438,7 +438,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     rSh.StartAction();
 
                     rSh.Push();
-                    const SwRedline *pActRed = rSh.SelPrevRedline();
+                    const SwRangeRedline *pActRed = rSh.SelPrevRedline();
 
                     if (pActRed == pRedline)
                     {   // New cursor is at the beginning of the current redlines.
@@ -834,7 +834,7 @@ IMPL_LINK( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog *, pBtn )
     // Insert or change a comment.
     pSh->SetRedlineComment(pDlg->GetNote());
 
-    const SwRedline *pRedline = pSh->GetCurrRedline();
+    const SwRangeRedline *pRedline = pSh->GetCurrRedline();
 
     if (pRedline)
     {
@@ -843,7 +843,7 @@ IMPL_LINK( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog *, pBtn )
             pSh->SwapPam(); // Move the cursor behind the Redline.
 
         pSh->Push();
-        const SwRedline *pActRed = pSh->SelNextRedline();
+        const SwRangeRedline *pActRed = pSh->SelNextRedline();
         pSh->Pop(pActRed != 0);
 
         sal_Bool bEnable = sal_False;
@@ -887,13 +887,13 @@ IMPL_LINK( SwTextShell, RedlinePrevHdl, AbstractSvxPostItDialog *, pBtn )
     // Insert or change a comment.
     pSh->SetRedlineComment(pDlg->GetNote());
 
-    const SwRedline *pRedline = pSh->GetCurrRedline();
+    const SwRangeRedline *pRedline = pSh->GetCurrRedline();
 
     if (pRedline)
     {
         // Traveling only if more than one field.
         pSh->Push();
-        const SwRedline *pActRed = pSh->SelPrevRedline();
+        const SwRangeRedline *pActRed = pSh->SelPrevRedline();
         pSh->Pop(pActRed != 0);
 
         sal_Bool bEnable = sal_False;

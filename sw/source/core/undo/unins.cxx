@@ -176,7 +176,7 @@ sal_Bool SwUndoInsert::CanGrouping( const SwPosition& rPos )
                 SwIndex* pIdx;
                 for( sal_uInt16 i = 0; i < rTbl.size(); ++i )
                 {
-                    SwRedline* pRedl = rTbl[ i ];
+                    SwRangeRedline* pRedl = rTbl[ i ];
                     if( pIReg == (pIdx = &pRedl->End()->nContent)->GetIdxReg() &&
                         nCntnt == pIdx->GetIndex() )
                     {
@@ -337,7 +337,7 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
         {
             RedlineMode_t eOld = pTmpDoc->GetRedlineMode();
             pTmpDoc->SetRedlineMode_intern((RedlineMode_t)(eOld & ~nsRedlineMode_t::REDLINE_IGNORE));
-            pTmpDoc->AppendRedline( new SwRedline( *pRedlData, *pPam ), true);
+            pTmpDoc->AppendRedline( new SwRangeRedline( *pRedlData, *pPam ), true);
             pTmpDoc->SetRedlineMode_intern( eOld );
         }
         else if( !( nsRedlineMode_t::REDLINE_IGNORE & GetRedlineMode() ) &&
@@ -388,7 +388,7 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
             {
                 RedlineMode_t eOld = pTmpDoc->GetRedlineMode();
                 pTmpDoc->SetRedlineMode_intern((RedlineMode_t)(eOld & ~nsRedlineMode_t::REDLINE_IGNORE));
-                pTmpDoc->AppendRedline( new SwRedline( *pRedlData,
+                pTmpDoc->AppendRedline( new SwRangeRedline( *pRedlData,
                                             *pPam ), true);
                 pTmpDoc->SetRedlineMode_intern( eOld );
             }

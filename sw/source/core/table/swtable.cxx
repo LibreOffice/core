@@ -2119,7 +2119,7 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rTxt, const Color* pCol,
             if( pDoc->IsRedlineOn() )
             {
                 SwPaM aTemp(*pTNd, 0, *pTNd, rTxt.getLength());
-                pDoc->AppendRedline(new SwRedline(nsRedlineType_t::REDLINE_INSERT, aTemp), true);
+                pDoc->AppendRedline(new SwRangeRedline(nsRedlineType_t::REDLINE_INSERT, aTemp), true);
             }
         }
 

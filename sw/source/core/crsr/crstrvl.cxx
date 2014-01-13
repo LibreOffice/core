@@ -1451,7 +1451,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
 
                 if( !bRet && SwContentAtPos::SW_REDLINE & rCntntAtPos.eCntntAtPos )
                 {
-                    const SwRedline* pRedl = GetDoc()->GetRedline(aPos, NULL);
+                    const SwRangeRedline* pRedl = GetDoc()->GetRedline(aPos, NULL);
                     if( pRedl )
                     {
                         rCntntAtPos.aFnd.pRedl = pRedl;
@@ -1974,9 +1974,9 @@ sal_Bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
     return bRet;
 }
 
-const SwRedline* SwCrsrShell::SelNextRedline()
+const SwRangeRedline* SwCrsrShell::SelNextRedline()
 {
-    const SwRedline* pFnd = 0;
+    const SwRangeRedline* pFnd = 0;
     if( !IsTableMode() )
     {
         SET_CURR_SHELL( this );
@@ -1992,9 +1992,9 @@ const SwRedline* SwCrsrShell::SelNextRedline()
     return pFnd;
 }
 
-const SwRedline* SwCrsrShell::SelPrevRedline()
+const SwRangeRedline* SwCrsrShell::SelPrevRedline()
 {
-    const SwRedline* pFnd = 0;
+    const SwRangeRedline* pFnd = 0;
     if( !IsTableMode() )
     {
         SET_CURR_SHELL( this );
@@ -2010,9 +2010,9 @@ const SwRedline* SwCrsrShell::SelPrevRedline()
     return pFnd;
 }
 
-const SwRedline* SwCrsrShell::_GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect )
+const SwRangeRedline* SwCrsrShell::_GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect )
 {
-    const SwRedline* pFnd = 0;
+    const SwRangeRedline* pFnd = 0;
     SwCallLink aLk( *this ); // watch Crsr-Moves
     SwCrsrSaveState aSaveState( *m_pCurCrsr );
 
@@ -2078,15 +2078,15 @@ const SwRedline* SwCrsrShell::_GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect
     return pFnd;
 }
 
-const SwRedline* SwCrsrShell::GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect )
+const SwRangeRedline* SwCrsrShell::GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect )
 {
-    const SwRedline* pFnd = 0;
+    const SwRangeRedline* pFnd = 0;
     if( !IsTableMode() )
     {
         SET_CURR_SHELL( this );
 
         const SwRedlineTbl& rTbl = GetDoc()->GetRedlineTbl();
-        const SwRedline* pTmp = rTbl[ nArrPos ];
+        const SwRangeRedline* pTmp = rTbl[ nArrPos ];
         sal_uInt16 nSeqNo = pTmp->GetSeqNo();
         if( nSeqNo && bSelect )
         {

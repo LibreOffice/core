@@ -259,7 +259,7 @@ void RtfExport::WriteRevTab()
 
     for( sal_uInt16 i = 0; i < pDoc->GetRedlineTbl().size(); ++i )
     {
-        const SwRedline* pRedl = pDoc->GetRedlineTbl()[ i ];
+        const SwRangeRedline* pRedl = pDoc->GetRedlineTbl()[ i ];
 
         GetRedline(SW_MOD()->GetRedlineAuthor(pRedl->GetAuthor()));
     }

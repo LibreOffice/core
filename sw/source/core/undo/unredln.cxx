@@ -172,7 +172,7 @@ void SwUndoRedlineDelete::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 {
     if (rPam.GetPoint() != rPam.GetMark())
     {
-        rDoc.AppendRedline( new SwRedline(*pRedlData, rPam), sal_False );
+        rDoc.AppendRedline( new SwRangeRedline(*pRedlData, rPam), sal_False );
     }
 }
 
@@ -367,7 +367,7 @@ SwUndoCompDoc::SwUndoCompDoc( const SwPaM& rRg, sal_Bool bIns )
     }
 }
 
-SwUndoCompDoc::SwUndoCompDoc( const SwRedline& rRedl )
+SwUndoCompDoc::SwUndoCompDoc( const SwRangeRedline& rRedl )
     : SwUndo( UNDO_COMPAREDOC ), SwUndRng( rRedl ), pRedlData( 0 ),
     pUnDel( 0 ), pUnDel2( 0 ), pRedlSaveData( 0 ),
     // for MergeDoc the corresponding inverse is needed
@@ -469,7 +469,7 @@ void SwUndoCompDoc::RedoImpl(::sw::UndoRedoContext & rContext)
     {
         if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
         {
-            SwRedline* pTmp = new SwRedline( *pRedlData, *pPam );
+            SwRangeRedline* pTmp = new SwRangeRedline( *pRedlData, *pPam );
             ((SwRedlineTbl&)pDoc->GetRedlineTbl()).Insert( pTmp );
             pTmp->InvalidateRange();
         }
@@ -489,7 +489,7 @@ void SwUndoCompDoc::RedoImpl(::sw::UndoRedoContext & rContext)
 
         SetPaM( *pPam );
 
-        SwRedline* pTmp = new SwRedline( *pRedlData, *pPam );
+        SwRangeRedline* pTmp = new SwRangeRedline( *pRedlData, *pPam );
         ((SwRedlineTbl&)pDoc->GetRedlineTbl()).Insert( pTmp );
         if (pTmp) // #i19649#
             pTmp->InvalidateRange();

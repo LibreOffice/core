@@ -22,7 +22,7 @@
 #include <unotext.hxx>
 
 
-class SwRedline;
+class SwRangeRedline;
 
 /**
  * SwXRedlineText provides an XText which may be used to write
@@ -71,9 +71,9 @@ class SwXRedline :
         public SwClient
 {
     SwDoc*      pDoc;
-    SwRedline*  pRedline;
+    SwRangeRedline*  pRedline;
 public:
-    SwXRedline(SwRedline& rRedline, SwDoc& rDoc);
+    SwXRedline(SwRangeRedline& rRedline, SwDoc& rDoc);
     ~SwXRedline();
 
     TYPEINFO();
@@ -105,7 +105,7 @@ public:
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    const SwRedline*    GetRedline() const {return pRedline;}
+    const SwRangeRedline*    GetRedline() const {return pRedline;}
 protected:
     //SwClient
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);

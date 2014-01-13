@@ -580,7 +580,7 @@ static void lcl_DeleteRedlines( const SwPaM& rPam, SwPaM& rCpyPam )
         pSrcDoc->GetRedline( *pStt, &n );
         for( ; n < rTbl.size(); ++n )
         {
-            const SwRedline* pRedl = rTbl[ n ];
+            const SwRangeRedline* pRedl = rTbl[ n ];
             if( nsRedlineType_t::REDLINE_DELETE == pRedl->GetType() && pRedl->IsVisible() )
             {
                 const SwPosition *pRStt = pRedl->Start(), *pREnd = pRedl->End();
@@ -780,7 +780,7 @@ SwDoc::CopyRange( SwPaM& rPam, SwPosition& rPos, const bool bCopyAll ) const
     if( pRedlineRange )
     {
         if( pDoc->IsRedlineOn() )
-            pDoc->AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_INSERT, *pRedlineRange ), true);
+            pDoc->AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, *pRedlineRange ), true);
         else
             pDoc->SplitRedline( *pRedlineRange );
         delete pRedlineRange;

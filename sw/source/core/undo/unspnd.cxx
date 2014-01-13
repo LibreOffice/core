@@ -173,7 +173,7 @@ void SwUndoSplitNode::RedoImpl(::sw::UndoRedoContext & rContext)
                 {
                     RedlineMode_t eOld = pDoc->GetRedlineMode();
                     pDoc->SetRedlineMode_intern((RedlineMode_t)(eOld & ~nsRedlineMode_t::REDLINE_IGNORE));
-                    pDoc->AppendRedline( new SwRedline( *pRedlData, rPam ), true);
+                    pDoc->AppendRedline( new SwRangeRedline( *pRedlData, rPam ), true);
                     pDoc->SetRedlineMode_intern( eOld );
                 }
                 else

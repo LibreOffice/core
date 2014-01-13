@@ -302,7 +302,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
 
             pDoc->SetRedlineMode_intern( eOld );
             if( pDoc->IsRedlineOn() )
-                pDoc->AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_INSERT, *pUndoPam ), true);
+                pDoc->AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, *pUndoPam ), true);
             else
                 pDoc->SplitRedline( *pUndoPam );
             pDoc->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );

@@ -745,13 +745,13 @@ namespace sw
                         pFltRedline->nAutorNoPrev, pFltRedline->aStampPrev, aEmptyOUStr,
                         0);
 
-                    mrDoc.AppendRedline(new SwRedline(aData, aRegion), true);
+                    mrDoc.AppendRedline(new SwRangeRedline(aData, aRegion), true);
                 }
 
                 SwRedlineData aData(pFltRedline->eType, pFltRedline->nAutorNo,
                         pFltRedline->aStamp, aEmptyOUStr, 0);
 
-                SwRedline *const pNewRedline(new SwRedline(aData, aRegion));
+                SwRangeRedline *const pNewRedline(new SwRangeRedline(aData, aRegion));
                 // the point node may be deleted in AppendRedline, so park
                 // the PaM somewhere safe
                 aRegion.DeleteMark();

@@ -39,7 +39,7 @@ class SwTxtNode;
 class SwPaM;
 class SwAccessiblePortionData;
 class SwAccessibleHyperTextData;
-class SwRedline;
+class SwRangeRedline;
 class SwXTextPortion;
 class SwParaChangeTrackingInfo; //#i108125#
 
@@ -139,7 +139,7 @@ class SwAccessibleParagraph :
         }
     }
 
-    const SwRedline* GetRedlineAtIndex( sal_Int32 nPos );
+    const SwRangeRedline* GetRedlineAtIndex( sal_Int32 nPos );
     OUString GetFieldTypeNameAtIndex(sal_Int32 nIndex);
 
     // #i63870#

@@ -542,7 +542,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     {
         SwPaM aPam( *pTblNd->EndOfSectionNode(), *pTblNd, 1 );
         if( IsRedlineOn() )
-            AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
+            AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
         else
             SplitRedline( aPam );
     }

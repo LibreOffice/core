@@ -637,7 +637,7 @@ static bool lcl_InsAttr(
                         pUndo->SaveRedlineData( aPam, sal_True );
 
                     if( pDoc->IsRedlineOn() )
-                        pDoc->AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
+                        pDoc->AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
                     else
                         pDoc->SplitRedline( aPam );
                 }
@@ -679,7 +679,7 @@ static bool lcl_InsAttr(
                         pUndo->SaveRedlineData( aPam, bTxtIns );
 
                     if( pDoc->IsRedlineOn() )
-                        pDoc->AppendRedline( new SwRedline( bTxtIns
+                        pDoc->AppendRedline( new SwRangeRedline( bTxtIns
                                 ? nsRedlineType_t::REDLINE_INSERT : nsRedlineType_t::REDLINE_FORMAT, aPam ), true);
                     else if( bTxtIns )
                         pDoc->SplitRedline( aPam );
@@ -854,7 +854,7 @@ static bool lcl_InsAttr(
 
                 if( pUndo )
                     pUndo->SaveRedlineData( aPam, sal_False );
-                pDoc->AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_FORMAT, aPam ), true);
+                pDoc->AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_FORMAT, aPam ), true);
             }
         }
         if( pOtherSet && pOtherSet->Count() )
@@ -871,7 +871,7 @@ static bool lcl_InsAttr(
     {
         if( pUndo )
             pUndo->SaveRedlineData( rRg, sal_False );
-        pDoc->AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_FORMAT, rRg ), true);
+        pDoc->AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_FORMAT, rRg ), true);
     }
 
     /* now if range */
@@ -2413,7 +2413,7 @@ void SwDoc::SetTxtFmtCollByAutoFmt( const SwPosition& rPos, sal_uInt16 nPoolId,
     {
         // create the redline object
         const SwTxtFmtColl& rColl = *pTNd->GetTxtColl();
-        SwRedline* pRedl = new SwRedline( nsRedlineType_t::REDLINE_FMTCOLL, aPam );
+        SwRangeRedline* pRedl = new SwRangeRedline( nsRedlineType_t::REDLINE_FMTCOLL, aPam );
         pRedl->SetMark();
 
         // Only those items that are not set by the Set again in the Node
@@ -2457,7 +2457,7 @@ void SwDoc::SetFmtItemByAutoFmt( const SwPaM& rPam, const SfxItemSet& rSet )
     if (mbIsAutoFmtRedline)
     {
         // create the redline object
-        SwRedline* pRedl = new SwRedline( nsRedlineType_t::REDLINE_FORMAT, rPam );
+        SwRangeRedline* pRedl = new SwRangeRedline( nsRedlineType_t::REDLINE_FORMAT, rPam );
         if( !pRedl->HasMark() )
             pRedl->SetMark();
 

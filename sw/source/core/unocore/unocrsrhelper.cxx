@@ -1282,7 +1282,7 @@ void makeRedline( SwPaM& rPaM,
         }
     }
 
-    SwRedline* pRedline = new SwRedline( aRedlineData, rPaM );
+    SwRangeRedline* pRedline = new SwRangeRedline( aRedlineData, rPaM );
     RedlineMode_t nPrevMode = pRedlineAccess->GetRedlineMode( );
     pRedline->SetExtraData( pRedlineExtraData );
 

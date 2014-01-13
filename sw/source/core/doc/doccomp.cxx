@@ -1684,7 +1684,7 @@ void SwCompareData::SetRedlinesToDoc( sal_Bool bUseDocInfo )
                 SwUndo *const pUndo(new SwUndoCompDoc( *pTmp, sal_False )) ;
                 rDoc.GetIDocumentUndoRedo().AppendUndo(pUndo);
             }
-            rDoc.AppendRedline( new SwRedline( aRedlnData, *pTmp ), true );
+            rDoc.AppendRedline( new SwRangeRedline( aRedlnData, *pTmp ), true );
 
         } while( pDelRing != ( pTmp = (SwPaM*)pTmp->GetNext() ));
     }
@@ -1746,7 +1746,7 @@ void SwCompareData::SetRedlinesToDoc( sal_Bool bUseDocInfo )
         }
 
         do {
-            if( rDoc.AppendRedline( new SwRedline( aRedlnData, *pTmp ), true) &&
+            if( rDoc.AppendRedline( new SwRangeRedline( aRedlnData, *pTmp ), true) &&
                 rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
                 SwUndo *const pUndo(new SwUndoCompDoc( *pTmp, sal_True ));
@@ -1825,18 +1825,18 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
 
 class _SaveMergeRedlines : public Ring
 {
-    const SwRedline* pSrcRedl;
-    SwRedline* pDestRedl;
+    const SwRangeRedline* pSrcRedl;
+    SwRangeRedline* pDestRedl;
 public:
     _SaveMergeRedlines( const SwNode& rDstNd,
-                        const SwRedline& rSrcRedl, Ring* pRing );
+                        const SwRangeRedline& rSrcRedl, Ring* pRing );
     sal_uInt16 InsertRedline();
 
-    SwRedline* GetDestRedline() { return pDestRedl; }
+    SwRangeRedline* GetDestRedline() { return pDestRedl; }
 };
 
 _SaveMergeRedlines::_SaveMergeRedlines( const SwNode& rDstNd,
-                        const SwRedline& rSrcRedl, Ring* pRing )
+                        const SwRangeRedline& rSrcRedl, Ring* pRing )
     : Ring( pRing ), pSrcRedl( &rSrcRedl )
 {
     SwPosition aPos( rDstNd );
@@ -1844,7 +1844,7 @@ _SaveMergeRedlines::_SaveMergeRedlines( const SwNode& rDstNd,
     const SwPosition* pStt = rSrcRedl.Start();
     if( rDstNd.IsCntntNode() )
         aPos.nContent.Assign( ((SwCntntNode*)&rDstNd), pStt->nContent.GetIndex() );
-    pDestRedl = new SwRedline( rSrcRedl.GetRedlineData(), aPos );
+    pDestRedl = new SwRangeRedline( rSrcRedl.GetRedlineData(), aPos );
 
     if( nsRedlineType_t::REDLINE_DELETE == pDestRedl->GetType() )
     {
@@ -1911,7 +1911,7 @@ sal_uInt16 _SaveMergeRedlines::InsertRedline()
         const SwRedlineTbl& rRedlineTbl = pDoc->GetRedlineTbl();
         for( ; n < rRedlineTbl.size(); ++n )
         {
-            SwRedline* pRedl = rRedlineTbl[ n ];
+            SwRangeRedline* pRedl = rRedlineTbl[ n ];
             SwPosition* pRStt = pRedl->Start(),
                       * pREnd = pRStt == pRedl->GetPoint() ? pRedl->GetMark()
                                                            : pRedl->GetPoint();
@@ -1937,7 +1937,7 @@ sal_uInt16 _SaveMergeRedlines::InsertRedline()
 
                 case POS_OUTSIDE:
                     {
-                        SwRedline* pCpyRedl = new SwRedline(
+                        SwRangeRedline* pCpyRedl = new SwRangeRedline(
                             pDestRedl->GetRedlineData(), *pDStt );
                         pCpyRedl->SetMark();
                         *pCpyRedl->GetPoint() = *pRStt;
@@ -2030,7 +2030,7 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
         sal_uLong nMyEndOfExtra = GetNodes().GetEndOfExtras().GetIndex();
         for( sal_uInt16 n = 0; n < rSrcRedlTbl.size(); ++n )
         {
-            const SwRedline* pRedl = rSrcRedlTbl[ n ];
+            const SwRangeRedline* pRedl = rSrcRedlTbl[ n ];
             sal_uLong nNd = pRedl->GetPoint()->nNode.GetIndex();
             RedlineType_t eType = pRedl->GetType();
             if( nEndOfExtra < nNd &&

@@ -1167,7 +1167,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 const sal_uLong nOwnIndex = pStartNode->EndOfSectionIndex();
                 for (sal_uInt16 nRed = 0; nRed < nRedTblCount; nRed++)
                 {
-                    SwRedline const*const pRedline = rRedTbl[nRed];
+                    SwRangeRedline const*const pRedline = rRedTbl[nRed];
                     SwPosition const*const pRedStart = pRedline->Start();
                     const SwNodeIndex nRedNode = pRedStart->nNode;
                     if (nOwnIndex == nRedNode.GetIndex())

@@ -433,8 +433,8 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         SwNodeIndex aSttIdx( GetNodes(), nBeg );
 
         // the copied range is deleted
-        SwRedline *const pDeleteRedline(
-            new SwRedline( nsRedlineType_t::REDLINE_DELETE, *pRedlPam ));
+        SwRangeRedline *const pDeleteRedline(
+            new SwRangeRedline( nsRedlineType_t::REDLINE_DELETE, *pRedlPam ));
 
         // pRedlPam points to nodes that may be deleted (hidden) by
         // AppendRedline, so adjust it beforehand to prevent ASSERT
@@ -445,7 +445,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         AppendRedline(pDeleteRedline, true);
 
         // the sorted range is inserted
-        AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_INSERT, *pRedlPam ), true);
+        AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, *pRedlPam ), true);
 
         if( pRedlUndo )
         {
