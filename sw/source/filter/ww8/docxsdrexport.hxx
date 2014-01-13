@@ -11,7 +11,6 @@
 #define INCLUDED_SW_SOURCE_FILTER_WW8_DOCXSDREXPORT_HXX
 
 #include <boost/shared_ptr.hpp>
-#include <sax/fshelper.hxx>
 
 namespace oox
 {
@@ -56,6 +55,7 @@ public:
     /// When exporting fly frames, this holds the real size of the frame.
     const Size* getFlyFrameSize();
     bool getTextFrameSyntax();
+    bool getDMLTextFrameSyntax();
     sax_fastparser::FastAttributeList*& getFlyAttrList();
     void setFlyAttrList(sax_fastparser::FastAttributeList* pAttrList);
     /// Attributes of the next v:textbox element.
@@ -67,6 +67,8 @@ public:
     sax_fastparser::FastAttributeList*& getFlyFillAttrList();
     sax_fastparser::FastAttributeList* getFlyWrapAttrList();
     void setFlyWrapAttrList(sax_fastparser::FastAttributeList* pAttrList);
+    /// Attributes of <wps:bodyPr>, used during DML export of text frames.
+    sax_fastparser::FastAttributeList* getBodyPrAttrList();
 
     void startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rSize);
     void endDMLAnchorInline(const SwFrmFmt* pFrmFmt);
@@ -78,10 +80,12 @@ public:
     void writeDMLEffectLst(const SwFrmFmt& rFrmFmt);
     /// Writes a diagram (smartart).
     void writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFrmFmt, int nAnchorId);
+    /// Writes text frame in DML format.
+    void writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId);
     /// Writes text frame in VML format.
     void writeVMLTextFrame(sw::Frame* pParentFrame);
     /// Undo the text direction mangling done by the frame btLr handler in writerfilter::dmapper::DomainMapper::lcl_startCharacterGroup()
-    bool checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttributeList* pTextboxAttrList = 0, sax_fastparser::FastAttributeList* pBodyPrAttrList = 0);
+    bool checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttributeList* pTextboxAttrList = 0);
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXSDREXPORT_HXX

@@ -35,6 +35,7 @@
 #include <ndtxt.hxx>
 #include <txatbase.hxx>
 #include <fmtautofmt.hxx>
+#include <fmtfsize.hxx>
 
 #include <docxsdrexport.hxx>
 #include <docxexport.hxx>
@@ -65,12 +66,14 @@ struct DocxSdrExport::Impl
     oox::drawingml::DrawingML* m_pDrawingML;
     const Size* m_pFlyFrameSize;
     bool m_bTextFrameSyntax;
+    bool m_bDMLTextFrameSyntax;
     sax_fastparser::FastAttributeList* m_pFlyAttrList;
     sax_fastparser::FastAttributeList* m_pTextboxAttrList;
     OStringBuffer m_aTextFrameStyle;
     bool m_bFrameBtLr;
     sax_fastparser::FastAttributeList* m_pFlyFillAttrList;
     sax_fastparser::FastAttributeList* m_pFlyWrapAttrList;
+    sax_fastparser::FastAttributeList* m_pBodyPrAttrList;
 
     Impl(DocxSdrExport& rSdrExport, DocxExport& rExport, sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML)
         : m_rSdrExport(rSdrExport),
@@ -79,11 +82,13 @@ struct DocxSdrExport::Impl
           m_pDrawingML(pDrawingML),
           m_pFlyFrameSize(0),
           m_bTextFrameSyntax(false),
+          m_bDMLTextFrameSyntax(false),
           m_pFlyAttrList(0),
           m_pTextboxAttrList(0),
           m_bFrameBtLr(false),
           m_pFlyFillAttrList(0),
-          m_pFlyWrapAttrList(0)
+          m_pFlyWrapAttrList(0),
+          m_pBodyPrAttrList(0)
     {
     }
 
@@ -120,6 +125,11 @@ const Size* DocxSdrExport::getFlyFrameSize()
 bool DocxSdrExport::getTextFrameSyntax()
 {
     return m_pImpl->m_bTextFrameSyntax;
+}
+
+bool DocxSdrExport::getDMLTextFrameSyntax()
+{
+    return m_pImpl->m_bDMLTextFrameSyntax;
 }
 
 sax_fastparser::FastAttributeList*& DocxSdrExport::getFlyAttrList()
@@ -160,6 +170,11 @@ sax_fastparser::FastAttributeList*& DocxSdrExport::getFlyFillAttrList()
 sax_fastparser::FastAttributeList* DocxSdrExport::getFlyWrapAttrList()
 {
     return m_pImpl->m_pFlyWrapAttrList;
+}
+
+sax_fastparser::FastAttributeList* DocxSdrExport::getBodyPrAttrList()
+{
+    return m_pImpl->m_pBodyPrAttrList;
 }
 
 void DocxSdrExport::setFlyWrapAttrList(sax_fastparser::FastAttributeList* pAttrList)
@@ -757,6 +772,137 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFr
     }
 }
 
+void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId)
+{
+    sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
+    const SwFrmFmt& rFrmFmt = pParentFrame->GetFrmFmt();
+    const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
+
+    sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
+    sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
+
+    //Save data here and restore when out of scope
+    ExportDataSaveRestore aDataGuard(m_pImpl->m_rExport, nStt, nEnd, pParentFrame);
+
+    // When a frame has some low height, but automatically expanded due
+    // to lots of contents, this size contains the real size.
+    const Size aSize = pParentFrame->GetSize();
+
+    startDMLAnchorInline(&rFrmFmt, aSize);
+
+    sax_fastparser::FastAttributeList* pDocPrAttrList = pFS->createAttrList();
+    pDocPrAttrList->add(XML_id, OString::number(nAnchorId).getStr());
+    pDocPrAttrList->add(XML_name, OUStringToOString(rFrmFmt.GetName(), RTL_TEXTENCODING_UTF8).getStr());
+    sax_fastparser::XFastAttributeListRef xDocPrAttrListRef(pDocPrAttrList);
+    pFS->singleElementNS(XML_wp, XML_docPr, xDocPrAttrListRef);
+
+    pFS->startElementNS(XML_a, XML_graphic,
+                        FSNS(XML_xmlns, XML_a), "http://schemas.openxmlformats.org/drawingml/2006/main",
+                        FSEND);
+    pFS->startElementNS(XML_a, XML_graphicData,
+                        XML_uri, "http://schemas.microsoft.com/office/word/2010/wordprocessingShape",
+                        FSEND);
+    pFS->startElementNS(XML_wps, XML_wsp, FSEND);
+    pFS->singleElementNS(XML_wps, XML_cNvSpPr,
+                         XML_txBox, "1",
+                         FSEND);
+
+    uno::Any aRotation ;
+    const SdrObject* pSdrObj = rFrmFmt.FindRealSdrObject();
+    uno::Reference< drawing::XShape > xShape(((SdrObject*)pSdrObj)->getUnoShape(), uno::UNO_QUERY);
+    uno::Reference< beans::XPropertySet > xPropertySet(xShape, uno::UNO_QUERY);
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropertySet->getPropertySetInfo();
+    sal_Int32 nRotation = 0;
+
+    if (xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
+    {
+        uno::Sequence< beans::PropertyValue > propList;
+        xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= propList;
+        for (sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp)
+        {
+            OUString propName = propList[nProp].Name;
+            if (propName == "mso-rotation-angle")
+            {
+                aRotation = propList[nProp].Value ;
+                break;
+            }
+        }
+    }
+    aRotation >>= nRotation ;
+    OString sRotation(OString::number(nRotation));
+    // Shape properties
+    pFS->startElementNS(XML_wps, XML_spPr, FSEND);
+    if (nRotation)
+    {
+        pFS->startElementNS(XML_a, XML_xfrm,
+                            XML_rot, sRotation.getStr(),
+                            FSEND);
+    }
+    else
+    {
+        pFS->startElementNS(XML_a, XML_xfrm, FSEND);
+    }
+    pFS->singleElementNS(XML_a, XML_off,
+                         XML_x, "0",
+                         XML_y, "0",
+                         FSEND);
+    OString aWidth(OString::number(TwipsToEMU(aSize.Width())));
+    OString aHeight(OString::number(TwipsToEMU(aSize.Height())));
+    pFS->singleElementNS(XML_a, XML_ext,
+                         XML_cx, aWidth.getStr(),
+                         XML_cy, aHeight.getStr(),
+                         FSEND);
+    pFS->endElementNS(XML_a, XML_xfrm);
+    OUString shapeType = "rect";
+    if (xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
+    {
+        uno::Sequence< beans::PropertyValue > propList;
+        xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= propList;
+        for (sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp)
+        {
+            OUString propName = propList[nProp].Name;
+            if (propName == "mso-orig-shape-type")
+            {
+                propList[nProp].Value >>= shapeType;
+                break;
+            }
+        }
+    }
+
+    pFS->singleElementNS(XML_a, XML_prstGeom,
+                         XML_prst, OUStringToOString(shapeType, RTL_TEXTENCODING_UTF8).getStr(),
+                         FSEND);
+    m_pImpl->m_bDMLTextFrameSyntax = true;
+    m_pImpl->m_pBodyPrAttrList = pFS->createAttrList();
+    m_pImpl->m_rExport.OutputFormat(pParentFrame->GetFrmFmt(), false, false, true);
+    m_pImpl->m_bDMLTextFrameSyntax = false;
+    writeDMLEffectLst(rFrmFmt);
+    pFS->endElementNS(XML_wps, XML_spPr);
+
+    m_pImpl->m_rExport.mpParentFrame = NULL;
+    pFS->startElementNS(XML_wps, XML_txbx, FSEND);
+    pFS->startElementNS(XML_w, XML_txbxContent, FSEND);
+
+    m_pImpl->m_bFrameBtLr = checkFrameBtlr(m_pImpl->m_rExport.pDoc->GetNodes()[nStt], 0);
+    m_pImpl->m_rExport.WriteText();
+    m_pImpl->m_bFrameBtLr = false;
+
+    pFS->endElementNS(XML_w, XML_txbxContent);
+    pFS->endElementNS(XML_wps, XML_txbx);
+    sax_fastparser::XFastAttributeListRef xBodyPrAttrList(m_pImpl->m_pBodyPrAttrList);
+    m_pImpl->m_pBodyPrAttrList = NULL;
+    pFS->startElementNS(XML_wps, XML_bodyPr, xBodyPrAttrList);
+    // AutoSize of the Text Frame.
+    const SwFmtFrmSize& rSize = rFrmFmt.GetFrmSize();
+    pFS->singleElementNS(XML_a, (rSize.GetHeightSizeType() == ATT_VAR_SIZE ? XML_spAutoFit : XML_noAutofit), FSEND);
+    pFS->endElementNS(XML_wps, XML_bodyPr);
+
+    pFS->endElementNS(XML_wps, XML_wsp);
+    pFS->endElementNS(XML_a, XML_graphicData);
+    pFS->endElementNS(XML_a, XML_graphic);
+    endDMLAnchorInline(&rFrmFmt);
+}
+
 void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame)
 {
     sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
@@ -816,10 +962,10 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame)
     m_pImpl->m_bFrameBtLr = false;
 }
 
-bool DocxSdrExport::checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttributeList* pTextboxAttrList, sax_fastparser::FastAttributeList* pBodyPrAttrList)
+bool DocxSdrExport::checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttributeList* pTextboxAttrList)
 {
     // The intended usage is to pass either a valid VML or DML attribute list.
-    assert(pTextboxAttrList || pBodyPrAttrList);
+    assert(pTextboxAttrList || m_pImpl->m_pBodyPrAttrList);
 
     if (!pStartNode->IsTxtNode())
         return false;
@@ -856,7 +1002,7 @@ bool DocxSdrExport::checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttri
             if (pTextboxAttrList)
                 pTextboxAttrList->add(XML_style, "mso-layout-flow-alt:bottom-to-top");
             else
-                pBodyPrAttrList->add(XML_vert, "vert270");
+                m_pImpl->m_pBodyPrAttrList->add(XML_vert, "vert270");
             return true;
         }
     }

@@ -393,9 +393,6 @@ private:
     /// checks whether the current component is a diagram
     bool IsDiagram (const SdrObject* sdrObject);
 
-    /// Writes text frame in DML format.
-    void WriteDMLTextFrame(sw::Frame* pParentFrame);
-
     void InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
     void StartTable( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
     void StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
@@ -682,8 +679,6 @@ private:
     ::sax_fastparser::FastAttributeList *m_pSectionSpacingAttrList;
     ::sax_fastparser::FastAttributeList *m_pParagraphSpacingAttrList;
     ::sax_fastparser::FastAttributeList *m_pHyperlinkAttrList;
-    /// Attributes of <wps:bodyPr>, used during DML export of text frames.
-    ::sax_fastparser::FastAttributeList *m_pBodyPrAttrList;
     /// Attributes of the run color
     ::sax_fastparser::FastAttributeList *m_pColorAttrList;
     /// Attributes of the paragraph background
@@ -747,7 +742,6 @@ private:
     DocxColBreakStatus m_nColBreakStatus;
 
     std::vector<sw::Frame> m_aParentFrames;
-    bool m_bDMLTextFrameSyntax;
     // close of hyperlink needed
     bool m_closeHyperlinkInThisRun;
     bool m_closeHyperlinkInPreviousRun;

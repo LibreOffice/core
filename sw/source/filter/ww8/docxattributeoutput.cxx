@@ -270,137 +270,6 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
     m_bParagraphOpened = true;
 }
 
-void DocxAttributeOutput::WriteDMLTextFrame(sw::Frame* pParentFrame)
-{
-    const SwFrmFmt& rFrmFmt = pParentFrame->GetFrmFmt( );
-    const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
-
-    sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
-    sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
-
-    //Save data here and restore when out of scope
-    ExportDataSaveRestore aDataGuard(m_rExport, nStt, nEnd, pParentFrame);
-
-    // When a frame has some low height, but automatically expanded due
-    // to lots of contents, this size contains the real size.
-    const Size aSize = pParentFrame->GetSize();
-
-    m_rExport.SdrExporter().startDMLAnchorInline(&rFrmFmt, aSize);
-
-    sax_fastparser::FastAttributeList* pDocPrAttrList = m_pSerializer->createAttrList();
-    pDocPrAttrList->add(XML_id, OString::number(m_anchorId++).getStr());
-    pDocPrAttrList->add(XML_name, OUStringToOString(rFrmFmt.GetName(), RTL_TEXTENCODING_UTF8).getStr());
-    XFastAttributeListRef xDocPrAttrListRef(pDocPrAttrList);
-    m_pSerializer->singleElementNS(XML_wp, XML_docPr, xDocPrAttrListRef);
-
-    m_pSerializer->startElementNS(XML_a, XML_graphic,
-            FSNS(XML_xmlns, XML_a), "http://schemas.openxmlformats.org/drawingml/2006/main",
-            FSEND);
-    m_pSerializer->startElementNS(XML_a, XML_graphicData,
-            XML_uri, "http://schemas.microsoft.com/office/word/2010/wordprocessingShape",
-            FSEND);
-    m_pSerializer->startElementNS(XML_wps, XML_wsp, FSEND);
-    m_pSerializer->singleElementNS(XML_wps, XML_cNvSpPr,
-            XML_txBox, "1",
-            FSEND);
-
-    uno::Any aRotation ;
-    const SdrObject* pSdrObj = rFrmFmt.FindRealSdrObject();
-    uno::Reference< drawing::XShape > xShape( ((SdrObject*)pSdrObj)->getUnoShape(), uno::UNO_QUERY );
-    uno::Reference< beans::XPropertySet > xPropertySet( xShape, uno::UNO_QUERY );
-    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropertySet->getPropertySetInfo();
-    sal_Int32 nRotation = 0;
-
-    if ( xPropSetInfo->hasPropertyByName( "FrameInteropGrabBag" ) )
-    {
-        uno::Sequence< beans::PropertyValue > propList;
-        xPropertySet->getPropertyValue( "FrameInteropGrabBag" ) >>= propList;
-        for ( sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp )
-        {
-            OUString propName = propList[nProp].Name;
-            if ( propName == "mso-rotation-angle")
-            {
-                aRotation = propList[nProp].Value ;
-                break;
-            }
-        }
-    }
-    aRotation >>= nRotation ;
-    OString sRotation(OString::number(nRotation));
-    // Shape properties
-    m_pSerializer->startElementNS(XML_wps, XML_spPr, FSEND);
-    if(nRotation)
-    {
-        m_pSerializer->startElementNS(XML_a, XML_xfrm,
-            XML_rot, sRotation.getStr(),
-            FSEND);
-
-    }
-    else
-    {
-        m_pSerializer->startElementNS(XML_a, XML_xfrm, FSEND);
-    }
-    m_pSerializer->singleElementNS(XML_a, XML_off,
-            XML_x, "0",
-            XML_y, "0",
-            FSEND);
-    OString aWidth(OString::number(TwipsToEMU(aSize.Width())));
-    OString aHeight(OString::number(TwipsToEMU(aSize.Height())));
-    m_pSerializer->singleElementNS(XML_a, XML_ext,
-            XML_cx, aWidth.getStr(),
-            XML_cy, aHeight.getStr(),
-            FSEND);
-    m_pSerializer->endElementNS(XML_a, XML_xfrm);
-    OUString shapeType = "rect";
-    if ( xPropSetInfo->hasPropertyByName( "FrameInteropGrabBag" ) )
-    {
-        uno::Sequence< beans::PropertyValue > propList;
-        xPropertySet->getPropertyValue( "FrameInteropGrabBag" ) >>= propList;
-        for ( sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp )
-        {
-            OUString propName = propList[nProp].Name;
-            if ( propName == "mso-orig-shape-type")
-            {
-                propList[nProp].Value >>= shapeType;
-                break;
-            }
-        }
-    }
-
-    m_pSerializer->singleElementNS(XML_a, XML_prstGeom,
-            XML_prst, OUStringToOString( shapeType, RTL_TEXTENCODING_UTF8 ).getStr(),
-            FSEND);
-    m_bDMLTextFrameSyntax = true;
-    m_pBodyPrAttrList = m_pSerializer->createAttrList();
-    m_rExport.OutputFormat( pParentFrame->GetFrmFmt(), false, false, true );
-    m_bDMLTextFrameSyntax = false;
-    m_rExport.SdrExporter().writeDMLEffectLst(rFrmFmt);
-    m_pSerializer->endElementNS(XML_wps, XML_spPr);
-
-    m_rExport.mpParentFrame = NULL;
-    m_pSerializer->startElementNS( XML_wps, XML_txbx, FSEND );
-    m_pSerializer->startElementNS( XML_w, XML_txbxContent, FSEND );
-
-    m_rExport.SdrExporter().setFrameBtLr(m_rExport.SdrExporter().checkFrameBtlr(m_rExport.pDoc->GetNodes()[nStt], 0, m_pBodyPrAttrList));
-    m_rExport.WriteText( );
-    m_rExport.SdrExporter().setFrameBtLr(false);
-
-    m_pSerializer->endElementNS( XML_w, XML_txbxContent );
-    m_pSerializer->endElementNS( XML_wps, XML_txbx );
-    XFastAttributeListRef xBodyPrAttrList(m_pBodyPrAttrList);
-    m_pBodyPrAttrList = NULL;
-    m_pSerializer->startElementNS( XML_wps, XML_bodyPr, xBodyPrAttrList );
-    // AutoSize of the Text Frame.
-    const SwFmtFrmSize& rSize = rFrmFmt.GetFrmSize();
-    m_pSerializer->singleElementNS(XML_a, (rSize.GetHeightSizeType() == ATT_VAR_SIZE ? XML_spAutoFit : XML_noAutofit), FSEND);
-    m_pSerializer->endElementNS( XML_wps, XML_bodyPr );
-
-    m_pSerializer->endElementNS(XML_wps, XML_wsp);
-    m_pSerializer->endElementNS(XML_a, XML_graphicData);
-    m_pSerializer->endElementNS(XML_a, XML_graphic);
-    m_rExport.SdrExporter().endDMLAnchorInline(&rFrmFmt);
-}
-
 void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner )
 {
     // write the paragraph properties + the run, already in the correct order
@@ -437,7 +306,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
         //Reset the table infos after saving.
         m_rExport.mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
 
-        WriteDMLTextFrame(pParentFrame);
+        m_rExport.SdrExporter().writeDMLTextFrame(pParentFrame, m_anchorId++);
         m_pSerializer->endElementNS(XML_mc, XML_Choice);
 
         // Reset table infos, otherwise the depth of the cells will be incorrect,
@@ -5335,7 +5204,7 @@ void DocxAttributeOutput::FormatFrameSize( const SwFmtFrmSize& rSize )
         m_rExport.SdrExporter().getTextFrameStyle().append(";width:").append(double(pSize->Width()) / 20);
         m_rExport.SdrExporter().getTextFrameStyle().append("pt;height:").append(double(pSize->Height()) / 20).append("pt");
     }
-    else if (m_bDMLTextFrameSyntax)
+    else if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
     }
     else if ( m_rExport.bOutFlyFrmAttrs )
@@ -5384,7 +5253,7 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
         m_rExport.SdrExporter().getTextFrameStyle().append(";mso-wrap-distance-left:").append(double(rLRSpace.GetLeft()) / 20).append("pt");
         m_rExport.SdrExporter().getTextFrameStyle().append(";mso-wrap-distance-right:").append(double(rLRSpace.GetRight()) / 20).append("pt");
     }
-    else if (m_bDMLTextFrameSyntax)
+    else if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
     }
     else if ( m_rExport.bOutFlyFrmAttrs )
@@ -5438,7 +5307,7 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
         m_rExport.SdrExporter().getTextFrameStyle().append(";mso-wrap-distance-top:").append(double(rULSpace.GetUpper()) / 20).append("pt");
         m_rExport.SdrExporter().getTextFrameStyle().append(";mso-wrap-distance-bottom:").append(double(rULSpace.GetLower()) / 20).append("pt");
     }
-    else if (m_bDMLTextFrameSyntax)
+    else if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
     }
     else if ( m_rExport.bOutFlyFrmAttrs )
@@ -5551,7 +5420,7 @@ void DocxAttributeOutput::FormatSurround( const SwFmtSurround& rSurround )
                 m_rExport.SdrExporter().getFlyWrapAttrList()->add(XML_side, sSide);
         }
     }
-    else if (m_bDMLTextFrameSyntax)
+    else if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
     }
     else if ( m_rExport.bOutFlyFrmAttrs )
@@ -5583,7 +5452,7 @@ void DocxAttributeOutput::FormatVertOrientation( const SwFmtVertOrient& rFlyVert
     {
         m_rExport.SdrExporter().getTextFrameStyle().append(";margin-top:").append(double(rFlyVert.GetPos()) / 20).append("pt");
     }
-    else if (m_bDMLTextFrameSyntax)
+    else if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
     }
     else if ( m_rExport.bOutFlyFrmAttrs )
@@ -5645,7 +5514,7 @@ void DocxAttributeOutput::FormatHorizOrientation( const SwFmtHoriOrient& rFlyHor
     {
         m_rExport.SdrExporter().getTextFrameStyle().append(";margin-left:").append(double(rFlyHori.GetPos()) / 20).append("pt");
     }
-    else if (m_bDMLTextFrameSyntax)
+    else if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
     }
     else if ( m_rExport.bOutFlyFrmAttrs )
@@ -5740,7 +5609,7 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
         sColor = "#" + sColor;
         AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), XML_fillcolor, sColor.getStr() );
     }
-    else if (m_bDMLTextFrameSyntax)
+    else if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
         bool bImageBackground = false;
         const SfxPoolItem* pItem = GetExport().HasItem(RES_FILL_STYLE);
@@ -5799,7 +5668,7 @@ void DocxAttributeOutput::FormatFillStyle( const XFillStyleItem& rFillStyle )
 
 void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGradient )
 {
-    if (m_oFillStyle && *m_oFillStyle == XFILL_GRADIENT && !m_bDMLTextFrameSyntax)
+    if (m_oFillStyle && *m_oFillStyle == XFILL_GRADIENT && !m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
         AddToAttrList( m_rExport.SdrExporter().getFlyFillAttrList(), XML_type, "gradient" );
 
@@ -5843,7 +5712,7 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
         AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), XML_fillcolor, sColor1.getStr() );
         AddToAttrList( m_rExport.SdrExporter().getFlyFillAttrList(), XML_color2, sColor2.getStr() );
     }
-    else if (m_oFillStyle && *m_oFillStyle == XFILL_GRADIENT && m_bDMLTextFrameSyntax)
+    else if (m_oFillStyle && *m_oFillStyle == XFILL_GRADIENT && m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
         uno::Reference<beans::XPropertySet> xPropertySet = SwXFrames::GetObject(const_cast<SwFrmFmt&>(m_rExport.mpParentFrame->GetFrmFmt()), FLYCNTTYPE_FRM);
         m_rDrawingML.SetFS(m_pSerializer);
@@ -5854,7 +5723,7 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
 
 void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
 {
-    if (m_bDMLTextFrameSyntax)
+    if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
         // <a:gradFill> should be before <a:ln>.
         const SfxPoolItem* pItem = GetExport().HasItem(RES_FILL_STYLE);
@@ -5880,7 +5749,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         }
         m_bIgnoreNextFill = true;
     }
-    if (m_rExport.SdrExporter().getTextFrameSyntax() || m_bDMLTextFrameSyntax)
+    if (m_rExport.SdrExporter().getTextFrameSyntax() || m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
         const SvxBorderLine* pLeft = rBox.GetLeft( );
         const SvxBorderLine* pTop = rBox.GetTop( );
@@ -5930,12 +5799,12 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
             }
         }
 
-        if (m_bDMLTextFrameSyntax)
+        if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
         {
-            m_pBodyPrAttrList->add(XML_lIns, OString::number(TwipsToEMU(rBox.GetDistance(BOX_LINE_LEFT))));
-            m_pBodyPrAttrList->add(XML_tIns, OString::number(TwipsToEMU(rBox.GetDistance(BOX_LINE_TOP))));
-            m_pBodyPrAttrList->add(XML_rIns, OString::number(TwipsToEMU(rBox.GetDistance(BOX_LINE_RIGHT))));
-            m_pBodyPrAttrList->add(XML_bIns, OString::number(TwipsToEMU(rBox.GetDistance(BOX_LINE_BOTTOM))));
+            m_rExport.SdrExporter().getBodyPrAttrList()->add(XML_lIns, OString::number(TwipsToEMU(rBox.GetDistance(BOX_LINE_LEFT))));
+            m_rExport.SdrExporter().getBodyPrAttrList()->add(XML_tIns, OString::number(TwipsToEMU(rBox.GetDistance(BOX_LINE_TOP))));
+            m_rExport.SdrExporter().getBodyPrAttrList()->add(XML_rIns, OString::number(TwipsToEMU(rBox.GetDistance(BOX_LINE_RIGHT))));
+            m_rExport.SdrExporter().getBodyPrAttrList()->add(XML_bIns, OString::number(TwipsToEMU(rBox.GetDistance(BOX_LINE_BOTTOM))));
             return;
         }
 
@@ -6282,7 +6151,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pSectionSpacingAttrList( NULL ),
       m_pParagraphSpacingAttrList( NULL ),
       m_pHyperlinkAttrList( NULL ),
-      m_pBodyPrAttrList( NULL ),
       m_pColorAttrList( NULL ),
       m_pBackgroundAttrList( NULL ),
       m_pFootnotesList( new ::docx::FootnotesList() ),
@@ -6300,7 +6168,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pTableWrt( NULL ),
       m_bParagraphOpened( false ),
       m_nColBreakStatus( COLBRK_NONE ),
-      m_bDMLTextFrameSyntax( false ),
       m_closeHyperlinkInThisRun( false ),
       m_closeHyperlinkInPreviousRun( false ),
       m_startedHyperlink( false ),
@@ -6335,7 +6202,6 @@ DocxAttributeOutput::~DocxAttributeOutput()
     delete m_pSectionSpacingAttrList, m_pSectionSpacingAttrList = NULL;
     delete m_pParagraphSpacingAttrList, m_pParagraphSpacingAttrList = NULL;
     delete m_pHyperlinkAttrList, m_pHyperlinkAttrList = NULL;
-    delete m_pBodyPrAttrList, m_pBodyPrAttrList = NULL;
     delete m_pColorAttrList, m_pColorAttrList = NULL;
     delete m_pBackgroundAttrList, m_pBackgroundAttrList = NULL;
 
