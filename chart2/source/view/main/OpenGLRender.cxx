@@ -932,7 +932,6 @@ OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
 {
     //TODO: moggi: use STL
     memset(&m_Bubble2DCircle, 0, sizeof(m_Bubble2DCircle));
-    memset(&m_TextInfo, 0, sizeof(TextInfo));
 
     m_iArbMultisampleFormat = 0;
 
@@ -1504,44 +1503,45 @@ int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color,
         }
     }
     aBitmap.ReleaseAccess(pRAcc);
-    m_TextInfo.x = (float)(aPos.X + aSize.Width / 2) / OPENGL_SCALE_VALUE;
-    m_TextInfo.y = (float)(aPos.Y + aSize.Height / 2) / OPENGL_SCALE_VALUE;
-    m_TextInfo.z = m_fZStep;
-    m_TextInfo.rotation = -(double)rotation * GL_PI / 18000.0f;
-    m_TextInfo.vertex[0] = (float)(-aSize.Width / 2) / OPENGL_SCALE_VALUE;
-    m_TextInfo.vertex[1] = (float)(-aSize.Height / 2) / OPENGL_SCALE_VALUE;
+    TextInfo aTextInfo;
+    aTextInfo.x = (float)(aPos.X + aSize.Width / 2) / OPENGL_SCALE_VALUE;
+    aTextInfo.y = (float)(aPos.Y + aSize.Height / 2) / OPENGL_SCALE_VALUE;
+    aTextInfo.z = m_fZStep;
+    aTextInfo.rotation = -(double)rotation * GL_PI / 18000.0f;
+    aTextInfo.vertex[0] = (float)(-aSize.Width / 2) / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[1] = (float)(-aSize.Height / 2) / OPENGL_SCALE_VALUE;
 
-    m_TextInfo.vertex[2] = (float)(aSize.Width / 2) / OPENGL_SCALE_VALUE;
-    m_TextInfo.vertex[3] = (float)(-aSize.Height / 2) / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[2] = (float)(aSize.Width / 2) / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[3] = (float)(-aSize.Height / 2) / OPENGL_SCALE_VALUE;
 
-    m_TextInfo.vertex[4] = (float)(aSize.Width / 2) / OPENGL_SCALE_VALUE;
-    m_TextInfo.vertex[5] = (float)(aSize.Height / 2) / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[4] = (float)(aSize.Width / 2) / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[5] = (float)(aSize.Height / 2) / OPENGL_SCALE_VALUE;
 
-    m_TextInfo.vertex[6] = (float)(-aSize.Width / 2) / OPENGL_SCALE_VALUE;
-    m_TextInfo.vertex[7] = (float)(aSize.Height / 2) / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[6] = (float)(-aSize.Width / 2) / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[7] = (float)(aSize.Height / 2) / OPENGL_SCALE_VALUE;
 
     //if has ratotion, we must re caculate the central pos
     if (!rtl::math::approxEqual(0, rotation))
     {
         //use left top
         double r = sqrt((double)(aSize.Width * aSize.Width + aSize.Height * aSize.Height)) / 2;
-        double sinOrgAngle =  m_TextInfo.vertex[1] / r / 2;
-        double cosOrgAngle = m_TextInfo.vertex[0] / r / 2;
-        double sinDiataAngle = sin(m_TextInfo.rotation);
-        double cosDiataAngle = cos(m_TextInfo.rotation);
+        double sinOrgAngle =  aTextInfo.vertex[1] / r / 2;
+        double cosOrgAngle = aTextInfo.vertex[0] / r / 2;
+        double sinDiataAngle = sin(aTextInfo.rotation);
+        double cosDiataAngle = cos(aTextInfo.rotation);
         double x = r * (cosOrgAngle * cosDiataAngle - sinOrgAngle * sinDiataAngle);
         double y = r * (sinOrgAngle * cosDiataAngle + cosOrgAngle * sinDiataAngle);
-        double diataX = x - m_TextInfo.vertex[0];
-        double diataY = y - m_TextInfo.vertex[1];
-        m_TextInfo.x = m_TextInfo.x - diataX;
-        m_TextInfo.y = m_TextInfo.y - diataY;
+        double diataX = x - aTextInfo.vertex[0];
+        double diataY = y - aTextInfo.vertex[1];
+        aTextInfo.x = aTextInfo.x - diataX;
+        aTextInfo.y = aTextInfo.y - diataY;
 
     }
 
     CHECK_GL_ERROR();
-    glGenTextures(1, &m_TextInfo.texture);
+    glGenTextures(1, &aTextInfo.texture);
     CHECK_GL_ERROR();
-    glBindTexture(GL_TEXTURE_2D, m_TextInfo.texture);
+    glBindTexture(GL_TEXTURE_2D, aTextInfo.texture);
     CHECK_GL_ERROR();
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
     CHECK_GL_ERROR();
@@ -1555,7 +1555,7 @@ int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color,
     CHECK_GL_ERROR();
     glBindTexture(GL_TEXTURE_2D, 0);
     CHECK_GL_ERROR();
-    m_TextInfoList.push_back(m_TextInfo);
+    m_TextInfoList.push_back(aTextInfo);
     return 0;
 }
 

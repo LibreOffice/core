@@ -277,7 +277,6 @@ private:
 
     std::list <RectanglePointList> m_RectangleShapePointList;
     // add for text
-    TextInfo m_TextInfo;
     std::list <TextInfo> m_TextInfoList;
     GLint m_TextProID;
     GLint m_TextMatrixID;
