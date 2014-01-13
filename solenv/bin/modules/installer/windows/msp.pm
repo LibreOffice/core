@@ -877,19 +877,14 @@ sub get_patchsequence
 
     my $packageversion = $allvariables->{'PACKAGEVERSION'};
 
-    if ( $packageversion =~ /^\s*(\d+)\.(\d+)\.(\d+)\s*$/ )
+    if ( $packageversion =~ /^\s*(\d+)\.(\d+)\.(\d+)\.(\d+)\s*$/ )
     {
         my $major = $1;
         my $minor = $2;
         my $micro = $3;
-        my $concat = 100 * $minor + $micro;
-        $packageversion = $major . "\." . $concat;
+        my $patch = $4;
+        $patchsequence = $major . "\." . $minor . "\." . $micro . "\." . $patch;
     }
-    my $vendornumber = 0;
-    if ( $allvariables->{'VENDORPATCHVERSION'} ) { $vendornumber = $allvariables->{'VENDORPATCHVERSION'}; }
-    $patchsequence = $packageversion . "\." . $installer::globals::buildid . "\." . $vendornumber;
-
-    if ( $allvariables->{'PATCHSEQUENCE'} ) { $patchsequence = $allvariables->{'PATCHSEQUENCE'}; }
 
     return $patchsequence;
 }
