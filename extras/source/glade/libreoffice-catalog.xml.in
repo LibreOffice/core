@@ -280,13 +280,13 @@
     <glade-widget-class title="LicenseView" name="deploymentgui-LicenseView"
                         generic-name="LicenseView" parent="GtkTextView"
                         icon-name="widget-gtk-textview"/>
-    <glade-widget-class title="ValueSet" name="svtlo-ValueSet"
+    <glade-widget-class title="SvtValueSet" name="svtlo-ValueSet"
                         generic-name="Set of Value Options" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="ValueSet" name="svxcorelo-SvxColorValueSet"
+    <glade-widget-class title="SvxColorValueSet" name="svxcorelo-SvxColorValueSet"
                         generic-name="Set of Value Options" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="ValueSet" name="swuilo-ColumnValueSet"
+    <glade-widget-class title="SwColumnValueSet" name="swuilo-ColumnValueSet"
                         generic-name="Set of Value Options" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="TableValueSet" name="sdlo-TableValueSet"
