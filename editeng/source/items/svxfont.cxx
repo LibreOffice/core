@@ -22,7 +22,6 @@
 #include <vcl/print.hxx>
 #include <tools/gen.hxx>
 #include <tools/poly.hxx>
-#include <tools/string.hxx>
 #include <unotools/charclass.hxx>
 #include <editeng/unolingu.hxx>
 #include <com/sun/star/i18n/KCharacterType.hpp>
@@ -166,12 +165,12 @@ class SvxDoCapitals
 protected:
     OutputDevice *pOut;
     const OUString &rTxt;
-    const xub_StrLen nIdx;
-    const xub_StrLen nLen;
+    const sal_Int32 nIdx;
+    const sal_Int32 nLen;
 
 public:
     SvxDoCapitals( OutputDevice *_pOut, const OUString &_rTxt,
-                   const xub_StrLen _nIdx, const xub_StrLen _nLen )
+                   const sal_Int32 _nIdx, const sal_Int32 _nLen )
         : pOut(_pOut), rTxt(_rTxt), nIdx(_nIdx), nLen(_nLen)
         { }
 
@@ -180,13 +179,13 @@ public:
     virtual void DoSpace( const sal_Bool bDraw );
     virtual void SetSpace();
     virtual void Do( const OUString &rTxt,
-                     const xub_StrLen nIdx, const xub_StrLen nLen,
+                     const sal_Int32 nIdx, const sal_Int32 nLen,
                      const sal_Bool bUpper ) = 0;
 
-    inline OutputDevice *GetOut() { return pOut; }
-    inline const OUString &GetTxt() const { return rTxt; }
-    xub_StrLen GetIdx() const { return nIdx; }
-    xub_StrLen GetLen() const { return nLen; }
+    OutputDevice *GetOut() { return pOut; }
+    const OUString &GetTxt() const { return rTxt; }
+    sal_Int32 GetIdx() const { return nIdx; }
+    sal_Int32 GetLen() const { return nLen; }
 };
 
 void SvxDoCapitals::DoSpace( const sal_Bool /*bDraw*/ ) { }
@@ -202,13 +201,13 @@ void SvxDoCapitals::SetSpace() { }
 void SvxFont::DoOnCapitals(SvxDoCapitals &rDo) const
 {
     const OUString &rTxt = rDo.GetTxt();
-    const xub_StrLen nIdx = rDo.GetIdx();
+    const sal_Int32 nIdx = rDo.GetIdx();
     const sal_Int32 nLen = rDo.GetLen();
 
     const OUString aTxt( CalcCaseMap( rTxt ) );
-    const sal_uInt16 nTxtLen = std::min( rTxt.getLength(), nLen );
-    sal_uInt16 nPos = 0;
-    sal_uInt16 nOldPos = nPos;
+    const sal_Int32 nTxtLen = std::min( rTxt.getLength(), nLen );
+    sal_Int32 nPos = 0;
+    sal_Int32 nOldPos = nPos;
 
     // #108210#
     // Test if string length differ between original and CaseMapped
@@ -591,8 +590,8 @@ protected:
     short       nKern;
 public:
       SvxDoGetCapitalSize( SvxFont *_pFnt, const OutputDevice *_pOut,
-                           const OUString &_rTxt, const xub_StrLen _nIdx,
-                           const xub_StrLen _nLen, const short _nKrn )
+                           const OUString &_rTxt, const sal_Int32 _nIdx,
+                           const sal_Int32 _nLen, const short _nKrn )
             : SvxDoCapitals( (OutputDevice*)_pOut, _rTxt, _nIdx, _nLen ),
               pFont( _pFnt ),
               nKern( _nKrn )
@@ -600,14 +599,14 @@ public:
 
     virtual ~SvxDoGetCapitalSize() {}
 
-    virtual void Do( const OUString &rTxt, const xub_StrLen nIdx,
-                     const xub_StrLen nLen, const sal_Bool bUpper );
+    virtual void Do( const OUString &rTxt, const sal_Int32 nIdx,
+                     const sal_Int32 nLen, const sal_Bool bUpper );
 
-    inline const Size &GetSize() const { return aTxtSize; };
+    const Size &GetSize() const { return aTxtSize; };
 };
 
-void SvxDoGetCapitalSize::Do( const OUString &_rTxt, const xub_StrLen _nIdx,
-                              const xub_StrLen _nLen, const sal_Bool bUpper )
+void SvxDoGetCapitalSize::Do( const OUString &_rTxt, const sal_Int32 _nIdx,
+                              const sal_Int32 _nLen, const sal_Bool bUpper )
 {
     Size aPartSize;
     if ( !bUpper )
@@ -656,7 +655,7 @@ protected:
     short nKern;
 public:
     SvxDoDrawCapital( SvxFont *pFnt, OutputDevice *_pOut, const OUString &_rTxt,
-                      const xub_StrLen _nIdx, const xub_StrLen _nLen,
+                      const sal_Int32 _nIdx, const sal_Int32 _nLen,
                       const Point &rPos, const short nKrn )
         : SvxDoCapitals( _pOut, _rTxt, _nIdx, _nLen ),
           pFont( pFnt ),
@@ -664,18 +663,17 @@ public:
           aSpacePos( rPos ),
           nKern( nKrn )
         { }
-    virtual ~SvxDoDrawCapital() {}
     virtual void DoSpace( const sal_Bool bDraw );
     virtual void SetSpace();
-    virtual void Do( const OUString &rTxt, const xub_StrLen nIdx,
-                     const xub_StrLen nLen, const sal_Bool bUpper );
+    virtual void Do( const OUString &rTxt, const sal_Int32 nIdx,
+                     const sal_Int32 nLen, const sal_Bool bUpper );
 };
 
 void SvxDoDrawCapital::DoSpace( const sal_Bool bDraw )
 {
     if ( bDraw || pFont->IsWordLineMode() )
     {
-        sal_uInt16 nDiff = (sal_uInt16)(aPos.X() - aSpacePos.X());
+        sal_uLong nDiff = (sal_uLong)(aPos.X() - aSpacePos.X());
         if ( nDiff )
         {
             sal_Bool bWordWise = pFont->IsWordLineMode();
@@ -697,8 +695,8 @@ void SvxDoDrawCapital::SetSpace()
         aSpacePos.X() = aPos.X();
 }
 
-void SvxDoDrawCapital::Do( const OUString &_rTxt, const xub_StrLen _nIdx,
-                           const xub_StrLen _nLen, const sal_Bool bUpper)
+void SvxDoDrawCapital::Do( const OUString &_rTxt, const sal_Int32 _nIdx,
+                           const sal_Int32 _nLen, const sal_Bool bUpper)
 {
     sal_uInt8 nProp = 0;
     Size aPartSize;
