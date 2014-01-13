@@ -65,10 +65,12 @@ public:
 class AddressWalkerWriter : public AddressWalker
 {
 public:
-    ScDocShell* mpDocShell;
-    ScDocument* mpDocument;
+    ScDocShell*                         mpDocShell;
+    ScDocument*                         mpDocument;
+    formula::FormulaGrammar::Grammar    meGrammar;
 
-    AddressWalkerWriter(ScAddress aInitialAddress, ScDocShell* pDocShell, ScDocument* pDocument);
+    AddressWalkerWriter(ScAddress aInitialAddress, ScDocShell* pDocShell, ScDocument* pDocument,
+            formula::FormulaGrammar::Grammar eGrammar );
 
     void writeFormula(OUString aFormula);
     void writeString(OUString aString);
