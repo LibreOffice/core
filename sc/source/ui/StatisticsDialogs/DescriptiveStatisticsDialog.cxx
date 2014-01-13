@@ -83,7 +83,8 @@ sal_Int16 ScDescriptiveStatisticsDialog::GetUndoNameId()
 
 ScRange ScDescriptiveStatisticsDialog::ApplyOutput(ScDocShell* pDocShell)
 {
-    AddressWalkerWriter aOutput(mOutputAddress, pDocShell, mDocument);
+    AddressWalkerWriter aOutput(mOutputAddress, pDocShell, mDocument,
+            formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
     FormulaTemplate aTemplate(mDocument, mAddressDetails);
 
     boost::scoped_ptr<DataRangeIterator> pIterator;
