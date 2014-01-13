@@ -613,8 +613,8 @@ void SwTxtNode::RstTxtAttr(
                     }
                 }
             }
-            ++i;
         }
+        ++i;
     }
 
     TryDeleteSwpHints();
