@@ -8257,6 +8257,9 @@ if test "$ENABLE_MARIADBC" = "TRUE"; then
         fi
         AC_MSG_CHECKING([for MariaDB Client library])
         MARIADB_CFLAGS=`$MARIADBCONFIG --cflags`
+        if test "$COM_GCC_IS_CLANG" = TRUE; then
+            MARIADB_CFLAGS=$(printf '%s' "$MARIADB_CFLAGS" | sed -e s/-fstack-protector-strong//)
+        fi
         MARIADB_LIBS=`$MARIADBCONFIG --libs_r`
         AC_MSG_RESULT([includes '$MARIADB_CFLAGS', libraries '$MARIADB_LIBS'])
         AC_MSG_CHECKING([whether to bundle the MySQL/MariaDB client library])
