@@ -1088,7 +1088,9 @@ SdXImpressDocument::createInstanceWithArguments(
     throw (css::uno::Exception, css::uno::RuntimeException)
 {
     OUString arg;
-    if (ServiceSpecifier == "com.sun.star.presentation.MediaShape"
+    if ((ServiceSpecifier == "com.sun.star.drawing.GraphicObjectShape"
+         || ServiceSpecifier == "com.sun.star.drawing.MediaShape"
+         || ServiceSpecifier == "com.sun.star.presentation.MediaShape")
         && Arguments.getLength() == 1 && (Arguments[0] >>= arg))
     {
         return create(ServiceSpecifier, arg);
