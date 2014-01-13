@@ -423,10 +423,10 @@ class VCL_DLLPUBLIC MetaTextAction : public MetaAction
 {
 private:
 
-    Point               maPt;
-    OUString       maStr;
-    sal_uInt16          mnIndex;
-    sal_uInt16          mnLen;
+    Point           maPt;
+    OUString        maStr;
+    sal_Int32       mnIndex;
+    sal_Int32       mnLen;
 
     virtual sal_Bool    Compare( const MetaAction& ) const;
 
@@ -434,26 +434,26 @@ public:
                         DECL_META_ACTION( Text, META_TEXT_ACTION )
 
     MetaTextAction( const Point& rPt, const OUString& rStr,
-                    sal_uInt16 nIndex, sal_uInt16 nLen );
+                    sal_Int32 nIndex, sal_Int32 nLen );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void    Move( long nHorzMove, long nVertMove );
+    virtual void    Scale( double fScaleX, double fScaleY );
 
-    const Point&        GetPoint() const { return maPt; }
+    const Point&    GetPoint() const { return maPt; }
     const OUString& GetText() const { return maStr; }
-    sal_uInt16              GetIndex() const { return mnIndex; }
-    sal_uInt16              GetLen() const { return mnLen; }
+    sal_Int32       GetIndex() const { return mnIndex; }
+    sal_Int32       GetLen() const { return mnLen; }
 };
 
 class VCL_DLLPUBLIC MetaTextArrayAction : public MetaAction
 {
 private:
 
-    Point               maStartPt;
-    OUString       maStr;
-    sal_Int32*          mpDXAry;
-    sal_uInt16          mnIndex;
-    sal_uInt16          mnLen;
+    Point       maStartPt;
+    OUString    maStr;
+    sal_Int32*  mpDXAry;
+    sal_Int32   mnIndex;
+    sal_Int32   mnLen;
 
     virtual sal_Bool    Compare( const MetaAction& ) const;
 
@@ -464,35 +464,35 @@ public:
                         MetaTextArrayAction();
                         MetaTextArrayAction( const MetaTextArrayAction& rAction );
     MetaTextArrayAction( const Point& rStartPt, const OUString& rStr,
-                         const sal_Int32* pDXAry, sal_uInt16 nIndex,
-                         sal_uInt16 nLen );
+                         const sal_Int32* pDXAry, sal_Int32 nIndex,
+                         sal_Int32 nLen );
 
     virtual void        Execute( OutputDevice* pOut );
 
     virtual MetaAction* Clone();
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void    Move( long nHorzMove, long nVertMove );
+    virtual void    Scale( double fScaleX, double fScaleY );
 
-    virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData );
-    virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData );
+    virtual void    Write( SvStream& rOStm, ImplMetaWriteData* pData );
+    virtual void    Read( SvStream& rIStm, ImplMetaReadData* pData );
 
-    const Point&        GetPoint() const { return maStartPt; }
+    const Point&    GetPoint() const { return maStartPt; }
     const OUString& GetText() const { return maStr; }
-    sal_uInt16              GetIndex() const { return mnIndex; }
-    sal_uInt16              GetLen() const { return mnLen; }
-    sal_Int32*          GetDXArray() const { return mpDXAry; }
+    sal_Int32       GetIndex() const { return mnIndex; }
+    sal_Int32       GetLen() const { return mnLen; }
+    sal_Int32*      GetDXArray() const { return mpDXAry; }
 };
 
 class VCL_DLLPUBLIC MetaStretchTextAction : public MetaAction
 {
 private:
 
-    Point               maPt;
-    OUString       maStr;
-    sal_uInt32          mnWidth;
-    sal_uInt16          mnIndex;
-    sal_uInt16          mnLen;
+    Point       maPt;
+    OUString    maStr;
+    sal_uInt32  mnWidth;
+    sal_Int32   mnIndex;
+    sal_Int32   mnLen;
 
     virtual sal_Bool    Compare( const MetaAction& ) const;
 
@@ -501,16 +501,16 @@ public:
 
     MetaStretchTextAction( const Point& rPt, sal_uInt32 nWidth,
                            const OUString& rStr,
-                           sal_uInt16 nIndex, sal_uInt16 nLen );
+                           sal_Int32 nIndex, sal_Int32 nLen );
 
-    virtual void        Move( long nHorzMove, long nVertMove );
-    virtual void        Scale( double fScaleX, double fScaleY );
+    virtual void    Move( long nHorzMove, long nVertMove );
+    virtual void    Scale( double fScaleX, double fScaleY );
 
-    const Point&        GetPoint() const { return maPt; }
+    const Point&    GetPoint() const { return maPt; }
     const OUString& GetText() const { return maStr; }
-    sal_uInt32          GetWidth() const { return mnWidth; }
-    sal_uInt16              GetIndex() const { return mnIndex; }
-    sal_uInt16              GetLen() const { return mnLen; }
+    sal_uInt32      GetWidth() const { return mnWidth; }
+    sal_Int32       GetIndex() const { return mnIndex; }
+    sal_Int32       GetLen() const { return mnLen; }
 };
 
 class VCL_DLLPUBLIC MetaTextRectAction : public MetaAction

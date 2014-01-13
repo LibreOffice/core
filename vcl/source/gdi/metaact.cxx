@@ -1188,7 +1188,7 @@ IMPL_META_ACTION( Text, META_TEXT_ACTION )
 // ------------------------------------------------------------------------
 
 MetaTextAction::MetaTextAction( const Point& rPt, const OUString& rStr,
-                                sal_uInt16 nIndex, sal_uInt16 nLen ) :
+                                sal_Int32 nIndex, sal_Int32 nLen ) :
     MetaAction  ( META_TEXT_ACTION ),
     maPt        ( rPt ),
     maStr       ( rStr ),
@@ -1242,10 +1242,10 @@ sal_Bool MetaTextAction::Compare( const MetaAction& rMetaAction ) const
 void MetaTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 2, pData );
-    rOStm   << maPt;
+    rOStm  << maPt;
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
-    rOStm  .WriteUInt16( mnIndex );
-    rOStm  .WriteUInt16( mnLen );
+    rOStm.WriteInt32(mnIndex);
+    rOStm.WriteInt32(mnLen);
 
     write_lenPrefixed_uInt16s_FromOUString<sal_uInt16>(rOStm, maStr); // version 2
 }
@@ -1299,13 +1299,13 @@ MetaTextArrayAction::MetaTextArrayAction( const MetaTextArrayAction& rAction ) :
 MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
                                           const OUString& rStr,
                                           const sal_Int32* pDXAry,
-                                          sal_uInt16 nIndex,
-                                          sal_uInt16 nLen ) :
+                                          sal_Int32 nIndex,
+                                          sal_Int32 nLen ) :
     MetaAction  ( META_TEXTARRAY_ACTION ),
     maStartPt   ( rStartPt ),
     maStr       ( rStr ),
     mnIndex     ( nIndex ),
-    mnLen       ( ( nLen == STRING_LEN ) ? rStr.getLength() : nLen )
+    mnLen       ( nLen )
 {
     const sal_uLong nAryLen = pDXAry ? mnLen : 0;
 
@@ -1376,16 +1376,16 @@ sal_Bool MetaTextArrayAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaTextArrayAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    const sal_uInt32 nAryLen = mpDXAry ? mnLen : 0;
+    const sal_Int32 nAryLen = mpDXAry ? mnLen : 0;
 
     WRITE_BASE_COMPAT( rOStm, 2, pData );
-    rOStm   << maStartPt;
+    rOStm  << maStartPt;
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
-    rOStm  .WriteUInt16( mnIndex );
-    rOStm  .WriteUInt16( mnLen );
-    rOStm  .WriteUInt32( nAryLen );
+    rOStm.WriteInt32(mnIndex);
+    rOStm.WriteInt32(mnLen);
+    rOStm.WriteInt32(nAryLen);
 
-    for( sal_uLong i = 0UL; i < nAryLen; i++ )
+    for (sal_Int32 i = 0; i < nAryLen; ++i)
         rOStm.WriteInt32( mpDXAry[ i ] );
 
     write_lenPrefixed_uInt16s_FromOUString<sal_uInt16>(rOStm, maStr); // version 2
@@ -1395,7 +1395,7 @@ void MetaTextArrayAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
-    sal_uInt32 nAryLen;
+    sal_Int32 nAryLen;
 
     delete[] mpDXAry;
 
@@ -1421,8 +1421,8 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
             mpDXAry = new (std::nothrow)sal_Int32[ mnLen ];
             if ( mpDXAry )
             {
-                   sal_uLong i;
-                for( i = 0UL; i < nAryLen; i++ )
+                sal_Int32 i;
+                for( i = 0; i < nAryLen; i++ )
                     rIStm >> mpDXAry[ i ];
 
                 // #106172# setup remainder
@@ -1459,7 +1459,7 @@ IMPL_META_ACTION( StretchText, META_STRETCHTEXT_ACTION )
 
 MetaStretchTextAction::MetaStretchTextAction( const Point& rPt, sal_uInt32 nWidth,
                                               const OUString& rStr,
-                                              sal_uInt16 nIndex, sal_uInt16 nLen ) :
+                                              sal_Int32 nIndex, sal_Int32 nLen ) :
     MetaAction  ( META_STRETCHTEXT_ACTION ),
     maPt        ( rPt ),
     maStr       ( rStr ),
@@ -1516,11 +1516,11 @@ sal_Bool MetaStretchTextAction::Compare( const MetaAction& rMetaAction ) const
 void MetaStretchTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 2, pData );
-    rOStm   << maPt;
+    rOStm  << maPt;
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
-    rOStm  .WriteUInt32( mnWidth );
-    rOStm  .WriteUInt16( mnIndex );
-    rOStm  .WriteUInt16( mnLen );
+    rOStm.WriteUInt32( mnWidth );
+    rOStm.WriteInt32( mnIndex );
+    rOStm.WriteInt32( mnLen );
 
     write_lenPrefixed_uInt16s_FromOUString<sal_uInt16>(rOStm, maStr); // version 2
 }
@@ -1599,9 +1599,9 @@ sal_Bool MetaTextRectAction::Compare( const MetaAction& rMetaAction ) const
 void MetaTextRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 2, pData );
-    rOStm   << maRect;
+    rOStm  << maRect;
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
-    rOStm  .WriteUInt16( mnStyle );
+    rOStm.WriteUInt16( mnStyle );
 
     write_lenPrefixed_uInt16s_FromOUString<sal_uInt16>(rOStm, maStr); // version 2
 }

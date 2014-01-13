@@ -161,7 +161,7 @@ void ImplWritePopAction( SvStream& rOStm )
     rOStm.WriteInt32( (sal_Int32) 4 );
 }
 
-void ImplWriteLineColor( SvStream& rOStm, const Color& rColor, sal_Int16 nStyle, sal_Int32 nWidth = 0L )
+void ImplWriteLineColor( SvStream& rOStm, const Color& rColor, sal_Int16 nStyle, sal_Int32 nWidth = 0 )
 {
     if( rColor.GetTransparency() > 127 )
         nStyle = 0;
@@ -497,7 +497,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
         rMtf.SetPrefMapMode( aMapMode );
         size_t nLastPolygonAction(0);
 
-        for( sal_Int32 i = 0L; i < nActions; i++ )
+        for (sal_Int32 i = 0; i < nActions; ++i)
         {
             rIStm >> nType;
             sal_Int32 nActBegin = rIStm.Tell();
@@ -828,7 +828,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     sal_Int32       nIndex, nLen;
 
                     rIStm >> aPt >> nIndex >> nLen >> nTmp;
-                    if ( nTmp && ( static_cast< sal_uInt32 >( nTmp ) < ( SAL_MAX_UINT16 - 1 ) ) )
+                    if (nTmp > 0)
                     {
                         OString aByteStr = read_uInt8s_ToOString(rIStm, nTmp);
                         sal_uInt8 nTerminator = 0;
@@ -838,7 +838,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                         OUString aStr(OStringToOUString(aByteStr, eActualCharSet));
                         if ( nUnicodeCommentActionNumber == i )
                             ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
-                        rMtf.AddAction( new MetaTextAction( aPt, aStr, (sal_uInt16) nIndex, (sal_uInt16) nLen ) );
+                        rMtf.AddAction( new MetaTextAction( aPt, aStr, nIndex, nLen ) );
                     }
                     rIStm.Seek( nActBegin + nActionSize );
                 }
@@ -850,7 +850,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     sal_Int32   nIndex, nLen, nAryLen;
 
                     rIStm >> aPt >> nIndex >> nLen >> nTmp >> nAryLen;
-                    if ( nTmp && ( static_cast< sal_uInt32 >( nTmp ) < ( SAL_MAX_UINT16 - 1 ) ) )
+                    if (nTmp > 0)
                     {
                         OString aByteStr = read_uInt8s_ToOString(rIStm, nTmp);
                         sal_uInt8 nTerminator = 0;
@@ -859,13 +859,13 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                         OUString aStr(OStringToOUString(aByteStr, eActualCharSet));
 
-                        if( nAryLen > 0L )
+                        if (nAryLen > 0)
                         {
                             sal_Int32 nStrLen( aStr.getLength() );
 
                             pDXAry = new sal_Int32[ std::max( nAryLen, nStrLen ) ];
 
-                            for( long j = 0L; j < nAryLen; j++ )
+                            for (sal_Int32 j = 0; j < nAryLen; ++j)
                                 rIStm >> nTmp, pDXAry[ j ] = nTmp;
 
                             // #106172# Add last DX array elem, if missing
@@ -899,10 +899,9 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                         }
                         if ( nUnicodeCommentActionNumber == i )
                             ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
-                        rMtf.AddAction( new MetaTextArrayAction( aPt, aStr, pDXAry, (sal_uInt16) nIndex, (sal_uInt16) nLen ) );
+                        rMtf.AddAction( new MetaTextArrayAction( aPt, aStr, pDXAry, nIndex, nLen ) );
 
-                        if( pDXAry )
-                            delete[] pDXAry;
+                        delete[] pDXAry;
                     }
                     rIStm.Seek( nActBegin + nActionSize );
                 }
@@ -913,7 +912,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     sal_Int32       nIndex, nLen, nWidth;
 
                     rIStm >> aPt >> nIndex >> nLen >> nTmp >> nWidth;
-                    if ( nTmp && ( static_cast< sal_uInt32 >( nTmp ) < ( SAL_MAX_INT16 - 1 ) ) )
+                    if (nTmp > 0)
                     {
                         OString aByteStr = read_uInt8s_ToOString(rIStm, nTmp);
                         sal_uInt8 nTerminator = 0;
@@ -923,7 +922,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                         OUString aStr(OStringToOUString(aByteStr, eActualCharSet));
                         if ( nUnicodeCommentActionNumber == i )
                             ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
-                        rMtf.AddAction( new MetaStretchTextAction( aPt, nWidth, aStr, (sal_uInt16) nIndex, (sal_uInt16) nLen ) );
+                        rMtf.AddAction( new MetaStretchTextAction( aPt, nWidth, aStr, nIndex, nLen ) );
                     }
                     rIStm.Seek( nActBegin + nActionSize );
                 }
@@ -1686,17 +1685,17 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 OUString        aUniText( pAct->GetText() );
                 OString aText(OUStringToOString(aUniText,
                     rActualCharSet));
-                const sal_uLong nStrLen = aText.getLength();
+                const sal_Int32 nStrLen = aText.getLength();
 
                 if ( ImplWriteUnicodeComment( rOStm, aUniText ) )
                     nCount++;
 
                 rOStm.WriteInt16( (sal_Int16) GDI_TEXT_ACTION );
-                rOStm.WriteInt32( (sal_Int32) ( 24 + ( nStrLen + 1 ) ) );
+                rOStm.WriteInt32( ( 24 + ( nStrLen + 1 ) ) );
                 rOStm << pAct->GetPoint();
-                rOStm.WriteInt32( (sal_Int32) pAct->GetIndex() );
-                rOStm.WriteInt32( (sal_Int32) pAct->GetLen() );
-                rOStm.WriteInt32( (sal_Int32) nStrLen );
+                rOStm.WriteInt32( pAct->GetIndex() );
+                rOStm.WriteInt32( pAct->GetLen() );
+                rOStm.WriteInt32( nStrLen );
                 rOStm.Write( aText.getStr(), nStrLen + 1 );
                 nCount++;
             }
@@ -1708,9 +1707,9 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 OString aText(OUStringToOString(pAct->GetText(),
                     rActualCharSet));
                 OUString                aUniText = pAct->GetText().copy( pAct->GetIndex(), std::min<sal_Int32>(pAct->GetText().getLength() - pAct->GetIndex(), pAct->GetLen()) );
-                sal_uLong               nAryLen;
-                sal_uLong               nLen = pAct->GetLen();
-                const sal_uLong         nTextLen = aText.getLength();
+                sal_Int32               nAryLen;
+                sal_Int32               nLen = pAct->GetLen();
+                const sal_Int32         nTextLen = aText.getLength();
                 sal_Int32*              pDXArray = pAct->GetDXArray();
 
                 if ( ImplWriteUnicodeComment( rOStm, aUniText ) )
@@ -1721,7 +1720,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                     if( pAct->GetIndex() <= nTextLen )
                         nLen = nTextLen - pAct->GetIndex();
                     else
-                        nLen = 0UL;
+                        nLen = 0;
                 }
 
                 if( !pDXArray || !nLen )
@@ -1730,16 +1729,16 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                     nAryLen = nLen; // #105987# Write out all of DX array
 
                 rOStm.WriteInt16( (sal_Int16) GDI_TEXTARRAY_ACTION );
-                rOStm.WriteInt32( (sal_Int32) ( 28 + ( nLen + 1 ) + ( nAryLen * 4 ) ) );
+                rOStm.WriteInt32( ( 28 + ( nLen + 1 ) + ( nAryLen * 4 ) ) );
                 rOStm << pAct->GetPoint();
-                rOStm.WriteInt32( (sal_Int32) 0 );
-                rOStm.WriteInt32( (sal_Int32) nLen );
-                rOStm.WriteInt32( (sal_Int32) nLen );
-                rOStm.WriteInt32( (sal_Int32) nAryLen );
+                rOStm.WriteInt32( 0 );
+                rOStm.WriteInt32( nLen );
+                rOStm.WriteInt32( nLen );
+                rOStm.WriteInt32( nAryLen );
                 rOStm.Write( aText.getStr()+pAct->GetIndex(), nLen + 1 );
 
-                for( sal_uLong n = 0UL ; n < nAryLen; n++ )
-                    rOStm.WriteInt32( (sal_Int32) pDXArray[ n ] );
+                for (sal_Int32 n = 0; n < nAryLen; ++n)
+                    rOStm.WriteInt32( pDXArray[ n ] );
 
                 nCount++;
             }
@@ -1751,17 +1750,17 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 OUString                aUniText( pAct->GetText() );
                 OString aText(OUStringToOString(aUniText,
                     rActualCharSet));
-                const sal_uLong nStrLen = aText.getLength();
+                const sal_Int32         nStrLen = aText.getLength();
 
                 if ( ImplWriteUnicodeComment( rOStm, aUniText ) )
                     nCount++;
 
                 rOStm.WriteInt16( (sal_Int16) GDI_STRETCHTEXT_ACTION );
-                rOStm.WriteInt32( (sal_Int32) ( 28 + ( nStrLen + 1 ) ) );
+                rOStm.WriteInt32( ( 28 + ( nStrLen + 1 ) ) );
                 rOStm << pAct->GetPoint();
-                rOStm.WriteInt32( (sal_Int32) pAct->GetIndex() );
-                rOStm.WriteInt32( (sal_Int32) pAct->GetLen() );
-                rOStm.WriteInt32( (sal_Int32) nStrLen );
+                rOStm.WriteInt32( pAct->GetIndex() );
+                rOStm.WriteInt32( pAct->GetLen() );
+                rOStm.WriteInt32( nStrLen );
                 rOStm.WriteInt32( (sal_Int32) pAct->GetWidth() );
                 rOStm.Write( aText.getStr(), nStrLen + 1 );
                 nCount++;
