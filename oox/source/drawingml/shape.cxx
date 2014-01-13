@@ -621,7 +621,7 @@ Reference< XShape > Shape::createAndInsert(
         {
             if (aServiceName == "com.sun.star.text.TextFrame")
             {
-                if (mpCustomShapePropertiesPtr != NULL && mpCustomShapePropertiesPtr->getShapeTypeOverride())
+                if (mpCustomShapePropertiesPtr && mpCustomShapePropertiesPtr->getShapeTypeOverride())
                 {
                     uno::Reference<beans::XPropertySet> propertySet (mxShape, uno::UNO_QUERY);
                     uno::Sequence<beans::PropertyValue> aGrabBag;
