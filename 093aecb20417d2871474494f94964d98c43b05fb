@@ -16,6 +16,23 @@
       "revId": "093aecb20417d2871474494f94964d98c43b05fb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_b5d9aa85",
+        "filename": "sw/source/ui/inc/toxmgr.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-13T14:51:10Z",
+      "side": 1,
+      "message": "OUString is already copy-on-write, so no need have this as a pointer.",
+      "revId": "093aecb20417d2871474494f94964d98c43b05fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
