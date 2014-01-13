@@ -7830,7 +7830,7 @@ void PDFWriterImpl::drawEmphasisMark( long nX, long nY,
     }
 }
 
-void PDFWriterImpl::drawText( const Point& rPos, const OUString& rText, xub_StrLen nIndex, xub_StrLen nLen, bool bTextLines )
+void PDFWriterImpl::drawText( const Point& rPos, const OUString& rText, sal_Int32 nIndex, sal_Int32 nLen, bool bTextLines )
 {
     MARK( "drawText" );
 
@@ -7846,7 +7846,7 @@ void PDFWriterImpl::drawText( const Point& rPos, const OUString& rText, xub_StrL
     }
 }
 
-void PDFWriterImpl::drawTextArray( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray, xub_StrLen nIndex, xub_StrLen nLen, bool bTextLines )
+void PDFWriterImpl::drawTextArray( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray, sal_Int32 nIndex, sal_Int32 nLen, bool bTextLines )
 {
     MARK( "drawText with array" );
 
@@ -7862,7 +7862,7 @@ void PDFWriterImpl::drawTextArray( const Point& rPos, const OUString& rText, con
     }
 }
 
-void PDFWriterImpl::drawStretchText( const Point& rPos, sal_uLong nWidth, const OUString& rText, xub_StrLen nIndex, xub_StrLen nLen, bool bTextLines )
+void PDFWriterImpl::drawStretchText( const Point& rPos, sal_uLong nWidth, const OUString& rText, sal_Int32 nIndex, sal_Int32 nLen, bool bTextLines )
 {
     MARK( "drawStretchText" );
 
@@ -7914,15 +7914,15 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const OUString& rOrigStr, 
         OUString           aLastLine;
         ImplMultiTextLineInfo   aMultiLineInfo;
         ImplTextLineInfo*       pLineInfo;
-        xub_StrLen              i;
-        xub_StrLen              nLines;
-        xub_StrLen              nFormatLines;
+        sal_Int32               i;
+        sal_Int32               nLines;
+        sal_Int32               nFormatLines;
 
         if ( nTextHeight )
         {
             ::vcl::DefaultTextLayout aLayout( *m_pReferenceDevice );
             OutputDevice::ImplGetTextLines( aMultiLineInfo, nWidth, aStr, nStyle, aLayout );
-            nLines = (xub_StrLen)(nHeight/nTextHeight);
+            nLines = nHeight/nTextHeight;
             nFormatLines = aMultiLineInfo.Count();
             if ( !nLines )
                 nLines = 1;
@@ -7957,8 +7957,8 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const OUString& rOrigStr, 
                     aPos.X() += nWidth-pLineInfo->GetWidth();
                 else if ( nStyle & TEXT_DRAW_CENTER )
                     aPos.X() += (nWidth-pLineInfo->GetWidth())/2;
-                xub_StrLen nIndex   = pLineInfo->GetIndex();
-                xub_StrLen nLineLen = pLineInfo->GetLen();
+                sal_Int32 nIndex = pLineInfo->GetIndex();
+                sal_Int32 nLineLen = pLineInfo->GetLen();
                 drawText( aPos, aStr, nIndex, nLineLen, bTextLines );
                 // mnemonics should not appear in documents,
                 // if the need arises, put them in here

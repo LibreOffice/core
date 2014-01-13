@@ -771,12 +771,12 @@ The following structure describes the permissions used in PDF security
                                       FontUnderline eOverline,
                                       sal_Bool bUnderlineAbove = sal_False );
     void                DrawTextArray( const Point& rStartPt, const OUString& rStr,
-                                       const sal_Int32* pDXAry = NULL,
-                                       xub_StrLen nIndex = 0,
-                                       xub_StrLen nLen = STRING_LEN );
+                                       const sal_Int32* pDXAry,
+                                       sal_Int32 nIndex,
+                                       sal_Int32 nLen );
     void                DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
                                          const OUString& rStr,
-                                         xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN );
+                                         sal_Int32 nIndex, sal_Int32 nLen );
     void                DrawText( const Rectangle& rRect,
                                   const OUString& rStr, sal_uInt16 nStyle = 0 );
 

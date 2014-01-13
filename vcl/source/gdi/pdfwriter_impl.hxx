@@ -1195,10 +1195,10 @@ public:
     }
 
     /* actual drawing functions */
-    void drawText( const Point& rPos, const OUString& rText, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN, bool bTextLines = true );
-    void drawTextArray( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray = NULL, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN, bool bTextLines = true );
+    void drawText( const Point& rPos, const OUString& rText, sal_Int32 nIndex, sal_Int32 nLen, bool bTextLines = true );
+    void drawTextArray( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray, sal_Int32 nIndex, sal_Int32 nLen, bool bTextLines = true );
     void drawStretchText( const Point& rPos, sal_uLong nWidth, const OUString& rText,
-                          xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
+                          sal_Int32 nIndex, sal_Int32 nLen,
                           bool bTextLines = true  );
     void drawText( const Rectangle& rRect, const OUString& rOrigStr, sal_uInt16 nStyle, bool bTextLines = true  );
     void drawTextLine( const Point& rPos, long nWidth, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, bool bUnderlineAbove );

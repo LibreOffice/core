@@ -65,7 +65,7 @@ void PDFWriter::SetFont( const Font& rFont )
 
 void PDFWriter::DrawText( const Point& rPos, const OUString& rText )
 {
-    pImplementation->drawText( rPos, rText );
+    pImplementation->drawText( rPos, rText, 0, rText.getLength() );
 }
 
 void PDFWriter::DrawTextLine(
@@ -83,8 +83,8 @@ void PDFWriter::DrawTextArray(
                               const Point& rStartPt,
                               const OUString& rStr,
                               const sal_Int32* pDXAry,
-                              xub_StrLen nIndex,
-                              xub_StrLen nLen )
+                              sal_Int32 nIndex,
+                              sal_Int32 nLen )
 {
     pImplementation->drawTextArray( rStartPt, rStr, pDXAry, nIndex, nLen );
 }
@@ -93,8 +93,8 @@ void PDFWriter::DrawStretchText(
                                 const Point& rStartPt,
                                 sal_uLong nWidth,
                                 const OUString& rStr,
-                                xub_StrLen nIndex,
-                                xub_StrLen nLen )
+                                sal_Int32 nIndex,
+                                sal_Int32 nLen )
 {
     pImplementation->drawStretchText( rStartPt, nWidth, rStr, nIndex, nLen );
 }
