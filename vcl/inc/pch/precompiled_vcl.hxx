@@ -370,7 +370,6 @@
 #include <tools/rtti.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
 #include <tools/tenccvt.hxx>
 #include <tools/time.hxx>
 #include <tools/tools.h>

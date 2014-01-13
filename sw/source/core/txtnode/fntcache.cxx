@@ -1312,7 +1312,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     {
                         if ( pSI && pSI->CountKashida() &&
                             pSI->KashidaJustify( pKernArray, 0, rInf.GetIdx(),
-                                                 rInf.GetLen(), nSpaceAdd ) != STRING_LEN )
+                                                 rInf.GetLen(), nSpaceAdd ) != -1 )
                         {
                             bSpecialJust = true;
                             nSpaceAdd = 0;
@@ -1523,7 +1523,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 {
                     if ( pSI && pSI->CountKashida() &&
                          pSI->KashidaJustify( pKernArray, pScrArray, rInf.GetIdx(),
-                                              rInf.GetLen(), nSpaceAdd ) != STRING_LEN )
+                                              rInf.GetLen(), nSpaceAdd ) != -1 )
                         nSpaceAdd = 0;
                     else
                         bNoHalfSpace = true;
@@ -2083,7 +2083,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
             {
                 if ( pSI && pSI->CountKashida() &&
                     pSI->KashidaJustify( pKernArray, 0, rInf.GetIdx(), rInf.GetLen(),
-                                         nSpaceAdd ) != STRING_LEN )
+                                         nSpaceAdd ) != -1 )
                     nSpaceAdd = 0;
             }
         }

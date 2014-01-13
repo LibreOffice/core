@@ -1735,41 +1735,41 @@ long SwScriptInfo::Compress( sal_Int32* pKernArray, xub_StrLen nIdx, xub_StrLen 
 // total number of kashida positions, or the number of kashida positions after some positions
 // have been dropped, depending on the state of the aKashidaInvalid array.
 
-sal_uInt16 SwScriptInfo::KashidaJustify( sal_Int32* pKernArray,
+sal_Int32 SwScriptInfo::KashidaJustify( sal_Int32* pKernArray,
                                     sal_Int32* pScrArray,
-                                    xub_StrLen nStt,
-                                    xub_StrLen nLen,
+                                    sal_Int32 nStt,
+                                    sal_Int32 nLen,
                                     long nSpaceAdd ) const
 {
     SAL_WARN_IF( !nLen, "sw.core", "Kashida justification without text?!" );
 
     if( !IsKashidaLine(nStt))
-        return STRING_LEN;
+        return -1;
 
     // evaluate kashida information in collected in SwScriptInfo
 
-    sal_uInt16 nCntKash = 0;
+    size_t nCntKash = 0;
     while( nCntKash < CountKashida() )
     {
         if ( nStt <= GetKashida( nCntKash ) )
             break;
         else
-            nCntKash++;
+            ++nCntKash;
     }
 
-    const xub_StrLen nEnd = nStt + nLen;
+    const sal_Int32 nEnd = nStt + nLen;
 
-    sal_uInt16 nCntKashEnd = nCntKash;
+    size_t nCntKashEnd = nCntKash;
     while ( nCntKashEnd < CountKashida() )
     {
        if ( nEnd <= GetKashida( nCntKashEnd ) )
             break;
         else
-            nCntKashEnd++;
+            ++nCntKashEnd;
     }
 
-    sal_uInt16 nActualKashCount = nCntKashEnd - nCntKash;
-    for ( sal_uInt16 i = nCntKash; i < nCntKashEnd; ++i )
+    size_t nActualKashCount = nCntKashEnd - nCntKash;
+    for (size_t i = nCntKash; i < nCntKashEnd; ++i)
     {
         if ( nActualKashCount && !IsKashidaValid ( i ) )
             --nActualKashCount;
@@ -1785,13 +1785,13 @@ sal_uInt16 SwScriptInfo::KashidaJustify( sal_Int32* pKernArray,
         while ( ! IsKashidaValid ( nCntKash ) && nCntKash < nCntKashEnd )
             ++nCntKash;
 
-        xub_StrLen nKashidaPos = GetKashida( nCntKash );
-        xub_StrLen nIdx = nKashidaPos;
+        sal_Int32 nKashidaPos = GetKashida( nCntKash );
+        sal_Int32 nIdx = nKashidaPos;
         long nKashAdd = nSpaceAdd;
 
         while ( nIdx < nEnd )
         {
-            sal_uInt16 nArrayPos = nIdx - nStt;
+            sal_Int32 nArrayPos = nIdx - nStt;
 
             // next kashida position
             ++nCntKash;
@@ -1802,7 +1802,7 @@ sal_uInt16 SwScriptInfo::KashidaJustify( sal_Int32* pKernArray,
             if ( nIdx > nEnd )
                 nIdx = nEnd;
 
-            const sal_uInt16 nArrayEnd = nIdx - nStt;
+            const sal_Int32 nArrayEnd = nIdx - nStt;
 
             while ( nArrayPos < nArrayEnd )
             {
@@ -1861,7 +1861,7 @@ bool SwScriptInfo::IsArabicText( const OUString& rTxt, sal_Int32 nStt, sal_Int32
     return false;
 }
 
-sal_Bool SwScriptInfo::IsKashidaValid ( xub_StrLen nKashPos ) const
+bool SwScriptInfo::IsKashidaValid(sal_Int32 nKashPos) const
 {
     for ( size_t i = 0; i < aKashidaInvalid.size(); ++i )
     {
@@ -1871,7 +1871,7 @@ sal_Bool SwScriptInfo::IsKashidaValid ( xub_StrLen nKashPos ) const
     return true;
 }
 
-void SwScriptInfo::ClearKashidaInvalid ( xub_StrLen nKashPos )
+void SwScriptInfo::ClearKashidaInvalid(sal_Int32 nKashPos)
 {
     for ( size_t i = 0; i < aKashidaInvalid.size(); ++i )
     {
@@ -1893,9 +1893,10 @@ void SwScriptInfo::ClearKashidaInvalid ( xub_StrLen nKashPos )
  * clears all kashida invalid flags in the given text range
 *************************************************************************/
 
-bool SwScriptInfo::MarkOrClearKashidaInvalid ( xub_StrLen nStt, xub_StrLen nLen, bool bMark, xub_StrLen nMarkCount )
+bool SwScriptInfo::MarkOrClearKashidaInvalid(sal_Int32 nStt, sal_Int32 nLen,
+    bool bMark, sal_Int32 nMarkCount)
 {
-    sal_uInt16 nCntKash = 0;
+    size_t nCntKash = 0;
     while( nCntKash < CountKashida() )
     {
         if ( nStt <= GetKashida( nCntKash ) )
@@ -1904,7 +1905,7 @@ bool SwScriptInfo::MarkOrClearKashidaInvalid ( xub_StrLen nStt, xub_StrLen nLen,
             nCntKash++;
     }
 
-    const xub_StrLen nEnd = nStt + nLen;
+    const sal_Int32 nEnd = nStt + nLen;
 
     while ( nCntKash < CountKashida() )
     {
@@ -1918,7 +1919,7 @@ bool SwScriptInfo::MarkOrClearKashidaInvalid ( xub_StrLen nStt, xub_StrLen nLen,
                 {
                     MarkKashidaInvalid ( nCntKash );
                     --nMarkCount;
-                    if(!nMarkCount)
+                    if (!nMarkCount)
                        return true;
                 }
             }
@@ -1932,9 +1933,9 @@ bool SwScriptInfo::MarkOrClearKashidaInvalid ( xub_StrLen nStt, xub_StrLen nLen,
     return false;
 }
 
-void SwScriptInfo::MarkKashidaInvalid ( xub_StrLen nKashPos )
+void SwScriptInfo::MarkKashidaInvalid(sal_Int32 nKashPos)
 {
-    aKashidaInvalid.push_back( nKashPos );
+    aKashidaInvalid.push_back(nKashPos);
 }
 
 /*************************************************************************
@@ -1942,10 +1943,10 @@ void SwScriptInfo::MarkKashidaInvalid ( xub_StrLen nKashPos )
  * retrieve the kashida positions in the given text range
 *************************************************************************/
 
-sal_uInt16 SwScriptInfo::GetKashidaPositions ( xub_StrLen nStt, xub_StrLen nLen,
-                                           xub_StrLen* pKashidaPosition )
+sal_Int32 SwScriptInfo::GetKashidaPositions(sal_Int32 nStt, sal_Int32 nLen,
+    sal_Int32* pKashidaPosition)
 {
-    sal_uInt16 nCntKash = 0;
+    size_t nCntKash = 0;
     while( nCntKash < CountKashida() )
     {
         if ( nStt <= GetKashida( nCntKash ) )
@@ -1954,9 +1955,9 @@ sal_uInt16 SwScriptInfo::GetKashidaPositions ( xub_StrLen nStt, xub_StrLen nLen,
             nCntKash++;
     }
 
-    const xub_StrLen nEnd = nStt + nLen;
+    const sal_Int32 nEnd = nStt + nLen;
 
-    sal_uInt16 nCntKashEnd = nCntKash;
+    size_t nCntKashEnd = nCntKash;
     while ( nCntKashEnd < CountKashida() )
     {
        if ( nEnd <= GetKashida( nCntKashEnd ) )
@@ -1970,7 +1971,7 @@ sal_uInt16 SwScriptInfo::GetKashidaPositions ( xub_StrLen nStt, xub_StrLen nLen,
     return nCntKashEnd - nCntKash;
 }
 
-void SwScriptInfo::SetNoKashidaLine ( xub_StrLen nStt, xub_StrLen nLen )
+void SwScriptInfo::SetNoKashidaLine(sal_Int32 nStt, sal_Int32 nLen)
 {
     aNoKashidaLine.push_back( nStt );
     aNoKashidaLineEnd.push_back( nStt+nLen );
@@ -1981,29 +1982,29 @@ void SwScriptInfo::SetNoKashidaLine ( xub_StrLen nStt, xub_StrLen nLen )
  * determines if the line uses kashida justification
 *************************************************************************/
 
-bool SwScriptInfo::IsKashidaLine ( xub_StrLen nCharIdx ) const
+bool SwScriptInfo::IsKashidaLine(sal_Int32 nCharIdx) const
 {
-   for( size_t i = 0; i < aNoKashidaLine.size(); ++i )
+    for (size_t i = 0; i < aNoKashidaLine.size(); ++i)
     {
-       if( nCharIdx >= aNoKashidaLine[ i ] && nCharIdx < aNoKashidaLineEnd[ i ])
-           return false;
+        if (nCharIdx >= aNoKashidaLine[ i ] && nCharIdx < aNoKashidaLineEnd[ i ])
+            return false;
     }
-   return true;
+    return true;
 }
 
-void SwScriptInfo::ClearNoKashidaLine ( xub_StrLen nStt, xub_StrLen nLen )
+void SwScriptInfo::ClearNoKashidaLine(sal_Int32 nStt, sal_Int32 nLen)
 {
-   size_t i = 0;
-   while( i < aNoKashidaLine.size())
-   {
-       if( nStt + nLen >= aNoKashidaLine[ i ] && nStt < aNoKashidaLineEnd [ i ] )
-       {
-           aNoKashidaLine.erase(aNoKashidaLine.begin() + i);
-           aNoKashidaLineEnd.erase(aNoKashidaLineEnd.begin() + i);
-       }
-       else
-           ++i;
-   }
+    size_t i = 0;
+    while( i < aNoKashidaLine.size())
+    {
+        if( nStt + nLen >= aNoKashidaLine[ i ] && nStt < aNoKashidaLineEnd [ i ] )
+        {
+            aNoKashidaLine.erase(aNoKashidaLine.begin() + i);
+            aNoKashidaLineEnd.erase(aNoKashidaLineEnd.begin() + i);
+        }
+        else
+            ++i;
+    }
 }
 
 /*************************************************************************
@@ -2012,30 +2013,30 @@ void SwScriptInfo::ClearNoKashidaLine ( xub_StrLen nStt, xub_StrLen nLen )
  * mark the given character indices as invalid kashida positions
 ************************************************************************/
 
-bool SwScriptInfo::MarkKashidasInvalid ( xub_StrLen nCnt, xub_StrLen* pKashidaPositions )
+bool SwScriptInfo::MarkKashidasInvalid(sal_Int32 nCnt, sal_Int32* pKashidaPositions)
 {
-   SAL_WARN_IF( !pKashidaPositions || nCnt == 0, "sw.core", "Where are kashidas?" );
+    SAL_WARN_IF( !pKashidaPositions || nCnt == 0, "sw.core", "Where are kashidas?" );
 
-   sal_uInt16 nCntKash = 0;
-   xub_StrLen nKashidaPosIdx = 0;
+    size_t nCntKash = 0;
+    sal_Int32 nKashidaPosIdx = 0;
 
-    while ( nCntKash < CountKashida() && nKashidaPosIdx < nCnt )
+    while (nCntKash < CountKashida() && nKashidaPosIdx < nCnt)
     {
-       if ( pKashidaPositions [nKashidaPosIdx] > GetKashida( nCntKash ) )
-       {
-           nCntKash++;
-           continue;
-       }
+        if ( pKashidaPositions [nKashidaPosIdx] > GetKashida( nCntKash ) )
+        {
+            ++nCntKash;
+            continue;
+        }
 
         if ( pKashidaPositions [nKashidaPosIdx] == GetKashida( nCntKash ) && IsKashidaValid ( nCntKash ) )
-       {
+        {
             MarkKashidaInvalid ( nCntKash );
-       }
-       else
-           return false; // something is wrong
-       nKashidaPosIdx++;
-   }
-   return true;
+        }
+        else
+            return false; // something is wrong
+        nKashidaPosIdx++;
+    }
+    return true;
 }
 
 sal_Int32 SwScriptInfo::ThaiJustify( const OUString& rTxt, sal_Int32* pKernArray,

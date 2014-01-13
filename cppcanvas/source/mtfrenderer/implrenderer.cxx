@@ -79,6 +79,7 @@
 #include "mtftools.hxx"
 #include "outdevstate.hxx"
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <tools/string.hxx>
 
 using namespace ::com::sun::star;
 

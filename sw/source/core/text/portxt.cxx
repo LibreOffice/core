@@ -118,10 +118,10 @@ static sal_Int32 lcl_AddSpace( const SwTxtSizeInfo &rInf, const OUString* pStr,
     {
         if ( SwScriptInfo::IsArabicText( *pStr, nPos, nEnd - nPos ) && pSI->CountKashida() )
         {
-            const sal_uInt16 nKashRes = pSI->KashidaJustify( 0, 0, nPos, nEnd - nPos );
+            const sal_Int32 nKashRes = pSI->KashidaJustify( 0, 0, nPos, nEnd - nPos );
             // i60591: need to check result of KashidaJustify
             // determine if kashida justification is applicable
-            if( nKashRes != STRING_LEN )
+            if (nKashRes != -1)
                 return nKashRes;
         }
     }

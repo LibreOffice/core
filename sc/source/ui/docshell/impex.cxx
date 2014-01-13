@@ -23,6 +23,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <sot/formats.hxx>
 #include <sfx2/mieclip.hxx>
+#include <tools/string.hxx>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 
 #include "global.hxx"

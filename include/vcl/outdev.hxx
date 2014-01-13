@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_OUTDEV_HXX
 
 #include <tools/gen.hxx>
-#include <tools/string.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <tools/rc.hxx>
@@ -1095,12 +1094,11 @@ public:
     // i60594
     // validate kashida positions against the current font
     // returns count of invalid kashida positions
-    xub_StrLen          ValidateKashidas ( const OUString& rTxt,
-                                            xub_StrLen nIdx, xub_StrLen nLen,
-                                            xub_StrLen nKashCount, // number of suggested kashida positions (in)
-                                            const xub_StrLen* pKashidaPos, // suggested kashida positions (in)
-                                            xub_StrLen* pKashidaPosDropped // invalid kashida positions (out)
-                                            ) const;
+    sal_Int32           ValidateKashidas(const OUString& rTxt, sal_Int32 nIdx, sal_Int32 nLen,
+        sal_Int32 nKashCount, // number of suggested kashida positions (in)
+        const sal_Int32* pKashidaPos, // suggested kashida positions (in)
+        sal_Int32* pKashidaPosDropped // invalid kashida positions (out)
+        ) const;
 
     sal_uInt16          GetBitCount() const;
 

@@ -7155,17 +7155,17 @@ long OutputDevice::GetMinKashida() const
     return ImplDevicePixelToLogicWidth( pMetric->mnMinKashida );
 }
 
-xub_StrLen OutputDevice::ValidateKashidas ( const OUString& rTxt,
-                                            xub_StrLen nIdx, xub_StrLen nLen,
-                                            xub_StrLen nKashCount,
-                                            const xub_StrLen* pKashidaPos,
-                                            xub_StrLen* pKashidaPosDropped ) const
+sal_Int32 OutputDevice::ValidateKashidas ( const OUString& rTxt,
+                                            sal_Int32 nIdx, sal_Int32 nLen,
+                                            sal_Int32 nKashCount,
+                                            const sal_Int32* pKashidaPos,
+                                            sal_Int32* pKashidaPosDropped ) const
 {
    // do layout
     SalLayout* pSalLayout = ImplLayout( rTxt, nIdx, nLen );
     if( !pSalLayout )
         return 0;
-    xub_StrLen nDropped = 0;
+    sal_Int32 nDropped = 0;
     for( int i = 0; i < nKashCount; ++i )
     {
         if( !pSalLayout->IsKashidaPosValid( pKashidaPos[ i ] ))

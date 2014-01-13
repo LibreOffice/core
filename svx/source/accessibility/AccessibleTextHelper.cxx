@@ -47,6 +47,7 @@
 #include <vcl/unohelp.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
+#include <tools/string.hxx>
 
 //------------------------------------------------------------------------
 //

@@ -59,10 +59,10 @@ private:
         inline DirectionChangeInfo(xub_StrLen pos, sal_uInt8 typ) : position(pos), type(typ) {};
     };
     std::vector<DirectionChangeInfo> aDirectionChanges;
-    std::deque< xub_StrLen > aKashida;
-    std::deque< xub_StrLen > aKashidaInvalid;
-    std::deque< xub_StrLen > aNoKashidaLine;
-    std::deque< xub_StrLen > aNoKashidaLineEnd;
+    std::deque< sal_Int32 > aKashida;
+    std::deque< sal_Int32 > aKashidaInvalid;
+    std::deque< sal_Int32 > aNoKashidaLine;
+    std::deque< sal_Int32 > aNoKashidaLineEnd;
     std::deque< xub_StrLen > aHiddenChg;
     //! Records a single change in compression.
     struct CompressionChangeInfo
@@ -78,11 +78,11 @@ private:
 
     void UpdateBidiInfo( const OUString& rTxt );
 
-    sal_Bool IsKashidaValid ( xub_StrLen nKashPos ) const;
-    void MarkKashidaInvalid ( xub_StrLen nKashPos );
-    void ClearKashidaInvalid ( xub_StrLen nKashPos );
-    bool MarkOrClearKashidaInvalid( xub_StrLen nStt, xub_StrLen nLen, bool bMark, xub_StrLen nMarkCount );
-    bool IsKashidaLine ( xub_StrLen nCharIdx ) const;
+    bool IsKashidaValid(sal_Int32 nKashPos) const;
+    void MarkKashidaInvalid(sal_Int32 nKashPos);
+    void ClearKashidaInvalid(sal_Int32 nKashPos);
+    bool MarkOrClearKashidaInvalid(sal_Int32 nStt, sal_Int32 nLen, bool bMark, sal_Int32 nMarkCount);
+    bool IsKashidaLine(sal_Int32 nCharIdx) const;
 
 public:
     enum CompType { KANA, SPECIAL_LEFT, SPECIAL_RIGHT, NONE };
@@ -110,8 +110,16 @@ public:
     inline xub_StrLen GetDirChg( const size_t nCnt ) const;
     inline sal_uInt8 GetDirType( const size_t nCnt ) const;
 
-    inline size_t CountKashida() const;
-    inline xub_StrLen GetKashida( const size_t nCnt ) const;
+    size_t CountKashida() const
+    {
+        return aKashida.size();
+    }
+
+    sal_Int32 GetKashida(const size_t nCnt) const
+    {
+        OSL_ENSURE( nCnt < aKashida.size(),"No Kashidas today!");
+        return aKashida[nCnt];
+    }
 
     inline size_t CountCompChg() const;
     inline xub_StrLen GetCompStart( const size_t nCnt ) const;
@@ -233,24 +241,28 @@ public:
                 The value which has to be added to a kashida opportunity.
     @return The number of kashida opportunities in the given range
 */
-    sal_uInt16 KashidaJustify( sal_Int32* pKernArray, sal_Int32* pScrArray,
-                           xub_StrLen nStt, xub_StrLen nLen,
-                           long nSpaceAdd = 0) const;
+    sal_Int32 KashidaJustify( sal_Int32* pKernArray, sal_Int32* pScrArray,
+        sal_Int32 nStt, sal_Int32 nLen, long nSpaceAdd = 0) const;
 
 /** Clears array of kashidas marked as invalid
  */
-    inline void ClearKashidaInvalid ( xub_StrLen nStt, xub_StrLen nLen ) { MarkOrClearKashidaInvalid( nStt, nLen, false, 0 ); }
+    void ClearKashidaInvalid(sal_Int32 nStt, sal_Int32 nLen)
+    {
+        MarkOrClearKashidaInvalid(nStt, nLen, false, 0);
+    }
 
 /** Marks nCnt kashida positions as invalid
    pKashidaPositions: array of char indices relative to the paragraph
 */
-   bool MarkKashidasInvalid ( xub_StrLen nCnt, xub_StrLen* pKashidaPositions );
+    bool MarkKashidasInvalid(sal_Int32 nCnt, sal_Int32* pKashidaPositions);
 
 /** Marks nCnt kashida positions as invalid
     in the given text range
  */
-   inline bool MarkKashidasInvalid ( xub_StrLen nCnt, xub_StrLen nStt, xub_StrLen nLen )
-       { return MarkOrClearKashidaInvalid( nStt, nLen, true, nCnt ); }
+    bool MarkKashidasInvalid(sal_Int32 nCnt, sal_Int32 nStt, sal_Int32 nLen)
+    {
+        return MarkOrClearKashidaInvalid(nStt, nLen, true, nCnt);
+    }
 
 /** retrieves kashida opportunities for a given text range.
    returns the number of kashida positions in the given text range
@@ -258,9 +270,8 @@ public:
    pKashidaPositions: buffer to reveive the char indices of the
                       kashida opportunties relative to the paragraph
 */
-   sal_uInt16 GetKashidaPositions ( xub_StrLen nStt, xub_StrLen nLen,
-                             xub_StrLen* pKashidaPosition );
-
+    sal_Int32 GetKashidaPositions(sal_Int32 nStt, sal_Int32 nLen,
+       sal_Int32* pKashidaPosition);
 
 
 
@@ -268,13 +279,13 @@ public:
    nStt Start char index of the line referring to the paragraph.
    nLen Number of characters in the line
 */
-   void SetNoKashidaLine ( xub_StrLen nStt, xub_StrLen nLen );
+    void SetNoKashidaLine(sal_Int32 nStt, sal_Int32 nLen);
 
 /** Clear forced blank justification for a given line.
    nStt Start char index of the line referring to the paragraph.
    nLen Number of characters in the line
 */
-   void ClearNoKashidaLine ( xub_StrLen nStt, xub_StrLen nLen );
+    void ClearNoKashidaLine(sal_Int32 nStt, sal_Int32 nLen);
 
 /** Checks if text is Arabic text.
 
@@ -343,13 +354,6 @@ inline sal_uInt8 SwScriptInfo::GetDirType( const size_t nCnt ) const
 {
     OSL_ENSURE( nCnt < aDirectionChanges.size(),"No DirType today!");
     return aDirectionChanges[ nCnt ].type;
-}
-
-inline size_t SwScriptInfo::CountKashida() const { return aKashida.size(); }
-inline xub_StrLen SwScriptInfo::GetKashida( const size_t nCnt ) const
-{
-    OSL_ENSURE( nCnt < aKashida.size(),"No Kashidas today!");
-    return aKashida[ nCnt ];
 }
 
 inline size_t SwScriptInfo::CountCompChg() const { return aCompressionChanges.size(); };

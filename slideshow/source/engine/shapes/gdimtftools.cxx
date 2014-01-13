@@ -21,6 +21,7 @@
 // must be first
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/string.hxx>
 #include <gdimtftools.hxx>
 
 #include <com/sun/star/document/XExporter.hpp>

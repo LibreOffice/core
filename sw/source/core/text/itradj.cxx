@@ -117,7 +117,7 @@ void SwTxtAdjuster::FormatBlock( )
  * lcl_CheckKashidaPositions()
  *************************************************************************/
 static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTxtIter& rItr,
-                                xub_StrLen& nKashidas, xub_StrLen& nGluePortion )
+                                sal_Int32& rKashidas, xub_StrLen& nGluePortion )
 {
     // i60594 validate Kashida justification
     xub_StrLen nIdx = rItr.GetStart();
@@ -128,18 +128,18 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, S
     // total number of kashida positions, or the number of kashida positions after some positions
     // have been dropped.
     // Here we want the clean total, which is OK: We have called ClearKashidaInvalid() before.
-    nKashidas = rSI.KashidaJustify ( 0, 0, rItr.GetStart(), rItr.GetLength(), 0 );
+    rKashidas = rSI.KashidaJustify ( 0, 0, rItr.GetStart(), rItr.GetLength(), 0 );
 
-    if (!nKashidas) // nothing to do
+    if (rKashidas <= 0) // nothing to do
         return true;
 
     // kashida positions found in SwScriptInfo are not necessarily valid in every font
     // if two characters are replaced by a ligature glyph, there will be no place for a kashida
-    xub_StrLen* pKashidaPos = new xub_StrLen [ nKashidas ];
-    xub_StrLen* pKashidaPosDropped = new xub_StrLen [ nKashidas ];
+    sal_Int32* pKashidaPos = new sal_Int32[ rKashidas ];
+    sal_Int32* pKashidaPosDropped = new sal_Int32[ rKashidas ];
     rSI.GetKashidaPositions ( nIdx, rItr.GetLength(), pKashidaPos );
-    xub_StrLen nKashidaIdx = 0;
-    while ( nKashidas && nIdx < nEnd )
+    sal_Int32 nKashidaIdx = 0;
+    while ( rKashidas && nIdx < nEnd )
     {
         rItr.SeekAndChgAttrIter( nIdx, rInf.GetOut() );
         xub_StrLen nNext = rItr.GetNextAttr();
@@ -152,8 +152,8 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, S
 
         if ( nNext == STRING_LEN || nNext > nEnd )
             nNext = nEnd;
-        xub_StrLen nKashidasInAttr = rSI.KashidaJustify ( 0, 0, nIdx, nNext - nIdx );
-        if ( nKashidasInAttr )
+        sal_Int32 nKashidasInAttr = rSI.KashidaJustify ( 0, 0, nIdx, nNext - nIdx );
+        if (nKashidasInAttr > 0)
         {
             // Kashida glyph looks suspicious, skip Kashida justification
             if ( rInf.GetOut()->GetMinKashida() <= 0 )
@@ -163,11 +163,11 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, S
                 return false;
             }
 
-            xub_StrLen nKashidasDropped = 0;
+            sal_Int32 nKashidasDropped = 0;
             if ( !SwScriptInfo::IsArabicText( rInf.GetTxt(), nIdx, nNext - nIdx ) )
             {
                 nKashidasDropped = nKashidasInAttr;
-                nKashidas -= nKashidasDropped;
+                rKashidas -= nKashidasDropped;
             }
             else
             {
@@ -179,8 +179,8 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, S
                 rInf.GetOut()->SetLayoutMode ( nOldLayout );
                 if ( nKashidasDropped )
                 {
-                    rSI.MarkKashidasInvalid ( nKashidasDropped, pKashidaPosDropped );
-                    nKashidas -= nKashidasDropped;
+                    rSI.MarkKashidasInvalid(nKashidasDropped, pKashidaPosDropped);
+                    rKashidas -= nKashidasDropped;
                     nGluePortion -= nKashidasDropped;
                 }
             }
@@ -192,20 +192,20 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, S
     delete[] pKashidaPosDropped;
 
     // return false if all kashidas have been eliminated
-    return (nKashidas > 0);
+    return (rKashidas > 0);
 }
 
 /*************************************************************************
  * lcl_CheckKashidaWidth()
  *************************************************************************/
-static bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTxtIter& rItr, xub_StrLen& nKashidas,
+static bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTxtIter& rItr, sal_Int32& rKashidas,
                              xub_StrLen& nGluePortion, const long nGluePortionWidth, long& nSpaceAdd )
 {
     // check kashida width
     // if width is smaller than minimal kashida width allowed by fonts in the current line
     // drop one kashida after the other until kashida width is OK
     bool bAddSpaceChanged;
-    while ( nKashidas )
+    while (rKashidas)
     {
         bAddSpaceChanged = false;
         xub_StrLen nIdx = rItr.GetStart();
@@ -223,20 +223,20 @@ static bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTx
 
             if ( nNext == STRING_LEN || nNext > nEnd )
                 nNext = nEnd;
-            xub_StrLen nKashidasInAttr = rSI.KashidaJustify ( 0, 0, nIdx, nNext - nIdx );
+            sal_Int32 nKashidasInAttr = rSI.KashidaJustify ( 0, 0, nIdx, nNext - nIdx );
 
             long nFontMinKashida = rInf.GetOut()->GetMinKashida();
-            if ( nFontMinKashida && nKashidasInAttr && SwScriptInfo::IsArabicText( rInf.GetTxt(), nIdx, nNext - nIdx ) )
+            if ( nFontMinKashida && nKashidasInAttr > 0 && SwScriptInfo::IsArabicText( rInf.GetTxt(), nIdx, nNext - nIdx ) )
             {
-                xub_StrLen nKashidasDropped = 0;
-                while ( nKashidas && nGluePortion && nKashidasInAttr &&
+                sal_Int32 nKashidasDropped = 0;
+                while ( rKashidas && nGluePortion && nKashidasInAttr > 0 &&
                         nSpaceAdd / SPACING_PRECISION_FACTOR < nFontMinKashida )
                 {
                     --nGluePortion;
-                    --nKashidas;
+                    --rKashidas;
                     --nKashidasInAttr;
                     ++nKashidasDropped;
-                    if( !nKashidas || !nGluePortion ) // nothing left, return false to
+                    if( !rKashidas || !nGluePortion ) // nothing left, return false to
                         return false;                 // do regular blank justification
 
                     nSpaceAdd = nGluePortionWidth / nGluePortion;
@@ -349,7 +349,7 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
                 const long nGluePortionWidth = static_cast<SwGluePortion*>(pPos)->GetPrtGlue() *
                                                SPACING_PRECISION_FACTOR;
 
-                xub_StrLen nKashidas = 0;
+                sal_Int32 nKashidas = 0;
                 if( nGluePortion && rSI.CountKashida() && !bSkipKashida )
                 {
                     // kashida positions found in SwScriptInfo are not necessarily valid in every font

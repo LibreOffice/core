@@ -24,6 +24,7 @@
 #include <vector>
 #include <osl/endian.h>
 #include <tools/solar.h>
+#include <tools/string.hxx>
 #include <rtl/math.hxx>
 
 #include <comphelper/classids.hxx>
