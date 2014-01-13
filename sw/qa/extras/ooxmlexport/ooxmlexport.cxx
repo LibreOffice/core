@@ -272,6 +272,15 @@ DECLARE_OOXMLEXPORT_TEST(testFdo38244, "fdo38244.docx")
     CPPUNIT_ASSERT_EQUAL(true, bCaught);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testCommentsNested, "comments-nested.odt")
+{
+    uno::Reference<beans::XPropertySet> xOuter(getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 2), "TextField"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Outer"), getProperty<OUString>(xOuter, "Content"));
+
+    uno::Reference<beans::XPropertySet> xInner(getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 4), "TextField"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Inner"), getProperty<OUString>(xInner, "Content"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testMathEscape, "math-escape.docx")
 {
     CPPUNIT_ASSERT_EQUAL(OUString("\\{ left [ right ] left ( right ) \\}"), getFormula(getRun(getParagraph(1), 1)));

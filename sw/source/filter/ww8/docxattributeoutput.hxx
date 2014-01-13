@@ -783,7 +783,9 @@ private:
     const SdrObject* m_postponedChart;
     Size m_postponedChartSize;
     const SwField* pendingPlaceholder;
-    std::vector< const SwPostItField* > m_postitFields;
+    /// Maps postit fields to ID's, used in commentRangeStart/End, commentReference and comment.xml.
+    std::vector< std::pair<const SwPostItField*, sal_Int32> > m_postitFields;
+    /// Number of postit fields which already have a commentReference written.
     unsigned int m_postitFieldsMaxId;
     int m_anchorId;
     int m_nextFontId;

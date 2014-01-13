@@ -4670,18 +4670,28 @@ void DocxAttributeOutput::HiddenField( const SwField& /*rFld*/ )
 void DocxAttributeOutput::PostitField( const SwField* pFld )
 {
     assert( dynamic_cast< const SwPostItField* >( pFld ));
-    m_postitFields.push_back( static_cast< const SwPostItField* >( pFld ));
+    const SwPostItField* pPostItFld = static_cast<const SwPostItField*>(pFld);
+    OString aName = OUStringToOString(pPostItFld->GetName(), RTL_TEXTENCODING_UTF8);
+    sal_Int32 nId = 0;
+    std::map< OString, sal_uInt16 >::iterator it = m_rOpenedAnnotationMarksIds.find(aName);
+    if (it != m_rOpenedAnnotationMarksIds.end())
+        // If the postit field has an annotation mark associated, we already have an id.
+        nId = it->second;
+    else
+        // Otherwise get a new one.
+        nId = m_nNextAnnotationMarkId++;
+    m_postitFields.push_back(std::make_pair(pPostItFld, nId));
 }
 
 void DocxAttributeOutput::WritePostitFieldReference()
 {
     while( m_postitFieldsMaxId < m_postitFields.size())
     {
-        OString idstr = OString::number( m_postitFieldsMaxId);
+        OString idstr = OString::number(m_postitFields[m_postitFieldsMaxId].second);
 
         // In case this file is inside annotation marks, we want to write the
         // comment reference after the annotation mark is closed, not here.
-        OString idname = OUStringToOString(m_postitFields[m_postitFieldsMaxId]->GetName(), RTL_TEXTENCODING_UTF8);
+        OString idname = OUStringToOString(m_postitFields[m_postitFieldsMaxId].first->GetName(), RTL_TEXTENCODING_UTF8);
         std::map< OString, sal_uInt16 >::iterator it = m_rOpenedAnnotationMarksIds.find( idname );
         if ( it == m_rOpenedAnnotationMarksIds.end(  ) )
             m_pSerializer->singleElementNS( XML_w, XML_commentReference, FSNS( XML_w, XML_id ), idstr.getStr(), FSEND );
@@ -4695,8 +4705,8 @@ void DocxAttributeOutput::WritePostitFields()
          i < m_postitFields.size();
          ++i )
     {
-        OString idstr = OString::number( i);
-        const SwPostItField* f = m_postitFields[ i ];
+        OString idstr = OString::number( m_postitFields[ i ].second);
+        const SwPostItField* f = m_postitFields[ i ].first;
         m_pSerializer->startElementNS( XML_w, XML_comment, FSNS( XML_w, XML_id ), idstr.getStr(),
             FSNS( XML_w, XML_author ), OUStringToOString( f->GetPar1(), RTL_TEXTENCODING_UTF8 ).getStr(),
             FSNS( XML_w, XML_date ), DateTimeToOString(f->GetDateTime()).getStr(),
