@@ -26,7 +26,8 @@
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <svtools/ctrlbox.hxx>
+
+#include <com/sun/star/table/BorderLineStyle.hpp>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -68,13 +69,15 @@ namespace drawinglayer
 
             short                                           mnStyle;
 
+            double                                          mfPatternScale;
+
             /// local helpers
             double getWidth(
                     const geometry::ViewInformation2D& rViewInformation) const;
 
             bool isSolidLine() const
             {
-                return (mnStyle==STYLE_SOLID);
+                return mnStyle == com::sun::star::table::BorderLineStyle::SOLID;
             }
 
             bool isInsideUsed() const
@@ -110,7 +113,8 @@ namespace drawinglayer
                 const basegfx::BColor& rRGBColorLeft,
                 const basegfx::BColor& rRGBColorGap,
                 bool bHasGapColor,
-                const short nStyle );
+                const short nStyle,
+                double fPatternScale = 1.0 );
 
             /// data read access
             const basegfx::B2DPoint& getStart() const { return maStart; }
@@ -127,6 +131,7 @@ namespace drawinglayer
             const basegfx::BColor& getRGBColorGap () const { return maRGBColorGap; }
             bool hasGapColor( ) const { return mbHasGapColor; }
             short getStyle () const { return mnStyle; }
+            double getPatternScale() const { return mfPatternScale; }
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
