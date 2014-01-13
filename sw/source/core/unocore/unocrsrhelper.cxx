@@ -1177,8 +1177,10 @@ void makeRedline( SwPaM& rPaM,
 {
     IDocumentRedlineAccess* pRedlineAccess = rPaM.GetDoc();
 
-    RedlineType_t eType = nsRedlineType_t::REDLINE_INSERT;
-    if ( rRedlineType == "Delete" )
+    RedlineType_t eType;
+    if      ( rRedlineType == "Insert" )
+        eType = nsRedlineType_t::REDLINE_INSERT;
+    else if ( rRedlineType == "Delete" )
         eType = nsRedlineType_t::REDLINE_DELETE;
     else if ( rRedlineType == "Format" )
         eType = nsRedlineType_t::REDLINE_FORMAT;
@@ -1186,7 +1188,7 @@ void makeRedline( SwPaM& rPaM,
         eType = nsRedlineType_t::REDLINE_TABLE;
     else if ( rRedlineType == "ParagraphFormat" )
         eType = nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT;
-    else if( !rRedlineType.startsWith( "Insert" ))
+    else
         throw lang::IllegalArgumentException();
 
     //todo: what about REDLINE_FMTCOLL?
