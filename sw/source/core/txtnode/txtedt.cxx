@@ -612,10 +612,6 @@ void SwTxtNode::RstTxtAttr(
                             InsertHint( pNew,
                                 nsSetAttrMode::SETATTR_NOHINTADJUST );
                         }
-
-                        // don't increment, the inserted attribute has pushed
-                        // another onto position i!
-                        continue;
                     }
 
                     // this case appears to rely on InsertHint not re-sorting
