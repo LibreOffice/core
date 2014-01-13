@@ -7872,6 +7872,11 @@ AC_SUBST(FREETYPE_LIBS)
 AC_SUBST([SYSTEM_FREETYPE])
 
 dnl ===================================================================
+dnl Check for system libabw
+dnl ===================================================================
+libo_CHECK_SYSTEM_MODULE([libabw],[ABW],[libabw-0.0],["-I${WORKDIR}/UnpackedTarball/libabw/inc"],["-L${WORKDIR}/UnpackedTarball/libabw/src/lib/.libs -labw-0.0"])
+
+dnl ===================================================================
 dnl Check for system libwps
 dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([libwps],[WPS],[libwps-0.2],["-I${WORKDIR}/UnpackedTarball/libwps/inc"],["-L${WORKDIR}/UnpackedTarball/libwps/src/lib/.libs -lwps-0.2"])
