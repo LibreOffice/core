@@ -1521,7 +1521,7 @@ int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color,
     m_TextInfo.vertex[7] = (float)(aSize.Height / 2) / OPENGL_SCALE_VALUE;
 
     //if has ratotion, we must re caculate the central pos
-    if (rotation)
+    if (!rtl::math::approxEqual(0, rotation))
     {
         //use left top
         double r = sqrt((double)(aSize.Width * aSize.Width + aSize.Height * aSize.Height)) / 2;
