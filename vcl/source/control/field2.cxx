@@ -321,7 +321,7 @@ static OUString ImplPatternReformat( const OUString& rStr,
 
 static void ImplPatternMaxPos( const OUString& rStr, const OString& rEditMask,
                                sal_uInt16 nFormatFlags, bool bSameMask,
-                               sal_uInt16 nCursorPos, sal_Int32& rPos )
+                               sal_Int32 nCursorPos, sal_Int32& rPos )
 {
 
     // last position must not be longer than the contained string
@@ -394,7 +394,7 @@ static void ImplPatternProcessStrictModify( Edit* pEdit,
         if ( nMaxSel >= aText.getLength() )
         {
             sal_Int32 nMaxPos = aNewText.getLength();
-            ImplPatternMaxPos( aNewText, rEditMask, nFormatFlags, bSameMask, (xub_StrLen)nMaxSel, nMaxPos );
+            ImplPatternMaxPos( aNewText, rEditMask, nFormatFlags, bSameMask, nMaxSel, nMaxPos );
             if ( aSel.Min() == aSel.Max() )
             {
                 aSel.Min() = nMaxPos;
@@ -409,11 +409,11 @@ static void ImplPatternProcessStrictModify( Edit* pEdit,
     }
 }
 
-static xub_StrLen ImplPatternLeftPos(const OString& rEditMask, sal_Int32 nCursorPos)
+static sal_Int32 ImplPatternLeftPos(const OString& rEditMask, sal_Int32 nCursorPos)
 {
     // search non-literal predecessor
-    xub_StrLen nNewPos = nCursorPos;
-    xub_StrLen nTempPos = nNewPos;
+    sal_Int32 nNewPos = nCursorPos;
+    sal_Int32 nTempPos = nNewPos;
     while ( nTempPos )
     {
         if ( rEditMask[nTempPos-1] != EDITMASK_LITERAL )
@@ -426,7 +426,7 @@ static xub_StrLen ImplPatternLeftPos(const OString& rEditMask, sal_Int32 nCursor
     return nNewPos;
 }
 
-static xub_StrLen ImplPatternRightPos( const OUString& rStr, const OString& rEditMask,
+static sal_Int32 ImplPatternRightPos( const OUString& rStr, const OString& rEditMask,
                                        sal_uInt16 nFormatFlags, bool bSameMask,
                                        sal_Int32 nCursorPos )
 {
@@ -482,7 +482,7 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             // all was selected by the focus
             Selection aSel( aOldSel );
             aSel.Justify();
-            nCursorPos = (xub_StrLen)aSel.Min();
+            nCursorPos = aSel.Min();
             aSel.Max() = ImplPatternRightPos( pEdit->GetText(), rEditMask, nFormatFlags, bSameMask, nCursorPos );
             if ( bShift )
                 aSel.Min() = aOldSel.Min();
@@ -605,7 +605,7 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
 
     Selection aSel = aOldSel;
     aSel.Justify();
-    nNewPos = (xub_StrLen)aSel.Min();
+    nNewPos = aSel.Min();
 
     if ( nNewPos < rEditMask.getLength() )
     {
@@ -669,7 +669,7 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             aStr.truncate( n );
 
             if ( aSel.Len() )
-                aStr.remove( (xub_StrLen)aSel.Min(), (xub_StrLen)aSel.Len() );
+                aStr.remove( aSel.Min(), aSel.Len() );
 
             if ( aStr.getLength() < rEditMask.getLength() )
             {
@@ -690,7 +690,7 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             if ( aSel.Len() )
             {
                 // delete selection
-                OUString aRep = rLiteralMask.copy( (xub_StrLen)aSel.Min(), (xub_StrLen)aSel.Len() );
+                OUString aRep = rLiteralMask.copy( aSel.Min(), aSel.Len() );
                 aStr.remove( aSel.Min(), aRep.getLength() );
                 aStr.insert( aSel.Min(), aRep );
             }
