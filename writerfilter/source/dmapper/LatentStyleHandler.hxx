@@ -13,28 +13,30 @@
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-namespace writerfilter {
-    namespace dmapper {
+namespace writerfilter
+{
+namespace dmapper
+{
 
-        /// Handler for a latent style (w:lsdException element)
-        class LatentStyleHandler
-            : public LoggedProperties
-        {
-            std::vector<beans::PropertyValue> m_aAttributes;
+/// Handler for a latent style (w:lsdException element)
+class LatentStyleHandler
+    : public LoggedProperties
+{
+    std::vector<beans::PropertyValue> m_aAttributes;
 
-            // Properties
-            virtual void lcl_attribute(Id Name, Value & val);
-            virtual void lcl_sprm(Sprm & sprm);
+    // Properties
+    virtual void lcl_attribute(Id Name, Value& val);
+    virtual void lcl_sprm(Sprm& sprm);
 
-            public:
-            LatentStyleHandler();
-            virtual ~LatentStyleHandler();
+public:
+    LatentStyleHandler();
+    virtual ~LatentStyleHandler();
 
-            com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> getAttributes() const;
-        };
+    com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> getAttributes() const;
+};
 
-        typedef boost::shared_ptr<LatentStyleHandler> LatentStyleHandlerPtr;
-    } // namespace dmapper
+typedef boost::shared_ptr<LatentStyleHandler> LatentStyleHandlerPtr;
+} // namespace dmapper
 } // namespace writerfilter
 
 #endif

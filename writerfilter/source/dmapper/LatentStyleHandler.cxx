@@ -10,8 +10,10 @@
 #include <ooxml/resourceids.hxx>
 #include "dmapperLoggers.hxx"
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter
+{
+namespace dmapper
+{
 
 using namespace ::com::sun::star;
 
@@ -30,30 +32,30 @@ void LatentStyleHandler::lcl_attribute(Id rName, Value& rVal)
     bool bFound = true;
     switch (rName)
     {
-        case NS_ooxml::LN_CT_LsdException_name:
-            aValue.Name = "name";
+    case NS_ooxml::LN_CT_LsdException_name:
+        aValue.Name = "name";
         break;
-        case NS_ooxml::LN_CT_LsdException_locked:
-            aValue.Name = "locked";
+    case NS_ooxml::LN_CT_LsdException_locked:
+        aValue.Name = "locked";
         break;
-        case NS_ooxml::LN_CT_LsdException_uiPriority:
-            aValue.Name = "uiPriority";
+    case NS_ooxml::LN_CT_LsdException_uiPriority:
+        aValue.Name = "uiPriority";
         break;
-        case NS_ooxml::LN_CT_LsdException_semiHidden:
-            aValue.Name = "semiHidden";
+    case NS_ooxml::LN_CT_LsdException_semiHidden:
+        aValue.Name = "semiHidden";
         break;
-        case NS_ooxml::LN_CT_LsdException_unhideWhenUsed:
-            aValue.Name = "unhideWhenUsed";
+    case NS_ooxml::LN_CT_LsdException_unhideWhenUsed:
+        aValue.Name = "unhideWhenUsed";
         break;
-        case NS_ooxml::LN_CT_LsdException_qFormat:
-            aValue.Name = "qFormat";
+    case NS_ooxml::LN_CT_LsdException_qFormat:
+        aValue.Name = "qFormat";
         break;
-        default:
-            bFound = false;
+    default:
+        bFound = false;
 #ifdef DEBUG_DOMAINMAPPER
-            dmapper_logger->element("unhandled");
+        dmapper_logger->element("unhandled");
 #endif
-            break;
+        break;
     }
     if (bFound)
     {
