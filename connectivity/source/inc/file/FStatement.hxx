@@ -39,7 +39,6 @@
 #include <comphelper/propertycontainer.hxx>
 #include "file/fanalyzer.hxx"
 #include <comphelper/broadcasthelper.hxx>
-#include <tools/string.hxx>
 #include "TSortIndex.hxx"
 
 namespace connectivity

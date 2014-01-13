@@ -23,7 +23,6 @@
 
 #include "accessibility.hrc"
 #include "sdresid.hxx"
-#include <tools/string.hxx>
 #include <svx/DescriptionGenerator.hxx>
 #include <rtl/ustring.h>
 

@@ -22,7 +22,6 @@
 #include <sal/types.h>
 
 #include <tools/gen.hxx>
-#include <tools/string.hxx>
 #include <tools/color.hxx>
 
 #include <vcl/dllapi.h>

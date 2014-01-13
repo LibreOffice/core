@@ -19,7 +19,6 @@
 
 #include "dbase/DIndexIter.hxx"
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
-#include <tools/string.hxx>
 
 using namespace ::com::sun::star::sdb;
 using namespace connectivity;

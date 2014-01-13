@@ -744,7 +744,6 @@
 #include <tools/rtti.hxx>
 #include <tools/shl.hxx>
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
 #include <tools/svborder.hxx>
 #include <tools/tenccvt.hxx>
 #include <tools/time.hxx>
