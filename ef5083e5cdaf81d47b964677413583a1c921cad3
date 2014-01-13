@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa98f980_159b56ca",
+        "filename": "vcl/source/filter/igif/gifread.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-01-13T13:29:13Z",
+      "side": 1,
+      "message": "\"accommodate\" is the spelling",
+      "range": {
+        "startLine": 191,
+        "startChar": 23,
+        "endLine": 191,
+        "endChar": 33
+      },
+      "revId": "ef5083e5cdaf81d47b964677413583a1c921cad3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_f55ed211",
+        "filename": "vcl/source/filter/igif/gifread.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-01-13T13:29:13Z",
+      "side": 1,
+      "message": "\"Netscape\" and \"interpret\" - spelling.",
+      "revId": "ef5083e5cdaf81d47b964677413583a1c921cad3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_b5644ae6",
+        "filename": "vcl/source/filter/igif/gifread.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-01-13T13:29:13Z",
+      "side": 1,
+      "message": "spelled \"transparent\"",
+      "revId": "ef5083e5cdaf81d47b964677413583a1c921cad3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_d561ced4",
+        "filename": "vcl/source/filter/igif/gifread.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-01-13T13:29:13Z",
+      "side": 1,
+      "message": "spelled \"transparent\"",
+      "revId": "ef5083e5cdaf81d47b964677413583a1c921cad3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
