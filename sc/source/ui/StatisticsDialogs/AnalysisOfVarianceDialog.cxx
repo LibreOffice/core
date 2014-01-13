@@ -104,7 +104,8 @@ sal_Int16 ScAnalysisOfVarianceDialog::GetUndoNameId()
 
 ScRange ScAnalysisOfVarianceDialog::ApplyOutput(ScDocShell* pDocShell)
 {
-    AddressWalkerWriter output(mOutputAddress, pDocShell, mDocument);
+    AddressWalkerWriter output(mOutputAddress, pDocShell, mDocument,
+            formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
     FormulaTemplate aTemplate(mDocument, mAddressDetails);
 
     output.writeBoldString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ANOVA_SINGLE_FACTOR_LABEL));

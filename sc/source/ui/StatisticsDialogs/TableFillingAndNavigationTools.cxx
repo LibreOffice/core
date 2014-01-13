@@ -152,15 +152,18 @@ void AddressWalker::pop()
     mAddressStack.pop_back();
 }
 
-AddressWalkerWriter::AddressWalkerWriter(ScAddress aInitialAddress, ScDocShell* pDocShell, ScDocument* pDocument) :
+AddressWalkerWriter::AddressWalkerWriter(ScAddress aInitialAddress, ScDocShell* pDocShell, ScDocument* pDocument,
+        formula::FormulaGrammar::Grammar eGrammar ) :
     AddressWalker(aInitialAddress, true),
     mpDocShell(pDocShell),
-    mpDocument(pDocument)
+    mpDocument(pDocument),
+    meGrammar(eGrammar)
 {}
 
 void AddressWalkerWriter::writeFormula(OUString aFormula)
 {
-    mpDocShell->GetDocFunc().SetFormulaCell(mCurrentAddress, new ScFormulaCell(mpDocument, mCurrentAddress, aFormula), true);
+    mpDocShell->GetDocFunc().SetFormulaCell(mCurrentAddress,
+            new ScFormulaCell(mpDocument, mCurrentAddress, aFormula, meGrammar), true);
 }
 
 void AddressWalkerWriter::writeMatrixFormula(OUString aFormula)
@@ -168,7 +171,7 @@ void AddressWalkerWriter::writeMatrixFormula(OUString aFormula)
     ScRange aRange;
     aRange.aStart = mCurrentAddress;
     aRange.aEnd = mCurrentAddress;
-    mpDocShell->GetDocFunc().EnterMatrix(aRange, NULL, NULL, aFormula, false, false, OUString(), formula::FormulaGrammar::GRAM_DEFAULT );
+    mpDocShell->GetDocFunc().EnterMatrix(aRange, NULL, NULL, aFormula, false, false, OUString(), meGrammar );
 }
 
 void AddressWalkerWriter::writeString(OUString aString)
