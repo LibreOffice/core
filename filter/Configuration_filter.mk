@@ -346,6 +346,7 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu,filter
 	writer_WriteNow \
 	writer_WriterPlus \
 	writer_ZWrite \
+	writer_AbiWord_Document \
 	writer_T602_Document \
 	writer_LotusWordPro_Document \
 	generic_Text \
@@ -405,6 +406,7 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters.xcu,fi
 	WriteNow \
 	WriterPlus \
 	ZWrite \
+	AbiWord \
 	T602Document \
 	LotusWordPro \
 	Text \
