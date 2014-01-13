@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa98f980_f5edf2f0",
+        "filename": "include/oox/drawingml/customshapeproperties.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-13T17:17:08Z",
+      "side": 1,
+      "message": "Nitpick: oox public C++ API has nothing to do with UNO, so you can use plain bool here. In other words: it\u0027s rare that you need to write out sal_Bool anywhere in new code. :-)",
+      "revId": "ff08baa6b7524523b784bffe8dbdeb787fddf935",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
