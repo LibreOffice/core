@@ -340,9 +340,9 @@ void SFTreeListBox:: RequestSubEntries( SvTreeListEntry* pRootEntry, Reference< 
     }
 }
 
-long SFTreeListBox::ExpandingHdl()
+bool SFTreeListBox::ExpandingHdl()
 {
-    return sal_True;
+    return true;
 }
 
 void SFTreeListBox::ExpandAllTrees()

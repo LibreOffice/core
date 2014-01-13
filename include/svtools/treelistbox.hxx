@@ -442,7 +442,7 @@ public:
     const Link&     GetExpandingHdl() const { return aExpandingHdl; }
 
     virtual void    ExpandedHdl();
-    virtual long    ExpandingHdl();
+    virtual bool    ExpandingHdl();
     virtual void    SelectHdl();
     virtual void    DeselectHdl();
     virtual sal_Bool    DoubleClickHdl();

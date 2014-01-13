@@ -700,7 +700,7 @@ SvTreeListEntry* TreeListBox::FindEntry( SvTreeListEntry* pParent, const OUStrin
     return 0;
 }
 
-long TreeListBox::ExpandingHdl()
+bool TreeListBox::ExpandingHdl()
 {
     // expanding or collapsing?
     bool bOK = true;

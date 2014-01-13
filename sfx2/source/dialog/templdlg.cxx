@@ -526,7 +526,7 @@ protected:
     virtual void    Command( const CommandEvent& rMEvt );
     virtual long    Notify( NotifyEvent& rNEvt );
     virtual sal_Bool    DoubleClickHdl();
-    virtual long    ExpandingHdl();
+    virtual bool    ExpandingHdl();
     virtual void    ExpandedHdl();
     virtual sal_Bool    NotifyMoving(SvTreeListEntry*  pTarget,
                                      SvTreeListEntry*  pEntry,
@@ -644,7 +644,7 @@ sal_Bool StyleTreeListBox_Impl::NotifyMoving(SvTreeListEntry*  pTarget,
 
 //-------------------------------------------------------------------------
 
-long  StyleTreeListBox_Impl::ExpandingHdl()
+bool  StyleTreeListBox_Impl::ExpandingHdl()
 
 /*  [Description]
 
@@ -656,7 +656,7 @@ long  StyleTreeListBox_Impl::ExpandingHdl()
 */
 {
     pCurEntry = GetCurEntry();
-    return sal_True;
+    return true;
 }
 
 //-------------------------------------------------------------------------

@@ -504,10 +504,10 @@ sal_uLong SvTreeListBox::Insert( SvTreeListEntry* pEntry,sal_uLong nRootPos )
     return nInsPos;
 }
 
-long SvTreeListBox::ExpandingHdl()
+bool SvTreeListBox::ExpandingHdl()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    return aExpandingHdl.IsSet() ? aExpandingHdl.Call( this ) : 1;
+    return !aExpandingHdl.IsSet() || aExpandingHdl.Call( this );
 }
 
 void SvTreeListBox::ExpandedHdl()

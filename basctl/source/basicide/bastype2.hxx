@@ -185,7 +185,7 @@ protected:
     virtual void            RequestingChildren( SvTreeListEntry* pParent );
     virtual void            ExpandedHdl();
     virtual SvTreeListEntry*    CloneEntry( SvTreeListEntry* pSource );
-    virtual long            ExpandingHdl();
+    virtual bool            ExpandingHdl();
 
     void                    ImpCreateLibEntries( SvTreeListEntry* pShellRootEntry, const ScriptDocument& rDocument, LibraryLocation eLocation );
     void                    ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName );

@@ -73,7 +73,7 @@ protected:
     void                    ExpandTree( SvTreeListEntry* pRootEntry );
     virtual void            RequestingChildren( SvTreeListEntry* pParent );
     virtual void            ExpandedHdl();
-    virtual long            ExpandingHdl();
+    virtual bool            ExpandingHdl();
 public:
     void                    Init( const OUString& language );
     void  RequestSubEntries(  SvTreeListEntry* pRootEntry, ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& node,
