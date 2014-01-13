@@ -73,39 +73,17 @@ OOXMLFastTokenHandler::OOXMLFastTokenHandler
 OUString SAL_CALL OOXMLFastTokenHandler::getIdentifier(::sal_Int32 Token)
     throw (css::uno::RuntimeException)
 {
-    OUString sResult;
-
-#if 0
-    //FIXME this is broken: tokenmap::wordlist is not indexed by Token!
-    if ( Token >= 0 || Token < OOXML_FAST_TOKENS_END )
-    {
-        static OUString aTokens[OOXML_FAST_TOKENS_END];
-
-        if (aTokens[Token].getLength() == 0)
-            aTokens[Token] = OUString::createFromAscii
-                (tokenmap::wordlist[Token].name);
-    }
-#else
     (void) Token;
-#endif
-
-    return sResult;
+    // we use a Boost tokenmap, but tokenmaps cannot be indexed by an integer
+    throw css::uno::RuntimeException();
 }
 
 css::uno::Sequence< ::sal_Int8 > SAL_CALL OOXMLFastTokenHandler::getUTF8Identifier(::sal_Int32 Token)
     throw (css::uno::RuntimeException)
 {
-#if 0
-    if ( Token < 0  || Token >= OOXML_FAST_TOKENS_END )
-#endif
-        return css::uno::Sequence< ::sal_Int8 >();
-
-#if 0
-    //FIXME this is broken: tokenmap::wordlist is not indexed by Token!
-    return css::uno::Sequence< ::sal_Int8 >(reinterpret_cast< const sal_Int8 *>(tokenmap::wordlist[Token].name), strlen(tokenmap::wordlist[Token].name));
-#else
     (void) Token;
-#endif
+    // we use a Boost tokenmap, but tokenmaps cannot be indexed by an integer
+    throw css::uno::RuntimeException();
 }
 
 sal_Int32 OOXMLFastTokenHandler::getTokenDirect( const char *pStr, sal_Int32 nLength ) const
