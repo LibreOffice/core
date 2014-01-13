@@ -4757,16 +4757,10 @@ lcl_MakeBorderLine(SwRect const& rRect,
         ?   lcl_GetExtent(0, pEndNeighbour)
         :   lcl_GetExtent(pEndNeighbour, 0);
 
-    double const nLeftWidth = (isLeftOrTopBorder == isVertical)
-         ? rBorder.GetInWidth() : rBorder.GetOutWidth();
-    double const nRightWidth = (isLeftOrTopBorder == isVertical)
-         ? rBorder.GetOutWidth() : rBorder.GetInWidth();
-    Color const aLeftColor = (isLeftOrTopBorder == isVertical)
-        ? rBorder.GetColorIn(isLeftOrTopBorder)
-        : rBorder.GetColorOut(isLeftOrTopBorder);
-    Color const aRightColor = (isLeftOrTopBorder == isVertical)
-        ? rBorder.GetColorOut(isLeftOrTopBorder)
-        : rBorder.GetColorIn(isLeftOrTopBorder);
+    double const nLeftWidth = rBorder.GetOutWidth();
+    double const nRightWidth = rBorder.GetInWidth();
+    Color const aLeftColor = rBorder.GetColorOut(isLeftOrTopBorder);
+    Color const aRightColor = rBorder.GetColorIn(isLeftOrTopBorder);
 
     ::rtl::Reference<BorderLinePrimitive2D> const xLine =
         new BorderLinePrimitive2D(

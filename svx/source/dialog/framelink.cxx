@@ -1124,6 +1124,51 @@ void lclDrawDiagFrameBorders(
 
 #define SCALEVALUE( value ) lclScaleValue( value, fScale, nMaxWidth )
 
+Style::Style() :
+    meRefMode(REFMODE_CENTERED),
+    mfScale(1.0),
+    mnType(table::BorderLineStyle::SOLID)
+{
+    Clear();
+}
+
+Style::Style( double nP, double nD, double nS, editeng::SvxBorderStyle nType ) :
+    meRefMode(REFMODE_CENTERED),
+    mfScale(1.0),
+    mnType(nType)
+{
+    Clear();
+    Set( nP, nD, nS );
+}
+
+Style::Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor,
+              double nP, double nD, double nS, editeng::SvxBorderStyle nType ) :
+    meRefMode(REFMODE_CENTERED),
+    mfScale(1.0),
+    mnType(nType)
+{
+    Set( rColorPrim, rColorSecn, rColorGap, bUseGapColor, nP, nD, nS );
+}
+
+Style::Style( const editeng::SvxBorderLine& rBorder, double fScale, sal_uInt16 nMaxWidth ) :
+    meRefMode(REFMODE_CENTERED),
+    mfScale(fScale)
+{
+    Set( rBorder, fScale, nMaxWidth );
+}
+
+Style::Style( const editeng::SvxBorderLine* pBorder, double fScale, sal_uInt16 nMaxWidth ) :
+    meRefMode(REFMODE_CENTERED),
+    mfScale(fScale)
+{
+    Set( pBorder, fScale, nMaxWidth );
+}
+
+double Style::Scale() const
+{
+    return mfScale;
+}
+
 void Style::Clear()
 {
     Set( Color(), Color(), Color(), false, 0, 0, 0 );
@@ -1384,7 +1429,7 @@ drawinglayer::primitive2d::Primitive2DSequence CreateClippedBorderPrimitives (
         rBorder.GetColorSecn().getBColor(),
         rBorder.GetColorPrim().getBColor(),
         rBorder.GetColorGap().getBColor(),
-        rBorder.UseGapColor(), rBorder.Type() );
+        rBorder.UseGapColor(), rBorder.Type(), rBorder.Scale() );
 
     return aSequence;
 }
@@ -1412,7 +1457,7 @@ drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimitives(
         rBorder.GetColorSecn().getBColor(),
         rBorder.GetColorPrim().getBColor(),
         rBorder.GetColorGap().getBColor(),
-        rBorder.UseGapColor(), rBorder.Type() );
+        rBorder.UseGapColor(), rBorder.Type(), rBorder.Scale() );
 
     return aSequence;
 }
