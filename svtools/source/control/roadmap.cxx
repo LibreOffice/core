@@ -19,10 +19,6 @@
 
 #include <svtools/roadmap.hxx>
 
-#ifndef _STRING_HXX
-#define _STRING_HXX
-#endif
-
 #include <vector>
 #include <algorithm>
 #include <vcl/bitmap.hxx>
