@@ -34,6 +34,7 @@ namespace drawinglayer { namespace primitive2d {
     class PolyPolygonColorPrimitive2D;
     class PolygonHairlinePrimitive2D;
     class PolygonStrokePrimitive2D;
+    class BorderLinePrimitive2D;
 }}
 
 //////////////////////////////////////////////////////////////////////////////
@@ -64,6 +65,7 @@ namespace drawinglayer
             bool tryDrawPolyPolygonColorPrimitive2DDirect(const drawinglayer::primitive2d::PolyPolygonColorPrimitive2D& rSource, double fTransparency);
             bool tryDrawPolygonHairlinePrimitive2DDirect(const drawinglayer::primitive2d::PolygonHairlinePrimitive2D& rSource, double fTransparency);
             bool tryDrawPolygonStrokePrimitive2DDirect(const drawinglayer::primitive2d::PolygonStrokePrimitive2D& rSource, double fTransparency);
+            bool tryDrawBorderLinePrimitive2DDirect(const drawinglayer::primitive2d::BorderLinePrimitive2D& rSource);
 
         public:
             /// constructor/destructor
