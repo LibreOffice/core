@@ -1532,6 +1532,39 @@ endef
 endif # SYSTEM_ODFGEN
 
 
+ifeq ($(SYSTEM_ABW),YES)
+
+define gb_LinkTarget__use_abw
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+    $(ABW_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(ABW_LIBS))
+
+endef
+gb_ExternalProject__use_abw :=
+
+else # !SYSTEM_ABW
+
+define gb_LinkTarget__use_abw
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,libabw)/inc \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,libabw)/src/lib/.libs/libabw-0.0$(gb_StaticLibrary_PLAINEXT) \
+)
+$(call gb_LinkTarget_use_external_project,$(1),libabw)
+
+endef
+define gb_ExternalProject__use_abw
+$(call gb_ExternalProject_use_external_project,$(1),libabw)
+
+endef
+
+endif # SYSTEM_ABW
+
+
 ifeq ($(SYSTEM_MSPUB),YES)
 
 define gb_LinkTarget__use_mspub
