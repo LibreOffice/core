@@ -1474,9 +1474,7 @@ int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color,
     BitmapEx aBitmapEx(aDevice.GetBitmap(aRect.TopLeft(), Size(bmpWidth, bmpHeight)));
     Bitmap aBitmap( aBitmapEx.GetBitmap());
     int bitmapsize = aBitmap.GetSizeBytes();
-    boost::scoped_array<sal_uInt8> bitmapBuf(new sal_uInt8[bitmapsize * 4 / 3 + BMP_HEADER_LEN]);
-    //TODO:moggi: why do we need the BMP header?
-    CreateBMPHeaderRGBA(bitmapBuf.get(), bmpWidth, bmpHeight);
+    boost::scoped_array<sal_uInt8> bitmapBuf(new sal_uInt8[bitmapsize * 4 / 3 ]);
     BitmapReadAccess* pRAcc = aBitmap.AcquireReadAccess();
     sal_uInt8 red = (color & 0x00FF0000) >> 16;
     sal_uInt8 g = (color & 0x0000FF00) >> 8;
@@ -1488,7 +1486,7 @@ int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color,
         for(long nx = 0; nx < bmpWidth; nx++)
         {
            sal_uInt8 *pm = pRAcc->GetScanline(ny) + nx * 3;
-           sal_uInt8 *mk = bitmapBuf.get() +  BMP_HEADER_LEN + ny * bmpWidth * 4 + nx * 4;
+           sal_uInt8 *mk = bitmapBuf.get() + ny * bmpWidth * 4 + nx * 4;
            if ((*pm == 0xFF) && (*(pm + 1) == 0xFF) && (*(pm + 2) == 0xFF))
            {
                *mk = *pm;
@@ -1553,7 +1551,7 @@ int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color,
     CHECK_GL_ERROR();
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     CHECK_GL_ERROR();
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bmpWidth, bmpHeight, 0, GL_BGRA, GL_UNSIGNED_BYTE, bitmapBuf.get() + BMP_HEADER_LEN);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bmpWidth, bmpHeight, 0, GL_BGRA, GL_UNSIGNED_BYTE, bitmapBuf.get());
     CHECK_GL_ERROR();
     glBindTexture(GL_TEXTURE_2D, 0);
     CHECK_GL_ERROR();
