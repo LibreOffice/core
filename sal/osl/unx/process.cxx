@@ -685,7 +685,10 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
 
     hThread = osl_createThread(ChildStatusProc, &Data);
 
-    osl_waitCondition(Data.m_started, NULL);
+    if (hThread != 0)
+    {
+        osl_waitCondition(Data.m_started, NULL);
+    }
     osl_destroyCondition(Data.m_started);
 
     for (i = 0; Data.m_pszArgs[i] != NULL; i++)
@@ -703,12 +706,14 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
 
     if (Data.m_pProcImpl->m_pid != 0)
     {
+         assert(hThread != 0);
+
         *pProcess = Data.m_pProcImpl;
 
          if (Options & osl_Process_WAIT)
             osl_joinProcess(*pProcess);
 
-        return osl_Process_E_None;
+         return osl_Process_E_None;
     }
 
     osl_destroyCondition(Data.m_pProcImpl->m_terminated);
