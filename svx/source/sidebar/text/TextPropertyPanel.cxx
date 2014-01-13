@@ -576,76 +576,29 @@ IMPL_LINK(TextPropertyPanel, ToolboxIncDecSelectHdl, ToolBox*, pToolBox)
             break;
 
         default:
+            EndTracking();
+            mbFocusOnFontSizeCtrl = false;
+            long nSize = mpFontSizeBox->GetValue();
+
             if(aCommand == UNO_GROW)
             {
-                EndTracking();
-                mbFocusOnFontSizeCtrl = false;
-                sal_Int64 iValue = mpFontSizeBox->GetValue();
-                int iPos = mpFontSizeBox->GetValuePos(iValue, FUNIT_NONE);
-                long nSize = iValue;
-                if(iPos != LISTBOX_ENTRY_NOTFOUND)
-                    nSize = mpFontSizeBox->GetValue(iPos+1 , FUNIT_NONE);
-                else if(iValue >= 100 && iValue < 105)
-                    nSize = 105;
-                else if(iValue >= 105 && iValue < 110)
-                    nSize = 110;
-                else if(iValue < 960)
-                {
-                    nSize = (nSize / 10) * 10 + 10;
-                    while(nSize < 960 && mpFontSizeBox->GetValuePos(nSize, FUNIT_NONE) == LISTBOX_ENTRY_NOTFOUND)
-                        nSize += 10;
-                }
-                else
-                {
-                    nSize = iValue;
-                }
-
-                float fSize = (float)nSize / 10;
-
-                SfxMapUnit eUnit = maFontSizeControl.GetCoreMetric();
-                SvxFontHeightItem aItem( CalcToUnit( fSize, eUnit ), 100, SID_ATTR_CHAR_FONTHEIGHT ) ;
-
-                mpBindings->GetDispatcher()->Execute( SID_ATTR_CHAR_FONTHEIGHT, SFX_CALLMODE_RECORD, &aItem, 0L );
-                mpBindings->Invalidate(SID_ATTR_CHAR_FONTHEIGHT,true,false);
-                mpFontSizeBox->SetValue( nSize );
+                if( ( nSize += 20 ) >= 9999 )
+                    nSize = 9999;
             }
             else if(aCommand == UNO_SHRINK)
             {
-                EndTracking();
-                mbFocusOnFontSizeCtrl = false;
-                sal_Int64 iValue = mpFontSizeBox->GetValue();
-                int iPos = mpFontSizeBox->GetValuePos(iValue, FUNIT_NONE);
-                long nSize = iValue;
-                if(iPos != LISTBOX_ENTRY_NOTFOUND)
-                    nSize = mpFontSizeBox->GetValue(iPos-1, FUNIT_NONE);
-                else if(iValue > 100 && iValue <= 105)
-                    nSize = 100;
-                else if(iValue > 105 && iValue <= 110)
-                    nSize = 105;
-                else if(iValue > 960)
-                {
-                    nSize = 960;
-                }
-                else if(iValue > 60)
-                {
-                    nSize = (nSize / 10) * 10 ;
-                    while(nSize > 60 && mpFontSizeBox->GetValuePos(nSize, FUNIT_NONE) == LISTBOX_ENTRY_NOTFOUND)
-                        nSize -= 10;
-                }
-                else
-                {
-                    nSize = iValue;
-                }
-
-                float fSize = (float)nSize / 10;
-
-                SfxMapUnit eUnit = maFontSizeControl.GetCoreMetric();
-                SvxFontHeightItem aItem( CalcToUnit( fSize, eUnit ), 100, SID_ATTR_CHAR_FONTHEIGHT ) ;
-
-                mpBindings->GetDispatcher()->Execute( SID_ATTR_CHAR_FONTHEIGHT, SFX_CALLMODE_RECORD, &aItem, 0L );
-                mpBindings->Invalidate(SID_ATTR_CHAR_FONTHEIGHT,true,false);
-                mpFontSizeBox->SetValue( nSize );
+                if( ( nSize -= 20 ) <= 20 )
+                    nSize = 20;
             }
+
+            float fSize = (float)nSize / 10;
+
+            SfxMapUnit eUnit = maFontSizeControl.GetCoreMetric();
+            SvxFontHeightItem aItem( CalcToUnit( fSize, eUnit ), 100, SID_ATTR_CHAR_FONTHEIGHT ) ;
+
+            mpBindings->GetDispatcher()->Execute( SID_ATTR_CHAR_FONTHEIGHT, SFX_CALLMODE_RECORD, &aItem, 0L );
+            mpBindings->Invalidate(SID_ATTR_CHAR_FONTHEIGHT,true,false);
+            mpFontSizeBox->SetValue( nSize );
     }
     UpdateItem(SID_ATTR_CHAR_FONTHEIGHT);
 
@@ -805,8 +758,8 @@ void TextPropertyPanel::NotifyItemUpdate (
 
                     default:
                     {
-                        mpToolBoxIncDec->EnableItem(nIncreaseId, bIsEnabled && nValue<960);
-                        mpToolBoxIncDec->EnableItem(nDecreaseId, bIsEnabled && nValue>60);
+                        mpToolBoxIncDec->EnableItem(nIncreaseId, bIsEnabled && nValue<9999);
+                        mpToolBoxIncDec->EnableItem(nDecreaseId, bIsEnabled && nValue>20);
                         break;
                     }
                 }
@@ -1073,11 +1026,11 @@ void TextPropertyPanel::NotifyItemUpdate (
                     const sal_Int64 nSize (mpFontSizeBox->GetValue());
                     if(nSID == SID_GROW_FONT_SIZE)
                     {
-                        mpToolBoxIncDec->EnableItem(mpToolBoxIncDec->GetItemId(UNO_GROW), bIsEnabled && nSize<960);
+                        mpToolBoxIncDec->EnableItem(mpToolBoxIncDec->GetItemId(UNO_GROW), bIsEnabled && nSize<9999);
                     }
                     else if (nSID == SID_SHRINK_FONT_SIZE)
                     {
-                        mpToolBoxIncDec->EnableItem(mpToolBoxIncDec->GetItemId(UNO_SHRINK), bIsEnabled && nSize>60);
+                        mpToolBoxIncDec->EnableItem(mpToolBoxIncDec->GetItemId(UNO_SHRINK), bIsEnabled && nSize>20);
                     }
                 }
             }

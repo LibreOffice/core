@@ -55,8 +55,8 @@
 #include <SwStyleNameMapper.hxx>
 #include "swabstdlg.hxx"
 #include "chrdlg.hrc"
-const SwTwips lFontInc = 2 * 20;           // ==> PointToTwips(2)
-const SwTwips lFontMaxSz = 72 * 20;        // ==> PointToTwips(72)
+const SwTwips lFontInc = 40;        // 2pt
+const SwTwips lFontMaxSz = 19998;   // 999.9pt
 
 
 
@@ -234,19 +234,15 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
                     SvxFontHeightItem aSize( *(const SvxFontHeightItem*)pI );
                     SwTwips lSize = (SwTwips) aSize.GetHeight();
 
-                    if (bGrow)
+                    if ( bGrow )
                     {
-                        if( lSize == lFontMaxSz )
-                            break;      // That's all, further up is not possible
-                        if( ( lSize += lFontInc ) > lFontMaxSz )
+                        if( ( lSize += lFontInc ) >= lFontMaxSz )
                             lSize = lFontMaxSz;
                     }
                     else
                     {
-                        if( 4 == lSize )
-                            break;
-                        if( ( lSize -= lFontInc ) < 4 )
-                            lSize = 4;
+                        if( ( lSize -= lFontInc ) <= lFontInc )
+                            lSize = lFontInc;
                     }
                     aSize.SetHeight( lSize );
                     aAttrSet.Put( aSize );
