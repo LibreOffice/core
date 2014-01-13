@@ -44,7 +44,7 @@ published interface XMouseMotionListener: com::sun::star::lang::XEventListener
     void mouseDragged( [in] com::sun::star::awt::MouseEvent e );
 
 
-    /** is invoked when the mouse button has been moved on a window
+    /** is invoked when the mouse pointer has been moved on a window
         (with no buttons down).
      */
     void mouseMoved( [in] com::sun::star::awt::MouseEvent e );
