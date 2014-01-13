@@ -7969,7 +7969,7 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const OUString& rOrigStr, 
 
             // output last line left adjusted since it was shortened
             if (!aLastLine.isEmpty())
-                drawText( aPos, aLastLine, 0, STRING_LEN, bTextLines );
+                drawText( aPos, aLastLine, 0, aLastLine.getLength(), bTextLines );
         }
     }
     else
@@ -8002,7 +8002,7 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const OUString& rOrigStr, 
         // mnemonics should be inserted here if the need arises
 
         // draw the actual text
-        drawText( aPos, aStr, 0, STRING_LEN, bTextLines );
+        drawText( aPos, aStr, 0, aStr.getLength(), bTextLines );
     }
 
     // reset clip region to original value

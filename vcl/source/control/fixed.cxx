@@ -622,7 +622,7 @@ void FixedLine::ImplDraw( bool bLayout )
             aStartPt.Y() -= (aOutSize.Height() - nWidth)/2;
         Point aTextPt( aStartPt );
         aTextPt.X() -= GetTextHeight()/2;
-        DrawText( aTextPt, aText, 0, STRING_LEN, pVector, pDisplayText );
+        DrawText( aTextPt, aText, 0, aText.getLength(), pVector, pDisplayText );
         Pop();
         if( aOutSize.Height() - aStartPt.Y() > FIXEDLINE_TEXT_BORDER )
             aDecoView.DrawSeparator( Point( aStartPt.X(), aOutSize.Height()-1 ),

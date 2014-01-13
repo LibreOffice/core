@@ -3918,7 +3918,7 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
     // strikeout text has to be left aligned
     sal_uLong nOrigTLM = mnTextLayoutMode;
     mnTextLayoutMode = TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_COMPLEX_DISABLED;
-    pLayout = ImplLayout( aStrikeoutText, 0, STRING_LEN );
+    pLayout = ImplLayout( aStrikeoutText, 0, aStrikeoutText.getLength() );
     mnTextLayoutMode = nOrigTLM;
 
     if( !pLayout )
@@ -5501,7 +5501,6 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
 long OutputDevice::GetTextArray( const OUString& rStr, sal_Int32* pDXAry,
                                  sal_Int32 nIndex, sal_Int32 nLen ) const
 {
-    // MEM: default nLen = STRING_LENGTH
     if(nLen == 0x0FFFF)
     {
         SAL_INFO("sal.rtl.xub",
@@ -6247,7 +6246,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
 
             // If there still is a last line, we output it left-aligned as the line would be clipped
             if ( !aLastLine.isEmpty() )
-                _rLayout.DrawText( aPos, aLastLine, 0, STRING_LEN, pVector, pDisplayText );
+                _rLayout.DrawText( aPos, aLastLine, 0, aLastLine.getLength(), pVector, pDisplayText );
 
             // Reset clipping
             if ( nStyle & TEXT_DRAW_CLIP )
@@ -6312,7 +6311,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
         {
             rTargetDevice.Push( PUSH_CLIPREGION );
             rTargetDevice.IntersectClipRegion( rRect );
-            _rLayout.DrawText( aPos, aStr, 0, STRING_LEN, pVector, pDisplayText );
+            _rLayout.DrawText( aPos, aStr, 0, aStr.getLength(), pVector, pDisplayText );
             if ( bDrawMnemonics )
             {
                 if ( nMnemonicPos != -1 )
@@ -6322,7 +6321,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
         }
         else
         {
-            _rLayout.DrawText( aPos, aStr, 0, STRING_LEN, pVector, pDisplayText );
+            _rLayout.DrawText( aPos, aStr, 0, aStr.getLength(), pVector, pDisplayText );
             if ( bDrawMnemonics )
             {
                 if ( nMnemonicPos != -1 )
