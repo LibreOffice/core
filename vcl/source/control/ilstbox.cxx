@@ -2154,12 +2154,11 @@ void ImplListBoxWindow::ScrollHorz( long n )
 
 // -----------------------------------------------------------------------
 
-Size ImplListBoxWindow::CalcSize( sal_uInt16 nMaxLines ) const
+Size ImplListBoxWindow::CalcSize(sal_Int32 nMaxLines) const
 {
     // FIXME: LISTBOX_ENTRY_FLAG_MULTILINE
 
     Size aSz;
-//  sal_uInt16 nL = Min( nMaxLines, mpEntryList->GetEntryCount() );
     aSz.Height() =  nMaxLines * mnMaxHeight;
     aSz.Width() = mnMaxWidth + 2*mnBorder;
     return aSz;

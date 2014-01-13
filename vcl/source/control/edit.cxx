@@ -2942,7 +2942,7 @@ Size Edit::GetOptimalSize() const
 
 // -----------------------------------------------------------------------
 
-Size Edit::CalcSize( xub_StrLen nChars ) const
+Size Edit::CalcSize(sal_Int32 nChars) const
 {
     // width for N characters, independent from content.
     // works only correct for fixed fonts, average otherwise

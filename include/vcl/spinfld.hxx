@@ -103,7 +103,7 @@ public:
     virtual Size    CalcMinimumSize() const;
     virtual Size    CalcMinimumSizeForText(const OUString &rString) const;
     virtual Size    GetOptimalSize() const;
-    virtual Size    CalcSize( sal_uInt16 nChars ) const;
+    virtual Size    CalcSize(sal_Int32 nChars) const;
 };
 
 #endif // INCLUDED_VCL_SPINFLD_HXX

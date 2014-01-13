@@ -347,7 +347,7 @@ public:
     bool            IsMouseMoveSelectEnabled() const    { return mbMouseMoveSelect; }
     bool            IsMouseMoveSelect() const   { return mbMouseMoveSelect||mbStackMode; }
 
-    Size            CalcSize( sal_uInt16 nMaxLines ) const;
+    Size            CalcSize(sal_Int32 nMaxLines) const;
     Rectangle       GetBoundingRectangle( sal_uInt16 nItem ) const;
 
     long            GetEntryHeight() const              { return mnMaxHeight; }

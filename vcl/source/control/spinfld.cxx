@@ -1005,7 +1005,7 @@ Size SpinField::GetOptimalSize() const
 
 // -----------------------------------------------------------------------
 
-Size SpinField::CalcSize( sal_uInt16 nChars ) const
+Size SpinField::CalcSize(sal_Int32 nChars) const
 {
     Size aSz = Edit::CalcSize( nChars );
 

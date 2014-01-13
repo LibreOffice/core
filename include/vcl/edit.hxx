@@ -233,7 +233,7 @@ public:
     virtual Size        CalcMinimumSize() const;
     virtual Size        CalcMinimumSizeForText(const OUString &rString) const;
     virtual Size        GetOptimalSize() const;
-    virtual Size        CalcSize( sal_uInt16 nChars ) const;
+    virtual Size        CalcSize(sal_Int32 nChars) const;
     virtual sal_Int32   GetMaxVisChars() const;
 
     sal_Int32           GetCharPos( const Point& rWindowPos ) const;
