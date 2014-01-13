@@ -8,21 +8,51 @@
  */
 
 #include "WPXSvStream.hxx"
+
+#include <rtl/string.hxx>
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+
 #include <limits>
 #include <vector>
+
+#include <boost/scoped_ptr.hpp>
+#include <boost/unordered_map.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 
 namespace
 {
-static void splitPath( std::vector<OUString> &rElems, const OUString &rPath )
+
+class PositionHolder
 {
-    for (sal_Int32 i = 0; i >= 0;)
-        rElems.push_back( rPath.getToken( 0, '/', i ) );
+    // disable copying
+    PositionHolder(const PositionHolder &);
+    PositionHolder &operator=(const PositionHolder &);
+
+public:
+    explicit PositionHolder(const Reference<XSeekable> &rxSeekable);
+    ~PositionHolder();
+
+private:
+    const Reference<XSeekable> mxSeekable;
+    const sal_uInt64 mnPosition;
+};
+
+PositionHolder::PositionHolder(const Reference<XSeekable> &rxSeekable)
+    : mxSeekable(rxSeekable)
+    , mnPosition(rxSeekable->getPosition())
+{
+}
+
+PositionHolder::~PositionHolder() try
+{
+    mxSeekable->seek(mnPosition);
+}
+catch (...)
+{
 }
 
 } // anonymous namespace
@@ -37,6 +67,154 @@ typedef struct
     SotStorageStreamRef ref;
 } SotStorageStreamRefWrapper;
 
+namespace
+{
+
+const rtl::OUString concatPath(const rtl::OUString &lhs, const rtl::OUString &rhs)
+{
+    if (lhs.isEmpty())
+        return rhs;
+    return lhs + "/" + rhs;
+}
+
+struct StreamData
+{
+    explicit StreamData(const rtl::OString &rName);
+
+    SotStorageStreamRefWrapper stream;
+    rtl::OString name;
+};
+
+typedef boost::unordered_map<rtl::OUString, std::size_t, rtl::OUStringHash> NameMap_t;
+typedef boost::unordered_map<rtl::OUString, SotStorageRefWrapper, rtl::OUStringHash> OLEStorageMap_t;
+
+struct OLEStorageImpl
+{
+    OLEStorageImpl();
+
+    void initialize(SvStream *pStream);
+
+    SotStorageStreamRef getStream(const rtl::OUString &rPath);
+    SotStorageStreamRef getStream(std::size_t nId);
+
+private:
+    void traverse(const SotStorageRef &rStorage, const rtl::OUString &rPath);
+
+    SotStorageStreamRef createStream(const rtl::OUString &rPath);
+
+public:
+    boost::scoped_ptr<SvStream> mpStream;
+    SotStorageRefWrapper mxRootStorage;
+    OLEStorageMap_t maStorageMap;
+    ::std::vector< StreamData > maStreams;
+    NameMap_t maNameMap;
+    bool mbInitialized;
+};
+
+StreamData::StreamData(const rtl::OString &rName)
+    : stream()
+    , name(rName)
+{
+}
+
+OLEStorageImpl::OLEStorageImpl()
+    : mpStream()
+    , mxRootStorage()
+    , maStorageMap()
+    , maStreams()
+    , maNameMap()
+    , mbInitialized(false)
+{
+}
+
+void OLEStorageImpl::initialize(SvStream *const pStream)
+{
+    if (!pStream)
+        return;
+
+    mpStream.reset(pStream);
+    mxRootStorage.ref = new SotStorage( pStream, sal_True );
+
+    traverse(mxRootStorage.ref, "");
+
+    mbInitialized = true;
+}
+
+SotStorageStreamRef OLEStorageImpl::getStream(const rtl::OUString &rPath)
+{
+    NameMap_t::iterator aIt = maNameMap.find(rPath);
+
+    // For the while don't return stream in this situation.
+    // Later, given how libcdr's zip stream implementation behaves,
+    // return the first stream in the storage if there is one.
+    if (maNameMap.end() == aIt)
+        return SotStorageStreamRef();
+
+    if (!maStreams[aIt->second].stream.ref.Is())
+        maStreams[aIt->second].stream.ref = createStream(rPath);
+
+    return maStreams[aIt->second].stream.ref;
+}
+
+SotStorageStreamRef OLEStorageImpl::getStream(const std::size_t nId)
+{
+    if (!maStreams[nId].stream.ref.Is())
+        maStreams[nId].stream.ref = createStream(rtl::OStringToOUString(maStreams[nId].name, RTL_TEXTENCODING_UTF8));
+
+    return maStreams[nId].stream.ref;
+}
+
+void OLEStorageImpl::traverse(const SotStorageRef &rStorage, const rtl::OUString &rPath)
+{
+    SvStorageInfoList infos;
+
+    rStorage->FillInfoList(&infos);
+
+    for (SvStorageInfoList::const_iterator aIt = infos.begin(); infos.end() != aIt; ++aIt)
+    {
+        if (aIt->IsStream())
+        {
+            maStreams.push_back(StreamData(rtl::OUStringToOString(aIt->GetName(), RTL_TEXTENCODING_UTF8)));
+            maNameMap[concatPath(rPath, aIt->GetName())] = maStreams.size() - 1;
+        }
+        else if (aIt->IsStorage())
+        {
+            const rtl::OUString aPath = concatPath(rPath, aIt->GetName());
+            SotStorageRefWrapper xStorage;
+            xStorage.ref = rStorage->OpenSotStorage(aIt->GetName(), STREAM_STD_READ);
+            maStorageMap[aPath] = xStorage;
+
+            // deep-first traversal
+            traverse(xStorage.ref, aPath);
+        }
+        else
+        {
+            assert(0);
+        }
+    }
+}
+
+SotStorageStreamRef OLEStorageImpl::createStream(const rtl::OUString &rPath)
+{
+    const sal_Int32 nDelim = rPath.lastIndexOf(sal_Unicode('/'));
+
+    if (-1 == nDelim)
+        return mxRootStorage.ref->OpenSotStream(rPath, STREAM_STD_READ);
+
+    const rtl::OUString aDir = rPath.copy(0, nDelim);
+    const rtl::OUString aName = rPath.copy(nDelim + 1);
+
+    const OLEStorageMap_t::const_iterator aIt = maStorageMap.find(aDir);
+
+    // We can only get there for paths that are present in the OLE.
+    // Which means the storage must exist.
+    assert(maStorageMap.end() != aIt);
+
+    return aIt->second.ref->OpenSotStream(aName, STREAM_STD_READ);
+}
+
+}
+
 class WPXSvInputStreamImpl
 {
 public :
@@ -44,22 +222,32 @@ public :
                       ::com::sun::star::io::XInputStream > xStream );
     ~WPXSvInputStreamImpl();
 
-    bool isOLEStream();
-    WPXInputStream * getDocumentOLEStream(const char *name);
+    bool isStructured();
+    unsigned subStreamCount();
+    const char * subStreamName(unsigned id);
+    bool existsSubStream(const char *name);
+    WPXInputStream * getSubStreamByName(const char *name);
+    WPXInputStream * getSubStreamById(unsigned id);
 
     const unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead);
     int seek(long offset);
     long tell();
-    bool atEOS();
+    bool isEnd();
+
     void invalidateReadBuffer();
+
 private:
-    ::std::vector< SotStorageRefWrapper > mxChildrenStorages;
-    ::std::vector< SotStorageStreamRefWrapper > mxChildrenStreams;
-    ::com::sun::star::uno::Reference<
-    ::com::sun::star::io::XInputStream > mxStream;
-    ::com::sun::star::uno::Reference<
-    ::com::sun::star::io::XSeekable > mxSeekable;
+    bool isOLE();
+    void ensureOLEIsInitialized();
+
+    WPXInputStream *createWPXStream(const SotStorageStreamRef &rxStorage);
+
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > mxStream;
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable > mxSeekable;
     ::com::sun::star::uno::Sequence< sal_Int8 > maData;
+    boost::scoped_ptr< OLEStorageImpl > mpOLEStorage;
+    bool mbCheckedOLE;
 public:
     sal_Int64 mnLength;
     unsigned char *mpReadBuffer;
@@ -68,8 +256,6 @@ public:
 };
 
 WPXSvInputStreamImpl::WPXSvInputStreamImpl( Reference< XInputStream > xStream ) :
-    mxChildrenStorages(),
-    mxChildrenStreams(),
     mxStream(xStream),
     mxSeekable(xStream, UNO_QUERY),
     maData(0),
@@ -109,7 +295,7 @@ const unsigned char *WPXSvInputStreamImpl::read(unsigned long numBytes, unsigned
 {
     numBytesRead = 0;
 
-    if (numBytes == 0 || atEOS())
+    if (numBytes == 0 || isEnd())
         return 0;
 
     numBytesRead = mxStream->readSomeBytes (maData, numBytes);
@@ -153,99 +339,127 @@ int WPXSvInputStreamImpl::seek(long offset)
     }
 }
 
-bool WPXSvInputStreamImpl::atEOS()
+bool WPXSvInputStreamImpl::isEnd()
 {
     if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
         return true;
     return (mxSeekable->getPosition() >= mnLength);
 }
 
-bool WPXSvInputStreamImpl::isOLEStream()
+bool WPXSvInputStreamImpl::isStructured()
 {
     if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
         return false;
 
-    sal_Int64 tmpPosition = mxSeekable->getPosition();
+    PositionHolder pos(mxSeekable);
     mxSeekable->seek(0);
 
-    SvStream *pStream = utl::UcbStreamHelper::CreateStream( mxStream );
-    bool bAns = pStream && SotStorage::IsOLEStorage( pStream );
-    if (pStream)
-        delete pStream;
-
-    mxSeekable->seek(tmpPosition);
-
-    return bAns;
+    return isOLE();
 }
 
-WPXInputStream *WPXSvInputStreamImpl::getDocumentOLEStream(const char *name)
+unsigned WPXSvInputStreamImpl::subStreamCount()
+{
+    if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
+        return 0;
+
+    PositionHolder pos(mxSeekable);
+    mxSeekable->seek(0);
+
+    if (isOLE())
+    {
+        ensureOLEIsInitialized();
+
+        return mpOLEStorage->maStreams.size();
+    }
+
+    return 0;
+}
+
+const char *WPXSvInputStreamImpl::subStreamName(const unsigned id)
+{
+    if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
+        return 0;
+
+    PositionHolder pos(mxSeekable);
+    mxSeekable->seek(0);
+
+    if (isOLE())
+    {
+        ensureOLEIsInitialized();
+
+        if (mpOLEStorage->maStreams.size() <= id)
+            return 0;
+
+        return mpOLEStorage->maStreams[id].name.getStr();
+    }
+
+    return 0;
+}
+
+bool WPXSvInputStreamImpl::existsSubStream(const char *const name)
 {
     if (!name)
         return 0;
-    OUString rPath(name,strlen(name),RTL_TEXTENCODING_UTF8);
-    std::vector<OUString> aElems;
-    splitPath( aElems, rPath );
+
+    if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
+        return false;
+
+    PositionHolder pos(mxSeekable);
+    mxSeekable->seek(0);
+
+    if (isOLE())
+    {
+        ensureOLEIsInitialized();
+
+        const rtl::OUString aName(rtl::OStringToOUString(rtl::OString(name), RTL_TEXTENCODING_UTF8));
+        return mpOLEStorage->maNameMap.end() != mpOLEStorage->maNameMap.find(aName);
+    }
+
+    return false;
+}
+
+WPXInputStream *WPXSvInputStreamImpl::getSubStreamByName(const char *const name)
+{
+    if (!name)
+        return 0;
 
     if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
         return 0;
 
-    sal_Int64 tmpPosition = mxSeekable->getPosition();
+    PositionHolder pos(mxSeekable);
     mxSeekable->seek(0);
 
-    SvStream *pStream = utl::UcbStreamHelper::CreateStream( mxStream );
-
-    if (!pStream || !SotStorage::IsOLEStorage( pStream ))
+    if (isOLE())
     {
-        mxSeekable->seek(tmpPosition);
-        return 0;
+        ensureOLEIsInitialized();
+
+        const rtl::OUString aName(rtl::OStringToOUString(rtl::OString(name), RTL_TEXTENCODING_UTF8));
+        return createWPXStream(mpOLEStorage->getStream(aName));
     }
 
-    SotStorageRefWrapper storageRefWrapper;
-    storageRefWrapper.ref = new SotStorage( pStream, sal_True );
-    mxChildrenStorages.push_back( storageRefWrapper );
-
-    unsigned i = 0;
-    while (i < aElems.size())
-    {
-        if( mxChildrenStorages.back().ref->IsStream(aElems[i]))
-            break;
-        else if (mxChildrenStorages.back().ref->IsStorage(aElems[i]))
-        {
-            SotStorageRef tmpParent(mxChildrenStorages.back().ref);
-            storageRefWrapper.ref = tmpParent->OpenSotStorage(aElems[i++], STREAM_STD_READ);
-            mxChildrenStorages.push_back(storageRefWrapper);
-        }
-        else
-            // should not happen
-            return 0;
-    }
-
-    // For the while don't return stream in this situation.
-    // Later, given how libcdr's zip stream implementation behaves,
-    // return the first stream in the storage if there is one.
-    if (i >= aElems.size())
-        return 0;
-
-    SotStorageStreamRefWrapper storageStreamRefWrapper;
-    storageStreamRefWrapper.ref = mxChildrenStorages.back().ref->OpenSotStream( aElems[i], STREAM_STD_READ );
-    mxChildrenStreams.push_back( storageStreamRefWrapper );
-
-    mxSeekable->seek(tmpPosition);
-
-    if ( !mxChildrenStreams.back().ref.Is() || mxChildrenStreams.back().ref->GetError() )
-    {
-        mxSeekable->seek(tmpPosition);
-        return 0;
-    }
-
-    Reference < XInputStream > xContents(new utl::OSeekableInputStreamWrapper( mxChildrenStreams.back().ref ));
-    mxSeekable->seek(tmpPosition);
-    if (xContents.is())
-        return new WPXSvInputStream( xContents );
-    else
-        return 0;
+    return 0;
 }
 
+WPXInputStream *WPXSvInputStreamImpl::getSubStreamById(const unsigned id)
+{
+    if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
+        return 0;
+
+    PositionHolder pos(mxSeekable);
+    mxSeekable->seek(0);
+
+    if (isOLE())
+    {
+        ensureOLEIsInitialized();
+
+        if (mpOLEStorage->maStreams.size() <= id)
+            return 0;
+
+        return createWPXStream(mpOLEStorage->getStream(id));
+    }
+
+    return 0;
+}
 
 void WPXSvInputStreamImpl::invalidateReadBuffer()
 {
@@ -257,6 +471,39 @@ void WPXSvInputStreamImpl::invalidateReadBuffer()
         mnReadBufferPos = 0;
         mnReadBufferLength = 0;
     }
+}
+
+WPXInputStream *WPXSvInputStreamImpl::createWPXStream(const SotStorageStreamRef &rxStorage)
+{
+    Reference < XInputStream > xContents(new utl::OSeekableInputStreamWrapper( rxStorage ));
+    if (xContents.is())
+        return new WPXSvInputStream( xContents );
+    else
+        return 0;
+}
+
+bool WPXSvInputStreamImpl::isOLE()
+{
+    if (!mbCheckedOLE)
+    {
+        assert(0 == mxSeekable->getPosition());
+
+        boost::scoped_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( mxStream ));
+        if (pStream && SotStorage::IsOLEStorage(pStream.get()))
+            mpOLEStorage.reset(new OLEStorageImpl());
+
+        mbCheckedOLE = true;
+    }
+
+    return bool(mpOLEStorage);
+}
+
+void WPXSvInputStreamImpl::ensureOLEIsInitialized()
+{
+    assert(mpOLEStorage);
+
+    if (!mpOLEStorage->mbInitialized)
+        mpOLEStorage->initialize(utl::UcbStreamHelper::CreateStream( mxStream ));
 }
 
 WPXSvInputStream::WPXSvInputStream( Reference< XInputStream > xStream ) :
@@ -368,21 +615,60 @@ int WPXSvInputStream::seek(long offset, WPX_SEEK_TYPE seekType)
     return retVal;
 }
 
+bool WPXSvInputStream::isEnd()
+{
+    return mpImpl->isEnd() && mpImpl->mnReadBufferPos == mpImpl->mnReadBufferLength;
+}
+
+bool WPXSvInputStream::isStructured()
+{
+    mpImpl->invalidateReadBuffer();
+    return mpImpl->isStructured();
+}
+
+unsigned WPXSvInputStream::subStreamCount()
+{
+    mpImpl->invalidateReadBuffer();
+    return mpImpl->subStreamCount();
+}
+
+const char *WPXSvInputStream::subStreamName(const unsigned id)
+{
+    mpImpl->invalidateReadBuffer();
+    return mpImpl->subStreamName(id);
+}
+
+bool WPXSvInputStream::existsSubStream(const char *const name)
+{
+    mpImpl->invalidateReadBuffer();
+    return mpImpl->existsSubStream(name);
+}
+
+WPXInputStream *WPXSvInputStream::getSubStreamByName(const char *name)
+{
+    mpImpl->invalidateReadBuffer();
+    return mpImpl->getSubStreamByName(name);
+}
+
+WPXInputStream *WPXSvInputStream::getSubStreamById(const unsigned id)
+{
+    mpImpl->invalidateReadBuffer();
+    return mpImpl->getSubStreamById(id);
+}
+
 bool WPXSvInputStream::atEOS()
 {
-    return mpImpl->atEOS() && mpImpl->mnReadBufferPos == mpImpl->mnReadBufferLength;
+    return isEnd();
 }
 
 bool WPXSvInputStream::isOLEStream()
 {
-    mpImpl->invalidateReadBuffer();
-    return mpImpl->isOLEStream();
+    return isStructured();
 }
 
 WPXInputStream *WPXSvInputStream::getDocumentOLEStream(const char *name)
 {
-    mpImpl->invalidateReadBuffer();
-    return mpImpl->getDocumentOLEStream(name);
+    return getSubStreamByName(name);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
