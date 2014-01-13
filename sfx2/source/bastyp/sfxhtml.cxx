@@ -248,12 +248,7 @@ sal_Bool SfxHTMLParser::FinishFileDownload( OUString& rStr )
             aStream << *pStream;
 
         aStream.Seek( STREAM_SEEK_TO_END );
-        DBG_ASSERT( aStream.Tell() < STRING_MAXLEN,
-                    "File too long for a string, cut off the end" );
-        xub_StrLen nLen = aStream.Tell() < STRING_MAXLEN
-                        ? (xub_StrLen)aStream.Tell()
-                        : STRING_MAXLEN;
-
+        sal_Size nLen = aStream.Tell();
         aStream.Seek( 0 );
         OString sBuffer = read_uInt8s_ToOString(aStream, nLen);
         rStr = OStringToOUString( sBuffer, RTL_TEXTENCODING_UTF8 );
