@@ -385,7 +385,7 @@ namespace pcr
     bool HyperlinkInput::impl_textHitTest( const ::Point& _rWindowPos )
     {
         sal_Int32 nPos = GetCharPos( _rWindowPos );
-        return ( ( nPos != STRING_LEN ) && ( nPos < GetText().getLength() ) );
+        return ( ( nPos != EDIT_NOLIMIT ) && ( nPos < GetText().getLength() ) );
     }
 
     //--------------------------------------------------------------------
