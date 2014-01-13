@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa98f980_7573c2b1",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2116,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-13T13:43:48Z",
+      "side": 1,
+      "message": "If you set bTabInTOC to true here, then you probably want to set it back to false in EndTOX(). Same for bHideTabLeaderAndPageNumbers.",
+      "revId": "e483e834b38ac6e84955b3240b05958846582c58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
