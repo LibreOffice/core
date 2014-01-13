@@ -436,16 +436,8 @@ public:
         @param nMaxCodepointsToRead
                    Maximum of codepoints (UCS-2 or UTF-16 pairs, not bytes) to
                    read, if line is longer it will be truncated.
-
-        @note NOTE that the default is one character less than STRING_MAXLEN to
-              prevent problems after conversion to String that may be lurking in
-              various places doing something like
-              @code
-                for (sal_uInt16 i=0; i < aString.Len(); ++i)
-              @endcode
-              causing endless loops ...
     */
-    bool            ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsToRead = 0xFFFE );
+    bool        ReadUniStringLine(OUString& rStr, sal_Int32 nMaxCodepointsToRead);
     /** Read a 32bit length prefixed sequence of utf-16 if
         eSrcCharSet==RTL_TEXTENCODING_UNICODE, otherwise read a 16bit length
         prefixed sequence of bytes and convert from eSrcCharSet */
