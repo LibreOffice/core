@@ -22121,63 +22121,6 @@
           </UML:Generalization.parent>
         </UML:Generalization>
         <!--DFF FSP-->
-        <!--DFF BlipPng-->
-        <UML:Class xmi.id="BlipPng" name="BlipPng">
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>0xf01e</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="dffid"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:Classifier.feature>
-            <UML:Attribute name="payload">
-              <UML:ModelElement.taggedValue>
-                <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>the actual PNG</UML:TaggedValue.dataValue>
-                  <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="comment"/>
-                  </UML:TaggedValue.type>
-                </UML:TaggedValue>
-              </UML:ModelElement.taggedValue>
-              <UML:ModelElement.taggedValue>
-                <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>0x19</UML:TaggedValue.dataValue>
-                  <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="offset"/>
-                  </UML:TaggedValue.type>
-                </UML:TaggedValue>
-              </UML:ModelElement.taggedValue>
-              <UML:ModelElement.taggedValue>
-                <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>rtf:payload</UML:TaggedValue.dataValue>
-                  <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="attrid"/>
-                  </UML:TaggedValue.type>
-                </UML:TaggedValue>
-              </UML:ModelElement.taggedValue>
-              <UML:StructuralFeature.type>
-                <UML:DataType xmi.idref="Blob"/>
-              </UML:StructuralFeature.type>
-              <UML:ModelElement.stereotype>
-                <UML:Stereotype xmi.idref="attribute"/>
-              </UML:ModelElement.stereotype>
-              <UML:ModelElement.stereotype>
-                <UML:Stereotype xmi.idref="attributeremainder"/>
-              </UML:ModelElement.stereotype>
-            </UML:Attribute>
-          </UML:Classifier.feature>
-        </UML:Class>
-        <UML:Generalization isSpecification="false" xmi.id="BlipPng-Properties">
-          <UML:Generalization.child>
-            <UML:Class xmi.idref="BlipPng"/>
-          </UML:Generalization.child>
-          <UML:Generalization.parent>
-            <UML:Class xmi.idref="Properties"/>
-          </UML:Generalization.parent>
-        </UML:Generalization>
-        <!--DFF BlipPng-->
         <!--DFF BlipDib-->
         <UML:Class xmi.id="BlipDib" name="BlipDib">
           <UML:ModelElement.taggedValue>

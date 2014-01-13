@@ -483,7 +483,7 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
             }
         }
         break;
-        case NS_rtf::LN_payload :
+        case NS_ooxml::LN_payload :
         {
             writerfilter::Reference<BinaryObj>::Pointer_t pPictureData = val.getBinary();
             if( pPictureData.get())

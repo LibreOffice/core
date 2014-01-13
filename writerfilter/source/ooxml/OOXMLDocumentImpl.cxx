@@ -345,7 +345,7 @@ OOXMLPropertySet * OOXMLDocumentImpl::getPicturePropSet
     OOXMLValue::Pointer_t pPayloadValue(new OOXMLBinaryValue(pPicture));
 
     OOXMLProperty::Pointer_t pPayloadProperty
-        (new OOXMLPropertyImpl(NS_rtf::LN_payload, pPayloadValue,
+        (new OOXMLPropertyImpl(NS_ooxml::LN_payload, pPayloadValue,
                                OOXMLPropertyImpl::ATTRIBUTE));
 
     OOXMLPropertySet::Pointer_t pBlipSet(new OOXMLPropertySetImpl());
