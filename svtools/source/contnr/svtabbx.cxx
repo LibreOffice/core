@@ -1231,7 +1231,7 @@ sal_Int32 SvHeaderTabListBox::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nC
 {
     OUString sText = GetAccessibleCellText( _nRow, static_cast< sal_uInt16 >( _nColumnPos ) );
     MetricVector aRects;
-    if ( GetGlyphBoundRects(Point(0,0),sText,0,STRING_LEN,0,aRects) )
+    if ( GetGlyphBoundRects(Point(0,0), sText, 0, sText.getLength(), 0, aRects) )
     {
         for (MetricVector::iterator aIter = aRects.begin(); aIter != aRects.end(); ++aIter)
         {
