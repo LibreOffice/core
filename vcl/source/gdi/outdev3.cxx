@@ -7185,8 +7185,19 @@ sal_Bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const OUString&
 
     rVector.clear();
 
-    if( nLen == STRING_LEN )
+    if(nLen == 0x0FFFF)
+    {
+        SAL_INFO("sal.rtl.xub",
+                 "GetGlyphBoundRects Suspicious arguments nLen:" << nLen);
+    }
+
+    if( nIndex >= rStr.getLength() )
+        return false;
+
+    if( nLen < 0 || nIndex + nLen >= rStr.getLength() )
+    {
         nLen = rStr.getLength() - nIndex;
+    }
 
     Rectangle aRect;
     for( int i = 0; i < nLen; i++ )
