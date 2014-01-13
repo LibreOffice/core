@@ -599,10 +599,8 @@ void GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
     Rectangle            areaRect;
     GtkShadowType        shadowType;
     const SpinbuttonValue *    pSpinVal = (aValue.getType() == CTRL_SPINBUTTONS) ? static_cast<const SpinbuttonValue *>(&aValue) : NULL;
-    Rectangle            upBtnRect;
     ControlPart        upBtnPart = PART_BUTTON_UP;
     ControlState        upBtnState = CTRL_STATE_ENABLED;
-    Rectangle            downBtnRect;
     ControlPart        downBtnPart = PART_BUTTON_DOWN;
     ControlState        downBtnState = CTRL_STATE_ENABLED;
 
