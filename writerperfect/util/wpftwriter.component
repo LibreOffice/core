@@ -18,6 +18,10 @@
 -->
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="wpftwriter" xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.Writer.AbiWordImportFilter">
+    <service name="com.sun.star.document.ImportFilter"/>
+    <service name="com.sun.star.document.ExtendedTypeDetection"/>
+  </implementation>
   <implementation name="com.sun.star.comp.Writer.MSWorksImportFilter">
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExtendedTypeDetection"/>

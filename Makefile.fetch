@@ -75,6 +75,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 	@date >> $(fetch_LOGFILE)
 	$(foreach item, \
 		$(call fetch_Optional,LIBATOMIC_OPS,LIBATOMIC_OPS_TARBALL) \
+		$(call fetch_Optional,ABW,ABW_TARBALL) \
 		$(call fetch_Optional,CDR,CDR_TARBALL) \
 		$(call fetch_Optional,EBOOK,EBOOK_TARBALL) \
 		$(call fetch_Optional,FREEHAND,FREEHAND_TARBALL) \
