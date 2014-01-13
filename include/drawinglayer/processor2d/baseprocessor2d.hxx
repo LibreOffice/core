@@ -33,7 +33,7 @@ namespace drawinglayer
     {
         /** BaseProcessor2D class
 
-            Baseclass for all C++ implementations of instances which process
+            Base class for all C++ implementations of instances which process
             primitives.
 
             Instances which process primitives can be renderers, but also stuff
@@ -69,7 +69,7 @@ namespace drawinglayer
 
             Basic Primitives:
 
-            - BitmapPrimitive2D (bitmap data, evtl. with transparence)
+            - BitmapPrimitive2D (bitmap data, eventually with transparency)
             - PointArrayPrimitive2D (single points)
             - PolygonHairlinePrimitive2D (hairline curves/polygons)
             - PolyPolygonColorPrimitive2D (colored polygons)
@@ -83,7 +83,7 @@ namespace drawinglayer
             - TransformPrimitive2D (for a transformation stack)
 
             A processor doing so is a minimal processor. Of course a processor may
-            handle any higher-level prmitive (that has a decomposition implementation)
+            handle any higher-level primitive (that has a decomposition implementation)
             for more direct data access or performance reasons, too.
 
             The main part of a processBasePrimitive2D implementation is a switch..case
