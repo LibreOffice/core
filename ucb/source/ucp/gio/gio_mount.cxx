@@ -22,7 +22,14 @@
 #include <stdio.h>
 #include <string.h>
 
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE && HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-function"
+#endif
 G_DEFINE_TYPE (OOoMountOperation, ooo_mount_operation, G_TYPE_MOUNT_OPERATION);
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE && HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
+#pragma GCC diagnostic pop
+#endif
 
 static void ooo_mount_operation_ask_password (GMountOperation   *op,
     const char *message, const char *default_user, const char *default_domain,
