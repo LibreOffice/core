@@ -419,10 +419,14 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
             const sal_UCS4 cMaxChar = Getsal_uInt16( pLimitBase + 2*i );
             const int nGlyphDelta  = GetSShort( pDeltaBase + 2*i );
             const int nRangeOffset = Getsal_uInt16( pOffsetBase + 2*i );
-            if( cMinChar > cMaxChar )   // no sane font should trigger this
+            if( cMinChar > cMaxChar ) {  // no sane font should trigger this
+                SAL_WARN("vcl.gdi", "Min char should never be more than the max char!");
                 break;
-            if( cMaxChar == 0xFFFF )
+            }
+            if( cMaxChar == 0xFFFF ) {
+                SAL_WARN("vcl.gdi", "Format 4 char should not be 0xFFFF");
                 break;
+            }
             *(pCP++) = cMinChar;
             *(pCP++) = cMaxChar + 1;
             if( !nRangeOffset ) {
@@ -454,15 +458,12 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
             sal_UCS4 cMaxChar = GetUInt( pGroup + 4 );
             int nGlyphId = GetUInt( pGroup + 8 );
             pGroup += 12;
-#if 0       // TODO: remove unicode baseplane clipping for UCS-4 support
-            if( cMinChar > 0xFFFF )
-                continue;
-            if( cMaxChar > 0xFFFF )
-                cMaxChar = 0xFFFF;
-#else
-            if( cMinChar > cMaxChar )   // no sane font should trigger this
+
+            if( cMinChar > cMaxChar ) {   // no sane font should trigger this
+                SAL_WARN("vcl.gdi", "Min char should never be more than the max char!");
                 break;
-#endif
+            }
+
             *(pCP++) = cMinChar;
             *(pCP++) = cMaxChar + 1;
             pStartGlyphs[i] = nGlyphId;
