@@ -33,6 +33,23 @@
       "revId": "093aecb20417d2871474494f94964d98c43b05fb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_15d0b652",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2699,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-13T15:19:15Z",
+      "side": 1,
+      "message": "No need to have a separate bool here, just check for .isEmpty() before you call setPropertyValue().",
+      "revId": "093aecb20417d2871474494f94964d98c43b05fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
