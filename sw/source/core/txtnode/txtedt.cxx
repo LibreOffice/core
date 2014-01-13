@@ -488,23 +488,21 @@ void SwTxtNode::RstTxtAttr(
             continue;
         }
 
-        if( nStt <= nAttrStart )          // Faelle: 1,3,5
+        if (nStt <= nAttrStart)     // Case: 1,3,5
         {
             const sal_Int32 nAttrEnd = pAttrEnd != NULL
                                         ? *pAttrEnd
                                         : nAttrStart;
-            if( nEnd > nAttrStart
-                || ( nEnd == nAttrEnd && nEnd == nAttrStart ) )
+            if (nEnd > nAttrStart
+                || (nEnd == nAttrEnd && nEnd == nAttrStart)) // Case: 1,3
             {
-                // Faelle: 1,3
                 if ( nMin > nAttrStart )
                     nMin = nAttrStart;
                 if ( nMax < nAttrEnd )
                     nMax = nAttrEnd;
-                // Falls wir nur ein nichtaufgespanntes Attribut entfernen,
-                // tun wir mal so, als ob sich nichts geaendert hat.
+                // If only a no-extent hint is deleted, no resorting is needed
                 bChanged = bChanged || nEnd > nAttrStart || bNoLen;
-                if( nAttrEnd <= nEnd ) // Fall: 1
+                if (nAttrEnd <= nEnd)   // Case: 1
                 {
                     m_pSwpHints->DeleteAtPos(i);
                     DestroyAttr( pHt );
@@ -521,16 +519,13 @@ void SwTxtNode::RstTxtAttr(
                         break;
 
                     //JP 26.11.96:
-                    // beim DeleteAtPos wird ein Resort ausgefuehrt!!
-                    // darum muessen wir wieder bei 0 anfangen!!!
-                    // ueber den Fall 3 koennen Attribute nach hinten
-                    // verschoben worden sein; damit stimmt jetzt das i
-                    // nicht mehr!!!
+                    // DeleteAtPos does a Resort!  Via Case 3 or 4 hints could
+                    // have been moved around so i is wrong now.
+                    // So we have to start over at 0 again.
                     i = 0;
-
                     continue;
                 }
-                else // Fall: 3
+                else    // Case: 3
                 {
                     m_pSwpHints->NoteInHistory( pHt );
                     // UGLY: this may temporarily destroy the sorting!
@@ -552,11 +547,11 @@ void SwTxtNode::RstTxtAttr(
                 }
             }
         }
-        else if ( pAttrEnd != NULL )    // Faelle: 2,4,5
+        else if (pAttrEnd != 0)         // Case: 2,4,5
         {
-            if( *pAttrEnd > nStt )     // Faelle: 2,4
+            if (*pAttrEnd > nStt)       // Case: 2,4
             {
-                if( *pAttrEnd < nEnd )  // Fall: 2
+                if (*pAttrEnd < nEnd)   // Case: 2
                 {
                     if ( nMin > nAttrStart )
                         nMin = nAttrStart;
@@ -582,10 +577,10 @@ void SwTxtNode::RstTxtAttr(
                     // and pNew being inserted behind pHt
                     assert(pHt == m_pSwpHints->GetTextHint(i));
                 }
-                else if( nLen ) // Fall: 4
+                else if (nLen)  // Case: 4
                 {
-                    // bei Lange 0 werden beide Hints vom Insert(Ht)
-                    // wieder zu einem zusammengezogen !!!!
+                    // for Length 0 both hints would be merged again by
+                    // InsertHint, so leave them alone!
                     if ( nMin > nAttrStart )
                         nMin = nAttrStart;
                     if ( nMax < *pAttrEnd )
@@ -618,8 +613,8 @@ void SwTxtNode::RstTxtAttr(
                                 nsSetAttrMode::SETATTR_NOHINTADJUST );
                         }
 
-                        // jetzt kein i+1, weil das eingefuegte Attribut
-                        // ein anderes auf die Position geschoben hat !
+                        // don't increment, the inserted attribute has pushed
+                        // another onto position i!
                         continue;
                     }
 
@@ -639,7 +634,7 @@ void SwTxtNode::RstTxtAttr(
         {   // possibly sometimes Resort would be sufficient, but...
             m_pSwpHints->MergePortions(*this);
         }
-        //TxtFrm's reagieren auf aHint, andere auf aNew
+        // TxtFrm's respond to aHint, others to aNew
         SwUpdateAttr aHint( nMin, nMax, 0 );
         NotifyClients( 0, &aHint );
         SwFmtChg aNew( GetFmtColl() );
