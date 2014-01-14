@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa98f980_f5c0922c",
+        "filename": "filter/source/msfilter/eschesdo.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000531
+      },
+      "writtenOn": "2014-01-14T12:02:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa98f980_150516c2",
+      "revId": "0824e551604dd8b6a365b957be1727bc66a9c2ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa98f980_550f9ee1",
         "filename": "filter/source/msfilter/eschesdo.hxx",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2014-01-13T16:23:15Z",
       "side": 1,
       "message": "Existing methods in this call start with a capital letter, please follow that convention: SetOOXML().",
+      "revId": "0824e551604dd8b6a365b957be1727bc66a9c2ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_15dd1615",
+        "filename": "filter/source/msfilter/eschesdo.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000531
+      },
+      "writtenOn": "2014-01-14T12:02:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa98f980_550f9ee1",
       "revId": "0824e551604dd8b6a365b957be1727bc66a9c2ce",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "fa98f980_35e21ad6",
+        "filename": "oox/source/export/vmlexport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000531
+      },
+      "writtenOn": "2014-01-14T12:02:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa98f980_b5f52acd",
+      "revId": "0824e551604dd8b6a365b957be1727bc66a9c2ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa98f980_35313aa3",
         "filename": "oox/source/export/vmlexport.cxx",
         "patchSetId": 4
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "fa98f980_55e79ee4",
+        "filename": "oox/source/export/vmlexport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1000531
+      },
+      "writtenOn": "2014-01-14T12:02:31Z",
+      "side": 1,
+      "message": "If AddSdrObject() method, test goes into infinite loop. Because there is already AddSdrObject() function with same parameter which is mandatory in both cases. So should I add new method in parent class?",
+      "parentUuid": "fa98f980_35313aa3",
+      "revId": "0824e551604dd8b6a365b957be1727bc66a9c2ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa98f980_5526be69",
         "filename": "sw/source/filter/ww8/rtfsdrexport.cxx",
         "patchSetId": 4
@@ -81,6 +153,24 @@
       "writtenOn": "2014-01-13T16:23:15Z",
       "side": 1,
       "message": "And then these changes won\u0027t be necessary, either.",
+      "revId": "0824e551604dd8b6a365b957be1727bc66a9c2ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_b5cd2a60",
+        "filename": "sw/source/filter/ww8/rtfsdrexport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000531
+      },
+      "writtenOn": "2014-01-14T12:02:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa98f980_5526be69",
       "revId": "0824e551604dd8b6a365b957be1727bc66a9c2ce",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
