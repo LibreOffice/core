@@ -142,8 +142,8 @@ AxBinaryPropertyWriter::AxBinaryPropertyWriter( BinaryOutputStream& rOutStrm, bo
 
 void AxBinaryPropertyWriter::writeBoolProperty( bool orbValue, bool bReverse )
 {
-    // orbValue ^ bReverse true then we want to set the bit, e.g. don't skip
-    startNextProperty(  !( ( orbValue ^ bReverse ) >= 1 ) );
+    // orbValue == bReverse false then we want to set the bit, e.g. don't skip
+    startNextProperty( orbValue == bReverse );
 }
 
 void AxBinaryPropertyWriter::writePairProperty( AxPairData& orPairData )

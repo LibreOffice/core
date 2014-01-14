@@ -209,7 +209,7 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
         cssc2::LegendPosition eLegendPos = cssc2::LegendPosition_CUSTOM;
         cssc::ChartLegendExpansion eLegendExpand = cssc::ChartLegendExpansion_CUSTOM;
         RelativePosition eRelPos;
-        bool bTopRight=0;
+        bool bTopRight=false;
         switch( mrModel.mnPosition )
         {
             case XML_l:
@@ -225,7 +225,7 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
                 eRelPos.Primary = 1;
                 eRelPos.Secondary =0;
                 eRelPos.Anchor = Alignment_TOP_RIGHT;
-                bTopRight=1;
+                bTopRight=true;
 
             break;
             case XML_t:
@@ -252,7 +252,7 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
         aPropSet.setProperty( PROP_AnchorPosition, eLegendPos );
         aPropSet.setProperty( PROP_Expansion, eLegendExpand );
 
-        if(eLegendPos == LegendPosition_CUSTOM && 1 == bTopRight && bManualLayout==false)
+        if(eLegendPos == LegendPosition_CUSTOM && bTopRight && bManualLayout==false)
             aPropSet.setProperty( PROP_RelativePosition , makeAny(eRelPos));
     }
     catch( Exception& )

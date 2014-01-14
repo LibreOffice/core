@@ -157,7 +157,7 @@ public:
 
     /** Returns true, if nElement contains the identifier of the specified
         parent element. */
-    sal_Int32    isParentElement( sal_Int32 nElement, sal_Int32 nCountBack = 1 ) const
+    bool isParentElement( sal_Int32 nElement, sal_Int32 nCountBack = 1 ) const
                             { return getParentElement( nCountBack ) == nElement; }
 
     /** Returns true, if the element currently processed is the root element of
