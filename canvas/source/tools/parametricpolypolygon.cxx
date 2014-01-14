@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <canvas/debug.hxx>
 #include <canvas/canvastools.hxx>
 
@@ -30,6 +29,7 @@
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/tools/tools.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <limits>
 
@@ -199,23 +199,21 @@ namespace canvas
         return mxDevice.is() ? mxDevice->getDeviceColorSpace() : uno::Reference< rendering::XColorSpace >();
     }
 
-#define IMPLEMENTATION_NAME "Canvas::ParametricPolyPolygon"
-#define SERVICE_NAME "com.sun.star.rendering.ParametricPolyPolygon"
 
     OUString SAL_CALL ParametricPolyPolygon::getImplementationName(  ) throw (uno::RuntimeException)
     {
-        return OUString( IMPLEMENTATION_NAME );
+        return OUString( "Canvas::ParametricPolyPolygon" );
     }
 
     sal_Bool SAL_CALL ParametricPolyPolygon::supportsService( const OUString& ServiceName ) throw (uno::RuntimeException)
     {
-        return ServiceName == SERVICE_NAME;
+        return cppu::supportsService(this, ServiceName);
     }
 
     uno::Sequence< OUString > SAL_CALL ParametricPolyPolygon::getSupportedServiceNames(  ) throw (uno::RuntimeException)
     {
         uno::Sequence< OUString > aRet(1);
-        aRet[0] = SERVICE_NAME;
+        aRet[0] = "com.sun.star.rendering.ParametricPolyPolygon";
 
         return aRet;
     }

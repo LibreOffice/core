@@ -22,14 +22,12 @@
 #include <canvas/base/cachedprimitivebase.hxx>
 
 #include <com/sun/star/rendering/RepaintResult.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/tools/canvastools.hxx>
 
 using namespace ::com::sun::star;
-
-#define IMPLEMENTATION_NAME "canvas::CachedPrimitiveBase"
-#define SERVICE_NAME "com.sun.star.rendering.CachedBitmap"
 
 namespace canvas
 {
@@ -83,18 +81,18 @@ namespace canvas
 
     OUString SAL_CALL CachedPrimitiveBase::getImplementationName(  ) throw (uno::RuntimeException)
     {
-        return OUString( IMPLEMENTATION_NAME );
+        return OUString("canvas::CachedPrimitiveBase");
     }
 
     sal_Bool SAL_CALL CachedPrimitiveBase::supportsService( const OUString& ServiceName ) throw (uno::RuntimeException)
     {
-        return ServiceName == SERVICE_NAME;
+        return cppu::supportsService(this, ServiceName);
     }
 
     uno::Sequence< OUString > SAL_CALL CachedPrimitiveBase::getSupportedServiceNames(  ) throw (uno::RuntimeException)
     {
         uno::Sequence< OUString > aRet(1);
-        aRet[0] = SERVICE_NAME;
+        aRet[0] = "com.sun.star.rendering.CachedBitmap";
 
         return aRet;
     }

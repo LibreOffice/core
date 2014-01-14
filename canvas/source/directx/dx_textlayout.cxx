@@ -21,6 +21,7 @@
 #include <ctype.h>
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
@@ -28,7 +29,6 @@
 #include "dx_textlayout.hxx"
 #include "dx_spritecanvas.hxx"
 #include "dx_textlayout_drawhelper.hxx"
-
 
 using namespace ::com::sun::star;
 
@@ -246,24 +246,20 @@ namespace dxcanvas
         return true;
     }
 
-
-#define SERVICE_NAME "com.sun.star.rendering.TextLayout"
-#define IMPLEMENTATION_NAME "DXCanvas::TextLayout"
-
     OUString SAL_CALL TextLayout::getImplementationName() throw( uno::RuntimeException )
     {
-        return OUString( IMPLEMENTATION_NAME );
+        return OUString( "DXCanvas::TextLayout" );
     }
 
     sal_Bool SAL_CALL TextLayout::supportsService( const OUString& ServiceName ) throw( uno::RuntimeException )
     {
-        return ServiceName == SERVICE_NAME;
+        return cppu::supportsService( this, ServiceName );
     }
 
     uno::Sequence< OUString > SAL_CALL TextLayout::getSupportedServiceNames()  throw( uno::RuntimeException )
     {
         uno::Sequence< OUString > aRet(1);
-        aRet[0] = SERVICE_NAME;
+        aRet[0] = "com.sun.star.rendering.TextLayout";
 
         return aRet;
     }

@@ -21,6 +21,7 @@
 #include <ctype.h>
 #include <canvas/debug.hxx>
 #include <canvas/canvastools.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <vcl/bitmapex.hxx>
@@ -243,23 +244,20 @@ namespace dxcanvas
         return aRes;
     }
 
-#define IMPLEMENTATION_NAME "DXCanvas.CanvasBitmap"
-#define SERVICE_NAME "com.sun.star.rendering.CanvasBitmap"
-
     OUString SAL_CALL CanvasBitmap::getImplementationName(  ) throw (uno::RuntimeException)
     {
-        return OUString( IMPLEMENTATION_NAME );
+        return OUString( "DXCanvas.CanvasBitmap" );
     }
 
     sal_Bool SAL_CALL CanvasBitmap::supportsService( const OUString& ServiceName ) throw (uno::RuntimeException)
     {
-        return ServiceName == SERVICE_NAME;
+        return cppu::supportsService( this, ServiceName );
     }
 
     uno::Sequence< OUString > SAL_CALL CanvasBitmap::getSupportedServiceNames(  ) throw (uno::RuntimeException)
     {
         uno::Sequence< OUString > aRet(1);
-        aRet[0] = SERVICE_NAME;
+        aRet[0] = "com.sun.star.rendering.CanvasBitmap";
 
         return aRet;
     }

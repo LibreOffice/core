@@ -26,6 +26,7 @@
 #include <vcl/metric.hxx>
 
 #include <com/sun/star/rendering/PanoseProportion.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "canvasfont.hxx"
 #include "textlayout.hxx"
@@ -150,23 +151,20 @@ namespace vclcanvas
         return uno::Sequence< beans::PropertyValue >();
     }
 
-#define IMPLEMENTATION_NAME "VCLCanvas::CanvasFont"
-#define SERVICE_NAME "com.sun.star.rendering.CanvasFont"
-
     OUString SAL_CALL CanvasFont::getImplementationName() throw( uno::RuntimeException )
     {
-        return OUString( IMPLEMENTATION_NAME );
+        return OUString( "VCLCanvas::CanvasFont" );
     }
 
     sal_Bool SAL_CALL CanvasFont::supportsService( const OUString& ServiceName ) throw( uno::RuntimeException )
     {
-        return ServiceName == SERVICE_NAME;
+        return cppu::supportsService( this, ServiceName );
     }
 
     uno::Sequence< OUString > SAL_CALL CanvasFont::getSupportedServiceNames()  throw( uno::RuntimeException )
     {
         uno::Sequence< OUString > aRet(1);
-        aRet[0] = OUString( SERVICE_NAME );
+        aRet[0] = "com.sun.star.rendering.CanvasFont";
 
         return aRet;
     }

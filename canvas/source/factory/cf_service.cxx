@@ -23,6 +23,7 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -59,7 +60,6 @@ Sequence<OUString> SAL_CALL getSuppServices()
     return Sequence<OUString>(&name, 1);
 }
 
-//==============================================================================
 class CanvasFactory
     : public ::cppu::WeakImplHelper3< lang::XServiceInfo,
                                       lang::XMultiComponentFactory,
@@ -226,20 +226,17 @@ Reference<XInterface> create( Reference<XComponentContext> const & xContext )
 }
 
 // XServiceInfo
-//______________________________________________________________________________
 OUString CanvasFactory::getImplementationName() throw (RuntimeException)
 {
     return getImplName();
 }
 
-//______________________________________________________________________________
 sal_Bool CanvasFactory::supportsService( OUString const & serviceName )
     throw (RuntimeException)
 {
-    return serviceName.equals(getSuppServices()[0]);
+    return cppu::supportsService(this, serviceName);
 }
 
-//______________________________________________________________________________
 Sequence<OUString> CanvasFactory::getSupportedServiceNames()
     throw (RuntimeException)
 {
@@ -247,7 +244,6 @@ Sequence<OUString> CanvasFactory::getSupportedServiceNames()
 }
 
 // XMultiComponentFactory
-//______________________________________________________________________________
 Sequence<OUString> CanvasFactory::getAvailableServiceNames()
     throw (RuntimeException)
 {
@@ -259,7 +255,6 @@ Sequence<OUString> CanvasFactory::getAvailableServiceNames()
     return aServiceNames;
 }
 
-//______________________________________________________________________________
 Reference<XInterface> CanvasFactory::createInstanceWithContext(
     OUString const & name, Reference<XComponentContext> const & xContext )
     throw (Exception)

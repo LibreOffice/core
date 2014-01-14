@@ -24,6 +24,7 @@
 
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>
@@ -461,24 +462,20 @@ namespace vclcanvas
                           OffsetTransformer( aMatrix ) );
     }
 
-
-#define IMPLEMENTATION_NAME "VCLCanvas::TextLayout"
-#define SERVICE_NAME "com.sun.star.rendering.TextLayout"
-
     OUString SAL_CALL TextLayout::getImplementationName() throw( uno::RuntimeException )
     {
-        return OUString( IMPLEMENTATION_NAME );
+        return OUString( "VCLCanvas::TextLayout" );
     }
 
     sal_Bool SAL_CALL TextLayout::supportsService( const OUString& ServiceName ) throw( uno::RuntimeException )
     {
-        return ServiceName == SERVICE_NAME;
+        return cppu::supportsService( this, ServiceName );
     }
 
     uno::Sequence< OUString > SAL_CALL TextLayout::getSupportedServiceNames()  throw( uno::RuntimeException )
     {
         uno::Sequence< OUString > aRet(1);
-        aRet[0] = OUString( SERVICE_NAME );
+        aRet[0] = "com.sun.star.rendering.TextLayout";
 
         return aRet;
     }

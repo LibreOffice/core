@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <canvas/debug.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 #include "canvasbitmap.hxx"
 
@@ -71,23 +71,21 @@ namespace vclcanvas
         maCanvasHelper.init( rBitmap, rDevice, rOutDevProvider );
     }
 
-#define IMPLEMENTATION_NAME "VCLCanvas.CanvasBitmap"
-#define SERVICE_NAME "com.sun.star.rendering.CanvasBitmap"
 
     OUString SAL_CALL CanvasBitmap::getImplementationName(  ) throw (uno::RuntimeException)
     {
-        return OUString( IMPLEMENTATION_NAME );
+        return OUString( "VCLCanvas.CanvasBitmap" );
     }
 
     sal_Bool SAL_CALL CanvasBitmap::supportsService( const OUString& ServiceName ) throw (uno::RuntimeException)
     {
-        return ServiceName == SERVICE_NAME;
+        return cppu::supportsService( this, ServiceName );
     }
 
     uno::Sequence< OUString > SAL_CALL CanvasBitmap::getSupportedServiceNames(  ) throw (uno::RuntimeException)
     {
         uno::Sequence< OUString > aRet(1);
-        aRet[0] = OUString( SERVICE_NAME );
+        aRet[0] = "com.sun.star.rendering.CanvasBitmap";
 
         return aRet;
     }
