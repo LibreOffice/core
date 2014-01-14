@@ -106,7 +106,7 @@ void SwTxtAdjuster::FormatBlock( )
         }
     }
 
-    const xub_StrLen nOldIdx = GetInfo().GetIdx();
+    const sal_Int32 nOldIdx = GetInfo().GetIdx();
     GetInfo().SetIdx( nStart );
     CalcNewBlock( pCurr, pFly );
     GetInfo().SetIdx( nOldIdx );
@@ -117,11 +117,11 @@ void SwTxtAdjuster::FormatBlock( )
  * lcl_CheckKashidaPositions()
  *************************************************************************/
 static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTxtIter& rItr,
-                                sal_Int32& rKashidas, xub_StrLen& nGluePortion )
+                                sal_Int32& rKashidas, sal_Int32& nGluePortion )
 {
     // i60594 validate Kashida justification
-    xub_StrLen nIdx = rItr.GetStart();
-    xub_StrLen nEnd = rItr.GetEnd();
+    sal_Int32 nIdx = rItr.GetStart();
+    sal_Int32 nEnd = rItr.GetEnd();
 
     // Note on calling KashidaJustify():
     // Kashida positions may be marked as invalid. Therefore KashidaJustify may return the clean
@@ -142,15 +142,15 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, S
     while ( rKashidas && nIdx < nEnd )
     {
         rItr.SeekAndChgAttrIter( nIdx, rInf.GetOut() );
-        xub_StrLen nNext = rItr.GetNextAttr();
+        sal_Int32 nNext = rItr.GetNextAttr();
 
         // is there also a script change before?
         // if there is, nNext should point to the script change
-        xub_StrLen nNextScript = rSI.NextScriptChg( nIdx );
+        sal_Int32 nNextScript = rSI.NextScriptChg( nIdx );
         if( nNextScript < nNext )
             nNext = nNextScript;
 
-        if ( nNext == STRING_LEN || nNext > nEnd )
+        if ( nNext == COMPLETE_STRING || nNext > nEnd )
             nNext = nEnd;
         sal_Int32 nKashidasInAttr = rSI.KashidaJustify ( 0, 0, nIdx, nNext - nIdx );
         if (nKashidasInAttr > 0)
@@ -199,7 +199,7 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, S
  * lcl_CheckKashidaWidth()
  *************************************************************************/
 static bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTxtIter& rItr, sal_Int32& rKashidas,
-                             xub_StrLen& nGluePortion, const long nGluePortionWidth, long& nSpaceAdd )
+                             sal_Int32& nGluePortion, const long nGluePortionWidth, long& nSpaceAdd )
 {
     // check kashida width
     // if width is smaller than minimal kashida width allowed by fonts in the current line
@@ -208,20 +208,20 @@ static bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTx
     while (rKashidas)
     {
         bAddSpaceChanged = false;
-        xub_StrLen nIdx = rItr.GetStart();
-        xub_StrLen nEnd = rItr.GetEnd();
+        sal_Int32 nIdx = rItr.GetStart();
+        sal_Int32 nEnd = rItr.GetEnd();
         while ( nIdx < nEnd )
         {
             rItr.SeekAndChgAttrIter( nIdx, rInf.GetOut() );
-            xub_StrLen nNext = rItr.GetNextAttr();
+            sal_Int32 nNext = rItr.GetNextAttr();
 
             // is there also a script change before?
             // if there is, nNext should point to the script change
-            xub_StrLen nNextScript = rSI.NextScriptChg( nIdx );
+            sal_Int32 nNextScript = rSI.NextScriptChg( nIdx );
             if( nNextScript < nNext )
                nNext = nNextScript;
 
-            if ( nNext == STRING_LEN || nNext > nEnd )
+            if ( nNext == COMPLETE_STRING || nNext > nEnd )
                 nNext = nEnd;
             sal_Int32 nKashidasInAttr = rSI.KashidaJustify ( 0, 0, nIdx, nNext - nIdx );
 
@@ -271,7 +271,7 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
     OSL_ENSURE( pCurrent->Height(), "SwTxtAdjuster::CalcBlockAdjust: missing CalcLine()" );
 
     pCurrent->InitSpaceAdd();
-    xub_StrLen nGluePortion = 0;
+    sal_Int32 nGluePortion = 0;
     sal_Int32 nCharCnt = 0;
     MSHORT nSpaceIdx = 0;
 
@@ -627,7 +627,7 @@ void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
     CalcRightMargin( pCurrent );
 
     SwLinePortion *pPos = pLeft->GetPortion();
-    xub_StrLen nLen = 0;
+    sal_Int32 nLen = 0;
 
     // If we only have one line, the text portion is consecutive and we center, then ...
     sal_Bool bComplete = 0 == nStart;

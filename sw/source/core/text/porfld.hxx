@@ -38,8 +38,8 @@ class SwFldPortion : public SwExpandPortion
 protected:
     OUString  aExpand;              // The expanded field
     SwFont  *pFnt;                  // For multi-line fields
-    xub_StrLen nNextOffset;         // Offset of the follow in the original string
-    xub_StrLen nNextScriptChg;
+    sal_Int32 nNextOffset;         // Offset of the follow in the original string
+    sal_Int32 nNextScriptChg;
     KSHORT  nViewWidth;             // Screen width for empty fields
     sal_Bool bFollow : 1;           // 2nd or later part of a field
     sal_Bool bLeft : 1;             // Used by SwNumberPortion
@@ -93,11 +93,11 @@ public:
     inline sal_Bool HasFollow() const { return bHasFollow; }
     inline void SetHasFollow( sal_Bool bNew ) { bHasFollow = bNew; }
 
-    inline xub_StrLen GetNextOffset() const { return nNextOffset; }
-    inline void SetNextOffset( xub_StrLen nNew ) { nNextOffset = nNew; }
+    inline sal_Int32 GetNextOffset() const { return nNextOffset; }
+    inline void SetNextOffset( sal_Int32 nNew ) { nNextOffset = nNew; }
 
-    inline xub_StrLen GetNextScriptChg() const { return nNextScriptChg; }
-    inline void SetNextScriptChg( xub_StrLen nNew ) { nNextScriptChg = nNew; }
+    inline sal_Int32 GetNextScriptChg() const { return nNextScriptChg; }
+    inline void SetNextScriptChg( sal_Int32 nNew ) { nNextScriptChg = nNew; }
 
     // Field cloner for SplitGlue
     virtual SwFldPortion *Clone( const OUString &rExpand ) const;
@@ -149,7 +149,7 @@ public:
                      const KSHORT nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual xub_StrLen GetCrsrOfst( const MSHORT nOfst ) const;
+    virtual sal_Int32 GetCrsrOfst( const MSHORT nOfst ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
 
     // Field cloner for SplitGlue

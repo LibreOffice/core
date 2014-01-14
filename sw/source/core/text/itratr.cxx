@@ -111,7 +111,7 @@ SwAttrIter::~SwAttrIter()
  * GetAttr() das entartete Attribut.
  *************************************************************************/
 
-SwTxtAttr *SwAttrIter::GetAttr( const xub_StrLen nPosition ) const
+SwTxtAttr *SwAttrIter::GetAttr( const sal_Int32 nPosition ) const
 {
     return (m_pTxtNode) ? m_pTxtNode->GetTxtAttrForCharAt(nPosition) : 0;
 }
@@ -120,7 +120,7 @@ SwTxtAttr *SwAttrIter::GetAttr( const xub_StrLen nPosition ) const
  *                        SwAttrIter::SeekAndChg()
  *************************************************************************/
 
-sal_Bool SwAttrIter::SeekAndChgAttrIter( const xub_StrLen nNewPos, OutputDevice* pOut )
+sal_Bool SwAttrIter::SeekAndChgAttrIter( const sal_Int32 nNewPos, OutputDevice* pOut )
 {
     sal_Bool bChg = nStartIndex && nNewPos == nPos ? pFnt->IsFntChg() : Seek( nNewPos );
     if ( pLastOut != pOut )
@@ -142,7 +142,7 @@ sal_Bool SwAttrIter::SeekAndChgAttrIter( const xub_StrLen nNewPos, OutputDevice*
     return bChg;
 }
 
-sal_Bool SwAttrIter::IsSymbol( const xub_StrLen nNewPos )
+sal_Bool SwAttrIter::IsSymbol( const sal_Int32 nNewPos )
 {
     Seek( nNewPos );
     if ( !nChgCnt && !nPropFont )
@@ -171,7 +171,7 @@ sal_Bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const sal_Bool
     {
         pRedln->Clear( pFnt );
         if( !bParaFont )
-            nChgCnt = nChgCnt + pRedln->Seek( *pFnt, 0, STRING_LEN );
+            nChgCnt = nChgCnt + pRedln->Seek( *pFnt, 0, MSHRT_MAX );
         else
             pRedln->Reset();
     }
@@ -215,7 +215,7 @@ sal_Bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const sal_Bool
 
 // AMA: Neuer AttrIter Nov 94
 
-void SwAttrIter::SeekFwd( const xub_StrLen nNewPos )
+void SwAttrIter::SeekFwd( const sal_Int32 nNewPos )
 {
     SwTxtAttr *pTxtAttr;
 
@@ -259,7 +259,7 @@ void SwAttrIter::SeekFwd( const xub_StrLen nNewPos )
  *                       SwAttrIter::Seek()
  *************************************************************************/
 
-sal_Bool SwAttrIter::Seek( const xub_StrLen nNewPos )
+sal_Bool SwAttrIter::Seek( const sal_Int32 nNewPos )
 {
     if ( pRedln && pRedln->ExtOn() )
         pRedln->LeaveExtend( *pFnt, nNewPos );
@@ -308,9 +308,9 @@ sal_Bool SwAttrIter::Seek( const xub_StrLen nNewPos )
  *                      SwAttrIter::GetNextAttr()
  *************************************************************************/
 
-xub_StrLen SwAttrIter::GetNextAttr( ) const
+sal_Int32 SwAttrIter::GetNextAttr( ) const
 {
-    xub_StrLen nNext = STRING_LEN;
+    sal_Int32 nNext = COMPLETE_STRING;
     if( pHints )
     {
         // are there attribute starts left?
@@ -329,7 +329,7 @@ xub_StrLen SwAttrIter::GetNextAttr( ) const
             SwTxtAttr *const pAttr(pHints->GetEnd(i));
             if (!pAttr->IsFormatIgnoreEnd())
             {
-                xub_StrLen const nNextEnd = *pAttr->GetAnyEnd();
+                sal_Int32 const nNextEnd = *pAttr->GetAnyEnd();
                 nNext = std::min(nNext, nNextEnd); // pick nearest one
                 break;
             }
@@ -338,7 +338,7 @@ xub_StrLen SwAttrIter::GetNextAttr( ) const
     if (m_pTxtNode!=NULL) {
         //TODO maybe use hints like FieldHints for this instead of looking at the text...
         const sal_Int32 l = nNext<m_pTxtNode->Len() ? nNext : m_pTxtNode->Len();
-        xub_StrLen p=nPos;
+        sal_Int32 p=nPos;
         while (p<l && m_pTxtNode->GetTxt()[p] != CH_TXT_ATR_FIELDSTART
                    && m_pTxtNode->GetTxt()[p] != CH_TXT_ATR_FIELDEND
                    && m_pTxtNode->GetTxt()[p] != CH_TXT_ATR_FORMELEMENT)
@@ -366,21 +366,21 @@ public:
     long nRowWidth;
     long nWordWidth;
     long nWordAdd;
-    xub_StrLen nNoLineBreak;
+    sal_Int32 nNoLineBreak;
     SwMinMaxArgs( OutputDevice* pOutI, SwViewShell* pShI, sal_uLong& rMinI, sal_uLong &rMaxI, sal_uLong &rAbsI )
         : pOut( pOutI ), pSh( pShI ), rMin( rMinI ), rMax( rMaxI ), rAbsMin( rAbsI )
-        { nRowWidth = nWordWidth = nWordAdd = 0; nNoLineBreak = STRING_LEN; }
+        { nRowWidth = nWordWidth = nWordAdd = 0; nNoLineBreak = COMPLETE_STRING; }
     void Minimum( long nNew ) const { if( (long)rMin < nNew ) rMin = nNew; }
     void NewWord() { nWordAdd = nWordWidth = 0; }
 };
 
 static sal_Bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const OUString &rTxt,
-    xub_StrLen nIdx, xub_StrLen nEnd )
+    sal_Int32 nIdx, sal_Int32 nEnd )
 {
     sal_Bool bRet = sal_False;
     while( nIdx < nEnd )
     {
-        xub_StrLen nStop = nIdx;
+        sal_Int32 nStop = nIdx;
         sal_Bool bClear;
         LanguageType eLang = pFnt->GetLanguage();
         if( g_pBreakIt->GetBreakIter().is() )
@@ -389,7 +389,7 @@ static sal_Bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const OUStri
             Boundary aBndry( g_pBreakIt->GetBreakIter()->getWordBoundary( rTxt, nIdx,
                              g_pBreakIt->GetLocale( eLang ),
                              WordType::DICTIONARY_WORD, sal_True ) );
-            nStop = (xub_StrLen)aBndry.endPos;
+            nStop = aBndry.endPos;
             if( nIdx <= aBndry.startPos && nIdx && nIdx-1 != rArg.nNoLineBreak )
                 rArg.NewWord();
             if( nStop == nIdx )
@@ -641,7 +641,7 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
 
     SwScriptInfo aScriptInfo;
     SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
-    xub_StrLen nIdx = 0;
+    sal_Int32 nIdx = 0;
     aIter.SeekAndChgAttrIter( nIdx, pOut );
     sal_Int32 nLen = m_Text.getLength();
     long nAktWidth = 0;
@@ -649,8 +649,8 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
     SwMinMaxArgs aArg( pOut, pSh, rMin, rMax, rAbsMin );
     while( nIdx < nLen )
     {
-        xub_StrLen nNextChg = aIter.GetNextAttr();
-        xub_StrLen nStop = aScriptInfo.NextScriptChg( nIdx );
+        sal_Int32 nNextChg = aIter.GetNextAttr();
+        sal_Int32 nStop = aScriptInfo.NextScriptChg( nIdx );
         if( nNextChg > nStop )
             nNextChg = nStop;
         SwTxtAttr *pHint = NULL;

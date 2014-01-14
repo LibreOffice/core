@@ -27,7 +27,7 @@ class SwUndoSplitNode: public SwUndo
     SwHistory* pHistory;
     SwRedlineData* pRedlData;
     sal_uLong nNode;
-    xub_StrLen nCntnt;
+    sal_Int32 nCntnt;
     sal_Bool bTblFlag : 1;
     sal_Bool bChkTblStt : 1;
     sal_uInt32 nParRsid;
@@ -50,7 +50,7 @@ class SwUndoMove : public SwUndo, private SwUndRng, private SwUndoSaveCntnt
     // nIns..  - source Position of move (after move!)
     // nMv..   - destination position of move (before move!); for REDO
     sal_uLong nDestSttNode, nDestEndNode, nInsPosNode, nMvDestNode;
-    xub_StrLen nDestSttCntnt, nDestEndCntnt, nInsPosCntnt, nMvDestCntnt;
+    sal_Int32 nDestSttCntnt, nDestEndCntnt, nInsPosCntnt, nMvDestCntnt;
 
     sal_uInt16 nFtnStt; // StartPos of Footnotes in History
 
@@ -77,7 +77,7 @@ public:
     sal_Bool IsMoveRange() const        { return bMoveRange; }
     sal_uLong GetEndNode() const        { return nEndNode; }
     sal_uLong GetDestSttNode() const    { return nDestSttNode; }
-    xub_StrLen GetDestSttCntnt() const  { return nDestSttCntnt; }
+    sal_Int32 GetDestSttCntnt() const  { return nDestSttCntnt; }
 
     void SetMoveRedlines( bool b )       { bMoveRedlines = b; }
 };

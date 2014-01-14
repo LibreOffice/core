@@ -80,7 +80,7 @@ void SwUndRng::SetValues( const SwPaM& rPam )
     }
     else
         // no selection !!
-        nEndNode = 0, nEndCntnt = STRING_MAXLEN;
+        nEndNode = 0, nEndCntnt = COMPLETE_STRING;
 
     nSttNode = pStt->nNode.GetIndex();
     nSttCntnt = pStt->nContent.GetIndex();
@@ -98,7 +98,7 @@ void SwUndRng::SetPaM( SwPaM & rPam, sal_Bool bCorrToCntnt ) const
     else
         rPam.GetPoint()->nContent.Assign( 0, 0 );
 
-    if( !nEndNode && STRING_MAXLEN == nEndCntnt )       // no selection
+    if( !nEndNode && COMPLETE_STRING == nEndCntnt )       // no selection
         return ;
 
     rPam.SetMark();
@@ -321,7 +321,7 @@ SwUndoSaveCntnt::~SwUndoSaveCntnt()
 // If pEndNdIdx is given, Undo/Redo calls -Ins/DelFly. In that case the whole
 // section should be moved.
 void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
-                    sal_uLong* pEndNdIdx, xub_StrLen* pEndCntIdx )
+                    sal_uLong* pEndNdIdx, sal_Int32* pEndCntIdx )
 {
     SwDoc& rDoc = *rPaM.GetDoc();
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
@@ -362,7 +362,7 @@ void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
 
 void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
                             SwPosition& rInsPos,
-                            sal_uLong* pEndNdIdx, xub_StrLen* pEndCntIdx )
+                            sal_uLong* pEndNdIdx, sal_Int32* pEndCntIdx )
 {
     // here comes the recovery
     SwNodes & rNds = rDoc.GetUndoManager().GetUndoNodes();
@@ -1115,7 +1115,7 @@ sal_Bool SwUndo::CanRedlineGroup( SwRedlineSaveDatas& rCurr,
 }
 
 // #111827#
-OUString ShortenString(const OUString & rStr, xub_StrLen nLength, const OUString & rFillStr)
+OUString ShortenString(const OUString & rStr, sal_Int32 nLength, const OUString & rFillStr)
 {
     assert(nLength - rFillStr.getLength() >= 2);
 
@@ -1125,14 +1125,14 @@ OUString ShortenString(const OUString & rStr, xub_StrLen nLength, const OUString
         aResult = rStr;
     else
     {
-        long nTmpLength = nLength - rFillStr.getLength();
+        sal_Int32 nTmpLength = nLength - rFillStr.getLength();
         if ( nTmpLength < 2 )
             nTmpLength = 2;
 
-        nLength = static_cast<xub_StrLen>(nTmpLength);
+        nLength = nTmpLength;
 
-        const xub_StrLen nFrontLen = nLength - nLength / 2;
-        const xub_StrLen nBackLen = nLength - nFrontLen;
+        const sal_Int32 nFrontLen = nLength - nLength / 2;
+        const sal_Int32 nBackLen = nLength - nFrontLen;
 
         aResult += rStr.copy(0, nFrontLen);
         aResult += rFillStr;

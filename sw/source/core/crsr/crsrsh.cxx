@@ -3058,10 +3058,10 @@ bool SwCrsrShell::SelectHiddenRange()
             const sal_Int32 nPos = rPt.nContent.GetIndex();
 
             // check if nPos is in hidden range
-            xub_StrLen nHiddenStart;
-            xub_StrLen nHiddenEnd;
+            sal_Int32 nHiddenStart;
+            sal_Int32 nHiddenEnd;
             SwScriptInfo::GetBoundsOfHiddenRange( *pNode, nPos, nHiddenStart, nHiddenEnd );
-            if ( STRING_LEN != nHiddenStart )
+            if ( COMPLETE_STRING != nHiddenStart )
             {
                 // make selection:
                 m_pCurCrsr->SetMark();

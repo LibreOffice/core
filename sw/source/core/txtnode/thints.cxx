@@ -109,8 +109,8 @@ struct TxtAttrDeleter
 
 struct TxtAttrContains
 {
-    xub_StrLen m_nPos;
-    TxtAttrContains( const xub_StrLen nPos ) : m_nPos( nPos ) { }
+    sal_Int32 m_nPos;
+    TxtAttrContains( const sal_Int32 nPos ) : m_nPos( nPos ) { }
     bool operator() (SwTxtAttrEnd * const pAttr)
     {
         return (*pAttr->GetStart() < m_nPos) && (m_nPos < *pAttr->End());
@@ -134,8 +134,8 @@ struct TxtAttrContains
 //                  |---| => valid: b after a
 // ===> 2 invalid overlap cases
 static
-bool isOverlap(const xub_StrLen nStart1, const xub_StrLen nEnd1,
-               const xub_StrLen nStart2, const xub_StrLen nEnd2)
+bool isOverlap(const sal_Int32 nStart1, const sal_Int32 nEnd1,
+               const sal_Int32 nStart2, const sal_Int32 nEnd2)
 {
     return
         ((nStart1 > nStart2) && (nStart1 < nEnd2) && (nEnd1 > nEnd2))  // (1)
@@ -144,8 +144,8 @@ bool isOverlap(const xub_StrLen nStart1, const xub_StrLen nEnd1,
 
 /// #i106930#: now asymmetric: empty hint1 is _not_ nested, but empty hint2 is
 static
-bool isNestedAny(const xub_StrLen nStart1, const xub_StrLen nEnd1,
-                 const xub_StrLen nStart2, const xub_StrLen nEnd2)
+bool isNestedAny(const sal_Int32 nStart1, const sal_Int32 nEnd1,
+                 const sal_Int32 nStart2, const sal_Int32 nEnd2)
 {
     return ((nStart1 == nStart2) || (nEnd1 == nEnd2))
         // same start/end: nested except if hint1 empty and hint2 not empty
@@ -225,7 +225,7 @@ void SwTxtRuby::InitRuby(SwTxtNode & rNode)
  */
 static SwTxtAttrNesting *
 MakeTxtAttrNesting(SwTxtNode & rNode, SwTxtAttrNesting & rNesting,
-        const xub_StrLen nStart, const xub_StrLen nEnd)
+        const sal_Int32 nStart, const sal_Int32 nEnd)
 {
     SwTxtAttr * const pNew( MakeTxtAttr(
             *rNode.GetDoc(), rNesting.GetAttr(), nStart, nEnd ) );
@@ -252,18 +252,18 @@ typedef ::std::vector<SwTxtAttrNesting *> NestList_t;
 
 static void
 lcl_DoSplitNew(NestList_t & rSplits, SwTxtNode & rNode,
-    const xub_StrLen nNewStart,
-    const xub_StrLen nOtherStart, const xub_StrLen nOtherEnd, bool bOtherDummy)
+    const sal_Int32 nNewStart,
+    const sal_Int32 nOtherStart, const sal_Int32 nOtherEnd, bool bOtherDummy)
 {
     const bool bSplitAtStart(nNewStart < nOtherStart);
-    const xub_StrLen nSplitPos( (bSplitAtStart) ? nOtherStart : nOtherEnd );
+    const sal_Int32 nSplitPos( (bSplitAtStart) ? nOtherStart : nOtherEnd );
     // first find the portion that is split (not necessarily the last one!)
     NestList_t::iterator const iter(
         ::std::find_if( rSplits.begin(), rSplits.end(),
             TxtAttrContains(nSplitPos) ) );
     if (iter != rSplits.end()) // already split here?
     {
-        const xub_StrLen nStartPos( // skip other's dummy character!
+        const sal_Int32 nStartPos( // skip other's dummy character!
             (bSplitAtStart && bOtherDummy) ? nSplitPos + 1 : nSplitPos );
         SwTxtAttrNesting * const pNew( MakeTxtAttrNesting(
                 rNode, **iter, nStartPos, *(*iter)->GetEnd() ) );
@@ -354,8 +354,8 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
 {
 //    INVARIANT:  the nestable hints in the array are properly nested
     const sal_uInt16 nNewWhich( rNewHint.Which() );
-    const xub_StrLen nNewStart( *rNewHint.GetStart() );
-    const xub_StrLen nNewEnd  ( *rNewHint.GetEnd()   );
+    const sal_Int32 nNewStart( *rNewHint.GetStart() );
+    const sal_Int32 nNewEnd  ( *rNewHint.GetEnd()   );
     const bool bNewSelfNestable( isSelfNestable(nNewWhich) );
 
     OSL_ENSURE( (RES_TXTATR_INETFMT   == nNewWhich) ||
@@ -379,8 +379,8 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
         if (pOther->IsNesting())
         {
             const sal_uInt16 nOtherWhich( pOther->Which() );
-            const xub_StrLen nOtherStart( *(pOther)->GetStart() );
-            const xub_StrLen nOtherEnd  ( *(pOther)->GetEnd()   );
+            const sal_Int32 nOtherStart( *(pOther)->GetStart() );
+            const sal_Int32 nOtherEnd  ( *(pOther)->GetEnd()   );
             if (isOverlap(nNewStart, nNewEnd, nOtherStart, nOtherEnd ))
             {
                 switch (splitPolicy(nNewWhich, nOtherWhich))
@@ -446,14 +446,14 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
     for (NestList_t::iterator itOther = OverlappingExisting.begin();
             itOther != OverlappingExisting.end(); ++itOther)
     {
-        const xub_StrLen nOtherStart( *(*itOther)->GetStart() );
-        const xub_StrLen nOtherEnd  ( *(*itOther)->GetEnd()   );
+        const sal_Int32 nOtherStart( *(*itOther)->GetStart() );
+        const sal_Int32 nOtherEnd  ( *(*itOther)->GetEnd()   );
 
         for (NestList_t::iterator itNew = SplitNew.begin();
                 itNew != SplitNew.end(); ++itNew)
         {
-            const xub_StrLen nSplitNewStart( *(*itNew)->GetStart() );
-            const xub_StrLen nSplitNewEnd  ( *(*itNew)->GetEnd()   );
+            const sal_Int32 nSplitNewStart( *(*itNew)->GetStart() );
+            const sal_Int32 nSplitNewEnd  ( *(*itNew)->GetEnd()   );
             // 4 cases: within, around, overlap l, overlap r, (OTHER: no action)
             const bool bRemoveOverlap(
                 !bNewSelfNestable && (nNewWhich == (*itOther)->Which()) );
@@ -536,8 +536,8 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
     for (NestList_t::iterator itOther = OverwrittenExisting.begin();
             itOther != OverwrittenExisting.end(); ++itOther)
     {
-        const xub_StrLen nOtherStart( *(*itOther)->GetStart() );
-        const xub_StrLen nOtherEnd  ( *(*itOther)->GetEnd()   );
+        const sal_Int32 nOtherStart( *(*itOther)->GetStart() );
+        const sal_Int32 nOtherEnd  ( *(*itOther)->GetEnd()   );
 
         // overwritten portion is given by start/end of inserted hint
         if ((nNewStart <= nOtherStart) && (nOtherEnd <= nNewEnd))
@@ -2053,7 +2053,7 @@ struct SwPoolItemEndPair
 {
 public:
     const SfxPoolItem* mpItem;
-    xub_StrLen mnEndPos;
+    sal_Int32 mnEndPos;
 
     SwPoolItemEndPair() : mpItem( 0 ), mnEndPos( 0 ) {};
 };
@@ -2687,7 +2687,7 @@ bool SwpHints::MergePortions( SwTxtNode& rNode )
     typedef std::multimap< int, std::pair<SwTxtAttr*, bool> > PortionMap;
     PortionMap aPortionMap;
     std::map<int, bool> RsidOnlyAutoFmtFlagMap;
-    xub_StrLen nLastPorStart = STRING_LEN;
+    sal_Int32 nLastPorStart = COMPLETE_STRING;
     sal_uInt16 i = 0;
     int nKey = 0;
 
@@ -2737,7 +2737,7 @@ bool SwpHints::MergePortions( SwTxtNode& rNode )
             continue;
         }
 
-        const xub_StrLen nPorStart = *pHt->GetStart();
+        const sal_Int32 nPorStart = *pHt->GetStart();
         if (nPorStart != nLastPorStart)
             ++nKey;
         nLastPorStart = nPorStart;
@@ -2876,7 +2876,7 @@ bool SwpHints::MergePortions( SwTxtNode& rNode )
             // important: delete second range so any IgnoreStart on the first
             // range is still valid
             // erase all elements with key i + 1
-            xub_StrLen nNewPortionEnd = 0;
+            sal_Int32 nNewPortionEnd = 0;
             for ( aIter2 = aRange2.first; aIter2 != aRange2.second; ++aIter2 )
             {
                 SwTxtAttr *const p2 = aIter2->second.first;
@@ -2950,22 +2950,22 @@ bool SwpHints::MergePortions( SwTxtNode& rNode )
 // check if there is already a character format and adjust the sort numbers
 static void lcl_CheckSortNumber( const SwpHints& rHints, SwTxtCharFmt& rNewCharFmt )
 {
-    const xub_StrLen nHtStart = *rNewCharFmt.GetStart();
-    const xub_StrLen nHtEnd   = *rNewCharFmt.GetEnd();
+    const sal_Int32 nHtStart = *rNewCharFmt.GetStart();
+    const sal_Int32 nHtEnd   = *rNewCharFmt.GetEnd();
     sal_uInt16 nSortNumber = 0;
 
     for ( sal_uInt16 i = 0; i < rHints.Count(); ++i )
     {
         const SwTxtAttr* pOtherHt = rHints[i];
 
-        const xub_StrLen nOtherStart = *pOtherHt->GetStart();
+        const sal_Int32 nOtherStart = *pOtherHt->GetStart();
 
         if ( nOtherStart > nHtStart )
             break;
 
         if ( RES_TXTATR_CHARFMT == pOtherHt->Which() )
         {
-            const xub_StrLen nOtherEnd = *pOtherHt->End();
+            const sal_Int32 nOtherEnd = *pOtherHt->End();
 
             if ( nOtherStart == nHtStart && nOtherEnd == nHtEnd )
             {

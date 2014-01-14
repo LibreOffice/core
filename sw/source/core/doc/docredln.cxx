@@ -3318,7 +3318,7 @@ void SwRangeRedline::InvalidateRange()       // trigger the Layout
 
 /** Calculates the start and end position of the intersection rTmp and
     text node nNdIdx */
-void SwRangeRedline::CalcStartEnd( sal_uLong nNdIdx, xub_StrLen& rStart, xub_StrLen& rEnd ) const
+void SwRangeRedline::CalcStartEnd( sal_uLong nNdIdx, sal_Int32& rStart, sal_Int32& rEnd ) const
 {
     const SwPosition *pRStt = Start(), *pREnd = End();
     if( pRStt->nNode < nNdIdx )
@@ -3326,7 +3326,7 @@ void SwRangeRedline::CalcStartEnd( sal_uLong nNdIdx, xub_StrLen& rStart, xub_Str
         if( pREnd->nNode > nNdIdx )
         {
             rStart = 0;             // Paragraph is completely enclosed
-            rEnd = STRING_LEN;
+            rEnd = COMPLETE_STRING;
         }
         else
         {
@@ -3342,12 +3342,12 @@ void SwRangeRedline::CalcStartEnd( sal_uLong nNdIdx, xub_StrLen& rStart, xub_Str
         if( pREnd->nNode == nNdIdx )
             rEnd = pREnd->nContent.GetIndex(); // Within the Paragraph
         else
-            rEnd = STRING_LEN;      // Paragraph is overlapped in the end
+            rEnd = COMPLETE_STRING;      // Paragraph is overlapped in the end
     }
     else
     {
-        rStart = STRING_LEN;
-        rEnd = STRING_LEN;
+        rStart = COMPLETE_STRING;
+        rEnd = COMPLETE_STRING;
     }
 }
 

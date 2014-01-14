@@ -353,7 +353,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                     continue;
                 }
 
-                const xub_StrLen nPorSttIdx = rInf.GetLineStart() + nLineLength;
+                const sal_Int32 nPorSttIdx = rInf.GetLineStart() + nLineLength;
                 nLineLength = nLineLength + pPos->GetLen();
                 AddPrtWidth( pPos->Width() );
 
@@ -624,9 +624,9 @@ SwCharRange &SwCharRange::operator+=(const SwCharRange &rRange)
     return *this;
 }
 
-SwScriptInfo::SwScriptInfo() :
-    nInvalidityPos( 0 ),
-    nDefaultDir( 0 )
+SwScriptInfo::SwScriptInfo()
+    : nInvalidityPos(0)
+    , nDefaultDir(0)
 {
 };
 
@@ -641,7 +641,7 @@ SwScriptInfo::~SwScriptInfo()
  * Sw Script Types (SW_LATIN, SW_CJK, SW_CTL), used to identify the font
 *************************************************************************/
 
-sal_uInt8 SwScriptInfo::WhichFont( xub_StrLen nIdx, const OUString* pTxt, const SwScriptInfo* pSI )
+sal_uInt8 SwScriptInfo::WhichFont( sal_Int32 nIdx, const OUString* pTxt, const SwScriptInfo* pSI )
 {
     SAL_WARN_IF( !pTxt && !pSI, "sw.core", "How should I determine the script type?" );
     sal_uInt16 nScript;
@@ -693,8 +693,8 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     for( i = 0; i < aHiddenMulti.GetRangeCount(); ++i )
     {
         const Range& rRange = aHiddenMulti.GetRange( i );
-        const xub_StrLen nStart = (xub_StrLen)rRange.Min();
-        const xub_StrLen nEnd = (xub_StrLen)rRange.Max() + 1;
+        const sal_Int32 nStart = rRange.Min();
+        const sal_Int32 nEnd = rRange.Max() + 1;
 
         aHiddenChg.push_back( nStart );
         aHiddenChg.push_back( nEnd );
@@ -704,10 +704,10 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     // SCRIPT AND SCRIPT RELATED INFORMATION
     //
 
-    xub_StrLen nChg = nInvalidityPos;
+    sal_Int32 nChg = nInvalidityPos;
 
-    // STRING_LEN means the data structure is up to date
-    nInvalidityPos = STRING_LEN;
+    // COMPLETE_STRING means the data structure is up to date
+    nInvalidityPos = COMPLETE_STRING;
 
     // this is the default direction
     nDefaultDir = static_cast<sal_uInt8>(bRTL ? UBIDI_RTL : UBIDI_LTR);
@@ -779,7 +779,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     if ( nChg )
         --nChg;
 
-    const xub_StrLen nGrpStart = nCnt ? GetScriptChg( nCnt - 1 ) : 0;
+    const sal_Int32 nGrpStart = nCnt ? GetScriptChg( nCnt - 1 ) : 0;
 
     // we go back in our group until we reach the first character of
     // type nScript
@@ -800,7 +800,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     aScriptChanges.erase( aScriptChanges.begin() + nCnt, aScriptChanges.end() );
 
     // get the start of the last compression group
-    sal_uInt16 nLastCompression = nChg;
+    sal_Int32 nLastCompression = nChg;
     if( nCntComp )
     {
         --nCntComp;
@@ -816,7 +816,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     aCompressionChanges.erase(aCompressionChanges.begin() + nCntComp, aCompressionChanges.end() );
 
     // get the start of the last kashida group
-    sal_uInt16 nLastKashida = nChg;
+    sal_Int32 nLastKashida = nChg;
     if( nCntKash && i18n::ScriptType::COMPLEX == nScript )
     {
         --nCntKash;
@@ -837,8 +837,8 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         // all of the characters in this grounp are weak. We have to assign
         // the scripts to these characters depending on the fonts which are
         // set for these characters to display them.
-        xub_StrLen nEnd =
-                (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfScript( rTxt, nChg, WEAK );
+        sal_Int32 nEnd =
+                g_pBreakIt->GetBreakIter()->endOfScript( rTxt, nChg, WEAK );
 
         if( nEnd > rTxt.getLength() )
             nEnd = rTxt.getLength();
@@ -874,8 +874,8 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                 "sw.core", "Inserting WEAK into SwScriptInfo structure" );
         SAL_WARN_IF( STRING_LEN == nChg, "sw.core", "65K? Strange length of script section" );
 
-        xub_StrLen nSearchStt = nChg;
-        nChg = (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfScript( rTxt, nSearchStt, nScript );
+        sal_Int32 nSearchStt = nChg;
+        nChg = g_pBreakIt->GetBreakIter()->endOfScript( rTxt, nSearchStt, nScript );
 
         if ( nChg > rTxt.getLength() )
             nChg = rTxt.getLength();
@@ -886,11 +886,11 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         if( i18n::ScriptType::COMPLEX == nScript )
         {
             const short nScriptType = ScriptTypeDetector::getCTLScriptType( rTxt, nSearchStt );
-            xub_StrLen nNextCTLScriptStart = nSearchStt;
+            sal_Int32 nNextCTLScriptStart = nSearchStt;
             short nCurrentScriptType = nScriptType;
             while( com::sun::star::i18n::CTLScriptType::CTL_UNKNOWN == nCurrentScriptType || nScriptType == nCurrentScriptType )
             {
-                nNextCTLScriptStart = (xub_StrLen)ScriptTypeDetector::endOfCTLScriptType( rTxt, nNextCTLScriptStart );
+                nNextCTLScriptStart = ScriptTypeDetector::endOfCTLScriptType( rTxt, nNextCTLScriptStart );
                 if( nNextCTLScriptStart < rTxt.getLength() && nNextCTLScriptStart < nChg )
                     nCurrentScriptType = ScriptTypeDetector::getCTLScriptType( rTxt, nNextCTLScriptStart );
                 else
@@ -928,7 +928,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         {
             sal_uInt8 ePrevState = NONE;
             sal_uInt8 eState;
-            sal_uInt16 nPrevChg = nLastCompression;
+            sal_Int32 nPrevChg = nLastCompression;
 
             while ( nLastCompression < nChg )
             {
@@ -1203,9 +1203,9 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         {
             const sal_uInt8 nCurrDirType = GetDirType( nDirIdx );
                 // nStart ist start of RTL run:
-                const xub_StrLen nStart = nDirIdx > 0 ? GetDirChg( nDirIdx - 1 ) : 0;
+                const sal_Int32 nStart = nDirIdx > 0 ? GetDirChg( nDirIdx - 1 ) : 0;
                 // nEnd is end of RTL run:
-                const xub_StrLen nEnd = GetDirChg( nDirIdx );
+                const sal_Int32 nEnd = GetDirChg( nDirIdx );
 
             if ( nCurrDirType % 2 == UBIDI_RTL  || // text in RTL run
                 ( nCurrDirType > UBIDI_LTR && !lcl_HasStrongLTR( rTxt, nStart, nEnd ) ) ) // non-strong text in embedded LTR run
@@ -1220,7 +1220,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                 while ( GetScriptChg( nScriptIdx ) <= nStart )
                     ++nScriptIdx;
 
-                const xub_StrLen nStartPosOfGroup = nScriptIdx ? GetScriptChg( nScriptIdx - 1 ) : 0;
+                const sal_Int32 nStartPosOfGroup = nScriptIdx ? GetScriptChg( nScriptIdx - 1 ) : 0;
                 const sal_uInt8 nScriptTypeOfGroup = GetScriptType( nScriptIdx );
 
                 SAL_WARN_IF( nStartPosOfGroup > nStart || GetScriptChg( nScriptIdx ) <= nStart,
@@ -1250,7 +1250,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                 // Check that ScriptChangeInfos are in increasing order of
                 // position and that we don't have "empty" changes.
                 sal_uInt8 nLastTyp = i18n::ScriptType::WEAK;
-                xub_StrLen nLastPos = 0;
+                sal_Int32 nLastPos = 0;
                 for (std::vector<ScriptChangeInfo>::const_iterator i2 = aScriptChanges.begin(); i2 != aScriptChanges.end(); ++i2)
                 {
                     SAL_WARN_IF( nLastTyp == i2->type ||
@@ -1279,11 +1279,11 @@ void SwScriptInfo::UpdateBidiInfo( const OUString& rTxt )
     ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(rTxt.getStr()), rTxt.getLength(),    // UChar != sal_Unicode in MinGW
                    nDefaultDir, NULL, &nError );
     nError = U_ZERO_ERROR;
-    long nCount = ubidi_countRuns( pBidi, &nError );
+    int nCount = ubidi_countRuns( pBidi, &nError );
     int32_t nStart = 0;
     int32_t nEnd;
     UBiDiLevel nCurrDir;
-    for ( sal_uInt16 nIdx = 0; nIdx < nCount; ++nIdx )
+    for ( int nIdx = 0; nIdx < nCount; ++nIdx )
     {
         ubidi_getLogicalRun( pBidi, nStart, &nEnd, &nCurrDir );
         aDirectionChanges.push_back( DirectionChangeInfo(nEnd, nCurrDir) );
@@ -1299,13 +1299,13 @@ void SwScriptInfo::UpdateBidiInfo( const OUString& rTxt )
  * returns the position of the next character which belongs to another script
  * than the character of the actual (input) position.
  * If there's no script change until the end of the paragraph, it will return
- * STRING_LEN.
+ * COMPLETE_STRING.
  * Scripts are Asian (Chinese, Japanese, Korean),
  *             Latin ( English etc.)
  *         and Complex ( Hebrew, Arabian )
  *************************************************************************/
 
-xub_StrLen SwScriptInfo::NextScriptChg( const xub_StrLen nPos )  const
+sal_Int32 SwScriptInfo::NextScriptChg(const sal_Int32 nPos)  const
 {
     sal_uInt16 nEnd = CountScriptChg();
     for( sal_uInt16 nX = 0; nX < nEnd; ++nX )
@@ -1314,7 +1314,7 @@ xub_StrLen SwScriptInfo::NextScriptChg( const xub_StrLen nPos )  const
             return GetScriptChg( nX );
     }
 
-    return STRING_LEN;
+    return COMPLETE_STRING;
 }
 
 /*************************************************************************
@@ -1322,7 +1322,7 @@ xub_StrLen SwScriptInfo::NextScriptChg( const xub_StrLen nPos )  const
  * returns the script of the character at the input position
  *************************************************************************/
 
-sal_uInt8 SwScriptInfo::ScriptType( const xub_StrLen nPos ) const
+sal_uInt8 SwScriptInfo::ScriptType(const sal_Int32 nPos) const
 {
     sal_uInt16 nEnd = CountScriptChg();
     for( sal_uInt16 nX = 0; nX < nEnd; ++nX )
@@ -1335,7 +1335,7 @@ sal_uInt8 SwScriptInfo::ScriptType( const xub_StrLen nPos ) const
     return (sal_uInt8)GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
 }
 
-xub_StrLen SwScriptInfo::NextDirChg( const xub_StrLen nPos,
+sal_Int32 SwScriptInfo::NextDirChg( const sal_Int32 nPos,
                                      const sal_uInt8* pLevel )  const
 {
     sal_uInt8 nCurrDir = pLevel ? *pLevel : 62;
@@ -1347,10 +1347,10 @@ xub_StrLen SwScriptInfo::NextDirChg( const xub_StrLen nPos,
             return GetDirChg( nX );
     }
 
-    return STRING_LEN;
+    return COMPLETE_STRING;
 }
 
-sal_uInt8 SwScriptInfo::DirType( const xub_StrLen nPos ) const
+sal_uInt8 SwScriptInfo::DirType(const sal_Int32 nPos) const
 {
     sal_uInt16 nEnd = CountDirChg();
     for( sal_uInt16 nX = 0; nX < nEnd; ++nX )
@@ -1367,15 +1367,15 @@ sal_uInt8 SwScriptInfo::DirType( const xub_StrLen nPos ) const
  * Takes a string and replaced the hidden ranges with cChar.
  **************************************************************************/
 
-sal_uInt16 SwScriptInfo::MaskHiddenRanges( const SwTxtNode& rNode, OUStringBuffer & rText,
-                                       const xub_StrLen nStt, const xub_StrLen nEnd,
+sal_Int32 SwScriptInfo::MaskHiddenRanges( const SwTxtNode& rNode, OUStringBuffer & rText,
+                                       const sal_Int32 nStt, const sal_Int32 nEnd,
                                        const sal_Unicode cChar )
 {
     assert(rNode.GetTxt().getLength() == rText.getLength());
 
     PositionList aList;
-    xub_StrLen nHiddenStart;
-    xub_StrLen nHiddenEnd;
+    sal_Int32 nHiddenStart;
+    sal_Int32 nHiddenEnd;
     sal_uInt16 nNumOfHiddenChars = 0;
     GetBoundsOfHiddenRange( rNode, 0, nHiddenStart, nHiddenEnd, &aList );
     PositionList::const_reverse_iterator rFirst( aList.end() );
@@ -1410,8 +1410,8 @@ sal_uInt16 SwScriptInfo::MaskHiddenRanges( const SwTxtNode& rNode, OUStringBuffe
 void SwScriptInfo::DeleteHiddenRanges( SwTxtNode& rNode )
 {
     PositionList aList;
-    xub_StrLen nHiddenStart;
-    xub_StrLen nHiddenEnd;
+    sal_Int32 nHiddenStart;
+    sal_Int32 nHiddenEnd;
     GetBoundsOfHiddenRange( rNode, 0, nHiddenStart, nHiddenEnd, &aList );
     PositionList::const_reverse_iterator rFirst( aList.end() );
     PositionList::const_reverse_iterator rLast( aList.begin() );
@@ -1430,11 +1430,11 @@ void SwScriptInfo::DeleteHiddenRanges( SwTxtNode& rNode )
  * static version
  **************************************************************************/
 
-bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTxtNode& rNode, xub_StrLen nPos,
-                                           xub_StrLen& rnStartPos, xub_StrLen& rnEndPos,
+bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTxtNode& rNode, sal_Int32 nPos,
+                                           sal_Int32& rnStartPos, sal_Int32& rnEndPos,
                                            PositionList* pList )
 {
-    rnStartPos = STRING_LEN;
+    rnStartPos = COMPLETE_STRING;
     rnEndPos = 0;
 
     bool bNewContainsHiddenChars = false;
@@ -1487,8 +1487,8 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTxtNode& rNode, xub_StrLen nP
         for( sal_uInt16 i = 0; i < aHiddenMulti.GetRangeCount(); ++i )
         {
             const Range& rRange = aHiddenMulti.GetRange( i );
-            const xub_StrLen nHiddenStart = (xub_StrLen)rRange.Min();
-            const xub_StrLen nHiddenEnd = (xub_StrLen)rRange.Max() + 1;
+            const sal_Int32 nHiddenStart = rRange.Min();
+            const sal_Int32 nHiddenEnd = rRange.Max() + 1;
 
             if ( nHiddenStart > nPos )
                 break;
@@ -1506,8 +1506,8 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTxtNode& rNode, xub_StrLen nP
             for( sal_uInt16 i = 0; i < aHiddenMulti.GetRangeCount(); ++i )
             {
                 const Range& rRange = aHiddenMulti.GetRange( i );
-                pList->push_back( (xub_StrLen)rRange.Min() );
-                pList->push_back( (xub_StrLen)rRange.Max() + 1 );
+                pList->push_back( rRange.Min() );
+                pList->push_back( rRange.Max() + 1 );
             }
         }
 
@@ -1522,17 +1522,17 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTxtNode& rNode, xub_StrLen nP
  * non-static version
  **************************************************************************/
 
-bool SwScriptInfo::GetBoundsOfHiddenRange( xub_StrLen nPos, xub_StrLen& rnStartPos,
-                                           xub_StrLen& rnEndPos, PositionList* pList ) const
+bool SwScriptInfo::GetBoundsOfHiddenRange( sal_Int32 nPos, sal_Int32& rnStartPos,
+                                           sal_Int32& rnEndPos, PositionList* pList ) const
 {
-    rnStartPos = STRING_LEN;
+    rnStartPos = COMPLETE_STRING;
     rnEndPos = 0;
 
     sal_uInt16 nEnd = CountHiddenChg();
     for( sal_uInt16 nX = 0; nX < nEnd; ++nX )
     {
-        const xub_StrLen nHiddenStart = GetHiddenChg( nX++ );
-        const xub_StrLen nHiddenEnd = GetHiddenChg( nX );
+        const sal_Int32 nHiddenStart = GetHiddenChg( nX++ );
+        const sal_Int32 nHiddenEnd = GetHiddenChg( nX );
 
         if ( nHiddenStart > nPos )
             break;
@@ -1556,12 +1556,12 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( xub_StrLen nPos, xub_StrLen& rnStartP
     return CountHiddenChg() > 0;
 }
 
-bool SwScriptInfo::IsInHiddenRange( const SwTxtNode& rNode, xub_StrLen nPos )
+bool SwScriptInfo::IsInHiddenRange( const SwTxtNode& rNode, sal_Int32 nPos )
 {
-    xub_StrLen nStartPos;
-    xub_StrLen nEndPos;
+    sal_Int32 nStartPos;
+    sal_Int32 nEndPos;
     SwScriptInfo::GetBoundsOfHiddenRange( rNode, nPos, nStartPos, nEndPos );
-    return nStartPos != STRING_LEN;
+    return nStartPos != COMPLETE_STRING;
 }
 
 
@@ -1571,12 +1571,12 @@ bool SwScriptInfo::IsInHiddenRange( const SwTxtNode& rNode, xub_StrLen nPos )
  * returns the type of the compressed character
  *************************************************************************/
 
-sal_uInt8 SwScriptInfo::CompType( const xub_StrLen nPos ) const
+sal_uInt8 SwScriptInfo::CompType( const sal_Int32 nPos ) const
 {
     sal_uInt16 nEnd = CountCompChg();
     for( sal_uInt16 nX = 0; nX < nEnd; ++nX )
     {
-        xub_StrLen nChg = GetCompStart( nX );
+        sal_Int32 nChg = GetCompStart( nX );
 
         if ( nPos < nChg )
             return NONE;
@@ -1594,15 +1594,15 @@ sal_uInt8 SwScriptInfo::CompType( const xub_StrLen nPos ) const
  * between nStart and nEnd
  *************************************************************************/
 
-sal_uInt16 SwScriptInfo::HasKana( xub_StrLen nStart, const xub_StrLen nLen ) const
+sal_uInt16 SwScriptInfo::HasKana( sal_Int32 nStart, const sal_Int32 nLen ) const
 {
     sal_uInt16 nCnt = CountCompChg();
-    xub_StrLen nEnd = nStart + nLen;
+    sal_Int32 nEnd = nStart + nLen;
 
     for( sal_uInt16 nX = 0; nX < nCnt; ++nX )
     {
-        xub_StrLen nKanaStart  = GetCompStart( nX );
-        xub_StrLen nKanaEnd = nKanaStart + GetCompLen( nX );
+        sal_Int32 nKanaStart  = GetCompStart( nX );
+        sal_Int32 nKanaEnd = nKanaStart + GetCompLen( nX );
 
         if ( nKanaStart >= nEnd )
             return USHRT_MAX;
@@ -1614,7 +1614,7 @@ sal_uInt16 SwScriptInfo::HasKana( xub_StrLen nStart, const xub_StrLen nLen ) con
     return USHRT_MAX;
 }
 
-long SwScriptInfo::Compress( sal_Int32* pKernArray, xub_StrLen nIdx, xub_StrLen nLen,
+long SwScriptInfo::Compress( sal_Int32* pKernArray, sal_Int32 nIdx, sal_Int32 nLen,
                              const sal_uInt16 nCompress, const sal_uInt16 nFontHeight,
                              Point* pPoint ) const
 {
@@ -1632,8 +1632,8 @@ long SwScriptInfo::Compress( sal_Int32* pKernArray, xub_StrLen nIdx, xub_StrLen 
     if ( USHRT_MAX == nCompIdx )
         return 0;
 
-    xub_StrLen nChg = GetCompStart( nCompIdx );
-    xub_StrLen nCompLen = GetCompLen( nCompIdx );
+    sal_Int32 nChg = GetCompStart( nCompIdx );
+    sal_Int32 nCompLen = GetCompLen( nCompIdx );
     sal_uInt16 nI = 0;
     nLen = nLen + nIdx;
 
@@ -1703,7 +1703,7 @@ long SwScriptInfo::Compress( sal_Int32* pKernArray, xub_StrLen nIdx, xub_StrLen 
 
         if( nIdx < nLen )
         {
-            xub_StrLen nTmpChg;
+            sal_Int32 nTmpChg;
             if( ++nCompIdx < nCompCount )
             {
                 nTmpChg = GetCompStart( nCompIdx );
@@ -1837,7 +1837,7 @@ bool SwScriptInfo::IsArabicText( const OUString& rTxt, sal_Int32 nStt, sal_Int32
     const CharClass& rCC = GetAppCharClass();
     sal_Int32 nIdx = nStt;
     const sal_Int32 nEnd = nStt + nLen;
-    while ( nIdx < nEnd && !rCC.isLetterNumeric( rTxt, (xub_StrLen)nIdx ) )
+    while ( nIdx < nEnd && !rCC.isLetterNumeric( rTxt, nIdx ) )
     {
         ++nIdx;
     }
@@ -1846,7 +1846,7 @@ bool SwScriptInfo::IsArabicText( const OUString& rTxt, sal_Int32 nStt, sal_Int32
     {
         // no regular character found in this portion. Go backward:
         --nIdx;
-        while ( nIdx >= 0 && !rCC.isLetterNumeric( rTxt, (xub_StrLen)nIdx ) )
+        while ( nIdx >= 0 && !rCC.isLetterNumeric( rTxt, nIdx ) )
         {
             --nIdx;
         }
@@ -2088,7 +2088,7 @@ SwScriptInfo* SwScriptInfo::GetScriptInfo( const SwTxtNode& rTNd,
             pScriptInfo = (SwScriptInfo*)pLast->GetScriptInfo();
             if ( pScriptInfo )
             {
-                if ( !bAllowInvalid && STRING_LEN != pScriptInfo->GetInvalidity() )
+                if ( !bAllowInvalid && COMPLETE_STRING != pScriptInfo->GetInvalidityA() )
                     pScriptInfo = 0;
                 else break;
             }
@@ -2108,9 +2108,9 @@ SwParaPortion::~SwParaPortion()
 {
 }
 
-xub_StrLen SwParaPortion::GetParLen() const
+sal_Int32 SwParaPortion::GetParLen() const
 {
-    xub_StrLen nLen = 0;
+    sal_Int32 nLen = 0;
     const SwLineLayout *pLay = this;
     while( pLay )
     {
@@ -2222,8 +2222,8 @@ void SwScriptInfo::selectHiddenTextProperty(const SwTxtNode& rNode, MultiSelecti
                 static_cast<const SvxCharHiddenItem*>( CharFmt::GetItem( *pTxtAttr, RES_CHRATR_HIDDEN ) );
             if( pHiddenItem )
             {
-                const xub_StrLen nSt = *pTxtAttr->GetStart();
-                const xub_StrLen nEnd = *pTxtAttr->End();
+                const sal_Int32 nSt = *pTxtAttr->GetStart();
+                const sal_Int32 nEnd = *pTxtAttr->End();
                 if( nEnd > nSt )
                 {
                     Range aTmp( nSt, nEnd - 1 );
@@ -2251,8 +2251,8 @@ void SwScriptInfo::selectRedLineDeleted(const SwTxtNode& rNode, MultiSelection &
             if ( pRed->Start()->nNode > rNode.GetIndex() )
                 break;
 
-            xub_StrLen nRedlStart;
-            xub_StrLen nRedlnEnd;
+            sal_Int32 nRedlStart;
+            sal_Int32 nRedlnEnd;
             pRed->CalcStartEnd( rNode.GetIndex(), nRedlStart, nRedlnEnd );
             //clip it if the redline extends past the end of the nodes text
             nRedlnEnd = std::min<sal_Int32>(nRedlnEnd, rNode.GetTxt().getLength());
@@ -2287,8 +2287,8 @@ void SwScriptInfo::CalcHiddenRanges( const SwTxtNode& rNode, MultiSelection& rHi
     if ( bNewContainsHiddenChars )
     {
         const Range& rRange = rHiddenMulti.GetRange( 0 );
-        const xub_StrLen nHiddenStart = (xub_StrLen)rRange.Min();
-        const xub_StrLen nHiddenEnd = (xub_StrLen)rRange.Max() + 1;
+        const sal_Int32 nHiddenStart = rRange.Min();
+        const sal_Int32 nHiddenEnd = rRange.Max() + 1;
         bNewHiddenCharsHidePara =
             (nHiddenStart == 0 && nHiddenEnd >= rNode.GetTxt().getLength());
     }

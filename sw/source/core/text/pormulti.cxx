@@ -171,7 +171,7 @@ void SwMultiPortion::ActualizeTabulator()
  * --------------------------------------------------*/
 
 SwRotatedPortion::SwRotatedPortion( const SwMultiCreator& rCreate,
-    xub_StrLen nEnd, sal_Bool bRTL ) : SwMultiPortion( nEnd )
+    sal_Int32 nEnd, sal_Bool bRTL ) : SwMultiPortion( nEnd )
 {
     const SvxCharRotateItem* pRot = (SvxCharRotateItem*)rCreate.pItem;
     if( !pRot )
@@ -200,7 +200,7 @@ SwRotatedPortion::SwRotatedPortion( const SwMultiCreator& rCreate,
  * SwBidiPortion::SwBidiPortion(..)
  * --------------------------------------------------*/
 
-SwBidiPortion::SwBidiPortion( xub_StrLen nEnd, sal_uInt8 nLv )
+SwBidiPortion::SwBidiPortion( sal_Int32 nEnd, sal_uInt8 nLv )
     : SwMultiPortion( nEnd ), nLevel( nLv )
 {
     SetBidi();
@@ -230,11 +230,11 @@ sal_Bool SwBidiPortion::ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const
     return bRet;
 }
 
-xub_StrLen SwBidiPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf ) const
+sal_Int32 SwBidiPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf ) const
 {
     // Calculate number of blanks for justified alignment
     SwLinePortion* pPor = GetRoot().GetFirstPortion();
-    xub_StrLen nTmpStart = rInf.GetIdx();
+    sal_Int32 nTmpStart = rInf.GetIdx();
     sal_Int32 nNull = 0;
     sal_Int32 nBlanks;
 
@@ -261,7 +261,7 @@ xub_StrLen SwBidiPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf ) const
  * --------------------------------------------------*/
 
 SwDoubleLinePortion::SwDoubleLinePortion( SwDoubleLinePortion& rDouble,
-                                          xub_StrLen nEnd ) :
+                                          sal_Int32 nEnd ) :
     SwMultiPortion( nEnd ),
     pBracket( 0 )
 {
@@ -289,7 +289,7 @@ SwDoubleLinePortion::SwDoubleLinePortion( SwDoubleLinePortion& rDouble,
  * --------------------------------------------------*/
 
 SwDoubleLinePortion::SwDoubleLinePortion( const SwMultiCreator& rCreate,
-    xub_StrLen nEnd ) : SwMultiPortion( nEnd ), pBracket( new SwBracket() )
+    sal_Int32 nEnd ) : SwMultiPortion( nEnd ), pBracket( new SwBracket() )
 {
     SetDouble();
     const SvxTwoLinesItem* pTwo = (SvxTwoLinesItem*)rCreate.pItem;
@@ -544,8 +544,8 @@ sal_Bool SwDoubleLinePortion::ChgSpaceAdd( SwLineLayout* pCurr,
         }
         else
         {
-            xub_StrLen nMyBlank = GetSmallerSpaceCnt();
-            xub_StrLen nOther = GetSpaceCnt();
+            sal_Int32 nMyBlank = GetSmallerSpaceCnt();
+            sal_Int32 nOther = GetSpaceCnt();
             SwTwips nMultiSpace = pCurr->GetLLSpaceAdd( 0 ) * nMyBlank + nOther * nSpaceAdd;
 
             if( nMyBlank )
@@ -588,7 +588,7 @@ SwDoubleLinePortion::~SwDoubleLinePortion()
  * --------------------------------------------------*/
 
 
-SwRubyPortion::SwRubyPortion( const SwRubyPortion& rRuby, xub_StrLen nEnd ) :
+SwRubyPortion::SwRubyPortion( const SwRubyPortion& rRuby, sal_Int32 nEnd ) :
     SwMultiPortion( nEnd ),
     nRubyOffset( rRuby.GetRubyOffset() ),
     nAdjustment( rRuby.GetAdjustment() )
@@ -606,7 +606,7 @@ SwRubyPortion::SwRubyPortion( const SwRubyPortion& rRuby, xub_StrLen nEnd ) :
 
 SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
                               const IDocumentSettingAccess& rIDocumentSettingAccess,
-                              xub_StrLen nEnd, xub_StrLen nOffs,
+                              sal_Int32 nEnd, sal_Int32 nOffs,
                               const sal_Bool* pForceRubyPos )
      : SwMultiPortion( nEnd )
 {
@@ -681,7 +681,7 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
 void SwRubyPortion::_Adjust( SwTxtFormatInfo &rInf )
 {
     SwTwips nLineDiff = GetRoot().Width() - GetRoot().GetNext()->Width();
-    xub_StrLen nOldIdx = rInf.GetIdx();
+    sal_Int32 nOldIdx = rInf.GetIdx();
     if( !nLineDiff )
         return;
     SwLineLayout *pCurr;
@@ -791,7 +791,7 @@ void SwRubyPortion::CalcRubyOffset()
         if( pFld->HasFollow() )
             nRubyOffset = pFld->GetNextOffset();
         else
-            nRubyOffset = STRING_LEN;
+            nRubyOffset = COMPLETE_STRING;
     }
 }
 
@@ -866,7 +866,7 @@ static bool lcl_HasRotation( const SwTxtAttr& rAttr,
     return false;
 }
 
-SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
+SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( sal_Int32 &rPos,
                                                 SwMultiPortion* pMulti ) const
 {
     SwScriptInfo& rSI = ((SwParaPortion*)GetParaPortion())->GetScriptInfo();
@@ -897,7 +897,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
     if ( GetTxt().getLength() != rPos && nNextLevel > nCurrLevel )
     {
         rPos = bFldBidi ? rPos + 1 : rSI.NextDirChg( rPos, &nCurrLevel );
-        if ( STRING_LEN == rPos )
+        if ( COMPLETE_STRING == rPos )
             return NULL;
         SwMultiCreator *pRet = new SwMultiCreator;
         pRet->pItem = NULL;
@@ -944,7 +944,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
     for( i = 0; i < nCount; ++i )
     {
         const SwTxtAttr *pTmp = (*pHints)[i];
-        xub_StrLen nStart = *pTmp->GetStart();
+        sal_Int32 nStart = *pTmp->GetStart();
         if( rPos < nStart )
             break;
         if( *pTmp->GetAnyEnd() > rPos )
@@ -986,7 +986,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
         SwMultiCreator *pRet = new SwMultiCreator;
 
         // We note the endpositions of the 2-line attributes in aEnd as stack
-        std::deque< xub_StrLen > aEnd;
+        std::deque< sal_Int32 > aEnd;
 
         // The bOn flag signs the state of the last 2-line attribute in the
         // aEnd-stack, it is compatible with the winner-attribute or
@@ -1103,7 +1103,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
         pRet->nId = SW_MC_ROTATE;
 
         // We note the endpositions of the 2-line attributes in aEnd as stack
-        std::deque< xub_StrLen > aEnd;
+        std::deque< sal_Int32 > aEnd;
 
         // The bOn flag signs the state of the last 2-line attribute in the
         // aEnd-stack, which could interrupts the winning rotation attribute.
@@ -1112,7 +1112,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
         // n2Lines is the index of the last 2-line-attribute, which contains
         // the actual position.
         i = 0;
-        xub_StrLen n2Start = rPos;
+        sal_Int32 n2Start = rPos;
         while( i < nCount )
         {
             const SwTxtAttr *pTmp = (*pHints)[i++];
@@ -1392,10 +1392,10 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
         rMulti.GetPortion()->PrePaint( GetInfo(), &rMulti );
 
     // old values must be saved and restored at the end
-    xub_StrLen nOldLen = GetInfo().GetLen();
+    sal_Int32 nOldLen = GetInfo().GetLen();
     KSHORT nOldX = KSHORT(GetInfo().X());
     long nOldY = GetInfo().Y();
-    xub_StrLen nOldIdx = GetInfo().GetIdx();
+    sal_Int32 nOldIdx = GetInfo().GetIdx();
 
     SwSpaceManipulator aManip( GetInfo(), rMulti );
 
@@ -1420,7 +1420,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
 
     if( rMulti.HasBrackets() )
     {
-        xub_StrLen nTmpOldIdx = GetInfo().GetIdx();
+        sal_Int32 nTmpOldIdx = GetInfo().GetIdx();
         GetInfo().SetIdx(((SwDoubleLinePortion&)rMulti).GetBrackets()->nStart);
         SeekAndChg( GetInfo() );
         ((SwDoubleLinePortion&)rMulti).PaintBracket( GetInfo(), 0, sal_True );
@@ -1645,7 +1645,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
 
     if( rMulti.HasBrackets() )
     {
-        xub_StrLen nTmpOldIdx = GetInfo().GetIdx();
+        sal_Int32 nTmpOldIdx = GetInfo().GetIdx();
         GetInfo().SetIdx(((SwDoubleLinePortion&)rMulti).GetBrackets()->nStart);
         SeekAndChg( GetInfo() );
         GetInfo().X( nOldX );
@@ -1693,7 +1693,7 @@ static bool lcl_ExtractFieldFollow( SwLineLayout* pLine, SwLinePortion* &rpFld )
  * --------------------------------------------------*/
 
 static void lcl_TruncateMultiPortion( SwMultiPortion& rMulti, SwTxtFormatInfo& rInf,
-                               xub_StrLen nStartIdx )
+                               sal_Int32 nStartIdx )
 {
     rMulti.GetRoot().Truncate();
     rMulti.GetRoot().SetLen(0);
@@ -1725,7 +1725,7 @@ sal_Bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
 
     if( rMulti.HasBrackets() )
     {
-        xub_StrLen nOldIdx = rInf.GetIdx();
+        sal_Int32 nOldIdx = rInf.GetIdx();
         rInf.SetIdx( ((SwDoubleLinePortion&)rMulti).GetBrackets()->nStart );
         SeekAndChg( rInf );
         nOldX = KSHORT(GetInfo().X());
@@ -1797,11 +1797,11 @@ sal_Bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
 
     pMulti = &rMulti;
     SwLineLayout *pOldCurr = pCurr;
-    xub_StrLen nOldStart = GetStart();
+    sal_Int32 nOldStart = GetStart();
     SwTwips nMinWidth = nTmpX + 1;
     SwTwips nActWidth = nMaxWidth;
-    const xub_StrLen nStartIdx = rInf.GetIdx();
-    xub_StrLen nMultiLen = rMulti.GetLen();
+    const sal_Int32 nStartIdx = rInf.GetIdx();
+    sal_Int32 nMultiLen = rMulti.GetLen();
 
     SwLinePortion *pFirstRest;
     SwLinePortion *pSecondRest;
@@ -1900,7 +1900,7 @@ sal_Bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         // second line has to be formatted
         else if( pCurr->GetLen()<nMultiLen || rMulti.IsRuby() || aInf.GetRest())
         {
-            xub_StrLen nFirstLen = pCurr->GetLen();
+            sal_Int32 nFirstLen = pCurr->GetLen();
             delete pCurr->GetNext();
             pCurr->SetNext( new SwLineLayout() );
             pCurr = pCurr->GetNext();
@@ -2178,11 +2178,11 @@ sal_Bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
  * --------------------------------------------------*/
 
 SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
-    xub_StrLen nPosition )
+    sal_Int32 nPosition )
 {
     if( !nPosition )
         return NULL;
-    xub_StrLen nMultiPos = nPosition - pLine->GetLen();
+    sal_Int32 nMultiPos = nPosition - pLine->GetLen();
     const SwMultiPortion *pTmpMulti = NULL;
     const SwMultiPortion *pHelpMulti = NULL;
     const SwLinePortion* pPor = pLine->GetFirstPortion();
@@ -2277,7 +2277,7 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
         return pRest;
 
     if( pRest || nMultiPos > nPosition || ( pHelpMulti->IsRuby() &&
-        ((SwRubyPortion*)pHelpMulti)->GetRubyOffset() < STRING_LEN ) )
+        ((SwRubyPortion*)pHelpMulti)->GetRubyOffset() < COMPLETE_STRING ) )
     {
         SwMultiPortion* pTmp;
         if( pHelpMulti->IsDouble() )
@@ -2341,7 +2341,7 @@ SwTxtCursorSave::SwTxtCursorSave( SwTxtCursor* pTxtCursor,
                                   SwMultiPortion* pMulti,
                                   SwTwips nY,
                                   sal_uInt16& nX,
-                                  xub_StrLen nCurrStart,
+                                  sal_Int32 nCurrStart,
                                   long nSpaceAdd )
 {
     pTxtCrsr = pTxtCursor;
@@ -2367,7 +2367,7 @@ SwTxtCursorSave::SwTxtCursorSave( SwTxtCursor* pTxtCursor,
         }
         else
         {
-            const xub_StrLen nOldIdx = pTxtCursor->GetInfo().GetIdx();
+            const sal_Int32 nOldIdx = pTxtCursor->GetInfo().GetIdx();
             pTxtCursor->GetInfo().SetIdx ( nCurrStart );
             nSpaceCnt = ((SwBidiPortion*)pMulti)->GetSpaceCnt(pTxtCursor->GetInfo());
             pTxtCursor->GetInfo().SetIdx ( nOldIdx );

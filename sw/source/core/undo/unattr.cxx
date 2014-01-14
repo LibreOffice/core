@@ -415,7 +415,7 @@ void SwUndoFmtAttr::SaveFlyAnchor( bool bSvDrwPt )
     if( !rAnchor.GetCntntAnchor() )
         return;
 
-    xub_StrLen nCntnt = 0;
+    sal_Int32 nCntnt = 0;
     switch( rAnchor.GetAnchorId() )
     {
     case FLY_AS_CHAR:
@@ -897,7 +897,7 @@ void SwUndoAttr::RemoveIdx( SwDoc& rDoc )
     SwNodes& rNds = rDoc.GetNodes();
     for ( sal_uInt16 n = 0; n < m_pHistory->Count(); ++n )
     {
-        xub_StrLen nCntnt = 0;
+        sal_Int32 nCntnt = 0;
         sal_uLong nNode = 0;
         pHstHnt = (*m_pHistory)[ n ];
         switch ( pHstHnt->Which() )
@@ -919,7 +919,7 @@ void SwUndoAttr::RemoveIdx( SwDoc& rDoc )
                     SwHistoryResetAttrSet * pHistoryHint
                         = static_cast<SwHistoryResetAttrSet*>(pHstHnt);
                     nCntnt = pHistoryHint->GetCntnt();
-                    if ( STRING_MAXLEN != nCntnt )
+                    if ( COMPLETE_STRING != nCntnt )
                     {
                         const std::vector<sal_uInt16>& rArr = pHistoryHint->GetArr();
                         for ( sal_uInt16 i = rArr.size(); i; )

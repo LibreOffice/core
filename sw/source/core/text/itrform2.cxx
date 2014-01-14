@@ -75,7 +75,7 @@ namespace {
                                     const sal_Int32 nOldLineEnd,
                                     const std::vector<long> &rFlyStarts );
     //! Determine if we need to build hidden portions
-    static bool lcl_BuildHiddenPortion( const SwTxtSizeInfo& rInf, xub_StrLen &rPos );
+    static bool lcl_BuildHiddenPortion( const SwTxtSizeInfo& rInf, sal_Int32 &rPos );
 
     // Check whether the two font has the same border
     static bool lcl_HasSameBorder(const SwFont& rFirst, const SwFont& rSecond);
@@ -104,7 +104,7 @@ void SwTxtFormatter::CtorInitTxtFormatter( SwTxtFrm *pNewFrm, SwTxtFormatInfo *p
     bTruncLines = sal_False;
     nCntEndHyph = 0;
     nCntMidHyph = 0;
-    nLeftScanIdx = STRING_LEN;
+    nLeftScanIdx = COMPLETE_STRING;
     nRightScanIdx = 0;
     m_nHintEndIndex = 0;
     m_pFirstOfBorderMerge = 0;
@@ -379,7 +379,7 @@ void SwTxtFormatter::InsertPortion( SwTxtFormatInfo &rInf,
 
 void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 {
-    OSL_ENSURE( rInf.GetTxt().getLength() < STRING_LEN,
+    OSL_ENSURE( rInf.GetTxt().getLength() < COMPLETE_STRING,
             "SwTxtFormatter::BuildPortions: bad text length in info" );
 
     rInf.ChkNoHyph( CntEndHyph(), CntMidHyph() );
@@ -431,7 +431,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
     while( pPor && !rInf.IsStop() )
     {
-        OSL_ENSURE( rInf.GetLen() < STRING_LEN &&
+        OSL_ENSURE( rInf.GetLen() < COMPLETE_STRING &&
                 rInf.GetIdx() <= rInf.GetTxt().getLength(),
                 "SwTxtFormatter::BuildPortions: bad length in info" );
 
@@ -630,7 +630,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             {
                 // The distance between two different scripts is set
                 // to 20% of the fontheight.
-                xub_StrLen nTmp = rInf.GetIdx() + pPor->GetLen();
+                sal_Int32 nTmp = rInf.GetIdx() + pPor->GetLen();
                 if( nTmp == pScriptInfo->NextScriptChg( nTmp - 1 ) &&
                     nTmp != rInf.GetTxt().getLength() )
                 {
@@ -657,7 +657,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
         if ( bHasGrid && pPor != pGridKernPortion && ! pMulti )
         {
-            xub_StrLen nTmp = rInf.GetIdx() + pPor->GetLen();
+            sal_Int32 nTmp = rInf.GetIdx() + pPor->GetLen();
             const SwTwips nRestWidth = rInf.Width() - rInf.X() - pPor->Width();
 
             const sal_uInt8 nCurrScript = pFnt->GetActual(); // pScriptInfo->ScriptType( rInf.GetIdx() );
@@ -1243,7 +1243,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
     // Check for Hidden Portion:
     if ( !pPor )
     {
-        xub_StrLen nEnd = rInf.GetIdx();
+        sal_Int32 nEnd = rInf.GetIdx();
         if ( ::lcl_BuildHiddenPortion( rInf, nEnd ) )
             pPor = new SwHiddenTextPortion( nEnd - rInf.GetIdx() );
     }
@@ -1257,7 +1257,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
         {
             // We open a multiportion part, if we enter a multi-line part
             // of the paragraph.
-            xub_StrLen nEnd = rInf.GetIdx();
+            sal_Int32 nEnd = rInf.GetIdx();
             SwMultiCreator* pCreate = rInf.GetMultiCreator( nEnd, pMulti );
             if( pCreate )
             {
@@ -1495,7 +1495,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
  *                      SwTxtFormatter::FormatLine()
  *************************************************************************/
 
-xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStartPos )
+sal_Int32 SwTxtFormatter::FormatLine(const sal_Int32 nStartPos)
 {
     OSL_ENSURE( ! pFrm->IsVertical() || pFrm->IsSwapped(),
             "SwTxtFormatter::FormatLine( nStartPos ) with unswapped frame" );
@@ -1529,7 +1529,7 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStartPos )
     // for an optimal repaint rectangle, we want to compare fly portions
     // before and after the BuildPortions call
     const sal_Bool bOptimizeRepaint = AllowRepaintOpt();
-    const xub_StrLen nOldLineEnd = nStartPos + pCurr->GetLen();
+    const sal_Int32 nOldLineEnd = nStartPos + pCurr->GetLen();
     std::vector<long> flyStarts;
 
     // these are the conditions for a fly position comparison
@@ -1671,7 +1671,7 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStartPos )
     // delete master copy of rest portion
     xSaveFld.reset();
 
-    xub_StrLen nNewStart = nStartPos + pCurr->GetLen();
+    sal_Int32 nNewStart = nStartPos + pCurr->GetLen();
 
     // adjust text if kana compression is enabled
     if ( GetInfo().CompressLine() )
@@ -2034,8 +2034,8 @@ sal_Bool SwTxtFormatter::AllowRepaintOpt() const
     }
 
     // Schon wieder ein Sonderfall: unsichtbare SoftHyphs
-    const xub_StrLen nReformat = GetInfo().GetReformatStart();
-    if( bOptimizeRepaint && STRING_LEN != nReformat )
+    const sal_Int32 nReformat = GetInfo().GetReformatStart();
+    if( bOptimizeRepaint && COMPLETE_STRING != nReformat )
     {
         const sal_Unicode cCh = nReformat >= GetInfo().GetTxt().getLength() ? 0 : GetInfo().GetTxt()[ nReformat ];
         bOptimizeRepaint = ( CH_TXTATR_BREAKWORD != cCh && CH_TXTATR_INWORD != cCh )
@@ -2059,7 +2059,7 @@ void SwTxtFormatter::CalcUnclipped( SwTwips& rTop, SwTwips& rBottom )
 
 
 void SwTxtFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
-    xub_StrLen nStartIdx, sal_Bool bAlways ) const
+    sal_Int32 nStartIdx, sal_Bool bAlways ) const
 {
     OSL_ENSURE( ! pFrm->IsVertical() || pFrm->IsSwapped(),
             "SwTxtFormatter::UpdatePos with unswapped frame" );
@@ -2165,7 +2165,7 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
                 // jump to end of the bidi portion
                 aSt.X() += pLay->Width();
 
-            xub_StrLen nStIdx = aTmpInf.GetIdx();
+            sal_Int32 nStIdx = aTmpInf.GetIdx();
             do
             {
                 UpdatePos( pLay, aSt, nStIdx, bAlways );
@@ -2772,17 +2772,17 @@ namespace {
             // step back six(!) more characters for complex scripts
             // this is required e.g., for Khmer (thank you, Javier!)
             const SwScriptInfo& rSI = txtFmtInfo.GetParaPortion()->GetScriptInfo();
-            xub_StrLen nMaxContext = 0;
+            sal_Int32 nMaxContext = 0;
             if( ::i18n::ScriptType::COMPLEX == rSI.ScriptType( nReformat ) )
                 nMaxContext = 6;
     #else
             // Some Graphite fonts need context for scripts not marked as complex
-            static const xub_StrLen nMaxContext = 10;
+            static const sal_Int32 nMaxContext = 10;
     #endif
     #else
             // some fonts like Quartz's Zapfino need more context
             // TODO: query FontInfo for maximum unicode context
-            static const xub_StrLen nMaxContext = 8;
+            static const sal_Int32 nMaxContext = 8;
     #endif
             if( nMaxContext > 0 )
             {
@@ -2850,7 +2850,7 @@ namespace {
     }
 
     // Determine if we need to build hidden portions
-    bool lcl_BuildHiddenPortion( const SwTxtSizeInfo& rInf, xub_StrLen &rPos )
+    bool lcl_BuildHiddenPortion( const SwTxtSizeInfo& rInf, sal_Int32 &rPos )
     {
         // Only if hidden text should not be shown:
     //    if ( rInf.GetVsh() && rInf.GetVsh()->GetWin() && rInf.GetOpt().IsShowHiddenChar() )
@@ -2860,8 +2860,8 @@ namespace {
             return false;
 
         const SwScriptInfo& rSI = rInf.GetParaPortion()->GetScriptInfo();
-        xub_StrLen nHiddenStart;
-        xub_StrLen nHiddenEnd;
+        sal_Int32 nHiddenStart;
+        sal_Int32 nHiddenEnd;
         rSI.GetBoundsOfHiddenRange( rPos, nHiddenStart, nHiddenEnd );
         if ( nHiddenEnd )
         {

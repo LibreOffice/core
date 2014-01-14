@@ -2045,7 +2045,7 @@ sal_Bool SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
     if( bProcess )
     {
         SwViewShell *pSh = pImp->GetShell();
-        if( STRING_LEN == nTxtPos )
+        if( COMPLETE_STRING == nTxtPos )
         {
             --nTxtPos;
             if( pSh->ISA(SwCrsrShell) && !((SwCrsrShell*)pSh)->IsTableMode() )
@@ -2175,7 +2175,7 @@ sal_Bool SwLayIdle::DoIdleJob( IdleJobType eJob, sal_Bool bVisAreaOnly )
         pPage = (SwPageFrm*)pRoot->Lower();
 
     pCntntNode = NULL;
-    nTxtPos = STRING_LEN;
+    nTxtPos = COMPLETE_STRING;
 
     while ( pPage )
     {

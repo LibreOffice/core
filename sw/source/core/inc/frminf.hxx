@@ -46,13 +46,13 @@ public:
     SwTwips GetLineStart() const;
 
     // return center position of the next character
-    SwTwips GetCharPos( xub_StrLen nChar, sal_Bool bCenter = sal_True ) const;
+    SwTwips GetCharPos( sal_Int32 nChar, sal_Bool bCenter = sal_True ) const;
 
     // collect all whitespaces at the beginning and end of a line in Pam
     void GetSpaces( SwPaM &rPam, sal_Bool bWithLineBreak ) const;
 
     // Is a bullet point/symbol/etc. at the first text position?
-    sal_Bool IsBullet( xub_StrLen nTxtPos ) const;
+    sal_Bool IsBullet( sal_Int32 nTxtPos ) const;
 
     // determine intentation for first line
     SwTwips GetFirstIndent() const;

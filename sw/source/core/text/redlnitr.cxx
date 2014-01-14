@@ -88,14 +88,14 @@ void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, S
 
     // determine script changes if not already done for current paragraph
     OSL_ENSURE( pScriptInfo, "No script info available");
-    if ( pScriptInfo->GetInvalidity() != STRING_LEN )
+    if ( pScriptInfo->GetInvalidityA() != COMPLETE_STRING )
          pScriptInfo->InitScriptInfo( rTxtNode, bRTL );
 
     if ( g_pBreakIt->GetBreakIter().is() )
     {
         pFnt->SetActual( SwScriptInfo::WhichFont( 0, 0, pScriptInfo ) );
 
-        xub_StrLen nChg = 0;
+        sal_Int32 nChg = 0;
         sal_uInt16 nCnt = 0;
 
         do
@@ -133,8 +133,8 @@ void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, S
     const bool bShow = IDocumentRedlineAccess::IsShowChanges( pIDRA->GetRedlineMode() );
     if( pExtInp || bShow )
     {
-        MSHORT nRedlPos = pIDRA->GetRedlinePos( rTxtNode, USHRT_MAX );
-        if( pExtInp || MSHRT_MAX != nRedlPos )
+        sal_uInt16 nRedlPos = pIDRA->GetRedlinePos( rTxtNode, USHRT_MAX );
+        if( pExtInp || USHRT_MAX != nRedlPos )
         {
             const std::vector<sal_uInt16> *pArr = 0;
             sal_Int32 nInputStt = 0;
@@ -167,23 +167,23 @@ void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, S
  *
  * Wenn bOn gesetzt ist, ist der Font entsprechend manipuliert worden.
  *
- * Wenn nAct auf MSHRT_MAX gesetzt wurde ( durch Reset() ), so ist zur Zeit
+ * Wenn nAct auf COMPLETE_STRING gesetzt wurde ( durch Reset() ), so ist zur Zeit
  * kein Redline aktiv, nStart und nEnd sind invalid.
  *************************************************************************/
 
 SwRedlineItr::SwRedlineItr( const SwTxtNode& rTxtNd, SwFont& rFnt,
-                            SwAttrHandler& rAH, MSHORT nRed, sal_Bool bShw,
+                            SwAttrHandler& rAH, sal_Int32 nRed, sal_Bool bShw,
                             const std::vector<sal_uInt16> *pArr,
-                            xub_StrLen nExtStart )
+                            sal_Int32 nExtStart )
     : rDoc( *rTxtNd.GetDoc() ), rAttrHandler( rAH ), pSet( 0 ),
       nNdIdx( rTxtNd.GetIndex() ), nFirst( nRed ),
-      nAct( MSHRT_MAX ), bOn( sal_False ), bShow( bShw )
+      nAct( COMPLETE_STRING ), bOn( sal_False ), bShow( bShw )
 {
     if( pArr )
         pExt = new SwExtend( *pArr, nExtStart );
     else
         pExt = NULL;
-    Seek( rFnt, 0, STRING_LEN );
+    Seek (rFnt, 0, COMPLETE_STRING);
 }
 
 SwRedlineItr::~SwRedlineItr()
@@ -196,7 +196,7 @@ SwRedlineItr::~SwRedlineItr()
 // Der Return-Wert von SwRedlineItr::Seek gibt an, ob der aktuelle Font
 // veraendert wurde durch Verlassen (-1) oder Betreten eines Bereichs (+1)
 
-short SwRedlineItr::_Seek( SwFont& rFnt, xub_StrLen nNew, xub_StrLen nOld )
+short SwRedlineItr::_Seek(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
 {
     short nRet = 0;
     if( ExtOn() )
@@ -224,13 +224,13 @@ short SwRedlineItr::_Seek( SwFont& rFnt, xub_StrLen nNew, xub_StrLen nOld )
             else
                 return nRet + EnterExtend( rFnt, nNew ); // Wir sind im gleichen Bereich geblieben.
         }
-        if( MSHRT_MAX == nAct || nOld > nNew )
+        if( COMPLETE_STRING == nAct || nOld > nNew )
             nAct = nFirst;
 
-        nStart = STRING_LEN;
-        nEnd = STRING_LEN;
+        nStart = COMPLETE_STRING;
+        nEnd = COMPLETE_STRING;
 
-        for( ; nAct < rDoc.GetRedlineTbl().size() ; ++nAct )
+        for( ; nAct < (sal_Int32)rDoc.GetRedlineTbl().size() ; ++nAct )
         {
             rDoc.GetRedlineTbl()[ nAct ]->CalcStartEnd( nNdIdx, nStart, nEnd );
 
@@ -278,8 +278,8 @@ short SwRedlineItr::_Seek( SwFont& rFnt, xub_StrLen nNew, xub_StrLen nOld )
                 }
                 break;
             }
-            nStart = STRING_LEN;
-            nEnd = STRING_LEN;
+            nStart = COMPLETE_STRING;
+            nEnd = COMPLETE_STRING;
         }
     }
     return nRet + EnterExtend( rFnt, nNew );
@@ -343,12 +343,12 @@ void SwRedlineItr::_Clear( SwFont* pFnt )
         pFnt->SetNoCol( sal_False );
 }
 
-xub_StrLen SwRedlineItr::_GetNextRedln( xub_StrLen nNext )
+sal_Int32 SwRedlineItr::_GetNextRedln( sal_Int32 nNext )
 {
     nNext = NextExtend( nNext );
-    if( !bShow || MSHRT_MAX == nFirst )
+    if( !bShow || COMPLETE_STRING == nFirst )
         return nNext;
-    if( MSHRT_MAX == nAct )
+    if( COMPLETE_STRING == nAct )
     {
         nAct = nFirst;
         rDoc.GetRedlineTbl()[ nAct ]->CalcStartEnd( nNdIdx, nStart, nEnd );
@@ -368,7 +368,7 @@ sal_Bool SwRedlineItr::_ChkSpecialUnderline() const
     // Wenn die Unterstreichung oder das Escapement vom Redling kommt,
     // wenden wir immer das SpecialUnderlining, d.h. die Unterstreichung
     // unter der Grundlinie an.
-    for (MSHORT i = 0; i < m_Hints.size(); ++i)
+    for (size_t i = 0; i < m_Hints.size(); ++i)
     {
         MSHORT nWhich = m_Hints[i]->Which();
         if( RES_CHRATR_UNDERLINE == nWhich ||
@@ -378,23 +378,23 @@ sal_Bool SwRedlineItr::_ChkSpecialUnderline() const
     return sal_False;
 }
 
-sal_Bool SwRedlineItr::CheckLine( xub_StrLen nChkStart, xub_StrLen nChkEnd )
+sal_Bool SwRedlineItr::CheckLine( sal_Int32 nChkStart, sal_Int32 nChkEnd )
 {
-    if( nFirst == MSHRT_MAX )
+    if( nFirst == COMPLETE_STRING )
         return sal_False;
     if( nChkEnd == nChkStart ) // Leerzeilen gucken ein Zeichen weiter.
         ++nChkEnd;
-    xub_StrLen nOldStart = nStart;
-    xub_StrLen nOldEnd = nEnd;
-    xub_StrLen nOldAct = nAct;
+    sal_Int32 nOldStart = nStart;
+    sal_Int32 nOldEnd = nEnd;
+    sal_Int32 nOldAct = nAct;
     sal_Bool bRet = sal_False;
 
-    for( nAct = nFirst; nAct < rDoc.GetRedlineTbl().size() ; ++nAct )
+    for( nAct = nFirst; nAct < (sal_Int32)rDoc.GetRedlineTbl().size() ; ++nAct )
     {
         rDoc.GetRedlineTbl()[ nAct ]->CalcStartEnd( nNdIdx, nStart, nEnd );
         if( nChkEnd < nStart )
             break;
-        if( nChkStart <= nEnd && ( nChkEnd > nStart || STRING_LEN == nEnd ) )
+        if( nChkStart <= nEnd && ( nChkEnd > nStart || COMPLETE_STRING == nEnd ) )
         {
             bRet = sal_True;
             break;
@@ -407,7 +407,7 @@ sal_Bool SwRedlineItr::CheckLine( xub_StrLen nChkStart, xub_StrLen nChkEnd )
     return bRet;
 }
 
-void SwExtend::ActualizeFont( SwFont &rFnt, MSHORT nAttr )
+void SwExtend::ActualizeFont( SwFont &rFnt, sal_uInt16 nAttr )
 {
     if ( nAttr & EXTTEXTINPUT_ATTR_UNDERLINE )
         rFnt.SetUnderline( UNDERLINE_SINGLE );
@@ -431,7 +431,7 @@ void SwExtend::ActualizeFont( SwFont &rFnt, MSHORT nAttr )
         rFnt.SetGreyWave( sal_True );
 }
 
-short SwExtend::Enter( SwFont& rFnt, xub_StrLen nNew )
+short SwExtend::Enter(SwFont& rFnt, sal_Int32 nNew)
 {
     OSL_ENSURE( !Inside(), "SwExtend: Enter without Leave" );
     OSL_ENSURE( !pFnt, "SwExtend: Enter with Font" );
@@ -445,7 +445,7 @@ short SwExtend::Enter( SwFont& rFnt, xub_StrLen nNew )
     return 0;
 }
 
-sal_Bool SwExtend::_Leave( SwFont& rFnt, xub_StrLen nNew )
+sal_Bool SwExtend::_Leave(SwFont& rFnt, sal_Int32 nNew)
 {
     OSL_ENSURE( Inside(), "SwExtend: Leave without Enter" );
     MSHORT nOldAttr = rArr[ nPos - nStart ];
@@ -469,7 +469,7 @@ sal_Bool SwExtend::_Leave( SwFont& rFnt, xub_StrLen nNew )
     return sal_False;
 }
 
-xub_StrLen SwExtend::Next( xub_StrLen nNext )
+sal_Int32 SwExtend::Next( sal_Int32 nNext )
 {
     if( nPos < nStart )
     {
@@ -478,9 +478,9 @@ xub_StrLen SwExtend::Next( xub_StrLen nNext )
     }
     else if( nPos < nEnd )
     {
-        MSHORT nIdx = nPos - nStart;
+        sal_Int32 nIdx = nPos - nStart;
         MSHORT nAttr = rArr[ nIdx ];
-        while( ++nIdx < rArr.size() && nAttr == rArr[ nIdx ] )
+        while( ++nIdx < (sal_Int32)rArr.size() && nAttr == rArr[ nIdx ] )
             ; //nothing
         nIdx = nIdx + nStart;
         if( nNext > nIdx )

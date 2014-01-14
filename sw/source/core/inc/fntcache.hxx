@@ -81,8 +81,8 @@ class SwFntObj : public SwCacheObj
     static OutputDevice *pPixOut;
 
     // SMARTTAGS
-    void calcLinePos(SwDrawTextInfo& rInf, Point& aStart, Point& aEnd, xub_StrLen nStart,
-       xub_StrLen nWrLen, xub_StrLen nCnt, const sal_Bool bSwitchH2V, const sal_Bool bSwitchL2R,
+    void calcLinePos(SwDrawTextInfo& rInf, Point& aStart, Point& aEnd, sal_Int32 nStart,
+       sal_Int32 nWrLen, sal_Int32 nCnt, const sal_Bool bSwitchH2V, const sal_Bool bSwitchL2R,
        long nHalfSpace, long* pKernArray, const sal_Bool bBidiPor);
 
 public:
@@ -115,7 +115,7 @@ public:
     void   DrawText( SwDrawTextInfo &rInf );
     /// determine the TextSize (of the printer)
     Size  GetTextSize( SwDrawTextInfo &rInf );
-    xub_StrLen GetCrsrOfst( SwDrawTextInfo &rInf );
+    sal_Int32 GetCrsrOfst( SwDrawTextInfo &rInf );
 
     void CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut );
     void CreatePrtFont( const OutputDevice& rOut );

@@ -157,13 +157,13 @@ class SwUndoSetFlyFmt : public SwUndo, public SwClient
     SwFrmFmt* pNewFmt;
     SfxItemSet* pItemSet;               // the re-/ set attributes
     sal_uLong nOldNode, nNewNode;
-    xub_StrLen nOldCntnt, nNewCntnt;
+    sal_Int32 nOldCntnt, nNewCntnt;
     sal_uInt16 nOldAnchorTyp, nNewAnchorTyp;
     sal_Bool bAnchorChgd;
 
     void PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem );
     void Modify( const SfxPoolItem*, const SfxPoolItem* );
-    void GetAnchor( SwFmtAnchor& rAnhor, sal_uLong nNode, xub_StrLen nCntnt );
+    void GetAnchor( SwFmtAnchor& rAnhor, sal_uLong nNode, sal_Int32 nCntnt );
 
 public:
     SwUndoSetFlyFmt( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFrmFmt );
@@ -214,7 +214,7 @@ const int nUndoStringLength = 20;
    @return the shortened string
  */
 OUString
-ShortenString(const OUString & rStr, xub_StrLen nLength, const OUString & rFillStr);
+ShortenString(const OUString & rStr, sal_Int32 nLength, const OUString & rFillStr);
 /**
    Denotes special characters in a string.
 

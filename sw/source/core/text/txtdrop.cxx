@@ -73,8 +73,8 @@ static sal_Bool lcl_IsDropFlyInter( const SwTxtFormatInfo &rInf,
 class SwDropSave
 {
     SwTxtPaintInfo* pInf;
-    xub_StrLen nIdx;
-    xub_StrLen nLen;
+    sal_Int32 nIdx;
+    sal_Int32 nLen;
     long nX;
     long nY;
 
@@ -133,7 +133,7 @@ SwDropPortion::~SwDropPortion()
         pBlink->Delete( this );
 }
 
-sal_Bool SwTxtSizeInfo::_HasHint( const SwTxtNode* pTxtNode, xub_StrLen nPos )
+sal_Bool SwTxtSizeInfo::_HasHint( const SwTxtNode* pTxtNode, sal_Int32 nPos )
 {
     return 0 != pTxtNode->GetTxtAttrForCharAt(nPos);
 }
@@ -175,10 +175,10 @@ MSHORT SwTxtNode::GetDropLen( MSHORT nWishLen ) const
             g_pBreakIt->GetBreakIter()->getWordBoundary( GetTxt(), 0,
             g_pBreakIt->GetLocale( eLanguage ), WordType::DICTIONARY_WORD, sal_True );
 
-        nEnd = (xub_StrLen)aBound.endPos;
+        nEnd = aBound.endPos;
     }
 
-    xub_StrLen i = 0;
+    sal_Int32 i = 0;
     for( ; i < nEnd; ++i )
     {
         sal_Unicode const cChar = GetTxt()[i];
@@ -276,7 +276,7 @@ void SwDropPortion::PaintTxt( const SwTxtPaintInfo &rInf ) const
     OSL_ENSURE( nDropHeight && pPart && nLines != 1, "Drop Portion painted twice" );
 
     const SwDropPortionPart* pCurrPart = GetPart();
-    const xub_StrLen nOldLen = GetLen();
+    const sal_Int32 nOldLen = GetLen();
     const KSHORT nOldWidth = Width();
     const KSHORT nOldAscent = GetAscent();
 
@@ -408,8 +408,8 @@ void SwDropPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
 sal_Bool SwDropPortion::FormatTxt( SwTxtFormatInfo &rInf )
 {
-    const xub_StrLen nOldLen = GetLen();
-    const xub_StrLen nOldInfLen = rInf.GetLen();
+    const sal_Int32 nOldLen = GetLen();
+    const sal_Int32 nOldInfLen = rInf.GetLen();
     const sal_Bool bFull = SwTxtPortion::Format( rInf );
     if( bFull )
     {
@@ -430,7 +430,7 @@ sal_Bool SwDropPortion::FormatTxt( SwTxtFormatInfo &rInf )
 SwPosSize SwDropPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
 {
     sal_uInt16 nMyX = 0;
-    xub_StrLen nIdx = 0;
+    sal_Int32 nIdx = 0;
 
     const SwDropPortionPart* pCurrPart = GetPart();
 
@@ -442,8 +442,8 @@ SwPosSize SwDropPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
         pCurrPart = pCurrPart->GetFollow();
     }
 
-    xub_StrLen nOldIdx = rInf.GetIdx();
-    xub_StrLen nOldLen = rInf.GetLen();
+    sal_Int32 nOldIdx = rInf.GetIdx();
+    sal_Int32 nOldLen = rInf.GetLen();
 
     ((SwTxtSizeInfo&)rInf).SetIdx( nIdx );
     ((SwTxtSizeInfo&)rInf).SetLen( rInf.GetLen() - nIdx );
@@ -474,7 +474,7 @@ SwPosSize SwDropPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
  *                virtual GetCrsrOfst()
  *************************************************************************/
 
-xub_StrLen SwDropPortion::GetCrsrOfst( const KSHORT ) const
+sal_Int32 SwDropPortion::GetCrsrOfst( const KSHORT ) const
 {
     return 0;
 }
@@ -575,7 +575,7 @@ SwDropPortion *SwTxtFormatter::NewDropPortion( SwTxtFormatInfo &rInf )
     if( !pDropFmt )
         return 0;
 
-    xub_StrLen nPorLen = pDropFmt->GetWholeWord() ? 0 : pDropFmt->GetChars();
+    sal_Int32 nPorLen = pDropFmt->GetWholeWord() ? 0 : pDropFmt->GetChars();
     nPorLen = pFrm->GetTxtNode()->GetDropLen( nPorLen );
     if( !nPorLen )
     {
@@ -615,7 +615,7 @@ SwDropPortion *SwTxtFormatter::NewDropPortion( SwTxtFormatInfo &rInf )
 
     // build DropPortionParts:
     OSL_ENSURE( ! rInf.GetIdx(), "Drop Portion not at 0 position!" );
-    xub_StrLen nNextChg = 0;
+    sal_Int32 nNextChg = 0;
     const SwCharFmt* pFmt = pDropFmt->GetCharFmt();
     SwDropPortionPart* pCurrPart = 0;
 
@@ -636,7 +636,7 @@ SwDropPortion *SwTxtFormatter::NewDropPortion( SwTxtFormatInfo &rInf )
         pTmpFnt->SetVertical( 0, rInf.GetTxtFrm()->IsVertical() );
 
         // find next attribute change / script change
-        const xub_StrLen nTmpIdx = nNextChg;
+        const sal_Int32 nTmpIdx = nNextChg;
         sal_Int32 nNextAttr = std::min( static_cast<sal_Int32>(GetNextAttr()), rInf.GetTxt().getLength() );
         nNextChg = pScriptInfo->NextScriptChg( nTmpIdx );
         if( nNextChg > nNextAttr )
@@ -759,7 +759,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
 
     SwDropPortionPart* pCurrPart = pDrop->GetPart();
     const bool bUseCache = ! pCurrPart->GetFollow() && !pCurrPart->GetFont().HasBorder();
-    xub_StrLen nIdx = rInf.GetIdx();
+    sal_Int32 nIdx = rInf.GetIdx();
     OUString aStr(rInf.GetTxt().copy(nIdx, pCurrPart->GetLen()));
 
     long nAscent = 0;

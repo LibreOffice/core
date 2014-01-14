@@ -100,7 +100,7 @@ class SwErgoSumPortion : public SwFldPortion
 {
 public:
     SwErgoSumPortion( const OUString &rExp, const OUString& rStr );
-    virtual xub_StrLen GetCrsrOfst( const KSHORT nOfst ) const;
+    virtual sal_Int32 GetCrsrOfst( const KSHORT nOfst ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
 
     // Field cloner for SplitGlue

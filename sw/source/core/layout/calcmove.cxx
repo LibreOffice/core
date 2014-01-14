@@ -1333,7 +1333,7 @@ void SwCntntFrm::MakeAll()
                 const SwTwips nHDiff = nOldH - (Frm().*fnRect->fnGetHeight)();
                 const bool bNoPrepAdjustFrm =
                     nHDiff > 0 && IsInTab() && GetFollow() &&
-                    ( 1 == static_cast<SwTxtFrm*>(GetFollow())->GetLineCount( STRING_LEN ) || (static_cast<SwTxtFrm*>(GetFollow())->Frm().*fnRect->fnGetWidth)() < 0 ) &&
+                    ( 1 == static_cast<SwTxtFrm*>(GetFollow())->GetLineCount( COMPLETE_STRING ) || (static_cast<SwTxtFrm*>(GetFollow())->Frm().*fnRect->fnGetWidth)() < 0 ) &&
                     GetFollow()->CalcAddLowerSpaceAsLastInTableCell() == nHDiff;
                 if ( !bNoPrepAdjustFrm )
                 {

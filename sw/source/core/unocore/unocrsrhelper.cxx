@@ -267,7 +267,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
 }
 
 uno::Reference<text::XTextContent>
-GetNestedTextContent(SwTxtNode & rTextNode, xub_StrLen const nIndex,
+GetNestedTextContent(SwTxtNode & rTextNode, sal_Int32 const nIndex,
         bool const bParent)
 {
     // these should be unambiguous because of the dummy character
@@ -1124,7 +1124,7 @@ bool DocInsertStringSplitCR(
     // grouping done in InsertString is intended for typing, not API calls
     ::sw::GroupUndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
     OUString aTxt;
-    xub_StrLen nStartIdx = 0;
+    sal_Int32 nStartIdx = 0;
     SwTxtNode* const pTxtNd =
         rNewCursor.GetPoint()->nNode.GetNode().GetTxtNode();
     if (!pTxtNd)
@@ -1132,9 +1132,9 @@ bool DocInsertStringSplitCR(
         SAL_INFO("sw.uno", "DocInsertStringSplitCR: need a text node");
         return false;
     }
-    const xub_StrLen nMaxLength = ( pTxtNd )
-        ? STRING_LEN - pTxtNd->GetTxt().getLength()
-        : STRING_LEN;
+    const sal_Int32 nMaxLength = ( pTxtNd )
+        ? COMPLETE_STRING - pTxtNd->GetTxt().getLength()
+        : COMPLETE_STRING;
     sal_Int32 nIdx = rText.indexOf( '\r', nStartIdx );
     if( ( nIdx == -1 && nMaxLength < rText.getLength() ) ||
         ( nIdx != -1 && nMaxLength < nIdx ) )

@@ -219,7 +219,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
     rFlyFmts.erase( std::find( rFlyFmts.begin(), rFlyFmts.end(), pFrmFmt ));
 }
 
-SwUndoInsLayFmt::SwUndoInsLayFmt( SwFrmFmt* pFormat, sal_uLong nNodeIdx, xub_StrLen nCntIdx )
+SwUndoInsLayFmt::SwUndoInsLayFmt( SwFrmFmt* pFormat, sal_uLong nNodeIdx, sal_Int32 nCntIdx )
     : SwUndoFlyBase( pFormat, RES_DRAWFRMFMT == pFormat->Which() ?
                                             UNDO_INSDRAWFMT : UNDO_INSLAYFMT ),
     mnCrsrSaveIndexPara( nNodeIdx ), mnCrsrSaveIndexPos( nCntIdx )
@@ -482,7 +482,7 @@ void SwUndoSetFlyFmt::DeRegisterFromFormat( SwFmt& rFmt )
 }
 
 void SwUndoSetFlyFmt::GetAnchor( SwFmtAnchor& rAnchor,
-                                sal_uLong nNode, xub_StrLen nCntnt )
+                                sal_uLong nNode, sal_Int32 nCntnt )
 {
     RndStdIds nAnchorTyp = rAnchor.GetAnchorId();
     if (FLY_AT_PAGE != nAnchorTyp)

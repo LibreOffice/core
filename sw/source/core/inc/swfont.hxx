@@ -79,8 +79,8 @@ class SwSubFont : public SvxFont
     void DrawStretchCapital( SwDrawTextInfo &rInf );
     void DoOnCapitals( SwDoCapitals &rDo );
     void _DrawStretchText( SwDrawTextInfo &rInf );
-    xub_StrLen _GetCrsrOfst( SwDrawTextInfo& rInf );
-    xub_StrLen GetCapitalCrsrOfst( SwDrawTextInfo& rInf );
+    sal_Int32 _GetCrsrOfst( SwDrawTextInfo& rInf );
+    sal_Int32 GetCapitalCrsrOfst( SwDrawTextInfo& rInf );
 
     inline void SetColor( const Color& rColor );
     inline void SetFillColor( const Color& rColor );
@@ -340,10 +340,10 @@ public:
 
     sal_Int32 GetCapitalBreak( SwViewShell* pSh,  const OutputDevice* pOut,
         const SwScriptInfo* pScript, const OUString& rTxt,
-        long nTextWidth, const xub_StrLen nIdx,
-        const xub_StrLen nLen );
+        long nTextWidth, const sal_Int32 nIdx,
+        const sal_Int32 nLen );
 
-    xub_StrLen GetCapitalCrsrOfst( SwDrawTextInfo& rInf )
+    sal_Int32 GetCapitalCrsrOfst( SwDrawTextInfo& rInf )
         { return aSub[nActual].GetCapitalCrsrOfst( rInf ); }
 
     void DrawCapital( SwDrawTextInfo &rInf )
@@ -358,9 +358,9 @@ public:
     Size _GetTxtSize( SwDrawTextInfo& rInf )
         { rInf.SetFont( this ); return aSub[nActual]._GetTxtSize( rInf ); }
 
-    xub_StrLen GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth );
+    sal_Int32 GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth );
 
-    xub_StrLen _GetCrsrOfst( SwDrawTextInfo& rInf )
+    sal_Int32 _GetCrsrOfst( SwDrawTextInfo& rInf )
         { return aSub[nActual]._GetCrsrOfst( rInf ); }
 
     inline void _DrawText( SwDrawTextInfo &rInf )

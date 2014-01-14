@@ -790,7 +790,7 @@ uno::Reference< uno::XInterface >
  *
  * @param nHyphPos Offset in the to be separated word
  */
-void SwEditShell::InsertSoftHyph( const xub_StrLen nHyphPos )
+void SwEditShell::InsertSoftHyph( const sal_Int32 nHyphPos )
 {
     OSL_ENSURE( pHyphIter, "wo ist mein Iterator?" );
     pHyphIter->InsertSoftHyph( nHyphPos );
@@ -972,7 +972,7 @@ bool SwEditShell::GetGrammarCorrection(
 
                 rResult = xGCIterator->checkSentenceAtPosition(
                         xDoc, xFlatPara, aExpandText, lang::Locale(), nStartOfSentence,
-                        nEndOfSentence == STRING_LEN ? aExpandText.getLength() : nEndOfSentence,
+                        nEndOfSentence == COMPLETE_STRING ? aExpandText.getLength() : nEndOfSentence,
                         rErrorPosInText );
                 bRes = true;
 
@@ -1271,7 +1271,7 @@ static SpellContentPositions lcl_CollectDeletedRedlines(SwEditShell* pSh)
 
             if( nsRedlineType_t::REDLINE_DELETE == pRed->GetType() )
             {
-                xub_StrLen nStart_, nEnd_;
+                sal_Int32 nStart_, nEnd_;
                 pRed->CalcStartEnd( pTxtNode->GetIndex(), nStart_, nEnd_ );
                 sal_Int32 nStart = nStart_;
                 sal_Int32 nEnd = nEnd_;
@@ -1721,7 +1721,7 @@ void SwEditShell::IgnoreGrammarErrorAt( SwPaM& rErrorPosition )
     SwNodeIndex aIdx = rErrorPosition.Start()->nNode;
     SwNodeIndex aEndIdx = rErrorPosition.Start()->nNode;
     sal_Int32 nStart = rErrorPosition.Start()->nContent.GetIndex();
-    sal_Int32 nEnd = STRING_LEN;
+    sal_Int32 nEnd = COMPLETE_STRING;
     while( aIdx <= aEndIdx )
     {
         pNode = aIdx.GetNode().GetTxtNode();

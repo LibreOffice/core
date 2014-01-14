@@ -102,13 +102,13 @@ sal_Int32 SwASC_AttrIter::SearchNext( sal_Int32 nStartPos )
             }
             else if ( pHt->HasContent() )
             {
-                const xub_StrLen nHintStart = *pHt->GetStart();
+                const sal_Int32 nHintStart = *pHt->GetStart();
                 if ( nHintStart >= nStartPos && nHintStart <= nMinPos )
                 {
                     nMinPos = nHintStart;
                 }
 
-                const xub_StrLen nHintEnd = pHt->End() ? *pHt->End() : STRING_MAXLEN;
+                const sal_Int32 nHintEnd = pHt->End() ? *pHt->End() : COMPLETE_STRING;
                 if ( nHintEnd >= nStartPos && nHintEnd < nMinPos )
                 {
                     nMinPos = nHintEnd;

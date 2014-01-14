@@ -143,7 +143,7 @@ sal_Bool SwFlyCntPortion::Format( SwTxtFormatInfo &rInf )
  * @param nStart
  * @param nEnd
  */
-void SwTxtFrm::MoveFlyInCnt( SwTxtFrm *pNew, xub_StrLen nStart, xub_StrLen nEnd )
+void SwTxtFrm::MoveFlyInCnt( SwTxtFrm *pNew, sal_Int32 nStart, sal_Int32 nEnd )
 {
     SwSortedObjs *pObjs = 0L;
     if ( 0 != (pObjs = GetDrawObjs()) )
@@ -178,12 +178,12 @@ void SwTxtFrm::MoveFlyInCnt( SwTxtFrm *pNew, xub_StrLen nStart, xub_StrLen nEnd 
     }
 }
 
-xub_StrLen SwTxtFrm::CalcFlyPos( SwFrmFmt* pSearch )
+sal_Int32 SwTxtFrm::CalcFlyPos( SwFrmFmt* pSearch )
 {
     SwpHints* pHints = GetTxtNode()->GetpSwpHints();
     OSL_ENSURE( pHints, "CalcFlyPos: Why me?" );
     if( !pHints )
-        return STRING_LEN;
+        return COMPLETE_STRING;
     SwTxtAttr* pFound = NULL;
     for ( sal_uInt16 i = 0; i < pHints->Count(); i++)
     {
@@ -197,7 +197,7 @@ xub_StrLen SwTxtFrm::CalcFlyPos( SwFrmFmt* pSearch )
     }
     OSL_ENSURE( pHints, "CalcFlyPos: Not Found!" );
     if( !pFound )
-        return STRING_LEN;
+        return COMPLETE_STRING;
     return *pFound->GetStart();
 }
 
@@ -380,7 +380,7 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
     }
 }
 
-xub_StrLen SwFlyCntPortion::GetFlyCrsrOfst( const KSHORT nOfst,
+sal_Int32 SwFlyCntPortion::GetFlyCrsrOfst( const KSHORT nOfst,
     const Point &rPoint, SwPosition *pPos, SwCrsrMoveState* pCMS ) const
 {
     // Da die FlyCnt nicht an der Seite haengen, wird ihr
@@ -394,7 +394,7 @@ xub_StrLen SwFlyCntPortion::GetFlyCrsrOfst( const KSHORT nOfst,
         return 0;
 }
 
-xub_StrLen SwFlyCntPortion::GetCrsrOfst( const KSHORT nOfst ) const
+sal_Int32 SwFlyCntPortion::GetCrsrOfst( const KSHORT nOfst ) const
 {
     // OSL_ENSURE( !this, "SwFlyCntPortion::GetCrsrOfst: use GetFlyCrsrOfst()" );
     return SwLinePortion::GetCrsrOfst( nOfst );

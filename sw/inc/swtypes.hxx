@@ -58,6 +58,8 @@ typedef long SwTwips;
 
 #define MM50   283  // 1/2 cm in TWIPS.
 
+const sal_Int32 COMPLETE_STRING = SAL_MAX_INT32;
+
 const SwTwips cMinHdFtHeight = 56;
 
 #define MINFLY 23   // Minimal size for FlyFrms.

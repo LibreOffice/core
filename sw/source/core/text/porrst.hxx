@@ -51,7 +51,7 @@ public:
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
     virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const;
-    virtual xub_StrLen GetCrsrOfst( const MSHORT nOfst ) const;
+    virtual sal_Int32 GetCrsrOfst( const MSHORT nOfst ) const;
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const;
@@ -133,7 +133,7 @@ public:
 class SwHiddenTextPortion : public SwLinePortion
 {
 public:
-    inline SwHiddenTextPortion( xub_StrLen nLen )
+    inline SwHiddenTextPortion( sal_Int32 nLen )
         { SetWhichPor( POR_HIDDEN_TXT );  SetLen( nLen ); }
 
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;

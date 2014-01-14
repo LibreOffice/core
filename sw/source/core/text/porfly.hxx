@@ -57,7 +57,7 @@ class SwFlyCntPortion : public SwLinePortion
     sal_Bool bDraw : 1;  // DrawContact?
     sal_Bool bMax : 1;   // Line adjustment and height == line height
     sal_uInt8 nAlign : 3; // Line adjustment? No, above, middle, bottom
-    virtual xub_StrLen GetCrsrOfst( const KSHORT nOfst ) const;
+    virtual sal_Int32 GetCrsrOfst( const KSHORT nOfst ) const;
 
 public:
     // OD 29.07.2003 #110978# - use new datatype for parameter <nFlags>
@@ -87,7 +87,7 @@ public:
                   long nLnAscent, long nLnDescent,
                   long nFlyAscent, long nFlyDescent,
                   objectpositioning::AsCharFlags nFlags );
-    xub_StrLen GetFlyCrsrOfst( const KSHORT nOfst, const Point &rPoint,
+    sal_Int32 GetFlyCrsrOfst( const KSHORT nOfst, const Point &rPoint,
                         SwPosition *pPos, SwCrsrMoveState* pCMS ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;

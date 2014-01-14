@@ -38,8 +38,8 @@ class SwTxtFormatter : public SwTxtPainter
     SwMultiPortion* pMulti; // during formatting a multi-portion
     sal_uInt8 nCntEndHyph;  // Counts consecutive hyphens at the line end
     sal_uInt8 nCntMidHyph;  // Counts consecutive hyphens before flies
-    xub_StrLen nLeftScanIdx; // for increasing performance during
-    xub_StrLen nRightScanIdx; // scanning for portion ends
+    sal_Int32 nLeftScanIdx; // for increasing performance during
+    sal_Int32 nRightScanIdx; // scanning for portion ends
     sal_Bool bOnceMore : 1; // Another round?
     sal_Bool bFlyInCntBase : 1; // Base reference that sets a character-bound frame
     sal_Bool bChanges : 1; // Flag for calculating the repaint rectangle
@@ -113,7 +113,7 @@ class SwTxtFormatter : public SwTxtPainter
         for example after adjustment change (right alignment, justified, etc.)
         Mainly to correct the X position.
      */
-    void UpdatePos( SwLineLayout *pCurr, Point aStart, xub_StrLen nStartIdx,
+    void UpdatePos( SwLineLayout *pCurr, Point aStart, sal_Int32 nStartIdx,
             sal_Bool bAlways = sal_False ) const;
 
     /**
@@ -153,11 +153,11 @@ public:
     sal_Bool CalcOnceMore();
 
     void CtorInitTxtFormatter( SwTxtFrm *pFrm, SwTxtFormatInfo *pInf );
-    inline SwTxtFormatter( SwTxtFrm *pTxtFrm, SwTxtFormatInfo *pTxtFmtInf ) : SwTxtPainter(pTxtFrm!=NULL?pTxtFrm->GetTxtNode():NULL)
+    SwTxtFormatter( SwTxtFrm *pTxtFrm, SwTxtFormatInfo *pTxtFmtInf ) : SwTxtPainter(pTxtFrm!=NULL?pTxtFrm->GetTxtNode():NULL)
            { CtorInitTxtFormatter( pTxtFrm, pTxtFmtInf ); }
     ~SwTxtFormatter();
 
-    xub_StrLen FormatLine( const xub_StrLen nStart );
+    sal_Int32 FormatLine( const sal_Int32 nStart );
 
     void RecalcRealHeight();
 
@@ -167,16 +167,16 @@ public:
     // A special method for QuoVadis texts:
     // nErgo is the page number of the ErgoSum Ftn
     // At 0 it's still unclear
-    xub_StrLen FormatQuoVadis( const xub_StrLen nStart );
+    sal_Int32 FormatQuoVadis( const sal_Int32 nStart );
 
     // The emergency break: Cancel formatting, discard line
-    inline sal_Bool IsStop() const { return GetInfo().IsStop(); }
+    sal_Bool IsStop() const { return GetInfo().IsStop(); }
 
     // The counterpart: Continue formatting at all costs
-    inline sal_Bool IsNewLine() const { return GetInfo().IsNewLine(); }
+    sal_Bool IsNewLine() const { return GetInfo().IsNewLine(); }
 
     // FormatQuick(); Refresh formatting information
-    inline sal_Bool IsQuick() const { return GetInfo().IsQuick(); }
+    sal_Bool IsQuick() const { return GetInfo().IsQuick(); }
 
     // Create a SwLineLayout if needed, which avoids Ftn/Fly to oscillate
     void MakeDummyLine();
@@ -190,38 +190,38 @@ public:
     // How wide would you be without any bounds (Flys etc.)?
     SwTwips _CalcFitToContent( );
 
-    SwLinePortion* MakeRestPortion(const SwLineLayout* pLine, xub_StrLen nPos);
+    SwLinePortion* MakeRestPortion(const SwLineLayout* pLine, sal_Int32 nPos);
 
-    inline const SwFmtDrop *GetDropFmt() const { return pDropFmt; }
-    inline void ClearDropFmt() { pDropFmt = 0; }
+    const SwFmtDrop *GetDropFmt() const { return pDropFmt; }
+    void ClearDropFmt() { pDropFmt = 0; }
 
-    inline SwMultiPortion *GetMulti() const { return pMulti; }
+    SwMultiPortion *GetMulti() const { return pMulti; }
 
-    inline sal_Bool IsOnceMore() const { return bOnceMore; }
-    inline void       SetOnceMore( sal_Bool bNew ) { bOnceMore = bNew; }
+    sal_Bool IsOnceMore() const { return bOnceMore; }
+    void       SetOnceMore( sal_Bool bNew ) { bOnceMore = bNew; }
 
-    inline sal_Bool HasChanges() const { return bChanges; }
-    inline void       SetChanges()       { bChanges = sal_True; }
+    sal_Bool HasChanges() const { return bChanges; }
+    void       SetChanges()       { bChanges = sal_True; }
 
-    inline sal_Bool HasTruncLines() const { return bTruncLines; }
-    inline void       SetTruncLines( sal_Bool bNew ) { bTruncLines = bNew; }
+    sal_Bool HasTruncLines() const { return bTruncLines; }
+    void       SetTruncLines( sal_Bool bNew ) { bTruncLines = bNew; }
 
-    inline sal_Bool IsUnclipped() const { return bUnclipped; }
-    inline void       SetUnclipped( sal_Bool bNew ) { bUnclipped = bNew; }
+    sal_Bool IsUnclipped() const { return bUnclipped; }
+    void       SetUnclipped( sal_Bool bNew ) { bUnclipped = bNew; }
 
-    inline sal_Bool IsFlyInCntBase() const { return bFlyInCntBase; }
-    inline void  SetFlyInCntBase( sal_Bool bNew = sal_True ){ bFlyInCntBase = bNew; }
+    sal_Bool IsFlyInCntBase() const { return bFlyInCntBase; }
+    void  SetFlyInCntBase( sal_Bool bNew = sal_True ){ bFlyInCntBase = bNew; }
 
-    inline SwTxtFormatInfo &GetInfo()
+    SwTxtFormatInfo &GetInfo()
         { return (SwTxtFormatInfo&)SwTxtIter::GetInfo(); }
-    inline const SwTxtFormatInfo &GetInfo() const
+    const SwTxtFormatInfo &GetInfo() const
         { return (const SwTxtFormatInfo&)SwTxtIter::GetInfo(); }
 
-    inline void InitCntHyph() { CntHyphens( nCntEndHyph, nCntMidHyph ); }
-    inline const sal_uInt8 &CntEndHyph() const { return nCntEndHyph; }
-    inline const sal_uInt8 &CntMidHyph() const { return nCntMidHyph; }
-    inline sal_uInt8 &CntEndHyph() { return nCntEndHyph; }
-    inline sal_uInt8 &CntMidHyph() { return nCntMidHyph; }
+    void InitCntHyph() { CntHyphens( nCntEndHyph, nCntMidHyph ); }
+    const sal_uInt8 &CntEndHyph() const { return nCntEndHyph; }
+    const sal_uInt8 &CntMidHyph() const { return nCntMidHyph; }
+    sal_uInt8 &CntEndHyph() { return nCntEndHyph; }
+    sal_uInt8 &CntMidHyph() { return nCntMidHyph; }
 
     /**
      * Merge border of the drop portion with modifying the font of

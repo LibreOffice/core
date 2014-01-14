@@ -242,7 +242,7 @@ void SwTxtIter::Bottom()
  *                      SwTxtIter::CharToLine()
  *************************************************************************/
 
-void SwTxtIter::CharToLine(const xub_StrLen nChar)
+void SwTxtIter::CharToLine(const sal_Int32 nChar)
 {
     while( nStart + pCurr->GetLen() <= nChar && Next() )
         ;
@@ -255,7 +255,7 @@ void SwTxtIter::CharToLine(const xub_StrLen nChar)
  *************************************************************************/
 
 // 1170: beruecksichtigt Mehrdeutigkeiten:
-const SwLineLayout *SwTxtCursor::CharCrsrToLine( const xub_StrLen nPosition )
+const SwLineLayout *SwTxtCursor::CharCrsrToLine( const sal_Int32 nPosition )
 {
     CharToLine( nPosition );
     if( nPosition != nStart )
@@ -389,7 +389,7 @@ static sal_Bool lcl_NeedsFieldRest( const SwLineLayout* pCurr )
 void SwTxtIter::TruncLines( bool bNoteFollow )
 {
     SwLineLayout *pDel = pCurr->GetNext();
-    const xub_StrLen nEnd = nStart + pCurr->GetLen();
+    const sal_Int32 nEnd = nStart + pCurr->GetLen();
 
     if( pDel )
     {
@@ -404,7 +404,7 @@ void SwTxtIter::TruncLines( bool bNoteFollow )
             if ( pFollow && ! pFollow->IsLocked() &&
                  nEnd == pFollow->GetOfst() )
             {
-                xub_StrLen nRangeEnd = nEnd;
+                sal_Int32 nRangeEnd = nEnd;
                 SwLineLayout* pLine = pDel;
 
                 // determine range to be searched for flys anchored as characters

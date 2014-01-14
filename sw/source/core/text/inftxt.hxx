@@ -131,7 +131,7 @@ class SwTxtInfo
     // Implementation in txthyph.cxx
     friend void SetParaPortion( SwTxtInfo *pInf, SwParaPortion *pRoot );
     SwParaPortion *pPara;
-    xub_StrLen nTxtStart;                 // TxtOfst for Follows
+    sal_Int32 nTxtStart;                 // TxtOfst for Follows
 
 protected:
     inline SwTxtInfo() : pPara(0) {}
@@ -141,7 +141,7 @@ public:
     inline SwTxtInfo( SwTxtFrm *pFrm ) { CtorInitTxtInfo( pFrm ); }
     inline SwParaPortion *GetParaPortion() { return pPara; }
     inline const SwParaPortion *GetParaPortion() const { return pPara; }
-    inline xub_StrLen GetTxtStart() const { return nTxtStart; }
+    inline sal_Int32 GetTxtStart() const { return nTxtStart; }
 
     friend SvStream &operator<<( SvStream &rOS, const SwTxtInfo &rInf );
 };
@@ -196,18 +196,18 @@ protected:
 
 protected:
     void CtorInitTxtSizeInfo( SwTxtFrm *pFrm, SwFont *pFnt = 0,
-                   const xub_StrLen nIdx = 0,
-                   const xub_StrLen nLen = STRING_LEN );
+                   const sal_Int32 nIdx = 0,
+                   const sal_Int32 nLen = COMPLETE_STRING );
     SwTxtSizeInfo() : m_pKanaComp(0), m_pVsh(0), m_pOut(0), m_pRef(0), m_pFnt(0), m_pUnderFnt(0), m_pFrm(0), m_pOpt(0), m_pTxt(0) {}
 public:
     SwTxtSizeInfo( const SwTxtSizeInfo &rInf );
     SwTxtSizeInfo( const SwTxtSizeInfo &rInf, const OUString* pTxt,
                    const sal_Int32 nIdx = 0,
-                   const xub_StrLen nLen = STRING_LEN );
+                   const sal_Int32 nLen = COMPLETE_STRING );
 
     SwTxtSizeInfo( SwTxtFrm *pTxtFrm, SwFont *pTxtFnt = 0,
                    const sal_Int32 nIndex = 0,
-                   const xub_StrLen nLength = STRING_LEN )
+                   const sal_Int32 nLength = COMPLETE_STRING )
         : m_bOnWin(false)
     {
         CtorInitTxtSizeInfo( pTxtFrm, pTxtFnt, nIndex, nLength );
@@ -216,7 +216,7 @@ public:
     // GetMultiAttr returns the text attribute of the multiportion,
     // if rPos is inside any multi-line part.
     // rPos will set to the end of the multi-line part.
-    SwMultiCreator* GetMultiCreator( xub_StrLen &rPos, SwMultiPortion* pM ) const;
+    SwMultiCreator* GetMultiCreator( sal_Int32 &rPos, SwMultiPortion* pM ) const;
 
     inline bool OnWin() const { return m_bOnWin; }
     inline void SetOnWin( const bool bNew ) { m_bOnWin = bNew; }
@@ -276,26 +276,26 @@ public:
     // GetTxtSize
     //
     SwPosSize GetTxtSize( OutputDevice* pOut, const SwScriptInfo* pSI,
-                          const OUString& rTxt, const xub_StrLen nIdx,
-                          const xub_StrLen nLen, const sal_uInt16 nComp ) const;
+                          const OUString& rTxt, const sal_Int32 nIdx,
+                          const sal_Int32 nLen, const sal_uInt16 nComp ) const;
     SwPosSize GetTxtSize() const;
-    void GetTxtSize( const SwScriptInfo* pSI, const xub_StrLen nIdx,
-                      const xub_StrLen nLen, const sal_uInt16 nComp,
+    void GetTxtSize( const SwScriptInfo* pSI, const sal_Int32 nIdx,
+                      const sal_Int32 nLen, const sal_uInt16 nComp,
                       sal_uInt16& nMinSize, sal_uInt16& nMaxSizeDiff ) const;
-    inline SwPosSize GetTxtSize( const SwScriptInfo* pSI, const xub_StrLen nIdx,
-                                 const xub_StrLen nLen, const sal_uInt16 nComp ) const;
+    inline SwPosSize GetTxtSize( const SwScriptInfo* pSI, const sal_Int32 nIdx,
+                                 const sal_Int32 nLen, const sal_uInt16 nComp ) const;
     inline SwPosSize GetTxtSize( const OUString &rTxt ) const;
 
     //
     // GetTxtBreak
     //
-    xub_StrLen GetTxtBreak( const long nLineWidth,
-                                           const xub_StrLen nMaxLen,
+    sal_Int32 GetTxtBreak( const long nLineWidth,
+                                           const sal_Int32 nMaxLen,
                                            const sal_uInt16 nComp ) const;
-    xub_StrLen GetTxtBreak( const long nLineWidth,
-                                           const xub_StrLen nMaxLen,
+    sal_Int32 GetTxtBreak( const long nLineWidth,
+                                           const sal_Int32 nMaxLen,
                                            const sal_uInt16 nComp,
-                                           xub_StrLen& rExtraCharPos ) const;
+                                           sal_Int32& rExtraCharPos ) const;
 
     KSHORT GetAscent() const;
 
@@ -317,9 +317,9 @@ public:
     inline SwTxtFrm *GetTxtFrm() { return m_pFrm; }
     inline const SwTxtFrm *GetTxtFrm() const { return m_pFrm; }
 
-    inline sal_Bool HasHint( xub_StrLen nPos ) const
+    inline sal_Bool HasHint( sal_Int32 nPos ) const
         { return _HasHint( m_pFrm->GetTxtNode(), nPos ); }
-    static sal_Bool _HasHint( const SwTxtNode* pTxtNode, xub_StrLen nPos );
+    static sal_Bool _HasHint( const SwTxtNode* pTxtNode, sal_Int32 nPos );
 
     // If Kana Compression is enabled, a minimum and maximum portion width
     // is calculated. We format lines with minimal size and share remaining
@@ -384,7 +384,7 @@ class SwTxtPaintInfo : public SwTxtSizeInfo
 
     MSHORT nSpaceIdx;
     void _DrawText( const OUString &rText, const SwLinePortion &rPor,
-                   const xub_StrLen nIdx, const xub_StrLen nLen,
+                   const sal_Int32 nIdx, const sal_Int32 nLen,
                    const sal_Bool bKern, const sal_Bool bWrong = sal_False,
                    const sal_Bool bSmartTag = sal_False,
                    const sal_Bool bGrammarCheck = sal_False );  // SMARTTAGS
@@ -422,12 +422,12 @@ public:
     inline SwTxtFly *GetTxtFly() { return &aTxtFly; }
     inline const SwTxtFly *GetTxtFly() const { return &aTxtFly; }
     inline void DrawText( const OUString &rText, const SwLinePortion &rPor,
-                          const xub_StrLen nIdx = 0,
-                          const xub_StrLen nLen = STRING_LEN,
+                          const sal_Int32 nIdx = 0,
+                          const sal_Int32 nLen = COMPLETE_STRING,
                           const sal_Bool bKern = sal_False) const;
-    inline void DrawText( const SwLinePortion &rPor, const xub_StrLen nLen,
+    inline void DrawText( const SwLinePortion &rPor, const sal_Int32 nLen,
                           const sal_Bool bKern = sal_False ) const;
-    inline void DrawMarkedText( const SwLinePortion &rPor, const xub_StrLen nLen,
+    inline void DrawMarkedText( const SwLinePortion &rPor, const sal_Int32 nLen,
                                 const sal_Bool bKern,
                                 const sal_Bool bWrong,
                                 const sal_Bool bSmartTags,
@@ -521,12 +521,12 @@ class SwTxtFormatInfo : public SwTxtPaintInfo
 
     SwTabPortion    *pLastTab;     // The _last_ TabPortion
 
-    xub_StrLen nSoftHyphPos;    // SoftHyphPos forr Hyphenation
-    xub_StrLen nHyphStart;      // TxtPos at which the interactive hyphen is at the moment
-    xub_StrLen nHyphWrdStart;   // Position of the found word
-    xub_StrLen nHyphWrdLen;     // Length of the found word
-    xub_StrLen nLineStart;      // Current line start in rTxt
-    xub_StrLen nUnderScorePos;  // enlarge repaint if underscore has been found
+    sal_Int32 nSoftHyphPos;    // SoftHyphPos forr Hyphenation
+    sal_Int32 nHyphStart;      // TxtPos at which the interactive hyphen is at the moment
+    sal_Int32 nHyphWrdStart;   // Position of the found word
+    sal_Int32 nHyphWrdLen;     // Length of the found word
+    sal_Int32 nLineStart;      // Current line start in rTxt
+    sal_Int32 nUnderScorePos;  // enlarge repaint if underscore has been found
     // #i34348# Changed type from sal_uInt16 to SwTwips
     SwTwips nLeft;              // Left margin
     SwTwips nRight;             // Right margin
@@ -588,7 +588,7 @@ public:
            void Init();
 
     // Returns the first changed position of the paragraph
-    inline xub_StrLen GetReformatStart() const;
+    inline sal_Int32 GetReformatStart() const;
 
     // Margins
     inline SwTwips Left() const { return nLeft; }
@@ -642,8 +642,8 @@ public:
     inline sal_Bool IsQuick() const { return bQuick; }
     inline sal_Bool IsTest() const { return bTestFormat; }
 
-    inline xub_StrLen GetLineStart() const { return nLineStart; }
-    inline void SetLineStart( const xub_StrLen nNew ) { nLineStart = nNew; }
+    inline sal_Int32 GetLineStart() const { return nLineStart; }
+    inline void SetLineStart( const sal_Int32 nNew ) { nLineStart = nNew; }
 
     // these are used during fly calculation
     inline KSHORT GetLineHeight() const { return nLineHeight; }
@@ -655,8 +655,8 @@ public:
     inline SwLinePortion *GetUnderFlow() { return pUnderFlow; }
     inline void SetUnderFlow( SwLinePortion *pNew )
            { pUnderFlow = pNew; bUnderFlow = sal_True; }
-    inline xub_StrLen GetSoftHyphPos() const { return nSoftHyphPos; }
-    inline void SetSoftHyphPos( const xub_StrLen nNew ) { nSoftHyphPos = nNew; }
+    inline sal_Int32 GetSoftHyphPos() const { return nSoftHyphPos; }
+    inline void SetSoftHyphPos( const sal_Int32 nNew ) { nSoftHyphPos = nNew; }
 
     inline void SetParaFtn();
 
@@ -691,19 +691,19 @@ public:
     inline void SetArrowDone( const sal_Bool bNew ) { bArrowDone = bNew; }
 
     // For SwTxtPortion::Hyphenate
-    inline sal_Bool IsSoftHyph( const xub_StrLen nPos ) const;
+    inline sal_Bool IsSoftHyph( const sal_Int32 nPos ) const;
     sal_Bool ChgHyph( const sal_Bool bNew );
 
     // Should the hyphenate helper be discarded?
     sal_Bool IsHyphenate() const;
-    inline void SetHyphStart( const xub_StrLen nNew ) { nHyphStart = nNew; }
-    inline xub_StrLen GetHyphStart() const { return nHyphStart; }
-    inline void SetHyphWrdStart( const xub_StrLen nNew ) { nHyphWrdStart = nNew; }
-    inline xub_StrLen GetHyphWrdStart() const { return nHyphWrdStart; }
-    inline void SetHyphWrdLen( const xub_StrLen nNew ) { nHyphWrdLen = nNew; }
-    inline xub_StrLen GetHyphWrdLen() const { return nHyphWrdLen; }
-    inline xub_StrLen GetUnderScorePos() const { return nUnderScorePos; }
-    inline void SetUnderScorePos( xub_StrLen nNew ) { nUnderScorePos = nNew; }
+    inline void SetHyphStart( const sal_Int32 nNew ) { nHyphStart = nNew; }
+    inline sal_Int32 GetHyphStart() const { return nHyphStart; }
+    inline void SetHyphWrdStart( const sal_Int32 nNew ) { nHyphWrdStart = nNew; }
+    inline sal_Int32 GetHyphWrdStart() const { return nHyphWrdStart; }
+    inline void SetHyphWrdLen( const sal_Int32 nNew ) { nHyphWrdLen = nNew; }
+    inline sal_Int32 GetHyphWrdLen() const { return nHyphWrdLen; }
+    inline sal_Int32 GetUnderScorePos() const { return nUnderScorePos; }
+    inline void SetUnderScorePos( sal_Int32 nNew ) { nUnderScorePos = nNew; }
 
     // Calls HyphenateWord() of Hyphenator
     ::com::sun::star::uno::Reference<
@@ -726,7 +726,7 @@ public:
 
     // Looks for tabs, TabDec, TXTATR and BRK from nIdx until nEnd.
     // Return: Position; sets cHookChar if necessary
-    xub_StrLen ScanPortionEnd( const xub_StrLen nStart, const xub_StrLen nEnd );
+    sal_Int32 ScanPortionEnd( const sal_Int32 nStart, const sal_Int32 nEnd );
 
     friend SvStream &operator<<( SvStream &rOS, const SwTxtFormatInfo &rInf );
 
@@ -815,8 +815,8 @@ inline SwPosSize SwTxtSizeInfo::GetTxtSize( const OUString &rTxt ) const
 }
 
 inline SwPosSize SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI,
-                                            const xub_StrLen nNewIdx,
-                                            const xub_StrLen nNewLen,
+                                            const sal_Int32 nNewIdx,
+                                            const sal_Int32 nNewLen,
                                             const sal_uInt16 nCompress ) const
 {
     return GetTxtSize( m_pOut, pSI, *m_pTxt, nNewIdx, nNewLen, nCompress );
@@ -839,20 +839,20 @@ inline void SwTxtPaintInfo::SetPaintOfst( const SwTwips nNew )
 
 inline void SwTxtPaintInfo::DrawText( const OUString &rText,
                             const SwLinePortion &rPor,
-                            const xub_StrLen nStart, const xub_StrLen nLength,
+                            const sal_Int32 nStart, const sal_Int32 nLength,
                             const sal_Bool bKern ) const
 {
     ((SwTxtPaintInfo*)this)->_DrawText( rText, rPor, nStart, nLength, bKern );
 }
 
 inline void SwTxtPaintInfo::DrawText( const SwLinePortion &rPor,
-        const xub_StrLen nLength, const sal_Bool bKern ) const
+        const sal_Int32 nLength, const sal_Bool bKern ) const
 {
     ((SwTxtPaintInfo*)this)->_DrawText( *m_pTxt, rPor, m_nIdx, nLength, bKern );
 }
 
 inline void SwTxtPaintInfo::DrawMarkedText( const SwLinePortion &rPor,
-                                            const xub_StrLen nLength,
+                                            const sal_Int32 nLength,
                                             const sal_Bool bKern,
                                             const sal_Bool bWrong,
                                             const sal_Bool bSmartTags,
@@ -865,7 +865,7 @@ inline void SwTxtPaintInfo::DrawMarkedText( const SwLinePortion &rPor,
  * Inline implementations of SwTxtFormatInfo
  *************************************************************************/
 
-inline xub_StrLen SwTxtFormatInfo::GetReformatStart() const
+inline sal_Int32 SwTxtFormatInfo::GetReformatStart() const
 {
     return GetParaPortion()->GetReformat()->Start();
 }
@@ -880,12 +880,10 @@ inline void SwTxtFormatInfo::SetParaFtn()
     GetTxtFrm()->SetFtn( sal_True );
 }
 
-inline sal_Bool SwTxtFormatInfo::IsSoftHyph( const xub_StrLen nPos ) const
+inline sal_Bool SwTxtFormatInfo::IsSoftHyph( const sal_Int32 nPos ) const
 {
     return CHAR_SOFTHYPHEN == GetTxtFrm()->GetTxtNode()->GetTxt()[nPos];
 }
-
-
 
 #endif
 

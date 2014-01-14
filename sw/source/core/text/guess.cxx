@@ -150,7 +150,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
     }
 
     bool bHyph = rInf.IsHyphenate() && !rInf.IsHyphForbud();
-    xub_StrLen nHyphPos = 0;
+    sal_Int32 nHyphPos = 0;
 
     // nCutPos is the first character not fitting to the current line
     // nHyphPos is the first character not fitting to the current line,
@@ -167,7 +167,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         nCutPos = rInf.GetTxtBreak( nLineWidth, nMaxLen, nMaxComp );
 
 #if OSL_DEBUG_LEVEL > 1
-        if ( STRING_LEN != nCutPos )
+        if ( COMPLETE_STRING != nCutPos )
         {
             sal_uInt16 nMinSize;
             rInf.GetTxtSize( &rSI, rInf.GetIdx(), nCutPos - rInf.GetIdx(),
@@ -210,13 +210,13 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         return sal_False;
     }
 
-    xub_StrLen nPorLen = 0;
+    sal_Int32 nPorLen = 0;
     // do not call the break iterator nCutPos is a blank
     sal_Unicode cCutChar = rInf.GetTxt()[ nCutPos ];
     if( CH_BLANK == cCutChar || CH_FULL_BLANK == cCutChar )
     {
         nBreakPos = nCutPos;
-        xub_StrLen nX = nBreakPos;
+        sal_Int32 nX = nBreakPos;
 
         const SvxAdjust& rAdjust = rInf.GetTxtFrm()->GetTxtNode()->GetSwAttrSet().GetAdjust().GetAdjust();
         if ( rAdjust == SVX_ADJUST_LEFT )
@@ -252,7 +252,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         // into our string. If the line break position is inside of before
         // the field portion, we trigger an underflow.
 
-        xub_StrLen nOldIdx = rInf.GetIdx();
+        sal_Int32 nOldIdx = rInf.GetIdx();
         sal_Unicode cFldChr = 0;
 
 #if OSL_DEBUG_LEVEL > 0
@@ -313,13 +313,13 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             const CharClass& rCC = GetAppCharClass();
 
             // step back until a non-punctuation character is reached
-            xub_StrLen nLangIndex = nCutPos;
+            sal_Int32 nLangIndex = nCutPos;
 
             // If a field has been expanded right in front of us we do not
             // step further than the beginning of the expanded field
             // (which is the position of the field placeholder in our
             // original string).
-            const xub_StrLen nDoNotStepOver = CH_TXTATR_BREAKWORD == cFldChr ?
+            const sal_Int32 nDoNotStepOver = CH_TXTATR_BREAKWORD == cFldChr ?
                                               rInf.GetIdx() - nFieldDiff - 1:
                                               0;
 
@@ -371,7 +371,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             rInf.GetTxt(), nCutPos, aLocale,
             rInf.GetLineStart(), aHyphOpt, aUserOpt );
 
-        nBreakPos = (xub_StrLen)aResult.breakIndex;
+        nBreakPos = aResult.breakIndex;
 
         // if we are formatting multi portions we want to allow line breaks
         // at the border between single line and multi line portion
@@ -385,7 +385,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
         bHyph = BreakType::HYPHENATION == aResult.breakType;
 
-        if ( bHyph && nBreakPos != STRING_LEN)
+        if ( bHyph && nBreakPos != COMPLETE_STRING )
         {
             // found hyphenation position within line
             // nBreakPos is set to the hyphenation position
@@ -426,7 +426,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         }
         else if ( !bHyph && nBreakPos >= rInf.GetLineStart() )
         {
-            OSL_ENSURE( nBreakPos != STRING_LEN, "we should have found a break pos" );
+            OSL_ENSURE( nBreakPos != COMPLETE_STRING, "we should have found a break pos" );
 
             // found break position within line
             xHyphWord = NULL;
@@ -444,7 +444,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
                 // If a field has been expanded, we do not want to delete any
                 // blanks inside the field portion. This would cause an unwanted
                 // underflow
-                xub_StrLen nX = nBreakPos;
+                sal_Int32 nX = nBreakPos;
                 while( nX > rInf.GetLineStart() &&
                        ( CH_TXTATR_BREAKWORD != cFldChr || nX > rInf.GetIdx() ) &&
                        ( CH_BLANK == rInf.GetChar( --nX ) ||
@@ -456,16 +456,16 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         }
         else
         {
-            // no line break found, setting nBreakPos to STRING_LEN
+            // no line break found, setting nBreakPos to COMPLETE_STRING
             // causes a break cut
-            nBreakPos = STRING_LEN;
+            nBreakPos = COMPLETE_STRING;
             OSL_ENSURE( nCutPos >= rInf.GetIdx(), "Deep cut" );
             nPorLen = nCutPos - rInf.GetIdx();
         }
 
-        if( nBreakPos > nCutPos && nBreakPos != STRING_LEN )
+        if( nBreakPos > nCutPos && nBreakPos != COMPLETE_STRING )
         {
-            const xub_StrLen nHangingLen = nBreakPos - nCutPos;
+            const sal_Int32 nHangingLen = nBreakPos - nCutPos;
             SwPosSize aTmpSize = rInf.GetTxtSize( &rSI, nCutPos,
                                                   nHangingLen, 0 );
             aTmpSize.Width(aTmpSize.Width() + nLeftRightBorderSpace);
@@ -484,7 +484,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         {
             if ( nBreakPos < rInf.GetIdx() )
                 nBreakPos = nOldIdx - 1;
-            else if ( STRING_LEN != nBreakPos )
+            else if ( COMPLETE_STRING != nBreakPos )
             {
                 OSL_ENSURE( nBreakPos >= nFieldDiff, "I've got field trouble!" );
                 nBreakPos = nBreakPos - nFieldDiff;
@@ -534,14 +534,14 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 // if hyphenated at this position (old german spelling)
 
 bool SwTxtGuess::AlternativeSpelling( const SwTxtFormatInfo &rInf,
-    const xub_StrLen nPos )
+    const sal_Int32 nPos )
 {
     // get word boundaries
     Boundary aBound =
         g_pBreakIt->GetBreakIter()->getWordBoundary( rInf.GetTxt(), nPos,
         g_pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
         WordType::DICTIONARY_WORD, sal_True );
-    nBreakStart = (xub_StrLen)aBound.startPos;
+    nBreakStart = aBound.startPos;
     sal_Int32 nWordLen = aBound.endPos - nBreakStart;
 
     // if everything else fails, we want to cut at nPos

@@ -264,7 +264,7 @@ SwLinePortion *SwLinePortion::FindPrevPortion( const SwLinePortion *pRoot )
  *                virtual SwLinePortion::GetCrsrOfst()
  *************************************************************************/
 
-xub_StrLen SwLinePortion::GetCrsrOfst( const KSHORT nOfst ) const
+sal_Int32 SwLinePortion::GetCrsrOfst( const KSHORT nOfst ) const
 {
     if( nOfst > ( PrtWidth() / 2 ) )
         return GetLen();

@@ -157,7 +157,7 @@ void SAL_CALL SwXTextMarkup::commitStringMarkup(
             }
         }
         bRepaint = pWList == mpTxtNode->GetGrammarCheck();
-        if( pWList->GetBeginInv() < STRING_LEN )
+        if( pWList->GetBeginInv() < COMPLETE_STRING )
             ((SwGrammarMarkUp*)pWList)->ClearGrammarList();
     }
     else if ( nType == text::TextMarkupType::SMARTTAG )
@@ -422,13 +422,13 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         {
             mpTxtNode->SetGrammarCheck( new SwGrammarMarkUp() );
             pWList = mpTxtNode->GetGrammarCheck();
-            pWList->SetInvalid( 0, STRING_LEN );
+            pWList->SetInvalid( 0, COMPLETE_STRING );
         }
     }
     bRepaint = pWList == mpTxtNode->GetGrammarCheck();
 
     bool bAcceptGrammarError = false;
-    if( pWList->GetBeginInv() < STRING_LEN )
+    if( pWList->GetBeginInv() < COMPLETE_STRING )
     {
         const ModelToViewHelper::ModelPosition aSentenceEnd =
             maConversionMap.ConvertToModelPosition(

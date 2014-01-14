@@ -587,7 +587,7 @@ void SwAnchoredDrawObject::InvalidateObjPos()
             {
                 SwTxtFrm* pAnchorTxtFrm( static_cast<SwTxtFrm*>(AnchorFrm()) );
                 if ( pAnchorTxtFrm->GetTxtNode()->GetpSwpHints() &&
-                     pAnchorTxtFrm->CalcFlyPos( &GetFrmFmt() ) != STRING_LEN )
+                     pAnchorTxtFrm->CalcFlyPos( &GetFrmFmt() ) != COMPLETE_STRING )
                 {
                     AnchorFrm()->Prepare( PREP_FLY_ATTR_CHG, &GetFrmFmt() );
                 }

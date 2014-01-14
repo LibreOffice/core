@@ -26,7 +26,7 @@
  *                      class SwExpandPortion
  *************************************************************************/
 
-xub_StrLen SwExpandPortion::GetCrsrOfst( const MSHORT nOfst ) const
+sal_Int32 SwExpandPortion::GetCrsrOfst( const MSHORT nOfst ) const
 { return SwLinePortion::GetCrsrOfst( nOfst ); }
 
 /*************************************************************************
@@ -70,7 +70,7 @@ SwPosSize SwExpandPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
 sal_Bool SwExpandPortion::Format( SwTxtFormatInfo &rInf )
 {
     SwTxtSlot aDiffTxt( &rInf, this, true, false );
-    const xub_StrLen nFullLen = rInf.GetLen();
+    const sal_Int32 nFullLen = rInf.GetLen();
 
     // So komisch es aussieht, die Abfrage auf GetLen() muss wegen der
     // ExpandPortions _hinter_ aDiffTxt (vgl. SoftHyphs)
@@ -137,7 +137,7 @@ SwLinePortion *SwBlankPortion::Compress() { return this; }
 // Komplikationen bei Flys...
 
 MSHORT SwBlankPortion::MayUnderFlow( const SwTxtFormatInfo &rInf,
-    xub_StrLen nIdx, sal_Bool bUnderFlow ) const
+    sal_Int32 nIdx, sal_Bool bUnderFlow ) const
 {
     if( rInf.StopUnderFlow() )
         return 0;
@@ -161,7 +161,7 @@ MSHORT SwBlankPortion::MayUnderFlow( const SwTxtFormatInfo &rInf,
         //Hier wird ueberprueft, ob es in dieser Zeile noch sinnvolle Umbrueche
         //gibt, Blanks oder Felder etc., wenn nicht, kein Underflow.
         //Wenn Flys im Spiel sind, lassen wir das Underflow trotzdem zu.
-            xub_StrLen nBlank = nIdx;
+            sal_Int32 nBlank = nIdx;
             while( --nBlank > rInf.GetLineStart() )
             {
                 const sal_Unicode cCh = rInf.GetChar( nBlank );

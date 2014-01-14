@@ -94,7 +94,7 @@ SwUndoMove::SwUndoMove( SwDoc* pDoc, const SwNodeRange& rRg,
     bMoveRange = sal_True;
     bJoinNext = bJoinPrev = sal_False;
 
-    nSttCntnt = nEndCntnt = nMvDestCntnt = STRING_MAXLEN;
+    nSttCntnt = nEndCntnt = nMvDestCntnt = COMPLETE_STRING;
 
     nSttNode = rRg.aStart.GetIndex();
     nEndNode = rRg.aEnd.GetIndex();
@@ -166,7 +166,7 @@ void SwUndoMove::SetDestRange( const SwNodeIndex& rStt,
     }
     nInsPosNode  = rInsPos.GetIndex();
 
-    nDestSttCntnt = nDestEndCntnt = nInsPosCntnt = STRING_MAXLEN;
+    nDestSttCntnt = nDestEndCntnt = nInsPosCntnt = COMPLETE_STRING;
 }
 
 void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)

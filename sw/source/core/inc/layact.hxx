@@ -197,7 +197,7 @@ class SwLayIdle
     SwRootFrm *pRoot;
     SwViewImp  *pImp;           // Hier Meldet sich der Idler an und ab.
     SwCntntNode *pCntntNode;    // Hier wird die aktuelle Cursorposition
-    xub_StrLen  nTxtPos;        // zwischengespeichert.
+    sal_Int32  nTxtPos;        // zwischengespeichert.
     sal_Bool        bPageValid;     // Konnte die Seite alles validiert werden?
     sal_Bool        bAllValid;      // Konnte alles validiert werden?
 

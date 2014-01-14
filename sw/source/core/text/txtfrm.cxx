@@ -447,7 +447,7 @@ void SwTxtFrm::HideHidden()
     OSL_ENSURE( !GetFollow() && IsHiddenNow(),
             "HideHidden on visible frame of hidden frame has follow" );
 
-    const xub_StrLen nEnd = STRING_LEN;
+    const sal_Int32 nEnd = COMPLETE_STRING;
     HideFootnotes( GetOfst(), nEnd );
     // OD 2004-01-15 #110582#
     HideAndShowObjects();
@@ -459,7 +459,7 @@ void SwTxtFrm::HideHidden()
 /*************************************************************************
  *                        SwTxtFrm::HideFootnotes()
  *************************************************************************/
-void SwTxtFrm::HideFootnotes( xub_StrLen nStart, xub_StrLen nEnd )
+void SwTxtFrm::HideFootnotes( sal_Int32 nStart, sal_Int32 nEnd )
 {
     const SwpHints *pHints = GetTxtNode()->GetpSwpHints();
     if( pHints )
@@ -471,7 +471,7 @@ void SwTxtFrm::HideFootnotes( xub_StrLen nStart, xub_StrLen nEnd )
             const SwTxtAttr *pHt = (*pHints)[i];
             if ( pHt->Which() == RES_TXTATR_FTN )
             {
-                const xub_StrLen nIdx = *pHt->GetStart();
+                const sal_Int32 nIdx = *pHt->GetStart();
                 if ( nEnd < nIdx )
                     break;
                 if( nStart <= nIdx )
@@ -604,13 +604,13 @@ void SwTxtFrm::HideAndShowObjects()
                 else if ((eAnchorType == FLY_AT_CHAR) ||
                          (eAnchorType == FLY_AS_CHAR))
                 {
-                    xub_StrLen nHiddenStart;
-                    xub_StrLen nHiddenEnd;
+                    sal_Int32 nHiddenStart;
+                    sal_Int32 nHiddenEnd;
                     const sal_Int32 nObjAnchorPos = pContact->GetCntntAnchorIndex().GetIndex();
                     SwScriptInfo::GetBoundsOfHiddenRange( rNode, nObjAnchorPos, nHiddenStart, nHiddenEnd, 0 );
                     // #120729# - hotfix
                     // under certain conditions
-                    if ( nHiddenStart != STRING_LEN && bShouldBeHidden &&
+                    if ( nHiddenStart != COMPLETE_STRING && bShouldBeHidden &&
                          sw_HideObj( *this, eAnchorType, nObjAnchorPos, (*GetDrawObjs())[i] ) )
                         pContact->MoveObjToInvisibleLayer( pObj );
                     else
@@ -642,7 +642,7 @@ void SwTxtFrm::HideAndShowObjects()
  * nFound ist <= nEndLine.
  *************************************************************************/
 
-xub_StrLen SwTxtFrm::FindBrk( const OUString &rTxt,
+sal_Int32 SwTxtFrm::FindBrk( const OUString &rTxt,
                               const sal_Int32 nStart,
                               const sal_Int32 nEnd ) const
 {
@@ -664,16 +664,14 @@ xub_StrLen SwTxtFrm::FindBrk( const OUString &rTxt,
         nFound++;
     }
 
-    return nFound <= STRING_LEN
-           ? static_cast<xub_StrLen>(nFound)
-           : STRING_LEN;
+    return nFound;
 }
 
 /*************************************************************************
  *                      SwTxtFrm::IsIdxInside()
  *************************************************************************/
 
-sal_Bool SwTxtFrm::IsIdxInside( const xub_StrLen nPos, const xub_StrLen nLen ) const
+sal_Bool SwTxtFrm::IsIdxInside( const sal_Int32 nPos, const sal_Int32 nLen ) const
 {
     if( GetOfst() > nPos + nLen ) // d.h., der Bereich liegt komplett vor uns.
         return sal_False;
@@ -681,7 +679,7 @@ sal_Bool SwTxtFrm::IsIdxInside( const xub_StrLen nPos, const xub_StrLen nLen ) c
     if( !GetFollow() )         // der Bereich liegt nicht komplett vor uns,
         return sal_True;           // nach uns kommt niemand mehr.
 
-    const xub_StrLen nMax = GetFollow()->GetOfst();
+    const sal_Int32 nMax = GetFollow()->GetOfst();
 
     // der Bereich liegt nicht komplett hinter uns bzw.
     // unser Text ist geloescht worden.
@@ -728,7 +726,7 @@ void SwTxtFrm::_InvalidateRange( const SwCharRange &aRange, const long nD)
     }
     SwCharRange &rReformat = *(pPara->GetReformat());
     if(aRange != rReformat) {
-        if( STRING_LEN == rReformat.Len() )
+        if( COMPLETE_STRING == rReformat.Len() )
             rReformat = aRange;
         else
             rReformat += aRange;
@@ -879,10 +877,10 @@ static void lcl_SetWrong( SwTxtFrm& rFrm, sal_Int32 nPos, sal_Int32 nCnt, bool b
 static void lcl_SetScriptInval( SwTxtFrm& rFrm, sal_Int32 nPos )
 {
     if( rFrm.GetPara() )
-        rFrm.GetPara()->GetScriptInfo().SetInvalidity( nPos );
+        rFrm.GetPara()->GetScriptInfo().SetInvalidityA( nPos );
 }
 
-static void lcl_ModifyOfst( SwTxtFrm* pFrm, xub_StrLen nPos, sal_Int32 nLen )
+static void lcl_ModifyOfst( SwTxtFrm* pFrm, sal_Int32 nPos, sal_Int32 nLen )
 {
     while( pFrm && pFrm->GetOfst() <= nPos )
         pFrm = pFrm->GetFollow();
@@ -918,7 +916,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             // Collection hat sich geaendert
             Prepare( PREP_CLEAR );
             _InvalidatePrt();
-            lcl_SetWrong( *this, 0, STRING_LEN, false );
+            lcl_SetWrong( *this, 0, COMPLETE_STRING, false );
             SetDerivedR2L( sal_False );
             CheckDirChange();
             // OD 09.12.2002 #105576# - Force complete paint due to existing
@@ -979,7 +977,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             lcl_SetScriptInval( *this, nPos );
             bSetFldsDirty = bRecalcFtnFlag = true;
             if( HasFollow() )
-                lcl_ModifyOfst( this, nPos, STRING_LEN );
+                lcl_ModifyOfst( this, nPos, COMPLETE_STRING );
         }
         break;
         case RES_DEL_TXT:
@@ -1206,7 +1204,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             if ( SFX_ITEM_SET ==
                  rNewSet.GetItemState( RES_TXTATR_CHARFMT, sal_False ) )
             {
-                lcl_SetWrong( *this, 0, STRING_LEN, false );
+                lcl_SetWrong( *this, 0, COMPLETE_STRING, false );
                 lcl_SetScriptInval( *this, 0 );
             }
             else if ( SFX_ITEM_SET ==
@@ -1215,7 +1213,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                       rNewSet.GetItemState( RES_CHRATR_CJK_LANGUAGE, sal_False ) ||
                       SFX_ITEM_SET ==
                       rNewSet.GetItemState( RES_CHRATR_CTL_LANGUAGE, sal_False ) )
-                lcl_SetWrong( *this, 0, STRING_LEN, false );
+                lcl_SetWrong( *this, 0, COMPLETE_STRING, false );
             else if ( SFX_ITEM_SET ==
                       rNewSet.GetItemState( RES_CHRATR_FONT, sal_False ) ||
                       SFX_ITEM_SET ==
@@ -1386,7 +1384,7 @@ void SwTxtFrm::PrepWidows( const MSHORT nNeed, sal_Bool bNotify )
     SwTxtSizeInfo aInf( this );
     SwTxtMargin aLine( this, &aInf );
     aLine.Bottom();
-    xub_StrLen nTmpLen = aLine.GetCurr()->GetLen();
+    sal_Int32 nTmpLen = aLine.GetCurr()->GetLen();
     while( nHave && aLine.PrevLine() )
     {
         if( nTmpLen )
@@ -1429,7 +1427,7 @@ void SwTxtFrm::PrepWidows( const MSHORT nNeed, sal_Bool bNotify )
  *                      SwTxtFrm::Prepare
  *************************************************************************/
 
-static bool lcl_ErgoVadis( SwTxtFrm* pFrm, xub_StrLen &rPos, const PrepareHint ePrep )
+static bool lcl_ErgoVadis( SwTxtFrm* pFrm, sal_Int32 &rPos, const PrepareHint ePrep )
 {
     const SwFtnInfo &rFtnInfo = pFrm->GetNode()->GetDoc()->GetFtnInfo();
     if( ePrep == PREP_ERGOSUM )
@@ -1573,7 +1571,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                     const SwFtnInfo &rFtnInfo = GetNode()->GetDoc()->GetFtnInfo();
                     if( !pPara->UpdateQuoVadis( rFtnInfo.aQuoVadis ) )
                     {
-                        xub_StrLen nPos = pPara->GetParLen();
+                        sal_Int32 nPos = pPara->GetParLen();
                         if( nPos )
                             --nPos;
                         InvalidateRange( SwCharRange( nPos, 1 ), 1);
@@ -1583,7 +1581,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
             else
             {
                 // Wir sind also der TxtFrm _mit_ der Fussnote
-                const xub_StrLen nPos = *pFtn->GetStart();
+                const sal_Int32 nPos = *pFtn->GetStart();
                 InvalidateRange( SwCharRange( nPos, 1 ), 1);
             }
             break;
@@ -1596,19 +1594,19 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 sal_Bool bOld = IsVertical();
                 SetInvalidVert( sal_True );
                 if( bOld != IsVertical() )
-                    InvalidateRange( SwCharRange( GetOfst(), STRING_LEN ) );
+                    InvalidateRange( SwCharRange( GetOfst(), COMPLETE_STRING ) );
             }
 
             if( HasFollow() )
             {
-                xub_StrLen nNxtOfst = GetFollow()->GetOfst();
+                sal_Int32 nNxtOfst = GetFollow()->GetOfst();
                 if( nNxtOfst )
                     --nNxtOfst;
                 InvalidateRange( SwCharRange( nNxtOfst, 1 ), 1);
             }
             if( IsInFtn() )
             {
-                xub_StrLen nPos;
+                sal_Int32 nPos;
                 if( lcl_ErgoVadis( this, nPos, PREP_QUOVADIS ) )
                     InvalidateRange( SwCharRange( nPos, 1 ), 0 );
                 if( lcl_ErgoVadis( this, nPos, PREP_ERGOSUM ) )
@@ -1620,12 +1618,12 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
             if( pHints )
             {
                 const sal_uInt16 nSize = pHints->Count();
-                const xub_StrLen nEnd = GetFollow() ?
-                                    GetFollow()->GetOfst() : STRING_LEN;
+                const sal_Int32 nEnd = GetFollow() ?
+                                    GetFollow()->GetOfst() : COMPLETE_STRING;
                 for ( sal_uInt16 i = 0; i < nSize; ++i )
                 {
                     const SwTxtAttr *pHt = (*pHints)[i];
-                    const xub_StrLen nStart = *pHt->GetStart();
+                    const sal_Int32 nStart = *pHt->GetStart();
                     if( nStart >= GetOfst() )
                     {
                         if( nStart >= nEnd )
@@ -1757,7 +1755,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 // hochrutschen kann, die extra auf die naechste Seite gerutscht war, um mit
                 // der Fussnote zusammen zu sein, insbesondere bei spaltigen Bereichen.
                 OSL_ENSURE( GetFollow(), "PREP_FTN_GONE darf nur vom Follow gerufen werden" );
-                xub_StrLen nPos = GetFollow()->GetOfst();
+                sal_Int32 nPos = GetFollow()->GetOfst();
                 if( IsFollow() && GetOfst() == nPos )       // falls wir gar keine Textmasse besitzen,
                     FindMaster()->Prepare( PREP_FTN_GONE ); // rufen wir das Prepare unseres Masters
                 if( nPos )
@@ -1768,7 +1766,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         case PREP_ERGOSUM:
         case PREP_QUOVADIS:
             {
-                xub_StrLen nPos;
+                sal_Int32 nPos;
                 if( lcl_ErgoVadis( this, nPos, ePrep ) )
                     InvalidateRange( SwCharRange( nPos, 1 ), 0 );
             }
@@ -1777,8 +1775,8 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         {
             if( pVoid )
             {
-                xub_StrLen nWhere = CalcFlyPos( (SwFrmFmt*)pVoid );
-                OSL_ENSURE( STRING_LEN != nWhere, "Prepare: Why me?" );
+                sal_Int32 nWhere = CalcFlyPos( (SwFrmFmt*)pVoid );
+                OSL_ENSURE( COMPLETE_STRING != nWhere, "Prepare: Why me?" );
                 InvalidateRange( SwCharRange( nWhere, 1 ) );
                 return;
             }
@@ -1791,8 +1789,8 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
             {
                 if( PREP_FLY_ARRIVE == ePrep || PREP_FLY_LEAVE == ePrep )
                 {
-                    xub_StrLen nLen = ( GetFollow() ? GetFollow()->GetOfst() :
-                                      STRING_LEN ) - GetOfst();
+                    sal_Int32 nLen = ( GetFollow() ? GetFollow()->GetOfst() :
+                                      COMPLETE_STRING ) - GetOfst();
                     InvalidateRange( SwCharRange( GetOfst(), nLen ), 0 );
                 }
             }
@@ -2438,7 +2436,7 @@ KSHORT SwTxtFrm::FirstLineHeight() const
     return pPara->Height();
 }
 
-MSHORT SwTxtFrm::GetLineCount( xub_StrLen nPos )
+MSHORT SwTxtFrm::GetLineCount( sal_Int32 nPos )
 {
     MSHORT nRet = 0;
     SwTxtFrm *pFrm = this;
@@ -2449,7 +2447,7 @@ MSHORT SwTxtFrm::GetLineCount( xub_StrLen nPos )
             break;
         SwTxtSizeInfo aInf( pFrm );
         SwTxtMargin aLine( pFrm, &aInf );
-        if( STRING_LEN == nPos )
+        if( COMPLETE_STRING == nPos )
             aLine.Bottom();
         else
             aLine.CharToLine( nPos );

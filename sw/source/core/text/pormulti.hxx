@@ -59,7 +59,7 @@ struct SwMultiCreator
 
 struct SwBracket
 {
-    xub_StrLen nStart;      // Start of text attribute determins the font
+    sal_Int32 nStart;      // Start of text attribute determins the font
     KSHORT nAscent;         // Ascent of the brackets
     KSHORT nHeight;         // Height of them
     KSHORT nPreWidth;       // Width of the opening bracket
@@ -94,7 +94,7 @@ class SwMultiPortion : public SwLinePortion
     sal_uInt8 nDirection:2; // Direction (0/90/180/270 degrees)
     sal_Bool bFlyInCntnt:1; // Fly as character inside
 protected:
-    SwMultiPortion( xub_StrLen nEnd ) : pFldRest( 0 ), bTab1( sal_False ),
+    SwMultiPortion( sal_Int32 nEnd ) : pFldRest( 0 ), bTab1( sal_False ),
         bTab2( sal_False ), bDouble( sal_False ), bRuby( false ),
         bBidi( sal_False ), bFormatted( sal_False ), bFollowFld( sal_False ),
         nDirection( 0 ), bFlyInCntnt( sal_False )
@@ -152,11 +152,11 @@ class SwDoubleLinePortion : public SwMultiPortion
 {
     SwBracket* pBracket;    // Surrounding brackets
     SwTwips nLineDiff;      // Difference of the width of the both lines
-    xub_StrLen nBlank1;     // Number of blanks in the first line
-    xub_StrLen nBlank2;     // Number of blanks in the second line
+    sal_Int32 nBlank1;     // Number of blanks in the first line
+    sal_Int32 nBlank2;     // Number of blanks in the second line
 public:
-    SwDoubleLinePortion( SwDoubleLinePortion& rDouble, xub_StrLen nEnd );
-    SwDoubleLinePortion( const SwMultiCreator& rCreate, xub_StrLen nEnd );
+    SwDoubleLinePortion( SwDoubleLinePortion& rDouble, sal_Int32 nEnd );
+    SwDoubleLinePortion( const SwMultiCreator& rCreate, sal_Int32 nEnd );
     ~SwDoubleLinePortion();
 
     inline SwBracket* GetBrackets() const { return pBracket; }
@@ -172,12 +172,12 @@ public:
     void CalcBlanks( SwTxtFormatInfo &rInf );
     static void ResetSpaceAdd( SwLineLayout* pCurr );
     inline SwTwips GetLineDiff() const { return nLineDiff; }
-    inline xub_StrLen GetSpaceCnt() const
+    inline sal_Int32 GetSpaceCnt() const
         { return ( nLineDiff < 0 ) ? nBlank2 : nBlank1; }
-    inline xub_StrLen GetSmallerSpaceCnt() const
+    inline sal_Int32 GetSmallerSpaceCnt() const
         { return ( nLineDiff < 0 ) ? nBlank1 : nBlank2; }
-    inline xub_StrLen GetBlank1() const { return nBlank1; }
-    inline xub_StrLen GetBlank2() const { return nBlank2; }
+    inline sal_Int32 GetBlank1() const { return nBlank1; }
+    inline sal_Int32 GetBlank2() const { return nBlank2; }
 
     virtual long CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
     virtual sal_Bool ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const;
@@ -185,30 +185,30 @@ public:
 
 class SwRubyPortion : public SwMultiPortion
 {
-    xub_StrLen nRubyOffset;
+    sal_Int32 nRubyOffset;
     sal_uInt16 nAdjustment;
     void _Adjust( SwTxtFormatInfo &rInf);
 public:
-    SwRubyPortion( const SwRubyPortion& rRuby, xub_StrLen nEnd );
+    SwRubyPortion( const SwRubyPortion& rRuby, sal_Int32 nEnd );
 
     SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
                    const IDocumentSettingAccess& rIDocumentSettingAccess,
-                   xub_StrLen nEnd, xub_StrLen nOffs,
+                   sal_Int32 nEnd, sal_Int32 nOffs,
                    const sal_Bool* pForceRubyPos );
 
     void CalcRubyOffset();
     inline void Adjust( SwTxtFormatInfo &rInf )
         { if(nAdjustment && GetRoot().GetNext()) _Adjust(rInf); }
     inline sal_uInt16 GetAdjustment() const { return nAdjustment; }
-    inline xub_StrLen GetRubyOffset() const { return nRubyOffset; }
+    inline sal_Int32 GetRubyOffset() const { return nRubyOffset; }
 };
 
 class SwRotatedPortion : public SwMultiPortion
 {
 public:
-    SwRotatedPortion( xub_StrLen nEnd, sal_uInt8 nDir = 1 )
+    SwRotatedPortion( sal_Int32 nEnd, sal_uInt8 nDir = 1 )
         : SwMultiPortion( nEnd ) { SetDirection( nDir ); }
-    SwRotatedPortion( const SwMultiCreator& rCreate, xub_StrLen nEnd,
+    SwRotatedPortion( const SwMultiCreator& rCreate, sal_Int32 nEnd,
                       sal_Bool bRTL );
 };
 
@@ -217,11 +217,11 @@ class SwBidiPortion : public SwMultiPortion
     sal_uInt8 nLevel;
 
 public:
-    SwBidiPortion( xub_StrLen nEnd, sal_uInt8 nLv );
+    SwBidiPortion( sal_Int32 nEnd, sal_uInt8 nLv );
 
     inline sal_uInt8 GetLevel() const { return nLevel; }
     // Get number of blanks for justified alignment
-    xub_StrLen GetSpaceCnt( const SwTxtSizeInfo &rInf ) const;
+    sal_Int32 GetSpaceCnt( const SwTxtSizeInfo &rInf ) const;
     // Calculates extra spacing based on number of blanks
     virtual long CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
     // Manipulate the spacing array at pCurr
@@ -235,12 +235,12 @@ class SwTxtCursorSave
     SwTxtCursor* pTxtCrsr;
     SwLineLayout* pCurr;
     SwTwips nWidth;
-    xub_StrLen nStart;
+    sal_Int32 nStart;
     sal_uInt8 nOldProp;
     sal_Bool bSpaceChg;
 public:
     SwTxtCursorSave( SwTxtCursor* pTxtCursor, SwMultiPortion* pMulti,
-        SwTwips nY, sal_uInt16& nX, xub_StrLen nCurrStart, long nSpaceAdd );
+        SwTwips nY, sal_uInt16& nX, sal_Int32 nCurrStart, long nSpaceAdd );
     ~SwTxtCursorSave();
 };
 

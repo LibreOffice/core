@@ -5492,7 +5492,7 @@ static SwTwips lcl_CalcHeightOfFirstContentLine( const SwRowFrm& rSourceLine )
                     // would have no follow and thus would add this space.
                     if ( pTmp->IsTxtFrm() &&
                          const_cast<SwTxtFrm*>(static_cast<const SwTxtFrm*>(pTmp))
-                                            ->GetLineCount( STRING_LEN ) == 1 )
+                                            ->GetLineCount( COMPLETE_STRING ) == 1 )
                     {
                         nTmpHeight += SwFlowFrm::CastFlowFrm(pTmp)
                                         ->CalcAddLowerSpaceAsLastInTableCell();

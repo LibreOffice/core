@@ -394,7 +394,7 @@ int SwHistorySetTOXMark::IsEqual( const SwTOXMark& rCmp ) const
 }
 
 SwHistoryResetTxt::SwHistoryResetTxt( sal_uInt16 nWhich,
-            xub_StrLen nAttrStart, xub_StrLen nAttrEnd, sal_uLong nNodePos )
+            sal_Int32 nAttrStart, sal_Int32 nAttrEnd, sal_uLong nNodePos )
     : SwHistoryHint( HSTRY_RESETTXTHNT )
     , m_nNodeIndex( nNodePos ), m_nStart( nAttrStart ), m_nEnd( nAttrEnd )
     , m_nAttr( nWhich )
@@ -781,7 +781,7 @@ void SwHistorySetAttrSet::SetInDoc( SwDoc* pDoc, bool )
 }
 
 SwHistoryResetAttrSet::SwHistoryResetAttrSet( const SfxItemSet& rSet,
-                    sal_uLong nNodePos, xub_StrLen nAttrStt, xub_StrLen nAttrEnd )
+                    sal_uLong nNodePos, sal_Int32 nAttrStt, sal_Int32 nAttrEnd )
     : SwHistoryHint( HSTRY_RESETATTRSET )
     , m_nNodeIndex( nNodePos ), m_nStart( nAttrStt ), m_nEnd( nAttrEnd )
     , m_Array( (sal_uInt8)rSet.Count() )
@@ -871,7 +871,7 @@ SwHistoryChangeFlyAnchor::SwHistoryChangeFlyAnchor( SwFrmFmt& rFmt )
     , m_nOldNodeIndex( rFmt.GetAnchor().GetCntntAnchor()->nNode.GetIndex() )
     , m_nOldContentIndex( (FLY_AT_CHAR == rFmt.GetAnchor().GetAnchorId())
             ?   rFmt.GetAnchor().GetCntntAnchor()->nContent.GetIndex()
-            :   STRING_MAXLEN )
+            :   COMPLETE_STRING )
 {
 }
 
@@ -888,7 +888,7 @@ void SwHistoryChangeFlyAnchor::SetInDoc( SwDoc* pDoc, bool )
         SwNode* pNd = pDoc->GetNodes()[ m_nOldNodeIndex ];
         SwCntntNode* pCNd = pNd->GetCntntNode();
         SwPosition aPos( *pNd );
-        if ( STRING_MAXLEN != m_nOldContentIndex )
+        if ( COMPLETE_STRING != m_nOldContentIndex )
         {
             OSL_ENSURE(pCNd, "SwHistoryChangeFlyAnchor: no ContentNode");
             if (pCNd)
@@ -1219,8 +1219,8 @@ void SwHistory::CopyFmtAttr( const SfxItemSet& rSet, sal_uLong nNodeIdx )
 void SwHistory::CopyAttr(
     SwpHints* pHts,
     const sal_uLong nNodeIdx,
-    const xub_StrLen nStart,
-    const xub_StrLen nEnd,
+    const sal_Int32 nStart,
+    const sal_Int32 nEnd,
     const bool bCopyFields )
 {
     if( !pHts  )
@@ -1342,7 +1342,7 @@ void SwRegHistory::AddHint( SwTxtAttr* pHt, const bool bNew )
 }
 
 bool SwRegHistory::InsertItems( const SfxItemSet& rSet,
-    xub_StrLen const nStart, xub_StrLen const nEnd, SetAttrMode const nFlags )
+    sal_Int32 const nStart, sal_Int32 const nEnd, SetAttrMode const nFlags )
 {
     if( !rSet.Count() )
         return false;

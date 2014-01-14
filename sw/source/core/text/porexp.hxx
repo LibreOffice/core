@@ -31,7 +31,7 @@ class SwExpandPortion : public SwTxtPortion
 public:
     inline  SwExpandPortion() { SetWhichPor( POR_EXP ); }
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
-    virtual xub_StrLen GetCrsrOfst( const MSHORT nOfst ) const;
+    virtual sal_Int32 GetCrsrOfst( const MSHORT nOfst ) const;
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
     virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const;
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
@@ -64,7 +64,7 @@ public:
     virtual void FormatEOL( SwTxtFormatInfo &rInf );
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    MSHORT MayUnderFlow( const SwTxtFormatInfo &rInf, xub_StrLen nIdx,
+    MSHORT MayUnderFlow( const SwTxtFormatInfo &rInf, sal_Int32 nIdx,
         sal_Bool bUnderFlow ) const;
 
     // Accessibility: pass information about this portion to the PortionHandler

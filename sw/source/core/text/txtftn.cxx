@@ -92,7 +92,7 @@ SwTxtFrm *SwTxtFrm::FindFtnRef( const SwTxtFtn *pFtn )
  *************************************************************************/
 
 #ifdef DBG_UTIL
-void SwTxtFrm::CalcFtnFlag( xub_StrLen nStop )//For testing the SplitFrm
+void SwTxtFrm::CalcFtnFlag( sal_Int32 nStop )//For testing the SplitFrm
 #else
 void SwTxtFrm::CalcFtnFlag()
 #endif
@@ -106,10 +106,10 @@ void SwTxtFrm::CalcFtnFlag()
     const sal_uInt16 nSize = pHints->Count();
 
 #ifdef DBG_UTIL
-    const xub_StrLen nEnd = nStop != STRING_LEN ? nStop
-                        : GetFollow() ? GetFollow()->GetOfst() : STRING_LEN;
+    const sal_Int32 nEnd = nStop != COMPLETE_STRING ? nStop
+                        : GetFollow() ? GetFollow()->GetOfst() : COMPLETE_STRING;
 #else
-    const xub_StrLen nEnd = GetFollow() ? GetFollow()->GetOfst() : STRING_LEN;
+    const sal_Int32 nEnd = GetFollow() ? GetFollow()->GetOfst() : COMPLETE_STRING;
 #endif
 
     for ( sal_uInt16 i = 0; i < nSize; ++i )
@@ -117,7 +117,7 @@ void SwTxtFrm::CalcFtnFlag()
         const SwTxtAttr *pHt = (*pHints)[i];
         if ( pHt->Which() == RES_TXTATR_FTN )
         {
-            const xub_StrLen nIdx = *pHt->GetStart();
+            const sal_Int32 nIdx = *pHt->GetStart();
             if ( nEnd < nIdx )
                 break;
             if( GetOfst() <= nIdx )
@@ -300,7 +300,7 @@ SwTwips SwTxtFrm::GetFtnLine( const SwTxtFtn *pFtn ) const
 
     SwTxtInfo aInf( pThis );
     SwTxtIter aLine( pThis, &aInf );
-    const xub_StrLen nPos = *pFtn->GetStart();
+    const sal_Int32 nPos = *pFtn->GetStart();
     aLine.CharToLine( nPos );
 
     SwTwips nRet = aLine.Y() + SwTwips(aLine.GetLineHeight());
@@ -427,7 +427,7 @@ SwTxtFrm *SwTxtFrm::FindQuoVadisFrm()
  *                      SwTxtFrm::RemoveFtn()
  *************************************************************************/
 
-void SwTxtFrm::RemoveFtn( const xub_StrLen nStart, const xub_StrLen nLen )
+void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
 {
     if ( !IsFtnAllowed() )
         return;
@@ -436,9 +436,9 @@ void SwTxtFrm::RemoveFtn( const xub_StrLen nStart, const xub_StrLen nLen )
     if( !pHints )
         return;
 
-    bool bRollBack = nLen != STRING_LEN;
+    bool bRollBack = nLen != COMPLETE_STRING;
     sal_uInt16 nSize = pHints->Count();
-    xub_StrLen nEnd;
+    sal_Int32 nEnd;
     SwTxtFrm* pSource;
     if( bRollBack )
     {
@@ -449,7 +449,7 @@ void SwTxtFrm::RemoveFtn( const xub_StrLen nStart, const xub_StrLen nLen )
     }
     else
     {
-        nEnd = STRING_LEN;
+        nEnd = COMPLETE_STRING;
         pSource = this;
     }
 
@@ -467,7 +467,7 @@ void SwTxtFrm::RemoveFtn( const xub_StrLen nStart, const xub_StrLen nLen )
             if ( RES_TXTATR_FTN != pHt->Which() )
                 continue;
 
-            const xub_StrLen nIdx = *pHt->GetStart();
+            const sal_Int32 nIdx = *pHt->GetStart();
             if( nStart > nIdx )
                 break;
 
@@ -592,14 +592,14 @@ void SwTxtFrm::RemoveFtn( const xub_StrLen nStart, const xub_StrLen nLen )
     // des Follows ist aber veraltet, er wird demnaechst gesetzt. CalcFntFlag ist
     // auf einen richtigen Follow-Offset angewiesen. Deshalb wird hier kurzfristig
     // der Follow-Offset manipuliert.
-    xub_StrLen nOldOfst = STRING_LEN;
+    sal_Int32 nOldOfst = COMPLETE_STRING;
     if( HasFollow() && nStart > GetOfst() )
     {
         nOldOfst = GetFollow()->GetOfst();
         GetFollow()->ManipOfst( nStart + ( bRollBack ? nLen : 0 ) );
     }
     pSource->CalcFtnFlag();
-    if( nOldOfst < STRING_LEN )
+    if( nOldOfst < COMPLETE_STRING )
         GetFollow()->ManipOfst( nOldOfst );
 }
 
@@ -1080,7 +1080,7 @@ SwErgoSumPortion *SwTxtFormatter::NewErgoSumPortion( SwTxtFormatInfo &rInf ) con
  *                  SwTxtFormatter::FormatQuoVadis()
  *************************************************************************/
 
-xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
+sal_Int32 SwTxtFormatter::FormatQuoVadis( const sal_Int32 nOffset )
 {
     OSL_ENSURE( ! pFrm->IsVertical() || ! pFrm->IsSwapped(),
             "SwTxtFormatter::FormatQuoVadis with swapped frame" );
@@ -1172,7 +1172,7 @@ xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
 
     SWAP_IF_NOT_SWAPPED( pFrm )
 
-    const xub_StrLen nRet = FormatLine( nStart );
+    const sal_Int32 nRet = FormatLine( nStart );
 
     UNDO_SWAP( pFrm )
 
@@ -1588,7 +1588,7 @@ SwErgoSumPortion::SwErgoSumPortion(const OUString &rExp, const OUString& rStr)
     SetWhichPor( POR_ERGOSUM );
 }
 
-xub_StrLen SwErgoSumPortion::GetCrsrOfst( const KSHORT ) const
+sal_Int32 SwErgoSumPortion::GetCrsrOfst( const KSHORT ) const
 {
     return 0;
 }

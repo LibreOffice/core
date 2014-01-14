@@ -40,20 +40,20 @@ class SwDropPortionPart
 {
     SwDropPortionPart* pFollow;
     SwFont* pFnt;
-    xub_StrLen nLen;
+    sal_Int32 nLen;
     sal_uInt16 nWidth;
     bool m_bJoinBorderWithNext;
     bool m_bJoinBorderWithPrev;
 
 public:
-    SwDropPortionPart( SwFont& rFont, const xub_StrLen nL )
+    SwDropPortionPart( SwFont& rFont, const sal_Int32 nL )
             : pFollow( 0 ), pFnt( &rFont ), nLen( nL ), nWidth( 0 ), m_bJoinBorderWithNext(false), m_bJoinBorderWithPrev(false) {};
     ~SwDropPortionPart();
 
     inline SwDropPortionPart* GetFollow() const { return pFollow; };
     inline void SetFollow( SwDropPortionPart* pNew ) { pFollow = pNew; };
     inline SwFont& GetFont() const { return *pFnt; }
-    inline xub_StrLen GetLen() const { return nLen; }
+    inline sal_Int32 GetLen() const { return nLen; }
     inline sal_uInt16 GetWidth() const { return nWidth; }
     inline void SetWidth( sal_uInt16 nNew )  { nWidth = nNew; }
 
@@ -94,7 +94,7 @@ public:
             void PaintDrop( const SwTxtPaintInfo &rInf ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
     virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const;
-    virtual xub_StrLen GetCrsrOfst( const MSHORT nOfst ) const;
+    virtual sal_Int32 GetCrsrOfst( const MSHORT nOfst ) const;
 
     inline MSHORT GetLines() const { return nLines; }
     inline KSHORT GetDistance() const { return nDistance; }

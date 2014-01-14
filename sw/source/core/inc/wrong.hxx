@@ -29,7 +29,7 @@
 #include <vector>
 
 #include <tools/color.hxx>
-#include <tools/string.hxx>
+#include <swtypes.hxx>
 #include <viewopt.hxx>
 
 class SwWrongList;
@@ -215,7 +215,7 @@ public:
     inline sal_Bool InsideInvalid( sal_Int32 nChk ) const
         { return nChk >= nBeginInvalid && nChk <= nEndInvalid; }
     void SetInvalid( sal_Int32 nBegin, sal_Int32 nEnd );
-    inline void Validate(){ nBeginInvalid = STRING_LEN; }
+    inline void Validate(){ nBeginInvalid = COMPLETE_STRING; }
     void Invalidate( sal_Int32 nBegin, sal_Int32 nEnd );
     sal_Bool InvalidateWrong();
     sal_Bool Fresh( sal_Int32 &rStart, sal_Int32 &rEnd, sal_Int32 nPos,

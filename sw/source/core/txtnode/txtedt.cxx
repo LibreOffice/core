@@ -114,8 +114,8 @@ lcl_MaskRedlines( const SwTxtNode& rNode, OUStringBuffer& rText,
 
         if( nsRedlineType_t::REDLINE_DELETE == pRed->GetType() )
         {
-            xub_StrLen nRedlineEnd;
-            xub_StrLen nRedlineStart;
+            sal_Int32 nRedlineEnd;
+            sal_Int32 nRedlineStart;
 
             pRed->CalcStartEnd( rNode.GetIndex(), nRedlineStart, nRedlineEnd );
 
@@ -1109,8 +1109,8 @@ sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
     }
 
     bool    bFound  = false;
-    xub_StrLen  nBegin  = nTextBegin;
-    xub_StrLen  nLen = 0;
+    sal_Int32  nBegin  = nTextBegin;
+    sal_Int32  nLen = 0;
     LanguageType nLangFound = LANGUAGE_NONE;
     if (m_Text.isEmpty())
     {
@@ -1132,7 +1132,7 @@ sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
         // Implicit changes require setting new attributes, which in turn destroys
         // the attribute sequence on that aIter iterates. We store the necessary
         // coordinates and apply those changes after iterating through the text.
-        typedef std::pair<xub_StrLen, xub_StrLen> ImplicitChangesRange;
+        typedef std::pair<sal_Int32, sal_Int32> ImplicitChangesRange;
         std::vector<ImplicitChangesRange> aImplicitChanges;
 
         // find non zero length text portion of appropriate language
@@ -1142,11 +1142,11 @@ sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
                                 (editeng::HangulHanjaConversion::IsChinese( nLangFound ) &&
                                  editeng::HangulHanjaConversion::IsChinese( rArgs.nConvSrcLang ));
 
-            xub_StrLen nChPos = aIter.GetChgPos();
-            // the position at the end of the paragraph returns -1
-            // that becomes 65535 when converted to xub_StrLen,
-            // and thus must be cut to the end of the actual string.
-            if (nChPos == (xub_StrLen) -1)
+            sal_Int32 nChPos = aIter.GetChgPos();
+            // the position at the end of the paragraph is COMPLETE_STRING and
+            // thus must be cut to the end of the actual string.
+            assert(nChPos != -1);
+            if (nChPos == -1 || nChPos == COMPLETE_STRING)
             {
                 nChPos = m_Text.getLength();
             }
@@ -1220,7 +1220,7 @@ sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
 
 // Die Aehnlichkeiten zu SwTxtNode::Spell sind beabsichtigt ...
 // ACHTUNG: Ev. Bugs in beiden Routinen fixen!
-SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rViewOpt, xub_StrLen nActPos )
+SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rViewOpt, sal_Int32 nActPos )
 {
     SwRect aRect;
 #if OSL_DEBUG_LEVEL > 1
@@ -1232,7 +1232,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
     // ACHTUNG: Ev. Bugs in beiden Routinen fixen!
     SwTxtNode *pNode = GetTxtNode();
     if( pNode != pActNode || !nActPos )
-        nActPos = STRING_LEN;
+        nActPos = COMPLETE_STRING;
 
     SwAutoCompleteWord& rACW = SwDoc::GetAutoCompleteWords();
 
@@ -1252,9 +1252,9 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
     sal_Int32 nBegin = 0;
     sal_Int32 nEnd = pNode->GetTxt().getLength();
     sal_Int32 nInsertPos = 0;
-    sal_Int32 nChgStart = STRING_LEN;
+    sal_Int32 nChgStart = COMPLETE_STRING;
     sal_Int32 nChgEnd = 0;
-    sal_Int32 nInvStart = STRING_LEN;
+    sal_Int32 nInvStart = COMPLETE_STRING;
     sal_Int32 nInvEnd = 0;
 
     const bool bAddAutoCmpl = pNode->IsAutoCompleteWordDirty() &&
@@ -1263,13 +1263,13 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
     if( pNode->GetWrong() )
     {
         nBegin = pNode->GetWrong()->GetBeginInv();
-        if( STRING_LEN != nBegin )
+        if( COMPLETE_STRING != nBegin )
         {
             nEnd = std::max(pNode->GetWrong()->GetEndInv(), pNode->GetTxt().getLength());
         }
 
         // get word around nBegin, we start at nBegin - 1
-        if ( STRING_LEN != nBegin )
+        if ( COMPLETE_STRING != nBegin )
         {
             if ( nBegin )
                 --nBegin;
@@ -1312,7 +1312,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
         {
             const OUString& rWord = aScanner.GetWord();
             nBegin = aScanner.GetBegin();
-            xub_StrLen nLen = aScanner.GetLen();
+            sal_Int32 nLen = aScanner.GetLen();
 
             // get next language for next word, consider language attributes
             // within the word
@@ -1380,7 +1380,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
         }
 
         pNode->GetWrong()->SetInvalid( nInvStart, nInvEnd );
-        pNode->SetWrongDirty( STRING_LEN != pNode->GetWrong()->GetBeginInv() );
+        pNode->SetWrongDirty( COMPLETE_STRING != pNode->GetWrong()->GetBeginInv() );
         if( !pNode->GetWrong()->Count() && ! pNode->IsWrongDirty() )
             pNode->SetWrong( NULL );
     }
@@ -1404,7 +1404,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
     @param nActPos ???
     @return SwRect Repaint area
 */
-SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/ )
+SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, sal_Int32 /*nActPos*/ )
 {
     SwRect aRet;
     SwTxtNode *pNode = GetTxtNode();
@@ -1420,7 +1420,7 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/
 
     if ( pSmartTagList )
     {
-        if ( pSmartTagList->GetBeginInv() != STRING_LEN )
+        if ( pSmartTagList->GetBeginInv() != COMPLETE_STRING )
         {
             nBegin = pSmartTagList->GetBeginInv();
             nEnd = std::min( pSmartTagList->GetEndInv(), rText.getLength() );
@@ -1442,10 +1442,10 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/
     // clear smart tag list between nBegin and nEnd:
     if ( 0 != nNumberOfEntries )
     {
-        sal_Int32 nChgStart = STRING_LEN;
+        sal_Int32 nChgStart = COMPLETE_STRING;
         sal_Int32 nChgEnd = 0;
         const sal_uInt16 nCurrentIndex = pSmartTagList->GetWrongPos( nBegin );
-        pSmartTagList->Fresh( nChgStart, nChgEnd, nBegin, nEnd - nBegin, nCurrentIndex, STRING_LEN );
+        pSmartTagList->Fresh( nChgStart, nChgEnd, nBegin, nEnd - nBegin, nCurrentIndex, COMPLETE_STRING );
         nNumberOfRemovedEntries = nNumberOfEntries - pSmartTagList->Count();
     }
 
@@ -1498,8 +1498,8 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/
     if( pSmartTagList )
     {
         // Update WrongList stuff
-        pSmartTagList->SetInvalid( STRING_LEN, 0 );
-        pNode->SetSmartTagDirty( STRING_LEN != pSmartTagList->GetBeginInv() );
+        pSmartTagList->SetInvalid( COMPLETE_STRING, 0 );
+        pNode->SetSmartTagDirty( COMPLETE_STRING != pSmartTagList->GetBeginInv() );
 
         if( !pSmartTagList->Count() && !pNode->IsSmartTagDirty() )
             pNode->SetSmartTags( NULL );
@@ -1522,11 +1522,11 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/
 }
 
 // Wird vom CollectAutoCmplWords gerufen
-void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, xub_StrLen nActPos )
+void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, sal_Int32 nActPos )
 {
     SwTxtNode *pNode = GetTxtNode();
     if( pNode != pActNode || !nActPos )
-        nActPos = STRING_LEN;
+        nActPos = COMPLETE_STRING;
 
     SwDoc* pDoc = pNode->GetDoc();
     SwAutoCompleteWord& rACW = SwDoc::GetAutoCompleteWords();

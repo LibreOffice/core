@@ -981,14 +981,14 @@ sal_Bool SwAccessibleParagraph::GetTextBoundary(
                             {
                                 nLast = nWrongPos
                                         ? pWrongList->Pos( --nWrongPos )
-                                        : STRING_LEN;
+                                        : COMPLETE_STRING;
                             }
                             if ( nBegin > pWrongList->GetBeginInv() &&
-                                 ( nLast == STRING_LEN || nLast < pWrongList->GetEndInv() ) )
+                                 ( nLast == COMPLETE_STRING || nLast < pWrongList->GetEndInv() ) )
                             {
                                 nLast = min(nBegin, pWrongList->GetEndInv());
                             }
-                            else if ( nLast < STRING_LEN )
+                            else if ( nLast < COMPLETE_STRING )
                             {
                                 nLast += pWrongList->Len( nWrongPos );
                             }
@@ -1001,11 +1001,11 @@ sal_Bool SwAccessibleParagraph::GetTextBoundary(
                             }
                             else
                             {
-                                if (STRING_LEN == nLast)//first
+                                if (COMPLETE_STRING == nLast)//first
                                 {
                                     rBound.endPos = min(nNext, rBound.endPos);
                                 }
-                                else if(STRING_LEN == nNext)
+                                else if(COMPLETE_STRING == nNext)
                                 {
                                     rBound.startPos = max(nLast, rBound.startPos);
                                 }

@@ -232,7 +232,7 @@ void SwTxtPortion::BreakCut( SwTxtFormatInfo &rInf, const SwTxtGuess &rGuess )
     // Special case 1: The word is larger than the line
     // We truncate ...
     const KSHORT nLineWidth = (KSHORT)(rInf.Width() - rInf.X());
-    xub_StrLen nLen = rGuess.CutPos() - rInf.GetIdx();
+    sal_Int32 nLen = rGuess.CutPos() - rInf.GetIdx();
     if( nLen )
     {
         // special case: guess does not always provide the correct
@@ -363,7 +363,7 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
         aGuess.ClearHangingPortion();
     }
     // breakPos >= index
-    else if ( aGuess.BreakPos() >= rInf.GetIdx() && aGuess.BreakPos() != STRING_LEN )
+    else if ( aGuess.BreakPos() >= rInf.GetIdx() && aGuess.BreakPos() != COMPLETE_STRING )
     {
         // case B1
         if( aGuess.HyphWord().is() && aGuess.BreakPos() > rInf.GetLineStart()
@@ -421,7 +421,7 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
 
             OSL_ENSURE( aGuess.BreakStart() >= aGuess.FieldDiff(),
                     "Trouble with expanded field portions during line break" );
-            const xub_StrLen nRealStart = aGuess.BreakStart() - aGuess.FieldDiff();
+            const sal_Int32 nRealStart = aGuess.BreakStart() - aGuess.FieldDiff();
             if( aGuess.BreakPos() < nRealStart && !InExpGrp() )
             {
                 SwHolePortion *pNew = new SwHolePortion( *this );
@@ -436,7 +436,7 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
     else
     {
         bool bFirstPor = rInf.GetLineStart() == rInf.GetIdx();
-        if( aGuess.BreakPos() != STRING_LEN &&
+        if( aGuess.BreakPos() != COMPLETE_STRING &&
             aGuess.BreakPos() != rInf.GetLineStart() &&
             ( !bFirstPor || rInf.GetFly() || rInf.GetLast()->IsFlyPortion() ||
               rInf.IsFirstMulti() ) &&
@@ -500,7 +500,7 @@ void SwTxtPortion::FormatEOL( SwTxtFormatInfo &rInf )
         && !rInf.GetLast()->IsHolePortion() )
     {
         // calculate number of blanks
-        xub_StrLen nX = rInf.GetIdx() - 1;
+        sal_Int32 nX = rInf.GetIdx() - 1;
         sal_uInt16 nHoleLen = 1;
         while( nX && nHoleLen < GetLen() && CH_BLANK == rInf.GetChar( --nX ) )
             nHoleLen++;
@@ -525,7 +525,7 @@ void SwTxtPortion::FormatEOL( SwTxtFormatInfo &rInf )
 /*************************************************************************
  *               virtual SwTxtPortion::GetCrsrOfst()
  *************************************************************************/
-xub_StrLen SwTxtPortion::GetCrsrOfst( const KSHORT nOfst ) const
+sal_Int32 SwTxtPortion::GetCrsrOfst( const KSHORT nOfst ) const
 {
     OSL_ENSURE( !this, "SwTxtPortion::GetCrsrOfst: don't use this method!" );
     return SwLinePortion::GetCrsrOfst( nOfst );
@@ -605,7 +605,7 @@ sal_Bool SwTxtPortion::GetExpTxt( const SwTxtSizeInfo &, OUString & ) const
 }
 
 /*************************************************************************
- *        xub_StrLen SwTxtPortion::GetSpaceCnt()
+ *        sal_Int32 SwTxtPortion::GetSpaceCnt()
  *              long SwTxtPortion::CalcSpacing()
  * Are responsible for the justified paragraph. They calculate the blank
  * count and the resulting added space.
@@ -644,7 +644,7 @@ sal_Int32 SwTxtPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf,
 
 long SwTxtPortion::CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const
 {
-    xub_StrLen nCnt = 0;
+    sal_Int32 nCnt = 0;
 
     if ( InExpGrp() )
     {

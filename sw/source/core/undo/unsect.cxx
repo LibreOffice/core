@@ -126,7 +126,7 @@ void SwUndoInsSection::UndoImpl(::sw::UndoRedoContext & rContext)
 
     // no selection?
     SwNodeIndex aIdx( *pNd );
-    if( ( !nEndNode && STRING_MAXLEN == nEndCntnt ) ||
+    if( ( !nEndNode && COMPLETE_STRING == nEndCntnt ) ||
         ( nSttNode == nEndNode && nSttCntnt == nEndCntnt ))
         // delete simply all nodes
         rDoc.GetNodes().Delete( aIdx, pNd->EndOfSectionIndex() -

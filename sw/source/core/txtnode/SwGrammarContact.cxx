@@ -124,7 +124,7 @@ SwGrammarMarkUp* SwGrammarContact::getGrammarCheck( SwTxtNode& rTxtNode, bool bC
                 else
                 {
                     mpProxyList = new SwGrammarMarkUp();
-                    mpProxyList->SetInvalid( 0, STRING_LEN );
+                    mpProxyList->SetInvalid( 0, COMPLETE_STRING );
                 }
             }
            mbFinished = false;
@@ -137,7 +137,7 @@ SwGrammarMarkUp* SwGrammarContact::getGrammarCheck( SwTxtNode& rTxtNode, bool bC
         if( bCreate && !pRet ) // do you want to create a list?
         {
             pRet = new SwGrammarMarkUp();
-            pRet->SetInvalid( 0, STRING_LEN );
+            pRet->SetInvalid( 0, COMPLETE_STRING );
             rTxtNode.SetGrammarCheck( pRet );
             rTxtNode.SetGrammarCheckDirty( true );
         }

@@ -740,8 +740,8 @@ _SetGetExpFld::_SetGetExpFld( const SwNodeIndex& rNdIdx,
 }
 
 // Extension for Sections:
-// these always have content position 0xffff!
-// There is never a field on this, only up to STRING_MAXLEN possible
+// these always have content position 0xffffffff!
+// There is never a field on this, only up to COMPLETE_STRING possible
 _SetGetExpFld::_SetGetExpFld( const SwSectionNode& rSectNd,
                                 const SwPosition* pPos )
 {

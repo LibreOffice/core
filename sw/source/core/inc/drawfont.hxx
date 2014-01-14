@@ -49,20 +49,20 @@ class SwDrawTextInfo
     Size m_aSize;
     SwFont *pFnt;
     SwUnderlineFont* pUnderFnt;
-    xub_StrLen* pHyphPos;
+    sal_Int32* pHyphPos;
     long nLeft;
     long nRight;
     long nKanaDiff;
-    xub_StrLen nIdx;
-    xub_StrLen nLen;
-    xub_StrLen nOfst;
+    sal_Int32 nIdx;
+    sal_Int32 nLen;
+    sal_Int32 nOfst;
     sal_uInt16 nWidth;
     sal_uInt16 nAscent;
     sal_uInt16 nCompress;
     long nSperren;
     long nSpace;
     long nKern;
-    xub_StrLen nNumberOfBlanks;
+    sal_Int32 nNumberOfBlanks;
     sal_uInt8 nCursorBidiLevel;
     sal_Bool bBullet : 1;
     sal_Bool bUpper : 1;        // for small caps: upper case flag
@@ -103,7 +103,7 @@ public:
 #endif
 
     SwDrawTextInfo( SwViewShell *pS, OutputDevice &rO, const SwScriptInfo* pSI,
-                    const OUString &rSt, xub_StrLen nI, xub_StrLen nL,
+                    const OUString &rSt, sal_Int32 nI, sal_Int32 nL,
                     sal_uInt16 nW = 0, sal_Bool bB = sal_False )
     {
         pFrm = NULL;
@@ -192,7 +192,7 @@ public:
         return m_aPos;
     }
 
-    xub_StrLen *GetHyphPos() const
+    sal_Int32 *GetHyphPos() const
     {
 #ifdef DBG_UTIL
         OSL_ENSURE( m_bHyph, "DrawTextInfo: Undefined Hyph Position" );
@@ -247,17 +247,17 @@ public:
         return pUnderFnt;
     }
 
-    xub_StrLen GetIdx() const
+    sal_Int32 GetIdx() const
     {
         return nIdx;
     }
 
-    xub_StrLen GetLen() const
+    sal_Int32 GetLen() const
     {
         return nLen;
     }
 
-    xub_StrLen GetOfst() const
+    sal_Int32 GetOfst() const
     {
 #ifdef DBG_UTIL
         OSL_ENSURE( m_bOfst, "DrawTextInfo: Undefined Offset" );
@@ -265,7 +265,7 @@ public:
         return nOfst;
     }
 
-    xub_StrLen GetEnd() const
+    sal_Int32 GetEnd() const
     {
         return nIdx + nLen;
     }
@@ -333,7 +333,7 @@ public:
         return nSpace;
     }
 
-    xub_StrLen GetNumberOfBlanks() const
+    sal_Int32 GetNumberOfBlanks() const
     {
 #ifdef DBG_UTIL
         OSL_ENSURE( m_bNumberOfBlanks, "DrawTextInfo::Undefined NumberOfBlanks" );
@@ -405,7 +405,7 @@ public:
 #endif
     }
 
-    void SetHyphPos( xub_StrLen *pNew )
+    void SetHyphPos( sal_Int32 *pNew )
     {
         pHyphPos = pNew;
 #ifdef DBG_UTIL
@@ -455,17 +455,17 @@ public:
 #endif
     }
 
-    void SetIdx( xub_StrLen nNew )
+    void SetIdx( sal_Int32 nNew )
     {
         nIdx = nNew;
     }
 
-    void SetLen( xub_StrLen nNew )
+    void SetLen( sal_Int32 nNew )
     {
         nLen = nNew;
     }
 
-    void SetOfst( xub_StrLen nNew )
+    void SetOfst( sal_Int32 nNew )
     {
         nOfst = nNew;
 #ifdef DBG_UTIL
@@ -533,7 +533,7 @@ public:
 #endif
     }
 
-    void SetNumberOfBlanks( xub_StrLen nNew )
+    void SetNumberOfBlanks( sal_Int32 nNew )
     {
 #ifdef DBG_UTIL
         m_bNumberOfBlanks = true;

@@ -85,7 +85,7 @@ SwBreakPortion::SwBreakPortion( const SwLinePortion &rPortion )
     SetWhichPor( POR_BRK );
 }
 
-xub_StrLen SwBreakPortion::GetCrsrOfst( const KSHORT ) const
+sal_Int32 SwBreakPortion::GetCrsrOfst( const KSHORT ) const
 { return 0; }
 
 KSHORT SwBreakPortion::GetViewWidth( const SwTxtSizeInfo & ) const

@@ -55,20 +55,20 @@ private:
     OutputDevice *pLastOut;
     MSHORT nChgCnt;
     SwRedlineItr *pRedln;
-    xub_StrLen nStartIndex, nEndIndex, nPos;
+    sal_Int32 nStartIndex, nEndIndex, nPos;
     sal_uInt8 nPropFont;
     const void* aMagicNo[ SW_SCRIPTS ];
     MSHORT aFntIdx[ SW_SCRIPTS ];
     const SwTxtNode* m_pTxtNode;
 
-    void SeekFwd( const xub_StrLen nPos );
-    inline void SetFnt( SwFont* pNew ) { pFnt = pNew; }
+    void SeekFwd( const sal_Int32 nPos );
+    void SetFnt( SwFont* pNew ) { pFnt = pNew; }
 
 protected:
     void Chg( SwTxtAttr *pHt );
     void Rst( SwTxtAttr *pHt );
     void CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm* pFrm = 0 );
-    inline SwAttrIter(SwTxtNode* pTxtNode)
+    SwAttrIter(SwTxtNode* pTxtNode)
         : pShell(0), pFnt(0), pHints(0), pAttrSet(0), pScriptInfo(0), pLastOut(0), nChgCnt(0), pRedln(0), nPropFont(0), m_pTxtNode(pTxtNode)
         {
             aMagicNo[SW_LATIN] = aMagicNo[SW_CJK] = aMagicNo[SW_CTL] = NULL;
@@ -76,45 +76,45 @@ protected:
 
 public:
     // Constructor, destructor
-    inline SwAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf )
+    SwAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf )
         : pShell(0), pFnt(0), pHints(0), pScriptInfo(0), pLastOut(0), nChgCnt(0), pRedln(0),nPropFont(0), m_pTxtNode(&rTxtNode)
         { CtorInitAttrIter( rTxtNode, rScrInf ); }
 
     virtual ~SwAttrIter();
 
-    inline SwRedlineItr *GetRedln() { return pRedln; }
+    SwRedlineItr *GetRedln() { return pRedln; }
     // The parameter returns the position of the next change before or at the
     // char position.
-    xub_StrLen GetNextAttr( ) const;
+    sal_Int32 GetNextAttr( ) const;
     /// Enables the attributes used at char pos nPos in the logical font
-    sal_Bool Seek( const xub_StrLen nPos );
+    sal_Bool Seek( const sal_Int32 nPos );
     // Creates the font at the specified position via Seek() and checks
     // if it's a symbol font.
-    sal_Bool IsSymbol( const xub_StrLen nPos );
+    sal_Bool IsSymbol( const sal_Int32 nPos );
 
     /** Executes ChgPhysFnt if Seek() returns sal_True
      *  and change font to merge character border with neighbours.
     **/
-    sal_Bool SeekAndChgAttrIter( const xub_StrLen nPos, OutputDevice* pOut );
+    sal_Bool SeekAndChgAttrIter( const sal_Int32 nPos, OutputDevice* pOut );
     sal_Bool SeekStartAndChgAttrIter( OutputDevice* pOut, const sal_Bool bParaFont = sal_False );
 
     // Do we have an attribute change at all?
-    inline sal_Bool HasHints() const { return 0 != pHints; }
+    sal_Bool HasHints() const { return 0 != pHints; }
 
     // Returns the attribute for a position
-    SwTxtAttr *GetAttr( const xub_StrLen nPos ) const;
+    SwTxtAttr *GetAttr( const sal_Int32 nPos ) const;
 
-    inline const SwAttrSet* GetAttrSet() const { return pAttrSet; }
+    const SwAttrSet* GetAttrSet() const { return pAttrSet; }
 
-    inline const SwpHints *GetHints() const { return pHints; }
+    const SwpHints *GetHints() const { return pHints; }
 
-    inline SwFont *GetFnt() { return pFnt; }
-    inline const SwFont *GetFnt() const { return pFnt; }
+    SwFont *GetFnt() { return pFnt; }
+    const SwFont *GetFnt() const { return pFnt; }
 
-    inline sal_uInt8 GetPropFont() const { return nPropFont; }
-    inline void SetPropFont( const sal_uInt8 nNew ) { nPropFont = nNew; }
+    sal_uInt8 GetPropFont() const { return nPropFont; }
+    void SetPropFont( const sal_uInt8 nNew ) { nPropFont = nNew; }
 
-    inline SwAttrHandler& GetAttrHandler() { return aAttrHandler; }
+    SwAttrHandler& GetAttrHandler() { return aAttrHandler; }
 };
 
 #endif

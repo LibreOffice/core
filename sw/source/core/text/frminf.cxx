@@ -25,12 +25,12 @@
  *                   SwTxtMargin::GetTxtStart()
  *************************************************************************/
 
-xub_StrLen SwTxtMargin::GetTxtStart() const
+sal_Int32 SwTxtMargin::GetTxtStart() const
 {
     const OUString &rTxt = GetInfo().GetTxt();
-    const xub_StrLen nTmpPos = nStart;
-    const xub_StrLen nEnd = nTmpPos + pCurr->GetLen();
-    xub_StrLen i;
+    const sal_Int32 nTmpPos = nStart;
+    const sal_Int32 nEnd = nTmpPos + pCurr->GetLen();
+    sal_Int32 i;
 
     for( i = nTmpPos; i < nEnd; ++i )
     {
@@ -45,19 +45,19 @@ xub_StrLen SwTxtMargin::GetTxtStart() const
  *                   SwTxtMargin::GetTxtEnd()
  *************************************************************************/
 
-xub_StrLen SwTxtMargin::GetTxtEnd() const
+sal_Int32 SwTxtMargin::GetTxtEnd() const
 {
     const OUString &rTxt = GetInfo().GetTxt();
-    const xub_StrLen nTmpPos = nStart;
-    const xub_StrLen nEnd = nTmpPos + pCurr->GetLen();
+    const sal_Int32 nTmpPos = nStart;
+    const sal_Int32 nEnd = nTmpPos + pCurr->GetLen();
     sal_Int32 i;
     for( i = nEnd - 1; i >= nTmpPos; --i )
     {
         sal_Unicode aChar = rTxt[i];
         if( CH_TAB != aChar && CH_BREAK != aChar && ' ' != aChar )
-            return static_cast<xub_StrLen>(i + 1);
+            return static_cast<sal_Int32>(i + 1);
     }
-    return static_cast<xub_StrLen>(i + 1);
+    return static_cast<sal_Int32>(i + 1);
 }
 
 /*************************************************************************
@@ -112,7 +112,7 @@ sal_Bool SwTxtFrmInfo::IsFilled( const sal_uInt8 nPercent ) const
 // Where does the text start (without whitespace)? (document global)
 SwTwips SwTxtFrmInfo::GetLineStart( const SwTxtCursor &rLine ) const
 {
-    xub_StrLen nTxtStart = rLine.GetTxtStart();
+    sal_Int32 nTxtStart = rLine.GetTxtStart();
     SwTwips nStart;
     if( rLine.GetStart() == nTxtStart )
         nStart = rLine.GetLineStart();
@@ -141,7 +141,7 @@ SwTwips SwTxtFrmInfo::GetLineStart() const
 }
 
 // Calculates the character's position and returns the middle position
-SwTwips SwTxtFrmInfo::GetCharPos( xub_StrLen nChar, sal_Bool bCenter ) const
+SwTwips SwTxtFrmInfo::GetCharPos( sal_Int32 nChar, sal_Bool bCenter ) const
 {
     SWRECTFN( pFrm )
     SwFrmSwapper aSwapper( pFrm, sal_True );
@@ -182,7 +182,7 @@ SwTwips SwTxtFrmInfo::GetCharPos( xub_StrLen nChar, sal_Bool bCenter ) const
  *************************************************************************/
 
 SwPaM *AddPam( SwPaM *pPam, const SwTxtFrm* pTxtFrm,
-                const xub_StrLen nPos, const xub_StrLen nLen )
+                const sal_Int32 nPos, const sal_Int32 nLen )
 {
     if( nLen )
     {
@@ -218,7 +218,7 @@ void SwTxtFrmInfo::GetSpaces( SwPaM &rPam, sal_Bool bWithLineBreak ) const
 
         if( aLine.GetCurr()->GetLen() )
         {
-            xub_StrLen nPos = aLine.GetTxtStart();
+            sal_Int32 nPos = aLine.GetTxtStart();
             // Do NOT include the blanks/tabs from the first line
             // in the selection
             if( !bFirstLine && nPos > aLine.GetStart() )
@@ -251,7 +251,7 @@ void SwTxtFrmInfo::GetSpaces( SwPaM &rPam, sal_Bool bWithLineBreak ) const
 
 // Is there a bullet/symbol etc. at the text position?
 // Fonts: CharSet, SYMBOL und DONTKNOW
-sal_Bool SwTxtFrmInfo::IsBullet( xub_StrLen nTxtStart ) const
+sal_Bool SwTxtFrmInfo::IsBullet( sal_Int32 nTxtStart ) const
 {
     SwTxtSizeInfo aInf( (SwTxtFrm*)pFrm );
     SwTxtMargin aLine( (SwTxtFrm*)pFrm, &aInf );

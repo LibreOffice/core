@@ -37,6 +37,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
+#include <tools/string.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>

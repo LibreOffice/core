@@ -188,7 +188,7 @@ const SwBodyFrm *SwTxtFrm::FindBodyFrm() const
     return 0;
 }
 
-sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
+sal_Bool SwTxtFrm::CalcFollow( const sal_Int32 nTxtOfst )
 {
     SWAP_IF_SWAPPED( this )
 
@@ -557,7 +557,7 @@ com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > SwTxtFrm::GetT
  *************************************************************************/
 
 void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
-                             const xub_StrLen nOffset, const xub_StrLen nEnd,
+                             const sal_Int32 nOffset, const sal_Int32 nEnd,
                              const sal_uInt8 nMode )
 {
     SwFrmSwapper aSwapper( this, sal_False );
@@ -583,7 +583,7 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
     // Dancing on the volcano: We'll just format the last line quickly
     // for the QuoVadis stuff.
     // The Offset can move of course:
-    const xub_StrLen nNewOfst = ( IsInFtn() && ( !GetIndNext() || HasFollow() ) ) ?
+    const sal_Int32 nNewOfst = ( IsInFtn() && ( !GetIndNext() || HasFollow() ) ) ?
                             rLine.FormatQuoVadis(nOffset) : nOffset;
 
     if( !(nMode & 1) )
@@ -620,7 +620,7 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
     SwTxtFrm *pNxt = pFoll->GetFollow();
 
     // All footnotes of the to-be-destroyed Follow are relocated to us
-    xub_StrLen nStart = pFoll->GetOfst();
+    sal_Int32 nStart = pFoll->GetOfst();
     if ( pFoll->HasFtn() )
     {
         const SwpHints *pHints = pFoll->GetTxtNode()->GetpSwpHints();
@@ -660,7 +660,7 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
     }
 #endif
 
-    pFoll->MoveFlyInCnt( this, nStart, STRING_LEN );
+    pFoll->MoveFlyInCnt( this, nStart, COMPLETE_STRING );
     pFoll->SetFtn( sal_False );
     // #i27138#
     // notify accessibility paragraphs objects about changed CONTENT_FLOWS_FROM/_TO relation.
@@ -683,7 +683,7 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
     return pNxt;
 }
 
-SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
+SwCntntFrm *SwTxtFrm::SplitFrm( const sal_Int32 nTxtPos )
 {
     SWAP_IF_SWAPPED( this )
 
@@ -752,7 +752,7 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
     }
 #endif
 
-    MoveFlyInCnt( pNew, nTxtPos, STRING_LEN );
+    MoveFlyInCnt( pNew, nTxtPos, COMPLETE_STRING );
 
     // No SetOfst or CalcFollow, because an AdjustFollow follows immediately anyways
 
@@ -762,7 +762,7 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
     return pNew;
 }
 
-void SwTxtFrm::_SetOfst( const xub_StrLen nNewOfst )
+void SwTxtFrm::_SetOfst( const sal_Int32 nNewOfst )
 {
     // We do not need to invalidate out Follow.
     // We are a Follow, get formatted right away and call
@@ -969,19 +969,19 @@ sal_Bool SwTxtFrm::CalcPreps()
         if( pFrm->GetOfst() < nNew )\
             pFrm->MoveFlyInCnt( this, 0, nNew );\
         else if( pFrm->GetOfst() > nNew )\
-            MoveFlyInCnt( pFrm, nNew, STRING_LEN );\
+            MoveFlyInCnt( pFrm, nNew, COMPLETE_STRING );\
     }
 
 void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
                              WidowsAndOrphans &rFrmBreak,
-                             const xub_StrLen nStrLen,
+                             const sal_Int32 nStrLen,
                              const sal_Bool bDummy )
 {
     SWAP_IF_NOT_SWAPPED( this )
 
     SwParaPortion *pPara = rLine.GetInfo().GetParaPortion();
 
-    xub_StrLen nEnd = rLine.GetStart();
+    sal_Int32 nEnd = rLine.GetStart();
 
     sal_Bool bHasToFit = pPara->IsPrepMustFit();
 
@@ -1037,7 +1037,7 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
         // If we're done formatting, we set nEnd to the end.
         // AdjustFollow might execute JoinFrm() because of this.
         // Else, nEnd is the end of the last line in the Master.
-        xub_StrLen nOld = nEnd;
+        sal_Int32 nOld = nEnd;
         nEnd = rLine.GetEnd();
         if( GetFollow() )
         {
@@ -1147,7 +1147,7 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
             "SwTxtFrm::FormatLine( rLine, bPrev) with unswapped frame" );
     SwParaPortion *pPara = rLine.GetInfo().GetParaPortion();
     const SwLineLayout *pOldCur = rLine.GetCurr();
-    const xub_StrLen nOldLen    = pOldCur->GetLen();
+    const sal_Int32 nOldLen    = pOldCur->GetLen();
     const KSHORT nOldAscent = pOldCur->GetAscent();
     const KSHORT nOldHeight = pOldCur->Height();
     const SwTwips nOldWidth = pOldCur->Width() + pOldCur->GetHangingMargin();
@@ -1157,7 +1157,7 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
     if( rLine.GetCurr()->IsClipping() )
         rLine.CalcUnclipped( nOldTop, nOldBottom );
 
-    const xub_StrLen nNewStart = rLine.FormatLine( rLine.GetStart() );
+    const sal_Int32 nNewStart = rLine.FormatLine( rLine.GetStart() );
 
     OSL_ENSURE( Frm().Pos().Y() + Prt().Pos().Y() == rLine.GetFirstPos(),
             "SwTxtFrm::FormatLine: frame leaves orbit." );
@@ -1268,7 +1268,7 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
         return sal_True;
 
     // Reached the Reformat's end?
-    const xub_StrLen nEnd = pPara->GetReformat()->Start() +
+    const sal_Int32 nEnd = pPara->GetReformat()->Start() +
                         pPara->GetReformat()->Len();
 
     if( nNewStart <= nEnd )
@@ -1287,19 +1287,19 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
 
     // That was too complicated for the C30: aString( GetTxt() );
     const OUString &rString = GetTxtNode()->GetTxt();
-    const xub_StrLen nStrLen = rString.getLength();
+    const sal_Int32 nStrLen = rString.getLength();
 
     SwCharRange &rReformat = *(pPara->GetReformat());
     SwRepaint   &rRepaint = *(pPara->GetRepaint());
     SwRepaint *pFreeze = NULL;
 
-    // Due to performance reasons we set rReformat to STRING_LEN in Init()
+    // Due to performance reasons we set rReformat to COMPLETE_STRING in Init()
     // In this case we adjust rReformat
     if( rReformat.Len() > nStrLen )
         rReformat.Len() = nStrLen;
 
     // Optimized:
-    xub_StrLen nEnd = rReformat.Start() + rReformat.Len();
+    sal_Int32 nEnd = rReformat.Start() + rReformat.Len();
     if( nEnd > nStrLen )
     {
         rReformat.Len() = nStrLen - rReformat.Start();
@@ -1347,7 +1347,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
                     rLine.Top(); // So that NumDone doesn't get confused
                 break;
             }
-        xub_StrLen nNew = rLine.GetStart() + rLine.GetLength();
+        sal_Int32 nNew = rLine.GetStart() + rLine.GetLength();
         if( nNew )
         {
             --nNew;
@@ -1761,7 +1761,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
         return;
     }
 
-    const xub_StrLen nStrLen = GetTxtNode()->GetTxt().getLength();
+    const sal_Int32 nStrLen = GetTxtNode()->GetTxt().getLength();
     if ( nStrLen || !FormatEmpty() )
     {
 
@@ -1947,8 +1947,8 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
     if( aLine.GetDropFmt() )
         return sal_False;
 
-    xub_StrLen nStart = GetOfst();
-    const xub_StrLen nEnd = GetFollow()
+    sal_Int32 nStart = GetOfst();
+    const sal_Int32 nEnd = GetFollow()
                       ? GetFollow()->GetOfst() : aInf.GetTxt().getLength();
     do
     {
@@ -1966,7 +1966,7 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
     if( !bForceQuickFormat && nNewHeight != nOldHeight && !IsUndersized() )
     {
         // Attention: This situation can occur due to FormatLevel==12. Don't panic!
-        const xub_StrLen nStrt = GetOfst();
+        const sal_Int32 nStrt = GetOfst();
         _InvalidateRange( SwCharRange( nStrt, nEnd - nStrt) );
         return sal_False;
     }

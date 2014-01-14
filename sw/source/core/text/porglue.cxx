@@ -42,7 +42,7 @@ SwGluePortion::SwGluePortion( const KSHORT nInitFixWidth )
  *                virtual SwGluePortion::GetCrsrOfst()
  *************************************************************************/
 
-xub_StrLen SwGluePortion::GetCrsrOfst( const KSHORT nOfst ) const
+sal_Int32 SwGluePortion::GetCrsrOfst( const KSHORT nOfst ) const
 {
     if( !GetLen() || nOfst > GetLen() || !Width() )
         return SwLinePortion::GetCrsrOfst( nOfst );

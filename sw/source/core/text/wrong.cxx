@@ -48,8 +48,8 @@ SwWrongArea::SwWrongArea( const rtl::OUString& rType,
 
 SwWrongList::SwWrongList( WrongListType eType ) :
     meType       (eType),
-    nBeginInvalid(STRING_LEN),  // everything correct... (the invalid area starts beyond the string)
-    nEndInvalid  (STRING_LEN)
+    nBeginInvalid(COMPLETE_STRING),  // everything correct... (the invalid area starts beyond the string)
+    nEndInvalid  (COMPLETE_STRING)
 {
     maList.reserve( 5 );
 }
@@ -154,11 +154,11 @@ sal_Bool SwWrongList::Check( sal_Int32 &rChk, sal_Int32 &rLn ) const
 
     @param[in] rChk starting position of the word to check
 
-    @return starting position of incorrectly selected area, <STRING_LEN> otherwise
+    @return starting position of incorrectly selected area, <COMPLETE_STRING> otherwise
  */
 sal_Int32 SwWrongList::NextWrong( sal_Int32 nChk ) const
 {
-    sal_Int32 nRet = STRING_LEN;
+    sal_Int32 nRet = COMPLETE_STRING;
     sal_uInt16 nPos = GetWrongPos( nChk );
     if( nPos < Count() )
     {
@@ -168,7 +168,7 @@ sal_Int32 SwWrongList::NextWrong( sal_Int32 nChk ) const
             if( ++nPos < Count() )
                 nRet = Pos( nPos );
             else
-                nRet = STRING_LEN;
+                nRet = COMPLETE_STRING;
         }
     }
     if( nRet > GetBeginInv() && nChk < GetEndInv() )
@@ -296,7 +296,7 @@ void SwWrongList::Move( sal_Int32 nPos, sal_Int32 nDiff )
 
         if ( bJump )
             ++i;
-        if( STRING_LEN == GetBeginInv() )
+        if( COMPLETE_STRING == GetBeginInv() )
             SetInvalid( nPos ? nPos - 1 : nPos, nPos + 1 );
         else
         {
@@ -308,7 +308,7 @@ void SwWrongList::Move( sal_Int32 nPos, sal_Int32 nDiff )
     else
     {
         const sal_Int32 nEnd = nPos + nDiff;
-        if( STRING_LEN != GetBeginInv() )
+        if( COMPLETE_STRING != GetBeginInv() )
         {
             if( nBeginInvalid > nPos )
                 nBeginInvalid += nDiff;
@@ -419,7 +419,7 @@ sal_Bool SwWrongList::Fresh( sal_Int32 &rStart, sal_Int32 &rEnd, sal_Int32 nPos,
 
 void SwWrongList::Invalidate( sal_Int32 nBegin, sal_Int32 nEnd )
 {
-    if (STRING_LEN == GetBeginInv())
+    if (COMPLETE_STRING == GetBeginInv())
         SetInvalid( nBegin, nEnd );
     else
         _Invalidate( nBegin, nEnd );
@@ -465,7 +465,7 @@ SwWrongList* SwWrongList::SplitList( sal_Int32 nSplitPos )
         pRet->_Invalidate( nSplitPos ? nSplitPos - 1 : nSplitPos, nSplitPos );
         Remove( 0, nLst );
     }
-    if( STRING_LEN == GetBeginInv() )
+    if( COMPLETE_STRING == GetBeginInv() )
         SetInvalid( 0, 1 );
     else
     {

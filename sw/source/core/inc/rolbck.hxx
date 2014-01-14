@@ -120,8 +120,8 @@ class SwHistorySetTxt : public SwHistoryHint
     ::std::auto_ptr<SfxPoolItem> m_pAttr;
     SAL_WNODEPRECATED_DECLARATIONS_POP
     const sal_uLong m_nNodeIndex;
-    const xub_StrLen m_nStart;
-    const xub_StrLen m_nEnd;
+    const sal_Int32 m_nStart;
+    const sal_Int32 m_nEnd;
     bool m_bFormatIgnoreStart : 1;
     bool m_bFormatIgnoreEnd   : 1;
 
@@ -142,7 +142,7 @@ class SwHistorySetTxtFld : public SwHistoryHint
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
     sal_uLong m_nNodeIndex;
-    xub_StrLen m_nPos;
+    sal_Int32 m_nPos;
     sal_uInt16 m_nFldWhich;
 
 public:
@@ -158,8 +158,8 @@ class SwHistorySetRefMark : public SwHistoryHint
 {
     const OUString m_RefName;
     const sal_uLong m_nNodeIndex;
-    const xub_StrLen m_nStart;
-    const xub_StrLen m_nEnd;
+    const sal_Int32 m_nStart;
+    const sal_Int32 m_nEnd;
 
 public:
     SwHistorySetRefMark( SwTxtRefMark* pTxtHt, sal_uLong nNode );
@@ -173,8 +173,8 @@ class SwHistorySetTOXMark : public SwHistoryHint
     const OUString m_TOXName;
     const TOXTypes m_eTOXTypes;
     const sal_uLong m_nNodeIndex;
-    const xub_StrLen m_nStart;
-    const xub_StrLen m_nEnd;
+    const sal_Int32 m_nStart;
+    const sal_Int32 m_nEnd;
 
 public:
     SwHistorySetTOXMark( SwTxtTOXMark* pTxtHt, sal_uLong nNode );
@@ -186,18 +186,18 @@ public:
 class SwHistoryResetTxt : public SwHistoryHint
 {
     const sal_uLong m_nNodeIndex;
-    const xub_StrLen m_nStart;
-    const xub_StrLen m_nEnd;
+    const sal_Int32 m_nStart;
+    const sal_Int32 m_nEnd;
     const sal_uInt16 m_nAttr;
 
 public:
-    SwHistoryResetTxt( sal_uInt16 nWhich, xub_StrLen nStt, xub_StrLen nEnd,
+    SwHistoryResetTxt( sal_uInt16 nWhich, sal_Int32 nStt, sal_Int32 nEnd,
                        sal_uLong nNode );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
     sal_uInt16 GetWhich() const         { return m_nAttr; }
     sal_uLong GetNode() const           { return m_nNodeIndex; }
-    xub_StrLen GetCntnt() const     { return m_nStart; }
+    sal_Int32 GetCntnt() const     { return m_nStart; }
 
 };
 
@@ -208,7 +208,7 @@ class SwHistorySetFootnote : public SwHistoryHint
     SAL_WNODEPRECATED_DECLARATIONS_POP
     const OUString m_FootnoteNumber;
     sal_uLong m_nNodeIndex;
-    const xub_StrLen m_nStart;
+    const sal_Int32 m_nStart;
     const bool m_bEndNote;
 
 public:
@@ -263,8 +263,8 @@ class SwHistoryBookmark : public SwHistoryHint
         KeyCode m_aKeycode;
         const sal_uLong m_nNode;
         const sal_uLong m_nOtherNode;
-        const xub_StrLen m_nCntnt;
-        const xub_StrLen m_nOtherCntnt;
+        const sal_Int32 m_nCntnt;
+        const sal_Int32 m_nOtherCntnt;
         const bool m_bSavePos;
         const bool m_bSaveOtherPos;
         const bool m_bHadOtherPos;
@@ -288,19 +288,19 @@ public:
 class SwHistoryResetAttrSet : public SwHistoryHint
 {
     const sal_uLong m_nNodeIndex;
-    const xub_StrLen m_nStart;
-    const xub_StrLen m_nEnd;
+    const sal_Int32 m_nStart;
+    const sal_Int32 m_nEnd;
     std::vector<sal_uInt16> m_Array;
 
 public:
     SwHistoryResetAttrSet( const SfxItemSet& rSet, sal_uLong nNode,
-                        xub_StrLen nStt = STRING_MAXLEN,
-                        xub_StrLen nEnd = STRING_MAXLEN );
+                        sal_Int32 nStt,
+                        sal_Int32 nEnd);
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
     const std::vector<sal_uInt16>& GetArr() const { return m_Array; }
     sal_uLong GetNode() const               { return m_nNodeIndex; }
-    xub_StrLen GetCntnt() const         { return m_nStart; }
+    sal_Int32 GetCntnt() const         { return m_nStart; }
 
 };
 
@@ -308,7 +308,7 @@ class SwHistoryChangeFlyAnchor : public SwHistoryHint
 {
     SwFrmFmt & m_rFmt;
     const sal_uLong m_nOldNodeIndex;
-    const xub_StrLen m_nOldContentIndex;
+    const sal_Int32 m_nOldContentIndex;
 
 public:
     SwHistoryChangeFlyAnchor( SwFrmFmt& rFmt );
@@ -395,8 +395,8 @@ public:
     void CopyAttr(
         SwpHints* pHts,
         const sal_uLong nNodeIdx,
-        const xub_StrLen nStart,
-        const xub_StrLen nEnd,
+        const sal_Int32 nStart,
+        const sal_Int32 nEnd,
         const bool bCopyFields );
 
     void CopyFmtAttr( const SfxItemSet& rSet, sal_uLong nNodeIdx );
@@ -421,7 +421,7 @@ public:
 
     /// @return true if at least 1 item was inserted
     bool InsertItems( const SfxItemSet& rSet,
-        xub_StrLen const nStart, xub_StrLen const nEnd,
+        sal_Int32 const nStart, sal_Int32 const nEnd,
         SetAttrMode const nFlags );
 
     void AddHint( SwTxtAttr* pHt, const bool bNew = false );

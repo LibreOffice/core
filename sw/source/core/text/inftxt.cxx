@@ -226,7 +226,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
 }
 
 void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
-                   const xub_StrLen nNewIdx, const xub_StrLen nNewLen )
+                   const sal_Int32 nNewIdx, const sal_Int32 nNewLen )
 {
     m_pKanaComp = NULL;
     m_nKanaIdx = 0;
@@ -303,7 +303,7 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
 }
 
 SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const OUString* pTxt,
-                              const sal_Int32 nIndex, const xub_StrLen nLength )
+                              const sal_Int32 nIndex, const sal_Int32 nLength )
     : SwTxtInfo( rNew ),
       m_pKanaComp(((SwTxtSizeInfo&)rNew).GetpKanaComp()),
       m_pVsh(((SwTxtSizeInfo&)rNew).GetVsh()),
@@ -359,8 +359,8 @@ void SwTxtSizeInfo::NoteAnimation() const
 SwPosSize SwTxtSizeInfo::GetTxtSize( OutputDevice* pOutDev,
                                      const SwScriptInfo* pSI,
                                      const OUString& rTxt,
-                                     const xub_StrLen nIndex,
-                                     const xub_StrLen nLength,
+                                     const sal_Int32 nIndex,
+                                     const sal_Int32 nLength,
                                      const sal_uInt16 nComp ) const
 {
     SwDrawTextInfo aDrawInf( m_pVsh, *pOutDev, pSI, rTxt, nIndex, nLength );
@@ -392,8 +392,8 @@ SwPosSize SwTxtSizeInfo::GetTxtSize() const
     return m_pFnt->_GetTxtSize( aDrawInf );
 }
 
-void SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI, const xub_StrLen nIndex,
-                                const xub_StrLen nLength, const sal_uInt16 nComp,
+void SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI, const sal_Int32 nIndex,
+                                const sal_Int32 nLength, const sal_uInt16 nComp,
                                 sal_uInt16& nMinSize, sal_uInt16& nMaxSizeDiff ) const
 {
     SwDrawTextInfo aDrawInf( m_pVsh, *m_pOut, pSI, *m_pTxt, nIndex, nLength );
@@ -406,8 +406,8 @@ void SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI, const xub_StrLen nIndex
     nMinSize = aSize.Width();
 }
 
-xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
-                                       const xub_StrLen nMaxLen,
+sal_Int32 SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
+                                       const sal_Int32 nMaxLen,
                                        const sal_uInt16 nComp ) const
 {
     const SwScriptInfo& rScriptInfo =
@@ -425,10 +425,10 @@ xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
     return m_pFnt->GetTxtBreak( aDrawInf, nLineWidth );
 }
 
-xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
-                                       const xub_StrLen nMaxLen,
+sal_Int32 SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
+                                       const sal_Int32 nMaxLen,
                                        const sal_uInt16 nComp,
-                                       xub_StrLen& rExtraCharPos ) const
+                                       sal_Int32& rExtraCharPos ) const
 {
     const SwScriptInfo& rScriptInfo =
                      ( (SwParaPortion*)GetParaPortion() )->GetScriptInfo();
@@ -536,7 +536,7 @@ static sal_Bool lcl_IsDarkBackground( const SwTxtPaintInfo& rInf )
  *************************************************************************/
 
 void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor,
-                                const xub_StrLen nStart, const xub_StrLen nLength,
+                                const sal_Int32 nStart, const sal_Int32 nLength,
                                 const sal_Bool bKern, const sal_Bool bWrong,
                                 const sal_Bool bSmartTag,
                                 const sal_Bool bGrammarCheck )  // SMARTTAGS
@@ -1314,7 +1314,7 @@ sal_Bool SwTxtFormatInfo::InitHyph( const sal_Bool bAutoHyphen )
     sal_Bool bAuto = bAutoHyphen || rAttr.IsHyphen();
     if( bAuto || bInterHyph )
     {
-        nHyphStart = nHyphWrdStart = STRING_LEN;
+        nHyphStart = nHyphWrdStart = COMPLETE_STRING;
         nHyphWrdLen = 0;
 
         const sal_Int16 nMinimalLeading  = std::max(rAttr.GetMinLead(), sal_uInt8(2));
@@ -1425,7 +1425,7 @@ void SwTxtFormatInfo::Init()
     nWidth = nRealWidth;
     nForcedLeftMargin = 0;
     nSoftHyphPos = 0;
-    nUnderScorePos = STRING_LEN;
+    nUnderScorePos = COMPLETE_STRING;
     cHookChar = 0;
     SetIdx(0);
     SetLen( GetTxt().getLength() );
@@ -1454,7 +1454,7 @@ SwTxtFormatInfo::SwTxtFormatInfo( const SwTxtFormatInfo& rInf,
     pLastTab = NULL;
 
     nSoftHyphPos = 0;
-    nUnderScorePos = STRING_LEN;
+    nUnderScorePos = COMPLETE_STRING;
     nHyphStart = 0;
     nHyphWrdStart = 0;
     nHyphWrdLen = 0;
@@ -1515,11 +1515,11 @@ sal_Bool SwTxtFormatInfo::_CheckFtnPortion( SwLineLayout* pCurr )
     return bRet;
 }
 
-xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
-                                            const xub_StrLen nEnd )
+sal_Int32 SwTxtFormatInfo::ScanPortionEnd( const sal_Int32 nStart,
+                                            const sal_Int32 nEnd )
 {
     cHookChar = 0;
-    xub_StrLen i = nStart;
+    sal_Int32 i = nStart;
 
     //
     // Used for decimal tab handling:
@@ -1554,7 +1554,7 @@ xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
             return i;
 
         case CHAR_UNDERSCORE:
-            if ( STRING_LEN == nUnderScorePos )
+            if ( COMPLETE_STRING == nUnderScorePos )
                 nUnderScorePos = i;
             break;
 
@@ -1772,7 +1772,7 @@ SwFontSave::~SwFontSave()
         if( pIter )
         {
             pIter->SetFnt( pFnt );
-            pIter->nPos = STRING_LEN;
+            pIter->nPos = COMPLETE_STRING;
         }
     }
 }

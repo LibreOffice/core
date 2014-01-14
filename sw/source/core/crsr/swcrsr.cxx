@@ -422,7 +422,7 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
                 ( nsSwCursorSelOverFlags::SELOVER_TOGGLE & eFlags )
                 ? pSavePos->nNode
                 : GetMark()->nNode.GetIndex();
-            const xub_StrLen nRefContentIdx =
+            const sal_Int32 nRefContentIdx =
                 ( nsSwCursorSelOverFlags::SELOVER_TOGGLE & eFlags )
                 ? pSavePos->nCntnt
                 : GetMark()->nContent.GetIndex();
@@ -433,14 +433,14 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
 
             if ( pInputFldTxtAttrAtPoint != NULL )
             {
-                const xub_StrLen nNewPointPos =
+                const sal_Int32 nNewPointPos =
                     bIsForwardSelection ? *(pInputFldTxtAttrAtPoint->End()) : *(pInputFldTxtAttrAtPoint->GetStart());
                 GetPoint()->nContent.Assign( pTxtNdAtPoint, nNewPointPos );
             }
 
             if ( pInputFldTxtAttrAtMark != NULL )
             {
-                const xub_StrLen nNewMarkPos =
+                const sal_Int32 nNewMarkPos =
                     bIsForwardSelection ? *(pInputFldTxtAttrAtMark->GetStart()) : *(pInputFldTxtAttrAtMark->End());
                 GetMark()->nContent.Assign( pTxtNdAtMark, nNewMarkPos );
             }
@@ -1197,7 +1197,7 @@ sal_Bool SwCursor::IsInWordWT( sal_Int16 nWordType ) const
         if(bRet)
         {
             const CharClass& rCC = GetAppCharClass();
-            bRet = rCC.isLetterNumeric( pTxtNd->GetTxt(), static_cast<xub_StrLen>(aBoundary.startPos) );
+            bRet = rCC.isLetterNumeric( pTxtNd->GetTxt(), static_cast<sal_Int32>(aBoundary.startPos) );
         }
     }
     return bRet;
@@ -1409,7 +1409,7 @@ static OUString lcl_MaskDeletedRedlines( const SwTxtNode* pTxtNd )
 
                 if( nsRedlineType_t::REDLINE_DELETE == pRed->GetType() )
                 {
-                    xub_StrLen nStart, nEnd;
+                    sal_Int32 nStart, nEnd;
                     pRed->CalcStartEnd( pTxtNd->GetIndex(), nStart, nEnd );
 
                     while ( nStart < nEnd && nStart < sNodeText.getLength() )

@@ -2320,8 +2320,8 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                     sal_Bool bHidden = rTxtNode.IsHidden();
                     if ( !bHidden )
                     {
-                        xub_StrLen nHiddenStart;
-                        xub_StrLen nHiddenEnd;
+                        sal_Int32 nHiddenStart;
+                        sal_Int32 nHiddenEnd;
 
                         SwPosition aPosition( pTxtFld->GetTxtNode() );
                         aPosition.nContent = *pTxtFld->GetStart();

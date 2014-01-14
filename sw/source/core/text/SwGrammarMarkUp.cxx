@@ -69,7 +69,7 @@ SwGrammarMarkUp* SwGrammarMarkUp::SplitGrammarList( sal_Int32 nSplitPos )
     {
         if( !pNew ) {
             pNew = new SwGrammarMarkUp();
-            pNew->SetInvalid( 0, STRING_LEN );
+            pNew->SetInvalid( 0, COMPLETE_STRING );
         }
         pNew->maSentence.insert( pNew->maSentence.begin(), maSentence.begin(), pIter );
         maSentence.erase( maSentence.begin(), pIter );
@@ -96,7 +96,7 @@ void SwGrammarMarkUp::JoinGrammarList( SwGrammarMarkUp* pNext, sal_Int32 nInsert
 
 void SwGrammarMarkUp::ClearGrammarList( sal_Int32 nSentenceEnd )
 {
-    if( STRING_LEN == nSentenceEnd ) {
+    if( COMPLETE_STRING == nSentenceEnd ) {
         ClearList();
         maSentence.clear();
         Validate();
@@ -113,7 +113,7 @@ void SwGrammarMarkUp::ClearGrammarList( sal_Int32 nSentenceEnd )
             ++pLast;
         maSentence.erase( pIter, pLast );
         RemoveEntry( nStart, nSentenceEnd );
-        SetInvalid( nSentenceEnd + 1, STRING_LEN );
+        SetInvalid( nSentenceEnd + 1, COMPLETE_STRING );
     }
 }
 
@@ -143,13 +143,13 @@ sal_Int32 SwGrammarMarkUp::getSentenceStart( sal_Int32 nPos )
 sal_Int32 SwGrammarMarkUp::getSentenceEnd( sal_Int32 nPos )
 {
     if( !maSentence.size() )
-        return STRING_LEN;
+        return COMPLETE_STRING;
     std::vector< sal_Int32 >::iterator pIter = maSentence.begin();
     while( pIter != maSentence.end() && *pIter <= nPos )
         ++pIter;
     if( pIter != maSentence.end() )
         return *pIter;
-    return STRING_LEN;
+    return COMPLETE_STRING;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

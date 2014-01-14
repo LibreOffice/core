@@ -103,7 +103,7 @@ SwTxtFrm *GetAdjFrmAtPos( SwTxtFrm *pFrm, const SwPosition &rPos,
     return pFrmAtPos ? pFrmAtPos : pFrm;
 }
 
-bool sw_ChangeOffset( SwTxtFrm* pFrm, xub_StrLen nNew )
+bool sw_ChangeOffset( SwTxtFrm* pFrm, sal_Int32 nNew )
 {
     // Do not scroll in areas and outside of flies
     OSL_ENSURE( !pFrm->IsFollow(), "Illegal Scrolling by Follow!" );
@@ -142,7 +142,7 @@ bool sw_ChangeOffset( SwTxtFrm* pFrm, xub_StrLen nNew )
  *                      GetFrmAtOfst(), GetFrmAtPos()
  *************************************************************************/
 
-SwTxtFrm& SwTxtFrm::GetFrmAtOfst( const xub_StrLen nWhere )
+SwTxtFrm& SwTxtFrm::GetFrmAtOfst( const sal_Int32 nWhere )
 {
     SwTxtFrm* pRet = this;
     while( pRet->HasFollow() && nWhere >= pRet->GetFollow()->GetOfst() )
@@ -610,17 +610,17 @@ sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
             while( aLine.GetLineNr() > 1 )
                 aLine.Prev();
 
-        xub_StrLen nOffset = aLine.GetCrsrOfst( pPos, rPoint, bChgFrm, pCMS );
+        sal_Int32 nOffset = aLine.GetCrsrOfst( pPos, rPoint, bChgFrm, pCMS );
 
         if( pCMS && pCMS->eState == MV_NONE && aLine.GetEnd() == nOffset )
             ((SwCrsrMoveState*)pCMS)->eState = MV_RIGHTMARGIN;
 
     // pPos is a pure IN parameter and must not be evaluated.
-    // pIter->GetCrsrOfst returns from a nesting with STRING_LEN.
+    // pIter->GetCrsrOfst returns from a nesting with COMPLETE_STRING.
     // If SwTxtIter::GetCrsrOfst calls GetCrsrOfst further by itself
     // nNode changes the position.
     // In such cases, pPos must not be calculated.
-        if( STRING_LEN != nOffset )
+        if( COMPLETE_STRING != nOffset )
         {
             SwTxtNode* pTxtNd = ((SwTxtFrm*)this)->GetTxtNode();
             pPos->nNode = *pTxtNd;
@@ -705,7 +705,7 @@ sal_Bool SwTxtFrm::LeftMargin(SwPaM *pPam) const
     SwTxtFrm *pFrm = GetAdjFrmAtPos( (SwTxtFrm*)this, *pPam->GetPoint(),
                                      SwTxtCursor::IsRightMargin() );
     pFrm->GetFormatted();
-    xub_StrLen nIndx;
+    sal_Int32 nIndx;
     if ( pFrm->IsEmpty() )
         nIndx = 0;
     else
@@ -744,7 +744,7 @@ sal_Bool SwTxtFrm::RightMargin(SwPaM *pPam, sal_Bool bAPI) const
     SwTxtFrm *pFrm = GetAdjFrmAtPos( (SwTxtFrm*)this, *pPam->GetPoint(),
                                      SwTxtCursor::IsRightMargin() );
     pFrm->GetFormatted();
-    xub_StrLen nRightMargin;
+    sal_Int32 nRightMargin;
     if ( IsEmpty() )
         nRightMargin = 0;
     else
@@ -810,10 +810,10 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
 
     if( !IsEmpty() && !IsHiddenNow() )
     {
-        xub_StrLen nFormat = STRING_LEN;
+        sal_Int32 nFormat = COMPLETE_STRING;
         do
         {
-            if( nFormat != STRING_LEN && !IsFollow() )
+            if( nFormat != COMPLETE_STRING && !IsFollow() )
                 sw_ChangeOffset( ((SwTxtFrm*)this), nFormat );
 
             SwTxtSizeInfo aInf( (SwTxtFrm*)this );
@@ -826,7 +826,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
                 aLine.Top();
 
             const SwLineLayout *pPrevLine = aLine.GetPrevLine();
-            const xub_StrLen nStart = aLine.GetStart();
+            const sal_Int32 nStart = aLine.GetStart();
             aLine.GetCharRect( &aCharBox, nPos );
 
             bool bSecondOfDouble = ( aInf.IsMulti() && ! aInf.IsFirstMulti() );
@@ -835,7 +835,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
             if( !pPrevLine && !bSecondOfDouble && GetOfst() && !IsFollow() )
             {
                 nFormat = GetOfst();
-                xub_StrLen nDiff = aLine.GetLength();
+                sal_Int32 nDiff = aLine.GetLength();
                 if( !nDiff )
                     nDiff = MIN_OFFSET_STEP;
                 if( nFormat > nDiff )
@@ -866,7 +866,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
                 const sal_uLong nOldNode = pPam->GetPoint()->nNode.GetIndex();
 #endif
                 // The node should not be changed
-                xub_StrLen nTmpOfst = aLine.GetCrsrOfst( pPam->GetPoint(),
+                sal_Int32 nTmpOfst = aLine.GetCrsrOfst( pPam->GetPoint(),
                                                          aCharBox.Pos(), sal_False );
 #if OSL_DEBUG_LEVEL > 0
                 OSL_ENSURE( nOldNode == pPam->GetPoint()->nNode.GetIndex(),
@@ -899,7 +899,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
     if ( IsFollow() )
     {
         const SwTxtFrm *pTmpPrev = FindMaster();
-        xub_StrLen nOffs = GetOfst();
+        sal_Int32 nOffs = GetOfst();
         if( pTmpPrev )
         {
             SwViewShell *pSh = getRootFrm()->GetCurrShell();
@@ -1206,10 +1206,10 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
 
     if ( !IsEmpty() && !IsHiddenNow() )
     {
-        xub_StrLen nFormat = STRING_LEN;
+        sal_Int32 nFormat = COMPLETE_STRING;
         do
         {
-            if( nFormat != STRING_LEN && !IsFollow() &&
+            if( nFormat != COMPLETE_STRING && !IsFollow() &&
                 !sw_ChangeOffset( ((SwTxtFrm*)this), nFormat ) )
                 break;
 
@@ -1220,7 +1220,7 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
             aLine.CharCrsrToLine( nPos );
 
             const SwLineLayout* pNextLine = aLine.GetNextLine();
-            const xub_StrLen nStart = aLine.GetStart();
+            const sal_Int32 nStart = aLine.GetStart();
             aLine.GetCharRect( &aCharBox, nPos );
 
             bool bFirstOfDouble = ( aInf.IsMulti() && aInf.IsFirstMulti() );
@@ -1235,7 +1235,7 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
                 if ( pNextLine && ! bFirstOfDouble )
                     aLine.NextLine();
 
-                xub_StrLen nTmpOfst = aLine.GetCrsrOfst( pPam->GetPoint(),
+                sal_Int32 nTmpOfst = aLine.GetCrsrOfst( pPam->GetPoint(),
                                  aCharBox.Pos(), sal_False );
 #if OSL_DEBUG_LEVEL > 0
                 OSL_ENSURE( nOldNode == pPam->GetPoint()->nNode.GetIndex(),
@@ -1282,8 +1282,8 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
                 {
                     if( nFormat <= GetOfst() )
                     {
-                        nFormat = std::min( xub_StrLen( GetOfst() + MIN_OFFSET_STEP ),
-                                       static_cast<xub_StrLen>(nTmpLen) );
+                        nFormat = std::min( sal_Int32( GetOfst() + MIN_OFFSET_STEP ),
+                                       static_cast<sal_Int32>(nTmpLen) );
                         if( nFormat <= GetOfst() )
                             break;
                     }

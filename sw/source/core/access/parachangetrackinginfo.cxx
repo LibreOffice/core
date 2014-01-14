@@ -69,10 +69,10 @@ namespace {
             return;
         }
 
-        const xub_StrLen nTxtFrmTextStartPos = rTxtFrm.IsFollow()
+        const sal_Int32 nTxtFrmTextStartPos = rTxtFrm.IsFollow()
                                                ? rTxtFrm.GetOfst()
                                                : 0;
-        const xub_StrLen nTxtFrmTextEndPos = rTxtFrm.HasFollow()
+        const sal_Int32 nTxtFrmTextEndPos = rTxtFrm.HasFollow()
                                              ? rTxtFrm.GetFollow()->GetOfst()
                                              : rTxtFrm.GetTxt().getLength();
 
@@ -89,8 +89,8 @@ namespace {
                 break;
             }
 
-            xub_StrLen nTxtNodeChangeTrackStart( STRING_LEN );
-            xub_StrLen nTxtNodeChangeTrackEnd( STRING_LEN );
+            sal_Int32 nTxtNodeChangeTrackStart(COMPLETE_STRING);
+            sal_Int32 nTxtNodeChangeTrackEnd(COMPLETE_STRING);
             pActRedline->CalcStartEnd( rTxtNode.GetIndex(),
                                        nTxtNodeChangeTrackStart,
                                        nTxtNodeChangeTrackEnd );

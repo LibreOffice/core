@@ -78,7 +78,7 @@ namespace SwUnoCursorHelper
     };
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >
-        GetNestedTextContent(SwTxtNode & rTextNode, xub_StrLen const nIndex,
+        GetNestedTextContent(SwTxtNode & rTextNode, sal_Int32 const nIndex,
             bool const bParent);
 
     bool                    getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry

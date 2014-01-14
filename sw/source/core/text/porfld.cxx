@@ -76,7 +76,7 @@ void SwFldPortion::TakeNextOffset( const SwFldPortion* pFld )
 }
 
 SwFldPortion::SwFldPortion( const OUString &rExpand, SwFont *pFont, bool bPlaceHold )
-    : aExpand(rExpand), pFnt(pFont), nNextOffset(0), nNextScriptChg(STRING_LEN), nViewWidth(0),
+    : aExpand(rExpand), pFnt(pFont), nNextOffset(0), nNextScriptChg(COMPLETE_STRING), nViewWidth(0),
       bFollow( sal_False ), bHasFollow( sal_False ), bPlaceHolder( bPlaceHold )
     , m_bNoLength( sal_False )
 {
@@ -200,10 +200,10 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
         sal_uInt16 nScript;
         {
             nScript = g_pBreakIt->GetBreakIter()->getScriptType( aTxt, 0 );
-            xub_StrLen nChg = 0;
+            sal_Int32 nChg = 0;
             if( i18n::ScriptType::WEAK == nScript )
             {
-                nChg =(xub_StrLen)g_pBreakIt->GetBreakIter()->endOfScript(aTxt,0,nScript);
+                nChg = g_pBreakIt->GetBreakIter()->endOfScript(aTxt,0,nScript);
                 if( nChg < aTxt.getLength() )
                     nScript = g_pBreakIt->GetBreakIter()->getScriptType( aTxt, nChg );
             }
@@ -212,7 +212,7 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
             // nNextScriptChg will be evaluated during SwFldPortion::Format()
             //
             if ( nChg < aTxt.getLength() )
-                nNextScriptChg = (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfScript( aTxt, nChg, nScript );
+                nNextScriptChg = g_pBreakIt->GetBreakIter()->endOfScript( aTxt, nChg, nScript );
             else
                 nNextScriptChg = aTxt.getLength();
 
@@ -242,7 +242,7 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
             UBiDiLevel nCurrDir;
             ubidi_getLogicalRun( pBidi, 0, &nEnd, &nCurrDir );
             ubidi_close( pBidi );
-            const xub_StrLen nNextDirChg = (xub_StrLen)nEnd;
+            const sal_Int32 nNextDirChg = nEnd;
             nNextScriptChg = std::min( nNextScriptChg, nNextDirChg );
 
             // #i89825# change the script type also to CTL
@@ -295,7 +295,7 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
 sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
 {
     // Scope wegen aDiffTxt::DTOR!
-    xub_StrLen nRest;
+    sal_Int32 nRest;
     sal_Bool bFull;
     bool bEOL = false;
     long nTxtRest = rInf.GetTxt().getLength() - rInf.GetIdx();
@@ -307,8 +307,8 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
         // Field portion has to be split in several parts if
         // 1. There are script/direction changes inside the field
         // 2. There are portion breaks (tab, break) inside the field:
-        const xub_StrLen nOldFullLen = rInf.GetLen();
-        xub_StrLen nFullLen = rInf.ScanPortionEnd( rInf.GetIdx(), rInf.GetIdx() + nOldFullLen ) - rInf.GetIdx();
+        const sal_Int32 nOldFullLen = rInf.GetLen();
+        sal_Int32 nFullLen = rInf.ScanPortionEnd( rInf.GetIdx(), rInf.GetIdx() + nOldFullLen ) - rInf.GetIdx();
         if ( nNextScriptChg < nFullLen )
         {
             nFullLen = nNextScriptChg;
@@ -316,7 +316,7 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
         }
         rInf.SetLen( nFullLen );
 
-        if ( STRING_LEN != rInf.GetUnderScorePos() &&
+        if ( COMPLETE_STRING != rInf.GetUnderScorePos() &&
              rInf.GetUnderScorePos() > rInf.GetIdx() )
              rInf.SetUnderScorePos( rInf.GetIdx() );
 
@@ -342,7 +342,7 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
         }
         else
         {
-            xub_StrLen nOldLineStart = rInf.GetLineStart();
+            sal_Int32 nOldLineStart = rInf.GetLineStart();
             if( IsFollow() )
                 rInf.SetLineStart( 0 );
             rInf.SetNotEOL( nFullLen == nOldFullLen && nTxtRest > nFollow );
@@ -358,7 +358,7 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
             rInf.SetNotEOL( false );
             rInf.SetLineStart( nOldLineStart );
         }
-        xub_StrLen nTmpLen = GetLen();
+        sal_Int32 nTmpLen = GetLen();
         bEOL = !nTmpLen && nFollow && bFull;
         nRest = nOldFullLen - nTmpLen;
 
@@ -543,7 +543,7 @@ SwNumberPortion::SwNumberPortion( const OUString &rExpand,
     SetCenter( bCntr );
 }
 
-xub_StrLen SwNumberPortion::GetCrsrOfst( const MSHORT ) const
+sal_Int32 SwNumberPortion::GetCrsrOfst( const MSHORT ) const
 {
     return 0;
 }

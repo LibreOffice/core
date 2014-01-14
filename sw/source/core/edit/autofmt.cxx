@@ -20,6 +20,7 @@
 #include <ctype.h>
 #include <hintids.hxx>
 
+#include <tools/string.hxx>
 #include <unotools/charclass.hxx>
 
 #include <vcl/msgbox.hxx>

@@ -418,7 +418,7 @@ void SwTxtCursor::CtorInitTxtCursor( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
 
 // 1170: Ancient bug: Shift-End forgets the last character ...
 
-sal_Bool SwTxtCursor::GetEndCharRect( SwRect* pOrig, const xub_StrLen nOfst,
+sal_Bool SwTxtCursor::GetEndCharRect( SwRect* pOrig, const sal_Int32 nOfst,
                                   SwCrsrMoveState* pCMS, const long nMax )
 {
     // 1170: Ambiguity of document positions
@@ -496,7 +496,7 @@ sal_Bool SwTxtCursor::GetEndCharRect( SwRect* pOrig, const xub_StrLen nOfst,
  * value = real height of (shortened) cursor
  *************************************************************************/
 
-void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
+void SwTxtCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
     SwCrsrMoveState* pCMS )
 {
     const OUString aText = GetInfo().GetTxt();
@@ -735,7 +735,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         // In a multi-portion we use GetCharRect()-function
                         // recursively and must add the x-position
                         // of the multi-portion.
-                        xub_StrLen nOldStart = nStart;
+                        sal_Int32 nOldStart = nStart;
                         SwTwips nOldY = nY;
                         sal_uInt8 nOldProp = GetPropFont();
                         nStart = aInf.GetIdx();
@@ -905,7 +905,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                     }
                     if ( pPor->PrtWidth() )
                     {
-                        xub_StrLen nOldLen = pPor->GetLen();
+                        sal_Int32 nOldLen = pPor->GetLen();
                         pPor->SetLen( nOfst - aInf.GetIdx() );
                         aInf.SetLen( pPor->GetLen() );
                         if( nX || !pPor->InNumberGrp() )
@@ -1099,7 +1099,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                     else
                     {
                         const bool bOldOnWin = aInf.OnWin();
-                        xub_StrLen nOldLen = pPor->GetLen();
+                        sal_Int32 nOldLen = pPor->GetLen();
                         pPor->SetLen( 1 );
                         aInf.SetLen( pPor->GetLen() );
                         SeekAndChg( aInf );
@@ -1198,7 +1198,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
  *                      SwTxtCursor::GetCharRect()
  *************************************************************************/
 
-sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
+sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
                                SwCrsrMoveState* pCMS, const long nMax )
 {
     CharCrsrToLine(nOfst);
@@ -1206,7 +1206,7 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
     // Indicates that a position inside a special portion (field, number portion)
     // is requested.
     const sal_Bool bSpecialPos = pCMS && pCMS->pSpecialPos;
-    xub_StrLen nFindOfst = nOfst;
+    sal_Int32 nFindOfst = nOfst;
 
     if ( bSpecialPos )
     {
@@ -1291,14 +1291,14 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
  *
  * Return: Offset in String
  *************************************************************************/
-xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
+sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                      const MSHORT nChgNode, SwCrsrMoveState* pCMS ) const
 {
     // If necessary, as catch up, do the adjustment
     GetAdjusted();
 
     const OUString &rText = GetInfo().GetTxt();
-    xub_StrLen nOffset = 0;
+    sal_Int32 nOffset = 0;
 
     // x is the horizontal offset within the line.
     SwTwips x = rPoint.X();
@@ -1324,12 +1324,12 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
     // If there are attribut changes in the line, search for the paragraph,
     // in which nX is situated.
     SwLinePortion *pPor = pCurr->GetFirstPortion();
-    xub_StrLen nCurrStart  = nStart;
+    sal_Int32 nCurrStart  = nStart;
     sal_Bool bHolePortion = sal_False;
     sal_Bool bLastHyph = sal_False;
 
     std::deque<sal_uInt16> *pKanaComp = pCurr->GetpKanaComp();
-    xub_StrLen nOldIdx = GetInfo().GetIdx();
+    sal_Int32 nOldIdx = GetInfo().GetIdx();
     MSHORT nSpaceIdx = 0;
     size_t nKanaIdx = 0;
     long nSpaceAdd = pCurr->IsSpaceAdd() ? pCurr->GetLLSpaceAdd( 0 ) : 0;
@@ -1440,7 +1440,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
 
     ((SwTxtSizeInfo&)GetInfo()).SetIdx( nOldIdx );
 
-    xub_StrLen nLength = pPor->GetLen();
+    sal_Int32 nLength = pPor->GetLen();
 
     sal_Bool bFieldInfo = pCMS && pCMS->bFieldInfo;
 
@@ -1692,7 +1692,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 }
 
                 if ( pPor->InFldGrp() && pCMS && pCMS->pSpecialPos )
-                    aDrawInf.SetLen( STRING_LEN ); // SMARTTAGS
+                    aDrawInf.SetLen( COMPLETE_STRING ); // SMARTTAGS
 
                 aDrawInf.SetSpace( nSpaceAdd );
                 aDrawInf.SetFont( aSizeInf.GetFont() );
@@ -1733,7 +1733,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 && !( (SwFlyCntPortion*)pPor )->IsDraw() )
             {
                 // JP 24.11.94: if the Position is not in Fly, then
-                //              we many not return with STRING_LEN as value!
+                //              we many not return with COMPLETE_STRING as value!
                 //              (BugId: 9692 + Change in feshview)
                 SwFlyInCntFrm *pTmp = ( (SwFlyCntPortion*)pPor )->GetFlyFrm();
                 sal_Bool bChgNode = 1 < nChgNode;
@@ -1762,8 +1762,8 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                     ((SwTxtSizeInfo*)pInf)->SelectFont();
 
                     // 6776: The pIter->GetCrsrOfst is returning here
-                    // from a nesting with STRING_LEN.
-                    return STRING_LEN;
+                    // from a nesting with COMPLETE_STRING.
+                    return COMPLETE_STRING;
                 }
             }
             else

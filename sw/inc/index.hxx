@@ -23,7 +23,6 @@
 
 #include "rtl/instance.hxx"
 #include <tools/solar.h>
-#include <tools/string.hxx>
 #include <tools/rtti.hxx>
 #include <swdllapi.h>
 

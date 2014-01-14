@@ -52,7 +52,7 @@ class SwTxtFrm: public SwCntntFrm
     friend class SwTestFormat;
     friend class WidowsAndOrphans;
     friend class SwTxtFrmLocker;        // duerfen Lock()/Unlock()
-    friend bool sw_ChangeOffset( SwTxtFrm* pFrm, xub_StrLen nNew );
+    friend bool sw_ChangeOffset( SwTxtFrm* pFrm, sal_Int32 nNew );
 
     static SwCache *pTxtCache;  //Pointer auf den Line-Cache
     static long nMinPrtLine;    //Diese Linie darf beim Drucken nicht
@@ -77,17 +77,17 @@ class SwTxtFrm: public SwCntntFrm
     SwTwips mnAdditionalFirstLineOffset;
 
 
-    xub_StrLen nOfst;           //nOfst gibt den Offset im Cntnt (Anzahl Zeichen) an.
+    sal_Int32 nOfst;           //nOfst gibt den Offset im Cntnt (Anzahl Zeichen) an.
 
     sal_uInt16 nCacheIdx;           //Index in den Cache, USHRT_MAX wenn definitiv
                                 //kein passendes Objekt im Cache steht.
 
     //Teilt den Master ab und erzeugt einen Follow oder passt die
     //Daten im Follow an.
-           void _AdjustFollow( SwTxtFormatter &rLine, const xub_StrLen nOffset,
-                               const xub_StrLen nStrEnd, const sal_uInt8 nMode );
-    inline void AdjustFollow( SwTxtFormatter &rLine, const xub_StrLen nOffset,
-                              const xub_StrLen nStrEnd, const sal_uInt8 nMode );
+           void _AdjustFollow( SwTxtFormatter &rLine, const sal_Int32 nOffset,
+                               const sal_Int32 nStrEnd, const sal_uInt8 nMode );
+    inline void AdjustFollow( SwTxtFormatter &rLine, const sal_Int32 nOffset,
+                              const sal_Int32 nStrEnd, const sal_uInt8 nMode );
 
     //Iteriert ueber alle Zeilen und stellt das Linespacing
     //entsprechend dem Attribut ein.
@@ -104,7 +104,7 @@ class SwTxtFrm: public SwCntntFrm
 
     // WidowsAndOrphans, AdjustFrm, AdjustFollow
     void FormatAdjust( SwTxtFormatter &rLine, WidowsAndOrphans &rFrmBreak,
-                       const xub_StrLen nStrLen, const sal_Bool bDummy );
+                       const sal_Int32 nStrLen, const sal_Bool bDummy );
 
     sal_Bool bLocked        : 1;        // im Format?
     sal_Bool bFormatted     : 1;        // nach Format auf sal_True
@@ -134,7 +134,7 @@ class SwTxtFrm: public SwCntntFrm
     inline void SetEmpty( const sal_Bool bNew ) { bEmpty = bNew; }
     inline void SetFieldFollow( const sal_Bool bNew ) { bFieldFollow = bNew; }
 
-    sal_Bool IsIdxInside( const xub_StrLen nPos, const xub_StrLen nLen ) const;
+    sal_Bool IsIdxInside( const sal_Int32 nPos, const sal_Int32 nLen ) const;
 
     // Wechselt den Frame oder auch nicht (vgl. FlyCnt)
     sal_Bool _GetCrsrOfst(SwPosition *pPos, const Point &rPoint,
@@ -152,10 +152,10 @@ class SwTxtFrm: public SwCntntFrm
     void FormatOnceMore( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf );
 
     // formatiert den Follow und sorgt fuer die Entsorgung bei Orphans
-    sal_Bool CalcFollow(  const xub_StrLen nTxtOfst );
+    sal_Bool CalcFollow(  const sal_Int32 nTxtOfst );
 
     // korrigiert die Stelle ab der formatiert werden muss.
-    xub_StrLen FindBrk(const OUString &rTxt, const sal_Int32 nStart,
+    sal_Int32 FindBrk(const OUString &rTxt, const sal_Int32 nStart,
                                        const sal_Int32 nEnd) const;
 
     // inline-Weiche
@@ -206,10 +206,10 @@ class SwTxtFrm: public SwCntntFrm
 
     // ST2
     SwWrongList* _SmartTagScan ( OUString aTxtToScan, SwWrongList *pSmartTagList,
-                                 xub_StrLen nBegin,xub_StrLen nEnd,
-                                 xub_StrLen nInsertPos, xub_StrLen nActPos,
-                                 xub_StrLen &nChgStart, xub_StrLen &nChgEnd,
-                                 xub_StrLen &nInvStart, xub_StrLen &nInvEnd);
+                                 sal_Int32 nBegin,sal_Int32 nEnd,
+                                 sal_Int32 nInsertPos, sal_Int32 nActPos,
+                                 sal_Int32 &nChgStart, sal_Int32 &nChgEnd,
+                                 sal_Int32 &nInvStart, sal_Int32 &nInvEnd);
 protected:
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 
@@ -221,11 +221,11 @@ public:
     void Init();
 
     // Wird von FormatSpelling( ) gerufen
-    SwRect _AutoSpell( const SwCntntNode*, const SwViewOption&, xub_StrLen );
+    SwRect _AutoSpell( const SwCntntNode*, const SwViewOption&, sal_Int32 );
     // is called from the FormatSpelling( ) method
-    SwRect SmartTagScan( SwCntntNode* , xub_StrLen );
+    SwRect SmartTagScan( SwCntntNode* , sal_Int32 );
     // Wird vom CollectAutoCmplWords gerufen
-    void CollectAutoCmplWrds( SwCntntNode* , xub_StrLen );
+    void CollectAutoCmplWrds( SwCntntNode* , sal_Int32 );
 
     // Returns the screen position of rPos. The values are relative to the upper
     // left position of the page frame.
@@ -302,16 +302,16 @@ public:
                             sal_Bool& bRight, sal_Bool bInsertCrsr );
 
     // Methoden zur Verwaltung von FolgeFrames
-           SwCntntFrm *SplitFrm( const xub_StrLen nTxtPos );
+           SwCntntFrm *SplitFrm( const sal_Int32 nTxtPos );
            SwCntntFrm *JoinFrm();
-    inline xub_StrLen  GetOfst() const { return nOfst; }
-           void        _SetOfst( const xub_StrLen nNewOfst );
-    inline void        SetOfst ( const xub_StrLen nNewOfst );
-    inline void        ManipOfst ( const xub_StrLen nNewOfst ){ nOfst = nNewOfst; }
+    inline sal_Int32  GetOfst() const { return nOfst; }
+           void        _SetOfst( const sal_Int32 nNewOfst );
+    inline void        SetOfst ( const sal_Int32 nNewOfst );
+    inline void        ManipOfst ( const sal_Int32 nNewOfst ){ nOfst = nNewOfst; }
            SwTxtFrm   *GetFrmAtPos ( const SwPosition &rPos);
     inline const SwTxtFrm *GetFrmAtPos ( const SwPosition &rPos) const;
            // OD 07.10.2003 #110978# - return <reference> instead of <pointer>
-    SwTxtFrm&   GetFrmAtOfst( const xub_StrLen nOfst );
+    SwTxtFrm&   GetFrmAtOfst( const sal_Int32 nOfst );
     // Wenn es einen Follow gibt und wir selbst keinen Text enthalten:
     inline sal_Bool IsEmptyMaster() const
         { return GetFollow() && !GetFollow()->GetOfst(); }
@@ -388,7 +388,7 @@ public:
 
     // Hat der Frm eine lokale Fussnote (in diesem Frm bzw. Follow)?
 #ifdef DBG_UTIL
-    void CalcFtnFlag( xub_StrLen nStop = STRING_LEN );//For testing SplitFrm
+    void CalcFtnFlag( sal_Int32 nStop = COMPLETE_STRING );//For testing SplitFrm
 #else
     void CalcFtnFlag();
 #endif
@@ -396,7 +396,7 @@ public:
     // Hidden
     sal_Bool IsHiddenNow() const;       // bHidden && pOut == pPrt
     void HideHidden();              // Anhaengsel entfernen wenn Hidden
-    void HideFootnotes( xub_StrLen nStart, xub_StrLen nEnd );
+    void HideFootnotes( sal_Int32 nStart, sal_Int32 nEnd );
 
     /** method to hide/show objects
 
@@ -410,8 +410,8 @@ public:
     void HideAndShowObjects();
 
     // Ftn
-    void RemoveFtn( const xub_StrLen nStart = 0,
-                    const xub_StrLen nLen = STRING_LEN );
+    void RemoveFtn( const sal_Int32 nStart = 0,
+                    const sal_Int32 nLen = COMPLETE_STRING );
     inline SwTwips GetFtnFrmHeight() const;
     SwTxtFrm *FindFtnRef( const SwTxtFtn *pFtn );
     inline const SwTxtFrm *FindFtnRef( const SwTxtFtn *pFtn ) const
@@ -453,7 +453,7 @@ public:
     inline void SetFtn( const sal_Bool bNew ) { bFtn = bNew; }
 
     // Beruecksichtigung der Follows
-    inline sal_Bool IsInside( const xub_StrLen nPos ) const;
+    inline sal_Bool IsInside( const sal_Int32 nPos ) const;
 
     const SwBodyFrm   *FindBodyFrm()   const;
 
@@ -505,16 +505,16 @@ public:
     sal_uInt16 FirstLineHeight() const;
 
     // Haengt FlyInCntFrm um, wenn nEnd > Index >= nStart ist.
-    void MoveFlyInCnt( SwTxtFrm *pNew, xub_StrLen nStart, xub_StrLen nEnd );
+    void MoveFlyInCnt( SwTxtFrm *pNew, sal_Int32 nStart, sal_Int32 nEnd );
 
     // Berechnet die Position von FlyInCntFrms
-    xub_StrLen CalcFlyPos( SwFrmFmt* pSearch );
+    sal_Int32 CalcFlyPos( SwFrmFmt* pSearch );
 
     // Ermittelt die Startposition und Schrittweite des Registers
     sal_Bool FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff );
 
 
-    sal_uInt16 GetLineCount( xub_StrLen nPos );     //Ermittelt die Zeilenanzahl
+    sal_uInt16 GetLineCount( sal_Int32 nPos );     //Ermittelt die Zeilenanzahl
 
     //Fuer die Anzeige der Zeilennummern.
     sal_uLong GetAllLines()  const { return nAllLines; }
@@ -647,7 +647,7 @@ inline SwTwips SwTxtFrm::GrowTst( const SwTwips nGrow )
     return Grow( nGrow, sal_True );
 }
 
-inline sal_Bool SwTxtFrm::IsInside( const xub_StrLen nPos ) const
+inline sal_Bool SwTxtFrm::IsInside( const sal_Int32 nPos ) const
 {
     sal_Bool bRet = sal_True;
     if( nPos < GetOfst() )
@@ -684,13 +684,13 @@ inline const SwTxtFrm *SwTxtFrm::GetFrmAtPos( const SwPosition &rPos) const
 }
 
 inline void SwTxtFrm::AdjustFollow( SwTxtFormatter &rLine,
-    const xub_StrLen nOffset, const xub_StrLen nStrEnd, const sal_uInt8 nMode )
+    const sal_Int32 nOffset, const sal_Int32 nStrEnd, const sal_uInt8 nMode )
 {
     if ( HasFollow() )
         _AdjustFollow( rLine, nOffset, nStrEnd, nMode );
 }
 
-inline void SwTxtFrm::SetOfst( const xub_StrLen nNewOfst )
+inline void SwTxtFrm::SetOfst( const sal_Int32 nNewOfst )
 {
     if ( nOfst != nNewOfst )
         _SetOfst( nNewOfst );

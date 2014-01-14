@@ -84,7 +84,7 @@ void SwLayoutCache::Read( SvStream &rStream )
 
 //-----------------------------------------------------------------------------
 
-void SwLayCacheImpl::Insert( sal_uInt16 nType, sal_uLong nIndex, xub_StrLen nOffset )
+void SwLayCacheImpl::Insert( sal_uInt16 nType, sal_uLong nIndex, sal_Int32 nOffset )
 {
     aType.push_back( nType );
     std::vector<sal_uLong>::push_back( nIndex );
@@ -120,9 +120,9 @@ bool SwLayCacheImpl::Read( SvStream& rStream )
             if( (cFlags & 0x01) != 0 )
                 aIo.GetStream() >> nOffset;
             else
-                nOffset = STRING_LEN;
+                nOffset = COMPLETE_STRING;
             aIo.CloseFlagRec();
-            Insert( SW_LAYCACHE_IO_REC_PARA, nIndex, (xub_StrLen)nOffset );
+            Insert( SW_LAYCACHE_IO_REC_PARA, nIndex, (sal_Int32)nOffset );
             aIo.CloseRec( SW_LAYCACHE_IO_REC_PARA );
             break;
         }
@@ -131,7 +131,7 @@ bool SwLayCacheImpl::Read( SvStream& rStream )
             aIo.OpenFlagRec();
             aIo.GetStream() >> nIndex
                             >> nOffset;
-            Insert( SW_LAYCACHE_IO_REC_TABLE, nIndex, (xub_StrLen)nOffset );
+            Insert( SW_LAYCACHE_IO_REC_TABLE, nIndex, (sal_Int32)nOffset );
             aIo.CloseFlagRec();
             aIo.CloseRec( SW_LAYCACHE_IO_REC_TABLE );
             break;
@@ -221,7 +221,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                     else if( pTmp->IsTabFrm() )
                     {
                         SwTabFrm* pTab = (SwTabFrm*)pTmp;
-                        sal_uLong nOfst = STRING_LEN;
+                        sal_uLong nOfst = COMPLETE_STRING;
                         if( pTab->IsFollow() )
                         {
                             // If the table is a follow, we have to look for the
@@ -262,7 +262,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                             // immediately.
                             if( pTab->GetFollow() )
                             {
-                                if( nOfst == STRING_LEN )
+                                if( nOfst == COMPLETE_STRING )
                                     nOfst = 0;
                                 do
                                 {
@@ -368,7 +368,7 @@ sal_Bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
                             SW_LAYCACHE_IO_REC_PARA !=
                             pImpl->GetBreakType( nIndex ) ||
                             ( bFollow ? ((SwTxtFrm*)pTmp)->GetOfst()
-                              : STRING_LEN ) != pImpl->GetBreakOfst( nIndex ) )
+                              : COMPLETE_STRING ) != pImpl->GetBreakOfst( nIndex ) )
                         {
                             return sal_False;
                         }
@@ -378,7 +378,7 @@ sal_Bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
                 else if( pTmp->IsTabFrm() )
                 {
                     SwTabFrm* pTab = (SwTabFrm*)pTmp;
-                    sal_uLong nOfst = STRING_LEN;
+                    sal_Int32 nOfst = COMPLETE_STRING;
                     if( pTab->IsFollow() )
                     {
                         nOfst = 0;
@@ -413,7 +413,7 @@ sal_Bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
                         }
                         if( pTab->GetFollow() )
                         {
-                            if( nOfst == STRING_LEN )
+                            if( nOfst == COMPLETE_STRING )
                                 nOfst = 0;
                             do
                             {
@@ -733,7 +733,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
         ++nParagraphCnt;
     if( bFirst && pImpl && nIndex < pImpl->size() &&
         pImpl->GetBreakIndex( nIndex ) == nNodeIndex &&
-        ( pImpl->GetBreakOfst( nIndex ) < STRING_LEN ||
+        ( pImpl->GetBreakOfst( nIndex ) < COMPLETE_STRING ||
           ( ++nIndex < pImpl->size() &&
           pImpl->GetBreakIndex( nIndex ) == nNodeIndex ) ) )
         bFirst = false;
@@ -747,7 +747,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
          ( rpFrm->IsTabFrm() && bLongTab )
        )
     {
-        sal_uLong nRowCount = 0;
+        sal_Int32 nRowCount = 0;
         do
         {
             if( pImpl || bLongTab )
@@ -757,12 +757,12 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                         pImpl->GetBreakIndex(nIndex) : 0xffff;
                 (void)nBrkIndex;
 #endif
-                xub_StrLen nOfst = STRING_LEN;
+                sal_Int32 nOfst = COMPLETE_STRING;
                 sal_uInt16 nType = SW_LAYCACHE_IO_REC_PAGES;
                 if( bLongTab )
                 {
                     rbBreakAfter = sal_True;
-                    nOfst = static_cast<xub_StrLen>(nRowCount + nMaxRowPerPage);
+                    nOfst = static_cast<sal_Int32>(nRowCount + nMaxRowPerPage);
                 }
                 else
                 {
@@ -778,7 +778,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                     }
                 }
 
-                if( nOfst < STRING_LEN )
+                if( nOfst < COMPLETE_STRING )
                 {
                     bool bSplit = false;
                     sal_uInt16 nRepeat( 0 );

@@ -146,7 +146,7 @@ void SwEditShell::Insert2(const OUString &rStr, const bool bForceExpandHints )
             }
             else
             {
-                if ( STRING_LEN != pSI->GetInvalidity() )
+                if ( COMPLETE_STRING != pSI->GetInvalidityA() )
                     pSI->InitScriptInfo( (SwTxtNode&)rNode );
                 nLevel = pSI->DirType( nPrevPos );
             }

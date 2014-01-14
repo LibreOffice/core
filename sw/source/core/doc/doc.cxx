@@ -1986,10 +1986,10 @@ static bool lcl_SpellAndGrammarAgain( const SwNodePtr& rpNd, void* pArgs )
         {
             pTxtNode->SetWrongDirty( true );
             if( pTxtNode->GetWrong() )
-                pTxtNode->GetWrong()->SetInvalid( 0, STRING_LEN );
+                pTxtNode->GetWrong()->SetInvalid( 0, COMPLETE_STRING );
             pTxtNode->SetGrammarCheckDirty( true );
             if( pTxtNode->GetGrammarCheck() )
-                pTxtNode->GetGrammarCheck()->SetInvalid( 0, STRING_LEN );
+                pTxtNode->GetGrammarCheck()->SetInvalid( 0, COMPLETE_STRING );
         }
     }
     return true;
@@ -2003,7 +2003,7 @@ static bool lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
         pTxtNode->SetSmartTagDirty( true );
         if( pTxtNode->GetSmartTags() )
         {
-                pTxtNode->SetSmartTags( NULL );
+            pTxtNode->SetSmartTags( NULL );
         }
     }
     return true;

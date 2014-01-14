@@ -23,8 +23,8 @@
 #include <sal/types.h>
 #include <editeng/langitem.hxx>
 #include <hintids.hxx>
+#include <swtypes.hxx>
 #include <deque>
-#include <tools/string.hxx>
 
 class SwTxtNode;
 class SwTxtAttr;
@@ -39,14 +39,14 @@ class SwScriptIterator
     bool bForward;
 
 public:
-    SwScriptIterator( const OUString& rStr, xub_StrLen nStart = 0,
+    SwScriptIterator( const OUString& rStr, sal_Int32 nStart = 0,
                       bool bFrwrd = true );
 
     bool Next();
 
-    sal_uInt16 GetCurrScript() const        { return nCurScript; }
-    xub_StrLen GetScriptChgPos() const      { return (m_nChgPos == -1) ? STRING_LEN : m_nChgPos; }
-    const OUString& GetText() const         { return m_rText; }
+    sal_uInt16 GetCurrScript() const { return nCurScript; }
+    sal_Int32 GetScriptChgPos() const { return (m_nChgPos == -1) ? COMPLETE_STRING : m_nChgPos; }
+    const OUString& GetText() const { return m_rText; }
 };
 
 
@@ -56,7 +56,7 @@ class SwTxtAttrIterator
     std::deque<const SwTxtAttr*> aStack;
     const SwTxtNode& rTxtNd;
     const SfxPoolItem *pParaItem, *pCurItem;
-    xub_StrLen nChgPos;
+    sal_Int32 nChgPos;
     sal_uInt16 nAttrPos, nWhichId;
     bool bIsUseGetWhichOfScript;
 
@@ -65,19 +65,19 @@ class SwTxtAttrIterator
 
 public:
     SwTxtAttrIterator( const SwTxtNode& rTxtNd, sal_uInt16 nWhichId,
-                        xub_StrLen nStart = 0, bool bUseGetWhichOfScript = true );
+                        sal_Int32 nStart = 0, bool bUseGetWhichOfScript = true );
 
     bool Next();
 
     const SfxPoolItem& GetAttr() const  { return *pCurItem; }
-    xub_StrLen GetChgPos() const        { return nChgPos; }
+    sal_Int32 GetChgPos() const        { return nChgPos; }
 };
 
 
 class SwLanguageIterator : public SwTxtAttrIterator
 {
 public:
-    SwLanguageIterator( const SwTxtNode& rTxtNode, xub_StrLen nStart = 0,
+    SwLanguageIterator( const SwTxtNode& rTxtNode, sal_Int32 nStart = 0,
                         sal_uInt16 nWhich = RES_CHRATR_LANGUAGE,
                         bool bUseGetWhichOfScript = true )
         : SwTxtAttrIterator( rTxtNode, nWhich, nStart, bUseGetWhichOfScript )

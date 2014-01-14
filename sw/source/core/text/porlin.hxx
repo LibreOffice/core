@@ -64,7 +64,7 @@ protected:
     // Here we have areas with different attributes
     SwLinePortion *pPortion;
     // Count of chars and spaces on the line
-    xub_StrLen nLineLength;
+    sal_Int32 nLineLength;
     KSHORT nAscent;      // Maximum ascender
 
     SwLinePortion();
@@ -83,8 +83,8 @@ public:
     inline SwLinePortion *GetPortion() const { return( pPortion ); }
     inline SwLinePortion &operator=(const SwLinePortion &rPortion);
     inline bool operator==( const SwLinePortion &rPortion ) const;
-    inline xub_StrLen GetLen() const { return nLineLength; }
-    inline void SetLen( const xub_StrLen nLen ) { nLineLength = nLen; }
+    inline sal_Int32 GetLen() const { return nLineLength; }
+    inline void SetLen( const sal_Int32 nLen ) { nLineLength = nLen; }
     inline void SetPortion( SwLinePortion *pNew ){ pPortion = pNew; }
     inline KSHORT &GetAscent() { return nAscent; }
     inline KSHORT GetAscent() const { return nAscent; }
@@ -161,7 +161,7 @@ public:
     SwLinePortion *FindPrevPortion( const SwLinePortion *pRoot );
     SwLinePortion *FindLastPortion();
 
-    virtual xub_StrLen GetCrsrOfst( const KSHORT nOfst ) const;
+    virtual sal_Int32 GetCrsrOfst( const KSHORT nOfst ) const;
     virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const;
     void CalcTxtSize( const SwTxtSizeInfo &rInfo );
 

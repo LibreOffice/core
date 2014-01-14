@@ -41,18 +41,18 @@ class SwTxtFormatter;
 
 class SwCharRange
 {
-    xub_StrLen nStart, nLen;
+    sal_Int32 nStart, nLen;
 public:
-    inline SwCharRange( const xub_StrLen nInitStart = 0,
-        const xub_StrLen nInitLen = 0): nStart( nInitStart ), nLen(nInitLen) {}
-    inline xub_StrLen &Start() { return nStart; }
-    inline const xub_StrLen &Start() const { return nStart; }
-    inline void LeftMove( xub_StrLen nNew )
+    inline SwCharRange( const sal_Int32 nInitStart = 0,
+        const sal_Int32 nInitLen = 0): nStart( nInitStart ), nLen(nInitLen) {}
+    inline sal_Int32 &Start() { return nStart; }
+    inline const sal_Int32 &Start() const { return nStart; }
+    inline void LeftMove( sal_Int32 nNew )
             { if ( nNew < nStart ) { nLen += nStart-nNew; nStart = nNew; } }
-    inline xub_StrLen End() const
+    inline sal_Int32 End() const
                 { return nStart + nLen; }
-    inline xub_StrLen &Len() { return nLen; }
-    inline const xub_StrLen &Len() const { return nLen; }
+    inline sal_Int32 &Len() { return nLen; }
+    inline const sal_Int32 &Len() const { return nLen; }
     inline bool operator<(const SwCharRange &rRange) const
                 { return nStart < rRange.nStart; }
     inline bool operator>(const SwCharRange &rRange) const
@@ -302,7 +302,7 @@ public:
     inline const SwScriptInfo& GetScriptInfo() const { return aScriptInfo; }
 
     // For SwTxtFrm::Format: returns the paragraph's current length
-    xub_StrLen GetParLen() const;
+    sal_Int32 GetParLen() const;
 
     // For Prepare()
     sal_Bool UpdateQuoVadis( const OUString &rQuo );
@@ -388,7 +388,7 @@ inline void SwParaPortion::ResetPreps()
 inline void SwParaPortion::FormatReset()
 {
     nDelta = 0;
-    aReformat = SwCharRange( 0, STRING_LEN );
+    aReformat = SwCharRange(0, COMPLETE_STRING);
     // bFlys needs to be retained in SwTxtFrm::_Format() so that empty
     // paragraphs that needed to avoid Frames with no flow, reformat
     // when the Frame disappears from the Area

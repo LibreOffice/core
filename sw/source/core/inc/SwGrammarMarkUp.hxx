@@ -52,7 +52,7 @@ public:
     /* SwWrongList::JoinList() + handling of maSentence */
     void JoinGrammarList( SwGrammarMarkUp* pNext, sal_Int32 nInsertPos );
     /* SwWrongList::ClearList() + handling of maSentence */
-    void ClearGrammarList( sal_Int32 nSentenceEnd = STRING_LEN );
+    void ClearGrammarList( sal_Int32 nSentenceEnd = COMPLETE_STRING );
     /* setSentence to define the start positionof a sentence,
        at the moment the end position is given by the next start position */
     void setSentence( sal_Int32 nStart );

@@ -30,7 +30,7 @@ using namespace ::com::sun::star;
 
 
 SwScriptIterator::SwScriptIterator(
-            const OUString& rStr, xub_StrLen nStt, bool const bFrwrd)
+            const OUString& rStr, sal_Int32 nStt, bool const bFrwrd)
     : m_rText(rStr)
     , m_nChgPos(rStr.getLength())
     , nCurScript(i18n::ScriptType::WEAK)
@@ -41,13 +41,13 @@ SwScriptIterator::SwScriptIterator(
         if ( ! bFrwrd && nStt )
             --nStt;
 
-        xub_StrLen nPos = nStt;
+        sal_Int32 nPos = nStt;
         nCurScript = g_pBreakIt->GetBreakIter()->getScriptType(m_rText, nPos);
         if( i18n::ScriptType::WEAK == nCurScript )
         {
             if( nPos )
             {
-                nPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->beginOfScript(
+                nPos = g_pBreakIt->GetBreakIter()->beginOfScript(
                                                 m_rText, nPos, nCurScript);
                 if (nPos && nPos < m_rText.getLength())
                 {
@@ -97,7 +97,7 @@ bool SwScriptIterator::Next()
 // --------------------------------------------------------------------
 
 SwTxtAttrIterator::SwTxtAttrIterator( const SwTxtNode& rTNd, sal_uInt16 nWhchId,
-                                        xub_StrLen nStt,
+                                        sal_Int32 nStt,
                                         bool bUseGetWhichOfScript )
     : aSIter( rTNd.GetTxt(), nStt ), rTxtNd( rTNd ),
     pParaItem( 0 ), nChgPos( nStt ), nAttrPos( 0 ), nWhichId( nWhchId ),
@@ -187,7 +187,7 @@ void SwTxtAttrIterator::SearchNextChg()
         pParaItem = &rTxtNd.GetSwAttrSet().Get( nWh );
     }
 
-    xub_StrLen nStt = nChgPos;
+    sal_Int32 nStt = nChgPos;
     nChgPos = aSIter.GetScriptChgPos();
     pCurItem = pParaItem;
 

@@ -153,10 +153,10 @@ protected:
     // MoveFrom:    moves from the UndoNodesArray into the NodesArray.
     void MoveToUndoNds( SwPaM& rPam,
                         SwNodeIndex* pNodeIdx = 0,
-                        sal_uLong* pEndNdIdx = 0, xub_StrLen * pEndCntIdx = 0 );
+                        sal_uLong* pEndNdIdx = 0, sal_Int32 * pEndCntIdx = 0 );
     void MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
                           SwPosition& rInsPos,
-                          sal_uLong* pEndNdIdx = 0, xub_StrLen * pEndCntIdx = 0 );
+                          sal_uLong* pEndNdIdx = 0, sal_Int32 * pEndCntIdx = 0 );
 
     // These two methods move the SPoint back/forth from PaM. With it
     // a range can be spanned for Undo/Redo. (In this case the SPoint
@@ -207,7 +207,7 @@ class SwUndRng
 {
 public:
     sal_uLong nSttNode, nEndNode;
-    xub_StrLen nSttCntnt, nEndCntnt;
+    sal_Int32 nSttCntnt, nEndCntnt;
 
     SwUndRng();
     SwUndRng( const SwPaM& );
@@ -267,7 +267,7 @@ class SwUndoFlyBase : public SwUndo, private SwUndoSaveSection
 protected:
     SwFrmFmt* pFrmFmt;          // The saved FlyFormat.
     sal_uLong nNdPgPos;
-    xub_StrLen nCntPos;         // Page at/in paragraph.
+    sal_Int32 nCntPos;         // Page at/in paragraph.
     sal_uInt16 nRndId;
     sal_Bool bDelFmt;           // Delete saved format.
 
@@ -287,9 +287,9 @@ public:
 class SwUndoInsLayFmt : public SwUndoFlyBase
 {
     sal_uLong mnCrsrSaveIndexPara;           // Cursor position
-    xub_StrLen mnCrsrSaveIndexPos;            // for undo
+    sal_Int32 mnCrsrSaveIndexPos;            // for undo
 public:
-    SwUndoInsLayFmt( SwFrmFmt* pFormat, sal_uLong nNodeIdx, xub_StrLen nCntIdx );
+    SwUndoInsLayFmt( SwFrmFmt* pFormat, sal_uLong nNodeIdx, sal_Int32 nCntIdx );
 
     virtual ~SwUndoInsLayFmt();
 

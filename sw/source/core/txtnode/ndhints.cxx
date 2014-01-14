@@ -42,8 +42,8 @@ static bool lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 {
     if ( *rHt1.GetStart() == *rHt2.GetStart() )
     {
-        const xub_StrLen nHt1 = *rHt1.GetAnyEnd();
-        const xub_StrLen nHt2 = *rHt2.GetAnyEnd();
+        const sal_Int32 nHt1 = *rHt1.GetAnyEnd();
+        const sal_Int32 nHt2 = *rHt2.GetAnyEnd();
         if ( nHt1 == nHt2 )
         {
             const sal_uInt16 nWhich1 = rHt1.Which();
@@ -75,8 +75,8 @@ static bool lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 // Zuerst nach Ende danach nach Ptr
 static bool lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 {
-    const xub_StrLen nHt1 = *rHt1.GetAnyEnd();
-    const xub_StrLen nHt2 = *rHt2.GetAnyEnd();
+    const sal_Int32 nHt1 = *rHt1.GetAnyEnd();
+    const sal_Int32 nHt2 = *rHt2.GetAnyEnd();
     if ( nHt1 == nHt2 )
     {
         if ( *rHt1.GetStart() == *rHt2.GetStart() )
@@ -178,8 +178,8 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
     // 1) gleiche Anzahl in beiden Arrays
     CHECK_ERR( m_HintStarts.size() == m_HintEnds.size(),
         "HintsCheck: wrong sizes" );
-    xub_StrLen nLastStart = 0;
-    xub_StrLen nLastEnd   = 0;
+    sal_Int32 nLastStart = 0;
+    sal_Int32 nLastEnd   = 0;
 
     const SwTxtAttr *pLastStart = 0;
     const SwTxtAttr *pLastEnd = 0;
@@ -210,7 +210,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
         CHECK_ERR( 0xFF != *(unsigned char*)pHt, "HintsCheck: start ptr was deleted" );
 
         // 3a) Stimmt die Start-Sortierung?
-        xub_StrLen nIdx = *pHt->GetStart();
+        sal_Int32 nIdx = *pHt->GetStart();
         CHECK_ERR( nIdx >= nLastStart, "HintsCheck: starts are unsorted" );
 
         // 4a) IsLessStart-Konsistenz
@@ -242,15 +242,15 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
 
         // 5) gleiche Pointer in beiden Arrays
         if (m_HintStarts.find(const_cast<SwTxtAttr*>(pHt)) == m_HintStarts.end())
-            nIdx = STRING_LEN;
+            nIdx = COMPLETE_STRING;
 
-        CHECK_ERR( STRING_LEN != nIdx, "HintsCheck: no GetStartOf" );
+        CHECK_ERR( COMPLETE_STRING != nIdx, "HintsCheck: no GetStartOf" );
 
         // 6) gleiche Pointer in beiden Arrays
         if (m_HintEnds.find(const_cast<SwTxtAttr*>(pHt)) == m_HintEnds.end())
-            nIdx = STRING_LEN;
+            nIdx = COMPLETE_STRING;
 
-        CHECK_ERR( STRING_LEN != nIdx, "HintsCheck: no GetEndOf" );
+        CHECK_ERR( COMPLETE_STRING != nIdx, "HintsCheck: no GetEndOf" );
 
         // 7a) character attributes in array?
         sal_uInt16 nWhich = pHt->Which();

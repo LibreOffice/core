@@ -676,7 +676,7 @@ public:
     void HyphIgnore();
 
     /// For Inserting SoftHyphen. Position is offset within the syllabificated word.
-    void InsertSoftHyph( const xub_StrLen nHyphPos );
+    void InsertSoftHyph( const sal_Int32 nHyphPos );
 
     const SwTable& InsertTable( const SwInsertTableOptions& rInsTblOpts,  ///< ALL_TBL_INS_ATTR
                                 sal_uInt16 nRows, sal_uInt16 nCols,

@@ -52,18 +52,18 @@ typedef boost::ptr_vector<SwFlyCache> SwPageFlyCache;
 
 class SwLayCacheImpl : public std::vector<sal_uLong>
 {
-    std::deque<xub_StrLen> aOffset;
+    std::deque<sal_Int32> aOffset;
     std::vector<sal_uInt16> aType;
     SwPageFlyCache aFlyCache;
     bool bUseFlyCache;
-    void Insert( sal_uInt16 nType, sal_uLong nIndex, xub_StrLen nOffset );
+    void Insert( sal_uInt16 nType, sal_uLong nIndex, sal_Int32 nOffset );
 
 public:
     SwLayCacheImpl() {}
     bool Read( SvStream& rStream );
 
     sal_uLong GetBreakIndex( sal_uInt16 nIdx ) const { return std::vector<sal_uLong>::operator[]( nIdx ); }
-    xub_StrLen GetBreakOfst( size_t nIdx ) const { return aOffset[ nIdx ]; }
+    sal_Int32 GetBreakOfst( size_t nIdx ) const { return aOffset[ nIdx ]; }
     sal_uInt16 GetBreakType( sal_uInt16 nIdx ) const { return aType[ nIdx ]; }
 
     sal_uInt16 GetFlyCount() const { return aFlyCache.size(); }

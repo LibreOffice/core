@@ -4250,8 +4250,8 @@ OUString SwTxtNode::GetLabelFollowedBy() const
 
 void SwTxtNode::CalcHiddenCharFlags() const
 {
-    xub_StrLen nStartPos;
-    xub_StrLen nEndPos;
+    sal_Int32 nStartPos;
+    sal_Int32 nEndPos;
     // Update of the flags is done inside GetBoundsOfHiddenRange()
     SwScriptInfo::GetBoundsOfHiddenRange( *this, 0, nStartPos, nEndPos );
 }

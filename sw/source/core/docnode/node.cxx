@@ -1107,10 +1107,10 @@ sal_Bool SwCntntNode::GoNext(SwIndex * pIdx, sal_uInt16 nMode ) const
                 // Check if nPos is inside hidden text range:
                 if ( CRSR_SKIP_HIDDEN & nMode )
                 {
-                    xub_StrLen nHiddenStart;
-                    xub_StrLen nHiddenEnd;
+                    sal_Int32 nHiddenStart;
+                    sal_Int32 nHiddenEnd;
                     SwScriptInfo::GetBoundsOfHiddenRange( rTNd, nPos, nHiddenStart, nHiddenEnd );
-                    if ( nHiddenStart != STRING_LEN && nHiddenStart != nPos )
+                    if ( nHiddenStart != COMPLETE_STRING && nHiddenStart != nPos )
                          nPos = nHiddenEnd;
                 }
 
@@ -1154,10 +1154,10 @@ sal_Bool SwCntntNode::GoPrevious(SwIndex * pIdx, sal_uInt16 nMode ) const
                 // Check if nPos is inside hidden text range:
                 if ( CRSR_SKIP_HIDDEN & nMode )
                 {
-                    xub_StrLen nHiddenStart;
-                    xub_StrLen nHiddenEnd;
+                    sal_Int32 nHiddenStart;
+                    sal_Int32 nHiddenEnd;
                     SwScriptInfo::GetBoundsOfHiddenRange( rTNd, nPos, nHiddenStart, nHiddenEnd );
-                    if ( nHiddenStart != STRING_LEN  )
+                    if ( nHiddenStart != COMPLETE_STRING )
                          nPos = nHiddenStart;
                 }
 

@@ -183,7 +183,7 @@ struct CalcLinePosData
 {
     SwDrawTextInfo& rInf;
     Font& rFont;
-    xub_StrLen nCnt;
+    sal_Int32 nCnt;
     const sal_Bool bSwitchH2V;
     const sal_Bool bSwitchL2R;
     long nHalfSpace;
@@ -191,7 +191,7 @@ struct CalcLinePosData
     const sal_Bool bBidiPor;
 
     CalcLinePosData( SwDrawTextInfo& _rInf, Font& _rFont,
-                      xub_StrLen _nCnt, const sal_Bool _bSwitchH2V, const sal_Bool _bSwitchL2R,
+                      sal_Int32 _nCnt, const sal_Bool _bSwitchH2V, const sal_Bool _bSwitchL2R,
                       long _nHalfSpace, sal_Int32* _pKernArray, const sal_Bool _bBidiPor) :
         rInf( _rInf ),
         rFont( _rFont ),
@@ -212,10 +212,10 @@ struct CalcLinePosData
 */
 
 static void lcl_calcLinePos( const CalcLinePosData &rData,
-    Point &rStart, Point &rEnd, xub_StrLen nStart, xub_StrLen nWrLen )
+    Point &rStart, Point &rEnd, sal_Int32 nStart, sal_Int32 nWrLen )
 {
    long nBlank = 0;
-   const xub_StrLen nEnd = nStart + nWrLen;
+   const sal_Int32 nEnd = nStart + nWrLen;
    const long nTmpSpaceAdd = rData.rInf.GetSpace() / SPACING_PRECISION_FACTOR;
 
    if ( nEnd < rData.nCnt
@@ -970,7 +970,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     if ( bChgColor )
         pTmpFont->SetColor( aOldColor );
 
-    if ( STRING_LEN == rInf.GetLen() )
+    if ( COMPLETE_STRING == rInf.GetLen() )
         rInf.SetLen( rInf.GetText().getLength() );
 
 
@@ -1170,8 +1170,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     else
                     {
                         Point aTmpPos( aPos );
-                        xub_StrLen i;
-                        xub_StrLen j = 0;
+                        sal_Int32 i;
+                        sal_Int32 j = 0;
                         long nSpaceSum = 0;
                         for( i = 0; i < rInf.GetLen(); i++ )
                         {
@@ -1238,7 +1238,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
             if( bStretch )
             {
-                xub_StrLen nZwi = rInf.GetLen() - 1;
+                sal_Int32 nZwi = rInf.GetLen() - 1;
                 long nDiff = rInf.GetWidth() - pKernArray[ nZwi ]
                              - rInf.GetLen() * rInf.GetKern();
                 long nRest = nDiff % nZwi;
@@ -1380,8 +1380,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             else
             {
                 Point aTmpPos( aPos );
-                xub_StrLen j = 0;
-                xub_StrLen i;
+                sal_Int32 j = 0;
+                sal_Int32 i;
                 for( i = 0; i < rInf.GetLen(); i++ )
                 {
                     if( CH_BLANK == rInf.GetText()[ rInf.GetIdx()+i ] )
@@ -1556,11 +1556,11 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             // !!! HACK !!!
             // The Arabic layout engine requires some context of the string
             // which should be painted.
-            xub_StrLen nCopyStart = rInf.GetIdx();
+            sal_Int32 nCopyStart = rInf.GetIdx();
             if ( nCopyStart )
                 --nCopyStart;
 
-            xub_StrLen nCopyLen = rInf.GetLen();
+            sal_Int32 nCopyLen = rInf.GetLen();
             if ( nCopyStart + nCopyLen < rInf.GetText().getLength() )
                 ++nCopyLen;
 
@@ -1785,8 +1785,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 }
             }
 
-            xub_StrLen nOffs = 0;
-            xub_StrLen nLen = rInf.GetLen();
+            sal_Int32 nOffs = 0;
+            sal_Int32 nLen = rInf.GetLen();
 
             if( nOffs < nLen )
             {
@@ -1794,7 +1794,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 // the paragraph string. For the layout engine, the copy
                 // of the string has to be an environment of the range which
                 // is painted
-                xub_StrLen nTmpIdx = bBullet ?
+                sal_Int32 nTmpIdx = bBullet ?
                                               ( rInf.GetIdx() ? 1 : 0 ) :
                                               rInf.GetIdx();
 
@@ -1816,7 +1816,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
 {
     Size aTxtSize;
-    const xub_StrLen nLn = ( STRING_LEN != rInf.GetLen() ) ? rInf.GetLen() :
+    const sal_Int32 nLn = ( COMPLETE_STRING != rInf.GetLen() ) ? rInf.GetLen() :
                            rInf.GetText().getLength();
 
     // be sure to have the correct layout mode at the printer
@@ -2022,7 +2022,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
 }
 
 
-xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
+sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 {
     long nSpaceAdd =       rInf.GetSpace() / SPACING_PRECISION_FACTOR;
     const long nSperren = -rInf.GetSperren() / SPACING_PRECISION_FACTOR;
@@ -2111,7 +2111,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 
     long nLeft = 0;
     long nRight = 0;
-    xub_StrLen nCnt = 0;
+    sal_Int32 nCnt = 0;
     long nSpaceSum = 0;
     long nKernSum = 0;
 
@@ -2176,9 +2176,9 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
     sal_Int32 nDone = 0;
     LanguageType aLang = LANGUAGE_NONE;
     bool bSkipCharacterCells = false;
-    xub_StrLen nIdx = rInf.GetIdx();
-    xub_StrLen nLastIdx = nIdx;
-    const xub_StrLen nEnd = rInf.GetIdx() + rInf.GetLen();
+    sal_Int32 nIdx = rInf.GetIdx();
+    sal_Int32 nLastIdx = nIdx;
+    const sal_Int32 nEnd = rInf.GetIdx() + rInf.GetLen();
 
     // #i105901#
     // skip character cells for all script types
@@ -2198,7 +2198,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 
         if ( bSkipCharacterCells )
         {
-            nIdx = (xub_StrLen)g_pBreakIt->GetBreakIter()->nextCharacters( rInf.GetText(),
+            nIdx = g_pBreakIt->GetBreakIter()->nextCharacters( rInf.GetText(),
                         nIdx, g_pBreakIt->GetLocale( aLang ), nItrMode, 1, nDone );
             if ( nIdx <= nLastIdx )
                 break;
@@ -2347,13 +2347,13 @@ SwCacheObj *SwFntAccess::NewObj( )
     return new SwFntObj( *(SwSubFont *)pOwner, ++pMagicNo, pShell );
 }
 
-extern xub_StrLen sw_CalcCaseMap( const SwFont& rFnt,
+extern sal_Int32 sw_CalcCaseMap( const SwFont& rFnt,
                                    const OUString& rOrigString,
-                                   xub_StrLen nOfst,
-                                   xub_StrLen nLen,
-                                   xub_StrLen nIdx );
+                                   sal_Int32 nOfst,
+                                   sal_Int32 nLen,
+                                   sal_Int32 nIdx );
 
-xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
+sal_Int32 SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
 {
     ChgFnt( rInf.GetShell(), rInf.GetOut() );
 
@@ -2369,7 +2369,7 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
     sal_Int32 nTxtBreak = 0;
     long nKern = 0;
 
-    sal_uInt16 nLn = ( rInf.GetLen() == STRING_LEN ? rInf.GetText().getLength()
+    sal_uInt16 nLn = ( rInf.GetLen() == COMPLETE_STRING ? rInf.GetText().getLength()
                                                : rInf.GetLen() );
 
     if ( rInf.GetFrm() && nLn && rInf.SnapToGrid() &&
@@ -2447,8 +2447,8 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
 
         const OUString* pTmpText;
         OUString aTmpText;
-        xub_StrLen nTmpIdx;
-        xub_StrLen nTmpLen;
+        sal_Int32 nTmpIdx;
+        sal_Int32 nTmpLen;
         bool bTextReplaced = false;
 
         if ( !aSub[nActual].IsCaseMap() )
@@ -2491,8 +2491,7 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
             nTxtBreak = rInf.GetOut().GetTextBreak( *pTmpText, nTextWidth,
                              static_cast<sal_Unicode>('-'), nHyphPos,
                              nTmpIdx, nTmpLen, nKern );
-            *rInf.GetHyphPos() = (nHyphPos == -1)
-                ? STRING_LEN : static_cast<xub_StrLen>(nHyphPos);
+            *rInf.GetHyphPos() = (nHyphPos == -1) ? COMPLETE_STRING : nHyphPos;
         }
         else
             nTxtBreak = rInf.GetOut().GetTextBreak( *pTmpText, nTextWidth,
@@ -2508,7 +2507,7 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
         }
     }
 
-    xub_StrLen nTxtBreak2 = nTxtBreak == -1 ? STRING_LEN : nTxtBreak;
+    sal_Int32 nTxtBreak2 = nTxtBreak == -1 ? COMPLETE_STRING : nTxtBreak;
 
     if ( ! bCompress )
         return nTxtBreak2;
@@ -2528,7 +2527,7 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
                             rInf.GetKanaComp(), (sal_uInt16)GetHeight( nActual ) ) )
         {
             long nKernAdd = nKern;
-            xub_StrLen nTmpBreak = nTxtBreak2;
+            sal_Int32 nTmpBreak = nTxtBreak2;
             if( nKern && nTxtBreak2 )
                 nKern *= nTxtBreak2 - 1;
             while( nTxtBreak2<nLn && nTextWidth >= pKernArray[nTxtBreak2] +nKern )

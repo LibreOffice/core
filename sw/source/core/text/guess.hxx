@@ -34,10 +34,10 @@ class SwTxtGuess
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XHyphenatedWord >  xHyphWord;
     SwHangingPortion *pHanging; // for hanging punctuation
-    xub_StrLen nCutPos;         // this character doesn't fit
-    xub_StrLen nBreakStart;     // start index of word containing line break
-    xub_StrLen nBreakPos;       // start index of break position
-    xub_StrLen nFieldDiff;      // absolut positions can be wrong if we
+    sal_Int32 nCutPos;         // this character doesn't fit
+    sal_Int32 nBreakStart;     // start index of word containing line break
+    sal_Int32 nBreakPos;       // start index of break position
+    sal_Int32 nFieldDiff;      // absolut positions can be wrong if we
                                 // a field in the text has been expanded
     KSHORT nBreakWidth;         // width of the broken portion
 public:
@@ -49,15 +49,15 @@ public:
     // true, if current portion still fits to current line
     sal_Bool Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
                     const KSHORT nHeight );
-    bool AlternativeSpelling( const SwTxtFormatInfo &rInf, const xub_StrLen nPos );
+    bool AlternativeSpelling( const SwTxtFormatInfo &rInf, const sal_Int32 nPos );
 
     inline SwHangingPortion* GetHangingPortion() const { return pHanging; }
     inline void ClearHangingPortion() { pHanging = NULL; }
     inline KSHORT BreakWidth() const { return nBreakWidth; }
-    inline xub_StrLen CutPos() const { return nCutPos; }
-    inline xub_StrLen BreakStart() const { return nBreakStart; }
-    inline xub_StrLen BreakPos() const {return nBreakPos; }
-    inline xub_StrLen FieldDiff() const {return nFieldDiff; }
+    inline sal_Int32 CutPos() const { return nCutPos; }
+    inline sal_Int32 BreakStart() const { return nBreakStart; }
+    inline sal_Int32 BreakPos() const {return nBreakPos; }
+    inline sal_Int32 FieldDiff() const {return nFieldDiff; }
     inline ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XHyphenatedWord > HyphWord() const
         { return xHyphWord; }
 };
