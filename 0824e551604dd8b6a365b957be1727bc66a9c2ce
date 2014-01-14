@@ -142,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "fa98f980_b5f44a88",
+        "filename": "oox/source/export/vmlexport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-14T12:44:04Z",
+      "side": 1,
+      "message": "See how it\u0027s done in RtfSdrExport::AddSdrObject(), sw/source/filter/ww8/rtfsdrexport.cxx. You can do the same: in VMLExport you can implement your AddSdrObject(), then explicitly call the parent method. I may be wrong, but I think VMLExport and RtfSdrExport is the same in this aspect, and RtfSdrExport already does this without problems.",
+      "parentUuid": "fa98f980_55e79ee4",
+      "revId": "0824e551604dd8b6a365b957be1727bc66a9c2ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa98f980_5526be69",
         "filename": "sw/source/filter/ww8/rtfsdrexport.cxx",
         "patchSetId": 4
