@@ -405,8 +405,8 @@ NSData *getUncompressedData(NSFileHandle *file, NSString *name)
     
     OOoMetaDataParser *parser = [OOoMetaDataParser new];
     if (parser != nil) {
-	//parse and extract the data
-	[parser parseXML:metaData intoDictionary:attributes];
+        //parse and extract the data
+        [parser parseXML:metaData intoDictionary:attributes];
     }
 
     [metaData release];
@@ -423,8 +423,8 @@ NSData *getUncompressedData(NSFileHandle *file, NSString *name)
     
     OOoContentDataParser *parser2 = [OOoContentDataParser new];
     if (parser2 != nil) {
-	//parse and extract the data
-	[parser2 parseXML:contentData intoDictionary:attributes];
+        //parse and extract the data
+        [parser2 parseXML:contentData intoDictionary:attributes];
     }
 
     [contentData release];
