@@ -23,6 +23,7 @@
 #include <rtl/ustring.hxx>
 
 #include <pam.hxx>
+#include <redlinetypes.hxx>
 
 #include <IDocumentRedlineAccess.hxx>
 
@@ -180,8 +181,42 @@ public:
     OUString GetDescr() const;
 };
 
+/*
+ * This is the base class that will be used to describe a Redline of any type.
+ * There are sevaral different types of redlines:
+ * - 'Range' redline (SwRangeRedline) - this has a range, e.g. - inserted run,
+ *    deleted run, inserted paragraph mark etc.
+ * - 'Table Row' redline (TBD) - this is attached to a specific table's row,
+ *    e.g. - table row was inserted \ deleted
+ * - 'Table Properties' redline (TBD)
+ */
+class SW_DLLPUBLIC SwRedline
+{
+public:
+    SwRedline( const sal_uInt8 nRedlineType ): m_nRedlineType( nRedlineType )   {}
+    virtual ~SwRedline()    {};
 
-class SW_DLLPUBLIC SwRangeRedline : public SwPaM
+    sal_uInt8   GetRedlineType() const { return m_nRedlineType; }
+
+private:
+    sal_uInt8   m_nRedlineType;
+
+public:
+    inline sal_Bool IsRangeRedline() const;
+    inline sal_Bool IsTableRowRedline() const;
+};
+
+inline sal_Bool SwRedline::IsRangeRedline() const
+{
+    return RD_RANGEREDLINE == m_nRedlineType  ? sal_True : sal_False;
+}
+
+inline sal_Bool SwRedline::IsTableRowRedline() const
+{
+    return RD_TABLEROWREDLINE == m_nRedlineType  ? sal_True : sal_False;
+}
+
+class SW_DLLPUBLIC SwRangeRedline : public SwRedline, public SwPaM
 {
     SwRedlineData* pRedlineData;
     SwNodeIndex* pCntntSect;
@@ -201,7 +236,7 @@ public:
     // For sw3io: pData is taken over!
     SwRangeRedline(SwRedlineData* pData, const SwPosition& rPos, sal_Bool bVsbl,
                sal_Bool bDelLP, sal_Bool bIsPD) :
-        SwPaM( rPos ), pRedlineData( pData ), pCntntSect( 0 ),
+        SwRedline( RD_RANGEREDLINE ), SwPaM( rPos ), pRedlineData( pData ), pCntntSect( 0 ),
         bDelLastPara( bDelLP ), bIsLastParaDelete( bIsPD ), bIsVisible( bVsbl )
     {}
     SwRangeRedline( const SwRangeRedline& );

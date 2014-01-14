@@ -3092,7 +3092,7 @@ OUString SwRedlineData::GetDescr() const
 }
 
 SwRangeRedline::SwRangeRedline(RedlineType_t eTyp, const SwPaM& rPam )
-    : SwPaM( *rPam.GetMark(), *rPam.GetPoint() ),
+    : SwRedline( RD_RANGEREDLINE ), SwPaM( *rPam.GetMark(), *rPam.GetPoint() ),
     pRedlineData( new SwRedlineData( eTyp, GetDoc()->GetRedlineAuthor() ) ),
     pCntntSect( 0 )
 {
@@ -3103,7 +3103,7 @@ SwRangeRedline::SwRangeRedline(RedlineType_t eTyp, const SwPaM& rPam )
 }
 
 SwRangeRedline::SwRangeRedline( const SwRedlineData& rData, const SwPaM& rPam )
-    : SwPaM( *rPam.GetMark(), *rPam.GetPoint() ),
+    : SwRedline( RD_RANGEREDLINE ), SwPaM( *rPam.GetMark(), *rPam.GetPoint() ),
     pRedlineData( new SwRedlineData( rData )),
     pCntntSect( 0 )
 {
@@ -3114,7 +3114,7 @@ SwRangeRedline::SwRangeRedline( const SwRedlineData& rData, const SwPaM& rPam )
 }
 
 SwRangeRedline::SwRangeRedline( const SwRedlineData& rData, const SwPosition& rPos )
-    : SwPaM( rPos ),
+    : SwRedline( RD_RANGEREDLINE ), SwPaM( rPos ),
     pRedlineData( new SwRedlineData( rData )),
     pCntntSect( 0 )
 {
@@ -3123,7 +3123,7 @@ SwRangeRedline::SwRangeRedline( const SwRedlineData& rData, const SwPosition& rP
 }
 
 SwRangeRedline::SwRangeRedline( const SwRangeRedline& rCpy )
-    : SwPaM( *rCpy.GetMark(), *rCpy.GetPoint() ),
+    : SwRedline( RD_RANGEREDLINE ), SwPaM( *rCpy.GetMark(), *rCpy.GetPoint() ),
     pRedlineData( new SwRedlineData( *rCpy.pRedlineData )),
     pCntntSect( 0 )
 {
