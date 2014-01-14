@@ -2592,7 +2592,7 @@ HtmlSelectModel::importBinaryModel( BinaryInputStream& rInStrm )
         if ( !nToken ) // first line will tell us if multiselect is enabled
         {
             if ( sLine == sMultiple )
-                mnMultiSelect = true;
+                mnMultiSelect = AX_SELECTION_MULTI;
         }
         // skip first and last lines, no data there
         else if ( nToken < nTokenCount - 1)
