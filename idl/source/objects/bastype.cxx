@@ -66,7 +66,7 @@ void SvUINT32::Write( SvStream & rStm, sal_uInt32 nVal )
     SvPersistStream::WriteCompressed( rStm, nVal );
 }
 
-SvStream& operator << (SvStream & rStm, const SvBOOL & rb )
+SvStream& WriteSvBOOL(SvStream & rStm, const SvBOOL & rb )
 {
     sal_uInt8 n = rb.nVal;
     if( rb.bSet )
@@ -88,7 +88,7 @@ SvStream& operator >> (SvStream & rStm, SvBOOL & rb )
     return rStm;
 }
 
-SvStream& operator << (SvStream & rStm, const SvVersion & r )
+SvStream& WriteSvVersion(SvStream & rStm, const SvVersion & r )
 {
     if( (r.GetMajorVersion() || r.GetMinorVersion())
       && r.GetMajorVersion() <= 0x0F && r.GetMinorVersion() <= 0x0F )
@@ -212,7 +212,7 @@ sal_Bool SvIdentifier::WriteSvIdl( SvStringHashEntry * pName,
     return sal_True;
 }
 
-SvStream& operator << (SvStream & rStm, const SvIdentifier & r )
+SvStream& WriteSvIdentifier(SvStream & rStm, const SvIdentifier & r )
 {
     write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStm, r.getString());
     return rStm;
@@ -275,9 +275,9 @@ sal_Bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
     return sal_False;
 }
 
-SvStream& operator << (SvStream & rStm, const SvNumberIdentifier & r )
+SvStream& WriteSvNumberIdentifier(SvStream & rStm, const SvNumberIdentifier & r )
 {
-    rStm << (SvIdentifier &)r;
+    WriteSvIdentifier( rStm, (SvIdentifier &)r );
     SvPersistStream::WriteCompressed( rStm, r.nValue );
     return rStm;
 }
@@ -325,7 +325,7 @@ sal_Bool SvString::WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm,
     return sal_True;
 }
 
-SvStream& operator << (SvStream & rStm, const SvString & r )
+SvStream& WriteSvString(SvStream & rStm, const SvString & r )
 {
     write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStm, r.getString());
     return rStm;

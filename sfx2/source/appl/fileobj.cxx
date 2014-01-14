@@ -165,7 +165,7 @@ sal_Bool SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
                     if( GRAPHIC_NONE != aGrf.GetType() )
                     {
                         aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
-                        aMemStm << aGrf;
+                        WriteGraphic( aMemStm, aGrf );
                     }
                     break;
 

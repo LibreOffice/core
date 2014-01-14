@@ -306,12 +306,13 @@ SvStream& operator>>( SvStream& rIStm, Impl_Gradient& rImpl_Gradient )
     return rIStm;
 }
 
-SvStream& operator<<( SvStream& rOStm, const Impl_Gradient& rImpl_Gradient )
+SvStream& WriteImpl_Gradient( SvStream& rOStm, const Impl_Gradient& rImpl_Gradient )
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );
 
     rOStm.WriteUInt16( (sal_uInt16) rImpl_Gradient.meStyle );
-    rOStm << rImpl_Gradient.maStartColor << rImpl_Gradient.maEndColor;
+    WriteColor( rOStm, rImpl_Gradient.maStartColor );
+    WriteColor( rOStm, rImpl_Gradient.maEndColor );
     rOStm.WriteUInt16( rImpl_Gradient.mnAngle )
          .WriteUInt16( rImpl_Gradient.mnBorder )
          .WriteUInt16( rImpl_Gradient.mnOfsX )
@@ -329,9 +330,9 @@ SvStream& operator>>( SvStream& rIStm, Gradient& rGradient )
     return( rIStm >> *rGradient.mpImplGradient );
 }
 
-SvStream& operator<<( SvStream& rOStm, const Gradient& rGradient )
+SvStream& WriteGradient( SvStream& rOStm, const Gradient& rGradient )
 {
-    return( rOStm << *rGradient.mpImplGradient );
+    return WriteImpl_Gradient( rOStm, *rGradient.mpImplGradient );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -342,10 +342,10 @@ SvStream& SvxFieldItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) co
     {
         // SvxFieldData not enough, because not registered on ClassMgr.
         SvxURLField aDummyData;
-        aPStrm << &aDummyData;
+        WriteSvPersistBase( aPStrm , &aDummyData );
     }
     else
-        aPStrm << pField;
+        WriteSvPersistBase( aPStrm, pField );
 
     return rStrm;
 }

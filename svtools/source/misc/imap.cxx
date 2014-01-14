@@ -182,7 +182,7 @@ void IMapRectangleObject::ImpConstruct( const Rectangle& rRect, sal_Bool bPixel 
 
 void IMapRectangleObject::WriteIMapObject( SvStream& rOStm ) const
 {
-    rOStm << aRect;
+    WriteRectangle( rOStm, aRect );
 }
 
 
@@ -292,7 +292,7 @@ void IMapCircleObject::WriteIMapObject( SvStream& rOStm ) const
 {
     sal_uInt32 nTmp = nRadius;
 
-    rOStm << aCenter;
+    WritePair( rOStm, aCenter );
     rOStm << nTmp;
 }
 
@@ -431,9 +431,9 @@ void IMapPolygonObject::ImpConstruct( const Polygon& rPoly, sal_Bool bPixel )
 
 void IMapPolygonObject::WriteIMapObject( SvStream& rOStm ) const
 {
-    rOStm << aPoly;
+    WritePolygon( rOStm, aPoly );
     rOStm << bEllipse;  // >= Version 2
-    rOStm << aEllipse;  // >= Version 2
+    WriteRectangle( rOStm, aEllipse );  // >= Version 2
 }
 
 

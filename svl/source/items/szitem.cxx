@@ -107,7 +107,7 @@ SfxPoolItem* SfxSizeItem::Create(SvStream &rStream, sal_uInt16 ) const
 SvStream& SfxSizeItem::Store(SvStream &rStream, sal_uInt16 ) const
 {
     DBG_CHKTHIS(SfxSizeItem, 0);
-    rStream << aVal;
+    WritePair( rStream, aVal );
     return rStream;
 }
 

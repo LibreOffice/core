@@ -86,7 +86,7 @@ public:
     const OUString          GetTitle() const;
     void                    SetTitle( const OUString& rTitle );
 
-    friend SvStream&        operator<<( SvStream& rOut, const SgaObject& rObj );
+    friend SvStream&        WriteSgaObject( SvStream& rOut, const SgaObject& rObj );
     friend SvStream&        operator>>( SvStream& rIn, SgaObject& rObj );
 
     BitmapEx createPreviewBitmapEx(const Size& rSizePixel) const;

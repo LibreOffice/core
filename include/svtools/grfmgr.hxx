@@ -150,7 +150,7 @@ public:
                                 mnGPercent != 0 || mnBPercent != 0 || mfGamma != 1.0 || mbInvert );
                     }
 
-    friend SvStream& operator<<( SvStream& rOStm, const GraphicAttr& rAttr );
+    friend SvStream& WriteGraphicAttr( SvStream& rOStm, const GraphicAttr& rAttr );
     friend SvStream& operator>>( SvStream& rIStm, GraphicAttr& rAttr );
 };
 
@@ -484,7 +484,7 @@ public:
 
     void                    StopAnimation( OutputDevice* pOut = NULL, long nExtraData = 0L );
 
-    friend SvStream&        operator<<( SvStream& rOStm, const GraphicObject& rGraphicObj );
+    friend SvStream&        WriteGraphicObject( SvStream& rOStm, const GraphicObject& rGraphicObj );
     friend SvStream&        operator>>( SvStream& rIStm, GraphicObject& rGraphicObj );
 
     static GraphicObject    CreateGraphicObjectFromURL( const OUString &rURL );

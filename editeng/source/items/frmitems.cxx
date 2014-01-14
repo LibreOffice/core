@@ -106,7 +106,7 @@ namespace
     /// Store a border line to a stream.
     SvStream& StoreBorderLine(SvStream &stream, const SvxBorderLine &l, sal_uInt16 version)
     {
-        stream << l.GetColor();
+        WriteColor( stream, l.GetColor() );
         stream.WriteUInt16( l.GetOutWidth() )
               .WriteUInt16( l.GetInWidth() )
               .WriteUInt16( l.GetDistance() );
@@ -1512,9 +1512,9 @@ SvStream& SvxShadowItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) 
 {
     rStrm.WriteSChar( (sal_Int8) GetLocation() )
          .WriteUInt16( (sal_uInt16) GetWidth() )
-         .WriteUChar( (sal_Bool)(aShadowColor.GetTransparency() > 0) )
-          << GetColor()
-          << GetColor();
+         .WriteUChar( (sal_Bool)(aShadowColor.GetTransparency() > 0) );
+    WriteColor( rStrm, GetColor() );
+    WriteColor( rStrm, GetColor() );
     rStrm.WriteSChar( (sal_Int8)(aShadowColor.GetTransparency() > 0 ? 0 : 1) ); //BRUSH_NULL : BRUSH_SOLID
     return rStrm;
 }
@@ -2612,8 +2612,8 @@ SvStream& SvxBoxInfoItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ )
         const SvxBorderLine* l = pLine[ i ];
         if( l )
         {
-            rStrm.WriteChar( (char) i )
-                  << l->GetColor();
+            rStrm.WriteChar( (char) i );
+            WriteColor( rStrm, l->GetColor() );
             rStrm.WriteInt16( (short) l->GetOutWidth() )
                  .WriteInt16( (short) l->GetInWidth() )
                  .WriteInt16( (short) l->GetDistance() );
@@ -3257,14 +3257,14 @@ SvStream& SvxLineItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) co
 {
     if( pLine )
     {
-        rStrm << pLine->GetColor();
+        WriteColor( rStrm, pLine->GetColor() );
         rStrm.WriteInt16( (short)pLine->GetOutWidth() )
              .WriteInt16( (short)pLine->GetInWidth() )
              .WriteInt16( (short)pLine->GetDistance() );
     }
     else
     {
-        rStrm << Color();
+        WriteColor( rStrm, Color() );
         rStrm.WriteInt16( (short)0 ).WriteInt16( (short)0 ).WriteInt16( (short)0 );
     }
     return rStrm;
@@ -3901,8 +3901,8 @@ SfxPoolItem* SvxBrushItem::Create( SvStream& rStream, sal_uInt16 nVersion ) cons
 SvStream& SvxBrushItem::Store( SvStream& rStream , sal_uInt16 /*nItemVersion*/ ) const
 {
     rStream.WriteUChar( (sal_Bool)sal_False );
-    rStream << aColor;
-    rStream << aColor;
+    WriteColor( rStream, aColor );
+    WriteColor( rStream, aColor );
     rStream.WriteSChar( (sal_Int8)(aColor.GetTransparency() > 0 ? 0 : 1) ); //BRUSH_NULL : BRUSH_SOLID
 
     sal_uInt16 nDoLoad = 0;
@@ -3916,7 +3916,7 @@ SvStream& SvxBrushItem::Store( SvStream& rStream , sal_uInt16 /*nItemVersion*/ )
     rStream.WriteUInt16( nDoLoad );
 
     if ( pImpl->pGraphicObject && maStrLink.isEmpty() )
-        rStream << pImpl->pGraphicObject->GetGraphic();
+        WriteGraphic( rStream, pImpl->pGraphicObject->GetGraphic() );
     if ( !maStrLink.isEmpty() )
     {
         OSL_FAIL("No BaseURL!");

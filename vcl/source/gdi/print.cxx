@@ -249,7 +249,7 @@ bool QueueInfo::operator==( const QueueInfo& rInfo ) const
 }
 
 
-SvStream& operator<<( SvStream& rOStream, const QueueInfo& rInfo )
+SvStream& WriteQueueInfo( SvStream& rOStream, const QueueInfo& rInfo )
 {
     VersionCompat aCompat( rOStream, STREAM_WRITE, 1 );
 
