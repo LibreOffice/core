@@ -211,7 +211,7 @@ struct XMLEffectHint
     sal_Int32       mnPresId;
     sal_Int32       mnPathShapeId;
 
-    int operator<(const XMLEffectHint& rComp) const { return mnPresId < rComp.mnPresId; }
+    bool operator<(const XMLEffectHint& rComp) const { return mnPresId < rComp.mnPresId; }
 
     XMLEffectHint()
     :   meKind( XMLE_SHOW ), mbTextEffect( sal_False ),

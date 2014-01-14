@@ -68,9 +68,9 @@ SvXMLNamespaceMap::~SvXMLNamespaceMap()
 {
 }
 
-int SvXMLNamespaceMap::operator ==( const SvXMLNamespaceMap& rCmp ) const
+bool SvXMLNamespaceMap::operator ==( const SvXMLNamespaceMap& rCmp ) const
 {
-    return static_cast < int > (aNameHash == rCmp.aNameHash);
+    return aNameHash == rCmp.aNameHash;
 }
 
 sal_uInt16 SvXMLNamespaceMap::_Add( const OUString& rPrefix, const OUString &rName, sal_uInt16 nKey )

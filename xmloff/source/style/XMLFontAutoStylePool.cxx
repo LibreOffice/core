@@ -107,8 +107,8 @@ struct XMLFontAutoStylePoolEntryCmp_Impl {
         XMLFontAutoStylePoolEntry_Impl* const& r1,
         XMLFontAutoStylePoolEntry_Impl* const& r2 ) const
     {
-        sal_Int8 nEnc1(r1->GetEncoding() != RTL_TEXTENCODING_SYMBOL);
-        sal_Int8 nEnc2(r2->GetEncoding() != RTL_TEXTENCODING_SYMBOL);
+        bool nEnc1(r1->GetEncoding() != RTL_TEXTENCODING_SYMBOL);
+        bool nEnc2(r2->GetEncoding() != RTL_TEXTENCODING_SYMBOL);
         if( nEnc1 != nEnc2 )
             return nEnc1 < nEnc2;
         else if( r1->GetPitch() != r2->GetPitch() )

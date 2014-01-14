@@ -36,7 +36,7 @@ SvXMLAttrContainerData::~SvXMLAttrContainerData()
 {
 }
 
-int SvXMLAttrContainerData::operator ==( const SvXMLAttrContainerData& rCmp ) const
+bool SvXMLAttrContainerData::operator ==( const SvXMLAttrContainerData& rCmp ) const
 {
     return ( *(rCmp.pimpl) == *(pimpl) );
 }

@@ -768,7 +768,7 @@ struct ZOrderHint
     sal_Int32 nIs;
     sal_Int32 nShould;
 
-    int operator<(const ZOrderHint& rComp) const { return nShould < rComp.nShould; }
+    bool operator<(const ZOrderHint& rComp) const { return nShould < rComp.nShould; }
 };
 
 class ShapeSortContext

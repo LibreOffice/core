@@ -36,7 +36,7 @@ public:
     SvXMLAttrContainerData(const SvXMLAttrContainerData &rCopy);
     ~SvXMLAttrContainerData();
 
-    int  operator ==( const SvXMLAttrContainerData& rCmp ) const;
+    bool operator ==( const SvXMLAttrContainerData& rCmp ) const;
 
     sal_Bool AddAttr( const OUString& rLName, const OUString& rValue );
     sal_Bool AddAttr( const OUString& rPrefix, const OUString& rNamespace,

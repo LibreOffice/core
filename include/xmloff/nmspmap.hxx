@@ -100,7 +100,7 @@ public:
     SvXMLNamespaceMap( const SvXMLNamespaceMap& );
 
     void operator =( const SvXMLNamespaceMap& rCmp );
-    int operator ==( const SvXMLNamespaceMap& rCmp ) const;
+    bool operator ==( const SvXMLNamespaceMap& rCmp ) const;
 
     sal_uInt16 Add( const OUString& rPrefix,
                 const OUString& rName,
