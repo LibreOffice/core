@@ -714,21 +714,22 @@ namespace oox { namespace ppt {
 
                 pNode->getNodeProperties()[ NP_TRANSFORMTYPE ]
                     = makeAny((sal_Int16)AnimationTransformType::ROTATE);
-                // TODO make sure the units are OK
+                // see also DFF_msofbtAnimateRotationData in
+                // sd/source/filter/ppt/pptinanimations.cxx
                 if(attribs.hasAttribute( XML_by ) )
                 {
                     sal_Int32 nBy = attribs.getInteger( XML_by, 0 );
-                    pNode->setBy( makeAny( (double)nBy ) );
+                    pNode->setBy( makeAny( (double) nBy ) );
                 }
                 if(attribs.hasAttribute( XML_from ) )
                 {
                     sal_Int32 nFrom = attribs.getInteger( XML_from, 0 );
-                    pNode->setFrom( makeAny( nFrom ) );
+                    pNode->setFrom( makeAny( (double) nFrom ) );
                 }
                 if(attribs.hasAttribute( XML_to ) )
                 {
                     sal_Int32 nTo = attribs.getInteger( XML_to, 0 );
-                    pNode->setTo( makeAny( nTo ) );
+                    pNode->setTo( makeAny( (double) nTo ) );
                 }
             }
 
