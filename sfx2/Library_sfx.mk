@@ -107,6 +107,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/appl/linkmgr2 \
     sfx2/source/appl/linksrc \
     sfx2/source/appl/lnkbase2 \
+	sfx2/source/appl/macroloader \
     sfx2/source/appl/module \
     sfx2/source/appl/newhelp \
     sfx2/source/appl/opengrf \

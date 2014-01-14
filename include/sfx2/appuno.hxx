@@ -46,41 +46,6 @@
 #include <tools/errcode.hxx>
 #include <sfx2/sfxuno.hxx>
 
-class SfxObjectShell;
-class SfxMacroLoader  :     public ::cppu::WeakImplHelper5<
-                                       css::frame::XDispatchProvider,
-                                       css::frame::XNotifyingDispatch,
-                                       css::frame::XSynchronousDispatch,
-                                       css::lang::XServiceInfo,
-                                       css::lang::XInitialization >
-{
-    ::com::sun::star::uno::WeakReference < ::com::sun::star::frame::XFrame > m_xFrame;
-
-    SfxObjectShell*             GetObjectShell_Impl();
-
-public:
-    // XInterface, XTypeProvider, XServiceInfo
-    SFX_DECL_XSERVICEINFO
-
-    SfxMacroLoader( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& )
-    {}
-
-    static ErrCode loadMacro( const OUString& aURL, ::com::sun::star::uno::Any& rRetval, SfxObjectShell* pDoc=NULL ) throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatch > SAL_CALL
-                    queryDispatch( const ::com::sun::star::util::URL& aURL, const OUString& sTargetFrameName,
-                    FrameSearchFlags eSearchFlags ) throw( ::com::sun::star::uno::RuntimeException ) ;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatch > > SAL_CALL
-                    queryDispatches( const ::com::sun::star::uno::Sequence < ::com::sun::star::frame::DispatchDescriptor >& seqDescriptor )
-                        throw( ::com::sun::star::uno::RuntimeException ) ;
-    virtual void SAL_CALL dispatchWithNotification( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArgs, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArgs ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL dispatchWithReturnValue( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArgs ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-};
-
 class SfxAppDispatchProvider : public ::cppu::WeakImplHelper3< ::com::sun::star::frame::XAppDispatchProvider,
                                                                ::com::sun::star::lang::XServiceInfo,
                                                                ::com::sun::star::lang::XInitialization >
