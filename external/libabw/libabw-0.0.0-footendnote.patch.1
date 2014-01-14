@@ -1,0 +1,101 @@
+--- a/src/lib/ABWContentCollector.cpp
++++ b/src/lib/ABWContentCollector.cpp
+@@ -289,6 +289,7 @@ libabw::ABWContentParsingState::ABWContentParsingState() :
+   m_isSpanOpened(false),
+   m_isParagraphOpened(false),
+   m_isListElementOpened(false),
++  m_inParagraphOrListElement(false),
+ 
+   m_currentSectionStyle(),
+   m_currentParagraphStyle(),
+@@ -334,6 +335,7 @@ libabw::ABWContentParsingState::ABWContentParsingState(const ABWContentParsingSt
+   m_isSpanOpened(ps.m_isSpanOpened),
+   m_isParagraphOpened(ps.m_isParagraphOpened),
+   m_isListElementOpened(ps.m_isListElementOpened),
++  m_inParagraphOrListElement(ps.m_inParagraphOrListElement),
+ 
+   m_currentSectionStyle(ps.m_currentSectionStyle),
+   m_currentParagraphStyle(ps.m_currentParagraphStyle),
+@@ -500,6 +502,7 @@ void libabw::ABWContentCollector::collectParagraphProperties(const char *level,
+     parsePropString(props, tmpProps);
+   for (std::map<std::string, std::string>::const_iterator iter = tmpProps.begin(); iter != tmpProps.end(); ++iter)
+     m_ps->m_currentParagraphStyle[iter->first] = iter->second;
++  m_ps->m_inParagraphOrListElement = true;
+ }
+ 
+ void libabw::ABWContentCollector::collectCharacterProperties(const char *style, const char *props)
+@@ -748,6 +751,7 @@ void libabw::ABWContentCollector::closeParagraphOrListElement()
+   _closeParagraph();
+   _closeListElement();
+   m_ps->m_currentParagraphStyle.clear();
++  m_ps->m_inParagraphOrListElement = false;
+ }
+ 
+ void libabw::ABWContentCollector::openLink(const char *href)
+@@ -807,6 +811,8 @@ void libabw::ABWContentCollector::insertPageBreak()
+ 
+ void libabw::ABWContentCollector::insertText(const WPXString &text)
+ {
++  if (!m_ps->m_inParagraphOrListElement)
++    return;
+   if (!m_ps->m_isSpanOpened)
+     _openSpan();
+ 
+--- a/src/lib/ABWContentCollector.h
++++ b/src/lib/ABWContentCollector.h
+@@ -71,6 +71,7 @@ struct ABWContentParsingState
+   bool m_isSpanOpened;
+   bool m_isParagraphOpened;
+   bool m_isListElementOpened;
++  bool m_inParagraphOrListElement;
+ 
+   std::map<std::string, std::string> m_currentSectionStyle;
+   std::map<std::string, std::string> m_currentParagraphStyle;
+--- a/src/lib/ABWParser.cpp
++++ b/src/lib/ABWParser.cpp
+@@ -92,7 +92,7 @@ void appendFromBase64(WPXBinaryData &data, const char *base64Data)
+ } // namespace libabw
+ 
+ libabw::ABWParser::ABWParser(WPXInputStream *input, WPXDocumentInterface *iface)
+-  : m_input(input), m_iface(iface), m_collector(0), m_inParagraph(false)
++  : m_input(input), m_iface(iface), m_collector(0)
+ {
+ }
+ 
+@@ -173,8 +173,7 @@ void libabw::ABWParser::processXmlNode(xmlTextReaderPtr reader)
+   {
+     WPXString text((const char *)xmlTextReaderConstValue(reader));
+     ABW_DEBUG_MSG(("ABWParser::processXmlNode: text %s\n", text.cstr()));
+-    if (m_inParagraph && m_collector)
+-      m_collector->insertText(text);
++    m_collector->insertText(text);
+   }
+   switch (tokenId)
+   {
+@@ -219,16 +218,10 @@ void libabw::ABWParser::processXmlNode(xmlTextReaderPtr reader)
+     break;
+   case XML_P:
+     if (XML_READER_TYPE_ELEMENT == tokenType)
+-    {
+       readP(reader);
+-      m_inParagraph = true;
+-    }
+     if (XML_READER_TYPE_END_ELEMENT == tokenType || emptyToken > 0)
+-    {
+-      m_inParagraph = false;
+       if (m_collector)
+         m_collector->closeParagraphOrListElement();
+-    }
+     break;
+   case XML_C:
+     if (XML_READER_TYPE_ELEMENT == tokenType)
+--- a/src/lib/ABWParser.h
++++ b/src/lib/ABWParser.h
+@@ -61,7 +61,6 @@ private:
+   WPXInputStream *m_input;
+   WPXDocumentInterface *m_iface;
+   ABWCollector *m_collector;
+-  bool m_inParagraph;
+ };
+ 
+ } // namespace libabw
