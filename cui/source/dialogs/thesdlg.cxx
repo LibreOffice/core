@@ -518,7 +518,7 @@ SvxThesaurusDialog::SvxThesaurusDialog(
 
 IMPL_LINK( SvxThesaurusDialog, ReplaceBtnHdl_Impl, Button *, EMPTYARG /*pBtn*/ )
 {
-    EndDialog(true);
+    EndDialog(RET_OK);
     return 0;
 }
 

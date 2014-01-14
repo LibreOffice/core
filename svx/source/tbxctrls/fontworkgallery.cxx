@@ -247,7 +247,7 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
 IMPL_LINK_NOARG(FontWorkGalleryDialog, ClickOKHdl)
 {
     insertSelectedFontwork();
-    EndDialog( true );
+    EndDialog( RET_OK );
     return 0;
 }
 
@@ -256,7 +256,7 @@ IMPL_LINK_NOARG(FontWorkGalleryDialog, ClickOKHdl)
 IMPL_LINK_NOARG(FontWorkGalleryDialog, DoubleClickFavoriteHdl)
 {
     insertSelectedFontwork();
-    EndDialog( true );
+    EndDialog( RET_OK );
     return( 0L );
 }
 

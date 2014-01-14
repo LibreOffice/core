@@ -225,13 +225,13 @@ LicenseDialogImpl::LicenseDialogImpl(
 
 IMPL_LINK_NOARG(LicenseDialogImpl, AcceptHdl)
 {
-    EndDialog(true);
+    EndDialog(RET_OK);
     return 0;
 }
 
 IMPL_LINK_NOARG(LicenseDialogImpl, CancelHdl)
 {
-    EndDialog(false);
+    EndDialog(RET_CANCEL);
     return 0;
 }
 

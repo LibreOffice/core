@@ -33,7 +33,7 @@ OUString InputDialog::getEntryText() const
 
 IMPL_LINK(InputDialog,ClickHdl,PushButton*, pButton)
 {
-    EndDialog(pButton == m_pOK ? true : false);
+    EndDialog(pButton == m_pOK ? RET_OK : RET_CANCEL);
     return 0;
 }
 

@@ -135,7 +135,7 @@ IMPL_LINK_NOARG(CertPathDialog, OKHdl_Impl)
         SAL_WARN("cui.options", "CertPathDialog::OKHdl_Impl(): caught exception" << e.Message);
     }
 
-    EndDialog(true);
+    EndDialog(RET_OK);
 
     return 0;
 }
