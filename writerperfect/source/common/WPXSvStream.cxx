@@ -82,12 +82,34 @@ struct StreamData
     explicit StreamData(const rtl::OString &rName);
 
     SotStorageStreamRefWrapper stream;
+
+    /** Name of the stream.
+      *
+      * This is not @c rtl::OUString, because we need to be able to
+      * produce const char* from it.
+      */
     rtl::OString name;
 };
 
 typedef boost::unordered_map<rtl::OUString, std::size_t, rtl::OUStringHash> NameMap_t;
 typedef boost::unordered_map<rtl::OUString, SotStorageRefWrapper, rtl::OUStringHash> OLEStorageMap_t;
 
+/** Representation of an OLE2 storage.
+  *
+  * This class tries to bring a bit of sanity to use of SotStorage with
+  * respect to the needs of @c librevenge::RVNGInputStream API. It
+  * holds all nested storages for the whole lifetime (more precisely,
+  * since initialization, which is performed by calling @c
+  * initialize()), thus ensuring that no created stream is destroyed
+  * just because its parent storage went out of scope. It also holds a
+  * bidirectional map of stream names to their indexes (index of a
+  * stream is determined by deep-first traversal), which is also
+  * populated during initialization (member variables @c maStreams and
+  * @c maNameMap).
+  *
+  * Streams are created on demand (and saved, for the same reason as
+  * storages).
+  */
 struct OLEStorageImpl
 {
     OLEStorageImpl();
@@ -103,10 +125,10 @@ private:
     SotStorageStreamRef createStream(const rtl::OUString &rPath);
 
 public:
-    SotStorageRefWrapper mxRootStorage;
-    OLEStorageMap_t maStorageMap;
-    ::std::vector< StreamData > maStreams;
-    NameMap_t maNameMap;
+    SotStorageRefWrapper mxRootStorage; //< root storage of the OLE2
+    OLEStorageMap_t maStorageMap; //< map of all sub storages by name
+    ::std::vector< StreamData > maStreams; //< list of streams and their names
+    NameMap_t maNameMap; //< map of stream names to indexes (into @c maStreams)
     bool mbInitialized;
 };
 
