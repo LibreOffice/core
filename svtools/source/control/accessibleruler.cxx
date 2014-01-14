@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
@@ -362,7 +363,6 @@ sal_Int32 SvtRulerAccessible::getBackground(  )
 }
 
 //=====  XServiceInfo  ========================================================
-
 OUString SAL_CALL SvtRulerAccessible::getImplementationName( void ) throw( RuntimeException )
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.ui.SvtRulerAccessible" ) );
@@ -370,20 +370,7 @@ OUString SAL_CALL SvtRulerAccessible::getImplementationName( void ) throw( Runti
 
 sal_Bool SAL_CALL SvtRulerAccessible::supportsService( const OUString& sServiceName ) throw( RuntimeException )
 {
-    ::osl::MutexGuard   aGuard( m_aMutex );
-    //  Iterate over all supported service names and return true if on of them
-    //  matches the given name.
-    Sequence< OUString >    aSupportedServices( getSupportedServiceNames() );
-    int                     nLength = aSupportedServices.getLength();
-    const OUString*         pStr = aSupportedServices.getConstArray();
-
-    for( int i = nLength ; i ; --i, ++pStr )
-    {
-        if( sServiceName == *pStr )
-            return sal_True;
-    }
-
-    return sal_False;
+    return cppu::supportsService( this, sServiceName );
 }
 
 Sequence< OUString > SAL_CALL SvtRulerAccessible::getSupportedServiceNames( void ) throw( RuntimeException )
@@ -393,15 +380,12 @@ Sequence< OUString > SAL_CALL SvtRulerAccessible::getSupportedServiceNames( void
 }
 
 //=====  XTypeProvider  =======================================================
-
 Sequence< sal_Int8 > SAL_CALL SvtRulerAccessible::getImplementationId( void ) throw( RuntimeException )
 {
     return getUniqueId();
 }
 
-
 //=====  internals ========================================================
-
 void SvtRulerAccessible::setName( const OUString& rName )
 {
         msName = rName;

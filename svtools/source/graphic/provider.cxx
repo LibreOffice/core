@@ -34,6 +34,7 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "descriptor.hxx"
 #include "graphic.hxx"
@@ -51,13 +52,9 @@ GraphicProvider::GraphicProvider()
 {
 }
 
-// ------------------------------------------------------------------------------
-
 GraphicProvider::~GraphicProvider()
 {
 }
-
-// ------------------------------------------------------------------------------
 
 OUString SAL_CALL GraphicProvider::getImplementationName()
     throw( uno::RuntimeException )
@@ -65,22 +62,11 @@ OUString SAL_CALL GraphicProvider::getImplementationName()
     return OUString( "com.sun.star.comp.graphic.GraphicProvider" );
 }
 
-// ------------------------------------------------------------------------------
-
 sal_Bool SAL_CALL GraphicProvider::supportsService( const OUString& ServiceName )
     throw( uno::RuntimeException )
 {
-    uno::Sequence< OUString >    aSNL( getSupportedServiceNames() );
-    const OUString*              pArray = aSNL.getConstArray();
-
-    for( int i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return true;
-
-    return false;
+    return cppu::supportsService( this, ServiceName );
 }
-
-// ------------------------------------------------------------------------------
 
 uno::Sequence< OUString > SAL_CALL GraphicProvider::getSupportedServiceNames()
     throw( uno::RuntimeException )
@@ -89,8 +75,6 @@ uno::Sequence< OUString > SAL_CALL GraphicProvider::getSupportedServiceNames()
     aSeq.getArray()[ 0 ] = "com.sun.star.graphic.GraphicProvider";
     return aSeq;
 }
-
-// ------------------------------------------------------------------------------
 
 uno::Sequence< uno::Type > SAL_CALL GraphicProvider::getTypes()
     throw(uno::RuntimeException)

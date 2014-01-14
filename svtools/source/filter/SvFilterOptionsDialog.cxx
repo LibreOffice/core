@@ -35,6 +35,7 @@
 #include <com/sun/star/uno/Any.h>
 #include <unotools/syslocale.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include "vcl/svapp.hxx"
 
 using namespace ::rtl;
@@ -56,24 +57,15 @@ OUString SvFilterOptionsDialog_getImplementationName()
 {
     return OUString( "com.sun.star.comp.svtools.SvFilterOptionsDialog" );
 }
-#define SERVICE_NAME "com.sun.star.ui.dialog.FilterOptionsDialog"
-sal_Bool SAL_CALL SvFilterOptionsDialog_supportsService( const OUString& ServiceName )
-    throw( uno::RuntimeException )
-{
-    return ServiceName == SERVICE_NAME;
-}
 
 uno::Sequence< OUString > SAL_CALL SvFilterOptionsDialog_getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( SERVICE_NAME );
+    pArray[0] = "com.sun.star.ui.dialog.FilterOptionsDialog";
     return aRet;
 }
-#undef SERVICE_NAME
-
-// -----------------------------------------------------------------------------
 
 SvFilterOptionsDialog::SvFilterOptionsDialog( const uno::Reference< uno::XComponentContext >& rxContext ) :
     mxContext           ( rxContext ),
@@ -117,7 +109,7 @@ OUString SAL_CALL SvFilterOptionsDialog::getImplementationName()
 sal_Bool SAL_CALL SvFilterOptionsDialog::supportsService( const OUString& rServiceName )
     throw( uno::RuntimeException )
 {
-    return SvFilterOptionsDialog_supportsService( rServiceName );
+    return cppu::supportsService( this, rServiceName );
 }
 uno::Sequence< OUString > SAL_CALL SvFilterOptionsDialog::getSupportedServiceNames()
     throw ( uno::RuntimeException )
