@@ -562,11 +562,28 @@ DummyRectangle::DummyRectangle(const awt::Size& rSize, const awt::Point& rPoint,
 
 void DummyRectangle::render()
 {
-    /*
     SAL_WARN("chart2.opengl", "render DummyRectangle");
     debugProperties(maProperties);
     DummyChart* pChart = getRootShape();
-    std::map< OUString, uno::Any >::const_iterator itr = maProperties.find("FillColor");
+    std::map< OUString, uno::Any >::const_iterator itr = maProperties.find("Invisible");
+    if(itr != maProperties.end())
+    {
+        SAL_WARN("chart2.opengl", "invisble");
+        return;
+    }
+
+    itr = maProperties.find("FillStyle");
+    if(itr != maProperties.end())
+    {
+        drawing::FillStyle eStyle = itr->second.get<drawing::FillStyle>();
+        if(eStyle == drawing::FillStyle_NONE)
+        {
+            SAL_WARN("chart2.opengl", "no fill style");
+            return;
+        }
+    }
+
+    itr = maProperties.find("FillColor");
     if(itr != maProperties.end())
     {
         uno::Any co =  itr->second;
@@ -587,7 +604,6 @@ void DummyRectangle::render()
     }
     pChart->m_GLRender.RectangleShapePoint(maPosition.X, maPosition.Y, maSize.Width, maSize.Height);
     pChart->m_GLRender.RenderRectangleShape();
-    */
 }
 
 DummyText::DummyText(const OUString& rText, const tNameSequence& rNames,

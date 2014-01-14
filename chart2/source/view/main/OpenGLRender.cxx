@@ -1612,8 +1612,8 @@ int OpenGLRender::SetArea2DShapePoint(float x, float y, int listLength)
     {
         m_Area2DPointList.reserve(listLength);
     }
-    float actualX = (x / OPENGL_SCALE_VALUE) - ((float)m_iWidth / 2);
-    float actualY = (y / OPENGL_SCALE_VALUE) - ((float)m_iHeight / 2);
+    float actualX = (x / OPENGL_SCALE_VALUE);
+    float actualY = (y / OPENGL_SCALE_VALUE);
     m_Area2DPointList.push_back(actualX);
     m_Area2DPointList.push_back(actualY);
     m_Area2DPointList.push_back(m_fZStep);

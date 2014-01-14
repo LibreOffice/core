@@ -368,6 +368,7 @@ uno::Reference< drawing::XShape > OpenglShapeFactory::createInvisibleRectangle(
             , const awt::Size& rSize )
 {
     dummy::DummyRectangle* pRectangle = new dummy::DummyRectangle(rSize);
+    pRectangle->setPropertyValue("Invisible", uno::makeAny(sal_True));
     xTarget->add(pRectangle);
     return pRectangle;
 }
