@@ -287,9 +287,6 @@ sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool /*bForBrowsing*/)
 
                             case RET_CANCEL:
                                 return sal_False;
-
-                            case RET_NEWTASK:
-                                return RET_NEWTASK;
                         }
 
                             if ( bModified )

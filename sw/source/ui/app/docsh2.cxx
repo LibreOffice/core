@@ -307,7 +307,7 @@ sal_uInt16 SwDocShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
 {
     sal_uInt16 nRet = SfxObjectShell::PrepareClose( bUI, bForBrowsing );
 
-    if( sal_True == nRet ) //has to be queried against TRUE! (RET_NEWTASK)
+    if( sal_True == nRet )
         EndListening( *this );
 
     if( pDoc && IsInPrepareClose() )

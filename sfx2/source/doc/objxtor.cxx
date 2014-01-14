@@ -651,10 +651,6 @@ sal_uInt16 SfxObjectShell::PrepareClose
         else if ( RET_CANCEL == nRet )
             // Cancelled
             return sal_False;
-        else if ( RET_NEWTASK == nRet )
-        {
-            return RET_NEWTASK;
-        }
     }
 
     pImp->bPreparedForClose = sal_True;
