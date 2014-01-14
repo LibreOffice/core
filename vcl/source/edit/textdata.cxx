@@ -300,7 +300,7 @@ TEIMEInfos::~TEIMEInfos()
     delete[] pAttribs;
 }
 
-void TEIMEInfos::CopyAttribs( const sal_uInt16* pA, sal_uInt16 nL )
+void TEIMEInfos::CopyAttribs(const sal_uInt16* pA, sal_Int32 nL)
 {
     nLen = nL;
     delete[] pAttribs;

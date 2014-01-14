@@ -140,16 +140,16 @@ struct TEIMEInfos
 {
     OUString    aOldTextAfterStartPos;
     sal_uInt16* pAttribs;
-    TextPaM aPos;
-    sal_uInt16  nLen;
-    sal_Bool    bCursor;
-    sal_Bool    bWasCursorOverwrite;
+    TextPaM     aPos;
+    sal_Int32   nLen;
+    bool        bCursor;
+    bool        bWasCursorOverwrite;
 
-            TEIMEInfos( const TextPaM& rPos, const OUString& rOldTextAfterStartPos );
-            ~TEIMEInfos();
+    TEIMEInfos(const TextPaM& rPos, const OUString& rOldTextAfterStartPos);
+    ~TEIMEInfos();
 
-    void    CopyAttribs( const sal_uInt16* pA, sal_uInt16 nL );
-    void    DestroyAttribs();
+    void CopyAttribs(const sal_uInt16* pA, sal_Int32 nL);
+    void DestroyAttribs();
 };
 
 // -----------------  Wrapper for old Tools List -------------------
