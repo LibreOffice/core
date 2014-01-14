@@ -21,7 +21,6 @@
 // must be first
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/string.hxx>
 #include <gdimtftools.hxx>
 
 #include <com/sun/star/document/XExporter.hpp>
@@ -241,20 +240,20 @@ sal_Int32 getNextActionOffset( MetaAction * pCurrAct )
     switch (pCurrAct->GetType()) {
     case META_TEXT_ACTION: {
         MetaTextAction * pAct = static_cast<MetaTextAction *>(pCurrAct);
-        return (pAct->GetLen() == (sal_uInt16)STRING_LEN
-                ? pAct->GetText().getLength() - pAct->GetIndex() : pAct->GetLen());
+        sal_Int32 nLen = std::min(pAct->GetLen(), pAct->GetText().getLength() - pAct->GetIndex());
+        return nLen;
     }
     case META_TEXTARRAY_ACTION: {
         MetaTextArrayAction * pAct =
             static_cast<MetaTextArrayAction *>(pCurrAct);
-        return (pAct->GetLen() == (sal_uInt16)STRING_LEN
-                ? pAct->GetText().getLength() - pAct->GetIndex() : pAct->GetLen());
+        sal_Int32 nLen = std::min(pAct->GetLen(), pAct->GetText().getLength() - pAct->GetIndex());
+        return nLen;
     }
     case META_STRETCHTEXT_ACTION: {
         MetaStretchTextAction * pAct =
             static_cast<MetaStretchTextAction *>(pCurrAct);
-        return (pAct->GetLen() == (sal_uInt16)STRING_LEN
-                ? pAct->GetText().getLength() - pAct->GetIndex() : pAct->GetLen());
+        sal_Int32 nLen = std::min(pAct->GetLen(), pAct->GetText().getLength() - pAct->GetIndex());
+        return nLen;
     }
     case META_FLOATTRANSPARENT_ACTION: {
         MetaFloatTransparentAction * pAct =
