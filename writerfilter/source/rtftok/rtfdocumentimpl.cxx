@@ -1103,6 +1103,8 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_SUBJECT:
         case DESTINATION_DOCCOMM:
         case DESTINATION_ATNID:
+        case DESTINATION_ANNOTATIONREFERENCESTART:
+        case DESTINATION_ANNOTATIONREFERENCEEND:
         case DESTINATION_MR:
         case DESTINATION_MCHR:
         case DESTINATION_MPOS:
@@ -1624,22 +1626,10 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aStates.top().nDestinationState = DESTINATION_DOCCOMM;
             break;
         case RTF_ATRFSTART:
+            m_aStates.top().nDestinationState = DESTINATION_ANNOTATIONREFERENCESTART;
+            break;
         case RTF_ATRFEND:
-            {
-                // We could send the real value here, but that would make the
-                // tokenizer more complicated, and dmapper doesn't read the
-                // result anyway.
-                RTFValue::Pointer_t pValue(new RTFValue(0));
-                m_aStates.top().nDestinationState = DESTINATION_SKIP;
-
-                RTFSprms aAttributes;
-                if (nKeyword == RTF_ATRFSTART)
-                    aAttributes.set(NS_ooxml::LN_EG_RangeMarkupElements_commentRangeStart, pValue);
-                else
-                    aAttributes.set(NS_ooxml::LN_EG_RangeMarkupElements_commentRangeEnd, pValue);
-                writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes));
-                Mapper().props(pProperties);
-            }
+            m_aStates.top().nDestinationState = DESTINATION_ANNOTATIONREFERENCEEND;
             break;
         case RTF_ATNID:
             m_aStates.top().nDestinationState = DESTINATION_ATNID;
@@ -4251,11 +4241,25 @@ int RTFDocumentImpl::popState()
         case DESTINATION_ATNID:
             m_aAuthorInitials = m_aStates.top().aDestinationText.makeStringAndClear();
             break;
+        case DESTINATION_ANNOTATIONREFERENCESTART:
+        case DESTINATION_ANNOTATIONREFERENCEEND:
+            {
+                OUString aStr = m_aStates.top().aDestinationText.makeStringAndClear();
+                RTFValue::Pointer_t pValue(new RTFValue(aStr.toInt32()));
+                RTFSprms aAttributes;
+                if (aState.nDestinationState == DESTINATION_ANNOTATIONREFERENCESTART)
+                    aAttributes.set(NS_ooxml::LN_EG_RangeMarkupElements_commentRangeStart, pValue);
+                else
+                    aAttributes.set(NS_ooxml::LN_EG_RangeMarkupElements_commentRangeEnd, pValue);
+                writerfilter::Reference<Properties>::Pointer_t pProperties(new RTFReferenceProperties(aAttributes));
+                Mapper().props(pProperties);
+            }
+            break;
         case DESTINATION_ANNOTATIONREFERENCE:
             {
                 OUString aStr = m_aStates.top().aDestinationText.makeStringAndClear();
                 RTFSprms aAnnAttributes;
-                aAnnAttributes.set(NS_ooxml::LN_CT_Markup_id, RTFValue::Pointer_t(new RTFValue(aStr)));
+                aAnnAttributes.set(NS_ooxml::LN_CT_Markup_id, RTFValue::Pointer_t(new RTFValue(aStr.toInt32())));
                 Mapper().props(writerfilter::Reference<Properties>::Pointer_t(new RTFReferenceProperties(aAnnAttributes)));
             }
             break;

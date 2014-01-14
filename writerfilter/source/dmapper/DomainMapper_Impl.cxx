@@ -1691,18 +1691,15 @@ void DomainMapper_Impl::PopAnnotation()
 
     try
     {
-    if ( m_nAnnotationId != -1 )
-    {
         // See if the annotation will be a single position or a range.
-        AnnotationPosition& aAnnotationPosition = m_aAnnotationPositions[ m_nAnnotationId ];
-        if ( !aAnnotationPosition.m_xStart.is()
-             || !aAnnotationPosition.m_xEnd.is() )
+        if (m_nAnnotationId == -1 || !m_aAnnotationPositions[m_nAnnotationId].m_xStart.is() || !m_aAnnotationPositions[m_nAnnotationId].m_xEnd.is())
         {
             uno::Sequence< beans::PropertyValue > aEmptyProperties;
             appendTextContent( uno::Reference< text::XTextContent >( m_xAnnotationField, uno::UNO_QUERY_THROW ), aEmptyProperties );
         }
         else
         {
+            AnnotationPosition& aAnnotationPosition = m_aAnnotationPositions[m_nAnnotationId];
             // Create a range that points to the annotation start/end.
             uno::Reference<text::XText> const xText = aAnnotationPosition.m_xStart->getText();
             uno::Reference<text::XTextCursor> const xCursor = xText->createTextCursorByRange(aAnnotationPosition.m_xStart);
@@ -1714,7 +1711,6 @@ void DomainMapper_Impl::PopAnnotation()
             xTextAppend->insertTextContent(xTextRange, uno::Reference<text::XTextContent>(m_xAnnotationField, uno::UNO_QUERY_THROW), !xCursor->isCollapsed());
         }
         m_aAnnotationPositions.erase( m_nAnnotationId );
-    }
     }
     catch (uno::Exception const& e)
     {
