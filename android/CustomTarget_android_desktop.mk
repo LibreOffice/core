@@ -24,6 +24,12 @@ $(call gb_CustomTarget_get_target,android/desktop) : \
 $(android_desktop_DIR)/done : $(lo4android_DIR)/done
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MAK,2)
 	cd $(SRCDIR)/android/experimental/desktop && $(MAKE) all
+# Copy to $(BUILDDIR)/instsetoo_native as that is where the tinderbox build script
+# still looks for the .apk, and we want fresh daily builds to be uploaded. Even if
+# the apps as such are mostly useless.
+# Us "foo" instead of the old INPATH
+	mkdir -p $(BUILDDIR)/instsetoo_native/foo/bin; \
+	cp $(SRCDIR)/android/experimental/desktop/bin/*-debug.apk $(BUILDDIR)/instsetoo_native/foo/bin
 
 $(call gb_CustomTarget_get_clean_target,android/desktop) :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/Clean/,,$@),$(false),MAK,2)
