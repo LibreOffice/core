@@ -830,8 +830,12 @@ OUString SwFormTokensHelper::SearchNextToken( const OUString & sPattern,
     }
     else
     {
+        // apparently the TOX_STYLE_DELIMITER act as a bracketing for
+        // TOKEN_TEXT tokens so that the user can have '>' inside the text...
         const sal_Int32 nTextSeparatorFirst = sPattern.indexOf( TOX_STYLE_DELIMITER, nStt );
-        if( nTextSeparatorFirst>=0 && nTextSeparatorFirst+1<sPattern.getLength())
+        if (    nTextSeparatorFirst >= 0
+            &&  nTextSeparatorFirst + 1 < sPattern.getLength()
+            &&  nTextSeparatorFirst < nEnd)
         {
             const sal_Int32 nTextSeparatorSecond = sPattern.indexOf( TOX_STYLE_DELIMITER,
                                                                      nTextSeparatorFirst + 1 );
@@ -839,6 +843,7 @@ OUString SwFormTokensHelper::SearchNextToken( const OUString & sPattern,
             if( nEnd < nTextSeparatorSecond )
                 nEnd = sPattern.indexOf( '>', nTextSeparatorSecond );
             // FIXME: No check to verify that nEnd is still >=0?
+            assert(nEnd >= 0);
         }
 
         ++nEnd;
