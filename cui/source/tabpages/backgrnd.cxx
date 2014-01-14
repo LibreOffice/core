@@ -1034,9 +1034,9 @@ sal_Bool SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSe
             // Bitmap-treatment:
             SvxGraphicPosition  eNewPos  = GetGraphicPosition_Impl();
 
-            int bBitmapChanged = ( ( eNewPos != eOldPos ) ||
+            bool bBitmapChanged = ( ( eNewPos != eOldPos ) ||
                                    ( rOldItem.GetGraphicLink() != aBgdGraphicPath ) );
-            int bBrushChanged = ( rOldItem.GetColor() != aBgdColor );
+            bool bBrushChanged = ( rOldItem.GetColor() != aBgdColor );
             if( bBitmapChanged || bBrushChanged )
             {
                 bModified = sal_True;

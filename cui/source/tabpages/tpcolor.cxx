@@ -87,7 +87,7 @@ void SvxColorTabPage::SetEmbed( bool bEmbed )
 bool SvxColorTabPage::GetEmbed()
 {
     XPropertyListRef pList = GetList();
-    return pList.is() ? pList->IsEmbedInDocument() : 0;
+    return pList.is() && pList->IsEmbedInDocument();
 }
 
 IMPL_LINK_NOARG(SvxColorTabPage, EmbedToggleHdl_Impl)

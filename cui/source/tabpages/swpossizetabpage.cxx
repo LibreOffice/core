@@ -511,7 +511,6 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(Window* pParent, const SfxItemSet& rInA
     , m_nOldV(VertOrientation::TOP)
     , m_nOldVRel(RelOrientation::PRINT_AREA)
     , m_fWidthHeightRatio(1.0)
-    , m_nHtmlMode(0)
     , m_bHtmlMode(false)
     , m_bAtHoriPosModified(false)
     , m_bAtVertPosModified(false)
@@ -944,8 +943,11 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet& rSet)
 
     pItem = GetItem( rSet, SID_HTML_MODE );
     if(pItem)
-        m_nHtmlMode = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
-    m_bHtmlMode = 0 != (m_bHtmlMode & HTMLMODE_ON);
+    {
+        m_bHtmlMode =
+            (static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON)
+            != 0;
+    }
 
     pItem = GetItem( rSet, SID_ATTR_TRANSFORM_IN_VERTICAL_TEXT );
     if(pItem && static_cast<const SfxBoolItem*>(pItem)->GetValue())

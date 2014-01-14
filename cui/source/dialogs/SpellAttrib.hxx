@@ -78,7 +78,7 @@ struct SpellErrorDescription
                 sRuleId = *pRuleId;
         };
 
-    int operator==( const SpellErrorDescription& rDesc ) const
+    bool operator==( const SpellErrorDescription& rDesc ) const
     {
         return bIsGrammarError == rDesc.bIsGrammarError &&
                 sErrorText.equals( rDesc.sErrorText ) &&
