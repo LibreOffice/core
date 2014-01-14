@@ -2258,6 +2258,12 @@ DECLARE_OOXMLEXPORT_TEST(testAutofit, "autofit.docx")
     CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(getShape(2), "FrameIsAutomaticHeight")));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testDmlShapeTitle, "dml-shape-title.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(OUString("Title"), getProperty<OUString>(getShape(1), "Title"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Description"), getProperty<OUString>(getShape(1), "Description"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTrackChangesDeletedParagraphMark, "testTrackChangesDeletedParagraphMark.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
