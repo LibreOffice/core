@@ -1643,16 +1643,16 @@ RTLFUNC(StrComp)
     const OUString& rStr2 = rPar.Get(2)->GetOUString();
 
     SbiInstance* pInst = GetSbData()->pInst;
-    sal_Int16 nTextCompare;
+    bool nTextCompare;
     bool bCompatibility = ( pInst && pInst->IsCompatibility() );
     if( bCompatibility )
     {
         SbiRuntime* pRT = pInst->pRun;
-        nTextCompare = pRT ? pRT->GetImageFlag( SBIMG_COMPARETEXT ) : sal_False;
+        nTextCompare = pRT && pRT->GetImageFlag( SBIMG_COMPARETEXT );
     }
     else
     {
-        nTextCompare = sal_True;
+        nTextCompare = true;
     }
     if ( rPar.Count() == 4 )
         nTextCompare = rPar.Get(3)->GetInteger();

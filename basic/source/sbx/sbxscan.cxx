@@ -76,7 +76,7 @@ bool ImpStrChr( const sal_Unicode* p, sal_Unicode c )
 
 bool ImpIsAlNum( sal_Unicode c )
 {
-    return (c < 128) ? isalnum( static_cast<char>(c) ) : false;
+    return c < 128 && isalnum( static_cast<char>(c) );
 }
 
 // scanning a string according to BASIC-conventions
