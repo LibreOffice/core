@@ -215,16 +215,16 @@ namespace dxcanvas
                 aVirtualDevice.DrawTextArray( aEmptyPoint,
                                               aText,
                                               pDXArray.get(),
-                                              (xub_StrLen)rText.StartPosition,
-                                              (xub_StrLen)rText.Length );
+                                              rText.StartPosition,
+                                              rText.Length );
             }
             else
             {
                 // draw the String
                 aVirtualDevice.DrawText( aEmptyPoint,
                                          aText,
-                                         (xub_StrLen)rText.StartPosition,
-                                         (xub_StrLen)rText.Length );
+                                         rText.StartPosition,
+                                         rText.Length );
             }
         }
     }
