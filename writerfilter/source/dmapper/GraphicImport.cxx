@@ -390,6 +390,7 @@ public:
 
     void applyName(uno::Reference<beans::XPropertySet>& xGraphicObjectProperties) const
     {
+        PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
         try
         {
             if( !sName.isEmpty() )
@@ -397,6 +398,10 @@ public:
                 uno::Reference< container::XNamed > xNamed( xGraphicObjectProperties, uno::UNO_QUERY_THROW );
                 xNamed->setName( sName );
             }
+            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_DESCRIPTION ),
+                uno::makeAny( sAlternativeText ));
+            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_TITLE ),
+                uno::makeAny( title ));
         }
         catch( const uno::Exception& e )
         {
@@ -1239,10 +1244,6 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
             }
 
             // setting properties for all types
-            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_DESCRIPTION ),
-                uno::makeAny( m_pImpl->sAlternativeText ));
-            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_TITLE ),
-                uno::makeAny( m_pImpl->title ));
             if( m_pImpl->bPositionProtected )
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_POSITION_PROTECTED ),
                     uno::makeAny(true));
