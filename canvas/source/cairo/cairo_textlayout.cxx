@@ -21,6 +21,7 @@
 
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <vcl/metric.hxx>
@@ -631,23 +632,20 @@ namespace cairocanvas
                           OffsetTransformer( aMatrix ) );
     }
 
-#define SERVICE_NAME "com.sun.star.rendering.TextLayout"
-#define IMPLEMENTATION_NAME "CairoCanvas::TextLayout"
-
     OUString SAL_CALL TextLayout::getImplementationName() throw( uno::RuntimeException )
     {
-        return OUString( IMPLEMENTATION_NAME );
+        return OUString( "CairoCanvas::TextLayout" );
     }
 
     sal_Bool SAL_CALL TextLayout::supportsService( const OUString& ServiceName ) throw( uno::RuntimeException )
     {
-        return ServiceName == SERVICE_NAME;
+        return cppu::supportsService( this, ServiceName );
     }
 
     uno::Sequence< OUString > SAL_CALL TextLayout::getSupportedServiceNames()  throw( uno::RuntimeException )
     {
         uno::Sequence< OUString > aRet(1);
-        aRet[0] = OUString( SERVICE_NAME );
+        aRet[0] = "com.sun.star.rendering.TextLayout";
 
         return aRet;
     }

@@ -119,23 +119,20 @@ namespace dxcanvas
         return rendering::FontMetrics();
     }
 
-#define SERVICE_NAME "com.sun.star.rendering.CanvasFont"
-#define IMPLEMENTATION_NAME "DXCanvas::CanvasFont"
-
     OUString SAL_CALL CanvasFont::getImplementationName() throw( uno::RuntimeException )
     {
-        return OUString( IMPLEMENTATION_NAME );
+        return OUString( "DXCanvas::CanvasFont" );
     }
 
     sal_Bool SAL_CALL CanvasFont::supportsService( const OUString& ServiceName ) throw( uno::RuntimeException )
     {
-        return ServiceName == SERVICE_NAME;
+        return cppu::supportsService( this, ServiceName );
     }
 
     uno::Sequence< OUString > SAL_CALL CanvasFont::getSupportedServiceNames()  throw( uno::RuntimeException )
     {
         uno::Sequence< OUString > aRet(1);
-        aRet[0] = SERVICE_NAME;
+        aRet[0] = "com.sun.star.rendering.CanvasFont";
 
         return aRet;
     }

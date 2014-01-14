@@ -21,6 +21,7 @@
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <rtl/math.hxx>
 
@@ -117,23 +118,20 @@ namespace vclcanvas
         maCanvasHelper.clear();
     }
 
-#define IMPLEMENTATION_NAME "VCLCanvas.CanvasCustomSprite"
-#define SERVICE_NAME "com.sun.star.rendering.CanvasCustomSprite"
-
     OUString SAL_CALL CanvasCustomSprite::getImplementationName() throw( uno::RuntimeException )
     {
-        return OUString( IMPLEMENTATION_NAME );
+        return OUString( "VCLCanvas.CanvasCustomSprite" );
     }
 
     sal_Bool SAL_CALL CanvasCustomSprite::supportsService( const OUString& ServiceName ) throw( uno::RuntimeException )
     {
-        return ServiceName == SERVICE_NAME;
+        return cppu::supportsService( this, ServiceName );
     }
 
     uno::Sequence< OUString > SAL_CALL CanvasCustomSprite::getSupportedServiceNames()  throw( uno::RuntimeException )
     {
         uno::Sequence< OUString > aRet(1);
-        aRet[0] = OUString( SERVICE_NAME );
+        aRet[0] = "com.sun.star.rendering.CanvasCustomSprite";
 
         return aRet;
     }

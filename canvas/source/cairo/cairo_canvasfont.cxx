@@ -20,6 +20,7 @@
 #include <canvas/debug.hxx>
 
 #include <com/sun/star/rendering/PanoseProportion.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <rtl/math.hxx>
 #include <basegfx/numeric/ftools.hxx>
@@ -138,23 +139,20 @@ namespace cairocanvas
         return uno::Sequence< beans::PropertyValue >();
     }
 
-#define IMPLEMENTATION_NAME "CairoCanvas::CanvasFont"
-#define SERVICE_NAME "com.sun.star.rendering.CanvasFont"
-
     OUString SAL_CALL CanvasFont::getImplementationName() throw( uno::RuntimeException )
     {
-        return OUString( IMPLEMENTATION_NAME );
+        return OUString( "CairoCanvas::CanvasFont" );
     }
 
     sal_Bool SAL_CALL CanvasFont::supportsService( const OUString& ServiceName ) throw( uno::RuntimeException )
     {
-        return ServiceName == SERVICE_NAME;
+        return cppu::supportsService( this, ServiceName );
     }
 
     uno::Sequence< OUString > SAL_CALL CanvasFont::getSupportedServiceNames()  throw( uno::RuntimeException )
     {
         uno::Sequence< OUString > aRet(1);
-        aRet[0] = SERVICE_NAME;
+        aRet[0] = "com.sun.star.rendering.CanvasFont";
 
         return aRet;
     }
