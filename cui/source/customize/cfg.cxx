@@ -2516,9 +2516,7 @@ IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton )
             pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_MENU );
             pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_RENAME_MENU ) );
 
-            bool ret = pNameDialog->Execute();
-
-            if ( ret == RET_OK ) {
+            if ( pNameDialog->Execute() == RET_OK ) {
                 pNameDialog->GetName( aNewName );
                 pMenuData->SetName( aNewName );
 
@@ -2540,9 +2538,7 @@ IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton )
                 new SvxMainMenuOrganizerDialog( this,
                     GetSaveInData()->GetEntries(), pMenuData );
 
-            bool ret = pDialog->Execute();
-
-            if ( ret == RET_OK )
+            if ( pDialog->Execute() == RET_OK )
             {
                 GetSaveInData()->SetEntries( pDialog->GetEntries() );
 
@@ -2574,9 +2570,7 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
             pNameDialog->SetHelpId( HID_SVX_CONFIG_NAME_SUBMENU );
             pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_ADD_SUBMENU ) );
 
-            bool ret = pNameDialog->Execute();
-
-            if ( ret == RET_OK ) {
+            if ( pNameDialog->Execute() == RET_OK ) {
                 pNameDialog->GetName(aNewName);
 
                 SvxConfigEntry* pNewEntryData =
@@ -2620,9 +2614,7 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
             pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_MENU_ITEM );
             pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_RENAME_MENU ) );
 
-            bool ret = pNameDialog->Execute();
-
-            if ( ret == RET_OK ) {
+            if ( pNameDialog->Execute() == RET_OK ) {
                 pNameDialog->GetName(aNewName);
 
                 pEntry->SetName( aNewName );
@@ -2667,9 +2659,7 @@ IMPL_LINK( SvxMenuConfigPage, NewMenuHdl, Button *, pButton )
         new SvxMainMenuOrganizerDialog( 0,
             GetSaveInData()->GetEntries(), NULL, sal_True );
 
-    bool ret = pDialog->Execute();
-
-    if ( ret == RET_OK )
+    if ( pDialog->Execute() == RET_OK )
     {
         GetSaveInData()->SetEntries( pDialog->GetEntries() );
         ReloadTopLevelListBox( pDialog->GetSelectedEntry() );
@@ -3215,9 +3205,7 @@ IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton )
             pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_TOOLBAR );
             pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_RENAME_TOOLBAR ) );
 
-            bool ret = pNameDialog->Execute();
-
-            if ( ret == RET_OK )
+            if ( pNameDialog->Execute() == RET_OK )
             {
                 pNameDialog->GetName(aNewName);
 
@@ -3306,9 +3294,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
             pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_TOOLBAR_ITEM );
             pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_RENAME_TOOLBAR ) );
 
-            bool ret = pNameDialog->Execute();
-
-            if ( ret == RET_OK ) {
+            if ( pNameDialog->Execute() == RET_OK ) {
                 pNameDialog->GetName(aNewName);
 
                 pEntry->SetName( aNewName );
@@ -3441,9 +3427,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
                     GetSaveInData()->GetImageManager(),
                     GetSaveInData()->GetParentImageManager() );
 
-            bool ret = pIconDialog->Execute();
-
-            if ( ret == RET_OK )
+            if ( pIconDialog->Execute() == RET_OK )
             {
                 uno::Reference< graphic::XGraphic > newgraphic =
                     pIconDialog->GetSelectedIcon();
@@ -4591,8 +4575,7 @@ IMPL_LINK( SvxToolbarConfigPage, NewToolbarHdl, Button *, pButton )
     pNameDialog->m_pSaveInListBox->SelectEntryPos(
         aSaveInListBox.GetSelectEntryPos(), sal_True );
 
-    bool ret = pNameDialog->Execute();
-    if ( ret == RET_OK )
+    if ( pNameDialog->Execute() == RET_OK )
     {
         aNewName = pNameDialog->GetName();
 
@@ -5197,9 +5180,7 @@ IMPL_LINK( SvxIconSelectorDialog, DeleteHdl, PushButton *, pButton )
     (void)pButton;
 
     OUString message = CUI_RES( RID_SVXSTR_DELETE_ICON_CONFIRM );
-    bool ret = WarningBox( this, WinBits(WB_OK_CANCEL), message ).Execute();
-
-    if ( ret == RET_OK )
+    if ( WarningBox( this, WinBits(WB_OK_CANCEL), message ).Execute() == RET_OK )
     {
         sal_uInt16 nCount = aTbSymbol.GetItemCount();
 

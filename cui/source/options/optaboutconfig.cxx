@@ -526,8 +526,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
 
             CuiAboutConfigValueDialog* pValueDialog = new CuiAboutConfigValueDialog(0, sDialogValue, limit);
 
-            bool ret = pValueDialog->Execute();
-            if( ret == RET_OK )
+            if( pValueDialog->Execute() == RET_OK )
             {
                 sNewValue = pValueDialog->getValue();
                 if ( sPropertyType == "short")
