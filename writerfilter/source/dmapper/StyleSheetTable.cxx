@@ -452,7 +452,6 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
         case NS_rtf::LN_BCHUPE:
         case NS_rtf::LN_FAUTOREDEF:
         case NS_rtf::LN_FHIDDEN:
-        case NS_rtf::LN_UNUSED8_3:
             //noone seems to care about it
         break;
         case NS_ooxml::LN_CT_Style_type:

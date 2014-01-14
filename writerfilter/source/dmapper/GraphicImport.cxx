@@ -614,9 +614,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_Border_val:
             //graphic borders don't support different line types
         break;
-        case NS_rtf::LN_ICO:   // 0x175b
-            m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineColor = ConversionHelper::ConvertColor( nIntValue );
-        break;
         case NS_ooxml::LN_CT_Border_space:
             m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineDistance = nIntValue;
         break;
@@ -624,7 +621,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
             m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].bHasShadow = nIntValue ? true : false;
         break;
         case NS_ooxml::LN_CT_Border_frame: // ignored
-        case NS_rtf::LN_UNUSED2_15: // ignored
             break;
 
         case NS_rtf::LN_SPID:

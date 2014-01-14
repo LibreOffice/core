@@ -43,7 +43,6 @@ struct FontEntry
     sal_Int32       nFontFamilyId;
     sal_Int32       nBaseWeight;
     sal_Int32       nAltFontIndex;
-    OUString sPanose;
     OUString sFontSignature;
     FontEntry() :
         bTrueType(false),

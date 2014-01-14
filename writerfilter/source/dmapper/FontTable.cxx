@@ -71,20 +71,13 @@ void FontTable::lcl_attribute(Id Name, Value & val)
         case NS_rtf::LN_FTRUETYPE:
             m_pImpl->pCurrentEntry->bTrueType = nIntValue == 1 ? true : false;
         break;
-        case NS_rtf::LN_UNUSED1_3: //unused
         case NS_rtf::LN_FF: //unused
-        case NS_rtf::LN_UNUSED1_7: //unused
         break;
         case NS_rtf::LN_WWEIGHT:
             m_pImpl->pCurrentEntry->nBaseWeight = nIntValue;
         break;
         case NS_rtf::LN_CHS:
             m_pImpl->pCurrentEntry->nTextEncoding = nIntValue;
-        break;
-        case NS_rtf::LN_IXCHSZALT:
-        break;
-        case NS_rtf::LN_PANOSE:
-            m_pImpl->pCurrentEntry->sPanose += sValue;
         break;
         case NS_rtf::LN_FS:
             m_pImpl->pCurrentEntry->sFontSignature += sValue;

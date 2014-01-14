@@ -185,12 +185,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
 
         switch( nName )
         {
-            /* attributes to be ignored */
-        case NS_rtf::LN_UNUSED1_3:
-        case NS_rtf::LN_UNUSED1_7:
-        case NS_rtf::LN_UNUSED8_3:
-            break;
-
         case NS_rtf::LN_ISTD: //index of applied style
             {
             //search for the style with the given id and apply it
@@ -277,10 +271,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 m_pImpl->GetFIB().SetLNCHS( nIntValue );
             }
             break;
-        case NS_rtf::LN_IXCHSZALT:
-            break;
-        case NS_rtf::LN_PANOSE:
-            break;
         case NS_rtf::LN_FS:
             break;
         case NS_rtf::LN_STI:
@@ -314,39 +304,15 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 m_pImpl->GetFIB().SetData( nName, nIntValue );
             }
             break;
-        case NS_rtf::LN_SHDFORECOLOR:
-            break;
-        case NS_rtf::LN_SHDBACKCOLOR:
-            break;
-        case NS_rtf::LN_SHDPATTERN:
-            break;
         case NS_ooxml::LN_CT_Border_sz:
             break;
         case NS_ooxml::LN_CT_Border_val:
-            break;
-        case NS_rtf::LN_ICO:
             break;
         case NS_ooxml::LN_CT_Border_space:
             break;
         case NS_ooxml::LN_CT_Border_shadow:
             break;
         case NS_ooxml::LN_CT_Border_frame:
-            break;
-        case NS_rtf::LN_UNUSED2_15:
-            break;
-        case NS_rtf::LN_FFIRSTMERGED:
-            break;
-        case NS_rtf::LN_FMERGED:
-            break;
-        case NS_rtf::LN_FVERTICAL:
-            break;
-        case NS_rtf::LN_FBACKWARD:
-            break;
-        case NS_rtf::LN_FROTATEFONT:
-            break;
-        case NS_rtf::LN_FVERTMERGE:
-            break;
-        case NS_rtf::LN_FVERTRESTART:
             break;
         case NS_rtf::LN_VERTALIGN:
             break;
@@ -480,9 +446,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_JC:
             //tab justification
             m_pImpl->ModifyCurrentTabStop(nName, nIntValue);
-            break;
-        case NS_rtf::LN_UNUSED0_6:
-            // really unused
             break;
         case NS_ooxml::LN_NUMBERING:
             break;

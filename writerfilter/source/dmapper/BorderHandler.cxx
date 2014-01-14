@@ -68,7 +68,6 @@ void BorderHandler::lcl_attribute(Id rName, Value & rVal)
             appendGrabBag("val", TDefTableHandler::getBorderTypeString(nIntValue));
         break;
         case NS_ooxml::LN_CT_Border_color:
-        case NS_rtf::LN_ICO:        // 0x2873
             m_nLineColor = nIntValue;
             appendGrabBag("color", OStringToOUString(msfilter::util::ConvertColor(nIntValue, /*bAutoColor=*/true), RTL_TEXTENCODING_UTF8));
         break;
@@ -80,9 +79,6 @@ void BorderHandler::lcl_attribute(Id rName, Value & rVal)
             m_bShadow = nIntValue;
         break;
         case NS_ooxml::LN_CT_Border_frame:
-        case NS_rtf::LN_UNUSED2_15: // 0x2877
-            // ignored
-        break;
         case NS_ooxml::LN_CT_Border_themeTint:
             appendGrabBag("themeTint", OUString::number(nIntValue, 16));
             break;

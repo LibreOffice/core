@@ -283,14 +283,6 @@ void TDefTableHandler::lcl_attribute(Id rName, Value & rVal)
     (void)rName;
     switch( rName )
     {
-        case NS_rtf::LN_FFIRSTMERGED:
-        case NS_rtf::LN_FMERGED:
-        case NS_rtf::LN_FVERTICAL:
-        case NS_rtf::LN_FBACKWARD:
-        case NS_rtf::LN_FROTATEFONT:
-        case NS_rtf::LN_FVERTMERGE:
-        case NS_rtf::LN_FVERTRESTART:
-        break;
         case NS_rtf::LN_VERTALIGN:
             //TODO: m_aCellVertAlign is just a temporary solution! 0 - top 1 - center 2 - bottom
             m_aCellVertAlign.push_back( nIntValue );
@@ -317,7 +309,6 @@ void TDefTableHandler::lcl_attribute(Id rName, Value & rVal)
             appendGrabBag("val", TDefTableHandler::getBorderTypeString(nIntValue));
         break;
         case NS_ooxml::LN_CT_Border_color:
-        case NS_rtf::LN_ICO:        // 0x2873
             appendGrabBag("color", OStringToOUString(msfilter::util::ConvertColor(nIntValue, /*bAutoColor=*/true), RTL_TEXTENCODING_UTF8));
             m_nLineColor = nIntValue;
         break;
@@ -328,7 +319,6 @@ void TDefTableHandler::lcl_attribute(Id rName, Value & rVal)
         case NS_ooxml::LN_CT_Border_shadow:
             //if 1 then line has shadow - unsupported
         case NS_ooxml::LN_CT_Border_frame:
-        case NS_rtf::LN_UNUSED2_15: // 0x2877
             // ignored
         break;
         case NS_ooxml::LN_CT_Border_themeColor:
