@@ -103,7 +103,6 @@ private:
     SotStorageStreamRef createStream(const rtl::OUString &rPath);
 
 public:
-    boost::scoped_ptr<SvStream> mpStream;
     SotStorageRefWrapper mxRootStorage;
     OLEStorageMap_t maStorageMap;
     ::std::vector< StreamData > maStreams;
@@ -118,8 +117,7 @@ StreamData::StreamData(const rtl::OString &rName)
 }
 
 OLEStorageImpl::OLEStorageImpl()
-    : mpStream()
-    , mxRootStorage()
+    : mxRootStorage()
     , maStorageMap()
     , maStreams()
     , maNameMap()
@@ -132,7 +130,6 @@ void OLEStorageImpl::initialize(SvStream *const pStream)
     if (!pStream)
         return;
 
-    mpStream.reset(pStream);
     mxRootStorage.ref = new SotStorage( pStream, sal_True );
 
     traverse(mxRootStorage.ref, "");
