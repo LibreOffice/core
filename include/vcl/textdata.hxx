@@ -160,11 +160,11 @@ struct TEIMEInfos
 template <class T> class ToolsList : public ::std::vector< T >
 {
 public:
-    sal_uLong       Count() const { return static_cast<sal_uLong>(::std::vector< T >::size()); }
-    sal_uLong       GetPos( T pObject ) const { return ( ::std::find( this->begin(), this->end(), pObject ) ) - this->begin(); }
-    T               GetObject( sal_uLong nIndex ) const { return (*this)[nIndex]; }
-    void            Insert( T pObject, sal_uLong nPos ) { ::std::vector< T >::insert( this->begin()+nPos, pObject ); }
-    void            Remove( sal_uLong nPos ) { ::std::vector< T >::erase( this->begin()+nPos ); }
+    size_t Count() const { return ::std::vector< T >::size(); }
+    size_t GetPos( T pObject ) const { return ( ::std::find( this->begin(), this->end(), pObject ) ) - this->begin(); }
+    T      GetObject( size_t nIndex ) const { return (*this)[nIndex]; }
+    void   Insert( T pObject, size_t nPos ) { ::std::vector< T >::insert( this->begin()+nPos, pObject ); }
+    void   Remove( size_t nPos ) { ::std::vector< T >::erase( this->begin()+nPos ); }
 };
 
 #endif // INCLUDED_VCL_TEXTDATA_HXX
