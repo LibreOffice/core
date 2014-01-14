@@ -33,7 +33,7 @@ class SvXMLUnitConverter;
 
 class EDITENG_DLLPUBLIC SvxOrphansItem: public SfxByteItem
 {
-    friend SvStream & operator<<( SvStream & aS, SvxOrphansItem & );
+    friend SvStream & WriteSvxOrphansItem( SvStream & aS, SvxOrphansItem & );
 public:
     TYPEINFO();
 

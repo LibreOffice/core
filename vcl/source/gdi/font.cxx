@@ -706,12 +706,12 @@ SvStream& operator>>( SvStream& rIStm, Impl_Font& rImpl_Font )
     return rIStm;
 }
 
-SvStream& operator<<( SvStream& rOStm, const Impl_Font& rImpl_Font )
+SvStream& WriteImpl_Font( SvStream& rOStm, const Impl_Font& rImpl_Font )
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 3 );
     rOStm.WriteUniOrByteString( rImpl_Font.maFamilyName, rOStm.GetStreamCharSet() );
     rOStm.WriteUniOrByteString( rImpl_Font.maStyleName, rOStm.GetStreamCharSet() );
-    rOStm << rImpl_Font.maSize;
+    WritePair( rOStm, rImpl_Font.maSize );
 
     rOStm.WriteUInt16( (sal_uInt16) GetStoreCharSet( rImpl_Font.meCharSet ) );
     rOStm.WriteUInt16( (sal_uInt16) rImpl_Font.meFamily );
@@ -748,9 +748,9 @@ SvStream& operator>>( SvStream& rIStm, Font& rFont )
     return( rIStm >> *rFont.mpImplFont );
 }
 
-SvStream& operator<<( SvStream& rOStm, const Font& rFont )
+SvStream& WriteFont( SvStream& rOStm, const Font& rFont )
 {
-    return( rOStm << *rFont.mpImplFont );
+    return WriteImpl_Font( rOStm, *rFont.mpImplFont );
 }
 
 namespace

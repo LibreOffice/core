@@ -135,7 +135,7 @@ void SvtGraphicStroke::scale( double fXScale, double fYScale )
     maEndArrow.Scale( fXScale, fYScale );
 }
 
-SvStream& operator<<( SvStream& rOStm, const SvtGraphicStroke& rClass )
+SvStream& WriteSvtGraphicStroke( SvStream& rOStm, const SvtGraphicStroke& rClass )
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );
 
@@ -287,12 +287,12 @@ void SvtGraphicFill::setPath( const PolyPolygon& rPath )
     maPath = rPath;
 }
 
-SvStream& operator<<( SvStream& rOStm, const SvtGraphicFill& rClass )
+SvStream& WriteSvtGraphicFill( SvStream& rOStm, const SvtGraphicFill& rClass )
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );
 
     rClass.maPath.Write( rOStm );
-    rOStm << rClass.maFillColor;
+    WriteColor( rOStm, rClass.maFillColor );
     rOStm.WriteDouble( rClass.mfTransparency );
     sal_uInt16 nTmp = sal::static_int_cast<sal_uInt16>( rClass.maFillRule );
     rOStm.WriteUInt16( nTmp );
@@ -305,13 +305,13 @@ SvStream& operator<<( SvStream& rOStm, const SvtGraphicFill& rClass )
     rOStm.WriteUInt16( nTmp );
     nTmp = sal::static_int_cast<sal_uInt16>( rClass.maHatchType );
     rOStm.WriteUInt16( nTmp );
-    rOStm << rClass.maHatchColor;
+    WriteColor( rOStm, rClass.maHatchColor );
     nTmp = sal::static_int_cast<sal_uInt16>( rClass.maGradientType );
     rOStm.WriteUInt16( nTmp );
-    rOStm << rClass.maGradient1stColor;
-    rOStm << rClass.maGradient2ndColor;
+    WriteColor( rOStm, rClass.maGradient1stColor );
+    WriteColor( rOStm, rClass.maGradient2ndColor );
     rOStm.WriteInt32( rClass.maGradientStepCount );
-    rOStm << rClass.maFillGraphic;
+    WriteGraphic( rOStm, rClass.maFillGraphic );
 
     return rOStm;
 }

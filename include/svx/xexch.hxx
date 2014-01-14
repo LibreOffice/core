@@ -48,7 +48,7 @@ public:
 
                         XFillExchangeData& operator=( const XFillExchangeData& rXFillExchangeData );
 
-    SVX_DLLPUBLIC friend SvStream&    operator<<( SvStream& rOStm, const XFillExchangeData& rXFillExchangeData );
+    SVX_DLLPUBLIC friend SvStream&    WriteXFillExchangeData( SvStream& rOStm, const XFillExchangeData& rXFillExchangeData );
     SVX_DLLPUBLIC friend SvStream&    operator>>( SvStream& rIStm, XFillExchangeData& rXFillExchangeData );
 
     XFillAttrSetItem*   GetXFillAttrSetItem() { return pXFillAttrSetItem; }

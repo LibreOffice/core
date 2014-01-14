@@ -34,7 +34,7 @@ SvStream& operator>>( SvStream& rIStream, Pair& rPair )
     return rIStream;
 }
 
-SvStream& operator<<( SvStream& rOStream, const Pair& rPair )
+SvStream& WritePair( SvStream& rOStream, const Pair& rPair )
 {
     DBG_ASSERTWARNING( rOStream.GetVersion(), "Pair::<< - Solar-Version not set on rOStream" );
 
@@ -186,7 +186,7 @@ SvStream& operator>>( SvStream& rIStream, Rectangle& rRect )
     return rIStream;
 }
 
-SvStream& operator<<( SvStream& rOStream, const Rectangle& rRect )
+SvStream& WriteRectangle( SvStream& rOStream, const Rectangle& rRect )
 {
     DBG_ASSERTWARNING( rOStream.GetVersion(), "Rectangle::<< - Solar-Version not set on rOStream" );
 

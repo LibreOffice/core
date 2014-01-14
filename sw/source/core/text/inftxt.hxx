@@ -119,7 +119,7 @@ public:
         return nListTabStopPosition;
     }
 
-    friend SvStream &operator<<( SvStream &rOS, const SwLineInfo &rInf );
+    friend SvStream & WriteSwLineInfo( SvStream &rOS, const SwLineInfo &rInf );
 };
 
 /*************************************************************************
@@ -143,7 +143,7 @@ public:
     inline const SwParaPortion *GetParaPortion() const { return pPara; }
     inline xub_StrLen GetTxtStart() const { return nTxtStart; }
 
-    friend SvStream &operator<<( SvStream &rOS, const SwTxtInfo &rInf );
+    friend SvStream & WriteSwTxtInfo( SvStream &rOS, const SwTxtInfo &rInf );
 };
 
 /*************************************************************************
@@ -305,7 +305,7 @@ public:
     inline void SetLen( const sal_Int32 nNew ) { m_nLen = nNew; }
     inline void SetTxt( const OUString &rNew ){ m_pTxt = &rNew; }
 
-    friend SvStream &operator<<( SvStream &rOS, const SwTxtSizeInfo &rInf );
+    friend SvStream & WriteSwTxtSizeInfo( SvStream &rOS, const SwTxtSizeInfo &rInf );
 
     // No Bullets for the symbol font!
     inline sal_Bool IsNoSymbol() const
@@ -474,7 +474,7 @@ public:
     inline const SwRect &GetPaintRect() const { return aPaintRect; }
     inline void SetPaintRect( const SwRect &rNew ) { aPaintRect = rNew; }
 
-    friend SvStream &operator<<( SvStream &rOS, const SwTxtPaintInfo &rInf );
+    friend SvStream & WriteSwTxtPaintInfo( SvStream &rOS, const SwTxtPaintInfo &rInf );
 
     //
     // STUFF FOR JUSTIFIED ALIGNMENT
@@ -728,7 +728,7 @@ public:
     // Return: Position; sets cHookChar if necessary
     xub_StrLen ScanPortionEnd( const xub_StrLen nStart, const xub_StrLen nEnd );
 
-    friend SvStream &operator<<( SvStream &rOS, const SwTxtFormatInfo &rInf );
+    friend SvStream & WriteSwTxtFormatInfo( SvStream &rOS, const SwTxtFormatInfo &rInf );
 
     inline void SetTabOverflow( sal_Bool bOverflow ) { bTabOverflow = bOverflow; }
     inline sal_Bool IsTabOverflow( ) { return bTabOverflow; }

@@ -49,7 +49,7 @@ private:
     sal_Bool            mbSimple;
 
     friend SvStream& operator>>( SvStream& rIStm, ImplMapMode& rMapMode );
-    friend SvStream& operator<<( SvStream& rOStm, const ImplMapMode& rMapMode );
+    friend SvStream& WriteImplMapMode( SvStream& rOStm, const ImplMapMode& rMapMode );
 
     static ImplMapMode* ImplGetStaticMapMode( MapUnit eUnit );
 public:
@@ -102,7 +102,7 @@ public:
                         { return (mpImplMapMode == rMapMode.mpImplMapMode); }
 
     friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, MapMode& rMapMode );
-    friend VCL_DLLPUBLIC SvStream& operator<<( SvStream& rOStm, const MapMode& rMapMode );
+    friend VCL_DLLPUBLIC SvStream& WriteMapMode( SvStream& rOStm, const MapMode& rMapMode );
 };
 
 #endif // INCLUDED_VCL_MAPMOD_HXX

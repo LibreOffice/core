@@ -111,7 +111,7 @@ SfxPoolItem* SfxRectangleItem::Create(SvStream &rStream, sal_uInt16 ) const
 SvStream& SfxRectangleItem::Store(SvStream &rStream, sal_uInt16 ) const
 {
     DBG_CHKTHIS(SfxRectangleItem, 0);
-    rStream << aVal;
+    WriteRectangle( rStream, aVal );
     return rStream;
 }
 

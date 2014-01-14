@@ -311,7 +311,7 @@ void Graphic::Load( SvStream& rIStm )
 
 void Graphic::Save( SvStream& rOStm )
 {
-    rOStm << *this;
+    WriteGraphic( rOStm, *this );
 }
 
 void Graphic::Assign( const SvDataCopyStream& rCopyStream )
@@ -577,9 +577,9 @@ SvStream& operator>>( SvStream& rIStream, Graphic& rGraphic )
     return rIStream >> *rGraphic.mpImpGraphic;
 }
 
-SvStream& operator<<( SvStream& rOStream, const Graphic& rGraphic )
+SvStream& WriteGraphic( SvStream& rOStream, const Graphic& rGraphic )
 {
-    return rOStream << *rGraphic.mpImpGraphic;
+    return WriteImpGraphic( rOStream, *rGraphic.mpImpGraphic );
 }
 
 const SvgDataPtr& Graphic::getSvgData() const

@@ -1295,7 +1295,7 @@ void WinMtfOutput::DrawPolygon( Polygon& rPolygon, sal_Bool bRecordPath )
 
                     SvMemoryStream  aMemStm;
 
-                    aMemStm << aFill;
+                    WriteSvtGraphicFill( aMemStm, aFill );
 
                     mpGDIMetaFile->AddAction( new MetaCommentAction( "XPATHFILL_SEQ_BEGIN", 0,
                                                             static_cast<const sal_uInt8*>(aMemStm.GetData()),

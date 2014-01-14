@@ -623,7 +623,7 @@ SvStream& operator>>( SvStream& rIStream, PolyPolygon& rPolyPoly )
     return rIStream;
 }
 
-SvStream& operator<<( SvStream& rOStream, const PolyPolygon& rPolyPoly )
+SvStream& WritePolyPolygon( SvStream& rOStream, const PolyPolygon& rPolyPoly )
 {
     DBG_CHKOBJ( &rPolyPoly, PolyPolygon, NULL );
     DBG_ASSERTWARNING( rOStream.GetVersion(), "PolyPolygon::<< - Solar-Version not set on rOStream" );
@@ -634,7 +634,7 @@ SvStream& operator<<( SvStream& rOStream, const PolyPolygon& rPolyPoly )
 
     // output polygons
     for ( sal_uInt16 i = 0; i < nPolyCount; i++ )
-        rOStream << *(rPolyPoly.mpImplPolyPolygon->mpPolyAry[i]);
+        WritePolygon( rOStream, *(rPolyPoly.mpImplPolyPolygon->mpPolyAry[i]) );
 
     return rOStream;
 }

@@ -1247,8 +1247,8 @@ sal_Bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
             nDataFieldPos = rOStm.Tell();
             rOStm << (sal_Int32) 0;
 
-            rOStm << aSize;
-            rOStm << aMapMode;
+            WritePair( rOStm, aSize );
+            WriteMapMode( rOStm, aMapMode );
 
             delete pCompat;
         }
@@ -1278,7 +1278,7 @@ sal_Bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
             const sal_uLong nDataStart = rOStm.Tell();
 
             if( ImplIsSupportedGraphic() )
-                rOStm << *this;
+                WriteImpGraphic( rOStm, *this );
 
             if( !rOStm.GetError() )
             {
@@ -1572,7 +1572,7 @@ sal_Bool ImpGraphic::ImplExportNative( SvStream& rOStm ) const
                 bResult = mpGfxLink->ExportNative( rOStm );
             else
             {
-                rOStm << *this;
+                WriteImpGraphic( rOStm, *this );
                 bResult = ( rOStm.GetError() == ERRCODE_NONE );
             }
         }
@@ -1738,7 +1738,7 @@ SvStream& operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic )
     return rIStm;
 }
 
-SvStream& operator<<( SvStream& rOStm, const ImpGraphic& rImpGraphic )
+SvStream& WriteImpGraphic( SvStream& rOStm, const ImpGraphic& rImpGraphic )
 {
     if( !rOStm.GetError() )
     {
@@ -1759,7 +1759,7 @@ SvStream& operator<<( SvStream& rOStm, const ImpGraphic& rImpGraphic )
 
                 rImpGraphic.mpGfxLink->SetPrefMapMode( rImpGraphic.ImplGetPrefMapMode() );
                 rImpGraphic.mpGfxLink->SetPrefSize( rImpGraphic.ImplGetPrefSize() );
-                rOStm << *rImpGraphic.mpGfxLink;
+                WriteGfxLink( rOStm, *rImpGraphic.mpGfxLink );
             }
             else
             {
@@ -1791,7 +1791,7 @@ SvStream& operator<<( SvStream& rOStm, const ImpGraphic& rImpGraphic )
                         }
                         else if( rImpGraphic.ImplIsAnimated())
                         {
-                            rOStm << *rImpGraphic.mpAnimation;
+                            WriteAnimation( rOStm, *rImpGraphic.mpAnimation );
                         }
                         else
                         {
@@ -1803,7 +1803,7 @@ SvStream& operator<<( SvStream& rOStm, const ImpGraphic& rImpGraphic )
                     default:
                     {
                         if( rImpGraphic.ImplIsSupportedGraphic() )
-                            rOStm << rImpGraphic.maMetaFile;
+                            WriteGDIMetaFile( rOStm, rImpGraphic.maMetaFile );
                     }
                     break;
                 }

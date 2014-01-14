@@ -56,7 +56,7 @@ namespace svt
     //= helpers
     //=====================================================================
     //---------------------------------------------------------------------
-    SvStream& operator << ( SvStream& _rStorage, const util::DateTime& _rDate )
+    SvStream& WriteDateTime( SvStream& _rStorage, const util::DateTime& _rDate )
     {
         sal_uInt16 hundredthSeconds = static_cast< sal_uInt16 >( _rDate.NanoSeconds / Time::nanoPerCenti );
         _rStorage.WriteUInt16( hundredthSeconds );
@@ -353,7 +353,7 @@ namespace svt
         void operator() ( const TemplateContent& _rContent ) const
         {
             // store the info about this content
-            m_rStorage << _rContent.getModDate();
+            WriteDateTime( m_rStorage, _rContent.getModDate() );
 
             // store the info about the children
             // the number

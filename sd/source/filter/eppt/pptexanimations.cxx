@@ -252,7 +252,7 @@ const sal_Char* AnimationExporter::FindTransitionName( const sal_Int16 nType, co
     return pRet;
 }
 
-SvStream& operator<<(SvStream& rOut, AnimationNode& rNode )
+SvStream& WriteAnimationNode(SvStream& rOut, AnimationNode& rNode )
 {
     rOut.WriteInt32( rNode.mnU1 );
     rOut.WriteInt32( rNode.mnRestart );
@@ -570,7 +570,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
                         case AnimationFill::HOLD : aAnim.mnFill = 3; break;
                         case AnimationFill::TRANSITION : aAnim.mnFill = 4; break;
                     }
-                    rStrm << aAnim;
+                    WriteAnimationNode( rStrm, aAnim );
                 }
                 exportIterate( rStrm, xNode );
                 exportAnimPropertySet( rStrm, xNode );
@@ -878,7 +878,7 @@ void AnimationExporter::exportAnimNode( SvStream& rStrm, const Reference< XAnima
         break;
     }
 
-    rStrm << aAnim;
+    WriteAnimationNode( rStrm, aAnim );
 }
 
 void AnimationExporter::GetUserData( const Sequence< NamedValue >& rUserData, const Any ** pAny, sal_Size nLen )
