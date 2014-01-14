@@ -2144,8 +2144,7 @@ OUString EditDoc::GetParaAsString(
             pNextFeature = 0;   // Feature does not interest the below
 
         DBG_ASSERT( nEnd >= nIndex, "End in front of the index?" );
-        //!! beware of sub string length  of -1 which is also defined as STRING_LEN and
-        //!! thus would result in adding the whole sub string up to the end of the node !!
+        //!! beware of sub string length  of -1
         if (nEnd > nIndex)
             aStr += pNode->GetString().copy(nIndex, nEnd - nIndex);
 
