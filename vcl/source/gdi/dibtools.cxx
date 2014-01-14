@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -1576,4 +1577,4 @@ bool WriteDIBV5(
     return ImplWriteDIB(rSource, &rSourceAlpha, rOStm, false, true);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
