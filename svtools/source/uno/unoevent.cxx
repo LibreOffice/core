@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/rtti.hxx>
 #include <tools/solar.h>
@@ -151,7 +151,7 @@ sal_Bool SvBaseEventDescriptor::hasElements()
 sal_Bool SvBaseEventDescriptor::supportsService(const OUString& rServiceName)
     throw(RuntimeException)
 {
-    return sServiceName.equals(rServiceName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence<OUString> SvBaseEventDescriptor::getSupportedServiceNames(void)

@@ -25,6 +25,7 @@
 #include <vcl/graph.hxx>
 #include "graphic.hxx"
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <string.h>
 
 using namespace com::sun::star;
@@ -131,35 +132,17 @@ uno::Sequence< OUString > Graphic::getSupportedServiceNames_Static()
     return aSeq;
 }
 
-// ------------------------------------------------------------------------------
-
 OUString SAL_CALL Graphic::getImplementationName()
     throw( uno::RuntimeException )
 {
     return getImplementationName_Static();
 }
 
-// ------------------------------------------------------------------------------
-
 sal_Bool SAL_CALL Graphic::supportsService( const OUString& rServiceName )
     throw( uno::RuntimeException )
 {
-    if( ::unographic::GraphicDescriptor::supportsService( rServiceName ) )
-        return true;
-    else
-    {
-        uno::Sequence< OUString >    aSNL( getSupportedServiceNames() );
-        const OUString*              pArray = aSNL.getConstArray();
-
-        for( int i = 0; i < aSNL.getLength(); i++ )
-            if( pArray[i] == rServiceName )
-                return true;
-
-        return false;
-    }
+    return cppu::supportsService( this, rServiceName );
 }
-
-// ------------------------------------------------------------------------------
 
 uno::Sequence< OUString > SAL_CALL Graphic::getSupportedServiceNames()
     throw( uno::RuntimeException )
@@ -175,8 +158,6 @@ uno::Sequence< OUString > SAL_CALL Graphic::getSupportedServiceNames()
 
     return aRet;
 }
-
-// ------------------------------------------------------------------------------
 
 uno::Sequence< uno::Type > SAL_CALL Graphic::getTypes()
     throw(uno::RuntimeException)
