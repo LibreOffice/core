@@ -57,6 +57,7 @@
 
 #define OPENGL_SCALE_VALUE 20
 #define DEBUG_POSITIONING 0
+#define RENDER_TO_FILE 0
 
 typedef struct PosVeci3
 {
@@ -144,8 +145,9 @@ public:
     void SetWidth(int width);
     void SetHeight(int height);
     void Release();
+#if RENDER_TO_FILE
     int CreateBMPHeader(sal_uInt8 *bmpHeader, int xsize, int ysize);
-    int CreateBMPHeaderRGBA(sal_uInt8 *bmpHeader, int xsize, int ysize);
+#endif
     int RenderLine2FBO(int wholeFlag);
     int SetLine2DShapePoint(float x, float y, int listLength);
     void SetLine2DColor(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b);

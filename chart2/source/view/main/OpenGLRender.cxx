@@ -44,8 +44,7 @@ using namespace com::sun::star;
 
 using namespace std;
 
-#define RENDER_TO_FILE 0
-#define DEBUG_PNG 1
+#define DEBUG_PNG 0
 #define BMP_HEADER_LEN 54
 
 #if DEBUG_PNG
@@ -961,6 +960,7 @@ void OpenGLRender::SetHeight(int height)
     m_Projection = glm::ortho(0.f, float(m_iWidth), 0.f, float(m_iHeight), -4.f, 3.f);
 }
 
+#if RENDER_TO_FILE
 int OpenGLRender::CreateBMPHeader(sal_uInt8 *bmpHeader, int xsize, int ysize)
 {
     unsigned char header[BMP_HEADER_LEN] = {
@@ -989,8 +989,8 @@ int OpenGLRender::CreateBMPHeader(sal_uInt8 *bmpHeader, int xsize, int ysize)
     header[25] = (height >> 24) &0x000000ff;
     memcpy(bmpHeader, header, BMP_HEADER_LEN);
     return 0;
-
 }
+#endif
 
 void OpenGLRender::SetLine2DColor(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b)
 {
@@ -1613,37 +1613,6 @@ int OpenGLRender::RenderTextShape()
     }
     CHECK_GL_ERROR();
     return 0;
-}
-
-int OpenGLRender::CreateBMPHeaderRGBA(sal_uInt8 *bmpHeader, int xsize, int ysize)
-{
-    unsigned char header[BMP_HEADER_LEN] = {
-        0x42, 0x4d, 0, 0, 0, 0, 0, 0, 0, 0,
-        54, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 32, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0
-    };
-
-    long file_size = (long)xsize * (long)ysize * 4 + 54;
-    header[2] = (unsigned char)(file_size &0x000000ff);
-    header[3] = (file_size >> 8) & 0x000000ff;
-    header[4] = (file_size >> 16) & 0x000000ff;
-    header[5] = (file_size >> 24) & 0x000000ff;
-
-    long width = xsize;
-    header[18] = width & 0x000000ff;
-    header[19] = (width >> 8) &0x000000ff;
-    header[20] = (width >> 16) &0x000000ff;
-    header[21] = (width >> 24) &0x000000ff;
-
-    long height = -ysize;
-    header[22] = height &0x000000ff;
-    header[23] = (height >> 8) &0x000000ff;
-    header[24] = (height >> 16) &0x000000ff;
-    header[25] = (height >> 24) &0x000000ff;
-    memcpy(bmpHeader, header, BMP_HEADER_LEN);
-    return 0;
-
 }
 
 int OpenGLRender::SetArea2DShapePoint(float x, float y, int listLength)
