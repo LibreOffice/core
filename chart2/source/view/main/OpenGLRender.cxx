@@ -1475,6 +1475,19 @@ int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color,
     int bmpHeight = (aRect.Bottom() - aRect.Top() + 3) & ~3;
     BitmapEx aBitmapEx(aDevice.GetBitmapEx(aRect.TopLeft(), Size(bmpWidth, bmpHeight)));
 
+#if DEBUG_PNG // debug PNG writing
+    static int nIdx = 0;
+    OUString aName = OUString( "file:///home/moggi/Documents/work/text" ) + OUString::number( nIdx++ ) + ".png";
+    try {
+        vcl::PNGWriter aWriter( aBitmapEx );
+        SvFileStream sOutput( aName, STREAM_WRITE );
+        aWriter.Write( sOutput );
+        sOutput.Close();
+    } catch (...) {
+        SAL_WARN("slideshow.opengl", "Error writing png to " << aName);
+    }
+#endif
+
     Bitmap aBitmap (aBitmapEx.GetBitmap());
     AlphaMask aAlpha (aBitmapEx.GetAlpha());
     boost::scoped_array<sal_uInt8> bitmapBuf(new sal_uInt8[4* bmpWidth * bmpHeight ]);
