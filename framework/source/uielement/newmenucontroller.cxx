@@ -226,7 +226,7 @@ void NewMenuController::setAccelerators( PopupMenu* pPopupMenu )
         for ( sal_uInt32 i = 0; i < nItemCount; i++ )
         {
             sal_uInt16 nId( pPopupMenu->GetItemId( sal_uInt16( i )));
-            if ( nId & ( pPopupMenu->GetItemType( nId ) != MENUITEM_SEPARATOR ))
+            if ( nId && ( pPopupMenu->GetItemType( nId ) != MENUITEM_SEPARATOR ))
             {
                 aIds.push_back( nId );
                 aMenuShortCuts.push_back( aEmptyKeyCode );
