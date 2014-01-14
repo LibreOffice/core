@@ -223,9 +223,9 @@ void Writer::placeShape( sal_uInt16 nID, sal_uInt16 nDepth, sal_Int32 x, sal_Int
 
     BitStream aBits;
 
-    aBits.writeUB( nClip != 0, 1 );     // Has Clip Actions?
+    aBits.writeUB( sal_uInt32(nClip != 0), 1 ); // Has Clip Actions?
     aBits.writeUB( 0, 1 );              // reserved
-    aBits.writeUB( pName != NULL, 1 );  // has a name
+    aBits.writeUB( sal_uInt32(pName != NULL), 1 ); // has a name
     aBits.writeUB( 0, 1 );              // no ratio
     aBits.writeUB( 0, 1 );              // no color transform
     aBits.writeUB( 1, 1 );              // has a matrix

@@ -181,7 +181,7 @@ void Writer::Impl_addShapeRecordChange( BitStream& rBits, sal_Int16 dx, sal_Int1
 {
     rBits.writeUB( 0, 1 );          // TypeFlag
     rBits.writeUB( 0, 1 );          // StateNewStyles
-    rBits.writeUB( !bFilled, 1 );   // StateLineStyle
+    rBits.writeUB( sal_uInt32(!bFilled), 1 ); // StateLineStyle
     rBits.writeUB( 0, 1 );          // StateFillStyle0
     rBits.writeUB( bFilled, 1 );        // StateFillStyle1
     rBits.writeUB( 1, 1 );          // StateMoveTo
@@ -218,7 +218,7 @@ void Writer::Impl_addStraightEdgeRecord( BitStream& rBits, sal_Int16 dx, sal_Int
     else
     {
         rBits.writeUB( 0, 1 );
-        rBits.writeUB( ( dx == 0 ), 1 );
+        rBits.writeUB( sal_uInt32( dx == 0 ), 1 );
         if( dx == 0 )
         {
             rBits.writeSB( dy, nBits );     // DeltaY
@@ -855,7 +855,7 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
 
     GraphicFilter aFilter;
 
-    Sequence< PropertyValue > aFilterData(nJPEGQualityLevel != -1);
+    Sequence< PropertyValue > aFilterData(sal_Int32(nJPEGQualityLevel != -1));
     if( nJPEGQualityLevel != -1 )
     {
         aFilterData[0].Name = "Quality";
