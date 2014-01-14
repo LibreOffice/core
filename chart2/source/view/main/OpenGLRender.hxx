@@ -28,6 +28,7 @@
 #include <vcl/window.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
+#include <vcl/bitmapex.hxx>
 
 #if defined( _WIN32 )
 #include <GL/glu.h>
@@ -170,7 +171,7 @@ public:
     int RenderRectangleShape(bool bBorder, bool bFill);
     int RectangleShapePoint(float x, float y, float directionX, float directionY);
 
-    int CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color, const Font& rFont,
+    int CreateTextTexture(const BitmapEx& rBitmapEx,
             com::sun::star::awt::Point aPos, com::sun::star::awt::Size aSize, long rotation);
     int RenderTextShape();
 

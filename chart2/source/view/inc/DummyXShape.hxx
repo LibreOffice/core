@@ -374,9 +374,12 @@ public:
 
     virtual void render() SAL_OVERRIDE;
 
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
 private:
     OUString maText;
     uno::Any maTrans;
+    BitmapEx maBitmap;
 };
 
 class DummyFormattedText : public DummyXShape

@@ -10,7 +10,6 @@
 #include <GL/glew.h>
 #include <vector>
 #include "OpenGLRender.hxx"
-#include <vcl/bitmapex.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/graph.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
@@ -36,8 +35,6 @@
 #include <editeng/unoprnms.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/dibtools.hxx>
-#include <vcl/bmpacc.hxx>
-#include <vcl/svapp.hxx>
 
 #include <boost/scoped_array.hpp>
 
@@ -45,7 +42,7 @@ using namespace com::sun::star;
 
 using namespace std;
 
-#define DEBUG_PNG 0
+#define DEBUG_PNG 1
 #define BMP_HEADER_LEN 54
 
 #if DEBUG_PNG
@@ -1459,27 +1456,14 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
 }
 
 
-int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color, const Font& rFont, awt::Point aPos, awt::Size aSize, long rotation)
+int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, awt::Point aPos, awt::Size aSize, long rotation)
 {
-    VirtualDevice aDevice(*Application::GetDefaultDevice(), 0, 0);
-    aDevice.Erase();
-    Rectangle aRect;
-    aDevice.SetFont(rFont);
-    aDevice.GetTextBoundRect(aRect, textValue);
-    int screenWidth = (aRect.BottomRight().X() + 3) & ~3;
-    int screenHeight = (aRect.BottomRight().Y() + 3) & ~3;
-    aDevice.SetOutputSizePixel(Size(screenWidth * 3, screenHeight));
-    aDevice.SetBackground(Wallpaper(COL_TRANSPARENT));
-    aDevice.DrawText(Point(0, 0), textValue);
-    int bmpWidth = (aRect.Right() - aRect.Left() + 3) & ~3;
-    int bmpHeight = (aRect.Bottom() - aRect.Top() + 3) & ~3;
-    BitmapEx aBitmapEx(aDevice.GetBitmapEx(aRect.TopLeft(), Size(bmpWidth, bmpHeight)));
 
 #if DEBUG_PNG // debug PNG writing
     static int nIdx = 0;
     OUString aName = OUString( "file:///home/moggi/Documents/work/text" ) + OUString::number( nIdx++ ) + ".png";
     try {
-        vcl::PNGWriter aWriter( aBitmapEx );
+        vcl::PNGWriter aWriter( rBitmapEx );
         SvFileStream sOutput( aName, STREAM_WRITE );
         aWriter.Write( sOutput );
         sOutput.Close();
@@ -1488,8 +1472,11 @@ int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color,
     }
 #endif
 
-    Bitmap aBitmap (aBitmapEx.GetBitmap());
-    AlphaMask aAlpha (aBitmapEx.GetAlpha());
+    long bmpWidth = rBitmapEx.GetSizePixel().Width();
+    long bmpHeight = rBitmapEx.GetSizePixel().Height();
+
+    Bitmap aBitmap (rBitmapEx.GetBitmap());
+    AlphaMask aAlpha (rBitmapEx.GetAlpha());
     boost::scoped_array<sal_uInt8> bitmapBuf(new sal_uInt8[4* bmpWidth * bmpHeight ]);
     Bitmap::ScopedReadAccess pReadAccces( aBitmap );
     AlphaMask::ScopedReadAccess pAlphaReadAccess( aAlpha );
@@ -1504,26 +1491,26 @@ int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color,
             bitmapBuf[i++] = aCol.GetRed();
             bitmapBuf[i++] = aCol.GetGreen();
             bitmapBuf[i++] = aCol.GetBlue();
-            bitmapBuf[i++] = *pAScan++;
+            bitmapBuf[i++] = 255 - *pAScan++;
         }
     }
 
     TextInfo aTextInfo;
-    aTextInfo.x = (float)(aPos.X + aSize.Width / 2) / OPENGL_SCALE_VALUE;
-    aTextInfo.y = (float)(aPos.Y + aSize.Height / 2) / OPENGL_SCALE_VALUE;
+    aTextInfo.x = (float)(aPos.X + aSize.Width / 2);
+    aTextInfo.y = (float)(aPos.Y + aSize.Height / 2);
     aTextInfo.z = m_fZStep;
     aTextInfo.rotation = -(double)rotation * GL_PI / 18000.0f;
-    aTextInfo.vertex[0] = (float)(-aSize.Width / 2) / OPENGL_SCALE_VALUE;
-    aTextInfo.vertex[1] = (float)(-aSize.Height / 2) / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[0] = (float)(aPos.X);
+    aTextInfo.vertex[1] = (float)(aPos.Y);
 
-    aTextInfo.vertex[2] = (float)(aSize.Width / 2) / OPENGL_SCALE_VALUE;
-    aTextInfo.vertex[3] = (float)(-aSize.Height / 2) / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[2] = (float)(aPos.X + aSize.Width);
+    aTextInfo.vertex[3] = (float)(aPos.Y);
 
-    aTextInfo.vertex[4] = (float)(aSize.Width / 2) / OPENGL_SCALE_VALUE;
-    aTextInfo.vertex[5] = (float)(aSize.Height / 2) / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[4] = (float)(aPos.X + aSize.Width);
+    aTextInfo.vertex[5] = (float)(aPos.Y + aSize.Height);
 
-    aTextInfo.vertex[6] = (float)(-aSize.Width / 2) / OPENGL_SCALE_VALUE;
-    aTextInfo.vertex[7] = (float)(aSize.Height / 2) / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[6] = (float)(aPos.X);
+    aTextInfo.vertex[7] = (float)(aPos.Y + aSize.Height);
 
     //if has ratotion, we must re caculate the central pos
     if (!rtl::math::approxEqual(0, rotation))
@@ -1561,7 +1548,6 @@ int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color,
     glBindTexture(GL_TEXTURE_2D, 0);
     CHECK_GL_ERROR();
     m_TextInfoList.push_back(aTextInfo);
-    aDevice.Erase();
     return 0;
 }
 
@@ -1573,7 +1559,7 @@ int OpenGLRender::RenderTextShape()
     for (size_t i = 0; i < listNum; i++)
     {
         TextInfo &textInfo = m_TextInfoList.front();
-        PosVecf3 trans = {textInfo.x, textInfo.y, textInfo.z};
+        PosVecf3 trans = {0, 0, 0};
         PosVecf3 angle = {0.0f, 0.0f, float(textInfo.rotation)};
         PosVecf3 scale = {1.0, 1.0, 1.0f};
         MoveModelf(trans, angle, scale);

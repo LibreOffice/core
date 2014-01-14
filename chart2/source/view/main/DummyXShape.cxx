@@ -21,6 +21,8 @@
 #include <rtl/ustring.hxx>
 
 #include <vcl/window.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/svapp.hxx>
 #include <tools/gen.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <editeng/unoprnms.hxx>
@@ -618,14 +620,6 @@ void DummyRectangle::render()
     pChart->m_GLRender.RenderRectangleShape(bBorder, bFill);
 }
 
-DummyText::DummyText(const OUString& rText, const tNameSequence& rNames,
-        const tAnySequence& rValues, const uno::Any& rTrans ):
-    maText(rText),
-    maTrans(rTrans)
-{
-    setProperties(rNames, rValues, maProperties);
-}
-
 namespace {
 
 struct FontAttribSetter
@@ -675,17 +669,50 @@ private:
 
 }
 
+DummyText::DummyText(const OUString& rText, const tNameSequence& rNames,
+        const tAnySequence& rValues, const uno::Any& rTrans ):
+    maText(rText),
+    maTrans(rTrans)
+{
+    setProperties(rNames, rValues, maProperties);
+
+    Font aFont;
+    std::for_each(maProperties.begin(), maProperties.end(), FontAttribSetter(aFont));
+
+    VirtualDevice aDevice(*Application::GetDefaultDevice(), 0, 0);
+    aDevice.Erase();
+    Rectangle aRect;
+    aDevice.SetFont(aFont);
+    aDevice.GetTextBoundRect(aRect, rText);
+    int screenWidth = (aRect.BottomRight().X() + 3) & ~3;
+    int screenHeight = (aRect.BottomRight().Y() + 3) & ~3;
+    aDevice.SetOutputSizePixel(Size(screenWidth * 3, screenHeight));
+    aDevice.SetBackground(Wallpaper(COL_TRANSPARENT));
+    aDevice.DrawText(Point(0, 0), rText);
+    int bmpWidth = (aRect.Right() - aRect.Left() + 3) & ~3;
+    int bmpHeight = (aRect.Bottom() - aRect.Top() + 3) & ~3;
+    maBitmap = BitmapEx(aDevice.GetBitmapEx(aRect.TopLeft(), Size(bmpWidth, bmpHeight)));
+
+    setSize(awt::Size(bmpWidth, bmpHeight));
+}
+
 void DummyText::render()
 {
     SAL_WARN("chart2.opengl", "render DummyText");
     debugProperties(maProperties);
 
-    Font aFont;
-    std::for_each(maProperties.begin(), maProperties.end(), FontAttribSetter(aFont));
-
     DummyChart* pChart = getRootShape();
-    pChart->m_GLRender.CreateTextTexture(maText, 0, aFont, maPosition, maSize, 0);
+    pChart->m_GLRender.CreateTextTexture(maBitmap, maPosition, maSize, 0);
     pChart->m_GLRender.RenderTextShape();
+}
+
+void DummyText::setPropertyValue( const OUString& rName, const uno::Any& rValue)
+    throw(beans::UnknownPropertyException, beans::PropertyVetoException,
+            lang::IllegalArgumentException, lang::WrappedTargetException,
+            uno::RuntimeException)
+{
+    SAL_WARN("chart2.opengl", "property value set after image has been created");
+    DummyXShape::setPropertyValue(rName, rValue);
 }
 
 DummyFormattedText::DummyFormattedText(uno::Sequence< uno::Reference<
