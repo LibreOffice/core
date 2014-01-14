@@ -25,6 +25,14 @@ namespace sc {
 
 struct ColumnBlockConstPosition;
 
+struct RowSpan
+{
+    SCROW mnRow1;
+    SCROW mnRow2;
+
+    RowSpan(SCROW nRow1, SCROW nRow2);
+};
+
 /**
  * Structure that stores segments of boolean flags per column, and perform
  * custom action on those segments.
@@ -85,15 +93,7 @@ class SingleColumnSpanSet
 public:
     typedef mdds::flat_segment_tree<SCROW, bool> ColumnSpansType;
 
-    struct Span
-    {
-        SCROW mnRow1;
-        SCROW mnRow2;
-
-        Span(SCROW nRow1, SCROW nRow2) : mnRow1(nRow1), mnRow2(nRow2) {}
-    };
-
-    typedef std::vector<Span> SpansType;
+    typedef std::vector<RowSpan> SpansType;
 
     SingleColumnSpanSet();
 

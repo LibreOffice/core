@@ -20,6 +20,8 @@
 
 namespace sc {
 
+RowSpan::RowSpan(SCROW nRow1, SCROW nRow2) : mnRow1(nRow1), mnRow2(nRow2) {}
+
 ColumnSpanSet::ColumnType::ColumnType(SCROW nStart, SCROW nEnd, bool bInit) :
     maSpans(nStart, nEnd+1, bInit), miPos(maSpans.begin()) {}
 
@@ -270,7 +272,7 @@ void SingleColumnSpanSet::getSpans(SpansType& rSpans) const
         bool bThisVal = it->second;
 
         if (bLastVal)
-            aSpans.push_back(Span(nLastRow, nThisRow-1));
+            aSpans.push_back(RowSpan(nLastRow, nThisRow-1));
 
         nLastRow = nThisRow;
         bLastVal = bThisVal;

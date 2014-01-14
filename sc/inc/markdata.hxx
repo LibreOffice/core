@@ -26,6 +26,12 @@
 
 #include <set>
 
+namespace sc {
+
+struct RowSpan;
+
+}
+
 class ScMarkArray;
 class ScRangeList;
 
@@ -102,6 +108,8 @@ public:
 
     SCCOLROW    GetMarkColumnRanges( SCCOLROW* pRanges );
     SCCOLROW    GetMarkRowRanges( SCCOLROW* pRanges );
+
+    void GetMarkedRowSpans( SCTAB nTab, std::vector<sc::RowSpan>& rSpans );
 
     bool        IsColumnMarked( SCCOL nCol ) const;
     bool        IsRowMarked( SCROW nRow ) const;
