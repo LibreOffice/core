@@ -1021,7 +1021,7 @@ OUString ORowSetValue::getString( ) const
                 }
                 break;
             case DataType::BIT:
-                aRet = OUString::number(static_cast<bool>(*this));
+                aRet = OUString::number(int(static_cast<bool>(*this)));
                 break;
             case DataType::BOOLEAN:
                 aRet = OUString::boolean(static_cast<bool>(*this));
@@ -1175,7 +1175,7 @@ sal_Int8 ORowSetValue::getInt8()    const
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
-                nRet = m_aValue.m_bBool;
+                nRet = sal_Int8(m_aValue.m_bBool);
                 break;
             case DataType::TINYINT:
                 if ( m_bSigned )
@@ -1321,7 +1321,7 @@ sal_Int16 ORowSetValue::getInt16()  const
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
-                nRet = m_aValue.m_bBool;
+                nRet = sal_Int16(m_aValue.m_bBool);
                 break;
             case DataType::TINYINT:
                 if ( m_bSigned )
@@ -1392,7 +1392,7 @@ sal_uInt16 ORowSetValue::getUInt16()  const
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
-                nRet = m_aValue.m_bBool;
+                nRet = sal_uInt16(m_aValue.m_bBool);
                 break;
             case DataType::TINYINT:
                 if ( m_bSigned )
@@ -1466,7 +1466,7 @@ sal_Int32 ORowSetValue::getInt32()  const
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
-                nRet = m_aValue.m_bBool;
+                nRet = sal_Int32(m_aValue.m_bBool);
                 break;
             case DataType::TINYINT:
                 if ( m_bSigned )
@@ -1539,7 +1539,7 @@ sal_uInt32 ORowSetValue::getUInt32()  const
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
-                nRet = m_aValue.m_bBool;
+                nRet = sal_uInt32(m_aValue.m_bBool);
                 break;
             case DataType::TINYINT:
                 if ( m_bSigned )
@@ -1613,7 +1613,7 @@ sal_Int64 ORowSetValue::getLong()   const
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
-                nRet = m_aValue.m_bBool;
+                nRet = sal_Int64(m_aValue.m_bBool);
                 break;
             case DataType::TINYINT:
                 if ( m_bSigned )
@@ -1686,7 +1686,7 @@ sal_uInt64 ORowSetValue::getULong()   const
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
-                nRet = m_aValue.m_bBool;
+                nRet = sal_uInt64(m_aValue.m_bBool);
                 break;
             case DataType::TINYINT:
                 if ( m_bSigned )
@@ -1764,7 +1764,7 @@ float ORowSetValue::getFloat()  const
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
-                nRet = m_aValue.m_bBool;
+                nRet = float(m_aValue.m_bBool);
                 break;
             case DataType::TINYINT:
                 if ( m_bSigned )
@@ -1843,7 +1843,7 @@ double ORowSetValue::getDouble()    const
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
-                nRet = m_aValue.m_bBool;
+                nRet = double(m_aValue.m_bBool);
                 break;
             case DataType::TINYINT:
                 if ( m_bSigned )
