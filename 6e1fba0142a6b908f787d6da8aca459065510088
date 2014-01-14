@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa98f980_b5228aff",
+        "filename": "connectivity/source/drivers/dbase/dindexnode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-01-14T16:54:54Z",
+      "side": 1,
+      "message": "aChild is a ONDXPagePtr which is derived from  SV_DECL_REF(ONDXPage) which has an \"ONDXPage \u0026 operator*()\"\n\nbut the old code called operator\u003c\u003c(ONDXPagePtr\u0026) which does something different than the ONDXPage\u0026 one!",
+      "revId": "6e1fba0142a6b908f787d6da8aca459065510088",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_d51f0eb6",
+        "filename": "connectivity/source/drivers/dbase/dindexnode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 866,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-01-14T16:54:54Z",
+      "side": 1,
+      "message": "same problem here; actually this would be an infinite recursion?",
+      "revId": "6e1fba0142a6b908f787d6da8aca459065510088",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
