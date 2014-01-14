@@ -22,6 +22,7 @@
 
 #include <unotools/pathoptions.hxx>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
@@ -1357,27 +1358,20 @@ void PasswordContainer::Notify()
     }
 }
 
-
 OUString SAL_CALL PasswordContainer::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return impl_getStaticImplementationName();
 }
 
-
 sal_Bool SAL_CALL PasswordContainer::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
 {
-    if ( ServiceName.equalsAscii("com.sun.star.task.PasswordContainer") )
-        return sal_True;
-    else
-        return sal_False;
+    return cppu::supportsService( this,  ServiceName );
 }
-
 
 Sequence< OUString > SAL_CALL PasswordContainer::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return impl_getStaticSupportedServiceNames();
 }
-
 
 Sequence< OUString > SAL_CALL PasswordContainer::impl_getStaticSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
@@ -1385,7 +1379,6 @@ Sequence< OUString > SAL_CALL PasswordContainer::impl_getStaticSupportedServiceN
     aRet[0] = "com.sun.star.task.PasswordContainer";
     return aRet;
 }
-
 
 OUString SAL_CALL PasswordContainer::impl_getStaticImplementationName() throw(uno::RuntimeException)
 {

@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <svl/itempool.hxx>
@@ -281,10 +282,10 @@ OUString SAL_CALL NamespaceMap::getImplementationName(  )
     return NamespaceMap_getImplementationName();
 }
 
-sal_Bool SAL_CALL NamespaceMap::supportsService( const OUString& )
+sal_Bool SAL_CALL NamespaceMap::supportsService( const OUString& serviceName )
     throw(RuntimeException)
 {
-    return sal_True;
+    return cppu::supportsService( this, serviceName );
 }
 
 Sequence< OUString > SAL_CALL NamespaceMap::getSupportedServiceNames(  )

@@ -22,6 +22,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <svx/xtable.hxx>
 
 using namespace ::com::sun::star;
@@ -72,14 +73,7 @@ SvxUnoColorTable::~SvxUnoColorTable() throw()
 
 sal_Bool SAL_CALL SvxUnoColorTable::supportsService( const  OUString& ServiceName ) throw(uno::RuntimeException)
 {
-    uno::Sequence< OUString > aSNL( getSupportedServiceNames() );
-    const OUString * pArray = aSNL.getConstArray();
-
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService( this, ServiceName );
 }
 
 OUString SAL_CALL SvxUnoColorTable::getImplementationName() throw( uno::RuntimeException )

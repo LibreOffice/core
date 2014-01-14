@@ -25,6 +25,7 @@
 #include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/gallery/XGalleryTheme.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
@@ -38,13 +39,9 @@ GalleryThemeProvider::GalleryThemeProvider() :
     mpGallery = ::Gallery::GetGalleryInstance();
 }
 
-// ------------------------------------------------------------------------------
-
 GalleryThemeProvider::~GalleryThemeProvider()
 {
 }
-
-// ------------------------------------------------------------------------------
 
 OUString SAL_CALL GalleryThemeProvider::getImplementationName()
     throw( uno::RuntimeException )
@@ -52,22 +49,11 @@ OUString SAL_CALL GalleryThemeProvider::getImplementationName()
     return OUString( "com.sun.star.comp.gallery.GalleryThemeProvider" );
 }
 
-// ------------------------------------------------------------------------------
-
 sal_Bool SAL_CALL GalleryThemeProvider::supportsService( const OUString& ServiceName )
     throw( uno::RuntimeException )
 {
-    uno::Sequence< OUString >    aSNL( getSupportedServiceNames() );
-    const OUString*              pArray = aSNL.getConstArray();
-
-    for( int i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return true;
-
-    return false;
+    return cppu::supportsService( this, ServiceName );
 }
-
-// ------------------------------------------------------------------------------
 
 uno::Sequence< OUString > SAL_CALL GalleryThemeProvider::getSupportedServiceNames()
     throw( uno::RuntimeException )
@@ -76,8 +62,6 @@ uno::Sequence< OUString > SAL_CALL GalleryThemeProvider::getSupportedServiceName
     aSeq.getArray()[ 0 ] = "com.sun.star.gallery.GalleryThemeProvider";
     return aSeq;
 }
-
-// ------------------------------------------------------------------------------
 
 uno::Sequence< uno::Type > SAL_CALL GalleryThemeProvider::getTypes()
     throw(uno::RuntimeException)
@@ -105,8 +89,6 @@ uno::Sequence< sal_Int8 > SAL_CALL GalleryThemeProvider::getImplementationId()
 {
     return theGalleryThemeProviderImplementationId::get().getSeq();
 }
-
-// ------------------------------------------------------------------------------
 
 void SAL_CALL GalleryThemeProvider::initialize( const uno::Sequence< uno::Any >& rArguments )
     throw ( uno::Exception, uno::RuntimeException )
