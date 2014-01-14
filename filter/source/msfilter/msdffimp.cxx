@@ -24,7 +24,6 @@
 #include <vector>
 #include <osl/endian.h>
 #include <tools/solar.h>
-#include <tools/string.hxx>
 #include <rtl/math.hxx>
 
 #include <comphelper/classids.hxx>
@@ -4353,7 +4352,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 sal_Bool bCreateNewParaObject = sal_False;
                                 for ( i = 0; i < nParagraphs; i++ )
                                 {
-                                    sal_Bool bIsRTL = aVirDev.GetTextIsRTL( rOutliner.GetText( rOutliner.GetParagraph( i ) ), 0, STRING_LEN );
+                                    OUString aString(rOutliner.GetText(rOutliner.GetParagraph(i)));
+                                    bool bIsRTL = aVirDev.GetTextIsRTL(aString, 0, aString.getLength());
                                     if ( bIsRTL )
                                     {
                                         SfxItemSet aSet2( rOutliner.GetParaAttribs( i ) );
