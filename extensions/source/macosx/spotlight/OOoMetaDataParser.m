@@ -172,7 +172,7 @@ static NSDictionary *metaXML2MDIKeys;
         }
         // cleanup part 1
         [textCurrentElement release];
-        if (customAttribute != nil) {
+        if (isCustom == YES) {
             [customAttribute release];
         }
     }
