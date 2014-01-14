@@ -41,13 +41,9 @@ using namespace com::sun::star::sdbcx;
 
 namespace
 {
-    int libo_strcmp0 (const char *str1, const char *str2)
+    bool equal(const char *str1, const char *str2)
     {
-         if (!str1)
-             return -(str1 != str2);
-         if (!str2)
-             return str1 != str2;
-         return strcmp (str1, str2);
+        return str1 == 0 || str2 == 0 ? str1 == str2 : strcmp(str1, str2) == 0;
     }
 }
 
@@ -1093,7 +1089,7 @@ bool isSourceBackend(ESource *pSource, const char *backendname)
         return false;
 
     gpointer extension = e_source_get_extension (pSource, E_SOURCE_EXTENSION_ADDRESS_BOOK);
-    return extension && libo_strcmp0 (e_source_backend_get_backend_name (extension), backendname) == 0;
+    return extension && equal(e_source_backend_get_backend_name (extension), backendname);
 }
 
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
