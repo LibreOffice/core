@@ -22,7 +22,6 @@
 #include <stdio.h>
 #include <comphelper/string.hxx>
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
 #include <tools/debug.hxx>
 #include <tools/color.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -783,8 +782,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
 
         default:
             bEqSignFound = false;
-            if( (nNextCh==cBreak && !cQuote) ||
-                (sal_uLong(aToken.getLength()) + MAX_LEN) > sal_uLong(STRING_MAXLEN & ~1 ))
+            if (nNextCh == cBreak && !cQuote)
                 bContinue = false;
             else
             {
@@ -794,12 +792,6 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                     if( MAX_LEN == sTmpBuffer.getLength() )
                     {
                         aToken += sTmpBuffer.makeStringAndClear();
-                        if( (sal_uLong(aToken.getLength()) + MAX_LEN) >
-                                sal_uLong(STRING_MAXLEN & ~1 ) )
-                        {
-                            nNextCh = GetNextChar();
-                            return HTML_TEXTTOKEN;
-                        }
                     }
                     if( ( sal_Unicode(EOF) == (nNextCh = GetNextChar()) &&
                           rInput.IsEof() ) ||
