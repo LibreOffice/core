@@ -4317,7 +4317,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         }
                         if ( IsProperty( DFF_Prop_gtextSpacing ) )
                         {
-                            sal_Int32 nTextWidth = GetPropertyValue( DFF_Prop_gtextSpacing, 100 < 16 ) / 655;
+                            sal_Int32 nTextWidth = GetPropertyValue( DFF_Prop_gtextSpacing, 1 << 16 ) / 655;
                             if ( nTextWidth != 100 )
                                 aSet.Put( SvxCharScaleWidthItem( (sal_uInt16)nTextWidth, EE_CHAR_FONTWIDTH ) );
                         }
