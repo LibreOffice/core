@@ -16,8 +16,7 @@
 
 struct libvlc_media_t;
 
-namespace
-{
+namespace { extern "C" {
     void ( *libvlc_media_player_retain ) ( libvlc_media_player_t *p_mi );
     libvlc_media_player_t * ( *libvlc_media_player_new_from_media ) ( libvlc_media_t *p_md );
     void ( *libvlc_media_player_release ) ( libvlc_media_player_t *p_mi );
@@ -58,7 +57,7 @@ namespace
     int ( *libvlc_audio_get_track ) ( libvlc_media_player_t *p_mi );
     libvlc_track_description_t * ( *libvlc_audio_get_track_description ) (libvlc_media_player_t *p_mi );
     int ( *libvlc_audio_set_track ) (libvlc_media_player_t *p_mi, int i_track);
-}
+} }
 
 namespace avmedia
 {
