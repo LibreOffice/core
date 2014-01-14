@@ -230,7 +230,7 @@ public:
     void SetPreviewBitmapExAndStrings(sal_uIntPtr nPos, const BitmapEx& rBitmapEx, const Size& rSize, const OUString& rTitle, const OUString& rPath);
 };
 
-SvStream& operator<<( SvStream& rOut, const GalleryTheme& rTheme );
+SvStream& WriteGalleryTheme( SvStream& rOut, const GalleryTheme& rTheme );
 SvStream& operator>>( SvStream& rIn, GalleryTheme& rTheme );
 
 #endif

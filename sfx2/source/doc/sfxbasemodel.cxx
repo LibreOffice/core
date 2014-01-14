@@ -2004,7 +2004,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                 aDesc.mbCanLink = sal_False;
 
                 SvMemoryStream aMemStm( 1024, 1024 );
-                aMemStm << aDesc;
+                WriteTransferableObjectDescriptor( aMemStm, aDesc );
                 aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Tell() );
             }
             else

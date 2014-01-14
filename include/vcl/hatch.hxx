@@ -43,7 +43,7 @@ struct ImplHatch
                         ImplHatch( const ImplHatch& rImplHatch );
 
     friend SvStream&    operator>>( SvStream& rIStm, ImplHatch& rImplHatch );
-    friend SvStream&    operator<<( SvStream& rOStm, const ImplHatch& rImplHatch );
+    friend SvStream&    WriteImplHatch( SvStream& rOStm, const ImplHatch& rImplHatch );
 };
 
 // ---------
@@ -81,7 +81,7 @@ public:
     sal_uInt16          GetAngle() const { return mpImplHatch->mnAngle; }
 
     friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, Hatch& rHatch );
-    friend VCL_DLLPUBLIC SvStream& operator<<( SvStream& rOStm, const Hatch& rHatch );
+    friend VCL_DLLPUBLIC SvStream& WriteHatch( SvStream& rOStm, const Hatch& rHatch );
 };
 
 #endif // INCLUDED_VCL_HATCH_HXX

@@ -1201,7 +1201,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                                     Polygon aPath;
                                     aStroke.getPath( aPath );
                                     aStroke.setPath( ImplGetRotatedPolygon( aPath, aRotAnchor, aRotOffset, fSin, fCos ) );
-                                    aDest << aStroke;
+                                    WriteSvtGraphicStroke( aDest, aStroke );
                                     aMtf.AddAction( new MetaCommentAction( "XPATHSTROKE_SEQ_BEGIN", 0,
                                                         static_cast<const sal_uInt8*>( aDest.GetData()), aDest.Tell() ) );
                                 }
@@ -1212,7 +1212,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                                     PolyPolygon aPath;
                                     aFill.getPath( aPath );
                                     aFill.setPath( ImplGetRotatedPolyPolygon( aPath, aRotAnchor, aRotOffset, fSin, fCos ) );
-                                    aDest << aFill;
+                                    WriteSvtGraphicFill( aDest, aFill );
                                     aMtf.AddAction( new MetaCommentAction( "XPATHFILL_SEQ_BEGIN", 0,
                                                         static_cast<const sal_uInt8*>( aDest.GetData()), aDest.Tell() ) );
                                 }
@@ -2798,7 +2798,7 @@ SvStream& operator>>( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
     return rIStm;
 }
 
-SvStream& operator<<( SvStream& rOStm, const GDIMetaFile& rGDIMetaFile )
+SvStream& WriteGDIMetaFile( SvStream& rOStm, const GDIMetaFile& rGDIMetaFile )
 {
     if( !rOStm.GetError() )
     {
@@ -2848,8 +2848,8 @@ SvStream& GDIMetaFile::Write( SvStream& rOStm )
     pCompat = new VersionCompat( rOStm, STREAM_WRITE, 1 );
 
     rOStm.WriteUInt32( nStmCompressMode );
-    rOStm << aPrefMapMode;
-    rOStm << aPrefSize;
+    WriteMapMode( rOStm, aPrefMapMode );
+    WritePair( rOStm, aPrefSize );
     rOStm.WriteUInt32( (sal_uInt32) GetActionSize() );
 
     delete pCompat;

@@ -114,13 +114,13 @@ SvStream& operator>>( SvStream& rIStm, TransferableObjectDescriptor& rObjDesc )
 
 // -----------------------------------------------------------------------------
 
-SvStream& operator<<( SvStream& rOStm, const TransferableObjectDescriptor& rObjDesc )
+SvStream& WriteTransferableObjectDescriptor( SvStream& rOStm, const TransferableObjectDescriptor& rObjDesc )
 {
     const sal_uInt32    nFirstPos = rOStm.Tell(), nViewAspect = rObjDesc.mnViewAspect;
     const sal_uInt32    nSig1 = TOD_SIG1, nSig2 = TOD_SIG2;
 
     rOStm.SeekRel( 4 );
-    rOStm << rObjDesc.maClassName;
+    WriteSvGlobalName( rOStm, rObjDesc.maClassName );
     rOStm.WriteUInt32( nViewAspect );
     //#fdo39428 Remove SvStream operator<<(long)
     rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(rObjDesc.maSize.Width()) );
@@ -831,7 +831,7 @@ sal_Bool TransferableHelper::SetGraphic( const Graphic& rGraphic, const DataFlav
 
         aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
         aMemStm.SetCompressMode( COMPRESSMODE_NATIVE );
-        aMemStm << rGraphic;
+        WriteGraphic( aMemStm, rGraphic );
         maAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) );
     }
 
@@ -860,7 +860,7 @@ sal_Bool TransferableHelper::SetTransferableObjectDescriptor( const Transferable
 
     SvMemoryStream aMemStm( 1024, 1024 );
 
-    aMemStm << rDesc;
+    WriteTransferableObjectDescriptor( aMemStm, rDesc );
     maAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Tell() );
 
     return( maAny.hasValue() );

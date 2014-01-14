@@ -152,7 +152,7 @@ SvStream& operator>>( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
 
 // -----------------------------------------------------------------------
 
-SvStream& operator<<( SvStream& rOStm, const ImplWallpaper& rImplWallpaper )
+SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpaper )
 {
     VersionCompat   aCompat( rOStm, STREAM_WRITE, 3 );
     sal_Bool            bRect = ( rImplWallpaper.mpRect != NULL );
@@ -161,17 +161,17 @@ SvStream& operator<<( SvStream& rOStm, const ImplWallpaper& rImplWallpaper )
     sal_Bool            bDummy = sal_False;
 
     // version 1
-    rOStm << rImplWallpaper.maColor;
+    WriteColor( rOStm, rImplWallpaper.maColor );
     rOStm.WriteUInt16( (sal_uInt16) rImplWallpaper.meStyle );
 
     // version 2
     rOStm.WriteUChar( bRect ).WriteUChar( bGrad ).WriteUChar( bBmp ).WriteUChar( bDummy ).WriteUChar( bDummy ).WriteUChar( bDummy );
 
     if( bRect )
-        rOStm << *rImplWallpaper.mpRect;
+        WriteRectangle( rOStm, *rImplWallpaper.mpRect );
 
     if( bGrad )
-        rOStm << *rImplWallpaper.mpGradient;
+        WriteGradient( rOStm, *rImplWallpaper.mpGradient );
 
     if( bBmp )
         WriteDIBBitmapEx(*rImplWallpaper.mpBitmap, rOStm);
@@ -557,9 +557,9 @@ SvStream& operator>>( SvStream& rIStm, Wallpaper& rWallpaper )
 
 // -----------------------------------------------------------------------
 
-SvStream& operator<<( SvStream& rOStm, const Wallpaper& rWallpaper )
+SvStream& WriteWallpaper( SvStream& rOStm, const Wallpaper& rWallpaper )
 {
-    return( rOStm << *rWallpaper.mpImplWallpaper );
+    return WriteImplWallpaper( rOStm, *rWallpaper.mpImplWallpaper );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

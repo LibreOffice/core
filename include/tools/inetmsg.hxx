@@ -62,7 +62,7 @@ public:
     const OString& GetName() const { return m_aName; }
     const OString& GetValue() const { return m_aValue; }
 
-    friend SvStream& operator<< (
+    friend SvStream& WriteINetMessageHeader(
         SvStream& rStrm, const INetMessageHeader& rHdr)
     {
         write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStrm, rHdr.m_aName);
@@ -194,7 +194,7 @@ public:
     SvLockBytes* GetDocumentLB() const { return m_xDocLB; }
     void         SetDocumentLB (SvLockBytes *pDocLB) { m_xDocLB = pDocLB; }
 
-    friend SvStream& operator<< (
+    friend SvStream& WriteINetMessage(
         SvStream& rStrm, const INetMessage& rMsg)
     {
         return rMsg.operator<< (rStrm);

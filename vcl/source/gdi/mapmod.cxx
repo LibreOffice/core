@@ -55,14 +55,14 @@ SvStream& operator>>( SvStream& rIStm, ImplMapMode& rImplMapMode )
     return rIStm;
 }
 
-SvStream& operator<<( SvStream& rOStm, const ImplMapMode& rImplMapMode )
+SvStream& WriteImplMapMode( SvStream& rOStm, const ImplMapMode& rImplMapMode )
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );
 
-    rOStm.WriteUInt16( (sal_uInt16) rImplMapMode.meUnit ) <<
-             rImplMapMode.maOrigin <<
-             rImplMapMode.maScaleX <<
-             rImplMapMode.maScaleY;
+    rOStm.WriteUInt16( (sal_uInt16) rImplMapMode.meUnit );
+    WritePair( rOStm, rImplMapMode.maOrigin );
+    WriteFraction( rOStm, rImplMapMode.maScaleX );
+    WriteFraction( rOStm, rImplMapMode.maScaleY );
     rOStm.WriteUChar( rImplMapMode.mbSimple );
 
     return rOStm;
@@ -237,9 +237,9 @@ SvStream& operator>>( SvStream& rIStm, MapMode& rMapMode )
     return (rIStm >> *rMapMode.mpImplMapMode);
 }
 
-SvStream& operator<<( SvStream& rOStm, const MapMode& rMapMode )
+SvStream& WriteMapMode( SvStream& rOStm, const MapMode& rMapMode )
 {
-    return (rOStm << *rMapMode.mpImplMapMode);
+    return WriteImplMapMode( rOStm, *rMapMode.mpImplMapMode );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

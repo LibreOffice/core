@@ -42,7 +42,7 @@ public:
     static sal_uInt32  Read( SvStream & rStm );
     static void    Write( SvStream & rStm, sal_uInt32 nVal );
 
-    friend SvStream& operator << (SvStream & rStm, const SvUINT32 & r )
+    friend SvStream& WriteSvUINT32(SvStream & rStm, const SvUINT32 & r )
                 { SvUINT32::Write( rStm, r.nVal ); return rStm; }
     friend SvStream& operator >> (SvStream & rStm, SvUINT32 & r )
                 { r.nVal = SvUINT32::Read( rStm ); return rStm; }
@@ -62,7 +62,7 @@ public:
     operator    int ()const { return nVal; }
     sal_Bool        IsSet() const { return bSet; }
 
-    friend SvStream& operator << (SvStream & rStm, const Svint & r )
+    friend SvStream& WriteSvint(SvStream & rStm, const Svint & r )
                 { SvUINT32::Write( rStm, (sal_uInt32)r.nVal ); rStm << r.bSet; return rStm; }
     friend SvStream& operator >> (SvStream & rStm, Svint & r )
                 { r.nVal = (int)SvUINT32::Read( rStm ); rStm >> r.bSet ; return rStm; }
@@ -86,7 +86,7 @@ public:
     sal_Bool        Is() const { return nVal; }
     sal_Bool        IsSet() const { return bSet; }
 
-    friend SvStream& operator << (SvStream &, const SvBOOL &);
+    friend SvStream& WriteSvBOOL(SvStream &, const SvBOOL &);
     friend SvStream& operator >> (SvStream &, SvBOOL &);
 
     sal_Bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
@@ -111,7 +111,7 @@ public:
     {
         return m_aStr;
     }
-    friend SvStream& operator << (SvStream &, const SvIdentifier &);
+    friend SvStream& WriteSvIdentifier(SvStream &, const SvIdentifier &);
     friend SvStream& operator >> (SvStream &, SvIdentifier &);
 
     sal_Bool IsSet() const
@@ -138,7 +138,7 @@ public:
     sal_uInt32      GetValue() const { return nValue; }
     void        SetValue( sal_uInt32 nVal ) { nValue = nVal; }
 
-    friend SvStream& operator << (SvStream &, const SvNumberIdentifier &);
+    friend SvStream& WriteSvNumberIdentifier(SvStream &, const SvNumberIdentifier &);
     friend SvStream& operator >> (SvStream &, SvNumberIdentifier &);
     sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     sal_Bool        ReadSvIdl( SvIdlDataBase &, SvStringHashEntry * pName,
@@ -164,7 +164,7 @@ public:
     {
         return !m_aStr.isEmpty();
     }
-    friend SvStream& operator << (SvStream &, const SvString &);
+    friend SvStream& WriteSvString(SvStream &, const SvString &);
     friend SvStream& operator >> (SvStream &, SvString &);
 
     sal_Bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
@@ -215,7 +215,7 @@ public:
     sal_uInt16      GetMajorVersion() const { return nMajorVersion; }
     sal_uInt16      GetMinorVersion() const { return nMinorVersion; }
 
-    friend SvStream& operator << (SvStream &, const SvVersion &);
+    friend SvStream& WriteSvVersion(SvStream &, const SvVersion &);
     friend SvStream& operator >> (SvStream &, SvVersion &);
     sal_Bool        ReadSvIdl( SvTokenStream & rInStm );
     sal_Bool        WriteSvIdl( SvStream & rOutStm );

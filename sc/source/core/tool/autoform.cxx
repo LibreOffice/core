@@ -104,7 +104,7 @@ namespace
     }
 
     /// Write an AutoFormatSwBlob to stream.
-    SvStream& operator<<(SvStream &stream, AutoFormatSwBlob &blob)
+    SvStream& WriteAutoFormatSwBlob(SvStream &stream, AutoFormatSwBlob &blob)
     {
         const sal_uInt64 endOfBlob = stream.Tell() + sizeof(sal_uInt64) + blob.size;
         stream.WriteUInt64( endOfBlob );
@@ -192,7 +192,7 @@ void ScAfVersions::Write(SvStream& rStream, sal_uInt16 fileVersion)
 
     rStream.WriteUInt16( SvxAdjustItem(SVX_ADJUST_LEFT, 0).GetVersion(fileVersion) );
     if (fileVersion >= SOFFICE_FILEFORMAT_50)
-        rStream << swVersions;
+        WriteAutoFormatSwBlob( rStream, swVersions );
 
     rStream.WriteUInt16( SvxHorJustifyItem(SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY).GetVersion(fileVersion) );
     rStream.WriteUInt16( SvxVerJustifyItem(SVX_VER_JUSTIFY_STANDARD, ATTR_VER_JUSTIFY).GetVersion(fileVersion) );
@@ -413,7 +413,7 @@ sal_Bool ScAutoFormatDataField::Save( SvStream& rStream, sal_uInt16 fileVersion 
 
     aAdjust.Store       ( rStream, aAdjust.GetVersion( fileVersion ) );
     if (fileVersion >= SOFFICE_FILEFORMAT_50)
-        rStream << m_swFields;
+        WriteAutoFormatSwBlob( rStream, m_swFields );
 
     aHorJustify.Store   ( rStream, aHorJustify.GetVersion( fileVersion ) );
     aVerJustify.Store   ( rStream, aVerJustify.GetVersion( fileVersion ) );
@@ -805,7 +805,7 @@ bool ScAutoFormatData::Save(SvStream& rStream, sal_uInt16 fileVersion)
     rStream.WriteUChar( ( b = bIncludeWidthHeight ) );
 
     if (fileVersion >= SOFFICE_FILEFORMAT_50)
-        rStream << m_swFields;
+        WriteAutoFormatSwBlob( rStream, m_swFields );
 
     sal_Bool bRet = 0 == rStream.GetError();
     for (sal_uInt16 i = 0; bRet && (i < 16); i++)

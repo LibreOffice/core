@@ -79,7 +79,7 @@ public:
             ~SvGlobalName();
 
     TOOLS_DLLPUBLIC friend SvStream & operator >> ( SvStream &, SvGlobalName & );
-    TOOLS_DLLPUBLIC friend SvStream & operator << ( SvStream &, const SvGlobalName & );
+    TOOLS_DLLPUBLIC friend SvStream & WriteSvGlobalName( SvStream &, const SvGlobalName & );
 
     bool          operator < ( const SvGlobalName & rObj ) const;
     SvGlobalName& operator += ( sal_uInt32 );

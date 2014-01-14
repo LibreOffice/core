@@ -269,7 +269,7 @@ sal_Bool GfxLink::ExportNative( SvStream& rOStream ) const
     return ( rOStream.GetError() == ERRCODE_NONE );
 }
 
-SvStream& operator<<( SvStream& rOStream, const GfxLink& rGfxLink )
+SvStream& WriteGfxLink( SvStream& rOStream, const GfxLink& rGfxLink )
 {
     VersionCompat* pCompat = new VersionCompat( rOStream, STREAM_WRITE, 2 );
 
@@ -277,7 +277,8 @@ SvStream& operator<<( SvStream& rOStream, const GfxLink& rGfxLink )
     rOStream.WriteUInt16( (sal_uInt16) rGfxLink.GetType() ).WriteUInt32( rGfxLink.GetDataSize() ).WriteUInt32( rGfxLink.GetUserId() );
 
     // Version 2
-    rOStream << rGfxLink.GetPrefSize() << rGfxLink.GetPrefMapMode();
+    WritePair( rOStream, rGfxLink.GetPrefSize() );
+    WriteMapMode( rOStream, rGfxLink.GetPrefMapMode() );
 
     delete pCompat;
 

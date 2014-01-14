@@ -133,11 +133,12 @@ SvStream& operator>>( SvStream& rIStm, ImplHatch& rImplHatch )
     return rIStm;
 }
 
-SvStream& operator<<( SvStream& rOStm, const ImplHatch& rImplHatch )
+SvStream& WriteImplHatch( SvStream& rOStm, const ImplHatch& rImplHatch )
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );
 
-    rOStm.WriteUInt16( (sal_uInt16) rImplHatch.meStyle ) << rImplHatch.maColor;
+    rOStm.WriteUInt16( (sal_uInt16) rImplHatch.meStyle );
+    WriteColor( rOStm, rImplHatch.maColor );
     //#fdo39428 SvStream no longer supports operator<<(long)
     rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(rImplHatch.mnDistance) ).WriteUInt16( rImplHatch.mnAngle );
 
@@ -150,9 +151,9 @@ SvStream& operator>>( SvStream& rIStm, Hatch& rHatch )
     return( rIStm >> *rHatch.mpImplHatch );
 }
 
-SvStream& operator<<( SvStream& rOStm, const Hatch& rHatch )
+SvStream& WriteHatch( SvStream& rOStm, const Hatch& rHatch )
 {
-    return( rOStm << *rHatch.mpImplHatch );
+    return WriteImplHatch( rOStm, *rHatch.mpImplHatch );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

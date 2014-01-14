@@ -241,7 +241,7 @@ void VCLXPrinterPropertySet::selectForm( const OUString& rFormDescription ) thro
 
     SvMemoryStream aMem;
     aMem.WriteUInt32( sal_uInt32(BINARYSETUPMARKER) );
-    aMem << GetPrinter()->GetJobSetup();
+    WriteJobSetup( aMem, GetPrinter()->GetJobSetup() );
     return ::com::sun::star::uno::Sequence<sal_Int8>( (sal_Int8*) aMem.GetData(), aMem.Tell() );
 }
 

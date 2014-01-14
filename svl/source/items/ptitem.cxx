@@ -111,7 +111,7 @@ SfxPoolItem* SfxPointItem::Create(SvStream &rStream, sal_uInt16 ) const
 SvStream& SfxPointItem::Store(SvStream &rStream, sal_uInt16 ) const
 {
     DBG_CHKTHIS(SfxPointItem, 0);
-    rStream << aVal;
+    WritePair( rStream, aVal );
     return rStream;
 }
 

@@ -207,7 +207,7 @@ void GalleryTheme::ImplWrite()
 
             if( pOStm )
             {
-                *pOStm << *this;
+                WriteGalleryTheme( *pOStm, *this );
                 delete pOStm;
             }
 
@@ -646,7 +646,7 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
                     pIStm->Seek( pEntry->nOffset );
                     *pIStm >> *pObj;
                     pEntry->nOffset = pTmpStm->Tell();
-                    *pTmpStm << *pObj;
+                    WriteSgaObject( *pTmpStm, *pObj );
                     delete pObj;
                 }
             }
@@ -1512,7 +1512,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
     return rIStm;
 }
 
-SvStream& operator<<( SvStream& rOut, const GalleryTheme& rTheme )
+SvStream& WriteGalleryTheme( SvStream& rOut, const GalleryTheme& rTheme )
 {
     return rTheme.WriteData( rOut );
 }

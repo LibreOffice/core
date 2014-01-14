@@ -2006,9 +2006,9 @@ SvStream& SvxColorItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
 {
     if( VERSION_USEAUTOCOLOR == nItemVersion &&
         COL_AUTO == mColor.GetColor() )
-        rStrm << Color( COL_BLACK );
+        WriteColor( rStrm, Color( COL_BLACK ) );
     else
-        rStrm << mColor;
+        WriteColor( rStrm, mColor );
     return rStrm;
 }
 
@@ -2082,7 +2082,8 @@ SfxPoolItem* SvxCharSetColorItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxCharSetColorItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteUChar( (sal_uInt8)GetSOStoreTextEncoding(GetCharSet()) ) << GetValue();
+    rStrm.WriteUChar( (sal_uInt8)GetSOStoreTextEncoding(GetCharSet()) );
+    WriteColor( rStrm, GetValue() );
     return rStrm;
 }
 

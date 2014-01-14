@@ -31,7 +31,7 @@ class StgIo;
 class SvStream;
 
 SvStream& operator>>( SvStream&, ClsId& );
-SvStream& operator<<( SvStream&, const ClsId& );
+SvStream& WriteClsId( SvStream&, const ClsId& );
 
 class StgHeader
 {

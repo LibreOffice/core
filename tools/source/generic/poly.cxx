@@ -1595,7 +1595,7 @@ SvStream& operator>>( SvStream& rIStream, Polygon& rPoly )
     return rIStream;
 }
 
-SvStream& operator<<( SvStream& rOStream, const Polygon& rPoly )
+SvStream& WritePolygon( SvStream& rOStream, const Polygon& rPoly )
 {
     DBG_CHKOBJ( &rPoly, Polygon, NULL );
     DBG_ASSERTWARNING( rOStream.GetVersion(), "Polygon::<< - Solar-Version not set on rOStream" );
@@ -1659,7 +1659,7 @@ void Polygon::Read( SvStream& rIStream )
 void Polygon::ImplWrite( SvStream& rOStream ) const
 {
     sal_uInt8   bHasPolyFlags = mpImplPolygon->mpFlagAry != NULL;
-    rOStream << *this;
+    WritePolygon( rOStream, *this );
     rOStream.WriteUChar( bHasPolyFlags );
 
     if ( bHasPolyFlags )
