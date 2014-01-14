@@ -493,18 +493,10 @@ com_sun_star_drawing_EnhancedCustomShapeEngine_implementation_getFactory(
     SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
     uno_Sequence * arguments)
 {
-    assert(arguments != 0);
+    assert(arguments != 0); (void) arguments;
     css::uno::Reference<css::uno::XInterface> x(
         static_cast<cppu::OWeakObject *>(new EnhancedCustomShapeEngine));
     x->acquire();
-    css::uno::Reference< css::lang::XInitialization > xx(x, css::uno::UNO_QUERY);
-    if (xx.is())
-    {
-        css::uno::Sequence<css::uno::Any> aArgs(
-                reinterpret_cast<css::uno::Any *>(arguments->elements),
-                arguments->nElements);
-        xx->initialize(aArgs);
-    }
     return x.get();
 }
 

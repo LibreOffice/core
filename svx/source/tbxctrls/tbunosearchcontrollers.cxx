@@ -1053,18 +1053,10 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_svx_FindTextToolboxController_implementation_getFactory(
     css::uno::XComponentContext *context, uno_Sequence * arguments)
 {
-    assert(arguments != 0);
+    assert(arguments != 0); (void) arguments;
     css::uno::Reference<css::uno::XInterface> x(
         static_cast<cppu::OWeakObject *>(new FindTextToolbarController(context)));
     x->acquire();
-    css::uno::Reference< css::lang::XInitialization > xx(x, css::uno::UNO_QUERY);
-    if (xx.is())
-    {
-        css::uno::Sequence<css::uno::Any> aArgs(
-                reinterpret_cast<css::uno::Any *>(arguments->elements),
-                arguments->nElements);
-        xx->initialize(aArgs);
-    }
     return x.get();
 }
 
@@ -1072,18 +1064,10 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_svx_ExitFindbarToolboxController_implementation_getFactory(
     css::uno::XComponentContext *context, uno_Sequence * arguments)
 {
-    assert(arguments != 0);
+    assert(arguments != 0); (void) arguments;
     css::uno::Reference<css::uno::XInterface> x(
         static_cast<cppu::OWeakObject *>(new ExitSearchToolboxController(context)));
     x->acquire();
-    css::uno::Reference< css::lang::XInitialization > xx(x, css::uno::UNO_QUERY);
-    if (xx.is())
-    {
-        css::uno::Sequence<css::uno::Any> aArgs(
-                reinterpret_cast<css::uno::Any *>(arguments->elements),
-                arguments->nElements);
-        xx->initialize(aArgs);
-    }
     return x.get();
 }
 
@@ -1091,19 +1075,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_svx_UpSearchToolboxController_implementation_getFactory(
     css::uno::XComponentContext *context, uno_Sequence * arguments)
 {
-    assert(arguments != 0);
+    assert(arguments != 0); (void) arguments;
     css::uno::Reference<css::uno::XInterface> x(
         static_cast<cppu::OWeakObject *>(new UpDownSearchToolboxController(
                 context, UpDownSearchToolboxController::UP )));
     x->acquire();
-    css::uno::Reference< css::lang::XInitialization > xx(x, css::uno::UNO_QUERY);
-    if (xx.is())
-    {
-        css::uno::Sequence<css::uno::Any> aArgs(
-                reinterpret_cast<css::uno::Any *>(arguments->elements),
-                arguments->nElements);
-        xx->initialize(aArgs);
-    }
     return x.get();
 }
 
@@ -1111,19 +1087,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_svx_DownSearchToolboxController_implementation_getFactory(
     css::uno::XComponentContext *context, uno_Sequence * arguments)
 {
-    assert(arguments != 0);
+    assert(arguments != 0); (void) arguments;
     css::uno::Reference<css::uno::XInterface> x(
         static_cast<cppu::OWeakObject *>(new UpDownSearchToolboxController(
                 context, UpDownSearchToolboxController::DOWN )));
     x->acquire();
-    css::uno::Reference< css::lang::XInitialization > xx(x, css::uno::UNO_QUERY);
-    if (xx.is())
-    {
-        css::uno::Sequence<css::uno::Any> aArgs(
-                reinterpret_cast<css::uno::Any *>(arguments->elements),
-                arguments->nElements);
-        xx->initialize(aArgs);
-    }
     return x.get();
 }
 
@@ -1131,18 +1099,10 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_svx_MatchCaseToolboxController_implementation_getFactory(
     css::uno::XComponentContext *context, uno_Sequence * arguments)
 {
-    assert(arguments != 0);
+    assert(arguments != 0); (void) arguments;
     css::uno::Reference<css::uno::XInterface> x(
         static_cast<cppu::OWeakObject *>(new MatchCaseToolboxController(context)));
     x->acquire();
-    css::uno::Reference< css::lang::XInitialization > xx(x, css::uno::UNO_QUERY);
-    if (xx.is())
-    {
-        css::uno::Sequence<css::uno::Any> aArgs(
-                reinterpret_cast<css::uno::Any *>(arguments->elements),
-                arguments->nElements);
-        xx->initialize(aArgs);
-    }
     return x.get();
 }
 
@@ -1150,18 +1110,10 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_svx_FindAllToolboxController_implementation_getFactory(
     css::uno::XComponentContext *context, uno_Sequence * arguments)
 {
-    assert(arguments != 0);
+    assert(arguments != 0); (void) arguments;
     css::uno::Reference<css::uno::XInterface> x(
         static_cast<cppu::OWeakObject *>(new FindAllToolboxController(context)));
     x->acquire();
-    css::uno::Reference< css::lang::XInitialization > xx(x, css::uno::UNO_QUERY);
-    if (xx.is())
-    {
-        css::uno::Sequence<css::uno::Any> aArgs(
-                reinterpret_cast<css::uno::Any *>(arguments->elements),
-                arguments->nElements);
-        xx->initialize(aArgs);
-    }
     return x.get();
 }
 
@@ -1170,18 +1122,10 @@ com_sun_star_comp_svx_Impl_FindbarDispatcher_implementation_getFactory(
     SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
     uno_Sequence * arguments)
 {
-    assert(arguments != 0);
+    assert(arguments != 0); (void) arguments;
     css::uno::Reference<css::uno::XInterface> x(
         static_cast<cppu::OWeakObject *>(new FindbarDispatcher));
     x->acquire();
-    css::uno::Reference< css::lang::XInitialization > xx(x, css::uno::UNO_QUERY);
-    if (xx.is())
-    {
-        css::uno::Sequence<css::uno::Any> aArgs(
-                reinterpret_cast<css::uno::Any *>(arguments->elements),
-                arguments->nElements);
-        xx->initialize(aArgs);
-    }
     return x.get();
 }
 

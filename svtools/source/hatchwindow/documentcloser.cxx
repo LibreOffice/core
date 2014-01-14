@@ -281,12 +281,8 @@ com_sun_star_comp_embed_DocumentCloser_get_implementation(
         SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
         uno_Sequence * arguments)
 {
-    assert(arguments != 0 );
+    assert(arguments != 0); (void) arguments;
     rtl::Reference<ODocumentCloser> x(new ODocumentCloser);
-    css::uno::Sequence<css::uno::Any> aArgs(
-            reinterpret_cast<css::uno::Any *>(arguments->elements),
-            arguments->nElements);
-    x->initialize(aArgs);
     x->acquire();
     return static_cast<cppu::OWeakObject *>(x.get());
 }

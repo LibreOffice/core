@@ -20,6 +20,7 @@
 #include "com/sun/star/container/ElementExistException.hpp"
 #include "com/sun/star/container/XEnumeration.hpp"
 #include "com/sun/star/container/XNameContainer.hpp"
+#include "com/sun/star/lang/XInitialization.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/lang/XSingleComponentFactory.hpp"
 #include "com/sun/star/lang/XSingleServiceFactory.hpp"
@@ -601,12 +602,18 @@ ImplementationWrapper::createInstanceWithArgumentsAndContext(
     throw (css::uno::Exception, css::uno::RuntimeException)
 {
     loadImplementation(Context);
-    return constructor_ != 0
-        ? css::uno::Reference<css::uno::XInterface>(
-            (*constructor_)(Context.get(), Arguments.get()), SAL_NO_ACQUIRE)
-        : factory1_.is()
-        ? factory1_->createInstanceWithArgumentsAndContext(Arguments, Context)
-        : factory2_->createInstanceWithArguments(Arguments);
+    if (constructor_ != 0) {
+        css::uno::Reference<css::uno::XInterface> xRet(
+            (*constructor_)(Context.get(), Arguments.get()), SAL_NO_ACQUIRE);
+        css::uno::Reference<css::lang::XInitialization> xInit(
+                xRet, css::uno::UNO_QUERY);
+        if (xInit.is())
+            xInit->initialize(Arguments);
+        return xRet;
+    } else
+        return factory1_.is()
+            ? factory1_->createInstanceWithArgumentsAndContext(Arguments, Context)
+            : factory2_->createInstanceWithArguments(Arguments);
 }
 
 css::uno::Reference< css::uno::XInterface >
@@ -928,9 +935,14 @@ cppuhelper::ServiceManager::createInstanceWithArgumentsAndContext(
         return css::uno::Reference< css::uno::XInterface >();
     }
     if (impl->constructor != 0) {
-        return css::uno::Reference<css::uno::XInterface>(
+        css::uno::Reference<css::uno::XInterface> xRet(
             (*impl->constructor)(Context.get(), Arguments.get()),
             SAL_NO_ACQUIRE);
+        css::uno::Reference<css::lang::XInitialization> xInit(
+                xRet, css::uno::UNO_QUERY);
+        if (xInit.is())
+            xInit->initialize(Arguments);
+        return xRet;
     } else if (impl->factory1.is()) {
         return impl->factory1->createInstanceWithArgumentsAndContext(
             Arguments, Context);

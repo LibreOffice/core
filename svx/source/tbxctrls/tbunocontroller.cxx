@@ -443,18 +443,10 @@ com_sun_star_svx_FontHeightToolBoxController_implementation_getFactory(
     css::uno::XComponentContext *rxContext,
     uno_Sequence * arguments)
 {
-    assert(arguments != 0);
+    assert(arguments != 0); (void) arguments;
     css::uno::Reference<css::uno::XInterface> x(
         static_cast<cppu::OWeakObject *>(new FontHeightToolBoxControl(rxContext)));
     x->acquire();
-    css::uno::Reference< css::lang::XInitialization > xx(x, css::uno::UNO_QUERY);
-    if (xx.is())
-    {
-        css::uno::Sequence<css::uno::Any> aArgs(
-                reinterpret_cast<css::uno::Any *>(arguments->elements),
-                arguments->nElements);
-        xx->initialize(aArgs);
-    }
     return x.get();
 }
 
