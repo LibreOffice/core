@@ -2453,7 +2453,17 @@ DECLARE_OOXMLEXPORT_TEST(testTrackChangesParagraphProperties, "testTrackChangesP
         return;
     assertXPathChildren(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pPrChange", 0);
 }
-
+DECLARE_OOXMLEXPORT_TEST(testTableRowDataDisplayedTwice,"table_on_first&second_page.docx")
+{
+    // fdo#73534: There was a problem for some documents during export.Invalid sectPr getting added
+    // because of wrong condition in code.
+    // This was the reason for increasing number of pages after RT
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToLastPage();
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

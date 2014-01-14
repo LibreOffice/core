@@ -396,13 +396,12 @@ bool MSWordExportBase::SetAktPageDescFromNode(const SwNode &rNd)
 // Es duerfen nur Funktionen gerufen werden, die nicht in den
 // Ausgabebereich pO schreiben, da dieser nur einmal fuer CHP und PAP existiert
 // und damit im falschen landen wuerden.
-void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode& rNd )
+void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode& rNd, bool isCellOpen)
 {
     if ( bStyDef || bOutKF || bInWriteEscher || bOutPageDescs )
         return;
 
     bBreakBefore = true;
-
     bool bNewPageDesc = false;
     const SfxPoolItem* pItem=0;
     const SwFmtPageDesc *pPgDesc=0;
@@ -415,11 +414,19 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
 
     const SwPageDesc * pPageDesc = rNd.FindPageDesc(sal_False);
 
+    // Even if pAktPageDesc != pPageDesc ,it might be because of the different header & footer types.
     if (pAktPageDesc != pPageDesc)
     {
-        bBreakSet = true;
-        bNewPageDesc = true;
-        pAktPageDesc = pPageDesc;
+        if (isCellOpen && (pAktPageDesc->GetName() != pPageDesc->GetName()))
+        {
+           // Table cell is open and page header types are different,so do not output section break.
+        }
+        else
+        {
+            bBreakSet = true;
+            bNewPageDesc = true;
+            pAktPageDesc = pPageDesc;
+        }
     }
 
     if ( pSet && pSet->Count() )
