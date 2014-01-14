@@ -172,7 +172,7 @@ public:
     SAL_DLLPRIVATE void ReleasingComponent_Impl( sal_Bool bSet );
     SAL_DLLPRIVATE void GetViewData_Impl();
     SAL_DLLPRIVATE void SetFrameType_Impl( sal_uInt32 );
-    SAL_DLLPRIVATE bool PrepareClose_Impl( sal_Bool bUI, sal_Bool bForBrowsing=sal_False );
+    SAL_DLLPRIVATE bool PrepareClose_Impl( sal_Bool bUI );
     SAL_DLLPRIVATE sal_Bool DocIsModified_Impl();
     SAL_DLLPRIVATE void SetCurrentViewFrame_Impl( SfxViewFrame* );
     SAL_DLLPRIVATE sal_Bool IsClosing_Impl() const;

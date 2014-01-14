@@ -70,7 +70,7 @@ public:
     */
     virtual void ArrangeGUIElements (void);
 
-    virtual bool PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False );
+    virtual bool PrepareClose( sal_Bool bUI = sal_True ) SAL_OVERRIDE;
 
     virtual long VirtHScrollHdl(ScrollBar* pHScroll);
     virtual long VirtVScrollHdl(ScrollBar* pVHScroll);

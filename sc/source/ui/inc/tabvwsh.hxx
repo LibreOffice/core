@@ -202,7 +202,7 @@ private:
 protected:
     virtual void    Activate(sal_Bool bMDI);
     virtual void    Deactivate(sal_Bool bMDI);
-    virtual bool    PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = false );
+    virtual bool    PrepareClose( sal_Bool bUI = sal_True ) SAL_OVERRIDE;
 
     virtual void    ShowCursor(bool bOn);
 

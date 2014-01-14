@@ -567,9 +567,8 @@ struct BoolEnv_Impl
 
 bool SfxObjectShell::PrepareClose
 (
-    sal_Bool    bUI,  // sal_True: Dialog and so on is allowed
+    sal_Bool    bUI   // sal_True: Dialog and so on is allowed
                       // sal_False: silent-mode
-    sal_Bool    bForBrowsing
 )
 {
     if( pImp->bInPrepareClose || pImp->bPreparedForClose )
@@ -581,7 +580,7 @@ bool SfxObjectShell::PrepareClose
         return false;
 
     SfxViewFrame* pFirst = SfxViewFrame::GetFirst( this );
-    if( pFirst && !pFirst->GetFrame().PrepareClose_Impl( bUI, bForBrowsing ) )
+    if( pFirst && !pFirst->GetFrame().PrepareClose_Impl( bUI ) )
         return false;
 
     // prepare views for closing
@@ -591,7 +590,7 @@ bool SfxObjectShell::PrepareClose
         DBG_ASSERT(pFrm->GetViewShell(),"No Shell");
         if ( pFrm->GetViewShell() )
         {
-            bool nRet = pFrm->GetViewShell()->PrepareClose( bUI, bForBrowsing );
+            bool nRet = pFrm->GetViewShell()->PrepareClose( bUI );
             if ( !nRet )
                 return nRet;
         }

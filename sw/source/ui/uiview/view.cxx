@@ -1728,18 +1728,18 @@ void    SwView::StopShellTimer()
     }
 }
 
-bool SwView::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
+bool SwView::PrepareClose( sal_Bool bUI )
 {
     SfxViewFrame* pVFrame = GetViewFrame();
     pVFrame->SetChildWindow( SwInputChild::GetChildWindowId(), sal_False );
     if( pVFrame->GetDispatcher()->IsLocked() )
         pVFrame->GetDispatcher()->Lock(sal_False);
 
-    if ( m_pFormShell && !m_pFormShell->PrepareClose( bUI, bForBrowsing ) )
+    if ( m_pFormShell && !m_pFormShell->PrepareClose( bUI ) )
     {
         return false;
     }
-    return SfxViewShell::PrepareClose( bUI, bForBrowsing );
+    return SfxViewShell::PrepareClose( bUI );
 }
 
 // status methods for clipboard.

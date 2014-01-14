@@ -426,7 +426,7 @@ public:
     static sal_uInt32           HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDoc );
 
     virtual void                ViewAssigned();
-    virtual bool                PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False );
+    virtual bool                PrepareClose( sal_Bool bUI = sal_True );
     virtual sal_Bool            IsInformationLost();
     virtual sal_uInt16          GetHiddenInformationState( sal_uInt16 nStates );
     sal_Int16                   QueryHiddenInformation( HiddenWarningFact eFact, Window* pParent );

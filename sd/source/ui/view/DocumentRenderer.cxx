@@ -1472,7 +1472,7 @@ private:
 
             // When in outline view then apply all pending changes to the model.
             if (pShell->ISA(OutlineViewShell))
-                static_cast<OutlineViewShell*>(pShell)->PrepareClose (sal_False, sal_False);
+                static_cast<OutlineViewShell*>(pShell)->PrepareClose (sal_False);
 
             // Collect some frequently used data.
             if (mpOptions->IsDate())

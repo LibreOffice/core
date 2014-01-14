@@ -371,10 +371,8 @@ void Shell::StoreAllWindowData( bool bPersistent )
 }
 
 
-bool Shell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
+bool Shell::PrepareClose( sal_Bool bUI )
 {
-    (void)bForBrowsing;
-
     // reset here because it's modified after printing etc. (DocInfo)
     GetViewFrame()->GetObjectShell()->SetModified(false);
 

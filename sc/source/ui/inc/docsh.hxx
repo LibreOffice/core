@@ -209,7 +209,7 @@ public:
     virtual sal_Bool    Save();
     virtual sal_Bool    SaveAs( SfxMedium& rMedium );
     virtual sal_Bool    ConvertTo( SfxMedium &rMedium );
-    virtual bool        PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = false );
+    virtual bool        PrepareClose( sal_Bool bUI = sal_True ) SAL_OVERRIDE;
     virtual void    PrepareReload();
     virtual sal_Bool    IsInformationLost();
     virtual void    LoadStyles( SfxObjectShell &rSource );

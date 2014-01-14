@@ -1288,8 +1288,7 @@ SfxViewShell::~SfxViewShell()
 
 bool SfxViewShell::PrepareClose
 (
-    sal_Bool bUI,     // TRUE: Allow Dialog and so on, FALSE: silent-mode
-    sal_Bool /*bForBrowsing*/
+    sal_Bool bUI     // TRUE: Allow Dialog and so on, FALSE: silent-mode
 )
 {
     SfxPrinter *pPrinter = GetPrinter();

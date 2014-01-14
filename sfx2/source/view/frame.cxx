@@ -193,7 +193,7 @@ sal_Bool SfxFrame::DocIsModified_Impl()
     return sal_False;
 }
 
-bool SfxFrame::PrepareClose_Impl( sal_Bool bUI, sal_Bool bForBrowsing )
+bool SfxFrame::PrepareClose_Impl( sal_Bool bUI )
 {
     bool nRet = true;
 
@@ -218,17 +218,17 @@ bool SfxFrame::PrepareClose_Impl( sal_Bool bUI, sal_Bool bForBrowsing )
 
             if ( bOther )
                 // if there are other views only the current view of this frame must be asked
-                nRet = GetCurrentViewFrame()->GetViewShell()->PrepareClose( bUI, bForBrowsing );
+                nRet = GetCurrentViewFrame()->GetViewShell()->PrepareClose( bUI );
             else
                 // otherwise ask the document
-                nRet = pCur->PrepareClose( bUI, bForBrowsing );
+                nRet = pCur->PrepareClose( bUI );
         }
 
         if ( nRet )
         {
             // if this frame has child frames, ask them too
             for( sal_uInt16 nPos = GetChildFrameCount(); nRet && nPos--; )
-                nRet = (*pChildArr)[ nPos ]->PrepareClose_Impl( bUI, bForBrowsing );
+                nRet = (*pChildArr)[ nPos ]->PrepareClose_Impl( bUI );
         }
 
         pImp->bPrepClosing = sal_False;

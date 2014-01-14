@@ -831,9 +831,9 @@ void ViewShellBase::SetZoomFactor (
 
 
 
-bool ViewShellBase::PrepareClose (sal_Bool bUI, sal_Bool bForBrowsing)
+bool ViewShellBase::PrepareClose (sal_Bool bUI)
 {
-    bool nResult = SfxViewShell::PrepareClose (bUI, bForBrowsing);
+    bool nResult = SfxViewShell::PrepareClose (bUI);
 
     if (nResult)
     {
@@ -842,7 +842,7 @@ bool ViewShellBase::PrepareClose (sal_Bool bUI, sal_Bool bForBrowsing)
         // Forward call to main sub shell.
         ViewShell* pShell = GetMainViewShell().get();
         if (pShell != NULL)
-            nResult = pShell->PrepareClose (bUI, bForBrowsing);
+            nResult = pShell->PrepareClose (bUI);
     }
 
     return nResult;

@@ -274,7 +274,7 @@ public:
     sal_uInt16 GetPrintedHandoutPageCount(void) const { return mnPrintedHandoutPageCount; }
     void SetPrintedHandoutPageCount (sal_uInt16 nPageCount) {mnPrintedHandoutPageCount=nPageCount; }
 
-    virtual bool PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False );
+    virtual bool PrepareClose( sal_Bool bUI = sal_True );
 
     void GetMenuState(SfxItemSet& rSet);
 

@@ -161,7 +161,7 @@ public:
     virtual void SetZoomFactor (
         const Fraction &rZoomX,
         const Fraction &rZoomY);
-    virtual bool PrepareClose (sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False);
+    virtual bool PrepareClose (sal_Bool bUI = sal_True) SAL_OVERRIDE;
     virtual void WriteUserData (OUString&, bool bBrowse = false);
     virtual void ReadUserData (const OUString&, bool bBrowse = false);
     virtual SdrView* GetDrawView (void) const;

@@ -303,9 +303,9 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 }
 
 // Notification Close Doc
-bool SwDocShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
+bool SwDocShell::PrepareClose( sal_Bool bUI )
 {
-    bool nRet = SfxObjectShell::PrepareClose( bUI, bForBrowsing );
+    bool nRet = SfxObjectShell::PrepareClose( bUI );
 
     if( nRet )
         EndListening( *this );
