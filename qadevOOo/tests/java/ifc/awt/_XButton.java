@@ -99,7 +99,7 @@ public class _XButton extends MultiMethodTest {
     public void _setActionCommand() {
 
         boolean result = true ;
-        oObj.setActionCommand("XButtonComand") ;
+        oObj.setActionCommand("XButtonCommand") ;
 
         tRes.tested("setActionCommand()", result) ;
     }

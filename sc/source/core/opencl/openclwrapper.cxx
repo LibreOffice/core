@@ -493,7 +493,7 @@ int OpenclDevice::initOpenclRunEnv( int argc )
     if ( !isInited )
     {
         registOpenclKernel();
-        //initialize devices, context, comand_queue
+        //initialize devices, context, command_queue
         int status = initOpenclRunEnv( &gpuEnv );
         if ( status )
         {

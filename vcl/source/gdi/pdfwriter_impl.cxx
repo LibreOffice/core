@@ -1908,7 +1908,7 @@ void PDFWriterImpl::computeDocumentIdentifier( std::vector< sal_uInt8 >& o_rIden
     // according to ISO 19005-1:2005 6.7.3 the date is corrected for
     // local time zone offset UTC only, whereas Acrobat 8 seems
     // to use the localtime notation only
-    // according to a raccomandation in XMP Specification (Jan 2004, page 75)
+    // according to a recommendation in XMP Specification (Jan 2004, page 75)
     // the Acrobat way seems the right approach
     aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Year/1000)%10)) );
     aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Year/100)%10)) );
