@@ -51,7 +51,7 @@ public:
     {
         m_aNumberFormatMap[tFullAxisIndex(nDimIndex,nAxisIndex)] = nFormatKey;
     }
-    sal_Int32 hasFormat( sal_Int32 nDimIndex, sal_Int32 nAxisIndex ) const
+    bool hasFormat( sal_Int32 nDimIndex, sal_Int32 nAxisIndex ) const
     {
         return (m_aNumberFormatMap.find(tFullAxisIndex(nDimIndex,nAxisIndex)) !=m_aNumberFormatMap.end());
     }

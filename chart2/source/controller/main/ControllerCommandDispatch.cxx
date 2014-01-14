@@ -78,10 +78,10 @@ namespace impl
 {
 
 /// Constants for moving the series.
-enum EnumForward{
-    MOVE_SERIES_FORWARD = true,
-    MOVE_SERIES_BACKWARD = false
-};
+namespace {
+    static bool const MOVE_SERIES_FORWARD = true;
+    static bool const MOVE_SERIES_BACKWARD = false;
+}
 
 /** Represents the current state of the controller (needed for issue 63017).
 
