@@ -493,7 +493,7 @@ void OTableController::doEditIndexes()
     if (!xIndexes.is())
         return;
 
-    DbaIndexDialog aDialog(getView(), aFieldNames, xIndexes, getConnection(), getORB(), isConnected() ? getConnection()->getMetaData().is() && getConnection()->getMetaData()->getMaxColumnsInIndex() : sal_Int32(0));
+    DbaIndexDialog aDialog(getView(), aFieldNames, xIndexes, getConnection(), getORB(), isConnected() && getConnection()->getMetaData().is() ? getConnection()->getMetaData()->getMaxColumnsInIndex() : 0);
     if (RET_OK != aDialog.Execute())
         return;
 
