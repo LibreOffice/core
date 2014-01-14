@@ -594,46 +594,51 @@ namespace svtools
                 if ( eUnit == MAP_TWIP )
                 {
                     aPattern.push_back( 30.0 );
-                    aPattern.push_back( 110.0 );
+                    aPattern.push_back( 60.0 );
                 }
                 else if ( eUnit == MAP_100TH_MM )
                 {
-                    aPattern.push_back( 50 );
-                    aPattern.push_back( 200 );
+                    aPattern.push_back( 50.0 );
+                    aPattern.push_back( 100.0 );
                 }
                 else if ( eUnit == MAP_PIXEL )
                 {
-                    aPattern.push_back( 1.0 );
-                    aPattern.push_back( 3.0 );
+                    aPattern.push_back( 1.0 ); // line
+                    aPattern.push_back( 2.0 ); // blank
                 }
                 break;
             case table::BorderLineStyle::DASHED:
                 if ( eUnit == MAP_TWIP )
                 {
-                    aPattern.push_back( 110 );
-                    aPattern.push_back( 110 );
+                    aPattern.push_back( 120.0 );
+                    aPattern.push_back( 40.0 );
                 }
                 else if ( eUnit == MAP_100TH_MM )
                 {
-                    aPattern.push_back( 200 );
-                    aPattern.push_back( 200 );
+                    aPattern.push_back( 150.0 );
+                    aPattern.push_back( 50.0 );
                 }
                 else if ( eUnit == MAP_PIXEL )
                 {
-                    aPattern.push_back( 10 );
-                    aPattern.push_back( 20 );
+                    aPattern.push_back( 9.0 );
+                    aPattern.push_back( 3.0 );
                 }
                 break;
             case table::BorderLineStyle::FINE_DASHED:
-                if ( eUnit == MAP_PIXEL )
+                if ( eUnit == MAP_TWIP )
                 {
-                    aPattern.push_back( 8 );
-                    aPattern.push_back( 2 );
+                    aPattern.push_back( 60.0 );
+                    aPattern.push_back( 40.0 );
                 }
-                else if ( eUnit == MAP_TWIP )
+                else if ( eUnit == MAP_100TH_MM )
                 {
-                    aPattern.push_back( 120.0 );
-                    aPattern.push_back( 30.0 );
+                    aPattern.push_back( 75.0 );
+                    aPattern.push_back( 50.0 );
+                }
+                else if ( eUnit == MAP_PIXEL )
+                {
+                    aPattern.push_back( 3.0 );
+                    aPattern.push_back( 2.0 );
                 }
                 break;
             default:
