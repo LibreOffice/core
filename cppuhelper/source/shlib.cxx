@@ -195,6 +195,7 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
             }
         }
         if (fp == 0) {
+            SAL_WARN("cppuhelper", "unknown factory name \"" << name << "\"");
             throw css::loader::CannotActivateFactoryException(
                 "unknown factory name \"" + name + "\"",
                 css::uno::Reference<css::uno::XInterface>());
@@ -213,6 +214,7 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
                 return;
             }
         }
+        SAL_WARN("cppuhelper", "unknown constructor name \"" << constructor << "\"");
         throw css::loader::CannotActivateFactoryException(
             "unknown constructor name \"" + constructor + "\"",
             css::uno::Reference<css::uno::XInterface>());
