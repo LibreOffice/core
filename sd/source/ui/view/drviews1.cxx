@@ -298,9 +298,7 @@ bool DrawViewShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
     if ( !ViewShell::PrepareClose(bUI, bForBrowsing) )
         return false;
 
-    bool bRet = true;
-
-    if( bRet && HasCurrentFunction() )
+    if( HasCurrentFunction() )
     {
         sal_uInt16 nID = GetCurrentFunction()->GetSlotID();
         if (nID == SID_TEXTEDIT || nID == SID_ATTR_CHAR)
@@ -308,14 +306,8 @@ bool DrawViewShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
             mpDrawView->SdrEndTextEdit();
         }
     }
-    else if( !bRet )
-    {
-        maCloseTimer.SetTimeoutHdl( LINK( this, DrawViewShell, CloseHdl ) );
-        maCloseTimer.SetTimeout( 20 );
-        maCloseTimer.Start();
-    }
 
-    return bRet;
+    return true;
 }
 
 /**
@@ -1221,17 +1213,6 @@ void DrawViewShell::ResetActualLayer()
         GetViewFrame()->GetBindings().Invalidate( SID_MODIFYLAYER );
         GetViewFrame()->GetBindings().Invalidate( SID_DELETE_LAYER );
     }
-}
-
-/**
- * Execute a delayed close
- */
-
-IMPL_LINK( DrawViewShell, CloseHdl, Timer*, pTimer )
-{
-    pTimer->Stop();
-    GetViewFrame()->GetBindings().Execute( SID_CLOSEWIN );
-    return 0L;
 }
 
 /**

@@ -382,14 +382,12 @@ protected:
     sal_Bool            mbZoomOnPage;
     sal_Bool            mbIsRulerDrag;
     sal_uLong           mnLockCount;
-    Timer           maCloseTimer;
     sal_Bool            mbReadOnly;
     sal_uInt16*         mpSlotArray;
 
     static sal_Bool     mbPipette;
 
                     DECL_LINK( ClipboardChanged, TransferableDataHelper* );
-                    DECL_LINK( CloseHdl, Timer* pTimer );
                     DECL_LINK( TabSplitHdl, TabBar * );
                     DECL_LINK( NameObjectHdl, AbstractSvxNameDialog* );
                     DECL_LINK( RenameSlideHdl, AbstractSvxNameDialog* );
