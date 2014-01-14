@@ -1848,32 +1848,6 @@ bool ScHorizontalCellIterator::GetPos( SCCOL& rCol, SCROW& rRow )
     return mbMore;
 }
 
-namespace {
-
-inline bool advanceNonEmptyBlock(size_t nRow, sc::CellStoreType::const_iterator& rPos,
-                                 const sc::CellStoreType::const_iterator& rEnd)
-{
-    assert (rPos->type != sc::element_type_empty);
-
-    if (nRow < rPos->position + rPos->size)
-        // Block already contains the specified row. Nothing to do.
-        return true;
-
-    // This block is behind the current row position. Advance the block.
-    for (++rPos; rPos != rEnd; ++rPos)
-    {
-        if (nRow < rPos->position + rPos->size &&
-            rPos->type == sc::element_type_empty)
-            // Found a non-empty block that contains the specified row.
-            return true;
-    }
-
-    // No more blocks.
-    return false;
-}
-
-}
-
 // Skip any invalid / empty cells across the current row,
 // we only advance the cursor if the current entry is invalid.
 // if we return true we have a valid cursor (or hit the end)
