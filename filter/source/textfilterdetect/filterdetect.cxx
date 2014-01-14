@@ -14,6 +14,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 #define WRITER_TEXT_FILTER "Text"
 #define CALC_TEXT_FILTER   "Text - txt - csv (StarCalc)"
@@ -118,12 +119,6 @@ OUString PlainTextFilterDetect_getImplementationName()
     return OUString("com.sun.star.comp.filters.PlainTextFilterDetect");
 }
 
-sal_Bool PlainTextFilterDetect_supportsService(const OUString& ServiceName)
-{
-    return ServiceName == "com.sun.star.document.ExtendedTypeDetection" ||
-        ServiceName == "com.sun.star.comp.filters.PlainTextFilterDetect";
-}
-
 uno::Sequence<OUString> PlainTextFilterDetect_getSupportedServiceNames()
 {
     uno::Sequence<OUString> aRet(2);
@@ -149,7 +144,7 @@ OUString SAL_CALL PlainTextFilterDetect::getImplementationName()
 sal_Bool SAL_CALL PlainTextFilterDetect::supportsService(const OUString& rServiceName)
     throw (uno::RuntimeException)
 {
-    return PlainTextFilterDetect_supportsService(rServiceName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL PlainTextFilterDetect::getSupportedServiceNames()

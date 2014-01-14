@@ -31,6 +31,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 
@@ -448,45 +449,26 @@ void SAL_CALL FlashExportFilter::initialize( const ::com::sun::star::uno::Sequen
 {
 }
 
-// -----------------------------------------------------------------------------
-
 OUString FlashExportFilter_getImplementationName ()
     throw (RuntimeException)
 {
     return OUString ( "com.sun.star.comp.Impress.FlashExportFilter" );
 }
 
-// -----------------------------------------------------------------------------
-
-#define SERVICE_NAME "com.sun.star.document.ExportFilter"
-
-sal_Bool SAL_CALL FlashExportFilter_supportsService( const OUString& ServiceName )
-    throw (RuntimeException)
-{
-    return ServiceName == SERVICE_NAME;
-}
-
-// -----------------------------------------------------------------------------
-
 Sequence< OUString > SAL_CALL FlashExportFilter_getSupportedServiceNames(  )
     throw (RuntimeException)
 {
     Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( SERVICE_NAME );
+    pArray[0] =  "com.sun.star.document.ExportFilter";
     return aRet;
 }
-#undef SERVICE_NAME
-
-// -----------------------------------------------------------------------------
 
 Reference< XInterface > SAL_CALL FlashExportFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
     return (cppu::OWeakObject*) new FlashExportFilter( comphelper::getComponentContext(rSMgr) );
 }
-
-// -----------------------------------------------------------------------------
 
 // XServiceInfo
 OUString SAL_CALL FlashExportFilter::getImplementationName(  )
@@ -495,23 +477,17 @@ OUString SAL_CALL FlashExportFilter::getImplementationName(  )
     return FlashExportFilter_getImplementationName();
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Bool SAL_CALL FlashExportFilter::supportsService( const OUString& rServiceName )
     throw (RuntimeException)
 {
-    return FlashExportFilter_supportsService( rServiceName );
+    return cppu::supportsService( this, rServiceName );
 }
-
-// -----------------------------------------------------------------------------
 
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL FlashExportFilter::getSupportedServiceNames(  )
     throw (RuntimeException)
 {
     return FlashExportFilter_getSupportedServiceNames();
 }
-
-// -----------------------------------------------------------------------------
 
 }
 

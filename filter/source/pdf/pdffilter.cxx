@@ -17,30 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "pdffilter.hxx"
 #include "pdfexport.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <svl/outstrm.hxx>
 #include <vcl/FilterConfigItem.hxx>
 
-// -------------
 // - PDFFilter -
-// -------------
-
 PDFFilter::PDFFilter( const Reference< XComponentContext > &rxContext ) :
     mxContext( rxContext )
 {
 }
 
-// -----------------------------------------------------------------------------
-
 PDFFilter::~PDFFilter()
 {
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 {
@@ -200,37 +193,19 @@ void SAL_CALL PDFFilter::initialize( const ::com::sun::star::uno::Sequence< ::co
 {
 }
 
-// -----------------------------------------------------------------------------
-
 OUString PDFFilter_getImplementationName ()
     throw (RuntimeException)
 {
     return OUString ( "com.sun.star.comp.PDF.PDFFilter" );
 }
 
-// -----------------------------------------------------------------------------
-
-#define SERVICE_NAME "com.sun.star.document.PDFFilter"
-
-sal_Bool SAL_CALL PDFFilter_supportsService( const OUString& ServiceName )
-    throw (RuntimeException)
-{
-    return ServiceName == SERVICE_NAME;
-}
-
-// -----------------------------------------------------------------------------
-
 Sequence< OUString > SAL_CALL PDFFilter_getSupportedServiceNames(  ) throw (RuntimeException)
 {
     Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = SERVICE_NAME;
+    pArray[0] = "com.sun.star.document.PDFFilter";
     return aRet;
 }
-
-#undef SERVICE_NAME
-
-// -----------------------------------------------------------------------------
 
 Reference< XInterface > SAL_CALL PDFFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr) throw( Exception )
 {
@@ -250,7 +225,7 @@ OUString SAL_CALL PDFFilter::getImplementationName()
 sal_Bool SAL_CALL PDFFilter::supportsService( const OUString& rServiceName )
     throw (RuntimeException)
 {
-    return PDFFilter_supportsService( rServiceName );
+    return cppu::supportsService( this, rServiceName );
 }
 
 // -----------------------------------------------------------------------------

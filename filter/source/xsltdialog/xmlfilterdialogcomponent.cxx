@@ -28,6 +28,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -193,8 +194,6 @@ OUString XMLFilterDialogComponent_getImplementationName() throw ( RuntimeExcepti
     return OUString( "com.sun.star.comp.ui.XSLTFilterDialog" );
 }
 
-//-------------------------------------------------------------------------
-
 Sequence< OUString > SAL_CALL XMLFilterDialogComponent_getSupportedServiceNames()  throw ( RuntimeException )
 {
     Sequence< OUString > aSupported(1);
@@ -202,32 +201,15 @@ Sequence< OUString > SAL_CALL XMLFilterDialogComponent_getSupportedServiceNames(
     return aSupported;
 }
 
-//-------------------------------------------------------------------------
-
-sal_Bool SAL_CALL XMLFilterDialogComponent_supportsService( const OUString& ServiceName ) throw ( RuntimeException )
-{
-    Sequence< OUString > aSupported(XMLFilterDialogComponent_getSupportedServiceNames());
-    const OUString* pArray = aSupported.getConstArray();
-    for (sal_Int32 i = 0; i < aSupported.getLength(); ++i, ++pArray)
-        if (pArray->equals(ServiceName))
-            return sal_True;
-    return sal_False;
-}
-
-//-------------------------------------------------------------------------
-
 Reference< XInterface > SAL_CALL XMLFilterDialogComponent_createInstance( const Reference< XMultiServiceFactory > & rSMgr) throw ( Exception )
 {
     return (OWeakObject*)new XMLFilterDialogComponent( comphelper::getComponentContext(rSMgr) );
 }
 
-//-------------------------------------------------------------------------
 OUString SAL_CALL XMLFilterDialogComponent::getImplementationName() throw(com::sun::star::uno::RuntimeException)
 {
     return XMLFilterDialogComponent_getImplementationName();
 }
-
-//-------------------------------------------------------------------------
 
 namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, lcl_ImplId > {}; }
 
@@ -269,20 +251,15 @@ Sequence< Type > XMLFilterDialogComponent::getTypes() throw (RuntimeException)
     return theDialogComponentTypes::get().getTypeCollection().getTypes();
 }
 
-//-------------------------------------------------------------------------
-
 Sequence< OUString > SAL_CALL XMLFilterDialogComponent::getSupportedServiceNames() throw(com::sun::star::uno::RuntimeException)
 {
     return XMLFilterDialogComponent_getSupportedServiceNames();
 }
 
-//-------------------------------------------------------------------------
 sal_Bool SAL_CALL XMLFilterDialogComponent::supportsService(const OUString& ServiceName) throw(RuntimeException)
 {
-    return XMLFilterDialogComponent_supportsService( ServiceName );
+    return cppu::supportsService( this, ServiceName );
 }
-
-//-------------------------------------------------------------------------
 
 /** Called in dispose method after the listeners were notified.
 */
