@@ -255,7 +255,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
 
 sfx2::LinkManager* ScDocument::GetLinkManager()
 {
-    return GetDocLinkManager().getLinkManager(bAutoCalc);
+    return GetDocLinkManager().getLinkManager(true);
 }
 
 const sfx2::LinkManager* ScDocument::GetLinkManager() const
