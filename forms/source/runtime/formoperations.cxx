@@ -132,7 +132,7 @@ namespace frm
         ,m_bActiveControlModified( false )
         ,m_bConstructed( false )
     #ifdef DBG_UTIL
-        ,m_nMethodNestingLevel( false )
+        ,m_nMethodNestingLevel( 0 )
     #endif
     {
     }

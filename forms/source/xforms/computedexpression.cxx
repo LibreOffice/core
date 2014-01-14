@@ -98,11 +98,11 @@ bool ComputedExpression::_checkExpression( const sal_Char* pExpression ) const
     sal_Int32 nLength =  msExpression.getLength();
     sal_Int32 nStart = 0;
     sal_Int32 nEnd = nLength;
-    int nSearch = aTextSearch.SearchForward( msExpression, &nStart, &nEnd );
+    bool nSearch = aTextSearch.SearchForward( msExpression, &nStart, &nEnd );
 
     // our expression is static only if 1) we found our regexp, and 2)
     // the regexp goes from beginning to end.
-    return ( nLength == 0  ||  nSearch != 0 )
+    return ( nLength == 0  ||  nSearch )
         && ( nStart == 0  &&  nEnd == nLength );
 }
 
