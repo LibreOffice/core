@@ -47,7 +47,6 @@
 #include <vcl/unohelp.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
-#include <tools/string.hxx>
 
 //------------------------------------------------------------------------
 //
@@ -671,12 +670,12 @@ namespace accessibility
                                this, aSelection.nEndPos, maLastSelection.nEndPos, aSelection.nEndPara, maLastSelection.nEndPara);
 
                     // #108947# Sort new range before calling FireEvent
-                    ::std::pair< xub_StrLen, xub_StrLen > sortedSelection(
+                    ::std::pair<sal_Int32, sal_Int32> sortedSelection(
                         makeSortedPair(::std::min( aSelection.nStartPara, nMaxValidParaIndex ),
                                        ::std::min( aSelection.nEndPara, nMaxValidParaIndex ) ) );
 
                     // #108947# Sort last range before calling FireEvent
-                    ::std::pair< xub_StrLen, xub_StrLen > sortedLastSelection(
+                    ::std::pair<sal_Int32, sal_Int32> sortedLastSelection(
                         makeSortedPair(::std::min( maLastSelection.nStartPara, nMaxValidParaIndex ),
                                        ::std::min( maLastSelection.nEndPara, nMaxValidParaIndex ) ) );
 
@@ -741,18 +740,18 @@ namespace accessibility
                                 else
                                 {
                                     // check for changed selection on paragraph <nPara>
-                                    const xub_StrLen nParaStartPos =
+                                    const sal_Int32 nParaStartPos =
                                             nPara == aTmpSel.nStartPara
                                             ? aTmpSel.nStartPos : 0;
-                                    const xub_StrLen nParaEndPos =
+                                    const sal_Int32 nParaEndPos =
                                             nPara == aTmpSel.nEndPara
-                                            ? aTmpSel.nEndPos : STRING_LEN;
-                                    const xub_StrLen nLastParaStartPos =
+                                            ? aTmpSel.nEndPos : -1;
+                                    const sal_Int32 nLastParaStartPos =
                                             nPara == aTmpLastSel.nStartPara
                                             ? aTmpLastSel.nStartPos : 0;
-                                    const xub_StrLen nLastParaEndPos =
+                                    const sal_Int32 nLastParaEndPos =
                                             nPara == aTmpLastSel.nEndPara
-                                            ? aTmpLastSel.nEndPos : STRING_LEN;
+                                            ? aTmpLastSel.nEndPos : -1;
                                     if ( nParaStartPos != nLastParaStartPos ||
                                          nParaEndPos != nLastParaEndPos )
                                     {
