@@ -618,7 +618,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
     }
     else
         // "Select" the entire column if no selection exists.
-        aMarkedSpans.push_back(sc::SingleColumnSpanSet::Span(0, MAXROW));
+        aMarkedSpans.push_back(sc::RowSpan(0, MAXROW));
 
     sal_uInt16 nWidth = static_cast<sal_uInt16>(nOldWidth*nPPTX);
     bool bFound = false;

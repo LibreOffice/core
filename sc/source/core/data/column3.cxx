@@ -198,7 +198,7 @@ public:
         mrDoc(rDoc),
         maHint(SC_HINT_DATACHANGED, ScAddress(nCol, 0, nTab)) {}
 
-    void operator() (const sc::SingleColumnSpanSet::Span& rSpan)
+    void operator() (const sc::RowSpan& rSpan)
     {
         SCROW nRow1 = rSpan.mnRow1, nRow2 = rSpan.mnRow2;
         maHint.GetAddress().SetRow(nRow1);
@@ -556,7 +556,7 @@ public:
     EmptyCells(sc::ColumnBlockPosition& rPos, ScColumn& rColumn) :
         mrColumn(rColumn), mrPos(rPos) {}
 
-    void operator() (const sc::SingleColumnSpanSet::Span& rSpan)
+    void operator() (const sc::RowSpan& rSpan)
     {
         sc::CellStoreType& rCells = mrColumn.GetCellStore();
 
@@ -651,7 +651,7 @@ bool ScColumn::InitBlockPosition( sc::ColumnBlockConstPosition& rBlockPos ) cons
 
 namespace {
 
-class CopyAttrArrayByRange : std::unary_function<sc::SingleColumnSpanSet::Span, void>
+class CopyAttrArrayByRange : std::unary_function<sc::RowSpan, void>
 {
     ScAttrArray& mrDestAttrArray;
     ScAttrArray& mrSrcAttrArray;
@@ -660,7 +660,7 @@ public:
     CopyAttrArrayByRange(ScAttrArray& rDestAttrArray, ScAttrArray& rSrcAttrArray, long nRowOffset) :
         mrDestAttrArray(rDestAttrArray), mrSrcAttrArray(rSrcAttrArray), mnRowOffset(nRowOffset) {}
 
-    void operator() (const sc::SingleColumnSpanSet::Span& rSpan)
+    void operator() (const sc::RowSpan& rSpan)
     {
         mrDestAttrArray.CopyAreaSafe(
             rSpan.mnRow1+mnRowOffset, rSpan.mnRow2+mnRowOffset, mnRowOffset, mrSrcAttrArray);
