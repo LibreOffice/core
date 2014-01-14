@@ -105,6 +105,17 @@ public:
 
     enum FieldmarkType { NONE, TEXT, CHECK }; // Used for simulating fieldmarks in OpenDocument 1.n Strict (for n <= 2). CHECK currently ignored.
 
+
+    void exportTextRangeSpan(
+            const ::com::sun::star::uno::Reference< com::sun::star::text::XTextRange > & rTextRange,
+            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xPropSet,
+            ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySetInfo > & xPropSetInfo,
+            const sal_Bool bIsUICharStyle,
+            const sal_Bool bHasAutoStyle,
+            const OUString& sStyle,
+            bool& rPrevCharIsSpace,
+            FieldmarkType& openFieldMark);
+
 protected:
 
     const OUString sActualSize;

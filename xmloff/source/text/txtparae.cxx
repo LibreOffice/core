@@ -3220,9 +3220,9 @@ void XMLTextParagraphExport::setTextEmbeddedGraphicURL(
 }
 
 sal_Bool XMLTextParagraphExport::addHyperlinkAttributes(
-        const Reference < XPropertySet > & rPropSet,
-        const Reference < XPropertyState > & rPropState,
-        const Reference < XPropertySetInfo > & rPropSetInfo )
+    const Reference< XPropertySet > & rPropSet,
+    const Reference< XPropertyState > & rPropState,
+    const Reference< XPropertySetInfo > & rPropSetInfo )
 {
     sal_Bool bExport = sal_False;
     OUString sHRef, sName, sTargetFrame, sUStyleName, sVStyleName;
@@ -3238,52 +3238,59 @@ sal_Bool XMLTextParagraphExport::addHyperlinkAttributes(
             bExport = sal_True;
     }
 
-    if( rPropSetInfo->hasPropertyByName( sHyperLinkName ) &&
-        ( !rPropState.is() || PropertyState_DIRECT_VALUE ==
-                    rPropState->getPropertyState( sHyperLinkName ) ) )
+    if ( sHRef.isEmpty() )
+    {
+        // hyperlink without an URL does not make sense
+        OSL_ENSURE( false, "hyperlink without an URL --> no export to ODF" );
+        return sal_False;
+    }
+
+    if ( rPropSetInfo->hasPropertyByName( sHyperLinkName )
+         && ( !rPropState.is()
+              || PropertyState_DIRECT_VALUE == rPropState->getPropertyState( sHyperLinkName ) ) )
     {
         rPropSet->getPropertyValue( sHyperLinkName ) >>= sName;
         if( !sName.isEmpty() )
             bExport = sal_True;
     }
 
-    if( rPropSetInfo->hasPropertyByName( sHyperLinkTarget ) &&
-        ( !rPropState.is() || PropertyState_DIRECT_VALUE ==
-                    rPropState->getPropertyState( sHyperLinkTarget ) ) )
+    if ( rPropSetInfo->hasPropertyByName( sHyperLinkTarget )
+         && ( !rPropState.is()
+              || PropertyState_DIRECT_VALUE == rPropState->getPropertyState( sHyperLinkTarget ) ) )
     {
         rPropSet->getPropertyValue( sHyperLinkTarget ) >>= sTargetFrame;
         if( !sTargetFrame.isEmpty() )
             bExport = sal_True;
     }
 
-    if( rPropSetInfo->hasPropertyByName( sServerMap ) &&
-        ( !rPropState.is() || PropertyState_DIRECT_VALUE ==
-                    rPropState->getPropertyState( sServerMap ) ) )
+    if ( rPropSetInfo->hasPropertyByName( sServerMap )
+         && ( !rPropState.is()
+              || PropertyState_DIRECT_VALUE == rPropState->getPropertyState( sServerMap ) ) )
     {
-        bServerMap = *(sal_Bool *)rPropSet->getPropertyValue( sServerMap ).getValue();
-        if( bServerMap  )
+        bServerMap = *(sal_Bool *) rPropSet->getPropertyValue( sServerMap ).getValue();
+        if ( bServerMap )
             bExport = sal_True;
     }
 
-    if( rPropSetInfo->hasPropertyByName( sUnvisitedCharStyleName ) &&
-        ( !rPropState.is() || PropertyState_DIRECT_VALUE ==
-            rPropState->getPropertyState( sUnvisitedCharStyleName ) ) )
+    if ( rPropSetInfo->hasPropertyByName( sUnvisitedCharStyleName )
+         && ( !rPropState.is()
+              || PropertyState_DIRECT_VALUE == rPropState->getPropertyState( sUnvisitedCharStyleName ) ) )
     {
         rPropSet->getPropertyValue( sUnvisitedCharStyleName ) >>= sUStyleName;
         if( !sUStyleName.isEmpty() )
             bExport = sal_True;
     }
 
-    if( rPropSetInfo->hasPropertyByName( sVisitedCharStyleName ) &&
-        ( !rPropState.is() || PropertyState_DIRECT_VALUE ==
-            rPropState->getPropertyState( sVisitedCharStyleName ) ) )
+    if ( rPropSetInfo->hasPropertyByName( sVisitedCharStyleName )
+         && ( !rPropState.is()
+              || PropertyState_DIRECT_VALUE == rPropState->getPropertyState( sVisitedCharStyleName ) ) )
     {
         rPropSet->getPropertyValue( sVisitedCharStyleName ) >>= sVStyleName;
         if( !sVStyleName.isEmpty() )
             bExport = sal_True;
     }
 
-    if( bExport )
+    if ( bExport )
     {
         GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
         GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, GetExport().GetRelativeReference( sHRef ) );
@@ -3315,14 +3322,46 @@ sal_Bool XMLTextParagraphExport::addHyperlinkAttributes(
     return bExport;
 }
 
+void XMLTextParagraphExport::exportTextRangeSpan(
+    const com::sun::star::uno::Reference< com::sun::star::text::XTextRange > & rTextRange,
+    Reference< XPropertySet > & xPropSet,
+    Reference < XPropertySetInfo > & xPropSetInfo,
+    const sal_Bool bIsUICharStyle,
+    const sal_Bool bHasAutoStyle,
+    const OUString& sStyle,
+    bool& rPrevCharIsSpace,
+    FieldmarkType& openFieldMark )
+{
+    XMLTextCharStyleNamesElementExport aCharStylesExport(
+            GetExport(),
+            bIsUICharStyle && aCharStyleNamesPropInfoCache.hasProperty( xPropSet, xPropSetInfo ),
+            bHasAutoStyle,
+            xPropSet,
+            sCharStyleNames );
+
+    if ( !sStyle.isEmpty() )
+    {
+        GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME, GetExport().EncodeStyleName( sStyle ) );
+    }
+    {
+        SvXMLElementExport aElement( GetExport(), !sStyle.isEmpty(), XML_NAMESPACE_TEXT, XML_SPAN, sal_False, sal_False );
+        const OUString aText( rTextRange->getString() );
+        SvXMLElementExport aElem2( GetExport(), TEXT == openFieldMark,
+            XML_NAMESPACE_TEXT, XML_TEXT_INPUT,
+            sal_False, sal_False );
+        exportText( aText, rPrevCharIsSpace );
+        openFieldMark = NONE;
+    }
+}
+
 void XMLTextParagraphExport::exportTextRange(
-        const Reference < XTextRange > & rTextRange,
+        const Reference< XTextRange > & rTextRange,
         sal_Bool bAutoStyles,
         bool& rPrevCharIsSpace,
         FieldmarkType& openFieldMark )
 {
-    Reference < XPropertySet > xPropSet( rTextRange, UNO_QUERY );
-    if( bAutoStyles )
+    Reference< XPropertySet > xPropSet( rTextRange, UNO_QUERY );
+    if ( bAutoStyles )
     {
         Add( XML_STYLE_FAMILY_TEXT_TEXT, xPropSet );
     }
@@ -3331,54 +3370,36 @@ void XMLTextParagraphExport::exportTextRange(
         sal_Bool bHyperlink = sal_False;
         sal_Bool bIsUICharStyle = sal_False;
         sal_Bool bHasAutoStyle = sal_False;
-
-        OUString sStyle(FindTextStyleAndHyperlink( xPropSet, bHyperlink,
-                                                        bIsUICharStyle, bHasAutoStyle ));
+        const OUString sStyle(
+            FindTextStyleAndHyperlink( xPropSet, bHyperlink, bIsUICharStyle, bHasAutoStyle ) );
 
         Reference < XPropertySetInfo > xPropSetInfo;
-        if( bHyperlink )
+        sal_Bool bHyperlinkAttrsAdded = sal_False;
+        if ( bHyperlink )
         {
             Reference< XPropertyState > xPropState( xPropSet, UNO_QUERY );
-            xPropSetInfo.set(xPropSet->getPropertySetInfo());
-            bHyperlink = addHyperlinkAttributes( xPropSet, xPropState, xPropSetInfo );
+            xPropSetInfo.set( xPropSet->getPropertySetInfo() );
+            bHyperlinkAttrsAdded = addHyperlinkAttributes( xPropSet, xPropState, xPropSetInfo );
         }
-        SvXMLElementExport aElem( GetExport(), bHyperlink, XML_NAMESPACE_TEXT,
-                                  XML_A, sal_False, sal_False );
-        if( bHyperlink )
+
+        if ( bHyperlink && bHyperlinkAttrsAdded )
         {
+            SvXMLElementExport aElem( GetExport(), sal_True, XML_NAMESPACE_TEXT, XML_A, sal_False, sal_False );
+
             // export events (if supported)
             OUString sHyperLinkEvents(
                 "HyperLinkEvents");
             if (xPropSetInfo->hasPropertyByName(sHyperLinkEvents))
             {
-                Reference<XNameReplace> xName(xPropSet->getPropertyValue(sHyperLinkEvents), uno::UNO_QUERY);
-                GetExport().GetEventExport().Export(xName, sal_False);
+                Reference< XNameReplace > xName( xPropSet->getPropertyValue( sHyperLinkEvents ), uno::UNO_QUERY );
+                GetExport().GetEventExport().Export( xName, sal_False );
             }
+
+            exportTextRangeSpan( rTextRange, xPropSet, xPropSetInfo, bIsUICharStyle, bHasAutoStyle, sStyle, rPrevCharIsSpace, openFieldMark );
         }
-
+        else
         {
-            XMLTextCharStyleNamesElementExport aCharStylesExport(
-                GetExport(), bIsUICharStyle &&
-                             aCharStyleNamesPropInfoCache.hasProperty(
-                                                    xPropSet, xPropSetInfo ), bHasAutoStyle,
-                xPropSet, sCharStyleNames );
-
-            OUString aText(rTextRange->getString());
-            if( !sStyle.isEmpty() )
-                GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
-                          GetExport().EncodeStyleName( sStyle ) );
-            {
-                // in a block to make sure it is destroyed before the text:a element
-                SvXMLElementExport aElement( GetExport(), !sStyle.isEmpty(),
-                                          XML_NAMESPACE_TEXT, XML_SPAN, sal_False,
-                                          sal_False );
-
-                SvXMLElementExport aElem2( GetExport(), TEXT == openFieldMark,
-                    XML_NAMESPACE_TEXT, XML_TEXT_INPUT,
-                    sal_False, sal_False );
-                exportText( aText, rPrevCharIsSpace );
-                openFieldMark = NONE;
-            }
+            exportTextRangeSpan( rTextRange, xPropSet, xPropSetInfo, bIsUICharStyle, bHasAutoStyle, sStyle, rPrevCharIsSpace, openFieldMark );
         }
     }
 }
