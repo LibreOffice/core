@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <bitset>
+
 #include <svtools/colorcfg.hxx>
 #include <svtools/extcolorcfg.hxx>
 #include <svtools/headbar.hxx>
@@ -524,13 +528,12 @@ void ColorConfigWindow_Impl::setAllocation(const Size &rAllocation)
 
 void ColorConfigWindow_Impl::CreateEntries()
 {
-    std::vector<int> aModulesInstalled;
+    std::bitset<nGroupCount> aModulesInstalled;
     // creating group headers
     vChapters.reserve(nGroupCount);
-    aModulesInstalled.reserve(nGroupCount);
     for (unsigned i = 0; i != nGroupCount; ++i)
     {
-        aModulesInstalled.push_back(IsGroupVisible(vGroupInfo[i].eGroup));
+        aModulesInstalled[i] = IsGroupVisible(vGroupInfo[i].eGroup);
         vChapters.push_back(boost::shared_ptr<Chapter>(
             new Chapter(get<FixedText>(vGroupInfo[i].pGroup), aModulesInstalled[i])));
     }
