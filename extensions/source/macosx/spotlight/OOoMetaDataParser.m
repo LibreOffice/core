@@ -72,7 +72,6 @@ static NSDictionary *metaXML2MDIKeys;
 {
     if ((self = [super init]) != nil) {
         shouldReadCharacters = NO;
-//        currentElement = nil;
         textCurrentElement = nil;
         
         return self;

@@ -112,7 +112,6 @@
     
     [runningTextContent appendString:string];
     
-    //NSLog(@"currentElement: %@", currentElement);
     //NSLog(@"read: %@", string);
     
 }
