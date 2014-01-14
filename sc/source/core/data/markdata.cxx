@@ -20,6 +20,7 @@
 #include "markdata.hxx"
 #include "markarr.hxx"
 #include "rangelst.hxx"
+#include <columnspanset.hxx>
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -545,6 +546,26 @@ SCCOLROW ScMarkData::GetMarkRowRanges( SCCOLROW* pRanges )
 
     delete[] bRowMarked;
     return nRangeCnt;
+}
+
+void ScMarkData::GetMarkedRowSpans( SCTAB nTab, std::vector<sc::RowSpan>& rSpans )
+{
+    std::vector<sc::RowSpan> aSpans;
+
+    if (bMarked)
+        MarkToMulti();
+
+    if (!bMultiMarked)
+    {
+        rSpans.swap(aSpans);
+        return;
+    }
+
+    sc::SingleColumnSpanSet aMarkedRows;
+    for (SCCOL nCol = aMultiRange.aStart.Col(); nCol <= aMultiRange.aEnd.Col(); ++nCol)
+        aMarkedRows.scan(*this, nTab, nCol);
+
+    aMarkedRows.getSpans(rSpans);
 }
 
 bool ScMarkData::IsAllMarked( const ScRange& rRange ) const

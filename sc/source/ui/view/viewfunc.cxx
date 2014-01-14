@@ -2905,7 +2905,7 @@ void ScViewFunc::UpdateSelectionArea( const ScMarkData& rSel, ScPatternAttr* pAt
         PAINT_GRID, nExtFlags | SC_PF_TESTMERGE );
     ScTabViewShell* pTabViewShell = GetViewData()->GetViewShell();
     pTabViewShell->CellContentChanged();
-    pTabViewShell->AdjustBlockHeight(true, const_cast<ScMarkData*>(&rSel));
+    pTabViewShell->AdjustBlockHeight(false, const_cast<ScMarkData*>(&rSel));
 }
 
 

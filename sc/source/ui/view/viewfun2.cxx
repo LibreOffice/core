@@ -81,6 +81,7 @@
 #include "prnsave.hxx"
 #include "searchresults.hxx"
 #include "tokenarray.hxx"
+#include <columnspanset.hxx>
 
 #include <boost/scoped_ptr.hpp>
 #include <vector>
@@ -107,12 +108,12 @@ sal_Bool ScViewFunc::AdjustBlockHeight( sal_Bool bPaint, ScMarkData* pMarkData )
         pMarkData = &GetViewData()->GetMarkData();
 
     ScDocument* pDoc = pDocSh->GetDocument();
-    SCCOLROW* pRanges = new SCCOLROW[MAXCOLROWCOUNT];
-    SCCOLROW nRangeCnt = pMarkData->GetMarkRowRanges( pRanges );
-    if (nRangeCnt == 0)
+    std::vector<sc::RowSpan> aMarkedRows;
+    pMarkData->GetMarkedRowSpans(GetViewData()->GetTabNo(), aMarkedRows);
+    if (aMarkedRows.empty())
     {
-        pRanges[0] = pRanges[1] = GetViewData()->GetCurY();
-        nRangeCnt = 1;
+        SCROW nCurRow = GetViewData()->GetCurY();
+        aMarkedRows.push_back(sc::RowSpan(nCurRow, nCurRow));
     }
 
     double nPPTX = GetViewData()->GetPPTX();
@@ -133,26 +134,25 @@ sal_Bool ScViewFunc::AdjustBlockHeight( sal_Bool bPaint, ScMarkData* pMarkData )
     for (; itr != itrEnd; ++itr)
     {
         SCTAB nTab = *itr;
-        SCCOLROW* pOneRange = pRanges;
-        sal_Bool bChanged = false;
+        bool bChanged = false;
         SCROW nPaintY = 0;
-        for (SCROW nRangeNo=0; nRangeNo<nRangeCnt; nRangeNo++)
+        std::vector<sc::RowSpan>::const_iterator itRows = aMarkedRows.begin(), itRowsEnd = aMarkedRows.end();
+        for (; itRows != itRowsEnd; ++itRows)
         {
-            SCROW nStartNo = *(pOneRange++);
-            SCROW nEndNo = *(pOneRange++);
+            SCROW nStartNo = itRows->mnRow1;
+            SCROW nEndNo = itRows->mnRow2;
             if (pDoc->SetOptimalHeight( nStartNo, nEndNo, nTab, 0, aProv.GetDevice(),
                                         nPPTX, nPPTY, aZoomX, aZoomY, false ))
             {
                 if (!bChanged)
                     nPaintY = nStartNo;
-                bAnyChanged = bChanged = sal_True;
+                bAnyChanged = bChanged = true;
             }
         }
         if ( bPaint && bChanged )
             pDocSh->PostPaint( 0, nPaintY, nTab, MAXCOL, MAXROW, nTab,
                                                 PAINT_GRID | PAINT_LEFT );
     }
-    delete[] pRanges;
 
     if ( bPaint && bAnyChanged )
         pDocSh->UpdateOle(GetViewData());
