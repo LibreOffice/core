@@ -90,7 +90,7 @@ SlideTransitionContext::~SlideTransitionContext() throw()
         if (!mbHasTransition)
         {
             mbHasTransition = true;
-            maTransition.setOoxTransitionType( aElementToken, rAttribs.getBool( XML_thruBlk, false ), 0);
+            maTransition.setOoxTransitionType( aElementToken, sal_Int32(rAttribs.getBool( XML_thruBlk, false )), 0);
         }
         return this;
     case PPT_TOKEN( push ):
