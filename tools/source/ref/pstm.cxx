@@ -642,7 +642,7 @@ SvPersistStream& SvPersistStream::ReadPointer
     return *this;
 }
 
-SvPersistStream& operator <<
+SvPersistStream& WriteSvPersistBase
 (
     SvPersistStream & rStm,
     SvPersistBase * pObj
@@ -660,7 +660,7 @@ SvPersistStream& operator >>
     return rStm.ReadPointer( rpObj );
 }
 
-SvStream& operator <<
+SvStream& WriteSvPersistStream
 (
     SvStream & rStm,
     SvPersistStream & rThis

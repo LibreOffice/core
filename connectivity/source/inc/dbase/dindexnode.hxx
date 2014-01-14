@@ -91,7 +91,7 @@ namespace connectivity
 
         class ONDXPagePtr : public ONDXPageRef
         {
-            friend  SvStream& operator << (SvStream &rStream, const ONDXPagePtr&);
+            friend  SvStream& WriteONDXPagePtr(SvStream &rStream, const ONDXPagePtr&);
             friend  SvStream& operator >> (SvStream &rStream, ONDXPagePtr&);
 
             sal_uInt32  nPagePos;       // Position in the index file
@@ -115,7 +115,7 @@ namespace connectivity
         {
             friend class ODbaseIndex;
 
-            friend  SvStream& operator << (SvStream &rStream, const ONDXPage&);
+            friend  SvStream& WriteONDXPage(SvStream &rStream, const ONDXPage&);
             friend  SvStream& operator >> (SvStream &rStream, ONDXPage&);
 
             sal_uInt32      nPagePos;       // Position in the index file
@@ -190,7 +190,7 @@ namespace connectivity
 
         SV_IMPL_REF(ONDXPage);
 
-        SvStream& operator << (SvStream &rStream, const ONDXPagePtr&);
+        SvStream& WriteONDXPagePtr(SvStream &rStream, const ONDXPagePtr&);
         SvStream& operator >> (SvStream &rStream, ONDXPagePtr&);
 
         inline sal_Bool ONDXPage::IsRoot() const {return !aParent.Is();}
@@ -212,7 +212,7 @@ namespace connectivity
                 aChild->SetParent(this);
         }
         SvStream& operator >> (SvStream &rStream, ONDXPage& rPage);
-        SvStream& operator << (SvStream &rStream, const ONDXPage& rPage);
+        SvStream& WriteONDXPage(SvStream &rStream, const ONDXPage& rPage);
 
 
         typedef ::std::vector<ONDXPage*>    ONDXPageList;

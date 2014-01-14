@@ -80,7 +80,7 @@ struct TransferableObjectDescriptor
     {}
 
     SVT_DLLPUBLIC friend SvStream&  operator>>( SvStream& rIStm, TransferableObjectDescriptor& rObjDesc );
-    SVT_DLLPUBLIC friend SvStream&  operator<<( SvStream& rOStm, const TransferableObjectDescriptor& rObjDesc );
+    SVT_DLLPUBLIC friend SvStream&  WriteTransferableObjectDescriptor( SvStream& rOStm, const TransferableObjectDescriptor& rObjDesc );
 };
 
 struct AcceptDropEvent

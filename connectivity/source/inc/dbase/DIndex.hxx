@@ -40,7 +40,7 @@ namespace connectivity
 
         class ODbaseIndex : public ODbaseIndex_BASE
         {
-            friend SvStream& operator << (SvStream &rStream, ODbaseIndex&);
+            friend SvStream& WriteODbaseIndex(SvStream &rStream, ODbaseIndex&);
             friend SvStream& operator >> (SvStream &rStream, ODbaseIndex&);
 
             friend class ONDXNode;
@@ -141,7 +141,7 @@ namespace connectivity
             sal_Bool ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValue& rValue);
         };
 
-        SvStream& operator << (SvStream &rStream, ODbaseIndex&);
+        SvStream& WriteODbaseIndex(SvStream &rStream, ODbaseIndex&);
         SvStream& operator >> (SvStream &rStream, ODbaseIndex&);
     }
 }

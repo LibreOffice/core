@@ -268,7 +268,7 @@ SvStream& operator>>( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
 
 // -----------------------------------------------------------------------
 
-SvStream& operator<<( SvStream& rOStm, const ImplLineInfo& rImplLineInfo )
+SvStream& WriteImplLineInfo( SvStream& rOStm, const ImplLineInfo& rImplLineInfo )
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 4 );
 
@@ -300,9 +300,9 @@ SvStream& operator>>( SvStream& rIStm, LineInfo& rLineInfo )
 
 // -----------------------------------------------------------------------
 
-SvStream& operator<<( SvStream& rOStm, const LineInfo& rLineInfo )
+SvStream& WriteLineInfo( SvStream& rOStm, const LineInfo& rLineInfo )
 {
-    return( rOStm << *rLineInfo.mpImplLineInfo );
+    return WriteImplLineInfo( rOStm, *rLineInfo.mpImplLineInfo );
 }
 
 // -----------------------------------------------------------------------

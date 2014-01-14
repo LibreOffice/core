@@ -109,7 +109,7 @@ SvStream& INetMessage::operator<< (SvStream& rStrm) const
     rStrm.WriteUInt32( static_cast<sal_uInt32>(n) );
 
     for (i = 0; i < n; i++)
-        rStrm << *( m_aHeaderList[ i ] );
+        WriteINetMessageHeader( rStrm, *( m_aHeaderList[ i ] ) );
 
     return rStrm;
 }

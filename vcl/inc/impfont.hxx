@@ -83,7 +83,7 @@ private:
                         mbTransparent:1;    // compatibility, now on output device
 
     friend SvStream&    operator>>( SvStream& rIStm, Impl_Font& );
-    friend SvStream&    operator<<( SvStream& rOStm, const Impl_Font& );
+    friend SvStream&    WriteImpl_Font( SvStream& rOStm, const Impl_Font& );
 };
 
 // ------------------

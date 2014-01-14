@@ -65,7 +65,7 @@ void SvClassElement::Save( SvPersistStream & rStm )
     rStm << nMask;
     if( nMask & 0x01 ) rStm << aAutomation;
     if( nMask & 0x02 ) write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStm, aPrefix);
-    if( nMask & 0x04 ) rStm << xClass;
+    if( nMask & 0x04 ) WriteSvPersistBase( rStm, xClass );
 }
 
 SV_IMPL_META_FACTORY1( SvMetaClass, SvMetaType );
@@ -117,10 +117,10 @@ void SvMetaClass::Save( SvPersistStream & rStm )
 
     // write data
     rStm << nMask;
-    if( nMask & 0x01 ) rStm << aAttrList;
-    if( nMask & 0x02 ) rStm << aSuperClass;
-    if( nMask & 0x04 ) rStm << aClassList;
-    if( nMask & 0x08 ) rStm << xAutomationInterface;
+    if( nMask & 0x01 ) WriteSvDeclPersistList( rStm, aAttrList );
+    if( nMask & 0x02 ) WriteSvPersistBase( rStm, aSuperClass );
+    if( nMask & 0x04 ) WriteSvDeclPersistList( rStm, aClassList );
+    if( nMask & 0x08 ) WriteSvPersistBase( rStm, xAutomationInterface );
     if( nMask & 0x10 ) rStm << aAutomation;
 }
 

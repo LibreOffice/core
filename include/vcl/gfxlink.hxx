@@ -173,7 +173,7 @@ public:
 
 public:
 
-    friend VCL_DLLPUBLIC SvStream&  operator<<( SvStream& rOStream, const GfxLink& rGfxLink );
+    friend VCL_DLLPUBLIC SvStream&  WriteGfxLink( SvStream& rOStream, const GfxLink& rGfxLink );
     friend VCL_DLLPUBLIC SvStream&  operator>>( SvStream& rIStream, GfxLink& rGfxLink );
 };
 

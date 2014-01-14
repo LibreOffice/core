@@ -77,9 +77,9 @@ void SvMetaModule::Save( SvPersistStream & rStm )
 
     rStm << (sal_uInt16)(MODULE_VER | IDL_WRITE_COMPILER); // Version
 
-    rStm << aClassList;
-    rStm << aTypeList;
-    rStm << aAttrList;
+    WriteSvDeclPersistList( rStm, aClassList );
+    WriteSvDeclPersistList( rStm, aTypeList );
+    WriteSvDeclPersistList( rStm, aAttrList );
     // browser
     rStm.WriteUniOrByteString( aIdlFileName, rStm.GetStreamCharSet() );
     write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStm, aHelpFileName.getString());
@@ -90,9 +90,9 @@ void SvMetaModule::Save( SvPersistStream & rStm )
     sal_uInt16 nCmpLen = 0;
     sal_uLong nLenPos = rStm.Tell();
     rStm << nCmpLen;
-    rStm << aBeginName;
-    rStm << aEndName;
-    rStm << aNextName;
+    WriteSvGlobalName( rStm, aBeginName );
+    WriteSvGlobalName( rStm, aEndName );
+    WriteSvGlobalName( rStm, aNextName );
     // write length of compiler data
     sal_uLong nPos = rStm.Tell();
     rStm.Seek( nLenPos );

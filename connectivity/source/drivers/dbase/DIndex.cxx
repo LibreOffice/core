@@ -307,7 +307,7 @@ void ODbaseIndex::Release(sal_Bool bSave)
     {
         m_aHeader.db_rootpage = m_nRootPage;
         m_aHeader.db_pagecount = m_nPageCount;
-        (*m_pFileStream) << *this;
+        WriteODbaseIndex( *m_pFileStream, *this );
     }
     m_nRootPage = m_nPageCount = 0;
     m_nCurNode = NODE_NOTFOUND;
@@ -356,7 +356,7 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ODbaseIndex& rInd
     return rStream;
 }
 //------------------------------------------------------------------
-SvStream& connectivity::dbase::operator << (SvStream &rStream, ODbaseIndex& rIndex)
+SvStream& connectivity::dbase::WriteODbaseIndex(SvStream &rStream, ODbaseIndex& rIndex)
 {
     rStream.Seek(0);
     OSL_VERIFY_EQUALS( rStream.Write(&rIndex.m_aHeader,DINDEX_PAGE_SIZE), DINDEX_PAGE_SIZE, "Write not successful: Wrong header size for dbase index!");

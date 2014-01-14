@@ -320,7 +320,7 @@ SvStream& XColorItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 
     if ( !IsIndex() )
     {
-        rOut << aColor;
+        WriteColor( rOut, aColor );
     }
 
     return rOut;

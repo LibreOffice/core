@@ -230,7 +230,7 @@ public:
                             );
 
     friend VCL_DLLPUBLIC SvStream&  operator>>( SvStream& rIStream, Animation& rAnimation );
-    friend VCL_DLLPUBLIC SvStream&  operator<<( SvStream& rOStream, const Animation& rAnimation );
+    friend VCL_DLLPUBLIC SvStream&  WriteAnimation( SvStream& rOStream, const Animation& rAnimation );
 };
 
 #endif // INCLUDED_VCL_ANIMATE_HXX
