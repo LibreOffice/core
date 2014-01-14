@@ -1149,6 +1149,13 @@ void BrowseBox::Clear()
     DoHideCursor( "Clear" );
     long nOldRowCount = nRowCount;
     nRowCount = 0;
+    if(bMultiSelection)
+    {
+        assert(uRow.pSel);
+        *uRow.pSel = MultiSelection();
+    }
+    else
+        uRow.nSel = BROWSER_ENDOFSELECTION;
     nCurRow = BROWSER_ENDOFSELECTION;
     nTopRow = 0;
     nCurColId = 0;
