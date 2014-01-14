@@ -81,7 +81,7 @@ SC_SIMPLE_SERVICE_INFO( ScNamedRangesObj, "ScNamedRangesObj", "com.sun.star.shee
 
 static bool lcl_UserVisibleName(const ScRangeData& rData)
 {
-    //! als Methode an ScRangeData
+    //! as method to ScRangeData
 
     return !rData.HasType(RT_DATABASE);
 }
@@ -103,13 +103,13 @@ ScNamedRangeObj::~ScNamedRangeObj()
 
 void ScNamedRangeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //  Ref-Update interessiert nicht
+    // reference update is of no interest
 
     if ( rHint.ISA( SfxSimpleHint ) && ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = NULL;       // became invalid
 }
 
-// Hilfsfuntionen
+// Helper functions
 
 ScRangeData* ScNamedRangeObj::GetRangeData_Impl()
 {
@@ -207,7 +207,7 @@ void ScNamedRangeObj::Modify_Impl( const OUString* pNewName, const ScTokenArray*
     }
     else
     {
-        pNew = NULL;        //! uno::Exception/Fehler oder so
+        pNew = NULL;        //! uno::Exception/Error or something
         delete pNewRanges;
     }
 }
@@ -223,7 +223,7 @@ void SAL_CALL ScNamedRangeObj::setName( const OUString& aNewName )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    //! Formeln anpassen ?????
+    //! adapt formulas ?????
 
     OUString aNewStr(aNewName);
     // GRAM_PODF_A1 for API compatibility.
@@ -358,7 +358,7 @@ uno::Reference<table::XCellRange> SAL_CALL ScNamedRangeObj::getReferredCells()
     ScRangeData* pData = GetRangeData_Impl();
     if ( pData && pData->IsValidReference( aRange ) )
     {
-        //! static Funktion um ScCellObj/ScCellRangeObj zu erzeugen am ScCellRangeObj ???
+        //! static function to create ScCellObj/ScCellRangeObj at ScCellRangeObj ???
 
         if ( aRange.aStart == aRange.aEnd )
             return new ScCellObj( pDocShell, aRange.aStart );
@@ -485,12 +485,12 @@ ScNamedRangesObj::~ScNamedRangesObj()
 
 void ScNamedRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //  Referenz-Update interessiert hier nicht
+    // reference update is of no interest
 
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = NULL;       // became invalid
     }
 }
 
@@ -546,7 +546,7 @@ void SAL_CALL ScNamedRangesObj::addNewFromTitles( const table::CellRangeAddress&
                                     sheet::Border aBorder ) throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    //! das darf kein enum sein, weil mehrere Bits gesetzt sein koennen !!!
+    //! this cannot be an enum, because multiple bits can be set !!!
 
     sal_Bool bTop    = ( aBorder == sheet::Border_TOP );
     sal_Bool bLeft   = ( aBorder == sheet::Border_LEFT );
@@ -644,7 +644,7 @@ uno::Any SAL_CALL ScNamedRangesObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScNamedRangesObj::getElementType() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return ::getCppuType((const uno::Reference< sheet::XNamedRange >*)0);   // muss zu getByIndex passen
+    return ::getCppuType((const uno::Reference< sheet::XNamedRange >*)0);   // must be suitable for getByIndex
 }
 
 sal_Bool SAL_CALL ScNamedRangesObj::hasElements() throw(uno::RuntimeException)
@@ -709,7 +709,7 @@ uno::Sequence<OUString> SAL_CALL ScNamedRangesObj::getElementNames()
         ScRangeName* pNames = GetRangeName_Impl();
         if (pNames)
         {
-            long nVisCount = getCount();            // Namen mit lcl_UserVisibleName
+            long nVisCount = getCount();            // names with lcl_UserVisibleName
             uno::Sequence<OUString> aSeq(nVisCount);
             OUString* pAry = aSeq.getArray();
             sal_uInt16 nVisPos = 0;
@@ -960,10 +960,10 @@ void ScLabelRangeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     //! Ref-Update !!!
 
     if ( rHint.ISA( SfxSimpleHint ) && ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = NULL;       // became invalid
 }
 
-// Hilfsfuntionen
+// Helper functions
 
 ScRangePair* ScLabelRangeObj::GetData_Impl()
 {
@@ -990,7 +990,7 @@ void ScLabelRangeObj::Modify_Impl( const ScRange* pLabel, const ScRange* pData )
             ScRangePair* pEntry = xNewList->Find( aRange );
             if (pEntry)
             {
-                xNewList->Remove( pEntry );     // nur aus der Liste entfernt, nicht geloescht
+                xNewList->Remove( pEntry );     // only removed from list, not deleted
 
                 if ( pLabel )
                     pEntry->GetRange(0) = *pLabel;
@@ -1009,10 +1009,10 @@ void ScLabelRangeObj::Modify_Impl( const ScRange* pLabel, const ScRange* pData )
                 pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID );
                 pDocShell->SetDocumentModified();
 
-                //! Undo ?!?! (hier und aus Dialog)
+                //! Undo ?!?! (here and from dialog)
 
                 if ( pLabel )
-                    aRange = *pLabel;   // Objekt anpassen, um Range wiederzufinden
+                    aRange = *pLabel;   // adapt object to find range again
             }
         }
     }
@@ -1077,12 +1077,12 @@ ScLabelRangesObj::~ScLabelRangesObj()
 
 void ScLabelRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //  Referenz-Update interessiert hier nicht
+    //  reference update is of no interest
 
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = NULL;       // became invalid
     }
 }
 
@@ -1132,7 +1132,7 @@ void SAL_CALL ScLabelRangesObj::addNew( const table::CellRangeAddress& aLabelAre
             pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID );
             pDocShell->SetDocumentModified();
 
-            //! Undo ?!?! (hier und aus Dialog)
+            //! Undo ?!?! (here and from dialog)
         }
     }
 }
@@ -1167,7 +1167,7 @@ void SAL_CALL ScLabelRangesObj::removeByIndex( sal_Int32 nIndex )
                 pDocShell->SetDocumentModified();
                 bDone = sal_True;
 
-                //! Undo ?!?! (hier und aus Dialog)
+                //! Undo ?!?! (here and from dialog)
             }
         }
     }
@@ -1214,7 +1214,7 @@ uno::Any SAL_CALL ScLabelRangesObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScLabelRangesObj::getElementType() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return ::getCppuType((const uno::Reference< sheet::XLabelRange >*)0);   // muss zu getByIndex passen
+    return ::getCppuType((const uno::Reference< sheet::XLabelRange >*)0);   // must be suitable for getByIndex
 
 }
 
