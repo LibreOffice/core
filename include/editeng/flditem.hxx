@@ -56,7 +56,7 @@ public:
     virtual                 ~SvxFieldData();
 
     virtual SvxFieldData*   Clone() const;
-    virtual int             operator==( const SvxFieldData& ) const;
+    virtual bool            operator==( const SvxFieldData& ) const;
 
     virtual MetaAction* createBeginComment() const;
     virtual MetaAction* createEndComment() const;
@@ -136,7 +136,7 @@ public:
     static OUString    GetFormatted( Date& rDate, SvxDateFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
 
     virtual SvxFieldData*   Clone() const;
-    virtual int             operator==( const SvxFieldData& ) const;
+    virtual bool            operator==( const SvxFieldData& ) const;
 
     virtual MetaAction* createBeginComment() const;
 };
@@ -174,7 +174,7 @@ public:
     void                    SetFormat( SvxURLFormat eFmt ) { eFormat = eFmt; }
 
     virtual SvxFieldData*   Clone() const;
-    virtual int             operator==( const SvxFieldData& ) const;
+    virtual bool            operator==( const SvxFieldData& ) const;
 
     virtual MetaAction* createBeginComment() const;
 };
@@ -186,7 +186,7 @@ public:
     SvxPageField();
 
     virtual SvxFieldData*   Clone() const;
-    virtual int             operator==( const SvxFieldData& ) const;
+    virtual bool            operator==( const SvxFieldData& ) const;
 
     virtual MetaAction* createBeginComment() const;
 };
@@ -198,7 +198,7 @@ public:
     SvxPagesField();
 
     virtual SvxFieldData*   Clone() const;
-    virtual int             operator==( const SvxFieldData& ) const;
+    virtual bool            operator==( const SvxFieldData& ) const;
 };
 
 class EDITENG_DLLPUBLIC SvxTimeField : public SvxFieldData
@@ -208,7 +208,7 @@ public:
     SvxTimeField();
 
     virtual SvxFieldData*   Clone() const;
-    virtual int             operator==( const SvxFieldData& ) const;
+    virtual bool            operator==( const SvxFieldData& ) const;
 
     virtual MetaAction* createBeginComment() const;
 };
@@ -220,7 +220,7 @@ public:
     SvxFileField();
 
     virtual SvxFieldData*   Clone() const;
-    virtual int             operator==( const SvxFieldData& ) const;
+    virtual bool            operator==( const SvxFieldData& ) const;
 };
 
 class EDITENG_DLLPUBLIC SvxTableField : public SvxFieldData
@@ -235,7 +235,7 @@ public:
     int GetTab() const;
 
     virtual SvxFieldData*   Clone() const;
-    virtual int             operator==( const SvxFieldData& ) const;
+    virtual bool            operator==( const SvxFieldData& ) const;
 };
 
 
@@ -283,7 +283,7 @@ public:
     static OUString    GetFormatted( Time& rTime, SvxTimeFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
 
     virtual SvxFieldData*   Clone() const;
-    virtual int             operator==( const SvxFieldData& ) const;
+    virtual bool            operator==( const SvxFieldData& ) const;
 
     virtual MetaAction* createBeginComment() const;
 };
@@ -324,7 +324,7 @@ public:
     OUString           GetFormatted() const;
 
     virtual SvxFieldData*   Clone() const;
-    virtual int             operator==( const SvxFieldData& ) const;
+    virtual bool            operator==( const SvxFieldData& ) const;
 };
 
 
@@ -372,7 +372,7 @@ public:
     OUString           GetFormatted() const;
 
     virtual SvxFieldData*   Clone() const;
-    virtual int             operator==( const SvxFieldData& ) const;
+    virtual bool            operator==( const SvxFieldData& ) const;
 };
 
 /** this field is used as a placeholder for a header&footer in impress. The actual
@@ -384,7 +384,7 @@ public:
     SvxHeaderField();
 
     virtual SvxFieldData*   Clone() const;
-    virtual int             operator==( const SvxFieldData& ) const;
+    virtual bool            operator==( const SvxFieldData& ) const;
 };
 
 /** this field is used as a placeholder for a header&footer in impress. The actual
@@ -395,7 +395,7 @@ public:
     SV_DECL_PERSIST1( SvxFooterField, SvxFieldData, com::sun::star::text::textfield::Type::PRESENTATION_FOOTER )
     SvxFooterField();
     virtual SvxFieldData*   Clone() const;
-    virtual int             operator==( const SvxFieldData& ) const;
+    virtual bool            operator==( const SvxFieldData& ) const;
 };
 
 /** this field is used as a placeholder for a header&footer in impress. The actual
@@ -409,7 +409,7 @@ public:
     static OUString    GetFormatted( Date& rDate, Time& rTime, int eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
 
     virtual SvxFieldData*   Clone() const;
-    virtual int             operator==( const SvxFieldData& ) const;
+    virtual bool            operator==( const SvxFieldData& ) const;
 };
 
 

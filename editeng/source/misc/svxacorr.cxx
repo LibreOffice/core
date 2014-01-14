@@ -94,19 +94,19 @@ TYPEINIT0(SvxAutoCorrect)
 
 typedef SvxAutoCorrectLanguageLists* SvxAutoCorrectLanguageListsPtr;
 
-static inline int IsWordDelim( const sal_Unicode c )
+static inline bool IsWordDelim( const sal_Unicode c )
 {
     return ' ' == c || '\t' == c || 0x0a == c ||
             cNonBreakingSpace == c || 0x2011 == c || 0x1 == c;
 }
 
-static inline int IsLowerLetter( sal_Int32 nCharType )
+static inline bool IsLowerLetter( sal_Int32 nCharType )
 {
     return CharClass::isLetterType( nCharType ) &&
             0 == ( ::com::sun::star::i18n::KCharacterType::UPPER & nCharType);
 }
 
-static inline int IsUpperLetter( sal_Int32 nCharType )
+static inline bool IsUpperLetter( sal_Int32 nCharType )
 {
     return CharClass::isLetterType( nCharType ) &&
             0 == ( ::com::sun::star::i18n::KCharacterType::LOWER & nCharType);

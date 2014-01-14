@@ -387,9 +387,9 @@ public:
     long                mnWidthToFill;
 
     // bitfield
-    unsigned            mbEndOfLine : 1;
-    unsigned            mbEndOfParagraph : 1;
-    unsigned            mbEndOfBullet : 1;
+    bool                mbEndOfLine : 1;
+    bool                mbEndOfParagraph : 1;
+    bool                mbEndOfBullet : 1;
 
     sal_uInt8 GetBiDiLevel() const { return mnBiDiLevel; }
     sal_Bool IsRTL() const { return mnBiDiLevel % 2 ? sal_True : sal_False; }

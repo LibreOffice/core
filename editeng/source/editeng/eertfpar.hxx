@@ -86,7 +86,7 @@ protected:
     virtual void        UnknownAttrToken( int nToken, SfxItemSet* pSet );
     virtual void        NextToken( int nToken );
     virtual void        SetAttrInDoc( SvxRTFItemStackType &rSet );
-    virtual int         IsEndPara( SvxNodeIdx* pNd, sal_uInt16 nCnt ) const;
+    virtual bool        IsEndPara( SvxNodeIdx* pNd, sal_uInt16 nCnt ) const;
     virtual void        CalcValue();
     void                CreateStyleSheets();
     SfxStyleSheet*      CreateStyleSheet( SvxRTFStyleType* pRTFStyle );

@@ -31,7 +31,7 @@ SvxFieldData* SdrMeasureField::Clone() const
     return new SdrMeasureField(*this);
 }
 
-int SdrMeasureField::operator==(const SvxFieldData& rSrc) const
+bool SdrMeasureField::operator==(const SvxFieldData& rSrc) const
 {
     return eMeasureFieldKind==((SdrMeasureField&)rSrc).GetMeasureFieldKind();
 }

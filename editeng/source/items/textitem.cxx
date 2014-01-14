@@ -347,7 +347,7 @@ bool SvxFontItem::operator==( const SfxPoolItem& rAttr ) const
 
     const SvxFontItem& rItem = (const SvxFontItem&)rAttr;
 
-    int bRet = ( eFamily == rItem.eFamily &&
+    bool bRet = ( eFamily == rItem.eFamily &&
                  aFamilyName == rItem.aFamilyName &&
                  aStyleName == rItem.aStyleName );
 

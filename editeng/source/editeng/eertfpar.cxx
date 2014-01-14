@@ -285,7 +285,7 @@ void EditRTFParser::SetEndPrevPara( SvxNodeIdx*& rpNodePos,
     rCntPos = pPrevNode->Len();
 }
 
-int EditRTFParser::IsEndPara( SvxNodeIdx* pNd, sal_uInt16 nCnt ) const
+bool EditRTFParser::IsEndPara( SvxNodeIdx* pNd, sal_uInt16 nCnt ) const
 {
     return ( nCnt == ( ((EditNodeIdx*)pNd)->GetNode()->Len()) );
 }

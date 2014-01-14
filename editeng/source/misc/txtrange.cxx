@@ -287,7 +287,7 @@ void SvxBoundArgs::NoteRange( bool bToggle )
             aBoolArr.erase( aBoolArr.begin() + nMaxIdx, aBoolArr.begin() + (nMaxIdx + nDiff) );
         }
         DBG_ASSERT( nMaxIdx < aBoolArr.size(), "NoteRange: Too much deleted" );
-        aBoolArr[ nMaxIdx ] = aBoolArr[ nMaxIdx ] ^ bToggle;
+        aBoolArr[ nMaxIdx ] = aBoolArr[ nMaxIdx ] != bToggle;
     }
 }
 

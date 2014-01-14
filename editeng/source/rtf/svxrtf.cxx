@@ -925,7 +925,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
             }
 
             // Set all attributes which have been defined from start until here
-            int bCrsrBack = !pInsPos->GetCntIdx();
+            bool bCrsrBack = !pInsPos->GetCntIdx();
             if( bCrsrBack )
             {
                 // at the beginning of a paragraph? Move back one position
@@ -1025,7 +1025,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                     {
                         // at the beginning of a paragraph? Move back one position
                         MovePos( sal_True );
-                        bCrsrBack = sal_False;
+                        bCrsrBack = false;
 
                         // Open a new Group.
                         SvxRTFItemStackType* pNew = new SvxRTFItemStackType(
@@ -1094,7 +1094,7 @@ void SvxRTFParser::SetAttrSet( SvxRTFItemStackType &rSet )
 }
 
     // Has no Text been inserted yet? (SttPos from the top Stack entry!)
-int SvxRTFParser::IsAttrSttPos()
+bool SvxRTFParser::IsAttrSttPos()
 {
     SvxRTFItemStackType* pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();
     return !pAkt || (pAkt->pSttNd->GetIdx() == pInsPos->GetNodeIdx() &&

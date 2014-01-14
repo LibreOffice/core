@@ -258,7 +258,7 @@ public:
     virtual ~SvxNumRule();
 
     int                     operator==( const SvxNumRule& ) const;
-    int                     operator!=( const SvxNumRule& rRule ) const {return !(*this == rRule);}
+    bool                    operator!=( const SvxNumRule& rRule ) const {return !(*this == rRule);}
 
     SvxNumRule&             operator=( const SvxNumRule&  );
 

@@ -267,7 +267,7 @@ protected:
 
     inline SfxItemSet& GetAttrSet();
     // no text yet inserted? (SttPos from the top stack entry!)
-    int IsAttrSttPos();
+    bool IsAttrSttPos();
     void AttrGroupEnd();        // edit the current, delete from stack
     void SetAllAttrOfStk();     // end all Attr. and set it into doc
 
@@ -290,18 +290,18 @@ protected:
                     int bReadNewDoc = sal_True );
     virtual ~SvxRTFParser();
 
-    int IsNewDoc() const                { return bNewDoc; }
-    void SetNewDoc( int bFlag )         { bNewDoc = bFlag; }
-    int IsNewGroup() const              { return bNewGroup; }
-    void SetNewGroup( int bFlag )       { bNewGroup = bFlag; }
-    int IsChkStyleAttr() const          { return bChkStyleAttr; }
-    void SetChkStyleAttr( int bFlag )   { bChkStyleAttr = bFlag; }
-    int IsCalcValue() const             { return bCalcValue; }
-    void SetCalcValue( int bFlag )      { bCalcValue = bFlag; }
-    int IsPardTokenRead() const         { return bPardTokenRead; }
-    void SetPardTokenRead( int bFlag )  { bPardTokenRead = bFlag; }
-    int IsReadDocInfo() const           { return bReadDocInfo; }
-    void SetReadDocInfo( int bFlag )    { bReadDocInfo = bFlag; }
+    bool IsNewDoc() const               { return bNewDoc; }
+    void SetNewDoc( bool bFlag )        { bNewDoc = bFlag; }
+    bool IsNewGroup() const             { return bNewGroup; }
+    void SetNewGroup( bool bFlag )      { bNewGroup = bFlag; }
+    bool IsChkStyleAttr() const         { return bChkStyleAttr; }
+    void SetChkStyleAttr( bool bFlag )  { bChkStyleAttr = bFlag; }
+    bool IsCalcValue() const            { return bCalcValue; }
+    void SetCalcValue( bool bFlag )     { bCalcValue = bFlag; }
+    bool IsPardTokenRead() const        { return bPardTokenRead; }
+    void SetPardTokenRead( bool bFlag ) { bPardTokenRead = bFlag; }
+    bool IsReadDocInfo() const          { return bReadDocInfo; }
+    void SetReadDocInfo( bool bFlag )   { bReadDocInfo = bFlag; }
 
     // Query/Set the current insert position
     SvxPosition& GetInsPos() const      { return *pInsPos; }
@@ -328,7 +328,7 @@ public:
     inline const Color& GetColor( size_t nId ) const;
     const Font& GetFont( sal_uInt16 nId );      // Changes the dflt Font
 
-    virtual int IsEndPara( SvxNodeIdx* pNd, xub_StrLen nCnt ) const = 0;
+    virtual bool IsEndPara( SvxNodeIdx* pNd, xub_StrLen nCnt ) const = 0;
 
     // to det a different attribute pool. May only be done prior to CallParser!
     // The maps are not generated anew!

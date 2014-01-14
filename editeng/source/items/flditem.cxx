@@ -244,7 +244,7 @@ SvxFieldData* SvxFieldData::Clone() const
 
 // -----------------------------------------------------------------------
 
-int SvxFieldData::operator==( const SvxFieldData& rFld ) const
+bool SvxFieldData::operator==( const SvxFieldData& rFld ) const
 {
     DBG_ASSERT( Type() == rFld.Type(), "==: Different Types" );
     (void)rFld;
@@ -400,7 +400,7 @@ SvxFieldData* SvxDateField::Clone() const
 
 // -----------------------------------------------------------------------
 
-int SvxDateField::operator==( const SvxFieldData& rOther ) const
+bool SvxDateField::operator==( const SvxFieldData& rOther ) const
 {
     if ( rOther.Type() != Type() )
         return sal_False;
@@ -538,7 +538,7 @@ SvxFieldData* SvxURLField::Clone() const
 
 // -----------------------------------------------------------------------
 
-int SvxURLField::operator==( const SvxFieldData& rOther ) const
+bool SvxURLField::operator==( const SvxFieldData& rOther ) const
 {
     if ( rOther.Type() != Type() )
         return sal_False;
@@ -620,7 +620,7 @@ SvxFieldData* SvxPageField::Clone() const
     return new SvxPageField;        // empty
 }
 
-int SvxPageField::operator==( const SvxFieldData& rCmp ) const
+bool SvxPageField::operator==( const SvxFieldData& rCmp ) const
 {
     return ( rCmp.Type() == TYPE(SvxPageField) );
 }
@@ -648,7 +648,7 @@ SvxFieldData* SvxPagesField::Clone() const
     return new SvxPagesField;   // empty
 }
 
-int SvxPagesField::operator==( const SvxFieldData& rCmp ) const
+bool SvxPagesField::operator==( const SvxFieldData& rCmp ) const
 {
     return ( rCmp.Type() == TYPE(SvxPagesField) );
 }
@@ -670,7 +670,7 @@ SvxFieldData* SvxTimeField::Clone() const
     return new SvxTimeField;    // empty
 }
 
-int SvxTimeField::operator==( const SvxFieldData& rCmp ) const
+bool SvxTimeField::operator==( const SvxFieldData& rCmp ) const
 {
     return ( rCmp.Type() == TYPE(SvxTimeField) );
 }
@@ -697,7 +697,7 @@ SvxFieldData* SvxFileField::Clone() const
     return new SvxFileField;    // empty
 }
 
-int SvxFileField::operator==( const SvxFieldData& rCmp ) const
+bool SvxFileField::operator==( const SvxFieldData& rCmp ) const
 {
     return ( rCmp.Type() == TYPE(SvxFileField) );
 }
@@ -731,7 +731,7 @@ SvxFieldData* SvxTableField::Clone() const
     return new SvxTableField(mnTab);
 }
 
-int SvxTableField::operator==( const SvxFieldData& rCmp ) const
+bool SvxTableField::operator==( const SvxFieldData& rCmp ) const
 {
     if (rCmp.Type() != TYPE(SvxTableField))
         return false;
@@ -780,7 +780,7 @@ SvxFieldData* SvxExtTimeField::Clone() const
 
 //----------------------------------------------------------------------------
 
-int SvxExtTimeField::operator==( const SvxFieldData& rOther ) const
+bool SvxExtTimeField::operator==( const SvxFieldData& rOther ) const
 {
     if ( rOther.Type() != Type() )
         return sal_False;
@@ -924,7 +924,7 @@ SvxFieldData* SvxExtFileField::Clone() const
 
 //----------------------------------------------------------------------------
 
-int SvxExtFileField::operator==( const SvxFieldData& rOther ) const
+bool SvxExtFileField::operator==( const SvxFieldData& rOther ) const
 {
     if ( rOther.Type() != Type() )
         return sal_False;
@@ -1076,7 +1076,7 @@ SvxFieldData* SvxAuthorField::Clone() const
 
 //----------------------------------------------------------------------------
 
-int SvxAuthorField::operator==( const SvxFieldData& rOther ) const
+bool SvxAuthorField::operator==( const SvxFieldData& rOther ) const
 {
     if ( rOther.Type() != Type() )
         return sal_False;
@@ -1176,7 +1176,7 @@ SvxFieldData* SvxHeaderField::Clone() const
     return new SvxHeaderField;      // empty
 }
 
-int SvxHeaderField::operator==( const SvxFieldData& rCmp ) const
+bool SvxHeaderField::operator==( const SvxFieldData& rCmp ) const
 {
     return ( rCmp.Type() == TYPE(SvxHeaderField) );
 }
@@ -1199,7 +1199,7 @@ SvxFieldData* SvxFooterField::Clone() const
     return new SvxFooterField;      // empty
 }
 
-int SvxFooterField::operator==( const SvxFieldData& rCmp ) const
+bool SvxFooterField::operator==( const SvxFieldData& rCmp ) const
 {
     return ( rCmp.Type() == TYPE(SvxFooterField) );
 }
@@ -1221,7 +1221,7 @@ SvxFieldData* SvxDateTimeField::Clone() const
     return new SvxDateTimeField;        // empty
 }
 
-int SvxDateTimeField::operator==( const SvxFieldData& rCmp ) const
+bool SvxDateTimeField::operator==( const SvxFieldData& rCmp ) const
 {
     return ( rCmp.Type() == TYPE(SvxDateTimeField) );
 }

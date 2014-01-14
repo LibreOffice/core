@@ -893,7 +893,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         case EE_CHAR_OUTLINE:
         {
             rOutput << OOO_STRING_SVTOOLS_RTF_OUTL;
-            if ( ((const SvxContourItem&)rItem).GetValue() == 0 )
+            if ( !((const SvxContourItem&)rItem).GetValue() )
                 rOutput << '0';
         }
         break;
@@ -920,7 +920,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         case EE_CHAR_SHADOW:
         {
             rOutput << OOO_STRING_SVTOOLS_RTF_SHAD;
-            if ( ((const SvxShadowedItem&)rItem).GetValue() == 0 )
+            if ( !((const SvxShadowedItem&)rItem).GetValue() )
                 rOutput << '0';
         }
         break;

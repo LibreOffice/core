@@ -217,7 +217,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
     RTF_CharTypeDef eCharType = NOTDEF_CHARTYPE;
     sal_uInt16 nFontAlign;
 
-    int bChkStkPos = !bNewGroup && !aAttrStack.empty();
+    bool bChkStkPos = !bNewGroup && !aAttrStack.empty();
 
     while( bContinue && IsParserWorking() )  // as long as known Attribute are recognized
     {
@@ -1403,7 +1403,8 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
         aAttr = *(SvxBoxItem*)pItem;
 
     SvxBorderLine aBrd( 0, DEF_LINE_WIDTH_0 );  // Simple plain line
-    int bContinue = sal_True, nBorderTyp = 0;
+    bool bContinue = true;
+    int nBorderTyp = 0;
 
     long nWidth = 1;
     bool bDoubleWidth = false;
@@ -1585,7 +1586,7 @@ void SvxRTFParser::ReadBackgroundAttr( int nToken, SfxItemSet& rSet,
                                         int bTableDef )
 {
     // then read the border attribute
-    int bContinue = sal_True;
+    bool bContinue = true;
     sal_uInt16 nColor = USHRT_MAX, nFillColor = USHRT_MAX;
     sal_uInt8 nFillValue = 0;
 
