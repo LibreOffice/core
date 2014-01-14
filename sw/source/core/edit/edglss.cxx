@@ -313,25 +313,23 @@ sal_Bool SwEditShell::GetSelectedText( OUString &rBuf, int nHndlParaBrk )
             SwAsciiOptions aAsciiOpt( xWrt->GetAsciiOptions() );
             aAsciiOpt.SetCharSet( RTL_TEXTENCODING_UCS2 );
             xWrt->SetAsciiOptions( aAsciiOpt );
-            xWrt->bUCS2_WithStartChar = sal_False;
+            xWrt->bUCS2_WithStartChar = false;
 
-            long lLen;
-            if( !IsError( aWriter.Write( xWrt ) ) &&
-                STRING_MAXLEN > (( lLen  = aStream.GetSize() )
-                                        / sizeof( sal_Unicode )) + 1 )
+            if (!IsError(aWriter.Write(xWrt)))
             {
                 aStream.WriteUInt16( (sal_Unicode)'\0' );
 
                 const sal_Unicode *p = (sal_Unicode*)aStream.GetBuffer();
-                if( p )
+                if (p)
                     rBuf = OUString(p);
                 else
                 {
-                    rtl_uString *pStr = rtl_uString_alloc(lLen / sizeof( sal_Unicode ));
+                    sal_Size nLen = aStream.GetSize();
+                    rtl_uString *pStr = rtl_uString_alloc(nLen / sizeof( sal_Unicode ));
                     aStream.Seek( 0 );
                     aStream.ResetError();
                     //endian specific?, yipes!
-                    aStream.Read(pStr->buffer, lLen);
+                    aStream.Read(pStr->buffer, nLen);
                     rBuf = OUString(pStr, SAL_NO_ACQUIRE);
                 }
             }
