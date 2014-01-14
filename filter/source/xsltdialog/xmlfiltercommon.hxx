@@ -71,7 +71,7 @@ public:
 
     filter_info_impl();
     filter_info_impl( const filter_info_impl& rInfo );
-    int operator==( const filter_info_impl& ) const;
+    bool operator==( const filter_info_impl& ) const;
 
     com::sun::star::uno::Sequence< OUString > getFilterUserData() const;
 };

@@ -4456,7 +4456,7 @@ void PPTCharPropSet::ImplMakeUnique()
 void PPTCharPropSet::SetFont( sal_uInt16 nFont )
 {
     sal_uInt32  nMask = 1 << PPT_CharAttr_Font;
-    sal_uInt32  bDoNotMake = pCharSet->mnAttrSet & nMask;
+    bool bDoNotMake = (pCharSet->mnAttrSet & nMask) != 0;
 
     if ( bDoNotMake )
         bDoNotMake = nFont == pCharSet->mnFont;

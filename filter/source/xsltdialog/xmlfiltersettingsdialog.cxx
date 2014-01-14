@@ -1574,28 +1574,24 @@ filter_info_impl::filter_info_impl( const filter_info_impl& rInfo ) :
 
 // -----------------------------------------------------------------------
 
-int filter_info_impl::operator==( const filter_info_impl& r ) const
+bool filter_info_impl::operator==( const filter_info_impl& r ) const
 {
-    if( maFilterName != r.maFilterName ||
-        maType != r.maType ||
-        maDocumentService != r.maDocumentService ||
-        maFilterService != r.maFilterService ||
-        maInterfaceName != r.maInterfaceName ||
-        maComment != r.maComment ||
-        maExtension != r.maExtension ||
-        maDocType != r.maDocType ||
-        maExportXSLT != r.maExportXSLT ||
-        maImportXSLT != r.maImportXSLT ||
-        maExportService != r.maExportService ||
-        maImportService != r.maImportService ||
-        maImportTemplate != r.maImportTemplate ||
-        maFlags != r.maFlags ||
-        maFileFormatVersion != r.maFileFormatVersion ||
-        mbNeedsXSLT2 != r.mbNeedsXSLT2
-        )
-        return false;
-
-    return true;
+    return maFilterName == r.maFilterName &&
+        maType == r.maType &&
+        maDocumentService == r.maDocumentService &&
+        maFilterService == r.maFilterService &&
+        maInterfaceName == r.maInterfaceName &&
+        maComment == r.maComment &&
+        maExtension == r.maExtension &&
+        maDocType == r.maDocType &&
+        maExportXSLT == r.maExportXSLT &&
+        maImportXSLT == r.maImportXSLT &&
+        maExportService == r.maExportService &&
+        maImportService == r.maImportService &&
+        maImportTemplate == r.maImportTemplate &&
+        maFlags == r.maFlags &&
+        maFileFormatVersion == r.maFileFormatVersion &&
+        mbNeedsXSLT2 == r.mbNeedsXSLT2;
 }
 
 // -----------------------------------------------------------------------
