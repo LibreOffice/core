@@ -684,14 +684,16 @@ inline void SvXMLExport::SetGraphicResolver(
 // Helper class to export an element.
 class XMLOFF_DLLPUBLIC SvXMLElementExport
 {
-    SvXMLExport& rExport;
-    ::rtl::OUString aName;
-    sal_Bool bIgnWS : 1;
-    sal_Bool bDoSomething : 1;
+    SvXMLExport& mrExport;
+    ::rtl::OUString maElementName;
+    const sal_Bool mbIgnoreWhitespaceInside :1;
+    const sal_Bool mbDoSomething :1;
 
-    SAL_DLLPRIVATE void StartElement( SvXMLExport& rExp, sal_uInt16 nPrefix,
-                       const ::rtl::OUString& rName,
-                       sal_Bool bIgnWSOutside );
+    SAL_DLLPRIVATE
+    void StartElement(
+        const sal_uInt16 nPrefix,
+        const ::rtl::OUString& rName,
+        const sal_Bool bIgnoreWhitespaceOutside );
 
 public:
 

@@ -2125,7 +2125,8 @@ void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
                         {
                             if (!lcl_HasListStyle(
                                     m_pImpl->m_pOutlineStylesCandidates[i][j],
-                                    m_pImpl->m_xParaStyles, GetXMLImport(),
+                                    m_pImpl->m_xParaStyles,
+                                    GetXMLImport(),
                                     s_NumberingStyleName,
                                     sOutlineStyleName))
                             {

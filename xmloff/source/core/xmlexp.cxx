@@ -2627,12 +2627,10 @@ SvXMLExport::AddAttributesRDFa(
     mpImpl->mpRDFaHelper->AddRDFa(xMeta);
 }
 
-// --> OD 2008-11-26 #158694#
 sal_Bool SvXMLExport::exportTextNumberElement() const
 {
     return mpImpl->mbExportTextNumberElement;
 }
-// <--
 
 sal_Bool SvXMLExport::SetNullDateOnUnitConverter()
 {
@@ -2643,116 +2641,132 @@ sal_Bool SvXMLExport::SetNullDateOnUnitConverter()
     return mpImpl->mbNullDateInitialized;
 }
 
+
 //=============================================================================
 
-void SvXMLElementExport::StartElement( SvXMLExport& rExp,
-                                       sal_uInt16 nPrefixKey,
-                                       const OUString& rLName,
-                                       sal_Bool bIWSOutside )
+
+void SvXMLElementExport::StartElement(
+    const sal_uInt16 nPrefixKey,
+    const OUString& rLName,
+    const sal_Bool bIgnoreWhitespaceOutside )
 {
-    aName = rExp.GetNamespaceMap().GetQNameByKey(nPrefixKey, rLName);
-    rExp.StartElement(aName, bIWSOutside);
+    maElementName = mrExport.GetNamespaceMap().GetQNameByKey(nPrefixKey, rLName);
+    mrExport.StartElement(maElementName, bIgnoreWhitespaceOutside);
 }
 
-SvXMLElementExport::SvXMLElementExport( SvXMLExport& rExp,
-                                        sal_uInt16 nPrefixKey,
-                                        const sal_Char *pLName,
-                                        sal_Bool bIWSOutside,
-                                        sal_Bool bIWSInside ) :
-    rExport( rExp ),
-    bIgnWS( bIWSInside ),
-    bDoSomething( sal_True )
+SvXMLElementExport::SvXMLElementExport(
+    SvXMLExport& rExp,
+    sal_uInt16 nPrefixKey,
+    const sal_Char *pLName,
+    sal_Bool bIWSOutside,
+    sal_Bool bIWSInside )
+    : mrExport( rExp )
+    , maElementName()
+    , mbIgnoreWhitespaceInside( bIWSInside )
+    , mbDoSomething( sal_True )
 {
-    OUString sLName( OUString::createFromAscii(pLName) );
-    StartElement( rExp, nPrefixKey, sLName, bIWSOutside );
+    const OUString sLName( OUString::createFromAscii( pLName ) );
+    StartElement( nPrefixKey, sLName, bIWSOutside );
 }
 
-SvXMLElementExport::SvXMLElementExport( SvXMLExport& rExp,
-                                        sal_uInt16 nPrefixKey,
-                                        const OUString& rLName,
-                                        sal_Bool bIWSOutside,
-                                        sal_Bool bIWSInside ) :
-    rExport( rExp ),
-    bIgnWS( bIWSInside ),
-    bDoSomething( sal_True )
+SvXMLElementExport::SvXMLElementExport(
+    SvXMLExport& rExp,
+    sal_uInt16 nPrefixKey,
+    const OUString& rLName,
+    sal_Bool bIWSOutside,
+    sal_Bool bIWSInside )
+    : mrExport( rExp )
+    , maElementName()
+    , mbIgnoreWhitespaceInside( bIWSInside )
+    , mbDoSomething( sal_True )
 {
-    StartElement( rExp, nPrefixKey, rLName, bIWSOutside );
+    StartElement( nPrefixKey, rLName, bIWSOutside );
 }
 
-SvXMLElementExport::SvXMLElementExport( SvXMLExport& rExp,
-                                        sal_uInt16 nPrefixKey,
-                                        enum XMLTokenEnum eLName,
-                                        sal_Bool bIWSOutside,
-                                        sal_Bool bIWSInside ) :
-    rExport( rExp ),
-    bIgnWS( bIWSInside ),
-    bDoSomething( sal_True )
+SvXMLElementExport::SvXMLElementExport(
+    SvXMLExport& rExp,
+    sal_uInt16 nPrefixKey,
+    enum XMLTokenEnum eLName,
+    sal_Bool bIWSOutside,
+    sal_Bool bIWSInside )
+    : mrExport( rExp )
+    , maElementName()
+    , mbIgnoreWhitespaceInside( bIWSInside )
+    , mbDoSomething( sal_True )
 {
-    StartElement( rExp, nPrefixKey, GetXMLToken(eLName), bIWSOutside );
+    StartElement( nPrefixKey, GetXMLToken(eLName), bIWSOutside );
 }
 
-SvXMLElementExport::SvXMLElementExport( SvXMLExport& rExp,
-                                        sal_Bool bDoSth,
-                                        sal_uInt16 nPrefixKey,
-                                        const sal_Char *pLName,
-                                        sal_Bool bIWSOutside,
-                                        sal_Bool bIWSInside ) :
-    rExport( rExp ),
-    bIgnWS( bIWSInside ),
-    bDoSomething( bDoSth )
+SvXMLElementExport::SvXMLElementExport(
+    SvXMLExport& rExp,
+    sal_Bool bDoSth,
+    sal_uInt16 nPrefixKey,
+    const sal_Char *pLName,
+    sal_Bool bIWSOutside,
+    sal_Bool bIWSInside )
+    : mrExport( rExp )
+    , maElementName()
+    , mbIgnoreWhitespaceInside( bIWSInside )
+    , mbDoSomething( bDoSth )
 {
-    if( bDoSomething )
+    if ( mbDoSomething )
     {
-        OUString sLName( OUString::createFromAscii(pLName) );
-        StartElement( rExp, nPrefixKey, sLName, bIWSOutside );
+        const OUString sLName( OUString::createFromAscii( pLName ) );
+        StartElement( nPrefixKey, sLName, bIWSOutside );
     }
 }
 
-SvXMLElementExport::SvXMLElementExport( SvXMLExport& rExp,
-                                        sal_Bool bDoSth,
-                                        sal_uInt16 nPrefixKey,
-                                        const OUString& rLName,
-                                        sal_Bool bIWSOutside,
-                                        sal_Bool bIWSInside ) :
-    rExport( rExp ),
-    bIgnWS( bIWSInside ),
-    bDoSomething( bDoSth )
+SvXMLElementExport::SvXMLElementExport(
+    SvXMLExport& rExp,
+    sal_Bool bDoSth,
+    sal_uInt16 nPrefixKey,
+    const OUString& rLName,
+    sal_Bool bIWSOutside,
+    sal_Bool bIWSInside )
+    : mrExport( rExp )
+    , maElementName()
+    , mbIgnoreWhitespaceInside( bIWSInside )
+    , mbDoSomething( bDoSth )
 {
-    if( bDoSomething )
-        StartElement( rExp, nPrefixKey, rLName, bIWSOutside );
+    if ( mbDoSomething )
+        StartElement( nPrefixKey, rLName, bIWSOutside );
 }
 
-SvXMLElementExport::SvXMLElementExport( SvXMLExport& rExp,
-                                        sal_Bool bDoSth,
-                                        sal_uInt16 nPrefixKey,
-                                        enum XMLTokenEnum eLName,
-                                        sal_Bool bIWSOutside,
-                                        sal_Bool bIWSInside ) :
-    rExport( rExp ),
-    bIgnWS( bIWSInside ),
-    bDoSomething( bDoSth )
+SvXMLElementExport::SvXMLElementExport(
+    SvXMLExport& rExp,
+    sal_Bool bDoSth,
+    sal_uInt16 nPrefixKey,
+    enum XMLTokenEnum eLName,
+    sal_Bool bIWSOutside,
+    sal_Bool bIWSInside )
+    : mrExport( rExp )
+    , maElementName()
+    , mbIgnoreWhitespaceInside( bIWSInside )
+    , mbDoSomething( bDoSth )
 {
-    if( bDoSomething )
-        StartElement( rExport, nPrefixKey, GetXMLToken(eLName), bIWSOutside );
+    if ( mbDoSomething )
+        StartElement( nPrefixKey, GetXMLToken( eLName ), bIWSOutside );
 }
 
-SvXMLElementExport::SvXMLElementExport( SvXMLExport& rExp,
-                                        const OUString& rQName,
-                                        sal_Bool bIWSOutside,
-                                        sal_Bool bIWSInside ) :
-    rExport( rExp ),
-    bIgnWS( bIWSInside ),
-    bDoSomething( sal_True )
+SvXMLElementExport::SvXMLElementExport(
+    SvXMLExport& rExp,
+    const OUString& rQName,
+    sal_Bool bIWSOutside,
+    sal_Bool bIWSInside )
+    : mrExport( rExp )
+    , maElementName()
+    , mbIgnoreWhitespaceInside( bIWSInside )
+    , mbDoSomething( sal_True )
 {
-    aName = rQName;
+    maElementName = rQName;
     rExp.StartElement( rQName, bIWSOutside );
 }
 
 SvXMLElementExport::~SvXMLElementExport()
 {
-    if( bDoSomething )
+    if ( mbDoSomething )
     {
-        rExport.EndElement( aName, bIgnWS );
+        mrExport.EndElement( maElementName, mbIgnoreWhitespaceInside );
     }
 }
 
