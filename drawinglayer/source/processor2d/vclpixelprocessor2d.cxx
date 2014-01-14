@@ -293,7 +293,7 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D :
                 {
-                    // directdraw of text simple portion; added test possibility to check text decompose
+                    // directdraw of decorated text portion; added test possibility to check text decompose
                     static bool bForceComplexTextDecomposition(false);
 
                     // Adapt evtl. used special DrawMode
