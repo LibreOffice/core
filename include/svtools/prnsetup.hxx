@@ -73,9 +73,9 @@ public:
     void                SetOptionsHdl( const Link& rLink );
 };
 
-// --------------------------------------
-// - Hilfsfunktionen fuer Print-Dialoge -
-// --------------------------------------
+// -------------------------------------
+// - Helper functions for print dialog -
+// -------------------------------------
 
 #define IMPL_PRINTDLG_STATUS_UPDATE     15000
 
