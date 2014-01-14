@@ -80,7 +80,7 @@ void ScDPOutputGeometry::getColumnFieldPositions(vector<ScAddress>& rAddrs) cons
 
     if (mnPageFields)
     {
-        SCROW nRowStart = maOutRange.aStart.Row() + mbShowFilter;
+        SCROW nRowStart = maOutRange.aStart.Row() + int(mbShowFilter);
         SCROW nRowEnd   = nRowStart + static_cast<SCCOL>(mnPageFields-1);
         nCurRow = nRowEnd + 2;
     }
@@ -131,7 +131,7 @@ void ScDPOutputGeometry::getPageFieldPositions(vector<ScAddress>& rAddrs) const
     SCTAB nTab = maOutRange.aStart.Tab();
     SCCOL nCol = maOutRange.aStart.Col();
 
-    SCROW nRowStart = maOutRange.aStart.Row() + mbShowFilter;
+    SCROW nRowStart = maOutRange.aStart.Row() + int(mbShowFilter);
     SCROW nRowEnd   = nRowStart + static_cast<SCCOL>(mnPageFields-1);
 
     for (SCROW nRow = nRowStart; nRow <= nRowEnd; ++nRow)
@@ -147,7 +147,7 @@ SCROW ScDPOutputGeometry::getRowFieldHeaderRow() const
 
     if (mnPageFields)
     {
-        SCROW nRowStart = maOutRange.aStart.Row() + mbShowFilter;
+        SCROW nRowStart = maOutRange.aStart.Row() + int(mbShowFilter);
         SCROW nRowEnd   = nRowStart + static_cast<SCCOL>(mnPageFields-1);
         nCurRow = nRowEnd + 2;
     }
@@ -195,7 +195,7 @@ ScDPOutputGeometry::getFieldButtonType(const ScAddress& rPos) const
     if (mnPageFields)
     {
         SCCOL nCol = maOutRange.aStart.Col();
-        SCROW nRowStart = maOutRange.aStart.Row() + mbShowFilter;
+        SCROW nRowStart = maOutRange.aStart.Row() + int(mbShowFilter);
         SCROW nRowEnd   = nRowStart + static_cast<SCCOL>(mnPageFields-1);
         if (rPos.Col() == nCol && nRowStart <= rPos.Row() && rPos.Row() <= nRowEnd)
         {

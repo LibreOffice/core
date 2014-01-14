@@ -1078,7 +1078,7 @@ void ScInterpreter::ScEqual()
         PushMatrix(aMat);
     }
     else
-        PushInt( Compare() == 0 );
+        PushInt( int(Compare() == 0) );
 }
 
 
@@ -1096,7 +1096,7 @@ void ScInterpreter::ScNotEqual()
         PushMatrix(aMat);
     }
     else
-        PushInt( Compare() != 0 );
+        PushInt( int(Compare() != 0) );
 }
 
 
@@ -1114,7 +1114,7 @@ void ScInterpreter::ScLess()
         PushMatrix(aMat);
     }
     else
-        PushInt( Compare() < 0 );
+        PushInt( int(Compare() < 0) );
 }
 
 
@@ -1132,7 +1132,7 @@ void ScInterpreter::ScGreater()
         PushMatrix(aMat);
     }
     else
-        PushInt( Compare() > 0 );
+        PushInt( int(Compare() > 0) );
 }
 
 
@@ -1150,7 +1150,7 @@ void ScInterpreter::ScLessEqual()
         PushMatrix(aMat);
     }
     else
-        PushInt( Compare() <= 0 );
+        PushInt( int(Compare() <= 0) );
 }
 
 
@@ -1168,7 +1168,7 @@ void ScInterpreter::ScGreaterEqual()
         PushMatrix(aMat);
     }
     else
-        PushInt( Compare() >= 0 );
+        PushInt( int(Compare() >= 0) );
 }
 
 
@@ -1179,7 +1179,7 @@ void ScInterpreter::ScAnd()
     if ( MustHaveParamCountMin( nParamCount, 1 ) )
     {
         bool bHaveValue = false;
-        short nRes = true;
+        bool nRes = true;
         size_t nRefInList = 0;
         while( nParamCount-- > 0)
         {
@@ -1265,7 +1265,7 @@ void ScInterpreter::ScAnd()
                 Pop();
         }
         if ( bHaveValue )
-            PushInt( nRes );
+            PushInt( int(nRes) );
         else
             PushNoValue();
     }
@@ -1279,7 +1279,7 @@ void ScInterpreter::ScOr()
     if ( MustHaveParamCountMin( nParamCount, 1 ) )
     {
         bool bHaveValue = false;
-        short nRes = false;
+        bool nRes = false;
         size_t nRefInList = 0;
         while( nParamCount-- > 0)
         {
@@ -1366,7 +1366,7 @@ void ScInterpreter::ScOr()
                 Pop();
         }
         if ( bHaveValue )
-            PushInt( nRes );
+            PushInt( int(nRes) );
         else
             PushNoValue();
     }
@@ -1381,7 +1381,7 @@ void ScInterpreter::ScXor()
     if ( MustHaveParamCountMin( nParamCount, 1 ) )
     {
         bool bHaveValue = false;
-        short nRes = false;
+        bool nRes = false;
         size_t nRefInList = 0;
         while( nParamCount-- > 0)
         {
@@ -1453,7 +1453,7 @@ void ScInterpreter::ScXor()
                             if ( nErr )
                             {
                                 SetError( nErr );
-                                nRes = 0;
+                                nRes = false;
                             }
                             else
                                 nRes ^= ( fVal != 0.0 );
@@ -1470,7 +1470,7 @@ void ScInterpreter::ScXor()
                 Pop();
         }
         if ( bHaveValue )
-            PushInt( nRes );
+            PushInt( int(nRes) );
         else
             PushNoValue();
     }
@@ -1559,7 +1559,7 @@ void ScInterpreter::ScNot()
                         for (SCSIZE j = 0; j < nR; ++j)
                         {
                             if ( pMat->IsValueOrEmpty(i,j) )
-                                pResMat->PutDouble( (pMat->GetDouble(i,j) == 0.0), i, j );
+                                pResMat->PutDouble( double(pMat->GetDouble(i,j) == 0.0), i, j );
                             else
                                 pResMat->PutString(
                                     mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i, j);
@@ -1571,7 +1571,7 @@ void ScInterpreter::ScNot()
         }
         break;
         default:
-            PushInt( GetDouble() == 0.0 );
+            PushInt( int(GetDouble() == 0.0) );
     }
 }
 
@@ -1908,15 +1908,15 @@ void ScInterpreter::ScIsEmpty()
 }
 
 
-short ScInterpreter::IsString()
+bool ScInterpreter::IsString()
 {
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
-    short nRes = 0;
+    bool nRes = false;
     switch ( GetRawStackType() )
     {
         case svString:
             Pop();
-            nRes = 1;
+            nRes = true;
         break;
         case svDoubleRef :
         case svSingleRef :
@@ -1933,7 +1933,7 @@ short ScInterpreter::IsString()
                 {
                     case CELLTYPE_STRING :
                     case CELLTYPE_EDIT :
-                        nRes = 1;
+                        nRes = true;
                         break;
                     case CELLTYPE_FORMULA :
                         nRes = (!aCell.mpFormula->IsValue() && !aCell.mpFormula->IsEmpty());
@@ -1971,19 +1971,19 @@ short ScInterpreter::IsString()
 
 void ScInterpreter::ScIsString()
 {
-    PushInt( IsString() );
+    PushInt( int(IsString()) );
 }
 
 
 void ScInterpreter::ScIsNonString()
 {
-    PushInt( !IsString() );
+    PushInt( int(!IsString()) );
 }
 
 
 void ScInterpreter::ScIsLogical()
 {
-    short nRes = 0;
+    bool nRes = false;
     switch ( GetStackType() )
     {
         case svDoubleRef :
@@ -2016,7 +2016,7 @@ void ScInterpreter::ScIsLogical()
     }
     nCurFmtType = nFuncFmtType = NUMBERFORMAT_LOGICAL;
     nGlobalError = 0;
-    PushInt( nRes );
+    PushInt( int(nRes) );
 }
 
 
@@ -2494,7 +2494,7 @@ void ScInterpreter::ScCellExternal()
 void ScInterpreter::ScIsRef()
 {
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
-    short nRes = 0;
+    bool nRes = false;
     switch ( GetStackType() )
     {
         case svSingleRef :
@@ -2502,7 +2502,7 @@ void ScInterpreter::ScIsRef()
             ScAddress aAdr;
             PopSingleRef( aAdr );
             if ( !nGlobalError )
-                nRes = 1;
+                nRes = true;
         }
         break;
         case svDoubleRef :
@@ -2510,7 +2510,7 @@ void ScInterpreter::ScIsRef()
             ScRange aRange;
             PopDoubleRef( aRange );
             if ( !nGlobalError )
-                nRes = 1;
+                nRes = true;
         }
         break;
         case svRefList :
@@ -2524,19 +2524,19 @@ void ScInterpreter::ScIsRef()
             Pop();
     }
     nGlobalError = 0;
-    PushInt( nRes );
+    PushInt( int(nRes) );
 }
 
 
 void ScInterpreter::ScIsValue()
 {
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
-    short nRes = 0;
+    bool nRes = false;
     switch ( GetRawStackType() )
     {
         case svDouble:
             Pop();
-            nRes = 1;
+            nRes = true;
         break;
         case svDoubleRef :
         case svSingleRef :
@@ -2552,7 +2552,7 @@ void ScInterpreter::ScIsValue()
                 switch (aCell.meType)
                 {
                     case CELLTYPE_VALUE :
-                        nRes = 1;
+                        nRes = true;
                         break;
                     case CELLTYPE_FORMULA :
                         nRes = (aCell.mpFormula->IsValue() && !aCell.mpFormula->IsEmpty());
@@ -2588,14 +2588,14 @@ void ScInterpreter::ScIsValue()
             Pop();
     }
     nGlobalError = 0;
-    PushInt( nRes );
+    PushInt( int(nRes) );
 }
 
 
 void ScInterpreter::ScIsFormula()
 {
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
-    short nRes = 0;
+    bool nRes = false;
     switch ( GetStackType() )
     {
         case svDoubleRef :
@@ -2612,7 +2612,7 @@ void ScInterpreter::ScIsFormula()
             Pop();
     }
     nGlobalError = 0;
-    PushInt( nRes );
+    PushInt( int(nRes) );
 }
 
 
@@ -2652,7 +2652,7 @@ void ScInterpreter::ScFormula()
 void ScInterpreter::ScIsNV()
 {
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
-    short nRes = 0;
+    bool nRes = false;
     switch ( GetStackType() )
     {
         case svDoubleRef :
@@ -2661,7 +2661,7 @@ void ScInterpreter::ScIsNV()
             ScAddress aAdr;
             PopDoubleRefOrSingleRef( aAdr );
             if ( nGlobalError == NOTAVAILABLE )
-                nRes = 1;
+                nRes = true;
             else
             {
                 ScRefCellValue aCell;
@@ -2691,17 +2691,17 @@ void ScInterpreter::ScIsNV()
         default:
             PopError();
             if ( nGlobalError == NOTAVAILABLE )
-                nRes = 1;
+                nRes = true;
     }
     nGlobalError = 0;
-    PushInt( nRes );
+    PushInt( int(nRes) );
 }
 
 
 void ScInterpreter::ScIsErr()
 {
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
-    short nRes = 0;
+    bool nRes = false;
     switch ( GetStackType() )
     {
         case svDoubleRef :
@@ -2710,7 +2710,7 @@ void ScInterpreter::ScIsErr()
             ScAddress aAdr;
             PopDoubleRefOrSingleRef( aAdr );
             if ( nGlobalError && nGlobalError != NOTAVAILABLE )
-                nRes = 1;
+                nRes = true;
             else
             {
                 ScRefCellValue aCell;
@@ -2746,17 +2746,17 @@ void ScInterpreter::ScIsErr()
         default:
             PopError();
             if ( nGlobalError && nGlobalError != NOTAVAILABLE )
-                nRes = 1;
+                nRes = true;
     }
     nGlobalError = 0;
-    PushInt( nRes );
+    PushInt( int(nRes) );
 }
 
 
 void ScInterpreter::ScIsError()
 {
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
-    short nRes = 0;
+    bool nRes = false;
     switch ( GetStackType() )
     {
         case svDoubleRef :
@@ -2765,11 +2765,11 @@ void ScInterpreter::ScIsError()
             ScAddress aAdr;
             if ( !PopDoubleRefOrSingleRef( aAdr ) )
             {
-                nRes = 1;
+                nRes = true;
                 break;
             }
             if ( nGlobalError )
-                nRes = 1;
+                nRes = true;
             else
             {
                 ScRefCellValue aCell;
@@ -2782,7 +2782,7 @@ void ScInterpreter::ScIsError()
         {
             ScMatrixRef pMat = PopMatrix();
             if ( nGlobalError || !pMat )
-                nRes = 1;
+                nRes = true;
             else if ( !pJumpMatrix )
                 nRes = (pMat->GetErrorIfNotString( 0, 0) != 0);
             else
@@ -2798,17 +2798,17 @@ void ScInterpreter::ScIsError()
         default:
             PopError();
             if ( nGlobalError )
-                nRes = 1;
+                nRes = true;
     }
     nGlobalError = 0;
-    PushInt( nRes );
+    PushInt( int(nRes) );
 }
 
 
-short ScInterpreter::IsEven()
+bool ScInterpreter::IsEven()
 {
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
-    short nRes = 0;
+    bool nRes = false;
     double fVal = 0.0;
     switch ( GetStackType() )
     {
@@ -2830,13 +2830,13 @@ short ScInterpreter::IsEven()
                 {
                     case CELLTYPE_VALUE :
                         fVal = GetCellValue(aAdr, aCell);
-                        nRes = 1;
+                        nRes = true;
                     break;
                     case CELLTYPE_FORMULA :
                         if (aCell.mpFormula->IsValue())
                         {
                             fVal = GetCellValue(aAdr, aCell);
-                            nRes = 1;
+                            nRes = true;
                         }
                     break;
                     default:
@@ -2848,7 +2848,7 @@ short ScInterpreter::IsEven()
         case svDouble:
         {
             fVal = PopDouble();
-            nRes = 1;
+            nRes = true;
         }
         break;
         case svMatrix:
@@ -2891,13 +2891,13 @@ short ScInterpreter::IsEven()
 
 void ScInterpreter::ScIsEven()
 {
-    PushInt( IsEven() );
+    PushInt( int(IsEven()) );
 }
 
 
 void ScInterpreter::ScIsOdd()
 {
-    PushInt( !IsEven() );
+    PushInt( int(!IsEven()) );
 }
 
 void ScInterpreter::ScN()
@@ -7787,7 +7787,7 @@ void ScInterpreter::ScExact()
     {
         svl::SharedString s1 = GetString();
         svl::SharedString s2 = GetString();
-        PushInt( s1.getData() == s2.getData() );
+        PushInt( int(s1.getData() == s2.getData()) );
     }
 }
 
@@ -7841,7 +7841,7 @@ bool SAL_CALL lcl_getScriptClass(sal_uInt32 currentChar)
           (MsLangId::getSystemLanguage() == LANGUAGE_JAPANESE) )
         return true;
     sal_uInt16 i;
-    static sal_Int16 nRet = 0;
+    static bool nRet = false;
     UBlockCode block = (UBlockCode)ublock_getCode((sal_uInt32)currentChar);
     for ( i = 0; i < scriptListCount; i++) {
         if (block <= scriptList[i].to) break;
@@ -8051,7 +8051,7 @@ void ScInterpreter::ScSearch()
                 utl::SearchParam::SRCH_REGEXP : utl::SearchParam::SRCH_NORMAL);
             utl::SearchParam sPar(SearchStr, eSearchType, false, false, false);
             utl::TextSearch sT( sPar, *ScGlobal::pCharClass );
-            int nBool = sT.SearchForward(sStr, &nPos, &nEndPos);
+            bool nBool = sT.SearchForward(sStr, &nPos, &nEndPos);
             if (!nBool)
                 PushNoValue();
             else

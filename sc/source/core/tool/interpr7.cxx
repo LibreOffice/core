@@ -125,7 +125,7 @@ void ScInterpreter::ScFilterXML()
             case XPATH_BOOLEAN:
                 {
                     bool bVal = pXPathObj->boolval != 0;
-                    PushDouble(bVal);
+                    PushDouble(double(bVal));
                 }
                 break;
             case XPATH_NUMBER:

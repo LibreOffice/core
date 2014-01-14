@@ -1594,9 +1594,9 @@ size_t HashSingleRef( const ScSingleRefData& rRef )
 {
     size_t nVal = 0;
 
-    nVal += rRef.IsColRel();
-    nVal += (rRef.IsRowRel() << 1);
-    nVal += (rRef.IsTabRel() << 2);
+    nVal += size_t(rRef.IsColRel());
+    nVal += (size_t(rRef.IsRowRel()) << 1);
+    nVal += (size_t(rRef.IsTabRel()) << 2);
 
     return nVal;
 }

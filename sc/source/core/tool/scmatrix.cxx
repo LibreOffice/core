@@ -623,7 +623,7 @@ ScMatrixValue ScMatrixImpl::Get(SCSIZE nC, SCSIZE nR) const
         {
             case mdds::mtm::element_boolean:
                 aVal.nType = SC_MATVAL_BOOLEAN;
-                aVal.fVal = maMat.get_boolean(aPos);
+                aVal.fVal = double(maMat.get_boolean(aPos));
             break;
             case mdds::mtm::element_numeric:
                 aVal.nType = SC_MATVAL_VALUE;
@@ -1355,7 +1355,7 @@ public:
                 {
                     rCell.mbValue = true;
                     rCell.mbEmpty = false;
-                    rCell.mfValue = *it;
+                    rCell.mfValue = double(*it);
                     compare();
                 }
             }
@@ -1454,7 +1454,7 @@ public:
                 block_type::const_iterator it = block_type::begin(*node.data);
                 block_type::const_iterator itEnd = block_type::end(*node.data);
                 for (; it != itEnd; ++it)
-                    compareLeftNumeric(*it);
+                    compareLeftNumeric(double(*it));
             }
             break;
             case mdds::mtm::element_string:

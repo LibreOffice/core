@@ -200,7 +200,7 @@ double CompareFunc( const Compare::Cell& rCell1, const Compare::Cell& rCell2, bo
                     bEqual = rCell2.maStr == rItem.maString;
 
                 // match => fRes=0, else fRes=1
-                fRes = (rEntry.eOp == SC_NOT_EQUAL) ? bEqual : !bEqual;
+                fRes = double((rEntry.eOp == SC_NOT_EQUAL) ? bEqual : !bEqual);
             }
         }
     }
@@ -265,7 +265,7 @@ double CompareFunc( double fCell1, const Compare::Cell& rCell2, CompareOptions* 
                 bool bEqual = rCell2.maStr == rItem.maString;
 
                 // match => fRes=0, else fRes=1
-                fRes = (rEntry.eOp == SC_NOT_EQUAL) ? bEqual : !bEqual;
+                fRes = double((rEntry.eOp == SC_NOT_EQUAL) ? bEqual : !bEqual);
             }
         }
     }
@@ -327,7 +327,7 @@ double CompareFunc( const Compare::Cell& rCell1, double fCell2, CompareOptions* 
                 bool bEqual = rCell1.maStr == rItem.maString;
 
                 // match => fRes=0, else fRes=1
-                fRes = (rEntry.eOp == SC_NOT_EQUAL) ? bEqual : !bEqual;
+                fRes = double((rEntry.eOp == SC_NOT_EQUAL) ? bEqual : !bEqual);
             }
         }
     }

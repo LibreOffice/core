@@ -104,7 +104,7 @@ bool ScDPSaveMember::HasIsVisible() const
 
 void ScDPSaveMember::SetIsVisible(bool bSet)
 {
-    nVisibleMode = bSet;
+    nVisibleMode = sal_uInt16(bSet);
 }
 
 bool ScDPSaveMember::HasShowDetails() const
@@ -114,7 +114,7 @@ bool ScDPSaveMember::HasShowDetails() const
 
 void ScDPSaveMember::SetShowDetails(bool bSet)
 {
-    nShowDetailsMode = bSet;
+    nShowDetailsMode = sal_uInt16(bSet);
 }
 
 void ScDPSaveMember::SetName( const OUString& rNew )
@@ -391,7 +391,7 @@ bool ScDPSaveDimension::HasShowEmpty() const
 
 void ScDPSaveDimension::SetShowEmpty(bool bSet)
 {
-    nShowEmptyMode = bSet;
+    nShowEmptyMode = sal_uInt16(bSet);
 }
 
 void ScDPSaveDimension::SetFunction(sal_uInt16 nNew)
@@ -1095,22 +1095,22 @@ void ScDPSaveData::SetPosition( ScDPSaveDimension* pDim, long nNew )
 
 void ScDPSaveData::SetColumnGrand(bool bSet)
 {
-    nColumnGrandMode = bSet;
+    nColumnGrandMode = sal_uInt16(bSet);
 }
 
 void ScDPSaveData::SetRowGrand(bool bSet)
 {
-    nRowGrandMode = bSet;
+    nRowGrandMode = sal_uInt16(bSet);
 }
 
 void ScDPSaveData::SetIgnoreEmptyRows(bool bSet)
 {
-    nIgnoreEmptyMode = bSet;
+    nIgnoreEmptyMode = sal_uInt16(bSet);
 }
 
 void ScDPSaveData::SetRepeatIfEmpty(bool bSet)
 {
-    nRepeatEmptyMode = bSet;
+    nRepeatEmptyMode = sal_uInt16(bSet);
 }
 
 void ScDPSaveData::SetFilterButton(bool bSet)
