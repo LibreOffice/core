@@ -55,9 +55,9 @@ static OUString FilePicker_getSystemPickerServiceName()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_svt_FilePicker_get_implementation(
-        css::uno::XComponentContext *context, uno_Sequence * arguments)
+        css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    assert(arguments != 0); (void) arguments;
     Reference< css::uno::XInterface > xResult;
     Reference< css::lang::XMultiComponentFactory > xFactory (context->getServiceManager());
     if (xFactory.is() && SvtMiscOptions().UseSystemFileDialog())
@@ -115,9 +115,9 @@ static OUString FolderPicker_getSystemPickerServiceName()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_svt_FolderPicker_get_implementation(
-        css::uno::XComponentContext *context, uno_Sequence * arguments)
+        css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
     Reference< css::uno::XInterface > xResult;
     Reference< css::lang::XMultiComponentFactory > xFactory (context->getServiceManager());
     if (xFactory.is() && SvtMiscOptions().UseSystemFileDialog())

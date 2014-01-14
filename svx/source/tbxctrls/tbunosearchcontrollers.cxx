@@ -1051,9 +1051,9 @@ void SAL_CALL FindbarDispatcher::removeStatusListener( const css::uno::Reference
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_svx_FindTextToolboxController_implementation_getFactory(
-    css::uno::XComponentContext *context, uno_Sequence * arguments)
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    assert(arguments != 0); (void) arguments;
     css::uno::Reference<css::uno::XInterface> x(
         static_cast<cppu::OWeakObject *>(new FindTextToolbarController(context)));
     x->acquire();
@@ -1062,9 +1062,9 @@ com_sun_star_svx_FindTextToolboxController_implementation_getFactory(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_svx_ExitFindbarToolboxController_implementation_getFactory(
-    css::uno::XComponentContext *context, uno_Sequence * arguments)
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    assert(arguments != 0); (void) arguments;
     css::uno::Reference<css::uno::XInterface> x(
         static_cast<cppu::OWeakObject *>(new ExitSearchToolboxController(context)));
     x->acquire();
@@ -1073,9 +1073,9 @@ com_sun_star_svx_ExitFindbarToolboxController_implementation_getFactory(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_svx_UpSearchToolboxController_implementation_getFactory(
-    css::uno::XComponentContext *context, uno_Sequence * arguments)
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    assert(arguments != 0); (void) arguments;
     css::uno::Reference<css::uno::XInterface> x(
         static_cast<cppu::OWeakObject *>(new UpDownSearchToolboxController(
                 context, UpDownSearchToolboxController::UP )));
@@ -1085,9 +1085,9 @@ com_sun_star_svx_UpSearchToolboxController_implementation_getFactory(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_svx_DownSearchToolboxController_implementation_getFactory(
-    css::uno::XComponentContext *context, uno_Sequence * arguments)
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    assert(arguments != 0); (void) arguments;
     css::uno::Reference<css::uno::XInterface> x(
         static_cast<cppu::OWeakObject *>(new UpDownSearchToolboxController(
                 context, UpDownSearchToolboxController::DOWN )));
@@ -1097,9 +1097,9 @@ com_sun_star_svx_DownSearchToolboxController_implementation_getFactory(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_svx_MatchCaseToolboxController_implementation_getFactory(
-    css::uno::XComponentContext *context, uno_Sequence * arguments)
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    assert(arguments != 0); (void) arguments;
     css::uno::Reference<css::uno::XInterface> x(
         static_cast<cppu::OWeakObject *>(new MatchCaseToolboxController(context)));
     x->acquire();
@@ -1108,9 +1108,9 @@ com_sun_star_svx_MatchCaseToolboxController_implementation_getFactory(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_svx_FindAllToolboxController_implementation_getFactory(
-    css::uno::XComponentContext *context, uno_Sequence * arguments)
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    assert(arguments != 0); (void) arguments;
     css::uno::Reference<css::uno::XInterface> x(
         static_cast<cppu::OWeakObject *>(new FindAllToolboxController(context)));
     x->acquire();
@@ -1120,9 +1120,8 @@ com_sun_star_svx_FindAllToolboxController_implementation_getFactory(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_svx_Impl_FindbarDispatcher_implementation_getFactory(
     SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
-    uno_Sequence * arguments)
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    assert(arguments != 0); (void) arguments;
     css::uno::Reference<css::uno::XInterface> x(
         static_cast<cppu::OWeakObject *>(new FindbarDispatcher));
     x->acquire();

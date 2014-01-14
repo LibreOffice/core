@@ -44,7 +44,7 @@ namespace cppuhelper {
 extern "C" {
 
 typedef css::uno::XInterface * SAL_CALL ImplementationConstructorFn(
-    css::uno::XComponentContext *, uno_Sequence *);
+    css::uno::XComponentContext *, css::uno::Sequence<css::uno::Any> const &);
 
 }
 

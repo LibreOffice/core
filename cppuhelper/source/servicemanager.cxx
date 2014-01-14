@@ -588,7 +588,7 @@ ImplementationWrapper::createInstanceWithContext(
     return constructor_ != 0
         ? css::uno::Reference<css::uno::XInterface>(
             (*constructor_)(
-                Context.get(), css::uno::Sequence<css::uno::Any>().get()),
+                Context.get(), css::uno::Sequence<css::uno::Any>()),
             SAL_NO_ACQUIRE)
         : factory1_.is()
         ? factory1_->createInstanceWithContext(Context)
@@ -604,7 +604,7 @@ ImplementationWrapper::createInstanceWithArgumentsAndContext(
     loadImplementation(Context);
     if (constructor_ != 0) {
         css::uno::Reference<css::uno::XInterface> xRet(
-            (*constructor_)(Context.get(), Arguments.get()), SAL_NO_ACQUIRE);
+            (*constructor_)(Context.get(), Arguments), SAL_NO_ACQUIRE);
         css::uno::Reference<css::lang::XInitialization> xInit(
                 xRet, css::uno::UNO_QUERY);
         if (xInit.is())
@@ -909,7 +909,7 @@ cppuhelper::ServiceManager::createInstanceWithContext(
     if (impl->constructor != 0) {
         return css::uno::Reference<css::uno::XInterface>(
             (*impl->constructor)(
-                Context.get(), css::uno::Sequence<css::uno::Any>().get()),
+                Context.get(), css::uno::Sequence<css::uno::Any>()),
             SAL_NO_ACQUIRE);
     } else if (impl->factory1.is()) {
         return impl->factory1->createInstanceWithContext(Context);
@@ -936,7 +936,7 @@ cppuhelper::ServiceManager::createInstanceWithArgumentsAndContext(
     }
     if (impl->constructor != 0) {
         css::uno::Reference<css::uno::XInterface> xRet(
-            (*impl->constructor)(Context.get(), Arguments.get()),
+            (*impl->constructor)(Context.get(), Arguments),
             SAL_NO_ACQUIRE);
         css::uno::Reference<css::lang::XInitialization> xInit(
                 xRet, css::uno::UNO_QUERY);

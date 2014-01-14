@@ -1672,9 +1672,9 @@ Any ORegistryServiceManager::getPropertyValue(const OUString& PropertyName)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_stoc_OServiceManager(
-    css::uno::XComponentContext * context, uno_Sequence * arguments)
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
     css::uno::Reference<css::uno::XInterface> x(
         static_cast<cppu::OWeakObject *>(new OServiceManager(context)));
     x->acquire();
@@ -1683,9 +1683,9 @@ com_sun_star_comp_stoc_OServiceManager(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_stoc_ORegistryServiceManager(
-    css::uno::XComponentContext * context, uno_Sequence * arguments)
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
     css::uno::Reference<css::uno::XInterface> x(
         static_cast<cppu::OWeakObject *>(new ORegistryServiceManager(context)));
     x->acquire();
@@ -1694,9 +1694,9 @@ com_sun_star_comp_stoc_ORegistryServiceManager(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_stoc_OServiceManagerWrapper(
-    css::uno::XComponentContext * context, uno_Sequence * arguments)
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
     css::uno::Reference<css::uno::XInterface> x(
         static_cast<cppu::OWeakObject *>(new OServiceManagerWrapper(context)));
     x->acquire();

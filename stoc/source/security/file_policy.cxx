@@ -543,9 +543,9 @@ Sequence< OUString > FilePolicy::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_security_comp_stoc_FilePolicy(
-    css::uno::XComponentContext * context, uno_Sequence * arguments)
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
     css::uno::Reference<css::uno::XInterface> x(
         static_cast<cppu::OWeakObject *>(new FilePolicy(context)));
     x->acquire();

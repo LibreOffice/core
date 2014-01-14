@@ -1126,9 +1126,8 @@ void SimpleRegistry::mergeKey(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_stoc_SimpleRegistry(
     SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
-    uno_Sequence * arguments)
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
     css::uno::Reference<css::uno::XInterface> x(
         static_cast<cppu::OWeakObject *>(new SimpleRegistry));
     x->acquire();
