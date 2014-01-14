@@ -251,7 +251,6 @@ namespace drawinglayer
                     const double fExt = getWidth(rViewInformation);  // Extend a lot: it'll be clipped after
                     const basegfx::B2DPoint aTmpStart(getStart() - (fExt * aVector));
                     const basegfx::B2DPoint aTmpEnd(getEnd() + (fExt * aVector));
-                    xRetval.realloc(1);
 
                     // Get which is the line to show
                     bool bIsSolidline = isSolidLine();
@@ -273,6 +272,7 @@ namespace drawinglayer
                         aPolygon.append( getStart() );
                         aPolygon.append( getEnd() );
 
+                        xRetval.realloc(1);
                         xRetval[0] = Primitive2DReference(new PolygonHairlinePrimitive2D(
                             aPolygon,
                             aColor));
@@ -308,8 +308,28 @@ namespace drawinglayer
                                 aDashed.setB2DPolygon( i, aClipped.getB2DPolygon( 0 ) );
                         }
 
-                        xRetval[0] = Primitive2DReference(new PolyPolygonColorPrimitive2D(
-                                basegfx::B2DPolyPolygon( aDashed ), aColor));
+                        sal_uInt32 n = aDashed.count();
+                        xRetval.realloc(n);
+                        for (sal_uInt32 i = 0; i < n; ++i)
+                        {
+                            basegfx::B2DPolygon aDash = aDashed.getB2DPolygon(i);
+                            if (bIsHairline)
+                            {
+                                // Convert a rectanglar polygon into a line.
+                                basegfx::B2DPolygon aDash2;
+                                basegfx::B2DRange aRange = aDash.getB2DRange();
+                                basegfx::B2DPoint aPt(aRange.getMinX(), aRange.getMinY());
+                                aDash2.append(basegfx::B2DPoint(aRange.getMinX(), aRange.getMinY()));
+                                aDash2.append(basegfx::B2DPoint(aRange.getMaxX(), aRange.getMinY()));
+                                xRetval[i] = Primitive2DReference(
+                                    new PolygonHairlinePrimitive2D(aDash2, aColor));
+                            }
+                            else
+                            {
+                                xRetval[i] = Primitive2DReference(
+                                    new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aDash), aColor));
+                            }
+                        }
                     }
                 }
             }
