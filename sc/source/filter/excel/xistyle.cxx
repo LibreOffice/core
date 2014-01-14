@@ -900,7 +900,7 @@ bool lclConvertBorderLine( ::editeng::SvxBorderLine& rLine, const XclImpPalette&
         {   0,                  table::BorderLineStyle::SOLID },  // 0 = none
         {   EXC_BORDER_THIN,    table::BorderLineStyle::SOLID },  // 1 = thin
         {   EXC_BORDER_MEDIUM,  table::BorderLineStyle::SOLID },  // 2 = medium
-        {   EXC_BORDER_THIN,    table::BorderLineStyle::DASHED }, // 3 = dashed
+        {   EXC_BORDER_THIN,    table::BorderLineStyle::FINE_DASHED }, // 3 = dashed
         {   EXC_BORDER_THIN,    table::BorderLineStyle::DOTTED }, // 4 = dotted
         {   EXC_BORDER_THICK,   table::BorderLineStyle::SOLID },  // 5 = thick
         {   EXC_BORDER_THIN,    table::BorderLineStyle::DOUBLE }, // 6 = double
