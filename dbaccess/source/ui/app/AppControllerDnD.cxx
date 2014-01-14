@@ -501,7 +501,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
     SharedConnection xConnection( ensureConnection() );
     Reference< XNameAccess > xDocContainer;
 
-    if ( ( _eType == E_FORM ) | ( _eType == E_REPORT ) )
+    if ( ( _eType == E_FORM ) || ( _eType == E_REPORT ) )
     {
         xDocContainer.set( getElements( _eType ) );
         OSL_ENSURE( xDocContainer.is(), "OApplicationController::getDocumentsAccess: invalid container!" );
