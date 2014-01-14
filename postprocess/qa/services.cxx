@@ -46,6 +46,9 @@ void ServicesTest::test()
                 "fantasy service name \"" << s[i] << "\"");
             continue;
         }
+        SAL_WARN(
+                "postprocess.cppunit",
+                "trying \"" << s[i] << "\"");
         Reference< XServiceTypeDescription2 > xDesc(
             xTypeManager->getByHierarchicalName(s[i]), UNO_QUERY_THROW);
         Sequence< Reference< XServiceConstructorDescription > > xseq = xDesc->getConstructors();
