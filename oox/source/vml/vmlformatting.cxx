@@ -332,7 +332,7 @@ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& r
                         rPointLists.push_back( ::std::vector< Point >() );
                         rFlagLists.push_back( ::std::vector< PolygonFlags >() );
                     }
-                    rPointLists.back().push_back( Point( aCoordList[ 0 ], aCoordList[ 1 ] ) );
+                    rPointLists.back().push_back( Point( (aCoordList[ 0 ]), (aCoordList.size() > 1 ? aCoordList[ 1 ] : 0) ) );
                     rFlagLists.back().push_back( PolygonFlags_NORMAL );
                     aCurrentPoint = rPointLists.back().back();
                     break;
@@ -371,7 +371,7 @@ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& r
                     break;
 
                 case LINE_ABS: // 2* params -> param count reset
-                    rPointLists.back().push_back( Point( aCoordList[ 0 ], aCoordList[ 1 ] ) );
+                    rPointLists.back().push_back( Point( aCoordList[ 0 ], (aCoordList.size() > 1 ? aCoordList[ 1 ] : 0) ) );
                     rFlagLists.back().push_back( PolygonFlags_NORMAL );
                     aCurrentPoint = rPointLists.back().back();
                     nParamCount = 2;
