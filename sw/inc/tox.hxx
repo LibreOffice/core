@@ -248,18 +248,6 @@ struct SwFormTokenEqualToFormTokenType
     }
 };
 
-/**
-   Functor that appends the string representation of a given token to a string.
-
-   @param _rText    string to append the string representation to
-   @param rToken    token whose string representation is appended
-*/
-struct SwFormTokenToString
-{
-    OUString & rText;
-    SwFormTokenToString(OUString & _rText) : rText(_rText) {}
-    void operator()(const SwFormToken & rToken) { rText += rToken.GetString(); }
-};
 
 /// Vector of tokens.
 typedef std::vector<SwFormToken> SwFormTokens;
