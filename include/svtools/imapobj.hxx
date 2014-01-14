@@ -64,11 +64,11 @@ class SVT_DLLPUBLIC IMapObject
 protected:
     sal_uInt16              nReadVersion;
 
-    // Binaer-Im-/Export
+    // binary import/export
     virtual void        WriteIMapObject( SvStream& rOStm ) const = 0;
     virtual void        ReadIMapObject(  SvStream& rIStm ) = 0;
 
-    // Hilfsmethoden
+    // helper methods
     void AppendCERNCoords(OStringBuffer& rBuf, const Point& rPoint100) const;
     void AppendCERNURL(OStringBuffer& rBuf, const OUString& rBaseURL) const;
     void AppendNCSACoords(OStringBuffer& rBuf, const Point& rPoint100) const;
