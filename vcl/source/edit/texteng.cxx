@@ -1260,7 +1260,7 @@ sal_uInt16 TextEngine::GetLineCount( sal_uLong nParagraph ) const
     if ( pPPortion )
         return pPPortion->GetLines().size();
 
-    return 0xFFFF;
+    return 0;
 }
 
 sal_uInt16 TextEngine::GetLineLen( sal_uLong nParagraph, sal_uInt16 nLine ) const
@@ -1274,7 +1274,7 @@ sal_uInt16 TextEngine::GetLineLen( sal_uLong nParagraph, sal_uInt16 nLine ) cons
         return pLine->GetLen();
     }
 
-    return 0xFFFF;
+    return 0;
 }
 
 sal_uLong TextEngine::CalcParaHeight( sal_uLong nParagraph ) const
