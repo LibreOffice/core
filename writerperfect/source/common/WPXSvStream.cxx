@@ -259,6 +259,8 @@ WPXSvInputStreamImpl::WPXSvInputStreamImpl( Reference< XInputStream > xStream ) 
     mxStream(xStream),
     mxSeekable(xStream, UNO_QUERY),
     maData(0),
+    mpOLEStorage(0),
+    mbCheckedOLE(false),
     mnLength(0),
     mpReadBuffer(0),
     mnReadBufferLength(0),
