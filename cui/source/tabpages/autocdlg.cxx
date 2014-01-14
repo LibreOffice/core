@@ -1778,7 +1778,7 @@ OfaQuoteTabPage::OfaQuoteTabPage(Window* pParent, const SfxItemSet& rSet)
         sHeader += "\t";
         m_pSwCheckLB->InsertHeaderEntry( sHeader, HEADERBAR_APPEND,
                         HIB_CENTER | HIB_VCENTER | HIB_FIXEDPOS | HIB_FIXED);
-        m_pCheckLB->Hide(true);
+        m_pCheckLB->Hide();
     }
     else
     {

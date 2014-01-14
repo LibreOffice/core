@@ -278,7 +278,7 @@ class SvxHlinkDlgMarkWnd;
 class AbstractSvxHlinkDlgMarkWnd_Impl : public AbstractSvxHlinkDlgMarkWnd
 {
     DECL_ABSTDLG_BASE(AbstractSvxHlinkDlgMarkWnd_Impl,SvxHlinkDlgMarkWnd)
-    virtual void                Hide( sal_uInt16 nFlags = 0 );
+    virtual void                Hide() SAL_OVERRIDE;
     virtual sal_Bool            IsVisible() const ;
     virtual void                Invalidate( sal_uInt16 nFlags = 0 );
     virtual void                SetSizePixel( const Size& rNewSize );

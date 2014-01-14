@@ -163,7 +163,7 @@ PasswordToOpenModifyDialog_Impl::PasswordToOpenModifyDialog_Impl(
 
     m_aMoreFewerOptionsBTN.Enable( bIsPasswordToModify );
     if (!bIsPasswordToModify)
-        m_aMoreFewerOptionsBTN.Hide( sal_True );
+        m_aMoreFewerOptionsBTN.Hide();
 }
 
 

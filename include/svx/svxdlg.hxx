@@ -140,7 +140,7 @@ public:
     // in class Window
     virtual void    SetSizePixel( const Size& rNewSize ) = 0;
     virtual Size    GetSizePixel() const = 0;
-    virtual void    Hide( sal_uInt16 nFlags = 0 ) = 0;
+    virtual void    Hide() = 0;
     virtual sal_Bool    IsVisible() const = 0;
     virtual void    Invalidate( sal_uInt16 nFlags = 0 ) = 0;
 };

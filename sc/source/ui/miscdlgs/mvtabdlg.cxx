@@ -196,7 +196,7 @@ void ScMoveTableDlg::CheckNewTabName()
     }
     else
     {
-        pFtWarn->Hide(sal_True);
+        pFtWarn->Hide();
         pFtWarn->SetControlBackground();
         pFtWarn->SetText(OUString());
         pBtnOk->Enable();
@@ -225,7 +225,7 @@ void ScMoveTableDlg::Init()
     pBtnMove->Check( true );
     pBtnCopy->Check( false );
     pEdTabName->Enable(false);
-    pFtWarn->Hide(sal_True);
+    pFtWarn->Hide();
     InitDocListBox();
     SelHdl( pLbDoc );
 }

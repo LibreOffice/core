@@ -543,9 +543,9 @@ OUString AbstractURLDlg_Impl::GetName() const
     return pDlg->GetName();
 }
 
-void AbstractSvxHlinkDlgMarkWnd_Impl::Hide( sal_uInt16 nFlags )
+void AbstractSvxHlinkDlgMarkWnd_Impl::Hide()
 {
-    ((Window*)pDlg)->Hide( nFlags );
+    ((Window*)pDlg)->Hide();
 }
 
 void AbstractSvxHlinkDlgMarkWnd_Impl::SetSizePixel( const Size& rNewSize )

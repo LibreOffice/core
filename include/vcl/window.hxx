@@ -721,7 +721,7 @@ public:
     Dialog*             GetParentDialog() const;
 
     void                Show( sal_Bool bVisible = sal_True, sal_uInt16 nFlags = 0 );
-    void                Hide( sal_uInt16 nFlags = 0 ) { Show( sal_False, nFlags ); }
+    void                Hide() { Show( sal_False ); }
     sal_Bool                IsVisible() const;
     sal_Bool                IsReallyVisible() const;
     sal_Bool                IsReallyShown() const;
