@@ -1972,7 +1972,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
 
                     if ( ::osl::FileBase::E_None == result )
                     {
-                        OString  aTemp( aBuffer, static_cast< xub_StrLen >( aBytesRead ) );
+                        OString aTemp(aBuffer, static_cast<sal_Size>(aBytesRead));
                         aContent += aTemp;
                     }
                 } while ( ::osl::FileBase::E_None == result && aBytesRead );
