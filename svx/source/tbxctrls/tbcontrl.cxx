@@ -1675,7 +1675,7 @@ void SvxLineWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 // -----------------------------------------------------------------------
 
 //########################################################################
-// Hilfsklassen
+// Helper classes
 
 //========================================================================
 // class SfxStyleControllerItem_Impl ------------------------------------------
@@ -1685,7 +1685,7 @@ SfxStyleControllerItem_Impl::SfxStyleControllerItem_Impl(
     const Reference< XDispatchProvider >& rDispatchProvider,
     sal_uInt16                                nSlotId,      // Family-ID
     const OUString&                  rCommand,     // .uno: command bound to this item
-    SvxStyleToolBoxControl&               rTbxCtl )     // Controller-Instanz, dem dieses Item zugeordnet ist.
+    SvxStyleToolBoxControl&               rTbxCtl )     // controller instance, which the item is assigned to.
     :   SfxStatusListener( rDispatchProvider, nSlotId, rCommand ),
         rControl( rTbxCtl )
 {
