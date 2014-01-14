@@ -56,10 +56,10 @@ struct LangSvcEntries
         aSvcImplNames[0] = rSvcImplName;
     }
 
-    bool    IsAlreadyWarned() const         { return bAlreadyWarned != 0; }
-    void    SetAlreadyWarned( bool bVal )   { bAlreadyWarned = 0 != bVal; }
-    bool    IsDoWarnAgain() const           { return bDoWarnAgain != 0; }
-    void    SetDoWarnAgain( bool bVal )     { bDoWarnAgain = 0 != bVal; }
+    bool    IsAlreadyWarned() const         { return bAlreadyWarned; }
+    void    SetAlreadyWarned( bool bVal )   { bAlreadyWarned = bVal; }
+    bool    IsDoWarnAgain() const           { return bDoWarnAgain; }
+    void    SetDoWarnAgain( bool bVal )     { bDoWarnAgain = bVal; }
 
     inline void Clear()
     {
