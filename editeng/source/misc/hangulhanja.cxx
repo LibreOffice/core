@@ -313,7 +313,7 @@ namespace editeng
     {
         sal_Int16 nConversionType = -1;
         if (m_eConvType == HHC::eConvHangulHanja)
-            nConversionType = HHC::eHangulToHanja == ( m_eCurrentConversionDirection && !bSwitchDirection ) ? TO_HANJA : TO_HANGUL;
+            nConversionType = ( HHC::eHangulToHanja == m_eCurrentConversionDirection && !bSwitchDirection ) ? TO_HANJA : TO_HANGUL;
         else if (m_eConvType == HHC::eConvSimplifiedTraditional)
             nConversionType = LANGUAGE_CHINESE_SIMPLIFIED == m_nTargetLang ? TO_SCHINESE : TO_TCHINESE;
         DBG_ASSERT( nConversionType != -1, "unexpected conversion type" );
