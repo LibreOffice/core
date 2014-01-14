@@ -68,13 +68,9 @@ namespace OpenStormBento
 #define UtErr_OK 0
 #define UtErr_Fail 1
 
-#define UT_TRUE sal_True
-#define UT_FALSE sal_False
-
 #define UtByte sal_uInt8
 #define UtDWord sal_uInt32
 #define UtWord sal_uInt16
-#define UtBool sal_Int32
 
 #define UtDefClassP(Name) class Name; typedef Name * p##Name; \
   typedef const Name * pConst##Name

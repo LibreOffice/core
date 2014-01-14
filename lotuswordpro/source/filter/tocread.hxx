@@ -72,7 +72,7 @@ private: // Methods
     BenError ReadTOC();
     BenError ReadSegments(pCBenValue pValue, BenByte * pLookAhead);
     BenError ReadSegment(pCBenValue pValue, BenByte * pLookAhead);
-    UtBool CanGetData(unsigned long Amt);
+    bool CanGetData(unsigned long Amt);
     BenError GetByte(BenByte * pByte);
     BenError GetDWord(BenDWord * pDWord);
     BenByte GetCode();

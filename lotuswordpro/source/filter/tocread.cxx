@@ -372,8 +372,8 @@ CBenTOCReader::ReadSegment(pCBenValue pValue, BenByte * pLookAhead)
 {
     BenError Err;
 
-    UtBool Immediate = UT_FALSE;
-    UtBool EightByteOffset = UT_FALSE;
+    bool Immediate = false;
+    bool EightByteOffset = false;
     unsigned long Offset(0), Length(0);
 
     switch (*pLookAhead)
@@ -387,29 +387,29 @@ CBenTOCReader::ReadSegment(pCBenValue pValue, BenByte * pLookAhead)
             break;
 
         case BEN_IMMEDIATE0:
-            Length = 0; Immediate = UT_TRUE;
+            Length = 0; Immediate = true;
             break;
 
         case BEN_IMMEDIATE1:
-            Length = 1; Immediate = UT_TRUE;
+            Length = 1; Immediate = true;
             break;
 
         case BEN_IMMEDIATE2:
-            Length = 2; Immediate = UT_TRUE;
+            Length = 2; Immediate = true;
             break;
 
         case BEN_IMMEDIATE3:
-            Length = 3; Immediate = UT_TRUE;
+            Length = 3; Immediate = true;
             break;
 
         case BEN_CONT_IMMEDIATE4:
         case BEN_IMMEDIATE4:
-            Length = 4; Immediate = UT_TRUE;
+            Length = 4; Immediate = true;
             break;
 
         case BEN_CONT_OFFSET8_LEN4:
         case BEN_OFFSET8_LEN4:
-            EightByteOffset = UT_TRUE;
+            EightByteOffset = true;
             break;
 
         default:
@@ -440,7 +440,7 @@ CBenTOCReader::ReadSegment(pCBenValue pValue, BenByte * pLookAhead)
     return BenErr_OK;
 }
 
-UtBool
+bool
 CBenTOCReader::CanGetData(unsigned long Amt)
 {
     return cCurr + Amt <= cTOCSize;

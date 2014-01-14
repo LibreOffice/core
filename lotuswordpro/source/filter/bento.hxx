@@ -252,7 +252,7 @@ class CBenObject : public CBenIDListElmt
 public:
     pCBenProperty UseProperty(BenObjectID PropertyID);
     pCBenValue UseValue(BenObjectID PropertyID);
-    virtual UtBool IsNamedObject();
+    virtual bool IsNamedObject();
     pLtcBenContainer GetContainer() { return cpContainer; }
     BenObjectID GetObjectID() { return GetID(); }
 public: // Internal methods
@@ -354,24 +354,24 @@ class CBenValueSegment : public CUtListElmt
 public: // Internal methods
     CBenValueSegment(pCBenValue pValue, BenContainerPos Pos,
       unsigned long Size) : CUtListElmt(pValue->GetValueSegments())
-      { cpValue = pValue; cImmediate = UT_FALSE; cPos = Pos;
+      { cpValue = pValue; cImmediate = false; cPos = Pos;
       cSize = Size; }
     CBenValueSegment(pCBenValue pValue, BenConstDataPtr pImmData,
       unsigned short Size) : CUtListElmt(pValue->GetValueSegments())
-      { cpValue = pValue; cImmediate = UT_TRUE;
+      { cpValue = pValue; cImmediate = true;
       UtHugeMemcpy(cImmData, pImmData, Size); cSize = Size; }
     CBenValueSegment(BenContainerPos Pos, unsigned long Size)
-      { cpValue = NULL; cImmediate = UT_FALSE; cPos = Pos;
+      { cpValue = NULL; cImmediate = false; cPos = Pos;
       cSize = Size; }
     CBenValueSegment(BenConstDataPtr pImmData, unsigned short Size)
-      { cpValue = NULL; cImmediate = UT_TRUE;
+      { cpValue = NULL; cImmediate = true;
       UtHugeMemcpy(cImmData, pImmData, Size); cSize = Size; }
-    UtBool IsLast()
+    bool IsLast()
     {
         return cpValue == NULL || cpValue->GetValueSegments()->GetLast() ==
           this;
     }
-    UtBool IsImmediate() { return cImmediate; }
+    bool IsImmediate() { return cImmediate; }
     BenContainerPos GetPosition() { return cPos; }
     unsigned long GetSize() { return cSize; }
     void SetSize(unsigned long Size) { cSize = Size; }
@@ -379,7 +379,7 @@ public: // Internal methods
 
 private: // Data
     pCBenValue cpValue;
-    UtBool cImmediate;
+    bool cImmediate;
     union
     {
         BenContainerPos cPos;
@@ -398,9 +398,9 @@ inline pLtcBenContainer CBenValue::GetContainer()
 class CBenNamedObject : public CBenObject
 {
 public: // Methods
-    virtual UtBool IsNamedObject();
-    virtual UtBool IsPropertyName();
-    virtual UtBool IsTypeName();
+    virtual bool IsNamedObject();
+    virtual bool IsPropertyName();
+    virtual bool IsTypeName();
 
 public: // Internal methods
     CBenNamedObject(pLtcBenContainer pContainer, BenObjectID ObjectID,
@@ -431,7 +431,7 @@ public: // Internal methods
     pCBenNamedObjectListElmt pPrevNamedObjectListElmt) :
     CBenNamedObject(pContainer, ObjectID, pPrevObject, sName,
     pPrevNamedObjectListElmt) { ; }
-    virtual UtBool IsPropertyName();
+    virtual bool IsPropertyName();
 };
 
 class CBenTypeName : public CBenNamedObject
@@ -442,7 +442,7 @@ public: // Internal methods
     pCBenNamedObjectListElmt pPrevNamedObjectListElmt) :
     CBenNamedObject(pContainer, ObjectID, pPrevObject, sName,
     pPrevNamedObjectListElmt) { ; }
-    virtual UtBool IsTypeName();
+    virtual bool IsTypeName();
 };
 
 

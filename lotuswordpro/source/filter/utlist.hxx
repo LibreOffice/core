@@ -82,7 +82,7 @@ public: // Methods
         cpNext->cpPrev = cpPrev;
         cpNext = NULL;
     }
-    UtBool OnList() { return cpNext != NULL; }
+    bool OnList() { return cpNext != NULL; }
     void MakeNotOnList() { cpNext = NULL; } // Same as Remove but doesn't
                                             // patch up list
     pCUtListElmt GetNext() const { return cpNext; }
@@ -129,8 +129,8 @@ public: // Methods
     pCUtListElmt GetLast() { return cDummyElmt.GetPrev(); }
     pCUtListElmt GetTerminating() { return &cDummyElmt; }
     pCUtListElmt GetNextOrNULL(pCUtListElmt pCurr);
-    UtBool IsEmpty() { return GetFirst() == GetTerminating(); };
-    UtBool ContainsAtLeastTwoItems() { return GetFirst() != GetLast(); };
+    bool IsEmpty() { return GetFirst() == GetTerminating(); };
+    bool ContainsAtLeastTwoItems() { return GetFirst() != GetLast(); };
 
     void Destroy(void);
 

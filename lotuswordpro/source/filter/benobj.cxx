@@ -57,10 +57,10 @@
 namespace OpenStormBento
 {
 
-UtBool
+bool
 CBenObject::IsNamedObject()
 {
-    return UT_FALSE;
+    return false;
 }
 
 pCBenProperty

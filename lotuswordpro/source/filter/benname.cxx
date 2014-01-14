@@ -66,20 +66,20 @@ CBenNamedObject::CBenNamedObject(pLtcBenContainer pContainer,
     cNameListElmt.SetNamedObject(this);
 }
 
-UtBool CBenNamedObject::IsNamedObject()
-{ return UT_TRUE; }
+bool CBenNamedObject::IsNamedObject()
+{ return true; }
 
-UtBool CBenNamedObject::IsPropertyName()
-{ return UT_FALSE; }
+bool CBenNamedObject::IsPropertyName()
+{ return false; }
 
-UtBool CBenNamedObject::IsTypeName()
-{ return UT_FALSE; }
+bool CBenNamedObject::IsTypeName()
+{ return false; }
 
-UtBool CBenPropertyName::IsPropertyName()
-{ return UT_TRUE; }
+bool CBenPropertyName::IsPropertyName()
+{ return true; }
 
-UtBool CBenTypeName::IsTypeName()
-{ return UT_TRUE; }
+bool CBenTypeName::IsTypeName()
+{ return true; }
 } // end namespace OpenStormBento
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
