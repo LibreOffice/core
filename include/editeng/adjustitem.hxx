@@ -46,7 +46,7 @@ class EDITENG_DLLPUBLIC SvxAdjustItem : public SfxEnumItemInterface
     sal_Bool    bLastCenter : 1;
     sal_Bool    bLastBlock : 1;
 
-    friend SvStream& operator<<( SvStream&, SvxAdjustItem& ); //$ ostream
+    friend SvStream& WriteSvxAdjustItem( SvStream&, SvxAdjustItem& ); //$ ostream
 public:
     TYPEINFO();
 

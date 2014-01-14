@@ -53,7 +53,7 @@ struct ImplLineInfo
     bool operator==( const ImplLineInfo& ) const;
 
     friend SvStream&    operator>>( SvStream& rIStm, ImplLineInfo& rImplLineInfo );
-    friend SvStream&    operator<<( SvStream& rOStm, const ImplLineInfo& rImplLineInfo );
+    friend SvStream&    WriteImplLineInfo( SvStream& rOStm, const ImplLineInfo& rImplLineInfo );
 };
 
 // ------------
@@ -109,7 +109,7 @@ public:
     sal_Bool            IsDefault() const;
 
     friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, LineInfo& rLineInfo );
-    friend VCL_DLLPUBLIC SvStream& operator<<( SvStream& rOStm, const LineInfo& rLineInfo );
+    friend VCL_DLLPUBLIC SvStream& WriteLineInfo( SvStream& rOStm, const LineInfo& rLineInfo );
 
     // helper to get decomposed polygon data with the LineInfo applied. The source
     // hairline polygon is given in io_rLinePolyPolygon. Both given polygons may

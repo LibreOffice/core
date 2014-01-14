@@ -283,16 +283,16 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
     if(pBulletFont)
     {
         rStream.WriteUInt16( (sal_uInt16)1 );
-        rStream << *pBulletFont;
+        WriteFont( rStream, *pBulletFont );
     }
     else
         rStream.WriteUInt16( (sal_uInt16)0 );
-    rStream << aGraphicSize;
+    WritePair( rStream, aGraphicSize );
 
     Color nTempColor = nBulletColor;
     if(COL_AUTO == nBulletColor.GetColor())
         nTempColor = COL_BLACK;
-    rStream << nTempColor;
+    WriteColor( rStream, nTempColor );
     rStream.WriteUInt16( nBulletRelSize );
     rStream.WriteUInt16( (sal_uInt16)IsShowSymbol() );
 

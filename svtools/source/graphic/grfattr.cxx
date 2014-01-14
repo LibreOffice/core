@@ -100,7 +100,7 @@ SvStream& operator>>( SvStream& rIStm, GraphicAttr& rAttr )
 
 // ------------------------------------------------------------------------
 
-SvStream& operator<<( SvStream& rOStm, const GraphicAttr& rAttr )
+SvStream& WriteGraphicAttr( SvStream& rOStm, const GraphicAttr& rAttr )
 {
     VersionCompat       aCompat( rOStm, STREAM_WRITE, 2 );
     const sal_uInt32    nTmp32 = 0;

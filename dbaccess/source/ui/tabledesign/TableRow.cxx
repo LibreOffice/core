@@ -106,7 +106,7 @@ void OTableRow::SetFieldType( const TOTypeInfoSP& _pType, sal_Bool _bForce )
 
 namespace dbaui
 {
-    SvStream& operator<<( SvStream& _rStr, const OTableRow& _rRow )
+    SvStream& WriteOTableRow( SvStream& _rStr, const OTableRow& _rRow )
     {
         _rStr.WriteInt32( _rRow.m_nPos );
         OFieldDescription* pFieldDesc = _rRow.GetActFieldDescr();

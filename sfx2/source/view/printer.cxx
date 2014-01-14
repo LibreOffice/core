@@ -93,7 +93,7 @@ SvStream& SfxPrinter::Store( SvStream& rStream ) const
 */
 
 {
-    return ( rStream << GetJobSetup() );
+    return WriteJobSetup( rStream, GetJobSetup() );
 }
 
 //--------------------------------------------------------------------

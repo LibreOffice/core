@@ -188,7 +188,7 @@ void SgaObject::WriteData( SvStream& rOut, const OUString& rDestDir ) const
         rOut.SetCompressMode( nOldCompressMode );
     }
     else
-        rOut << aThumbMtf;
+        WriteGDIMetaFile( rOut, aThumbMtf );
 
     OUString aURLWithoutDestDir = aURL.GetMainURL( INetURLObject::NO_DECODE );
     aURLWithoutDestDir = aURLWithoutDestDir.replaceFirst(rDestDir, "");
@@ -252,7 +252,7 @@ void SgaObject::SetTitle( const OUString& rTitle )
     aTitle = rTitle;
 }
 
-SvStream& operator<<( SvStream& rOut, const SgaObject& rObj )
+SvStream& WriteSgaObject( SvStream& rOut, const SgaObject& rObj )
 {
     rObj.WriteData( rOut, "" );
     return rOut;

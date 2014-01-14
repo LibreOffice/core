@@ -90,7 +90,7 @@ public:
     void operator&=(const SetOfByte& r2ndSet);
     void operator|=(const SetOfByte& r2ndSet);
 
-    friend inline SvStream& operator<<(SvStream& rOut, const SetOfByte& rSet);
+    friend inline SvStream& WriteSetOfByte(SvStream& rOut, const SetOfByte& rSet);
     friend inline SvStream& operator>>(SvStream& rIn, SetOfByte& rSet);
 
     // initialize this set with a uno sequence of sal_Int8
@@ -100,7 +100,7 @@ public:
     void QueryValue(com::sun::star::uno::Any & rAny) const;
 };
 
-inline SvStream& operator<<(SvStream& rOut, const SetOfByte& rSet)
+inline SvStream& WriteSetOfByte(SvStream& rOut, const SetOfByte& rSet)
 {
     rOut.Write((char*)rSet.aData,32);
     return rOut;

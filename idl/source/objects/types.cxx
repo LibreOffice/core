@@ -87,8 +87,8 @@ void SvMetaAttribute::Save( SvPersistStream & rStm )
 
     // write data
     rStm << nMask;
-    if( nMask & 0x1 )   rStm << aType;
-    if( nMask & 0x2 )   rStm << aSlotId;
+    if( nMask & 0x1 )   WriteSvPersistBase( rStm, aType );
+    if( nMask & 0x2 )   WriteSvNumberIdentifier( rStm, aSlotId );
     if( nMask & 0x4 )   rStm << aExport;
     if( nMask & 0x8 )   rStm << aReadonly;
     if( nMask & 0x10 )  rStm << aAutomation;
@@ -843,15 +843,15 @@ void SvMetaType::Save( SvPersistStream & rStm )
     if( nMask & 0x0004 ) rStm << aCall0;
     if( nMask & 0x0008 ) rStm << aCall1;
     if( nMask & 0x0010 ) rStm << aSbxDataType;
-    if( nMask & 0x0020 ) rStm << aSvName;
-    if( nMask & 0x0040 ) rStm << aSbxName;
-    if( nMask & 0x0080 ) rStm << aOdlName;
-    if( nMask & 0x0100 ) rStm << *pAttrList;
+    if( nMask & 0x0020 ) WriteSvIdentifier( rStm, aSvName );
+    if( nMask & 0x0040 ) WriteSvIdentifier( rStm, aSbxName );
+    if( nMask & 0x0080 ) WriteSvIdentifier( rStm, aOdlName );
+    if( nMask & 0x0100 ) WriteSvDeclPersistList( rStm, *pAttrList );
     if( nMask & 0x0800 ) rStm << (sal_uInt16)nType;
     if( nMask & 0x1000 ) rStm << cParserChar;
-    if( nMask & 0x2000 ) rStm << aCName;
-    if( nMask & 0x4000 ) rStm << aBasicName;
-    if( nMask & 0x8000 ) rStm << aBasicPostfix;
+    if( nMask & 0x2000 ) WriteSvIdentifier( rStm, aCName );
+    if( nMask & 0x4000 ) WriteSvIdentifier( rStm, aBasicName );
+    if( nMask & 0x8000 ) WriteSvIdentifier( rStm, aBasicPostfix );
 }
 
 SvMetaAttributeMemberList & SvMetaType::GetAttrList() const
@@ -1841,7 +1841,7 @@ void SvMetaTypeEnum::Save( SvPersistStream & rStm )
 
     // write data
     rStm << nMask;
-    if( nMask & 0x01 ) rStm << aEnumValueList;
+    if( nMask & 0x01 ) WriteSvDeclPersistList( rStm, aEnumValueList );
     if( nMask & 0x02 ) write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStm, aPrefix);
 }
 

@@ -352,7 +352,7 @@ void GraphicObject::Load( SvStream& rIStm )
 
 void GraphicObject::Save( SvStream& rOStm )
 {
-    rOStm << *this;
+    WriteGraphicObject( rOStm, *this );
 }
 
 void GraphicObject::Assign( const SvDataCopyStream& rCopyStream )
@@ -1129,12 +1129,13 @@ SvStream& operator>>( SvStream& rIStm, GraphicObject& rGraphicObj )
     return rIStm;
 }
 
-SvStream& operator<<( SvStream& rOStm, const GraphicObject& rGraphicObj )
+SvStream& WriteGraphicObject( SvStream& rOStm, const GraphicObject& rGraphicObj )
 {
     VersionCompat   aCompat( rOStm, STREAM_WRITE, 1 );
     const sal_Bool      bLink =  rGraphicObj.HasLink();
 
-    rOStm << rGraphicObj.GetGraphic() << rGraphicObj.GetAttr();
+    WriteGraphic( rOStm, rGraphicObj.GetGraphic() );
+    WriteGraphicAttr( rOStm, rGraphicObj.GetAttr() );
     rOStm.WriteUChar( bLink );
 
     if( bLink )

@@ -232,7 +232,7 @@ namespace
     {
         // write SvtGraphicFill
         SvMemoryStream aMemStm;
-        aMemStm << rStroke;
+        WriteSvtGraphicStroke( aMemStm, rStroke );
         rTarget.AddAction(
             new MetaCommentAction(
                 "XPATHSTROKE_SEQ_BEGIN",
@@ -245,7 +245,7 @@ namespace
     {
         // write SvtGraphicFill
         SvMemoryStream aMemStm;
-        aMemStm << rFilling;
+        WriteSvtGraphicFill( aMemStm, rFilling );
         rTarget.AddAction(
             new MetaCommentAction(
                 "XPATHFILL_SEQ_BEGIN",

@@ -34,7 +34,7 @@ class SvXMLUnitConverter;
 #define LINE_SPACE_DEFAULT_HEIGHT 200
 class EDITENG_DLLPUBLIC SvxLineSpacingItem : public SfxEnumItemInterface
 {
-    friend SvStream& operator<<( SvStream&, SvxLineSpacingItem& ); //$ ostream
+    friend SvStream& WriteSvxLineSpacingItem( SvStream&, SvxLineSpacingItem& ); //$ ostream
 
     short nInterLineSpace;
     sal_uInt16 nLineHeight;

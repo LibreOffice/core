@@ -1560,7 +1560,7 @@ bool WriteDIBBitmapEx(
         }
         else if(TRANSPARENT_COLOR == rSource.eTransparent)
         {
-            rOStm << rSource.aTransparentColor;
+            WriteColor( rOStm, rSource.aTransparentColor );
             return true;
         }
     }

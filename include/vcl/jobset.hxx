@@ -66,7 +66,7 @@ public:
                             { return !(JobSetup::operator==( rJobSetup )); }
 
     friend VCL_DLLPUBLIC SvStream&  operator>>( SvStream& rIStream, JobSetup& rJobSetup );
-    friend VCL_DLLPUBLIC SvStream&  operator<<( SvStream& rOStream, const JobSetup& rJobSetup );
+    friend VCL_DLLPUBLIC SvStream&  WriteJobSetup( SvStream& rOStream, const JobSetup& rJobSetup );
 };
 
 #endif // INCLUDED_VCL_JOBSET_HXX
