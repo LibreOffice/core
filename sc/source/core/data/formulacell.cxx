@@ -115,8 +115,7 @@ lcl_checkRangeDimensions(
     const bool bSameTabs(lcl_checkRangeDimension(rPos, rRef1, rRef2, lcl_GetTab));
 
     // Test if exactly two dimensions are equal
-    if (!(bSameCols ^ bSameRows ^ bSameTabs)
-            && (bSameCols || bSameRows || bSameTabs))
+    if (int(bSameCols) + int(bSameRows) + int(bSameTabs) == 2)
     {
         bCol = !bSameCols;
         bRow = !bSameRows;
@@ -2676,7 +2675,8 @@ bool ScFormulaCell::UpdateReferenceOnMove(
 
     bValChanged = false;
 
-    if ( ( bCompile = (bCompile || bValChanged || bRefModified || bColRowNameCompile) ) != 0 )
+    bCompile = (bCompile || bValChanged || bRefModified || bColRowNameCompile);
+    if ( bCompile )
     {
         CompileTokenArray( bNewListening ); // no Listening
         bNeedDirty = true;

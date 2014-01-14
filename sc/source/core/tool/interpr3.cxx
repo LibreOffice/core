@@ -2055,7 +2055,7 @@ void ScInterpreter::ScGammaDist( int nMinParamCount )
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, nMinParamCount, 4 ) )
         return;
-    double bCumulative;
+    bool bCumulative;
     if (nParamCount == 4)
         bCumulative = GetBool();
     else

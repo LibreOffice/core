@@ -66,9 +66,9 @@ public:
                     { nCol = r.nCol; nRow = r.nRow; nTab = r.nTab; return *this; }
     ScBigAddress&   operator=( const ScAddress& r )
                     { nCol = r.Col(); nRow = r.Row(); nTab = r.Tab(); return *this; }
-    int             operator==( const ScBigAddress& r ) const
+    bool            operator==( const ScBigAddress& r ) const
                     { return nCol == r.nCol && nRow == r.nRow && nTab == r.nTab; }
-    int             operator!=( const ScBigAddress& r ) const
+    bool            operator!=( const ScBigAddress& r ) const
                     { return !operator==( r ); }
 
     friend inline SvStream& operator<< ( SvStream& rStream, const ScBigAddress& rAdr );
@@ -191,9 +191,9 @@ public:
 
     ScBigRange&     operator=( const ScBigRange& r )
                         { aStart = r.aStart; aEnd = r.aEnd; return *this; }
-    int             operator==( const ScBigRange& r ) const
+    bool            operator==( const ScBigRange& r ) const
                         { return (aStart == r.aStart) && (aEnd == r.aEnd); }
-    int             operator!=( const ScBigRange& r ) const
+    bool            operator!=( const ScBigRange& r ) const
                         { return !operator==( r ); }
 
     friend inline SvStream& operator<< ( SvStream& rStream, const ScBigRange& rRange );

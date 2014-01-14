@@ -159,9 +159,9 @@ const ScViewOptions& ScViewOptions::operator=( const ScViewOptions& rCpy )
     return *this;
 }
 
-int ScViewOptions::operator==( const ScViewOptions& rOpt ) const
+bool ScViewOptions::operator==( const ScViewOptions& rOpt ) const
 {
-    sal_Bool    bEqual = sal_True;
+    bool bEqual = true;
     sal_uInt16  i;
 
     for ( i=0; i<MAX_OPT && bEqual; i++ )  bEqual = (aOptArr [i] == rOpt.aOptArr[i]);

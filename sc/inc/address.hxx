@@ -627,8 +627,8 @@ public:
     inline ScRangePair& operator= ( const ScRangePair& r );
     const ScRange&      GetRange( sal_uInt16 n ) const { return aRange[n]; }
     ScRange&            GetRange( sal_uInt16 n ) { return aRange[n]; }
-    inline int operator==( const ScRangePair& ) const;
-    inline int operator!=( const ScRangePair& ) const;
+    inline bool operator==( const ScRangePair& ) const;
+    inline bool operator!=( const ScRangePair& ) const;
 };
 
 inline ScRangePair& ScRangePair::operator= ( const ScRangePair& r )
@@ -638,12 +638,12 @@ inline ScRangePair& ScRangePair::operator= ( const ScRangePair& r )
     return *this;
 }
 
-inline int ScRangePair::operator==( const ScRangePair& r ) const
+inline bool ScRangePair::operator==( const ScRangePair& r ) const
 {
     return ( (aRange[0] == r.aRange[0]) && (aRange[1] == r.aRange[1]) );
 }
 
-inline int ScRangePair::operator!=( const ScRangePair& r ) const
+inline bool ScRangePair::operator!=( const ScRangePair& r ) const
 {
     return !operator==( r );
 }
@@ -693,8 +693,8 @@ public:
     inline  SCROW   Row() const { return aAdr.Row(); }
     inline  SCTAB   Tab() const { return aAdr.Tab(); }
 
-    inline  int     operator == ( const ScRefAddress& r ) const;
-    inline  int     operator != ( const ScRefAddress& r ) const
+    inline  bool    operator == ( const ScRefAddress& r ) const;
+    inline  bool    operator != ( const ScRefAddress& r ) const
                     { return !(operator==(r)); }
 
             OUString  GetRefString( ScDocument* pDoc, SCTAB nActTab,
@@ -728,7 +728,7 @@ inline void ScRefAddress::Set( SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
     bRelTab = bNewRelTab;
 }
 
-inline int ScRefAddress::operator==( const ScRefAddress& r ) const
+inline bool ScRefAddress::operator==( const ScRefAddress& r ) const
 {
     return aAdr == r.aAdr && bRelCol == r.bRelCol && bRelRow == r.bRelRow &&
         bRelTab == r.bRelTab;

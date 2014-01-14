@@ -41,7 +41,7 @@ public:
     void Save( SvStream& rStream, rtl_TextEncoding eByteStrSet ) const;   // saving of the numberformats
     void PutFormatIndex(sal_uLong nFormat, SvNumberFormatter& rFormatter);
     sal_uLong GetFormatIndex( SvNumberFormatter& rFormatter);
-    inline int operator==(const ScNumFormatAbbrev& rNumFormat) const
+    inline bool operator==(const ScNumFormatAbbrev& rNumFormat) const
     {
         return ((sFormatstring == rNumFormat.sFormatstring)
             && (eLnge == rNumFormat.eLnge)

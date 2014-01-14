@@ -276,8 +276,8 @@ public:
         ~ScInputHdlState();
 
     ScInputHdlState&    operator= ( const ScInputHdlState& r );
-    int                 operator==( const ScInputHdlState& r ) const;
-    int                 operator!=( const ScInputHdlState& r ) const
+    bool                operator==( const ScInputHdlState& r ) const;
+    bool                operator!=( const ScInputHdlState& r ) const
                             { return !operator==( r ); }
 
     const ScAddress&        GetPos() const          { return aCursorPos; }

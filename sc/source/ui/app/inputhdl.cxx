@@ -3948,7 +3948,7 @@ ScInputHdlState::~ScInputHdlState()
 
 //------------------------------------------------------------------------
 
-int ScInputHdlState::operator==( const ScInputHdlState& r ) const
+bool ScInputHdlState::operator==( const ScInputHdlState& r ) const
 {
     return (    (aStartPos  == r.aStartPos)
              && (aEndPos    == r.aEndPos)

@@ -592,7 +592,7 @@ static bool lcl_IsEqual( const ScTokenArray* pArr1, const ScTokenArray* pArr2 )
         return !pArr1 && !pArr2;        // beide 0 -> gleich
 }
 
-int ScConditionEntry::operator== ( const ScConditionEntry& r ) const
+bool ScConditionEntry::operator== ( const ScConditionEntry& r ) const
 {
     bool bEq = (eOp == r.eOp && nOptions == r.nOptions &&
                 lcl_IsEqual( pFormula1, r.pFormula1 ) &&
@@ -1085,12 +1085,12 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
             {
                 OUString aStr = OUString::number(nVal1);
                 OUString aStr2 = OUString::number(nArg);
-                bValid = aStr2.endsWith(aStr) == 0;
+                bValid = !aStr2.endsWith(aStr);
             }
             else
             {
                 OUString aStr2 = OUString::number(nArg);
-                bValid = aStr2.endsWith(aStrVal1) == 0;
+                bValid = !aStr2.endsWith(aStrVal1);
             }
             break;
         case SC_COND_CONTAINS_TEXT:
@@ -1576,7 +1576,7 @@ ScCondFormatEntry::ScCondFormatEntry( ScDocument* pDocument, const ScCondFormatE
 {
 }
 
-int ScCondFormatEntry::operator== ( const ScCondFormatEntry& r ) const
+bool ScCondFormatEntry::operator== ( const ScCondFormatEntry& r ) const
 {
     return ScConditionEntry::operator==( r ) &&
             aStyleName == r.aStyleName;

@@ -50,7 +50,7 @@ public:
     // for UpdateRef:
     void                SetPos(const ScAddress& rNew)   { aPos=rNew; }
 
-    int operator==      ( const ScDetOpData& r ) const
+    bool operator==     ( const ScDetOpData& r ) const
                             { return eOperation == r.eOperation && aPos == r.aPos; }
 };
 

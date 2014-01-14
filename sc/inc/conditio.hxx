@@ -202,7 +202,7 @@ public:
             ScConditionEntry( ScDocument* pDocument, const ScConditionEntry& r );
     virtual ~ScConditionEntry();
 
-    int             operator== ( const ScConditionEntry& r ) const;
+    bool            operator== ( const ScConditionEntry& r ) const;
 
     virtual void SetParent( ScConditionalFormat* pNew )  { pCondFormat = pNew; }
 
@@ -308,7 +308,7 @@ public:
             ScCondFormatEntry( ScDocument* pDocument, const ScCondFormatEntry& r );
     virtual ~ScCondFormatEntry();
 
-    int             operator== ( const ScCondFormatEntry& r ) const;
+    bool            operator== ( const ScCondFormatEntry& r ) const;
 
     const OUString&   GetStyle() const        { return aStyleName; }
     void            UpdateStyleName(const OUString& rNew)  { aStyleName=rNew; }
