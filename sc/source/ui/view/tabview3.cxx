@@ -1028,9 +1028,15 @@ void ScTabView::MoveCursorAbs( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
         if (!bShift)
         {
             // Remove all marked data on cursor movement unless the Shift is locked.
-            ScMarkData aData(aViewData.GetMarkData());
-            aData.ResetMark();
-            SetMarkData(aData);
+            ScMarkData& rMark = aViewData.GetMarkData();
+            bool bMarked = rMark.IsMarked() || rMark.IsMultiMarked();
+            if (bMarked)
+            {
+                rMark.ResetMark();
+                DoneBlockMode();
+                InitOwnBlockMode();
+                MarkDataChanged();
+            }
         }
 
         bool bSame = ( nCurX == aViewData.GetCurX() && nCurY == aViewData.GetCurY() );
