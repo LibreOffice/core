@@ -160,6 +160,24 @@
     },
     {
       "key": {
+        "uuid": "fa98f980_f5eed2b3",
+        "filename": "oox/source/export/vmlexport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1000531
+      },
+      "writtenOn": "2014-01-14T12:49:41Z",
+      "side": 1,
+      "message": "Yes, I did same thing as you mention. I called parent method also. But still still goes into infinite loop",
+      "parentUuid": "fa98f980_b5f44a88",
+      "revId": "0824e551604dd8b6a365b957be1727bc66a9c2ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa98f980_5526be69",
         "filename": "sw/source/filter/ww8/rtfsdrexport.cxx",
         "patchSetId": 4
