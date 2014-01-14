@@ -164,8 +164,13 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
                               {
                                   SlidePersistPtr pMasterPersist( mpSlidePersistPtr->getMasterPersist() );
                                   if ( pMasterPersist.get() )
-                                    pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder,
-                                pPPTShapePtr->getSubTypeIndex(), pMasterPersist->getShapes()->getChildren() );
+                                {
+                                    if ( mpSlidePersistPtr->isNotesPage() )
+                                        pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder, -1, pMasterPersist->getShapes()->getChildren() );
+                                    else
+                                        pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder,
+                                        pPPTShapePtr->getSubTypeIndex(), pMasterPersist->getShapes()->getChildren() );
+                                }
                               }
                               if ( pPlaceholder.get() )
                               {
