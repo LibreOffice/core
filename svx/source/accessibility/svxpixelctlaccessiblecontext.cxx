@@ -22,6 +22,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
@@ -362,33 +363,21 @@ OUString SvxPixelCtlAccessible::getImplementationName(  ) throw (uno::RuntimeExc
 {
     return OUString("SvxPixelCtlAccessible");
 }
-/*-- 04.02.2002 14:12:05---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-const sal_Char sAccessible[]          = "Accessible";
-const sal_Char sAccessibleContext[]   = "AccessibleContext";
-const sal_Char sAccessibleComponent[] = "AccessibleComponent";
 
 sal_Bool SvxPixelCtlAccessible::supportsService( const OUString& rServiceName )
     throw (uno::RuntimeException)
 {
-    return  rServiceName.equalsAsciiL( sAccessible         , sizeof(sAccessible         )-1 ) ||
-            rServiceName.equalsAsciiL( sAccessibleContext  , sizeof(sAccessibleContext  )-1 ) ||
-            rServiceName.equalsAsciiL( sAccessibleComponent, sizeof(sAccessibleComponent)-1 );// ||
-//            rServiceName.equalsAsciiL( sAccessibleTable, sizeof(sAccessibleTable)-1 );
+    return cppu::supportsService( this, rServiceName );
 }
-/*-- 04.02.2002 14:12:05---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Sequence< OUString > SvxPixelCtlAccessible::getSupportedServiceNames(  )
     throw (uno::RuntimeException)
 {
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessible         ) );
-    pArray[1] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleContext  ) );
-    pArray[2] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleComponent) );
-//    pArray[3] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleTable) );
+    pArray[0] = "Accessible";
+    pArray[1] = "AccessibleContext";
+    pArray[2] = "AccessibleComponent";
     return aRet;
 }
 
@@ -951,7 +940,6 @@ void SAL_CALL SvxPixelCtlAccessibleChild::removeAccessibleEventListener( const u
 
 
 //=====  XServiceInfo  ========================================================
-
 OUString SAL_CALL SvxPixelCtlAccessibleChild::getImplementationName( void ) throw( RuntimeException )
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "SvxPixelCtlAccessibleChild" ) );
@@ -959,19 +947,16 @@ OUString SAL_CALL SvxPixelCtlAccessibleChild::getImplementationName( void ) thro
 
 sal_Bool SAL_CALL SvxPixelCtlAccessibleChild::supportsService( const OUString& rServiceName ) throw( RuntimeException )
 {
-    return  rServiceName.equalsAsciiL( sAccessible         , sizeof(sAccessible         )-1 ) ||
-            rServiceName.equalsAsciiL( sAccessibleContext  , sizeof(sAccessibleContext  )-1 ) ||
-            rServiceName.equalsAsciiL( sAccessibleComponent, sizeof(sAccessibleComponent)-1 );
-
+    return cppu::supportsService( this, rServiceName );
 }
 
 Sequence< OUString > SAL_CALL SvxPixelCtlAccessibleChild::getSupportedServiceNames( void ) throw( RuntimeException )
 {
     uno::Sequence< OUString > aRet(3);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessible         ) );
-    pArray[1] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleContext  ) );
-    pArray[2] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleComponent) );
+    pArray[0] = "Accessible";
+    pArray[1] = "AccessibleContext";
+    pArray[2] = "AccessibleComponent";
     return aRet;
 }
 

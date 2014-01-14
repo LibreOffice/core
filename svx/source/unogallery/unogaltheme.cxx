@@ -32,6 +32,7 @@
 #include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
 
@@ -89,38 +90,23 @@ uno::Sequence< OUString > GalleryTheme::getSupportedServiceNames_Static()
     return aSeq;
 }
 
-// ------------------------------------------------------------------------------
-
 OUString SAL_CALL GalleryTheme::getImplementationName()
     throw( uno::RuntimeException )
 {
     return getImplementationName_Static();
 }
 
-// ------------------------------------------------------------------------------
-
 sal_Bool SAL_CALL GalleryTheme::supportsService( const OUString& ServiceName )
     throw( uno::RuntimeException )
 {
-    uno::Sequence< OUString >    aSNL( getSupportedServiceNames() );
-    const OUString*              pArray = aSNL.getConstArray();
-
-    for( int i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return true;
-
-    return false;
+    return cppu::supportsService( this, ServiceName );
 }
-
-// ------------------------------------------------------------------------------
 
 uno::Sequence< OUString > SAL_CALL GalleryTheme::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
     return getSupportedServiceNames_Static();
 }
-
-// ------------------------------------------------------------------------------
 
 uno::Sequence< uno::Type > SAL_CALL GalleryTheme::getTypes()
     throw(uno::RuntimeException)

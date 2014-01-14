@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/color.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <osl/mutex.hxx>
@@ -25,6 +24,7 @@
 
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "numfmuno.hxx"
 #include <svl/numuno.hxx>
@@ -33,11 +33,6 @@
 #include <svl/itemprop.hxx>
 
 using namespace com::sun::star;
-
-#define SERVICENAME_NUMBERFORMATTER "com.sun.star.util.NumberFormatter"
-#define SERVICENAME_NUMBERSETTINGS  "com.sun.star.util.NumberFormatSettings"
-#define SERVICENAME_NUMBERFORMATS   "com.sun.star.util.NumberFormats"
-#define SERVICENAME_NUMBERFORMAT    "com.sun.star.util.NumberFormatProperties"
 
 #define PROPERTYNAME_FMTSTR     "FormatString"
 #define PROPERTYNAME_LOCALE     "Locale"
@@ -384,7 +379,7 @@ OUString SAL_CALL SvNumberFormatterServiceObj::getImplementationName()
 sal_Bool SAL_CALL SvNumberFormatterServiceObj::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return ServiceName.equalsAscii(SERVICENAME_NUMBERFORMATTER);
+    return cppu::supportsService( this, ServiceName );
 }
 
 uno::Sequence<OUString> SAL_CALL SvNumberFormatterServiceObj::getSupportedServiceNames()
@@ -392,7 +387,7 @@ uno::Sequence<OUString> SAL_CALL SvNumberFormatterServiceObj::getSupportedServic
 {
     uno::Sequence<OUString> aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = SERVICENAME_NUMBERFORMATTER;
+    pArray[0] = "com.sun.star.util.NumberFormatter";
     return aRet;
 }
 
@@ -676,7 +671,7 @@ OUString SAL_CALL SvNumberFormatsObj::getImplementationName()
 sal_Bool SAL_CALL SvNumberFormatsObj::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return ServiceName.equalsAscii(SERVICENAME_NUMBERFORMATS);
+    return cppu::supportsService( this, ServiceName );
 }
 
 uno::Sequence<OUString> SAL_CALL SvNumberFormatsObj::getSupportedServiceNames()
@@ -684,7 +679,7 @@ uno::Sequence<OUString> SAL_CALL SvNumberFormatsObj::getSupportedServiceNames()
 {
     uno::Sequence<OUString> aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString(SERVICENAME_NUMBERFORMATS);
+    pArray[0] = "com.sun.star.util.NumberFormats";
     return aRet;
 }
 
@@ -933,7 +928,7 @@ OUString SAL_CALL SvNumberFormatObj::getImplementationName()
 sal_Bool SAL_CALL SvNumberFormatObj::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return ServiceName.equalsAscii(SERVICENAME_NUMBERFORMAT);
+    return cppu::supportsService( this, ServiceName );
 }
 
 uno::Sequence<OUString> SAL_CALL SvNumberFormatObj::getSupportedServiceNames()
@@ -941,7 +936,7 @@ uno::Sequence<OUString> SAL_CALL SvNumberFormatObj::getSupportedServiceNames()
 {
     uno::Sequence<OUString> aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = SERVICENAME_NUMBERFORMAT;
+    pArray[0] = "com.sun.star.util.NumberFormatProperties";
     return aRet;
 }
 
@@ -1092,7 +1087,7 @@ OUString SAL_CALL SvNumberFormatSettingsObj::getImplementationName()
 sal_Bool SAL_CALL SvNumberFormatSettingsObj::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return ServiceName.equalsAscii(SERVICENAME_NUMBERSETTINGS);
+    return cppu::supportsService( this, ServiceName );
 }
 
 uno::Sequence<OUString> SAL_CALL SvNumberFormatSettingsObj::getSupportedServiceNames()
@@ -1100,7 +1095,7 @@ uno::Sequence<OUString> SAL_CALL SvNumberFormatSettingsObj::getSupportedServiceN
 {
     uno::Sequence<OUString> aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = SERVICENAME_NUMBERSETTINGS;
+    pArray[0] = "com.sun.star.util.NumberFormatSettings";
     return aRet;
 }
 

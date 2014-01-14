@@ -26,6 +26,7 @@
 
 #include <comphelper/string.hxx>
 
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <svl/style.hxx>
 #include <svl/itemset.hxx>
@@ -867,29 +868,16 @@ Sequence< sal_Int8 > SAL_CALL Cell::getImplementationId(  ) throw (RuntimeExcept
     return pId->getImplementationId();
 }
 
-// -----------------------------------------------------------------------------
 // XServiceInfo
-// -----------------------------------------------------------------------------
-
 OUString SAL_CALL Cell::getImplementationName(  ) throw (RuntimeException)
 {
     return OUString( "com.sun.star.comp.svx.table.Cell" );
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Bool SAL_CALL Cell::supportsService( const OUString& ServiceName ) throw (RuntimeException)
 {
-    if( ServiceName == "com.sun.star.table.cell" )
-        return sal_True;
-
-    if( ServiceName == "com.sun.star.drawing.cell" )
-        return sal_True;
-
-    return SvxUnoTextBase::supportsService( ServiceName );
+    return cppu::supportsService( this, ServiceName );
 }
-
-// -----------------------------------------------------------------------------
 
 Sequence< OUString > SAL_CALL Cell::getSupportedServiceNames(  ) throw (RuntimeException)
 {
@@ -901,10 +889,7 @@ Sequence< OUString > SAL_CALL Cell::getSupportedServiceNames(  ) throw (RuntimeE
     return aSeq;
 }
 
-// -----------------------------------------------------------------------------
 // XLayoutConstrains
-// -----------------------------------------------------------------------------
-
 ::com::sun::star::awt::Size SAL_CALL Cell::getMinimumSize(  ) throw (RuntimeException)
 {
     return ::com::sun::star::awt::Size( getMinimumWidth(),  getMinimumHeight() );
