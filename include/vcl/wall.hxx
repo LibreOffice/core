@@ -125,7 +125,7 @@ public:
                         { return (mpImplWallpaper == rWallpaper.mpImplWallpaper); }
 
     friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, Wallpaper& rWallpaper );
-    friend VCL_DLLPUBLIC SvStream& operator<<( SvStream& rOStm, const Wallpaper& rWallpaper );
+    friend VCL_DLLPUBLIC SvStream& WriteWallpaper( SvStream& rOStm, const Wallpaper& rWallpaper );
 };
 
 #endif // INCLUDED_VCL_WALL_HXX

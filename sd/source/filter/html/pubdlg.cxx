@@ -131,7 +131,7 @@ public:
 
     int operator ==(const SdPublishingDesign & rDesign) const;
     friend SvStream& operator >> (SvStream& rIn, SdPublishingDesign& rDesign);
-    friend SvStream& operator << (SvStream& rOut, const SdPublishingDesign& rDesign);
+    friend SvStream& WriteSdPublishingDesign(SvStream& rOut, const SdPublishingDesign& rDesign);
 };
 
 // load Default-settings
@@ -295,7 +295,7 @@ SvStream& operator >> (SvStream& rIn, SdPublishingDesign& rDesign)
 }
 
 // Set the design to the stream
-SvStream& operator << (SvStream& rOut, const SdPublishingDesign& rDesign)
+SvStream& WriteSdPublishingDesign(SvStream& rOut, const SdPublishingDesign& rDesign)
 {
     // The last parameter is the versionnumber of the code
     SdIOCompat aIO(rOut, STREAM_WRITE, 0);
@@ -323,11 +323,11 @@ SvStream& operator << (SvStream& rOut, const SdPublishingDesign& rDesign)
     rOut.WriteUChar( rDesign.m_bCreated );     // not used
     rOut.WriteInt16( rDesign.m_nButtonThema );
     rOut.WriteUChar( rDesign.m_bUserAttr );
-    rOut << rDesign.m_aBackColor;
-    rOut << rDesign.m_aTextColor;
-    rOut << rDesign.m_aLinkColor;
-    rOut << rDesign.m_aVLinkColor;
-    rOut << rDesign.m_aALinkColor;
+    WriteColor( rOut, rDesign.m_aBackColor );
+    WriteColor( rOut, rDesign.m_aTextColor );
+    WriteColor( rOut, rDesign.m_aLinkColor );
+    WriteColor( rOut, rDesign.m_aVLinkColor );
+    WriteColor( rOut, rDesign.m_aALinkColor );
     rOut.WriteUChar( rDesign.m_bUseAttribs );
     rOut.WriteUChar( rDesign.m_bUseColor );
 
@@ -1570,7 +1570,7 @@ sal_Bool SdPublishingDlg::Save()
         for( sal_uInt16 nIndex = 0;
              pStream->GetError() == SVSTREAM_OK && nIndex < nDesigns;
              nIndex++ )
-            *pStream << m_aDesignList[nIndex];
+            WriteSdPublishingDesign( *pStream, m_aDesignList[nIndex] );
     }
 
     aMedium.Close();

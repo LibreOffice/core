@@ -215,7 +215,7 @@ public:
 public:
 
     friend SvStream& operator>>(SvStream& rIn, AnimationNode& rAtom);
-    friend SvStream& operator<<(SvStream& rOut, AnimationNode& rAtom);
+    friend SvStream& WriteAnimationNode(SvStream& rOut, AnimationNode& rAtom);
 };
 
 static const ImplAttributeNameConversion gImplConversionList[] =

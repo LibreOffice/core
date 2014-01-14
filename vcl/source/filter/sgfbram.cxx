@@ -82,7 +82,7 @@ SvStream& operator>>(SvStream& rIStream, SgfVector& rVect)
     return rIStream;
 }
 
-SvStream& operator<<(SvStream& rOStream, BmpFileHeader& rHead)
+SvStream& WriteBmpFileHeader(SvStream& rOStream, BmpFileHeader& rHead)
 {
 #if defined OSL_BIGENDIAN
     rHead.Typ     =OSL_SWAPWORD(rHead.Typ     );
@@ -123,7 +123,7 @@ sal_uInt32 BmpFileHeader::GetOfs()
     return sal_uInt32(OfsLo)+0x00010000*sal_uInt32(OfsHi);
 }
 
-SvStream& operator<<(SvStream& rOStream, BmpInfoHeader& rInfo)
+SvStream& WriteBmpInfoHeader(SvStream& rOStream, BmpInfoHeader& rInfo)
 {
 #if defined OSL_BIGENDIAN
     rInfo.Size    =OSL_SWAPDWORD (rInfo.Size    );
@@ -155,7 +155,7 @@ SvStream& operator<<(SvStream& rOStream, BmpInfoHeader& rInfo)
     return rOStream;
 }
 
-SvStream& operator<<(SvStream& rOStream, const RGBQuad& rQuad)
+SvStream& WriteRGBQuad(SvStream& rOStream, const RGBQuad& rQuad)
 {
     rOStream.Write((char*)&rQuad,sizeof(rQuad));
     return rOStream;
@@ -231,14 +231,15 @@ bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
     aBmpInfo.ColMust=0;
     pBuf=new sal_uInt8[nWdtOut];
     if (!pBuf) return false;       // Fehler: kein Speichel da
-    rOut<<aBmpHead<<aBmpInfo;
+    WriteBmpFileHeader( rOut, aBmpHead );
+    WriteBmpInfoHeader( rOut, aBmpInfo );
     memset(pBuf,0,nWdtOut);        // Buffer mit Nullen fuellen
 
     if (nColors==2)
     {
 
-        rOut<<RGBQuad(0x00,0x00,0x00); // Schwarz
-        rOut<<RGBQuad(0xFF,0xFF,0xFF); // Weiss
+        WriteRGBQuad( rOut, RGBQuad(0x00,0x00,0x00) ); // Schwarz
+        WriteRGBQuad( rOut, RGBQuad(0xFF,0xFF,0xFF) ); // Weiss
         nOfs=rOut.Tell();
         for (j=0;j<rHead.Ysize;j++)
             rOut.Write((char*)pBuf,nWdtOut);  // Datei erstmal komplett mit Nullen fuellen
@@ -253,22 +254,22 @@ bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
     } else if (nColors==16) {
         sal_uInt8 pl2= 0;     // Masken fuer die Planes
 
-        rOut<<RGBQuad(0x00,0x00,0x00); // Schwarz
-        rOut<<RGBQuad(0x24,0x24,0x24); // Grau 80%
-        rOut<<RGBQuad(0x49,0x49,0x49); // Grau 60%
-        rOut<<RGBQuad(0x92,0x92,0x92); // Grau 40%
-        rOut<<RGBQuad(0x6D,0x6D,0x6D); // Grau 30%
-        rOut<<RGBQuad(0xB6,0xB6,0xB6); // Grau 20%
-        rOut<<RGBQuad(0xDA,0xDA,0xDA); // Grau 10%
-        rOut<<RGBQuad(0xFF,0xFF,0xFF); // Weiss
-        rOut<<RGBQuad(0x00,0x00,0x00); // Schwarz
-        rOut<<RGBQuad(0xFF,0x00,0x00); // Rot
-        rOut<<RGBQuad(0x00,0x00,0xFF); // Blau
-        rOut<<RGBQuad(0xFF,0x00,0xFF); // Magenta
-        rOut<<RGBQuad(0x00,0xFF,0x00); // Gruen
-        rOut<<RGBQuad(0xFF,0xFF,0x00); // Gelb
-        rOut<<RGBQuad(0x00,0xFF,0xFF); // Cyan
-        rOut<<RGBQuad(0xFF,0xFF,0xFF); // Weiss
+        WriteRGBQuad( rOut, RGBQuad(0x00,0x00,0x00) ); // Schwarz
+        WriteRGBQuad( rOut, RGBQuad(0x24,0x24,0x24) ); // Grau 80%
+        WriteRGBQuad( rOut, RGBQuad(0x49,0x49,0x49) ); // Grau 60%
+        WriteRGBQuad( rOut, RGBQuad(0x92,0x92,0x92) ); // Grau 40%
+        WriteRGBQuad( rOut, RGBQuad(0x6D,0x6D,0x6D) ); // Grau 30%
+        WriteRGBQuad( rOut, RGBQuad(0xB6,0xB6,0xB6) ); // Grau 20%
+        WriteRGBQuad( rOut, RGBQuad(0xDA,0xDA,0xDA) ); // Grau 10%
+        WriteRGBQuad( rOut, RGBQuad(0xFF,0xFF,0xFF) ); // Weiss
+        WriteRGBQuad( rOut, RGBQuad(0x00,0x00,0x00) ); // Schwarz
+        WriteRGBQuad( rOut, RGBQuad(0xFF,0x00,0x00) ); // Rot
+        WriteRGBQuad( rOut, RGBQuad(0x00,0x00,0xFF) ); // Blau
+        WriteRGBQuad( rOut, RGBQuad(0xFF,0x00,0xFF) ); // Magenta
+        WriteRGBQuad( rOut, RGBQuad(0x00,0xFF,0x00) ); // Gruen
+        WriteRGBQuad( rOut, RGBQuad(0xFF,0xFF,0x00) ); // Gelb
+        WriteRGBQuad( rOut, RGBQuad(0x00,0xFF,0xFF) ); // Cyan
+        WriteRGBQuad( rOut, RGBQuad(0xFF,0xFF,0xFF) ); // Weiss
 
         nOfs=rOut.Tell();
         for (j=0;j<rHead.Ysize;j++)

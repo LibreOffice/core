@@ -51,7 +51,7 @@ SvStream& operator >>( SvStream& r, ClsId& rId )
     return r;
 }
 
-SvStream& operator <<( SvStream& r, const ClsId& rId )
+SvStream& WriteClsId( SvStream& r, const ClsId& rId )
 {
     return
        r .WriteInt32( (sal_Int32) rId.n1 )
@@ -159,7 +159,7 @@ bool StgHeader::Store( StgIo& rIo )
     SvStream& r = *rIo.GetStrm();
     r.Seek( 0L );
     r.Write( cSignature, 8 );
-    r << aClsId;                     // 08 Class ID
+    WriteClsId( r, aClsId );                   // 08 Class ID
     r.WriteInt32( nVersion )                   // 1A version number
      .WriteUInt16( nByteOrder )                 // 1C Unicode byte order indicator
      .WriteInt16( nPageSize )                  // 1E 1 << nPageSize = block size
@@ -427,7 +427,7 @@ void StgEntry::Store( void* pTo )
      .WriteInt32( nLeft )                      // 44 left node entry
      .WriteInt32( nRight )                     // 48 right node entry
      .WriteInt32( nChild );                    // 4C 1st child entry if storage;
-    r << aClsId;                               // 50 class ID (optional)
+    WriteClsId( r, aClsId );                   // 50 class ID (optional)
     r.WriteInt32( nFlags )                     // 60 state flags(?)
      .WriteInt32( nMtime[ 0 ] )                // 64 modification time
      .WriteInt32( nMtime[ 1 ] )                // 64 modification time

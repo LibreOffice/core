@@ -1617,7 +1617,7 @@ SvStream& operator>>(SvStream& rIStrm, Region& rRegion)
     return rIStrm;
 }
 
-SvStream& operator<<( SvStream& rOStrm, const Region& rRegion )
+SvStream& WriteRegion( SvStream& rOStrm, const Region& rRegion )
 {
     const sal_uInt16 nVersion(2);
     VersionCompat aCompat(rOStrm, STREAM_WRITE, nVersion);
@@ -1683,7 +1683,7 @@ SvStream& operator<<( SvStream& rOStrm, const Region& rRegion )
         PolyPolygon aNoCurvePolyPolygon;
         rRegion.GetAsPolyPolygon().AdaptiveSubdivide(aNoCurvePolyPolygon);
 
-        rOStrm << aNoCurvePolyPolygon;
+        WritePolyPolygon( rOStrm, aNoCurvePolyPolygon );
     }
 
     return rOStrm;

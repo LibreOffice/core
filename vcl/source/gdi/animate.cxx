@@ -695,7 +695,7 @@ sal_Bool Animation::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterPara
     return bRet;
 }
 
-SvStream& operator<<( SvStream& rOStm, const Animation& rAnimation )
+SvStream& WriteAnimation( SvStream& rOStm, const Animation& rAnimation )
 {
     const sal_uInt16 nCount = rAnimation.Count();
 
@@ -720,9 +720,9 @@ SvStream& operator<<( SvStream& rOStm, const Animation& rAnimation )
 
             // Write AnimationBitmap
             WriteDIBBitmapEx(rAnimBmp.aBmpEx, rOStm);
-            rOStm << rAnimBmp.aPosPix;
-            rOStm << rAnimBmp.aSizePix;
-            rOStm << rAnimation.maGlobalSize;
+            WritePair( rOStm, rAnimBmp.aPosPix );
+            WritePair( rOStm, rAnimBmp.aSizePix );
+            WritePair( rOStm, rAnimation.maGlobalSize );
             rOStm.WriteUInt16( (sal_uInt16) ( ( ANIMATION_TIMEOUT_ON_CLICK == rAnimBmp.nWait ) ? 65535 : rAnimBmp.nWait ) );
             rOStm.WriteUInt16( (sal_uInt16) rAnimBmp.eDisposal );
             rOStm.WriteUChar( (sal_uInt8) rAnimBmp.bUserInput );

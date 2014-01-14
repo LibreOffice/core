@@ -182,19 +182,19 @@ void SvMetaSlot::Save( SvPersistStream & rStm )
     // write data
     rStm << nMask;
     TEST_WRITE
-    if( nMask & 0x0001 ) rStm << aMethod;
+    if( nMask & 0x0001 ) WriteSvPersistBase( rStm, aMethod );
     TEST_WRITE
-    if( nMask & 0x0002 ) rStm << aGroupId;
+    if( nMask & 0x0002 ) WriteSvIdentifier( rStm, aGroupId );
     TEST_WRITE
     if( nMask & 0x0004 ) rStm << aHasCoreId;
     TEST_WRITE
-    if( nMask & 0x0008 ) rStm << aConfigId;
+    if( nMask & 0x0008 ) WriteSvIdentifier( rStm, aConfigId );
     TEST_WRITE
-    if( nMask & 0x0010 ) rStm << aExecMethod;
+    if( nMask & 0x0010 ) WriteSvIdentifier( rStm, aExecMethod );
     TEST_WRITE
-    if( nMask & 0x0020 ) rStm << aStateMethod;
+    if( nMask & 0x0020 ) WriteSvIdentifier( rStm, aStateMethod );
     TEST_WRITE
-    if( nMask & 0x0040 ) rStm << aDefault;
+    if( nMask & 0x0040 ) WriteSvIdentifier( rStm, aDefault );
     TEST_WRITE
     if( nMask & 0x0080 ) rStm << aPseudoSlots;
     TEST_WRITE
@@ -245,9 +245,9 @@ void SvMetaSlot::Save( SvPersistStream & rStm )
     TEST_WRITE
     if( nMask & 0x0008 ) rStm << aHasDialog;
     TEST_WRITE
-    if( nMask & 0x0010 ) rStm << aDisableFlags;
+    if( nMask & 0x0010 ) WriteSvString( rStm, aDisableFlags );
     TEST_WRITE
-    if( nMask & 0x0020 ) rStm << aPseudoPrefix;
+    if( nMask & 0x0020 ) WriteSvIdentifier( rStm, aPseudoPrefix );
     TEST_WRITE
     if( nMask & 0x0040 ) rStm << aRecordPerSet;
     TEST_WRITE
@@ -263,7 +263,7 @@ void SvMetaSlot::Save( SvPersistStream & rStm )
     TEST_WRITE
     if( nMask & 0x1000 ) rStm << aContainer;
     TEST_WRITE
-    if( nMask & 0x2000 ) rStm << aSlotType;
+    if( nMask & 0x2000 ) WriteSvPersistBase( rStm, aSlotType );
     TEST_WRITE
     if( nMask & 0x4000 ) rStm << aRecordAbsolute;
     TEST_WRITE
@@ -274,7 +274,7 @@ void SvMetaSlot::Save( SvPersistStream & rStm )
     if( aImageReflection.IsSet() )  nMask |= 0x0002;
     rStm << nMask;
     TEST_WRITE
-    if( nMask & 0x0001 ) rStm << aUnoName;
+    if( nMask & 0x0001 ) WriteSvString( rStm, aUnoName );
     TEST_WRITE
     if( nMask & 0x0002 ) rStm << aImageReflection;
 }

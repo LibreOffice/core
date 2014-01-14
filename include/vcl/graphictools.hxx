@@ -175,7 +175,7 @@ public:
 
 private:
     // friends
-    VCL_DLLPUBLIC friend SvStream& operator<<( SvStream& rOStm, const SvtGraphicStroke& rClass );
+    VCL_DLLPUBLIC friend SvStream& WriteSvtGraphicStroke( SvStream& rOStm, const SvtGraphicStroke& rClass );
     VCL_DLLPUBLIC friend SvStream& operator>>( SvStream& rIStm, SvtGraphicStroke& rClass );
 
     Polygon         maPath;
@@ -352,7 +352,7 @@ public:
 
 private:
     // friends
-    VCL_DLLPUBLIC friend SvStream& operator<<( SvStream& rOStm, const SvtGraphicFill& rClass );
+    VCL_DLLPUBLIC friend SvStream& WriteSvtGraphicFill( SvStream& rOStm, const SvtGraphicFill& rClass );
     VCL_DLLPUBLIC friend SvStream& operator>>( SvStream& rIStm, SvtGraphicFill& rClass );
 
     PolyPolygon     maPath;

@@ -4519,7 +4519,7 @@ RTLFUNC(SavePicture)
     {
         SvFileStream aOStream( rPar.Get(2)->GetOUString(), STREAM_WRITE | STREAM_TRUNC );
         Graphic aGraphic = ((SbStdPicture*)pObj)->GetGraphic();
-        aOStream << aGraphic;
+        WriteGraphic( aOStream, aGraphic );
     }
 }
 

@@ -160,7 +160,7 @@ private:
 
     sal_Bool                ImplExportNative( SvStream& rOStm ) const;
 
-    friend SvStream&    operator<<( SvStream& rOStm, const ImpGraphic& rImpGraphic );
+    friend SvStream&    WriteImpGraphic( SvStream& rOStm, const ImpGraphic& rImpGraphic );
     friend SvStream&    operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic );
 
     // SvgData support

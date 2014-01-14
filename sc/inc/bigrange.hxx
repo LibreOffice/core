@@ -71,9 +71,10 @@ public:
     bool            operator!=( const ScBigAddress& r ) const
                     { return !operator==( r ); }
 
-    friend inline SvStream& operator<< ( SvStream& rStream, const ScBigAddress& rAdr );
+    friend inline SvStream& WriteScBigAddress( SvStream& rStream, const ScBigAddress& rAdr );
     friend inline SvStream& operator>> ( SvStream& rStream, ScBigAddress& rAdr );
 };
+
 
 
 inline void ScBigAddress::PutInOrder( ScBigAddress& r )
@@ -130,7 +131,7 @@ inline ScAddress ScBigAddress::MakeAddress() const
 }
 
 
-inline SvStream& operator<< ( SvStream& rStream, const ScBigAddress& rAdr )
+inline SvStream& WriteScBigAddress( SvStream& rStream, const ScBigAddress& rAdr )
 {
     rStream << rAdr.nCol << rAdr.nRow << rAdr.nTab;
     return rStream;
@@ -196,7 +197,7 @@ public:
     bool            operator!=( const ScBigRange& r ) const
                         { return !operator==( r ); }
 
-    friend inline SvStream& operator<< ( SvStream& rStream, const ScBigRange& rRange );
+    friend inline SvStream& WriteScBigRange ( SvStream& rStream, const ScBigRange& rRange );
     friend inline SvStream& operator>> ( SvStream& rStream, ScBigRange& rRange );
 };
 
@@ -229,10 +230,10 @@ inline sal_Bool ScBigRange::Intersects( const ScBigRange& r ) const
 }
 
 
-inline SvStream& operator<< ( SvStream& rStream, const ScBigRange& rRange )
+inline SvStream& WriteScBigRange ( SvStream& rStream, const ScBigRange& rRange )
 {
-    rStream << rRange.aStart;
-    rStream << rRange.aEnd;
+    WriteScBigAddress( rStream, rRange.aStart );
+    WriteScBigAddress( rStream, rRange.aEnd );
     return rStream;
 }
 
