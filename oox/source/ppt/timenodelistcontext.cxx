@@ -804,7 +804,7 @@ namespace oox { namespace ppt {
                 if(attribs.hasAttribute( XML_by ) )
                 {
                     sal_Int32 nBy = attribs.getInteger( XML_by, 0 );
-                    pNode->setBy( makeAny( nBy ) );
+                    pNode->setBy( makeAny( (double)nBy ) );
                 }
                 if(attribs.hasAttribute( XML_from ) )
                 {
