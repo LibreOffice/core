@@ -48,6 +48,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <unotools/pathoptions.hxx>
 
 using namespace comphelper;
@@ -354,24 +355,16 @@ OUString XmlFilterAdaptor_getImplementationName ()
 {
     return OUString( "com.sun.star.comp.Writer.XmlFilterAdaptor" );
 }
-#define SERVICE_NAME1 "com.sun.star.document.ExportFilter"
-#define SERVICE_NAME2 "com.sun.star.document.ImportFilter"
-sal_Bool SAL_CALL XmlFilterAdaptor_supportsService( const OUString& ServiceName )
-    throw (RuntimeException)
-{
-    return ServiceName == SERVICE_NAME1 || ServiceName == SERVICE_NAME2;
-}
+
 Sequence< OUString > SAL_CALL XmlFilterAdaptor_getSupportedServiceNames(  )
     throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( SERVICE_NAME1 );
-    pArray[1] =  OUString ( SERVICE_NAME2 );
+    pArray[0] =  "com.sun.star.document.ExportFilter";
+    pArray[1] =  "com.sun.star.document.ImportFilter";
     return aRet;
 }
-#undef SERVICE_NAME1
-#undef SERVICE_NAME2
 
 Reference< XInterface > SAL_CALL XmlFilterAdaptor_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
@@ -385,11 +378,13 @@ OUString SAL_CALL XmlFilterAdaptor::getImplementationName(  )
 {
     return XmlFilterAdaptor_getImplementationName();
 }
+
 sal_Bool SAL_CALL XmlFilterAdaptor::supportsService( const OUString& rServiceName )
     throw (RuntimeException)
 {
-    return XmlFilterAdaptor_supportsService( rServiceName );
+    return cppu::supportsService( this, rServiceName );
 }
+
 Sequence< OUString > SAL_CALL XmlFilterAdaptor::getSupportedServiceNames(  )
     throw (RuntimeException)
 {

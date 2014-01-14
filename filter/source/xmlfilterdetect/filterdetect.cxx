@@ -41,6 +41,7 @@
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <boost/scoped_ptr.hpp>
@@ -248,12 +249,11 @@ OUString FilterDetect_getImplementationName ()
 {
     return OUString( "com.sun.star.comp.filters.XMLFilterDetect" );
 }
-#define SERVICE_NAME1 "com.sun.star.document.ExtendedTypeDetection"
 
 Sequence< OUString > FilterDetect_getSupportedServiceNames()
 {
     Sequence < OUString > aRet(1);
-    aRet[0] = SERVICE_NAME1;
+    aRet[0] = "com.sun.star.document.ExtendedTypeDetection";
     return aRet;
 }
 
@@ -271,8 +271,9 @@ OUString SAL_CALL FilterDetect::getImplementationName(  )
 sal_Bool SAL_CALL FilterDetect::supportsService( const OUString& rServiceName )
     throw (RuntimeException)
 {
-    return rServiceName == SERVICE_NAME1;
+    return cppu::supportsService( this, rServiceName );
 }
+
 Sequence< OUString > SAL_CALL FilterDetect::getSupportedServiceNames(  )
     throw (RuntimeException)
 {

@@ -17,18 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "configflush.hxx"
 #include "constant.hxx"
+#include <cppuhelper/supportsservice.hxx>
 
 #include <osl/diagnose.h>
-
 
 namespace filter{
     namespace config{
 
-
-//-----------------------------------------------
 ConfigFlush::ConfigFlush(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
     : BaseLock   (       )
     , m_xSMGR    (xSMGR  )
@@ -36,12 +33,10 @@ ConfigFlush::ConfigFlush(const css::uno::Reference< css::lang::XMultiServiceFact
 {
 }
 
-//-----------------------------------------------
 ConfigFlush::~ConfigFlush()
 {
 }
 
-//-----------------------------------------------
 OUString SAL_CALL ConfigFlush::getImplementationName()
     throw (css::uno::RuntimeException)
 {
@@ -49,29 +44,18 @@ OUString SAL_CALL ConfigFlush::getImplementationName()
     // <- SAFE
 }
 
-//-----------------------------------------------
 sal_Bool SAL_CALL ConfigFlush::supportsService(const OUString& sServiceName)
     throw (css::uno::RuntimeException)
 {
-          css::uno::Sequence< OUString > lServiceNames = impl_getSupportedServiceNames();
-          sal_Int32                             c             = lServiceNames.getLength();
-    const OUString*                      pNames        = lServiceNames.getConstArray();
-    for (sal_Int32 i=0; i<c; ++i)
-    {
-        if (pNames[i].equals(sServiceName))
-            return sal_True;
-    }
-    return sal_False;
+    return cppu::supportsService(this, sServiceName);
 }
 
-//-----------------------------------------------
 css::uno::Sequence< OUString > SAL_CALL ConfigFlush::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
     return impl_getSupportedServiceNames();
 }
 
-//-----------------------------------------------
 void SAL_CALL ConfigFlush::refresh()
     throw(css::uno::RuntimeException)
 {

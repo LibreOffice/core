@@ -23,7 +23,7 @@
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
 
 
 namespace filter{
@@ -39,7 +39,10 @@ namespace filter{
                 type/filter configuration will be changed at runtime.
  */
 class ConfigFlush : public BaseLock
-                  , public ::cppu::WeakImplHelper1< css::util::XRefreshable >
+                  , public ::cppu::WeakImplHelper2<
+                                                    css::util::XRefreshable,
+                                                    css::lang::XServiceInfo
+                                                  >
 {
     //-------------------------------------------
     // member

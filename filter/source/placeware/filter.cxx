@@ -22,6 +22,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include "exporter.hxx"
@@ -139,45 +140,26 @@ void SAL_CALL PlaceWareExportFilter::initialize( const ::com::sun::star::uno::Se
 {
 }
 
-// -----------------------------------------------------------------------------
-
 OUString PlaceWareExportFilter_getImplementationName ()
     throw (RuntimeException)
 {
     return OUString( "com.sun.star.comp.Impress.PlaceWareExportFilter" );
 }
 
-// -----------------------------------------------------------------------------
-
-#define SERVICE_NAME "com.sun.star.document.ExportFilter"
-
-sal_Bool SAL_CALL PlaceWareExportFilter_supportsService( const OUString& ServiceName )
-    throw (RuntimeException)
-{
-    return ServiceName == SERVICE_NAME;
-}
-
-// -----------------------------------------------------------------------------
-
 Sequence< OUString > SAL_CALL PlaceWareExportFilter_getSupportedServiceNames(  )
     throw (RuntimeException)
 {
     Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( SERVICE_NAME );
+    pArray[0] =  "com.sun.star.document.ExportFilter";
     return aRet;
 }
-#undef SERVICE_NAME
-
-// -----------------------------------------------------------------------------
 
 Reference< XInterface > SAL_CALL PlaceWareExportFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
     return (cppu::OWeakObject*) new PlaceWareExportFilter( comphelper::getComponentContext(rSMgr) );
 }
-
-// -----------------------------------------------------------------------------
 
 // XServiceInfo
 OUString SAL_CALL PlaceWareExportFilter::getImplementationName(  )
@@ -186,15 +168,11 @@ OUString SAL_CALL PlaceWareExportFilter::getImplementationName(  )
     return PlaceWareExportFilter_getImplementationName();
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Bool SAL_CALL PlaceWareExportFilter::supportsService( const OUString& rServiceName )
     throw (RuntimeException)
 {
-    return PlaceWareExportFilter_supportsService( rServiceName );
+    return cppu::supportsService( this, rServiceName );
 }
-
-// -----------------------------------------------------------------------------
 
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL PlaceWareExportFilter::getSupportedServiceNames(  )
     throw (RuntimeException)
