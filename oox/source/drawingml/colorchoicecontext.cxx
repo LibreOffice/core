@@ -69,7 +69,12 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
         break;
 
         case A_TOKEN( schemeClr ):
+        {
             mrColor.setSchemeClr( rAttribs.getToken( XML_val, XML_TOKEN_INVALID ) );
+            oox::OptValue<rtl::OUString> sSchemeName = rAttribs.getString( XML_val );
+            if( sSchemeName.has() )
+                mrColor.setSchemeName( sSchemeName.use() );
+        }
         break;
 
         case A_TOKEN( prstClr ):

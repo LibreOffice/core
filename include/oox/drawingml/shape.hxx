@@ -217,6 +217,9 @@ protected:
                             ::oox::core::XmlFilterBase& rFilter,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes );
 
+    void                putPropertyToGrabBag(
+                            const ::com::sun::star::beans::PropertyValue& pProperty );
+
     std::vector< ShapePtr >     maChildren;               // only used for group shapes
     com::sun::star::awt::Size   maChSize;                 // only used for group shapes
     com::sun::star::awt::Point  maChPosition;             // only used for group shapes

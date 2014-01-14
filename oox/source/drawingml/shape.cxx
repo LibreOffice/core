@@ -564,6 +564,21 @@ Reference< XShape > Shape::createAndInsert(
                 if( const FillProperties* pFillProps = pTheme->getFillStyle( pFillRef->mnThemedIdx ) )
                     aFillProperties.assignUsed( *pFillProps );
                 nFillPhClr = pFillRef->maPhClr.getColor( rGraphicHelper );
+
+                OUString sColorScheme = pFillRef->maPhClr.getSchemeName();
+                if( !sColorScheme.isEmpty() )
+                {
+                    Sequence< PropertyValue > aProperties(2);
+                    aProperties[0].Name = "SchemeClr";
+                    aProperties[0].Value = Any( sColorScheme );
+                    aProperties[1].Name = "Idx";
+                    aProperties[1].Value = Any( pFillRef->mnThemedIdx );
+
+                    PropertyValue pStyleFillRef;
+                    pStyleFillRef.Name = "StyleFillRef";
+                    pStyleFillRef.Value = Any( aProperties );
+                    putPropertyToGrabBag( pStyleFillRef );
+                }
             }
             if( const ShapeStyleRef* pEffectRef = getShapeStyleRef( XML_effectRef ) )
             {
@@ -1034,6 +1049,24 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
         break;
 
         default:;
+    }
+}
+
+void Shape::putPropertyToGrabBag( const PropertyValue& pProperty )
+{
+    Reference< XPropertySet > xSet( mxShape, UNO_QUERY );
+    Reference< XPropertySetInfo > xSetInfo( xSet->getPropertySetInfo() );
+    const OUString& aGrabBagPropName = OUString( UNO_NAME_MISC_OBJ_INTEROPGRABBAG );
+    if( mxShape.is() && xSet.is() && xSetInfo.is() && xSetInfo->hasPropertyByName( aGrabBagPropName ) )
+    {
+        Sequence< PropertyValue > aGrabBag;
+        xSet->getPropertyValue( aGrabBagPropName ) >>= aGrabBag;
+
+        sal_Int32 length = aGrabBag.getLength();
+        aGrabBag.realloc( length + 1 );
+        aGrabBag[length] = pProperty;
+
+        xSet->setPropertyValue( aGrabBagPropName, Any( aGrabBag ) );
     }
 }
 

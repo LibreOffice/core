@@ -369,6 +369,10 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
 
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
+    pFS->startElementNS( mnXmlNamespace, XML_style, FSEND );
+    WriteShapeStyle( rXPropSet );
+    pFS->endElementNS( mnXmlNamespace, XML_style );
+
     // write text
     WriteTextBox( xShape, mnXmlNamespace );
 

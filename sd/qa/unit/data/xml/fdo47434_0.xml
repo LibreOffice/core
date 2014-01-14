@@ -23,7 +23,14 @@
    <Line2 column1="0.000000" column2="2.000000" column3="4366.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
+  <InteropGrabBag>
+   <PropertyValue name="StyleFillRef">
+    <StyleFillRef>
+     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Idx" value="0" handle="0" propertyState="DIRECT_VALUE"/>
+    </StyleFillRef>
+   </PropertyValue>
+  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
@@ -84,7 +91,14 @@
    <Line2 column1="0.000000" column2="2.000000" column3="5159.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
+  <InteropGrabBag>
+   <PropertyValue name="StyleFillRef">
+    <StyleFillRef>
+     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Idx" value="0" handle="0" propertyState="DIRECT_VALUE"/>
+    </StyleFillRef>
+   </PropertyValue>
+  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="MirroredX" value="true" handle="0" propertyState="DIRECT_VALUE"/>
@@ -145,7 +159,14 @@
    <Line2 column1="0.000000" column2="2.000000" column3="4366.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
+  <InteropGrabBag>
+   <PropertyValue name="StyleFillRef">
+    <StyleFillRef>
+     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Idx" value="0" handle="0" propertyState="DIRECT_VALUE"/>
+    </StyleFillRef>
+   </PropertyValue>
+  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
@@ -206,7 +227,14 @@
    <Line2 column1="0.000000" column2="2.000000" column3="5159.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
+  <InteropGrabBag>
+   <PropertyValue name="StyleFillRef">
+    <StyleFillRef>
+     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Idx" value="0" handle="0" propertyState="DIRECT_VALUE"/>
+    </StyleFillRef>
+   </PropertyValue>
+  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="MirroredX" value="true" handle="0" propertyState="DIRECT_VALUE"/>

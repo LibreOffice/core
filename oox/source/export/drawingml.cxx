@@ -1620,6 +1620,52 @@ void DrawingML::WriteFill( Reference< XPropertySet > xPropSet )
     return;
 }
 
+void DrawingML::WriteShapeStyle( Reference< XPropertySet > xPropSet )
+{
+    // check existence of the grab bag
+    if ( !GetProperty( xPropSet, "InteropGrabBag" ) )
+        return;
+
+    // extract the relevant properties from the grab bag
+    Sequence< PropertyValue > aGrabBag;
+    Sequence< PropertyValue > aFillRefProperties;
+    mAny >>= aGrabBag;
+    for( sal_Int32 i=0; i < aGrabBag.getLength(); ++i)
+        if( aGrabBag[i].Name == "StyleFillRef" )
+        {
+            aGrabBag[i].Value >>= aFillRefProperties;
+            break;
+        }
+
+    // write mock <a:lnRef>
+    mpFS->singleElementNS( XML_a, XML_lnRef, XML_idx, I32S( 0 ), FSEND );
+
+    // write <a:fillRef>
+    if( aFillRefProperties.getLength() > 0 )
+    {
+        OUString sSchemeClr;
+        sal_uInt32 nIdx;
+        for( sal_Int32 i=0; i < aFillRefProperties.getLength(); ++i)
+            if( aFillRefProperties[i].Name == "SchemeClr" )
+                aFillRefProperties[i].Value >>= sSchemeClr;
+            else if( aFillRefProperties[i].Name == "Idx" )
+                aFillRefProperties[i].Value >>= nIdx;
+        mpFS->startElementNS( XML_a, XML_fillRef, XML_idx, I32S( nIdx ), FSEND );
+        mpFS->singleElementNS( XML_a, XML_schemeClr, XML_val,
+                               OUStringToOString( sSchemeClr, RTL_TEXTENCODING_ASCII_US ).getStr(),
+                               FSEND );
+        mpFS->endElementNS( XML_a, XML_fillRef );
+    }
+    else
+        // write mock <a:fillRef>
+        mpFS->singleElementNS( XML_a, XML_fillRef, XML_idx, I32S( 0 ), FSEND );
+
+    // write mock <a:effectRef>
+    mpFS->singleElementNS( XML_a, XML_effectRef, XML_idx, I32S( 0 ), FSEND );
+    // write mock <a:fontRef>
+    mpFS->singleElementNS( XML_a, XML_fontRef, XML_idx, "minor", FSEND );
+}
+
 }
 }
 

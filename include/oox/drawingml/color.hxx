@@ -58,6 +58,8 @@ public:
     void                setPrstClr( sal_Int32 nToken );
     /** Sets a scheme color from the a:schemeClr element. */
     void                setSchemeClr( sal_Int32 nToken );
+    /** Sets the scheme name from the a:schemeClr element for interoperability purposes */
+    void                setSchemeName( OUString sSchemeName ) { msSchemeName = sSchemeName; }
     /** Sets a system color from the a:sysClr element. */
     void                setSysClr( sal_Int32 nToken, sal_Int32 nLastRgb );
     /** Sets a palette color index. */
@@ -89,6 +91,9 @@ public:
     bool                hasTransparency() const;
     /** Returns the transparency of the color (0 = opaque, 100 = full transparent). */
     sal_Int16           getTransparency() const;
+
+    /** Returns the scheme name from the a:schemeClr element for interoperability purposes */
+    OUString            getSchemeName() const { return msSchemeName; }
 
 private:
     /** Internal helper for getColor(). */
@@ -130,6 +135,8 @@ private:
     mutable sal_Int32   mnC2;           /// Green, green%, saturation, or system default RGB.
     mutable sal_Int32   mnC3;           /// Blue, blue%, or luminance.
     sal_Int32           mnAlpha;        /// Alpha value (color opacity).
+
+    OUString            msSchemeName;   /// Scheme name from the a:schemeClr element for interoperability purposes
 };
 
 typedef boost::shared_ptr< Color > ColorPtr;
