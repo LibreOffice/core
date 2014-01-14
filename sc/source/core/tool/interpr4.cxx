@@ -696,7 +696,7 @@ bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                         // one day, and room for pad byte check.
                         if ( aTmp.getLength() > ((sal_uInt16)(~0)) - 2 )
                             return false;
-                        // Append a 0-pad-byte if string length is not even
+                        // Append a 0-pad-byte if string length is odd
                         //! MUST be sal_uInt16 and not xub_StrLen
                         sal_uInt16 nStrLen = (sal_uInt16) aTmp.getLength();
                         sal_uInt16 nLen = ( nStrLen + 2 ) & ~1;
@@ -711,7 +711,7 @@ bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                         memcpy( p, aTmp.getStr(), nStrLen + 1);
                         nPos += 10 + nStrLen + 1;
                         sal_uInt8* q = ( pCellArr + nPos );
-                        if( !nStrLen & 1 )
+                        if( (nStrLen & 1) == 0 )
                             *q++ = 0, nPos++;
                         p = (sal_uInt16*) ( pCellArr + nPos );
                         nCount++;
@@ -819,7 +819,7 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             // one day, and room for pad byte check.
                             if ( aTmp.getLength() > ((sal_uInt16)(~0)) - 2 )
                                 return false;
-                            // Append a 0-pad-byte if string length is not even
+                            // Append a 0-pad-byte if string length is odd
                             //! MUST be sal_uInt16 and not xub_StrLen
                             sal_uInt16 nStrLen = (sal_uInt16) aTmp.getLength();
                             sal_uInt16 nLen = ( nStrLen + 2 ) & ~1;
@@ -829,7 +829,7 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             memcpy( p, aTmp.getStr(), nStrLen + 1);
                             nPos += 2 + nStrLen + 1;
                             sal_uInt8* q = ( pCellArr + nPos );
-                            if( !nStrLen & 1 )
+                            if( (nStrLen & 1) == 0 )
                                 *q++ = 0, nPos++;
                         }
                         nCount++;
