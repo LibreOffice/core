@@ -193,9 +193,9 @@ sal_Bool SfxFrame::DocIsModified_Impl()
     return sal_False;
 }
 
-sal_uInt16 SfxFrame::PrepareClose_Impl( sal_Bool bUI, sal_Bool bForBrowsing )
+bool SfxFrame::PrepareClose_Impl( sal_Bool bUI, sal_Bool bForBrowsing )
 {
-    sal_uInt16 nRet = RET_OK;
+    bool nRet = true;
 
     // prevent recursive calls
     if( !pImp->bPrepClosing )
@@ -224,17 +224,17 @@ sal_uInt16 SfxFrame::PrepareClose_Impl( sal_Bool bUI, sal_Bool bForBrowsing )
                 nRet = pCur->PrepareClose( bUI, bForBrowsing );
         }
 
-        if ( nRet == RET_OK )
+        if ( nRet )
         {
             // if this frame has child frames, ask them too
-            for( sal_uInt16 nPos = GetChildFrameCount(); nRet == RET_OK && nPos--; )
+            for( sal_uInt16 nPos = GetChildFrameCount(); nRet && nPos--; )
                 nRet = (*pChildArr)[ nPos ]->PrepareClose_Impl( bUI, bForBrowsing );
         }
 
         pImp->bPrepClosing = sal_False;
     }
 
-    if ( nRet == RET_OK && pImp->pWorkWin )
+    if ( nRet && pImp->pWorkWin )
         // if closing was accepted by the component the UI subframes must be asked also
         nRet = pImp->pWorkWin->PrepareClose_Impl();
 

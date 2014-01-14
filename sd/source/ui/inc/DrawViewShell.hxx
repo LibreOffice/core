@@ -227,7 +227,7 @@ public:
         const Ruler& rRuler,
         const MouseEvent& rMEvt);
 
-    virtual sal_uInt16  PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False );
+    virtual bool    PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False );
 
     PageKind        GetPageKind() { return mePageKind; }
 

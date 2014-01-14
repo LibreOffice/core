@@ -1286,7 +1286,7 @@ SfxViewShell::~SfxViewShell()
 
 //--------------------------------------------------------------------
 
-sal_uInt16 SfxViewShell::PrepareClose
+bool SfxViewShell::PrepareClose
 (
     sal_Bool bUI,     // TRUE: Allow Dialog and so on, FALSE: silent-mode
     sal_Bool /*bForBrowsing*/
@@ -1301,16 +1301,16 @@ sal_uInt16 SfxViewShell::PrepareClose
             aInfoBox.Execute();
         }
 
-        return sal_False;
+        return false;
     }
 
     if( GetViewFrame()->IsInModalMode() )
-        return sal_False;
+        return false;
 
     if( bUI && GetViewFrame()->GetDispatcher()->IsLocked() )
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
 //--------------------------------------------------------------------

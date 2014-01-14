@@ -119,7 +119,7 @@ private:
     virtual void        AdjustPosSizePixel( const Point &rPos, const Size &rSize );
     virtual void        OuterResizePixel( const Point &rPos, const Size &rSize );
     sal_uInt16              InsertWindowInTable (BaseWindow* pNewWin);
-    virtual sal_uInt16      PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing );
+    virtual bool        PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing );
 
     void                SetCurWindow (BaseWindow* pNewWin, bool bUpdateTabBar = false, bool bRememberAsCurrent = true);
     void                ManageToolbars();

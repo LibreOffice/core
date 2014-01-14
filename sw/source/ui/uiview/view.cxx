@@ -1728,19 +1728,16 @@ void    SwView::StopShellTimer()
     }
 }
 
-sal_uInt16  SwView::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
+bool SwView::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
 {
     SfxViewFrame* pVFrame = GetViewFrame();
     pVFrame->SetChildWindow( SwInputChild::GetChildWindowId(), sal_False );
     if( pVFrame->GetDispatcher()->IsLocked() )
         pVFrame->GetDispatcher()->Lock(sal_False);
 
-    sal_uInt16 nRet;
-    if ( m_pFormShell &&
-         sal_True != (nRet = m_pFormShell->PrepareClose( bUI, bForBrowsing )) )
-
+    if ( m_pFormShell && !m_pFormShell->PrepareClose( bUI, bForBrowsing ) )
     {
-        return nRet;
+        return false;
     }
     return SfxViewShell::PrepareClose( bUI, bForBrowsing );
 }

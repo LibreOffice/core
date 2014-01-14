@@ -1551,7 +1551,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
         FmFormShell* pFormSh = aViewData.GetViewShell()->GetFormShell();
         if (pFormSh)
         {
-            bool bAllowed = static_cast<bool>(pFormSh->PrepareClose(true));
+            bool bAllowed = pFormSh->PrepareClose(true);
             if (!bAllowed)
             {
                 //! Fehlermeldung? oder macht das die FormShell selber?

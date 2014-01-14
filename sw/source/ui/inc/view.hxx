@@ -418,7 +418,7 @@ public:
                                                    bool bEraseTrail );
     virtual sal_Bool            HasSelection( sal_Bool  bText ) const;
     virtual OUString        GetSelectionText( bool bCompleteWords = false );
-    virtual sal_uInt16          PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False );
+    virtual bool            PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False );
     virtual void            MarginChanged();
 
     // replace word/selection with text from the thesaurus

@@ -276,7 +276,7 @@ void ScTabViewShell::SetActive()
     ActiveGrabFocus();
 }
 
-sal_uInt16 ScTabViewShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
+bool ScTabViewShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
 {
     // Call EnterHandler even in formula mode here,
     // so a formula change in an embedded object isn't lost

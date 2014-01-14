@@ -565,7 +565,7 @@ struct BoolEnv_Impl
 };
 
 
-sal_uInt16 SfxObjectShell::PrepareClose
+bool SfxObjectShell::PrepareClose
 (
     sal_Bool    bUI,  // sal_True: Dialog and so on is allowed
                       // sal_False: silent-mode
@@ -573,16 +573,16 @@ sal_uInt16 SfxObjectShell::PrepareClose
 )
 {
     if( pImp->bInPrepareClose || pImp->bPreparedForClose )
-        return sal_True;
+        return true;
     BoolEnv_Impl aBoolEnv( pImp );
 
     // DocModalDialog?
     if ( IsInModalMode() )
-        return sal_False;
+        return false;
 
     SfxViewFrame* pFirst = SfxViewFrame::GetFirst( this );
     if( pFirst && !pFirst->GetFrame().PrepareClose_Impl( bUI, bForBrowsing ) )
-        return sal_False;
+        return false;
 
     // prepare views for closing
     for ( SfxViewFrame* pFrm = SfxViewFrame::GetFirst( this );
@@ -591,8 +591,8 @@ sal_uInt16 SfxObjectShell::PrepareClose
         DBG_ASSERT(pFrm->GetViewShell(),"No Shell");
         if ( pFrm->GetViewShell() )
         {
-            sal_uInt16 nRet = pFrm->GetViewShell()->PrepareClose( bUI, bForBrowsing );
-            if ( nRet != sal_True )
+            bool nRet = pFrm->GetViewShell()->PrepareClose( bUI, bForBrowsing );
+            if ( !nRet )
                 return nRet;
         }
     }
@@ -603,7 +603,7 @@ sal_uInt16 SfxObjectShell::PrepareClose
     if( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
     {
         pImp->bPreparedForClose = sal_True;
-        return sal_True;
+        return true;
     }
 
     // Ask if possible if it should be saved
@@ -650,11 +650,11 @@ sal_uInt16 SfxObjectShell::PrepareClose
         }
         else if ( RET_CANCEL == nRet )
             // Cancelled
-            return sal_False;
+            return false;
     }
 
     pImp->bPreparedForClose = sal_True;
-    return sal_True;
+    return true;
 }
 
 //--------------------------------------------------------------------

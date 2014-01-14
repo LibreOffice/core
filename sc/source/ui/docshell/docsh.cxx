@@ -2500,7 +2500,7 @@ sal_Bool ScDocShell::QuerySlotExecutable( sal_uInt16 nSlotId )
 }
 
 
-sal_uInt16 ScDocShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
+bool ScDocShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
 {
     if(SC_MOD()->GetCurRefDlgId()>0)
     {
@@ -2546,8 +2546,8 @@ sal_uInt16 ScDocShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
     }
     // end handler code
 
-    sal_uInt16 nRet = SfxObjectShell::PrepareClose( bUI, bForBrowsing );
-    if (nRet == sal_True)                       // sal_True = schliessen
+    bool nRet = SfxObjectShell::PrepareClose( bUI, bForBrowsing );
+    if (nRet)                       // true = close
         aDocument.EnableIdle(false);        // nicht mehr drin rumpfuschen !!!
 
     return nRet;

@@ -1145,10 +1145,10 @@ long OutlineViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
  * PrepareClose, gets called when the Shell shall be destroyed.
  * Forwards the invocation to the View
  */
-sal_uInt16 OutlineViewShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
+bool OutlineViewShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
 {
     if( ViewShell::PrepareClose(bUI, bForBrowsing) != sal_True )
-        return sal_False;
+        return false;
 
     return pOlView == NULL || pOlView->PrepareClose(bUI);
 }

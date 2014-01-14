@@ -371,7 +371,7 @@ void Shell::StoreAllWindowData( bool bPersistent )
 }
 
 
-sal_uInt16 Shell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
+bool Shell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
 {
     (void)bForBrowsing;
 

@@ -293,12 +293,12 @@ void DrawViewShell::SetZoomRect( const Rectangle& rZoomRect )
  * discover an refreshed text objext.
  */
 
-sal_uInt16 DrawViewShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
+bool DrawViewShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
 {
-    if ( ViewShell::PrepareClose(bUI, bForBrowsing) != sal_True )
-        return sal_False;
+    if ( !ViewShell::PrepareClose(bUI, bForBrowsing) )
+        return false;
 
-    sal_Bool            bRet = sal_True;
+    bool bRet = true;
 
     if( bRet && HasCurrentFunction() )
     {

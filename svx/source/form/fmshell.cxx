@@ -247,13 +247,13 @@ void FmFormShell::NotifyMarkListChanged(FmFormView* pWhichView)
 }
 
 //------------------------------------------------------------------------
-sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool /*bForBrowsing*/)
+bool FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool /*bForBrowsing*/)
 {
     if ( GetImpl()->didPrepareClose() )
         // we already did a PrepareClose for the current modifications of the current form
-        return sal_True;
+        return true;
 
-    sal_Bool bResult = sal_True;
+    bool bResult = true;
     // Save the data records, not in DesignMode and FilterMode
     if (!m_bDesignMode && !GetImpl()->isInFilterMode() &&
         m_pFormView && m_pFormView->GetActualOutDev() &&
@@ -286,7 +286,7 @@ sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool /*bForBrowsing*/)
                                 break;
 
                             case RET_CANCEL:
-                                return sal_False;
+                                return false;
                         }
 
                             if ( bModified )

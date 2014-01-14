@@ -587,7 +587,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             sal_Bool bForEdit = !pSh->IsReadOnly();
 
             // If possible ask the User
-            sal_Bool bDo = ( GetViewShell()->PrepareClose() != sal_False );
+            bool bDo = GetViewShell()->PrepareClose();
             SFX_REQUEST_ARG(rReq, pSilentItem, SfxBoolItem, SID_SILENT, sal_False);
             if ( bDo && GetFrame().DocIsModified_Impl() &&
                  !rReq.IsAPI() && ( !pSilentItem || !pSilentItem->GetValue() ) )

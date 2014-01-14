@@ -831,11 +831,11 @@ void ViewShellBase::SetZoomFactor (
 
 
 
-sal_uInt16 ViewShellBase::PrepareClose (sal_Bool bUI, sal_Bool bForBrowsing)
+bool ViewShellBase::PrepareClose (sal_Bool bUI, sal_Bool bForBrowsing)
 {
-    sal_uInt16 nResult = SfxViewShell::PrepareClose (bUI, bForBrowsing);
+    bool nResult = SfxViewShell::PrepareClose (bUI, bForBrowsing);
 
-    if (nResult == sal_True)
+    if (nResult)
     {
         mpImpl->mbIsClosing = true;
 

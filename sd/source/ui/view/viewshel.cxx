@@ -1035,9 +1035,9 @@ void ViewShell::SetDefTabHRuler( sal_uInt16 nDefTab )
 /** Tell the FmFormShell that the view shell is closing.  Give it the
     oportunity to prevent that.
 */
-sal_uInt16 ViewShell::PrepareClose (sal_Bool bUI, sal_Bool bForBrowsing)
+bool ViewShell::PrepareClose (sal_Bool bUI, sal_Bool bForBrowsing)
 {
-    sal_uInt16 nResult = sal_True;
+    bool nResult = true;
 
     FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager()->GetFormShell();
     if (pFormShell != NULL)

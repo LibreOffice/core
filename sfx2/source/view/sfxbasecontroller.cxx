@@ -360,7 +360,7 @@ void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::queryClosing( const la
     SfxViewShell* pShell = m_pController->GetViewShell_Impl();
     if  ( m_pController !=  NULL &&  pShell )
     {
-        sal_Bool bCanClose = (sal_Bool) pShell->PrepareClose( sal_False );
+        bool bCanClose = pShell->PrepareClose( sal_False );
         if ( !bCanClose )
         {
             if ( bDeliverOwnership && ( !pShell->GetWindow() || !pShell->GetWindow()->IsReallyVisible() ) )
@@ -633,7 +633,7 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( Runtime
         for ( const SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell ); !bOther && pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell ) )
             bOther = (pFrame != pActFrame);
 
-        sal_Bool bRet = bOther || pDocShell->PrepareClose();
+        bool bRet = bOther || pDocShell->PrepareClose();
         if ( bRet )
         {
             ConnectSfxFrame_Impl( E_DISCONNECT );

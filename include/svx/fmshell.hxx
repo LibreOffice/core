@@ -123,7 +123,7 @@ public:
     FmFormPage*  GetCurPage() const;
     FmXFormShell* GetImpl() const {return m_pImpl;};
 
-    sal_uInt16  PrepareClose(sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False);
+    bool PrepareClose(sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False);
 
     bool        IsActiveControl() const;
     void        ForgetActiveControl();
