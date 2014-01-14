@@ -392,8 +392,9 @@ void DocxAttributeOutput::SectionBreaks(const SwTxtNode& rNode)
     {
         const SwTxtNode* pTxtNode = static_cast< SwTxtNode* >( &aNextIndex.GetNode() );
         // If next node has no string - it is an empty node, so no need to output the section break
+
         if (!pTxtNode->GetTxt().isEmpty())
-            m_rExport.OutputSectionBreaks( pTxtNode->GetpSwAttrSet(), *pTxtNode );
+            m_rExport.OutputSectionBreaks( pTxtNode->GetpSwAttrSet(), *pTxtNode, m_tableReference->m_bTableCellOpen );
     }
     else if ( aNextIndex.GetNode().IsTableNode() )
     {
