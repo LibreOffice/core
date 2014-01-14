@@ -66,7 +66,7 @@ public:
     friend inline   bool operator>=( const Fraction& rVal1, const Fraction& rVal2 );
 
     TOOLS_DLLPUBLIC friend SvStream& operator>>( SvStream& rIStream, Fraction& rFract );
-    TOOLS_DLLPUBLIC friend SvStream& operator<<( SvStream& rOStream, const Fraction& rFract );
+    TOOLS_DLLPUBLIC friend SvStream& WriteFraction( SvStream& rOStream, const Fraction& rFract );
 };
 
 inline Fraction::Fraction( const Fraction& rFrac )

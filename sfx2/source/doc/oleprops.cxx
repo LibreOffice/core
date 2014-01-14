@@ -1255,7 +1255,7 @@ void SfxOlePropertySet::ImplSave( SvStream& rStrm )
            .WriteUInt16( sal_uInt16( 0 ) )          // version
            .WriteUInt16( sal_uInt16( 1 ) )          // OS minor version
            .WriteUInt16( sal_uInt16( 2 ) );         // OS type always windows for text encoding
-    rStrm << aGuid;                    // unused guid
+    WriteSvGlobalName( rStrm, aGuid );                    // unused guid
     rStrm  .WriteInt32( nSectCount );              // number of sections
 
     // write placeholders for section guid/position pairs
@@ -1272,7 +1272,7 @@ void SfxOlePropertySet::ImplSave( SvStream& rStrm )
         SaveObject( rStrm, rSection );
         // write section guid/position pair
         rStrm.Seek( nSectPosPos );
-        rStrm << aIt->first;
+        WriteSvGlobalName( rStrm, aIt->first );
         rStrm.WriteUInt32( nSectPos );
         nSectPosPos = rStrm.Tell();
     }

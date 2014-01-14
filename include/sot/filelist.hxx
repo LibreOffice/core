@@ -51,7 +51,7 @@ public:
     FileList&           operator=( const FileList& rFileList );
 
     // Im-/Export
-    SOT_DLLPUBLIC friend SvStream&  operator<<( SvStream& rOStm, const FileList& rFileList );
+    SOT_DLLPUBLIC friend SvStream&  WriteFileList( SvStream& rOStm, const FileList& rFileList );
     SOT_DLLPUBLIC friend SvStream&  operator>>( SvStream& rIStm, FileList& rFileList );
 
     // Liste fuellen/abfragen

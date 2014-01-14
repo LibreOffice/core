@@ -311,7 +311,7 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
     return rIStream;
 }
 
-SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
+SvStream& WriteJobSetup( SvStream& rOStream, const JobSetup& rJobSetup )
 {
     DBG_ASSERTWARNING( rOStream.GetVersion(), "JobSetup::<< - Solar-Version not set on rOStream" );
 

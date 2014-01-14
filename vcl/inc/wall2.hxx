@@ -36,7 +36,7 @@ private:
     BitmapEx*       mpCache;
 
     friend SvStream& operator>>( SvStream& rIStm, ImplWallpaper& rImplWallpaper );
-    friend SvStream& operator<<( SvStream& rOStm, const ImplWallpaper& rImplWallpaper );
+    friend SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpaper );
 
 public:
                     ImplWallpaper();

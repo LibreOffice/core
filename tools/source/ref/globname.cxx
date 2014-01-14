@@ -120,7 +120,7 @@ void SvGlobalName::NewImp()
     }
 }
 
-SvStream& operator << ( SvStream& rOStr, const SvGlobalName & rObj )
+SvStream& WriteSvGlobalName( SvStream& rOStr, const SvGlobalName & rObj )
 {
     sal_uInt32 a;
     memcpy(&a, rObj.pImp->szData, sizeof(sal_uInt32));

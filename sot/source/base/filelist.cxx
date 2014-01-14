@@ -68,7 +68,7 @@ void FileList::Load( SvStream& rIStm )
 
 void FileList::Save( SvStream& rOStm )
 {
-    rOStm << *this;
+    WriteFileList( rOStm, *this );
 }
 
 void FileList::Assign( const SvDataCopyStream& rCopyStream )
@@ -87,7 +87,7 @@ void FileList::Assign( const SvDataCopyStream& rCopyStream )
  * e.g. DropQueryFile
  */
 
-SvStream& operator<<( SvStream& rOStm, SAL_UNUSED_PARAMETER const FileList& )
+SvStream& WriteFileList( SvStream& rOStm, SAL_UNUSED_PARAMETER const FileList& )
 {
     OSL_FAIL("TODO: Not implemented!");
     return rOStm;

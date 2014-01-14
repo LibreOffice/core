@@ -115,7 +115,7 @@ public:
     bool operator==( const QueueInfo& rInfo ) const;
 
     friend VCL_DLLPUBLIC SvStream&          operator>>( SvStream& rIStream, QueueInfo& rInfo );
-    friend VCL_DLLPUBLIC SvStream&          operator<<( SvStream& rOStream, const QueueInfo& rInfo );
+    friend VCL_DLLPUBLIC SvStream&          WriteQueueInfo( SvStream& rOStream, const QueueInfo& rInfo );
 };
 
 // ------------------

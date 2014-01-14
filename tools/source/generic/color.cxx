@@ -227,7 +227,7 @@ SvStream& Color::Write( SvStream& rOStm, bool bNewFormat )
     if ( bNewFormat )
         rOStm.WriteUInt32( mnColor );
     else
-        rOStm << *this;
+        WriteColor( rOStm, *this );
 
     return rOStm;
 }
@@ -300,7 +300,7 @@ SvStream& operator>>( SvStream& rIStream, Color& rColor )
     return rIStream;
 }
 
-SvStream& operator<<( SvStream& rOStream, const Color& rColor )
+SvStream& WriteColor( SvStream& rOStream, const Color& rColor )
 {
     DBG_ASSERTWARNING( rOStream.GetVersion(), "Color::<< - Solar-Version not set on rOStream" );
 

@@ -69,10 +69,12 @@ namespace dbaui
         */
         inline bool IsReadOnly() const { return m_bReadOnly; }
 
-        friend SvStream& operator<<( SvStream& rStr,const OTableRow& _rRow );
+        friend SvStream& WriteOTableRow( SvStream& rStr,const OTableRow& _rRow );
         friend SvStream& operator>>( SvStream& rStr, OTableRow& _rRow );
     };
+
 }
+
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEROW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

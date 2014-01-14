@@ -144,10 +144,10 @@ void SvIdlDataBase::Save( SvStream & rStm, sal_uInt32 nFlags )
             if( !pModule->IsImported() )
                 aList.insert( pModule->GetClassList() );
         }
-        aPStm << aList;
+        WriteSvDeclPersistList( aPStm, aList );
     }
     else
-        aPStm << aClassList;
+        WriteSvDeclPersistList( aPStm, aClassList );
 
     aTypeList.WriteObjects( aPStm, bOnlyStreamedObjs );
     aAttrList.WriteObjects( aPStm, bOnlyStreamedObjs );

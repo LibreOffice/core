@@ -41,7 +41,7 @@ namespace dbaui
                 ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aIter = pRows->begin();
                 ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aEnd = pRows->end();
                 for(;aIter != aEnd;++aIter)
-                    (*rxOStm) << *(*aIter);
+                    WriteOTableRow(*rxOStm, **aIter);
                 return sal_True;
             }
         }

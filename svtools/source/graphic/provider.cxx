@@ -837,7 +837,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
                     SvMemoryStream aMemStrm;
                     aMemStrm.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
                     if( 0 == strcmp( pFilterShortName, MIMETYPE_VCLGRAPHIC ) )
-                        aMemStrm << aGraphic;
+                        WriteGraphic( aMemStrm, aGraphic );
                     else
                     {
                         rFilter.ExportGraphic( aGraphic, aPath, aMemStrm,

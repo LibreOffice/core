@@ -84,7 +84,7 @@ sal_Bool SvxColorValueSetData::GetData( const ::com::sun::star::datatransfer::Da
 
 sal_Bool SvxColorValueSetData::WriteObject( SotStorageStreamRef& rxOStm, void*, sal_uInt32 , const ::com::sun::star::datatransfer::DataFlavor&  )
 {
-    *rxOStm << maData;
+    WriteXFillExchangeData( *rxOStm, maData );
     return( rxOStm->GetError() == ERRCODE_NONE );
 }
 

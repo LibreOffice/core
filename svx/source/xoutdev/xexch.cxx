@@ -49,7 +49,7 @@ XFillExchangeData::~XFillExchangeData()
 }
 
 /// binary export (currently w/o version control because it is not persistent)
-SvStream& operator<<( SvStream& rOStm, const XFillExchangeData& rData )
+SvStream& WriteXFillExchangeData( SvStream& rOStm, const XFillExchangeData& rData )
 {
     if( rData.pXFillAttrSetItem )
     {

@@ -90,7 +90,7 @@ void ONDXPage::QueryDelete()
 {
     // Store in GarbageCollector
     if (IsModified() && rIndex.m_pFileStream)
-        (*rIndex.m_pFileStream) << *this;
+        WriteONDXPage( *rIndex.m_pFileStream, *this );
 
     bModified = sal_False;
     if (rIndex.UseCollector())
@@ -713,7 +713,7 @@ void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
         }
         rStream.Write(&pBuf[0], nLen);
     }
-    rStream << aChild;
+    WriteONDXPagePtr( rStream, aChild );
 }
 
 
@@ -791,7 +791,7 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPagePtr& rPag
     return rStream;
 }
 // -----------------------------------------------------------------------------
-SvStream& connectivity::dbase::operator << (SvStream &rStream, const ONDXPagePtr& rPage)
+SvStream& connectivity::dbase::WriteONDXPagePtr(SvStream &rStream, const ONDXPagePtr& rPage)
 {
     rStream.WriteUInt32( rPage.nPagePos );
     return rStream;
@@ -845,7 +845,7 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPage& rPage)
 }
 
 //------------------------------------------------------------------
-SvStream& connectivity::dbase::operator << (SvStream &rStream, const ONDXPage& rPage)
+SvStream& connectivity::dbase::WriteONDXPage(SvStream &rStream, const ONDXPage& rPage)
 {
     // Page doesn't exist yet
     sal_uIntPtr nSize = (rPage.GetPagePos() + 1) * DINDEX_PAGE_SIZE;
@@ -862,7 +862,8 @@ SvStream& connectivity::dbase::operator << (SvStream &rStream, const ONDXPage& r
     OSL_UNUSED( nCurrentPos );
 
     nValue = rPage.nCount;
-    rStream.WriteUInt32( nValue ) << rPage.aChild;
+    rStream.WriteUInt32( nValue );
+    WriteONDXPagePtr( rStream, rPage.aChild );
 
     sal_uInt16 i = 0;
     for (; i < rPage.nCount; i++)

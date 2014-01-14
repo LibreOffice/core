@@ -148,7 +148,7 @@ bool StgCompObjStream::Store()
     WriteInt16( (sal_Int16) -2 );                     // 0xFFFE = Byte Order Indicator
     WriteInt32( (sal_Int32) 0x0A03 );         // Windows 3.10
     WriteInt32( (sal_Int32) -1L );
-    *this << aClsId;             // Class ID
+    WriteClsId( *this, aClsId );             // Class ID
     WriteInt32( (sal_Int32) (aAsciiUserName.getLength() + 1) );
     WriteCharPtr( (const char *)aAsciiUserName.getStr() );
     WriteUChar( (sal_uInt8) 0 );             // string terminator

@@ -145,11 +145,11 @@ void SvMetaName::Save( SvPersistStream & rStm )
     if( aDescription.IsSet() )  nMask |= 0x10;
 
     rStm << nMask;
-    if( nMask & 0x01 ) rStm << aName;
-    if( nMask & 0x02 ) rStm << aHelpContext;
-    if( nMask & 0x04 ) rStm << aHelpText;
-    if( nMask & 0x08 ) rStm << aConfigName;
-    if( nMask & 0x10 ) rStm << aDescription;
+    if( nMask & 0x01 ) WriteSvString( rStm, aName );
+    if( nMask & 0x02 ) WriteSvNumberIdentifier( rStm, aHelpContext );
+    if( nMask & 0x04 ) WriteSvString( rStm, aHelpText );
+    if( nMask & 0x08 ) WriteSvString( rStm, aConfigName );
+    if( nMask & 0x10 ) WriteSvString( rStm, aDescription );
 }
 
 sal_Bool SvMetaName::SetName( const OString& rName, SvIdlDataBase * )
@@ -427,7 +427,7 @@ void SvMetaReference::Save( SvPersistStream & rStm )
 
     // write data
     rStm << nMask;
-    if( nMask & 0x01 ) rStm << aRef;
+    if( nMask & 0x01 ) WriteSvPersistBase( rStm, aRef );
 }
 
 SV_IMPL_META_FACTORY1( SvMetaExtern, SvMetaReference );
@@ -472,9 +472,9 @@ void SvMetaExtern::Save( SvPersistStream & rStm )
 
     // write data
     rStm << nMask;
-    if( nMask & 0x01 ) rStm << pModule;
-    if( nMask & 0x02 ) rStm << aUUId;
-    if( nMask & 0x04 ) rStm << aVersion;
+    if( nMask & 0x01 ) WriteSvPersistBase( rStm, pModule );
+    if( nMask & 0x02 ) WriteSvGlobalName( rStm, aUUId );
+    if( nMask & 0x04 ) WriteSvVersion( rStm, aVersion );
 }
 
 SvMetaModule * SvMetaExtern::GetModule() const
