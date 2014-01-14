@@ -24,7 +24,7 @@
 #include <svx/svxdllapi.h>
 
 //************************************************************
-//   Vorausdeklarationen
+//   Forward Declarations
 //************************************************************
 
 class ImpCaptParams;
@@ -34,7 +34,7 @@ namespace sdr { namespace properties {
 }}
 
 //************************************************************
-//   Hilfsklasse SdrCaptObjGeoData
+//   Helper Class SdrCaptObjGeoData
 //************************************************************
 
 // #109872#
@@ -53,14 +53,14 @@ class SVX_DLLPUBLIC SdrCaptionObj : public SdrRectObj
 private:
     // to allow sdr::properties::CaptionProperties access to ImpRecalcTail()
     friend class sdr::properties::CaptionProperties;
-    friend class                SdrTextObj; // fuer ImpRecalcTail() bei AutoGrow
+    friend class                SdrTextObj; // for ImpRecalcTail() during AutoGrow
 
 protected:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
 private:
-    Polygon                     aTailPoly;  // das ganze Polygon des Schwanzes
+    Polygon                     aTailPoly;  // the whole tail polygon
     sal_Bool                    mbSpecialTextBoxShadow; // for calc special shadow, default FALSE
     sal_Bool                    mbFixedTail; // for calc note box fixed tail, default FALSE
     Point                       maFixedTailPos; // for calc note box fixed tail position.
