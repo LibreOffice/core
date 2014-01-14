@@ -1552,8 +1552,11 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     /* fdo#72488 Hack: try to see if the space is zero width
                      * and don't bother with inserting a bullet in this case.
                      */
-                    if (pKernArray[i + nCopyStart] != pKernArray[ i + nCopyStart + 1])
+                    if ((i + nCopyStart + 1 >= rInf.GetLen()) ||
+                        pKernArray[i + nCopyStart] != pKernArray[ i + nCopyStart + 1])
+                    {
                         aStr = aStr.replaceAt(i, 1, OUString(CH_BULLET));
+                    }
                 }
         }
 
