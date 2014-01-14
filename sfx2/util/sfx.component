@@ -44,7 +44,8 @@
     <service name="com.sun.star.frame.SynchronousFrameLoader"/>
     <service name="com.sun.star.frame.OfficeFrameLoader"/>
   </implementation>
-  <implementation name="com.sun.star.comp.sfx2.AppDispatchProvider">
+  <implementation name="com.sun.star.comp.sfx2.AppDispatchProvider"
+      constructor="com_sun_star_comp_sfx2_AppDispatchProvider_get_implementation">
     <service name="com.sun.star.frame.ProtocolHandler"/>
     <service name="com.sun.star.frame.AppDispatchProvider"/>
   </implementation>

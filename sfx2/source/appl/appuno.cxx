@@ -21,8 +21,6 @@
 #pragma warning( disable : 4290 )
 #endif
 
-#include <sfx2/appuno.hxx>
-
 #include "backingcomp.hxx"
 #include "SfxDocumentMetaData.hxx"
 #include "appbaslib.hxx"
@@ -1705,186 +1703,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
     rArgs = aSequ;
 }
 
- /* XServiceInfo */
-OUString SAL_CALL SfxAppDispatchProvider::getImplementationName() throw( css::uno::RuntimeException )
-{
-    return impl_getStaticImplementationName();
-}
-
-/* XServiceInfo */
-sal_Bool SAL_CALL SfxAppDispatchProvider::supportsService( const OUString& sServiceName ) throw( css::uno::RuntimeException )
-{
-    return cppu::supportsService(this, sServiceName);
-}
-
-/* XServiceInfo */
-css::uno::Sequence< OUString > SAL_CALL SfxAppDispatchProvider::getSupportedServiceNames() throw( css::uno::RuntimeException )
-{
-    return impl_getStaticSupportedServiceNames();
-}
-
-/* Helper for XServiceInfo */
-css::uno::Sequence< OUString > SfxAppDispatchProvider::impl_getStaticSupportedServiceNames()
-{
-    css::uno::Sequence< OUString > seqServiceNames( 2 );
-    seqServiceNames.getArray()[0] = "com.sun.star.frame.DispatchProvider";
-    seqServiceNames.getArray()[1] = "com.sun.star.frame.AppDispatchProvider";
-    return seqServiceNames;
-}
-
-/* Helper for XServiceInfo */
-OUString SfxAppDispatchProvider::impl_getStaticImplementationName()
-{
-    return OUString( "com.sun.star.comp.sfx2.AppDispatchProvider" );
-}
-
-/* Helper for registry */
-css::uno::Reference< css::uno::XInterface > SAL_CALL SfxAppDispatchProvider::impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::Exception )
-{
-    return css::uno::Reference< css::uno::XInterface >( *new SfxAppDispatchProvider( xServiceManager ) );
-}
-
-SFX_IMPL_SINGLEFACTORY( SfxAppDispatchProvider );
-
-void SAL_CALL SfxAppDispatchProvider::initialize( const uno::Sequence<uno::Any>& aArguments ) throw (uno::Exception, uno::RuntimeException)
-{
-    Reference < XFrame > xFrame;
-    if ( aArguments.getLength() )
-    {
-        aArguments[0] >>= xFrame;
-        m_xFrame = xFrame;
-    }
-}
-
-Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch(
-    const util::URL& aURL,
-    const OUString& /*sTargetFrameName*/,
-    FrameSearchFlags /*eSearchFlags*/ ) throw( RuntimeException )
-{
-    sal_uInt16                  nId( 0 );
-    sal_Bool                bMasterCommand( sal_False );
-    Reference < XDispatch > xDisp;
-    const SfxSlot* pSlot = 0;
-    SfxDispatcher* pAppDisp = SFX_APP()->GetAppDispatcher_Impl();
-    if ( aURL.Protocol == "slot:" || aURL.Protocol == "commandId:" )
-    {
-        nId = (sal_uInt16) aURL.Path.toInt32();
-        SfxShell* pShell;
-        pAppDisp->GetShellAndSlot_Impl( nId, &pShell, &pSlot, sal_True, sal_True );
-    }
-    else if ( aURL.Protocol == ".uno:" )
-    {
-        // Support ".uno" commands. Map commands to slotid
-        bMasterCommand = SfxOfficeDispatch::IsMasterUnoCommand( aURL );
-        if ( bMasterCommand )
-            pSlot = pAppDisp->GetSlot( SfxOfficeDispatch::GetMasterUnoCommand( aURL ) );
-        else
-            pSlot = pAppDisp->GetSlot( aURL.Main );
-    }
-
-    if ( pSlot )
-    {
-        SfxOfficeDispatch* pDispatch = new SfxOfficeDispatch( pAppDisp, pSlot, aURL ) ;
-        pDispatch->SetFrame(m_xFrame);
-        pDispatch->SetMasterUnoCommand( bMasterCommand );
-        xDisp = pDispatch;
-    }
-
-    return xDisp;
-}
-
-Sequence< Reference < XDispatch > > SAL_CALL SfxAppDispatchProvider::queryDispatches( const Sequence < DispatchDescriptor >& seqDescriptor )
-throw( RuntimeException )
-{
-    sal_Int32 nCount = seqDescriptor.getLength();
-    uno::Sequence< uno::Reference < frame::XDispatch > > lDispatcher(nCount);
-    for( sal_Int32 i=0; i<nCount; ++i )
-        lDispatcher[i] = this->queryDispatch( seqDescriptor[i].FeatureURL,
-                                              seqDescriptor[i].FrameName,
-                                              seqDescriptor[i].SearchFlags );
-    return lDispatcher;
-}
-
-Sequence< sal_Int16 > SAL_CALL SfxAppDispatchProvider::getSupportedCommandGroups()
-throw (uno::RuntimeException)
-{
-    SolarMutexGuard aGuard;
-
-    std::list< sal_Int16 > aGroupList;
-    SfxSlotPool* pAppSlotPool = &SFX_APP()->GetAppSlotPool_Impl();
-
-    const sal_uIntPtr nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
-
-    // Gruppe anw"ahlen ( Gruppe 0 ist intern )
-    for ( sal_uInt16 i=0; i<pAppSlotPool->GetGroupCount(); i++ )
-    {
-        pAppSlotPool->SeekGroup( i );
-        const SfxSlot* pSfxSlot = pAppSlotPool->FirstSlot();
-        while ( pSfxSlot )
-        {
-            if ( pSfxSlot->GetMode() & nMode )
-            {
-                sal_Int16 nCommandGroup = MapGroupIDToCommandGroup( pSfxSlot->GetGroupId() );
-                aGroupList.push_back( nCommandGroup );
-                break;
-            }
-            pSfxSlot = pAppSlotPool->NextSlot();
-        }
-    }
-
-    uno::Sequence< sal_Int16 > aSeq =
-        comphelper::containerToSequence< sal_Int16, std::list< sal_Int16 > >( aGroupList );
-
-    return aSeq;
-}
-
-Sequence< frame::DispatchInformation > SAL_CALL SfxAppDispatchProvider::getConfigurableDispatchInformation( sal_Int16 nCmdGroup )
-throw (uno::RuntimeException)
-{
-    std::list< frame::DispatchInformation > aCmdList;
-
-    SolarMutexGuard aGuard;
-    SfxSlotPool* pAppSlotPool = &SFX_APP()->GetAppSlotPool_Impl();
-
-    if ( pAppSlotPool )
-    {
-        const sal_uIntPtr   nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
-        OUString aCmdPrefix( ".uno:" );
-
-        // Gruppe anw"ahlen ( Gruppe 0 ist intern )
-        for ( sal_uInt16 i=0; i<pAppSlotPool->GetGroupCount(); i++ )
-        {
-            pAppSlotPool->SeekGroup( i );
-            const SfxSlot* pSfxSlot = pAppSlotPool->FirstSlot();
-            if ( pSfxSlot )
-            {
-                sal_Int16 nCommandGroup = MapGroupIDToCommandGroup( pSfxSlot->GetGroupId() );
-                if ( nCommandGroup == nCmdGroup )
-                {
-                    while ( pSfxSlot )
-                    {
-                        if ( pSfxSlot->GetMode() & nMode )
-                        {
-                            frame::DispatchInformation aCmdInfo;
-                            OUStringBuffer aBuf( aCmdPrefix );
-                            aBuf.appendAscii( pSfxSlot->GetUnoName() );
-                            aCmdInfo.Command = aBuf.makeStringAndClear();
-                            aCmdInfo.GroupId = nCommandGroup;
-                            aCmdList.push_back( aCmdInfo );
-                        }
-                        pSfxSlot = pAppSlotPool->NextSlot();
-                    }
-                }
-            }
-        }
-    }
-
-    uno::Sequence< frame::DispatchInformation > aSeq =
-        comphelper::containerToSequence< frame::DispatchInformation, std::list< frame::DispatchInformation > >( aCmdList );
-
-    return aSeq;
-}
-
 #ifdef TEST_HANDLERS
 #include <cppuhelper/implbase2.hxx>
 
@@ -1985,7 +1803,6 @@ SFX2_DLLPUBLIC void* SAL_CALL sfx_component_getFactory(
         IF_NAME_CREATECOMPONENTFACTORY( BackingComp )
         IF_NAME_CREATECOMPONENTFACTORY( SfxGlobalEvents_Impl )
         IF_NAME_CREATECOMPONENTFACTORY( SfxFrameLoader_Impl )
-        IF_NAME_CREATECOMPONENTFACTORY( SfxAppDispatchProvider )
         IF_NAME_CREATECOMPONENTFACTORY( SfxDocTplService )
         IF_NAME_CREATECOMPONENTFACTORY( ShutdownIcon )
         IF_NAME_CREATECOMPONENTFACTORY( SfxApplicationScriptLibraryContainer )

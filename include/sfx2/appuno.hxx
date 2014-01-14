@@ -46,27 +46,6 @@
 #include <tools/errcode.hxx>
 #include <sfx2/sfxuno.hxx>
 
-class SfxAppDispatchProvider : public ::cppu::WeakImplHelper3< ::com::sun::star::frame::XAppDispatchProvider,
-                                                               ::com::sun::star::lang::XServiceInfo,
-                                                               ::com::sun::star::lang::XInitialization >
-{
-    ::com::sun::star::uno::WeakReference < ::com::sun::star::frame::XFrame > m_xFrame;
-public:
-                    SfxAppDispatchProvider( const com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& )
-                    {}
-
-    SFX_DECL_XSERVICEINFO
-    virtual ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatch > SAL_CALL
-                    queryDispatch( const ::com::sun::star::util::URL& aURL, const OUString& sTargetFrameName,
-                    FrameSearchFlags eSearchFlags ) throw( ::com::sun::star::uno::RuntimeException ) ;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatch > > SAL_CALL
-                    queryDispatches( const ::com::sun::star::uno::Sequence < ::com::sun::star::frame::DispatchDescriptor >& seqDescriptor )
-                        throw( ::com::sun::star::uno::RuntimeException ) ;
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL getSupportedCommandGroups() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( sal_Int16 ) throw (::com::sun::star::uno::RuntimeException);
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
