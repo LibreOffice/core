@@ -26,7 +26,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/brokenpackageint.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/dllapi.h>
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/frame.hxx>
@@ -52,11 +51,7 @@
 #include <basic/sbxmeth.hxx>
 #include <basic/sbxobj.hxx>
 #include <comphelper/interaction.hxx>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/sequence.hxx>
 #include <framework/documentundoguard.hxx>
-#include <osl/mutex.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itempool.hxx>
@@ -69,36 +64,11 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 
-#include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/awt/XButton.hpp>
-#include <com/sun/star/awt/XTopWindow.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/ContainerEvent.hpp>
-#include <com/sun/star/container/XContainer.hpp>
-#include <com/sun/star/container/XContainerListener.hpp>
-#include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/container/XIndexReplace.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/container/XNameReplace.hpp>
-#include <com/sun/star/container/XSet.hpp>
-#include <com/sun/star/document/MacroExecMode.hpp>
-#include <com/sun/star/document/UpdateDocMode.hpp>
-#include <com/sun/star/frame/DispatchResultEvent.hpp>
-#include <com/sun/star/frame/DispatchResultState.hpp>
-#include <com/sun/star/frame/FrameAction.hpp>
-#include <com/sun/star/frame/FrameActionEvent.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XFrameActionListener.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/registry/RegistryValueType.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
-
-#include <cppuhelper/supportsservice.hxx>
 
 #include <boost/scoped_ptr.hpp>
 
