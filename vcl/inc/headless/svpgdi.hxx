@@ -236,12 +236,7 @@ public:
     virtual SystemFontData  GetSysFontData( int nFallbacklevel ) const;
 
 #ifdef IOS
-    void                SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContext, int = 0 )
-    {
-        mxLayer = xLayer;
-        mrContext = xContext;
-        mbForeignContext = xContext != NULL;
-    };
+    void                SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContext, int = 0 );
 
     bool CheckContext();
     CGContextRef GetContext();

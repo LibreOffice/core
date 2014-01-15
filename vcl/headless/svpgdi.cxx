@@ -732,4 +732,15 @@ bool SvpSalGraphics::supportsOperation( OutDevSupportType ) const
     return false;
 }
 
+#ifdef IOS
+
+void SvpSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContext, int /* nBitmapDepth */ )
+{
+    mxLayer = xLayer;
+    mrContext = xContext;
+    mbForeignContext = xContext != NULL;
+};
+
+#endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
