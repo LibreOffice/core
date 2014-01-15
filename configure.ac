@@ -4702,7 +4702,7 @@ AC_SUBST(ENABLE_CUPS)
 
 # fontconfig checks
 if test "$test_fontconfig" = "yes"; then
-    PKG_CHECK_MODULES([FONTCONFIG], [fontconfig >= 2.2.0])
+    PKG_CHECK_MODULES([FONTCONFIG], [fontconfig >= 2.4.1])
     SYSTEM_FONTCONFIG=YES
 fi
 AC_SUBST(FONTCONFIG_CFLAGS)
