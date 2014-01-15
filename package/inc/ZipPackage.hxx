@@ -19,8 +19,9 @@
 #ifndef _ZIP_PACKAGE_HXX
 #define _ZIP_PACKAGE_HXX
 
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase8.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
@@ -63,12 +64,13 @@ enum InitialisationMode
     e_IMode_XStream
 };
 
-class ZipPackage : public cppu::WeakImplHelper7
+class ZipPackage : public cppu::WeakImplHelper8
                     <
                        com::sun::star::lang::XInitialization,
                        com::sun::star::lang::XSingleServiceFactory,
                        com::sun::star::lang::XUnoTunnel,
                        com::sun::star::lang::XServiceInfo,
+                       com::sun::star::container::XEnumerationAccess,
                        com::sun::star::container::XHierarchicalNameAccess,
                        com::sun::star::util::XChangesBatch,
                        com::sun::star::beans::XPropertySet
@@ -141,6 +143,14 @@ public:
     // XInitialization
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
         throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    // XEnumerationAccess
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createEnumeration()
+        throw(::com::sun::star::uno::RuntimeException);
+    // XElementType
+    virtual ::com::sun::star::uno::Type getElementType()
+        throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool hasElements()
+        throw(::com::sun::star::uno::RuntimeException);
     // XHierarchicalNameAccess
     virtual ::com::sun::star::uno::Any SAL_CALL getByHierarchicalName( const OUString& aName )
         throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
