@@ -208,6 +208,8 @@ __EXPORT ScDbNameDlg::~ScDbNameDlg()
 void ScDbNameDlg::Init()
 {
     aBtnHeader.Check( sal_True );       // Default: mit Spaltenkoepfen
+    aBtnDoSize.Check( sal_True );
+    aBtnKeepFmt.Check( sal_True );
 
     aBtnMore.AddWindow( &aFlOptions );
     aBtnMore.AddWindow( &aBtnHeader );
