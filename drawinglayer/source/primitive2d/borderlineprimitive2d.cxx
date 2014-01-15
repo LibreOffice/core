@@ -133,7 +133,6 @@ namespace drawinglayer
                 basegfx::B2DVector aVector(getEnd() - getStart());
                 aVector.normalize();
                 const basegfx::B2DVector aPerpendicular(basegfx::getPerpendicular(aVector));
-                basegfx::B2DVector aScale = rViewInformation.getInverseObjectToViewTransformation() * aVector;
 
                 const basegfx::B2DPolyPolygon& aClipRegion =
                     getClipPolygon(rViewInformation);
@@ -161,7 +160,7 @@ namespace drawinglayer
                         aPolygon.append( getEnd() );
 
                         basegfx::B2DPolygon aPolygon2 = aPolygon;
-                        double fGap = (mfDistance/mfLeftWidth) * aScale.getLength();
+                        double fGap = (mfDistance/mfLeftWidth) * mfPatternScale * 10.0;
                         moveLine(aPolygon2, fGap, aVector);
 
                         xRetval.realloc(2);
@@ -191,7 +190,7 @@ namespace drawinglayer
                             aPolygon = aClipped.getB2DPolygon(0);
 
                         basegfx::B2DPolygon aPolygon2 = aPolygon;
-                        double fGap = (mfDistance/mfLeftWidth + aVector.getLength()) * aScale.getLength();
+                        double fGap = (mfDistance/mfLeftWidth + aVector.getLength()) * mfPatternScale * 10.0;
                         moveLine(aPolygon2, fGap, aVector);
 
                         xRetval.realloc(2);
@@ -243,7 +242,7 @@ namespace drawinglayer
                         aPolygon.append( aTmpEnd );
 
                         basegfx::B2DPolyPolygon aDashed = svtools::ApplyLineDashing(
-                               aPolygon, getStyle(), MAP_PIXEL, aScale.getLength() );
+                               aPolygon, getStyle(), MAP_PIXEL, mfPatternScale*10.0);
                         for (sal_uInt32 i = 0; i < aDashed.count(); i++ )
                         {
                             basegfx::B2DPolygon aDash = aDashed.getB2DPolygon( i );
