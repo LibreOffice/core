@@ -117,7 +117,6 @@
 #include "doc.hrc"
 #include "openflag.hxx"
 #include <sfx2/sfxresid.hxx>
-#include <sfx2/appuno.hxx>
 #include "sfxacldetect.hxx"
 #include <officecfg/Office/Common.hxx>
 

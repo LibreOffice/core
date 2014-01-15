@@ -63,7 +63,6 @@
 #include <basic/basmgr.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
-#include <sfx2/appuno.hxx>
 #include <sfx2/sfxhelp.hxx>
 #include <sfx2/request.hxx>
 #include "sfxtypes.hxx"

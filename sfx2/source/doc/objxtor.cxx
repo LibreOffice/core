@@ -88,7 +88,6 @@
 #include "doc.hrc"
 #include "sfxlocal.hrc"
 #include "appdata.hxx"
-#include <sfx2/appuno.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <basic/basmgr.hxx>
 #include <svtools/svtools.hrc>

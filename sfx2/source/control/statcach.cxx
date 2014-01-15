@@ -39,7 +39,6 @@
 #include <comphelper/processfactory.hxx>
 
 #include <sfx2/app.hxx>
-#include <sfx2/appuno.hxx>
 #include "statcach.hxx"
 #include <sfx2/msg.hxx>
 #include <sfx2/ctrlitem.hxx>

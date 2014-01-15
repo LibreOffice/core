@@ -43,7 +43,6 @@
 #include <unotools/useroptions.hxx>
 #include <unotools/bootstrap.hxx>
 
-#include <sfx2/appuno.hxx>
 #include <sfx2/module.hxx>
 #include "arrdecl.hxx"
 #include <sfx2/app.hxx>

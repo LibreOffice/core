@@ -41,7 +41,6 @@
 #include "app.hrc"
 #include <sfx2/sfxresid.hxx>
 #include "objshimp.hxx"
-#include <sfx2/appuno.hxx>
 #include "imestatuswindow.hxx"
 #include "appbaslib.hxx"
 

@@ -109,7 +109,6 @@
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/taskpane.hxx>
 #include <sfx2/evntconf.hxx>
-#include <sfx2/appuno.hxx>
 #include <swatrset.hxx>
 #include <idxmrk.hxx>
 #include <wordcountdialog.hxx>

@@ -55,7 +55,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/fcontnr.hxx>
 #include "impframe.hxx"
-#include <sfx2/appuno.hxx>
 #include "workwin.hxx"
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/msgpool.hxx>

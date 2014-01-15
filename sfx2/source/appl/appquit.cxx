@@ -46,7 +46,6 @@
 #include "sfxlocal.hrc"
 #include <sfx2/fcontnr.hxx>
 #include "nochaos.hxx"
-#include <sfx2/appuno.hxx>
 #include <sfx2/doctempl.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>

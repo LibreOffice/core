@@ -642,7 +642,6 @@
 #include <sfx2/DocumentMetadataAccess.hxx>
 #include <sfx2/Metadatable.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/appuno.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/childwin.hxx>

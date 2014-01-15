@@ -99,7 +99,6 @@
 #include "fltlst.hxx"
 #include <sfx2/request.hxx>
 #include "arrdecl.hxx"
-#include <sfx2/appuno.hxx>
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <functional>
