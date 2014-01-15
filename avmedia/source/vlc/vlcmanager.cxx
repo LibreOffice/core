@@ -10,6 +10,7 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
 #include <com/sun/star/uno/Exception.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include "vlcmanager.hxx"
 #include "vlcplayer.hxx"
 #include "wrapper/Instance.hxx"
@@ -114,7 +115,7 @@ rtl::OUString SAL_CALL Manager::getImplementationName()
 sal_Bool SAL_CALL Manager::supportsService( const rtl::OUString& serviceName )
     throw (uno::RuntimeException)
 {
-    return serviceName == VLC_SERVICENAME;
+    return cppu::supportsService(this, serviceName);
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL Manager::getSupportedServiceNames()

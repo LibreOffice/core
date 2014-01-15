@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cppuhelper/supportsservice.hxx>
 #include "vlcwindow.hxx"
 #include "vlcplayer.hxx"
 
@@ -78,7 +79,7 @@ void SAL_CALL VLCWindow::setPointerType( ::sal_Int32 ) throw (css::uno::RuntimeE
 
 ::sal_Bool SAL_CALL VLCWindow::supportsService( const ::rtl::OUString& serviceName ) throw (css::uno::RuntimeException)
 {
-    return serviceName == AVMEDIA_VLC_WINDOW_SERVICENAME;
+    return cppu::supportsService(this, serviceName);
 }
 
 uno::Sequence< ::rtl::OUString > SAL_CALL VLCWindow::getSupportedServiceNames() throw (css::uno::RuntimeException)

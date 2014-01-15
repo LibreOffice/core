@@ -20,6 +20,7 @@
 #include "manager.hxx"
 #include "player.hxx"
 
+#include <cppuhelper/supportsservice.hxx>
 #include <tools/urlobj.hxx>
 
 #define AVMEDIA_WIN_MANAGER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Manager_DirectX"
@@ -37,13 +38,9 @@ Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
 {
 }
 
-// ------------------------------------------------------------------------------
-
 Manager::~Manager()
 {
 }
-
-// ------------------------------------------------------------------------------
 
 uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const OUString& rURL )
     throw (uno::RuntimeException)
@@ -58,23 +55,17 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const OUString&
     return xRet;
 }
 
-// ------------------------------------------------------------------------------
-
 OUString SAL_CALL Manager::getImplementationName(  )
     throw (uno::RuntimeException)
 {
     return OUString( AVMEDIA_WIN_MANAGER_IMPLEMENTATIONNAME );
 }
 
-// ------------------------------------------------------------------------------
-
 sal_Bool SAL_CALL Manager::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException)
 {
-    return ServiceName == AVMEDIA_WIN_MANAGER_SERVICENAME;
+    return cppu::supportsService(this, ServiceName);
 }
-
-// ------------------------------------------------------------------------------
 
 uno::Sequence< OUString > SAL_CALL Manager::getSupportedServiceNames(  )
     throw (uno::RuntimeException)
