@@ -21,8 +21,6 @@
 #define INCLUDED_SFX2_SOURCE_INC_APPBASLIB_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 
@@ -93,34 +91,6 @@ private:
     bool    impl_getContainer(
                 ContainerType _eType,
                 ::com::sun::star::uno::Reference< ::com::sun::star::script::XStorageBasedLibraryContainer >& _out_rxContainer );
-};
-
-class SfxApplicationScriptLibraryContainer
-{
-public:
-    // Service
-    static ::com::sun::star::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
-    static OUString impl_getStaticImplementationName();
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL impl_createInstance
-        ( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager )
-            throw( ::com::sun::star::uno::Exception );
-    static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > impl_createFactory
-        ( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
-
-};
-
-class SfxApplicationDialogLibraryContainer
-{
-public:
-    // Service
-    static ::com::sun::star::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
-    static OUString impl_getStaticImplementationName();
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL impl_createInstance
-        ( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager )
-            throw( ::com::sun::star::uno::Exception );
-    static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > impl_createFactory
-        ( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
-
 };
 
 #endif // INCLUDED_SFX2_SOURCE_INC_APPBASLIB_HXX

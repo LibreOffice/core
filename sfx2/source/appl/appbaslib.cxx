@@ -154,63 +154,32 @@ SfxBasicManagerHolder::LegacyPsswdBinaryLimitExceeded( Sequence< OUString >& sMo
 
 //============================================================================
 // Service for application library container
-SFX_IMPL_ONEINSTANCEFACTORY( SfxApplicationDialogLibraryContainer )
 
-Sequence< OUString > SfxApplicationDialogLibraryContainer::impl_getStaticSupportedServiceNames()
-{
-    static Sequence< OUString > seqServiceNames( 1 );
-    static sal_Bool bNeedsInit = sal_True;
-
-    MutexGuard aGuard( Mutex::getGlobalMutex() );
-    if( bNeedsInit )
-    {
-        OUString* pSeq = seqServiceNames.getArray();
-        pSeq[0] = "com.sun.star.script.ApplicationDialogLibraryContainer";
-        bNeedsInit = sal_False;
-    }
-    return seqServiceNames;
-}
-
-OUString SfxApplicationDialogLibraryContainer::impl_getStaticImplementationName()
-{
-    return OUString("com.sun.star.comp.sfx2.ApplicationDialogLibraryContainer");
-}
-
-Reference< XInterface > SAL_CALL SfxApplicationDialogLibraryContainer::impl_createInstance
-    ( const Reference< XMultiServiceFactory >& )
-        throw( Exception )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_sfx2_ApplicationDialogLibraryContainer_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
 {
     SFX_APP()->GetBasicManager();
     Reference< XInterface > xRet =
         Reference< XInterface >( SFX_APP()->GetDialogContainer(), UNO_QUERY );
-    return xRet;
+    xRet->acquire();
+    return xRet.get();
 }
 
 //============================================================================
 // Service for application library container
-SFX_IMPL_ONEINSTANCEFACTORY( SfxApplicationScriptLibraryContainer )
 
-Sequence< OUString > SfxApplicationScriptLibraryContainer::impl_getStaticSupportedServiceNames()
-{
-    Sequence< OUString > seqServiceNames( 1 );
-    OUString* pSeq = seqServiceNames.getArray();
-    pSeq[0] = "com.sun.star.script.ApplicationScriptLibraryContainer";
-    return seqServiceNames;
-}
-
-OUString SfxApplicationScriptLibraryContainer::impl_getStaticImplementationName()
-{
-    return OUString("com.sun.star.comp.sfx2.ApplicationScriptLibraryContainer");
-}
-
-Reference< XInterface > SAL_CALL SfxApplicationScriptLibraryContainer::impl_createInstance
-    ( const Reference< XMultiServiceFactory >& )
-        throw( Exception )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_sfx2_ApplicationScriptLibraryContainer_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
 {
     SFX_APP()->GetBasicManager();
     Reference< XInterface > xRet =
         Reference< XInterface >( SFX_APP()->GetBasicContainer(), UNO_QUERY );
-    return xRet;
+    xRet->acquire();
+    return xRet.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

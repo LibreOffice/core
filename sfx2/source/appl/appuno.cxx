@@ -23,7 +23,6 @@
 
 #include "backingcomp.hxx"
 #include "SfxDocumentMetaData.hxx"
-#include "appbaslib.hxx"
 #include "fltoptint.hxx"
 #include "frmload.hxx"
 #include "objshimp.hxx"
@@ -1799,8 +1798,6 @@ SFX2_DLLPUBLIC void* SAL_CALL sfx_component_getFactory(
         IF_NAME_CREATECOMPONENTFACTORY( BackingComp )
         IF_NAME_CREATECOMPONENTFACTORY( SfxFrameLoader_Impl )
         IF_NAME_CREATECOMPONENTFACTORY( ShutdownIcon )
-        IF_NAME_CREATECOMPONENTFACTORY( SfxApplicationScriptLibraryContainer )
-        IF_NAME_CREATECOMPONENTFACTORY( SfxApplicationDialogLibraryContainer )
 #ifdef TEST_HANDLERS
         IF_NAME_CREATECOMPONENTFACTORY( TestKeyHandler )
         IF_NAME_CREATECOMPONENTFACTORY( TestMouseClickHandler )
