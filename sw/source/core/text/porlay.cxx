@@ -840,7 +840,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         sal_Int32 nEnd =
                 g_pBreakIt->GetBreakIter()->endOfScript( rTxt, nChg, WEAK );
 
-        if( nEnd > rTxt.getLength() )
+        if (nEnd > rTxt.getLength() || nEnd < 0)
             nEnd = rTxt.getLength();
 
         nScript = (sal_uInt8)GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
@@ -876,7 +876,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         sal_Int32 nSearchStt = nChg;
         nChg = g_pBreakIt->GetBreakIter()->endOfScript( rTxt, nSearchStt, nScript );
 
-        if ( nChg > rTxt.getLength() )
+        if (nChg > rTxt.getLength() || nChg < 0)
             nChg = rTxt.getLength();
 
         // #i28203#

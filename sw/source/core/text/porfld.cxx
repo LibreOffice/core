@@ -204,14 +204,14 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
             if( i18n::ScriptType::WEAK == nScript )
             {
                 nChg = g_pBreakIt->GetBreakIter()->endOfScript(aTxt,0,nScript);
-                if( nChg < aTxt.getLength() )
+                if (nChg < aTxt.getLength() && nChg >= 0)
                     nScript = g_pBreakIt->GetBreakIter()->getScriptType( aTxt, nChg );
             }
 
             //
             // nNextScriptChg will be evaluated during SwFldPortion::Format()
             //
-            if ( nChg < aTxt.getLength() )
+            if (nChg < aTxt.getLength() && nChg >= 0)
                 nNextScriptChg = g_pBreakIt->GetBreakIter()->endOfScript( aTxt, nChg, nScript );
             else
                 nNextScriptChg = aTxt.getLength();

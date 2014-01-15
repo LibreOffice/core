@@ -1430,7 +1430,9 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, sal_Int32 /*nActPos*/ 
                 const LanguageType aCurrLang = pNode->GetLang( nBegin );
                 const com::sun::star::lang::Locale aCurrLocale = g_pBreakIt->GetLocale( aCurrLang );
                 nBegin = g_pBreakIt->GetBreakIter()->beginOfSentence( rText, nBegin, aCurrLocale );
-                nEnd = std::min( rText.getLength(), g_pBreakIt->GetBreakIter()->endOfSentence( rText, nEnd, aCurrLocale ) );
+                nEnd = g_pBreakIt->GetBreakIter()->endOfSentence(rText, nEnd, aCurrLocale);
+                if (nEnd > rText.getLength() || nEnd < 0)
+                    nEnd = rText.getLength();
             }
         }
     }

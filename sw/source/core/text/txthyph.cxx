@@ -231,8 +231,8 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
         Boundary aBound =
             g_pBreakIt->GetBreakIter()->getWordBoundary( rInf.GetTxt(), nWrdStart,
             g_pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ), WordType::DICTIONARY_WORD, sal_True );
-        nWrdStart = static_cast<sal_Int32>(aBound.startPos);
-        nLen = static_cast<sal_Int32>(aBound.endPos - nWrdStart);
+        nWrdStart = aBound.startPos;
+        nLen = aBound.endPos - nWrdStart;
         bRet = 0 != nLen;
         if( bRet )
         {

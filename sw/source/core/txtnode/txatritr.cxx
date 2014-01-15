@@ -49,7 +49,7 @@ SwScriptIterator::SwScriptIterator(
             {
                 nPos = g_pBreakIt->GetBreakIter()->beginOfScript(
                                                 m_rText, nPos, nCurScript);
-                if (nPos && nPos < m_rText.getLength())
+                if (nPos > 0 && nPos < m_rText.getLength())
                 {
                     nStt = --nPos;
                     nCurScript =
@@ -71,7 +71,7 @@ bool SwScriptIterator::Next()
     bool bRet = false;
     if( g_pBreakIt->GetBreakIter().is() )
     {
-        if (bForward && (m_nChgPos != -1) && (m_nChgPos < m_rText.getLength()))
+        if (bForward && m_nChgPos >= 0 && m_nChgPos < m_rText.getLength())
         {
             nCurScript =
                 g_pBreakIt->GetBreakIter()->getScriptType(m_rText, m_nChgPos);

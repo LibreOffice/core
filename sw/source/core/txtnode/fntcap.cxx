@@ -626,7 +626,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
         nPos = g_pBreakIt->GetBreakIter()->endOfCharBlock(
                         oldText, nPos,
             g_pBreakIt->GetLocale( eLng ), CharType::LOWERCASE_LETTER);
-        if( nPos == COMPLETE_STRING )
+        if (nPos < 0)
             nPos = nOldPos;
         else if( nPos > nMaxPos )
             nPos = nMaxPos;
@@ -676,7 +676,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
         nPos = g_pBreakIt->GetBreakIter()->nextCharBlock(
                             oldText, nPos,
                g_pBreakIt->GetLocale( eLng ), CharType::LOWERCASE_LETTER);
-        if( nPos == COMPLETE_STRING || nPos > nMaxPos )
+        if (nPos < 0 || nPos > nMaxPos)
             nPos = nMaxPos;
         OSL_ENSURE( nPos, "nextCharBlock not implemented?" );
 #if OSL_DEBUG_LEVEL > 1
@@ -793,7 +793,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
         nPos = g_pBreakIt->GetBreakIter()->endOfCharBlock(
                             oldText, nPos,
                g_pBreakIt->GetLocale( eLng ), CharType::LOWERCASE_LETTER);
-        if( nPos == COMPLETE_STRING || nPos > nMaxPos )
+        if (nPos < 0 || nPos > nMaxPos)
             nPos = nMaxPos;
         OSL_ENSURE( nPos, "endOfCharBlock not implemented?" );
 #if OSL_DEBUG_LEVEL > 1
