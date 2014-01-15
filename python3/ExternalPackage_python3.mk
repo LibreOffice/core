@@ -143,7 +143,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,lib/python/plat-aix4
 # that one is generated...
 ifneq ($(OS)-$(COM),WNT-MSC)
 $(eval $(call gb_ExternalPackage_add_files,python3,lib/python,\
-	Lib/_sysconfigdata.py \
+	LO_lib/_sysconfigdata.py \
 ))
 endif
 
