@@ -165,7 +165,7 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
 
     case RND_DRAW_OBJECT:
         {
-            pFmt = MakeDrawFrmFmt( aEmptyOUStr, GetDfltFrmFmt() );
+            pFmt = MakeDrawFrmFmt( OUString(), GetDfltFrmFmt() );
             if( pSet )      // Set a few more attributes
                 pFmt->SetFmtAttr( *pSet );
 
@@ -383,7 +383,7 @@ SwFrmFmt *SwDoc::CopyLayoutFmt(
         SwXFrame::GetOrCreateSdrObject(pFormat);
     }
     else
-        pDest = MakeDrawFrmFmt( aEmptyOUStr, pDest );
+        pDest = MakeDrawFrmFmt( OUString(), pDest );
 
     // Copy all other or new attributes
     pDest->CopyAttrs( rSource );
@@ -861,7 +861,7 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
                              const SfxItemSet* pFlyAttrSet,
                              SwFrmFmt* pDefFmt )
 {
-    SwDrawFrmFmt *pFmt = MakeDrawFrmFmt( aEmptyOUStr,
+    SwDrawFrmFmt *pFmt = MakeDrawFrmFmt( OUString(),
                                         pDefFmt ? pDefFmt : GetDfltFrmFmt() );
 
     const SwFmtAnchor* pAnchor = 0;
@@ -1395,7 +1395,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
         // Insert field
         if(pType)
         {
-            SwSetExpField aFld( (SwSetExpFieldType*)pType, aEmptyOUStr, SVX_NUM_ARABIC);
+            SwSetExpField aFld( (SwSetExpFieldType*)pType, OUString(), SVX_NUM_ARABIC);
             if( bOrderNumberingFirst )
                 nIdx = 0;
             SwFmtFld aFmt( aFld );
@@ -1687,7 +1687,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
         // insert field
         if ( pType )
         {
-            SwSetExpField aFld( (SwSetExpFieldType*)pType, aEmptyOUStr, SVX_NUM_ARABIC );
+            SwSetExpField aFld( (SwSetExpFieldType*)pType, OUString(), SVX_NUM_ARABIC );
             if( bOrderNumberingFirst )
                 nIdx = 0;
             SwFmtFld aFmt( aFld );

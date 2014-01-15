@@ -229,7 +229,7 @@ static double lcl_ConvertToDateValue( SwDoc& rDoc, sal_Int32 nDate )
 }
 
 SwCalc::SwCalc( SwDoc& rD )
-    : aErrExpr( aEmptyOUStr, SwSbxValue(), 0 )
+    : aErrExpr( OUString(), SwSbxValue(), 0 )
     , nCommandPos(0)
     , rDoc( rD )
     , pLclData( m_aSysLocale.GetLocaleDataPtr() )
@@ -656,8 +656,8 @@ SwCalcOper SwCalc::GetToken()
     {
         // Parse any token.
         ParseResult aRes = pCharClass->parseAnyToken( sCommand, nCommandPos,
-                                                      coStartFlags, aEmptyOUStr,
-                                                      coContFlags, aEmptyOUStr );
+                                                      coStartFlags, OUString(),
+                                                      coContFlags, OUString());
 
         bool bSetError = true;
         sal_Int32 nRealStt = nCommandPos + aRes.LeadingWhiteSpace;

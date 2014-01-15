@@ -431,7 +431,7 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
     case ND_OLENODE:
         {
             // StarView does not yet provide an option to copy a StarOBJ
-            SvStorageRef aRef = new SvStorage( aEmptyOUStr );
+            SvStorageRef aRef = new SvStorage( OUString() );
             SwOLEObj& rSwOLE = (SwOLEObj&)((SwOLENode*)pCNd)->GetOLEObj();
 
             // temporary storage until object is inserted
@@ -833,7 +833,7 @@ void SwUndoReRead::SetAndSave(::sw::UndoRedoContext & rContext)
     }
     else
     {
-        pGrfNd->ReRead( aEmptyOUStr, aEmptyOUStr, pOldGrf, 0, sal_True );
+        pGrfNd->ReRead( OUString(), OUString(), pOldGrf, 0, sal_True );
         delete pOldGrf;
     }
 

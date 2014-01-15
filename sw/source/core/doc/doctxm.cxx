@@ -78,7 +78,7 @@ struct LinkStruct
     sal_Int32 nStartTextPos, nEndTextPos;
 
     LinkStruct( const OUString& rURL, sal_Int32 nStart, sal_Int32 nEnd )
-        : aINetFmt( rURL, aEmptyOUStr),
+        : aINetFmt( rURL, OUString()),
         nStartTextPos( nStart),
         nEndTextPos(nEnd) {}
 };
@@ -706,7 +706,7 @@ static const SwTxtNode* lcl_FindChapterNode( const SwNode& rNd, sal_uInt8 nLvl =
 
 SwTOXBaseSection::SwTOXBaseSection(SwTOXBase const& rBase, SwSectionFmt & rFmt)
     : SwTOXBase( rBase )
-    , SwSection( TOX_CONTENT_SECTION, aEmptyOUStr, rFmt )
+    , SwSection( TOX_CONTENT_SECTION, OUString(), rFmt )
 {
     SetProtect( rBase.IsProtected() );
     SetSectionName( GetTOXName() );
@@ -1296,7 +1296,7 @@ void SwTOXBaseSection::UpdateSequence( const SwTxtNode* pOwnChapterNode )
 void SwTOXBaseSection::UpdateAuthorities( const SwTOXInternational& rIntl )
 {
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
-    SwFieldType* pAuthFld = pDoc->GetFldType(RES_AUTHORITY, aEmptyOUStr, false);
+    SwFieldType* pAuthFld = pDoc->GetFldType(RES_AUTHORITY, OUString(), false);
     if(!pAuthFld)
         return;
 

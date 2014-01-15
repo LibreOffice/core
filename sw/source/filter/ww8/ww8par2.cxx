@@ -193,7 +193,7 @@ public:
     const WW8_TCell* GetAktWWCell() const { return pAktWWCell; }
     short GetAktCol() const { return nAktCol; }
     // find name of numrule valid for current WW-COL
-    const OUString& GetNumRuleName() const;
+    OUString GetNumRuleName() const;
     void SetNumRuleName( const OUString& rName );
 
     sw::util::RedlineStack* getOldRedlineStack(){ return mpOldRedlineStack; }
@@ -3302,20 +3302,19 @@ sal_uInt16 WW8TabDesc::GetLogicalWWCol() const // returns number of col as INDIC
 }
 
 // find name of numrule valid for current WW-COL
-const OUString& WW8TabDesc::GetNumRuleName() const
+OUString WW8TabDesc::GetNumRuleName() const
 {
     sal_uInt16 nCol = GetLogicalWWCol();
     if (nCol < aNumRuleNames.size())
         return aNumRuleNames[nCol];
-    else
-        return aEmptyOUStr;
+    return OUString();
 }
 
 void WW8TabDesc::SetNumRuleName( const OUString& rName )
 {
     sal_uInt16 nCol = GetLogicalWWCol();
     for (sal_uInt16 nSize = static_cast< sal_uInt16 >(aNumRuleNames.size()); nSize <= nCol; ++nSize)
-        aNumRuleNames.push_back(aEmptyOUStr);
+        aNumRuleNames.push_back(OUString());
     aNumRuleNames[nCol] = rName;
 }
 

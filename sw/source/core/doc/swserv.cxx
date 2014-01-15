@@ -47,12 +47,12 @@ sal_Bool SwServerObject::GetData( uno::Any & rData,
     switch( SotExchange::GetFormatIdFromMimeType( rMimeType ) )
     {
     case FORMAT_STRING:
-        ::GetASCWriter( aEmptyOUStr, OUString(), xWrt );
+        ::GetASCWriter( OUString(), OUString(), xWrt );
         break;
 
     case FORMAT_RTF:
         // mba: no BaseURL for data exchange
-        ::GetRTFWriter( aEmptyOUStr, OUString(), xWrt );
+        ::GetRTFWriter( OUString(), OUString(), xWrt );
         break;
     }
 

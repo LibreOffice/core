@@ -342,7 +342,7 @@ sal_uLong SwXMLTextBlocks::PutBlock( SwPaM& , const OUString& )
     nFlags |= nCommitFlags;
 
     WriterRef xWrt;
-    ::GetXMLWriter ( aEmptyOUStr, GetBaseURL(), xWrt);
+    ::GetXMLWriter ( OUString(), GetBaseURL(), xWrt);
     SwWriter aWriter (xRoot, *pDoc );
 
     xWrt->bBlock = sal_True;

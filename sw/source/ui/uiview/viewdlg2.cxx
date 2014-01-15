@@ -167,7 +167,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
 
     GetWrtShell().InsertLabel( eT,
                                 pOpt->GetCaption(),
-                                !pOpt->IgnoreSeqOpts() ? aEmptyOUStr : pOpt->GetSeparator(),
+                                !pOpt->IgnoreSeqOpts() ? OUString() : pOpt->GetSeparator(),
                                 pOpt->GetNumSeparator(),
                                 !pOpt->GetPos(),
                                 nID,

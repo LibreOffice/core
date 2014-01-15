@@ -1900,7 +1900,7 @@ OUString SwTableBox::GetName() const
     if( !pSttNd )       // box without content?
     {
         // search for the next first box?
-        return aEmptyOUStr;
+        return OUString();
     }
 
     const SwTable& rTbl = pSttNd->FindTableNode()->GetTable();

@@ -162,7 +162,7 @@ sal_Bool SwGrfNode::ReRead(
                     nNewType = OBJECT_CLIENT_DDE;
                 else
                 {
-                    sfx2::MakeLnkName( sCmd, 0, rGrfName, aEmptyOUStr, &rFltName );
+                    sfx2::MakeLnkName( sCmd, 0, rGrfName, OUString(), &rFltName );
                     nNewType = OBJECT_CLIENT_GRF;
                 }
 

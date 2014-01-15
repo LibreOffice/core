@@ -2332,7 +2332,7 @@ void AttributeOutputBase::EndTOX( const SwSection& rSect,bool bCareEnd )
     if ( pTOX )
     {
         ww::eField eCode = TOX_INDEX == pTOX->GetType() ? ww::eINDEX : ww::eTOC;
-        GetExport( ).OutputField( 0, eCode, aEmptyOUStr, WRITEFIELD_CLOSE );
+        GetExport( ).OutputField( 0, eCode, OUString(), WRITEFIELD_CLOSE );
     }
     GetExport( ).bInWriteTOX = false;
     if (bCareEnd)

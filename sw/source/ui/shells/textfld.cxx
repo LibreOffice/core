@@ -367,7 +367,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     // --> suggestion has to be removed before
                     GetView().GetEditWin().StopQuickHelp();
 
-                    SwInsertFld_Data aData(TYP_POSTITFLD, 0, sAuthor, aEmptyOUStr, 0);
+                    SwInsertFld_Data aData(TYP_POSTITFLD, 0, sAuthor, OUString(), 0);
                     aFldMgr.InsertFld( aData );
 
                     rSh.Push();
@@ -378,7 +378,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
                 if (pPostIt)
                 {
-                    SwFieldType* pType = rSh.GetDoc()->GetFldType(RES_POSTITFLD, aEmptyOUStr,false);
+                    SwFieldType* pType = rSh.GetDoc()->GetFldType(RES_POSTITFLD, OUString(), false);
                     SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
                     SwFmtFld* pSwFmtFld = aIter.First();
                     while( pSwFmtFld )
@@ -597,7 +597,7 @@ FIELD_INSERT:
                 if(!nInsertFormat)
                     nInsertFormat = aFldMgr.GetDefaultFormat(nInsertType, bIsText, rSh.GetNumberFormatter());
                 SwInsertFld_Data aData(nInsertType, nInsertSubType,
-                                    aEmptyOUStr, aEmptyOUStr, nInsertFormat);
+                                    OUString(), OUString(), nInsertFormat);
                 aFldMgr.InsertFld(aData);
                 rReq.Done();
             }

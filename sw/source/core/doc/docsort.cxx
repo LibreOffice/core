@@ -197,7 +197,7 @@ OUString SwSortTxtElement::GetKey(sal_uInt16 nId) const
 {
     SwTxtNode* pTxtNd = aPos.GetNode().GetTxtNode();
     if( !pTxtNd )
-        return aEmptyOUStr;
+        return OUString();
 
     // for TextNodes
     const OUString& rStr = pTxtNd->GetTxt();

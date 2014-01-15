@@ -3475,7 +3475,7 @@ bool SwWW8ImplReader::SetNewFontAttr(sal_uInt16 nFCode, bool bSetEnums,
 
     rtl_TextEncoding eDstCharSet = eSrcCharSet;
 
-    SvxFontItem aFont( eFamily, aName, aEmptyOUStr, ePitch, eDstCharSet, nWhich);
+    SvxFontItem aFont( eFamily, aName, OUString(), ePitch, eDstCharSet, nWhich);
 
     if( bSetEnums )
     {

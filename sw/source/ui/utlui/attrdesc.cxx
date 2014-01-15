@@ -184,7 +184,7 @@ SfxItemPresentation SwFmtRuby::GetPresentation( SfxItemPresentation ePres,
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
             {
-                rText = aEmptyOUStr;
+                rText = OUString();
                 return ePres;
             }
         default:;//prevent warning

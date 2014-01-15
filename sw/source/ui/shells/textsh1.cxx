@@ -587,7 +587,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if ( pItem )
             {
                 OUString sName = ((SfxStringItem*)pItem)->GetValue();
-                rWrtSh.SetBookmark( KeyCode(), sName, aEmptyOUStr );
+                rWrtSh.SetBookmark( KeyCode(), sName, OUString() );
             }
             else
             {
@@ -764,7 +764,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 }
 
                 if( !bDelSel && aFldMgr.GetCurFld() && TYP_FORMELFLD == aFldMgr.GetCurTypeId() )
-                    aFldMgr.UpdateCurFld( aFldMgr.GetCurFld()->GetFormat(), aEmptyOUStr, sFormula );
+                    aFldMgr.UpdateCurFld( aFldMgr.GetCurFld()->GetFormat(), OUString(), sFormula );
                 else if( !sFormula.isEmpty() )
                 {
                     if( rWrtSh.IsCrsrInTbl() )
@@ -778,7 +778,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     {
                         SvNumberFormatter* pFormatter = rWrtSh.GetNumberFormatter();
                         sal_uLong nSysNumFmt = pFormatter->GetFormatIndex( NF_NUMBER_STANDARD, LANGUAGE_SYSTEM);
-                        SwInsertFld_Data aData(TYP_FORMELFLD, nsSwGetSetExpType::GSE_FORMULA, aEmptyOUStr, sFormula, nSysNumFmt);
+                        SwInsertFld_Data aData(TYP_FORMELFLD, nsSwGetSetExpType::GSE_FORMULA, OUString(), sFormula, nSysNumFmt);
                         aFldMgr.InsertFld(aData);
                     }
                 }

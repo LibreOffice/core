@@ -253,7 +253,7 @@ int SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
         }
         else
         {
-            rShell.Insert( aEmptyOUStr, aEmptyOUStr, aGraphic, &aFrameManager );
+            rShell.Insert( OUString(), OUString(), aGraphic, &aFrameManager );
         }
 
         // it is too late after "EndAction" because the Shell can already be destroyed.
@@ -431,7 +431,7 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
 
         // format not equal to current filter (with autodetection)
         if( nError == GRFILTER_FORMATERROR )
-            nError = InsertGraphic( aFileName, aEmptyOUStr, bAsLink, &GraphicFilter::GetGraphicFilter() );
+            nError = InsertGraphic( aFileName, OUString(), bAsLink, &GraphicFilter::GetGraphicFilter() );
         if ( rSh.IsFrmSelected() )
         {
             SwFrmFmt* pFmt = pDoc->FindFrmFmtByName( sGraphicFormat );

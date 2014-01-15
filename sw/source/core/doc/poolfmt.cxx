@@ -146,7 +146,7 @@ static void lcl_SetDfltFont( sal_uInt16 nFntType, SfxItemSet& rSet )
                                 nLng, DEFAULTFONT_FLAGS_ONLYONE ) );
 
         rSet.Put( SvxFontItem( aFnt.GetFamily(), aFnt.GetName(),
-                            aEmptyOUStr, aFnt.GetPitch(),
+                            OUString(), aFnt.GetPitch(),
                             aFnt.GetCharSet(), aArr[n].nResFntId ));
     }
 }
@@ -175,7 +175,7 @@ static void lcl_SetDfltFont( sal_uInt16 nLatinFntType, sal_uInt16 nCJKFntType,
                                 nLng, DEFAULTFONT_FLAGS_ONLYONE ) );
 
         rSet.Put( SvxFontItem( aFnt.GetFamily(), aFnt.GetName(),
-                            aEmptyOUStr, aFnt.GetPitch(),
+                            OUString(), aFnt.GetPitch(),
                             aFnt.GetCharSet(), aArr[n].nResFntId ));
     }
 }
@@ -459,7 +459,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
                                             nLng, DEFAULTFONT_FLAGS_ONLYONE ) );
 
                     aSet.Put( SvxFontItem( aFnt.GetFamily(), aFnt.GetName(),
-                                            aEmptyOUStr, aFnt.GetPitch(),
+                                            OUString(), aFnt.GetPitch(),
                                             aFnt.GetCharSet(), *(pArr+1) ));
                 }
 
@@ -1952,7 +1952,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                 aFmt.SetFirstLineIndent( - nOffs );
             }
 
-            aFmt.SetSuffix( aEmptyOUStr );
+            aFmt.SetSuffix( OUString() );
             for( n = 3; n < MAXLEVEL; ++n )
             {
                 aFmt.SetStart( n+1 );

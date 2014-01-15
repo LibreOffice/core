@@ -520,7 +520,7 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
         if( EXCHG_IN_ACTION_MOVE == nAction && pIns )
         {
             aSection = SwSectionData(*pIns);
-            aSection.SetLinkFileName( aEmptyOUStr );
+            aSection.SetLinkFileName( OUString() );
             aSection.SetType( CONTENT_SECTION );
             aSection.SetProtectFlag( false );
 

@@ -1206,17 +1206,17 @@ void SwColumnPage::Update()
         }
         else
         {
-            aEd3.SetText(aEmptyOUStr);
-            aDistEd2.SetText(aEmptyOUStr);
+            aEd3.SetText(OUString());
+            aDistEd2.SetText(OUString());
         }
     }
     else
     {
-        aEd1.SetText(aEmptyOUStr);
-        aEd2.SetText(aEmptyOUStr);
-        aEd3.SetText(aEmptyOUStr);
-        aDistEd1.SetText(aEmptyOUStr);
-        aDistEd2.SetText(aEmptyOUStr);
+        aEd1.SetText(OUString());
+        aEd2.SetText(OUString());
+        aEd3.SetText(OUString());
+        aDistEd1.SetText(OUString());
+        aDistEd2.SetText(OUString());
     }
     UpdateColMgr(0);
 }

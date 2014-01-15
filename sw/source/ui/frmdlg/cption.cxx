@@ -188,7 +188,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
             m_pCategoryBox->SetText( sString );
         else
             m_pCategoryBox->SetText(
-                    SwStyleNameMapper::GetUIName( nPoolId, aEmptyOUStr ));
+                    SwStyleNameMapper::GetUIName( nPoolId, OUString() ));
     }
 
     // aFormatBox
@@ -250,8 +250,8 @@ void SwCaptionDialog::Apply()
     OUString aName( m_pCategoryBox->GetText() );
     if ( aName == m_sNone )
     {
-        aOpt.SetCategory( aEmptyOUStr );
-        aOpt.SetNumSeparator( aEmptyOUStr );
+        aOpt.SetCategory( OUString() );
+        aOpt.SetNumSeparator( OUString() );
     }
     else
     {
@@ -273,7 +273,7 @@ IMPL_LINK_INLINE_START( SwCaptionDialog, OptionHdl, Button*, pButton )
 {
     OUString sFldTypeName = m_pCategoryBox->GetText();
     if(sFldTypeName == m_sNone)
-        sFldTypeName = aEmptyOUStr;
+        sFldTypeName = OUString();
     SwSequenceOptionDialog  aDlg( pButton, rView, sFldTypeName );
     aDlg.SetApplyBorderAndShadow(bCopyAttributes);
     aDlg.SetCharacterStyle( sCharacterStyle );

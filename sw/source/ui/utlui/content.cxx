@@ -264,7 +264,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                 pMarkAccess->getBookmarksBegin(),
                 pMarkAccess->getBookmarksEnd(),
                 &lcl_IsUiVisibleBookmark));
-            sTypeToken = aEmptyOUStr;
+            sTypeToken = OUString();
             bEdit = true;
         }
         break;
@@ -406,14 +406,14 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                     }
                 }
             }
-            sTypeToken = aEmptyOUStr;
+            sTypeToken = OUString();
             bEdit = true;
             nOldMemberCount = nMemberCount;
         }
         break;
         case CONTENT_TYPE_DRAWOBJECT:
         {
-            sTypeToken = aEmptyOUStr;
+            sTypeToken = OUString();
             nMemberCount = 0;
             SdrModel* pModel = pWrtShell->getIDocumentDrawModelAccess()->GetDrawModel();
             if(pModel)
@@ -2871,7 +2871,7 @@ void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
             }
             else
             {
-                Help::ShowQuickHelp( this, Rectangle(), aEmptyOUStr, 0 );
+                Help::ShowQuickHelp( this, Rectangle(), OUString(), 0 );
                 bCallBase = false;
             }
         }

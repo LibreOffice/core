@@ -853,8 +853,8 @@ sal_Bool SwFldMgr::InsertFld(
                     pType,
                     rData.sPar1, // author
                     rData.sPar2, // content
-                    aEmptyOUStr, // author's initials
-                    aEmptyOUStr, // name
+                    OUString(), // author's initials
+                    OUString(), // name
                     DateTime(DateTime::SYSTEM) );
             pFld = pPostItField;
         }
@@ -1238,7 +1238,7 @@ sal_Bool SwFldMgr::InsertFld(
                 if(pTyp)
                 {
                     SwSetExpField* pExpFld =
-                        new SwSetExpField(pTyp, aEmptyOUStr, nFormatId);
+                        new SwSetExpField(pTyp, OUString(), nFormatId);
 
                     // Don't change type of SwSetExpFieldType:
                     sal_uInt16 nOldSubType = pExpFld->GetSubType();

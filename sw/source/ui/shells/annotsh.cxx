@@ -893,8 +893,8 @@ void SwAnnotationShell::ExecClpbrd(SfxRequest &rReq)
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 SfxAbstractPasteDialog* pDlg = pFact->CreatePasteDialog( &rView.GetEditWin() );
 
-                pDlg->Insert( SOT_FORMAT_STRING, aEmptyOUStr );
-                pDlg->Insert( SOT_FORMAT_RTF,    aEmptyOUStr );
+                pDlg->Insert( SOT_FORMAT_STRING, OUString() );
+                pDlg->Insert( SOT_FORMAT_RTF,    OUString() );
 
                 TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( &rView.GetEditWin() ) );
 

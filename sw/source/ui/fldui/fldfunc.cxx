@@ -265,8 +265,8 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
         }
         else
         {
-            m_pNameED->SetText(aEmptyOUStr);
-            m_pValueED->SetText(aEmptyOUStr);
+            m_pNameED->SetText(OUString());
+            m_pValueED->SetText(OUString());
         }
         if(bDropDown)
             ListEnableHdl(0);

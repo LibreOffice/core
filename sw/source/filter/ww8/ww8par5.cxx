@@ -1126,7 +1126,7 @@ OUString SwWW8ImplReader::GetFieldResult( WW8FieldDesc* pF )
     WW8_CP nStart = pF->nSRes;              // result start
     long nL = pF->nLRes;                    // result length
     if( !nL )
-        return aEmptyOUStr;                   // no result
+        return OUString();                  // no result
 
     if( nL > MAX_FIELDLEN )
         nL = MAX_FIELDLEN;                  // MaxLength, by quoting
@@ -1323,7 +1323,7 @@ eF_ResT SwWW8ImplReader::Read_F_ANumber( WW8FieldDesc*, OUString& rStr )
         SwSetExpFieldType aT( &rDoc, OUString("AutoNr"), nsSwGetSetExpType::GSE_SEQ );
         pNumFldType = rDoc.InsertFldType( aT );
     }
-    SwSetExpField aFld( (SwSetExpFieldType*)pNumFldType, aEmptyOUStr,
+    SwSetExpField aFld( (SwSetExpFieldType*)pNumFldType, OUString(),
                         GetNumberPara( rStr ) );
     aFld.SetValue( ++nFldNum );
     rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
@@ -1392,7 +1392,7 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, OUString& rStr )
 
     SwSetExpFieldType* pFT = (SwSetExpFieldType*)rDoc.InsertFldType(
                         SwSetExpFieldType( &rDoc, aSequenceName, nsSwGetSetExpType::GSE_SEQ ) );
-    SwSetExpField aFld( pFT, aEmptyOUStr, eNumFormat );
+    SwSetExpField aFld( pFT, OUString(), eNumFormat );
 
     //#i120654# Add bHidden for /h flag (/h: Hide the field result.)
     if (bHidden)
@@ -1818,7 +1818,7 @@ eF_ResT SwWW8ImplReader::Read_F_Symbol( WW8FieldDesc*, OUString& rStr )
     {
         if (!aName.isEmpty())                           // Font Name set ?
         {
-            SvxFontItem aFont(FAMILY_DONTKNOW, aName, aEmptyOUStr,
+            SvxFontItem aFont(FAMILY_DONTKNOW, aName, OUString(),
                 PITCH_DONTKNOW, RTL_TEXTENCODING_SYMBOL, RES_CHRATR_FONT);
             NewAttr(aFont);                       // new Font
         }
@@ -2309,7 +2309,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, OUString& rStr )
         aFlySet.Put( SwFmtVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
         pFlyFmtOfJustInsertedGraphic = rDoc.Insert( *pPaM,
                                                     aGrfName,
-                                                    aEmptyOUStr,
+                                                    OUString(),
                                                     0,          // Graphic*
                                                     &aFlySet,
                                                     0, 0);         // SwFrmFmt*
@@ -2434,7 +2434,7 @@ eF_ResT SwWW8ImplReader::Read_F_DBNext( WW8FieldDesc*, OUString& )
 {
     SwDBNextSetFieldType aN;
     SwFieldType* pFT = rDoc.InsertFldType( aN );
-    SwDBNextSetField aFld( (SwDBNextSetFieldType*)pFT, aEmptyOUStr, aEmptyOUStr,
+    SwDBNextSetField aFld( (SwDBNextSetFieldType*)pFT, OUString(), OUString(),
                             SwDBData() );       // Datenbank: Nichts
     rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
     return FLD_OK;
@@ -2630,7 +2630,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
             pFmt = rDoc.MakeCharFmt(aNm,(SwCharFmt*)rDoc.GetDfltCharFmt());
             SvxFontHeightItem aHeightItem(nFontSize*10, 100, RES_CHRATR_FONTSIZE);
             SvxFontItem aFontItem(FAMILY_DONTKNOW,sFontName,
-                aEmptyOUStr,PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT);
+                OUString(), PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT);
             aHeightItem.SetWhich(GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript));
             aFontItem.SetWhich(GetWhichOfScript(RES_CHRATR_FONT,nScript));
             pFmt->SetFmtAttr(aHeightItem);
@@ -2856,7 +2856,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
 
     const SwTOXType* pType = rDoc.GetTOXType( eTox, 0 );
     SwForm aOrigForm(eTox);
-    SwTOXBase* pBase = new SwTOXBase( pType, aOrigForm, nCreateOf, aEmptyOUStr );
+    SwTOXBase* pBase = new SwTOXBase( pType, aOrigForm, nCreateOf, OUString() );
     pBase->SetProtected(maSectionManager.CurrentSectionIsProtected());
     switch( eTox ){
     case TOX_INDEX:

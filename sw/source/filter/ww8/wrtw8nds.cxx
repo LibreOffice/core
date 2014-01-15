@@ -765,7 +765,7 @@ void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, sal_Int32 /*nPos*/, 
 void WW8AttributeOutput::EndRuby()
 {
     m_rWW8Export.WriteChar( ')' );
-    m_rWW8Export.OutputField( 0, ww::eEQ, aEmptyOUStr, WRITEFIELD_END | WRITEFIELD_CLOSE );
+    m_rWW8Export.OutputField( 0, ww::eEQ, OUString(), WRITEFIELD_END | WRITEFIELD_CLOSE );
 }
 
 /*#i15387# Better ideas welcome*/
@@ -1011,7 +1011,7 @@ bool WW8AttributeOutput::EndURL()
     if ( !m_rWW8Export.bWrtWW8 )
         return false;
 
-    m_rWW8Export.OutputField( 0, ww::eHYPERLINK, aEmptyOUStr, WRITEFIELD_CLOSE );
+    m_rWW8Export.OutputField( 0, ww::eHYPERLINK, OUString(), WRITEFIELD_CLOSE );
 
     return true;
 }
@@ -2588,7 +2588,7 @@ void WW8AttributeOutput::TableNodeInfo( ww8::WW8TableNodeInfo::Pointer_t pNodeIn
 
 void WW8AttributeOutput::EmptyParagraph()
 {
-    m_rWW8Export.WriteStringAsPara( aEmptyOUStr );
+    m_rWW8Export.WriteStringAsPara( OUString() );
 }
 
 bool MSWordExportBase::NoPageBreakSection( const SfxItemSet* pSet )

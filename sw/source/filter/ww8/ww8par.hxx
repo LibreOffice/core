@@ -260,7 +260,7 @@ public:
     bool bParaAutoAfter;    // For Auto Spacing after a paragraph
 
     SwWW8StyInf() :
-        sWWStyleName( aEmptyOUStr ),
+        sWWStyleName( OUString() ),
         nWWStyleId( 0 ),
         eLTRFontSrcCharSet(0),
         eRTLFontSrcCharSet(0),

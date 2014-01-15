@@ -478,15 +478,15 @@ void    SwOutlineSettingsTabPage::Update()
         if(bSameStart)
             m_pStartEdit->SetValue(aNumFmtArr[0]->GetStart());
         else
-            m_pStartEdit->SetText(aEmptyOUStr);
+            m_pStartEdit->SetText(OUString());
         if(bSamePrefix)
             m_pPrefixED->SetText(aNumFmtArr[0]->GetPrefix());
         else
-            m_pPrefixED->SetText(aEmptyOUStr);
+            m_pPrefixED->SetText(OUString());
         if(bSameSuffix)
             m_pSuffixED->SetText(aNumFmtArr[0]->GetSuffix());
         else
-            m_pSuffixED->SetText(aEmptyOUStr);
+            m_pSuffixED->SetText(OUString());
 
         if(bSameCharFmt)
         {
@@ -507,7 +507,7 @@ void    SwOutlineSettingsTabPage::Update()
         }
         else
         {
-            m_pAllLevelNF->SetText(aEmptyOUStr);
+            m_pAllLevelNF->SetText(OUString());
         }
     }
     else
@@ -538,7 +538,7 @@ void    SwOutlineSettingsTabPage::Update()
         }
         else
         {
-            m_pAllLevelNF->SetText(aEmptyOUStr);
+            m_pAllLevelNF->SetText(OUString());
             m_pAllLevelNF->Enable(sal_False);
             m_pAllLevelFT->Enable(sal_False);
         }
@@ -600,14 +600,14 @@ IMPL_LINK( SwOutlineSettingsTabPage, CollSelect, ListBox *, pBox )
         pCollNames[i] = aSaveCollNames[i];
 
     if(aCollName == aNoFmtName)
-        pCollNames[nTmpLevel] = aEmptyOUStr;
+        pCollNames[nTmpLevel] = OUString();
     else
     {
         pCollNames[nTmpLevel] = aCollName;
                 // template already in use?
         for( i = 0; i < MAXLEVEL; ++i)
             if(i != nTmpLevel && pCollNames[i] == aCollName )
-                pCollNames[i] = aEmptyOUStr;
+                pCollNames[i] = OUString();
     }
 
     // search the oldname and put it into the current entries
@@ -760,7 +760,7 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
     for( i = 0; i < MAXLEVEL; ++i )
     {
         m_pCollBox->InsertEntry( SwStyleNameMapper::GetUIName(
-                                    static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i), aEmptyOUStr ));
+                                    static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i), OUString()));
         m_pLevelLB->InsertEntry( OUString::number(i + 1) );
     }
     OUString sStr("1 - ");

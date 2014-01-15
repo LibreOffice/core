@@ -1596,7 +1596,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
         //
         if ( pPDFExtOutDevData->GetIsExportNotes() )
         {
-            SwFieldType* pType = mrSh.GetFldType( RES_POSTITFLD, aEmptyOUStr );
+            SwFieldType* pType = mrSh.GetFldType( RES_POSTITFLD, OUString() );
             SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
             for( SwFmtFld* pFirst = aIter.First(); pFirst; )
             {
@@ -1832,7 +1832,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
         //
         // REFERENCES
         //
-        SwFieldType* pType = mrSh.GetFldType( RES_GETREFFLD, aEmptyOUStr );
+        SwFieldType* pType = mrSh.GetFldType( RES_GETREFFLD, OUString() );
         SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
         for( SwFmtFld* pFirst = aIter.First(); pFirst; )
         {

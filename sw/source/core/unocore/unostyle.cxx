@@ -1985,7 +1985,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                     if(SFX_ITEM_SET == rStyleSet.GetItemState( RES_TXTATR_CJK_RUBY, sal_True, &pItem ) )
                         pRuby = new SwFmtRuby(*((SwFmtRuby*)pItem));
                     if(!pRuby)
-                        pRuby = new SwFmtRuby(aEmptyOUStr);
+                        pRuby = new SwFmtRuby(OUString());
                     OUString sStyle;
                     SwStyleNameMapper::FillUIName(sTmp, sStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
                     pRuby->SetCharFmtName( sTmp );

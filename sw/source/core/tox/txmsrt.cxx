@@ -189,7 +189,7 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwCntntNode* pNd,
 
 OUString SwTOXSortTabBase::GetURL() const
 {
-    return aEmptyOUStr;
+    return OUString();
 }
 
 void SwTOXSortTabBase::FillText( SwTxtNode& rNd, const SwIndex& rInsPos,

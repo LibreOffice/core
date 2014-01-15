@@ -167,13 +167,13 @@ void SwJavaEditDialog::CheckTravel()
                     sURL = aINetURL.PathToFileName();
             }
             m_pUrlED->SetText(sURL);
-            m_pEditED->SetText(aEmptyOUStr);
+            m_pEditED->SetText(OUString());
             m_pUrlRB->Check();
         }
         else
         {
             m_pEditED->SetText(pFld->GetPar2());
-            m_pUrlED->SetText(aEmptyOUStr);
+            m_pUrlED->SetText(OUString());
             m_pEditRB->Check();
         }
         m_pTypeED->SetText(pFld->GetPar1());
