@@ -156,6 +156,15 @@ DECLARE_RTFEXPORT_TEST(testFdo38244, "fdo38244.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("M"), getProperty<OUString>(xPropertySet, "Initials"));
 }
 
+DECLARE_RTFEXPORT_TEST(testCommentsNested, "comments-nested.odt")
+{
+    uno::Reference<beans::XPropertySet> xOuter(getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 2), "TextField"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Outer"), getProperty<OUString>(xOuter, "Content"));
+
+    uno::Reference<beans::XPropertySet> xInner(getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 4), "TextField"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Inner"), getProperty<OUString>(xInner, "Content"));
+}
+
 DECLARE_RTFEXPORT_TEST(testMathAccents, "math-accents.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));

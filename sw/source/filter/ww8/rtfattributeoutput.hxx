@@ -500,8 +500,9 @@ private:
     bool m_bStrikeDouble;
 
     sal_Int32 m_nNextAnnotationMarkId;
-    /// Map of the annotation marks ids
-    std::map< OString, std::pair<sal_uInt16, const SwPostItField*> > m_rOpenedAnnotationMarksIds;
+    sal_Int32 m_nCurrentAnnotationMarkId;
+    /// Maps annotation mark names to ID's.
+    std::map<OString, sal_uInt16> m_rOpenedAnnotationMarksIds;
 
     /*
      * The current table helper.
@@ -577,7 +578,8 @@ private:
 
     bool m_bInRun;
 
-    unsigned int m_nPostitFieldsMaxId;
+    /// Maps ID's to postit fields, used in atrfstart/end and atnref.
+    std::map<sal_uInt16, const SwPostItField*> m_aPostitFields;
 
     /// When exporting fly frames, this holds the real size of the frame.
     const Size* m_pFlyFrameSize;

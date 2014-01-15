@@ -1480,8 +1480,7 @@ void RtfAttributeOutput::WriteAnnotationMarks_Impl( std::vector< OUString >& rSt
 
         // Output the annotation mark
         sal_uInt16 nId = m_nNextAnnotationMarkId++;
-        const SwPostItField* pField = 0; // This will be set by PostitField().
-        m_rOpenedAnnotationMarksIds[rName] = std::make_pair(nId, pField);
+        m_rOpenedAnnotationMarksIds[rName] = nId;
         m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ATRFSTART " ");
         m_aRun->append(OString::number(nId).getStr());
         m_aRun->append('}');
@@ -1493,20 +1492,21 @@ void RtfAttributeOutput::WriteAnnotationMarks_Impl( std::vector< OUString >& rSt
         OString rName = OUStringToOString( *i, RTL_TEXTENCODING_UTF8 );
 
         // Get the id of the annotation mark
-        std::map< OString, std::pair<sal_uInt16, const SwPostItField*> >::iterator it = m_rOpenedAnnotationMarksIds.find( rName );
+        std::map<OString, sal_uInt16>::iterator it = m_rOpenedAnnotationMarksIds.find(rName);
         if (it != m_rOpenedAnnotationMarksIds.end())
         {
-            sal_uInt16 nId = ( *it ).second.first;
-            const SwPostItField* pField = ( *it ).second.second;
+            sal_uInt16 nId = it->second;
             m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ATRFEND " ");
             m_aRun->append(OString::number(nId).getStr());
             m_aRun->append('}');
             m_rOpenedAnnotationMarksIds.erase( rName );
 
-            if (pField)
+            if (m_aPostitFields.find(nId) != m_aPostitFields.end())
             {
                 m_aRunText->append("{");
-                PostitField(pField);
+                m_nCurrentAnnotationMarkId = nId;
+                PostitField(m_aPostitFields[nId]);
+                m_nCurrentAnnotationMarkId = -1;
                 m_aRunText->append("}");
             }
         }
@@ -3227,12 +3227,12 @@ void RtfAttributeOutput::PostitField( const SwField* pFld )
     const SwPostItField& rPFld = *(SwPostItField*)pFld;
 
     OString aName = OUStringToOString(rPFld.GetName(), RTL_TEXTENCODING_UTF8);
-    std::map< OString, std::pair<sal_uInt16, const SwPostItField*> >::iterator it = m_rOpenedAnnotationMarksIds.find(aName);
+    std::map<OString, sal_uInt16>::iterator it = m_rOpenedAnnotationMarksIds.find(aName);
     if (it != m_rOpenedAnnotationMarksIds.end())
     {
         // In case this field is inside annotation marks, we want to write the
         // annotation itself after the annotation mark is closed, not here.
-        it->second.second = &rPFld;
+        m_aPostitFields[it->second] = &rPFld;
         return;
     }
 
@@ -3245,9 +3245,13 @@ void RtfAttributeOutput::PostitField( const SwField* pFld )
     m_aRunText->append(OOO_STRING_SVTOOLS_RTF_CHATN);
 
     m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ANNOTATION);
-    m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ATNREF " ");
-    m_aRunText->append(sal_Int32(m_nPostitFieldsMaxId++));
-    m_aRunText->append('}');
+
+    if (m_nCurrentAnnotationMarkId != -1)
+    {
+        m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ATNREF " ");
+        m_aRunText->append(m_nCurrentAnnotationMarkId);
+        m_aRunText->append('}');
+    }
     m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ATNDATE " ");
     m_aRunText->append((sal_Int32)sw::ms::DateTime2DTTM(rPFld.GetDateTime()));
     m_aRunText->append('}');
@@ -3273,6 +3277,7 @@ RtfAttributeOutput::RtfAttributeOutput( RtfExport &rExport )
     : m_rExport( rExport ),
     m_bStrikeDouble( false ),
     m_nNextAnnotationMarkId(0),
+    m_nCurrentAnnotationMarkId(-1),
     m_pTableWrt( NULL ),
     m_bTableCellOpen( false ),
     m_nTableDepth( 0 ),
@@ -3287,7 +3292,6 @@ RtfAttributeOutput::RtfAttributeOutput( RtfExport &rExport )
     m_aCells(),
     m_bSingleEmptyRun(false),
     m_bInRun(false),
-    m_nPostitFieldsMaxId(0),
     m_pFlyFrameSize(0),
     m_pPrevPageDesc(0)
 {
