@@ -19,89 +19,46 @@
 
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <cppuhelper/supportsservice.hxx>
+#include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/io/XStream.hpp>
 
-#include <ownsubfilterservice.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <rtl/ref.hxx>
 #include <sfx2/objsh.hxx>
 
-using namespace ::com::sun::star;
+using namespace css;
 
-namespace sfx2 {
+namespace {
 
-//-------------------------------------------------------------------------
-OwnSubFilterService::OwnSubFilterService( const uno::Reference < lang::XMultiServiceFactory >& xFactory )
-: m_xFactory( xFactory )
-, m_pObjectShell( NULL )
+class OwnSubFilterService : public cppu::WeakImplHelper2 < document::XFilter
+                                                        ,lang::XServiceInfo >
 {
-}
+    uno::Reference< frame::XModel > m_xModel;
+    uno::Reference< io::XStream > m_xStream;
+    SfxObjectShell* m_pObjectShell;
 
-//-------------------------------------------------------------------------
-OwnSubFilterService::~OwnSubFilterService()
-{
-}
+public:
+    OwnSubFilterService( const uno::Sequence< uno::Any >& aArguments )
+        throw (uno::Exception, uno::RuntimeException);
+    virtual ~OwnSubFilterService();
 
-//-------------------------------------------------------------------------
-uno::Sequence< OUString > SAL_CALL OwnSubFilterService::impl_getStaticSupportedServiceNames()
-{
-    uno::Sequence< OUString > aRet(2);
-    aRet[0] = "com.sun.star.document.OwnSubFilter";
-    aRet[1] = "com.sun.star.comp.document.OwnSubFilter";
-    return aRet;
-}
+    // XFilter
+    virtual ::sal_Bool SAL_CALL filter( const uno::Sequence< beans::PropertyValue >& aDescriptor ) throw (uno::RuntimeException);
+    virtual void SAL_CALL cancel() throw (uno::RuntimeException);
 
-//-------------------------------------------------------------------------
-OUString SAL_CALL OwnSubFilterService::impl_getStaticImplementationName()
-{
-    return OUString("com.sun.star.comp.document.OwnSubFilter");
-}
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName(  ) throw (uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (uno::RuntimeException);
+    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (uno::RuntimeException);
+};
 
-//-------------------------------------------------------------------------
-uno::Reference< uno::XInterface > SAL_CALL OwnSubFilterService::impl_staticCreateSelfInstance(
-            const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
-{
-    return uno::Reference< uno::XInterface >( *new OwnSubFilterService( xServiceManager ) );
-}
-
-//-------------------------------------------------------------------------
-uno::Reference< lang::XSingleServiceFactory > SAL_CALL OwnSubFilterService::impl_createFactory(
-            const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
-{
-    return ::cppu::createSingleFactory( xServiceManager,
-                                OwnSubFilterService::impl_getStaticImplementationName(),
-                                OwnSubFilterService::impl_staticCreateSelfInstance,
-                                OwnSubFilterService::impl_getStaticSupportedServiceNames() );
-}
-
-
-// XFilter
-
-//-------------------------------------------------------------------------
-sal_Bool SAL_CALL OwnSubFilterService::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor )
-    throw (uno::RuntimeException)
-{
-    if ( !m_pObjectShell )
-        throw uno::RuntimeException();
-
-    return m_pObjectShell->ImportFromGeneratedStream_Impl( m_xStream, aDescriptor );
-}
-
-//-------------------------------------------------------------------------
-void SAL_CALL OwnSubFilterService::cancel()
-    throw (uno::RuntimeException)
-{
-    // not implemented
-}
-
-
-// XInitialization
-
-//-------------------------------------------------------------------------
-void SAL_CALL OwnSubFilterService::initialize( const uno::Sequence< uno::Any >& aArguments )
+OwnSubFilterService::OwnSubFilterService( const uno::Sequence< uno::Any >& aArguments )
     throw (uno::Exception, uno::RuntimeException)
+    : m_pObjectShell( NULL )
 {
-    if ( !m_xFactory.is() )
-        throw uno::RuntimeException();
-
     if ( aArguments.getLength() != 2 )
         throw lang::IllegalArgumentException();
 
@@ -122,11 +79,29 @@ void SAL_CALL OwnSubFilterService::initialize( const uno::Sequence< uno::Any >& 
         throw lang::IllegalArgumentException();
 }
 
-// XServiceInfo
+OwnSubFilterService::~OwnSubFilterService()
+{
+}
+
+sal_Bool SAL_CALL OwnSubFilterService::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor )
+    throw (uno::RuntimeException)
+{
+    if ( !m_pObjectShell )
+        throw uno::RuntimeException();
+
+    return m_pObjectShell->ImportFromGeneratedStream_Impl( m_xStream, aDescriptor );
+}
+
+void SAL_CALL OwnSubFilterService::cancel()
+    throw (uno::RuntimeException)
+{
+    // not implemented
+}
+
 OUString SAL_CALL OwnSubFilterService::getImplementationName()
     throw ( uno::RuntimeException )
 {
-    return impl_getStaticImplementationName();
+    return OUString("com.sun.star.comp.document.OwnSubFilter");
 }
 
 sal_Bool SAL_CALL OwnSubFilterService::supportsService( const OUString& ServiceName )
@@ -138,9 +113,22 @@ sal_Bool SAL_CALL OwnSubFilterService::supportsService( const OUString& ServiceN
 uno::Sequence< OUString > SAL_CALL OwnSubFilterService::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {
-    return impl_getStaticSupportedServiceNames();
+    uno::Sequence< OUString > aRet(2);
+    aRet[0] = "com.sun.star.document.OwnSubFilter";
+    aRet[1] = "com.sun.star.comp.document.OwnSubFilter";
+    return aRet;
 }
 
-} // namespace sfx2
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_document_OwnSubFilter_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &arguments)
+{
+    rtl::Reference<OwnSubFilterService> x(new OwnSubFilterService(arguments));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -59,7 +59,6 @@
 #include <comphelper/sequence.hxx>
 #include <framework/documentundoguard.hxx>
 #include <osl/mutex.hxx>
-#include <ownsubfilterservice.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
@@ -1799,7 +1798,6 @@ SFX2_DLLPUBLIC void* SAL_CALL sfx_component_getFactory(
         IF_NAME_CREATECOMPONENTFACTORY( TestKeyHandler )
         IF_NAME_CREATECOMPONENTFACTORY( TestMouseClickHandler )
 #endif
-        IF_NAME_CREATECOMPONENTFACTORY( ::sfx2::OwnSubFilterService )
         if ( ::comp_SfxDocumentMetaData::_getImplementationName().equals(
                  OUString::createFromAscii( pImplementationName ) ) )
         {
