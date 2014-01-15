@@ -263,8 +263,6 @@ private:
 
     Bubble2DCircle m_Bubble2DCircle;
 
-    Bubble2DPointList m_Bubble2DPointList;
-
     std::list <Bubble2DPointList> m_Bubble2DShapePointList;
     GLint m_CommonProID;
     GLint m_2DVertexID;

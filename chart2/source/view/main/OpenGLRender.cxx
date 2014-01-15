@@ -931,7 +931,6 @@ OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
     m_ClearColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f))
 {
     //TODO: moggi: use STL
-    memset(&m_Bubble2DPointList, 0, sizeof(m_Bubble2DPointList));
     memset(&m_Bubble2DCircle, 0, sizeof(m_Bubble2DCircle));
     memset(&m_TextInfo, 0, sizeof(TextInfo));
 
@@ -1266,12 +1265,13 @@ int OpenGLRender::Bubble2DShapePoint(float x, float y, float directionX, float d
 
     float actualX = (x / OPENGL_SCALE_VALUE);
     float actualY = (y / OPENGL_SCALE_VALUE);
-    m_Bubble2DPointList.x = actualX;
-    m_Bubble2DPointList.y = actualY;
-    m_Bubble2DPointList.xScale = directionX / OPENGL_SCALE_VALUE;
-    m_Bubble2DPointList.yScale = directionY / OPENGL_SCALE_VALUE;
+    Bubble2DPointList aBubble2DPointList;
+    aBubble2DPointList.x = actualX;
+    aBubble2DPointList.y = actualY;
+    aBubble2DPointList.xScale = directionX / OPENGL_SCALE_VALUE;
+    aBubble2DPointList.yScale = directionY / OPENGL_SCALE_VALUE;
 
-    m_Bubble2DShapePointList.push_back(m_Bubble2DPointList);
+    m_Bubble2DShapePointList.push_back(aBubble2DPointList);
     return 0;
 }
 
