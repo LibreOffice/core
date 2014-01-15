@@ -666,8 +666,6 @@ void OutputDevice::DrawTransformedBitmapEx(
     const basegfx::B2DHomMatrix& rTransformation,
     const BitmapEx& rBitmapEx)
 {
-    OSL_TRACE( "OutputDevice::DrawBitmapEx( Point, Size )" );
-
     if( ImplIsRecordLayout() )
         return;
 
