@@ -549,35 +549,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
             break; // y-size
         case NS_rtf::LN_HMF: break; //identifier - ignored
 
-        //sprm 0xf008
-        case NS_rtf::LN_shptype:
-            break;
-        case NS_rtf::LN_shpid:
-            break;
-        case NS_rtf::LN_shpfGroup:
-            break;// This shape is a group shape
-        case NS_rtf::LN_shpfChild:
-            break;// Not a top-level shape
-        case NS_rtf::LN_shpfPatriarch:
-            break;// This is the topmost group shape. Exactly one of these per drawing.
-        case NS_rtf::LN_shpfDeleted:
-            break;// The shape has been deleted
-        case NS_rtf::LN_shpfOleShape:
-            break;// The shape is an OLE object
-        case NS_rtf::LN_shpfHaveMaster:
-            break;// Shape has a hspMaster property
-        case NS_rtf::LN_shpfFlipH:       // Shape is flipped horizontally
-            m_pImpl->bHoriFlip = nIntValue ? true : false;
-        break;
-        case NS_rtf::LN_shpfFlipV:       // Shape is flipped vertically
-            m_pImpl->bVertFlip = nIntValue ? true : false;
-        break;
-        case NS_rtf::LN_shpfConnector:
-            break;// Connector type of shape
-        case NS_rtf::LN_shpfHaveAnchor:
-            break;// Shape has an anchor of some kind
-        case NS_rtf::LN_shpfBackground:
-            break;// Background shape
         case NS_rtf::LN_shpfBid:
             break; //ignored
         case NS_rtf::LN_shpfComplex:
