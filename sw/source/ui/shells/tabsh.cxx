@@ -1241,7 +1241,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
             case SID_TABLE_VERT_BOTTOM:
             {
                 sal_uInt16 nAlign = rSh.GetBoxAlign();
-                sal_Bool bSet = nSlot == (SID_TABLE_VERT_NONE && nAlign == text::VertOrientation::NONE) ||
+                sal_Bool bSet = (nSlot == SID_TABLE_VERT_NONE && nAlign == text::VertOrientation::NONE) ||
                             (nSlot == SID_TABLE_VERT_CENTER && nAlign == text::VertOrientation::CENTER) ||
                             (nSlot == SID_TABLE_VERT_BOTTOM && nAlign == text::VertOrientation::BOTTOM);
                 rSet.Put(SfxBoolItem(nSlot, bSet));
