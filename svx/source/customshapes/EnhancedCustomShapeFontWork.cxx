@@ -230,7 +230,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                 nScriptType = xBI->getScriptType( rText, 0 );
                 if( i18n::ScriptType::WEAK == nScriptType )
                 {
-                    sal_Int32 nChg = xBI->endOfScript( rText, nChg, nScriptType );
+                    sal_Int32 nChg = xBI->endOfScript( rText, 0, nScriptType );
                     if (nChg < rText.getLength() && nChg >= 0)
                         nScriptType = xBI->getScriptType( rText, nChg );
                     else
