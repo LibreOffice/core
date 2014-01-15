@@ -133,8 +133,6 @@ extern bool bExecuteDrag;
 #define SWTRANSFER_OBJECTTYPE_SWOLE             0x00000010
 #define SWTRANSFER_OBJECTTYPE_DDE               0x00000020
 
-#define SWTRANSFER_GRAPHIC_INSERTED             0x00000040
-
 using namespace ::svx;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1109,7 +1107,7 @@ sal_Bool SwTransferable::IsPaste( const SwWrtShell& rSh,
     return bIsPaste;
 }
 
-int SwTransferable::Paste( SwWrtShell& rSh, TransferableDataHelper& rData )
+bool SwTransferable::Paste( SwWrtShell& rSh, TransferableDataHelper& rData )
 {
     sal_uInt16 nEventAction, nAction=0,
            nDestination = SwTransferable::GetSotDestination( rSh );
@@ -1153,7 +1151,7 @@ int SwTransferable::Paste( SwWrtShell& rSh, TransferableDataHelper& rData )
                                         nDestination, sal_False, sal_False );
 }
 
-int SwTransferable::PasteData( TransferableDataHelper& rData,
+bool SwTransferable::PasteData( TransferableDataHelper& rData,
                             SwWrtShell& rSh, sal_uInt16 nAction, sal_uLong nFormat,
                             sal_uInt16 nDestination, sal_Bool bIsPasteFmt,
                             sal_Bool bIsDefault,
@@ -1165,7 +1163,7 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
     SwTrnsfrActionAndUndo* pAction = 0;
     SwModule* pMod = SW_MOD();
 
-    int nRet = 0;
+    bool nRet = false;
     bool bCallAutoCaption = false;
 
     if( pPt )
@@ -1316,7 +1314,7 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
                     {
                         SwFmtINetFmt aFmt( aBkmk.GetURL(), OUString() );
                         rSh.InsertURL( aFmt, aBkmk.GetDescription() );
-                        nRet = 1;
+                        nRet = true;
                     }
                 }
                 break;
@@ -1354,7 +1352,7 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
                                     : EXCHG_IN_ACTION_LINK == nClearedAction
                                         ? SW_PASTESDR_SETATTR
                                         : SW_PASTESDR_INSERT),
-                                pPt, nActionFlags, bMsg );
+                                pPt, nActionFlags, bMsg, 0 );
                 break;
 
             case SOT_FORMAT_FILE_LIST:
@@ -1380,7 +1378,7 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
                             }
                         }
                         rSh.NavigatorPaste( aBkmk, nClearedAction );
-                        nRet = 1;
+                        nRet = true;
                     }
                 }
                 break;
@@ -1398,11 +1396,15 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
             break;
 
         case EXCHG_OUT_ACTION_INSERT_FILE:
-            nRet = SwTransferable::_PasteFileName( rData, rSh, nFormat,
-                                        SW_PASTESDR_INSERT, pPt,
-                                        nActionFlags, bMsg );
-            if( nRet & SWTRANSFER_GRAPHIC_INSERTED )
-                bCallAutoCaption = true;
+            {
+                bool graphicInserted;
+                nRet = SwTransferable::_PasteFileName( rData, rSh, nFormat,
+                                            SW_PASTESDR_INSERT, pPt,
+                                            nActionFlags, bMsg,
+                                            &graphicInserted );
+                if( graphicInserted )
+                    bCallAutoCaption = true;
+            }
             break;
 
         case EXCHG_OUT_ACTION_INSERT_OLE:
@@ -1427,7 +1429,7 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
                         SwTransferable::_CheckForURLOrLNKFile( rData, sURL, &sDesc );
                         if( sDesc.isEmpty() )
                             sDesc = sURL;
-                        nRet = 1;
+                        nRet = true;
                     }
                 }
                 else
@@ -1437,7 +1439,7 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
                     {
                         sURL = aBkmk.GetURL();
                         sDesc = aBkmk.GetDescription();
-                        nRet = 1;
+                        nRet = true;
                     }
                 }
 
@@ -1596,11 +1598,11 @@ sal_uInt16 SwTransferable::GetSotDestination( const SwWrtShell& rSh,
     return nRet;
 }
 
-int SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
+bool SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
                                     SwWrtShell& rSh, sal_uLong nFmt, sal_Bool bMsg )
 {
     sal_uInt16 nResId = MSG_CLPBRD_FORMAT_ERROR;
-    int nRet = 0;
+    bool nRet = false;
 
     MSE40HTMLClipFormatObj aMSE40ClpObj;
 
@@ -1672,7 +1674,7 @@ int SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
         if( IsError( aReader.Read( *pRead )) )
             nResId = ERR_CLPBRD_READ;
         else
-            nResId = 0, nRet = 1;
+            nResId = 0, nRet = true;
 
         rSh.SetChgLnk( aOldLink );
         if( nRet )
@@ -1692,10 +1694,10 @@ int SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
     return nRet;
 }
 
-int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
+bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                                 sal_uLong nFmt, sal_uInt8 nActionFlags, sal_Bool bMsg )
 {
-    int nRet = 0;
+    bool nRet = false;
     TransferableObjectDescriptor aObjDesc;
     uno::Reference < io::XInputStream > xStrm;
     uno::Reference < embed::XStorage > xStore;
@@ -1755,7 +1757,7 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
         SwPaM &rPAM = *rSh.GetCrsr();
         SwReader aReader( xStore, aEmptyOUStr, rPAM );
         if( !IsError( aReader.Read( *pRead )) )
-            nRet = 1;
+            nRet = true;
         else if( bMsg )
             InfoBox( 0, SW_RES(ERR_CLPBRD_READ) ).Execute();
     }
@@ -1887,7 +1889,7 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
             //End of Hack!
 
             rSh.InsertOleObject( xObjRef );
-            nRet = 1;
+            nRet = true;
 
             if( nRet && ( nActionFlags &
                 ( EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL >> 8) ))
@@ -1900,11 +1902,11 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
     return nRet;
 }
 
-int SwTransferable::_PasteTargetURL( TransferableDataHelper& rData,
+bool SwTransferable::_PasteTargetURL( TransferableDataHelper& rData,
                                     SwWrtShell& rSh, sal_uInt16 nAction,
                                     const Point* pPt, sal_Bool bInsertGRF )
 {
-    int nRet = 0;
+    bool nRet = false;
     INetImage aINetImg;
     if( ( rData.HasFormat( SOT_FORMATSTR_ID_INET_IMAGE ) &&
           rData.GetINetImage( SOT_FORMATSTR_ID_INET_IMAGE, aINetImg )) ||
@@ -1956,12 +1958,12 @@ int SwTransferable::_PasteTargetURL( TransferableDataHelper& rData,
                     }
                     break;
                 default:
-                    nRet = 0;
+                    nRet = false;
                 }
             }
         }
         else
-            nRet = 1;
+            nRet = true;
     }
 
     if( nRet )
@@ -2017,7 +2019,7 @@ void SwTransferable::SetSelInShell( SwWrtShell& rSh, sal_Bool bSelectFrm,
     }
 }
 
-int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
+bool SwTransferable::_PasteDDE( TransferableDataHelper& rData,
                                 SwWrtShell& rWrtShell, sal_Bool bReReadGrf,
                                 sal_Bool bMsg )
 {
@@ -2029,7 +2031,7 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
         if( !rData.GetSotStorageStream( SOT_FORMATSTR_ID_LINK, xStrm ))
         {
             OSL_ENSURE( !&rWrtShell, "DDE Data not found." );
-            return 0;
+            return false;
         }   // report useful error!!
 
         rtl_TextEncoding eEncoding = DDE_TXT_ENCODING;
@@ -2050,7 +2052,7 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
          rData.HasFormat( nFormat = FORMAT_BITMAP )) )
     {
         Graphic aGrf;
-        int nRet = rData.GetGraphic( nFormat, aGrf );
+        bool nRet = rData.GetGraphic( nFormat, aGrf );
         if( nRet )
         {
             OUString sLnkTyp("DDE");
@@ -2176,14 +2178,14 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
             }
     }
 
-    return 1;
+    return true;
 }
 
-int SwTransferable::_PasteSdrFormat(  TransferableDataHelper& rData,
+bool SwTransferable::_PasteSdrFormat(  TransferableDataHelper& rData,
                                     SwWrtShell& rSh, sal_uInt16 nAction,
                                     const Point* pPt, sal_uInt8 nActionFlags, bool bNeedToSelectBeforePaste)
 {
-    int nRet = 0;
+    bool nRet = false;
     SotStorageStreamRef xStrm;
     if( rData.GetSotStorageStream( SOT_FORMATSTR_ID_DRAWING, xStrm ))
     {
@@ -2197,7 +2199,7 @@ int SwTransferable::_PasteSdrFormat(  TransferableDataHelper& rData,
         }
 
         rSh.Paste( *xStrm, nAction, pPt );
-        nRet = 1;
+        nRet = true;
 
         if( nRet && ( nActionFlags &
             ( EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL >> 8) ))
@@ -2206,11 +2208,11 @@ int SwTransferable::_PasteSdrFormat(  TransferableDataHelper& rData,
     return nRet;
 }
 
-int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
+bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
                                 sal_uLong nFmt, sal_uInt16 nAction, const Point* pPt,
                                 sal_uInt8 nActionFlags, sal_Int8 /* nDropAction */, bool bNeedToSelectBeforePaste)
 {
-    int nRet = 0;
+    bool nRet = false;
 
     Graphic aGraphic;
     INetBookmark aBkmk;
@@ -2239,7 +2241,7 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
     case SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK:
     case SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR:
     case SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR:
-        if( 0 != ( nRet = rData.GetINetBookmark( nFmt, aBkmk ) ))
+        if( ( nRet = rData.GetINetBookmark( nFmt, aBkmk ) ))
         {
             if( SW_PASTESDR_SETATTR == nAction )
                 nFmt = SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK;
@@ -2251,7 +2253,7 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
     case SOT_FORMAT_FILE:
         {
             OUString sTxt;
-            if( 0 != ( nRet = rData.GetString( nFmt, sTxt ) ) )
+            if( ( nRet = rData.GetString( nFmt, sTxt ) ) )
             {
                 OUString sDesc;
                 SwTransferable::_CheckForURLOrLNKFile( rData, sTxt, &sDesc );
@@ -2284,7 +2286,7 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
         {
             // then set as hyperlink after the graphic
             nFmt = SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK;
-            nRet = sal_True;
+            nRet = true;
         }
     }
 
@@ -2348,7 +2350,7 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
             }
             break;
         default:
-            nRet = 0;
+            nRet = false;
         }
     }
 
@@ -2383,17 +2385,17 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
             aURL.SetMap( &aMap );
             aSet.Put( aURL );
             rSh.SetFlyFrmAttr( aSet );
-            nRet = 1;
+            nRet = true;
         }
     }
 
     return nRet;
 }
 
-int SwTransferable::_PasteImageMap( TransferableDataHelper& rData,
+bool SwTransferable::_PasteImageMap( TransferableDataHelper& rData,
                                     SwWrtShell& rSh )
 {
-    int nRet = 0;
+    bool nRet = false;
     if( rData.HasFormat( SOT_FORMATSTR_ID_SVIM ))
     {
         SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
@@ -2410,15 +2412,15 @@ int SwTransferable::_PasteImageMap( TransferableDataHelper& rData,
             aSet.Put( aURL );
             rSh.SetFlyFrmAttr( aSet );
         }
-        nRet = 1;
+        nRet = true;
     }
     return nRet;
 }
 
-int SwTransferable::_PasteAsHyperlink( TransferableDataHelper& rData,
+bool SwTransferable::_PasteAsHyperlink( TransferableDataHelper& rData,
                                         SwWrtShell& rSh, sal_uLong nFmt )
 {
-    int nRet = 0;
+    bool nRet = false;
     OUString sFile;
     if( rData.GetString( nFmt, sFile ) && !sFile.isEmpty() )
     {
@@ -2454,20 +2456,22 @@ int SwTransferable::_PasteAsHyperlink( TransferableDataHelper& rData,
                                 sDesc.isEmpty() ? sFile : sDesc);
             }
         }
-        nRet = sal_True;
+        nRet = true;
     }
     return nRet;
 }
 
-int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
+bool SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                                     SwWrtShell& rSh, sal_uLong nFmt,
                                     sal_uInt16 nAction, const Point* pPt,
-                    sal_uInt8 nActionFlags, sal_Bool /* bMsg */)
+                    sal_uInt8 nActionFlags, sal_Bool /* bMsg */,
+                    bool * graphicInserted)
 {
-    int nRet = SwTransferable::_PasteGrf( rData, rSh, nFmt, nAction,
+    bool nRet = SwTransferable::_PasteGrf( rData, rSh, nFmt, nAction,
                                             pPt, nActionFlags, 0, false);
-    if( nRet )
-        nRet |= SWTRANSFER_GRAPHIC_INSERTED;
+    if (graphicInserted != 0) {
+        *graphicInserted = nRet;
+    }
     if( !nRet )
     {
         OUString sFile, sDesc;
@@ -2505,7 +2509,7 @@ int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
 
                     Application::PostUserEvent( STATIC_LINK( &rSh, SwWrtShell,
                                                 InsertRegionDialog ), pSect );
-                    nRet = 1;
+                    nRet = true;
                     }
                 else if( SW_PASTESDR_SETATTR == nAction ||
                         ( bIsURLFile && SW_PASTESDR_INSERT == nAction ))
@@ -2541,7 +2545,7 @@ int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                                             sDesc.isEmpty() ? sFile : sDesc );
                         }
                     }
-                    nRet = sal_True;
+                    nRet = true;
                 }
             }
         }
@@ -2549,11 +2553,11 @@ int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
     return nRet;
 }
 
-int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
+bool SwTransferable::_PasteDBData( TransferableDataHelper& rData,
                                     SwWrtShell& rSh, sal_uLong nFmt, sal_Bool bLink,
                                     const Point* pDragPt, sal_Bool bMsg )
 {
-    int nRet = 0;
+    bool nRet = false;
     OUString sTxt;
     if( rData.GetString( nFmt, sTxt ) && !sTxt.isEmpty() )
     {
@@ -2643,7 +2647,7 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
                     rSh.SwFEShell::InsertDrawObj( *pObj, *pDragPt );
             }
         }
-        nRet = 1;
+        nRet = true;
     }
     else if( bMsg )
     {
@@ -2652,11 +2656,11 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
     return nRet;
 }
 
-int SwTransferable::_PasteFileList( TransferableDataHelper& rData,
+bool SwTransferable::_PasteFileList( TransferableDataHelper& rData,
                                     SwWrtShell& rSh, sal_Bool bLink,
                                     const Point* pPt, sal_Bool bMsg )
 {
-    int nRet = 0;
+    bool nRet = false;
     FileList aFileList;
     if( rData.GetFileList( SOT_FORMAT_FILE_LIST, aFileList ) &&
         aFileList.Count() )
@@ -2671,14 +2675,14 @@ int SwTransferable::_PasteFileList( TransferableDataHelper& rData,
             TransferableDataHelper aData( pHlp );
 
             if( SwTransferable::_PasteFileName( aData, rSh, SOT_FORMAT_FILE, nAct,
-                                            pPt, sal_False, bMsg ))
+                                            pPt, sal_False, bMsg, 0 ))
             {
                 if( bLink )
                 {
                     sFlyNm = rSh.GetFlyName();
                     SwTransferable::SetSelInShell( rSh, sal_False, pPt );
                 }
-                nRet = 1;
+                nRet = true;
             }
         }
         if( !sFlyNm.isEmpty() )
@@ -3142,13 +3146,13 @@ void SwTransferable::DragFinished( sal_Int8 nAction )
     ((SwViewOption *)pWrtShell->GetViewOptions())->SetIdle( bOldIdle );
 }
 
-int SwTransferable::PrivatePaste( SwWrtShell& rShell )
+bool SwTransferable::PrivatePaste( SwWrtShell& rShell )
 {
     // first, ask for the SelectionType, then action-bracketing !!!!
     // (otherwise it's not pasted into a TableSelection!!!)
     OSL_ENSURE( !rShell.ActionPend(), "Paste must never have an ActionPend" );
     if ( !pClpDocFac )
-        return sal_False; // the return value of the SwFEShell::Paste also is sal_Bool!
+        return false; // the return value of the SwFEShell::Paste also is sal_Bool!
 
     const int nSelection = rShell.GetSelectionType();
 
@@ -3195,7 +3199,7 @@ int SwTransferable::PrivatePaste( SwWrtShell& rShell )
             }
     }
 
-    int nRet = rShell.Paste( pClpDocFac->GetDoc() );
+    bool nRet = rShell.Paste( pClpDocFac->GetDoc() );
 
     if( bKillPaMs )
         rShell.KillPams();
@@ -3207,7 +3211,7 @@ int SwTransferable::PrivatePaste( SwWrtShell& rShell )
     return nRet;
 }
 
-int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
+bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
                                 sal_Bool bMove, sal_Bool bIsXSelection )
 {
     int cWord    = 0;
@@ -3249,7 +3253,7 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
                 aURL.SetURL( aTmp.GetURL(), sal_False );
                 aSet.Put( aURL );
                 rSh.SetFlyFrmAttr( aSet );
-                return 1;
+                return true;
             }
 
             if( nsSelectionType::SEL_DRW & nSelection )
@@ -3270,13 +3274,13 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
         OUString sFltNm;
         rSrcSh.GetGrfNms( &sGrfNm, &sFltNm );
         rSh.ReRead( sGrfNm, sFltNm, rSrcSh.GetGraphic() );
-        return 1;
+        return true;
     }
 
     //not in selections or selected frames
     if( rSh.ChgCurrPam( rDragPt ) ||
         ( rSh.IsSelFrmMode() && rSh.IsInsideSelectedObj( rDragPt )) )
-        return 0;
+        return false;
 
     if( rSrcSh.IsTableMode() )
         bTblSel = sal_True;
@@ -3284,7 +3288,7 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
     {
         // don't move position-protected objects!
         if( bMove && rSrcSh.IsSelObjProtected( FLYPROTECT_POS ) )
-            return 0;
+            return false;
 
         bFrmSel = sal_True;
     }
@@ -3351,7 +3355,7 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
                 rSh.EndUndo();
                 rSh.EndAction();
                 rSh.EndAction();
-                return 0;
+                return false;
             }
             rSh.GoNextCrsr();
         }
@@ -3465,7 +3469,7 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
 
     rSrcSh.EndAction();
     rSh.EndAction();
-    return 1;
+    return true;
 }
 
 // Interfaces for Selection

@@ -89,45 +89,45 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
     static int _TestAllowedFormat( const TransferableDataHelper& rData,
                                         sal_uLong nFormat, sal_uInt16 nDestination );
 
-    static int _PasteFileContent( TransferableDataHelper&,
+    static bool _PasteFileContent( TransferableDataHelper&,
                                     SwWrtShell& rSh, sal_uLong nFmt, sal_Bool bMsg );
-    static int _PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
+    static bool _PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                             sal_uLong nFmt, sal_uInt8 nActionFlags, sal_Bool bMsg );
-    static int _PasteTargetURL( TransferableDataHelper& rData, SwWrtShell& rSh,
+    static bool _PasteTargetURL( TransferableDataHelper& rData, SwWrtShell& rSh,
                         sal_uInt16 nAction, const Point* pPt, sal_Bool bInsertGRF );
 
-    static int _PasteDDE( TransferableDataHelper& rData, SwWrtShell& rWrtShell,
+    static bool _PasteDDE( TransferableDataHelper& rData, SwWrtShell& rWrtShell,
                             sal_Bool bReReadGrf, sal_Bool bMsg );
 
-    static int _PasteSdrFormat(  TransferableDataHelper& rData,
+    static bool _PasteSdrFormat(  TransferableDataHelper& rData,
                                     SwWrtShell& rSh, sal_uInt16 nAction,
                                     const Point* pPt, sal_uInt8 nActionFlags, bool bNeedToSelectBeforePaste);
 
-    static int _PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
+    static bool _PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
                                 sal_uLong nFmt, sal_uInt16 nAction, const Point* pPt,
                                 sal_uInt8 nActionFlags, sal_Int8 nDropAction, bool bNeedToSelectBeforePaste);
 
-    static int _PasteImageMap( TransferableDataHelper& rData,
+    static bool _PasteImageMap( TransferableDataHelper& rData,
                                     SwWrtShell& rSh );
 
-    static int _PasteAsHyperlink( TransferableDataHelper& rData,
+    static bool _PasteAsHyperlink( TransferableDataHelper& rData,
                                         SwWrtShell& rSh, sal_uLong nFmt );
 
-    static int _PasteFileName( TransferableDataHelper& rData,
+    static bool _PasteFileName( TransferableDataHelper& rData,
                             SwWrtShell& rSh, sal_uLong nFmt, sal_uInt16 nAction,
-                            const Point* pPt, sal_uInt8 nActionFlags, sal_Bool bMsg );
+                            const Point* pPt, sal_uInt8 nActionFlags, sal_Bool bMsg, bool * graphicInserted );
 
-    static int _PasteDBData( TransferableDataHelper& rData, SwWrtShell& rSh,
+    static bool _PasteDBData( TransferableDataHelper& rData, SwWrtShell& rSh,
                             sal_uLong nFmt, sal_Bool bLink, const Point* pDragPt,
                             sal_Bool bMsg );
 
-    static int _PasteFileList( TransferableDataHelper& rData,
+    static bool _PasteFileList( TransferableDataHelper& rData,
                                 SwWrtShell& rSh, sal_Bool bLink,
                                 const Point* pPt, sal_Bool bMsg );
 
-    int PrivateDrop( SwWrtShell& rSh, const Point& rDragPt, sal_Bool bMove,
+    bool PrivateDrop( SwWrtShell& rSh, const Point& rDragPt, sal_Bool bMove,
                         sal_Bool bIsXSelection );
-    int PrivatePaste( SwWrtShell& rShell );
+    bool PrivatePaste( SwWrtShell& rShell );
 
     void SetDataForDragAndDrop( const Point& rSttPos );
 
@@ -170,8 +170,8 @@ public:
 
     // paste - methods and helper methods for the paste
     static sal_Bool IsPaste( const SwWrtShell&, const TransferableDataHelper& );
-    static int Paste( SwWrtShell&, TransferableDataHelper& );
-    static int PasteData( TransferableDataHelper& rData,
+    static bool Paste( SwWrtShell&, TransferableDataHelper& );
+    static bool PasteData( TransferableDataHelper& rData,
                           SwWrtShell& rSh, sal_uInt16 nAction, sal_uLong nFormat,
                           sal_uInt16 nDestination, sal_Bool bIsPasteFmt,
                           sal_Bool bIsDefault,
