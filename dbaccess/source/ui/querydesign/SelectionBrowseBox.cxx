@@ -1259,9 +1259,8 @@ void OSelectionBrowseBox::PaintStatusCell(OutputDevice& rDev, const Rectangle& r
     OUString  aLabel(ModuleRes(STR_QUERY_HANDLETEXT));
 
    // from BROW_CRIT2_ROW onwards all rows are shown "or"
-    xub_StrLen nToken = (xub_StrLen) (m_nSeekRow >= GetBrowseRow(BROW_CRIT2_ROW))
-                                ?
-            xub_StrLen(BROW_CRIT2_ROW) : xub_StrLen(GetRealRow(m_nSeekRow));
+    sal_Int32 nToken = (m_nSeekRow >= GetBrowseRow(BROW_CRIT2_ROW))
+        ?  BROW_CRIT2_ROW : GetRealRow(m_nSeekRow);
     rDev.DrawText(aRect, aLabel.getToken(nToken, ';'),TEXT_DRAW_VCENTER);
 }
 
@@ -2648,9 +2647,8 @@ OUString OSelectionBrowseBox::GetRowDescription( sal_Int32 _nRow ) const
     OUString  aLabel(ModuleRes(STR_QUERY_HANDLETEXT));
 
     // from BROW_CRIT2_ROW onwards all rows are shown as "or"
-    xub_StrLen nToken = (xub_StrLen) (_nRow >= GetBrowseRow(BROW_CRIT2_ROW))
-                                ?
-            xub_StrLen(BROW_CRIT2_ROW) : xub_StrLen(GetRealRow(_nRow));
+    sal_Int32 nToken = (_nRow >= GetBrowseRow(BROW_CRIT2_ROW))
+        ?  BROW_CRIT2_ROW : GetRealRow(_nRow);
     return aLabel.getToken(nToken, ';');
 }
 
@@ -2704,7 +2702,7 @@ void OSelectionBrowseBox::setFunctionCell(OTableFieldDescRef& _pEntry)
                 m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(2, ';')); // 2 -> COUNT
             else
             {
-                xub_StrLen nCount = comphelper::string::getTokenCount(m_aFunctionStrings, ';');
+                sal_Int32 nCount = comphelper::string::getTokenCount(m_aFunctionStrings, ';');
                 if ( _pEntry->isNumeric() )
                     --nCount;
                 for( sal_Int32 nIdx = 1; nIdx < nCount; nIdx++ )

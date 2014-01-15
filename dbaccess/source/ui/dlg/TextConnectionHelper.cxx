@@ -87,7 +87,7 @@ DBG_NAME(OTextConnectionHelper)
         DBG_CTOR(OTextConnectionHelper,NULL);
 
         sal_Int32 nCnt = comphelper::string::getTokenCount(m_aFieldSeparatorList, '\t');
-        xub_StrLen i;
+        sal_Int32 i;
 
         for( i = 0 ; i < nCnt ; i += 2 )
             m_aFieldSeparator.InsertEntry( m_aFieldSeparatorList.getToken( i, '\t' ) );
@@ -454,7 +454,7 @@ DBG_NAME(OTextConnectionHelper)
     OUString OTextConnectionHelper::GetSeparator( const ComboBox& rBox, const OUString& rList )
     {
         sal_Unicode nTok = '\t';
-        xub_StrLen  nPos(rBox.GetEntryPos( rBox.GetText() ));
+        sal_uInt16 nPos(rBox.GetEntryPos( rBox.GetText() ));
 
         if( nPos == COMBOBOX_ENTRY_NOTFOUND )
             return rBox.GetText().copy(0);
@@ -470,7 +470,7 @@ DBG_NAME(OTextConnectionHelper)
     {
         char    nTok = '\t';
         sal_Int32   nCnt = comphelper::string::getTokenCount(rList, nTok);
-        xub_StrLen  i;
+        sal_Int32 i;
 
         for( i=0 ; i<nCnt ; i+=2 )
         {
