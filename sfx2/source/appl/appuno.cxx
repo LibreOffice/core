@@ -22,7 +22,6 @@
 #endif
 
 #include "backingcomp.hxx"
-#include "SfxDocumentMetaData.hxx"
 #include "eventsupplier.hxx"
 #include "fltoptint.hxx"
 #include "objshimp.hxx"
@@ -1798,22 +1797,6 @@ SFX2_DLLPUBLIC void* SAL_CALL sfx_component_getFactory(
         IF_NAME_CREATECOMPONENTFACTORY( TestKeyHandler )
         IF_NAME_CREATECOMPONENTFACTORY( TestMouseClickHandler )
 #endif
-        if ( ::comp_SfxDocumentMetaData::_getImplementationName().equals(
-                 OUString::createFromAscii( pImplementationName ) ) )
-        {
-            xFactory = ::cppu::createSingleComponentFactory(
-            ::comp_SfxDocumentMetaData::_create,
-            ::comp_SfxDocumentMetaData::_getImplementationName(),
-            ::comp_SfxDocumentMetaData::_getSupportedServiceNames());
-        }
-        if ( ::comp_CompatWriterDocProps::_getImplementationName().equals(
-                 OUString::createFromAscii( pImplementationName ) ) )
-        {
-            xFactory = ::cppu::createSingleComponentFactory(
-            ::comp_CompatWriterDocProps::_create,
-            ::comp_CompatWriterDocProps::_getImplementationName(),
-            ::comp_CompatWriterDocProps::_getSupportedServiceNames());
-        }
 
         // Factory is valid - service was found.
 

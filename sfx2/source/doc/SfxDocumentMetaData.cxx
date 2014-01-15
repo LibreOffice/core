@@ -56,7 +56,7 @@
 #include <com/sun/star/util/DateTimeWithTimezone.hpp>
 #include <com/sun/star/util/Duration.hpp>
 
-#include "SfxDocumentMetaData.hxx"
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include <tools/datetime.hxx>
@@ -377,7 +377,7 @@ public:
 // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
     {
-        return comp_CompatWriterDocProps::_getImplementationName();
+        return OUString("CompatWriterDocPropsImpl");
     }
 
     virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException)
@@ -387,7 +387,9 @@ public:
 
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException)
     {
-        return comp_CompatWriterDocProps::_getSupportedServiceNames();
+        css::uno::Sequence< OUString > aServiceNames(1);
+        aServiceNames[ 0 ] = "com.sun.star.writer.DocumentProperties";
+        return aServiceNames;
     }
 };
 
@@ -1384,27 +1386,23 @@ SfxDocumentMetaData::SfxDocumentMetaData(
 OUString SAL_CALL
 SfxDocumentMetaData::getImplementationName() throw (css::uno::RuntimeException)
 {
-    return comp_SfxDocumentMetaData::_getImplementationName();
+    return OUString("SfxDocumentMetaData");
 }
 
 ::sal_Bool SAL_CALL
 SfxDocumentMetaData::supportsService(OUString const & serviceName)
         throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence< OUString > serviceNames =
-        comp_SfxDocumentMetaData::_getSupportedServiceNames();
-    for (::sal_Int32 i = 0; i < serviceNames.getLength(); ++i) {
-        if (serviceNames[i] == serviceName)
-            return sal_True;
-    }
-    return sal_False;
+    return cppu::supportsService(this, serviceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL
 SfxDocumentMetaData::getSupportedServiceNames()
         throw (css::uno::RuntimeException)
 {
-    return comp_SfxDocumentMetaData::_getSupportedServiceNames();
+    css::uno::Sequence< OUString > s(1);
+    s[0] = "com.sun.star.document.DocumentProperties";
+    return s;
 }
 
 
@@ -2316,52 +2314,24 @@ void SfxDocumentMetaData::createUserDefined()
 
 } // closing anonymous implementation namespace
 
-
-// component helper namespace
-namespace comp_CompatWriterDocProps {
-
-    OUString SAL_CALL _getImplementationName() {
-        return OUString("CompatWriterDocPropsImpl");
-    }
-
-    css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
-    {
-        css::uno::Sequence< OUString > aServiceNames(1);
-        aServiceNames[ 0 ] = "com.sun.star.writer.DocumentProperties";
-        return aServiceNames;
-    }
-
-    css::uno::Reference< css::uno::XInterface > SAL_CALL _create(
-        const css::uno::Reference< css::uno::XComponentContext > & context)
-            SAL_THROW((css::uno::Exception))
-    {
-        return static_cast< ::cppu::OWeakObject * >
-                    (new CompatWriterDocPropsImpl(context));
-    }
-
-}
-
-namespace comp_SfxDocumentMetaData {
-
-OUString SAL_CALL _getImplementationName() {
-    return OUString("SfxDocumentMetaData");
-}
-
-css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+CompatWriterDocPropsImpl_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    css::uno::Sequence< OUString > s(1);
-    s[0] = "com.sun.star.document.DocumentProperties";
-    return s;
+    rtl::Reference<CompatWriterDocPropsImpl> x(new CompatWriterDocPropsImpl(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL _create(
-    const css::uno::Reference< css::uno::XComponentContext > & context)
-        SAL_THROW((css::uno::Exception))
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+SfxDocumentMetaData_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return static_cast< ::cppu::OWeakObject * >
-                (new SfxDocumentMetaData(context));
+    rtl::Reference<SfxDocumentMetaData> x(new SfxDocumentMetaData(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
-
-} // closing component helper namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

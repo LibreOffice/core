@@ -23,10 +23,12 @@
     <service name="com.sun.star.frame.StartModule"/>
     <service name="com.sun.star.frame.ProtocolHandler"/>
   </implementation>
-  <implementation name="SfxDocumentMetaData">
+  <implementation name="SfxDocumentMetaData"
+      constructor="SfxDocumentMetaData_get_implementation">
     <service name="com.sun.star.document.DocumentProperties"/>
   </implementation>
-  <implementation name="CompatWriterDocPropsImpl">
+  <implementation name="CompatWriterDocPropsImpl"
+      constructor="CompatWriterDocPropsImpl_get_implementation">
     <service name="com.sun.star.writer.DocumentProperties"/>
   </implementation>
   <implementation name="com.sun.star.comp.desktop.QuickstartWrapper"
