@@ -5487,12 +5487,7 @@ static void ImplHandleIMENotify( HWND hWnd, WPARAM wParam )
 static bool
 ImplHandleGetObject(HWND hWnd, LPARAM lParam, WPARAM wParam, LRESULT & nRet)
 {
-    // IA2 should be enabled automatically
-    AllSettings aSettings = Application::GetSettings();
-    MiscSettings aMisc = aSettings.GetMiscSettings();
-    aMisc.SetEnableATToolSupport( sal_True );
-    aSettings.SetMiscSettings( aMisc );
-    Application::SetSettings( aSettings );
+    // IA2 should not be enabled automatically since it's experimental
 
     if (!Application::GetSettings().GetMiscSettings().GetEnableATToolSupport())
         return false; // locked down somehow ?
