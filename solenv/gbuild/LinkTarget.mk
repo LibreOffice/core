@@ -782,8 +782,10 @@ $(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS += $(3)
 
 # depend on the exports of the library, not on the library itself
 # for faster incremental builds when the ABI is unchanged
+ifeq ($(DISABLE_DYNLOADING),)
 $(call gb_LinkTarget_get_target,$(1)) : \
 	$(foreach lib,$(3),$(call gb_Library_get_exports_target,$(lib)))
+endif
 $(call gb_LinkTarget_get_headers_target,$(1)) : \
 	$(foreach lib,$(2),$(call gb_Library_get_headers_target,$(lib)))
 $(foreach lib,$(2),$(call gb_LinkTarget__lib_dummy_depend,$(lib)))
@@ -862,7 +864,9 @@ endef
 define gb_LinkTarget_use_static_libraries
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS += $$(if $$(filter-out StaticLibrary,$$(TARGETTYPE)),$(2))
 
+ifeq ($(DISABLE_DYNLOADING),)
 $(call gb_LinkTarget_get_target,$(1)) : $(foreach lib,$(2),$(call gb_StaticLibrary_get_target,$(lib)))
+endif
 $(call gb_LinkTarget_get_headers_target,$(1)) : \
 	$(foreach lib,$(2),$(call gb_StaticLibrary_get_headers_target,$(lib)))
 $(foreach lib,$(2),$(call gb_LinkTarget__static_lib_dummy_depend,$(lib)))
