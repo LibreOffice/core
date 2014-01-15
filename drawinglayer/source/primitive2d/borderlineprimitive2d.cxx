@@ -153,6 +153,9 @@ namespace drawinglayer
                     nWidth = lcl_GetCorrectedWidth(nWidth,
                                 getStart(), getEnd(), rViewInformation);
 
+                    // distance is already scaled.
+                    double fGap = mfDistance*12.0;
+
                     if (bIsHairline)
                     {
                         // create hairline primitive
@@ -160,7 +163,6 @@ namespace drawinglayer
                         aPolygon.append( getEnd() );
 
                         basegfx::B2DPolygon aPolygon2 = aPolygon;
-                        double fGap = (mfDistance/mfLeftWidth) * mfPatternScale * 10.0;
                         moveLine(aPolygon2, fGap, aVector);
 
                         xRetval.realloc(2);
@@ -190,7 +192,6 @@ namespace drawinglayer
                             aPolygon = aClipped.getB2DPolygon(0);
 
                         basegfx::B2DPolygon aPolygon2 = aPolygon;
-                        double fGap = (mfDistance/mfLeftWidth + aVector.getLength()) * mfPatternScale * 10.0;
                         moveLine(aPolygon2, fGap, aVector);
 
                         xRetval.realloc(2);
