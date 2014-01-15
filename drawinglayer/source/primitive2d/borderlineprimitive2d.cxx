@@ -241,8 +241,9 @@ namespace drawinglayer
                         aPolygon.append( aTmpStart );
                         aPolygon.append( aTmpEnd );
 
-                        basegfx::B2DPolyPolygon aDashed = svtools::ApplyLineDashing(
-                               aPolygon, getStyle(), MAP_PIXEL, mfPatternScale*10.0);
+                        basegfx::B2DPolyPolygon aDashed =
+                            svtools::ApplyLineDashing(aPolygon, getStyle(), mfPatternScale*10.0);
+
                         for (sal_uInt32 i = 0; i < aDashed.count(); i++ )
                         {
                             basegfx::B2DPolygon aDash = aDashed.getB2DPolygon( i );
