@@ -36,7 +36,8 @@
     <service name="com.sun.star.comp.document.OwnSubFilter"/>
     <service name="com.sun.star.document.OwnSubFilter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.embed.PackageStructureCreator">
+  <implementation name="com.sun.star.comp.embed.PackageStructureCreator"
+      constructor="com_sun_star_comp_embed_PackageStructureCreator_get_implementation">
     <service name="com.sun.star.comp.embed.PackageStructureCreator"/>
     <service name="com.sun.star.embed.PackageStructureCreator"/>
   </implementation>

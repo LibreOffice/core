@@ -19,11 +19,13 @@
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <cppuhelper/supportsservice.hxx>
-
-#include "xpackcreator.hxx"
+#include <com/sun/star/embed/XPackageStructureCreator.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <rtl/ref.hxx>
 #include <sot/stg.hxx>
 #include <sot/storage.hxx>
 #include <tools/stream.hxx>
@@ -32,40 +34,24 @@
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 
-using namespace ::com::sun::star;
+using namespace css;
 
-//-------------------------------------------------------------------------
-uno::Sequence< OUString > SAL_CALL OPackageStructureCreator::impl_getStaticSupportedServiceNames()
+namespace {
+
+class OPackageStructureCreator : public ::cppu::WeakImplHelper2< embed::XPackageStructureCreator,
+                                                                lang::XServiceInfo >
 {
-    uno::Sequence< OUString > aRet(2);
-    aRet[0] = "com.sun.star.embed.PackageStructureCreator";
-    aRet[1] = "com.sun.star.comp.embed.PackageStructureCreator";
-    return aRet;
-}
+public:
+    OPackageStructureCreator() {}
 
-//-------------------------------------------------------------------------
-OUString SAL_CALL OPackageStructureCreator::impl_getStaticImplementationName()
-{
-    return OUString("com.sun.star.comp.embed.PackageStructureCreator");
-}
+    // XPackageStructureCreator
+    virtual void SAL_CALL convertToPackage( const OUString& aFolderUrl, const uno::Reference< io::XOutputStream >& xTargetStream ) throw (io::IOException, uno::RuntimeException);
 
-//-------------------------------------------------------------------------
-uno::Reference< lang::XSingleServiceFactory > SAL_CALL OPackageStructureCreator::impl_createFactory(
-            const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
-{
-    return ::cppu::createOneInstanceFactory( xServiceManager,
-                                OPackageStructureCreator::impl_getStaticImplementationName(),
-                                OPackageStructureCreator::impl_staticCreateSelfInstance,
-                                OPackageStructureCreator::impl_getStaticSupportedServiceNames() );
-}
-
-//-------------------------------------------------------------------------
-uno::Reference< uno::XInterface > SAL_CALL OPackageStructureCreator::impl_staticCreateSelfInstance(
-            const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
-{
-    return uno::Reference< uno::XInterface >( *new OPackageStructureCreator( xServiceManager ) );
-}
-
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() throw (uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (uno::RuntimeException);
+    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (uno::RuntimeException);
+};
 
 //-------------------------------------------------------------------------
 void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolderUrl,
@@ -167,7 +153,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
 OUString SAL_CALL OPackageStructureCreator::getImplementationName()
     throw ( uno::RuntimeException )
 {
-    return impl_getStaticImplementationName();
+    return OUString("com.sun.star.comp.embed.PackageStructureCreator");
 }
 
 sal_Bool SAL_CALL OPackageStructureCreator::supportsService( const OUString& ServiceName )
@@ -179,7 +165,22 @@ sal_Bool SAL_CALL OPackageStructureCreator::supportsService( const OUString& Ser
 uno::Sequence< OUString > SAL_CALL OPackageStructureCreator::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {
-    return impl_getStaticSupportedServiceNames();
+    uno::Sequence< OUString > aRet(2);
+    aRet[0] = "com.sun.star.embed.PackageStructureCreator";
+    aRet[1] = "com.sun.star.comp.embed.PackageStructureCreator";
+    return aRet;
+}
+
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_embed_PackageStructureCreator_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    rtl::Reference<OPackageStructureCreator> x(new OPackageStructureCreator());
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

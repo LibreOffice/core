@@ -44,7 +44,6 @@
 #include "sfxslots.hxx"
 #include "sfxtypes.hxx"
 #include "shutdownicon.hxx"
-#include "xpackcreator.hxx"
 
 #include <sal/config.h>
 #include <basic/basmgr.hxx>
@@ -1800,7 +1799,6 @@ SFX2_DLLPUBLIC void* SAL_CALL sfx_component_getFactory(
         IF_NAME_CREATECOMPONENTFACTORY( TestKeyHandler )
         IF_NAME_CREATECOMPONENTFACTORY( TestMouseClickHandler )
 #endif
-        IF_NAME_CREATECOMPONENTFACTORY( OPackageStructureCreator )
         IF_NAME_CREATECOMPONENTFACTORY( ::sfx2::OwnSubFilterService )
         if ( ::comp_SfxDocumentMetaData::_getImplementationName().equals(
                  OUString::createFromAscii( pImplementationName ) ) )
