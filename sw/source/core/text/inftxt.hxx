@@ -522,9 +522,6 @@ class SwTxtFormatInfo : public SwTxtPaintInfo
     SwTabPortion    *pLastTab;     // The _last_ TabPortion
 
     sal_Int32 nSoftHyphPos;    // SoftHyphPos forr Hyphenation
-    sal_Int32 nHyphStart;      // TxtPos at which the interactive hyphen is at the moment
-    sal_Int32 nHyphWrdStart;   // Position of the found word
-    sal_Int32 nHyphWrdLen;     // Length of the found word
     sal_Int32 nLineStart;      // Current line start in rTxt
     sal_Int32 nUnderScorePos;  // enlarge repaint if underscore has been found
     // #i34348# Changed type from sal_uInt16 to SwTwips
@@ -696,12 +693,6 @@ public:
 
     // Should the hyphenate helper be discarded?
     sal_Bool IsHyphenate() const;
-    inline void SetHyphStart( const sal_Int32 nNew ) { nHyphStart = nNew; }
-    inline sal_Int32 GetHyphStart() const { return nHyphStart; }
-    inline void SetHyphWrdStart( const sal_Int32 nNew ) { nHyphWrdStart = nNew; }
-    inline sal_Int32 GetHyphWrdStart() const { return nHyphWrdStart; }
-    inline void SetHyphWrdLen( const sal_Int32 nNew ) { nHyphWrdLen = nNew; }
-    inline sal_Int32 GetHyphWrdLen() const { return nHyphWrdLen; }
     inline sal_Int32 GetUnderScorePos() const { return nUnderScorePos; }
     inline void SetUnderScorePos( sal_Int32 nNew ) { nUnderScorePos = nNew; }
 

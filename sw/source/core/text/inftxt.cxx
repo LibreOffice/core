@@ -1314,9 +1314,6 @@ sal_Bool SwTxtFormatInfo::InitHyph( const sal_Bool bAutoHyphen )
     sal_Bool bAuto = bAutoHyphen || rAttr.IsHyphen();
     if( bAuto || bInterHyph )
     {
-        nHyphStart = nHyphWrdStart = COMPLETE_STRING;
-        nHyphWrdLen = 0;
-
         const sal_Int16 nMinimalLeading  = std::max(rAttr.GetMinLead(), sal_uInt8(2));
         const sal_Int16 nMinimalTrailing = rAttr.GetMinTrail();
         lcl_InitHyphValues( aHyphVals, nMinimalLeading, nMinimalTrailing);
@@ -1455,9 +1452,6 @@ SwTxtFormatInfo::SwTxtFormatInfo( const SwTxtFormatInfo& rInf,
 
     nSoftHyphPos = 0;
     nUnderScorePos = COMPLETE_STRING;
-    nHyphStart = 0;
-    nHyphWrdStart = 0;
-    nHyphWrdLen = 0;
     nLineStart = rInf.GetIdx();
     nLeft = rInf.nLeft;
     nRight = rInf.nRight;
