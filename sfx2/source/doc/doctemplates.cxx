@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include "doctemplates.hxx"
 #include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
@@ -33,6 +31,8 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
+#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -54,7 +54,21 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
+#include <com/sun/star/ucb/XProgressHandler.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/frame/XDocumentTemplates.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/lang/XLocalizable.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/ucb/XContent.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
+#include <rtl/ref.hxx>
 #include <svtools/templatefoldercache.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/ucbhelper.hxx>
@@ -68,12 +82,8 @@
 
 #include <vector>
 
-//-----------------------------------------------------------------------------
 
 //=============================================================================
-
-#define TEMPLATE_SERVICE_NAME               "com.sun.star.frame.DocumentTemplates"
-#define TEMPLATE_IMPLEMENTATION_NAME        "com.sun.star.comp.sfx2.DocumentTemplates"
 
 #define SERVICENAME_TYPEDETECTION           "com.sun.star.document.TypeDetection"
 
@@ -118,7 +128,7 @@ using namespace ::comphelper;
 
 using ::std::vector;
 
-//=============================================================================
+namespace {
 
 class WaitWindow_Impl : public WorkWindow
 {
@@ -150,9 +160,6 @@ class GroupData_Impl;
 typedef vector< NamePair_Impl* > NameList_Impl;
 typedef vector< GroupData_Impl* > GroupList_Impl;
 
-//=============================================================================
-#include <com/sun/star/task/InteractionHandler.hpp>
-#include <com/sun/star/ucb/XProgressHandler.hpp>
 
 class TplTaskEnvironment : public ::cppu::WeakImplHelper1< ucb::XCommandEnvironment >
 {
@@ -1073,22 +1080,6 @@ sal_Bool SfxDocTplService_Impl::getProperty( Content& rContent,
     return bGotProperty;
 }
 
-// -----------------------------------------------------------------------
-// static
-bool SfxURLRelocator_Impl::propertyCanContainOfficeDir(
-                                        const OUString & rPropName )
-{
-    // Note: TargetURL is handled by UCB itself (because it is a property
-    //       with a predefined semantic). Additional Core properties introduced
-    //       be a client app must be handled by the client app itself, because
-    //       the UCB does not know the semantics of those properties.
-    return ( rPropName == TARGET_DIR_URL || rPropName == PROPERTY_DIRLIST );
-}
-
-//-----------------------------------------------------------------------------
-// public SfxDocTplService_Impl
-//-----------------------------------------------------------------------------
-
 SfxDocTplService_Impl::SfxDocTplService_Impl( const uno::Reference< XComponentContext > & xContext )
 : maRelocator( xContext )
 {
@@ -1776,7 +1767,6 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
 
     try
     {
-        uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
         uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
         // get document service name
@@ -1815,7 +1805,7 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
         // find the related type name
         OUString aTypeName;
         uno::Reference< container::XNameAccess > xFilterFactory(
-            xFactory->createInstance("com.sun.star.document.FilterFactory"),
+            mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.FilterFactory", mxContext),
             uno::UNO_QUERY_THROW );
 
         uno::Sequence< beans::PropertyValue > aFilterData;
@@ -1834,7 +1824,7 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
             mxType.is() ?
                 uno::Reference< container::XNameAccess >( mxType, uno::UNO_QUERY_THROW ) :
                 uno::Reference< container::XNameAccess >(
-                    xFactory->createInstance("com.sun.star.document.TypeDetection"),
+                    mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", mxContext),
                     uno::UNO_QUERY_THROW );
 
         SequenceAsHashMap aTypeProps( xTypeDetection->getByName( aTypeName ) );
@@ -2173,14 +2163,63 @@ sal_Bool SfxDocTplService_Impl::renameTemplate( const OUString& rGroupName,
 }
 
 //-----------------------------------------------------------------------------
+class SfxDocTplService: public ::cppu::WeakImplHelper3< css::lang::XLocalizable, css::frame::XDocumentTemplates, css::lang::XServiceInfo >
+{
+    SfxDocTplService_Impl       *pImp;
 
-SFX_IMPL_XSERVICEINFO( SfxDocTplService, TEMPLATE_SERVICE_NAME, TEMPLATE_IMPLEMENTATION_NAME )
-SFX_IMPL_SINGLEFACTORY( SfxDocTplService )
+public:
+    SfxDocTplService( const css::uno::Reference < uno::XComponentContext >& xContext );
+    ~SfxDocTplService();
+
+    virtual OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException)
+    {
+        return OUString("com.sun.star.comp.sfx2.DocumentTemplates");
+    }
+
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException)
+    {
+        return cppu::supportsService(this, ServiceName);
+    }
+
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException)
+    {
+        css::uno::Sequence< OUString > aSeq(1);
+        aSeq[0] = OUString("com.sun.star.frame.DocumentTemplates");
+        return aSeq;
+    }
+
+
+    // --- XLocalizable ---
+    void SAL_CALL                   setLocale( const css::lang::Locale & eLocale ) throw( css::uno::RuntimeException );
+    css::lang::Locale SAL_CALL              getLocale() throw( css::uno::RuntimeException );
+
+    // --- XDocumentTemplates ---
+    css::uno::Reference< css::ucb::XContent > SAL_CALL  getContent() throw( css::uno::RuntimeException );
+    sal_Bool SAL_CALL               storeTemplate( const OUString& GroupName,
+                                                   const OUString& TemplateName,
+                                                   const css::uno::Reference< css::frame::XStorable >& Storable ) throw( css::uno::RuntimeException );
+    sal_Bool SAL_CALL               addTemplate( const OUString& GroupName,
+                                                 const OUString& TemplateName,
+                                                 const OUString& SourceURL ) throw( css::uno::RuntimeException );
+    sal_Bool SAL_CALL               removeTemplate( const OUString& GroupName,
+                                                    const OUString& TemplateName ) throw( css::uno::RuntimeException );
+    sal_Bool SAL_CALL               renameTemplate( const OUString& GroupName,
+                                                    const OUString& OldTemplateName,
+                                                    const OUString& NewTemplateName ) throw( css::uno::RuntimeException );
+    sal_Bool SAL_CALL               addGroup( const OUString& GroupName ) throw( css::uno::RuntimeException );
+    sal_Bool SAL_CALL               removeGroup( const OUString& GroupName ) throw( css::uno::RuntimeException );
+    sal_Bool SAL_CALL               renameGroup( const OUString& OldGroupName,
+                                                 const OUString& NewGroupName ) throw( css::uno::RuntimeException );
+    void SAL_CALL                   update() throw( css::uno::RuntimeException );
+};
 
 //-----------------------------------------------------------------------------
-SfxDocTplService::SfxDocTplService( const uno::Reference< XMultiServiceFactory >& xFactory )
+SfxDocTplService::SfxDocTplService( const uno::Reference< XComponentContext >& xContext )
 {
-    pImp = new SfxDocTplService_Impl( comphelper::getComponentContext(xFactory) );
+    pImp = new SfxDocTplService_Impl(xContext);
 }
 
 //-----------------------------------------------------------------------------
@@ -2773,6 +2812,19 @@ DocTemplates_EntryData_Impl::DocTemplates_EntryData_Impl( const OUString& rTitle
     mbUpdateLink    = sal_False;
 }
 
+}
+
+// static
+bool SfxURLRelocator_Impl::propertyCanContainOfficeDir(
+                                        const OUString & rPropName )
+{
+    // Note: TargetURL is handled by UCB itself (because it is a property
+    //       with a predefined semantic). Additional Core properties introduced
+    //       be a client app must be handled by the client app itself, because
+    //       the UCB does not know the semantics of those properties.
+    return ( rPropName == TARGET_DIR_URL || rPropName == PROPERTY_DIRLIST );
+}
+
 // -----------------------------------------------------------------------
 SfxURLRelocator_Impl::SfxURLRelocator_Impl( const uno::Reference< XComponentContext > & xContext )
 : mxContext( xContext )
@@ -2843,5 +2895,14 @@ void SfxURLRelocator_Impl::makeAbsoluteURL( OUString & rURL )
     }
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_sfx2_DocumentTemplates_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    rtl::Reference<SfxDocTplService> x(new SfxDocTplService(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -55,7 +55,8 @@
   <implementation name="com.sun.star.comp.sfx2.ApplicationScriptLibraryContainer">
     <service name="com.sun.star.script.ApplicationScriptLibraryContainer"/>
   </implementation>
-  <implementation name="com.sun.star.comp.sfx2.DocumentTemplates">
+  <implementation name="com.sun.star.comp.sfx2.DocumentTemplates"
+      constructor="com_sun_star_comp_sfx2_DocumentTemplates_get_implementation">
     <service name="com.sun.star.frame.DocumentTemplates"/>
   </implementation>
   <implementation name="com.sun.star.comp.sfx2.GlobalEventBroadcaster"
