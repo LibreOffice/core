@@ -718,7 +718,7 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
                 WorkWindow* pWorkWindow = dynamic_cast<WorkWindow*>(pShell->GetViewFrame()->GetTopFrame().GetWindow().GetParent());
                 if( pWorkWindow )
                 {
-                    pWorkWindow->StartPresentationMode( sal_False, isAlwaysOnTop() );
+                    pWorkWindow->StartPresentationMode( sal_False, isAlwaysOnTop() ? PRESENTATION_HIDEALLAPPS : 0 );
                 }
             }
         }
