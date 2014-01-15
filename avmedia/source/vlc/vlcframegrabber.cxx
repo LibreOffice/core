@@ -9,6 +9,7 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/stream.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "vlcframegrabber.hxx"
 #include "vlcplayer.hxx"
@@ -102,7 +103,7 @@ VLCFrameGrabber::VLCFrameGrabber( wrapper::EventHandler& eh, const rtl::OUString
 ::sal_Bool SAL_CALL VLCFrameGrabber::supportsService( const ::rtl::OUString& serviceName )
         throw ( ::com::sun::star::uno::RuntimeException )
 {
-    return AVMEDIA_VLC_GRABBER_SERVICENAME == serviceName;
+    return cppu::supportsService(this, serviceName);
 }
 
 ::uno::Sequence< ::rtl::OUString > SAL_CALL VLCFrameGrabber::getSupportedServiceNames()

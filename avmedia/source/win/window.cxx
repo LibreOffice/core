@@ -30,6 +30,7 @@
 #pragma warning(pop)
 #endif
 #include <com/sun/star/awt/SystemPointer.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "window.hxx"
 #include "player.hxx"
@@ -601,7 +602,7 @@ OUString SAL_CALL Window::getImplementationName(  )
 sal_Bool SAL_CALL Window::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException)
 {
-    return ServiceName == AVMEDIA_WIN_WINDOW_SERVICENAME;
+    return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL Window::getSupportedServiceNames(  )

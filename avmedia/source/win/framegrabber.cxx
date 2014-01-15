@@ -35,6 +35,7 @@
 #include "framegrabber.hxx"
 #include "player.hxx"
 
+#include <cppuhelper/supportsservice.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>
 #include <unotools/localfilehelper.hxx>
@@ -57,14 +58,10 @@ FrameGrabber::FrameGrabber( const uno::Reference< lang::XMultiServiceFactory >& 
     ::CoInitialize( NULL );
 }
 
-// ------------------------------------------------------------------------------
-
 FrameGrabber::~FrameGrabber()
 {
     ::CoUninitialize();
 }
-
-// ------------------------------------------------------------------------------
 
 IMediaDet* FrameGrabber::implCreateMediaDet( const OUString& rURL ) const
 {
@@ -87,8 +84,6 @@ IMediaDet* FrameGrabber::implCreateMediaDet( const OUString& rURL ) const
     return pDet;
 }
 
-// ------------------------------------------------------------------------------
-
 bool FrameGrabber::create( const OUString& rURL )
 {
     // just check if a MediaDet interface can be created with the given URL
@@ -105,8 +100,6 @@ bool FrameGrabber::create( const OUString& rURL )
 
     return( maURL.getLength() > 0 );
 }
-
-// ------------------------------------------------------------------------------
 
 uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMediaTime )
     throw (uno::RuntimeException)
@@ -204,23 +197,17 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
     return xRet;
 }
 
-// ------------------------------------------------------------------------------
-
 OUString SAL_CALL FrameGrabber::getImplementationName(  )
     throw (uno::RuntimeException)
 {
     return OUString( AVMEDIA_WIN_FRAMEGRABBER_IMPLEMENTATIONNAME );
 }
 
-// ------------------------------------------------------------------------------
-
 sal_Bool SAL_CALL FrameGrabber::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException)
 {
-    return ServiceName == AVMEDIA_WIN_FRAMEGRABBER_SERVICENAME;
+    return cppu::supportsService(this, ServiceName);
 }
-
-// ------------------------------------------------------------------------------
 
 uno::Sequence< OUString > SAL_CALL FrameGrabber::getSupportedServiceNames(  )
     throw (uno::RuntimeException)

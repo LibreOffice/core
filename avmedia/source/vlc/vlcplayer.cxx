@@ -1,6 +1,7 @@
 #include <boost/bind.hpp>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "vlcplayer.hxx"
 #include "vlcwindow.hxx"
@@ -247,7 +248,7 @@ uno::Reference< css::media::XFrameGrabber > SAL_CALL VLCPlayer::createFrameGrabb
 ::sal_Bool SAL_CALL VLCPlayer::supportsService( const ::rtl::OUString& serviceName )
      throw ( ::com::sun::star::uno::RuntimeException )
 {
-    return serviceName == AVMEDIA_VLC_PLAYER_SERVICENAME;
+    return cppu::supportsService(this, serviceName);
 }
 
 ::uno::Sequence< ::rtl::OUString > SAL_CALL VLCPlayer::getSupportedServiceNames()
