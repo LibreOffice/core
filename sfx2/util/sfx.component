@@ -61,7 +61,8 @@
   <implementation name="com.sun.star.comp.sfx2.GlobalEventBroadcaster">
     <service name="com.sun.star.frame.GlobalEventBroadcaster"/>
   </implementation>
-  <implementation name="com.sun.star.comp.sfx2.IFrameObject">
+  <implementation name="com.sun.star.comp.sfx2.IFrameObject"
+      constructor="com_sun_star_comp_sfx2_IFrameObject_get_implementation">
     <service name="com.sun.star.frame.SpecialEmbeddedObject"/>
   </implementation>
   <implementation name="com.sun.star.comp.sfx2.PluginObject"

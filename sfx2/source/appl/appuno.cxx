@@ -28,7 +28,6 @@
 #include "eventsupplier.hxx"
 #include "fltoptint.hxx"
 #include "frmload.hxx"
-#include "iframe.hxx"
 #include "objshimp.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/brokenpackageint.hxx>
@@ -1811,7 +1810,6 @@ SFX2_DLLPUBLIC void* SAL_CALL sfx_component_getFactory(
         IF_NAME_CREATECOMPONENTFACTORY( TestMouseClickHandler )
 #endif
         IF_NAME_CREATECOMPONENTFACTORY( OPackageStructureCreator )
-        IF_NAME_CREATECOMPONENTFACTORY( ::sfx2::IFrameObject )
         IF_NAME_CREATECOMPONENTFACTORY( ::sfx2::OwnSubFilterService )
         if ( ::comp_SfxDocumentMetaData::_getImplementationName().equals(
                  OUString::createFromAscii( pImplementationName ) ) )

@@ -17,28 +17,94 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
-#include "iframe.hxx"
-#include <sfx2/sfxdlg.hxx>
-#include <sfx2/sfxsids.hrc>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/Frame.hpp>
+#include <com/sun/star/frame/XFrame2.hpp>
+#include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 
-#include <comphelper/processfactory.hxx>
-#include <tools/urlobj.hxx>
-#include <tools/debug.hxx>
-#include <rtl/ustring.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
+#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <rtl/ref.hxx>
 #include <svtools/miscopt.hxx>
+#include <svl/ownlist.hxx>
+#include <svl/itemprop.hxx>
+#include <sfx2/frmdescr.hxx>
+#include <sfx2/sfxdlg.hxx>
+#include <sfx2/sfxsids.hrc>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 
 using namespace ::com::sun::star;
 
-namespace sfx2
+namespace {
+
+class IFrameObject : public ::cppu::WeakImplHelper6 <
+        css::util::XCloseable,
+        css::lang::XEventListener,
+        css::frame::XSynchronousFrameLoader,
+        css::ui::dialogs::XExecutableDialog,
+        css::lang::XServiceInfo,
+        css::beans::XPropertySet >
 {
+    css::uno::Reference < css::uno::XComponentContext > mxContext;
+    css::uno::Reference < css::frame::XFrame2 > mxFrame;
+    css::uno::Reference < css::embed::XEmbeddedObject > mxObj;
+    SfxItemPropertyMap  maPropMap;
+    SfxFrameDescriptor  maFrmDescr;
+
+public:
+    IFrameObject( const css::uno::Reference < css::uno::XComponentContext>& rxContext,
+                  const css::uno::Sequence< css::uno::Any >& aArguments )
+        throw (css::uno::Exception, css::uno::RuntimeException);
+    ~IFrameObject();
+
+    virtual OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException)
+    {
+        return OUString("com.sun.star.comp.sfx2.IFrameObject");
+    }
+
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException)
+    {
+        return cppu::supportsService(this, ServiceName);
+    }
+
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException)
+    {
+        css::uno::Sequence< OUString > aSeq(1);
+        aSeq[0] = OUString("com.sun.star.frame.SpecialEmbeddedObject");
+        return aSeq;
+    }
+
+    virtual sal_Bool SAL_CALL load( const css::uno::Sequence < css::beans::PropertyValue >& lDescriptor,
+            const css::uno::Reference < css::frame::XFrame >& xFrame ) throw( css::uno::RuntimeException );
+    virtual void SAL_CALL cancel() throw( css::uno::RuntimeException );
+    virtual void SAL_CALL close( sal_Bool bDeliverOwnership ) throw( css::util::CloseVetoException, css::uno::RuntimeException );
+    virtual void SAL_CALL addCloseListener( const css::uno::Reference < css::util::XCloseListener >& xListener ) throw( css::uno::RuntimeException );
+    virtual void SAL_CALL removeCloseListener( const css::uno::Reference < css::util::XCloseListener >& xListener ) throw( css::uno::RuntimeException );
+    virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException) ;
+    virtual void SAL_CALL setTitle( const OUString& aTitle ) throw (css::uno::RuntimeException);
+    virtual ::sal_Int16 SAL_CALL execute(  ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw( css::uno::RuntimeException );
+    virtual void SAL_CALL addPropertyChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener > & aListener) throw( css::uno::RuntimeException );
+    virtual void SAL_CALL removePropertyChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener > & aListener) throw( css::uno::RuntimeException );
+    virtual void SAL_CALL addVetoableChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener > & aListener) throw( css::uno::RuntimeException );
+    virtual void SAL_CALL removeVetoableChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener > & aListener) throw( css::uno::RuntimeException );
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+};
 
 class IFrameWindow_Impl : public Window
 {
@@ -92,24 +158,18 @@ const SfxItemPropertyMapEntry* lcl_GetIFramePropertyMap_Impl()
     return aIFramePropertyMap_Impl;
 }
 
-SFX_IMPL_XSERVICEINFO_CTX( IFrameObject, "com.sun.star.embed.SpecialEmbeddedObject", "com.sun.star.comp.sfx2.IFrameObject" )
-SFX_IMPL_SINGLEFACTORY( IFrameObject );
-
-IFrameObject::IFrameObject( const uno::Reference < uno::XComponentContext >& rxContext )
+IFrameObject::IFrameObject( const uno::Reference < uno::XComponentContext >& rxContext,
+                            const uno::Sequence< uno::Any >& aArguments )
+    throw ( uno::Exception, uno::RuntimeException )
     : mxContext( rxContext )
     , maPropMap( lcl_GetIFramePropertyMap_Impl() )
 {
+    if ( aArguments.getLength() )
+        aArguments[0] >>= mxObj;
 }
 
 IFrameObject::~IFrameObject()
 {
-}
-
-
-void SAL_CALL IFrameObject::initialize( const uno::Sequence< uno::Any >& aArguments ) throw ( uno::Exception, uno::RuntimeException )
-{
-    if ( aArguments.getLength() )
-        aArguments[0] >>= mxObj;
 }
 
 sal_Bool SAL_CALL IFrameObject::load(
@@ -365,6 +425,16 @@ void SAL_CALL IFrameObject::setTitle( const OUString& ) throw (::com::sun::star:
 {
 }
 
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_sfx2_IFrameObject_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &arguments)
+{
+    rtl::Reference<IFrameObject> x(new IFrameObject(context, arguments));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
