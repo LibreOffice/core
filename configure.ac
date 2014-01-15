@@ -1241,8 +1241,7 @@ AC_ARG_WITH(macosx-bundle-identifier,
 AC_ARG_ENABLE(libc++,
     AS_HELP_STRING([--enable-libc++],
         [Use the libc++ C++ library instead of GNU libstdc++ on OS X. Only effective
-         if --with-macosx-version-min-required is 10.7 or later. Experimental work in
-         progress, very likely breaks something, don't use unless you plan to fix that.]),
+         if --with-macosx-version-min-required is 10.7 or later.]),
 ,)
 
 AC_ARG_ENABLE(ios-simulator,
@@ -3001,7 +3000,9 @@ if test $_os = iOS; then
     # Just add -fvisibility=hidden to CC and CXX directly so that the 3rd-party libs also
     # get compiled with it, to avoid ld warnings when linking all that together into one
     # executable.
-    # Use libc++ if opted in only, and only when building against iOS 7 SDK or newer.
+
+    # Use libc++ for iOS 7 SDK and libstdc++ for earlier (but we don't really expect anybody to
+    # be be using an earlier SDK)
 
     XCODE_CLANG_CXX_LIBRARY=libstdc++
     case $ios_sdk in
@@ -3011,9 +3012,10 @@ if test $_os = iOS; then
         fi
         ;;
     *)
-        if test "$enable_libc__" = yes; then
-            XCODE_CLANG_CXX_LIBRARY=libc++
+        if test "$enable_libc__" = no; then
+            AC_MSG_ERROR([--disable-libc++ not allowed])
         fi
+        XCODE_CLANG_CXX_LIBRARY=libc++
         ;;
     esac
 
