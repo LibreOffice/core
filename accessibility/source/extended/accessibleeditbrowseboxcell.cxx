@@ -119,14 +119,7 @@ namespace accessibility
         SolarMethodGuard aGuard( *this );
 
         // TODO: localize this!
-        OUStringBuffer sName;
-        sName.appendAscii("Column ");
-        sName.append(getColumnPos()-1);
-
-        sName.appendAscii(", Row ");
-        sName.append(getRowPos());
-
-        return sName.makeStringAndClear();
+        return "Column " + OUString::number(getColumnPos()-1) + ", Row " + OUString::number(getRowPos());
     }
 
     // -----------------------------------------------------------------------------
