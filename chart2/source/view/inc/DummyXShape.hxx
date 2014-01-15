@@ -12,6 +12,8 @@
 
 #include <cppuhelper/implbase6.hxx>
 
+#include "OpenGLRender.hxx"
+
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -83,19 +85,9 @@
 #elif defined( UNX )
     #include <GL/glu.h>
     #include <GL/glext.h>
-
-    namespace unx
-    {
-        #include <X11/keysym.h>
-        #include <X11/X.h>
-        #define GLX_GLXEXT_PROTOTYPES 1
-        #include <GL/glx.h>
-        #include <GL/glxext.h>
-    }
 #endif
 //[mod] by gaowei
 
-#include "OpenGLRender.hxx"
 
 //[mod] by gaowei end
 

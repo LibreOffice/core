@@ -502,7 +502,7 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
 #if defined( WNT )
     SwapBuffers(glWin.hDC);
 #elif defined( UNX )
-    unx::glXSwapBuffers(glWin.dpy, glWin.win);
+    glXSwapBuffers(glWin.dpy, glWin.win);
 #endif
     glFlush();
     glEnable(GL_LIGHTING);
@@ -741,7 +741,7 @@ void OpenGLRender::renderToBitmap()
 #if defined( WNT )
     SwapBuffers(glWin.hDC);
 #elif defined( UNX )
-    unx::glXSwapBuffers(glWin.dpy, glWin.win);
+    glXSwapBuffers(glWin.dpy, glWin.win);
 #endif
     glFlush();
 }
@@ -823,7 +823,7 @@ int OpenGLRender::RenderTexture(GLuint TexID)
 #if defined( WNT )
     SwapBuffers(glWin.hDC);
 #elif defined( UNX )
-    unx::glXSwapBuffers(glWin.dpy, glWin.win);
+    glXSwapBuffers(glWin.dpy, glWin.win);
 #endif
     glFlush();
     return 0;

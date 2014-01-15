@@ -10,6 +10,12 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <vcl/font.hxx>
 
+#if defined( UNX )
+#include <prex.h>
+#include "GL/glxew.h"
+#include <postx.h>
+#endif
+
 #if defined( _WIN32 )
 #include "prewin.h"
 #include "windows.h"
@@ -24,25 +30,22 @@
 #include <vcl/sysdata.hxx>
 
 #if defined( _WIN32 )
-    #include <GL/glu.h>
-    #include <GL/glext.h>
-    #include <GL/wglext.h>
+#include <GL/glu.h>
+#include <GL/glext.h>
+#include <GL/wglext.h>
 #elif defined( MACOSX )
-    #include "premac.h"
-    #include <Cocoa/Cocoa.h>
-    #include "postmac.h"
+#include "premac.h"
+#include <Cocoa/Cocoa.h>
+#include "postmac.h"
 #elif defined( UNX )
-    #include <GL/glu.h>
-    #include <GL/glext.h>
 
-namespace unx
-{
-    #include <X11/keysym.h>
-    #include <X11/X.h>
-    #define GLX_GLXEXT_PROTOTYPES 1
-    #include <GL/glx.h>
-    #include <GL/glxext.h>
-}
+#include <GL/glu.h>
+#include <GL/glext.h>
+
+#define GLX_GLXEXT_PROTOTYPES 1
+#include <GL/glx.h>
+#include <GL/glxext.h>
+
 #endif
 
 // Include GLM
@@ -110,14 +113,14 @@ struct GLWindow
     HGLRC                   hRC;
 #elif defined( MACOSX )
 #elif defined( UNX )
-    unx::Display*           dpy;
+    Display*           dpy;
     int                     screen;
-    unx::Window             win;
+    XLIB_Window             win;
 #if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
-    unx::GLXFBConfig        fbc;
+    GLXFBConfig        fbc;
 #endif
-    unx::XVisualInfo*       vi;
-    unx::GLXContext         ctx;
+    XVisualInfo*       vi;
+    GLXContext         ctx;
 
     bool HasGLXExtension( const char* name ) { return gluCheckExtension( (const GLubyte*) name, (const GLubyte*) GLXExtensions ); }
     const char*             GLXExtensions;
