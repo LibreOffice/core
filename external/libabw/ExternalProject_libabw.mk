@@ -19,6 +19,7 @@ $(eval $(call gb_ExternalProject_use_externals,libabw,\
 	boost_headers \
 	libxml2 \
 	wpd \
+	zlib \
 ))
 
 $(call gb_ExternalProject_get_state_target,libabw,build) :
@@ -35,8 +36,6 @@ $(call gb_ExternalProject_get_state_target,libabw,build) :
 			CXXFLAGS="$(if $(filter NO,$(SYSTEM_BOOST)),-I$(call gb_UnpackedTarball_get_dir,boost) -I$(BUILDDIR)/config_$(gb_Side),$(BOOST_CPPFLAGS)) \
 			$(if $(filter NO,$(SYSTEM_LIBXML)),-I$(call gb_UnpackedTarball_get_dir,xml2)/include)" \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-			LIBXML2_CFLAGS="$(LIBXML_CFLAGS)" \
-			LIBXML2_LIBS="$(LIBXML_LIBS)" \
 		&& (cd $(EXTERNAL_WORKDIR)/src/lib && \
 		    $(if $(VERBOSE)$(verbose),V=1) \
 		    $(MAKE)) \
