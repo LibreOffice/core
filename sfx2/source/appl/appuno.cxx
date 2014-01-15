@@ -1693,77 +1693,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
     rArgs = aSequ;
 }
 
-#ifdef TEST_HANDLERS
-#include <cppuhelper/implbase2.hxx>
-
-#include <com/sun/star/awt/XKeyHandler.hpp>
-#include <com/sun/star/awt/XMouseClickHandler.hpp>
-
-class TestKeyHandler: public ::cppu::WeakImplHelper2
-<
-    com::sun::star::awt::XKeyHandler,
-    com::sun::star::lang::XServiceInfo
->
-{
-public:
-    TestKeyHandler( const com::sun::star::uno::Reference < lang::XMultiServiceFactory >& ){}
-
-    SFX_DECL_XSERVICEINFO
-    virtual sal_Bool SAL_CALL keyPressed( const awt::KeyEvent& aEvent ) throw (uno::RuntimeException);
-    virtual sal_Bool SAL_CALL keyReleased( const awt::KeyEvent& aEvent ) throw (uno::RuntimeException);
-    virtual void SAL_CALL disposing( const lang::EventObject& Source)
-        throw (uno::RuntimeException);
-};
-
-class TestMouseClickHandler: public ::cppu::WeakImplHelper2
-<
-    com::sun::star::awt::XMouseClickHandler,
-    com::sun::star::lang::XServiceInfo
->
-{
-public:
-    TestMouseClickHandler( const com::sun::star::uno::Reference < lang::XMultiServiceFactory >& ){}
-
-    SFX_DECL_XSERVICEINFO
-    virtual sal_Bool SAL_CALL mousePressed( const awt::MouseEvent& e ) throw (uno::RuntimeException);
-    virtual sal_Bool SAL_CALL mouseReleased( const awt::MouseEvent& e ) throw (uno::RuntimeException);
-    virtual void SAL_CALL disposing( const lang::EventObject& Source)
-        throw (uno::RuntimeException);
-};
-
-sal_Bool SAL_CALL TestKeyHandler::keyPressed( const awt::KeyEvent& aEvent ) throw (uno::RuntimeException)
-{
-    return sal_False;
-}
-
-sal_Bool SAL_CALL TestKeyHandler::keyReleased( const awt::KeyEvent& aEvent ) throw (uno::RuntimeException)
-{
-    return sal_False;
-}
-
-void SAL_CALL TestKeyHandler::disposing( const lang::EventObject& Source) throw (uno::RuntimeException)
-{
-}
-
-sal_Bool SAL_CALL TestMouseClickHandler::mousePressed( const awt::MouseEvent& e ) throw (uno::RuntimeException)
-{
-    return sal_False;
-}
-
-sal_Bool SAL_CALL TestMouseClickHandler::mouseReleased( const awt::MouseEvent& e ) throw (uno::RuntimeException)
-{
-    return sal_False;
-}
-
-void SAL_CALL TestMouseClickHandler::disposing( const lang::EventObject& Source) throw (uno::RuntimeException)
-{
-}
-
-SFX_IMPL_XSERVICEINFO( TestKeyHandler, "com.sun.star.task.Job", "com.sun.star.comp.Office.KeyHandler");
-SFX_IMPL_XSERVICEINFO( TestMouseClickHandler, "com.sun.star.task.Job", "com.sun.star.comp.Office.MouseClickHandler");
-SFX_IMPL_SINGLEFACTORY( TestKeyHandler );
-SFX_IMPL_SINGLEFACTORY( TestMouseClickHandler );
-#endif
 // -----------------------------------------------------------------------
 
 extern "C" {
@@ -1791,10 +1720,6 @@ SFX2_DLLPUBLIC void* SAL_CALL sfx_component_getFactory(
         //      Write no ";" at end of line and dont forget "else" ! (see macro)
         //=============================================================================
         IF_NAME_CREATECOMPONENTFACTORY( SfxGlobalEvents_Impl )
-#ifdef TEST_HANDLERS
-        IF_NAME_CREATECOMPONENTFACTORY( TestKeyHandler )
-        IF_NAME_CREATECOMPONENTFACTORY( TestMouseClickHandler )
-#endif
 
         // Factory is valid - service was found.
 
