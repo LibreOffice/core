@@ -134,14 +134,14 @@ class SwTxtInfo
     sal_Int32 nTxtStart;                 // TxtOfst for Follows
 
 protected:
-    inline SwTxtInfo() : pPara(0) {}
+    SwTxtInfo() : pPara(0) {}
 public:
     void CtorInitTxtInfo( SwTxtFrm *pFrm );
     SwTxtInfo( const SwTxtInfo &rInf );
-    inline SwTxtInfo( SwTxtFrm *pFrm ) { CtorInitTxtInfo( pFrm ); }
-    inline SwParaPortion *GetParaPortion() { return pPara; }
-    inline const SwParaPortion *GetParaPortion() const { return pPara; }
-    inline sal_Int32 GetTxtStart() const { return nTxtStart; }
+    SwTxtInfo( SwTxtFrm *pFrm ) { CtorInitTxtInfo( pFrm ); }
+    SwParaPortion *GetParaPortion() { return pPara; }
+    const SwParaPortion *GetParaPortion() const { return pPara; }
+    sal_Int32 GetTxtStart() const { return nTxtStart; }
 
     friend SvStream &operator<<( SvStream &rOS, const SwTxtInfo &rInf );
 };
