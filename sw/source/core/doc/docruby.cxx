@@ -235,7 +235,7 @@ sal_Bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_
                             g_pBreakIt->GetLocale( pTNd->GetLang( nStart )),
                             WordType::ANYWORD_IGNOREWHITESPACES,
                             sal_True ).startPos;
-        if( nWordStt < nStart && -1 != nWordStt )
+        if (nWordStt < nStart && nWordStt >= 0)
         {
             nStart = nWordStt;
             pPos->nContent = nStart;
