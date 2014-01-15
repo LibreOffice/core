@@ -2444,7 +2444,16 @@ bool ScColumn::UpdateReference( sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc
     {
         // Cells in this column is being shifted.  Split formula grouping at
         // the top and bottom boundaries before they get shifted.
-        SCROW nSplitPos = rCxt.maRange.aStart.Row();
+        // Also, for deleted rows split at the top of the deleted area to adapt
+        // the affected group length.
+        SCROW nSplitPos;
+        if (rCxt.mnRowDelta < 0)
+        {
+            nSplitPos = rCxt.maRange.aStart.Row() + rCxt.mnRowDelta;
+            if (ValidRow(nSplitPos))
+                aBounds.push_back(nSplitPos);
+        }
+        nSplitPos = rCxt.maRange.aStart.Row();
         if (ValidRow(nSplitPos))
         {
             aBounds.push_back(nSplitPos);
