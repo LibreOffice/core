@@ -30,6 +30,7 @@
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <officecfg/Office/Common.hxx>
 
@@ -477,12 +478,6 @@ OUString ONSSInitializer_getImplementationName ()
     return OUString ( IMPLEMENTATION_NAME );
 }
 
-sal_Bool SAL_CALL ONSSInitializer_supportsService( const OUString& ServiceName )
-    throw (cssu::RuntimeException)
-{
-    return ServiceName == NSS_SERVICE_NAME;
-}
-
 cssu::Sequence< OUString > SAL_CALL ONSSInitializer_getSupportedServiceNames(  )
     throw (cssu::RuntimeException)
 {
@@ -504,11 +499,13 @@ OUString SAL_CALL ONSSInitializer::getImplementationName()
 {
     return ONSSInitializer_getImplementationName();
 }
+
 sal_Bool SAL_CALL ONSSInitializer::supportsService( const OUString& rServiceName )
     throw (cssu::RuntimeException)
 {
-    return ONSSInitializer_supportsService( rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
+
 cssu::Sequence< OUString > SAL_CALL ONSSInitializer::getSupportedServiceNames(  )
     throw (cssu::RuntimeException)
 {
