@@ -278,8 +278,6 @@ private:
 
     float m_fAlpha;
 
-    RectanglePointList m_RectangleList;
-
     std::list <RectanglePointList> m_RectangleShapePointList;
     // add for text
     TextInfo m_TextInfo;

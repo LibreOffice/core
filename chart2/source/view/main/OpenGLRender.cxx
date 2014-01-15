@@ -940,7 +940,6 @@ OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
     memset(&m_Bubble2DPointList, 0, sizeof(m_Bubble2DPointList));
     memset(&m_Bubble2DCircle, 0, sizeof(m_Bubble2DCircle));
     memset(&m_TextInfo, 0, sizeof(TextInfo));
-    memset(&m_RectangleList, 0, sizeof(RectanglePointList));
 
     m_iArbMultisampleFormat = 0;
 
@@ -1347,13 +1346,13 @@ int OpenGLRender::RectangleShapePoint(float x, float y, float directionX, float 
     //check whether to create the circle data
     float actualX = x / OPENGL_SCALE_VALUE;
     float actualY = y / OPENGL_SCALE_VALUE;
-    m_RectangleList.x = actualX;
-    m_RectangleList.y = actualY;
-    m_RectangleList.z = m_fZStep;
-    m_RectangleList.xScale = directionX / OPENGL_SCALE_VALUE;
-    m_RectangleList.yScale = directionY / OPENGL_SCALE_VALUE;
+    RectanglePointList aRectangleList.x = actualX;
+    aRectangleList.y = actualY;
+    aRectangleList.z = m_fZStep;
+    aRectangleList.xScale = directionX / OPENGL_SCALE_VALUE;
+    aRectangleList.yScale = directionY / OPENGL_SCALE_VALUE;
 
-    m_RectangleShapePointList.push_back(m_RectangleList);
+    m_RectangleShapePointList.push_back(aRectangleList);
     return 0;
 }
 
