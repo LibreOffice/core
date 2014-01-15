@@ -980,7 +980,7 @@ Sequence< OUString > AccessController::getSupportedServiceNames()
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_security_comp_stoc_AccessController(
+com_sun_star_security_comp_stoc_AccessController_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {

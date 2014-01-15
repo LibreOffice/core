@@ -1671,7 +1671,7 @@ Any ORegistryServiceManager::getPropertyValue(const OUString& PropertyName)
 } // namespace
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_comp_stoc_OServiceManager(
+com_sun_star_comp_stoc_OServiceManager_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
@@ -1682,7 +1682,7 @@ com_sun_star_comp_stoc_OServiceManager(
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_comp_stoc_ORegistryServiceManager(
+com_sun_star_comp_stoc_ORegistryServiceManager_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
@@ -1693,7 +1693,7 @@ com_sun_star_comp_stoc_ORegistryServiceManager(
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_comp_stoc_OServiceManagerWrapper(
+com_sun_star_comp_stoc_OServiceManagerWrapper_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {

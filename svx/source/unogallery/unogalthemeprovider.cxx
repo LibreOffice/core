@@ -249,7 +249,7 @@ void SAL_CALL GalleryThemeProvider::removeByName( const OUString& rName )
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_comp_gallery_GalleryThemeProvider_implementation_getFactory(
+com_sun_star_comp_gallery_GalleryThemeProvider_get_implementation(
     SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {

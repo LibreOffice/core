@@ -439,7 +439,7 @@ void FontHeightToolBoxControl::dispatchCommand(
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_svx_FontHeightToolBoxController_implementation_getFactory(
+com_sun_star_svx_FontHeightToolBoxController_get_implementation(
     css::uno::XComponentContext *rxContext,
     css::uno::Sequence<css::uno::Any> const &)
 {

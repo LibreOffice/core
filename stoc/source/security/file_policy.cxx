@@ -542,7 +542,7 @@ Sequence< OUString > FilePolicy::getSupportedServiceNames()
 } // namespace
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_security_comp_stoc_FilePolicy(
+com_sun_star_security_comp_stoc_FilePolicy_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {

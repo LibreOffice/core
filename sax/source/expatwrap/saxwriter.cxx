@@ -1373,7 +1373,7 @@ void SAXWriter::unknown(const OUString& sString) throw (SAXException, RuntimeExc
 } // namespace
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_extensions_xml_sax_Writer(
+com_sun_star_extensions_xml_sax_Writer_get_implementation(
     SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {

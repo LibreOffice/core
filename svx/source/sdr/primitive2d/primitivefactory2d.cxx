@@ -88,7 +88,7 @@ Primitive2DSequence SAL_CALL PrimitiveFactory2D::createPrimitivesFromXDrawPage(
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_comp_graphic_PrimitiveFactory2D_implementation_getFactory(
+com_sun_star_comp_graphic_PrimitiveFactory2D_get_implementation(
     SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {

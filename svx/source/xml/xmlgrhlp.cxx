@@ -1051,7 +1051,7 @@ Sequence< OUString > SAL_CALL SvXMLGraphicImportExportHelper::getSupportedServic
     SvXMLGraphicHelper
  */
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_comp_Svx_GraphicImportHelper_implementation_getFactory(
+com_sun_star_comp_Svx_GraphicImportHelper_get_implementation(
     SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
@@ -1075,7 +1075,7 @@ com_sun_star_comp_Svx_GraphicImportHelper_implementation_getFactory(
     SvXMLGraphicHelper
  */
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_comp_Svx_GraphicExportHelper_implementation_getFactory(
+com_sun_star_comp_Svx_GraphicExportHelper_get_implementation(
     SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {

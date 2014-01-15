@@ -20,37 +20,37 @@
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.stoc.DLLComponentLoader"
-      constructor="com_sun_star_comp_stoc_DLLComponentLoader">
+      constructor="com_sun_star_comp_stoc_DLLComponentLoader_get_implementation">
     <service name="com.sun.star.loader.SharedLibrary"/>
   </implementation>
   <implementation name="com.sun.star.comp.stoc.ImplementationRegistration"
-      constructor="com_sun_star_comp_stoc_ImplementationRegistration">
+      constructor="com_sun_star_comp_stoc_ImplementationRegistration_get_implementation">
     <service name="com.sun.star.registry.ImplementationRegistration"/>
   </implementation>
   <implementation name="com.sun.star.comp.stoc.NestedRegistry"
-      constructor="com_sun_star_comp_stoc_NestedRegistry">
+      constructor="com_sun_star_comp_stoc_NestedRegistry_get_implementation">
     <service name="com.sun.star.registry.NestedRegistry"/>
   </implementation>
   <implementation name="com.sun.star.comp.stoc.ORegistryServiceManager"
-      constructor="com_sun_star_comp_stoc_ORegistryServiceManager">
+      constructor="com_sun_star_comp_stoc_ORegistryServiceManager_get_implementation">
     <service name="com.sun.star.lang.RegistryServiceManager"/>
   </implementation>
   <implementation name="com.sun.star.comp.stoc.OServiceManager"
-      constructor="com_sun_star_comp_stoc_OServiceManager">
+      constructor="com_sun_star_comp_stoc_OServiceManager_get_implementation">
     <service name="com.sun.star.lang.ServiceManager"/>
   </implementation>
   <implementation name="com.sun.star.comp.stoc.OServiceManagerWrapper"
-      constructor="com_sun_star_comp_stoc_OServiceManagerWrapper"/>
+      constructor="com_sun_star_comp_stoc_OServiceManagerWrapper_get_implementation"/>
   <implementation name="com.sun.star.comp.stoc.SimpleRegistry"
-      constructor="com_sun_star_comp_stoc_SimpleRegistry">
+      constructor="com_sun_star_comp_stoc_SimpleRegistry_get_implementation">
     <service name="com.sun.star.registry.SimpleRegistry"/>
   </implementation>
   <implementation name="com.sun.star.security.comp.stoc.AccessController"
-      constructor="com_sun_star_security_comp_stoc_AccessController">
+      constructor="com_sun_star_security_comp_stoc_AccessController_get_implementation">
     <service name="com.sun.star.security.AccessController"/>
   </implementation>
   <implementation name="com.sun.star.security.comp.stoc.FilePolicy"
-      constructor="com_sun_star_security_comp_stoc_FilePolicy">
+      constructor="com_sun_star_security_comp_stoc_FilePolicy_get_implementation">
     <service name="com.sun.star.security.Policy"/>
   </implementation>
 </component>

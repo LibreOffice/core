@@ -165,7 +165,7 @@ sal_Bool SAL_CALL DllComponentLoader::writeRegistryInfo(
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_comp_stoc_DLLComponentLoader(
+com_sun_star_comp_stoc_DLLComponentLoader_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {

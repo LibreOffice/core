@@ -269,7 +269,7 @@ uno::Sequence< OUString > SAL_CALL SvxShapeCollection::getSupportedServiceNames(
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_drawing_SvxShapeCollection_implementation_getFactory(
+com_sun_star_drawing_SvxShapeCollection_get_implementation(
     SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
