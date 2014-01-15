@@ -315,7 +315,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
 
         sal_uInt16 nScript =
             SwHTMLWriter::GetCSS1ScriptForScriptType( nScriptType );
-        if( nPos < sExpand.getLength() || nScript != rHTMLWrt.nCSS1Script )
+        if( (nPos < sExpand.getLength() && nPos >= 0) || nScript != rHTMLWrt.nCSS1Script )
         {
             bNeedsCJKProcessing = sal_True;
         }

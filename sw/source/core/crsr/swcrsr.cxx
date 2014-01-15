@@ -1233,7 +1233,7 @@ sal_Bool SwCursor::GoStartWordWT( sal_Int16 nWordType )
                             nWordType,
                             sal_False ).startPos;
 
-        if (nPtPos < pTxtNd->GetTxt().getLength())
+        if (nPtPos < pTxtNd->GetTxt().getLength() && nPtPos >= 0)
         {
             GetPoint()->nContent = nPtPos;
             if( !IsSelOvr() )
@@ -1257,7 +1257,7 @@ sal_Bool SwCursor::GoEndWordWT( sal_Int16 nWordType )
                             nWordType,
                             sal_True ).endPos;
 
-        if (nPtPos <= pTxtNd->GetTxt().getLength() &&
+        if (nPtPos <= pTxtNd->GetTxt().getLength() && nPtPos >= 0 &&
             GetPoint()->nContent.GetIndex() != nPtPos )
         {
             GetPoint()->nContent = nPtPos;
@@ -1282,7 +1282,7 @@ sal_Bool SwCursor::GoNextWordWT( sal_Int16 nWordType )
             g_pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos, 1 ) ),
                     nWordType ).startPos;
 
-        if (nPtPos < pTxtNd->GetTxt().getLength())
+        if (nPtPos < pTxtNd->GetTxt().getLength() && nPtPos >= 0)
         {
             GetPoint()->nContent = nPtPos;
             if( !IsSelOvr() )
@@ -1309,7 +1309,7 @@ sal_Bool SwCursor::GoPrevWordWT( sal_Int16 nWordType )
             g_pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos, 1 ) ),
                     nWordType ).startPos;
 
-        if (nPtPos < pTxtNd->GetTxt().getLength())
+        if (nPtPos < pTxtNd->GetTxt().getLength() && nPtPos >= 0)
         {
             GetPoint()->nContent = nPtPos;
             if( !IsSelOvr() )
@@ -1474,7 +1474,7 @@ sal_Bool SwCursor::GoSentence( SentenceMoveType eMoveType )
 
         // it is allowed to place the PaM just behind the last
         // character in the text thus <= ...Len
-        if (nPtPos <= pTxtNd->GetTxt().getLength())
+        if (nPtPos <= pTxtNd->GetTxt().getLength() && nPtPos >= 0)
         {
             GetPoint()->nContent = nPtPos;
             if( !IsSelOvr() )
@@ -1511,12 +1511,12 @@ sal_Bool SwCursor::ExpandToSentenceBorders()
         // it is allowed to place the PaM just behind the last
         // character in the text thus <= ...Len
         bool bChanged = false;
-        if (nStartPos <= pStartNd->GetTxt().getLength())
+        if (nStartPos <= pStartNd->GetTxt().getLength() && nStartPos >= 0)
         {
             GetMark()->nContent = nStartPos;
             bChanged = true;
         }
-        if (nEndPos <= pEndNd->GetTxt().getLength())
+        if (nEndPos <= pEndNd->GetTxt().getLength() && nEndPos >= 0)
         {
             GetPoint()->nContent = nEndPos;
             bChanged = true;
