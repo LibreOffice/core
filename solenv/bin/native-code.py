@@ -51,12 +51,12 @@ core_factory_list = [
 
 core_constructor_list = [
 # sax/source/expatwrap/expwrap.component
-    "com_sun_star_comp_extensions_xml_sax_ParserExpat",
-    "com_sun_star_comp_extensions_xml_sax_FastParser",
+    "com_sun_star_comp_extensions_xml_sax_ParserExpat_get_implementation",
+    "com_sun_star_comp_extensions_xml_sax_FastParser_get_implementation",
 # svtools/util/svt.component
     "com_sun_star_comp_graphic_GraphicProvider_get_implementation",
 # svx/util/svx.component
-    "com_sun_star_drawing_EnhancedCustomShapeEngine_implementation_getFactory",
+    "com_sun_star_drawing_EnhancedCustomShapeEngine_get_implementation",
     ]
 
 extended_core_factory_list = core_factory_list + [
