@@ -71,7 +71,7 @@ namespace frm
         if ( nParagraphs )
         {
             sal_Int32 nLastParaNumber = nParagraphs - 1;
-            xub_StrLen nParaLen = pEngine->GetTextLen( nLastParaNumber );
+            sal_Int32 nParaLen = pEngine->GetTextLen( nLastParaNumber );
             getEditView()->SetSelection( ESelection( 0, 0, nLastParaNumber, nParaLen ) );
         }
     }
