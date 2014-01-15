@@ -572,7 +572,7 @@ int OpenGLRender::SetLine2DShapePoint(float x, float y, int listLength)
     float actualY = (y / OPENGL_SCALE_VALUE);
     m_Line2DPointList.push_back(actualX);
     m_Line2DPointList.push_back(actualY);
-    m_Line2DPointList.push_back(0);
+    m_Line2DPointList.push_back(m_fZStep);
 
     if (m_Line2DPointList.size() == size_t(listLength * 3))
     {
@@ -584,6 +584,7 @@ int OpenGLRender::SetLine2DShapePoint(float x, float y, int listLength)
 
 int OpenGLRender::RenderLine2FBO(int)
 {
+    m_fZStep += 0.001;
     CHECK_GL_ERROR();
     glLineWidth(m_fLineWidth);
     size_t listNum = m_Line2DShapePointList.size();
@@ -1282,7 +1283,7 @@ int OpenGLRender::RenderBubble2FBO(int)
     {
         //move the circle to the pos, and scale using the xScale and Y scale
         Bubble2DPointList &pointList = m_Bubble2DShapePointList.front();
-        PosVecf3 trans = {pointList.x, pointList.y, 0.0f};
+        PosVecf3 trans = {pointList.x, pointList.y, m_fZStep};
         PosVecf3 angle = {0.0f, 0.0f, 0.0f};
         PosVecf3 scale = {pointList.xScale, pointList.yScale, 1.0f};
         MoveModelf(trans, angle, scale);
