@@ -1124,6 +1124,37 @@ void lclDrawDiagFrameBorders(
 
 #define SCALEVALUE( value ) lclScaleValue( value, fScale, nMaxWidth )
 
+Style::Style()
+    : meRefMode( REFMODE_CENTERED )
+    , mnType( ::com::sun::star::table::BorderLineStyle::SOLID )
+{ Clear(); }
+
+Style::Style( double nP, double nD, double nS, editeng::SvxBorderStyle nType ) :
+    meRefMode( REFMODE_CENTERED ), mnType( nType )
+{
+    Clear();
+    Set( nP, nD, nS );
+}
+
+Style::Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor,
+              double nP, double nD, double nS, editeng::SvxBorderStyle nType ) :
+    meRefMode( REFMODE_CENTERED ), mnType( nType )
+{
+    Set( rColorPrim, rColorSecn, rColorGap, bUseGapColor, nP, nD, nS );
+}
+
+Style::Style( const editeng::SvxBorderLine& rBorder, double fScale, sal_uInt16 nMaxWidth ) :
+    meRefMode( REFMODE_CENTERED )
+{
+    Set( rBorder, fScale, nMaxWidth );
+}
+
+Style::Style( const editeng::SvxBorderLine* pBorder, double fScale, sal_uInt16 nMaxWidth ) :
+    meRefMode( REFMODE_CENTERED )
+{
+    Set( pBorder, fScale, nMaxWidth );
+}
+
 void Style::Clear()
 {
     Set( Color(), Color(), Color(), false, 0, 0, 0 );

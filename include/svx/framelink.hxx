@@ -108,25 +108,16 @@ class SVX_DLLPUBLIC Style
 {
 public:
     /** Constructs an invisible frame style. */
-    inline explicit     Style()
-        : meRefMode( REFMODE_CENTERED )
-        , mnType( ::com::sun::star::table::BorderLineStyle::SOLID )
-    { Clear(); }
+    explicit Style();
     /** Constructs a frame style with passed line widths. */
-    inline explicit     Style( double nP, double nD, double nS, editeng::SvxBorderStyle nType ) :
-                            meRefMode( REFMODE_CENTERED ), mnType( nType )
-                            { Clear(); Set( nP, nD, nS ); }
+    explicit Style( double nP, double nD, double nS, editeng::SvxBorderStyle nType );
     /** Constructs a frame style with passed color and line widths. */
-    inline explicit     Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor,
-                            double nP, double nD, double nS, editeng::SvxBorderStyle nType ) :
-                            meRefMode( REFMODE_CENTERED ), mnType( nType )
-                            { Set( rColorPrim, rColorSecn, rColorGap, bUseGapColor, nP, nD, nS ); }
+    explicit Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor,
+                    double nP, double nD, double nS, editeng::SvxBorderStyle nType );
     /** Constructs a frame style from the passed SvxBorderLine struct. */
-    inline explicit     Style( const editeng::SvxBorderLine& rBorder, double fScale = 1.0, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 ) :
-                            meRefMode( REFMODE_CENTERED ) { Set( rBorder, fScale, nMaxWidth ); }
+    explicit Style( const editeng::SvxBorderLine& rBorder, double fScale = 1.0, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
     /** Constructs a frame style from the passed SvxBorderLine struct. Clears the style, if pBorder is 0. */
-    inline explicit     Style( const editeng::SvxBorderLine* pBorder, double fScale = 1.0, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 ) :
-                            meRefMode( REFMODE_CENTERED ) { Set( pBorder, fScale, nMaxWidth ); }
+    explicit Style( const editeng::SvxBorderLine* pBorder, double fScale = 1.0, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
 
     inline RefMode      GetRefMode() const { return meRefMode; }
     inline const Color& GetColorPrim() const { return maColorPrim; }
