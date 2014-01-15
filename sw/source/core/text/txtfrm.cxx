@@ -886,7 +886,10 @@ static void lcl_ModifyOfst( SwTxtFrm* pFrm, sal_Int32 nPos, sal_Int32 nLen )
         pFrm = pFrm->GetFollow();
     while( pFrm )
     {
-        pFrm->ManipOfst( pFrm->GetOfst() + nLen );
+        if (nLen == COMPLETE_STRING)
+            pFrm->ManipOfst( COMPLETE_STRING );
+        else
+            pFrm->ManipOfst( pFrm->GetOfst() + nLen );
         pFrm = pFrm->GetFollow();
     }
 }
