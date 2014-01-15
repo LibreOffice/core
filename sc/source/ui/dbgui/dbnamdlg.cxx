@@ -177,6 +177,8 @@ ScDbNameDlg::~ScDbNameDlg()
 void ScDbNameDlg::Init()
 {
     m_pBtnHeader->Check( sal_True );       // Default: mit Spaltenkoepfen
+    m_pBtnDoSize->Check( sal_True );
+    m_pBtnKeepFmt->Check( sal_True );
 
     m_pBtnOk->SetClickHdl      ( LINK( this, ScDbNameDlg, OkBtnHdl ) );
     m_pBtnCancel->SetClickHdl  ( LINK( this, ScDbNameDlg, CancelBtnHdl ) );
