@@ -792,7 +792,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
 
             break;
         case NS_ooxml::LN_CT_WrapThrough_wrapText:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             m_pImpl->bContour = true;
             m_pImpl->bContourOutside = false;
 
@@ -800,8 +799,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
 
             break;
         case NS_ooxml::LN_CT_WrapSquare_wrapText: //90928;
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
-
             handleWrapTextValue(val.getInt());
             break;
         case NS_ooxml::LN_shape:
@@ -1055,7 +1052,6 @@ void GraphicImport::lcl_sprm(Sprm & rSprm)
         break;
         case NS_ooxml::LN_CT_WrapTight_wrapPolygon:
         case NS_ooxml::LN_CT_WrapThrough_wrapPolygon:
-            /* WRITERFILTERSTATUS: done: 100, planned: 4, spent: 2 */
             {
                 WrapPolygonHandler aHandler;
 

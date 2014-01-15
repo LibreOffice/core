@@ -163,11 +163,9 @@ void WrapPolygonHandler::lcl_attribute(Id Name, Value & val)
     switch(Name)
     {
     case NS_ooxml::LN_CT_Point2D_x:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
         mnX = nIntValue;
         break;
     case NS_ooxml::LN_CT_Point2D_y:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
         mnY = nIntValue;
         break;
     default:
@@ -184,7 +182,6 @@ void WrapPolygonHandler::lcl_sprm(Sprm & _sprm)
     {
     case NS_ooxml::LN_CT_WrapPath_lineTo:
     case NS_ooxml::LN_CT_WrapPath_start:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
         {
             resolveSprmProps(*this, _sprm);
 
