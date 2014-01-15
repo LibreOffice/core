@@ -22,9 +22,6 @@
 
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -94,7 +91,14 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
 
         virtual ~ShutdownIcon();
 
-        SFX_DECL_XSERVICEINFO
+        virtual OUString SAL_CALL getImplementationName()
+            throw (css::uno::RuntimeException);
+
+        virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+            throw (css::uno::RuntimeException);
+
+        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+            throw (css::uno::RuntimeException);
 
         static ShutdownIcon* getInstance();
         static ShutdownIcon* createInstance();
@@ -112,10 +116,6 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
         static bool bModalMode;
 
         void init() throw( ::com::sun::star::uno::Exception );
-
-        static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory >
-                    GetWrapperFactory( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xSMgr );
-        static OUString  GetImplementationName_static();
 
         OUString GetResString( int id );
         OUString GetUrlDescription( const OUString& aUrl );

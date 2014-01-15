@@ -29,7 +29,8 @@
   <implementation name="CompatWriterDocPropsImpl">
     <service name="com.sun.star.writer.DocumentProperties"/>
   </implementation>
-  <implementation name="com.sun.star.comp.desktop.QuickstartWrapper">
+  <implementation name="com.sun.star.comp.desktop.QuickstartWrapper"
+      constructor="com_sun_star_comp_desktop_QuickstartWrapper_get_implementation">
     <service name="com.sun.star.office.Quickstart"/>
   </implementation>
   <implementation name="com.sun.star.comp.document.OwnSubFilter"

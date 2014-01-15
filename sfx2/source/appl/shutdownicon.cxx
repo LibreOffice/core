@@ -46,12 +46,14 @@
 #include <sfx2/fcontnr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <sfx2/dispatch.hxx>
 #include <comphelper/extract.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/security.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #ifdef UNX // need symlink
 #include <unistd.h>
@@ -70,10 +72,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::ui::dialogs;
-#ifdef WNT
-#else
-using namespace ::rtl;
-#endif
 using namespace ::sfx2;
 
 #ifdef ENABLE_QUICKSTART_APPLET
@@ -102,8 +100,25 @@ void SAL_CALL SfxNotificationListener_Impl::disposing( const EventObject& ) thro
 {
 }
 
-SFX_IMPL_XSERVICEINFO_CTX( ShutdownIcon, "com.sun.star.office.Quickstart", "com.sun.star.comp.desktop.QuickstartWrapper" )  \
-SFX_IMPL_ONEINSTANCEFACTORY( ShutdownIcon );
+OUString SAL_CALL ShutdownIcon::getImplementationName()
+    throw (css::uno::RuntimeException)
+{
+    return OUString("com.sun.star.comp.desktop.QuickstartWrapper");
+}
+
+sal_Bool SAL_CALL ShutdownIcon::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> SAL_CALL ShutdownIcon::getSupportedServiceNames()
+    throw (css::uno::RuntimeException)
+{
+    css::uno::Sequence< OUString > aSeq(1);
+    aSeq[0] = OUString("com.sun.star.office.Quickstart");
+    return aSeq;
+}
 
 bool ShutdownIcon::bModalMode = false;
 ShutdownIcon* ShutdownIcon::pShutdownIcon = NULL;
@@ -863,7 +878,7 @@ void ShutdownIcon::SetAutostart( bool bActivate )
         getAutostartDir( true );
 
         OUString aPath( "${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/xdg/qstart.desktop"  );
-        Bootstrap::expandMacros( aPath );
+        rtl::Bootstrap::expandMacros( aPath );
 
         OUString aDesktopFile;
         ::osl::File::getSystemPathFromFileURL( aPath, aDesktopFile );
@@ -954,6 +969,16 @@ void SAL_CALL ShutdownIcon::setFastPropertyValue(       ::sal_Int32             
     }
 
     return aValue;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_desktop_QuickstartWrapper_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    rtl::Reference<ShutdownIcon> x(new ShutdownIcon(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

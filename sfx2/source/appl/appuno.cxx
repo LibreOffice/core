@@ -44,7 +44,6 @@
 #include <sfx2/unoctitm.hxx>
 #include "sfxslots.hxx"
 #include "sfxtypes.hxx"
-#include "shutdownicon.hxx"
 
 #include <sal/config.h>
 #include <basic/basmgr.hxx>
@@ -1795,7 +1794,6 @@ SFX2_DLLPUBLIC void* SAL_CALL sfx_component_getFactory(
         //=============================================================================
         IF_NAME_CREATECOMPONENTFACTORY( BackingComp )
         IF_NAME_CREATECOMPONENTFACTORY( SfxGlobalEvents_Impl )
-        IF_NAME_CREATECOMPONENTFACTORY( ShutdownIcon )
 #ifdef TEST_HANDLERS
         IF_NAME_CREATECOMPONENTFACTORY( TestKeyHandler )
         IF_NAME_CREATECOMPONENTFACTORY( TestMouseClickHandler )
