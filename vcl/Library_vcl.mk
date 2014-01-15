@@ -423,7 +423,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/osx/service_entry \
     $(vcl_quartz_code) \
     vcl/quartz/salgdiutils \
-    vcl/quartz/salmathutils \
     vcl/osx/salnativewidgets \
     vcl/osx/salprn \
     vcl/osx/salframe \
