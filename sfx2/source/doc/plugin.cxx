@@ -17,23 +17,33 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
-#include "plugin.hxx"
 #include <com/sun/star/plugin/PluginManager.hpp>
+#include <com/sun/star/plugin/XPlugin.hpp>
 #include <com/sun/star/plugin/XPluginManager.hpp>
 #include <com/sun/star/plugin/PluginMode.hpp>
 #include <com/sun/star/awt/XControl.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
+#include <svl/itemprop.hxx>
+#include <svl/ownlist.hxx>
 #include <svtools/miscopt.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 
 using namespace ::com::sun::star;
 
-namespace sfx2
-{
+namespace {
 
 class PluginWindow_Impl : public Window
 {
@@ -70,12 +80,61 @@ const SfxItemPropertyMapEntry* lcl_GetPluginPropertyMap_Impl()
     return aPluginPropertyMap_Impl;
 }
 
-SFX_IMPL_XSERVICEINFO( PluginObject, "com.sun.star.embed.SpecialEmbeddedObject", "com.sun.star.comp.sfx2.PluginObject" )
-SFX_IMPL_SINGLEFACTORY( PluginObject );
+class PluginObject : public ::cppu::WeakImplHelper5 <
+        css::util::XCloseable,
+        css::lang::XEventListener,
+        css::frame::XSynchronousFrameLoader,
+        css::beans::XPropertySet,
+        css::lang::XServiceInfo >
+{
+    css::uno::Reference< css::plugin::XPlugin > mxPlugin;
+    SfxItemPropertyMap  maPropMap;
+    SvCommandList       maCmdList;
+    OUString     maURL;
+    OUString     maMimeType;
 
-PluginObject::PluginObject( const uno::Reference < lang::XMultiServiceFactory >& rFact )
-    : mxFact( rFact )
-    , maPropMap( lcl_GetPluginPropertyMap_Impl() )
+public:
+    PluginObject();
+    ~PluginObject();
+
+    virtual sal_Bool SAL_CALL load( const css::uno::Sequence < css::beans::PropertyValue >& lDescriptor,
+            const css::uno::Reference < css::frame::XFrame >& xFrame ) throw( css::uno::RuntimeException );
+    virtual void SAL_CALL cancel() throw( css::uno::RuntimeException );
+    virtual void SAL_CALL close( sal_Bool bDeliverOwnership ) throw( css::util::CloseVetoException, css::uno::RuntimeException );
+    virtual void SAL_CALL addCloseListener( const css::uno::Reference < css::util::XCloseListener >& xListener ) throw( css::uno::RuntimeException );
+    virtual void SAL_CALL removeCloseListener( const css::uno::Reference < css::util::XCloseListener >& xListener ) throw( css::uno::RuntimeException );
+    virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException) ;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw( css::uno::RuntimeException );
+    virtual void SAL_CALL addPropertyChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener > & aListener) throw( css::uno::RuntimeException );
+    virtual void SAL_CALL removePropertyChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener > & aListener) throw( css::uno::RuntimeException );
+    virtual void SAL_CALL addVetoableChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener > & aListener) throw( css::uno::RuntimeException );
+    virtual void SAL_CALL removeVetoableChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener > & aListener) throw( css::uno::RuntimeException );
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+
+    virtual OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException)
+    {
+        return OUString("com.sun.star.comp.sfx2.PluginObject");
+    }
+
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException)
+    {
+        return cppu::supportsService(this, ServiceName);
+    }
+
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException)
+    {
+        css::uno::Sequence< OUString > aSeq(1);
+        aSeq[0] = OUString("com.sun.star.frame.SpecialEmbeddedObject");
+        return aSeq;
+    }
+};
+
+PluginObject::PluginObject()
+    : maPropMap( lcl_GetPluginPropertyMap_Impl() )
 {
 }
 
@@ -83,18 +142,12 @@ PluginObject::~PluginObject()
 {
 }
 
-void SAL_CALL PluginObject::initialize( const uno::Sequence< uno::Any >& aArguments ) throw ( uno::Exception, uno::RuntimeException )
-{
-    if ( aArguments.getLength() )
-        aArguments[0] >>= mxObj;
-}
-
 sal_Bool SAL_CALL PluginObject::load(
     const uno::Sequence < com::sun::star::beans::PropertyValue >& /*lDescriptor*/,
     const uno::Reference < frame::XFrame >& xFrame )
 throw( uno::RuntimeException )
 {
-    uno::Reference< plugin::XPluginManager > xPMgr( plugin::PluginManager::create(comphelper::getComponentContext(mxFact)) );
+    uno::Reference< plugin::XPluginManager > xPMgr( plugin::PluginManager::create(comphelper::getProcessComponentContext()) );
 
     if ( SvtMiscOptions().IsPluginsEnabled() )
     {
@@ -251,6 +304,16 @@ void SAL_CALL PluginObject::removeVetoableChangeListener(const OUString&, const 
 {
 }
 
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_sfx2_PluginObject_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    rtl::Reference<PluginObject> x(new PluginObject());
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

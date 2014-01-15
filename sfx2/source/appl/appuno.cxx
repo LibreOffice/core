@@ -30,7 +30,6 @@
 #include "frmload.hxx"
 #include "iframe.hxx"
 #include "objshimp.hxx"
-#include "plugin.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/brokenpackageint.hxx>
 #include <sfx2/dispatch.hxx>
@@ -1812,7 +1811,6 @@ SFX2_DLLPUBLIC void* SAL_CALL sfx_component_getFactory(
         IF_NAME_CREATECOMPONENTFACTORY( TestMouseClickHandler )
 #endif
         IF_NAME_CREATECOMPONENTFACTORY( OPackageStructureCreator )
-        IF_NAME_CREATECOMPONENTFACTORY( ::sfx2::PluginObject )
         IF_NAME_CREATECOMPONENTFACTORY( ::sfx2::IFrameObject )
         IF_NAME_CREATECOMPONENTFACTORY( ::sfx2::OwnSubFilterService )
         if ( ::comp_SfxDocumentMetaData::_getImplementationName().equals(
