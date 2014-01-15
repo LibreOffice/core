@@ -239,15 +239,15 @@ void ScTable::DeleteRow(
         }
     }
 
-    std::vector<SCCOL> aRegroupCols;
-    rRegroupCols.getColumns(nTab, aRegroupCols);
-    std::for_each(aRegroupCols.begin(), aRegroupCols.end(), ColumnRegroupFormulaCells(aCol));
-
     {   // scope for bulk broadcast
         ScBulkBroadcast aBulkBroadcast( pDocument->GetBASM());
         for (SCCOL j=nStartCol; j<=nEndCol; j++)
             aCol[j].DeleteRow( nStartRow, nSize );
     }
+
+    std::vector<SCCOL> aRegroupCols;
+    rRegroupCols.getColumns(nTab, aRegroupCols);
+    std::for_each(aRegroupCols.begin(), aRegroupCols.end(), ColumnRegroupFormulaCells(aCol));
 
     InvalidatePageBreaks();
 
