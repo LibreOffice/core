@@ -28,8 +28,7 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
 #include <com/sun/star/sdbc/DriverManager.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
@@ -82,7 +81,6 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include "frmload.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
@@ -1091,7 +1089,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                     // mechanism, and the type detection (which doesn't know about the Basic IDE).
                     Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
                     Reference< XSynchronousFrameLoader > xLoader(
-                        xContext->getServiceManager()->createInstanceWithContext(SfxFrameLoader_Impl::impl_getStaticImplementationName(), xContext),
+                        xContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.office.FrameLoader", xContext),
                         UNO_QUERY_THROW );
                     ::comphelper::NamedValueCollection aLoadArgs;
                     aLoadArgs.put( "Model", pBasicIDE->GetModel() );

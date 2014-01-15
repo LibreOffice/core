@@ -24,7 +24,6 @@
 #include "backingcomp.hxx"
 #include "SfxDocumentMetaData.hxx"
 #include "fltoptint.hxx"
-#include "frmload.hxx"
 #include "objshimp.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/brokenpackageint.hxx>
@@ -1796,7 +1795,6 @@ SFX2_DLLPUBLIC void* SAL_CALL sfx_component_getFactory(
         //      Write no ";" at end of line and dont forget "else" ! (see macro)
         //=============================================================================
         IF_NAME_CREATECOMPONENTFACTORY( BackingComp )
-        IF_NAME_CREATECOMPONENTFACTORY( SfxFrameLoader_Impl )
         IF_NAME_CREATECOMPONENTFACTORY( ShutdownIcon )
 #ifdef TEST_HANDLERS
         IF_NAME_CREATECOMPONENTFACTORY( TestKeyHandler )

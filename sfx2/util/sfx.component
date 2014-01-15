@@ -40,7 +40,8 @@
     <service name="com.sun.star.comp.embed.PackageStructureCreator"/>
     <service name="com.sun.star.embed.PackageStructureCreator"/>
   </implementation>
-  <implementation name="com.sun.star.comp.office.FrameLoader">
+  <implementation name="com.sun.star.comp.office.FrameLoader"
+      constructor="com_sun_star_comp_office_FrameLoader_get_implementation">
     <service name="com.sun.star.frame.SynchronousFrameLoader"/>
     <service name="com.sun.star.frame.OfficeFrameLoader"/>
   </implementation>
