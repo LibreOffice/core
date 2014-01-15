@@ -211,13 +211,6 @@ static GLfloat coordVertices[] = {
     0.0f, 1.0f,
 };
 
-static GLfloat square2DVertices[] = {
-    -1.0f, -1.0f,
-    1.0f, -1.0f,
-    1.0f,  1.0f,
-    -1.0f,  1.0f
-};
-
 #if 0
 static const GLfloat g_vertex_buffer_data[] = {
     -1.0f,-1.0f,-1.0f,
@@ -1346,34 +1339,46 @@ int OpenGLRender::RectangleShapePoint(float x, float y, float directionX, float 
     //check whether to create the circle data
     float actualX = x / OPENGL_SCALE_VALUE;
     float actualY = y / OPENGL_SCALE_VALUE;
-    RectanglePointList aRectangleList.x = actualX;
-    aRectangleList.y = actualY;
-    aRectangleList.z = m_fZStep;
-    aRectangleList.xScale = directionX / OPENGL_SCALE_VALUE;
-    aRectangleList.yScale = directionY / OPENGL_SCALE_VALUE;
+    float actualSizeX = directionX / OPENGL_SCALE_VALUE;
+    float actualSizeY = directionY / OPENGL_SCALE_VALUE;
+    RectanglePointList aRectangle;
 
-    m_RectangleShapePointList.push_back(aRectangleList);
+    aRectangle.points[0] = actualX;
+    aRectangle.points[1] = actualY;
+    aRectangle.points[2] = m_fZStep;
+    aRectangle.points[3] = actualX + actualSizeX;
+    aRectangle.points[4] = actualX;
+    aRectangle.points[5] = m_fZStep;
+    aRectangle.points[6] = actualX + actualSizeX;
+    aRectangle.points[7] = actualX + actualSizeY;
+    aRectangle.points[8] = m_fZStep;
+    aRectangle.points[9] = actualX;
+    aRectangle.points[10] = actualX + actualSizeY;
+    aRectangle.points[11] = m_fZStep;
+
+    m_RectangleShapePointList.push_back(aRectangle);
     return 0;
 }
 
 
 int OpenGLRender::RenderRectangleShape()
 {
+    m_fZStep += 0.001;
     size_t listNum = m_RectangleShapePointList.size();
     for (size_t i = 0; i < listNum; i++)
     {
         //move the circle to the pos, and scale using the xScale and Y scale
         RectanglePointList &pointList = m_RectangleShapePointList.front();
-        PosVecf3 trans = {pointList.x, pointList.y, pointList.z};
+        PosVecf3 trans = {0, 0, 0};
         PosVecf3 angle = {0.0f, 0.0f, 0.0f};
-        PosVecf3 scale = {pointList.xScale, pointList.yScale, 1.0f};
+        PosVecf3 scale = {1, 1, 1.0f};
         MoveModelf(trans, angle, scale);
         m_MVP = m_Projection * m_View * m_Model;
 
         //render to fbo
         //fill vertex buffer
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(square2DVertices), square2DVertices, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(pointList.points), pointList.points, GL_STATIC_DRAW);
 
         glBindBuffer(GL_ARRAY_BUFFER, m_ColorBuffer);
         glBufferData(GL_ARRAY_BUFFER, sizeof(m_BackgroundColor), m_BackgroundColor, GL_STATIC_DRAW);

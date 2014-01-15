@@ -84,14 +84,10 @@ typedef struct Bubble2DCircle
     int bufLen;
 }Bubble2DCircle;
 
-typedef struct RectanglePointList
+struct RectanglePointList
 {
-    float x;
-    float y;
-    float z;
-    float xScale;
-    float yScale;
-}RectanglePointList;
+    float points[12];
+};
 
 typedef struct TextInfo
 {
