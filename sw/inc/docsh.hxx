@@ -222,7 +222,7 @@ public:
 
     virtual bool DdeGetData( const OUString& rItem, const OUString& rMimeType,
                              ::com::sun::star::uno::Any & rValue );
-    virtual long DdeSetData( const OUString& rItem, const OUString& rMimeType,
+    virtual bool DdeSetData( const OUString& rItem, const OUString& rMimeType,
                              const ::com::sun::star::uno::Any & rValue );
     virtual ::sfx2::SvLinkSource* DdeCreateLinkSource( const OUString& rItem );
     virtual void ReconnectDdeLink(SfxObjectShell& rServer);

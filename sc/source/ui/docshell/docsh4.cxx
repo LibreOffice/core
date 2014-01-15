@@ -2125,7 +2125,7 @@ bool ScDocShell::DdeGetData( const OUString& rItem,
     return aObj.IsRef() && aObj.ExportData( rMimeType, rValue );
 }
 
-long ScDocShell::DdeSetData( const OUString& rItem,
+bool ScDocShell::DdeSetData( const OUString& rItem,
                              const OUString& rMimeType,
                              const ::com::sun::star::uno::Any & rValue )
 {
@@ -2136,9 +2136,9 @@ long ScDocShell::DdeSetData( const OUString& rItem,
             if ( ScByteSequenceToString::GetString( aDdeTextFmt, rValue, osl_getThreadTextEncoding() ) )
             {
                 aDdeTextFmt = aDdeTextFmt.toAsciiUpperCase();
-                return 1;
+                return true;
             }
-            return 0;
+            return false;
         }
         ScImportExport aObj( &aDocument, rItem );
         if( aDdeTextFmt[0] == 'F' )
@@ -2149,19 +2149,17 @@ long ScDocShell::DdeSetData( const OUString& rItem,
             OUString aData;
             if ( ScByteSequenceToString::GetString( aData, rValue, osl_getThreadTextEncoding() ) )
             {
-                return aObj.ImportString( aData, SOT_FORMATSTR_ID_SYLK ) ? 1 : 0;
+                return aObj.ImportString( aData, SOT_FORMATSTR_ID_SYLK );
             }
-            return 0;
+            return false;
         }
         if( aDdeTextFmt == "CSV" ||
             aDdeTextFmt == "FCSV" )
             aObj.SetSeparator( ',' );
-        return aObj.ImportData( rMimeType, rValue ) ? 1 : 0;
+        return aObj.ImportData( rMimeType, rValue );
     }
     ScImportExport aObj( &aDocument, rItem );
-    if( aObj.IsRef() )
-        return aObj.ImportData( rMimeType, rValue ) ? 1 : 0;
-    return 0;
+    return aObj.IsRef() && aObj.ImportData( rMimeType, rValue );
 }
 
 ::sfx2::SvLinkSource* ScDocShell::DdeCreateLinkSource( const OUString& rItem )

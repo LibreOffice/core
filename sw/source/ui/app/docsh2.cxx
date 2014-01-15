@@ -1169,7 +1169,7 @@ bool SwDocShell::DdeGetData( const OUString& rItem, const OUString& rMimeType,
     return pDoc->GetData( rItem, rMimeType, rValue );
 }
 
-long SwDocShell::DdeSetData( const OUString& rItem, const OUString& rMimeType,
+bool SwDocShell::DdeSetData( const OUString& rItem, const OUString& rMimeType,
                              const uno::Any & rValue )
 {
     return pDoc->SetData( rItem, rMimeType, rValue );

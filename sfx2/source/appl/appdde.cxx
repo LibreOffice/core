@@ -386,13 +386,13 @@ bool SfxObjectShell::DdeGetData( const OUString&,              // the Item to be
     This method can be overloaded by application developers, to receive
     DDE-data directed to their SfxApplication subclass.
 
-    The base implementation is not receiving any data and returns 0.
+    The base implementation is not receiving any data and returns false.
 */
-long SfxObjectShell::DdeSetData( const OUString&,                    // the Item to be addressed
+bool SfxObjectShell::DdeSetData( const OUString&,                    // the Item to be addressed
                                  const OUString&,                    // in: Format
                                  const ::com::sun::star::uno::Any& )// out: requested data
 {
-    return 0;
+    return false;
 }
 
 /*  [Description]
@@ -461,13 +461,13 @@ bool SfxViewFrame::DdeGetData( const OUString&,            // the Item to be add
     This method can be overloaded by application developers, to receive
     DDE-data directed to their SfxApplication subclass.
 
-    The base implementation is not receiving any data and returns 0.
+    The base implementation is not receiving any data and returns false.
 */
-long SfxViewFrame::DdeSetData( const OUString&,                  // the Item to be addressed
+bool SfxViewFrame::DdeSetData( const OUString&,                  // the Item to be addressed
                                const OUString&,                  // in: Format
                                const ::com::sun::star::uno::Any& )// out: requested data
 {
-    return 0;
+    return false;
 }
 
 /*  [Description]
@@ -614,7 +614,7 @@ bool SfxDdeDocTopic_Impl::Put( const DdeData* pData )
         ::com::sun::star::uno::Any aValue;
         aValue <<= aSeq;
         OUString sMimeType( SotExchange::GetFormatMimeType( pData->GetFormat() ));
-        bRet = 0 != pSh->DdeSetData( GetCurItem(), sMimeType, aValue );
+        bRet = pSh->DdeSetData( GetCurItem(), sMimeType, aValue );
     }
     else
         bRet = false;
