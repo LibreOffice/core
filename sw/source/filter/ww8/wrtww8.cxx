@@ -2002,7 +2002,7 @@ static sal_uInt16 lcl_TCFlags(SwDoc &rDoc, const SwTableBox * pBox, sal_Int32 nR
             if( pCNd && pCNd->IsTxtNode())
             {
                 SfxItemSet aCoreSet(rDoc.GetAttrPool(), RES_CHRATR_ROTATE, RES_CHRATR_ROTATE);
-                ((SwTxtNode*)pCNd)->GetAttr( aCoreSet, 0, !((SwTxtNode*)pCNd)->GetTxt().isEmpty());
+                ((SwTxtNode*)pCNd)->GetAttr( aCoreSet, 0, ((SwTxtNode*)pCNd)->GetTxt().getLength());
                 const SvxCharRotateItem * pRotate = NULL;
                 const SfxPoolItem * pRotItem;
                 if ( SFX_ITEM_SET == aCoreSet.GetItemState(RES_CHRATR_ROTATE, sal_True, &pRotItem))
