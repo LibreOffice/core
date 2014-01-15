@@ -179,7 +179,7 @@ sal_Bool SAL_CALL SfxEvents_Impl::hasElements() throw ( uno::RuntimeException )
         return sal_False;
 }
 
-void SfxEvents_Impl::Execute( uno::Any& aEventData, const document::DocumentEvent& aTrigger, SfxObjectShell* pDoc )
+static void Execute( uno::Any& aEventData, const document::DocumentEvent& aTrigger, SfxObjectShell* pDoc )
 {
     uno::Sequence < beans::PropertyValue > aProperties;
     if ( aEventData >>= aProperties )
@@ -486,6 +486,357 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
         o_normalizedDescriptor.put( PROP_LIBRARY, aLibrary );
         o_normalizedDescriptor.put( PROP_MACRO_NAME, aMacroName );
     }
+}
+
+ModelCollectionEnumeration::ModelCollectionEnumeration()
+    : ModelCollectionMutexBase(                 )
+    , m_pEnumerationIt        (m_lModels.begin())
+{
+}
+
+ModelCollectionEnumeration::~ModelCollectionEnumeration()
+{
+}
+
+void ModelCollectionEnumeration::setModelList(const TModelList& rList)
+{
+    // SAFE ->
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+    m_lModels        = rList;
+    m_pEnumerationIt = m_lModels.begin();
+    aLock.clear();
+    // <- SAFE
+}
+
+sal_Bool SAL_CALL ModelCollectionEnumeration::hasMoreElements()
+    throw(uno::RuntimeException)
+{
+    // SAFE ->
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+    return (m_pEnumerationIt != m_lModels.end());
+    // <- SAFE
+}
+
+uno::Any SAL_CALL ModelCollectionEnumeration::nextElement()
+    throw(container::NoSuchElementException,
+          lang::WrappedTargetException     ,
+          uno::RuntimeException            )
+{
+    // SAFE ->
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+    if (m_pEnumerationIt == m_lModels.end())
+        throw container::NoSuchElementException(
+                    OUString("End of model enumeration reached."),
+                    static_cast< container::XEnumeration* >(this));
+    uno::Reference< frame::XModel > xModel(*m_pEnumerationIt, uno::UNO_QUERY);
+    ++m_pEnumerationIt;
+    aLock.clear();
+    // <- SAFE
+
+    return uno::makeAny(xModel);
+}
+
+SFX_IMPL_XSERVICEINFO_CTX( SfxGlobalEvents_Impl, "com.sun.star.frame.GlobalEventBroadcaster", "com.sun.star.comp.sfx2.GlobalEventBroadcaster" )
+SFX_IMPL_ONEINSTANCEFACTORY( SfxGlobalEvents_Impl );
+
+//-----------------------------------------------------------------------------
+SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const uno::Reference < uno::XComponentContext >& rxContext)
+    : ModelCollectionMutexBase(       )
+    , m_xJobExecutorListener( task::JobExecutor::create( rxContext ), uno::UNO_QUERY_THROW )
+    , m_aLegacyListeners      (m_aLock)
+    , m_aDocumentListeners    (m_aLock)
+    , pImp                    (0      )
+{
+    m_refCount++;
+    SFX_APP();
+    pImp                   = new GlobalEventConfig();
+    m_xEvents              = pImp;
+    m_refCount--;
+}
+
+//-----------------------------------------------------------------------------
+SfxGlobalEvents_Impl::~SfxGlobalEvents_Impl()
+{
+}
+
+//-----------------------------------------------------------------------------
+uno::Reference< container::XNameReplace > SAL_CALL SfxGlobalEvents_Impl::getEvents()
+    throw(uno::RuntimeException)
+{
+    // SAFE ->
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+    return m_xEvents;
+    // <- SAFE
+}
+
+//-----------------------------------------------------------------------------
+void SAL_CALL SfxGlobalEvents_Impl::addEventListener(const uno::Reference< document::XEventListener >& xListener)
+    throw(uno::RuntimeException)
+{
+    // container is threadsafe
+    m_aLegacyListeners.addInterface(xListener);
+}
+
+//-----------------------------------------------------------------------------
+void SAL_CALL SfxGlobalEvents_Impl::removeEventListener(const uno::Reference< document::XEventListener >& xListener)
+    throw(uno::RuntimeException)
+{
+    // container is threadsafe
+    m_aLegacyListeners.removeInterface(xListener);
+}
+
+//-----------------------------------------------------------------------------
+void SAL_CALL SfxGlobalEvents_Impl::addDocumentEventListener( const uno::Reference< document::XDocumentEventListener >& _Listener )
+    throw(uno::RuntimeException)
+{
+    m_aDocumentListeners.addInterface( _Listener );
+}
+
+//-----------------------------------------------------------------------------
+void SAL_CALL SfxGlobalEvents_Impl::removeDocumentEventListener( const uno::Reference< document::XDocumentEventListener >& _Listener )
+    throw(uno::RuntimeException)
+{
+    m_aDocumentListeners.removeInterface( _Listener );
+}
+
+//-----------------------------------------------------------------------------
+void SAL_CALL SfxGlobalEvents_Impl::notifyDocumentEvent( const OUString& /*_EventName*/,
+        const uno::Reference< frame::XController2 >& /*_ViewController*/, const uno::Any& /*_Supplement*/ )
+        throw (lang::IllegalArgumentException, lang::NoSupportException, uno::RuntimeException)
+{
+    // we're a multiplexer only, no chance to generate artifical events here
+    throw lang::NoSupportException(OUString(), *this);
+}
+
+//-----------------------------------------------------------------------------
+void SAL_CALL SfxGlobalEvents_Impl::notifyEvent(const document::EventObject& aEvent)
+    throw(uno::RuntimeException)
+{
+    document::DocumentEvent aDocEvent(aEvent.Source, aEvent.EventName, NULL, uno::Any());
+    implts_notifyJobExecution(aEvent);
+    implts_checkAndExecuteEventBindings(aDocEvent);
+    implts_notifyListener(aDocEvent);
+}
+
+//-----------------------------------------------------------------------------
+void SAL_CALL SfxGlobalEvents_Impl::documentEventOccured( const document::DocumentEvent& _Event )
+    throw (uno::RuntimeException)
+{
+    implts_notifyJobExecution(document::EventObject(_Event.Source, _Event.EventName));
+    implts_checkAndExecuteEventBindings(_Event);
+    implts_notifyListener(_Event);
+}
+
+//-----------------------------------------------------------------------------
+void SAL_CALL SfxGlobalEvents_Impl::disposing(const lang::EventObject& aEvent)
+    throw(uno::RuntimeException)
+{
+    uno::Reference< frame::XModel > xDoc(aEvent.Source, uno::UNO_QUERY);
+
+    // SAFE ->
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+    TModelList::iterator pIt = impl_searchDoc(xDoc);
+    if (pIt != m_lModels.end())
+        m_lModels.erase(pIt);
+    aLock.clear();
+    // <- SAFE
+}
+
+//-----------------------------------------------------------------------------
+sal_Bool SAL_CALL SfxGlobalEvents_Impl::has(const uno::Any& aElement)
+    throw (uno::RuntimeException)
+{
+    uno::Reference< frame::XModel > xDoc;
+    aElement >>= xDoc;
+
+    sal_Bool bHas = sal_False;
+
+    // SAFE ->
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+    TModelList::iterator pIt = impl_searchDoc(xDoc);
+    if (pIt != m_lModels.end())
+        bHas = sal_True;
+    aLock.clear();
+    // <- SAFE
+
+    return bHas;
+}
+
+//-----------------------------------------------------------------------------
+void SAL_CALL SfxGlobalEvents_Impl::insert( const uno::Any& aElement )
+    throw (lang::IllegalArgumentException  ,
+           container::ElementExistException,
+           uno::RuntimeException           )
+{
+    uno::Reference< frame::XModel > xDoc;
+    aElement >>= xDoc;
+    if (!xDoc.is())
+        throw lang::IllegalArgumentException(
+                OUString("Cant locate at least the model parameter."),
+                static_cast< container::XSet* >(this),
+                0);
+
+    // SAFE ->
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+    TModelList::iterator pIt = impl_searchDoc(xDoc);
+    if (pIt != m_lModels.end())
+        throw container::ElementExistException(
+                OUString(),
+                static_cast< container::XSet* >(this));
+    m_lModels.push_back(xDoc);
+    aLock.clear();
+    // <- SAFE
+
+    uno::Reference< document::XDocumentEventBroadcaster > xDocBroadcaster(xDoc, uno::UNO_QUERY );
+    if (xDocBroadcaster.is())
+        xDocBroadcaster->addDocumentEventListener(this);
+    else
+    {
+        // try the "legacy version" of XDocumentEventBroadcaster, which is XEventBroadcaster
+        uno::Reference< document::XEventBroadcaster > xBroadcaster(xDoc, uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->addEventListener(static_cast< document::XEventListener* >(this));
+    }
+}
+
+//-----------------------------------------------------------------------------
+void SAL_CALL SfxGlobalEvents_Impl::remove( const uno::Any& aElement )
+    throw (lang::IllegalArgumentException   ,
+           container::NoSuchElementException,
+           uno::RuntimeException            )
+{
+    uno::Reference< frame::XModel > xDoc;
+    aElement >>= xDoc;
+    if (!xDoc.is())
+        throw lang::IllegalArgumentException(
+                OUString("Cant locate at least the model parameter."),
+                static_cast< container::XSet* >(this),
+                0);
+
+    // SAFE ->
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+    TModelList::iterator pIt = impl_searchDoc(xDoc);
+    if (pIt == m_lModels.end())
+        throw container::NoSuchElementException(
+                OUString(),
+                static_cast< container::XSet* >(this));
+    m_lModels.erase(pIt);
+    aLock.clear();
+    // <- SAFE
+
+    uno::Reference< document::XDocumentEventBroadcaster > xDocBroadcaster(xDoc, uno::UNO_QUERY );
+    if (xDocBroadcaster.is())
+        xDocBroadcaster->removeDocumentEventListener(this);
+    else
+    {
+        // try the "legacy version" of XDocumentEventBroadcaster, which is XEventBroadcaster
+        uno::Reference< document::XEventBroadcaster > xBroadcaster(xDoc, uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->removeEventListener(static_cast< document::XEventListener* >(this));
+    }
+}
+
+//-----------------------------------------------------------------------------
+uno::Reference< container::XEnumeration > SAL_CALL SfxGlobalEvents_Impl::createEnumeration()
+    throw (uno::RuntimeException)
+{
+    // SAFE ->
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+    ModelCollectionEnumeration* pEnum = new ModelCollectionEnumeration();
+    pEnum->setModelList(m_lModels);
+    uno::Reference< container::XEnumeration > xEnum(
+        static_cast< container::XEnumeration* >(pEnum),
+        uno::UNO_QUERY);
+    aLock.clear();
+    // <- SAFE
+
+    return xEnum;
+}
+
+//-----------------------------------------------------------------------------
+uno::Type SAL_CALL SfxGlobalEvents_Impl::getElementType()
+    throw (uno::RuntimeException)
+{
+    return ::getCppuType(static_cast< uno::Reference< frame::XModel >* >(NULL));
+}
+
+//-----------------------------------------------------------------------------
+sal_Bool SAL_CALL SfxGlobalEvents_Impl::hasElements()
+    throw (uno::RuntimeException)
+{
+    // SAFE ->
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+    return (m_lModels.size()>0);
+    // <- SAFE
+}
+
+//-----------------------------------------------------------------------------
+void SfxGlobalEvents_Impl::implts_notifyJobExecution(const document::EventObject& aEvent)
+{
+    try
+    {
+        m_xJobExecutorListener->notifyEvent(aEvent);
+    }
+    catch(const uno::RuntimeException&)
+        { throw; }
+    catch(const uno::Exception&)
+        {}
+}
+
+//-----------------------------------------------------------------------------
+void SfxGlobalEvents_Impl::implts_checkAndExecuteEventBindings(const document::DocumentEvent& aEvent)
+{
+    try
+    {
+        // SAFE ->
+        ::osl::ResettableMutexGuard aLock(m_aLock);
+        uno::Reference< container::XNameReplace > xEvents = m_xEvents;
+        aLock.clear();
+        // <- SAFE
+
+        uno::Any aAny;
+        if ( xEvents.is() && xEvents->hasByName( aEvent.EventName ) )
+            aAny = xEvents->getByName(aEvent.EventName);
+        Execute(aAny, aEvent, 0);
+    }
+    catch ( uno::RuntimeException const & )
+    {
+        throw;
+    }
+    catch ( uno::Exception const & )
+    {
+       DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
+//-----------------------------------------------------------------------------
+void SfxGlobalEvents_Impl::implts_notifyListener(const document::DocumentEvent& aEvent)
+{
+    // containers are threadsafe
+    document::EventObject aLegacyEvent(aEvent.Source, aEvent.EventName);
+    m_aLegacyListeners.notifyEach( &document::XEventListener::notifyEvent, aLegacyEvent );
+
+    m_aDocumentListeners.notifyEach( &document::XDocumentEventListener::documentEventOccured, aEvent );
+}
+
+//-----------------------------------------------------------------------------
+// not threadsafe ... must be locked from outside!
+TModelList::iterator SfxGlobalEvents_Impl::impl_searchDoc(const uno::Reference< frame::XModel >& xModel)
+{
+    if (!xModel.is())
+        return m_lModels.end();
+
+    TModelList::iterator pIt;
+    for (  pIt  = m_lModels.begin();
+           pIt != m_lModels.end()  ;
+         ++pIt                     )
+    {
+        uno::Reference< frame::XModel > xContainerDoc(*pIt, uno::UNO_QUERY);
+        if (xContainerDoc == xModel)
+            break;
+    }
+
+    return pIt;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

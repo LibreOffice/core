@@ -236,7 +236,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/menu/thessubmenu \
     sfx2/source/menu/virtmenu \
     sfx2/source/notify/eventsupplier \
-	sfx2/source/notify/globalevents \
     sfx2/source/notify/hintpost \
     sfx2/source/sidebar/Sidebar \
     sfx2/source/sidebar/SidebarChildWindow \
