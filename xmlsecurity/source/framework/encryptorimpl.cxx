@@ -23,6 +23,7 @@
 #include <com/sun/star/xml/wrapper/XXMLElementWrapper.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
+ #include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
@@ -217,12 +218,6 @@ OUString EncryptorImpl_getImplementationName ()
     return OUString ( IMPLEMENTATION_NAME );
 }
 
-sal_Bool SAL_CALL EncryptorImpl_supportsService( const OUString& ServiceName )
-    throw (RuntimeException)
-{
-    return ServiceName == SERVICE_NAME;
-}
-
 Sequence< OUString > SAL_CALL EncryptorImpl_getSupportedServiceNames(  )
     throw (RuntimeException)
 {
@@ -246,11 +241,13 @@ OUString SAL_CALL EncryptorImpl::getImplementationName(  )
 {
     return EncryptorImpl_getImplementationName();
 }
+
 sal_Bool SAL_CALL EncryptorImpl::supportsService( const OUString& rServiceName )
     throw (RuntimeException)
 {
-    return EncryptorImpl_supportsService( rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
+
 Sequence< OUString > SAL_CALL EncryptorImpl::getSupportedServiceNames(  )
     throw (RuntimeException)
 {
