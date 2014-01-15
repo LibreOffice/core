@@ -447,7 +447,7 @@ void setProperties( const VLineProperties& rLineProperties, std::map<OUString, u
     //LineColor
     if(rLineProperties.Color.hasValue())
         rTargetProps.insert(std::pair<OUString, uno::Any>(
-                    UNO_NAME_LINECOLOR, rLineProperties.Transparence));
+                    UNO_NAME_LINECOLOR, rLineProperties.Color));
 
     //LineDashName
     if(rLineProperties.DashName.hasValue())

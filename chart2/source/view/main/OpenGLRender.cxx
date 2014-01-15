@@ -525,7 +525,7 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
 BitmapEx OpenGLRender::GetAsBitmap()
 {
     boost::scoped_array<sal_uInt8> buf(new sal_uInt8[m_iWidth * m_iHeight * 4]);
-    glReadPixels(0, 0, m_iWidth, m_iHeight, GL_RGBA, GL_UNSIGNED_BYTE, buf.get());
+    glReadPixels(0, 0, m_iWidth, m_iHeight, GL_BGRA, GL_UNSIGNED_BYTE, buf.get());
 
     Bitmap aBitmap( Size(m_iWidth, m_iHeight), 24 );
     AlphaMask aAlpha( Size(m_iWidth, m_iHeight) );
