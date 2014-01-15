@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "backingcomp.hxx"
-
 #include "backingwindow.hxx"
 
 #include <helpid.hrc>
@@ -33,14 +31,23 @@
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/awt/XKeyListener.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 
-#include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/factory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <svl/solar.hrc>
@@ -50,15 +57,96 @@
 
 #include <unotools/bootstrap.hxx>
 
-const char SERVICENAME_FRAMECONTROLLER[] = "com.sun.star.frame.Controller";
-const char IMPLEMENTATIONNAME_STARTMODULE[] = "com.sun.star.comp.sfx2.BackingComp";
+
+namespace {
+
 const char FRAME_PROPNAME_LAYOUTMANAGER[] = "LayoutManager";
 const char HID_BACKINGWINDOW[] = "FWK_HID_BACKINGWINDOW";
 const char SPECIALTARGET_MENUBAR[] = "_menubar";
 
-//_______________________________________________
+/**
+    implements the backing component.
 
-//_______________________________________________
+    This component is a special one, which doesn't provide a controller
+    nor a model. It supports the following features:
+        - Drag & Drop
+        - Key Accelerators
+        - Simple Menu
+        - Progress Bar
+        - Background
+ */
+class BackingComp : public  css::lang::XTypeProvider
+                  , public  css::lang::XServiceInfo
+                  , public  css::lang::XInitialization
+                  , public  css::frame::XController  // => XComponent
+                  , public  css::awt::XKeyListener // => XEventListener
+                  , public css::frame::XDispatchProvider
+                  , public css::frame::XDispatch
+                  , public  ::cppu::OWeakObject
+{
+private:
+    /** the global uno service manager.
+        Must be used to create own needed services. */
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+
+    /** reference to the component window. */
+    css::uno::Reference< css::awt::XWindow > m_xWindow;
+
+    /** the owner frame of this component. */
+    css::uno::Reference< css::frame::XFrame > m_xFrame;
+
+public:
+
+             BackingComp( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    virtual ~BackingComp(                                                                    );
+
+    // XInterface
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw(css::uno::RuntimeException);
+    virtual void          SAL_CALL acquire       (                             ) throw(                          );
+    virtual void          SAL_CALL release       (                             ) throw(                          );
+
+    // XTypeProvide
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes           () throw(css::uno::RuntimeException);
+    virtual css::uno::Sequence< sal_Int8 >       SAL_CALL getImplementationId() throw(css::uno::RuntimeException);
+
+    // XServiceInfo
+    virtual OUString                       SAL_CALL getImplementationName   (                                     ) throw(css::uno::RuntimeException);
+    virtual sal_Bool                              SAL_CALL supportsService         ( const OUString& sServiceName ) throw(css::uno::RuntimeException);
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(                                     ) throw(css::uno::RuntimeException);
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& lArgs ) throw(css::uno::Exception, css::uno::RuntimeException);
+
+    // XController
+    virtual void SAL_CALL attachFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) throw(css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL attachModel( const css::uno::Reference< css::frame::XModel >& xModel ) throw(css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL suspend( sal_Bool bSuspend ) throw(css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getViewData() throw(css::uno::RuntimeException);
+    virtual void SAL_CALL restoreViewData( const css::uno::Any& aData ) throw(css::uno::RuntimeException);
+    virtual css::uno::Reference< css::frame::XModel > SAL_CALL getModel() throw(css::uno::RuntimeException);
+    virtual css::uno::Reference< css::frame::XFrame > SAL_CALL getFrame() throw(css::uno::RuntimeException);
+
+    // XKeyListener
+    virtual void SAL_CALL keyPressed ( const css::awt::KeyEvent& aEvent ) throw(css::uno::RuntimeException);
+    virtual void SAL_CALL keyReleased( const css::awt::KeyEvent& aEvent ) throw(css::uno::RuntimeException);
+
+    // XEventListener
+    virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException);
+
+    // XComponent
+    virtual void SAL_CALL dispose            (                                                                   ) throw(css::uno::RuntimeException);
+    virtual void SAL_CALL addEventListener   ( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw(css::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw(css::uno::RuntimeException);
+
+    // XDispatchProvider
+    virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch( const css::util::URL& aURL, const OUString& sTargetFrameName , sal_Int32 nSearchFlags ) throw( css::uno::RuntimeException );
+    virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions    ) throw( css::uno::RuntimeException );
+
+    // XDispatch
+    virtual void SAL_CALL dispatch( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException );
+    virtual void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener, const css::util::URL& aURL ) throw( css::uno::RuntimeException );
+    virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener, const css::util::URL& aURL ) throw( css::uno::RuntimeException );
+};
 
 BackingComp::BackingComp( const css::uno::Reference< css::uno::XComponentContext >& xContext )
     : m_xContext(xContext)
@@ -227,155 +315,25 @@ css::uno::Sequence< sal_Int8 > SAL_CALL BackingComp::getImplementationId()
     return pID->getImplementationId();
 }
 
-//_______________________________________________
-
-/** returns a static implementation name for this UNO service.
-
-    Because this value is needed at different places and our class is used
-    by some generic macros too, we have to use a static impl method for that!
-
-    @see impl_getStaticImplementationName()
-    @see IMPLEMENTATIONNAME
-
-    @return The implementation name of this class.
-*/
-
 OUString SAL_CALL BackingComp::getImplementationName()
     throw(css::uno::RuntimeException)
 {
-    return impl_getStaticImplementationName();
+    return OUString("com.sun.star.comp.sfx2.BackingComp");
 }
-
-//_______________________________________________
-
-/** returns information about supported services.
-
-    Because this value is needed at different places and our class is used
-    by some generic macros too, we have to use a static impl method for that!
-
-    @see impl_getStaticSupportedServiceNames()
-    @see SERVICENAME
-
-    @return <TRUE/> if the queried service is supported;
-            <br><FALSE/> otherwise.
-*/
 
 sal_Bool SAL_CALL BackingComp::supportsService( /*IN*/ const OUString& sServiceName )
     throw(css::uno::RuntimeException)
 {
-    return (
-            sServiceName.equals("com.sun.star.frame.StartModule") ||
-            sServiceName.equals(SERVICENAME_FRAMECONTROLLER) ||
-            sServiceName.equals("com.sun.star.frame.ProtocolHandler")
-           );
+    return cppu::supportsService(this, sServiceName);
 }
-
-//_______________________________________________
-
-/** returns collection of supported services.
-
-    Because this value is needed at different places and our class is used
-    by some generic macros too, we have to use a static impl method for that!
-
-    @see impl_getStaticSupportedServiceNames()
-    @see SERVICENAME
-
-    @return A list of all supported uno service names.
-*/
 
 css::uno::Sequence< OUString > SAL_CALL BackingComp::getSupportedServiceNames()
     throw(css::uno::RuntimeException)
-{
-    return impl_getStaticSupportedServiceNames();
-}
-
-//_______________________________________________
-
-/** returns static implementation name.
-
-    Because this value is needed at different places and our class is used
-    by some generic macros too, we have to use a static impl method for that!
-
-    @see impl_getStaticSupportedServiceNames()
-    @see SERVICENAME
-
-    @return The implementation name of this class.
-*/
-
-OUString BackingComp::impl_getStaticImplementationName()
-{
-    return OUString( IMPLEMENTATIONNAME_STARTMODULE );
-}
-
-//_______________________________________________
-
-/** returns static list of supported service names.
-
-    Because this value is needed at different places and our class is used
-    by some generic macros too, we have to use a static impl method for that!
-
-    @see impl_getStaticSupportedServiceNames()
-    @see SERVICENAME
-
-    @return A list of all supported uno service names.
-*/
-
-css::uno::Sequence< OUString > BackingComp::impl_getStaticSupportedServiceNames()
 {
     css::uno::Sequence< OUString > lNames(2);
     lNames[0] = "com.sun.star.frame.StartModule";
     lNames[1] = "com.sun.star.frame.ProtocolHandler";
     return lNames;
-}
-
-//_______________________________________________
-
-/** returns a new instance of this class.
-
-    This factory method is registered inside the UNO runtime
-    and will be called for every createInstance() request from outside,
-    which wish to use this service.
-
-    @param  xSMGR
-                reference to the uno service manager, which call us
-                We use it too, to set it at the new created instance.
-
-    @return A new instance as uno reference.
-*/
-
-css::uno::Reference< css::uno::XInterface > SAL_CALL BackingComp::impl_createInstance( /*IN*/ const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR )
-    throw(css::uno::Exception)
-{
-    BackingComp* pObject = new BackingComp(comphelper::getComponentContext(xSMGR));
-    return css::uno::Reference< css::uno::XInterface >(static_cast< ::cppu::OWeakObject* >(pObject), css::uno::UNO_QUERY);
-}
-
-//_______________________________________________
-
-/** returns a new factory instance for instances of this class.
-
-    It uses a helper class of the cppuhelper project as factory.
-    It will be initialized with all necessary information and
-    will be able afterwards to create instance of this class.
-    This factory call us back inside our method impl_createInstance().
-    So we can create and initialize ourself. Only filtering of creation
-    requests will be done by this factory.
-
-    @param  xSMGR
-                reference to the uno service manager, which call us
-
-    @return A new instance of our factory.
-*/
-
-css::uno::Reference< css::lang::XSingleServiceFactory > BackingComp::impl_createFactory( /*IN*/ const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR )
-{
-    css::uno::Reference< css::lang::XSingleServiceFactory > xReturn(
-        cppu::createSingleFactory(
-            xSMGR,
-            BackingComp::impl_getStaticImplementationName(),
-            BackingComp::impl_createInstance,
-            BackingComp::impl_getStaticSupportedServiceNames()));
-    return xReturn;
 }
 
 //_______________________________________________
@@ -846,6 +804,18 @@ void SAL_CALL BackingComp::addStatusListener( const css::uno::Reference< css::fr
 
 void SAL_CALL BackingComp::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xControl*/, const css::util::URL& /*aURL*/ ) throw ( css::uno::RuntimeException )
 {
+}
+
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_sfx2_BackingComp_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    rtl::Reference<BackingComp> x(new BackingComp(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

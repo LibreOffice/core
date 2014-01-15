@@ -21,7 +21,6 @@
 #pragma warning( disable : 4290 )
 #endif
 
-#include "backingcomp.hxx"
 #include "eventsupplier.hxx"
 #include "fltoptint.hxx"
 #include "objshimp.hxx"
@@ -1791,7 +1790,6 @@ SFX2_DLLPUBLIC void* SAL_CALL sfx_component_getFactory(
         //  !!! ATTENTION !!!
         //      Write no ";" at end of line and dont forget "else" ! (see macro)
         //=============================================================================
-        IF_NAME_CREATECOMPONENTFACTORY( BackingComp )
         IF_NAME_CREATECOMPONENTFACTORY( SfxGlobalEvents_Impl )
 #ifdef TEST_HANDLERS
         IF_NAME_CREATECOMPONENTFACTORY( TestKeyHandler )
