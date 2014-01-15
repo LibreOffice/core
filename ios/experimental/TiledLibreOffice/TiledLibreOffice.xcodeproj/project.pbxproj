@@ -59,10 +59,17 @@
 		BE0899161860F6450021A679 /* salbmp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salbmp.cxx; path = ../../../vcl/quartz/salbmp.cxx; sourceTree = "<group>"; };
 		BE0899171860F6450021A679 /* salgdi.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salgdi.cxx; path = ../../../vcl/quartz/salgdi.cxx; sourceTree = "<group>"; };
 		BE0899181860F6450021A679 /* salgdicommon.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salgdicommon.cxx; path = ../../../vcl/quartz/salgdicommon.cxx; sourceTree = "<group>"; };
-		BE0899191860F6450021A679 /* salgdiutils.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salgdiutils.cxx; path = ../../../vcl/quartz/salgdiutils.cxx; sourceTree = "<group>"; };
-		BE08991A1860F6450021A679 /* salmathutils.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salmathutils.cxx; path = ../../../vcl/quartz/salmathutils.cxx; sourceTree = "<group>"; };
 		BE08991B1860F6450021A679 /* salvd.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salvd.cxx; path = ../../../vcl/quartz/salvd.cxx; sourceTree = "<group>"; };
 		BE08991C1860F6450021A679 /* utils.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = utils.cxx; path = ../../../vcl/quartz/utils.cxx; sourceTree = "<group>"; };
+		BE35B53918868EFD001B7439 /* dummies.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dummies.cxx; path = ../../../vcl/ios/dummies.cxx; sourceTree = "<group>"; };
+		BE35B53A18868EFD001B7439 /* iosinst.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = iosinst.cxx; path = ../../../vcl/ios/iosinst.cxx; sourceTree = "<group>"; };
+		BE35B53C18869D69001B7439 /* svpbmp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpbmp.cxx; path = ../../../vcl/headless/svpbmp.cxx; sourceTree = "<group>"; };
+		BE35B53D18869D69001B7439 /* svpdata.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpdata.cxx; path = ../../../vcl/headless/svpdata.cxx; sourceTree = "<group>"; };
+		BE35B53E18869D69001B7439 /* svpdummies.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpdummies.cxx; path = ../../../vcl/headless/svpdummies.cxx; sourceTree = "<group>"; };
+		BE35B53F18869D69001B7439 /* svpframe.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpframe.cxx; path = ../../../vcl/headless/svpframe.cxx; sourceTree = "<group>"; };
+		BE35B54018869D69001B7439 /* svpgdi.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpgdi.cxx; path = ../../../vcl/headless/svpgdi.cxx; sourceTree = "<group>"; };
+		BE35B54118869D69001B7439 /* svpinst.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpinst.cxx; path = ../../../vcl/headless/svpinst.cxx; sourceTree = "<group>"; };
+		BE35B54218869D69001B7439 /* svpvd.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpvd.cxx; path = ../../../vcl/headless/svpvd.cxx; sourceTree = "<group>"; };
 		BE82BD7218218E2E00A447B5 /* TiledLibreOffice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TiledLibreOffice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE82BD7518218E2E00A447B5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BE82BD7718218E2E00A447B5 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -146,6 +153,8 @@
 			isa = PBXGroup;
 			children = (
 				BE0899121860D78B0021A679 /* app */,
+				BE35B53B18869D2B001B7439 /* headless */,
+				BE35B53818868ECD001B7439 /* ios */,
 				BE0899131860F6100021A679 /* quartz */,
 			);
 			name = vcl;
@@ -186,12 +195,33 @@
 				BE0899161860F6450021A679 /* salbmp.cxx */,
 				BE0899171860F6450021A679 /* salgdi.cxx */,
 				BE0899181860F6450021A679 /* salgdicommon.cxx */,
-				BE0899191860F6450021A679 /* salgdiutils.cxx */,
-				BE08991A1860F6450021A679 /* salmathutils.cxx */,
 				BE08991B1860F6450021A679 /* salvd.cxx */,
 				BE08991C1860F6450021A679 /* utils.cxx */,
 			);
 			name = quartz;
+			sourceTree = "<group>";
+		};
+		BE35B53818868ECD001B7439 /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				BE35B53918868EFD001B7439 /* dummies.cxx */,
+				BE35B53A18868EFD001B7439 /* iosinst.cxx */,
+			);
+			name = ios;
+			sourceTree = "<group>";
+		};
+		BE35B53B18869D2B001B7439 /* headless */ = {
+			isa = PBXGroup;
+			children = (
+				BE35B53C18869D69001B7439 /* svpbmp.cxx */,
+				BE35B53D18869D69001B7439 /* svpdata.cxx */,
+				BE35B53E18869D69001B7439 /* svpdummies.cxx */,
+				BE35B53F18869D69001B7439 /* svpframe.cxx */,
+				BE35B54018869D69001B7439 /* svpgdi.cxx */,
+				BE35B54118869D69001B7439 /* svpinst.cxx */,
+				BE35B54218869D69001B7439 /* svpvd.cxx */,
+			);
+			name = headless;
 			sourceTree = "<group>";
 		};
 		BE82BD6918218E2E00A447B5 = {
