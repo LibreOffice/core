@@ -2077,7 +2077,7 @@ void ScDocShell::GetPageOnFromPageStyleSet( const SfxItemSet* pStyleSet,
     rbFooter = ((const SfxBoolItem&)pSet->Get(ATTR_PAGE_ON)).GetValue();
 }
 
-long ScDocShell::DdeGetData( const OUString& rItem,
+bool ScDocShell::DdeGetData( const OUString& rItem,
                              const OUString& rMimeType,
                              ::com::sun::star::uno::Any & rValue )
 {
@@ -2090,11 +2090,11 @@ long ScDocShell::DdeGetData( const OUString& rItem,
             rValue <<= ::com::sun::star::uno::Sequence< sal_Int8 >(
                                         (const sal_Int8*)aFmtByte.getStr(),
                                         aFmtByte.getLength() + 1 );
-            return 1;
+            return true;
         }
         ScImportExport aObj( &aDocument, rItem );
         if ( !aObj.IsRef() )
-            return 0;                           // ungueltiger Bereich
+            return false;                           // ungueltiger Bereich
 
         if( aDdeTextFmt[0] == 'F' )
             aObj.SetFormulas( sal_True );
@@ -2108,23 +2108,21 @@ long ScDocShell::DdeGetData( const OUString& rItem,
                 rValue <<= ::com::sun::star::uno::Sequence< sal_Int8 >(
                                             (const sal_Int8*)aData.getStr(),
                                             aData.getLength() + 1 );
-                return 1;
+                return true;
             }
             else
-                return 0;
+                return false;
         }
         if( aDdeTextFmt == "CSV" ||
             aDdeTextFmt == "FCSV" )
             aObj.SetSeparator( ',' );
         aObj.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::ToSpace, 0, false ) );
-        return aObj.ExportData( rMimeType, rValue ) ? 1 : 0;
+        return aObj.ExportData( rMimeType, rValue );
     }
 
     ScImportExport aObj( &aDocument, rItem );
     aObj.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::ToSpace, 0, false ) );
-    if( aObj.IsRef() )
-        return aObj.ExportData( rMimeType, rValue ) ? 1 : 0;
-    return 0;
+    return aObj.IsRef() && aObj.ExportData( rMimeType, rValue );
 }
 
 long ScDocShell::DdeSetData( const OUString& rItem,

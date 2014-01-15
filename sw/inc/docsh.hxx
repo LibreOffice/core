@@ -220,7 +220,7 @@ public:
     Reader* StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
                             SwCrsrShell* pCrsrSh = 0, SwPaM* pPaM = 0);
 
-    virtual long DdeGetData( const OUString& rItem, const OUString& rMimeType,
+    virtual bool DdeGetData( const OUString& rItem, const OUString& rMimeType,
                              ::com::sun::star::uno::Any & rValue );
     virtual long DdeSetData( const OUString& rItem, const OUString& rMimeType,
                              const ::com::sun::star::uno::Any & rValue );

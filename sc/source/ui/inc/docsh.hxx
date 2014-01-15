@@ -374,7 +374,7 @@ public:
                                                bool&             rbHeader,
                                                bool&             rbFooter );
 
-    virtual long DdeGetData( const OUString& rItem, const OUString& rMimeType,
+    virtual bool DdeGetData( const OUString& rItem, const OUString& rMimeType,
                                 ::com::sun::star::uno::Any & rValue );
     virtual long DdeSetData( const OUString& rItem, const OUString& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue );

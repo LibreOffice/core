@@ -1163,7 +1163,7 @@ void lcl_processCompatibleSfxHint( const uno::Reference< document::XVbaEventsHel
 }
 #endif
 
-long SwDocShell::DdeGetData( const OUString& rItem, const OUString& rMimeType,
+bool SwDocShell::DdeGetData( const OUString& rItem, const OUString& rMimeType,
                              uno::Any & rValue )
 {
     return pDoc->GetData( rItem, rMimeType, rValue );

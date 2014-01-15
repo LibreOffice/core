@@ -370,13 +370,13 @@ long SfxObjectShell::DdeExecute( const OUString&   rCmd )  // Expressed in our B
     This method can be overloaded by application developers, to receive
     DDE-data-requests directed to their SfxApplication subclass.
 
-    The base implementation provides no data and returns 0.
+    The base implementation provides no data and returns false.
 */
-long SfxObjectShell::DdeGetData( const OUString&,              // the Item to be addressed
+bool SfxObjectShell::DdeGetData( const OUString&,              // the Item to be addressed
                                  const OUString&,              // in: Format
                                  ::com::sun::star::uno::Any& )// out: requested data
 {
-    return 0;
+    return false;
 }
 
 //--------------------------------------------------------------------
@@ -447,13 +447,13 @@ long SfxViewFrame::DdeExecute( const OUString&   rCmd ) // Expressed in our BASI
     This method can be overloaded by application developers, to receive
     DDE-data-requests directed to their SfxApplication subclass.
 
-    The base implementation provides no data and returns 0.
+    The base implementation provides no data and returns false.
 */
-long SfxViewFrame::DdeGetData( const OUString&,            // the Item to be addressed
+bool SfxViewFrame::DdeGetData( const OUString&,            // the Item to be addressed
                                const OUString&,            // in: Format
                                ::com::sun::star::uno::Any& )// out: requested data
 {
-    return 0;
+    return false;
 }
 
 /*  [Description]
@@ -594,7 +594,7 @@ DdeData* SfxDdeDocTopic_Impl::Get( sal_uIntPtr nFormat )
 {
     OUString sMimeType( SotExchange::GetFormatMimeType( nFormat ));
     ::com::sun::star::uno::Any aValue;
-    long nRet = pSh->DdeGetData( GetCurItem(), sMimeType, aValue );
+    bool nRet = pSh->DdeGetData( GetCurItem(), sMimeType, aValue );
     if( nRet && aValue.hasValue() && ( aValue >>= aSeq ) )
     {
         aData = DdeData( aSeq.getConstArray(), aSeq.getLength(), nFormat );

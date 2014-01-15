@@ -479,7 +479,7 @@ public:
 
     // DDE-Interface
     virtual long                DdeExecute( const OUString& rCmd );
-    virtual long                DdeGetData( const OUString& rItem,
+    virtual bool                DdeGetData( const OUString& rItem,
                                             const OUString& rMimeType,
                                             ::com::sun::star::uno::Any & rValue );
     virtual long                DdeSetData( const OUString& rItem,
