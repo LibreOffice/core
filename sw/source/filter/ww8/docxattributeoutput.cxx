@@ -519,6 +519,18 @@ void DocxAttributeOutput::EndParagraphProperties( const boost::shared_ptr<SfxIte
 
         if(pParagraphMarkerProperties)
         {
+            // The 'm_pFontsAttrList', 'm_pEastAsianLayoutAttrList', 'm_pCharLangAttrList' are used to hold information
+            // that should be collected by different properties in the core, and are all flushed together
+            // to the DOCX when the function 'WriteCollectedRunProperties' gets called.
+            // So we need to store the current status of these lists, so that we can revert back to them when
+            // we are done exporting the redline attributes.
+            ::sax_fastparser::FastAttributeList *pFontsAttrList_Original           = m_pFontsAttrList;
+            ::sax_fastparser::FastAttributeList *pEastAsianLayoutAttrList_Original = m_pEastAsianLayoutAttrList;
+            ::sax_fastparser::FastAttributeList *pCharLangAttrList_Original        = m_pCharLangAttrList;
+            m_pFontsAttrList           = NULL;
+            m_pEastAsianLayoutAttrList = NULL;
+            m_pCharLangAttrList        = NULL;
+
             SfxWhichIter aIter( *pParagraphMarkerProperties );
             sal_uInt16 nWhichId = aIter.FirstWhich();
             const SfxPoolItem* pItem = 0;
@@ -531,18 +543,6 @@ void DocxAttributeOutput::EndParagraphProperties( const boost::shared_ptr<SfxIte
                 }
                 nWhichId = aIter.NextWhich();
             }
-
-            // The 'm_pFontsAttrList', 'm_pEastAsianLayoutAttrList', 'm_pCharLangAttrList' are used to hold information
-            // that should be collected by different properties in the core, and are all flushed together
-            // to the DOCX when the function 'WriteCollectedRunProperties' gets called.
-            // So we need to store the current status of these lists, so that we can revert back to them when
-            // we are done exporting the redline attributes.
-            ::sax_fastparser::FastAttributeList *pFontsAttrList_Original           = m_pFontsAttrList;
-            ::sax_fastparser::FastAttributeList *pEastAsianLayoutAttrList_Original = m_pEastAsianLayoutAttrList;
-            ::sax_fastparser::FastAttributeList *pCharLangAttrList_Original        = m_pCharLangAttrList;
-            m_pFontsAttrList           = NULL;
-            m_pEastAsianLayoutAttrList = NULL;
-            m_pCharLangAttrList        = NULL;
 
             // Write the collected run properties that are stored in 'm_pFontsAttrList', 'm_pEastAsianLayoutAttrList', 'm_pCharLangAttrList'
             WriteCollectedRunProperties();
