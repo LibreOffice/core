@@ -2454,6 +2454,21 @@ DECLARE_OOXMLEXPORT_TEST(testTrackChangesParagraphProperties, "testTrackChangesP
     assertXPathChildren(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pPrChange", 0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testMsoSpt180, "mso-spt180.docx")
+{
+    if (!m_bExported)
+        return;
+
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xGroup->getByIndex(0), "CustomShapeGeometry");
+    OUString aType;
+    for (int i = 0; i < aProps.getLength(); ++i)
+        if (aProps[i].Name == "Type")
+            aType = aProps[i].Value.get<OUString>();
+    // This was exported as borderCallout90, which is an invalid drawingML preset shape string.
+    CPPUNIT_ASSERT_EQUAL(OUString("ooxml-borderCallout1"), aType);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
