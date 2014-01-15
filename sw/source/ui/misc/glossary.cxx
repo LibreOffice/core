@@ -973,7 +973,7 @@ sal_Bool SwGlTreeListBox::NotifyCopyingOrMoving(
     if(pDestParent != pSrcParent)
     {
         SwGlossaryDlg* pDlg = (SwGlossaryDlg*)GetParentDialog();
-        SwWait aWait( *pDlg->pSh->GetView().GetDocShell(), sal_True );
+        SwWait aWait( *pDlg->pSh->GetView().GetDocShell(), true );
 
         GroupUserData* pGroupData = (GroupUserData*)pSrcParent->GetUserData();
         OUString sSourceGroup = pGroupData->sGroupName

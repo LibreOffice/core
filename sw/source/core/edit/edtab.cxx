@@ -121,7 +121,7 @@ sal_Bool SwEditShell::TextToTable( const SwInsertTableOptions& rInsTblOpts,
                                sal_Int16 eAdj,
                                const SwTableAutoFmt* pTAFmt )
 {
-    SwWait aWait( *GetDoc()->GetDocShell(), sal_True );
+    SwWait aWait( *GetDoc()->GetDocShell(), true );
     sal_Bool bRet = sal_False;
     StartAllAction();
     FOREACHPAM_START(GetCrsr())
@@ -135,7 +135,7 @@ sal_Bool SwEditShell::TextToTable( const SwInsertTableOptions& rInsTblOpts,
 
 sal_Bool SwEditShell::TableToText( sal_Unicode cCh )
 {
-    SwWait aWait( *GetDoc()->GetDocShell(), sal_True );
+    SwWait aWait( *GetDoc()->GetDocShell(), true );
     sal_Bool bRet = sal_False;
     SwPaM* pCrsr = GetCrsr();
     const SwTableNode* pTblNd =

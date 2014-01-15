@@ -253,7 +253,7 @@ sal_Bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
             }
         }
     }
-    SwWait aWait( *this, sal_True );
+    SwWait aWait( *this, true );
 
         // Suppress SfxProgress, when we are Embedded
     SW_MOD()->SetEmbeddedLoadSave(
@@ -305,7 +305,7 @@ sal_Bool SwDocShell::Save()
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
     if(pView)
         pView->GetEditWin().StopQuickHelp();
-    SwWait aWait( *this, sal_True );
+    SwWait aWait( *this, true );
 
     CalcLayoutForOLEObjects();  // format for OLE objets
     // #i62875#
@@ -390,7 +390,7 @@ sal_Bool SwDocShell::Save()
 // Save using the Defaultformat
 sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
 {
-    SwWait aWait( *this, sal_True );
+    SwWait aWait( *this, true );
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
     if(pView)
         pView->GetEditWin().StopQuickHelp();
@@ -713,7 +713,7 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     // No View, so the whole Document!
     if ( pWrtShell )
     {
-        SwWait aWait( *this, sal_True );
+        SwWait aWait( *this, true );
         // #i106906#
         const sal_Bool bFormerLockView = pWrtShell->IsViewLocked();
         pWrtShell->LockView( sal_True );

@@ -1034,7 +1034,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 {
                     if( PrepareClose( sal_False ) )
                     {
-                        SwWait aWait( *this, sal_True );
+                        SwWait aWait( *this, true );
 
                         if ( bCreateByOutlineLevel )
                         {

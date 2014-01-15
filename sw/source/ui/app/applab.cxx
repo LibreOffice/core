@@ -219,7 +219,7 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
 
         {   // block for locks the dispatcher!!
 
-            SwWait aWait( (SwDocShell&)*xDocSh, sal_True );
+            SwWait aWait( (SwDocShell&)*xDocSh, true );
 
             SET_CURR_SHELL(pSh);
             pSh->SetLabelDoc(rItem.bSynchron);

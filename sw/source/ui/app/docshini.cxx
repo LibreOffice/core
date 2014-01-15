@@ -486,7 +486,7 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
             nUpdateDocMode = pUpdateDocItem ? pUpdateDocItem->GetValue() : document::UpdateDocMode::NO_UPDATE;
         }
 
-        SwWait aWait( *this, sal_True );
+        SwWait aWait( *this, true );
         sal_uInt32 nErr = ERR_SWG_READ_ERROR;
         switch( GetCreateMode() )
         {
@@ -579,7 +579,7 @@ sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
         if ( xAccess->hasByName( aStreamName ) && rMedium.GetStorage()->isStreamElement( aStreamName ) )
         {
             // Loading
-            SwWait aWait( *this, sal_True );
+            SwWait aWait( *this, true );
             {
                 OSL_ENSURE( !mxBasePool.is(), "who hasn't destroyed their Pool?" );
                 mxBasePool = new SwDocStyleSheetPool( *pDoc, SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );

@@ -395,7 +395,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     if( !sGrfNm.isEmpty() )
                     {
                         SwDocShell* pDocSh = GetView().GetDocShell();
-                        SwWait aWait( *pDocSh, sal_True );
+                        SwWait aWait( *pDocSh, true );
                         SfxMedium* pMedium = pDocSh->GetMedium();
                         INetURLObject aAbs;
                         if( pMedium )

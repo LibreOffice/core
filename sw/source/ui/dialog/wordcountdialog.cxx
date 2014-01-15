@@ -121,7 +121,7 @@ void SwWordCountFloatDlg::UpdateCounts()
     SwDocStat aCurrCnt;
     SwDocStat aDocStat;
     {
-        SwWait aWait( *::GetActiveView()->GetDocShell(), sal_True );
+        SwWait aWait( *::GetActiveView()->GetDocShell(), true );
         rSh.StartAction();
         rSh.CountWords( aCurrCnt );
         aDocStat = rSh.GetUpdatedDocStat();

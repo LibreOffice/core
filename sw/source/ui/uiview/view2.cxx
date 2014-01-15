@@ -2138,7 +2138,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
                 sal_uLong nErrno;
                 {   //Scope for SwWait-Object, to be able to execute slots
                     //outside this scope.
-                    SwWait aWait( *GetDocShell(), sal_True );
+                    SwWait aWait( *GetDocShell(), true );
                     m_pWrtShell->StartAllAction();
                     if ( m_pWrtShell->HasSelection() )
                         m_pWrtShell->DelRight();      // delete selections
@@ -2197,7 +2197,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
                                     sFltNm, nVersion, pDocSh );
         if( nRet )
         {
-            SwWait aWait( *GetDocShell(), sal_True );
+            SwWait aWait( *GetDocShell(), true );
             m_pWrtShell->StartAllAction();
 
             m_pWrtShell->EnterStdMode(); // delete selections

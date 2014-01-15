@@ -224,7 +224,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
 
     if (nMode == ENV_NEWDOC || nMode == ENV_INSERT)
     {
-        SwWait aWait( (SwDocShell&)*xDocSh, sal_True );
+        SwWait aWait( (SwDocShell&)*xDocSh, true );
 
         // Read dialog and save item to config
         const SwEnvItem& rItem = pItem ? *pItem : (const SwEnvItem&) pDlg->GetOutputItemSet()->Get(FN_ENVELOP);

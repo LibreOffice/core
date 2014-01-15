@@ -1153,7 +1153,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 break;
 
             if( 10 == i )
-                pWait.reset(new SwWait( *pView->GetDocShell(), sal_True ));
+                pWait.reset(new SwWait( *pView->GetDocShell(), true ));
         }
 
         rSh.MoveTable( GetfnTableCurr(), GetfnTableStart() );
@@ -1381,7 +1381,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     rSh.SwEditShell::SplitNode();
 
                 if( 10 == i )
-                    pWait.reset(new SwWait( *pView->GetDocShell(), sal_True ));
+                    pWait.reset(new SwWait( *pView->GetDocShell(), true ));
             }
 
             if( !bSetCrsr && pMark != NULL)

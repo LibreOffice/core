@@ -27,9 +27,9 @@ class SwDocShell;
 class SW_DLLPUBLIC SwWait
 {
     SwDocShell &rDoc;
-    sal_Bool        bLock;
+    bool        bLock;
 public:
-    SwWait( SwDocShell &rDocShell, sal_Bool bLockDispatcher );
+    SwWait( SwDocShell &rDocShell, bool bLockDispatcher );
     ~SwWait();
 };
 

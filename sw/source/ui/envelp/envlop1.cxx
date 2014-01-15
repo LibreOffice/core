@@ -238,7 +238,7 @@ SwEnvPage::~SwEnvPage()
 
 IMPL_LINK( SwEnvPage, DatabaseHdl, ListBox *, pListBox )
 {
-    SwWait aWait( *pSh->GetView().GetDocShell(), sal_True );
+    SwWait aWait( *pSh->GetView().GetDocShell(), true );
 
     if (pListBox == m_pDatabaseLB)
     {

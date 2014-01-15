@@ -104,7 +104,7 @@ void SwModelessRedlineAcceptDlg::Activate()
 
     if (pChildWin->GetOldDocShell() != pDocSh)
     {   // doc-switch
-        SwWait aWait( *pDocSh, sal_False );
+        SwWait aWait( *pDocSh, false );
         SwWrtShell* pSh = pView->GetWrtShellPtr();
 
         pChildWin->SetOldDocShell(pDocSh);  // avoid recursion (using modified-Hdl)
@@ -221,7 +221,7 @@ SwRedlineAcceptDlg::~SwRedlineAcceptDlg()
 
 void SwRedlineAcceptDlg::Init(sal_uInt16 nStart)
 {
-    SwWait aWait( *::GetActiveView()->GetDocShell(), sal_False );
+    SwWait aWait( *::GetActiveView()->GetDocShell(), false );
     pTable->SetUpdateMode(sal_False);
     aUsedSeqNo.clear();
 
@@ -360,7 +360,7 @@ void SwRedlineAcceptDlg::Activate()
     if (!pView) // can happen when switching to another app, when a Listbox in the dialog
         return; // had the focus previously (actually THs Bug)
 
-    SwWait aWait( *pView->GetDocShell(), sal_False );
+    SwWait aWait( *pView->GetDocShell(), false );
 
     aUsedSeqNo.clear();
 
@@ -782,7 +782,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( sal_Bool bSelect, sal_Bool bAccept )
     if( !bAccept )
         FnAccRej = &SwEditShell::RejectRedline;
 
-    SwWait aWait( *pSh->GetView().GetDocShell(), sal_True );
+    SwWait aWait( *pSh->GetView().GetDocShell(), true );
     pSh->StartAction();
 
     // #111827#
@@ -1142,7 +1142,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
                     if (pTable->GetSortedCol() == nSortMode)
                         bSortDir = !pTable->GetSortDirection();
 
-                    SwWait aWait( *::GetActiveView()->GetDocShell(), sal_False );
+                    SwWait aWait( *::GetActiveView()->GetDocShell(), false );
                     pTable->SortByCol(nSortMode, bSortDir);
                     if (nSortMode == 0xffff)
                         Init();             // newly fill everything

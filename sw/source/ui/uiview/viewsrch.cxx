@@ -316,7 +316,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                     sal_uLong nFound;
 
                     {   //Scope for SwWait-Object
-                        SwWait aWait( *GetDocShell(), sal_True );
+                        SwWait aWait( *GetDocShell(), true );
                         m_pWrtShell->StartAllAction();
                         if (!m_pSrchItem->GetSelection())
                         {
@@ -485,7 +485,7 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
     if (!m_pSrchItem->GetSelection())
         m_pWrtShell->KillSelection(0, false);
 
-    SwWait *pWait = new SwWait( *GetDocShell(), sal_True );
+    SwWait *pWait = new SwWait( *GetDocShell(), true );
     if( FUNC_Search( aOpts ) )
     {
         m_bFound = sal_True;
@@ -561,7 +561,7 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
     }
     m_pWrtShell->StartAllAction();
     m_pWrtShell->Pop(sal_False);
-    pWait = new SwWait( *GetDocShell(), sal_True );
+    pWait = new SwWait( *GetDocShell(), true );
 
     bool bSrchBkwrd = DOCPOS_START == aOpts.eEnd;
 
@@ -592,7 +592,7 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
 
 sal_Bool SwView::SearchAll(sal_uInt16* pFound)
 {
-    SwWait aWait( *GetDocShell(), sal_True );
+    SwWait aWait( *GetDocShell(), true );
     m_pWrtShell->StartAllAction();
 
     SwSearchOptions aOpts( m_pWrtShell, m_pSrchItem->GetBackward() );
@@ -620,7 +620,7 @@ sal_Bool SwView::SearchAll(sal_uInt16* pFound)
 
 void SwView::Replace()
 {
-    SwWait aWait( *GetDocShell(), sal_True );
+    SwWait aWait( *GetDocShell(), true );
 
     m_pWrtShell->StartAllAction();
 

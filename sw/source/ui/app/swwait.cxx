@@ -24,7 +24,7 @@
 #include <swwait.hxx>
 
 
-void SwDocShell::EnterWait( sal_Bool bLockDispatcher )
+void SwDocShell::EnterWait( bool bLockDispatcher )
 {
     SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this, sal_False );
     while ( pFrame )
@@ -36,7 +36,7 @@ void SwDocShell::EnterWait( sal_Bool bLockDispatcher )
     }
 }
 
-void SwDocShell::LeaveWait( sal_Bool bLockDispatcher )
+void SwDocShell::LeaveWait( bool bLockDispatcher )
 {
     SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this, sal_False );
     while ( pFrame )
@@ -48,7 +48,7 @@ void SwDocShell::LeaveWait( sal_Bool bLockDispatcher )
     }
 }
 
-SwWait::SwWait( SwDocShell &rDocShell, sal_Bool bLockDispatcher ) :
+SwWait::SwWait( SwDocShell &rDocShell, bool bLockDispatcher ) :
     rDoc ( rDocShell ),
     bLock( bLockDispatcher )
 {

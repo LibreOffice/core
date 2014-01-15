@@ -265,8 +265,8 @@ public:
     /** Activate wait cursor for all windows of this document
     Optionally all dispatcher could be Locked
     Usually locking should be done using the class: SwWaitObject! */
-    void EnterWait( sal_Bool bLockDispatcher );
-    void LeaveWait( sal_Bool bLockDispatcher );
+    void EnterWait( bool bLockDispatcher );
+    void LeaveWait( bool bLockDispatcher );
 
     void ToggleBrowserMode(sal_Bool bOn, SwView* pView);
 
