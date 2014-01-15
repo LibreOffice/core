@@ -359,8 +359,8 @@ void SAL_CALL SwXReferenceMark::dispose() throw (uno::RuntimeException)
                     &m_pImpl->m_pDoc->GetNodes()))
             {
                 SwTxtNode const& rTxtNode = pTxtMark->GetTxtNode();
-                const xub_StrLen nStt = *pTxtMark->GetStart();
-                const xub_StrLen nEnd = pTxtMark->End()
+                const sal_Int32 nStt = *pTxtMark->GetStart();
+                const sal_Int32 nEnd = pTxtMark->End()
                                   ? *pTxtMark->End()
                                   : nStt + 1;
 
@@ -432,8 +432,8 @@ throw (uno::RuntimeException)
                      &m_pImpl->m_pDoc->GetNodes()))
             {
                 SwTxtNode const& rTxtNode = pTxtMark->GetTxtNode();
-                const xub_StrLen nStt = *pTxtMark->GetStart();
-                const xub_StrLen nEnd = pTxtMark->End()
+                const sal_Int32 nStt = *pTxtMark->GetStart();
+                const sal_Int32 nEnd = pTxtMark->End()
                                         ? *pTxtMark->End()
                                         : nStt + 1;
 
@@ -612,8 +612,8 @@ throw (uno::RuntimeException)
     if (IsValid())
     {
         SwTxtNode * pTxtNode;
-        xub_StrLen nMetaStart;
-        xub_StrLen nMetaEnd;
+        sal_Int32 nMetaStart;
+        sal_Int32 nMetaEnd;
         const bool bSuccess(
                 m_rMeta.SetContentRange(pTxtNode, nMetaStart, nMetaEnd) );
         if (bSuccess)
@@ -798,7 +798,7 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
 bool SwXMeta::SetContentRange(
-        SwTxtNode *& rpNode, xub_StrLen & rStart, xub_StrLen & rEnd ) const
+        SwTxtNode *& rpNode, sal_Int32 & rStart, sal_Int32 & rEnd ) const
 {
     ::sw::Meta const * const pMeta( m_pImpl->GetMeta() );
     if (pMeta)
@@ -823,8 +823,8 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
     throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     SwTxtNode * pTxtNode;
-    xub_StrLen nMetaStart;
-    xub_StrLen nMetaEnd;
+    sal_Int32 nMetaStart;
+    sal_Int32 nMetaEnd;
     const bool bSuccess( SetContentRange(pTxtNode, nMetaStart, nMetaEnd) );
     OSL_ENSURE(bSuccess, "no pam?");
     if (!bSuccess)
@@ -963,8 +963,8 @@ SwXMeta::dispose() throw (uno::RuntimeException)
     else if (!m_pImpl->m_bIsDisposed)
     {
         SwTxtNode * pTxtNode;
-        xub_StrLen nMetaStart;
-        xub_StrLen nMetaEnd;
+        sal_Int32 nMetaStart;
+        sal_Int32 nMetaEnd;
         const bool bSuccess(SetContentRange(pTxtNode, nMetaStart, nMetaEnd));
         OSL_ENSURE(bSuccess, "no pam?");
         if (bSuccess)
@@ -1093,8 +1093,8 @@ SwXMeta::getAnchor() throw (uno::RuntimeException)
     }
 
     SwTxtNode * pTxtNode;
-    xub_StrLen nMetaStart;
-    xub_StrLen nMetaEnd;
+    sal_Int32 nMetaStart;
+    sal_Int32 nMetaEnd;
     const bool bSuccess(SetContentRange(pTxtNode, nMetaStart, nMetaEnd));
     OSL_ENSURE(bSuccess, "no pam?");
     if (!bSuccess)
@@ -1206,8 +1206,8 @@ SwXMeta::getParent() throw (uno::RuntimeException)
 {
     SolarMutexGuard g;
     SwTxtNode * pTxtNode;
-    xub_StrLen nMetaStart;
-    xub_StrLen nMetaEnd;
+    sal_Int32 nMetaStart;
+    sal_Int32 nMetaEnd;
     bool const bSuccess( SetContentRange(pTxtNode, nMetaStart, nMetaEnd) );
     OSL_ENSURE(bSuccess, "no pam?");
     if (!bSuccess) { throw lang::DisposedException(); }
@@ -1260,8 +1260,8 @@ SwXMeta::createEnumeration() throw (uno::RuntimeException)
     }
 
     SwTxtNode * pTxtNode;
-    xub_StrLen nMetaStart;
-    xub_StrLen nMetaEnd;
+    sal_Int32 nMetaStart;
+    sal_Int32 nMetaEnd;
     const bool bSuccess(SetContentRange(pTxtNode, nMetaStart, nMetaEnd));
     OSL_ENSURE(bSuccess, "no pam?");
     if (!bSuccess)

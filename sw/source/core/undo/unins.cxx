@@ -107,8 +107,8 @@ void SwUndoInsert::Init(const SwNodeIndex & rNd)
 }
 
 // #111827#
-SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, xub_StrLen nCnt,
-            xub_StrLen nL,
+SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, sal_Int32 nCnt,
+            sal_Int32 nL,
             const IDocumentContentOperations::InsertFlags nInsertFlags,
             sal_Bool bWDelim )
     : SwUndo(UNDO_TYPING), pTxt( 0 ), pRedlData( 0 ),
@@ -494,7 +494,7 @@ class SwUndoReplace::Impl
     OUString m_sOld;
     OUString m_sIns;
     sal_uLong m_nSttNd, m_nEndNd, m_nOffset;
-    xub_StrLen m_nSttCnt, m_nEndCnt, m_nSetPos, m_nSelEnd;
+    sal_Int32 m_nSttCnt, m_nEndCnt, m_nSetPos, m_nSelEnd;
     bool m_bSplitNext : 1;
     bool m_bRegExp : 1;
     // metadata references for paragraph and following para (if m_bSplitNext)

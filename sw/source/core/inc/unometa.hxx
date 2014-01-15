@@ -104,7 +104,7 @@ public:
 
     /// init params with position of the attribute content (w/out CH_TXTATR)
     bool SetContentRange(
-            SwTxtNode *& rpNode, xub_StrLen & rStart, xub_StrLen & rEnd) const;
+            SwTxtNode *& rpNode, sal_Int32 & rStart, sal_Int32 & rEnd) const;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
         GetParentText() const;
 

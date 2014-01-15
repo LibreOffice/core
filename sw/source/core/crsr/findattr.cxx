@@ -86,7 +86,7 @@ int CmpAttr( const SfxPoolItem& rItem1, const SfxPoolItem& rItem2 )
 }
 
 const SwTxtAttr* GetFrwrdTxtHint( const SwpHints& rHtsArr, sal_uInt16& rPos,
-                                    xub_StrLen nCntntPos )
+                                    sal_Int32 nCntntPos )
 {
     while( rPos < rHtsArr.Count() )
     {
@@ -99,7 +99,7 @@ const SwTxtAttr* GetFrwrdTxtHint( const SwpHints& rHtsArr, sal_uInt16& rPos,
 }
 
 const SwTxtAttr* GetBkwrdTxtHint( const SwpHints& rHtsArr, sal_uInt16& rPos,
-                                  xub_StrLen nCntntPos )
+                                  sal_Int32 nCntntPos )
 {
     while( rPos > 0 )
     {

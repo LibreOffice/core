@@ -238,7 +238,7 @@ OUString SwFmtFtn::GetViewNumStr( const SwDoc& rDoc, sal_Bool bInclStrings ) con
  *                      class SwTxt/FmtFnt
  *************************************************************************/
 
-SwTxtFtn::SwTxtFtn( SwFmtFtn& rAttr, xub_StrLen nStartPos )
+SwTxtFtn::SwTxtFtn( SwFmtFtn& rAttr, sal_Int32 nStartPos )
     : SwTxtAttr( rAttr, nStartPos )
     , m_pStartNode( 0 )
     , m_pTxtNode( 0 )

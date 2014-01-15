@@ -449,7 +449,7 @@ public:
     void CreateBookmarkTbl();
     // Search alle Bookmarks in the range and return it in the Array.
     sal_uInt16 GetBookmarks( const SwCntntNode& rNd,
-                        xub_StrLen nStt, xub_StrLen nEnd,
+                        sal_Int32 nStt, sal_Int32 nEnd,
                         std::vector< const ::sw::mark::IMark* >& rArr );
 
     // Create new PaM at position.

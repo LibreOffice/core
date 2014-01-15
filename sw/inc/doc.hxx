@@ -867,7 +867,7 @@ public:
     virtual bool InsertString(const SwPaM &rRg, const OUString&,
               const enum InsertFlags nInsertMode = INS_EMPTYEXPAND );
     virtual bool UpdateParRsid( SwTxtNode *pTxtNode, sal_uInt32 nVal = 0 );
-    virtual bool UpdateRsid( const SwPaM &rRg, xub_StrLen nLen );
+    virtual bool UpdateRsid( const SwPaM &rRg, sal_Int32 nLen );
     virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const OUString& rGrfName, const OUString& rFltName, const Graphic* pGraphic,
                         const SfxItemSet* pFlyAttrSet, const SfxItemSet* pGrfAttrSet, SwFrmFmt*);
     virtual SwFlyFrmFmt* Insert(const SwPaM& rRg, const GraphicObject& rGrfObj, const SfxItemSet* pFlyAttrSet,
@@ -1470,7 +1470,7 @@ public:
     void CorrAbs(
         const SwNodeIndex& rOldNode,
         const SwPosition& rNewPos,
-        const xub_StrLen nOffset = 0,
+        const sal_Int32 nOffset = 0,
         sal_Bool bMoveCrsr = sal_False );
 
     /// Set everything in the range of [rStartNode, rEndNode] to rNewPos.
@@ -1490,7 +1490,7 @@ public:
     void CorrRel(
         const SwNodeIndex& rOldNode,
         const SwPosition& rNewPos,
-        const xub_StrLen nOffset = 0,
+        const sal_Int32 nOffset = 0,
         sal_Bool bMoveCrsr = sal_False );
 
     /// Query / set rules for Outline.

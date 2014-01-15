@@ -1448,7 +1448,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
         case POR_FLD :
             {
                 // check field type:
-                const xub_StrLen nIdx = static_cast<const SwFldPortion*>(pPor)->IsFollow() ?
+                const sal_Int32 nIdx = static_cast<const SwFldPortion*>(pPor)->IsFollow() ?
                                         rInf.GetIdx() - 1 :
                                         rInf.GetIdx();
                 const SwTxtAttr* pHint = mpPorInfo->mrTxtPainter.GetAttr( nIdx );

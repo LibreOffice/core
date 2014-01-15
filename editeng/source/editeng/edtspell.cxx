@@ -593,7 +593,7 @@ EdtAutoCorrDoc::~EdtAutoCorrDoc()
         mpEditEngine->UndoActionEnd( EDITUNDO_INSERT );
 }
 
-sal_Bool EdtAutoCorrDoc::Delete( sal_uInt16 nStt, sal_uInt16 nEnd )
+sal_Bool EdtAutoCorrDoc::Delete(sal_Int32 nStt, sal_Int32 nEnd)
 {
     EditSelection aSel( EditPaM( pCurNode, nStt ), EditPaM( pCurNode, nEnd ) );
     mpEditEngine->DeleteSelection(aSel);
@@ -604,7 +604,7 @@ sal_Bool EdtAutoCorrDoc::Delete( sal_uInt16 nStt, sal_uInt16 nEnd )
     return true;
 }
 
-sal_Bool EdtAutoCorrDoc::Insert( sal_uInt16 nPos, const OUString& rTxt )
+sal_Bool EdtAutoCorrDoc::Insert(sal_Int32 nPos, const OUString& rTxt)
 {
     EditSelection aSel = EditPaM( pCurNode, nPos );
     mpEditEngine->InsertText(aSel, rTxt);
@@ -619,12 +619,12 @@ sal_Bool EdtAutoCorrDoc::Insert( sal_uInt16 nPos, const OUString& rTxt )
     return true;
 }
 
-sal_Bool EdtAutoCorrDoc::Replace( sal_uInt16 nPos, const OUString& rTxt )
+sal_Bool EdtAutoCorrDoc::Replace(sal_Int32 nPos, const OUString& rTxt)
 {
     return ReplaceRange( nPos, rTxt.getLength(), rTxt );
 }
 
-sal_Bool EdtAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength, const OUString& rTxt )
+sal_Bool EdtAutoCorrDoc::ReplaceRange(sal_Int32 nPos, sal_Int32 nSourceLength, const OUString& rTxt)
 {
     // Actually a Replace introduce => corresponds to UNDO
     sal_uInt16 nEnd = nPos+nSourceLength;
@@ -647,8 +647,8 @@ sal_Bool EdtAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength
     return true;
 }
 
-sal_Bool EdtAutoCorrDoc::SetAttr( sal_uInt16 nStt, sal_uInt16 nEnd,
-            sal_uInt16 nSlotId, SfxPoolItem& rItem )
+sal_Bool EdtAutoCorrDoc::SetAttr(sal_Int32 nStt, sal_Int32 nEnd,
+            sal_uInt16 nSlotId, SfxPoolItem& rItem)
 {
     SfxItemPool* pPool = &mpEditEngine->GetEditDoc().GetItemPool();
     while ( pPool->GetSecondaryPool() &&
@@ -673,8 +673,8 @@ sal_Bool EdtAutoCorrDoc::SetAttr( sal_uInt16 nStt, sal_uInt16 nEnd,
     return true;
 }
 
-sal_Bool EdtAutoCorrDoc::SetINetAttr( sal_uInt16 nStt, sal_uInt16 nEnd,
-            const OUString& rURL )
+sal_Bool EdtAutoCorrDoc::SetINetAttr(sal_Int32 nStt, sal_Int32 nEnd,
+            const OUString& rURL)
 {
     // Turn the Text into a command field ...
     EditSelection aSel( EditPaM( pCurNode, nStt ), EditPaM( pCurNode, nEnd ) );
@@ -764,7 +764,7 @@ bool EdtAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos,
     return bRet;
 }
 
-LanguageType EdtAutoCorrDoc::GetLanguage( sal_uInt16 nPos, sal_Bool ) const
+LanguageType EdtAutoCorrDoc::GetLanguage( sal_Int32 nPos, sal_Bool ) const
 {
     return mpEditEngine->GetLanguage( EditPaM( pCurNode, nPos+1 ) );
 }

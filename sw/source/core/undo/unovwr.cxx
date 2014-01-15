@@ -326,9 +326,9 @@ struct _UndoTransliterate_Data
     SwHistory*      pHistory;
     Sequence< sal_Int32 >*  pOffsets;
     sal_uLong           nNdIdx;
-    xub_StrLen      nStart, nLen;
+    sal_Int32      nStart, nLen;
 
-    _UndoTransliterate_Data( sal_uLong nNd, xub_StrLen nStt, xub_StrLen nStrLen, const OUString& rTxt )
+    _UndoTransliterate_Data( sal_uLong nNd, sal_Int32 nStt, sal_Int32 nStrLen, const OUString& rTxt )
         : sText( rTxt ), pHistory( 0 ), pOffsets( 0 ),
         nNdIdx( nNd ), nStart( nStt ), nLen( nStrLen )
     {}
@@ -382,12 +382,12 @@ void SwUndoTransliterate::DoTransliterate(SwDoc & rDoc, SwPaM & rPam)
 }
 
 void SwUndoTransliterate::AddChanges( SwTxtNode& rTNd,
-                    xub_StrLen nStart, xub_StrLen nLen,
+                    sal_Int32 nStart, sal_Int32 nLen,
                     uno::Sequence <sal_Int32>& rOffsets )
 {
     long nOffsLen = rOffsets.getLength();
     _UndoTransliterate_Data* pNew = new _UndoTransliterate_Data(
-                        rTNd.GetIndex(), nStart, (xub_StrLen)nOffsLen,
+                        rTNd.GetIndex(), nStart, (sal_Int32)nOffsLen,
                         rTNd.GetTxt().copy(nStart, nLen));
 
     aChanges.push_back( pNew );

@@ -85,15 +85,15 @@ public:
     SvxAutoCorrDoc() {}
     virtual ~SvxAutoCorrDoc();
 
-    virtual sal_Bool Delete( xub_StrLen nStt, xub_StrLen nEnd ) = 0;
-    virtual sal_Bool Insert( xub_StrLen nPos, const OUString& rTxt ) = 0;
-    virtual sal_Bool Replace( xub_StrLen nPos, const OUString& rTxt ) = 0;
-    virtual sal_Bool ReplaceRange( xub_StrLen nPos, xub_StrLen nLen, const OUString& rTxt ) = 0;
+    virtual sal_Bool Delete( sal_Int32 nStt, sal_Int32 nEnd ) = 0;
+    virtual sal_Bool Insert( sal_Int32 nPos, const OUString& rTxt ) = 0;
+    virtual sal_Bool Replace( sal_Int32 nPos, const OUString& rTxt ) = 0;
+    virtual sal_Bool ReplaceRange( sal_Int32 nPos, sal_Int32 nLen, const OUString& rTxt ) = 0;
 
-    virtual sal_Bool SetAttr( xub_StrLen nStt, xub_StrLen nEnd, sal_uInt16 nSlotId,
+    virtual sal_Bool SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlotId,
                             SfxPoolItem& ) = 0;
 
-    virtual sal_Bool SetINetAttr( xub_StrLen nStt, xub_StrLen nEnd, const OUString& rURL ) = 0;
+    virtual sal_Bool SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUString& rURL ) = 0;
 
     // Return the text of a previous paragraph.
     // If no paragraph exits or just an empty one, then return an empty string.
@@ -110,12 +110,12 @@ public:
     //  - FnCptlSttWrd
     //  - FnCptlSttSntnc
     // As an option, the words can then be inserted into the exception lists.
-    virtual void SaveCpltSttWord( sal_uLong nFlag, xub_StrLen nPos,
+    virtual void SaveCpltSttWord( sal_uLong nFlag, sal_Int32 nPos,
                                     const OUString& rExceptWord,
                                     sal_Unicode cChar );
 
     // which language at the position?
-    virtual LanguageType GetLanguage( xub_StrLen nPos, sal_Bool bPrevPara = sal_False ) const;
+    virtual LanguageType GetLanguage( sal_Int32 nPos, sal_Bool bPrevPara = sal_False ) const;
 };
 
 
@@ -292,12 +292,12 @@ public:
     // to the actual SwTxtNode/EditNode string because it inserts the character
     // in rDoc and expects that to side-effect rTxt
     sal_uLong DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
-                           xub_StrLen nPos, sal_Unicode cInsChar, sal_Bool bInsert, Window* pFrameWin = NULL );
+                           sal_Int32 nPos, sal_Unicode cInsChar, sal_Bool bInsert, Window* pFrameWin = NULL );
 
     // Return for the autotext expansion the previous word,
     // AutoCorrect - corresponding algorithm
     sal_Bool GetPrevAutoCorrWord( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
-                                xub_StrLen nPos, OUString& rWord ) const;
+                                sal_Int32 nPos, OUString& rWord ) const;
 
     // Search for or or the words in the replacement table.
     // rText - check in this text the words of the list
@@ -321,9 +321,9 @@ public:
     void SetStartDoubleQuote( const sal_Unicode cStart )    { cStartDQuote = cStart; }
     void SetEndDoubleQuote( const sal_Unicode cEnd )        { cEndDQuote = cEnd; }
 
-    OUString GetQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
+    OUString GetQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
                     sal_Unicode cInsChar, sal_Bool bSttQuote );
-    void InsertQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
+    void InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
                     sal_Unicode cInsChar, sal_Bool bSttQuote, sal_Bool bIns );
 
     // Query/Set the name of the AutoCorrect file
@@ -394,28 +394,28 @@ public:
 
     // Methods for the auto-correction
     sal_Bool FnCptlSttWrd( SvxAutoCorrDoc&, const OUString&,
-                                xub_StrLen nSttPos, xub_StrLen nEndPos,
+                                sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang = LANGUAGE_SYSTEM );
     sal_Bool FnChgOrdinalNumber( SvxAutoCorrDoc&, const OUString&,
-                                xub_StrLen nSttPos, xub_StrLen nEndPos,
+                                sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang = LANGUAGE_SYSTEM );
     sal_Bool FnChgToEnEmDash( SvxAutoCorrDoc&, const OUString&,
-                                xub_StrLen nSttPos, xub_StrLen nEndPos,
+                                sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang = LANGUAGE_SYSTEM );
     sal_Bool FnAddNonBrkSpace( SvxAutoCorrDoc&, const OUString&,
-                                xub_StrLen nSttPos, xub_StrLen nEndPos,
+                                sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang = LANGUAGE_SYSTEM );
     sal_Bool FnSetINetAttr( SvxAutoCorrDoc&, const OUString&,
-                                xub_StrLen nSttPos, xub_StrLen nEndPos,
+                                sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang = LANGUAGE_SYSTEM );
     sal_Bool FnChgWeightUnderl( SvxAutoCorrDoc&, const OUString&,
-                                xub_StrLen nSttPos, xub_StrLen nEndPos,
+                                sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang = LANGUAGE_SYSTEM );
     sal_Bool FnCptlSttSntnc( SvxAutoCorrDoc&, const OUString&, sal_Bool bNormalPos,
-                                xub_StrLen nSttPos, xub_StrLen nEndPos,
+                                sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang  = LANGUAGE_SYSTEM);
     bool FnCorrectCapsLock( SvxAutoCorrDoc&, const OUString&,
-                            xub_StrLen nSttPos, xub_StrLen nEndPos,
+                            sal_Int32 nSttPos, sal_Int32 nEndPos,
                             LanguageType eLang  = LANGUAGE_SYSTEM );
 
     bool                HasRunNext() { return bRunNext; }

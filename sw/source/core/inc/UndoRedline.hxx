@@ -66,14 +66,14 @@ public:
 
     // SwUndoTblCpyTbl needs this information:
     long NodeDiff() const { return nSttNode - nEndNode; }
-    xub_StrLen ContentStart() const { return nSttCntnt; }
+    sal_Int32 ContentStart() const { return nSttCntnt; }
 };
 
 class SwUndoRedlineSort : public SwUndoRedline
 {
     SwSortOptions* pOpt;
     sal_uLong nSaveEndNode, nOffset;
-    xub_StrLen nSaveEndCntnt;
+    sal_Int32 nSaveEndCntnt;
 
     virtual void UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam);
     virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam);

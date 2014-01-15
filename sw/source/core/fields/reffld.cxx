@@ -90,8 +90,8 @@ static void lcl_GetLayTree( const SwFrm* pFrm, std::vector<const SwFrm*>& rArr )
     }
 }
 
-bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
-                    const SwTxtNode& rBehindNd, sal_uInt16 nSttPos )
+bool IsFrameBehind( const SwTxtNode& rMyNd, sal_Int32 nMySttPos,
+                    const SwTxtNode& rBehindNd, sal_Int32 nSttPos )
 {
     const SwTxtFrm *pMyFrm = (SwTxtFrm*)rMyNd.getLayoutFrm( rMyNd.GetDoc()->GetCurrentLayout(), 0,0,sal_False),
                    *pFrm = (SwTxtFrm*)rBehindNd.getLayoutFrm( rBehindNd.GetDoc()->GetCurrentLayout(), 0,0,sal_False);
@@ -108,7 +108,7 @@ bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
     ::lcl_GetLayTree( pFrm, aRefArr );
     ::lcl_GetLayTree( pMyFrm, aArr );
 
-    sal_uInt16 nRefCnt = aRefArr.size() - 1, nCnt = aArr.size() - 1;
+    size_t nRefCnt = aRefArr.size() - 1, nCnt = aArr.size() - 1;
     sal_Bool bVert = sal_False;
     sal_Bool bR2L = sal_False;
 

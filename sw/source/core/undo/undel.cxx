@@ -473,7 +473,7 @@ sal_Bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
     SwTxtNode * pDelTxtNd = pStt->nNode.GetNode().GetTxtNode();
     if( !pDelTxtNd ) return sal_False;
 
-    xub_StrLen nUChrPos = bBackSp ? 0 : pSttStr->getLength()-1;
+    sal_Int32 nUChrPos = bBackSp ? 0 : pSttStr->getLength()-1;
     sal_Unicode cDelChar = pDelTxtNd->GetTxt()[ pStt->nContent.GetIndex() ];
     CharClass& rCC = GetAppCharClass();
     if( ( CH_TXTATR_BREAKWORD == cDelChar || CH_TXTATR_INWORD == cDelChar ) ||
@@ -618,7 +618,7 @@ OUString DenoteSpecialCharacters(const OUString & rStr)
     if (!rStr.isEmpty())
     {
         bool bStart = false;
-        xub_StrLen nStart = 0;
+        sal_Int32 nStart = 0;
         sal_Unicode cLast = 0;
 
         for( sal_Int32 i = 0; i < rStr.getLength(); i++)

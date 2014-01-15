@@ -95,7 +95,7 @@ public:
         { return FLYFRAME == eSetGetExpFldType ? CNTNT.pFlyFmt : 0; }
 
     sal_uLong GetNode() const { return nNode; }
-    xub_StrLen GetCntnt() const { return nCntnt; }
+    sal_Int32 GetCntnt() const { return nCntnt; }
     const void* GetPointer() const { return CNTNT.pTxtFld; }
 
     void GetPos( SwPosition& rPos ) const;

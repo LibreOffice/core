@@ -72,7 +72,7 @@ class _HTMLAttr
     friend class _CellSaveStruct;
 
     SwNodeIndex nSttPara, nEndPara;
-    xub_StrLen nSttCntnt, nEndCntnt;
+    sal_Int32 nSttCntnt, nEndCntnt;
     sal_Bool bInsAtStart : 1;
     sal_Bool bLikePara : 1; // Attribut ueber dem gesamten Absatz setzen
     sal_Bool bValid : 1;    // ist das Attribut gueltig?
@@ -87,14 +87,14 @@ class _HTMLAttr
                _HTMLAttr **pHd=0 );
 
     _HTMLAttr( const _HTMLAttr &rAttr, const SwNodeIndex &rEndPara,
-               xub_StrLen nEndCnt, _HTMLAttr **pHd );
+               sal_Int32 nEndCnt, _HTMLAttr **pHd );
 
 public:
 
     ~_HTMLAttr();
 
-    _HTMLAttr *Clone( const SwNodeIndex& rEndPara, xub_StrLen nEndCnt ) const;
-    void Reset( const SwNodeIndex& rSttPara, xub_StrLen nSttCnt,
+    _HTMLAttr *Clone( const SwNodeIndex& rEndPara, sal_Int32 nEndCnt ) const;
+    void Reset( const SwNodeIndex& rSttPara, sal_Int32 nSttCnt,
                 _HTMLAttr **pHd );
     inline void SetStart( const SwPosition& rPos );
 
@@ -104,8 +104,8 @@ public:
     const SwNodeIndex& GetSttPara() const { return nSttPara; }
     const SwNodeIndex& GetEndPara() const { return nEndPara; }
 
-    xub_StrLen GetSttCnt() const { return nSttCntnt; }
-    xub_StrLen GetEndCnt() const { return nEndCntnt; }
+    sal_Int32 GetSttCnt() const { return nSttCntnt; }
+    sal_Int32 GetEndCnt() const { return nEndCntnt; }
 
     sal_Bool IsLikePara() const { return bLikePara; }
     void SetLikePara( sal_Bool bPara=sal_True ) { bLikePara = bPara; }
@@ -381,7 +381,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     _HTMLAttrTable  aAttrTab;   // "offene" Attribute
     _HTMLAttrContexts aContexts;// der aktuelle Attribut/Token-Kontext
     SwHTMLFrmFmts   aMoveFlyFrms;// Fly-Frames, the anchor is moved
-    std::deque<xub_StrLen> aMoveFlyCnts;// and the Content-Positions
+    std::deque<sal_Int32> aMoveFlyCnts;// and the Content-Positions
 
     SwApplet_Impl *pAppletImpl; // das aktuelle Applet
 
@@ -867,7 +867,7 @@ private:
     SwNodeIndex *GetFootEndNoteSection( const OUString& rName );
     void DeleteFootEndNoteImpl();
 
-    xub_StrLen StripTrailingLF();
+    sal_Int32 StripTrailingLF();
 
     // Remove empty paragraph at the PaM position
     void StripTrailingPara();

@@ -34,17 +34,17 @@ SwInsTxt::SwInsTxt( sal_Int32 nP, sal_Int32 nL )
 {
 }
 
-SwDelChr::SwDelChr( xub_StrLen nP )
+SwDelChr::SwDelChr( sal_Int32 nP )
     : SwMsgPoolItem( RES_DEL_CHR ), nPos( nP )
 {
 }
 
-SwDelTxt::SwDelTxt( xub_StrLen nS, xub_StrLen nL )
+SwDelTxt::SwDelTxt( sal_Int32 nS, sal_Int32 nL )
     : SwMsgPoolItem( RES_DEL_TXT ), nStart( nS ), nLen( nL )
 {
 }
 
-SwUpdateAttr::SwUpdateAttr( xub_StrLen nS, xub_StrLen nE, sal_uInt16 nW )
+SwUpdateAttr::SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW )
     : SwMsgPoolItem( RES_UPDATE_ATTR ), nStart( nS ), nEnd( nE ), nWhichAttr( nW )
 {
 }

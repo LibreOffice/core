@@ -576,8 +576,8 @@ namespace SwLangHelper
         aText = rEditEngine->GetText(aDocSelection);
         if (!aText.isEmpty())
         {
-            xub_StrLen nStt = 0;
-            xub_StrLen nEnd = aDocSelection.nEndPos;
+            sal_Int32 nStt = 0;
+            sal_Int32 nEnd = aDocSelection.nEndPos;
             // at most 100 chars to the left...
             nStt = nEnd > 100 ? nEnd - 100 : 0;
             // ... and 100 to the right of the cursor position

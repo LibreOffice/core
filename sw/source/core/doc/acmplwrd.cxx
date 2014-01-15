@@ -84,7 +84,7 @@ class SwAutoCompleteString
 #endif
     SwDocPtrVector aSourceDocs;
     public:
-        SwAutoCompleteString(const OUString& rStr, xub_StrLen nPos, xub_StrLen nLen);
+        SwAutoCompleteString(const OUString& rStr, sal_Int32 nPos, sal_Int32 nLen);
 
         ~SwAutoCompleteString();
         void        AddDocument(const SwDoc& rDoc);
@@ -176,7 +176,7 @@ void SwAutoCompleteWord_Impl::RemoveDocument(const SwDoc& rDoc)
 }
 
 SwAutoCompleteString::SwAutoCompleteString(
-            const OUString& rStr, xub_StrLen const nPos, xub_StrLen const nLen)
+            const OUString& rStr, sal_Int32 const nPos, sal_Int32 const nLen)
     : editeng::IAutoCompleteString(rStr.copy(nPos, nLen))
 {
 #if OSL_DEBUG_LEVEL > 0

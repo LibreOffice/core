@@ -330,11 +330,11 @@ SwTxtFormatter::TryNewNoLengthPortion(SwTxtFormatInfo & rInfo)
 {
     if (pHints)
     {
-        const xub_StrLen nIdx(rInfo.GetIdx());
+        const sal_Int32 nIdx(rInfo.GetIdx());
         while (m_nHintEndIndex < pHints->GetEndCount())
         {
             SwTxtAttr & rHint( *pHints->GetEnd(m_nHintEndIndex) );
-            xub_StrLen const nEnd( *rHint.GetAnyEnd() );
+            sal_Int32 const nEnd( *rHint.GetAnyEnd() );
             if (nEnd > nIdx)
             {
                 break;

@@ -1131,7 +1131,7 @@ sal_Bool GetFrmInPage( const SwCntntFrm *pCnt, SwWhichPage fnWhichPage,
 
         SwCntntNode *pCNd = (SwCntntNode*)pCnt->GetNode();
         pPam->GetPoint()->nNode = *pCNd;
-        xub_StrLen nIdx;
+        sal_Int32 nIdx;
         if( fnPosPage == GetFirstSub )
             nIdx = ((SwTxtFrm*)pCnt)->GetOfst();
         else

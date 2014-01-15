@@ -794,7 +794,7 @@ void SwXTextCursor::DeleteAndInsert(const OUString& rText,
         // Start/EndAction
         SwDoc* pDoc = pUnoCrsr->GetDoc();
         UnoActionContext aAction(pDoc);
-        const xub_StrLen nTxtLen = rText.getLength();
+        const sal_Int32 nTxtLen = rText.getLength();
         pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
         SwCursor * pCurrent = pUnoCrsr;
         do
@@ -834,8 +834,8 @@ lcl_ForceIntoMeta(SwPaM & rCursor,
     if (!pXMeta)
         throw uno::RuntimeException();
     SwTxtNode * pTxtNode;
-    xub_StrLen nStart;
-    xub_StrLen nEnd;
+    sal_Int32 nStart;
+    sal_Int32 nEnd;
     const bool bSuccess( pXMeta->SetContentRange(pTxtNode, nStart, nEnd) );
     OSL_ENSURE(bSuccess, "no pam?");
     if (!bSuccess)
@@ -878,8 +878,8 @@ bool SwXTextCursor::IsAtEndOfMeta() const
         if (pCursor && pXMeta)
         {
             SwTxtNode * pTxtNode;
-            xub_StrLen nStart;
-            xub_StrLen nEnd;
+            sal_Int32 nStart;
+            sal_Int32 nEnd;
             const bool bSuccess(
                     pXMeta->SetContentRange(pTxtNode, nStart, nEnd) );
             OSL_ENSURE(bSuccess, "no pam?");

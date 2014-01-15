@@ -2288,7 +2288,7 @@ sal_Unicode SwCrsrShell::GetChar( sal_Bool bEnd, long nOffset )
     @param bEnd   Start counting from the end? From start otherwise.
     @param nCount Number of characters.
 */
-sal_Bool SwCrsrShell::ExtendSelection( sal_Bool bEnd, xub_StrLen nCount )
+sal_Bool SwCrsrShell::ExtendSelection( sal_Bool bEnd, sal_Int32 nCount )
 {
     if( !m_pCurCrsr->HasMark() || IsTableMode() )
         return sal_False; // no selection

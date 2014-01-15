@@ -41,8 +41,8 @@ bool GoInCntnt( SwPaM&, SwMoveFn);
 bool GoInCntntCells( SwPaM&, SwMoveFn);
 bool GoInCntntSkipHidden( SwPaM&, SwMoveFn);
 bool GoInCntntCellsSkipHidden( SwPaM&, SwMoveFn);
-const SwTxtAttr* GetFrwrdTxtHint( const SwpHints&, sal_uInt16&, xub_StrLen );
-const SwTxtAttr* GetBkwrdTxtHint( const SwpHints&, sal_uInt16&, xub_StrLen );
+const SwTxtAttr* GetFrwrdTxtHint( const SwpHints&, sal_uInt16&, sal_Int32 );
+const SwTxtAttr* GetBkwrdTxtHint( const SwpHints&, sal_uInt16&, sal_Int32 );
 
 sal_Bool GoNext(SwNode* pNd, SwIndex * pIdx, sal_uInt16 nMode );
 sal_Bool GoPrevious(SwNode* pNd, SwIndex * pIdx, sal_uInt16 nMode );
@@ -66,7 +66,7 @@ typedef SwCntntNode* (*GoNds)( SwNodeIndex*, sal_Bool );
 typedef void (*GoDoc)( SwPosition* );
 typedef void (*GoSection)( SwPosition* );
 typedef bool (SwPosition:: *CmpOp)( const SwPosition& ) const;
-typedef const SwTxtAttr* (*GetHint)( const SwpHints&, sal_uInt16&, xub_StrLen );
+typedef const SwTxtAttr* (*GetHint)( const SwpHints&, sal_uInt16&, sal_Int32 );
 typedef bool (utl::TextSearch:: *SearchTxt)( const OUString&, sal_Int32*,
                     sal_Int32*, ::com::sun::star::util::SearchResult* );
 typedef void (SwNodes:: *MvSection)( SwNodeIndex * ) const;

@@ -41,11 +41,11 @@ class SwFrmFmt;
 
 struct FrameDependSortListEntry
 {
-    xub_StrLen nIndex;
+    sal_Int32 nIndex;
     sal_uInt32 nOrder;
     ::boost::shared_ptr<SwDepend> pFrameDepend;
 
-    FrameDependSortListEntry (xub_StrLen const i_nIndex,
+    FrameDependSortListEntry (sal_Int32 const i_nIndex,
                 sal_uInt32 const i_nOrder, SwDepend * const i_pDepend)
         : nIndex(i_nIndex), nOrder(i_nOrder), pFrameDepend(i_pDepend) { }
 };

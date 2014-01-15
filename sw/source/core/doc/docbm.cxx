@@ -536,7 +536,7 @@ namespace sw { namespace mark
     void MarkManager::correctMarksAbsolute(
         const SwNodeIndex& rOldNode,
         const SwPosition& rNewPos,
-        const xub_StrLen nOffset)
+        const sal_Int32 nOffset)
     {
         const SwNode* const pOldNode = &rOldNode.GetNode();
         SwPosition aNewPos(rNewPos);
@@ -576,7 +576,7 @@ namespace sw { namespace mark
     }
 
 
-    void MarkManager::correctMarksRelative(const SwNodeIndex& rOldNode, const SwPosition& rNewPos, const xub_StrLen nOffset)
+    void MarkManager::correctMarksRelative(const SwNodeIndex& rOldNode, const SwPosition& rNewPos, const sal_Int32 nOffset)
     {
         const SwNode* const pOldNode = &rOldNode.GetNode();
         SwPosition aNewPos(rNewPos);

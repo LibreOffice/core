@@ -2088,7 +2088,7 @@ sal_Bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, sal_Bool bUpdateNu
 {
     // Ein harter Zeilen-Umbruch am Ende muss immer entfernt werden.
     // Einen zweiten ersetzen wir durch einen Absatz-Abstand.
-    xub_StrLen nLFStripped = StripTrailingLF();
+    sal_Int32 nLFStripped = StripTrailingLF();
     if( (AM_NOSPACE==eMode || AM_SOFTNOSPACE==eMode) && nLFStripped > 1 )
         eMode = AM_SPACE;
 
@@ -2161,7 +2161,7 @@ sal_Bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, sal_Bool bUpdateNu
                         pAttr->GetSttPara() == rEndIdx &&
                         pAttr->GetSttCnt() == 0;
 
-                    xub_StrLen nStt = pAttr->nSttCntnt;
+                    sal_Int32 nStt = pAttr->nSttCntnt;
                     sal_Bool bScript = sal_False, bFont = sal_False;
                     sal_uInt16 nScriptItem;
                     sal_Bool bInsert = sal_True;
@@ -2202,7 +2202,7 @@ sal_Bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, sal_Bool bUpdateNu
                                 nStt = nScriptEnd;
                                 nScriptTxt = g_pBreakIt->GetBreakIter()->getScriptType(
                                                 rText, nStt );
-                                nScriptEnd = (xub_StrLen)g_pBreakIt->GetBreakIter()
+                                nScriptEnd = g_pBreakIt->GetBreakIter()
                                     ->endOfScript( rText, nStt, nScriptTxt );
                             }
                             bInsert = nScriptItem == nScriptTxt;
@@ -2285,7 +2285,7 @@ sal_Bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, sal_Bool bUpdateNu
         // If it is equal to the style, or in fact the paragarph's value
         // for that hint, the hint is removed. Otherwise it's end position
         // is remembered.
-        xub_StrLen aEndPos[15] =
+        sal_Int32 aEndPos[15] =
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         SwpHints& rHints = pTxtNd->GetSwpHints();
         for( sal_uInt16 i=0; i < nCntAttr; i++ )
@@ -2341,7 +2341,7 @@ sal_Bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, sal_Bool bUpdateNu
             }
             if( nIdx != -1 )
             {
-                xub_StrLen nStt = *pHt->GetStart();
+                sal_Int32 nStt = *pHt->GetStart();
                 if( nStt >= aEndPos[nIdx] )
                 {
                     sal_Bool bFont = (nIdx % 5) == 0;
@@ -3091,7 +3091,7 @@ void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
             pAttr->nSttCntnt = nScriptEnd;
             nScriptTxt = g_pBreakIt->GetBreakIter()->getScriptType(
                             rText, nScriptEnd );
-            nScriptEnd = (xub_StrLen)g_pBreakIt->GetBreakIter()
+            nScriptEnd = g_pBreakIt->GetBreakIter()
                     ->endOfScript( rText, nScriptEnd, nScriptTxt );
         }
         bInsert = nScriptItem == nScriptTxt;
@@ -5484,7 +5484,7 @@ _HTMLAttr::_HTMLAttr( const SwPosition& rPos, const SfxPoolItem& rItem,
 }
 
 _HTMLAttr::_HTMLAttr( const _HTMLAttr &rAttr, const SwNodeIndex &rEndPara,
-                      sal_uInt16 nEndCnt, _HTMLAttr **ppHd ) :
+                      sal_Int32 nEndCnt, _HTMLAttr **ppHd ) :
     nSttPara( rAttr.nSttPara ),
     nEndPara( rEndPara ),
     nSttCntnt( rAttr.nSttCntnt ),
@@ -5505,7 +5505,7 @@ _HTMLAttr::~_HTMLAttr()
     delete pItem;
 }
 
-_HTMLAttr *_HTMLAttr::Clone( const SwNodeIndex& rEndPara, sal_uInt16 nEndCnt ) const
+_HTMLAttr *_HTMLAttr::Clone(const SwNodeIndex& rEndPara, sal_Int32 nEndCnt) const
 {
     // das Attribut mit der alten Start-Position neu anlegen
     _HTMLAttr *pNew = new _HTMLAttr( *this, rEndPara, nEndCnt, ppHead );
@@ -5516,8 +5516,8 @@ _HTMLAttr *_HTMLAttr::Clone( const SwNodeIndex& rEndPara, sal_uInt16 nEndCnt ) c
     return pNew;
 }
 
-void _HTMLAttr::Reset( const SwNodeIndex& rSttPara, sal_uInt16 nSttCnt,
-                       _HTMLAttr **ppHd )
+void _HTMLAttr::Reset(const SwNodeIndex& rSttPara, sal_Int32 nSttCnt,
+                       _HTMLAttr **ppHd)
 {
     // den Anfang (und das Ende) neu setzen
     nSttPara = rSttPara;

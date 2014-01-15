@@ -38,7 +38,7 @@ class SwTxtCharFmt : public SwTxtAttrEnd
     sal_uInt16 m_nSortNumber;
 
 public:
-    SwTxtCharFmt( SwFmtCharFmt& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
+    SwTxtCharFmt( SwFmtCharFmt& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
     virtual ~SwTxtCharFmt( );
 
     // Passed from SwFmtCharFmt (no derivation from SwClient!).
@@ -59,7 +59,7 @@ class SwTxtAttrNesting : public SwTxtAttrEnd
 {
 protected:
     SwTxtAttrNesting( SfxPoolItem & i_rAttr,
-        const xub_StrLen i_nStart, const xub_StrLen i_nEnd );
+        const sal_Int32 i_nStart, const sal_Int32 i_nEnd );
     virtual ~SwTxtAttrNesting();
 };
 
@@ -67,14 +67,14 @@ class SwTxtMeta : public SwTxtAttrNesting
 {
 private:
     SwTxtMeta( SwFmtMeta & i_rAttr,
-        const xub_StrLen i_nStart, const xub_StrLen i_nEnd );
+        const sal_Int32 i_nStart, const sal_Int32 i_nEnd );
 
 public:
     static SwTxtMeta * CreateTxtMeta(
         ::sw::MetaFieldManager & i_rTargetDocManager,
         SwTxtNode *const i_pTargetTxtNode,
         SwFmtMeta & i_rAttr,
-        xub_StrLen const i_nStart, xub_StrLen const i_nEnd,
+        sal_Int32 const i_nStart, sal_Int32 const i_nEnd,
         bool const i_bIsCopy);
 
     virtual ~SwTxtMeta();
@@ -91,7 +91,7 @@ class SW_DLLPUBLIC SwTxtRuby : public SwTxtAttrNesting, public SwClient
 protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 public:
-    SwTxtRuby( SwFmtRuby& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
+    SwTxtRuby( SwFmtRuby& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
     virtual ~SwTxtRuby();
     TYPEINFO();
 

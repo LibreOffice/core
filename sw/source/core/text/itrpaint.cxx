@@ -318,7 +318,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             SeekAndChgBefore( GetInfo() );
         else if ( pPor->IsQuoVadisPortion() )
         {
-            xub_StrLen nOffset = GetInfo().GetIdx();
+            sal_Int32 nOffset = GetInfo().GetIdx();
             SeekStartAndChg( GetInfo(), sal_True );
             if( GetRedln() && pCurr->HasRedline() )
                 GetRedln()->Seek( *pFnt, nOffset, 0 );
@@ -538,8 +538,8 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
 
             if( bUnder )
             {
-                xub_StrLen nSt = *pTxtAttr->GetStart();
-                xub_StrLen nEnd = *pTxtAttr->GetEnd();
+                sal_Int32 nSt = *pTxtAttr->GetStart();
+                sal_Int32 nEnd = *pTxtAttr->GetEnd();
                 if( nEnd > nSt )
                 {
                     Range aTmp( nSt, nEnd - 1 );
@@ -552,7 +552,7 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
     }
 
     MSHORT i;
-    xub_StrLen nIndx = GetInfo().GetIdx();
+    sal_Int32 nIndx = GetInfo().GetIdx();
     long nUnderStart = 0;
     long nUnderEnd = 0;
     MSHORT nCnt = (MSHORT)aUnderMulti.GetRangeCount();
@@ -590,7 +590,7 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
         SwAttrIter aIter( *(SwTxtNode*)GetInfo().GetTxtFrm()->GetTxtNode(),
                           rScriptInfo );
 
-        xub_StrLen nTmpIdx = nIndx;
+        sal_Int32 nTmpIdx = nIndx;
         sal_uLong nSumWidth = 0;
         sal_uLong nSumHeight = 0;
         sal_uLong nBold = 0;

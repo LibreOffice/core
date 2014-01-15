@@ -187,7 +187,7 @@ struct HTMLControl
     // die Form, zu der das Control gehoert
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > xFormComps;
     sal_uLong nNdIdx;                   // der Node, in dem es verankert ist
-    xub_StrLen nCount;              // wie viele Controls sind in dem Node
+    sal_Int32 nCount;              // wie viele Controls sind in dem Node
 
     HTMLControl( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > & rForm,
                  sal_uInt32 nIdx );
@@ -327,7 +327,7 @@ public:
     sal_uInt16 nDfltTopMargin;          // die defaults, der nicht geschrieben
     sal_uInt16 nDfltBottomMargin;       // werden muessen (aus der Vorlage)
     sal_uInt16 nIndentLvl;              // wie weit ist eingerueckt?
-    xub_StrLen nWhishLineLen;           // wie lang darf eine Zeile werden?
+    sal_Int32 nWhishLineLen;           // wie lang darf eine Zeile werden?
     sal_uInt16 nDefListLvl;             // welcher DL-Level existiert gerade
     sal_Int32  nDefListMargin;          // Wie weit wird in DL eingerueckt
     sal_uInt16 nHeaderFooterSpace;
@@ -406,7 +406,7 @@ public:
     void OutHyperlinkHRefValue( const OUString& rURL );
 
     // gebe die evt. an der akt. Position stehenden FlyFrame aus.
-    sal_Bool OutFlyFrm( sal_uLong nNdIdx, xub_StrLen nCntntIdx,
+    sal_Bool OutFlyFrm( sal_uLong nNdIdx, sal_Int32 nCntntIdx,
                         sal_uInt8 nPos, HTMLOutContext *pContext = 0 );
     void OutFrmFmt( sal_uInt8 nType, const SwFrmFmt& rFmt,
                     const SdrObject *pSdrObj );
@@ -477,7 +477,7 @@ public:
     void DecIndentLevel() { if ( nIndentLvl ) nIndentLvl--; }
     OString GetIndentString(sal_uInt16 nIncLvl = 0);
 
-    xub_StrLen GetLineLen() { return (xub_StrLen)(Strm().Tell()-nLastLFPos); }
+    sal_Int32 GetLineLen() { return (sal_Int32)(Strm().Tell()-nLastLFPos); }
     void OutNewLine( sal_Bool bCheck=sal_False );
 
     // fuer HTMLSaveData

@@ -489,7 +489,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, sal_uInt16 ins )
                 sal_uInt16          nOld_ListPor        = nListPor;
                 SwSbxValue      nOld_LastLeft       = nLastLeft;
                 SwSbxValue      nOld_NumberValue    = nNumberValue;
-                xub_StrLen      nOld_CommandPos     = nCommandPos;
+                sal_Int32      nOld_CommandPos     = nCommandPos;
                 SwCalcOper      eOld_CurrOper       = eCurrOper;
                 SwCalcOper      eOld_CurrListOper   = eCurrListOper;
 

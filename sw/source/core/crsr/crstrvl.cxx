@@ -818,7 +818,7 @@ SwField* SwCrsrShell::GetFieldAtCrsr(
     if ( pTxtFld != NULL
         && pCrsr->Start()->nNode == pCrsr->End()->nNode )
     {
-        const xub_StrLen nTxtFldLength =
+        const sal_Int32 nTxtFldLength =
             pTxtFld->End() != NULL
             ? *(pTxtFld->End()) - *(pTxtFld->GetStart())
             : 1;
@@ -890,7 +890,7 @@ bool SwCrsrShell::DocPtInsideInputFld( const Point& rDocPt ) const
 }
 
 
-xub_StrLen SwCrsrShell::StartOfInputFldAtPos( const SwPosition& rPos ) const
+sal_Int32 SwCrsrShell::StartOfInputFldAtPos( const SwPosition& rPos ) const
 {
     const SwTxtInputFld* pTxtInputFld = dynamic_cast<const SwTxtInputFld*>(GetTxtFldAtPos( &rPos, true ));
     if ( pTxtInputFld == NULL )
@@ -902,7 +902,7 @@ xub_StrLen SwCrsrShell::StartOfInputFldAtPos( const SwPosition& rPos ) const
 }
 
 
-xub_StrLen SwCrsrShell::EndOfInputFldAtPos( const SwPosition& rPos ) const
+sal_Int32 SwCrsrShell::EndOfInputFldAtPos( const SwPosition& rPos ) const
 {
     const SwTxtInputFld* pTxtInputFld = dynamic_cast<const SwTxtInputFld*>(GetTxtFldAtPos( &rPos, true ));
     if ( pTxtInputFld == NULL )
@@ -1730,8 +1730,8 @@ bool SwContentAtPos::IsInRTLText()const
 }
 
 
-sal_Bool SwCrsrShell::SelectTxt( const xub_StrLen nStart,
-                                 const xub_StrLen nEnd )
+sal_Bool SwCrsrShell::SelectTxt( const sal_Int32 nStart,
+                                 const sal_Int32 nEnd )
 {
     SET_CURR_SHELL( this );
     sal_Bool bRet = sal_False;

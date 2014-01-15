@@ -491,9 +491,9 @@ void SwTxtInputFld::UpdateFieldContent()
         OSL_ENSURE( (*End()) - (*GetStart()) >= 2,
                 "<SwTxtInputFld::UpdateFieldContent()> - Are CH_TXT_ATR_INPUTFIELDSTART and/or CH_TXT_ATR_INPUTFIELDEND missing?" );
         // skip CH_TXT_ATR_INPUTFIELDSTART character
-        const xub_StrLen nIdx = (*GetStart()) + 1;
+        const sal_Int32 nIdx = (*GetStart()) + 1;
         // skip CH_TXT_ATR_INPUTFIELDEND character
-        const xub_StrLen nLen = static_cast<xub_StrLen>(std::max<sal_Int32>( 0, ( (*End()) - 1 - nIdx ) ));
+        const sal_Int32 nLen = static_cast<sal_Int32>(std::max<sal_Int32>( 0, ( (*End()) - 1 - nIdx ) ));
         const OUString aNewFieldContent = GetTxtNode().GetExpandTxt( nIdx, nLen );
 
         const SwInputField* pInputFld = dynamic_cast<const SwInputField*>(GetFmtFld().GetField());
@@ -530,7 +530,7 @@ void SwTxtInputFld::UpdateTextNodeContent( const OUString& rNewContent )
 // text annotation field
 SwTxtAnnotationFld::SwTxtAnnotationFld(
     SwFmtFld & rAttr,
-    xub_StrLen const nStart,
+    sal_Int32 const nStart,
     bool const bInClipboard )
     : SwTxtFld( rAttr, nStart, bInClipboard )
 {

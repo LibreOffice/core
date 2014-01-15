@@ -38,7 +38,7 @@ class SW_DLLPUBLIC SwTxtFtn : public SwTxtAttr
     sal_uInt16 m_nSeqNo;
 
 public:
-    SwTxtFtn( SwFmtFtn& rAttr, xub_StrLen nStart );
+    SwTxtFtn( SwFmtFtn& rAttr, sal_Int32 nStart );
     virtual ~SwTxtFtn();
 
     inline SwNodeIndex *GetStartNode() const { return m_pStartNode; }

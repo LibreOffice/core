@@ -492,7 +492,7 @@ OUString SwEditShell::GetDropTxt( const sal_uInt16 nChars ) const
     SwTxtNode* pTxtNd = pCrsr->GetNode( !pCrsr->HasMark() )->GetTxtNode();
     if( pTxtNd )
     {
-        xub_StrLen nDropLen = pTxtNd->GetDropLen( nChars );
+        sal_Int32 nDropLen = pTxtNd->GetDropLen( nChars );
         if( nDropLen )
             aTxt = pTxtNd->GetTxt().copy(0, nDropLen);
     }
@@ -540,14 +540,14 @@ OUString SwEditShell::Calculate()
 
             sal_Unicode ch;
             bool bValidFlds = false;
-            xub_StrLen nPos = 0;
+            sal_Int32 nPos = 0;
 
             while( nPos < aStr.getLength() )
             {
                 ch = aStr[ nPos++ ];
                 if( rCC.isLetter( aStr, nPos-1 ) || ch == '_' )
                 {
-                    xub_StrLen nTmpStt = nPos-1;
+                    sal_Int32 nTmpStt = nPos-1;
                     while(  nPos < aStr.getLength() &&
                             0 != ( ch = aStr[ nPos++ ]) &&
                            (rCC.isLetterNumeric( aStr, nPos - 1 ) ||
@@ -884,7 +884,7 @@ sal_uInt16 SwEditShell::GetLineCount( sal_Bool bActPos )
     {
         if( 0 != ( pCntFrm = pCNd->getLayoutFrm( GetLayout() ) ) && pCntFrm->IsTxtFrm() )
         {
-            xub_StrLen nActPos = bActPos && aStart == rPtIdx ?
+            sal_Int32 nActPos = bActPos && aStart == rPtIdx ?
                 pPam->GetPoint()->nContent.GetIndex() : USHRT_MAX;
             nRet = nRet + ((SwTxtFrm*)pCntFrm)->GetLineCount( nActPos );
         }
@@ -1025,9 +1025,9 @@ void SwEditShell::SetExtTextInputData( const CommandExtTextInputData& rData )
         ShowCrsr();
         const sal_Int32 nDiff = nNewCrsrPos - rPos.nContent.GetIndex();
         if( 0 > nDiff )
-            Left( (xub_StrLen)-nDiff, CRSR_SKIP_CHARS );
+            Left( (sal_Int32)-nDiff, CRSR_SKIP_CHARS );
         else if( 0 < nDiff )
-            Right( (xub_StrLen)nDiff, CRSR_SKIP_CHARS );
+            Right( (sal_Int32)nDiff, CRSR_SKIP_CHARS );
 
         SetOverwriteCrsr( rData.IsCursorOverwrite() );
 

@@ -176,7 +176,7 @@ void PaMCorrAbs( const SwPaM& rRange,
 
 void SwDoc::CorrAbs(const SwNodeIndex& rOldNode,
     const SwPosition& rNewPos,
-    const xub_StrLen nOffset,
+    const sal_Int32 nOffset,
     sal_Bool bMoveCrsr)
 {
     SwCntntNode *const pCntntNode( rOldNode.GetNode().GetCntntNode() );
@@ -298,7 +298,7 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
 
 void SwDoc::CorrRel(const SwNodeIndex& rOldNode,
     const SwPosition& rNewPos,
-    const xub_StrLen nOffset,
+    const sal_Int32 nOffset,
     sal_Bool bMoveCrsr)
 {
     getIDocumentMarkAccess()->correctMarksRelative(rOldNode, rNewPos, nOffset);

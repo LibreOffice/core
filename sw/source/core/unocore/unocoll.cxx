@@ -876,7 +876,7 @@ uno::Any SAL_CALL SwXTextTables::getByIndex(sal_Int32 nIndex)
     {
         if(0 <= nIndex && GetDoc()->GetTblFrmFmtCount(true) > nIndex)
         {
-            SwFrmFmt& rFmt = GetDoc()->GetTblFrmFmt( static_cast< xub_StrLen >(nIndex), true);
+            SwFrmFmt& rFmt = GetDoc()->GetTblFrmFmt(nIndex, true);
             uno::Reference< XTextTable >  xTbl = SwXTextTables::GetObject(rFmt);
             aRet.setValue( &xTbl,
                 ::getCppuType((uno::Reference< XTextTable>*)0));

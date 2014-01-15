@@ -85,27 +85,27 @@ public:
 class SwDelChr: public SwMsgPoolItem
 {
 public:
-    xub_StrLen nPos;
+    sal_Int32 nPos;
 
-    SwDelChr( xub_StrLen nP );
+    SwDelChr( sal_Int32 nP );
 };
 
 class SwDelTxt: public SwMsgPoolItem
 {
 public:
-    xub_StrLen nStart;
-    xub_StrLen nLen;
+    sal_Int32 nStart;
+    sal_Int32 nLen;
 
-    SwDelTxt( xub_StrLen nS, xub_StrLen nL );
+    SwDelTxt( sal_Int32 nS, sal_Int32 nL );
 };
 
 class SwUpdateAttr: public SwMsgPoolItem
 {
 public:
-    xub_StrLen nStart;
-    xub_StrLen nEnd;
+    sal_Int32 nStart;
+    sal_Int32 nEnd;
     sal_uInt16 nWhichAttr;
-    SwUpdateAttr( xub_StrLen nS, xub_StrLen nE, sal_uInt16 nW );
+    SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW );
 };
 
 

@@ -358,7 +358,7 @@ void SwHTMLWriter::CollectFlyFrms()
     }
 }
 
-sal_Bool SwHTMLWriter::OutFlyFrm( sal_uLong nNdIdx, xub_StrLen nCntntIdx, sal_uInt8 nPos,
+sal_Bool SwHTMLWriter::OutFlyFrm( sal_uLong nNdIdx, sal_Int32 nCntntIdx, sal_uInt8 nPos,
                               HTMLOutContext *pContext )
 {
     sal_Bool bFlysLeft = sal_False; // Noch Flys an aktueller Node-Position da?

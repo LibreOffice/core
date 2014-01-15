@@ -34,7 +34,7 @@ class SwTxtFlyCnt : public SwTxtAttr
     SwFlyInCntFrm  *_GetFlyFrm( const SwFrm *pCurrFrm );
 
 public:
-    SwTxtFlyCnt( SwFmtFlyCnt& rAttr, xub_StrLen nStart );
+    SwTxtFlyCnt( SwFmtFlyCnt& rAttr, sal_Int32 nStart );
 
     // Sets anchor in pFmt and
     void    SetAnchor( const SwTxtNode *pNode );

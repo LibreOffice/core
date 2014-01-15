@@ -38,7 +38,7 @@ protected:
 virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
 public:
-    SwTxtINetFmt( SwFmtINetFmt& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
+    SwTxtINetFmt( SwFmtINetFmt& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
     virtual ~SwTxtINetFmt();
     TYPEINFO();
 

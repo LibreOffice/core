@@ -36,7 +36,7 @@ class SwUndoOverwrite: public SwUndo, private SwUndoSaveCntnt
     OUString aDelStr, aInsStr;
     SwRedlineSaveDatas* pRedlSaveData;
     sal_uLong nSttNode;
-    xub_StrLen nSttCntnt;
+    sal_Int32 nSttCntnt;
     sal_Bool bInsChar : 1;  // no Overwrite, but Insert
     sal_Bool bGroup : 1;    // TRUE: is already grouped; evaluated in CanGrouping()
 
@@ -83,7 +83,7 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & );
     virtual void RepeatImpl( ::sw::RepeatContext & );
 
-    void AddChanges( SwTxtNode& rTNd, xub_StrLen nStart, xub_StrLen nLen,
+    void AddChanges( SwTxtNode& rTNd, sal_Int32 nStart, sal_Int32 nLen,
                      ::com::sun::star::uno::Sequence <sal_Int32>& rOffsets );
     sal_Bool HasData() const { return aChanges.size() > 0; }
 };

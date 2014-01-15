@@ -162,7 +162,7 @@ sal_Bool SwCrsrShell::GotoFtnAnchor()
     return bRet;
 }
 
-inline sal_Bool CmpLE( const SwTxtFtn& rFtn, sal_uLong nNd, xub_StrLen nCnt )
+inline sal_Bool CmpLE( const SwTxtFtn& rFtn, sal_uLong nNd, sal_Int32 nCnt )
 {
     const sal_uLong nTNd = rFtn.GetTxtNode().GetIndex();
     return nTNd < nNd || ( nTNd == nNd && *rFtn.GetStart() <= nCnt );

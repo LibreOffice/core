@@ -213,7 +213,7 @@ namespace
         {
         }
 
-        xub_StrLen getIndex ()
+        sal_Int32 getIndex ()
         {
             return maPosition.nContent.GetIndex();
         }
@@ -385,7 +385,7 @@ throw( container::NoSuchElementException, lang::WrappedTargetException,
     return any;
 }
 
-typedef ::std::deque< xub_StrLen > FieldMarks_t;
+typedef ::std::deque< sal_Int32 > FieldMarks_t;
 
 static void
 lcl_FillFieldMarkArray(FieldMarks_t & rFieldMarks, SwUnoCrsr const & rUnoCrsr,
@@ -688,7 +688,7 @@ lcl_ExportHints(
     SwpHints * const pHints,
     const sal_Int32 i_nStartPos,
     const sal_Int32 i_nEndPos,
-    const xub_StrLen nCurrentIndex,
+    const sal_Int32 nCurrentIndex,
     const bool bRightMoveForbidden,
     bool & o_rbCursorMoved,
     sal_Int32 & o_rNextAttrPosition )
@@ -982,7 +982,7 @@ lcl_ExportHints(
 }
 
 static void lcl_MoveCursor( SwUnoCrsr * const pUnoCrsr,
-    const xub_StrLen nCurrentIndex,
+    const sal_Int32 nCurrentIndex,
     const sal_Int32 nNextFrameIndex,
     const sal_Int32 nNextPortionIndex,
     const sal_Int32 nNextAttrIndex,
@@ -1148,7 +1148,7 @@ static sal_Int32 lcl_ExportFrames(
     Reference<XText> const & i_xParent,
     SwUnoCrsr * const i_pUnoCrsr,
     FrameDependSortList_t & i_rFrames,
-    xub_StrLen const i_nCurrentIndex)
+    sal_Int32 const i_nCurrentIndex)
 {
     // find first Frame in (sorted) i_rFrames at current position
     while (i_rFrames.size() && (i_rFrames.front().nIndex == i_nCurrentIndex))
@@ -1214,7 +1214,7 @@ static void lcl_CreatePortions(
             (i_nStartPos <= pUnoCrsr->Start()->nNode.GetNode().GetTxtNode()->
                         GetTxt().getLength()), "Incorrect start position" );
         // ??? should this be i_nStartPos - current position ?
-        pUnoCrsr->Right(static_cast<xub_StrLen>(i_nStartPos),
+        pUnoCrsr->Right(static_cast<sal_Int32>(i_nStartPos),
                 CRSR_SKIP_CHARS, sal_False, sal_False);
     }
 

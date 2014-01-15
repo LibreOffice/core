@@ -20,7 +20,6 @@
 #include <ctype.h>
 #include <hintids.hxx>
 
-#include <tools/string.hxx>
 #include <unotools/charclass.hxx>
 
 #include <vcl/msgbox.hxx>
@@ -170,8 +169,8 @@ class SwAutoFormat
 
     OUString DelLeadingBlanks(const OUString& rStr) const;
     OUString& DelTrailingBlanks( OUString& rStr ) const;
-    xub_StrLen GetLeadingBlanks( const OUString& rStr ) const;
-    xub_StrLen GetTrailingBlanks( const OUString& rStr ) const;
+    sal_Int32 GetLeadingBlanks( const OUString& rStr ) const;
+    sal_Int32 GetTrailingBlanks( const OUString& rStr ) const;
 
     bool IsFirstCharCapital( const SwTxtNode& rNd ) const;
     sal_uInt16 GetDigitLevel( const SwTxtNode& rTxtNd, sal_Int32& rPos,
@@ -200,7 +199,7 @@ class SwAutoFormat
     /// delete the previous paragraph
     void DelPrevPara();
     /// execute AutoCorrect on current TextNode
-    void AutoCorrect( xub_StrLen nSttPos = 0 );
+    void AutoCorrect( sal_Int32 nSttPos = 0 );
 
     bool CanJoin( const SwTxtNode* pTxtNd ) const
     {
@@ -208,7 +207,7 @@ class SwAutoFormat
              !IsEmptyLine( *pTxtNd ) &&
              !IsNoAlphaLine( *pTxtNd) &&
              !IsEnumericChar( *pTxtNd ) &&
-             ((STRING_MAXLEN - 50 - pTxtNd->GetTxt().getLength()) >
+             ((COMPLETE_STRING - 50 - pTxtNd->GetTxt().getLength()) >
                     pAktTxtNd->GetTxt().getLength()) &&
              !HasBreakAttr( *pTxtNd );
     }
@@ -502,7 +501,7 @@ sal_Bool SwAutoFormat::IsNoAlphaLine( const SwTxtNode& rNd ) const
     if( rStr.isEmpty() )
         return sal_False;
     // or better: determine via number of AlphaNum and !AlphaNum characters
-    xub_StrLen nANChar = 0, nBlnk = 0;
+    sal_Int32 nANChar = 0, nBlnk = 0;
 
     CharClass& rCC = GetCharClass( rNd.GetSwAttrSet().GetLanguage().GetLanguage() );
     for( sal_Int32 n = 0, nEnd = rStr.getLength(); n < nEnd; ++n )
@@ -514,7 +513,7 @@ sal_Bool SwAutoFormat::IsNoAlphaLine( const SwTxtNode& rNd ) const
     // If there are 75% of non-alphanumeric characters, then sal_True
     sal_uLong nLen = rStr.getLength() - nBlnk;
     nLen = ( nLen * 3 ) / 4;            // long overflow, if the strlen > sal_uInt16
-    return xub_StrLen(nLen) < (rStr.getLength() - nANChar - nBlnk);
+    return sal_Int32(nLen) < (rStr.getLength() - nANChar - nBlnk);
 }
 
 bool SwAutoFormat::DoUnderline()
@@ -524,7 +523,7 @@ bool SwAutoFormat::DoUnderline()
 
     OUString const& rTxt(pAktTxtNd->GetTxt());
     int eState = 0;
-    xub_StrLen nCnt = 0;
+    sal_Int32 nCnt = 0;
     while (nCnt < rTxt.getLength())
     {
         int eTmp = 0;
@@ -604,8 +603,8 @@ bool SwAutoFormat::DoTable()
         return false;
 
     const OUString& rTmp = pAktTxtNd->GetTxt();
-    xub_StrLen nSttPlus = GetLeadingBlanks( rTmp );
-    xub_StrLen nEndPlus = GetTrailingBlanks( rTmp );
+    sal_Int32 nSttPlus = GetLeadingBlanks( rTmp );
+    sal_Int32 nEndPlus = GetTrailingBlanks( rTmp );
     sal_Unicode cChar;
 
     if( 2 > nEndPlus - nSttPlus ||
@@ -615,7 +614,7 @@ bool SwAutoFormat::DoTable()
 
     SwTxtFrmInfo aInfo( pAktTxtFrm );
 
-    xub_StrLen n = nSttPlus;
+    sal_Int32 n = nSttPlus;
     std::vector<sal_uInt16> aPosArr;
 
     while (n < rTmp.getLength())
@@ -688,7 +687,7 @@ OUString SwAutoFormat::DelLeadingBlanks( const OUString& rStr ) const
 
 OUString& SwAutoFormat::DelTrailingBlanks( OUString& rStr ) const
 {
-    xub_StrLen nL = rStr.getLength(), n = nL;
+    sal_Int32 nL = rStr.getLength(), n = nL;
     if( !nL )
         return rStr;
 
@@ -699,19 +698,19 @@ OUString& SwAutoFormat::DelTrailingBlanks( OUString& rStr ) const
     return rStr;
 }
 
-xub_StrLen SwAutoFormat::GetLeadingBlanks( const OUString& rStr ) const
+sal_Int32 SwAutoFormat::GetLeadingBlanks( const OUString& rStr ) const
 {
-    xub_StrLen nL;
-    xub_StrLen n;
+    sal_Int32 nL;
+    sal_Int32 n;
 
     for( nL = rStr.getLength(), n = 0; n < nL && IsSpace( rStr[ n ] ); ++n )
         ;
     return n;
 }
 
-xub_StrLen SwAutoFormat::GetTrailingBlanks( const OUString& rStr ) const
+sal_Int32 SwAutoFormat::GetTrailingBlanks( const OUString& rStr ) const
 {
-    xub_StrLen nL = rStr.getLength(), n = nL;
+    sal_Int32 nL = rStr.getLength(), n = nL;
     if( !nL )
         return 0;
 
@@ -1394,7 +1393,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
     DeleteCurrentParagraph( true, true );
 
     bool bChgBullet = false, bChgEnum = false;
-    xub_StrLen nAutoCorrPos = 0;
+    sal_Int32 nAutoCorrPos = 0;
 
     // if numbering is set, get the current one
     SwNumRule aRule( pDoc->GetUniqueNumRuleName(),
@@ -1706,7 +1705,7 @@ void SwAutoFormat::BuildNegIndent( SwTwips nSpaces )
             bInsTab = false;
         }
 
-        xub_StrLen nSpaceStt = nSpacePos;
+        sal_Int32 nSpaceStt = nSpacePos;
         while (nSpaceStt && IsSpace(rStr[--nSpaceStt]))
             ;
         ++nSpaceStt;
@@ -1794,7 +1793,7 @@ void SwAutoFormat::BuildHeadLine( sal_uInt16 nLvl )
 }
 
 /// Start autocorrection for the current TextNode
-void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
+void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
 {
     SvxAutoCorrect* pATst = SvxAutoCorrCfg::Get().GetAutoCorrect();
     long aSvxFlags = pATst->GetFlags( );

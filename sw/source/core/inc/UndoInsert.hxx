@@ -38,7 +38,7 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
     OUString *pTxt, *pUndoTxt;
     SwRedlineData* pRedlData;
     sal_uLong nNode;
-    xub_StrLen nCntnt, nLen;
+    sal_Int32 nCntnt, nLen;
     sal_Bool bIsWordDelim : 1;
     sal_Bool bIsAppend : 1;
     sal_Bool m_bWithRsid : 1;
@@ -55,7 +55,7 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
     OUString * GetTxtFromDoc() const;
 
 public:
-    SwUndoInsert( const SwNodeIndex& rNode, xub_StrLen nCntnt, xub_StrLen nLen,
+    SwUndoInsert( const SwNodeIndex& rNode, sal_Int32 nCntnt, sal_Int32 nLen,
                   const IDocumentContentOperations::InsertFlags nInsertFlags,
                   sal_Bool bWDelim = sal_True );
     SwUndoInsert( const SwNodeIndex& rNode );

@@ -112,7 +112,7 @@ void SwAutoCorrDoc::DeleteSel( SwPaM& rDelPam )
     }
 }
 
-sal_Bool SwAutoCorrDoc::Delete( xub_StrLen nStt, xub_StrLen nEnd )
+sal_Bool SwAutoCorrDoc::Delete( sal_Int32 nStt, sal_Int32 nEnd )
 {
     const SwNodeIndex& rNd = rCrsr.GetPoint()->nNode;
     SwPaM aSel( rNd, nStt, rNd, nEnd );
@@ -123,7 +123,7 @@ sal_Bool SwAutoCorrDoc::Delete( xub_StrLen nStt, xub_StrLen nEnd )
     return sal_True;
 }
 
-sal_Bool SwAutoCorrDoc::Insert( xub_StrLen nPos, const OUString& rTxt )
+sal_Bool SwAutoCorrDoc::Insert( sal_Int32 nPos, const OUString& rTxt )
 {
     SwPaM aPam( rCrsr.GetPoint()->nNode.GetNode(), nPos );
     rEditSh.GetDoc()->InsertString( aPam, rTxt );
@@ -139,12 +139,12 @@ sal_Bool SwAutoCorrDoc::Insert( xub_StrLen nPos, const OUString& rTxt )
     return sal_True;
 }
 
-sal_Bool SwAutoCorrDoc::Replace( xub_StrLen nPos, const OUString& rTxt )
+sal_Bool SwAutoCorrDoc::Replace( sal_Int32 nPos, const OUString& rTxt )
 {
     return ReplaceRange( nPos, rTxt.getLength(), rTxt );
 }
 
-sal_Bool SwAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength, const OUString& rTxt )
+sal_Bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, const OUString& rTxt )
 {
     SwPaM* pPam = &rCrsr;
     if( pPam->GetPoint()->nContent.GetIndex() != nPos )
@@ -227,7 +227,7 @@ sal_Bool SwAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength,
     return sal_True;
 }
 
-sal_Bool SwAutoCorrDoc::SetAttr( xub_StrLen nStt, xub_StrLen nEnd, sal_uInt16 nSlotId,
+sal_Bool SwAutoCorrDoc::SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlotId,
                                         SfxPoolItem& rItem )
 {
     const SwNodeIndex& rNd = rCrsr.GetPoint()->nNode;
@@ -250,7 +250,7 @@ sal_Bool SwAutoCorrDoc::SetAttr( xub_StrLen nStt, xub_StrLen nEnd, sal_uInt16 nS
     return 0 != nWhich;
 }
 
-sal_Bool SwAutoCorrDoc::SetINetAttr( xub_StrLen nStt, xub_StrLen nEnd, const OUString& rURL )
+sal_Bool SwAutoCorrDoc::SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUString& rURL )
 {
     const SwNodeIndex& rNd = rCrsr.GetPoint()->nNode;
     SwPaM aPam( rNd, nStt, rNd, nEnd );
@@ -400,7 +400,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
 //  - FnCptlSttSntnc
 // after the exchange of characters. Then the words, if necessary, can be inserted
 // into the exception list.
-void SwAutoCorrDoc::SaveCpltSttWord( sal_uLong nFlag, xub_StrLen nPos,
+void SwAutoCorrDoc::SaveCpltSttWord( sal_uLong nFlag, sal_Int32 nPos,
                                             const OUString& rExceptWord,
                                             sal_Unicode cChar )
 {
@@ -410,7 +410,7 @@ void SwAutoCorrDoc::SaveCpltSttWord( sal_uLong nFlag, xub_StrLen nPos,
                                         nNode, nPos, rExceptWord, cChar, eLang ));
 }
 
-LanguageType SwAutoCorrDoc::GetLanguage( xub_StrLen nPos, sal_Bool bPrevPara ) const
+LanguageType SwAutoCorrDoc::GetLanguage( sal_Int32 nPos, sal_Bool bPrevPara ) const
 {
     LanguageType eRet = LANGUAGE_SYSTEM;
 

@@ -180,9 +180,9 @@ lcl_CleanStr(const SwTxtNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
 }
 
 // skip all non SwPostIts inside the array
-xub_StrLen GetPostIt(xub_StrLen aCount,const SwpHints *pHts)
+sal_Int32 GetPostIt(sal_Int32 aCount,const SwpHints *pHts)
 {
-    xub_StrLen aIndex = 0;
+    sal_Int32 aIndex = 0;
     while (aCount)
     {
         for (sal_Int32 i = 0; i < pHts->Count(); i++ )
@@ -253,8 +253,8 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
             const SwpHints *pHts = ((SwTxtNode*)pNode)->GetpSwpHints();
 
             // count PostItFields by looping over all fields
-            xub_StrLen aNumberPostits = 0;
-            xub_StrLen aIgnore = 0;
+            sal_Int32 aNumberPostits = 0;
+            sal_Int32 aIgnore = 0;
             if (pHts && bSearchInNotes)
             {
                 if (!bSrchForward)
@@ -289,7 +289,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
             SwViewShell *const pWrtShell = (pDocShell) ? (SwViewShell*)(pDocShell->GetWrtShell()) : 0;
             SwPostItMgr *const pPostItMgr = (pWrtShell) ? pWrtShell->GetPostItMgr() : 0;
 
-            xub_StrLen aStart = 0;
+            sal_Int32 aStart = 0;
             // do we need to finish a note?
             if (pPostItMgr && pPostItMgr->HasActiveSidebarWin())
             {
@@ -462,8 +462,8 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
                 (rSTxt.*fnMove->fnSearch)( sCleanStr, &nProxyStart, &nProxyEnd, 0 ) &&
                 !(bZeroMatch = (nProxyStart == nProxyEnd)))
         {
-            nStart = (xub_StrLen)nProxyStart;
-            nEnd = (xub_StrLen)nProxyEnd;
+            nStart = nProxyStart;
+            nEnd = nProxyEnd;
             // set section correctly
             *GetPoint() = *pPam->GetPoint();
             SetMark();

@@ -44,7 +44,7 @@ TYPEINIT1(SwTxtRuby,SwClient);
  *************************************************************************/
 
 SwTxtCharFmt::SwTxtCharFmt( SwFmtCharFmt& rAttr,
-                    xub_StrLen nStt, xub_StrLen nEnde )
+                    sal_Int32 nStt, sal_Int32 nEnde )
     : SwTxtAttrEnd( rAttr, nStt, nEnde )
     , m_pTxtNode( 0 )
     , m_nSortNumber( 0 )
@@ -89,7 +89,7 @@ bool SwTxtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
  *************************************************************************/
 
 SwTxtAttrNesting::SwTxtAttrNesting( SfxPoolItem & i_rAttr,
-            const xub_StrLen i_nStart, const xub_StrLen i_nEnd )
+            const sal_Int32 i_nStart, const sal_Int32 i_nEnd )
     : SwTxtAttrEnd( i_rAttr, i_nStart, i_nEnd )
 {
     SetDontExpand( true );  // never expand this attribute
@@ -110,7 +110,7 @@ SwTxtAttrNesting::~SwTxtAttrNesting()
  *************************************************************************/
 
 SwTxtINetFmt::SwTxtINetFmt( SwFmtINetFmt& rAttr,
-                            xub_StrLen nStart, xub_StrLen nEnd )
+                            sal_Int32 nStart, sal_Int32 nEnd )
     : SwTxtAttrNesting( rAttr, nStart, nEnd )
     , SwClient( 0 )
     , m_pTxtNode( 0 )
@@ -212,7 +212,7 @@ sal_Bool SwTxtINetFmt::IsProtect( ) const
  *************************************************************************/
 
 SwTxtRuby::SwTxtRuby( SwFmtRuby& rAttr,
-                      xub_StrLen nStart, xub_StrLen nEnd )
+                      sal_Int32 nStart, sal_Int32 nEnd )
     : SwTxtAttrNesting( rAttr, nStart, nEnd )
     , SwClient( 0 )
     , m_pTxtNode( 0 )
@@ -302,8 +302,8 @@ SwTxtMeta::CreateTxtMeta(
     ::sw::MetaFieldManager & i_rTargetDocManager,
     SwTxtNode *const i_pTargetTxtNode,
     SwFmtMeta & i_rAttr,
-    xub_StrLen const i_nStart,
-    xub_StrLen const i_nEnd,
+    sal_Int32 const i_nStart,
+    sal_Int32 const i_nEnd,
     bool const i_bIsCopy)
 {
     if (COPY == i_bIsCopy)
@@ -316,7 +316,7 @@ SwTxtMeta::CreateTxtMeta(
 }
 
 SwTxtMeta::SwTxtMeta( SwFmtMeta & i_rAttr,
-        const xub_StrLen i_nStart, const xub_StrLen i_nEnd )
+        const sal_Int32 i_nStart, const sal_Int32 i_nEnd )
     : SwTxtAttrNesting( i_rAttr, i_nStart, i_nEnd )
 {
     i_rAttr.SetTxtAttr( this );

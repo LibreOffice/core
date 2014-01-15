@@ -872,7 +872,6 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     {
         SAL_WARN_IF( i18n::ScriptType::WEAK == nScript,
                 "sw.core", "Inserting WEAK into SwScriptInfo structure" );
-        SAL_WARN_IF( STRING_LEN == nChg, "sw.core", "65K? Strange length of script section" );
 
         sal_Int32 nSearchStt = nChg;
         nChg = g_pBreakIt->GetBreakIter()->endOfScript( rTxt, nSearchStt, nScript );

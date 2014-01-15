@@ -46,10 +46,10 @@ enum TOXSortType
 struct SwTOXSource
 {
     const SwCntntNode* pNd;
-    xub_StrLen nPos;
+    sal_Int32 nPos;
     sal_Bool bMainEntry;
 
-    SwTOXSource( const SwCntntNode* pNode, xub_StrLen n, sal_Bool bMain )
+    SwTOXSource( const SwCntntNode* pNode, sal_Int32 n, sal_Bool bMain )
         : pNd(pNode), nPos(n), bMainEntry(bMain)
     {
     }
@@ -114,7 +114,7 @@ public:
 
     OUString GetFollowingText( sal_Bool bMorePages ) const;
 
-    OUString ToUpper( const OUString& rStr, xub_StrLen nPos ) const;
+    OUString ToUpper( const OUString& rStr, sal_Int32 nPos ) const;
     inline sal_Bool IsNumeric( const OUString& rStr ) const;
 };
 
@@ -130,7 +130,7 @@ struct SwTOXSortTabBase
     const SwTxtTOXMark* pTxtMark;
     const SwTOXInternational* pTOXIntl;
     sal_uLong nPos;
-    xub_StrLen nCntPos;
+    sal_Int32 nCntPos;
     sal_uInt16 nType;
     static sal_uInt16 nOpt;
 

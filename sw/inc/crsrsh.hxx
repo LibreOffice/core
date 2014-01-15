@@ -286,7 +286,7 @@ protected:
 
     // set all PaMs in OldNode to NewPos + Offset
     void PaMCorrAbs(const SwNodeIndex &rOldNode, const SwPosition &rNewPos,
-                    const xub_StrLen nOffset = 0 );
+                    const sal_Int32 nOffset = 0 );
 
     bool _SelTblRowOrCol( bool bRow, bool bRowSimple = false );
 
@@ -690,7 +690,7 @@ public:
 
     // get the nth character from the start or end of the  current selection
     sal_Unicode GetChar( sal_Bool bEnd = sal_True, long nOffset = 0 );
-    sal_Bool ExtendSelection( sal_Bool bEnd = sal_True, xub_StrLen nCount = 1 );
+    sal_Bool ExtendSelection( sal_Bool bEnd = sal_True, sal_Int32 nCount = 1 );
 
     // Place only the visible cursor at the given position in the document.
     // Return FALSE if SPoint was corrected by layout.
@@ -717,8 +717,8 @@ public:
     bool CrsrInsideInputFld() const;
     bool PosInsideInputFld( const SwPosition& rPos ) const;
     bool DocPtInsideInputFld( const Point& rDocPt ) const;
-    xub_StrLen StartOfInputFldAtPos( const SwPosition& rPos ) const;
-    xub_StrLen EndOfInputFldAtPos( const SwPosition& rPos ) const;
+    sal_Int32 StartOfInputFldAtPos( const SwPosition& rPos ) const;
+    sal_Int32 EndOfInputFldAtPos( const SwPosition& rPos ) const;
 
     // Return number of cursors in ring (The flag indicates whether
     // only cursors containing selections are requested).
@@ -799,8 +799,8 @@ public:
     bool GotoINetAttr( const SwTxtINetFmt& rAttr );
     const SwFmtINetFmt* FindINetAttr( const OUString& rName ) const;
 
-    sal_Bool SelectTxt( const xub_StrLen nStart,
-                        const xub_StrLen nEnd );
+    sal_Bool SelectTxt( const sal_Int32 nStart,
+                        const sal_Int32 nEnd );
 
     sal_Bool CheckTblBoxCntnt( const SwPosition* pPos = 0 );
     void SaveTblBoxCntnt( const SwPosition* pPos = 0 );

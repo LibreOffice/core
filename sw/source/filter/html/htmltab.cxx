@@ -2938,9 +2938,9 @@ SwStartNode *SwHTMLParser::InsertTempTableCaptionSection()
 }
 
 
-xub_StrLen SwHTMLParser::StripTrailingLF()
+sal_Int32 SwHTMLParser::StripTrailingLF()
 {
-    xub_StrLen nStripped = 0;
+    sal_Int32 nStripped = 0;
 
     const sal_Int32 nLen = pPam->GetPoint()->nContent.GetIndex();
     if( nLen )
@@ -3133,7 +3133,7 @@ class _CellSaveStruct : public _SectionSaveStruct
     sal_uInt32 nNumFmt;
 
     sal_uInt16 nRowSpan, nColSpan, nWidth, nHeight;
-    xub_StrLen nNoBreakEndCntntPos;     // Zeichen-Index eines </NOBR>
+    sal_Int32 nNoBreakEndCntntPos;     // Zeichen-Index eines </NOBR>
 
     SvxAdjust eAdjust;
     sal_Int16 eVertOri;

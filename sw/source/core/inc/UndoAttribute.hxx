@@ -156,7 +156,7 @@ class SwUndoFmtResetAttr : public SwUndo
 class SwUndoDontExpandFmt : public SwUndo
 {
     const sal_uLong m_nNodeIndex;
-    const xub_StrLen m_nContentIndex;
+    const sal_Int32 m_nContentIndex;
 
 public:
     SwUndoDontExpandFmt( const SwPosition& rPos );

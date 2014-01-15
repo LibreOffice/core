@@ -81,8 +81,8 @@ class SwDropCapsPict : public Control
     {
         sal_uLong  textWidth;   ///< Physical width of this segment.
         sal_uInt16 scriptType;  ///< Script type (e.g. Latin, Asian, Complex)
-        xub_StrLen changePos;   ///< Character position where the script changes.
-        _ScriptInfo(sal_uLong txtWidth, sal_uInt16 scrptType, xub_StrLen position)
+        sal_Int32 changePos;   ///< Character position where the script changes.
+        _ScriptInfo(sal_uLong txtWidth, sal_uInt16 scrptType, sal_Int32 position)
             : textWidth(txtWidth), scriptType(scrptType), changePos(position) {}
         bool operator<(_ScriptInfo other) { return changePos < other.changePos; }
     };
@@ -99,8 +99,8 @@ class SwDropCapsPict : public Control
     inline void     InitPrinter( void );
     void            _InitPrinter( void );
     void            GetFontSettings( const SwDropCapsPage& _rPage, Font& _rFont, sal_uInt16 _nWhich );
-    void            GetFirstScriptSegment(xub_StrLen &start, xub_StrLen &end, sal_uInt16 &scriptType);
-    bool            GetNextScriptSegment(size_t &nIdx, xub_StrLen &start, xub_StrLen &end, sal_uInt16 &scriptType);
+    void            GetFirstScriptSegment(sal_Int32 &start, sal_Int32 &end, sal_uInt16 &scriptType);
+    bool            GetNextScriptSegment(size_t &nIdx, sal_Int32 &start, sal_Int32 &end, sal_uInt16 &scriptType);
 
 public:
 
@@ -216,7 +216,7 @@ SwDropCapsPict::~SwDropCapsPict()
 /// @param[out] start      The character position of the start of the segment.
 /// @param[out] end        The character position of the end of the segment.
 /// @param[out] scriptType The script type (Latin, Asian, Complex etc.)
-void SwDropCapsPict::GetFirstScriptSegment(xub_StrLen &start, xub_StrLen &end, sal_uInt16 &scriptType)
+void SwDropCapsPict::GetFirstScriptSegment(sal_Int32 &start, sal_Int32 &end, sal_uInt16 &scriptType)
 {
     start = 0;
     if( maScriptChanges.empty() )
@@ -237,7 +237,7 @@ void SwDropCapsPict::GetFirstScriptSegment(xub_StrLen &start, xub_StrLen &end, s
 /// @param[in,out] end        The character position of the end of the segment.
 /// @param[out]    scriptType The script type (Latin, Asian, Complex etc.)
 /// @returns True if there was a next segment, false if not.
-bool SwDropCapsPict::GetNextScriptSegment(size_t &nIdx, xub_StrLen &start, xub_StrLen &end, sal_uInt16 &scriptType)
+bool SwDropCapsPict::GetNextScriptSegment(size_t &nIdx, sal_Int32 &start, sal_Int32 &end, sal_uInt16 &scriptType)
 {
     if (maScriptChanges.empty() || nIdx >= maScriptChanges.size() - 1 || end >= maText.getLength())
         return false;
@@ -396,8 +396,8 @@ void SwDropCapsPict::DrawPrev( const Point& rPt )
     Font        aOldFont = mpPrinter->GetFont();
     sal_uInt16      nScript;
     size_t      nIdx = 0;
-    xub_StrLen  nStart;
-    xub_StrLen  nEnd;
+    sal_Int32  nStart;
+    sal_Int32  nEnd;
     GetFirstScriptSegment(nStart, nEnd, nScript);
     do
     {
@@ -430,7 +430,7 @@ void SwDropCapsPict::CheckScript( void )
     sal_uInt16 nChg = 0;
     if( css::i18n::ScriptType::WEAK == nScript )
     {
-        nChg = (xub_StrLen)xBreak->endOfScript( maText, nChg, nScript );
+        nChg = (sal_Int32)xBreak->endOfScript( maText, nChg, nScript );
         if( nChg < maText.getLength() )
             nScript = xBreak->getScriptType( maText, nChg );
         else
@@ -439,7 +439,7 @@ void SwDropCapsPict::CheckScript( void )
 
     do
     {
-        nChg = (xub_StrLen)xBreak->endOfScript( maText, nChg, nScript );
+        nChg = (sal_Int32)xBreak->endOfScript( maText, nChg, nScript );
         maScriptChanges.push_back( _ScriptInfo(0, nScript, nChg) );
 
         if( nChg < maText.getLength() )
@@ -455,8 +455,8 @@ Size SwDropCapsPict::CalcTextSize( void )
 
     sal_uInt16      nScript;
     size_t      nIdx = 0;
-    xub_StrLen  nStart;
-    xub_StrLen  nEnd;
+    sal_Int32  nStart;
+    sal_Int32  nEnd;
     GetFirstScriptSegment(nStart, nEnd, nScript);
     long        nTxtWidth = 0;
     long        nCJKHeight = 0;

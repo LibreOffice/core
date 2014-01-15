@@ -141,7 +141,7 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
     if( !GetNext() && !rInf.GetTxtFly()->IsOn() && !pFrm->GetFollow() )
         return bRet;
 
-    xub_StrLen nWrdStart = nStart;
+    sal_Int32 nWrdStart = nStart;
 
     // Wir muessen die alte Zeile erhalten. Ein Beispiel:
     // Das Attribut fuer Trennung wurde nicht gesetzt,
@@ -222,8 +222,8 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
         // Start() hangelt sich zum End()
         rHyphInf.nWordStart = nWrdStart;
 
-        xub_StrLen nLen = 0;
-        const xub_StrLen nEnd = nWrdStart;
+        sal_Int32 nLen = 0;
+        const sal_Int32 nEnd = nWrdStart;
 
         // Wir suchen vorwaerts
         Reference< XHyphenatedWord > xHyphWord;
@@ -231,8 +231,8 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
         Boundary aBound =
             g_pBreakIt->GetBreakIter()->getWordBoundary( rInf.GetTxt(), nWrdStart,
             g_pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ), WordType::DICTIONARY_WORD, sal_True );
-        nWrdStart = static_cast<xub_StrLen>(aBound.startPos);
-        nLen = static_cast<xub_StrLen>(aBound.endPos - nWrdStart);
+        nWrdStart = static_cast<sal_Int32>(aBound.startPos);
+        nLen = static_cast<sal_Int32>(aBound.endPos - nWrdStart);
         bRet = 0 != nLen;
         if( bRet )
         {
@@ -282,7 +282,7 @@ sal_Bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
         return sal_False;
 
     SwHyphPortion *pHyphPor;
-    xub_StrLen nPorEnd;
+    sal_Int32 nPorEnd;
     SwTxtSizeInfo aInf( rInf );
 
     // first case: hyphenated word has alternative spelling
@@ -294,7 +294,7 @@ sal_Bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
 
         OUString aAltTxt = aAltSpell.aReplacement;
         nPorEnd = aAltSpell.nChangedPos + rGuess.BreakStart() - rGuess.FieldDiff();
-        xub_StrLen nTmpLen = 0;
+        sal_Int32 nTmpLen = 0;
 
         // soft hyphen at alternative spelling position?
         if( rInf.GetTxt()[ rInf.GetSoftHyphPos() ] == CHAR_SOFTHYPHEN )
@@ -564,7 +564,7 @@ void SwSoftHyphPortion::FormatEOL( SwTxtFormatInfo &rInf )
 
         // 5964: alte Werte muessen wieder zurueckgesetzt werden.
         const SwTwips nOldX  = rInf.X();
-        const xub_StrLen nOldIdx = rInf.GetIdx();
+        const sal_Int32 nOldIdx = rInf.GetIdx();
         rInf.X( rInf.X() - PrtWidth() );
         rInf.SetIdx( rInf.GetIdx() - GetLen() );
         const sal_Bool bFull = SwHyphPortion::Format( rInf );

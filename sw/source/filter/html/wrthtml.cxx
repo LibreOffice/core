@@ -862,13 +862,13 @@ sal_uInt16 SwHTMLWriter::OutHeaderAttrs()
 
     sal_uInt16 nAttrs = 0;
     sal_uInt16 nCntAttr = pTxtNd->GetSwpHints().Count();
-    xub_StrLen nOldPos = 0;
+    sal_Int32 nOldPos = 0;
     for( sal_uInt16 i=0; i<nCntAttr; i++ )
     {
         const SwTxtAttr *pHt = pTxtNd->GetSwpHints()[i];
         if( !pHt->End() )
         {
-            xub_StrLen nPos = *pHt->GetStart();
+            sal_Int32 nPos = *pHt->GetStart();
             if( nPos-nOldPos > 1
                 || ( pHt->Which() != RES_TXTATR_FIELD
                      && pHt->Which() != RES_TXTATR_ANNOTATION ) )

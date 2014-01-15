@@ -1114,7 +1114,7 @@ bool SwDoc::InsertItemSet ( const SwPaM &rRg, const SfxItemSet &rSet,
 }
 
 /// Set the rsid of the next nLen symbols of rRg to the current session number
-bool SwDoc::UpdateRsid( const SwPaM &rRg, const xub_StrLen nLen )
+bool SwDoc::UpdateRsid( const SwPaM &rRg, const sal_Int32 nLen )
 {
     SwTxtNode *pTxtNode = rRg.GetPoint()->nNode.GetNode().GetTxtNode();
     if (!pTxtNode)

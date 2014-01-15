@@ -143,7 +143,7 @@ class IDocumentMarkAccess
         */
         virtual void correctMarksAbsolute(const SwNodeIndex& rOldNode,
             const SwPosition& rNewPos,
-            const xub_StrLen nOffset) =0;
+            const sal_Int32 nOffset) =0;
 
         /** Corrects marks (relative)
             This method uses the previous position of the mark in the paragraph as offset
@@ -161,7 +161,7 @@ class IDocumentMarkAccess
         */
         virtual void correctMarksRelative(const SwNodeIndex& rOldNode,
             const SwPosition& rNewPos,
-            const xub_StrLen nOffset) =0;
+            const sal_Int32 nOffset) =0;
 
         /** Deletes marks in a range
 

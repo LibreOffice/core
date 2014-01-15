@@ -277,7 +277,7 @@ void SwHTMLWriter::OutForm( sal_Bool bTag_On, const SwStartNode *pStartNd )
 
         uno::Reference< container::XIndexContainer > xCurrentFormComps;// die aktuelle Form in der Tabelle
         const SwStartNode *pCurrentStNd = 0; // und der Start-Node eines Ctrls
-        xub_StrLen nCurrentCtrls = 0;   // und die in ihr gefundenen Controls
+        sal_Int32 nCurrentCtrls = 0;   // und die in ihr gefundenen Controls
         sal_uInt32 nEndIdx =  pStartNd->EndOfSectionIndex();
         for( ; i < aHTMLControls.size() &&
             aHTMLControls[i]->nNdIdx <= nEndIdx; i++ )

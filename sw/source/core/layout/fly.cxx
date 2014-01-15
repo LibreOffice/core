@@ -1206,7 +1206,7 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
                 if( LONG_MAX != nNewY )
                 {
                     aVert.SetVertOrient( text::VertOrientation::NONE );
-                    xub_StrLen nOfs =
+                    sal_Int32 nOfs =
                         pFmt->GetAnchor().GetCntntAnchor()->nContent.GetIndex();
                     OSL_ENSURE( GetAnchorFrm()->IsTxtFrm(), "TxtFrm expected" );
                     pAutoFrm = (SwTxtFrm*)GetAnchorFrm();
@@ -1262,7 +1262,7 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
                     {
                         if( !pAutoFrm )
                         {
-                            xub_StrLen nOfs = pFmt->GetAnchor().GetCntntAnchor()
+                            sal_Int32 nOfs = pFmt->GetAnchor().GetCntntAnchor()
                                           ->nContent.GetIndex();
                             OSL_ENSURE( GetAnchorFrm()->IsTxtFrm(), "TxtFrm expected");
                             pAutoFrm = (SwTxtFrm*)GetAnchorFrm();

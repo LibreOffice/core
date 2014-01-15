@@ -113,7 +113,7 @@ static inline bool IsUpperLetter( sal_Int32 nCharType )
 }
 
 bool lcl_IsUnsupportedUnicodeChar( CharClass& rCC, const OUString& rTxt,
-                                   xub_StrLen nStt, xub_StrLen nEnd )
+                                   sal_Int32 nStt, sal_Int32 nEnd )
 {
     for( ; nStt < nEnd; ++nStt )
     {
@@ -141,7 +141,7 @@ bool lcl_IsUnsupportedUnicodeChar( CharClass& rCC, const OUString& rTxt,
 }
 
 static sal_Bool lcl_IsSymbolChar( CharClass& rCC, const OUString& rTxt,
-                                  xub_StrLen nStt, xub_StrLen nEnd )
+                                  sal_Int32 nStt, sal_Int32 nEnd )
 {
     for( ; nStt < nEnd; ++nStt )
     {
@@ -173,12 +173,12 @@ SvxAutoCorrDoc::~SvxAutoCorrDoc()
 //  - FnCptlSttSntnc
 // after the exchange of characters. Then the words, if necessary, can be inserted
 // into the exception list.
-void SvxAutoCorrDoc::SaveCpltSttWord( sal_uLong, xub_StrLen, const OUString&,
+void SvxAutoCorrDoc::SaveCpltSttWord( sal_uLong, sal_Int32, const OUString&,
                                         sal_Unicode )
 {
 }
 
-LanguageType SvxAutoCorrDoc::GetLanguage( xub_StrLen , sal_Bool ) const
+LanguageType SvxAutoCorrDoc::GetLanguage( sal_Int32, sal_Bool ) const
 {
     return LANGUAGE_SYSTEM;
 }
@@ -341,7 +341,7 @@ void SvxAutoCorrect::SetAutoCorrFlag( long nFlag, sal_Bool bOn )
 
     // Two capital letters at the beginning of word?
 sal_Bool SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
-                                    xub_StrLen nSttPos, xub_StrLen nEndPos,
+                                    sal_Int32 nSttPos, sal_Int32 nEndPos,
                                     LanguageType eLang )
 {
     sal_Bool bRet = sal_False;
@@ -359,14 +359,14 @@ sal_Bool SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const OUString& rTx
     // Is the word a compounded word separated by delimiters?
     // If so, keep track of all delimiters so each constituent
     // word can be checked for two initial capital letters.
-    std::deque<xub_StrLen> aDelimiters;
+    std::deque<sal_Int32> aDelimiters;
 
     // Always check for two capitals at the beginning
     // of the entire word, so start at nSttPos.
     aDelimiters.push_back(nSttPos);
 
     // Find all compound word delimiters
-    for (xub_StrLen n = nSttPos; n < nEndPos; ++n)
+    for (sal_Int32 n = nSttPos; n < nEndPos; ++n)
     {
         if (IsAutoCorrectChar(rTxt[ n ]))
         {
@@ -431,7 +431,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const OUString& rTx
 
 sal_Bool SvxAutoCorrect::FnChgOrdinalNumber(
                                 SvxAutoCorrDoc& rDoc, const OUString& rTxt,
-                                xub_StrLen nSttPos, xub_StrLen nEndPos,
+                                sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang )
 {
 // 1st, 2nd, 3rd, 4 - 0th
@@ -449,10 +449,10 @@ sal_Bool SvxAutoCorrect::FnChgOrdinalNumber(
 
 
     // Get the last number in the string to check
-    xub_StrLen nNumEnd = nEndPos;
+    sal_Int32 nNumEnd = nEndPos;
     bool foundEnd = false;
     bool validNumber = true;
-    xub_StrLen i = nEndPos;
+    sal_Int32 i = nEndPos;
 
     while ( i > nSttPos )
     {
@@ -502,7 +502,7 @@ sal_Bool SvxAutoCorrect::FnChgOrdinalNumber(
 
 sal_Bool SvxAutoCorrect::FnChgToEnEmDash(
                                 SvxAutoCorrDoc& rDoc, const OUString& rTxt,
-                                xub_StrLen nSttPos, xub_StrLen nEndPos,
+                                sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang )
 {
     sal_Bool bRet = sal_False;
@@ -520,7 +520,7 @@ sal_Bool SvxAutoCorrect::FnChgToEnEmDash(
             if( ' ' == rTxt[ nSttPos-1 ] &&
                 '-' == rTxt[ nSttPos+1 ])
             {
-                xub_StrLen n;
+                sal_Int32 n;
                 for( n = nSttPos+2; n < nEndPos && lcl_IsInAsciiArr(
                             sImplSttSkipChars,(cCh = rTxt[ n ]));
                         ++n )
@@ -547,7 +547,7 @@ sal_Bool SvxAutoCorrect::FnChgToEnEmDash(
                  ' ' == rTxt[ nSttPos-1 ] &&
                  '-' == rTxt[ nSttPos-2 ])
         {
-            xub_StrLen n, nLen = 1, nTmpPos = nSttPos - 2;
+            sal_Int32 n, nLen = 1, nTmpPos = nSttPos - 2;
             if( '-' == ( cCh = rTxt[ nTmpPos-1 ]) )
             {
                 --nTmpPos;
@@ -606,7 +606,7 @@ sal_Bool SvxAutoCorrect::FnChgToEnEmDash(
 
 sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
                                 SvxAutoCorrDoc& rDoc, const OUString& rTxt,
-                                xub_StrLen, xub_StrLen nEndPos,
+                                sal_Int32, sal_Int32 nEndPos,
                                 LanguageType eLang )
 {
     bool bRet = false;
@@ -627,7 +627,7 @@ sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
         if ( bIsSpecial )
         {
             // Get the last word delimiter position
-            xub_StrLen nSttWdPos = nEndPos;
+            sal_Int32 nSttWdPos = nEndPos;
             bool bWasWordDelim = false;
             while( nSttWdPos && !(bWasWordDelim = IsWordDelim( rTxt[ --nSttWdPos ])))
                 ;
@@ -651,7 +651,7 @@ sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
                 if ( ( chars.indexOf( cPrevChar ) == -1 ) && cPrevChar != '\t' )
                 {
                     // Remove any previous normal space
-                    xub_StrLen nPos = nEndPos - 1;
+                    sal_Int32 nPos = nEndPos - 1;
                     while ( cPrevChar == ' ' || cPrevChar == cNonBreakingSpace )
                     {
                         if ( nPos == 0 ) break;
@@ -691,16 +691,11 @@ sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
 
 
 sal_Bool SvxAutoCorrect::FnSetINetAttr( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
-                                    xub_StrLen nSttPos, xub_StrLen nEndPos,
+                                    sal_Int32 nSttPos, sal_Int32 nEndPos,
                                     LanguageType eLang )
 {
-    sal_Int32 nStart(nSttPos);
-    sal_Int32 nEnd(nEndPos);
-
-    OUString sURL( URIHelper::FindFirstURLInText( rTxt, nStart, nEnd,
+    OUString sURL( URIHelper::FindFirstURLInText( rTxt, nSttPos, nEndPos,
                                                 GetCharClass( eLang ) ));
-    nSttPos = (xub_StrLen)nStart;
-    nEndPos = (xub_StrLen)nEnd;
     sal_Bool bRet = !sURL.isEmpty();
     if( bRet )          // also Attribut setzen:
         rDoc.SetINetAttr( nSttPos, nEndPos, sURL );
@@ -709,7 +704,7 @@ sal_Bool SvxAutoCorrect::FnSetINetAttr( SvxAutoCorrDoc& rDoc, const OUString& rT
 
 
 sal_Bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
-                                        xub_StrLen, xub_StrLen nEndPos,
+                                        sal_Int32 , sal_Int32 nEndPos,
                                         LanguageType eLang )
 {
     // Condition:
@@ -724,7 +719,7 @@ sal_Bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const OUString
     --nEndPos;
 
     sal_Bool bAlphaNum = sal_False;
-    xub_StrLen nPos = nEndPos;
+    sal_Int32 nPos = nEndPos;
     sal_Int32  nFndPos = -1;
     CharClass& rCC = GetCharClass( eLang );
 
@@ -783,7 +778,7 @@ sal_Bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const OUString
 
 sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
                                     const OUString& rTxt, sal_Bool bNormalPos,
-                                    xub_StrLen nSttPos, xub_StrLen nEndPos,
+                                    sal_Int32 nSttPos, sal_Int32 nEndPos,
                                     LanguageType eLang )
 {
 
@@ -800,25 +795,19 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
     sal_Bool bAtStart = sal_False;
     do {
         --pStr;
-        if( rCC.isLetter(
-                aText, sal::static_int_cast< xub_StrLen >( pStr - pStart ) ) )
+        if (rCC.isLetter(aText, pStr - pStart))
         {
             if( !pWordStt )
                 pDelim = pStr+1;
             pWordStt = pStr;
         }
-        else if( pWordStt &&
-                 !rCC.isDigit(
-                     aText,
-                     sal::static_int_cast< xub_StrLen >( pStr - pStart ) ) )
+        else if (pWordStt && !rCC.isDigit(aText, pStr - pStart))
         {
             if( lcl_IsInAsciiArr( sImplWordChars, *pStr ) &&
                 pWordStt - 1 == pStr &&
                 // Installation at beginning of paragraph. Replaced < by <= (#i38971#)
                 (sal_IntPtr)(pStart + 1) <= (sal_IntPtr)pStr &&
-                rCC.isLetter(
-                    aText,
-                    sal::static_int_cast< xub_StrLen >( pStr-1 - pStart ) ) )
+                rCC.isLetter(aText, pStr-1 - pStart))
                 pWordStt = --pStr;
             else
                 break;
@@ -829,13 +818,10 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
         return sal_False;    // no character to be replaced
 
 
-    if (rCC.isDigit( aText, sal::static_int_cast< xub_StrLen >( pStr - pStart ) ))
+    if (rCC.isDigit(aText, pStr - pStart))
         return sal_False; // already ok
 
-    if (IsUpperLetter(
-            rCC.getCharacterType(
-                aText,
-                sal::static_int_cast< xub_StrLen >( pWordStt - pStart ) ) ) )
+    if (IsUpperLetter(rCC.getCharacterType(aText, pWordStt - pStart)))
         return sal_False; // already ok
 
     //See if the text is the start of a protocol string, e.g. have text of
@@ -880,7 +866,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
             OUString sChar( *pWordStt );
             sChar = rCC.titlecase(sChar); //see fdo#56740
             return  !comphelper::string::equals(sChar, *pWordStt) &&
-                    rDoc.ReplaceRange( xub_StrLen( pWordStt - pStart ), 1, sChar );
+                    rDoc.ReplaceRange( pWordStt - pStart, 1, sChar );
         }
 
         aText = aPrevPara;
@@ -964,24 +950,18 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
     if( 2 > ( pStr - pStart ) )
         return sal_False;
 
-    if( !rCC.isLetterNumeric(
-            aText, sal::static_int_cast< xub_StrLen >( pStr-- - pStart ) ) )
+    if (!rCC.isLetterNumeric(aText, pStr-- - pStart))
     {
         sal_Bool bValid = sal_False, bAlphaFnd = sal_False;
         const sal_Unicode* pTmpStr = pStr;
         while( !bValid )
         {
-            if( rCC.isDigit(
-                    aText,
-                    sal::static_int_cast< xub_StrLen >( pTmpStr - pStart ) ) )
+            if( rCC.isDigit( aText, pTmpStr - pStart ) )
             {
                 bValid = sal_True;
                 pStr = pTmpStr - 1;
             }
-            else if( rCC.isLetter(
-                         aText,
-                         sal::static_int_cast< xub_StrLen >(
-                             pTmpStr - pStart ) ) )
+            else if( rCC.isLetter( aText, pTmpStr - pStart ) )
             {
                 if( bAlphaFnd )
                 {
@@ -1009,9 +989,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
     // Search for the beginning of the word
     while( !IsWordDelim( *pStr ))
     {
-        if( bNumericOnly &&
-            rCC.isLetter(
-                aText, sal::static_int_cast< xub_StrLen >( pStr - pStart ) ) )
+        if( bNumericOnly && rCC.isLetter( aText, pStr - pStart ) )
             bNumericOnly = sal_False;
 
         if( pStart == pStr )
@@ -1060,7 +1038,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
 
     // Ok, then replace
     sal_Unicode cSave = *pWordStt;
-    nSttPos = sal::static_int_cast< xub_StrLen >( pWordStt - rTxt.getStr() );
+    nSttPos = pWordStt - rTxt.getStr();
     OUString sChar( cSave );
     sChar = rCC.titlecase(sChar); //see fdo#56740
     sal_Bool bRet = sChar[0] != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar );
@@ -1073,7 +1051,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
 }
 
 bool SvxAutoCorrect::FnCorrectCapsLock( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
-                                        xub_StrLen nSttPos, xub_StrLen nEndPos,
+                                        sal_Int32 nSttPos, sal_Int32 nEndPos,
                                         LanguageType eLang )
 {
     if (nEndPos - nSttPos < 2)
@@ -1145,7 +1123,7 @@ sal_Unicode SvxAutoCorrect::GetQuote( sal_Unicode cInsChar, sal_Bool bSttQuote,
     return cRet;
 }
 
-void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
+void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
                                     sal_Unicode cInsChar, sal_Bool bSttQuote,
                                     sal_Bool bIns )
 {
@@ -1187,7 +1165,7 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
     rDoc.Replace( nInsPos, sChg );
 }
 
-OUString SvxAutoCorrect::GetQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
+OUString SvxAutoCorrect::GetQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
                                 sal_Unicode cInsChar, sal_Bool bSttQuote )
 {
     LanguageType eLang = rDoc.GetLanguage( nInsPos, sal_False );
@@ -1218,7 +1196,7 @@ OUString SvxAutoCorrect::GetQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
 
 sal_uLong
 SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
-                                    xub_StrLen nInsPos, sal_Unicode cChar,
+                                    sal_Int32 nInsPos, sal_Unicode cChar,
                                     sal_Bool bInsert, Window* pFrameWin )
 {
     sal_uLong nRet = 0;
@@ -1368,7 +1346,7 @@ SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                 nRet = Autocorrect;
                 if( !aPara.isEmpty() )
                 {
-                    xub_StrLen nEnd = nCapLttrPos;
+                    sal_Int32 nEnd = nCapLttrPos;
                     while( nEnd < aPara.getLength() &&
                             !IsWordDelim( aPara[ nEnd ]))
                         ++nEnd;
@@ -1513,13 +1491,13 @@ sal_Bool SvxAutoCorrect::AddWrtSttException( const OUString& rNew,
 }
 
 sal_Bool SvxAutoCorrect::GetPrevAutoCorrWord( SvxAutoCorrDoc& rDoc,
-                                        const OUString& rTxt, xub_StrLen nPos,
+                                        const OUString& rTxt, sal_Int32 nPos,
                                         OUString& rWord ) const
 {
     if( !nPos )
         return sal_False;
 
-    xub_StrLen nEnde = nPos;
+    sal_Int32 nEnde = nPos;
 
     // it must be followed by a blank or tab!
     if( ( nPos < rTxt.getLength() &&
@@ -1532,7 +1510,7 @@ sal_Bool SvxAutoCorrect::GetPrevAutoCorrWord( SvxAutoCorrDoc& rDoc,
 
     // Found a Paragraph-start or a Blank, search for the word shortcut in
     // auto.
-    xub_StrLen nCapLttrPos = nPos+1;        // on the 1st Character
+    sal_Int32 nCapLttrPos = nPos+1;        // on the 1st Character
     if( !nPos && !IsWordDelim( rTxt[ 0 ]))
         --nCapLttrPos;          // Beginning of pargraph and no Blank!
 
@@ -2761,13 +2739,13 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
                                       sal_Int32 nEndPos) const
 {
     const OUString& rChk = pFnd->GetShort();
-    xub_StrLen left_wildcard = ( rChk[0] == C_ASTERISK ) ? 1 : 0; // "*word" pattern?
-    xub_StrLen nSttWdPos = nEndPos;
+    sal_Int32 left_wildcard = ( rChk[0] == C_ASTERISK ) ? 1 : 0; // "*word" pattern?
+    sal_Int32 nSttWdPos = nEndPos;
     if( nEndPos >= rChk.getLength() - left_wildcard)
     {
 
         bool bWasWordDelim = false;
-        xub_StrLen nCalcStt = nEndPos - rChk.getLength() + left_wildcard;
+        sal_Int32 nCalcStt = nEndPos - rChk.getLength() + left_wildcard;
         if( ( !nCalcStt || nCalcStt == rStt || left_wildcard ||
               ( nCalcStt < rStt &&
                 IsWordDelim( rTxt[ nCalcStt - 1 ] ))) )

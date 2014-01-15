@@ -37,7 +37,6 @@
 #include <editeng/frmdiritem.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
-#include <tools/string.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
@@ -1734,14 +1733,8 @@ sal_Bool SwHTMLParser::FileDownload( const OUString& rURL,
         aStream << *pStream;
 
         aStream.Seek( STREAM_SEEK_TO_END );
-        OSL_ENSURE( aStream.Tell() < STRING_MAXLEN,
-                    "File zu lang fuer einen String, Ende abgeschnitten" );
-        xub_StrLen nLen = aStream.Tell() < STRING_MAXLEN
-                        ? (xub_StrLen)aStream.Tell()
-                        : STRING_MAXLEN;
-
-        rStr = OUString( (const sal_Char *)aStream.GetData(), nLen
-                            , GetSrcEncoding() );
+        rStr = OUString((const sal_Char *)aStream.GetData(), aStream.Tell(),
+            GetSrcEncoding());
     }
 
 

@@ -392,8 +392,8 @@ void Writer::CreateBookmarkTbl()
 
 
 // search alle Bookmarks in the range and return it in the Array
-sal_uInt16 Writer::GetBookmarks(const SwCntntNode& rNd, xub_StrLen nStt,
-    xub_StrLen nEnd, std::vector< const ::sw::mark::IMark* >& rArr)
+sal_uInt16 Writer::GetBookmarks(const SwCntntNode& rNd, sal_Int32 nStt,
+    sal_Int32 nEnd, std::vector< const ::sw::mark::IMark* >& rArr)
 {
     OSL_ENSURE( rArr.empty(), "there are still entries available" );
 
@@ -412,7 +412,7 @@ sal_uInt16 Writer::GetBookmarks(const SwCntntNode& rNd, xub_StrLen nStt,
             for( SwBookmarkNodeTable::const_iterator it = aIterPair.first; it != aIterPair.second; ++it )
             {
                 const ::sw::mark::IMark& rBkmk = *(it->second);
-                xub_StrLen nCntnt;
+                sal_Int32 nCntnt;
                 if( rBkmk.GetMarkPos().nNode == nNd &&
                     (nCntnt = rBkmk.GetMarkPos().nContent.GetIndex() ) >= nStt &&
                     nCntnt < nEnd )

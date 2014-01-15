@@ -55,7 +55,7 @@ SfxPoolItem* SwFmtFlyCnt::Clone( SfxItemPool* ) const
     return new SwFmtFlyCnt( pFmt );
 }
 
-SwTxtFlyCnt::SwTxtFlyCnt( SwFmtFlyCnt& rAttr, xub_StrLen nStartPos )
+SwTxtFlyCnt::SwTxtFlyCnt( SwFmtFlyCnt& rAttr, sal_Int32 nStartPos )
     : SwTxtAttr( rAttr, nStartPos )
 {
     rAttr.pTxtAttr = this;

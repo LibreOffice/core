@@ -43,8 +43,8 @@
 #include <comcore.hrc>
 #include <numrule.hxx>
 
-extern bool IsFrameBehind( const SwTxtNode& rMyNd, xub_StrLen nMySttPos,
-                           const SwTxtNode& rBehindNd, xub_StrLen nSttPos );
+extern bool IsFrameBehind( const SwTxtNode& rMyNd, sal_Int32 nMySttPos,
+                           const SwTxtNode& rBehindNd, sal_Int32 nSttPos );
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -100,7 +100,7 @@ SwTOXInternational::~SwTOXInternational()
     delete pIndexWrapper;
 }
 
-OUString SwTOXInternational::ToUpper( const OUString& rStr, xub_StrLen nPos ) const
+OUString SwTOXInternational::ToUpper( const OUString& rStr, sal_Int32 nPos ) const
 {
     return pCharClass->uppercase( rStr, nPos, 1 );
 }
@@ -147,7 +147,7 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwCntntNode* pNd,
 
     if( pNd )
     {
-        xub_StrLen n = 0;
+        sal_Int32 n = 0;
         if( pTxtMark )
             n = *pTxtMark->GetStart();
         SwTOXSource aTmp( pNd, n,
