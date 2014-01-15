@@ -1394,10 +1394,10 @@ IMPL_LINK( SvxSearchDialog, ModifyHdl_Impl, ComboBox *, pEd )
         sal_Int32 nReplTxtLen = 0;
         if (bAllowEmptySearch)
             nReplTxtLen = m_pReplaceLB->GetText().getLength();
-        xub_StrLen nAttrTxtLen = 0;
+        sal_Int32 nAttrTxtLen = 0;
 
         if ( !pImpl->bMultiLineEdit )
-           nAttrTxtLen = m_pSearchAttrText->GetText().getLength();
+            nAttrTxtLen = m_pSearchAttrText->GetText().getLength();
         else
             nAttrTxtLen = pImpl->m_pSearchFormats->GetText().getLength();
 

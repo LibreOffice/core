@@ -72,8 +72,8 @@ namespace
     {
         basegfx::B2DVector                          maOffset;
         OUString                                    maText;
-        xub_StrLen                                  mnTextStart;
-        xub_StrLen                                  mnTextLength;
+        sal_Int32                                   mnTextStart;
+        sal_Int32                                   mnTextLength;
         sal_Int32                                   mnParagraph;
         SvxFont                                     maFont;
         ::std::vector< double >                     maDblDXArray;   // double DXArray, font size independent -> unit coordinate system
@@ -122,15 +122,15 @@ namespace
         }
 
         const OUString& getText() const { return maText; }
-        xub_StrLen getTextStart() const { return mnTextStart; }
-        xub_StrLen getTextLength() const { return mnTextLength; }
+        sal_Int32 getTextStart() const { return mnTextStart; }
+        sal_Int32 getTextLength() const { return mnTextLength; }
         sal_Int32 getParagraph() const { return mnParagraph; }
         const SvxFont& getFont() const { return maFont; }
         bool isRTL() const { return mbRTL; }
         const ::std::vector< double >& getDoubleDXArray() const { return maDblDXArray; }
         const ::com::sun::star::lang::Locale& getLocale() const { return maLocale; }
 
-        xub_StrLen getPortionIndex(xub_StrLen nIndex, xub_StrLen nLength) const
+        sal_Int32 getPortionIndex(sal_Int32 nIndex, sal_Int32 nLength) const
         {
             if(mbRTL)
             {
@@ -142,7 +142,7 @@ namespace
             }
         }
 
-        double getDisplayLength(xub_StrLen nIndex, xub_StrLen nLength) const
+        double getDisplayLength(sal_Int32 nIndex, sal_Int32 nLength) const
         {
             drawinglayer::primitive2d::TextLayouterDevice aTextLayouter;
             double fRetval(0.0);
@@ -233,14 +233,14 @@ namespace
             return fRetval;
         }
 
-        xub_StrLen getNextGlyphLen(const impPathTextPortion* pCandidate, xub_StrLen nPosition, const ::com::sun::star::lang::Locale& rFontLocale)
+        sal_Int32 getNextGlyphLen(const impPathTextPortion* pCandidate, sal_Int32 nPosition, const ::com::sun::star::lang::Locale& rFontLocale)
         {
-            xub_StrLen nNextGlyphLen(1);
+            sal_Int32 nNextGlyphLen(1);
 
             if(mxBreak.is())
             {
                 sal_Int32 nDone(0L);
-                nNextGlyphLen = (xub_StrLen)mxBreak->nextCharacters(pCandidate->getText(), nPosition,
+                nNextGlyphLen = mxBreak->nextCharacters(pCandidate->getText(), nPosition,
                     rFontLocale, CharacterIteratorMode::SKIPCELL, 1, nDone) - nPosition;
             }
 
@@ -353,11 +353,11 @@ namespace
 
                     drawinglayer::primitive2d::TextLayouterDevice aTextLayouter;
                     aTextLayouter.setFont(pCandidate->getFont());
-                    xub_StrLen nUsedTextLength(0);
+                    sal_Int32 nUsedTextLength(0);
 
                     while(nUsedTextLength < pCandidate->getTextLength() && fPolyStart < fPolyEnd)
                     {
-                        xub_StrLen nNextGlyphLen(getNextGlyphLen(pCandidate, pCandidate->getTextStart() + nUsedTextLength, pCandidate->getLocale()));
+                        sal_Int32 nNextGlyphLen(getNextGlyphLen(pCandidate, pCandidate->getTextStart() + nUsedTextLength, pCandidate->getLocale()));
 
                         // prepare portion length. Takes RTL sections into account.
                         double fPortionLength(pCandidate->getDisplayLength(nUsedTextLength, nNextGlyphLen));
@@ -479,7 +479,7 @@ namespace
 
                         if(!pCandidate->getText().isEmpty() && nNextGlyphLen)
                         {
-                            const xub_StrLen nPortionIndex(pCandidate->getPortionIndex(nUsedTextLength, nNextGlyphLen));
+                            const sal_Int32 nPortionIndex(pCandidate->getPortionIndex(nUsedTextLength, nNextGlyphLen));
                             ::std::vector< double > aNewDXArray;
 
                             if(nNextGlyphLen > 1 && pCandidate->getDoubleDXArray().size())
@@ -548,8 +548,8 @@ namespace
                             }
                         }
 
-                        // consume from portion // no += here, xub_StrLen is sal_uInt16 and the compiler will generate a warning here
-                        nUsedTextLength = nUsedTextLength + nNextGlyphLen;
+                        // consume from portion
+                        nUsedTextLength += nNextGlyphLen;
 
                         // consume from polygon
                         fPolyStart += fPortionLength;

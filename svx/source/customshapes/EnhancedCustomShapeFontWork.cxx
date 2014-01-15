@@ -230,9 +230,8 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                 nScriptType = xBI->getScriptType( rText, 0 );
                 if( i18n::ScriptType::WEAK == nScriptType )
                 {
-                    sal_uInt16 nChg = 0;
-                    nChg = (xub_StrLen)xBI->endOfScript( rText, nChg, nScriptType );
-                    if( nChg < rText.getLength() )
+                    sal_Int32 nChg = xBI->endOfScript( rText, nChg, nScriptType );
+                    if (nChg < rText.getLength() && nChg >= 0)
                         nScriptType = xBI->getScriptType( rText, nChg );
                     else
                         nScriptType = i18n::ScriptType::LATIN;

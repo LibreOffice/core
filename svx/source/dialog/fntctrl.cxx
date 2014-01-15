@@ -138,7 +138,7 @@ class FontPrevWin_Impl
 
     Reference < XBreakIterator >    xBreak;
     std::vector<sal_uIntPtr>        aTextWidth;
-    std::deque<xub_StrLen>         aScriptChg;
+    std::deque<sal_Int32>           aScriptChg;
     std::vector<sal_uInt16>         aScriptType;
     SvxFont                         aCJKFont;
     SvxFont                         aCTLFont;
@@ -246,11 +246,11 @@ void FontPrevWin_Impl::CheckScript()
         xBreak = BreakIterator::create(xContext);
     }
     sal_uInt16 nScript = xBreak->getScriptType( aText, 0 );
-    sal_uInt16 nChg = 0;
+    sal_Int32 nChg = 0;
     if( com::sun::star::i18n::ScriptType::WEAK == nScript )
     {
-        nChg = (xub_StrLen)xBreak->endOfScript( aText, nChg, nScript );
-        if( nChg < aText.getLength() )
+        nChg = xBreak->endOfScript( aText, nChg, nScript );
+        if (nChg < aText.getLength() && nChg >= 0)
             nScript = xBreak->getScriptType( aText, nChg );
         else
             nScript = com::sun::star::i18n::ScriptType::LATIN;
@@ -258,7 +258,7 @@ void FontPrevWin_Impl::CheckScript()
 
     do
     {
-        nChg = (xub_StrLen)xBreak->endOfScript( aText, nChg, nScript );
+        nChg = xBreak->endOfScript( aText, nChg, nScript );
         if (nChg < aText.getLength() && nChg > 0 &&
             (com::sun::star::i18n::ScriptType::WEAK ==
              xBreak->getScriptType(aText, nChg - 1)))
@@ -303,8 +303,8 @@ Size FontPrevWin_Impl::CalcTextSize( OutputDevice* pWin, OutputDevice* _pPrinter
 {
     sal_uInt16 nScript;
     sal_uInt16 nIdx = 0;
-    xub_StrLen nStart = 0;
-    xub_StrLen nEnd;
+    sal_Int32 nStart = 0;
+    sal_Int32 nEnd;
     size_t nCnt = aScriptChg.size();
     if( nCnt )
     {
@@ -385,8 +385,8 @@ void FontPrevWin_Impl::DrawPrev( OutputDevice* pWin, Printer* _pPrinter,
     Font aOldFont = _pPrinter->GetFont();
     sal_uInt16 nScript;
     sal_uInt16 nIdx = 0;
-    xub_StrLen nStart = 0;
-    xub_StrLen nEnd;
+    sal_Int32 nStart = 0;
+    sal_Int32 nEnd;
     size_t nCnt = aScriptChg.size();
     if( nCnt )
     {
