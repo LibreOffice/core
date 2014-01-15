@@ -9,6 +9,11 @@
 
 #include "WPXSvStream.hxx"
 
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/uno/Any.hxx>
+
+#include <comphelper/processfactory.hxx>
+
 #include <rtl/string.hxx>
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
@@ -22,6 +27,10 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
+
+namespace container = com::sun::star::container;
+namespace lang = com::sun::star::lang;
+namespace packages = com::sun::star::packages;
 
 namespace
 {
@@ -259,6 +268,8 @@ private:
     bool isOLE();
     void ensureOLEIsInitialized();
 
+    bool isZip();
+
     WPXInputStream *createWPXStream(const SotStorageStreamRef &rxStorage);
 
 private:
@@ -266,7 +277,12 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable > mxSeekable;
     ::com::sun::star::uno::Sequence< sal_Int8 > maData;
     boost::scoped_ptr< OLEStorageImpl > mpOLEStorage;
+    // TODO: this is not sufficient to implement RVNGInputStream, as
+    // packages::Package does not support any kind of enumeration of
+    // its content
+    ::com::sun::star::uno::Reference< container::XHierarchicalNameAccess > mxZipStorage;
     bool mbCheckedOLE;
+    bool mbCheckedZip;
 public:
     sal_Int64 mnLength;
     unsigned char *mpReadBuffer;
@@ -279,7 +295,9 @@ WPXSvInputStreamImpl::WPXSvInputStreamImpl( Reference< XInputStream > xStream ) 
     mxSeekable(xStream, UNO_QUERY),
     maData(0),
     mpOLEStorage(0),
+    mxZipStorage(),
     mbCheckedOLE(false),
+    mbCheckedZip(false),
     mnLength(0),
     mpReadBuffer(0),
     mnReadBufferLength(0),
@@ -373,7 +391,7 @@ bool WPXSvInputStreamImpl::isStructured()
     PositionHolder pos(mxSeekable);
     mxSeekable->seek(0);
 
-    return isOLE();
+    return isOLE() || isZip();
 }
 
 unsigned WPXSvInputStreamImpl::subStreamCount()
@@ -390,6 +408,8 @@ unsigned WPXSvInputStreamImpl::subStreamCount()
 
         return mpOLEStorage->maStreams.size();
     }
+
+    // TODO: zip impl.
 
     return 0;
 }
@@ -412,6 +432,8 @@ const char *WPXSvInputStreamImpl::subStreamName(const unsigned id)
         return mpOLEStorage->maStreams[id].name.getStr();
     }
 
+    // TODO: zip impl.
+
     return 0;
 }
 
@@ -426,13 +448,16 @@ bool WPXSvInputStreamImpl::existsSubStream(const char *const name)
     PositionHolder pos(mxSeekable);
     mxSeekable->seek(0);
 
+    const rtl::OUString aName(rtl::OStringToOUString(rtl::OString(name), RTL_TEXTENCODING_UTF8));
+
     if (isOLE())
     {
         ensureOLEIsInitialized();
-
-        const rtl::OUString aName(rtl::OStringToOUString(rtl::OString(name), RTL_TEXTENCODING_UTF8));
         return mpOLEStorage->maNameMap.end() != mpOLEStorage->maNameMap.find(aName);
     }
+
+    if (isZip())
+        return mxZipStorage->hasByHierarchicalName(aName);
 
     return false;
 }
@@ -448,12 +473,25 @@ WPXInputStream *WPXSvInputStreamImpl::getSubStreamByName(const char *const name)
     PositionHolder pos(mxSeekable);
     mxSeekable->seek(0);
 
+    const rtl::OUString aName(rtl::OStringToOUString(rtl::OString(name), RTL_TEXTENCODING_UTF8));
+
     if (isOLE())
     {
         ensureOLEIsInitialized();
-
-        const rtl::OUString aName(rtl::OStringToOUString(rtl::OString(name), RTL_TEXTENCODING_UTF8));
         return createWPXStream(mpOLEStorage->getStream(aName));
+    }
+
+    if (isZip())
+    {
+        try
+        {
+            const Reference<XStream> xStream(mxZipStorage->getByHierarchicalName(aName), UNO_QUERY_THROW);
+            return new WPXSvInputStream(xStream->getInputStream());
+        }
+        catch (const Exception &)
+        {
+            // nothing needed
+        }
     }
 
     return 0;
@@ -476,6 +514,8 @@ WPXInputStream *WPXSvInputStreamImpl::getSubStreamById(const unsigned id)
 
         return createWPXStream(mpOLEStorage->getStream(id));
     }
+
+    // TODO: zip impl.
 
     return 0;
 }
@@ -514,6 +554,33 @@ bool WPXSvInputStreamImpl::isOLE()
     }
 
     return bool(mpOLEStorage);
+}
+
+bool WPXSvInputStreamImpl::isZip()
+{
+    if (!mbCheckedZip)
+    {
+        assert(0 == mxSeekable->getPosition());
+
+        try
+        {
+            Sequence<Any> aArgs(1);
+            aArgs[0] <<= mxStream;
+
+            const Reference<XComponentContext> xContext(comphelper::getProcessComponentContext(), UNO_QUERY_THROW);
+            mxZipStorage.set(
+                    xContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.packages.Package", aArgs, xContext),
+                    UNO_QUERY_THROW);
+        }
+        catch (const Exception &)
+        {
+            // ignore
+        }
+
+        mbCheckedZip = true;
+    }
+
+    return mxZipStorage.is();
 }
 
 void WPXSvInputStreamImpl::ensureOLEIsInitialized()
