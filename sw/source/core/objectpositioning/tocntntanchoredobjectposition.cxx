@@ -127,7 +127,7 @@ static bool lcl_DoesVertPosFits( const SwTwips _nRelPosY,
         // #i45085# - check, if upper frame would grow the
         // excepted amount of twips.
         const SwTwips nTwipsGrown = const_cast<SwLayoutFrm*>(_pUpperOfOrientFrm)->
-                                        Grow( _nRelPosY - _nAvail, sal_True ) > 0;
+                                        Grow( _nRelPosY - _nAvail, sal_True );
         bVertPosFits = ( nTwipsGrown == ( _nRelPosY - _nAvail ) );
         if ( bVertPosFits )
             _orpLayoutFrmToGrow = const_cast<SwLayoutFrm*>(_pUpperOfOrientFrm);
