@@ -69,6 +69,8 @@ namespace drawinglayer
 
             short                                           mnStyle;
 
+            double                                          mfPatternScale;
+
             /// local helpers
             double getWidth(
                     const geometry::ViewInformation2D& rViewInformation) const;
@@ -111,7 +113,8 @@ namespace drawinglayer
                 const basegfx::BColor& rRGBColorLeft,
                 const basegfx::BColor& rRGBColorGap,
                 bool bHasGapColor,
-                const short nStyle );
+                const short nStyle,
+                double fPatternScale = 1.0 );
 
             /// data read access
             const basegfx::B2DPoint& getStart() const { return maStart; }
@@ -128,6 +131,7 @@ namespace drawinglayer
             const basegfx::BColor& getRGBColorGap () const { return maRGBColorGap; }
             bool hasGapColor( ) const { return mbHasGapColor; }
             short getStyle () const { return mnStyle; }
+            double getPatternScale() const { return mfPatternScale; }
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;

@@ -307,7 +307,8 @@ namespace drawinglayer
             const basegfx::BColor& rRGBColorLeft,
             const basegfx::BColor& rRGBColorGap,
             bool bHasGapColor,
-            const short nStyle)
+            const short nStyle,
+            double fPatternScale)
         :   BufferedDecompositionPrimitive2D(),
             maStart(rStart),
             maEnd(rEnd),
@@ -322,7 +323,8 @@ namespace drawinglayer
             maRGBColorLeft(rRGBColorLeft),
             maRGBColorGap(rRGBColorGap),
             mbHasGapColor(bHasGapColor),
-            mnStyle(nStyle)
+            mnStyle(nStyle),
+            mfPatternScale(fPatternScale)
         {
         }
 
@@ -345,7 +347,8 @@ namespace drawinglayer
                     && getRGBColorLeft() == rCompare.getRGBColorLeft()
                     && getRGBColorGap() == rCompare.getRGBColorGap()
                     && hasGapColor() == rCompare.hasGapColor()
-                    && getStyle() == rCompare.getStyle());
+                    && getStyle() == rCompare.getStyle()
+                    && getPatternScale() == rCompare.getPatternScale());
             }
 
             return false;

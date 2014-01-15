@@ -127,6 +127,7 @@ public:
     inline double       Prim() const { return mnPrim; }
     inline double       Dist() const { return mnDist; }
     inline double       Secn() const { return mnSecn; }
+    double Scale() const;
     inline editeng::SvxBorderStyle Type() const { return mnType; }
 
     /** Returns the total width of this frame style. */
@@ -167,6 +168,7 @@ private:
     double              mnPrim;     /// Width of primary (single, left, or top) line.
     double              mnDist;     /// Distance between primary and secondary line.
     double              mnSecn;     /// Width of secondary (right or bottom) line.
+    double              mfScale;
     editeng::SvxBorderStyle      mnType;
 };
 
