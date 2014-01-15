@@ -58,7 +58,8 @@
   <implementation name="com.sun.star.comp.sfx2.DocumentTemplates">
     <service name="com.sun.star.frame.DocumentTemplates"/>
   </implementation>
-  <implementation name="com.sun.star.comp.sfx2.GlobalEventBroadcaster">
+  <implementation name="com.sun.star.comp.sfx2.GlobalEventBroadcaster"
+      constructor="com_sun_star_comp_sfx2_GlobalEventBroadcaster_get_implementation">
     <service name="com.sun.star.frame.GlobalEventBroadcaster"/>
   </implementation>
   <implementation name="com.sun.star.comp.sfx2.IFrameObject"

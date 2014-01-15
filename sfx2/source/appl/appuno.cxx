@@ -25,7 +25,6 @@
 #include "SfxDocumentMetaData.hxx"
 #include "appbaslib.hxx"
 #include "doctemplates.hxx"
-#include "eventsupplier.hxx"
 #include "fltoptint.hxx"
 #include "frmload.hxx"
 #include "objshimp.hxx"
@@ -1799,7 +1798,6 @@ SFX2_DLLPUBLIC void* SAL_CALL sfx_component_getFactory(
         //      Write no ";" at end of line and dont forget "else" ! (see macro)
         //=============================================================================
         IF_NAME_CREATECOMPONENTFACTORY( BackingComp )
-        IF_NAME_CREATECOMPONENTFACTORY( SfxGlobalEvents_Impl )
         IF_NAME_CREATECOMPONENTFACTORY( SfxFrameLoader_Impl )
         IF_NAME_CREATECOMPONENTFACTORY( SfxDocTplService )
         IF_NAME_CREATECOMPONENTFACTORY( ShutdownIcon )
