@@ -786,7 +786,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
     return m_pRootFolder->createEnumeration();
 }
 
-::com::sun::star::uno::Type ZipPackage::getElementType()
+::com::sun::star::uno::Type SAL_CALL ZipPackage::getElementType()
         throw( RuntimeException )
 {
     assert(m_pRootFolder);
@@ -794,7 +794,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
     return m_pRootFolder->getElementType();
 }
 
-sal_Bool ZipPackage::hasElements()
+sal_Bool SAL_CALL ZipPackage::hasElements()
         throw( RuntimeException )
 {
     assert(m_pRootFolder);

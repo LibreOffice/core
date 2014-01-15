@@ -147,9 +147,9 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createEnumeration()
         throw(::com::sun::star::uno::RuntimeException);
     // XElementType
-    virtual ::com::sun::star::uno::Type getElementType()
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
         throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool hasElements()
+    virtual sal_Bool SAL_CALL hasElements()
         throw(::com::sun::star::uno::RuntimeException);
     // XHierarchicalNameAccess
     virtual ::com::sun::star::uno::Any SAL_CALL getByHierarchicalName( const OUString& aName )
