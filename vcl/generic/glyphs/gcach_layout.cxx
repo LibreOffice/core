@@ -20,6 +20,7 @@
 #include <gcach_ftyp.hxx>
 #include <sallayout.hxx>
 #include <salgdi.hxx>
+#include <scrptrun.h>
 
 #include <boost/static_assert.hpp>
 
@@ -354,6 +355,19 @@ HbLayoutEngine::~HbLayoutEngine()
     hb_face_destroy(mpHbFace);
 }
 
+struct HbScriptRun
+{
+    int32_t mnMin;
+    int32_t mnEnd;
+    UScriptCode maScript;
+
+    HbScriptRun(int32_t nMin, int32_t nEnd, UScriptCode aScript)
+    : mnMin(nMin), mnEnd(nEnd), maScript(aScript)
+    {}
+};
+
+typedef std::vector<HbScriptRun> HbScriptRuns;
+
 bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 {
     ServerFont& rFont = rLayout.GetServerFont();
@@ -376,137 +390,151 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
     rLayout.Reserve(nGlyphCapacity);
 
+    ScriptRun aScriptRun(reinterpret_cast<const UChar *>(rArgs.mpStr), rArgs.mnLength);
+
     Point aCurrPos(0, 0);
     while (true)
     {
-        int nMinRunPos, nEndRunPos;
+        int nBidiMinRunPos, nBidiEndRunPos;
         bool bRightToLeft;
-        if (!rArgs.GetNextRun(&nMinRunPos, &nEndRunPos, &bRightToLeft))
+        if (!rArgs.GetNextRun(&nBidiMinRunPos, &nBidiEndRunPos, &bRightToLeft))
             break;
 
-        int nRunLen = nEndRunPos - nMinRunPos;
-
-        // find matching script
-        // TODO: use ICU's UScriptRun API to properly resolves "common" and
-        // "inherited" script codes, probably use it in GetNextRun() and return
-        // the script there
-        UScriptCode eScriptCode = USCRIPT_INVALID_CODE;
-        for (int i = nMinRunPos; i < nEndRunPos; ++i)
+        // Find script subruns.
+        int nCurrentPos = nBidiMinRunPos;
+        HbScriptRuns aScriptSubRuns;
+        while (aScriptRun.next())
         {
-            UErrorCode rcI18n = U_ZERO_ERROR;
-            UScriptCode eNextScriptCode = uscript_getScript(rArgs.mpStr[i], &rcI18n);
-            if ((eNextScriptCode > USCRIPT_INHERITED))
-            {
-                eScriptCode = eNextScriptCode;
-                if (eNextScriptCode != USCRIPT_LATIN)
-                    break;
-            }
-        }
-        if (eScriptCode < 0)   // TODO: handle errors better
-            eScriptCode = USCRIPT_LATIN;
-
-        meScriptCode = eScriptCode;
-
-        OString sLanguage = OUStringToOString(rArgs.maLanguageTag.getLanguage(), RTL_TEXTENCODING_UTF8);
-
-        if (pHbUnicodeFuncs == NULL)
-            pHbUnicodeFuncs = getUnicodeFuncs();
-
-        hb_buffer_t *pHbBuffer = hb_buffer_create();
-        hb_buffer_set_unicode_funcs(pHbBuffer, pHbUnicodeFuncs);
-        hb_buffer_set_direction(pHbBuffer, bRightToLeft ? HB_DIRECTION_RTL: HB_DIRECTION_LTR);
-        hb_buffer_set_script(pHbBuffer, hb_icu_script_to_script(eScriptCode));
-        hb_buffer_set_language(pHbBuffer, hb_language_from_string(sLanguage.getStr(), -1));
-        hb_buffer_add_utf16(pHbBuffer, rArgs.mpStr, rArgs.mnLength, nMinRunPos, nRunLen);
-        hb_shape(pHbFont, pHbBuffer, NULL, 0);
-
-        int nRunGlyphCount = hb_buffer_get_length(pHbBuffer);
-        hb_glyph_info_t *pHbGlyphInfos = hb_buffer_get_glyph_infos(pHbBuffer, NULL);
-        hb_glyph_position_t *pHbPositions = hb_buffer_get_glyph_positions(pHbBuffer, NULL);
-
-        for (int i = 0; i < nRunGlyphCount; ++i) {
-            int32_t nGlyphIndex = pHbGlyphInfos[i].codepoint;
-            int32_t nCharPos = pHbGlyphInfos[i].cluster;
-
-            // if needed request glyph fallback by updating LayoutArgs
-            if (!nGlyphIndex)
-            {
-                rLayout.setNeedFallback(rArgs, nCharPos, bRightToLeft);
-                if (SAL_LAYOUT_FOR_FALLBACK & rArgs.mnFlags)
-                    continue;
-            }
-
-            // apply vertical flags and glyph substitution
-            // XXX: Use HB_DIRECTION_TTB above and apply whatever flags magic
-            // FixupGlyphIndex() is doing, minus the GSUB part.
-            if (nCharPos >= 0)
-            {
-                sal_UCS4 aChar = rArgs.mpStr[nCharPos];
-                nGlyphIndex = rFont.FixupGlyphIndex(nGlyphIndex, aChar);
-            }
-
-            bool bInCluster = false;
-            if (i > 0 && pHbGlyphInfos[i].cluster == pHbGlyphInfos[i - 1].cluster)
-                bInCluster = true;
-
-            long nGlyphFlags = 0;
-            if (bRightToLeft)
-                nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
-
-            if (bInCluster)
-                nGlyphFlags |= GlyphItem::IS_IN_CLUSTER;
-
-            // The whole IS_DIACRITIC concept is a stupid hack that was
-            // introduced ages ago to work around the utter brokenness of the
-            // way justification adjustments are applied (the DXArray fiasco).
-            // Since it is such a stupid hack, there is no sane way to directly
-            // map to concepts of the "outside" world, so we do some rather
-            // ugly hacks:
-            // * If the font has a GDEF table, we check for glyphs with mark
-            //   glyph class which is sensible, except that some fonts
-            //   (fdo#70968) assign mark class to spacing marks (which is wrong
-            //   but usually harmless), so we try to sniff what HarfBuzz thinks
-            //   about this glyph by checking if it gives it a zero advance
-            //   width.
-            // * If the font has no GDEF table, we just check if the glyph has
-            //   zero advance width, but this is stupid and can be wrong. A
-            //   better way would to check the character's Unicode combining
-            //   class, but unfortunately glyph gives combining marks the
-            //   cluster value of its base character, so nCharPos will be
-            //   pointing to the wrong character (but HarfBuzz might change
-            //   this in the future).
-            bool bDiacritic = false;
-            if (hb_ot_layout_has_glyph_classes(mpHbFace))
-            {
-                // the font has GDEF table
-                bool bMark = hb_ot_layout_get_glyph_class(mpHbFace, nGlyphIndex) == HB_OT_LAYOUT_GLYPH_CLASS_MARK;
-                if (bMark && pHbPositions[i].x_advance == 0)
-                    bDiacritic = true;
-            }
-            else
-            {
-                // the font lacks GDEF table
-                if (pHbPositions[i].x_advance == 0)
-                    bDiacritic = true;
-            }
-
-            if (bDiacritic)
-                nGlyphFlags |= GlyphItem::IS_DIACRITIC;
-
-            int32_t nXOffset =  pHbPositions[i].x_offset >> 6;
-            int32_t nYOffset =  pHbPositions[i].y_offset >> 6;
-            int32_t nXAdvance = pHbPositions[i].x_advance >> 6;
-            int32_t nYAdvance = pHbPositions[i].y_advance >> 6;
-
-            Point aNewPos = Point(aCurrPos.X() + nXOffset, -(aCurrPos.Y() + nYOffset));
-            const GlyphItem aGI(nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nXAdvance, nXOffset);
-            rLayout.AppendGlyph(aGI);
-
-            aCurrPos.X() += nXAdvance;
-            aCurrPos.Y() += nYAdvance;
+            if (aScriptRun.getScriptStart() <= nCurrentPos && aScriptRun.getScriptEnd() > nCurrentPos)
+                break;
         }
 
-        hb_buffer_destroy(pHbBuffer);
+        while (nCurrentPos < nBidiEndRunPos)
+        {
+            int32_t nMinRunPos = nCurrentPos;
+            int32_t nEndRunPos = std::min(aScriptRun.getScriptEnd(), nBidiEndRunPos);
+            HbScriptRun aRun(nMinRunPos, nEndRunPos, aScriptRun.getScriptCode());
+            aScriptSubRuns.push_back(aRun);
+
+            nCurrentPos = nEndRunPos;
+            aScriptRun.next();
+        }
+
+        // RTL subruns should be reversed to ensure that final glyph order is
+        // correct.
+        if (bRightToLeft)
+            std::reverse(aScriptSubRuns.begin(), aScriptSubRuns.end());
+
+        aScriptRun.reset();
+
+        for (HbScriptRuns::iterator it = aScriptSubRuns.begin(); it != aScriptSubRuns.end(); ++it)
+        {
+            int nMinRunPos = it->mnMin;
+            int nEndRunPos = it->mnEnd;
+            int nRunLen = nEndRunPos - nMinRunPos;
+            meScriptCode = it->maScript;
+
+            OString sLanguage = OUStringToOString(rArgs.maLanguageTag.getLanguage(), RTL_TEXTENCODING_UTF8);
+
+            if (pHbUnicodeFuncs == NULL)
+                pHbUnicodeFuncs = getUnicodeFuncs();
+
+            hb_buffer_t *pHbBuffer = hb_buffer_create();
+            hb_buffer_set_unicode_funcs(pHbBuffer, pHbUnicodeFuncs);
+            hb_buffer_set_direction(pHbBuffer, bRightToLeft ? HB_DIRECTION_RTL: HB_DIRECTION_LTR);
+            hb_buffer_set_script(pHbBuffer, hb_icu_script_to_script(meScriptCode));
+            hb_buffer_set_language(pHbBuffer, hb_language_from_string(sLanguage.getStr(), -1));
+            hb_buffer_add_utf16(pHbBuffer, rArgs.mpStr, rArgs.mnLength, nMinRunPos, nRunLen);
+            hb_shape(pHbFont, pHbBuffer, NULL, 0);
+
+            int nRunGlyphCount = hb_buffer_get_length(pHbBuffer);
+            hb_glyph_info_t *pHbGlyphInfos = hb_buffer_get_glyph_infos(pHbBuffer, NULL);
+            hb_glyph_position_t *pHbPositions = hb_buffer_get_glyph_positions(pHbBuffer, NULL);
+
+            for (int i = 0; i < nRunGlyphCount; ++i) {
+                int32_t nGlyphIndex = pHbGlyphInfos[i].codepoint;
+                int32_t nCharPos = pHbGlyphInfos[i].cluster;
+
+                // if needed request glyph fallback by updating LayoutArgs
+                if (!nGlyphIndex)
+                {
+                    rLayout.setNeedFallback(rArgs, nCharPos, bRightToLeft);
+                    if (SAL_LAYOUT_FOR_FALLBACK & rArgs.mnFlags)
+                        continue;
+                }
+
+                // apply vertical flags and glyph substitution
+                // XXX: Use HB_DIRECTION_TTB above and apply whatever flags magic
+                // FixupGlyphIndex() is doing, minus the GSUB part.
+                if (nCharPos >= 0)
+                {
+                    sal_UCS4 aChar = rArgs.mpStr[nCharPos];
+                    nGlyphIndex = rFont.FixupGlyphIndex(nGlyphIndex, aChar);
+                }
+
+                bool bInCluster = false;
+                if (i > 0 && pHbGlyphInfos[i].cluster == pHbGlyphInfos[i - 1].cluster)
+                    bInCluster = true;
+
+                long nGlyphFlags = 0;
+                if (bRightToLeft)
+                    nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
+
+                if (bInCluster)
+                    nGlyphFlags |= GlyphItem::IS_IN_CLUSTER;
+
+                // The whole IS_DIACRITIC concept is a stupid hack that was
+                // introduced ages ago to work around the utter brokenness of the
+                // way justification adjustments are applied (the DXArray fiasco).
+                // Since it is such a stupid hack, there is no sane way to directly
+                // map to concepts of the "outside" world, so we do some rather
+                // ugly hacks:
+                // * If the font has a GDEF table, we check for glyphs with mark
+                //   glyph class which is sensible, except that some fonts
+                //   (fdo#70968) assign mark class to spacing marks (which is wrong
+                //   but usually harmless), so we try to sniff what HarfBuzz thinks
+                //   about this glyph by checking if it gives it a zero advance
+                //   width.
+                // * If the font has no GDEF table, we just check if the glyph has
+                //   zero advance width, but this is stupid and can be wrong. A
+                //   better way would to check the character's Unicode combining
+                //   class, but unfortunately glyph gives combining marks the
+                //   cluster value of its base character, so nCharPos will be
+                //   pointing to the wrong character (but HarfBuzz might change
+                //   this in the future).
+                bool bDiacritic = false;
+                if (hb_ot_layout_has_glyph_classes(mpHbFace))
+                {
+                    // the font has GDEF table
+                    bool bMark = hb_ot_layout_get_glyph_class(mpHbFace, nGlyphIndex) == HB_OT_LAYOUT_GLYPH_CLASS_MARK;
+                    if (bMark && pHbPositions[i].x_advance == 0)
+                        bDiacritic = true;
+                }
+                else
+                {
+                    // the font lacks GDEF table
+                    if (pHbPositions[i].x_advance == 0)
+                        bDiacritic = true;
+                }
+
+                if (bDiacritic)
+                    nGlyphFlags |= GlyphItem::IS_DIACRITIC;
+
+                int32_t nXOffset =  pHbPositions[i].x_offset >> 6;
+                int32_t nYOffset =  pHbPositions[i].y_offset >> 6;
+                int32_t nXAdvance = pHbPositions[i].x_advance >> 6;
+                int32_t nYAdvance = pHbPositions[i].y_advance >> 6;
+
+                Point aNewPos = Point(aCurrPos.X() + nXOffset, -(aCurrPos.Y() + nYOffset));
+                const GlyphItem aGI(nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nXAdvance, nXOffset);
+                rLayout.AppendGlyph(aGI);
+
+                aCurrPos.X() += nXAdvance;
+                aCurrPos.Y() += nYAdvance;
+            }
+
+            hb_buffer_destroy(pHbBuffer);
+        }
     }
 
     hb_font_destroy(pHbFont);

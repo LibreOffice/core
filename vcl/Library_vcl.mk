@@ -464,6 +464,7 @@ vcl_generic_code= \
     vcl/generic/glyphs/gcach_layout \
     vcl/generic/glyphs/gcach_rbmp \
     vcl/generic/glyphs/glyphcache \
+    vcl/generic/glyphs/scrptrun \
     vcl/generic/fontmanager/fontcache \
     vcl/generic/fontmanager/fontconfig \
     vcl/generic/fontmanager/fontmanager \
