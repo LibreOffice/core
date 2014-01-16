@@ -1588,10 +1588,9 @@ void DbgOutf( const sal_Char*, ... ) {}
 #endif
 
 
-#if OSL_DEBUG_LEVEL > 0
-
 TOOLS_DLLPUBLIC void DbgUnhandledException(const css::uno::Any & caught, const char* currentFunction, const char* fileAndLineNo)
 {
+#if OSL_DEBUG_LEVEL > 0
         OString sMessage( "caught an exception!" );
         sMessage += "\nin function:";
         sMessage += currentFunction;
@@ -1633,9 +1632,9 @@ TOOLS_DLLPUBLIC void DbgUnhandledException(const css::uno::Any & caught, const c
         SAL_DETAIL_LOG_FORMAT(
             SAL_DETAIL_ENABLE_LOG_WARN, SAL_DETAIL_LOG_LEVEL_WARN,
             "legacy.osl", fileAndLineNo, "%s", sMessage.getStr());
+#endif
 }
 
-#endif  // OSL_DEBUG_LEVEL
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
