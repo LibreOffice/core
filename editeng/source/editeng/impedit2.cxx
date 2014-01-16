@@ -935,7 +935,7 @@ EditPaM ImpEditEngine::CursorVisualStartEnd( EditView* pEditView, const EditPaM&
         const UBiDiLevel  nBidiLevel = IsRightToLeft( nPara ) ? 1 /*RTL*/ : 0 /*LTR*/;
         ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(pLineString), aLine.getLength(), nBidiLevel, NULL, &nError );   // UChar != sal_Unicode in MinGW
 
-        sal_uInt16 nVisPos = bStart ? 0 : aLine.getLength()-1;
+        sal_Int32 nVisPos = bStart ? 0 : aLine.getLength()-1;
         const sal_Int32 nLogPos = ubidi_getLogicalIndex( pBidi, nVisPos, &nError );
 
         ubidi_close( pBidi );
@@ -2586,7 +2586,7 @@ EditPaM ImpEditEngine::InsertText( const EditSelection& rCurSel,
                 OUString aNewText( aOldText );
                 if (pCTLOptions->IsCTLSequenceCheckingTypeAndReplace())
                 {
-                    /*const xub_StrLen nPrevPos = static_cast< xub_StrLen >*/( _xISC->correctInputSequence( aNewText, nTmpPos - 1, c, nCheckMode ) );
+                    _xISC->correctInputSequence(aNewText, nTmpPos - 1, c, nCheckMode);
 
                     // find position of first character that has changed
                     sal_Int32 nOldLen = aOldText.getLength();
@@ -2679,10 +2679,10 @@ EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUStrin
         if ( nEnd > nStart )
         {
             OUString aLine = aText.copy( nStart, nEnd-nStart );
-            xub_StrLen nChars = aPaM.GetNode()->Len() + aLine.getLength();
+            sal_Int32 nChars = aPaM.GetNode()->Len() + aLine.getLength();
             if ( nChars > MAXCHARSINPARA )
             {
-                xub_StrLen nMaxNewChars = MAXCHARSINPARA-aPaM.GetNode()->Len();
+                sal_Int32 nMaxNewChars = MAXCHARSINPARA-aPaM.GetNode()->Len();
                 nEnd -= ( aLine.getLength() - nMaxNewChars ); // Then the characters end up in the next paragraph.
                 aLine = aLine.copy( 0, nMaxNewChars );            // Delete the Rest...
             }

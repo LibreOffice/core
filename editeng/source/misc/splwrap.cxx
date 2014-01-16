@@ -64,7 +64,7 @@ void SvxPrepareAutoCorrect( OUString &rOldText, const OUString &rNewText )
     // rOldText: text to be replaced
     // rNewText: replacement text
 
-    xub_StrLen  nOldLen = rOldText.getLength(),
+    sal_Int32 nOldLen = rOldText.getLength(),
                 nNewLen = rNewText.getLength();
     if (nOldLen && nNewLen)
     {
