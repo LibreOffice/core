@@ -193,9 +193,9 @@ void SwUiWriterTest::testExportRTF()
 
     OString aData(static_cast<const sal_Char*>(aStream.GetBuffer()), aStream.GetSize());
     CPPUNIT_ASSERT(aData.startsWith("{\\rtf1"));
-    CPPUNIT_ASSERT_EQUAL(-1, aData.indexOf("aaa"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aData.indexOf("aaa"));
     CPPUNIT_ASSERT(aData.indexOf("bbb") != -1);
-    CPPUNIT_ASSERT_EQUAL(-1, aData.indexOf("ccc"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aData.indexOf("ccc"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
