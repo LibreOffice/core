@@ -383,11 +383,13 @@ started, run ndk-gdb.
 Raspbian
 ********
 
-It's now possible to cross-compile LibreOffice for Rapsberry Pi running Raspbian.
+In theory, this should work also for another Linux, it does not need to be Raspbian.
+But this cross-compilation work is tested from Debian based system to Raspbian.
+
 You will need Raspbian's pkg-config files and system libraries to build against.
-Available at http://dev-www.libreoffice.org/src/raspbian_rootfs.tar.bz2
-$ wget http://dev-www.libreoffice.org/src/raspbian_rootfs.tar.bz2
-$ tar -axf raspbian_rootfs.tar.bz2
+Available at http://dev-www.libreoffice.org/extern/raspbian_rootfs.tar.bz2
+$ wget http://dev-www.libreoffice.org/extern/raspbian_rootfs.tar.bz2
+$ tar -xf raspbian_rootfs.tar.bz2
 
 You can build cross-compiler yourself or get the executables here:
 $ git clone git://github.com/raspberrypi/tools
@@ -415,8 +417,7 @@ CC=<path-to-arm-linux-gnueabihf-gcc> --sysroot=<path-to-raspbian_rootfs>
 CXX=<path-to-arm-linux-gnueabihf-g++> --sysroot=<path-to-raspbian_rootfs>
 --build=x86_64-unknown-linux-gnu
 --host=arm-unknown-linux-gnueabihf
---without-doxygen
---disable-gnome-vfs
+--disable-sdk
 --enable-python=system
 PYTHON_CFLAGS=-I<path-to-raspbian_rootfs>/usr/include/python2.7
 PYTHON_LIBS=-lpython2.7
@@ -433,8 +434,7 @@ JAVALIB=-L<path-to-raspbian_rootfs>/usr/lib/jvm/java-6-openjdk-armhf/jre/lib/arm
 --with-system-redland
 
 Finally, when you are ready to run the binaries in Raspbian,
-you may need to get more system libraries.
-Update your /etc/apt/sources.list as described in
-http://www.raspbian.org/RaspbianRepository and then:
-$ sudo apt-get update
-$ sudo apt-get build-dep libreoffice
+you may need to get more system libraries, who knows.
+$ sudo apt-get install libreoffice # or similar
+That installs libreoffice too, which you don't need because you have
+just built one, but I don't know how to avoid it easily.
