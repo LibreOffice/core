@@ -299,6 +299,16 @@ public:
     bool operator<( const SwRangeRedline& ) const;
 };
 
+/// Base object for 'Redlines' that are not of 'Ranged' type (like table row insert\delete)
+class SW_DLLPUBLIC SwExtraRedline
+{
+public:
+    SwExtraRedline( RedlineType_t eType );
+    SwExtraRedline( const SwExtraRedline& );
+    virtual ~SwExtraRedline();
+};
+
+
 class SW_DLLPUBLIC SwRedlineHint : public SfxHint
 {
 #define SWREDLINE_INSERTED  1

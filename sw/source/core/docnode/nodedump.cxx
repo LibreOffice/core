@@ -601,4 +601,26 @@ void SwRedlineTbl::dumpAsXml( xmlTextWriterPtr w )
     writer.endElement( );    // swredlinetbl
 }
 
+void SwExtraRedlineTbl::dumpAsXml( xmlTextWriterPtr w )
+{
+    WriterHelper writer( w );
+
+    writer.startElement( "swextraredlinetbl" );
+    writer.writeFormatAttribute( "ptr", "%p", this );
+
+    const SwExtraRedlineTbl& extraRedlineTbl = (*this);
+
+    for( sal_uInt16 nCurExtraRedlinePos = 0; nCurExtraRedlinePos < GetSize(); ++nCurExtraRedlinePos )
+    {
+        const SwExtraRedline* pExtraRedline = extraRedlineTbl.GetRedline( nCurExtraRedlinePos );
+
+        writer.startElement( "swextraredline" );
+        writer.writeFormatAttribute( "ptr", "%p", pExtraRedline );
+
+        writer.endElement( );    // extra_redline_data
+    }
+
+    writer.endElement( );    // swextraredlinetbl
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
