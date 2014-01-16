@@ -661,8 +661,10 @@ endif
 # Runtime dependency for unit-tests
 $(eval $(call gb_Library_use_restarget,vcl,vcl))
 
+ifeq ($(OS),WNT)
 # HACK: dependency on icon themes so running unit tests don't
 # prevent delivering these by having open file handles on WNT
 $(eval $(call gb_Library_use_package,vcl,postprocess_images))
+endif
 
 # vim: set noet sw=4 ts=4:
