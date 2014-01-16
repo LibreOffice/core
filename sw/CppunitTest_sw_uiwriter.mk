@@ -61,6 +61,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_uiwriter,\
     linguistic/source/lng \
     package/util/package2 \
     package/source/xstor/xstor \
+    sw/util/msword \
     sw/util/sw \
     sw/util/swd \
     sax/source/expatwrap/expwrap \
