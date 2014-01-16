@@ -13,7 +13,9 @@
    <Line2 column1="0.000000" column2="7620.000000" column3="7197.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
+  <InteropGrabBag>
+   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -100,7 +102,9 @@
    <Line2 column1="0.000000" column2="9529.000000" column3="4229.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
+  <InteropGrabBag>
+   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -187,7 +191,9 @@
    <Line2 column1="0.000000" column2="1274.000000" column3="5715.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
+  <InteropGrabBag>
+   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues>
@@ -341,7 +347,9 @@
    <Line2 column1="0.000000" column2="1274.000000" column3="6125.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
+  <InteropGrabBag>
+   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues>
@@ -495,7 +503,9 @@
    <Line2 column1="0.000000" column2="2672.000000" column3="6125.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
+  <InteropGrabBag>
+   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues>

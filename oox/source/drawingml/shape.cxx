@@ -568,11 +568,13 @@ Reference< XShape > Shape::createAndInsert(
                 OUString sColorScheme = pFillRef->maPhClr.getSchemeName();
                 if( !sColorScheme.isEmpty() )
                 {
-                    Sequence< PropertyValue > aProperties(2);
+                    Sequence< PropertyValue > aProperties(3);
                     aProperties[0].Name = "SchemeClr";
                     aProperties[0].Value = Any( sColorScheme );
                     aProperties[1].Name = "Idx";
                     aProperties[1].Value = Any( pFillRef->mnThemedIdx );
+                    aProperties[2].Name = "Color";
+                    aProperties[2].Value = Any( nFillPhClr );
 
                     PropertyValue pStyleFillRef;
                     pStyleFillRef.Name = "StyleFillRef";
@@ -764,6 +766,18 @@ Reference< XShape > Shape::createAndInsert(
                 mxShape->setPosition(awt::Point(aShapeRectHmm.X, aShapeRectHmm.Y));
                 mxShape->setSize(awt::Size(aShapeRectHmm.Width, aShapeRectHmm.Height));
             }
+
+            Sequence< PropertyValue > aProperties( 1 );
+            aProperties[0].Name = "OriginalSolidFillClr";
+            aProperties[0].Value = aShapeProps[PROP_FillColor];
+            OUString sColorFillScheme = aFillProperties.maFillColor.getSchemeName();
+            if( !aFillProperties.maFillColor.isPlaceHolder() && !sColorFillScheme.isEmpty() )
+            {
+                aProperties.realloc( 2 );
+                aProperties[1].Name = "SpPrSolidFillSchemeClr";
+                aProperties[1].Value = Any( sColorFillScheme );
+            }
+            putPropertiesToGrabBag( aProperties );
         }
 
         // These can have a custom geometry, so position should be set here,
@@ -1066,6 +1080,33 @@ void Shape::putPropertyToGrabBag( const PropertyValue& pProperty )
         aGrabBag.realloc( length + 1 );
         aGrabBag[length] = pProperty;
 
+        xSet->setPropertyValue( aGrabBagPropName, Any( aGrabBag ) );
+    }
+}
+
+void Shape::putPropertiesToGrabBag( const Sequence< PropertyValue >& aProperties )
+{
+    Reference< XPropertySet > xSet( mxShape, UNO_QUERY );
+    Reference< XPropertySetInfo > xSetInfo( xSet->getPropertySetInfo() );
+    const OUString& aGrabBagPropName = OUString( UNO_NAME_MISC_OBJ_INTEROPGRABBAG );
+    if( mxShape.is() && xSet.is() && xSetInfo.is() && xSetInfo->hasPropertyByName( aGrabBagPropName ) )
+    {
+        // get existing grab bag
+        Sequence< PropertyValue > aGrabBag;
+        xSet->getPropertyValue( aGrabBagPropName ) >>= aGrabBag;
+        sal_Int32 length = aGrabBag.getLength();
+
+        // update grab bag size to contain the new items
+        aGrabBag.realloc( length + aProperties.getLength() );
+
+        // put the new items
+        for( sal_Int32 i=0; i < aProperties.getLength(); ++i )
+        {
+            aGrabBag[length + i].Name = aProperties[i].Name;
+            aGrabBag[length + i].Value = aProperties[i].Value;
+        }
+
+        // put it back to the shape
         xSet->setPropertyValue( aGrabBagPropName, Any( aGrabBag ) );
     }
 }

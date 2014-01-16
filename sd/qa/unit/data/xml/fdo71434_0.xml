@@ -6,6 +6,8 @@
    <Line2 column1="0.000000" column2="19046.000000" column3="-75.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
+  <InteropGrabBag>
+   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+  </InteropGrabBag>
  </XShape>
 </XShapes>

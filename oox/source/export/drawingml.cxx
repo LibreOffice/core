@@ -174,10 +174,65 @@ void DrawingML::WriteSolidFill( sal_uInt32 nColor )
     mpFS->endElementNS( XML_a, XML_solidFill );
 }
 
+void DrawingML::WriteSolidFill( OUString sSchemeName )
+{
+    mpFS->startElementNS( XML_a, XML_solidFill, FSEND );
+    mpFS->singleElementNS( XML_a, XML_schemeClr, XML_val,
+                           OUStringToOString( sSchemeName, RTL_TEXTENCODING_ASCII_US ).getStr(),
+                           FSEND );
+    mpFS->endElementNS( XML_a, XML_solidFill );
+}
+
 void DrawingML::WriteSolidFill( Reference< XPropertySet > rXPropSet )
 {
-    if ( GetProperty( rXPropSet, "FillColor" ) )
-        WriteSolidFill( *((sal_uInt32*) mAny.getValue()) & 0xffffff );
+    // get fill color
+    sal_uInt32 nFillColor;
+    if ( !GetProperty( rXPropSet, "FillColor" ) )
+        return;
+    mAny >>= nFillColor;
+
+    // get InteropGrabBag and search the relevant attributes
+    OUString sColorFillScheme;
+    sal_uInt32 nOriginalColor;
+    Sequence< PropertyValue > aStyleProperties;
+    if ( GetProperty( rXPropSet, "InteropGrabBag" ) )
+    {
+        Sequence< PropertyValue > aGrabBag;
+        mAny >>= aGrabBag;
+        for( sal_Int32 i=0; i < aGrabBag.getLength(); ++i )
+            if( aGrabBag[i].Name == "SpPrSolidFillSchemeClr" )
+                aGrabBag[i].Value >>= sColorFillScheme;
+            else if( aGrabBag[i].Name == "OriginalSolidFillClr" )
+                aGrabBag[i].Value >>= nOriginalColor;
+            else if( aGrabBag[i].Name == "StyleFillRef" )
+                aGrabBag[i].Value >>= aStyleProperties;
+    }
+
+    // write XML
+    if ( nFillColor != nOriginalColor )
+        // the user has set a different color for the shape
+        WriteSolidFill( nFillColor & 0xffffff );
+    else if ( !sColorFillScheme.isEmpty() )
+        // the shape had a scheme color and the user didn't change it
+        WriteSolidFill( sColorFillScheme );
+    else if ( aStyleProperties.hasElements() )
+    {
+        sal_uInt32 nThemeColor;
+        for( sal_Int32 i=0; i < aStyleProperties.getLength(); ++i )
+            if( aStyleProperties[i].Name == "Color" )
+            {
+                aStyleProperties[i].Value >>= nThemeColor;
+                break;
+            }
+        if ( nFillColor != nThemeColor )
+            // the shape contains a theme but it wasn't being used
+            WriteSolidFill( nFillColor & 0xffffff );
+        // in case the shape used the style color and the user didn't change it,
+        // we must not write a <a: solidFill> tag.
+    }
+    else
+        // the shape had a custom color and the user didn't change it
+        WriteSolidFill( nFillColor & 0xffffff );
 }
 
 void DrawingML::WriteGradientStop( sal_uInt16 nStop, sal_uInt32 nColor )

@@ -38,7 +38,9 @@
      <Line2 column1="0.000000" column2="254.000000" column3="3496.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -98,7 +100,9 @@
      <Line2 column1="0.000000" column2="2072.000000" column3="5702.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -158,7 +162,9 @@
      <Line2 column1="0.000000" column2="811.000000" column3="5702.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -218,7 +224,9 @@
      <Line2 column1="0.000000" column2="834.000000" column3="3623.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -282,7 +290,9 @@
      <Line2 column1="0.000000" column2="4509.000000" column3="5771.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -342,7 +352,9 @@
      <Line2 column1="0.000000" column2="3165.000000" column3="5771.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -402,7 +414,9 @@
      <Line2 column1="0.000000" column2="7483.000000" column3="5771.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -462,7 +476,9 @@
      <Line2 column1="0.000000" column2="5903.000000" column3="5771.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -522,7 +538,9 @@
      <Line2 column1="0.000000" column2="630.000000" column3="7078.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -582,7 +600,9 @@
      <Line2 column1="0.000000" column2="741.000000" column3="5771.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -642,7 +662,9 @@
      <Line2 column1="0.000000" column2="903.000000" column3="3623.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -706,7 +728,9 @@
      <Line2 column1="0.000000" column2="3272.000000" column3="5771.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -766,7 +790,9 @@
      <Line2 column1="0.000000" column2="1992.000000" column3="5771.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -826,7 +852,9 @@
      <Line2 column1="0.000000" column2="713.000000" column3="5771.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -886,7 +914,9 @@
      <Line2 column1="0.000000" column2="903.000000" column3="3623.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -950,7 +980,9 @@
      <Line2 column1="0.000000" column2="1989.000000" column3="13817.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -1010,7 +1042,9 @@
      <Line2 column1="0.000000" column2="737.000000" column3="13817.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -1070,7 +1104,9 @@
      <Line2 column1="0.000000" column2="7377.000000" column3="5771.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -1130,7 +1166,9 @@
      <Line2 column1="0.000000" column2="5851.000000" column3="5771.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -1190,7 +1228,9 @@
      <Line2 column1="0.000000" column2="12373.000000" column3="5771.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -1250,7 +1290,9 @@
      <Line2 column1="0.000000" column2="11250.000000" column3="5771.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -1310,7 +1352,9 @@
      <Line2 column1="0.000000" column2="3177.000000" column3="7232.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -1370,7 +1414,9 @@
      <Line2 column1="0.000000" column2="1949.000000" column3="7232.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -1430,7 +1476,9 @@
      <Line2 column1="0.000000" column2="728.000000" column3="7232.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -1490,7 +1538,9 @@
      <Line2 column1="0.000000" column2="777.000000" column3="5771.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -1550,7 +1600,9 @@
      <Line2 column1="0.000000" column2="903.000000" column3="3623.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -1614,7 +1666,9 @@
      <Line2 column1="0.000000" column2="7085.000000" column3="5774.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -1674,7 +1728,9 @@
      <Line2 column1="0.000000" column2="5830.000000" column3="5774.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -1734,7 +1790,9 @@
      <Line2 column1="0.000000" column2="4551.000000" column3="5774.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -1794,7 +1852,9 @@
      <Line2 column1="0.000000" column2="3272.000000" column3="5774.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -1854,7 +1914,9 @@
      <Line2 column1="0.000000" column2="1992.000000" column3="5774.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -1914,7 +1976,9 @@
      <Line2 column1="0.000000" column2="713.000000" column3="5774.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -1974,7 +2038,9 @@
      <Line2 column1="0.000000" column2="906.000000" column3="3623.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -2038,7 +2104,9 @@
      <Line2 column1="0.000000" column2="11224.000000" column3="5774.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -2098,7 +2166,9 @@
      <Line2 column1="0.000000" column2="9916.000000" column3="5774.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -2158,7 +2228,9 @@
      <Line2 column1="0.000000" column2="8608.000000" column3="5774.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -2218,7 +2290,9 @@
      <Line2 column1="0.000000" column2="781.000000" column3="12333.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -2278,7 +2352,9 @@
      <Line2 column1="0.000000" column2="5992.000000" column3="5774.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -2338,7 +2414,9 @@
      <Line2 column1="0.000000" column2="4684.000000" column3="5774.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -2398,7 +2476,9 @@
      <Line2 column1="0.000000" column2="3376.000000" column3="5774.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -2458,7 +2538,9 @@
      <Line2 column1="0.000000" column2="2068.000000" column3="5774.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -2518,7 +2600,9 @@
      <Line2 column1="0.000000" column2="12490.000000" column3="5774.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -2578,7 +2662,9 @@
      <Line2 column1="0.000000" column2="713.000000" column3="5774.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -2638,7 +2724,9 @@
      <Line2 column1="0.000000" column2="906.000000" column3="3623.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -2702,7 +2790,9 @@
      <Line2 column1="0.000000" column2="10863.000000" column3="5774.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -2762,7 +2852,9 @@
      <Line2 column1="0.000000" column2="1817.000000" column3="13615.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -2822,7 +2914,9 @@
      <Line2 column1="0.000000" column2="657.000000" column3="13615.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -2882,7 +2976,9 @@
      <Line2 column1="0.000000" column2="7275.000000" column3="5774.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -2942,7 +3038,9 @@
      <Line2 column1="0.000000" column2="6012.000000" column3="5774.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -3002,7 +3100,9 @@
      <Line2 column1="0.000000" column2="4731.000000" column3="5774.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -3062,7 +3162,9 @@
      <Line2 column1="0.000000" column2="3475.000000" column3="5774.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -3122,7 +3224,9 @@
      <Line2 column1="0.000000" column2="2049.000000" column3="5774.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -3182,7 +3286,9 @@
      <Line2 column1="0.000000" column2="12187.000000" column3="5774.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -3242,7 +3348,9 @@
      <Line2 column1="0.000000" column2="710.000000" column3="5774.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -3302,7 +3410,9 @@
      <Line2 column1="0.000000" column2="906.000000" column3="3623.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -3366,7 +3476,9 @@
      <Line2 column1="0.000000" column2="1079.000000" column3="2544.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -3431,7 +3543,9 @@
      <Line2 column1="0.000000" column2="1245.000000" column3="4529.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -3496,7 +3610,9 @@
      <Line2 column1="0.000000" column2="1132.000000" column3="5919.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -3561,7 +3677,10 @@
      <Line2 column1="0.000000" column2="1223.000000" column3="17350.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" value="14539203" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="SpPrSolidFillSchemeClr" value="bg2" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -3626,7 +3745,9 @@
      <Line2 column1="0.000000" column2="1269.000000" column3="7189.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -3691,7 +3812,9 @@
      <Line2 column1="0.000000" column2="1157.000000" column3="8671.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -3756,7 +3879,9 @@
      <Line2 column1="0.000000" column2="1132.000000" column3="9939.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -3821,7 +3946,9 @@
      <Line2 column1="0.000000" column2="1152.000000" column3="11210.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -3886,7 +4013,9 @@
      <Line2 column1="0.000000" column2="1132.000000" column3="12483.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -3951,7 +4080,9 @@
      <Line2 column1="0.000000" column2="1037.000000" column3="13753.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -4016,7 +4147,9 @@
      <Line2 column1="0.000000" column2="1063.000000" column3="14901.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -4081,7 +4214,9 @@
      <Line2 column1="0.000000" column2="1132.000000" column3="16071.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -4146,7 +4281,9 @@
      <Line2 column1="0.000000" column2="1245.000000" column3="4529.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -4211,7 +4348,9 @@
      <Line2 column1="0.000000" column2="1132.000000" column3="5921.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -4276,7 +4415,9 @@
      <Line2 column1="0.000000" column2="1149.000000" column3="17689.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -4341,7 +4482,9 @@
      <Line2 column1="0.000000" column2="1132.000000" column3="7277.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -4406,7 +4549,9 @@
      <Line2 column1="0.000000" column2="1132.000000" column3="8585.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -4471,7 +4616,9 @@
      <Line2 column1="0.000000" column2="1132.000000" column3="9893.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -4536,7 +4683,9 @@
      <Line2 column1="0.000000" column2="1132.000000" column3="11200.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -4601,7 +4750,9 @@
      <Line2 column1="0.000000" column2="1211.000000" column3="12508.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -4666,7 +4817,9 @@
      <Line2 column1="0.000000" column2="1132.000000" column3="13816.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -4731,7 +4884,9 @@
      <Line2 column1="0.000000" column2="1132.000000" column3="15124.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -4796,7 +4951,9 @@
      <Line2 column1="0.000000" column2="1132.000000" column3="16432.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -4861,7 +5018,9 @@
      <Line2 column1="0.000000" column2="1245.000000" column3="4529.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -4926,7 +5085,9 @@
      <Line2 column1="0.000000" column2="1132.000000" column3="5921.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -4991,7 +5152,9 @@
      <Line2 column1="0.000000" column2="1132.000000" column3="7201.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -5056,7 +5219,9 @@
      <Line2 column1="0.000000" column2="1132.000000" column3="8480.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -5121,7 +5286,9 @@
      <Line2 column1="0.000000" column2="1132.000000" column3="9759.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -5186,7 +5353,9 @@
      <Line2 column1="0.000000" column2="1132.000000" column3="11039.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -5251,7 +5420,9 @@
      <Line2 column1="0.000000" column2="1101.000000" column3="12309.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -5316,7 +5487,9 @@
      <Line2 column1="0.000000" column2="1245.000000" column3="4526.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -5381,7 +5554,9 @@
      <Line2 column1="0.000000" column2="1366.000000" column3="5866.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -5446,7 +5621,9 @@
      <Line2 column1="0.000000" column2="1088.000000" column3="7416.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -5511,7 +5688,9 @@
      <Line2 column1="0.000000" column2="1008.000000" column3="8677.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -5576,7 +5755,10 @@
      <Line2 column1="0.000000" column2="925.000000" column3="9946.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" value="14539203" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="SpPrSolidFillSchemeClr" value="bg2" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -5641,7 +5823,9 @@
      <Line2 column1="0.000000" column2="1034.000000" column3="16505.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -5706,7 +5890,10 @@
      <Line2 column1="0.000000" column2="912.000000" column3="17689.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" value="14539203" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="SpPrSolidFillSchemeClr" value="bg2" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -5771,7 +5958,9 @@
      <Line2 column1="0.000000" column2="1245.000000" column3="10999.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -5836,7 +6025,9 @@
      <Line2 column1="0.000000" column2="1338.000000" column3="12479.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -5901,7 +6092,9 @@
      <Line2 column1="0.000000" column2="1184.000000" column3="13962.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -5966,7 +6159,9 @@
      <Line2 column1="0.000000" column2="1144.000000" column3="15233.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -6031,7 +6226,9 @@
      <Line2 column1="0.000000" column2="1245.000000" column3="4526.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -6096,7 +6293,9 @@
      <Line2 column1="0.000000" column2="1132.000000" column3="5918.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -6161,7 +6360,9 @@
      <Line2 column1="0.000000" column2="1132.000000" column3="7198.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -6226,7 +6427,9 @@
      <Line2 column1="0.000000" column2="1132.000000" column3="8477.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -6291,7 +6494,9 @@
      <Line2 column1="0.000000" column2="1245.000000" column3="4526.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -6356,7 +6561,9 @@
      <Line2 column1="0.000000" column2="1131.000000" column3="5947.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -6421,7 +6628,9 @@
      <Line2 column1="0.000000" column2="969.000000" column3="7223.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -6486,7 +6695,9 @@
      <Line2 column1="0.000000" column2="1231.000000" column3="11059.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -6551,7 +6762,10 @@
      <Line2 column1="0.000000" column2="1422.000000" column3="12543.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" value="14539203" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="SpPrSolidFillSchemeClr" value="bg2" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -6616,7 +6830,9 @@
      <Line2 column1="0.000000" column2="1132.000000" column3="8371.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -6681,7 +6897,9 @@
      <Line2 column1="0.000000" column2="1132.000000" column3="9715.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -6746,7 +6964,9 @@
      <Line2 column1="0.000000" column2="1245.000000" column3="4457.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -6811,7 +7031,9 @@
      <Line2 column1="0.000000" column2="1132.000000" column3="5947.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -6876,7 +7098,9 @@
      <Line2 column1="0.000000" column2="1101.000000" column3="7224.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -6941,7 +7165,9 @@
      <Line2 column1="0.000000" column2="983.000000" column3="3341.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag/>
+    <InteropGrabBag>
+     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
+    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>

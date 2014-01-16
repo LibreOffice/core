@@ -219,6 +219,8 @@ protected:
 
     void                putPropertyToGrabBag(
                             const ::com::sun::star::beans::PropertyValue& pProperty );
+    void                putPropertiesToGrabBag(
+                            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProperties );
 
     std::vector< ShapePtr >     maChildren;               // only used for group shapes
     com::sun::star::awt::Size   maChSize;                 // only used for group shapes
