@@ -983,7 +983,7 @@ void SbiIoSystem::WriteCon(const OUString& rText)
         }
         OUString s(aOut.copy(0, n1));
         aOut = aOut.copy(n1);
-        while (aOut[0] == '\n' || aOut[0] == '\r')
+        while ( !aOut.isEmpty() && (aOut[0] == '\n' || aOut[0] == '\r') )
         {
             aOut = aOut.copy(1);
         }
