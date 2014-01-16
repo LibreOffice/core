@@ -43,8 +43,8 @@ public:
     sal_uInt16      GetZoom() const                 { return nZoom;         }
     void        SetZoomType( SvxZoomType eNew ) { eZoomType = eNew;     }
     SvxZoomType GetZoomType() const             { return eZoomType;     }
-    void        SetSynchronizeZoom( sal_Bool bNew ) { bSynchronizeZoom = bNew; }
-    sal_Bool        GetSynchronizeZoom() const      { return bSynchronizeZoom; }
+    void        SetSynchronizeZoom( bool bNew ) { bSynchronizeZoom = bNew; }
+    bool        GetSynchronizeZoom() const      { return bSynchronizeZoom; }
     sal_uInt16      GetLRUFuncListCount() const     { return nLRUFuncCount; }
     sal_uInt16*     GetLRUFuncList() const          { return pLRUList;      }
     void        SetLRUFuncList( const sal_uInt16* pList,
@@ -86,7 +86,7 @@ private:
     sal_uInt16*     pLRUList;
     SvxZoomType eZoomType;
     sal_uInt16      nZoom;
-    sal_Bool        bSynchronizeZoom;
+    bool            bSynchronizeZoom;
     sal_uInt16      nStatusFunc;
     sal_Bool        bAutoComplete;
     sal_Bool        bDetectiveAuto;

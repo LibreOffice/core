@@ -628,7 +628,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case SID_ATTR_ZOOM: // Statuszeile
         case FID_SCALE:
             {
-                sal_Bool bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
+                bool bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
                 SvxZoomType eOldZoomType = GetZoomType();
                 SvxZoomType eNewZoomType = eOldZoomType;
                 const Fraction& rOldY = GetViewData()->GetZoomY();  // Y wird angezeigt
@@ -740,7 +740,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case SID_ATTR_ZOOMSLIDER:
             {
                 const SfxPoolItem* pItem = NULL;
-                sal_Bool bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
+                bool bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
                 if ( pReqArgs && pReqArgs->GetItemState(SID_ATTR_ZOOMSLIDER, sal_True, &pItem) == SFX_ITEM_SET )
                 {
                     const sal_uInt16 nCurrentZoom = ((const SvxZoomSliderItem *)pItem)->GetValue();

@@ -952,7 +952,7 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
             {
                 // scroll wheel doesn't set the AppOptions default
 
-                sal_Bool bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
+                bool bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
                 SetZoomType( SVX_ZOOM_PERCENT, bSyncZoom );
                 Fraction aFract( nNew, 100 );
                 SetZoom( aFract, aFract, bSyncZoom );
