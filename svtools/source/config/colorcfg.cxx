@@ -23,7 +23,9 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <comphelper/processfactory.hxx>
 #include <unotools/configitem.hxx>
+#include <unotools/confignode.hxx>
 #include <unotools/configpaths.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <svl/poolitem.hxx>
@@ -64,6 +66,7 @@ class ColorConfig_Impl : public utl::ConfigItem
     sal_Bool            m_bEditMode;
     OUString       m_sIsVisible;
     OUString       m_sLoadedScheme;
+    bool m_bAutoDetectSystemHC;
 
     uno::Sequence< OUString> GetPropertyNames(const OUString& rScheme);
 public:
@@ -91,6 +94,7 @@ public:
     void                            SetModified(){ConfigItem::SetModified();}
     void                            ClearModified(){ConfigItem::ClearModified();}
     void                            SettingsChanged();
+    bool GetAutoDetectSystemHC() {return m_bAutoDetectSystemHC;}
 
     // #100822#
     DECL_LINK( DataChangedEventListener, VclWindowEvent* );
@@ -183,7 +187,8 @@ uno::Sequence< OUString> ColorConfig_Impl::GetPropertyNames(const OUString& rSch
 ColorConfig_Impl::ColorConfig_Impl(sal_Bool bEditMode) :
     ConfigItem("Office.UI/ColorScheme"),
     m_bEditMode(bEditMode),
-    m_sIsVisible("/IsVisible")
+    m_sIsVisible("/IsVisible"),
+    m_bAutoDetectSystemHC(true)
 {
     if(!m_bEditMode)
     {
@@ -236,6 +241,15 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
         //test for visibility property
         if(pColorNames[nIndex].match(m_sIsVisible, pColorNames[nIndex].getLength() - m_sIsVisible.getLength()))
              m_aConfigValues[i / 2].bIsVisible = Any2Bool(pColors[nIndex++]);
+    }
+    // fdo#71511: check if we are running in a11y autodetect
+    {
+        utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithComponentContext(comphelper::getProcessComponentContext(),OUString("org.openoffice.Office.Common/Accessibility") );
+        if(aNode.isValid())
+        {
+            uno::Any aValue = aNode.getNodeValue(OUString("AutoDetectSystemHC"));
+            aValue >>= m_bAutoDetectSystemHC;
+        }
     }
 }
 
@@ -465,6 +479,21 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
 
         default:
             aRet = aAutoColors[eEntry];
+    }
+    // fdo#71511: if in autodetected a11y HC mode, do pull background color from theme
+    if(m_pImpl &&  m_pImpl->GetAutoDetectSystemHC())
+    {
+        switch(eEntry)
+        {
+            case DOCCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetWindowColor();
+                break;
+            case FONTCOLOR :
+                aRet = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
+                break;
+            default:
+                break;
+        }
     }
     return aRet;
 }
