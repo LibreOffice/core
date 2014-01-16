@@ -1157,6 +1157,7 @@ sal_uInt16 AquaSalGraphics::GetBitCount() const
 
 SalBitmap* AquaSalGraphics::getBitmap( long  nX, long  nY, long  nDX, long  nDY )
 {
+#ifdef IOS
     if (!mbForeignContext && m_aDevice != NULL)
     {
         // on ios virtual device are Svp so use Svp bitmap to get the content
@@ -1193,20 +1194,19 @@ SalBitmap* AquaSalGraphics::getBitmap( long  nX, long  nY, long  nDX, long  nDY 
         }
         return NULL;
     }
-    else
+#endif
+
+    DBG_ASSERT( mxLayer, "AquaSalGraphics::getBitmap() with no layer" );
+
+    ApplyXorContext();
+
+    QuartzSalBitmap* pBitmap = new QuartzSalBitmap;
+    if( !pBitmap->Create( mxLayer, mnBitmapDepth, nX, nY, nDX, nDY) )
     {
-        DBG_ASSERT( mxLayer, "AquaSalGraphics::getBitmap() with no layer" );
-
-        ApplyXorContext();
-
-        QuartzSalBitmap* pBitmap = new QuartzSalBitmap;
-        if( !pBitmap->Create( mxLayer, mnBitmapDepth, nX, nY, nDX, nDY) )
-        {
-            delete pBitmap;
-            pBitmap = NULL;
-        }
-        return pBitmap;
+        delete pBitmap;
+        pBitmap = NULL;
     }
+    return pBitmap;
 }
 
 #ifndef IOS
