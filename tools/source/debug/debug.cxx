@@ -1590,7 +1590,11 @@ void DbgOutf( const sal_Char*, ... ) {}
 
 TOOLS_DLLPUBLIC void DbgUnhandledException(const css::uno::Any & caught, const char* currentFunction, const char* fileAndLineNo)
 {
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL == 0
+        (void) caught;
+        (void) currentFunction;
+        (void) fileAndLineNo;
+#else
         OString sMessage( "caught an exception!" );
         sMessage += "\nin function:";
         sMessage += currentFunction;
