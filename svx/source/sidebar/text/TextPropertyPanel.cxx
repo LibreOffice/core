@@ -81,9 +81,6 @@ namespace svx { namespace sidebar {
 
 #undef HAS_IA2
 
-#define FN_GROW_FONT_SIZE       (FN_FORMAT + 3 )
-#define FN_SHRINK_FONT_SIZE     (FN_FORMAT + 4 )
-
 PopupControl* TextPropertyPanel::CreateCharacterSpacingControl (PopupContainer* pParent)
 {
     return new TextCharacterSpacingControl(pParent, *this, mpBindings);
@@ -553,44 +550,10 @@ IMPL_LINK(TextPropertyPanel, ToolboxIncDecSelectHdl, ToolBox*, pToolBox)
     const sal_uInt16 nId = pToolBox->GetCurItemId();
     const OUString aCommand(pToolBox->GetItemCommand(nId));
 
-    // font size +/- enhancement in sd
-    switch (maContext.GetCombinedContext_DI())
-    {
-        case CombinedEnumContext(Application_DrawImpress, Context_DrawText):
-        case CombinedEnumContext(Application_DrawImpress, Context_Text):
-        case CombinedEnumContext(Application_DrawImpress, Context_Table):
-        case CombinedEnumContext(Application_DrawImpress, Context_OutlineText):
-        case CombinedEnumContext(Application_DrawImpress, Context_Draw):
-        case CombinedEnumContext(Application_DrawImpress, Context_TextObject):
-        case CombinedEnumContext(Application_DrawImpress, Context_Graphic):
-            if(aCommand == UNO_GROW)
-            {
-                EndTracking();
-                SfxVoidItem aItem(SID_GROW_FONT_SIZE);
-                mpBindings->GetDispatcher()->Execute( SID_GROW_FONT_SIZE, SFX_CALLMODE_RECORD, &aItem, 0L );
-            }
-            else if(aCommand == UNO_SHRINK)
-            {
-                EndTracking();
-                SfxVoidItem aItem(SID_SHRINK_FONT_SIZE);
-                mpBindings->GetDispatcher()->Execute( SID_SHRINK_FONT_SIZE, SFX_CALLMODE_RECORD, &aItem, 0L );
-            }
-            break;
+    EndTracking();
 
-        default:
-            if(aCommand == UNO_GROW)
-            {
-                EndTracking();
-                SfxVoidItem aItem(FN_GROW_FONT_SIZE);
-                mpBindings->GetDispatcher()->Execute( FN_GROW_FONT_SIZE, SFX_CALLMODE_RECORD, &aItem, 0L );
-            }
-            else if(aCommand == UNO_SHRINK)
-            {
-                EndTracking();
-                SfxVoidItem aItem(FN_SHRINK_FONT_SIZE);
-                mpBindings->GetDispatcher()->Execute( FN_SHRINK_FONT_SIZE, SFX_CALLMODE_RECORD, &aItem, 0L );
-            }
-    }
+    dispatch(aCommand);
+
     UpdateItem(SID_ATTR_CHAR_FONTHEIGHT);
 
     return 0;
