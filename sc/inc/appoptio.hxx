@@ -73,18 +73,18 @@ public:
     void        SetDefaultObjectSizeHeight(sal_Int32 nNew)  { nDefaultObjectSizeHeight = nNew; }
     sal_Int32       GetDefaultObjectSizeHeight() const      { return nDefaultObjectSizeHeight; }
 
-    void        SetShowSharedDocumentWarning( sal_Bool bNew )   { mbShowSharedDocumentWarning = bNew; }
-    sal_Bool        GetShowSharedDocumentWarning() const        { return mbShowSharedDocumentWarning; }
+    void        SetShowSharedDocumentWarning( bool bNew )   { mbShowSharedDocumentWarning = bNew; }
+    bool        GetShowSharedDocumentWarning() const        { return mbShowSharedDocumentWarning; }
     ScOptionsUtil::KeyBindingType GetKeyBindingType() const { return meKeyBindingType; }
     void        SetKeyBindingType( ScOptionsUtil::KeyBindingType e ) { meKeyBindingType = e; }
 
     const ScAppOptions& operator=   ( const ScAppOptions& rOpt );
 
 private:
-    FieldUnit   eMetric;
+    FieldUnit       eMetric;
     sal_uInt16      nLRUFuncCount;
     sal_uInt16*     pLRUList;
-    SvxZoomType eZoomType;
+    SvxZoomType     eZoomType;
     sal_uInt16      nZoom;
     bool            bSynchronizeZoom;
     sal_uInt16      nStatusFunc;
@@ -97,7 +97,7 @@ private:
     ScLkUpdMode eLinkMode;
     sal_Int32       nDefaultObjectSizeWidth;
     sal_Int32       nDefaultObjectSizeHeight;
-    sal_Bool        mbShowSharedDocumentWarning;
+    bool            mbShowSharedDocumentWarning;
     ScOptionsUtil::KeyBindingType meKeyBindingType;
 };
 
