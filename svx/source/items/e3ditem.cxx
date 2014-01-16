@@ -102,9 +102,9 @@ SvStream& SvxB3DVectorItem::Store(SvStream &rStream, sal_uInt16 /*nItemVersion*/
 
     // ## if (nItemVersion)
     double fValue;
-    fValue = aVal.getX(); rStream << fValue;
-    fValue = aVal.getY(); rStream << fValue;
-    fValue = aVal.getZ(); rStream << fValue;
+    fValue = aVal.getX(); rStream.WriteDouble( fValue );
+    fValue = aVal.getY(); rStream.WriteDouble( fValue );
+    fValue = aVal.getZ(); rStream.WriteDouble( fValue );
 
     return rStream;
 }

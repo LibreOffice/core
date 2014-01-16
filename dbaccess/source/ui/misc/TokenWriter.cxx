@@ -381,8 +381,8 @@ sal_Bool ORTFImportExport::Write()
 {
     SAL_INFO("dbaccess.ui", "ORTFImportExport::Write" );
     ODatabaseImportExport::Write();
-    (*m_pStream) << '{'     << OOO_STRING_SVTOOLS_RTF_RTF;
-    (*m_pStream) << OOO_STRING_SVTOOLS_RTF_ANSI << SAL_NEWLINE_STRING;
+    m_pStream->WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_RTF );
+    m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ANSI ).WriteCharPtr( SAL_NEWLINE_STRING );
     rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252;
 
     sal_Bool bBold          = ( ::com::sun::star::awt::FontWeight::BOLD     == m_aFont.Weight );
@@ -402,36 +402,36 @@ sal_Bool ORTFImportExport::Write()
         aFonts = OUStringToOString(aName, eDestEnc);
     }
 
-    (*m_pStream)    << "{\\fonttbl";
+    m_pStream->WriteCharPtr( "{\\fonttbl" );
     sal_Int32 nTokenCount = comphelper::string::getTokenCount(aFonts, ';');
     for(sal_Int32 j=0; j<nTokenCount; ++j)
     {
-        (*m_pStream) << "\\f";
+        m_pStream->WriteCharPtr( "\\f" );
         m_pStream->WriteNumber(j);
-        (*m_pStream) << "\\fcharset0\\fnil ";
-        (*m_pStream) << comphelper::string::getToken(aFonts, j, ';').getStr();
-        (*m_pStream) << ';';
+        m_pStream->WriteCharPtr( "\\fcharset0\\fnil " );
+        m_pStream->WriteCharPtr( comphelper::string::getToken(aFonts, j, ';').getStr() );
+        m_pStream->WriteChar( ';' );
     }
-    (*m_pStream) << '}' ;
-    (*m_pStream) << SAL_NEWLINE_STRING;
+    m_pStream->WriteChar( '}' ) ;
+    m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
     // write the rtf color table
-    (*m_pStream) << '{' << OOO_STRING_SVTOOLS_RTF_COLORTBL << OOO_STRING_SVTOOLS_RTF_RED;
+    m_pStream->WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_COLORTBL ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_RED );
     m_pStream->WriteNumber(static_cast<sal_uInt32>(aColor.GetRed()));
-    (*m_pStream) << OOO_STRING_SVTOOLS_RTF_GREEN;
+    m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_GREEN );
     m_pStream->WriteNumber(static_cast<sal_uInt32>(aColor.GetGreen()));
-    (*m_pStream) << OOO_STRING_SVTOOLS_RTF_BLUE;
+    m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_BLUE );
     m_pStream->WriteNumber(static_cast<sal_uInt32>(aColor.GetBlue()));
 
-    (*m_pStream) << ";\\red255\\green255\\blue255;\\red192\\green192\\blue192;}"
-                 << SAL_NEWLINE_STRING;
+    m_pStream->WriteCharPtr( ";\\red255\\green255\\blue255;\\red192\\green192\\blue192;}" )
+                .WriteCharPtr( SAL_NEWLINE_STRING );
 
     static char const aTRRH[] = "\\trrh-270\\pard\\intbl";
     static char const aFS[] = "\\fs20\\f0\\cf0\\cb2";
     static char const aCell1[] = "\\clbrdrl\\brdrs\\brdrcf0\\clbrdrt\\brdrs\\brdrcf0\\clbrdrb\\brdrs\\brdrcf0\\clbrdrr\\brdrs\\brdrcf0\\clshdng10000\\clcfpat2\\cellx";
 
-    (*m_pStream) << OOO_STRING_SVTOOLS_RTF_TROWD << OOO_STRING_SVTOOLS_RTF_TRGAPH;
+    m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TROWD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRGAPH );
     m_pStream->WriteNumber(static_cast<sal_Int32>(40));
-    (*m_pStream) << SAL_NEWLINE_STRING;
+    m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
 
     if(m_xObject.is())
     {
@@ -450,14 +450,14 @@ sal_Bool ORTFImportExport::Write()
 
         for( sal_Int32 i=1; i<=nCount; ++i )
         {
-            (*m_pStream) << aCell1;
+            m_pStream->WriteCharPtr( aCell1 );
             m_pStream->WriteNumber(i*CELL_X);
-            (*m_pStream) << SAL_NEWLINE_STRING;
+            m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
         }
 
         // column description
-        (*m_pStream) << '{' << SAL_NEWLINE_STRING;
-        (*m_pStream) << aTRRH;
+        m_pStream->WriteChar( '{' ).WriteCharPtr( SAL_NEWLINE_STRING );
+        m_pStream->WriteCharPtr( aTRRH );
 
         OString* pHorzChar = new OString[nCount];
 
@@ -487,28 +487,28 @@ sal_Bool ORTFImportExport::Write()
 
             pHorzChar[i-1] = pChar; // to avoid to always rummage in the ITEMSET later on
 
-            (*m_pStream) << SAL_NEWLINE_STRING;
-            (*m_pStream) << '{';
-            (*m_pStream) << OOO_STRING_SVTOOLS_RTF_QC;   // column header always centered
+            m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
+            m_pStream->WriteChar( '{' );
+            m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_QC );   // column header always centered
 
-            if ( bBold )        (*m_pStream) << OOO_STRING_SVTOOLS_RTF_B;
-            if ( bItalic )      (*m_pStream) << OOO_STRING_SVTOOLS_RTF_I;
-            if ( bUnderline )   (*m_pStream) << OOO_STRING_SVTOOLS_RTF_UL;
-            if ( bStrikeout )   (*m_pStream) << OOO_STRING_SVTOOLS_RTF_STRIKE;
+            if ( bBold )        m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_B );
+            if ( bItalic )      m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_I );
+            if ( bUnderline )   m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_UL );
+            if ( bStrikeout )   m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_STRIKE );
 
-            (*m_pStream) << aFS;
-            (*m_pStream) << ' ';
+            m_pStream->WriteCharPtr( aFS );
+            m_pStream->WriteChar( ' ' );
             RTFOutFuncs::Out_String(*m_pStream,sColumnName,eDestEnc);
 
-            (*m_pStream) << OOO_STRING_SVTOOLS_RTF_CELL;
-            (*m_pStream) << '}';
-            (*m_pStream) << SAL_NEWLINE_STRING;
-            (*m_pStream) << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_INTBL;
+            m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CELL );
+            m_pStream->WriteChar( '}' );
+            m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
+            m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PARD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_INTBL );
         }
 
-        (*m_pStream) << OOO_STRING_SVTOOLS_RTF_ROW;
-        (*m_pStream) << SAL_NEWLINE_STRING << '}';
-        (*m_pStream) << SAL_NEWLINE_STRING;
+        m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ROW );
+        m_pStream->WriteCharPtr( SAL_NEWLINE_STRING ).WriteChar( '}' );
+        m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
 
         Reference< XRowSet > xRowSet(m_xRow,UNO_QUERY);
         sal_Int32 k=1;
@@ -547,8 +547,8 @@ sal_Bool ORTFImportExport::Write()
         delete [] pHorzChar;
     }
 
-    (*m_pStream) << '}' << SAL_NEWLINE_STRING;
-    (*m_pStream) << (sal_uInt8) 0;
+    m_pStream->WriteChar( '}' ).WriteCharPtr( SAL_NEWLINE_STRING );
+    m_pStream->WriteUChar( (sal_uInt8) 0 );
     return ((*m_pStream).GetError() == SVSTREAM_OK);
 }
 
@@ -557,18 +557,18 @@ void ORTFImportExport::appendRow(OString* pHorzChar,sal_Int32 _nColumnCount,sal_
     if(!m_pRowMarker || m_pRowMarker[kk] == k)
     {
         ++kk;
-        (*m_pStream) << OOO_STRING_SVTOOLS_RTF_TROWD << OOO_STRING_SVTOOLS_RTF_TRGAPH;
+        m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TROWD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRGAPH );
         m_pStream->WriteNumber(static_cast<sal_Int32>(40));
-        (*m_pStream) << SAL_NEWLINE_STRING;
+        m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
 
         static char const aCell2[] = "\\clbrdrl\\brdrs\\brdrcf2\\clbrdrt\\brdrs\\brdrcf2\\clbrdrb\\brdrs\\brdrcf2\\clbrdrr\\brdrs\\brdrcf2\\clshdng10000\\clcfpat1\\cellx";
         static char const aTRRH[] = "\\trrh-270\\pard\\intbl";
 
         for ( sal_Int32 i=1; i<=_nColumnCount; ++i )
         {
-            (*m_pStream) << aCell2;
+            m_pStream->WriteCharPtr( aCell2 );
             m_pStream->WriteNumber(i*CELL_X);
-            (*m_pStream) << SAL_NEWLINE_STRING;
+            m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
         }
 
         const sal_Bool bBold            = ( ::com::sun::star::awt::FontWeight::BOLD     == m_aFont.Weight );
@@ -577,20 +577,20 @@ void ORTFImportExport::appendRow(OString* pHorzChar,sal_Int32 _nColumnCount,sal_
         const sal_Bool bStrikeout       = ( ::com::sun::star::awt::FontStrikeout::NONE  != m_aFont.Strikeout );
         Reference< XRowSet > xRowSet(m_xRow,UNO_QUERY);
 
-        (*m_pStream) << '{';
-        (*m_pStream) << aTRRH;
+        m_pStream->WriteChar( '{' );
+        m_pStream->WriteCharPtr( aTRRH );
         for ( sal_Int32 i=1; i <= _nColumnCount; ++i )
         {
-            (*m_pStream) << SAL_NEWLINE_STRING;
-            (*m_pStream) << '{';
-            (*m_pStream) << pHorzChar[i-1].getStr();
+            m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
+            m_pStream->WriteChar( '{' );
+            m_pStream->WriteCharPtr( pHorzChar[i-1].getStr() );
 
-            if ( bBold )        (*m_pStream) << OOO_STRING_SVTOOLS_RTF_B;
-            if ( bItalic )      (*m_pStream) << OOO_STRING_SVTOOLS_RTF_I;
-            if ( bUnderline )   (*m_pStream) << OOO_STRING_SVTOOLS_RTF_UL;
-            if ( bStrikeout )   (*m_pStream) << OOO_STRING_SVTOOLS_RTF_STRIKE;
+            if ( bBold )        m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_B );
+            if ( bItalic )      m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_I );
+            if ( bUnderline )   m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_UL );
+            if ( bStrikeout )   m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_STRIKE );
 
-            (*m_pStream) << "\\fs20\\f1\\cf0\\cb1 ";
+            m_pStream->WriteCharPtr( "\\fs20\\f1\\cf0\\cb1 " );
 
             try
             {
@@ -605,13 +605,13 @@ void ORTFImportExport::appendRow(OString* pHorzChar,sal_Int32 _nColumnCount,sal_
                 SAL_WARN("dbaccess.ui","RTF WRITE!");
             }
 
-            (*m_pStream) << OOO_STRING_SVTOOLS_RTF_CELL;
-            (*m_pStream) << '}';
-            (*m_pStream) << SAL_NEWLINE_STRING;
-            (*m_pStream) << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_INTBL;
+            m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CELL );
+            m_pStream->WriteChar( '}' );
+            m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
+            m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PARD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_INTBL );
         }
-        (*m_pStream) << OOO_STRING_SVTOOLS_RTF_ROW << SAL_NEWLINE_STRING;
-        (*m_pStream) << '}';
+        m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ROW ).WriteCharPtr( SAL_NEWLINE_STRING );
+        m_pStream->WriteChar( '}' );
     }
     ++k;
 }
@@ -677,7 +677,7 @@ sal_Bool OHTMLImportExport::Write()
     ODatabaseImportExport::Write();
     if(m_xObject.is())
     {
-        (*m_pStream) << '<' << OOO_STRING_SVTOOLS_HTML_doctype << ' ' << OOO_STRING_SVTOOLS_HTML_doctype40 << '>' << SAL_NEWLINE_STRING << SAL_NEWLINE_STRING;
+        m_pStream->WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_doctype ).WriteChar( ' ' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_doctype40 ).WriteChar( '>' ).WriteCharPtr( SAL_NEWLINE_STRING ).WriteCharPtr( SAL_NEWLINE_STRING );
         TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_html );
         WriteHeader();
         OUT_LF();
@@ -732,32 +732,32 @@ void OHTMLImportExport::WriteBody()
     SAL_INFO("dbaccess.ui", "OHTMLImportExport::WriteBody" );
 
     IncIndent(1);
-    (*m_pStream) << "<" << OOO_STRING_SVTOOLS_HTML_style << " " << OOO_STRING_SVTOOLS_HTML_O_type << "=\"text/css\">";
+    m_pStream->WriteCharPtr( "<" ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_style ).WriteCharPtr( " " ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_type ).WriteCharPtr( "=\"text/css\">" );
 
-    (*m_pStream) << sMyBegComment; OUT_LF();
-    (*m_pStream) << OOO_STRING_SVTOOLS_HTML_body " { " << sFontFamily << '"' << OUStringToOString(m_aFont.Name, osl_getThreadTextEncoding()).getStr() << '\"';
+    m_pStream->WriteCharPtr( sMyBegComment ); OUT_LF();
+    m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_HTML_body ).WriteCharPtr( " { " ).WriteCharPtr( sFontFamily ).WriteChar( '"' ).WriteCharPtr( OUStringToOString(m_aFont.Name, osl_getThreadTextEncoding()).getStr() ).WriteChar( '\"' );
         // TODO : think about the encoding of the font name
-    (*m_pStream) << "; " << sFontSize;
+    m_pStream->WriteCharPtr( "; " ).WriteCharPtr( sFontSize );
     m_pStream->WriteNumber(static_cast<sal_Int32>(m_aFont.Height));
-    (*m_pStream) << '}';
+    m_pStream->WriteChar( '}' );
 
     OUT_LF();
-    (*m_pStream) << sMyEndComment;
+    m_pStream->WriteCharPtr( sMyEndComment );
     IncIndent(-1); OUT_LF(); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_style );
     OUT_LF();
 
     // default Textcolour black
-    (*m_pStream) << '<' << OOO_STRING_SVTOOLS_HTML_body << ' ' << OOO_STRING_SVTOOLS_HTML_O_text << '=';
+    m_pStream->WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_body ).WriteChar( ' ' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_text ).WriteChar( '=' );
     sal_Int32 nColor = 0;
     if(m_xObject.is())
         m_xObject->getPropertyValue(PROPERTY_TEXTCOLOR) >>= nColor;
     ::Color aColor(nColor);
     HTMLOutFuncs::Out_Color( (*m_pStream), aColor );
 
-    (*m_pStream) << " " OOO_STRING_SVTOOLS_HTML_O_bgcolor "=";
+    m_pStream->WriteCharPtr( " " OOO_STRING_SVTOOLS_HTML_O_bgcolor "=" );
     HTMLOutFuncs::Out_Color( (*m_pStream), aColor );
 
-    (*m_pStream) << '>'; OUT_LF();
+    m_pStream->WriteChar( '>' ); OUT_LF();
 
     WriteTables();
 
@@ -815,7 +815,7 @@ void OHTMLImportExport::WriteTables()
     TAG_ON( OOO_STRING_SVTOOLS_HTML_caption );
     TAG_ON( OOO_STRING_SVTOOLS_HTML_bold );
 
-    (*m_pStream)    << OUStringToOString(m_sName, osl_getThreadTextEncoding()).getStr();
+    m_pStream->WriteCharPtr( OUStringToOString(m_sName, osl_getThreadTextEncoding()).getStr() );
         // TODO : think about the encoding of the name
     TAG_OFF( OOO_STRING_SVTOOLS_HTML_bold );
     TAG_OFF( OOO_STRING_SVTOOLS_HTML_caption );
@@ -1030,7 +1030,7 @@ void OHTMLImportExport::FontOn()
     aStrOut  = aStrOut + " ";
     aStrOut  = aStrOut + OOO_STRING_SVTOOLS_HTML_O_color;
     aStrOut  = aStrOut + "=";
-    (*m_pStream) << aStrOut.getStr();
+    m_pStream->WriteCharPtr( aStrOut.getStr() );
 
     sal_Int32 nColor = 0;
     if(m_xObject.is())
@@ -1038,7 +1038,7 @@ void OHTMLImportExport::FontOn()
     ::Color aColor(nColor);
 
     HTMLOutFuncs::Out_Color( (*m_pStream), aColor );
-    (*m_pStream) << ">";
+    m_pStream->WriteCharPtr( ">" );
 }
 
 inline void OHTMLImportExport::FontOff()

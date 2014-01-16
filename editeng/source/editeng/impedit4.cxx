@@ -340,11 +340,11 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     nEndNode = aEditDoc.GetPos( aSel.Max().GetNode() );
 
     // RTF header ...
-    rOutput << '{' ;
+    rOutput.WriteChar( '{' ) ;
 
-    rOutput << OOO_STRING_SVTOOLS_RTF_RTF;
+    rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_RTF );
 
-    rOutput << OOO_STRING_SVTOOLS_RTF_ANSI;
+    rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ANSI );
     rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252;
 
     // Generate and write out Font table  ...
@@ -379,32 +379,33 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         }
     }
 
-    rOutput << endl << '{' << OOO_STRING_SVTOOLS_RTF_FONTTBL;
+    rOutput << endl;
+    rOutput.WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_FONTTBL );
     sal_uInt16 j;
     for ( j = 0; j < aFontTable.size(); j++ )
     {
         SvxFontItem* pFontItem = aFontTable[ j ];
-        rOutput << '{';
-        rOutput << OOO_STRING_SVTOOLS_RTF_F;
+        rOutput.WriteChar( '{' );
+        rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_F );
         rOutput.WriteNumber( static_cast<sal_uInt32>( j ) );
         switch ( pFontItem->GetFamily()  )
         {
-            case FAMILY_DONTKNOW:       rOutput << OOO_STRING_SVTOOLS_RTF_FNIL;
+            case FAMILY_DONTKNOW:       rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_FNIL );
                                         break;
-            case FAMILY_DECORATIVE:     rOutput << OOO_STRING_SVTOOLS_RTF_FDECOR;
+            case FAMILY_DECORATIVE:     rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_FDECOR );
                                         break;
-            case FAMILY_MODERN:         rOutput << OOO_STRING_SVTOOLS_RTF_FMODERN;
+            case FAMILY_MODERN:         rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_FMODERN );
                                         break;
-            case FAMILY_ROMAN:          rOutput << OOO_STRING_SVTOOLS_RTF_FROMAN;
+            case FAMILY_ROMAN:          rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_FROMAN );
                                         break;
-            case FAMILY_SCRIPT:         rOutput << OOO_STRING_SVTOOLS_RTF_FSCRIPT;
+            case FAMILY_SCRIPT:         rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_FSCRIPT );
                                         break;
-            case FAMILY_SWISS:          rOutput << OOO_STRING_SVTOOLS_RTF_FSWISS;
+            case FAMILY_SWISS:          rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_FSWISS );
                                         break;
             default:
                 break;
         }
-        rOutput << OOO_STRING_SVTOOLS_RTF_FPRQ;
+        rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_FPRQ );
         sal_uInt16 nVal = 0;
         switch( pFontItem->GetPitch() )
         {
@@ -419,14 +420,14 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         DBG_ASSERT( eChrSet != 9, "SystemCharSet?!" );
         if( RTL_TEXTENCODING_DONTKNOW == eChrSet )
             eChrSet = osl_getThreadTextEncoding();
-        rOutput << OOO_STRING_SVTOOLS_RTF_FCHARSET;
+        rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_FCHARSET );
         rOutput.WriteNumber( static_cast<sal_uInt32>( rtl_getBestWindowsCharsetFromTextEncoding( eChrSet ) ) );
 
-        rOutput << ' ';
+        rOutput.WriteChar( ' ' );
         RTFOutFuncs::Out_String( rOutput, pFontItem->GetFamilyName(), eDestEnc );
-        rOutput << ";}";
+        rOutput.WriteCharPtr( ";}" );
     }
-    rOutput << '}';
+    rOutput.WriteChar( '}' );
     rOutput << endl;
 
     // Write out ColorList  ...
@@ -443,22 +444,22 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     }
     aColorList.Insert( new SvxColorItem( (const SvxColorItem&)aEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_COLOR) ), i );
 
-    rOutput << '{' << OOO_STRING_SVTOOLS_RTF_COLORTBL;
+    rOutput.WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_COLORTBL );
     for ( j = 0; j < aColorList.Count(); j++ )
     {
         pColorItem = aColorList.GetObject( j );
         if ( !j || ( pColorItem->GetValue() != COL_AUTO ) )
         {
-            rOutput << OOO_STRING_SVTOOLS_RTF_RED;
+            rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_RED );
             rOutput.WriteNumber( static_cast<sal_uInt32>(pColorItem->GetValue().GetRed()) );
-            rOutput << OOO_STRING_SVTOOLS_RTF_GREEN;
+            rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_GREEN );
             rOutput.WriteNumber( static_cast<sal_uInt32>(pColorItem->GetValue().GetGreen()) );
-            rOutput << OOO_STRING_SVTOOLS_RTF_BLUE;
+            rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_BLUE );
             rOutput.WriteNumber( static_cast<sal_uInt32>(pColorItem->GetValue().GetBlue()) );
         }
-        rOutput << ';';
+        rOutput.WriteChar( ';' );
     }
-    rOutput << '}';
+    rOutput.WriteChar( '}' );
     rOutput << endl;
 
     // StyleSheets...
@@ -467,14 +468,15 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         sal_uInt16 nStyles = (sal_uInt16)GetStyleSheetPool()->GetStyles().size();
         if ( nStyles )
         {
-            rOutput << '{' << OOO_STRING_SVTOOLS_RTF_STYLESHEET;
+            rOutput.WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_STYLESHEET );
 
             for ( sal_uInt16 nStyle = 0; nStyle < nStyles; nStyle++ )
             {
 
                 SfxStyleSheet* pStyle = (SfxStyleSheet*)GetStyleSheetPool()->GetStyles()[ nStyle ].get();
 
-                rOutput << endl << '{' << OOO_STRING_SVTOOLS_RTF_S;
+                rOutput << endl;
+                rOutput.WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_S );
                 sal_uInt32 nNumber = nStyle + 1;
                 rOutput.WriteNumber( nNumber );
 
@@ -493,7 +495,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
                 {
                     SfxStyleSheet* pParent = (SfxStyleSheet*)GetStyleSheetPool()->Find( pStyle->GetParent(), pStyle->GetFamily() );
                     DBG_ASSERT( pParent, "Parent not found!" );
-                    rOutput << OOO_STRING_SVTOOLS_RTF_SBASEDON;
+                    rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SBASEDON );
                     nNumber = getStylePos( GetStyleSheetPool()->GetStyles(), pParent ) + 1;
                     rOutput.WriteNumber( nNumber );
                 }
@@ -504,39 +506,39 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
                     pNext = (SfxStyleSheet*)GetStyleSheetPool()->Find( pStyle->GetFollow(), pStyle->GetFamily() );
 
                 DBG_ASSERT( pNext, "Next ot found!" );
-                rOutput << OOO_STRING_SVTOOLS_RTF_SNEXT;
+                rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SNEXT );
                 nNumber = getStylePos( GetStyleSheetPool()->GetStyles(), pNext ) + 1;
                 rOutput.WriteNumber( nNumber );
 
                 // Name of the template ...
-                rOutput << " " << OUStringToOString(pStyle->GetName(), eDestEnc).getStr();
-                rOutput << ";}";
+                rOutput.WriteCharPtr( " " ).WriteCharPtr( OUStringToOString(pStyle->GetName(), eDestEnc).getStr() );
+                rOutput.WriteCharPtr( ";}" );
             }
-            rOutput << '}';
+            rOutput.WriteChar( '}' );
             rOutput << endl;
         }
     }
 
     // Write the pool defaults in advance ...
-    rOutput << '{' << OOO_STRING_SVTOOLS_RTF_IGNORE << "\\EditEnginePoolDefaults";
+    rOutput.WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_IGNORE ).WriteCharPtr( "\\EditEnginePoolDefaults" );
     for ( sal_uInt16 nPoolDefItem = EE_PARA_START; nPoolDefItem <= EE_CHAR_END; nPoolDefItem++)
     {
         const SfxPoolItem& rItem = aEditDoc.GetItemPool().GetDefaultItem( nPoolDefItem );
         WriteItemAsRTF( rItem, rOutput, 0, 0, aFontTable, aColorList );
     }
-    rOutput << '}' << endl;
+    rOutput.WriteChar( '}' ) << endl;
 
     // DefTab:
     MapMode aTwpMode( MAP_TWIP );
     sal_uInt16 nDefTabTwps = (sal_uInt16) GetRefDevice()->LogicToLogic(
                                         Point( aEditDoc.GetDefTab(), 0 ),
                                         &GetRefMapMode(), &aTwpMode ).X();
-    rOutput << OOO_STRING_SVTOOLS_RTF_DEFTAB;
+    rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_DEFTAB );
     rOutput.WriteNumber( static_cast<sal_uInt32>( nDefTabTwps ) );
     rOutput << endl;
 
     // iterate over the paragraphs ...
-    rOutput << '{' << endl;
+    rOutput.WriteChar( '{' ) << endl;
     for ( sal_Int32 nNode = nStartNode; nNode <= nEndNode; nNode++  )
     {
         ContentNode* pNode = aEditDoc.GetObject( nNode );
@@ -549,7 +551,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         if ( pNode->GetStyleSheet() )
         {
             // Number of template
-            rOutput << OOO_STRING_SVTOOLS_RTF_S;
+            rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_S );
             sal_uInt32 nNumber = getStylePos( GetStyleSheetPool()->GetStyles(), pNode->GetStyleSheet() ) + 1;
             rOutput.WriteNumber( nNumber );
 
@@ -577,7 +579,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
             }
         }
         if ( bAttr )
-            rOutput << ' '; // Separator
+            rOutput.WriteChar( ' ' ); // Separator
 
         ItemList aAttribItems;
         ParaPortion* pParaPortion = FindParaPortion( pNode );
@@ -602,7 +604,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
                 if ( aAttribItems.Count() )
                 {
                     // These attributes may not apply to the entire paragraph:
-                    rOutput << '{';
+                    rOutput.WriteChar( '{' );
                     WriteItemListAsRTF( aAttribItems, rOutput, nNode, nStartPos, aFontTable, aColorList );
                     bFinishPortion = sal_True;
                 }
@@ -647,9 +649,9 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
                 // Insert hard attribs AFTER CJK attribs...
                 lcl_FindValidAttribs( aAttribItems, pNode, nIndex, nScriptType );
 
-                rOutput << '{';
+                rOutput.WriteChar( '{' );
                 if ( WriteItemListAsRTF( aAttribItems, rOutput, nNode, nIndex, aFontTable, aColorList ) )
-                    rOutput << ' ';
+                    rOutput.WriteChar( ' ' );
 
                 sal_uInt16 nS = nIndex;
                 sal_uInt16 nE = nIndex + pTextPortion->GetLen();
@@ -660,22 +662,22 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
 
                 OUString aRTFStr = aEditDoc.GetParaAsString( pNode, nS, nE);
                 RTFOutFuncs::Out_String( rOutput, aRTFStr, eDestEnc );
-                rOutput << '}';
+                rOutput.WriteChar( '}' );
             }
             if ( bFinishPortion )
             {
-                rOutput << '}';
+                rOutput.WriteChar( '}' );
                 bFinishPortion = sal_False;
             }
 
             nIndex = nIndex + pTextPortion->GetLen();
         }
 
-        rOutput << OOO_STRING_SVTOOLS_RTF_PAR << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_PLAIN;;
+        rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PAR ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PARD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PLAIN );
         rOutput << endl;
     }
     // RTF-trailer ...
-    rOutput << "}}";    // 1xparentheses paragraphs, 1xparentheses RTF document
+    rOutput.WriteCharPtr( "}}" );    // 1xparentheses paragraphs, 1xparentheses RTF document
     rOutput.Flush();
 
     std::vector<SvxFontItem*>::iterator it;
@@ -696,9 +698,9 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         {
             const SvxFrameDirectionItem& rWritingMode = (const SvxFrameDirectionItem&)rItem;
             if ( rWritingMode.GetValue() == FRMDIR_HORI_RIGHT_TOP )
-                rOutput << "\\rtlpar";
+                rOutput.WriteCharPtr( "\\rtlpar" );
             else
-                rOutput << "\\ltrpar";
+                rOutput.WriteCharPtr( "\\ltrpar" );
         }
         break;
         case EE_PARA_OUTLLEVEL:
@@ -706,7 +708,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             sal_Int32 nLevel = ((const SfxInt16Item&)rItem).GetValue();
             if( nLevel >= 0 )
             {
-                rOutput << "\\level";
+                rOutput.WriteCharPtr( "\\level" );
                 rOutput.WriteNumber( nLevel );
             }
         }
@@ -714,15 +716,15 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         case EE_PARA_OUTLLRSPACE:
         case EE_PARA_LRSPACE:
         {
-            rOutput << OOO_STRING_SVTOOLS_RTF_FI;
+            rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_FI );
             sal_Int32 nTxtFirst = ((const SvxLRSpaceItem&)rItem).GetTxtFirstLineOfst();
             nTxtFirst = LogicToTwips( nTxtFirst );
             rOutput.WriteNumber( nTxtFirst );
-            rOutput << OOO_STRING_SVTOOLS_RTF_LI;
+            rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_LI );
             sal_uInt32 nTxtLeft = static_cast< sal_uInt32 >(((const SvxLRSpaceItem&)rItem).GetTxtLeft());
             nTxtLeft = (sal_uInt32)LogicToTwips( nTxtLeft );
             rOutput.WriteNumber( nTxtLeft );
-            rOutput << OOO_STRING_SVTOOLS_RTF_RI;
+            rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_RI );
             sal_uInt32 nTxtRight = ((const SvxLRSpaceItem&)rItem).GetRight();
             nTxtRight = LogicToTwips( nTxtRight);
             rOutput.WriteNumber( nTxtRight );
@@ -730,11 +732,11 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         break;
         case EE_PARA_ULSPACE:
         {
-            rOutput << OOO_STRING_SVTOOLS_RTF_SB;
+            rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SB );
             sal_uInt32 nUpper = ((const SvxULSpaceItem&)rItem).GetUpper();
             nUpper = (sal_uInt32)LogicToTwips( nUpper );
             rOutput.WriteNumber( nUpper );
-            rOutput << OOO_STRING_SVTOOLS_RTF_SA;
+            rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SA );
             sal_uInt32 nLower = ((const SvxULSpaceItem&)rItem).GetLower();
             nLower = LogicToTwips( nLower );
             rOutput.WriteNumber( nLower );
@@ -742,7 +744,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         break;
         case EE_PARA_SBL:
         {
-            rOutput << OOO_STRING_SVTOOLS_RTF_SL;
+            rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SL );
             sal_Int32 nVal = ((const SvxLineSpacingItem&)rItem).GetLineHeight();
             char cMult = '0';
             if ( ((const SvxLineSpacingItem&)rItem).GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP )
@@ -755,7 +757,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
                 cMult = '1';
             }
             rOutput.WriteNumber( nVal );
-            rOutput << OOO_STRING_SVTOOLS_RTF_SLMULT << cMult;
+            rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SLMULT ).WriteChar( cMult );
         }
         break;
         case EE_PARA_JUST:
@@ -763,11 +765,11 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             SvxAdjust eJustification = ((const SvxAdjustItem&)rItem).GetAdjust();
             switch ( eJustification )
             {
-                case SVX_ADJUST_CENTER: rOutput << OOO_STRING_SVTOOLS_RTF_QC;
+                case SVX_ADJUST_CENTER: rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_QC );
                                         break;
-                case SVX_ADJUST_RIGHT:  rOutput << OOO_STRING_SVTOOLS_RTF_QR;
+                case SVX_ADJUST_RIGHT:  rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_QR );
                                         break;
-                default:                rOutput << OOO_STRING_SVTOOLS_RTF_QL;
+                default:                rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_QL );
                                         break;
             }
         }
@@ -778,7 +780,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             for ( sal_uInt16 i = 0; i < rTabs.Count(); i++ )
             {
                 const SvxTabStop& rTab = rTabs[i];
-                rOutput << OOO_STRING_SVTOOLS_RTF_TX;
+                rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TX );
                 rOutput.WriteNumber( LogicToTwips( rTab.GetTabPos() ) );
             }
         }
@@ -786,7 +788,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         case EE_CHAR_COLOR:
         {
             sal_uInt32 n = rColorList.GetId( (const SvxColorItem&)rItem );
-            rOutput << OOO_STRING_SVTOOLS_RTF_CF;
+            rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CF );
             rOutput.WriteNumber( n );
         }
         break;
@@ -804,7 +806,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
                 }
             }
 
-            rOutput << OOO_STRING_SVTOOLS_RTF_F;
+            rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_F );
             rOutput.WriteNumber( n );
         }
         break;
@@ -812,7 +814,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         case EE_CHAR_FONTHEIGHT_CJK:
         case EE_CHAR_FONTHEIGHT_CTL:
         {
-            rOutput << OOO_STRING_SVTOOLS_RTF_FS;
+            rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_FS );
             sal_Int32 nHeight = ((const SvxFontHeightItem&)rItem).GetHeight();
             nHeight = LogicToTwips( nHeight );
             // Twips => HalfPoints
@@ -827,8 +829,8 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             FontWeight e = ((const SvxWeightItem&)rItem).GetWeight();
             switch ( e )
             {
-                case WEIGHT_BOLD:   rOutput << OOO_STRING_SVTOOLS_RTF_B;                break;
-                default:            rOutput << OOO_STRING_SVTOOLS_RTF_B << '0';     break;
+                case WEIGHT_BOLD:   rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_B );                break;
+                default:            rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_B ).WriteChar( '0' );     break;
             }
         }
         break;
@@ -839,10 +841,10 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             FontUnderline e = ((const SvxUnderlineItem&)rItem).GetLineStyle();
             switch ( e )
             {
-                case UNDERLINE_NONE:    rOutput << OOO_STRING_SVTOOLS_RTF_ULNONE;       break;
-                case UNDERLINE_SINGLE:  rOutput << OOO_STRING_SVTOOLS_RTF_UL;       break;
-                case UNDERLINE_DOUBLE:  rOutput << OOO_STRING_SVTOOLS_RTF_ULDB;     break;
-                case UNDERLINE_DOTTED:  rOutput << OOO_STRING_SVTOOLS_RTF_ULD;      break;
+                case UNDERLINE_NONE:    rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ULNONE );       break;
+                case UNDERLINE_SINGLE:  rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_UL );       break;
+                case UNDERLINE_DOUBLE:  rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ULDB );     break;
+                case UNDERLINE_DOTTED:  rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ULD );      break;
                 default:
                     break;
             }
@@ -853,10 +855,10 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             FontUnderline e = ((const SvxOverlineItem&)rItem).GetLineStyle();
             switch ( e )
             {
-                case UNDERLINE_NONE:    rOutput << OOO_STRING_SVTOOLS_RTF_OLNONE;       break;
-                case UNDERLINE_SINGLE:  rOutput << OOO_STRING_SVTOOLS_RTF_OL;       break;
-                case UNDERLINE_DOUBLE:  rOutput << OOO_STRING_SVTOOLS_RTF_OLDB;     break;
-                case UNDERLINE_DOTTED:  rOutput << OOO_STRING_SVTOOLS_RTF_OLD;      break;
+                case UNDERLINE_NONE:    rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_OLNONE );       break;
+                case UNDERLINE_SINGLE:  rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_OL );       break;
+                case UNDERLINE_DOUBLE:  rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_OLDB );     break;
+                case UNDERLINE_DOTTED:  rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_OLD );      break;
                 default:
                     break;
             }
@@ -868,8 +870,8 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             switch ( e )
             {
                 case STRIKEOUT_SINGLE:
-                case STRIKEOUT_DOUBLE:  rOutput << OOO_STRING_SVTOOLS_RTF_STRIKE;       break;
-                case STRIKEOUT_NONE:    rOutput << OOO_STRING_SVTOOLS_RTF_STRIKE << '0';    break;
+                case STRIKEOUT_DOUBLE:  rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_STRIKE );       break;
+                case STRIKEOUT_NONE:    rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_STRIKE ).WriteChar( '0' );    break;
                 default:
                     break;
             }
@@ -883,8 +885,8 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             switch ( e )
             {
                 case ITALIC_OBLIQUE:
-                case ITALIC_NORMAL: rOutput << OOO_STRING_SVTOOLS_RTF_I;        break;
-                case ITALIC_NONE:   rOutput << OOO_STRING_SVTOOLS_RTF_I << '0'; break;
+                case ITALIC_NORMAL: rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_I );        break;
+                case ITALIC_NONE:   rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_I ).WriteChar( '0' ); break;
                 default:
                     break;
             }
@@ -892,58 +894,58 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         break;
         case EE_CHAR_OUTLINE:
         {
-            rOutput << OOO_STRING_SVTOOLS_RTF_OUTL;
+            rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_OUTL );
             if ( !((const SvxContourItem&)rItem).GetValue() )
-                rOutput << '0';
+                rOutput.WriteChar( '0' );
         }
         break;
         case EE_CHAR_RELIEF:
         {
             sal_uInt16 nRelief = ((const SvxCharReliefItem&)rItem).GetValue();
             if ( nRelief == RELIEF_EMBOSSED )
-                rOutput << OOO_STRING_SVTOOLS_RTF_EMBO;
+                rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_EMBO );
             if ( nRelief == RELIEF_ENGRAVED )
-                rOutput << OOO_STRING_SVTOOLS_RTF_IMPR;
+                rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_IMPR );
         }
         break;
         case EE_CHAR_EMPHASISMARK:
         {
             sal_uInt16 nMark = ((const SvxEmphasisMarkItem&)rItem).GetValue();
             if ( nMark == EMPHASISMARK_NONE )
-                rOutput << OOO_STRING_SVTOOLS_RTF_ACCNONE;
+                rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ACCNONE );
             else if ( nMark == EMPHASISMARK_SIDE_DOTS )
-                rOutput << OOO_STRING_SVTOOLS_RTF_ACCCOMMA;
+                rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ACCCOMMA );
             else
-                rOutput << OOO_STRING_SVTOOLS_RTF_ACCDOT;
+                rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ACCDOT );
         }
         break;
         case EE_CHAR_SHADOW:
         {
-            rOutput << OOO_STRING_SVTOOLS_RTF_SHAD;
+            rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SHAD );
             if ( !((const SvxShadowedItem&)rItem).GetValue() )
-                rOutput << '0';
+                rOutput.WriteChar( '0' );
         }
         break;
         case EE_FEATURE_TAB:
         {
-            rOutput << OOO_STRING_SVTOOLS_RTF_TAB;
+            rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TAB );
         }
         break;
         case EE_FEATURE_LINEBR:
         {
-            rOutput << OOO_STRING_SVTOOLS_RTF_SL;
+            rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SL );
         }
         break;
         case EE_CHAR_KERNING:
         {
-            rOutput << OOO_STRING_SVTOOLS_RTF_EXPNDTW;
+            rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_EXPNDTW );
             rOutput.WriteNumber( LogicToTwips(
                 ((const SvxKerningItem&)rItem).GetValue() ) );
         }
         break;
         case EE_CHAR_PAIRKERNING:
         {
-            rOutput << OOO_STRING_SVTOOLS_RTF_KERNING;
+            rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_KERNING );
             rOutput.WriteNumber( static_cast<sal_uInt32>(((const SvxAutoKernItem&)rItem).GetValue() ? 1 : 0 ));
         }
         break;
@@ -972,16 +974,16 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             // SWG:
             if ( nEsc )
             {
-                rOutput << "{\\*\\updnprop" << OString::number(
-                    nProp100).getStr() << '}';
+                rOutput.WriteCharPtr( "{\\*\\updnprop" ).WriteCharPtr( OString::number(
+                    nProp100).getStr() ).WriteChar( '}' );
             }
             long nUpDown = nFontHeight * std::abs( nEsc ) / 100;
             OString aUpDown = OString::number(
                 nUpDown);
             if ( nEsc < 0 )
-                rOutput << OOO_STRING_SVTOOLS_RTF_DN << aUpDown.getStr();
+                rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_DN ).WriteCharPtr( aUpDown.getStr() );
             else if ( nEsc > 0 )
-                rOutput << OOO_STRING_SVTOOLS_RTF_UP << aUpDown.getStr();
+                rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_UP ).WriteCharPtr( aUpDown.getStr() );
         }
         break;
     }

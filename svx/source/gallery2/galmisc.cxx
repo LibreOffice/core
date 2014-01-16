@@ -555,7 +555,7 @@ sal_Bool GalleryTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pU
 
     if( pUserObject )
     {
-        *rxOStm << *static_cast< SotStorageStream* >( pUserObject );
+        rxOStm->WriteStream( *static_cast< SotStorageStream* >( pUserObject ) );
         bRet = ( rxOStm->GetError() == ERRCODE_NONE );
     }
 

@@ -121,7 +121,7 @@ namespace dbaui
             if ( aValue >>= nValue )
             {
                 _rStr.WriteInt32( sal_Int32(1) );
-                _rStr << nValue;
+                _rStr.WriteDouble( nValue );
             }
             else
             {

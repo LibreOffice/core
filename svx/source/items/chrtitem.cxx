@@ -289,7 +289,7 @@ SfxPoolItem* SvxDoubleItem::Create(SvStream& rIn, sal_uInt16 /*nVersion*/) const
 
 SvStream& SvxDoubleItem::Store(SvStream& rOut, sal_uInt16 /*nItemVersion*/) const
 {
-    rOut << fVal;
+    rOut.WriteDouble( fVal );
     return rOut;
 }
 

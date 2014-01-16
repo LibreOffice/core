@@ -113,18 +113,18 @@ void SwBaseNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, sal_uInt16 n
 // PROTECTED METHODS ----------------------------------------------------
 sal_Bool SwBaseNumRules::Store(SvStream &rStream)
 {
-    rStream << ACT_NUM_VERSION;
+    rStream.WriteUInt16( ACT_NUM_VERSION );
         // Write, what positions are occupied by a rule
         // Then write each of the rules
     for(sal_uInt16 i = 0; i < nMaxRules; ++i)
     {
         if(pNumRules[i])
         {
-            rStream << (unsigned char) sal_True;
+            rStream.WriteUChar( (unsigned char) sal_True );
             pNumRules[i]->Store( rStream );
         }
         else
-            rStream << (unsigned char) sal_False;
+            rStream.WriteUChar( (unsigned char) sal_False );
     }
     return sal_True;
 }
@@ -269,11 +269,11 @@ void SwNumRulesWithName::Store( SvStream &rStream )
         _SwNumFmtGlobal* pFmt = aFmts[ n ];
         if( pFmt )
         {
-            rStream << (char)1;
+            rStream.WriteChar( (char)1 );
             pFmt->Store( rStream );
         }
         else
-            rStream << (char)0;
+            rStream.WriteChar( (char)0 );
     }
 }
 
@@ -470,28 +470,28 @@ void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
             nPitch = (sal_uInt16)pFnt->GetPitch();
         }
 
-        rStream << sal_uInt16(aFmt.GetNumberingType())
-                << aFmt.GetBulletChar()
-                << static_cast<sal_Bool>(aFmt.GetIncludeUpperLevels() > 0)
-                << aFmt.GetStart();
+        rStream.WriteUInt16( sal_uInt16(aFmt.GetNumberingType()) )
+               .WriteUInt16( aFmt.GetBulletChar() )
+               .WriteUChar( static_cast<sal_Bool>(aFmt.GetIncludeUpperLevels() > 0) )
+               .WriteUInt16( aFmt.GetStart() );
         rStream.WriteUniOrByteString( aFmt.GetPrefix(), eEncoding );
         rStream.WriteUniOrByteString( aFmt.GetSuffix(), eEncoding );
-        rStream << sal_uInt16( aFmt.GetNumAdjust() )
-                << aFmt.GetAbsLSpace()
-                << aFmt.GetFirstLineOffset()
-                << aFmt.GetCharTextDistance()
-                << aFmt.GetLSpace()
-                << sal_False;//aFmt.IsRelLSpace();
+        rStream.WriteUInt16( sal_uInt16( aFmt.GetNumAdjust() ) )
+               .WriteInt16( aFmt.GetAbsLSpace() )
+               .WriteInt16( aFmt.GetFirstLineOffset() )
+               .WriteInt16( aFmt.GetCharTextDistance() )
+               .WriteInt16( aFmt.GetLSpace() )
+               .WriteUChar( sal_False );//aFmt.IsRelLSpace();
         rStream.WriteUniOrByteString( aName, eEncoding );
-        rStream << nFamily
-                << nCharSet
-                << nWidth
-                << nHeight
-                << nPitch;
+        rStream.WriteUInt16( nFamily )
+               .WriteUInt16( nCharSet )
+               .WriteInt16( nWidth )
+               .WriteInt16( nHeight )
+               .WriteUInt16( nPitch );
     }
-    rStream << nCharPoolId;
+    rStream.WriteUInt16( nCharPoolId );
     rStream.WriteUniOrByteString( sCharFmtName, eEncoding );
-    rStream << static_cast<sal_uInt16>(aItems.size());
+    rStream.WriteUInt16( static_cast<sal_uInt16>(aItems.size()) );
 
     for( sal_uInt16 n = aItems.size(); n; )
     {
@@ -499,8 +499,8 @@ void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
         sal_uInt16 nIVers = pItem->GetVersion( SOFFICE_FILEFORMAT_50 );
         OSL_ENSURE( nIVers != USHRT_MAX,
                 "Was'n das: Item-Version USHRT_MAX in der aktuellen Version" );
-        rStream << pItem->Which()
-                << nIVers;
+        rStream.WriteUInt16( pItem->Which() )
+               .WriteUInt16( nIVers );
         pItem->Store( rStream, nIVers );
     }
 
@@ -508,22 +508,22 @@ void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
 
     if( SVX_NUM_BITMAP == aFmt.GetNumberingType() )
     {
-        rStream << (sal_Int32)aFmt.GetGraphicSize().Width()
-                << (sal_Int32)aFmt.GetGraphicSize().Height();
+        rStream.WriteInt32( (sal_Int32)aFmt.GetGraphicSize().Width() )
+               .WriteInt32( (sal_Int32)aFmt.GetGraphicSize().Height() );
         sal_uInt8 cFlg = ( 0 != aFmt.GetBrush() ? 1 : 0 ) +
                     ( 0 != aFmt.GetGraphicOrientation() ? 2 : 0 );
-        rStream << cFlg;
+        rStream.WriteUChar( cFlg );
 
         if( aFmt.GetBrush() )
         {
             sal_uInt16 nVersion = aFmt.GetBrush()->GetVersion( SOFFICE_FILEFORMAT_50 );
-            rStream << nVersion;
+            rStream.WriteUInt16( nVersion );
             aFmt.GetBrush()->Store( rStream, nVersion );
         }
         if( aFmt.GetGraphicOrientation() )
         {
             sal_uInt16 nVersion = aFmt.GetGraphicOrientation()->GetVersion( SOFFICE_FILEFORMAT_50 );
-            rStream << nVersion;
+            rStream.WriteUInt16( nVersion );
             aFmt.GetGraphicOrientation()->Store( rStream, nVersion );
         }
     }

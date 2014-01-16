@@ -358,7 +358,7 @@ void Tag::addString( const char* pString )
 
 void Tag::addStream( SvStream& rIn )
 {
-    *this << rIn;
+    (*this).WriteStream( rIn );
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -412,7 +412,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
         }
     }
 
-    rWrt.Strm() << sOut.makeStringAndClear().getStr();
+    rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
     rWrt.bTxtAttr = sal_False;
     rWrt.bOutOpts = sal_True;
@@ -458,7 +458,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
             &rWrt.aNonConvertableCharacters));
     }
     sOut.append('>');
-    rWrt.Strm() << sOut.makeStringAndClear().getStr();
+    rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
     rWrt.bLFPossible = sal_True;
 
     rWrt.IncIndentLevel();  // den Inhalt von <TD>...</TD> einruecken
@@ -532,7 +532,7 @@ void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
     }
 
     rWrt.OutNewLine();  // <TR> in neuer Zeile
-    rWrt.Strm() << '<' << OOO_STRING_SVTOOLS_HTML_tablerow;
+    rWrt.Strm().WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_tablerow );
     if( pBrushItem )
     {
         rWrt.OutBackground( pBrushItem, sal_False );
@@ -549,10 +549,10 @@ void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_valign)
             .append("=\"").append(text::VertOrientation::TOP==eRowVertOri ? OOO_STRING_SVTOOLS_HTML_VA_top : OOO_STRING_SVTOOLS_HTML_VA_bottom)
             .append("\"");
-        rWrt.Strm() << sOut.makeStringAndClear().getStr();
+        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
     }
 
-    rWrt.Strm() << '>';
+    rWrt.Strm().WriteChar( '>' );
 
     rWrt.IncIndentLevel(); // Inhalt von <TR>...</TR> einruecken
 
@@ -638,7 +638,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         rWrt.nDirection = rWrt.GetHTMLDirection( pFrmFmt->GetAttrSet() );
     if( rWrt.bOutFlyFrame || nOldDirection != rWrt.nDirection )
     {
-        rWrt.Strm() << sOut.makeStringAndClear().getStr();
+        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
         rWrt.OutDirection( rWrt.nDirection );
     }
 
@@ -714,7 +714,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cellspacing).
         append("=\"").append(static_cast<sal_Int32>(rWrt.ToPixel(nCellSpacing,false))).append("\"");
 
-    rWrt.Strm() << sOut.makeStringAndClear().getStr();
+    rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
     // Hintergrund ausgeben
     if( pFrmFmt )
@@ -726,7 +726,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     }
 
     sOut.append('>');
-    rWrt.Strm() << sOut.makeStringAndClear().getStr();
+    rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
     rWrt.IncIndentLevel(); // Inhalte von Table einruecken
 
@@ -787,7 +787,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
             else
                 sOutStr.append(static_cast<sal_Int32>(rWrt.ToPixel(nWidth,false)));
             sOutStr.append("\">");
-            rWrt.Strm() << sOutStr.makeStringAndClear().getStr();
+            rWrt.Strm().WriteCharPtr( sOutStr.makeStringAndClear().getStr() );
 
             if( bColGroups && pColumn->bRightBorder && nCol<nCols-1 )
             {

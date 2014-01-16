@@ -319,7 +319,7 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, sal_uIntPt
 
     if( pOStm )
     {
-        *pOStm << nNextNumber;
+        pOStm->WriteUInt32( nNextNumber );
         delete pOStm;
     }
 
@@ -1294,9 +1294,9 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
     sal_uInt32          nCount = GetObjectCount();
     sal_Bool                bRel;
 
-    rOStm << (sal_uInt16) 0x0004;
+    rOStm.WriteUInt16( (sal_uInt16) 0x0004 );
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStm, GetRealName(), RTL_TEXTENCODING_UTF8);
-    rOStm << nCount << (sal_uInt16) osl_getThreadTextEncoding();
+    rOStm.WriteUInt32( nCount ).WriteUInt16( (sal_uInt16) osl_getThreadTextEncoding() );
 
     for( sal_uInt32 i = 0; i < nCount; i++ )
     {
@@ -1346,19 +1346,19 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
                           << m_aDestDir << "' in '" << aPath << "'");
         }
 
-        rOStm << bRel;
+        rOStm.WriteUChar( bRel );
         write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStm, aPath, RTL_TEXTENCODING_UTF8);
-        rOStm << pObj->nOffset << (sal_uInt16) pObj->eObjKind;
+        rOStm.WriteUInt32( pObj->nOffset ).WriteUInt16( (sal_uInt16) pObj->eObjKind );
     }
 
     // more recently, a 512-byte reserve buffer is written,
     // to recognize them two sal_uIntPtr-Ids will be written.
-    rOStm << COMPAT_FORMAT( 'G', 'A', 'L', 'R' ) << COMPAT_FORMAT( 'E', 'S', 'R', 'V' );
+    rOStm.WriteUInt32( COMPAT_FORMAT( 'G', 'A', 'L', 'R' ) ).WriteUInt32( COMPAT_FORMAT( 'E', 'S', 'R', 'V' ) );
 
     const long      nReservePos = rOStm.Tell();
     VersionCompat*  pCompat = new VersionCompat( rOStm, STREAM_WRITE, 2 );
 
-    rOStm << (sal_uInt32) GetId() << IsThemeNameFromResource(); // From version 2 and up
+    rOStm.WriteUInt32( (sal_uInt32) GetId() ).WriteUChar( IsThemeNameFromResource() ); // From version 2 and up
 
     delete pCompat;
 

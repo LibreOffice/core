@@ -1043,7 +1043,7 @@ static sal_Bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
         {
             pStrm->WriteUInt16( (sal_uInt16)eType ); // VarType Id
         }
-        *pStrm << rVar.GetDouble();
+        pStrm->WriteDouble( rVar.GetDouble() );
         break;
 
     case SbxSTRING:

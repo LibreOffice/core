@@ -82,15 +82,15 @@ void IMapObject::Write( SvStream& rOStm, const OUString& rBaseURL ) const
     IMapCompat*             pCompat;
     const rtl_TextEncoding  eEncoding = osl_getThreadTextEncoding();
 
-    rOStm << GetType();
-    rOStm << GetVersion();
-    rOStm << ( (sal_uInt16) eEncoding );
+    rOStm.WriteUInt16( GetType() );
+    rOStm.WriteUInt16( GetVersion() );
+    rOStm.WriteUInt16(  (sal_uInt16) eEncoding  );
 
     const OString aRelURL = OUStringToOString(
         URIHelper::simpleNormalizedMakeRelative(rBaseURL, aURL), eEncoding);
     write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStm, aRelURL);
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStm, aAltText, eEncoding);
-    rOStm << bActive;
+    rOStm.WriteUChar( bActive );
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStm, aTarget, eEncoding);
 
     pCompat = new IMapCompat( rOStm, STREAM_WRITE );
@@ -293,7 +293,7 @@ void IMapCircleObject::WriteIMapObject( SvStream& rOStm ) const
     sal_uInt32 nTmp = nRadius;
 
     WritePair( rOStm, aCenter );
-    rOStm << nTmp;
+    rOStm.WriteUInt32( nTmp );
 }
 
 
@@ -432,7 +432,7 @@ void IMapPolygonObject::ImpConstruct( const Polygon& rPoly, sal_Bool bPixel )
 void IMapPolygonObject::WriteIMapObject( SvStream& rOStm ) const
 {
     WritePolygon( rOStm, aPoly );
-    rOStm << bEllipse;  // >= Version 2
+    rOStm.WriteUChar( bEllipse );  // >= Version 2
     WriteRectangle( rOStm, aEllipse );  // >= Version 2
 }
 
@@ -947,11 +947,11 @@ void ImageMap::Write( SvStream& rOStm, const OUString& rBaseURL ) const
     rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
     // write MagicCode
-    rOStm << IMAPMAGIC;
-    rOStm << GetVersion();
+    rOStm.WriteCharPtr( IMAPMAGIC );
+    rOStm.WriteUInt16( GetVersion() );
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStm, aImageName, eEncoding);
     write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStm, OString()); //dummy
-    rOStm << nCount;
+    rOStm.WriteUInt16( nCount );
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStm, aImageName, eEncoding);
 
     pCompat = new IMapCompat( rOStm, STREAM_WRITE );

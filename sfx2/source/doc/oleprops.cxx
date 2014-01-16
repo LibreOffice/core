@@ -470,7 +470,7 @@ void SfxOleDoubleProperty::ImplLoad( SvStream& rStrm )
 
 void SfxOleDoubleProperty::ImplSave( SvStream& rStrm )
 {
-    rStrm << mfValue;
+    rStrm.WriteDouble( mfValue );
 }
 
 // ----------------------------------------------------------------------------
@@ -640,7 +640,7 @@ void SfxOleDateProperty::ImplSave( SvStream& rStrm )
     //number of days (not seconds) since December 31, 1899
     long nStartDays = ::Date::DateToDays(31, 12, 1899);
     double fValue = nDays-nStartDays;
-    rStrm << fValue;
+    rStrm.WriteDouble( fValue );
 }
 
 // ----------------------------------------------------------------------------

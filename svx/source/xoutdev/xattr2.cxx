@@ -270,12 +270,12 @@ SfxPoolItem* AffineMatrixItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/ ) cons
 
 SvStream& AffineMatrixItem::Store(SvStream &rStream, sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStream << maMatrix.m00;
-    rStream << maMatrix.m01;
-    rStream << maMatrix.m02;
-    rStream << maMatrix.m10;
-    rStream << maMatrix.m11;
-    rStream << maMatrix.m12;
+    rStream.WriteDouble( maMatrix.m00 );
+    rStream.WriteDouble( maMatrix.m01 );
+    rStream.WriteDouble( maMatrix.m02 );
+    rStream.WriteDouble( maMatrix.m10 );
+    rStream.WriteDouble( maMatrix.m11 );
+    rStream.WriteDouble( maMatrix.m12 );
     return rStream;
 }
 

@@ -593,7 +593,7 @@ sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
                     if( pSrcStm )
                     {
                         rxOStm->SetBufferSize( 0xff00 );
-                        *rxOStm << *pSrcStm;
+                        rxOStm->WriteStream( *pSrcStm );
                         delete pSrcStm;
                     }
 

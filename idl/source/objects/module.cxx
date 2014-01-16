@@ -75,7 +75,7 @@ void SvMetaModule::Save( SvPersistStream & rStm )
 {
     SvMetaExtern::Save( rStm );
 
-    rStm << (sal_uInt16)(MODULE_VER | IDL_WRITE_COMPILER); // Version
+    rStm.WriteUInt16( (sal_uInt16)(MODULE_VER | IDL_WRITE_COMPILER) ); // Version
 
     WriteSvDeclPersistList( rStm, aClassList );
     WriteSvDeclPersistList( rStm, aTypeList );
@@ -89,14 +89,14 @@ void SvMetaModule::Save( SvPersistStream & rStm )
     // write compiler data
     sal_uInt16 nCmpLen = 0;
     sal_uLong nLenPos = rStm.Tell();
-    rStm << nCmpLen;
+    rStm.WriteUInt16( nCmpLen );
     WriteSvGlobalName( rStm, aBeginName );
     WriteSvGlobalName( rStm, aEndName );
     WriteSvGlobalName( rStm, aNextName );
     // write length of compiler data
     sal_uLong nPos = rStm.Tell();
     rStm.Seek( nLenPos );
-    rStm << (sal_uInt16)( nPos - nLenPos - sizeof( sal_uInt16 ) );
+    rStm.WriteUInt16( (sal_uInt16)( nPos - nLenPos - sizeof( sal_uInt16 ) ) );
     rStm.Seek( nPos );
 }
 
@@ -157,19 +157,19 @@ void SvMetaModule::WriteAttributesSvIdl( SvIdlDataBase & rBase,
         {
             WriteTab( rOutStm, nTab );
             aHelpFileName.WriteSvIdl( SvHash_HelpFile(), rOutStm, nTab +1 );
-            rOutStm << ';' << endl;
+            rOutStm.WriteChar( ';' ) << endl;
         }
         if( !aSlotIdFile.getString().isEmpty() )
         {
             WriteTab( rOutStm, nTab );
             aSlotIdFile.WriteSvIdl( SvHash_SlotIdFile(), rOutStm, nTab +1 );
-            rOutStm << ';' << endl;
+            rOutStm.WriteChar( ';' ) << endl;
         }
         if( !aTypeLibFile.getString().isEmpty() )
         {
             WriteTab( rOutStm, nTab );
             aTypeLibFile.WriteSvIdl( SvHash_TypeLibFile(), rOutStm, nTab +1 );
-            rOutStm << ';' << endl;
+            rOutStm.WriteChar( ';' ) << endl;
         }
     }
 }
@@ -356,12 +356,13 @@ sal_Bool SvMetaModule::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm 
 void SvMetaModule::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
                                sal_uInt16 nTab )
 {
-    rOutStm << SvHash_module()->GetName().getStr() << endl
-            << '\"';
+    rOutStm.WriteCharPtr( SvHash_module()->GetName().getStr() ) << endl;
+    rOutStm.WriteChar( '\"' );
     rOutStm.WriteUniOrByteString( aBeginName.GetHexName(), rOutStm.GetStreamCharSet() );
-    rOutStm << '\"' << endl << '\"';
+    rOutStm.WriteChar( '\"' ) << endl;
+    rOutStm.WriteChar( '\"' );
     rOutStm.WriteUniOrByteString( aEndName.GetHexName(), rOutStm.GetStreamCharSet() );
-    rOutStm << '\"' << endl;
+    rOutStm.WriteChar( '\"' ) << endl;
     SvMetaExtern::WriteSvIdl( rBase, rOutStm, nTab );
 }
 
@@ -393,9 +394,9 @@ void SvMetaModule::WriteAttributes( SvIdlDataBase & rBase,
     if( !aHelpFileName.getString().isEmpty() )
     {
         WriteTab( rOutStm, nTab );
-        rOutStm << "// class SvMetaModule" << endl;
+        rOutStm.WriteCharPtr( "// class SvMetaModule" ) << endl;
         WriteTab( rOutStm, nTab );
-        rOutStm << "helpfile(\"" << aHelpFileName.getString().getStr() << "\");" << endl;
+        rOutStm.WriteCharPtr( "helpfile(\"" ).WriteCharPtr( aHelpFileName.getString().getStr() ).WriteCharPtr( "\");" ) << endl;
     }
 }
 
@@ -410,16 +411,16 @@ void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
         if( !aSlotIdFile.getString().isEmpty() )
         {
             WriteTab( rOutStm, nTab );
-            rOutStm << "#include \"" << aSlotIdFile.getString().getStr() << '"' << endl << endl;
+            rOutStm.WriteCharPtr( "#include \"" ).WriteCharPtr( aSlotIdFile.getString().getStr() ).WriteChar( '"' ) << endl << endl;
         }
         SvMetaExtern::Write( rBase, rOutStm, nTab, nT, nA );
         rOutStm << endl;
         WriteTab( rOutStm, nTab );
-        rOutStm << "library " << GetName().getString().getStr() << endl;
+        rOutStm.WriteCharPtr( "library " ).WriteCharPtr( GetName().getString().getStr() ) << endl;
         WriteTab( rOutStm, nTab );
-        rOutStm << '{' << endl;
+        rOutStm.WriteChar( '{' ) << endl;
         WriteTab( rOutStm, nTab );
-        rOutStm << "importlib(\"STDOLE.TLB\");" << endl;
+        rOutStm.WriteCharPtr( "importlib(\"STDOLE.TLB\");" ) << endl;
 
         for( sal_uLong n = 0; n < aClassList.size(); n++ )
         {
@@ -434,49 +435,50 @@ void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
             }
         }
 
-        rOutStm << '}' << endl;
+        rOutStm.WriteChar( '}' ) << endl;
     }
     break;
     case WRITE_DOCU:
     {
-        rOutStm << "SvIDL interface documentation" << endl << endl;
-        rOutStm << "<MODULE>" << endl << GetName().getString().getStr() << endl;
+        rOutStm.WriteCharPtr( "SvIDL interface documentation" ) << endl << endl;
+        rOutStm.WriteCharPtr( "<MODULE>" ) << endl;
+        rOutStm.WriteCharPtr( GetName().getString().getStr() ) << endl;
         WriteDescription( rOutStm );
-        rOutStm << "</MODULE>" << endl << endl;
+        rOutStm.WriteCharPtr( "</MODULE>" ) << endl << endl;
 
-        rOutStm << "<CLASSES>" << endl;
+        rOutStm.WriteCharPtr( "<CLASSES>" ) << endl;
         for( sal_uLong n = 0; n < aClassList.size(); n++ )
         {
             SvMetaClass * pClass = aClassList[n];
             if( !pClass->IsShell() )
             {
-                rOutStm << pClass->GetName().getString().getStr();
+                rOutStm.WriteCharPtr( pClass->GetName().getString().getStr() );
                 SvMetaClass* pSC = pClass->GetSuperClass();
                 if( pSC )
-                    rOutStm << " : " << pSC->GetName().getString().getStr();
+                    rOutStm.WriteCharPtr( " : " ).WriteCharPtr( pSC->GetName().getString().getStr() );
 
                 // imported classes
                 const SvClassElementMemberList& rClassList = pClass->GetClassList();
                 if ( !rClassList.empty() )
                 {
-                    rOutStm << " ( ";
+                    rOutStm.WriteCharPtr( " ( " );
 
                     for( sal_uLong m=0; m<rClassList.size(); ++m )
                     {
                         SvClassElement *pEle = rClassList[m];
                         SvMetaClass *pCl = pEle->GetClass();
-                        rOutStm << pCl->GetName().getString().getStr();
+                        rOutStm.WriteCharPtr( pCl->GetName().getString().getStr() );
                         if ( m+1 == rClassList.size() )
-                            rOutStm << " )";
+                            rOutStm.WriteCharPtr( " )" );
                         else
-                            rOutStm << " , ";
+                            rOutStm.WriteCharPtr( " , " );
                     }
                 }
 
                 rOutStm << endl;
             }
         }
-        rOutStm << "</CLASSES>" << endl << endl;
+        rOutStm.WriteCharPtr( "</CLASSES>" ) << endl << endl;
         // no break!
     }
 

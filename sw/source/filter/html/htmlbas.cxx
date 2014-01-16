@@ -294,14 +294,14 @@ void SwHTMLWriter::OutBasic()
                     .append(OOO_STRING_SVTOOLS_HTML_META_content_script_type)
                     .append("\" ").append(OOO_STRING_SVTOOLS_HTML_O_content)
                     .append("=\"text/x-");
-                Strm() << sOut.getStr();
+                Strm().WriteCharPtr( sOut.getStr() );
                 // Entities aren't welcome here
-                Strm() << OUStringToOString(sLang, eDestEnc).getStr()
-                    << "\">";
+                Strm().WriteCharPtr( OUStringToOString(sLang, eDestEnc).getStr() )
+                   .WriteCharPtr( "\">" );
             }
 
             const OUString& rModName = pModule->GetName();
-            Strm() << SAL_NEWLINE_STRING;   // nicht einruecken!
+            Strm().WriteCharPtr( SAL_NEWLINE_STRING );   // nicht einruecken!
             HTMLOutFuncs::OutScript( Strm(), GetBaseURL(), pModule->GetSource(),
                                      sLang, eType, aEmptyOUStr,
                                      &rLibName, &rModName,
