@@ -166,7 +166,7 @@ oslGenericFunction Filters::GetMswordLibSymbol( const char *pSymbol )
 
 namespace SwReaderWriter {
 
-Reader* GetReader( ReaderWriterEnum eReader )
+SW_DLLPUBLIC Reader* GetReader( ReaderWriterEnum eReader )
 {
     return aReaderWriter[eReader].GetReader();
 }

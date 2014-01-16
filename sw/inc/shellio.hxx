@@ -146,7 +146,7 @@ public:
     {   ResetAllFmtsOnly(); aASCIIOpts.Reset(); }
 };
 
-class SwReader: public SwDocFac
+class SW_DLLPUBLIC SwReader: public SwDocFac
 {
     SvStream* pStrm;
     SotStorageRef pStg;
@@ -560,7 +560,7 @@ struct SwReaderWriterEntry
 namespace SwReaderWriter
 {
     /// Return reader based on ReaderWriterEnum.
-    Reader* GetReader( ReaderWriterEnum eReader );
+    SW_DLLPUBLIC Reader* GetReader( ReaderWriterEnum eReader );
 
     /// Return reader based on the name.
     Reader* GetReader( const OUString& rFltName );

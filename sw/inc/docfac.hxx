@@ -23,7 +23,7 @@
 
 class SwDoc;
 
-class SwDocFac
+class SW_DLLPUBLIC SwDocFac
 {
 protected:
     SwDoc* pDoc;
