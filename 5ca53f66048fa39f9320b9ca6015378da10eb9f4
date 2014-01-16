@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_31795094",
+        "filename": "solenv/bin/modules/installer/simplepackage.pm",
+        "patchSetId": 1
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2014-01-16T02:22:05Z",
+      "side": 1,
+      "message": "This block duplicates the signing part that is right below, in the else.\n\nget rid of the else part and move the signing part after the if-block to apply for both help/langpacks as well as main installer, and only set the appfolder accordingly",
+      "revId": "5ca53f66048fa39f9320b9ca6015378da10eb9f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
