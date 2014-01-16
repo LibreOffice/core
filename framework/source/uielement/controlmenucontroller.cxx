@@ -17,29 +17,30 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/macros.h>
-#include <uielement/controlmenucontroller.hxx>
+#include <sal/config.h>
 
 #include <threadhelp/resetableguard.hxx>
-#include "services.h"
+#include <stdtypes.h>
 
-#include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/awt/MenuItemStyle.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XStatusListener.hpp>
+#include <com/sun/star/frame/XPopupMenuController.hpp>
 
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/strbuf.hxx>
 #include <svl/solar.hrc>
 #include <tools/rcid.h>
 #include <vcl/image.hxx>
 #include <svtools/menuoptions.hxx>
+#include <svtools/popupmenucontrollerbase.hxx>
 #include <osl/mutex.hxx>
 
 // Copied from svx
@@ -163,28 +164,82 @@ static const char* aCommands[] =
     ".uno:ConvertToSpinButton"
 };
 
-//_________________________________________________________________________________________________________________
-//  Defines
-//_________________________________________________________________________________________________________________
-
+using namespace css;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
-using namespace com::sun::star::util;
-using namespace com::sun::star::style;
-using namespace com::sun::star::container;
 
-namespace framework
+namespace {
+
+class ControlMenuController :  public svt::PopupMenuControllerBase
 {
+    using svt::PopupMenuControllerBase::disposing;
 
-DEFINE_XSERVICEINFO_MULTISERVICE_2      (   ControlMenuController                   ,
-                                            OWeakObject                             ,
-                                            SERVICENAME_POPUPMENUCONTROLLER         ,
-                                            IMPLEMENTATIONNAME_CONTROLMENUCONTROLLER
-                                        )
+public:
+    ControlMenuController( const uno::Reference< uno::XComponentContext >& xContext );
+    virtual ~ControlMenuController();
 
-DEFINE_INIT_SERVICE                     (   ControlMenuController, {} )
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException)
+    {
+        return OUString("com.sun.star.comp.framework.ControlMenuController");
+    }
+
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException)
+    {
+        return cppu::supportsService(this, ServiceName);
+    }
+
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException)
+    {
+        css::uno::Sequence< OUString > aSeq(1);
+        aSeq[0] = OUString("com.sun.star.frame.PopupMenuController");
+        return aSeq;
+    }
+
+
+    // XPopupMenuController
+    virtual void SAL_CALL updatePopupMenu() throw (uno::RuntimeException);
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const uno::Sequence< uno::Any >& aArguments ) throw (uno::Exception, uno::RuntimeException);
+
+    // XStatusListener
+    virtual void SAL_CALL statusChanged( const frame::FeatureStateEvent& Event ) throw ( uno::RuntimeException );
+
+    // XMenuListener
+    virtual void SAL_CALL itemActivated( const awt::MenuEvent& rEvent ) throw (uno::RuntimeException);
+
+    // XEventListener
+    virtual void SAL_CALL disposing( const lang::EventObject& Source ) throw ( uno::RuntimeException );
+
+private:
+    virtual void impl_setPopupMenu();
+    virtual void impl_select(const uno::Reference< frame::XDispatch >& _xDispatch,const util::URL& aURL);
+
+    class UrlToDispatchMap : public ::boost::unordered_map< OUString,
+                                                     uno::Reference< frame::XDispatch >,
+                                                     OUStringHash,
+                                                     ::std::equal_to< OUString > >
+    {
+        public:
+            inline void free()
+            {
+                UrlToDispatchMap().swap( *this );
+            }
+    };
+
+    void updateImagesPopupMenu( PopupMenu* pPopupMenu );
+    void fillPopupMenu( uno::Reference< awt::XPopupMenu >& rPopupMenu );
+
+    sal_Bool            m_bShowMenuImages : 1;
+    PopupMenu*          m_pResPopupMenu;
+    UrlToDispatchMap    m_aURLToDispatchMap;
+};
 
 ControlMenuController::ControlMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext ),
@@ -372,7 +427,7 @@ void SAL_CALL ControlMenuController::updatePopupMenu() throw (::com::sun::star::
 
     if ( m_xFrame.is() && m_xPopupMenu.is() )
     {
-        URL aTargetURL;
+        css::util::URL aTargetURL;
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
         fillPopupMenu( m_xPopupMenu );
         m_aURLToDispatchMap.free();
@@ -401,6 +456,16 @@ void SAL_CALL ControlMenuController::initialize( const Sequence< Any >& aArgumen
     m_aBaseURL = OUString();
 }
 
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_ControlMenuController_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    rtl::Reference<ControlMenuController> x(new ControlMenuController(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

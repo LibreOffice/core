@@ -37,7 +37,6 @@
 #include <jobs/jobexecutor.hxx>
 #include <uifactory/uielementfactorymanager.hxx>
 #include <uifactory/uicontrollerfactory.hxx>
-#include <uielement/controlmenucontroller.hxx>
 #include <uielement/uicommanddescription.hxx>
 #include <uiconfiguration/moduleuicfgsupplier.hxx>
 #include <uiconfiguration/moduleuiconfigurationmanager.hxx>
@@ -62,7 +61,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::JobExecutor                             )   else
                         IFFACTORY( ::framework::UIElementFactoryManager                 )   else
                         IFFACTORY( ::framework::PopupMenuControllerFactory              )   else
-                        IFFACTORY( ::framework::ControlMenuController                   )   else
                         IFFACTORY( ::framework::UICommandDescription                    )   else
                         IFFACTORY( ::framework::ModuleUIConfigurationManagerSupplier    )   else
                         IFFACTORY( ::framework::ModuleUIConfigurationManager            )   else

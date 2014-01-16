@@ -29,7 +29,8 @@
   <implementation name="com.sun.star.comp.framework.AutoRecovery">
     <service name="com.sun.star.frame.AutoRecovery"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.ControlMenuController">
+  <implementation name="com.sun.star.comp.framework.ControlMenuController"
+      constructor="com_sun_star_comp_framework_ControlMenuController_get_implementation">
     <service name="com.sun.star.frame.PopupMenuController"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.Desktop">
