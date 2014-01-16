@@ -27,6 +27,8 @@
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <com/sun/star/rendering/PanoseWeight.hpp>
 
+#include <cppuhelper/supportsservice.hxx>
+
 using namespace ::com::sun::star;
 
 namespace dxcanvas
