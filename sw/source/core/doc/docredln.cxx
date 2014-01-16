@@ -3963,4 +3963,20 @@ SwExtraRedline::~SwExtraRedline()
 {
 }
 
+SwTableRowRedline::SwTableRowRedline( RedlineType_t eTyp, SwTableLine* pTableLine )
+:SwExtraRedline( eTyp )
+{
+    (void)pTableLine;
+}
+
+SwTableRowRedline::SwTableRowRedline( const SwTableRowRedline& rCpy )
+: SwExtraRedline( rCpy )
+{
+    (void)rCpy;
+}
+
+SwTableRowRedline::~SwTableRowRedline()
+{
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
