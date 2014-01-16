@@ -53,8 +53,8 @@ public:
     sal_uInt16      GetStatusFunc() const           { return nStatusFunc;   }
     void        SetAutoComplete( bool bNew )    { bAutoComplete = bNew; }
     bool        GetAutoComplete() const         { return bAutoComplete; }
-    void        SetDetectiveAuto( sal_Bool bNew )   { bDetectiveAuto = bNew; }
-    sal_Bool        GetDetectiveAuto() const        { return bDetectiveAuto; }
+    void        SetDetectiveAuto( bool bNew )   { bDetectiveAuto = bNew; }
+    bool        GetDetectiveAuto() const        { return bDetectiveAuto; }
 
     void        SetTrackContentColor(sal_uInt32 nNew) { nTrackContentColor = nNew; }
     sal_uInt32  GetTrackContentColor() const     { return nTrackContentColor; }
@@ -89,7 +89,7 @@ private:
     bool            bSynchronizeZoom;
     sal_uInt16      nStatusFunc;
     bool            bAutoComplete;
-    sal_Bool        bDetectiveAuto;
+    bool            bDetectiveAuto;
     sal_uInt32  nTrackContentColor;
     sal_uInt32  nTrackInsertColor;
     sal_uInt32  nTrackDeleteColor;

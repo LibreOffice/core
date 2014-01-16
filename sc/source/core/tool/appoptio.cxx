@@ -63,7 +63,7 @@ void ScAppOptions::SetDefaults()
     bSynchronizeZoom = sal_True;
     nStatusFunc     = SUBTOTAL_FUNC_SUM;
     bAutoComplete   = true;
-    bDetectiveAuto  = sal_True;
+    bDetectiveAuto  = true;
 
     delete [] pLRUList;
     pLRUList = new sal_uInt16[5];               // sinnvoll vorbelegen

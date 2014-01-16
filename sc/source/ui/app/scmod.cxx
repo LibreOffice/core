@@ -459,7 +459,7 @@ void ScModule::Execute( SfxRequest& rReq )
         case SID_DETECTIVE_AUTO:
             {
                 ScAppOptions aNewOpts( GetAppOptions() );
-                sal_Bool bNew = !aNewOpts.GetDetectiveAuto();
+                bool bNew = !aNewOpts.GetDetectiveAuto();
                 SFX_REQUEST_ARG( rReq, pAuto, SfxBoolItem, SID_DETECTIVE_AUTO, false );
                 if ( pAuto )
                     bNew = pAuto->GetValue();
