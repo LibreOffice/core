@@ -66,7 +66,6 @@
 #include <osl/time.h>
 #include "com/sun/star/io/XAsyncOutputMonitor.hpp"
 
-#include <cassert>
 #include <cstring>
 #include <memory>
 #include <vector>
@@ -776,30 +775,6 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
             }
         }
     }
-}
-
-::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL ZipPackage::createEnumeration()
-        throw( RuntimeException )
-{
-    assert(m_pRootFolder);
-
-    return m_pRootFolder->createEnumeration();
-}
-
-::com::sun::star::uno::Type SAL_CALL ZipPackage::getElementType()
-        throw( RuntimeException )
-{
-    assert(m_pRootFolder);
-
-    return m_pRootFolder->getElementType();
-}
-
-sal_Bool SAL_CALL ZipPackage::hasElements()
-        throw( RuntimeException )
-{
-    assert(m_pRootFolder);
-
-    return m_pRootFolder->hasElements();
 }
 
 Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
