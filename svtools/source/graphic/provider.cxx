@@ -861,9 +861,7 @@ com_sun_star_comp_graphic_GraphicProvider_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    rtl::Reference<GraphicProvider> x(new GraphicProvider);
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new GraphicProvider);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

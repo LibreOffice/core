@@ -444,9 +444,7 @@ com_sun_star_svx_FontHeightToolBoxController_get_implementation(
     css::uno::XComponentContext *rxContext,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    rtl::Reference<FontHeightToolBoxControl> x(new FontHeightToolBoxControl(rxContext));
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new FontHeightToolBoxControl(rxContext));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

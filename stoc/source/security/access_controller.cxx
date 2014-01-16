@@ -984,9 +984,7 @@ com_sun_star_security_comp_stoc_AccessController_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    rtl::Reference<AccessController> x(new AccessController(context));
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new AccessController(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -255,9 +255,7 @@ com_sun_star_comp_sfx2_AppDispatchProvider_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &arguments)
 {
-    rtl::Reference<SfxAppDispatchProvider> x(new SfxAppDispatchProvider(arguments));
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new SfxAppDispatchProvider(arguments));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

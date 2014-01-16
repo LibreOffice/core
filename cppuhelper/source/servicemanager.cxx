@@ -706,8 +706,7 @@ cppuhelper::ServiceManager::Data::Implementation::createInstance(
         if (constructor != 0) {
             return css::uno::Reference<css::uno::XInterface>(
                 (*constructor)(
-                    context.get(), css::uno::Sequence<css::uno::Any>()),
-                SAL_NO_ACQUIRE);
+                    context.get(), css::uno::Sequence<css::uno::Any>()));
         }
         if (factory1.is()) {
             return factory1->createInstanceWithContext(context);
@@ -730,8 +729,7 @@ cppuhelper::ServiceManager::Data::Implementation::createInstance(
         if (constructor != 0) {
             singleton.set(
                 (*constructor)(
-                    context.get(), css::uno::Sequence<css::uno::Any>()),
-                SAL_NO_ACQUIRE);
+                    context.get(), css::uno::Sequence<css::uno::Any>()));
         } else if (factory1.is()) {
             singleton = factory1->createInstanceWithContext(context);
         } else if (factory2.is()) {
@@ -761,7 +759,7 @@ cppuhelper::ServiceManager::Data::Implementation::createInstanceWithArguments(
             // should be removed again once XInitialization-based
             // implementations have become rare:
             css::uno::Reference<css::uno::XInterface> inst(
-                (*constructor)(context.get(), arguments), SAL_NO_ACQUIRE);
+                (*constructor)(context.get(), arguments));
             css::uno::Reference<css::lang::XInitialization> init(
                 inst, css::uno::UNO_QUERY);
             if (init.is()) {
@@ -793,8 +791,7 @@ cppuhelper::ServiceManager::Data::Implementation::createInstanceWithArguments(
         }
         if (constructor != 0) {
             //HACK: see above
-            singleton.set(
-                (*constructor)(context.get(), arguments), SAL_NO_ACQUIRE);
+            singleton.set((*constructor)(context.get(), arguments));
             css::uno::Reference<css::lang::XInitialization> init(
                 singleton, css::uno::UNO_QUERY);
             if (init.is()) {

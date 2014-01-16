@@ -1676,9 +1676,7 @@ com_sun_star_comp_stoc_OServiceManager_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    rtl::Reference<OServiceManager> x(new OServiceManager(context));
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new OServiceManager(context));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
@@ -1686,9 +1684,7 @@ com_sun_star_comp_stoc_ORegistryServiceManager_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    rtl::Reference<ORegistryServiceManager> x(new ORegistryServiceManager(context));
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new ORegistryServiceManager(context));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
@@ -1696,9 +1692,7 @@ com_sun_star_comp_stoc_OServiceManagerWrapper_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    rtl::Reference<OServiceManagerWrapper> x(new OServiceManagerWrapper(context));
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new OServiceManagerWrapper(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

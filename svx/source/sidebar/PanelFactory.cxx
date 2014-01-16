@@ -209,7 +209,5 @@ org_apache_openoffice_comp_svx_sidebar_PanelFactory_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    rtl::Reference<PanelFactory> x(new PanelFactory);
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new PanelFactory);
 }

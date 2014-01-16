@@ -59,7 +59,7 @@ public:
     */
     void    reset( BasicManager* _pBasicManager );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >
+    ::com::sun::star::script::XLibraryContainer *
             getLibraryContainer( ContainerType _eType );
 
     /** calls the storeLibraries at both our script and basic library container

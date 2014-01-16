@@ -813,9 +813,7 @@ com_sun_star_comp_sfx2_BackingComp_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    rtl::Reference<BackingComp> x(new BackingComp(context));
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new BackingComp(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -127,11 +127,10 @@ BasicManager* SfxApplication::GetBasicManager()
 
 //--------------------------------------------------------------------
 
-Reference< XLibraryContainer > SfxApplication::GetDialogContainer()
+XLibraryContainer * SfxApplication::GetDialogContainer()
 {
 #ifdef DISABLE_SCRIPTING
-    Reference< XLibraryContainer >  dummy;
-    return dummy;
+    return NULL;
 #else
     if ( !pAppData_Impl->pBasicManager->isValid() )
         GetBasicManager();
@@ -141,11 +140,10 @@ Reference< XLibraryContainer > SfxApplication::GetDialogContainer()
 
 //--------------------------------------------------------------------
 
-Reference< XLibraryContainer > SfxApplication::GetBasicContainer()
+XLibraryContainer * SfxApplication::GetBasicContainer()
 {
 #ifdef DISABLE_SCRIPTING
-    Reference< XLibraryContainer >  dummy;
-    return dummy;
+    return NULL;
 #else
     if ( !pAppData_Impl->pBasicManager->isValid() )
         GetBasicManager();

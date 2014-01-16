@@ -1055,9 +1055,7 @@ com_sun_star_svx_FindTextToolboxController_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    rtl::Reference<FindTextToolbarController> x(new FindTextToolbarController(context));
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new FindTextToolbarController(context));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
@@ -1065,9 +1063,7 @@ com_sun_star_svx_ExitFindbarToolboxController_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    rtl::Reference<ExitSearchToolboxController> x(new ExitSearchToolboxController(context));
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new ExitSearchToolboxController(context));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
@@ -1075,10 +1071,7 @@ com_sun_star_svx_UpSearchToolboxController_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    rtl::Reference<UpDownSearchToolboxController> x(new UpDownSearchToolboxController(
-                context, UpDownSearchToolboxController::UP));
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new UpDownSearchToolboxController(context, UpDownSearchToolboxController::UP));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
@@ -1086,10 +1079,7 @@ com_sun_star_svx_DownSearchToolboxController_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    rtl::Reference<UpDownSearchToolboxController> x(new UpDownSearchToolboxController(
-                context, UpDownSearchToolboxController::DOWN));
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new UpDownSearchToolboxController(context, UpDownSearchToolboxController::DOWN));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
@@ -1097,9 +1087,7 @@ com_sun_star_svx_MatchCaseToolboxController_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    rtl::Reference<MatchCaseToolboxController> x(new MatchCaseToolboxController(context));
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new MatchCaseToolboxController(context));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
@@ -1107,9 +1095,7 @@ com_sun_star_svx_FindAllToolboxController_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    rtl::Reference<FindAllToolboxController> x(new FindAllToolboxController(context));
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new FindAllToolboxController(context));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
@@ -1117,9 +1103,7 @@ com_sun_star_comp_svx_Impl_FindbarDispatcher_get_implementation(
     SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    rtl::Reference<FindbarDispatcher> x(new FindbarDispatcher);
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new FindbarDispatcher);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

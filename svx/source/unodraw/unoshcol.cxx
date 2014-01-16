@@ -274,9 +274,7 @@ com_sun_star_drawing_SvxShapeCollection_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    rtl::Reference<SvxShapeCollection> x(new SvxShapeCollection);
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new SvxShapeCollection);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

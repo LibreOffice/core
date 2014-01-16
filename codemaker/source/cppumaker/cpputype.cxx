@@ -3463,7 +3463,7 @@ void ServiceType::dumpHxxFile(
                       "LO_URE_CTOR_FUN_")
                   << name_.replaceAll(".", "_dot_")
                   << (")(the_context.get(), ::css::uno::Sequence<"
-                      " ::css::uno::Any >())), ::SAL_NO_ACQUIRE),"
+                      " ::css::uno::Any >()))),"
                       " ::css::uno::UNO_QUERY);\n#else\n")
                   << indent() << "the_instance = ::css::uno::Reference< "
                   << scopedBaseName
@@ -3606,7 +3606,7 @@ void ServiceType::dumpHxxFile(
                 } else {
                     o << "the_arguments";
                 }
-                o << ")), ::SAL_NO_ACQUIRE), ::css::uno::UNO_QUERY);\n" << indent()
+                o << "))), ::css::uno::UNO_QUERY);\n" << indent()
                   << ("::css::uno::Reference< ::css::lang::XInitialization > "
                       "init(the_instance, ::css::uno::UNO_QUERY);\n")
                   << indent() << "if (init.is()) {\n"

@@ -190,9 +190,7 @@ com_sun_star_drawing_SvxUnoColorTable_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    rtl::Reference<SvxUnoColorTable> x(new SvxUnoColorTable);
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new SvxUnoColorTable);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -121,7 +121,7 @@ void SfxBasicManagerHolder::storeLibrariesToStorage( const Reference< XStorage >
 #endif
 }
 
-Reference< XLibraryContainer > SfxBasicManagerHolder::getLibraryContainer( ContainerType _eType )
+XLibraryContainer * SfxBasicManagerHolder::getLibraryContainer( ContainerType _eType )
 {
     OSL_PRECOND( isValid(), "SfxBasicManagerHolder::getLibraryContainer: not initialized!" );
 
@@ -161,9 +161,7 @@ com_sun_star_comp_sfx2_ApplicationDialogLibraryContainer_get_implementation(
     css::uno::Sequence<css::uno::Any> const &)
 {
     SFX_APP()->GetBasicManager();
-    Reference< XInterface > xRet( SFX_APP()->GetDialogContainer(), UNO_QUERY );
-    xRet->acquire();
-    return xRet.get();
+    return SFX_APP()->GetDialogContainer();
 }
 
 //============================================================================
@@ -175,9 +173,7 @@ com_sun_star_comp_sfx2_ApplicationScriptLibraryContainer_get_implementation(
     css::uno::Sequence<css::uno::Any> const &)
 {
     SFX_APP()->GetBasicManager();
-    Reference< XInterface > xRet( SFX_APP()->GetBasicContainer(), UNO_QUERY );
-    xRet->acquire();
-    return xRet.get();
+    return SFX_APP()->GetBasicContainer();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

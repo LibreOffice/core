@@ -1355,9 +1355,7 @@ com_sun_star_comp_stoc_NestedRegistry_get_implementation(
     SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    rtl::Reference<NestedRegistryImpl> x(new NestedRegistryImpl);
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new NestedRegistryImpl);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

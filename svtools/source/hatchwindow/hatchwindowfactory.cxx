@@ -89,9 +89,7 @@ com_sun_star_comp_embed_HatchWindowFactory_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    rtl::Reference<OHatchWindowFactory> x(new OHatchWindowFactory);
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new OHatchWindowFactory);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

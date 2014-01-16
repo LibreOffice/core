@@ -432,9 +432,7 @@ com_sun_star_comp_sfx2_IFrameObject_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &arguments)
 {
-    rtl::Reference<IFrameObject> x(new IFrameObject(context, arguments));
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new IFrameObject(context, arguments));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

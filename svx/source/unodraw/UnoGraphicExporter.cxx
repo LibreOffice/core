@@ -1285,9 +1285,7 @@ com_sun_star_comp_Draw_GraphicExporter_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    rtl::Reference<GraphicExporter> x(new GraphicExporter);
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new GraphicExporter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -126,9 +126,7 @@ com_sun_star_comp_document_OwnSubFilter_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &arguments)
 {
-    rtl::Reference<OwnSubFilterService> x(new OwnSubFilterService(arguments));
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new OwnSubFilterService(arguments));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

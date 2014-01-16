@@ -2319,9 +2319,7 @@ CompatWriterDocPropsImpl_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    rtl::Reference<CompatWriterDocPropsImpl> x(new CompatWriterDocPropsImpl(context));
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new CompatWriterDocPropsImpl(context));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
@@ -2329,9 +2327,7 @@ SfxDocumentMetaData_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    rtl::Reference<SfxDocumentMetaData> x(new SfxDocumentMetaData(context));
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new SfxDocumentMetaData(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

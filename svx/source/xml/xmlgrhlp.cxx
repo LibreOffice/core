@@ -1055,10 +1055,7 @@ com_sun_star_comp_Svx_GraphicImportHelper_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    rtl::Reference<SvXMLGraphicImportExportHelper> x(
-        new SvXMLGraphicImportExportHelper(GRAPHICHELPER_MODE_READ));
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new SvXMLGraphicImportExportHelper(GRAPHICHELPER_MODE_READ));
 }
 
 /** Create this with createInstanceWithArguments. service name
@@ -1078,10 +1075,7 @@ com_sun_star_comp_Svx_GraphicExportHelper_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    rtl::Reference<SvXMLGraphicImportExportHelper> x(
-        new SvXMLGraphicImportExportHelper(GRAPHICHELPER_MODE_WRITE));
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new SvXMLGraphicImportExportHelper(GRAPHICHELPER_MODE_WRITE));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -93,9 +93,7 @@ com_sun_star_comp_graphic_PrimitiveFactory2D_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    rtl::Reference<PrimitiveFactory2D> x(new PrimitiveFactory2D);
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new PrimitiveFactory2D);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

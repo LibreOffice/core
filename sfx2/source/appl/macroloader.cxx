@@ -341,9 +341,7 @@ com_sun_star_comp_sfx2_SfxMacroLoader_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &arguments)
 {
-    rtl::Reference<SfxMacroLoader> x(new SfxMacroLoader(arguments));
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new SfxMacroLoader(arguments));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

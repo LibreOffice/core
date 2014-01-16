@@ -425,9 +425,7 @@ com_sun_star_comp_svx_RecoveryUI_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    rtl::Reference<RecoveryUI> x(new RecoveryUI(context));
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new RecoveryUI(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

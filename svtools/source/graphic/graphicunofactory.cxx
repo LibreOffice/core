@@ -115,9 +115,7 @@ com_sun_star_graphic_GraphicObject_get_implementation(
         SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
         css::uno::Sequence<css::uno::Any> const &arguments)
 {
-    rtl::Reference<GObjectImpl> x(new GObjectImpl(arguments));
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new GObjectImpl(arguments));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
