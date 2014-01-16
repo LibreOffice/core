@@ -728,7 +728,7 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
         if (!aName.isEmpty())
         {
             SvTreeListEntry* pEntry = m_pHeaderTree->First();
-            while (pEntry && m_pHeaderTree->GetEntryText(pEntry)!=aName)
+            while (pEntry && m_pHeaderTree->GetEntryText(pEntry, 0) != aName)
             {
                 pEntry = m_pHeaderTree->Next(pEntry);
             }
@@ -757,7 +757,7 @@ IMPL_LINK_NOARG(SwAddStylesDlg_Impl, OkHdl)
         sal_IntPtr nLevel = (sal_IntPtr)pEntry->GetUserData();
         if(nLevel != USHRT_MAX)
         {
-            OUString sName(m_pHeaderTree->GetEntryText(pEntry));
+            OUString sName(m_pHeaderTree->GetEntryText(pEntry, 0));
             if(!pStyleArr[nLevel].isEmpty())
                 pStyleArr[nLevel] += OUString(TOX_STYLE_DELIMITER);
             pStyleArr[nLevel] += sName;
