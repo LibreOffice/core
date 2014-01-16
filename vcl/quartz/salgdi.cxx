@@ -806,6 +806,8 @@ bool SvpSalGraphics::CheckContext()
 {
     if (mbForeignContext)
         return true;
+    if(m_aDevice == NULL) // fix tiledrendering crash when changing content size
+        return false;
 
     const basegfx::B2IVector size = m_aDevice->getSize();
     const basegfx::B2IVector bufferSize = m_aDevice->getBufferSize();
@@ -829,32 +831,14 @@ bool SvpSalGraphics::CheckContext()
                                           kCGImageAlphaNone);
         break;
     case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA:
-        mrContext = CGBitmapContextCreate(pixelBuffer.get(),
-                                          bufferSize.getX(), bufferSize.getY(),
-                                          8, scanlineStride,
-                                          CGColorSpaceCreateDeviceRGB(),
-                                          kCGImageAlphaNoneSkipLast);
-        break;
     case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_ARGB:
-        mrContext = CGBitmapContextCreate(pixelBuffer.get(),
-                                          bufferSize.getX(), bufferSize.getY(),
-                                          8, scanlineStride,
-                                          CGColorSpaceCreateDeviceRGB(),
-                                          kCGImageAlphaNoneSkipFirst);
-        break;
+    case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_ABGR:
     case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA:
         mrContext = CGBitmapContextCreate(pixelBuffer.get(),
                                           bufferSize.getX(), bufferSize.getY(),
                                           8, scanlineStride,
                                           CGColorSpaceCreateDeviceRGB(),
-                                          kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Little);
-        break;
-    case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_ABGR:
-        mrContext = CGBitmapContextCreate(pixelBuffer.get(),
-                                          bufferSize.getX(), bufferSize.getY(),
-                                          8, scanlineStride,
-                                          CGColorSpaceCreateDeviceRGB(),
-                                          kCGImageAlphaNoneSkipLast | kCGBitmapByteOrder32Little);
+                                          kCGImageAlphaNoneSkipFirst);//kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Little);
         break;
     default:
         SAL_WARN( "vcl.ios", "CheckContext: unsupported color format " << basebmp::formatName( m_aDevice->getScanlineFormat() ) );

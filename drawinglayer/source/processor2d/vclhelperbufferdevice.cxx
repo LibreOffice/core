@@ -47,7 +47,7 @@ namespace
         VDevBuffer();
         virtual ~VDevBuffer();
 
-        VirtualDevice* alloc(OutputDevice& rOutDev, const Size& rSizePixel, bool bClear, bool bMono);
+        VirtualDevice* alloc(OutputDevice& rOutDev, const Size& rSizePixel, bool bClear, sal_Int32 nBits);
         void free(VirtualDevice& rDevice);
 
         // Timer virtuals
@@ -80,7 +80,7 @@ namespace
         }
     }
 
-    VirtualDevice* VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSizePixel, bool bClear, bool bMono)
+    VirtualDevice* VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSizePixel, bool bClear, sal_Int32 nBits)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         VirtualDevice* pRetval = 0;
@@ -94,7 +94,7 @@ namespace
             {
                 OSL_ENSURE(*a, "Empty pointer in VDevBuffer (!)");
 
-                if((bMono && 1 == (*a)->GetBitCount()) || (!bMono && (*a)->GetBitCount() > 1))
+                if(nBits == (*a)->GetBitCount())
                 {
                     // candidate is valid due to bit depth
                     if(aFound != maFreeBuffers.end())
@@ -160,7 +160,7 @@ namespace
         // no success yet, create new buffer
         if(!pRetval)
         {
-            pRetval = (bMono) ? new VirtualDevice(rOutDev, 1) : new VirtualDevice(rOutDev);
+            pRetval = new VirtualDevice(rOutDev, nBits);
             pRetval->SetOutputSizePixel(rSizePixel, bClear);
         }
         else
@@ -233,7 +233,7 @@ namespace drawinglayer
 
         if(isVisible())
         {
-            mpContent = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), false, false);
+            mpContent = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), false, 0);
 
             // #i93485# assert when copying from window to VDev is used
             OSL_ENSURE(mrOutDev.GetOutDevType() != OUTDEV_WINDOW,
@@ -348,7 +348,7 @@ namespace drawinglayer
         OSL_ENSURE(mpContent, "impBufferDevice: No content, check isVisible() before accessing (!)");
         if(!mpMask)
         {
-            mpMask = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, true);
+            mpMask = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, 1);
             mpMask->SetMapMode(mpContent->GetMapMode());
 
             // do NOT copy AA flag for mask!
@@ -362,7 +362,7 @@ namespace drawinglayer
         OSL_ENSURE(mpContent, "impBufferDevice: No content, check isVisible() before accessing (!)");
         if(!mpAlpha)
         {
-            mpAlpha = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, false);
+            mpAlpha = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, 8);
             mpAlpha->SetMapMode(mpContent->GetMapMode());
 
             // copy AA flag for new target; masking needs to be smooth

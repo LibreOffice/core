@@ -35,6 +35,8 @@
 
 #ifdef IOS
 #include "saldatabasic.hxx"
+#include "headless/svpbmp.hxx"
+#include <basegfx/range/b2ibox.hxx>
 #endif
 
 using namespace vcl;
@@ -285,12 +287,6 @@ static inline void alignLinePoint( const SalPoint* i_pIn, float& o_fX, float& o_
 
 void AquaSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics *pSrcGraphics )
 {
-#ifdef IOS
-    // Horrible horrible this is all crack, mxLayer is always NULL on iOS,
-    // all this stuff should be rewritten anyway for iOS
-    if( !mxLayer )
-        return;
-#endif
 
     if( !pSrcGraphics )
     {
@@ -335,12 +331,9 @@ void AquaSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics *pSrcGrap
     const CGPoint aDstPoint = CGPointMake(+rPosAry.mnDestX - rPosAry.mnSrcX, rPosAry.mnDestY - rPosAry.mnSrcY);
     if( (rPosAry.mnSrcWidth == rPosAry.mnDestWidth &&
          rPosAry.mnSrcHeight == rPosAry.mnDestHeight) &&
-        (!mnBitmapDepth || (aDstPoint.x + pSrc->mnWidth) <= mnWidth) ) // workaround a Quartz crasher
+        (!mnBitmapDepth || (aDstPoint.x + pSrc->mnWidth) <= mnWidth)
+        && pSrc->mxLayer ) // workaround a Quartz crasher
     {
-#ifdef IOS
-        if( !CheckContext() )
-            return;
-#endif
         // in XOR mode the drawing context is redirected to the XOR mask
         // if source and target are identical then copyBits() paints onto the target context though
         CGContextRef xCopyContext = mrContext;
@@ -895,6 +888,25 @@ bool AquaSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPol
     // #i97317# workaround for Quartz having problems with drawing small polygons
     if( ! ((aRefreshRect.size.width <= 0.125) && (aRefreshRect.size.height <= 0.125)) )
     {
+        // prepare drawing mode
+        CGPathDrawingMode eMode;
+        if( IsBrushVisible() && IsPenVisible() )
+        {
+            eMode = kCGPathEOFillStroke;
+        }
+        else if( IsPenVisible() )
+        {
+            eMode = kCGPathStroke;
+        }
+        else if( IsBrushVisible() )
+        {
+            eMode = kCGPathEOFill;
+        }
+        else
+        {
+            return true;
+        }
+
         // use the path to prepare the graphics context
         CGContextSaveGState( mrContext );
         CGContextBeginPath( mrContext );
@@ -903,7 +915,7 @@ bool AquaSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPol
         // draw path with antialiased polygon
         CGContextSetShouldAntialias( mrContext, true );
         CGContextSetAlpha( mrContext, 1.0 - fTransparency );
-        CGContextDrawPath( mrContext, kCGPathEOFillStroke );
+        CGContextDrawPath( mrContext, eMode );
         CGContextRestoreGState( mrContext );
 
         // mark modified rectangle as updated
@@ -1145,18 +1157,56 @@ sal_uInt16 AquaSalGraphics::GetBitCount() const
 
 SalBitmap* AquaSalGraphics::getBitmap( long  nX, long  nY, long  nDX, long  nDY )
 {
-    DBG_ASSERT( mxLayer, "AquaSalGraphics::getBitmap() with no layer" );
-
-    ApplyXorContext();
-
-    QuartzSalBitmap* pBitmap = new QuartzSalBitmap;
-    if( !pBitmap->Create( mxLayer, mnBitmapDepth, nX, nY, nDX, nDY) )
+    if (!mbForeignContext && m_aDevice != NULL)
     {
-        delete pBitmap;
-        pBitmap = NULL;
-    }
+        // on ios virtual device are Svp so use Svp bitmap to get the content
+        basegfx::B2IBox aRect( nX, nY, nX+nDX, nY+nDY );
+        basebmp::BitmapDeviceSharedPtr aSubSet = basebmp::subsetBitmapDevice(m_aDevice , aRect );
 
-    return pBitmap;
+        SvpSalBitmap* pSalBitmap = new SvpSalBitmap;
+        pSalBitmap->setBitmap(aSubSet);
+        BitmapBuffer* pBuffer = pSalBitmap->AcquireBuffer(true);
+        QuartzSalBitmap* pBitmap = new QuartzSalBitmap;
+        if( !pBitmap->Create(*pBuffer))
+        {
+            delete pBitmap;
+            pBitmap = NULL;
+        }
+        pSalBitmap->ReleaseBuffer(pBuffer, true);
+        delete pSalBitmap;
+        return pBitmap;
+    }
+    else if (mbForeignContext)
+    {
+        //if using external context like on ios, check if we can get a backing image and copy it
+        CGImageRef backImage = CGBitmapContextCreateImage(mrContext);
+        if (backImage)
+        {
+            QuartzSalBitmap* pBitmap = new QuartzSalBitmap;
+            if( !pBitmap->Create(backImage, mnBitmapDepth, nX, nY, nDX, nDY))
+            {
+                delete pBitmap;
+                pBitmap = NULL;
+            }
+            CGImageRelease(backImage);
+            return pBitmap;
+        }
+        return NULL;
+    }
+    else
+    {
+        DBG_ASSERT( mxLayer, "AquaSalGraphics::getBitmap() with no layer" );
+
+        ApplyXorContext();
+
+        QuartzSalBitmap* pBitmap = new QuartzSalBitmap;
+        if( !pBitmap->Create( mxLayer, mnBitmapDepth, nX, nY, nDX, nDY) )
+        {
+            delete pBitmap;
+            pBitmap = NULL;
+        }
+        return pBitmap;
+    }
 }
 
 #ifndef IOS
