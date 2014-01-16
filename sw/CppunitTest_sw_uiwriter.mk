@@ -77,6 +77,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_uiwriter,\
         vcl/vcl.unx \
     ) \
     $(if $(filter DESKTOP,$(BUILD_TYPE)),xmlhelp/util/ucpchelp1) \
+	writerfilter/util/writerfilter \
     xmloff/util/xo \
 ))
 

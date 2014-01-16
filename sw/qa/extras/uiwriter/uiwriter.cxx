@@ -9,6 +9,8 @@
 #include <swmodeltestbase.hxx>
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>
+#include <crsskip.hxx>
+#include <shellio.hxx>
 
 #include "UndoManager.hxx"
 
@@ -24,12 +26,14 @@ public:
     void testReplaceBackward();
     void testFdo69893();
     void testFdo70807();
+    void testImportRTF();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
     CPPUNIT_TEST(testReplaceBackward);
     CPPUNIT_TEST(testFdo69893);
     CPPUNIT_TEST(testFdo70807);
+    CPPUNIT_TEST(testImportRTF);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -142,6 +146,26 @@ void SwUiWriterTest::testFdo70807()
         CPPUNIT_ASSERT_EQUAL(expectedUserDefined, xStyle->isUserDefined());
         CPPUNIT_ASSERT_EQUAL(expectedUsedStyle, xStyle->isInUse());
     }
+}
+
+void SwUiWriterTest::testImportRTF()
+{
+    // Insert "foobar" and position the cursor between "foo" and "bar".
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("foobar");
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 3, /*bBasicCall=*/false);
+
+    // Insert the RTF at the cursor position.
+    OString aData = "{\\rtf1 Hello world!\\par}";
+    SvMemoryStream aStream(const_cast<sal_Char*>(aData.getStr()), aData.getLength(), STREAM_READ);
+    SwReader aReader(aStream, OUString(), OUString(), *pWrtShell->GetCrsr());
+    Reader* pRTFReader = SwReaderWriter::GetReader(READER_WRITER_RTF);
+    CPPUNIT_ASSERT_EQUAL(sal_uLong(0), aReader.Read(*pRTFReader));
+
+    sal_uLong nIndex = pWrtShell->GetCrsr()->GetNode()->GetIndex();
+    CPPUNIT_ASSERT_EQUAL(OUString("fooHello world!"), static_cast<SwTxtNode*>(pDoc->GetNodes()[nIndex - 1])->GetTxt());
+    CPPUNIT_ASSERT_EQUAL(OUString("bar"), static_cast<SwTxtNode*>(pDoc->GetNodes()[nIndex])->GetTxt());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
