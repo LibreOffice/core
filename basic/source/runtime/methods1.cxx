@@ -1326,7 +1326,7 @@ RTLFUNC(Environ)
     const char* pEnvStr = getenv(aByteStr.getStr());
     if ( pEnvStr )
     {
-        aResult = OUString::createFromAscii( pEnvStr );
+        aResult = OUString(pEnvStr, strlen(pEnvStr), osl_getThreadTextEncoding());
     }
     rPar.Get(0)->PutString( aResult );
 }
