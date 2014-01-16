@@ -41,17 +41,20 @@ void DocumentHandler::startElement(const char *psName, const WPXPropertyList &xP
         // filter out libwpd elements
         if (strncmp(i.key(), "libwpd", 6) != 0)
         {
-            pAttrList->AddAttribute(OUString::createFromAscii(i.key()),
-                                    OUString::createFromAscii(i()->getStr().cstr()));
+            OUString sName(i.key(), strlen(i.key()),  RTL_TEXTENCODING_UTF8);
+            OUString sValue(i()->getStr().cstr(), strlen(i()->getStr().cstr()), RTL_TEXTENCODING_UTF8);
+            pAttrList->AddAttribute(sName, sValue);
         }
     }
 
-    mxHandler->startElement(OUString::createFromAscii(psName), xAttrList);
+    OUString sElementName(psName, strlen(psName), RTL_TEXTENCODING_UTF8);
+    mxHandler->startElement(sElementName, xAttrList);
 }
 
 void DocumentHandler::endElement(const char *psName)
 {
-    mxHandler->endElement(OUString::createFromAscii(psName));
+    OUString sElementName(psName, strlen(psName), RTL_TEXTENCODING_UTF8);
+    mxHandler->endElement(sElementName);
 }
 
 void DocumentHandler::characters(const WPXString &sCharacters)
