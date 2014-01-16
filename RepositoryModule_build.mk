@@ -62,18 +62,25 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 			basic \
 			canvas \
 			configmgr \
+			connectivity \
 			cppcanvas \
 			drawinglayer \
 			editeng \
+			extensions \
+			filter \
 			framework \
 			linguistic \
+			mysqlc \
+			officecfg \
 			package \
+			postprocess \
 			sfx2 \
 			sot \
 			svgio \
 			svl \
 			svtools \
 			svx \
+			swext \
 			toolkit \
 			ucb \
 			unoxml \
