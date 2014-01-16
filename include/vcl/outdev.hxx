@@ -101,31 +101,27 @@ namespace vcl
     struct FontCapabilities;
 }
 
-// ---------------------
-// - OutputDevice-Data -
-// ---------------------
+// OutputDevice-Data
 
 struct ImplMapRes
 {
-    long                mnMapOfsX;          // Offset in X Richtung
-    long                mnMapOfsY;          // Offset in Y Richtung
-    long                mnMapScNumX;        // Skal.-faktor Zaehler X Richtung
-    long                mnMapScNumY;        // Skal.-faktor Zaehler Y Richtung
-    long                mnMapScDenomX;      // Skal.-faktor Nenner X Richtung
-    long                mnMapScDenomY;      // Skal.-faktor Nenner Y Richtung
+    long                mnMapOfsX;          // Offset in X direction
+    long                mnMapOfsY;          // Offset in Y direction
+    long                mnMapScNumX;        // Scaling factor - numerator in X direction
+    long                mnMapScNumY;        // Scaling factor - numerator in Y direction
+    long                mnMapScDenomX;      // Scaling factor - denominator in X direction
+    long                mnMapScDenomY;      // Scaling factor - denominator in Y direction
 };
 
 struct ImplThresholdRes
 {
-    long                mnThresLogToPixX;   // Schwellenwerte fuer Berechnung
-    long                mnThresLogToPixY;   // mit BigInts
+    long                mnThresLogToPixX;   // Thresholds for calculation
+    long                mnThresLogToPixY;   // with BigInts
     long                mnThresPixToLogX;   // ""
     long                mnThresPixToLogY;   // ""
 };
 
-// ----------------------
-// - OutputDevice-Types -
-// ----------------------
+// OutputDevice-Types
 
 // Flags for Push()
 #define PUSH_LINECOLOR                  ((sal_uInt16)0x0001)
@@ -246,9 +242,7 @@ enum OutDevType { OUTDEV_DONTKNOW, OUTDEV_WINDOW, OUTDEV_PRINTER, OUTDEV_VIRDEV 
 
 enum OutDevViewType { OUTDEV_VIEWTYPE_DONTKNOW, OUTDEV_VIEWTYPE_PRINTPREVIEW, OUTDEV_VIEWTYPE_SLIDESHOW };
 
-// ----------------
-// - OutputDevice -
-// ----------------
+// OutputDevice
 
 class VirtualDevice;
 class Printer;
@@ -1114,7 +1108,7 @@ public:
 
     void                Push( sal_uInt16 nFlags = PUSH_ALL );
     void                Pop();
-    // returns the curren stack depth; that is the number of Push() calls minus the number of Pop() calls
+    // returns the current stack depth; that is the number of Push() calls minus the number of Pop() calls
     // this should not normally be used since Push and Pop must always be used symmetrically
     // however this may be e.g. a help when debugging code in which this somehow is not the case
     sal_uInt32          GetGCStackDepth() const;
