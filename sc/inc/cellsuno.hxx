@@ -188,7 +188,7 @@ private:
     sal_Int64               nObjectId;
     sal_Bool                    bChartColAsHdr;
     sal_Bool                    bChartRowAsHdr;
-    sal_Bool                    bCursorOnly;
+    bool                    bCursorOnly;
     sal_Bool                    bGotDataChangedHint;
     XModifyListenerArr_Impl aValueListeners;
 
@@ -255,8 +255,8 @@ public:
     void                    SetNewRange(const ScRange& rNew);   // for cursor
     void                    SetNewRanges(const ScRangeList& rNew);
 
-    void                    SetCursorOnly(sal_Bool bSet);
-    sal_Bool                    IsCursorOnly() const            { return bCursorOnly; }
+    void                    SetCursorOnly(bool bSet);
+    bool                    IsCursorOnly() const            { return bCursorOnly; }
 
                             // XSheetOperation
     virtual double SAL_CALL computeFunction( ::com::sun::star::sheet::GeneralFunction nFunction )

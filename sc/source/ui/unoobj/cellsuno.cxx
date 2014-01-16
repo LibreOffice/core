@@ -1731,7 +1731,7 @@ void ScCellRangesBase::SetNewRanges(const ScRangeList& rNew)
     RefChanged();
 }
 
-void ScCellRangesBase::SetCursorOnly( sal_Bool bSet )
+void ScCellRangesBase::SetCursorOnly( bool bSet )
 {
     //  set for a selection object that is created from the cursor position
     //  without anything selected (may contain several sheets)
