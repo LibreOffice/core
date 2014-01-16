@@ -17,61 +17,106 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <uielement/recentfilesmenucontroller.hxx>
-#include <threadhelp/resetableguard.hxx>
-#include "services.h"
-
 #include <classes/resource.hrc>
 #include <classes/fwkresid.hxx>
 
-#include <com/sun/star/util/XStringWidth.hpp>
-
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/file.hxx>
+#include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
+#include <svtools/popupmenucontrollerbase.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/historyoptions.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 
+using namespace css;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
+using namespace framework;
 
 #define MAX_MENU_ITEMS  99
+
+namespace {
 
 static const char CMD_CLEAR_LIST[]   = ".uno:ClearRecentFileList";
 static const char CMD_PREFIX[]       = "vnd.sun.star.popup:RecentFileList?entry=";
 static const char MENU_SHORTCUT[]     = "~N. ";
 
-namespace framework
+struct LoadRecentFile
 {
-
-class RecentFilesStringLength : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XStringWidth >
-{
-    public:
-        RecentFilesStringLength() {}
-        virtual ~RecentFilesStringLength() {}
-
-        // XStringWidth
-        sal_Int32 SAL_CALL queryStringWidth( const OUString& aString )
-            throw (::com::sun::star::uno::RuntimeException)
-        {
-            return aString.getLength();
-        }
+    util::URL                               aTargetURL;
+    uno::Sequence< beans::PropertyValue >   aArgSeq;
+    uno::Reference< frame::XDispatch >      xDispatch;
 };
 
-DEFINE_XSERVICEINFO_MULTISERVICE_2      (   RecentFilesMenuController                   ,
-                                            OWeakObject                                 ,
-                                            SERVICENAME_POPUPMENUCONTROLLER             ,
-                                            IMPLEMENTATIONNAME_RECENTFILESMENUCONTROLLER
-                                        )
+class RecentFilesMenuController :  public svt::PopupMenuControllerBase
+{
+    using svt::PopupMenuControllerBase::disposing;
 
-DEFINE_INIT_SERVICE                     (   RecentFilesMenuController, {} )
+public:
+    RecentFilesMenuController( const uno::Reference< uno::XComponentContext >& xContext );
+    virtual ~RecentFilesMenuController();
 
-RecentFilesMenuController::RecentFilesMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException)
+    {
+        return OUString("com.sun.star.comp.framework.RecentFilesMenuController");
+    }
+
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException)
+    {
+        return cppu::supportsService(this, ServiceName);
+    }
+
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException)
+    {
+        css::uno::Sequence< OUString > aSeq(1);
+        aSeq[0] = OUString("com.sun.star.frame.PopupMenuController");
+        return aSeq;
+    }
+
+    // XStatusListener
+    virtual void SAL_CALL statusChanged( const frame::FeatureStateEvent& Event ) throw ( uno::RuntimeException );
+
+    // XMenuListener
+    virtual void SAL_CALL itemSelected( const awt::MenuEvent& rEvent ) throw (uno::RuntimeException);
+    virtual void SAL_CALL itemActivated( const awt::MenuEvent& rEvent ) throw (uno::RuntimeException);
+
+    // XDispatchProvider
+    virtual uno::Reference< frame::XDispatch > SAL_CALL queryDispatch( const util::URL& aURL, const OUString& sTarget, sal_Int32 nFlags ) throw( uno::RuntimeException );
+
+    // XDispatch
+    virtual void SAL_CALL dispatch( const util::URL& aURL, const uno::Sequence< beans::PropertyValue >& seqProperties ) throw( uno::RuntimeException );
+
+    // XEventListener
+    virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( uno::RuntimeException );
+
+    DECL_STATIC_LINK( RecentFilesMenuController, ExecuteHdl_Impl, LoadRecentFile* );
+
+private:
+    virtual void impl_setPopupMenu();
+    struct RecentFile
+    {
+        OUString aURL;
+        OUString aTitle;
+    };
+
+    void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
+    void executeEntry( sal_Int32 nIndex );
+
+    std::vector< RecentFile > m_aRecentFilesItems;
+    sal_Bool                  m_bDisabled : 1;
+};
+
+RecentFilesMenuController::RecentFilesMenuController( const uno::Reference< uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext ),
     m_bDisabled( sal_False )
 {
@@ -96,7 +141,6 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
     if ( pVCLPopupMenu )
     {
         Sequence< Sequence< PropertyValue > > aHistoryList = SvtHistoryOptions().GetList( ePICKLIST );
-        Reference< XStringWidth > xStringLength( new RecentFilesStringLength );
 
         int nPickListMenuItems = ( aHistoryList.getLength() > MAX_MENU_ITEMS ) ? MAX_MENU_ITEMS : aHistoryList.getLength();
         m_aRecentFilesItems.clear();
@@ -375,6 +419,16 @@ IMPL_STATIC_LINK_NOINSTANCE( RecentFilesMenuController, ExecuteHdl_Impl, LoadRec
     return 0;
 }
 
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_RecentFilesMenuController_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    rtl::Reference<RecentFilesMenuController> x(new RecentFilesMenuController(context));
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

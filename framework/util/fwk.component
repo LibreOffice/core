@@ -93,7 +93,8 @@
   <implementation name="com.sun.star.comp.framework.PopupMenuControllerFactory">
     <service name="com.sun.star.frame.PopupMenuControllerFactory"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.RecentFilesMenuController">
+  <implementation name="com.sun.star.comp.framework.RecentFilesMenuController"
+      constructor="com_sun_star_comp_framework_RecentFilesMenuController_get_implementation">
     <service name="com.sun.star.frame.PopupMenuController"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.StatusBarControllerFactory">
