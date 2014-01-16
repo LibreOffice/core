@@ -105,7 +105,7 @@ public:
                     new ImplementationInfo(
                         name, loader, uri, environment, constructorName, prefix,
                         alienContext, rdbFile)),
-                constructor(0), loaded(false)
+                constructor(0), status(STATUS_NEW)
             {}
 
             Implementation(
@@ -118,15 +118,33 @@ public:
                     theComponent):
                 info(new ImplementationInfo(name)), constructor(0),
                 factory1(theFactory1), factory2(theFactory2),
-                component(theComponent), loaded(true)
+                component(theComponent), status(STATUS_LOADED)
             {}
+
+            css::uno::Reference<css::uno::XInterface> createInstance(
+                css::uno::Reference<css::uno::XComponentContext> const &
+                    context,
+                bool singletonRequest);
+
+            css::uno::Reference<css::uno::XInterface>
+            createInstanceWithArguments(
+                css::uno::Reference<css::uno::XComponentContext> const &
+                    context,
+                bool singletonRequest,
+                css::uno::Sequence<css::uno::Any> const & arguments);
+
+            enum Status { STATUS_NEW, STATUS_WRAPPER, STATUS_LOADED };
 
             boost::shared_ptr< ImplementationInfo > info;
             ImplementationConstructorFn * constructor;
             css::uno::Reference< css::lang::XSingleComponentFactory > factory1;
             css::uno::Reference< css::lang::XSingleServiceFactory > factory2;
             css::uno::Reference< css::lang::XComponent > component;
-            bool loaded;
+            Status status;
+
+            osl::Mutex mutex;
+            css::uno::Reference<css::uno::XInterface> singleton;
+            bool dispose;
         };
 
         typedef std::map< rtl::OUString, boost::shared_ptr< Implementation > >
@@ -166,7 +184,7 @@ public:
     }
 
     void addSingletonContextEntries(
-        std::vector< cppu::ContextEntry_Init > * entries) const;
+        std::vector< cppu::ContextEntry_Init > * entries);
 
     css::uno::Reference< css::uno::XComponentContext > getContext() const {
         assert(context_.is());
@@ -175,10 +193,7 @@ public:
 
     void loadImplementation(
         css::uno::Reference< css::uno::XComponentContext > const & context,
-        boost::shared_ptr< Data::ImplementationInfo > const & info,
-        ImplementationConstructorFn ** constructor,
-        css::uno::Reference< css::lang::XSingleComponentFactory > * factory1,
-        css::uno::Reference< css::lang::XSingleServiceFactory > * factory2);
+        boost::shared_ptr< Data::Implementation > & implementation);
 
 private:
     virtual ~ServiceManager() {}

@@ -519,6 +519,58 @@ css::beans::Property getDefaultContextProperty() {
         css::beans::PropertyAttribute::READONLY);
 }
 
+class SingletonFactory:
+    public cppu::WeakImplHelper1<css::lang::XSingleComponentFactory>,
+    private boost::noncopyable
+{
+public:
+    SingletonFactory(
+        rtl::Reference< cppuhelper::ServiceManager > const & manager,
+        boost::shared_ptr<
+            cppuhelper::ServiceManager::Data::Implementation > const &
+            implementation):
+        manager_(manager), implementation_(implementation)
+    { assert(manager.is()); assert(implementation.get() != 0); }
+
+private:
+    virtual ~SingletonFactory() {}
+
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
+    createInstanceWithContext(
+        css::uno::Reference< css::uno::XComponentContext > const & Context)
+        throw (css::uno::Exception, css::uno::RuntimeException);
+
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
+    createInstanceWithArgumentsAndContext(
+        css::uno::Sequence< css::uno::Any > const & Arguments,
+        css::uno::Reference< css::uno::XComponentContext > const & Context)
+        throw (css::uno::Exception, css::uno::RuntimeException);
+
+    rtl::Reference< cppuhelper::ServiceManager > manager_;
+    boost::shared_ptr< cppuhelper::ServiceManager::Data::Implementation >
+        implementation_;
+};
+
+css::uno::Reference< css::uno::XInterface >
+SingletonFactory::createInstanceWithContext(
+    css::uno::Reference< css::uno::XComponentContext > const & Context)
+    throw (css::uno::Exception, css::uno::RuntimeException)
+{
+    manager_->loadImplementation(Context, implementation_);
+    return implementation_->createInstance(Context, true);
+}
+
+css::uno::Reference< css::uno::XInterface >
+SingletonFactory::createInstanceWithArgumentsAndContext(
+    css::uno::Sequence< css::uno::Any > const & Arguments,
+    css::uno::Reference< css::uno::XComponentContext > const & Context)
+    throw (css::uno::Exception, css::uno::RuntimeException)
+{
+    manager_->loadImplementation(Context, implementation_);
+    return implementation_->createInstanceWithArguments(
+        Context, true, Arguments);
+}
+
 class ImplementationWrapper:
     public cppu::WeakImplHelper3<
         css::lang::XSingleComponentFactory, css::lang::XSingleServiceFactory,
@@ -529,10 +581,10 @@ public:
     ImplementationWrapper(
         rtl::Reference< cppuhelper::ServiceManager > const & manager,
         boost::shared_ptr<
-            cppuhelper::ServiceManager::Data::ImplementationInfo > const &
-            info):
-        manager_(manager), info_(info), loaded_(false), constructor_(0)
-    { assert(manager.is() && info.get() != 0); }
+            cppuhelper::ServiceManager::Data::Implementation > const &
+            implementation):
+        manager_(manager), implementation_(implementation)
+    { assert(manager.is()); assert(implementation.get() != 0); }
 
 private:
     virtual ~ImplementationWrapper() {}
@@ -565,18 +617,9 @@ private:
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException);
 
-    void loadImplementation(
-        css::uno::Reference< css::uno::XComponentContext > const & context);
-
     rtl::Reference< cppuhelper::ServiceManager > manager_;
-    boost::shared_ptr< cppuhelper::ServiceManager::Data::ImplementationInfo >
-        info_;
-
-    osl::Mutex mutex_;
-    bool loaded_;
-    cppuhelper::ImplementationConstructorFn * constructor_;
-    css::uno::Reference< css::lang::XSingleComponentFactory > factory1_;
-    css::uno::Reference< css::lang::XSingleServiceFactory > factory2_;
+    boost::shared_ptr< cppuhelper::ServiceManager::Data::Implementation >
+        implementation_;
 };
 
 css::uno::Reference< css::uno::XInterface >
@@ -584,15 +627,8 @@ ImplementationWrapper::createInstanceWithContext(
     css::uno::Reference< css::uno::XComponentContext > const & Context)
     throw (css::uno::Exception, css::uno::RuntimeException)
 {
-    loadImplementation(Context);
-    return constructor_ != 0
-        ? css::uno::Reference<css::uno::XInterface>(
-            (*constructor_)(
-                Context.get(), css::uno::Sequence<css::uno::Any>()),
-            SAL_NO_ACQUIRE)
-        : factory1_.is()
-        ? factory1_->createInstanceWithContext(Context)
-        : factory2_->createInstance();
+    manager_->loadImplementation(Context, implementation_);
+    return implementation_->createInstance(Context, false);
 }
 
 css::uno::Reference< css::uno::XInterface >
@@ -601,19 +637,9 @@ ImplementationWrapper::createInstanceWithArgumentsAndContext(
     css::uno::Reference< css::uno::XComponentContext > const & Context)
     throw (css::uno::Exception, css::uno::RuntimeException)
 {
-    loadImplementation(Context);
-    if (constructor_ != 0) {
-        css::uno::Reference<css::uno::XInterface> xRet(
-            (*constructor_)(Context.get(), Arguments), SAL_NO_ACQUIRE);
-        css::uno::Reference<css::lang::XInitialization> xInit(
-                xRet, css::uno::UNO_QUERY);
-        if (xInit.is())
-            xInit->initialize(Arguments);
-        return xRet;
-    } else
-        return factory1_.is()
-            ? factory1_->createInstanceWithArgumentsAndContext(Arguments, Context)
-            : factory2_->createInstanceWithArguments(Arguments);
+    manager_->loadImplementation(Context, implementation_);
+    return implementation_->createInstanceWithArguments(
+        Context, false, Arguments);
 }
 
 css::uno::Reference< css::uno::XInterface >
@@ -635,7 +661,7 @@ ImplementationWrapper::createInstanceWithArguments(
 rtl::OUString ImplementationWrapper::getImplementationName()
     throw (css::uno::RuntimeException)
 {
-    return info_->name;
+    return implementation_->info->name;
 }
 
 sal_Bool ImplementationWrapper::supportsService(rtl::OUString const & ServiceName)
@@ -648,58 +674,149 @@ css::uno::Sequence< rtl::OUString >
 ImplementationWrapper::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
-    if (info_->services.size() > static_cast< sal_uInt32 >(SAL_MAX_INT32)) {
+    if (implementation_->info->services.size()
+        > static_cast< sal_uInt32 >(SAL_MAX_INT32))
+    {
         throw css::uno::RuntimeException(
-            "Implementation " + info_->name + " supports too many services",
+            ("Implementation " + implementation_->info->name
+             + " supports too many services"),
             static_cast< cppu::OWeakObject * >(this));
     }
     css::uno::Sequence< rtl::OUString > names(
-        static_cast< sal_Int32 >(info_->services.size()));
+        static_cast< sal_Int32 >(implementation_->info->services.size()));
     sal_Int32 i = 0;
     for (std::vector< rtl::OUString >::const_iterator j(
-             info_->services.begin());
-         j != info_->services.end(); ++j)
+             implementation_->info->services.begin());
+         j != implementation_->info->services.end(); ++j)
     {
         names[i++] = *j;
     }
     return names;
 }
 
-void ImplementationWrapper::loadImplementation(
-    css::uno::Reference< css::uno::XComponentContext > const & context)
+}
+
+css::uno::Reference<css::uno::XInterface>
+cppuhelper::ServiceManager::Data::Implementation::createInstance(
+    css::uno::Reference<css::uno::XComponentContext> const & context,
+    bool singletonRequest)
 {
-    {
-        osl::MutexGuard g(mutex_);
-        if (loaded_) {
-            return;
+    if (info->singletons.empty()) {
+        assert(!singletonRequest);
+        if (constructor != 0) {
+            return css::uno::Reference<css::uno::XInterface>(
+                (*constructor)(
+                    context.get(), css::uno::Sequence<css::uno::Any>()),
+                SAL_NO_ACQUIRE);
         }
-    }
-    cppuhelper::ImplementationConstructorFn * ctor = 0;
-    css::uno::Reference< css::lang::XSingleComponentFactory > f1;
-    css::uno::Reference< css::lang::XSingleServiceFactory > f2;
-    //TODO: There is a race here, as the relevant service factory can already
-    // have been removed and loading can thus fail, as the entity from which to
-    // load can disappear once the service factory is removed:
-    manager_->loadImplementation(context, info_, &ctor, &f1, &f2);
-    if (ctor == 0 && !f1.is() && !f2.is()) {
+        if (factory1.is()) {
+            return factory1->createInstanceWithContext(context);
+        }
+        if (factory2.is()) {
+            return factory2->createInstance();
+        }
         throw css::uno::DeploymentException(
-            ("Implementation " + info_->name
+            ("Implementation " + info->name
              + " does not provide a constructor or factory"),
-            static_cast< cppu::OWeakObject * >(this));
-    }
-    osl::MutexGuard g(mutex_);
-    if (!loaded_) {
-        loaded_ = true;
-        constructor_ = ctor;
-        factory1_ = f1;
-        factory2_ = f2;
+            css::uno::Reference<css::uno::XInterface>());
+    } else {
+        osl::MutexGuard g(mutex); //TODO: must be a non-recursive mutex
+        if (singleton.is()) {
+            if (singletonRequest) {
+                dispose = false;
+            }
+            return singleton;
+        }
+        if (constructor != 0) {
+            singleton.set(
+                (*constructor)(
+                    context.get(), css::uno::Sequence<css::uno::Any>()),
+                SAL_NO_ACQUIRE);
+        } else if (factory1.is()) {
+            singleton = factory1->createInstanceWithContext(context);
+        } else if (factory2.is()) {
+            singleton = factory2->createInstance();
+        } else {
+            throw css::uno::DeploymentException(
+                ("Implementation " + info->name
+                 + " does not provide a constructor or factory"),
+            css::uno::Reference<css::uno::XInterface>());
+        }
+        dispose = singleton.is() && !singletonRequest;
+        return singleton;
     }
 }
 
+css::uno::Reference<css::uno::XInterface>
+cppuhelper::ServiceManager::Data::Implementation::createInstanceWithArguments(
+    css::uno::Reference<css::uno::XComponentContext> const & context,
+    bool singletonRequest, css::uno::Sequence<css::uno::Any> const & arguments)
+{
+    if (info->singletons.empty()) {
+        assert(!singletonRequest);
+        if (constructor != 0) {
+            //HACK: The constructor will either observe arguments and return
+            // inst that does not implement XInitialization (or null), or ignore
+            // arguments and return inst that implements XInitialization; this
+            // should be removed again once XInitialization-based
+            // implementations have become rare:
+            css::uno::Reference<css::uno::XInterface> inst(
+                (*constructor)(context.get(), arguments), SAL_NO_ACQUIRE);
+            css::uno::Reference<css::lang::XInitialization> init(
+                inst, css::uno::UNO_QUERY);
+            if (init.is()) {
+                init->initialize(arguments);
+            }
+            return inst;
+        }
+        if (factory1.is()) {
+            return factory1->createInstanceWithArgumentsAndContext(
+                arguments, context);
+        }
+        if (factory2.is()) {
+            return factory2->createInstanceWithArguments(arguments);
+        }
+        throw css::uno::DeploymentException(
+            "Implementation " + info->name + " does not provide a factory",
+            css::uno::Reference<css::uno::XInterface>());
+    } else {
+        osl::MutexGuard g(mutex); //TODO: must be a non-recursive mutex
+        if (singleton.is()) {
+            SAL_WARN(
+                "cppuhelper",
+                "createInstanceWithArguments request for already instantiated"
+                    " singleton implementation " << info->name);
+            if (singletonRequest) {
+                dispose = false;
+            }
+            return singleton;
+        }
+        if (constructor != 0) {
+            //HACK: see above
+            singleton.set(
+                (*constructor)(context.get(), arguments), SAL_NO_ACQUIRE);
+            css::uno::Reference<css::lang::XInitialization> init(
+                singleton, css::uno::UNO_QUERY);
+            if (init.is()) {
+                init->initialize(arguments);
+            }
+        } else if (factory1.is()) {
+            singleton = factory1->createInstanceWithArgumentsAndContext(
+                arguments, context);
+        } else if (factory2.is()) {
+            singleton = factory2->createInstanceWithArguments(arguments);
+        } else {
+            throw css::uno::DeploymentException(
+                "Implementation " + info->name + " does not provide a factory",
+            css::uno::Reference<css::uno::XInterface>());
+        }
+        dispose = singleton.is() && !singletonRequest;
+        return singleton;
+    }
 }
 
 void cppuhelper::ServiceManager::addSingletonContextEntries(
-    std::vector< cppu::ContextEntry_Init > * entries) const
+    std::vector< cppu::ContextEntry_Init > * entries)
 {
     assert(entries != 0);
     for (Data::ImplementationMap::const_iterator i(data_.singletons.begin());
@@ -714,44 +831,50 @@ void cppuhelper::ServiceManager::addSingletonContextEntries(
         entries->push_back(
             cppu::ContextEntry_Init(
                 "/singletons/" + i->first,
-                css::uno::makeAny(i->second[0]->info->name), true));
+                css::uno::makeAny<
+                    css::uno::Reference<css::lang::XSingleComponentFactory> >(
+                        new SingletonFactory(this, i->second[0])),
+                true));
     }
 }
 
 void cppuhelper::ServiceManager::loadImplementation(
         css::uno::Reference< css::uno::XComponentContext > const & context,
-        boost::shared_ptr< Data::ImplementationInfo > const & info,
-        ImplementationConstructorFn ** constructor,
-        css::uno::Reference< css::lang::XSingleComponentFactory > * factory1,
-        css::uno::Reference< css::lang::XSingleServiceFactory > * factory2)
+        boost::shared_ptr< Data::Implementation > & implementation)
 {
-    assert(
-        info.get() != 0 && constructor != 0 && *constructor == 0
-        && factory1 != 0 && !factory1->is() && factory2 != 0
-        && !factory2->is());
+    assert(implementation.get() != 0);
+    {
+        osl::MutexGuard g(rBHelper.rMutex);
+        if (implementation->status == Data::Implementation::STATUS_LOADED) {
+            return;
+        }
+    }
     rtl::OUString uri;
     try {
-        uri = cppu::bootstrap_expandUri(info->uri);
+        uri = cppu::bootstrap_expandUri(implementation->info->uri);
     } catch (css::lang::IllegalArgumentException & e) {
         throw css::uno::DeploymentException(
-            "Cannot expand URI" + info->uri + ": " + e.Message,
+            "Cannot expand URI" + implementation->info->uri + ": " + e.Message,
             static_cast< cppu::OWeakObject * >(this));
     }
+    cppuhelper::ImplementationConstructorFn * ctor = 0;
     css::uno::Reference< css::uno::XInterface > f0;
     // Special handling of SharedLibrary loader, with support for environment,
     // constructor, and prefix arguments:
-    if (!info->alienContext.is()
-        && info->loader == "com.sun.star.loader.SharedLibrary")
+    if (!implementation->info->alienContext.is()
+        && implementation->info->loader == "com.sun.star.loader.SharedLibrary")
     {
         cppuhelper::detail::loadSharedLibComponentFactory(
-            uri, info->environment, info->prefix, info->name, info->constructor,
-            this, constructor, &f0);
-        if (constructor != 0 && *constructor != 0) {
-            assert(!info->environment.isEmpty());
+            uri, implementation->info->environment,
+            implementation->info->prefix, implementation->info->name,
+            implementation->info->constructor, this, &ctor, &f0);
+        if (ctor != 0) {
+            assert(!implementation->info->environment.isEmpty());
             css::uno::Environment curEnv(css::uno::Environment::getCurrent());
             css::uno::Environment env(
                 cppuhelper::detail::getEnvironment(
-                    info->environment, info->name));
+                    implementation->info->environment,
+                    implementation->info->name));
             if (!(curEnv.is() && env.is())) {
                 throw css::uno::DeploymentException(
                     "cannot get environments",
@@ -763,21 +886,23 @@ void cppuhelper::ServiceManager::loadImplementation(
         }
     } else {
         SAL_WARN_IF(
-            !info->environment.isEmpty(), "cppuhelper",
-            "Loader " << info->loader << " and non-empty environment "
-                << info->environment);
+            !implementation->info->environment.isEmpty(), "cppuhelper",
+            "Loader " << implementation->info->loader
+                << " and non-empty environment "
+                << implementation->info->environment);
         SAL_WARN_IF(
-            !info->prefix.isEmpty(), "cppuhelper",
-            "Loader " << info->loader << " and non-empty constructor "
-                << info->constructor);
+            !implementation->info->prefix.isEmpty(), "cppuhelper",
+            "Loader " << implementation->info->loader
+                << " and non-empty constructor "
+                << implementation->info->constructor);
         SAL_WARN_IF(
-            !info->prefix.isEmpty(), "cppuhelper",
-            "Loader " << info->loader << " and non-empty prefix "
-                << info->prefix);
+            !implementation->info->prefix.isEmpty(), "cppuhelper",
+            "Loader " << implementation->info->loader
+                << " and non-empty prefix " << implementation->info->prefix);
         css::uno::Reference< css::uno::XComponentContext > ctxt;
         css::uno::Reference< css::lang::XMultiComponentFactory > smgr;
-        if (info->alienContext.is()) {
-            ctxt = info->alienContext;
+        if (implementation->info->alienContext.is()) {
+            ctxt = implementation->info->alienContext;
             smgr = css::uno::Reference< css::lang::XMultiComponentFactory >(
                 ctxt->getServiceManager(), css::uno::UNO_SET_THROW);
         } else {
@@ -786,28 +911,69 @@ void cppuhelper::ServiceManager::loadImplementation(
             smgr = this;
         }
         css::uno::Reference< css::loader::XImplementationLoader > loader(
-            smgr->createInstanceWithContext(info->loader, ctxt),
+            smgr->createInstanceWithContext(implementation->info->loader, ctxt),
             css::uno::UNO_QUERY_THROW);
         f0 = loader->activate(
-            info->name, rtl::OUString(), uri,
+            implementation->info->name, rtl::OUString(), uri,
             css::uno::Reference< css::registry::XRegistryKey >());
     }
-    factory1->set(f0, css::uno::UNO_QUERY);
-    if (!factory1->is()) {
-        factory2->set(f0, css::uno::UNO_QUERY);
+    css::uno::Reference<css::lang::XSingleComponentFactory> f1;
+    css::uno::Reference<css::lang::XSingleServiceFactory> f2;
+    if (ctor == 0) {
+        f1.set(f0, css::uno::UNO_QUERY);
+        if (!f1.is()) {
+            f2.set(f0, css::uno::UNO_QUERY);
+            if (!f2.is()) {
+                throw css::uno::DeploymentException(
+                    ("Implementation " + implementation->info->name
+                     + " does not provide a constructor or factory"),
+                    static_cast< cppu::OWeakObject * >(this));
+            }
+        }
+    }
+    //TODO: There is a race here, as the relevant service factory can be removed
+    // while the mutex is unlocked and loading can thus fail, as the entity from
+    // which to load can disappear once the service factory is removed.
+    osl::MutexGuard g(rBHelper.rMutex);
+    if (!(isDisposed()
+          || implementation->status == Data::Implementation::STATUS_LOADED))
+    {
+        implementation->status = Data::Implementation::STATUS_LOADED;
+        implementation->constructor = ctor;
+        implementation->factory1 = f1;
+        implementation->factory2 = f2;
     }
 }
 
 void cppuhelper::ServiceManager::disposing() {
+    std::vector< css::uno::Reference<css::uno::XInterface> > sngls;
     std::vector< css::uno::Reference< css::lang::XComponent > > comps;
     Data clear;
     {
         osl::MutexGuard g(rBHelper.rMutex);
+        for (Data::NamedImplementations::const_iterator i(
+                 data_.namedImplementations.begin());
+             i != data_.namedImplementations.end(); ++i)
+        {
+            assert(i->second.get() != 0);
+            if (!i->second->info->singletons.empty()) {
+                osl::MutexGuard g2(i->second->mutex);
+                if (i->second->dispose) {
+                    sngls.push_back(i->second->singleton);
+                }
+            }
+        }
         for (Data::DynamicImplementations::const_iterator i(
                  data_.dynamicImplementations.begin());
              i != data_.dynamicImplementations.end(); ++i)
         {
             assert(i->second.get() != 0);
+            if (!i->second->info->singletons.empty()) {
+                osl::MutexGuard g2(i->second->mutex);
+                if (i->second->dispose) {
+                    sngls.push_back(i->second->singleton);
+                }
+            }
             if (i->second->component.is()) {
                 comps.push_back(i->second->component);
             }
@@ -816,6 +982,24 @@ void cppuhelper::ServiceManager::disposing() {
         data_.dynamicImplementations.swap(clear.dynamicImplementations);
         data_.services.swap(clear.services);
         data_.singletons.swap(clear.singletons);
+    }
+    for (std::vector<
+             css::uno::Reference<css::uno::XInterface> >::const_iterator i(
+                 sngls.begin());
+         i != sngls.end(); ++i)
+    {
+        css::uno::Reference<css::lang::XComponent> comp(
+            *i, css::uno::UNO_QUERY);
+        if (comp.is()) {
+            try {
+                comp->dispose();
+            } catch (css::uno::RuntimeException & e) {
+                SAL_WARN(
+                    "cppuhelper",
+                    "Ignoring RuntimeException \"" << e.Message
+                        << "\" while disposing singleton");
+            }
+        }
     }
     for (std::vector<
              css::uno::Reference< css::lang::XComponent > >::const_iterator i(
@@ -903,23 +1087,9 @@ cppuhelper::ServiceManager::createInstanceWithContext(
 {
     boost::shared_ptr< Data::Implementation > impl(
         findServiceImplementation(Context, aServiceSpecifier));
-    if (impl.get() == 0) {
-        return css::uno::Reference< css::uno::XInterface >();
-    }
-    if (impl->constructor != 0) {
-        return css::uno::Reference<css::uno::XInterface>(
-            (*impl->constructor)(
-                Context.get(), css::uno::Sequence<css::uno::Any>()),
-            SAL_NO_ACQUIRE);
-    } else if (impl->factory1.is()) {
-        return impl->factory1->createInstanceWithContext(Context);
-    }
-    if (impl->factory2.is()) {
-        return impl->factory2->createInstance();
-    }
-    throw css::uno::DeploymentException(
-        "Implementation " + impl->info->name + " does not provide a factory",
-        static_cast< cppu::OWeakObject * >(this));
+    return impl.get() == 0
+        ? css::uno::Reference< css::uno::XInterface >()
+        : impl->createInstance(Context, false);
 }
 
 css::uno::Reference< css::uno::XInterface >
@@ -931,28 +1101,9 @@ cppuhelper::ServiceManager::createInstanceWithArgumentsAndContext(
 {
     boost::shared_ptr< Data::Implementation > impl(
         findServiceImplementation(Context, ServiceSpecifier));
-    if (impl.get() == 0) {
-        return css::uno::Reference< css::uno::XInterface >();
-    }
-    if (impl->constructor != 0) {
-        css::uno::Reference<css::uno::XInterface> xRet(
-            (*impl->constructor)(Context.get(), Arguments),
-            SAL_NO_ACQUIRE);
-        css::uno::Reference<css::lang::XInitialization> xInit(
-                xRet, css::uno::UNO_QUERY);
-        if (xInit.is())
-            xInit->initialize(Arguments);
-        return xRet;
-    } else if (impl->factory1.is()) {
-        return impl->factory1->createInstanceWithArgumentsAndContext(
-            Arguments, Context);
-    }
-    if (impl->factory2.is()) {
-        return impl->factory2->createInstanceWithArguments(Arguments);
-    }
-    throw css::uno::DeploymentException(
-        "Implementation " + impl->info->name + " does not provide a factory",
-        static_cast< cppu::OWeakObject * >(this));
+    return impl.get() == 0
+        ? css::uno::Reference< css::uno::XInterface >()
+        : impl->createInstanceWithArguments(Context, false, Arguments);
 }
 
 css::uno::Type cppuhelper::ServiceManager::getElementType()
@@ -1126,15 +1277,15 @@ cppuhelper::ServiceManager::createContentEnumeration(
                 factories.clear();
                 break;
             }
-            if (!impl->loaded) {
+            if (impl->status == Data::Implementation::STATUS_NEW) {
                 // Postpone actual implementation instantiation as long as
                 // possible (so that e.g. opening LO's "Tools - Macros" menu
                 // does not try to instantiate a JVM, which can lead to a
                 // synchronous error dialog when no JVM is specified, and
                 // showing the dialog while hovering over a menu can cause
                 // trouble):
-                impl->factory1 = new ImplementationWrapper(this, impl->info);
-                impl->loaded = true;
+                impl->factory1 = new ImplementationWrapper(this, *i);
+                impl->status = Data::Implementation::STATUS_WRAPPER;
             }
         }
         if (impl->factory1.is()) {
@@ -1784,23 +1935,10 @@ cppuhelper::ServiceManager::findServiceImplementation(
             impl = i->second[0];
         }
         assert(impl.get() != 0);
-        loaded = impl->loaded;
+        loaded = impl->status == Data::Implementation::STATUS_LOADED;
     }
-    //TODO: There is a race here, as the relevant service factory can be removed
-    // while the mutex is unlocked and loading can thus fail, as the entity from
-    // which to load can disappear once the service factory is removed.
     if (!loaded) {
-        cppuhelper::ImplementationConstructorFn * ctor = 0;
-        css::uno::Reference< css::lang::XSingleComponentFactory > f1;
-        css::uno::Reference< css::lang::XSingleServiceFactory > f2;
-        loadImplementation(context, impl->info, &ctor, &f1, &f2);
-        osl::MutexGuard g(rBHelper.rMutex);
-        if (!(isDisposed() || impl->loaded)) {
-            impl->loaded = true;
-            impl->constructor = ctor;
-            impl->factory1 = f1;
-            impl->factory2 = f2;
-        }
+        loadImplementation(context, impl);
     }
     return impl;
 }
