@@ -101,31 +101,27 @@ namespace vcl
     struct FontCapabilities;
 }
 
-// ---------------------
-// - OutputDevice-Data -
-// ---------------------
+// OutputDevice-Data
 
 struct ImplMapRes
 {
-    long                mnMapOfsX;          // Offset in X Richtung
-    long                mnMapOfsY;          // Offset in Y Richtung
-    long                mnMapScNumX;        // Skal.-faktor Zaehler X Richtung
-    long                mnMapScNumY;        // Skal.-faktor Zaehler Y Richtung
-    long                mnMapScDenomX;      // Skal.-faktor Nenner X Richtung
-    long                mnMapScDenomY;      // Skal.-faktor Nenner Y Richtung
+    long                mnMapOfsX;          // Offset in X direction
+    long                mnMapOfsY;          // Offset in Y direction
+    long                mnMapScNumX;        // Scaling factor - numerator in X direction
+    long                mnMapScNumY;        // Scaling factor - numerator in Y direction
+    long                mnMapScDenomX;      // Scaling factor - denominator in X direction
+    long                mnMapScDenomY;      // Scaling factor - denominator in Y direction
 };
 
 struct ImplThresholdRes
 {
-    long                mnThresLogToPixX;   // Schwellenwerte fuer Berechnung
-    long                mnThresLogToPixY;   // mit BigInts
+    long                mnThresLogToPixX;   // Thresholds for calculation
+    long                mnThresLogToPixY;   // with BigInts
     long                mnThresPixToLogX;   // ""
     long                mnThresPixToLogY;   // ""
 };
 
-// ----------------------
-// - OutputDevice-Types -
-// ----------------------
+// OutputDevice-Types
 
 // Flags for Push()
 #define PUSH_LINECOLOR                  ((sal_uInt16)0x0001)
@@ -246,9 +242,7 @@ enum OutDevType { OUTDEV_DONTKNOW, OUTDEV_WINDOW, OUTDEV_PRINTER, OUTDEV_VIRDEV 
 
 enum OutDevViewType { OUTDEV_VIEWTYPE_DONTKNOW, OUTDEV_VIEWTYPE_PRINTPREVIEW, OUTDEV_VIEWTYPE_SLIDESHOW };
 
-// ----------------
-// - OutputDevice -
-// ----------------
+// OutputDevice
 
 class VirtualDevice;
 class Printer;
@@ -551,7 +545,7 @@ public:
 
     OutDevType          GetOutDevType() const { return meOutDevType; }
 
-    /** query an <code>OutputDevice</code> whether it spports a specific operation
+    /** query an <code>OutputDevice</code> to see whether it supports a specific operation
 
     @return
     true if operation supported, else false
@@ -603,7 +597,7 @@ public:
         This method splits up the text rect into multiple
         MetaTextActions, one for each line of text. This is comparable
         to AddGradientActions(), which splits up a gradient into its
-        constituing polygons. Parameter semantics fully compatible to
+        constituent polygons. Parameter semantics fully compatible to
         DrawText().
      */
     void                AddTextRectActions( const Rectangle& rRect,
@@ -876,8 +870,8 @@ public:
     If this OutputDevice is used for displaying a Print Preview
     the OutDevViewType should be set to 'OUTDEV_VIEWTYPE_PRINTPREVIEW'.
 
-    A View than can make painting decisions dependent on this OutDevViewType.
-    E.g. text colors need to be handled different, dependent on whether it's a PrintPreview or not. (see #106611# for more)
+    A View can then make painting decisions dependent on this OutDevViewType.
+    E.g. text colors need to be handled differently, dependent on whether it's a PrintPreview or not. (see #106611# for more)
     */
     void                SetOutDevViewType( OutDevViewType eOutDevViewType ) { meOutDevViewType=eOutDevViewType; }
     OutDevViewType      GetOutDevViewType() const { return meOutDevViewType; }
@@ -961,12 +955,12 @@ public:
         pixel, i.e. some output modes such as metafile recordings
         might be completely unaffected by this method! Use with
         care. Furthermore, if the OutputDevice's MapMode is the
-        default (that's MAP_PIXEL), then, too, any pixel offset set is
-        ignored. This might be unintuitive for cases, but would have
-        been far more fragile to implement. What's more, the reason
-        why the pixel offset was introduced (avoiding rounding errors)
-        does not apply for MAP_PIXEL, because one can always use the
-        MapMode origin then.
+        default (that's MAP_PIXEL), then any pixel offset set is
+        ignored also. This might be unintuitive for cases, but would
+        have been far more fragile to implement. What's more, the
+        reason why the pixel offset was introduced (avoiding rounding
+        errors) does not apply for MAP_PIXEL, because one can always
+        use the MapMode origin then.
 
         @param rOffset
         The offset in pixel
@@ -1058,7 +1052,7 @@ public:
                                                  const MapMode&    rMapModeDest );
 
     // create a mapping transformation from rMapModeSource to rMapModeDest (the above methods
-    // for B2DPoly/Polygons use this internally anyways to transform the B2DPolygon)
+    // for B2DPoly/Polygons use this internally anyway to transform the B2DPolygon)
     static basegfx::B2DHomMatrix LogicToLogic(const MapMode& rMapModeSource, const MapMode& rMapModeDest);
 
     Size                GetOutputSizePixel() const
@@ -1114,7 +1108,7 @@ public:
 
     void                Push( sal_uInt16 nFlags = PUSH_ALL );
     void                Pop();
-    // returns the curren stack depth; that is the number of Push() calls minus the number of Pop() calls
+    // returns the current stack depth; that is the number of Push() calls minus the number of Pop() calls
     // this should not normally be used since Push and Pop must always be used symmetrically
     // however this may be e.g. a help when debugging code in which this somehow is not the case
     sal_uInt32          GetGCStackDepth() const;
@@ -1176,9 +1170,7 @@ public:
                                               const Point& rSrcPt, const Size& rSrcSz,
                                               const Bitmap& rBmp, long nMaxBmpDPIX, long nMaxBmpDPIY );
 
-    //-------------------------------------
     //  Native Widget Rendering functions
-    //-------------------------------------
 
     // These all just call through to the private mpGraphics functions of the same name.
 
