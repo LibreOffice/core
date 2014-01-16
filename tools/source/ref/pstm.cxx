@@ -66,7 +66,7 @@ void TOOLS_DLLPUBLIC WritePersistListObjects(const SvPersistListWriteable& rList
         SvPersistBase * pObj = rList.GetPersistBase( n );
         if( !bOnlyStreamed || rStm.IsStreamed( pObj ) )
         { // Object should be stored
-            rStm << pObj;
+            WriteSvPersistBase(rStm, pObj);
             nWriteCount++;
         }
     }
