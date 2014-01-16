@@ -23,13 +23,11 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/frame/DoubleInitializationException.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
@@ -46,8 +44,7 @@ namespace {
 
 // the service is implemented as a wrapper to be able to die by refcount
 // the disposing mechanics is required for java related scenarios
-class ODocumentCloser : public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XComponent,
-                                                        ::com::sun::star::lang::XInitialization,
+class ODocumentCloser : public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XComponent,
                                                         ::com::sun::star::lang::XServiceInfo >
 {
     ::osl::Mutex m_aMutex;
@@ -55,19 +52,15 @@ class ODocumentCloser : public ::cppu::WeakImplHelper3< ::com::sun::star::lang::
     ::cppu::OInterfaceContainerHelper* m_pListenersContainer; // list of listeners
 
     sal_Bool m_bDisposed;
-    sal_Bool m_bInitialized;
 
 public:
-    ODocumentCloser();
+    ODocumentCloser(const uno::Sequence< uno::Any >& aArguments);
     ~ODocumentCloser();
 
 // XComponent
     virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
-
-// XInitialization
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
 // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -152,17 +145,26 @@ IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, MainThreadFrameCloserReq
     return 0;
 }
 
-
-// ====================================================================
-// ODocumentCloser
-// ====================================================================
-
-// --------------------------------------------------------
-ODocumentCloser::ODocumentCloser()
+ODocumentCloser::ODocumentCloser(const uno::Sequence< uno::Any >& aArguments)
 : m_pListenersContainer( NULL )
 , m_bDisposed( sal_False )
-, m_bInitialized( sal_False )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if ( !m_refCount )
+        throw uno::RuntimeException(); // the object must be refcounted already!
+
+    sal_Int32 nLen = aArguments.getLength();
+    if ( nLen != 1 )
+        throw lang::IllegalArgumentException(
+                        OUString("Wrong count of parameters!" ),
+                        uno::Reference< uno::XInterface >(),
+                        0 );
+
+    if ( !( aArguments[0] >>= m_xFrame ) || !m_xFrame.is() )
+        throw lang::IllegalArgumentException(
+                OUString("Nonempty reference is expected as the first argument!" ),
+                uno::Reference< uno::XInterface >(),
+                0 );
 }
 
 // --------------------------------------------------------
@@ -223,37 +225,6 @@ void SAL_CALL ODocumentCloser::removeEventListener( const uno::Reference< lang::
         m_pListenersContainer->removeInterface( xListener );
 }
 
-// XInitialization
-// --------------------------------------------------------
-void SAL_CALL ODocumentCloser::initialize( const uno::Sequence< uno::Any >& aArguments )
-    throw (uno::Exception, uno::RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    if ( m_bInitialized )
-        throw frame::DoubleInitializationException();
-
-    if ( m_bDisposed )
-        throw lang::DisposedException(); // TODO
-
-    if ( !m_refCount )
-        throw uno::RuntimeException(); // the object must be refcounted already!
-
-    sal_Int32 nLen = aArguments.getLength();
-    if ( nLen != 1 )
-        throw lang::IllegalArgumentException(
-                        OUString("Wrong count of parameters!" ),
-                        uno::Reference< uno::XInterface >(),
-                        0 );
-
-    if ( !( aArguments[0] >>= m_xFrame ) || !m_xFrame.is() )
-        throw lang::IllegalArgumentException(
-                OUString("Nonempty reference is expected as the first argument!" ),
-                uno::Reference< uno::XInterface >(),
-                0 );
-
-    m_bInitialized = sal_True;
-}
-
 // XServiceInfo
 OUString SAL_CALL ODocumentCloser::getImplementationName(  )
     throw (uno::RuntimeException)
@@ -279,9 +250,9 @@ uno::Sequence< OUString > SAL_CALL ODocumentCloser::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_embed_DocumentCloser_get_implementation(
         SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
-        css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<css::uno::Any> const &arguments)
 {
-    rtl::Reference<ODocumentCloser> x(new ODocumentCloser);
+    rtl::Reference<ODocumentCloser> x(new ODocumentCloser(arguments));
     x->acquire();
     return static_cast<cppu::OWeakObject *>(x.get());
 }
