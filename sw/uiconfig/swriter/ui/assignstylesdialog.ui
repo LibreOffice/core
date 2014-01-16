@@ -16,7 +16,7 @@
   <object class="GtkDialog" id="AssignStylesDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Insert Database Columns</property>
+    <property name="title" translatable="yes">Assign Styles</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
