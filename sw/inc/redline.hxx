@@ -23,6 +23,7 @@
 #include <rtl/ustring.hxx>
 
 #include <pam.hxx>
+#include <swtable.hxx>
 
 #include <IDocumentRedlineAccess.hxx>
 
@@ -306,6 +307,15 @@ public:
     SwExtraRedline( RedlineType_t eType );
     SwExtraRedline( const SwExtraRedline& );
     virtual ~SwExtraRedline();
+};
+
+/// Redline that holds information about a table-row that had some change
+class SW_DLLPUBLIC SwTableRowRedline : public SwExtraRedline
+{
+public:
+    SwTableRowRedline( RedlineType_t eType, SwTableLine* pTableLine );
+    SwTableRowRedline( const SwTableRowRedline& );
+    virtual ~SwTableRowRedline();
 };
 
 
