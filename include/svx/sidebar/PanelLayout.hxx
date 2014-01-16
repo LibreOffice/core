@@ -16,6 +16,7 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/timer.hxx>
 
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
 /// This class is the base for the Widget Layout-based sidebar panels.
@@ -36,6 +37,9 @@ public:
     virtual Size GetOptimalSize() const;
     virtual void setPosSizePixel(long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags = WINDOW_POSSIZE_ALL);
     virtual void queue_resize();
+
+    void dispatch(const OUString& rCommand, const css::uno::Sequence<css::beans::PropertyValue>& rArgs =
+        css::uno::Sequence<css::beans::PropertyValue>());
 };
 
 #endif

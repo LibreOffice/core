@@ -242,7 +242,7 @@ private:
     };
 
     /// XFrame to be able to extract labels and other properties of the UNO commands (like of .uno:Bold).
-    com::sun::star::uno::Reference<com::sun::star::frame::XFrame> m_xFrame;
+    css::uno::Reference<css::frame::XFrame> m_xFrame;
 
 public:
     VclBuilder(::Window *pParent, OUString sUIRootDir, OUString sUIFile,
@@ -308,6 +308,8 @@ public:
     //Helpers to retrofit all the existing code to the builder
     static void reorderWithinParent(std::vector< ::Window*>& rChilds, bool bIsButtonBox);
     static void reorderWithinParent(::Window &rWindow, sal_uInt16 nNewPosition);
+
+    css::uno::Reference<css::frame::XFrame> getFrame() { return m_xFrame; }
 private:
     ::Window *insertObject(::Window *pParent,
         const OString &rClass, const OString &rID,
@@ -390,6 +392,7 @@ public:
     virtual ~VclBuilderContainer();
     static OUString getUIRootDir();
     bool hasBuilder() const { return m_pUIBuilder != NULL; }
+    css::uno::Reference<css::frame::XFrame> getFrame() { return m_pUIBuilder->getFrame(); }
     template <typename T> T* get(T*& ret, OString sID)
     {
         return m_pUIBuilder->get<T>(ret, sID);
