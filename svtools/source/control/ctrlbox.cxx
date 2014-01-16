@@ -596,12 +596,12 @@ std::vector<double> GetDashing( sal_uInt16 nDashing )
             aPattern.push_back( 2.0 ); // blank
         break;
         case table::BorderLineStyle::DASHED:
-            aPattern.push_back( 9.0 );
-            aPattern.push_back( 3.0 );
+            aPattern.push_back( 16.0 ); // line
+            aPattern.push_back( 5.0 );  // blank
         break;
         case table::BorderLineStyle::FINE_DASHED:
-            aPattern.push_back( 3.0 );
-            aPattern.push_back( 2.0 );
+            aPattern.push_back( 6.0 ); // line
+            aPattern.push_back( 2.0 ); // blank
         break;
         default:
             ;
