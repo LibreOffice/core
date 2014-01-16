@@ -17,12 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <loadenv/loadenv.hxx>
+#include <services/desktop.hxx>
 
+#include <loadenv/loadenv.hxx>
 #include <loadenv/targethelper.hxx>
 
-#include <services/desktop.hxx>
 #include <helper/ocomponentaccess.hxx>
+#include <helper/oframes.hxx>
 #include <dispatch/dispatchprovider.hxx>
 
 #include <dispatch/interceptionhelper.hxx>
@@ -30,7 +31,6 @@
 #include <threadhelp/transactionguard.hxx>
 #include <threadhelp/writeguard.hxx>
 #include <threadhelp/readguard.hxx>
-#include <services.h>
 #include <general.h>
 #include <properties.h>
 
@@ -61,80 +61,77 @@
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/frame/XTerminateListener2.hpp>
 
-#include <cppuhelper/queryinterface.hxx>
-#include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/proptypehlp.hxx>
-#include <rtl/ustrbuf.hxx>
+#include <comphelper/sequence.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 
 #include <tools/errinf.hxx>
 #include <comphelper/extract.hxx>
 
-#include <fwkdllapi.h>
-
 namespace framework{
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
+OUString SAL_CALL Desktop::getImplementationName()
+    throw (css::uno::RuntimeException)
+{
+    return OUString("com.sun.star.comp.framework.Desktop");
+}
 
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   Desktop,
-                                            ::cppu::OWeakObject,
-                                            "com.sun.star.frame.Desktop",
-                                            IMPLEMENTATIONNAME_DESKTOP
-                                        )
+sal_Bool SAL_CALL Desktop::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException)
+{
+    return cppu::supportsService(this, ServiceName);
+}
 
-DEFINE_INIT_SERVICE                     (   Desktop,
-                                            {
-                                                /*Attention
-                                                    I think we don't need any mutex or lock here ... because we are called by our own static method impl_createInstance()
-                                                    to create a new instance of this class by our own supported service factory.
-                                                    see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further information!
-                                                */
+css::uno::Sequence<OUString> SAL_CALL Desktop::getSupportedServiceNames()
+    throw (css::uno::RuntimeException)
+{
+    css::uno::Sequence< OUString > aSeq(1);
+    aSeq[0] = OUString("com.sun.star.frame.Desktop");
+    return aSeq;
+}
 
-                                                //-------------------------------------------------------------------------------------------------------------
-                                                // Initialize a new XFrames-helper-object to handle XIndexAccess and XElementAccess.
-                                                // We hold member as reference ... not as pointer too!
-                                                // Attention: We share our frame container with this helper. Container is threadsafe himself ... So I think we can do that.
-                                                // But look on dispose() for right order of deinitialization.
-                                                OFrames* pFramesHelper = new OFrames( this, &m_aChildTaskContainer );
-                                                m_xFramesHelper = css::uno::Reference< css::frame::XFrames >( static_cast< ::cppu::OWeakObject* >(pFramesHelper), css::uno::UNO_QUERY );
+void Desktop::constructorInit()
+{
+    // Initialize a new XFrames-helper-object to handle XIndexAccess and XElementAccess.
+    // We hold member as reference ... not as pointer too!
+    // Attention: We share our frame container with this helper. Container is threadsafe himself ... So I think we can do that.
+    // But look on dispose() for right order of deinitialization.
+    OFrames* pFramesHelper = new OFrames( this, &m_aChildTaskContainer );
+    m_xFramesHelper = css::uno::Reference< css::frame::XFrames >( static_cast< ::cppu::OWeakObject* >(pFramesHelper), css::uno::UNO_QUERY );
 
-                                                //-------------------------------------------------------------------------------------------------------------
-                                                // Initialize a new dispatchhelper-object to handle dispatches.
-                                                // We use these helper as slave for our interceptor helper ... not directly!
-                                                // But he is event listener on THIS instance!
-                                                DispatchProvider* pDispatchHelper = new DispatchProvider( m_xContext, this );
-                                                css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( static_cast< ::cppu::OWeakObject* >(pDispatchHelper), css::uno::UNO_QUERY );
+    //-------------------------------------------------------------------------------------------------------------
+    // Initialize a new dispatchhelper-object to handle dispatches.
+    // We use these helper as slave for our interceptor helper ... not directly!
+    // But he is event listener on THIS instance!
+    DispatchProvider* pDispatchHelper = new DispatchProvider( m_xContext, this );
+    css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( static_cast< ::cppu::OWeakObject* >(pDispatchHelper), css::uno::UNO_QUERY );
 
-                                                //-------------------------------------------------------------------------------------------------------------
-                                                // Initialize a new interception helper object to handle dispatches and implement an interceptor mechanism.
-                                                // Set created dispatch provider as slowest slave of it.
-                                                // Hold interception helper by reference only - not by pointer!
-                                                // So it's easiear to destroy it.
-                                                InterceptionHelper* pInterceptionHelper = new InterceptionHelper( this, xDispatchProvider );
-                                                m_xDispatchHelper = css::uno::Reference< css::frame::XDispatchProvider >( static_cast< ::cppu::OWeakObject* >(pInterceptionHelper), css::uno::UNO_QUERY );
+    //-------------------------------------------------------------------------------------------------------------
+    // Initialize a new interception helper object to handle dispatches and implement an interceptor mechanism.
+    // Set created dispatch provider as slowest slave of it.
+    // Hold interception helper by reference only - not by pointer!
+    // So it's easiear to destroy it.
+    InterceptionHelper* pInterceptionHelper = new InterceptionHelper( this, xDispatchProvider );
+    m_xDispatchHelper = css::uno::Reference< css::frame::XDispatchProvider >( static_cast< ::cppu::OWeakObject* >(pInterceptionHelper), css::uno::UNO_QUERY );
 
-                                                OUStringBuffer sUntitledPrefix (256);
-                                                sUntitledPrefix.append      (FWK_RESSTR(STR_UNTITLED_DOCUMENT));
-                                                sUntitledPrefix.appendAscii (" ");
+    OUStringBuffer sUntitledPrefix (256);
+    sUntitledPrefix.append      (FWK_RESSTR(STR_UNTITLED_DOCUMENT));
+    sUntitledPrefix.appendAscii (" ");
 
-                                                ::comphelper::NumberedCollection* pNumbers = new ::comphelper::NumberedCollection ();
-                                                m_xTitleNumberGenerator = css::uno::Reference< css::frame::XUntitledNumbers >(static_cast< ::cppu::OWeakObject* >(pNumbers), css::uno::UNO_QUERY_THROW);
-                                                pNumbers->setOwner          ( static_cast< ::cppu::OWeakObject* >(this) );
-                                                pNumbers->setUntitledPrefix ( sUntitledPrefix.makeStringAndClear ()     );
+    ::comphelper::NumberedCollection* pNumbers = new ::comphelper::NumberedCollection ();
+    m_xTitleNumberGenerator = css::uno::Reference< css::frame::XUntitledNumbers >(static_cast< ::cppu::OWeakObject* >(pNumbers), css::uno::UNO_QUERY_THROW);
+    pNumbers->setOwner          ( static_cast< ::cppu::OWeakObject* >(this) );
+    pNumbers->setUntitledPrefix ( sUntitledPrefix.makeStringAndClear ()     );
 
-                                                // Safe impossible cases
-                                                // We can't work without this helper!
-                                                SAL_WARN_IF( !m_xFramesHelper.is(), "fwk", "Desktop::Desktop(): Frames helper is not valid. XFrames, XIndexAccess and XElementAcces are not supported!");
-                                                SAL_WARN_IF( !m_xDispatchHelper.is(), "fwk", "Desktop::Desktop(): Dispatch helper is not valid. XDispatch will not work correctly!" );
+    // Safe impossible cases
+    // We can't work without this helper!
+    SAL_WARN_IF( !m_xFramesHelper.is(), "fwk", "Desktop::Desktop(): Frames helper is not valid. XFrames, XIndexAccess and XElementAcces are not supported!");
+    SAL_WARN_IF( !m_xDispatchHelper.is(), "fwk", "Desktop::Desktop(): Dispatch helper is not valid. XDispatch will not work correctly!" );
 
-                                                // Enable object for real working!
-                                                // Otherwise all calls will be rejected ...
-                                                m_aTransactionManager.setWorkingMode( E_WORK );
-                                            }
-                                        )
+    // Enable object for real working!
+    // Otherwise all calls will be rejected ...
+    m_aTransactionManager.setWorkingMode( E_WORK );
+}
 
 /*-************************************************************************************************************//**
     @short      standard constructor to create instance by factory
@@ -158,14 +155,10 @@ DEFINE_INIT_SERVICE                     (   Desktop,
     @onerror    We throw an ASSERT in debug version or do nothing in relaese version.
 *//*-*************************************************************************************************************/
 Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xContext )
-        //  Init baseclasses first
-        //  Attention: Don't change order of initialization!
-        //      ThreadHelpBase is a struct with a lock as member. We can't use a lock as direct member!
-        //      We must guarantee right initialization and a valid value of this to initialize other baseclasses!
         :   ThreadHelpBase          ( &Application::GetSolarMutex()                 )
         ,   TransactionBase         (                                               )
-        ,   ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >           ( m_aLock.getShareableOslMutex()         )
-        ,   ::cppu::OPropertySetHelper  ( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
+        ,   Desktop_BASE            ( *static_cast<osl::Mutex *>(this)              )
+        ,   cppu::OPropertySetHelper( cppu::WeakComponentImplHelperBase::rBHelper   )
         // Init member
         ,   m_bIsTerminated         ( sal_False                                     )   // see dispose() for further information!
         ,   m_xContext              ( xContext                                      )
@@ -187,9 +180,6 @@ Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xCon
         ,   m_xSfxTerminator        (                                               )
         ,   m_xTitleNumberGenerator (                                               )
 {
-    // Safe impossible cases
-    // We don't accept all incoming parameter.
-    SAL_WARN_IF( implcp_ctor( xContext ), "fwk", "Desktop::Desktop(): Invalid parameter detected!" );
 }
 
 /*-************************************************************************************************************//**
@@ -401,22 +391,22 @@ void SAL_CALL Desktop::addTerminateListener( const css::uno::Reference< css::fra
         // SYCNHRONIZED ->
         WriteGuard aWriteLock( m_aLock );
 
-        if( sImplementationName.equals(IMPLEMENTATIONNAME_SFXTERMINATOR) )
+        if( sImplementationName == "com.sun.star.comp.sfx2.SfxTerminateListener" )
         {
             m_xSfxTerminator = xListener;
             return;
         }
-        if( sImplementationName.equals(IMPLEMENTATIONNAME_PIPETERMINATOR) )
+        if( sImplementationName == "com.sun.star.comp.OfficeIPCThreadController" )
         {
             m_xPipeTerminator = xListener;
             return;
         }
-        if( sImplementationName.equals(IMPLEMENTATIONNAME_QUICKLAUNCHER) )
+        if( sImplementationName == "com.sun.star.comp.desktop.QuickstartWrapper" )
         {
             m_xQuickLauncher = xListener;
             return;
         }
-        if( sImplementationName.equals(IMPLEMENTATIONNAME_SWTHREADMANAGER) )
+        if( sImplementationName == "com.sun.star.util.comp.FinalThreadManager" )
         {
             m_xSWThreadManager = xListener;
             return;
@@ -444,25 +434,25 @@ void SAL_CALL Desktop::removeTerminateListener( const css::uno::Reference< css::
         // SYCNHRONIZED ->
         WriteGuard aWriteLock( m_aLock );
 
-        if( sImplementationName.equals(IMPLEMENTATIONNAME_SFXTERMINATOR) )
+        if( sImplementationName == "com.sun.star.comp.sfx2.SfxTerminateListener" )
         {
             m_xSfxTerminator.clear();
             return;
         }
 
-        if( sImplementationName.equals(IMPLEMENTATIONNAME_PIPETERMINATOR) )
+        if( sImplementationName == "com.sun.star.comp.OfficeIPCThreadController" )
         {
             m_xPipeTerminator.clear();
             return;
         }
 
-        if( sImplementationName.equals(IMPLEMENTATIONNAME_QUICKLAUNCHER) )
+        if( sImplementationName == "com.sun.star.comp.desktop.QuickstartWrapper" )
         {
             m_xQuickLauncher.clear();
             return;
         }
 
-        if( sImplementationName.equals(IMPLEMENTATIONNAME_SWTHREADMANAGER) )
+        if( sImplementationName == "com.sun.star.util.comp.FinalThreadManager" )
         {
             m_xSWThreadManager.clear();
             return;
@@ -607,13 +597,10 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
     SAL_INFO( "fwk.desktop", "framework (as96863) ::Desktop::loadComponentFromURL" );
 
-    ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::frame::XComponentLoader > xThis(static_cast< css::frame::XComponentLoader* >(this), css::uno::UNO_QUERY);
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    aReadLock.unlock();
 
     SAL_INFO( "fwk.desktop", "PERFORMANCE - Desktop::loadComponentFromURL()" );
-    return LoadEnv::loadComponentFromURL(xThis, xContext, sURL, sTargetFrameName, nSearchFlags, lArguments);
+    return LoadEnv::loadComponentFromURL(xThis, m_xContext, sURL, sTargetFrameName, nSearchFlags, lArguments);
 }
 
 /*-************************************************************************************************************//**
@@ -1001,13 +988,6 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
     //    force using of "if() else if() ..."
     //-----------------------------------------------------------------------------------------------------
 
-    // get threadsafe some necessary member which are necessary for following functionality
-    /* SAFE { */
-    ReadGuard aReadLock( m_aLock );
-    css::uno::Reference< css::uno::XComponentContext> xContext = m_xContext;
-    aReadLock.unlock();
-    /* } SAFE */
-
     //-----------------------------------------------------------------------------------------------------
     // I.I) "_blank"
     //  create a new task as child of this desktop instance
@@ -1015,7 +995,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
     //-----------------------------------------------------------------------------------------------------
     if ( sTargetFrameName==SPECIALTARGET_BLANK )
     {
-        TaskCreator aCreator( xContext );
+        TaskCreator aCreator( m_xContext );
         xTarget = aCreator.createTask(sTargetFrameName,sal_False);
     }
 
@@ -1051,13 +1031,6 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
         //  But note: Such flags are not valid for the desktop - especialy SIBLINGS or PARENT.
         //-------------------------------------------------------------------------------------------------
 
-        // get threadsafe some necessary member which are necessary for following functionality
-        /* SAFE { */
-        aReadLock.lock();
-        OUString sOwnName = m_sName;
-        aReadLock.unlock();
-        /* } SAFE */
-
         //-------------------------------------------------------------------------------------------------
         // II.I) SELF
         //  Check for right name. If it's the searched one return ourself - otherwise
@@ -1065,7 +1038,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
         //-------------------------------------------------------------------------------------------------
         if (
             (nSearchFlags &  css::frame::FrameSearchFlag::SELF)  &&
-            (sOwnName     == sTargetFrameName                 )
+            (m_sName == sTargetFrameName)
            )
         {
             xTarget = this;
@@ -1113,7 +1086,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
             (nSearchFlags & css::frame::FrameSearchFlag::CREATE)
            )
         {
-            TaskCreator aCreator( xContext );
+            TaskCreator aCreator( m_xContext );
             xTarget = aCreator.createTask(sTargetFrameName,sal_False);
         }
     }
@@ -1121,8 +1094,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
     return xTarget;
 }
 
-//=============================================================================
-void SAL_CALL Desktop::dispose()
+void SAL_CALL Desktop::disposing()
     throw( css::uno::RuntimeException )
 {
     // Safe impossible cases
@@ -1652,7 +1624,8 @@ css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL Desktop::getPropert
         {
             // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
             // (Use method "getInfoHelper()".)
-            static css::uno::Reference< css::beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+            static css::uno::Reference< css::beans::XPropertySetInfo > xInfo(
+                    cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() ) );
             pInfo = &xInfo;
         }
     }
@@ -1931,13 +1904,6 @@ void Desktop::impl_sendNotifyTerminationEvent()
     return (nNonClosedFrames < 1);
 }
 
-//*****************************************************************************************************************
-//  We work with valid servicemanager only.
-sal_Bool Desktop::implcp_ctor( const css::uno::Reference< css::uno::XComponentContext >& xContext )
-{
-    return !xContext.is();
-}
-
 //  We work with valid listener only.
 sal_Bool Desktop::implcp_addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
 {
@@ -1951,5 +1917,35 @@ sal_Bool Desktop::implcp_removeEventListener( const css::uno::Reference< css::la
 }
 
 }   // namespace framework
+
+namespace {
+
+struct Instance {
+    explicit Instance(
+        css::uno::Reference<css::uno::XComponentContext> const & context):
+        instance(static_cast<cppu::OWeakObject *>(new framework::Desktop(context)))
+    {
+        static_cast<framework::Desktop *>(static_cast<cppu::OWeakObject *>
+                (instance.get()))->constructorInit();
+    }
+
+    css::uno::Reference<css::uno::XInterface> instance;
+};
+
+struct Singleton:
+    public rtl::StaticWithArg<
+        Instance, css::uno::Reference<css::uno::XComponentContext>, Singleton>
+{};
+
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_Desktop_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(static_cast<cppu::OWeakObject *>(
+                Singleton::get(context).instance.get()));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

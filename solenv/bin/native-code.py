@@ -48,6 +48,7 @@ core_factory_list = [
 core_constructor_list = [
 # framework/util/fwk.component
     "com_sun_star_comp_framework_AutoRecovery_get_implementation",
+    "com_sun_star_comp_framework_Desktop_get_implementation",
     "com_sun_star_comp_framework_Frame_get_implementation",
     "com_sun_star_comp_framework_JobExecutor_get_implementation",
     "com_sun_star_comp_framework_LayoutManager_get_implementation",

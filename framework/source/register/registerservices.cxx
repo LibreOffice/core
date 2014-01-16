@@ -33,10 +33,8 @@
                                 IFFACTORIE( Service2 )
                              )
 =================================================================================================================*/
-#include <services/desktop.hxx>
 
 COMPONENTGETFACTORY ( fwk,
-                        IFFACTORY( ::framework::Desktop                                 )
             )
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

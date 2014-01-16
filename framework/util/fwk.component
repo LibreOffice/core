@@ -36,7 +36,8 @@
       constructor="com_sun_star_comp_framework_ControlMenuController_get_implementation">
     <service name="com.sun.star.frame.PopupMenuController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.Desktop">
+  <implementation name="com.sun.star.comp.framework.Desktop"
+      constructor="com_sun_star_comp_framework_Desktop_get_implementation">
     <service name="com.sun.star.frame.Desktop"/>
     <singleton name="com.sun.star.frame.theDesktop"/>
   </implementation>

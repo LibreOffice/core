@@ -20,16 +20,11 @@
 #ifndef INCLUDED_FRAMEWORK_INC_SERVICES_DESKTOP_HXX
 #define INCLUDED_FRAMEWORK_INC_SERVICES_DESKTOP_HXX
 
+#include <sal/config.h>
+
 #include <classes/framecontainer.hxx>
-#include <threadhelp/threadhelpbase.hxx>
-#include <helper/oframes.hxx>
-#include <macros/generic.hxx>
-#include <macros/xinterface.hxx>
-#include <macros/xtypeprovider.hxx>
-#include <macros/xserviceinfo.hxx>
 
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
-
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
@@ -38,7 +33,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XFrames.hpp>
-#include <com/sun/star/lang/XServiceName.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -53,11 +48,10 @@
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <unotools/cmdoptions.hxx>
-#include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/implbase6.hxx>
-
 #include <comphelper/numberedcollection.hxx>
+#include <cppuhelper/compbase6.hxx>
+#include <cppuhelper/propshlp.hxx>
+#include <unotools/cmdoptions.hxx>
 
 namespace framework{
 
@@ -91,15 +85,10 @@ enum ELoadState
                 XEventListener
                 XInteractionHandler
 
-    @base       ThreadHelpBase
-                TransactionBase
-                OBroadcastHelper
-                OPropertySetHelper
-
     @devstatus  ready to use
     @threadsafe yes
 *//*-*************************************************************************************************************/
-typedef ::cppu::WeakImplHelper6<
+typedef cppu::WeakComponentImplHelper6<
            css::lang::XServiceInfo              ,
            css::frame::XDesktop2                ,
            css::frame::XTasksSupplier           ,
@@ -107,14 +96,11 @@ typedef ::cppu::WeakImplHelper6<
            css::task::XInteractionHandler       ,
            css::frame::XUntitledNumbers > Desktop_BASE;
 
-class Desktop   :   // base classes
-                    // Order is necessary for right initialization!
-                    private ThreadHelpBase                       ,
-                    private TransactionBase                      ,
-                    public  ::cppu::OBroadcastHelper             ,
-                    public  ::cppu::OPropertySetHelper           ,
-                    // interfaces
-                    public  Desktop_BASE
+class Desktop : private osl::Mutex,
+                private ThreadHelpBase,
+                private TransactionBase,
+                public Desktop_BASE,
+                public cppu::OPropertySetHelper
 {
     // internal used types, const etcpp.
     private:
@@ -130,8 +116,17 @@ class Desktop   :   // base classes
                  Desktop( const css::uno::Reference< css::uno::XComponentContext >& xContext );
         virtual ~Desktop(                                                                    );
 
+        void constructorInit();
+
         //  XServiceInfo
-        DECLARE_XSERVICEINFO
+        virtual OUString SAL_CALL getImplementationName()
+            throw (css::uno::RuntimeException);
+
+        virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+            throw (css::uno::RuntimeException);
+
+        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+            throw (css::uno::RuntimeException);
 
         // XInterface
         virtual void SAL_CALL acquire() throw ()
@@ -274,8 +269,7 @@ class Desktop   :   // base classes
         virtual void                                                                SAL_CALL removeFrameActionListener  ( const css::uno::Reference< css::frame::XFrameActionListener >& xListener        ) throw( css::uno::RuntimeException          );
 
         //   XComponent
-        using cppu::OPropertySetHelper::disposing;
-        virtual void                                                                SAL_CALL dispose                    (                                                                                 ) throw( css::uno::RuntimeException          );
+        virtual void SAL_CALL disposing() throw( css::uno::RuntimeException );
         virtual void                                                                SAL_CALL addEventListener           ( const css::uno::Reference< css::lang::XEventListener >&        xListener        ) throw( css::uno::RuntimeException          );
         virtual void                                                                SAL_CALL removeEventListener        ( const css::uno::Reference< css::lang::XEventListener >&        xListener        ) throw( css::uno::RuntimeException          );
 
@@ -407,7 +401,6 @@ class Desktop   :   // base classes
     //-------------------------------------------------------------------------------------------------------------
     private:
 
-        static sal_Bool implcp_ctor                     ( const css::uno::Reference< css::uno::XComponentContext >&         xFactory         );
         static sal_Bool implcp_addEventListener         ( const css::uno::Reference< css::lang::XEventListener >&           xListener        );
         static sal_Bool implcp_removeEventListener      ( const css::uno::Reference< css::lang::XEventListener >&           xListener        );
 
