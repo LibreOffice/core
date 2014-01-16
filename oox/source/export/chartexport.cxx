@@ -747,8 +747,6 @@ void ChartExport::exportChartSpace( Reference< ::com::sun::star::chart::XChartDo
     //XML_chart
     exportChart(rChartDoc);
 
-    exportExternalData(rChartDoc);
-
     // TODO: printSettings
     // TODO: style
     // TODO: text properties
@@ -756,6 +754,10 @@ void ChartExport::exportChartSpace( Reference< ::com::sun::star::chart::XChartDo
     Reference< XPropertySet > xPropSet( rChartDoc->getArea(), uno::UNO_QUERY );
     if( xPropSet.is() )
         exportShapeProps( xPropSet );
+
+    //XML_externalData
+    exportExternalData(rChartDoc);
+
     pFS->endElement( FSNS( XML_c, XML_chartSpace ) );
 }
 
