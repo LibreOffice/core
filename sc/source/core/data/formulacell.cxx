@@ -2799,6 +2799,8 @@ bool ScFormulaCell::UpdateReference(
 
 void ScFormulaCell::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
 {
+    // Adjust tokens only when it's not grouped or grouped top cell.
+    bool bAdjustCode = !mxGroup || mxGroup->mpTopCell == this;
     bool bPosChanged = (rCxt.mnInsertPos <= aPos.Tab());
     pCode->Reset();
     if (pDocument->IsClipOrUndo() || !pCode->GetNextReferenceRPN())
@@ -2815,6 +2817,9 @@ void ScFormulaCell::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
     if (bPosChanged)
         aPos.IncTab(rCxt.mnSheets);
 
+    if (!bAdjustCode)
+        return;
+
     sc::RefUpdateResult aRes = pCode->AdjustReferenceOnInsertedTab(rCxt, aOldPos);
     if (aRes.mbNameModified)
         // Re-compile after new sheet(s) have been inserted.
@@ -2825,6 +2830,8 @@ void ScFormulaCell::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
 
 bool ScFormulaCell::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
 {
+    // Adjust tokens only when it's not grouped or grouped top cell.
+    bool bAdjustCode = !mxGroup || mxGroup->mpTopCell == this;
     bool bPosChanged = (aPos.Tab() >= rCxt.mnDeletePos + rCxt.mnSheets);
     pCode->Reset();
     if (pDocument->IsClipOrUndo() || !pCode->GetNextReferenceRPN())
@@ -2840,6 +2847,9 @@ bool ScFormulaCell::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
     if (bPosChanged)
         aPos.IncTab(-1*rCxt.mnSheets);
 
+    if (!bAdjustCode)
+        return false;
+
     sc::RefUpdateResult aRes = pCode->AdjustReferenceOnDeletedTab(rCxt, aOldPos);
     if (aRes.mbNameModified)
         // Re-compile after sheet(s) have been deleted.
@@ -2850,6 +2860,9 @@ bool ScFormulaCell::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
 
 void ScFormulaCell::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nTabNo )
 {
+    // Adjust tokens only when it's not grouped or grouped top cell.
+    bool bAdjustCode = !mxGroup || mxGroup->mpTopCell == this;
+
     pCode->Reset();
     if (!pCode->GetNextReferenceRPN() || pDocument->IsClipOrUndo())
     {
@@ -2863,6 +2876,10 @@ void ScFormulaCell::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nTab
     aPos.SetTab(nTabNo);
 
     // no StartListeningTo because pTab[nTab] not yet correct!
+
+    if (!bAdjustCode)
+        return;
+
     sc::RefUpdateResult aRes = pCode->AdjustReferenceOnMovedTab(rCxt, aOldPos);
     if (aRes.mbNameModified)
         // Re-compile after sheet(s) have been deleted.
