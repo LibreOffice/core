@@ -9,13 +9,11 @@
 
 #include "WPXSvStream.hxx"
 
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/io/XActiveDataSink.hpp>
+#include <com/sun/star/packages/zip/XZipFileAccess2.hpp>
 #include <com/sun/star/uno/Any.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/seekableinput.hxx>
 
 #include <rtl/string.hxx>
 #include <tools/stream.hxx>
@@ -263,8 +261,6 @@ struct ZipStreamData
     rtl::OString aName;
 };
 
-typedef boost::unordered_map<rtl::OUString, Reference<XInputStream>, rtl::OUStringHash> ZipStorageMap_t;
-
 /** Representation of a Zip storage.
   *
   * This is quite similar to OLEStorageImpl, except that we do not need
@@ -272,7 +268,7 @@ typedef boost::unordered_map<rtl::OUString, Reference<XInputStream>, rtl::OUStri
   */
 struct ZipStorageImpl
 {
-    ZipStorageImpl(const Reference<container::XHierarchicalNameAccess> &rxRoot);
+    ZipStorageImpl(const Reference<container::XNameAccess> &rxContainer);
 
     /** Initialize for access.
       *
@@ -286,12 +282,12 @@ struct ZipStorageImpl
     Reference<XInputStream> getStream(std::size_t nId);
 
 private:
-    void traverse(const Reference<container::XEnumeration> &rxEnum, const rtl::OUString &rPath);
+    void traverse(const Reference<container::XNameAccess> &rxEnum);
 
     Reference<XInputStream> createStream(const rtl::OUString &rPath);
 
 public:
-    Reference<container::XHierarchicalNameAccess> mxRoot; //< root of the Zip
+    Reference<container::XNameAccess> mxContainer; //< root of the Zip
     ::std::vector< ZipStreamData > maStreams; //< list of streams and their names
     NameMap_t maNameMap; //< map of stream names to indexes (into @c maStreams)
     bool mbInitialized;
@@ -303,21 +299,18 @@ ZipStreamData::ZipStreamData(const rtl::OString &rName)
 {
 }
 
-ZipStorageImpl::ZipStorageImpl(const Reference<container::XHierarchicalNameAccess> &rxRoot)
-    : mxRoot(rxRoot)
+ZipStorageImpl::ZipStorageImpl(const Reference<container::XNameAccess> &rxContainer)
+    : mxContainer(rxContainer)
     , maStreams()
     , maNameMap()
     , mbInitialized(false)
 {
-    assert(mxRoot.is());
+    assert(mxContainer.is());
 }
 
 void ZipStorageImpl::initialize()
 {
-    const Reference<container::XEnumerationAccess> xEnum(mxRoot, UNO_QUERY);
-
-    if (xEnum.is())
-        traverse(xEnum->createEnumeration(), "");
+    traverse(mxContainer);
 
     mbInitialized = true;
 }
@@ -346,39 +339,18 @@ Reference<XInputStream> ZipStorageImpl::getStream(const std::size_t nId)
     return maStreams[nId].xStream;
 }
 
-void ZipStorageImpl::traverse(const Reference<container::XEnumeration> &rxEnum, const rtl::OUString &rPath)
+void ZipStorageImpl::traverse(const Reference<container::XNameAccess> &rxContainer)
 {
-    while (rxEnum->hasMoreElements())
+    const Sequence<rtl::OUString> lNames = rxContainer->getElementNames();
+
+    maStreams.reserve(lNames.getLength());
+
+    for (sal_Int32 n = 0; n < lNames.getLength(); ++n)
     {
-        Any aItem;
-        try
+        if (!lNames[n].endsWithAsciiL("/", 1)) // skip dirs
         {
-            aItem = rxEnum->nextElement();
-        }
-        catch (const Exception &)
-        {
-            continue;
-        }
-
-        const Reference<container::XNamed> xNamed(aItem, UNO_QUERY);
-        const Reference<XActiveDataSink> xSink(aItem, UNO_QUERY);
-        const Reference<container::XEnumerationAccess> xEnum(aItem, UNO_QUERY);
-
-        if (xSink.is() && xNamed.is())
-        {
-            maStreams.push_back(ZipStreamData(rtl::OUStringToOString(xNamed->getName(), RTL_TEXTENCODING_UTF8)));
-            maNameMap[concatPath(rPath, xNamed->getName())] = maStreams.size() - 1;
-        }
-        else if (xEnum.is() && xNamed.is())
-        {
-            const rtl::OUString aPath = concatPath(rPath, xNamed->getName());
-
-            // deep-first traversal
-            traverse(xEnum->createEnumeration(), aPath);
-        }
-        else
-        {
-            assert(0);
+            maStreams.push_back(ZipStreamData(rtl::OUStringToOString(lNames[n], RTL_TEXTENCODING_UTF8)));
+            maNameMap[lNames[n]] = maStreams.size() - 1;
         }
     }
 }
@@ -389,8 +361,13 @@ Reference<XInputStream> ZipStorageImpl::createStream(const rtl::OUString &rPath)
 
     try
     {
-        const Reference<XActiveDataSink> xSink(mxRoot->getByHierarchicalName(rPath), UNO_QUERY_THROW);
-        xStream.set(xSink->getInputStream(), UNO_QUERY_THROW);
+        const Reference<XInputStream> xInputStream(mxContainer->getByName(rPath), UNO_QUERY_THROW);
+        const Reference<XSeekable> xSeekable(xInputStream, UNO_QUERY);
+
+        if (xSeekable.is())
+            xStream = xInputStream;
+        else
+            xStream.set(new comphelper::OSeekableInputWrapper(xInputStream, comphelper::getProcessComponentContext()));
     }
     catch (const Exception &)
     {
@@ -431,6 +408,7 @@ private:
     void ensureZipIsInitialized();
 
     WPXInputStream *createWPXStream(const SotStorageStreamRef &rxStorage);
+    WPXInputStream *createWPXStream(const Reference<XInputStream> &rxStream);
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > mxStream;
@@ -673,7 +651,7 @@ WPXInputStream *WPXSvInputStreamImpl::getSubStreamByName(const char *const name)
 
         try
         {
-            return new WPXSvInputStream(mpZipStorage->getStream(aName));
+            return createWPXStream(mpZipStorage->getStream(aName));
         }
         catch (const Exception &)
         {
@@ -713,7 +691,7 @@ WPXInputStream *WPXSvInputStreamImpl::getSubStreamById(const unsigned id)
 
         try
         {
-            return new WPXSvInputStream(mpZipStorage->getStream(id));
+            return createWPXStream(mpZipStorage->getStream(id));
         }
         catch (const Exception &)
         {
@@ -739,6 +717,14 @@ WPXInputStream *WPXSvInputStreamImpl::createWPXStream(const SotStorageStreamRef 
     Reference < XInputStream > xContents(new utl::OSeekableInputStreamWrapper( rxStorage ));
     if (xContents.is())
         return new WPXSvInputStream( xContents );
+    else
+        return 0;
+}
+
+WPXInputStream *WPXSvInputStreamImpl::createWPXStream(const Reference<XInputStream> &rxStream)
+{
+    if (rxStream.is())
+        return new WPXSvInputStream( rxStream );
     else
         return 0;
 }
@@ -771,10 +757,10 @@ bool WPXSvInputStreamImpl::isZip()
             aArgs[0] <<= mxStream;
 
             const Reference<XComponentContext> xContext(comphelper::getProcessComponentContext(), UNO_QUERY_THROW);
-            const Reference<container::XHierarchicalNameAccess> xZipStorage(
-                    xContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.packages.Package", aArgs, xContext),
+            const Reference<packages::zip::XZipFileAccess2> xZip(
+                    xContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.packages.zip.ZipFileAccess", aArgs, xContext),
                     UNO_QUERY_THROW);
-            mpZipStorage.reset(new ZipStorageImpl(xZipStorage));
+            mpZipStorage.reset(new ZipStorageImpl(xZip));
         }
         catch (const Exception &)
         {
