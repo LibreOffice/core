@@ -446,7 +446,7 @@ void ScModule::Execute( SfxRequest& rReq )
         case FID_AUTOCOMPLETE:
             {
                 ScAppOptions aNewOpts( GetAppOptions() );
-                sal_Bool bNew = !aNewOpts.GetAutoComplete();
+                bool bNew = !aNewOpts.GetAutoComplete();
                 aNewOpts.SetAutoComplete( bNew );
                 SetAppOptions( aNewOpts );
                 ScInputHandler::SetAutoComplete( bNew );

@@ -51,8 +51,8 @@ public:
                                 const sal_uInt16  nCount );
     void        SetStatusFunc( sal_uInt16 nNew )    { nStatusFunc = nNew;   }
     sal_uInt16      GetStatusFunc() const           { return nStatusFunc;   }
-    void        SetAutoComplete( sal_Bool bNew )    { bAutoComplete = bNew; }
-    sal_Bool        GetAutoComplete() const         { return bAutoComplete; }
+    void        SetAutoComplete( bool bNew )    { bAutoComplete = bNew; }
+    bool        GetAutoComplete() const         { return bAutoComplete; }
     void        SetDetectiveAuto( sal_Bool bNew )   { bDetectiveAuto = bNew; }
     sal_Bool        GetDetectiveAuto() const        { return bDetectiveAuto; }
 
@@ -88,7 +88,7 @@ private:
     sal_uInt16      nZoom;
     bool            bSynchronizeZoom;
     sal_uInt16      nStatusFunc;
-    sal_Bool        bAutoComplete;
+    bool            bAutoComplete;
     sal_Bool        bDetectiveAuto;
     sal_uInt32  nTrackContentColor;
     sal_uInt32  nTrackInsertColor;

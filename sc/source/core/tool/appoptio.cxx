@@ -62,7 +62,7 @@ void ScAppOptions::SetDefaults()
     eZoomType       = SVX_ZOOM_PERCENT;
     bSynchronizeZoom = sal_True;
     nStatusFunc     = SUBTOTAL_FUNC_SUM;
-    bAutoComplete   = sal_True;
+    bAutoComplete   = true;
     bDetectiveAuto  = sal_True;
 
     delete [] pLRUList;
