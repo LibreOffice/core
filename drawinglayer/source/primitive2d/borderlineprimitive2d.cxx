@@ -154,7 +154,7 @@ namespace drawinglayer
                                 getStart(), getEnd(), rViewInformation);
 
                     // distance is already scaled.
-                    double fGap = mfDistance*12.0;
+                    double fGap = mfDistance*8.0;
 
                     if (bIsHairline)
                     {
