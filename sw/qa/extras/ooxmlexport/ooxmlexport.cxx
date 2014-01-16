@@ -2469,6 +2469,54 @@ DECLARE_OOXMLEXPORT_TEST(testMsoSpt180, "mso-spt180.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("ooxml-borderCallout1"), aType);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testShapeThemePreservation, "shape-theme-preservation.docx")
+{
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+
+    // check shape style has been preserved
+    assertXPath(pXmlDocument,
+            "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:fillRef",
+            "idx", "1");
+    assertXPath(pXmlDocument,
+            "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:fillRef/a:schemeClr",
+            "val", "accent1");
+    assertXPath(pXmlDocument,
+            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:fillRef",
+            "idx", "1");
+    assertXPath(pXmlDocument,
+            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:fillRef/a:schemeClr",
+            "val", "accent1");
+    assertXPath(pXmlDocument,
+            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:fillRef",
+            "idx", "1");
+    assertXPath(pXmlDocument,
+            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:fillRef/a:schemeClr",
+            "val", "accent1");
+
+    // check shape style hasn't been overwritten
+    assertXPath(pXmlDocument,
+            "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:solidFill",
+            0);
+
+    // check direct theme assignments have been preserved
+    assertXPath(pXmlDocument,
+            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:solidFill/a:schemeClr",
+            "val", "accent6");
+
+    // check direct color assignments have been preserved
+    OUString sFillColor = getXPath(pXmlDocument,
+            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:solidFill/a:srgbClr",
+            "val");
+    CPPUNIT_ASSERT_EQUAL(sFillColor.toInt32(16), sal_Int32(0x00b050));
+
+    // check colors are properly applied to shapes on import
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4f81bd), getProperty<sal_Int32>(getShape(1), "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xf79646), getProperty<sal_Int32>(getShape(2), "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00b050), getProperty<sal_Int32>(getShape(3), "FillColor"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
