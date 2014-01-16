@@ -1296,7 +1296,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             // directions if source and destination ranges intersect
                             if ( !bOtherDoc )
                             {
-                                if ( pOwnClip && pOwnClip->GetDocument()->IsCutMode() )
+                                if ( pOwnClip )
                                 {
                                     ScViewData* pData = GetViewData();
                                     if ( pData->GetMarkData().GetTableSelect(
@@ -1307,15 +1307,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                         SCCOL nClipStartX, nClipSizeX;
                                         SCROW  nClipStartY, nClipSizeY;
                                         pOwnClip->GetDocument()->GetClipStart( nClipStartX, nClipStartY );
-                                        // for CutMode, filtered rows can always be included
                                         pOwnClip->GetDocument()->GetClipArea( nClipSizeX, nClipSizeY, sal_True );
                                         int nDisableShift = 0;
-                                        if ( nClipStartX <= nPosX + nClipSizeX &&
-                                                nPosX <= nClipStartX + nClipSizeX )
-                                            nDisableShift |= SC_CELL_SHIFT_DISABLE_DOWN;
-                                        if ( nClipStartY <= nPosY + nClipSizeY &&
-                                                nPosY <= nClipStartY + nClipSizeY )
+                                        if ( MAXCOL <= nPosX + nClipSizeX )
                                             nDisableShift |= SC_CELL_SHIFT_DISABLE_RIGHT;
+                                        if ( MAXROW <= nPosY + nClipSizeY )
+                                            nDisableShift |= SC_CELL_SHIFT_DISABLE_DOWN;
                                         if ( nDisableShift )
                                             pDlg->SetCellShiftDisabled( nDisableShift );
                                     }
