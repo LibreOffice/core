@@ -105,6 +105,7 @@ public:
     // instead of the automatic color
     ColorConfigValue        GetColorValue(ColorConfigEntry eEntry, sal_Bool bSmart = sal_True)const;
     static Color            GetDefaultColor(ColorConfigEntry eEntry);
+    void Reload();
 };
 
 class SVT_DLLPUBLIC EditableColorConfig
