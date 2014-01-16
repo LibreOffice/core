@@ -31,8 +31,6 @@ import org.libreoffice.impressremote.util.SavedStates;
 public class ComputersActivity extends ActionBarActivity implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
     private boolean mBluetoothWasEnabled;
 
-    private final static int REQUEST_ENABLE_BT = 1;
-
     @Override
     protected void onCreate(Bundle aSavedInstanceState) {
         super.onCreate(aSavedInstanceState);
@@ -42,16 +40,6 @@ public class ComputersActivity extends ActionBarActivity implements ActionBar.Ta
 
         setUpTitle();
         setUpContent();
-    }
-
-    @Override
-    protected void onActivityResult(int arg0, int arg1, Intent arg2) {
-        super.onActivityResult(arg0, arg1, arg2);
-
-        if (arg0 == REQUEST_ENABLE_BT) {
-            // Ideally we should do all detection based on listening to the bluetooth state
-            // as the user can still enable BT separately (see BluetoothServersFinder.java:onReceive)
-        }
     }
 
     private void saveBluetoothState(Bundle aSavedInstanceState) {
@@ -76,7 +64,7 @@ public class ComputersActivity extends ActionBarActivity implements ActionBar.Ta
     }
 
     private void enableBluetooth() {
-        BluetoothOperator.enable(this, REQUEST_ENABLE_BT);
+        BluetoothOperator.enable();
     }
 
     private void setUpTitle() {

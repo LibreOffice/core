@@ -8,9 +8,7 @@
  */
 package org.libreoffice.impressremote.util;
 
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
-import android.content.Intent;
 
 public final class BluetoothOperator {
     private BluetoothOperator() {
@@ -28,16 +26,12 @@ public final class BluetoothOperator {
         return BluetoothAdapter.getDefaultAdapter();
     }
 
-    public static void enable(Activity aActivity, int nRequestCode) {
+    public static void enable() {
         if (!isAvailable()) {
             return;
         }
 
-        if (getAdapter() != null) {
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            aActivity.startActivityForResult(enableBtIntent, nRequestCode);
-        }
-
+        getAdapter().enable();
     }
 
     public static void disable() {
