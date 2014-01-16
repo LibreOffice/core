@@ -43,6 +43,7 @@ OZipFileAccess::OZipFileAccess( const uno::Reference< uno::XComponentContext >& 
 , m_pZipFile( NULL )
 , m_pListenersContainer( NULL )
 , m_bDisposed( sal_False )
+, m_bOwnContent( false )
 {
     if ( !rxContext.is() )
         throw uno::RuntimeException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
@@ -188,6 +189,7 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
         if ( aContent.openStream ( xSink ) )
         {
             m_xContentStream = xSink->getInputStream();
+            m_bOwnContent = true;
             xSeekable = uno::Reference< io::XSeekable >( m_xContentStream, uno::UNO_QUERY );
         }
     }
@@ -385,7 +387,7 @@ void SAL_CALL OZipFileAccess::dispose()
         m_pZipFile = NULL;
     }
 
-    if ( m_xContentStream.is() )
+    if ( m_xContentStream.is() && m_bOwnContent )
         try {
             m_xContentStream->closeInput();
         } catch( uno::Exception& )

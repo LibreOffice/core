@@ -51,6 +51,7 @@ class OZipFileAccess : public ::cppu::WeakImplHelper4<
     ::cppu::OInterfaceContainerHelper* m_pListenersContainer;
 
     sal_Bool m_bDisposed;
+    bool m_bOwnContent;
 
 public:
     OZipFileAccess( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
