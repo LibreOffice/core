@@ -106,7 +106,7 @@ SvStream& WriteGraphicAttr( SvStream& rOStm, const GraphicAttr& rAttr )
     const sal_uInt32    nTmp32 = 0;
 
     rOStm.WriteUInt32( nTmp32 ).WriteUInt32( nTmp32 );
-    rOStm << rAttr.mfGamma;
+    rOStm.WriteDouble( rAttr.mfGamma );
     rOStm.WriteUInt32( rAttr.mnMirrFlags ).WriteUInt16( rAttr.mnRotate10 );
     rOStm.WriteInt16( rAttr.mnContPercent ).WriteInt16( rAttr.mnLumPercent ).WriteInt16( rAttr.mnRPercent ).WriteInt16( rAttr.mnGPercent ).WriteInt16( rAttr.mnBPercent );
     rOStm.WriteUChar( rAttr.mbInvert ).WriteUChar( rAttr.mcTransparency ).WriteUInt16( (sal_uInt16) rAttr.meDrawMode );

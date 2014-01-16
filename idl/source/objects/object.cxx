@@ -62,8 +62,8 @@ void SvClassElement::Save( SvPersistStream & rStm )
     if( xClass.Is() )               nMask |= 0x4;
 
     // write data
-    rStm << nMask;
-    if( nMask & 0x01 ) rStm << aAutomation;
+    rStm.WriteUChar( nMask );
+    if( nMask & 0x01 ) rStm.WriteUChar( aAutomation );
     if( nMask & 0x02 ) write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStm, aPrefix);
     if( nMask & 0x04 ) WriteSvPersistBase( rStm, xClass );
 }
@@ -116,12 +116,12 @@ void SvMetaClass::Save( SvPersistStream & rStm )
     if( aAutomation.IsSet() )       nMask |= 0x10;
 
     // write data
-    rStm << nMask;
+    rStm.WriteUChar( nMask );
     if( nMask & 0x01 ) WriteSvDeclPersistList( rStm, aAttrList );
     if( nMask & 0x02 ) WriteSvPersistBase( rStm, aSuperClass );
     if( nMask & 0x04 ) WriteSvDeclPersistList( rStm, aClassList );
     if( nMask & 0x08 ) WriteSvPersistBase( rStm, xAutomationInterface );
-    if( nMask & 0x10 ) rStm << aAutomation;
+    if( nMask & 0x10 ) rStm.WriteUChar( aAutomation );
 }
 
 void SvMetaClass::ReadAttributesSvIdl( SvIdlDataBase & rBase,
@@ -139,12 +139,12 @@ void SvMetaClass::WriteAttributesSvIdl( SvIdlDataBase & rBase,
     if( !aAutomation )
     {
         WriteTab( rOutStm, nTab );
-        rOutStm << "//class SvMetaClass" << endl;
+        rOutStm.WriteCharPtr( "//class SvMetaClass" ) << endl;
         if( !aAutomation )
         {
             WriteTab( rOutStm, nTab );
             aAutomation.WriteSvIdl( SvHash_Automation(), rOutStm );
-            rOutStm << ';' << endl;
+            rOutStm.WriteChar( ';' ) << endl;
         }
     }
 }
@@ -260,20 +260,20 @@ void SvMetaClass::WriteContextSvIdl
     {
         WriteTab( rOutStm, nTab );
         aAttrList[n]->WriteSvIdl( rBase, rOutStm, nTab );
-        rOutStm << ';' << endl;
+        rOutStm.WriteChar( ';' ) << endl;
     }
     for( n = 0; n < aClassList.size(); n++ )
     {
         SvClassElement * pEle = aClassList[n];
         WriteTab( rOutStm, nTab );
-        rOutStm << SvHash_import()->GetName().getStr() << ' '
-                << pEle->GetPrefix().getStr();
+        rOutStm.WriteCharPtr( SvHash_import()->GetName().getStr() ).WriteChar( ' ' )
+               .WriteCharPtr( pEle->GetPrefix().getStr() );
         if( pEle->GetAutomation() )
-            rOutStm << " [ " << SvHash_Automation()->GetName().getStr()
-                    << " ]";
+            rOutStm.WriteCharPtr( " [ " ).WriteCharPtr( SvHash_Automation()->GetName().getStr() )
+                   .WriteCharPtr( " ]" );
         if( !pEle->GetPrefix().isEmpty() )
-            rOutStm << ' ' << pEle->GetPrefix().getStr();
-        rOutStm << ';' << endl;
+            rOutStm.WriteChar( ' ' ).WriteCharPtr( pEle->GetPrefix().getStr() );
+        rOutStm.WriteChar( ';' ) << endl;
     }
 }
 
@@ -370,7 +370,7 @@ void SvMetaClass::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
 {
     WriteHeaderSvIdl( rBase, rOutStm, nTab );
     if( aSuperClass.Is() )
-        rOutStm << " : " << aSuperClass->GetName().getString().getStr();
+        rOutStm.WriteCharPtr( " : " ).WriteCharPtr( aSuperClass->GetName().getString().getStr() );
     rOutStm << endl;
     SvMetaName::WriteSvIdl( rBase, rOutStm, nTab );
     rOutStm << endl;
@@ -396,13 +396,13 @@ void SvMetaClass::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
         }
         case WRITE_DOCU:
         {
-            rOutStm << "<INTERFACE>" << endl
-                    << GetName().getString().getStr();
+            rOutStm.WriteCharPtr( "<INTERFACE>" ) << endl;
+            rOutStm.WriteCharPtr( GetName().getString().getStr() );
             if ( GetAutomation() )
-                rOutStm << " ( Automation ) ";
+                rOutStm.WriteCharPtr( " ( Automation ) " );
             rOutStm << endl;
             WriteDescription( rOutStm );
-            rOutStm << "</INTERFACE>" << endl << endl;
+            rOutStm.WriteCharPtr( "</INTERFACE>" ) << endl << endl;
 
             // write all attributes
             sal_uLong n;
@@ -561,20 +561,20 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
 {
     WriteStars( rOutStm );
     // define class
-    rOutStm << "#ifdef " << GetName().getString().getStr() << endl;
-    rOutStm << "#undef ShellClass" << endl;
-    rOutStm << "#undef " << GetName().getString().getStr() << endl;
-    rOutStm << "#define ShellClass " << GetName().getString().getStr() << endl;
+    rOutStm.WriteCharPtr( "#ifdef " ).WriteCharPtr( GetName().getString().getStr() ) << endl;
+    rOutStm.WriteCharPtr( "#undef ShellClass" ) << endl;
+    rOutStm.WriteCharPtr( "#undef " ).WriteCharPtr( GetName().getString().getStr() ) << endl;
+    rOutStm.WriteCharPtr( "#define ShellClass " ).WriteCharPtr( GetName().getString().getStr() ) << endl;
 
     // no slotmaps get written for interfaces
     if( !IsShell() )
     {
-        rOutStm << "#endif" << endl << endl;
+        rOutStm.WriteCharPtr( "#endif" ) << endl << endl;
         return;
     }
     // write parameter array
-    rOutStm << "SFX_ARGUMENTMAP(" << GetName().getString().getStr() << ')' << endl
-        << '{' << endl;
+    rOutStm.WriteCharPtr( "SFX_ARGUMENTMAP(" ).WriteCharPtr( GetName().getString().getStr() ).WriteChar( ')' ) << endl;
+    rOutStm.WriteChar( '{' ) << endl;
 
     std::vector<sal_uLong> aSuperList;
     SvMetaClassList classList;
@@ -597,9 +597,10 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     {
         // at leaast one dummy
         WriteTab( rOutStm, 1 );
-        rOutStm << "SFX_ARGUMENT( 0, 0, SfxVoidItem )" << endl;
+        rOutStm.WriteCharPtr( "SFX_ARGUMENT( 0, 0, SfxVoidItem )" ) << endl;
     }
-    rOutStm << endl << "};" << endl << endl;
+    rOutStm << endl;
+    rOutStm.WriteCharPtr( "};" ) << endl << endl;
 
     ByteStringList aStringList;
     WriteSlotStubs( GetName().getString(), aSlotList, aStringList, rOutStm );
@@ -610,8 +611,8 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     rOutStm << endl;
 
     // write slotmap
-    rOutStm << "SFX_SLOTMAP_ARG(" << GetName().getString().getStr() << ')' << endl
-        << '{' << endl;
+    rOutStm.WriteCharPtr( "SFX_SLOTMAP_ARG(" ).WriteCharPtr( GetName().getString().getStr() ).WriteChar( ')' ) << endl;
+    rOutStm.WriteChar( '{' ) << endl;
 
     // write all attributes
     WriteSlots( GetName().getString(), 0, aSlotList, rBase, rOutStm );
@@ -621,13 +622,15 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     {
         // at least one dummy
         WriteTab( rOutStm, 1 );
-        rOutStm << "SFX_SLOT_ARG(" << GetName().getString().getStr()
-                << ", 0, 0, "
-                << "SFX_STUB_PTR_EXEC_NONE,"
-                << "SFX_STUB_PTR_STATE_NONE,"
-                << "0, SfxVoidItem, 0, 0, \"\", 0 )" << endl;
+        rOutStm.WriteCharPtr( "SFX_SLOT_ARG(" ).WriteCharPtr( GetName().getString().getStr() )
+               .WriteCharPtr( ", 0, 0, " )
+               .WriteCharPtr( "SFX_STUB_PTR_EXEC_NONE," )
+               .WriteCharPtr( "SFX_STUB_PTR_STATE_NONE," )
+               .WriteCharPtr( "0, SfxVoidItem, 0, 0, \"\", 0 )" ) << endl;
     }
-    rOutStm << endl << "};" << endl << "#endif" << endl << endl;
+    rOutStm << endl;
+    rOutStm.WriteCharPtr( "};" ) << endl;
+    rOutStm.WriteCharPtr( "#endif" ) << endl << endl;
 
     for( size_t i = 0, n = aSlotList.size(); i < n; ++i )
     {

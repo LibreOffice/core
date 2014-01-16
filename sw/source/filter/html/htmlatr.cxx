@@ -645,7 +645,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         // nur einen Zeilen-Umbruch (ohne Einrueckung) am Absatz-Anfang
         // ausgeben
         rInfo.aToken = OString();   // kein End-Tag ausgeben
-        rWrt.Strm() << SAL_NEWLINE_STRING;
+        rWrt.Strm().WriteCharPtr( SAL_NEWLINE_STRING );
 
         return;
     }
@@ -806,7 +806,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
                  append("=\"").append(static_cast<sal_Int32>(nNumStart)).append("\"");
         }
         sOut.append('>');
-        rWrt.Strm() << sOut.getStr();
+        rWrt.Strm().WriteCharPtr( sOut.getStr() );
     }
 
     if( rHWrt.nDefListLvl > 0 && !bForceDL )
@@ -823,12 +823,12 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         // all text behind the control does not recognize this attribute.
         OStringBuffer sOut;
         sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_division);
-        rWrt.Strm() << sOut.makeStringAndClear().getStr();
+        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
         rHWrt.bTxtAttr = sal_False;
         rHWrt.bOutOpts = sal_True;
         OutHTML_SvxAdjust( rWrt, *pAdjItem );
-        rWrt.Strm() << '>';
+        rWrt.Strm().WriteChar( '>' );
         pAdjItem = 0;
         rHWrt.bNoAlign = sal_False;
         rInfo.bOutDiv = sal_True;
@@ -905,14 +905,14 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
         if( eLang != LANGUAGE_DONTKNOW && eLang != rHWrt.eLang )
         {
-            rWrt.Strm() << sOut.makeStringAndClear().getStr();
+            rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
             rHWrt.OutLanguage( eLang );
         }
 
         if( nDir != rHWrt.nDirection )
         {
             if( !sOut.isEmpty() )
-                rWrt.Strm() << sOut.makeStringAndClear().getStr();
+                rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
             rHWrt.OutDirection( nDir );
         }
 
@@ -921,7 +921,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_class)
                 .append("=\"");
-            rWrt.Strm() << sOut.makeStringAndClear().getStr();
+            rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
             OUString aClass( pFmtInfo->aClass );
             if( pFmtInfo->bScriptDependent )
             {
@@ -944,7 +944,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
                                       rHWrt.eDestEnc, &rHWrt.aNonConvertableCharacters );
             sOut.append('\"');
         }
-        rWrt.Strm() << sOut.makeStringAndClear().getStr();
+        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
         // ggf. Ausrichtung ausgeben.
         if( !rHWrt.bNoAlign && pAdjItem )
@@ -956,7 +956,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
             OutCSS1_ParaTagStyleOpt( rWrt, *rInfo.pItemSet );
         }
 
-        rWrt.Strm() << '>';
+        rWrt.Strm().WriteChar( '>' );
 
         // Soll ein </P> geschrieben wenrden
         rInfo.bOutPara =
@@ -2105,7 +2105,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         const SfxItemSet* pItemSet = pNd->GetpSwAttrSet();
         if( !pItemSet )
         {
-            rWrt.Strm() << sOut.makeStringAndClear().getStr() << '>';
+            rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() ).WriteChar( '>' );
             return rHTMLWrt;
         }
         const SfxPoolItem* pItem;
@@ -2138,8 +2138,8 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
 
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_width)
                     .append("=\"");
-                rWrt.Strm() << sOut.makeStringAndClear().getStr();
-                rWrt.OutULong( rHTMLWrt.ToPixel(nPageWidth-nLeft-nRight,false) ) << "\"";
+                rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+                rWrt.OutULong( rHTMLWrt.ToPixel(nPageWidth-nLeft-nRight,false) ).WriteCharPtr( "\"" );
 
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align)
                     .append("=\"");
@@ -2152,7 +2152,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                 sOut.append("\"");
             }
         }
-        rWrt.Strm() << sOut.makeStringAndClear().getStr();
+        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
         if( SFX_ITEM_SET == pItemSet->GetItemState( RES_BOX, sal_False, &pItem ))
         {
             const SvxBoxItem* pBoxItem = (const SvxBoxItem*)pItem;
@@ -2162,15 +2162,15 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                 sal_uInt16 nWidth = pBorderLine->GetScaledWidth();
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_size)
                     .append("=\"");
-                rWrt.Strm() << sOut.makeStringAndClear().getStr();
-                rWrt.OutULong( rHTMLWrt.ToPixel(nWidth,false) ) << "\"";
+                rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+                rWrt.OutULong( rHTMLWrt.ToPixel(nWidth,false) ).WriteCharPtr( "\"" );
 
                 const Color& rBorderColor = pBorderLine->GetColor();
                 if( !rBorderColor.IsRGBEqual( Color(COL_GRAY) ) )
                 {
                     sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_color)
                         .append("=");
-                    rWrt.Strm() << sOut.makeStringAndClear().getStr();
+                    rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
                     HTMLOutFuncs::Out_Color( rWrt.Strm(), rBorderColor,
                                              rHTMLWrt.eDestEnc );
                 }
@@ -2178,11 +2178,11 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                 if( !pBorderLine->GetInWidth() )
                 {
                     sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_noshade);
-                    rWrt.Strm() << sOut.makeStringAndClear().getStr();
+                    rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
                 }
             }
         }
-        rWrt.Strm() << '>';
+        rWrt.Strm().WriteChar( '>' );
         return rHTMLWrt;
     }
 
@@ -2265,7 +2265,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         }
 
         if( bPageBreakBefore )
-            rWrt.Strm() << '\f';
+            rWrt.Strm().WriteChar( '\f' );
     }
 
     // eventuell eine Form oeffnen
@@ -2570,7 +2570,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                         OString sOut("&#");
                         sOut += OString::number( (sal_uInt64)c );
                         sOut += ";";
-                        rWrt.Strm() << sOut.getStr();
+                        rWrt.Strm().WriteCharPtr( sOut.getStr() );
                     }
                     else
                         HTMLOutFuncs::Out_Char( rWrt.Strm(), (sal_Unicode)c, aContext, &rHTMLWrt.aNonConvertableCharacters );
@@ -2608,7 +2608,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             // Wenn der letzte Absatz einer Tabellezelle leer ist und
             // wir fuer den MS-IE exportieren, schreiben wir statt eines
             // <BR> ein &nbsp;
-            rWrt.Strm() << '&' << OOO_STRING_SVTOOLS_HTML_S_nbsp << ';';
+            rWrt.Strm().WriteChar( '&' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_S_nbsp ).WriteChar( ';' );
         }
         else
         {
@@ -2658,7 +2658,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     rHTMLWrt.OutForm( sal_False );
 
     if( bPageBreakBehind )
-        rWrt.Strm() << '\f';
+        rWrt.Strm().WriteChar( '\f' );
 
     return rHTMLWrt;
 }
@@ -2714,8 +2714,8 @@ static Writer& OutHTML_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
         OStringBuffer sOut;
         sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_font).append(' ')
             .append(OOO_STRING_SVTOOLS_HTML_O_color).append("=");
-        rWrt.Strm() << sOut.makeStringAndClear().getStr();
-        HTMLOutFuncs::Out_Color( rWrt.Strm(), aColor, rHTMLWrt.eDestEnc ) << '>';
+        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        HTMLOutFuncs::Out_Color( rWrt.Strm(), aColor, rHTMLWrt.eDestEnc ).WriteChar( '>' );
     }
     else
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_font, sal_False );
@@ -2758,9 +2758,9 @@ static Writer& OutHTML_SvxFont( Writer& rWrt, const SfxPoolItem& rHt )
         OStringBuffer sOut;
         sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_font).append(' ')
             .append(OOO_STRING_SVTOOLS_HTML_O_face).append("=\"");
-        rWrt.Strm() << sOut.makeStringAndClear().getStr();
+        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
         HTMLOutFuncs::Out_String( rWrt.Strm(), aNames, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters )
-            << "\">";
+           .WriteCharPtr( "\">" );
     }
     else
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_font , sal_False );
@@ -2783,14 +2783,14 @@ static Writer& OutHTML_SvxFontHeight( Writer& rWrt, const SfxPoolItem& rHt )
         sal_uInt16 nSize = rHTMLWrt.GetHTMLFontSize( nHeight );
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_size).append("=\"").
              append(static_cast<sal_Int32>(nSize)).append("\"");
-        rWrt.Strm() << sOut.getStr();
+        rWrt.Strm().WriteCharPtr( sOut.getStr() );
 
         if( rHTMLWrt.bCfgOutStyles && rHTMLWrt.bTxtAttr )
         {
             // always export font size as CSS option, too
             OutCSS1_HintStyleOpt( rWrt, rHt );
         }
-        rWrt.Strm() << '>';
+        rWrt.Strm().WriteChar( '>' );
     }
     else
     {
@@ -2814,9 +2814,9 @@ static Writer& OutHTML_SvxLanguage( Writer& rWrt, const SfxPoolItem& rHt )
     {
         OStringBuffer sOut;
         sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_span);
-        rWrt.Strm() << sOut.makeStringAndClear().getStr();
+        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
         rHTMLWrt.OutLanguage( ((const SvxLanguageItem &)rHt).GetLanguage() );
-        rWrt.Strm() << '>';
+        rWrt.Strm().WriteChar( '>' );
     }
     else
     {
@@ -3021,7 +3021,7 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, sal_Bool bO
         sOut.append('\"');
     }
 
-    rWrt.Strm() << sOut.makeStringAndClear().getStr();
+    rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
     OUString sRel;
 
@@ -3037,7 +3037,7 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, sal_Bool bO
         aURL = comphelper::string::strip(aURL, ' ');
 
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_href).append("=\"");
-        rWrt.Strm() << sOut.makeStringAndClear().getStr();
+        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
         rHTMLWrt.OutHyperlinkHRefValue( aURL );
         sOut.append('\"');
     }
@@ -3045,7 +3045,7 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, sal_Bool bO
     if( !rINetFmt.GetName().isEmpty() )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name).append("=\"");
-        rWrt.Strm() << sOut.makeStringAndClear().getStr();
+        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
         HTMLOutFuncs::Out_String( rWrt.Strm(), rINetFmt.GetName(),
                                   rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         sOut.append('\"');
@@ -3055,7 +3055,7 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, sal_Bool bO
     if( !rTarget.isEmpty() )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_target).append("=\"");
-        rWrt.Strm() << sOut.makeStringAndClear().getStr();
+        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
         HTMLOutFuncs::Out_String( rWrt.Strm(), rTarget, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         sOut.append('\"');
     }
@@ -3064,13 +3064,13 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, sal_Bool bO
         sOut.append(OUStringToOString(sRel, RTL_TEXTENCODING_ASCII_US));
 
     if( !sOut.isEmpty() )
-        rWrt.Strm() << sOut.makeStringAndClear().getStr();
+        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
     if( bEvents )
         HTMLOutFuncs::Out_Events( rWrt.Strm(), *pMacTable, aAnchorEventTable,
                                   rHTMLWrt.bCfgStarBasic, rHTMLWrt.eDestEnc,
                                      &rHTMLWrt.aNonConvertableCharacters    );
-    rWrt.Strm() << ">";
+    rWrt.Strm().WriteCharPtr( ">" );
 
     return rWrt;
 }
@@ -3162,7 +3162,7 @@ static Writer& OutHTML_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_class)
                 .append("=\"");
-            rWrt.Strm() << sOut.makeStringAndClear().getStr();
+            rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
             OUString aClass( pFmtInfo->aClass );
             if( pFmtInfo->bScriptDependent )
             {
@@ -3186,7 +3186,7 @@ static Writer& OutHTML_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
             sOut.append('\"');
         }
         sOut.append('>');
-        rWrt.Strm() << sOut.makeStringAndClear().getStr();
+        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
     }
     else
     {
@@ -3221,7 +3221,7 @@ static Writer& OutHTML_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt )
         OStringBuffer sOut;
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).append("=\"")
             .append(pStr).append("\"");
-        rWrt.Strm() << sOut.makeStringAndClear().getStr();
+        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
     }
 
     return rWrt;

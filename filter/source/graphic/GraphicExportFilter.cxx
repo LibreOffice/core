@@ -132,7 +132,7 @@ sal_Bool SAL_CALL GraphicExportFilter::filter( const Sequence<PropertyValue>& rD
     {
         SvOutputStream aOutputStream( mxOutputStream );
         aMemStream.Seek(0);
-        aOutputStream << aMemStream;
+        aOutputStream.WriteStream( aMemStream );
 
         return true;
     }

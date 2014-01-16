@@ -254,21 +254,21 @@ void RtfExport::WriteNumbering()
     if ( !pUsedNumTbl )
         return; // no numbering is used
 
-    Strm() << '{' << OOO_STRING_SVTOOLS_RTF_IGNORE << OOO_STRING_SVTOOLS_RTF_LISTTABLE;
+    Strm().WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_IGNORE ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_LISTTABLE );
 
     CollectGrfsOfBullets();
     if (!m_vecBulletPic.empty())
-        Strm() << '{' << OOO_STRING_SVTOOLS_RTF_IGNORE << LO_STRING_SVTOOLS_RTF_LISTPICTURE;
+        Strm().WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_IGNORE ).WriteCharPtr( LO_STRING_SVTOOLS_RTF_LISTPICTURE );
     BulletDefinitions();
     if (!m_vecBulletPic.empty())
-        Strm() << '}';
+        Strm().WriteChar( '}' );
 
     AbstractNumberingDefinitions();
-    Strm() << '}';
+    Strm().WriteChar( '}' );
 
-    Strm() << '{' << OOO_STRING_SVTOOLS_RTF_LISTOVERRIDETABLE;
+    Strm().WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_LISTOVERRIDETABLE );
     NumberingDefinitions();
-    Strm() << '}';
+    Strm().WriteChar( '}' );
 
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " end");
 }
@@ -293,16 +293,16 @@ void RtfExport::WriteRevTab()
     }
 
     // Now write the table
-    Strm() << '{' << OOO_STRING_SVTOOLS_RTF_IGNORE << OOO_STRING_SVTOOLS_RTF_REVTBL << ' ';
+    Strm().WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_IGNORE ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_REVTBL ).WriteChar( ' ' );
     for(sal_uInt16 i = 0; i < m_aRedlineTbl.size(); ++i)
     {
         const OUString* pAuthor = GetRedline(i);
-        Strm() << '{';
+        Strm().WriteChar( '{' );
         if (pAuthor)
-            Strm() << msfilter::rtfutil::OutString(*pAuthor, eDefaultEncoding).getStr();
-        Strm() << ";}";
+            Strm().WriteCharPtr( msfilter::rtfutil::OutString(*pAuthor, eDefaultEncoding).getStr() );
+        Strm().WriteCharPtr( ";}" );
     }
-    Strm() << '}' << SAL_NEWLINE_STRING;
+    Strm().WriteChar( '}' ).WriteCharPtr( SAL_NEWLINE_STRING );
 }
 
 void RtfExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
@@ -398,9 +398,9 @@ sal_uLong RtfExport::ReplaceCr( sal_uInt8 )
 
 void RtfExport::WriteFonts()
 {
-    Strm() << SAL_NEWLINE_STRING << '{' << OOO_STRING_SVTOOLS_RTF_FONTTBL;
+    Strm().WriteCharPtr( SAL_NEWLINE_STRING ).WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_FONTTBL );
     maFontHelper.WriteFontTable( *m_pAttrOutput );
-    Strm() << '}';
+    Strm().WriteChar( '}' );
 }
 
 void RtfExport::WriteStyles()
@@ -416,10 +416,10 @@ void RtfExport::WriteFootnoteSettings()
     // Request a separator only in case the width is larger than zero.
     bool bSeparator = double(rFtnInfo.GetWidth()) > 0;
 
-    Strm() << '{' << OOO_STRING_SVTOOLS_RTF_IGNORE << OOO_STRING_SVTOOLS_RTF_FTNSEP;
+    Strm().WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_IGNORE ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_FTNSEP );
     if (bSeparator)
-        Strm() << OOO_STRING_SVTOOLS_RTF_CHFTNSEP;
-    Strm() << '}';
+        Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CHFTNSEP );
+    Strm().WriteChar( '}' );
 }
 
 void RtfExport::WriteMainText()
@@ -446,7 +446,7 @@ void RtfExport::WriteMainText()
 void RtfExport::WriteInfo()
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-    Strm() << '{' << OOO_STRING_SVTOOLS_RTF_INFO;
+    Strm().WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_INFO );
 
     SwDocShell *pDocShell(pDoc->GetDocShell());
     uno::Reference<document::XDocumentProperties> xDocProps;
@@ -474,8 +474,8 @@ void RtfExport::WriteInfo()
         OutDateTime(OOO_STRING_SVTOOLS_RTF_PRINTIM, xDocProps->getPrintDate());
     }
 
-    Strm() << '{' << OOO_STRING_SVTOOLS_RTF_COMMENT << " ";
-    Strm() << OUStringToOString( utl::ConfigManager::getProductName(), eCurrentEncoding).getStr() << "}{" << OOO_STRING_SVTOOLS_RTF_VERN;
+    Strm().WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_COMMENT ).WriteCharPtr( " " );
+    Strm().WriteCharPtr( OUStringToOString( utl::ConfigManager::getProductName(), eCurrentEncoding).getStr() ).WriteCharPtr( "}{" ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_VERN );
 
 // The convention that we follow is that the version number
 // should be a non-negative 32-bit int
@@ -485,8 +485,8 @@ void RtfExport::WriteInfo()
 #error Minor, micro and patchlevel version numbers must be less than 256
 #endif
 
-    Strm().WriteNumber((sal_Int32) LIBO_VERSION_ENCODED_IN_32BITS) << '}';
-    Strm() << '}';
+    Strm().WriteNumber((sal_Int32) LIBO_VERSION_ENCODED_IN_32BITS).WriteChar( '}' );
+    Strm().WriteChar( '}' );
 }
 
 void RtfExport::WritePageDescTable()
@@ -498,15 +498,15 @@ void RtfExport::WritePageDescTable()
     if( !nSize )
         return;
 
-    Strm() << SAL_NEWLINE_STRING;
+    Strm().WriteCharPtr( SAL_NEWLINE_STRING );
     bOutPageDescs = sal_True;
-    Strm() << '{' << OOO_STRING_SVTOOLS_RTF_IGNORE << OOO_STRING_SVTOOLS_RTF_PGDSCTBL;
+    Strm().WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_IGNORE ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PGDSCTBL );
     for( sal_uInt16 n = 0; n < nSize; ++n )
     {
         const SwPageDesc& rPageDesc = pDoc->GetPageDesc( n );
 
-        Strm() << SAL_NEWLINE_STRING << '{' << OOO_STRING_SVTOOLS_RTF_PGDSC;
-        OutULong( n ) << OOO_STRING_SVTOOLS_RTF_PGDSCUSE;
+        Strm().WriteCharPtr( SAL_NEWLINE_STRING ).WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PGDSC );
+        OutULong( n ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PGDSCUSE );
         OutULong( rPageDesc.ReadUseOn() );
 
         OutPageDescription( rPageDesc, false, false );
@@ -516,11 +516,11 @@ void RtfExport::WritePageDescTable()
         while( i  )
             if( rPageDesc.GetFollow() == &pDoc->GetPageDesc( --i ) )
                 break;
-        Strm() << OOO_STRING_SVTOOLS_RTF_PGDSCNXT;
-        OutULong( i ) << ' ';
-        Strm() << msfilter::rtfutil::OutString( rPageDesc.GetName(), eDefaultEncoding).getStr() << ";}";
+        Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PGDSCNXT );
+        OutULong( i ).WriteChar( ' ' );
+        Strm().WriteCharPtr( msfilter::rtfutil::OutString( rPageDesc.GetName(), eDefaultEncoding).getStr() ).WriteCharPtr( ";}" );
     }
-    Strm() << '}' << SAL_NEWLINE_STRING;
+    Strm().WriteChar( '}' ).WriteCharPtr( SAL_NEWLINE_STRING );
     bOutPageDescs = sal_False;
 
     // reset table infos, otherwise the depth of the cells will be incorrect,
@@ -531,13 +531,13 @@ void RtfExport::WritePageDescTable()
 void RtfExport::ExportDocument_Impl()
 {
     // Make the header
-    Strm() << '{' << OOO_STRING_SVTOOLS_RTF_RTF << '1'
-        << OOO_STRING_SVTOOLS_RTF_ANSI;
-    Strm() << OOO_STRING_SVTOOLS_RTF_DEFF;
+    Strm().WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_RTF ).WriteChar( '1' )
+       .WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ANSI );
+    Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_DEFF );
     OutULong( maFontHelper.GetId( (SvxFontItem&)pDoc->GetAttrPool().GetDefaultItem(
                     RES_CHRATR_FONT ) ));
     // If this not exist, MS don't understand our ansi characters (0x80-0xff).
-    Strm() << "\\adeflang1025";
+    Strm().WriteCharPtr( "\\adeflang1025" );
 
     // Font table
     WriteFonts();
@@ -554,17 +554,17 @@ void RtfExport::ExportDocument_Impl()
 
     WriteInfo();
     // Default TabSize
-    Strm() << m_pAttrOutput->m_aTabStop.makeStringAndClear().getStr() << SAL_NEWLINE_STRING;
+    Strm().WriteCharPtr( m_pAttrOutput->m_aTabStop.makeStringAndClear().getStr() ).WriteCharPtr( SAL_NEWLINE_STRING );
     // Zoom
     SwViewShell *pViewShell(pDoc->GetCurrentViewShell());
     if (pViewShell && pViewShell->GetViewOptions()->GetZoomType() == SVX_ZOOM_PERCENT)
     {
-        Strm() << OOO_STRING_SVTOOLS_RTF_VIEWSCALE;
+        Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_VIEWSCALE );
         OutULong(pViewShell->GetViewOptions()->GetZoom());
     }
     // Record changes?
     if (nsRedlineMode_t::REDLINE_ON & mnRedlineMode)
-        Strm() << OOO_STRING_SVTOOLS_RTF_REVISIONS;
+        Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_REVISIONS );
     // Init sections
     m_pSections = new MSWordSections( *this );
 
@@ -583,14 +583,14 @@ void RtfExport::ExportDocument_Impl()
             const SvxProtectItem* pProtect = (const SvxProtectItem*)rPool.GetItem2(RES_PROTECT, n);
             if (pProtect && pProtect->IsCntntProtected())
             {
-                Strm() << OOO_STRING_SVTOOLS_RTF_FORMPROT;
+                Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_FORMPROT );
                 break;
             }
         }
     }
 
     // enable form field shading
-    Strm() << OOO_STRING_SVTOOLS_RTF_FORMSHADE;
+    Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_FORMSHADE );
 
     // size and empty margins of the page
     if( pDoc->GetPageDescCnt() )
@@ -620,8 +620,8 @@ void RtfExport::ExportDocument_Impl()
                 else if( pDoc->FindPageDescByName( pSttPgDsc->
                                     GetPageDesc()->GetName(), &nPosInDoc ))
                 {
-                    Strm() << '{' << OOO_STRING_SVTOOLS_RTF_IGNORE << OOO_STRING_SVTOOLS_RTF_PGDSCNO;
-                    OutULong( nPosInDoc ) << '}';
+                    Strm().WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_IGNORE ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PGDSCNO );
+                    OutULong( nPosInDoc ).WriteChar( '}' );
                 }
             }
         }
@@ -631,43 +631,43 @@ void RtfExport::ExportDocument_Impl()
 
         {
             if( rPageDesc.GetLandscape() )
-                Strm() << OOO_STRING_SVTOOLS_RTF_LANDSCAPE;
+                Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_LANDSCAPE );
 
             const SwFmtFrmSize& rSz = rFmtPage.GetFrmSize();
             // Clipboard document is always created without a printer, then
             // the size will be always LONG_MAX! Solution then is to use A4
             if( LONG_MAX == rSz.GetHeight() || LONG_MAX == rSz.GetWidth() )
             {
-                Strm() << OOO_STRING_SVTOOLS_RTF_PAPERH;
+                Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PAPERH );
                 Size a4 = SvxPaperInfo::GetPaperSize(PAPER_A4);
-                OutULong( a4.Height() ) << OOO_STRING_SVTOOLS_RTF_PAPERW;
+                OutULong( a4.Height() ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PAPERW );
                 OutULong( a4.Width() );
             }
             else
             {
-                Strm() << OOO_STRING_SVTOOLS_RTF_PAPERH;
-                OutULong( rSz.GetHeight() ) << OOO_STRING_SVTOOLS_RTF_PAPERW;
+                Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PAPERH );
+                OutULong( rSz.GetHeight() ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PAPERW );
                 OutULong( rSz.GetWidth() );
             }
         }
 
         {
             const SvxLRSpaceItem& rLR = rFmtPage.GetLRSpace();
-            Strm() << OOO_STRING_SVTOOLS_RTF_MARGL;
-            OutLong( rLR.GetLeft() ) << OOO_STRING_SVTOOLS_RTF_MARGR;
+            Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_MARGL );
+            OutLong( rLR.GetLeft() ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_MARGR );
             OutLong( rLR.GetRight() );
         }
 
         {
             const SvxULSpaceItem& rUL = rFmtPage.GetULSpace();
-            Strm() << OOO_STRING_SVTOOLS_RTF_MARGT;
-            OutLong( rUL.GetUpper() ) << OOO_STRING_SVTOOLS_RTF_MARGB;
+            Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_MARGT );
+            OutLong( rUL.GetUpper() ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_MARGB );
             OutLong( rUL.GetLower() );
         }
 
-        Strm() << OOO_STRING_SVTOOLS_RTF_SECTD << OOO_STRING_SVTOOLS_RTF_SBKNONE;
+        Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SECTD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SBKNONE );
         // All sections are unlocked by default
-        Strm() << OOO_STRING_SVTOOLS_RTF_SECTUNLOCKED;
+        Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SECTUNLOCKED );
         OutLong(1);
         OutPageDescription( rPageDesc, false, true );   // Changed bCheckForFirstPage to sal_True so headers
                                                             // following title page are correctly added - i13107
@@ -689,7 +689,7 @@ void RtfExport::ExportDocument_Impl()
         const char* pOut = FTNPOS_CHAPTER == rFtnInfo.ePos
                             ? OOO_STRING_SVTOOLS_RTF_ENDDOC
                             : OOO_STRING_SVTOOLS_RTF_FTNBJ;
-        Strm() << pOut << OOO_STRING_SVTOOLS_RTF_FTNSTART;
+        Strm().WriteCharPtr( pOut ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_FTNSTART );
         OutLong( rFtnInfo.nFtnOffset + 1 );
 
         switch( rFtnInfo.eNum )
@@ -698,7 +698,7 @@ void RtfExport::ExportDocument_Impl()
             case FTNNUM_DOC:        pOut = OOO_STRING_SVTOOLS_RTF_FTNRSTCONT;   break;
             default:                pOut = OOO_STRING_SVTOOLS_RTF_FTNRESTART;   break;
         }
-        Strm() << pOut;
+        Strm().WriteCharPtr( pOut );
 
         switch( rFtnInfo.aFmt.GetNumberingType() )
         {
@@ -711,13 +711,13 @@ void RtfExport::ExportDocument_Impl()
             case SVX_NUM_CHAR_SPECIAL:          pOut = OOO_STRING_SVTOOLS_RTF_FTNNCHI;  break;
             default:                    pOut = OOO_STRING_SVTOOLS_RTF_FTNNAR;       break;
         }
-        Strm() << pOut;
+        Strm().WriteCharPtr( pOut );
 
 
         const SwEndNoteInfo& rEndNoteInfo = pDoc->GetEndNoteInfo();
 
-        Strm() << OOO_STRING_SVTOOLS_RTF_AENDDOC << OOO_STRING_SVTOOLS_RTF_AFTNRSTCONT
-               << OOO_STRING_SVTOOLS_RTF_AFTNSTART;
+        Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_AENDDOC ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_AFTNRSTCONT )
+              .WriteCharPtr( OOO_STRING_SVTOOLS_RTF_AFTNSTART );
         OutLong( rEndNoteInfo.nFtnOffset + 1 );
 
         switch( rEndNoteInfo.aFmt.GetNumberingType() )
@@ -731,16 +731,16 @@ void RtfExport::ExportDocument_Impl()
             case SVX_NUM_CHAR_SPECIAL:          pOut = OOO_STRING_SVTOOLS_RTF_AFTNNCHI; break;
             default:                    pOut = OOO_STRING_SVTOOLS_RTF_AFTNNAR;  break;
         }
-        Strm() << pOut;
+        Strm().WriteCharPtr( pOut );
     }
 
-    Strm() << SAL_NEWLINE_STRING;
+    Strm().WriteCharPtr( SAL_NEWLINE_STRING );
 
     WriteFootnoteSettings();
 
     WriteMainText();
 
-    Strm() << '}';
+    Strm().WriteChar( '}' );
 }
 
 void RtfExport::PrepareNewPageDesc( const SfxItemSet* pSet,
@@ -776,7 +776,7 @@ bool RtfExport::DisallowInheritingOutlineNumbering( const SwFmt& rFmt )
             if (((const SwTxtFmtColl*)pParent)->IsAssignedToListLevelOfOutlineStyle())
             {
                 // Level 9 disables the outline
-                Strm() << OOO_STRING_SVTOOLS_RTF_LEVEL << sal_Int32(9);
+                Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_LEVEL ).WriteInt32( sal_Int32(9) );
 
                 bRet = true;
             }
@@ -877,23 +877,23 @@ void RtfExport::OutUnicode(const sal_Char *pToken, const OUString &rContent, boo
     {
         if (!bUpr)
         {
-            Strm() << '{' << pToken << ' ';
-            Strm() << msfilter::rtfutil::OutString( rContent, eCurrentEncoding ).getStr();
-            Strm() << '}';
+            Strm().WriteChar( '{' ).WriteCharPtr( pToken ).WriteChar( ' ' );
+            Strm().WriteCharPtr( msfilter::rtfutil::OutString( rContent, eCurrentEncoding ).getStr() );
+            Strm().WriteChar( '}' );
         }
         else
-            Strm() << msfilter::rtfutil::OutStringUpr(pToken, rContent, eCurrentEncoding).getStr();
+            Strm().WriteCharPtr( msfilter::rtfutil::OutStringUpr(pToken, rContent, eCurrentEncoding).getStr() );
     }
 }
 
 void RtfExport::OutDateTime(const sal_Char* pStr, const util::DateTime& rDT )
 {
-    Strm() << '{' << pStr << OOO_STRING_SVTOOLS_RTF_YR;
-    OutULong( rDT.Year ) << OOO_STRING_SVTOOLS_RTF_MO;
-    OutULong( rDT.Month ) << OOO_STRING_SVTOOLS_RTF_DY;
-    OutULong( rDT.Day ) << OOO_STRING_SVTOOLS_RTF_HR;
-    OutULong( rDT.Hours ) << OOO_STRING_SVTOOLS_RTF_MIN;
-    OutULong( rDT.Minutes ) << '}';
+    Strm().WriteChar( '{' ).WriteCharPtr( pStr ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_YR );
+    OutULong( rDT.Year ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_MO );
+    OutULong( rDT.Month ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_DY );
+    OutULong( rDT.Day ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_HR );
+    OutULong( rDT.Hours ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_MIN );
+    OutULong( rDT.Minutes ).WriteChar( '}' );
 }
 
 sal_uInt16 RtfExport::GetColor( const Color& rColor ) const
@@ -1065,12 +1065,12 @@ void RtfExport::OutColorTable()
         const Color& rCol = m_aColTbl[ n ];
         if( n || COL_AUTO != rCol.GetColor() )
         {
-            Strm() << OOO_STRING_SVTOOLS_RTF_RED;
-            OutULong( rCol.GetRed() ) << OOO_STRING_SVTOOLS_RTF_GREEN;
-            OutULong( rCol.GetGreen() ) << OOO_STRING_SVTOOLS_RTF_BLUE;
+            Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_RED );
+            OutULong( rCol.GetRed() ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_GREEN );
+            OutULong( rCol.GetGreen() ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_BLUE );
             OutULong( rCol.GetBlue() );
         }
-        Strm() << ';';
+        Strm().WriteChar( ';' );
     }
 }
 
@@ -1121,13 +1121,13 @@ void RtfExport::OutPageDescription( const SwPageDesc& rPgDsc, bool bWriteReset, 
     if( bWriteReset )
     {
         if( pCurPam->GetPoint()->nNode == pOrigPam->Start()->nNode )
-            Strm() << OOO_STRING_SVTOOLS_RTF_SECTD << OOO_STRING_SVTOOLS_RTF_SBKNONE;
+            Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SECTD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SBKNONE );
         else
-            Strm() << OOO_STRING_SVTOOLS_RTF_SECT << OOO_STRING_SVTOOLS_RTF_SECTD;
+            Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SECT ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SECTD );
     }
 
     if( pAktPageDesc->GetLandscape() )
-        Strm() << OOO_STRING_SVTOOLS_RTF_LNDSCPSXN;
+        Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_LNDSCPSXN );
 
     const SwFmt *pFmt = &pAktPageDesc->GetMaster(); //GetLeft();
     bOutPageDescs = true;
@@ -1146,7 +1146,7 @@ void RtfExport::OutPageDescription( const SwPageDesc& rPgDsc, bool bWriteReset, 
     // title page
     if( pAktPageDesc != &rPgDsc )
     {
-        Strm() << OOO_STRING_SVTOOLS_RTF_TITLEPG;
+        Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TITLEPG );
         pAktPageDesc = &rPgDsc;
         if( pAktPageDesc->GetMaster().GetAttrSet().GetItemState( RES_HEADER,
                     sal_False, &pItem ) == SFX_ITEM_SET )
@@ -1184,12 +1184,12 @@ void RtfExport::WriteHeaderFooter(const SfxPoolItem& rItem, bool bHeader)
     /* is this a title page? */
     if( pAktPageDesc->GetFollow() && pAktPageDesc->GetFollow() != pAktPageDesc )
     {
-        Strm() << OOO_STRING_SVTOOLS_RTF_TITLEPG;
+        Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TITLEPG );
         pStr = (bHeader ? OOO_STRING_SVTOOLS_RTF_HEADERF : OOO_STRING_SVTOOLS_RTF_FOOTERF);
     }
-    Strm() << '{' << pStr;
+    Strm().WriteChar( '{' ).WriteCharPtr( pStr );
     WriteHeaderFooterText(pAktPageDesc->GetMaster(), bHeader);
-    Strm() << '}';
+    Strm().WriteChar( '}' );
 
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " end");
 }

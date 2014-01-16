@@ -98,7 +98,7 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
         {
             SvStream* pOut = utl::UcbStreamHelper::CreateStream(aOutStr, STREAM_WRITE);
             SvStream* pIn = utl::UcbStreamHelper::CreateStream(xInputStream);
-            *pOut << *pIn;
+            pOut->WriteStream( *pIn );
             delete pOut;
             return true;
         }

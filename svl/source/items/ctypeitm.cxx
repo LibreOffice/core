@@ -88,7 +88,7 @@ SvStream & CntContentTypeItem::Store(SvStream & rStream, sal_uInt16) const
     // CntContentTypeItem used to be derived from CntStringItem, so take that
     // into account:
     writeUnicodeString(rStream, GetValue());
-    rStream << CNTSTRINGITEM_STREAM_MAGIC << sal_Bool(sal_False);
+    rStream.WriteUInt32( CNTSTRINGITEM_STREAM_MAGIC ).WriteUChar( sal_Bool(sal_False) );
     return rStream;
 }
 

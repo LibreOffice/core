@@ -205,7 +205,7 @@ XclExpStream& XclExpStream::operator<<( double fValue )
     if (mbUseEncrypter && HasValidEncrypter())
         mxEncrypter->Encrypt(mrStrm, fValue);
     else
-        mrStrm << fValue;
+        mrStrm.WriteDouble( fValue );
     return *this;
 }
 

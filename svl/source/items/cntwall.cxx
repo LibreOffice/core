@@ -115,13 +115,13 @@ SfxPoolItem* CntWallpaperItem::Create( SvStream& rStream, sal_uInt16 nVersion) c
 // -----------------------------------------------------------------------
 SvStream& CntWallpaperItem::Store( SvStream& rStream, sal_uInt16 ) const
 {
-    rStream << CNTWALLPAPERITEM_STREAM_MAGIC;
+    rStream.WriteUInt32( CNTWALLPAPERITEM_STREAM_MAGIC );
     writeUnicodeString(rStream, _aURL);
     // !!! Color stream operators do not work - they discard any
     // transparency info !!!
     // ??? Why the hell Color::Write(...) isn't const ???
     (const_cast< CntWallpaperItem* >(this))->_nColor.Write( rStream, sal_True );
-    rStream << _nStyle;
+    rStream.WriteUInt16( _nStyle );
 
     return rStream;
 }

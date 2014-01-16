@@ -36,13 +36,13 @@ SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
         // written
         break;
     case 0xA0:
-        rStream << "\\~";
+        rStream.WriteCharPtr( "\\~" );
         break;
     case 0xAD:
-        rStream << "\\-";
+        rStream.WriteCharPtr( "\\-" );
         break;
     case 0x2011:
-        rStream << "\\_";
+        rStream.WriteCharPtr( "\\_" );
         break;
     case '\n':
         pStr = OOO_STRING_SVTOOLS_RTF_LINE;
@@ -87,11 +87,11 @@ SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
             case '\\':
             case '}':
             case '{':
-                rStream << '\\' << (sal_Char)c;
+                rStream.WriteChar( '\\' ).WriteChar( (sal_Char)c );
                 break;
             default:
                 if (c >= ' ' && c <= '~')
-                    rStream << (sal_Char)c;
+                    rStream.WriteChar( (sal_Char)c );
                 else
                 {
                     //If we can't convert to the dest encoding, or if
@@ -121,18 +121,18 @@ SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
                         {
                             // #i47831# add an additional whitespace, so that
                             // "document whitespaces" are not ignored.;
-                            rStream << "\\uc"
-                                << OString::number(nLen).getStr() << " ";
+                            rStream.WriteCharPtr( "\\uc" )
+                               .WriteCharPtr( OString::number(nLen).getStr() ).WriteCharPtr( " " );
                             *pUCMode = nLen;
                         }
-                        rStream << "\\u"
-                            << OString::number(
-                                static_cast<sal_Int32>(c)).getStr();
+                        rStream.WriteCharPtr( "\\u" )
+                           .WriteCharPtr( OString::number(
+                                static_cast<sal_Int32>(c)).getStr() );
                     }
 
                     for (sal_Int32 nI = 0; nI < nLen; ++nI)
                     {
-                        rStream << "\\'";
+                        rStream.WriteCharPtr( "\\'" );
                         Out_Hex(rStream, sConverted[nI], 2);
                     }
                 }
@@ -142,7 +142,7 @@ SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
     }
 
     if (pStr)
-        rStream << pStr << ' ';
+        rStream.WriteCharPtr( pStr ).WriteChar( ' ' );
 
     return rStream;
 }
@@ -154,7 +154,7 @@ SvStream& RTFOutFuncs::Out_String( SvStream& rStream, const OUString& rStr,
     for (sal_Int32 n = 0; n < rStr.getLength(); ++n)
         Out_Char(rStream, rStr[n], &nUCMode, eDestEnc, bWriteHelpFile);
     if (nUCMode != 1)
-      rStream << "\\uc1"<< " "; // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.;
+      rStream.WriteCharPtr( "\\uc1" ).WriteCharPtr( " " ); // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.;
     return rStream;
 }
 
@@ -175,7 +175,7 @@ SvStream& RTFOutFuncs::Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nLe
             *pStr += 39;
         nHex >>= 4;
     }
-    return rStream << pStr;
+    return rStream.WriteCharPtr( pStr );
 }
 
 

@@ -227,13 +227,13 @@ void ScHTMLExport::WriteImage( OUString& rLinkName, const Graphic& rGrf,
     // <IMG SRC="..."[ rImgOptions]>
     if( !rLinkName.isEmpty() )
     {
-        rStrm << '<' << OOO_STRING_SVTOOLS_HTML_image << ' ' << OOO_STRING_SVTOOLS_HTML_O_src << "=\"";
+        rStrm.WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_image ).WriteChar( ' ' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_src ).WriteCharPtr( "=\"" );
         HTMLOutFuncs::Out_String( rStrm, URIHelper::simpleNormalizedMakeRelative(
                     aBaseURL,
-                    rLinkName ), eDestEnc ) << '\"';
+                    rLinkName ), eDestEnc ).WriteChar( '\"' );
         if ( !rImgOptions.isEmpty() )
-            rStrm << rImgOptions.getStr();
-        rStrm << '>' << SAL_NEWLINE_STRING << GetIndentStr();
+            rStrm.WriteCharPtr( rImgOptions.getStr() );
+        rStrm.WriteChar( '>' ).WriteCharPtr( SAL_NEWLINE_STRING ).WriteCharPtr( GetIndentStr() );
     }
 }
 

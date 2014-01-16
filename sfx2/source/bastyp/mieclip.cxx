@@ -78,7 +78,7 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
         pStrm = new SvMemoryStream( ( nEnd - nStt < 0x10000l
                                         ? nEnd - nStt + 32
                                         : 0 ));
-        *pStrm << rStream;
+        pStrm->WriteStream( rStream );
         pStrm->SetStreamSize( nEnd - nStt + 1L );
         pStrm->Seek( STREAM_SEEK_TO_BEGIN );
         return pStrm;
@@ -91,7 +91,7 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
         {
             rStream.Seek(nFragStart);
             pStrm = new SvMemoryStream(nSize);
-            *pStrm << rStream;
+            pStrm->WriteStream( rStream );
             pStrm->SetStreamSize(nSize);
             pStrm->Seek(STREAM_SEEK_TO_BEGIN);
             return pStrm;

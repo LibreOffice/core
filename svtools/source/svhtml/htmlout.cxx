@@ -514,7 +514,7 @@ SvStream& HTMLOutFuncs::Out_AsciiTag( SvStream& rStream, const sal_Char *pStr,
     sal_Char sStt[3] = "</";
     if( bOn )
         sStt[1] = 0;
-    return (rStream << sStt << pStr << '>');
+    return (rStream.WriteCharPtr( sStt ).WriteCharPtr( pStr ).WriteChar( '>' ));
 }
 
 SvStream& HTMLOutFuncs::Out_Char( SvStream& rStream, sal_Unicode c,
@@ -522,7 +522,7 @@ SvStream& HTMLOutFuncs::Out_Char( SvStream& rStream, sal_Unicode c,
                                   OUString *pNonConvertableChars )
 {
     OString sOut = lcl_ConvertCharToHTML( c, rContext, pNonConvertableChars );
-    rStream << sOut.getStr();
+    rStream.WriteCharPtr( sOut.getStr() );
     return rStream;
 }
 
@@ -545,7 +545,7 @@ SvStream& HTMLOutFuncs::FlushToAscii( SvStream& rStream,
     OString sOut = lcl_FlushToAscii( rContext );
 
     if (!sOut.isEmpty())
-        rStream << sOut.getStr();
+        rStream.WriteCharPtr( sOut.getStr() );
 
     return rStream;
 }
@@ -568,17 +568,17 @@ SvStream& HTMLOutFuncs::Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nL
             *pStr += 39;
         nHex >>= 4;
     }
-    return rStream << pStr;
+    return rStream.WriteCharPtr( pStr );
 }
 
 
 SvStream& HTMLOutFuncs::Out_Color( SvStream& rStream, const Color& rColor,
                                    rtl_TextEncoding )
 {
-    rStream << "\"#";
+    rStream.WriteCharPtr( "\"#" );
     if( rColor.GetColor() == COL_AUTO )
     {
-        rStream << "000000";
+        rStream.WriteCharPtr( "000000" );
     }
     else
     {
@@ -586,7 +586,7 @@ SvStream& HTMLOutFuncs::Out_Color( SvStream& rStream, const Color& rColor,
         Out_Hex( rStream, rColor.GetGreen(), 2 );
         Out_Hex( rStream, rColor.GetBlue(), 2 );
     }
-    rStream << '\"';
+    rStream.WriteChar( '\"' );
 
     return rStream;
 }
@@ -617,9 +617,9 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
         .append(' ')
         .append(OOO_STRING_SVTOOLS_HTML_O_name)
         .append("=\"");
-    rStream << sOut.makeStringAndClear().getStr();
+    rStream.WriteCharPtr( sOut.makeStringAndClear().getStr() );
     Out_String( rStream, rOutName, eDestEnc, pNonConvertableChars );
-    rStream << "\">";
+    rStream.WriteCharPtr( "\">" );
 
     for( sal_uInt16 i=0U; i<rIMap.GetIMapObjectCount(); i++ )
     {
@@ -701,16 +701,16 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
             if( pShape )
             {
                 if( pDelim )
-                    rStream << pDelim;
+                    rStream.WriteCharPtr( pDelim );
                 if( pIndentArea )
-                    rStream << pIndentArea;
+                    rStream.WriteCharPtr( pIndentArea );
 
                 sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_area)
                     .append(' ').append(OOO_STRING_SVTOOLS_HTML_O_shape)
                     .append('=').append(pShape).append(' ')
                     .append(OOO_STRING_SVTOOLS_HTML_O_coords).append("=\"")
                     .append(aCoords).append("\" ");
-                rStream << sOut.makeStringAndClear().getStr();
+                rStream.WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
                 OUString aURL( pObj->GetURL() );
                 if( !aURL.isEmpty() && pObj->IsActive() )
@@ -718,19 +718,19 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                     aURL = URIHelper::simpleNormalizedMakeRelative(
                         rBaseURL, aURL );
                     sOut.append(OOO_STRING_SVTOOLS_HTML_O_href).append("=\"");
-                    rStream << sOut.makeStringAndClear().getStr();
-                    Out_String( rStream, aURL, eDestEnc, pNonConvertableChars ) << '\"';
+                    rStream.WriteCharPtr( sOut.makeStringAndClear().getStr() );
+                    Out_String( rStream, aURL, eDestEnc, pNonConvertableChars ).WriteChar( '\"' );
                 }
                 else
-                    rStream << OOO_STRING_SVTOOLS_HTML_O_nohref;
+                    rStream.WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_nohref );
 
                 const OUString& rObjName = pObj->GetName();
                 if( !rObjName.isEmpty() )
                 {
                     sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name)
                         .append("=\"");
-                    rStream << sOut.makeStringAndClear().getStr();
-                    Out_String( rStream, rObjName, eDestEnc, pNonConvertableChars ) << '\"';
+                    rStream.WriteCharPtr( sOut.makeStringAndClear().getStr() );
+                    Out_String( rStream, rObjName, eDestEnc, pNonConvertableChars ).WriteChar( '\"' );
                 }
 
                 const OUString& rTarget = pObj->GetTarget();
@@ -738,8 +738,8 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                 {
                     sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_target)
                         .append("=\"");
-                    rStream << sOut.makeStringAndClear().getStr();
-                    Out_String( rStream, rTarget, eDestEnc, pNonConvertableChars ) << '\"';
+                    rStream.WriteCharPtr( sOut.makeStringAndClear().getStr() );
+                    Out_String( rStream, rTarget, eDestEnc, pNonConvertableChars ).WriteChar( '\"' );
                 }
 
                 OUString rDesc( pObj->GetAltText() );
@@ -750,8 +750,8 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                 {
                     sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_alt)
                         .append("=\"");
-                    rStream << sOut.makeStringAndClear().getStr();
-                    Out_String( rStream, rDesc, eDestEnc, pNonConvertableChars ) << '\"';
+                    rStream.WriteCharPtr( sOut.makeStringAndClear().getStr() );
+                    Out_String( rStream, rDesc, eDestEnc, pNonConvertableChars ).WriteChar( '\"' );
                 }
 
                 const SvxMacroTableDtor& rMacroTab = pObj->GetMacroTable();
@@ -759,16 +759,16 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                     Out_Events( rStream, rMacroTab, pEventTable,
                                 bOutStarBasic, eDestEnc, pNonConvertableChars );
 
-                rStream << '>';
+                rStream.WriteChar( '>' );
             }
         }
 
     }
 
     if( pDelim )
-        rStream << pDelim;
+        rStream.WriteCharPtr( pDelim );
     if( pIndentMap )
-        rStream << pIndentMap;
+        rStream.WriteCharPtr( pIndentMap );
     Out_AsciiTag( rStream, OOO_STRING_SVTOOLS_HTML_map, sal_False );
 
     return rStream;
@@ -798,7 +798,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
         sOut.append(' ')
             .append(OOO_STRING_SVTOOLS_HTML_O_language)
             .append("=\"");
-        rStrm << sOut.makeStringAndClear().getStr();
+        rStrm.WriteCharPtr( sOut.makeStringAndClear().getStr() );
         Out_String( rStrm, rLanguage, eDestEnc, pNonConvertableChars );
         sOut.append('\"');
     }
@@ -806,7 +806,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
     if( !rSrc.isEmpty() )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_src).append("=\"");
-        rStrm << sOut.makeStringAndClear().getStr();
+        rStrm.WriteCharPtr( sOut.makeStringAndClear().getStr() );
         Out_String( rStrm, URIHelper::simpleNormalizedMakeRelative(rBaseURL, rSrc), eDestEnc, pNonConvertableChars );
         sOut.append('\"');
     }
@@ -815,7 +815,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_sdlibrary)
             .append("=\"");
-        rStrm << sOut.makeStringAndClear().getStr();
+        rStrm.WriteCharPtr( sOut.makeStringAndClear().getStr() );
         Out_String( rStrm, *pSBLibrary, eDestEnc, pNonConvertableChars );
         sOut.append('\"');
     }
@@ -824,23 +824,23 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_sdmodule)
             .append("=\"");
-        rStrm << sOut.makeStringAndClear().getStr();
+        rStrm.WriteCharPtr( sOut.makeStringAndClear().getStr() );
         Out_String( rStrm, *pSBModule, eDestEnc, pNonConvertableChars );
         sOut.append('\"');
     }
 
     sOut.append('>');
 
-    rStrm << sOut.makeStringAndClear().getStr();
+    rStrm.WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
     if( !rSource.isEmpty() || pSBLibrary || pSBModule )
     {
-        rStrm << SAL_NEWLINE_STRING;
+        rStrm.WriteCharPtr( SAL_NEWLINE_STRING );
 
         if( JAVASCRIPT != eScriptType )
         {
-            rStrm << "<!--"
-                  << SAL_NEWLINE_STRING;
+            rStrm.WriteCharPtr( "<!--" )
+                 .WriteCharPtr( SAL_NEWLINE_STRING );
         }
 
         if( STARBASIC == eScriptType )
@@ -851,7 +851,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
                     .append(OOO_STRING_SVTOOLS_HTML_SB_library)
                     .append(' ')
                     .append(OUStringToOString(*pSBLibrary, eDestEnc));
-                rStrm << sOut.makeStringAndClear().getStr() << SAL_NEWLINE_STRING;
+                rStrm.WriteCharPtr( sOut.makeStringAndClear().getStr() ).WriteCharPtr( SAL_NEWLINE_STRING );
             }
 
             if( pSBModule )
@@ -860,7 +860,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
                     .append(OOO_STRING_SVTOOLS_HTML_SB_module)
                     .append(' ')
                     .append(OUStringToOString(*pSBModule, eDestEnc));
-                rStrm << sOut.makeStringAndClear().getStr() << SAL_NEWLINE_STRING;
+                rStrm.WriteCharPtr( sOut.makeStringAndClear().getStr() ).WriteCharPtr( SAL_NEWLINE_STRING );
             }
         }
 
@@ -869,16 +869,16 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
             // we write the module in ANSI-charset, but with
             // the system new line.
             const OString sSource(OUStringToOString(rSource, eDestEnc));
-            rStrm << sSource.getStr() << SAL_NEWLINE_STRING;
+            rStrm.WriteCharPtr( sSource.getStr() ).WriteCharPtr( SAL_NEWLINE_STRING );
         }
-        rStrm << SAL_NEWLINE_STRING;
+        rStrm.WriteCharPtr( SAL_NEWLINE_STRING );
 
         if( JAVASCRIPT != eScriptType )
         {
             // MIB/MM: if it is not StarBasic, a // could be wrong.
             // As the comment is removed during reading, it is not helping us....
-            rStrm << (STARBASIC == eScriptType ? "' -->" : "// -->")
-                  << SAL_NEWLINE_STRING;
+            rStrm.WriteCharPtr( STARBASIC == eScriptType ? "' -->" : "// -->" )
+                 .WriteCharPtr( SAL_NEWLINE_STRING );
         }
     }
 
@@ -912,9 +912,9 @@ SvStream& HTMLOutFuncs::Out_Events( SvStream& rStrm,
             {
                 OStringBuffer sOut;
                 sOut.append(' ').append(pStr).append("=\"");
-                rStrm << sOut.makeStringAndClear().getStr();
+                rStrm.WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
-                Out_String( rStrm, pMacro->GetMacName(), eDestEnc, pNonConvertableChars ) << '\"';
+                Out_String( rStrm, pMacro->GetMacName(), eDestEnc, pNonConvertableChars ).WriteChar( '\"' );
             }
         }
         i++;

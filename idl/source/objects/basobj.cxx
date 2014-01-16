@@ -44,15 +44,15 @@ void SvMetaObject::Save( SvPersistStream & )
 void SvMetaObject::WriteTab( SvStream & rOutStm, sal_uInt16 nTab )
 {
     while( nTab-- )
-        rOutStm << "    ";
+        rOutStm.WriteCharPtr( "    " );
 }
 
 void SvMetaObject::WriteStars( SvStream & rOutStm )
 {
-    rOutStm << '/';
+    rOutStm.WriteChar( '/' );
     for( int i = 6; i > 0; i-- )
-        rOutStm << "**********";
-    rOutStm << '/' << endl;
+        rOutStm.WriteCharPtr( "**********" );
+    rOutStm.WriteChar( '/' ) << endl;
 }
 
 sal_Bool SvMetaObject::TestAndSeekSpaceOnly( SvStream & rOutStm, sal_uLong nBegPos )
@@ -144,7 +144,7 @@ void SvMetaName::Save( SvPersistStream & rStm )
     if( aConfigName.IsSet() )   nMask |= 0x08;
     if( aDescription.IsSet() )  nMask |= 0x10;
 
-    rStm << nMask;
+    rStm.WriteUChar( nMask );
     if( nMask & 0x01 ) WriteSvString( rStm, aName );
     if( nMask & 0x02 ) WriteSvNumberIdentifier( rStm, aHelpContext );
     if( nMask & 0x04 ) WriteSvString( rStm, aHelpText );
@@ -219,18 +219,19 @@ void SvMetaName::WriteContextSvIdl( SvIdlDataBase &, SvStream &, sal_uInt16 )
 
 void SvMetaName::WriteDescription( SvStream & rOutStm )
 {
-    rOutStm << "<DESCRIPTION>" << endl;
+    rOutStm.WriteCharPtr( "<DESCRIPTION>" ) << endl;
 
     OString aDesc( GetDescription().getString() );
     sal_Int32 nPos = aDesc.indexOf('\n');
     while ( nPos != -1 )
     {
-        rOutStm << aDesc.copy( 0, nPos ).getStr() << endl;
+        rOutStm.WriteCharPtr( aDesc.copy( 0, nPos ).getStr() ) << endl;
         aDesc = aDesc.copy(nPos+1);
         nPos = aDesc.indexOf('\n');
     }
 
-    rOutStm << aDesc.getStr() << endl << "</DESCRIPTION>" << endl;
+    rOutStm.WriteCharPtr( aDesc.getStr() ) << endl;
+    rOutStm.WriteCharPtr( "</DESCRIPTION>" ) << endl;
 }
 
 void SvMetaName::WriteAttributesSvIdl( SvIdlDataBase & rBase,
@@ -240,25 +241,25 @@ void SvMetaName::WriteAttributesSvIdl( SvIdlDataBase & rBase,
     if( aHelpContext.IsSet() || aHelpText.IsSet() || aConfigName.IsSet() )
     {
         WriteTab( rOutStm, nTab );
-        rOutStm << "// class SvMetaName" << endl;
+        rOutStm.WriteCharPtr( "// class SvMetaName" ) << endl;
     }
     if( aHelpContext.IsSet() )
     {
         WriteTab( rOutStm, nTab );
         aHelpContext.WriteSvIdl( SvHash_HelpContext(), rOutStm, nTab );
-        rOutStm << ';' << endl;
+        rOutStm.WriteChar( ';' ) << endl;
     }
     if( aHelpText.IsSet() )
     {
         WriteTab( rOutStm, nTab );
         aHelpText.WriteSvIdl( rBase, rOutStm, nTab );
-        rOutStm << ';' << endl;
+        rOutStm.WriteChar( ';' ) << endl;
     }
     if( aConfigName.IsSet() )
     {
         WriteTab( rOutStm, nTab );
         aConfigName.WriteSvIdl( SvHash_ConfigName(), rOutStm, nTab );
-        rOutStm << ';' << endl;
+        rOutStm.WriteChar( ';' ) << endl;
     }
 }
 
@@ -297,7 +298,7 @@ void SvMetaName::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
 {
     sal_uLong nBeginPos = rOutStm.Tell();
     WriteTab( rOutStm, nTab );
-    rOutStm << '[' << endl;
+    rOutStm.WriteChar( '[' ) << endl;
     sal_uLong nOldPos = rOutStm.Tell();
     WriteAttributesSvIdl( rBase, rOutStm, nTab +1 );
 
@@ -308,13 +309,13 @@ void SvMetaName::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
     else
     {
         WriteTab( rOutStm, nTab );
-        rOutStm << ']';
+        rOutStm.WriteChar( ']' );
         nBeginPos = rOutStm.Tell();
           rOutStm << endl;
     }
 
     WriteTab( rOutStm, nTab );
-    rOutStm << '{' << endl;
+    rOutStm.WriteChar( '{' ) << endl;
     nOldPos = rOutStm.Tell();
     WriteContextSvIdl( rBase, rOutStm, nTab +1 );
 
@@ -325,7 +326,7 @@ void SvMetaName::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
     else
     {
         WriteTab( rOutStm, nTab );
-        rOutStm << '}';
+        rOutStm.WriteChar( '}' );
     }
 }
 
@@ -335,7 +336,7 @@ void SvMetaName::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
 {
     sal_uLong nBeginPos = rOutStm.Tell();
     WriteTab( rOutStm, nTab );
-    rOutStm << '[' << endl;
+    rOutStm.WriteChar( '[' ) << endl;
     sal_uLong nOldPos = rOutStm.Tell();
     WriteAttributes( rBase, rOutStm, nTab +1, nT, nA );
 
@@ -357,7 +358,7 @@ void SvMetaName::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
     {
         rOutStm.Seek( nPos );
         WriteTab( rOutStm, nTab );
-        rOutStm << ']' << endl;
+        rOutStm.WriteChar( ']' ) << endl;
     }
 }
 
@@ -368,19 +369,19 @@ void SvMetaName::WriteAttributes( SvIdlDataBase &, SvStream & rOutStm,
     if( GetHelpText().IsSet() || GetHelpContext().IsSet() )
     {
         WriteTab( rOutStm, nTab );
-        rOutStm << "// class SvMetaName" << endl;
+        rOutStm.WriteCharPtr( "// class SvMetaName" ) << endl;
     }
     if( GetHelpText().IsSet() )
     {
         WriteTab( rOutStm, nTab );
-        rOutStm << "helpstring(\"" << GetHelpText().getString().getStr() << "\")," << endl;
+        rOutStm.WriteCharPtr( "helpstring(\"" ).WriteCharPtr( GetHelpText().getString().getStr() ).WriteCharPtr( "\")," ) << endl;
     }
     if( GetHelpContext().IsSet() )
     {
         WriteTab( rOutStm, nTab );
-        rOutStm << "helpcontext("
-                << OString::number(GetHelpContext().GetValue()).getStr()
-                << ")," << endl;
+        rOutStm.WriteCharPtr( "helpcontext(" )
+               .WriteCharPtr( OString::number(GetHelpContext().GetValue()).getStr() )
+               .WriteCharPtr( ")," ) << endl;
     }
 }
 
@@ -426,7 +427,7 @@ void SvMetaReference::Save( SvPersistStream & rStm )
         nMask |= 0x01;
 
     // write data
-    rStm << nMask;
+    rStm.WriteUChar( nMask );
     if( nMask & 0x01 ) WriteSvPersistBase( rStm, aRef );
 }
 
@@ -471,7 +472,7 @@ void SvMetaExtern::Save( SvPersistStream & rStm )
     if( bReadVersion )              nMask |= 0x10;
 
     // write data
-    rStm << nMask;
+    rStm.WriteUChar( nMask );
     if( nMask & 0x01 ) WriteSvPersistBase( rStm, pModule );
     if( nMask & 0x02 ) WriteSvGlobalName( rStm, aUUId );
     if( nMask & 0x04 ) WriteSvVersion( rStm, aVersion );
@@ -512,19 +513,19 @@ void SvMetaExtern::WriteAttributesSvIdl( SvIdlDataBase & rBase,
     if( bReadUUId || bReadVersion )
     {
         WriteTab( rOutStm, nTab );
-        rOutStm << "// class SvMetaExtern" << endl;
+        rOutStm.WriteCharPtr( "// class SvMetaExtern" ) << endl;
 
         if( bReadUUId )
         {
             WriteTab( rOutStm, nTab );
             aUUId.WriteSvIdl( rOutStm );
-            rOutStm << ';' << endl;
+            rOutStm.WriteChar( ';' ) << endl;
         }
         if( bReadVersion )
         {
             WriteTab( rOutStm, nTab );
             aVersion.WriteSvIdl( rOutStm );
-            rOutStm << ';' << endl;
+            rOutStm.WriteChar( ';' ) << endl;
         }
     }
 }
@@ -556,15 +557,15 @@ void SvMetaExtern::WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm,
     SvMetaReference::WriteAttributes( rBase, rOutStm, nTab, nT, nA );
 
     WriteTab( rOutStm, nTab );
-    rOutStm << "// class SvMetaExtern" << endl;
+    rOutStm.WriteCharPtr( "// class SvMetaExtern" ) << endl;
     WriteTab( rOutStm, nTab );
-    rOutStm << "uuid(" << OUStringToOString(GetUUId().GetHexName(), RTL_TEXTENCODING_UTF8).getStr() << ")," << endl;
+    rOutStm.WriteCharPtr( "uuid(" ).WriteCharPtr( OUStringToOString(GetUUId().GetHexName(), RTL_TEXTENCODING_UTF8).getStr() ).WriteCharPtr( ")," ) << endl;
     WriteTab( rOutStm, nTab );
-    rOutStm << "version("
-        << OString::number(aVersion.GetMajorVersion()).getStr()
-        << '.'
-        << OString::number(aVersion.GetMinorVersion()).getStr()
-        << ")," << endl;
+    rOutStm.WriteCharPtr( "version(" )
+       .WriteCharPtr( OString::number(aVersion.GetMajorVersion()).getStr() )
+       .WriteChar( '.' )
+       .WriteCharPtr( OString::number(aVersion.GetMinorVersion()).getStr() )
+       .WriteCharPtr( ")," ) << endl;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

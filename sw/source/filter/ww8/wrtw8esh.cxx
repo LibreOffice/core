@@ -1478,7 +1478,7 @@ void SwEscherEx::WritePictures()
         mxGlobal->SetNewBlipStreamOffset( nEndPos );
 
         pPicStrm->Seek( 0 );
-        rWrt.Strm() << *pPicStrm;
+        rWrt.Strm().WriteStream( *pPicStrm );
     }
     Flush();
 }
@@ -2244,7 +2244,7 @@ void SwBasicEscherEx::WritePictures()
         mxGlobal->WriteBlibStoreEntry(*pEscherStrm, 1, sal_True, nEndPos);
 
         pPicStrm->Seek(0);
-        *pEscherStrm << *pPicStrm;
+        pEscherStrm->WriteStream( *pPicStrm );
     }
 }
 
@@ -2407,7 +2407,7 @@ SwEscherEx::~SwEscherEx()
 void SwEscherEx::FinishEscher()
 {
     pEscherStrm->Seek(0);
-    *rWrt.pTableStrm << *pEscherStrm;
+    rWrt.pTableStrm->WriteStream( *pEscherStrm );
     delete pEscherStrm, pEscherStrm = 0;
 }
 

@@ -674,7 +674,7 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
                 if( pSrcStm )
                 {
                     xStream->SetBufferSize( 0xff00 );
-                    *xStream << *pSrcStm;
+                    xStream->WriteStream( *pSrcStm );
                     delete pSrcStm;
                 }
 

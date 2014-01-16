@@ -1053,7 +1053,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                 // copy temp stream to XOutputStream
                 SvOutputStream aOutputStream( aSettings.mxOutputStream );
                 aStream.Seek(0);
-                aOutputStream << aStream;
+                aOutputStream.WriteStream( aStream );
             }
             else
             {

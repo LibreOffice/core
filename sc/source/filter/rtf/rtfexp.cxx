@@ -66,25 +66,25 @@ ScRTFExport::~ScRTFExport()
 
 sal_uLong ScRTFExport::Write()
 {
-    rStrm << '{' << OOO_STRING_SVTOOLS_RTF_RTF;
-    rStrm << OOO_STRING_SVTOOLS_RTF_ANSI << SAL_NEWLINE_STRING;
+    rStrm.WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_RTF );
+    rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ANSI ).WriteCharPtr( SAL_NEWLINE_STRING );
 
     // Data
     for ( SCTAB nTab = aRange.aStart.Tab(); nTab <= aRange.aEnd.Tab(); nTab++ )
     {
         if ( nTab > aRange.aStart.Tab() )
-            rStrm << OOO_STRING_SVTOOLS_RTF_PAR;
+            rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PAR );
         WriteTab( nTab );
     }
 
-    rStrm << '}' << SAL_NEWLINE_STRING;
+    rStrm.WriteChar( '}' ).WriteCharPtr( SAL_NEWLINE_STRING );
     return rStrm.GetError();
 }
 
 
 void ScRTFExport::WriteTab( SCTAB nTab )
 {
-    rStrm << '{' << SAL_NEWLINE_STRING;
+    rStrm.WriteChar( '{' ).WriteCharPtr( SAL_NEWLINE_STRING );
     if ( pDoc->HasTable( nTab ) )
     {
         memset( &pCellX[0], 0, (MAXCOL+2) * sizeof(sal_uLong) );
@@ -101,14 +101,14 @@ void ScRTFExport::WriteTab( SCTAB nTab )
             WriteRow( nTab, nRow );
         }
     }
-    rStrm << '}' << SAL_NEWLINE_STRING;
+    rStrm.WriteChar( '}' ).WriteCharPtr( SAL_NEWLINE_STRING );
 }
 
 
 void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
 {
-    rStrm << OOO_STRING_SVTOOLS_RTF_TROWD << OOO_STRING_SVTOOLS_RTF_TRGAPH << "30" << OOO_STRING_SVTOOLS_RTF_TRLEFT << "-30";
-    rStrm << OOO_STRING_SVTOOLS_RTF_TRRH << OString::number(pDoc->GetRowHeight(nRow, nTab)).getStr();
+    rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TROWD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRGAPH ).WriteCharPtr( "30" ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRLEFT ).WriteCharPtr( "-30" );
+    rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRRH ).WriteCharPtr( OString::number(pDoc->GetRowHeight(nRow, nTab)).getStr() );
     SCCOL nCol;
     SCCOL nEndCol = aRange.aEnd.Col();
     for ( nCol = aRange.aStart.Col(); nCol <= nEndCol; nCol++ )
@@ -120,12 +120,12 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
         const sal_Char* pChar;
 
         if ( rMergeAttr.GetColMerge() != 0 )
-            rStrm << OOO_STRING_SVTOOLS_RTF_CLMGF;
+            rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CLMGF );
         else
         {
             const ScMergeFlagAttr& rMergeFlagAttr = (const ScMergeFlagAttr&) pAttr->GetItem( ATTR_MERGE_FLAG );
             if ( rMergeFlagAttr.IsHorOverlapped() )
-                rStrm << OOO_STRING_SVTOOLS_RTF_CLMRG;
+                rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CLMRG );
         }
 
         switch( rVerJustifyItem.GetValue() )
@@ -137,13 +137,13 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
             default:                        pChar = NULL;           break;
         }
         if ( pChar )
-            rStrm << pChar;
+            rStrm.WriteCharPtr( pChar );
 
-        rStrm << OOO_STRING_SVTOOLS_RTF_CELLX << OString::number(pCellX[nCol+1]).getStr();
+        rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CELLX ).WriteCharPtr( OString::number(pCellX[nCol+1]).getStr() );
         if ( (nCol & 0x0F) == 0x0F )
-            rStrm << SAL_NEWLINE_STRING; // Do not let lines get too long
+            rStrm.WriteCharPtr( SAL_NEWLINE_STRING ); // Do not let lines get too long
     }
-    rStrm << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_PLAIN << OOO_STRING_SVTOOLS_RTF_INTBL << SAL_NEWLINE_STRING;
+    rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PARD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PLAIN ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_INTBL ).WriteCharPtr( SAL_NEWLINE_STRING );
 
     sal_uLong nStrmPos = rStrm.Tell();
     for ( nCol = aRange.aStart.Col(); nCol <= nEndCol; nCol++ )
@@ -151,11 +151,11 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
         WriteCell( nTab, nRow, nCol );
         if ( rStrm.Tell() - nStrmPos > 255 )
         {   // Do not let lines get too long
-            rStrm << SAL_NEWLINE_STRING;
+            rStrm.WriteCharPtr( SAL_NEWLINE_STRING );
             nStrmPos = rStrm.Tell();
         }
     }
-    rStrm << OOO_STRING_SVTOOLS_RTF_ROW << SAL_NEWLINE_STRING;
+    rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ROW ).WriteCharPtr( SAL_NEWLINE_STRING );
 }
 
 
@@ -166,7 +166,7 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
     const ScMergeFlagAttr& rMergeFlagAttr = (const ScMergeFlagAttr&) pAttr->GetItem( ATTR_MERGE_FLAG );
     if ( rMergeFlagAttr.IsHorOverlapped() )
     {
-        rStrm << OOO_STRING_SVTOOLS_RTF_CELL;
+        rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CELL );
         return ;
     }
 
@@ -221,32 +221,32 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
         case SVX_HOR_JUSTIFY_REPEAT:
         default:                        pChar = OOO_STRING_SVTOOLS_RTF_QL;  break;
     }
-    rStrm << pChar;
+    rStrm.WriteCharPtr( pChar );
 
     if ( rWeightItem.GetWeight() >= WEIGHT_BOLD )
     {   // bold
         bResetAttr = sal_True;
-        rStrm << OOO_STRING_SVTOOLS_RTF_B;
+        rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_B );
     }
     if ( rPostureItem.GetPosture() != ITALIC_NONE )
     {   // italic
         bResetAttr = sal_True;
-        rStrm << OOO_STRING_SVTOOLS_RTF_I;
+        rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_I );
     }
     if ( rUnderlineItem.GetLineStyle() != UNDERLINE_NONE )
     {   // underline
         bResetAttr = sal_True;
-        rStrm << OOO_STRING_SVTOOLS_RTF_UL;
+        rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_UL );
     }
 
-    rStrm << ' ';
+    rStrm.WriteChar( ' ' );
     RTFOutFuncs::Out_String( rStrm, aContent );
-    rStrm << OOO_STRING_SVTOOLS_RTF_CELL;
+    rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CELL );
 
     if ( bResetPar )
-        rStrm << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_INTBL;
+        rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PARD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_INTBL );
     if ( bResetAttr )
-        rStrm << OOO_STRING_SVTOOLS_RTF_PLAIN;
+        rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PLAIN );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -118,7 +118,7 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
             {
                 SvOutputStream aOStm( xOStm );
 
-                aOStm << *pIStm;
+                aOStm.WriteStream( *pIStm );
                 bRet = ( aOStm.Tell() && ( aOStm.GetError() == ERRCODE_NONE ) );
 
                 delete pIStm;

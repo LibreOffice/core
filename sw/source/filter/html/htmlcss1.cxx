@@ -1730,7 +1730,7 @@ sal_Bool SwHTMLParser::FileDownload( const OUString& rURL,
     if( pStream )
     {
         SvMemoryStream aStream;
-        aStream << *pStream;
+        aStream.WriteStream( *pStream );
 
         aStream.Seek( STREAM_SEEK_TO_END );
         rStr = OUString((const sal_Char *)aStream.GetData(), aStream.Tell(),

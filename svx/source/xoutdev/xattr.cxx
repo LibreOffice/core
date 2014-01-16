@@ -1198,8 +1198,8 @@ namespace
             for(sal_uInt32 b(0L); b < nPointCount; b++)
             {
                 const basegfx::B2DPoint aPoint(aCandidate.getB2DPoint(b));
-                rOut << aPoint.getX();
-                rOut << aPoint.getY();
+                rOut.WriteDouble( aPoint.getX() );
+                rOut.WriteDouble( aPoint.getY() );
 
                 if(bControlPoints)
                 {
@@ -1209,12 +1209,12 @@ namespace
                     if(bEdgeIsCurve)
                     {
                         const basegfx::B2DVector aControlVectorA(aCandidate.getPrevControlPoint(b));
-                        rOut << aControlVectorA.getX();
-                        rOut << aControlVectorA.getY();
+                        rOut.WriteDouble( aControlVectorA.getX() );
+                        rOut.WriteDouble( aControlVectorA.getY() );
 
                         const basegfx::B2DVector aControlVectorB(aCandidate.getNextControlPoint(b));
-                        rOut << aControlVectorB.getX();
-                        rOut << aControlVectorB.getY();
+                        rOut.WriteDouble( aControlVectorB.getX() );
+                        rOut.WriteDouble( aControlVectorB.getY() );
                     }
                 }
             }

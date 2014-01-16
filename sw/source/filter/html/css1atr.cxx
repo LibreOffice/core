@@ -217,9 +217,9 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
         OutNewLine();
         sOut.append("<" + OString(OOO_STRING_SVTOOLS_HTML_style) + " " +
                     OString(OOO_STRING_SVTOOLS_HTML_O_type) + "=\"text/css\">");
-        Strm() << sOut.makeStringAndClear().getStr();
+        Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
         OutNewLine();
-        Strm() << '<' << OOO_STRING_SVTOOLS_HTML_comment;
+        Strm().WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_comment );
 
         IncIndentLevel();
     }
@@ -265,7 +265,7 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
     if( nCSS1OutMode & CSS1_OUTMODE_ENCODE )
     {
         // In STYLE-Optionen den String codieren
-        Strm() << sOut.makeStringAndClear().getStr();
+        Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
         if( pVal )
             HTMLOutFuncs::Out_String( Strm(), OUString::createFromAscii(pVal),
                                       eDestEnc, &aNonConvertableCharacters );
@@ -282,7 +282,7 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
     }
 
     if (!sOut.isEmpty())
-        Strm() << sOut.makeStringAndClear().getStr();
+        Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 }
 
 static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
@@ -516,7 +516,7 @@ void SwHTMLWriter::OutCSS1_SfxItemSet( const SfxItemSet& rItemSet,
             break;
         }
         if (!sOut.isEmpty())
-            Strm() << sOut.makeStringAndClear().getStr();
+            Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
     }
 }
 
@@ -633,7 +633,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, sal_Bool bUsed )
     {
         DecIndentLevel();
         OutNewLine();
-        Strm() << "-->";
+        Strm().WriteCharPtr( "-->" );
 
         OutNewLine();
         HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_style, sal_False );
@@ -1809,12 +1809,12 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
     {
         rHTMLWrt.OutNewLine();
         OString sTmp(OUStringToOString(aSelector, rHTMLWrt.eDestEnc));
-        rWrt.Strm() << sTmp.getStr() << " {";
+        rWrt.Strm().WriteCharPtr( sTmp.getStr() ).WriteCharPtr( " {" );
         rHTMLWrt.bFirstCSS1Property = sal_False;
     }
 
     if( !rHTMLWrt.bFirstCSS1Property )
-        rWrt.Strm() << sCSS1_rule_end;
+        rWrt.Strm().WriteCharPtr( sCSS1_rule_end );
 
     return rWrt;
 }
@@ -1835,7 +1835,7 @@ static Writer& OutCSS1_SwFtnInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
                              true, &aSelector );
         rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_font_size,
                                         sHTML_FTN_fontheight );
-        rHTMLWrt.Strm() << sCSS1_rule_end;
+        rHTMLWrt.Strm().WriteCharPtr( sCSS1_rule_end );
     }
 
     const SwCharFmt *pSymCharFmt = rInfo.GetCharFmt( *pDoc );
@@ -1899,7 +1899,7 @@ Writer& OutCSS1_BodyTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet )
     {
         // wenn eine Property als Bestandteil einer Style-Option
         // ausgegeben wurde, muss die Optiomn noch beendet werden
-        rWrt.Strm() << '\"';
+        rWrt.Strm().WriteChar( '\"' );
     }
 
     return rWrt;
@@ -1926,7 +1926,7 @@ Writer& OutCSS1_HintSpanTag( Writer& rWrt, const SfxPoolItem& rHt )
     Out( aCSS1AttrFnTab, rHt, rWrt );
 
     if( !rHTMLWrt.bFirstCSS1Property  && rHTMLWrt.bTagOn )
-        rWrt.Strm() << sCSS1_span_tag_end;
+        rWrt.Strm().WriteCharPtr( sCSS1_span_tag_end );
 
     return rWrt;
 }
@@ -1942,7 +1942,7 @@ Writer& OutCSS1_HintStyleOpt( Writer& rWrt, const SfxPoolItem& rHt )
     Out( aCSS1AttrFnTab, rHt, rWrt );
 
     if( !rHTMLWrt.bFirstCSS1Property )
-        rWrt.Strm() << '\"';
+        rWrt.Strm().WriteChar( '\"' );
 
     return rWrt;
 }
@@ -1958,7 +1958,7 @@ Writer& OutCSS1_TableBGStyleOpt( Writer& rWrt, const SfxPoolItem& rHt )
     OutCSS1_SvxBrush( rWrt, rHt, CSS1_BACKGROUND_TABLE );
 
     if( !rHTMLWrt.bFirstCSS1Property )
-        rWrt.Strm() << '\"';
+        rWrt.Strm().WriteChar( '\"' );
 
     return rWrt;
 }
@@ -1993,7 +1993,7 @@ Writer& OutCSS1_NumBulListStyleOpt( Writer& rWrt, const SwNumRule& rNumRule,
         rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_text_indent, nFirstLineOffset );
 
     if( !rHTMLWrt.bFirstCSS1Property )
-        rWrt.Strm() << '\"';
+        rWrt.Strm().WriteChar( '\"' );
 
     return rWrt;
 }
@@ -2195,7 +2195,7 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
         OutCSS1_SfxItemSet( *pItemSet, sal_False );
 
     if( !bFirstCSS1Property )
-        Strm() << '\"';
+        Strm().WriteChar( '\"' );
 }
 
 void SwHTMLWriter::OutCSS1_TableFrmFmtOptions( const SwFrmFmt& rFrmFmt )
@@ -2216,7 +2216,7 @@ void SwHTMLWriter::OutCSS1_TableFrmFmtOptions( const SwFrmFmt& rFrmFmt )
         OutCSS1_SwFmtLayoutSplit( *this, *pItem );
 
     if( !bFirstCSS1Property )
-        Strm() << '\"';
+        Strm().WriteChar( '\"' );
 }
 
 void SwHTMLWriter::OutCSS1_TableCellBorderHack(SwFrmFmt const& rFrmFmt)
@@ -2226,7 +2226,7 @@ void SwHTMLWriter::OutCSS1_TableCellBorderHack(SwFrmFmt const& rFrmFmt)
     OutCSS1_SvxBox(*this, rFrmFmt.GetBox());
     if (!bFirstCSS1Property)
     {
-        this->Strm() << cCSS1_style_opt_end;
+        this->Strm().WriteChar( cCSS1_style_opt_end );
     }
 }
 
@@ -2248,7 +2248,7 @@ void SwHTMLWriter::OutCSS1_SectionFmtOptions( const SwFrmFmt& rFrmFmt, const SwF
     }
 
     if( !bFirstCSS1Property )
-        Strm() << '\"';
+        Strm().WriteChar( '\"' );
 }
 
 static bool OutCSS1_FrmFmtBrush( SwHTMLWriter& rWrt,
@@ -2949,7 +2949,7 @@ static void OutCSS1_SwFmtDropAttrs( SwHTMLWriter& rHWrt,
     else if( pDCCharFmt )
         rHWrt.OutCSS1_SfxItemSet( pDCCharFmt->GetAttrSet() );
     else if( (rHWrt.nCSS1OutMode & CSS1_OUTMODE_ANY_OFF) == CSS1_OUTMODE_RULE_OFF )
-        rHWrt.Strm() << sCSS1_rule_end;
+        rHWrt.Strm().WriteCharPtr( sCSS1_rule_end );
 
 }
 

@@ -280,7 +280,7 @@ void WW8_WrtBookmarks::Write( WW8Export& rWrt)
     rWrt.WriteAsStringTable(aNames, rWrt.pFib->fcSttbfbkmk,rWrt.pFib->lcbSttbfbkmk);
     SvStream& rStrm = rWrt.bWrtWW8 ? *rWrt.pTableStrm : rWrt.Strm();
     rWrt.pFib->fcPlcfbkf = rStrm.Tell();
-    rStrm<<aTempStrm1;
+    rStrm.WriteStream( aTempStrm1 );
     SwWW8Writer::WriteLong(rStrm, rWrt.pFib->ccpText + rWrt.pFib->ccpTxbx);
     for (aItr = aSttCps.begin();aItr!=aSttCps.end();++aItr)
     {
@@ -291,7 +291,7 @@ void WW8_WrtBookmarks::Write( WW8Export& rWrt)
     }
     rWrt.pFib->lcbPlcfbkf = rStrm.Tell() - rWrt.pFib->fcPlcfbkf;
     rWrt.pFib->fcPlcfbkl = rStrm.Tell();
-    rStrm<<aTempStrm2;
+    rStrm.WriteStream( aTempStrm2 );
     SwWW8Writer::WriteLong(rStrm, rWrt.pFib->ccpText + rWrt.pFib->ccpTxbx);
     rWrt.pFib->lcbPlcfbkl = rStrm.Tell() - rWrt.pFib->fcPlcfbkl;
 }

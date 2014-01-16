@@ -180,13 +180,13 @@ void SvMetaSlot::Save( SvPersistStream & rStm )
     if( aAsynchron.IsSet() )    nMask |= 0x8000;
 
     // write data
-    rStm << nMask;
+    rStm.WriteUInt16( nMask );
     TEST_WRITE
     if( nMask & 0x0001 ) WriteSvPersistBase( rStm, aMethod );
     TEST_WRITE
     if( nMask & 0x0002 ) WriteSvIdentifier( rStm, aGroupId );
     TEST_WRITE
-    if( nMask & 0x0004 ) rStm << aHasCoreId;
+    if( nMask & 0x0004 ) rStm.WriteUChar( aHasCoreId );
     TEST_WRITE
     if( nMask & 0x0008 ) WriteSvIdentifier( rStm, aConfigId );
     TEST_WRITE
@@ -196,23 +196,23 @@ void SvMetaSlot::Save( SvPersistStream & rStm )
     TEST_WRITE
     if( nMask & 0x0040 ) WriteSvIdentifier( rStm, aDefault );
     TEST_WRITE
-    if( nMask & 0x0080 ) rStm << aPseudoSlots;
+    if( nMask & 0x0080 ) rStm.WriteUChar( aPseudoSlots );
     TEST_WRITE
-    if( nMask & 0x0100 ) rStm << aGet;
+    if( nMask & 0x0100 ) rStm.WriteUChar( aGet );
     TEST_WRITE
-    if( nMask & 0x0200 ) rStm << aSet;
+    if( nMask & 0x0200 ) rStm.WriteUChar( aSet );
     TEST_WRITE
-    if( nMask & 0x0400 ) rStm << aCachable;
+    if( nMask & 0x0400 ) rStm.WriteUChar( aCachable );
     TEST_WRITE
-    if( nMask & 0x0800 ) rStm << aVolatile;
+    if( nMask & 0x0800 ) rStm.WriteUChar( aVolatile );
     TEST_WRITE
-    if( nMask & 0x1000 ) rStm << aToggle;
+    if( nMask & 0x1000 ) rStm.WriteUChar( aToggle );
     TEST_WRITE
-    if( nMask & 0x2000 ) rStm << aAutoUpdate;
+    if( nMask & 0x2000 ) rStm.WriteUChar( aAutoUpdate );
     TEST_WRITE
-    if( nMask & 0x4000 ) rStm << aSynchron;
+    if( nMask & 0x4000 ) rStm.WriteUChar( aSynchron );
     TEST_WRITE
-    if( nMask & 0x8000 ) rStm << aAsynchron;
+    if( nMask & 0x8000 ) rStm.WriteUChar( aAsynchron );
 
     // write next bunch
     // create mask
@@ -235,48 +235,48 @@ void SvMetaSlot::Save( SvPersistStream & rStm )
     if( aImageRotation.IsSet() )       nMask |= 0x8000;
 
     // write data
-    rStm << nMask;
+    rStm.WriteUInt16( nMask );
     TEST_WRITE
-    if( nMask & 0x0001 ) rStm << aRecordPerItem;
+    if( nMask & 0x0001 ) rStm.WriteUChar( aRecordPerItem );
     TEST_WRITE
-    if( nMask & 0x0002 ) rStm << aRecordManual;
+    if( nMask & 0x0002 ) rStm.WriteUChar( aRecordManual );
     TEST_WRITE
-    if( nMask & 0x0004 ) rStm << aNoRecord;
+    if( nMask & 0x0004 ) rStm.WriteUChar( aNoRecord );
     TEST_WRITE
-    if( nMask & 0x0008 ) rStm << aHasDialog;
+    if( nMask & 0x0008 ) rStm.WriteUChar( aHasDialog );
     TEST_WRITE
     if( nMask & 0x0010 ) WriteSvString( rStm, aDisableFlags );
     TEST_WRITE
     if( nMask & 0x0020 ) WriteSvIdentifier( rStm, aPseudoPrefix );
     TEST_WRITE
-    if( nMask & 0x0040 ) rStm << aRecordPerSet;
+    if( nMask & 0x0040 ) rStm.WriteUChar( aRecordPerSet );
     TEST_WRITE
-    if( nMask & 0x0080 ) rStm << aMenuConfig;
+    if( nMask & 0x0080 ) rStm.WriteUChar( aMenuConfig );
     TEST_WRITE
-    if( nMask & 0x0100 ) rStm << aToolBoxConfig;
+    if( nMask & 0x0100 ) rStm.WriteUChar( aToolBoxConfig );
     TEST_WRITE
-    if( nMask & 0x0200 ) rStm << aStatusBarConfig;
+    if( nMask & 0x0200 ) rStm.WriteUChar( aStatusBarConfig );
     TEST_WRITE
-    if( nMask & 0x0400 ) rStm << aAccelConfig;
+    if( nMask & 0x0400 ) rStm.WriteUChar( aAccelConfig );
     TEST_WRITE
-    if( nMask & 0x0800 ) rStm << aFastCall;
+    if( nMask & 0x0800 ) rStm.WriteUChar( aFastCall );
     TEST_WRITE
-    if( nMask & 0x1000 ) rStm << aContainer;
+    if( nMask & 0x1000 ) rStm.WriteUChar( aContainer );
     TEST_WRITE
     if( nMask & 0x2000 ) WriteSvPersistBase( rStm, aSlotType );
     TEST_WRITE
-    if( nMask & 0x4000 ) rStm << aRecordAbsolute;
+    if( nMask & 0x4000 ) rStm.WriteUChar( aRecordAbsolute );
     TEST_WRITE
-    if( nMask & 0x8000 ) rStm << aImageRotation;
+    if( nMask & 0x8000 ) rStm.WriteUChar( aImageRotation );
 
     nMask = 0;
     if( aUnoName.IsSet() )          nMask |= 0x0001;
     if( aImageReflection.IsSet() )  nMask |= 0x0002;
-    rStm << nMask;
+    rStm.WriteUInt16( nMask );
     TEST_WRITE
     if( nMask & 0x0001 ) WriteSvString( rStm, aUnoName );
     TEST_WRITE
-    if( nMask & 0x0002 ) rStm << aImageReflection;
+    if( nMask & 0x0002 ) rStm.WriteUChar( aImageReflection );
 }
 
 sal_Bool SvMetaSlot::IsVariable() const
@@ -629,45 +629,45 @@ void SvMetaSlot::WriteAttributesSvIdl( SvIdlDataBase & rBase,
     if( aSlotType.Is() )
     {
         WriteTab( rOutStm, nTab );
-        rOutStm << SvHash_SlotType()->GetName().getStr() << '(';
+        rOutStm.WriteCharPtr( SvHash_SlotType()->GetName().getStr() ).WriteChar( '(' );
         aSlotType->WriteTheType( rBase, rOutStm, nTab, WRITE_IDL );
-        rOutStm << ");" << endl;
+        rOutStm.WriteCharPtr( ");" ) << endl;
     }
     if( aMethod.Is() )
     {
         WriteTab( rOutStm, nTab );
         aMethod->WriteSvIdl( rBase, rOutStm, nTab );
-        rOutStm << ';' << endl;
+        rOutStm.WriteChar( ';' ) << endl;
     }
     if( aHasCoreId )
     {
         aHasCoreId.WriteSvIdl( SvHash_HasCoreId(), rOutStm );
-        rOutStm << ';' << endl;
+        rOutStm.WriteChar( ';' ) << endl;
     }
     if( !aGroupId.getString().isEmpty() )
     {
         WriteTab( rOutStm, nTab );
         aGroupId.WriteSvIdl( SvHash_GroupId(), rOutStm, nTab +1);
-        rOutStm << ';' << endl;
+        rOutStm.WriteChar( ';' ) << endl;
     }
     if( !aExecMethod.getString().isEmpty() )
     {
         WriteTab( rOutStm, nTab );
         aExecMethod.WriteSvIdl( SvHash_ExecMethod(), rOutStm, nTab +1);
-        rOutStm << ';' << endl;
+        rOutStm.WriteChar( ';' ) << endl;
     }
     if( !aStateMethod.getString().isEmpty() )
     {
         WriteTab( rOutStm, nTab );
         aStateMethod.WriteSvIdl( SvHash_StateMethod(), rOutStm, nTab +1);
-        rOutStm << ';' << endl;
+        rOutStm.WriteChar( ';' ) << endl;
     }
 
     if( !aDisableFlags.getString().isEmpty() )
     {
         WriteTab( rOutStm, nTab );
         aDisableFlags.WriteSvIdl( SvHash_DisableFlags(), rOutStm, nTab +1);
-        rOutStm << ';' << endl;
+        rOutStm.WriteChar( ';' ) << endl;
     }
 
     if( aSet || aGet || aPseudoSlots )
@@ -681,16 +681,16 @@ void SvMetaSlot::WriteAttributesSvIdl( SvIdlDataBase & rBase,
         }
         if( aGet )
         {
-            rOutStm << p;
+            rOutStm.WriteCharPtr( p );
             aGet.WriteSvIdl( SvHash_Get(), rOutStm );
             p = ", ";
         }
         if( aSet )
         {
-            rOutStm << p;
+            rOutStm.WriteCharPtr( p );
             aSet.WriteSvIdl( SvHash_Set(), rOutStm );
         }
-        rOutStm << ';' << endl;
+        rOutStm.WriteChar( ';' ) << endl;
     }
 
     OString aDel(", ");
@@ -793,7 +793,7 @@ void SvMetaSlot::WriteAttributesSvIdl( SvIdlDataBase & rBase,
     if( !aOut.isEmpty() )
     {
         WriteTab( rOutStm, nTab );
-        rOutStm << aOut.getStr() << endl;
+        rOutStm.WriteCharPtr( aOut.getStr() ) << endl;
     }
 }
 
@@ -1105,11 +1105,11 @@ void SvMetaSlot::WriteSlotStubs( const OString& rShellName,
         if ( !bIn )
         {
             rList.push_back( new OString(aMethodName) );
-            rOutStm << "SFX_EXEC_STUB("
-                    << rShellName.getStr()
-                    << ','
-                    << aMethodName.getStr()
-                    << ')' << endl;
+            rOutStm.WriteCharPtr( "SFX_EXEC_STUB(" )
+                   .WriteCharPtr( rShellName.getStr() )
+                   .WriteChar( ',' )
+                   .WriteCharPtr( aMethodName.getStr() )
+                   .WriteChar( ')' ) << endl;
         }
     }
 
@@ -1130,11 +1130,11 @@ void SvMetaSlot::WriteSlotStubs( const OString& rShellName,
         if ( !bIn )
         {
             rList.push_back( new OString(aMethodName) );
-            rOutStm << "SFX_STATE_STUB("
-                    << rShellName.getStr()
-                    << ','
-                    << aMethodName.getStr()
-                    << ')' << endl;
+            rOutStm.WriteCharPtr( "SFX_STATE_STUB(" )
+                   .WriteCharPtr( rShellName.getStr() )
+                   .WriteChar( ',' )
+                   .WriteCharPtr( aMethodName.getStr() )
+                   .WriteChar( ')' ) << endl;
         }
     }
 }
@@ -1151,51 +1151,51 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
 
     sal_Bool bIsEnumSlot = 0 != pEnumValue;
 
-    rOutStm << "// Slot Nr. "
-        << OString::number(nListPos).getStr()
-        << " : ";
+    rOutStm.WriteCharPtr( "// Slot Nr. " )
+       .WriteCharPtr( OString::number(nListPos).getStr() )
+       .WriteCharPtr( " : " );
     OString aSlotIdValue(OString::number(GetSlotId().GetValue()));
-    rOutStm << aSlotIdValue.getStr() << endl;
+    rOutStm.WriteCharPtr( aSlotIdValue.getStr() ) << endl;
     WriteTab( rOutStm, 1 );
     if( bIsEnumSlot )
-        rOutStm << "SFX_NEW_SLOT_ENUM( ";
+        rOutStm.WriteCharPtr( "SFX_NEW_SLOT_ENUM( " );
     else
-        rOutStm << "SFX_NEW_SLOT_ARG( " << rShellName.getStr() << ',' ;
+        rOutStm.WriteCharPtr( "SFX_NEW_SLOT_ARG( " ).WriteCharPtr( rShellName.getStr() ).WriteChar( ',' ) ;
 
-    rOutStm << rSlotId.getStr() << ',';
+    rOutStm.WriteCharPtr( rSlotId.getStr() ).WriteChar( ',' );
     const SvHelpContext& rHlpCtx = GetHelpContext();
     if( rHlpCtx.IsSet() )
-        rOutStm << rHlpCtx.getString().getStr() << ',';
+        rOutStm.WriteCharPtr( rHlpCtx.getString().getStr() ).WriteChar( ',' );
     else
-        rOutStm << rSlotId.getStr() << ',';
+        rOutStm.WriteCharPtr( rSlotId.getStr() ).WriteChar( ',' );
 
     // GroupId
     if( !GetGroupId().isEmpty() )
-        rOutStm << GetGroupId().getStr();
+        rOutStm.WriteCharPtr( GetGroupId().getStr() );
     else
-        rOutStm << '0';
-    rOutStm << ',' << endl;
+        rOutStm.WriteChar( '0' );
+    rOutStm.WriteChar( ',' ) << endl;
     WriteTab( rOutStm, 4 );
 
     if( bIsEnumSlot )
     {
-        rOutStm << "&a" << rShellName.getStr() << "Slots_Impl["
-            << OString::number(pLinkedSlot->GetListPos()).getStr()
-            << "] /*Offset Master*/, " << endl;
+        rOutStm.WriteCharPtr( "&a" ).WriteCharPtr( rShellName.getStr() ).WriteCharPtr( "Slots_Impl[" )
+           .WriteCharPtr( OString::number(pLinkedSlot->GetListPos()).getStr() )
+           .WriteCharPtr( "] /*Offset Master*/, " ) << endl;
         WriteTab( rOutStm, 4 );
-        rOutStm << "&a" << rShellName.getStr() << "Slots_Impl["
-            << OString::number(pNextSlot->GetListPos()).getStr()
-            << "] /*Offset Next*/, " << endl;
+        rOutStm.WriteCharPtr( "&a" ).WriteCharPtr( rShellName.getStr() ).WriteCharPtr( "Slots_Impl[" )
+           .WriteCharPtr( OString::number(pNextSlot->GetListPos()).getStr() )
+           .WriteCharPtr( "] /*Offset Next*/, " ) << endl;
 
         WriteTab( rOutStm, 4 );
 
         // SlotId
         if( !GetSlotId().getString().isEmpty() )
-            rOutStm << pLinkedSlot->GetSlotId().getString().getStr();
+            rOutStm.WriteCharPtr( pLinkedSlot->GetSlotId().getString().getStr() );
         else
-            rOutStm << '0';
-        rOutStm << ',';
-        rOutStm << pEnumValue->GetName().getString().getStr();
+            rOutStm.WriteChar( '0' );
+        rOutStm.WriteChar( ',' );
+        rOutStm.WriteCharPtr( pEnumValue->GetName().getString().getStr() );
     }
     else
     {
@@ -1234,19 +1234,19 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
 
         if ( !pLinkedSlot )
         {
-            rOutStm << "0 ,";
+            rOutStm.WriteCharPtr( "0 ," );
         }
         else
         {
-            rOutStm << "&a" << rShellName.getStr() << "Slots_Impl["
-                << OString::number(pLinkedSlot->GetListPos()).getStr()
-                << "] /*Offset Linked*/, " << endl;
+            rOutStm.WriteCharPtr( "&a" ).WriteCharPtr( rShellName.getStr() ).WriteCharPtr( "Slots_Impl[" )
+               .WriteCharPtr( OString::number(pLinkedSlot->GetListPos()).getStr() )
+               .WriteCharPtr( "] /*Offset Linked*/, " ) << endl;
             WriteTab( rOutStm, 4 );
         }
 
-        rOutStm << "&a" << rShellName.getStr() << "Slots_Impl["
-            << OString::number(pNextSlot->GetListPos()).getStr()
-            << "] /*Offset Next*/, " << endl;
+        rOutStm.WriteCharPtr( "&a" ).WriteCharPtr( rShellName.getStr() ).WriteCharPtr( "Slots_Impl[" )
+           .WriteCharPtr( OString::number(pNextSlot->GetListPos()).getStr() )
+           .WriteCharPtr( "] /*Offset Next*/, " ) << endl;
 
         WriteTab( rOutStm, 4 );
 
@@ -1254,84 +1254,84 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
         if( !GetExecMethod().isEmpty() &&
             GetExecMethod() != "NoExec")
         {
-            rOutStm << "SFX_STUB_PTR(" << rShellName.getStr() << ','
-                    << GetExecMethod().getStr() << ')';
+            rOutStm.WriteCharPtr( "SFX_STUB_PTR(" ).WriteCharPtr( rShellName.getStr() ).WriteChar( ',' )
+                   .WriteCharPtr( GetExecMethod().getStr() ).WriteChar( ')' );
         }
         else
-            rOutStm << "SFX_STUB_PTR_EXEC_NONE";
-        rOutStm << ',';
+            rOutStm.WriteCharPtr( "SFX_STUB_PTR_EXEC_NONE" );
+        rOutStm.WriteChar( ',' );
 
         // write StateMethod, with standard name if not specified
         if( !GetStateMethod().isEmpty() &&
             GetStateMethod() != "NoState")
         {
-            rOutStm << "SFX_STUB_PTR(" << rShellName.getStr() << ','
-                    << GetStateMethod().getStr() << ')';
+            rOutStm.WriteCharPtr( "SFX_STUB_PTR(" ).WriteCharPtr( rShellName.getStr() ).WriteChar( ',' )
+                   .WriteCharPtr( GetStateMethod().getStr() ).WriteChar( ')' );
         }
         else
-            rOutStm << "SFX_STUB_PTR_STATE_NONE";
+            rOutStm.WriteCharPtr( "SFX_STUB_PTR_STATE_NONE" );
     }
-    rOutStm << ',' << endl;
+    rOutStm.WriteChar( ',' ) << endl;
     WriteTab( rOutStm, 4 );
 
     // write flags
     if( GetHasCoreId() )
-        rOutStm << MakeSlotName( SvHash_HasCoreId() ).getStr() << '|';
+        rOutStm.WriteCharPtr( MakeSlotName( SvHash_HasCoreId() ).getStr() ).WriteChar( '|' );
     if( GetCachable() )
-        rOutStm << MakeSlotName( SvHash_Cachable() ).getStr() << '|';
+        rOutStm.WriteCharPtr( MakeSlotName( SvHash_Cachable() ).getStr() ).WriteChar( '|' );
     if( GetVolatile() )
-        rOutStm << MakeSlotName( SvHash_Volatile() ).getStr() << '|';
+        rOutStm.WriteCharPtr( MakeSlotName( SvHash_Volatile() ).getStr() ).WriteChar( '|' );
     if( GetToggle() )
-        rOutStm << MakeSlotName( SvHash_Toggle() ).getStr() << '|';
+        rOutStm.WriteCharPtr( MakeSlotName( SvHash_Toggle() ).getStr() ).WriteChar( '|' );
     if( GetAutoUpdate() )
-        rOutStm << MakeSlotName( SvHash_AutoUpdate() ).getStr() << '|';
+        rOutStm.WriteCharPtr( MakeSlotName( SvHash_AutoUpdate() ).getStr() ).WriteChar( '|' );
     if( GetSynchron() )
-        rOutStm << MakeSlotName( SvHash_Synchron() ).getStr() << '|';
+        rOutStm.WriteCharPtr( MakeSlotName( SvHash_Synchron() ).getStr() ).WriteChar( '|' );
     if( GetAsynchron() )
-        rOutStm << MakeSlotName( SvHash_Asynchron() ).getStr() << '|';
+        rOutStm.WriteCharPtr( MakeSlotName( SvHash_Asynchron() ).getStr() ).WriteChar( '|' );
     if( GetRecordPerItem() )
-        rOutStm << MakeSlotName( SvHash_RecordPerItem() ).getStr() << '|';
+        rOutStm.WriteCharPtr( MakeSlotName( SvHash_RecordPerItem() ).getStr() ).WriteChar( '|' );
     if( GetRecordPerSet() )
-        rOutStm << MakeSlotName( SvHash_RecordPerSet() ).getStr() << '|';
+        rOutStm.WriteCharPtr( MakeSlotName( SvHash_RecordPerSet() ).getStr() ).WriteChar( '|' );
     if( GetRecordManual() )
-        rOutStm << MakeSlotName( SvHash_RecordManual() ).getStr() << '|';
+        rOutStm.WriteCharPtr( MakeSlotName( SvHash_RecordManual() ).getStr() ).WriteChar( '|' );
     if( GetNoRecord() )
-        rOutStm << MakeSlotName( SvHash_NoRecord() ).getStr() << '|';
+        rOutStm.WriteCharPtr( MakeSlotName( SvHash_NoRecord() ).getStr() ).WriteChar( '|' );
     if( GetRecordAbsolute() )
-        rOutStm << MakeSlotName( SvHash_RecordAbsolute() ).getStr() << '|';
+        rOutStm.WriteCharPtr( MakeSlotName( SvHash_RecordAbsolute() ).getStr() ).WriteChar( '|' );
     if( GetHasDialog() )
-        rOutStm << MakeSlotName( SvHash_HasDialog() ).getStr() << '|';
+        rOutStm.WriteCharPtr( MakeSlotName( SvHash_HasDialog() ).getStr() ).WriteChar( '|' );
     if( GetMenuConfig() )
-        rOutStm << MakeSlotName( SvHash_MenuConfig() ).getStr() << '|';
+        rOutStm.WriteCharPtr( MakeSlotName( SvHash_MenuConfig() ).getStr() ).WriteChar( '|' );
     if( GetToolBoxConfig() )
-        rOutStm << MakeSlotName( SvHash_ToolBoxConfig() ).getStr() << '|';
+        rOutStm.WriteCharPtr( MakeSlotName( SvHash_ToolBoxConfig() ).getStr() ).WriteChar( '|' );
     if( GetStatusBarConfig() )
-        rOutStm << MakeSlotName( SvHash_StatusBarConfig() ).getStr() << '|';
+        rOutStm.WriteCharPtr( MakeSlotName( SvHash_StatusBarConfig() ).getStr() ).WriteChar( '|' );
     if( GetAccelConfig() )
-        rOutStm << MakeSlotName( SvHash_AccelConfig() ).getStr() << '|';
+        rOutStm.WriteCharPtr( MakeSlotName( SvHash_AccelConfig() ).getStr() ).WriteChar( '|' );
     if( GetFastCall() )
-        rOutStm << MakeSlotName( SvHash_FastCall() ).getStr() << '|';
+        rOutStm.WriteCharPtr( MakeSlotName( SvHash_FastCall() ).getStr() ).WriteChar( '|' );
     if( GetContainer() )
-        rOutStm << MakeSlotName( SvHash_Container() ).getStr() << '|';
+        rOutStm.WriteCharPtr( MakeSlotName( SvHash_Container() ).getStr() ).WriteChar( '|' );
     if ( GetReadOnlyDoc() )
-        rOutStm << MakeSlotName( SvHash_ReadOnlyDoc() ).getStr() << '|';
+        rOutStm.WriteCharPtr( MakeSlotName( SvHash_ReadOnlyDoc() ).getStr() ).WriteChar( '|' );
     if( GetImageRotation() )
-        rOutStm << MakeSlotName( SvHash_ImageRotation() ).getStr() << '|';
+        rOutStm.WriteCharPtr( MakeSlotName( SvHash_ImageRotation() ).getStr() ).WriteChar( '|' );
     if( GetImageReflection() )
-        rOutStm << MakeSlotName( SvHash_ImageReflection() ).getStr() << '|';
-    rOutStm << '0';
+        rOutStm.WriteCharPtr( MakeSlotName( SvHash_ImageReflection() ).getStr() ).WriteChar( '|' );
+    rOutStm.WriteChar( '0' );
 
-    rOutStm << ',' << endl;
+    rOutStm.WriteChar( ',' ) << endl;
        WriteTab( rOutStm, 4 );
     if ( GetDisableFlags().isEmpty() )
-        rOutStm << "0";
+        rOutStm.WriteCharPtr( "0" );
     else
-        rOutStm << GetDisableFlags().getStr();
+        rOutStm.WriteCharPtr( GetDisableFlags().getStr() );
 
     // write attribute type
     if( !bIsEnumSlot )
     {
-        rOutStm << ',' << endl;
+        rOutStm.WriteChar( ',' ) << endl;
         WriteTab( rOutStm, 4 );
 
         SvMetaType * pT = GetSlotType();
@@ -1344,12 +1344,12 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
         }
         if( pT )
         {
-            rOutStm << pT->GetName().getString().getStr();
+            rOutStm.WriteCharPtr( pT->GetName().getString().getStr() );
             if( !rBase.FindType( pT, rBase.aUsedTypes ) )
                 rBase.aUsedTypes.push_back( pT );
         }
         else
-            rOutStm << "SfxVoidItem not defined";
+            rOutStm.WriteCharPtr( "SfxVoidItem not defined" );
     }
     else
     {
@@ -1360,11 +1360,11 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
 
     if( !bIsEnumSlot )
     {
-        rOutStm << ',' << endl;
+        rOutStm.WriteChar( ',' ) << endl;
         WriteTab( rOutStm, 4 );
         rOutStm
-            << OString::number(nCount).getStr()
-            << "/*Offset*/, ";
+           .WriteCharPtr( OString::number(nCount).getStr() )
+           .WriteCharPtr( "/*Offset*/, " );
 
         if( IsMethod() )
         {
@@ -1376,47 +1376,47 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
                 pType = GetType();
             sal_uLong nSCount = pType->GetAttrCount();
             rOutStm
-                << OString::number(nSCount).getStr()
-                << "/*Count*/";
+               .WriteCharPtr( OString::number(nSCount).getStr() )
+               .WriteCharPtr( "/*Count*/" );
         }
         else
-            rOutStm << '0';
+            rOutStm.WriteChar( '0' );
 
         // name for recording
         if ( GetExport() )
         {
-            rOutStm << ",\"";
+            rOutStm.WriteCharPtr( ",\"" );
             if (!rPrefix.isEmpty())
-                rOutStm << rPrefix.getStr();
-            rOutStm << '.';
+                rOutStm.WriteCharPtr( rPrefix.getStr() );
+            rOutStm.WriteChar( '.' );
             if ( !IsVariable() || !GetType() ||
                  GetType()->GetBaseType()->GetType() != TYPE_STRUCT )
-                rOutStm << GetMangleName( sal_False ).getStr();
-            rOutStm << "\",";
+                rOutStm.WriteCharPtr( GetMangleName( sal_False ).getStr() );
+            rOutStm.WriteCharPtr( "\"," );
         }
         else
-            rOutStm << ", 0, ";
+            rOutStm.WriteCharPtr( ", 0, " );
 
         // Method/Property flags
         if( IsMethod() )
-            rOutStm << "SFX_SLOT_METHOD|";
+            rOutStm.WriteCharPtr( "SFX_SLOT_METHOD|" );
         if( IsVariable() )
         {
-            rOutStm << "SFX_SLOT_PROPGET|";
+            rOutStm.WriteCharPtr( "SFX_SLOT_PROPGET|" );
             if( !GetReadonly() )
-                rOutStm << "SFX_SLOT_PROPSET|";
+                rOutStm.WriteCharPtr( "SFX_SLOT_PROPSET|" );
         }
 
-        rOutStm << '0';
+        rOutStm.WriteChar( '0' );
     }
 
     {
-        rOutStm << ",\"";
-        rOutStm << GetMangleName( sal_False ).getStr();
-        rOutStm << "\"";
+        rOutStm.WriteCharPtr( ",\"" );
+        rOutStm.WriteCharPtr( GetMangleName( sal_False ).getStr() );
+        rOutStm.WriteCharPtr( "\"" );
     }
 
-    rOutStm << " )," << endl;
+    rOutStm.WriteCharPtr( " )," ) << endl;
 }
 
 sal_uInt16 SvMetaSlot::WriteSlotParamArray( SvIdlDataBase & rBase, SvStream & rOutStm )
@@ -1443,12 +1443,12 @@ sal_uInt16 SvMetaSlot::WriteSlotParamArray( SvIdlDataBase & rBase, SvStream & rO
             SvMetaAttribute * pPar  = rList[n];
             SvMetaType * pPType     = pPar->GetType();
             WriteTab( rOutStm, 1 );
-            rOutStm << "SFX_ARGUMENT("
-                << pPar->GetSlotId().getString().getStr() << ',' // SlodId
+            rOutStm.WriteCharPtr( "SFX_ARGUMENT(" )
+               .WriteCharPtr( pPar->GetSlotId().getString().getStr() ).WriteChar( ',' ) // SlodId
                 // parameter name
-                << "\"" << pPar->GetName().getString().getStr() << "\","
+               .WriteCharPtr( "\"" ).WriteCharPtr( pPar->GetName().getString().getStr() ).WriteCharPtr( "\"," )
                 // item name
-                << pPType->GetName().getString().getStr() << ")," << endl;
+               .WriteCharPtr( pPType->GetName().getString().getStr() ).WriteCharPtr( ")," ) << endl;
             if( !rBase.FindType( pPType, rBase.aUsedTypes ) )
                 rBase.aUsedTypes.push_back( pPType );
         }
@@ -1491,8 +1491,8 @@ void SvMetaSlot::WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
     if( rTable.find( nSId ) == rTable.end() )
     {
         rTable[ nSId ] = this;
-        rOutStm << "#define " << GetSlotId().getString().getStr() << '\t'
-            << OString::number(nSId).getStr()
+        rOutStm.WriteCharPtr( "#define " ).WriteCharPtr( GetSlotId().getString().getStr() ).WriteChar( '\t' )
+           .WriteCharPtr( OString::number(nSId).getStr() )
             << endl;
     }
 
@@ -1526,9 +1526,9 @@ void SvMetaSlot::WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
             {
                 rTable[ nSId2 ] = this;
 
-                rOutStm << "#define " << aSId.getStr() << '\t'
-                    << OString::number(
-                        nSId2).getStr()
+                rOutStm.WriteCharPtr( "#define " ).WriteCharPtr( aSId.getStr() ).WriteChar( '\t' )
+                   .WriteCharPtr( OString::number(
+                        nSId2).getStr() )
                     << endl;
             }
         }
@@ -1538,26 +1538,26 @@ void SvMetaSlot::WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
 void WriteBool( sal_Bool bSet, SvStream& rStream )
 {
     if ( bSet )
-        rStream << "TRUE" << ',';
+        rStream.WriteCharPtr( "TRUE" ).WriteChar( ',' );
     else
-        rStream << "FALSE" << ',';
+        rStream.WriteCharPtr( "FALSE" ).WriteChar( ',' );
 }
 
 void SvMetaSlot::WriteCSV( SvIdlDataBase& rBase, SvStream& rStrm )
 {
-    rStrm << "PROJECT,";
-    rStrm << GetSlotId().getString().getStr() << ',';
+    rStrm.WriteCharPtr( "PROJECT," );
+    rStrm.WriteCharPtr( GetSlotId().getString().getStr() ).WriteChar( ',' );
     rStrm
-        << OString::number(
-            GetSlotId().GetValue()).getStr()
-        << ',';
+       .WriteCharPtr( OString::number(
+            GetSlotId().GetValue()).getStr() )
+       .WriteChar( ',' );
 
     if ( !GetPseudoPrefix().isEmpty() )
-        rStrm << GetPseudoPrefix().getStr() << ',';
+        rStrm.WriteCharPtr( GetPseudoPrefix().getStr() ).WriteChar( ',' );
     else
-        rStrm << ',';
+        rStrm.WriteChar( ',' );
 
-    rStrm << GetGroupId().getStr() << ',';
+    rStrm.WriteCharPtr( GetGroupId().getStr() ).WriteChar( ',' );
 
     WriteBool( GetAccelConfig(), rStrm );
     WriteBool( GetMenuConfig(), rStrm );
@@ -1565,15 +1565,15 @@ void SvMetaSlot::WriteCSV( SvIdlDataBase& rBase, SvStream& rStrm )
     WriteBool( GetToolBoxConfig(), rStrm );
 
     if ( GetSlotType() )
-        rStrm << GetSlotType()->GetName().getString().getStr() << ',';
+        rStrm.WriteCharPtr( GetSlotType()->GetName().getString().getStr() ).WriteChar( ',' );
     else
-        rStrm << ',';
+        rStrm.WriteChar( ',' );
 
     WriteBool( GetAutoUpdate(), rStrm );
     if ( GetCachable() )
-        rStrm << "Cachable" << ',';
+        rStrm.WriteCharPtr( "Cachable" ).WriteChar( ',' );
     else
-        rStrm << "Volatile" << ',';
+        rStrm.WriteCharPtr( "Volatile" ).WriteChar( ',' );
 
     WriteBool( GetContainer(), rStrm );
     WriteBool( GetFastCall(), rStrm );
@@ -1582,39 +1582,39 @@ void SvMetaSlot::WriteCSV( SvIdlDataBase& rBase, SvStream& rStrm )
     WriteBool( GetReadOnlyDoc(), rStrm );
     WriteBool( GetImageRotation(), rStrm );
     WriteBool( GetImageReflection(), rStrm );
-    rStrm << GetDisableFlags().getStr() << ',';
+    rStrm.WriteCharPtr( GetDisableFlags().getStr() ).WriteChar( ',' );
 
     if( GetSynchron() )
-        rStrm << "Synchron" << ',';
+        rStrm.WriteCharPtr( "Synchron" ).WriteChar( ',' );
     else
-        rStrm << "Asynchron" << ',';
+        rStrm.WriteCharPtr( "Asynchron" ).WriteChar( ',' );
 
     WriteBool( GetToggle(), rStrm );
     WriteBool( GetReadonly(), rStrm );
     WriteBool( GetExport(), rStrm );
     if( GetRecordPerItem() )
-        rStrm << "RecordPerItem" << ',';
+        rStrm.WriteCharPtr( "RecordPerItem" ).WriteChar( ',' );
     else if ( GetNoRecord() )
-        rStrm << "NoRecord" << ',';
+        rStrm.WriteCharPtr( "NoRecord" ).WriteChar( ',' );
     else if ( GetRecordManual() )
-        rStrm << "RecordManual" << ',';
+        rStrm.WriteCharPtr( "RecordManual" ).WriteChar( ',' );
     else
-        rStrm << "RecordPerSet" << ',';
+        rStrm.WriteCharPtr( "RecordPerSet" ).WriteChar( ',' );
 
     WriteBool( GetRecordAbsolute(), rStrm );
 
     if ( GetType()->GetType() != TYPE_METHOD && GetMethod() )
     {
-        rStrm << GetMethod()->GetType()->GetReturnType()->GetName().getString().getStr() << ',';
-        rStrm << GetMethod()->GetName().getString().getStr() << ',';
+        rStrm.WriteCharPtr( GetMethod()->GetType()->GetReturnType()->GetName().getString().getStr() ).WriteChar( ',' );
+        rStrm.WriteCharPtr( GetMethod()->GetName().getString().getStr() ).WriteChar( ',' );
     }
     else
     {
-        rStrm << ",,";
+        rStrm.WriteCharPtr( ",," );
     }
 
-    rStrm << GetType()->GetSvName().getStr() << ',';
-    rStrm << GetName().getString().getStr() << ',';
+    rStrm.WriteCharPtr( GetType()->GetSvName().getStr() ).WriteChar( ',' );
+    rStrm.WriteCharPtr( GetName().getString().getStr() ).WriteChar( ',' );
 
     if ( GetType()->GetType() == TYPE_METHOD || GetMethod() )
     {
@@ -1624,7 +1624,7 @@ void SvMetaSlot::WriteCSV( SvIdlDataBase& rBase, SvStream& rStrm )
 
         if( pList && !pList->empty() )
         {
-            rStrm << "\"(";
+            rStrm.WriteCharPtr( "\"(" );
             SvMetaAttributeMemberList::const_iterator it = pList->begin();
             while( it != pList->end() )
             {
@@ -1632,12 +1632,12 @@ void SvMetaSlot::WriteCSV( SvIdlDataBase& rBase, SvStream& rStrm )
                 pAttr->WriteCSV( rBase, rStrm );
                 ++it;
                 if( it != pList->end() )
-                    rStrm << ',';
+                    rStrm.WriteChar( ',' );
             }
-            rStrm << ")\"";
+            rStrm.WriteCharPtr( ")\"" );
         }
         else
-            rStrm << "()";
+            rStrm.WriteCharPtr( "()" );
     }
 
     rStrm << endl;

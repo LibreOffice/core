@@ -1235,17 +1235,17 @@ sal_Bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
         if( rOStm.GetVersion() >= SOFFICE_FILEFORMAT_50 )
         {
             // write ID for new format (5.0)
-            rOStm << GRAPHIC_FORMAT_50;
+            rOStm.WriteUInt32( GRAPHIC_FORMAT_50 );
 
             // write new style header
             VersionCompat* pCompat = new VersionCompat( rOStm, STREAM_WRITE, 1 );
 
             //#fdo39428 SvStream no longer supports operator<<(long)
-            rOStm << sal::static_int_cast<sal_Int32>(meType);
+            rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(meType) );
 
             // data size is updated later
             nDataFieldPos = rOStm.Tell();
-            rOStm << (sal_Int32) 0;
+            rOStm.WriteInt32( (sal_Int32) 0 );
 
             WritePair( rOStm, aSize );
             WriteMapMode( rOStm, aMapMode );
@@ -1255,21 +1255,21 @@ sal_Bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
         else
         {
             // write old style (<=4.0) header
-            rOStm << (sal_Int32) meType;
+            rOStm.WriteInt32( (sal_Int32) meType );
 
             // data size is updated later
             nDataFieldPos = rOStm.Tell();
-            rOStm << (sal_Int32) 0;
+            rOStm.WriteInt32( (sal_Int32) 0 );
             //#fdo39428 SvStream no longer supports operator<<(long)
-            rOStm << sal::static_int_cast<sal_Int32>(aSize.Width());
-            rOStm << sal::static_int_cast<sal_Int32>(aSize.Height());
-            rOStm << sal::static_int_cast<sal_Int32>(aMapMode.GetMapUnit());
-            rOStm << sal::static_int_cast<sal_Int32>(aMapMode.GetScaleX().GetNumerator());
-            rOStm << sal::static_int_cast<sal_Int32>(aMapMode.GetScaleX().GetDenominator());
-            rOStm << sal::static_int_cast<sal_Int32>(aMapMode.GetScaleY().GetNumerator());
-            rOStm << sal::static_int_cast<sal_Int32>(aMapMode.GetScaleY().GetDenominator());
-            rOStm << sal::static_int_cast<sal_Int32>(aMapMode.GetOrigin().X());
-            rOStm << sal::static_int_cast<sal_Int32>(aMapMode.GetOrigin().Y());
+            rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aSize.Width()) );
+            rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aSize.Height()) );
+            rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aMapMode.GetMapUnit()) );
+            rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aMapMode.GetScaleX().GetNumerator()) );
+            rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aMapMode.GetScaleX().GetDenominator()) );
+            rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aMapMode.GetScaleY().GetNumerator()) );
+            rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aMapMode.GetScaleY().GetDenominator()) );
+            rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aMapMode.GetOrigin().X()) );
+            rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aMapMode.GetOrigin().Y()) );
         }
 
         // write data block
@@ -1285,7 +1285,7 @@ sal_Bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
                 const sal_uLong nStmPos2 = rOStm.Tell();
                 rOStm.Seek( nDataFieldPos );
                 //fdo39428 SvStream no longer supports operator<<(long)
-                rOStm << sal::static_int_cast<sal_Int32>(nStmPos2 - nDataStart);
+                rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(nStmPos2 - nDataStart) );
                 rOStm.Seek( nStmPos2 );
                 bRet = sal_True;
             }
@@ -1751,7 +1751,7 @@ SvStream& WriteImpGraphic( SvStream& rOStm, const ImpGraphic& rImpGraphic )
                 VersionCompat* pCompat;
 
                 // native format
-                rOStm << NATIVE_FORMAT_50;
+                rOStm.WriteUInt32( NATIVE_FORMAT_50 );
 
                 // write compat info
                 pCompat = new VersionCompat( rOStm, STREAM_WRITE, 1 );
@@ -1783,8 +1783,8 @@ SvStream& WriteImpGraphic( SvStream& rOStm, const ImpGraphic& rImpGraphic )
                             // no problem to extend it; only used at runtime
                             const sal_uInt32 nSvgMagic((sal_uInt32('s') << 24) | (sal_uInt32('v') << 16) | (sal_uInt32('g') << 8) | sal_uInt32('0'));
 
-                            rOStm << nSvgMagic;
-                            rOStm << rImpGraphic.getSvgData()->getSvgDataArrayLength();
+                            rOStm.WriteUInt32( nSvgMagic );
+                            rOStm.WriteUInt32( rImpGraphic.getSvgData()->getSvgDataArrayLength() );
                             rOStm.Write(rImpGraphic.getSvgData()->getSvgDataArray().get(), rImpGraphic.getSvgData()->getSvgDataArrayLength());
                             rOStm.WriteUniOrByteString(rImpGraphic.getSvgData()->getPath(),
                                                        rOStm.GetStreamCharSet());

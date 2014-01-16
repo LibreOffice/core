@@ -244,7 +244,7 @@ sal_Bool SfxHTMLParser::FinishFileDownload( OUString& rStr )
 
         SvMemoryStream aStream;
         if( pStream )
-            aStream << *pStream;
+            aStream.WriteStream( *pStream );
 
         aStream.Seek( STREAM_SEEK_TO_END );
         sal_Size nLen = aStream.Tell();

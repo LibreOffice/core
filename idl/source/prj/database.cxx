@@ -128,8 +128,8 @@ void SvIdlDataBase::Save( SvStream & rStm, sal_uInt32 nFlags )
     SvPersistStream aPStm( *IDLAPP->pClassMgr, &rStm );
     aPStm.SetContextFlags( nFlags );
 
-    aPStm << (sal_uInt32)DATABASE_SIGNATURE;
-    aPStm << (sal_uInt16)DATABASE_VER;
+    aPStm.WriteUInt32( (sal_uInt32)DATABASE_SIGNATURE );
+    aPStm.WriteUInt16( (sal_uInt16)DATABASE_VER );
 
     sal_Bool bOnlyStreamedObjs = sal_False;
     if( nFlags & IDL_WRITE_CALLING )
@@ -152,7 +152,7 @@ void SvIdlDataBase::Save( SvStream & rStm, sal_uInt32 nFlags )
     aTypeList.WriteObjects( aPStm, bOnlyStreamedObjs );
     aAttrList.WriteObjects( aPStm, bOnlyStreamedObjs );
     aModuleList.WriteObjects( aPStm, bOnlyStreamedObjs );
-    aPStm << nUniqueId;
+    aPStm.WriteUInt32( nUniqueId );
 }
 
 void SvIdlDataBase::SetError( const OString& rError, SvToken * pTok )
@@ -709,9 +709,9 @@ sal_Bool SvIdlWorkingBase::WriteSvIdl( SvStream & rOutStm )
         for ( size_t i = 0, n = aList.size(); i < n; ++i )
         {
             SvStringHashEntry* pEntry = aList[ i ];
-            rOutStm << "#define " << pEntry->GetName().getStr()
-                    << '\t'
-                    << OString::number(pEntry->GetValue()).getStr()
+            rOutStm.WriteCharPtr( "#define " ).WriteCharPtr( pEntry->GetName().getStr() )
+                   .WriteChar( '\t' )
+                   .WriteCharPtr( OString::number(pEntry->GetValue()).getStr() )
                     << endl;
         }
     }
@@ -746,7 +746,7 @@ sal_Bool SvIdlWorkingBase::WriteSfx( SvStream & rOutStm )
         pType->WriteSfx( *this, rOutStm );
     }
     aUsedTypes.clear();
-    rOutStm << aTmpStm;
+    rOutStm.WriteStream( aTmpStm );
     return sal_True;
 }
 
@@ -833,8 +833,8 @@ struct WriteDep
     explicit WriteDep(SvFileStream & rStream) : m_rStream(rStream) { }
     void operator() (OUString const& rItem)
     {
-        m_rStream << " \\\n ";
-        m_rStream << OUStringToOString(rItem, RTL_TEXTENCODING_UTF8).getStr();
+        m_rStream.WriteCharPtr( " \\\n " );
+        m_rStream.WriteCharPtr( OUStringToOString(rItem, RTL_TEXTENCODING_UTF8).getStr() );
     }
 };
 
@@ -846,18 +846,18 @@ struct WriteDummy
     explicit WriteDummy(SvFileStream & rStream) : m_rStream(rStream) { }
     void operator() (OUString const& rItem)
     {
-        m_rStream << OUStringToOString(rItem, RTL_TEXTENCODING_UTF8).getStr();
-        m_rStream << " :\n\n";
+        m_rStream.WriteCharPtr( OUStringToOString(rItem, RTL_TEXTENCODING_UTF8).getStr() );
+        m_rStream.WriteCharPtr( " :\n\n" );
     }
 };
 
 bool SvIdlDataBase::WriteDepFile(
         SvFileStream & rStream, OUString const& rTarget)
 {
-    rStream << OUStringToOString(rTarget, RTL_TEXTENCODING_UTF8).getStr();
-    rStream << " :";
+    rStream.WriteCharPtr( OUStringToOString(rTarget, RTL_TEXTENCODING_UTF8).getStr() );
+    rStream.WriteCharPtr( " :" );
     ::std::for_each(m_DepFiles.begin(), m_DepFiles.end(), WriteDep(rStream));
-    rStream << "\n\n";
+    rStream.WriteCharPtr( "\n\n" );
     ::std::for_each(m_DepFiles.begin(), m_DepFiles.end(), WriteDummy(rStream));
     return rStream.GetError() == SVSTREAM_OK;
 }

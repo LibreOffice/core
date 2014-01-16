@@ -179,9 +179,9 @@ static void lcl_html_outEvents( SvStream& rStrm,
                     RTL_TEXTENCODING_ASCII_US));
         }
         sOut.append("=\"");
-        rStrm << sOut.makeStringAndClear().getStr();
+        rStrm.WriteCharPtr( sOut.makeStringAndClear().getStr() );
         HTMLOutFuncs::Out_String( rStrm, pDescs[i].ScriptCode, eDestEnc, pNonConvertableChars );
-        rStrm << '\"';
+        rStrm.WriteChar( '\"' );
         if( EXTENDED_STYPE == eScriptType &&
             !pDescs[i].AddListenerParam.isEmpty() )
         {
@@ -192,10 +192,10 @@ static void lcl_html_outEvents( SvStream& rStrm,
                 .append(OUStringToOString(sMethod,
                     RTL_TEXTENCODING_ASCII_US))
                 .append("=\"");
-            rStrm << sOut.makeStringAndClear().getStr();
+            rStrm.WriteCharPtr( sOut.makeStringAndClear().getStr() );
             HTMLOutFuncs::Out_String( rStrm, pDescs[i].AddListenerParam,
                                       eDestEnc, pNonConvertableChars );
-            rStrm << '\"';
+            rStrm.WriteChar( '\"' );
         }
     }
 }
@@ -480,7 +480,7 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
         !((OUString*)aTmp.getValue())->isEmpty() )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name).append("=\"");
-        Strm() << sOut.makeStringAndClear().getStr();
+        Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
         HTMLOutFuncs::Out_String( Strm(), *(OUString*)aTmp.getValue(),
                                   eDestEnc, &aNonConvertableCharacters );
         sOut.append('\"');
@@ -492,7 +492,7 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
         !((OUString*)aTmp.getValue())->isEmpty() )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_action).append("=\"");
-        Strm() << sOut.makeStringAndClear().getStr();
+        Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
         OUString aURL( *(OUString*)aTmp.getValue() );
         aURL = URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), aURL);
         HTMLOutFuncs::Out_String( Strm(), aURL, eDestEnc, &aNonConvertableCharacters );
@@ -544,16 +544,16 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
         !((OUString*)aTmp.getValue())->isEmpty() )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_target).append("=\"");
-        Strm() << sOut.makeStringAndClear().getStr();
+        Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
         HTMLOutFuncs::Out_String( Strm(), *(OUString*)aTmp.getValue(),
                                   eDestEnc, &aNonConvertableCharacters );
         sOut.append('\"');
     }
 
-    Strm() << sOut.makeStringAndClear().getStr();
+    Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
     uno::Reference< form::XFormComponent > xFormComp( rFormComps, uno::UNO_QUERY );
     lcl_html_outEvents( Strm(), xFormComp, bCfgStarBasic, eDestEnc, &aNonConvertableCharacters );
-    Strm() << '>';
+    Strm().WriteChar( '>' );
 
     IncIndentLevel(); // Inhalt der Form einruecken
     bLFPossible = sal_True;
@@ -620,7 +620,7 @@ void SwHTMLWriter::OutHiddenControls(
             {
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name)
                     .append("=\"");
-                Strm() << sOut.makeStringAndClear().getStr();
+                Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
                 HTMLOutFuncs::Out_String( Strm(), *(OUString*)aTmp.getValue(),
                                           eDestEnc, &aNonConvertableCharacters );
                 sOut.append('\"');
@@ -632,13 +632,13 @@ void SwHTMLWriter::OutHiddenControls(
             {
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_value)
                     .append("=\"");
-                Strm() << sOut.makeStringAndClear().getStr();
+                Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
                 HTMLOutFuncs::Out_String( Strm(), *(OUString*)aTmp.getValue(),
                                           eDestEnc, &aNonConvertableCharacters );
                 sOut.append('\"');
             }
             sOut.append('>');
-            Strm() << sOut.makeStringAndClear().getStr();
+            Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
             nFormCntrlCnt++;
         }
@@ -980,7 +980,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name).
             append("=\"");
-        rWrt.Strm() << sOut.makeStringAndClear().getStr();
+        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
         HTMLOutFuncs::Out_String( rWrt.Strm(), *(OUString*)aTmp.getValue(),
                                   rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         sOut.append('\"');
@@ -997,7 +997,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_value).append(
             "=\"");
-        rWrt.Strm() << sOut.makeStringAndClear().getStr();
+        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
         HTMLOutFuncs::Out_String( rWrt.Strm(), sValue, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         sOut.append('\"');
     }
@@ -1013,7 +1013,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_src).
                 append("=\"");
-            rWrt.Strm() << sOut.makeStringAndClear().getStr();
+            rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
             HTMLOutFuncs::Out_String( rWrt.Strm(),
                         URIHelper::simpleNormalizedMakeRelative( rWrt.GetBaseURL(), *(OUString*)aTmp.getValue()),
@@ -1064,7 +1064,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     }
 
     if( !sOut.isEmpty() )
-        rWrt.Strm() << sOut.makeStringAndClear().getStr();
+        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
     OSL_ENSURE( !bInCntnr, "Container wird fuer Controls nicht unterstuertzt" );
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_DRAW ) && !bInCntnr )
@@ -1202,7 +1202,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     lcl_html_outEvents( rWrt.Strm(), xFormComp, rHTMLWrt.bCfgStarBasic,
                         rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
 
-    rWrt.Strm() << '>';
+    rWrt.Strm().WriteChar( '>' );
 
     if( TAG_SELECT == eTag )
     {
@@ -1264,7 +1264,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                 {
                     sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_value).
                         append("=\"");
-                    rWrt.Strm() << sOut.makeStringAndClear().getStr();
+                    rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
                     HTMLOutFuncs::Out_String( rWrt.Strm(), sVal,
                         rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
                     sOut.append('\"');
@@ -1273,7 +1273,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                     sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_selected);
 
                 sOut.append('>');
-                rWrt.Strm() << sOut.makeStringAndClear().getStr();
+                rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
                 HTMLOutFuncs::Out_String( rWrt.Strm(), pStrings[i],
                                           rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
@@ -1304,7 +1304,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             while ( nPos != -1 )
             {
                 if( nPos )
-                    rWrt.Strm() << SAL_NEWLINE_STRING;
+                    rWrt.Strm().WriteCharPtr( SAL_NEWLINE_STRING );
                 OUString aLine = sVal.getToken( 0, 0x0A, nPos );
                 HTMLOutFuncs::Out_String( rWrt.Strm(), aLine,
                                         rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
@@ -1320,12 +1320,12 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         {
             sValue = *(OUString*)aTmp.getValue();
             HTMLOutFuncs::Out_String( rWrt.Strm(), sValue,
-                rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ) << ' ';
+                rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ).WriteChar( ' ' );
         }
     }
 
     if( !aEndTags.isEmpty() )
-        rWrt.Strm() << aEndTags.getStr();
+        rWrt.Strm().WriteCharPtr( aEndTags.getStr() );
 
     // Controls sind nicht absatz-gebunden, deshalb kein LF mehr ausgeben!
     rHTMLWrt.bLFPossible = sal_False;

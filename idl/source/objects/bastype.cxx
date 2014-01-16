@@ -71,7 +71,7 @@ SvStream& WriteSvBOOL(SvStream & rStm, const SvBOOL & rb )
     sal_uInt8 n = rb.nVal;
     if( rb.bSet )
         n |= 0x02;
-    rStm << n;
+    rStm.WriteUChar( n );
     return rStm;
 }
 SvStream& operator >> (SvStream & rStm, SvBOOL & rb )
@@ -98,13 +98,13 @@ SvStream& WriteSvVersion(SvStream & rStm, const SvVersion & r )
 
         int n = r.GetMajorVersion() << 4;
         n |= r.GetMinorVersion();
-        rStm << (sal_uInt8)n;
+        rStm.WriteUChar( (sal_uInt8)n );
     }
     else
     {
-        rStm << (sal_uInt8)0;
-        rStm << r.GetMajorVersion();
-        rStm << r.GetMinorVersion();
+        rStm.WriteUChar( (sal_uInt8)0 );
+        rStm.WriteUInt16( r.GetMajorVersion() );
+        rStm.WriteUInt16( r.GetMinorVersion() );
     }
     return rStm;
 }
@@ -160,9 +160,9 @@ sal_Bool SvBOOL::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
 sal_Bool SvBOOL::WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm )
 {
     if( nVal )
-        rOutStm << pName->GetName().getStr();
+        rOutStm.WriteCharPtr( pName->GetName().getStr() );
     else
-        rOutStm << pName->GetName().getStr() << "(FALSE)";
+        rOutStm.WriteCharPtr( pName->GetName().getStr() ).WriteCharPtr( "(FALSE)" );
     return sal_True;
 }
 
@@ -207,8 +207,8 @@ sal_Bool SvIdentifier::WriteSvIdl( SvStringHashEntry * pName,
                                SvStream & rOutStm,
                                sal_uInt16 /*nTab */ )
 {
-    rOutStm << pName->GetName().getStr() << '(';
-    rOutStm << getString().getStr() << ')';
+    rOutStm.WriteCharPtr( pName->GetName().getStr() ).WriteChar( '(' );
+    rOutStm.WriteCharPtr( getString().getStr() ).WriteChar( ')' );
     return sal_True;
 }
 
@@ -320,8 +320,8 @@ sal_Bool SvString::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm 
 sal_Bool SvString::WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm,
                            sal_uInt16 /*nTab */ )
 {
-    rOutStm << pName->GetName().getStr() << "(\"";
-    rOutStm << m_aStr.getStr() << "\")";
+    rOutStm.WriteCharPtr( pName->GetName().getStr() ).WriteCharPtr( "(\"" );
+    rOutStm.WriteCharPtr( m_aStr.getStr() ).WriteCharPtr( "\")" );
     return sal_True;
 }
 
@@ -378,8 +378,8 @@ sal_Bool SvUUId::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
 sal_Bool SvUUId::WriteSvIdl( SvStream & rOutStm )
 {
     // write global id
-    rOutStm << SvHash_uuid()->GetName().getStr() << "(\"";
-    rOutStm << OUStringToOString(GetHexName(), RTL_TEXTENCODING_UTF8).getStr() << "\")";
+    rOutStm.WriteCharPtr( SvHash_uuid()->GetName().getStr() ).WriteCharPtr( "(\"" );
+    rOutStm.WriteCharPtr( OUStringToOString(GetHexName(), RTL_TEXTENCODING_UTF8).getStr() ).WriteCharPtr( "\")" );
     return sal_True;
 }
 
@@ -410,11 +410,11 @@ sal_Bool SvVersion::ReadSvIdl( SvTokenStream & rInStm )
 
 sal_Bool SvVersion::WriteSvIdl( SvStream & rOutStm )
 {
-    rOutStm << SvHash_Version()->GetName().getStr() << '('
-        << OString::number(nMajorVersion).getStr()
-        << '.'
-        << OString::number(nMinorVersion).getStr()
-        << ')';
+    rOutStm.WriteCharPtr( SvHash_Version()->GetName().getStr() ).WriteChar( '(' )
+       .WriteCharPtr( OString::number(nMajorVersion).getStr() )
+       .WriteChar( '.' )
+       .WriteCharPtr( OString::number(nMinorVersion).getStr() )
+       .WriteChar( ')' );
     return sal_True;
 }
 
