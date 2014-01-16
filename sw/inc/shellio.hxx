@@ -506,7 +506,7 @@ public:
 
 // Interface class for general access on special writers.
 
-class SwWriter
+class SW_DLLPUBLIC SwWriter
 {
     SvStream* pStrm;
     SotStorageRef pStg;
@@ -566,7 +566,7 @@ namespace SwReaderWriter
     Reader* GetReader( const OUString& rFltName );
 
     /// Return writer based on the name.
-    void GetWriter( const OUString& rFltName, const OUString& rBaseURL, WriterRef& xWrt );
+    SW_DLLPUBLIC void GetWriter( const OUString& rFltName, const OUString& rBaseURL, WriterRef& xWrt );
 }
 
 void GetRTFWriter( const OUString&, const OUString&, WriterRef& );

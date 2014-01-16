@@ -171,7 +171,7 @@ SW_DLLPUBLIC Reader* GetReader( ReaderWriterEnum eReader )
     return aReaderWriter[eReader].GetReader();
 }
 
-void GetWriter( const OUString& rFltName, const OUString& rBaseURL, WriterRef& xRet )
+SW_DLLPUBLIC void GetWriter( const OUString& rFltName, const OUString& rBaseURL, WriterRef& xRet )
 {
     for( sal_uInt16 n = 0; n < MAXFILTER; ++n )
         if ( aFilterDetect[n].IsFilter( rFltName ) )
