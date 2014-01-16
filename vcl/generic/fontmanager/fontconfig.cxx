@@ -37,41 +37,6 @@ using namespace psp;
 #include <fontconfig/fontconfig.h>
 #include <ft2build.h>
 #include <fontconfig/fcfreetype.h>
-// allow compile on baseline (currently with fontconfig 2.2.0)
-#ifndef FC_WEIGHT_BOOK      // TODO: remove when baseline moves to fc>=2.2.1
-    #define FC_WEIGHT_BOOK 75
-#endif
-#ifndef FC_EMBEDDED_BITMAP  // TODO: remove when baseline moves to fc>=2.3.92
-    #define FC_EMBEDDED_BITMAP "embeddedbitmap"
-#endif
-#ifndef FC_FAMILYLANG       // TODO: remove when baseline moves to fc>=2.2.97
-    #define FC_FAMILYLANG "familylang"
-#endif
-#ifndef FC_CAPABILITY       // TODO: remove when baseline moves to fc>=2.2.97
-    #define FC_CAPABILITY "capability"
-#endif
-#ifndef FC_STYLELANG        // TODO: remove when baseline moves to fc>=2.2.97
-    #define FC_STYLELANG "stylelang"
-#endif
-#ifndef FC_HINT_STYLE       // TODO: remove when baseline moves to fc>=2.2.91
-    #define FC_HINT_STYLE  "hintstyle"
-    #define FC_HINT_NONE   0
-    #define FC_HINT_SLIGHT 1
-    #define FC_HINT_MEDIUM 2
-    #define FC_HINT_FULL   3
-#endif
-#ifndef FC_FT_FACE
-    #define FC_FT_FACE "ftface"
-#endif
-#ifndef FC_EMBOLDEN
-    #define FC_EMBOLDEN "embolden"
-#endif
-#ifndef FC_MATRIX
-    #define FC_MATRIX "matrix"
-#endif
-#ifndef FC_FONTFORMAT
-    #define FC_FONTFORMAT "fontformat"
-#endif
 
 #if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
 #include <dbus/dbus-glib.h>
