@@ -3876,4 +3876,91 @@ bool SwDoc::IsInRedlines(const SwNode & rNode) const
     return aPam.ContainsPosition(aPos);
 }
 
+bool SwExtraRedlineTbl::Contains(const SwExtraRedline* p) const
+{
+    return GetPos(p) != USHRT_MAX;
+}
+
+sal_uInt16 SwExtraRedlineTbl::GetPos(const SwExtraRedline* p) const
+{
+    std::vector<SwExtraRedline*>::const_iterator it = std::find(m_aExtraRedlines.begin(), m_aExtraRedlines.end(), p);
+    if( it == m_aExtraRedlines.end() )
+        return USHRT_MAX;
+    return it - m_aExtraRedlines.begin();
+}
+
+bool SwExtraRedlineTbl::Insert( SwExtraRedline* p )
+{
+    m_aExtraRedlines.push_back( p );
+    //p->CallDisplayFunc();
+    return true;
+}
+
+void SwExtraRedlineTbl::Remove( sal_uInt16 nPos )
+{
+    /*
+    SwDoc* pDoc = 0;
+    if( !nP && 1 == size() )
+        pDoc = front()->GetDoc();
+    */
+
+    m_aExtraRedlines.erase( m_aExtraRedlines.begin() + nPos );
+
+    /*
+    SwViewShell* pSh;
+    if( pDoc && !pDoc->IsInDtor() &&
+        0 != ( pSh = pDoc->GetCurrentViewShell()) )
+        pSh->InvalidateWindows( SwRect( 0, 0, LONG_MAX, LONG_MAX ) );
+    */
+}
+
+bool SwExtraRedlineTbl::Remove( const SwExtraRedline* p )
+{
+    sal_uInt16 nPos = GetPos(p);
+    if (nPos != USHRT_MAX)
+        Remove(nPos);
+    return nPos != USHRT_MAX;
+}
+
+void SwExtraRedlineTbl::DeleteAndDestroy( sal_uInt16 nPos, sal_uInt16 nLen )
+{
+    /*
+    SwDoc* pDoc = 0;
+    if( !nP && nL && nL == size() )
+        pDoc = front()->GetDoc();
+    */
+
+    for( std::vector<SwExtraRedline*>::iterator it = m_aExtraRedlines.begin() + nPos; it != m_aExtraRedlines.begin() + nPos + nLen; ++it )
+        delete *it;
+
+    m_aExtraRedlines.erase( m_aExtraRedlines.begin() + nPos, m_aExtraRedlines.begin() + nPos + nLen );
+
+    /*
+    SwViewShell* pSh;
+    if( pDoc && !pDoc->IsInDtor() &&
+        0 != ( pSh = pDoc->GetCurrentViewShell() ) )
+        pSh->InvalidateWindows( SwRect( 0, 0, LONG_MAX, LONG_MAX ) );
+    */
+}
+
+void SwExtraRedlineTbl::DeleteAndDestroyAll()
+{
+    DeleteAndDestroy(0, m_aExtraRedlines.size());
+}
+
+
+SwExtraRedline::SwExtraRedline( RedlineType_t eTyp )
+{
+    (void)eTyp;
+}
+
+SwExtraRedline::SwExtraRedline( const SwExtraRedline& rCpy )
+{
+    (void)rCpy;
+}
+
+SwExtraRedline::~SwExtraRedline()
+{
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,6 +34,7 @@ class SwUndo;
 class SwSectionFmt;
 class SwNumRule;
 class SwRangeRedline;
+class SwExtraRedline;
 class SwUnoCrsr;
 class SwOLENode;
 class SwTxtFmtColl;
@@ -181,6 +182,31 @@ public:
     using _SwRedlineTbl::operator[];
     using _SwRedlineTbl::empty;
 };
+
+/// Table that holds 'extra' redlines, such as 'table row insert\delete', 'paragraph moves' etc...
+class SwExtraRedlineTbl
+{
+private:
+    std::vector<SwExtraRedline*>    m_aExtraRedlines;
+
+public:
+    bool Contains(const SwExtraRedline* p) const;
+    sal_uInt16 GetPos(const SwExtraRedline* p) const;
+
+    bool Insert( SwExtraRedline* p );
+
+    void Remove( sal_uInt16 nPos );
+    bool Remove( const SwExtraRedline* p );
+    void DeleteAndDestroy( sal_uInt16 nPos, sal_uInt16 nLen = 1 );
+    void DeleteAndDestroyAll();
+
+    void dumpAsXml(xmlTextWriterPtr w);
+
+    sal_uInt16 GetSize() const                              {     return m_aExtraRedlines.size();                }
+    SwExtraRedline* GetRedline( sal_uInt16 uIndex ) const   {     return m_aExtraRedlines.operator[]( uIndex );  }
+    sal_uInt16 IsEmpty() const                              {     return m_aExtraRedlines.empty();               }
+};
+
 
 class SwUnoCrsrTbl : public std::set<SwUnoCrsr*> {
 public:
