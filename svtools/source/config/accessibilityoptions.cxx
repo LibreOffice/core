@@ -31,6 +31,8 @@
 
 #include <svl/smplhint.hxx>
 
+#include <svtools/colorcfg.hxx>
+
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/instance.hxx>
@@ -386,7 +388,7 @@ void SvtAccessibilityOptions_Impl::SetAutoDetectSystemHC(sal_Bool bSet)
         {
             xNode->setPropertyValue(s_sAutoDetectSystemHC, css::uno::makeAny(bSet));
             ::comphelper::ConfigurationHelper::flush(m_xCfg);
-
+            svtools::ColorConfig().Reload();
             bIsModified = sal_True;
         }
     }
