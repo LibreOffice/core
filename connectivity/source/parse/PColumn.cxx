@@ -25,8 +25,6 @@
 #include <comphelper/types.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <bitset>
-
 using namespace ::comphelper;
 using namespace connectivity;
 using namespace dbtools;
