@@ -246,6 +246,7 @@ public:
     void testSharedFormulasRefUpdate();
     void testSharedFormulasRefUpdateRange();
     void testSharedFormulasDeleteRows();
+    void testSharedFormulasRefUpdateMoveSheets();
     void testSharedFormulasCopyPaste();
     void testFormulaPosition();
 
@@ -396,6 +397,7 @@ public:
     CPPUNIT_TEST(testSharedFormulasRefUpdate);
     CPPUNIT_TEST(testSharedFormulasRefUpdateRange);
     CPPUNIT_TEST(testSharedFormulasDeleteRows);
+    CPPUNIT_TEST(testSharedFormulasRefUpdateMoveSheets);
     CPPUNIT_TEST(testSharedFormulasCopyPaste);
     CPPUNIT_TEST(testFormulaPosition);
     CPPUNIT_TEST(testJumpToPrecedentsDependents);

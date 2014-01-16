@@ -515,7 +515,88 @@ void Test::testSharedFormulasDeleteRows()
     CPPUNIT_ASSERT_MESSAGE("1,6 must be a shared formula cell.", pFC && pFC->IsShared());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(6), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(8), pFC->GetSharedLength());
+}
 
+void Test::testSharedFormulasRefUpdateMoveSheets()
+{
+    m_pDoc->InsertTab(0, "Sheet1");
+    m_pDoc->InsertTab(1, "Sheet2");
+    m_pDoc->InsertTab(2, "Sheet3");
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // make sure auto calc is on.
+
+    // Switch to R1C1 for ease of repeated formula insertions.
+    FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
+
+    // Fill numbers in A1:A8 on Sheet2.
+    for (SCROW i = 0; i <= 7; ++i)
+        m_pDoc->SetValue(ScAddress(0,i,1), i+1);
+
+    // Fill formula cells A1:A8 on Sheet1, to refer to the same cell address on Sheet2.
+    for (SCROW i = 0; i <= 7; ++i)
+        m_pDoc->SetString(ScAddress(0,i,0), "=Sheet2!RC");
+
+    // Check the results.
+    for (SCROW i = 0; i <= 7; ++i)
+        CPPUNIT_ASSERT_EQUAL(static_cast<double>(i+1), m_pDoc->GetValue(ScAddress(0,i,0)));
+
+    // Move Sheet3 to the leftmost position before Sheet1.
+    m_pDoc->MoveTab(2, 0);
+
+    // Check sheet names.
+    std::vector<OUString> aTabNames = m_pDoc->GetAllTableNames();
+    CPPUNIT_ASSERT_MESSAGE("There should be at least 3 sheets.", aTabNames.size() >= 3);
+    CPPUNIT_ASSERT_EQUAL(OUString("Sheet3"), aTabNames[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Sheet1"), aTabNames[1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Sheet2"), aTabNames[2]);
+
+    // Check the results again on Sheet1.
+    for (SCROW i = 0; i <= 7; ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL(static_cast<double>(i+1), m_pDoc->GetValue(ScAddress(0,i,1)));
+        if (!checkFormula(*m_pDoc, ScAddress(0,i,1), "Sheet2!RC"))
+            CPPUNIT_FAIL("Wrong formula expression.");
+    }
+
+    // Insert a new sheet at the left end.
+    m_pDoc->InsertTab(0, "Sheet4");
+
+    // Check sheet names.
+    aTabNames = m_pDoc->GetAllTableNames();
+    CPPUNIT_ASSERT_MESSAGE("There should be at least 4 sheets.", aTabNames.size() >= 4);
+    CPPUNIT_ASSERT_EQUAL(OUString("Sheet4"), aTabNames[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Sheet3"), aTabNames[1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Sheet1"), aTabNames[2]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Sheet2"), aTabNames[3]);
+
+    // Check the results again on Sheet1.
+    for (SCROW i = 0; i <= 7; ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL(static_cast<double>(i+1), m_pDoc->GetValue(ScAddress(0,i,2)));
+        if (!checkFormula(*m_pDoc, ScAddress(0,i,2), "Sheet2!RC"))
+            CPPUNIT_FAIL("Wrong formula expression.");
+    }
+
+    // Delete Sheet4.
+    m_pDoc->DeleteTab(0);
+
+    // Check sheet names.
+    aTabNames = m_pDoc->GetAllTableNames();
+    CPPUNIT_ASSERT_MESSAGE("There should be at least 3 sheets.", aTabNames.size() >= 3);
+    CPPUNIT_ASSERT_EQUAL(OUString("Sheet3"), aTabNames[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Sheet1"), aTabNames[1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Sheet2"), aTabNames[2]);
+
+    // Check the results again on Sheet1.
+    for (SCROW i = 0; i <= 7; ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL(static_cast<double>(i+1), m_pDoc->GetValue(ScAddress(0,i,1)));
+        if (!checkFormula(*m_pDoc, ScAddress(0,i,1), "Sheet2!RC"))
+            CPPUNIT_FAIL("Wrong formula expression.");
+    }
+
+    m_pDoc->DeleteTab(2);
+    m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
 

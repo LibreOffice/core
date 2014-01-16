@@ -420,7 +420,7 @@ bool checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected
         return false;
     }
 
-    OUString aFormula = toString(rDoc, rPos, *pCode);
+    OUString aFormula = toString(rDoc, rPos, *pCode, rDoc.GetGrammar());
     if (aFormula != OUString::createFromAscii(pExpected))
     {
         cerr << "Formula '" << pExpected << "' expected, but '" << aFormula << "' found" << endl;
