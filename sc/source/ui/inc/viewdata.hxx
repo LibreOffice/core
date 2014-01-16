@@ -308,10 +308,10 @@ public:
     void            SetPagebreakMode( bool bSet );
     void            SetPasteMode ( ScPasteFlags nFlags )            { nPasteFlags = nFlags; }
 
-    void            SetZoomType( SvxZoomType eNew, sal_Bool bAll );
+    void            SetZoomType( SvxZoomType eNew, bool bAll );
     void            SetZoomType( SvxZoomType eNew, std::vector< SCTAB >& tabs );
     void            SetZoom( const Fraction& rNewX, const Fraction& rNewY, std::vector< SCTAB >& tabs );
-    void            SetZoom( const Fraction& rNewX, const Fraction& rNewY, sal_Bool bAll );
+    void            SetZoom( const Fraction& rNewX, const Fraction& rNewY, bool bAll );
     void            RefreshZoom();
 
     void            SetSelCtrlMouseClick( bool bTmp ) { bSelCtrlMouseClick = bTmp; }

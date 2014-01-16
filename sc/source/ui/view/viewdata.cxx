@@ -582,7 +582,7 @@ void ScViewData::SetZoomType( SvxZoomType eNew, std::vector< SCTAB >& tabs )
     }
 }
 
-void ScViewData::SetZoomType( SvxZoomType eNew, sal_Bool bAll )
+void ScViewData::SetZoomType( SvxZoomType eNew, bool bAll )
 {
     std::vector< SCTAB > vTabs; // Empty for all tabs
     if ( !bAll ) // get selected tabs
@@ -667,7 +667,7 @@ void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, std::vec
     RefreshZoom();
 }
 
-void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, sal_Bool bAll )
+void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, bool bAll )
 {
     std::vector< SCTAB > vTabs;
     if ( !bAll ) // get selected tabs

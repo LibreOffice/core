@@ -413,7 +413,7 @@ void ScTabViewShell::SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoo
         aNewY = aFrac400;
 
     GetViewData()->UpdateScreenZoom( aNewX, aNewY );
-    SetZoom( aNewX, aNewY, sal_True );
+    SetZoom( aNewX, aNewY, true );
 
     PaintGrid();
     PaintTop();
@@ -1750,13 +1750,13 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     if ( GetViewData()->GetDocShell()->IsPreview() )
     {
         //  preview for template dialog: always show whole page
-        SetZoomType( SVX_ZOOM_WHOLEPAGE, sal_True );    // zoom value is recalculated at next Resize
+        SetZoomType( SVX_ZOOM_WHOLEPAGE, true );    // zoom value is recalculated at next Resize
     }
     else
     {
         Fraction aFract( rAppOpt.GetZoom(), 100 );
-        SetZoom( aFract, aFract, sal_True );
-        SetZoomType( rAppOpt.GetZoomType(), sal_True );
+        SetZoom( aFract, aFract, true );
+        SetZoomType( rAppOpt.GetZoomType(), true );
     }
 
     // make Controller known to SFX

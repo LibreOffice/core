@@ -1570,11 +1570,11 @@ void ScTabViewObj::SetZoomType(sal_Int16 aZoomType)
             {
                 case SVX_ZOOM_WHOLEPAGE:
                 case SVX_ZOOM_PAGEWIDTH:
-                    pView->SetZoomType( eZoomType, sal_True );
+                    pView->SetZoomType( eZoomType, true );
                     break;
 
                 default:
-                    pView->SetZoomType( SVX_ZOOM_PERCENT, sal_True );
+                    pView->SetZoomType( SVX_ZOOM_PERCENT, true );
             }
             SetZoom( nZoom );
         }
