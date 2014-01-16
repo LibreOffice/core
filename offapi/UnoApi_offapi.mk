@@ -200,6 +200,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/frame,\
     StartModule \
     TaskCreator \
 	UICommandDescription \
+	theGlobalEventBroadcaster \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/graphic,\
 	GraphicObject \

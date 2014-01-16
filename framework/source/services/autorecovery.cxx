@@ -38,7 +38,7 @@
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
+#include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
@@ -1364,7 +1364,7 @@ void AutoRecovery::implts_startListening()
 
     if (!xBroadcaster.is())
     {
-        xBroadcaster = css::frame::GlobalEventBroadcaster::create( xContext );
+        xBroadcaster = css::frame::theGlobalEventBroadcaster::get( xContext );
         // SAFE -> ----------------------------------
         WriteGuard aWriteLock(m_aLock);
         m_xNewDocBroadcaster = xBroadcaster;
@@ -2597,7 +2597,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
            since our last AutoSave. And we deregister us in case we know this state.
            But directly after one document as recovered ... we must start listening.
            Otherwhise the first "modify" doesn't reach us. Because we ourself called setModified()
-           on the document via API. And currently we dont listen for any events (not at the GlobalEventBroadcaster
+           on the document via API. And currently we dont listen for any events (not at theGlobalEventBroadcaster
            nor at any document!).
         */
         implts_startModifyListeningOnDoc(rInfo);

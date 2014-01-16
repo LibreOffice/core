@@ -25,7 +25,7 @@
 #include "lateinitlistener.hxx"
 #include "lateinitthread.hxx"
 
-#include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
+#include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 
 
 namespace filter{
@@ -40,7 +40,7 @@ LateInitListener::LateInitListener(const css::uno::Reference< css::uno::XCompone
     osl_atomic_increment( &m_refCount );
 
     m_xBroadcaster = css::uno::Reference< css::document::XEventBroadcaster >(
-        css::frame::GlobalEventBroadcaster::create(rxContext),
+        css::frame::theGlobalEventBroadcaster::get(rxContext),
         css::uno::UNO_QUERY_THROW);
 
     m_xBroadcaster->addEventListener(static_cast< css::document::XEventListener* >(this));

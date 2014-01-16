@@ -27,9 +27,10 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XComponent;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.Pair;
+import com.sun.star.frame.XGlobalEventBroadcaster;
 import com.sun.star.frame.XStorable;
+import com.sun.star.frame.theGlobalEventBroadcaster;
 import com.sun.star.document.DocumentEvent;
-import com.sun.star.document.XDocumentEventBroadcaster;
 import com.sun.star.document.XDocumentEventListener;
 import org.openoffice.test.OfficeConnection;
 
@@ -63,7 +64,7 @@ public class LoadSaveTest
 
     private XMultiServiceFactory m_xMSF = null;
     private XComponentContext m_xContext = null;
-    private XDocumentEventBroadcaster m_xGEB = null;
+    private XGlobalEventBroadcaster m_xGEB = null;
     private String m_TmpDir = null;
 
     private String m_fileURL = "file://";
@@ -77,10 +78,7 @@ public class LoadSaveTest
         assertNotNull("could not get component context.", m_xContext);
         m_xMSF = UnoRuntime.queryInterface(
             XMultiServiceFactory.class, m_xContext.getServiceManager());
-        Object oGEB = m_xMSF.createInstance(
-                "com.sun.star.frame.GlobalEventBroadcaster");
-        m_xGEB = UnoRuntime.queryInterface(XDocumentEventBroadcaster.class, oGEB);
-        assertNotNull("could not get global event broadcaster.", m_xGEB);
+        m_xGEB = theGlobalEventBroadcaster.get(m_xContext);
         m_TmpDir = util.utils.getOfficeTemp/*Dir*/(m_xMSF);
         System.out.println("tempdir: " + m_TmpDir);
         System.out.println("sourcedir: " + m_SourceDir);

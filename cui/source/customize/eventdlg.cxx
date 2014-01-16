@@ -21,7 +21,7 @@
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
+#include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -83,7 +83,7 @@ SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet,
     uno::Reference< frame::XGlobalEventBroadcaster > xSupplier;
 
     xSupplier =
-        frame::GlobalEventBroadcaster::create(::comphelper::getProcessComponentContext());
+        frame::theGlobalEventBroadcaster::get(::comphelper::getProcessComponentContext());
 
     sal_uInt16 nPos(0);
     m_xAppEvents = xSupplier->getEvents();

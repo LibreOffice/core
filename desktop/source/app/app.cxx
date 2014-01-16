@@ -40,7 +40,7 @@
 #include <svtools/javacontext.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/AutoRecovery.hpp>
-#include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
+#include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/SessionListener.hpp>
 #include <com/sun/star/frame/XSessionManagerListener.hpp>
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>
@@ -1513,7 +1513,7 @@ int Desktop::Main()
 
         // create service for loadin SFX (still needed in startup)
         pExecGlobals->xGlobalBroadcaster = Reference < css::document::XEventListener >
-            ( css::frame::GlobalEventBroadcaster::create(xContext), UNO_QUERY_THROW );
+            ( css::frame::theGlobalEventBroadcaster::get(xContext), UNO_QUERY_THROW );
 
         /* ensure existance of a default window that messages can be dispatched to
            This is for the benefit of testtool which uses PostUserEvent extensively

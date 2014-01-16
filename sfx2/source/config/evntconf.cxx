@@ -44,7 +44,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
+#include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -232,7 +232,7 @@ void PropagateEvent_Impl( SfxObjectShell *pDoc, OUString aEventName, const SvxMa
     else
     {
         xSupplier = uno::Reference < document::XEventsSupplier >
-                ( frame::GlobalEventBroadcaster::create(::comphelper::getProcessComponentContext()),
+                ( frame::theGlobalEventBroadcaster::get(::comphelper::getProcessComponentContext()),
                   uno::UNO_QUERY );
     }
 

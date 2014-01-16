@@ -237,8 +237,8 @@ def loadFromURL(xContext, url):
     props = [("Hidden", True), ("ReadOnly", True)] # FilterName?
     loadProps = tuple([mkPropertyValue(name, value) for (name, value) in props])
     xListener = EventListener()
-    xGEB = xContext.ServiceManager.createInstanceWithContext(
-        "com.sun.star.frame.GlobalEventBroadcaster", xContext)
+    xGEB = xContext.getValueByName(
+        "/singletons/com.sun.star.frame.theGlobalEventBroadcaster")
     xGEB.addDocumentEventListener(xListener)
     try:
         xDoc = xDesktop.loadComponentFromURL(url, "_blank", 0, loadProps)

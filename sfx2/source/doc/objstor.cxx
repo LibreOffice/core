@@ -27,7 +27,7 @@
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
-#include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
+#include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -150,7 +150,7 @@ void impl_addToModelCollection(const css::uno::Reference< css::frame::XModel >& 
 
     css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     css::uno::Reference< css::frame::XGlobalEventBroadcaster > xModelCollection =
-        css::frame::GlobalEventBroadcaster::create(xContext);
+        css::frame::theGlobalEventBroadcaster::get(xContext);
     try
     {
         xModelCollection->insert(css::uno::makeAny(xModel));

@@ -28,7 +28,7 @@
 module com {  module sun {  module star {  module frame {
 
 /**
-   Provides a unified interface for the GlobalEventBroadcaster service to implement.
+   Provides the unified interface of theGlobalEventBroadcaster singleton.
 
    @since LibreOffice 4.0
  */

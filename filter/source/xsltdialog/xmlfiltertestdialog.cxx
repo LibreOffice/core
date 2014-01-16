@@ -24,7 +24,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
-#include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
+#include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -166,7 +166,7 @@ XMLFilterTestDialog::XMLFilterTestDialog(Window* pParent,
 
     try
     {
-        mxGlobalBroadcaster = GlobalEventBroadcaster::create(mxContext);
+        mxGlobalBroadcaster = theGlobalEventBroadcaster::get(mxContext);
         mxGlobalEventListener = new GlobalEventListenerImpl( this );
         mxGlobalBroadcaster->addEventListener( mxGlobalEventListener );
     }

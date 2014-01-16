@@ -36,7 +36,6 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.container.XSet;
-import com.sun.star.document.XDocumentEventBroadcaster;
 import com.sun.star.document.XDocumentEventListener;
 import com.sun.star.document.XEmbeddedScripts;
 import com.sun.star.document.XEventsSupplier;
@@ -45,10 +44,12 @@ import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XFrame;
+import com.sun.star.frame.XGlobalEventBroadcaster;
 import com.sun.star.frame.XLoadable;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XModel2;
 import com.sun.star.frame.XTitle;
+import com.sun.star.frame.theGlobalEventBroadcaster;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XSingleComponentFactory;
@@ -260,7 +261,8 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
             globalFactory.insert(m_callbackFactory);
 
             // register ourself as listener at the global event broadcaster
-            final XDocumentEventBroadcaster broadcaster = UnoRuntime.queryInterface(XDocumentEventBroadcaster.class, getMSF().createInstance("com.sun.star.frame.GlobalEventBroadcaster"));
+            final XGlobalEventBroadcaster broadcaster
+                = theGlobalEventBroadcaster.get(getComponentContext());
             broadcaster.addDocumentEventListener(this);
         }
         catch (Exception e)
@@ -282,7 +284,8 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
             m_callbackFactory.dispose();
 
             // revoke ourself as listener at the global event broadcaster
-            final XDocumentEventBroadcaster broadcaster = UnoRuntime.queryInterface(XDocumentEventBroadcaster.class, getMSF().createInstance("com.sun.star.frame.GlobalEventBroadcaster"));
+            final XGlobalEventBroadcaster broadcaster
+                = theGlobalEventBroadcaster.get(getComponentContext());
             broadcaster.removeDocumentEventListener(this);
         }
         catch (Exception e)

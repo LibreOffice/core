@@ -275,7 +275,8 @@ def loadFromURL(xContext, url, t, component):
     xListener = None
     if component == "writer":
         xListener = EventListener()
-        xGEB = xContext.ServiceManager.createInstanceWithContext("com.sun.star.frame.GlobalEventBroadcaster", xContext)
+        xGEB = xContext.getValueByName(
+            "/singletons/com.sun.star.frame.theGlobalEventBroadcaster")
         xGEB.addDocumentEventListener(xListener)
     try:
         xDoc = None

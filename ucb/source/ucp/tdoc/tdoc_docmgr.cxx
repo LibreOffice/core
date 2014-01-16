@@ -35,7 +35,7 @@
 #include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/document/XEventBroadcaster.hpp"
 #include "com/sun/star/document/XStorageBasedDocument.hpp"
-#include "com/sun/star/frame/GlobalEventBroadcaster.hpp"
+#include "com/sun/star/frame/theGlobalEventBroadcaster.hpp"
 #include "com/sun/star/frame/XStorable.hpp"
 #include "com/sun/star/frame/ModuleManager.hpp"
 #include "com/sun/star/lang/DisposedException.hpp"
@@ -105,7 +105,7 @@ OfficeDocumentsManager::OfficeDocumentsManager(
             const uno::Reference< uno::XComponentContext > & rxContext,
             OfficeDocumentsEventListener * pDocEventListener )
 : m_xContext( rxContext ),
-  m_xDocEvtNotifier( frame::GlobalEventBroadcaster::create( rxContext ) ),
+  m_xDocEvtNotifier( frame::theGlobalEventBroadcaster::get( rxContext ) ),
   m_pDocEventListener( pDocEventListener ),
   m_xDocCloseListener( new OfficeDocumentsCloseListener( this ) )
 {

@@ -70,6 +70,7 @@
   </implementation>
   <implementation name="com.sun.star.comp.sfx2.GlobalEventBroadcaster">
     <service name="com.sun.star.frame.GlobalEventBroadcaster"/>
+    <singleton name="com.sun.star.frame.theGlobalEventBroadcaster"/>
   </implementation>
   <implementation name="com.sun.star.comp.sfx2.IFrameObject"
       constructor="com_sun_star_comp_sfx2_IFrameObject_get_implementation">

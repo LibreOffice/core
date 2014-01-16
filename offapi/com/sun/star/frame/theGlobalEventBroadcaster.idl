@@ -16,22 +16,28 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_frame_GlobalEventBroadcaster_idl__
-#define __com_sun_star_frame_GlobalEventBroadcaster_idl__
+
+#ifndef COM_SUN_STAR_FRAME_GLOBALEVENTBROADCASTER_IDL
+#define COM_SUN_STAR_FRAME_GLOBALEVENTBROADCASTER_IDL
 
 #include <com/sun/star/frame/XGlobalEventBroadcaster.idl>
 
-
-module com {  module sun {  module star {  module frame {
+module com { module sun { module star { module frame {
 
 /**
-   A legacy (single-instance) service-variant of theGlobalEventBroadcaster
-   singleton.
+    This singleton offers the document event functionality that can be found at
+    any com::sun::star::document::OfficeDocument, but it does it for all
+    existing documents.
 
-   @deprecated Use theGlobalEventBroadcaster singleton instead.
+    So it is a single place where a listener can be registered for all events in
+    all documents.
+
+    Prior to LibreOffice 4.3, this singleton was only available as a
+    (single-instance) GlobalEventBroadcaster service.
+
+    @since LibreOffice 4.3
 */
-service GlobalEventBroadcaster : XGlobalEventBroadcaster;
-
+singleton theGlobalEventBroadcaster: XGlobalEventBroadcaster;
 
 }; }; }; };
 

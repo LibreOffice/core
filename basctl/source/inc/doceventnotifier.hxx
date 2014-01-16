@@ -55,7 +55,7 @@ namespace basctl
     //====================================================================
     //= DocumentEventNotifier
     //====================================================================
-    /** allows registering at the GlobalEventBroadcaster for global document events
+    /** allows registering at theGlobalEventBroadcaster for global document events
     */
     class DocumentEventNotifier
     {

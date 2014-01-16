@@ -21,7 +21,7 @@
 #include "doceventnotifier.hxx"
 #include "scriptdocument.hxx"
 
-#include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
+#include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 
 #include <vcl/svapp.hxx>
@@ -50,7 +50,7 @@ namespace basctl
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::frame::XModel;
-    using ::com::sun::star::frame::GlobalEventBroadcaster;
+    using ::com::sun::star::frame::theGlobalEventBroadcaster;
     using ::com::sun::star::uno::UNO_QUERY;
 
     namespace csslang = ::com::sun::star::lang;
@@ -212,7 +212,7 @@ namespace basctl
             {
                 Reference< com::sun::star::uno::XComponentContext > aContext(
                     comphelper::getProcessComponentContext() );
-                xBroadcaster.set( GlobalEventBroadcaster::create(aContext), UNO_QUERY_THROW );
+                xBroadcaster.set( theGlobalEventBroadcaster::get(aContext), UNO_QUERY_THROW );
             }
 
             void ( SAL_CALL XEventBroadcaster::*listenerAction )( const Reference< XEventListener >& ) =

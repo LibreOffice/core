@@ -20,14 +20,15 @@ package complex.dbaccess;
 import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.XEnumeration;
-import com.sun.star.container.XEnumerationAccess;
 import com.sun.star.frame.FrameSearchFlag;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XFrame;
+import com.sun.star.frame.XGlobalEventBroadcaster;
 import com.sun.star.frame.XModel;
+import com.sun.star.frame.theGlobalEventBroadcaster;
 import com.sun.star.lang.XComponent;
 import com.sun.star.sdb.CommandType;
 import com.sun.star.uno.Exception;
@@ -111,7 +112,8 @@ public class Beamer extends TestCase
 
         final XFrame beamer = frame.findFrame("_beamer", 0);
         assertNotNull(beamer);
-        final XEnumerationAccess evtBc = UnoRuntime.queryInterface(XEnumerationAccess.class, getMSF().createInstance("com.sun.star.frame.GlobalEventBroadcaster"));
+        final XGlobalEventBroadcaster evtBc = theGlobalEventBroadcaster.get(
+            getComponentContext());
         XEnumeration enumeration = evtBc.createEnumeration();
         int count = -1;
         while (enumeration.hasMoreElements())

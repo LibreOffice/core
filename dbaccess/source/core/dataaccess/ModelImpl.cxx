@@ -36,7 +36,7 @@
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
 #include <com/sun/star/embed/StorageFactory.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
-#include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
+#include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/sdb/BooleanComparisonMode.hpp>
 #include <com/sun/star/script/DocumentScriptLibraryContainer.hpp>
@@ -952,7 +952,7 @@ Reference< XModel > ODatabaseModelImpl::createNewModel_deliverOwnership( bool _b
 
         try
         {
-            Reference< XGlobalEventBroadcaster > xModelCollection = GlobalEventBroadcaster::create( m_aContext );
+            Reference< XGlobalEventBroadcaster > xModelCollection = theGlobalEventBroadcaster::get( m_aContext );
             xModelCollection->insert( makeAny( xModel ) );
         }
         catch( const Exception& )

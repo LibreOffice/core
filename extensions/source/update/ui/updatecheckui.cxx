@@ -28,7 +28,7 @@
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
+#include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/task/XJob.hpp>
@@ -155,9 +155,6 @@ private:
     void            AddMenuBarIcon( SystemWindow* pSysWin, bool bAddEventHdl );
     Image           GetBubbleImage( OUString &rURL );
 
-    uno::Reference< document::XEventBroadcaster > getGlobalEventBroadcaster() const
-         throw (uno::RuntimeException);
-
 public:
                     UpdateCheckUI(const uno::Reference<uno::XComponentContext>&);
     virtual        ~UpdateCheckUI();
@@ -220,7 +217,7 @@ UpdateCheckUI::UpdateCheckUI(const uno::Reference<uno::XComponentContext>& xCont
     maTimeoutTimer.SetTimeout( 10000 );
     maTimeoutTimer.SetTimeoutHdl( LINK( this, UpdateCheckUI, TimeOutHdl ) );
 
-    uno::Reference< document::XEventBroadcaster > xBroadcaster( getGlobalEventBroadcaster() );
+    uno::Reference< document::XEventBroadcaster > xBroadcaster( frame::theGlobalEventBroadcaster::get(m_xContext) );
     xBroadcaster->addEventListener( this );
 
     maWindowEventHdl = LINK( this, UpdateCheckUI, WindowEventHdl );
@@ -235,20 +232,6 @@ UpdateCheckUI::~UpdateCheckUI()
     RemoveBubbleWindow( true );
     delete mpUpdResMgr;
     delete mpSfxResMgr;
-}
-
-//------------------------------------------------------------------------------
-uno::Reference<document::XEventBroadcaster>
-UpdateCheckUI::getGlobalEventBroadcaster() const throw (uno::RuntimeException)
-{
-    if( !m_xContext.is() )
-        throw uno::RuntimeException(
-            "UpdateCheckUI: empty component context",
-                uno::Reference< uno::XInterface >() );
-
-    return uno::Reference<document::XEventBroadcaster> (
-        frame::GlobalEventBroadcaster::create(m_xContext),
-        uno::UNO_QUERY_THROW);
 }
 
 //------------------------------------------------------------------------------
