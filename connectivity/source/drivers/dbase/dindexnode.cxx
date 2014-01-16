@@ -697,7 +697,7 @@ void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
             rStream.Write(&buf[0], sizeof(double));
         }
         else
-            rStream << (double) aKey.getValue();
+            rStream.WriteDouble( (double) aKey.getValue() );
     }
     else
     {

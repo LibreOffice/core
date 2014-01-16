@@ -317,8 +317,8 @@ Size ScHTMLExport::MMToPixel( const Size& rSize )
 
 sal_uLong ScHTMLExport::Write()
 {
-    rStrm << '<' << OOO_STRING_SVTOOLS_HTML_doctype << ' ' << OOO_STRING_SVTOOLS_HTML_doctype40 << '>'
-        << SAL_NEWLINE_STRING << SAL_NEWLINE_STRING;
+    rStrm.WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_doctype ).WriteChar( ' ' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_doctype40 ).WriteChar( '>' )
+       .WriteCharPtr( SAL_NEWLINE_STRING ).WriteCharPtr( SAL_NEWLINE_STRING );
     TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_html );
     WriteHeader();
     OUT_LF();
@@ -365,19 +365,19 @@ void ScHTMLExport::WriteHeader()
     // CSS1 StyleSheet
     PageDefaults( bAll ? 0 : aRange.aStart.Tab() );
     IncIndent(1);
-    rStrm << "<" << OOO_STRING_SVTOOLS_HTML_style << " " << OOO_STRING_SVTOOLS_HTML_O_type << "=\"text/css\">";
+    rStrm.WriteCharPtr( "<" ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_style ).WriteCharPtr( " " ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_type ).WriteCharPtr( "=\"text/css\">" );
 
-    rStrm << sMyBegComment; OUT_LF();
-    rStrm << OOO_STRING_SVTOOLS_HTML_body << "," << OOO_STRING_SVTOOLS_HTML_division << "," << OOO_STRING_SVTOOLS_HTML_table << ","
-        << OOO_STRING_SVTOOLS_HTML_thead << "," << OOO_STRING_SVTOOLS_HTML_tbody << "," << OOO_STRING_SVTOOLS_HTML_tfoot << ","
-        << OOO_STRING_SVTOOLS_HTML_tablerow << "," << OOO_STRING_SVTOOLS_HTML_tableheader << ","
-        << OOO_STRING_SVTOOLS_HTML_tabledata << "," << OOO_STRING_SVTOOLS_HTML_parabreak << " { " << sFontFamily;
+    rStrm.WriteCharPtr( sMyBegComment ); OUT_LF();
+    rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_HTML_body ).WriteCharPtr( "," ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_division ).WriteCharPtr( "," ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_table ).WriteCharPtr( "," )
+       .WriteCharPtr( OOO_STRING_SVTOOLS_HTML_thead ).WriteCharPtr( "," ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_tbody ).WriteCharPtr( "," ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_tfoot ).WriteCharPtr( "," )
+       .WriteCharPtr( OOO_STRING_SVTOOLS_HTML_tablerow ).WriteCharPtr( "," ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_tableheader ).WriteCharPtr( "," )
+       .WriteCharPtr( OOO_STRING_SVTOOLS_HTML_tabledata ).WriteCharPtr( "," ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_parabreak ).WriteCharPtr( " { " ).WriteCharPtr( sFontFamily );
     sal_Int32 nFonts = comphelper::string::getTokenCount(aHTMLStyle.aFontFamilyName, ';');
     if ( nFonts == 1 )
     {
-        rStrm << '\"';
+        rStrm.WriteChar( '\"' );
         OUT_STR( aHTMLStyle.aFontFamilyName );
-        rStrm << '\"';
+        rStrm.WriteChar( '\"' );
     }
     else
     {   // Fontlist, VCL: Semicolon as separator
@@ -385,17 +385,17 @@ void ScHTMLExport::WriteHeader()
         const OUString& rList = aHTMLStyle.aFontFamilyName;
         for ( sal_Int32 j = 0, nPos = 0; j < (sal_Int32) nFonts; j++ )
         {
-            rStrm << '\"';
+            rStrm.WriteChar( '\"' );
             OUT_STR( rList.getToken( 0, ';', nPos ) );
-            rStrm << '\"';
+            rStrm.WriteChar( '\"' );
             if ( j < nFonts-1 )
-                rStrm << ", ";
+                rStrm.WriteCharPtr( ", " );
         }
     }
-    rStrm << "; " << sFontSize
-        << GetFontSizeCss( ( sal_uInt16 ) aHTMLStyle.nFontHeight ) << " }";
+    rStrm.WriteCharPtr( "; " ).WriteCharPtr( sFontSize )
+       .WriteCharPtr( GetFontSizeCss( ( sal_uInt16 ) aHTMLStyle.nFontHeight ) ).WriteCharPtr( " }" );
     OUT_LF();
-    rStrm << sMyEndComment;
+    rStrm.WriteCharPtr( sMyEndComment );
     IncIndent(-1); OUT_LF(); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_style );
 
     IncIndent(-1); OUT_LF(); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_head );
@@ -421,11 +421,11 @@ void ScHTMLExport::WriteOverview()
             if ( !IsEmptyTable( nTab ) )
             {
                 pDoc->GetName( nTab, aStr );
-                rStrm << "<A HREF=\"#table"
-                    << OString::number(nTab).getStr()
-                    << "\">";
+                rStrm.WriteCharPtr( "<A HREF=\"#table" )
+                   .WriteCharPtr( OString::number(nTab).getStr() )
+                   .WriteCharPtr( "\">" );
                 OUT_STR( aStr );
-                rStrm << "</A>";
+                rStrm.WriteCharPtr( "</A>" );
                 TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_linebreak );
             }
         }
@@ -559,7 +559,7 @@ void ScHTMLExport::WriteBody()
     const SvxBrushItem* pBrushItem = (const SvxBrushItem*)&rSet.Get( ATTR_BACKGROUND );
 
     // default text color black
-    rStrm << '<' << OOO_STRING_SVTOOLS_HTML_body << ' ' << OOO_STRING_SVTOOLS_HTML_O_text << "=\"#000000\"";
+    rStrm.WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_body ).WriteChar( ' ' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_text ).WriteCharPtr( "=\"#000000\"" );
 
     if ( bAll && GPOS_NONE != pBrushItem->GetGraphicPos() )
     {
@@ -604,10 +604,10 @@ void ScHTMLExport::WriteBody()
         }
         if( !aLink.isEmpty() )
         {
-            rStrm << ' ' << OOO_STRING_SVTOOLS_HTML_O_background << "=\"";
+            rStrm.WriteChar( ' ' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_background ).WriteCharPtr( "=\"" );
             OUT_STR( URIHelper::simpleNormalizedMakeRelative(
                         aBaseURL,
-                        aLink ) ) << '\"';
+                        aLink ) ).WriteChar( '\"' );
         }
     }
     if ( !aHTMLStyle.aBackgroundColor.GetTransparency() )
@@ -619,7 +619,7 @@ void ScHTMLExport::WriteBody()
         HTMLOutFuncs::Out_Color( rStrm, aHTMLStyle.aBackgroundColor );
     }
 
-    rStrm << '>'; OUT_LF();
+    rStrm.WriteChar( '>' ); OUT_LF();
 
     if ( bAll )
         WriteOverview();
@@ -679,9 +679,9 @@ void ScHTMLExport::WriteTables()
                 OUT_HR();
 
                 // Write anchor
-                rStrm << "<A NAME=\"table"
-                    << OString::number(nTab).getStr()
-                    << "\">";
+                rStrm.WriteCharPtr( "<A NAME=\"table" )
+                   .WriteCharPtr( OString::number(nTab).getStr() )
+                   .WriteCharPtr( "\">" );
                 TAG_ON( OOO_STRING_SVTOOLS_HTML_head1 );
                 OUT_STR( aStrOut );
                 TAG_ON( OOO_STRING_SVTOOLS_HTML_emphasis );
@@ -691,7 +691,7 @@ void ScHTMLExport::WriteTables()
 
                 TAG_OFF( OOO_STRING_SVTOOLS_HTML_emphasis );
                 TAG_OFF( OOO_STRING_SVTOOLS_HTML_head1 );
-                rStrm << "</A>"; OUT_LF();
+                rStrm.WriteCharPtr( "</A>" ); OUT_LF();
             }
         }
         else
@@ -1216,11 +1216,11 @@ bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
                             bUrl = sal_True;
                             const SvxURLField*  pURLField = (const SvxURLField*)pField;
 //                          String              aFieldText = rEngine.GetText( aSel );
-                            rStrm << '<' << OOO_STRING_SVTOOLS_HTML_anchor << ' ' << OOO_STRING_SVTOOLS_HTML_O_href << "=\"";
+                            rStrm.WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_anchor ).WriteChar( ' ' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_href ).WriteCharPtr( "=\"" );
                             OUT_STR( pURLField->GetURL() );
-                            rStrm << "\">";
+                            rStrm.WriteCharPtr( "\">" );
                             OUT_STR( pURLField->GetRepresentation() );
-                            rStrm << "</" << OOO_STRING_SVTOOLS_HTML_anchor << '>';
+                            rStrm.WriteCharPtr( "</" ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_anchor ).WriteChar( '>' );
                         }
                     }
                 }
@@ -1273,7 +1273,7 @@ sal_Bool ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
         {
             INetURLObject aCpyURL( aDest );
             SvFileStream aCpy( aCpyURL.PathToFileName(), STREAM_WRITE );
-            aCpy << aTmp;
+            aCpy.WriteStream( aTmp );
 
             aCpy.Close();
             bRet = SVSTREAM_OK == aCpy.GetError();
@@ -1284,7 +1284,7 @@ sal_Bool ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
 
             {
                 SvFileStream aCpy( aMedium.GetPhysicalName(), STREAM_WRITE );
-                aCpy << aTmp;
+                aCpy.WriteStream( aTmp );
             }
 
             // Take over

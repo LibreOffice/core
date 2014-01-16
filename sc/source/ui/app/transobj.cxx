@@ -466,7 +466,7 @@ sal_Bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
                 if( pSrcStm )
                 {
                     rxOStm->SetBufferSize( 0xff00 );
-                    *rxOStm << *pSrcStm;
+                    rxOStm->WriteStream( *pSrcStm );
                     delete pSrcStm;
                 }
 

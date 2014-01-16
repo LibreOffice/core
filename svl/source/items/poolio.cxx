@@ -117,15 +117,15 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
     pImp->bStreaming = sal_True;
     if ( !pStoreMaster )
     {
-        rStream << ( rStream.GetVersion() >= SOFFICE_FILEFORMAT_50
+        rStream.WriteUInt16(  rStream.GetVersion() >= SOFFICE_FILEFORMAT_50
                 ? SFX_ITEMPOOL_TAG_STARTPOOL_5
-                : SFX_ITEMPOOL_TAG_STARTPOOL_4 );
-        rStream << SFX_ITEMPOOL_VER_MAJOR << SFX_ITEMPOOL_VER_MINOR;
-        rStream << SFX_ITEMPOOL_TAG_TRICK4OLD;
+                : SFX_ITEMPOOL_TAG_STARTPOOL_4  );
+        rStream.WriteUInt8( SFX_ITEMPOOL_VER_MAJOR ).WriteUInt8( SFX_ITEMPOOL_VER_MINOR );
+        rStream.WriteUInt16( SFX_ITEMPOOL_TAG_TRICK4OLD );
 
         // SfxStyleSheet-Bug umgehen
-        rStream << sal_uInt16(0); // Version
-        rStream << sal_uInt16(0); // Count (2. Schleife f"allt sonst auf die Fresse)
+        rStream.WriteUInt16( sal_uInt16(0) ); // Version
+        rStream.WriteUInt16( sal_uInt16(0) ); // Count (2. Schleife f"allt sonst auf die Fresse)
     }
 
     // jeder Pool ist als ganzes ein Record
@@ -135,7 +135,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
     // Einzel-Header (Version des Inhalts und Name)
     {
         SfxMiniRecordWriter aPoolHeaderRec( &rStream, SFX_ITEMPOOL_REC_HEADER);
-        rStream << pImp->nVersion;
+        rStream.WriteUInt16( pImp->nVersion );
         SfxPoolItem::writeByteString(rStream, pImp->aName);
     }
 
@@ -146,18 +146,18 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
         {
             aVerRec.NewContent();
             SfxPoolVersion_ImplPtr pVer = pImp->aVersions[nVerNo];
-            rStream << pVer->_nVer << pVer->_nStart << pVer->_nEnd;
+            rStream.WriteUInt16( pVer->_nVer ).WriteUInt16( pVer->_nStart ).WriteUInt16( pVer->_nEnd );
             sal_uInt16 nCount = pVer->_nEnd - pVer->_nStart + 1;
             sal_uInt16 nNewWhich = 0;
             for ( sal_uInt16 n = 0; n < nCount; ++n )
             {
                 nNewWhich = pVer->_pMap[n];
-                rStream << nNewWhich;
+                rStream.WriteUInt16( nNewWhich );
             }
 
             // Workaround gegen Bug in SetVersionMap der 312
             if ( SOFFICE_FILEFORMAT_31 == pImp->mnFileFormatVersion )
-                rStream << sal_uInt16(nNewWhich+1);
+                rStream.WriteUInt16( sal_uInt16(nNewWhich+1) );
         }
     }
 
@@ -189,11 +189,11 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
                     // eigene Kennung, globale Which-Id und Item-Version
                     sal_uInt16 nSlotId = GetSlotId( (*ppDefItem)->Which(), sal_False );
                     aWhichIdsRec.NewContent(nSlotId, 0);
-                    rStream << (*ppDefItem)->Which();
-                    rStream << nItemVersion;
+                    rStream.WriteUInt16( (*ppDefItem)->Which() );
+                    rStream.WriteUInt16( nItemVersion );
                     const sal_uInt32 nCount = ::std::min<size_t>( (*itrArr)->size(), SAL_MAX_UINT32 );
                     DBG_ASSERT(nCount, "ItemArr is empty");
-                    rStream << nCount;
+                    rStream.WriteUInt32( nCount );
 
                     // Items an sich schreiben
                     SfxMultiMixRecordWriter aItemsRec( &rStream, SFX_ITEMPOOL_REC_ITEMS, 0 );
@@ -206,10 +206,10 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
                             aItemsRec.NewContent((sal_uInt16)j, 'X' );
 
                             if ( pItem->GetRefCount() == SFX_ITEMS_SPECIAL )
-                                rStream << (sal_uInt16) pItem->GetKind();
+                                rStream.WriteUInt16( (sal_uInt16) pItem->GetKind() );
                             else
                             {
-                                rStream << (sal_uInt16) pItem->GetRefCount();
+                                rStream.WriteUInt16( (sal_uInt16) pItem->GetRefCount() );
                                 if( pItem->GetRefCount() > SFX_ITEMS_OLD_MAXREF )
                                     rStream.SetError( ERRCODE_IO_NOTSTORABLEINBINARYFORMAT );
                             }
@@ -258,8 +258,8 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
                 // eigene Kennung, globale Kennung, Version
                 sal_uInt16 nSlotId = GetSlotId( pDefaultItem->Which(), sal_False );
                 aDefsRec.NewContent( nSlotId, 0 );
-                rStream << pDefaultItem->Which();
-                rStream << nItemVersion;
+                rStream.WriteUInt16( pDefaultItem->Which() );
+                rStream.WriteUInt16( nItemVersion );
 
                 // Item an sich
                 pDefaultItem->Store( rStream, nItemVersion );
@@ -1171,13 +1171,13 @@ bool SfxItemPool::StoreSurrogate
     if ( pItem )
     {
         bool bRealSurrogate = IsItemFlag(*pItem, SFX_ITEM_POOLABLE);
-        rStream << ( bRealSurrogate
+        rStream.WriteUInt32(  bRealSurrogate
                         ? GetSurrogate( pItem )
-                        : SFX_ITEMS_DIRECT );
+                        : SFX_ITEMS_DIRECT  );
         return bRealSurrogate;
     }
 
-    rStream << SFX_ITEMS_NULL;
+    rStream.WriteUInt32( SFX_ITEMS_NULL );
     return sal_True;
 }
 
@@ -1510,16 +1510,16 @@ bool SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
     if ( USHRT_MAX == nItemVersion )
         return sal_False;
 
-    rStream << rItem.Which() << nSlotId;
+    rStream.WriteUInt16( rItem.Which() ).WriteUInt16( nSlotId );
     if ( bDirect || !pPool->StoreSurrogate( rStream, &rItem ) )
     {
-        rStream << nItemVersion;
-        rStream << (sal_uInt32) 0L;           // Platz fuer Laenge in Bytes
+        rStream.WriteUInt16( nItemVersion );
+        rStream.WriteUInt32( (sal_uInt32) 0L );           // Platz fuer Laenge in Bytes
         sal_uLong nIStart = rStream.Tell();
         rItem.Store(rStream, nItemVersion);
         sal_uLong nIEnd = rStream.Tell();
         rStream.Seek( nIStart-4 );
-        rStream << (sal_Int32) ( nIEnd-nIStart );
+        rStream.WriteInt32( (sal_Int32) ( nIEnd-nIStart ) );
         rStream.Seek( nIEnd );
     }
 

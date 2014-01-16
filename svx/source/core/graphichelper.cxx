@@ -163,7 +163,7 @@ OUString GraphicHelper::ExportGraphic( const Graphic& rGraphic, const OUString& 
                     SfxMedium aOut( sPath, STREAM_WRITE | STREAM_SHARE_DENYNONE);
                     if( aOut.GetOutStream() && !aOut.GetOutStream()->GetError())
                     {
-                        *aOut.GetOutStream() << *aIn.GetInStream();
+                        aOut.GetOutStream()->WriteStream( *aIn.GetInStream() );
                         if ( 0 == aIn.GetError() )
                         {
                             aOut.Close();

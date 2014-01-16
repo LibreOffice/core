@@ -622,7 +622,7 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
                 if( pSrcStm )
                 {
                     rxOStm->SetBufferSize( 0xff00 );
-                    *rxOStm << *pSrcStm;
+                    rxOStm->WriteStream( *pSrcStm );
                     delete pSrcStm;
                 }
 
