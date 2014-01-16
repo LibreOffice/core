@@ -163,6 +163,7 @@ void SwUiWriterTest::testImportRTF()
     SvMemoryStream aStream(const_cast<sal_Char*>(aData.getStr()), aData.getLength(), STREAM_READ);
     SwReader aReader(aStream, OUString(), OUString(), *pWrtShell->GetCrsr());
     Reader* pRTFReader = SwReaderWriter::GetReader(READER_WRITER_RTF);
+    CPPUNIT_ASSERT(pRTFReader != 0);
     CPPUNIT_ASSERT_EQUAL(sal_uLong(0), aReader.Read(*pRTFReader));
 
     sal_uLong nIndex = pWrtShell->GetCrsr()->GetNode()->GetIndex();
