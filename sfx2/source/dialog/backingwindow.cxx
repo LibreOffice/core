@@ -59,7 +59,7 @@ const char TEMPLATE_URL[] =       "slot:5500";
 const char OPEN_URL[] =           ".uno:Open";
 const char SERVICENAME_CFGREADACCESS[] = "com.sun.star.configuration.ConfigurationAccess";
 
-const int nButtonsFontSize = 15;
+const int nButtonsFontSize = 12;
 const Color aButtonsBackground(114, 168, 84); // TDF green
 const Color aButtonsText(COL_WHITE);
 
@@ -90,10 +90,6 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     get(mpAllButtonsBox, "all_buttons_box");
     get(mpButtonsBox, "buttons_box");
     get(mpSmallButtonsBox, "small_buttons_box");
-    get(mpThinBox1, "thin_box1");
-    get(mpThinBox2, "thin_box2");
-    get(mpHelpBox, "help_box");
-    get(mpExtensionsBox, "extensions_box");
 
     get(mpAllRecentThumbnails, "all_recent");
 
@@ -217,6 +213,9 @@ void BackingWindow::initControls()
     setupButton( mpImpressAllButton );
     setupButton( mpMathAllButton );
 
+    setupButton( mpHelpButton );
+    setupButton( mpExtensionsButton );
+
     mpExtensionsButton->SetClickHdl(LINK(this, BackingWindow, ExtLinkClickHdl));
 
     // setup nice colors
@@ -225,13 +224,8 @@ void BackingWindow::initControls()
     aFont.SetHeight(nButtonsFontSize);
     mpCreateLabel->SetControlFont(aFont);
 
-    mpHelpButton->SetControlForeground(aButtonsText);
-    mpExtensionsButton->SetControlForeground(aButtonsText);
-
     mpAllButtonsBox->SetBackground(aButtonsBackground);
     mpSmallButtonsBox->SetBackground(aButtonsBackground);
-    mpHelpBox->SetBackground(aButtonsBackground);
-    mpExtensionsBox->SetBackground(aButtonsBackground);
 
     // motif image under the buttons
     Wallpaper aWallpaper(get<FixedImage>("motif")->GetImage().GetBitmapEx());
@@ -240,10 +234,6 @@ void BackingWindow::initControls()
 
     mpButtonsBox->SetBackground(aWallpaper);
 
-    // thin white rectangle aronud the Help and Extensions buttons
-    mpThinBox1->SetBackground(aButtonsText);
-    mpThinBox2->SetBackground(aButtonsText);
-
     Resize();
 }
 
@@ -251,11 +241,15 @@ void BackingWindow::setupButton( PushButton* pButton )
 {
     // the buttons should have a bit bigger font
     Font aFont(pButton->GetControlFont());
-    aFont.SetHeight(nButtonsFontSize);
+    if( pButton == mpHelpButton || pButton == mpExtensionsButton )
+        aFont.SetHeight(nButtonsFontSize - 2);
+    else
+        aFont.SetHeight(nButtonsFontSize);
     pButton->SetControlFont(aFont);
 
     // color that fits the theme
     pButton->SetControlForeground(aButtonsText);
+    pButton->SetControlBackground(aButtonsBackground);
 
     pButton->SetClickHdl( LINK( this, BackingWindow, ClickHdl ) );
 }

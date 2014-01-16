@@ -738,7 +738,9 @@ void PushButton::ImplDrawPushButtonFrame( Window* pDev,
         pDev->OutputDevice::SetSettings( aOldSettings );
     }
     else
-        rRect = aDecoView.DrawButton( rRect, nStyle );
+    {
+        aDecoView.DrawButton( rRect, nStyle | BUTTON_DRAW_NOFILL );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1037,10 +1039,11 @@ void PushButton::ImplDrawPushButton( bool bLayout )
         if( ! bRollOver && ! HasFocus() )
             bDrawMenuSep = false;
     }
+
+    const Rectangle aCtrlRegion( aInRect );
     if ( (bNativeOK=IsNativeControlSupported(CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL)) == sal_True )
     {
         PushButtonValue aControlValue;
-        Rectangle        aCtrlRegion( aInRect );
         ControlState     nState = 0;
 
         if ( mbPressed || IsChecked() )                   nState |= CTRL_STATE_PRESSED;
@@ -1074,42 +1077,44 @@ void PushButton::ImplDrawPushButton( bool bLayout )
         Size aInRectSize( LogicToPixel( Size( aInRect.GetWidth(), aInRect.GetHeight() ) ) );
         aControlValue.mbSingleLine = (aInRectSize.Height() < 2 * aFontSize.Height() );
 
-        if( ((nState & CTRL_STATE_ROLLOVER)) || ! (GetStyle() & WB_FLATBUTTON) )
+        if( ! (GetStyle() & WB_FLATBUTTON) )
         {
             bNativeOK = DrawNativeControl( CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
                             aControlValue, OUString()/*PushButton::GetText()*/ );
         }
         else
         {
-            bNativeOK = true;
+            bNativeOK = sal_False;
         }
 
-        // draw content using the same aInRect as non-native VCL would do
-        ImplDrawPushButtonContent( this,
+        if( bNativeOK )
+        {
+            // draw content using the same aInRect as non-native VCL would do
+            ImplDrawPushButtonContent( this,
                                    (nState&CTRL_STATE_ROLLOVER) ? WINDOW_DRAW_ROLLOVER : 0,
                                    aInRect, bLayout, bDrawMenuSep );
+        }
 
         if ( HasFocus() )
             ShowFocus( ImplGetFocusRect() );
     }
 
-    if ( bNativeOK == sal_False )
+    if ( !bNativeOK )
     {
         // draw PushButtonFrame, aInRect has content size afterwards
         if( (GetStyle() & WB_FLATBUTTON) )
         {
-            Rectangle aTempRect( aInRect );
-            if( ! bLayout && bRollOver )
-                ImplDrawPushButtonFrame( this, aTempRect, nButtonStyle );
+            aInRect = aCtrlRegion;
+            if( !bLayout )
+            {
+                if( bRollOver )
+                    nButtonStyle |= BUTTON_DRAW_DEFAULT;
+                ImplDrawPushButtonFrame( this, aInRect, nButtonStyle );
+            }
             aInRect.Left()   += 2;
             aInRect.Top()    += 2;
             aInRect.Right()  -= 2;
             aInRect.Bottom() -= 2;
-        }
-        else
-        {
-            if( ! bLayout )
-                ImplDrawPushButtonFrame( this, aInRect, nButtonStyle );
         }
 
         // draw content

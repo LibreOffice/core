@@ -133,6 +133,7 @@ TemplateAbstractView::TemplateAbstractView (Window *pParent, WinBits nWinStyle, 
 {
     maAllButton.Hide();
     maAllButton.SetStyle(maAllButton.GetStyle() | WB_FLATBUTTON);
+    maAllButton.SetControlBackground(Color(COL_TRANSPARENT));
     maAllButton.SetClickHdl(LINK(this,TemplateAbstractView,ShowRootRegionHdl));
     maFTName.Hide();
 }
@@ -145,6 +146,7 @@ TemplateAbstractView::TemplateAbstractView(Window *pParent, const ResId &rResId,
 {
     maAllButton.Hide();
     maAllButton.SetStyle(maAllButton.GetStyle() | WB_FLATBUTTON);
+    maAllButton.SetControlBackground(Color(COL_TRANSPARENT));
     maAllButton.SetClickHdl(LINK(this,TemplateAbstractView,ShowRootRegionHdl));
     maFTName.Hide();
 }
@@ -157,6 +159,7 @@ TemplateAbstractView::TemplateAbstractView(Window *pParent)
 {
     maAllButton.Hide();
     maAllButton.SetStyle(maAllButton.GetStyle() | WB_FLATBUTTON);
+    maAllButton.SetControlBackground(Color(COL_TRANSPARENT));
     maAllButton.SetClickHdl(LINK(this,TemplateAbstractView,ShowRootRegionHdl));
     maFTName.Hide();
 }
