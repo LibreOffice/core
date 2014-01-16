@@ -51,7 +51,6 @@ void MeasureHandler::lcl_attribute(Id rName, Value & rVal)
     (void)rName;
     switch( rName )
     {
-        case NS_rtf::LN_unit:
         case NS_ooxml::LN_CT_TblWidth_type:// = 90668;
         {
             //can be: NS_ooxml::LN_Value_ST_TblWidth_nil, NS_ooxml::LN_Value_ST_TblWidth_pct,
@@ -80,8 +79,6 @@ void MeasureHandler::lcl_attribute(Id rName, Value & rVal)
                 m_nRowHeightSizeType = text::SizeType::FIX;
         }
         break;
-        case NS_rtf::LN_trleft:
-        case NS_rtf::LN_preferredWidth:
         case NS_ooxml::LN_CT_TblWidth_w:// = 90667;
             m_nMeasureValue = nIntValue;
             if (!m_aInteropGrabBagName.isEmpty())

@@ -421,10 +421,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_rtf::LN_LINEPROPSRIGHT:
             break;
-        case NS_rtf::LN_LINEPROPSHORIZONTAL:
-            break;
-        case NS_rtf::LN_LINEPROPSVERTICAL:
-            break;
         case NS_rtf::LN_headerr:
             break;
         case NS_rtf::LN_footerr:
@@ -2588,16 +2584,12 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         break;
     case 0x6815:
         break; //undocumented
-    case NS_sprm::LN_CIndrsid:
-        break; //undocumented
     case 0x6467:
         break; //undocumented
     case 0xF617:
         break; //undocumented
     case 0xd634: // sprmTNewSpacing - table spacing ( see WW8TabBandDesc::ProcessSpacing() )
         break;
-    case NS_sprm::LN_TTRLeft:
-        break; //undocumented
     case 0x4888:
     case 0x6887:
         //properties of list levels - undocumented
