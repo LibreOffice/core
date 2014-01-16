@@ -16,6 +16,24 @@
       "revId": "5ca53f66048fa39f9320b9ca6015378da10eb9f4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_f1eee8b3",
+        "filename": "solenv/bin/modules/installer/simplepackage.pm",
+        "patchSetId": 1
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-01-16T16:04:53Z",
+      "side": 1,
+      "message": "you are forgetting the 3rd kind: the SDK, which is not a langpack nor the libreoffice App",
+      "parentUuid": "da9df570_31795094",
+      "revId": "5ca53f66048fa39f9320b9ca6015378da10eb9f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
