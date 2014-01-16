@@ -27,6 +27,7 @@ public:
     void testFdo69893();
     void testFdo70807();
     void testImportRTF();
+    void testExportRTF();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -34,6 +35,7 @@ public:
     CPPUNIT_TEST(testFdo69893);
     CPPUNIT_TEST(testFdo70807);
     CPPUNIT_TEST(testImportRTF);
+    CPPUNIT_TEST(testExportRTF);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -166,6 +168,34 @@ void SwUiWriterTest::testImportRTF()
     sal_uLong nIndex = pWrtShell->GetCrsr()->GetNode()->GetIndex();
     CPPUNIT_ASSERT_EQUAL(OUString("fooHello world!"), static_cast<SwTxtNode*>(pDoc->GetNodes()[nIndex - 1])->GetTxt());
     CPPUNIT_ASSERT_EQUAL(OUString("bar"), static_cast<SwTxtNode*>(pDoc->GetNodes()[nIndex])->GetTxt());
+}
+
+void SwUiWriterTest::testExportRTF()
+{
+    // Insert "aaabbbccc" and select "bbb".
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("aaabbbccc");
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 3, /*bBasicCall=*/false);
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 3, /*bBasicCall=*/false);
+
+    // Create the clipboard document.
+    boost::shared_ptr<SwDoc> pClpDoc(new SwDoc());
+    pClpDoc->SetClipBoard(true);
+    pWrtShell->Copy(pClpDoc.get());
+
+    // And finally export it as RTF.
+    WriterRef xWrt;
+    SwReaderWriter::GetWriter("RTF", OUString(), xWrt);
+    SvMemoryStream aStream;
+    SwWriter aWrt(aStream, *pClpDoc);
+    aWrt.Write(xWrt);
+
+    OString aData(static_cast<const sal_Char*>(aStream.GetBuffer()), aStream.GetSize());
+    CPPUNIT_ASSERT(aData.startsWith("{\\rtf1"));
+    CPPUNIT_ASSERT_EQUAL(-1, aData.indexOf("aaa"));
+    CPPUNIT_ASSERT(aData.indexOf("bbb") != -1);
+    CPPUNIT_ASSERT_EQUAL(-1, aData.indexOf("ccc"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
