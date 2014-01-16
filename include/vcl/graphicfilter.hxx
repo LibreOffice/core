@@ -225,8 +225,6 @@ struct FilterErrorEx
 /** Class to import and export graphic formats. */
 class VCL_DLLPUBLIC GraphicFilter
 {
-    friend class SvFilterOptionsDialog;
-
 private:
 
     void            ImplInit();
