@@ -21,7 +21,6 @@
 #pragma warning( disable : 4290 )
 #endif
 
-#include "eventsupplier.hxx"
 #include "fltoptint.hxx"
 #include "objshimp.hxx"
 #include <sfx2/app.hxx>
@@ -1692,50 +1691,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
 
     rArgs = aSequ;
 }
-
-// -----------------------------------------------------------------------
-
-extern "C" {
-
-SFX2_DLLPUBLIC void* SAL_CALL sfx_component_getFactory(
-    const sal_Char* pImplementationName ,
-    void*           pServiceManager     ,
-    void*                                 )
-{
-    // Set default return value for this operation - if it failed.
-    void* pReturn = NULL ;
-
-    if  (
-            ( pImplementationName   !=  NULL ) &&
-            ( pServiceManager       !=  NULL )
-        )
-    {
-        // Define variables which are used in following macros.
-        uno::Reference<uno::XInterface> xFactory;
-        uno::Reference<lang::XMultiServiceFactory> xServiceManager( reinterpret_cast<lang::XMultiServiceFactory*>( pServiceManager ) ) ;
-
-        //=============================================================================
-        //  Add new macro line to handle new service.
-        //  !!! ATTENTION !!!
-        //      Write no ";" at end of line and dont forget "else" ! (see macro)
-        //=============================================================================
-        IF_NAME_CREATECOMPONENTFACTORY( SfxGlobalEvents_Impl )
-
-        // Factory is valid - service was found.
-
-        // Factory is valid - service was found.
-        if ( xFactory.is() )
-        {
-            xFactory->acquire();
-            pReturn = xFactory.get();
-        }
-    }
-    // Return with result of this operation.
-    return pReturn ;
-}
-} // extern "C"
-
-//=========================================================================
 
 void SAL_CALL FilterOptionsContinuation::setFilterOptions(
                 const uno::Sequence<beans::PropertyValue>& rProps )
