@@ -40,6 +40,7 @@ public:
     void testChartExternalData();
     void testEmbeddingsGrabBag();
     void testAreaChartLoad();
+    void testUpDownBars();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -52,6 +53,7 @@ public:
     CPPUNIT_TEST(testChartExternalData);
     CPPUNIT_TEST(testEmbeddingsGrabBag);
     CPPUNIT_TEST(testAreaChartLoad);
+    CPPUNIT_TEST(testUpDownBars);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -510,6 +512,14 @@ void Chart2ExportTest::testAreaChartLoad()
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:areaChart/c:ser/c:dLbls/c:showVal", "val", "1");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:areaChart/c:ser/c:dLbls/c:dLbl", 0);
+}
+
+void Chart2ExportTest::testUpDownBars()
+{
+    load("/chart2/qa/extras/data/docx/", "UpDownBars.docx");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:upDownBars");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
