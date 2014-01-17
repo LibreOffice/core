@@ -324,7 +324,7 @@ void Service::setLocale(css::lang::Locale const & eLocale)
     throw (css::uno::RuntimeException)
 {
     osl::MutexGuard guard(*lock_);
-    locale_ = LanguageTag::convertToBcp47( eLocale);
+    locale_ = LanguageTag::convertToBcp47( eLocale, false);
 }
 
 css::lang::Locale Service::getLocale() throw (css::uno::RuntimeException) {
