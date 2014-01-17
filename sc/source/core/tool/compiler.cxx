@@ -1631,24 +1631,34 @@ void ScCompiler::SetRefConvention( FormulaGrammar::AddressConvention eConv )
 
 const ScCompiler::Convention* ScCompiler::GetRefConvention( FormulaGrammar::AddressConvention eConv )
 {
-    static const ConventionOOO_A1 ConvOOO_A1;
-    static const ConventionOOO_A1_ODF ConvOOO_A1_ODF;
-    static const ConventionXL_A1 ConvXL_A1;
-    static const ConventionXL_R1C1 ConvXL_R1C1;
-    static const ConventionXL_OOX ConvXL_OOX;
 
     switch (eConv)
     {
         case FormulaGrammar::CONV_OOO:
+        {
+            static const ConventionOOO_A1 ConvOOO_A1;
             return &ConvOOO_A1;
+        }
         case FormulaGrammar::CONV_ODF:
+        {
+            static const ConventionOOO_A1_ODF ConvOOO_A1_ODF;
             return &ConvOOO_A1_ODF;
+        }
         case FormulaGrammar::CONV_XL_A1:
+        {
+            static const ConventionXL_A1 ConvXL_A1;
             return &ConvXL_A1;
+        }
         case FormulaGrammar::CONV_XL_R1C1:
+        {
+            static const ConventionXL_R1C1 ConvXL_R1C1;
             return &ConvXL_R1C1;
+        }
         case FormulaGrammar::CONV_XL_OOX:
+        {
+            static const ConventionXL_OOX ConvXL_OOX;
             return &ConvXL_OOX;
+        }
         case FormulaGrammar::CONV_UNSPECIFIED:
         default:
             ;
