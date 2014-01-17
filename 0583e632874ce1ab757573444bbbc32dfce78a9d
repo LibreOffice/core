@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_d1fba445",
+        "filename": "solenv/bin/macosx-codesign-app-bundle",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2014-01-17T00:53:48Z",
+      "side": 1,
+      "message": "typo. IDENTIF*I*ER",
+      "revId": "0583e632874ce1ab757573444bbbc32dfce78a9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
