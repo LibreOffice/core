@@ -262,7 +262,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                             // immediately.
                             if( pTab->GetFollow() )
                             {
-                                if( nOfst == COMPLETE_STRING )
+                                if( nOfst == (sal_uLong) COMPLETE_STRING )
                                     nOfst = 0;
                                 do
                                 {
