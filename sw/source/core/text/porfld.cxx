@@ -45,9 +45,7 @@
 
 using namespace ::com::sun::star;
 
-/*************************************************************************
- *                      class SwFldPortion
- *************************************************************************/
+// class SwFldPortion
 
 SwLinePortion *SwFldPortion::Compress()
 { return (GetLen() || !aExpand.isEmpty() || SwLinePortion::Compress()) ? this : 0; }
@@ -112,14 +110,9 @@ SwFldPortion::~SwFldPortion()
         pBlink->Delete( this );
 }
 
-/*************************************************************************
- *               virtual SwFldPortion::GetViewWidth()
- *************************************************************************/
-
 KSHORT SwFldPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 {
-    // Wir stehen zwar im const, aber nViewWidth sollte erst im letzten
-    // Moment errechnet werden:
+    // even though this is const, nViewWidth should be computed at the very end:
     SwFldPortion* pThis = (SwFldPortion*)this;
     if( !Width() && rInf.OnWin() && !rInf.GetOpt().IsPagePreview() &&
             !rInf.GetOpt().IsReadonly() && SwViewOption::IsFieldShadings() )
@@ -132,15 +125,9 @@ KSHORT SwFldPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
     return nViewWidth;
 }
 
-/*************************************************************************
- *                 virtual SwFldPortion::Format()
- *************************************************************************/
-
 // 8653: in keinem Fall nur SetLen(0);
 
-/*************************************************************************
- *   Hilfsklasse SwFldSlot
- **************************************************************************/
+// Helper class SwFldSlot
 
 class SwFldSlot
 {
@@ -383,7 +370,7 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
             switch( aNew[0] )
             {
                 case CH_BREAK  : bFull = sal_True;
-                            // kein break;
+                            // no break
                 case ' ' :
                 case CH_TAB    :
                 case CHAR_HARDHYPHEN:               // non-breaking hyphen
@@ -427,10 +414,6 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
     return bFull;
 }
 
-/*************************************************************************
- *               virtual SwFldPortion::Paint()
- *************************************************************************/
-
 void SwFldPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     SwFontSave aSave( rInf, pFnt );
@@ -444,10 +427,6 @@ void SwFldPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 }
 
-/*************************************************************************
- *              virtual SwFldPortion::GetExpTxt()
- *************************************************************************/
-
 sal_Bool SwFldPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
 {
     rTxt = aExpand;
@@ -458,10 +437,6 @@ sal_Bool SwFldPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) co
         rTxt = OUString(' ');
     return sal_True;
 }
-
-/*************************************************************************
- *              virtual SwFldPortion::HandlePortion()
- *************************************************************************/
 
 void SwFldPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
@@ -475,10 +450,6 @@ void SwFldPortion::HandlePortion( SwPortionHandler& rPH ) const
     }
 }
 
-/*************************************************************************
- *                virtual SwFldPortion::GetTxtSize()
- *************************************************************************/
-
 SwPosSize SwFldPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
 {
     SwFontSave aSave( rInf, pFnt );
@@ -486,9 +457,8 @@ SwPosSize SwFldPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
     return aSize;
 }
 
-/*************************************************************************
- *                      class SwHiddenPortion
- *************************************************************************/
+
+// class SwHiddenPortion
 
 SwFldPortion *SwHiddenPortion::Clone(const OUString &rExpand ) const
 {
@@ -497,10 +467,6 @@ SwFldPortion *SwHiddenPortion::Clone(const OUString &rExpand ) const
         pNewFnt = new SwFont( *pFnt );
     return new SwHiddenPortion( rExpand, pNewFnt );
 }
-
-/*************************************************************************
- *               virtual SwHiddenPortion::Paint()
- *************************************************************************/
 
 void SwHiddenPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
@@ -512,19 +478,14 @@ void SwHiddenPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 }
 
-/*************************************************************************
- *              virtual SwHiddenPortion::GetExpTxt()
- *************************************************************************/
-
 sal_Bool SwHiddenPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
 {
     // Nicht auf IsHidden() abfragen !
     return SwFldPortion::GetExpTxt( rInf, rTxt );
 }
 
-/*************************************************************************
- *                      class SwNumberPortion
- *************************************************************************/
+
+// class SwNumberPortion
 
 SwNumberPortion::SwNumberPortion( const OUString &rExpand,
                                   SwFont *pFont,
@@ -557,10 +518,6 @@ SwFldPortion *SwNumberPortion::Clone( const OUString &rExpand ) const
     return new SwNumberPortion( rExpand, pNewFnt, IsLeft(), IsCenter(),
                                 nMinDist, mbLabelAlignmentPosAndSpaceModeActive );
 }
-
-/*************************************************************************
- *                 virtual SwNumberPortion::Format()
- *************************************************************************/
 
 // 5010: Wir sind in der Lage, mehrzeilige NumFelder anzulegen!
 // 3689: Fies ist, wenn man in der Dialogbox soviel Davor-Text
@@ -599,7 +556,7 @@ sal_Bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
                 nDiff = rInf.Left() - rInf.First() + rInf.ForcedLeftMargin();
             }
         }
-        // Ein Vorschlag von Juergen und Volkmar:
+        // proposal from Juergen and Volkmar:
         // Der Textteil hinter der Numerierung sollte immer
         // mindestens beim linken Rand beginnen.
         if( nDiff < 0 )
@@ -650,10 +607,6 @@ void SwNumberPortion::FormatEOL( SwTxtFormatInfo& )
     // portion and the fly portion go to the next line
 //    SetHide( sal_True );
 }
-
-/*************************************************************************
- *               virtual SwNumberPortion::Paint()
- *************************************************************************/
 
 void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
@@ -717,7 +670,7 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
             SwExpandPortion::Paint( rInf );
         else
         {
-            // logisches const: Width wird wieder zurueckgesetzt
+            // logical const: reset width
             SwLinePortion *pThis = (SwLinePortion*)this;
             bPaintSpace = bPaintSpace && nFixWidth < nOldWidth;
             KSHORT nSpaceOffs = nFixWidth;
@@ -774,9 +727,7 @@ static sal_Char const sDoubleSpace[] = "  ";
 }
 
 
-/*************************************************************************
- *                      class SwBulletPortion
- *************************************************************************/
+// class SwBulletPortion
 
 SwBulletPortion::SwBulletPortion( const sal_Unicode cBullet,
                                   const OUString& rBulletFollowedBy,
@@ -792,9 +743,8 @@ SwBulletPortion::SwBulletPortion( const sal_Unicode cBullet,
     SetWhichPor( POR_BULLET );
 }
 
-/*************************************************************************
- *                      class SwGrfNumPortion
- *************************************************************************/
+
+// class SwGrfNumPortion
 
 #define GRFNUM_SECURE 10
 
@@ -886,7 +836,7 @@ sal_Bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
     long nDiff = mbLabelAlignmentPosAndSpaceModeActive
                  ? 0
                  : rInf.Left() - rInf.First() + rInf.ForcedLeftMargin();
-    // Ein Vorschlag von Juergen und Volkmar:
+    // proposal by Juergen and Volkmar:
     // Der Textteil hinter der Numerierung sollte immer
     // mindestens beim linken Rand beginnen.
     if( nDiff < 0 )
@@ -1083,10 +1033,8 @@ void SwTxtFrm::StopAnimation( OutputDevice* pOut )
     }
 }
 
-/*************************************************************************
- * SwCombinedPortion::SwCombinedPortion(..)
- * initializes the script array and clears the width array
- *************************************************************************/
+// SwCombinedPortion::SwCombinedPortion(..)
+// initializes the script array and clears the width array
 
 SwCombinedPortion::SwCombinedPortion( const OUString &rTxt )
     : SwFldPortion( rTxt )
@@ -1121,10 +1069,6 @@ SwCombinedPortion::SwCombinedPortion( const OUString &rTxt )
     }
     memset( &aWidth, 0, sizeof(aWidth) );
 }
-
-/*************************************************************************
- * SwCombinedPortion::Paint(..)
- *************************************************************************/
 
 void SwCombinedPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
@@ -1179,10 +1123,6 @@ void SwCombinedPortion::Paint( const SwTxtPaintInfo &rInf ) const
         ((SwTxtPaintInfo&)rInf).SetPos( aOldPos );
     }
 }
-
-/*************************************************************************
- * SwCombinedPortion::Format(..)
- *************************************************************************/
 
 sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
 {
@@ -1345,10 +1285,6 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
     }
     return bFull;
 }
-
-/*************************************************************************
- * SwCombinedPortion::GetViewWidth(..)
- *************************************************************************/
 
 KSHORT SwCombinedPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 {
