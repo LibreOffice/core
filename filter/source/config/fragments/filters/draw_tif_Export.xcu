@@ -21,7 +21,7 @@
         <prop oor:name="FilterService"/>
         <prop oor:name="UserData"><value></value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="x-default">TIFF - Tagged Image File Format</value>
+            <value xml:lang="en-US">TIFF - Tagged Image File Format</value>
         </prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>tif_Tag_Image_File</value></prop>
