@@ -1332,7 +1332,7 @@ ParagraphProperties::~ParagraphProperties()
 }
 
 
-int ParagraphProperties::operator==(const ParagraphProperties& rCompare)
+bool ParagraphProperties::operator==(const ParagraphProperties& rCompare)
 {
     return
         m_bFrameMode == rCompare.m_bFrameMode &&

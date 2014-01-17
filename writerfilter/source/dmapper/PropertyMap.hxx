@@ -322,7 +322,7 @@ public:
     ParagraphProperties(const ParagraphProperties&);
     ~ParagraphProperties();
 
-    int operator==(const ParagraphProperties&); //does not compare the starting/ending range, m_sParaStyleName and m_nDropCapLength
+    bool operator==(const ParagraphProperties&); //does not compare the starting/ending range, m_sParaStyleName and m_nDropCapLength
 
     void    SetFrameMode( bool set = true ) { m_bFrameMode = set; }
     bool    IsFrameMode()const { return m_bFrameMode; }
