@@ -31,7 +31,7 @@
 namespace svx {
 namespace frame {
 
-class ArrayImpl;
+struct ArrayImpl;
 
 /** Stores frame styles of an array of cells, supports merged ranges.
 
