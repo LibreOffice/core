@@ -58,12 +58,10 @@
 
 // =======================================================================
 
-long ImplCallPreNotify( NotifyEvent& rEvt )
+bool ImplCallPreNotify( NotifyEvent& rEvt )
 {
-    long nRet = Application::CallEventHooks( rEvt );
-    if ( !nRet )
-        nRet = rEvt.GetWindow()->PreNotify( rEvt );
-    return nRet;
+    return Application::CallEventHooks( rEvt )
+        || rEvt.GetWindow()->PreNotify( rEvt );
 }
 
 static sal_Bool ImplHandleMouseFloatMode( Window* pChild, const Point& rMousePos,
@@ -236,7 +234,7 @@ static sal_Bool ImplCallCommand( Window* pChild, sal_uInt16 nEvt, void* pData = 
     CommandEvent    aCEvt( aPos, nEvt, bMouse, pData );
     NotifyEvent     aNCmdEvt( EVENT_COMMAND, pChild, &aCEvt );
     ImplDelData     aDelData( pChild );
-    sal_Bool            bPreNotify = (ImplCallPreNotify( aNCmdEvt ) != 0);
+    bool bPreNotify = ImplCallPreNotify( aNCmdEvt );
     if ( aDelData.IsDead() )
         return sal_False;
     if ( !bPreNotify )
@@ -1036,7 +1034,7 @@ static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
 
     KeyEvent    aKeyEvt( (sal_Unicode)nCharCode, aKeyCode, nRepeat );
     NotifyEvent aNotifyEvt( nSVEvent, pChild, &aKeyEvt );
-    sal_Bool        bKeyPreNotify = (ImplCallPreNotify( aNotifyEvt ) != 0);
+    bool bKeyPreNotify = ImplCallPreNotify( aNotifyEvt );
     bool nRet = true;
 
     if ( !bKeyPreNotify && !aDelData.IsDead() )
@@ -1149,7 +1147,7 @@ static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
         ImplDelData aChildDelData( pChild );
         KeyEvent    aKEvt( (sal_Unicode)nCharCode, aKeyCode, nRepeat );
         NotifyEvent aNEvt( nSVEvent, pChild, &aKEvt );
-        sal_Bool        bPreNotify = (ImplCallPreNotify( aNEvt ) != 0);
+        bool bPreNotify = ImplCallPreNotify( aNEvt );
         if ( aChildDelData.IsDead() )
             return true;
 
@@ -1368,7 +1366,7 @@ static sal_Bool ImplCallWheelCommand( Window* pWindow, const Point& rPos,
     CommandEvent        aCEvt( aCmdMousePos, COMMAND_WHEEL, sal_True, pWheelData );
     NotifyEvent         aNCmdEvt( EVENT_COMMAND, pWindow, &aCEvt );
     ImplDelData         aDelData( pWindow );
-    sal_Bool                bPreNotify = (ImplCallPreNotify( aNCmdEvt ) != 0);
+    bool bPreNotify = ImplCallPreNotify( aNCmdEvt );
     if ( aDelData.IsDead() )
         return sal_False;
     if ( !bPreNotify )
