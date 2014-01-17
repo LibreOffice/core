@@ -225,8 +225,8 @@ public:
     AnonDBs& getAnonDBs();
     const AnonDBs& getAnonDBs() const;
 
-    const ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool bStartOnly) const;
-    ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool bStartOnly);
+    const ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const;
+    ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly);
     const ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
     ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
     ScDBData* GetDBNearCursor(SCCOL nCol, SCROW nRow, SCTAB nTab );

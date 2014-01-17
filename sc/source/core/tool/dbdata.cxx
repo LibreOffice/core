@@ -822,7 +822,7 @@ const ScDBCollection::AnonDBs& ScDBCollection::getAnonDBs() const
     return maAnonDBs;
 }
 
-const ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool bStartOnly) const
+const ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const
 {
     // First, search the global named db ranges.
     NamedDBs::DBsType::const_iterator itr = find_if(
@@ -844,7 +844,7 @@ const ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab
     return NULL;
 }
 
-ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool bStartOnly)
+ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly)
 {
     // First, search the global named db ranges.
     NamedDBs::DBsType::iterator itr = find_if(

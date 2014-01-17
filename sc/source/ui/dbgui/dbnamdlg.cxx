@@ -213,7 +213,7 @@ void ScDbNameDlg::Init()
         if ( pDBColl )
         {
             // Feststellen, ob definierter DB-Bereich markiert wurde:
-            pDBData = pDBColl->GetDBAtCursor( nStartCol, nStartRow, nStartTab, sal_True );
+            pDBData = pDBColl->GetDBAtCursor( nStartCol, nStartRow, nStartTab, true );
             if ( pDBData )
             {
                 ScAddress&  rStart = theCurArea.aStart;
