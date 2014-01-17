@@ -1044,7 +1044,7 @@ IMPL_LINK( SwGlossaryDlg, PathHdl, Button *, pBtn )
 
 IMPL_LINK_NOARG(SwGlossaryDlg, InsertHdl)
 {
-    EndDialog(true);
+    EndDialog(RET_OK);
     return 0;
 }
 

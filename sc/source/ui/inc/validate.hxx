@@ -132,7 +132,7 @@ public:
         OSL_FAIL( "should not execute here!!!when the edit kill focus, should remove refhandler.\r\n" );
 
         if ( IsInExecute() )
-            EndDialog( false );
+            EndDialog( RET_CANCEL );
         else if ( GetStyle() & WB_CLOSEABLE )
             Close();
     }

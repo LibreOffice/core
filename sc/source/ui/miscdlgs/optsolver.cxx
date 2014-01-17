@@ -91,9 +91,9 @@ ScSolverSuccessDialog::ScSolverSuccessDialog( Window* pParent, const OUString& r
 IMPL_LINK( ScSolverSuccessDialog, ClickHdl, PushButton*, pBtn )
 {
     if (pBtn == m_pBtnOk)
-        EndDialog(true);
+        EndDialog(RET_OK);
     else
-        EndDialog(false);
+        EndDialog(RET_CANCEL);
     return 0;
 }
 
