@@ -33,7 +33,6 @@ core_factory_list = [
     ("liblocalebe1lo.a", "localebe1_component_getFactory"),
     ("libooxlo.a", "oox_component_getFactory"),
     ("libpackage2.a", "package2_component_getFactory"),
-    ("libsfxlo.a", "sfx_component_getFactory"),
     ("libsotlo.a", "sot_component_getFactory"),
     ("libspelllo.a", "spell_component_getFactory"),
     ("libtklo.a", "tk_component_getFactory"),
