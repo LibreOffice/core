@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_d180048e",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4495,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-17T08:40:09Z",
+      "side": 1,
+      "message": "This looks bad to me, you test that the Frm is not a LayoutFrm, then you still static_cast it down to LayoutFrm? That is undefined behavior, I\u0027m afraid.",
+      "revId": "aaca5a6345d246cbcb0006ecf73bea30bf71dbe3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
