@@ -238,7 +238,7 @@ struct SalQueryCharPositionEvent
 // - SalFrame-Types -
 // ------------------
 
-typedef long (*SALFRAMEPROC)( Window* pInst, SalFrame* pFrame,
+typedef bool (*SALFRAMEPROC)( Window* pInst, SalFrame* pFrame,
                               sal_uInt16 nEvent, const void* pEvent );
 
 // --------------------

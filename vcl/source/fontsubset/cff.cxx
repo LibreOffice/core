@@ -1113,7 +1113,7 @@ void CffSubsetterContext::convertOneTypeEsc( void)
         break;
     case TYPE2OP::NOT:
         assert( mnStackIdx >= 1 );
-        pTop[0] = (pTop[0] == 0);
+        pTop[0] = ValType(pTop[0] == 0);
         break;
     case TYPE2OP::ABS:
         assert( mnStackIdx >= 1 );
@@ -1148,7 +1148,7 @@ void CffSubsetterContext::convertOneTypeEsc( void)
         break;
     case TYPE2OP::EQ:
         assert( mnStackIdx >= 2 );
-        pTop[0] = (pTop[0] == pTop[-1]);
+        pTop[0] = ValType(pTop[0] == pTop[-1]);
         --mnStackIdx;
         break;
     case TYPE2OP::DROP:
@@ -2130,22 +2130,22 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     int nPrivEntryCount = 9;
 #if !defined(IGNORE_HINTS)
     // emit blue hints only if non-default values
-    nPrivEntryCount += !mpCffLocal->maOtherBlues.empty();
-    nPrivEntryCount += !mpCffLocal->maFamilyBlues.empty();
-    nPrivEntryCount += !mpCffLocal->maFamilyOtherBlues.empty();
-    nPrivEntryCount += (mpCffLocal->mfBlueScale != 0.0);
-    nPrivEntryCount += (mpCffLocal->mfBlueShift != 0.0);
-    nPrivEntryCount += (mpCffLocal->mfBlueFuzz != 0.0);
+    nPrivEntryCount += int(!mpCffLocal->maOtherBlues.empty());
+    nPrivEntryCount += int(!mpCffLocal->maFamilyBlues.empty());
+    nPrivEntryCount += int(!mpCffLocal->maFamilyOtherBlues.empty());
+    nPrivEntryCount += int(mpCffLocal->mfBlueScale != 0.0);
+    nPrivEntryCount += int(mpCffLocal->mfBlueShift != 0.0);
+    nPrivEntryCount += int(mpCffLocal->mfBlueFuzz != 0.0);
     // emit stem hints only if non-default values
-    nPrivEntryCount += (mpCffLocal->maStemStdHW != 0);
-    nPrivEntryCount += (mpCffLocal->maStemStdVW != 0);
-    nPrivEntryCount += !mpCffLocal->maStemSnapH.empty();
-    nPrivEntryCount += !mpCffLocal->maStemSnapV.empty();
+    nPrivEntryCount += int(mpCffLocal->maStemStdHW != 0);
+    nPrivEntryCount += int(mpCffLocal->maStemStdVW != 0);
+    nPrivEntryCount += int(!mpCffLocal->maStemSnapH.empty());
+    nPrivEntryCount += int(!mpCffLocal->maStemSnapV.empty());
     // emit other hints only if non-default values
-    nPrivEntryCount += (mpCffLocal->mfExpFactor != 0.0);
-    nPrivEntryCount += (mpCffLocal->mnLangGroup != 0);
-    nPrivEntryCount += (mpCffLocal->mnLangGroup == 1);
-    nPrivEntryCount += (mpCffLocal->mbForceBold != false);
+    nPrivEntryCount += int(mpCffLocal->mfExpFactor != 0.0);
+    nPrivEntryCount += int(mpCffLocal->mnLangGroup != 0);
+    nPrivEntryCount += int(mpCffLocal->mnLangGroup == 1);
+    nPrivEntryCount += int(mpCffLocal->mbForceBold != false);
 #endif // IGNORE_HINTS
     // emit the privdict header
     pOut += sprintf( pOut,

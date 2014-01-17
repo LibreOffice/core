@@ -53,12 +53,12 @@ inline sal_uInt16 NEXT_UShort( const unsigned char* &p )
 
 #define MKTAG(s) ((((((s[0]<<8)+s[1])<<8)+s[2])<<8)+s[3])
 
-int ReadGSUB( struct _TrueTypeFont* pTTFile,
+bool ReadGSUB( struct _TrueTypeFont* pTTFile,
     int nRequestedScript, int nRequestedLangsys )
 {
     const FT_Byte* pGsubBase = (FT_Byte*)pTTFile->tables[ O_gsub ];
     if( !pGsubBase )
-        return -1;
+        return false;
 
     // #129682# check offsets inside GSUB table
     const FT_Byte* pGsubLimit = pGsubBase + pTTFile->tlens[ O_gsub ];
@@ -73,7 +73,7 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
     // sanity check the GSUB header
     if( nVersion != 0x00010000 )
         if( nVersion != 0x00001000 )    // workaround for SunBatang etc.
-            return -1;                  // unknown format or broken
+            return false;               // unknown format or broken
 
     typedef std::vector<sal_uLong> ReqFeatureTagList;
     ReqFeatureTagList aReqFeatureTagList;

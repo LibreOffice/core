@@ -55,11 +55,11 @@ extern "C" char * XSetIMValues(XIM im, ...);
 //
 // ------------------------------------------------------------------------------------
 
-Bool
+bool
 IMServerKinput2 ()
 {
     const static char* p_xmodifiers = getenv ("XMODIFIERS");
-    const static Bool  b_kinput2    =    (p_xmodifiers != NULL)
+    const static bool  b_kinput2    =    (p_xmodifiers != NULL)
                                       && (strcmp(p_xmodifiers, "@im=kinput2") == 0);
 
     return b_kinput2;
@@ -76,7 +76,7 @@ class XKeyEventOp : XKeyEvent
 
         XKeyEventOp&    operator= (const XKeyEvent &rEvent);
         void            erase ();
-        Bool            match (const XKeyEvent &rEvent) const;
+        bool            match (const XKeyEvent &rEvent) const;
 };
 
 void
@@ -122,7 +122,7 @@ XKeyEventOp::erase ()
     init();
 }
 
-Bool
+bool
 XKeyEventOp::match (const XKeyEvent &rEvent) const
 {
     return (   (type == XLIB_KeyPress   && rEvent.type == KeyRelease)
@@ -216,7 +216,7 @@ IsXWindowCompatibleLocale( const char* p_locale )
 // see i8988, i9188, i8930, i16318
 // on Solaris the environment needs to be set equivalent to the locale (#i37047#)
 
-Bool
+bool
 SalI18N_InputMethod::SetLocale( const char* pLocale )
 {
     // check whether we want an Input Method engine, if we don't we
@@ -357,7 +357,7 @@ PrintInputStyle( XIMStyles *pStyle )
 // prior to xopendisplay, the xopenim call has to be delayed
 //
 
-Bool
+bool
 SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
 {
     if ( mbUseable )
@@ -405,13 +405,13 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
 // give IM the opportunity to look at the event, and possibly hide it
 //
 
-Bool
+bool
 SalI18N_InputMethod::FilterEvent( XEvent *pEvent, XLIB_Window window    )
 {
     if (!mbUseable)
         return False;
 
-    Bool bFilterEvent = XFilterEvent (pEvent, window);
+    bool bFilterEvent = XFilterEvent (pEvent, window);
 
     if (pEvent->type != XLIB_KeyPress && pEvent->type != KeyRelease)
         return bFilterEvent;

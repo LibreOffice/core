@@ -1444,7 +1444,7 @@ sal_Bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPar
        (nType == CTRL_EDITBOX) ||
        (nType == CTRL_PUSHBUTTON && nPart == PART_ENTIRE_CONTROL) ||
        (nType == CTRL_CHECKBOX && nPart == PART_ENTIRE_CONTROL) ||
-       (nType == CTRL_RADIOBUTTON && nPart == PART_ENTIRE_CONTROL) |
+       (nType == CTRL_RADIOBUTTON && nPart == PART_ENTIRE_CONTROL) ||
        (nType == CTRL_TOOLBAR &&
         (nPart == PART_BUTTON || nPart == PART_ENTIRE_CONTROL)) ||
         ((nType == CTRL_SPINBOX) &&

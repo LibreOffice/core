@@ -710,7 +710,7 @@ static GType
 ensureTypeFor( uno::XInterface *pAccessible )
 {
     int i;
-    int bTypes[ aTypeTableSize ] = { 0, };
+    bool bTypes[ aTypeTableSize ] = { false, };
     OString aTypeName( "OOoAtkObj" );
 
     for( i = 0; i < aTypeTableSize; i++ )
@@ -718,7 +718,7 @@ ensureTypeFor( uno::XInterface *pAccessible )
         if( isOfType( pAccessible, aTypeTable[i].aGetUnoType() ) )
         {
             aTypeName += aTypeTable[i].name;
-            bTypes[i] = TRUE;
+            bTypes[i] = true;
         }
     }
 

@@ -134,13 +134,13 @@ namespace
     {
         FcChar8 *pNameA=NULL, *pNameB=NULL;
 
-        int nHaveA = FcPatternGetString(a, FC_FAMILY, 0, &pNameA) == FcResultMatch;
-        int nHaveB = FcPatternGetString(b, FC_FAMILY, 0, &pNameB) == FcResultMatch;
+        bool nHaveA = FcPatternGetString(a, FC_FAMILY, 0, &pNameA) == FcResultMatch;
+        bool nHaveB = FcPatternGetString(b, FC_FAMILY, 0, &pNameB) == FcResultMatch;
 
         if (nHaveA && nHaveB)
             return strcmp((const char*)pNameA, (const char*)pNameB);
 
-        return nHaveA - nHaveB;
+        return int(nHaveA) - int(nHaveB);
     }
 
     //Sort fonts so that fonts with the same family name are side-by-side, with
@@ -156,8 +156,8 @@ namespace
 
             int nVersionA=0, nVersionB=0;
 
-            int nHaveA = FcPatternGetInteger(a, FC_FONTVERSION, 0, &nVersionA) == FcResultMatch;
-            int nHaveB = FcPatternGetInteger(b, FC_FONTVERSION, 0, &nVersionB) == FcResultMatch;
+            bool nHaveA = FcPatternGetInteger(a, FC_FONTVERSION, 0, &nVersionA) == FcResultMatch;
+            bool nHaveB = FcPatternGetInteger(b, FC_FONTVERSION, 0, &nVersionB) == FcResultMatch;
 
             if (nHaveA && nHaveB)
                 return nVersionA > nVersionB;

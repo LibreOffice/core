@@ -3841,7 +3841,7 @@ long X11SalFrame::HandleStateEvent( XPropertyEvent *pEvent )
         )
         return 0;
 
-    DBG_ASSERT( actual_type = pEvent->atom
+    DBG_ASSERT( actual_type == pEvent->atom
                 && 32 == actual_format
                 &&  2 == nitems
                 &&  0 == bytes_after, "HandleStateEvent" );

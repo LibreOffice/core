@@ -97,7 +97,7 @@ namespace vcl {
 // - Prototypes -
 // --------------
 
-long ImplWindowFrameProc( Window* pInst, SalFrame* pFrame, sal_uInt16 nEvent, const void* pEvent );
+bool ImplWindowFrameProc( Window* pInst, SalFrame* pFrame, sal_uInt16 nEvent, const void* pEvent );
 
 // -----------
 // - HitTest -
@@ -406,7 +406,7 @@ public:
 // - Hilfsmethoden -
 // -----------------
 
-long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouseLeave,
+bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouseLeave,
                            long nX, long nY, sal_uIntPtr nMsgTime,
                            sal_uInt16 nCode, sal_uInt16 nMode );
 void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight );

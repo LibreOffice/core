@@ -49,14 +49,14 @@ private:
     XVaNestedList mpStatusAttributes;
     XVaNestedList mpPreeditAttributes;
 
-    Bool         SupportInputMethodStyle( XIMStyles *pIMStyles );
+    bool         SupportInputMethodStyle( XIMStyles *pIMStyles );
     unsigned int GetWeightingOfIMStyle(   XIMStyle n_style ) const ;
     Bool         IsSupportedIMStyle(      XIMStyle n_style ) const ;
 
 public:
 
     Bool UseContext()       { return mbUseable; }
-    Bool IsPreeditMode()    { return maClientData.eState == ePreeditStatusActive; }
+    bool IsPreeditMode()    { return maClientData.eState == ePreeditStatusActive; }
     XIC  GetContext()       { return maContext; }
 
     void ExtendEventMask(  XLIB_Window aFocusWindow );

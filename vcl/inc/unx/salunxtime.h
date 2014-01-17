@@ -30,25 +30,23 @@
 #endif
 #include <sal/types.h>
 
-inline int operator >= ( const timeval &t1, const timeval &t2 )
+inline bool operator >= ( const timeval &t1, const timeval &t2 )
 {
     if( t1.tv_sec == t2.tv_sec )
         return t1.tv_usec >= t2.tv_usec;
     return t1.tv_sec > t2.tv_sec;
 }
 
-inline int operator > ( const timeval &t1, const timeval &t2 )
+inline bool operator > ( const timeval &t1, const timeval &t2 )
 {
     if( t1.tv_sec == t2.tv_sec )
         return t1.tv_usec > t2.tv_usec;
     return t1.tv_sec > t2.tv_sec;
 }
 
-inline int operator == ( const timeval &t1, const timeval &t2 )
+inline bool operator == ( const timeval &t1, const timeval &t2 )
 {
-    if( t1.tv_sec == t2.tv_sec )
-        return t1.tv_usec == t2.tv_usec;
-    return sal_False;
+    return t1.tv_sec == t2.tv_sec && t1.tv_usec == t2.tv_usec;
 }
 
 inline timeval &operator -= ( timeval &t1, const timeval &t2 )

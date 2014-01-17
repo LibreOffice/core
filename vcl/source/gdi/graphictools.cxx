@@ -301,7 +301,7 @@ SvStream& WriteSvtGraphicFill( SvStream& rOStm, const SvtGraphicFill& rClass )
     int i;
     for(i=0; i<SvtGraphicFill::Transform::MatrixSize; ++i)
         rOStm.WriteDouble( rClass.maFillTransform.matrix[i] );
-    nTmp = rClass.mbTiling;
+    nTmp = sal_uInt16(rClass.mbTiling);
     rOStm.WriteUInt16( nTmp );
     nTmp = sal::static_int_cast<sal_uInt16>( rClass.maHatchType );
     rOStm.WriteUInt16( nTmp );

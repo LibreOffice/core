@@ -23,7 +23,7 @@
 
 namespace psp {
 
-inline int isSpace( char cChar )
+inline bool isSpace( char cChar )
 {
     return
         cChar == ' '    || cChar == '\t'    ||
@@ -31,7 +31,7 @@ inline int isSpace( char cChar )
         cChar == 0x0c   || cChar == 0x0b;
 }
 
-inline int isSpace( sal_Unicode cChar )
+inline bool isSpace( sal_Unicode cChar )
 {
     return
         cChar == ' '    || cChar == '\t'    ||
@@ -39,12 +39,12 @@ inline int isSpace( sal_Unicode cChar )
         cChar == 0x0c   || cChar == 0x0b;
 }
 
-inline int isProtect( char cChar )
+inline bool isProtect( char cChar )
 {
     return cChar == '`' || cChar == '\'' || cChar == '"';
 }
 
-inline int isProtect( sal_Unicode cChar )
+inline bool isProtect( sal_Unicode cChar )
 {
     return cChar == '`' || cChar == '\'' || cChar == '"';
 }

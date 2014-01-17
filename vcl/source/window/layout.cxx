@@ -929,10 +929,10 @@ void VclGrid::calcMaxs(const array_type &A, std::vector<Value> &rWidths, std::ve
             sal_Int32 nHeight = rEntry.nSpanHeight;
 
             for (sal_Int32 nSpanX = 0; nSpanX < nWidth; ++nSpanX)
-                rWidths[x+nSpanX].m_bExpand = rWidths[x+nSpanX].m_bExpand | pChild->get_hexpand();
+                rWidths[x+nSpanX].m_bExpand |= pChild->get_hexpand();
 
             for (sal_Int32 nSpanY = 0; nSpanY < nHeight; ++nSpanY)
-                rHeights[y+nSpanY].m_bExpand = rHeights[y+nSpanY].m_bExpand | pChild->get_vexpand();
+                rHeights[y+nSpanY].m_bExpand |= pChild->get_vexpand();
 
             if (nWidth == 1 || nHeight == 1)
             {
@@ -1034,7 +1034,7 @@ VclGrid::Value accumulateValues(const VclGrid::Value &i, const VclGrid::Value &j
 {
     VclGrid::Value aRet;
     aRet.m_nValue = i.m_nValue + j.m_nValue;
-    aRet.m_bExpand = i.m_bExpand | j.m_bExpand;
+    aRet.m_bExpand = i.m_bExpand || j.m_bExpand;
     return aRet;
 }
 

@@ -300,14 +300,10 @@ void GtkSalMenu::ImplUpdate( gboolean bRecurse )
 
         // Get internal menu item values.
         OUString aText = pVCLMenu->GetItemText( nId );
-        sal_Bool itemEnabled = pVCLMenu->IsItemEnabled( nId );
+        bool bEnabled = pVCLMenu->IsItemEnabled( nId );
         KeyCode nAccelKey = pVCLMenu->GetAccelKey( nId );
-        sal_Bool itemChecked = pVCLMenu->IsItemChecked( nId );
+        bool bChecked = pVCLMenu->IsItemChecked( nId );
         MenuItemBits itemBits = pVCLMenu->GetItemBits( nId );
-
-        // Convert internal values to native values.
-        gboolean bChecked = ( itemChecked == sal_True ) ? TRUE : FALSE;
-        gboolean bEnabled = ( itemEnabled == sal_True ) ? TRUE : FALSE;
 
         // Store current item command in command list.
         gchar *aCurrentCommand = g_lo_menu_get_command_from_item_in_section( pLOMenu, nSection, nItemPos );

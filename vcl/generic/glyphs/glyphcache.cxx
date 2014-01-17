@@ -89,7 +89,7 @@ size_t GlyphCache::IFSD_Hash::operator()( const FontSelectPattern& rFontSelData 
     size_t nHash = nFontId << 8;
     nHash   += rFontSelData.mnHeight;
     nHash   += rFontSelData.mnOrientation;
-    nHash   += rFontSelData.mbVertical;
+    nHash   += size_t(rFontSelData.mbVertical);
     nHash   += rFontSelData.GetSlant();
     nHash   += rFontSelData.GetWeight();
 #if ENABLE_GRAPHITE

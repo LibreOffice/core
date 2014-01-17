@@ -710,7 +710,7 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     const_cast<SalBitmap&>(rAlphaBmp).ReleaseBuffer( pAlphaBuffer, sal_True );
 
     XRenderPictureAttributes aAttr;
-    aAttr.repeat = true;
+    aAttr.repeat = int(true);
     Picture aAlphaPic = rPeer.CreatePicture( aAlphaPM, pAlphaFormat, CPRepeat, &aAttr );
     if( !aAlphaPic )
         return false;

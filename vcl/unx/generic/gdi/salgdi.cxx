@@ -1111,7 +1111,7 @@ bool X11SalGraphics::drawFilledTrapezoids( const ::basegfx::B2DTrapezoid* pB2DTr
 
         rEntry.m_aPixmap = limitXCreatePixmap( pXDisplay, hDrawable_, 1, 1, 32 );
         XRenderPictureAttributes aAttr;
-        aAttr.repeat = true;
+        aAttr.repeat = int(true);
 
         XRenderPictFormat* pXRPF = rRenderPeer.FindStandardFormat( PictStandardARGB32 );
         rEntry.m_aPicture = rRenderPeer.CreatePicture( rEntry.m_aPixmap, pXRPF, CPRepeat, &aAttr );

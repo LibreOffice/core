@@ -715,9 +715,9 @@ static int BSplineToPSPath(ControlPoint *srcA, int srcCount, PSPathElement **pat
     PSPathElement p( PS_NOOP );
 
     int x0 = 0, y0 = 0, x1 = 0, y1 = 0, x2, y2, curx, cury;
-    int lastOff = 0;                                        /*- last point was off-contour */
+    bool lastOff = false;                                   /*- last point was off-contour */
     int scflag = 1;                                         /*- start contour flag */
-    int ecflag = 0;                                         /*- end contour flag */
+    bool ecflag = false;                                    /*- end contour flag */
     int cp = 0;                                             /*- current point */
     int StartContour = 0, EndContour = 1;
 
@@ -753,7 +753,7 @@ static int BSplineToPSPath(ControlPoint *srcA, int srcCount, PSPathElement **pat
                 cp++;
             }
             aPathList.push_back( p );
-            lastOff = 0;
+            lastOff = false;
             scflag = 0;
         }
 
@@ -783,7 +783,7 @@ static int BSplineToPSPath(ControlPoint *srcA, int srcCount, PSPathElement **pat
                     aPathList.push_back( p );
                 }
             }
-            x0 = curx; y0 = cury; lastOff = 0;
+            x0 = curx; y0 = cury; lastOff = false;
         }
         else
         {
@@ -810,7 +810,7 @@ static int BSplineToPSPath(ControlPoint *srcA, int srcCount, PSPathElement **pat
         if (ecflag) {
             aPathList.push_back( PSPathElement(PS_CLOSEPATH) );
             scflag = 1;
-            ecflag = 0;
+            ecflag = false;
             cp = EndContour + 1;
             if (cp >= srcCount) break;
             continue;
@@ -2512,7 +2512,7 @@ GlyphData *GetTTRawGlyphData(TrueTypeFont *ttf, sal_uInt32 glyphID)
         d->compflag = (GetInt16( srcptr, 0, 1 ) < 0);
     } else {
         d->ptr = 0;
-        d->compflag = 0;
+        d->compflag = false;
     }
 
     d->glyphID = glyphID;

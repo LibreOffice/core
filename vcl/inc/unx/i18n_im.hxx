@@ -28,7 +28,7 @@ extern "C" char* GetMethodName( XIMStyle nStyle, char *pBuf, int nBufSize);
 
 class VCLPLUG_GEN_PUBLIC SalI18N_InputMethod
 {
-    Bool        mbUseable;  // system supports locale as well as status
+    bool        mbUseable;  // system supports locale as well as status
                             // and preedit style ?
     XIM         maMethod;
     XIMCallback maDestroyCallback;
@@ -37,13 +37,13 @@ class VCLPLUG_GEN_PUBLIC SalI18N_InputMethod
 public:
 
     Bool        PosixLocale();
-    Bool        UseMethod()             { return mbUseable; }
+    bool        UseMethod()             { return mbUseable; }
     XIM         GetMethod()             { return maMethod;  }
     void        HandleDestroyIM();
-    Bool        CreateMethod( Display *pDisplay );
+    bool        CreateMethod( Display *pDisplay );
     XIMStyles  *GetSupportedStyles()    { return mpStyles;  }
-    Bool        SetLocale( const char* pLocale = "" );
-    Bool        FilterEvent( XEvent *pEvent, XLIB_Window window );
+    bool        SetLocale( const char* pLocale = "" );
+    bool        FilterEvent( XEvent *pEvent, XLIB_Window window );
 
     SalI18N_InputMethod();
     ~SalI18N_InputMethod();

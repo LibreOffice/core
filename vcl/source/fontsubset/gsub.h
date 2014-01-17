@@ -27,7 +27,7 @@ int HasVerticalGSUB( struct vcl::_TrueTypeFont* pTTFile );
 
 int UseGSUB( struct vcl::_TrueTypeFont* pTTFile, int nGlyph, int wmode );
 
-int ReadGSUB( struct vcl::_TrueTypeFont* pTTFile, int nRequestedScript, int nRequestedLangsys );
+bool ReadGSUB( struct vcl::_TrueTypeFont* pTTFile, int nRequestedScript, int nRequestedLangsys );
 
 void ReleaseGSUB( struct vcl::_TrueTypeFont* pTTFile );
 

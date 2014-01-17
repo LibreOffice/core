@@ -508,7 +508,7 @@ SalI18N_InputContext::IsSupportedIMStyle( XIMStyle nStyle ) const
     return False;
 }
 
-Bool
+bool
 SalI18N_InputContext::SupportInputMethodStyle( XIMStyles *pIMStyles )
 {
     mnPreeditStyle = 0;

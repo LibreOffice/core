@@ -174,7 +174,7 @@ int ImplFontCharMap::GetGlyphIndex( sal_UCS4 cChar ) const
     // check that we are inside any range
     if( (nRange == 0) && (cChar < mpRangeCodes[0]) ) {
         // symbol aliasing gives symbol fonts a second chance
-        const bool bSymbolic = (mpRangeCodes[0]>=0xF000) & (mpRangeCodes[1]<=0xF0FF);
+        const bool bSymbolic = (mpRangeCodes[0]>=0xF000) && (mpRangeCodes[1]<=0xF0FF);
         if( !bSymbolic )
             return 0;
         // check for symbol aliasing (U+F0xx -> U+00xx)

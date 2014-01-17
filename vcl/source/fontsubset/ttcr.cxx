@@ -1370,7 +1370,7 @@ static void ProcessTables(TrueTypeCreator *tt)
             if (z > yMax) yMax = z;
         }
 
-        if (gd->compflag == 0) {                            /* non-composite glyph */
+        if (!gd->compflag) {                                /* non-composite glyph */
             if (gd->npoints > maxPoints) maxPoints = gd->npoints;
             if (gd->ncontours > maxContours) maxContours = gd->ncontours;
         } else {                                            /* composite glyph */

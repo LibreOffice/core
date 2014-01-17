@@ -2885,10 +2885,10 @@ bool PDFWriterImpl::emitTilings()
         CHECK_RETURN( updateObject( it->m_nObject ) );
         CHECK_RETURN( writeBuffer( aTilingObj.getStr(), aTilingObj.getLength() ) );
         checkAndEnableStreamEncryption( it->m_nObject );
-        nTilingStreamSize = writeBuffer( it->m_pTilingStream->GetData(), nTilingStreamSize );
+        bool written = writeBuffer( it->m_pTilingStream->GetData(), nTilingStreamSize );
         delete it->m_pTilingStream;
         it->m_pTilingStream = NULL;
-        if( nTilingStreamSize == 0 )
+        if( !written )
             return false;
         disableStreamEncryption();
         aTilingObj.setLength( 0 );
@@ -6329,8 +6329,8 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     aLine.append( "/Filter/FlateDecode" );
 #endif
     aLine.append( ">>\nstream\n" );
-    CHECK_RETURN( updateObject( nICCObject ) );
-    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+    if ( !updateObject( nICCObject ) ) return 0;
+    if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) ) return 0;
     //get file position
     sal_uInt64 nBeginStreamPos = 0;
     osl_getFilePos( m_aFile, &nBeginStreamPos );
@@ -6346,31 +6346,31 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     std::vector<unsigned char> xBuffer(nBytesNeeded);
     cmsSaveProfileToMem(hProfile, &xBuffer[0], &nBytesNeeded);
     cmsCloseProfile(hProfile);
-    sal_Int32 nStreamSize = writeBuffer( &xBuffer[0], (sal_Int32) xBuffer.size() );
+    bool written = writeBuffer( &xBuffer[0], (sal_Int32) xBuffer.size() );
     disableStreamEncryption();
     endCompression();
     sal_uInt64 nEndStreamPos = 0;
     osl_getFilePos( m_aFile, &nEndStreamPos );
 
-    if( nStreamSize == 0 )
+    if( !written )
         return 0;
     if( ! writeBuffer( "\nendstream\nendobj\n\n", 19 ) )
         return 0 ;
     aLine.setLength( 0 );
 
     //emit the stream length   object
-    CHECK_RETURN( updateObject( nStreamLengthObject ) );
+    if ( !updateObject( nStreamLengthObject ) ) return 0;
     aLine.setLength( 0 );
     aLine.append( nStreamLengthObject );
     aLine.append( " 0 obj\n" );
     aLine.append( (sal_Int64)(nEndStreamPos-nBeginStreamPos) );
     aLine.append( "\nendobj\n\n" );
-    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+    if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) ) return 0;
     aLine.setLength( 0 );
 
     //emit the OutputIntent dictionary
     sal_Int32 nOIObject = createObject();
-    CHECK_RETURN( updateObject( nOIObject ) );
+    if ( !updateObject( nOIObject ) ) return 0;
     aLine.append( nOIObject );
     aLine.append( " 0 obj\n"
                   "<</Type/OutputIntent/S/GTS_PDFA1/OutputConditionIdentifier");
@@ -6380,7 +6380,7 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     aLine.append("/DestOutputProfile ");
     aLine.append( nICCObject );
     aLine.append( " 0 R>>\nendobj\n\n" );;
-    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+    if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) ) return 0;
 
     return nOIObject;
 }
@@ -6554,9 +6554,11 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
 
         aMetadataObj.append( (sal_Int32) aMetadataStream.getLength() );
         aMetadataObj.append( ">>\nstream\n" );
-        CHECK_RETURN( writeBuffer( aMetadataObj.getStr(), aMetadataObj.getLength() ) );
+        if ( !writeBuffer( aMetadataObj.getStr(), aMetadataObj.getLength() ) )
+            return 0;
         //emit the stream
-        CHECK_RETURN( writeBuffer( aMetadataStream.getStr(), aMetadataStream.getLength() ) );
+        if ( !writeBuffer( aMetadataStream.getStr(), aMetadataStream.getLength() ) )
+            return 0;
 
         aMetadataObj.setLength( 0 );
         aMetadataObj.append( "\nendstream\nendobj\n\n" );

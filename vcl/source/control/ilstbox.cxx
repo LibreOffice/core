@@ -288,7 +288,7 @@ sal_uInt16 ImplEntryList::FindMatchingEntry( const OUString& rStr, sal_uInt16 nS
         nStart++;   // decrements right away
 
     const vcl::I18nHelper& rI18nHelper = mpWindow->GetSettings().GetLocaleI18nHelper();
-    for ( sal_uInt16 n = nStart; bForward ? ( n < nEntryCount ) : n; )
+    for ( sal_uInt16 n = nStart; bForward ? n < nEntryCount : n != 0; )
     {
         if ( !bForward )
             n--;

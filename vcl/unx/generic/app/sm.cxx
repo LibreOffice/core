@@ -239,7 +239,7 @@ IMPL_STATIC_LINK_NOINSTANCE( SessionManagerClient, SaveYourselfHdl, void*, pStat
 {
     // Decode argument smuggled in as void*:
     sal_uIntPtr nStateVal = reinterpret_cast< sal_uIntPtr >(pStateVal);
-    Bool shutdown = nStateVal != 0;
+    bool shutdown = nStateVal != 0;
 
     SAL_INFO("vcl.sm", "posting save documents event shutdown = " << (shutdown ? "true" : "false" ));
 

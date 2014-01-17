@@ -369,7 +369,7 @@ GetAlternateKeyCode( const sal_uInt16 nKeyCode )
 
 #if GTK_CHECK_VERSION(3,0,0)
 static int debugQueuePureRedraw = 0;
-static int debugRedboxRedraws = 0;
+static bool debugRedboxRedraws = false;
 
 namespace {
 /// Decouple SalFrame lifetime from damagetracker lifetime
@@ -3148,7 +3148,7 @@ bool GtkSalFrame::Dispatch( const XEvent* pEvent )
             aEvent.type = GDK_FOCUS_CHANGE;
             aEvent.window = widget_get_window( m_pWindow );
             aEvent.send_event = sal_True;
-            aEvent.in = (pEvent->xclient.data.l[1] == 1);
+            aEvent.in = gint16(pEvent->xclient.data.l[1] == 1);
             signalFocus( m_pWindow, &aEvent, this );
         }
     }

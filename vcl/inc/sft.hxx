@@ -178,7 +178,7 @@ namespace vcl
         sal_uInt8  *ptr;                         /**< pointer to glyph data              */
         sal_uInt16 aw;                          /**< advance width                      */
         sal_Int16  lsb;                         /**< left sidebearing                   */
-        sal_uInt16 compflag;                    /**< 0- if non-composite, 1- otherwise  */
+        bool compflag;                          /**< false- if non-composite */
         sal_uInt16 npoints;                     /**< number of points                   */
         sal_uInt16 ncontours;                   /**< number of contours                 */
         /* */
@@ -225,7 +225,7 @@ namespace vcl
         int   typoLineGap;        /**< OS/2 portable typographc line gap                       */
         int   winAscent;          /**< ascender metric for Windows                             */
         int   winDescent;         /**< descender metric for Windows                            */
-        int   symbolEncoded;      /**< 1: MS symbol encoded 0: not symbol encoded              */
+        bool  symbolEncoded;      /**< true: MS symbol encoded */
         int   rangeFlag;          /**< if set to 1 Unicode Range flags are applicable          */
         sal_uInt32 ur1;               /**< bits 0 - 31 of Unicode Range flags                      */
         sal_uInt32 ur2;               /**< bits 32 - 63 of Unicode Range flags                     */

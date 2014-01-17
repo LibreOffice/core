@@ -325,14 +325,14 @@ static long ContextMenuEventLink( void* pCEvent, void* )
     return 0;
 }
 
-long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouseLeave,
+bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouseLeave,
                            long nX, long nY, sal_uLong nMsgTime,
                            sal_uInt16 nCode, sal_uInt16 nMode )
 {
     ImplSVData* pSVData = ImplGetSVData();
     Point       aMousePos( nX, nY );
     Window*     pChild;
-    long        nRet;
+    bool        nRet;
     sal_uInt16      nClicks;
     ImplFrameData* pWinFrameData = pWindow->ImplGetFrameData();
     sal_uInt16      nOldCode = pWinFrameData->mnMouseCode;
@@ -349,7 +349,7 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
             if( pWindow->ImplGetWindow() == pSVData->maHelpData.mpHelpWin )
             {
                 ImplDestroyHelpWindow( false );
-                return 1; // pWindow is dead now - avoid crash!
+                return true; // pWindow is dead now - avoid crash!
             }
             else
                 ImplDestroyHelpWindow( true );
@@ -379,7 +379,7 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
             ImplDestroyHelpWindow( true );
 
             if ( aDelData.IsDead() )
-                return 1; // pWindow is dead now - avoid crash! (#122045#)
+                return true; // pWindow is dead now - avoid crash! (#122045#)
         }
     }
     else
@@ -393,7 +393,7 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
     if ( pSVData->maWinData.mpAutoScrollWin && (nSVEvent == EVENT_MOUSEBUTTONDOWN) )
     {
         pSVData->maWinData.mpAutoScrollWin->EndAutoScroll();
-        return 1;
+        return true;
     }
 
     // find mouse window
@@ -406,10 +406,10 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
 
         // java client cannot capture mouse correctly
         if ( pWindow != pChild->ImplGetFrameWindow() )
-            return 0;
+            return false;
 
         if ( bMouseLeave )
-            return 0;
+            return false;
     }
     else
     {
@@ -422,7 +422,7 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
     // test this because mouse events are buffered in the remote version
     // and size may not be in sync
     if ( !pChild && !bMouseLeave )
-        return 0;
+        return false;
 
     // execute a few tests and catch the message or implement the status
     if ( pChild )
@@ -435,7 +435,7 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
         // no mouse messages to system object windows ?
         // !!!KA: Is it OK to comment this out? !!!
 //        if ( pChild->ImplGetWindowImpl()->mpSysObj )
-//            return 0;
+//            return false;
 
         // no mouse messages to disabled windows
         // #106845# if the window was disabed during capturing we have to pass the mouse events to release capturing
@@ -462,14 +462,14 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
             }
 
             if ( nSVEvent == EVENT_MOUSEBUTTONDOWN )
-                return 1;
+                return true;
             else
             {
                 // Set normal MousePointer for disabled windows
                 if ( nSVEvent == EVENT_MOUSEMOVE )
                     ImplSetMousePointer( pChild );
 
-                return 0;
+                return false;
             }
         }
 
@@ -497,7 +497,7 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
                 // set mouse pointer anew, as it could have changed
                 // due to the mode switch
                 ImplSetMousePointer( pChild );
-                return 0;
+                return false;
             }
 
             pWinFrameData->mnLastMouseWinX = aChildMousePos.X();
@@ -622,7 +622,7 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
                         pChild->ImplRemoveDel( &aDelData2 );
                 }
                 if ( aDelData.IsDead() )
-                    return 1;
+                    return true;
                 pMouseMoveWin->ImplRemoveDel( &aDelData );
             }
 
@@ -634,7 +634,7 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
 
         // MouseLeave
         if ( !pChild )
-            return 0;
+            return false;
     }
     else
     {
@@ -700,7 +700,7 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
                 pChild->ImplRemoveDel( &aDelData );
                 pChild->ImplGetFrameData()->mbStartDragCalled = sal_True;
             }
-            return 1;
+            return true;
         }
         else
             pChild->ImplRemoveDel( &aDelData );
@@ -724,14 +724,14 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
             !(pChild->ImplGetFrameWindow()->GetStyle() & WB_OWNERDRAWDECORATION) )    // ownerdrawdecorated windows must never grab focus
             pChild->ToTop();
         if ( aDelData.IsDead() )
-            return 1;
+            return true;
     }
 
     if ( ImplCallPreNotify( aNEvt ) || aDelData.IsDead() )
-        nRet = 1;
+        nRet = true;
     else
     {
-        nRet = 0;
+        nRet = false;
         if ( nSVEvent == EVENT_MOUSEMOVE )
         {
             if ( pSVData->maWinData.mpTrackWin )
@@ -746,7 +746,7 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
                         pSVData->maWinData.mpTrackTimer->Start();
                 }
                 bCallHelpRequest = sal_False;
-                nRet = 1;
+                nRet = true;
             }
             else
             {
@@ -773,7 +773,7 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
         {
             if ( pSVData->maWinData.mpTrackWin &&
                  !(pSVData->maWinData.mnTrackFlags & STARTTRACK_MOUSEBUTTONDOWN) )
-                nRet = 1;
+                nRet = true;
             else
             {
                 pChild->ImplGetWindowImpl()->mbMouseButtonDown = sal_False;
@@ -785,7 +785,7 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
             if ( pSVData->maWinData.mpTrackWin )
             {
                 pChild->EndTracking();
-                nRet = 1;
+                nRet = true;
             }
             else
             {
@@ -800,7 +800,7 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
     }
 
     if ( aDelData.IsDead() )
-        return 1;
+        return true;
 
 
     if ( nSVEvent == EVENT_MOUSEMOVE )
@@ -810,19 +810,19 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
     {
         if ( bCallHelpRequest && !pSVData->maHelpData.mbKeyboardHelp )
             ImplHandleMouseHelpRequest( pChild, pChild->OutputToScreenPixel( aMEvt.GetPosPixel() ) );
-        nRet = 1;
+        nRet = true;
     }
     else if ( !nRet )
     {
         if ( nSVEvent == EVENT_MOUSEBUTTONDOWN )
         {
             if ( !pChild->ImplGetWindowImpl()->mbMouseButtonDown )
-                nRet = 1;
+                nRet = true;
         }
         else
         {
             if ( !pChild->ImplGetWindowImpl()->mbMouseButtonUp )
-                nRet = 1;
+                nRet = true;
         }
     }
 
@@ -839,7 +839,7 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
         if ( !bDrag )
         {
             // Command-Events
-            if ( /*(nRet == 0) &&*/ (nClicks == 1) && (nSVEvent == EVENT_MOUSEBUTTONDOWN) &&
+            if ( /*!nRet &&*/ (nClicks == 1) && (nSVEvent == EVENT_MOUSEBUTTONDOWN) &&
                  (nCode == MOUSE_MIDDLE) )
             {
                 sal_uInt16 nMiddleAction = pChild->GetSettings().GetMouseSettings().GetMiddleButtonAction();
@@ -934,7 +934,7 @@ static Window* ImplGetKeyInputWindow( Window* pWindow )
 
 // -----------------------------------------------------------------------
 
-static long ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
+static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
                            sal_uInt16 nKeyCode, sal_uInt16 nCharCode, sal_uInt16 nRepeat, sal_Bool bForward )
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -961,7 +961,7 @@ static long ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
                 break;
         }
         if( nVCLEvent && pSVData->mpApp->HandleKey( nVCLEvent, pWindow, &aKeyEvent ) )
-            return 1;
+            return true;
     }
 
     // #i1820# use locale specific decimal separator
@@ -987,7 +987,7 @@ static long ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
         if ( aKeyCode.IsShift() && aKeyCode.IsMod1() && (aKeyCode.IsMod2() || aKeyCode.IsMod3()) && (aKeyCode.GetCode() == KEY_D) )
         {
             DBGGUI_START();
-            return 1;
+            return true;
         }
 #endif
 
@@ -995,7 +995,7 @@ static long ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
         {
             Help::EndExtHelp();
             if ( nEvCode == KEY_ESCAPE )
-                return 1;
+                return true;
         }
         if ( pSVData->maHelpData.mpHelpWin )
             ImplDestroyHelpWindow( false );
@@ -1005,7 +1005,7 @@ static long ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
         {
             pSVData->maWinData.mpAutoScrollWin->EndAutoScroll();
             if ( nEvCode == KEY_ESCAPE )
-                return 1;
+                return true;
         }
 
         if ( pSVData->maWinData.mpTrackWin )
@@ -1026,15 +1026,15 @@ static long ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
                             pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
                     }
                 }
-                return 1;
+                return true;
             }
             else if ( nOrigCode == KEY_RETURN )
             {
                 pSVData->maWinData.mpTrackWin->EndTracking( ENDTRACK_KEY );
-                return 1;
+                return true;
             }
             else if ( !(pSVData->maWinData.mnTrackFlags & STARTTRACK_KEYINPUT) )
-                return 1;
+                return true;
         }
 
         // handle FloatingMode
@@ -1049,7 +1049,7 @@ static long ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
                 {
                     pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
                     if( !bCtrlF6 )
-                        return 1;
+                        return true;
                 }
             }
         }
@@ -1058,14 +1058,14 @@ static long ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
         if ( pSVData->maAppData.mpAccelMgr )
         {
             if ( pSVData->maAppData.mpAccelMgr->IsAccelKey( aKeyCode, nRepeat ) )
-                return 1;
+                return true;
         }
     }
 
     // find window
     Window* pChild = ImplGetKeyInputWindow( pWindow );
     if ( !pChild )
-        return 0;
+        return false;
 
     // --- RTL --- mirror cursor keys
     if( (aKeyCode.GetCode() == KEY_LEFT || aKeyCode.GetCode() == KEY_RIGHT) &&
@@ -1079,7 +1079,7 @@ static long ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
     KeyEvent    aKeyEvt( (sal_Unicode)nCharCode, aKeyCode, nRepeat );
     NotifyEvent aNotifyEvt( nSVEvent, pChild, &aKeyEvt );
     sal_Bool        bKeyPreNotify = (ImplCallPreNotify( aNotifyEvt ) != 0);
-    long        nRet = 1;
+    bool nRet = true;
 
     if ( !bKeyPreNotify && !aDelData.IsDead() )
     {
@@ -1099,7 +1099,7 @@ static long ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
     }
 
     if ( aDelData.IsDead() )
-        return 1;
+        return true;
 
     pChild->ImplRemoveDel( &aDelData );
 
@@ -1157,29 +1157,29 @@ static long ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
                         pChild->RequestHelp( aHelpEvent );
                     }
                     else
-                        nRet = 0;
+                        nRet = false;
                 }
                 else if ( aKeyCode.IsShift() )
                 {
                     if ( pSVData->maHelpData.mbExtHelp )
                         Help::StartExtHelp();
                     else
-                        nRet = 0;
+                        nRet = false;
                 }
             }
             else
             {
                 if ( ImplCallHotKey( aKeyCode ) )
-                    nRet = 1;
+                    nRet = true;
                 else
-                    nRet = 0;
+                    nRet = false;
             }
         }
     }
     else
     {
         if ( !bKeyPreNotify && pChild->ImplGetWindowImpl()->mbKeyUp )
-            nRet = 0;
+            nRet = false;
     }
 
     // #105591# send keyinput to parent if we are a floating window and the key was not pocessed yet
@@ -1193,7 +1193,7 @@ static long ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
         NotifyEvent aNEvt( nSVEvent, pChild, &aKEvt );
         sal_Bool        bPreNotify = (ImplCallPreNotify( aNEvt ) != 0);
         if ( aChildDelData.IsDead() )
-            return 1;
+            return true;
 
         if ( !bPreNotify )
         {
@@ -1211,11 +1211,11 @@ static long ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
             if( !aChildDelData.IsDead() )
                 aNEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNEvt );
             if ( aChildDelData.IsDead() )
-                return 1;
+                return true;
         }
 
         if( bPreNotify || !pChild->ImplGetWindowImpl()->mbKeyInput )
-            nRet = 1;
+            nRet = true;
     }
 
     return nRet;
@@ -1223,7 +1223,7 @@ static long ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
 
 // -----------------------------------------------------------------------
 
-static long ImplHandleExtTextInput( Window* pWindow,
+static bool ImplHandleExtTextInput( Window* pWindow,
                                     const OUString& rText,
                                     const sal_uInt16* pTextAttr,
                                     sal_Int32 nCursorPos, sal_uInt16 nCursorFlags )
@@ -1239,7 +1239,7 @@ static long ImplHandleExtTextInput( Window* pWindow,
         {
             pChild = ImplGetKeyInputWindow( pWindow );
             if ( !pChild )
-                return 0;
+                return false;
         }
         if( !pChild->ImplGetWindowImpl()->mpFrameData->mnFocusId )
             break;
@@ -1264,7 +1264,7 @@ static long ImplHandleExtTextInput( Window* pWindow,
 
     // be aware of being recursively called in StartExtTextInput
     if ( !pChild->ImplGetWindowImpl()->mbExtTextInput )
-        return 0;
+        return false;
 
     // Test for changes
     bool bOnlyCursor = false;
@@ -1318,11 +1318,11 @@ static long ImplHandleExtTextInput( Window* pWindow,
 
 // -----------------------------------------------------------------------
 
-static long ImplHandleEndExtTextInput( Window* /* pWindow */ )
+static bool ImplHandleEndExtTextInput( Window* /* pWindow */ )
 {
     ImplSVData* pSVData = ImplGetSVData();
     Window*     pChild = pSVData->maWinData.mpExtTextInputWin;
-    long        nRet = 0;
+    bool        nRet = false;
 
     if ( pChild )
     {
@@ -1394,7 +1394,7 @@ static void ImplHandleExtTextInputPos( Window* pWindow,
 
 // -----------------------------------------------------------------------
 
-static long ImplHandleInputContextChange( Window* pWindow, LanguageType eNewLang )
+static bool ImplHandleInputContextChange( Window* pWindow, LanguageType eNewLang )
 {
     Window* pChild = ImplGetKeyInputWindow( pWindow );
     CommandInputContextData aData( eNewLang );
@@ -1427,7 +1427,7 @@ static sal_Bool ImplCallWheelCommand( Window* pWindow, const Point& rPos,
 
 // -----------------------------------------------------------------------
 
-static long ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEvt, bool scaleDirectly = false )
+static bool ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEvt, bool scaleDirectly = false )
 {
     ImplDelData aDogTag( pWindow );
 
@@ -1437,7 +1437,7 @@ static long ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
     if ( pSVData->maHelpData.mpHelpWin )
         ImplDestroyHelpWindow( true );
     if( aDogTag.IsDead() )
-        return 0;
+        return false;
 
     sal_uInt16 nMode;
     sal_uInt16 nCode = rEvt.mnCode;
@@ -2017,7 +2017,7 @@ static sal_uInt16 ImplGetMouseButtonMode( SalMouseEvent* pEvent )
 
 // -----------------------------------------------------------------------
 
-inline long ImplHandleSalMouseLeave( Window* pWindow, SalMouseEvent* pEvent )
+inline bool ImplHandleSalMouseLeave( Window* pWindow, SalMouseEvent* pEvent )
 {
     return ImplHandleMouseEvent( pWindow, EVENT_MOUSEMOVE, sal_True,
                                  pEvent->mnX, pEvent->mnY,
@@ -2027,7 +2027,7 @@ inline long ImplHandleSalMouseLeave( Window* pWindow, SalMouseEvent* pEvent )
 
 // -----------------------------------------------------------------------
 
-inline long ImplHandleSalMouseMove( Window* pWindow, SalMouseEvent* pEvent )
+inline bool ImplHandleSalMouseMove( Window* pWindow, SalMouseEvent* pEvent )
 {
     return ImplHandleMouseEvent( pWindow, EVENT_MOUSEMOVE, sal_False,
                                  pEvent->mnX, pEvent->mnY,
@@ -2037,7 +2037,7 @@ inline long ImplHandleSalMouseMove( Window* pWindow, SalMouseEvent* pEvent )
 
 // -----------------------------------------------------------------------
 
-inline long ImplHandleSalMouseButtonDown( Window* pWindow, SalMouseEvent* pEvent )
+inline bool ImplHandleSalMouseButtonDown( Window* pWindow, SalMouseEvent* pEvent )
 {
     return ImplHandleMouseEvent( pWindow, EVENT_MOUSEBUTTONDOWN, sal_False,
                                  pEvent->mnX, pEvent->mnY,
@@ -2052,7 +2052,7 @@ inline long ImplHandleSalMouseButtonDown( Window* pWindow, SalMouseEvent* pEvent
 
 // -----------------------------------------------------------------------
 
-inline long ImplHandleSalMouseButtonUp( Window* pWindow, SalMouseEvent* pEvent )
+inline bool ImplHandleSalMouseButtonUp( Window* pWindow, SalMouseEvent* pEvent )
 {
     return ImplHandleMouseEvent( pWindow, EVENT_MOUSEBUTTONUP, sal_False,
                                  pEvent->mnX, pEvent->mnY,
@@ -2067,17 +2067,17 @@ inline long ImplHandleSalMouseButtonUp( Window* pWindow, SalMouseEvent* pEvent )
 
 // -----------------------------------------------------------------------
 
-static long ImplHandleSalMouseActivate( Window* /*pWindow*/, SalMouseActivateEvent* /*pEvent*/ )
+static bool ImplHandleSalMouseActivate( Window* /*pWindow*/, SalMouseActivateEvent* /*pEvent*/ )
 {
-    return sal_False;
+    return false;
 }
 
 // -----------------------------------------------------------------------
 
-static long ImplHandleMenuEvent( Window* pWindow, SalMenuEvent* pEvent, sal_uInt16 nEvent )
+static bool ImplHandleMenuEvent( Window* pWindow, SalMenuEvent* pEvent, sal_uInt16 nEvent )
 {
     // Find SystemWindow and its Menubar and let it dispatch the command
-    long nRet = 0;
+    bool nRet = false;
     Window *pWin = pWindow->ImplGetWindowImpl()->mpFirstChild;
     while ( pWin )
     {
@@ -2093,19 +2093,19 @@ static long ImplHandleMenuEvent( Window* pWindow, SalMenuEvent* pEvent, sal_uInt
             switch( nEvent )
             {
                 case SALEVENT_MENUACTIVATE:
-                    nRet = pMenuBar->HandleMenuActivateEvent( (Menu*) pEvent->mpMenu ) ? 1 : 0;
+                    nRet = pMenuBar->HandleMenuActivateEvent( (Menu*) pEvent->mpMenu );
                     break;
                 case SALEVENT_MENUDEACTIVATE:
-                    nRet = pMenuBar->HandleMenuDeActivateEvent( (Menu*) pEvent->mpMenu ) ? 1 : 0;
+                    nRet = pMenuBar->HandleMenuDeActivateEvent( (Menu*) pEvent->mpMenu );
                     break;
                 case SALEVENT_MENUHIGHLIGHT:
-                    nRet = pMenuBar->HandleMenuHighlightEvent( (Menu*) pEvent->mpMenu, pEvent->mnId ) ? 1 : 0;
+                    nRet = pMenuBar->HandleMenuHighlightEvent( (Menu*) pEvent->mpMenu, pEvent->mnId );
                     break;
                 case SALEVENT_MENUBUTTONCOMMAND:
-                    nRet = pMenuBar->HandleMenuButtonEvent( (Menu*) pEvent->mpMenu, pEvent->mnId ) ? 1 : 0;
+                    nRet = pMenuBar->HandleMenuButtonEvent( (Menu*) pEvent->mpMenu, pEvent->mnId );
                     break;
                 case SALEVENT_MENUCOMMAND:
-                    nRet = pMenuBar->HandleMenuCommandEvent( (Menu*) pEvent->mpMenu, pEvent->mnId ) ? 1 : 0;
+                    nRet = pMenuBar->HandleMenuCommandEvent( (Menu*) pEvent->mpMenu, pEvent->mnId );
                     break;
                 default:
                     break;
@@ -2249,10 +2249,10 @@ static void ImplHandleSalExtTextInputPos( Window* pWindow, SalExtTextInputPosEve
 
 // -----------------------------------------------------------------------
 
-static long ImplHandleShowDialog( Window* pWindow, int nDialogId )
+static bool ImplHandleShowDialog( Window* pWindow, int nDialogId )
 {
     if( ! pWindow )
-        return sal_False;
+        return false;
 
     if( pWindow->GetType() == WINDOW_BORDERWINDOW )
     {
@@ -2381,18 +2381,18 @@ static void ImplHandleSalQueryCharPosition( Window *pWindow,
 
 // -----------------------------------------------------------------------
 
-long ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
+bool ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
                           sal_uInt16 nEvent, const void* pEvent )
 {
     DBG_TESTSOLARMUTEX();
 
-    long nRet = 0;
+    bool nRet = false;
 
     // #119709# for some unknown reason it is possible to receive events (in this case key events)
     // although the corresponding VCL window must have been destroyed already
     // at least ImplGetWindowImpl() was NULL in these cases, so check this here
     if( pWindow->ImplGetWindowImpl() == NULL )
-        return 0;
+        return false;
 
     switch ( nEvent )
     {
@@ -2565,15 +2565,15 @@ long ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
                     {
                         // Message-Schleife beenden
                         Application::Quit();
-                        return sal_False;
+                        return false;
                     }
                     else
                     {
                         bInQueryExit = false;
-                        return sal_True;
+                        return true;
                     }
                 }
-                return sal_False;
+                return false;
             }
 
         case SALEVENT_SETTINGSCHANGED:

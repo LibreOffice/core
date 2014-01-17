@@ -232,7 +232,8 @@ bool GtkSalDisplay::Dispatch( XEvent* pEvent )
              it != m_aFrames.end(); ++it )
         {
             if( (GdkNativeWindow)(*it)->GetSystemData()->aWindow == pEvent->xany.window )
-                return static_cast<GtkSalFrame*>(*it)->Dispatch( pEvent );
+                return static_cast<GtkSalFrame*>(*it)->Dispatch( pEvent )
+                    ? GDK_FILTER_TRANSLATE : GDK_FILTER_CONTINUE; //TODO
         }
     }
 
@@ -573,7 +574,7 @@ void GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
             gboolean wasOneEvent = TRUE;
             while( nMaxEvents-- && wasOneEvent )
             {
-                wasOneEvent = g_main_context_iteration( NULL, bWait & !bWasEvent );
+                wasOneEvent = g_main_context_iteration( NULL, bWait && !bWasEvent );
                 if( wasOneEvent )
                     bWasEvent = true;
             }
