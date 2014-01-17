@@ -110,9 +110,9 @@ class ScChartPositioner             // only parameter struct
     ScChartGlue eGlue;
     SCCOL       nStartCol;
     SCROW       nStartRow;
-    sal_Bool        bColHeaders;
-    sal_Bool        bRowHeaders;
-    sal_Bool        bDummyUpperLeft;
+    bool        bColHeaders;
+    bool        bRowHeaders;
+    bool        bDummyUpperLeft;
 
 private:
     void        CheckColRowHeaders();
@@ -133,10 +133,10 @@ public:
     void    SetRangeList( const ScRangeListRef& rNew ) { aRangeListRef = rNew; }
     void    SetRangeList( const ScRange& rNew );
 
-    void    SetHeaders(sal_Bool bCol, sal_Bool bRow) { bColHeaders=bCol; bRowHeaders=bRow; }
-    sal_Bool    HasColHeaders() const            { return bColHeaders; }
-    sal_Bool    HasRowHeaders() const            { return bRowHeaders; }
-    void    SetDummyUpperLeft(sal_Bool bNew) { bDummyUpperLeft = bNew; }
+    void    SetHeaders(bool bCol, bool bRow) { bColHeaders=bCol; bRowHeaders=bRow; }
+    bool    HasColHeaders() const            { return bColHeaders; }
+    bool    HasRowHeaders() const            { return bRowHeaders; }
+    void    SetDummyUpperLeft(bool bNew)     { bDummyUpperLeft = bNew; }
     void    SeteGlue(ScChartGlue eNew) { eGlue = eNew; }
     void    SetStartCol(SCCOL nNew) { nStartCol = nNew; }
     void    SetStartRow(SCROW nNew) { nStartRow = nNew; }

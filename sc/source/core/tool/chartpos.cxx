@@ -263,7 +263,7 @@ void ScChartPositioner::GlueState()
         else
             eGlue = SC_CHARTGLUE_COLS;
         if ( *pA != nOccu )
-            bDummyUpperLeft = sal_True;
+            bDummyUpperLeft = true;
     }
     else
     {
