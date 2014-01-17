@@ -2245,12 +2245,12 @@ void ScDataPilotFieldObj::setCurrentPage( const OUString& rPage )
     }
 }
 
-sal_Bool ScDataPilotFieldObj::getUseCurrentPage() const
+bool ScDataPilotFieldObj::getUseCurrentPage() const
 {
     return false;
 }
 
-void ScDataPilotFieldObj::setUseCurrentPage( sal_Bool bUse )
+void ScDataPilotFieldObj::setUseCurrentPage( bool bUse )
 {
     SolarMutexGuard aGuard;
     ScDPObject* pDPObj = 0;
@@ -2341,14 +2341,14 @@ void ScDataPilotFieldObj::setSortInfo( const DataPilotFieldSortInfo* pInfo )
     }
 }
 
-sal_Bool ScDataPilotFieldObj::getShowEmpty() const
+bool ScDataPilotFieldObj::getShowEmpty() const
 {
     SolarMutexGuard aGuard;
     ScDPSaveDimension* pDim = GetDPDimension();
     return pDim && pDim->GetShowEmpty();
 }
 
-void ScDataPilotFieldObj::setShowEmpty( sal_Bool bShow )
+void ScDataPilotFieldObj::setShowEmpty( bool bShow )
 {
     SolarMutexGuard aGuard;
     ScDPObject* pDPObj = 0;
@@ -2359,7 +2359,7 @@ void ScDataPilotFieldObj::setShowEmpty( sal_Bool bShow )
     }
 }
 
-sal_Bool ScDataPilotFieldObj::hasGroupInfo()
+bool ScDataPilotFieldObj::hasGroupInfo()
 {
     SolarMutexGuard aGuard;
     ScDPObject* pDPObj = 0;
@@ -2522,9 +2522,9 @@ void ScDataPilotFieldObj::setGroupInfo( const DataPilotFieldGroupInfo* pInfo )
     }
 }
 
-sal_Bool ScDataPilotFieldObj::HasString(const Sequence< OUString >& rItems, const OUString& aString)
+bool ScDataPilotFieldObj::HasString(const Sequence< OUString >& rItems, const OUString& aString)
 {
-    sal_Bool bRet = false;
+    bool bRet = false;
 
     sal_Int32 nCount(rItems.getLength());
     sal_Int32 nItem(0);

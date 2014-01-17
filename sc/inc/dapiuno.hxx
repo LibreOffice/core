@@ -568,8 +568,8 @@ public:
     void setSubtotals(const com::sun::star::uno::Sequence< com::sun::star::sheet::GeneralFunction >& rFunctions);
     OUString getCurrentPage() const;
     void setCurrentPage(const OUString& sPage);
-    sal_Bool getUseCurrentPage() const;
-    void setUseCurrentPage(sal_Bool bUse);
+    bool getUseCurrentPage() const;
+    void setUseCurrentPage(bool bUse);
     const com::sun::star::sheet::DataPilotFieldAutoShowInfo* getAutoShowInfo();
     void setAutoShowInfo(const com::sun::star::sheet::DataPilotFieldAutoShowInfo* pInfo);
     const com::sun::star::sheet::DataPilotFieldLayoutInfo* getLayoutInfo();
@@ -578,15 +578,15 @@ public:
     void setReference(const com::sun::star::sheet::DataPilotFieldReference* pInfo);
     const com::sun::star::sheet::DataPilotFieldSortInfo* getSortInfo();
     void setSortInfo(const com::sun::star::sheet::DataPilotFieldSortInfo* pInfo);
-    sal_Bool getShowEmpty() const;
-    void setShowEmpty(sal_Bool bShow);
+    bool getShowEmpty() const;
+    void setShowEmpty(bool bShow);
 
-    sal_Bool hasGroupInfo();
+    bool hasGroupInfo();
     com::sun::star::sheet::DataPilotFieldGroupInfo getGroupInfo();
     void setGroupInfo(const com::sun::star::sheet::DataPilotFieldGroupInfo* pInfo);
 
                             // XDataPilotFieldGrouping
-    sal_Bool HasString(const com::sun::star::uno::Sequence< OUString >& aItems, const OUString& aString);
+    bool HasString(const com::sun::star::uno::Sequence< OUString >& aItems, const OUString& aString);
     virtual com::sun::star::uno::Reference < com::sun::star::sheet::XDataPilotField > SAL_CALL
         createNameGroup(const com::sun::star::uno::Sequence< OUString >& aItems)
              throw (::com::sun::star::uno::RuntimeException,
