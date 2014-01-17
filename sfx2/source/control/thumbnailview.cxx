@@ -891,7 +891,6 @@ void ThumbnailView::Paint( const Rectangle &aRect)
 
 void ThumbnailView::GetFocus()
 {
-    if(GETFOCUS_TAB & GetGetFocusFlags())
     {
         // Select the first item if nothing selected
         int nSelected = -1;
