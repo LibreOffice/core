@@ -146,6 +146,12 @@ bool ScRefTokenHelper::getRangeFromToken(ScRange& rRange, const ScSharedTokenRef
                 return false;
 
             const ScSingleRefData& rRefData = pToken->GetSingleRef();
+
+            if(!rRefData.Valid())
+            {
+                OSL_ENSURE(false, "RefData out of range, correct before usage (!)");
+            }
+
             rRange.aStart.SetCol(rRefData.nCol);
             rRange.aStart.SetRow(rRefData.nRow);
             rRange.aStart.SetTab(rRefData.nTab);
@@ -160,6 +166,12 @@ bool ScRefTokenHelper::getRangeFromToken(ScRange& rRange, const ScSharedTokenRef
                 return false;
 
             const ScComplexRefData& rRefData = pToken->GetDoubleRef();
+
+            if(!rRefData.Valid())
+            {
+                OSL_ENSURE(false, "RefData out of range, correct before usage (!)");
+            }
+
             rRange.aStart.SetCol(rRefData.Ref1.nCol);
             rRange.aStart.SetRow(rRefData.Ref1.nRow);
             rRange.aStart.SetTab(rRefData.Ref1.nTab);

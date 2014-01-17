@@ -124,6 +124,10 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
 
     sal_Size nEndPos = aIn.GetRecPos() + nFormulaLen;
 
+    // #123870# Init members, they are on random values and not all will beinitialized in all cases below
+    aSRD.InitMembers();
+    aCRD.InitMembers();
+
     while( (aIn.GetRecPos() < nEndPos) && !bError )
     {
         aIn >> nOp;
@@ -1243,6 +1247,10 @@ ConvErr ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStrea
     sal_uInt16 nTabCount = static_cast< sal_uInt16 >( rTabNames.size() );
 
     sal_Size nEndPos = rStrm.GetRecPos() + nFormulaLen;
+
+    // #123870# Init members, they are on random values and not all will beinitialized in all cases below
+    aSRD.InitMembers();
+    aCRD.InitMembers();
 
     while( (rStrm.GetRecPos() < nEndPos) && !bError )
     {

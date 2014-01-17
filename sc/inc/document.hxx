@@ -465,7 +465,7 @@ public:
 public:
     SC_DLLPUBLIC                ScDocument( ScDocumentMode eMode = SCDOCMODE_DOCUMENT,
                                 SfxObjectShell* pDocShell = NULL );
-    SC_DLLPUBLIC                ~ScDocument();
+    SC_DLLPUBLIC                virtual ~ScDocument();
 
     inline ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                     GetServiceManager() const { return xServiceManager; }
