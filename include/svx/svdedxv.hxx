@@ -80,12 +80,12 @@ protected:
 
     sal_uInt16                  nMacroTol;
 
-    unsigned                    bTextEditDontDelete : 1;   // Outliner und View bei SdrEndTextEdit nicht deleten (f. Rechtschreibpruefung)
-    unsigned                    bTextEditOnlyOneView : 1;  // Nur eine OutlinerView (f. Rechtschreibpruefung)
-    unsigned                    bTextEditNewObj : 1;       // Aktuell editiertes Objekt wurde gerade neu erzeugt
-    unsigned                    bQuickTextEditMode : 1;    // persistent(->CrtV). Default=TRUE
-    unsigned                    bMacroMode : 1;            // persistent(->CrtV). Default=TRUE
-    unsigned                    bMacroDown : 1;
+    bool                        bTextEditDontDelete : 1;   // Outliner und View bei SdrEndTextEdit nicht deleten (f. Rechtschreibpruefung)
+    bool                        bTextEditOnlyOneView : 1;  // Nur eine OutlinerView (f. Rechtschreibpruefung)
+    bool                        bTextEditNewObj : 1;       // Aktuell editiertes Objekt wurde gerade neu erzeugt
+    bool                        bQuickTextEditMode : 1;    // persistent(->CrtV). Default=TRUE
+    bool                        bMacroMode : 1;            // persistent(->CrtV). Default=TRUE
+    bool                        bMacroDown : 1;
 
     rtl::Reference< sdr::SelectionController > mxSelectionController;
     rtl::Reference< sdr::SelectionController > mxLastSelectionController;

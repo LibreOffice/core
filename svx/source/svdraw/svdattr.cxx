@@ -1475,7 +1475,7 @@ SdrCustomShapeAdjustmentItem::~SdrCustomShapeAdjustmentItem()
 
 bool SdrCustomShapeAdjustmentItem::operator==( const SfxPoolItem& rCmp ) const
 {
-    int bRet = SfxPoolItem::operator==( rCmp );
+    bool bRet = SfxPoolItem::operator==( rCmp );
     if ( bRet )
     {
         bRet = GetCount() == ((SdrCustomShapeAdjustmentItem&)rCmp).GetCount();

@@ -111,20 +111,20 @@ struct SVX_DLLPUBLIC SdrViewEvent
     sal_uInt16                      nHlplIdx;
     sal_uInt16                      nGlueId;
 
-    unsigned                    bMouseDown : 1;
-    unsigned                    bMouseUp : 1;
-    unsigned                    bDoubleHdlSize : 1;  // Doppelte Handlegroesse wg. TextEdit
-    unsigned                    bIsAction : 1;       // Action ist aktiv
-    unsigned                    bIsTextEdit : 1;     // TextEdit laeuft zur Zeit
-    unsigned                    bTextEditHit : 1;    // offene OutlinerView getroffen
-    unsigned                    bAddMark : 1;
-    unsigned                    bUnmark : 1;
-    unsigned                    bPrevNextMark : 1;
-    unsigned                    bMarkPrev : 1;
-    unsigned                    bInsPointNewObj : 1;
-    unsigned                    bDragWithCopy : 1;
-    unsigned                    bCaptureMouse : 1;
-    unsigned                    bReleaseMouse : 1;
+    bool                        bMouseDown : 1;
+    bool                        bMouseUp : 1;
+    bool                        bDoubleHdlSize : 1;  // Doppelte Handlegroesse wg. TextEdit
+    bool                        bIsAction : 1;       // Action ist aktiv
+    bool                        bIsTextEdit : 1;     // TextEdit laeuft zur Zeit
+    bool                        bTextEditHit : 1;    // offene OutlinerView getroffen
+    bool                        bAddMark : 1;
+    bool                        bUnmark : 1;
+    bool                        bPrevNextMark : 1;
+    bool                        bMarkPrev : 1;
+    bool                        bInsPointNewObj : 1;
+    bool                        bDragWithCopy : 1;
+    bool                        bCaptureMouse : 1;
+    bool                        bReleaseMouse : 1;
 
 public:
     SdrViewEvent();
@@ -159,11 +159,11 @@ class SVX_DLLPUBLIC SdrView: public SdrCreateView, public tools::WeakBase< SdrVi
 {
     friend class                SdrPageView;
 
-    unsigned                    bNoExtendedMouseDispatcher : 1;
-    unsigned                    bNoExtendedKeyDispatcher : 1;
-    unsigned                    bNoExtendedCommandDispatcher : 1;
-    unsigned                    bTextEditOnObjectsWithoutTextIfTextTool : 1;
-    unsigned                    mbMasterPagePaintCaching : 1;
+    bool                        bNoExtendedMouseDispatcher : 1;
+    bool                        bNoExtendedKeyDispatcher : 1;
+    bool                        bNoExtendedCommandDispatcher : 1;
+    bool                        bTextEditOnObjectsWithoutTextIfTextTool : 1;
+    bool                        mbMasterPagePaintCaching : 1;
 
 protected:
     SvtAccessibilityOptions maAccessibilityOptions;

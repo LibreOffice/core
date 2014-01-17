@@ -171,11 +171,11 @@ namespace drawinglayer
             SvxBorderLine                               maBottomFromRLine;
 
             // bitfield
-            unsigned                                    mbLeftIsOutside : 1;
-            unsigned                                    mbBottomIsOutside : 1;
-            unsigned                                    mbRightIsOutside : 1;
-            unsigned                                    mbTopIsOutside : 1;
-            unsigned                                    mbInTwips : 1;
+            bool                                        mbLeftIsOutside : 1;
+            bool                                        mbBottomIsOutside : 1;
+            bool                                        mbRightIsOutside : 1;
+            bool                                        mbTopIsOutside : 1;
+            bool                                        mbInTwips : 1;
 
         protected:
             // local decomposition.

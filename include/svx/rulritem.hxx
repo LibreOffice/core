@@ -141,8 +141,8 @@ struct SVX_DLLPUBLIC SvxColumnDescription
     SvxColumnDescription(long start, long end,
                          long endMin, long endMax, sal_Bool bVis = sal_True);
 
-    int operator==(const SvxColumnDescription &rCmp) const;
-    int operator!=(const SvxColumnDescription &rCmp) const;
+    bool operator==(const SvxColumnDescription &rCmp) const;
+    bool operator!=(const SvxColumnDescription &rCmp) const;
     long GetWidth() const;
 };
 

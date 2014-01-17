@@ -132,12 +132,10 @@ bool SvxGalleryItem::operator==( const SfxPoolItem& rAttr ) const
 
     const SvxGalleryItem& rItem = static_cast<const SvxGalleryItem&>(rAttr);
 
-    int bRet = m_nType  == rItem.m_nType &&
+    return m_nType  == rItem.m_nType &&
             m_aURL      == rItem.m_aURL &&
             m_xDrawing  == rItem.m_xDrawing &&
             m_xGraphic  == rItem.m_xGraphic;
-
-    return bRet;
 }
 
 SfxPoolItem* SvxGalleryItem::Clone( SfxItemPool * ) const

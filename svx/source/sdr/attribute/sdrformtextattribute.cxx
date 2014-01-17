@@ -169,8 +169,8 @@ namespace drawinglayer
             SdrFormTextOutlineAttribute             maShadowOutline;
 
             // bitfield
-            unsigned                                mbFormTextMirror : 1;   // change orientation
-            unsigned                                mbFormTextOutline : 1;  // show contour of objects
+            bool                                    mbFormTextMirror : 1;   // change orientation
+            bool                                    mbFormTextOutline : 1;  // show contour of objects
 
             explicit ImpSdrFormTextAttribute(const SfxItemSet& rSet)
             :   mnRefCount(0),

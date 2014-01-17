@@ -72,15 +72,13 @@ bool SvxSmartTagItem::operator==( const SfxPoolItem& rAttr ) const
 
     const SvxSmartTagItem& rItem = static_cast<const SvxSmartTagItem&>(rAttr);
 
-    int bRet = maActionComponentsSequence == rItem.maActionComponentsSequence &&
+    return maActionComponentsSequence == rItem.maActionComponentsSequence &&
                maActionIndicesSequence == rItem.maActionIndicesSequence &&
                maStringKeyMaps == rItem.maStringKeyMaps &&
                mxRange == rItem.mxRange &&
                mxController == rItem.mxController &&
                maApplicationName == rItem.maApplicationName &&
                maRangeText == rItem.maRangeText;
-
-    return bRet;
 }
 
 // -----------------------------------------------------------------------

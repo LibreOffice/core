@@ -1078,7 +1078,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
             aBoxInfo.SetLine(bSet ? &aLine : 0, BOXINFO_LINE_VERT);
             aBoxInfo.SetValid(VALID_VERT, pBorder->IsVerticalLineValid);
 
-            aBox.SetDistance(pBorder->Distance, false);
+            aBox.SetDistance(pBorder->Distance); //TODO
             aBoxInfo.SetValid(VALID_DISTANCE, pBorder->IsDistanceValid);
 
             mpProperties->SetObjectItem(aBox);

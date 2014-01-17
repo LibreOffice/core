@@ -120,20 +120,20 @@ protected:
     SdrViewEditMode             eEditMode;      // Persistent
     SdrViewEditMode             eEditMode0;     // Persistent
 
-    //HMHunsigned                   bHdlShown : 1;
-    unsigned                    bRefHdlShownOnly : 1; // Axis of reflextion during dragging (ni)
-    unsigned                    bDesignMode : 1;      // DesignMode for SdrUnoObj
-    unsigned                    bForceFrameHandles : 1; // Persistent - FrameDrag auch bei Einzelobjekten
-    unsigned                    bPlusHdlAlways : 1;   // Persistent
-    unsigned                    bMarkHdlWhenTextEdit : 1; // Persistent, default=FALSE
-    unsigned                    bInsPolyPoint : 1;     // at this time InsPolyPointDragging
-    unsigned                    bMarkedObjRectDirty : 1;
-    unsigned                    bMrkPntDirty : 1;
-    unsigned                    bMarkedPointsRectsDirty : 1;
-    unsigned                    bMarkableObjCountDirty : 1;
+    //HMHbool                       bHdlShown : 1;
+    bool                        bRefHdlShownOnly : 1; // Axis of reflextion during dragging (ni)
+    bool                        bDesignMode : 1;      // DesignMode for SdrUnoObj
+    bool                        bForceFrameHandles : 1; // Persistent - FrameDrag auch bei Einzelobjekten
+    bool                        bPlusHdlAlways : 1;   // Persistent
+    bool                        bMarkHdlWhenTextEdit : 1; // Persistent, default=FALSE
+    bool                        bInsPolyPoint : 1;     // at this time InsPolyPointDragging
+    bool                        bMarkedObjRectDirty : 1;
+    bool                        bMrkPntDirty : 1;
+    bool                        bMarkedPointsRectsDirty : 1;
+    bool                        bMarkableObjCountDirty : 1;
 
     // flag to completely disable handles at the view
-    unsigned                    mbMarkHandlesHidden : 1;
+    bool                        mbMarkHandlesHidden : 1;
 
 private:
     SVX_DLLPRIVATE void ImpClearVars();

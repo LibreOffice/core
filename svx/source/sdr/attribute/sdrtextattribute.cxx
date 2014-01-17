@@ -60,15 +60,15 @@ namespace drawinglayer
             SdrTextVertAdjust                   maSdrTextVertAdjust;
 
             // bitfield
-            unsigned                            mbContour : 1;
-            unsigned                            mbFitToSize : 1;
-            unsigned                            mbAutoFit : 1;
-            unsigned                            mbHideContour : 1;
-            unsigned                            mbBlink : 1;
-            unsigned                            mbScroll : 1;
-            unsigned                            mbInEditMode : 1;
-            unsigned                            mbFixedCellHeight : 1;
-            unsigned                            mbWrongSpell : 1;
+            bool                                mbContour : 1;
+            bool                                mbFitToSize : 1;
+            bool                                mbAutoFit : 1;
+            bool                                mbHideContour : 1;
+            bool                                mbBlink : 1;
+            bool                                mbScroll : 1;
+            bool                                mbInEditMode : 1;
+            bool                                mbFixedCellHeight : 1;
+            bool                                mbWrongSpell : 1;
 
         public:
             ImpSdrTextAttribute(

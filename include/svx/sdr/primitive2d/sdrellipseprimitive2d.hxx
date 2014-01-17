@@ -74,8 +74,8 @@ namespace drawinglayer
             double                                      mfEndAngle;
 
             // bitfield
-            unsigned                                    mbCloseSegment : 1;
-            unsigned                                    mbCloseUsingCenter : 1;
+            bool                                        mbCloseSegment : 1;
+            bool                                        mbCloseUsingCenter : 1;
 
         protected:
             // local decomposition.

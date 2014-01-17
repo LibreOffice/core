@@ -89,7 +89,7 @@ private:
 
     // bitfield
     // #i72889# flag if this is only a temporary target for repaint, default is false
-    unsigned                                            mbTemporaryTarget : 1;
+    bool                                                mbTemporaryTarget : 1;
 
     /** Remember whether the mxOverlayManager supports buffering.  Using
         this flags expensive dynamic_casts on mxOverlayManager in order to
@@ -141,7 +141,7 @@ public:
 
     // #i72889# read/write access to TempoparyTarget
     bool getTemporaryTarget() const { return (bool)mbTemporaryTarget; }
-    void setTemporaryTarget(bool bNew) { if(bNew != (bool)mbTemporaryTarget) mbTemporaryTarget = bNew; }
+    void setTemporaryTarget(bool bNew) { mbTemporaryTarget = bNew; }
 
     // #i72889# get target output device, take into account output buffering
     OutputDevice& GetTargetOutputDevice() { if(mpPreRenderDevice) return mpPreRenderDevice->GetPreRenderDevice(); else return mrOutputDevice; }

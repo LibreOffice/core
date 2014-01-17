@@ -87,7 +87,7 @@ namespace sdr
 
             // bitfield
             // flag for preview renderer
-            unsigned                                        mbIsPreviewRenderer : 1;
+            bool                                            mbIsPreviewRenderer : 1;
 
             // method to create a EventHandler. Needs to give a result.
             sdr::event::TimerEventHandler* CreateEventHandler();

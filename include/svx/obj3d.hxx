@@ -116,8 +116,8 @@ private:
     basegfx::B3DHomMatrix       maFullTransform;    // global transformation (including. parents)
 
     // Flags
-    unsigned        mbTfHasChanged          : 1;
-    unsigned        mbIsSelected            : 1;
+    bool            mbTfHasChanged          : 1;
+    bool            mbIsSelected            : 1;
 
  public:
     void SetBoundVolInvalid();
@@ -229,8 +229,8 @@ protected:
     Color                   aMaterialAmbientColor;
 
     // attributes for geometry creation
-    unsigned                bCreateNormals              : 1;
-    unsigned                bCreateTexture              : 1;
+    bool                    bCreateNormals              : 1;
+    bool                    bCreateTexture              : 1;
 
 protected:
     void SetDefaultAttributes(E3dDefaultAttributes& rDefault);

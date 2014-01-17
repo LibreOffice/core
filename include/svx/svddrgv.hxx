@@ -43,26 +43,26 @@ protected:
     sal_uIntPtr                     nDragXorPointLimit;
     sal_uInt16                      nDetailedEdgeDraggingLimit;
 
-    unsigned                    bFramDrag : 1;        // currently frame dragging
-    unsigned                    bDragSpecial : 1;     // currently Special Obj-dragging
-    unsigned                    bMarkedHitMovesAlways : 1; // Persistent
-    unsigned                    bDragLimit : 1;      // Limit on SnapRect instead of BoundRect
-    unsigned                    bDragHdl : 1;        // TRUE: RefPt is slid
-    unsigned                    bDragStripes : 1;    // Persistent
-    unsigned                    bMirrRefDragObj : 1; // Persistent - During the drag, show the mirror axis of the mirrored objects as Xor
-    unsigned                    mbSolidDragging : 1;  // allow solid create/drag of objects
-    unsigned                    bMouseHideWhileDraggingPoints : 1;
-    unsigned                    bResizeAtCenter : 1;
-    unsigned                    bCrookAtCenter : 1;
-    unsigned                    bDragWithCopy : 1;
-    unsigned                    bInsGluePoint : 1;
-    unsigned                    bInsObjPointMode : 1;
-    unsigned                    bInsGluePointMode : 1;
-    unsigned                    bNoDragXorPolys : 1;
-    unsigned                    bAutoVertexCon : 1;  // Automatische Konnektorgenerierung an den Scheitelpunkten
-    unsigned                    bAutoCornerCon : 1;  // Automatische Konnektorgenerierung an den Eckpunkten
-    unsigned                    bRubberEdgeDragging : 1;
-    unsigned                    bDetailedEdgeDragging : 1;
+    bool                        bFramDrag : 1;        // currently frame dragging
+    bool                        bDragSpecial : 1;     // currently Special Obj-dragging
+    bool                        bMarkedHitMovesAlways : 1; // Persistent
+    bool                        bDragLimit : 1;      // Limit on SnapRect instead of BoundRect
+    bool                        bDragHdl : 1;        // TRUE: RefPt is slid
+    bool                        bDragStripes : 1;    // Persistent
+    bool                        bMirrRefDragObj : 1; // Persistent - During the drag, show the mirror axis of the mirrored objects as Xor
+    bool                        mbSolidDragging : 1;  // allow solid create/drag of objects
+    bool                        bMouseHideWhileDraggingPoints : 1;
+    bool                        bResizeAtCenter : 1;
+    bool                        bCrookAtCenter : 1;
+    bool                        bDragWithCopy : 1;
+    bool                        bInsGluePoint : 1;
+    bool                        bInsObjPointMode : 1;
+    bool                        bInsGluePointMode : 1;
+    bool                        bNoDragXorPolys : 1;
+    bool                        bAutoVertexCon : 1;  // Automatische Konnektorgenerierung an den Scheitelpunkten
+    bool                        bAutoCornerCon : 1;  // Automatische Konnektorgenerierung an den Eckpunkten
+    bool                        bRubberEdgeDragging : 1;
+    bool                        bDetailedEdgeDragging : 1;
 
 private:
     SVX_DLLPRIVATE void ImpClearVars();

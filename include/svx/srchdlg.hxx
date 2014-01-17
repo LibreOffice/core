@@ -235,7 +235,7 @@ private:
     void            Construct_Impl();
     void            InitControls_Impl();
     void            ShowOptionalControls_Impl();
-    void            Init_Impl( int bHasItemSet );
+    void            Init_Impl( bool bHasItemSet );
     void            InitAttrList_Impl( const SfxItemSet* pSSet,
                                        const SfxItemSet* pRSet );
     void            Remember_Impl( const OUString &rStr,sal_Bool bSearch );

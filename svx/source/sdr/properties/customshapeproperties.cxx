@@ -37,7 +37,7 @@ namespace sdr
             SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
             SdrTextAutoGrowHeightItem& rAutoGrowHeightItem =
                 (SdrTextAutoGrowHeightItem&)rObj.GetMergedItem( SDRATTR_TEXT_AUTOGROWHEIGHT );
-            rObj.bTextFrame = rAutoGrowHeightItem.GetValue() != 0;
+            rObj.bTextFrame = rAutoGrowHeightItem.GetValue();
 
             if ( rObj.bTextFrame )
                 rObj.NbcAdjustTextFrameWidthAndHeight();
@@ -117,7 +117,7 @@ namespace sdr
 
             if( SFX_ITEM_SET == rSet.GetItemState( SDRATTR_TEXT_AUTOGROWHEIGHT ) )
             {
-                rObj.bTextFrame = ((SdrTextAutoGrowHeightItem&)rSet.Get( SDRATTR_TEXT_AUTOGROWHEIGHT )).GetValue() != 0;
+                rObj.bTextFrame = ((SdrTextAutoGrowHeightItem&)rSet.Get( SDRATTR_TEXT_AUTOGROWHEIGHT )).GetValue();
             }
 
             // call parent
@@ -133,7 +133,7 @@ namespace sdr
 
             if( pNewItem && ( SDRATTR_TEXT_AUTOGROWHEIGHT == nWhich ) )
             {
-                rObj.bTextFrame = ((SdrTextAutoGrowHeightItem*)pNewItem)->GetValue() != 0;
+                rObj.bTextFrame = ((SdrTextAutoGrowHeightItem*)pNewItem)->GetValue();
             }
             // call parent
             TextProperties::ItemChange( nWhich, pNewItem );

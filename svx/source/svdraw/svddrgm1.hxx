@@ -143,7 +143,7 @@ private:
     SdrHdlGradient*             pIAOHandle;
 
     // is this for gradient (or for transparency)?
-    unsigned                    bIsGradient : 1;
+    bool                        bIsGradient : 1;
 
 public:
     TYPEINFO();

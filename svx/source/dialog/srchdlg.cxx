@@ -715,7 +715,7 @@ private:
 
 }
 
-void SvxSearchDialog::Init_Impl( int bSearchPattern )
+void SvxSearchDialog::Init_Impl( bool bSearchPattern )
 {
     DBG_ASSERT( pSearchItem, "SearchItem == 0" );
 

@@ -102,8 +102,8 @@ class SVX_DLLPUBLIC Svx3DLightControl : public Svx3DPreviewControl
     double                      mfSaveActionStartRotZ;
 
     // bitfield
-    unsigned                    mbMouseMoved : 1;
-    unsigned                    mbGeometrySelected : 1;
+    bool                        mbMouseMoved : 1;
+    bool                        mbGeometrySelected : 1;
 
     void Construct2();
     void ConstructLightObjects();

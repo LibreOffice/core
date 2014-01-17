@@ -72,9 +72,9 @@ namespace drawinglayer
 
             // bitfield
             // is there a PageNumber, Header, Footer or DateTimeField used? Evaluated at construction
-            unsigned                                mbContainsPageField : 1;
-            unsigned                                mbContainsPageCountField : 1;
-            unsigned                                mbContainsOtherFields : 1;
+            bool                                    mbContainsPageField : 1;
+            bool                                    mbContainsPageCountField : 1;
+            bool                                    mbContainsOtherFields : 1;
 
         protected:
             // support for XTEXT_PAINTSHAPE_BEGIN/XTEXT_PAINTSHAPE_END Metafile comments
@@ -203,11 +203,11 @@ namespace drawinglayer
             SdrTextVertAdjust                       maSdrTextVertAdjust;
 
             // bitfield
-            unsigned                                mbFixedCellHeight : 1;
-            unsigned                                mbUnlimitedPage : 1;    // force layout with no text break
-            unsigned                                mbCellText : 1;         // this is a cell text as block text
-            unsigned                                mbWordWrap : 1;         // for CustomShapes text layout
-            unsigned                                mbClipOnBounds : 1;     // for CustomShapes text layout
+            bool                                    mbFixedCellHeight : 1;
+            bool                                    mbUnlimitedPage : 1;    // force layout with no text break
+            bool                                    mbCellText : 1;         // this is a cell text as block text
+            bool                                    mbWordWrap : 1;         // for CustomShapes text layout
+            bool                                    mbClipOnBounds : 1;     // for CustomShapes text layout
 
         protected:
             // local decomposition.
@@ -261,7 +261,7 @@ namespace drawinglayer
             basegfx::B2DHomMatrix                   maTextRangeTransform;
 
             // bitfield
-            unsigned                                mbFixedCellHeight : 1;
+            bool                                    mbFixedCellHeight : 1;
 
         protected:
             // local decomposition.
@@ -302,7 +302,7 @@ namespace drawinglayer
             ::basegfx::B2DHomMatrix                 maTextRangeTransform;   // text range transformation from unit range ([0.0 .. 1.0]) to text range
 
             // bitfield
-            unsigned                                mbWordWrap : 1;         // for CustomShapes text layout
+            bool                                    mbWordWrap : 1;         // for CustomShapes text layout
 
         protected:
             // local decomposition.

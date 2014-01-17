@@ -31,7 +31,7 @@ class SVX_DLLPUBLIC SdrDragEntry
 {
 private:
     // bitfield
-    unsigned                    mbAddToTransparent : 1;
+    bool                        mbAddToTransparent : 1;
 
 protected:
     // access for derived classes
@@ -125,8 +125,8 @@ private:
     SdrDragView&                            mrSdrDragView;
 
     // bitfield
-    unsigned                                mbMoveOnly : 1;
-    unsigned                                mbSolidDraggingActive : 1;
+    bool                                    mbMoveOnly : 1;
+    bool                                    mbSolidDraggingActive : 1;
 
 protected:
     // access for derivated classes to maSdrDragEntries

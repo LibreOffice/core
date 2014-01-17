@@ -198,7 +198,7 @@ namespace sdr
         {
         protected:
             // bitfield
-            unsigned                                    mbFront : 1;
+            bool                                        mbFront : 1;
 
             virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
             virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
@@ -222,7 +222,7 @@ namespace sdr
         {
         protected:
             // bitfield
-            unsigned                                    mbFront : 1;
+            bool                                        mbFront : 1;
 
             virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
             virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;

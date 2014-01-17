@@ -233,7 +233,7 @@ SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem( SvStream& /*rIn*/, sal_u
 }
 bool SdrCustomShapeGeometryItem::operator==( const SfxPoolItem& rCmp ) const
 {
-    int bRet = SfxPoolItem::operator==( rCmp );
+    bool bRet = SfxPoolItem::operator==( rCmp );
     if ( bRet )
         bRet = ((SdrCustomShapeGeometryItem&)rCmp).aPropSeq == aPropSeq;
     return bRet;

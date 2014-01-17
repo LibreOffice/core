@@ -73,7 +73,7 @@ protected:
     Imp3DDepthRemapper*         mp3DDepthRemapper;
 
     // Flag to determine if only selected objects should be drawn
-    unsigned                    bDrawOnlySelected       : 1;
+    bool                        bDrawOnlySelected       : 1;
 
     virtual void NewObjectInserted(const E3dObject* p3DObj);
     virtual void StructureChanged();

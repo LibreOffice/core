@@ -136,7 +136,7 @@ static void ImpGetPercent(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const vo
     sal_Bool& bFirst=*(sal_Bool*)pbFirst;
     if (nRet!=FUZZY) {
         bool bOn=rGP.IsPercent();
-        if (bFirst) { nRet=bOn; bFirst=sal_False; }
+        if (bFirst) { nRet=sal_uInt16(bOn); bFirst=sal_False; }
         else if ((nRet!=0)!=bOn) nRet=FUZZY;
     }
 }

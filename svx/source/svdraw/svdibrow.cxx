@@ -998,7 +998,7 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
                             case ITEM_INT32     : aEntry.bIsNum = true;  aEntry.nVal=((SfxInt32Item &)rItem).GetValue();                                        break;
                             case ITEM_UINT32    : aEntry.bIsNum = true;  aEntry.nVal=((SfxUInt32Item&)rItem).GetValue(); aEntry.nMin=0; /*aEntry.nMax=0xFF...*/;break;
                             case ITEM_ENUM      : aEntry.bCanNum = true; aEntry.nVal=((SfxEnumItemInterface&)rItem).GetEnumValue(); aEntry.nMin=0; aEntry.nMax=((SfxEnumItemInterface&)rItem).GetValueCount()-1; break;
-                            case ITEM_BOOL      : aEntry.bCanNum = true; aEntry.nVal=((SfxBoolItem  &)rItem).GetValue(); aEntry.nMin=0; aEntry.nMax=1;          break;
+                            case ITEM_BOOL      : aEntry.bCanNum = true; aEntry.nVal=sal_Int32(((SfxBoolItem  &)rItem).GetValue()); aEntry.nMin=0; aEntry.nMax=1;          break;
                             case ITEM_FLAG      : aEntry.bCanNum = true; aEntry.nVal=((SfxFlagItem  &)rItem).GetValue(); aEntry.nMin=0; aEntry.nMax=0xFFFF;     break;
                             case ITEM_FONTHEIGHT: aEntry.bCanNum = true; aEntry.nVal=((SvxFontHeightItem&)rItem).GetHeight(); aEntry.nMin=0;                    break;
                             case ITEM_FONTWIDTH : aEntry.bCanNum = true; aEntry.nVal=((SvxCharScaleWidthItem&)rItem).GetValue();    aEntry.nMin=0; aEntry.nMax=0xFFFF;break;

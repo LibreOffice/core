@@ -712,7 +712,7 @@ SvxColumnDescription::SvxColumnDescription(long start, long end, long endMin, lo
     nEndMax  (endMax)
 {}
 
-int SvxColumnDescription::operator==(const SvxColumnDescription& rCmp) const
+bool SvxColumnDescription::operator==(const SvxColumnDescription& rCmp) const
 {
     return nStart   == rCmp.nStart
         && bVisible == rCmp.bVisible
@@ -721,7 +721,7 @@ int SvxColumnDescription::operator==(const SvxColumnDescription& rCmp) const
         && nEndMax  == rCmp.nEndMax;
 }
 
-int SvxColumnDescription::operator!=(const SvxColumnDescription& rCmp) const
+bool SvxColumnDescription::operator!=(const SvxColumnDescription& rCmp) const
 {
     return !operator==(rCmp);
 }

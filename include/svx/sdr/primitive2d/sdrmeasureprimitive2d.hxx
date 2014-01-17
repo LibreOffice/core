@@ -61,9 +61,9 @@ namespace drawinglayer
             double                                      mfRightDelta;
 
             // bitfield
-            unsigned                                    mbBelow : 1;
-            unsigned                                    mbTextRotation : 1;
-            unsigned                                    mbTextAutoAngle : 1;
+            bool                                        mbBelow : 1;
+            bool                                        mbTextRotation : 1;
+            bool                                        mbTextAutoAngle : 1;
 
             // internal decomposition helper
             Primitive2DReference impCreatePart(

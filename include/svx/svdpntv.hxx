@@ -167,51 +167,51 @@ protected:
     // hold an incarnation of Drawinglayer configuration options
     SvtOptionsDrawinglayer      maDrawinglayerOpt;
 
-    unsigned                    bPageVisible : 1;
-    unsigned                    bPageBorderVisible : 1;
-    unsigned                    bBordVisible : 1;
-    unsigned                    bGridVisible : 1;
-    unsigned                    bGridFront : 1;
-    unsigned                    bHlplVisible : 1;
-    unsigned                    bHlplFront : 1;
-    unsigned                    bGlueVisible : 1;    // Persistent. Klebepunkte anzeigen
-    unsigned                    bGlueVisible2 : 1;   // Klebepunkte auch bei GluePointEdit anzeigen
-    unsigned                    bGlueVisible3 : 1;   // Klebepunkte auch bei EdgeTool anzeigen
-    unsigned                    bGlueVisible4 : 1;   // Klebepunkte anzeigen, wenn 1 Edge markiert
-    unsigned                    bRestoreColors : 1;   // Pens und Brushes werden zurueckgesetzt.
-    unsigned                    bSomeObjChgdFlag : 1;
-    unsigned                    bSwapAsynchron : 1;
-    unsigned                    bPrintPreview : 1;
+    bool                        bPageVisible : 1;
+    bool                        bPageBorderVisible : 1;
+    bool                        bBordVisible : 1;
+    bool                        bGridVisible : 1;
+    bool                        bGridFront : 1;
+    bool                        bHlplVisible : 1;
+    bool                        bHlplFront : 1;
+    bool                        bGlueVisible : 1;    // Persistent. Klebepunkte anzeigen
+    bool                        bGlueVisible2 : 1;   // Klebepunkte auch bei GluePointEdit anzeigen
+    bool                        bGlueVisible3 : 1;   // Klebepunkte auch bei EdgeTool anzeigen
+    bool                        bGlueVisible4 : 1;   // Klebepunkte anzeigen, wenn 1 Edge markiert
+    bool                        bRestoreColors : 1;   // Pens und Brushes werden zurueckgesetzt.
+    bool                        bSomeObjChgdFlag : 1;
+    bool                        bSwapAsynchron : 1;
+    bool                        bPrintPreview : 1;
 
     // sal_Bool fuer die Verwaltung des anzuzeigenden Status
     // Gruppe Betreten/Verlassen. Default ist sal_True, wird aber
     // beispielsweise beim Chart auf sal_False gesetzt, da dort
     // die Ghosted-Effekte zur Darstellug unerwuenscht sind.
-    unsigned                    bVisualizeEnteredGroup : 1;
-    unsigned                    bAnimationPause : 1;
+    bool                        bVisualizeEnteredGroup : 1;
+    bool                        bAnimationPause : 1;
 
     // #114898#
     // Flag which decides if buffered output for this view is allowed. When
     // set, PreRendering for PageView rendering will be used. Default is sal_False
-    unsigned                    mbBufferedOutputAllowed : 1;
+    bool                        mbBufferedOutputAllowed : 1;
 
     // #114898#
     // Flag which decides if buffered overlay for this view is allowed. When
     // set, the output will be buffered in an overlay vdev. When not, overlay is
     // directly painted to OutDev. Default is sal_False.
-    unsigned                    mbBufferedOverlayAllowed : 1;
+    bool                        mbBufferedOverlayAllowed : 1;
 
     // allow page painting at all?
-    unsigned                    mbPagePaintingAllowed : 1;
+    bool                        mbPagePaintingAllowed : 1;
 
     // is this a preview renderer?
-    unsigned                    mbPreviewRenderer : 1;
+    bool                        mbPreviewRenderer : 1;
 
     // flags for calc and sw for suppressing OLE, CHART or DRAW objects
-    unsigned                    mbHideOle : 1;
-    unsigned                    mbHideChart : 1;
-    unsigned                    mbHideDraw : 1;             // hide draw objects other than form controls
-    unsigned                    mbHideFormControl : 1;      // hide form controls only
+    bool                        mbHideOle : 1;
+    bool                        mbHideChart : 1;
+    bool                        mbHideDraw : 1;             // hide draw objects other than form controls
+    bool                        mbHideFormControl : 1;      // hide form controls only
 
 public:
     // #114898#
@@ -255,9 +255,9 @@ protected:
     // Wenn man den IdleStatus des Systems nicht abwarten will (auf const geschummelt):
     void FlushComeBackTimer() const;
     void TheresNewMapMode();
-    void ImpSetGlueVisible2(bool bOn) { if (bGlueVisible2!=(unsigned)bOn) { bGlueVisible2=bOn; if (!bGlueVisible && !bGlueVisible3 && !bGlueVisible4) GlueInvalidate(); } }
-    void ImpSetGlueVisible3(bool bOn) { if (bGlueVisible3!=(unsigned)bOn) { bGlueVisible3=bOn; if (!bGlueVisible && !bGlueVisible2 && !bGlueVisible4) GlueInvalidate(); } }
-    void ImpSetGlueVisible4(bool bOn) { if (bGlueVisible4!=(unsigned)bOn) { bGlueVisible4=bOn; if (!bGlueVisible && !bGlueVisible2 && !bGlueVisible3) GlueInvalidate(); } }
+    void ImpSetGlueVisible2(bool bOn) { if (bGlueVisible2!=bOn) { bGlueVisible2=bOn; if (!bGlueVisible && !bGlueVisible3 && !bGlueVisible4) GlueInvalidate(); } }
+    void ImpSetGlueVisible3(bool bOn) { if (bGlueVisible3!=bOn) { bGlueVisible3=bOn; if (!bGlueVisible && !bGlueVisible2 && !bGlueVisible4) GlueInvalidate(); } }
+    void ImpSetGlueVisible4(bool bOn) { if (bGlueVisible4!=bOn) { bGlueVisible4=bOn; if (!bGlueVisible && !bGlueVisible2 && !bGlueVisible3) GlueInvalidate(); } }
     sal_Bool ImpIsGlueVisible2() const { return bGlueVisible2; }
     sal_Bool ImpIsGlueVisible3() const { return bGlueVisible3; }
     sal_Bool ImpIsGlueVisible4() const { return bGlueVisible4; }
@@ -414,11 +414,11 @@ public:
     void SetGridFront(bool bOn = true) { bGridFront  =bOn; InvalidateAllWin(); }
     void SetHlplVisible(bool bOn = true) { bHlplVisible=bOn; InvalidateAllWin(); }
     void SetHlplFront(bool bOn = true) { bHlplFront  =bOn; InvalidateAllWin(); }
-    void SetGlueVisible(bool bOn = true) { if (bGlueVisible!=(unsigned)bOn) { bGlueVisible=bOn; if (!bGlueVisible2 && !bGlueVisible3 && !bGlueVisible4) GlueInvalidate(); } }
+    void SetGlueVisible(bool bOn = true) { if (bGlueVisible!=bOn) { bGlueVisible=bOn; if (!bGlueVisible2 && !bGlueVisible3 && !bGlueVisible4) GlueInvalidate(); } }
     void SetGridColor( Color aColor );
 
     sal_Bool IsPreviewRenderer() const { return (sal_Bool )mbPreviewRenderer; }
-    void SetPreviewRenderer(bool bOn) { if((unsigned)bOn != mbPreviewRenderer) { mbPreviewRenderer=bOn; }}
+    void SetPreviewRenderer(bool bOn) { mbPreviewRenderer=bOn; }
 
     // access methods for calc and sw hide object modes
     bool getHideOle() const { return mbHideOle; }

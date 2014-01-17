@@ -69,7 +69,7 @@ namespace sdr
             // bitfield
             // This bool gets set when the object gets invalidated by ActionChanged() and
             // can be used from the OC to late-invalidates
-            unsigned                                        mbLazyInvalidate : 1;
+            bool                                            mbLazyInvalidate : 1;
 
         protected:
             // make redirector a protected friend, it needs to call createPrimitives as default action

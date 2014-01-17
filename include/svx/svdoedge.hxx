@@ -53,12 +53,12 @@ protected:
     sal_uInt16                      nConId;        // Konnektornummer
 
     // bitfield
-    unsigned                    bBestConn : 1;   // sal_True= es wird der guenstigste Konnektor gesucht
-    unsigned                    bBestVertex : 1; // sal_True= es wird der guenstigste Scheitelpunkt zum konnekten gesucht
-    unsigned                    bXDistOvr : 1;   // sal_True= Hor. Objektabstand wurde gedragt (Overwrite)
-    unsigned                    bYDistOvr : 1;   // sal_True= Vert. Objektabstand wurde gedragt (Overwrite)
-    unsigned                    bAutoVertex : 1; // AutoConnector am Scheitelpunkt nCon
-    unsigned                    bAutoCorner : 1; // AutoConnector am Eckpunkt nCon
+    bool                        bBestConn : 1;   // sal_True= es wird der guenstigste Konnektor gesucht
+    bool                        bBestVertex : 1; // sal_True= es wird der guenstigste Scheitelpunkt zum konnekten gesucht
+    bool                        bXDistOvr : 1;   // sal_True= Hor. Objektabstand wurde gedragt (Overwrite)
+    bool                        bYDistOvr : 1;   // sal_True= Vert. Objektabstand wurde gedragt (Overwrite)
+    bool                        bAutoVertex : 1; // AutoConnector am Scheitelpunkt nCon
+    bool                        bAutoCorner : 1; // AutoConnector am Eckpunkt nCon
 
 public:
     SdrObjConnection() { ResetVars(); }
@@ -167,24 +167,24 @@ protected:
     SdrEdgeInfoRec              aEdgeInfo;
 
     // bitfield
-    unsigned                    bEdgeTrackDirty : 1; // sal_True=Verbindungsverlauf muss neu berechnet werden.
-    unsigned                    bEdgeTrackUserDefined : 1;
+    bool                        bEdgeTrackDirty : 1; // sal_True=Verbindungsverlauf muss neu berechnet werden.
+    bool                        bEdgeTrackUserDefined : 1;
 
     // #109007#
     // Bool to allow supporession of default connects at object
     // inside test (HitTest) and object center test (see ImpFindConnector())
-    unsigned                    mbSuppressDefaultConnect : 1;
+    bool                        mbSuppressDefaultConnect : 1;
 
     // #110649#
     // Flag value for avoiding death loops when calculating BoundRects
     // from circularly connected connectors. A coloring algorythm is used
     // here. When the GetCurrentBoundRect() calculation of a SdrEdgeObj
     // is running, the flag is set, else it is always sal_False.
-    unsigned                    mbBoundRectCalculationRunning : 1;
+    bool                        mbBoundRectCalculationRunning : 1;
 
     // #i123048# need to remember if layouting was suppressed before to get
     // to a correct state for first real layouting
-    unsigned                    mbSuppressed : 1;
+    bool                        mbSuppressed : 1;
 
 public:
     // #109007#

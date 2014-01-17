@@ -469,13 +469,13 @@ protected:
     sal_uInt16     nPageNum;
 
     // bitfield
-    unsigned            mbMaster : 1;               // flag if this is a MasterPage
-    unsigned            mbInserted : 1;
-    unsigned            mbObjectsNotPersistent : 1;
-    unsigned            mbSwappingLocked : 1;
+    bool                mbMaster : 1;               // flag if this is a MasterPage
+    bool                mbInserted : 1;
+    bool                mbObjectsNotPersistent : 1;
+    bool                mbSwappingLocked : 1;
 
     // #i93597#
-    unsigned            mbPageBorderOnlyLeftRight : 1;
+    bool                mbPageBorderOnlyLeftRight : 1;
 
     void SetUnoPage(::com::sun::star::uno::Reference<
                         ::com::sun::star::drawing::XDrawPage> const&);

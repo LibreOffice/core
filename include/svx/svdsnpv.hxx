@@ -60,27 +60,27 @@ protected:
 
     SdrCrookMode                eCrookMode;
 
-    unsigned                    bSnapEnab : 1;
-    unsigned                    bGridSnap : 1;
-    unsigned                    bSnapTo1Pix : 1;             // Wenn GridSnap aus, auf ein Pixel fangen um Werte wie 10.01 zu vermeiden
-    unsigned                    bBordSnap : 1;
-    unsigned                    bHlplSnap : 1;
-    unsigned                    bOFrmSnap : 1;
-    unsigned                    bOPntSnap : 1;
-    unsigned                    bOConSnap : 1;
-    unsigned                    bMoveMFrmSnap : 1;
-    unsigned                    bMoveOFrmSnap : 1;
-    unsigned                    bMoveOPntSnap : 1;
-    unsigned                    bMoveOConSnap : 1;
-    unsigned                    bMoveSnapOnlyTopLeft : 1;    //  Speacial fuer den Dialogeditor
-    unsigned                    bOrtho : 1;
-    unsigned                    bBigOrtho : 1;
-    unsigned                    bAngleSnapEnab : 1;
-    unsigned                    bMoveOnlyDragging : 1;       // Objekte nur verschieben bei Resize/Rotate/...
-    unsigned                    bSlantButShear : 1;          // Slant anstelle von Shear anwenden
-    unsigned                    bCrookNoContortion : 1;      // Objekte bei Crook nicht verzerren
-    unsigned                    bHlplFixed : 1;       // sal_True=Hilfslinien fixiert, also nicht verschiebbar
-    unsigned                    bEliminatePolyPoints : 1;
+    bool                        bSnapEnab : 1;
+    bool                        bGridSnap : 1;
+    bool                        bSnapTo1Pix : 1;             // Wenn GridSnap aus, auf ein Pixel fangen um Werte wie 10.01 zu vermeiden
+    bool                        bBordSnap : 1;
+    bool                        bHlplSnap : 1;
+    bool                        bOFrmSnap : 1;
+    bool                        bOPntSnap : 1;
+    bool                        bOConSnap : 1;
+    bool                        bMoveMFrmSnap : 1;
+    bool                        bMoveOFrmSnap : 1;
+    bool                        bMoveOPntSnap : 1;
+    bool                        bMoveOConSnap : 1;
+    bool                        bMoveSnapOnlyTopLeft : 1;    //  Speacial fuer den Dialogeditor
+    bool                        bOrtho : 1;
+    bool                        bBigOrtho : 1;
+    bool                        bAngleSnapEnab : 1;
+    bool                        bMoveOnlyDragging : 1;       // Objekte nur verschieben bei Resize/Rotate/...
+    bool                        bSlantButShear : 1;          // Slant anstelle von Shear anwenden
+    bool                        bCrookNoContortion : 1;      // Objekte bei Crook nicht verzerren
+    bool                        bHlplFixed : 1;       // sal_True=Hilfslinien fixiert, also nicht verschiebbar
+    bool                        bEliminatePolyPoints : 1;
 
 private:
     SVX_DLLPRIVATE void ClearVars();
