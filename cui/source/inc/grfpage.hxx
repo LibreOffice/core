@@ -36,6 +36,7 @@ public:
     SvxCropExample( Window* pPar, WinBits nStyle );
 
     virtual void Paint( const Rectangle& rRect );
+    virtual void Resize();
     virtual Size GetOptimalSize() const;
 
     void SetTopLeft( const Point& rNew )    { aTopLeft = rNew; }

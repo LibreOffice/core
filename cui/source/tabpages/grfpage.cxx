@@ -786,6 +786,11 @@ void SvxCropExample::Paint( const Rectangle& )
     DrawRect( aRect );
 }
 
+void SvxCropExample::Resize()
+{
+    SetFrameSize(aFrameSize);
+}
+
 void SvxCropExample::SetFrameSize( const Size& rSz )
 {
     aFrameSize = rSz;
