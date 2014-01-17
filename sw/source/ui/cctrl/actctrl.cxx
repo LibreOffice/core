@@ -30,7 +30,7 @@ void NumEditAction::Action()
 
 bool NumEditAction::Notify( NotifyEvent& rNEvt )
 {
-    long nHandled = false;
+    bool nHandled = false;
 
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {

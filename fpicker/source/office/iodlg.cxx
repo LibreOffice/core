@@ -1719,7 +1719,7 @@ bool SvtFileDialog::Notify( NotifyEvent& rNEvt )
 
 {
     sal_uInt16 nType = rNEvt.GetType();
-    long nRet = false;
+    bool nRet = false;
 
     if ( EVENT_KEYINPUT == nType && rNEvt.GetKeyEvent() )
     {
