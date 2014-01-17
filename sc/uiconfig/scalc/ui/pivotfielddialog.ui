@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 on Fri Jan 17 10:58:52 2014 -->
+<!-- Generated with glade 3.16.0 on Fri Jan 17 11:22:49 2014 -->
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
@@ -99,6 +99,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
@@ -107,12 +108,15 @@
                     <property name="can_focus">False</property>
                     <property name="margin_top">6</property>
                     <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
                     <property name="top_padding">6</property>
                     <property name="left_padding">12</property>
                     <child>
                       <object class="GtkGrid" id="grid2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
                         <property name="row_spacing">6</property>
                         <child>
                           <object class="GtkRadioButton" id="none">
@@ -176,7 +180,9 @@
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
                             <child internal-child="selection">
-                              <object class="GtkTreeSelection" id="DPFunctionListBox-selection4"/>
+                              <object class="GtkTreeSelection" id="DPFunctionListBox-selection4">
+                                <property name="mode">multiple</property>
+                              </object>
                             </child>
                           </object>
                           <packing>

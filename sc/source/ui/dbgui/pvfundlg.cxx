@@ -157,13 +157,7 @@ static const ScDPListBoxWrapper::MapEntryType spShowFromMap[] =
 // ============================================================================
 
 ScDPFunctionListBox::ScDPFunctionListBox(Window* pParent, WinBits nStyle)
-    : MultiListBox(pParent, nStyle)
-{
-    FillFunctionNames();
-}
-
-ScDPFunctionListBox::ScDPFunctionListBox(Window* pParent, const ResId& rResId)
-    : MultiListBox(pParent, rResId)
+    : ListBox(pParent, nStyle)
 {
     FillFunctionNames();
 }
@@ -225,8 +219,6 @@ ScDPFunctionDlg::ScDPFunctionDlg(
     get(mpBtnOk, "ok");
 
     Init( rLabelData, rFuncData );
-
-    mpLbFunc->EnableMultiSelection(false);
 }
 
 sal_uInt16 ScDPFunctionDlg::GetFuncMask() const
@@ -438,6 +430,7 @@ ScDPSubtotalDlg::ScDPSubtotalDlg( Window* pParent, ScDPObject& rDPObj,
     get(mpCbShowAll, "showall");
     get(mpFtName, "name");
     get(mpLbFunc, "functions");
+    mpLbFunc->EnableMultiSelection(true);
     mpLbFunc->set_height_request(mpLbFunc->GetTextHeight() * 8);
     get(mpRbNone, "none");
     get(mpRbAuto, "auto");

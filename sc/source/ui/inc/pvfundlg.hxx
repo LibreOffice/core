@@ -45,11 +45,10 @@ class ScDPObject;
 
 // ============================================================================
 
-class ScDPFunctionListBox : public MultiListBox
+class ScDPFunctionListBox : public ListBox
 {
 public:
     ScDPFunctionListBox(Window* pParent, WinBits nStyle);
-    ScDPFunctionListBox(Window* pParent, const ResId& rResId);
 
     void                SetSelection( sal_uInt16 nFuncMask );
     sal_uInt16          GetSelection() const;
