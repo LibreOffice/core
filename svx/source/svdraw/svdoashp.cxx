@@ -2598,10 +2598,10 @@ void SdrObjCustomShape::SetVerticalWriting( sal_Bool bVertical )
                 case SDRTEXTHORZADJUST_BLOCK: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_BLOCK)); break;
             }
 
-            SetObjectItemSet( aNewSet );
             pOutlinerParaObject = GetOutlinerParaObject();
             if ( pOutlinerParaObject )
                 pOutlinerParaObject->SetVertical(bVertical);
+            SetObjectItemSet( aNewSet );
 
             // restore object size
             SetSnapRect(aObjectRect);
