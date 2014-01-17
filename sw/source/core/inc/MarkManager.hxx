@@ -100,6 +100,7 @@ namespace sw {
             // make names
             OUString getUniqueMarkName(const OUString& rName) const;
             void sortMarks();
+            void sortSubsetMarks();
 
             // container for all marks
             container_t m_vAllMarks;

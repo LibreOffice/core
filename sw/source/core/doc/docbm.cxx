@@ -97,7 +97,9 @@ namespace
     }
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    static inline ::std::auto_ptr<SwPosition> lcl_PositionFromCntntNode(SwCntntNode * const pCntntNode, const bool bAtEnd=false)
+    static inline ::std::auto_ptr<SwPosition> lcl_PositionFromCntntNode(
+        SwCntntNode * const pCntntNode,
+        const bool bAtEnd=false)
     {
         ::std::auto_ptr<SwPosition> pResult(new SwPosition(*pCntntNode));
         pResult->nContent.Assign(pCntntNode, bAtEnd ? pCntntNode->Len() : 0);
@@ -110,20 +112,30 @@ namespace
     // else set it to the end of the node before rStt
     // else set it to the CntntNode of the Pos outside the Range
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    static inline ::std::auto_ptr<SwPosition> lcl_FindExpelPosition(const SwNodeIndex& rStt,
+    static inline ::std::auto_ptr<SwPosition> lcl_FindExpelPosition(
+        const SwNodeIndex& rStt,
         const SwNodeIndex& rEnd,
         const SwPosition& rOtherPosition)
     {
         SwCntntNode * pNode = rEnd.GetNode().GetCntntNode();
-        SwNodeIndex aStt = SwNodeIndex(rStt);
-        SwNodeIndex aEnd = SwNodeIndex(rEnd);
-        bool bAtEnd = false;
-        if(!pNode)
-            pNode = rEnd.GetNodes().GoNext(&aEnd), bAtEnd = false;
-        if(!pNode)
-            pNode = rStt.GetNodes().GoPrevious(&aStt), bAtEnd = true;
-        if(pNode)
-            return lcl_PositionFromCntntNode(pNode, bAtEnd);
+        bool bPosAtEndOfNode = false;
+        if ( pNode == NULL)
+        {
+            SwNodeIndex aEnd = SwNodeIndex(rEnd);
+            pNode = rEnd.GetNodes().GoNext( &aEnd );
+            bPosAtEndOfNode = false;
+        }
+        if ( pNode == NULL )
+        {
+            SwNodeIndex aStt = SwNodeIndex(rStt);
+            pNode = rStt.GetNodes().GoPrevious(&aStt);
+            bPosAtEndOfNode = true;
+        }
+        if ( pNode != NULL )
+        {
+            return lcl_PositionFromCntntNode( pNode, bPosAtEndOfNode );
+        }
+
         return ::std::auto_ptr<SwPosition>(new SwPosition(rOtherPosition));
     }
     SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -635,6 +647,9 @@ namespace sw { namespace mark
         ::std::vector<const_iterator_t> vMarksToDelete;
         bool bIsSortingNeeded = false;
 
+        // boolean indicating, if at least one mark has been moved while colleting marks for deletion
+        bool bMarksMoved = false;
+
         // copy all bookmarks in the move area to a vector storing all position data as offset
         // reassignment is performed after the move
         for(iterator_t ppMark = m_vAllMarks.begin();
@@ -718,7 +733,8 @@ namespace sw { namespace mark
                     }
                     else
                     {
-                        pNewPos = lcl_FindExpelPosition( rStt, rEnd, bIsPosInRange ? pMark->GetOtherMarkPos() : pMark->GetMarkPos() );
+                        pNewPos =
+                            lcl_FindExpelPosition( rStt, rEnd, bIsPosInRange ? pMark->GetOtherMarkPos() : pMark->GetMarkPos() );
                     }
                 }
 
@@ -747,6 +763,7 @@ namespace sw { namespace mark
                         pMark->SetMarkPos(*pNewPos);
                     else
                         pMark->SetOtherMarkPos(*pNewPos);
+                    bMarksMoved = true;
 
                     // illegal selection? collapse the mark and restore sorting later
                     bIsSortingNeeded |= lcl_FixCorrectedMark( bIsPosInRange, bIsOtherPosInRange, pMark );
@@ -760,20 +777,32 @@ namespace sw { namespace mark
             // which would invalidate the iterators in vMarksToDelete
             std::vector< ::boost::shared_ptr<ILazyDeleter> > vDelay;
             vDelay.reserve(vMarksToDelete.size());
-            // we just remembered the iterators to delete, so we do not need to
-            // search for the boost::shared_ptr<> (the entry in m_vAllMarks) again.
+
+            // If needed, sort mark containers containing subsets of the marks
+            // in order to assure sorting.  The sorting is critical for the
+            // deletion of a mark as it is searched in these container for
+            // deletion.
+            if ( vMarksToDelete.size() > 0 && bMarksMoved )
+            {
+                sortSubsetMarks();
+            }
+            // we just remembered the iterators to delete, so we do not need to search
+            // for the shared_ptr<> (the entry in m_vAllMarks) again
             // reverse iteration, since erasing an entry invalidates iterators
             // behind it (the iterators in vMarksToDelete are sorted)
-            for (std::vector<const_iterator_t>::reverse_iterator pppMark
-                    = vMarksToDelete.rbegin();
-                pppMark != vMarksToDelete.rend();
-                ++pppMark)
+            for ( ::std::vector< const_iterator_t >::reverse_iterator pppMark = vMarksToDelete.rbegin();
+                  pppMark != vMarksToDelete.rend();
+                  ++pppMark )
             {
                 vDelay.push_back(deleteMark(*pppMark));
             }
         } // scope to kill vDelay
-        if(bIsSortingNeeded)
+
+        if ( bIsSortingNeeded )
+        {
             sortMarks();
+        }
+
 #if 0
         OSL_TRACE("deleteMarks");
         lcl_DebugMarks(m_vAllMarks);
@@ -1030,13 +1059,18 @@ namespace sw { namespace mark
         return sTmp;
     }
 
-    void MarkManager::sortMarks()
+    void MarkManager::sortSubsetMarks()
     {
-        sort(m_vAllMarks.begin(), m_vAllMarks.end(), &lcl_MarkOrderingByStart);
         sort(m_vCommonMarks.begin(), m_vCommonMarks.end(), &lcl_MarkOrderingByStart);
         sort(m_vBookmarks.begin(), m_vBookmarks.end(), &lcl_MarkOrderingByStart);
         sort(m_vFieldmarks.begin(), m_vFieldmarks.end(), &lcl_MarkOrderingByStart);
         sort(m_vAnnotationMarks.begin(), m_vAnnotationMarks.end(), &lcl_MarkOrderingByStart);
+    }
+
+    void MarkManager::sortMarks()
+    {
+        sort(m_vAllMarks.begin(), m_vAllMarks.end(), &lcl_MarkOrderingByStart);
+        sortSubsetMarks();
     }
 
 #if OSL_DEBUG_LEVEL > 1
