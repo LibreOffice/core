@@ -4164,6 +4164,20 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
     }
 }
 
+void Window::ImplGrabFocusToDocument( sal_uInt16 nFlags )
+{
+    Window *pWin = this;
+    while( pWin )
+    {
+        if( !pWin->GetParent() )
+        {
+            pWin->ImplGetFrameWindow()->GetWindow( WINDOW_CLIENT )->ImplGrabFocus(nFlags);
+            return;
+        }
+        pWin = pWin->GetParent();
+    }
+}
+
 // -----------------------------------------------------------------------
 
 void Window::ImplNewInputContext()
@@ -7503,16 +7517,7 @@ sal_Bool Window::HasFocus() const
 
 void Window::GrabFocusToDocument()
 {
-    Window *pWin = this;
-    while( pWin )
-    {
-        if( !pWin->GetParent() )
-        {
-            pWin->ImplGetFrameWindow()->GetWindow( WINDOW_CLIENT )->GrabFocus();
-            return;
-        }
-        pWin = pWin->GetParent();
-    }
+    ImplGrabFocusToDocument(0);
 }
 
 void Window::SetFakeFocus( bool bFocus )

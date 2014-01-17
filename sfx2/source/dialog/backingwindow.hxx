@@ -107,7 +107,9 @@ public:
 
     virtual void        Paint( const Rectangle& rRect );
     virtual void        Resize();
+    virtual long        PreNotify( NotifyEvent& rNEvt );
     virtual long        Notify( NotifyEvent& rNEvt );
+    virtual void        GetFocus();
 
     virtual Size GetOptimalSize() const;
 
