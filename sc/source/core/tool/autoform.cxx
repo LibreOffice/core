@@ -292,7 +292,7 @@ void ScAutoFormatDataField::SetAdjust( const SvxAdjustItem& rAdjust )
     aItem = *(ItemType*)pNew;               \
     delete pNew;
 
-sal_Bool ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVersions, sal_uInt16 nVer )
+bool ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVersions, sal_uInt16 nVer )
 {
     SfxPoolItem* pNew;
     SvxOrientationItem aOrientation( SVX_ORIENTATION_STANDARD, 0 );
@@ -378,7 +378,7 @@ sal_Bool ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVe
     return (rStream.GetError() == 0);
 }
 
-sal_Bool ScAutoFormatDataField::Save( SvStream& rStream, sal_uInt16 fileVersion )
+bool ScAutoFormatDataField::Save( SvStream& rStream, sal_uInt16 fileVersion )
 {
     SvxOrientationItem aOrientation( aRotateAngle.GetValue(), aStacked.GetValue(), 0 );
 
@@ -791,7 +791,7 @@ bool ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersions )
 bool ScAutoFormatData::Save(SvStream& rStream, sal_uInt16 fileVersion)
 {
     sal_uInt16 nVal = AUTOFORMAT_DATA_ID;
-    sal_Bool b;
+    bool b;
     rStream.WriteUInt16( nVal );
     // --- from 680/dr25 on: store strings as UTF-8
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStream, aName, RTL_TEXTENCODING_UTF8);
@@ -807,7 +807,7 @@ bool ScAutoFormatData::Save(SvStream& rStream, sal_uInt16 fileVersion)
     if (fileVersion >= SOFFICE_FILEFORMAT_50)
         WriteAutoFormatSwBlob( rStream, m_swFields );
 
-    sal_Bool bRet = 0 == rStream.GetError();
+    bool bRet = 0 == rStream.GetError();
     for (sal_uInt16 i = 0; bRet && (i < 16); i++)
         bRet = GetField( i ).Save( rStream, fileVersion );
 

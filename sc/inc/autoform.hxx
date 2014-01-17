@@ -244,8 +244,8 @@ public:
     void    SetRotateAngle( const SfxInt32Item& rRotateAngle )      { aRotateAngle.SetValue( rRotateAngle.GetValue() ); }
     void    SetRotateMode( const SvxRotateModeItem& rRotateMode )   { aRotateMode.SetValue( rRotateMode.GetValue() ); }
 
-    sal_Bool                        Load( SvStream& rStream, const ScAfVersions& rVersions, sal_uInt16 nVer );
-    sal_Bool                        Save( SvStream& rStream, sal_uInt16 fileVersion );
+    bool    Load( SvStream& rStream, const ScAfVersions& rVersions, sal_uInt16 nVer );
+    bool    Save( SvStream& rStream, sal_uInt16 fileVersion );
 };
 
 
