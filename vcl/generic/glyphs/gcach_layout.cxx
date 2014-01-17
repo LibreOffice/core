@@ -34,8 +34,6 @@
 #include <hb-icu.h>
 #include <hb-ot.h>
 
-#include <unicode/uscript.h>
-
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <comphelper/processfactory.hxx>
@@ -326,7 +324,7 @@ static hb_unicode_funcs_t* getUnicodeFuncs(void)
 class HbLayoutEngine : public ServerFontLayoutEngine
 {
 private:
-    UScriptCode             meScriptCode;
+    hb_script_t             maHbScript;
     hb_face_t*              mpHbFace;
     int                     mfUnitsPerEM;
 
@@ -338,7 +336,7 @@ public:
 };
 
 HbLayoutEngine::HbLayoutEngine(ServerFont& rServerFont)
-:   meScriptCode(USCRIPT_INVALID_CODE),
+:   maHbScript(HB_SCRIPT_INVALID),
     mpHbFace(NULL),
     mfUnitsPerEM(0)
 {
@@ -359,10 +357,11 @@ struct HbScriptRun
 {
     int32_t mnMin;
     int32_t mnEnd;
-    UScriptCode maScript;
+    hb_script_t maScript;
 
     HbScriptRun(int32_t nMin, int32_t nEnd, UScriptCode aScript)
-    : mnMin(nMin), mnEnd(nEnd), maScript(aScript)
+    : mnMin(nMin), mnEnd(nEnd),
+      maScript(hb_icu_script_to_script(aScript))
     {}
 };
 
@@ -432,7 +431,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             int nMinRunPos = it->mnMin;
             int nEndRunPos = it->mnEnd;
             int nRunLen = nEndRunPos - nMinRunPos;
-            meScriptCode = it->maScript;
+            maHbScript = it->maScript;
 
             OString sLanguage = OUStringToOString(rArgs.maLanguageTag.getLanguage(), RTL_TEXTENCODING_UTF8);
 
@@ -442,7 +441,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             hb_buffer_t *pHbBuffer = hb_buffer_create();
             hb_buffer_set_unicode_funcs(pHbBuffer, pHbUnicodeFuncs);
             hb_buffer_set_direction(pHbBuffer, bRightToLeft ? HB_DIRECTION_RTL: HB_DIRECTION_LTR);
-            hb_buffer_set_script(pHbBuffer, hb_icu_script_to_script(meScriptCode));
+            hb_buffer_set_script(pHbBuffer, maHbScript);
             hb_buffer_set_language(pHbBuffer, hb_language_from_string(sLanguage.getStr(), -1));
             hb_buffer_add_utf16(pHbBuffer, rArgs.mpStr, rArgs.mnLength, nMinRunPos, nRunLen);
             hb_shape(pHbFont, pHbBuffer, NULL, 0);
@@ -546,7 +545,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
     // determine need for kashida justification
     if((rArgs.mpDXArray || rArgs.mnLayoutWidth)
-    && ((meScriptCode == USCRIPT_ARABIC) || (meScriptCode == USCRIPT_SYRIAC)))
+    && ((maHbScript == HB_SCRIPT_ARABIC) || (maHbScript == HB_SCRIPT_SYRIAC)))
         rArgs.mnFlags |= SAL_LAYOUT_KASHIDA_JUSTIFICATON;
 
     return true;
