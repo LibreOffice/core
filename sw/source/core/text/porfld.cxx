@@ -118,8 +118,7 @@ SwFldPortion::~SwFldPortion()
 
 KSHORT SwFldPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 {
-    // Wir stehen zwar im const, aber nViewWidth sollte erst im letzten
-    // Moment errechnet werden:
+    // even though this is const, nViewWidth should be computed at the very end:
     SwFldPortion* pThis = (SwFldPortion*)this;
     if( !Width() && rInf.OnWin() && !rInf.GetOpt().IsPagePreview() &&
             !rInf.GetOpt().IsReadonly() && SwViewOption::IsFieldShadings() )
@@ -139,7 +138,7 @@ KSHORT SwFldPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 // 8653: in keinem Fall nur SetLen(0);
 
 /*************************************************************************
- *   Hilfsklasse SwFldSlot
+ *   Helper class SwFldSlot
  **************************************************************************/
 
 class SwFldSlot
@@ -383,7 +382,7 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
             switch( aNew[0] )
             {
                 case CH_BREAK  : bFull = sal_True;
-                            // kein break;
+                            // no break
                 case ' ' :
                 case CH_TAB    :
                 case CHAR_HARDHYPHEN:               // non-breaking hyphen
@@ -599,7 +598,7 @@ sal_Bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
                 nDiff = rInf.Left() - rInf.First() + rInf.ForcedLeftMargin();
             }
         }
-        // Ein Vorschlag von Juergen und Volkmar:
+        // proposal from Juergen and Volkmar:
         // Der Textteil hinter der Numerierung sollte immer
         // mindestens beim linken Rand beginnen.
         if( nDiff < 0 )
@@ -717,7 +716,7 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
             SwExpandPortion::Paint( rInf );
         else
         {
-            // logisches const: Width wird wieder zurueckgesetzt
+            // logical const: reset width
             SwLinePortion *pThis = (SwLinePortion*)this;
             bPaintSpace = bPaintSpace && nFixWidth < nOldWidth;
             KSHORT nSpaceOffs = nFixWidth;
@@ -886,7 +885,7 @@ sal_Bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
     long nDiff = mbLabelAlignmentPosAndSpaceModeActive
                  ? 0
                  : rInf.Left() - rInf.First() + rInf.ForcedLeftMargin();
-    // Ein Vorschlag von Juergen und Volkmar:
+    // proposal by Juergen and Volkmar:
     // Der Textteil hinter der Numerierung sollte immer
     // mindestens beim linken Rand beginnen.
     if( nDiff < 0 )

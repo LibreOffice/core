@@ -23,17 +23,13 @@
 #include <svx/svdorect.hxx>
 #include <svx/svxdllapi.h>
 
-//************************************************************
-//   Vorausdeklarationen
-//************************************************************
+// Forward Declarations
 
 namespace sdr { namespace properties {
     class CircleProperties;
 }}
 
-//************************************************************
-//   Hilfsklasse SdrCircObjGeoData
-//************************************************************
+// Helper class SdrCircObjGeoData
 
 // #109872#
 class SdrCircObjGeoData : public SdrTextObjGeoData
@@ -43,9 +39,7 @@ public:
     long                        nEndWink;
 };
 
-//************************************************************
 //   SdrCircObj
-//************************************************************
 
 class SVX_DLLPUBLIC SdrCircObj : public SdrRectObj
 {
@@ -70,10 +64,10 @@ protected:
 private:
      SVX_DLLPRIVATE basegfx::B2DPolygon ImpCalcXPolyCirc(const SdrObjKind eKind, const Rectangle& rRect1, long nStart, long nEnd) const;
     SVX_DLLPRIVATE void ImpSetCreateParams(SdrDragStat& rStat) const;
-    SVX_DLLPRIVATE void ImpSetAttrToCircInfo(); // Werte vom Pool kopieren
-    SVX_DLLPRIVATE void ImpSetCircInfoToAttr(); // Werte in den Pool kopieren
+    SVX_DLLPRIVATE void ImpSetAttrToCircInfo(); // copy values from pool
+    SVX_DLLPRIVATE void ImpSetCircInfoToAttr(); // copy values into pool
 
-    // Liefert sal_True, wenn das Painten ein XPolygon erfordert.
+    // returns sal_True if paint requires a XPolygon
     SVX_DLLPRIVATE bool PaintNeedsXPolyCirc() const; // PaintNeedsXPoly-> PaintNeedsXPolyCirc
     SVX_DLLPRIVATE virtual void RecalcXPoly();
 
@@ -82,15 +76,13 @@ protected:
 
 public:
     TYPEINFO();
-    SdrCircObj(SdrObjKind eNewKind); // Circ, CArc, Sect oder CCut
+    SdrCircObj(SdrObjKind eNewKind); // Circ, CArc, Sect or CCut
     SdrCircObj(SdrObjKind eNewKind, const Rectangle& rRect);
 
     // 0=0.00Deg=3h 9000=90.00Deg=12h 18000=180.00Deg=9h 27000=270.00Deg=6h
-    // Der Verlauf des Kreises von StartWink nach EndWink ist immer entgegen
-    // dem Uhrzeigersinn.
-    // Wenn nNewStartWink==nNewEndWink hat der Kreisbogen einen Verlaufswinkel
-    // von 0 Grad. Bei nNewStartWink+36000==nNewEndWink ist der Verlaufswinkel
-    // 360.00 Grad.
+    // The circle is build up from StartWink to EndWink anti-clockwise.
+    // If nNewStartWink==nNewEndWink, then arc has an angle of 0 degrees.
+    // If nNewStartWink+36000==nNewEndWink, then the arc has angle of 360 degrees.
     SdrCircObj(SdrObjKind eNewKind, const Rectangle& rRect, long nNewStartWink, long nNewEndWink);
     virtual ~SdrCircObj();
 
