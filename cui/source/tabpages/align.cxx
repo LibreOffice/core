@@ -160,6 +160,7 @@ AlignmentTabPage::AlignmentTabPage( Window* pParent, const SfxItemSet& rCoreAttr
     get(m_pLbHorAlign,"comboboxHorzAlign");
     get(m_pFtIndent,"labelIndent");
     get(m_pEdIndent,"spinIndentFrom");
+    get(m_pFtVerAlign,"labelVertAlign");
     get(m_pLbVerAlign,"comboboxVertAlign");
 
     //text rotation
@@ -187,6 +188,10 @@ AlignmentTabPage::AlignmentTabPage( Window* pParent, const SfxItemSet& rCoreAttr
     get(m_pFtTopLock,"labelSTR_TOPLOCK");
     get(m_pFtCelLock,"labelSTR_CELLLOCK");
     get(m_pFtABCD,"labelABCD");
+
+    get(m_pAlignmentFrame, "alignment");
+    get(m_pOrientFrame, "orientation");
+    get(m_pPropertiesFrame, "properties");
 
     m_pCtrlDial->SetText(m_pFtABCD->GetText());
 
@@ -227,6 +232,7 @@ AlignmentTabPage::AlignmentTabPage( Window* pParent, const SfxItemSet& rCoreAttr
     AddItemConnection( new HorJustConnection( SID_ATTR_ALIGN_HOR_JUSTIFY, *m_pLbHorAlign, s_pHorJustMap, sfx::ITEMCONN_HIDE_UNKNOWN ) );
     AddItemConnection( new sfx::DummyItemConnection( SID_ATTR_ALIGN_INDENT, *m_pFtIndent, sfx::ITEMCONN_HIDE_UNKNOWN ) );
     AddItemConnection( new sfx::UInt16MetricConnection( SID_ATTR_ALIGN_INDENT, *m_pEdIndent, FUNIT_TWIP, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new sfx::DummyItemConnection( SID_ATTR_ALIGN_VER_JUSTIFY, *m_pFtVerAlign, sfx::ITEMCONN_HIDE_UNKNOWN ) );
     AddItemConnection( new VerJustConnection( SID_ATTR_ALIGN_VER_JUSTIFY, *m_pLbVerAlign, s_pVerJustMap, sfx::ITEMCONN_HIDE_UNKNOWN ) );
     AddItemConnection( new DialControlConnection( SID_ATTR_ALIGN_DEGREES, *m_pCtrlDial, sfx::ITEMCONN_HIDE_UNKNOWN ) );
     AddItemConnection( new sfx::DummyItemConnection( SID_ATTR_ALIGN_DEGREES, *m_pFtRotate, sfx::ITEMCONN_HIDE_UNKNOWN ) );
@@ -370,6 +376,13 @@ void AlignmentTabPage::UpdateEnableControls()
     // shrink only without automatic line break, and not for block, fill or distribute.
     m_pBtnShrink->Enable( (m_pBtnWrap->GetState() == STATE_NOCHECK) && !bHorBlock && !bHorFill && !bHorDist );
 
+    // visibility of frames
+    m_pAlignmentFrame->Show(m_pLbHorAlign->IsVisible() || m_pEdIndent->IsVisible() ||
+        m_pLbVerAlign->IsVisible());
+    m_pOrientFrame->Show(m_pCtrlDial->IsVisible() || m_pVsRefEdge->IsVisible() ||
+        m_pCbStacked->IsVisible() || m_pCbAsianMode->IsVisible());
+    m_pPropertiesFrame->Show(m_pBtnWrap->IsVisible() || m_pBtnHyphen->IsVisible() ||
+        m_pBtnShrink->IsVisible() || m_pLbFrameDir->IsVisible());
 }
 
 bool AlignmentTabPage::HasAlignmentChanged( const SfxItemSet& rNew, sal_uInt16 nWhich ) const

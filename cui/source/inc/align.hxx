@@ -40,6 +40,7 @@
 #include <vcl/field.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svtools/valueset.hxx>
@@ -80,6 +81,7 @@ private:
     ListBox*             m_pLbHorAlign;
     FixedText*           m_pFtIndent;
     MetricField*         m_pEdIndent;
+    FixedText*           m_pFtVerAlign;
     ListBox*             m_pLbVerAlign;
 
     DialControl*         m_pCtrlDial;
@@ -103,6 +105,9 @@ private:
     FixedText*           m_pFtCelLock;
     FixedText*           m_pFtABCD;
 
+    VclContainer*        m_pAlignmentFrame;
+    VclContainer*        m_pOrientFrame;
+    VclContainer*        m_pPropertiesFrame;
 };
 
 // ============================================================================
