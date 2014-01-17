@@ -135,7 +135,6 @@ const Graphic ImpLoadLinkedGraphic( const String aFileName, const String aFilter
                             ? pGF->GetImportFormatNumber( aFilterName )
                             : GRFILTER_FORMAT_DONTKNOW;
 
-        String aEmptyStr;
         com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aFilterData( 1 );
 
         // Room for improvment:
@@ -144,7 +143,14 @@ const Graphic ImpLoadLinkedGraphic( const String aFileName, const String aFilter
         // there we should create a new service to provide this data if needed
         aFilterData[ 0 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CreateNativeLink" ) );
         aFilterData[ 0 ].Value = Any( sal_True );
-        pGF->ImportGraphic( aGraphic, aEmptyStr, *pInStrm, nFilter, NULL, 0, &aFilterData );
+
+        // #123042# for e.g SVG the path is needed, so hand it over here. I have no real idea
+        // what consequences this may have; maybe this is not handed over by purpose here. Not
+        // handing it over means that any GraphicFormat that internallv needs a path as base
+        // to interpret included links may fail.
+        // Alternatively the path may be set at the result after this call when it is known
+        // that it is a SVG graphic, but only because noone yet tried to interpret it.
+        pGF->ImportGraphic( aGraphic, aFileName, *pInStrm, nFilter, NULL, 0, &aFilterData );
     }
     return aGraphic;
 }
