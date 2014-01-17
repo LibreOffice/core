@@ -2469,6 +2469,14 @@ DECLARE_OOXMLEXPORT_TEST(testMsoSpt180, "mso-spt180.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("ooxml-borderCallout1"), aType);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO73546, "FDO73546.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:hdr/w:p[1]/w:r[3]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor", "distL","0");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

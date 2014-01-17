@@ -836,22 +836,27 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                     rAppendContext.pLastParagraphProperties->GetWrap() :
                     pStyleProperties->GetWrap());
 
-                sal_Int32 nBottomDist;
-                sal_Int32 nTopDist = nBottomDist =
-                    rAppendContext.pLastParagraphProperties->GethSpace() >= 0 ?
-                    rAppendContext.pLastParagraphProperties->GethSpace() :
-                    pStyleProperties->GethSpace();
-
-                pFrameProperties[11].Value <<= nVertOrient == text::VertOrientation::TOP ? 0 : nTopDist;
-                pFrameProperties[12].Value <<= nVertOrient == text::VertOrientation::BOTTOM ? 0 : nBottomDist;
-
+                /** FDO#73546 : distL & distR should be unsigned intgers <Ecma 20.4.3.6>
+                    Swapped the array elements 11,12 & 13,14 since 11 & 12 are
+                    LEFT & RIGHT margins and 13,14 are TOP and BOTTOM margins respectively.
+                */
                 sal_Int32 nRightDist;
                 sal_Int32 nLeftDist = nRightDist =
+                    rAppendContext.pLastParagraphProperties->GethSpace() >= 0 ?
+                    rAppendContext.pLastParagraphProperties->GethSpace() :
+                    pStyleProperties->GethSpace() >= 0 ? pStyleProperties->GethSpace() : 0;
+
+                pFrameProperties[11].Value <<= nHoriOrient == text::HoriOrientation::LEFT ? 0 : nLeftDist;
+                pFrameProperties[12].Value <<= nHoriOrient == text::HoriOrientation::RIGHT ? 0 : nRightDist;
+
+                sal_Int32 nBottomDist;
+                sal_Int32 nTopDist = nBottomDist =
                     rAppendContext.pLastParagraphProperties->GetvSpace() >= 0 ?
                     rAppendContext.pLastParagraphProperties->GetvSpace() :
-                pStyleProperties->GetvSpace() >= 0 ? pStyleProperties->GetvSpace() : 0;
-                pFrameProperties[13].Value <<= nHoriOrient == text::HoriOrientation::LEFT ? 0 : nLeftDist;
-                pFrameProperties[14].Value <<= nHoriOrient == text::HoriOrientation::RIGHT ? 0 : nRightDist;
+                    pStyleProperties->GetvSpace() >= 0 ? pStyleProperties->GetvSpace() : 0;
+
+                pFrameProperties[13].Value <<= nVertOrient == text::VertOrientation::TOP ? 0 : nTopDist;
+                pFrameProperties[14].Value <<= nVertOrient == text::VertOrientation::BOTTOM ? 0 : nBottomDist;
                 // If there is no fill, the Word default is 100% transparency.
                 // Otherwise CellColorHandler has priority, and this setting
                 // will be ignored.
