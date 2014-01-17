@@ -581,8 +581,8 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
         case SC_SERVICE_RANGEADDRESS:
             if (pDocShell)
             {
-                sal_Bool bRange = ( nType == SC_SERVICE_RANGEADDRESS );
-                xRet.set(*new ScAddressConversionObj( pDocShell, bRange ));
+                bool bIsRange = ( nType == SC_SERVICE_RANGEADDRESS );
+                xRet.set(*new ScAddressConversionObj( pDocShell, bIsRange ));
             }
             break;
 

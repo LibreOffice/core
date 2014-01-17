@@ -34,10 +34,10 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------------
 
-ScAddressConversionObj::ScAddressConversionObj(ScDocShell* pDocSh, sal_Bool bForRange) :
+ScAddressConversionObj::ScAddressConversionObj(ScDocShell* pDocSh, bool _bIsRange) :
     pDocShell( pDocSh ),
     nRefSheet( 0 ),
-    bIsRange( bForRange )
+    bIsRange( _bIsRange )
 {
     pDocShell->GetDocument()->AddUnoObject(*this);
 }
@@ -57,13 +57,13 @@ void ScAddressConversionObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-sal_Bool ScAddressConversionObj::ParseUIString( const OUString& rUIString, ::formula::FormulaGrammar::AddressConvention eConv )
+bool ScAddressConversionObj::ParseUIString( const OUString& rUIString, ::formula::FormulaGrammar::AddressConvention eConv )
 {
     if (!pDocShell)
         return false;
 
     ScDocument* pDoc = pDocShell->GetDocument();
-    sal_Bool bSuccess = false;
+    bool bSuccess = false;
     if ( bIsRange )
     {
         sal_uInt16 nResult = aRange.ParseAny( rUIString, pDoc, eConv );
@@ -75,7 +75,7 @@ sal_Bool ScAddressConversionObj::ParseUIString( const OUString& rUIString, ::for
                 aRange.aEnd.SetTab( aRange.aStart.Tab() );
             // different sheets are not supported in CellRangeAddress
             if ( aRange.aStart.Tab() == aRange.aEnd.Tab() )
-                bSuccess = sal_True;
+                bSuccess = true;
         }
     }
     else
@@ -85,7 +85,7 @@ sal_Bool ScAddressConversionObj::ParseUIString( const OUString& rUIString, ::for
         {
             if ( ( nResult & SCA_TAB_3D ) == 0 )
                 aRange.aStart.SetTab( static_cast<SCTAB>(nRefSheet) );
-            bSuccess = sal_True;
+            bSuccess = true;
         }
     }
     return bSuccess;
@@ -138,7 +138,7 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const OUString& aPropert
     if ( !pDocShell )
         throw uno::RuntimeException();
 
-    sal_Bool bSuccess = false;
+    bool bSuccess = false;
     OUString aNameStr(aPropertyName);
     if ( aNameStr.equalsAscii( SC_UNONAME_ADDRESS ) )
     {
@@ -149,7 +149,7 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const OUString& aPropert
             if ( aValue >>= aRangeAddress )
             {
                 ScUnoConversion::FillScRange( aRange, aRangeAddress );
-                bSuccess = sal_True;
+                bSuccess = true;
             }
         }
         else
@@ -158,7 +158,7 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const OUString& aPropert
             if ( aValue >>= aCellAddress )
             {
                 ScUnoConversion::FillScAddress( aRange.aStart, aCellAddress );
-                bSuccess = sal_True;
+                bSuccess = true;
             }
         }
     }
@@ -169,7 +169,7 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const OUString& aPropert
         if ( aValue >>= nIntVal )
         {
             nRefSheet = nIntVal;
-            bSuccess = sal_True;
+            bSuccess = true;
         }
     }
     else if ( aNameStr.equalsAscii( SC_UNONAME_UIREPR ) )
