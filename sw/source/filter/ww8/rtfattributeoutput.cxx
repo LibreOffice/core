@@ -776,7 +776,7 @@ void RtfAttributeOutput::TableCanSplit( ww8::WW8TableNodeInfoInner::Pointer_t pT
     const SwFmtRowSplit& rSplittable = pLineFmt->GetRowSplit( );
 
     // The rtf default is to allow a row to break
-    if (rSplittable.GetValue() == 0)
+    if (!rSplittable.GetValue())
         m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_TRKEEP);
 }
 

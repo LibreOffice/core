@@ -150,7 +150,7 @@ lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode, OUStringBuffer& rText,
     sal_uInt16 nHiddenCharsMasked = 0;
 
     const SwDoc& rDoc = *rNode.GetDoc();
-    const bool bShowChg = 0 != IDocumentRedlineAccess::IsShowChanges( rDoc.GetRedlineMode() );
+    const bool bShowChg = IDocumentRedlineAccess::IsShowChanges( rDoc.GetRedlineMode() );
 
     // If called from word count or from spell checking, deleted redlines
     // should be masked:
@@ -2253,7 +2253,7 @@ void SwTxtNode::SetParaNumberOfCharsExcludingSpaces( sal_uLong nNew ) const
 
 bool SwTxtNode::IsWordCountDirty() const
 {
-    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->bWordCountDirty : 0;
+    return m_pParaIdleData_Impl && m_pParaIdleData_Impl->bWordCountDirty;
 }
 
 void SwTxtNode::SetWrongDirty( bool bNew ) const
@@ -2266,7 +2266,7 @@ void SwTxtNode::SetWrongDirty( bool bNew ) const
 
 bool SwTxtNode::IsWrongDirty() const
 {
-    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->bWrongDirty : 0;
+    return m_pParaIdleData_Impl && m_pParaIdleData_Impl->bWrongDirty;
 }
 
 void SwTxtNode::SetGrammarCheckDirty( bool bNew ) const
@@ -2279,7 +2279,7 @@ void SwTxtNode::SetGrammarCheckDirty( bool bNew ) const
 
 bool SwTxtNode::IsGrammarCheckDirty() const
 {
-    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->bGrammarCheckDirty : 0;
+    return m_pParaIdleData_Impl && m_pParaIdleData_Impl->bGrammarCheckDirty;
 }
 
 void SwTxtNode::SetSmartTagDirty( bool bNew ) const
@@ -2292,7 +2292,7 @@ void SwTxtNode::SetSmartTagDirty( bool bNew ) const
 
 bool SwTxtNode::IsSmartTagDirty() const
 {
-    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->bSmartTagDirty : 0;
+    return m_pParaIdleData_Impl && m_pParaIdleData_Impl->bSmartTagDirty;
 }
 
 void SwTxtNode::SetAutoCompleteWordDirty( bool bNew ) const
@@ -2305,7 +2305,7 @@ void SwTxtNode::SetAutoCompleteWordDirty( bool bNew ) const
 
 bool SwTxtNode::IsAutoCompleteWordDirty() const
 {
-    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->bAutoComplDirty : 0;
+    return m_pParaIdleData_Impl && m_pParaIdleData_Impl->bAutoComplDirty;
 }
 
 // <-- Paragraph statistics end

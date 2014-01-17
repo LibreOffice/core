@@ -168,11 +168,11 @@ struct WW8_STD
 {
     // Base part of STD:
     sal_uInt16  sti : 12;          // invariant style identifier
-    sal_uInt16  fScratch : 1;      // spare field for any temporary use,
+    bool        fScratch : 1;      // spare field for any temporary use,
                                                          // always reset back to zero!
-    sal_uInt16  fInvalHeight : 1;  // PHEs of all text with this style are wrong
-    sal_uInt16  fHasUpe : 1;       // UPEs have been generated
-    sal_uInt16  fMassCopy : 1;     // std has been mass-copied; if unused at
+    bool        fInvalHeight : 1;  // PHEs of all text with this style are wrong
+    bool        fHasUpe : 1;       // UPEs have been generated
+    bool        fMassCopy : 1;     // std has been mass-copied; if unused at
                                                          // save time, style should be deleted
     sal_uInt16  sgc : 4;           // style type code
     sal_uInt16  istdBase : 12;     // base style
@@ -181,8 +181,8 @@ struct WW8_STD
     sal_uInt16  bchUpe;            // offset to end of upx's, start of upe's
     //-------- jetzt neu:
     // ab Ver8 gibts zwei Felder mehr:
-  sal_uInt16    fAutoRedef : 1;    /* auto redefine style when appropriate */
-  sal_uInt16    fHidden : 1;       /* hidden from UI? */
+  bool          fAutoRedef : 1;    /* auto redefine style when appropriate */
+  bool          fHidden : 1;       /* hidden from UI? */
   sal_uInt16    : 14;              /* unused bits */
 
     // Variable length part of STD:
@@ -287,7 +287,7 @@ public:
     //Maps what I think is the language this is to affect to the OOo language
     sal_uInt16 GetConvertedLang() const;
 
-    sal_uInt16 fKerningPunct  : 1;  // true if we're kerning punctuation
+    bool       fKerningPunct  : 1;  // true if we're kerning punctuation
     sal_uInt16 iJustification : 2;  // Kinsoku method of justification:
                                 //  0 = always expand
                                 //  1 = compress punctuation
@@ -296,7 +296,7 @@ public:
                                 //  0 = Level 1
                                 //  1 = Level 2
                                 //  2 = Custom
-    sal_uInt16 f2on1          : 1;  // 2-page-on-1 feature is turned on.
+    bool       f2on1          : 1;  // 2-page-on-1 feature is turned on.
     sal_uInt16 reserved1      : 4;  // in 97 its marked as reserved BUT
     sal_uInt16 reserved2      : 6;  // reserved ?
     //we find that the following applies,
@@ -805,7 +805,7 @@ public:
     sal_Int32 nYaTop;        //top of rectangle enclosing shape relative to the origin of the shape
     sal_Int32 nXaRight;  //right of rectangle enclosing shape relative to the origin of the shape
     sal_Int32 nYaBottom;//bottom of the rectangle enclosing shape relative to the origin of the shape
-    sal_uInt16 bHdr:1;
+    bool      bHdr:1;
     //0001 1 in the undo doc when shape is from the header doc, 0 otherwise (undefined when not in the undo doc)
     sal_uInt16 nbx:2;
     //0006 x position of shape relative to anchor CP
@@ -833,13 +833,13 @@ public:
     //1 wrap only on left
     //2 wrap only on right
     //3 wrap only on largest side
-    sal_uInt16 bRcaSimple:1;
+    bool       bRcaSimple:1;
     //2000 when set, temporarily overrides bx, by, forcing the xaLeft, xaRight, yaTop, and yaBottom fields to all be page relative.
-    sal_uInt16 bBelowText:1;
+    bool       bBelowText:1;
     //4000
     //1 shape is below text
     //0 shape is above text
-    sal_uInt16 bAnchorLock:1;
+    bool       bAnchorLock:1;
     //8000  1 anchor is locked
     //      0 anchor is not locked
     sal_Int32 nTxbx; //count of textboxes in shape (undo doc only)

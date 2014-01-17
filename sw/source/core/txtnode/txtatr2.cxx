@@ -306,7 +306,7 @@ SwTxtMeta::CreateTxtMeta(
     sal_Int32 const i_nEnd,
     bool const i_bIsCopy)
 {
-    if (COPY == i_bIsCopy)
+    if (i_bIsCopy)
     {   // i_rAttr is already cloned, now call DoCopy to copy the sw::Meta
         OSL_ENSURE(i_pTargetTxtNode, "cannot copy Meta without target node");
         i_rAttr.DoCopy(i_rTargetDocManager, *i_pTargetTxtNode);

@@ -215,7 +215,7 @@ public:
                                    sal_uInt8 nFlag );
 
     /// Should we output borders?
-    static int HasBorderItem( const SwFmt& rFmt );
+    static bool HasBorderItem( const SwFmt& rFmt );
 };
 
 class WW8_WrPlcSepx : public MSWordSections

@@ -1317,7 +1317,7 @@ SwCntntNode* SwNodes::GoPrevious(SwNodeIndex *pIdx) const
     return (SwCntntNode*)pNd;
 }
 
-inline int TstIdx( sal_uLong nSttIdx, sal_uLong nEndIdx, sal_uLong nStt, sal_uLong nEnd )
+inline bool TstIdx( sal_uLong nSttIdx, sal_uLong nEndIdx, sal_uLong nStt, sal_uLong nEnd )
 {
     return nStt < nSttIdx && nEnd >= nSttIdx &&
             nStt < nEndIdx && nEnd >= nEndIdx;
@@ -1924,7 +1924,7 @@ SwStartNode* SwNodes::MakeTextSection( const SwNodeIndex & rWhere,
 //TODO: provide better documentation
 /** go to next section that is not protected nor hidden
  *
- * @note if bSkipHidden == false and bSkipProtect == false, use GoNext/GoPrevious
+ * @note if !bSkipHidden and !bSkipProtect, use GoNext/GoPrevious
  *
  * @param pIdx
  * @param bSkipHidden
@@ -1935,7 +1935,7 @@ SwStartNode* SwNodes::MakeTextSection( const SwNodeIndex & rWhere,
  * @see SwNodes::GoNextSection (TODO: seems to be C&P programming here)
 */
 SwCntntNode* SwNodes::GoNextSection( SwNodeIndex * pIdx,
-                            int bSkipHidden, int bSkipProtect ) const
+                            bool bSkipHidden, bool bSkipProtect ) const
 {
     bool bFirst = true;
     SwNodeIndex aTmp( *pIdx );
@@ -1989,7 +1989,7 @@ SwCntntNode* SwNodes::GoNextSection( SwNodeIndex * pIdx,
 
 ///@see SwNodes::GoNextSection (TODO: seems to be C&P programming here)
 SwCntntNode* SwNodes::GoPrevSection( SwNodeIndex * pIdx,
-                            int bSkipHidden, int bSkipProtect ) const
+                            bool bSkipHidden, bool bSkipProtect ) const
 {
     bool bFirst = true;
     SwNodeIndex aTmp( *pIdx );

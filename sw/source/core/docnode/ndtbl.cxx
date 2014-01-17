@@ -4477,7 +4477,7 @@ sal_Bool SwDoc::UnProtectTbls( const SwPaM& rPam )
             // Check whether the Table is within the Selection
             if( bHasSel )
             {
-                int bFound = sal_False;
+                bool bFound = false;
                 SwPaM* pTmp = (SwPaM*)&rPam;
                 do {
                     const SwPosition *pStt = pTmp->Start(),

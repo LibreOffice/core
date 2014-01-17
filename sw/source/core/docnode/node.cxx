@@ -167,7 +167,7 @@ int Put( boost::shared_ptr<const SfxItemSet>& mrpAttrSet, const SwCntntNode& rNo
     return nRet;
 }
 
-int Put_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
+bool Put_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
             const SwCntntNode& rNode, const SfxPoolItem& rAttr,
             SwAttrSet* pOld, SwAttrSet* pNew )
 {
@@ -178,7 +178,7 @@ int Put_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
     if( rNode.GetModifyAtAttr() )
         aNewSet.SetModifyAtAttr( &rNode );
 
-    const int nRet = aNewSet.Put_BC( rAttr, pOld, pNew );
+    const bool nRet = aNewSet.Put_BC( rAttr, pOld, pNew );
 
     if ( nRet )
         GetNewAutoStyle( mrpAttrSet, rNode, aNewSet );
@@ -186,7 +186,7 @@ int Put_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
     return nRet;
 }
 
-int Put_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
+bool Put_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
             const SwCntntNode& rNode, const SfxItemSet& rSet,
             SwAttrSet* pOld, SwAttrSet* pNew )
 {
@@ -205,7 +205,7 @@ int Put_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
     if( rNode.GetModifyAtAttr() )
         aNewSet.SetModifyAtAttr( &rNode );
 
-    const int nRet = aNewSet.Put_BC( rSet, pOld, pNew );
+    const bool nRet = aNewSet.Put_BC( rSet, pOld, pNew );
 
     // #i76273# Robust
     if ( pStyleNames )
@@ -1367,7 +1367,7 @@ sal_Bool SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
     {
         SwAttrSet aOld( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() ),
                   aNew( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() );
-        if( 0 != ( bRet = 0 != AttrSetHandleHelper::Put_BC( mpAttrSet, *this, rAttr, &aOld, &aNew ) ))
+        if( 0 != ( bRet = AttrSetHandleHelper::Put_BC( mpAttrSet, *this, rAttr, &aOld, &aNew ) ))
         {
             SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
             SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
@@ -1443,7 +1443,7 @@ sal_Bool SwCntntNode::SetAttr( const SfxItemSet& rSet )
     {
         SwAttrSet aOld( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() ),
                   aNew( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() );
-        if( 0 != (bRet = 0 != AttrSetHandleHelper::Put_BC( mpAttrSet, *this, rSet, &aOld, &aNew )) )
+        if( 0 != (bRet = AttrSetHandleHelper::Put_BC( mpAttrSet, *this, rSet, &aOld, &aNew )) )
         {
             // Some special treatment for Attributes
             SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
@@ -1654,7 +1654,7 @@ static bool lcl_CheckMaxLength(SwNode const& rPrev, SwNode const& rNext)
 
 /// Can we join two Nodes?
 /// We can return the 2nd position in pIdx.
-int SwCntntNode::CanJoinNext( SwNodeIndex* pIdx ) const
+bool SwCntntNode::CanJoinNext( SwNodeIndex* pIdx ) const
 {
     const SwNodes& rNds = GetNodes();
     SwNodeIndex aIdx( *this, 1 );
@@ -1666,19 +1666,19 @@ int SwCntntNode::CanJoinNext( SwNodeIndex* pIdx ) const
         ++aIdx;
 
     if (rNds.Count()-1 == aIdx.GetIndex())
-        return sal_False;
+        return false;
     if (!lcl_CheckMaxLength(*this, *pNd))
     {
         return false;
     }
     if( pIdx )
         *pIdx = aIdx;
-    return sal_True;
+    return true;
 }
 
 /// Can we join two Nodes?
 /// We can return the 2nd position in pIdx.
-int SwCntntNode::CanJoinPrev( SwNodeIndex* pIdx ) const
+bool SwCntntNode::CanJoinPrev( SwNodeIndex* pIdx ) const
 {
     SwNodeIndex aIdx( *this, -1 );
 
@@ -1689,14 +1689,14 @@ int SwCntntNode::CanJoinPrev( SwNodeIndex* pIdx ) const
         aIdx--;
 
     if (0 == aIdx.GetIndex())
-        return sal_False;
+        return false;
     if (!lcl_CheckMaxLength(*pNd, *this))
     {
         return false;
     }
     if( pIdx )
         *pIdx = aIdx;
-    return sal_True;
+    return true;
 }
 
 //FEATURE::CONDCOLL

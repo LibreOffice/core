@@ -2731,12 +2731,12 @@ sal_Bool SwTransferable::IsPasteSpecial( const SwWrtShell& rWrtShell,
     return aClipboardFmtItem.Count() > 0;
 }
 
-int SwTransferable::PasteFormat( SwWrtShell& rSh,
+bool SwTransferable::PasteFormat( SwWrtShell& rSh,
                                     TransferableDataHelper& rData,
                                     sal_uLong nFormat )
 {
     SwWait aWait( *rSh.GetView().GetDocShell(), false );
-    int nRet = 0;
+    bool nRet = false;
 
     sal_uLong nPrivateFmt = FORMAT_PRIVATE;
     SwTransferable *pClipboard = GetSwTransferable( rData );
@@ -2773,7 +2773,7 @@ int SwTransferable::PasteFormat( SwWrtShell& rSh,
     return nRet;
 }
 
-int SwTransferable::_TestAllowedFormat( const TransferableDataHelper& rData,
+bool SwTransferable::_TestAllowedFormat( const TransferableDataHelper& rData,
                                         sal_uLong nFormat, sal_uInt16 nDestination )
 {
     sal_uInt16 nAction = EXCHG_INOUT_ACTION_NONE, nEventAction;
@@ -2811,15 +2811,15 @@ static sal_uInt16 aPasteSpecialIds[] =
     0
 };
 
-int SwTransferable::PasteUnformatted( SwWrtShell& rSh, TransferableDataHelper& rData )
+bool SwTransferable::PasteUnformatted( SwWrtShell& rSh, TransferableDataHelper& rData )
 {
     // Plain text == unformatted
     return SwTransferable::PasteFormat( rSh, rData, SOT_FORMAT_STRING );
 }
 
-int SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rData, sal_uLong& rFormatUsed )
+bool SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rData, sal_uLong& rFormatUsed )
 {
-    int nRet = 0;
+    bool nRet = false;
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     SfxAbstractPasteDialog* pDlg = pFact->CreatePasteDialog( &rSh.GetView().GetEditWin() );
 

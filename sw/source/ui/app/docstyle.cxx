@@ -898,7 +898,7 @@ bool  SwDocStyleSheet::SetName( const OUString& rStr)
     else if(!bPhysical)
         FillStyleSheet( FillPhysical );
 
-    int bChg = false;
+    bool bChg = false;
     switch(nFamily)
     {
         case SFX_STYLE_FAMILY_CHAR :

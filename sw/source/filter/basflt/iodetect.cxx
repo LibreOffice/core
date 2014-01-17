@@ -65,7 +65,7 @@ OUString SwIoDetect::IsReader(const sal_Char* pHeader, sal_uLong nLen_) const
         sal_Bool fComplexGet()  { return static_cast< sal_Bool >((fFlagsGet() >> 2) & 1); }
     };
 
-    int bRet = sal_False;
+    bool bRet = false;
     if ( sHTML == sName )
         bRet = HTMLParser::IsHTMLFormat( pHeader, sal_True, RTL_TEXTENCODING_DONTKNOW );
     else if ( FILTER_RTF == sName )
@@ -164,9 +164,9 @@ sal_Bool SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter
         /* Bug 62703 - und auch WinWord Docs ohne ClipBoardId! */
         if (rFilter.GetUserData() == FILTER_WW8 || rFilter.GetUserData() == sWW6)
         {
-            bRet = !((rStg.IsContained( OUString("0Table")) ||
-                        rStg.IsContained( OUString("1Table"))) ^
-                    (rFilter.GetUserData() == FILTER_WW8));
+            bRet = (rStg.IsContained(OUString("0Table"))
+                    || rStg.IsContained(OUString("1Table")))
+                == (rFilter.GetUserData() == FILTER_WW8);
             if (bRet && !rFilter.IsAllowedAsTemplate())
             {
                 SotStorageStreamRef xRef =

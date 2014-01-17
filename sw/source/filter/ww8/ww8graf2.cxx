@@ -290,7 +290,7 @@ bool SwWW8ImplReader::ReadGrafFile(OUString& rFileName, Graphic*& rpGraphic,
     if (nData > 0)
     {
         rpGraphic = new Graphic();
-        if (0 == (bOk = SwWW8ImplReader::GetPictGrafFromStream(*rpGraphic, *pSt)))
+        if (!(bOk = SwWW8ImplReader::GetPictGrafFromStream(*rpGraphic, *pSt)))
             DELETEZ(rpGraphic);
     }
     return bOk; // Grafik drin

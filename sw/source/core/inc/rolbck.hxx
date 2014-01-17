@@ -179,7 +179,7 @@ class SwHistorySetTOXMark : public SwHistoryHint
 public:
     SwHistorySetTOXMark( SwTxtTOXMark* pTxtHt, sal_uLong nNode );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
-    int IsEqual( const SwTOXMark& rCmp ) const;
+    bool IsEqual( const SwTOXMark& rCmp ) const;
 
 };
 

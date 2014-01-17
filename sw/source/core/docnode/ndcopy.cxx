@@ -1604,7 +1604,7 @@ void SwDoc::CopyFlyInFlyImpl(
         {
             const SwFrmFmt *pFmtN = (*nIt).GetFmt();
             const SwFmtChain &rChain = pFmtN->GetChain();
-            int nCnt = 0 != rChain.GetPrev();
+            int nCnt = int(0 != rChain.GetPrev());
             nCnt += rChain.GetNext() ? 1: 0;
             size_t k = 0;
             for (::std::set< _ZSortFly >::const_iterator kIt=aSet.begin() ; kIt != aSet.end(); ++kIt, ++k )

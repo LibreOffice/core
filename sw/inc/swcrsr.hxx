@@ -42,7 +42,7 @@ const int FIND_NO_RING      = 2;
 struct SwFindParas
 {
     virtual int Find( SwPaM*, SwMoveFn, const SwPaM*, sal_Bool ) = 0;
-    virtual int IsReplaceMode() const = 0;
+    virtual bool IsReplaceMode() const = 0;
 
 protected:
     ~SwFindParas() {}

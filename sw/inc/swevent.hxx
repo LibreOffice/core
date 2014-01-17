@@ -99,13 +99,13 @@ struct SwCallMouseEvent
     void Set( const SwFmtINetFmt* pINetAttr )
         { eType = EVENT_OBJECT_INETATTR; PTR.pINetAttr = pINetAttr; PTR.IMAP.pIMapObj = 0; }
 
-    int operator==( const SwCallMouseEvent& rEvent ) const
+    bool operator==( const SwCallMouseEvent& rEvent ) const
         {
             return eType == rEvent.eType &&
                     PTR.pFmt == rEvent.PTR.pFmt &&
                     PTR.IMAP.pIMapObj == rEvent.PTR.IMAP.pIMapObj;
         }
-    int operator!=( const SwCallMouseEvent& rEvent ) const
+    bool operator!=( const SwCallMouseEvent& rEvent ) const
         {   return !( *this == rEvent );    }
 
     void Clear()

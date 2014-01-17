@@ -133,7 +133,7 @@ SwDrawDocument::~SwDrawDocument()
  */
 SdrPage* SwDrawDocument::AllocPage(bool bMasterPage)
 {
-    SwDPage* pPage = new SwDPage(*this, 0 != bMasterPage);
+    SwDPage* pPage = new SwDPage(*this, bMasterPage);
     pPage->SetName(OUString("Controls"));
     return pPage;
 }

@@ -180,7 +180,7 @@ private:
     _DB_ColumnConfigData& operator =( const _DB_ColumnConfigData& );
 };
 
-int SwInsDBColumn::operator<( const SwInsDBColumn& rCmp ) const
+bool SwInsDBColumn::operator<( const SwInsDBColumn& rCmp ) const
 {
     return 0 > GetAppCollator().compareString( sColumn, rCmp.sColumn );
 }

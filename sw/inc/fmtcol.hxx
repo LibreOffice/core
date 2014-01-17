@@ -209,8 +209,8 @@ private:
     SwCollCondition & operator= (const SwCollCondition &);
 public:
 
-    int operator==( const SwCollCondition& rCmp ) const;
-    int operator!=( const SwCollCondition& rCmp ) const
+    bool operator==( const SwCollCondition& rCmp ) const;
+    bool operator!=( const SwCollCondition& rCmp ) const
                             { return ! (*this == rCmp); }
 
     sal_uLong GetCondition() const      { return nCondition; }

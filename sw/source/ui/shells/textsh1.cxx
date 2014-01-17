@@ -1263,7 +1263,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         bool bSetBlockMode = !rWrtSh.IsBlockMode();
         if( pArgs && SFX_ITEM_SET == pArgs->GetItemState(nSlot, sal_False, &pItem))
             bSetBlockMode = ((const SfxBoolItem*)pItem)->GetValue();
-        if( ( nSlot == FN_SELECTION_MODE_DEFAULT ) ^ bSetBlockMode )
+        if( ( nSlot == FN_SELECTION_MODE_DEFAULT ) != bSetBlockMode )
             rWrtSh.EnterBlockMode();
         else
             rWrtSh.EnterStdMode();

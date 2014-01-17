@@ -236,7 +236,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
                                                   nRefPoolId );
     OSL_ENSURE( nDeep ? !aToken.isEmpty() : aToken.isEmpty(),
             "Hier stimmt doch was mit dem Token nicht!" );
-    OSL_ENSURE( nDeep ? nRefPoolId : !nRefPoolId,
+    OSL_ENSURE( nDeep ? nRefPoolId != 0 : nRefPoolId == 0,
             "Hier stimmt doch was mit der Vergleichs-Vorlage nicht!" );
 
     sal_Bool bTxtColl = pFmt->Which() == RES_TXTFMTCOLL ||

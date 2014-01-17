@@ -164,8 +164,8 @@ public:
         return *this;
     }
 
-    int operator==( const _ZSortFly& ) const { return sal_False; }
-    int operator<( const _ZSortFly& rCmp ) const
+    bool operator==( const _ZSortFly& ) const { return false; }
+    bool operator<( const _ZSortFly& rCmp ) const
         { return nOrdNum < rCmp.nOrdNum; }
 
     const SwFrmFmt* GetFmt() const              { return pFmt; }

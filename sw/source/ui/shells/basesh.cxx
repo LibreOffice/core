@@ -325,8 +325,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     SwView* pView = &rView;
                     rReq.Ignore();
                     bIgnore = true;
-                    int nRet = SwTransferable::PasteUnformatted( rSh, aDataHelper );
-                    if(nRet)
+                    if(SwTransferable::PasteUnformatted( rSh, aDataHelper ))
                     {
                         SfxViewFrame* pViewFrame = pView->GetViewFrame();
                         uno::Reference< frame::XDispatchRecorder > xRecorder =
@@ -361,8 +360,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     sal_uLong nFormatId = 0;
                     rReq.Ignore();
                     bIgnore = true;
-                    int nRet = SwTransferable::PasteSpecial( rSh, aDataHelper, nFormatId );
-                    if(nRet)
+                    if(SwTransferable::PasteSpecial( rSh, aDataHelper, nFormatId ))
                     {
                         SfxViewFrame* pViewFrame = pView->GetViewFrame();
                         uno::Reference< frame::XDispatchRecorder > xRecorder =

@@ -101,8 +101,7 @@ public:
     bool GetChanged( size_t nLine ) const
         {
             return (pChangedFlag && nLine < aLines.size())
-                ? pChangedFlag[ nLine ]
-                : 0;
+                && pChangedFlag[ nLine ];
         }
 
     size_t GetLineCount() const     { return aLines.size(); }
@@ -1725,9 +1724,8 @@ void SwCompareData::SetRedlinesToDoc( sal_Bool bUseDocInfo )
                 if( rSttEnd == rEndStt ||
                     (!rEndStt.nContent.GetIndex() &&
                     rEndStt.nNode.GetIndex() - 1 == rSttEnd.nNode.GetIndex() &&
-                    0 != ( pCNd = rSttEnd.nNode.GetNode().GetCntntNode() )
-                        ? rSttEnd.nContent.GetIndex() == pCNd->Len()
-                        : 0 ))
+                    0 != ( pCNd = rSttEnd.nNode.GetNode().GetCntntNode() ) &&
+                    rSttEnd.nContent.GetIndex() == pCNd->Len()))
                 {
                     if( pTmp->GetNext() == pInsRing )
                     {

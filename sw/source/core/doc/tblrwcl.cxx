@@ -889,7 +889,7 @@ lcl_FndNxtPrvDelBox( const SwTableLines& rTblLns,
                 --*pCurPos;
             pAllDelBoxes->erase( pAllDelBoxes->begin() + nFndPos );
         }
-    } while( bNxt ? ( nLinePos + 1 < (sal_uInt16)rTblLns.size() ) : nLinePos );
+    } while( bNxt ? ( nLinePos + 1 < (sal_uInt16)rTblLns.size() ) : nLinePos != 0 );
     return pFndBox;
 }
 
@@ -1550,7 +1550,7 @@ static void lcl_Merge_MoveLine(_FndLine& rFndLine, _InsULPara *const pULPara)
 
                 // If there are already Lines, then these need to go into a new Line and Box
                 nMvPos = pRMBox->GetTabLines().GetPos( pInsLine );
-                if( pULPara->bUL ? nMvPos
+                if( pULPara->bUL ? nMvPos != 0
                                 : nMvPos+1 < (sal_uInt16)pRMBox->GetTabLines().size() )
                 {
                     // Merge all Lines into a new Line and Box
@@ -2452,7 +2452,7 @@ static bool lcl_SetSelBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                     return false;
 
             // Collect all "ContentBoxes"
-            if( ( 0 != ( bGreaterBox = TBLFIX_CHGABS != rParam.nMode && ( nDist + ( rParam.bLeft ? 0 : nWidth ) ) >= rParam.nSide)) ||
+            if( (bGreaterBox = TBLFIX_CHGABS != rParam.nMode && ( nDist + ( rParam.bLeft ? 0 : nWidth ) ) >= rParam.nSide) ||
                 ( !rParam.bBigger && ( std::abs( nDist + (( rParam.nMode && rParam.bLeft ) ? 0 : nWidth ) - rParam.nSide ) < COLFUZZY ) ) )
             {
                 rParam.bAnyBoxFnd = true;
@@ -2486,8 +2486,8 @@ static bool lcl_SetSelBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
             rParam.nLowerDiff = nOldLower;
 
             if( nLowerDiff ||
-                 ( 0 != ( bGreaterBox = !nOldLower && TBLFIX_CHGABS != rParam.nMode &&
-                    ( nDist + ( rParam.bLeft ? 0 : nWidth ) ) >= rParam.nSide)) ||
+                 (bGreaterBox = !nOldLower && TBLFIX_CHGABS != rParam.nMode &&
+                    ( nDist + ( rParam.bLeft ? 0 : nWidth ) ) >= rParam.nSide) ||
                 ( std::abs( nDist + ( (rParam.nMode && rParam.bLeft) ? 0 : nWidth )
                             - rParam.nSide ) < COLFUZZY ))
             {
@@ -3671,7 +3671,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
             }
         }
         else if( bInsDel ||
-                ( bLeft ? nDist : std::abs( rSz.GetWidth() - nDist ) > COLFUZZY ) )
+                ( bLeft ? nDist != 0 : std::abs( rSz.GetWidth() - nDist ) > COLFUZZY ) )
         {
             bRet = true;
             if( bLeft && TBLFIX_CHGABS == eTblChgMode && !bInsDel )
@@ -3812,7 +3812,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
             eTblChgMode = eOld;
             return bRet;
         }
-        else if( bInsDel || ( bLeft ? nDist
+        else if( bInsDel || ( bLeft ? nDist != 0
                                     : (rSz.GetWidth() - nDist) > COLFUZZY ))
         {
             if( bLeft && TBLFIX_CHGABS == eTblChgMode && !bInsDel )
@@ -3824,7 +3824,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
             while( pLine->GetUpper() )
             {
                 sal_uInt16 nPos = pLine->GetTabBoxes().GetPos( pBox );
-                if( bLeft ? nPos : nPos + 1 != (sal_uInt16)pLine->GetTabBoxes().size() )
+                if( bLeft ? nPos != 0 : nPos + 1 != (sal_uInt16)pLine->GetTabBoxes().size() )
                     break;
 
                 pBox = pLine->GetUpper();
@@ -3846,7 +3846,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
             // First, see if there is enough room at all
             if( bInsDel )
             {
-                if( 0 != ( bRet = bLeft ? nDist != 0
+                if( ( bRet = bLeft ? nDist != 0
                                 : ( rSz.GetWidth() - nDist ) > COLFUZZY ) &&
                     !aParam.bBigger )
                 {
@@ -4317,7 +4317,7 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                 }
                 else
                 {
-                    if( bTop ? nEnd : nStt < nEnd  )
+                    if( bTop ? nEnd != 0 : nStt < nEnd  )
                     {
                         if( bTop )
                             nStt = nEnd - 1;

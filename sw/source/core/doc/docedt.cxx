@@ -260,7 +260,7 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
             }
             else if( ( rSttNdIdx.GetIndex() + nSttOff <= pAPos->nNode.GetIndex()
                     && pAPos->nNode.GetIndex() <= rEndNdIdx.GetIndex() - nOff ) ||
-                        0 != ( bInsPos = rInsPos == pAPos->nNode ))
+                        ( bInsPos = rInsPos == pAPos->nNode ))
 
             {
                 _SaveFly aSave( pAPos->nNode.GetIndex() - rSttNdIdx.GetIndex(),
@@ -863,7 +863,7 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
     }
 
 
-    int bUpdateFtn = sal_False;
+    bool bUpdateFtn = false;
     SwFtnIdxs aTmpFntIdx;
 
     SwUndoMove * pUndoMove = 0;
@@ -1079,7 +1079,7 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
     // Or else delete the Frames for all footnotes that are being moved
     // and have it rebuild after the Move (footnotes can change pages).
     // Additionally we have to correct the FtnIdx array's sorting.
-    int bUpdateFtn = sal_False;
+    bool bUpdateFtn = false;
     SwFtnIdxs aTmpFntIdx;
 
     SwUndoMove* pUndo = 0;

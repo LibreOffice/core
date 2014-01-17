@@ -145,18 +145,18 @@ public:
     long GetPos() const                         { return nPos; }
     const SwWriteTableCells& GetCells() const   { return aCells; }
 
-    inline int operator==( const SwWriteTableRow& rRow ) const;
-    inline int operator<( const SwWriteTableRow& rRow2 ) const;
+    inline bool operator==( const SwWriteTableRow& rRow ) const;
+    inline bool operator<( const SwWriteTableRow& rRow2 ) const;
 };
 
-inline int SwWriteTableRow::operator==( const SwWriteTableRow& rRow ) const
+inline bool SwWriteTableRow::operator==( const SwWriteTableRow& rRow ) const
 {
     // etwas Unschaerfe zulassen
     return (nPos >= rRow.nPos ?  nPos - rRow.nPos : rRow.nPos - nPos ) <=
         (mbUseLayoutHeights ? 0 : ROWFUZZY);
 }
 
-inline int SwWriteTableRow::operator<( const SwWriteTableRow& rRow ) const
+inline bool SwWriteTableRow::operator<( const SwWriteTableRow& rRow ) const
 {
     // Da wir hier nur die Wahrheits-Grade 0 und 1 kennen, lassen wir lieber
     // auch nicht zu, dass x==y und x<y gleichzeitig gilt ;-)
@@ -194,8 +194,8 @@ public:
 
     void SetOutWidth( bool bSet )               { bOutWidth = bSet; }
 
-    inline int operator==( const SwWriteTableCol& rCol ) const;
-    inline int operator<( const SwWriteTableCol& rCol ) const;
+    inline bool operator==( const SwWriteTableCol& rCol ) const;
+    inline bool operator<( const SwWriteTableCol& rCol ) const;
 
     void SetWidthOpt( sal_uInt32 nWidth, bool bRel )
     {
@@ -205,14 +205,14 @@ public:
     bool HasRelWidthOpt() const                 { return bRelWidthOpt; }
 };
 
-inline int SwWriteTableCol::operator==( const SwWriteTableCol& rCol ) const
+inline bool SwWriteTableCol::operator==( const SwWriteTableCol& rCol ) const
 {
     // etwas Unschaerfe zulassen
     return (nPos >= rCol.nPos ? nPos - rCol.nPos
                                      : rCol.nPos - nPos ) <= COLFUZZY;
 }
 
-inline int SwWriteTableCol::operator<( const SwWriteTableCol& rCol ) const
+inline bool SwWriteTableCol::operator<( const SwWriteTableCol& rCol ) const
 {
     // Da wir hier nur die Wahrheits-Grade 0 und 1 kennen, lassen wir lieber
     // auch nicht zu, dass x==y und x<y gleichzeitig gilt ;-)

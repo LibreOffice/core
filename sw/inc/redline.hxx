@@ -46,7 +46,7 @@ public:
 
     virtual void Accept( SwPaM& rPam ) const;
     virtual void Reject( SwPaM& rPam ) const;
-    virtual int operator == ( const SwRedlineExtraData& ) const;
+    virtual bool operator == ( const SwRedlineExtraData& ) const;
 };
 
 class SwRedlineExtraData_FmtColl : public SwRedlineExtraData
@@ -60,7 +60,7 @@ public:
     virtual ~SwRedlineExtraData_FmtColl();
     virtual SwRedlineExtraData* CreateNew() const;
     virtual void Reject( SwPaM& rPam ) const;
-    virtual int operator == ( const SwRedlineExtraData& ) const;
+    virtual bool operator == ( const SwRedlineExtraData& ) const;
 
     void SetItemSet( const SfxItemSet& rSet );
 };
@@ -76,7 +76,7 @@ public:
     virtual ~SwRedlineExtraData_Format();
     virtual SwRedlineExtraData* CreateNew() const;
     virtual void Reject( SwPaM& rPam ) const;
-    virtual int operator == ( const SwRedlineExtraData& ) const;
+    virtual bool operator == ( const SwRedlineExtraData& ) const;
 };
 
 /*
@@ -98,7 +98,7 @@ public:
     virtual ~SwRedlineExtraData_FormattingChanges();
     virtual SwRedlineExtraData* CreateNew() const;
     virtual void Reject( SwPaM& rPam ) const;
-    virtual int operator == ( const SwRedlineExtraData& ) const;
+    virtual bool operator == ( const SwRedlineExtraData& ) const;
     SfxItemSet* GetItemSet( ) const;
 };
 
@@ -125,7 +125,7 @@ public:
 
     ~SwRedlineData();
 
-    int operator==( const SwRedlineData& rCmp ) const
+    bool operator==( const SwRedlineData& rCmp ) const
         {
             return nAuthor == rCmp.nAuthor &&
                     eType == rCmp.eType &&
@@ -136,7 +136,7 @@ public:
                         ( pExtraData && rCmp.pExtraData &&
                             *pExtraData == *rCmp.pExtraData ));
         }
-    int operator!=( const SwRedlineData& rCmp ) const
+    bool operator!=( const SwRedlineData& rCmp ) const
         {   return !operator==( rCmp ); }
 
     RedlineType_t GetType() const
@@ -152,7 +152,7 @@ public:
 
     void SetAutoFmtFlag()
   { eType = (RedlineType_t)(eType | nsRedlineType_t::REDLINE_FORM_AUTOFMT); }
-    int CanCombine( const SwRedlineData& rCmp ) const
+    bool CanCombine( const SwRedlineData& rCmp ) const
         {
             return nAuthor == rCmp.nAuthor &&
                     eType == rCmp.eType &&
@@ -230,9 +230,9 @@ public:
     sal_Bool HasValidRange() const;
 
     const SwRedlineData& GetRedlineData(sal_uInt16 nPos = 0) const;
-    int operator==( const SwRedlineData& rCmp ) const
+    bool operator==( const SwRedlineData& rCmp ) const
         { return *pRedlineData == rCmp; }
-    int operator!=( const SwRedlineData& rCmp ) const
+    bool operator!=( const SwRedlineData& rCmp ) const
         { return *pRedlineData != rCmp; }
     void SetAutoFmtFlag()               { pRedlineData->SetAutoFmtFlag(); }
 
@@ -295,8 +295,8 @@ public:
      */
     OUString GetDescr(sal_uInt16 nPos = 0);
 
-    int operator==( const SwRangeRedline& ) const;
-    int operator<( const SwRangeRedline& ) const;
+    bool operator==( const SwRangeRedline& ) const;
+    bool operator<( const SwRangeRedline& ) const;
 };
 
 class SW_DLLPUBLIC SwRedlineHint : public SfxHint

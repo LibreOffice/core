@@ -651,7 +651,7 @@ SwSectionFmt *wwSectionManager::InsertSection(
 
     SfxItemSet aSet( mrReader.rDoc.GetAttrPool(), aFrmFmtSetRange );
 
-    sal_uInt8 nRTLPgn = maSegments.empty() ? 0 : maSegments.back().IsBiDi();
+    bool nRTLPgn = !maSegments.empty() && maSegments.back().IsBiDi();
     aSet.Put(SvxFrameDirectionItem(
         nRTLPgn ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR));
 
@@ -898,7 +898,7 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
     {
         // sprmSFEvenlySpaced
         aNewSection.maSep.fEvenlySpaced =
-            ReadBSprm(pSep, (eVer <= ww::eWW7 ? 138 : 0x3005), 1) ? true : false;
+            sal_uInt8(ReadBSprm(pSep, (eVer <= ww::eWW7 ? 138 : 0x3005), 1) ? true : false);
 
         const sal_uInt8 numrgda = SAL_N_ELEMENTS(aNewSection.maSep.rgdxaColumnWidthSpacing);
         if (aNewSection.maSep.ccolM1 > 0 && !aNewSection.maSep.fEvenlySpaced)
@@ -1230,7 +1230,7 @@ static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPa
                                     pSprm[0], pSprm[1], pSprm[2], pSprm[3] ) )
              {
                 for( int i = 0; i < 4; ++i )
-                    nBorder |= (_SetWW8_BRC( bVer67, brc[ i ], pSprm[ i ] ))<<i;
+                    nBorder |= int(_SetWW8_BRC( bVer67, brc[ i ], pSprm[ i ] ))<<i;
              }
         }
     }
@@ -1247,12 +1247,12 @@ static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPa
         if( pPap )
         {
             for( int i = 0; i < 5; ++i, ++pIds )
-                nBorder |= (_SetWW8_BRC( bVer67, brc[ i ], pPap->HasSprm( *pIds )))<<i;
+                nBorder |= int(_SetWW8_BRC( bVer67, brc[ i ], pPap->HasSprm( *pIds )))<<i;
         }
         else if( pSty )
         {
             for( int i = 0; i < 5; ++i, ++pIds )
-                nBorder |= (_SetWW8_BRC( bVer67, brc[ i ], pSty->HasParaSprm( *pIds )))<<i;
+                nBorder |= int(_SetWW8_BRC( bVer67, brc[ i ], pSty->HasParaSprm( *pIds )))<<i;
         }
         else {
             OSL_ENSURE( pSty || pPap, "WW8PLCFx_Cp_FKP and WW8RStyle "

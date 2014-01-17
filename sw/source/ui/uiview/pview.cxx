@@ -238,7 +238,7 @@ void SwPagePreviewWin::CalcWish( sal_uInt8 nNewRow, sal_uInt8 nNewCol )
 
     // If changes have taken place at the columns, the special case "single column"
     // must be considered and corrected if necessary.
-    if( (1 == nOldCol) ^ (1 == mnCol) )
+    if( (1 == nOldCol) != (1 == mnCol) )
         mrView.ScrollDocSzChg();
 
     // Order must be maintained!
@@ -834,8 +834,7 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
                 {
                     pViewWin->SetSelectedPage( nNewSelectedPage );
                     pViewWin->SetSttPage( nNewStartPage );
-                    int nRet = ChgPage( SwPagePreviewWin::MV_SELPAGE, sal_True );
-                    bRefresh = 0 != nRet;
+                    bRefresh = ChgPage( SwPagePreviewWin::MV_SELPAGE, sal_True );
                 }
                 GetViewShell()->ShowPreviewSelection( nNewSelectedPage );
                 // invalidate page status.
@@ -869,12 +868,12 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
             eMvMode = SwPagePreviewWin::MV_DOC_END; bRetVal = true; goto MOVEPAGE;
 MOVEPAGE:
             {
-                int nRet = ChgPage( eMvMode, sal_True );
+                bool nRet = ChgPage( eMvMode, sal_True );
                 // return value fuer Basic
                 if(bRetVal)
-                    rReq.SetReturnValue(SfxBoolItem(rReq.GetSlot(), nRet == 0));
+                    rReq.SetReturnValue(SfxBoolItem(rReq.GetSlot(), !nRet));
 
-                bRefresh = 0 != nRet;
+                bRefresh = nRet;
                 rReq.Done();
             }
             break;
@@ -1253,10 +1252,10 @@ int SwPagePreview::_CreateScrollbar( sal_Bool bHori )
     return 1;
 }
 
-int SwPagePreview::ChgPage( int eMvMode, int bUpdateScrollbar )
+bool SwPagePreview::ChgPage( int eMvMode, int bUpdateScrollbar )
 {
     Rectangle aPixVisArea( pViewWin->LogicToPixel( aVisArea ) );
-    int bChg = pViewWin->MovePage( eMvMode ) ||
+    bool bChg = pViewWin->MovePage( eMvMode ) ||
                eMvMode == SwPagePreviewWin::MV_CALC ||
                eMvMode == SwPagePreviewWin::MV_NEWWINSIZE;
     aVisArea = pViewWin->PixelToLogic( aPixVisArea );

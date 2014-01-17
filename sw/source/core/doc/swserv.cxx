@@ -116,7 +116,7 @@ void SwServerObject::SendDataChanged( const SwPosition& rPos )
     // Is someone interested in our changes?
     if( HasDataLinks() )
     {
-        int bCall = sal_False;
+        bool bCall = false;
         const SwStartNode* pNd = 0;
         switch( eType )
         {
@@ -152,7 +152,7 @@ void SwServerObject::SendDataChanged( const SwPaM& rRange )
     // Is someone interested in our changes?
     if( HasDataLinks() )
     {
-        int bCall = sal_False;
+        bool bCall = false;
         const SwStartNode* pNd = 0;
         const SwPosition* pStt = rRange.Start(), *pEnd = rRange.End();
         switch( eType )

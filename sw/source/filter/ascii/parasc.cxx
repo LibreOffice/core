@@ -61,7 +61,7 @@ class SwASCIIParser
 
 public:
     SwASCIIParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
-                            int bReadNewDoc, const SwAsciiOptions& rOpts );
+                            bool bReadNewDoc, const SwAsciiOptions& rOpts );
     ~SwASCIIParser();
 
     sal_uLong CallParser();
@@ -88,7 +88,7 @@ sal_uLong AsciiReader::Read( SwDoc &rDoc, const OUString&, SwPaM &rPam, const OU
 }
 
 SwASCIIParser::SwASCIIParser(SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
-    int bReadNewDoc, const SwAsciiOptions& rOpts)
+    bool bReadNewDoc, const SwAsciiOptions& rOpts)
     : pDoc(pD), rInput(rIn), rOpt(rOpts), nFileSize(0), nScript(0)
     , bNewDoc(bReadNewDoc)
 {

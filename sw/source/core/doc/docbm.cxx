@@ -719,7 +719,7 @@ namespace sw { namespace mark
                     vMarksToDelete.push_back(ppMark);
                 }
             }
-            else if ( bIsPosInRange ^ bIsOtherPosInRange )
+            else if ( bIsPosInRange != bIsOtherPosInRange )
             {
                 // the bookmark is partitially in the range
                 // move position of that is in the range out of it
@@ -1190,7 +1190,7 @@ namespace
         return nReturn;
     }
 
-    static inline int lcl_Greater( const SwPosition& rPos, const SwNodeIndex& rNdIdx, const SwIndex* pIdx )
+    static inline bool lcl_Greater( const SwPosition& rPos, const SwNodeIndex& rNdIdx, const SwIndex* pIdx )
     {
         return rPos.nNode > rNdIdx || ( pIdx && rPos.nNode == rNdIdx && rPos.nContent > pIdx->GetIndex() );
     }

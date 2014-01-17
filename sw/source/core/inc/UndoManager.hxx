@@ -98,7 +98,7 @@ private:
     /// position in Undo-Array at which Doc was saved (and is not modified)
     UndoStackMark m_UndoSaveMark;
 
-    typedef enum { UNDO = true, REDO = false } UndoOrRedo_t;
+    typedef enum { UNDO = int(true), REDO = int(false) } UndoOrRedo_t;
     bool impl_DoUndoRedo(UndoOrRedo_t const undoOrRedo);
 
     // UGLY: should not be called

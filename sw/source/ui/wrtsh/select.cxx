@@ -733,21 +733,21 @@ long SwWrtShell::UpdateLayoutFrm(const Point *pPt, sal_Bool )
 
 // Handler for toggling the modes. Returns back the old mode.
 
-long SwWrtShell::ToggleAddMode()
+bool SwWrtShell::ToggleAddMode()
 {
     bAddMode ? LeaveAddMode(): EnterAddMode();
     Invalidate();
     return !bAddMode;
 }
 
-long SwWrtShell::ToggleBlockMode()
+bool SwWrtShell::ToggleBlockMode()
 {
     bBlockMode ? LeaveBlockMode(): EnterBlockMode();
     Invalidate();
     return !bBlockMode;
 }
 
-long SwWrtShell::ToggleExtMode()
+bool SwWrtShell::ToggleExtMode()
 {
     bExtMode ? LeaveExtMode() : EnterExtMode();
     Invalidate();

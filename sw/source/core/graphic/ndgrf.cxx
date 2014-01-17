@@ -513,7 +513,7 @@ StreamAndStorageNames lcl_GetStreamStorageNames( const OUString sUserData )
 short SwGrfNode::SwapIn( sal_Bool bWaitForData )
 {
     if( bInSwapIn ) // not recursively!
-        return !maGrfObj.IsSwappedOut();
+        return short(!maGrfObj.IsSwappedOut());
 
     short nRet = 0;
     bInSwapIn = sal_True;

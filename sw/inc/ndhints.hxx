@@ -35,8 +35,8 @@ class SfxItemSet;
 class SwDoc;
 
 typedef enum {
-    COPY = true,
-    NEW  = false,
+    COPY = int(true),
+    NEW  = int(false),
 } CopyOrNew_t;
 
 /// if COPY then pTxtNode must be given!

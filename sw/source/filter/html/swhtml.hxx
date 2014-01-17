@@ -900,7 +900,7 @@ public:
     SwHTMLParser( SwDoc* pD, SwPaM & rCrsr, SvStream& rIn,
                     const OUString& rFileName,
                     const OUString& rBaseURL,
-                    int bReadNewDoc = sal_True,
+                    bool bReadNewDoc = true,
                     SfxMedium* pMed = 0, sal_Bool bReadUTF8 = sal_False,
                     sal_Bool bIgnoreHTMLComments = sal_False );
 

@@ -1468,7 +1468,7 @@ static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
         aIdx--, pLast = 0;
 
     while( bNext ? ( aIdx.GetIndex() < aIdx.GetNodes().Count() - 1 )
-                 : aIdx.GetIndex() )
+                 : aIdx.GetIndex() != 0 )
     {
         if( aIdx.GetNode().IsTxtNode() )
         {

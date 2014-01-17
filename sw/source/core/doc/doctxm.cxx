@@ -193,20 +193,20 @@ public:
     CompareNodeCntnt( sal_uLong nNd, sal_Int32 nCnt )
         : nNode( nNd ), nCntnt( nCnt ) {}
 
-    int operator==( const CompareNodeCntnt& rCmp ) const
+    bool operator==( const CompareNodeCntnt& rCmp ) const
         { return nNode == rCmp.nNode && nCntnt == rCmp.nCntnt; }
-    int operator!=( const CompareNodeCntnt& rCmp ) const
+    bool operator!=( const CompareNodeCntnt& rCmp ) const
         { return nNode != rCmp.nNode || nCntnt != rCmp.nCntnt; }
-    int operator< ( const CompareNodeCntnt& rCmp ) const
+    bool operator< ( const CompareNodeCntnt& rCmp ) const
         { return nNode < rCmp.nNode ||
             ( nNode == rCmp.nNode && nCntnt < rCmp.nCntnt); }
-    int operator<=( const CompareNodeCntnt& rCmp ) const
+    bool operator<=( const CompareNodeCntnt& rCmp ) const
         { return nNode < rCmp.nNode ||
             ( nNode == rCmp.nNode && nCntnt <= rCmp.nCntnt); }
-    int operator> ( const CompareNodeCntnt& rCmp ) const
+    bool operator> ( const CompareNodeCntnt& rCmp ) const
         { return nNode > rCmp.nNode ||
             ( nNode == rCmp.nNode && nCntnt > rCmp.nCntnt); }
-    int operator>=( const CompareNodeCntnt& rCmp ) const
+    bool operator>=( const CompareNodeCntnt& rCmp ) const
         { return nNode > rCmp.nNode ||
             ( nNode == rCmp.nNode && nCntnt >= rCmp.nCntnt); }
 };

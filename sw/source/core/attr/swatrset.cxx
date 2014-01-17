@@ -111,23 +111,23 @@ SfxItemSet* SwAttrSet::Clone( sal_Bool bItems, SfxItemPool *pToPool ) const
                 : new SwAttrSet( *GetPool(), GetRanges() );
 }
 
-int SwAttrSet::Put_BC( const SfxPoolItem& rAttr,
+bool SwAttrSet::Put_BC( const SfxPoolItem& rAttr,
                        SwAttrSet* pOld, SwAttrSet* pNew )
 {
     pNewSet = pNew;
     pOldSet = pOld;
-    int nRet = 0 != SfxItemSet::Put( rAttr );
+    bool nRet = 0 != SfxItemSet::Put( rAttr );
     pOldSet = pNewSet = 0;
     return nRet;
 }
 
 
-int SwAttrSet::Put_BC( const SfxItemSet& rSet,
+bool SwAttrSet::Put_BC( const SfxItemSet& rSet,
                        SwAttrSet* pOld, SwAttrSet* pNew )
 {
     pNewSet = pNew;
     pOldSet = pOld;
-    int nRet = 0 != SfxItemSet::Put( rSet );
+    bool nRet = 0 != SfxItemSet::Put( rSet );
     pOldSet = pNewSet = 0;
     return nRet;
 }

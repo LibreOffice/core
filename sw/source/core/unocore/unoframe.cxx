@@ -1281,7 +1281,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                 }
             }
         }
-        else if(0 != (bNextFrame = (rPropertyName == UNO_NAME_CHAIN_NEXT_NAME))
+        else if((bNextFrame = (rPropertyName == UNO_NAME_CHAIN_NEXT_NAME))
             || rPropertyName == UNO_NAME_CHAIN_PREV_NAME)
         {
             OUString sChainName;
@@ -1953,7 +1953,7 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
                     pFmt->SetFmtAttr(aSet);
             }
         }
-        else if(0 != (bNextFrame = (rPropertyName == UNO_NAME_CHAIN_NEXT_NAME))
+        else if((bNextFrame = (rPropertyName == UNO_NAME_CHAIN_NEXT_NAME))
                 || rPropertyName == UNO_NAME_CHAIN_PREV_NAME)
         {
             SwDoc* pDoc = pFmt->GetDoc();

@@ -986,7 +986,7 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
                         }
                         else if ((aSetBox.GetTop() && rBox.GetTop() &&
                                  !(*aSetBox.GetTop() == *rBox.GetTop())) ||
-                                 ((!aSetBox.GetTop()) ^ (!rBox.GetTop()))) // XOR expression is sal_True, if one of the two pointers is 0
+                                 ((!aSetBox.GetTop()) != (!rBox.GetTop()))) // XOR expression is sal_True, if one of the two pointers is 0
                         {
                             aSetBoxInfo.SetValid(VALID_TOP, sal_False );
                             aSetBox.SetLine( 0, BOX_LINE_TOP );
@@ -1005,7 +1005,7 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
                         }
                         else if ((aSetBox.GetLeft() && rBox.GetLeft() &&
                                  !(*aSetBox.GetLeft() == *rBox.GetLeft())) ||
-                                 ((!aSetBox.GetLeft()) ^ (!rBox.GetLeft())))
+                                 ((!aSetBox.GetLeft()) != (!rBox.GetLeft())))
                         {
                             aSetBoxInfo.SetValid(VALID_LEFT, sal_False );
                             aSetBox.SetLine( 0, BOX_LINE_LEFT );
@@ -1022,7 +1022,7 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
                         }
                         else if ((aSetBoxInfo.GetVert() && rBox.GetLeft() &&
                                  !(*aSetBoxInfo.GetVert() == *rBox.GetLeft())) ||
-                                 ((!aSetBoxInfo.GetVert()) ^ (!rBox.GetLeft())))
+                                 ((!aSetBoxInfo.GetVert()) != (!rBox.GetLeft())))
                         {   aSetBoxInfo.SetValid( VALID_VERT, sal_False );
                             aSetBoxInfo.SetLine( 0, BOXINFO_LINE_VERT );
                         }
@@ -1038,7 +1038,7 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
                     }
                     else if ((aSetBox.GetRight() && rBox.GetRight() &&
                              !(*aSetBox.GetRight() == *rBox.GetRight())) ||
-                             (!aSetBox.GetRight() ^ !rBox.GetRight()))
+                             (!aSetBox.GetRight() != !rBox.GetRight()))
                     {   aSetBoxInfo.SetValid( VALID_RIGHT, sal_False );
                         aSetBox.SetLine( 0, BOX_LINE_RIGHT );
                     }
@@ -1055,7 +1055,7 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
                         }
                         else if ((aSetBox.GetBottom() && rBox.GetBottom() &&
                                  !(*aSetBox.GetBottom() == *rBox.GetBottom())) ||
-                                 (!aSetBox.GetBottom() ^ !rBox.GetBottom()))
+                                 (!aSetBox.GetBottom() != !rBox.GetBottom()))
                         {   aSetBoxInfo.SetValid( VALID_BOTTOM, sal_False );
                             aSetBox.SetLine( 0, BOX_LINE_BOTTOM );
                         }
@@ -1073,7 +1073,7 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
                         }
                         else if ((aSetBoxInfo.GetHori() && rBox.GetBottom() &&
                                  !(*aSetBoxInfo.GetHori() == *rBox.GetBottom())) ||
-                                 ((!aSetBoxInfo.GetHori()) ^ (!rBox.GetBottom())))
+                                 ((!aSetBoxInfo.GetHori()) != (!rBox.GetBottom())))
                         {
                             aSetBoxInfo.SetValid( VALID_HORI, sal_False );
                             aSetBoxInfo.SetLine( 0, BOXINFO_LINE_HORI );

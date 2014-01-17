@@ -86,7 +86,7 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
     static void SetSelInShell( SwWrtShell& , sal_Bool , const Point* );
     static sal_Bool _CheckForURLOrLNKFile( TransferableDataHelper& rData,
                                 OUString& rFileName, OUString* pTitle = 0 );
-    static int _TestAllowedFormat( const TransferableDataHelper& rData,
+    static bool _TestAllowedFormat( const TransferableDataHelper& rData,
                                         sal_uLong nFormat, sal_uInt16 nDestination );
 
     static bool _PasteFileContent( TransferableDataHelper&,
@@ -180,9 +180,9 @@ public:
 
     static sal_Bool IsPasteSpecial( const SwWrtShell& rWrtShell,
                                 const TransferableDataHelper& );
-    static int PasteUnformatted( SwWrtShell& rSh, TransferableDataHelper& );
-    static int PasteSpecial( SwWrtShell& rSh, TransferableDataHelper&, sal_uLong& rFormatUsed );
-    static int PasteFormat( SwWrtShell& rSh, TransferableDataHelper& rData,
+    static bool PasteUnformatted( SwWrtShell& rSh, TransferableDataHelper& );
+    static bool PasteSpecial( SwWrtShell& rSh, TransferableDataHelper&, sal_uLong& rFormatUsed );
+    static bool PasteFormat( SwWrtShell& rSh, TransferableDataHelper& rData,
                              sal_uLong nFormat );
 
     static void FillClipFmtItem( const SwWrtShell& rSh,

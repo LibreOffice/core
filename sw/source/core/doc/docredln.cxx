@@ -2837,9 +2837,9 @@ void SwRedlineExtraData::Reject( SwPaM& ) const
 {
 }
 
-int SwRedlineExtraData::operator == ( const SwRedlineExtraData& ) const
+bool SwRedlineExtraData::operator == ( const SwRedlineExtraData& ) const
 {
-    return sal_False;
+    return false;
 }
 
 SwRedlineExtraData_FmtColl::SwRedlineExtraData_FmtColl( const OUString& rColl,
@@ -2898,7 +2898,7 @@ void SwRedlineExtraData_FmtColl::Reject( SwPaM& rPam ) const
     }
 }
 
-int SwRedlineExtraData_FmtColl::operator == ( const SwRedlineExtraData& r) const
+bool SwRedlineExtraData_FmtColl::operator == ( const SwRedlineExtraData& r) const
 {
     const SwRedlineExtraData_FmtColl& rCmp = (SwRedlineExtraData_FmtColl&)r;
     return sFmtNm == rCmp.sFmtNm && nPoolId == rCmp.nPoolId &&
@@ -2962,17 +2962,17 @@ void SwRedlineExtraData_Format::Reject( SwPaM& rPam ) const
     pDoc->SetRedlineMode_intern( eOld );
 }
 
-int SwRedlineExtraData_Format::operator == ( const SwRedlineExtraData& rCmp ) const
+bool SwRedlineExtraData_Format::operator == ( const SwRedlineExtraData& rCmp ) const
 {
-    int nRet = 1;
+    bool nRet = true;
     size_t nEnd = aWhichIds.size();
     if( nEnd != ((SwRedlineExtraData_Format&)rCmp).aWhichIds.size() )
-        nRet = 0;
+        nRet = false;
     else
         for( size_t n = 0; n < nEnd; ++n )
             if( ((SwRedlineExtraData_Format&)rCmp).aWhichIds[n] != aWhichIds[n])
             {
-                nRet = 0;
+                nRet = false;
                 break;
             }
     return nRet;
@@ -3015,21 +3015,21 @@ void SwRedlineExtraData_FormattingChanges::Reject( SwPaM& rPam ) const
     // ToDo: Add 'Reject' logic
 }
 
-int SwRedlineExtraData_FormattingChanges::operator == ( const SwRedlineExtraData& rExtraData ) const
+bool SwRedlineExtraData_FormattingChanges::operator == ( const SwRedlineExtraData& rExtraData ) const
 {
     const SwRedlineExtraData_FormattingChanges& rCmp = (SwRedlineExtraData_FormattingChanges&)rExtraData;
 
     if ( !pSet && !rCmp.pSet )
     {
         // Both SfxItemSet are null
-        return 1;
+        return true;
     }
     else if ( pSet && rCmp.pSet && *pSet == *rCmp.pSet )
     {
         // Both SfxItemSet exist and are equal
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
 }
 
 SfxItemSet* SwRedlineExtraData_FormattingChanges::GetItemSet( ) const
@@ -3792,20 +3792,20 @@ const OUString& SwRangeRedline::GetComment( sal_uInt16 nPos ) const
     return GetRedlineData(nPos).sComment;
 }
 
-int SwRangeRedline::operator==( const SwRangeRedline& rCmp ) const
+bool SwRangeRedline::operator==( const SwRangeRedline& rCmp ) const
 {
     return this == &rCmp;
 }
 
-int SwRangeRedline::operator<( const SwRangeRedline& rCmp ) const
+bool SwRangeRedline::operator<( const SwRangeRedline& rCmp ) const
 {
-    sal_Bool nResult = sal_False;
+    bool nResult = false;
 
     if (*Start() < *rCmp.Start())
-        nResult = sal_True;
+        nResult = true;
     else if (*Start() == *rCmp.Start())
         if (*End() < *rCmp.End())
-            nResult = sal_True;
+            nResult = true;
 
     return nResult;
 }

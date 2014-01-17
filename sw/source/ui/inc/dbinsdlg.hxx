@@ -75,9 +75,9 @@ struct SwInsDBColumn
         bIsDBFmt(sal_True)
     {}
 
-    int operator==( const SwInsDBColumn& rCmp ) const
+    bool operator==( const SwInsDBColumn& rCmp ) const
         { return sColumn == rCmp.sColumn; }
-    int operator<( const SwInsDBColumn& rCmp ) const;
+    bool operator<( const SwInsDBColumn& rCmp ) const;
 };
 
 class SwInsDBColumns : public o3tl::sorted_vector<SwInsDBColumn*, o3tl::less_ptr_to<SwInsDBColumn> >

@@ -159,7 +159,7 @@ public:
 
     const _SetGetExpFlds* GetSortLst() const { return pFldSortLst; }
 
-    void MakeFldList( SwDoc& rDoc, int bAll, int eGetMode );
+    void MakeFldList( SwDoc& rDoc, bool bAll, int eGetMode );
 
     void InsDelFldInFldLst( bool bIns, const SwTxtFld& rFld );
 

@@ -2193,7 +2193,7 @@ void SwDocUpdtFld::InsDelFldInFldLst( bool bIns, const SwTxtFld& rFld )
     }
 }
 
-void SwDocUpdtFld::MakeFldList( SwDoc& rDoc, int bAll, int eGetMode )
+void SwDocUpdtFld::MakeFldList( SwDoc& rDoc, bool bAll, int eGetMode )
 {
     if( !pFldSortLst || bAll || !( eGetMode & nFldLstGetMode ) ||
         rDoc.GetNodes().Count() != nNodes )

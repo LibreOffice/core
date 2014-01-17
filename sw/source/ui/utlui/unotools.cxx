@@ -341,7 +341,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
         uno::Any aPFamily = xStyles->getByName( "PageStyles" );
         uno::Reference< container::XNameContainer >  xPFamily;
 
-        if( 0 == (EX_SHOW_DEFAULT_PAGE == nStyleFlags)
+        if( EX_SHOW_DEFAULT_PAGE != nStyleFlags
                 && (aPFamily >>= xPFamily) && !sPageStyle.isEmpty() )
         {
             uno::Any aPStyle = xPFamily->getByName( sPageStyle );

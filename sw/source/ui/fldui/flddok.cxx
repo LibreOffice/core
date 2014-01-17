@@ -420,7 +420,7 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
         m_pFixedCB->Enable(bFixed);
 
         if (IsFldEdit())
-            m_pFixedCB->Check( static_cast< sal_Bool >(((GetCurField()->GetFormat() & AF_FIXED) != 0) & bFixed));
+            m_pFixedCB->Check( (GetCurField()->GetFormat() & AF_FIXED) != 0 && bFixed );
 
         if (m_pNumFormatLB->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND)
             m_pNumFormatLB->SelectEntryPos(0);

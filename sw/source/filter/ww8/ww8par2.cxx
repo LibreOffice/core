@@ -2237,7 +2237,7 @@ void WW8TabDesc::CalcDefaults()
         pR->bLEmptyCol = pR->nCenter[0] - nMinLeft >= MINLAY;
         pR->bREmptyCol = (nMaxRight - pR->nCenter[pR->nWwCols] - nRightMaxThickness) >= MINLAY;
 
-        short nAddCols = pR->bLEmptyCol + pR->bREmptyCol;
+        short nAddCols = short(pR->bLEmptyCol) + short(pR->bREmptyCol);
         sal_uInt16 i;
         sal_uInt16 j = ( pR->bLEmptyCol ) ? 1 : 0;
         for (i = 0; i < pR->nWwCols; ++i)

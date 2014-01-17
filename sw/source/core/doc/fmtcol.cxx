@@ -203,13 +203,13 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                                                         this, pNewNumRuleItem );
     }
 
-    int bContinue = sal_True;
+    bool bContinue = true;
 
     // Check against the own attributes
     if( pNewLRSpace && SFX_ITEM_SET == GetItemState( RES_LR_SPACE, sal_False,
                                         (const SfxPoolItem**)&pOldLRSpace ))
     {
-        int bChg = sal_False;
+        bool bChg = false;
         if( pOldLRSpace != pNewLRSpace )    // Avoid recursion (SetAttr!)
         {
             SvxLRSpaceItem aNew( *pOldLRSpace );
@@ -252,7 +252,7 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         pOldULSpace != pNewULSpace )    // Avoid recursion (SetAttr!)
     {
         SvxULSpaceItem aNew( *pOldULSpace );
-        int bChg = sal_False;
+        bool bChg = false;
         // We had a relative value -> recalculate
         if( 100 != aNew.GetPropUpper() )
         {
@@ -502,9 +502,9 @@ void SwCollCondition::RegisterToFormat( SwFmt& rFmt )
     rFmt.Add( this );
 }
 
-int SwCollCondition::operator==( const SwCollCondition& rCmp ) const
+bool SwCollCondition::operator==( const SwCollCondition& rCmp ) const
 {
-    int nRet = 0;
+    bool nRet = false;
     if( nCondition == rCmp.nCondition )
     {
         if( USRFLD_EXPRESSION & nCondition )
@@ -528,7 +528,7 @@ int SwCollCondition::operator==( const SwCollCondition& rCmp ) const
         }
         else if( aSubCondition.nSubCondition ==
                     rCmp.aSubCondition.nSubCondition )
-            nRet = 1;
+            nRet = true;
     }
     return nRet;
 }

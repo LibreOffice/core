@@ -1398,7 +1398,7 @@ void MSWordSections::CheckForFacinPg( WW8Export& rWrt ) const
     }
 }
 
-int MSWordSections::HasBorderItem( const SwFmt& rFmt )
+bool MSWordSections::HasBorderItem( const SwFmt& rFmt )
 {
     const SfxPoolItem* pItem;
     return SFX_ITEM_SET == rFmt.GetItemState(RES_BOX, true, &pItem) &&

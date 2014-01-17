@@ -57,7 +57,7 @@ void SwTxtAttr::Destroy( SwTxtAttr * pToDestroy, SfxItemPool& rPool )
     rPool.Remove( *pAttr );
 }
 
-int SwTxtAttr::operator==( const SwTxtAttr& rAttr ) const
+bool SwTxtAttr::operator==( const SwTxtAttr& rAttr ) const
 {
     return GetAttr() == rAttr.GetAttr();
 }

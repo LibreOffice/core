@@ -548,7 +548,7 @@ struct SwFindParaText : public SwFindParas
         : rSearchOpt( rOpt ), rCursor( rCrsr ), aSTxt( rOpt ), bReplace( 0 != bRepl ), bSearchInNotes( bSearchNotes )
     {}
     virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, sal_Bool bInReadOnly );
-    virtual int IsReplaceMode() const;
+    virtual bool IsReplaceMode() const;
     virtual ~SwFindParaText();
 };
 
@@ -601,7 +601,7 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
     return bFnd ? FIND_FOUND : FIND_NOT_FOUND;
 }
 
-int SwFindParaText::IsReplaceMode() const
+bool SwFindParaText::IsReplaceMode() const
 {
     return bReplace;
 }

@@ -163,8 +163,8 @@ struct WW8FieldDesc
     WW8_CP nLRes;           ///< Laenge ( == 0, falls kein Ergebnis )
     sal_uInt16 nId;             ///< WW-Id fuer Felder
     sal_uInt8 nOpt;              ///< WW-Flags ( z.B.: vom User geaendert )
-    sal_uInt8 bCodeNest:1;       ///< Befehl rekursiv verwendet
-    sal_uInt8 bResNest:1;        ///< Befehl in Resultat eingefuegt
+    bool bCodeNest:1;       ///< Befehl rekursiv verwendet
+    bool bResNest:1;        ///< Befehl in Resultat eingefuegt
 };
 
 struct WW8PLCFxSave1
@@ -1047,15 +1047,15 @@ public:
     sal_Int16 lid;          // 0x6 language stamp---localized version;
     WW8_PN pnNext;          // 0x8
 
-    sal_uInt16 fDot :1;     // 0xa 0001
-    sal_uInt16 fGlsy :1;
-    sal_uInt16 fComplex :1; // 0004 when 1, file is in complex, fast-saved format.
-    sal_uInt16 fHasPic :1;  // 0008 file contains 1 or more pictures
+    bool fDot :1;     // 0xa 0001
+    bool fGlsy :1;
+    bool fComplex :1; // 0004 when 1, file is in complex, fast-saved format.
+    bool fHasPic :1;  // 0008 file contains 1 or more pictures
     sal_uInt16 cQuickSaves :4; // 00F0 count of times file was quicksaved
-    sal_uInt16 fEncrypted :1; //0100 1 if file is encrypted, 0 if not
-    sal_uInt16 fWhichTblStm :1; //0200 When 0, this fib refers to the table stream
-    sal_uInt16 fReadOnlyRecommended :1;
-    sal_uInt16 fWriteReservation :1;
+    bool fEncrypted :1; //0100 1 if file is encrypted, 0 if not
+    bool fWhichTblStm :1; //0200 When 0, this fib refers to the table stream
+    bool fReadOnlyRecommended :1;
+    bool fWriteReservation :1;
                                                     // named "0Table", when 1, this fib refers to the
                                                     // table stream named "1Table". Normally, a file
                                                     // will have only one table stream, but under unusual
@@ -1063,22 +1063,22 @@ public:
                                                     // both names. In that case, this flag must be used
                                                     // to decide which table stream is valid.
 
-    sal_uInt16 fExtChar :1; // 1000 =1, when using extended character set in file
-    sal_uInt16 fFarEast :1; // 4000 =1, probably, when far-East language vaiants of Word is used to create a file #i90932#
+    bool fExtChar :1; // 1000 =1, when using extended character set in file
+    bool fFarEast :1; // 4000 =1, probably, when far-East language vaiants of Word is used to create a file #i90932#
 
-    sal_uInt16 fObfuscated :1; // 8000=1. specifies whether the document is obfuscated using XOR obfuscation. otherwise this bit MUST be ignored.
+    bool fObfuscated :1; // 8000=1. specifies whether the document is obfuscated using XOR obfuscation. otherwise this bit MUST be ignored.
 
     sal_uInt16 nFibBack;    // 0xc
     sal_uInt16 nHash;       // 0xe  file encrypted hash
     sal_uInt16 nKey;        // 0x10  file encrypted key
     sal_uInt8 envr;         // 0x12 environment in which file was created
                                     //      0 created by Win Word / 1 created by Mac Word
-    sal_uInt8 fMac              :1;          // 0x13 when 1, this file was last saved in the Mac environment
-    sal_uInt8 fEmptySpecial     :1;
-    sal_uInt8 fLoadOverridePage :1;
-    sal_uInt8 fFuturesavedUndo  :1;
-    sal_uInt8 fWord97Saved      :1;
-    sal_uInt8 fWord2000Saved    :1;
+    bool fMac              :1;          // 0x13 when 1, this file was last saved in the Mac environment
+    bool fEmptySpecial     :1;
+    bool fLoadOverridePage :1;
+    bool fFuturesavedUndo  :1;
+    bool fWord97Saved      :1;
+    bool fWord2000Saved    :1;
     sal_uInt8 :2;
 
     sal_uInt16 chse;        // 0x14 default extended character set id for text in document stream. (overidden by chp.chse)
@@ -1489,14 +1489,14 @@ public:
     // Initialisier-Dummy:
     sal_uInt8    nDataStart;
     //-------------------------
-    sal_uInt16  fFacingPages : 1;   // 1 when facing pages should be printed
+    bool        fFacingPages : 1;   // 1 when facing pages should be printed
 
-    sal_uInt16  fWidowControl : 1;  //a: orig 97 docs say
+    bool        fWidowControl : 1;  //a: orig 97 docs say
                                     //    1 when widow control is in effect. 0 when widow control disabled.
                                     //b: MS-DOC: Word Binary File Format (.doc) Structure Specification 2008 says
                                     //    B - unused1 (1 bit): Undefined and MUST be ignored.
 
-    sal_uInt16  fPMHMainDoc : 1;    // 1 when doc is a main doc for Print Merge Helper, 0 when not; default=0
+    bool        fPMHMainDoc : 1;    // 1 when doc is a main doc for Print Merge Helper, 0 when not; default=0
     sal_uInt16  grfSuppression : 2; // 0 Default line suppression storage; 0= form letter line suppression; 1= no line suppression; default=0
     sal_uInt16  fpc : 2;            // 1 footnote position code: 0 as endnotes, 1 at bottom of page, 2 immediately beneath text
     sal_uInt16  : 1;                // 0 unused
@@ -1505,46 +1505,46 @@ public:
     //-------------------------
     sal_uInt16  rncFtn : 2;         // 0 restart index for footnotes, 0 don't restart note numbering, 1 section, 2 page
     sal_uInt16  nFtn : 14;          // 1 initial footnote number for document
-    sal_uInt16  fOutlineDirtySave : 1; // when 1, indicates that information in the hPLCFpad should be refreshed since outline has been dirtied
+    bool        fOutlineDirtySave : 1; // when 1, indicates that information in the hPLCFpad should be refreshed since outline has been dirtied
     sal_uInt16  : 7;                //   reserved
-    sal_uInt16  fOnlyMacPics : 1;   //   when 1, Word believes all pictures recorded in the document were created on a Macintosh
-    sal_uInt16  fOnlyWinPics : 1;   //   when 1, Word believes all pictures recorded in the document were created in Windows
-    sal_uInt16  fLabelDoc : 1;      //   when 1, document was created as a print merge labels document
-    sal_uInt16  fHyphCapitals : 1;  //   when 1, Word is allowed to hyphenate words that are capitalized. When 0, capitalized may not be hyphenated
-    sal_uInt16  fAutoHyphen : 1;    //   when 1, Word will hyphenate newly typed text as a background task
-    sal_uInt16  fFormNoFields : 1;
-    sal_uInt16  fLinkStyles : 1;    //   when 1, Word will merge styles from its template
-    sal_uInt16  fRevMarking : 1;    //   when 1, Word will mark revisions as the document is edited
-    sal_uInt16  fBackup : 1;        //   always make backup when document saved when 1.
-    sal_uInt16  fExactCWords : 1;
-    sal_uInt16  fPagHidden : 1;     //
-    sal_uInt16  fPagResults : 1;
-    sal_uInt16  fLockAtn : 1;       //   when 1, annotations are locked for editing
-    sal_uInt16  fMirrorMargins : 1; //   swap margins on left/right pages when 1.
-    sal_uInt16  fReadOnlyRecommended : 1;// user has recommended that this doc be opened read-only when 1
-    sal_uInt16  fDfltTrueType : 1;  //   when 1, use TrueType fonts by default (flag obeyed only when doc was created by WinWord 2.x)
-    sal_uInt16  fPagSuppressTopSpacing : 1;//when 1, file created with SUPPRESSTOPSPACING=YES in win.ini. (flag obeyed only when doc was created by WinWord 2.x).
-    sal_uInt16  fProtEnabled : 1;   //   when 1, document is protected from edit operations
-    sal_uInt16  fDispFormFldSel : 1;//   when 1, restrict selections to occur only within form fields
-    sal_uInt16  fRMView : 1;        //   when 1, show revision markings on screen
-    sal_uInt16  fRMPrint : 1;       //   when 1, print revision marks when document is printed
-    sal_uInt16  fWriteReservation : 1;
-    sal_uInt16  fLockRev : 1;       //   when 1, the current revision marking state is locked
-    sal_uInt16  fEmbedFonts : 1;    //   when 1, document contains embedded True Type fonts
+    bool        fOnlyMacPics : 1;   //   when 1, Word believes all pictures recorded in the document were created on a Macintosh
+    bool        fOnlyWinPics : 1;   //   when 1, Word believes all pictures recorded in the document were created in Windows
+    bool        fLabelDoc : 1;      //   when 1, document was created as a print merge labels document
+    bool        fHyphCapitals : 1;  //   when 1, Word is allowed to hyphenate words that are capitalized. When 0, capitalized may not be hyphenated
+    bool        fAutoHyphen : 1;    //   when 1, Word will hyphenate newly typed text as a background task
+    bool        fFormNoFields : 1;
+    bool        fLinkStyles : 1;    //   when 1, Word will merge styles from its template
+    bool        fRevMarking : 1;    //   when 1, Word will mark revisions as the document is edited
+    bool        fBackup : 1;        //   always make backup when document saved when 1.
+    bool        fExactCWords : 1;
+    bool        fPagHidden : 1;     //
+    bool        fPagResults : 1;
+    bool        fLockAtn : 1;       //   when 1, annotations are locked for editing
+    bool        fMirrorMargins : 1; //   swap margins on left/right pages when 1.
+    bool        fReadOnlyRecommended : 1;// user has recommended that this doc be opened read-only when 1
+    bool        fDfltTrueType : 1;  //   when 1, use TrueType fonts by default (flag obeyed only when doc was created by WinWord 2.x)
+    bool        fPagSuppressTopSpacing : 1;//when 1, file created with SUPPRESSTOPSPACING=YES in win.ini. (flag obeyed only when doc was created by WinWord 2.x).
+    bool        fProtEnabled : 1;   //   when 1, document is protected from edit operations
+    bool        fDispFormFldSel : 1;//   when 1, restrict selections to occur only within form fields
+    bool        fRMView : 1;        //   when 1, show revision markings on screen
+    bool        fRMPrint : 1;       //   when 1, print revision marks when document is printed
+    bool        fWriteReservation : 1;
+    bool        fLockRev : 1;       //   when 1, the current revision marking state is locked
+    bool        fEmbedFonts : 1;    //   when 1, document contains embedded True Type fonts
     //    compatability options
-    sal_uInt16 copts_fNoTabForInd : 1;          //    when 1, don't add automatic tab stops for hanging indent
-    sal_uInt16 copts_fNoSpaceRaiseLower : 1;        //    when 1, don't add extra space for raised or lowered characters
-    sal_uInt16 copts_fSupressSpbfAfterPgBrk : 1;    // when 1, supress the paragraph Space Before and Space After options after a page break
-    sal_uInt16 copts_fWrapTrailSpaces : 1;      //    when 1, wrap trailing spaces at the end of a line to the next line
-    sal_uInt16 copts_fMapPrintTextColor : 1;        //    when 1, print colors as black on non-color printers
-    sal_uInt16 copts_fNoColumnBalance : 1;      //    when 1, don't balance columns for Continuous Section starts
-    sal_uInt16 copts_fConvMailMergeEsc : 1;
-    sal_uInt16 copts_fSupressTopSpacing : 1;        //    when 1, supress extra line spacing at top of page
-    sal_uInt16 copts_fOrigWordTableRules : 1;   //    when 1, combine table borders like Word 5.x for the Macintosh
-    sal_uInt16 copts_fTransparentMetafiles : 1; //    when 1, don't blank area between metafile pictures
-    sal_uInt16 copts_fShowBreaksInFrames : 1;   //    when 1, show hard page or column breaks in frames
-    sal_uInt16 copts_fSwapBordersFacingPgs : 1; //    when 1, swap left and right pages on odd facing pages
-    sal_uInt16 copts_fExpShRtn : 1;             //    when 1, expand character spaces on the line ending SHIFT+RETURN  // #i56856#
+    bool       copts_fNoTabForInd : 1;          //    when 1, don't add automatic tab stops for hanging indent
+    bool       copts_fNoSpaceRaiseLower : 1;        //    when 1, don't add extra space for raised or lowered characters
+    bool       copts_fSupressSpbfAfterPgBrk : 1;    // when 1, supress the paragraph Space Before and Space After options after a page break
+    bool       copts_fWrapTrailSpaces : 1;      //    when 1, wrap trailing spaces at the end of a line to the next line
+    bool       copts_fMapPrintTextColor : 1;        //    when 1, print colors as black on non-color printers
+    bool       copts_fNoColumnBalance : 1;      //    when 1, don't balance columns for Continuous Section starts
+    bool       copts_fConvMailMergeEsc : 1;
+    bool       copts_fSupressTopSpacing : 1;        //    when 1, supress extra line spacing at top of page
+    bool       copts_fOrigWordTableRules : 1;   //    when 1, combine table borders like Word 5.x for the Macintosh
+    bool       copts_fTransparentMetafiles : 1; //    when 1, don't blank area between metafile pictures
+    bool       copts_fShowBreaksInFrames : 1;   //    when 1, show hard page or column breaks in frames
+    bool       copts_fSwapBordersFacingPgs : 1; //    when 1, swap left and right pages on odd facing pages
+    bool       copts_fExpShRtn : 1;             //    when 1, expand character spaces on the line ending SHIFT+RETURN  // #i56856#
 
     sal_Int16  dxaTab;              //      720 twips - default tab width
     sal_uInt16 wSpare;              //
@@ -1564,11 +1564,11 @@ public:
     sal_uInt16 nEdn : 14;           //      beginning endnote number
     sal_uInt16 epc : 2;             //      endnote position code: 0 at end of section, 3 at end of document
 
-    sal_uInt16 fPrintFormData : 1;  //      only print data inside of form fields
-    sal_uInt16 fSaveFormData : 1;   //      only save document data that is inside of a form field.
-    sal_uInt16 fShadeFormData : 1;  //      shade form fields
+    bool       fPrintFormData : 1;  //      only print data inside of form fields
+    bool       fSaveFormData : 1;   //      only save document data that is inside of a form field.
+    bool       fShadeFormData : 1;  //      shade form fields
     sal_uInt16 : 2;                 //      reserved
-    sal_uInt16 fWCFtnEdn : 1;       //      when 1, include footnotes and endnotes in word count
+    bool       fWCFtnEdn : 1;       //      when 1, include footnotes and endnotes in word count
     sal_Int32   cLines;             //      count of lines tallied by last Word Count operation
     sal_Int32   cWordsFtnEnd;       //      count of words in footnotes and endnotes tallied by last Word Count operation
     sal_Int32   cChFtnEdn;          //      count of characters in footnotes and endnotes tallied by last Word Count operation
@@ -1579,47 +1579,47 @@ public:
     sal_uInt16  wvkSaved : 3;       //      document view kind: 0 Normal view, 1 Outline view, 2 Page View
     sal_uInt16  wScaleSaved : 9;    ///< Specifies the zoom percentage that was in use when the document was saved.
     sal_uInt16  zkSaved : 2;
-    sal_uInt16  fRotateFontW6 : 1;
-    sal_uInt16  iGutterPos : 1 ;
+    bool        fRotateFontW6 : 1;
+    bool        iGutterPos : 1 ;
 
     // hier sollte bei nFib < 103   Schluss sein, sonst ist Datei fehlerhaft!
 
     /*
         bei nFib >= 103 gehts weiter:
     */
-    sal_uInt32 fNoTabForInd : 1;                      // see above in compatability options
-    sal_uInt32 fNoSpaceRaiseLower : 1;                // see above
-    sal_uInt32 fSupressSpbfAfterPageBreak : 1;        // see above
-    sal_uInt32 fWrapTrailSpaces : 1;                  // see above
-    sal_uInt32 fMapPrintTextColor : 1;                // see above
-    sal_uInt32 fNoColumnBalance : 1;                  // see above
-    sal_uInt32 fConvMailMergeEsc : 1;                 // see above
-    sal_uInt32 fSupressTopSpacing : 1;                // see above
-    sal_uInt32 fOrigWordTableRules : 1;               // see above
-    sal_uInt32 fTransparentMetafiles : 1;             // see above
-    sal_uInt32 fShowBreaksInFrames : 1;               // see above
-    sal_uInt32 fSwapBordersFacingPgs : 1;             // see above
-    sal_uInt32 fCompatabilityOptions_Unknown1_13 : 1; // #i78591#
-    sal_uInt32 fExpShRtn : 1;                         // #i78591# and #i56856#
-    sal_uInt32 fCompatabilityOptions_Unknown1_15 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown1_16 : 1; // #i78591#
-    sal_uInt32 fSuppressTopSpacingMac5 : 1;           // Suppress extra line spacing at top
+    bool       fNoTabForInd : 1;                      // see above in compatability options
+    bool       fNoSpaceRaiseLower : 1;                // see above
+    bool       fSupressSpbfAfterPageBreak : 1;        // see above
+    bool       fWrapTrailSpaces : 1;                  // see above
+    bool       fMapPrintTextColor : 1;                // see above
+    bool       fNoColumnBalance : 1;                  // see above
+    bool       fConvMailMergeEsc : 1;                 // see above
+    bool       fSupressTopSpacing : 1;                // see above
+    bool       fOrigWordTableRules : 1;               // see above
+    bool       fTransparentMetafiles : 1;             // see above
+    bool       fShowBreaksInFrames : 1;               // see above
+    bool       fSwapBordersFacingPgs : 1;             // see above
+    bool       fCompatabilityOptions_Unknown1_13 : 1; // #i78591#
+    bool       fExpShRtn : 1;                         // #i78591# and #i56856#
+    bool       fCompatabilityOptions_Unknown1_15 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown1_16 : 1; // #i78591#
+    bool       fSuppressTopSpacingMac5 : 1;           // Suppress extra line spacing at top
                                                       // of page like MacWord 5.x
-    sal_uInt32 fTruncDxaExpand : 1;                    // Expand/Condense by whole number of points
-    sal_uInt32 fPrintBodyBeforeHdr : 1;               // Print body text before header/footer
-    sal_uInt32 fNoLeading : 1;                        // Don't add extra spacebetween rows of text
-    sal_uInt32 fCompatabilityOptions_Unknown1_21 : 1; // #i78591#
-    sal_uInt32 fMWSmallCaps : 1;                     // Use larger small caps like MacWord 5.x
-    sal_uInt32 fCompatabilityOptions_Unknown1_23 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown1_24 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown1_25 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown1_26 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown1_27 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown1_28 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown1_29 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown1_30 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown1_31 : 1; // #i78591#
-    sal_uInt32 fUsePrinterMetrics : 1;                //The magic option
+    bool       fTruncDxaExpand : 1;                    // Expand/Condense by whole number of points
+    bool       fPrintBodyBeforeHdr : 1;               // Print body text before header/footer
+    bool       fNoLeading : 1;                        // Don't add extra spacebetween rows of text
+    bool       fCompatabilityOptions_Unknown1_21 : 1; // #i78591#
+    bool       fMWSmallCaps : 1;                     // Use larger small caps like MacWord 5.x
+    bool       fCompatabilityOptions_Unknown1_23 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown1_24 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown1_25 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown1_26 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown1_27 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown1_28 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown1_29 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown1_30 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown1_31 : 1; // #i78591#
+    bool       fUsePrinterMetrics : 1;                //The magic option
 
     // hier sollte bei nFib <= 105  Schluss sein, sonst ist Datei fehlerhaft!
 
@@ -1635,15 +1635,15 @@ public:
     sal_uInt16 : 1;                   // reserved
     sal_uInt16 lvl : 4;               // Which outline levels are showing in outline view
     sal_uInt16 : 4;                   // reserved
-    sal_uInt16 fHtmlDoc : 1;          // This file is based upon an HTML file
+    bool       fHtmlDoc : 1;          // This file is based upon an HTML file
     sal_uInt16 : 1;                   // reserved
-    sal_uInt16 fSnapBorder : 1;       // Snap table and page borders to page border
-    sal_uInt16 fIncludeHeader : 1;    // Place header inside page border
-    sal_uInt16 fIncludeFooter : 1;    // Place footer inside page border
-    sal_uInt16 fForcePageSizePag : 1; // Are we in online view
-    sal_uInt16 fMinFontSizePag : 1;   // Are we auto-promoting fonts to >= hpsZoonFontPag?
-    sal_uInt16 fHaveVersions : 1;     // versioning is turned on
-    sal_uInt16 fAutoVersion : 1;      // autoversioning is enabled
+    bool       fSnapBorder : 1;       // Snap table and page borders to page border
+    bool       fIncludeHeader : 1;    // Place header inside page border
+    bool       fIncludeFooter : 1;    // Place footer inside page border
+    bool       fForcePageSizePag : 1; // Are we in online view
+    bool       fMinFontSizePag : 1;   // Are we auto-promoting fonts to >= hpsZoonFontPag?
+    bool       fHaveVersions : 1;     // versioning is turned on
+    bool       fAutoVersion : 1;      // autoversioning is enabled
     sal_uInt16 : 14;                  // reserved
     // Skip 12 Bytes here: ASUMI
     sal_Int32 cChWS;
@@ -1658,56 +1658,56 @@ public:
     sal_Int16 hpsZoonFontPag;
     sal_Int16 dywDispPag;
 
-    sal_uInt32 fCompatabilityOptions_Unknown2_1 : 1;  // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_2 : 1;  // #i78591#
-    sal_uInt32 fDontUseHTMLAutoSpacing : 1;
-    sal_uInt32 fCompatabilityOptions_Unknown2_4 : 1;  // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_5 : 1;  // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_6 : 1;  // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_7 : 1;  // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_8 : 1;  // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_9 : 1;  // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_10 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_11 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_12 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_13 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_14 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_15 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_16 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_17 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_18 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_19 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_20 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_21 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_22 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_23 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_24 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_25 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_26 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_27 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_28 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_29 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_30 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_31 : 1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_32 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown2_1 : 1;  // #i78591#
+    bool       fCompatabilityOptions_Unknown2_2 : 1;  // #i78591#
+    bool       fDontUseHTMLAutoSpacing : 1;
+    bool       fCompatabilityOptions_Unknown2_4 : 1;  // #i78591#
+    bool       fCompatabilityOptions_Unknown2_5 : 1;  // #i78591#
+    bool       fCompatabilityOptions_Unknown2_6 : 1;  // #i78591#
+    bool       fCompatabilityOptions_Unknown2_7 : 1;  // #i78591#
+    bool       fCompatabilityOptions_Unknown2_8 : 1;  // #i78591#
+    bool       fCompatabilityOptions_Unknown2_9 : 1;  // #i78591#
+    bool       fCompatabilityOptions_Unknown2_10 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown2_11 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown2_12 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown2_13 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown2_14 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown2_15 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown2_16 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown2_17 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown2_18 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown2_19 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown2_20 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown2_21 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown2_22 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown2_23 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown2_24 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown2_25 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown2_26 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown2_27 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown2_28 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown2_29 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown2_30 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown2_31 : 1; // #i78591#
+    bool       fCompatabilityOptions_Unknown2_32 : 1; // #i78591#
 
     sal_uInt16 fUnknown3 : 15;
-    sal_uInt16 fUseBackGroundInAllmodes : 1;
+    bool       fUseBackGroundInAllmodes : 1;
 
-    sal_uInt16 fDoNotEmbedSystemFont : 1;
-    sal_uInt16 fWordCompat : 1;
-    sal_uInt16 fLiveRecover : 1;
-    sal_uInt16 fEmbedFactoids : 1;
-    sal_uInt16 fFactoidXML : 1;
-    sal_uInt16 fFactoidAllDone : 1;
-    sal_uInt16 fFolioPrint : 1;
-    sal_uInt16 fReverseFolio : 1;
+    bool       fDoNotEmbedSystemFont : 1;
+    bool       fWordCompat : 1;
+    bool       fLiveRecover : 1;
+    bool       fEmbedFactoids : 1;
+    bool       fFactoidXML : 1;
+    bool       fFactoidAllDone : 1;
+    bool       fFolioPrint : 1;
+    bool       fReverseFolio : 1;
     sal_uInt16 iTextLineEnding : 3;
-    sal_uInt16 fHideFcc : 1;
-    sal_uInt16 fAcetateShowMarkup : 1;
-    sal_uInt16 fAcetateShowAtn : 1;
-    sal_uInt16 fAcetateShowInsDel : 1;
-    sal_uInt16 fAcetateShowProps : 1;
+    bool       fHideFcc : 1;
+    bool       fAcetateShowMarkup : 1;
+    bool       fAcetateShowAtn : 1;
+    bool       fAcetateShowInsDel : 1;
+    bool       fAcetateShowProps : 1;
 
     // 2. Initialisier-Dummy:
     sal_uInt8 nDataEnd;

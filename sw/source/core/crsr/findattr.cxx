@@ -49,7 +49,7 @@ using namespace ::com::sun::star::util;
 typedef std::set<SwFmt*> SwpFmts;
 
 // Special case for SvxFontItem: only compare the name
-int CmpAttr( const SfxPoolItem& rItem1, const SfxPoolItem& rItem2 )
+bool CmpAttr( const SfxPoolItem& rItem1, const SfxPoolItem& rItem2 )
 {
     switch( rItem1.Which() )
     {
@@ -196,15 +196,15 @@ class SwAttrCheckArr
     sal_Bool bForward;
 
 public:
-    SwAttrCheckArr( const SfxItemSet& rSet, int bForward, int bNoCollections );
+    SwAttrCheckArr( const SfxItemSet& rSet, bool bForward, bool bNoCollections );
     ~SwAttrCheckArr();
 
     void SetNewSet( const SwTxtNode& rTxtNd, const SwPaM& rPam );
 
     /// how many attributes are there in total?
     sal_uInt16 Count() const    { return aCmpSet.Count(); }
-    int Found() const       { return nFound == aCmpSet.Count(); }
-    int CheckStack();
+    bool Found() const       { return nFound == aCmpSet.Count(); }
+    bool CheckStack();
 
     sal_Int32 Start() const;
     sal_Int32 End() const;
@@ -212,17 +212,17 @@ public:
     sal_Int32 GetNdStt() const { return nNdStt; }
     sal_Int32 GetNdEnd() const { return nNdEnd; }
 
-    int SetAttrFwd( const SwTxtAttr& rAttr );
-    int SetAttrBwd( const SwTxtAttr& rAttr );
+    bool SetAttrFwd( const SwTxtAttr& rAttr );
+    bool SetAttrBwd( const SwTxtAttr& rAttr );
 };
 
-SwAttrCheckArr::SwAttrCheckArr( const SfxItemSet& rSet, int bFwd,
-                                int bNoCollections )
+SwAttrCheckArr::SwAttrCheckArr( const SfxItemSet& rSet, bool bFwd,
+                                bool bNoCollections )
     : aCmpSet( *rSet.GetPool(), RES_CHRATR_BEGIN, RES_TXTATR_END-1 )
 {
     aCmpSet.Put( rSet, sal_False );
-    bNoColls = 0 != bNoCollections;
-    bForward = 0 != bFwd;
+    bNoColls = bNoCollections;
+    bForward = bFwd;
 
     // determine area of Fnd/Stack array (Min/Max)
     SfxItemIter aIter( aCmpSet );
@@ -324,7 +324,7 @@ lcl_IsAttributeIgnorable(sal_Int32 const nNdStart, sal_Int32 const nNdEnd,
             : ((rTmp.nEnd <= nNdStart) || (nNdEnd <= rTmp.nStt)));
 }
 
-int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
+bool SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
 {
     _SwSrchChrAttr aTmp( rAttr.GetAttr(), *rAttr.GetStart(), *rAttr.GetAnyEnd() );
 
@@ -477,7 +477,7 @@ int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
     return Found();
 }
 
-int SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
+bool SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
 {
     _SwSrchChrAttr aTmp( rAttr.GetAttr(), *rAttr.GetStart(), *rAttr.GetAnyEnd() );
 
@@ -650,10 +650,10 @@ sal_Int32 SwAttrCheckArr::End() const
     return nEnd;
 }
 
-int SwAttrCheckArr::CheckStack()
+bool SwAttrCheckArr::CheckStack()
 {
     if( !nStackCnt )
-        return sal_False;
+        return false;
 
     sal_uInt16 n;
     const sal_Int32 nSttPos = Start();
@@ -877,7 +877,7 @@ bool SwPaM::Find( const SfxPoolItem& rAttr, bool bValue, SwMoveFn fnMove,
 {
     // determine which attribute is searched:
     const sal_uInt16 nWhich = rAttr.Which();
-    int bCharAttr = isCHRATR(nWhich) || isTXTATR(nWhich);
+    bool bCharAttr = isCHRATR(nWhich) || isTXTATR(nWhich);
 
     SwPaM* pPam = MakeRegion( fnMove, pRegion );
 
@@ -1065,7 +1065,7 @@ struct SwFindParaAttr : public SwFindParas
     virtual ~SwFindParaAttr()   { delete pSTxt; }
 
     virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, sal_Bool bInReadOnly );
-    virtual int IsReplaceMode() const;
+    virtual bool IsReplaceMode() const;
 };
 
 int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
@@ -1206,7 +1206,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
         return FIND_FOUND;
 }
 
-int SwFindParaAttr::IsReplaceMode() const
+bool SwFindParaAttr::IsReplaceMode() const
 {
     return ( pSearchOpt && !pSearchOpt->replaceString.isEmpty() ) ||
            ( pReplSet && pReplSet->Count() );

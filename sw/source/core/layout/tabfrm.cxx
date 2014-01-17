@@ -4633,7 +4633,7 @@ bool SwRowFrm::IsRowSplitAllowed() const
 
     const SwTableLineFmt* pFrmFmt = (SwTableLineFmt*)GetTabLine()->GetFrmFmt();
     const SwFmtRowSplit& rLP = pFrmFmt->GetRowSplit();
-    return 0 != rLP.GetValue();
+    return rLP.GetValue();
 }
 
 /*************************************************************************

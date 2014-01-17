@@ -394,8 +394,8 @@ public:
     virtual SwCntntNode *JoinPrev();
     /** Is it possible to join two nodes?
        In pIdx the second position can be returned. */
-    int CanJoinNext( SwNodeIndex* pIdx =0 ) const;
-    int CanJoinPrev( SwNodeIndex* pIdx =0 ) const;
+    bool CanJoinNext( SwNodeIndex* pIdx =0 ) const;
+    bool CanJoinPrev( SwNodeIndex* pIdx =0 ) const;
 
     void MakeStartIndex( SwIndex * pIdx )   { pIdx->Assign( this, 0 ); }
     void MakeEndIndex( SwIndex * pIdx )     { pIdx->Assign( this, Len() ); }

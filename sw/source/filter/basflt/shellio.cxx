@@ -218,7 +218,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
             else
                 pUndoPam->GetPoint()->nContent.Assign( 0, 0 );
 
-            int bChkHeaderFooter = pNd->FindHeaderStartNode() ||
+            bool bChkHeaderFooter = pNd->FindHeaderStartNode() ||
                                    pNd->FindFooterStartNode();
 
             // Suche alle neuen Fly's und speicher sie als einzelne Undo

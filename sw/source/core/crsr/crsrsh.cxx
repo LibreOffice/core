@@ -2838,7 +2838,7 @@ sal_Bool SwCrsrShell::FindValidCntntNode( sal_Bool bOnlyText )
         ( !IsReadOnlyAvailable() &&
            pSectNd->GetSection().IsProtectFlag() )) )
     {
-        typedef SwCntntNode* (SwNodes:: *FNGoSection)( SwNodeIndex *, int, int ) const;
+        typedef SwCntntNode* (SwNodes:: *FNGoSection)( SwNodeIndex *, bool, bool ) const;
         FNGoSection funcGoSection = &SwNodes::GoNextSection;
 
         bOk = sal_False;

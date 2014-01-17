@@ -2683,7 +2683,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
     // check the availability of all data in the config item
     uno::Reference< XResultSet> xResultSet = rMMConfig.GetResultSet();
     if(!xResultSet.is())
-        return false;
+        return 0;
     bInMerge = sal_True;
     sal_Int32 nRet  = 0;
     pImpl->pMergeData = new SwDSParam(

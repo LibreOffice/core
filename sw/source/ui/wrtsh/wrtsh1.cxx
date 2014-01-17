@@ -1644,7 +1644,7 @@ sal_Bool SwWrtShell::Pop( sal_Bool bOldCrsr )
 
 bool SwWrtShell::CanInsert()
 {
-    return (!(IsSelFrmMode() | IsObjSelected() | (GetView().GetDrawFuncPtr() != NULL) | (GetView().GetPostItMgr()->GetActiveSidebarWin()!= NULL)));
+    return (!(IsSelFrmMode() || IsObjSelected() || (GetView().GetDrawFuncPtr() != NULL) || (GetView().GetPostItMgr()->GetActiveSidebarWin()!= NULL)));
 }
 
 void SwWrtShell::ChgDBData(const SwDBData& aDBData)

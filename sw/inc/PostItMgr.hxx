@@ -146,7 +146,7 @@ class SwPostItMgr: public SfxListener
         sw::sidebarwindows::SwSidebarWin* mpActivePostIt;
         bool                            mbLayout;
         long                            mbLayoutHeight;
-        long                            mbLayouting;
+        bool                            mbLayouting;
         bool                            mbReadOnly;
         bool                            mbDeleteNote;
         FieldShadowState                mShadowState;

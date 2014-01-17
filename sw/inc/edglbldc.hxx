@@ -54,9 +54,9 @@ public:
     sal_uLong GetDocPos() const { return nDocPos; }
 
     /// For sorting.
-    inline int operator==( const SwGlblDocContent& rCmp ) const
+    inline bool operator==( const SwGlblDocContent& rCmp ) const
         {   return GetDocPos() == rCmp.GetDocPos(); }
-    inline int operator<( const SwGlblDocContent& rCmp ) const
+    inline bool operator<( const SwGlblDocContent& rCmp ) const
         {   return GetDocPos() < rCmp.GetDocPos(); }
 };
 

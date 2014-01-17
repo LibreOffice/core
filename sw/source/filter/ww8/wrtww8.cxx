@@ -414,7 +414,7 @@ static void WriteDop( WW8Export& rWrt )
     rDop.cParasFtnEdn   = rDStat.nPara;
     rDop.cLinesFtnEdn   = rDStat.nPara;
 
-    rDop.fDontUseHTMLAutoSpacing = (rWrt.pDoc->get(IDocumentSettingAccess::PARA_SPACE_MAX) != 0);
+    rDop.fDontUseHTMLAutoSpacing = rWrt.pDoc->get(IDocumentSettingAccess::PARA_SPACE_MAX);
 
     rDop.fExpShRtn = !rWrt.pDoc->get(IDocumentSettingAccess::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK); // #i56856#
 

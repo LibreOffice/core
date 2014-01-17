@@ -1623,7 +1623,7 @@ void SwTableLine::ChgFrmFmt( SwTableLineFmt *pNewFmt )
                                                 pRow == pTab->GetFirstNonHeadlineRow();
             if ( bInFirstNonHeadlineRow ||
                  !pRow->GetNext() ||
-                 0 != ( bInFollowFlowRow = pRow->IsInFollowFlowRow() ) ||
+                 ( bInFollowFlowRow = pRow->IsInFollowFlowRow() ) ||
                  0 != pRow->IsInSplitTableRow() )
             {
                 if ( bInFirstNonHeadlineRow || bInFollowFlowRow )

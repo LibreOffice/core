@@ -196,7 +196,7 @@ void SwFmt::CopyAttrs( const SwFmt& rFmt, sal_Bool bReplace )
         SwAttrSet aOld( *aSet.GetPool(), aSet.GetRanges() ),
                   aNew( *aSet.GetPool(), aSet.GetRanges() );
 
-        if ( 0 != aSet.Put_BC( *pChgSet, &aOld, &aNew ) )
+        if ( aSet.Put_BC( *pChgSet, &aOld, &aNew ) )
         {
             // a few special treatments for attributes
             aSet.SetModifyAtAttr( this );
@@ -412,7 +412,7 @@ bool SwFmt::SetFmtAttr( const SfxPoolItem& rAttr )
         SwAttrSet aOld( *aSet.GetPool(), aSet.GetRanges() ),
                   aNew( *aSet.GetPool(), aSet.GetRanges() );
 
-        bRet = 0 != aSet.Put_BC( rAttr, &aOld, &aNew );
+        bRet = aSet.Put_BC( rAttr, &aOld, &aNew );
         if( bRet )
         {
             // some special treatments for attributes
@@ -459,7 +459,7 @@ bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
     {
         SwAttrSet aOld( *aSet.GetPool(), aSet.GetRanges() ),
                   aNew( *aSet.GetPool(), aSet.GetRanges() );
-        bRet = 0 != aSet.Put_BC( rSet, &aOld, &aNew );
+        bRet = aSet.Put_BC( rSet, &aOld, &aNew );
         if( bRet )
         {
             // some special treatments for attributes

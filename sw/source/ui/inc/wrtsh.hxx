@@ -130,17 +130,17 @@ public:
 
     void    EnterExtMode();
     void    LeaveExtMode();
-    long    ToggleExtMode();
+    bool    ToggleExtMode();
     sal_Bool    IsExtMode() const { return bExtMode; }
 
     void    EnterAddMode();
     void    LeaveAddMode();
-    long    ToggleAddMode();
+    bool    ToggleAddMode();
     sal_Bool    IsAddMode() const { return bAddMode; }
 
     void    EnterBlockMode();
     void    LeaveBlockMode();
-    long    ToggleBlockMode();
+    bool    ToggleBlockMode();
     sal_Bool    IsBlockMode() const { return bBlockMode; }
 
     void    SetInsMode( sal_Bool bOn = sal_True );

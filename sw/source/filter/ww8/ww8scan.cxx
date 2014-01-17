@@ -3076,7 +3076,7 @@ WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream* pSt, SvStream* pTblSt,
     : WW8PLCFx_Fc_FKP(pSt, pTblSt, pDataSt, *rBase.pWw8Fib, ePl,
     rBase.WW8Cp2Fc(0)), rSBase(rBase), nAttrStart(-1), nAttrEnd(-1),
     bLineEnd(false),
-    bComplex( (7 < rBase.pWw8Fib->nVersion) || (0 != rBase.pWw8Fib->fComplex) )
+    bComplex( (7 < rBase.pWw8Fib->nVersion) || rBase.pWw8Fib->fComplex )
 {
     ResetAttrStartEnd();
 
@@ -3384,7 +3384,7 @@ void WW8PLCFx_SEPX::SetIdx( sal_uLong nIdx )
 
 bool WW8PLCFx_SEPX::SeekPos(WW8_CP nCpPos)
 {
-    return pPLCF ? pPLCF->SeekPos( nCpPos ) : 0;
+    return pPLCF && pPLCF->SeekPos( nCpPos );
 }
 
 WW8_CP WW8PLCFx_SEPX::Where()
@@ -7175,10 +7175,10 @@ void WW8DopTypography::ReadFromMem(sal_uInt8 *&pData)
 
 void WW8DopTypography::WriteToMem(sal_uInt8 *&pData) const
 {
-    sal_uInt16 a16Bit = fKerningPunct;
+    sal_uInt16 a16Bit = sal_uInt16(fKerningPunct);
     a16Bit |= (iJustification << 1) & 0x0006;
     a16Bit |= (iLevelOfKinsoku << 3) & 0x0018;
-    a16Bit |= (f2on1 << 5) & 0x0020;
+    a16Bit |= (int(f2on1) << 5) & 0x0020;
     a16Bit |= (reserved1 << 6) & 0x03C0;
     a16Bit |= (reserved2 << 10) & 0xFC00;
     Set_UInt16(pData,a16Bit);

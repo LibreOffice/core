@@ -64,7 +64,7 @@ struct _PercentHdl
         : pDSh(pSh), bBack(false), bNodeIdx(false)
     {
         nActPos = nStt;
-        if( 0 != ( bBack = (nStt > nEnd )) )
+        if( ( bBack = (nStt > nEnd )) )
         {
             sal_uLong n = nStt; nStt = nEnd; nEnd = n;
         }
@@ -88,7 +88,7 @@ struct _PercentHdl
             nEnd = rPam.GetPoint()->nNode.GetIndex();
         }
         nActPos = nStt;
-        if( 0 != ( bBack = (nStt > nEnd )) )
+        if( ( bBack = (nStt > nEnd )) )
         {
             sal_uLong n = nStt; nStt = nEnd; nEnd = n;
         }
@@ -588,7 +588,7 @@ GoNextCell:
             ++aCellStt;
             if( 0 == ( pCNd = aCellStt.GetNode().GetCntntNode() ))
                 pCNd = aCellStt.GetNodes().GoNext( &aCellStt );
-            if( 0 == ( bProt = pCNd->IsProtect() ))
+            if( !( bProt = pCNd->IsProtect() ))
                 break;
             aCellStt.Assign( *pCNd->FindTableBoxStartNode()->EndOfSectionNode(), 1 );
         } while( bProt );
@@ -637,7 +637,7 @@ GoPrevCell:
             aCellStt.Assign( *pNd->StartOfSectionNode(), +1 );
             if( 0 == ( pCNd = aCellStt.GetNode().GetCntntNode() ))
                 pCNd = pNd->GetNodes().GoNext( &aCellStt );
-            if( 0 == ( bProt = pCNd->IsProtect() ))
+            if( !( bProt = pCNd->IsProtect() ))
                 break;
             aCellStt.Assign( *pNd->FindTableBoxStartNode(), -1 );
         } while( bProt );

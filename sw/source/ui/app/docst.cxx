@@ -483,7 +483,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
     }
 
         if(rReq.IsAPI()) // Basic only gets TRUE or FALSE
-            rReq.SetReturnValue(SfxUInt16Item(nSlot, nRet !=0));
+            rReq.SetReturnValue(SfxUInt16Item(nSlot, sal_uInt16(nRet !=0)));
         else
             rReq.SetReturnValue(SfxUInt16Item(nSlot, nRet));
 }

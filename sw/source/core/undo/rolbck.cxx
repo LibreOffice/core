@@ -381,7 +381,7 @@ void SwHistorySetTOXMark::SetInDoc( SwDoc* pDoc, bool )
                         nsSetAttrMode::SETATTR_NOTXTATRCHR );
 }
 
-int SwHistorySetTOXMark::IsEqual( const SwTOXMark& rCmp ) const
+bool SwHistorySetTOXMark::IsEqual( const SwTOXMark& rCmp ) const
 {
     return m_TOXName   == rCmp.GetTOXType()->GetTypeName() &&
            m_eTOXTypes == rCmp.GetTOXType()->GetType() &&

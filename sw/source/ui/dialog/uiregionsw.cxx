@@ -1407,7 +1407,7 @@ IMPL_LINK( SwEditRegionDlg, SubRegionEventHdl, VclWindowEvent *, pEvent )
 Image SwEditRegionDlg::BuildBitmap( sal_Bool bProtect, sal_Bool bHidden )
 {
     ImageList& rImgLst = aImageIL;
-    return rImgLst.GetImage((!bHidden+(bProtect<<1)) + 1);
+    return rImgLst.GetImage((int(!bHidden)+(bProtect<<1)) + 1);
 }
 
 /*--------------------------------------------------------------------
@@ -1602,7 +1602,7 @@ void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
     {
         const OUString sSectionName(pSectionData->GetSectionName());
         m_pCurName->SetText(rSh.GetUniqueSectionName(&sSectionName));
-        m_pProtectCB->Check( 0 != pSectionData->IsProtectFlag() );
+        m_pProtectCB->Check( pSectionData->IsProtectFlag() );
         m_sFileName = pSectionData->GetLinkFileName();
         m_sFilePasswd = pSectionData->GetLinkFilePassword();
         m_pFileCB->Check( !m_sFileName.isEmpty() );

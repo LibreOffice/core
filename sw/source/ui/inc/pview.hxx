@@ -187,7 +187,7 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
     SW_DLLPRIVATE DECL_LINK( ScrollHdl, SwScrollbar * );
     SW_DLLPRIVATE DECL_LINK( EndScrollHdl, SwScrollbar * );
     SW_DLLPRIVATE DECL_LINK( BtnPage, Button * );
-    SW_DLLPRIVATE int             ChgPage( int eMvMode, int bUpdateScrollbar = sal_True );
+    SW_DLLPRIVATE bool            ChgPage( int eMvMode, int bUpdateScrollbar = sal_True );
 
 
     SW_DLLPRIVATE virtual SfxPrinter*     GetPrinter( sal_Bool bCreate = sal_False );

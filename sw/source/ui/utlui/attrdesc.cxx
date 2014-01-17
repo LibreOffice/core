@@ -1144,7 +1144,7 @@ SfxItemPresentation SwInvertGrf::GetPresentation(
     case SFX_ITEM_PRESENTATION_COMPLETE:
         if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
         {
-            sal_uInt16 nId = 0 != GetValue() ? STR_INVERT : STR_INVERT_NOT;
+            sal_uInt16 nId = GetValue() ? STR_INVERT : STR_INVERT_NOT;
             rText = SW_RESSTR( nId );
         }
         break;

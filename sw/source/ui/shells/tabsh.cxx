@@ -1308,7 +1308,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
             case RES_ROW_SPLIT:
             {
                 const SwFmtLayoutSplit& rTabSplit = pFmt->GetLayoutSplit();
-                if ( 0 == rTabSplit.GetValue() )
+                if ( !rTabSplit.GetValue() )
                 {
                     rSet.DisableItem( nSlot );
                 }
