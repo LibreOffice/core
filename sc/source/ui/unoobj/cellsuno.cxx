@@ -1706,7 +1706,7 @@ void ScCellRangesBase::InitInsertRange(ScDocShell* pDocSh, const ScRange& rR)
     }
 }
 
-void ScCellRangesBase::AddRange(const ScRange& rRange, const sal_Bool bMergeRanges)
+void ScCellRangesBase::AddRange(const ScRange& rRange, const bool bMergeRanges)
 {
     if (bMergeRanges)
         aRanges.Join(rRange);

@@ -247,7 +247,7 @@ public:
     ScDocShell*             GetDocShell() const     { return pDocShell; }
     ScDocument*             GetDocument() const;
     const ScRangeList&      GetRangeList() const    { return aRanges; }
-    void                    AddRange(const ScRange& rRange, const sal_Bool bMergeRanges);
+    void                    AddRange(const ScRange& rRange, const bool bMergeRanges);
 
                             // arouse object created via service:
     void                    InitInsertRange(ScDocShell* pDocSh, const ScRange& rR);
