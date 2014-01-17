@@ -51,6 +51,10 @@ core_constructor_list = [
 # sax/source/expatwrap/expwrap.component
     "com_sun_star_comp_extensions_xml_sax_ParserExpat_get_implementation",
     "com_sun_star_comp_extensions_xml_sax_FastParser_get_implementation",
+# sfx2/util/sfx.component
+    "com_sun_star_comp_sfx2_GlobalEventBroadcaster_get_implementation",
+    "com_sun_star_comp_office_FrameLoader_get_implementation",
+    "SfxDocumentMetaData_get_implementation",
 # svtools/util/svt.component
     "com_sun_star_comp_graphic_GraphicProvider_get_implementation",
 # svx/util/svx.component
