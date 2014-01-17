@@ -328,7 +328,7 @@ class HbLayoutEngine : public ServerFontLayoutEngine
 private:
     UScriptCode             meScriptCode;
     hb_face_t*              mpHbFace;
-    int                     fUnitsPerEM;
+    int                     mfUnitsPerEM;
 
 public:
                             HbLayoutEngine(ServerFont&);
@@ -340,14 +340,14 @@ public:
 HbLayoutEngine::HbLayoutEngine(ServerFont& rServerFont)
 :   meScriptCode(USCRIPT_INVALID_CODE),
     mpHbFace(NULL),
-    fUnitsPerEM(0)
+    mfUnitsPerEM(0)
 {
     FT_Face aFtFace = rServerFont.GetFtFace();
-    fUnitsPerEM = rServerFont.GetEmUnits();
+    mfUnitsPerEM = rServerFont.GetEmUnits();
 
     mpHbFace = hb_face_create_for_tables(getFontTable, &rServerFont, NULL);
     hb_face_set_index(mpHbFace, aFtFace->face_index);
-    hb_face_set_upem(mpHbFace, fUnitsPerEM);
+    hb_face_set_upem(mpHbFace, mfUnitsPerEM);
 }
 
 HbLayoutEngine::~HbLayoutEngine()
@@ -381,8 +381,8 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
     hb_font_t *pHbFont = hb_font_create(mpHbFace);
     hb_font_set_funcs(pHbFont, pHbFontFuncs, &rFont, NULL);
     hb_font_set_scale(pHbFont,
-            ((uint64_t) aFtFace->size->metrics.x_scale * (uint64_t) fUnitsPerEM) >> 16,
-            ((uint64_t) aFtFace->size->metrics.y_scale * (uint64_t) fUnitsPerEM) >> 16);
+            ((uint64_t) aFtFace->size->metrics.x_scale * (uint64_t) mfUnitsPerEM) >> 16,
+            ((uint64_t) aFtFace->size->metrics.y_scale * (uint64_t) mfUnitsPerEM) >> 16);
     hb_font_set_ppem(pHbFont, aFtFace->size->metrics.x_ppem, aFtFace->size->metrics.y_ppem);
 
     // allocate temporary arrays, note: round to even
