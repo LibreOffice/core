@@ -119,7 +119,6 @@ const Graphic ImpLoadLinkedGraphic( const OUString& aFileName, const OUString& a
             ? rGF.GetImportFormatNumber( aFilterName )
             : GRFILTER_FORMAT_DONTKNOW;
 
-        OUString aEmptyStr;
         css::uno::Sequence< css::beans::PropertyValue > aFilterData( 1 );
 
         // TODO: Room for improvement:
@@ -127,8 +126,15 @@ const Graphic ImpLoadLinkedGraphic( const OUString& aFileName, const OUString& a
         // But this link is required by some filters to access the native graphic (PDF export/MS export),
         // there we should create a new service to provide this data if needed
         aFilterData[ 0 ].Name = "CreateNativeLink";
-        aFilterData[ 0 ].Value = Any( true );
-        rGF.ImportGraphic( aGraphic, aEmptyStr, *pInStrm, nFilter, NULL, 0, &aFilterData );
+        aFilterData[ 0 ].Value = Any( sal_True );
+
+        // #i123042# for e.g SVG the path is needed, so hand it over here. I have no real idea
+        // what consequences this may have; maybe this is not handed over by purpose here. Not
+        // handing it over means that any GraphicFormat that internallv needs a path as base
+        // to interpret included links may fail.
+        // Alternatively the path may be set at the result after this call when it is known
+        // that it is a SVG graphic, but only because noone yet tried to interpret it.
+        rGF.ImportGraphic( aGraphic, aFileName, *pInStrm, nFilter, NULL, 0, &aFilterData );
     }
     return aGraphic;
 }

@@ -324,7 +324,9 @@ sal_Bool SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
     else if( !pDownLoadData )
     {
         pStream->Seek( STREAM_SEEK_TO_BEGIN );
-        nRes = rGF.ImportGraphic( rGrf, aEmptyStr, *pStream, nFilter );
+
+        // #i123042# for e.g. SVG the path is needed, see same TaskID in svx for more info
+        nRes = rGF.ImportGraphic( rGrf, sFileNm, *pStream, nFilter );
     }
     else
     {
