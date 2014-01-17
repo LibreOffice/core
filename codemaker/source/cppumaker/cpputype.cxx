@@ -3357,6 +3357,7 @@ void ServiceType::dumpHxxFile(
         includes.addReference();
         includes.addRtlUstringH();
         includes.addRtlUstringHxx();
+        includes.add("com.sun.star.lang.XInitialization");
         includes.add("com.sun.star.uno.DeploymentException");
         includes.add("com.sun.star.uno.XComponentContext");
         for (std::vector<
@@ -3460,7 +3461,7 @@ void ServiceType::dumpHxxFile(
                       "LO_URE_CTOR_FUN_")
                   << name_.replaceAll(".", "_dot_")
                   << (")(the_context.get(), ::css::uno::Sequence<"
-                      " ::css::uno::Any >().get())), ::SAL_NO_ACQUIRE),"
+                      " ::css::uno::Any >())), ::SAL_NO_ACQUIRE),"
                       " ::css::uno::UNO_QUERY);\n#else\n")
                   << indent() << "the_instance = ::css::uno::Reference< "
                   << scopedBaseName
@@ -3599,12 +3600,22 @@ void ServiceType::dumpHxxFile(
                         u2b(i->parameters.back().name), "param",
                         codemaker::cpp::ITM_NONGLOBAL);
                 } else if (i->parameters.empty()) {
-                    o << ("::css::uno::Sequence< ::css::uno::Any >()");
+                    o << "::css::uno::Sequence< ::css::uno::Any >()";
                 } else {
                     o << "the_arguments";
                 }
-                o << (".get())), ::SAL_NO_ACQUIRE), ::css::uno::UNO_QUERY);\n"
-                      "#else\n")
+                o << ")), ::SAL_NO_ACQUIRE), ::css::uno::UNO_QUERY);\n" << indent()
+                  << ("::css::uno::Reference< ::css::lang::XInitialization > "
+                      "init(the_instance, ::css::uno::UNO_QUERY);\n")
+                  << indent() << "if (init.is()) {\n"
+                  << indent() << "    init->initialize(";
+                if (i->parameters.empty()) {
+                    o << "::css::uno::Sequence< ::css::uno::Any >()";
+                } else {
+                    o << "the_arguments";
+                }
+                o << ");\n" << indent() << "}\n";
+                o << ("#else\n")
                   << indent() << "the_instance = ::css::uno::Reference< "
                   << scopedBaseName
                   << (" >(the_context->getServiceManager()->"
