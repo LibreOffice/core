@@ -166,7 +166,7 @@ inline bool ScUnoConversion::Contains(
         (rApiOuter.StartRow <= rApiInner.StartRow) && (rApiInner.EndRow <= rApiOuter.EndRow);
 }
 
-inline sal_Bool operator==(
+inline bool operator==(
         const ::com::sun::star::table::CellAddress& rApiAddress1,
         const ::com::sun::star::table::CellAddress& rApiAddress2 )
 {
@@ -176,14 +176,14 @@ inline sal_Bool operator==(
         (rApiAddress1.Sheet == rApiAddress2.Sheet);
 }
 
-inline sal_Bool operator!=(
+inline bool operator!=(
         const ::com::sun::star::table::CellAddress& rApiAddress1,
         const ::com::sun::star::table::CellAddress& rApiAddress2 )
 {
     return !(rApiAddress1 == rApiAddress2);
 }
 
-inline sal_Bool operator==(
+inline bool operator==(
         const ::com::sun::star::table::CellRangeAddress& rApiRange1,
         const ::com::sun::star::table::CellRangeAddress& rApiRange2 )
 {
@@ -195,7 +195,7 @@ inline sal_Bool operator==(
         (rApiRange1.Sheet == rApiRange2.Sheet);
 }
 
-inline sal_Bool operator!=(
+inline bool operator!=(
         const ::com::sun::star::table::CellRangeAddress& rApiRange1,
         const ::com::sun::star::table::CellRangeAddress& rApiRange2 )
 {
