@@ -1160,7 +1160,7 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
                 {
                 case RES_HIDDENPARAFLD:
                     SetCalcHiddenParaField();
-                    // kein break !
+                    // no break
                 case RES_DBSETNUMBERFLD:
                 case RES_GETEXPFLD:
                 case RES_DBFLD:

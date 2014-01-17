@@ -2014,7 +2014,7 @@ IMPL_LINK_NOARG(SvxExtParagraphTabPage, OrphanHdl_Impl)
             if ( m_pWidowBox->GetState() == STATE_NOCHECK )
                 m_pKeepTogetherBox->Enable();
 
-        // kein break
+        // no break
         case STATE_DONTKNOW:
             m_pOrphanRowNo->Enable(sal_False);
             m_pOrphanRowLabel->Enable(sal_False);

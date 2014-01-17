@@ -2875,7 +2875,7 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
                     }
                     OSL_ENSURE( !this,
                             "LRSpace ueber mehrere Absaetze gesetzt!" );
-                    // kein break (hier sollen wir trotzdem nie hinkommen;
+                    // no break (shouldn't reach this point anyway)
                 default:
 
                     // ggfs. ein Bookmark anspringen

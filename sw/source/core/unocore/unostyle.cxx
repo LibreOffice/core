@@ -3066,45 +3066,45 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                     switch(pEntry->nWID)
                     {
                         case FN_UNO_FOOTER_ON:                  bFooter = true;
-                        //kein break;
+                        // no break
                         case FN_UNO_HEADER_ON:                  nRes = SID_ATTR_PAGE_ON;
                         break;
                         case FN_UNO_FOOTER_BACKGROUND:          bFooter = true;
-                        // kein break;
+                        // no break
                         case FN_UNO_HEADER_BACKGROUND:          nRes = RES_BACKGROUND; nItemType = TYPE_BRUSH;
                         break;
                         case FN_UNO_FOOTER_BOX:                 bFooter = true;
-                        // kein break;
+                        // no break
                         case FN_UNO_HEADER_BOX:                 nRes = RES_BOX; nItemType = TYPE_BOX;
                         break;
                         case FN_UNO_FOOTER_LR_SPACE:            bFooter = true;
-                        // kein break;
+                        // no break
                         case FN_UNO_HEADER_LR_SPACE:            nRes = RES_LR_SPACE;nItemType = TYPE_LRSPACE;
                         break;
                         case FN_UNO_FOOTER_SHADOW:              bFooter = true;
-                        // kein break;
+                        // no break
                         case FN_UNO_HEADER_SHADOW:              nRes = RES_SHADOW;nItemType = TYPE_SHADOW;
                         break;
                         case FN_UNO_FOOTER_BODY_DISTANCE:       bFooter = true;
-                        // kein break;
+                        // no break
                         case FN_UNO_HEADER_BODY_DISTANCE:       nRes = RES_UL_SPACE;nItemType = TYPE_ULSPACE;
                         break;
                         case FN_UNO_FOOTER_IS_DYNAMIC_DISTANCE: bFooter = true;
-                        // kein break;
+                        // no break
                         case FN_UNO_HEADER_IS_DYNAMIC_DISTANCE: nRes = SID_ATTR_PAGE_DYNAMIC;
                         break;
                         case FN_UNO_FOOTER_SHARE_CONTENT:       bFooter = true;
-                        // kein break;
+                        // no break
                         case FN_UNO_HEADER_SHARE_CONTENT:       nRes = SID_ATTR_PAGE_SHARED;
                         break;
                         case FN_UNO_FIRST_SHARE_CONTENT: nRes = SID_ATTR_PAGE_SHARED_FIRST;
                         break;
                         case FN_UNO_FOOTER_HEIGHT:              bFooter = true;
-                        // kein break;
+                        // no break
                         case FN_UNO_HEADER_HEIGHT:              nRes = SID_ATTR_PAGE_SIZE;nItemType = TYPE_SIZE;
                         break;
                         case FN_UNO_FOOTER_EAT_SPACING:     bFooter = true;
-                        // kein break;
+                        // no break
                         case FN_UNO_HEADER_EAT_SPACING:     nRes = RES_HEADER_FOOTER_EAT_SPACING;nItemType = TYPE_SIZE;
                         break;
                     }
@@ -3317,7 +3317,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                         {
                             case FN_UNO_FOOTER_ON:
                                 bFooter = true;
-                            // kein break!
+                            // no break
                             case FN_UNO_HEADER_ON:
                             {
                                 //falls das SetItem nicht da ist, dann ist der Wert sal_False
@@ -3327,41 +3327,41 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                             }
                             break;
                             case FN_UNO_FOOTER_BACKGROUND:      bFooter = true;
-                            // kein break;
+                            // no break
                             case FN_UNO_HEADER_BACKGROUND:      nRes = RES_BACKGROUND;
                             break;
                             case FN_UNO_FOOTER_BOX:             bFooter = true;
-                            // kein break;
+                            // no break
                             case FN_UNO_HEADER_BOX:             nRes = RES_BOX;
                             break;
                             case FN_UNO_FOOTER_LR_SPACE:        bFooter = true;
-                            // kein break;
+                            // no break
                             case FN_UNO_HEADER_LR_SPACE:        nRes = RES_LR_SPACE;
                             break;
                             case FN_UNO_FOOTER_SHADOW:          bFooter = true;
-                            // kein break;
+                            // no break
                             case FN_UNO_HEADER_SHADOW:          nRes = RES_SHADOW;
                             break;
                             case FN_UNO_FOOTER_BODY_DISTANCE:   bFooter = true;
-                            // kein break;
+                            // no break
                             case FN_UNO_HEADER_BODY_DISTANCE:   nRes = RES_UL_SPACE;
                             break;
                             case FN_UNO_FOOTER_IS_DYNAMIC_DISTANCE: bFooter = true;
-                            // kein break;
+                            // no break
                             case FN_UNO_HEADER_IS_DYNAMIC_DISTANCE: nRes = SID_ATTR_PAGE_DYNAMIC;
                             break;
                             case FN_UNO_FOOTER_SHARE_CONTENT:   bFooter = true;
-                            // kein break;
+                            // no break
                             case FN_UNO_HEADER_SHARE_CONTENT:   nRes = SID_ATTR_PAGE_SHARED;
                             break;
                             case FN_UNO_FIRST_SHARE_CONTENT: nRes = SID_ATTR_PAGE_SHARED_FIRST;
                             break;
                             case FN_UNO_FOOTER_HEIGHT:          bFooter = true;
-                            // kein break;
+                            // no break
                             case FN_UNO_HEADER_HEIGHT:          nRes = SID_ATTR_PAGE_SIZE;
                             break;
                             case FN_UNO_FOOTER_EAT_SPACING: bFooter = true;
-                            // kein break;
+                            // no break
                             case FN_UNO_HEADER_EAT_SPACING: nRes = RES_HEADER_FOOTER_EAT_SPACING;
                             break;
                         }

@@ -617,7 +617,7 @@ void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 rInvFlags |= 0x10;
             CheckDirChange();
         }
-            /* kein break hier */
+            // no break
         case RES_FRM_SIZE:
         {
             const SwRect aOldPageFrmRect( Frm() );
