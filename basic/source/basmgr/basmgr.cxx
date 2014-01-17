@@ -976,10 +976,10 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
             else
             {
                 xStorageRef = new SotStorage( false, aLibAbsStorage.GetMainURL
-                    ( INetURLObject::NO_DECODE ), eStorageReadMode, true );
+                    ( INetURLObject::NO_DECODE ), eStorageReadMode );
                 if ( xStorageRef->GetError() != ERRCODE_NONE )
                     xStorageRef = new SotStorage( false, aLibRelStorage.
-                    GetMainURL( INetURLObject::NO_DECODE ), eStorageReadMode, true );
+                    GetMainURL( INetURLObject::NO_DECODE ), eStorageReadMode );
             }
             if ( xStorageRef.Is() )
             {
