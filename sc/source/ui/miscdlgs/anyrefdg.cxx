@@ -330,7 +330,7 @@ void ScFormulaReferenceHelper::Init()
 IMPL_LINK( ScFormulaReferenceHelper, AccelSelectHdl, Accelerator *, pSelAccel )
 {
     if ( !pSelAccel )
-        return 0;
+        return long(false);
 
     switch ( pSelAccel->GetCurKeyCode().GetCode() )
     {
@@ -341,7 +341,7 @@ IMPL_LINK( ScFormulaReferenceHelper, AccelSelectHdl, Accelerator *, pSelAccel )
             m_pDlg->RefInputDone( true );
         break;
     }
-    return true;
+    return long(true);
 }
 
 typedef std::vector<Window*> winvec;

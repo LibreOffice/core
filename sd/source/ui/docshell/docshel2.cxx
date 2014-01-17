@@ -417,12 +417,12 @@ bool DrawDocShell::IsNewPageNameValid( OUString & rInOutPageName, bool bResetStr
 IMPL_LINK( DrawDocShell, RenameSlideHdl, AbstractSvxNameDialog*, pDialog )
 {
     if( ! pDialog )
-        return 0;
+        return long(false);
 
     OUString aNewName;
     pDialog->GetName( aNewName );
 
-    return IsNewPageNameValid( aNewName );
+    return long(IsNewPageNameValid( aNewName ));
 }
 } // end of namespace sd
 

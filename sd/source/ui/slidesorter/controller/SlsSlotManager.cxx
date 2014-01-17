@@ -955,7 +955,7 @@ IMPL_LINK(SlotManager, RenameSlideHdl, AbstractSvxNameDialog*, pDialog)
     if (pDescriptor.get() != NULL)
         pCurrentPage = pDescriptor->GetPage();
 
-    return ( (pCurrentPage!=NULL && aNewName == pCurrentPage->GetName())
+    return long( (pCurrentPage!=NULL && aNewName == pCurrentPage->GetName())
         || (mrSlideSorter.GetViewShell()
             && mrSlideSorter.GetViewShell()->GetDocSh()->IsNewPageNameValid( aNewName ) ));
 }

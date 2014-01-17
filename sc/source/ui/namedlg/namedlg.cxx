@@ -483,7 +483,7 @@ IMPL_LINK_NOARG(ScNameDlg, CancelBtnHdl)
 
 IMPL_LINK_NOARG(ScNameDlg, AddBtnHdl)
 {
-    return AddPushed();
+    return long(AddPushed());
 }
 
 IMPL_LINK_NOARG(ScNameDlg, RemoveBtnHdl)

@@ -418,8 +418,7 @@ sal_Bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilt
 
 IMPL_LINK_NOARG(ScTableLink, RefreshHdl)
 {
-    long nRes = Refresh( aFileName, aFilterName, NULL, GetRefreshDelay() ) != 0;
-    return nRes;
+    return long(Refresh( aFileName, aFilterName, NULL, GetRefreshDelay() ));
 }
 
 IMPL_LINK( ScTableLink, TableEndEditHdl, ::sfx2::SvBaseLink*, pLink )

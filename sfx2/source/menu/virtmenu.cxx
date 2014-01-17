@@ -912,7 +912,7 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
         if ( !bRet)
             DBG_WARNING( "W1: Virtual menu could not be created!" );
 #endif
-        return bRet;
+        return long(bRet);
     }
 }
 

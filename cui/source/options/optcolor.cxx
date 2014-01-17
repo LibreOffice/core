@@ -1201,7 +1201,7 @@ IMPL_LINK(SvxColorOptionsTabPage, CheckNameHdl_Impl, AbstractSvxNameDialog*, pDi
 {
     OUString sName;
     pDialog->GetName(sName);
-    return !sName.isEmpty() && LISTBOX_ENTRY_NOTFOUND == m_pColorSchemeLB->GetEntryPos( sName );
+    return long(!sName.isEmpty() && LISTBOX_ENTRY_NOTFOUND == m_pColorSchemeLB->GetEntryPos( sName ));
 }
 
 void SvxColorOptionsTabPage::FillUserData()

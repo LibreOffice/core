@@ -251,7 +251,7 @@ DBG_NAME(OMySQLIntroPageSetup)
     IMPL_LINK(OMySQLIntroPageSetup, OnSetupModeSelected, RadioButton*, /*_pBox*/)
     {
         maClickHdl.Call( this );
-        return true;
+        return long(true);
     }
 
     OMySQLIntroPageSetup::~OMySQLIntroPageSetup()

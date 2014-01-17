@@ -984,7 +984,7 @@ IMPL_LINK( ScDocShell, RefreshDBDataHdl, ScRefreshTimer*, pRefreshTimer )
 {
     ScDBDocFunc aFunc(*this);
 
-    sal_Bool bContinue = sal_True;
+    bool bContinue = true;
     ScDBData* pDBData = static_cast<ScDBData*>(pRefreshTimer);
     ScImportParam aImportParam;
     pDBData->GetImportParam( aImportParam );
@@ -1001,7 +1001,7 @@ IMPL_LINK( ScDocShell, RefreshDBDataHdl, ScRefreshTimer*, pRefreshTimer )
         }
     }
 
-    return bContinue != 0;
+    return long(bContinue);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

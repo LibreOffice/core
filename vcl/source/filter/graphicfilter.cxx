@@ -2149,7 +2149,7 @@ const Link GraphicFilter::GetFilterCallback() const
 
 IMPL_LINK( GraphicFilter, FilterCallback, ConvertData*, pData )
 {
-    long nRet = 0L;
+    bool nRet = false;
 
     if( pData )
     {
@@ -2187,7 +2187,7 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData*, pData )
         }
 #endif
     }
-    return nRet;
+    return long(nRet);
 }
 
 namespace
