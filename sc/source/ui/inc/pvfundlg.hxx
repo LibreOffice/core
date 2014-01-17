@@ -122,24 +122,20 @@ private:
     DECL_LINK( ClickHdl, PushButton* );
 
 private:
-    FixedLine           maFlSubt;
-    RadioButton         maRbNone;
-    RadioButton         maRbAuto;
-    RadioButton         maRbUser;
-    ScDPFunctionListBox maLbFunc;
-    FixedText           maFtNameLabel;
-    FixedInfo           maFtName;
-    CheckBox            maCbShowAll;
-    OKButton            maBtnOk;
-    CancelButton        maBtnCancel;
-    HelpButton          maBtnHelp;
-    PushButton          maBtnOptions;
+    RadioButton*         mpRbNone;
+    RadioButton*         mpRbAuto;
+    RadioButton*         mpRbUser;
+    ScDPFunctionListBox* mpLbFunc;
+    FixedText*           mpFtName;
+    CheckBox*            mpCbShowAll;
+    OKButton*            mpBtnOk;
+    PushButton*          mpBtnOptions;
 
-    ScDPObject&         mrDPObj;            /// The DataPilot object (for member names).
-    const ScDPNameVec&  mrDataFields;       /// The list of all data field names.
+    ScDPObject&          mrDPObj;            /// The DataPilot object (for member names).
+    const ScDPNameVec&   mrDataFields;       /// The list of all data field names.
 
-    ScDPLabelData       maLabelData;        /// Cache for sub dialog.
-    bool                mbEnableLayout;     /// true = Enable Layout mode controls.
+    ScDPLabelData        maLabelData;        /// Cache for sub dialog.
+    bool                 mbEnableLayout;     /// true = Enable Layout mode controls.
 };
 
 // ============================================================================

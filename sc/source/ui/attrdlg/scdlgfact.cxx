@@ -890,26 +890,14 @@ AbstractScDPFunctionDlg * ScAbstractDialogFactory_Impl::CreateScDPFunctionDlg ( 
 }
 
 AbstractScDPSubtotalDlg * ScAbstractDialogFactory_Impl::CreateScDPSubtotalDlg ( Window* pParent,
-                                                                int nId,
                                                                 ScDPObject& rDPObj,
                                                                 const ScDPLabelData& rLabelData,
                                                                 const ScPivotFuncData& rFuncData,
                                                                 const ScDPNameVec& rDataFields,
                                                                 bool bEnableLayout )
 {
-    ScDPSubtotalDlg * pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_PIVOTSUBT :
-            pDlg = new ScDPSubtotalDlg( pParent, rDPObj, rLabelData, rFuncData, rDataFields, bEnableLayout );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractScDPSubtotalDlg_Impl( pDlg );
-    return 0;
+    ScDPSubtotalDlg * pDlg = new ScDPSubtotalDlg( pParent, rDPObj, rLabelData, rFuncData, rDataFields, bEnableLayout );
+    return new AbstractScDPSubtotalDlg_Impl( pDlg );
 }
 
 AbstractScDPNumGroupDlg * ScAbstractDialogFactory_Impl::CreateScDPNumGroupDlg(

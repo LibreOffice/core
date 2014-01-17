@@ -790,7 +790,7 @@ void ScPivotLayoutDlg::NotifyDoubleClick( ScPivotFieldType eType, size_t nFieldI
 
             boost::scoped_ptr<AbstractScDPSubtotalDlg> pDlg(
                 pFact->CreateScDPSubtotalDlg(
-                    this, RID_SCDLG_PIVOTSUBT, *mxDlgDPObject, *pData, rFunc,
+                    this, *mxDlgDPObject, *pData, rFunc,
                     aDataFieldNames, bLayout));
 
             if ( pDlg->Execute() == RET_OK )

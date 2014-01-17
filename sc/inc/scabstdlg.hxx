@@ -421,7 +421,7 @@ public:
                                                                 const ScDPLabelData& rLabelData,
                                                                 const ScPivotFuncData& rFuncData ) = 0;
 
-    virtual AbstractScDPSubtotalDlg * CreateScDPSubtotalDlg( Window* pParent, int nId,
+    virtual AbstractScDPSubtotalDlg * CreateScDPSubtotalDlg( Window* pParent,
                                                                 ScDPObject& rDPObj,
                                                                 const ScDPLabelData& rLabelData,
                                                                 const ScPivotFuncData& rFuncData,

@@ -425,26 +425,24 @@ IMPL_LINK_NOARG(ScDPFunctionDlg, DblClickHdl)
 
 ScDPSubtotalDlg::ScDPSubtotalDlg( Window* pParent, ScDPObject& rDPObj,
         const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData,
-        const ScDPNameVec& rDataFields, bool bEnableLayout ) :
-    ModalDialog     ( pParent, ScResId( RID_SCDLG_PIVOTSUBT ) ),
-    maFlSubt        ( this, ScResId( FL_FUNC ) ),
-    maRbNone        ( this, ScResId( RB_NONE ) ),
-    maRbAuto        ( this, ScResId( RB_AUTO ) ),
-    maRbUser        ( this, ScResId( RB_USER ) ),
-    maLbFunc        ( this, ScResId( LB_FUNC ) ),
-    maFtNameLabel   ( this, ScResId( FT_NAMELABEL ) ),
-    maFtName        ( this, ScResId( FT_NAME ) ),
-    maCbShowAll     ( this, ScResId( CB_SHOWALL ) ),
-    maBtnOk         ( this, ScResId( BTN_OK ) ),
-    maBtnCancel     ( this, ScResId( BTN_CANCEL ) ),
-    maBtnHelp       ( this, ScResId( BTN_HELP ) ),
-    maBtnOptions    ( this, ScResId( BTN_OPTIONS ) ),
-    mrDPObj         ( rDPObj ),
-    mrDataFields    ( rDataFields ),
-    maLabelData     ( rLabelData ),
-    mbEnableLayout  ( bEnableLayout )
+        const ScDPNameVec& rDataFields, bool bEnableLayout )
+    : ModalDialog(pParent, "PivotFieldDialog",
+        "modules/scalc/ui/pivotfielddialog.ui")
+    , mrDPObj(rDPObj)
+    , mrDataFields(rDataFields)
+    , maLabelData(rLabelData)
+    , mbEnableLayout(bEnableLayout)
 {
-    FreeResource();
+    get(mpBtnOk, "ok");
+    get(mpBtnOptions, "options");
+    get(mpCbShowAll, "showall");
+    get(mpFtName, "name");
+    get(mpLbFunc, "functions");
+    mpLbFunc->set_height_request(mpLbFunc->GetTextHeight() * 8);
+    get(mpRbNone, "none");
+    get(mpRbAuto, "auto");
+    get(mpRbUser, "user");
+
     Init( rLabelData, rFuncData );
 }
 
@@ -452,10 +450,10 @@ sal_uInt16 ScDPSubtotalDlg::GetFuncMask() const
 {
     sal_uInt16 nFuncMask = PIVOT_FUNC_NONE;
 
-    if( maRbAuto.IsChecked() )
+    if( mpRbAuto->IsChecked() )
         nFuncMask = PIVOT_FUNC_AUTO;
-    else if( maRbUser.IsChecked() )
-        nFuncMask = maLbFunc.GetSelection();
+    else if( mpRbUser->IsChecked() )
+        nFuncMask = mpLbFunc->GetSelection();
 
     return nFuncMask;
 }
@@ -464,7 +462,7 @@ void ScDPSubtotalDlg::FillLabelData( ScDPLabelData& rLabelData ) const
 {
     rLabelData.mnFuncMask = GetFuncMask();
     rLabelData.mnUsedHier = maLabelData.mnUsedHier;
-    rLabelData.mbShowAll = maCbShowAll.IsChecked();
+    rLabelData.mbShowAll = mpCbShowAll->IsChecked();
     rLabelData.maMembers = maLabelData.maMembers;
     rLabelData.maSortInfo = maLabelData.maSortInfo;
     rLabelData.maLayoutInfo = maLabelData.maLayoutInfo;
@@ -474,51 +472,51 @@ void ScDPSubtotalDlg::FillLabelData( ScDPLabelData& rLabelData ) const
 void ScDPSubtotalDlg::Init( const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData )
 {
     // field name
-    maFtName.SetText(rLabelData.getDisplayName());
+    mpFtName->SetText(rLabelData.getDisplayName());
 
     // radio buttons
-    maRbNone.SetClickHdl( LINK( this, ScDPSubtotalDlg, RadioClickHdl ) );
-    maRbAuto.SetClickHdl( LINK( this, ScDPSubtotalDlg, RadioClickHdl ) );
-    maRbUser.SetClickHdl( LINK( this, ScDPSubtotalDlg, RadioClickHdl ) );
+    mpRbNone->SetClickHdl( LINK( this, ScDPSubtotalDlg, RadioClickHdl ) );
+    mpRbAuto->SetClickHdl( LINK( this, ScDPSubtotalDlg, RadioClickHdl ) );
+    mpRbUser->SetClickHdl( LINK( this, ScDPSubtotalDlg, RadioClickHdl ) );
 
     RadioButton* pRBtn = 0;
     switch( rFuncData.mnFuncMask )
     {
-        case PIVOT_FUNC_NONE:   pRBtn = &maRbNone;  break;
-        case PIVOT_FUNC_AUTO:   pRBtn = &maRbAuto;  break;
-        default:                pRBtn = &maRbUser;
+        case PIVOT_FUNC_NONE:   pRBtn = mpRbNone;  break;
+        case PIVOT_FUNC_AUTO:   pRBtn = mpRbAuto;  break;
+        default:                pRBtn = mpRbUser;
     }
     pRBtn->Check();
     RadioClickHdl( pRBtn );
 
     // list box
-    maLbFunc.SetSelection( rFuncData.mnFuncMask );
-    maLbFunc.SetDoubleClickHdl( LINK( this, ScDPSubtotalDlg, DblClickHdl ) );
+    mpLbFunc->SetSelection( rFuncData.mnFuncMask );
+    mpLbFunc->SetDoubleClickHdl( LINK( this, ScDPSubtotalDlg, DblClickHdl ) );
 
     // show all
-    maCbShowAll.Check( rLabelData.mbShowAll );
+    mpCbShowAll->Check( rLabelData.mbShowAll );
 
     // options
-    maBtnOptions.SetClickHdl( LINK( this, ScDPSubtotalDlg, ClickHdl ) );
+    mpBtnOptions->SetClickHdl( LINK( this, ScDPSubtotalDlg, ClickHdl ) );
 }
 
 // ----------------------------------------------------------------------------
 
 IMPL_LINK( ScDPSubtotalDlg, RadioClickHdl, RadioButton*, pBtn )
 {
-    maLbFunc.Enable( pBtn == &maRbUser );
+    mpLbFunc->Enable( pBtn == mpRbUser );
     return 0;
 }
 
 IMPL_LINK_NOARG(ScDPSubtotalDlg, DblClickHdl)
 {
-    maBtnOk.Click();
+    mpBtnOk->Click();
     return 0;
 }
 
 IMPL_LINK( ScDPSubtotalDlg, ClickHdl, PushButton*, pBtn )
 {
-    if( pBtn == &maBtnOptions )
+    if (pBtn == mpBtnOptions)
     {
         ScDPSubtotalOptDlg* pDlg = new ScDPSubtotalOptDlg( this, mrDPObj, maLabelData, mrDataFields, mbEnableLayout );
         if( pDlg->Execute() == RET_OK )

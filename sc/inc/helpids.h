@@ -53,7 +53,6 @@
 // Hilfe IDs fuer Dialoge / Pages (max.70) -----------------------------------
 #define HID_SC_PIVOTFILTER                                      "SC_HID_SC_PIVOTFILTER"
 #define HID_SC_INPORTOPT                                        "SC_HID_SC_INPORTOPT"
-#define HID_SC_PIVOTSUBT                                        "SC_HID_SC_PIVOTSUBT"
 
 #define HID_SC_NAVIGATOR                                        "SC_HID_SC_NAVIGATOR"
 
