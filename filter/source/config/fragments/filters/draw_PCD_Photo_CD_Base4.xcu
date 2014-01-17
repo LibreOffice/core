@@ -21,7 +21,7 @@
         <prop oor:name="FilterService"/>
         <prop oor:name="UserData"><value></value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="x-default">PCD - Kodak Photo CD (384x256)</value>
+            <value xml:lang="en-US">PCD - Kodak Photo CD (384x256)</value>
         </prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>pcd_Photo_CD_Base4</value></prop>
