@@ -164,7 +164,7 @@ ScDPFunctionListBox::ScDPFunctionListBox(Window* pParent, WinBits nStyle)
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScDPFunctionListBox(Window *pParent, VclBuilder::stringmap &rMap)
 {
-    WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
+    WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
