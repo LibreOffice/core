@@ -2582,6 +2582,14 @@ DECLARE_OOXMLEXPORT_TEST(testTableRowDataDisplayedTwice,"table-row-data-displaye
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO73546, "FDO73546.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:hdr/w:p[1]/w:r[3]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor", "distL","0");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
