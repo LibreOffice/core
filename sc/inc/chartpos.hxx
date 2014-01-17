@@ -58,7 +58,7 @@ public:
             SCCOL               GetColCount() const { return nColCount; }
             SCROW               GetRowCount() const { return nRowCount; }
 
-            sal_Bool                IsValid( SCCOL nCol, SCROW nRow ) const
+            bool                IsValid( SCCOL nCol, SCROW nRow ) const
                                     { return nCol < nColCount && nRow < nRowCount; }
                                 // data column by column
             sal_uLong               GetIndex( SCCOL nCol, SCROW nRow ) const
@@ -140,7 +140,7 @@ public:
     void    SetStartCol(SCCOL nNew) { nStartCol = nNew; }
     void    SetStartRow(SCROW nNew) { nStartRow = nNew; }
 
-    sal_Bool    operator==(const ScChartPositioner& rCmp) const;
+    bool    operator==(const ScChartPositioner& rCmp) const;
 
     void                    InvalidateGlue()
                                 {

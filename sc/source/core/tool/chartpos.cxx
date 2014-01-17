@@ -86,7 +86,7 @@ ScChartPositioner::~ScChartPositioner()
     delete pPositionMap;
 }
 
-sal_Bool ScChartPositioner::operator==(const ScChartPositioner& rCmp) const
+bool ScChartPositioner::operator==(const ScChartPositioner& rCmp) const
 {
     return bColHeaders == rCmp.bColHeaders
         && bRowHeaders == rCmp.bRowHeaders
