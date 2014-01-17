@@ -53,6 +53,9 @@ OUString foundLocale;
 OUString getInstalledLocale(
     css::uno::Sequence<OUString> const & installed, OUString const & locale)
 {
+    if (locale.isEmpty())
+        return OUString();  // do not attempt to resolve anything
+
     for (sal_Int32 i = 0; i != installed.getLength(); ++i) {
         if (installed[i] == locale) {
             return installed[i];
