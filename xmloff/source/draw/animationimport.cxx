@@ -1273,7 +1273,10 @@ private:
 };
 
 AnimationsImport::AnimationsImport( const Reference< XComponentContext > & rxContext )
-: SvXMLImport( rxContext, AnimationsImport_getImplementationName(), true )
+: SvXMLImport( rxContext, AnimationsImport_getImplementationName(), IMPORT_META )
+    //FIXME: the above "IMPORT_META" used to be a nonsensical "true", question
+    // remainst whether this should be IMPORT_META (same numerical value as
+    // true) or default IMPORT_ALL
 {
     // add namespaces
     GetNamespaceMap().Add(
