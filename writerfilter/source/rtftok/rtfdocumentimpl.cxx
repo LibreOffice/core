@@ -2340,7 +2340,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_WIDCTLPAR:
         case RTF_NOWIDCTLPAR:
             {
-                RTFValue::Pointer_t pValue(new RTFValue(nKeyword == RTF_WIDCTLPAR));
+                RTFValue::Pointer_t pValue(new RTFValue(int(nKeyword == RTF_WIDCTLPAR)));
                 m_aStates.top().aParagraphSprms.set(NS_sprm::LN_PFWidowControl, pValue);
             }
             break;
@@ -2505,7 +2505,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             }
         case RTF_SECTUNLOCKED:
             {
-                RTFValue::Pointer_t pValue(new RTFValue(!nParam));
+                RTFValue::Pointer_t pValue(new RTFValue(int(!nParam)));
                 m_aStates.top().aSectionSprms.set(NS_ooxml::LN_EG_SectPrContents_formProt, pValue);
             }
         case RTF_PGNDEC:
@@ -3081,7 +3081,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_HORZVERT:
             {
-                RTFValue::Pointer_t pValue(new RTFValue(true));
+                RTFValue::Pointer_t pValue(new RTFValue(int(true)));
                 m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_EastAsianLayout_vert, pValue);
                 if (nParam)
                     // rotate fits to a single line
@@ -3096,7 +3096,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_TWOINONE:
             {
-                RTFValue::Pointer_t pValue(new RTFValue(true));
+                RTFValue::Pointer_t pValue(new RTFValue(int(true)));
                 m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_EastAsianLayout_combine, pValue);
                 if (nParam > 0)
                     m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_EastAsianLayout_combineBrackets, pIntValue);
@@ -3695,7 +3695,7 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
     setNeedSect();
     RTFSkipDestination aSkip(*this);
     int nSprm = -1;
-    RTFValue::Pointer_t pBoolValue(new RTFValue(!bParam || nParam != 0));
+    RTFValue::Pointer_t pBoolValue(new RTFValue(int(!bParam || nParam != 0)));
 
     // Map all underline toggles to a single sprm.
     switch (nKeyword)
