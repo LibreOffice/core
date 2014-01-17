@@ -19,8 +19,6 @@
 
 #include "dbinsdlg.hxx"
 
-#include <memory>
-
 #include <float.h>
 
 #include <hintids.hxx>
@@ -91,6 +89,8 @@
 #include "table.hrc"
 #include <unomid.h>
 #include <IDocumentMarkAccess.hxx>
+
+#include <boost/scoped_ptr.hpp>
 
 namespace swui
 {
@@ -968,7 +968,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
     if( rSh.HasSelection() )
         rSh.DelRight();
 
-    ::std::auto_ptr<SwWait> pWait;
+    boost::scoped_ptr<SwWait> pWait;
 
     Reference< XColumnsSupplier > xColsSupp( xResultSet, UNO_QUERY );
     Reference <XNameAccess> xCols = xColsSupp->getColumns();

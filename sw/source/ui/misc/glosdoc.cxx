@@ -19,7 +19,6 @@
 
 
 #include <algorithm>
-#include <memory>
 
 #include <com/sun/star/container/XNamed.hpp>
 
@@ -44,6 +43,8 @@
 #include <unoatxt.hxx>
 #include <swerror.h>
 #include <globals.hrc>
+
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -641,7 +642,7 @@ Reference< text::XAutoTextEntry > SwGlossaries::GetAutoTextEntry(
 {
     //standard must be created
     sal_Bool bCreate = ( rCompleteGroupName == GetDefName() );
-    ::std::auto_ptr< SwTextBlocks > pGlosGroup( GetGroupDoc( rCompleteGroupName, bCreate ) );
+    boost::scoped_ptr< SwTextBlocks > pGlosGroup( GetGroupDoc( rCompleteGroupName, bCreate ) );
 
     if ( pGlosGroup.get() && !pGlosGroup->GetError() )
     {

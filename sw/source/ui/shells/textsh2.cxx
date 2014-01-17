@@ -47,7 +47,6 @@
 #include "dbmgr.hxx"
 #include <comphelper/uno3.hxx>
 #include <svx/dataaccessdescriptor.hxx>
-#include <memory>
 
 #include <vcl/svapp.hxx>
 
@@ -62,6 +61,8 @@
 #include "dbui.hrc"
 
 #include <unomid.h>
+
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::svx;
 using namespace ::com::sun::star;
@@ -263,7 +264,7 @@ IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl*, pDBStruct )
             SwDBData aDBData = pDBStruct->aDBData;
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-            ::std::auto_ptr<AbstractSwInsertDBColAutoPilot>pDlg (pFact->CreateSwInsertDBColAutoPilot(pThis->GetView(),
+            boost::scoped_ptr<AbstractSwInsertDBColAutoPilot>pDlg (pFact->CreateSwInsertDBColAutoPilot(pThis->GetView(),
                                                                                                 xSource,
                                                                                                 xColSupp,
                                                                                                 aDBData));

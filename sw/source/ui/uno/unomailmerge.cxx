@@ -67,9 +67,10 @@
 #include <shellio.hxx>
 #include <mmconfigitem.hxx>
 #include <mailmergehelper.hxx>
-#include <memory>
 
 #include <unomid.h>
+
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
@@ -657,7 +658,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
 
     SwMergeDescriptor aMergeDesc( nMergeType, rSh, aDescriptor );
 
-    std::auto_ptr< SwMailMergeConfigItem > pMMConfigItem;
+    boost::scoped_ptr< SwMailMergeConfigItem > pMMConfigItem;
     uno::Reference< mail::XMailService > xInService;
     if (MailMergeType::PRINTER == nCurOutputType)
     {

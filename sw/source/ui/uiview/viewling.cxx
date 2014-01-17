@@ -83,8 +83,9 @@
 #include <IMark.hxx>
 #include <xmloff/odffields.hxx>
 
-#include <memory>
 #include <editeng/editerr.hxx>
+
+#include <boost/scoped_ptr.hpp>
 
 using namespace sw::mark;
 using namespace ::com::sun::star;
@@ -684,7 +685,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
 
                 bRet = sal_True;
                 m_pWrtShell->SttSelect();
-                std::auto_ptr< SwSpellPopup > pPopup;
+                boost::scoped_ptr< SwSpellPopup > pPopup;
                 if (bUseGrammarContext)
                 {
                     sal_Int32 nPos = aPoint.nContent.GetIndex();

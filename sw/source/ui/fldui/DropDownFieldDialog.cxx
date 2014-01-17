@@ -25,6 +25,8 @@
 #include <flddropdown.hxx>
 #include <fldui.hrc>
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace ::com::sun::star;
 
 
@@ -81,7 +83,7 @@ void sw::DropDownFieldDialog::Apply()
         {
             rSh.StartAllAction();
 
-            ::std::auto_ptr<SwDropDownField> const pCopy(
+            boost::scoped_ptr<SwDropDownField> const pCopy(
                 static_cast<SwDropDownField *>( pDropField->CopyField() ) );
 
             pCopy->SetPar1(sSelect);

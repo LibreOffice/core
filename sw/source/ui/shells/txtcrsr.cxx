@@ -40,6 +40,8 @@
 #include <svx/fmshell.hxx>
 #include <svx/sdrobjectfilter.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace ::com::sun::star;
 
 void SwTextShell::ExecBasicMove(SfxRequest &rReq)
@@ -241,7 +243,7 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
                 if ( !pFormShell || !pDrawView || !pWindow )
                     break;
 
-                ::std::auto_ptr< ::svx::ISdrObjectFilter > pFilter( pFormShell->CreateFocusableControlFilter(
+                boost::scoped_ptr< ::svx::ISdrObjectFilter > pFilter( pFormShell->CreateFocusableControlFilter(
                     *pDrawView, *pWindow ) );
                 if ( !pFilter.get() )
                     break;

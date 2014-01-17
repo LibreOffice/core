@@ -84,6 +84,8 @@
 #include "swabstdlg.hxx"
 #include <table.hrc>
 
+#include <boost/scoped_ptr.hpp>
+
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
@@ -879,7 +881,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             if ( FN_TABLE_INSERT_ROW_DLG != nSlot || !rSh.IsInRepeatedHeadline())
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ::std::auto_ptr<SvxAbstractInsRowColDlg> pDlg( pFact ? pFact->CreateSvxInsRowColDlg( GetView().GetWindow(), nSlot == FN_TABLE_INSERT_COL_DLG, pSlot->GetCommand() ) : 0);
+                boost::scoped_ptr<SvxAbstractInsRowColDlg> pDlg( pFact ? pFact->CreateSvxInsRowColDlg( GetView().GetWindow(), nSlot == FN_TABLE_INSERT_COL_DLG, pSlot->GetCommand() ) : 0);
 
                 if( pDlg.get() && (pDlg->Execute() == 1) )
                 {

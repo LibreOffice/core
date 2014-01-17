@@ -120,11 +120,12 @@
 #include <swabstdlg.hxx>
 #include <fmthdft.hxx>
 #include <envelp.hrc>
-#include <memory>
 #include <vector>
 #include <unomid.h>
 #include <section.hxx>
 #include <rootfrm.hxx>
+
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::osl;
 using namespace ::svx;
@@ -904,7 +905,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             SfxObjectShellLock xTargetDocShell;
 
             SwView* pTargetView = 0;
-            std::auto_ptr< utl::TempFile > aTempFile;
+            boost::scoped_ptr< utl::TempFile > aTempFile;
             OUString sModifiedStartingPageDesc;
             OUString sStartingPageDesc;
             sal_uInt16 nStartingPageNo = 0;

@@ -30,6 +30,7 @@
 #include <svx/AccessibleTextHelper.hxx>
 #include <editeng/outliner.hxx>
 
+#include <boost/scoped_ptr.hpp>
 
 namespace sw { namespace sidebarwindows {
 
@@ -114,7 +115,7 @@ IMPL_LINK(SidebarTextEditSource, NotifyHdl, EENotify*, pNotify)
 {
     if ( pNotify )
     {
-        ::std::auto_ptr< SfxHint > aHint( SvxEditSourceHelper::EENotification2Hint( pNotify ) );
+        boost::scoped_ptr< SfxHint > aHint( SvxEditSourceHelper::EENotification2Hint( pNotify ) );
 
         if( aHint.get() )
         {
