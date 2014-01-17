@@ -64,7 +64,7 @@ void SvClassElement::Save( SvPersistStream & rStm )
     // write data
     rStm.WriteUChar( nMask );
     if( nMask & 0x01 ) rStm.WriteUChar( aAutomation );
-    if( nMask & 0x02 ) write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStm, aPrefix);
+    if( nMask & 0x02 ) write_uInt16_lenPrefixed_uInt8s_FromOString(rStm, aPrefix);
     if( nMask & 0x04 ) WriteSvPersistBase( rStm, xClass );
 }
 

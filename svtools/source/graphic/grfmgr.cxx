@@ -1139,7 +1139,7 @@ SvStream& WriteGraphicObject( SvStream& rOStm, const GraphicObject& rGraphicObj 
     rOStm.WriteUChar( bLink );
 
     if( bLink )
-        write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStm, rGraphicObj.GetLink(), RTL_TEXTENCODING_UTF8);
+        write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, rGraphicObj.GetLink(), RTL_TEXTENCODING_UTF8);
 
     return rOStm;
 }

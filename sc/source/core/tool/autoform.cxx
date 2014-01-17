@@ -794,7 +794,7 @@ bool ScAutoFormatData::Save(SvStream& rStream, sal_uInt16 fileVersion)
     bool b;
     rStream.WriteUInt16( nVal );
     // --- from 680/dr25 on: store strings as UTF-8
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStream, aName, RTL_TEXTENCODING_UTF8);
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rStream, aName, RTL_TEXTENCODING_UTF8);
 
     rStream.WriteUInt16( nStrResId );
     rStream.WriteUChar( ( b = bIncludeFont ) );

@@ -1219,10 +1219,10 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
 
         // Convert CH_FEATURE to CH_FEATURE_OLD
         OString aText = aBuffer.makeStringAndClear().replace(cFeatureConverted, CH_FEATURE_OLD);
-        write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStream, aText);
+        write_uInt16_lenPrefixed_uInt8s_FromOString(rOStream, aText);
 
         // StyleName and Family...
-        write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStream, rC.GetStyle(), eEncoding);
+        write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStream, rC.GetStyle(), eEncoding);
         rOStream.WriteUInt16( static_cast<sal_uInt16>(rC.GetFamily()) );
 
         // Paragraph attributes ...

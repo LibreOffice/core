@@ -1087,14 +1087,21 @@ inline void SvStatistics::PrintOn( SvStream &rOS ) const //$ ostream
     if( IsEmpty() )
         return;
 
-    rOS << "{   SV called:" << '\n';
+    rOS.WriteCharPtr( "{   SV called:\n" );
     if( nGetTextSize )
-        rOS << "\tnGetTextSize: " <<    nGetTextSize    << '\n';        if( nDrawText   )
-        rOS << "\tnDrawText: "  << nDrawText    << '\n';        if( nGetStretchTextSize )
-        rOS << "\tnGetStretchTextSize: "    << nGetStretchTextSize  << '\n';        if( nDrawStretchText    )
-        rOS << "\tnDrawStretchText: "   << nDrawStretchText << '\n';        if( nChangeFont )
-        rOS << "\tnChangeFont: "    << nChangeFont  << '\n';        if( nGetFontMetric  )
-        rOS << "\tnGetFontMetric: " << nGetFontMetric   << '\n';        rOS << "}"  << '\n';    }
+        rOS.WriteCharPtr( "\tnGetTextSize: " ).WriteUInt16( nGetTextSize ).WriteChar( '\n' );
+    if( nDrawText )
+        rOS.WriteCharPtr( "\tnDrawText: " ).WriteUInt16( nDrawText ).WriteChar( '\n' );
+    if( nGetStretchTextSize )
+        rOS.WriteCharPtr( "\tnGetStretchTextSize: " ).WriteUInt16( nGetStretchTextSize ).WriteChar( '\n' );
+    if( nDrawStretchText )
+        rOS.WriteCharPtr( "\tnDrawStretchText: " ).WriteUInt16( nDrawStretchText ).WriteChar( '\n' );
+    if( nChangeFont )
+        rOS.WriteCharPtr( "\tnChangeFont: " ).WriteUInt16(  nChangeFont ).WriteChar( '\n' );
+    if( nGetFontMetric )
+        rOS.WriteCharPtr( "\tnGetFontMetric: " ).WriteUInt16( nGetFontMetric ).WriteChar( '\n' );
+     rOS.WriteCharPtr( "}\n" );
+}
 #else
 #define SV_STAT(nWhich)
 #endif  /* DBG_UTIL */

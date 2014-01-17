@@ -192,7 +192,7 @@ void SgaObject::WriteData( SvStream& rOut, const OUString& rDestDir ) const
 
     OUString aURLWithoutDestDir = aURL.GetMainURL( INetURLObject::NO_DECODE );
     aURLWithoutDestDir = aURLWithoutDestDir.replaceFirst(rDestDir, "");
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, aURLWithoutDestDir, RTL_TEXTENCODING_UTF8);
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, aURLWithoutDestDir, RTL_TEXTENCODING_UTF8);
 }
 
 void SgaObject::ReadData(SvStream& rIn, sal_uInt16& rReadVersion )
@@ -299,8 +299,8 @@ void SgaObjectBmp::WriteData( SvStream& rOut, const OUString& rDestDir ) const
     SgaObject::WriteData( rOut, rDestDir );
     char aDummy[ 10 ];
     rOut.Write( aDummy, 10 );
-    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOut, OString()); //dummy
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, aTitle, RTL_TEXTENCODING_UTF8);
+    write_uInt16_lenPrefixed_uInt8s_FromOString(rOut, OString()); //dummy
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, aTitle, RTL_TEXTENCODING_UTF8);
 }
 
 void SgaObjectBmp::ReadData( SvStream& rIn, sal_uInt16& rReadVersion )
@@ -371,7 +371,7 @@ void SgaObjectSound::WriteData( SvStream& rOut, const OUString& rDestDir ) const
 {
     SgaObject::WriteData( rOut, rDestDir );
     rOut.WriteUInt16( (sal_uInt16) eSoundType );
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, aTitle, RTL_TEXTENCODING_UTF8);
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, aTitle, RTL_TEXTENCODING_UTF8);
 }
 
 void SgaObjectSound::ReadData( SvStream& rIn, sal_uInt16& rReadVersion )
@@ -530,7 +530,7 @@ sal_Bool SgaObjectSvDraw::CreateThumb( const FmFormModel& rModel )
 void SgaObjectSvDraw::WriteData( SvStream& rOut, const OUString& rDestDir ) const
 {
     SgaObject::WriteData( rOut, rDestDir );
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, aTitle, RTL_TEXTENCODING_UTF8);
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, aTitle, RTL_TEXTENCODING_UTF8);
 }
 
 void SgaObjectSvDraw::ReadData( SvStream& rIn, sal_uInt16& rReadVersion )

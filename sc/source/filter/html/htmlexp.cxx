@@ -116,15 +116,15 @@ const sal_Char ScHTMLExport::sIndentSource[nIndentMax+1] =
 #define TAG_ON( tag )       HTMLOutFuncs::Out_AsciiTag( rStrm, tag )
 #define TAG_OFF( tag )      HTMLOutFuncs::Out_AsciiTag( rStrm, tag, false )
 #define OUT_STR( str )      HTMLOutFuncs::Out_String( rStrm, str, eDestEnc, &aNonConvertibleChars )
-#define OUT_LF()            rStrm << SAL_NEWLINE_STRING << GetIndentStr()
-#define TAG_ON_LF( tag )    (TAG_ON( tag ) << SAL_NEWLINE_STRING << GetIndentStr())
-#define TAG_OFF_LF( tag )   (TAG_OFF( tag ) << SAL_NEWLINE_STRING << GetIndentStr())
+#define OUT_LF()            rStrm.WriteCharPtr( SAL_NEWLINE_STRING ).WriteCharPtr( GetIndentStr() )
+#define TAG_ON_LF( tag )    (TAG_ON( tag ).WriteCharPtr( SAL_NEWLINE_STRING ).WriteCharPtr( GetIndentStr() ))
+#define TAG_OFF_LF( tag )   (TAG_OFF( tag ).WriteCharPtr( SAL_NEWLINE_STRING ).WriteCharPtr( GetIndentStr() ))
 #define OUT_HR()            TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_horzrule )
-#define OUT_COMMENT( comment )  (rStrm << sMyBegComment, OUT_STR( comment ) \
-                                << sMyEndComment << SAL_NEWLINE_STRING \
-                                << GetIndentStr())
+#define OUT_COMMENT( comment )  (rStrm.WriteCharPtr( sMyBegComment ), OUT_STR( comment ) \
+                                .WriteCharPtr( sMyEndComment ).WriteCharPtr( SAL_NEWLINE_STRING ) \
+                                .WriteCharPtr( GetIndentStr() ))
 
-#define OUT_SP_CSTR_ASS( s )    rStrm << ' ' << s << '='
+#define OUT_SP_CSTR_ASS( s )    rStrm.WriteChar( ' ').WriteCharPtr( s ).WriteChar( '=' )
 
 #define GLOBSTR(id) ScGlobal::GetRscString( id )
 
