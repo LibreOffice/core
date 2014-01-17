@@ -21,7 +21,7 @@
         <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.T602ImportFilter</value></prop>
         <prop oor:name="UserData"><value>602</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="x-default">T602 Document</value>
+            <value xml:lang="en-US">T602 Document</value>
         </prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>writer_T602_Document</value></prop>

@@ -21,7 +21,7 @@
         <prop oor:name="FilterService"><value>com.sun.star.comp.Draw.CMXImportFilter</value></prop>
         <prop oor:name="UserData"><value></value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="x-default">Corel Presentation Exchange</value>
+            <value xml:lang="en-US">Corel Presentation Exchange</value>
         </prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>draw_Corel_Presentation_Exchange</value></prop>

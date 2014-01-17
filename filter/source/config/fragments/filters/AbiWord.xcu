@@ -21,7 +21,7 @@
         <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.AbiWordImportFilter</value></prop>
         <prop oor:name="UserData"><value>ABW</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="x-default">AbiWord Document</value>
+            <value xml:lang="en-US">AbiWord Document</value>
         </prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>writer_AbiWord_Document</value></prop>
