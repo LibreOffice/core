@@ -830,7 +830,7 @@ private:
 private:
     OUString    GetInputString_Impl(bool bEnglish) const;
     OUString    GetOutputString_Impl() const;
-    void        SetString_Impl(const OUString& rString, sal_Bool bInterpret, sal_Bool bEnglish);
+    void        SetString_Impl(const OUString& rString, bool bInterpret, bool bEnglish);
     double      GetValue_Impl() const;
     void        SetValue_Impl(double fValue);
     com::sun::star::table::CellContentType GetResultType_Impl();
@@ -1371,7 +1371,7 @@ private:
     ScRangeList             aRanges;
     ScAddress               aPos;
     ScMarkData*             pMark;
-    sal_Bool                    bAtEnd;
+    bool                    bAtEnd;
 
 private:
     void                    Advance_Impl();
@@ -1454,8 +1454,8 @@ private:
     SCTAB                   nTab;
     ScAttrRectIterator*     pIter;
     ScRange                 aNext;
-    sal_Bool                    bAtEnd;
-    sal_Bool                    bDirty;
+    bool                    bAtEnd;
+    bool                    bDirty;
 
 private:
     void                    Advance_Impl();

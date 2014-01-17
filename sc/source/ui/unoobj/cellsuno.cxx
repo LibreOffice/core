@@ -6237,7 +6237,7 @@ OUString ScCellObj::GetOutputString_Impl() const
     return aVal;
 }
 
-void ScCellObj::SetString_Impl(const OUString& rString, sal_Bool bInterpret, sal_Bool bEnglish)
+void ScCellObj::SetString_Impl(const OUString& rString, bool bInterpret, bool bEnglish)
 {
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
@@ -6513,7 +6513,7 @@ void SAL_CALL ScCellObj::setFormula( const OUString& aFormula ) throw(uno::Runti
 {
     SolarMutexGuard aGuard;
     OUString aString(aFormula);
-    SetString_Impl(aString, sal_True, sal_True); // Interpret as English
+    SetString_Impl(aString, true, true); // Interpret as English
 }
 
 double SAL_CALL ScCellObj::getValue() throw(uno::RuntimeException)
@@ -6726,7 +6726,7 @@ void ScCellObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry, c
             OUString aStrVal;
             aValue >>= aStrVal;
             OUString aString(aStrVal);
-            SetString_Impl(aString, sal_True, false);   // lokal interpretieren
+            SetString_Impl(aString, true, false);   // lokal interpretieren
         }
         else if ( pEntry->nWID == SC_WID_UNO_FORMRT )
         {
@@ -9235,7 +9235,7 @@ void ScCellsEnumeration::Advance_Impl()
     if (bFound)
         aPos.Set( nCol, nRow, nTab );
     else
-        bAtEnd = sal_True;      // kommt nix mehr
+        bAtEnd = true;      // kommt nix mehr
 }
 
 void ScCellsEnumeration::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -9463,10 +9463,10 @@ void ScCellFormatsEnumeration::Advance_Impl()
         if ( pIter->GetNext( nCol1, nCol2, nRow1, nRow2 ) )
             aNext = ScRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
         else
-            bAtEnd = sal_True;      // kommt nix mehr
+            bAtEnd = true;      // kommt nix mehr
     }
     else
-        bAtEnd = sal_True;          // Dok weggekommen oder so
+        bAtEnd = true;          // Dok weggekommen oder so
 }
 
 ScCellRangeObj* ScCellFormatsEnumeration::NextObject_Impl()
@@ -9500,7 +9500,7 @@ void ScCellFormatsEnumeration::Notify( SfxBroadcaster&, const SfxHint& rHint )
         }
         else if ( nId == SFX_HINT_DATACHANGED )
         {
-            bDirty = sal_True;          // AttrArray-Index evtl. ungueltig geworden
+            bDirty = true;          // AttrArray-Index evtl. ungueltig geworden
         }
     }
 }
