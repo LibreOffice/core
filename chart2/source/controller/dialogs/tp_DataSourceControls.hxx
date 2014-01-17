@@ -38,7 +38,7 @@ public:
     virtual ~SeriesEntry();
 
     /// the corresponding data series
-    ::com::sun::star::uno::Reference<::com::sun::star::chart2::XDataSeries > m_xDataSeries;
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > m_xDataSeries;
 
     /// the chart type that contains the series (via XDataSeriesContainer)
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType > m_xChartType;
