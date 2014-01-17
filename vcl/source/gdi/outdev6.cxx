@@ -58,8 +58,8 @@ Polygon toPolygon( const basegfx::B2DPolygon& rPoly )
         // This polygon not empty but is too small to display.  Approximate it
         // with a rectangle large enough to be displayed.
         double nX = aRange.getMinX(), nY = aRange.getMinY();
-        double nW = std::max<double>(1.0, round(fW));
-        double nH = std::max<double>(1.0, round(fH));
+        double nW = std::max<double>(1.0, rtl::math::round(fW));
+        double nH = std::max<double>(1.0, rtl::math::round(fH));
 
         Polygon aTarget;
         aTarget.Insert(0, Point(nX, nY));

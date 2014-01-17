@@ -23,10 +23,10 @@
 #include <svx/framelink.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 
-#include <memory>
-
 #include <vector>
 #include <svx/svxdllapi.h>
+
+#include <boost/scoped_ptr.hpp>
 
 namespace svx {
 namespace frame {
@@ -380,7 +380,7 @@ public:
     // ------------------------------------------------------------------------
 
 private:
-    typedef std::auto_ptr< ArrayImpl > ArrayImplPtr;
+    typedef boost::scoped_ptr<ArrayImpl> ArrayImplPtr;
 
     ArrayImplPtr        mxImpl;
 };
