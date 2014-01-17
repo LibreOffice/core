@@ -99,6 +99,7 @@ namespace sw { namespace mark
             // make names
             ::rtl::OUString getUniqueMarkName(const ::rtl::OUString& rName) const;
             void sortMarks();
+            void sortSubsetMarks();
 
             // container for all marks
             container_t m_vAllMarks;
