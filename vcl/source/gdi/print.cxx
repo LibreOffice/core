@@ -253,10 +253,10 @@ SvStream& WriteQueueInfo( SvStream& rOStream, const QueueInfo& rInfo )
 {
     VersionCompat aCompat( rOStream, STREAM_WRITE, 1 );
 
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStream, rInfo.maPrinterName, RTL_TEXTENCODING_UTF8);
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStream, rInfo.maDriver, RTL_TEXTENCODING_UTF8);
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStream, rInfo.maLocation, RTL_TEXTENCODING_UTF8);
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStream, rInfo.maComment, RTL_TEXTENCODING_UTF8);
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStream, rInfo.maPrinterName, RTL_TEXTENCODING_UTF8);
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStream, rInfo.maDriver, RTL_TEXTENCODING_UTF8);
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStream, rInfo.maLocation, RTL_TEXTENCODING_UTF8);
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStream, rInfo.maComment, RTL_TEXTENCODING_UTF8);
     rOStream.WriteUInt32( rInfo.mnStatus );
     rOStream.WriteUInt32( rInfo.mnJobs );
 

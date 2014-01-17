@@ -82,9 +82,9 @@ void SvMetaModule::Save( SvPersistStream & rStm )
     WriteSvDeclPersistList( rStm, aAttrList );
     // browser
     rStm.WriteUniOrByteString( aIdlFileName, rStm.GetStreamCharSet() );
-    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStm, aHelpFileName.getString());
-    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStm, aSlotIdFile.getString());
-    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStm, aModulePrefix.getString());
+    write_uInt16_lenPrefixed_uInt8s_FromOString(rStm, aHelpFileName.getString());
+    write_uInt16_lenPrefixed_uInt8s_FromOString(rStm, aSlotIdFile.getString());
+    write_uInt16_lenPrefixed_uInt8s_FromOString(rStm, aModulePrefix.getString());
 
     // write compiler data
     sal_uInt16 nCmpLen = 0;

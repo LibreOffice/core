@@ -3228,7 +3228,7 @@ OUString UCBStorage::CreateLinkFile( const OUString& rName )
 
         // store it as key/value pair
         OUString aLink = "ContentURL=" + aURL;
-        write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(*pStream, aLink, RTL_TEXTENCODING_UTF8);
+        write_uInt16_lenPrefixed_uInt8s_FromOUString(*pStream, aLink, RTL_TEXTENCODING_UTF8);
         pStream->Flush();
 
         // move the stream to its desired location

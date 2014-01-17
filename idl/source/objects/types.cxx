@@ -1784,7 +1784,7 @@ void SvMetaEnumValue::Save( SvPersistStream & rStm )
 
     // write data
     rStm.WriteUChar( nMask );
-    if( nMask & 0x01 ) write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStm, aEnumValue);
+    if( nMask & 0x01 ) write_uInt16_lenPrefixed_uInt8s_FromOString(rStm, aEnumValue);
 }
 
 sal_Bool SvMetaEnumValue::ReadSvIdl( SvIdlDataBase & rBase,
@@ -1843,7 +1843,7 @@ void SvMetaTypeEnum::Save( SvPersistStream & rStm )
     // write data
     rStm.WriteUChar( nMask );
     if( nMask & 0x01 ) WriteSvDeclPersistList( rStm, aEnumValueList );
-    if( nMask & 0x02 ) write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStm, aPrefix);
+    if( nMask & 0x02 ) write_uInt16_lenPrefixed_uInt8s_FromOString(rStm, aPrefix);
 }
 
 namespace

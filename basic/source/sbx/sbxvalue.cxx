@@ -1568,12 +1568,12 @@ sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
             case SbxDATE:
                 // #49935: Save as double, otherwise an error during the read in
                 ((SbxValue*)this)->aData.eType = (SbxDataType)( ( nType & 0xF000 ) | SbxDOUBLE );
-                write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(r, GetCoreString(), RTL_TEXTENCODING_ASCII_US);
+                write_uInt16_lenPrefixed_uInt8s_FromOUString(r, GetCoreString(), RTL_TEXTENCODING_ASCII_US);
                 ((SbxValue*)this)->aData.eType = (SbxDataType)nType;
                 break;
             case SbxSINGLE:
             case SbxDOUBLE:
-                write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(r, GetCoreString(), RTL_TEXTENCODING_ASCII_US);
+                write_uInt16_lenPrefixed_uInt8s_FromOUString(r, GetCoreString(), RTL_TEXTENCODING_ASCII_US);
                 break;
             case SbxSALUINT64:
             case SbxSALINT64:
@@ -1590,11 +1590,11 @@ sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
             case SbxSTRING:
                 if( aData.pOUString )
                 {
-                    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(r, *aData.pOUString, RTL_TEXTENCODING_ASCII_US);
+                    write_uInt16_lenPrefixed_uInt8s_FromOUString(r, *aData.pOUString, RTL_TEXTENCODING_ASCII_US);
                 }
                 else
                 {
-                    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(r, OUString(), RTL_TEXTENCODING_ASCII_US);
+                    write_uInt16_lenPrefixed_uInt8s_FromOUString(r, OUString(), RTL_TEXTENCODING_ASCII_US);
             }
             break;
         case SbxERROR:

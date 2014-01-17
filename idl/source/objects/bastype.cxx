@@ -214,7 +214,7 @@ sal_Bool SvIdentifier::WriteSvIdl( SvStringHashEntry * pName,
 
 SvStream& WriteSvIdentifier(SvStream & rStm, const SvIdentifier & r )
 {
-    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStm, r.getString());
+    write_uInt16_lenPrefixed_uInt8s_FromOString(rStm, r.getString());
     return rStm;
 }
 
@@ -327,7 +327,7 @@ sal_Bool SvString::WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm,
 
 SvStream& WriteSvString(SvStream & rStm, const SvString & r )
 {
-    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStm, r.getString());
+    write_uInt16_lenPrefixed_uInt8s_FromOString(rStm, r.getString());
     return rStm;
 }
 
