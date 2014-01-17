@@ -21,7 +21,7 @@
         <prop oor:name="FilterService"/>
         <prop oor:name="UserData"><value></value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="x-default">SGF - StarWriter Graphics Format</value>
+            <value xml:lang="en-US">SGF - StarWriter Graphics Format</value>
         </prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>sgf_StarOffice_Writer_SGF</value></prop>

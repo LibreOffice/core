@@ -21,7 +21,7 @@
         <prop oor:name="FilterService"/>
         <prop oor:name="UserData"><value>icg</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="x-default">CGM - Computer Graphics Metafile</value>
+            <value xml:lang="en-US">CGM - Computer Graphics Metafile</value>
         </prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>impress_CGM_Computer_Graphics_Metafile</value></prop>
