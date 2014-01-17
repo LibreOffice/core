@@ -323,7 +323,7 @@ void SdDrawDocument::UpdatePageRelativeURLs(SdPage* pPage, sal_uInt16 nPos, sal_
                         bool bNotesLink = ( aURLCopy.getLength() >= sNotes.getLength() + 3
                             && aURLCopy.endsWith(sNotes) );
 
-                        if (bNotesLink ^ bNotes)
+                        if (bNotesLink != bNotes)
                             continue; // no compatible link and page
 
                         if (bNotes)

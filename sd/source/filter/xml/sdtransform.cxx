@@ -313,7 +313,9 @@ bool SdTransformOOo2xDocument::transformItemSet( SfxItemSet& rSet, bool bNumberi
 
 bool SdTransformOOo2xDocument::removeAlienAttributes( SfxItemSet& rSet )
 {
-    return removeAlienAttributes( rSet, EE_PARA_XMLATTRIBS ) | removeAlienAttributes( rSet, SDRATTR_XMLATTRIBUTES );
+    bool b = removeAlienAttributes( rSet, EE_PARA_XMLATTRIBS );
+    b |= removeAlienAttributes( rSet, SDRATTR_XMLATTRIBUTES );
+    return b;
 }
 
 bool SdTransformOOo2xDocument::removeAlienAttributes( SfxItemSet& rSet, sal_uInt16 nWhich )

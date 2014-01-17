@@ -773,7 +773,7 @@ void EventMultiplexer::Implementation::CallListeners (EventMultiplexerEvent& rEv
     ListenerList::const_iterator iListenerEnd (aCopyListeners.end());
     for (; iListener!=iListenerEnd; ++iListener)
     {
-        if ((iListener->second && rEvent.meEventId) != 0)
+        if ((iListener->second && rEvent.meEventId))
             iListener->first.Call(&rEvent);
     }
 }

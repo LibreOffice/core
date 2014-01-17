@@ -842,9 +842,9 @@ short TableDesignDialog::Execute()
 
         if( aImpl.isOptionsChanged() )
             aImpl.ApplyOptions();
-        return true;
+        return RET_OK;
     }
-    return false;
+    return RET_CANCEL;
 }
 
 // ====================================================================

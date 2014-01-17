@@ -129,7 +129,7 @@ public:
 
     SdPublishingDesign();
 
-    int operator ==(const SdPublishingDesign & rDesign) const;
+    bool operator ==(const SdPublishingDesign & rDesign) const;
     friend SvStream& operator >> (SvStream& rIn, SdPublishingDesign& rDesign);
     friend SvStream& WriteSdPublishingDesign(SvStream& rOut, const SdPublishingDesign& rDesign);
 };
@@ -179,7 +179,7 @@ SdPublishingDesign::SdPublishingDesign()
 }
 
 // Compares the values without paying attention to the name
-int SdPublishingDesign::operator ==(const SdPublishingDesign & rDesign) const
+bool SdPublishingDesign::operator ==(const SdPublishingDesign & rDesign) const
 {
     return
     (
