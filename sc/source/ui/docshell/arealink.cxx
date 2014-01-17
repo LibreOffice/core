@@ -229,7 +229,7 @@ bool ScAreaLink::FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const OUStr
 
 //  ausfuehren:
 
-sal_Bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
+bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
                             const OUString& rNewArea, sal_uLong nNewRefresh )
 {
     //  Dokument laden - wie TabLink
@@ -311,7 +311,7 @@ sal_Bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilt
     }
 
     //! check CanFitBlock only if bDoInsert is set?
-    sal_Bool bCanDo = ValidColRow( aNewRange.aEnd.Col(), aNewRange.aEnd.Row() ) &&
+    bool bCanDo = ValidColRow( aNewRange.aEnd.Col(), aNewRange.aEnd.Row() ) &&
                   pDoc->CanFitBlock( aOldRange, aNewRange );
     if (bCanDo)
     {
@@ -488,7 +488,7 @@ sal_Bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilt
 IMPL_LINK_NOARG(ScAreaLink, RefreshHdl)
 {
     long nRes = Refresh( aFileName, aFilterName, aSourceArea,
-        GetRefreshDelay() ) != 0;
+        GetRefreshDelay() ) == true;
     return nRes;
 }
 

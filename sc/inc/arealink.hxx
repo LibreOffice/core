@@ -56,7 +56,7 @@ public:
 
     virtual void    Edit( Window*, const Link& rEndEditHdl );
 
-    sal_Bool    Refresh( const OUString& rNewFile, const OUString& rNewFilter,
+    bool    Refresh( const OUString& rNewFile, const OUString& rNewFilter,
                     const OUString& rNewArea, sal_uLong nNewRefresh );
 
     void    SetInCreate(bool bSet)                  { bInCreate = bSet; }
