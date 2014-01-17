@@ -41,6 +41,7 @@ public:
     void testEmbeddingsGrabBag();
     void testAreaChartLoad();
     void testUpDownBars();
+    void testDoughnutChart();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -54,6 +55,7 @@ public:
     CPPUNIT_TEST(testEmbeddingsGrabBag);
     CPPUNIT_TEST(testAreaChartLoad);
     CPPUNIT_TEST(testUpDownBars);
+    CPPUNIT_TEST(testDoughnutChart);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -520,6 +522,15 @@ void Chart2ExportTest::testUpDownBars()
     xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:upDownBars");
+}
+
+void Chart2ExportTest::testDoughnutChart()
+{
+    load("/chart2/qa/extras/data/docx/", "doughnutChart.docx");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart", "1");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
