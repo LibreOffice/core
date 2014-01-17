@@ -176,20 +176,6 @@ Reference< chart2::data::XLabeledDataSequence > lcl_findLSequenceWithOnlyLabel(
     return xResult;
 }
 
-void lcl_shiftControlY( Control & rControl, long nYOffset )
-{
-    Point aPos( rControl.GetPosPixel());
-    aPos.setY( aPos.getY() + nYOffset );
-    rControl.SetPosPixel( aPos );
-}
-
-void lcl_increaseHeightOfControl( Control & rControl, long nYOffset )
-{
-    Size aSize( rControl.GetSizePixel());
-    aSize.setHeight( aSize.getHeight () + nYOffset );
-    rControl.SetSizePixel( aSize );
-}
-
 } //  anonymous namespace
 
 namespace chart
