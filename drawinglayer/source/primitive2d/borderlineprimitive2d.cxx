@@ -275,7 +275,6 @@ namespace drawinglayer
                                 // Convert a rectanglar polygon into a line.
                                 basegfx::B2DPolygon aDash2;
                                 basegfx::B2DRange aRange = aDash.getB2DRange();
-                                basegfx::B2DPoint aPt(aRange.getMinX(), aRange.getMinY());
                                 aDash2.append(basegfx::B2DPoint(aRange.getMinX(), aRange.getMinY()));
                                 aDash2.append(basegfx::B2DPoint(aRange.getMaxX(), aRange.getMinY()));
                                 xRetval[i] = Primitive2DReference(
