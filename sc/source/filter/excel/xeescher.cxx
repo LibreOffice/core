@@ -1247,7 +1247,7 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
                     meTVA       = pCaption->GetTextVerticalAdjust();
                     meTHA       = pCaption->GetTextHorizontalAdjust();
                     mbAutoScale = pCaption->GetFitToSize()?true:false;
-                    mbLocked    = pCaption->IsMoveProtect() | pCaption->IsResizeProtect();
+                    mbLocked    = pCaption->IsMoveProtect() || pCaption->IsResizeProtect();
 
                     // AutoFill style would change if Postit.cxx object creation values are changed
                     OUString aCol(((XFillColorItem &)GETITEM(aItemSet, XFillColorItem , XATTR_FILLCOLOR)).GetValue());

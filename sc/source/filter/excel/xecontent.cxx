@@ -900,13 +900,13 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
 {
     bool bFmla2 = false;
     ScConditionMode eOperation = mrFormatEntry.GetOperation();
-    sal_Int32 nAboveAverage = eOperation == SC_COND_ABOVE_AVERAGE ||
+    bool nAboveAverage = eOperation == SC_COND_ABOVE_AVERAGE ||
                                 eOperation == SC_COND_ABOVE_EQUAL_AVERAGE;
-    sal_Int32 nEqualAverage = eOperation == SC_COND_ABOVE_EQUAL_AVERAGE ||
+    bool nEqualAverage = eOperation == SC_COND_ABOVE_EQUAL_AVERAGE ||
                                 eOperation == SC_COND_BELOW_EQUAL_AVERAGE;
-    sal_Int32 nBottom = eOperation == SC_COND_BOTTOM10
+    bool nBottom = eOperation == SC_COND_BOTTOM10
         || eOperation == SC_COND_BOTTOM_PERCENT;
-    sal_Int32 nPercent = eOperation == SC_COND_TOP_PERCENT ||
+    bool nPercent = eOperation == SC_COND_TOP_PERCENT ||
         eOperation == SC_COND_BOTTOM_PERCENT;
     OString aRank("0");
     if(IsTopBottomRule(eOperation))
@@ -931,10 +931,10 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
             XML_type, GetTypeString( mrFormatEntry.GetOperation() ),
             XML_priority, OString::number( mnPriority + 1 ).getStr(),
             XML_operator, GetOperatorString( mrFormatEntry.GetOperation(), bFmla2 ),
-            XML_aboveAverage, OString::number( nAboveAverage ).getStr(),
-            XML_equalAverage, OString::number( nEqualAverage ).getStr(),
-            XML_bottom, OString::number( nBottom ).getStr(),
-            XML_percent, OString::number( nPercent ).getStr(),
+            XML_aboveAverage, OString::number( int(nAboveAverage) ).getStr(),
+            XML_equalAverage, OString::number( int(nEqualAverage) ).getStr(),
+            XML_bottom, OString::number( int(nBottom) ).getStr(),
+            XML_percent, OString::number( int(nPercent) ).getStr(),
             XML_rank, aRank.getStr(),
             XML_text, aText.getStr(),
             XML_dxfId, OString::number( GetDxfs().GetDxfId( mrFormatEntry.GetStyle() ) ).getStr(),

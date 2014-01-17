@@ -17,12 +17,13 @@ class ScCTBWrapper;
 class TBCCmd : public TBBase
 {
 public:
-    TBCCmd() : cmdID(0), A(0), B(0), cmdType(0), C(0), reserved3(0) {}
+    TBCCmd() : cmdID(0), A(false), B(false), cmdType(0), C(false), reserved3(0)
+    {}
     sal_uInt16 cmdID;
-    sal_uInt16 A:1;
-    sal_uInt16 B:1;
+    bool A:1;
+    bool B:1;
     sal_uInt16 cmdType:5;
-    sal_uInt16 C:1;
+    bool C:1;
     sal_uInt16 reserved3:8;
     bool Read( SvStream& rS );
     void Print(FILE* fp);

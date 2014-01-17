@@ -592,7 +592,7 @@ Sc10DataBaseCollection::Sc10DataBaseCollection(SvStream& rStream) :
 }
 
 
-int Sc10LogFont::operator==( const Sc10LogFont& rData ) const
+bool Sc10LogFont::operator==( const Sc10LogFont& rData ) const
 {
     return !strcmp( lfFaceName, rData.lfFaceName )
         && lfHeight == rData.lfHeight
@@ -611,13 +611,13 @@ int Sc10LogFont::operator==( const Sc10LogFont& rData ) const
 }
 
 
-int Sc10Color::operator==( const Sc10Color& rColor ) const
+bool Sc10Color::operator==( const Sc10Color& rColor ) const
 {
     return ((Red == rColor.Red) && (Green == rColor.Green) && (Blue == rColor.Blue));
 }
 
 
-int Sc10HeadFootLine::operator==( const Sc10HeadFootLine& rData ) const
+bool Sc10HeadFootLine::operator==( const Sc10HeadFootLine& rData ) const
 {
     return !strcmp(Title, rData.Title)
         && LogFont == rData.LogFont
@@ -633,7 +633,7 @@ int Sc10HeadFootLine::operator==( const Sc10HeadFootLine& rData ) const
 }
 
 
-int Sc10PageFormat::operator==( const Sc10PageFormat& rData ) const
+bool Sc10PageFormat::operator==( const Sc10PageFormat& rData ) const
 {
     return !strcmp(PrintAreaName, rData.PrintAreaName)
         && HeadLine == rData.HeadLine

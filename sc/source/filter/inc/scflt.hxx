@@ -212,7 +212,7 @@ struct Sc10LogFont
     sal_uInt8       lfPitchAndFamily;
     sal_Char    lfFaceName[32];
 
-    int operator==( const Sc10LogFont& rData ) const;
+    bool operator==( const Sc10LogFont& rData ) const;
 };
 
 // RGB-Frabwerte
@@ -222,7 +222,7 @@ struct Sc10Color
     sal_uInt8       Blue;
     sal_uInt8       Green;
     sal_uInt8       Red;
-    int operator==( const Sc10Color& rColor ) const;
+    bool operator==( const Sc10Color& rColor ) const;
 };
 
 // Blockbeschreibung
@@ -282,7 +282,7 @@ struct Sc10HeadFootLine
     sal_uInt16          FrameColor; // Nibble Codierte Farben link oben rechts unten
     sal_uInt16          Reserved;
 
-    int operator==( const Sc10HeadFootLine& rData ) const;
+    bool operator==( const Sc10HeadFootLine& rData ) const;
 };
 
 // Seitenformat
@@ -317,7 +317,7 @@ struct Sc10PageFormat
     sal_Int16               ColRepeatEnd;
     sal_Char            Reserved[26];
 
-    int operator==( const Sc10PageFormat& rData ) const;
+    bool operator==( const Sc10PageFormat& rData ) const;
 };
 
 // Tabellenschutz
@@ -677,7 +677,7 @@ class Sc10PageData : public ScDataObject
 public:
     Sc10PageFormat      aPageFormat;
                         Sc10PageData( const Sc10PageFormat& rFormat ) : aPageFormat(rFormat) {}
-    int                 operator==( const Sc10PageData& rData ) const
+    bool                operator==( const Sc10PageData& rData ) const
                             { return aPageFormat == rData.aPageFormat; }
     virtual ScDataObject*   Clone() const;
 };

@@ -53,7 +53,7 @@ const double MM100_PER_EMU          = 1.0 / 360.0;
 // ----------------------------------------------------------------------------
 
 /** Returns true, if the passed year is a leap year. */
-inline sal_Int32 lclIsLeapYear( sal_Int32 nYear )
+inline bool lclIsLeapYear( sal_Int32 nYear )
 {
     return ((nYear % 4) == 0) && (((nYear % 100) != 0) || ((nYear % 400) == 0));
 }
