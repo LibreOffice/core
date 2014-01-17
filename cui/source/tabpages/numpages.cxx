@@ -298,7 +298,7 @@ void  SvxSingleNumPickTabPage::Reset( const SfxItemSet& rSet )
             eState = SFX_ITEM_SET;
         }
     }
-    DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!");
+    DBG_ASSERT(eState == SFX_ITEM_SET, "no item found!");
     delete pSaveNum;
     pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
 
@@ -457,7 +457,7 @@ void  SvxBulletPickTabPage::Reset( const SfxItemSet& rSet )
         }
 
     }
-    DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!");
+    DBG_ASSERT(eState == SFX_ITEM_SET, "no item found!");
     delete pSaveNum;
     pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
 
@@ -654,7 +654,7 @@ void  SvxNumPickTabPage::Reset( const SfxItemSet& rSet )
         }
 
     }
-    DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!");
+    DBG_ASSERT(eState == SFX_ITEM_SET, "no item found!");
     delete pSaveNum;
     pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
 
@@ -901,7 +901,7 @@ void  SvxBitmapPickTabPage::Reset( const SfxItemSet& rSet )
         }
 
     }
-    DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!");
+    DBG_ASSERT(eState == SFX_ITEM_SET, "no item found!");
     delete pSaveNum;
     pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
 
@@ -1222,7 +1222,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
         }
 
     }
-    DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!");
+    DBG_ASSERT(eState == SFX_ITEM_SET, "no item found!");
     delete pSaveNum;
     pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
 
@@ -2990,7 +2990,7 @@ void SvxNumPositionTabPage::Reset( const SfxItemSet& rSet )
         }
 
     }
-    DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!");
+    DBG_ASSERT(eState == SFX_ITEM_SET, "no item found!");
     delete pSaveNum;
     pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
 
