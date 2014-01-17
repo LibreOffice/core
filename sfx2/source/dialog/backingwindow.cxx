@@ -305,6 +305,41 @@ void BackingWindow::Paint( const Rectangle& )
                 aDev );
 }
 
+bool BackingWindow::PreNotify( NotifyEvent& rNEvt )
+{
+    if( rNEvt.GetType() == EVENT_KEYINPUT )
+    {
+        const KeyEvent* pEvt = rNEvt.GetKeyEvent();
+        const KeyCode& rKeyCode(pEvt->GetKeyCode());
+        // Subwindows of BackingWindow: Sidebar and Thumbnail view
+        if( rKeyCode.GetCode() == KEY_F6 )
+        {
+            if( rKeyCode.IsShift() ) // Shift + F6
+            {
+                if( mpAllRecentThumbnails->HasFocus() )
+                {
+                    mpOpenButton->GrabFocus();
+                    return 1;
+                }
+            }
+            else if ( rKeyCode.IsMod1() ) // Ctrl + F6
+            {
+                mpAllRecentThumbnails->GrabFocus();
+                return 1;
+            }
+            else // F6
+            {
+                if( mpAllButtonsBox->HasChildPathFocus() )
+                {
+                    mpAllRecentThumbnails->GrabFocus();
+                    return 1;
+                }
+            }
+        }
+    }
+    return Window::PreNotify( rNEvt );
+}
+
 bool BackingWindow::Notify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == EVENT_KEYINPUT )
@@ -315,7 +350,6 @@ bool BackingWindow::Notify( NotifyEvent& rNEvt )
             mpAccExec = svt::AcceleratorExecute::createAcceleratorHelper();
             mpAccExec->init( comphelper::getProcessComponentContext(), mxFrame);
         }
-
         const KeyEvent* pEvt = rNEvt.GetKeyEvent();
         const KeyCode& rKeyCode(pEvt->GetKeyCode());
         if( pEvt && mpAccExec->execute(rKeyCode) )
@@ -323,6 +357,25 @@ bool BackingWindow::Notify( NotifyEvent& rNEvt )
     }
 
     return Window::Notify( rNEvt );
+}
+
+void BackingWindow::GetFocus()
+{
+    sal_uInt16 nFlags = GetParent()->GetGetFocusFlags();
+    if( nFlags & GETFOCUS_F6 )
+    {
+        if( nFlags & GETFOCUS_FORWARD ) // F6
+        {
+            mpOpenButton->GrabFocus();
+            return;
+        }
+        else // Shift + F6 or Ctrl + F6
+        {
+            mpAllRecentThumbnails->GrabFocus();
+            return;
+        }
+    }
+    Window::GetFocus();
 }
 
 void BackingWindow::setOwningFrame( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame )
