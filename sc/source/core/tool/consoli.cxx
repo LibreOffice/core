@@ -159,11 +159,8 @@ void ScConsData::DeleteData()
 #undef DELETEARR
 #undef DELETESTR
 
-void ScConsData::InitData( sal_Bool bDelete )
+void ScConsData::InitData()
 {
-    if (bDelete)
-        DeleteData();
-
     if (bReference && nColCount && !ppRefs)
     {
         ppRefs = new ScReferenceList*[nColCount];
@@ -185,11 +182,11 @@ void ScConsData::InitData( sal_Bool bDelete )
 
     if (nColCount && !ppUsed)
     {
-        ppUsed = new sal_Bool*[nColCount];
+        ppUsed = new bool*[nColCount];
         for (SCSIZE i=0; i<nColCount; i++)
         {
-            ppUsed[i] = new sal_Bool[nRowCount];
-            memset( ppUsed[i], 0, nRowCount * sizeof(sal_Bool) );
+            ppUsed[i] = new bool[nRowCount];
+            memset( ppUsed[i], 0, nRowCount * sizeof(bool) );
         }
     }
 
@@ -208,7 +205,7 @@ void ScConsData::InitData( sal_Bool bDelete )
 
 void ScConsData::DoneFields()
 {
-    InitData(false);
+    InitData();
 }
 
 void ScConsData::SetSize( SCCOL nCols, SCROW nRows )
@@ -224,7 +221,7 @@ void ScConsData::GetSize( SCCOL& rCols, SCROW& rRows ) const
     rRows = static_cast<SCROW>(nRowCount);
 }
 
-void ScConsData::SetFlags( ScSubTotalFunc eFunc, sal_Bool bColName, sal_Bool bRowName, sal_Bool bRef )
+void ScConsData::SetFlags( ScSubTotalFunc eFunc, bool bColName, bool bRowName, bool bRef )
 {
     DeleteData();
     bReference = bRef;
@@ -304,7 +301,7 @@ void ScConsData::AddName( const OUString& rName )
             {
                 if (!ppUsed[nArrX][nArrY])
                 {
-                    ppUsed[nArrX][nArrY] = sal_True;
+                    ppUsed[nArrX][nArrY] = true;
                     ppRefs[nArrX][nArrY].Init();
                 }
                 ppRefs[nArrX][nArrY].SetFullSize(nMax);
@@ -504,7 +501,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
         else
         {
             aCornerText = aThisCorner;
-            bCornerUsed = sal_True;
+            bCornerUsed = true;
         }
     }
 
@@ -585,7 +582,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
                             ppRefs[nArrX][nArrY].AddEntry( nCol, nRow, nTab );
                         else
                         {
-                            ppUsed[nArrX][nArrY] = sal_True;
+                            ppUsed[nArrX][nArrY] = true;
                             ppRefs[nArrX][nArrY].Init();
                             ppRefs[nArrX][nArrY].AddEntry( nCol, nRow, nTab );
                         }
@@ -600,7 +597,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
                                          nVal);
                         else
                         {
-                            ppUsed[nArrX][nArrY] = sal_True;
+                            ppUsed[nArrX][nArrY] = true;
                             lcl_InitArray( eFunction, ppCount[nArrX][nArrY],
                                                   ppSum[nArrX][nArrY],
                                                   ppSumSqr[nArrX][nArrY], nVal );
