@@ -176,7 +176,7 @@ protected:
 public:
                     ~SystemWindow();
     virtual bool    Notify( NotifyEvent& rNEvt );
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
 
     virtual sal_Bool    Close();
     virtual void    TitleButtonClick( sal_uInt16 nButton );

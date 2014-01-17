@@ -180,7 +180,7 @@ class ScRefHdlModalImpl : public ModalDialog, public ScRefHandler
 {
 public:
 
-    virtual long        PreNotify( NotifyEvent& rNEvt );
+    virtual bool        PreNotify( NotifyEvent& rNEvt );
     virtual void        StateChanged( StateChangedType nStateChange );
 protected:
     ScRefHdlModalImpl(Window* pParent, const OString& rID,
@@ -193,7 +193,7 @@ template<  class TWindow, bool bBindRef = true >
 class ScRefHdlrImplBase: public TWindow, public ScRefHandler
 {
 public:
-    virtual long        PreNotify( NotifyEvent& rNEvt );
+    virtual bool        PreNotify( NotifyEvent& rNEvt );
     virtual void        StateChanged( StateChangedType nStateChange );
 
 private:
@@ -255,7 +255,7 @@ template<class TWindow, bool bBindRef >
 ScRefHdlrImplBase<TWindow,bBindRef>::~ScRefHdlrImplBase(){}
 
 template<class TWindow, bool bBindRef>
-long ScRefHdlrImplBase<TWindow, bBindRef>::PreNotify( NotifyEvent& rNEvt )
+bool ScRefHdlrImplBase<TWindow, bBindRef>::PreNotify( NotifyEvent& rNEvt )
 {
     ScRefHandler::preNotify( rNEvt, bBindRef );
     return TWindow::PreNotify( rNEvt );

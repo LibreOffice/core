@@ -79,7 +79,7 @@ namespace dbaui
         virtual ~OTableDesignView();
 
         // window overloads
-        virtual long            PreNotify( NotifyEvent& rNEvt );
+        virtual bool            PreNotify( NotifyEvent& rNEvt );
         virtual void            GetFocus();
 
         OTableEditorCtrl*       GetEditorCtrl() const { return m_pWin ? m_pWin->GetEditorCtrl() : NULL; }

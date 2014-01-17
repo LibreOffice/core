@@ -774,12 +774,12 @@ NumericField::~NumericField()
 {
 }
 
-long NumericField::PreNotify( NotifyEvent& rNEvt )
+bool NumericField::PreNotify( NotifyEvent& rNEvt )
 {
         if ( (rNEvt.GetType() == EVENT_KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplNumericProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
-            return 1;
+            return true;
     }
 
     return SpinField::PreNotify( rNEvt );
@@ -926,12 +926,12 @@ NumericBox::~NumericBox()
 {
 }
 
-long NumericBox::PreNotify( NotifyEvent& rNEvt )
+bool NumericBox::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplNumericProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
-            return 1;
+            return true;
     }
 
     return ComboBox::PreNotify( rNEvt );
@@ -1657,12 +1657,12 @@ sal_Int64 MetricField::GetLast( FieldUnit eOutUnit ) const
                                       meUnit, eOutUnit );
 }
 
-long MetricField::PreNotify( NotifyEvent& rNEvt )
+bool MetricField::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplMetricProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
-            return 1;
+            return true;
     }
 
     return SpinField::PreNotify( rNEvt );
@@ -1758,12 +1758,12 @@ MetricBox::~MetricBox()
 {
 }
 
-long MetricBox::PreNotify( NotifyEvent& rNEvt )
+bool MetricBox::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2()  )
     {
         if ( ImplMetricProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
-            return 1;
+            return true;
     }
 
     return ComboBox::PreNotify( rNEvt );
@@ -1992,12 +1992,12 @@ CurrencyField::~CurrencyField()
 {
 }
 
-long CurrencyField::PreNotify( NotifyEvent& rNEvt )
+bool CurrencyField::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplCurrencyProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
-            return 1;
+            return true;
     }
 
     return SpinField::PreNotify( rNEvt );
@@ -2074,12 +2074,12 @@ CurrencyBox::~CurrencyBox()
 {
 }
 
-long CurrencyBox::PreNotify( NotifyEvent& rNEvt )
+bool CurrencyBox::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplCurrencyProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
-            return 1;
+            return true;
     }
 
     return ComboBox::PreNotify( rNEvt );

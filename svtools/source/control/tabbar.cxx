@@ -104,7 +104,7 @@ public:
 
     TabBar*         GetParent() const { return (TabBar*)Window::GetParent(); }
 
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
 
@@ -129,14 +129,14 @@ void ImplTabButton::Command( const CommandEvent& rCEvt )
 
 // =======================================================================
 
-long ImplTabButton::PreNotify( NotifyEvent& rNEvt )
+bool ImplTabButton::PreNotify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
     {
         if ( GetParent()->IsInEditMode() )
         {
             GetParent()->EndEditMode();
-            return sal_True;
+            return true;
         }
     }
 
@@ -266,7 +266,7 @@ public:
     void            SetPostEvent() { mbPostEvt = sal_True; }
     void            ResetPostEvent() { mbPostEvt = sal_False; }
 
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
     virtual void    LoseFocus();
 };
 
@@ -280,7 +280,7 @@ TabBarEdit::TabBarEdit( TabBar* pParent, WinBits nWinStyle ) :
 
 // -----------------------------------------------------------------------
 
-long TabBarEdit::PreNotify( NotifyEvent& rNEvt )
+bool TabBarEdit::PreNotify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
@@ -294,7 +294,7 @@ long TabBarEdit::PreNotify( NotifyEvent& rNEvt )
                     if ( PostUserEvent( LINK( this, TabBarEdit, ImplEndEditHdl ), (void*)sal_False ) )
                         mbPostEvt = sal_True;
                 }
-                return sal_True;
+                return true;
             }
             else if ( pKEvt->GetKeyCode().GetCode() == KEY_ESCAPE )
             {
@@ -303,7 +303,7 @@ long TabBarEdit::PreNotify( NotifyEvent& rNEvt )
                     if ( PostUserEvent( LINK( this, TabBarEdit, ImplEndEditHdl ), (void*)sal_True ) )
                         mbPostEvt = sal_True;
                 }
-                return sal_True;
+                return true;
             }
         }
     }

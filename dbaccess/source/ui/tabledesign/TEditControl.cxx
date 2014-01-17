@@ -1745,7 +1745,7 @@ void OTableEditorCtrl::DeactivateCell(sal_Bool bUpdate)
         pDescrWin->SetReadOnly(bReadOnly || !SetDataPtr(nRow) || GetActRow()->IsReadOnly());
 }
 
-long OTableEditorCtrl::PreNotify( NotifyEvent& rNEvt )
+bool OTableEditorCtrl::PreNotify( NotifyEvent& rNEvt )
 {
     if (rNEvt.GetType() == EVENT_GETFOCUS)
     {

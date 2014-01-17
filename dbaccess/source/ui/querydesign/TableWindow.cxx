@@ -607,7 +607,7 @@ void OTableWindow::Command(const CommandEvent& rEvt)
     }
 }
 
-long OTableWindow::PreNotify(NotifyEvent& rNEvt)
+bool OTableWindow::PreNotify(NotifyEvent& rNEvt)
 {
     sal_Bool bHandled = sal_False;
     switch (rNEvt.GetType())
@@ -737,7 +737,7 @@ long OTableWindow::PreNotify(NotifyEvent& rNEvt)
     }
     if (!bHandled)
         return Window::PreNotify(rNEvt);
-    return 1L;
+    return true;
 }
 
 OUString OTableWindow::getTitle() const

@@ -65,7 +65,7 @@ class ComboBoxControl : public ComboBox
         virtual void KeyInput( const ::KeyEvent& rKEvt );
         virtual void GetFocus();
         virtual void LoseFocus();
-        virtual long PreNotify( NotifyEvent& rNEvt );
+        virtual bool PreNotify( NotifyEvent& rNEvt );
 
     private:
         IComboBoxListener* m_pComboBoxListener;
@@ -124,12 +124,12 @@ void ComboBoxControl::LoseFocus()
         m_pComboBoxListener->LoseFocus();
 }
 
-long ComboBoxControl::PreNotify( NotifyEvent& rNEvt )
+bool ComboBoxControl::PreNotify( NotifyEvent& rNEvt )
 {
-    long nRet( 0 );
+    bool nRet = false;
     if ( m_pComboBoxListener )
         nRet = m_pComboBoxListener->PreNotify( rNEvt );
-    if ( nRet == 0 )
+    if ( !nRet )
         nRet = ComboBox::PreNotify( rNEvt );
 
     return nRet;
@@ -230,7 +230,7 @@ void ComboboxToolbarController::LoseFocus()
     notifyFocusLost();
 }
 
-long ComboboxToolbarController::PreNotify( NotifyEvent& rNEvt )
+bool ComboboxToolbarController::PreNotify( NotifyEvent& rNEvt )
 {
     switch ( rNEvt.GetType() )
     {
@@ -243,7 +243,7 @@ long ComboboxToolbarController::PreNotify( NotifyEvent& rNEvt )
                     // Call execute only with non-empty text
                     if ( !m_pComboBox->GetText().isEmpty() )
                         execute( rKeyCode.GetModifier() );
-                    return 1;
+                    return true;
                 }
             }
             break;
@@ -256,7 +256,7 @@ long ComboboxToolbarController::PreNotify( NotifyEvent& rNEvt )
         default :
             break;
     }
-    return 0;
+    return false;
 }
 
 // --------------------------------------------------------

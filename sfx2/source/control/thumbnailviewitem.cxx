@@ -57,7 +57,7 @@ class ResizableMultiLineEdit : public VclMultiLineEdit
 
         void SetInGrabFocus(bool bInGrabFocus) { mbIsInGrabFocus = bInGrabFocus; }
 
-        virtual long PreNotify(NotifyEvent& rNEvt);
+        virtual bool PreNotify(NotifyEvent& rNEvt);
         virtual void Modify();
 };
 
@@ -72,9 +72,9 @@ ResizableMultiLineEdit::~ResizableMultiLineEdit ()
 {
 }
 
-long ResizableMultiLineEdit::PreNotify(NotifyEvent& rNEvt)
+bool ResizableMultiLineEdit::PreNotify(NotifyEvent& rNEvt)
 {
-    long nDone = 0;
+    bool nDone = false;
     if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         const KeyEvent& rKEvt = *rNEvt.GetKeyEvent();
@@ -85,7 +85,7 @@ long ResizableMultiLineEdit::PreNotify(NotifyEvent& rNEvt)
                 mpItem->setTitle( GetText() );
             case KEY_ESCAPE:
                 mpItem->setEditTitle(false);
-                nDone = 1;
+                nDone = true;
                 break;
             default:
                 break;
@@ -96,7 +96,7 @@ long ResizableMultiLineEdit::PreNotify(NotifyEvent& rNEvt)
         mpItem->setTitle( GetText() );
         mpItem->setEditTitle(false, false);
     }
-    return nDone ? nDone : VclMultiLineEdit::PreNotify(rNEvt);
+    return nDone || VclMultiLineEdit::PreNotify(rNEvt);
 }
 
 void ResizableMultiLineEdit::Modify()

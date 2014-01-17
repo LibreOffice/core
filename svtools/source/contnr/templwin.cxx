@@ -1108,10 +1108,10 @@ void SvtTemplateWindow::UpdateIcons()
 
 // ------------------------------------------------------------------------
 
-long SvtTemplateWindow::PreNotify( NotifyEvent& rNEvt )
+bool SvtTemplateWindow::PreNotify( NotifyEvent& rNEvt )
 {
     sal_uInt16 nType = rNEvt.GetType();
-    long nRet = 0;
+    bool nRet = false;
 
     if ( EVENT_KEYINPUT == nType && rNEvt.GetKeyEvent() )
     {
@@ -1121,15 +1121,15 @@ long SvtTemplateWindow::PreNotify( NotifyEvent& rNEvt )
         if ( KEY_BACKSPACE == nCode && !rKeyCode.GetModifier() && pFileWin->HasChildPathFocus() )
         {
             DoAction( TI_DOCTEMPLATE_BACK );
-            nRet = 1;
+            nRet = true;
         }
         else if ( pIconWin->ProcessKeyEvent( *rNEvt.GetKeyEvent() ) )
         {
-            nRet = 1;
+            nRet = true;
         }
     }
 
-    return nRet ? nRet : Window::PreNotify( rNEvt );
+    return nRet || Window::PreNotify( rNEvt );
 }
 
 // -----------------------------------------------------------------------------

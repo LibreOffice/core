@@ -110,7 +110,7 @@ bool SystemWindow::Notify( NotifyEvent& rNEvt )
 
 // -----------------------------------------------------------------------
 
-long SystemWindow::PreNotify( NotifyEvent& rNEvt )
+bool SystemWindow::PreNotify( NotifyEvent& rNEvt )
 {
     // capture KeyEvents for taskpane cycling
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
@@ -121,7 +121,7 @@ long SystemWindow::PreNotify( NotifyEvent& rNEvt )
         {
             // Ctrl-F6 goes directly to the document
             GrabFocusToDocument();
-            return sal_True;
+            return true;
         }
         else
         {
@@ -146,7 +146,7 @@ long SystemWindow::PreNotify( NotifyEvent& rNEvt )
                 pTList = pSysWin->mpImplData->mpTaskPaneList;
             }
             if( pTList && pTList->HandleKeyEvent( *rNEvt.GetKeyEvent() ) )
-                return sal_True;
+                return true;
         }
     }
     return Window::PreNotify( rNEvt );

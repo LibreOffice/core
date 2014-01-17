@@ -1207,7 +1207,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    long OBrowserListBox::PreNotify( NotifyEvent& _rNEvt )
+    bool OBrowserListBox::PreNotify( NotifyEvent& _rNEvt )
     {
         switch ( _rNEvt.GetType() )
         {
@@ -1255,7 +1255,7 @@ namespace pcr
                 }
             }
 
-            return 1L;
+            return true;
             // handled this. In particular, we also consume PageUp/Down events if we do not use them for scrolling,
             // otherwise they would be used to scroll the document view, which does not sound like it is desired by
             // the user.

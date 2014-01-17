@@ -45,7 +45,7 @@ namespace pcr
     // NumberFormatSampleField
     //==================================================================
     //------------------------------------------------------------------
-    long NumberFormatSampleField::PreNotify( NotifyEvent& rNEvt )
+    bool NumberFormatSampleField::PreNotify( NotifyEvent& rNEvt )
     {
         // want to handle two keys myself : Del/Backspace should empty the window (setting my prop to "standard" this way)
         if (EVENT_KEYINPUT == rNEvt.GetType())
@@ -57,7 +57,7 @@ namespace pcr
                 SetText( "" );
                 if ( m_pHelper )
                     m_pHelper->ModifiedHdl( this );
-                return 1;
+                return true;
             }
         }
 

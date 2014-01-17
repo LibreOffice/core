@@ -347,7 +347,7 @@ public:
 
     virtual sal_Bool    Close();
     virtual void    Resize();
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
     void            InsertLine( const OUString& rLine );
     void            Update() { WorkWindow::Update(); maLstBox.Update(); }
 
@@ -501,7 +501,7 @@ void DbgWindow::GetAssertionEntryRange( sal_uInt16 nInbetweenEntry, sal_uInt16& 
 
 // -----------------------------------------------------------------------
 
-long DbgWindow::PreNotify( NotifyEvent& rNEvt )
+bool DbgWindow::PreNotify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_COMMAND )
     {
@@ -544,7 +544,7 @@ long DbgWindow::PreNotify( NotifyEvent& rNEvt )
                         sAssertion.makeStringAndClear(), GetClipboard());
                 }
             }
-            return 1;   // handled
+            return true;   // handled
         }
     }
     return WorkWindow::PreNotify( rNEvt );

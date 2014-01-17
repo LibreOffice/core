@@ -79,7 +79,7 @@ class BibBookContainer: public BibSplitWindow
 
         virtual void            Split();
 
-        virtual long            PreNotify( NotifyEvent& rNEvt );
+        virtual bool            PreNotify( NotifyEvent& rNEvt );
 
     public:
 

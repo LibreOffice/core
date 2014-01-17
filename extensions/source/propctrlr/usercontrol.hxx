@@ -49,7 +49,7 @@ namespace pcr
         void SetFormatSupplier( const SvNumberFormatsSupplierObj* pSupplier );
 
     protected:
-        virtual long PreNotify( NotifyEvent& rNEvt );
+        virtual bool PreNotify( NotifyEvent& rNEvt );
     };
 
     //========================================================================

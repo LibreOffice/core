@@ -157,7 +157,7 @@ class AddressMultiLineEdit : public VclMultiLineEdit, public SfxListener
     using VclMultiLineEdit::SetText;
 
 protected:
-    long            PreNotify( NotifyEvent& rNEvt );
+    bool            PreNotify( NotifyEvent& rNEvt );
 public:
     AddressMultiLineEdit(Window* pParent, WinBits nWinStyle = WB_LEFT | WB_BORDER);
     ~AddressMultiLineEdit();

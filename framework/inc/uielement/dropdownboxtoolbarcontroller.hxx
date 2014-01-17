@@ -41,7 +41,7 @@ class IListBoxListener
         virtual void DoubleClick() = 0;
         virtual void GetFocus() = 0;
         virtual void LoseFocus() = 0;
-        virtual long PreNotify( NotifyEvent& rNEvt ) = 0;
+        virtual bool PreNotify( NotifyEvent& rNEvt ) = 0;
     protected:
         ~IListBoxListener() {}
 };
@@ -67,7 +67,7 @@ class DropdownToolbarController : public IListBoxListener,
         virtual void DoubleClick();
         virtual void GetFocus();
         virtual void LoseFocus();
-        virtual long PreNotify( NotifyEvent& rNEvt );
+        virtual bool PreNotify( NotifyEvent& rNEvt );
 
     protected:
         virtual void executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand );

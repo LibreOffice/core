@@ -264,7 +264,7 @@ namespace svx
                                     ScrollBar& _rScrollBar,
                                     SuggestionEdit* _pPrev, SuggestionEdit* _pNext );
         virtual             ~SuggestionEdit();
-        virtual long        PreNotify( NotifyEvent& rNEvt );
+        virtual bool        PreNotify( NotifyEvent& rNEvt );
     };
 
 

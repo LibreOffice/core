@@ -318,7 +318,7 @@ private:
     Reference< XFrame > mxFrame;
 
     virtual void    Select();
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
     virtual bool    Notify( NotifyEvent& rNEvt );
     void            ImplReleaseFocus();
 
@@ -369,7 +369,7 @@ void ImplGrafModeControl::Select()
     }
 }
 
-long ImplGrafModeControl::PreNotify( NotifyEvent& rNEvt )
+bool ImplGrafModeControl::PreNotify( NotifyEvent& rNEvt )
 {
     sal_uInt16 nType = rNEvt.GetType();
 

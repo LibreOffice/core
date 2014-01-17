@@ -63,7 +63,7 @@ namespace dbaui
         void SetReadOnly( sal_Bool bReadOnly );
 
         // window overloads
-        virtual long PreNotify( NotifyEvent& rNEvt );
+        virtual bool PreNotify( NotifyEvent& rNEvt );
         virtual void GetFocus();
         virtual void LoseFocus();
 

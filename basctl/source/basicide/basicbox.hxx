@@ -92,7 +92,7 @@ private:
 
 protected:
     virtual void    Select();
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
 
 public:
                     LibBox( Window* pParent,
@@ -132,7 +132,7 @@ private:
 
 protected:
     virtual void    Select();
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
 
 public:
     LanguageBox( Window* pParent );

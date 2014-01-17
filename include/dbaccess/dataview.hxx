@@ -53,7 +53,7 @@ namespace dbaui
         // initialize will be called when after the controller finished his initialize method
         virtual void initialize(){}
         // window overridables
-        virtual long PreNotify( NotifyEvent& rNEvt );
+        virtual bool PreNotify( NotifyEvent& rNEvt );
         virtual void StateChanged( StateChangedType nStateChange );
         virtual void DataChanged( const DataChangedEvent& rDCEvt );
 

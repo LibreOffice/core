@@ -110,7 +110,7 @@ namespace rptui
         virtual OUString getDataField() const;
 
     protected:
-        virtual long        PreNotify( NotifyEvent& rNEvt );
+        virtual bool        PreNotify( NotifyEvent& rNEvt );
 
     private:
         DECL_LINK( OnScroll, ScrollBar* );

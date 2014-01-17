@@ -111,7 +111,7 @@ namespace dbaui
         void    setTaskExternalMnemonics( MnemonicGenerator& _rMnemonics );
 
         // window overloads
-        virtual long PreNotify( NotifyEvent& rNEvt );
+        virtual bool PreNotify( NotifyEvent& rNEvt );
         virtual void GetFocus();
 
         inline IApplicationController&                  getAppController() const { return m_rAppController; }

@@ -638,7 +638,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    long ORoadmap::PreNotify( NotifyEvent& _rNEvt )
+    bool ORoadmap::PreNotify( NotifyEvent& _rNEvt )
     {
         // capture KeyEvents for taskpane cycling
         if ( _rNEvt.GetType() == EVENT_KEYINPUT )

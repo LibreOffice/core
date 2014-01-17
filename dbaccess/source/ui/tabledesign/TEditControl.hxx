@@ -165,7 +165,7 @@ namespace dbaui
         OFieldDescription* GetFieldDescr( long nRow );
 
         // window overloads
-        virtual long PreNotify( NotifyEvent& rNEvt );
+        virtual bool PreNotify( NotifyEvent& rNEvt );
 
         // IClipboardTest
         virtual sal_Bool isCutAllowed() { return IsCutAllowed(); }

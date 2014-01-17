@@ -66,12 +66,12 @@ namespace pcr
         void SetModifyHdl( const Link& _rLink ) { ListBoxType::SetSelectHdl( _rLink ); }
 
     protected:
-        long    PreNotify( NotifyEvent& _rNEvt );
+        bool    PreNotify( NotifyEvent& _rNEvt );
     };
 
     //------------------------------------------------------------------------
     template< class LISTBOX_WINDOW >
-    long ListLikeControlWithModifyHandler< LISTBOX_WINDOW >::PreNotify( NotifyEvent& _rNEvt )
+    bool ListLikeControlWithModifyHandler< LISTBOX_WINDOW >::PreNotify( NotifyEvent& _rNEvt )
     {
         if ( _rNEvt.GetType() == EVENT_KEYINPUT )
         {
@@ -399,7 +399,7 @@ namespace pcr
 
     protected:
         // Window overridables
-        virtual long    PreNotify( NotifyEvent& rNEvt );
+        virtual bool    PreNotify( NotifyEvent& rNEvt );
         virtual void    Resize();
 
     protected:

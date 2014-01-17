@@ -37,7 +37,7 @@ class SelectionListBox : public ListBox
 {
     bool            bCallAddSelection;
 
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
 
 public:
     SelectionListBox(Window* pParent, WinBits nStyle);

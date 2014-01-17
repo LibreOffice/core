@@ -486,7 +486,7 @@ public:
     explicit                PatternField( Window* pParent, WinBits nWinStyle );
     virtual                 ~PatternField();
 
-    virtual long            PreNotify( NotifyEvent& rNEvt );
+    virtual bool            PreNotify( NotifyEvent& rNEvt );
     virtual bool            Notify( NotifyEvent& rNEvt );
     virtual void            Modify();
 };
@@ -506,7 +506,7 @@ public:
     explicit                NumericField( Window* pParent, const ResId& );
     virtual                 ~NumericField();
 
-    virtual long            PreNotify( NotifyEvent& rNEvt );
+    virtual bool            PreNotify( NotifyEvent& rNEvt );
     virtual bool            Notify( NotifyEvent& rNEvt );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
@@ -536,7 +536,7 @@ public:
     explicit                MetricField( Window* pParent, const ResId& );
     virtual                 ~MetricField();
 
-    virtual long            PreNotify( NotifyEvent& rNEvt );
+    virtual bool            PreNotify( NotifyEvent& rNEvt );
     virtual bool            Notify( NotifyEvent& rNEvt );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
@@ -604,7 +604,7 @@ public:
 
                             ~CurrencyField();
 
-    virtual long            PreNotify( NotifyEvent& rNEvt );
+    virtual bool            PreNotify( NotifyEvent& rNEvt );
     virtual bool            Notify( NotifyEvent& rNEvt );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
@@ -636,7 +636,7 @@ public:
     explicit                DateField( Window* pParent, const ResId& );
     virtual                 ~DateField();
 
-    virtual long            PreNotify( NotifyEvent& rNEvt );
+    virtual bool            PreNotify( NotifyEvent& rNEvt );
     virtual bool            Notify( NotifyEvent& rNEvt );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
@@ -672,7 +672,7 @@ public:
     explicit                TimeField( Window* pParent, const ResId& );
     virtual                 ~TimeField();
 
-    virtual long            PreNotify( NotifyEvent& rNEvt );
+    virtual bool            PreNotify( NotifyEvent& rNEvt );
     virtual bool            Notify( NotifyEvent& rNEvt );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
@@ -702,7 +702,7 @@ public:
                             PatternBox( Window* pParent, WinBits nWinStyle );
                             ~PatternBox();
 
-    virtual long            PreNotify( NotifyEvent& rNEvt );
+    virtual bool            PreNotify( NotifyEvent& rNEvt );
     virtual bool            Notify( NotifyEvent& rNEvt );
 
     virtual void            Modify();
@@ -724,7 +724,7 @@ public:
 
     virtual Size            CalcMinimumSize() const;
 
-    virtual long            PreNotify( NotifyEvent& rNEvt );
+    virtual bool            PreNotify( NotifyEvent& rNEvt );
     virtual bool            Notify( NotifyEvent& rNEvt );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
@@ -746,7 +746,7 @@ public:
     explicit                MetricBox( Window* pParent, WinBits nWinStyle );
     virtual                 ~MetricBox();
 
-    virtual long            PreNotify( NotifyEvent& rNEvt );
+    virtual bool            PreNotify( NotifyEvent& rNEvt );
     virtual bool            Notify( NotifyEvent& rNEvt );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
@@ -780,7 +780,7 @@ public:
     explicit                CurrencyBox( Window* pParent, const ResId& );
     virtual                 ~CurrencyBox();
 
-    virtual long            PreNotify( NotifyEvent& rNEvt );
+    virtual bool            PreNotify( NotifyEvent& rNEvt );
     virtual bool            Notify( NotifyEvent& rNEvt );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
@@ -801,7 +801,7 @@ public:
     explicit                DateBox( Window* pParent, WinBits nWinStyle );
     virtual                 ~DateBox();
 
-    virtual long            PreNotify( NotifyEvent& rNEvt );
+    virtual bool            PreNotify( NotifyEvent& rNEvt );
     virtual bool            Notify( NotifyEvent& rNEvt );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
@@ -821,7 +821,7 @@ public:
     explicit                TimeBox( Window* pParent, WinBits nWinStyle );
     virtual                 ~TimeBox();
 
-    virtual long            PreNotify( NotifyEvent& rNEvt );
+    virtual bool            PreNotify( NotifyEvent& rNEvt );
     virtual bool            Notify( NotifyEvent& rNEvt );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 

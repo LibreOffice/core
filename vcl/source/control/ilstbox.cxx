@@ -2786,9 +2786,9 @@ void ImplWin::FillLayoutData() const
 
 // -----------------------------------------------------------------------
 
-long ImplWin::PreNotify( NotifyEvent& rNEvt )
+bool ImplWin::PreNotify( NotifyEvent& rNEvt )
 {
-    long nDone = 0;
+    bool nDone = false;
     const MouseEvent* pMouseEvt = NULL;
 
     if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
@@ -2805,7 +2805,7 @@ long ImplWin::PreNotify( NotifyEvent& rNEvt )
         }
     }
 
-    return nDone ? nDone : Control::PreNotify(rNEvt);
+    return nDone || Control::PreNotify(rNEvt);
 }
 
 // -----------------------------------------------------------------------
@@ -3104,7 +3104,7 @@ ImplListBoxFloatingWindow::ImplListBoxFloatingWindow( Window* pParent ) :
 
 // -----------------------------------------------------------------------
 
-long ImplListBoxFloatingWindow::PreNotify( NotifyEvent& rNEvt )
+bool ImplListBoxFloatingWindow::PreNotify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == EVENT_LOSEFOCUS )
     {

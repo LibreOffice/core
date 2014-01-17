@@ -223,7 +223,7 @@ namespace dbaui
 
         /** @note used by AddTabDlg to see if more tables can be added */
         virtual sal_Bool IsAddAllowed();
-        virtual long PreNotify(NotifyEvent& rNEvt);
+        virtual bool PreNotify(NotifyEvent& rNEvt);
 
         // DnD stuff
         virtual void StartDrag( sal_Int8 nAction, const Point& rPosPixel );

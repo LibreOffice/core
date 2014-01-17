@@ -64,7 +64,7 @@ private:
 
 protected:
 
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
     ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputDoneAfter( sal_Bool bForced = sal_False );
@@ -108,7 +108,7 @@ protected:
 
 protected:
 
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
     ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputDoneAfter( sal_Bool bForced = sal_False );

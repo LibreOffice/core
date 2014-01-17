@@ -407,7 +407,7 @@ class OfaAutoCompleteTabPage : public SfxTabPage
                                     const ResId& rResId )
             : MultiListBox( &rPg, rResId ), rPage( rPg ) {}
 
-        virtual long PreNotify( NotifyEvent& rNEvt );
+        virtual bool PreNotify( NotifyEvent& rNEvt );
     };
 
     CheckBox        aCBActiv; ///<Enable word completion

@@ -67,7 +67,7 @@ namespace dbaui
                                                 sal_uInt16 _nPos,
                                                 sal_Bool _bSet=sal_False);
     protected:
-        virtual long            PreNotify( NotifyEvent& rNEvt );
+        virtual bool            PreNotify( NotifyEvent& rNEvt );
     public:
         OWizTypeSelectList( Window* pParent, WinBits nStyle = WB_BORDER ) : MultiListBox(pParent,nStyle) {};
         OWizTypeSelectList( Window* pParent, const ResId& rResId ) : MultiListBox(pParent,rResId) {};

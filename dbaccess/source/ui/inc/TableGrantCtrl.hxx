@@ -82,7 +82,7 @@ public:
 protected:
     virtual void Resize();
 
-    virtual long PreNotify(NotifyEvent& rNEvt );
+    virtual bool PreNotify(NotifyEvent& rNEvt );
 
     virtual sal_Bool IsTabAllowed(sal_Bool bForward) const;
     virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol );

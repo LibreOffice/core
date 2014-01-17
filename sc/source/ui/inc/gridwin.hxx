@@ -319,7 +319,7 @@ public:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    MouseButtonUp( const MouseEvent& rMEvt );
     virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
     virtual void    Tracking( const TrackingEvent& rTEvt );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();

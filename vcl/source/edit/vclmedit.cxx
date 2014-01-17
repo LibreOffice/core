@@ -1410,9 +1410,9 @@ bool VclMultiLineEdit::Notify( NotifyEvent& rNEvt )
     return nDone || Edit::Notify( rNEvt );
 }
 
-long VclMultiLineEdit::PreNotify( NotifyEvent& rNEvt )
+bool VclMultiLineEdit::PreNotify( NotifyEvent& rNEvt )
 {
-    long nDone = 0;
+    bool nDone = false;
 
 #if (OSL_DEBUG_LEVEL > 1) && defined(DBG_UTIL)
     if( rNEvt.GetType() == EVENT_KEYINPUT )
@@ -1430,7 +1430,7 @@ long VclMultiLineEdit::PreNotify( NotifyEvent& rNEvt )
         const KeyEvent& rKEvent = *rNEvt.GetKeyEvent();
         if ( !rKEvent.GetKeyCode().IsShift() && ( rKEvent.GetKeyCode().GetGroup() == KEYGROUP_CURSOR ) )
         {
-            nDone = 1;
+            nDone = true;
             TextSelection aSel = pImpVclMEdit->GetTextWindow()->GetTextView()->GetSelection();
             if ( aSel.HasRange() )
             {
@@ -1493,14 +1493,14 @@ long VclMultiLineEdit::PreNotify( NotifyEvent& rNEvt )
                     break;
                     default:
                     {
-                        nDone = 0;
+                        nDone = false;
                     }
                 }
             }
         }
     }
 
-    return nDone ? nDone : Edit::PreNotify( rNEvt );
+    return nDone || Edit::PreNotify( rNEvt );
 }
 
 //

@@ -1255,9 +1255,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSelectionListBox(Window *pP
     return pListBox;
 }
 
-long SelectionListBox::PreNotify( NotifyEvent& rNEvt )
+bool SelectionListBox::PreNotify( NotifyEvent& rNEvt )
 {
-    long nHandled = ListBox::PreNotify( rNEvt );
+    bool nHandled = ListBox::PreNotify( rNEvt );
     if ( rNEvt.GetType() == EVENT_KEYUP )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();

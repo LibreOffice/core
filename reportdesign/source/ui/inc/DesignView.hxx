@@ -102,7 +102,7 @@ namespace rptui
 
         // window overloads
         virtual void MouseButtonDown( const MouseEvent& rMEvt );
-        virtual long PreNotify( NotifyEvent& rNEvt );
+        virtual bool PreNotify( NotifyEvent& rNEvt );
         virtual void GetFocus();
 
         // set the view readonly or not

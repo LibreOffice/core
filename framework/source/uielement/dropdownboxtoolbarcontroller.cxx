@@ -62,7 +62,7 @@ class ListBoxControl : public ListBox
         virtual void DoubleClick();
         virtual void GetFocus();
         virtual void LoseFocus();
-        virtual long PreNotify( NotifyEvent& rNEvt );
+        virtual bool PreNotify( NotifyEvent& rNEvt );
 
     private:
         IListBoxListener* m_pListBoxListener;
@@ -107,12 +107,12 @@ void ListBoxControl::LoseFocus()
         m_pListBoxListener->LoseFocus();
 }
 
-long ListBoxControl::PreNotify( NotifyEvent& rNEvt )
+bool ListBoxControl::PreNotify( NotifyEvent& rNEvt )
 {
-    long nRet( 0 );
+    bool nRet = false;
     if ( m_pListBoxListener )
         nRet = m_pListBoxListener->PreNotify( rNEvt );
-    if ( nRet == 0 )
+    if ( !nRet )
         nRet = ListBox::PreNotify( rNEvt );
 
     return nRet;
@@ -205,9 +205,9 @@ void DropdownToolbarController::LoseFocus()
     notifyFocusLost();
 }
 
-long DropdownToolbarController::PreNotify( NotifyEvent& /*rNEvt*/ )
+bool DropdownToolbarController::PreNotify( NotifyEvent& /*rNEvt*/ )
 {
-    return 0;
+    return false;
 }
 
 // --------------------------------------------------------

@@ -46,7 +46,7 @@ void SvxClickInfoCtr::MouseButtonDown( const MouseEvent& )
 }
 
 //-----------------------------------------------------------------------------
-long SvxClickInfoCtr::PreNotify( NotifyEvent& rNEvt )
+bool SvxClickInfoCtr::PreNotify( NotifyEvent& rNEvt )
 {
     if(rNEvt.GetType()==EVENT_GETFOCUS || rNEvt.GetType()==EVENT_MOUSEBUTTONDOWN)
     {

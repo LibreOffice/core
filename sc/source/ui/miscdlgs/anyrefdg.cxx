@@ -1038,7 +1038,7 @@ ScRefHdlModalImpl::ScRefHdlModalImpl(Window* pParent, const OString& rID,
 {
 }
 
-long ScRefHdlModalImpl::PreNotify( NotifyEvent& rNEvt )
+bool ScRefHdlModalImpl::PreNotify( NotifyEvent& rNEvt )
 {
     ScRefHandler::preNotify( rNEvt, true );
     return ModalDialog::PreNotify( rNEvt );

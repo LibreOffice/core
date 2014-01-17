@@ -476,12 +476,12 @@ LongCurrencyField::~LongCurrencyField()
 }
 
 
-long LongCurrencyField::PreNotify( NotifyEvent& rNEvt )
+bool LongCurrencyField::PreNotify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         if ( ImplLongCurrencyProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), GetLocaleDataWrapper() ) )
-            return 1;
+            return true;
     }
     return SpinField::PreNotify( rNEvt );
 }
@@ -559,12 +559,12 @@ LongCurrencyBox::~LongCurrencyBox()
 {
 }
 
-long LongCurrencyBox::PreNotify( NotifyEvent& rNEvt )
+bool LongCurrencyBox::PreNotify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         if ( ImplLongCurrencyProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), GetLocaleDataWrapper() ) )
-            return 1;
+            return true;
     }
     return ComboBox::PreNotify( rNEvt );
 }

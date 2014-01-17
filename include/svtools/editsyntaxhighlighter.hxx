@@ -36,7 +36,7 @@ class SVT_DLLPUBLIC MultiLineEditSyntaxHighlight : public MultiLineEdit
         virtual void DoBracketHilight(sal_uInt16 aKey);
 
     protected:
-        virtual long PreNotify( NotifyEvent& rNEvt );
+        virtual bool PreNotify( NotifyEvent& rNEvt );
 
     public:
         MultiLineEditSyntaxHighlight( Window* pParent, WinBits nWinStyle = WB_LEFT | WB_BORDER , HighlighterLanguage aLanguage = HIGHLIGHT_SQL);

@@ -485,9 +485,9 @@ Rectangle* SpinButton::ImplFindPartRect( const Point& rPt )
         return NULL;
 }
 
-long SpinButton::PreNotify( NotifyEvent& rNEvt )
+bool SpinButton::PreNotify( NotifyEvent& rNEvt )
 {
-    long nDone = 0;
+    bool nDone = false;
     const MouseEvent* pMouseEvt = NULL;
 
     if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
@@ -520,7 +520,7 @@ long SpinButton::PreNotify( NotifyEvent& rNEvt )
         }
     }
 
-    return nDone ? nDone : Control::PreNotify(rNEvt);
+    return nDone || Control::PreNotify(rNEvt);
 }
 
 // -----------------------------------------------------------------------

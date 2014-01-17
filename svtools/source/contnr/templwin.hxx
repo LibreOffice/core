@@ -248,7 +248,7 @@ private:
     void                UpdateIcons();
 
 protected:
-    virtual long        PreNotify( NotifyEvent& rNEvt );
+    virtual bool        PreNotify( NotifyEvent& rNEvt );
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 
 public:

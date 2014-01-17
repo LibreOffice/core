@@ -428,9 +428,9 @@ void BibToolBar::SetQueryString(const OUString& aStr)
 }
 
 
-long BibToolBar::PreNotify( NotifyEvent& rNEvt )
+bool BibToolBar::PreNotify( NotifyEvent& rNEvt )
 {
-    long nResult=sal_True;
+    bool nResult = true;
 
     sal_uInt16 nSwitch=rNEvt.GetType();
     if(aEdQuery.HasFocus() && nSwitch==EVENT_KEYINPUT)

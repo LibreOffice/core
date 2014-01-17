@@ -31,7 +31,7 @@ private:
     SvSimpleTable*     m_pTable;
 
 protected:
-    virtual long PreNotify( NotifyEvent& rNEvt );
+    virtual bool PreNotify( NotifyEvent& rNEvt );
 
 public:
     SvSimpleTableContainer( Window* pParent, const ResId& rResId );

@@ -52,7 +52,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    long FileURLBox::PreNotify( NotifyEvent& _rNEvt )
+    bool FileURLBox::PreNotify( NotifyEvent& _rNEvt )
     {
         switch ( _rNEvt.GetType() )
         {

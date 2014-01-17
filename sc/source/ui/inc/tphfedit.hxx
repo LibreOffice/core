@@ -131,7 +131,7 @@ public:
     void            SetMenuHdl( const Link& rLink ) { aMLink = rLink; }
     const Link&     GetMenuHdl() const { return aMLink; }
 
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
 };
 
 #endif // SC_TPHFEDIT_HXX

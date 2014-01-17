@@ -61,7 +61,7 @@ class EditControl : public Edit
         virtual void KeyInput( const ::KeyEvent& rKEvt );
         virtual void GetFocus();
         virtual void LoseFocus();
-        virtual long PreNotify( NotifyEvent& rNEvt );
+        virtual bool PreNotify( NotifyEvent& rNEvt );
 
     private:
         IEditListener* m_pEditListener;
@@ -106,12 +106,12 @@ void EditControl::LoseFocus()
         m_pEditListener->LoseFocus();
 }
 
-long EditControl::PreNotify( NotifyEvent& rNEvt )
+bool EditControl::PreNotify( NotifyEvent& rNEvt )
 {
-    long nRet( 0 );
+    bool nRet = false;
     if ( m_pEditListener )
         nRet = m_pEditListener->PreNotify( rNEvt );
-    if ( nRet == 0 )
+    if ( !nRet )
         nRet = Edit::PreNotify( rNEvt );
 
     return nRet;
@@ -196,7 +196,7 @@ void EditToolbarController::LoseFocus()
     notifyFocusLost();
 }
 
-long EditToolbarController::PreNotify( NotifyEvent& rNEvt )
+bool EditToolbarController::PreNotify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
@@ -207,11 +207,11 @@ long EditToolbarController::PreNotify( NotifyEvent& rNEvt )
             // Call execute only with non-empty text
             if ( !m_pEditControl->GetText().isEmpty() )
                 execute( rKeyCode.GetModifier() );
-            return 1;
+            return true;
         }
     }
 
-    return 0;
+    return false;
 }
 
 // --------------------------------------------------------

@@ -554,7 +554,7 @@ void FormattedField::ImplSetTextImpl(const OUString& rNew, Selection* pNewSel)
     m_bValueDirty = sal_True; // not always necessary, but better re-evaluate for safety reasons
 }
 
-long FormattedField::PreNotify(NotifyEvent& rNEvt)
+bool FormattedField::PreNotify(NotifyEvent& rNEvt)
 {
     DBG_CHKTHIS(FormattedField, NULL);
     if (rNEvt.GetType() == EVENT_KEYINPUT)

@@ -113,7 +113,7 @@ void MultiLineEditSyntaxHighlight::DoBracketHilight(sal_uInt16 nKey)
     }
 }
 
-long MultiLineEditSyntaxHighlight::PreNotify( NotifyEvent& rNEvt )
+bool MultiLineEditSyntaxHighlight::PreNotify( NotifyEvent& rNEvt )
 {
     if ( mbDoBracketHilight && (rNEvt.GetType() == EVENT_KEYINPUT) )
         DoBracketHilight(rNEvt.GetKeyEvent()->GetCharCode());

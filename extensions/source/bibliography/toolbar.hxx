@@ -143,7 +143,7 @@ class BibToolBar:   public ToolBox
         void                    InitListener();
         virtual void            Select();
         virtual void            Click();
-        long                    PreNotify( NotifyEvent& rNEvt );
+        virtual bool            PreNotify( NotifyEvent& rNEvt );
 
 
     public:

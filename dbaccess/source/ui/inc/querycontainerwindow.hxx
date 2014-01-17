@@ -53,7 +53,7 @@ namespace dbaui
 
         virtual void Construct();
 
-        virtual long        PreNotify( NotifyEvent& rNEvt );
+        virtual bool        PreNotify( NotifyEvent& rNEvt );
 
         // show the beamer
         void    showPreview(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);

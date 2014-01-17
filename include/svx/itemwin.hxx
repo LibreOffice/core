@@ -55,7 +55,7 @@ public:
 
 protected:
     virtual void    Select();
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
     virtual bool    Notify( NotifyEvent& rNEvt );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
@@ -87,7 +87,7 @@ public:
 
 protected:
     virtual void    Select();
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
     virtual bool    Notify( NotifyEvent& rNEvt );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
@@ -112,7 +112,7 @@ protected:
     virtual void    Down();
     virtual void    Up();       // just to be sure
 
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
     virtual bool    Notify( NotifyEvent& rNEvt );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
@@ -139,7 +139,7 @@ public:
     sal_Bool            IsRelease() { return bRelease;}
 
 protected:
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
     virtual bool    Notify( NotifyEvent& rNEvt );
 
 private:
@@ -161,7 +161,7 @@ public:
     sal_Bool            IsRelease() { return bRelease;}
 
 protected:
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
     virtual bool    Notify( NotifyEvent& rNEvt );
     virtual void    Select();
 

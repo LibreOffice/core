@@ -210,9 +210,9 @@ void BibBookContainer::GetFocus()
         pBottomWin->GrabFocus();
 }
 
-long BibBookContainer::PreNotify( NotifyEvent& rNEvt )
+bool BibBookContainer::PreNotify( NotifyEvent& rNEvt )
 {
-    long nHandled = 0;
+    bool nHandled = false;
     if( EVENT_KEYINPUT == rNEvt.GetType()  )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
@@ -235,10 +235,10 @@ long BibBookContainer::PreNotify( NotifyEvent& rNEvt )
                     SetItemSize( nFirstWinId, nHeight );
                     SetItemSize( nSecondWinId, 100 - nHeight );
                 }
-                nHandled = 1;
+                nHandled = true;
             }
             else if( pKEvt->GetCharCode() && HandleShortCutKey( *pKEvt ) )
-                nHandled = 1;
+                nHandled = true;
         }
     }
 

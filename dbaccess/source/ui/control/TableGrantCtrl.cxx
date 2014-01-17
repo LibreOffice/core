@@ -148,7 +148,7 @@ void OTableGrantControl::Resize()
     EditBrowseBox::Resize();
 }
 
-long OTableGrantControl::PreNotify(NotifyEvent& rNEvt)
+bool OTableGrantControl::PreNotify(NotifyEvent& rNEvt)
 {
     DBG_CHKTHIS(OTableGrantControl,NULL);
     if (rNEvt.GetType() == EVENT_LOSEFOCUS)

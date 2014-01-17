@@ -45,7 +45,7 @@ class ScListBox : public ListBox
 protected:
 
     virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
 
 public:
                     ScListBox( Window* pParent, const ResId& rResId );

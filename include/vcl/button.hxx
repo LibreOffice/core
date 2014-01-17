@@ -159,7 +159,7 @@ public:
     virtual void    LoseFocus();
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
 
     virtual void    Toggle();
@@ -357,7 +357,7 @@ public:
     virtual void    LoseFocus();
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
 
     virtual void    Toggle();
 
@@ -472,7 +472,7 @@ public:
     virtual void    LoseFocus();
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
 
     virtual void    Toggle();
 

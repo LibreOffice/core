@@ -752,7 +752,7 @@ void ComboBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 // -----------------------------------------------------------------------
 
-long ComboBox::PreNotify( NotifyEvent& rNEvt )
+bool ComboBox::PreNotify( NotifyEvent& rNEvt )
 {
 
     return Edit::PreNotify( rNEvt );

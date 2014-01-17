@@ -1274,7 +1274,7 @@ SentenceEditWindow_Impl::~SentenceEditWindow_Impl()
 #define ACTION_SELECTFIELD 2
 #define ACTION_EXPAND      3
 
-long SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
+bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 {
     bool bChange = false;
     const TextCharAttrib*  pErrorAttrib = 0;
@@ -1538,8 +1538,7 @@ long SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
         else
             bChange = false;
     }
-    long nRet = bChange ? 1 : MultiLineEdit::PreNotify(rNEvt);
-    return nRet;
+    return bChange || MultiLineEdit::PreNotify(rNEvt);
 }
 
 //-----------------------------------------------------------------------

@@ -610,7 +610,7 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------
-    long EditBrowseBox::PreNotify(NotifyEvent& rEvt)
+    bool EditBrowseBox::PreNotify(NotifyEvent& rEvt)
     {
         switch (rEvt.GetType())
         {
@@ -652,7 +652,7 @@ namespace svt
                                     // maybe we're not visible ...
                                     EnableAndShow();
                                     aController->GetWindow().GrabFocus();
-                                    return 1;
+                                    return true;
                                 }
                                 // ask if traveling to the next cell is allowed
                                 if (IsTabAllowed(sal_True))
@@ -713,7 +713,7 @@ namespace svt
                                 // maybe we're not visible ...
                                 EnableAndShow();
                                 aController->GetWindow().GrabFocus();
-                                return 1;
+                                return true;
                             }
                         }
 
@@ -721,7 +721,7 @@ namespace svt
 
                         if (bLocalSelect && (GetSelectRowCount() || GetSelection() != NULL))
                             DeactivateCell();
-                        return 1;
+                        return true;
                     }
                 }
         }

@@ -119,7 +119,7 @@ namespace dbaui
         Window::Resize();
         resizeAll( Rectangle( Point( 0, 0), GetSizePixel() ) );
     }
-    long ODataView::PreNotify( NotifyEvent& _rNEvt )
+    bool ODataView::PreNotify( NotifyEvent& _rNEvt )
     {
         bool bHandled = false;
         switch ( _rNEvt.GetType() )
@@ -139,7 +139,7 @@ namespace dbaui
                 bHandled = m_rController.interceptUserInput( _rNEvt );
                 break;
         }
-        return bHandled ? 1L : Window::PreNotify( _rNEvt );
+        return bHandled || Window::PreNotify( _rNEvt );
     }
     void ODataView::StateChanged( StateChangedType nType )
     {

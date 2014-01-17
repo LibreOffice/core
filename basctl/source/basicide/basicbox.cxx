@@ -254,9 +254,9 @@ void LibBox::InsertEntries( const ScriptDocument& rDocument, LibraryLocation eLo
     }
 }
 
-long LibBox::PreNotify( NotifyEvent& rNEvt )
+bool LibBox::PreNotify( NotifyEvent& rNEvt )
 {
-    long nDone = 0;
+    bool nDone = false;
     if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         KeyEvent aKeyEvt = *rNEvt.GetKeyEvent();
@@ -266,7 +266,7 @@ long LibBox::PreNotify( NotifyEvent& rNEvt )
             case KEY_RETURN:
             {
                 NotifyIDE();
-                nDone = 1;
+                nDone = true;
             }
             break;
 
@@ -274,7 +274,7 @@ long LibBox::PreNotify( NotifyEvent& rNEvt )
             {
                 SelectEntry( aCurText );
                 ReleaseFocus();
-                nDone = 1;
+                nDone = true;
             }
             break;
         }
@@ -296,7 +296,7 @@ long LibBox::PreNotify( NotifyEvent& rNEvt )
         }
     }
 
-    return nDone ? nDone : ListBox::PreNotify( rNEvt );
+    return nDone || ListBox::PreNotify( rNEvt );
 }
 
 void LibBox::Select()
@@ -473,9 +473,9 @@ void LanguageBox::Select()
         SelectEntry( m_sCurrentText );  // Select after Escape
 }
 
-long LanguageBox::PreNotify( NotifyEvent& rNEvt )
+bool LanguageBox::PreNotify( NotifyEvent& rNEvt )
 {
-    long nDone = 0;
+    bool nDone = false;
     if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         sal_uInt16 nKeyCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
@@ -484,14 +484,14 @@ long LanguageBox::PreNotify( NotifyEvent& rNEvt )
             case KEY_RETURN:
             {
                 SetLanguage();
-                nDone = 1;
+                nDone = true;
             }
             break;
 
             case KEY_ESCAPE:
             {
                 SelectEntry( m_sCurrentText );
-                nDone = 1;
+                nDone = true;
             }
             break;
         }
@@ -503,7 +503,7 @@ long LanguageBox::PreNotify( NotifyEvent& rNEvt )
     {
     }
 
-    return nDone ? nDone : ListBox::PreNotify( rNEvt );
+    return nDone || ListBox::PreNotify( rNEvt );
 }
 
 void LanguageBox::Update( const SfxStringItem* pItem )

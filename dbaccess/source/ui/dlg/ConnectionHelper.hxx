@@ -53,7 +53,7 @@ namespace dbaui
         // setting/retrieving the current connection URL
         // necessary because for some types, the URL must be decoded for display purposes
         ::dbaccess::ODsnTypeCollection* m_pCollection;  /// the DSN type collection instance
-        virtual long    PreNotify( NotifyEvent& _rNEvt );
+        virtual bool    PreNotify( NotifyEvent& _rNEvt );
 
         // <method>OGenericAdministrationPage::fillControls</method>
         virtual void    fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);

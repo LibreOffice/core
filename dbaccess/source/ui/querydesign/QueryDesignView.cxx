@@ -2778,7 +2778,7 @@ void OQueryDesignView::fillValidFields(const OUString& sAliasName, ComboBox* pFi
     }
 }
 
-long OQueryDesignView::PreNotify(NotifyEvent& rNEvt)
+bool OQueryDesignView::PreNotify(NotifyEvent& rNEvt)
 {
     switch (rNEvt.GetType())
     {

@@ -847,7 +847,7 @@ class SwAssignFieldsControl : public Control
     DECL_LINK(MatchHdl_Impl, ListBox*);
     DECL_LINK(GotFocusHdl_Impl, ListBox*);
 
-    virtual long        PreNotify( NotifyEvent& rNEvt );
+    virtual bool        PreNotify( NotifyEvent& rNEvt );
     virtual void        Command( const CommandEvent& rCEvt );
 
     void                MakeVisible( sal_Int32 nIndex );
@@ -1021,7 +1021,7 @@ void SwAssignFieldsControl::Command( const CommandEvent& rCEvt )
     }
 }
 
-long SwAssignFieldsControl::PreNotify( NotifyEvent& rNEvt )
+bool SwAssignFieldsControl::PreNotify( NotifyEvent& rNEvt )
 {
     if(rNEvt.GetType() == EVENT_COMMAND)
     {
@@ -1030,7 +1030,7 @@ long SwAssignFieldsControl::PreNotify( NotifyEvent& rNEvt )
         if( COMMAND_WHEEL == nCmd )
         {
             Command(*pCEvt);
-            return 1;
+            return true;
         }
     }
     return Control::PreNotify(rNEvt);
@@ -1305,18 +1305,18 @@ void    AddressMultiLineEdit::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rH
     }
 }
 
-long  AddressMultiLineEdit::PreNotify( NotifyEvent& rNEvt )
+bool AddressMultiLineEdit::PreNotify( NotifyEvent& rNEvt )
 {
-    long nHandled = 0;
+    bool nHandled = false;
     if( EVENT_KEYINPUT == rNEvt.GetType()  &&
         rNEvt.GetKeyEvent()->GetCharCode())
     {
-        nHandled = 1;
+        nHandled = true;
     }
     else if(EVENT_MOUSEBUTTONDOWN == rNEvt.GetType()) {
         const MouseEvent *pMEvt = rNEvt.GetMouseEvent();
         if(pMEvt->GetClicks() >= 2)
-            nHandled = 1;
+            nHandled = true;
     }
     if(!nHandled)
         nHandled = VclMultiLineEdit::PreNotify( rNEvt );

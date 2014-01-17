@@ -550,7 +550,7 @@ DBG_NAME(OConnectionHelper)
            }
         return eExists;
     }
-    long OConnectionHelper::PreNotify( NotifyEvent& _rNEvt )
+    bool OConnectionHelper::PreNotify( NotifyEvent& _rNEvt )
     {
         if ( m_pCollection->isFileSystemBased(m_eType) )
         {
@@ -567,7 +567,7 @@ DBG_NAME(OConnectionHelper)
                     if (m_aConnectionURL.IsWindowOrChild(_rNEvt.GetWindow()) && m_bUserGrabFocus)
                     {   // a descendant of the URL edit field lost the focus
                         if (!commitURL())
-                            return 1L;  // handled
+                            return true;  // handled
                     }
                     break;
             }

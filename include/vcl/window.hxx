@@ -597,7 +597,7 @@ public:
     virtual void        UserEvent( sal_uLong nEvent, void* pEventData );
     virtual void        StateChanged( StateChangedType nStateChange );
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
-    virtual long        PreNotify( NotifyEvent& rNEvt );
+    virtual bool        PreNotify( NotifyEvent& rNEvt );
     virtual bool        Notify( NotifyEvent& rNEvt );
     virtual Window*     GetPreferredKeyInputWindow();
 

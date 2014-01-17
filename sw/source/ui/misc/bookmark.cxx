@@ -225,15 +225,15 @@ sal_uInt16 BookmarkCombo::GetSelectEntryPos( sal_uInt16 nSelIndex ) const
     return COMBOBOX_ENTRY_NOTFOUND;
 }
 
-long BookmarkCombo::PreNotify( NotifyEvent& rNEvt )
+bool BookmarkCombo::PreNotify( NotifyEvent& rNEvt )
 {
-    long nHandled = 0;
+    bool nHandled = false;
     if( EVENT_KEYINPUT == rNEvt.GetType() &&
          rNEvt.GetKeyEvent()->GetCharCode() )
     {
         OUString sKey( rNEvt.GetKeyEvent()->GetCharCode() );
         if(-1 != aForbiddenChars.indexOf(sKey))
-            nHandled = 1;
+            nHandled = true;
     }
     if(!nHandled)
         nHandled = SwComboBox::PreNotify( rNEvt );

@@ -82,7 +82,7 @@ public:
     virtual ~OAddFieldWindow();
     virtual void Resize();
     virtual void GetFocus();
-    virtual long PreNotify( NotifyEvent& _rNEvt );
+    virtual bool PreNotify( NotifyEvent& _rNEvt );
 
     inline const OUString&       GetCommand()            const { return m_aCommandName; }
     inline sal_Int32                    GetCommandType()        const { return m_nCommandType; }

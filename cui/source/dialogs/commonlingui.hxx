@@ -49,7 +49,7 @@ public:
 
 protected:
     virtual void        MouseButtonDown( const MouseEvent& rMEvt );
-    virtual long        PreNotify( NotifyEvent& rNEvt );
+    virtual bool        PreNotify( NotifyEvent& rNEvt );
 
 };
 

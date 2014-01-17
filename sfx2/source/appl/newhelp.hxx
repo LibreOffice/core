@@ -196,7 +196,7 @@ public:
     SearchBox_Impl( Window* pParent, const ResId& rResId ) :
         ComboBox( pParent, rResId ) { SetDropDownLineCount( 5 ); }
 
-    virtual long        PreNotify( NotifyEvent& rNEvt );
+    virtual bool        PreNotify( NotifyEvent& rNEvt );
     virtual void        Select();
 
     inline void         SetSearchLink( const Link& rLink ) { aSearchLink = rLink; }
@@ -340,7 +340,7 @@ public:
     ~SfxHelpIndexWindow_Impl();
 
     virtual void        Resize();
-    virtual long        PreNotify( NotifyEvent& rNEvt );
+    virtual bool        PreNotify( NotifyEvent& rNEvt );
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 
     void                SetDoubleClickHdl( const Link& rLink );
@@ -478,7 +478,7 @@ public:
     ~SfxHelpTextWindow_Impl();
 
     virtual void            Resize();
-    virtual long            PreNotify( NotifyEvent& rNEvt );
+    virtual bool            PreNotify( NotifyEvent& rNEvt );
     virtual void            GetFocus();
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
@@ -546,7 +546,7 @@ public:
                         Window* pParent, WinBits nBits );
     ~SfxHelpWindow_Impl();
 
-    virtual long        PreNotify( NotifyEvent& rNEvt );
+    virtual bool        PreNotify( NotifyEvent& rNEvt );
 
     void                setContainerWindow(
                             ::com::sun::star::uno::Reference < ::com::sun::star::awt::XWindow > xWin );

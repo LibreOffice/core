@@ -387,16 +387,16 @@ void OWizTypeSelectList::setPrimaryKey(OFieldDescription* _pFieldDescr,sal_uInt1
     SetEntryData(_nPos,_pFieldDescr);
 }
 
-long OWizTypeSelectList::PreNotify( NotifyEvent& rEvt )
+bool OWizTypeSelectList::PreNotify( NotifyEvent& rEvt )
 {
-    long nDone = 0;
+    bool nDone = false;
     switch( rEvt.GetType() )
     {
         case EVENT_MOUSEBUTTONDOWN:
         {
             const MouseEvent* pMEvt = rEvt.GetMouseEvent();
             if(pMEvt->IsRight() && !pMEvt->GetModifier())
-                nDone = 1;
+                nDone = true;
         }
             break;
         case EVENT_COMMAND:
@@ -436,11 +436,11 @@ long OWizTypeSelectList::PreNotify( NotifyEvent& rEvt )
                 }
                 break;
             }
-            nDone = 1;
+            nDone = true;
         }
         break;
     }
-    return nDone ? nDone : MultiListBox::PreNotify(rEvt);
+    return nDone || MultiListBox::PreNotify(rEvt);
 }
 
 void OWizTypeSelect::fillColumnList(sal_uInt32 nRows)

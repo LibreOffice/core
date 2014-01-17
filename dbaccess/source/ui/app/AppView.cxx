@@ -274,7 +274,7 @@ void OApplicationView::resizeDocumentView(Rectangle& _rPlayground)
     _rPlayground.SetSize( Size( 0, 0 ) );
 }
 
-long OApplicationView::PreNotify( NotifyEvent& rNEvt )
+bool OApplicationView::PreNotify( NotifyEvent& rNEvt )
 {
     switch(rNEvt.GetType())
     {
@@ -292,11 +292,11 @@ long OApplicationView::PreNotify( NotifyEvent& rNEvt )
             // give the pane the chance to intercept mnemonic accelerators
             // #i34790#
             if ( getPanel() && getPanel()->interceptKeyInput( *pKeyEvent ) )
-                return 1L;
+                return true;
             // and ditto the detail view
             // #i72799#
             if ( getDetailView() && getDetailView()->interceptKeyInput( *pKeyEvent ) )
-                return 1L;
+                return true;
         }
         break;
     }

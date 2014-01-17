@@ -221,7 +221,7 @@ public:
                                  SCCOL nNewCol, SCROW nNewRow, ScFilterBoxMode eNewMode );
                 ~ScFilterListBox();
 
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
     virtual void    Select();
 
     SCCOL           GetCol() const          { return nCol; }
@@ -281,9 +281,9 @@ void ScFilterListBox::LoseFocus()
 
 // -----------------------------------------------------------------------
 
-long ScFilterListBox::PreNotify( NotifyEvent& rNEvt )
+bool ScFilterListBox::PreNotify( NotifyEvent& rNEvt )
 {
-    long nDone = 0;
+    bool nDone = false;
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         KeyEvent aKeyEvt = *rNEvt.GetKeyEvent();
@@ -294,17 +294,17 @@ long ScFilterListBox::PreNotify( NotifyEvent& rNEvt )
             if ( nKey == KEY_RETURN )
             {
                 SelectHdl();                    // auswaehlen
-                nDone = 1;
+                nDone = true;
             }
             else if ( nKey == KEY_ESCAPE )
             {
                 pGridWin->ClickExtern();        // loescht die List-Box !!!
-                nDone = 1;
+                nDone = true;
             }
         }
     }
 
-    return nDone ? nDone : ListBox::PreNotify( rNEvt );
+    return nDone || ListBox::PreNotify( rNEvt );
 }
 
 void ScFilterListBox::Select()
@@ -2707,7 +2707,7 @@ static void lcl_InitMouseEvent( ::com::sun::star::awt::MouseEvent& rEvent, const
     rEvent.PopupTrigger = false;
 }
 
-long ScGridWindow::PreNotify( NotifyEvent& rNEvt )
+bool ScGridWindow::PreNotify( NotifyEvent& rNEvt )
 {
     bool bDone = false;
     sal_uInt16 nType = rNEvt.GetType();
@@ -2751,7 +2751,7 @@ long ScGridWindow::PreNotify( NotifyEvent& rNEvt )
             }
         }
 
-        return 1;
+        return true;
     }
     else
         return Window::PreNotify( rNEvt );

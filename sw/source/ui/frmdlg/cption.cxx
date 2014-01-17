@@ -491,9 +491,9 @@ void    SwSequenceOptionDialog::SetCharacterStyle(const OUString& rStyle)
     m_pLbCharStyle->SelectEntry(rStyle);
 }
 
-long CategoryBox::PreNotify( NotifyEvent& rNEvt )
+bool CategoryBox::PreNotify( NotifyEvent& rNEvt )
 {
-    long nHandled = 0;
+    bool nHandled = false;
     if( rNEvt.GetType() == EVENT_KEYINPUT &&
         rNEvt.GetKeyEvent()->GetCharCode() )
     {
@@ -513,7 +513,7 @@ long CategoryBox::PreNotify( NotifyEvent& rNEvt )
                 + sText.copy(aSel.Max());
 
             if( !SwCalc::IsValidVarName( sName ))
-                nHandled = 1;
+                nHandled = true;
         }
     }
     if(!nHandled)

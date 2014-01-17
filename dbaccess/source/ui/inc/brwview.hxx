@@ -81,7 +81,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >     getContainer() { return m_xMe; }
 
     protected:
-        virtual long PreNotify( NotifyEvent& rNEvt );
+        virtual bool PreNotify( NotifyEvent& rNEvt );
         virtual void GetFocus();
         virtual void resizeDocumentView(Rectangle& rRect);
         virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource );

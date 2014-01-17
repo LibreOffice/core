@@ -1531,9 +1531,9 @@ void PushButton::DataChanged( const DataChangedEvent& rDCEvt )
 
 // -----------------------------------------------------------------------
 
-long PushButton::PreNotify( NotifyEvent& rNEvt )
+bool PushButton::PreNotify( NotifyEvent& rNEvt )
 {
-    long nDone = 0;
+    bool nDone = false;
     const MouseEvent* pMouseEvt = NULL;
 
     if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
@@ -1594,7 +1594,7 @@ long PushButton::PreNotify( NotifyEvent& rNEvt )
         }
     }
 
-    return nDone ? nDone : Button::PreNotify(rNEvt);
+    return nDone || Button::PreNotify(rNEvt);
 }
 
 // -----------------------------------------------------------------------
@@ -2780,9 +2780,9 @@ void RadioButton::DataChanged( const DataChangedEvent& rDCEvt )
 
 // -----------------------------------------------------------------------
 
-long RadioButton::PreNotify( NotifyEvent& rNEvt )
+bool RadioButton::PreNotify( NotifyEvent& rNEvt )
 {
-    long nDone = 0;
+    bool nDone = false;
     const MouseEvent* pMouseEvt = NULL;
 
     if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
@@ -2804,7 +2804,7 @@ long RadioButton::PreNotify( NotifyEvent& rNEvt )
         }
     }
 
-    return nDone ? nDone : Button::PreNotify(rNEvt);
+    return nDone || Button::PreNotify(rNEvt);
 }
 
 // -----------------------------------------------------------------------
@@ -3793,9 +3793,9 @@ void CheckBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 // -----------------------------------------------------------------------
 
-long CheckBox::PreNotify( NotifyEvent& rNEvt )
+bool CheckBox::PreNotify( NotifyEvent& rNEvt )
 {
-    long nDone = 0;
+    bool nDone = false;
     const MouseEvent* pMouseEvt = NULL;
 
     if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
@@ -3817,7 +3817,7 @@ long CheckBox::PreNotify( NotifyEvent& rNEvt )
         }
     }
 
-    return nDone ? nDone : Button::PreNotify(rNEvt);
+    return nDone || Button::PreNotify(rNEvt);
 }
 
 // -----------------------------------------------------------------------

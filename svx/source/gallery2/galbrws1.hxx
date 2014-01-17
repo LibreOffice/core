@@ -49,7 +49,7 @@ protected:
     void            InitSettings();
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
 
 public:
 

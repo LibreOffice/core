@@ -134,7 +134,7 @@ public:
     void            SetFamily( SfxStyleFamily eNewFamily );
     inline bool IsVisible() { return bVisible; }
 
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
     virtual bool    Notify( NotifyEvent& rNEvt );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
     virtual void    StateChanged( StateChangedType nStateChange );
@@ -219,7 +219,7 @@ public:
                         { FontNameBox::Fill( pList );
                           nFtCount = pList->GetFontNameCount(); }
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
     virtual bool    Notify( NotifyEvent& rNEvt );
     virtual Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -471,7 +471,7 @@ void SvxStyleBox_Impl::SetFamily( SfxStyleFamily eNewFamily )
 
 // -----------------------------------------------------------------------
 
-long SvxStyleBox_Impl::PreNotify( NotifyEvent& rNEvt )
+bool SvxStyleBox_Impl::PreNotify( NotifyEvent& rNEvt )
 {
     sal_uInt16 nType = rNEvt.GetType();
 
@@ -868,7 +868,7 @@ void SvxFontNameBox_Impl::Update( const SvxFontItem* pFontItem )
 
 // -----------------------------------------------------------------------
 
-long SvxFontNameBox_Impl::PreNotify( NotifyEvent& rNEvt )
+bool SvxFontNameBox_Impl::PreNotify( NotifyEvent& rNEvt )
 {
     sal_uInt16 nType = rNEvt.GetType();
 

@@ -971,7 +971,7 @@ namespace pcr
         MultiLineEdit*  getEdit() { return &m_aImplEdit; }
 
     protected:
-        virtual long    PreNotify(NotifyEvent& _rNEvt);
+        virtual bool    PreNotify(NotifyEvent& _rNEvt);
     };
 
     //------------------------------------------------------------------
@@ -989,9 +989,9 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    long OMultilineFloatingEdit::PreNotify(NotifyEvent& _rNEvt)
+    bool OMultilineFloatingEdit::PreNotify(NotifyEvent& _rNEvt)
     {
-        long nResult = sal_True;
+        bool nResult = true;
 
         sal_uInt16 nSwitch = _rNEvt.GetType();
         if (EVENT_KEYINPUT == nSwitch)
@@ -1095,9 +1095,9 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    long DropDownEditControl::PreNotify( NotifyEvent& rNEvt )
+    bool DropDownEditControl::PreNotify( NotifyEvent& rNEvt )
     {
-        long nResult = 1;
+        bool nResult = true;
 
         if (rNEvt.GetType() == EVENT_KEYINPUT)
         {

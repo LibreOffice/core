@@ -156,7 +156,7 @@ namespace dbaui
             Resize();
         }
     }
-    long OQueryContainerWindow::PreNotify( NotifyEvent& rNEvt )
+    bool OQueryContainerWindow::PreNotify( NotifyEvent& rNEvt )
     {
         sal_Bool bHandled = sal_False;
         switch (rNEvt.GetType())
@@ -170,7 +170,7 @@ namespace dbaui
                     rController.InvalidateFeature(SID_PASTE);
                 }
         }
-        return bHandled ? 1L : ODataView::PreNotify(rNEvt);
+        return bHandled || ODataView::PreNotify(rNEvt);
     }
     void OQueryContainerWindow::showPreview(const Reference<XFrame>& _xFrame)
     {

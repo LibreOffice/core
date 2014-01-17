@@ -3199,7 +3199,7 @@ sal_Bool DbGridControl::SaveRow()
     return sal_True;
 }
 
-long DbGridControl::PreNotify(NotifyEvent& rEvt)
+bool DbGridControl::PreNotify(NotifyEvent& rEvt)
 {
     // do not handle events of the Navbar
     if (m_aBar.IsWindowOrChild(rEvt.GetWindow()))
@@ -3226,7 +3226,7 @@ long DbGridControl::PreNotify(NotifyEvent& rEvt)
                 // call the Control - our direct base class will interpret this in a way we do not want (and do
                 // a cell traveling)
                 Control::KeyInput( aNewEvent );
-                return 1;
+                return true;
             }
 
             if ( !bShift && !bCtrl && ( KEY_ESCAPE == nCode ) )
@@ -3234,7 +3234,7 @@ long DbGridControl::PreNotify(NotifyEvent& rEvt)
                 if (IsModified())
                 {
                     Undo();
-                    return 1;
+                    return true;
                 }
             }
             else if ( ( KEY_DELETE == nCode ) && !bShift && !bCtrl )    // delete rows
@@ -3245,7 +3245,7 @@ long DbGridControl::PreNotify(NotifyEvent& rEvt)
                     if (m_nDeleteEvent)
                         Application::RemoveUserEvent(m_nDeleteEvent);
                     m_nDeleteEvent = Application::PostUserEvent(LINK(this,DbGridControl,OnDelete));
-                    return 1;
+                    return true;
                 }
             }
         }   // no break!

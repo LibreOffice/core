@@ -47,7 +47,7 @@ class ISpinfieldListener
         virtual void LoseFocus() = 0;
         virtual void StateChanged( StateChangedType nType ) = 0;
         virtual void DataChanged( const DataChangedEvent& rDCEvt ) = 0;
-        virtual long PreNotify( NotifyEvent& rNEvt ) = 0;
+        virtual bool PreNotify( NotifyEvent& rNEvt ) = 0;
 
     protected:
         ~ISpinfieldListener() {}
@@ -80,7 +80,7 @@ class SpinfieldToolbarController : public ISpinfieldListener,
         virtual void LoseFocus();
         virtual void StateChanged( StateChangedType nType );
         virtual void DataChanged( const DataChangedEvent& rDCEvt );
-        virtual long PreNotify( NotifyEvent& rNEvt );
+        virtual bool PreNotify( NotifyEvent& rNEvt );
 
     protected:
         virtual void executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand );

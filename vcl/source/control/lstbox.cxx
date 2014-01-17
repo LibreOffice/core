@@ -903,9 +903,9 @@ void ListBox::StateChanged( StateChangedType nType )
 }
 
 
-long ListBox::PreNotify( NotifyEvent& rNEvt )
+bool ListBox::PreNotify( NotifyEvent& rNEvt )
 {
-    long nDone = 0;
+    bool nDone = 0;
     if ( mpImplLB )
     {
         if( ( rNEvt.GetType() == EVENT_KEYINPUT ) && ( rNEvt.GetWindow() == mpImplWin ) )
@@ -922,7 +922,7 @@ long ListBox::PreNotify( NotifyEvent& rNEvt )
                         mpBtn->SetPressed( sal_True );
                         mpFloatWin->StartFloat( sal_False );
                         ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
-                        nDone = 1;
+                        nDone = true;
                     }
                     else
                     {
@@ -936,7 +936,7 @@ long ListBox::PreNotify( NotifyEvent& rNEvt )
                         aKeyEvt.GetKeyCode().IsMod2() )
                     {
                         mpFloatWin->EndPopupMode();
-                        nDone = 1;
+                        nDone = true;
                     }
                     else
                     {
@@ -949,7 +949,7 @@ long ListBox::PreNotify( NotifyEvent& rNEvt )
                     if( IsInDropDown() )
                     {
                         mpImplLB->ProcessKeyInput( aKeyEvt );
-                        nDone = 1;
+                        nDone = true;
                     }
                 }
                 break;
@@ -980,12 +980,12 @@ long ListBox::PreNotify( NotifyEvent& rNEvt )
             }
             else
             {
-                nDone = 0;  // Don't consume this event, let the default handling take it (i.e. scroll the context)
+                nDone = false;  // Don't consume this event, let the default handling take it (i.e. scroll the context)
             }
         }
     }
 
-    return nDone ? nDone : Control::PreNotify( rNEvt );
+    return nDone || Control::PreNotify( rNEvt );
 }
 
 

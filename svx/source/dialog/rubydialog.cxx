@@ -887,9 +887,9 @@ void RubyEdit::GetFocus()
     Edit::GetFocus();
 }
 
-long  RubyEdit::PreNotify( NotifyEvent& rNEvt )
+bool RubyEdit::PreNotify( NotifyEvent& rNEvt )
 {
-    long nHandled = 0;
+    bool nHandled = false;
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
@@ -900,7 +900,7 @@ long  RubyEdit::PreNotify( NotifyEvent& rNEvt )
         {
             sal_Int32 nParam = KEY_SHIFT == nMod ? -1 : 1;
             if(aScrollHdl.IsSet() && aScrollHdl.Call(&nParam))
-                nHandled = 1;
+                nHandled = true;
         }
         else if(KEY_UP == nCode || KEY_DOWN == nCode)
         {

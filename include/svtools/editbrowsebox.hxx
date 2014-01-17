@@ -203,7 +203,7 @@ namespace svt
 
     protected:
         // Window overridables
-        virtual long PreNotify( NotifyEvent& rNEvt );
+        virtual bool PreNotify( NotifyEvent& rNEvt );
 
         // MultiLineEdit overridables
         virtual void Modify();
@@ -288,7 +288,7 @@ namespace svt
         ~CheckBoxControl();
 
         virtual void GetFocus();
-        virtual long PreNotify(NotifyEvent& rEvt);
+        virtual bool PreNotify(NotifyEvent& rEvt);
         virtual void Paint(const Rectangle& rClientRect);
         virtual void Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
         virtual void StateChanged( StateChangedType nStateChange );
@@ -337,7 +337,7 @@ namespace svt
         ComboBoxControl(Window* pParent, WinBits nWinStyle = 0);
 
     protected:
-        virtual long PreNotify( NotifyEvent& rNEvt );
+        virtual bool PreNotify( NotifyEvent& rNEvt );
     };
 
     //==================================================================
@@ -370,7 +370,7 @@ namespace svt
         ListBoxControl(Window* pParent, WinBits nWinStyle = 0);
 
     protected:
-        virtual long PreNotify( NotifyEvent& rNEvt );
+        virtual bool PreNotify( NotifyEvent& rNEvt );
     };
 
     //==================================================================
@@ -528,7 +528,7 @@ namespace svt
         using BrowseBox::MouseButtonUp;
         using BrowseBox::MouseButtonDown;
 
-        virtual long PreNotify(NotifyEvent& rNEvt );
+        virtual bool PreNotify(NotifyEvent& rNEvt );
         virtual bool Notify(NotifyEvent& rNEvt);
 
         virtual void EndScroll();

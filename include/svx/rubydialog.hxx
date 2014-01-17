@@ -70,7 +70,7 @@ class RubyEdit  : public Edit
     Link    aScrollHdl;
     Link    aJumpHdl;
     virtual void        GetFocus();
-    virtual long        PreNotify( NotifyEvent& rNEvt );
+    virtual bool        PreNotify( NotifyEvent& rNEvt );
 public:
     RubyEdit(Window* pParent, const ResId& rResId)
         : Edit(pParent, rResId)

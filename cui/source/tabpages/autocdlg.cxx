@@ -2286,10 +2286,10 @@ void OfaAutoCompleteTabPage::CopyToClipboard() const
     }
 }
 
-long OfaAutoCompleteTabPage::AutoCompleteMultiListBox::PreNotify(
+bool OfaAutoCompleteTabPage::AutoCompleteMultiListBox::PreNotify(
             NotifyEvent& rNEvt )
 {
-    long nHandled = MultiListBox::PreNotify( rNEvt );
+    bool nHandled = MultiListBox::PreNotify( rNEvt );
 
     if( !nHandled && EVENT_KEYUP == rNEvt.GetType() )
     {
@@ -2298,14 +2298,14 @@ long OfaAutoCompleteTabPage::AutoCompleteMultiListBox::PreNotify(
         {
         case KEY_DELETE:
             rPage.DeleteHdl( 0 );
-            nHandled = 1;
+            nHandled = true;
             break;
 
         default:
             if( KEYFUNC_COPY == rKeyCode.GetFunction() )
             {
                 rPage.CopyToClipboard();
-                nHandled = 1;
+                nHandled = true;
             }
             break;
         }

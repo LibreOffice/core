@@ -72,7 +72,7 @@ private:
 
     SpellDialog*    GetSpellDialog() const {return (SpellDialog*)GetParentDialog();}
 protected:
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
 
 public:
     SentenceEditWindow_Impl(Window* pParent, WinBits nBits);

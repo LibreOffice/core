@@ -194,7 +194,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    long RichTextControl::PreNotify( NotifyEvent& _rNEvt )
+    bool RichTextControl::PreNotify( NotifyEvent& _rNEvt )
     {
         if ( IsWindowOrChild( _rNEvt.GetWindow() ) )
         {
@@ -213,7 +213,7 @@ namespace frm
                     KeyCode aNewCode( KEY_TAB, bShift, sal_False, sal_False, sal_False );
                     ::KeyEvent aNewEvent( pKeyEvent->GetCharCode(), aNewCode );
                     Control::KeyInput( aNewEvent );
-                    return 1;   // handled
+                    return true;   // handled
                 }
 
 #if OSL_DEBUG_LEVEL > 0
@@ -278,7 +278,7 @@ namespace frm
                         }
                         DELETEZ( pStream );
                     }
-                    return 1;   // handled
+                    return true;   // handled
                 }
 #endif
             }

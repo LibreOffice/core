@@ -213,7 +213,7 @@ public:
 
     void            ReInit(ScViewData* ptrViewData);
 
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
 
     void            Initialize (SfxChildWinInfo* pInfo);
     virtual void    FillInfo(SfxChildWinInfo&) const;

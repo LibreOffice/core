@@ -180,9 +180,9 @@ void FindTextFieldControl::SetTextToSelected_Impl()
     }
 }
 
-long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
+bool FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
 {
-    long nRet= ComboBox::PreNotify( rNEvt );
+    bool nRet= ComboBox::PreNotify( rNEvt );
 
     switch ( rNEvt.GetType() )
     {
@@ -195,7 +195,7 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
 
             if ( KEY_ESCAPE == nCode || (bMod1 && (KEY_F == nCode)) )
             {
-                nRet = 1;
+                nRet = true;
                 GrabFocusToDocument();
 
                 // hide the findbar
@@ -222,7 +222,7 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
                 ToolBox* pToolBox = (ToolBox*)pWindow;
 
                 impl_executeSearch( m_xContext, m_xFrame, pToolBox, bShift);
-                nRet = 1;
+                nRet = true;
             }
             break;
         }

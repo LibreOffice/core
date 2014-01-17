@@ -1260,7 +1260,7 @@ void AssignmentPersistentData::Commit()
     }
 
     // -------------------------------------------------------------------
-    long AddressBookSourceDialog::PreNotify( NotifyEvent& _rNEvt )
+    bool AddressBookSourceDialog::PreNotify( NotifyEvent& _rNEvt )
     {
         switch (_rNEvt.GetType())
         {
@@ -1286,7 +1286,7 @@ void AssignmentPersistentData::Commit()
                                 // give the left control in the "next" line the focus
                                 m_pImpl->pFields[nNextFocusList]->GrabFocus();
                                 // return saying "have handled this"
-                                return 1;
+                                return true;
                             }
                     }
                     else if (!bAlt && !bCtrl && bShift)
@@ -1300,7 +1300,7 @@ void AssignmentPersistentData::Commit()
                                 // give the right control in the "prebious" line the focus
                                 m_pImpl->pFields[0 - 1 + 2]->GrabFocus();
                                 // return saying "have handled this"
-                                return 1;
+                                return true;
                             }
                     }
                 }

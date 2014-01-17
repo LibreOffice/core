@@ -121,7 +121,7 @@ void SvxSBFontNameBox::FillList()
     SetSelection( aOldSel );
 }
 
-long SvxSBFontNameBox::PreNotify( NotifyEvent& rNEvt )
+bool SvxSBFontNameBox::PreNotify( NotifyEvent& rNEvt )
 {
     const sal_uInt16 nType (rNEvt.GetType());
 

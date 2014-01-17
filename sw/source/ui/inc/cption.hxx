@@ -56,7 +56,7 @@ public:
         : ComboBox( pParent, nStyle )
     {}
 
-    virtual long PreNotify( NotifyEvent& rNEvt );
+    virtual bool PreNotify( NotifyEvent& rNEvt );
 };
 
 

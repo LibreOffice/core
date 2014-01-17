@@ -543,7 +543,7 @@ private:
     sal_Bool            mbAutoWidth;
 
 protected:
-    long            PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
 
 public:
                     ImplListBoxFloatingWindow( Window* pParent );
@@ -608,7 +608,7 @@ public:
     virtual void    Resize();
     virtual void    GetFocus();
     virtual void    LoseFocus();
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
 
     sal_uInt16      GetItemPos() const { return mnItemPos; }
     void            SetItemPos( sal_uInt16 n ) { mnItemPos = n; }

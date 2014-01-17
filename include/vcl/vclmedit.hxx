@@ -47,7 +47,7 @@ protected:
     DECL_LINK(      ImpUpdateDataHdl, void* );
     void            StateChanged( StateChangedType nType );
     void            DataChanged( const DataChangedEvent& rDCEvt );
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
     virtual bool    Notify( NotifyEvent& rNEvt );
     using Control::ImplInitSettings;
     void            ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );

@@ -2585,7 +2585,7 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
 
 // -----------------------------------------------------------------------
 
-long SplitWindow::PreNotify( NotifyEvent& rNEvt )
+bool SplitWindow::PreNotify( NotifyEvent& rNEvt )
 {
     const MouseEvent* pMouseEvt = NULL;
 

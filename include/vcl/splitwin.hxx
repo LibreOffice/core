@@ -161,7 +161,7 @@ public:
     virtual void        RequestHelp( const HelpEvent& rHEvt );
     virtual void        StateChanged( StateChangedType nType );
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
-    virtual long        PreNotify( NotifyEvent& rNEvt );
+    virtual bool        PreNotify( NotifyEvent& rNEvt );
 
     void                InsertItem( sal_uInt16 nId, Window* pWindow, long nSize,
                                     sal_uInt16 nPos = SPLITWINDOW_APPEND, sal_uInt16 nSetId = 0,

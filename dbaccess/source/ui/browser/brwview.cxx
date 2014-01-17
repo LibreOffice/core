@@ -304,9 +304,9 @@ void UnoDataBrowserView::_disposing( const ::com::sun::star::lang::EventObject& 
     m_pVclControl = NULL;
 }
 
-long UnoDataBrowserView::PreNotify( NotifyEvent& rNEvt )
+bool UnoDataBrowserView::PreNotify( NotifyEvent& rNEvt )
 {
-    long nDone = 0L;
+    bool nDone = false;
     if(rNEvt.GetType() == EVENT_KEYINPUT)
     {
         sal_Bool bGrabAllowed = isGrabVclControlFocusAllowed(this);
@@ -323,11 +323,11 @@ long UnoDataBrowserView::PreNotify( NotifyEvent& rNEvt )
                 else if ( m_pTreeView && m_pVclControl && m_pVclControl->HasChildPathFocus() )
                     m_pTreeView->GrabFocus();
 
-                nDone = 1L;
+                nDone = true;
             }
         }
     }
-    return nDone ? nDone : ODataView::PreNotify(rNEvt);
+    return nDone || ODataView::PreNotify(rNEvt);
 }
 
 DBG_NAME(BrowserViewStatusDisplay)

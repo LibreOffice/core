@@ -37,7 +37,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    long OFileURLControl::PreNotify( NotifyEvent& _rNEvt )
+    bool OFileURLControl::PreNotify( NotifyEvent& _rNEvt )
     {
         if (GetSubEdit() == _rNEvt.GetWindow())
             if (EVENT_KEYINPUT == _rNEvt.GetType())

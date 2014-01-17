@@ -130,7 +130,7 @@ void OTableWindowListBox::NotifyEndScroll()
     m_bReallyScrolled = sal_False;
 }
 
-long OTableWindowListBox::PreNotify(NotifyEvent& rNEvt)
+bool OTableWindowListBox::PreNotify(NotifyEvent& rNEvt)
 {
     sal_Bool bHandled = sal_False;
     switch (rNEvt.GetType())
@@ -159,7 +159,7 @@ long OTableWindowListBox::PreNotify(NotifyEvent& rNEvt)
 
     if (!bHandled)
         return SvTreeListBox::PreNotify(rNEvt);
-    return 1L;
+    return true;
 }
 
 IMPL_LINK( OTableWindowListBox, ScrollUpHdl, SvTreeListBox*, /*pBox*/ )

@@ -428,9 +428,9 @@ void EditBox::GetFocus()
 
 //When an Event is cleared, this Routine is
 //first called and a PostUserEvent is sent.
-long EditBox::PreNotify( NotifyEvent& rNEvt )
+bool EditBox::PreNotify( NotifyEvent& rNEvt )
 {
-    long nResult=sal_True;
+    bool nResult = true;
 
     if(pMEdit==NULL) return nResult;
 
@@ -441,7 +441,7 @@ long EditBox::PreNotify( NotifyEvent& rNEvt )
         sal_uInt16 nKey=aKeyCode.GetCode();
         if( (nKey==KEY_RETURN && !aKeyCode.IsShift()) || nKey==KEY_TAB )
         {
-            nResult=long(GetParent()->Notify(rNEvt));
+            nResult = GetParent()->Notify(rNEvt);
         }
         else
         {

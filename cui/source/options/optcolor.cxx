@@ -837,7 +837,7 @@ class ColorConfigCtrl_Impl : public VclVBox
     DECL_LINK(ColorHdl, ColorListBox*);
     DECL_LINK(ControlFocusHdl, Control*);
 
-    virtual long PreNotify (NotifyEvent& rNEvt);
+    virtual bool PreNotify (NotifyEvent& rNEvt);
     virtual void Command (CommandEvent const& rCEvt);
     virtual void DataChanged (DataChangedEvent const& rDCEvt);
 public:
@@ -934,7 +934,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ScrollHdl, ScrollBar*, pScrollBar)
     return 0;
 }
 
-long ColorConfigCtrl_Impl::PreNotify( NotifyEvent& rNEvt )
+bool ColorConfigCtrl_Impl::PreNotify( NotifyEvent& rNEvt )
 {
     if(rNEvt.GetType() == EVENT_COMMAND)
     {
@@ -943,7 +943,7 @@ long ColorConfigCtrl_Impl::PreNotify( NotifyEvent& rNEvt )
         if( COMMAND_WHEEL == nCmd )
         {
             Command(*pCEvt);
-            return 1;
+            return true;
         }
     }
     return VclVBox::PreNotify(rNEvt);

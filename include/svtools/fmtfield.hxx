@@ -255,7 +255,7 @@ protected:
     virtual SvNumberFormatter*  CreateFormatter() { SetFormatter(StandardFormatter()); return m_pFormatter; }
     SvNumberFormatter*  ImplGetFormatter() const { return m_pFormatter ? m_pFormatter : ((FormattedField*)this)->CreateFormatter(); }
 
-    long PreNotify(NotifyEvent& rNEvt);
+    bool PreNotify(NotifyEvent& rNEvt);
 
     virtual void ReFormat();
 };

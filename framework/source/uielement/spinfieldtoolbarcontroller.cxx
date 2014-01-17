@@ -73,7 +73,7 @@ class SpinfieldControl : public SpinField
         virtual void LoseFocus();
         virtual void StateChanged( StateChangedType nType );
         virtual void DataChanged( const DataChangedEvent& rDCEvt );
-        virtual long PreNotify( NotifyEvent& rNEvt );
+        virtual bool PreNotify( NotifyEvent& rNEvt );
 
     private:
         ISpinfieldListener* m_pSpinFieldListener;
@@ -160,12 +160,12 @@ void SpinfieldControl::DataChanged( const DataChangedEvent& rDCEvt )
         m_pSpinFieldListener->DataChanged( rDCEvt );
 }
 
-long SpinfieldControl::PreNotify( NotifyEvent& rNEvt )
+bool SpinfieldControl::PreNotify( NotifyEvent& rNEvt )
 {
-    long nRet( 0 );
+    bool nRet = false;
     if ( m_pSpinFieldListener )
         nRet = m_pSpinFieldListener->PreNotify( rNEvt );
-    if ( nRet == 0 )
+    if ( !nRet )
         nRet = SpinField::PreNotify( rNEvt );
 
     return nRet;
@@ -318,7 +318,7 @@ void SpinfieldToolbarController::DataChanged( const DataChangedEvent& /*rDCEvt*/
 {
 }
 
-long SpinfieldToolbarController::PreNotify( NotifyEvent& rNEvt )
+bool SpinfieldToolbarController::PreNotify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
@@ -329,11 +329,11 @@ long SpinfieldToolbarController::PreNotify( NotifyEvent& rNEvt )
             // Call execute only with non-empty text
             if ( !m_pSpinfieldControl->GetText().isEmpty() )
                 execute( rKeyCode.GetModifier() );
-            return 1;
+            return true;
         }
     }
 
-    return 0;
+    return false;
 }
 
 // --------------------------------------------------------

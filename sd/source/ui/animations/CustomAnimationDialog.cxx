@@ -361,7 +361,7 @@ public:
     ~DropdownMenuBox();
 
     void Resize();
-    long PreNotify( NotifyEvent& rNEvt );
+    bool PreNotify( NotifyEvent& rNEvt );
 
     void SetMenuSelectHdl( const Link& rLink ) { mpDropdownButton->SetSelectHdl( rLink ); }
 
@@ -411,9 +411,9 @@ void DropdownMenuBox::Resize()
 
 // --------------------------------------------------------------------
 
-long DropdownMenuBox::PreNotify( NotifyEvent& rNEvt )
+bool DropdownMenuBox::PreNotify( NotifyEvent& rNEvt )
 {
-    long nResult=sal_True;
+    bool nResult = true;
 
     sal_uInt16 nSwitch=rNEvt.GetType();
     if (nSwitch==EVENT_KEYINPUT)

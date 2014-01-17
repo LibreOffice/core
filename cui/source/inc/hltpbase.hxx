@@ -64,7 +64,7 @@ protected:
     virtual bool        Notify( NotifyEvent& rNEvt );
     virtual void        Select();
     virtual void        Modify();
-    virtual long        PreNotify( NotifyEvent& rNEvt );
+    virtual bool        PreNotify( NotifyEvent& rNEvt );
 
 public:
     SvxHyperURLBox( Window* pParent, INetProtocol eSmart = INET_PROT_FILE );

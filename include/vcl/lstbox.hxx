@@ -84,7 +84,7 @@ public:
 
     virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void        Resize();
-    virtual long        PreNotify( NotifyEvent& rNEvt );
+    virtual bool        PreNotify( NotifyEvent& rNEvt );
     virtual void        StateChanged( StateChangedType nType );
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
     virtual void        UserDraw( const UserDrawEvent& rUDEvt );

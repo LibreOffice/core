@@ -92,7 +92,7 @@ public:
     virtual void    Resize();
     virtual void    Paint( const Rectangle & );
     virtual bool    Notify( NotifyEvent& rNEvt );
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
 
     void    QueryObjAreaPixel( Rectangle & );
     void    RequestObjAreaPixel( const Rectangle & );

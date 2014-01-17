@@ -83,7 +83,7 @@ public:
     long            GetValue() const { return mnValue; }
     void            SetValueStep( long nNewStep ) { mnValueStep = nNewStep; }
     long            GetValueStep() const { return mnValueStep; }
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
 
     void            SetUpHdl( const Link& rLink ) { maUpHdlLink = rLink; }
     const Link&     GetUpHdl() const   { return maUpHdlLink;   }

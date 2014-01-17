@@ -45,7 +45,7 @@ namespace dbaui
         void SetHelpText( const OUString& rText );
         OUString GetHelpText() const { return m_sHelpText; }
 
-        virtual long PreNotify( NotifyEvent& rNEvt );
+        virtual bool PreNotify( NotifyEvent& rNEvt );
 
         // IClipboardTest
         virtual sal_Bool isCutAllowed();

@@ -140,7 +140,7 @@ class HexColorControl : public Edit
 public:
     HexColorControl( Window* pParent, const ResId& rResId );
 
-    virtual long PreNotify( NotifyEvent& rNEvt );
+    virtual bool PreNotify( NotifyEvent& rNEvt );
     virtual void Paste();
 
     void SetColor( sal_Int32 nColor );
@@ -192,12 +192,12 @@ sal_Int32 HexColorControl::GetColor()
 
 // -----------------------------------------------------------------------
 
-long HexColorControl::PreNotify( NotifyEvent& rNEvt )
+bool HexColorControl::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplProcessKeyInput( *rNEvt.GetKeyEvent() ) )
-            return 1;
+            return true;
     }
 
     return Edit::PreNotify( rNEvt );

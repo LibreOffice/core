@@ -270,7 +270,7 @@ sal_Bool FmFieldWin::createSelectionControls( )
 }
 
 //-----------------------------------------------------------------------
-long FmFieldWin::PreNotify( NotifyEvent& _rNEvt )
+bool FmFieldWin::PreNotify( NotifyEvent& _rNEvt )
 {
     if ( EVENT_KEYINPUT == _rNEvt.GetType() )
     {
@@ -278,7 +278,7 @@ long FmFieldWin::PreNotify( NotifyEvent& _rNEvt )
         if ( ( 0 == rKeyCode.GetModifier() ) && ( KEY_RETURN == rKeyCode.GetCode() ) )
         {
             if ( createSelectionControls() )
-                return 1;
+                return true;
         }
     }
 

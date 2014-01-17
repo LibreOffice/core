@@ -1639,7 +1639,7 @@ void SvxNumberFormatTabPage::ChangePreviewText( sal_uInt16 nPos )
     m_pWndPreview->NotifyChange( aPreviewString, pPreviewColor );
 }
 
-long SvxNumberFormatTabPage::PreNotify( NotifyEvent& rNEvt )
+bool SvxNumberFormatTabPage::PreNotify( NotifyEvent& rNEvt )
 {
     if(rNEvt.GetType()==EVENT_LOSEFOCUS)
     {

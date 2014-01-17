@@ -176,7 +176,7 @@ namespace dbaui
         // window override
         virtual void                StateChanged( StateChangedType nStateChange );
         virtual void                GetFocus();
-        virtual long                PreNotify( NotifyEvent& rNEvt );
+        virtual bool                PreNotify( NotifyEvent& rNEvt );
         virtual void                Command(const CommandEvent& rEvt);
 
         // Accessibility

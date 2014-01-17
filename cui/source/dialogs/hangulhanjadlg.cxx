@@ -1388,9 +1388,9 @@ namespace svx
     {
     }
 
-    long SuggestionEdit::PreNotify( NotifyEvent& rNEvt )
+    bool SuggestionEdit::PreNotify( NotifyEvent& rNEvt )
     {
-        long    nHandled = 0;
+        bool nHandled = false;
         if( rNEvt.GetType() == EVENT_KEYINPUT )
         {
             const KeyEvent*             pKEvt = rNEvt.GetKeyEvent();
@@ -1405,7 +1405,7 @@ namespace svx
                     DoJump( bUp );
                     SetSelection( Selection( 0, SELECTION_MAX ) );
                         // Tab-travel doesn't really happen, so emulate it by setting a selection manually
-                    nHandled = 1;
+                    nHandled = true;
                 }
             }
             else if( KEY_UP == nCode || KEY_DOWN == nCode )
@@ -1414,20 +1414,20 @@ namespace svx
                 if( ShouldScroll( bUp ) )
                 {
                     DoJump( bUp );
-                    nHandled = 1;
+                    nHandled = true;
                 }
                 else if( bUp )
                 {
                     if( m_pPrev )
                     {
                         m_pPrev->GrabFocus();
-                        nHandled = 1;
+                        nHandled = true;
                     }
                 }
                 else if( m_pNext )
                 {
                     m_pNext->GrabFocus();
-                    nHandled = 1;
+                    nHandled = true;
                 }
             }
         }

@@ -440,7 +440,7 @@ void ScExtIButton::StartPopup()
     }
 }
 
-long ScExtIButton::PreNotify( NotifyEvent& rNEvt )
+bool ScExtIButton::PreNotify( NotifyEvent& rNEvt )
 {
     sal_uInt16 nSwitch=rNEvt.GetType();
     if(nSwitch==EVENT_MOUSEBUTTONUP)

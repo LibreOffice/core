@@ -749,7 +749,7 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionC
     return pEntry;
 }
 
-long ScAcceptChgDlg::PreNotify( NotifyEvent& rNEvt )
+bool ScAcceptChgDlg::PreNotify( NotifyEvent& rNEvt )
 {
     if(rNEvt.GetType()==EVENT_GETFOCUS && bNeedsUpdate)
     {

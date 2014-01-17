@@ -41,7 +41,7 @@ namespace dbaui
         virtual void initialize();
 
 
-        virtual long PreNotify( NotifyEvent& rNEvt );
+        virtual bool PreNotify( NotifyEvent& rNEvt );
         virtual void GetFocus();
     };
 }

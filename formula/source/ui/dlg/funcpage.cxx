@@ -43,11 +43,11 @@ void FormulaListBox::KeyInput( const KeyEvent& rKEvt )
         DoubleClick();
 }
 
-long FormulaListBox::PreNotify( NotifyEvent& rNEvt )
+bool FormulaListBox::PreNotify( NotifyEvent& rNEvt )
 {
     NotifyEvent aNotifyEvt=rNEvt;
 
-    long nResult=ListBox::PreNotify(rNEvt);
+    bool nResult = ListBox::PreNotify(rNEvt);
 
     sal_uInt16 nSwitch=aNotifyEvt.GetType();
     if(nSwitch==EVENT_KEYINPUT)

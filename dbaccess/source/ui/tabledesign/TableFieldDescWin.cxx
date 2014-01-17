@@ -276,7 +276,7 @@ void OTableFieldDescWin::LoseFocus()
         getGenPage()->LoseFocus();
 }
 
-long OTableFieldDescWin::PreNotify( NotifyEvent& rNEvt )
+bool OTableFieldDescWin::PreNotify( NotifyEvent& rNEvt )
 {
     sal_Bool bHandled = sal_False;
     switch(rNEvt.GetType())
@@ -289,7 +289,7 @@ long OTableFieldDescWin::PreNotify( NotifyEvent& rNEvt )
             break;
     }
 
-    return bHandled ? 1L : TabPage::PreNotify(rNEvt);
+    return bHandled || TabPage::PreNotify(rNEvt);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

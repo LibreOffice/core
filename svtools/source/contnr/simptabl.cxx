@@ -51,9 +51,9 @@ void SvSimpleTableContainer::SetTable(SvSimpleTable* pTable)
     m_pTable = pTable;
 }
 
-long SvSimpleTableContainer::PreNotify( NotifyEvent& rNEvt )
+bool SvSimpleTableContainer::PreNotify( NotifyEvent& rNEvt )
 {
-    long nResult = sal_True;
+    bool nResult = true;
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         const KeyCode& aKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
@@ -61,7 +61,7 @@ long SvSimpleTableContainer::PreNotify( NotifyEvent& rNEvt )
         if (nKey == KEY_TAB)
             GetParent()->Notify( rNEvt );
         else if (m_pTable && m_pTable->IsFocusOnCellEnabled() && ( nKey == KEY_LEFT || nKey == KEY_RIGHT))
-            return 0;
+            return false;
         else
             nResult = Control::PreNotify( rNEvt );
     }

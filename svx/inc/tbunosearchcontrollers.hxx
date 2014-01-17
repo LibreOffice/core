@@ -50,7 +50,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& xContext );
     virtual ~FindTextFieldControl();
 
-    virtual long PreNotify( NotifyEvent& rNEvt );
+    virtual bool PreNotify( NotifyEvent& rNEvt );
 
     void Remember_Impl(const OUString& rStr);
     void SetTextToSelected_Impl();

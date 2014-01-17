@@ -192,29 +192,29 @@ void ODesignView::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 //------------------------------------------------------------------------------
-long ODesignView::PreNotify( NotifyEvent& rNEvt )
+bool ODesignView::PreNotify( NotifyEvent& rNEvt )
 {
-    long nRet = ODataView::PreNotify(rNEvt); // 1 := has to be handled here
+    bool nRet = ODataView::PreNotify(rNEvt); // 1 := has to be handled here
     switch(rNEvt.GetType())
     {
         case EVENT_KEYINPUT:
             if ( (m_pPropWin && m_pPropWin->HasChildPathFocus()) )
-                return 0L;
+                return false;
             if ( (m_pAddField && m_pAddField->HasChildPathFocus()) )
-                return 0L;
+                return false;
             if ( (m_pReportExplorer && m_pReportExplorer->HasChildPathFocus()) )
-                return 0L;
+                return false;
             {
                 const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
                 if ( handleKeyEvent(*pKeyEvent) )
-                    nRet = 1L;
-                else if ( nRet == 1L && m_pAccel.get() )
+                    nRet = true;
+                else if ( nRet && m_pAccel.get() )
                 {
                     const KeyCode& rCode = pKeyEvent->GetKeyCode();
                     util::URL aUrl;
                     aUrl.Complete = m_pAccel->findCommand(svt::AcceleratorExecute::st_VCLKey2AWTKey(rCode));
                     if ( aUrl.Complete.isEmpty() || !m_rController.isCommandEnabled( aUrl.Complete ) )
-                        nRet = 0L;
+                        nRet = false;
                 }
             }
             break;

@@ -89,7 +89,7 @@ public:
     virtual void    Resize();
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
 
     void            SetUpHdl( const Link& rLink ) { maUpHdlLink = rLink; }
     const Link&     GetUpHdl() const { return maUpHdlLink; }

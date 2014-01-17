@@ -68,7 +68,7 @@ namespace dbaui
         }
 
         // Window overload
-        //  virtual long PreNotify( NotifyEvent& rNEvt );
+        //  virtual bool PreNotify( NotifyEvent& rNEvt );
         // Edit
         virtual void Modify();
     };

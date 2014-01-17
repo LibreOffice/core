@@ -494,7 +494,7 @@ namespace rptui
     }
 
     // -----------------------------------------------------------------------------
-    long ConditionalFormattingDialog::PreNotify( NotifyEvent& _rNEvt )
+    bool ConditionalFormattingDialog::PreNotify( NotifyEvent& _rNEvt )
     {
         switch ( _rNEvt.GetType() )
         {
@@ -507,12 +507,12 @@ namespace rptui
                 if ( rKeyCode.GetCode() == 0x0508 ) // -
                 {
                     impl_deleteCondition_nothrow( impl_getFocusedConditionIndex( 0 ) );
-                    return 1;
+                    return true;
                 }
                 if ( rKeyCode.GetCode() == 0x0507 ) // +
                 {
                     impl_addCondition_nothrow( impl_getFocusedConditionIndex( impl_getConditionCount() - 1 ) + 1 );
-                    return 1;
+                    return true;
                 }
             }
         }

@@ -1629,9 +1629,9 @@ Rectangle* TabControl::ImplFindPartRect( const Point& rPt )
     return nFound == 1 ? &pFoundItem->maRect : NULL;
 }
 
-long TabControl::PreNotify( NotifyEvent& rNEvt )
+bool TabControl::PreNotify( NotifyEvent& rNEvt )
 {
-    long nDone = 0;
+    bool nDone = false;
     const MouseEvent* pMouseEvt = NULL;
 
     if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
@@ -1675,7 +1675,7 @@ long TabControl::PreNotify( NotifyEvent& rNEvt )
         }
     }
 
-    return nDone ? nDone : Control::PreNotify(rNEvt);
+    return nDone || Control::PreNotify(rNEvt);
 }
 
 // -----------------------------------------------------------------------

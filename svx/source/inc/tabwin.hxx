@@ -91,7 +91,7 @@ public:
     virtual void Resize();
     virtual sal_Bool Close();
     virtual void GetFocus();
-    virtual long PreNotify( NotifyEvent& _rNEvt );
+    virtual bool PreNotify( NotifyEvent& _rNEvt );
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState);
 

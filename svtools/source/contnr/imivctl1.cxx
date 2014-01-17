@@ -85,7 +85,7 @@ public:
 
                     ~IcnViewEdit_Impl();
     virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
     sal_Bool            EditingCanceled() const { return bCanceled; }
     void            StopEditing( sal_Bool bCancel = sal_False );
     sal_Bool            IsGrabFocus() const { return bGrabFocus; }
@@ -3415,7 +3415,7 @@ void IcnViewEdit_Impl::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
-long IcnViewEdit_Impl::PreNotify( NotifyEvent& rNEvt )
+bool IcnViewEdit_Impl::PreNotify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == EVENT_LOSEFOCUS )
     {
@@ -3428,7 +3428,7 @@ long IcnViewEdit_Impl::PreNotify( NotifyEvent& rNEvt )
             aTimer.Start();
         }
     }
-    return 0;
+    return false;
 }
 
 void IcnViewEdit_Impl::StopEditing( sal_Bool bCancel )

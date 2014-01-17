@@ -1094,7 +1094,7 @@ void SvtURLBox::Modify()
 }
 
 //-------------------------------------------------------------------------
-long SvtURLBox::PreNotify( NotifyEvent& rNEvt )
+bool SvtURLBox::PreNotify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetWindow() == GetSubEdit() && rNEvt.GetType() == EVENT_KEYINPUT )
     {
@@ -1104,7 +1104,7 @@ long SvtURLBox::PreNotify( NotifyEvent& rNEvt )
         KeyCode aCode( rKey.GetCode() );
         if( ProcessKey( rKey ) )
         {
-            return sal_True;
+            return true;
         }
         else if( ( aCode == KEY_UP || aCode == KEY_DOWN ) && !rKey.IsMod2() )
         {
@@ -1112,7 +1112,7 @@ long SvtURLBox::PreNotify( NotifyEvent& rNEvt )
             sal_uInt16 nLen = (sal_uInt16)aSelection.Min();
             GetSubEdit()->KeyInput( rEvent );
             SetSelection( Selection( nLen, GetText().getLength() ) );
-            return sal_True;
+            return true;
         }
 
         if ( MatchesPlaceHolder( GetText() ) )

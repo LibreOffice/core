@@ -50,7 +50,7 @@ public:
                         { FontNameBox::Fill( pList );
                           nFtCount = pList->GetFontNameCount(); }
     void            SetBindings(SfxBindings* pBinding);//
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
     virtual bool    Notify(  NotifyEvent& rNEvt );//
 };
 

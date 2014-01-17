@@ -229,7 +229,7 @@ void OTableDesignView::resizeDocumentView(Rectangle& _rPlayground)
     _rPlayground.SetSize( Size( 0, 0 ) );
 }
 
-long OTableDesignView::PreNotify( NotifyEvent& rNEvt )
+bool OTableDesignView::PreNotify( NotifyEvent& rNEvt )
 {
     sal_Bool bHandled = sal_False;
     switch(rNEvt.GetType())
@@ -244,7 +244,7 @@ long OTableDesignView::PreNotify( NotifyEvent& rNEvt )
             break;
     }
 
-    return bHandled ? 1L : ODataView::PreNotify(rNEvt);
+    return bHandled || ODataView::PreNotify(rNEvt);
 }
 
 IClipboardTest* OTableDesignView::getActiveChild() const

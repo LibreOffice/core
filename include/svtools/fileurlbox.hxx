@@ -40,7 +40,7 @@ namespace svt
         FileURLBox( Window* _pParent, WinBits _nStyle );
 
     protected:
-        virtual long        PreNotify( NotifyEvent& rNEvt );
+        virtual bool        PreNotify( NotifyEvent& rNEvt );
         virtual bool        Notify( NotifyEvent& rNEvt );
 
     public:

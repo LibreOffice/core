@@ -109,7 +109,7 @@ namespace frm
         virtual void        Resize();
         virtual void        GetFocus();
         virtual void        StateChanged( StateChangedType nStateChange );
-        virtual long        PreNotify( NotifyEvent& _rNEvt );
+        virtual bool        PreNotify( NotifyEvent& _rNEvt );
         virtual bool        Notify( NotifyEvent& _rNEvt );
 
     private:

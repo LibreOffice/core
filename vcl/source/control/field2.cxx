@@ -824,14 +824,14 @@ PatternField::~PatternField()
 {
 }
 
-long PatternField::PreNotify( NotifyEvent& rNEvt )
+bool PatternField::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplPatternProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), GetEditMask(), GetLiteralMask(),
                                          IsStrictFormat(), GetFormatFlags(),
                                          ImplIsSameMask(), ImplGetInPattKeyInput() ) )
-            return 1;
+            return true;
     }
 
     return SpinField::PreNotify( rNEvt );
@@ -874,14 +874,14 @@ PatternBox::~PatternBox()
 {
 }
 
-long PatternBox::PreNotify( NotifyEvent& rNEvt )
+bool PatternBox::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplPatternProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), GetEditMask(), GetLiteralMask(),
                                          IsStrictFormat(), GetFormatFlags(),
                                          ImplIsSameMask(), ImplGetInPattKeyInput() ) )
-            return 1;
+            return true;
     }
 
     return ComboBox::PreNotify( rNEvt );
@@ -1821,14 +1821,14 @@ DateField::~DateField()
 {
 }
 
-long DateField::PreNotify( NotifyEvent& rNEvt )
+bool DateField::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) && IsStrictFormat() &&
          ( GetExtDateFormat() != XTDATEF_SYSTEM_LONG ) &&
          !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplDateProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), GetExtDateFormat( sal_True ), ImplGetLocaleDataWrapper() ) )
-            return 1;
+            return true;
     }
 
     return SpinField::PreNotify( rNEvt );
@@ -1924,14 +1924,14 @@ DateBox::~DateBox()
 {
 }
 
-long DateBox::PreNotify( NotifyEvent& rNEvt )
+bool DateBox::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) && IsStrictFormat() &&
          ( GetExtDateFormat() != XTDATEF_SYSTEM_LONG ) &&
          !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplDateProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), GetExtDateFormat( sal_True ), ImplGetLocaleDataWrapper() ) )
-            return 1;
+            return true;
     }
 
     return ComboBox::PreNotify( rNEvt );
@@ -2702,12 +2702,12 @@ TimeField::~TimeField()
 {
 }
 
-long TimeField::PreNotify( NotifyEvent& rNEvt )
+bool TimeField::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplTimeProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsDuration(), GetFormat(), ImplGetLocaleDataWrapper() ) )
-            return 1;
+            return true;
     }
 
     return SpinField::PreNotify( rNEvt );
@@ -2843,12 +2843,12 @@ TimeBox::~TimeBox()
 {
 }
 
-long TimeBox::PreNotify( NotifyEvent& rNEvt )
+bool TimeBox::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplTimeProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsDuration(), GetFormat(), ImplGetLocaleDataWrapper() ) )
-            return 1;
+            return true;
     }
 
     return ComboBox::PreNotify( rNEvt );

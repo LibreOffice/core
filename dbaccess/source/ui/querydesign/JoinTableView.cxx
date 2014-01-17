@@ -1269,7 +1269,7 @@ OTableConnection* OJoinTableView::GetTabConn(const OTableWindow* pLhs,const OTab
     return pConn;
 }
 
-long OJoinTableView::PreNotify(NotifyEvent& rNEvt)
+bool OJoinTableView::PreNotify(NotifyEvent& rNEvt)
 {
     sal_Bool bHandled = sal_False;
     switch (rNEvt.GetType())
@@ -1460,7 +1460,7 @@ long OJoinTableView::PreNotify(NotifyEvent& rNEvt)
 
     if (!bHandled)
         return Window::PreNotify(rNEvt);
-    return 1L;
+    return true;
 }
 
 void OJoinTableView::GrabTabWinFocus()

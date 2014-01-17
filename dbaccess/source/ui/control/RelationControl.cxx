@@ -100,7 +100,7 @@ namespace dbaui
     protected:
         virtual void Resize();
 
-        virtual long PreNotify(NotifyEvent& rNEvt );
+        virtual bool PreNotify(NotifyEvent& rNEvt );
 
         virtual sal_Bool IsTabAllowed(sal_Bool bForward) const;
 
@@ -186,7 +186,7 @@ namespace dbaui
         SetColumnWidth(2, (nOutputWidth / 2));
     }
 
-    long ORelationControl::PreNotify(NotifyEvent& rNEvt)
+    bool ORelationControl::PreNotify(NotifyEvent& rNEvt)
     {
         DBG_CHKTHIS(ORelationControl,NULL);
         if (rNEvt.GetType() == EVENT_LOSEFOCUS && !HasChildPathFocus() )

@@ -157,7 +157,7 @@ void SvxLineBox::Select()
 
 // -----------------------------------------------------------------------
 
-long SvxLineBox::PreNotify( NotifyEvent& rNEvt )
+bool SvxLineBox::PreNotify( NotifyEvent& rNEvt )
 {
     sal_uInt16 nType = rNEvt.GetType();
 
@@ -362,7 +362,7 @@ void SvxColorBox::Select()
 
 // -----------------------------------------------------------------------
 
-long SvxColorBox::PreNotify( NotifyEvent& rNEvt )
+bool SvxColorBox::PreNotify( NotifyEvent& rNEvt )
 {
     sal_uInt16 nType = rNEvt.GetType();
 
@@ -564,7 +564,7 @@ void SvxMetricField::RefreshDlgUnit()
 
 // -----------------------------------------------------------------------
 
-long SvxMetricField::PreNotify( NotifyEvent& rNEvt )
+bool SvxMetricField::PreNotify( NotifyEvent& rNEvt )
 {
     sal_uInt16 nType = rNEvt.GetType();
 
@@ -656,7 +656,7 @@ SvxFillTypeBox::~SvxFillTypeBox()
 
 // -----------------------------------------------------------------------
 
-long SvxFillTypeBox::PreNotify( NotifyEvent& rNEvt )
+bool SvxFillTypeBox::PreNotify( NotifyEvent& rNEvt )
 {
     sal_uInt16 nType = rNEvt.GetType();
 
@@ -749,7 +749,7 @@ SvxFillAttrBox::~SvxFillAttrBox()
 
 // -----------------------------------------------------------------------
 
-long SvxFillAttrBox::PreNotify( NotifyEvent& rNEvt )
+bool SvxFillAttrBox::PreNotify( NotifyEvent& rNEvt )
 {
     sal_uInt16 nType = rNEvt.GetType();
 

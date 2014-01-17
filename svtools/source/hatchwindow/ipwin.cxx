@@ -616,7 +616,7 @@ void SvResizeWindow::Paint( const Rectangle & /*rRect*/ )
     m_aResizer.Draw( this );
 }
 
-long SvResizeWindow::PreNotify( NotifyEvent& rEvt )
+bool SvResizeWindow::PreNotify( NotifyEvent& rEvt )
 {
     if ( rEvt.GetType() == EVENT_GETFOCUS && !m_bActive )
     {

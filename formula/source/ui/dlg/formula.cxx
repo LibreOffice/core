@@ -1707,7 +1707,7 @@ void FormulaModalDialog::SetFocusWin(Window *pWin,const OString& nUniqueId)
     }
 }
 
-long FormulaModalDialog::PreNotify( NotifyEvent& rNEvt )
+bool FormulaModalDialog::PreNotify( NotifyEvent& rNEvt )
 {
     m_pImpl->PreNotify( rNEvt );
 
@@ -1820,7 +1820,7 @@ void FormulaDlg::SetFocusWin(Window *pWin,const OString& nUniqueId)
 }
 
 
-long FormulaDlg::PreNotify( NotifyEvent& rNEvt )
+bool FormulaDlg::PreNotify( NotifyEvent& rNEvt )
 {
     m_pImpl->PreNotify( rNEvt );
     return SfxModelessDialog::PreNotify(rNEvt);

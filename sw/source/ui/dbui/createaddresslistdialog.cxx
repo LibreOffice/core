@@ -66,7 +66,7 @@ class SwAddressControl_Impl : public Control
 
     void                MakeVisible(const Rectangle& aRect);
 
-    virtual long        PreNotify( NotifyEvent& rNEvt );
+    virtual bool        PreNotify( NotifyEvent& rNEvt );
     virtual void        Command( const CommandEvent& rCEvt );
 
     using Window::SetData;
@@ -327,7 +327,7 @@ void SwAddressControl_Impl::Command( const CommandEvent& rCEvt )
     }
 }
 
-long SwAddressControl_Impl::PreNotify( NotifyEvent& rNEvt )
+bool SwAddressControl_Impl::PreNotify( NotifyEvent& rNEvt )
 {
     if(rNEvt.GetType() == EVENT_COMMAND)
     {
@@ -336,7 +336,7 @@ long SwAddressControl_Impl::PreNotify( NotifyEvent& rNEvt )
         if( COMMAND_WHEEL == nCmd )
         {
             Command(*pCEvt);
-            return 1;
+            return true;
         }
     }
     return Control::PreNotify(rNEvt);

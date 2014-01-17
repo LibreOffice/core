@@ -89,7 +89,7 @@ namespace svt
 
 
     protected:
-        long            PreNotify( NotifyEvent& rNEvt );
+        bool            PreNotify( NotifyEvent& rNEvt );
 
     protected:
         /// called when an item has been selected by any means

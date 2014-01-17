@@ -84,7 +84,7 @@ public:
 
     void                    SetOkHdl( const Link& rOkHandler );
     void                    HideLanguage(sal_Bool nFlag=sal_True);
-    virtual long            PreNotify( NotifyEvent& rNEvt );
+    virtual bool            PreNotify( NotifyEvent& rNEvt );
     virtual void            PageCreated (SfxAllItemSet aSet);
 private:
     SvxNumberFormatTabPage( Window* pParent,

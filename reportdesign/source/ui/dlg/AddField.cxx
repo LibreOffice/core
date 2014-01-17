@@ -245,7 +245,7 @@ uno::Sequence< beans::PropertyValue > OAddFieldWindow::getSelectedFieldDescripto
 }
 
 //-----------------------------------------------------------------------
-long OAddFieldWindow::PreNotify( NotifyEvent& _rNEvt )
+bool OAddFieldWindow::PreNotify( NotifyEvent& _rNEvt )
 {
     if ( EVENT_KEYINPUT == _rNEvt.GetType() )
     {
@@ -255,7 +255,7 @@ long OAddFieldWindow::PreNotify( NotifyEvent& _rNEvt )
             if ( m_aCreateLink.IsSet() )
             {
                 m_aCreateLink.Call(this);
-                return 1;
+                return true;
             }
         }
     }

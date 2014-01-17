@@ -5041,9 +5041,9 @@ void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
 
 // -----------------------------------------------------------------------
 
-long Window::PreNotify( NotifyEvent& rNEvt )
+bool Window::PreNotify( NotifyEvent& rNEvt )
 {
-    long bDone = sal_False;
+    bool bDone = false;
     if ( mpWindowImpl->mpParent && !ImplIsOverlapWindow() )
         bDone = mpWindowImpl->mpParent->PreNotify( rNEvt );
 

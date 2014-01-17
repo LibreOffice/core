@@ -71,15 +71,15 @@ void ORelationDesignView::initialize()
     OJoinDesignView::initialize();
 }
 
-long ORelationDesignView::PreNotify( NotifyEvent& rNEvt )
+bool ORelationDesignView::PreNotify( NotifyEvent& rNEvt )
 {
-    long nDone = 0L;
+    bool nDone = false;
     if(rNEvt.GetType() == EVENT_GETFOCUS)
     {
         if(!m_pTableView->HasChildPathFocus())
         {
             m_pTableView->GrabTabWinFocus();
-            nDone = 1L;
+            nDone = true;
         }
     }
     if(!nDone)

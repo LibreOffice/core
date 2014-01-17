@@ -72,7 +72,7 @@ public:
 
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
     virtual void        StateChanged( StateChangedType nStateChange );
-    virtual long        PreNotify( NotifyEvent& rNEvt );
+    virtual bool        PreNotify( NotifyEvent& rNEvt );
     virtual bool        Notify( NotifyEvent& rEvt );
     virtual void        Resize();
     virtual void        GetFocus();
@@ -138,7 +138,7 @@ bool SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
     return Window::Notify( rNEvt );
 }
 
-long SfxFrameWindow_Impl::PreNotify( NotifyEvent& rNEvt )
+bool SfxFrameWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 {
     sal_uInt16 nType = rNEvt.GetType();
     if ( nType == EVENT_KEYINPUT || nType == EVENT_KEYUP )
@@ -146,7 +146,7 @@ long SfxFrameWindow_Impl::PreNotify( NotifyEvent& rNEvt )
         SfxViewFrame* pView = pFrame->GetCurrentViewFrame();
         SfxViewShell* pShell = pView ? pView->GetViewShell() : NULL;
         if ( pShell && pShell->HasKeyListeners_Impl() && pShell->HandleNotifyEvent_Impl( rNEvt ) )
-            return sal_True;
+            return true;
     }
     else if ( nType == EVENT_MOUSEBUTTONUP || nType == EVENT_MOUSEBUTTONDOWN )
     {
@@ -156,7 +156,7 @@ long SfxFrameWindow_Impl::PreNotify( NotifyEvent& rNEvt )
         if ( pShell )
             if ( pWindow == pShell->GetWindow() || pShell->GetWindow()->IsChild( pWindow ) )
                 if ( pShell->HasMouseClickListeners_Impl() && pShell->HandleNotifyEvent_Impl( rNEvt ) )
-                    return sal_True;
+                    return true;
     }
 
     if ( nType == EVENT_MOUSEBUTTONDOWN )

@@ -50,7 +50,7 @@ namespace svt
     }
 
     //------------------------------------------------------------------
-    long ComboBoxControl::PreNotify( NotifyEvent& rNEvt )
+    bool ComboBoxControl::PreNotify( NotifyEvent& rNEvt )
     {
         switch (rNEvt.GetType())
         {
@@ -71,7 +71,7 @@ namespace svt
                         if (nPos >= GetEntryCount())
                             nPos = GetEntryCount() - 1;
                         SetText(GetEntry(sal::static_int_cast< sal_uInt16 >(nPos)));
-                        return 1;
+                        return true;
                     }
                 }
                 break;
@@ -157,7 +157,7 @@ namespace svt
     }
 
     //------------------------------------------------------------------
-    long ListBoxControl::PreNotify( NotifyEvent& rNEvt )
+    bool ListBoxControl::PreNotify( NotifyEvent& rNEvt )
     {
         switch (rNEvt.GetType())
         {
@@ -179,10 +179,10 @@ namespace svt
                             nPos = GetEntryCount() - 1;
                         SelectEntryPos(sal::static_int_cast< sal_uInt16 >(nPos));
                         Select();   // for calling Modify
-                        return 1;
+                        return true;
                     }
                     else if (GetParent()->PreNotify(rNEvt))
-                        return 1;
+                        return true;
                 }
                 break;
         }
@@ -322,7 +322,7 @@ namespace svt
     }
 
     //------------------------------------------------------------------
-    long CheckBoxControl::PreNotify(NotifyEvent& rEvt)
+    bool CheckBoxControl::PreNotify(NotifyEvent& rEvt)
     {
         switch (rEvt.GetType())
         {
@@ -568,7 +568,7 @@ namespace svt
     }
 
     //------------------------------------------------------------------
-    long MultiLineTextCell::PreNotify( NotifyEvent& rNEvt )
+    bool MultiLineTextCell::PreNotify( NotifyEvent& rNEvt )
     {
         if ( rNEvt.GetType() == EVENT_KEYINPUT )
         {
@@ -591,13 +591,13 @@ namespace svt
                         pKeyEvent->GetRepeat()
                     );
                     if ( dispatchKeyEvent( aEvent ) )
-                        return 1;
+                        return true;
                 }
 
                 if ( ( nCode != KEY_TAB ) && ( nCode != KEY_RETURN ) )   // everything but tab and enter
                 {
                     if ( dispatchKeyEvent( *pKeyEvent ) )
-                        return 1;
+                        return true;
                 }
             }
         }

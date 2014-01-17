@@ -92,7 +92,7 @@ public:
                     LongCurrencyField( Window* pParent, WinBits nWinStyle );
                     ~LongCurrencyField();
 
-    long            PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
     virtual bool    Notify( NotifyEvent& rNEvt );
 
     void            Modify();
@@ -119,7 +119,7 @@ public:
                     LongCurrencyBox( Window* pParent, WinBits nWinStyle );
                     ~LongCurrencyBox();
 
-    long            PreNotify( NotifyEvent& rNEvt );
+    virtual bool    PreNotify( NotifyEvent& rNEvt );
     virtual bool    Notify( NotifyEvent& rNEvt );
 
     void            Modify();

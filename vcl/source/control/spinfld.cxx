@@ -897,9 +897,9 @@ Rectangle* SpinField::ImplFindPartRect( const Point& rPt )
         return NULL;
 }
 
-long SpinField::PreNotify( NotifyEvent& rNEvt )
+bool SpinField::PreNotify( NotifyEvent& rNEvt )
 {
-    long nDone = 0;
+    bool nDone = false;
     const MouseEvent* pMouseEvt = NULL;
 
     if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
@@ -944,7 +944,7 @@ long SpinField::PreNotify( NotifyEvent& rNEvt )
         }
     }
 
-    return nDone ? nDone : Edit::PreNotify(rNEvt);
+    return nDone || Edit::PreNotify(rNEvt);
 }
 
 // -----------------------------------------------------------------------

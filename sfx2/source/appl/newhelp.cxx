@@ -907,7 +907,7 @@ void IndexTabPage_Impl::OpenKeyword()
 
 // class SearchBox_Impl --------------------------------------------------
 
-long SearchBox_Impl::PreNotify( NotifyEvent& rNEvt )
+bool SearchBox_Impl::PreNotify( NotifyEvent& rNEvt )
 {
     sal_Bool bHandled = sal_False;
     if ( !IsInDropDown() &&
@@ -918,7 +918,7 @@ long SearchBox_Impl::PreNotify( NotifyEvent& rNEvt )
         aSearchLink.Call( NULL );
         bHandled = sal_True;
     }
-    return bHandled ? 1 : ComboBox::PreNotify( rNEvt );
+    return bHandled || ComboBox::PreNotify( rNEvt );
 }
 
 // -----------------------------------------------------------------------
@@ -1764,9 +1764,9 @@ void SfxHelpIndexWindow_Impl::Resize()
 
 // -----------------------------------------------------------------------
 
-long SfxHelpIndexWindow_Impl::PreNotify( NotifyEvent& rNEvt )
+bool SfxHelpIndexWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 {
-    long nDone = 0;
+    bool nDone = false;
     sal_uInt16 nType = rNEvt.GetType();
     if ( EVENT_KEYINPUT == nType && rNEvt.GetKeyEvent() )
     {
@@ -1784,12 +1784,12 @@ long SfxHelpIndexWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             if ( !bCtrl && bShift && aActiveLB.HasChildPathFocus() )
             {
                 pControl->GrabFocus();
-                nDone = 1;
+                nDone = true;
             }
             else if ( !bCtrl && !bShift && pControl->HasChildPathFocus() )
             {
                 aActiveLB.GrabFocus();
-                nDone = 1;
+                nDone = true;
             }
             else if ( bCtrl )
             {
@@ -1800,7 +1800,7 @@ long SfxHelpIndexWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                     nPageId = HELP_INDEX_PAGE_FIRST;
                 aTabCtrl.SetCurPageId( (sal_uInt16)nPageId );
                 ActivatePageHdl( &aTabCtrl );
-                nDone = 1;
+                nDone = true;
             }
          }
         else if ( aTabCtrl.HasFocus() && ( KEY_LEFT == nCode || KEY_RIGHT == nCode ) )
@@ -1809,7 +1809,7 @@ long SfxHelpIndexWindow_Impl::PreNotify( NotifyEvent& rNEvt )
         }
     }
 
-    return nDone ? nDone : Window::PreNotify( rNEvt );
+    return nDone || Window::PreNotify( rNEvt );
 }
 
 // -----------------------------------------------------------------------
@@ -2498,9 +2498,9 @@ void SfxHelpTextWindow_Impl::Resize()
 
 // -----------------------------------------------------------------------
 
-long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
+bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 {
-    long nDone = 0;
+    bool nDone = false;
     sal_uInt16 nType = rNEvt.GetType();
     if ( EVENT_COMMAND == nType && rNEvt.GetCommandEvent() )
     {
@@ -2592,7 +2592,7 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 
             sal_uInt16 nId = aMenu.Execute( this, aPos );
             pHelpWin->DoAction( nId );
-            nDone = 1;
+            nDone = true;
         }
     }
     else if ( EVENT_KEYINPUT == nType && rNEvt.GetKeyEvent() )
@@ -2604,22 +2604,22 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
         if ( KEYGROUP_ALPHA == nKeyGroup &&  !isHandledKey( rKeyCode ) )
         {
             // do nothing disables the writer accelerators
-            nDone = 1;
+            nDone = true;
          }
         else if ( rKeyCode.IsMod1() && ( KEY_F4 == nKey || KEY_W == nKey ) )
         {
             // <CTRL><F4> or <CTRL><W> -> close top frame
             pHelpWin->CloseWindow();
-            nDone = 1;
+            nDone = true;
         }
         else if ( KEY_TAB == nKey && aOnStartupCB.HasChildPathFocus() )
         {
             aToolBox.GrabFocus();
-            nDone = 1;
+            nDone = true;
         }
     }
 
-    return nDone ? nDone : Window::PreNotify( rNEvt );
+    return nDone || Window::PreNotify( rNEvt );
 }
 
 // -----------------------------------------------------------------------
@@ -3188,7 +3188,7 @@ SfxHelpWindow_Impl::~SfxHelpWindow_Impl()
 
 // -----------------------------------------------------------------------
 
-long SfxHelpWindow_Impl::PreNotify( NotifyEvent& rNEvt )
+bool SfxHelpWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 {
     sal_Bool bHandled = sal_False;
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
@@ -3209,7 +3209,7 @@ long SfxHelpWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             bHandled = sal_True;
         }
     }
-    return bHandled ? 1 : Window::PreNotify( rNEvt );
+    return bHandled || Window::PreNotify( rNEvt );
 }
 
 // -----------------------------------------------------------------------

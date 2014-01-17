@@ -40,7 +40,7 @@ namespace svt
         OFileURLControl(Window* _pParent, const ResId& _rId);
 
     protected:
-        virtual long        PreNotify( NotifyEvent& rNEvt );
+        virtual bool        PreNotify( NotifyEvent& rNEvt );
         virtual bool        Notify( NotifyEvent& rNEvt );
     };
 

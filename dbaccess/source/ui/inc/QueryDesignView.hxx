@@ -97,7 +97,7 @@ namespace dbaui
         virtual void Construct();
         virtual void initialize();
         // window overloads
-        virtual long PreNotify( NotifyEvent& rNEvt );
+        virtual bool PreNotify( NotifyEvent& rNEvt );
         virtual void GetFocus();
 
         sal_Bool isSlotEnabled(sal_Int32 _nSlotId);

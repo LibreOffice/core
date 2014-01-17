@@ -58,7 +58,7 @@ namespace pcr
 
     protected:
         // Window overridables
-        inline virtual long PreNotify( NotifyEvent& rNEvt );
+        inline virtual bool PreNotify( NotifyEvent& rNEvt );
     };
 
     //========================================================================
@@ -231,10 +231,10 @@ namespace pcr
 
     //------------------------------------------------------------------------
     template< class WINDOW >
-    inline long ControlWindow< WINDOW >::PreNotify( NotifyEvent& rNEvt )
+    inline bool ControlWindow< WINDOW >::PreNotify( NotifyEvent& rNEvt )
     {
         if ( m_pHelper && m_pHelper->handlePreNotify( rNEvt ) )
-            return 1;
+            return true;
         return WindowType::PreNotify( rNEvt );
     }
 

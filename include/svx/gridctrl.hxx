@@ -309,7 +309,7 @@ protected:
     virtual void ArrangeControls(sal_uInt16& nX, sal_uInt16 nY);
     virtual sal_uInt32 GetTotalCellWidth(long nRow, sal_uInt16 nColId);
     virtual void Command(const CommandEvent& rEvt);
-    virtual long PreNotify(NotifyEvent& rEvt);
+    virtual bool PreNotify(NotifyEvent& rEvt);
     virtual void KeyInput(const KeyEvent& rEvt);
     virtual void StateChanged( StateChangedType nType );
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
