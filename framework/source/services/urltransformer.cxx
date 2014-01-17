@@ -30,12 +30,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-using namespace ::osl;
-using namespace ::cppu;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::util;
-
 namespace {
 
 class URLTransformer : public ::cppu::WeakImplHelper2< css::util::XURLTransformer, css::lang::XServiceInfo>
@@ -80,7 +74,7 @@ public:
 
 namespace
 {
-    void lcl_ParserHelper(INetURLObject& _rParser,URL& _rURL,bool _bUseIntern)
+    void lcl_ParserHelper(INetURLObject& _rParser, css::util::URL& _rURL,bool _bUseIntern)
     {
         // Get all information about this URL.
         _rURL.Protocol  = INetURLObject::GetScheme( _rParser.GetProtocol() );
@@ -132,7 +126,7 @@ namespace
 //*****************************************************************************************************************
 //  XURLTransformer
 //*****************************************************************************************************************
-sal_Bool SAL_CALL URLTransformer::parseStrict( URL& aURL ) throw( RuntimeException )
+sal_Bool SAL_CALL URLTransformer::parseStrict( css::util::URL& aURL ) throw( css::uno::RuntimeException )
 {
     // Safe impossible cases.
     if  (( &aURL                        ==  NULL    )   ||
@@ -185,8 +179,8 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( URL& aURL ) throw( RuntimeExcepti
 //*****************************************************************************************************************
 //  XURLTransformer
 //*****************************************************************************************************************
-sal_Bool SAL_CALL URLTransformer::parseSmart(           URL&        aURL            ,
-                                                const   OUString&    sSmartProtocol  ) throw( RuntimeException )
+sal_Bool SAL_CALL URLTransformer::parseSmart( css::util::URL& aURL,
+                                                const   OUString&    sSmartProtocol  ) throw( css::uno::RuntimeException )
 {
     // Safe impossible cases.
     if  (( &aURL                            ==  NULL    ) ||
@@ -241,7 +235,7 @@ sal_Bool SAL_CALL URLTransformer::parseSmart(           URL&        aURL        
 //*****************************************************************************************************************
 //  XURLTransformer
 //*****************************************************************************************************************
-sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException )
+sal_Bool SAL_CALL URLTransformer::assemble( css::util::URL& aURL ) throw( css::uno::RuntimeException )
 {
     // Safe impossible cases.
     if  ( &aURL == NULL )
@@ -304,8 +298,8 @@ sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException 
 //*****************************************************************************************************************
 //  XURLTransformer
 //*****************************************************************************************************************
-OUString SAL_CALL URLTransformer::getPresentation(   const   URL&        aURL            ,
-                                                            sal_Bool    bWithPassword   ) throw( RuntimeException )
+OUString SAL_CALL URLTransformer::getPresentation( const css::util::URL& aURL,
+                                                            sal_Bool    bWithPassword   ) throw( css::uno::RuntimeException )
 {
     // Safe impossible cases.
     if  (( &aURL                        ==  NULL        )   ||
@@ -317,7 +311,7 @@ OUString SAL_CALL URLTransformer::getPresentation(   const   URL&        aURL   
     }
 
     // Check given URL
-    URL aTestURL = aURL;
+    css::util::URL aTestURL = aURL;
     sal_Bool bParseResult = parseSmart( aTestURL, aTestURL.Protocol );
     if ( bParseResult )
     {
