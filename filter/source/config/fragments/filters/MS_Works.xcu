@@ -21,7 +21,7 @@
         <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.MSWorksImportFilter</value></prop>
         <prop oor:name="UserData"><value>WPS</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="x-default">Microsoft Works Document</value>
+            <value xml:lang="en-US">Microsoft Works Document</value>
         </prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>writer_MS_Works_Document</value></prop>
