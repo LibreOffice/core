@@ -825,7 +825,7 @@ void WMFWriter::TrueTextOut(const Point & rPoint, const OString& rString)
 {
     WriteRecordHeader(0,W_META_TEXTOUT);
 
-    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(*pWMF, rString);
+    write_uInt16_lenPrefixed_uInt8s_FromOString(*pWMF, rString);
     sal_Int32 nLen = rString.getLength();
     if ((nLen&1)!=0) pWMF->WriteUChar( (sal_uInt8)0 );
     WritePointYX(rPoint);

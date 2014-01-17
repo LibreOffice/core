@@ -649,9 +649,9 @@ const char OHTMLImportExport::sIndentSource[nIndentMax+1] = "\t\t\t\t\t\t\t\t\t\
 // Macros for HTML-Export
 #define TAG_ON( tag )       HTMLOutFuncs::Out_AsciiTag( (*m_pStream), tag )
 #define TAG_OFF( tag )      HTMLOutFuncs::Out_AsciiTag( (*m_pStream), tag, sal_False )
-#define OUT_LF()            (*m_pStream) << SAL_NEWLINE_STRING << GetIndentStr()
-#define TAG_ON_LF( tag )    (TAG_ON( tag ) << SAL_NEWLINE_STRING << GetIndentStr())
-#define TAG_OFF_LF( tag )   (TAG_OFF( tag ) << SAL_NEWLINE_STRING << GetIndentStr())
+#define OUT_LF()            m_pStream->WriteCharPtr( SAL_NEWLINE_STRING ).WriteCharPtr( GetIndentStr() )
+#define TAG_ON_LF( tag )    (TAG_ON( tag ).WriteCharPtr( SAL_NEWLINE_STRING ).WriteCharPtr( GetIndentStr() ))
+#define TAG_OFF_LF( tag )   (TAG_OFF( tag ).WriteCharPtr( SAL_NEWLINE_STRING ).WriteCharPtr( GetIndentStr() ))
 
 OHTMLImportExport::OHTMLImportExport(const ::svx::ODataAccessDescriptor& _aDataDescriptor,
                                      const Reference< XComponentContext >& _rM,

@@ -333,6 +333,15 @@ StreamType& operator<<( StreamType& rStrm, const XclObjAnchor& rAnchor )
         << static_cast<sal_uInt16>(rAnchor.maLast.mnRow)  << static_cast<sal_uInt16>(rAnchor.mnBY);
 }
 
+inline SvStream& WriteXclObjAnchor( SvStream& rStrm, const XclObjAnchor& rAnchor )
+{
+    return rStrm
+          .WriteUInt16( rAnchor.maFirst.mnCol ).WriteUInt16( rAnchor.mnLX )
+          .WriteUInt16( rAnchor.maFirst.mnRow ).WriteUInt16( rAnchor.mnTY )
+          .WriteUInt16( rAnchor.maLast.mnCol ).WriteUInt16( rAnchor.mnRX )
+          .WriteUInt16( rAnchor.maLast.mnRow).WriteUInt16(rAnchor.mnBY);
+}
+
 // ----------------------------------------------------------------------------
 
 struct XclObjLineData

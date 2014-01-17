@@ -1254,7 +1254,7 @@ void MetaTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm.WriteInt32(mnIndex);
     rOStm.WriteInt32(mnLen);
 
-    write_lenPrefixed_uInt16s_FromOUString<sal_uInt16>(rOStm, maStr); // version 2
+    write_uInt16_lenPrefixed_uInt16s_FromOUString(rOStm, maStr); // version 2
 }
 
 // ------------------------------------------------------------------------
@@ -1395,7 +1395,7 @@ void MetaTextArrayAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     for (sal_Int32 i = 0; i < nAryLen; ++i)
         rOStm.WriteInt32( mpDXAry[ i ] );
 
-    write_lenPrefixed_uInt16s_FromOUString<sal_uInt16>(rOStm, maStr); // version 2
+    write_uInt16_lenPrefixed_uInt16s_FromOUString(rOStm, maStr); // version 2
 }
 
 // ------------------------------------------------------------------------
@@ -1529,7 +1529,7 @@ void MetaStretchTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm.WriteInt32( mnIndex );
     rOStm.WriteInt32( mnLen );
 
-    write_lenPrefixed_uInt16s_FromOUString<sal_uInt16>(rOStm, maStr); // version 2
+    write_uInt16_lenPrefixed_uInt16s_FromOUString(rOStm, maStr); // version 2
 }
 
 // ------------------------------------------------------------------------
@@ -1610,7 +1610,7 @@ void MetaTextRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
     rOStm.WriteUInt16( mnStyle );
 
-    write_lenPrefixed_uInt16s_FromOUString<sal_uInt16>(rOStm, maStr); // version 2
+    write_uInt16_lenPrefixed_uInt16s_FromOUString(rOStm, maStr); // version 2
 }
 
 // ------------------------------------------------------------------------
@@ -4186,7 +4186,7 @@ sal_Bool MetaCommentAction::Compare( const MetaAction& rMetaAction ) const
 void MetaCommentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStm, maComment);
+    write_uInt16_lenPrefixed_uInt8s_FromOString(rOStm, maComment);
     rOStm.WriteInt32( mnValue ).WriteUInt32( mnDataSize );
 
     if ( mnDataSize )

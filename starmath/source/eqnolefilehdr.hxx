@@ -58,14 +58,14 @@ public:
     }
     inline void Write(SvStorageStream *pS)
     {
-        *pS << nCBHdr;
-        *pS << nVersion;
-        *pS << nCf;
-        *pS << nCBObject;
-        *pS << nReserved1;
-        *pS << nReserved2;
-        *pS << nReserved3;
-        *pS << nReserved4;
+        pS->WriteUInt16( nCBHdr );
+        pS->WriteUInt32( nVersion );
+        pS->WriteUInt16( nCf );
+        pS->WriteUInt32( nCBObject );
+        pS->WriteUInt32( nReserved1 );
+        pS->WriteUInt32( nReserved2 );
+        pS->WriteUInt32( nReserved3 );
+        pS->WriteUInt32( nReserved4 );
     }
 };
 

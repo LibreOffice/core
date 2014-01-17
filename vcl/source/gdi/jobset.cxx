@@ -354,23 +354,23 @@ SvStream& WriteJobSetup( SvStream& rOStream, const JobSetup& rJobSetup )
             ::boost::unordered_map< OUString, OUString, OUStringHash >::const_iterator it;
             for( it = pJobData->maValueMap.begin(); it != pJobData->maValueMap.end(); ++it )
             {
-                write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStream, it->first, RTL_TEXTENCODING_UTF8);
-                write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStream, it->second, RTL_TEXTENCODING_UTF8);
+                write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStream, it->first, RTL_TEXTENCODING_UTF8);
+                write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStream, it->second, RTL_TEXTENCODING_UTF8);
             }
-            write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStream, "COMPAT_DUPLEX_MODE");
+            write_uInt16_lenPrefixed_uInt8s_FromOString(rOStream, "COMPAT_DUPLEX_MODE");
             switch( pJobData->meDuplexMode )
             {
                 case DUPLEX_UNKNOWN:
-                    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStream, "DUPLEX_UNKNOWN");
+                    write_uInt16_lenPrefixed_uInt8s_FromOString(rOStream, "DUPLEX_UNKNOWN");
                     break;
                 case DUPLEX_OFF:
-                    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStream, "DUPLEX_OFF");
+                    write_uInt16_lenPrefixed_uInt8s_FromOString(rOStream, "DUPLEX_OFF");
                     break;
                 case DUPLEX_SHORTEDGE:
-                    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStream, "DUPLEX_SHORTEDGE");
+                    write_uInt16_lenPrefixed_uInt8s_FromOString(rOStream, "DUPLEX_SHORTEDGE");
                     break;
                 case DUPLEX_LONGEDGE:
-                    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStream, "DUPLEX_LONGEDGE");
+                    write_uInt16_lenPrefixed_uInt8s_FromOString(rOStream, "DUPLEX_LONGEDGE");
                     break;
             }
             nLen = sal::static_int_cast<sal_uInt16>(rOStream.Tell() - nPos);

@@ -301,23 +301,23 @@ SvStream& WriteSdPublishingDesign(SvStream& rOut, const SdPublishingDesign& rDes
     SdIOCompat aIO(rOut, STREAM_WRITE, 0);
 
     // Name
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, rDesign.m_aDesignName,
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aDesignName,
         RTL_TEXTENCODING_UTF8);
 
     rOut.WriteUInt16( (sal_uInt16)rDesign.m_eMode );
     rOut.WriteUChar( rDesign.m_bContentPage );
     rOut.WriteUChar( rDesign.m_bNotes );
     rOut.WriteUInt16( rDesign.m_nResolution );
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, rDesign.m_aCompression,
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aCompression,
         RTL_TEXTENCODING_UTF8);
     rOut.WriteUInt16( (sal_uInt16)rDesign.m_eFormat );
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, rDesign.m_aAuthor,
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aAuthor,
         RTL_TEXTENCODING_UTF8);
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, rDesign.m_aEMail,
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aEMail,
         RTL_TEXTENCODING_UTF8);
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, rDesign.m_aWWW,
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aWWW,
         RTL_TEXTENCODING_UTF8);
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, rDesign.m_aMisc,
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aMisc,
         RTL_TEXTENCODING_UTF8);
     rOut.WriteUChar( rDesign.m_bDownload );
     rOut.WriteUChar( rDesign.m_bCreated );     // not used
@@ -332,9 +332,9 @@ SvStream& WriteSdPublishingDesign(SvStream& rOut, const SdPublishingDesign& rDes
     rOut.WriteUChar( rDesign.m_bUseColor );
 
     rOut.WriteUInt16( (sal_uInt16)rDesign.m_eScript );
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, rDesign.m_aURL,
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aURL,
         RTL_TEXTENCODING_UTF8);
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, rDesign.m_aCGI,
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aCGI,
         RTL_TEXTENCODING_UTF8);
 
     rOut.WriteUChar( rDesign.m_bAutoSlide );

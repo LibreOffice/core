@@ -133,7 +133,7 @@ inline ScAddress ScBigAddress::MakeAddress() const
 
 inline SvStream& WriteScBigAddress( SvStream& rStream, const ScBigAddress& rAdr )
 {
-    rStream << rAdr.nCol << rAdr.nRow << rAdr.nTab;
+    rStream.WriteInt32( rAdr.nCol ).WriteInt32( rAdr.nRow ).WriteInt32( rAdr.nTab );
     return rStream;
 }
 
