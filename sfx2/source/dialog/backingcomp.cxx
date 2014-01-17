@@ -448,6 +448,20 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     if( pBack )
         pBack->setOwningFrame( m_xFrame );
 
+    // Set a minimum size for Start Center
+    if( pParent && pBack )
+    {
+        long nMenuHeight = 0;
+        Window* pMenu = pParent->GetWindow(WINDOW_NEXT);
+        if( pMenu )
+            nMenuHeight = pMenu->GetSizePixel().Height();
+
+        pParent->SetMinOutputSizePixel(
+            Size(
+                pBack->get_width_request(),
+                pBack->get_height_request() + nMenuHeight));
+    }
+
     /* } SAFE */
 }
 

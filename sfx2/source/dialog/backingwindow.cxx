@@ -265,6 +265,9 @@ void BackingWindow::initControls()
     mpThinBox2->SetBackground(aButtonsText);
 
     Resize();
+
+    set_width_request(mpAllRecentThumbnails->get_width_request() + mpAllButtonsBox->GetOptimalSize().Width());
+    set_height_request(mpAllButtonsBox->GetOptimalSize().Height());
 }
 
 void BackingWindow::setupButton( PushButton* pButton )
@@ -608,5 +611,4 @@ void BackingWindow::clearRecentFileList()
 {
     mpAllRecentThumbnails->Clear();
 }
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab:*/
