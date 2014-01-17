@@ -2395,7 +2395,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 rOStm.SeekRel( 4 );
 
                 // write data
-                write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStm, pA->GetComment());
+                write_uInt16_lenPrefixed_uInt8s_FromOString(rOStm, pA->GetComment());
                 rOStm.WriteInt32( pA->GetValue() ).WriteUInt32( nDataSize );
 
                 if( nDataSize )

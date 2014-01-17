@@ -314,7 +314,7 @@ sal_Bool SbxStdCollection::StoreData( SvStream& rStrm ) const
     sal_Bool bRes = SbxCollection::StoreData( rStrm );
     if( bRes )
     {
-        write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStrm, aElemClass,
+        write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, aElemClass,
             RTL_TEXTENCODING_ASCII_US);
         rStrm.WriteUChar( bAddRemoveOk );
     }

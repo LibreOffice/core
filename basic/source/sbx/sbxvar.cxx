@@ -644,7 +644,7 @@ sal_Bool SbxVariable::StoreData( SvStream& rStrm ) const
     {
         return sal_False;
     }
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStrm, maName,
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, maName,
                                                       RTL_TEXTENCODING_ASCII_US);
     rStrm.WriteUInt32( (sal_uInt32)nUserData );
     if( pInfo.Is() )
