@@ -66,48 +66,6 @@ long ImplCallPreNotify( NotifyEvent& rEvt )
     return nRet;
 }
 
-// =======================================================================
-
-long ImplCallEvent( NotifyEvent& rEvt )
-{
-    long nRet = ImplCallPreNotify( rEvt );
-    if ( !nRet )
-    {
-        Window* pWindow = rEvt.GetWindow();
-        switch ( rEvt.GetType() )
-        {
-            case EVENT_MOUSEBUTTONDOWN:
-                pWindow->MouseButtonDown( *rEvt.GetMouseEvent() );
-                break;
-            case EVENT_MOUSEBUTTONUP:
-                pWindow->MouseButtonUp( *rEvt.GetMouseEvent() );
-                break;
-            case EVENT_MOUSEMOVE:
-                pWindow->MouseMove( *rEvt.GetMouseEvent() );
-                break;
-            case EVENT_KEYINPUT:
-                pWindow->KeyInput( *rEvt.GetKeyEvent() );
-                break;
-            case EVENT_KEYUP:
-                pWindow->KeyUp( *rEvt.GetKeyEvent() );
-                break;
-            case EVENT_GETFOCUS:
-                pWindow->GetFocus();
-                break;
-            case EVENT_LOSEFOCUS:
-                pWindow->LoseFocus();
-                break;
-            case EVENT_COMMAND:
-                pWindow->Command( *rEvt.GetCommandEvent() );
-                break;
-        }
-    }
-
-    return nRet;
-}
-
-// =======================================================================
-
 static sal_Bool ImplHandleMouseFloatMode( Window* pChild, const Point& rMousePos,
                                       sal_uInt16 nCode, sal_uInt16 nSVEvent,
                                       sal_Bool bMouseLeave )

@@ -358,7 +358,6 @@ void        ImplFreeHotKeyData();
 void        ImplFreeEventHookData();
 
 long        ImplCallPreNotify( NotifyEvent& rEvt );
-long        ImplCallEvent( NotifyEvent& rEvt );
 
 extern VCL_PLUGIN_PUBLIC ImplSVData* pImplSVData;
 inline VCL_PLUGIN_PUBLIC ImplSVData* ImplGetSVData() { return pImplSVData; }
