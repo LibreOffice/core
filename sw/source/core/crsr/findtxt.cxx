@@ -89,7 +89,9 @@ lcl_CleanStr(const SwTxtNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
             bNewHint = true;
         }
         // Check if next stop is a soft hyphen.
-        else if (-1 != nSoftHyphen && nSoftHyphen < nHintStart && nSoftHyphen < nEnd)
+        else if (   -1 != nSoftHyphen
+                 && (-1 == nHintStart || nSoftHyphen < nHintStart)
+                 && nSoftHyphen < nEnd)
         {
             nStt = nSoftHyphen;
             bNewSoftHyphen = true;
