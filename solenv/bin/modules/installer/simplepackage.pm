@@ -433,11 +433,9 @@ sub create_package
             }
         }
 
-        $systemcall = "cd $localtempdir && hdiutil makehybrid -hfs -hfs-openfolder $folder $folder -hfs-volume-name \"$volume_name\" -ov -o $installdir/tmp && hdiutil convert -ov -format UDBZ $installdir/tmp.dmg -o $archive && ";
-        if (( $ref ne "" ) && ( $$ref ne "" )) {
-            $systemcall .= "hdiutil unflatten $archive && Rez -a $$ref -o $archive && hdiutil flatten $archive &&";
-        }
-        $systemcall .= "rm -f $installdir/tmp.dmg";
+        # makehybrid doesn't preserve extended attributes (needed when codesigning data files like .jar)
+        # unfortunately this method is slower than makehybrid followed by convert
+        $systemcall = "cd $localtempdir && hdiutil create -srcfolder $folder -volname \"$volume_name\" -ov -format UDBZ $archive";
     }
     else
     {
