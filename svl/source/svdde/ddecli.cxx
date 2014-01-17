@@ -120,7 +120,7 @@ HDDEDATA CALLBACK DdeInternal::CliCallback( WORD nCode, WORD nCbType,
                     nRet = (HDDEDATA)DDE_FACK;
                     break;
                 }
-                // kein break;
+                // no break
 
             case XTYP_REQUEST:
                 if( !hData && XTYP_REQUEST == nCode )

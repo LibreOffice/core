@@ -585,7 +585,7 @@ CSS1Token CSS1Parser::GetNextToken()
                 bNextCh = sal_False;
                 break;
             }
-            // kein break;
+            // no break
 
         default: // IDENT | syntax error
             if (comphelper::string::isalphaAscii(cNextCh))
