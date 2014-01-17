@@ -93,7 +93,7 @@ namespace
 }
 
 
-static short lcl_GetPassword(
+static bool lcl_GetPassword(
     Window *pParent,
     bool bProtect,
     /*out*/OUString &rPassword )

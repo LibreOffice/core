@@ -85,7 +85,7 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUString & aName, const uno::
 
             OUString sType;
             if  (   ( aNormalizedDescriptor.size() == 1 )
-                &&  ( aNormalizedDescriptor.has( PROP_EVENT_TYPE) == 0 )
+                &&  !aNormalizedDescriptor.has( PROP_EVENT_TYPE ) //TODO
                 &&  ( aNormalizedDescriptor.get( PROP_EVENT_TYPE ) >>= sType )
                 &&  ( sType.isEmpty() )
                 )

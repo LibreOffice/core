@@ -243,7 +243,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
             {
                 // More Views on the same Document?
                 SfxObjectShell *pDocSh = GetObjectShell();
-                int bOther = sal_False;
+                bool bOther = false;
                 for ( const SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocSh );
                       !bOther && pFrame;
                       pFrame = SfxViewFrame::GetNext( *pFrame, pDocSh ) )

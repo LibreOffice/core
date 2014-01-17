@@ -172,7 +172,7 @@ SfxFrameProperties& SfxFrameProperties::operator =(
     return *this;
 }
 
-int SfxFrameProperties::operator ==( const SfxFrameProperties& rProp ) const
+bool SfxFrameProperties::operator ==( const SfxFrameProperties& rProp ) const
 {
     return aURL == rProp.aURL && aName == rProp.aName && lMarginWidth == rProp.lMarginWidth && lMarginHeight == rProp.lMarginHeight &&
             lSize == rProp.lSize && eScroll == rProp.eScroll && eSizeSelector == rProp.eSizeSelector &&

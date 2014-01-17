@@ -171,7 +171,7 @@ public:
     void             SetActiveFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & rFrame );
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > GetActiveFrame() const;
                      // Reconfig
-    int              IsInRegistrations() const;
+    bool             IsInRegistrations() const;
     sal_uInt16           EnterRegistrations(const char *pFile = 0, int nLine = 0);
     void             LeaveRegistrations( sal_uInt16 nLevel = USHRT_MAX, const char *pFile = 0, int nLine = 0 );
     void             Register( SfxControllerItem& rBinding );
@@ -218,7 +218,7 @@ public:
 
 //--------------------------------------------------------------------
 
-inline int SfxBindings::IsInRegistrations() const
+inline bool SfxBindings::IsInRegistrations() const
 
 /*  [Description]
 

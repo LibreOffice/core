@@ -188,10 +188,10 @@ struct SfxFoundCache_Impl
         pCache(pC)
     {}
 
-    int operator<( const SfxFoundCache_Impl &r ) const
+    bool operator<( const SfxFoundCache_Impl &r ) const
     { return nWhichId < r.nWhichId; }
 
-    int operator==( const SfxFoundCache_Impl &r ) const
+    bool operator==( const SfxFoundCache_Impl &r ) const
     { return nWhichId== r.nWhichId; }
 };
 

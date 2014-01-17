@@ -206,7 +206,7 @@ bool SfxFrame::PrepareClose_Impl( sal_Bool bUI )
         {
             // SFX components have a known behaviour
             // First check if this frame is the only view to its current document
-            int bOther = sal_False;
+            bool bOther = false;
             for ( const SfxViewFrame *pFrame = SfxViewFrame::GetFirst( pCur );
                     !bOther && pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, pCur ) )
             {

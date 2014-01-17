@@ -281,7 +281,7 @@ sal_uInt16 TemplateLocalView::createRegion(const OUString &rName)
     sal_uInt16 nItemId = getNextItemId();
 
     if (!mpDocTemplates->InsertDir(rName,nRegionId))
-        return false;
+        return 0;
 
     OUString aRegionName = rName;
 

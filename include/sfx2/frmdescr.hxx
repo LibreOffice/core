@@ -215,7 +215,7 @@ public:
 
                                         ~SfxFrameProperties() { delete pFrame; }
 
-    int                                 operator ==( const SfxFrameProperties& ) const;
+    bool                                operator ==( const SfxFrameProperties& ) const;
     SfxFrameProperties&                 operator =( const SfxFrameProperties &rProp );
 };
 
