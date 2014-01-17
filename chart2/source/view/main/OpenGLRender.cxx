@@ -555,7 +555,7 @@ BitmapEx OpenGLRender::GetAsBitmap()
         aWriter.Write( sOutput );
         sOutput.Close();
     } catch (...) {
-        SAL_WARN("slideshow.opengl", "Error writing png to " << aName);
+        SAL_WARN("chart2.opengl", "Error writing png to " << aName);
     }
 #endif
 
@@ -907,7 +907,7 @@ void OpenGLRender::Release()
 
     glXMakeCurrent(glWin.dpy, None, NULL);
     if( glGetError() != GL_NO_ERROR ) {
-        SAL_INFO("slideshow.opengl", "glError: " << (char *)gluErrorString(glGetError()));
+        SAL_INFO("chart2.opengl", "glError: " << (char *)gluErrorString(glGetError()));
     }
     glXDestroyContext(glWin.dpy, glWin.ctx);
     glWin.ctx = NULL;
