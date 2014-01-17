@@ -1581,7 +1581,7 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
             // any change of the range address is broadcast to value (modify) listeners
             if ( !aValueListeners.empty() )
-                bGotDataChangedHint = sal_True;
+                bGotDataChangedHint = true;
 
             if ( pUndoRanges )
                 pDoc->AddUnoRefChange( nObjectId, *pUndoRanges );
@@ -1645,7 +1645,7 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
             // (SFX_HINT_DATACHANGED follows separately)
 
             if ( !aValueListeners.empty() )
-                bGotDataChangedHint = sal_True;
+                bGotDataChangedHint = true;
         }
     }
     else if ( rHint.ISA( ScUnoRefUndoHint ) )
@@ -1659,7 +1659,7 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
             RefChanged();
             if ( !aValueListeners.empty() )
-                bGotDataChangedHint = sal_True;     // need to broadcast the undo, too
+                bGotDataChangedHint = true;     // need to broadcast the undo, too
         }
     }
 }
@@ -2788,7 +2788,7 @@ IMPL_LINK( ScCellRangesBase, ValueListenerHdl, SfxHint*, pHint )
         //  in the range are notified. So only a flag is set that is checked when
         //  SFX_HINT_DATACHANGED is received.
 
-        bGotDataChangedHint = sal_True;
+        bGotDataChangedHint = true;
     }
     return 0;
 }

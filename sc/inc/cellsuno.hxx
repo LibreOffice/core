@@ -186,10 +186,10 @@ private:
     ScMarkData*             pMarkData;
     ScRangeList             aRanges;
     sal_Int64               nObjectId;
-    sal_Bool                    bChartColAsHdr;
-    sal_Bool                    bChartRowAsHdr;
+    bool                    bChartColAsHdr;
+    bool                    bChartRowAsHdr;
     bool                    bCursorOnly;
-    sal_Bool                    bGotDataChangedHint;
+    bool                    bGotDataChangedHint;
     XModifyListenerArr_Impl aValueListeners;
 
     DECL_LINK( ValueListenerHdl, SfxHint* );
