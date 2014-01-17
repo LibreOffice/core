@@ -447,7 +447,7 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
 #elif defined( UNX )
     GLWin.dpy = reinterpret_cast<unx::Display*>(sysData->pDisplay);
 
-    if( unx::glXQueryExtension( GLWin.dpy, NULL, NULL ) == false )
+    if( !unx::glXQueryExtension( GLWin.dpy, NULL, NULL ) )
         return false;
 
     GLWin.win = sysData->aWindow;
