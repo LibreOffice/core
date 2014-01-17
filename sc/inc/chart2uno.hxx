@@ -184,7 +184,7 @@ private:
 
     ScDocument*                 m_pDocument;
     SfxItemPropertySet          m_aPropSet;
-    sal_Bool                    m_bIncludeHiddenCells;
+    bool                        m_bIncludeHiddenCells;
 };
 
 // DataSource
@@ -428,7 +428,7 @@ private:
 
     // properties
     ::com::sun::star::chart2::data::DataSequenceRole  m_aRole;
-    sal_Bool                    m_bIncludeHiddenCells;
+    bool                        m_bIncludeHiddenCells;
 
     // internals
     typedef boost::scoped_ptr<std::vector<ScTokenRef> >  TokenListPtr;

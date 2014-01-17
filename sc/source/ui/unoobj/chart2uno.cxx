@@ -1008,7 +1008,7 @@ void lcl_convertTokensToString(OUString& rStr, const vector<ScTokenRef>& rTokens
 ScChart2DataProvider::ScChart2DataProvider( ScDocument* pDoc )
     : m_pDocument( pDoc)
     , m_aPropSet(lcl_GetDataProviderPropertyMap())
-    , m_bIncludeHiddenCells( sal_True)
+    , m_bIncludeHiddenCells( true)
 {
     if ( m_pDocument )
         m_pDocument->AddUnoObject( *this);
@@ -3465,7 +3465,7 @@ void SAL_CALL ScChart2DataSequence::setPropertyValue(
     }
     else if ( rPropertyName == SC_UNONAME_INCLUDEHIDDENCELLS )
     {
-        sal_Bool bOldValue = m_bIncludeHiddenCells;
+        bool bOldValue = m_bIncludeHiddenCells;
         if ( !(rValue >>= m_bIncludeHiddenCells))
             throw lang::IllegalArgumentException();
         if( bOldValue != m_bIncludeHiddenCells )
