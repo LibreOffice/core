@@ -180,15 +180,15 @@ public:
                 { aStart.GetVars( nCol1, nRow1, nTab1 );
                     aEnd.GetVars( nCol2, nRow2, nTab2 ); }
 
-    sal_Bool    IsValid( const ScDocument* pDoc ) const
+    bool    IsValid( const ScDocument* pDoc ) const
                 { return aStart.IsValid( pDoc ) && aEnd.IsValid( pDoc ); }
     inline ScRange  MakeRange() const
                     { return ScRange( aStart.MakeAddress(),
                         aEnd.MakeAddress() ); }
 
-    inline sal_Bool In( const ScBigAddress& ) const;    ///< is Address& in range?
-    inline sal_Bool In( const ScBigRange& ) const;      ///< is Range& in range?
-    inline sal_Bool Intersects( const ScBigRange& ) const;  ///< do two ranges overlap?
+    inline bool In( const ScBigAddress& ) const;    ///< is Address& in range?
+    inline bool In( const ScBigRange& ) const;      ///< is Range& in range?
+    inline bool Intersects( const ScBigRange& ) const;  ///< do two ranges overlap?
 
     ScBigRange&     operator=( const ScBigRange& r )
                         { aStart = r.aStart; aEnd = r.aEnd; return *this; }
@@ -202,7 +202,7 @@ public:
 };
 
 
-inline sal_Bool ScBigRange::In( const ScBigAddress& rAddr ) const
+inline bool ScBigRange::In( const ScBigAddress& rAddr ) const
 {
     return
         aStart.Col() <= rAddr.Col() && rAddr.Col() <= aEnd.Col() &&
@@ -211,7 +211,7 @@ inline sal_Bool ScBigRange::In( const ScBigAddress& rAddr ) const
 }
 
 
-inline sal_Bool ScBigRange::In( const ScBigRange& r ) const
+inline bool ScBigRange::In( const ScBigRange& r ) const
 {
     return
         aStart.Col() <= r.aStart.Col() && r.aEnd.Col() <= aEnd.Col() &&
@@ -220,7 +220,7 @@ inline sal_Bool ScBigRange::In( const ScBigRange& r ) const
 }
 
 
-inline sal_Bool ScBigRange::Intersects( const ScBigRange& r ) const
+inline bool ScBigRange::Intersects( const ScBigRange& r ) const
 {
     return !(
         std::min( aEnd.Col(), r.aEnd.Col() ) < std::max( aStart.Col(), r.aStart.Col() )
