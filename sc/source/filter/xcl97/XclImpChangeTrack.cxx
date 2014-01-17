@@ -492,7 +492,7 @@ void XclImpChangeTrack::Apply()
         pChangeTrack = NULL;
 
         ScChangeViewSettings aSettings;
-        aSettings.SetShowChanges( sal_True );
+        aSettings.SetShowChanges( true );
         GetDoc().SetChangeViewSettings( aSettings );
     }
 }

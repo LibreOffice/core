@@ -80,7 +80,7 @@ ScChangeViewSettings& ScChangeViewSettings::operator=( const ScChangeViewSetting
     return *this;
 }
 
-sal_Bool ScChangeViewSettings::IsValidComment(const OUString* pCommentStr) const
+bool ScChangeViewSettings::IsValidComment(const OUString* pCommentStr) const
 {
     bool nTheFlag = true;
 

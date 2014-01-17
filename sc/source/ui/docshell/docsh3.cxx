@@ -803,7 +803,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
         {
             // visuelles RedLining einschalten
             ScChangeViewSettings aChangeViewSet;
-            aChangeViewSet.SetShowChanges(sal_True);
+            aChangeViewSet.SetShowChanges(true);
             aDocument.SetChangeViewSettings(aChangeViewSet);
         }
     }
@@ -1293,8 +1293,8 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
             nEndShared = pThisTrack->GetActionMax();
 
             // only show changes from shared document
-            aChangeViewSet.SetShowChanges( sal_True );
-            aChangeViewSet.SetShowAccepted( sal_True );
+            aChangeViewSet.SetShowChanges( true );
+            aChangeViewSet.SetShowAccepted( true );
             aChangeViewSet.SetHasActionRange( true );
             aChangeViewSet.SetTheActionRange( nStartShared, nEndShared );
             aDocument.SetChangeViewSettings( aChangeViewSet );
@@ -1337,8 +1337,8 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
             sal_uLong nEndShared = pThisTrack->GetActionMax();
 
             // only show changes from shared document
-            aChangeViewSet.SetShowChanges( sal_True );
-            aChangeViewSet.SetShowAccepted( sal_True );
+            aChangeViewSet.SetShowChanges( true );
+            aChangeViewSet.SetShowAccepted( true );
             aChangeViewSet.SetHasActionRange( true );
             aChangeViewSet.SetTheActionRange( nStartShared, nEndShared );
             aDocument.SetChangeViewSettings( aChangeViewSet );

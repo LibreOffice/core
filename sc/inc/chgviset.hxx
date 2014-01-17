@@ -40,18 +40,18 @@ private:
     utl::TextSearch*    pCommentSearcher;
     DateTime            aFirstDateTime;
     DateTime            aLastDateTime;
-    OUString     aAuthorToShow;
-    OUString     aComment;
+    OUString            aAuthorToShow;
+    OUString            aComment;
     ScRangeList         aRangeList;
     ScChgsDateMode      eDateMode;
-    sal_Bool                bShowIt;
-    sal_Bool                bIsDate;
-    sal_Bool                bIsAuthor;
-    sal_Bool                bIsComment;
-    sal_Bool                bIsRange;
-    sal_Bool                bEveryoneButMe;
-    sal_Bool                bShowAccepted;
-    sal_Bool                bShowRejected;
+    bool                bShowIt;
+    bool                bIsDate;
+    bool                bIsAuthor;
+    bool                bIsComment;
+    bool                bIsRange;
+    bool                bEveryoneButMe;
+    bool                bShowAccepted;
+    bool                bShowRejected;
     bool                mbIsActionRange;
     sal_uLong               mnFirstAction;
     sal_uLong               mnLastAction;
@@ -79,11 +79,11 @@ public:
 
                         ~ScChangeViewSettings();
 
-    sal_Bool                ShowChanges() const {return bShowIt;}
-    void                SetShowChanges(sal_Bool nFlag=sal_True){bShowIt=nFlag;}
+    bool                ShowChanges() const {return bShowIt;}
+    void                SetShowChanges(bool nFlag) {bShowIt=nFlag;}
 
-    sal_Bool                HasDate() const {return bIsDate;}
-    void                SetHasDate(sal_Bool nFlag=sal_True) {bIsDate=nFlag;}
+    bool                HasDate() const {return bIsDate;}
+    void                SetHasDate(bool nFlag) {bIsDate=nFlag;}
 
     void                SetTheDateMode(ScChgsDateMode eDatMod){ eDateMode=eDatMod; }
     ScChgsDateMode      GetTheDateMode() const { return eDateMode; }
@@ -95,35 +95,35 @@ public:
     const DateTime&     GetTheLastDateTime()const {return aLastDateTime;}
 
 
-    sal_Bool                HasAuthor() const {return bIsAuthor;}
-    void                SetHasAuthor(sal_Bool nFlag=sal_True) {bIsAuthor=nFlag;}
+    bool                HasAuthor() const {return bIsAuthor;}
+    void                SetHasAuthor(bool nFlag) {bIsAuthor=nFlag;}
 
-    OUString     GetTheAuthorToShow()const {return aAuthorToShow;}
+    OUString            GetTheAuthorToShow()const {return aAuthorToShow;}
     void                SetTheAuthorToShow(const OUString& aString){aAuthorToShow=aString;}
 
-    sal_Bool                HasComment() const {return bIsComment;}
-    void                SetHasComment(sal_Bool nFlag=sal_True) {bIsComment=nFlag;}
+    bool                HasComment() const {return bIsComment;}
+    void                SetHasComment(bool nFlag) {bIsComment=nFlag;}
 
-    OUString     GetTheComment()const {return aComment;}
+    OUString            GetTheComment()const {return aComment;}
     void                SetTheComment(const OUString& aString);
 
-    sal_Bool            IsValidComment(const OUString* pCommentStr) const;
+    bool                IsValidComment(const OUString* pCommentStr) const;
 
-    sal_Bool                IsEveryoneButMe() const {return bEveryoneButMe;}
-    void                SetEveryoneButMe(sal_Bool nFlag=sal_True) {bEveryoneButMe=nFlag;}
+    bool                IsEveryoneButMe() const {return bEveryoneButMe;}
+    void                SetEveryoneButMe(bool nFlag) {bEveryoneButMe=nFlag;}
 
 
-    sal_Bool                HasRange() const {return bIsRange;}
-    void                SetHasRange(sal_Bool nFlag=sal_True) {bIsRange=nFlag;}
+    bool                HasRange() const {return bIsRange;}
+    void                SetHasRange(bool nFlag) {bIsRange=nFlag;}
 
     const ScRangeList&  GetTheRangeList()const {return aRangeList;}
     void                SetTheRangeList(const ScRangeList& aRl){aRangeList=aRl;}
 
-    sal_Bool                IsShowAccepted() const { return bShowAccepted; }
-    void                SetShowAccepted( sal_Bool bVal ) { bShowAccepted = bVal; }
+    bool                IsShowAccepted() const { return bShowAccepted; }
+    void                SetShowAccepted( bool bVal ) { bShowAccepted = bVal; }
 
-    sal_Bool                IsShowRejected() const { return bShowRejected; }
-    void                SetShowRejected( sal_Bool bVal ) { bShowRejected = bVal; }
+    bool                IsShowRejected() const { return bShowRejected; }
+    void                SetShowRejected( bool bVal ) { bShowRejected = bVal; }
 
     ScChangeViewSettings&   operator=   ( const ScChangeViewSettings& r );
 

@@ -884,8 +884,8 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
                                             if ( bChangedViewSettings )
                                             {
-                                                pChangeViewSet->SetShowChanges( sal_True );
-                                                pChangeViewSet->SetShowAccepted( sal_True );
+                                                pChangeViewSet->SetShowChanges( true );
+                                                pChangeViewSet->SetShowAccepted( true );
                                                 aDocument.SetChangeViewSettings( *pChangeViewSet );
                                             }
                                         }
@@ -3137,7 +3137,7 @@ void ScDocShell::SetChangeRecording( bool bActivate )
     {
         aDocument.StartChangeTracking();
         ScChangeViewSettings aChangeViewSet;
-        aChangeViewSet.SetShowChanges(sal_True);
+        aChangeViewSet.SetShowChanges(true);
         aDocument.SetChangeViewSettings(aChangeViewSet);
     }
     else

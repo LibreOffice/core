@@ -607,7 +607,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     {
                         pDoc->StartChangeTracking();
                         ScChangeViewSettings aChangeViewSet;
-                        aChangeViewSet.SetShowChanges(sal_True);
+                        aChangeViewSet.SetShowChanges(true);
                         pDoc->SetChangeViewSettings(aChangeViewSet);
                     }
 
@@ -778,7 +778,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             if ( !pOldSet || !pOldSet->ShowChanges() )
                             {
                                 ScChangeViewSettings aChangeViewSet;
-                                aChangeViewSet.SetShowChanges(sal_True);
+                                aChangeViewSet.SetShowChanges(true);
                                 aDocument.SetChangeViewSettings(aChangeViewSet);
                             }
                         }
@@ -790,8 +790,8 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             {
                                 // only show changes from merged document
                                 ScChangeViewSettings aChangeViewSet;
-                                aChangeViewSet.SetShowChanges( sal_True );
-                                aChangeViewSet.SetShowAccepted( sal_True );
+                                aChangeViewSet.SetShowChanges( true );
+                                aChangeViewSet.SetShowAccepted( true );
                                 aChangeViewSet.SetHasActionRange( true );
                                 aChangeViewSet.SetTheActionRange( nStart, nEnd );
                                 aDocument.SetChangeViewSettings( aChangeViewSet );
