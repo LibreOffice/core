@@ -1139,7 +1139,7 @@ IMPL_LINK_NOARG(SvtURLBox, AutoCompleteHdl_Impl)
 }
 
 //-------------------------------------------------------------------------
-long SvtURLBox::Notify( NotifyEvent &rEvt )
+bool SvtURLBox::Notify( NotifyEvent &rEvt )
 {
     if ( EVENT_GETFOCUS == rEvt.GetType() )
     {

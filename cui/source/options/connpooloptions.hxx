@@ -54,7 +54,7 @@ namespace offapp
         static SfxTabPage*  Create(Window* _pParent, const SfxItemSet& _rAttrSet);
 
     protected:
-        virtual long        Notify( NotifyEvent& _rNEvt );
+        virtual bool        Notify( NotifyEvent& _rNEvt );
 
         virtual sal_Bool    FillItemSet(SfxItemSet& _rSet);
         virtual void        Reset(const SfxItemSet& _rSet);

@@ -91,7 +91,7 @@ public:
     virtual void    KeyInput( const KeyEvent & rEvt );
     virtual void    Resize();
     virtual void    Paint( const Rectangle & );
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
     virtual long    PreNotify( NotifyEvent& rNEvt );
 
     void    QueryObjAreaPixel( Rectangle & );

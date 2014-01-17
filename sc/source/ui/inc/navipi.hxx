@@ -68,7 +68,7 @@ public:
 protected:
     virtual void        Select();
     virtual void        DoubleClick();
-    virtual long        Notify( NotifyEvent& rNEvt );
+    virtual bool        Notify( NotifyEvent& rNEvt );
 
 private:
     struct ScenarioEntry
@@ -131,7 +131,7 @@ public:
     void    SetCol( SCCOL nColNo );
 
 protected:
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
     virtual void    LoseFocus();
     virtual void    Up();
     virtual void    Down();
@@ -164,7 +164,7 @@ public:
     void    SetRow( SCROW nRow ){ SetValue( nRow ); }
 
 protected:
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
     virtual void    LoseFocus();
 
 private:

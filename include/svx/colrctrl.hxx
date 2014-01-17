@@ -111,7 +111,7 @@ public:
     void            SetSlotIDs( sal_uInt16 nLeft, sal_uInt16 nRight )
                         { nLeftSlot = nLeft; nRightSlot = nRight; }
 
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
 };
 
 #endif

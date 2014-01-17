@@ -36,7 +36,7 @@ public:
     PopupContainer (Window* pParent);
     virtual ~PopupContainer (void);
 
-    virtual long Notify (NotifyEvent& rNEvt);
+    virtual bool Notify (NotifyEvent& rNEvt);
 };
 
 

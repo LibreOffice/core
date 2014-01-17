@@ -130,15 +130,15 @@ namespace
         virtual void DataChanged(const DataChangedEvent& rDCEvt);
     public:
         OTablePreviewWindow( Window* pParent, WinBits nStyle = 0 );
-        virtual long Notify( NotifyEvent& rNEvt );
+        virtual bool Notify( NotifyEvent& rNEvt );
     };
     OTablePreviewWindow::OTablePreviewWindow(Window* pParent, WinBits nStyle) : Window( pParent, nStyle)
     {
         ImplInitSettings( sal_True, sal_True, sal_True );
     }
-    long OTablePreviewWindow::Notify( NotifyEvent& rNEvt )
+    bool OTablePreviewWindow::Notify( NotifyEvent& rNEvt )
     {
-        long nRet = Window::Notify( rNEvt );
+        bool nRet = Window::Notify( rNEvt );
         if ( rNEvt.GetType() == EVENT_INPUTENABLE && IsInputEnabled() )
             PostUserEvent( LINK( this, OTablePreviewWindow, OnDisableInput) );
         return nRet;

@@ -51,7 +51,7 @@ class SelectorListBox : public ListBox
         virtual ~SelectorListBox();
 
         virtual void Select();
-        virtual long Notify( NotifyEvent& rNEvt );
+        virtual bool Notify( NotifyEvent& rNEvt );
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
         void ReleaseFocus_Impl();

@@ -164,9 +164,9 @@ OUString Convert_Impl( const OUString& rValue )
 
 // class SvxControlFocusHelper ---------------------------------------------
 
-long SvxControlFocusHelper::Notify( NotifyEvent& rNEvt )
+bool SvxControlFocusHelper::Notify( NotifyEvent& rNEvt )
 {
-    long nRet = Control::Notify( rNEvt );
+    bool nRet = Control::Notify( rNEvt );
 
     if ( m_pFocusCtrl && rNEvt.GetWindow() != m_pFocusCtrl && rNEvt.GetType() == EVENT_GETFOCUS )
         m_pFocusCtrl->GrabFocus();

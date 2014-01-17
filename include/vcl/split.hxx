@@ -79,7 +79,7 @@ public:
     virtual void        MouseButtonDown( const MouseEvent& rMEvt );
     virtual void        Tracking( const TrackingEvent& rTEvt );
 
-    virtual long        Notify( NotifyEvent& rNEvt );
+    virtual bool        Notify( NotifyEvent& rNEvt );
 
     virtual void        GetFocus();
     virtual void        LoseFocus();

@@ -2221,7 +2221,7 @@ public:
     PushButton*     EnableNoneBtn( sal_Bool bEnable );
     void            ArrangeButtons();
 
-    long            Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
 };
 
 // -----------------------------------------------------------------------
@@ -2376,7 +2376,7 @@ void ImplCFieldFloatWin::ArrangeButtons()
 
 // -----------------------------------------------------------------------
 
-long ImplCFieldFloatWin::Notify( NotifyEvent& rNEvt )
+bool ImplCFieldFloatWin::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {

@@ -523,9 +523,9 @@ void SpinField::MouseMove( const MouseEvent& rMEvt )
 
 // --------------------------------------------------------------------
 
-long SpinField::Notify( NotifyEvent& rNEvt )
+bool SpinField::Notify( NotifyEvent& rNEvt )
 {
-    long nDone = 0;
+    bool nDone = false;
     if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         const KeyEvent& rKEvt = *rNEvt.GetKeyEvent();
@@ -539,7 +539,7 @@ long SpinField::Notify( NotifyEvent& rNEvt )
                     if ( !nMod )
                     {
                         Up();
-                        nDone = 1;
+                        nDone = true;
                     }
                 }
                 break;
@@ -548,13 +548,13 @@ long SpinField::Notify( NotifyEvent& rNEvt )
                     if ( !nMod )
                     {
                         Down();
-                        nDone = 1;
+                        nDone = true;
                     }
                     else if ( ( nMod == KEY_MOD2 ) && !mbInDropDown && ( GetStyle() & WB_DROPDOWN ) )
                     {
                         mbInDropDown = ShowDropDown( sal_True );
                         Paint( Rectangle( Point(), GetOutputSizePixel() ) );
-                        nDone = 1;
+                        nDone = true;
                     }
                 }
                 break;
@@ -563,7 +563,7 @@ long SpinField::Notify( NotifyEvent& rNEvt )
                     if ( !nMod )
                     {
                         Last();
-                        nDone = 1;
+                        nDone = true;
                     }
                 }
                 break;
@@ -572,7 +572,7 @@ long SpinField::Notify( NotifyEvent& rNEvt )
                     if ( !nMod )
                     {
                         First();
-                        nDone = 1;
+                        nDone = true;
                     }
                 }
                 break;
@@ -598,15 +598,15 @@ long SpinField::Notify( NotifyEvent& rNEvt )
                         Down();
                     else
                         Up();
-                    nDone = 1;
+                    nDone = true;
                 }
             }
             else
-                nDone = 0;  // don't eat this event, let the default handling happen (i.e. scroll the context)
+                nDone = false;  // don't eat this event, let the default handling happen (i.e. scroll the context)
         }
     }
 
-    return nDone ? nDone : Edit::Notify( rNEvt );
+    return nDone || Edit::Notify( rNEvt );
 }
 
 // --------------------------------------------------------------------

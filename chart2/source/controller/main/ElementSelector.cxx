@@ -203,9 +203,9 @@ void SelectorListBox::Select()
     }
 }
 
-long SelectorListBox::Notify( NotifyEvent& rNEvt )
+bool SelectorListBox::Notify( NotifyEvent& rNEvt )
 {
-    long nHandled = 0;
+    bool nHandled = false;
 
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
@@ -219,7 +219,7 @@ long SelectorListBox::Notify( NotifyEvent& rNEvt )
                 if ( KEY_TAB == nCode )
                     m_bReleaseFocus = false;
                 else
-                    nHandled = 1;
+                    nHandled = true;
                 Select();
                 break;
             }
@@ -236,7 +236,7 @@ long SelectorListBox::Notify( NotifyEvent& rNEvt )
             SelectEntryPos( GetSavedValue() );
     }
 
-    return nHandled ? nHandled : ListBox::Notify( rNEvt );
+    return nHandled || ListBox::Notify( rNEvt );
 }
 
 Reference< ::com::sun::star::accessibility::XAccessible > SelectorListBox::CreateAccessible()

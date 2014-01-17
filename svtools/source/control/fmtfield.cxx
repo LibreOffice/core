@@ -791,7 +791,7 @@ void FormattedField::ReFormat()
     }
 }
 
-long FormattedField::Notify(NotifyEvent& rNEvt)
+bool FormattedField::Notify(NotifyEvent& rNEvt)
 {
     DBG_CHKTHIS(FormattedField, NULL);
 
@@ -809,7 +809,7 @@ long FormattedField::Notify(NotifyEvent& rNEvt)
                 {
                     // the base class would translate this into calls to Up/Down/First/Last,
                     // but we don't want this if we are text-formatted
-                    return 1;
+                    return true;
                 }
         }
     }
@@ -825,7 +825,7 @@ long FormattedField::Notify(NotifyEvent& rNEvt)
                 // same as above : prevent the base class from doing Up/Down-calls
                 // (normally I should put this test into the Up/Down methods itself, shouldn't I ?)
                 // FS - 71553 - 19.01.00
-                return 1;
+                return true;
             }
         }
     }

@@ -34,7 +34,7 @@ public:
 
     void            SetFocusControl( Control* pCtrl ) { m_pFocusCtrl = pCtrl; }
 
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_CONTROLFOCUSHELPER_HXX

@@ -31,7 +31,7 @@ private:
     SvHeaderTabListBox          maListBox;
 protected:
     DECL_LINK( HeaderEndDrag_Impl, HeaderBar* );
-    virtual long                Notify( NotifyEvent& rNEvt );
+    virtual bool                Notify( NotifyEvent& rNEvt );
 public:
                                 _HeaderTabListBox( Window* pParent, const ResId& rId );
     virtual                     ~_HeaderTabListBox();

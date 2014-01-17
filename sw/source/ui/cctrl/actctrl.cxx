@@ -28,9 +28,9 @@ void NumEditAction::Action()
 }
 
 
-long NumEditAction::Notify( NotifyEvent& rNEvt )
+bool NumEditAction::Notify( NotifyEvent& rNEvt )
 {
-    long nHandled = 0;
+    long nHandled = false;
 
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
@@ -41,7 +41,7 @@ long NumEditAction::Notify( NotifyEvent& rNEvt )
                 !nModifier)
         {
             Action();
-            nHandled = 1;
+            nHandled = true;
         }
 
     }

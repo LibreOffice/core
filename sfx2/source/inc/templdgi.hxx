@@ -73,7 +73,7 @@ public:
 
     sal_uInt16           GetModifier() const { return nModifier; }
 
-    virtual long     Notify( NotifyEvent& rNEvt );
+    virtual bool     Notify( NotifyEvent& rNEvt );
 };
 
 // class SfxActionListBox ------------------------------------------------

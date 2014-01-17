@@ -387,17 +387,17 @@ void ContentListBox_Impl::RequestingChildren( SvTreeListEntry* pParent )
 
 // -----------------------------------------------------------------------
 
-long ContentListBox_Impl::Notify( NotifyEvent& rNEvt )
+bool ContentListBox_Impl::Notify( NotifyEvent& rNEvt )
 {
-    sal_Bool bHandled = sal_False;
+    bool bHandled = false;
     if ( rNEvt.GetType() == EVENT_KEYINPUT &&
          KEY_RETURN == rNEvt.GetKeyEvent()->GetKeyCode().GetCode() )
     {
         GetDoubleClickHdl().Call( NULL );
-        bHandled = sal_True;
+        bHandled = true;
     }
 
-    return bHandled ? 1 : SvTreeListBox::Notify( rNEvt );
+    return bHandled || SvTreeListBox::Notify( rNEvt );
 }
 
 // -----------------------------------------------------------------------
@@ -494,17 +494,17 @@ void IndexBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
 
 // -----------------------------------------------------------------------
 
-long IndexBox_Impl::Notify( NotifyEvent& rNEvt )
+bool IndexBox_Impl::Notify( NotifyEvent& rNEvt )
 {
-    sal_Bool bHandled = sal_False;
+    bool bHandled = false;
     if ( rNEvt.GetType() == EVENT_KEYINPUT &&
          KEY_RETURN == rNEvt.GetKeyEvent()->GetKeyCode().GetCode() )
     {
         GetDoubleClickHdl().Call( NULL );
-        bHandled = sal_True;
+        bHandled = true;
     }
 
-    return bHandled ? 1 : ComboBox::Notify( rNEvt );
+    return bHandled || ComboBox::Notify( rNEvt );
 }
 
 // -----------------------------------------------------------------------
@@ -931,17 +931,17 @@ void SearchBox_Impl::Select()
 
 // class SearchResultsBox_Impl -------------------------------------------
 
-long SearchResultsBox_Impl::Notify( NotifyEvent& rNEvt )
+bool SearchResultsBox_Impl::Notify( NotifyEvent& rNEvt )
 {
-    sal_Bool bHandled = sal_False;
+    bool bHandled = false;
     if ( rNEvt.GetType() == EVENT_KEYINPUT &&
          KEY_RETURN == rNEvt.GetKeyEvent()->GetKeyCode().GetCode() )
     {
         GetDoubleClickHdl().Call( NULL );
-        bHandled = sal_True;
+        bHandled = true;
     }
 
-    return bHandled ? 1 : ListBox::Notify( rNEvt );
+    return bHandled || ListBox::Notify( rNEvt );
 }
 
 // class SearchTabPage_Impl ----------------------------------------------
@@ -1308,9 +1308,9 @@ void BookmarksBox_Impl::DoAction( sal_uInt16 nAction )
 
 // -----------------------------------------------------------------------
 
-long BookmarksBox_Impl::Notify( NotifyEvent& rNEvt )
+bool BookmarksBox_Impl::Notify( NotifyEvent& rNEvt )
 {
-    long nRet = 0;
+    bool nRet = false;
     sal_uInt16 nType = rNEvt.GetType();
     if ( EVENT_KEYINPUT == nType )
     {
@@ -1318,12 +1318,12 @@ long BookmarksBox_Impl::Notify( NotifyEvent& rNEvt )
         if ( KEY_DELETE == nCode && GetEntryCount() > 0 )
         {
             DoAction( MID_DELETE );
-            nRet = 1;
+            nRet = true;
         }
         else if ( KEY_RETURN == nCode )
         {
             GetDoubleClickHdl().Call( NULL );
-            nRet = 1;
+            nRet = true;
         }
     }
     else if ( EVENT_COMMAND == nType )
@@ -1335,11 +1335,11 @@ long BookmarksBox_Impl::Notify( NotifyEvent& rNEvt )
             sal_uInt16 nId = aMenu.Execute( this, pCEvt->GetMousePosPixel() );
             if ( nId != MENU_ITEM_NOTFOUND )
                 DoAction( nId );
-            nRet = 1;
+            nRet = true;
         }
     }
 
-    return nRet ? nRet : ListBox::Notify( rNEvt );
+    return nRet || ListBox::Notify( rNEvt );
 }
 
 // class BookmarksTabPage_Impl -------------------------------------------
@@ -1989,7 +1989,7 @@ TextWin_Impl::~TextWin_Impl()
 {
 }
 
-long TextWin_Impl::Notify( NotifyEvent& rNEvt )
+bool TextWin_Impl::Notify( NotifyEvent& rNEvt )
 {
     if( ( rNEvt.GetType() == EVENT_KEYINPUT ) && rNEvt.GetKeyEvent()->GetKeyCode().GetCode() == KEY_TAB )
         return GetParent()->Notify( rNEvt );

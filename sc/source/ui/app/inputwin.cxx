@@ -2481,9 +2481,9 @@ void ScPosWnd::DoEnter()
     ReleaseFocus_Impl();
 }
 
-long ScPosWnd::Notify( NotifyEvent& rNEvt )
+bool ScPosWnd::Notify( NotifyEvent& rNEvt )
 {
-    long nHandled = 0;
+    bool nHandled = false;
 
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
@@ -2493,7 +2493,7 @@ long ScPosWnd::Notify( NotifyEvent& rNEvt )
         {
             case KEY_RETURN:
                 DoEnter();
-                nHandled = 1;
+                nHandled = true;
                 break;
 
             case KEY_ESCAPE:
@@ -2508,7 +2508,7 @@ long ScPosWnd::Notify( NotifyEvent& rNEvt )
                         SetText( aPosStr );
                     ReleaseFocus_Impl();
                 }
-                nHandled = 1;
+                nHandled = true;
                 break;
         }
     }

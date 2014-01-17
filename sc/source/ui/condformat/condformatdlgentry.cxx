@@ -62,7 +62,7 @@ ScCondFrmtEntry::~ScCondFrmtEntry()
 {
 }
 
-long ScCondFrmtEntry::Notify( NotifyEvent& rNEvt )
+bool ScCondFrmtEntry::Notify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
     {

@@ -311,7 +311,7 @@ IMPL_LINK_NOARG(PrinterSetupDialog, ImplChangePrinterHdl)
 
 // -----------------------------------------------------------------------
 
-long PrinterSetupDialog::Notify( NotifyEvent& rNEvt )
+bool PrinterSetupDialog::Notify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == EVENT_GETFOCUS) && IsReallyVisible() )
         ImplStatusHdl( &maStatusTimer );

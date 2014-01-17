@@ -623,7 +623,7 @@ public:
 
 protected:
     virtual void    Select();
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
 
     void ReleaseFocus();
 
@@ -680,9 +680,9 @@ void    SwZoomBox_Impl::Select()
     }
 }
 
-long SwZoomBox_Impl::Notify( NotifyEvent& rNEvt )
+bool SwZoomBox_Impl::Notify( NotifyEvent& rNEvt )
 {
-    long nHandled = 0;
+    bool nHandled = true;
 
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
@@ -696,7 +696,7 @@ long SwZoomBox_Impl::Notify( NotifyEvent& rNEvt )
                 if ( KEY_TAB == nCode )
                     bRelease = false;
                 else
-                    nHandled = 1;
+                    nHandled = true;
                 Select();
                 break;
             }
@@ -714,7 +714,7 @@ long SwZoomBox_Impl::Notify( NotifyEvent& rNEvt )
             SetText( GetSavedValue() );
     }
 
-    return nHandled ? nHandled : ComboBox::Notify( rNEvt );
+    return nHandled || ComboBox::Notify( rNEvt );
 }
 
 void SwZoomBox_Impl::ReleaseFocus()

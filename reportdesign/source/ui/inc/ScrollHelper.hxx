@@ -68,7 +68,7 @@ namespace rptui
         virtual void DataChanged( const DataChangedEvent& rDCEvt );
         // window
         virtual void            Resize();
-        virtual long            Notify( NotifyEvent& rNEvt );
+        virtual bool            Notify( NotifyEvent& rNEvt );
         // OPropertyChangeListener
         virtual void            _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException);
     public:

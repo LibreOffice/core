@@ -782,10 +782,10 @@ NavDocInfo* SdNavigatorWin::GetDocInfo()
 /**
  * PreNotify
  */
-long SdNavigatorWin::Notify(NotifyEvent& rNEvt)
+bool SdNavigatorWin::Notify(NotifyEvent& rNEvt)
 {
     const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-    long            nOK = sal_False;
+    bool            nOK = false;
 
     if( pKEvt )
     {
@@ -794,7 +794,7 @@ long SdNavigatorWin::Notify(NotifyEvent& rNEvt)
             if( SdPageObjsTLB::IsInDrag() )
             {
                 // during drag'n'drop we just stop the drag but do not close the navigator
-                nOK = sal_True;
+                nOK = true;
             }
             else
             {

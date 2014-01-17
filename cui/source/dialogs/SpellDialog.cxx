@@ -979,7 +979,7 @@ IMPL_LINK_NOARG(SpellDialog, CancelHdl)
 }
 
 //-----------------------------------------------------------------------
-long SpellDialog::Notify( NotifyEvent& rNEvt )
+bool SpellDialog::Notify( NotifyEvent& rNEvt )
 {
     /* #i38338#
     *   FIXME: LoseFocus and GetFocus are signals from vcl that

@@ -88,7 +88,7 @@ namespace padmin {
         void PrintTestPage();
         void updateSettings();
 
-        virtual long Notify( NotifyEvent& rEv );
+        virtual bool Notify( NotifyEvent& rEv );
         virtual void DataChanged( const DataChangedEvent& rEv );
 
         OUString getSelectedDevice();

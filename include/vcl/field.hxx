@@ -487,7 +487,7 @@ public:
     virtual                 ~PatternField();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
-    virtual long            Notify( NotifyEvent& rNEvt );
+    virtual bool            Notify( NotifyEvent& rNEvt );
     virtual void            Modify();
 };
 
@@ -507,7 +507,7 @@ public:
     virtual                 ~NumericField();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
-    virtual long            Notify( NotifyEvent& rNEvt );
+    virtual bool            Notify( NotifyEvent& rNEvt );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
     virtual Size            CalcMinimumSize() const;
@@ -537,7 +537,7 @@ public:
     virtual                 ~MetricField();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
-    virtual long            Notify( NotifyEvent& rNEvt );
+    virtual bool            Notify( NotifyEvent& rNEvt );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
     virtual Size            CalcMinimumSize() const;
@@ -605,7 +605,7 @@ public:
                             ~CurrencyField();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
-    virtual long            Notify( NotifyEvent& rNEvt );
+    virtual bool            Notify( NotifyEvent& rNEvt );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
     virtual void            Modify();
@@ -637,7 +637,7 @@ public:
     virtual                 ~DateField();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
-    virtual long            Notify( NotifyEvent& rNEvt );
+    virtual bool            Notify( NotifyEvent& rNEvt );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
     virtual void            Modify();
@@ -673,7 +673,7 @@ public:
     virtual                 ~TimeField();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
-    virtual long            Notify( NotifyEvent& rNEvt );
+    virtual bool            Notify( NotifyEvent& rNEvt );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
     virtual void            Modify();
@@ -703,7 +703,7 @@ public:
                             ~PatternBox();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
-    virtual long            Notify( NotifyEvent& rNEvt );
+    virtual bool            Notify( NotifyEvent& rNEvt );
 
     virtual void            Modify();
 
@@ -725,7 +725,7 @@ public:
     virtual Size            CalcMinimumSize() const;
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
-    virtual long            Notify( NotifyEvent& rNEvt );
+    virtual bool            Notify( NotifyEvent& rNEvt );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
     virtual void            Modify();
@@ -747,7 +747,7 @@ public:
     virtual                 ~MetricBox();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
-    virtual long            Notify( NotifyEvent& rNEvt );
+    virtual bool            Notify( NotifyEvent& rNEvt );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
     virtual Size            CalcMinimumSize() const;
@@ -781,7 +781,7 @@ public:
     virtual                 ~CurrencyBox();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
-    virtual long            Notify( NotifyEvent& rNEvt );
+    virtual bool            Notify( NotifyEvent& rNEvt );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
     virtual void            Modify();
@@ -802,7 +802,7 @@ public:
     virtual                 ~DateBox();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
-    virtual long            Notify( NotifyEvent& rNEvt );
+    virtual bool            Notify( NotifyEvent& rNEvt );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
     virtual void            Modify();
@@ -822,7 +822,7 @@ public:
     virtual                 ~TimeBox();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
-    virtual long            Notify( NotifyEvent& rNEvt );
+    virtual bool            Notify( NotifyEvent& rNEvt );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
     virtual void            Modify();

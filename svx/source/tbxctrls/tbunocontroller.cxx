@@ -92,7 +92,7 @@ public:
     void                statusChanged_Impl( long nHeight, bool bErase = false );
     void                UpdateFont( const ::com::sun::star::awt::FontDescriptor& rCurrentFont );
 
-    virtual long        Notify( NotifyEvent& rNEvt );
+    virtual bool        Notify( NotifyEvent& rNEvt );
 
 protected:
     virtual void        Select();
@@ -221,9 +221,9 @@ void SvxFontSizeBox_Impl::UpdateFont( const ::com::sun::star::awt::FontDescripto
 
 // -----------------------------------------------------------------------
 
-long SvxFontSizeBox_Impl::Notify( NotifyEvent& rNEvt )
+bool SvxFontSizeBox_Impl::Notify( NotifyEvent& rNEvt )
 {
-    long nHandled = 0;
+    bool nHandled = false;
 
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
@@ -237,7 +237,7 @@ long SvxFontSizeBox_Impl::Notify( NotifyEvent& rNEvt )
                 if ( KEY_TAB == nCode )
                     m_bRelease = false;
                 else
-                    nHandled = 1;
+                    nHandled = true;
                 Select();
                 break;
             }
@@ -245,7 +245,7 @@ long SvxFontSizeBox_Impl::Notify( NotifyEvent& rNEvt )
             case KEY_ESCAPE:
                 SetText( m_aCurText );
                 ReleaseFocus_Impl();
-                nHandled = 1;
+                nHandled = true;
                 break;
         }
     }
@@ -256,7 +256,7 @@ long SvxFontSizeBox_Impl::Notify( NotifyEvent& rNEvt )
             SetText(GetSavedValue());
     }
 
-    return nHandled ? nHandled : FontSizeBox::Notify( rNEvt );
+    return nHandled || FontSizeBox::Notify( rNEvt );
 }
 
 // ---------------------------------------------------------------------------

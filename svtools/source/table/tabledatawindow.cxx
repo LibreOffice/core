@@ -209,9 +209,9 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    long TableDataWindow::Notify(NotifyEvent& rNEvt )
+    bool TableDataWindow::Notify(NotifyEvent& rNEvt )
     {
-        long nDone = 0;
+        bool nDone = false;
         if ( rNEvt.GetType() == EVENT_COMMAND )
         {
             const CommandEvent& rCEvt = *rNEvt.GetCommandEvent();
@@ -224,7 +224,7 @@ namespace svt { namespace table
                 }
             }
         }
-        return nDone ? nDone : Window::Notify( rNEvt );
+        return nDone || Window::Notify( rNEvt );
     }
 //......................................................................................................................
 } } // namespace svt::table

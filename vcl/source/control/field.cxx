@@ -785,7 +785,7 @@ long NumericField::PreNotify( NotifyEvent& rNEvt )
     return SpinField::PreNotify( rNEvt );
 }
 
-long NumericField::Notify( NotifyEvent& rNEvt )
+bool NumericField::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_GETFOCUS )
         MarkToBeReformatted( sal_False );
@@ -937,7 +937,7 @@ long NumericBox::PreNotify( NotifyEvent& rNEvt )
     return ComboBox::PreNotify( rNEvt );
 }
 
-long NumericBox::Notify( NotifyEvent& rNEvt )
+bool NumericBox::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_GETFOCUS )
         MarkToBeReformatted( sal_False );
@@ -1668,7 +1668,7 @@ long MetricField::PreNotify( NotifyEvent& rNEvt )
     return SpinField::PreNotify( rNEvt );
 }
 
-long MetricField::Notify( NotifyEvent& rNEvt )
+bool MetricField::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_GETFOCUS )
         MarkToBeReformatted( sal_False );
@@ -1769,7 +1769,7 @@ long MetricBox::PreNotify( NotifyEvent& rNEvt )
     return ComboBox::PreNotify( rNEvt );
 }
 
-long MetricBox::Notify( NotifyEvent& rNEvt )
+bool MetricBox::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_GETFOCUS )
         MarkToBeReformatted( sal_False );
@@ -2003,7 +2003,7 @@ long CurrencyField::PreNotify( NotifyEvent& rNEvt )
     return SpinField::PreNotify( rNEvt );
 }
 
-long CurrencyField::Notify( NotifyEvent& rNEvt )
+bool CurrencyField::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_GETFOCUS )
         MarkToBeReformatted( sal_False );
@@ -2085,7 +2085,7 @@ long CurrencyBox::PreNotify( NotifyEvent& rNEvt )
     return ComboBox::PreNotify( rNEvt );
 }
 
-long CurrencyBox::Notify( NotifyEvent& rNEvt )
+bool CurrencyBox::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_GETFOCUS )
         MarkToBeReformatted( sal_False );

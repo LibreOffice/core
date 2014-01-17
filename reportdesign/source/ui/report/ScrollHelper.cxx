@@ -317,7 +317,7 @@ void OScrollWindowHelper::collapseSections(const uno::Sequence< ::com::sun::star
     m_aReportWindow.collapseSections(_aCollpasedSections);
 }
 //------------------------------------------------------------------------------
-long OScrollWindowHelper::Notify( NotifyEvent& rNEvt )
+bool OScrollWindowHelper::Notify( NotifyEvent& rNEvt )
 {
     const CommandEvent* pCommandEvent = rNEvt.GetCommandEvent();
     if ( pCommandEvent &&
@@ -334,7 +334,7 @@ long OScrollWindowHelper::Notify( NotifyEvent& rNEvt )
             pVScrBar = &m_aVScroll;
 
         if ( HandleScrollCommand( *pCommandEvent, pHScrBar, pVScrBar ) )
-            return 1L;
+            return true;
     }
     return OScrollWindowHelper_BASE::Notify(rNEvt);
 }

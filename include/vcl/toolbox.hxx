@@ -320,7 +320,7 @@ public:
     virtual void        Move();
     virtual void        Resize();
     virtual void        RequestHelp( const HelpEvent& rHEvt );
-    virtual long        Notify( NotifyEvent& rNEvt );
+    virtual bool        Notify( NotifyEvent& rNEvt );
     virtual void        Command( const CommandEvent& rCEvt );
     virtual void        StateChanged( StateChangedType nType );
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );

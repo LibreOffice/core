@@ -593,7 +593,7 @@ void ClientBox::MouseButtonDown( const MouseEvent& rMEvt )
 }
 
 //------------------------------------------------------------------------------
-long ClientBox::Notify( NotifyEvent& rNEvt )
+bool ClientBox::Notify( NotifyEvent& rNEvt )
 {
     if ( !m_bInDelete )
         DeleteRemoved();

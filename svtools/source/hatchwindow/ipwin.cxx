@@ -627,7 +627,7 @@ long SvResizeWindow::PreNotify( NotifyEvent& rEvt )
     return Window::PreNotify(rEvt);
 }
 
-long SvResizeWindow::Notify( NotifyEvent& rEvt )
+bool SvResizeWindow::Notify( NotifyEvent& rEvt )
 {
     if ( rEvt.GetType() == EVENT_LOSEFOCUS && m_bActive )
     {

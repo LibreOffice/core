@@ -93,7 +93,7 @@ public:
                     ~LongCurrencyField();
 
     long            PreNotify( NotifyEvent& rNEvt );
-    long            Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
 
     void            Modify();
     void            Up();
@@ -120,7 +120,7 @@ public:
                     ~LongCurrencyBox();
 
     long            PreNotify( NotifyEvent& rNEvt );
-    long            Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
 
     void            Modify();
     void            ReformatAll();

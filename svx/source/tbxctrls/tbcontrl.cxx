@@ -135,7 +135,7 @@ public:
     inline bool IsVisible() { return bVisible; }
 
     virtual long    PreNotify( NotifyEvent& rNEvt );
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
     virtual void    StateChanged( StateChangedType nStateChange );
 
@@ -220,7 +220,7 @@ public:
                           nFtCount = pList->GetFontNameCount(); }
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
     virtual long    PreNotify( NotifyEvent& rNEvt );
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
     virtual Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     void     SetOwnFontList(::std::auto_ptr<FontList> _aOwnFontList) { m_aOwnFontList = _aOwnFontList; }
@@ -488,9 +488,9 @@ long SvxStyleBox_Impl::PreNotify( NotifyEvent& rNEvt )
 
 // -----------------------------------------------------------------------
 
-long SvxStyleBox_Impl::Notify( NotifyEvent& rNEvt )
+bool SvxStyleBox_Impl::Notify( NotifyEvent& rNEvt )
 {
-    long nHandled = 0;
+    bool nHandled = false;
 
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
@@ -504,7 +504,7 @@ long SvxStyleBox_Impl::Notify( NotifyEvent& rNEvt )
                 if ( KEY_TAB == nCode )
                     bRelease = false;
                 else
-                    nHandled = 1;
+                    nHandled = true;
                 Select();
                 break;
             }
@@ -512,11 +512,11 @@ long SvxStyleBox_Impl::Notify( NotifyEvent& rNEvt )
             case KEY_ESCAPE:
                 SelectEntryPos( nCurSel );
                 ReleaseFocus();
-                nHandled = 1;
+                nHandled = true;
                 break;
         }
     }
-    return nHandled ? nHandled : ComboBox::Notify( rNEvt );
+    return nHandled || ComboBox::Notify( rNEvt );
 }
 
 void SvxStyleBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
@@ -882,9 +882,9 @@ long SvxFontNameBox_Impl::PreNotify( NotifyEvent& rNEvt )
 
 // -----------------------------------------------------------------------
 
-long SvxFontNameBox_Impl::Notify( NotifyEvent& rNEvt )
+bool SvxFontNameBox_Impl::Notify( NotifyEvent& rNEvt )
 {
-    long nHandled = 0;
+    bool nHandled = false;
     mbEndPreview = false;
     if ( rNEvt.GetType() == EVENT_KEYUP )
         mbEndPreview = true;
@@ -901,7 +901,7 @@ long SvxFontNameBox_Impl::Notify( NotifyEvent& rNEvt )
                 if ( KEY_TAB == nCode )
                     bRelease = false;
                 else
-                    nHandled = 1;
+                    nHandled = true;
                 Select();
                 break;
             }
@@ -922,7 +922,7 @@ long SvxFontNameBox_Impl::Notify( NotifyEvent& rNEvt )
         EndPreview();
     }
 
-    return nHandled ? nHandled : FontNameBox::Notify( rNEvt );
+    return nHandled || FontNameBox::Notify( rNEvt );
 }
 
 // ---------------------------------------------------------------------------

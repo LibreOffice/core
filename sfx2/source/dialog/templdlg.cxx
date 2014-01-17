@@ -302,9 +302,9 @@ IMPL_LINK_NOARG(DropListBox_Impl, OnAsyncExecuteDrop)
     return 0;
 }
 
-long DropListBox_Impl::Notify( NotifyEvent& rNEvt )
+bool DropListBox_Impl::Notify( NotifyEvent& rNEvt )
 {
-    long nRet = 0;
+    bool nRet = false;
     if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         const KeyCode&  rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
@@ -313,12 +313,12 @@ long DropListBox_Impl::Notify( NotifyEvent& rNEvt )
             if( pDialog->bCanDel && KEY_DELETE == rKeyCode.GetCode())
             {
                 pDialog->DeleteHdl( NULL );
-                nRet =  1;
+                nRet =  true;
             }
             else if( KEY_RETURN == rKeyCode.GetCode())
             {
                 GetDoubleClickHdl().Call(this);
-                nRet = 1;
+                nRet = true;
             }
         }
     }
@@ -524,7 +524,7 @@ private:
 
 protected:
     virtual void    Command( const CommandEvent& rMEvt );
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
     virtual sal_Bool    DoubleClickHdl();
     virtual bool    ExpandingHdl();
     virtual void    ExpandedHdl();
@@ -592,18 +592,18 @@ void StyleTreeListBox_Impl::Command( const CommandEvent& rCEvt )
 
 //-------------------------------------------------------------------------
 
-long StyleTreeListBox_Impl::Notify( NotifyEvent& rNEvt )
+bool StyleTreeListBox_Impl::Notify( NotifyEvent& rNEvt )
 {
     // handle <RETURN> as double click
 
-    long nRet = 0;
+    bool nRet = false;
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         const KeyCode&  rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
         if ( !rKeyCode.GetModifier() && KEY_RETURN == rKeyCode.GetCode() )
         {
             aDoubleClickLink.Call( this );
-            nRet = 1;
+            nRet = true;
         }
     }
 

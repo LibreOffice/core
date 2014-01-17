@@ -487,7 +487,7 @@ long LongCurrencyField::PreNotify( NotifyEvent& rNEvt )
 }
 
 
-long LongCurrencyField::Notify( NotifyEvent& rNEvt )
+bool LongCurrencyField::Notify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == EVENT_GETFOCUS )
     {
@@ -570,7 +570,7 @@ long LongCurrencyBox::PreNotify( NotifyEvent& rNEvt )
 }
 
 
-long LongCurrencyBox::Notify( NotifyEvent& rNEvt )
+bool LongCurrencyBox::Notify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == EVENT_GETFOCUS )
     {

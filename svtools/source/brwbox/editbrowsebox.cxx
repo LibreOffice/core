@@ -735,7 +735,7 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------
-    long EditBrowseBox::Notify(NotifyEvent& rEvt)
+    bool EditBrowseBox::Notify(NotifyEvent& rEvt)
     {
         switch (rEvt.GetType())
         {

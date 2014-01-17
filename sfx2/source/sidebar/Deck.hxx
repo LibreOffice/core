@@ -67,7 +67,7 @@ public:
 
     virtual void Paint (const Rectangle& rUpdateArea);
     virtual void DataChanged (const DataChangedEvent& rEvent);
-    virtual long Notify (NotifyEvent& rEvent);
+    virtual bool Notify (NotifyEvent& rEvent);
 
     void PrintWindowTree (void);
     void PrintWindowTree (const ::std::vector<Panel*>& rPanels);

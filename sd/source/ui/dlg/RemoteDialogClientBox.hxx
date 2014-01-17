@@ -146,7 +146,7 @@ public:
     void    Paint( const Rectangle &rPaintRect );
     void    Resize();
     Size    GetOptimalSize() const;
-    long    Notify( NotifyEvent& rNEvt );
+    bool    Notify( NotifyEvent& rNEvt );
 
     const Size      GetMinOutputSizePixel() const;
     void            SetExtraSize( long nSize ) { m_nExtraHeight = nSize; }

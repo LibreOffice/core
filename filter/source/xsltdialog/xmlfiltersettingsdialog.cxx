@@ -1002,10 +1002,10 @@ void XMLFilterSettingsDialog::onClose()
     Close();
 }
 
-long XMLFilterSettingsDialog::Notify( NotifyEvent& rNEvt )
+bool XMLFilterSettingsDialog::Notify( NotifyEvent& rNEvt )
 {
     // Because of of tab control first call the base class.
-    long nRet = ModelessDialog::Notify( rNEvt );
+    bool nRet = ModelessDialog::Notify( rNEvt );
     if ( !nRet )
     {
         if ( rNEvt.GetType() == EVENT_KEYINPUT )
@@ -1018,7 +1018,7 @@ long XMLFilterSettingsDialog::Notify( NotifyEvent& rNEvt )
             if( nKeyCode == KEY_ESCAPE || (bMod1 && (nKeyCode == KEY_W)))
             {
                 Close();
-                return sal_True;
+                return true;
             }
         }
     }
@@ -1385,9 +1385,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxPathControl(Window *pPar
     return new SvxPathControl(pParent);
 }
 
-long SvxPathControl::Notify(NotifyEvent& rNEvt)
+bool SvxPathControl::Notify(NotifyEvent& rNEvt)
 {
-    long nRet = VclVBox::Notify(rNEvt);
+    bool nRet = VclVBox::Notify(rNEvt);
 
     if ( m_pFocusCtrl && rNEvt.GetWindow() != m_pFocusCtrl && rNEvt.GetType() == EVENT_GETFOCUS )
         m_pFocusCtrl->GrabFocus();

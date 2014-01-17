@@ -120,7 +120,7 @@ public:
     explicit        FloatingWindow( Window* pParent, const ResId& );
     virtual         ~FloatingWindow();
 
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 

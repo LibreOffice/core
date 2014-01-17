@@ -180,7 +180,7 @@ protected:
     virtual void Command(const CommandEvent& rCEvt);
     virtual void RequestHelp( const HelpEvent& rEvt );
     virtual void LoseFocus();
-    virtual long Notify( NotifyEvent& rNEvt );
+    virtual bool Notify( NotifyEvent& rNEvt );
 
     /** Create an accessibility object that makes this window accessible.
 

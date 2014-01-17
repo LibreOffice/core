@@ -1773,9 +1773,9 @@ bool VclScrolledWindow::set_property(const OString &rKey, const OString &rValue)
     return bRet;
 }
 
-long VclScrolledWindow::Notify(NotifyEvent& rNEvt)
+bool VclScrolledWindow::Notify(NotifyEvent& rNEvt)
 {
-    long nDone = 0;
+    bool nDone = false;
     if ( rNEvt.GetType() == EVENT_COMMAND )
     {
         const CommandEvent& rCEvt = *rNEvt.GetCommandEvent();
@@ -1789,7 +1789,7 @@ long VclScrolledWindow::Notify(NotifyEvent& rNEvt)
         }
     }
 
-    return nDone ? nDone : VclBin::Notify( rNEvt );
+    return nDone || VclBin::Notify( rNEvt );
 }
 
 const Window *VclEventBox::get_child() const

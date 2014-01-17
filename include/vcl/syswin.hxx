@@ -175,7 +175,7 @@ protected:
 
 public:
                     ~SystemWindow();
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
     virtual long    PreNotify( NotifyEvent& rNEvt );
 
     virtual sal_Bool    Close();

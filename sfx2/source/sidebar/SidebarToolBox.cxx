@@ -118,7 +118,7 @@ void SidebarToolBox::Paint (const Rectangle& rRect)
 
 
 
-long SidebarToolBox::Notify (NotifyEvent& rEvent)
+bool SidebarToolBox::Notify (NotifyEvent& rEvent)
 {
     if (rEvent.GetType() == EVENT_KEYINPUT)
     {

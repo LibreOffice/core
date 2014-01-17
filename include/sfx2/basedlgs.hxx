@@ -114,7 +114,7 @@ protected:
 public:
     virtual void            FillInfo(SfxChildWinInfo&) const;
     void                    Initialize (SfxChildWinInfo* pInfo);
-    virtual long            Notify( NotifyEvent& rNEvt );
+    virtual bool            Notify( NotifyEvent& rNEvt );
     SfxBindings&            GetBindings()
                             { return *pBindings; }
 
@@ -148,7 +148,7 @@ protected:
     virtual sal_Bool            Close();
     virtual void            Resize();
     virtual void            Move();
-    virtual long            Notify( NotifyEvent& rNEvt );
+    virtual bool            Notify( NotifyEvent& rNEvt );
     SfxBindings&            GetBindings()
                             { return *pBindings; }
 

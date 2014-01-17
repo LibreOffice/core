@@ -987,9 +987,9 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    long XFormsPage::Notify( NotifyEvent& rNEvt )
+    bool XFormsPage::Notify( NotifyEvent& rNEvt )
     {
-        long nHandled = 0;
+        bool nHandled = false;
 
         if ( rNEvt.GetType() == EVENT_KEYINPUT )
         {
@@ -1003,7 +1003,7 @@ namespace svxform
             }
         }
 
-        return nHandled ? nHandled : Window::Notify( rNEvt );
+        return nHandled || Window::Notify( rNEvt );
     }
     //------------------------------------------------------------------------
     void XFormsPage::Resize()

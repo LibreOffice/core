@@ -147,7 +147,7 @@ PADialog::~PADialog()
     freePadminRC();
 }
 
-long PADialog::Notify( NotifyEvent& rEv )
+bool PADialog::Notify( NotifyEvent& rEv )
 {
     if( IsVisible() &&
         (rEv.GetType() == EVENT_GETFOCUS || rEv.GetType() == EVENT_LOSEFOCUS )

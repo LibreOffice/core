@@ -445,7 +445,7 @@ void WizardDialog::StateChanged( StateChangedType nType )
 
 // -----------------------------------------------------------------------
 
-long WizardDialog::Notify( NotifyEvent& rNEvt )
+bool WizardDialog::Notify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) && mpPrevBtn && mpNextBtn )
     {
@@ -466,7 +466,7 @@ long WizardDialog::Notify( NotifyEvent& rNEvt )
                         mpPrevBtn->SetPressed( sal_False );
                         mpPrevBtn->Click();
                     }
-                    return sal_True;
+                    return true;
                 }
             }
             else
@@ -480,7 +480,7 @@ long WizardDialog::Notify( NotifyEvent& rNEvt )
                         mpNextBtn->SetPressed( sal_False );
                         mpNextBtn->Click();
                     }
-                    return sal_True;
+                    return true;
                 }
             }
         }

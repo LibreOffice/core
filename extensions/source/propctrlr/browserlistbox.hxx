@@ -133,7 +133,7 @@ namespace pcr
         sal_uInt16                  CalcVisibleLines();
         void                        EnableUpdate();
         void                        DisableUpdate();
-        long                        Notify( NotifyEvent& _rNEvt );
+        bool                        Notify( NotifyEvent& _rNEvt );
         long                        PreNotify( NotifyEvent& _rNEvt );
 
         void                        SetListener( IPropertyLineListener* _pListener );

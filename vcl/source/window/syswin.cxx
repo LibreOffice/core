@@ -89,7 +89,7 @@ SystemWindow::~SystemWindow()
 
 // -----------------------------------------------------------------------
 
-long SystemWindow::Notify( NotifyEvent& rNEvt )
+bool SystemWindow::Notify( NotifyEvent& rNEvt )
 {
     // capture KeyEvents for menu handling
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
@@ -102,7 +102,7 @@ long SystemWindow::Notify( NotifyEvent& rNEvt )
                 pMBar = ((SystemWindow*)pWin)->GetMenuBar();
         }
         if ( pMBar && pMBar->ImplHandleKeyEvent( *rNEvt.GetKeyEvent(), sal_False ) )
-            return sal_True;
+            return true;
     }
 
     return Window::Notify( rNEvt );

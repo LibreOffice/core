@@ -197,7 +197,7 @@ void Deck::DataChanged (const DataChangedEvent& rEvent)
 
 
 
-long Deck::Notify (NotifyEvent& rEvent)
+bool Deck::Notify (NotifyEvent& rEvent)
 {
     if (rEvent.GetType() == EVENT_COMMAND)
     {
@@ -206,9 +206,7 @@ long Deck::Notify (NotifyEvent& rEvent)
             switch (pCommandEvent->GetCommand())
             {
                 case COMMAND_WHEEL:
-                    return ProcessWheelEvent(pCommandEvent, rEvent)
-                        ? sal_True
-                        : sal_False;
+                    return ProcessWheelEvent(pCommandEvent, rEvent);
 
                 default:
                     break;

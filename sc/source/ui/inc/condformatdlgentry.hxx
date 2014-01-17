@@ -67,7 +67,7 @@ public:
     ScCondFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos );
     virtual ~ScCondFrmtEntry();
 
-    virtual long Notify( NotifyEvent& rNEvt );
+    virtual bool Notify( NotifyEvent& rNEvt );
 
     bool IsSelected() const;
     void SetIndex(sal_Int32 nIndex);

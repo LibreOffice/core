@@ -171,7 +171,7 @@ namespace svt
     protected:
         // Window overridables
         virtual void Resize();
-        virtual long Notify( NotifyEvent& i_rNotifyEvent );
+        virtual bool Notify( NotifyEvent& i_rNotifyEvent );
         virtual void GetFocus();
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >

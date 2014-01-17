@@ -171,7 +171,7 @@ void SdDocPreviewWin::startPreview()
     }
 }
 
-long SdDocPreviewWin::Notify( NotifyEvent& rNEvt )
+bool SdDocPreviewWin::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
     {

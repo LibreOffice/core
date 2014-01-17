@@ -51,7 +51,7 @@ public:
                           nFtCount = pList->GetFontNameCount(); }
     void            SetBindings(SfxBindings* pBinding);//
     virtual long    PreNotify( NotifyEvent& rNEvt );
-    virtual long    Notify(  NotifyEvent& rNEvt );//
+    virtual bool    Notify(  NotifyEvent& rNEvt );//
 };
 
 } } // end of namespace svx::sidebar

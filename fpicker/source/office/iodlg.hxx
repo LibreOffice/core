@@ -165,7 +165,7 @@ private:
     void    implUpdateImages( );
 
 protected:
-    virtual long                Notify( NotifyEvent& rNEvt );
+    virtual bool                Notify( NotifyEvent& rNEvt );
     void                        EnableInternet( sal_Bool bInternet );
 
     // originally from VclFileDialog

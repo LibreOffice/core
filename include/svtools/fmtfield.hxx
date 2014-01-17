@@ -235,7 +235,7 @@ public:
     bool    IsUsingInputStringForFormatting() const;
 
 protected:
-    virtual long Notify(NotifyEvent& rNEvt);
+    virtual bool Notify(NotifyEvent& rNEvt);
     void impl_Modify(bool makeValueDirty = true);
     virtual void Modify();
 

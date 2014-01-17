@@ -49,7 +49,7 @@ public:
             MultiListBox( pParent, rResId ) {}
     ~DelMultiListBox() {}
 
-    virtual long Notify( NotifyEvent& rEvent );
+    virtual bool Notify( NotifyEvent& rEvent );
 
     Link setDelPressedLink( const Link& rLink )
     {
@@ -68,7 +68,7 @@ public:
                 ListBox( pParent, rResId ) {}
     ~DelListBox() {}
 
-    virtual long Notify( NotifyEvent& rEvent );
+    virtual bool Notify( NotifyEvent& rEvent );
 
     Link setDelPressedLink( const Link& rLink )
     {

@@ -133,9 +133,9 @@ IMPL_LINK( _HeaderTabListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
     return 1;
 }
 
-long _HeaderTabListBox::Notify( NotifyEvent& rNEvt )
+bool _HeaderTabListBox::Notify( NotifyEvent& rNEvt )
 {
-    long    nRet = Control::Notify( rNEvt );
+    bool nRet = Control::Notify( rNEvt );
 
     if( rNEvt.GetType() == EVENT_GETFOCUS )
     {

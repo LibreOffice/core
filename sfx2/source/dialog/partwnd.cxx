@@ -178,7 +178,7 @@ sal_Bool SfxPartDockWnd_Impl::QueryClose()
 
 //****************************************************************************
 
-long SfxPartDockWnd_Impl::Notify( NotifyEvent& rEvt )
+bool SfxPartDockWnd_Impl::Notify( NotifyEvent& rEvt )
 {
     if( rEvt.GetType() == EVENT_GETFOCUS )
     {

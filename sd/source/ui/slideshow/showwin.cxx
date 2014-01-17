@@ -281,19 +281,6 @@ void ShowWindow::Paint(const Rectangle& rRect)
     }
 }
 
-
-long ShowWindow::Notify(NotifyEvent& rNEvt)
-{
-    long nOK = sal_False;
-    if (!nOK)
-        nOK = Window::Notify(rNEvt);
-
-    return nOK;
-}
-
-
-// -----------------------------------------------------------------------------
-
 void ShowWindow::GetFocus()
 {
     // base class

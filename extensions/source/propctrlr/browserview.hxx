@@ -44,7 +44,7 @@ namespace pcr
     protected:
         virtual void Resize();
         virtual void GetFocus();
-        virtual long Notify( NotifyEvent& _rNEvt );
+        virtual bool Notify( NotifyEvent& _rNEvt );
 
     public:
         OPropertyBrowserView( Window* pParent, WinBits nBits = 0);

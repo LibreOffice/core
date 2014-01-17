@@ -733,7 +733,7 @@ void Splitter::KeyInput( const KeyEvent& rKEvt )
 
 // -----------------------------------------------------------------------
 
-long Splitter::Notify( NotifyEvent& rNEvt )
+bool Splitter::Notify( NotifyEvent& rNEvt )
 {
     return Window::Notify( rNEvt );
 }

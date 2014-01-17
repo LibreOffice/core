@@ -247,12 +247,12 @@ short SfxPrintOptionsDialog::Execute()
 
 //--------------------------------------------------------------------
 
-long SfxPrintOptionsDialog::Notify( NotifyEvent& rNEvt )
+bool SfxPrintOptionsDialog::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         if ( rNEvt.GetKeyEvent()->GetKeyCode().GetCode() == KEY_F1 && pDlgImpl->mbHelpDisabled )
-            return 1; // help disabled -> <F1> does nothing
+            return true; // help disabled -> <F1> does nothing
     }
 
     return ModalDialog::Notify( rNEvt );

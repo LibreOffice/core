@@ -73,7 +73,7 @@ public:
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
     virtual void        StateChanged( StateChangedType nStateChange );
     virtual long        PreNotify( NotifyEvent& rNEvt );
-    virtual long        Notify( NotifyEvent& rEvt );
+    virtual bool        Notify( NotifyEvent& rEvt );
     virtual void        Resize();
     virtual void        GetFocus();
     void                DoResize();
@@ -97,10 +97,10 @@ void SfxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
         pWorkWin->DataChanged_Impl( rDCEvt );
 }
 
-long SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
+bool SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
 {
     if ( pFrame->IsClosing_Impl() || !pFrame->GetFrameInterface().is() )
-        return sal_False;
+        return false;
 
     SfxViewFrame* pView = pFrame->GetCurrentViewFrame();
     if ( !pView || !pView->GetObjectShell() )
@@ -117,22 +117,22 @@ long SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
         // if focus was on an external window, the clipboard content might have been changed
         pView->GetBindings().Invalidate( SID_PASTE );
         pView->GetBindings().Invalidate( SID_PASTE_SPECIAL );
-        return sal_True;
+        return true;
     }
     else if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         if ( pView->GetViewShell()->KeyInput( *rNEvt.GetKeyEvent() ) )
-            return sal_True;
+            return true;
     }
     else if ( rNEvt.GetType() == EVENT_EXECUTEDIALOG /*|| rNEvt.GetType() == EVENT_INPUTDISABLE*/ )
     {
         pView->SetModalMode( sal_True );
-        return sal_True;
+        return true;
     }
     else if ( rNEvt.GetType() == EVENT_ENDEXECUTEDIALOG /*|| rNEvt.GetType() == EVENT_INPUTENABLE*/ )
     {
         pView->SetModalMode( sal_False );
-        return sal_True;
+        return true;
     }
 
     return Window::Notify( rNEvt );

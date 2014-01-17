@@ -79,7 +79,7 @@ public:
     void                SetWrappedWindow(Window* const pWindow);
 
     virtual void        StateChanged( StateChangedType nType );
-    virtual long        Notify( NotifyEvent& rNEvt );
+    virtual bool        Notify( NotifyEvent& rNEvt );
     virtual void        Resize();
     virtual void        Resizing( Size& rSize );
     virtual sal_Bool        Close();
@@ -269,7 +269,7 @@ void SfxTitleDockingWindow::SetWrappedWindow( Window* const pWindow )
     }
 }
 
-long SfxTitleDockingWindow::Notify( NotifyEvent& rNEvt )
+bool SfxTitleDockingWindow::Notify( NotifyEvent& rNEvt )
 {
     return SfxDockingWindow::Notify( rNEvt );
 }
@@ -1770,7 +1770,7 @@ Size SfxDockingWindow::GetMinOutputSizePixel() const
 
 //-------------------------------------------------------------------------
 
-long SfxDockingWindow::Notify( NotifyEvent& rEvt )
+bool SfxDockingWindow::Notify( NotifyEvent& rEvt )
 {
     if ( rEvt.GetType() == EVENT_GETFOCUS )
     {
@@ -1786,7 +1786,7 @@ long SfxDockingWindow::Notify( NotifyEvent& rEvt )
         // base class, otherwise the parent learns nothing
         // if ( rEvt.GetWindow() == this )  PB: #i74693# not necessary any longer
         DockingWindow::Notify( rEvt );
-        return sal_True;
+        return true;
     }
     else if( rEvt.GetType() == EVENT_KEYINPUT )
     {
@@ -1794,7 +1794,7 @@ long SfxDockingWindow::Notify( NotifyEvent& rEvt )
         if ( !DockingWindow::Notify( rEvt ) && SfxViewShell::Current() )
             // then also for valid global accelerators.
             return SfxViewShell::Current()->GlobalKeyInput_Impl( *rEvt.GetKeyEvent() );
-        return sal_True;
+        return true;
     }
     else if ( rEvt.GetType() == EVENT_LOSEFOCUS && !HasChildPathFocus() )
     {

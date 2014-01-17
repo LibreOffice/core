@@ -98,7 +98,7 @@ public:
 
     void                SetMinOutputSizePixel( const Size& rSize );
     Size                GetMinOutputSizePixel() const;
-    virtual long        Notify( NotifyEvent& rNEvt );
+    virtual bool        Notify( NotifyEvent& rNEvt );
     virtual void        FadeIn( sal_Bool );
     void                AutoShow( sal_Bool bShow = sal_True );
     DECL_LINK(TimerHdl, void *);

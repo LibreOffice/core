@@ -140,15 +140,15 @@ void padmin::FindFiles( const OUString& rDirectory, ::std::list< OUString >& rRe
  *  DelMultiListBox
  */
 
-long DelMultiListBox::Notify( NotifyEvent& rEvent )
+bool DelMultiListBox::Notify( NotifyEvent& rEvent )
 {
-    long nRet = 0;
+    bool nRet = false;
 
     if( rEvent.GetType() == EVENT_KEYINPUT &&
         rEvent.GetKeyEvent()->GetKeyCode().GetCode() == KEY_DELETE )
     {
         m_aDelPressedLink.Call( this );
-        nRet = 1;
+        nRet = true;
     }
     else
         nRet = MultiListBox::Notify( rEvent );
@@ -160,15 +160,15 @@ long DelMultiListBox::Notify( NotifyEvent& rEvent )
  *  DelListBox
  */
 
-long DelListBox::Notify( NotifyEvent& rEvent )
+bool DelListBox::Notify( NotifyEvent& rEvent )
 {
-    long nRet = 0;
+    bool nRet = false;
 
     if( rEvent.GetType() == EVENT_KEYINPUT &&
         rEvent.GetKeyEvent()->GetKeyCode().GetCode() == KEY_DELETE )
     {
         m_aDelPressedLink.Call( this );
-        nRet = 1;
+        nRet = true;
     }
     else
         nRet = ListBox::Notify( rEvent );

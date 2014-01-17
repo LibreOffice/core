@@ -594,10 +594,10 @@ IMPL_LINK_NOARG(Dialog, ImplAsyncCloseHdl)
 
 // -----------------------------------------------------------------------
 
-long Dialog::Notify( NotifyEvent& rNEvt )
+bool Dialog::Notify( NotifyEvent& rNEvt )
 {
     // Zuerst Basisklasse rufen wegen TabSteuerung
-    long nRet = SystemWindow::Notify( rNEvt );
+    bool nRet = SystemWindow::Notify( rNEvt );
     if ( !nRet )
     {
         if ( rNEvt.GetType() == EVENT_KEYINPUT )
@@ -614,7 +614,7 @@ long Dialog::Notify( NotifyEvent& rNEvt )
                 // post this Close asynchronous so we can leave our key handler before
                 // we get destroyed
                 PostUserEvent( LINK( this, Dialog, ImplAsyncCloseHdl ), this );
-                return sal_True;
+                return true;
             }
         }
         else if ( rNEvt.GetType() == EVENT_GETFOCUS )

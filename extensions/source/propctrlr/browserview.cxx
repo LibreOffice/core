@@ -91,7 +91,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    long OPropertyBrowserView::Notify( NotifyEvent& _rNEvt )
+    bool OPropertyBrowserView::Notify( NotifyEvent& _rNEvt )
     {
         if ( EVENT_KEYINPUT == _rNEvt.GetType() )
         {
@@ -101,7 +101,7 @@ namespace pcr
                 // silence this, we don't want to propagate this outside the property
                 // browser, as it will probably do harm there
                 // #i63285#
-                return 1;
+                return true;
         }
         return Window::Notify( _rNEvt );
     }

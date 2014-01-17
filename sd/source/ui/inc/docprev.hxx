@@ -67,7 +67,7 @@ public:
     virtual void    Resize();
     void            startPreview();
 
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
 
     void            SetClickHdl( const Link& rLink ) { aClickHdl = rLink; }
     const Link&     GetClickHdl() const { return aClickHdl; }

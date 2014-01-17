@@ -296,7 +296,7 @@ public:
     virtual void    Resizing( Size& rSize );
     virtual sal_Bool    Close();
     virtual void    Tracking( const TrackingEvent& rTEvt );
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 

@@ -56,7 +56,7 @@ public:
 protected:
     virtual void    Select();
     virtual long    PreNotify( NotifyEvent& rNEvt );
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 };
@@ -88,7 +88,7 @@ public:
 protected:
     virtual void    Select();
     virtual long    PreNotify( NotifyEvent& rNEvt );
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 };
@@ -113,7 +113,7 @@ protected:
     virtual void    Up();       // just to be sure
 
     virtual long    PreNotify( NotifyEvent& rNEvt );
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 public:
@@ -140,7 +140,7 @@ public:
 
 protected:
     virtual long    PreNotify( NotifyEvent& rNEvt );
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
 
 private:
     sal_uInt16          nCurPos;
@@ -162,7 +162,7 @@ public:
 
 protected:
     virtual long    PreNotify( NotifyEvent& rNEvt );
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
     virtual void    Select();
 
 private:

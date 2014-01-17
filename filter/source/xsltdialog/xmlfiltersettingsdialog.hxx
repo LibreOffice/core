@@ -51,7 +51,7 @@ public:
     XMLFilterListBox* getListBox() { return m_pFocusCtrl; }
     ~SvxPathControl();
 
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool Notify( NotifyEvent& rNEvt );
 };
 
 // --------------------------------------------------------------------
@@ -104,7 +104,7 @@ public:
 
     void    updateStates();
 
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool Notify( NotifyEvent& rNEvt );
 
     bool    isClosable();
 

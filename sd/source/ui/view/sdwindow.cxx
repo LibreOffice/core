@@ -295,9 +295,9 @@ void Window::Command(const CommandEvent& rCEvt)
 }
 
 
-long Window::Notify( NotifyEvent& rNEvt )
+bool Window::Notify( NotifyEvent& rNEvt )
 {
-    long nResult = sal_False;
+    bool nResult = false;
     if ( mpViewShell )
     {
         nResult = mpViewShell->Notify(rNEvt, this);

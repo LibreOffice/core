@@ -1710,7 +1710,7 @@ IMPL_LINK_NOARG(SvtFileDialog, PlayButtonHdl_Impl)
 
 //*****************************************************************************
 
-long SvtFileDialog::Notify( NotifyEvent& rNEvt )
+bool SvtFileDialog::Notify( NotifyEvent& rNEvt )
 
 /*  [Description]
 
@@ -1719,7 +1719,7 @@ long SvtFileDialog::Notify( NotifyEvent& rNEvt )
 
 {
     sal_uInt16 nType = rNEvt.GetType();
-    long nRet = 0;
+    long nRet = false;
 
     if ( EVENT_KEYINPUT == nType && rNEvt.GetKeyEvent() )
     {
@@ -1729,16 +1729,16 @@ long SvtFileDialog::Notify( NotifyEvent& rNEvt )
         if ( !rKeyCode.GetModifier() &&
              KEY_BACKSPACE == nCode && !_pImp->_pEdFileName->HasChildPathFocus() )
         {
-            nRet = 0;
+            nRet = false;
 
             if ( !nRet && _pImp->_pBtnUp->IsEnabled() )
             {
                 PrevLevel_Impl();
-                nRet = 1;
+                nRet = true;
             }
         }
     }
-    return nRet ? nRet : ModalDialog::Notify( rNEvt );
+    return nRet || ModalDialog::Notify( rNEvt );
 }
 
 //*****************************************************************************

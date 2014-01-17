@@ -186,7 +186,7 @@ public:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    Paint( const Rectangle &rPaintRect );
     virtual void    Resize();
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
 
     const Size      GetMinOutputSizePixel() const;
     void            SetExtraSize( long nSize ) { m_nExtraHeight = nSize; }

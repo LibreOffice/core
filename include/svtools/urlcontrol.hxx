@@ -41,7 +41,7 @@ namespace svt
 
     protected:
         virtual long        PreNotify( NotifyEvent& rNEvt );
-        virtual long        Notify( NotifyEvent& rNEvt );
+        virtual bool        Notify( NotifyEvent& rNEvt );
     };
 
 //.........................................................................

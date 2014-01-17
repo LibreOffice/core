@@ -31,7 +31,7 @@ class SW_DLLPUBLIC NumEditAction: public NumericField
 
 protected:
     virtual void Action();
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool Notify( NotifyEvent& rNEvt );
 public:
     NumEditAction( Window* pParent, const ResId& rResId ) :
                                 NumericField(pParent, rResId) {}

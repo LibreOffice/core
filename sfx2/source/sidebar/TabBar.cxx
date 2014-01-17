@@ -277,9 +277,9 @@ void TabBar::DataChanged (const DataChangedEvent& rDataChangedEvent)
 
 
 
-long TabBar::Notify (NotifyEvent&)
+bool TabBar::Notify (NotifyEvent&)
 {
-    return sal_False;
+    return false;
 }
 
 

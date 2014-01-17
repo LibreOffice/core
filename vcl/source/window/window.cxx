@@ -5084,9 +5084,9 @@ long Window::PreNotify( NotifyEvent& rNEvt )
 
 // -----------------------------------------------------------------------
 
-long Window::Notify( NotifyEvent& rNEvt )
+bool Window::Notify( NotifyEvent& rNEvt )
 {
-    long nRet = sal_False;
+    bool nRet = false;
 
     // check for docking window
     // but do nothing if window is docked and locked
@@ -5103,13 +5103,13 @@ long Window::Notify( NotifyEvent& rNEvt )
                 {
                     // ctrl double click toggles floating mode
                     pWrapper->SetFloatingMode( !pWrapper->IsFloatingMode() );
-                    return sal_True;
+                    return true;
                 }
                 else if ( pMEvt->GetClicks() == 1 && bHit)
                 {
                     // allow start docking during mouse move
                     pWrapper->ImplEnableStartDocking();
-                    return sal_True;
+                    return true;
                 }
             }
         }
@@ -5133,7 +5133,7 @@ long Window::Notify( NotifyEvent& rNEvt )
                     }
                     pWrapper->ImplStartDocking( aPos );
                 }
-                return sal_True;
+                return true;
             }
         }
         else if( rNEvt.GetType() == EVENT_KEYINPUT )
@@ -5151,7 +5151,7 @@ long Window::Notify( NotifyEvent& rNEvt )
                  */
                 if( pWrapper->IsFloatingMode() )
                     ToTop( TOTOP_GRABFOCUSONLY );
-                return sal_True;
+                return true;
             }
         }
     }

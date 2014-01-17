@@ -150,7 +150,7 @@ protected:
     virtual void    Select();
     virtual void    Modify();
 
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
 
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 

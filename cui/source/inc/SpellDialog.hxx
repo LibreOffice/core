@@ -210,7 +210,7 @@ private:
     void            SetTitle_Impl(LanguageType nLang);
 
 protected:
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
 
     OUString getReplacementString() const;
 

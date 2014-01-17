@@ -48,7 +48,7 @@ public:
 
     sal_Bool                    Construct();
     virtual short           Execute();
-    virtual long            Notify( NotifyEvent& rNEvt );
+    virtual bool            Notify( NotifyEvent& rNEvt );
 
     SfxTabPage*             GetTabPage() const { return pPage; }
     const SfxItemSet&       GetOptions() const { return *pOptions; }

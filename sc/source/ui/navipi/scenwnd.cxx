@@ -108,7 +108,7 @@ void ScScenarioListBox::DoubleClick()
     SelectScenario();
 }
 
-long ScScenarioListBox::Notify( NotifyEvent& rNEvt )
+bool ScScenarioListBox::Notify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
 
@@ -156,7 +156,7 @@ long ScScenarioListBox::Notify( NotifyEvent& rNEvt )
         }
     }
 
-    return bHandled ? 1 : ListBox::Notify( rNEvt );
+    return bHandled || ListBox::Notify( rNEvt );
 }
 
 const ScScenarioListBox::ScenarioEntry* ScScenarioListBox::GetSelectedEntry() const

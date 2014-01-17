@@ -258,7 +258,7 @@ public:
 
     virtual void        Resize();
     virtual void        StateChanged( StateChangedType nStateChange );
-    virtual long        Notify( NotifyEvent& rNEvt );
+    virtual bool        Notify( NotifyEvent& rNEvt );
 
     virtual void        ActivatePage();
     virtual long        DeactivatePage();

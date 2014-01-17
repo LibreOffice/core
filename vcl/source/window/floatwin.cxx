@@ -552,10 +552,10 @@ IMPL_LINK_NOARG(FloatingWindow, ImplEndPopupModeHdl)
 
 // -----------------------------------------------------------------------
 
-long FloatingWindow::Notify( NotifyEvent& rNEvt )
+bool FloatingWindow::Notify( NotifyEvent& rNEvt )
 {
     // Zuerst Basisklasse rufen wegen TabSteuerung
-    long nRet = SystemWindow::Notify( rNEvt );
+    bool nRet = SystemWindow::Notify( rNEvt );
     if ( !nRet )
     {
         if ( rNEvt.GetType() == EVENT_KEYINPUT )
@@ -567,7 +567,7 @@ long FloatingWindow::Notify( NotifyEvent& rNEvt )
             if ( (nKeyCode == KEY_ESCAPE) && (GetStyle() & WB_CLOSEABLE) )
             {
                 Close();
-                return sal_True;
+                return true;
             }
         }
     }

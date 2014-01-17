@@ -98,9 +98,9 @@ ColumnEdit::~ColumnEdit()
 
 //------------------------------------------------------------------------
 
-long ColumnEdit::Notify( NotifyEvent& rNEvt )
+bool ColumnEdit::Notify( NotifyEvent& rNEvt )
 {
-    long nHandled = SpinField::Notify( rNEvt );
+    bool nHandled = SpinField::Notify( rNEvt );
 
     sal_uInt16 nType = rNEvt.GetType();
     if ( nType == EVENT_KEYINPUT )
@@ -118,7 +118,7 @@ long ColumnEdit::Notify( NotifyEvent& rNEvt )
             {
                 ScNavigatorDlg::ReleaseFocus();
                 ExecuteCol();
-                nHandled = 1;
+                nHandled = true;
             }
         }
     }
@@ -300,9 +300,9 @@ RowEdit::~RowEdit()
 
 //------------------------------------------------------------------------
 
-long RowEdit::Notify( NotifyEvent& rNEvt )
+bool RowEdit::Notify( NotifyEvent& rNEvt )
 {
-    long nHandled = NumericField::Notify( rNEvt );
+    bool nHandled = NumericField::Notify( rNEvt );
 
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
@@ -312,7 +312,7 @@ long RowEdit::Notify( NotifyEvent& rNEvt )
         {
             ScNavigatorDlg::ReleaseFocus();
             ExecuteRow();
-            nHandled = 1;
+            nHandled = true;
         }
     }
 

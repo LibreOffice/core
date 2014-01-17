@@ -110,7 +110,7 @@ public:
 
 protected:
     virtual void                Resize();
-    virtual long                Notify(NotifyEvent& rNEvt);
+    virtual bool                Notify(NotifyEvent& rNEvt);
 
 
 private:

@@ -305,7 +305,7 @@ void BackingWindow::Paint( const Rectangle& )
                 aDev );
 }
 
-long BackingWindow::Notify( NotifyEvent& rNEvt )
+bool BackingWindow::Notify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
@@ -319,7 +319,7 @@ long BackingWindow::Notify( NotifyEvent& rNEvt )
         const KeyEvent* pEvt = rNEvt.GetKeyEvent();
         const KeyCode& rKeyCode(pEvt->GetKeyCode());
         if( pEvt && mpAccExec->execute(rKeyCode) )
-            return 1;
+            return true;
     }
 
     return Window::Notify( rNEvt );

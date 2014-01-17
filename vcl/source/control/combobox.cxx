@@ -760,9 +760,9 @@ long ComboBox::PreNotify( NotifyEvent& rNEvt )
 
 // -----------------------------------------------------------------------
 
-long ComboBox::Notify( NotifyEvent& rNEvt )
+bool ComboBox::Notify( NotifyEvent& rNEvt )
 {
-    long nDone = 0;
+    bool nDone = false;
     if( ( rNEvt.GetType() == EVENT_KEYINPUT ) && ( rNEvt.GetWindow() == mpSubEdit )
             && !IsReadOnly() )
     {
@@ -785,12 +785,12 @@ long ComboBox::Notify( NotifyEvent& rNEvt )
                     SetSelection( Selection( 0, SELECTION_MAX ) );
                     mpFloatWin->StartFloat( sal_False );
                     ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
-                    nDone = 1;
+                    nDone = true;
                 }
                 else if( ( nKeyCode == KEY_UP ) && mpFloatWin && mpFloatWin->IsInPopupMode() && aKeyEvt.GetKeyCode().IsMod2() )
                 {
                     mpFloatWin->EndPopupMode();
-                    nDone = 1;
+                    nDone = true;
                 }
                 else
                 {
@@ -804,7 +804,7 @@ long ComboBox::Notify( NotifyEvent& rNEvt )
                 if( ( rNEvt.GetWindow() == mpSubEdit ) && IsInDropDown() )
                 {
                     mpImplLB->ProcessKeyInput( aKeyEvt );
-                    nDone = 1;
+                    nDone = true;
                 }
             }
             break;
@@ -832,7 +832,7 @@ long ComboBox::Notify( NotifyEvent& rNEvt )
         }
         else
         {
-            nDone = 0;  // don't eat this event, let the default handling happen (i.e. scroll the context)
+            nDone = false;  // don't eat this event, let the default handling happen (i.e. scroll the context)
         }
     }
     else if( ( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN ) && ( rNEvt.GetWindow() == mpImplLB->GetMainWindow() ) )
@@ -840,7 +840,7 @@ long ComboBox::Notify( NotifyEvent& rNEvt )
         mpSubEdit->GrabFocus();
     }
 
-    return nDone ? nDone : Edit::Notify( rNEvt );
+    return nDone || Edit::Notify( rNEvt );
 }
 
 // -----------------------------------------------------------------------

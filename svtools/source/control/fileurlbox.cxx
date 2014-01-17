@@ -74,7 +74,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    long FileURLBox::Notify( NotifyEvent& _rNEvt )
+    bool FileURLBox::Notify( NotifyEvent& _rNEvt )
     {
         switch ( _rNEvt.GetType() )
         {
@@ -84,7 +84,7 @@ namespace svt
                 &&  ( IsInDropDown()                                             )
                 )
             {
-                long nReturn = SvtURLBox::Notify(_rNEvt);
+                bool nReturn = SvtURLBox::Notify(_rNEvt);
                 DisplayURL( m_sPreservedText );
                 return nReturn;
             }

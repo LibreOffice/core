@@ -73,7 +73,7 @@ private:
     SAL_DLLPRIVATE void         ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bool bLayout = false, bool bFirstInGroup = false, bool bLastInGroup = false, bool bIsCurrentItem = false );
     SAL_DLLPRIVATE void         ImplPaint( const Rectangle& rRect, bool bLayout = false );
     SAL_DLLPRIVATE void         ImplFreeLayoutData();
-    SAL_DLLPRIVATE long         ImplHandleKeyEvent( const KeyEvent& rKeyEvent );
+    SAL_DLLPRIVATE bool         ImplHandleKeyEvent( const KeyEvent& rKeyEvent );
 
     DECL_DLLPRIVATE_LINK(       ImplListBoxSelectHdl, void* );
     DECL_DLLPRIVATE_LINK(       ImplWindowEventListener, VclSimpleEvent* );
@@ -103,7 +103,7 @@ public:
     virtual void        LoseFocus();
     virtual void        RequestHelp( const HelpEvent& rHEvt );
     virtual void        Command( const CommandEvent& rCEvt );
-    virtual long        Notify( NotifyEvent& rNEvt );
+    virtual bool        Notify( NotifyEvent& rNEvt );
     virtual void        StateChanged( StateChangedType nType );
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
     virtual long        PreNotify( NotifyEvent& rNEvt );

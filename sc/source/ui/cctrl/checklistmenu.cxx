@@ -1198,7 +1198,7 @@ void ScCheckListMenuWindow::MouseMove(const MouseEvent& rMEvt)
         queueCloseSubMenu();
 }
 
-long ScCheckListMenuWindow::Notify(NotifyEvent& rNEvt)
+bool ScCheckListMenuWindow::Notify(NotifyEvent& rNEvt)
 {
     switch (rNEvt.GetType())
     {

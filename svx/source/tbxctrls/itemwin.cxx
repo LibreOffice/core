@@ -186,9 +186,9 @@ long SvxLineBox::PreNotify( NotifyEvent& rNEvt )
 
 // -----------------------------------------------------------------------
 
-long SvxLineBox::Notify( NotifyEvent& rNEvt )
+bool SvxLineBox::Notify( NotifyEvent& rNEvt )
 {
-    long nHandled = LineLB::Notify( rNEvt );
+    bool nHandled = LineLB::Notify( rNEvt );
 
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
@@ -198,13 +198,13 @@ long SvxLineBox::Notify( NotifyEvent& rNEvt )
         {
             case KEY_RETURN:
                 Select();
-                nHandled = 1;
+                nHandled = true;
                 break;
 
             case KEY_ESCAPE:
                 SelectEntryPos( nCurPos );
                 ReleaseFocus_Impl();
-                nHandled = 1;
+                nHandled = true;
                 break;
         }
     }
@@ -392,9 +392,9 @@ long SvxColorBox::PreNotify( NotifyEvent& rNEvt )
 
 // -----------------------------------------------------------------------
 
-long SvxColorBox::Notify( NotifyEvent& rNEvt )
+bool SvxColorBox::Notify( NotifyEvent& rNEvt )
 {
-    long nHandled = ColorLB::Notify( rNEvt );
+    bool nHandled = ColorLB::Notify( rNEvt );
 
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
@@ -404,13 +404,13 @@ long SvxColorBox::Notify( NotifyEvent& rNEvt )
         {
             case KEY_RETURN:
                 Select();
-                nHandled = 1;
+                nHandled = true;
                 break;
 
             case KEY_ESCAPE:
                 SelectEntryPos( nCurPos );
                 ReleaseFocus_Impl();
-                nHandled = 1;
+                nHandled = true;
                 break;
         }
     }
@@ -576,9 +576,9 @@ long SvxMetricField::PreNotify( NotifyEvent& rNEvt )
 
 // -----------------------------------------------------------------------
 
-long SvxMetricField::Notify( NotifyEvent& rNEvt )
+bool SvxMetricField::Notify( NotifyEvent& rNEvt )
 {
-    long nHandled = MetricField::Notify( rNEvt );
+    bool nHandled = MetricField::Notify( rNEvt );
 
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
@@ -607,7 +607,7 @@ long SvxMetricField::Notify( NotifyEvent& rNEvt )
 
             if ( bHandled )
             {
-                nHandled = 1;
+                nHandled = true;
                 Modify();
                 ReleaseFocus_Impl();
             }
@@ -677,9 +677,9 @@ long SvxFillTypeBox::PreNotify( NotifyEvent& rNEvt )
 
 // -----------------------------------------------------------------------
 
-long SvxFillTypeBox::Notify( NotifyEvent& rNEvt )
+bool SvxFillTypeBox::Notify( NotifyEvent& rNEvt )
 {
-    long nHandled = FillTypeLB::Notify( rNEvt );
+    bool nHandled = FillTypeLB::Notify( rNEvt );
 
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
@@ -687,7 +687,7 @@ long SvxFillTypeBox::Notify( NotifyEvent& rNEvt )
         switch ( pKEvt->GetKeyCode().GetCode() )
         {
             case KEY_RETURN:
-                nHandled = 1;
+                nHandled = true;
                 ( (Link&)GetSelectHdl() ).Call( this );
             break;
             case KEY_TAB:
@@ -699,7 +699,7 @@ long SvxFillTypeBox::Notify( NotifyEvent& rNEvt )
             case KEY_ESCAPE:
                 SelectEntryPos( nCurPos );
                 ReleaseFocus_Impl();
-                nHandled = 1;
+                nHandled = true;
                 break;
         }
     }
@@ -761,9 +761,9 @@ long SvxFillAttrBox::PreNotify( NotifyEvent& rNEvt )
 
 // -----------------------------------------------------------------------
 
-long SvxFillAttrBox::Notify( NotifyEvent& rNEvt )
+bool SvxFillAttrBox::Notify( NotifyEvent& rNEvt )
 {
-    long nHandled = FillAttrLB::Notify( rNEvt );
+    bool nHandled = FillAttrLB::Notify( rNEvt );
 
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
@@ -773,7 +773,7 @@ long SvxFillAttrBox::Notify( NotifyEvent& rNEvt )
         {
             case KEY_RETURN:
                 ( (Link&)GetSelectHdl() ).Call( this );
-                nHandled = 1;
+                nHandled = true;
             break;
             case KEY_TAB:
                 bRelease = sal_False;
@@ -783,7 +783,7 @@ long SvxFillAttrBox::Notify( NotifyEvent& rNEvt )
             case KEY_ESCAPE:
                 SelectEntryPos( nCurPos );
                 ReleaseFocus_Impl();
-                nHandled = 1;
+                nHandled = true;
                 break;
         }
     }

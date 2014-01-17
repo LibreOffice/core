@@ -85,7 +85,7 @@ public:
 
 
     virtual void    RequestingChildren( SvTreeListEntry* pParent );
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
 
     inline void     SetOpenHdl( const Link& rLink ) { SetDoubleClickHdl( rLink ); }
     OUString        GetSelectEntry() const;
@@ -133,7 +133,7 @@ public:
     IndexBox_Impl( Window* pParent, const ResId& rResId );
 
     virtual void        UserDraw( const UserDrawEvent& rUDEvt );
-    virtual long        Notify( NotifyEvent& rNEvt );
+    virtual bool        Notify( NotifyEvent& rNEvt );
 
     void                SelectExecutableEntry();
 };
@@ -207,7 +207,7 @@ class SearchResultsBox_Impl : public ListBox
 public:
     SearchResultsBox_Impl( Window* pParent, const ResId& rResId ) : ListBox( pParent, rResId ) {}
 
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
 };
 
 class SearchTabPage_Impl : public HelpTabPage_Impl
@@ -264,7 +264,7 @@ public:
     BookmarksBox_Impl( Window* pParent, const ResId& rResId );
     ~BookmarksBox_Impl();
 
-    virtual long        Notify( NotifyEvent& rNEvt );
+    virtual bool        Notify( NotifyEvent& rNEvt );
 };
 
 class BookmarksTabPage_Impl : public HelpTabPage_Impl
@@ -419,7 +419,7 @@ public:
                             TextWin_Impl( Window* pParent );
     virtual                 ~TextWin_Impl();
 
-    virtual long            Notify( NotifyEvent& rNEvt );
+    virtual bool            Notify( NotifyEvent& rNEvt );
 };
 
 // class SfxHelpTextWindow_Impl ------------------------------------------

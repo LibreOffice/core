@@ -1027,9 +1027,9 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
 
 // -----------------------------------------------------------------------
 
-long TabControl::ImplHandleKeyEvent( const KeyEvent& rKeyEvent )
+bool TabControl::ImplHandleKeyEvent( const KeyEvent& rKeyEvent )
 {
-    long nRet = 0;
+    bool nRet = false;
 
     if ( GetPageCount() > 1 )
     {
@@ -1043,7 +1043,7 @@ long TabControl::ImplHandleKeyEvent( const KeyEvent& rKeyEvent )
                 if ( (nKeyCode == KEY_TAB) || (nKeyCode == KEY_PAGEUP) )
                 {
                     ImplActivateTabPage( sal_False );
-                    nRet = 1;
+                    nRet = true;
                 }
             }
             else
@@ -1051,7 +1051,7 @@ long TabControl::ImplHandleKeyEvent( const KeyEvent& rKeyEvent )
                 if ( (nKeyCode == KEY_TAB) || (nKeyCode == KEY_PAGEDOWN) )
                 {
                     ImplActivateTabPage( sal_True );
-                    nRet = 1;
+                    nRet = true;
                 }
             }
         }
@@ -1680,14 +1680,14 @@ long TabControl::PreNotify( NotifyEvent& rNEvt )
 
 // -----------------------------------------------------------------------
 
-long TabControl::Notify( NotifyEvent& rNEvt )
+bool TabControl::Notify( NotifyEvent& rNEvt )
 {
-    long nRet = 0;
+    bool nRet = false;
 
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
         nRet = ImplHandleKeyEvent( *rNEvt.GetKeyEvent() );
 
-    return nRet ? nRet : Control::Notify( rNEvt );
+    return nRet || Control::Notify( rNEvt );
 }
 
 // -----------------------------------------------------------------------

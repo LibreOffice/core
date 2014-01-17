@@ -319,7 +319,7 @@ private:
 
     virtual void    Select();
     virtual long    PreNotify( NotifyEvent& rNEvt );
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
     void            ImplReleaseFocus();
 
 public:
@@ -379,9 +379,9 @@ long ImplGrafModeControl::PreNotify( NotifyEvent& rNEvt )
     return ListBox::PreNotify( rNEvt );
 }
 
-long ImplGrafModeControl::Notify( NotifyEvent& rNEvt )
+bool ImplGrafModeControl::Notify( NotifyEvent& rNEvt )
 {
-    long nHandled = ListBox::Notify( rNEvt );
+    bool nHandled = ListBox::Notify( rNEvt );
 
     if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
@@ -392,7 +392,7 @@ long ImplGrafModeControl::Notify( NotifyEvent& rNEvt )
             case KEY_RETURN:
             {
                 Select();
-                nHandled = 1;
+                nHandled = true;
             }
             break;
 
@@ -400,7 +400,7 @@ long ImplGrafModeControl::Notify( NotifyEvent& rNEvt )
             {
                 SelectEntryPos( mnCurPos );
                 ImplReleaseFocus();
-                nHandled = 1;
+                nHandled = true;
             }
             break;
         }

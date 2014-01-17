@@ -456,7 +456,7 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    long ToolPanelDeck::Notify( NotifyEvent& i_rNotifyEvent )
+    bool ToolPanelDeck::Notify( NotifyEvent& i_rNotifyEvent )
     {
         bool bHandled = false;
         if ( i_rNotifyEvent.GetType() == EVENT_KEYINPUT )
@@ -496,7 +496,7 @@ namespace svt
         }
 
         if ( bHandled )
-            return 1;
+            return true;
 
         return Control::Notify( i_rNotifyEvent );
     }

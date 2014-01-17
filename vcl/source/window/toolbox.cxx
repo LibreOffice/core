@@ -4360,7 +4360,7 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
 
 // -----------------------------------------------------------------------
 
-long ToolBox::Notify( NotifyEvent& rNEvt )
+bool ToolBox::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
@@ -4382,7 +4382,7 @@ long ToolBox::Notify( NotifyEvent& rNEvt )
                 if( bNoTabCycling &&  ! (GetStyle() & WB_FORCETABCYCLE) )
                     return DockingWindow::Notify( rNEvt );
                 else if( ImplChangeHighlightUpDn( aKeyCode.IsShift() ? sal_True : sal_False , bNoTabCycling ) )
-                    return sal_False;
+                    return false;
                 else
                     return DockingWindow::Notify( rNEvt );
             }

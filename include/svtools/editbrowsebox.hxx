@@ -529,7 +529,7 @@ namespace svt
         using BrowseBox::MouseButtonDown;
 
         virtual long PreNotify(NotifyEvent& rNEvt );
-        virtual long Notify(NotifyEvent& rNEvt);
+        virtual bool Notify(NotifyEvent& rNEvt);
 
         virtual void EndScroll();
 

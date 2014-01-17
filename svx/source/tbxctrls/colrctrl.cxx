@@ -580,9 +580,9 @@ void SvxColorDockingWindow::GetFocus (void)
     aColorSet.GrabFocus();
 }
 
-long SvxColorDockingWindow::Notify( NotifyEvent& rNEvt )
+bool SvxColorDockingWindow::Notify( NotifyEvent& rNEvt )
 {
-    long nRet = 0;
+    bool nRet = false;
     if( ( rNEvt.GetType() == EVENT_KEYINPUT ) )
     {
         KeyEvent aKeyEvt = *rNEvt.GetKeyEvent();
@@ -591,12 +591,12 @@ long SvxColorDockingWindow::Notify( NotifyEvent& rNEvt )
         {
             case KEY_ESCAPE:
                 GrabFocusToDocument();
-                nRet = 1;
+                nRet = true;
                 break;
         }
     }
 
-    return nRet ? nRet : SfxDockingWindow::Notify( rNEvt );
+    return nRet || SfxDockingWindow::Notify( rNEvt );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

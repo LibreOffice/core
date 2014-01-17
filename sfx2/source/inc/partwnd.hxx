@@ -61,7 +61,7 @@ class SfxPartDockWnd_Impl : public SfxDockingWindow
 {
 protected:
     virtual void            Resize();
-    virtual long            Notify( NotifyEvent& rNEvt );
+    virtual bool            Notify( NotifyEvent& rNEvt );
 
 public:
                             SfxPartDockWnd_Impl( SfxBindings* pBindings,

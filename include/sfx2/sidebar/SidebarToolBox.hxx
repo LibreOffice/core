@@ -52,7 +52,7 @@ public:
 
     virtual void Paint (const Rectangle& rRect);
 
-    virtual long Notify (NotifyEvent& rEvent);
+    virtual bool Notify (NotifyEvent& rEvent);
 
     cssu::Reference<css::frame::XToolbarController> GetControllerForItemId (
         const sal_uInt16 nItemId) const;

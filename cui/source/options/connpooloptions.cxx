@@ -372,7 +372,7 @@ namespace offapp
     }
 
     //--------------------------------------------------------------------
-    long ConnectionPoolOptionsPage::Notify( NotifyEvent& _rNEvt )
+    bool ConnectionPoolOptionsPage::Notify( NotifyEvent& _rNEvt )
     {
         if (EVENT_LOSEFOCUS == _rNEvt.GetType())
             if (m_pTimeout->IsWindowOrChild(_rNEvt.GetWindow()))

@@ -423,7 +423,7 @@ protected:
     virtual void        StateChanged( StateChangedType nType );
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 
-    long                Notify( NotifyEvent& rNEvt );
+    virtual bool        Notify( NotifyEvent& rNEvt );
 
     void                ImplResizeControls();
     void                ImplCheckScrollBars();

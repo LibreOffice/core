@@ -882,7 +882,7 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
     aTreeLB.GrabFocus();
 }
 
-long    OfaTreeOptionsDialog::Notify( NotifyEvent& rNEvt )
+bool OfaTreeOptionsDialog::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {

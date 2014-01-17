@@ -110,7 +110,7 @@ namespace frm
         virtual void        GetFocus();
         virtual void        StateChanged( StateChangedType nStateChange );
         virtual long        PreNotify( NotifyEvent& _rNEvt );
-        virtual long        Notify( NotifyEvent& _rNEvt );
+        virtual bool        Notify( NotifyEvent& _rNEvt );
 
     private:
                 void    applyAttributes( const SfxItemSet& _rAttributesToApply );

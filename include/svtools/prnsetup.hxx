@@ -66,7 +66,7 @@ public:
     Printer*        GetPrinter() const { return mpPrinter; }
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
 
     virtual short   Execute();
 

@@ -354,7 +354,7 @@ void SfxModelessDialog::Init(SfxBindings *pBindinx, SfxChildWindow *pCW)
 
 // -----------------------------------------------------------------------
 
-long SfxModelessDialog::Notify( NotifyEvent& rEvt )
+bool SfxModelessDialog::Notify( NotifyEvent& rEvt )
 
 /*  [Description]
 
@@ -379,7 +379,7 @@ long SfxModelessDialog::Notify( NotifyEvent& rEvt )
         if ( !ModelessDialog::Notify( rEvt ) && SfxViewShell::Current() )
             // then also for valid global accelerators.
             return SfxViewShell::Current()->GlobalKeyInput_Impl( *rEvt.GetKeyEvent() );
-        return sal_True;
+        return true;
     }
 
     return ModelessDialog::Notify( rEvt );
@@ -442,7 +442,7 @@ void SfxModelessDialog::FillInfo(SfxChildWinInfo& rInfo) const
 
 // -----------------------------------------------------------------------
 
-long SfxFloatingWindow::Notify( NotifyEvent& rEvt )
+bool SfxFloatingWindow::Notify( NotifyEvent& rEvt )
 
 /*  [Description]
 
@@ -470,7 +470,7 @@ long SfxFloatingWindow::Notify( NotifyEvent& rEvt )
         if ( !FloatingWindow::Notify( rEvt ) && SfxViewShell::Current() )
             // then also for valid global accelerators.
             return SfxViewShell::Current()->GlobalKeyInput_Impl( *rEvt.GetKeyEvent() );
-        return sal_True;
+        return true;
     }
 
     return FloatingWindow::Notify( rEvt );

@@ -104,7 +104,7 @@ void SvxHyperURLBox::Modify()
 {
     SvtURLBox::Modify();
 }
-long SvxHyperURLBox::Notify( NotifyEvent& rNEvt )
+bool SvxHyperURLBox::Notify( NotifyEvent& rNEvt )
 {
     return SvtURLBox::Notify( rNEvt );
 }

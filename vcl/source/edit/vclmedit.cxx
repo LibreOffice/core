@@ -1400,14 +1400,14 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& 
     pDev->Pop();
 }
 
-long VclMultiLineEdit::Notify( NotifyEvent& rNEvt )
+bool VclMultiLineEdit::Notify( NotifyEvent& rNEvt )
 {
-    long nDone = 0;
+    bool nDone = false;
     if( rNEvt.GetType() == EVENT_COMMAND )
     {
         nDone = pImpVclMEdit->HandleCommand( *rNEvt.GetCommandEvent() );
     }
-    return nDone ? nDone : Edit::Notify( rNEvt );
+    return nDone || Edit::Notify( rNEvt );
 }
 
 long VclMultiLineEdit::PreNotify( NotifyEvent& rNEvt )

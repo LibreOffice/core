@@ -130,24 +130,24 @@ long SvxSBFontNameBox::PreNotify( NotifyEvent& rNEvt )
     return FontNameBox::PreNotify( rNEvt );
 }
 //<<modify
-long SvxSBFontNameBox::Notify( NotifyEvent& rNEvt) //SfxBroadcaster& rBC, const SfxHint& rHint
+bool SvxSBFontNameBox::Notify( NotifyEvent& rNEvt) //SfxBroadcaster& rBC, const SfxHint& rHint
 {
     //SfxItemSetHint* pHint = PTR_CAST(SfxItemSetHint, &rHint);
     //if ( pHint )
     //  EnableControls_Impl();
-    bool bHandle = 0;
+    bool bHandle = false;
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         const sal_uInt16 nCode (rNEvt.GetKeyEvent()->GetKeyCode().GetCode());
 
         if( nCode == KEY_RETURN)
         {
-            bHandle = 1;
+            bHandle = true;
             Select();
         }
     }
 
-    return bHandle ? bHandle : FontNameBox::Notify( rNEvt );
+    return bHandle || FontNameBox::Notify( rNEvt );
 }
 void SvxSBFontNameBox::Select()
 {

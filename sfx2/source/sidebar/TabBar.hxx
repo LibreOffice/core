@@ -74,7 +74,7 @@ public:
 
     virtual void Paint (const Rectangle& rUpdateArea);
     virtual void DataChanged (const DataChangedEvent& rDataChangedEvent);
-    virtual long Notify (NotifyEvent& rEvent);
+    virtual bool Notify (NotifyEvent& rEvent);
 
     static sal_Int32 GetDefaultWidth (void);
 

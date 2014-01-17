@@ -61,7 +61,7 @@ private:
 protected:
     explicit        SpinField( WindowType nTyp );
 
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
     virtual void    Command( const CommandEvent& rCEvt );
 
     void            EndDropDown();

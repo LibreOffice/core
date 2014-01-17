@@ -1265,7 +1265,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    long OBrowserListBox::Notify( NotifyEvent& _rNEvt )
+    bool OBrowserListBox::Notify( NotifyEvent& _rNEvt )
     {
         switch ( _rNEvt.GetType() )
         {

@@ -567,7 +567,7 @@ protected:
     virtual void setAllocation(const Size &rAllocation);
     DECL_LINK(ScrollBarHdl, void *);
     void InitScrollBars(const Size &rRequest);
-    virtual long Notify(NotifyEvent& rNEvt);
+    virtual bool Notify(NotifyEvent& rNEvt);
 private:
     bool m_bUserManagedScrolling;
     ScrollBar m_aVScroll;

@@ -49,14 +49,14 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    long OFileURLControl::Notify( NotifyEvent& _rNEvt )
+    bool OFileURLControl::Notify( NotifyEvent& _rNEvt )
     {
         if (GetSubEdit() == _rNEvt.GetWindow())
             if (EVENT_KEYINPUT == _rNEvt.GetType())
                 if (KEY_RETURN == _rNEvt.GetKeyEvent()->GetKeyCode().GetCode())
                     if (IsInDropDown())
                     {
-                        long nReturn = SvtURLBox::Notify(_rNEvt);
+                        bool nReturn = SvtURLBox::Notify(_rNEvt);
 
                         // build a system dependent (thus more user readable) file name
                         OFileNotation aTransformer(m_sPreservedText, OFileNotation::N_URL);

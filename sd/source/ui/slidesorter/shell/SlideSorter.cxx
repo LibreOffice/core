@@ -60,7 +60,7 @@ public:
     virtual void MouseButtonUp (const MouseEvent& rEvent);
     virtual void MouseButtonDown (const MouseEvent& rEvent);
     virtual void Command (const CommandEvent& rEvent);
-    virtual long Notify (NotifyEvent& rEvent);
+    virtual bool Notify (NotifyEvent& rEvent);
 
 private:
     SlideSorter& mrSlideSorter;
@@ -673,10 +673,9 @@ void ContentWindow::Command(const CommandEvent& rEvent)
 
 
 
-long ContentWindow::Notify (NotifyEvent& rEvent)
+bool ContentWindow::Notify (NotifyEvent&)
 {
-    (void)rEvent;
-    return 0;
+    return false;
 }
 
 

@@ -130,7 +130,7 @@ public:
 
     virtual void    GetFocus();
     virtual void    LoseFocus();
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
     virtual void    StateChanged( StateChangedType nStateChange );
     virtual void    Resize();
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );

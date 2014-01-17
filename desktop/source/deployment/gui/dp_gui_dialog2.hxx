@@ -141,7 +141,7 @@ public:
                     ExtMgrDialog( Window * pParent, TheExtensionManager *pManager );
     virtual        ~ExtMgrDialog();
 
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
     virtual sal_Bool    Close();
 
     virtual void    showProgress( bool bStart );

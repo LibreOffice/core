@@ -34,7 +34,7 @@ class LimitBoxImpl: public LimitBox
         LimitBoxImpl( Window* pParent, LimitBoxController* pCtrl );
         virtual ~LimitBoxImpl();
 
-        virtual long    Notify( NotifyEvent& rNEvt );
+        virtual bool Notify( NotifyEvent& rNEvt );
 
     private:
         LimitBoxController* m_pControl;
@@ -50,9 +50,9 @@ LimitBoxImpl::~LimitBoxImpl()
 {
 }
 
-long LimitBoxImpl::Notify( NotifyEvent& rNEvt )
+bool LimitBoxImpl::Notify( NotifyEvent& rNEvt )
 {
-    long nHandled = 0;
+    bool nHandled = false;
     switch ( rNEvt.GetType() )
     {
         case EVENT_LOSEFOCUS:
@@ -76,7 +76,7 @@ long LimitBoxImpl::Notify( NotifyEvent& rNEvt )
                 case KEY_RETURN:
                 {
                     GrabFocusToDocument();
-                    nHandled = 1;
+                    nHandled = true;
                     break;
                 }
                 case KEY_TAB:
@@ -88,7 +88,7 @@ long LimitBoxImpl::Notify( NotifyEvent& rNEvt )
             break;
         }
     }
-    return nHandled ? nHandled : LimitBox::Notify( rNEvt );
+    return nHandled || LimitBox::Notify( rNEvt );
 }
 
 

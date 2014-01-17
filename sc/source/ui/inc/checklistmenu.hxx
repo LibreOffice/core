@@ -239,7 +239,7 @@ public:
     virtual ~ScCheckListMenuWindow();
 
     virtual void MouseMove(const MouseEvent& rMEvt);
-    virtual long Notify(NotifyEvent& rNEvt);
+    virtual bool Notify(NotifyEvent& rNEvt);
     virtual void Paint(const Rectangle& rRect);
     virtual Window* GetPreferredKeyInputWindow();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();

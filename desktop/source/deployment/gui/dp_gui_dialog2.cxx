@@ -145,7 +145,7 @@ public:
     void InitFromDialog(ExtMgrDialog *pParentDialog);
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
 
     virtual Size    GetOptimalSize() const;
 
@@ -430,7 +430,7 @@ void ExtBoxWithBtns_Impl::MouseButtonDown( const MouseEvent& rMEvt )
 }
 
 //------------------------------------------------------------------------------
-long ExtBoxWithBtns_Impl::Notify( NotifyEvent& rNEvt )
+bool ExtBoxWithBtns_Impl::Notify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
 
@@ -1141,7 +1141,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, TimeOutHdl)
 //------------------------------------------------------------------------------
 // VCL::Window / Dialog
 
-long ExtMgrDialog::Notify( NotifyEvent& rNEvt )
+bool ExtMgrDialog::Notify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
 

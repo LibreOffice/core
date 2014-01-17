@@ -287,15 +287,15 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    long RichTextControl::Notify( NotifyEvent& _rNEvt )
+    bool RichTextControl::Notify( NotifyEvent& _rNEvt )
     {
-        long nDone = 0;
+        bool nDone = false;
         if ( _rNEvt.GetType() == EVENT_COMMAND )
         {
             const CommandEvent& rEvent = *_rNEvt.GetCommandEvent();
             nDone = m_pImpl->HandleCommand( rEvent );
         }
-        return nDone ? nDone : Control::Notify( _rNEvt );
+        return nDone || Control::Notify( _rNEvt );
     }
 
     //--------------------------------------------------------------------

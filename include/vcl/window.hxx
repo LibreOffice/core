@@ -598,7 +598,7 @@ public:
     virtual void        StateChanged( StateChangedType nStateChange );
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
     virtual long        PreNotify( NotifyEvent& rNEvt );
-    virtual long        Notify( NotifyEvent& rNEvt );
+    virtual bool        Notify( NotifyEvent& rNEvt );
     virtual Window*     GetPreferredKeyInputWindow();
 
     /*virtual*/ void    AddEventListener( const Link& rEventListener );

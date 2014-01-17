@@ -2177,7 +2177,7 @@ void SwTOXEntryTabPage::SetFocus2theAllBtn()
     m_pAllLevelsPB->GrabFocus();
 }
 
-long SwTOXEntryTabPage::Notify( NotifyEvent& rNEvt )
+bool SwTOXEntryTabPage::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {

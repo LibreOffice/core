@@ -121,9 +121,9 @@ void BaseWindow::ExecuteGlobal (SfxRequest&)
 { }
 
 
-long BaseWindow::Notify( NotifyEvent& rNEvt )
+bool BaseWindow::Notify( NotifyEvent& rNEvt )
 {
-    long nDone = 0;
+    bool nDone = false;
 
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
@@ -140,14 +140,14 @@ long BaseWindow::Notify( NotifyEvent& rNEvt )
                 {
                     if (Shell* pShell = GetShell())
                         pShell->NextPage( nCode == KEY_PAGEUP );
-                    nDone = 1;
+                    nDone = true;
                 }
             }
             break;
         }
     }
 
-    return nDone ? nDone : Window::Notify( rNEvt );
+    return nDone || Window::Notify( rNEvt );
 }
 
 

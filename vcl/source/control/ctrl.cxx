@@ -280,7 +280,7 @@ OUString Control::GetDisplayText() const
 
 // -----------------------------------------------------------------------
 
-long Control::Notify( NotifyEvent& rNEvt )
+bool Control::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_GETFOCUS )
     {
@@ -290,7 +290,7 @@ long Control::Notify( NotifyEvent& rNEvt )
             StateChanged( STATE_CHANGE_CONTROL_FOCUS );
             if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_GETFOCUS, maGetFocusHdl, this ) )
                 // been destroyed within the handler
-                return sal_True;
+                return true;
         }
     }
     else
@@ -304,7 +304,7 @@ long Control::Notify( NotifyEvent& rNEvt )
                 StateChanged( STATE_CHANGE_CONTROL_FOCUS );
                 if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_LOSEFOCUS, maLoseFocusHdl, this ) )
                     // been destroyed within the handler
-                    return sal_True;
+                    return true;
             }
         }
     }

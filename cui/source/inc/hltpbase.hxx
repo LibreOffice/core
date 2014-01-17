@@ -61,7 +61,7 @@ protected:
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
 
-    virtual long        Notify( NotifyEvent& rNEvt );
+    virtual bool        Notify( NotifyEvent& rNEvt );
     virtual void        Select();
     virtual void        Modify();
     virtual long        PreNotify( NotifyEvent& rNEvt );

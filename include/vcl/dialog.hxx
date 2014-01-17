@@ -95,7 +95,7 @@ public:
     explicit        Dialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
     virtual         ~Dialog();
 
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
     virtual void    StateChanged( StateChangedType nStateChange );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 

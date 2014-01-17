@@ -596,7 +596,7 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
 
 // -----------------------------------------------------------------------
 
-long DockingWindow::Notify( NotifyEvent& rNEvt )
+bool DockingWindow::Notify( NotifyEvent& rNEvt )
 {
     if( GetDockingManager()->IsDockable( this ) )   // new docking interface
         return Window::Notify( rNEvt );
@@ -611,7 +611,7 @@ long DockingWindow::Notify( NotifyEvent& rNEvt )
                 if ( pMEvt->IsMod1() && (pMEvt->GetClicks() == 2) )
                 {
                     SetFloatingMode( !IsFloatingMode() );
-                    return sal_True;
+                    return true;
                 }
                 else if ( pMEvt->GetClicks() == 1 )
                 {
@@ -629,7 +629,7 @@ long DockingWindow::Notify( NotifyEvent& rNEvt )
                         }
                         ImplStartDocking( aPos );
                     }
-                    return sal_True;
+                    return true;
                 }
             }
         }
@@ -640,7 +640,7 @@ long DockingWindow::Notify( NotifyEvent& rNEvt )
                 rKey.IsShift() && rKey.IsMod1() )
             {
                 SetFloatingMode( !IsFloatingMode() );
-                return sal_True;
+                return true;
             }
         }
     }

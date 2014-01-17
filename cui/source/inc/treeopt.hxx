@@ -200,7 +200,7 @@ protected:
     DECL_LINK( HintHdl_Impl, Timer * );
     void SelectHdl_Impl();
 
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual bool    Notify( NotifyEvent& rNEvt );
     virtual short   Execute();
 
 public:

@@ -36,7 +36,7 @@ PopupContainer::~PopupContainer (void)
 
 
 
-long PopupContainer::Notify (NotifyEvent& rEvent)
+bool PopupContainer::Notify (NotifyEvent& rEvent)
 {
     if (rEvent.GetType() == EVENT_LOSEFOCUS)
     {
