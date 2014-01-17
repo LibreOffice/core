@@ -119,28 +119,22 @@ void clearCache()
 
 OString OpenclDevice::maCacheFolder = getCacheFolder();
 
-int OpenclDevice::releaseOpenclRunEnv()
+void OpenclDevice::releaseOpenclRunEnv()
 {
     releaseOpenclEnv( &gpuEnv );
-
-    return 1;
 }
 
-int OpenclDevice::registOpenclKernel()
+void OpenclDevice::registOpenclKernel()
 {
     if ( !gpuEnv.mnIsUserCreated )
         memset( &gpuEnv, 0, sizeof(gpuEnv) );
-
-    return 0;
 }
 
-int OpenclDevice::setKernelEnv( KernelEnv *envInfo )
+void OpenclDevice::setKernelEnv( KernelEnv *envInfo )
 {
     envInfo->mpkContext = gpuEnv.mpContext;
     envInfo->mpkCmdQueue = gpuEnv.mpCmdQueue;
     envInfo->mpkProgram = gpuEnv.mpArryPrograms[0];
-
-    return 1;
 }
 
 namespace {
@@ -222,7 +216,7 @@ std::vector<boost::shared_ptr<osl::File> > OpenclDevice::binaryGenerated( const 
     return aGeneratedFiles;
 }
 
-int OpenclDevice::writeBinaryToFile( const OString& rFileName, const char* binary, size_t numBytes )
+bool OpenclDevice::writeBinaryToFile( const OString& rFileName, const char* binary, size_t numBytes )
 {
     clearCache();
     osl::File file(rtl::OStringToOUString(rFileName, RTL_TEXTENCODING_UTF8));
@@ -230,17 +224,17 @@ int OpenclDevice::writeBinaryToFile( const OString& rFileName, const char* binar
             osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
 
     if(status != osl::FileBase::E_None)
-        return 0;
+        return false;
 
     sal_uInt64 nBytesWritten = 0;
     file.write( binary, numBytes, nBytesWritten );
 
     assert(numBytes == nBytesWritten);
 
-    return 1;
+    return true;
 }
 
-int OpenclDevice::generatBinFromKernelSource( cl_program program, const char * clFileName )
+bool OpenclDevice::generatBinFromKernelSource( cl_program program, const char * clFileName )
 {
     cl_uint numDevices;
 
@@ -301,13 +295,13 @@ int OpenclDevice::generatBinFromKernelSource( cl_program program, const char * c
         delete[] binaries[i];
     }
 
-    return 1;
+    return true;
 }
 
-int OpenclDevice::initOpenclAttr( OpenCLEnv * env )
+bool OpenclDevice::initOpenclAttr( OpenCLEnv * env )
 {
     if ( gpuEnv.mnIsUserCreated )
-        return 1;
+        return true;
 
     gpuEnv.mpContext = env->mpOclContext;
     gpuEnv.mpPlatformID = env->mpOclPlatformID;
@@ -316,14 +310,14 @@ int OpenclDevice::initOpenclAttr( OpenCLEnv * env )
 
     gpuEnv.mnIsUserCreated = 1;
 
-    return 0;
+    return false;
 }
 
-int OpenclDevice::releaseOpenclEnv( GPUEnv *gpuInfo )
+void OpenclDevice::releaseOpenclEnv( GPUEnv *gpuInfo )
 {
     if ( !isInited )
     {
-        return 1;
+        return;
     }
 
     if ( gpuEnv.mpCmdQueue )
@@ -340,7 +334,7 @@ int OpenclDevice::releaseOpenclEnv( GPUEnv *gpuInfo )
     gpuInfo->mnIsUserCreated = 0;
     free( gpuInfo->mpArryDevsID );
 
-    return 1;
+    return;
 }
 
 namespace {
@@ -481,14 +475,14 @@ bool OpenclDevice::buildProgramFromBinary(const char* buildOption, GPUEnv* gpuIn
     return buildProgram(buildOption, gpuInfo, idx);
 }
 
-int OpenclDevice::initOpenclRunEnv( int argc )
+bool OpenclDevice::initOpenclRunEnv( int argc )
 {
     if ( MAX_CLKERNEL_NUM <= 0 )
     {
-        return 1;
+        return true;
     }
     if ( ( argc > MAX_CLFILE_NUM ) || ( argc < 0 ) )
-        return 1;
+        return true;
 
     if ( !isInited )
     {
@@ -497,7 +491,7 @@ int OpenclDevice::initOpenclRunEnv( int argc )
         bool status = initOpenclRunEnv( &gpuEnv );
         if ( status )
         {
-            return 1;
+            return true;
         }
         //initialize program, kernelName, kernelCount
         if( getenv( "SC_FLOAT" ) )
@@ -519,7 +513,7 @@ int OpenclDevice::initOpenclRunEnv( int argc )
         }
         isInited = 1;
     }
-    return 0;
+    return false;
 }
 
 namespace {
@@ -558,7 +552,7 @@ void checkDeviceForDoubleSupport(cl_device_id deviceId, bool& bKhrFp64, bool& bA
 
 }
 
-int OpenclDevice::initOpenclRunEnv( GPUEnv *gpuInfo )
+bool OpenclDevice::initOpenclRunEnv( GPUEnv *gpuInfo )
 {
     size_t length;
     cl_int clStatus;
@@ -579,7 +573,7 @@ int OpenclDevice::initOpenclRunEnv( GPUEnv *gpuInfo )
             platforms = (cl_platform_id*) malloc( numPlatforms * sizeof( cl_platform_id ) );
             if (!platforms)
             {
-                return 1;
+                return true;
             }
             clStatus = clGetPlatformIDs( numPlatforms, platforms, NULL );
             CHECK_OPENCL(clStatus, "clGetPlatformIDs");
@@ -624,10 +618,10 @@ int OpenclDevice::initOpenclRunEnv( GPUEnv *gpuInfo )
             }
             free( platforms );
             if ( clStatus != CL_SUCCESS )
-                return 1;
+                return true;
         }
         if ( NULL == gpuInfo->mpPlatformID )
-            return 1;
+            return true;
 
         // Use available platform.
         cl_context_properties cps[3];
@@ -656,16 +650,16 @@ int OpenclDevice::initOpenclRunEnv( GPUEnv *gpuInfo )
             gpuInfo->mpContext = clCreateContextFromType( cps, gpuInfo->mDevType, NULL, NULL, &clStatus );
         }
         if ( ( gpuInfo->mpContext == (cl_context) NULL) || ( clStatus != CL_SUCCESS ) )
-            return 1;
+            return true;
         // Detect OpenCL devices.
         // First, get the size of device list data
         clStatus = clGetContextInfo( gpuInfo->mpContext, CL_CONTEXT_DEVICES, 0, NULL, &length );
         if ( ( clStatus != CL_SUCCESS ) || ( length == 0 ) )
-            return 1;
+            return true;
         // Now allocate memory for device list based on the size we got earlier
         gpuInfo->mpArryDevsID = (cl_device_id*) malloc( length );
         if ( gpuInfo->mpArryDevsID == (cl_device_id*) NULL )
-            return 1;
+            return true;
         // Now, get the device list data
         clStatus = clGetContextInfo( gpuInfo->mpContext, CL_CONTEXT_DEVICES, length,
                        gpuInfo->mpArryDevsID, NULL );
@@ -684,7 +678,7 @@ int OpenclDevice::initOpenclRunEnv( GPUEnv *gpuInfo )
     gpuInfo->mnKhrFp64Flag = bKhrFp64;
     gpuInfo->mnAmdFp64Flag = bAmdFp64;
 
-    return 0;
+    return false;
 }
 
 void OpenclDevice::setOpenclState( int state )

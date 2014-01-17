@@ -154,18 +154,18 @@ public:
     static int isInited;
     static OString maCacheFolder;
 
-    static int registOpenclKernel();
-    static int releaseOpenclRunEnv();
-    static int initOpenclRunEnv( GPUEnv *gpu );
-    static int releaseOpenclEnv( GPUEnv *gpuInfo );
-    static int initOpenclRunEnv( int argc );
-    static int generatBinFromKernelSource( cl_program program, const char * clFileName );
-    static int writeBinaryToFile( const OString& rName, const char* birary, size_t numBytes );
+    static void registOpenclKernel();
+    static void releaseOpenclRunEnv();
+    static bool initOpenclRunEnv( GPUEnv *gpu );
+    static void releaseOpenclEnv( GPUEnv *gpuInfo );
+    static bool initOpenclRunEnv( int argc );
+    static bool generatBinFromKernelSource( cl_program program, const char * clFileName );
+    static bool writeBinaryToFile( const OString& rName, const char* birary, size_t numBytes );
     static std::vector<boost::shared_ptr<osl::File> > binaryGenerated( const char * clFileName, cl_context context);
     static bool buildProgramFromBinary(const char* buildOption, GPUEnv* gpuEnv, const char* filename, int idx);
 
-    static int initOpenclAttr( OpenCLEnv * env );
-    static int setKernelEnv( KernelEnv *envInfo );
+    static bool initOpenclAttr( OpenCLEnv * env );
+    static void setKernelEnv( KernelEnv *envInfo );
 
     static int getOpenclState();
     static void setOpenclState( int state );
