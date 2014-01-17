@@ -34,25 +34,21 @@
 using namespace dbaui;
 
 DBG_NAME(SbaSbAttrDlg)
-SbaSbAttrDlg::SbaSbAttrDlg(Window* pParent, const SfxItemSet* pCellAttrs, SvNumberFormatter* pFormatter, sal_uInt16 nFlags, sal_Bool bRow)
-             : SfxTabDialog(pParent, ModuleRes( DLG_ATTR ), pCellAttrs )
-             ,aTitle(ModuleRes(ST_ROW))
+
+SbaSbAttrDlg::SbaSbAttrDlg(Window* pParent, const SfxItemSet* pCellAttrs,
+    SvNumberFormatter* pFormatter, bool bHasFormat, bool bRow)
+    : SfxTabDialog(pParent, "FieldDialog", "dbaccess/ui/fielddialog.ui", pCellAttrs)
+    , m_nNumberFormatId(0)
 {
     DBG_CTOR(SbaSbAttrDlg,NULL);
 
     pNumberInfoItem = new SvxNumberInfoItem( pFormatter, 0 );
 
     if (bRow)
-        SetText(aTitle);
-    if( nFlags & TP_ATTR_CHAR )
-    {
-        OSL_FAIL( "found flag TP_ATTR_CHAR" );
-    }
-    if( nFlags & TP_ATTR_NUMBER )
-        AddTabPage( RID_SVXPAGE_NUMBERFORMAT,OUString(ModuleRes(TP_ATTR_NUMBER)) );
-    if( nFlags & TP_ATTR_ALIGN )
-        AddTabPage( RID_SVXPAGE_ALIGNMENT,OUString(ModuleRes(TP_ATTR_ALIGN)) );
-    FreeResource();
+        SetText(get<FixedText>("alttitle")->GetText());
+    if (bHasFormat)
+        m_nNumberFormatId = AddTabPage("format", RID_SVXPAGE_NUMBERFORMAT);
+    AddTabPage("alignment", RID_SVXPAGE_ALIGNMENT);
 }
 
 SbaSbAttrDlg::~SbaSbAttrDlg()
@@ -65,17 +61,10 @@ SbaSbAttrDlg::~SbaSbAttrDlg()
 void SbaSbAttrDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-    switch ( nPageId )
+    if (nPageId == m_nNumberFormatId)
     {
-        case RID_SVXPAGE_NUMBERFORMAT:
-        {
-            aSet.Put (SvxNumberInfoItem( pNumberInfoItem->GetNumberFormatter(), (const sal_uInt16)SID_ATTR_NUMBERFORMAT_INFO));
-            rTabPage.PageCreated(aSet);
-        }
-        break;
-
-        default:
-        break;
+        aSet.Put (SvxNumberInfoItem( pNumberInfoItem->GetNumberFormatter(), (const sal_uInt16)SID_ATTR_NUMBERFORMAT_INFO));
+        rTabPage.PageCreated(aSet);
     }
 }
 

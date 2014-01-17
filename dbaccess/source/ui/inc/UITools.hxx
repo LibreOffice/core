@@ -196,7 +196,6 @@ namespace dbaui
                                     sal_Int32 _nDataType,
                                     sal_Int32& _nFormatKey,
                                     SvxCellHorJustify& _eJustify,
-                                    sal_uInt16& _nFlags,
                                     sal_Bool  _bHasFormat);
     /** append a name to tablefilter of a datasource
         @param  _xConnection    the connection is need to get the datasource

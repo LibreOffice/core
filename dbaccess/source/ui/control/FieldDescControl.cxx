@@ -632,8 +632,7 @@ IMPL_LINK( OFieldDescControl, FormatClickHdl, Button *, /*pButton*/ )
     SvNumberFormatsSupplierObj* pSupplierImpl = SvNumberFormatsSupplierObj::getImplementation( xSupplier );
 
     SvNumberFormatter* pFormatter = pSupplierImpl->GetNumberFormatter();
-    sal_uInt16 nFlags;
-    if(::dbaui::callColumnFormatDialog(this,pFormatter,pActFieldDescr->GetType(),nOldFormatKey,rOldJustify,nFlags,sal_True))
+    if(::dbaui::callColumnFormatDialog(this,pFormatter,pActFieldDescr->GetType(),nOldFormatKey,rOldJustify,sal_True))
     {
         sal_Bool bModified = sal_False;
         if(nOldFormatKey != pActFieldDescr->GetFormatKey())

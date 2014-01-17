@@ -83,7 +83,6 @@
 #define DLG_PARAMETERS                  RID_DIALOG_START +  5
 #define DLG_FILTERCRIT                  RID_DIALOG_START +  6
 
-#define DLG_ATTR                        RID_DIALOG_START + 10
 #define DLG_SAVE_AS                     RID_DIALOG_START + 11
 #define DLG_JOIN_TABADD                 RID_DIALOG_START + 14
 #define DLG_QRY_JOIN                    RID_DIALOG_START + 15

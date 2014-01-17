@@ -65,7 +65,6 @@
 #include <com/sun/star/awt/FontRelief.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include "dlgattr.hrc"
 #include "TypeInfo.hxx"
 #include "FieldDescriptions.hxx"
 #include <comphelper/processfactory.hxx>
@@ -771,11 +770,10 @@ void callColumnFormatDialog(const Reference<XPropertySet>& xAffectedCol,
             if ( bHasFormat )
                 nFormatKey = ::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_FORMATKEY));
 
-            sal_uInt16 nFlags = 0;
-            if(callColumnFormatDialog(_pParent,_pFormatter,nDataType,nFormatKey,eJustify,nFlags,bHasFormat))
+            if(callColumnFormatDialog(_pParent,_pFormatter,nDataType,nFormatKey,eJustify,bHasFormat))
             {
                 xAffectedCol->setPropertyValue(PROPERTY_ALIGN, makeAny((sal_Int16)dbaui::mapTextAllign(eJustify)));
-                if (nFlags & TP_ATTR_NUMBER)
+                if (bHasFormat)
                     xAffectedCol->setPropertyValue(PROPERTY_FORMATKEY, makeAny(nFormatKey));
 
             }
@@ -792,15 +790,9 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
                                 sal_Int32 _nDataType,
                                 sal_Int32& _nFormatKey,
                                 SvxCellHorJustify& _eJustify,
-                                sal_uInt16& _nFlags,
                                 sal_Bool  _bHasFormat)
 {
     sal_Bool bRet = sal_False;
-    // the allowed format changes depending on the type of the field ...
-    _nFlags = TP_ATTR_ALIGN;
-
-    if (_bHasFormat)
-        _nFlags |= TP_ATTR_NUMBER;
 
     // UNO->ItemSet
     static SfxItemInfo aItemInfos[] =
@@ -859,7 +851,7 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
     }
 
     {   // want the dialog to be destroyed before our set
-        SbaSbAttrDlg aDlg(_pParent, pFormatDescriptor, _pFormatter, _nFlags);
+        SbaSbAttrDlg aDlg(_pParent, pFormatDescriptor, _pFormatter, _bHasFormat);
         if (RET_OK == aDlg.Execute())
         {
             // ItemSet->UNO
@@ -874,7 +866,7 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
             _eJustify = (SvxCellHorJustify)pHorJustify->GetValue();
 
             // format key
-            if (_nFlags & TP_ATTR_NUMBER)
+            if (_bHasFormat)
             {
                 SFX_ITEMSET_GET(*pSet, pFormat, SfxUInt32Item, SBA_DEF_FMTVALUE, sal_True);
                 _nFormatKey = (sal_Int32)pFormat->GetValue();

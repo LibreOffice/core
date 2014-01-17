@@ -19,10 +19,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_DLGATTR_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_DLGATTR_HXX
 
-#include "dlgattr.hrc"
-
 #include <sfx2/tabdlg.hxx>
-#include <tools/solar.h>
 
 class SvxNumberInfoItem;
 class SfxItemSet;
@@ -32,11 +29,11 @@ namespace dbaui
 
     class SbaSbAttrDlg : public SfxTabDialog
     {
-        OUString aTitle;
         SvxNumberInfoItem* pNumberInfoItem;
+        sal_uInt32 m_nNumberFormatId;
 
     public:
-        SbaSbAttrDlg( Window * pParent, const SfxItemSet*, SvNumberFormatter*, sal_uInt16 nFlags = TP_ATTR_CHAR , sal_Bool bRow = sal_False);
+        SbaSbAttrDlg(Window * pParent, const SfxItemSet*, SvNumberFormatter*, bool bHasFormat, bool bRow = false);
         ~SbaSbAttrDlg();
 
         virtual void  PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage );
