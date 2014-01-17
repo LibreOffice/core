@@ -204,7 +204,6 @@ private:
 
     GLint m_RenderProID;
 
-    glm::vec4 m_Line2DColor;
 
     GLuint m_VertexBuffer;
 

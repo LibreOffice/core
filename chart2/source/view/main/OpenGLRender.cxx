@@ -605,7 +605,7 @@ int OpenGLRender::RenderLine2FBO(int)
         glUseProgram(m_CommonProID);
         CHECK_GL_ERROR();
 
-        glUniform4fv(m_2DColorID, 1, &m_Line2DColor[0]);
+        glUniform4fv(m_2DColorID, 1, &m_2DColor[0]);
         CHECK_GL_ERROR();
         glUniformMatrix4fv(m_MatrixID, 1, GL_FALSE, &m_MVP[0][0]);
         //CHECK_GL_ERROR();
@@ -918,7 +918,6 @@ void OpenGLRender::Release()
 
 OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
     m_Model(glm::mat4(1.0f)),
-    m_Line2DColor(glm::vec4(1.0, 0.0, 0.0, 1.0)),
     m_TextureObj(0),
     m_FboID(0),
     m_RboID(0),
@@ -926,6 +925,7 @@ OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
     m_iHeight(0),
     mxRenderTarget(xTarget),
     mbArbMultisampleSupported(false),
+    m_2DColor(glm::vec4(1.0, 0.0, 0.0, 1.0)),
     m_TextVertexID(0),
     m_TextTexCoordID(1),
     m_ClearColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f))
@@ -995,7 +995,7 @@ int OpenGLRender::CreateBMPHeader(sal_uInt8 *bmpHeader, int xsize, int ysize)
 
 void OpenGLRender::SetLine2DColor(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b)
 {
-    m_Line2DColor = glm::vec4((float)r / 255.0f, (float)g / 255.0f, (float)b / 255.0f, m_fAlpha);
+    m_2DColor = glm::vec4((float)r / 255.0f, (float)g / 255.0f, (float)b / 255.0f, m_fAlpha);
 }
 
 void OpenGLRender::SetLine2DWidth(int width)
