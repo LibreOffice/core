@@ -50,6 +50,12 @@ core_factory_list = [
     ]
 
 core_constructor_list = [
+# framework/util/fwk.component
+    "com_sun_star_comp_framework_ModuleManager_get_implementation",
+    "com_sun_star_comp_framework_URLTransformer_get_implementation",
+    "com_sun_star_comp_framework_Frame_get_implementation",
+    "com_sun_star_comp_framework_LayoutManager_get_implementation",
+    "com_sun_star_comp_framework_AddonsToolBarFactory_get_implementation",
 # sax/source/expatwrap/expwrap.component
     "com_sun_star_comp_extensions_xml_sax_ParserExpat_get_implementation",
     "com_sun_star_comp_extensions_xml_sax_FastParser_get_implementation",
