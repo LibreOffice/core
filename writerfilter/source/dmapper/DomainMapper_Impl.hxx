@@ -273,7 +273,7 @@ struct LineNumberSettings
     bool        bIsOn;
     sal_Int32   nDistance;
     sal_Int32   nInterval;
-    sal_Int32   bRestartAtEachPage;
+    bool        bRestartAtEachPage;
     sal_Int32   nStartValue;
     LineNumberSettings() :
         bIsOn(false)
