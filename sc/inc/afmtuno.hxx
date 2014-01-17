@@ -136,7 +136,7 @@ class ScAutoFormatObj : public ::cppu::WeakImplHelper6<
 {
 private:
     SfxItemPropertySet      aPropSet;
-    sal_uInt16                  nFormatIndex;
+    sal_uInt16              nFormatIndex;
 
     ScAutoFormatFieldObj*   GetObjectByIndex_Impl(sal_uInt16 nIndex);
 
@@ -147,7 +147,7 @@ public:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // per getImplementation gerufen:
-    sal_Bool                IsInserted() const      { return nFormatIndex != SC_AFMTOBJ_INVALID; }
+    bool                    IsInserted() const      { return nFormatIndex != SC_AFMTOBJ_INVALID; }
     void                    InitFormat( sal_uInt16 nNewIndex );
 
                             // XIndexAccess
