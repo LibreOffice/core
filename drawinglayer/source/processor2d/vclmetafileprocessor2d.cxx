@@ -824,7 +824,8 @@ namespace drawinglayer
                             sal_Int32(floor(aCurrentRange.getMinX())), sal_Int32(floor(aCurrentRange.getMinY())),
                             sal_Int32(ceil(aCurrentRange.getMaxX())), sal_Int32(ceil(aCurrentRange.getMaxY())));
                         const GraphicAttr& rAttr = rGraphicPrimitive.getGraphicAttr();
-                        Rectangle aCropRect;
+                        // fdo#72530 don't pass empty Rectangle to EndGroup
+                        Rectangle aCropRect(aCurrentRect);
 
                         if(rAttr.IsCropped())
                         {
