@@ -36,6 +36,7 @@ public:
     void testBarChart();
     void testCrosses();
     void testChartDataTable();
+    void testDoughnutChart();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -45,6 +46,7 @@ public:
     CPPUNIT_TEST(testBarChart);
     CPPUNIT_TEST(testCrosses);
     CPPUNIT_TEST(testChartDataTable);
+    CPPUNIT_TEST(testDoughnutChart);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -446,6 +448,16 @@ void Chart2ExportTest::testChartDataTable()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dTable/c:showOutline", "val", "1");
 }
 
+void Chart2ExportTest::testDoughnutChart()
+{
+    load("/chart2/qa/extras/data/docx/", "doughnutChart.docx");
+    {
+        xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+        if (!pXmlDoc)
+           return;
+      assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart", "1");
+    }
+}
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
