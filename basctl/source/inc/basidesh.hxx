@@ -190,7 +190,7 @@ public:
 
     virtual sal_Bool    HasUIFeature( sal_uInt32 nFeature );
 
-    long                CallBasicErrorHdl( StarBASIC* pBasic );
+    bool                CallBasicErrorHdl( StarBASIC* pBasic );
     long                CallBasicBreakHdl( StarBASIC* pBasic );
 
     BaseWindow*         FindWindow( const ScriptDocument& rDocument, const OUString& rLibName = OUString(), const OUString& rName = OUString(), ItemType nType = TYPE_UNKNOWN, bool bFindSuspended = false );

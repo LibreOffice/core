@@ -1113,9 +1113,9 @@ BaseWindow* Shell::FindWindow(
     return 0;
 }
 
-long Shell::CallBasicErrorHdl( StarBASIC* pBasic )
+bool Shell::CallBasicErrorHdl( StarBASIC* pBasic )
 {
-    long nRet = 0;
+    bool nRet = false;
     ModulWindow* pModWin = ShowActiveModuleWindow( pBasic );
     if ( pModWin )
         nRet = pModWin->BasicErrorHdl( pBasic );

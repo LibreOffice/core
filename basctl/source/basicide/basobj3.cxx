@@ -458,7 +458,7 @@ long HandleBasicError( StarBASIC* pBasic )
     }
 
     if ( pShell )
-        nRet = pShell->CallBasicErrorHdl( pBasic );
+        nRet = long(pShell->CallBasicErrorHdl( pBasic ));
     else
         ErrorHandler::HandleError( StarBASIC::GetErrorCode() );
 

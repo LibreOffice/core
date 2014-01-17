@@ -376,7 +376,7 @@ public:
     void            BasicAddWatch();
     void            BasicRemoveWatch();
 
-    long            BasicErrorHdl( StarBASIC* pBasic );
+    bool            BasicErrorHdl( StarBASIC* pBasic );
     long            BasicBreakHdl( StarBASIC* pBasic );
     void            AssertValidEditEngine();
 
