@@ -459,6 +459,8 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const Attri
                 dynamic_cast<SimpleShape&>( mrShape ).setService(
                         "com.sun.star.text.TextFrame");
             }
+            else
+                dynamic_cast<SimpleShape&>(mrShape).setService("com.sun.star.drawing.TextShape");
             return new TextBoxContext( *this, mrShapeModel.createTextBox(mrShape.getTypeModel()), rAttribs,
                 mrShape.getDrawing().getFilter().getGraphicHelper());
         case VMLX_TOKEN( ClientData ):
