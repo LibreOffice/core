@@ -83,6 +83,14 @@ OUString test::BootstrapFixtureBase::getURLFromWorkdir( const char *pPath )
     return m_aWorkdirRootURL + OUString::createFromAscii( pPath );
 }
 
+#ifdef _WIN32 // ifdef just to keep it out of unusedcode.easy
+OUString test::BootstrapFixtureBase::getPathFromWorkdir( const char *pPath )
+{
+    return m_aWorkdirRootPath + OUString::createFromAscii( pPath );
+
+}
+#endif
+
 void test::BootstrapFixtureBase::setUp()
 {
     // set UserInstallation to user profile dir in test/user-template
