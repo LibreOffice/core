@@ -22,7 +22,7 @@
 #include "scriptdocument.hxx"
 
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
-#include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 
 #include <vcl/svapp.hxx>
 
@@ -41,9 +41,9 @@ namespace basctl
 {
 //........................................................................
 
-    using ::com::sun::star::document::XEventBroadcaster;
-    using ::com::sun::star::document::XEventListener;
-    using ::com::sun::star::document::EventObject;
+    using ::com::sun::star::document::XDocumentEventBroadcaster;
+    using ::com::sun::star::document::XDocumentEventListener;
+    using ::com::sun::star::document::DocumentEvent;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Reference;
@@ -58,7 +58,7 @@ namespace basctl
     //====================================================================
     //= DocumentEventNotifier::Impl
     //====================================================================
-    typedef ::cppu::WeakComponentImplHelper1    <   XEventListener
+    typedef ::cppu::WeakComponentImplHelper1    <   XDocumentEventListener
                                                 >   DocumentEventNotifier_Impl_Base;
 
     enum ListenerAction
@@ -77,10 +77,10 @@ namespace basctl
         Impl (DocumentEventListener&, Reference<XModel> const& rxDocument);
         ~Impl ();
 
-        // document::XEventListener
-        virtual void SAL_CALL notifyEvent( const EventObject& Event ) throw (RuntimeException);
+        // XDocumentEventListener
+        virtual void SAL_CALL documentEventOccured( const DocumentEvent& Event ) throw (RuntimeException);
 
-        // lang::XEventListener
+        // XEventListener
         virtual void SAL_CALL disposing( const csslang::EventObject& Event ) throw (RuntimeException);
 
         // ComponentHelper
@@ -123,7 +123,7 @@ namespace basctl
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL DocumentEventNotifier::Impl::notifyEvent( const EventObject& _rEvent ) throw (RuntimeException)
+    void SAL_CALL DocumentEventNotifier::Impl::documentEventOccured( const DocumentEvent& _rEvent ) throw (RuntimeException)
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -205,18 +205,18 @@ namespace basctl
     {
         try
         {
-            Reference< XEventBroadcaster > xBroadcaster;
+            Reference< XDocumentEventBroadcaster > xBroadcaster;
             if ( m_xModel.is() )
                 xBroadcaster.set( m_xModel, UNO_QUERY_THROW );
             else
             {
                 Reference< com::sun::star::uno::XComponentContext > aContext(
                     comphelper::getProcessComponentContext() );
-                xBroadcaster.set( theGlobalEventBroadcaster::get(aContext), UNO_QUERY_THROW );
+                xBroadcaster = theGlobalEventBroadcaster::get(aContext);
             }
 
-            void ( SAL_CALL XEventBroadcaster::*listenerAction )( const Reference< XEventListener >& ) =
-                ( _eAction == RegisterListener ) ? &XEventBroadcaster::addEventListener : &XEventBroadcaster::removeEventListener;
+            void ( SAL_CALL XDocumentEventBroadcaster::*listenerAction )( const Reference< XDocumentEventListener >& ) =
+                ( _eAction == RegisterListener ) ? &XDocumentEventBroadcaster::addDocumentEventListener : &XDocumentEventBroadcaster::removeDocumentEventListener;
             (xBroadcaster.get()->*listenerAction)( this );
         }
         catch( const Exception& )
