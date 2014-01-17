@@ -47,7 +47,7 @@ OUString getDefaultLocale(
         css::uno::Reference< css::lang::XLocalizable >(
             css::configuration::theDefaultProvider::get(context),
             css::uno::UNO_QUERY_THROW)->
-        getLocale()).getBcp47();
+        getLocale()).getBcp47(false);
 }
 
 OUString extendLocalizedPath(OUString const & path, OUString const & locale) {
