@@ -962,6 +962,17 @@ DECLARE_OOXMLIMPORT_TEST(testGroupshapeLine, "groupshape-line.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xShape->getSize().Height);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testGroupshapeChildRotation, "groupshape-child-rotation.docx")
+{
+    // The problem was that (due to incorrect handling of rotation inside
+    // groupshapes), the first child wasn't in the top left corner of an inline
+    // groupshape.
+    uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xGroupShape->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xShape->getPosition().Y);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testN793262, "n793262.docx")
 {
     uno::Reference<container::XEnumerationAccess> xHeaderText = getProperty< uno::Reference<container::XEnumerationAccess> >(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "HeaderText");

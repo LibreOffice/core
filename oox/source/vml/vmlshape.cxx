@@ -642,9 +642,13 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         if (oRotation)
         {
             lcl_SetRotation(aPropertySet, *oRotation);
-            // If rotation is used, simple setPosition() is not enough.
-            aPropertySet.setAnyProperty(PROP_HoriOrientPosition, makeAny( aShapeRect.X ) );
-            aPropertySet.setAnyProperty(PROP_VertOrientPosition, makeAny( aShapeRect.Y ) );
+            uno::Reference<lang::XServiceInfo> xServiceInfo(rxShapes, uno::UNO_QUERY);
+            if (!xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
+            {
+                // If rotation is used, simple setPosition() is not enough.
+                aPropertySet.setAnyProperty(PROP_HoriOrientPosition, makeAny(aShapeRect.X));
+                aPropertySet.setAnyProperty(PROP_VertOrientPosition, makeAny(aShapeRect.Y));
+            }
         }
 
         // When flip has 'x' or 'y', the associated ShapeRect will be changed but direction change doesn't occur.
