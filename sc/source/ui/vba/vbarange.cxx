@@ -5638,7 +5638,7 @@ ScVbaRange::getServiceNames()
 sal_Bool SAL_CALL
 ScVbaRange::hasError() throw (uno::RuntimeException)
 {
-    double dResult = false;
+    double dResult = 0.0;
     uno::Reference< excel::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );
     uno::Reference< script::XInvocation > xInvoc( xApplication->WorksheetFunction(), uno::UNO_QUERY_THROW );
 
@@ -5649,9 +5649,7 @@ ScVbaRange::hasError() throw (uno::RuntimeException)
     uno::Sequence< sal_Int16 > OutParamIndex;
     uno::Sequence< uno::Any > OutParam;
     xInvoc->invoke( FunctionName, Params, OutParamIndex, OutParam ) >>= dResult;
-    if ( dResult > 0.0 )
-         return sal_True;
-    return false;
+    return dResult > 0.0;
 }
 
 namespace range

@@ -303,8 +303,8 @@ bool ScTabViewShell::PrepareClose(sal_Bool bUI)
 
     if ( pFormShell )
     {
-        sal_uInt16 nRet = pFormShell->PrepareClose(bUI);
-        if (nRet!=sal_True)
+        bool nRet = pFormShell->PrepareClose(bUI);
+        if (!nRet)
             return nRet;
     }
     return SfxViewShell::PrepareClose(bUI);

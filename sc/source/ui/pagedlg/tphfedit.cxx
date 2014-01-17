@@ -368,7 +368,7 @@ ScExtIButton::ScExtIButton(Window* pParent, WinBits nBits )
 {
     nSelected=0;
     aTimer.SetTimeout(600);
-    SetDropDown( true);
+    SetDropDown(PUSHBUTTON_DROPDOWN_TOOLBOX);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScExtIButton(Window *pParent, VclBuilder::stringmap &)

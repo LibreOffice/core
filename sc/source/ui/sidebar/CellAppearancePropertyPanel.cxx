@@ -359,7 +359,7 @@ IMPL_LINK(CellAppearancePropertyPanel, CBOXGridShowClkHdl, void*, EMPTYARG)
 {
     bool bState = mpCBXShowGrid->IsChecked();
     SfxBoolItem aItem( SID_SCGRIDSHOW , bState);
-    GetBindings()->GetDispatcher()->Execute(SID_SCGRIDSHOW, SFX_CALLMODE_RECORD, &aItem, false, 0L);
+    GetBindings()->GetDispatcher()->Execute(SID_SCGRIDSHOW, SFX_CALLMODE_RECORD, &aItem, 0L);
     return 0;
 }
 

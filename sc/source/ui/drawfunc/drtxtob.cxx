@@ -1254,7 +1254,7 @@ void ScDrawTextObjectBar::GetStatePropPanelAttr(SfxItemSet &rSet)
                 if(SFX_ITEM_DONTCARE != eVState)
                 {
                     SdrTextVertAdjust eTVA = (SdrTextVertAdjust)((const SdrTextVertAdjustItem&)aEditAttr.Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
-                    sal_Bool bSet = nSlotId == (SID_TABLE_VERT_NONE && eTVA == SDRTEXTVERTADJUST_TOP) ||
+                    sal_Bool bSet = (nSlotId == SID_TABLE_VERT_NONE && eTVA == SDRTEXTVERTADJUST_TOP) ||
                             (nSlotId == SID_TABLE_VERT_CENTER && eTVA == SDRTEXTVERTADJUST_CENTER) ||
                             (nSlotId == SID_TABLE_VERT_BOTTOM && eTVA == SDRTEXTVERTADJUST_BOTTOM);
                     rSet.Put(SfxBoolItem(nSlotId, bSet));

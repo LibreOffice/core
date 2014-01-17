@@ -556,7 +556,7 @@ VmlCommentExporter::VmlCommentExporter( sax_fastparser::FSHelperPtr p, ScAddress
 void VmlCommentExporter::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect )
 {
     lcl_FillProps( rProps, mpCaption, mbVisible );
-    rProps.AddOpt( ESCHER_Prop_fHidden, mbVisible );            // bool field
+    rProps.AddOpt( ESCHER_Prop_fHidden, sal_uInt32(mbVisible) ); // bool field
 
     // shadow property value for comment ( set in lcl_FillProps [*] ) has been
     // overwritten by new value ( 0x20000 ) in the generic part of the export

@@ -497,12 +497,12 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                             pTabViewShell->RemoveStyleSheetInUse( pStyleSheet );
                             pStylePool->Remove( pStyleSheet );
                             pTabViewShell->InvalidateAttribs();
-                            nRetMask = true;
+                            nRetMask = sal_uInt16(true);
                             bAddUndo = true;
                             rReq.Done();
                         }
                         else
-                            nRetMask = false;
+                            nRetMask = sal_uInt16(false);
                     }
                     break;
 
@@ -516,7 +516,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                             rReq.Done();
                         }
                         else
-                            nRetMask = false;
+                            nRetMask = sal_uInt16(false);
                     }
                     break;
 
@@ -659,7 +659,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                 {
                     case SID_STYLE_DELETE:
                     {
-                        nRetMask = ( NULL != pStyleSheet );
+                        nRetMask = sal_uInt16( NULL != pStyleSheet );
                         if ( pStyleSheet )
                         {
                             if ( pDoc->RemovePageStyleInUse( pStyleSheet->GetName() ) )
@@ -680,7 +680,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                     case SID_STYLE_HIDE:
                     case SID_STYLE_SHOW:
                     {
-                        nRetMask = ( NULL != pStyleSheet );
+                        nRetMask = sal_uInt16( NULL != pStyleSheet );
                         if ( pStyleSheet )
                         {
                             pStyleSheet->SetHidden( nSlotId == SID_STYLE_HIDE );
@@ -693,7 +693,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                     case SID_STYLE_APPLY:
                     {
-                        nRetMask = ( NULL != pStyleSheet );
+                        nRetMask = sal_uInt16( NULL != pStyleSheet );
                         if ( pStyleSheet && !pScMod->GetIsWaterCan() )
                         {
                             ScUndoApplyPageStyle* pUndoAction = 0;
@@ -754,7 +754,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                             aNewData.InitFromStyle( pStyleSheet );
                             bAddUndo = true;
                             rReq.Done();
-                            nRetMask = true;
+                            nRetMask = sal_uInt16(true);
                         }
                     }
                     break;
@@ -1976,8 +1976,8 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
                 // rSet.Put( SvxColorItem( pLine ? pLine->GetColor() : Color(), SID_FRAME_LINECOLOR ) );
                 Color aCol = 0;
                 editeng::SvxBorderLine aLine(0,0,0,0);
-                bool bCol = 0;
-                bool bColDisable = 0, bStyleDisable = 0;
+                bool bCol = false;
+                bool bColDisable = false, bStyleDisable = false;
                 SvxBoxItem aBoxItem(ATTR_BORDER);
                 SvxBoxInfoItem aInfoItem(ATTR_BORDER_INNER);
 
@@ -1985,7 +1985,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
 
                 if( aBoxItem.GetTop() )
                 {
-                    bCol = 1;
+                    bCol = true;
                     aCol = aBoxItem.GetTop()->GetColor() ;
                     aLine.SetColor(aCol);
                     aLine.SetWidth( aBoxItem.GetTop()->GetWidth());
@@ -1994,9 +1994,9 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
 
                 if( aBoxItem.GetBottom() )
                 {
-                    if(bCol == 0)
+                    if(!bCol)
                     {
-                        bCol = 1;
+                        bCol = true;
                         aCol = aBoxItem.GetBottom()->GetColor() ;
                         aLine.SetColor(aCol);
                         aLine.SetWidth( aBoxItem.GetBottom()->GetWidth());
@@ -2005,17 +2005,17 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
                     else
                     {
                         if(aCol != aBoxItem.GetBottom()->GetColor() )
-                            bColDisable = 1;
+                            bColDisable = true;
                         if(!( aLine == *(aBoxItem.GetBottom())) )
-                            bStyleDisable = 1;
+                            bStyleDisable = true;
                     }
                 }
 
                 if( aBoxItem.GetLeft() )
                 {
-                    if(bCol == 0)
+                    if(!bCol)
                     {
-                        bCol = 1;
+                        bCol = true;
                         aCol = aBoxItem.GetLeft()->GetColor() ;
                         aLine.SetColor(aCol);
                         aLine.SetWidth( aBoxItem.GetLeft()->GetWidth());
@@ -2024,17 +2024,17 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
                     else
                     {
                         if(aCol != aBoxItem.GetLeft()->GetColor() )
-                            bColDisable = 1;
+                            bColDisable = true;
                         if(!( aLine == *(aBoxItem.GetLeft())) )
-                            bStyleDisable = 1;
+                            bStyleDisable = true;
                     }
                 }
 
                 if( aBoxItem.GetRight() )
                 {
-                    if(bCol == 0)
+                    if(!bCol)
                     {
-                        bCol = 1;
+                        bCol = true;
                         aCol = aBoxItem.GetRight()->GetColor() ;
                         aLine.SetColor(aCol);
                         aLine.SetWidth( aBoxItem.GetRight()->GetWidth());
@@ -2043,17 +2043,17 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
                     else
                     {
                         if(aCol != aBoxItem.GetRight()->GetColor() )
-                            bColDisable = 1;
+                            bColDisable = true;
                         if(!( aLine == *(aBoxItem.GetRight())) )
-                            bStyleDisable = 1;
+                            bStyleDisable = true;
                     }
                 }
 
                 if( aInfoItem.GetVert())
                 {
-                    if(bCol == 0)
+                    if(!bCol)
                     {
-                        bCol = 1;
+                        bCol = true;
                         aCol = aInfoItem.GetVert()->GetColor() ;
                         aLine.SetColor(aCol);
                         aLine.SetWidth( aInfoItem.GetVert()->GetWidth());
@@ -2062,17 +2062,17 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
                     else
                     {
                         if(aCol != aInfoItem.GetVert()->GetColor() )
-                            bColDisable = 1;
+                            bColDisable = true;
                         if(!( aLine == *(aInfoItem.GetVert())) )
-                            bStyleDisable = 1;
+                            bStyleDisable = true;
                     }
                 }
 
                 if( aInfoItem.GetHori())
                 {
-                    if(bCol == 0)
+                    if(!bCol)
                     {
-                        bCol = 1;
+                        bCol = true;
                         aCol = aInfoItem.GetHori()->GetColor() ;
                         aLine.SetColor(aCol);
                         aLine.SetWidth( aInfoItem.GetHori()->GetWidth());
@@ -2081,9 +2081,9 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
                     else
                     {
                         if(aCol != aInfoItem.GetHori()->GetColor() )
-                            bColDisable = 1;
+                            bColDisable = true;
                         if(!( aLine == *(aInfoItem.GetHori())) )
-                            bStyleDisable = 1;
+                            bStyleDisable = true;
                     }
                 }
 
@@ -2094,8 +2094,8 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
                     || !aInfoItem.IsValid( VALID_TOP )
                     || !aInfoItem.IsValid( VALID_BOTTOM ) )
                 {
-                    bColDisable = 1;
-                    bStyleDisable = 1;
+                    bColDisable = true;
+                    bStyleDisable = true;
                 }
 
                 if(SID_FRAME_LINECOLOR == nWhich)
@@ -2106,7 +2106,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
                         rSet.Put( SvxColorItem(aCol, SID_FRAME_LINECOLOR ) );
                         rSet.InvalidateItem(SID_FRAME_LINECOLOR);
                     }
-                    else if( bCol == 0 && bColDisable == 0) // if no line available
+                    else if( !bCol && !bColDisable) // if no line available
                     {
                         aCol = COL_AUTO;
                         rSet.Put( SvxColorItem(aCol, SID_FRAME_LINECOLOR ) );

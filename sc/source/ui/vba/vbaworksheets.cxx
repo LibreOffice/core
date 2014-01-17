@@ -337,7 +337,7 @@ ScVbaWorksheets::getVisible() throw (uno::RuntimeException)
     while ( xEnum->hasMoreElements() )
     {
         uno::Reference< excel::XWorksheet > xSheet( xEnum->nextElement(), uno::UNO_QUERY_THROW );
-        if ( xSheet->getVisible() == false )
+        if ( xSheet->getVisible() == 0 )
         {
                 bVisible = false;
                 break;

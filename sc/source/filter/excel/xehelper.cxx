@@ -1040,7 +1040,7 @@ void XclExpCachedMatrix::Save( XclExpStream& rStrm ) const
             }
             else if( SC_MATVAL_BOOLEAN == nMatVal.nType )
             {
-                sal_Int8 nBool = nMatVal.GetBoolean();
+                sal_Int8 nBool = sal_Int8(nMatVal.GetBoolean());
                 rStrm.SetSliceSize( 9 );
                 rStrm << EXC_CACHEDVAL_BOOL << nBool;
                 rStrm.WriteZeroBytes( 7 );
