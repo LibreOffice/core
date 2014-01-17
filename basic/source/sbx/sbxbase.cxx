@@ -391,14 +391,14 @@ sal_Bool SbxInfo::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 
 sal_Bool SbxInfo::StoreData( SvStream& rStrm ) const
 {
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStrm, aComment,
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, aComment,
         RTL_TEXTENCODING_ASCII_US );
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStrm, aHelpFile,
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, aHelpFile,
         RTL_TEXTENCODING_ASCII_US);
     rStrm.WriteUInt32( nHelpId ).WriteUInt16( static_cast<sal_uInt16>(aParams.size()) );
     for(SbxParams::const_iterator i = aParams.begin(); i != aParams.end(); ++i)
     {
-        write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStrm, i->aName,
+        write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, i->aName,
             RTL_TEXTENCODING_ASCII_US);
         rStrm.WriteUInt16( (sal_uInt16) i->eType )
              .WriteUInt16( (sal_uInt16) i->nFlags )

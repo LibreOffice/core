@@ -1191,7 +1191,7 @@ SvStream& SwFmtVertOrient::Store(SvStream &rStream, sal_uInt16 /*version*/) cons
 #if SAL_TYPES_SIZEOFLONG == 8
     rStream.WriteInt64(nYPos);
 #else
-    rStream << static_cast<sal_Int32>(nYPos);
+    rStream.WriteInt32(nYPos);
 #endif
     rStream.WriteInt16( eOrient ).WriteInt16( eRelation );
     return rStream;

@@ -63,7 +63,7 @@ public:
     sal_Bool        IsSet() const { return bSet; }
 
     friend SvStream& WriteSvint(SvStream & rStm, const Svint & r )
-                { SvUINT32::Write( rStm, (sal_uInt32)r.nVal ); rStm << r.bSet; return rStm; }
+                { SvUINT32::Write( rStm, (sal_uInt32)r.nVal ); rStm.WriteUInt8( r.bSet ); return rStm; }
     friend SvStream& operator >> (SvStream & rStm, Svint & r )
                 { r.nVal = (int)SvUINT32::Read( rStm ); rStm >> r.bSet ; return rStm; }
 };

@@ -847,8 +847,8 @@ uno::Sequence< sal_Int8 > ScannerManager::getDIB() throw()
             sal_Int8*       pBuf = aRet.getArray();
             SvMemoryStream* pMemStm = new SvMemoryStream( (char*) pBuf, sizeof( BITMAPFILEHEADER ), STREAM_WRITE );
 
-            *pMemStm << 'B' << 'M' << (sal_uInt32) 0 << (sal_uInt32) 0;
-            *pMemStm << (sal_uInt32) ( sizeof( BITMAPFILEHEADER ) + pBIH->biSize + ( nColEntries * sizeof( RGBQUAD ) ) );
+            pMemStm->WriteChar( 'B' ).WriteChar( 'M' ).WriteUInt32( 0 ).WriteUInt32( 0 );
+            pMemStm->WriteUInt32( sizeof( BITMAPFILEHEADER ) + pBIH->biSize + ( nColEntries * sizeof( RGBQUAD ) ) );
 
             delete pMemStm;
             memcpy( pBuf + sizeof( BITMAPFILEHEADER ), pBIH, nDIBSize );

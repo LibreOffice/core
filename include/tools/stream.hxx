@@ -315,36 +315,6 @@ public:
     SvStream&       operator>>( double& rDouble );
     SvStream&       operator>>( SvStream& rStream );
 
-    SvStream&       operator<<( sal_uInt16 nUInt16 )
-                        { return WriteUInt16(nUInt16); }
-    SvStream&       operator<<( sal_uInt32 nUInt32 )
-                        { return WriteUInt32(nUInt32); }
-    SvStream&       operator<<( sal_uInt64 nuInt64 )
-                        { return WriteUInt64(nuInt64); }
-    SvStream&       operator<<( sal_Int16 nInt16 )
-                        { return WriteInt16(nInt16); }
-    SvStream&       operator<<( sal_Int32 nInt32 )
-                        { return WriteInt32(nInt32); }
-    SvStream&       operator<<( sal_Int64 nInt64 ) SAL_DELETED_FUNCTION;
-    SvStream&       operator<<( bool b )
-                        { return operator<<(static_cast< sal_Bool >(b)); }
-    SvStream&       operator<<( signed char nChar )
-                        { return WriteSChar(nChar); }
-    SvStream&       operator<<( char nChar )
-                        { return WriteChar(nChar); }
-    SvStream&       operator<<( unsigned char nChar )
-                        { return WriteUChar(nChar); }
-    SvStream&       operator<<( float nFloat )
-                        { return WriteFloat(nFloat); }
-    SvStream&       operator<<( const double& rDouble )
-                        { return WriteDouble(rDouble); }
-    SvStream&       operator<<( const char* pBuf )
-                        { return WriteCharPtr(pBuf); }
-    SvStream&       operator<<( const unsigned char* pBuf )
-                        { return WriteUCharPtr(pBuf); }
-    SvStream&       operator<<( SvStream& rStream )
-                        { return WriteStream(rStream); }
-
     SvStream&       WriteUInt16( sal_uInt16 nUInt16 );
     SvStream&       WriteUInt32( sal_uInt32 nUInt32 );
     SvStream&       WriteUInt64( sal_uInt64 nuInt64 );
@@ -577,39 +547,6 @@ TOOLS_DLLPUBLIC inline sal_Size write_uInt16s_FromOUString(SvStream& rStrm,
     return write_uInt16s_FromOUString(rStrm, rStr, rStr.getLength());
 }
 
-namespace streamdetail
-{
-    /// Attempt to write a pascal-style length (of type prefix) prefixed
-    /// sequence of units from a string-type, returned value is number of bytes
-    /// written (including byte-count of prefix)
-    template<typename prefix, typename S, sal_Size (*writeOper)(SvStream&, const S&, sal_Size)>
-        sal_Size write_lenPrefixed_seq_From_str(SvStream& rStrm, const S &rStr)
-    {
-        sal_Size nWritten = 0;
-        prefix nUnits = std::min<sal_Size>(rStr.getLength(), std::numeric_limits<prefix>::max());
-        SAL_WARN_IF(static_cast<sal_Size>(nUnits) != static_cast<sal_Size>(rStr.getLength()),
-            "tools.stream",
-            "string too long for prefix count to fit in output type");
-        rStrm << nUnits;
-        if (rStrm.good())
-        {
-            nWritten += sizeof(prefix);
-            nWritten += writeOper(rStrm, rStr, nUnits);
-        }
-        return nWritten;
-    }
-}
-
-/// Attempt to write a pascal-style length (of type prefix) prefixed sequence
-/// of 16bit units from an OUString, returned value is number of bytes written
-/// (including byte-count of prefix)
-template<typename prefix>
-sal_Size write_lenPrefixed_uInt16s_FromOUString(SvStream& rStrm,
-                                                const OUString &rStr)
-{
-    return streamdetail::write_lenPrefixed_seq_From_str<prefix, OUString, write_uInt16s_FromOUString>(rStrm, rStr);
-}
-
 /// Attempt to write a pascal-style length (of type prefix) prefixed sequence
 /// of 16bit units from an OUString, returned value is number of bytes written
 /// (including byte-count of prefix)
@@ -664,27 +601,6 @@ TOOLS_DLLPUBLIC inline sal_Size write_uInt8s_FromOString(SvStream& rStrm, const 
 TOOLS_DLLPUBLIC inline sal_Size write_uInt8s_FromOString(SvStream& rStrm, const OString& rStr)
 {
     return write_uInt8s_FromOString(rStrm, rStr, rStr.getLength());
-}
-
-/// Attempt to write a pascal-style length (of type prefix) prefixed sequence
-/// of 8bit units from an OString, returned value is number of bytes written
-/// (including byte-count of prefix)
-template<typename prefix>
-sal_Size write_lenPrefixed_uInt8s_FromOString(SvStream& rStrm,
-                                              const OString &rStr)
-{
-    return streamdetail::write_lenPrefixed_seq_From_str<prefix, OString, write_uInt8s_FromOString>(rStrm, rStr);
-}
-
-/// Attempt to write a pascal-style length (of type prefix) prefixed sequence
-/// of 8bit units from an OUString, returned value is number of bytes written
-/// (including byte-count of prefix)
-template<typename prefix>
-sal_Size write_lenPrefixed_uInt8s_FromOUString(SvStream& rStrm,
-                                               const OUString &rStr,
-                                               rtl_TextEncoding eEnc)
-{
-    return write_lenPrefixed_uInt8s_FromOString<prefix>(rStrm, OUStringToOString(rStr, eEnc));
 }
 
 /// Attempt to write a pascal-style length (of type prefix) prefixed
