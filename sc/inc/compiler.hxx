@@ -289,12 +289,6 @@ private:
     static CharClass            *pCharClassEnglish;                      // character classification for en_US locale
     static const Convention     *pConventions[ formula::FormulaGrammar::CONV_LAST ];
 
-    static const Convention * const pConvOOO_A1;
-    static const Convention * const pConvOOO_A1_ODF;
-    static const Convention * const pConvXL_A1;
-    static const Convention * const pConvXL_R1C1;
-    static const Convention * const pConvXL_OOX;
-
     static struct AddInMap
     {
         const char* pODFF;

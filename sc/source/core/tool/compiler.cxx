@@ -272,7 +272,7 @@ void ScCompiler::SetGrammarAndRefConvention(
         if (pDoc)
             SetRefConvention( pDoc->GetAddressConvention());
         else
-            SetRefConvention( pConvOOO_A1);
+            SetRefConvention( GetRefConvention( FormulaGrammar::CONV_OOO ) );
     }
     else
         SetRefConvention( eConv );
@@ -922,9 +922,6 @@ struct ConventionOOO_A1 : public Convention_A1
     }
 };
 
-static const ConventionOOO_A1 ConvOOO_A1;
-const ScCompiler::Convention * const ScCompiler::pConvOOO_A1 = &ConvOOO_A1;
-
 struct ConventionOOO_A1_ODF : public ConventionOOO_A1
 {
     ConventionOOO_A1_ODF() : ConventionOOO_A1 (FormulaGrammar::CONV_ODF) { }
@@ -982,9 +979,6 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
         makeExternalRefStrImpl(rBuffer, rPos, rFileName, rTabNames, rTabName, rRef, true);
     }
 };
-
-static const ConventionOOO_A1_ODF ConvOOO_A1_ODF;
-const ScCompiler::Convention * const ScCompiler::pConvOOO_A1_ODF = &ConvOOO_A1_ODF;
 
 struct ConventionXL
 {
@@ -1307,16 +1301,10 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
     }
 };
 
-static const ConventionXL_A1 ConvXL_A1;
-const ScCompiler::Convention * const ScCompiler::pConvXL_A1 = &ConvXL_A1;
-
 struct ConventionXL_OOX : public ConventionXL_A1
 {
     ConventionXL_OOX() : ConventionXL_A1( FormulaGrammar::CONV_XL_OOX ) { }
 };
-
-static const ConventionXL_OOX ConvXL_OOX;
-const ScCompiler::Convention * const ScCompiler::pConvXL_OOX = &ConvXL_OOX;
 
 static void
 r1c1_add_col( OUStringBuffer &rBuf, const ScSingleRefData& rRef, const ScAddress& rAbsRef )
@@ -1526,9 +1514,6 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
     }
 };
 
-static const ConventionXL_R1C1 ConvXL_R1C1;
-const ScCompiler::Convention * const ScCompiler::pConvXL_R1C1 = &ConvXL_R1C1;
-
 ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,ScTokenArray& rArr)
         : FormulaCompiler(rArr),
         pDoc( pDocument ),
@@ -1537,7 +1522,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,ScTokenArra
         pCharClass( ScGlobal::pCharClass ),
         mnPredetectedReference(0),
         mnRangeOpPosInSymbol(-1),
-        pConv( pConvOOO_A1 ),
+        pConv( GetRefConvention( FormulaGrammar::CONV_OOO ) ),
         meExtendedErrorDetection( EXTENDED_ERROR_DETECTION_NONE ),
         mbCloseBrackets( true ),
         mbRewind( false )
@@ -1563,7 +1548,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos)
         pCharClass( ScGlobal::pCharClass ),
         mnPredetectedReference(0),
         mnRangeOpPosInSymbol(-1),
-        pConv( pConvOOO_A1 ),
+        pConv( GetRefConvention( FormulaGrammar::CONV_OOO ) ),
         meExtendedErrorDetection( EXTENDED_ERROR_DETECTION_NONE ),
         mbCloseBrackets( true ),
         mbRewind( false )
@@ -1646,18 +1631,24 @@ void ScCompiler::SetRefConvention( FormulaGrammar::AddressConvention eConv )
 
 const ScCompiler::Convention* ScCompiler::GetRefConvention( FormulaGrammar::AddressConvention eConv )
 {
+    static const ConventionOOO_A1 ConvOOO_A1;
+    static const ConventionOOO_A1_ODF ConvOOO_A1_ODF;
+    static const ConventionXL_A1 ConvXL_A1;
+    static const ConventionXL_R1C1 ConvXL_R1C1;
+    static const ConventionXL_OOX ConvXL_OOX;
+
     switch (eConv)
     {
         case FormulaGrammar::CONV_OOO:
-            return pConvOOO_A1;
+            return &ConvOOO_A1;
         case FormulaGrammar::CONV_ODF:
-            return pConvOOO_A1_ODF;
+            return &ConvOOO_A1_ODF;
         case FormulaGrammar::CONV_XL_A1:
-            return pConvXL_A1;
+            return &ConvXL_A1;
         case FormulaGrammar::CONV_XL_R1C1:
-            return pConvXL_R1C1;
+            return &ConvXL_R1C1;
         case FormulaGrammar::CONV_XL_OOX:
-            return pConvXL_OOX;
+            return &ConvXL_OOX;
         case FormulaGrammar::CONV_UNSPECIFIED:
         default:
             ;
