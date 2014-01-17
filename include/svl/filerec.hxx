@@ -601,7 +601,7 @@ inline SfxMiniRecordWriter::SfxMiniRecordWriter( SvStream* pStream, sal_uInt8 nT
     DBG(_nStartPos = pStream->Tell());
     DBG( DbgOutf( "SfxFileRec: writing record to %ul", _nStartPos ) );
 
-    *pStream << ( ( nTag << 24 ) | nSize );
+    pStream->WriteUInt32( ( nTag << 24 ) | nSize );
 }
 
 /** The destructor closes the record automatically if not done earlier */

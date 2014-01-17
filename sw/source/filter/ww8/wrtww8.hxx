@@ -895,10 +895,10 @@ public:
     static sal_uLong FillUntil( SvStream& rStrm, sal_uLong nEndPos = 0 );
     static void FillCount( SvStream& rStrm, sal_uLong nCount );
 
-    static void WriteShort( SvStream& rStrm, sal_Int16 nVal ) { rStrm << nVal; }
+    static void WriteShort( SvStream& rStrm, sal_Int16 nVal ) { rStrm.WriteInt16( nVal ); }
     static void WriteShort( SvStream& rStrm, sal_uLong nPos, sal_Int16 nVal );
 
-    static void WriteLong( SvStream& rStrm, sal_Int32 nVal ) { rStrm << nVal; }
+    static void WriteLong( SvStream& rStrm, sal_Int32 nVal ) { rStrm.WriteInt32( nVal ); }
     static void WriteLong( SvStream& rStrm, sal_uLong nPos, sal_Int32 nVal );
 
     static void WriteString16(SvStream& rStrm, const OUString& rStr,

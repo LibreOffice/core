@@ -534,7 +534,7 @@ sal_Bool SwBoxAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
     aRotateMode.Store( rStream, aRotateMode.GetVersion(fileVersion) );
 
     // --- from 680/dr25 on: store strings as UTF-8
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStream, sNumFmtString,
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rStream, sNumFmtString,
         RTL_TEXTENCODING_UTF8);
     rStream.WriteUInt16( (sal_uInt16)eSysLanguage ).WriteUInt16( (sal_uInt16)eNumFmtLanguage );
 
@@ -966,7 +966,7 @@ sal_Bool SwTableAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
     sal_Bool b;
     rStream.WriteUInt16( nVal );
     // --- from 680/dr25 on: store strings as UTF-8
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStream, m_aName,
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rStream, m_aName,
         RTL_TEXTENCODING_UTF8 );
     rStream.WriteUInt16( nStrResId );
     rStream.WriteUChar( ( b = bInclFont ) );

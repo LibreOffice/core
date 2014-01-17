@@ -88,16 +88,16 @@ void IMapObject::Write( SvStream& rOStm, const OUString& rBaseURL ) const
 
     const OString aRelURL = OUStringToOString(
         URIHelper::simpleNormalizedMakeRelative(rBaseURL, aURL), eEncoding);
-    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStm, aRelURL);
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStm, aAltText, eEncoding);
+    write_uInt16_lenPrefixed_uInt8s_FromOString(rOStm, aRelURL);
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aAltText, eEncoding);
     rOStm.WriteUChar( bActive );
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStm, aTarget, eEncoding);
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aTarget, eEncoding);
 
     pCompat = new IMapCompat( rOStm, STREAM_WRITE );
 
     WriteIMapObject( rOStm );
     aEventList.Write( rOStm );                                      // V4
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStm, aName, eEncoding); // V5
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aName, eEncoding); // V5
 
     delete pCompat;
 }
@@ -949,10 +949,10 @@ void ImageMap::Write( SvStream& rOStm, const OUString& rBaseURL ) const
     // write MagicCode
     rOStm.WriteCharPtr( IMAPMAGIC );
     rOStm.WriteUInt16( GetVersion() );
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStm, aImageName, eEncoding);
-    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStm, OString()); //dummy
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aImageName, eEncoding);
+    write_uInt16_lenPrefixed_uInt8s_FromOString(rOStm, OString()); //dummy
     rOStm.WriteUInt16( nCount );
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStm, aImageName, eEncoding);
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aImageName, eEncoding);
 
     pCompat = new IMapCompat( rOStm, STREAM_WRITE );
 

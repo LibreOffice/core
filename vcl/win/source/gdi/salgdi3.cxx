@@ -163,7 +163,7 @@ ImplFontAttrCache::~ImplFontAttrCache()
         if ( aCacheFile.IsWritable() )
         {
             sal_uInt32 nCacheMagic = ImplFontAttrCache::MAGIC;
-            aCacheFile << nCacheMagic;
+            aCacheFile.ReaduInt32( nCacheMagic );
 
             // write the cache entries to the file
             FontAttrMap::const_iterator aIter = aFontAttributes.begin();
@@ -174,12 +174,12 @@ ImplFontAttrCache::~ImplFontAttrCache()
                 write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(aCacheFile, rFontFileURL, RTL_TEXTENCODING_UTF8);
                 write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(aCacheFile, rDFA.GetFamilyName(), RTL_TEXTENCODING_UTF8);
 
-                aCacheFile << static_cast<short>(rDFA.GetWeight());
-                aCacheFile << static_cast<short>(rDFA.GetSlant());
-                aCacheFile << static_cast<short>(rDFA.GetPitch());
-                aCacheFile << static_cast<short>(rDFA.GetWidthType());
-                aCacheFile << static_cast<short>(rDFA.GetFamilyType());
-                aCacheFile << static_cast<short>(rDFA.IsSymbolFont() != false);
+                aCacheFile.WriteInt16(rDFA.GetWeight());
+                aCacheFile.WriteInt16(rDFA.GetSlant());
+                aCacheFile.WriteInt16(rDFA.GetPitch());
+                aCacheFile.WriteInt16(rDFA.GetWidthType());
+                aCacheFile.WriteInt16(rDFA.GetFamilyType());
+                aCacheFile.WriteInt16(rDFA.IsSymbolFont() != false);
 
                 write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(aCacheFile, rDFA.GetStyleName(), RTL_TEXTENCODING_UTF8);
 
