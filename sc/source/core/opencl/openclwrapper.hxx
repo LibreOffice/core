@@ -121,8 +121,8 @@ struct GPUEnv
     cl_command_queue mpCmdQueue;
     cl_program mpArryPrograms[MAX_CLFILE_NUM]; //one program object maps one kernel source file
     int mnIsUserCreated; // 1: created , 0:no create and needed to create by opencl wrapper
-    int mnKhrFp64Flag;
-    int mnAmdFp64Flag;
+    bool mnKhrFp64Flag;
+    bool mnAmdFp64Flag;
 };
 
 struct SingleVectorFormula

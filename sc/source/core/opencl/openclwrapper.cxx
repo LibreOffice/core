@@ -494,7 +494,7 @@ int OpenclDevice::initOpenclRunEnv( int argc )
     {
         registOpenclKernel();
         //initialize devices, context, command_queue
-        int status = initOpenclRunEnv( &gpuEnv );
+        bool status = initOpenclRunEnv( &gpuEnv );
         if ( status )
         {
             return 1;
@@ -502,8 +502,8 @@ int OpenclDevice::initOpenclRunEnv( int argc )
         //initialize program, kernelName, kernelCount
         if( getenv( "SC_FLOAT" ) )
         {
-            gpuEnv.mnKhrFp64Flag = 0;
-            gpuEnv.mnAmdFp64Flag = 0;
+            gpuEnv.mnKhrFp64Flag = false;
+            gpuEnv.mnAmdFp64Flag = false;
         }
         if( gpuEnv.mnKhrFp64Flag )
         {
