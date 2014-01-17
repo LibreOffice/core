@@ -21,7 +21,7 @@
         <prop oor:name="FilterService"><value>com.sun.star.comp.Draw.CDRImportFilter</value></prop>
         <prop oor:name="UserData"><value></value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="x-default">Corel Draw</value>
+            <value xml:lang="en-US">Corel Draw</value>
         </prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>draw_CorelDraw_Document</value></prop>

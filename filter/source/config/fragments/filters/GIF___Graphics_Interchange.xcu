@@ -21,7 +21,7 @@
         <prop oor:name="FilterService"/>
         <prop oor:name="UserData"><value></value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="x-default">GIF - Graphics Interchange Format</value>
+            <value xml:lang="en-US">GIF - Graphics Interchange Format</value>
         </prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>gif_Graphics_Interchange</value></prop>

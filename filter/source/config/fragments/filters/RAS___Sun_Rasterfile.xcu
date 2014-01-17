@@ -21,7 +21,7 @@
         <prop oor:name="FilterService"/>
         <prop oor:name="UserData"><value></value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="x-default">RAS - Sun Raster Image</value>
+            <value xml:lang="en-US">RAS - Sun Raster Image</value>
         </prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>ras_Sun_Rasterfile</value></prop>

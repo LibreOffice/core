@@ -21,7 +21,7 @@
         <prop oor:name="FilterService"/>
         <prop oor:name="UserData"><value>CWW6</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="x-default">Microsoft Word 95</value>
+            <value xml:lang="en-US">Microsoft Word 95</value>
         </prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>writer_MS_Word_95</value></prop>

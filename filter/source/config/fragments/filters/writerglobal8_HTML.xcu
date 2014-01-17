@@ -25,6 +25,6 @@
         <prop oor:name="TemplateName"/>
         <prop oor:name="DocumentService"><value>com.sun.star.text.GlobalDocument</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="x-default">HTML (Writer/Global)</value>
+            <value xml:lang="en-US">HTML (Writer/Global)</value>
         </prop>
     </node>
