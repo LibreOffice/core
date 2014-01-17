@@ -416,7 +416,7 @@ public:
     virtual AbstractScPivotFilterDlg * CreateScPivotFilterDlg ( Window* pParent,
                                                                 const SfxItemSet&   rArgSet, sal_uInt16 nSourceTab , int nId ) = 0;
 
-    virtual AbstractScDPFunctionDlg * CreateScDPFunctionDlg( Window* pParent, int nId,
+    virtual AbstractScDPFunctionDlg * CreateScDPFunctionDlg( Window* pParent,
                                                                 const ScDPLabelDataVector& rLabelVec,
                                                                 const ScDPLabelData& rLabelData,
                                                                 const ScPivotFuncData& rFuncData ) = 0;

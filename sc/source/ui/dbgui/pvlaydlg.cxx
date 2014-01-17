@@ -806,7 +806,7 @@ void ScPivotLayoutDlg::NotifyDoubleClick( ScPivotFieldType eType, size_t nFieldI
             ScPivotFuncData& rFuncData = maWndData.GetFuncData(nFieldIndex);
             boost::scoped_ptr<AbstractScDPFunctionDlg> pDlg(
                 pFact->CreateScDPFunctionDlg(
-                    this, RID_SCDLG_DPDATAFIELD, maLabelData, *pData, rFuncData));
+                    this, maLabelData, *pData, rFuncData));
 
             if ( pDlg->Execute() == RET_OK )
             {

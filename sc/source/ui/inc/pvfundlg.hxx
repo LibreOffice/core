@@ -34,6 +34,7 @@
 #include <sfx2/itemconnect.hxx>
 #include "pivot.hxx"
 
+#include <boost/scoped_ptr.hpp>
 #include <boost/unordered_map.hpp>
 
 // ============================================================================
@@ -47,7 +48,8 @@ class ScDPObject;
 class ScDPFunctionListBox : public MultiListBox
 {
 public:
-    explicit            ScDPFunctionListBox( Window* pParent, const ResId& rResId );
+    ScDPFunctionListBox(Window* pParent, WinBits nStyle);
+    ScDPFunctionListBox(Window* pParent, const ResId& rResId);
 
     void                SetSelection( sal_uInt16 nFuncMask );
     sal_uInt16          GetSelection() const;
@@ -81,29 +83,22 @@ private:
     DECL_LINK( DblClickHdl, void* );
 
 private:
-    FixedLine           maFlFunc;
-    ScDPFunctionListBox maLbFunc;
-    FixedText           maFtNameLabel;
-    FixedInfo           maFtName;
-    FixedLine           maFlDisplay;
-    FixedText           maFtType;
-    ListBox             maLbType;
-    FixedText           maFtBaseField;
-    ListBox             maLbBaseField;
-    FixedText           maFtBaseItem;
-    ListBox             maLbBaseItem;
-    OKButton            maBtnOk;
-    CancelButton        maBtnCancel;
-    HelpButton          maBtnHelp;
-    MoreButton          maBtnMore;
+    ScDPFunctionListBox* mpLbFunc;
+    FixedText*           mpFtName;
+    ListBox*             mpLbType;
+    FixedText*           mpFtBaseField;
+    ListBox*             mpLbBaseField;
+    FixedText*           mpFtBaseItem;
+    ListBox*             mpLbBaseItem;
+    OKButton*            mpBtnOk;
 
-    NameMapType         maBaseFieldNameMap; // cache for base field display -> original name.
-    NameMapType         maBaseItemNameMap;  // cache for base item display -> original name.
+    NameMapType          maBaseFieldNameMap; // cache for base field display -> original name.
+    NameMapType          maBaseItemNameMap;  // cache for base item display -> original name.
 
-    ScDPListBoxWrapper  maLbTypeWrp;        /// Wrapper for direct usage of API constants.
+    boost::scoped_ptr<ScDPListBoxWrapper>  mxLbTypeWrp;        /// Wrapper for direct usage of API constants.
 
     const ScDPLabelDataVector& mrLabelVec;  /// Data of all labels.
-    bool                mbEmptyItem;        /// true = Empty base item in listbox.
+    bool                 mbEmptyItem;        /// true = Empty base item in listbox.
 };
 
 // ============================================================================

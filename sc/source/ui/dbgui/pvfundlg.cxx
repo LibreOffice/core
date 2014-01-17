@@ -28,6 +28,7 @@
 #include <com/sun/star/sheet/DataPilotFieldShowItemsMode.hpp>
 
 #include <tools/resary.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/msgbox.hxx>
 
 #include "scresid.hxx"
@@ -155,10 +156,25 @@ static const ScDPListBoxWrapper::MapEntryType spShowFromMap[] =
 
 // ============================================================================
 
-ScDPFunctionListBox::ScDPFunctionListBox( Window* pParent, const ResId& rResId ) :
-    MultiListBox( pParent, rResId )
+ScDPFunctionListBox::ScDPFunctionListBox(Window* pParent, WinBits nStyle)
+    : MultiListBox(pParent, nStyle)
 {
     FillFunctionNames();
+}
+
+ScDPFunctionListBox::ScDPFunctionListBox(Window* pParent, const ResId& rResId)
+    : MultiListBox(pParent, rResId)
+{
+    FillFunctionNames();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScDPFunctionListBox(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+    return new ScDPFunctionListBox(pParent, nWinStyle);
 }
 
 void ScDPFunctionListBox::SetSelection( sal_uInt16 nFuncMask )
@@ -191,45 +207,41 @@ void ScDPFunctionListBox::FillFunctionNames()
 
 ScDPFunctionDlg::ScDPFunctionDlg(
         Window* pParent, const ScDPLabelDataVector& rLabelVec,
-        const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData ) :
-    ModalDialog     ( pParent, ScResId( RID_SCDLG_DPDATAFIELD ) ),
-    maFlFunc        ( this, ScResId( FL_FUNC ) ),
-    maLbFunc        ( this, ScResId( LB_FUNC ) ),
-    maFtNameLabel   ( this, ScResId( FT_NAMELABEL ) ),
-    maFtName        ( this, ScResId( FT_NAME ) ),
-    maFlDisplay     ( this, ScResId( FL_DISPLAY ) ),
-    maFtType        ( this, ScResId( FT_TYPE ) ),
-    maLbType        ( this, ScResId( LB_TYPE ) ),
-    maFtBaseField   ( this, ScResId( FT_BASEFIELD ) ),
-    maLbBaseField   ( this, ScResId( LB_BASEFIELD ) ),
-    maFtBaseItem    ( this, ScResId( FT_BASEITEM ) ),
-    maLbBaseItem    ( this, ScResId( LB_BASEITEM ) ),
-    maBtnOk         ( this, ScResId( BTN_OK ) ),
-    maBtnCancel     ( this, ScResId( BTN_CANCEL ) ),
-    maBtnHelp       ( this, ScResId( BTN_HELP ) ),
-    maBtnMore       ( this, ScResId( BTN_MORE ) ),
-    maLbTypeWrp     ( maLbType, spRefTypeMap ),
-    mrLabelVec      ( rLabelVec ),
-    mbEmptyItem     ( false )
+        const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData)
+    : ModalDialog(pParent, "DataFieldDialog",
+        "modules/scalc/ui/datafielddialog.ui")
+    , mrLabelVec(rLabelVec)
+    , mbEmptyItem(false)
 {
-    FreeResource();
+    get(mpFtName, "name");
+    get(mpLbType, "type");
+    mxLbTypeWrp.reset(new ScDPListBoxWrapper(*mpLbType, spRefTypeMap));
+    get(mpLbFunc, "functions");
+    mpLbFunc->set_height_request(mpLbFunc->GetTextHeight() * 8);
+    get(mpFtBaseField, "basefieldft");
+    get(mpLbBaseField, "basefield");
+    get(mpFtBaseItem, "baseitemft");
+    get(mpLbBaseItem, "baseitem");
+    get(mpBtnOk, "ok");
+
     Init( rLabelData, rFuncData );
-    maLbFunc.EnableMultiSelection(false);
+
+    mpLbFunc->EnableMultiSelection(false);
 }
 
 sal_uInt16 ScDPFunctionDlg::GetFuncMask() const
 {
-    return maLbFunc.GetSelection();
+    return mpLbFunc->GetSelection();
 }
 
 DataPilotFieldReference ScDPFunctionDlg::GetFieldRef() const
 {
     DataPilotFieldReference aRef;
 
-    aRef.ReferenceType = maLbTypeWrp.GetControlValue();
-    aRef.ReferenceField = GetBaseFieldName(maLbBaseField.GetSelectEntry());
+    aRef.ReferenceType = mxLbTypeWrp->GetControlValue();
+    aRef.ReferenceField = GetBaseFieldName(mpLbBaseField->GetSelectEntry());
 
-    sal_uInt16 nBaseItemPos = maLbBaseItem.GetSelectEntryPos();
+    sal_uInt16 nBaseItemPos = mpLbBaseItem->GetSelectEntryPos();
     switch( nBaseItemPos )
     {
         case SC_BASEITEM_PREV_POS:
@@ -242,7 +254,7 @@ DataPilotFieldReference ScDPFunctionDlg::GetFieldRef() const
         {
             aRef.ReferenceItemType = DataPilotFieldReferenceItemType::NAMED;
             if( !mbEmptyItem || (nBaseItemPos > SC_BASEITEM_USER_POS) )
-                aRef.ReferenceItemName = GetBaseItemName(maLbBaseItem.GetSelectEntry());
+                aRef.ReferenceItemName = GetBaseItemName(mpLbBaseItem->GetSelectEntry());
         }
     }
 
@@ -253,30 +265,21 @@ void ScDPFunctionDlg::Init( const ScDPLabelData& rLabelData, const ScPivotFuncDa
 {
     // list box
     sal_uInt16 nFuncMask = (rFuncData.mnFuncMask == PIVOT_FUNC_NONE) ? PIVOT_FUNC_SUM : rFuncData.mnFuncMask;
-    maLbFunc.SetSelection( nFuncMask );
+    mpLbFunc->SetSelection( nFuncMask );
 
     // field name
-    maFtName.SetText(rLabelData.getDisplayName());
-
-    // "More button" controls
-    maBtnMore.AddWindow( &maFlDisplay );
-    maBtnMore.AddWindow( &maFtType );
-    maBtnMore.AddWindow( &maLbType );
-    maBtnMore.AddWindow( &maFtBaseField );
-    maBtnMore.AddWindow( &maLbBaseField );
-    maBtnMore.AddWindow( &maFtBaseItem );
-    maBtnMore.AddWindow( &maLbBaseItem );
+    mpFtName->SetText(rLabelData.getDisplayName());
 
     // handlers
-    maLbFunc.SetDoubleClickHdl( LINK( this, ScDPFunctionDlg, DblClickHdl ) );
-    maLbType.SetSelectHdl( LINK( this, ScDPFunctionDlg, SelectHdl ) );
-    maLbBaseField.SetSelectHdl( LINK( this, ScDPFunctionDlg, SelectHdl ) );
+    mpLbFunc->SetDoubleClickHdl( LINK( this, ScDPFunctionDlg, DblClickHdl ) );
+    mpLbType->SetSelectHdl( LINK( this, ScDPFunctionDlg, SelectHdl ) );
+    mpLbBaseField->SetSelectHdl( LINK( this, ScDPFunctionDlg, SelectHdl ) );
 
     // base field list box
     OUString aSelectedEntry;
     for( ScDPLabelDataVector::const_iterator aIt = mrLabelVec.begin(), aEnd = mrLabelVec.end(); aIt != aEnd; ++aIt )
     {
-        maLbBaseField.InsertEntry(aIt->getDisplayName());
+        mpLbBaseField->InsertEntry(aIt->getDisplayName());
         maBaseFieldNameMap.insert(
             NameMapType::value_type(aIt->getDisplayName(), aIt->maName));
         if (aIt->maName == rFuncData.maFieldRef.ReferenceField)
@@ -284,41 +287,41 @@ void ScDPFunctionDlg::Init( const ScDPLabelData& rLabelData, const ScPivotFuncDa
     }
 
     // base item list box
-    maLbBaseItem.SetSeparatorPos( SC_BASEITEM_USER_POS - 1 );
+    mpLbBaseItem->SetSeparatorPos( SC_BASEITEM_USER_POS - 1 );
 
     // select field reference type
-    maLbTypeWrp.SetControlValue( rFuncData.maFieldRef.ReferenceType );
-    SelectHdl( &maLbType );         // enables base field/item list boxes
+    mxLbTypeWrp->SetControlValue( rFuncData.maFieldRef.ReferenceType );
+    SelectHdl( mpLbType );         // enables base field/item list boxes
 
     // select base field
-    maLbBaseField.SelectEntry(aSelectedEntry);
-    if( maLbBaseField.GetSelectEntryPos() >= maLbBaseField.GetEntryCount() )
-        maLbBaseField.SelectEntryPos( 0 );
-    SelectHdl( &maLbBaseField );    // fills base item list, selects base item
+    mpLbBaseField->SelectEntry(aSelectedEntry);
+    if( mpLbBaseField->GetSelectEntryPos() >= mpLbBaseField->GetEntryCount() )
+        mpLbBaseField->SelectEntryPos( 0 );
+    SelectHdl( mpLbBaseField );    // fills base item list, selects base item
 
     // select base item
     switch( rFuncData.maFieldRef.ReferenceItemType )
     {
         case DataPilotFieldReferenceItemType::PREVIOUS:
-            maLbBaseItem.SelectEntryPos( SC_BASEITEM_PREV_POS );
+            mpLbBaseItem->SelectEntryPos( SC_BASEITEM_PREV_POS );
         break;
         case DataPilotFieldReferenceItemType::NEXT:
-            maLbBaseItem.SelectEntryPos( SC_BASEITEM_NEXT_POS );
+            mpLbBaseItem->SelectEntryPos( SC_BASEITEM_NEXT_POS );
         break;
         default:
         {
             if( mbEmptyItem && rFuncData.maFieldRef.ReferenceItemName.isEmpty() )
             {
                 // select special "(empty)" entry added before other items
-                maLbBaseItem.SelectEntryPos( SC_BASEITEM_USER_POS );
+                mpLbBaseItem->SelectEntryPos( SC_BASEITEM_USER_POS );
             }
             else
             {
                 sal_uInt16 nStartPos = mbEmptyItem ? (SC_BASEITEM_USER_POS + 1) : SC_BASEITEM_USER_POS;
                 sal_uInt16 nPos = FindBaseItemPos( rFuncData.maFieldRef.ReferenceItemName, nStartPos );
-                if( nPos >= maLbBaseItem.GetEntryCount() )
-                    nPos = (maLbBaseItem.GetEntryCount() > SC_BASEITEM_USER_POS) ? SC_BASEITEM_USER_POS : SC_BASEITEM_PREV_POS;
-                maLbBaseItem.SelectEntryPos( nPos );
+                if( nPos >= mpLbBaseItem->GetEntryCount() )
+                    nPos = (mpLbBaseItem->GetEntryCount() > SC_BASEITEM_USER_POS) ? SC_BASEITEM_USER_POS : SC_BASEITEM_PREV_POS;
+                mpLbBaseItem->SelectEntryPos( nPos );
             }
         }
     }
@@ -340,10 +343,10 @@ sal_uInt16 ScDPFunctionDlg::FindBaseItemPos( const OUString& rEntry, sal_uInt16 
 {
     sal_uInt16 nPos = nStartPos;
     bool bFound = false;
-    while (nPos < maLbBaseItem.GetEntryCount())
+    while (nPos < mpLbBaseItem->GetEntryCount())
     {
         // translate the displayed field name back to its original field name.
-        const OUString& rName = GetBaseItemName(maLbBaseItem.GetEntry(nPos));
+        const OUString& rName = GetBaseItemName(mpLbBaseItem->GetEntry(nPos));
         if (rName.equals(rEntry))
         {
             bFound = true;
@@ -356,10 +359,10 @@ sal_uInt16 ScDPFunctionDlg::FindBaseItemPos( const OUString& rEntry, sal_uInt16 
 
 IMPL_LINK( ScDPFunctionDlg, SelectHdl, ListBox*, pLBox )
 {
-    if( pLBox == &maLbType )
+    if( pLBox == mpLbType )
     {
         bool bEnableField, bEnableItem;
-        switch( maLbTypeWrp.GetControlValue() )
+        switch( mxLbTypeWrp->GetControlValue() )
         {
             case DataPilotFieldReferenceType::ITEM_DIFFERENCE:
             case DataPilotFieldReferenceType::ITEM_PERCENTAGE:
@@ -376,27 +379,27 @@ IMPL_LINK( ScDPFunctionDlg, SelectHdl, ListBox*, pLBox )
                 bEnableField = bEnableItem = false;
         }
 
-        bEnableField &= maLbBaseField.GetEntryCount() > 0;
-        maFtBaseField.Enable( bEnableField );
-        maLbBaseField.Enable( bEnableField );
+        bEnableField &= mpLbBaseField->GetEntryCount() > 0;
+        mpFtBaseField->Enable( bEnableField );
+        mpLbBaseField->Enable( bEnableField );
 
         bEnableItem &= bEnableField;
-        maFtBaseItem.Enable( bEnableItem );
-        maLbBaseItem.Enable( bEnableItem );
+        mpFtBaseItem->Enable( bEnableItem );
+        mpLbBaseItem->Enable( bEnableItem );
     }
-    else if( pLBox == &maLbBaseField )
+    else if( pLBox == mpLbBaseField )
     {
         // keep "previous" and "next" entries
-        while( maLbBaseItem.GetEntryCount() > SC_BASEITEM_USER_POS )
-            maLbBaseItem.RemoveEntry( SC_BASEITEM_USER_POS );
+        while( mpLbBaseItem->GetEntryCount() > SC_BASEITEM_USER_POS )
+            mpLbBaseItem->RemoveEntry( SC_BASEITEM_USER_POS );
 
         // update item list for current base field
         mbEmptyItem = false;
-        size_t nBasePos = maLbBaseField.GetSelectEntryPos();
+        size_t nBasePos = mpLbBaseField->GetSelectEntryPos();
         if( nBasePos < mrLabelVec.size() )
         {
             const vector<ScDPLabelData::Member>& rMembers = mrLabelVec[nBasePos].maMembers;
-            mbEmptyItem = lclFillListBox( maLbBaseItem, rMembers, SC_BASEITEM_USER_POS );
+            mbEmptyItem = lclFillListBox(*mpLbBaseItem, rMembers, SC_BASEITEM_USER_POS);
             // build cache for base names.
             NameMapType aMap;
             vector<ScDPLabelData::Member>::const_iterator itr = rMembers.begin(), itrEnd = rMembers.end();
@@ -406,15 +409,15 @@ IMPL_LINK( ScDPFunctionDlg, SelectHdl, ListBox*, pLBox )
         }
 
         // select base item
-        sal_uInt16 nItemPos = (maLbBaseItem.GetEntryCount() > SC_BASEITEM_USER_POS) ? SC_BASEITEM_USER_POS : SC_BASEITEM_PREV_POS;
-        maLbBaseItem.SelectEntryPos( nItemPos );
+        sal_uInt16 nItemPos = (mpLbBaseItem->GetEntryCount() > SC_BASEITEM_USER_POS) ? SC_BASEITEM_USER_POS : SC_BASEITEM_PREV_POS;
+        mpLbBaseItem->SelectEntryPos( nItemPos );
     }
     return 0;
 }
 
 IMPL_LINK_NOARG(ScDPFunctionDlg, DblClickHdl)
 {
-    maBtnOk.Click();
+    mpBtnOk->Click();
     return 0;
 }
 

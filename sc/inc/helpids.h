@@ -152,7 +152,6 @@
 
 #define HID_SC_DRAW_RENAME                                      "SC_HID_SC_DRAW_RENAME"
 
-#define HID_SC_DPDATAFIELD                                      "SC_HID_SC_DPDATAFIELD"
 #define HID_SC_DPSUBT_OPT                                       "SC_HID_SC_DPSUBT_OPT"
 #define HID_SC_DPSUBT_HIDE                                      "SC_HID_SC_DPSUBT_HIDE"
 #define HID_SC_DPNUMGROUP                                       "SC_HID_SC_DPNUMGROUP"

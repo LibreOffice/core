@@ -881,24 +881,12 @@ AbstractScPivotFilterDlg * ScAbstractDialogFactory_Impl::CreateScPivotFilterDlg 
 }
 
 AbstractScDPFunctionDlg * ScAbstractDialogFactory_Impl::CreateScDPFunctionDlg ( Window* pParent,
-                                                                int nId,
                                                                 const ScDPLabelDataVector& rLabelVec,
                                                                 const ScDPLabelData& rLabelData,
                                                                 const ScPivotFuncData& rFuncData )
 {
-    ScDPFunctionDlg * pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_DPDATAFIELD :
-            pDlg = new ScDPFunctionDlg( pParent, rLabelVec, rLabelData, rFuncData );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractScDPFunctionDlg_Impl( pDlg );
-    return 0;
+    ScDPFunctionDlg * pDlg = new ScDPFunctionDlg( pParent, rLabelVec, rLabelData, rFuncData );
+    return new AbstractScDPFunctionDlg_Impl( pDlg );
 }
 
 AbstractScDPSubtotalDlg * ScAbstractDialogFactory_Impl::CreateScDPSubtotalDlg ( Window* pParent,
