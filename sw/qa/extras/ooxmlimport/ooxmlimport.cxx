@@ -971,6 +971,10 @@ DECLARE_OOXMLIMPORT_TEST(testGroupshapeChildRotation, "groupshape-child-rotation
     uno::Reference<drawing::XShape> xShape(xGroupShape->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xShape->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xShape->getPosition().Y);
+
+    xShape.set(xGroupShape->getByIndex(4), uno::UNO_QUERY);
+    // This was 887, i.e. border distances were included in the height.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(686), xShape->getSize().Height);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testN793262, "n793262.docx")

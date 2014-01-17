@@ -620,10 +620,12 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
             getTextBox()->convert(xShape);
             if (getTextBox()->borderDistanceSet)
             {
+                awt::Size aSize = xShape->getSize();
                 PropertySet(xShape).setAnyProperty(PROP_TextLeftDistance, makeAny(sal_Int32(getTextBox()->borderDistanceLeft)));
                 PropertySet(xShape).setAnyProperty(PROP_TextUpperDistance, makeAny(sal_Int32(getTextBox()->borderDistanceTop)));
                 PropertySet(xShape).setAnyProperty(PROP_TextRightDistance, makeAny(sal_Int32(getTextBox()->borderDistanceRight)));
                 PropertySet(xShape).setAnyProperty(PROP_TextLowerDistance, makeAny(sal_Int32(getTextBox()->borderDistanceBottom)));
+                xShape->setSize(aSize);
             }
         }
     }
