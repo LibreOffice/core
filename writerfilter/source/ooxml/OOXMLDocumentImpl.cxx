@@ -295,7 +295,7 @@ void OOXMLDocumentImpl::resolveFootnote(Stream & rStream,
         nId = rType;
         break;
     default:
-        nId = NS_rtf::LN_footnote;
+        nId = NS_ooxml::LN_footnote;
         break;
     }
 
@@ -317,7 +317,7 @@ void OOXMLDocumentImpl::resolveEndnote(Stream & rStream,
         nId = rType;
         break;
     default:
-        nId = NS_rtf::LN_endnote;
+        nId = NS_ooxml::LN_endnote;
         break;
     }
 
@@ -330,7 +330,7 @@ void OOXMLDocumentImpl::resolveComment(Stream & rStream,
     writerfilter::Reference<Stream>::Pointer_t pStream =
         getXNoteStream(OOXMLStream::COMMENTS, 0, nId);
 
-    resolveFastSubStreamWithId(rStream, pStream, NS_rtf::LN_annotation);
+    resolveFastSubStreamWithId(rStream, pStream, NS_ooxml::LN_annotation);
 }
 
 OOXMLPropertySet * OOXMLDocumentImpl::getPicturePropSet
@@ -387,13 +387,13 @@ void OOXMLDocumentImpl::resolveHeader(Stream & rStream,
      switch (type)
      {
      case NS_ooxml::LN_Value_ST_HdrFtr_even:
-         resolveFastSubStreamWithId(rStream, pStream, NS_rtf::LN_headerl);
+         resolveFastSubStreamWithId(rStream, pStream, NS_ooxml::LN_headerl);
         break;
      case NS_ooxml::LN_Value_ST_HdrFtr_default: // here we assume that default is right, but not necessarily true :-(
-         resolveFastSubStreamWithId(rStream, pStream, NS_rtf::LN_headerr);
+         resolveFastSubStreamWithId(rStream, pStream, NS_ooxml::LN_headerr);
          break;
      case NS_ooxml::LN_Value_ST_HdrFtr_first:
-         resolveFastSubStreamWithId(rStream, pStream, NS_rtf::LN_headerf);
+         resolveFastSubStreamWithId(rStream, pStream, NS_ooxml::LN_headerf);
          break;
      default:
          break;
@@ -410,13 +410,13 @@ void OOXMLDocumentImpl::resolveFooter(Stream & rStream,
      switch (type)
      {
      case NS_ooxml::LN_Value_ST_HdrFtr_even:
-         resolveFastSubStreamWithId(rStream, pStream, NS_rtf::LN_footerl);
+         resolveFastSubStreamWithId(rStream, pStream, NS_ooxml::LN_footerl);
          break;
      case NS_ooxml::LN_Value_ST_HdrFtr_default: // here we assume that default is right, but not necessarily true :-(
-         resolveFastSubStreamWithId(rStream, pStream, NS_rtf::LN_footerr);
+         resolveFastSubStreamWithId(rStream, pStream, NS_ooxml::LN_footerr);
          break;
      case NS_ooxml::LN_Value_ST_HdrFtr_first:
-         resolveFastSubStreamWithId(rStream, pStream, NS_rtf::LN_footerf);
+         resolveFastSubStreamWithId(rStream, pStream, NS_ooxml::LN_footerf);
          break;
      default:
          break;

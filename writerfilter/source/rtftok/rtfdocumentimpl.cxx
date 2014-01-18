@@ -1369,14 +1369,14 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 sal_uInt32 nPos = m_nGroupStartPos - 1;
                 switch (nKeyword)
                 {
-                    case RTF_HEADER: nId = NS_rtf::LN_headerr; break;
-                    case RTF_FOOTER: nId = NS_rtf::LN_footerr; break;
-                    case RTF_HEADERL: nId = NS_rtf::LN_headerl; break;
-                    case RTF_HEADERR: nId = NS_rtf::LN_headerr; break;
-                    case RTF_HEADERF: nId = NS_rtf::LN_headerf; break;
-                    case RTF_FOOTERL: nId = NS_rtf::LN_footerl; break;
-                    case RTF_FOOTERR: nId = NS_rtf::LN_footerr; break;
-                    case RTF_FOOTERF: nId = NS_rtf::LN_footerf; break;
+                    case RTF_HEADER: nId = NS_ooxml::LN_headerr; break;
+                    case RTF_FOOTER: nId = NS_ooxml::LN_footerr; break;
+                    case RTF_HEADERL: nId = NS_ooxml::LN_headerl; break;
+                    case RTF_HEADERR: nId = NS_ooxml::LN_headerr; break;
+                    case RTF_HEADERF: nId = NS_ooxml::LN_headerf; break;
+                    case RTF_FOOTERL: nId = NS_ooxml::LN_footerl; break;
+                    case RTF_FOOTERR: nId = NS_ooxml::LN_footerr; break;
+                    case RTF_FOOTERF: nId = NS_ooxml::LN_footerf; break;
                     default: break;
                 }
                 m_nHeaderFooterPositions.push(make_pair(nId, nPos));
@@ -1386,7 +1386,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_FOOTNOTE:
             if (!m_pSuperstream)
             {
-                Id nId = NS_rtf::LN_footnote;
+                Id nId = NS_ooxml::LN_footnote;
 
                 // Check if this is an endnote.
                 OStringBuffer aBuf;
@@ -1398,7 +1398,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 }
                 OString aKeyword = aBuf.makeStringAndClear();
                 if (aKeyword.equals("\\ftnalt"))
-                    nId = NS_rtf::LN_endnote;
+                    nId = NS_ooxml::LN_endnote;
 
                 m_bHasFootnote = true;
                 if (m_aStates.top().pCurrentBuffer == &m_aSuperBuffer)
@@ -1443,7 +1443,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_ANNOTATION:
             if (!m_pSuperstream)
             {
-                resolveSubstream(m_nGroupStartPos - 1, NS_rtf::LN_annotation);
+                resolveSubstream(m_nGroupStartPos - 1, NS_ooxml::LN_annotation);
                 m_aStates.top().nDestinationState = DESTINATION_SKIP;
             }
             else
@@ -4563,7 +4563,7 @@ int RTFDocumentImpl::popState()
     {
         // \par means an empty paragraph at the end of footnotes/endnotes, but
         // not in case of other substreams, like headers.
-        if (m_bNeedCr && !(m_nStreamType == NS_rtf::LN_footnote || m_nStreamType == NS_rtf::LN_endnote))
+        if (m_bNeedCr && !(m_nStreamType == NS_ooxml::LN_footnote || m_nStreamType == NS_ooxml::LN_endnote))
             dispatchSymbol(RTF_PAR);
         sectBreak(true);
     }

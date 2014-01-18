@@ -47,6 +47,15 @@
   <token tokenid="ooxml:starmath"/>
   <token tokenid="ooxml:blip"/>
   <token tokenid="ooxml:payload"/>
+  <token tokenid="ooxml:footnote"/>
+  <token tokenid="ooxml:endnote"/>
+  <token tokenid="ooxml:annotation"/>
+  <token tokenid="ooxml:headerl"/>
+  <token tokenid="ooxml:headerr"/>
+  <token tokenid="ooxml:headerf"/>
+  <token tokenid="ooxml:footerl"/>
+  <token tokenid="ooxml:footerr"/>
+  <token tokenid="ooxml:footerf"/>
   <namespace name="dml-stylesheet" url="http://schemas.openxmlformats.org/drawingml/2006/main" file="dml-stylesheet.rng">
     <start name="theme"/>
     <start name="themeOverride"/>

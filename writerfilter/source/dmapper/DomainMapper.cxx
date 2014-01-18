@@ -421,11 +421,11 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_rtf::LN_LINEPROPSRIGHT:
             break;
-        case NS_rtf::LN_headerr:
+        case NS_ooxml::LN_headerr:
             break;
-        case NS_rtf::LN_footerr:
+        case NS_ooxml::LN_footerr:
             break;
-        case NS_rtf::LN_endnote:
+        case NS_ooxml::LN_endnote:
             break;
         case NS_ooxml::LN_CT_Bookmark_name:
             // sStringValue contains the bookmark name
@@ -3711,54 +3711,54 @@ void DomainMapper::lcl_substream(Id rName, ::writerfilter::Reference<Stream>::Po
 
     switch( rName )
     {
-    case NS_rtf::LN_headerl:
+    case NS_ooxml::LN_headerl:
 
         m_pImpl->PushPageHeader(SectionPropertyMap::PAGE_LEFT);
         break;
-    case NS_rtf::LN_headerr:
+    case NS_ooxml::LN_headerr:
 
         m_pImpl->PushPageHeader(SectionPropertyMap::PAGE_RIGHT);
         break;
-    case NS_rtf::LN_headerf:
+    case NS_ooxml::LN_headerf:
 
         m_pImpl->PushPageHeader(SectionPropertyMap::PAGE_FIRST);
         break;
-    case NS_rtf::LN_footerl:
+    case NS_ooxml::LN_footerl:
 
         m_pImpl->PushPageFooter(SectionPropertyMap::PAGE_LEFT);
         break;
-    case NS_rtf::LN_footerr:
+    case NS_ooxml::LN_footerr:
 
         m_pImpl->PushPageFooter(SectionPropertyMap::PAGE_RIGHT);
         break;
-    case NS_rtf::LN_footerf:
+    case NS_ooxml::LN_footerf:
 
         m_pImpl->PushPageFooter(SectionPropertyMap::PAGE_FIRST);
         break;
-    case NS_rtf::LN_footnote:
-    case NS_rtf::LN_endnote:
-        m_pImpl->PushFootOrEndnote( NS_rtf::LN_footnote == rName );
+    case NS_ooxml::LN_footnote:
+    case NS_ooxml::LN_endnote:
+        m_pImpl->PushFootOrEndnote( NS_ooxml::LN_footnote == rName );
     break;
-    case NS_rtf::LN_annotation :
+    case NS_ooxml::LN_annotation :
         m_pImpl->PushAnnotation();
     break;
     }
     ref->resolve(*this);
     switch( rName )
     {
-    case NS_rtf::LN_headerl:
-    case NS_rtf::LN_headerr:
-    case NS_rtf::LN_headerf:
-    case NS_rtf::LN_footerl:
-    case NS_rtf::LN_footerr:
-    case NS_rtf::LN_footerf:
+    case NS_ooxml::LN_headerl:
+    case NS_ooxml::LN_headerr:
+    case NS_ooxml::LN_headerf:
+    case NS_ooxml::LN_footerl:
+    case NS_ooxml::LN_footerr:
+    case NS_ooxml::LN_footerf:
         m_pImpl->PopPageHeaderFooter();
     break;
-    case NS_rtf::LN_footnote:
-    case NS_rtf::LN_endnote:
+    case NS_ooxml::LN_footnote:
+    case NS_ooxml::LN_endnote:
         m_pImpl->PopFootOrEndnote();
     break;
-    case NS_rtf::LN_annotation :
+    case NS_ooxml::LN_annotation :
         m_pImpl->PopAnnotation();
     break;
     }
