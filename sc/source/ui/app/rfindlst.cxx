@@ -35,7 +35,34 @@ ScRangeFindList::ScRangeFindList(const OUString& rName) :
 {
 }
 
-ColorData ScRangeFindList::GetColorName( size_t nIndex )
+size_t ScRangeFindList::Insert( const ScRangeFindData &rNew )
+{
+    for(std::vector<ScRangeFindData>::iterator it=maEntries.begin(); it!=maEntries.end(); ++it)
+    {
+        if(it->aRef == rNew.aRef)
+        {
+            return it->nIndex;
+        }
+    }
+    ScRangeFindData insertData(rNew);
+    insertData.nIndex = maEntries.size();
+    maEntries.push_back(insertData);
+    return insertData.nIndex;
+}
+
+// ColorData ScRangeFindList::GetColorName( const ScRange &rRange )
+// {
+//     for(std::vector<ScRangeFindData>::iterator it=maEntries.begin(); it!=maEntries.end(); ++it)
+//     {
+//         if(it->aRef == rRange)
+//         {
+//             return aColNames[it->nIndex % SC_RANGECOLORS];
+//         }
+//     }
+//     return aColNames[maEntries.size() % SC_RANGECOLORS];
+// }
+
+ColorData ScRangeFindList::GetColorName( const size_t nIndex )
 {
     return aColNames[nIndex % SC_RANGECOLORS];
 }
