@@ -188,7 +188,7 @@ void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount )
             rColor.SetBlue( *pTmp++ );
         }
 
-        // nach Moeglichkeit noch einige Standardfarben unterbringen
+        // if possible accommodate some standard colours
         if( nCount < 256UL )
         {
             (*pPal)[ 255UL ] = Color( COL_WHITE );
@@ -213,7 +213,7 @@ bool GIFReader::ReadExtension()
     rIStm >> cFunction;
     if( NO_PENDING( rIStm ) )
     {
-        // Block-Laenge
+        // Block length
         rIStm >> cSize;
 
         switch( cFunction )
@@ -238,15 +238,15 @@ bool GIFReader::ReadExtension()
             }
             break;
 
-            // Application-Extension
+            // Application extension
             case ( 0xff ) :
             {
                 if ( NO_PENDING( rIStm ) )
                 {
-                    // default diese Extension ueberlesen
+                    // by default overread this extension
                     bOverreadDataBlocks = true;
 
-                    // Appl.-Extension hat Laenge 11
+                    // Appl. extension has length 11
                     if ( cSize == 0x0b )
                     {
                         OString aAppId = read_uInt8s_ToOString(rIStm, 8);
@@ -271,10 +271,9 @@ bool GIFReader::ReadExtension()
                                 bRet = NO_PENDING( rIStm );
                                 bOverreadDataBlocks = false;
 
-                                // Netscape interpretiert den LoopCount
-                                // als reine Anzahl der _Wiederholungen_;
-                                // bei uns ist es die Gesamtanzahl der
-                                // Durchlaeufe
+                                // Netscape interpretes the loop count
+                                // as pure number of _repeats_;
+                                // here it is the total number of loops
                                 if( nLoops )
                                     nLoops++;
                             }
@@ -285,7 +284,7 @@ bool GIFReader::ReadExtension()
                         {
                             rIStm >> cByte;
 
-                            // Loop-Extension
+                            // Loop extension
                             if ( cByte == 0x01 )
                             {
                                 rIStm >> nLogWidth100 >> nLogHeight100;
@@ -303,13 +302,13 @@ bool GIFReader::ReadExtension()
             }
             break;
 
-            // alles andere ueberlesen
+            // overread everything else
             default:
                 bOverreadDataBlocks = true;
             break;
         }
 
-        // Sub-Blocks ueberlesen
+        // overread sub-blocks
         if ( bOverreadDataBlocks )
         {
             bRet = true;
@@ -355,7 +354,7 @@ bool GIFReader::ReadLocalHeader()
         aMemStm >> nImageHeight;
         aMemStm >> nFlags;
 
-        // Falls Interlaced, ersten Startwert vorgeben
+        // if interlaced, first define startvalue
         bInterlaced = ( ( nFlags & 0x40 ) == 0x40 );
         nLastInterCount = 7;
         nLastImageY = 0;
@@ -368,11 +367,9 @@ bool GIFReader::ReadLocalHeader()
         else
             pPal = &aGPalette;
 
-        // Falls alles soweit eingelesen werden konnte, kann
-        // nun das lokale Bild angelegt werden;
-        // es wird uebergeben, ob der BackgroundColorIndex evtl.
-        // beruecksichtigt werden soll ( wenn Globale Farbtab. und
-        // diese auch fuer dieses Bild gilt )
+        // if we could read everything, we will create the local image;
+        // if the global colour table is valid for the image, we will
+        // consider the BackGroudColorIndex.
         if( NO_PENDING( rIStm ) )
         {
             CreateBitmaps( nImageWidth, nImageHeight, pPal, bGlobalPalette && ( pPal == &aGPalette ) );
@@ -434,14 +431,14 @@ void GIFReader::FillImages( HPBYTE pBytes, sal_uLong nCount )
             {
                 long nT1;
 
-                // falls Interlaced, werden die Zeilen kopiert
+                // lines will be copied if interlaced
                 if( nLastInterCount )
                 {
                     long nMinY = std::min( (long) nLastImageY + 1, (long) nImageHeight - 1 );
                     long nMaxY = std::min( (long) nLastImageY + nLastInterCount, (long) nImageHeight - 1 );
 
-                    // letzte gelesene Zeile kopieren, wenn Zeilen
-                    // nicht zusanmmenfallen ( kommt vorm wenn wir am Ende des Bildes sind )
+                    // copy last line read, if lines do not coincide
+                    // ( happens at the end of the image )
                     if( ( nMinY > nLastImageY ) && ( nLastImageY < ( nImageHeight - 1 ) ) )
                     {
                         HPBYTE  pScanline8 = pAcc8->GetScanline( nYAcc );
@@ -498,7 +495,7 @@ void GIFReader::FillImages( HPBYTE pBytes, sal_uLong nCount )
                 nYAcc = nImageY;
             }
 
-            // Zeile faengt von vorne an
+            // line starts from the beginning
             nImageX = 0;
         }
 
@@ -566,9 +563,8 @@ void GIFReader::CreateNewBitmaps()
 
 const Graphic& GIFReader::GetIntermediateGraphic()
 {
-    // Intermediate-Graphic nur erzeugen, wenn schon
-    // Daten vorliegen, aber die Graphic noch nicht
-    // vollstaendig eingelesen wurde
+    // only create intermediate graphic, if data is available
+    // but graphic still not completely read
     if ( bImGraphicReady && !aAnimation.Count() )
     {
         Bitmap  aBmp;
@@ -601,12 +597,12 @@ bool GIFReader::ProcessGIF()
     if ( !bStatus )
         eActAction = ABORT_READING;
 
-    // Stream an die richtige Stelle bringen
+    // set stream to right position
     rIStm.Seek( nLastPos );
 
     switch( eActAction )
     {
-        // naechsten Marker lesen
+        // read next marker
         case( MARKER_READING ):
         {
             sal_uInt8 cByte;
@@ -631,7 +627,7 @@ bool GIFReader::ProcessGIF()
         }
         break;
 
-        // ScreenDescriptor lesen
+        // read ScreenDescriptor
         case( GLOBAL_HEADER_READING ):
         {
             if( ( bRead = ReadGlobalHeader() ) )
@@ -643,7 +639,7 @@ bool GIFReader::ProcessGIF()
         break;
 
 
-        // Extension lesen
+        // read extension
         case( EXTENSION_READING ):
         {
             if( ( bRead = ReadExtension() ) )
@@ -652,7 +648,7 @@ bool GIFReader::ProcessGIF()
         break;
 
 
-        // Image-Descriptor lesen
+        // read Image-Descriptor
         case( LOCAL_HEADER_READING ):
         {
             if( ( bRead = ReadLocalHeader() ) )
@@ -664,7 +660,7 @@ bool GIFReader::ProcessGIF()
         break;
 
 
-        // ersten Datenblock lesen
+        // read first data block
         case( FIRST_BLOCK_READING ):
         {
             sal_uInt8 cDataSize;
@@ -687,14 +683,14 @@ bool GIFReader::ProcessGIF()
         }
         break;
 
-        // naechsten Datenblock lesen
+        // read next data block
         case( NEXT_BLOCK_READING ):
         {
             sal_uInt16  nLastX = nImageX;
             sal_uInt16  nLastY = nImageY;
             sal_uLong   nRet = ReadNextBlock();
 
-            // Return: 0:Pending / 1:OK; / 2:OK und letzter Block: / 3:EOI / 4:HardAbort
+            // Return: 0:Pending / 1:OK; / 2:OK and last block: / 3:EOI / 4:HardAbort
             if( nRet )
             {
                 bRead = true;
@@ -736,7 +732,7 @@ bool GIFReader::ProcessGIF()
         }
         break;
 
-        // ein Fehler trat auf
+        // an error occured
         case( ABORT_READING ):
         {
             bEnd = true;
@@ -748,9 +744,9 @@ bool GIFReader::ProcessGIF()
         break;
     }
 
-    // Stream an die richtige Stelle bringen,
-    // falls Daten gelesen werden konnten
-    // entweder alte Position oder aktuelle Position
+    // set stream to right position,
+    // if data could be read put it a the old
+    // position otherwise at the actual one
     if( bRead || bEnd )
         nLastPos = rIStm.Tell();
 
