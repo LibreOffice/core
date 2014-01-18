@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_d419d223",
+        "filename": "dbaccess/source/core/api/CacheSet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-01-18T15:17:25Z",
+      "side": 1,
+      "message": "No, this won\u0027t work out too well, because it will create an OUString temporary. The append is much better here.",
+      "revId": "3440bd91f6d714d447f8f9a8c0d3393217412d78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
