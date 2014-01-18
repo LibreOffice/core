@@ -1478,6 +1478,7 @@ SfxItemPresentation XLineWidthItem::GetPresentation
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = GetMetricText( (long) GetValue(),
                                     eCoreUnit, ePresUnit, pIntl);
+            rText += sal_Unicode(' ');
             rText += SVX_RESSTR( GetMetricId( ePresUnit) );
             return ePres;
         default:
@@ -2754,6 +2755,7 @@ SfxItemPresentation XLineStartWidthItem::GetPresentation
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = GetMetricText( (long) GetValue(),
                                     eCoreUnit, ePresUnit, pIntl);
+            rText += sal_Unicode(' ');
             rText += SVX_RESSTR( GetMetricId( ePresUnit) );
             return ePres;
         default:
@@ -2861,6 +2863,7 @@ SfxItemPresentation XLineEndWidthItem::GetPresentation
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = GetMetricText( (long) GetValue(),
                                     eCoreUnit, ePresUnit, pIntl);
+            rText += sal_Unicode(' ');
             rText += SVX_RESSTR( GetMetricId( ePresUnit) );
             return ePres;
         default:

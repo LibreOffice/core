@@ -1585,8 +1585,11 @@ XubString MetricFormatter::CreateFieldText( sal_Int64 nValue ) const
     if( meUnit == FUNIT_CUSTOM )
         aStr += maCustomUnitText;
     else
+    {
+        if ( meUnit != FUNIT_NONE || meUnit != FUNIT_PERCENT )
+            aStr += xub_Unicode( ' ' );
         aStr += ImplMetricToString( meUnit );
-
+    }
     return aStr;
 }
 

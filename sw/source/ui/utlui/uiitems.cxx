@@ -110,6 +110,7 @@ SfxItemPresentation  SwPageFtnInfoItem::GetPresentation
                 rText = SW_RESSTR( STR_MAX_FTN_HEIGHT );
                 rText += ' ';
                 rText += ::GetMetricText( nHght, eCoreUnit, ePresUnit, pIntl );
+                rText += sal_Unicode(' ');
                 rText += ::GetSvxString( ::GetMetricId( ePresUnit ) );
             }
             return ePres;

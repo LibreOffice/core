@@ -734,6 +734,7 @@ SfxItemPresentation lcl_HFPresentation
                 {
                     aText += GetMetricText( (long)nLeftMargin,
                                            eCoreMetric, ePresentationMetric, pIntl );
+                    aText += sal_Unicode(' ');
                     aText += EE_RESSTR(GetMetricId(ePresentationMetric));
                 }
                 aText += cpDelim;
@@ -750,6 +751,7 @@ SfxItemPresentation lcl_HFPresentation
                 {
                     aText += GetMetricText( (long)nRightMargin,
                                             eCoreMetric, ePresentationMetric, pIntl );
+                    aText += sal_Unicode(' ');
                     aText += EE_RESSTR(GetMetricId(ePresentationMetric));
                 }
             }

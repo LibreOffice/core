@@ -623,11 +623,11 @@ Control RID_POPUPPANEL_TEXTPAGE_SPACING
 
     String STR_VERY_TIGHT_TIP
     {
-        Text [ en-US ] = " Spacing: Condensed By: 3pt";
+        Text [ en-US ] = " Spacing: Condensed By: 3 pt";
     };
     String STR_TIGHT_TIP
     {
-        Text [ en-US ] = " Spacing: Condensed By: 1.5pt";
+        Text [ en-US ] = " Spacing: Condensed By: 1.5 pt";
     };
     String STR_NORMAL_TIP
     {
@@ -635,11 +635,11 @@ Control RID_POPUPPANEL_TEXTPAGE_SPACING
     };
     String STR_LOOSE_TIP
     {
-        Text [ en-US ] = " Spacing: Expanded By: 3pt";
+        Text [ en-US ] = " Spacing: Expanded By: 3 pt";
     };
     String STR_VERY_LOOSE_TIP
     {
-        Text [ en-US ] = " Spacing: Expanded By: 6pt";
+        Text [ en-US ] = " Spacing: Expanded By: 6 pt";
     };
     String STR_CUSTOM_C_TIP
     {
