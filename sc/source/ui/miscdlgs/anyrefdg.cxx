@@ -135,7 +135,8 @@ void ScFormulaReferenceHelper::ShowSimpleReference(const OUString& rStr)
                 for ( size_t i = 0, nRanges = aRangeList.size(); i < nRanges; ++i )
                 {
                     ScRange* pRangeEntry = aRangeList[ i ];
-                    ColorData aColName = ScRangeFindList::GetColorName( i );
+                    ScRangeFindList *pRangeFindList = new ScRangeFindList( pViewData->GetDocShell()->GetTitle() );
+                    ColorData aColName = pRangeFindList->GetColorName( *pRangeEntry );
                     pTabViewShell->AddHighlightRange( *pRangeEntry, aColName );
                }
             }
@@ -219,7 +220,8 @@ void ScFormulaReferenceHelper::ShowFormulaReference(const OUString& rStr)
                             aRange.aStart = aRef.toAbs(aPos);
                             aRange.aEnd = aRange.aStart;
                         }
-                        ColorData aColName=ScRangeFindList::GetColorName(nIndex++);
+                        ScRangeFindList *pRangeFindList = new ScRangeFindList(pViewData->GetDocShell()->GetTitle());
+                        ColorData aColName = pRangeFindList->GetColorName(aRange);
                         pTabViewShell->AddHighlightRange(aRange, aColName);
                     }
 

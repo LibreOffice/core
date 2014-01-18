@@ -35,9 +35,16 @@ ScRangeFindList::ScRangeFindList(const OUString& rName) :
 {
 }
 
-ColorData ScRangeFindList::GetColorName( size_t nIndex )
+ColorData ScRangeFindList::GetColorName( ScRange range )
 {
-    return aColNames[nIndex % SC_RANGECOLORS];
+    for(std::vector<ScRangeFindData>::iterator it=maEntries.begin(); it!=maEntries.end(); ++it)
+    {
+        if(it->aRef == range)
+        {
+            return aColNames[it->nIndex % SC_RANGECOLORS];
+        }
+    }
+    return aColNames[maEntries.size() % SC_RANGECOLORS];
 }
 
 //==================================================================

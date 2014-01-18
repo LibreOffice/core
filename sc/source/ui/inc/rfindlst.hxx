@@ -32,9 +32,10 @@ struct ScRangeFindData
     sal_uInt16      nFlags;
     xub_StrLen  nSelStart;
     xub_StrLen  nSelEnd;
+    size_t nIndex;
 
-    ScRangeFindData( const ScRange& rR, sal_uInt16 nF, xub_StrLen nS, xub_StrLen nE ) :
-        aRef(rR), nFlags(nF), nSelStart(nS), nSelEnd(nE) {}
+    ScRangeFindData( const ScRange& rR, sal_uInt16 nF, xub_StrLen nS, xub_StrLen nE, size_t nI ) :
+        aRef(rR), nFlags(nF), nSelStart(nS), nSelEnd(nE), nIndex(nI) {}
 };
 
 class ScRangeFindList
@@ -56,7 +57,7 @@ public:
     const OUString& GetDocName() const          { return aDocName; }
     bool            IsHidden() const            { return bHidden; }
 
-    static ColorData GetColorName( size_t nIndex );
+    ColorData GetColorName( ScRange range );
 };
 
 

@@ -30,6 +30,7 @@
 
 #include <boost/unordered_map.hpp>
 #include <vector>
+#include <algorithm>
 
 class ImageList;
 class Bitmap;
