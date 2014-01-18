@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "da9df570_7414a6f5",
+        "filename": "sc/inc/global.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-01-18T13:37:27Z",
+      "side": 1,
+      "message": "Where ever you need it. I\u0027m not even sure if you use anything from the algorithm header.",
+      "parentUuid": "da9df570_944aea25",
+      "revId": "9cb68cf2e6c18acf48198ffa872b8736300a4ae7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9df570_1437dab1",
         "filename": "sc/source/ui/app/inputhdl.cxx",
         "patchSetId": 1
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "i do not understand the meaning of \"return the index\". which index are you talking about?",
       "parentUuid": "da9df570_1437dab1",
+      "revId": "9cb68cf2e6c18acf48198ffa872b8736300a4ae7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_94f82ac6",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-01-18T13:37:27Z",
+      "side": 1,
+      "message": "Change Insert to return the index of the inserted object or the index of the object that was already in there. So we can use the index directly and don\u0027t need to look the index up through the range 3 lines later.",
+      "parentUuid": "da9df570_340a1ed3",
       "revId": "9cb68cf2e6c18acf48198ffa872b8736300a4ae7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -212,6 +248,24 @@
     },
     {
       "key": {
+        "uuid": "da9df570_b4f52ecd",
+        "filename": "sc/source/ui/miscdlgs/anyrefdg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-01-18T13:37:27Z",
+      "side": 1,
+      "message": "You need to get it from ScInputHandler::GetRangeFindList()",
+      "parentUuid": "da9df570_545882fa",
+      "revId": "9cb68cf2e6c18acf48198ffa872b8736300a4ae7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9df570_b4c0ce7d",
         "filename": "sc/source/ui/miscdlgs/anyrefdg.cxx",
         "patchSetId": 1
@@ -258,6 +312,24 @@
       "side": 1,
       "message": "oh, didn\u0027t see that. So do i overload the function GetColorName() ?",
       "parentUuid": "da9df570_f4ba5609",
+      "revId": "9cb68cf2e6c18acf48198ffa872b8736300a4ae7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_d402b2b3",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-01-18T13:37:27Z",
+      "side": 1,
+      "message": "Yes, actually you could create a static one again that just takes an index and pass in the index that is stored in pData.",
+      "parentUuid": "da9df570_745d86e9",
       "revId": "9cb68cf2e6c18acf48198ffa872b8736300a4ae7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
