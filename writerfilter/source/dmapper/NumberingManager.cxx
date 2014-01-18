@@ -468,15 +468,6 @@ void AbstractListDef::SetValue( sal_uInt32 nSprmId, sal_Int32 nValue )
         case NS_ooxml::LN_CT_AbstractNum_tmpl:
             m_nTmpl = nValue;
         break;
-        case NS_rtf::LN_FSIMPLELIST:
-            m_nSimpleList = nValue;
-        break;
-        case NS_rtf::LN_fAutoNum:
-            m_nRestart = nValue;
-        break;
-        case NS_rtf::LN_fHybrid:
-            m_nUnsigned = nValue;
-        break;
         default:
             OSL_FAIL( "this line should never be reached");
     }
@@ -782,9 +773,6 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
             if ( pCurrentLvl.get( ) )
                 pCurrentLvl->SetValue( nName, sal_Int32( nIntValue ) );
         break;
-        case NS_rtf::LN_RGISTD:
-            m_pCurrentDefinition->AddRGISTD( rVal.getString() );
-        break;
         case NS_ooxml::LN_CT_Num_numId:
             m_pCurrentDefinition->SetId( rVal.getString().toInt32( ) );
         break;
@@ -792,9 +780,6 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
             m_pCurrentDefinition->SetId( nIntValue );
         break;
         case NS_ooxml::LN_CT_AbstractNum_tmpl:
-        case NS_rtf::LN_FSIMPLELIST:
-        case NS_rtf::LN_fAutoNum:
-        case NS_rtf::LN_fHybrid:
             m_pCurrentDefinition->SetValue( nName, nIntValue );
         break;
         case NS_ooxml::LN_CT_NumLvl_ilvl:
