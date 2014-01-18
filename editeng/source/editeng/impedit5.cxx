@@ -142,7 +142,6 @@ void ImpEditEngine::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     // So that not a lot of unnecessary formatting is done when destructing:
     if ( !bDowning )
     {
-        DBG_CHKOBJ( GetEditEnginePtr(), EditEngine, 0 );
 
         SfxStyleSheet* pStyle = NULL;
         sal_uLong nId = 0;
@@ -306,7 +305,6 @@ sal_Bool ImpEditEngine::Redo( EditView* pView )
 
 SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, sal_Bool bOnlyHardAttrib )
 {
-    DBG_CHKOBJ( GetEditEnginePtr(), EditEngine, 0 );
 
     aSel.Adjust( aEditDoc );
 
@@ -398,7 +396,6 @@ SfxItemSet ImpEditEngine::GetAttribs( sal_Int32 nPara, sal_uInt16 nStart, sal_uI
     // Optimized function with less Puts(), which cause unnecessary cloning from default items.
     // If this works, change GetAttribs( EditSelection ) to use this for each paragraph and merge the results!
 
-    DBG_CHKOBJ( GetEditEnginePtr(), EditEngine, 0 );
 
     ContentNode* pNode = const_cast<ContentNode*>(aEditDoc.GetObject(nPara));
     DBG_ASSERT( pNode, "GetAttribs - unknown paragraph!" );

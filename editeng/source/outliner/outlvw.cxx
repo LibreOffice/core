@@ -46,12 +46,10 @@
 
 using namespace ::com::sun::star;
 
-DBG_NAME(OutlinerView)
 
 
 OutlinerView::OutlinerView( Outliner* pOut, Window* pWin )
 {
-    DBG_CTOR( OutlinerView, 0 );
 
     pOwner                      = pOut;
 
@@ -61,14 +59,11 @@ OutlinerView::OutlinerView( Outliner* pOut, Window* pWin )
 
 OutlinerView::~OutlinerView()
 {
-    DBG_DTOR(OutlinerView,0);
     delete pEditView;
 }
 
 void OutlinerView::Paint( const Rectangle& rRect, OutputDevice* pTargetDevice )
 {
-    DBG_CHKTHIS(OutlinerView,0);
-
     // For the first Paint/KeyInput/Drop an emty Outliner is turned into
     // an Outliner with exactly one paragraph.
     if( pOwner->bFirstParaIsEmpty )
@@ -79,13 +74,10 @@ void OutlinerView::Paint( const Rectangle& rRect, OutputDevice* pTargetDevice )
 
 sal_Bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, Window* pFrameWin )
 {
-    DBG_CHKTHIS( OutlinerView, 0 );
-
     // For the first Paint/KeyInput/Drop an emty Outliner is turned into
     // an Outliner with exactly one paragraph.
     if( pOwner->bFirstParaIsEmpty )
         pOwner->Insert( OUString() );
-
 
     sal_Bool bKeyProcessed = sal_False;
     ESelection aSel( pEditView->GetSelection() );
@@ -247,13 +239,10 @@ sal_Bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, Window* pFrameWin )
     }
 
     return bKeyProcessed ? sal_True : pEditView->PostKeyEvent( rKEvt, pFrameWin );
-
 }
-
 
 sal_Int32 OutlinerView::ImpCheckMousePos(const Point& rPosPix, MouseTarget& reTarget)
 {
-    DBG_CHKTHIS(OutlinerView,0);
     sal_Int32 nPara = EE_PARA_NOT_FOUND;
 
     Point aMousePosWin = pEditView->GetWindow()->PixelToLogic( rPosPix );
@@ -297,8 +286,6 @@ sal_Int32 OutlinerView::ImpCheckMousePos(const Point& rPosPix, MouseTarget& reTa
 
 sal_Bool OutlinerView::MouseMove( const MouseEvent& rMEvt )
 {
-    DBG_CHKTHIS(OutlinerView,0);
-
     if( ( pOwner->ImplGetOutlinerMode() == OUTLINERMODE_TEXTOBJECT ) || pEditView->GetEditEngine()->IsInSelectionMode())
         return pEditView->MouseMove( rMEvt );
 
@@ -314,7 +301,6 @@ sal_Bool OutlinerView::MouseMove( const MouseEvent& rMEvt )
 
 sal_Bool OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    DBG_CHKTHIS(OutlinerView,0);
     if ( ( pOwner->ImplGetOutlinerMode() == OUTLINERMODE_TEXTOBJECT ) || pEditView->GetEditEngine()->IsInSelectionMode() )
         return pEditView->MouseButtonDown( rMEvt );
 
@@ -363,7 +349,6 @@ sal_Bool OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
 
 sal_Bool OutlinerView::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    DBG_CHKTHIS(OutlinerView,0);
     if ( ( pOwner->ImplGetOutlinerMode() == OUTLINERMODE_TEXTOBJECT ) || pEditView->GetEditEngine()->IsInSelectionMode() )
         return pEditView->MouseButtonUp( rMEvt );
 
@@ -379,8 +364,6 @@ sal_Bool OutlinerView::MouseButtonUp( const MouseEvent& rMEvt )
 
 void OutlinerView::ImpToggleExpand( Paragraph* pPara )
 {
-    DBG_CHKTHIS(OutlinerView,0);
-
     sal_Int32 nPara = pOwner->pParaList->GetAbsPos( pPara );
     pEditView->SetSelection( ESelection( nPara, 0, nPara, 0 ) );
     ImplExpandOrCollaps( nPara, nPara, !pOwner->pParaList->HasVisibleChildren( pPara ) );
@@ -390,8 +373,6 @@ void OutlinerView::ImpToggleExpand( Paragraph* pPara )
 sal_Int32 OutlinerView::Select( Paragraph* pParagraph, sal_Bool bSelect,
     sal_Bool bWithChildren )
 {
-    DBG_CHKTHIS(OutlinerView,0);
-
     sal_Int32 nPara = pOwner->pParaList->GetAbsPos( pParagraph );
     sal_uInt16 nEnd = 0;
     if ( bSelect )
@@ -409,8 +390,6 @@ sal_Int32 OutlinerView::Select( Paragraph* pParagraph, sal_Bool bSelect,
 
 void OutlinerView::SetAttribs( const SfxItemSet& rAttrs )
 {
-    DBG_CHKTHIS(OutlinerView,0);
-
     sal_Bool bUpdate = pOwner->pEditEngine->GetUpdateMode();
     pOwner->pEditEngine->SetUpdateMode( sal_False );
 
@@ -439,8 +418,6 @@ void OutlinerView::SetAttribs( const SfxItemSet& rAttrs )
 
 ParaRange OutlinerView::ImpGetSelectedParagraphs( sal_Bool bIncludeHiddenChildren )
 {
-    DBG_CHKTHIS( OutlinerView, 0 );
-
     ESelection aSel = pEditView->GetSelection();
     ParaRange aParas( aSel.nStartPara, aSel.nEndPara );
     aParas.Adjust();
@@ -463,8 +440,6 @@ void OutlinerView::AdjustDepth( short nDX )
 
 void OutlinerView::Indent( short nDiff )
 {
-    DBG_CHKTHIS( OutlinerView, 0 );
-
     if( !nDiff || ( ( nDiff > 0 ) && ImpCalcSelectedPages( sal_True ) && !pOwner->ImpCanIndentSelectedPages( this ) ) )
         return;
 
@@ -598,20 +573,17 @@ void OutlinerView::Indent( short nDiff )
 
 sal_Bool OutlinerView::AdjustHeight( long nDY )
 {
-    DBG_CHKTHIS(OutlinerView,0);
     pEditView->MoveParagraphs( nDY );
     return sal_True;    // remove return value...
 }
 
 Rectangle OutlinerView::GetVisArea() const
 {
-    DBG_CHKTHIS(OutlinerView,0);
     return pEditView->GetVisArea();
 }
 
 void OutlinerView::Expand()
 {
-    DBG_CHKTHIS( OutlinerView, 0 );
     ParaRange aParas = ImpGetSelectedParagraphs( sal_False );
     ImplExpandOrCollaps( aParas.nStartPara, aParas.nEndPara, sal_True );
 }
@@ -619,7 +591,6 @@ void OutlinerView::Expand()
 
 void OutlinerView::Collapse()
 {
-    DBG_CHKTHIS( OutlinerView, 0 );
     ParaRange aParas = ImpGetSelectedParagraphs( sal_False );
     ImplExpandOrCollaps( aParas.nStartPara, aParas.nEndPara, sal_False );
 }
@@ -627,21 +598,17 @@ void OutlinerView::Collapse()
 
 void OutlinerView::ExpandAll()
 {
-    DBG_CHKTHIS( OutlinerView, 0 );
     ImplExpandOrCollaps( 0, pOwner->pParaList->GetParagraphCount()-1, sal_True );
 }
 
 
 void OutlinerView::CollapseAll()
 {
-    DBG_CHKTHIS(OutlinerView,0);
     ImplExpandOrCollaps( 0, pOwner->pParaList->GetParagraphCount()-1, sal_False );
 }
 
 void OutlinerView::ImplExpandOrCollaps( sal_Int32 nStartPara, sal_Int32 nEndPara, sal_Bool bExpand )
 {
-    DBG_CHKTHIS( OutlinerView, 0 );
-
     sal_Bool bUpdate = pOwner->GetUpdateMode();
     pOwner->SetUpdateMode( sal_False );
 
@@ -681,8 +648,6 @@ void OutlinerView::InsertText( const OutlinerParaObject& rParaObj )
     // Possibly problematic:
     // EditEngine, RTF => Splitting the area, later join together.
 
-    DBG_CHKTHIS(OutlinerView,0);
-
     if ( ImpCalcSelectedPages( sal_False ) && !pOwner->ImpCanDeleteSelectedPages( this ) )
         return;
 
@@ -705,20 +670,17 @@ void OutlinerView::InsertText( const OutlinerParaObject& rParaObj )
 
 void OutlinerView::Cut()
 {
-    DBG_CHKTHIS(OutlinerView,0);
     if ( !ImpCalcSelectedPages( sal_False ) || pOwner->ImpCanDeleteSelectedPages( this ) )
         pEditView->Cut();
 }
 
 void OutlinerView::Paste()
 {
-    DBG_CHKTHIS(OutlinerView,0);
     PasteSpecial(); // HACK(SD does not call PasteSpecial)
 }
 
 void OutlinerView::PasteSpecial()
 {
-    DBG_CHKTHIS(OutlinerView,0);
     if ( !ImpCalcSelectedPages( sal_False ) || pOwner->ImpCanDeleteSelectedPages( this ) )
     {
         pOwner->UndoActionStart( OLUNDO_INSERT );
@@ -743,8 +705,6 @@ void OutlinerView::PasteSpecial()
 
 void OutlinerView::CreateSelectionList (std::vector<Paragraph*> &aSelList)
 {
-    DBG_CHKTHIS( OutlinerView, 0 );
-
     ParaRange aParas = ImpGetSelectedParagraphs( sal_True );
 
     for ( sal_Int32 nPara = aParas.nStartPara; nPara <= aParas.nEndPara; nPara++ )
@@ -756,20 +716,16 @@ void OutlinerView::CreateSelectionList (std::vector<Paragraph*> &aSelList)
 
 const SfxStyleSheet* OutlinerView::GetStyleSheet() const
 {
-    DBG_CHKTHIS(OutlinerView,0);
     return pEditView->GetStyleSheet();
 }
 
 SfxStyleSheet* OutlinerView::GetStyleSheet()
 {
-    DBG_CHKTHIS(OutlinerView,0);
     return pEditView->GetStyleSheet();
 }
 
 Pointer OutlinerView::GetPointer( const Point& rPosPixel )
 {
-    DBG_CHKTHIS(OutlinerView,0);
-
     MouseTarget eTarget;
     ImpCheckMousePos( rPosPixel, eTarget );
 
@@ -793,7 +749,6 @@ Pointer OutlinerView::GetPointer( const Point& rPosPixel )
 
 sal_Int32 OutlinerView::ImpInitPaste( sal_Int32& rStart )
 {
-    DBG_CHKTHIS(OutlinerView,0);
     pOwner->bPasting = sal_True;
     ESelection aSelection( pEditView->GetSelection() );
     aSelection.Adjust();
@@ -805,7 +760,6 @@ sal_Int32 OutlinerView::ImpInitPaste( sal_Int32& rStart )
 
 void OutlinerView::ImpPasted( sal_Int32 nStart, sal_Int32 nPrevParaCount, sal_Int32 nSize)
 {
-    DBG_CHKTHIS(OutlinerView,0);
     pOwner->bPasting = sal_False;
     sal_Int32 nCurParaCount = pOwner->pEditEngine->GetParagraphCount();
     if( nCurParaCount < nPrevParaCount )
@@ -818,14 +772,12 @@ void OutlinerView::ImpPasted( sal_Int32 nStart, sal_Int32 nPrevParaCount, sal_In
 
 void OutlinerView::Command( const CommandEvent& rCEvt )
 {
-    DBG_CHKTHIS(OutlinerView,0);
     pEditView->Command( rCEvt );
 }
 
 
 void OutlinerView::SelectRange( sal_Int32 nFirst, sal_Int32 nCount )
 {
-    DBG_CHKTHIS(OutlinerView,0);
     sal_Int32 nLast = nFirst+nCount;
     nCount = pOwner->pParaList->GetParagraphCount();
     if( nLast <= nCount )
@@ -837,8 +789,6 @@ void OutlinerView::SelectRange( sal_Int32 nFirst, sal_Int32 nCount )
 
 sal_Int32 OutlinerView::ImpCalcSelectedPages( sal_Bool bIncludeFirstSelected )
 {
-    DBG_CHKTHIS(OutlinerView,0);
-
     ESelection aSel( pEditView->GetSelection() );
     aSel.Adjust();
 
@@ -1211,7 +1161,6 @@ void OutlinerView::RemoveAttribsKeepLanguages( sal_Bool bRemoveParaAttribs )
 
 void OutlinerView::RemoveAttribs( sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich, sal_Bool bKeepLanguages )
 {
-    DBG_CHKTHIS(OutlinerView,0);
     sal_Bool bUpdate = pOwner->GetUpdateMode();
     pOwner->SetUpdateMode( sal_False );
     pOwner->UndoActionStart( OLUNDO_ATTR );
@@ -1243,7 +1192,6 @@ void OutlinerView::RemoveAttribs( sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich
 
 void OutlinerView::InsertText( const OUString& rNew, sal_Bool bSelect )
 {
-    DBG_CHKTHIS(OutlinerView,0);
     if( pOwner->bFirstParaIsEmpty )
         pOwner->Insert( OUString() );
     pEditView->InsertText( rNew, bSelect );
@@ -1251,102 +1199,79 @@ void OutlinerView::InsertText( const OUString& rNew, sal_Bool bSelect )
 
 void OutlinerView::SetVisArea( const Rectangle& rRect )
 {
-    DBG_CHKTHIS(OutlinerView,0);
     pEditView->SetVisArea( rRect );
 }
 
 
 void OutlinerView::SetSelection( const ESelection& rSel )
 {
-    DBG_CHKTHIS(OutlinerView,0);
     pEditView->SetSelection( rSel );
 }
 
 void OutlinerView::SetReadOnly( sal_Bool bReadOnly )
 {
-    DBG_CHKTHIS(OutlinerView,0);
     pEditView->SetReadOnly( bReadOnly );
 }
 
 sal_Bool OutlinerView::IsReadOnly() const
 {
-    DBG_CHKTHIS(OutlinerView,0);
     return pEditView->IsReadOnly();
 }
 
 sal_Bool OutlinerView::HasSelection() const
 {
-    DBG_CHKTHIS(OutlinerView,0);
     return pEditView->HasSelection();
 }
 
-
 void OutlinerView::ShowCursor( sal_Bool bGotoCursor )
 {
-    DBG_CHKTHIS(OutlinerView,0);
     pEditView->ShowCursor( bGotoCursor );
 }
 
-
 void OutlinerView::HideCursor()
 {
-    DBG_CHKTHIS(OutlinerView,0);
     pEditView->HideCursor();
 }
 
-
 void OutlinerView::SetWindow( Window* pWin )
 {
-    DBG_CHKTHIS(OutlinerView,0);
     pEditView->SetWindow( pWin );
 }
 
-
 Window* OutlinerView::GetWindow() const
 {
-    DBG_CHKTHIS(OutlinerView,0);
     return pEditView->GetWindow();
 }
 
-
 void OutlinerView::SetOutputArea( const Rectangle& rRect )
 {
-    DBG_CHKTHIS(OutlinerView,0);
     pEditView->SetOutputArea( rRect );
 }
 
-
 Rectangle OutlinerView::GetOutputArea() const
 {
-    DBG_CHKTHIS(OutlinerView,0);
     return pEditView->GetOutputArea();
 }
 
-
 OUString OutlinerView::GetSelected() const
 {
-    DBG_CHKTHIS(OutlinerView,0);
     return pEditView->GetSelected();
 }
 
 EESpellState OutlinerView::StartSpeller( sal_Bool bMultiDoc )
 {
-    DBG_CHKTHIS(OutlinerView,0);
     return pEditView->StartSpeller( bMultiDoc );
 }
 
 EESpellState OutlinerView::StartThesaurus()
 {
-    DBG_CHKTHIS(OutlinerView,0);
     return pEditView->StartThesaurus();
 }
-
 
 void OutlinerView::StartTextConversion(
     LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont,
     sal_Int32 nOptions, sal_Bool bIsInteractive, sal_Bool bMultipleDoc )
 {
-    DBG_CHKTHIS(OutlinerView,0);
     if (
         (LANGUAGE_KOREAN == nSrcLang && LANGUAGE_KOREAN == nDestLang) ||
         (LANGUAGE_CHINESE_SIMPLIFIED  == nSrcLang && LANGUAGE_CHINESE_TRADITIONAL == nDestLang) ||
@@ -1364,120 +1289,95 @@ void OutlinerView::StartTextConversion(
 
 sal_uInt16 OutlinerView::StartSearchAndReplace( const SvxSearchItem& rSearchItem )
 {
-    DBG_CHKTHIS(OutlinerView,0);
     return pEditView->StartSearchAndReplace( rSearchItem );
 }
 
 void OutlinerView::TransliterateText( sal_Int32 nTransliterationMode )
 {
-    DBG_CHKTHIS(OutlinerView,0);
     pEditView->TransliterateText( nTransliterationMode );
 }
 
-
-
 ESelection OutlinerView::GetSelection()
 {
-    DBG_CHKTHIS(OutlinerView,0);
     return pEditView->GetSelection();
 }
 
 
 void OutlinerView::Scroll( long nHorzScroll, long nVertScroll )
 {
-    DBG_CHKTHIS(OutlinerView,0);
     pEditView->Scroll( nHorzScroll, nVertScroll );
 }
 
-
 void OutlinerView::SetControlWord( sal_uLong nWord )
 {
-    DBG_CHKTHIS(OutlinerView,0);
     pEditView->SetControlWord( nWord );
 }
 
-
 sal_uLong OutlinerView::GetControlWord() const
 {
-    DBG_CHKTHIS(OutlinerView,0);
     return pEditView->GetControlWord();
 }
 
-
 void OutlinerView::SetAnchorMode( EVAnchorMode eMode )
 {
-    DBG_CHKTHIS(OutlinerView,0);
     pEditView->SetAnchorMode( eMode );
 }
 
-
 EVAnchorMode OutlinerView::GetAnchorMode() const
 {
-    DBG_CHKTHIS(OutlinerView,0);
     return pEditView->GetAnchorMode();
 }
 
 void OutlinerView::Copy()
 {
-    DBG_CHKTHIS(OutlinerView,0);
     pEditView->Copy();
 }
 
-
 void OutlinerView::InsertField( const SvxFieldItem& rFld )
 {
-    DBG_CHKTHIS(OutlinerView,0);
     pEditView->InsertField( rFld );
 }
 
 const SvxFieldItem* OutlinerView::GetFieldUnderMousePointer() const
 {
-    DBG_CHKTHIS(OutlinerView,0);
     return pEditView->GetFieldUnderMousePointer();
 }
 
 const SvxFieldItem* OutlinerView::GetFieldAtSelection() const
 {
-    DBG_CHKTHIS(OutlinerView,0);
     return pEditView->GetFieldAtSelection();
 }
 
 void OutlinerView::SetInvalidateMore( sal_uInt16 nPixel )
 {
-    DBG_CHKTHIS(OutlinerView,0);
     pEditView->SetInvalidateMore( nPixel );
 }
 
 
 sal_uInt16 OutlinerView::GetInvalidateMore() const
 {
-    DBG_CHKTHIS(OutlinerView,0);
     return pEditView->GetInvalidateMore();
 }
 
 
 sal_Bool OutlinerView::IsCursorAtWrongSpelledWord( sal_Bool bMarkIfWrong )
 {
-    DBG_CHKTHIS(OutlinerView,0);
     return pEditView->IsCursorAtWrongSpelledWord( bMarkIfWrong );
 }
 
 
 sal_Bool OutlinerView::IsWrongSpelledWordAtPos( const Point& rPosPixel, sal_Bool bMarkIfWrong )
 {
-    DBG_CHKTHIS(OutlinerView,0);
     return pEditView->IsWrongSpelledWordAtPos( rPosPixel, bMarkIfWrong );
 }
 
 void OutlinerView::ExecuteSpellPopup( const Point& rPosPixel, Link* pStartDlg )
 {
-    DBG_CHKTHIS(OutlinerView,0);
     pEditView->ExecuteSpellPopup( rPosPixel, pStartDlg );
 }
 
 sal_uLong OutlinerView::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, sal_Bool bSelect, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
-    DBG_CHKTHIS(OutlinerView,0);
     sal_Int32 nOldParaCount = pEditView->GetEditEngine()->GetParagraphCount();
     ESelection aOldSel = pEditView->GetSelection();
     aOldSel.Adjust();
@@ -1512,38 +1412,32 @@ sal_uLong OutlinerView::Read( SvStream& rInput, const OUString& rBaseURL, EEText
 
 void OutlinerView::SetBackgroundColor( const Color& rColor )
 {
-    DBG_CHKTHIS(OutlinerView,0);
     pEditView->SetBackgroundColor( rColor );
 }
 
 
 Color OutlinerView::GetBackgroundColor()
 {
-    DBG_CHKTHIS(OutlinerView,0);
     return pEditView->GetBackgroundColor();
 }
 
 SfxItemSet OutlinerView::GetAttribs()
 {
-    DBG_CHKTHIS(OutlinerView,0);
     return pEditView->GetAttribs();
 }
 
 sal_uInt16 OutlinerView::GetSelectedScriptType() const
 {
-    DBG_CHKTHIS(OutlinerView,0);
     return pEditView->GetSelectedScriptType();
 }
 
 OUString OutlinerView::GetSurroundingText() const
 {
-    DBG_CHKTHIS(OutlinerView,0);
     return pEditView->GetSurroundingText();
 }
 
 Selection OutlinerView::GetSurroundingTextSelection() const
 {
-    DBG_CHKTHIS(OutlinerView,0);
     return pEditView->GetSurroundingTextSelection();
 }
 

@@ -161,11 +161,6 @@ sal_Bool IsScriptItemValid( sal_uInt16 nItemId, short nScriptType )
 // Should later be moved to TOOLS/STRING (Current: 303)
 // for Grep: WS_TARGET
 
-DBG_NAME( EE_TextPortion );
-DBG_NAME( EE_EditLine );
-DBG_NAME( EE_ContentNode );
-DBG_NAME( EE_CharAttribList );
-DBG_NAME( EE_ParaPortion )
 
 const SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
         { SID_ATTR_FRAMEDIRECTION, SFX_ITEM_POOLABLE },         // EE_PARA_WRITINGDIR
@@ -532,7 +527,6 @@ void ExtraPortionInfo::SaveOrgDXArray( const sal_Int32* pDXArray, sal_uInt16 nLe
 
 ParaPortion::ParaPortion( ContentNode* pN )
 {
-    DBG_CTOR( EE_ParaPortion, 0 );
 
     pNode               = pN;
     bInvalid            = sal_True;
@@ -548,7 +542,6 @@ ParaPortion::ParaPortion( ContentNode* pN )
 
 ParaPortion::~ParaPortion()
 {
-    DBG_DTOR( EE_ParaPortion, 0 );
 }
 
 void ParaPortion::MarkInvalid( sal_uInt16 nStart, short nDiff )
@@ -948,7 +941,6 @@ EditLine::EditLine() :
     bHangingPunctuation(false),
     bInvalid(true)
 {
-    DBG_CTOR( EE_EditLine, 0 );
 
     nStart = nEnd = 0;
     nStartPortion = 0;  // to be able to tell the difference between a line
@@ -966,7 +958,6 @@ EditLine::EditLine( const EditLine& r ) :
     bHangingPunctuation(r.bHangingPunctuation),
     bInvalid(true)
 {
-    DBG_CTOR( EE_EditLine, 0 );
 
     nEnd = r.nEnd;
     nStart = r.nStart;
@@ -983,7 +974,6 @@ EditLine::EditLine( const EditLine& r ) :
 
 EditLine::~EditLine()
 {
-    DBG_DTOR( EE_EditLine, 0 );
 }
 
 EditLine::CharPosArrayType& EditLine::GetCharPosArray()
@@ -1298,18 +1288,15 @@ sal_Bool operator != ( const EditPaM& r1,  const EditPaM& r2  )
 
 ContentNode::ContentNode( SfxItemPool& rPool ) : aContentAttribs( rPool )
 {
-    DBG_CTOR( EE_ContentNode, 0 );
 }
 
 ContentNode::ContentNode( const OUString& rStr, const ContentAttribs& rContentAttribs ) :
     maString(rStr), aContentAttribs(rContentAttribs)
 {
-    DBG_CTOR( EE_ContentNode, 0 );
 }
 
 ContentNode::~ContentNode()
 {
-    DBG_DTOR( EE_ContentNode, 0 );
 }
 
 void ContentNode::ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNew, SfxItemPool& rItemPool )
@@ -2694,12 +2681,10 @@ CharAttribList::CharAttribList()
 , aDefFont()
 , bHasEmptyAttribs(false)
 {
-    DBG_CTOR( EE_CharAttribList, 0 );
 }
 
 CharAttribList::~CharAttribList()
 {
-    DBG_DTOR( EE_CharAttribList, 0 );
 }
 
 void CharAttribList::InsertAttrib( EditCharAttrib* pAttrib )
