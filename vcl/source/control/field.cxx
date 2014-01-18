@@ -1429,7 +1429,7 @@ OUString MetricFormatter::CreateFieldText( sal_Int64 nValue ) const
         aStr += maCustomUnitText;
     else
     {
-        if (meUnit != FUNIT_NONE || meUnit != FUNIT_PERCENT || meUnit != FUNIT_DEGREE)
+        if (meUnit != FUNIT_NONE && meUnit != FUNIT_PERCENT && meUnit != FUNIT_DEGREE)
             aStr += " ";
         aStr += ImplMetricToString( meUnit );
     }
