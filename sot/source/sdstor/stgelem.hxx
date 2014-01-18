@@ -23,8 +23,6 @@
 #ifndef _STGELEM_HXX
 #define _STGELEM_HXX
 
-#include <tools/solar.h>
-
 #include <sot/stg.hxx>
 
 class StgIo;
