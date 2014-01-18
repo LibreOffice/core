@@ -46,6 +46,7 @@
 #include <vcl/svapp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <bordertest.hxx>
 
@@ -1403,6 +1404,18 @@ DECLARE_RTFIMPORT_TEST(testBackground, "background.rtf")
     // The first shape wasn't in the foreground.
     CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(getShape(1), "Opaque")));
     CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(getShape(2), "Opaque")));
+}
+
+DECLARE_RTFIMPORT_TEST(testLevelfollow, "levelfollow.rtf")
+{
+    uno::Reference<container::XIndexAccess> xNum1Levels = getProperty< uno::Reference<container::XIndexAccess> >(getStyles("NumberingStyles")->getByName("WWNum1"), "NumberingRules");
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(SvxNumberFormat::LISTTAB), comphelper::SequenceAsHashMap(xNum1Levels->getByIndex(0))["LabelFollowedBy"].get<sal_Int16>()); // first level, tab
+
+    uno::Reference<container::XIndexAccess> xNum2Levels = getProperty< uno::Reference<container::XIndexAccess> >(getStyles("NumberingStyles")->getByName("WWNum2"), "NumberingRules");
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(SvxNumberFormat::SPACE), comphelper::SequenceAsHashMap(xNum2Levels->getByIndex(0))["LabelFollowedBy"].get<sal_Int16>()); // first level, space
+
+    uno::Reference<container::XIndexAccess> xNum3Levels = getProperty< uno::Reference<container::XIndexAccess> >(getStyles("NumberingStyles")->getByName("WWNum3"), "NumberingRules");
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(SvxNumberFormat::NOTHING), comphelper::SequenceAsHashMap(xNum3Levels->getByIndex(0))["LabelFollowedBy"].get<sal_Int16>()); // first level, nothing
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
