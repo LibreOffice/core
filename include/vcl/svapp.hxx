@@ -140,61 +140,312 @@ private:
     std::vector<OUString> aData;
 };
 
+/**
+ @brief Abstract base class used for the LibreOffice Desktop class.
 
+ Abstract base class used for the LibreOffice Desktop class.
+
+ It is only actually used by the Desktop class, the reason that
+ Application exists is because the VCL used to be a standalone
+ framework, long since abandoned by anything other than
+ OpenOffice and variants.
+
+ @see   Desktop
+ */
 class VCL_DLLPUBLIC Application
 {
 public:
     enum DialogCancelMode {
-        DIALOG_CANCEL_OFF, ///< do not automatically cancel dialogs
-        DIALOG_CANCEL_SILENT, ///< silently cancel any dialogs
-        DIALOG_CANCEL_FATAL
-            ///< cancel any dialogs by std::abort
+        DIALOG_CANCEL_OFF,      ///< do not automatically cancel dialogs
+        DIALOG_CANCEL_SILENT,   ///< silently cancel any dialogs
+        DIALOG_CANCEL_FATAL     ///< cancel any dialogs by std::abort
     };
 
+    /**
+    Default constructor for Application class.
+
+    Initializes the LibreOffice global instance data structure if needed,
+    and then sets itself to be the Application class. Also initializes any
+    platform specific data structures.
+
+    @attention The initialization of the application itself is done in
+            Init()
+
+    @see    InitSalData() is implemented by platform specific code.
+            ImplInitSVData() initializes the global instance data
+    */
                                 Application();
+
+    /** Virtual destructor for Application class.
+
+    Deinitializes the LibreOffice global instance data structure, then
+    deinitializes any platform specific data structures.
+
+     @see   ImplDeInitSVData() deinitializes the global instance data,
+            DeInitSalData() is implemented by platform specific code
+    */
     virtual                     ~Application();
 
+    /** Pure virtual entrypoint to the application.
+    */
     virtual int                 Main() = 0;
 
+    /** Exit from the application
+
+     @returns true if exited successfully, false if not able to fully exit
+    */
     virtual sal_Bool                QueryExit();
 
+    /** Send user event.
+
+    @param  nEvent      The numeric ID of the event
+    @param  pEventData  Pointer to a data associated with the event. Use
+                        a reinterpret_cast<void*> to pass in the parameter.
+    */
     virtual void                UserEvent( sal_uLong nEvent, void* pEventData );
 
+    // Functions that notify when changes occur in the application
+
+    /** Notify that the application is no longer the "focused" (or current)
+        application - needed for Windowing systems where an end user can switch
+        from one application to another.
+
+     @see DataChanged
+    */
     virtual void                FocusChanged();
+
+    /** Notify the application that data has changed via an event.
+
+     @param rDCEvt      Reference to a DataChangedEvent object - this will not
+                        be changed
+
+     @see FocusChanged
+    */
     virtual void                DataChanged( const DataChangedEvent& rDCEvt );
 
+    // Initialization functions
+
+    /** Initialize the application itself.
+
+     @attention Note that the global data structures and platform specific
+        initialization is done in the constructor.
+
+     @see InitFinished, DeInit
+    */
     virtual void                Init();
+
+    /** Finish initialization of the application.
+
+     @see Init, DeInit
+    */
     virtual void                InitFinished();
+
+    /** Deinitialized the application itself.
+
+     @attention Note that the global data structures and platform specific
+        deinitialization is done in the destructor.
+
+     @see Init, InitFinished
+    */
     virtual void                DeInit();
 
+    // Command line processing:
+
+    /** Gets the number of command line parameters passed to the application
+
+     @return sal_uInt16 - the number of parameters
+
+     @see GetCommandLineParam, GetAppFileName
+    */
     static sal_uInt16           GetCommandLineParamCount();
+
+    /** Gets a particular command line parameter
+
+     @param  nParam      The index of the parameter to return.
+
+     @return The command line parameter as an OUString
+
+     @see GetCommandLineParamCount, GetAppFileName
+    */
     static OUString             GetCommandLineParam( sal_uInt16 nParam );
+
+    /** Get the name of the file used to start the application
+
+     @return The filename as an OUString
+
+     @see GetCommandLineParamCount, GetCommandLineParam
+    */
     static OUString             GetAppFileName();
 
+    // Error handling
+    /** Handles an error code.
+
+     @remark This is not actually an exception. It merely takes an
+        error code, then in most cases aborts. The list of exception
+        identifiers can be found at include/vcl/apptypes.hxx - each
+        one starts with EXC_*
+
+     @param nError      The error code identifier
+
+     @returns sal_uInt16 value - if it is 0, then the error wasn't handled.
+
+     @see Abort
+    */
     virtual sal_uInt16          Exception( sal_uInt16 nError );
+
+    /** Ends the program prematurely with an error message.
+
+     If the --norestore command line argument is given (assuming
+     this process is run by developers who are interested in cores,
+     vs. end users who are not) then it does a coredump.
+
+     @param rErrorText  The error message to report.
+
+     @see Exception
+    */
     static void                 Abort( const OUString& rErrorText );
 
+    // Event loop functions:
+
+    /** Start executing the program.
+
+     @see Quit, Reschedule, Yield, EndYield, GetSolarMutex,
+          GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
+          EnableNoYieldMode, AddPostYieldListener, RemovePostYieldListener
+    */
     static void                 Execute();
+
+    /** Quit the program
+
+     @see Execute, Reschedule, Yield, EndYield, GetSolarMutex,
+          GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
+          EnableNoYieldMode, AddPostYieldListener, RemovePostYieldListener
+    */
     static void                 Quit();
+
+    /** Attempt to reschedule in processing of current event(s)
+
+     @param bAllEvents  If set to true, then try to process all the
+        events. If set to false, then only process the current
+        event. Defaults to false.
+
+     @see Execute, Quit, Yield, EndYield, GetSolarMutex,
+          GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
+          EnableNoYieldMode, AddPostYieldListener, RemovePostYieldListener
+
+     */
     static void                 Reschedule( bool bAllEvents = false );
+
+    /** Allow processing of the next event.
+
+     @see Execute, Quit, Reschedule, EndYield, GetSolarMutex,
+          GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
+          EnableNoYieldMode, AddPostYieldListener, RemovePostYieldListener
+    */
     static void                 Yield();
+
+    /**
+
+     @see Execute, Quit, Reschedule, Yield, GetSolarMutex,
+          GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
+          EnableNoYieldMode, AddPostYieldListener, RemovePostYieldListener
+    */
     static void                 EndYield();
+
+    /** @Brief Get the Solar Mutex for this thread.
+
+     Get the Solar Mutex that prevents other threads from accessing VCL
+     concurrently.
+
+     @returns SolarMutex reference
+
+     @see Execute, Quit, Reschedule, Yield, EndYield,
+          GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
+          EnableNoYieldMode, AddPostYieldListener, RemovePostYieldListener
+    */
     static comphelper::SolarMutex& GetSolarMutex();
+
+    /** Get the main thread ID.
+
+     @returns oslThreadIdentifier that contains the thread ID
+
+     @see Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
+          ReleaseSolarMutex, AcquireSolarMutex,
+          EnableNoYieldMode, AddPostYieldListener, RemovePostYieldListener
+    */
     static oslThreadIdentifier  GetMainThreadIdentifier();
-    static sal_uLong                ReleaseSolarMutex();
+
+    /** @Brief Release Solar Mutex(es) for this thread
+
+     Release the Solar Mutex(es) that prevents other threads from accessing
+     VCL concurrently.
+
+     @returns The number of mutexes that were acquired by this thread.
+
+     @see Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
+          GetMainThreadIdentifier, AcquireSolarMutex,
+          EnableNoYieldMode, AddPostYieldListener, RemovePostYieldListener
+    */
+
+    static sal_uLong            ReleaseSolarMutex();
+
+    /** @Brief Acquire Solar Mutex(es) for this thread.
+
+     Acquire the Solar Mutex(es) that prevents other threads from accessing
+     VCL concurrently.
+
+     @see Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
+          GetMainThreadIdentifier, ReleaseSolarMutex,
+          EnableNoYieldMode, AddPostYieldListener, RemovePostYieldListener
+    */
     static void                 AcquireSolarMutex( sal_uLong nCount );
+
+    /** @Brief Enables "no yield" mode
+
+     "No yield" mode prevents \code Yield() \endcode from waiting for events.
+
+     @remarks This was originally implemented in OOo bug 98792 to improve
+        Impress slideshows. For some reason, to \em disable no yield mode, you
+        call on EnableNoYieldMode
+
+     @param i_bNoYield      If set to false, then "no yield" mode is turned off.
+                            If set to true, then "no yield" mode is turned on.
+
+     @see Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
+          GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
+          AddPostYieldListener, RemovePostYieldListener
+    */
     static void                 EnableNoYieldMode( bool i_bNoYield );
+
+    /** Add a listener for yield events
+
+     @param  i_rListener     Listener to add
+
+     @see Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
+          GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
+          RemovePostYieldListener
+    */
     static void                 AddPostYieldListener( const Link& i_rListener );
+
+
+    /** Remove listener for yield events
+
+     @param  i_rListener     Listener to remove
+
+     @see Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
+          GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
+          AddPostYieldListener
+    */
     static void                 RemovePostYieldListener( const Link& i_rListener );
 
-    static sal_Bool                 IsInMain();
-    static sal_Bool                 IsInExecute();
-    static sal_Bool                 IsInModalMode();
+    static sal_Bool             IsInMain();
+    static sal_Bool             IsInExecute();
+    static sal_Bool             IsInModalMode();
 
-    static sal_uInt16               GetDispatchLevel();
+    static sal_uInt16           GetDispatchLevel();
     static bool                 AnyInput( sal_uInt16 nType = VCL_INPUT_ANY );
-    static sal_uLong                GetLastInputInterval();
-    static sal_Bool                 IsUICaptured();
+    static sal_uLong            GetLastInputInterval();
+    static sal_Bool             IsUICaptured();
 
     virtual void                SystemSettingsChanging( AllSettings& rSettings,
                                                         Window* pFrame );
@@ -223,21 +474,21 @@ public:
     static void                 RemoveKeyListener( const Link& rKeyListener );
     static void                 ImplCallEventListeners( sal_uLong nEvent, Window* pWin, void* pData );
     static void                 ImplCallEventListeners( VclSimpleEvent* pEvent );
-    static sal_Bool                 HandleKey( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent );
+    static sal_Bool             HandleKey( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent );
 
-    static sal_uLong                PostKeyEvent( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent );
-    static sal_uLong                PostMouseEvent( sal_uLong nEvent, Window *pWin, MouseEvent* pMouseEvent );
+    static sal_uLong            PostKeyEvent( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent );
+    static sal_uLong            PostMouseEvent( sal_uLong nEvent, Window *pWin, MouseEvent* pMouseEvent );
 #if !HAVE_FEATURE_DESKTOP
     static sal_uLong            PostZoomEvent( sal_uLong nEvent, Window *pWin, ZoomEvent* pZoomEvent );
     static sal_uLong            PostScrollEvent( sal_uLong nEvent, Window *pWin, ScrollEvent* pScrollEvent );
 #endif
     static void                 RemoveMouseAndKeyEvents( Window *pWin );
 
-    static sal_uLong                PostUserEvent( const Link& rLink, void* pCaller = NULL );
-    static sal_Bool                 PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller = NULL );
+    static sal_uLong            PostUserEvent( const Link& rLink, void* pCaller = NULL );
+    static sal_Bool             PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller = NULL );
     static void                 RemoveUserEvent( sal_uLong nUserEvent );
 
-    static sal_Bool                 InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority );
+    static sal_Bool             InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority );
     static void                 RemoveIdleHdl( const Link& rLink );
 
     virtual void                AppEvent( const ApplicationEvent& rAppEvent );
@@ -271,7 +522,7 @@ public:
     //               (e.g. Xserver with Xinerama, Windows)
     //        false: different screens are separate and windows cannot be moved
     //               between them (e.g. Xserver with multiple screens)
-    static bool          IsUnifiedDisplay();
+    static bool                 IsUnifiedDisplay();
     // if IsUnifiedDisplay() == true the return value will be
     // nearest screen of the target rectangle
     // in case of IsUnifiedDisplay() == false the return value
@@ -281,13 +532,13 @@ public:
     // external VGA display for a desktop machine - it is where a presenter
     // console should be rendered if there are other (non-built-in) screens
     // present.
-    static unsigned int  GetDisplayBuiltInScreen();
+    static unsigned int         GetDisplayBuiltInScreen();
     // Practically, this means - Get the screen we should run a presentation on.
-    static unsigned int  GetDisplayExternalScreen();
+    static unsigned int         GetDisplayExternalScreen();
 
     static const LocaleDataWrapper& GetAppLocaleDataWrapper();
 
-    static sal_Bool                 InsertAccel( Accelerator* pAccel );
+    static sal_Bool             InsertAccel( Accelerator* pAccel );
     static void                 RemoveAccel( Accelerator* pAccel );
 
     static long                 CallEventHooks( NotifyEvent& rEvt );
@@ -296,23 +547,23 @@ public:
     static Help*                GetHelp();
 
     static void                 EnableAutoHelpId( sal_Bool bEnabled = sal_True );
-    static sal_Bool                 IsAutoHelpIdEnabled();
+    static sal_Bool             IsAutoHelpIdEnabled();
 
     static void                 EnableAutoMnemonic( sal_Bool bEnabled = sal_True );
-    static sal_Bool                 IsAutoMnemonicEnabled();
+    static sal_Bool             IsAutoMnemonicEnabled();
 
-    static sal_uLong                GetReservedKeyCodeCount();
+    static sal_uLong            GetReservedKeyCodeCount();
     static const KeyCode*       GetReservedKeyCode( sal_uLong i );
 
     static void                 SetDefDialogParent( Window* pWindow );
     static Window*              GetDefDialogParent();
 
-    static DialogCancelMode GetDialogCancelMode();
-    static void SetDialogCancelMode( DialogCancelMode mode );
-    static sal_Bool                 IsDialogCancelEnabled();
+    static DialogCancelMode     GetDialogCancelMode();
+    static void                 SetDialogCancelMode( DialogCancelMode mode );
+    static sal_Bool             IsDialogCancelEnabled();
 
     static void                 SetSystemWindowMode( sal_uInt16 nMode );
-    static sal_uInt16               GetSystemWindowMode();
+    static sal_uInt16           GetSystemWindowMode();
 
     static void                 SetDialogScaleX( short nScale );
 
@@ -345,7 +596,7 @@ public:
 
         Must only be called with the Solar mutex locked.
      */
-    static bool CanToggleImeStatusWindow();
+    static bool                 CanToggleImeStatusWindow();
 
     /** Toggle any IME status window on and off.
 
@@ -354,19 +605,19 @@ public:
 
         Must only be called with the Solar mutex locked.
      */
-    static void ShowImeStatusWindow(bool bShow);
+    static void                 ShowImeStatusWindow(bool bShow);
 
     /** Return true if any IME status window should be turned on by default
         (this decision can be locale dependent, for example).
 
         Can be called without the Solar mutex locked.
      */
-    static bool GetShowImeStatusWindowDefault();
+    static bool                 GetShowImeStatusWindowDefault();
 
     /** Returns a string representing the desktop environment
         the process is currently running in.
      */
-    static const OUString& GetDesktopEnvironment();
+    static const OUString&      GetDesktopEnvironment();
 
     /** Add a file to the system shells recent document list if there is any.
           This function may have no effect under Unix because there is no
@@ -380,11 +631,11 @@ public:
           If an empty string will be provided "application/octet-stream"
           will be used.
     */
-    static void AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService);
+    static void                 AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService);
 
     /** Do we have a native / system file selector available ?
      */
-    static bool hasNativeFileSelection();
+    static bool                 hasNativeFileSelection();
 
     /** Create a platform specific file picker, if one is available,
         otherwise return an empty reference
@@ -400,7 +651,7 @@ public:
         createFolderPicker( const com::sun::star::uno::Reference<
                               com::sun::star::uno::XComponentContext >& rServiceManager );
 
-    static bool IsEnableAccessInterface() {return true;}
+    static bool                 IsEnableAccessInterface() {return true;}
 
 private:
 
