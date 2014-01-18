@@ -102,8 +102,8 @@ public:
     void testMatrixODS();
     void testMatrixXLS();
     void testBorderODS();
-    void testBorderXLS();
-    void testBorderXLSX();
+    void testCellBordersXLS();
+    void testCellBordersXLSX();
     void testBordersOoo33();
     void testBugFixesODS();
     void testBugFixesXLS();
@@ -174,8 +174,8 @@ public:
     CPPUNIT_TEST(testMatrixODS);
     CPPUNIT_TEST(testMatrixXLS);
     CPPUNIT_TEST(testBorderODS);
-//  CPPUNIT_TEST(testBorderXLS);
-//  CPPUNIT_TEST(testBorderXLSX);
+    CPPUNIT_TEST(testCellBordersXLS);
+    CPPUNIT_TEST(testCellBordersXLSX);
     CPPUNIT_TEST(testBordersOoo33);
     CPPUNIT_TEST(testBugFixesODS);
     CPPUNIT_TEST(testBugFixesXLS);
@@ -232,7 +232,7 @@ public:
 
 private:
     void testPassword_Impl(const OUString& rFileNameBase);
-    void testBorderImpl( sal_uLong nFormatType );
+    void testExcelCellBorders( sal_uLong nFormatType );
     uno::Reference<uno::XInterface> m_xCalcComponent;
 };
 
@@ -776,51 +776,68 @@ void ScFiltersTest::testBorderODS()
     xDocSh->DoClose();
 }
 
-void ScFiltersTest::testBorderImpl( sal_uLong nFormatType )
-{
-    ScDocShellRef xDocSh = loadDoc("border.", nFormatType );
+namespace {
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load border.xls", xDocSh.Is());
+const char* toBorderName( sal_Int16 eStyle )
+{
+    switch (eStyle)
+    {
+        case table::BorderLineStyle::SOLID: return "SOLID";
+        case table::BorderLineStyle::DOTTED: return "DOTTED";
+        case table::BorderLineStyle::DASHED: return "DASHED";
+        case table::BorderLineStyle::DOUBLE: return "DOUBLE";
+        case table::BorderLineStyle::FINE_DASHED: return "FINE_DASHED";
+        default:
+            ;
+    }
+
+    return "";
+}
+
+}
+
+void ScFiltersTest::testExcelCellBorders( sal_uLong nFormatType )
+{
+    ScDocShellRef xDocSh = loadDoc("cell-borders.", nFormatType);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
 
-    const editeng::SvxBorderLine* pLeft = NULL;
-    const editeng::SvxBorderLine* pTop = NULL;
-    const editeng::SvxBorderLine* pRight = NULL;
-    const editeng::SvxBorderLine* pBottom = NULL;
+    struct
+    {
+        SCROW mnRow;
+        sal_Int16 mnStyle;
+        long mnWidth;
+    } aChecks[] = {
+        {  1, table::BorderLineStyle::SOLID,        1L }, // hair
+        {  3, table::BorderLineStyle::DOTTED,      15L }, // thin
+        {  9, table::BorderLineStyle::FINE_DASHED, 15L }, // dashed
+        { 11, table::BorderLineStyle::SOLID,       15L }, // thin
+        { 19, table::BorderLineStyle::DASHED,      35L }, // medium dashed
+        { 21, table::BorderLineStyle::SOLID,       35L }, // medium
+        { 23, table::BorderLineStyle::SOLID,       50L }, // thick
+        { 25, table::BorderLineStyle::DOUBLE,      -1L }, // double (don't check width)
+    };
 
-    pDoc->GetBorderLines( 2, 3, 0, &pLeft, &pTop, &pRight, &pBottom );
-    CPPUNIT_ASSERT(pRight);
-    CPPUNIT_ASSERT_EQUAL(
-        table::BorderLineStyle::SOLID, pRight->GetBorderLineStyle());
-    CPPUNIT_ASSERT_EQUAL(1L, pRight->GetWidth());
-
-    pDoc->GetBorderLines( 3, 5, 0, &pLeft, &pTop, &pRight, &pBottom );
-    CPPUNIT_ASSERT(pRight);
-    CPPUNIT_ASSERT_EQUAL(
-        table::BorderLineStyle::SOLID, pRight->GetBorderLineStyle());
-    CPPUNIT_ASSERT_EQUAL(20L, pRight->GetWidth());
-
-    pDoc->GetBorderLines( 5, 7, 0, &pLeft, &pTop, &pRight, &pBottom );
-    CPPUNIT_ASSERT(pRight);
-    CPPUNIT_ASSERT_EQUAL(
-        table::BorderLineStyle::SOLID, pRight->GetBorderLineStyle());
-    CPPUNIT_ASSERT_EQUAL(30L, pRight->GetWidth());
-
-    pDoc->GetBorderLines( 7, 9, 0, &pLeft, &pTop, &pRight, &pBottom );
-    CPPUNIT_ASSERT(pRight);
-    CPPUNIT_ASSERT_EQUAL(
-        table::BorderLineStyle::FINE_DASHED, pRight->GetBorderLineStyle());
-    CPPUNIT_ASSERT_EQUAL(1L, pRight->GetWidth());
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+    {
+        const editeng::SvxBorderLine* pLine = NULL;
+        pDoc->GetBorderLines(2, aChecks[i].mnRow, 0, NULL, &pLine, NULL, NULL);
+        CPPUNIT_ASSERT(pLine);
+        CPPUNIT_ASSERT_EQUAL(toBorderName(aChecks[i].mnStyle), toBorderName(pLine->GetBorderLineStyle()));
+        if (aChecks[i].mnWidth >= 0)
+            CPPUNIT_ASSERT_EQUAL(aChecks[i].mnWidth, pLine->GetWidth());
+    }
 }
 
-void ScFiltersTest::testBorderXLS()
+void ScFiltersTest::testCellBordersXLS()
 {
-    testBorderImpl( XLS );
+    testExcelCellBorders(XLS);
 }
 
-void ScFiltersTest::testBorderXLSX()
+void ScFiltersTest::testCellBordersXLSX()
 {
-    testBorderImpl( XLSX );
+    testExcelCellBorders(XLSX);
 }
 
 struct Border
