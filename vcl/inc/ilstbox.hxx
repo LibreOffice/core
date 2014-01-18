@@ -415,7 +415,7 @@ private:
     bool mbAutoHScroll : 1; // AutoHScroll an oder aus
     bool mbEdgeBlending : 1;
 
-    Link                maScrollHdl;    // Weil der vom ImplListBoxWindow selbst benoetigt wird.
+    Link                maScrollHdl;    // because it is needed by ImplListBoxWindow itself
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDNDListenerContainer;
 
 protected:
