@@ -73,12 +73,12 @@ namespace
     {
         OUStringBuffer& rKeyCondition = io_aKeyConditions[i_sTableName];
         if ( !rKeyCondition.isEmpty() )
-            rKeyCondition.append(" AND ");
-        rKeyCondition.append(i_sQuotedColumnName);
+            rKeyCondition = rKeyCondition + " AND ";
+        rKeyCondition = rKeyCondition + i_sQuotedColumnName;
         if ( i_aValue.isNull() )
-            rKeyCondition.append(" IS NULL");
+            rKeyCondition = rKeyCondition + " IS NULL";
         else
-            rKeyCondition.append(" = ?");
+            rKeyCondition = rKeyCondition + " = ?";
     }
 }
 
@@ -223,8 +223,8 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
             }
             OUStringBuffer& rPart = aSql[aIter->second.sTableName];
             if ( !rPart.isEmpty() )
-                rPart.append(", ");
-            rPart.append(sQuotedColumnName + s_sPara);
+                rPart = rPart + ", ";
+            rPart = rPart + sQuotedColumnName + s_sPara;
         }
     }
 
@@ -252,7 +252,7 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
                                        s_sSET + aSqlIter->second.toString());
             OUStringBuffer& rCondition = aKeyConditions[aSqlIter->first];
             if ( !rCondition.isEmpty() )
-                sSql.append(" WHERE " + rCondition.toString() );
+                sSql = sSql + " WHERE " + rCondition.toString();
 
             executeUpdate(_rInsertRow ,_rOriginalRow,sSql.makeStringAndClear(),aSqlIter->first);
         }
@@ -291,12 +291,12 @@ void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const conn
             }
             OUStringBuffer& rPart = aSql[aIter->second.sTableName];
             if ( !rPart.isEmpty() )
-                rPart.append(", ");
-            rPart.append(sQuotedColumnName);
+                rPart = rPart + ", ";
+            rPart = rPart + sQuotedColumnName;
             OUStringBuffer& rParam = aParameter[aIter->second.sTableName];
             if ( !rParam.isEmpty() )
-                rParam.append(", ");
-            rParam.append("?");
+                rParam = rParam + ", ";
+            rParam = rParam + "?";
         }
     }
     if ( aParameter.empty() )
@@ -619,8 +619,8 @@ void OptimisticSet::fillMissingValues(ORowSetValueVector::Vector& io_aRow) const
         }
         OUStringBuffer& rPart = aSql[aColIter->second.sTableName];
         if ( !rPart.isEmpty() )
-            rPart.append(", ");
-        rPart.append(sQuotedColumnName);
+            rPart = rPart + ", ";
+        rPart = rPart + sQuotedColumnName;
     }
     Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
     TSQLStatements::iterator aSqlIter = aSql.begin();

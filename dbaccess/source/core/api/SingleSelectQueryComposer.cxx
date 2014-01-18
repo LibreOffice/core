@@ -179,34 +179,34 @@ namespace
         switch( i_nFilterOperator )
         {
             case SQLFilterOperator::EQUAL:
-                o_sRet.append(" = " + i_sValue);
+                o_sRet = o_sRet + " = " + i_sValue;
                 break;
             case SQLFilterOperator::NOT_EQUAL:
-                o_sRet.append(" <> " + i_sValue);
+                o_sRet = o_sRet + " <> " + i_sValue;
                 break;
             case SQLFilterOperator::LESS:
-                o_sRet.append(" < " + i_sValue);
+                o_sRet = o_sRet + " < " + i_sValue;
                 break;
             case SQLFilterOperator::GREATER:
-                o_sRet.append(" > " + i_sValue);
+                o_sRet = o_sRet + " > " + i_sValue;
                 break;
             case SQLFilterOperator::LESS_EQUAL:
-                o_sRet.append(" <= " + i_sValue);
+                o_sRet = o_sRet + " <= " + i_sValue;
                 break;
             case SQLFilterOperator::GREATER_EQUAL:
-                o_sRet.append(" >= " + i_sValue);
+                o_sRet = o_sRet + " >= " + i_sValue;
                 break;
             case SQLFilterOperator::LIKE:
-                o_sRet.append(" LIKE " + i_sValue);
+                o_sRet = o_sRet + " LIKE " + i_sValue;
                 break;
             case SQLFilterOperator::NOT_LIKE:
-                o_sRet.append(" NOT LIKE " + i_sValue);
+                o_sRet = o_sRet + " NOT LIKE " + i_sValue;
                 break;
             case SQLFilterOperator::SQLNULL:
-                o_sRet.append(" IS NULL");
+                o_sRet = o_sRet + " IS NULL";
                 break;
             case SQLFilterOperator::NOT_SQLNULL:
-                o_sRet.append(" IS NOT NULL");
+                o_sRet = o_sRet + " IS NOT NULL";
                 break;
             default:
                 throw SQLException();
@@ -356,7 +356,7 @@ void SAL_CALL OSingleSelectQueryComposer::setCommand( const OUString& Command,sa
         case CommandType::TABLE:
             if ( m_xConnectionTables->hasByName(Command) )
             {
-                sSQL.appendAscii("SELECT * FROM ");
+                sSQL = sSQL + "SELECT * FROM ";
                 Reference< XPropertySet > xTable;
                 try
                 {
@@ -373,7 +373,7 @@ void SAL_CALL OSingleSelectQueryComposer::setCommand( const OUString& Command,sa
                     DBG_UNHANDLED_EXCEPTION();
                 }
 
-                sSQL.append(dbtools::composeTableNameForSelect(m_xConnection,xTable));
+                sSQL = sSQL + dbtools::composeTableNameForSelect(m_xConnection,xTable);
             }
             else
             {
@@ -388,7 +388,7 @@ void SAL_CALL OSingleSelectQueryComposer::setCommand( const OUString& Command,sa
                 Reference<XPropertySet> xQuery(m_xConnectionQueries->getByName(Command),UNO_QUERY);
                 OUString sCommand;
                 xQuery->getPropertyValue(PROPERTY_COMMAND) >>= sCommand;
-                sSQL.append(sCommand);
+                sSQL = sSQL + sCommand;
             }
             else
             {
@@ -599,8 +599,8 @@ OUString OSingleSelectQueryComposer::composeStatementFromParts( const ::std::vec
     for ( SQLPart eLoopParts = Where; eLoopParts != SQLPartCount; incSQLPart( eLoopParts ) )
         if ( !_rParts[ eLoopParts ].isEmpty() )
         {
-            aSql.append( getKeyword( eLoopParts ) );
-            aSql.append( _rParts[ eLoopParts ] );
+            aSql = aSql + getKeyword( eLoopParts );
+            aSql = aSql + _rParts[ eLoopParts ];
         }
 
     return aSql.makeStringAndClear();
@@ -692,7 +692,7 @@ void OSingleSelectQueryComposer::setSingleAdditiveClause( SQLPart _ePart, const 
     // construct the complete statement
     OUStringBuffer aSql(m_aPureSelectSQL);
     for ( SQLPart eLoopParts = Where; eLoopParts != SQLPartCount; incSQLPart( eLoopParts ) )
-        aSql.append(aClauses[ eLoopParts ]);
+        aSql = aSql + aClauses[ eLoopParts ];
 
     // set the query
     setQuery_Impl(aSql.makeStringAndClear());
@@ -713,7 +713,7 @@ void OSingleSelectQueryComposer::setSingleAdditiveClause( SQLPart _ePart, const 
     aClauses[ _ePart ] = getComposedClause( OUString(), _rClause, *pComposer, getKeyword( _ePart ) );
     // and parse it, so that m_aAdditiveIterator is up to date
     for ( SQLPart eLoopParts = Where; eLoopParts != SQLPartCount; incSQLPart( eLoopParts ) )
-        aSql.append(aClauses[ eLoopParts ]);
+        aSql = aSql + aClauses[ eLoopParts ];
     try
     {
         parseAndCheck_throwError( m_aSqlParser, aSql.makeStringAndClear(), m_aAdditiveIterator, *this );
@@ -809,12 +809,12 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
         OUString sOriginalWhereClause = getSQLPart( Where, m_aSqlIterator, sal_False );
         if ( !sOriginalWhereClause.isEmpty() )
         {
-            aSQL.append( " AND ( " + sOriginalWhereClause + " ) " );
+            aSQL = aSQL + " AND ( " + sOriginalWhereClause + " ) ";
         }
 
         OUString sGroupBy = getSQLPart( Group, m_aSqlIterator, sal_True );
         if ( !sGroupBy.isEmpty() )
-            aSQL.append( sGroupBy );
+            aSQL = aSQL + sGroupBy;
 
         OUString sSQL( aSQL.makeStringAndClear() );
         // normalize the statement so that it doesn't contain any application-level features anymore
@@ -1512,12 +1512,12 @@ namespace
         {
             if ( pOrIter->getLength() )
             {
-                sRet.append(L_BRACKET);
+                sRet = sRet + L_BRACKET;
                 const PropertyValue* pAndIter = pOrIter->getConstArray();
                 const PropertyValue* pAndEnd = pAndIter + pOrIter->getLength();
                 while ( pAndIter != pAndEnd )
                 {
-                    sRet.append(pAndIter->Name);
+                    sRet = sRet + pAndIter->Name;
                     OUString sValue;
                     pAndIter->Value >>= sValue;
                     if ( i_xSelectColumns.is() && i_xSelectColumns->hasByName(pAndIter->Name) )
@@ -1532,13 +1532,13 @@ namespace
                     lcl_addFilterCriteria_throw(pAndIter->Handle,sValue,sRet);
                     ++pAndIter;
                     if ( pAndIter != pAndEnd )
-                        sRet.append(STR_AND);
+                        sRet = sRet + STR_AND;
                 }
-                sRet.append(R_BRACKET);
+                sRet = sRet + R_BRACKET;
             }
             ++pOrIter;
             if ( pOrIter != pOrEnd && !sRet.isEmpty() )
-                sRet.append(STR_OR);
+                sRet = sRet + STR_OR;
         }
         return sRet.makeStringAndClear();
     }
@@ -1640,7 +1640,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
             case DataType::VARCHAR:
             case DataType::CHAR:
             case DataType::LONGVARCHAR:
-                aSQL.append( DBTypeConversion::toSQLString( nType, aValue, sal_True, m_xTypeConverter ) );
+                aSQL = aSQL + DBTypeConversion::toSQLString( nType, aValue, sal_True, m_xTypeConverter );
                 break;
             case DataType::CLOB:
                 {
@@ -1650,12 +1650,12 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
                         const ::sal_Int64 nLength = xClob->length();
                         if ( sal_Int64(nLength + aSQL.getLength() + STR_LIKE.getLength() ) < sal_Int64(SAL_MAX_INT32) )
                         {
-                            aSQL.append("'" + xClob->getSubString(1,(sal_Int32)nLength) + "'");
+                            aSQL = aSQL + "'" + xClob->getSubString(1,(sal_Int32)nLength) + "'";
                         }
                     }
                     else
                     {
-                        aSQL.append( DBTypeConversion::toSQLString( nType, aValue, sal_True, m_xTypeConverter ) );
+                        aSQL = aSQL + DBTypeConversion::toSQLString( nType, aValue, sal_True, m_xTypeConverter );
                     }
                 }
                 break;
@@ -1668,17 +1668,17 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
                     {
                         if(nSearchable == ColumnSearch::CHAR)
                         {
-                            aSQL.append( "\'" );
+                            aSQL = aSQL + "\'";
                         }
                         aSQL.appendAscii( "0x" );
                         const sal_Int8* pBegin  = aSeq.getConstArray();
                         const sal_Int8* pEnd    = pBegin + aSeq.getLength();
                         for(;pBegin != pEnd;++pBegin)
                         {
-                            aSQL.append( (sal_Int32)*pBegin, 16 ).getStr();
+                            aSQL.append((sal_Int32)*pBegin, 16 ).getStr();
                         }
                         if(nSearchable == ColumnSearch::CHAR)
-                            aSQL.append( "\'" );
+                            aSQL = aSQL + "\'";
                     }
                     else
                         throw SQLException(DBACORE_RESSTRING(RID_STR_NOT_SEQUENCE_INT8),*this,SQLSTATE_GENERAL,1000,Any() );
@@ -1695,7 +1695,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
                 }
                 break;
             default:
-                aSQL.append( DBTypeConversion::toSQLString( nType, aValue, sal_True, m_xTypeConverter ) );
+                aSQL = aSQL + DBTypeConversion::toSQLString( nType, aValue, sal_True, m_xTypeConverter );
                 break;
         }
     }

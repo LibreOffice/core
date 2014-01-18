@@ -241,11 +241,11 @@ namespace
             fullName = tblName + s_sDot + colName;
         if ( _rValue.isNull() )
         {
-            o_buf.append(fullName + " IS NULL ");
+            o_buf = o_buf + fullName + " IS NULL ";
         }
         else
         {
-            o_buf.append(fullName + " = ? ");
+            o_buf = o_buf + fullName + " = ? ";
         }
     }
 }
@@ -276,7 +276,7 @@ OUStringBuffer OKeySet::createKeyFilter()
     for(SelectColumnsMetaData::const_iterator aPosIter = m_pKeyColumnNames->begin();aPosIter != aPosEnd; ++aPosIter)
     {
         if ( ! aFilter.isEmpty() )
-            aFilter.append(aAnd);
+            aFilter = aFilter + aAnd;
         appendOneKeyColumnClause(::dbtools::quoteTableName(xMeta, aPosIter->second.sTableName, ::dbtools::eInDataManipulation),
                                  ::dbtools::quoteName(aQuote, aPosIter->second.sRealName),
                                  *aIter++,
@@ -286,7 +286,7 @@ OUStringBuffer OKeySet::createKeyFilter()
     for(SelectColumnsMetaData::const_iterator aPosIter = m_pForeignColumnNames->begin(); aPosIter != aPosEnd; ++aPosIter)
     {
         if ( ! aFilter.isEmpty() )
-            aFilter.append(aAnd);
+            aFilter = aFilter + aAnd;
         appendOneKeyColumnClause(::dbtools::quoteTableName(xMeta, aPosIter->second.sTableName, ::dbtools::eInDataManipulation),
                                  ::dbtools::quoteName(aQuote, aPosIter->second.sRealName),
                                  *aIter++,
@@ -505,7 +505,7 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
     const SelectColumnsMetaData::const_iterator aPosEnd = (*m_pKeyColumnNames).end();
     for(;aIter != aPosEnd;++aIter)
     {
-        aCondition.append(::dbtools::quoteName( aQuote,aIter->second.sRealName) + aEqual + aAnd);
+        aCondition = aCondition + (::dbtools::quoteName( aQuote,aIter->second.sRealName) + aEqual + aAnd);
     }
     aCondition.setLength(aCondition.getLength() - aAnd.getLength());
     // sCon is (parenthesised) the condition to locate ONE row
@@ -518,7 +518,7 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
     const Any* const pEnd = pBegin + rows.getLength();
     for(;pBegin != pEnd;++pBegin)
     {
-        aSql.append(sCon + aOr);
+        aSql = aSql + sCon + aOr;
     }
     aSql.setLength(aSql.getLength()-3);
 
@@ -609,12 +609,12 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     {
         if ( m_pKeyColumnNames->find(aIter->first) != m_pKeyColumnNames->end() )
         {
-            sKeyCondition.append(::dbtools::quoteName( aQuote,aIter->second.sRealName));
+            sKeyCondition = sKeyCondition + ::dbtools::quoteName( aQuote,aIter->second.sRealName);
             if((_rOriginalRow->get())[aIter->second.nPosition].isNull())
-                sKeyCondition.append(sIsNull);
+                sKeyCondition = sKeyCondition + sIsNull;
             else
-                sKeyCondition.append(sParam);
-            sKeyCondition.append(aAnd);
+                sKeyCondition = sKeyCondition + sParam;
+            sKeyCondition = sKeyCondition + aAnd;
         }
         else
         {
@@ -624,22 +624,22 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
             {
                 if((*aIndexIter)->hasByName(aIter->first))
                 {
-                    sIndexCondition.append(::dbtools::quoteName( aQuote,aIter->second.sRealName));
+                    sIndexCondition = sIndexCondition + ::dbtools::quoteName( aQuote,aIter->second.sRealName);
                     if((_rOriginalRow->get())[aIter->second.nPosition].isNull())
-                        sIndexCondition.append(sIsNull);
+                        sIndexCondition = sIndexCondition + sIsNull;
                     else
                     {
-                        sIndexCondition.append(sParam);
+                        sIndexCondition = sIndexCondition + sParam;
                         aIndexColumnPositions.push_back(aIter->second.nPosition);
                     }
-                    sIndexCondition.append(aAnd);
+                    sIndexCondition = sIndexCondition + aAnd;
                     break;
                 }
             }
         }
         if((_rInsertRow->get())[aIter->second.nPosition].isModified())
         {
-            aSql.append(::dbtools::quoteName( aQuote,aIter->second.sRealName) + aPara);
+            aSql = aSql + ::dbtools::quoteName( aQuote,aIter->second.sRealName) + aPara;
         }
     }
 
@@ -652,18 +652,18 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
 
     if(!sKeyCondition.isEmpty() || !sIndexCondition.isEmpty())
     {
-        aSql.append(" WHERE ");
+        aSql = aSql + " WHERE ";
         if(!sKeyCondition.isEmpty() && !sIndexCondition.isEmpty())
         {
-            aSql.append(sKeyCondition.makeStringAndClear() + sIndexCondition.makeStringAndClear());
+            aSql = aSql + sKeyCondition.makeStringAndClear() + sIndexCondition.makeStringAndClear();
         }
         else if(!sKeyCondition.isEmpty())
         {
-            aSql.append(sKeyCondition.makeStringAndClear());
+            aSql = aSql + sKeyCondition.makeStringAndClear();
         }
         else if(!sIndexCondition.isEmpty())
         {
-            aSql.append(sIndexCondition.makeStringAndClear());
+            aSql = aSql + sIndexCondition.makeStringAndClear();
         }
         aSql.setLength(aSql.getLength()-5); // remove the last AND
     }
@@ -768,8 +768,8 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
             {
                 bRefetch = ::std::find(m_aFilterColumns.begin(),m_aFilterColumns.end(),aIter->second.sRealName) == m_aFilterColumns.end();
             }
-            aSql.append(::dbtools::quoteName( aQuote,aIter->second.sRealName) + aComma);
-            aValues.append(aPara);
+            aSql = aSql + ::dbtools::quoteName( aQuote,aIter->second.sRealName) + aComma;
+            aValues = aValues + aPara;
             bModified = sal_True;
         }
     }
@@ -778,7 +778,7 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
 
     aSql[aSql.getLength() - 1] = ')';
     aValues[aValues.getLength() - 1] = ')';
-    aSql.append(aValues.makeStringAndClear());
+    aSql = aSql + aValues.makeStringAndClear();
     // now create,fill and execute the prepared statement
     OUString sEmpty;
     executeInsert(_rInsertRow,aSql.makeStringAndClear(),sEmpty,bRefetch);
@@ -1019,15 +1019,15 @@ void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivit
     {
         if ( m_pKeyColumnNames->find(aIter->first) != m_pKeyColumnNames->end() )
         {
-            aSql.append(::dbtools::quoteName( aQuote,aIter->second.sRealName));
+            aSql = aSql + ::dbtools::quoteName( aQuote,aIter->second.sRealName);
             if((_rDeleteRow->get())[aIter->second.nPosition].isNull())
             {
                 SAL_WARN("dbaccess", "can a primary key be null");
-                aSql.append(" IS NULL");
+                aSql = aSql + " IS NULL";
             }
             else
-                aSql.append(" = ?");
-            aSql.append(aAnd);
+                aSql = aSql + " = ?";
+            aSql = aSql + aAnd;
         }
         else
         {
@@ -1037,22 +1037,22 @@ void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivit
             {
                 if((*aIndexIter)->hasByName(aIter->first))
                 {
-                    sIndexCondition.append(::dbtools::quoteName( aQuote,aIter->second.sRealName));
+                    sIndexCondition = sIndexCondition + ::dbtools::quoteName( aQuote,aIter->second.sRealName);
                     if((_rDeleteRow->get())[aIter->second.nPosition].isNull())
-                        sIndexCondition.append(" IS NULL");
+                        sIndexCondition = sIndexCondition + " IS NULL";
                     else
                     {
-                        sIndexCondition.append(" = ?");
+                        sIndexCondition = sIndexCondition + " = ?";
                         aIndexColumnPositions.push_back(aIter->second.nPosition);
                     }
-                    sIndexCondition.append(aAnd);
+                    sIndexCondition = sIndexCondition + aAnd;
 
                     break;
                 }
             }
         }
     }
-    aSql.append(sIndexCondition.makeStringAndClear());
+    aSql = aSql + sIndexCondition.makeStringAndClear();
     aSql.setLength(aSql.getLength()-5);
 
     // now create end execute the prepared statement

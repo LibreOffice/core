@@ -173,14 +173,14 @@ void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connecti
     connectivity::ORowVector< ORowSetValue > ::Vector::iterator aEnd = _rInsertRow->get().end();
     for(; aIter != aEnd;++aIter)
     {
-        aSql.append(::dbtools::quoteName( aQuote,m_xSetMetaData->getColumnName(i++)) + aComma);
-        aValues.append(aPara);
+        aSql = aSql + ::dbtools::quoteName( aQuote,m_xSetMetaData->getColumnName(i++)) + aComma;
+        aValues = aValues + aPara;
     }
 
     aSql[aSql.getLength() - 1] = ')';
     aValues[aValues.getLength() - 1] = ')';
 
-    aSql.append(aValues.makeStringAndClear());
+    aSql = aSql + aValues;
     // now create end execute the prepared statement
     {
         Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql.makeStringAndClear()));
@@ -253,12 +253,12 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
         aColumnName = m_xSetMetaData->getColumnName(i);
         if(xPrimaryKeyColumns.is() && xPrimaryKeyColumns->hasByName(aColumnName))
         {
-            _sCondition.append(::dbtools::quoteName( aQuote,aColumnName));
+            _sCondition = _sCondition + (::dbtools::quoteName( aQuote,aColumnName));
             if(aIter->isNull())
-                _sCondition.append(sIsNull);
+                _sCondition = _sCondition + sIsNull;
             else
-                _sCondition.append(sParam);
-            _sCondition.append(aAnd);
+                _sCondition = _sCondition + sParam;
+            _sCondition = _sCondition + aAnd;
             _rOrgValues.push_back(nCheckCount);
 
         }
@@ -268,19 +268,19 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
         {
             if((*aIndexIter)->hasByName(aColumnName))
             {
-                _sCondition.append(::dbtools::quoteName( aQuote,aColumnName));
+                _sCondition = _sCondition + (::dbtools::quoteName( aQuote,aColumnName));
                 if(aIter->isNull())
-                    _sCondition.append(sIsNull);
+                    _sCondition = _sCondition + sIsNull;
                 else
-                    _sCondition.append(sParam);
-                _sCondition.append(aAnd);
+                    _sCondition = _sCondition + sParam;
+                _sCondition = _sCondition + aAnd;
                 _rOrgValues.push_back(nCheckCount);
                 break;
             }
         }
         if(aIter->isModified())
         {
-            _sParameter.append(::dbtools::quoteName( aQuote,aColumnName) + aPara);
+            _sParameter = _sParameter + (::dbtools::quoteName( aQuote,aColumnName) + aPara);
         }
     }
 }
@@ -302,7 +302,7 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     {
         aCondition.setLength(aCondition.getLength()-5);
 
-        aSql.append(" WHERE " + aCondition.makeStringAndClear());
+        aSql = aSql + (" WHERE " + aCondition);
     }
     else
         ::dbtools::throwSQLException(
