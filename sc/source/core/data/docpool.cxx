@@ -749,7 +749,7 @@ static SfxItemPresentation lcl_HFPresentation
                 {
                     aText += GetMetricText( (long)nLeftMargin,
                                            eCoreMetric, ePresentationMetric, pIntl );
-                    aText += EE_RESSTR(GetMetricId(ePresentationMetric));
+                    aText += " " + EE_RESSTR(GetMetricId(ePresentationMetric));
                 }
                 aText += cpDelim;
 
@@ -764,7 +764,7 @@ static SfxItemPresentation lcl_HFPresentation
                 {
                     aText += GetMetricText( (long)nRightMargin,
                                             eCoreMetric, ePresentationMetric, pIntl );
-                    aText += EE_RESSTR(GetMetricId(ePresentationMetric));
+                    aText += " " + EE_RESSTR(GetMetricId(ePresentationMetric));
                 }
             }
             break;

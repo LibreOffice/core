@@ -80,7 +80,7 @@ SfxItemPresentation  SwPageFtnInfoItem::GetPresentation
             if ( nHght )
             {
                 rText = SW_RESSTR( STR_MAX_FTN_HEIGHT ) + " " +
-                        ::GetMetricText( nHght, eCoreUnit, ePresUnit, pIntl ) +
+                        ::GetMetricText( nHght, eCoreUnit, ePresUnit, pIntl ) + " " +
                         ::GetSvxString( ::GetMetricId( ePresUnit ) );
             }
             return ePres;

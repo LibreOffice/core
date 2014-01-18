@@ -352,11 +352,11 @@ SfxItemPresentation SvxSizeItem::GetPresentation
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = EE_RESSTR(RID_SVXITEMS_SIZE_WIDTH) +
                     GetMetricText( aSize.Width(), eCoreUnit, ePresUnit, pIntl ) +
-                    EE_RESSTR(GetMetricId(ePresUnit)) +
+                    " " + EE_RESSTR(GetMetricId(ePresUnit)) +
                     cpDelimTmp +
                     EE_RESSTR(RID_SVXITEMS_SIZE_HEIGHT) +
                     GetMetricText( aSize.Height(), eCoreUnit, ePresUnit, pIntl ) +
-                    EE_RESSTR(GetMetricId(ePresUnit));
+                    " " + EE_RESSTR(GetMetricId(ePresUnit));
             return SFX_ITEM_PRESENTATION_COMPLETE;
         //no break necessary
         default: ;//prevent warning
@@ -627,7 +627,7 @@ SfxItemPresentation SvxLRSpaceItem::GetPresentation
             {
                 rText = rText +
                         GetMetricText( (long)nLeftMargin, eCoreUnit, ePresUnit, pIntl ) +
-                        EE_RESSTR(GetMetricId(ePresUnit));
+                        " " + EE_RESSTR(GetMetricId(ePresUnit));
             }
             rText += OUString(cpDelim);
             if ( 100 != nPropFirstLineOfst || nFirstLineOfst )
@@ -640,7 +640,7 @@ SfxItemPresentation SvxLRSpaceItem::GetPresentation
                     rText = rText +
                             GetMetricText( (long)nFirstLineOfst,
                                             eCoreUnit, ePresUnit, pIntl ) +
-                            EE_RESSTR(GetMetricId(ePresUnit));
+                            " " + EE_RESSTR(GetMetricId(ePresUnit));
                 }
                 rText += OUString(cpDelim);
             }
@@ -652,7 +652,7 @@ SfxItemPresentation SvxLRSpaceItem::GetPresentation
                 rText = rText +
                         GetMetricText( (long)nRightMargin,
                                        eCoreUnit, ePresUnit, pIntl ) +
-                        EE_RESSTR(GetMetricId(ePresUnit));
+                        " " + EE_RESSTR(GetMetricId(ePresUnit));
             }
             return SFX_ITEM_PRESENTATION_COMPLETE;
         }
@@ -980,7 +980,7 @@ SfxItemPresentation SvxULSpaceItem::GetPresentation
             {
                 rText = rText +
                         GetMetricText( (long)nUpper, eCoreUnit, ePresUnit, pIntl ) +
-                        EE_RESSTR(GetMetricId(ePresUnit));
+                        " " + EE_RESSTR(GetMetricId(ePresUnit));
             }
             rText = rText + OUString(cpDelim) + EE_RESSTR(RID_SVXITEMS_ULSPACE_LOWER);
             if ( 100 != nPropLower )
@@ -989,7 +989,7 @@ SfxItemPresentation SvxULSpaceItem::GetPresentation
             {
                 rText = rText +
                         GetMetricText( (long)nLower, eCoreUnit, ePresUnit, pIntl ) +
-                        EE_RESSTR(GetMetricId(ePresUnit));
+                        " " + EE_RESSTR(GetMetricId(ePresUnit));
             }
             return SFX_ITEM_PRESENTATION_COMPLETE;
         }
@@ -1496,7 +1496,7 @@ SfxItemPresentation SvxShadowItem::GetPresentation
                     EE_RESSTR(nId) +
                     OUString(cpDelim) +
                     GetMetricText( (long)nWidth, eCoreUnit, ePresUnit, pIntl ) +
-                    EE_RESSTR(GetMetricId(ePresUnit)) +
+                    " " + EE_RESSTR(GetMetricId(ePresUnit)) +
                     OUString(cpDelim) +
                     EE_RESSTR(RID_SVXITEMS_SHADOW_BEGIN + eLocation);
             return ePres;
@@ -2164,7 +2164,7 @@ SfxItemPresentation SvxBoxItem::GetPresentation
                 rText = rText +
                         GetMetricText( (long)nTopDist, eCoreUnit,
                                             ePresUnit, pIntl ) +
-                        EE_RESSTR(GetMetricId(ePresUnit));
+                        " " + EE_RESSTR(GetMetricId(ePresUnit));
             }
             else
             {
@@ -2172,22 +2172,22 @@ SfxItemPresentation SvxBoxItem::GetPresentation
                         EE_RESSTR(RID_SVXITEMS_BORDER_TOP) +
                         GetMetricText( (long)nTopDist, eCoreUnit,
                                         ePresUnit, pIntl ) +
-                        EE_RESSTR(GetMetricId(ePresUnit)) +
+                        " " + EE_RESSTR(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         EE_RESSTR(RID_SVXITEMS_BORDER_BOTTOM) +
                         GetMetricText( (long)nBottomDist, eCoreUnit,
                                         ePresUnit, pIntl ) +
-                        EE_RESSTR(GetMetricId(ePresUnit)) +
+                        " " + EE_RESSTR(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         EE_RESSTR(RID_SVXITEMS_BORDER_LEFT) +
                         GetMetricText( (long)nLeftDist, eCoreUnit,
                                         ePresUnit, pIntl ) +
-                        EE_RESSTR(GetMetricId(ePresUnit)) +
+                        " " + EE_RESSTR(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         EE_RESSTR(RID_SVXITEMS_BORDER_RIGHT) +
                         GetMetricText( (long)nRightDist, eCoreUnit,
                                         ePresUnit, pIntl ) +
-                        EE_RESSTR(GetMetricId(ePresUnit));
+                        " " + EE_RESSTR(GetMetricId(ePresUnit));
             }
             return SFX_ITEM_PRESENTATION_COMPLETE;
         }

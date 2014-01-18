@@ -980,7 +980,7 @@ SfxItemPresentation SdrMetricItem::GetPresentation(SfxItemPresentation ePres,
     aFmt.TakeStr(nValue,rText);
     OUString aStr;
     aFmt.TakeUnitStr((MapUnit)ePresMetric,aStr);
-    rText+=aStr;
+    rText += " " + aStr;
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
         OUString aStr2;
 

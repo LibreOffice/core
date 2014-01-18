@@ -173,14 +173,14 @@ void TextCharacterSpacingControl::Rearrange(bool bLBAvailable,bool bAvailable, l
         {
             OUString aStrTip( maStrCusE);   //LAST CUSTOM no tip defect //add
             aStrTip += OUString::number( (double)mnCustomKern / 10);
-            aStrTip += maStrUnit;      // modify
+            aStrTip += " " + maStrUnit;      // modify
             maVSSpacing.SetItemText(6,aStrTip);
         }
         else if(mnCustomKern < 0)
         {
             OUString aStrTip(maStrCusC) ;     //LAST CUSTOM no tip defect //add
             aStrTip += OUString::number( (double)-mnCustomKern / 10);
-            aStrTip += maStrUnit;      // modify
+            aStrTip += " " + maStrUnit;      // modify
             maVSSpacing.SetItemText( 6, aStrTip );
         }
         else

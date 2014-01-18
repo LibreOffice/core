@@ -340,7 +340,8 @@ SfxItemPresentation SwFmtFrmSize::GetPresentation
             }
             else
             {
-                rText = rText + ::GetMetricText( GetWidth(), eCoreUnit, ePresUnit, pIntl ) + ::GetSvxString( ::GetMetricId( ePresUnit ) );
+                rText = rText + ::GetMetricText( GetWidth(), eCoreUnit, ePresUnit, pIntl ) +
+                    " " + ::GetSvxString( ::GetMetricId( ePresUnit ) );
             }
             if ( ATT_VAR_SIZE != GetHeightSizeType() )
             {
@@ -354,7 +355,7 @@ SfxItemPresentation SwFmtFrmSize::GetPresentation
                 else
                 {
                     rText = OUString( ::GetMetricText( GetHeight(), eCoreUnit, ePresUnit, pIntl ) ) +
-                            ::GetSvxString( ::GetMetricId( ePresUnit ) );
+                            " " + ::GetSvxString( ::GetMetricId( ePresUnit ) );
                 }
             }
             return ePres;
@@ -502,7 +503,7 @@ SfxItemPresentation SwFmtVertOrient::GetPresentation
                 {
                     rText = rText + SW_RESSTR( STR_POS_Y ) + " " +
                             ::GetMetricText( GetPos(), eCoreUnit, ePresUnit, pIntl ) +
-                            ::GetSvxString( ::GetMetricId( ePresUnit ) );
+                            " " + ::GetSvxString( ::GetMetricId( ePresUnit ) );
                 }
                 break;
                 case text::VertOrientation::TOP:
@@ -560,7 +561,7 @@ SfxItemPresentation SwFmtHoriOrient::GetPresentation
                 {
                     rText = rText + SW_RESSTR( STR_POS_X ) + " " +
                             ::GetMetricText( GetPos(), eCoreUnit, ePresUnit, pIntl ) +
-                            ::GetSvxString( ::GetMetricId( ePresUnit ) );
+                            " " + ::GetSvxString( ::GetMetricId( ePresUnit ) );
                 }
                 break;
                 case text::HoriOrientation::RIGHT:

@@ -1124,7 +1124,9 @@ SfxItemPresentation SvxTabStopItem::GetPresentation
                 rText += GetMetricText(
                     ((*this)[i]).GetTabPos(), eCoreUnit, ePresUnit, pIntl );
                 if ( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
-                    rText += EE_RESSTR(GetMetricId(ePresUnit));
+                {
+                    rText += " " + EE_RESSTR(GetMetricId(ePresUnit));
+                }
                 bComma = sal_True;
             }
         }
