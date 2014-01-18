@@ -37,7 +37,6 @@ copy-stuff:
 		sed -e 's!uri="vnd.sun.star.expand:$$LO_LIB_DIR/!uri="file://$$APP_DATA_DIR/lib/!g' <$(INSTDIR)/$$F.rdb >assets/$$F.rdb; \
 	done
 	cp $(SRC_ROOT)/odk/examples/java/DocumentHandling/test/test1.odt \
-	   $(SRC_ROOT)/sc/qa/unit/data/xls/border.xls \
 	   $(SRC_ROOT)/sw/qa/core/data/odt/test.odt \
 	   $(SRC_ROOT)/sw/qa/core/data/doc/testVba.doc \
 		assets
