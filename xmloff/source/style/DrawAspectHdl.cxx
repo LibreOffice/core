@@ -20,13 +20,8 @@
 #include "DrawAspectHdl.hxx"
 
 #include <com/sun/star/uno/Any.hxx>
-
 #include <rtl/ustrbuf.hxx>
-
-#include <tools/solar.h>
-
 #include <sax/tools/converter.hxx>
-
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmltoken.hxx>
 
