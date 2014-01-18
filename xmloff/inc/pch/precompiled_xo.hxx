@@ -549,7 +549,6 @@
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
 #include <tools/helpers.hxx>
-#include <tools/solar.h>
 #include <tools/time.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/wintypes.hxx>

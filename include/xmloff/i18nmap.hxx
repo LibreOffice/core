@@ -23,7 +23,6 @@
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <rtl/ustring.hxx>
-#include <tools/solar.h>
 #include <map>
 
 class SvI18NMapEntry_Key

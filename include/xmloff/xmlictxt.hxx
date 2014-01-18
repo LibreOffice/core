@@ -24,7 +24,6 @@
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <tools/solar.h>
 #include <tools/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/rtti.hxx>

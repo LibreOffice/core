@@ -25,8 +25,6 @@
 #include <xmloff/xmluconv.hxx>
 // header for struct SvXMLEnumMapEntry
 #include <xmloff/xmlement.hxx>
-#include <tools/solar.h>
-
 // header for class SvXMLImportPropertyMapper
 #include <xmloff/xmlimppr.hxx>
 // header for class XMLPropStyleContext
