@@ -37,14 +37,12 @@ class GraphicRendererVCL : public ::cppu::OWeakAggObject,
                            public ::comphelper::PropertySetHelper,
                            public ::com::sun::star::graphic::XGraphicRenderer
 {
+    static ::comphelper::PropertySetInfo* createPropertySetInfo();
+
 public:
 
     GraphicRendererVCL();
     ~GraphicRendererVCL() throw();
-
-protected:
-
-    static ::comphelper::PropertySetInfo* createPropertySetInfo();
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);

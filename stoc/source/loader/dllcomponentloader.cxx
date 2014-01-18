@@ -24,6 +24,7 @@
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <osl/module.h>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <uno/environment.h>
 #include <uno/mapping.hxx>
@@ -169,10 +170,9 @@ com_sun_star_comp_stoc_DLLComponentLoader_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    css::uno::Reference<css::uno::XInterface> x(
-        static_cast<cppu::OWeakObject *>(new DllComponentLoader(context)));
+    rtl::Reference<DllComponentLoader> x(new DllComponentLoader(context));
     x->acquire();
-    return x.get();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

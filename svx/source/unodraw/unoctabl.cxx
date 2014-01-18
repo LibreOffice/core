@@ -23,6 +23,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <rtl/ref.hxx>
 #include <svx/xtable.hxx>
 
 using namespace ::com::sun::star;
@@ -186,13 +187,12 @@ sal_Bool SAL_CALL SvxUnoColorTable::hasElements()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_drawing_SvxUnoColorTable_get_implementation(
-    SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
+    css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    css::uno::Reference<css::uno::XInterface> x(
-        static_cast<cppu::OWeakObject *>(new SvxUnoColorTable));
+    rtl::Reference<SvxUnoColorTable> x(new SvxUnoColorTable);
     x->acquire();
-    return x.get();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

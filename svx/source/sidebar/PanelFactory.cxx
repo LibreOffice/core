@@ -206,11 +206,10 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 org_apache_openoffice_comp_svx_sidebar_PanelFactory_get_implementation(
-    SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
+    css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    css::uno::Reference<css::uno::XInterface> x(
-        static_cast<cppu::OWeakObject *>(new PanelFactory));
+    rtl::Reference<PanelFactory> x(new PanelFactory);
     x->acquire();
-    return x.get();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }

@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/drawing/XCustomShapeEngine.hpp>
+#include <rtl/ref.hxx>
 #include "svx/EnhancedCustomShape2d.hxx"
 #include "EnhancedCustomShape3d.hxx"
 #include "EnhancedCustomShapeFontWork.hxx"
@@ -490,13 +491,12 @@ Sequence< Reference< drawing::XCustomShapeHandle > > SAL_CALL EnhancedCustomShap
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_drawing_EnhancedCustomShapeEngine_get_implementation(
-    SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
+    css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    css::uno::Reference<css::uno::XInterface> x(
-        static_cast<cppu::OWeakObject *>(new EnhancedCustomShapeEngine));
+    rtl::Reference<EnhancedCustomShapeEngine> x(new EnhancedCustomShapeEngine);
     x->acquire();
-    return x.get();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

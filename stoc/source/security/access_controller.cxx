@@ -26,8 +26,8 @@
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>
 
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/string.hxx>
 
 #include <uno/current_context.h>
 #include <uno/lbnames.h>
@@ -984,10 +984,9 @@ com_sun_star_security_comp_stoc_AccessController_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    css::uno::Reference<css::uno::XInterface> x(
-        static_cast<cppu::OWeakObject *>(new AccessController(context)));
+    rtl::Reference<AccessController> x(new AccessController(context));
     x->acquire();
-    return x.get();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

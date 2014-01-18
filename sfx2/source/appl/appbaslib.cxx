@@ -161,8 +161,7 @@ com_sun_star_comp_sfx2_ApplicationDialogLibraryContainer_get_implementation(
     css::uno::Sequence<css::uno::Any> const &)
 {
     SFX_APP()->GetBasicManager();
-    Reference< XInterface > xRet =
-        Reference< XInterface >( SFX_APP()->GetDialogContainer(), UNO_QUERY );
+    Reference< XInterface > xRet( SFX_APP()->GetDialogContainer(), UNO_QUERY );
     xRet->acquire();
     return xRet.get();
 }
@@ -176,8 +175,7 @@ com_sun_star_comp_sfx2_ApplicationScriptLibraryContainer_get_implementation(
     css::uno::Sequence<css::uno::Any> const &)
 {
     SFX_APP()->GetBasicManager();
-    Reference< XInterface > xRet =
-        Reference< XInterface >( SFX_APP()->GetBasicContainer(), UNO_QUERY );
+    Reference< XInterface > xRet( SFX_APP()->GetBasicContainer(), UNO_QUERY );
     xRet->acquire();
     return xRet.get();
 }

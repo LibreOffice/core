@@ -22,6 +22,7 @@
 #include "unogaltheme.hxx"
 #include "svx/gallery1.hxx"
 #include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -232,13 +233,12 @@ void SAL_CALL GalleryThemeProvider::removeByName( const OUString& rName )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_gallery_GalleryThemeProvider_get_implementation(
-    SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
+    css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    css::uno::Reference<css::uno::XInterface> x(
-        static_cast<cppu::OWeakObject *>(new GalleryThemeProvider));
+    rtl::Reference<GalleryThemeProvider> x(new GalleryThemeProvider);
     x->acquire();
-    return x.get();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

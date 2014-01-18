@@ -30,9 +30,9 @@
 #include <uno/mapping.hxx>
 #include <osl/thread.h>
 
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/strbuf.hxx>
 #include <osl/process.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -1821,11 +1821,9 @@ com_sun_star_comp_stoc_ImplementationRegistration_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    css::uno::Reference<css::uno::XInterface> x(
-        static_cast<cppu::OWeakObject *>(
-            new ImplementationRegistration(context)));
+    rtl::Reference<ImplementationRegistration> x(new ImplementationRegistration(context));
     x->acquire();
-    return x.get();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

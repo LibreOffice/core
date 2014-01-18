@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
+#include <rtl/ref.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -443,10 +444,9 @@ com_sun_star_svx_FontHeightToolBoxController_get_implementation(
     css::uno::XComponentContext *rxContext,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    css::uno::Reference<css::uno::XInterface> x(
-        static_cast<cppu::OWeakObject *>(new FontHeightToolBoxControl(rxContext)));
+    rtl::Reference<FontHeightToolBoxControl> x(new FontHeightToolBoxControl(rxContext));
     x->acquire();
-    return x.get();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

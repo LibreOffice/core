@@ -34,6 +34,7 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <rtl/ref.hxx>
 
 #include <expat.h>
 
@@ -1021,13 +1022,12 @@ void SaxExpatParser_Impl::callbackEndCDATA( void *pvThis )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_extensions_xml_sax_ParserExpat_get_implementation(
-    SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
+    css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    css::uno::Reference<css::uno::XInterface> x(
-        static_cast<cppu::OWeakObject *>(new SaxExpatParser));
+    rtl::Reference<SaxExpatParser> x(new SaxExpatParser);
     x->acquire();
-    return x.get();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

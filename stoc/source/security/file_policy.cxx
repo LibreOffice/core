@@ -23,7 +23,7 @@
 #include <osl/diagnose.h>
 #include <osl/file.h>
 #include <rtl/byteseq.hxx>
-#include <rtl/string.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <cppuhelper/access_control.hxx>
@@ -42,7 +42,6 @@
 #define IMPL_NAME "com.sun.star.security.comp.stoc.FilePolicy"
 
 using namespace ::osl;
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -157,7 +156,7 @@ class PolicyReader
     oslFileHandle m_file;
 
     sal_Int32 m_linepos;
-    ByteSequence m_line;
+    rtl::ByteSequence m_line;
     sal_Int32 m_pos;
     sal_Unicode m_back;
 
@@ -546,10 +545,9 @@ com_sun_star_security_comp_stoc_FilePolicy_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    css::uno::Reference<css::uno::XInterface> x(
-        static_cast<cppu::OWeakObject *>(new FilePolicy(context)));
+    rtl::Reference<FilePolicy> x(new FilePolicy(context));
     x->acquire();
-    return x.get();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

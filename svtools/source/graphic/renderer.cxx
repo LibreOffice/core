@@ -26,6 +26,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <rtl/ref.hxx>
 #include <svl/itemprop.hxx>
 #include <svtools/grfmgr.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -293,13 +294,12 @@ void SAL_CALL GraphicRendererVCL::render( const uno::Reference< graphic::XGraphi
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_graphic_GraphicRendererVCL_get_implementation(
-        SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
-        css::uno::Sequence<css::uno::Any> const &)
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    css::uno::Reference<css::uno::XInterface> x(
-            static_cast<cppu::OWeakObject *>(new GraphicRendererVCL));
+    rtl::Reference<GraphicRendererVCL> x(new GraphicRendererVCL);
     x->acquire();
-    return x.get();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

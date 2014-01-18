@@ -36,11 +36,9 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <rtl/strbuf.hxx>
-#include <rtl/byteseq.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 
-using namespace ::rtl;
 using namespace ::std;
 using namespace ::osl;
 using namespace ::cppu;
@@ -1374,13 +1372,12 @@ void SAXWriter::unknown(const OUString& sString) throw (SAXException, RuntimeExc
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_extensions_xml_sax_Writer_get_implementation(
-    SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
+    css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    css::uno::Reference<css::uno::XInterface> x(
-        static_cast<cppu::OWeakObject *>(new SAXWriter));
+    rtl::Reference<SAXWriter> x(new SAXWriter);
     x->acquire();
-    return x.get();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

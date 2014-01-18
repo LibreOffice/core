@@ -534,7 +534,7 @@ struct Instance {
             static_cast<cppu::OWeakObject *>(new SfxGlobalEvents_Impl(context)))
     {}
 
-    css::uno::Reference<css::uno::XInterface> instance;
+    rtl::Reference<css::uno::XInterface> instance;
 };
 
 struct Singleton:
@@ -549,8 +549,7 @@ com_sun_star_comp_sfx2_GlobalEventBroadcaster_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    css::uno::Reference<css::uno::XInterface> x(
-        Singleton::get(context).instance);
+    rtl::Reference<css::uno::XInterface> x(Singleton::get(context).instance);
     x->acquire();
     return x.get();
 }

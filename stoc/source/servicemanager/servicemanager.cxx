@@ -19,6 +19,7 @@
 
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <boost/unordered_map.hpp>
@@ -1675,10 +1676,9 @@ com_sun_star_comp_stoc_OServiceManager_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    css::uno::Reference<css::uno::XInterface> x(
-        static_cast<cppu::OWeakObject *>(new OServiceManager(context)));
+    rtl::Reference<OServiceManager> x(new OServiceManager(context));
     x->acquire();
-    return x.get();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
@@ -1686,10 +1686,9 @@ com_sun_star_comp_stoc_ORegistryServiceManager_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    css::uno::Reference<css::uno::XInterface> x(
-        static_cast<cppu::OWeakObject *>(new ORegistryServiceManager(context)));
+    rtl::Reference<ORegistryServiceManager> x(new ORegistryServiceManager(context));
     x->acquire();
-    return x.get();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
@@ -1697,10 +1696,9 @@ com_sun_star_comp_stoc_OServiceManagerWrapper_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    css::uno::Reference<css::uno::XInterface> x(
-        static_cast<cppu::OWeakObject *>(new OServiceManagerWrapper(context)));
+    rtl::Reference<OServiceManagerWrapper> x(new OServiceManagerWrapper(context));
     x->acquire();
-    return x.get();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
