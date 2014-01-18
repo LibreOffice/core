@@ -53,13 +53,13 @@
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
+using namespace css;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 using namespace com::sun::star::embed;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
-using namespace ::com::sun::star::ui;
 using namespace framework;
 
 namespace {
@@ -166,8 +166,6 @@ private:
         css::uno::Reference< css::container::XIndexAccess > xSettings;
     };
 
-    struct UIElementType;
-    friend struct UIElementType;
     typedef ::boost::unordered_map< OUString, UIElementData, OUStringHash, ::std::equal_to< OUString > > UIElementDataHashMap;
 
     struct UIElementType
@@ -250,7 +248,7 @@ static sal_Int16 RetrieveTypeFromResourceURL( const OUString& aResourceURL )
         if (( nIndex > 0 ) &&  ( aTmpStr.getLength() > nIndex ))
         {
             OUString aTypeStr( aTmpStr.copy( 0, nIndex ));
-            for ( int i = 0; i < UIElementType::COUNT; i++ )
+            for ( int i = 0; i < ui::UIElementType::COUNT; i++ )
             {
                 if ( aTypeStr.equalsAscii( UIELEMENTTYPENAMES[i] ))
                     return sal_Int16( i );
@@ -258,7 +256,7 @@ static sal_Int16 RetrieveTypeFromResourceURL( const OUString& aResourceURL )
         }
     }
 
-    return UIElementType::UNKNOWN;
+    return ui::UIElementType::UNKNOWN;
 }
 
 static OUString RetrieveNameFromResourceURL( const OUString& aResourceURL )
@@ -658,7 +656,7 @@ void ModuleUIConfigurationManager::impl_resetElementTypeData(
                 Reference< XIndexAccess > xOldSettings( rElement.xSettings );
                 impl_requestUIElementData( nType, LAYER_DEFAULT, rElement );
 
-                ConfigurationEvent aReplaceEvent;
+                ui::ConfigurationEvent aReplaceEvent;
                 aReplaceEvent.ResourceURL = rElement.aResourceURL;
                 aReplaceEvent.Accessor <<= xThis;
                 aReplaceEvent.Source = xThis;
@@ -675,7 +673,7 @@ void ModuleUIConfigurationManager::impl_resetElementTypeData(
             else
             {
                 // Remove user-defined settings from user layer
-                ConfigurationEvent aEvent;
+                ui::ConfigurationEvent aEvent;
                 aEvent.ResourceURL = rElement.aResourceURL;
                 aEvent.Accessor <<= xThis;
                 aEvent.Source = xThis;
@@ -725,7 +723,7 @@ void ModuleUIConfigurationManager::impl_reloadElementTypeData(
 
                 impl_requestUIElementData( nType, LAYER_USERDEFINED, rElement );
 
-                ConfigurationEvent aReplaceEvent;
+                ui::ConfigurationEvent aReplaceEvent;
 
                 aReplaceEvent.ResourceURL = rElement.aResourceURL;
                 aReplaceEvent.Accessor <<= xThis;
@@ -743,7 +741,7 @@ void ModuleUIConfigurationManager::impl_reloadElementTypeData(
 
                 impl_requestUIElementData( nType, LAYER_DEFAULT, rElement );
 
-                ConfigurationEvent aReplaceEvent;
+                ui::ConfigurationEvent aReplaceEvent;
 
                 aReplaceEvent.ResourceURL = rElement.aResourceURL;
                 aReplaceEvent.Accessor <<= xThis;
@@ -760,7 +758,7 @@ void ModuleUIConfigurationManager::impl_reloadElementTypeData(
             else
             {
                 // Element settings are not in any storage => remove
-                ConfigurationEvent aRemoveEvent;
+                ui::ConfigurationEvent aRemoveEvent;
 
                 aRemoveEvent.ResourceURL = rElement.aResourceURL;
                 aRemoveEvent.Accessor <<= xThis;
@@ -998,13 +996,13 @@ void SAL_CALL ModuleUIConfigurationManager::addConfigurationListener( const Refe
             throw DisposedException();
     }
 
-    m_aListenerContainer.addInterface( ::getCppuType( ( const Reference< XUIConfigurationListener >* ) NULL ), xListener );
+    m_aListenerContainer.addInterface( ::getCppuType( ( const Reference< ui::XUIConfigurationListener >* ) NULL ), xListener );
 }
 
 void SAL_CALL ModuleUIConfigurationManager::removeConfigurationListener( const Reference< ::com::sun::star::ui::XUIConfigurationListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    m_aListenerContainer.removeInterface( ::getCppuType( ( const Reference< XUIConfigurationListener >* ) NULL ), xListener );
+    m_aListenerContainer.removeInterface( ::getCppuType( ( const Reference< ui::XUIConfigurationListener >* ) NULL ), xListener );
 }
 
 
@@ -1238,7 +1236,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
                 Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
 
                 // Create event to notify listener about replaced element settings
-                ConfigurationEvent aEvent;
+                ui::ConfigurationEvent aEvent;
                 aEvent.ResourceURL = ResourceURL;
                 aEvent.Accessor <<= xThis;
                 aEvent.Source = xThis;
@@ -1285,7 +1283,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
                 Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
 
                 // Create event to notify listener about replaced element settings
-                ConfigurationEvent aEvent;
+                ui::ConfigurationEvent aEvent;
 
                 aEvent.ResourceURL = ResourceURL;
                 aEvent.Accessor <<= xThis;
@@ -1348,7 +1346,7 @@ throw ( NoSuchElementException, IllegalArgumentException, IllegalAccessException
                 if ( pDefaultDataSettings )
                 {
                     // Create event to notify listener about replaced element settings
-                    ConfigurationEvent aEvent;
+                    ui::ConfigurationEvent aEvent;
 
                     aEvent.ResourceURL = ResourceURL;
                     aEvent.Accessor <<= xThis;
@@ -1363,7 +1361,7 @@ throw ( NoSuchElementException, IllegalArgumentException, IllegalAccessException
                 else
                 {
                     // Create event to notify listener about removed element settings
-                    ConfigurationEvent aEvent;
+                    ui::ConfigurationEvent aEvent;
 
                     aEvent.ResourceURL = ResourceURL;
                     aEvent.Accessor <<= xThis;
@@ -1427,7 +1425,7 @@ throw ( ElementExistException, IllegalArgumentException, IllegalAccessException,
             Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
 
             // Create event to notify listener about removed element settings
-            ConfigurationEvent aEvent;
+            ui::ConfigurationEvent aEvent;
 
             aEvent.ResourceURL = NewResourceURL;
             aEvent.Accessor <<= xThis;
@@ -1474,7 +1472,7 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getImageManager()
     return Reference< XInterface >( m_xModuleImageManager, UNO_QUERY );
 }
 
-Reference< XAcceleratorConfiguration > SAL_CALL ModuleUIConfigurationManager::getShortCutManager() throw (::com::sun::star::uno::RuntimeException)
+Reference< ui::XAcceleratorConfiguration > SAL_CALL ModuleUIConfigurationManager::getShortCutManager() throw (::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -1486,7 +1484,7 @@ Reference< XAcceleratorConfiguration > SAL_CALL ModuleUIConfigurationManager::ge
 
     if ( !m_xModuleAcceleratorManager.is() )
     {
-        Reference< XAcceleratorConfiguration >  xManager = ModuleAcceleratorConfiguration::createWithModuleIdentifier(xContext, aModule);
+        Reference< ui::XAcceleratorConfiguration >  xManager = ui::ModuleAcceleratorConfiguration::createWithModuleIdentifier(xContext, aModule);
         m_xModuleAcceleratorManager = xManager;
     }
 
@@ -1677,7 +1675,7 @@ sal_Bool SAL_CALL ModuleUIConfigurationManager::isReadOnly() throw (::com::sun::
     return m_bReadOnly;
 }
 
-void ModuleUIConfigurationManager::implts_notifyContainerListener( const ConfigurationEvent& aEvent, NotifyOp eOp )
+void ModuleUIConfigurationManager::implts_notifyContainerListener( const ui::ConfigurationEvent& aEvent, NotifyOp eOp )
 {
     ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( ::getCppuType( ( const css::uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >*) NULL ) );
     if ( pContainer != NULL )
