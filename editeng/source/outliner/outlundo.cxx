@@ -149,12 +149,10 @@ void OutlinerUndoCheckPara::Repeat()
     OSL_FAIL( "Repeat not implemented!" );
 }
 
-DBG_NAME(OLUndoExpand);
 
 OLUndoExpand::OLUndoExpand(Outliner* pOut, sal_uInt16 _nId )
     : EditUndo( _nId, 0 )
 {
-    DBG_CTOR(OLUndoExpand,0);
     DBG_ASSERT(pOut,"Undo:No Outliner");
     pOutliner = pOut;
     nCount = 0;
@@ -164,14 +162,12 @@ OLUndoExpand::OLUndoExpand(Outliner* pOut, sal_uInt16 _nId )
 
 OLUndoExpand::~OLUndoExpand()
 {
-    DBG_DTOR(OLUndoExpand,0);
     delete pParas;
 }
 
 
 void OLUndoExpand::Restore( sal_Bool bUndo )
 {
-    DBG_CHKTHIS(OLUndoExpand,0);
     DBG_ASSERT(pOutliner,"Undo:No Outliner");
     DBG_ASSERT(pOutliner->pEditEngine,"Outliner already deleted");
     Paragraph* pPara;
@@ -204,21 +200,18 @@ void OLUndoExpand::Restore( sal_Bool bUndo )
 
 void OLUndoExpand::Undo()
 {
-    DBG_CHKTHIS(OLUndoExpand,0);
     Restore( sal_True );
 }
 
 
 void OLUndoExpand::Redo()
 {
-    DBG_CHKTHIS(OLUndoExpand,0);
     Restore( sal_False );
 }
 
 
 void OLUndoExpand::Repeat()
 {
-    DBG_CHKTHIS(OLUndoExpand,0);
     OSL_FAIL("Not implemented");
 }
 

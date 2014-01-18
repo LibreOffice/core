@@ -26,7 +26,6 @@
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
 
-DBG_NAME( EditUndo )
 
 static void lcl_DoSetSelection( EditView* pView, sal_uInt16 nPara )
 {
@@ -134,7 +133,6 @@ EditEngine* EditUndo::GetEditEngine()
 
 sal_uInt16 EditUndo::GetId() const
 {
-    DBG_CHKTHIS( EditUndo, 0 );
     return nId;
 }
 

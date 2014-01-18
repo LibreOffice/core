@@ -34,8 +34,6 @@
 
 #include <vector>
 
-DBG_NAMEEX( EE_EditTextObject )
-
 class SfxItemPool;
 class SfxStyleSheetPool;
 class SvxFieldItem;

@@ -53,8 +53,6 @@
 
 #include <boost/noncopyable.hpp>
 
-DBG_NAMEEX( EditView )
-DBG_NAMEEX( EditEngine )
 
 #define PIMPE       pImpEditView->pEditEngine
 

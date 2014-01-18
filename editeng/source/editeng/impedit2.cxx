@@ -617,7 +617,6 @@ EditPaM ImpEditEngine::Clear()
     for (size_t nView = aEditViews.size(); nView; )
     {
         EditView* pView = aEditViews[--nView];
-        DBG_CHKOBJ( pView, EditView, 0 );
         pView->pImpEditView->SetEditSelection( aSel );
     }
 
@@ -633,7 +632,6 @@ EditPaM ImpEditEngine::RemoveText()
     for (size_t nView = 0; nView < aEditViews.size(); ++nView)
     {
         EditView* pView = aEditViews[nView];
-        DBG_CHKOBJ( pView, EditView, 0 );
         pView->pImpEditView->SetEditSelection( aEmptySel );
     }
     ResetUndoManager();
@@ -657,7 +655,6 @@ void ImpEditEngine::SetText(const OUString& rText)
     for (size_t nView = 0; nView < aEditViews.size(); ++nView)
     {
         EditView* pView = aEditViews[nView];
-        DBG_CHKOBJ( pView, EditView, 0 );
         pView->pImpEditView->SetEditSelection( EditSelection( aPaM, aPaM ) );
         //  If no text then also no Format&Update
         // => The text remains.
@@ -3299,7 +3296,6 @@ void ImpEditEngine::UpdateSelections()
     for (size_t nView = 0; nView < aEditViews.size(); ++nView)
     {
         EditView* pView = aEditViews[nView];
-        DBG_CHKOBJ( pView, EditView, 0 );
         EditSelection aCurSel( pView->pImpEditView->GetEditSelection() );
         bool bChanged = false;
         for (size_t i = 0, n = aDeletedNodes.size(); i < n; ++i)
