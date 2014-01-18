@@ -31,8 +31,11 @@
 
 namespace drawinglayer
 {
+    namespace primitive2d { class BorderLinePrimitive2D; }
+
     namespace processor2d
     {
+
         /** VclPixelProcessor2D class
 
             This processor derived from VclProcessor2D is the base class for rendering
@@ -53,6 +56,7 @@ namespace drawinglayer
 
             // some helpers to try direct paints (shortcuts)
             bool tryDrawPolyPolygonColorPrimitive2DDirect(const drawinglayer::primitive2d::PolyPolygonColorPrimitive2D& rSource, double fTransparency);
+            bool tryDrawBorderLinePrimitive2DDirect(const drawinglayer::primitive2d::BorderLinePrimitive2D& rSource);
 
         public:
             /// constructor/destructor
