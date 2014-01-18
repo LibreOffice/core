@@ -24,12 +24,8 @@
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
 #include <com/sun/star/linguistic2/XSetSpellAlternatives.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
-
-#include <tools/solar.h>
-
 #include <cppuhelper/implbase2.hxx>
 #include <linguistic/lngdllapi.h>
-
 #include <boost/noncopyable.hpp>
 
 namespace com { namespace sun { namespace star {
@@ -58,14 +54,10 @@ sal_Bool    SeqHasEntry(
                 const ::com::sun::star::uno::Sequence< OUString > &rSeq,
                 const OUString &rTxt);
 
-///////////////////////////////////////////////////////////////////////////
-
 void SearchSimilarText( const OUString &rText, sal_Int16 nLanguage,
         ::com::sun::star::uno::Reference<
             ::com::sun::star::linguistic2::XSearchableDictionaryList > &xDicList,
         std::vector< OUString > & rDicListProps );
-
-///////////////////////////////////////////////////////////////////////////
 
 
 class SpellAlternatives
@@ -105,9 +97,6 @@ public:
     static com::sun::star::uno::Reference < com::sun::star::linguistic2::XSpellAlternatives > LNG_DLLPUBLIC CreateSpellAlternatives(
         const OUString &rWord, sal_Int16 nLang, sal_Int16 nTypeP, const ::com::sun::star::uno::Sequence< OUString > &rAlt );
 };
-
-
-///////////////////////////////////////////////////////////////////////////
 
 }   // namespace linguistic
 

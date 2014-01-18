@@ -28,7 +28,6 @@
 #include <com/sun/star/linguistic2/LinguServiceEventFlags.hpp>
 #include <com/sun/star/linguistic2/ProofreadingIterator.hpp>
 
-#include <tools/solar.h>
 #include <unotools/lingucfg.hxx>
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/lang.h>
@@ -36,7 +35,6 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/extract.hxx>
-
 #include <boost/checked_delete.hpp>
 
 #include "lngsvcmgr.hxx"
