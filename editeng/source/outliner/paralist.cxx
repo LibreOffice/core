@@ -26,8 +26,6 @@
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
 
-DBG_NAME(Paragraph)
-
 ParagraphData::ParagraphData()
 : nDepth( -1 )
 , mnNumberingStartValue( -1 )
@@ -60,7 +58,6 @@ bool ParagraphData::operator==(const ParagraphData& rCandidate) const
 Paragraph::Paragraph( sal_Int16 nDDepth )
 : aBulSize( -1, -1)
 {
-    DBG_CTOR( Paragraph, 0 );
 
     DBG_ASSERT(  ( nDDepth >= -1 ) && ( nDDepth < SVX_MAX_NUM ), "Paragraph-CTOR: nDepth invalid!" );
 
@@ -74,7 +71,6 @@ Paragraph::Paragraph( const Paragraph& rPara )
 , aBulText( rPara.aBulText )
 , aBulSize( rPara.aBulSize )
 {
-    DBG_CTOR( Paragraph, 0 );
 
     nDepth = rPara.nDepth;
     nFlags = rPara.nFlags;
@@ -86,8 +82,6 @@ Paragraph::Paragraph( const ParagraphData& rData )
 , aBulSize( -1, -1)
 , bVisible( sal_True )
 {
-    DBG_CTOR( Paragraph, 0 );
-
     nDepth = rData.nDepth;
     mnNumberingStartValue = rData.mnNumberingStartValue;
     mbParaIsNumberingRestart = rData.mbParaIsNumberingRestart;
@@ -95,7 +89,6 @@ Paragraph::Paragraph( const ParagraphData& rData )
 
 Paragraph::~Paragraph()
 {
-    DBG_DTOR( Paragraph, 0 );
 }
 
 void Paragraph::SetNumberingStartValue( sal_Int16 nNumberingStartValue )

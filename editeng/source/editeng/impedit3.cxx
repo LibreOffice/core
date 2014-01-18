@@ -281,7 +281,6 @@ void ImpEditEngine::UpdateViews( EditView* pCurView )
     for (size_t nView = 0; nView < aEditViews.size(); ++nView)
     {
         EditView* pView = aEditViews[nView];
-        DBG_CHKOBJ( pView, EditView, 0 );
         pView->HideCursor();
 
         Rectangle aClipRect( aInvalidRect );
@@ -3643,7 +3642,6 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
 void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRect, OutputDevice* pTargetDevice, sal_Bool bUseVirtDev )
 {
     DBG_ASSERT( pView, "No View - No Paint!" );
-    DBG_CHKOBJ( GetEditEnginePtr(), EditEngine, 0 );
 
     if ( !GetUpdateMode() || IsInUndo() )
         return;

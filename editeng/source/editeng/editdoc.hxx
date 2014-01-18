@@ -40,7 +40,6 @@
 class ImpEditEngine;
 class SvxTabStop;
 
-DBG_NAMEEX( EE_TextPortion )
 
 #define CHARPOSGROW     16
 #define DEFTAB          720
@@ -399,7 +398,6 @@ private:
                 , nRightToLeft( sal_False )
                 , nExtraValue( 0 )
                 {
-                    DBG_CTOR( EE_TextPortion, 0 );
                 }
 
 public:
@@ -411,7 +409,6 @@ public:
                 , nRightToLeft( sal_False )
                 , nExtraValue( 0 )
                 {
-                    DBG_CTOR( EE_TextPortion, 0 );
                 }
 
                 TextPortion( const TextPortion& r )
@@ -422,10 +419,8 @@ public:
                 , nRightToLeft( r.nRightToLeft )
                 , nExtraValue( r.nExtraValue )
                 {
-                    DBG_CTOR( EE_TextPortion, 0 );
                 }
 
-                ~TextPortion()              {   DBG_DTOR( EE_TextPortion, 0 ); delete pExtraInfos; }
 
     sal_uInt16      GetLen() const              { return nLen; }
     void        SetLen( sal_uInt16 nL )         { nLen = nL; }

@@ -72,7 +72,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
 
-DBG_NAME( EditView )
 
 
 // static
@@ -160,33 +159,26 @@ LanguageType EditView::CheckLanguage(
 // ----------------------------------------------------------------------
 EditView::EditView( EditEngine* pEng, Window* pWindow )
 {
-    DBG_CTOR( EditView, 0 );
     pImpEditView = new ImpEditView( this, pEng, pWindow );
 }
 
 EditView::~EditView()
 {
-    DBG_DTOR( EditView, 0 );
     delete pImpEditView;
 }
 
 ImpEditEngine* EditView::GetImpEditEngine() const
 {
-    DBG_CHKTHIS( EditView, 0 );
     return pImpEditView->pEditEngine->pImpEditEngine;
 }
 
 EditEngine* EditView::GetEditEngine() const
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     return pImpEditView->pEditEngine;
 }
 
 void EditView::Invalidate()
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     if ( !pImpEditView->DoInvalidateMore() )
         pImpEditView->GetWindow()->Invalidate( pImpEditView->aOutArea );
     else
@@ -203,21 +195,16 @@ void EditView::Invalidate()
 
 void EditView::SetReadOnly( sal_Bool bReadOnly )
 {
-    DBG_CHKTHIS( EditView, 0 );
     pImpEditView->bReadOnly = bReadOnly;
 }
 
 sal_Bool EditView::IsReadOnly() const
 {
-    DBG_CHKTHIS( EditView, 0 );
     return pImpEditView->bReadOnly;
 }
 
 void EditView::SetSelection( const ESelection& rESel )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-
     // If someone has just left an empty attribute, and then the outliner
     // manipulates the selection:
     if ( !pImpEditView->GetEditSelection().HasRange() )
@@ -255,9 +242,6 @@ void EditView::SetSelection( const ESelection& rESel )
 
 ESelection EditView::GetSelection() const
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-
     ESelection aSelection;
 
     aSelection.nStartPara = PIMPE->GetEditDoc().GetPos( pImpEditView->GetEditSelection().Min().GetNode() );
@@ -271,35 +255,26 @@ ESelection EditView::GetSelection() const
 
 sal_Bool EditView::HasSelection() const
 {
-    DBG_CHKTHIS( EditView, 0 );
     return pImpEditView->HasSelection();
 }
 
 void EditView::DeleteSelected()
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     pImpEditView->DeleteSelected();
 }
 
 sal_uInt16 EditView::GetSelectedScriptType() const
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     return PIMPE->GetScriptType( pImpEditView->GetEditSelection() );
 }
 
 void EditView::Paint( const Rectangle& rRect, OutputDevice* pTargetDevice )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     PIMPEE->Paint( pImpEditView, rRect, pTargetDevice );
 }
 
 void EditView::SetEditEngine( EditEngine* pEditEng )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     pImpEditView->pEditEngine = pEditEng;
     EditSelection aStartSel;
     aStartSel = PIMPE->GetEditDoc().GetStartPaM();
@@ -308,26 +283,22 @@ void EditView::SetEditEngine( EditEngine* pEditEng )
 
 void EditView::SetWindow( Window* pWin )
 {
-    DBG_CHKTHIS( EditView, 0 );
     pImpEditView->pOutWin = pWin;
     PIMPEE->GetSelEngine().Reset();
 }
 
 Window* EditView::GetWindow() const
 {
-    DBG_CHKTHIS( EditView, 0 );
     return pImpEditView->pOutWin;
 }
 
 void EditView::SetVisArea( const Rectangle& rRect )
 {
-    DBG_CHKTHIS( EditView, 0 );
     pImpEditView->SetVisDocStartPos( rRect.TopLeft() );
 }
 
 const Rectangle& EditView::GetVisArea() const
 {
-    DBG_CHKTHIS( EditView, 0 );
     // Change return value to Rectangle in next incompatible build !!!
     static Rectangle aRect;
     aRect = pImpEditView->GetVisDocArea();
@@ -336,7 +307,6 @@ const Rectangle& EditView::GetVisArea() const
 
 void EditView::SetOutputArea( const Rectangle& rRect )
 {
-    DBG_CHKTHIS( EditView, 0 );
     pImpEditView->SetOutputArea( rRect );
 
     // the rest here only if it is an API call:
@@ -348,26 +318,21 @@ void EditView::SetOutputArea( const Rectangle& rRect )
 
 const Rectangle& EditView::GetOutputArea() const
 {
-    DBG_CHKTHIS( EditView, 0 );
     return pImpEditView->GetOutputArea();
 }
 
 const Pointer& EditView::GetPointer() const
 {
-    DBG_CHKTHIS( EditView, 0 );
     return pImpEditView->GetPointer();
 }
 
 Cursor* EditView::GetCursor() const
 {
-    DBG_CHKTHIS( EditView, 0 );
     return pImpEditView->pCursor;
 }
 
 void EditView::InsertText( const OUString& rStr, sal_Bool bSelect )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
 
     EditEngine* pEE = PIMPE;
     pImpEditView->DrawSelection();
@@ -397,43 +362,31 @@ void EditView::InsertText( const OUString& rStr, sal_Bool bSelect )
 
 sal_Bool EditView::PostKeyEvent( const KeyEvent& rKeyEvent, Window* pFrameWin )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     return pImpEditView->PostKeyEvent( rKeyEvent, pFrameWin );
 }
 
 sal_Bool EditView::MouseButtonUp( const MouseEvent& rMouseEvent )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     return pImpEditView->MouseButtonUp( rMouseEvent );
 }
 
 sal_Bool EditView::MouseButtonDown( const MouseEvent& rMouseEvent )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     return pImpEditView->MouseButtonDown( rMouseEvent );
 }
 
 sal_Bool EditView::MouseMove( const MouseEvent& rMouseEvent )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     return pImpEditView->MouseMove( rMouseEvent );
 }
 
 void EditView::Command( const CommandEvent& rCEvt )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     pImpEditView->Command( rCEvt );
 }
 
 void EditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
 
     if ( pImpEditView->pEditEngine->HasView( this ) )
     {
@@ -446,28 +399,21 @@ void EditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor )
 
 void EditView::HideCursor()
 {
-    DBG_CHKTHIS( EditView, 0 );
     pImpEditView->GetCursor()->Hide();
 }
 
 Pair EditView::Scroll( long ndX, long ndY, sal_uInt8 nRangeCheck )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     return pImpEditView->Scroll( ndX, ndY, nRangeCheck );
 }
 
 const SfxItemSet& EditView::GetEmptyItemSet()
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     return PIMPE->GetEmptyItemSet();
 }
 
 void EditView::SetAttribs( const SfxItemSet& rSet )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     DBG_ASSERT( !pImpEditView->aEditSelection.IsInvalid(), "Blind Selection in ...." );
 
     pImpEditView->DrawSelection();
@@ -477,8 +423,6 @@ void EditView::SetAttribs( const SfxItemSet& rSet )
 
 void EditView::RemoveAttribsKeepLanguages( sal_Bool bRemoveParaAttribs )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
 
     pImpEditView->DrawSelection();
     PIMPE->UndoActionStart( EDITUNDO_RESETATTRIBS );
@@ -499,8 +443,6 @@ void EditView::RemoveAttribsKeepLanguages( sal_Bool bRemoveParaAttribs )
 
 void EditView::RemoveAttribs( sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
 
     pImpEditView->DrawSelection();
     PIMPE->UndoActionStart( EDITUNDO_RESETATTRIBS );
@@ -511,8 +453,6 @@ void EditView::RemoveAttribs( sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich )
 
 void EditView::RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     PIMPE->UndoActionStart( EDITUNDO_RESETATTRIBS );
     PIMPE->RemoveCharAttribs( nPara, nWhich );
     PIMPE->UndoActionEnd( EDITUNDO_RESETATTRIBS );
@@ -521,30 +461,22 @@ void EditView::RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich )
 
 SfxItemSet EditView::GetAttribs()
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     DBG_ASSERT( !pImpEditView->aEditSelection.IsInvalid(), "Blind Selection in ...." );
     return PIMPEE->GetAttribs( pImpEditView->GetEditSelection() );
 }
 
 void EditView::Undo()
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     PIMPE->Undo( this );
 }
 
 void EditView::Redo()
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     PIMPE->Redo( this );
 }
 
 sal_uLong EditView::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, sal_Bool bSelect, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     EditSelection aOldSel( pImpEditView->GetEditSelection() );
     pImpEditView->DrawSelection();
     PIMPEE->UndoActionStart( EDITUNDO_READ );
@@ -566,7 +498,6 @@ sal_uLong EditView::Read( SvStream& rInput, const OUString& rBaseURL, EETextForm
 
 void EditView::Cut()
 {
-    DBG_CHKTHIS( EditView, 0 );
     Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
     pImpEditView->CutCopy( aClipBoard, sal_True );
 }
@@ -580,50 +511,40 @@ void EditView::Cut()
 
 void EditView::Copy()
 {
-    DBG_CHKTHIS( EditView, 0 );
     Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
     pImpEditView->CutCopy( aClipBoard, sal_False );
 }
 
 void EditView::Paste()
 {
-    DBG_CHKTHIS( EditView, 0 );
     Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
     pImpEditView->Paste( aClipBoard, sal_False );
 }
 
 void EditView::PasteSpecial()
 {
-    DBG_CHKTHIS( EditView, 0 );
     Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
     pImpEditView->Paste(aClipBoard, sal_True );
 }
 
 Point EditView::GetWindowPosTopLeft( sal_Int32 nParagraph )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     Point aDocPos( pImpEditView->pEditEngine->GetDocPosTopLeft( nParagraph ) );
     return pImpEditView->GetWindowPos( aDocPos );
 }
 
 void EditView::SetSelectionMode( EESelectionMode eMode )
 {
-    DBG_CHKTHIS( EditView, 0 );
     pImpEditView->SetSelectionMode( eMode );
 }
 
 OUString EditView::GetSelected()
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     return PIMPEE->GetSelected( pImpEditView->GetEditSelection() );
 }
 
 void EditView::MoveParagraphs( Range aParagraphs, sal_Int32 nNewPos )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     PIMPEE->UndoActionStart( EDITUNDO_MOVEPARAS );
     PIMPEE->MoveParagraphs( aParagraphs, nNewPos, this );
     PIMPEE->UndoActionEnd( EDITUNDO_MOVEPARAS );
@@ -631,8 +552,6 @@ void EditView::MoveParagraphs( Range aParagraphs, sal_Int32 nNewPos )
 
 void EditView::MoveParagraphs( long nDiff )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     ESelection aSel = GetSelection();
     Range aRange( aSel.nStartPara, aSel.nEndPara );
     aRange.Justify();
@@ -645,41 +564,31 @@ void EditView::MoveParagraphs( long nDiff )
 
 void EditView::SetBackgroundColor( const Color& rColor )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     pImpEditView->SetBackgroundColor( rColor );
 }
 
 Color EditView::GetBackgroundColor() const
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     return pImpEditView->GetBackgroundColor();
 }
 
 void EditView::SetControlWord( sal_uInt32 nWord )
 {
-    DBG_CHKTHIS( EditView, 0 );
     pImpEditView->nControl = nWord;
 }
 
 sal_uInt32 EditView::GetControlWord() const
 {
-    DBG_CHKTHIS( EditView, 0 );
     return pImpEditView->nControl;
 }
 
 EditTextObject* EditView::CreateTextObject()
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     return PIMPEE->CreateTextObject( pImpEditView->GetEditSelection() );
 }
 
 void EditView::InsertText( const EditTextObject& rTextObject )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     pImpEditView->DrawSelection();
 
     PIMPE->UndoActionStart( EDITUNDO_INSERT );
@@ -693,9 +602,6 @@ void EditView::InsertText( const EditTextObject& rTextObject )
 
 void EditView::InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xDataObj, const OUString& rBaseURL, sal_Bool bUseSpecial )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-
     PIMPE->UndoActionStart( EDITUNDO_INSERT );
     pImpEditView->DeleteSelected();
     EditSelection aTextSel =
@@ -709,24 +615,16 @@ void EditView::InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::d
 
 void EditView::SetEditEngineUpdateMode( sal_Bool bUpdate )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     PIMPEE->SetUpdateMode( bUpdate, this );
 }
 
 void EditView::ForceUpdate()
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     PIMPEE->SetUpdateMode( sal_True, this, sal_True );
 }
 
 SfxStyleSheet* EditView::GetStyleSheet()
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-
-
     EditSelection aSel( pImpEditView->GetEditSelection() );
     aSel.Adjust( PIMPE->GetEditDoc() );
     sal_Int32 nStartPara = PIMPE->GetEditDoc().GetPos( aSel.Min().GetNode() );
@@ -750,31 +648,26 @@ const SfxStyleSheet* EditView::GetStyleSheet() const
 
 sal_Bool EditView::IsInsertMode() const
 {
-    DBG_CHKTHIS( EditView, 0 );
     return pImpEditView->IsInsertMode();
 }
 
 void EditView::SetInsertMode( sal_Bool bInsert )
 {
-    DBG_CHKTHIS( EditView, 0 );
     pImpEditView->SetInsertMode( bInsert );
 }
 
 void EditView::SetAnchorMode( EVAnchorMode eMode )
 {
-    DBG_CHKTHIS( EditView, 0 );
     pImpEditView->SetAnchorMode( eMode );
 }
 
 EVAnchorMode EditView::GetAnchorMode() const
 {
-    DBG_CHKTHIS( EditView, 0 );
     return pImpEditView->GetAnchorMode();
 }
 
 void EditView::TransliterateText( sal_Int32 nTransliterationMode )
 {
-    DBG_CHKTHIS( EditView, 0 );
     EditSelection aOldSel( pImpEditView->GetEditSelection() );
     EditSelection aNewSel = PIMPE->TransliterateText( pImpEditView->GetEditSelection(), nTransliterationMode );
     if ( aNewSel != aOldSel )
@@ -787,8 +680,6 @@ void EditView::TransliterateText( sal_Int32 nTransliterationMode )
 
 void EditView::CompleteAutoCorrect( Window* pFrameWin )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     if ( !pImpEditView->HasSelection() && PIMPEE->GetStatus().DoAutoCorrect() )
     {
         pImpEditView->DrawSelection();
@@ -803,8 +694,6 @@ void EditView::CompleteAutoCorrect( Window* pFrameWin )
 
 EESpellState EditView::StartSpeller( sal_Bool bMultipleDoc )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     if ( !PIMPEE->GetSpeller().is() )
         return EE_SPELL_NOSPELLER;
 
@@ -813,8 +702,6 @@ EESpellState EditView::StartSpeller( sal_Bool bMultipleDoc )
 
 EESpellState EditView::StartThesaurus()
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     if ( !PIMPEE->GetSpeller().is() )
         return EE_SPELL_NOSPELLER;
 
@@ -826,23 +713,17 @@ void EditView::StartTextConversion(
         LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont,
         sal_Int32 nOptions, sal_Bool bIsInteractive, sal_Bool bMultipleDoc )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     PIMPEE->Convert( this, nSrcLang, nDestLang, pDestFont, nOptions, bIsInteractive, bMultipleDoc );
 }
 
 
 sal_uInt16 EditView::StartSearchAndReplace( const SvxSearchItem& rSearchItem )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     return PIMPEE->StartSearchAndReplace( this, rSearchItem );
 }
 
 sal_Bool EditView::IsCursorAtWrongSpelledWord( sal_Bool bMarkIfWrong )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     sal_Bool bIsWrong = sal_False;
     if ( !HasSelection() )
     {
@@ -854,8 +735,6 @@ sal_Bool EditView::IsCursorAtWrongSpelledWord( sal_Bool bMarkIfWrong )
 
 sal_Bool EditView::IsWrongSpelledWordAtPos( const Point& rPosPixel, sal_Bool bMarkIfWrong )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     Point aPos ( pImpEditView->GetWindow()->PixelToLogic( rPosPixel ) );
     aPos = pImpEditView->GetDocPos( aPos );
     EditPaM aPaM = pImpEditView->pEditEngine->GetPaM(aPos, false);
@@ -864,8 +743,6 @@ sal_Bool EditView::IsWrongSpelledWordAtPos( const Point& rPosPixel, sal_Bool bMa
 
 void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
 
     Point aPos ( pImpEditView->GetWindow()->PixelToLogic( rPosPixel ) );
     aPos = pImpEditView->GetDocPos( aPos );
@@ -1146,8 +1023,6 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
 
 sal_Bool EditView::SelectCurrentWord( sal_Int16 nWordType )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     EditSelection aCurSel( pImpEditView->GetEditSelection() );
     pImpEditView->DrawSelection();
     aCurSel = PIMPE->SelectWord(aCurSel.Max(), nWordType);
@@ -1159,9 +1034,6 @@ sal_Bool EditView::SelectCurrentWord( sal_Int16 nWordType )
 
 void EditView::InsertField( const SvxFieldItem& rFld )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-
     EditEngine* pEE = PIMPE;
     pImpEditView->DrawSelection();
     pEE->UndoActionStart( EDITUNDO_INSERT );
@@ -1174,7 +1046,6 @@ void EditView::InsertField( const SvxFieldItem& rFld )
 
 const SvxFieldItem* EditView::GetFieldUnderMousePointer() const
 {
-    DBG_CHKTHIS( EditView, 0 );
     sal_Int32 nPara;
     sal_uInt16 nPos;
     return GetFieldUnderMousePointer( nPara, nPos );
@@ -1182,15 +1053,11 @@ const SvxFieldItem* EditView::GetFieldUnderMousePointer() const
 
 const SvxFieldItem* EditView::GetField( const Point& rPos, sal_Int32* pPara, sal_uInt16* pPos ) const
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     return pImpEditView->GetField( rPos, pPara, pPos );
 }
 
 const SvxFieldItem* EditView::GetFieldUnderMousePointer( sal_Int32& nPara, sal_uInt16& nPos ) const
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     Point aPos = pImpEditView->GetWindow()->GetPointerPosPixel();
     aPos = pImpEditView->GetWindow()->PixelToLogic( aPos );
     return GetField( aPos, &nPara, &nPos );
@@ -1225,13 +1092,11 @@ const SvxFieldItem* EditView::GetFieldAtSelection() const
 
 void EditView::SetInvalidateMore( sal_uInt16 nPixel )
 {
-    DBG_CHKTHIS( EditView, 0 );
     pImpEditView->SetInvalidateMore( nPixel );
 }
 
 sal_uInt16 EditView::GetInvalidateMore() const
 {
-    DBG_CHKTHIS( EditView, 0 );
     return (sal_uInt16)pImpEditView->GetInvalidateMore();
 }
 
@@ -1252,8 +1117,6 @@ static void ChangeFontSizeImpl( EditView* pEditView, bool bGrow, const ESelectio
 
 void EditView::ChangeFontSize( bool bGrow, const FontList* pFontList )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
 
     EditEngine& rEditEngine = *pImpEditView->pEditEngine;
 
@@ -1393,9 +1256,6 @@ bool EditView::ChangeFontSize( bool bGrow, SfxItemSet& rSet, const FontList* pFo
 
 OUString EditView::GetSurroundingText() const
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-
     EditSelection aSel( pImpEditView->GetEditSelection() );
     aSel.Adjust( PIMPE->GetEditDoc() );
 
@@ -1419,8 +1279,6 @@ OUString EditView::GetSurroundingText() const
 
 Selection EditView::GetSurroundingTextSelection() const
 {
-    DBG_CHKTHIS( EditView, 0 );
-
     ESelection aSelection( GetSelection() );
     aSelection.Adjust();
 

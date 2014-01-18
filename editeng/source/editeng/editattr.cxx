@@ -46,7 +46,6 @@
 
 #include "editattr.hxx"
 
-DBG_NAME( EE_EditAttrib )
 
 // -------------------------------------------------------------------------
 // class EditCharAttrib
@@ -54,7 +53,6 @@ DBG_NAME( EE_EditAttrib )
 EditCharAttrib::EditCharAttrib( const SfxPoolItem& rAttr, sal_uInt16 nS, sal_uInt16 nE ) :
     nStart(nS), nEnd(nE), bFeature(false), bEdge(false)
 {
-    DBG_CTOR( EE_EditAttrib, 0 );
     pItem = &rAttr;
 
     DBG_ASSERT( ( rAttr.Which() >= EE_ITEMS_START ) && ( rAttr.Which() <= EE_ITEMS_END ), "EditCharAttrib CTOR: Invalid id!" );
@@ -63,7 +61,6 @@ EditCharAttrib::EditCharAttrib( const SfxPoolItem& rAttr, sal_uInt16 nS, sal_uIn
 
 EditCharAttrib::~EditCharAttrib()
 {
-    DBG_DTOR( EE_EditAttrib, 0 );
 }
 
 void EditCharAttrib::SetFont( SvxFont&, OutputDevice* )

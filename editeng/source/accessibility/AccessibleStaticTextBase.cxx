@@ -102,7 +102,6 @@ namespace accessibility
     //
     //------------------------------------------------------------------------
 
-    DBG_NAME( AccessibleStaticTextBase_Impl );
 
     /** AccessibleStaticTextBase_Impl
 
@@ -123,7 +122,6 @@ namespace accessibility
 
         SvxEditSourceAdapter& GetEditSource() const SAL_THROW((uno::RuntimeException))
         {
-            DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
 
             return maEditSource;
         }
@@ -133,13 +131,11 @@ namespace accessibility
 
         void SetEventSource( const uno::Reference< XAccessible >& rInterface )
         {
-            DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
 
             mxThis = rInterface;
         }
         uno::Reference< XAccessible > GetEventSource() const
         {
-            DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
 
             return mxThis;
         }
@@ -147,7 +143,6 @@ namespace accessibility
         void SetOffset( const Point& );
         Point GetOffset() const
         {
-            DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
 
             ::osl::MutexGuard aGuard( maMutex ); Point aPoint( maOffset );
             return aPoint;
@@ -165,14 +160,12 @@ namespace accessibility
 
         EPosition                   Index2Internal( sal_Int32 nFlatIndex ) const
         {
-            DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
 
             return ImpCalcInternal( nFlatIndex, false );
         }
 
         EPosition                   Range2Internal( sal_Int32 nFlatIndex ) const
         {
-            DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
 
             return ImpCalcInternal( nFlatIndex, true );
         }
@@ -229,7 +222,6 @@ namespace accessibility
         maMutex(),
         maOffset(0,0)
     {
-        DBG_CTOR( AccessibleStaticTextBase_Impl, NULL );
 
         // TODO: this is still somewhat of a hack, all the more since
         // now the maTextParagraph has an empty parent reference set
@@ -237,13 +229,11 @@ namespace accessibility
 
     AccessibleStaticTextBase_Impl::~AccessibleStaticTextBase_Impl()
     {
-        DBG_DTOR( AccessibleStaticTextBase_Impl, NULL );
     }
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     void AccessibleStaticTextBase_Impl::SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) SAL_THROW((uno::RuntimeException))
     {
-        DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
 
         maEditSource.SetEditSource( pEditSource );
         if( mpTextParagraph )
@@ -253,7 +243,6 @@ namespace accessibility
 
     void AccessibleStaticTextBase_Impl::SetOffset( const Point& rPoint )
     {
-        DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
 
         // guard against non-atomic access to maOffset data structure
         {
@@ -270,14 +259,12 @@ namespace accessibility
 
     void AccessibleStaticTextBase_Impl::UpdateChildren()
     {
-        DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
 
         // currently no children
     }
 
     void AccessibleStaticTextBase_Impl::Dispose()
     {
-        DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
 
         // we're the owner of the paragraph, so destroy it, too
         if( mpTextParagraph )
@@ -298,7 +285,6 @@ namespace accessibility
 
     AccessibleEditableTextPara& AccessibleStaticTextBase_Impl::GetParagraph( sal_Int32 nPara ) const
     {
-        DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
 
         if( !mpTextParagraph )
             throw lang::DisposedException ("object has been already disposed", mxThis );
@@ -312,7 +298,6 @@ namespace accessibility
 
     sal_Int32 AccessibleStaticTextBase_Impl::GetParagraphCount() const
     {
-        DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
 
         if( !mpTextParagraph )
             return 0;
@@ -357,7 +342,6 @@ namespace accessibility
 
     EPosition AccessibleStaticTextBase_Impl::ImpCalcInternal( sal_Int32 nFlatIndex, bool bExclusive ) const
     {
-        DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
 
         if( nFlatIndex < 0 )
             throw lang::IndexOutOfBoundsException("AccessibleStaticTextBase_Impl::Index2Internal: character index out of bounds",
@@ -399,7 +383,6 @@ namespace accessibility
     sal_Bool AccessibleStaticTextBase_Impl::SetSelection( sal_Int32 nStartPara, sal_Int32 nStartIndex,
                                                           sal_Int32 nEndPara, sal_Int32 nEndIndex )
     {
-        DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
 
         if( !mpTextParagraph )
             return sal_False;
@@ -418,7 +401,6 @@ namespace accessibility
     sal_Bool AccessibleStaticTextBase_Impl::CopyText( sal_Int32 nStartPara, sal_Int32 nStartIndex,
                                                       sal_Int32 nEndPara, sal_Int32 nEndIndex )
     {
-        DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
 
         if( !mpTextParagraph )
             return sal_False;

@@ -56,8 +56,6 @@ using std::endl;
 
 using namespace com::sun::star;
 
-DBG_NAME( EE_EditTextObject )
-DBG_NAME( XEditAttribute )
 
 //--------------------------------------------------------------
 
@@ -72,7 +70,6 @@ XEditAttribute* MakeXEditAttribute( SfxItemPool& rPool, const SfxPoolItem& rItem
 
 XEditAttribute::XEditAttribute( const SfxPoolItem& rAttr, sal_uInt16 nS, sal_uInt16 nE )
 {
-    DBG_CTOR( XEditAttribute, 0 );
     pItem = &rAttr;
     nStart = nS;
     nEnd = nE;
@@ -80,7 +77,6 @@ XEditAttribute::XEditAttribute( const SfxPoolItem& rAttr, sal_uInt16 nS, sal_uIn
 
 XEditAttribute::~XEditAttribute()
 {
-    DBG_DTOR( XEditAttribute, 0 );
     pItem = 0;  // belongs to the Pool.
 }
 

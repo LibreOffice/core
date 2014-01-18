@@ -2255,7 +2255,6 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
     EditPaM aCursorPos;
     if( pActiveView && !bSpellAtCursorPos )
     {
-        DBG_CHKOBJ( pActiveView, EditView, 0 );
         aCursorPos = pActiveView->pImpEditView->GetEditSelection().Max();
     }
 

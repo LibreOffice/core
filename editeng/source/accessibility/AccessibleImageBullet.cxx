@@ -48,7 +48,6 @@ using namespace ::com::sun::star::accessibility;
 
 namespace accessibility
 {
-    DBG_NAME( AccessibleImageBullet )
 
     AccessibleImageBullet::AccessibleImageBullet ( const uno::Reference< XAccessible >& rParent ) :
         mnParagraphIndex( 0 ),
@@ -64,7 +63,6 @@ namespace accessibility
         mnNotifierClientId(::comphelper::AccessibleEventNotifier::registerClient())
     {
 #ifdef DBG_UTIL
-        DBG_CTOR( AccessibleImageBullet, NULL );
         OSL_TRACE( "Received ID: %d", mnNotifierClientId );
 #endif
 
@@ -85,7 +83,6 @@ namespace accessibility
 
     AccessibleImageBullet::~AccessibleImageBullet()
     {
-        DBG_DTOR( AccessibleImageBullet, NULL );
 
         // sign off from event notifier
         if( getNotifierClientId() != -1 )
@@ -103,14 +100,12 @@ namespace accessibility
 
     uno::Any SAL_CALL AccessibleImageBullet::queryInterface (const uno::Type & rType) throw (uno::RuntimeException)
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         return AccessibleImageBulletInterfaceBase::queryInterface(rType);
     }
 
     uno::Reference< XAccessibleContext > SAL_CALL AccessibleImageBullet::getAccessibleContext(  ) throw (uno::RuntimeException)
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         // We implement the XAccessibleContext interface in the same object
         return uno::Reference< XAccessibleContext > ( this );
@@ -118,14 +113,12 @@ namespace accessibility
 
     sal_Int32 SAL_CALL  AccessibleImageBullet::getAccessibleChildCount() throw (uno::RuntimeException)
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         return 0;
     }
 
     uno::Reference< XAccessible > SAL_CALL  AccessibleImageBullet::getAccessibleChild( sal_Int32 i ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
         (void)i;
 
         throw lang::IndexOutOfBoundsException("No children available",
@@ -135,28 +128,24 @@ namespace accessibility
 
     uno::Reference< XAccessible > SAL_CALL  AccessibleImageBullet::getAccessibleParent() throw (uno::RuntimeException)
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         return mxParent;
     }
 
     sal_Int32 SAL_CALL  AccessibleImageBullet::getAccessibleIndexInParent() throw (uno::RuntimeException)
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         return mnIndexInParent;
     }
 
     sal_Int16 SAL_CALL  AccessibleImageBullet::getAccessibleRole() throw (uno::RuntimeException)
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         return AccessibleRole::GRAPHIC;
     }
 
     OUString SAL_CALL  AccessibleImageBullet::getAccessibleDescription() throw (uno::RuntimeException)
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         SolarMutexGuard aGuard;
 
@@ -166,7 +155,6 @@ namespace accessibility
 
     OUString SAL_CALL  AccessibleImageBullet::getAccessibleName() throw (uno::RuntimeException)
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         SolarMutexGuard aGuard;
 
@@ -176,7 +164,6 @@ namespace accessibility
 
     uno::Reference< XAccessibleRelationSet > SAL_CALL AccessibleImageBullet::getAccessibleRelationSet() throw (uno::RuntimeException)
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         // no relations, therefore empty
         return uno::Reference< XAccessibleRelationSet >();
@@ -184,7 +171,6 @@ namespace accessibility
 
     uno::Reference< XAccessibleStateSet > SAL_CALL AccessibleImageBullet::getAccessibleStateSet() throw (uno::RuntimeException)
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         SolarMutexGuard aGuard;
 
@@ -199,7 +185,6 @@ namespace accessibility
 
     lang::Locale SAL_CALL AccessibleImageBullet::getLocale() throw (IllegalAccessibleComponentStateException, uno::RuntimeException)
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         SolarMutexGuard aGuard;
 
@@ -212,7 +197,6 @@ namespace accessibility
 
     void SAL_CALL AccessibleImageBullet::addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         if( getNotifierClientId() != -1 )
             ::comphelper::AccessibleEventNotifier::addEventListener( getNotifierClientId(), xListener );
@@ -220,7 +204,6 @@ namespace accessibility
 
     void SAL_CALL AccessibleImageBullet::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         if( getNotifierClientId() != -1 )
             ::comphelper::AccessibleEventNotifier::removeEventListener( getNotifierClientId(), xListener );
@@ -228,7 +211,6 @@ namespace accessibility
 
     sal_Bool SAL_CALL AccessibleImageBullet::containsPoint( const awt::Point& rPoint ) throw (uno::RuntimeException)
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         SolarMutexGuard aGuard;
 
@@ -244,7 +226,6 @@ namespace accessibility
 
     uno::Reference< XAccessible > SAL_CALL AccessibleImageBullet::getAccessibleAtPoint( const awt::Point& /*aPoint*/ ) throw (uno::RuntimeException)
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         // as we have no children, empty reference
         return uno::Reference< XAccessible >();
@@ -252,7 +233,6 @@ namespace accessibility
 
     awt::Rectangle SAL_CALL AccessibleImageBullet::getBounds(  ) throw (uno::RuntimeException)
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         SolarMutexGuard aGuard;
 
@@ -291,7 +271,6 @@ namespace accessibility
 
     awt::Point SAL_CALL AccessibleImageBullet::getLocation(  ) throw (uno::RuntimeException)
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         SolarMutexGuard aGuard;
 
@@ -302,7 +281,6 @@ namespace accessibility
 
     awt::Point SAL_CALL AccessibleImageBullet::getLocationOnScreen(  ) throw (uno::RuntimeException)
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         SolarMutexGuard aGuard;
 
@@ -329,7 +307,6 @@ namespace accessibility
 
     awt::Size SAL_CALL AccessibleImageBullet::getSize(  ) throw (uno::RuntimeException)
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         SolarMutexGuard aGuard;
 
@@ -340,7 +317,6 @@ namespace accessibility
 
     void SAL_CALL AccessibleImageBullet::grabFocus(  ) throw (uno::RuntimeException)
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         throw uno::RuntimeException("Not focusable",
                                     uno::Reference< uno::XInterface >
@@ -349,7 +325,6 @@ namespace accessibility
 
     sal_Int32 SAL_CALL AccessibleImageBullet::getForeground(  ) throw (::com::sun::star::uno::RuntimeException)
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         // #104444# Added to XAccessibleComponent interface
         svtools::ColorConfig aColorConfig;
@@ -359,7 +334,6 @@ namespace accessibility
 
     sal_Int32 SAL_CALL AccessibleImageBullet::getBackground(  ) throw (::com::sun::star::uno::RuntimeException)
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         // #104444# Added to XAccessibleComponent interface
         Color aColor( Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor() );
@@ -372,21 +346,18 @@ namespace accessibility
 
     OUString SAL_CALL AccessibleImageBullet::getImplementationName (void) throw (uno::RuntimeException)
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         return OUString("AccessibleImageBullet");
     }
 
     sal_Bool SAL_CALL AccessibleImageBullet::supportsService (const OUString& sServiceName) throw (uno::RuntimeException)
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         return cppu::supportsService(this, sServiceName);
     }
 
     uno::Sequence< OUString > SAL_CALL AccessibleImageBullet::getSupportedServiceNames (void) throw (uno::RuntimeException)
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         const OUString sServiceName ("com.sun.star.accessibility.AccessibleContext");
         return uno::Sequence< OUString > (&sServiceName, 1);
@@ -394,28 +365,24 @@ namespace accessibility
 
     OUString SAL_CALL AccessibleImageBullet::getServiceName (void) throw (uno::RuntimeException)
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         return OUString("com.sun.star.accessibility.AccessibleContext");
     }
 
     void AccessibleImageBullet::SetIndexInParent( sal_Int32 nIndex )
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         mnIndexInParent = nIndex;
     }
 
     void AccessibleImageBullet::SetEEOffset( const Point& rOffset )
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         maEEOffset = rOffset;
     }
 
     void AccessibleImageBullet::Dispose()
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         int nClientId( getNotifierClientId() );
 
@@ -443,7 +410,6 @@ namespace accessibility
 
     void AccessibleImageBullet::SetEditSource( SvxEditSource* pEditSource )
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         mpEditSource = pEditSource;
 
@@ -461,7 +427,6 @@ namespace accessibility
 
     void AccessibleImageBullet::FireEvent(const sal_Int16 nEventId, const uno::Any& rNewValue, const uno::Any& rOldValue ) const
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         uno::Reference < XAccessibleContext > xThis( const_cast< AccessibleImageBullet* > (this)->getAccessibleContext() );
 
@@ -474,21 +439,18 @@ namespace accessibility
 
     void AccessibleImageBullet::GotPropertyEvent( const uno::Any& rNewValue, const sal_Int16 nEventId ) const
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         FireEvent( nEventId, rNewValue );
     }
 
     void AccessibleImageBullet::LostPropertyEvent( const uno::Any& rOldValue, const sal_Int16 nEventId ) const
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         FireEvent( nEventId, uno::Any(), rOldValue );
     }
 
     void AccessibleImageBullet::SetState( const sal_Int16 nStateId )
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         ::utl::AccessibleStateSetHelper* pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
         if( pStateSet != NULL &&
@@ -501,7 +463,6 @@ namespace accessibility
 
     void AccessibleImageBullet::UnSetState( const sal_Int16 nStateId )
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         ::utl::AccessibleStateSetHelper* pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
         if( pStateSet != NULL &&
@@ -514,14 +475,12 @@ namespace accessibility
 
     int AccessibleImageBullet::getNotifierClientId() const
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         return mnNotifierClientId;
     }
 
     void AccessibleImageBullet::SetParagraphIndex( sal_Int32 nIndex )
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         uno::Any aOldDesc;
         uno::Any aOldName;
@@ -551,14 +510,12 @@ namespace accessibility
 
     sal_Int32 AccessibleImageBullet::GetParagraphIndex() const SAL_THROW((uno::RuntimeException))
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         return mnParagraphIndex;
     }
 
     SvxEditSource& AccessibleImageBullet::GetEditSource() const SAL_THROW((uno::RuntimeException))
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         if( mpEditSource )
             return *mpEditSource;
@@ -571,7 +528,6 @@ namespace accessibility
 
     SvxTextForwarder& AccessibleImageBullet::GetTextForwarder() const SAL_THROW((uno::RuntimeException))
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         SvxEditSource& rEditSource = GetEditSource();
         SvxTextForwarder* pTextForwarder = rEditSource.GetTextForwarder();
@@ -593,7 +549,6 @@ namespace accessibility
 
     SvxViewForwarder& AccessibleImageBullet::GetViewForwarder() const SAL_THROW((uno::RuntimeException))
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         SvxEditSource& rEditSource = GetEditSource();
         SvxViewForwarder* pViewForwarder = rEditSource.GetViewForwarder();
@@ -617,7 +572,6 @@ namespace accessibility
 
     const Point& AccessibleImageBullet::GetEEOffset() const
     {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
         return maEEOffset;
     }
