@@ -33,8 +33,6 @@
 #include <unotools/configitem.hxx>
 #include <unotools/linguprops.hxx>
 #include <com/sun/star/uno/Any.h>
-#include <tools/solar.h>
-
 #include "linguistic/misc.hxx"
 #include "defs.hxx"
 

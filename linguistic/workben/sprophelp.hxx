@@ -20,13 +20,10 @@
 #ifndef INCLUDED_LINGUISTIC_WORKBEN_SPROPHELP_HXX
 #define INCLUDED_LINGUISTIC_WORKBEN_SPROPHELP_HXX
 
-#include <tools/solar.h>
-
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
-
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
 
 namespace com { namespace sun { namespace star { namespace beans {
