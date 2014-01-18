@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_54ca42a2",
+        "filename": "sc/inc/global.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-01-18T12:26:41Z",
+      "side": 1,
+      "message": "Why did you include this header file here?",
+      "revId": "9cb68cf2e6c18acf48198ffa872b8736300a4ae7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_1437dab1",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-01-18T12:26:41Z",
+      "side": 1,
+      "message": "I would prefer if we return here the index and I don\u0027t see why we need the nCount variable.",
+      "revId": "9cb68cf2e6c18acf48198ffa872b8736300a4ae7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_343cde93",
+        "filename": "sc/source/ui/app/rfindlst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-01-18T12:26:41Z",
+      "side": 1,
+      "message": "Parameter as const reference",
+      "revId": "9cb68cf2e6c18acf48198ffa872b8736300a4ae7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_5441620a",
+        "filename": "sc/source/ui/inc/rfindlst.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-01-18T12:26:41Z",
+      "side": 1,
+      "message": "We don\u0027t need the nI parameter. Just set it directly in ScRangeFindList::Insert to maEntries.size()",
+      "revId": "9cb68cf2e6c18acf48198ffa872b8736300a4ae7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_74cf46b1",
+        "filename": "sc/source/ui/inc/rfindlst.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-01-18T12:26:41Z",
+      "side": 1,
+      "message": "Pass by const reference here. That saves us one copy. Additionally the parameter should be called rRange to show it is a reference.",
+      "revId": "9cb68cf2e6c18acf48198ffa872b8736300a4ae7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_94c3ca89",
+        "filename": "sc/source/ui/miscdlgs/anyrefdg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-01-18T12:26:41Z",
+      "side": 1,
+      "message": "That leaks memory. We need to use the old ScRangeFindList instance.",
+      "revId": "9cb68cf2e6c18acf48198ffa872b8736300a4ae7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_b4c0ce7d",
+        "filename": "sc/source/ui/miscdlgs/anyrefdg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-01-18T12:26:41Z",
+      "side": 1,
+      "message": "That leaks memory.",
+      "revId": "9cb68cf2e6c18acf48198ffa872b8736300a4ae7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_f4ba5609",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-01-18T12:26:41Z",
+      "side": 1,
+      "message": "Why do you use the reference to get the color when pData already contains the index that is used to calculate the color?",
+      "revId": "9cb68cf2e6c18acf48198ffa872b8736300a4ae7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
