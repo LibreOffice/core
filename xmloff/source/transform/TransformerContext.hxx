@@ -21,7 +21,6 @@
 #define INCLUDED_XMLOFF_SOURCE_TRANSFORM_TRANSFORMERCONTEXT_HXX
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <tools/solar.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/rtti.hxx>

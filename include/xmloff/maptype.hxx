@@ -20,7 +20,6 @@
 #ifndef INCLUDED_XMLOFF_MAPTYPE_HXX
 #define INCLUDED_XMLOFF_MAPTYPE_HXX
 
-#include <tools/solar.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <unotools/saveopt.hxx>

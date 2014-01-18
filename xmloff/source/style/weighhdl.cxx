@@ -23,7 +23,6 @@
 
 #include <xmloff/xmltoken.hxx>
 #include <tools/fontenum.hxx>
-#include <tools/solar.h>
 
 #include <limits.h>
 #include <rtl/ustrbuf.hxx>

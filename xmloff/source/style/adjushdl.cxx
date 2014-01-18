@@ -18,7 +18,6 @@
  */
 
 #include <adjushdl.hxx>
-#include <tools/solar.h>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
