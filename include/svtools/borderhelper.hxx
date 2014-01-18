@@ -29,6 +29,8 @@
 
 namespace svtools {
 
+SVT_DLLPUBLIC std::vector<double> GetLineDashing( sal_uInt16 nDashing, double fScale );
+
 SVT_DLLPUBLIC basegfx::B2DPolyPolygon ApplyLineDashing(
     const basegfx::B2DPolygon& rPolygon, sal_uInt16 nDashing, double fScale );
 
