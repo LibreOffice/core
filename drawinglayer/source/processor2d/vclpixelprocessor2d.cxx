@@ -34,6 +34,7 @@
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
+#include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
@@ -51,6 +52,8 @@
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
+
+#include <com/sun/star/table/BorderLineStyle.hpp>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -237,6 +240,63 @@ namespace drawinglayer
             }
 
             return bTryWorked;
+        }
+
+        bool VclPixelProcessor2D::tryDrawBorderLinePrimitive2DDirect(
+            const drawinglayer::primitive2d::BorderLinePrimitive2D& rSource)
+        {
+            if (rSource.getStyle() == table::BorderLineStyle::SOLID)
+            {
+                const basegfx::B2DPoint& rS = rSource.getStart();
+                const basegfx::B2DPoint& rE = rSource.getEnd();
+
+                double nX1 = rS.getX();
+                double nY1 = rS.getY();
+                double nX2 = rE.getX();
+                double nY2 = rE.getY();
+
+                if (nY1 == nY2)
+                {
+                    // Horizontal line.  Draw it as a rectangle.
+                    basegfx::B2DPolygon aTarget;
+
+                    const basegfx::BColor aLineColor =
+                        maBColorModifierStack.getModifiedColor(rSource.getRGBColorLeft());
+                    double nThick = rtl::math::round(rSource.getLeftWidth());
+
+                    aTarget.append(basegfx::B2DPoint(nX1, nY1));
+                    aTarget.append(basegfx::B2DPoint(nX2, nY1));
+                    aTarget.append(basegfx::B2DPoint(nX2, nY1+nThick));
+                    aTarget.append(basegfx::B2DPoint(nX1, nY1+nThick));
+                    aTarget.setClosed(true);
+                    aTarget.transform(maCurrentTransformation);
+
+                    basegfx::B2DRange aRange = aTarget.getB2DRange();
+                    double fH = aRange.getHeight();
+
+                    if (fH <= 1.0)
+                    {
+                        // Draw it as a line.
+                        aTarget.clear();
+                        aTarget.append(basegfx::B2DPoint(aRange.getMinX(), aRange.getMinY()));
+                        aTarget.append(basegfx::B2DPoint(aRange.getMaxX(), aRange.getMinY()));
+
+                        mpOutputDevice->SetFillColor();
+                        mpOutputDevice->SetLineColor(Color(aLineColor));
+
+                        mpOutputDevice->DrawPolyLine(aTarget);
+                        return true;
+                    }
+
+                    mpOutputDevice->SetFillColor(Color(aLineColor));
+                    mpOutputDevice->SetLineColor();
+
+                    mpOutputDevice->DrawPolygon(aTarget);
+                    return true;
+                }
+
+            }
+            return false;
         }
 
         void VclPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
@@ -851,7 +911,11 @@ namespace drawinglayer
                     sal_uInt16 nAntiAliasing = mpOutputDevice->GetAntialiasing();
                     mpOutputDevice->SetAntialiasing(nAntiAliasing & ~ANTIALIASING_ENABLE_B2DDRAW);
 
-                    process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    const drawinglayer::primitive2d::BorderLinePrimitive2D& rBorder =
+                        static_cast<const drawinglayer::primitive2d::BorderLinePrimitive2D&>(rCandidate);
+
+                    if (!tryDrawBorderLinePrimitive2DDirect(rBorder))
+                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
 
                     mpOutputDevice->SetAntialiasing(nAntiAliasing);
                     break;
