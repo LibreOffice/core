@@ -19,8 +19,10 @@
 #include <StyleSheetTable.hxx>
 #include <SdtHelper.hxx>
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter
+{
+namespace dmapper
+{
 
 using namespace ::com::sun::star;
 

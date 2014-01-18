@@ -17,54 +17,64 @@
 
 #include <WriterFilterDllApi.hxx>
 
-namespace com { namespace sun { namespace star {
-        namespace awt{
-            struct Size;
-            class XControlModel;
-        }
-}}}
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace awt
+{
+struct Size;
+class XControlModel;
+}
+}
+}
+}
 
-namespace writerfilter {
-    namespace dmapper {
+namespace writerfilter
+{
+namespace dmapper
+{
 
-        /**
-         * Helper to create form controls from w:sdt tokens.
-         *
-         * w:sdt tokens can't be imported as form fields, as w:sdt supports
-         * e.g. date picking as well.
-         */
-        class SdtHelper
-        {
-            DomainMapper_Impl& m_rDM_Impl;
+/**
+ * Helper to create form controls from w:sdt tokens.
+ *
+ * w:sdt tokens can't be imported as form fields, as w:sdt supports
+ * e.g. date picking as well.
+ */
+class SdtHelper
+{
+    DomainMapper_Impl& m_rDM_Impl;
 
-            /// Items of the drop-down control.
-            std::vector<OUString> m_aDropDownItems;
-            /// Pieces of the default text -- currently used only by the dropdown control.
-            OUStringBuffer m_aSdtTexts;
-            /// Date format, see com/sun/star/awt/UnoControlDateFieldModel.idl
-            boost::optional<sal_Int16> m_oDateFormat;
+    /// Items of the drop-down control.
+    std::vector<OUString> m_aDropDownItems;
+    /// Pieces of the default text -- currently used only by the dropdown control.
+    OUStringBuffer m_aSdtTexts;
+    /// Date format, see com/sun/star/awt/UnoControlDateFieldModel.idl
+    boost::optional<sal_Int16> m_oDateFormat;
 
-            bool m_bHasElements;
+    bool m_bHasElements;
 
-            /// Create and append the drawing::XControlShape, containing the various models.
-            void createControlShape(com::sun::star::awt::Size aSize, com::sun::star::uno::Reference<com::sun::star::awt::XControlModel>);
-        public:
-            SdtHelper(DomainMapper_Impl& rDM_Impl);
-            virtual ~SdtHelper();
+    /// Create and append the drawing::XControlShape, containing the various models.
+    void createControlShape(com::sun::star::awt::Size aSize, com::sun::star::uno::Reference<com::sun::star::awt::XControlModel>);
+public:
+    SdtHelper(DomainMapper_Impl& rDM_Impl);
+    virtual ~SdtHelper();
 
-            std::vector<OUString>& getDropDownItems();
-            OUStringBuffer& getSdtTexts();
-            boost::optional<sal_Int16>& getDateFormat();
-            /// If createControlShape() was ever called.
-            bool hasElements();
+    std::vector<OUString>& getDropDownItems();
+    OUStringBuffer& getSdtTexts();
+    boost::optional<sal_Int16>& getDateFormat();
+    /// If createControlShape() was ever called.
+    bool hasElements();
 
-            /// Create drop-down control from w:sdt's w:dropDownList.
-            void createDropDownControl();
-            /// Create date control from w:sdt's w:date.
-            void createDateControl(OUString& rDefaultText);
-        };
+    /// Create drop-down control from w:sdt's w:dropDownList.
+    void createDropDownControl();
+    /// Create date control from w:sdt's w:date.
+    void createDateControl(OUString& rDefaultText);
+};
 
-    } // namespace dmapper
+} // namespace dmapper
 } // namespace writerfilter
 
 #endif
