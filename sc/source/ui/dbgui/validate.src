@@ -125,7 +125,7 @@ TabPage TP_VALIDATION_VALUES
         Pos = MAP_APPFONT ( 80 - OFFSET_X , 30 ) ;
         Size = MAP_APPFONT ( 174 , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Allow ~blank cells" ;
+        Text [ en-US ] = "Allow ~empty cells" ;
     };
     CheckBox CB_SHOWLIST
     {
