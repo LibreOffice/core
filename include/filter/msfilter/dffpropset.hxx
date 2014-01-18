@@ -19,7 +19,6 @@
 #ifndef INCLUDED_FILTER_MSFILTER_DFFPROPSET_HXX
 #define INCLUDED_FILTER_MSFILTER_DFFPROPSET_HXX
 
-#include <tools/solar.h>
 #include <filter/msfilter/msfilterdllapi.h>
 #include <filter/msfilter/dffrecordheader.hxx>
 #include <tools/stream.hxx>
