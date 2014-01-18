@@ -213,25 +213,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_ooxml::LN_CT_Lvl_isLgl:
             break;
-        case NS_rtf::LN_FNORESTART:
-            break;
-        case NS_rtf::LN_FIDENTSAV:
-            break;
         case NS_ooxml::LN_CT_Lvl_legacy:
-            break;
-        case NS_rtf::LN_FTENTATIVE:
-            break;
-        case NS_rtf::LN_RGBXCHNUMS:
-            break;
-        case NS_rtf::LN_IXCHFOLLOW:
-            break;
-        case NS_rtf::LN_DXASPACE:
-            break;
-        case NS_rtf::LN_DXAINDENT:
-            break;
-        case NS_rtf::LN_CBGRPPRLCHPX:
-            break;
-        case NS_rtf::LN_CBGRPPRLPAPX:
             break;
         case NS_ooxml::LN_CT_AbstractNum_nsid:
             break;

@@ -3190,7 +3190,23 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             break;
         case RTF_LEVELFOLLOW:
-            m_aStates.top().aTableAttributes.set(NS_rtf::LN_IXCHFOLLOW, pIntValue);
+            {
+                OUString sValue;
+                switch (nParam)
+                {
+                case 0:
+                    sValue = "tab";
+                    break;
+                case 1:
+                    sValue = "space";
+                    break;
+                case 2:
+                    sValue = "nothing";
+                    break;
+                }
+                if (!sValue.isEmpty())
+                    m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_suff, RTFValue::Pointer_t(new RTFValue(sValue)));
+            }
             break;
         case RTF_LISTOVERRIDECOUNT:
             // Ignore this for now, the exporter always emits it with a zero parameter.

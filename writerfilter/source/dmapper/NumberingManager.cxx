@@ -121,16 +121,9 @@ void ListLevel::SetValue( Id nId, sal_Int32 nValue )
         case NS_ooxml::LN_CT_Lvl_isLgl:
             m_nFLegal = nValue;
         break;
-        case NS_rtf::LN_FNORESTART:
-            m_nFNoRestart = nValue;
-        break;
-        case NS_rtf::LN_FIDENTSAV:
-            m_nFPrev = nValue;
-        break;
         case NS_ooxml::LN_CT_Lvl_legacy:
             m_nFPrevSpace = nValue;
         break;
-        case NS_rtf::LN_IXCHFOLLOW:
         case NS_ooxml::LN_CT_Lvl_suff:
             m_nXChFollow = nValue;
         break;
@@ -747,10 +740,6 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
 
     switch(nName)
     {
-        case NS_rtf::LN_RGBXCHNUMS:
-            if(pCurrentLvl.get())
-                pCurrentLvl->AddRGBXchNums( rVal.getString( ) );
-        break;
         case NS_ooxml::LN_CT_LevelText_val:
         {
             //this strings contains the definition of the level
@@ -766,10 +755,7 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
         case NS_ooxml::LN_CT_Lvl_numFmt:
         case NS_rtf::LN_JC:
         case NS_ooxml::LN_CT_Lvl_isLgl:
-        case NS_rtf::LN_FNORESTART:
-        case NS_rtf::LN_FIDENTSAV:
         case NS_ooxml::LN_CT_Lvl_legacy:
-        case NS_rtf::LN_IXCHFOLLOW:
             if ( pCurrentLvl.get( ) )
                 pCurrentLvl->SetValue( nName, sal_Int32( nIntValue ) );
         break;
@@ -973,15 +959,11 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                     pProperties->resolve(*this);
             }
             break;
-            case NS_rtf::LN_RGBXCHNUMS: break;
             case NS_ooxml::LN_CT_Lvl_start:
             case NS_ooxml::LN_CT_Lvl_numFmt:
             case NS_rtf::LN_JC:
             case NS_ooxml::LN_CT_Lvl_isLgl:
-            case NS_rtf::LN_FNORESTART:
-            case NS_rtf::LN_FIDENTSAV:
             case NS_ooxml::LN_CT_Lvl_legacy:
-            case NS_rtf::LN_IXCHFOLLOW:
                 if (m_pCurrentDefinition->GetCurrentLevel().get())
                     m_pCurrentDefinition->GetCurrentLevel( )->SetValue( nSprmId, nIntValue );
             break;
