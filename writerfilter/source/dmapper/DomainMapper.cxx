@@ -365,14 +365,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_rtf::LN_LINETYPE:
             break;
-        case NS_rtf::LN_MM:
-            break;
-        case NS_rtf::LN_XEXT:
-            break;
-        case NS_rtf::LN_YEXT:
-            break;
-        case NS_rtf::LN_HMF:
-            break;
         case NS_rtf::LN_CBHEADER:
             break;
         case NS_rtf::LN_MFP:

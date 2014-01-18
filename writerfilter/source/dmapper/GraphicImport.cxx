@@ -537,17 +537,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_DYAORIGIN: //vertical offset of hand annotation origin
         break;
         case NS_rtf::LN_CPROPS:break;// unknown - ignored
-        //metafilepict
-        case NS_rtf::LN_MM:
-
-        break; //mapmode
-        case NS_rtf::LN_XEXT:
-            m_pImpl->setXSize(nIntValue);
-            break; // x-size
-        case NS_rtf::LN_YEXT:
-            m_pImpl->setYSize(nIntValue);
-            break; // y-size
-        case NS_rtf::LN_HMF: break; //identifier - ignored
 
         case NS_rtf::LN_shpfBid:
             break; //ignored

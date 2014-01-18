@@ -802,10 +802,10 @@ int RTFDocumentImpl::resolvePict(bool bInline)
         nXExt = (((long)m_aStates.top().aPicture.nScaleX) * ( nXExt - ( m_aStates.top().aPicture.nCropL + m_aStates.top().aPicture.nCropR ))) / 100L;
     if (m_aStates.top().aPicture.nScaleY != 100)
         nYExt = (((long)m_aStates.top().aPicture.nScaleY) * ( nYExt - ( m_aStates.top().aPicture.nCropT + m_aStates.top().aPicture.nCropB ))) / 100L;
-    RTFValue::Pointer_t pXExtValue(new RTFValue(nXExt));
-    RTFValue::Pointer_t pYExtValue(new RTFValue(nYExt));
-    aExtentAttributes.set(NS_rtf::LN_XEXT, pXExtValue);
-    aExtentAttributes.set(NS_rtf::LN_YEXT, pYExtValue);
+    RTFValue::Pointer_t pXExtValue(new RTFValue(MM100_TO_EMU(nXExt)));
+    RTFValue::Pointer_t pYExtValue(new RTFValue(MM100_TO_EMU(nYExt)));
+    aExtentAttributes.set(NS_ooxml::LN_CT_PositiveSize2D_cx, pXExtValue);
+    aExtentAttributes.set(NS_ooxml::LN_CT_PositiveSize2D_cy, pYExtValue);
     RTFValue::Pointer_t pExtentValue(new RTFValue(aExtentAttributes));
     // docpr sprm
     RTFSprms aDocprAttributes;
