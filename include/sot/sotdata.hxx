@@ -20,16 +20,11 @@
 #ifndef INCLUDED_SOT_SOTDATA_HXX
 #define INCLUDED_SOT_SOTDATA_HXX
 
-/*************************************************************************
-*************************************************************************/
-
-#include <tools/solar.h>
 #include <sot/sotdllapi.h>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <vector>
 #include <list>
 
-//==================class SotData_Impl====================================
 
 class SotFactory;
 class SotObject;

@@ -20,8 +20,6 @@
 #ifndef _STGAVL_HXX
 #define _STGAVL_HXX
 
-#include <tools/solar.h>
-
 // This class must be overloaded to define real, living nodes.
 // Especially, the compare function must be implemented.
 
