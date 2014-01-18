@@ -138,12 +138,26 @@ bool QuartzSalBitmap::Create( CGImageRef xImage, int nBitmapBits,
 
     // copy layer content into the bitmap buffer
     if(mxGraphicContext) // remove warning
+    {
+        // Flip the image right side up & draw
+        CGContextSaveGState(mxGraphicContext);
+
+        CGContextScaleCTM(mxGraphicContext, 1.0, -1.0);
+        CGContextTranslateCTM(mxGraphicContext, 0.0, -aLayerSize.height);
+
         CGContextDrawImage( mxGraphicContext,
                            CGRectMake(static_cast<CGFloat>(-nX),
-                                      static_cast<CGFloat>(-nY),
+                                      static_cast<CGFloat>(nY),
                                       aLayerSize.width,
                                       aLayerSize.height),
                            xImage );
+
+        // Restore the context so that the coordinate system is restored
+        CGContextRestoreGState(mxGraphicContext);
+
+    }
+
+
     return true;
 }
 
