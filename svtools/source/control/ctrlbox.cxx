@@ -638,6 +638,13 @@ namespace svtools
         return aPattern;
     }
 
+    std::vector<double> GetLineDashing( sal_uInt16 nDashing, double fScale )
+    {
+        std::vector<double> aPattern = GetDashing(nDashing);
+        std::for_each(aPattern.begin(), aPattern.end(), ApplyScale(fScale));
+        return aPattern;
+    }
+
     basegfx::B2DPolyPolygon ApplyLineDashing( const basegfx::B2DPolygon& rPolygon, sal_uInt16 nDashing, double fScale )
     {
         std::vector<double> aPattern = GetDashing(nDashing);
