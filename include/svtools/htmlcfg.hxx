@@ -19,9 +19,6 @@
 #ifndef INCLUDED_SVTOOLS_HTMLCFG_HXX
 #define INCLUDED_SVTOOLS_HTMLCFG_HXX
 
-// -----------------------------------------------------------------------
-
-#include <tools/solar.h>
 #include <unotools/configitem.hxx>
 #include <svtools/svtdllapi.h>
 
@@ -37,7 +34,6 @@
 
 class Link;
 struct HtmlOptions_Impl;
-// -----------------------------------------------------------------------
 
 class SVT_DLLPUBLIC SvxHtmlOptions : public utl::ConfigItem
 {

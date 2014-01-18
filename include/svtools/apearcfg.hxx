@@ -20,7 +20,6 @@
 #define INCLUDED_SVTOOLS_APEARCFG_HXX
 
 #include <svtools/svtdllapi.h>
-#include <tools/solar.h>
 #include <unotools/configitem.hxx>
 
 class Application;

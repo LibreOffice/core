@@ -21,7 +21,6 @@
 #define INCLUDED_SVTOOLS_PARHTML_HXX
 
 #include <svtools/svtdllapi.h>
-#include <tools/solar.h>
 #include <svtools/svparser.hxx>
 
 #include <boost/ptr_container/ptr_vector.hpp>

@@ -21,7 +21,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/rtti.hxx>
-#include <tools/solar.h>
 #include <svtools/unoevent.hxx>
 #include <svl/macitem.hxx>
 
@@ -40,9 +39,6 @@ using ::cppu::WeakImplHelper2;
 const sal_Char sAPI_ServiceName[] = "com.sun.star.container.XNameReplace";
 const sal_Char sAPI_SvDetachedEventDescriptor[] = "SvDetachedEventDescriptor";
 
-//
-// SvBaseEventDescriptor
-//
 
 SvBaseEventDescriptor::SvBaseEventDescriptor( const SvEventDescription* pSupportedMacroItems ) :
         sEventType("EventType"),
@@ -373,13 +369,6 @@ void SvBaseEventDescriptor::getMacroFromAny(
 }
 
 
-
-
-//
-// SvEventDescriptor
-//
-
-
 SvEventDescriptor::SvEventDescriptor(
     XInterface& rParent,
     const SvEventDescription* pSupportedMacroItems) :
@@ -427,12 +416,6 @@ void SvEventDescriptor::getByName(
     }
 }
 
-
-
-
-//
-// SvDetachedEventDescriptor
-//
 
 SvDetachedEventDescriptor::SvDetachedEventDescriptor(
     const SvEventDescription* pSupportedMacroItems) :
@@ -525,10 +508,6 @@ sal_Bool SvDetachedEventDescriptor::hasByName(
     return (NULL == aMacros[nIndex]) ? sal_False : aMacros[nIndex]->HasMacro();
 }
 
-
-//
-// SvMacroTableEventDescriptor
-//
 
 SvMacroTableEventDescriptor::SvMacroTableEventDescriptor(const SvEventDescription* pSupportedMacroItems) :
     SvDetachedEventDescriptor(pSupportedMacroItems)

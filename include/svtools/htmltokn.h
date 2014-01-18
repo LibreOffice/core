@@ -22,7 +22,6 @@
 
 #include <svtools/svtdllapi.h>
 #include <sal/types.h>
-#include <tools/solar.h>
 
 namespace rtl {
     class OUString;
