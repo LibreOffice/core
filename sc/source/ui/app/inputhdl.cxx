@@ -277,11 +277,11 @@ handle_r1c1:
                     pRangeFindList = new ScRangeFindList( pDocSh->GetTitle() );
                 }
 
-                pRangeFindList->Insert( ScRangeFindData( aRange, nFlags, nStart, nPos ) );
+                ColorData nColorData = pRangeFindList->Insert( ScRangeFindData( aRange, nFlags, nStart, nPos ) );
 
                 ESelection aSel( 0, nStart, 0, nPos );
                 SfxItemSet aSet( pEngine->GetEmptyItemSet() );
-                aSet.Put( SvxColorItem( Color( ScRangeFindList::GetColorName( nCount ) ),
+                aSet.Put( SvxColorItem( Color( nColorData ),
                             EE_CHAR_COLOR ) );
                 pEngine->QuickSetAttribs( aSet, aSel );
                 ++nCount;

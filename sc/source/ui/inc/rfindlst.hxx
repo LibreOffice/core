@@ -28,12 +28,15 @@
 
 struct ScRangeFindData
 {
-    ScRange     aRef;
-    sal_uInt16      nFlags;
+    ScRange    aRef;
+    sal_uInt16 nFlags;
     sal_Int32  nSelStart;
     sal_Int32  nSelEnd;
 
     ScRangeFindData( const ScRange& rR, sal_uInt16 nF, sal_Int32 nS, sal_Int32 nE ) :
+    ColorData nColorData;
+
+    ScRangeFindData( const ScRange& rR, sal_uInt16 nF, xub_StrLen nS, xub_StrLen nE) :
         aRef(rR), nFlags(nF), nSelStart(nS), nSelEnd(nE) {}
 };
 
@@ -47,7 +50,7 @@ public:
             ScRangeFindList(const OUString& rName);
 
     sal_uLong   Count() const                       { return maEntries.size(); }
-    void    Insert( const ScRangeFindData &rNew )       { maEntries.push_back(rNew); }
+    ColorData    Insert( const ScRangeFindData &rNew );
 
     ScRangeFindData* GetObject( sal_uLong nIndex ) { return &(maEntries[nIndex]); }
 
@@ -56,7 +59,7 @@ public:
     const OUString& GetDocName() const          { return aDocName; }
     bool            IsHidden() const            { return bHidden; }
 
-    static ColorData GetColorName( size_t nIndex );
+    static ColorData GetColorName(const size_t nIndex);
 };
 
 
