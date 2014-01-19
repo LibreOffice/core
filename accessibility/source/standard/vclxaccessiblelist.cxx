@@ -841,20 +841,17 @@ void VCLXAccessibleList::UpdateSelection_Impl(sal_uInt16)
                     aOldValue <<= getAccessibleChild( (sal_Int32)m_nLastSelectedPos );
                 aNewValue <<= xNewAcc;
             }
+            if (m_pListBoxHelper->IsInDropDown())
+            {
+                if ( aNewValue.hasValue() || aOldValue.hasValue() )
+                    NotifyAccessibleEvent(
+                            AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
+                            aOldValue,
+                            aNewValue );
+                //the SELECTION_CHANGED is not necessary
+                //NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
+            }
         }
-    }
-    if (!m_pListBoxHelper->IsInDropDown())
-    {
-    }
-    else
-    {
-        if ( aNewValue.hasValue() || aOldValue.hasValue() )
-            NotifyAccessibleEvent(
-                AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
-                aOldValue,
-                aNewValue );
-        //the SELECTION_CHANGED is not necessary
-        //NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
     }
 }
 
