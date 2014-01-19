@@ -60,7 +60,6 @@ OJoinControl::OJoinControl(Window* _pParent,const ResId& _rResId)
 
 } // dbaui
 
-DBG_NAME(DlgQryJoin)
 DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
                        const TTableConnectionData::value_type& _pData,
                        OJoinTableView::OTableWindowMap* _pTableMap,
@@ -79,7 +78,6 @@ DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
     ,m_pOrigConnData(_pData)
     ,m_xConnection(_xConnection)
 {
-    DBG_CTOR(DlgQryJoin,NULL);
 
     aML_HelpText.SetControlBackground( GetSettings().GetStyleSettings().GetFaceColor() );
     // Connection kopieren
@@ -162,14 +160,12 @@ DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
 
 DlgQryJoin::~DlgQryJoin()
 {
-    DBG_DTOR(DlgQryJoin,NULL);
     delete m_pJoinControl;
     delete m_pTableControl;
 }
 
 IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
 {
-    DBG_CHKTHIS(DlgQryJoin,NULL);
     if (m_pJoinControl->aLB_JoinType.GetSelectEntryPos() == m_pJoinControl->aLB_JoinType.GetSavedValue() )
         return 1;
 
@@ -258,7 +254,6 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
 
 IMPL_LINK( DlgQryJoin, OKClickHdl, Button*, /*pButton*/ )
 {
-    DBG_CHKTHIS(DlgQryJoin,NULL);
 
     m_pConnData->Update();
     m_pOrigConnData->CopyFrom( *m_pConnData );
@@ -269,7 +264,6 @@ IMPL_LINK( DlgQryJoin, OKClickHdl, Button*, /*pButton*/ )
 
 IMPL_LINK( DlgQryJoin, NaturalToggleHdl, CheckBox*, /*pButton*/ )
 {
-    DBG_CHKTHIS(DlgQryJoin,NULL);
     sal_Bool bChecked = m_pJoinControl->m_aCBNatural.IsChecked();
     static_cast<OQueryTableConnectionData*>(m_pConnData.get())->setNatural(bChecked);
     m_pTableControl->enableRelation(!bChecked);

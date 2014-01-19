@@ -27,12 +27,10 @@
 
 namespace dbaui
 {
-    DBG_NAME(OToolBoxHelper)
     OToolBoxHelper::OToolBoxHelper()
         : m_nSymbolsSize(-1 )
         , m_pToolBox(NULL)
     {
-        DBG_CTOR(OToolBoxHelper,NULL);
 
         OSL_ENSURE(m_nSymbolsSize != SvtMiscOptions().GetCurrentSymbolsSize(),"SymbolsSize should not be identical");
         SvtMiscOptions().AddListenerLink( LINK( this, OToolBoxHelper, ConfigOptionsChanged ) );
@@ -42,7 +40,6 @@ namespace dbaui
     {
         SvtMiscOptions().RemoveListenerLink( LINK( this, OToolBoxHelper, ConfigOptionsChanged ) );
         Application::RemoveEventListener( LINK( this, OToolBoxHelper, SettingsChanged ) );
-        DBG_DTOR(OToolBoxHelper,NULL);
     }
 
     void OToolBoxHelper::checkImageList()

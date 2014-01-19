@@ -30,7 +30,6 @@
 
 using namespace ::dbaui;
 // OWizColumnSelect
-DBG_NAME(OWizNameMatching)
 OWizNameMatching::OWizNameMatching( Window* pParent)
         :OWizardPage( pParent, ModuleRes( TAB_WIZ_NAME_MATCHING     ) )
         ,m_FT_TABLE_LEFT(       this, ModuleRes( FT_TABLE_LEFT          ) )
@@ -45,7 +44,6 @@ OWizNameMatching::OWizNameMatching( Window* pParent)
         ,m_pbNone(              this, ModuleRes( PB_NONE                    ) )
 
 {
-    DBG_CTOR(OWizNameMatching,NULL);
 
     m_ibColumn_up.SetClickHdl(LINK(this,OWizNameMatching,ButtonClickHdl));
     m_ibColumn_down.SetClickHdl(LINK(this,OWizNameMatching,ButtonClickHdl));
@@ -73,13 +71,11 @@ OWizNameMatching::OWizNameMatching( Window* pParent)
 
 OWizNameMatching::~OWizNameMatching()
 {
-    DBG_DTOR(OWizNameMatching,NULL);
 }
 
 void OWizNameMatching::Reset()
 {
     // urspr"unglichen zustand wiederherstellen
-    DBG_CHKTHIS(OWizNameMatching,NULL);
     // the left tree contains bitmaps so i need to resize the right one
     if(m_bFirstTime)
     {
@@ -95,7 +91,6 @@ void OWizNameMatching::Reset()
 
 void OWizNameMatching::ActivatePage( )
 {
-    DBG_CHKTHIS(OWizNameMatching,NULL);
 
     // set source table name
     OUString aName = m_sSourceText;
@@ -123,7 +118,6 @@ void OWizNameMatching::ActivatePage( )
 
 sal_Bool OWizNameMatching::LeavePage()
 {
-    DBG_CHKTHIS(OWizNameMatching,NULL);
 
     const ODatabaseExport::TColumnVector* pSrcColumns = m_pParent->getSrcVector();
 

@@ -58,7 +58,6 @@ namespace dbaui
         }
     };
 
-    DBG_NAME(ODataView)
     ODataView::ODataView(   Window* pParent,
                             IController& _rController,
                             const Reference< XComponentContext >& _rxContext,
@@ -68,7 +67,6 @@ namespace dbaui
         ,m_rController( _rController )
         ,m_aSeparator( this )
     {
-        DBG_CTOR(ODataView,NULL);
         m_rController.acquire();
         m_pAccel.reset(::svt::AcceleratorExecute::createAcceleratorHelper());
         m_aSeparator.Show();
@@ -80,7 +78,6 @@ namespace dbaui
 
     ODataView::~ODataView()
     {
-        DBG_DTOR(ODataView,NULL);
 
         m_rController.release();
     }

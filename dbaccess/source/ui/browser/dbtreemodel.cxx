@@ -23,15 +23,12 @@
 
 namespace dbaui
 {
-    DBG_NAME(DBTreeListUserData)
     DBTreeListUserData::DBTreeListUserData()
         :eType(SbaTableQueryBrowser::etQuery)
     {
-        DBG_CTOR(DBTreeListUserData,NULL);
     }
     DBTreeListUserData::~DBTreeListUserData()
     {
-        DBG_DTOR(DBTreeListUserData,NULL);
     }
 }
 

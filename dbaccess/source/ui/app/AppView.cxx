@@ -58,13 +58,11 @@ using namespace ::com::sun::star::container;
 using ::com::sun::star::sdb::application::NamedDatabaseObject;
 
 // class OAppBorderWindow
-DBG_NAME(OAppBorderWindow)
 OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePreviewMode) : Window(_pParent,WB_DIALOGCONTROL)
     ,m_pPanel(NULL)
     ,m_pDetailView(NULL)
     ,m_pView(_pParent)
 {
-    DBG_CTOR(OAppBorderWindow,NULL);
 
     SetBorderStyle(WINDOW_BORDER_MONO);
 
@@ -104,7 +102,6 @@ OAppBorderWindow::~OAppBorderWindow()
         m_pDetailView = NULL;
     }
 
-    DBG_DTOR(OAppBorderWindow,NULL);
 }
 
 void OAppBorderWindow::GetFocus()
@@ -190,7 +187,6 @@ OApplicationDetailView* OAppBorderWindow::getDetailView() const
 }
 
 // class OApplicationView
-DBG_NAME(OApplicationView);
 OApplicationView::OApplicationView( Window* pParent
                                     ,const Reference< XComponentContext >& _rxOrb
                                     ,IApplicationController& _rAppController
@@ -200,7 +196,6 @@ OApplicationView::OApplicationView( Window* pParent
     ,m_rAppController( _rAppController )
     ,m_eChildFocus(NONE)
 {
-    DBG_CTOR(OApplicationView,NULL);
 
     try
     {
@@ -219,7 +214,6 @@ OApplicationView::OApplicationView( Window* pParent
 
 OApplicationView::~OApplicationView()
 {
-    DBG_DTOR(OApplicationView,NULL);
 
     {
         stopComponentListening(m_xObject);

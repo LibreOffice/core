@@ -61,7 +61,6 @@ using namespace ::comphelper;
 using namespace ::cppu;
 
 // ODBTable
-DBG_NAME(ODBTable)
 
 ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables
         ,const Reference< XConnection >& _rxConn
@@ -76,7 +75,6 @@ ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables
     ,m_nPrivileges(0)
 {
     SAL_INFO("dbaccess", "ODBTable::ODBTable" );
-    DBG_CTOR(ODBTable, NULL);
     OSL_ENSURE(getMetaData().is(), "ODBTable::ODBTable : invalid conn !");
     OSL_ENSURE(!_rName.isEmpty(), "ODBTable::ODBTable : name !");
     // TODO : think about collecting the privileges here, as we can't ensure that in getFastPropertyValue, where
@@ -91,13 +89,11 @@ ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables
     :OTable_Base(_pTables,_rxConn, _rxConn->getMetaData().is() && _rxConn->getMetaData()->supportsMixedCaseQuotedIdentifiers())
     ,m_nPrivileges(-1)
 {
-    DBG_CTOR(ODBTable, NULL);
     SAL_INFO("dbaccess", "ODBTable::ODBTable" );
 }
 
 ODBTable::~ODBTable()
 {
-    DBG_DTOR(ODBTable, NULL);
 }
 
 IMPLEMENT_FORWARD_REFCOUNT(ODBTable,OTable_Base)

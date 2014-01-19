@@ -33,14 +33,12 @@
 #include "moduledbu.hxx"
 using namespace dbaui;
 
-DBG_NAME(SbaSbAttrDlg)
 
 SbaSbAttrDlg::SbaSbAttrDlg(Window* pParent, const SfxItemSet* pCellAttrs,
     SvNumberFormatter* pFormatter, bool bHasFormat, bool bRow)
     : SfxTabDialog(pParent, "FieldDialog", "dbaccess/ui/fielddialog.ui", pCellAttrs)
     , m_nNumberFormatId(0)
 {
-    DBG_CTOR(SbaSbAttrDlg,NULL);
 
     pNumberInfoItem = new SvxNumberInfoItem( pFormatter, 0 );
 
@@ -55,7 +53,6 @@ SbaSbAttrDlg::~SbaSbAttrDlg()
 {
     delete pNumberInfoItem;
 
-    DBG_DTOR(SbaSbAttrDlg,NULL);
 }
 
 void SbaSbAttrDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )

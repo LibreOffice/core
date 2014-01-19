@@ -51,7 +51,6 @@ using namespace ::com::sun::star::sdbcx;
 namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOperation;
 
 // Klasse OCopyTable
-DBG_NAME(OCopyTable)
 OCopyTable::OCopyTable( Window * pParent )
     :OWizardPage( pParent, ModuleRes(TAB_WIZ_COPYTABLE) )
     ,m_ftTableName(         this, ModuleRes( FT_TABLENAME       ) )
@@ -69,7 +68,6 @@ OCopyTable::OCopyTable( Window * pParent )
     ,m_pPage3(NULL)
     ,m_bUseHeaderAllowed(sal_True)
 {
-    DBG_CTOR(OCopyTable,NULL);
 
     m_edTableName.SetMaxTextLen(EDIT_NOLIMIT);
 
@@ -108,12 +106,10 @@ OCopyTable::OCopyTable( Window * pParent )
 
 OCopyTable::~OCopyTable()
 {
-    DBG_DTOR(OCopyTable,NULL);
 }
 
 IMPL_LINK( OCopyTable, AppendDataClickHdl, Button*, /*pButton*/ )
 {
-    DBG_CHKTHIS(OCopyTable,NULL);
 
     SetAppendDataRadio();
     return 0;
@@ -130,7 +126,6 @@ void OCopyTable::SetAppendDataRadio()
 
 IMPL_LINK( OCopyTable, RadioChangeHdl, Button*, pButton )
 {
-    DBG_CHKTHIS(OCopyTable,NULL);
     m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,pButton != &m_aRB_View);
     sal_Bool bKey = m_bPKeyAllowed && pButton != &m_aRB_View;
     m_aFT_KeyName.Enable(bKey && m_aCB_PrimaryColumn.IsChecked());
@@ -151,7 +146,6 @@ IMPL_LINK( OCopyTable, RadioChangeHdl, Button*, pButton )
 
 IMPL_LINK( OCopyTable, KeyClickHdl, Button*, /*pButton*/ )
 {
-    DBG_CHKTHIS(OCopyTable,NULL);
     m_edKeyName.Enable(m_aCB_PrimaryColumn.IsChecked());
     m_aFT_KeyName.Enable(m_aCB_PrimaryColumn.IsChecked());
     return 0;
@@ -159,7 +153,6 @@ IMPL_LINK( OCopyTable, KeyClickHdl, Button*, /*pButton*/ )
 
 sal_Bool OCopyTable::LeavePage()
 {
-    DBG_CHKTHIS(OCopyTable,NULL);
     m_pParent->m_bCreatePrimaryKeyColumn    = (m_bPKeyAllowed && m_aCB_PrimaryColumn.IsEnabled()) ? m_aCB_PrimaryColumn.IsChecked() : sal_False;
     m_pParent->m_aKeyName                   = m_pParent->m_bCreatePrimaryKeyColumn ? m_edKeyName.GetText() : OUString();
     m_pParent->setUseHeaderLine( m_aCB_UseHeaderLine.IsChecked() );
@@ -245,7 +238,6 @@ sal_Bool OCopyTable::LeavePage()
 
 void OCopyTable::ActivatePage()
 {
-    DBG_CHKTHIS(OCopyTable,NULL);
     m_pParent->GetOKButton().Enable( sal_True );
     m_nOldOperation = m_pParent->getOperation();
     m_edTableName.GrabFocus();
@@ -254,13 +246,11 @@ void OCopyTable::ActivatePage()
 
 OUString OCopyTable::GetTitle() const
 {
-    DBG_CHKTHIS(OCopyTable,NULL);
     return ModuleRes(STR_WIZ_TABLE_COPY);
 }
 
 void OCopyTable::Reset()
 {
-    DBG_CHKTHIS(OCopyTable,NULL);
     m_bFirstTime = sal_False;
 
     m_edTableName.SetText( m_pParent->m_sName );
@@ -269,7 +259,6 @@ void OCopyTable::Reset()
 
 sal_Bool OCopyTable::checkAppendData()
 {
-    DBG_CHKTHIS(OCopyTable,NULL);
     m_pParent->clearDestColumns();
     Reference< XPropertySet > xTable;
     Reference< XTablesSupplier > xSup( m_pParent->m_xDestConnection, UNO_QUERY );

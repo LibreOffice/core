@@ -40,7 +40,6 @@ using namespace ::svt;
 
 const OString aGroupIdent("dBase III");
 
-DBG_NAME(ODbaseIndexDialog)
 
 ODbaseIndexDialog::ODbaseIndexDialog( Window * pParent, OUString aDataSrcName )
     : ModalDialog( pParent, ModuleRes(DLG_DBASE_INDEXES) ),
@@ -61,7 +60,6 @@ ODbaseIndexDialog::ODbaseIndexDialog( Window * pParent, OUString aDataSrcName )
     m_aDSN(aDataSrcName),
     m_bCaseSensitiv(sal_True)
 {
-    DBG_CTOR(ODbaseIndexDialog,NULL);
 
     aCB_Tables.SetSelectHdl( LINK(this, ODbaseIndexDialog, TableSelectHdl) );
     aIB_Add.SetClickHdl( LINK(this, ODbaseIndexDialog, AddClickHdl) );
@@ -82,7 +80,6 @@ ODbaseIndexDialog::ODbaseIndexDialog( Window * pParent, OUString aDataSrcName )
 ODbaseIndexDialog::~ODbaseIndexDialog()
 {
 
-    DBG_DTOR(ODbaseIndexDialog,NULL);
 }
 
 sal_Bool ODbaseIndexDialog::GetTable(const OUString& _rName, TableInfoList::iterator& _rPosition)

@@ -89,20 +89,17 @@ DataSupplier_Impl::~DataSupplier_Impl()
 }
 
 // DataSupplier Implementation.
-DBG_NAME(DataSupplier)
 
 DataSupplier::DataSupplier( const rtl::Reference< ODocumentContainer >& rContent,
                             sal_Int32 nOpenMode )
 : m_pImpl( new DataSupplier_Impl( rContent,nOpenMode ) )
 {
-    DBG_CTOR(DataSupplier,NULL);
 
 }
 
 DataSupplier::~DataSupplier()
 {
 
-    DBG_DTOR(DataSupplier,NULL);
 }
 
 OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )

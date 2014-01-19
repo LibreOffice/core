@@ -70,8 +70,6 @@ namespace dbaui
     using namespace ::comphelper;
 
     // OTableSubscriptionPage
-DBG_NAME(OTableSubscriptionPage)
-
     OTableSubscriptionPage::OTableSubscriptionPage(Window* pParent, const SfxItemSet& _rCoreAttrs,
         OTableSubscriptionDialog* _pTablesDlg)
         : OGenericAdministrationPage(pParent, "TablesFilterPage",
@@ -110,7 +108,6 @@ DBG_NAME(OTableSubscriptionPage)
         }
         catch (RuntimeException&) { }
 
-        DBG_DTOR(OTableSubscriptionPage,NULL);
     }
 
     void OTableSubscriptionPage::StateChanged( StateChangedType nType )

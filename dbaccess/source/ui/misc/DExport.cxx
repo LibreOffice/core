@@ -81,7 +81,6 @@ using namespace ::com::sun::star::awt;
 namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOperation;
 
 // ODatabaseExport
-DBG_NAME(ODatabaseExport)
 ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
                                  const TPositions &_rColumnPositions,
                                  const Reference< XNumberFormatter >& _rxNumberF,
@@ -113,7 +112,6 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
     ,m_bAppendFirstLine(false)
 {
     SAL_INFO("dbaccess.ui", "ODatabaseExport::ODatabaseExport" );
-    DBG_CTOR(ODatabaseExport,NULL);
 
     m_nRows += nRows;
     sal_Int32 nCount = 0;
@@ -170,7 +168,6 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
     ,m_bAppendFirstLine(false)
 {
     SAL_INFO("dbaccess.ui", "ODatabaseExport::ODatabaseExport" );
-    DBG_CTOR(ODatabaseExport,NULL);
     try
     {
         SvtSysLocale aSysLocale;
@@ -291,7 +288,6 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
 
 ODatabaseExport::~ODatabaseExport()
 {
-    DBG_DTOR(ODatabaseExport,NULL);
     m_pFormatter = NULL;
     ODatabaseExport::TColumns::iterator aIter = m_aDestColumns.begin();
     ODatabaseExport::TColumns::iterator aEnd  = m_aDestColumns.end();
@@ -305,7 +301,6 @@ ODatabaseExport::~ODatabaseExport()
 void ODatabaseExport::insertValueIntoColumn()
 {
     SAL_INFO("dbaccess.ui", "ODatabaseExport::insertValueIntoColumn" );
-    DBG_CHKTHIS(ODatabaseExport,NULL);
     if(m_nColumnPos < sal_Int32(m_vDestVector.size()))
     {
         OFieldDescription* pField = m_vDestVector[m_nColumnPos]->second;
@@ -420,7 +415,6 @@ void ODatabaseExport::insertValueIntoColumn()
 sal_Int16 ODatabaseExport::CheckString(const OUString& aCheckToken, sal_Int16 _nOldNumberFormat)
 {
     SAL_INFO("dbaccess.ui", "ODatabaseExport::CheckString" );
-    DBG_CHKTHIS(ODatabaseExport,NULL);
     double fOutNumber = 0.0;
     sal_Int16 nNumberFormat = 0;
 
@@ -568,7 +562,6 @@ sal_Int16 ODatabaseExport::CheckString(const OUString& aCheckToken, sal_Int16 _n
 void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfoMap* _pInfoMap)
 {
     SAL_INFO("dbaccess.ui", "ODatabaseExport::SetColumnTypes" );
-    DBG_CHKTHIS(ODatabaseExport,NULL);
     if(_pList && _pInfoMap)
     {
         OSL_ENSURE(m_vNumberFormat.size() == m_vColumnSize.size() && m_vColumnSize.size() == _pList->size(),"Illegal columns in list");
@@ -641,7 +634,6 @@ void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfo
 void ODatabaseExport::CreateDefaultColumn(const OUString& _rColumnName)
 {
     SAL_INFO("dbaccess.ui", "ODatabaseExport::CreateDefaultColumn" );
-    DBG_CHKTHIS(ODatabaseExport,NULL);
     Reference< XDatabaseMetaData>  xDestMetaData(m_xConnection->getMetaData());
     sal_Int32 nMaxNameLen(xDestMetaData->getMaxColumnNameLength());
     OUString aAlias = _rColumnName;
@@ -694,7 +686,6 @@ void ODatabaseExport::CreateDefaultColumn(const OUString& _rColumnName)
 sal_Bool ODatabaseExport::createRowSet()
 {
     SAL_INFO("dbaccess.ui", "ODatabaseExport::createRowSet" );
-    DBG_CHKTHIS(ODatabaseExport,NULL);
     m_pUpdateHelper.reset(new OParameterUpdateHelper(createPreparedStatment(m_xConnection->getMetaData(),m_xTable,m_vColumns)));
 
     return m_pUpdateHelper.get() != NULL;
@@ -703,7 +694,6 @@ sal_Bool ODatabaseExport::createRowSet()
 sal_Bool ODatabaseExport::executeWizard(const OUString& _rTableName,const Any& _aTextColor,const FontDescriptor& _rFont)
 {
     SAL_INFO("dbaccess.ui", "ODatabaseExport::executeWizard" );
-    DBG_CHKTHIS(ODatabaseExport,NULL);
 
     bool bHaveDefaultTable =  !m_sDefaultTableName.isEmpty();
     OUString sTableName( bHaveDefaultTable ? m_sDefaultTableName : _rTableName );

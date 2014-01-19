@@ -254,20 +254,17 @@ private:
     sal_Bool impl_executeNewDatabaseWizard( Reference< XModel >& _rxModel, sal_Bool& _bShouldStartTableWizard );
 };
 
-DBG_NAME(DBContentLoader)
 
 DBContentLoader::DBContentLoader(const Reference< XComponentContext >& _rxFactory)
     :m_aContext( _rxFactory )
     ,m_nStartWizard(0)
 {
-    DBG_CTOR(DBContentLoader,NULL);
 
 }
 
 DBContentLoader::~DBContentLoader()
 {
 
-    DBG_DTOR(DBContentLoader,NULL);
 }
 
 Reference< XInterface > SAL_CALL DBContentLoader::Create( const Reference< XMultiServiceFactory >  & rSMgr )

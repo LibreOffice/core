@@ -56,7 +56,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::sdbc;
 using namespace comphelper;
-DBG_NAME(OCollectionView)
 OCollectionView::OCollectionView( Window * pParent
                                  ,const Reference< XContent>& _xContent
                                  ,const OUString& _sDefaultName
@@ -77,7 +76,6 @@ OCollectionView::OCollectionView( Window * pParent
     , m_xContext(_rxContext)
     , m_bCreateForm(sal_True)
 {
-    DBG_CTOR(OCollectionView,NULL);
     FreeResource();
 
     OSL_ENSURE(m_xContent.is(),"No valid content!");
@@ -102,7 +100,6 @@ OCollectionView::OCollectionView( Window * pParent
 
 OCollectionView::~OCollectionView( )
 {
-    DBG_DTOR(OCollectionView,NULL);
 }
 
 Reference< XContent> OCollectionView::getSelectedFolder() const

@@ -159,7 +159,6 @@ struct OGenericUnoController_Data
 };
 
 // OGenericUnoController
-DBG_NAME(OGenericUnoController)
 OGenericUnoController::OGenericUnoController(const Reference< XComponentContext >& _rM)
     :OGenericUnoController_Base( getMutex() )
     ,m_pView(NULL)
@@ -181,7 +180,6 @@ OGenericUnoController::OGenericUnoController(const Reference< XComponentContext 
     }
     osl_atomic_decrement( &m_refCount );
 
-    DBG_CTOR(OGenericUnoController,NULL);
 
     try
     {
@@ -225,7 +223,6 @@ OGenericUnoController::OGenericUnoController()
 OGenericUnoController::~OGenericUnoController()
 {
 
-    DBG_DTOR(OGenericUnoController,NULL);
 }
 
 sal_Bool OGenericUnoController::Construct(Window* /*pParent*/)

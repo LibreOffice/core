@@ -130,18 +130,15 @@ void SAL_CALL OTableColumnDescriptor::setParent( const Reference< XInterface >& 
 }
 
 // OTableColumn
-DBG_NAME(OTableColumn);
 
 OTableColumn::OTableColumn( const OUString& _rName )
     :OTableColumnDescriptor( false /* do not act as descriptor */ )
 {
-    DBG_CTOR(OTableColumn,NULL);
     m_sName = _rName;
 }
 
 OTableColumn::~OTableColumn()
 {
-    DBG_DTOR(OTableColumn,NULL);
 }
 
 IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumn )
@@ -162,7 +159,6 @@ OUString OTableColumn::getImplementationName(  ) throw (RuntimeException)
 }
 
 // OQueryColumn
-DBG_NAME( OQueryColumn );
 
 OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, const Reference< XConnection >& _rxConnection, const OUString &i_sLabel )
     :OTableColumnDescriptor( false /* do not act as descriptor */ )
@@ -175,7 +171,6 @@ OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, co
     registerProperty( PROPERTY_REALNAME, PROPERTY_ID_REALNAME, nPropAttr, &m_sRealName, ::getCppuType( &m_sRealName ) );
     registerProperty( PROPERTY_LABEL, PROPERTY_ID_LABEL, nPropAttr, &m_sLabel, ::getCppuType( &m_sLabel ) );
 
-    DBG_CTOR( OQueryColumn, NULL );
 
     OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_TYPENAME ) >>= m_aTypeName );
     OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_ISNULLABLE ) >>= m_nIsNullable );
@@ -221,7 +216,6 @@ OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, co
 
 OQueryColumn::~OQueryColumn()
 {
-    DBG_DTOR( OQueryColumn, NULL );
 }
 
 Reference< XPropertySet > OQueryColumn::impl_determineOriginalTableColumn( const Reference< XConnection >& _rxConnection )
@@ -318,14 +312,12 @@ void SAL_CALL OQueryColumn::getFastPropertyValue( Any& _rValue, sal_Int32 _nHand
 }
 
 // OColumnWrapper
-DBG_NAME(OColumnWrapper);
 
 OColumnWrapper::OColumnWrapper( const Reference< XPropertySet > & rCol, const bool _bNameIsReadOnly )
     :OColumn( _bNameIsReadOnly )
     ,m_xAggregate(rCol)
     ,m_nColTypeID(-1)
 {
-    DBG_CTOR(OColumnWrapper,NULL);
     // which type of aggregate property do we have?
     // we distingish the properties by the containment of optional properties
     m_nColTypeID = 0;
@@ -346,7 +338,6 @@ OColumnWrapper::OColumnWrapper( const Reference< XPropertySet > & rCol, const bo
 
 OColumnWrapper::~OColumnWrapper()
 {
-    DBG_DTOR(OColumnWrapper,NULL);
 }
 
 OUString OColumnWrapper::impl_getPropertyNameFromHandle( const sal_Int32 _nHandle ) const

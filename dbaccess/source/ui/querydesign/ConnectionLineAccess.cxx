@@ -189,7 +189,6 @@ namespace dbaui
     }
     OTableConnection::~OTableConnection()
     {
-        DBG_DTOR(OTableConnection,NULL);
         // clear vector
         clearLineData();
     }

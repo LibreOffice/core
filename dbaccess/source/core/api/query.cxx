@@ -66,7 +66,6 @@ namespace dbaccess
 {
 
 // OQuery
-DBG_NAME(OQuery)
 
 OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
                ,const Reference< XConnection >& _rxConn
@@ -81,7 +80,6 @@ OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
     ,m_bCaseSensitiv(sal_True)
     ,m_eDoingCurrently(NONE)
 {
-    DBG_CTOR(OQuery, NULL);
     registerProperties();
     ODataSettings::registerPropertiesFor(this);
 
@@ -108,7 +106,6 @@ OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
 
 OQuery::~OQuery()
 {
-    DBG_DTOR(OQuery, NULL);
 }
 
 IMPLEMENT_IMPLEMENTATION_ID(OQuery);

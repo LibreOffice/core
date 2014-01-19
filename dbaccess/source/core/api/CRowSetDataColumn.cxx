@@ -38,7 +38,6 @@ using namespace ::com::sun::star::util;
 using namespace cppu;
 using namespace osl;
 
-DBG_NAME(ORowSetDataColumn)
 
 ORowSetDataColumn::ORowSetDataColumn(   const Reference < XResultSetMetaData >& _xMetaData,
                                       const Reference < XRow >& _xRow,
@@ -53,14 +52,12 @@ ORowSetDataColumn::ORowSetDataColumn(   const Reference < XResultSetMetaData >& 
     ,m_sLabel(i_sLabel)
     ,m_aDescription(_rDescription)
 {
-    DBG_CTOR(ORowSetDataColumn,NULL);
     OColumnSettings::registerProperties( *this );
     registerProperty( PROPERTY_DESCRIPTION, PROPERTY_ID_DESCRIPTION, PropertyAttribute::READONLY, &m_aDescription, ::getCppuType( &m_aDescription ) );
 }
 
 ORowSetDataColumn::~ORowSetDataColumn()
 {
-    DBG_DTOR(ORowSetDataColumn,NULL);
 }
 
 // comphelper::OPropertyArrayUsageHelper
@@ -210,7 +207,6 @@ void ORowSetDataColumn::fireValueChange(const ORowSetValue& _rOldValue)
     }
 }
 
-DBG_NAME(ORowSetDataColumns )
 ORowSetDataColumns::ORowSetDataColumns(
                 sal_Bool _bCase,
                 const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,
@@ -220,12 +216,10 @@ ORowSetDataColumns::ORowSetDataColumns(
                 ) : connectivity::sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector)
                 ,m_aColumns(_rColumns)
 {
-    DBG_CTOR(ORowSetDataColumns ,NULL);
 }
 
 ORowSetDataColumns::~ORowSetDataColumns()
 {
-    DBG_DTOR(ORowSetDataColumns ,NULL);
 }
 
 sdbcx::ObjectType ORowSetDataColumns::createObject(const OUString& _rName)

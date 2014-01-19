@@ -326,7 +326,6 @@ Reference< XInterface > SAL_CALL OQueryController::Create(const Reference<XMulti
     return *(new OQueryController(comphelper::getComponentContext(_rxFactory)));
 }
 
-DBG_NAME(OQueryController);
 OQueryController::OQueryController(const Reference< XComponentContext >& _rM)
     :OJoinController(_rM)
     ,OQueryController_PBase( getBroadcastHelper() )
@@ -344,7 +343,6 @@ OQueryController::OQueryController(const Reference< XComponentContext >& _rM)
     ,m_bViewFunction(sal_False)
     ,m_bEscapeProcessing(sal_True)
 {
-    DBG_CTOR(OQueryController,NULL);
     InvalidateAll();
 
     registerProperty( PROPERTY_ACTIVECOMMAND, PROPERTY_ID_ACTIVECOMMAND, PropertyAttribute::READONLY | PropertyAttribute::BOUND,
@@ -355,7 +353,6 @@ OQueryController::OQueryController(const Reference< XComponentContext >& _rM)
 
 OQueryController::~OQueryController()
 {
-    DBG_DTOR(OQueryController,NULL);
     if ( !getBroadcastHelper().bDisposed && !getBroadcastHelper().bInDispose )
     {
         OSL_FAIL("Please check who doesn't dispose this component!");

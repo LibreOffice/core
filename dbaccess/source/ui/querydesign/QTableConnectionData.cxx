@@ -24,19 +24,16 @@
 using namespace dbaui;
 
 // class OQueryTableConnectionData
-DBG_NAME(OQueryTableConnectionData)
 OQueryTableConnectionData::OQueryTableConnectionData()
     :OTableConnectionData()
     ,m_eJoinType (INNER_JOIN)
     ,m_bNatural(false)
 {
-    DBG_CTOR(OQueryTableConnectionData,NULL);
 }
 
 OQueryTableConnectionData::OQueryTableConnectionData( const OQueryTableConnectionData& rConnData )
     :OTableConnectionData( rConnData )
 {
-    DBG_CTOR(OQueryTableConnectionData,NULL);
     m_nFromEntryIndex = rConnData.m_nFromEntryIndex;
     m_nDestEntryIndex = rConnData.m_nDestEntryIndex;
 
@@ -57,37 +54,31 @@ OQueryTableConnectionData::OQueryTableConnectionData(const TTableWindowData::val
     ,m_eFromType(TAB_NORMAL_FIELD)
     ,m_eDestType(TAB_NORMAL_FIELD)
 {
-    DBG_CTOR(OQueryTableConnectionData,NULL);
 }
 
 OQueryTableConnectionData::~OQueryTableConnectionData()
 {
-    DBG_DTOR(OQueryTableConnectionData,NULL);
 }
 
 OConnectionLineDataRef OQueryTableConnectionData::CreateLineDataObj()
 {
-    DBG_CHKTHIS(OQueryTableConnectionData,NULL);
     // no specializing of LineDatas, so it is an instance of standard class
     return new OConnectionLineData();
 }
 
 OConnectionLineDataRef OQueryTableConnectionData::CreateLineDataObj( const OConnectionLineData& rConnLineData )
 {
-    DBG_CHKTHIS(OQueryTableConnectionData,NULL);
     return new OConnectionLineData( rConnLineData );
 }
 
 void OQueryTableConnectionData::CopyFrom(const OTableConnectionData& rSource)
 {
-    DBG_CHKTHIS(OQueryTableConnectionData,NULL);
     // same as in base class, use of (non-virtual) operator=
     *this = (const OQueryTableConnectionData&)rSource;
 }
 
 OQueryTableConnectionData& OQueryTableConnectionData::operator=(const OQueryTableConnectionData& rConnData)
 {
-    DBG_CHKTHIS(OQueryTableConnectionData,NULL);
     if (&rConnData == this)
         return *this;
 
@@ -106,13 +97,11 @@ OQueryTableConnectionData& OQueryTableConnectionData::operator=(const OQueryTabl
 
 OUString OQueryTableConnectionData::GetAliasName(EConnectionSide nWhich) const
 {
-    DBG_CHKTHIS(OQueryTableConnectionData,NULL);
     return nWhich == JTCS_FROM ? m_pReferencingTable->GetWinName() : m_pReferencedTable->GetWinName();
 }
 
 void OQueryTableConnectionData::InitFromDrag(const OTableFieldDescRef& rDragLeft, const OTableFieldDescRef& rDragRight)
 {
-    DBG_CHKTHIS(OQueryTableConnectionData,NULL);
     // convert Information in rDrag into parameters for the base class init
     OQueryTableWindow* pSourceWin = static_cast<OQueryTableWindow*>(rDragLeft->GetTabWindow());
     OQueryTableWindow* pDestWin = static_cast<OQueryTableWindow*>(rDragRight->GetTabWindow());

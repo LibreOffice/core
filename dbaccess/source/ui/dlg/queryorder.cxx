@@ -42,7 +42,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 
-DBG_NAME(DlgOrderCrit)
 
 DlgOrderCrit::DlgOrderCrit(Window * pParent,
     const Reference< XConnection>& _rxConnection,
@@ -54,7 +53,6 @@ DlgOrderCrit::DlgOrderCrit(Window * pParent,
     , m_xColumns(_rxCols)
     , m_xConnection(_rxConnection)
 {
-    DBG_CTOR(DlgOrderCrit,NULL);
 
     get(m_pLB_ORDERFIELD1, "field1");
     get(m_pLB_ORDERVALUE1, "value1");
@@ -128,12 +126,10 @@ DlgOrderCrit::DlgOrderCrit(Window * pParent,
 
 DlgOrderCrit::~DlgOrderCrit()
 {
-    DBG_DTOR(DlgOrderCrit,NULL);
 }
 
 IMPL_LINK_INLINE_START( DlgOrderCrit, FieldListSelectHdl, ListBox *, /*pListBox*/ )
 {
-    DBG_CHKTHIS(DlgOrderCrit,NULL);
     EnableLines();
     return 0;
 }
@@ -174,7 +170,6 @@ void DlgOrderCrit::impl_initializeOrderList_nothrow()
 
 void DlgOrderCrit::EnableLines()
 {
-    DBG_CHKTHIS(DlgOrderCrit,NULL);
 
     if ( m_pLB_ORDERFIELD1->GetSelectEntryPos() == 0 )
     {
@@ -207,7 +202,6 @@ void DlgOrderCrit::EnableLines()
 
 OUString DlgOrderCrit::GetOrderList( ) const
 {
-    DBG_CHKTHIS(DlgOrderCrit,NULL);
     Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
     OUString sQuote  = xMetaData.is() ? xMetaData->getIdentifierQuoteString() : OUString();
     static const OUString sDESC(" DESC ");
@@ -236,7 +230,6 @@ OUString DlgOrderCrit::GetOrderList( ) const
 
 void DlgOrderCrit::BuildOrderPart()
 {
-    DBG_CHKTHIS(DlgOrderCrit,NULL);
     m_xQueryComposer->setOrder(GetOrderList());
 }
 

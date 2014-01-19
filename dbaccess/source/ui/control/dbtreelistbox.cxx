@@ -52,7 +52,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::view;
 
-DBG_NAME(DBTreeListBox)
 #define SPACEBETWEENENTRIES     4
 // class DBTreeListBox
 DBTreeListBox::DBTreeListBox( Window* pParent, WinBits nWinStyle ,sal_Bool _bHandleEnterKey)
@@ -62,7 +61,6 @@ DBTreeListBox::DBTreeListBox( Window* pParent, WinBits nWinStyle ,sal_Bool _bHan
     ,m_pContextMenuProvider( NULL )
     ,m_bHandleEnterKey(_bHandleEnterKey)
 {
-    DBG_CTOR(DBTreeListBox,NULL);
     init();
 }
 
@@ -73,7 +71,6 @@ DBTreeListBox::DBTreeListBox( Window* pParent, const ResId& rResId,sal_Bool _bHa
     ,m_pContextMenuProvider( NULL )
     ,m_bHandleEnterKey(_bHandleEnterKey)
 {
-    DBG_CTOR(DBTreeListBox,NULL);
     init();
 }
 
@@ -97,7 +94,6 @@ void DBTreeListBox::init()
 
 DBTreeListBox::~DBTreeListBox()
 {
-    DBG_DTOR(DBTreeListBox,NULL);
     implStopSelectionTimer();
 }
 

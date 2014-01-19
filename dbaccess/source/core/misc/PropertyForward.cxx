@@ -37,7 +37,6 @@ namespace dbaccess
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::lang;
 
-    DBG_NAME(OPropertyForward)
 
     OPropertyForward::OPropertyForward( const Reference< XPropertySet>& _xSource, const Reference< XNameAccess>& _xDestContainer,
             const OUString& _sName, const ::std::vector< OUString>& _aPropertyList )
@@ -46,7 +45,6 @@ namespace dbaccess
         ,m_sName( _sName )
         ,m_bInInsert( sal_False )
     {
-        DBG_CTOR(OPropertyForward,NULL);
 
         osl_atomic_increment(&m_refCount);
         try
@@ -70,7 +68,6 @@ namespace dbaccess
 
     OPropertyForward::~OPropertyForward()
     {
-        DBG_DTOR(OPropertyForward,NULL);
     }
 
     void SAL_CALL OPropertyForward::propertyChange( const PropertyChangeEvent& evt ) throw(RuntimeException)

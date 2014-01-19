@@ -31,19 +31,16 @@ namespace dbaui
     OUString OJoinExchObj::m_sJoinFormat;
 
     // class OJoinExchObj
-    DBG_NAME(OJoinExchObj)
     OJoinExchObj::OJoinExchObj(const OJoinExchangeData& jxdSource,sal_Bool _bFirstEntry)
         :m_bFirstEntry(_bFirstEntry)
         ,m_jxdSourceDescription(jxdSource)
         ,m_pDragListener(NULL)
     {
-        DBG_CTOR(OJoinExchObj,NULL);
         // add available types to list
     }
 
     OJoinExchObj::~OJoinExchObj()
     {
-        DBG_DTOR(OJoinExchObj,NULL);
     }
 
     void OJoinExchObj::StartDrag( Window* _pWindow, sal_Int8 _nDragSourceActions, IDragTransferableListener* _pListener )

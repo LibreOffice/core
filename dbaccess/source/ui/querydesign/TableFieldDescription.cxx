@@ -30,7 +30,6 @@ using namespace ::com::sun::star::beans;
 using namespace comphelper;
 using namespace dbaui;
 
-DBG_NAME(OTableFieldDesc)
 OTableFieldDesc::OTableFieldDesc()
     :m_pTabWindow(0)
     ,m_eDataType(1000)
@@ -43,14 +42,12 @@ OTableFieldDesc::OTableFieldDesc()
     ,m_bGroupBy(sal_False)
     ,m_bVisible(sal_False)
 {
-    DBG_CTOR(OTableFieldDesc,NULL);
 }
 
 OTableFieldDesc::OTableFieldDesc(const OTableFieldDesc& rRS)
     : ::salhelper::SimpleReferenceObject()
 
 {
-    DBG_CTOR(OTableFieldDesc,NULL);
     *this = rRS;
 }
 
@@ -62,13 +59,11 @@ OTableFieldDesc::OTableFieldDesc(const OUString& rT, const OUString& rF )
     ,m_bGroupBy(sal_False)
     ,m_bVisible(sal_False)
 {
-    DBG_CTOR(OTableFieldDesc,NULL);
     SetField( rF ); SetTable( rT );
 }
 
 OTableFieldDesc::~OTableFieldDesc()
 {
-    DBG_DTOR(OTableFieldDesc,NULL);
 }
 
 OTableFieldDesc& OTableFieldDesc::operator=( const OTableFieldDesc& rRS )
@@ -98,7 +93,6 @@ OTableFieldDesc& OTableFieldDesc::operator=( const OTableFieldDesc& rRS )
 
 sal_Bool OTableFieldDesc::operator==( const OTableFieldDesc& rDesc )
 {
-    DBG_CHKTHIS(OTableFieldDesc,NULL);
 
     return (    m_eOrderDir != rDesc.GetOrderDir()      ||
                 m_eDataType != rDesc.GetDataType()      ||
@@ -114,7 +108,6 @@ sal_Bool OTableFieldDesc::operator==( const OTableFieldDesc& rDesc )
 
 void OTableFieldDesc::SetCriteria( sal_uInt16 nIdx, const OUString& rCrit)
 {
-    DBG_CHKTHIS(OTableFieldDesc,NULL);
     if (nIdx < m_aCriteria.size())
         m_aCriteria[nIdx] = rCrit;
     else
@@ -127,7 +120,6 @@ void OTableFieldDesc::SetCriteria( sal_uInt16 nIdx, const OUString& rCrit)
 
 OUString OTableFieldDesc::GetCriteria( sal_uInt16 nIdx ) const
 {
-    DBG_CHKTHIS(OTableFieldDesc,NULL);
     OUString aRetStr;
     if( nIdx < m_aCriteria.size())
         aRetStr = m_aCriteria[nIdx];
@@ -150,7 +142,6 @@ namespace
 
 void OTableFieldDesc::Load( const ::com::sun::star::beans::PropertyValue& i_rSettings, const bool i_bIncludingCriteria )
 {
-    DBG_CHKTHIS(OTableFieldDesc,NULL);
 
     ::comphelper::NamedValueCollection aFieldDesc( i_rSettings.Value );
     m_aAliasName = aFieldDesc.getOrDefault( "AliasName", m_aAliasName );
@@ -182,7 +173,6 @@ void OTableFieldDesc::Load( const ::com::sun::star::beans::PropertyValue& i_rSet
 
 void OTableFieldDesc::Save( ::comphelper::NamedValueCollection& o_rSettings, const bool i_bIncludingCriteria )
 {
-    DBG_CHKTHIS(OTableFieldDesc,NULL);
 
     o_rSettings.put( "AliasName", m_aAliasName );
     o_rSettings.put( "TableName", m_aTableName );

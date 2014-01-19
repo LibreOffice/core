@@ -280,7 +280,6 @@ void OConnection::setTypeMap(const Reference< XNameAccess > & typeMap) throw( SQ
 }
 
 // OConnection
-DBG_NAME(OConnection)
 
 OConnection::OConnection(ODatabaseSource& _rDB
                          , Reference< XConnection >& _rxMaster
@@ -302,7 +301,6 @@ OConnection::OConnection(ODatabaseSource& _rDB
             ,m_bSupportsGroups(sal_False)
 {
     SAL_INFO("dbaccess", "OConnection::OConnection" );
-    DBG_CTOR(OConnection,NULL);
     osl_atomic_increment(&m_refCount);
 
     try
@@ -385,7 +383,6 @@ OConnection::~OConnection()
 {
     delete m_pTables;
     delete m_pViews;
-    DBG_DTOR(OConnection,NULL);
 }
 
 // XWarningsSupplier

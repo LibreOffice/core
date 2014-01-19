@@ -59,7 +59,6 @@ namespace dbaui
     using namespace ::dbtools;
 
     // OCommonBehaviourTabPage
-    DBG_NAME(OCommonBehaviourTabPage)
     OCommonBehaviourTabPage::OCommonBehaviourTabPage(Window* pParent, sal_uInt16 nResId, const SfxItemSet& _rCoreAttrs,
         sal_uInt32 nControlFlags,bool _bFreeResource)
 
@@ -77,7 +76,6 @@ namespace dbaui
         ,m_pAutoRetrieving(NULL)
         ,m_nControlFlags(nControlFlags)
     {
-        DBG_CTOR(OCommonBehaviourTabPage,NULL);
 
         if ((m_nControlFlags & CBTP_USE_OPTIONS) == CBTP_USE_OPTIONS)
         {
@@ -134,7 +132,6 @@ namespace dbaui
         DELETEZ(m_pAutoRetrievingLabel);
         DELETEZ(m_pAutoRetrieving);
 
-        DBG_DTOR(OCommonBehaviourTabPage,NULL);
     }
 
     void OCommonBehaviourTabPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
@@ -204,7 +201,6 @@ namespace dbaui
     }
 
     // ODbaseDetailsPage
-    DBG_NAME(ODbaseDetailsPage)
     ODbaseDetailsPage::ODbaseDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_DBASE, _rCoreAttrs, CBTP_USE_CHARSET ,false)
         ,m_aShowDeleted     (this, ModuleRes(CB_SHOWDELETEDROWS))
@@ -212,7 +208,6 @@ namespace dbaui
         ,m_aFT_Message      (this, ModuleRes( FT_SPECIAL_MESSAGE) )
         ,m_aIndexes         (this, ModuleRes(PB_INDICIES))
     {
-        DBG_CTOR(ODbaseDetailsPage,NULL);
 
         m_aIndexes.SetClickHdl(LINK(this, ODbaseDetailsPage, OnButtonClicked));
         m_aShowDeleted.SetClickHdl(LINK(this, ODbaseDetailsPage, OnButtonClicked));
@@ -226,7 +221,6 @@ namespace dbaui
     ODbaseDetailsPage::~ODbaseDetailsPage()
     {
 
-        DBG_DTOR(ODbaseDetailsPage,NULL);
     }
 
     SfxTabPage* ODriversSettings::CreateDbase( Window* pParent, const SfxItemSet& _rAttrSet )
@@ -297,18 +291,15 @@ namespace dbaui
     }
 
     // OAdoDetailsPage
-    DBG_NAME(OAdoDetailsPage)
     OAdoDetailsPage::OAdoDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_ADO, _rCoreAttrs, CBTP_USE_CHARSET )
     {
-        DBG_CTOR(OAdoDetailsPage,NULL);
 
     }
 
     OAdoDetailsPage::~OAdoDetailsPage()
     {
 
-        DBG_DTOR(OAdoDetailsPage,NULL);
     }
     SfxTabPage* ODriversSettings::CreateAdo( Window* pParent,   const SfxItemSet& _rAttrSet )
     {
@@ -794,11 +785,9 @@ namespace dbaui
     }
 
     // OTextDetailsPage
-    DBG_NAME(OTextDetailsPage)
     OTextDetailsPage::OTextDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_TEXT, _rCoreAttrs, 0, false )
     {
-        DBG_CTOR(OTextDetailsPage,NULL);
 
         m_pTextConnectionHelper = new OTextConnectionHelper( this, TC_EXTENSION | TC_HEADER | TC_SEPARATORS | TC_CHARSET );
         FreeResource();
@@ -808,7 +797,6 @@ namespace dbaui
     {
         DELETEZ(m_pTextConnectionHelper);
 
-        DBG_DTOR(OTextDetailsPage,NULL);
     }
 
     SfxTabPage* ODriversSettings::CreateText( Window* pParent,  const SfxItemSet& _rAttrSet )

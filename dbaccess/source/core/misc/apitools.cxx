@@ -31,12 +31,10 @@ using namespace osl;
 
 // various helper functions
 // OSubComponent
-DBG_NAME(OSubComponent)
 OSubComponent::OSubComponent(Mutex& _rMutex, const Reference< XInterface > & xParent)
               :OComponentHelper(_rMutex)
               ,m_xParent(xParent)
 {
-    DBG_CTOR(OSubComponent,NULL);
 
 }
 
@@ -44,7 +42,6 @@ OSubComponent::~OSubComponent()
 {
     m_xParent = NULL;
 
-    DBG_DTOR(OSubComponent,NULL);
 }
 
 // com::sun::star::lang::XTypeProvider

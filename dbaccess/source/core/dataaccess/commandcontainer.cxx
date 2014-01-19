@@ -38,7 +38,6 @@ namespace dbaccess
 {
 
 // OCommandContainer
-DBG_NAME(OCommandContainer)
 
 OCommandContainer::OCommandContainer( const Reference< ::com::sun::star::uno::XComponentContext >& _xORB
                                      ,const Reference< XInterface >&    _xParentContainer
@@ -48,12 +47,10 @@ OCommandContainer::OCommandContainer( const Reference< ::com::sun::star::uno::XC
     :ODefinitionContainer(_xORB,_xParentContainer,_pImpl,!_bTables)
     ,m_bTables(_bTables)
 {
-    DBG_CTOR(OCommandContainer, NULL);
 }
 
 OCommandContainer::~OCommandContainer()
 {
-    DBG_DTOR(OCommandContainer, NULL);
 }
 
 IMPLEMENT_FORWARD_XINTERFACE2( OCommandContainer,ODefinitionContainer,OCommandContainer_BASE)

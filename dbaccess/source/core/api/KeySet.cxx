@@ -102,7 +102,6 @@ namespace
     }
 }
 
-DBG_NAME(OKeySet)
 
 OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
                  const Reference< XIndexAccess>& _xTableKeys,
@@ -125,7 +124,6 @@ OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
             ,m_bRowCountFinal(sal_False)
 {
    SAL_INFO("dbaccess", "OKeySet::OKeySet" );
-    DBG_CTOR(OKeySet,NULL);
 
 }
 
@@ -143,7 +141,6 @@ OKeySet::~OKeySet()
 
     m_xComposer = NULL;
 
-    DBG_DTOR(OKeySet,NULL);
 }
 
 void OKeySet::initColumns()
