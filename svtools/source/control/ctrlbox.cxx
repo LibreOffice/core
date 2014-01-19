@@ -1896,8 +1896,7 @@ void FontSizeBox::SetRelative( sal_Bool bNewRelative )
                 SetDecimalDigits( 0 );
                 SetMin( nRelMin );
                 SetMax( nRelMax );
-                SetCustomUnitText(OUString('%'));
-                SetUnit( FUNIT_CUSTOM );
+                SetUnit( FUNIT_PERCENT );
 
                 Clear();
                 sal_uInt16 i = nRelMin;
