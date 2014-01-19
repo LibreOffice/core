@@ -5366,7 +5366,10 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                                     + pImpRec->aTextId.nSequence, pObj );
         }
         else
+        {
             delete pImpRec;
+            delete pTextImpRec,
+        }
     }
 
     return pObj;
