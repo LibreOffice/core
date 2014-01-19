@@ -469,17 +469,26 @@ public:
      "No yield" mode prevents @Yield from waiting for events.
 
      @remarks This was originally implemented in OOo bug 98792 to improve
-        Impress slideshows. For some reason, to \em disable no yield mode, you
-        call on EnableNoYieldMode
+        Impress slideshows.
 
-     @param i_bNoYield      If set to false, then "no yield" mode is turned off.
-                            If set to true, then "no yield" mode is turned on.
-
-     @see Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
+     @see DisableNoYieldMode, Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
           AddPostYieldListener, RemovePostYieldListener
     */
-    static void                 EnableNoYieldMode( bool i_bNoYield );
+    static void                 EnableNoYieldMode();
+
+    /** @Brief Disables "no yield" mode
+
+     "No yield" mode prevents @Yield from waiting for events.
+
+     @remarks This was originally implemented in OOo bug 98792 to improve
+        Impress slideshows.
+
+     @see EnableNoYieldMode, Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
+          GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
+          AddPostYieldListener, RemovePostYieldListener
+    */
+    static void                 DisableNoYieldMode();
 
     /** Add a listener for yield events
 
