@@ -838,6 +838,20 @@ bool DummyChart::initWindow()
 
 #elif defined( UNX )
 
+namespace {
+
+// we need them before glew can initialize them
+// glew needs an OpenGL context so we need to get the address manually
+void initOpenGLFunctionPointers()
+{
+    glXChooseFBConfig = (GLXFBConfig*(*)(Display *dpy, int screen, const int *attrib_list, int *nelements))glXGetProcAddressARB((GLubyte*)"glXChooseFBConfig");
+    glXGetVisualFromFBConfig = (XVisualInfo*(*)(Display *dpy, GLXFBConfig config))glXGetProcAddressARB((GLubyte*)"glXGetVisualFromFBConfig");    // try to find a visual for the current set of attributes
+    glXGetFBConfigAttrib = (int(*)(Display *dpy, GLXFBConfig config, int attribute, int* value))glXGetProcAddressARB((GLubyte*)"glXGetFBConfigAttrib");
+
+}
+
+}
+
 bool DummyChart::initWindow()
 {
     const SystemEnvData* sysData(mpWindow->GetSystemData());
@@ -870,11 +884,7 @@ bool DummyChart::initWindow()
     const SystemEnvData* pChildSysData = NULL;
     pWindow.reset();
 
-    glXChooseFBConfig = (GLXFBConfig*(*)(Display *dpy, int screen, const int *attrib_list, int *nelements))glXGetProcAddressARB((GLubyte*)"glXChooseFBConfig");
-    glXGetVisualFromFBConfig = (XVisualInfo*(*)(Display *dpy, GLXFBConfig config))glXGetProcAddressARB((GLubyte*)"glXGetVisualFromFBConfig");    // try to find a visual for the current set of attributes
-    glXGetFBConfigAttrib = (int(*)(Display *dpy, GLXFBConfig config, int attribute, int* value))glXGetProcAddressARB((GLubyte*)"glXGetFBConfigAttrib");
-
-
+    initOpenGLFunctionPointers();
 
     int fbCount = 0;
     GLXFBConfig* pFBC = glXChooseFBConfig( GLWin.dpy,
