@@ -3357,7 +3357,6 @@ void ServiceType::dumpHxxFile(
         includes.addReference();
         includes.addRtlUstringH();
         includes.addRtlUstringHxx();
-        includes.add("com.sun.star.lang.XInitialization");
         includes.add("com.sun.star.uno.DeploymentException");
         includes.add("com.sun.star.uno.XComponentContext");
         for (std::vector<
@@ -3411,14 +3410,17 @@ void ServiceType::dumpHxxFile(
     includes.dump(o, 0);
     if (!entity_->getConstructors().empty()) {
         o << ("\n#if defined ANDROID || defined IOS //TODO\n"
+              "#include <com/sun/star/lang/XInitialization.hpp>\n"
               "#include <osl/detail/component-defines.h>\n#endif\n\n"
               "#if defined LO_URE_CURRENT_ENV && defined LO_URE_CTOR_ENV_")
           << name_.replaceAll(".", "_dot_")
           << " && (LO_URE_CURRENT_ENV) == (LO_URE_CTOR_ENV_"
           << name_.replaceAll(".", "_dot_") << ") && defined LO_URE_CTOR_FUN_"
           << name_.replaceAll(".", "_dot_")
-          << "\nextern \"C\" void * SAL_CALL LO_URE_CTOR_FUN_"
-          << name_.replaceAll(".", "_dot_") << "(void *, void *);\n#endif\n";
+          << "\nextern \"C\" ::css::uno::XInterface * SAL_CALL LO_URE_CTOR_FUN_"
+          << name_.replaceAll(".", "_dot_")
+          << "(::css::uno::XComponentContext *, ::css::uno::Sequence< "
+             "::css::uno::Any > const &);\n#endif\n";
     }
     o << "\n";
     if (codemaker::cppumaker::dumpNamespaceOpen(o, name_, false)) {
