@@ -1896,7 +1896,6 @@ sal_Bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
         SbModule* pMod = dynamic_cast<SbModule*>(pBase);
         if( !pMod )
         {
-            delete pBase;
             return sal_False;
         }
         else if( pMod->ISA(SbJScriptModule) )
