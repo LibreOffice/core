@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_74874610",
+        "filename": "include/svx/svdocirc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-01-19T12:19:14Z",
+      "side": 1,
+      "message": "Can we just get rid of this comment? We all know what a forward declaration is!",
+      "revId": "45c1b615b7539755a2156516d92b183dac571b53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_947bca28",
+        "filename": "stoc/test/testintrosp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-01-19T12:19:14Z",
+      "side": 1,
+      "message": "Ew! Comment decorations - can these be removed?",
+      "revId": "45c1b615b7539755a2156516d92b183dac571b53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_b478ce2c",
+        "filename": "stoc/test/testintrosp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-01-19T12:19:14Z",
+      "side": 1,
+      "message": "More comment decorations :(",
+      "revId": "45c1b615b7539755a2156516d92b183dac571b53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_d4755233",
+        "filename": "sw/source/core/text/porfld.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-01-19T12:19:14Z",
+      "side": 1,
+      "message": "Oh!!!! Can we get rid of this completely?",
+      "revId": "45c1b615b7539755a2156516d92b183dac571b53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_f4725648",
+        "filename": "sw/source/core/text/porfld.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-01-19T12:19:14Z",
+      "side": 1,
+      "message": "This comment serves no purpose, can you remove it entirely?",
+      "revId": "45c1b615b7539755a2156516d92b183dac571b53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
