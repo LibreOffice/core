@@ -39,6 +39,8 @@
 #include <oox/export/drawingml.hxx>
 #include <docxtablestyleexport.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 class SwGrfNode;
 class SdrObject;
 
@@ -790,8 +792,8 @@ private:
     };
 
 
-    TableReference *m_tableReference;
-    TableReference *m_oldTableReference;
+    boost::scoped_ptr<TableReference> m_tableReference;
+    boost::scoped_ptr<TableReference> m_oldTableReference;
 
     std::map< OUString, EmbeddedFontRef > fontFilesMap; // font file url to data
 
