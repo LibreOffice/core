@@ -156,9 +156,6 @@ class OGroup
 
 public:
     OGroup( const OUString& rGroupName );
-#ifdef DBG_UTIL
-    OGroup( const OGroup& _rSource );   // just to ensure the DBG_CTOR call
-#endif
     virtual ~OGroup();
 
     sal_Bool operator==( const OGroup& rGroup ) const;

@@ -46,7 +46,6 @@ const sal_uInt16 DEFAULT_LONG    =  0x0001;
 const sal_uInt16 DEFAULT_DOUBLE  =  0x0002;
 const sal_uInt16 FILTERPROPOSAL  =  0x0004;
 
-DBG_NAME( OEditBaseModel )
 //------------------------------------------------------------------
 OEditBaseModel::OEditBaseModel( const Reference< XComponentContext >& _rxFactory, const OUString& rUnoControlModelName,
         const OUString& rDefault, const sal_Bool _bSupportExternalBinding, const sal_Bool _bSupportsValidation )
@@ -55,7 +54,6 @@ OEditBaseModel::OEditBaseModel( const Reference< XComponentContext >& _rxFactory
     ,m_bEmptyIsNull(sal_True)
     ,m_bFilterProposal(sal_False)
 {
-    DBG_CTOR( OEditBaseModel, NULL );
 }
 
 //------------------------------------------------------------------
@@ -63,7 +61,6 @@ OEditBaseModel::OEditBaseModel( const OEditBaseModel* _pOriginal, const Referenc
      :OBoundControlModel( _pOriginal, _rxFactory )
      ,m_nLastReadVersion(0)
 {
-    DBG_CTOR( OEditBaseModel, NULL );
 
     m_bFilterProposal = _pOriginal->m_bFilterProposal;
     m_bEmptyIsNull = _pOriginal->m_bEmptyIsNull;
@@ -74,7 +71,6 @@ OEditBaseModel::OEditBaseModel( const OEditBaseModel* _pOriginal, const Referenc
 //------------------------------------------------------------------
 OEditBaseModel::~OEditBaseModel( )
 {
-    DBG_DTOR( OEditBaseModel, NULL );
 }
 
 // XPersist

@@ -133,13 +133,11 @@ void OCurrencyModel::implConstruct()
 }
 
 //------------------------------------------------------------------
-DBG_NAME( OCurrencyModel )
 //------------------------------------------------------------------
 OCurrencyModel::OCurrencyModel(const Reference<XComponentContext>& _rxFactory)
     :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_CURRENCYFIELD, FRM_SUN_CONTROL_CURRENCYFIELD, sal_False, sal_True )
                                     // use the old control name for compytibility reasons
 {
-    DBG_CTOR( OCurrencyModel, NULL );
 
     m_nClassId = FormComponentType::CURRENCYFIELD;
     initValueProperty( PROPERTY_VALUE, PROPERTY_ID_VALUE );
@@ -151,14 +149,12 @@ OCurrencyModel::OCurrencyModel(const Reference<XComponentContext>& _rxFactory)
 OCurrencyModel::OCurrencyModel( const OCurrencyModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OEditBaseModel( _pOriginal, _rxFactory )
 {
-    DBG_CTOR( OCurrencyModel, NULL );
     implConstruct();
 }
 
 //------------------------------------------------------------------
 OCurrencyModel::~OCurrencyModel()
 {
-    DBG_DTOR( OCurrencyModel, NULL );
 }
 
 // XCloneable

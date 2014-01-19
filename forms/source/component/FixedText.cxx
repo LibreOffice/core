@@ -46,13 +46,11 @@ InterfaceRef SAL_CALL OFixedTextModel_CreateInstance(const Reference<XMultiServi
 }
 
 //------------------------------------------------------------------
-DBG_NAME( OFixedTextModel )
 //------------------------------------------------------------------
 OFixedTextModel::OFixedTextModel( const Reference<XComponentContext>& _rxFactory )
         :OControlModel(_rxFactory, VCL_CONTROLMODEL_FIXEDTEXT)
 
 {
-    DBG_CTOR( OFixedTextModel, NULL );
     m_nClassId = FormComponentType::FIXEDTEXT;
 }
 
@@ -61,13 +59,11 @@ OFixedTextModel::OFixedTextModel( const OFixedTextModel* _pOriginal, const Refer
     :OControlModel( _pOriginal, _rxFactory )
 
 {
-    DBG_CTOR( OFixedTextModel, NULL );
 }
 
 //------------------------------------------------------------------
 OFixedTextModel::~OFixedTextModel( )
 {
-    DBG_DTOR( OFixedTextModel, NULL );
 }
 
 //------------------------------------------------------------------------------

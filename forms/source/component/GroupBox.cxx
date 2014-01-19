@@ -50,12 +50,10 @@ InterfaceRef SAL_CALL OGroupBoxModel_CreateInstance(const Reference<starlang::XM
 }
 
 //------------------------------------------------------------------
-DBG_NAME( OGroupBoxModel )
 //------------------------------------------------------------------
 OGroupBoxModel::OGroupBoxModel(const Reference<XComponentContext>& _rxFactory)
     :OControlModel(_rxFactory, VCL_CONTROLMODEL_GROUPBOX, VCL_CONTROL_GROUPBOX)
 {
-    DBG_CTOR( OGroupBoxModel, NULL );
     m_nClassId = FormComponentType::GROUPBOX;
 }
 
@@ -63,7 +61,6 @@ OGroupBoxModel::OGroupBoxModel(const Reference<XComponentContext>& _rxFactory)
 OGroupBoxModel::OGroupBoxModel( const OGroupBoxModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OControlModel( _pOriginal, _rxFactory )
 {
-    DBG_CTOR( OGroupBoxModel, NULL );
 }
 
 // XServiceInfo
@@ -81,7 +78,6 @@ StringSequence SAL_CALL OGroupBoxModel::getSupportedServiceNames() throw(Runtime
 //------------------------------------------------------------------
 OGroupBoxModel::~OGroupBoxModel()
 {
-    DBG_DTOR( OGroupBoxModel, NULL );
 }
 
 //------------------------------------------------------------------------------

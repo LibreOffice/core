@@ -76,7 +76,6 @@ InterfaceRef SAL_CALL OGridControlModel_CreateInstance(const Reference<XMultiSer
     return *(new OGridControlModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
-DBG_NAME(OGridControlModel);
 //------------------------------------------------------------------
 OGridControlModel::OGridControlModel(const Reference<XComponentContext>& _rxFactory)
     :OControlModel(_rxFactory, OUString())
@@ -98,7 +97,6 @@ OGridControlModel::OGridControlModel(const Reference<XComponentContext>& _rxFact
     ,m_bAlwaysShowCursor(sal_False)
     ,m_bDisplaySynchron(sal_True)
 {
-    DBG_CTOR(OGridControlModel,NULL);
 
     m_nClassId = FormComponentType::GRIDCONTROL;
 }
@@ -113,7 +111,6 @@ OGridControlModel::OGridControlModel( const OGridControlModel* _pOriginal, const
     ,m_aResetListeners( m_aMutex )
     ,m_aRowSetChangeListeners( m_aMutex )
 {
-    DBG_CTOR(OGridControlModel,NULL);
 
     m_aDefaultControl = _pOriginal->m_aDefaultControl;
     m_bEnable = _pOriginal->m_bEnable;
@@ -142,7 +139,6 @@ OGridControlModel::~OGridControlModel()
         dispose();
     }
 
-    DBG_DTOR(OGridControlModel,NULL);
 }
 
 // XCloneable

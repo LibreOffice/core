@@ -98,13 +98,11 @@ namespace frm
     //= OScrollBarModel
     //====================================================================
     //--------------------------------------------------------------------
-    DBG_NAME( OScrollBarModel )
     //--------------------------------------------------------------------
     OScrollBarModel::OScrollBarModel( const Reference<XComponentContext>& _rxFactory )
         :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_SCROLLBAR, VCL_CONTROL_SCROLLBAR, sal_True, sal_True, sal_False )
         ,m_nDefaultScrollValue( 0 )
     {
-        DBG_CTOR( OScrollBarModel, NULL );
 
         m_nClassId = FormComponentType::SCROLLBAR;
         initValueProperty( PROPERTY_SCROLL_VALUE, PROPERTY_ID_SCROLL_VALUE );
@@ -114,14 +112,12 @@ namespace frm
     OScrollBarModel::OScrollBarModel( const OScrollBarModel* _pOriginal, const Reference< XComponentContext >& _rxFactory )
         :OBoundControlModel( _pOriginal, _rxFactory )
     {
-        DBG_CTOR( OScrollBarModel, NULL );
         m_nDefaultScrollValue = _pOriginal->m_nDefaultScrollValue;
     }
 
     //--------------------------------------------------------------------
     OScrollBarModel::~OScrollBarModel( )
     {
-        DBG_DTOR( OScrollBarModel, NULL );
     }
 
     //--------------------------------------------------------------------

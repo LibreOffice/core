@@ -56,13 +56,11 @@ namespace frm
     //==================================================================
     // ONavigationBarModel
     //==================================================================
-    DBG_NAME( ONavigationBarModel )
     //------------------------------------------------------------------
     ONavigationBarModel::ONavigationBarModel( const Reference< XComponentContext >& _rxFactory )
         :OControlModel( _rxFactory, OUString() )
         ,FontControlModel( true )
     {
-        DBG_CTOR( ONavigationBarModel, NULL );
 
         m_nClassId = FormComponentType::NAVIGATIONBAR;
         implInitPropertyContainer();
@@ -86,7 +84,6 @@ namespace frm
         :OControlModel( _pOriginal, _rxFactory )
         ,FontControlModel( _pOriginal )
     {
-        DBG_CTOR( ONavigationBarModel, NULL );
 
         implInitPropertyContainer();
 
@@ -139,7 +136,6 @@ namespace frm
             dispose();
         }
 
-        DBG_DTOR( ONavigationBarModel, NULL );
     }
 
     //------------------------------------------------------------------

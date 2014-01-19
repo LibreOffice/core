@@ -276,7 +276,6 @@ Any SAL_CALL ODatabaseForm::queryAggregation(const Type& _rType) throw(RuntimeEx
     return aReturn;
 }
 
-DBG_NAME(ODatabaseForm);
 //------------------------------------------------------------------
 ODatabaseForm::ODatabaseForm(const Reference<XComponentContext>& _rxContext)
     :OFormComponents(_rxContext)
@@ -309,7 +308,6 @@ ODatabaseForm::ODatabaseForm(const Reference<XComponentContext>& _rxContext)
     ,m_bForwardingConnection(sal_False)
     ,m_bSharingConnection( sal_False )
 {
-    DBG_CTOR( ODatabaseForm, NULL );
     impl_construct();
 }
 
@@ -356,7 +354,6 @@ ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
     ,m_bForwardingConnection( sal_False )
     ,m_bSharingConnection( sal_False )
 {
-    DBG_CTOR( ODatabaseForm, NULL );
 
     impl_construct();
 
@@ -457,7 +454,6 @@ void ODatabaseForm::impl_construct()
 //------------------------------------------------------------------
 ODatabaseForm::~ODatabaseForm()
 {
-    DBG_DTOR(ODatabaseForm,NULL);
 
     m_pGroupManager->release();
     m_pGroupManager = NULL;

@@ -139,7 +139,6 @@ namespace frm
     //=====================================================================
     //= NavigationToolBar
     //=====================================================================
-    DBG_NAME( NavigationToolBar )
     //---------------------------------------------------------------------
     NavigationToolBar::NavigationToolBar( Window* _pParent, WinBits _nStyle, const PCommandImageProvider& _pImageProvider,
             const PCommandDescriptionProvider& _pDescriptionProvider )
@@ -150,7 +149,6 @@ namespace frm
         ,m_eImageSize( eSmall )
         ,m_pToolbar( NULL )
     {
-        DBG_CTOR( NavigationToolBar, NULL );
         implInit( );
     }
 
@@ -165,7 +163,6 @@ namespace frm
             delete *loopChildWins;
         }
         delete m_pToolbar;
-        DBG_DTOR( NavigationToolBar, NULL );
     }
 
     //---------------------------------------------------------------------

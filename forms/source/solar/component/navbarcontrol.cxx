@@ -67,18 +67,15 @@ namespace frm
     //==================================================================
     // ONavigationBarControl
     //==================================================================
-    DBG_NAME( ONavigationBarControl )
     //------------------------------------------------------------------
     ONavigationBarControl::ONavigationBarControl( const Reference< XComponentContext >& _rxORB)
         :UnoControl(), m_xContext(_rxORB)
     {
-        DBG_CTOR( ONavigationBarControl, NULL );
     }
 
     //------------------------------------------------------------------
     ONavigationBarControl::~ONavigationBarControl()
     {
-        DBG_DTOR( ONavigationBarControl, NULL );
     }
 
     //------------------------------------------------------------------
@@ -234,7 +231,6 @@ namespace frm
     //==================================================================
     // ONavigationBarPeer
     //==================================================================
-    DBG_NAME( ONavigationBarPeer )
     //------------------------------------------------------------------
     ONavigationBarPeer* ONavigationBarPeer::Create( const Reference< XComponentContext >& _rxORB,
         Window* _pParentWindow, const Reference< XControlModel >& _rxModel )
@@ -274,13 +270,11 @@ namespace frm
     ONavigationBarPeer::ONavigationBarPeer( const Reference< XComponentContext >& _rxORB )
         :OFormNavigationHelper( _rxORB )
     {
-        DBG_CTOR( ONavigationBarPeer, NULL );
     }
 
     //------------------------------------------------------------------
     ONavigationBarPeer::~ONavigationBarPeer()
     {
-        DBG_DTOR( ONavigationBarPeer, NULL );
     }
 
     //------------------------------------------------------------------

@@ -42,20 +42,17 @@ namespace frm
     //==================================================================
     //= OFormNavigationHelper
     //==================================================================
-    DBG_NAME( OFormNavigationHelper )
     //------------------------------------------------------------------
     OFormNavigationHelper::OFormNavigationHelper( const Reference< XComponentContext >& _rxORB )
         :m_xORB( _rxORB )
         ,m_nConnectedFeatures( 0 )
     {
-        DBG_CTOR( OFormNavigationHelper, NULL );
         m_pFeatureInterception.reset( new ControlFeatureInterception( m_xORB ) );
     }
 
     //------------------------------------------------------------------
     OFormNavigationHelper::~OFormNavigationHelper()
     {
-        DBG_DTOR( OFormNavigationHelper, NULL );
     }
 
     //------------------------------------------------------------------

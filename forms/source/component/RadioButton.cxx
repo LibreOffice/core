@@ -98,13 +98,11 @@ InterfaceRef SAL_CALL ORadioButtonModel_CreateInstance(const Reference<XMultiSer
 }
 
 //------------------------------------------------------------------
-DBG_NAME( ORadioButtonModel )
 //------------------------------------------------------------------
 ORadioButtonModel::ORadioButtonModel(const Reference<XComponentContext>& _rxFactory)
     :OReferenceValueComponent( _rxFactory, VCL_CONTROLMODEL_RADIOBUTTON, FRM_SUN_CONTROL_RADIOBUTTON,sal_True )
                     // use the old control name for compytibility reasons
 {
-    DBG_CTOR( ORadioButtonModel, NULL );
 
     m_nClassId = FormComponentType::RADIOBUTTON;
     m_aLabelServiceName = FRM_SUN_COMPONENT_GROUPBOX;
@@ -116,13 +114,11 @@ ORadioButtonModel::ORadioButtonModel(const Reference<XComponentContext>& _rxFact
 ORadioButtonModel::ORadioButtonModel( const ORadioButtonModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OReferenceValueComponent( _pOriginal, _rxFactory )
 {
-    DBG_CTOR( ORadioButtonModel, NULL );
 }
 
 //------------------------------------------------------------------------------
 ORadioButtonModel::~ORadioButtonModel()
 {
-    DBG_DTOR( ORadioButtonModel, NULL );
 }
 
 // XCloneable

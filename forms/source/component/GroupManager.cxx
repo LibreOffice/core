@@ -151,31 +151,16 @@ public:
 // class OGroup
 //========================================================================
 
-DBG_NAME(OGroup)
 //------------------------------------------------------------------
 OGroup::OGroup( const OUString& rGroupName )
         :m_aGroupName( rGroupName )
         ,m_nInsertPos(0)
 {
-    DBG_CTOR(OGroup,NULL);
 }
-
-#ifdef DBG_UTIL
-//------------------------------------------------------------------
-OGroup::OGroup( const OGroup& _rSource )
-:m_aCompArray(_rSource.m_aCompArray)
-    ,m_aCompAccArray(_rSource.m_aCompAccArray)
-    ,m_aGroupName(_rSource.m_aGroupName)
-    ,m_nInsertPos(_rSource.m_nInsertPos)
-{
-    DBG_CTOR(OGroup,NULL);
-}
-#endif
 
 //------------------------------------------------------------------
 OGroup::~OGroup()
 {
-    DBG_DTOR(OGroup,NULL);
 }
 
 //------------------------------------------------------------------

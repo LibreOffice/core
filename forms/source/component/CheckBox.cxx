@@ -79,13 +79,11 @@ InterfaceRef SAL_CALL OCheckBoxModel_CreateInstance(const Reference<XMultiServic
 }
 
 //------------------------------------------------------------------
-DBG_NAME( OCheckBoxModel )
 //------------------------------------------------------------------
 OCheckBoxModel::OCheckBoxModel(const Reference<XComponentContext>& _rxFactory)
     :OReferenceValueComponent( _rxFactory, VCL_CONTROLMODEL_CHECKBOX, FRM_SUN_CONTROL_CHECKBOX, sal_True )
                     // use the old control name for compytibility reasons
 {
-    DBG_CTOR( OCheckBoxModel, NULL );
 
     m_nClassId = FormComponentType::CHECKBOX;
     initValueProperty( PROPERTY_STATE, PROPERTY_ID_STATE );
@@ -95,13 +93,11 @@ OCheckBoxModel::OCheckBoxModel(const Reference<XComponentContext>& _rxFactory)
 OCheckBoxModel::OCheckBoxModel( const OCheckBoxModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OReferenceValueComponent( _pOriginal, _rxFactory )
 {
-    DBG_CTOR( OCheckBoxModel, NULL );
 }
 
 //------------------------------------------------------------------------------
 OCheckBoxModel::~OCheckBoxModel()
 {
-    DBG_DTOR( OCheckBoxModel, NULL );
 }
 
 //------------------------------------------------------------------------------

@@ -78,18 +78,15 @@ namespace frm
     //==================================================================
     // ORichTextControl
     //==================================================================
-    DBG_NAME( ORichTextControl )
     //------------------------------------------------------------------
     ORichTextControl::ORichTextControl()
         :UnoEditControl()
     {
-        DBG_CTOR( ORichTextControl, NULL );
     }
 
     //------------------------------------------------------------------
     ORichTextControl::~ORichTextControl()
     {
-        DBG_DTOR( ORichTextControl, NULL );
     }
 
     //------------------------------------------------------------------
@@ -306,7 +303,6 @@ namespace frm
     //==================================================================
     // ORichTextPeer
     //==================================================================
-    DBG_NAME( ORichTextPeer )
     //------------------------------------------------------------------
     ORichTextPeer* ORichTextPeer::Create( const Reference< XControlModel >& _rxModel, Window* _pParentWindow, WinBits _nStyle )
     {
@@ -335,13 +331,11 @@ namespace frm
     //------------------------------------------------------------------
     ORichTextPeer::ORichTextPeer()
     {
-        DBG_CTOR( ORichTextPeer, NULL );
     }
 
     //------------------------------------------------------------------
     ORichTextPeer::~ORichTextPeer()
     {
-        DBG_DTOR( ORichTextPeer, NULL );
     }
 
     //------------------------------------------------------------------

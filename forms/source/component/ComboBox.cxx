@@ -124,7 +124,6 @@ Any SAL_CALL OComboBoxModel::queryAggregation(const Type& _rType) throw (Runtime
 }
 
 //------------------------------------------------------------------
-DBG_NAME( OComboBoxModel )
 //------------------------------------------------------------------
 OComboBoxModel::OComboBoxModel(const Reference<XComponentContext>& _rxFactory)
     :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_COMBOBOX, FRM_SUN_CONTROL_COMBOBOX, sal_True, sal_True, sal_True )
@@ -135,8 +134,6 @@ OComboBoxModel::OComboBoxModel(const Reference<XComponentContext>& _rxFactory)
     ,m_eListSourceType(ListSourceType_TABLE)
     ,m_bEmptyIsNull(sal_True)
 {
-    DBG_CTOR( OComboBoxModel, NULL );
-
     m_nClassId = FormComponentType::COMBOBOX;
     initValueProperty( PROPERTY_TEXT, PROPERTY_ID_TEXT );
 }
@@ -152,7 +149,6 @@ OComboBoxModel::OComboBoxModel( const OComboBoxModel* _pOriginal, const Referenc
     ,m_eListSourceType( _pOriginal->m_eListSourceType )
     ,m_bEmptyIsNull( _pOriginal->m_bEmptyIsNull )
 {
-    DBG_CTOR( OComboBoxModel, NULL );
 }
 
 //------------------------------------------------------------------
@@ -164,7 +160,6 @@ OComboBoxModel::~OComboBoxModel()
         dispose();
     }
 
-    DBG_DTOR( OComboBoxModel, NULL );
 }
 
 // XCloneable

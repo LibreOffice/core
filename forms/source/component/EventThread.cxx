@@ -29,11 +29,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
 
-DBG_NAME( OComponentEventThread )
 OComponentEventThread::OComponentEventThread( ::cppu::OComponentHelper* pCompImpl ) :
     m_pCompImpl( pCompImpl )
 {
-    DBG_CTOR( OComponentEventThread, NULL );
 
     increment(m_refCount);
 
@@ -54,7 +52,6 @@ OComponentEventThread::OComponentEventThread( ::cppu::OComponentHelper* pCompImp
 
 OComponentEventThread::~OComponentEventThread()
 {
-    DBG_DTOR( OComponentEventThread, NULL );
 
     DBG_ASSERT( m_aEvents.empty(),
         "OComponentEventThread::~OComponentEventThread: Didn't call dispose?" );
