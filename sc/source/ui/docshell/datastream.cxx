@@ -51,7 +51,7 @@ static double fTimes[DEBUG_TIME_MAX] = { 0.0, 0.0, 0.0 };
 
 double datastream_get_time(int nIdx)
 {
-    if( nIdx < 0 || nIdx > (int)SAL_N_ELEMENTS( fTimes ) )
+    if( nIdx < 0 || nIdx >= (int)SAL_N_ELEMENTS( fTimes ) )
         return -1;
     return fTimes[ nIdx ];
 }
