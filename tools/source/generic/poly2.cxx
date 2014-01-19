@@ -73,8 +73,6 @@ ImplPolyPolygon::~ImplPolyPolygon()
 
 PolyPolygon::PolyPolygon( sal_uInt16 nInitSize, sal_uInt16 nResize )
 {
-    DBG_CTOR( PolyPolygon, NULL );
-
     if ( nInitSize > MAX_POLYGONS )
         nInitSize = MAX_POLYGONS;
     else if ( !nInitSize )
@@ -88,8 +86,6 @@ PolyPolygon::PolyPolygon( sal_uInt16 nInitSize, sal_uInt16 nResize )
 
 PolyPolygon::PolyPolygon( const Polygon& rPoly )
 {
-    DBG_CTOR( PolyPolygon, NULL );
-
     if ( rPoly.GetSize() )
     {
         mpImplPolyPolygon = new ImplPolyPolygon( 1 );
@@ -101,8 +97,6 @@ PolyPolygon::PolyPolygon( const Polygon& rPoly )
 
 PolyPolygon::PolyPolygon( const PolyPolygon& rPolyPoly )
 {
-    DBG_CTOR( PolyPolygon, NULL );
-    DBG_CHKOBJ( &rPolyPoly, PolyPolygon, NULL );
     DBG_ASSERT( rPolyPoly.mpImplPolyPolygon->mnRefCount < 0xFFFFFFFE, "PolyPolygon: RefCount overflow" );
 
     mpImplPolyPolygon = rPolyPoly.mpImplPolyPolygon;
@@ -111,8 +105,6 @@ PolyPolygon::PolyPolygon( const PolyPolygon& rPolyPoly )
 
 PolyPolygon::~PolyPolygon()
 {
-    DBG_DTOR( PolyPolygon, NULL );
-
     if ( mpImplPolyPolygon->mnRefCount > 1 )
         mpImplPolyPolygon->mnRefCount--;
     else
@@ -121,8 +113,6 @@ PolyPolygon::~PolyPolygon()
 
 void PolyPolygon::Insert( const Polygon& rPoly, sal_uInt16 nPos )
 {
-    DBG_CHKTHIS( PolyPolygon, NULL );
-
     if ( mpImplPolyPolygon->mnCount >= MAX_POLYGONS )
         return;
 
@@ -166,7 +156,6 @@ void PolyPolygon::Insert( const Polygon& rPoly, sal_uInt16 nPos )
 
 void PolyPolygon::Remove( sal_uInt16 nPos )
 {
-    DBG_CHKTHIS( PolyPolygon, NULL );
     DBG_ASSERT( nPos < Count(), "PolyPolygon::Remove(): nPos >= nSize" );
 
     if ( mpImplPolyPolygon->mnRefCount > 1 )
@@ -184,7 +173,6 @@ void PolyPolygon::Remove( sal_uInt16 nPos )
 
 void PolyPolygon::Replace( const Polygon& rPoly, sal_uInt16 nPos )
 {
-    DBG_CHKTHIS( PolyPolygon, NULL );
     DBG_ASSERT( nPos < Count(), "PolyPolygon::Replace(): nPos >= nSize" );
 
     if ( mpImplPolyPolygon->mnRefCount > 1 )
@@ -199,7 +187,6 @@ void PolyPolygon::Replace( const Polygon& rPoly, sal_uInt16 nPos )
 
 const Polygon& PolyPolygon::GetObject( sal_uInt16 nPos ) const
 {
-    DBG_CHKTHIS( PolyPolygon, NULL );
     DBG_ASSERT( nPos < Count(), "PolyPolygon::GetObject(): nPos >= nSize" );
 
     return *(mpImplPolyPolygon->mpPolyAry[nPos]);
@@ -215,8 +202,6 @@ bool PolyPolygon::IsRect() const
 
 void PolyPolygon::Clear()
 {
-    DBG_CHKTHIS( PolyPolygon, NULL );
-
     if ( mpImplPolyPolygon->mnRefCount > 1 )
     {
         mpImplPolyPolygon->mnRefCount--;
@@ -239,8 +224,6 @@ void PolyPolygon::Clear()
 
 void PolyPolygon::Optimize( sal_uIntPtr nOptimizeFlags, const PolyOptimizeData* pData )
 {
-    DBG_CHKTHIS( PolyPolygon, NULL );
-
     if(nOptimizeFlags && Count())
     {
         // #115630# ImplDrawHatch does not work with beziers included in the polypolygon, take care of that
@@ -303,8 +286,6 @@ void PolyPolygon::Optimize( sal_uIntPtr nOptimizeFlags, const PolyOptimizeData* 
 
 void PolyPolygon::AdaptiveSubdivide( PolyPolygon& rResult, const double d ) const
 {
-    DBG_CHKTHIS( PolyPolygon, NULL );
-
     rResult.Clear();
 
     Polygon aPolygon;
@@ -378,14 +359,11 @@ void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rR
 
 sal_uInt16 PolyPolygon::Count() const
 {
-    DBG_CHKTHIS( PolyPolygon, NULL );
     return mpImplPolyPolygon->mnCount;
 }
 
 void PolyPolygon::Move( long nHorzMove, long nVertMove )
 {
-    DBG_CHKTHIS( PolyPolygon, NULL );
-
     // Required for DrawEngine
     if( nHorzMove || nVertMove )
     {
@@ -404,8 +382,6 @@ void PolyPolygon::Move( long nHorzMove, long nVertMove )
 
 void PolyPolygon::Translate( const Point& rTrans )
 {
-    DBG_CHKTHIS( PolyPolygon, NULL );
-
     if( mpImplPolyPolygon->mnRefCount > 1 )
     {
         mpImplPolyPolygon->mnRefCount--;
@@ -419,8 +395,6 @@ void PolyPolygon::Translate( const Point& rTrans )
 
 void PolyPolygon::Scale( double fScaleX, double fScaleY )
 {
-    DBG_CHKTHIS( PolyPolygon, NULL );
-
     if( mpImplPolyPolygon->mnRefCount > 1 )
     {
         mpImplPolyPolygon->mnRefCount--;
@@ -434,7 +408,6 @@ void PolyPolygon::Scale( double fScaleX, double fScaleY )
 
 void PolyPolygon::Rotate( const Point& rCenter, sal_uInt16 nAngle10 )
 {
-    DBG_CHKTHIS( PolyPolygon, NULL );
     nAngle10 %= 3600;
 
     if( nAngle10 )
@@ -446,8 +419,6 @@ void PolyPolygon::Rotate( const Point& rCenter, sal_uInt16 nAngle10 )
 
 void PolyPolygon::Rotate( const Point& rCenter, double fSin, double fCos )
 {
-    DBG_CHKTHIS( PolyPolygon, NULL );
-
     if( mpImplPolyPolygon->mnRefCount > 1 )
     {
         mpImplPolyPolygon->mnRefCount--;
@@ -486,8 +457,6 @@ void PolyPolygon::Clip( const Rectangle& rRect )
 
 Rectangle PolyPolygon::GetBoundRect() const
 {
-    DBG_CHKTHIS( PolyPolygon, NULL );
-
     long    nXMin=0, nXMax=0, nYMin=0, nYMax=0;
     bool    bFirst = true;
     sal_uInt16  nPolyCount = mpImplPolyPolygon->mnCount;
@@ -530,7 +499,6 @@ Rectangle PolyPolygon::GetBoundRect() const
 
 Polygon& PolyPolygon::operator[]( sal_uInt16 nPos )
 {
-    DBG_CHKTHIS( PolyPolygon, NULL );
     DBG_ASSERT( nPos < Count(), "PolyPolygon::[](): nPos >= nSize" );
 
     if ( mpImplPolyPolygon->mnRefCount > 1 )
@@ -544,8 +512,6 @@ Polygon& PolyPolygon::operator[]( sal_uInt16 nPos )
 
 PolyPolygon& PolyPolygon::operator=( const PolyPolygon& rPolyPoly )
 {
-    DBG_CHKTHIS( PolyPolygon, NULL );
-    DBG_CHKOBJ( &rPolyPoly, PolyPolygon, NULL );
     DBG_ASSERT( rPolyPoly.mpImplPolyPolygon->mnRefCount < 0xFFFFFFFE, "PolyPolygon: RefCount overflow" );
 
     rPolyPoly.mpImplPolyPolygon->mnRefCount++;
@@ -561,9 +527,6 @@ PolyPolygon& PolyPolygon::operator=( const PolyPolygon& rPolyPoly )
 
 bool PolyPolygon::operator==( const PolyPolygon& rPolyPoly ) const
 {
-    DBG_CHKTHIS( PolyPolygon, NULL );
-    DBG_CHKOBJ( &rPolyPoly, PolyPolygon, NULL );
-
     if ( rPolyPoly.mpImplPolyPolygon == mpImplPolyPolygon )
         return true;
     else
@@ -592,7 +555,6 @@ bool PolyPolygon::IsEqual( const PolyPolygon& rPolyPoly ) const
 
 SvStream& operator>>( SvStream& rIStream, PolyPolygon& rPolyPoly )
 {
-    DBG_CHKOBJ( &rPolyPoly, PolyPolygon, NULL );
     DBG_ASSERTWARNING( rIStream.GetVersion(), "PolyPolygon::>> - Solar-Version not set on rIStream" );
 
     Polygon* pPoly;
@@ -625,7 +587,6 @@ SvStream& operator>>( SvStream& rIStream, PolyPolygon& rPolyPoly )
 
 SvStream& WritePolyPolygon( SvStream& rOStream, const PolyPolygon& rPolyPoly )
 {
-    DBG_CHKOBJ( &rPolyPoly, PolyPolygon, NULL );
     DBG_ASSERTWARNING( rOStream.GetVersion(), "PolyPolygon::<< - Solar-Version not set on rOStream" );
 
     // Write number of polygons
@@ -643,7 +604,6 @@ void PolyPolygon::Read( SvStream& rIStream )
 {
     VersionCompat aCompat( rIStream, STREAM_READ );
 
-    DBG_CHKTHIS( PolyPolygon, NULL );
     DBG_ASSERTWARNING( rIStream.GetVersion(), "PolyPolygon::>> - Solar-Version not set on rIStream" );
 
     Polygon* pPoly;
@@ -676,7 +636,6 @@ void PolyPolygon::Write( SvStream& rOStream ) const
 {
     VersionCompat aCompat( rOStream, STREAM_WRITE, 1 );
 
-    DBG_CHKTHIS( PolyPolygon, NULL );
     DBG_ASSERTWARNING( rOStream.GetVersion(), "PolyPolygon::<< - Solar-Version not set on rOStream" );
 
     // Write number of polygons
@@ -705,7 +664,6 @@ basegfx::B2DPolyPolygon PolyPolygon::getB2DPolyPolygon() const
 // constructor to convert from basegfx::B2DPolyPolygon
 PolyPolygon::PolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
-    DBG_CTOR( PolyPolygon, NULL );
     const sal_uInt16 nCount(sal_uInt16(rPolyPolygon.count()));
     DBG_ASSERT(sal_uInt32(nCount) == rPolyPolygon.count(),
         "PolyPolygon::PolyPolygon: Too many sub-polygons in given basegfx::B2DPolyPolygon (!)");
