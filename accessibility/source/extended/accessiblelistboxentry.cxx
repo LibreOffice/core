@@ -427,32 +427,29 @@ namespace accessibility
                     return AccessibleRole::TREE_ITEM;
             else if( nType == TREEBOX_ALLITEM_ACCROLE_TYPE_LIST)
                     return AccessibleRole::LIST_ITEM;
-        }
 
-        sal_uInt16 treeFlag = pBox->GetTreeFlags();
-        if(treeFlag & TREEFLAG_CHKBTN )
-        {
-            SvTreeListEntry* pEntry = pBox->GetEntryFromPath( m_aEntryPath );
-            SvButtonState eState = pBox->GetCheckButtonState( pEntry );
-            switch( eState )
+            sal_uInt16 treeFlag = pBox->GetTreeFlags();
+            if(treeFlag & TREEFLAG_CHKBTN )
             {
+                SvTreeListEntry* pEntry = pBox->GetEntryFromPath( m_aEntryPath );
+                SvButtonState eState = pBox->GetCheckButtonState( pEntry );
+                switch( eState )
+                {
                 case SV_BUTTON_CHECKED:
                 case SV_BUTTON_UNCHECKED:
                     return AccessibleRole::CHECK_BOX;
                 case SV_BUTTON_TRISTATE:
                 default:
                     return AccessibleRole::LABEL;
+                }
             }
+            if(getRoleType() == 0)
+                return AccessibleRole::LIST_ITEM;
+            else
+                //o is: return AccessibleRole::LABEL;
+                return AccessibleRole::TREE_ITEM;
         }
-        else
-        {
-
-        if(getRoleType() == 0)
-            return AccessibleRole::LIST_ITEM;
-        else
-            //o is: return AccessibleRole::LABEL;
-            return AccessibleRole::TREE_ITEM;
-        }
+        return AccessibleRole::UNKNOWN;
     }
     // -----------------------------------------------------------------------------
     OUString SAL_CALL AccessibleListBoxEntry::getAccessibleDescription(  ) throw (RuntimeException)
