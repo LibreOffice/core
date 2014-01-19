@@ -78,7 +78,7 @@ namespace accessibility
         {
             switch ( rVclWindowEvent.GetId() )
             {
-                case  VCLEVENT_CHECKBOX_TOGGLE :
+            case  VCLEVENT_CHECKBOX_TOGGLE :
                 {
                     if ( !getListBox() || !getListBox()->HasFocus() )
                     {
@@ -103,114 +103,111 @@ namespace accessibility
                     break;
                 }
 
-                case VCLEVENT_LISTBOX_SELECT :
+            case VCLEVENT_LISTBOX_SELECT :
                 {
-                    // First send an event that tells the listeners of a
-                    // modified selection.  The active descendant event is
-                    // send after that so that the receiving AT has time to
-                    // read the text or name of the active child.
                     OSL_ASSERT(0 && "Debug: Treelist shouldn't use VCLEVENT_LISTBOX_SELECT");
+                    break;
                 }
 
-                case VCLEVENT_LISTBOX_TREESELECT:
+            case VCLEVENT_LISTBOX_TREESELECT:
+                {
+                    if ( getListBox() && getListBox()->HasFocus() )
                     {
-                        if ( getListBox() && getListBox()->HasFocus() )
+                        AccessibleListBoxEntry* pEntry =static_cast< AccessibleListBoxEntry* >(m_xFocusedChild.get());
+                        if (pEntry)
                         {
-                            AccessibleListBoxEntry* pEntry =static_cast< AccessibleListBoxEntry* >(m_xFocusedChild.get());
-                            if (pEntry)
-                            {
-                                pEntry->NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
-                            }
+                            pEntry->NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
                         }
                     }
-                    break;
-                case VCLEVENT_LISTBOX_TREEFOCUS:
+                }
+                break;
+            case VCLEVENT_LISTBOX_TREEFOCUS:
+                {
+                    SvTreeListBox* pBox = getListBox();
+                    sal_Bool bNeedFocus = sal_False;
+                    if (pBox)
                     {
-                        SvTreeListBox* pBox = getListBox();
-                        sal_Bool bNeedFocus = sal_False;
-                        if (pBox)
+                        Window* pParent = ((Window*)pBox)->GetParent();
+                        if (pParent && pParent->GetType() == WINDOW_FLOATINGWINDOW)
                         {
-                            Window* pParent = ((Window*)pBox)->GetParent();
-                            if (pParent && pParent->GetType() == WINDOW_FLOATINGWINDOW)
-                            {
-                                // MT: ImplGetAppSVData shouldn't be exported from VCL.
-                                // In which scenario is this needed?
-                                // If needed, we need to find an other solution
-                                /*
-                                ImplSVData* pSVData = ImplGetAppSVData();
-                                if (pSVData && pSVData->maWinData.mpFirstFloat == (FloatingWindow*)pParent)
-                                    bNeedFocus = sal_True;
-                                */
-                            }
-                        }
-                        if( pBox && (pBox->HasFocus() || bNeedFocus) )
-                        {
-                            uno::Any aOldValue, aNewValue;
-                            SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
-                            if ( pEntry )
-                            {
-                                AccessibleListBoxEntry* pEntryFocus =static_cast< AccessibleListBoxEntry* >(m_xFocusedChild.get());
-                                if (pEntryFocus && pEntryFocus->GetSvLBoxEntry() == pEntry)
-                                {
-                                    aOldValue <<= uno::Any();
-                                    aNewValue <<= m_xFocusedChild;
-                                    NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldValue, aNewValue );
-                                    return ;
-                                }
-
-                                aOldValue <<= m_xFocusedChild;
-
-                                MAP_ENTRY::iterator mi = m_mapEntry.find(pEntry);
-                                if(mi != m_mapEntry.end())
-                                {
-                                    OSL_ASSERT(mi->second.get() != NULL);
-                                    m_xFocusedChild = mi->second;
-                                }
-                                else
-                                {
-                                    AccessibleListBoxEntry *pEntNew = new AccessibleListBoxEntry( *getListBox(), pEntry, NULL );
-                                    m_xFocusedChild = pEntNew;
-                                    m_mapEntry.insert(MAP_ENTRY::value_type(pEntry,pEntNew));
-                                }
-
-                                aNewValue <<= m_xFocusedChild;
-                                NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldValue, aNewValue );
-                            }
-                            else
-                            {
-                                aOldValue <<= uno::Any();
-                                aNewValue <<= AccessibleStateType::FOCUSED;
-                                NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
-                            }
+                            // MT: ImplGetAppSVData shouldn't be exported from VCL.
+                            // In which scenario is this needed?
+                            // If needed, we need to find an other solution
+                            /*
+                              ImplSVData* pSVData = ImplGetAppSVData();
+                              if (pSVData && pSVData->maWinData.mpFirstFloat == (FloatingWindow*)pParent)
+                              bNeedFocus = sal_True;
+                            */
                         }
                     }
-                    break;
-                case VCLEVENT_LISTBOX_ITEMREMOVED:
+                    if( pBox && (pBox->HasFocus() || bNeedFocus) )
                     {
+                        uno::Any aOldValue, aNewValue;
                         SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
                         if ( pEntry )
                         {
-                            RemoveChildEntries(pEntry);
+                            AccessibleListBoxEntry* pEntryFocus =static_cast< AccessibleListBoxEntry* >(m_xFocusedChild.get());
+                            if (pEntryFocus && pEntryFocus->GetSvLBoxEntry() == pEntry)
+                            {
+                                aOldValue <<= uno::Any();
+                                aNewValue <<= m_xFocusedChild;
+                                NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldValue, aNewValue );
+                                return ;
+                            }
+
+                            aOldValue <<= m_xFocusedChild;
+
+                            MAP_ENTRY::iterator mi = m_mapEntry.find(pEntry);
+                            if(mi != m_mapEntry.end())
+                            {
+                                OSL_ASSERT(mi->second.get() != NULL);
+                                m_xFocusedChild = mi->second;
+                            }
+                            else
+                            {
+                                AccessibleListBoxEntry *pEntNew = new AccessibleListBoxEntry( *getListBox(), pEntry, NULL );
+                                m_xFocusedChild = pEntNew;
+                                m_mapEntry.insert(MAP_ENTRY::value_type(pEntry,pEntNew));
+                            }
+
+                            aNewValue <<= m_xFocusedChild;
+                            NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldValue, aNewValue );
                         }
                         else
                         {
-                            // NULL means Clear()
-                            MAP_ENTRY::iterator mi = m_mapEntry.begin();
-                            for ( ; mi != m_mapEntry.end() ; ++mi)
-                            {
-                                uno::Any aNewValue;
-                                uno::Any aOldValue;
-                                aOldValue <<= mi->second;
-                                NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
-                            }
-                            m_mapEntry.clear();
+                            aOldValue <<= uno::Any();
+                            aNewValue <<= AccessibleStateType::FOCUSED;
+                            NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
                         }
                     }
-                    break;
+                }
+                break;
+            case VCLEVENT_LISTBOX_ITEMREMOVED:
+                {
+                    SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
+                    if ( pEntry )
+                    {
+                        RemoveChildEntries(pEntry);
+                    }
+                    else
+                    {
+                        // NULL means Clear()
+                        MAP_ENTRY::iterator mi = m_mapEntry.begin();
+                        for ( ; mi != m_mapEntry.end() ; ++mi)
+                        {
+                            uno::Any aNewValue;
+                            uno::Any aOldValue;
+                            aOldValue <<= mi->second;
+                            NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
+                        }
+                        m_mapEntry.clear();
+                    }
+                }
+                break;
 
                 // #i92103#
-                case VCLEVENT_ITEM_EXPANDED :
-                case VCLEVENT_ITEM_COLLAPSED :
+            case VCLEVENT_ITEM_EXPANDED :
+            case VCLEVENT_ITEM_COLLAPSED :
                 {
                     SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
                     if ( pEntry )
@@ -232,8 +229,8 @@ namespace accessibility
                     }
                 }
                 break;
-                default:
-                    VCLXAccessibleComponent::ProcessWindowEvent (rVclWindowEvent);
+            default:
+                VCLXAccessibleComponent::ProcessWindowEvent (rVclWindowEvent);
             }
         }
     }
