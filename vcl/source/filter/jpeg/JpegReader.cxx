@@ -86,8 +86,8 @@ long StreamRead( SvStream* pStream, void* pBuffer, long nBufferSize )
 
         if( pStream->GetError() == ERRCODE_IO_PENDING )
         {
-            // Damit wir wieder an die alte Position
-            // seeken koennen, setzen wir den Error temp.zurueck
+            // in order to search from the old position
+            // we temporarily reset the error
             pStream->ResetError();
             pStream->Seek( nInitialPosition );
             pStream->SetError( ERRCODE_IO_PENDING );

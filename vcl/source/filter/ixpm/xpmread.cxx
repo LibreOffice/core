@@ -64,12 +64,12 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
     ReadState   eReadState;
     sal_uInt8       cDummy;
 
-    // sehen, ob wir _alles_ lesen koennen
+    // check if we can real ALL
     mrIStm.Seek( STREAM_SEEK_TO_END );
     mrIStm >> cDummy;
 
-    // falls wir nicht alles lesen koennen
-    // kehren wir zurueck und warten auf neue Daten
+    // if we could not read all
+    // return and wait for new data
     if ( mrIStm.GetError() != ERRCODE_IO_PENDING )
     {
         mrIStm.Seek( mnLastPos );
@@ -82,7 +82,7 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
 
             if ( ( mbStatus = ImplGetString() ) )
             {
-                mnIdentifier = XPMVALUES;           // Bitmap informationen einholen
+                mnIdentifier = XPMVALUES;           // fetch Bitmap information
                 mnWidth = ImplGetULONG( 0 );
                 mnHeight = ImplGetULONG( 1 );
                 mnColors = ImplGetULONG( 2 );
@@ -96,10 +96,10 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
             {
                 mnIdentifier = XPMCOLORS;
 
-                // mpColMap beinhaltet fuer jede vorhandene
-                // Farbe:   ( mnCpp )Byte(s)-> ASCII Eintrag der der Farbe zugeordnet ist
-                //              1    Byte   -> 0xff wenn Farbe transparent ist
-                //              3    Bytes  -> RGB Wert der Farbe
+                // mpColMap constitutes for all available
+                // colour:   ( mnCpp )Byte(s)-> ASCII entry assigned to the colour
+                //              1    Byte   -> 0xFF if colour is transparent
+                //              3    Bytes  -> RGB value of the colour
                 mpColMap = new sal_uInt8[ mnColors * ( 4 + mnCpp ) ];
                 if ( mpColMap )
                 {
@@ -117,7 +117,7 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
 
                 if ( mbStatus )
                 {
-                    // bei mehr als 256 Farben wird eine 24 Bit Grafik erstellt
+                    // create a 24bit graphic when more as 256 colours present
                     sal_uInt16  nBits = 1;
                     if ( mnColors > 256 )
                         nBits = 24;
@@ -131,7 +131,7 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
                     maBmp = Bitmap( Size( mnWidth, mnHeight ), nBits );
                     mpAcc = maBmp.AcquireWriteAccess();
 
-                    // mbTransparent ist true wenn mindestens eine Farbe Transparent ist
+                    // mbTransparent is TRUE if at least one colour is transparent
                     if ( mbTransparent )
                     {
                         maMaskBmp = Bitmap( Size( mnWidth, mnHeight ), 1 );
@@ -215,8 +215,8 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
 }
 
 // ------------------------------------------------------------------------
-// ImplGetColor ermittelt saemtliche Farbwerte,
-// die Rueckgabe ist true wenn saemtliche Farben zugeordnet werden konnten
+// ImplGetColor returns variouls colour values,
+// returns TRUE if various colours could be assigned
 
 bool XPMReader::ImplGetColor( sal_uLong nNumb )
 {
@@ -234,8 +234,8 @@ bool XPMReader::ImplGetColor( sal_uLong nNumb )
 }
 
 // ------------------------------------------------------------------------
-// ImpGetScanLine liest den String mpBufSize aus und schreibt die Pixel in die
-// Bitmap. Der Parameter nY gibt die horizontale Position an.
+// ImpGetScanLine reads the string mpBufSize and writes the pixel in the
+// Bitmap. Parameter nY is the horizontal position.
 
 bool XPMReader::ImplGetScanLine( sal_uLong nY )
 {
@@ -300,9 +300,9 @@ bool XPMReader::ImplGetScanLine( sal_uLong nY )
 }
 
 // ------------------------------------------------------------------------
-// versucht aus mpStringBuf einen Farbwert zu uebermitteln
-// wurde eine Farbe gefunden wird an pDest[1]..pDest[2] der RGB wert geschrieben
-// pDest[0] enthaelt 0xff wenn die Farbe transparent ist sonst 0
+// tries to determine a colour value from mpStringBuf
+// if a colour was found the RGB value is written a pDest[1]..pDest[2]
+// pDest[0] contains 0xFF if the colour is transparent otherwise 0
 
 bool XPMReader::ImplGetColSub( sal_uInt8* pDest )
 {
@@ -368,8 +368,8 @@ bool XPMReader::ImplGetColSub( sal_uInt8* pDest )
 }
 
 // ------------------------------------------------------------------------
-// ImplGetColKey durchsuch den String mpStringBuf nach einem Parameter 'nKey'
-// und gibt einen bool zurueck. ( wenn true werden mpPara und mnParaSize gesetzt )
+// ImplGetColKey searches string mpStringBuf for a parameter 'nKey'
+// and returns a boolean. (if TRUE mpPara and mnParaSize will be set)
 
 bool XPMReader::ImplGetColKey( sal_uInt8 nKey )
 {
@@ -412,12 +412,12 @@ bool XPMReader::ImplGetColKey( sal_uInt8 nKey )
 }
 
 // ------------------------------------------------------------------------
-// ImplGetRGBHex uebersetzt den ASCII-Hexadezimalwert der sich bei mpPara befindet
-// in einen RGB wert und schreibt diesen nach pDest
-// folgende Formate muessen sich bei mpPara befinden:
-// wenn nAdd = 0 : '#12ab12'                    -> RGB = 0x12, 0xab, 0x12
-//             2 : '#1234abcd1234'                  "      "     "     "
-//             6 : '#12345678abcdefab12345678'      "      "     "     "
+// ImplGetRGBHex translates the ASCII-Hexadecimalvalue belonging to mpPara
+// in a RGB value and writes this to pDest
+// below formats should be contained in mpPara:
+// if nAdd = 0 : '#12ab12'                    -> RGB = 0x12, 0xab, 0x12
+//           2 : '#1234abcd1234'                  "      "     "     "
+//           6 : '#12345678abcdefab12345678'      "      "     "     "
 
 
 void XPMReader::ImplGetRGBHex( sal_uInt8* pDest,sal_uLong  nAdd )
@@ -442,7 +442,7 @@ void XPMReader::ImplGetRGBHex( sal_uInt8* pDest,sal_uLong  nAdd )
 }
 
 // ------------------------------------------------------------------------
-// ImplGetUlong gibt den wert einer bis zu 6stelligen ASCII-Dezimalzahl zurueck.
+// ImplGetUlong returns the value of a up to 6-digit long ASCII-decimal number.
 
 sal_uLong XPMReader::ImplGetULONG( sal_uLong nPara )
 {
@@ -496,10 +496,10 @@ bool XPMReader::ImplCompare( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nSi
 }
 
 // ------------------------------------------------------------------------
-// ImplGetPara versucht den nNumb  ( 0...x ) Parameter aus mpStringBuf zu ermitteln.
-// Ein Parameter ist durch Spaces oder Tabs von den anderen getrennt.
-// Konnte der Parameter gefunden werden ist der Rueckgabewert true und mpPara + mnParaSize
-// werden gesetzt.
+// ImplGetPara tries to retrieve nNumb (0...x) parameters from mpStringBuf.
+// Parameters are separated by spaces or tabs.
+// If a parameter was found then the return value is TRUE and mpPara + mnParaSize
+// are set.
 
 bool XPMReader::ImplGetPara ( sal_uLong nNumb )
 {
@@ -552,9 +552,9 @@ bool XPMReader::ImplGetPara ( sal_uLong nNumb )
 }
 
 // ------------------------------------------------------------------------
-// Der naechste String wird ausgelesen und in mpStringBuf (mit 0 abgeschlossen) abgelegt;
-// mnStringSize enthaelt die Groesse des gelesenen Strings.
-// Bemerkungen wie '//' und '/*.....*/' werden uebersprungen.
+// The next string is read and stored in mpStringBuf (terminated with 0);
+// mnStringSize contains the size of the string read.
+// Comments like '//' and '/*....*/' are skipped.
 
 bool XPMReader::ImplGetString( void )
 {

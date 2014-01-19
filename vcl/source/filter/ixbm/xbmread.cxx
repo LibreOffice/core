@@ -80,7 +80,7 @@ void XBMReader::InitTable()
     pHexTable[(int)'e'] = 14;
     pHexTable[(int)'f'] = 15;
     pHexTable[(int)'x'] = 0;
-    pHexTable[(int)' '] =     -1;
+    pHexTable[(int)' '] = -1;
     pHexTable[(int)','] = -1;
     pHexTable[(int)'}'] = -1;
     pHexTable[(int)'\n'] = -1;
@@ -143,22 +143,22 @@ long XBMReader::ParseDefine( const sal_Char* pDefine )
     char*   pTmp = (char*) pDefine;
     unsigned char   cTmp;
 
-    // bis zum Ende gehen
+    // move to end
     pTmp += ( strlen( pDefine ) - 1 );
     cTmp = *pTmp--;
 
-    // letzte Ziffer suchen
+    // search last digit
     while( pHexTable[ cTmp ] == -1 )
         cTmp = *pTmp--;
 
-    // bis vor die Zahl laufen
+    // move before number
     while( pHexTable[ cTmp ] != -1 )
         cTmp = *pTmp--;
 
-    // auf Anfang der Zahl gehen
+    // move to start of number
     pTmp += 2;
 
-    // Hex lesen
+    // read Hex
     if( ( pTmp[0] == '0' ) && ( ( pTmp[1] == 'X' ) || ( pTmp[1] == 'x' ) ) )
     {
         pTmp += 2;
@@ -170,7 +170,7 @@ long XBMReader::ParseDefine( const sal_Char* pDefine )
             cTmp = *pTmp++;
         }
     }
-    // Dezimal lesen
+    // read decimal
     else
     {
         cTmp = *pTmp++;
@@ -203,7 +203,7 @@ bool XBMReader::ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat
         {
             sal_Int32 nPos;
 
-            // einfuehrende geschweifte Klammer loeschen
+            // delete opening curly bracket
             if( (nPos = ( aLine = aLastLine ).indexOf('{') ) != -1 )
                 aLine = aLine.copy(nPos + 1);
 
@@ -264,12 +264,12 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
     ReadState   eReadState;
     sal_uInt8       cDummy;
 
-    // sehen, ob wir _alles_ lesen koennen
+    // check if we can read ALL
     rIStm.Seek( STREAM_SEEK_TO_END );
     rIStm >> cDummy;
 
-    // falls wir nicht alles lesen koennen
-    // kehren wir zurueck und warten auf neue Daten
+    // if we cannot read all
+    // we returnn and wait for new data
     if ( rIStm.GetError() != ERRCODE_IO_PENDING )
     {
         rIStm.Seek( nLastPos );
@@ -284,8 +284,8 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
                 nWidth = nValue;
                 aLine = FindTokenLine( &rIStm, "#define", "_height" );
 
-                // Falls die Hoehe nicht folgt, suchen wir noch
-                // einmal vom Anfang der Datei an
+                // if height was not received, we search again
+                // from start of the file
                 if ( !bStatus )
                 {
                     rIStm.Seek( nLastPos );
