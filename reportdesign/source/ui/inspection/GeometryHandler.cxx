@@ -225,7 +225,6 @@ OUString GeometryHandler::impl_convertToFormula( const uno::Any& _rControlValue 
     aParser = ReportFormula( impl_isDataField(sName) ? ReportFormula::Field : ReportFormula::Expression, sName );
     return aParser.getCompleteFormula();
 }
-DBG_NAME(rpt_GeometryHandler)
 GeometryHandler::GeometryHandler(uno::Reference< uno::XComponentContext > const & context) :
     GeometryHandler_Base(m_aMutex)
     ,m_aPropertyListeners( m_aMutex )
@@ -234,7 +233,6 @@ GeometryHandler::GeometryHandler(uno::Reference< uno::XComponentContext > const 
     ,m_nDataFieldType(0)
     ,m_bIn(false)
 {
-    DBG_CTOR(rpt_GeometryHandler,NULL);
     try
     {
         m_xFormComponentHandler = form::inspection::FormComponentPropertyHandler::create(m_xContext);
@@ -248,7 +246,6 @@ GeometryHandler::GeometryHandler(uno::Reference< uno::XComponentContext > const 
 // -----------------------------------------------------------------------------
 GeometryHandler::~GeometryHandler()
 {
-    DBG_DTOR(rpt_GeometryHandler,NULL);
 }
 //------------------------------------------------------------------------
 OUString SAL_CALL GeometryHandler::getImplementationName(  ) throw(uno::RuntimeException)

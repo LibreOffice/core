@@ -89,7 +89,6 @@ namespace
 // PropBrw
 //============================================================================
 
-DBG_NAME( rpt_PropBrw )
 
 //----------------------------------------------------------------------------
 
@@ -100,7 +99,6 @@ PropBrw::PropBrw(const Reference< XComponentContext >& _xORB, Window* pParent, O
           ,m_pView( NULL )
           ,m_bInitialStateChange(sal_True)
 {
-    DBG_CTOR( rpt_PropBrw,NULL);
 
     Size aPropWinSize(STD_WIN_SIZE_X,STD_WIN_SIZE_Y);
     SetOutputSizePixel(aPropWinSize);
@@ -206,8 +204,6 @@ PropBrw::~PropBrw()
     {}
 
     ::rptui::notifySystemWindow(this,this,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
-
-    DBG_DTOR( rpt_PropBrw,NULL);
 }
 // -----------------------------------------------------------------------------
 void PropBrw::setCurrentPage(const OUString& _sLastActivePage)

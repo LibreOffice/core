@@ -24,7 +24,6 @@
 namespace rptui
 {
 //=====================================================================
-    DBG_NAME( rpt_OColorListener )
 OColorListener::OColorListener(Window* _pParent ,const OUString& _sColorEntry)
 : Window(_pParent)
 ,m_sColorEntry(_sColorEntry)
@@ -32,7 +31,6 @@ OColorListener::OColorListener(Window* _pParent ,const OUString& _sColorEntry)
 ,m_bCollapsed(sal_False)
 ,m_bMarked(sal_False)
 {
-    DBG_CTOR( rpt_OColorListener,NULL);
     StartListening(m_aExtendedColorConfig);
     m_nColor = m_aExtendedColorConfig.GetColorValue(CFG_REPORTDESIGNER,m_sColorEntry).getColor();
     m_nTextBoundaries = m_aColorConfig.GetColorValue(::svtools::DOCBOUNDARIES).nColor;
@@ -40,7 +38,6 @@ OColorListener::OColorListener(Window* _pParent ,const OUString& _sColorEntry)
 // -----------------------------------------------------------------------------
 OColorListener::~OColorListener()
 {
-    DBG_DTOR( rpt_OColorListener,NULL);
     EndListening(m_aExtendedColorConfig);
 }
 // -----------------------------------------------------------------------

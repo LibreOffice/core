@@ -37,7 +37,6 @@ namespace rptxml
     using namespace uno;
     using namespace xml::sax;
 
-DBG_NAME( rpt_OXMLReport )
 
 OXMLReport::OXMLReport( ORptFilter& rImport,
                 sal_uInt16 nPrfx, const OUString& rLName,
@@ -47,7 +46,6 @@ OXMLReport::OXMLReport( ORptFilter& rImport,
     OXMLReportElementBase( rImport, nPrfx, rLName,_xComponent.get(),_pContainer)
     ,m_xComponent(_xComponent)
 {
-    DBG_CTOR( rpt_OXMLReport,NULL);
     OSL_ENSURE(m_xComponent.is(),"No Report definition!");
 
     impl_initRuntimeDefaults();
@@ -108,7 +106,6 @@ OXMLReport::OXMLReport( ORptFilter& rImport,
 
 OXMLReport::~OXMLReport()
 {
-    DBG_DTOR( rpt_OXMLReport,NULL);
 }
 
 // -----------------------------------------------------------------------------

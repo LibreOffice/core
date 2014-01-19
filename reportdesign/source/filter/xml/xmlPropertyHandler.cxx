@@ -31,16 +31,13 @@ namespace rptxml
     using namespace xmloff;
     using namespace ::com::sun::star::report;
     using namespace ::com::sun::star::uno;
-DBG_NAME( rpt_OXMLRptPropHdlFactory )
 
 OXMLRptPropHdlFactory::OXMLRptPropHdlFactory()
 {
-    DBG_CTOR( rpt_OXMLRptPropHdlFactory,NULL);
 }
 // -----------------------------------------------------------------------------
 OXMLRptPropHdlFactory::~OXMLRptPropHdlFactory()
 {
-    DBG_DTOR( rpt_OXMLRptPropHdlFactory,NULL);
 }
 // -----------------------------------------------------------------------------
 }// rptxml

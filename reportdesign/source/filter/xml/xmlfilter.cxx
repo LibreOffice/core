@@ -95,7 +95,6 @@ public:
 };
 
 TYPEINIT1( RptMLMasterStylesContext_Impl, XMLTextMasterStylesContext );
-DBG_NAME(rpt_RptMLMasterStylesContext_Impl)
 RptMLMasterStylesContext_Impl::RptMLMasterStylesContext_Impl(
         ORptFilter& rImport, sal_uInt16 nPrfx,
         const OUString& rLName ,
@@ -103,12 +102,10 @@ RptMLMasterStylesContext_Impl::RptMLMasterStylesContext_Impl(
     XMLTextMasterStylesContext( rImport, nPrfx, rLName, xAttrList )
     ,m_rImport(rImport)
 {
-    DBG_CTOR(rpt_RptMLMasterStylesContext_Impl,NULL);
 }
 
 RptMLMasterStylesContext_Impl::~RptMLMasterStylesContext_Impl()
 {
-    DBG_DTOR(rpt_RptMLMasterStylesContext_Impl,NULL);
 }
 
 void RptMLMasterStylesContext_Impl::EndElement()
@@ -356,11 +353,9 @@ Sequence< OUString > ORptMetaImportHelper::getSupportedServiceNames_Static(  ) t
 // -------------
 // - ORptFilter -
 // -------------
-DBG_NAME(rpt_ORptFilter)
 ORptFilter::ORptFilter( const uno::Reference< XComponentContext >& _rxContext,sal_uInt16 nImportFlags )
     :SvXMLImport(_rxContext, getImplementationName_Static(), nImportFlags)
 {
-    DBG_CTOR(rpt_ORptFilter,NULL);
     GetMM100UnitConverter().SetCoreMeasureUnit(util::MeasureUnit::MM_100TH);
     GetMM100UnitConverter().SetXMLMeasureUnit(util::MeasureUnit::CM);
     GetNamespaceMap().Add( OUString( sXML_np__rpt ),
@@ -382,7 +377,6 @@ ORptFilter::ORptFilter( const uno::Reference< XComponentContext >& _rxContext,sa
 
 ORptFilter::~ORptFilter() throw()
 {
-    DBG_DTOR(rpt_ORptFilter,NULL);
 }
 //------------------------------------------------------------------------------
 uno::Reference< XInterface > ORptFilter::create(uno::Reference< XComponentContext > const & xContext)

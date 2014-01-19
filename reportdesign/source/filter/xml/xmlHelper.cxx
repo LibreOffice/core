@@ -58,15 +58,12 @@ namespace rptxml
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::beans;
-DBG_NAME(rpt_OPropertyHandlerFactory)
 OPropertyHandlerFactory::OPropertyHandlerFactory()
 {
-    DBG_CTOR(rpt_OPropertyHandlerFactory,NULL);
 }
 // -----------------------------------------------------------------------------
 OPropertyHandlerFactory::~OPropertyHandlerFactory()
 {
-    DBG_DTOR(rpt_OPropertyHandlerFactory,NULL);
 }
 // -----------------------------------------------------------------------------
 const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 _nType) const

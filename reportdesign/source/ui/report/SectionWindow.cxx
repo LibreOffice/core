@@ -43,7 +43,6 @@ namespace rptui
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
-DBG_NAME( rpt_OSectionWindow )
 OSectionWindow::OSectionWindow( OViewsWindow* _pParent,const uno::Reference< report::XSection >& _xSection,const OUString& _sColorEntry)
 : Window( _pParent,WB_DIALOGCONTROL)
 ,OPropertyChangeListener(m_aMutex)
@@ -53,7 +52,6 @@ OSectionWindow::OSectionWindow( OViewsWindow* _pParent,const uno::Reference< rep
 ,m_aSplitter(this)
 ,m_aEndMarker( this,_sColorEntry)
 {
-    DBG_CTOR( rpt_OSectionWindow,NULL);
     SetUniqueId(UID_RPT_SECTIONSWINDOW);
     const MapMode& rMapMode = _pParent->GetMapMode();
     SetMapMode( rMapMode );
@@ -101,7 +99,6 @@ OSectionWindow::OSectionWindow( OViewsWindow* _pParent,const uno::Reference< rep
 // -----------------------------------------------------------------------------
 OSectionWindow::~OSectionWindow()
 {
-    DBG_DTOR( rpt_OSectionWindow,NULL);
     try
     {
         if ( m_pSectionMulti.is() )

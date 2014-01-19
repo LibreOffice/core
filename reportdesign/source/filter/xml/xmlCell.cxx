@@ -47,7 +47,6 @@ namespace rptxml
     using namespace beans;
     using namespace xml::sax;
 
-DBG_NAME( rpt_OXMLCell )
 
 OXMLCell::OXMLCell( ORptFilter& rImport
                 ,sal_uInt16 nPrfx
@@ -61,7 +60,6 @@ OXMLCell::OXMLCell( ORptFilter& rImport
     ,m_nCurrentCount(0)
     ,m_bContainsShape(false)
 {
-    DBG_CTOR( rpt_OXMLCell,NULL);
     if ( !m_pCell )
         m_pCell = this;
 
@@ -96,7 +94,6 @@ OXMLCell::OXMLCell( ORptFilter& rImport
 // -----------------------------------------------------------------------------
 OXMLCell::~OXMLCell()
 {
-    DBG_DTOR( rpt_OXMLCell,NULL);
 }
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLCell::CreateChildContext(

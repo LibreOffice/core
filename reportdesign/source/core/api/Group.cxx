@@ -36,7 +36,6 @@ namespace reportdesign
 // =============================================================================
     using namespace com::sun::star;
     using namespace comphelper;
-DBG_NAME( rpt_OGroup )
 // -----------------------------------------------------------------------------
 OGroup::OGroup(const uno::Reference< report::XGroups >& _xParent
                ,const uno::Reference< uno::XComponentContext >& _xContext)
@@ -45,7 +44,6 @@ OGroup::OGroup(const uno::Reference< report::XGroups >& _xParent
 ,m_xContext(_xContext)
 ,m_xParent(_xParent)
 {
-    DBG_CTOR( rpt_OGroup,NULL);
     osl_atomic_increment(&m_refCount);
     {
         m_xFunctions = new OFunctions(this,m_xContext);
@@ -57,7 +55,6 @@ OGroup::OGroup(const uno::Reference< report::XGroups >& _xParent
 //
 OGroup::~OGroup()
 {
-    DBG_DTOR( rpt_OGroup,NULL);
 }
 //--------------------------------------------------------------------------
 void OGroup::copyGroup(const uno::Reference< report::XGroup >& _xSource)

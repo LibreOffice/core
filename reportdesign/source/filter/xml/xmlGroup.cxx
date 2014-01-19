@@ -46,7 +46,6 @@ namespace rptxml
         SvXMLUnitConverter::convertEnum( nRet, _sValue, aXML_EnumMap );
         return nRet;
     }
-DBG_NAME( rpt_OXMLGroup )
 
 OXMLGroup::OXMLGroup( ORptFilter& _rImport
                 ,sal_uInt16 nPrfx
@@ -55,7 +54,6 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                 ) :
     SvXMLImportContext( _rImport, nPrfx, _sLocalName )
 {
-    DBG_CTOR( rpt_OXMLGroup,NULL);
 
     m_xGroups = _rImport.getReportDefinition()->getGroups();
     OSL_ENSURE(m_xGroups.is(),"Groups is NULL!");
@@ -192,7 +190,6 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
 OXMLGroup::~OXMLGroup()
 {
 
-    DBG_DTOR( rpt_OXMLGroup,NULL);
 }
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLGroup::CreateChildContext(

@@ -51,7 +51,6 @@ uno::Sequence< OUString > lcl_getShapeOptionals()
     return uno::Sequence< OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
 }
 
-DBG_NAME( rpt_OShape )
 // -----------------------------------------------------------------------------
 OShape::OShape(uno::Reference< uno::XComponentContext > const & _xContext)
 :ShapeBase(m_aMutex)
@@ -60,7 +59,6 @@ OShape::OShape(uno::Reference< uno::XComponentContext > const & _xContext)
 ,m_nZOrder(0)
 ,m_bOpaque(sal_False)
 {
-    DBG_CTOR( rpt_OShape,NULL);
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_SHAPE,m_aProps.aComponent.m_xContext->getServiceManager());
 }
 // -----------------------------------------------------------------------------
@@ -75,7 +73,6 @@ OShape::OShape(uno::Reference< uno::XComponentContext > const & _xContext
 ,m_bOpaque(sal_False)
 ,m_sServiceName(_sServiceName)
 {
-    DBG_CTOR( rpt_OShape,NULL);
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_SHAPE,m_aProps.aComponent.m_xContext->getServiceManager());
     m_aProps.aComponent.m_xFactory = _xFactory;
     osl_atomic_increment( &m_refCount );
@@ -93,7 +90,6 @@ OShape::OShape(uno::Reference< uno::XComponentContext > const & _xContext
 // -----------------------------------------------------------------------------
 OShape::~OShape()
 {
-    DBG_DTOR( rpt_OShape,NULL);
 }
 // -----------------------------------------------------------------------------
 //IMPLEMENT_FORWARD_XINTERFACE2(OShape,ShapeBase,ShapePropertySet)

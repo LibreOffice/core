@@ -77,21 +77,18 @@ public:
     // -----------------------------------------------------------------------------
     // -----------------------------------------------------------------------------
 
-    DBG_NAME(rpt_OXReportControllerObserver)
 
     OXReportControllerObserver::OXReportControllerObserver(const OReportController& _rController)
             :m_pImpl(new OXReportControllerObserverImpl(_rController) )
             ,m_aFormattedFieldBeautifier(_rController)
             ,m_aFixedTextColor(_rController)
     {
-        DBG_CTOR( rpt_OXReportControllerObserver,NULL);
 
         Application::AddEventListener(LINK( this, OXReportControllerObserver, SettingsChanged ) );
     }
 
     OXReportControllerObserver::~OXReportControllerObserver()
     {
-        DBG_CTOR( rpt_OXReportControllerObserver,NULL);
         Application::RemoveEventListener(LINK( this, OXReportControllerObserver, SettingsChanged ) );
     }
 

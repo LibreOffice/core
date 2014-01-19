@@ -48,7 +48,6 @@ uno::Sequence< OUString > lcl_getFormattedFieldOptionals()
     OUString pProps[] = { OUString(PROPERTY_MASTERFIELDS),OUString(PROPERTY_DETAILFIELDS) };
     return uno::Sequence< OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
 }
-DBG_NAME( rpt_OFormattedField )
 // -----------------------------------------------------------------------------
 OFormattedField::OFormattedField(uno::Reference< uno::XComponentContext > const & _xContext)
 :FormattedFieldBase(m_aMutex)
@@ -56,7 +55,6 @@ OFormattedField::OFormattedField(uno::Reference< uno::XComponentContext > const 
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_nFormatKey(0)
 {
-    DBG_CTOR( rpt_OFormattedField,NULL);
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FORMATTEDFIELD,m_aProps.aComponent.m_xContext->getServiceManager());
 }
 // -----------------------------------------------------------------------------
@@ -68,7 +66,6 @@ OFormattedField::OFormattedField(uno::Reference< uno::XComponentContext > const 
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_nFormatKey(0)
 {
-    DBG_CTOR( rpt_OFormattedField,NULL);
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FORMATTEDFIELD,m_aProps.aComponent.m_xContext->getServiceManager());
     m_aProps.aComponent.m_xFactory = _xFactory;
     osl_atomic_increment( &m_refCount );
@@ -80,7 +77,6 @@ OFormattedField::OFormattedField(uno::Reference< uno::XComponentContext > const 
 // -----------------------------------------------------------------------------
 OFormattedField::~OFormattedField()
 {
-    DBG_DTOR( rpt_OFormattedField,NULL);
 }
 // -----------------------------------------------------------------------------
 IMPLEMENT_FORWARD_REFCOUNT( OFormattedField, FormattedFieldBase )

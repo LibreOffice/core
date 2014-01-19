@@ -50,7 +50,6 @@ namespace rptxml
     }
 
 
-DBG_NAME( rpt_OXMLSection )
 
 OXMLSection::OXMLSection( ORptFilter& rImport,
                 sal_uInt16 nPrfx, const OUString& _sLocalName,
@@ -61,7 +60,6 @@ OXMLSection::OXMLSection( ORptFilter& rImport,
 ,m_xSection(_xSection)
 ,m_bPageHeader(_bPageHeader)
 {
-    DBG_CTOR( rpt_OXMLSection,NULL);
 
     OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
     const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
@@ -104,7 +102,6 @@ OXMLSection::OXMLSection( ORptFilter& rImport,
 // -----------------------------------------------------------------------------
 OXMLSection::~OXMLSection()
 {
-    DBG_DTOR( rpt_OXMLSection,NULL);
 }
 // -----------------------------------------------------------------------------
 

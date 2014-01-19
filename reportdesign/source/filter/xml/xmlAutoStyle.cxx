@@ -68,20 +68,15 @@ void OXMLAutoStylePoolP::exportStyleAttributes(
         }
     }
 }
-DBG_NAME( rpt_OXMLAutoStylePoolP )
 // -----------------------------------------------------------------------------
 OXMLAutoStylePoolP::OXMLAutoStylePoolP(ORptExport& rTempORptExport):
     SvXMLAutoStylePoolP(rTempORptExport),
     rORptExport(rTempORptExport)
 {
-    DBG_CTOR( rpt_OXMLAutoStylePoolP,NULL);
-
 }
 // -----------------------------------------------------------------------------
 OXMLAutoStylePoolP::~OXMLAutoStylePoolP()
 {
-
-    DBG_DTOR( rpt_OXMLAutoStylePoolP,NULL);
 }
 // -----------------------------------------------------------------------------
 

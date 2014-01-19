@@ -49,18 +49,15 @@ namespace rptui
 {
     using namespace ::com::sun::star;
 
-    DBG_NAME(rpt_FixedTextColor)
 
     FixedTextColor::FixedTextColor(const OReportController& _aController)
             :m_rReportController(_aController)
     {
-        DBG_CTOR(rpt_FixedTextColor, NULL);
     }
 
     //--------------------------------------------------------------------
     FixedTextColor::~FixedTextColor()
     {
-        DBG_DTOR(rpt_FixedTextColor,NULL);
     }
     // -----------------------------------------------------------------------------
 

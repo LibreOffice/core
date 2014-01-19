@@ -275,7 +275,6 @@ Reference< XInterface > OReportController::create(Reference< XComponentContext >
 
 #define PROPERTY_ID_ZOOMVALUE   1
 
-DBG_NAME( rpt_OReportController )
 // -----------------------------------------------------------------------------
 OReportController::OReportController(Reference< XComponentContext > const & xContext)
     :OReportController_BASE(xContext)
@@ -303,14 +302,12 @@ OReportController::OReportController(Reference< XComponentContext > const & xCon
     m_pReportControllerObserver->acquire();
 
     m_sMode = "normal";
-    DBG_CTOR( rpt_OReportController,NULL);
     registerProperty(OUString("ZoomValue"),PROPERTY_ID_ZOOMVALUE,beans::PropertyAttribute::BOUND| beans::PropertyAttribute::TRANSIENT,&m_nZoomValue,::getCppuType(static_cast< sal_Int16*>(0)));
 
 }
 // -----------------------------------------------------------------------------
 OReportController::~OReportController()
 {
-    DBG_DTOR( rpt_OReportController,NULL);
 }
 // -----------------------------------------------------------------------------
 IMPLEMENT_FORWARD_XTYPEPROVIDER2(OReportController,OReportController_BASE,OReportController_Listener)

@@ -74,7 +74,6 @@ sal_Int32 lcl_getOverlappedControlColor(/*const uno::Reference <lang::XMultiServ
     return nColor;
 }
 //------------------------------------------------------------------------------
-DBG_NAME( rpt_OReportSection )
 OReportSection::OReportSection(OSectionWindow* _pParent,const uno::Reference< report::XSection >& _xSection)
 : Window(_pParent,WB_DIALOGCONTROL)
 , ::comphelper::OPropertyChangeListener(m_aMutex)
@@ -91,7 +90,6 @@ OReportSection::OReportSection(OSectionWindow* _pParent,const uno::Reference< re
 ,m_bDialogModelChanged(sal_False)
 ,m_bInDrag(sal_False)
 {
-    DBG_CTOR( rpt_OReportSection,NULL);
     //EnableChildTransparentMode();
     SetHelpId(HID_REPORTSECTION);
     SetMapMode( MapMode( MAP_100TH_MM ) );
@@ -114,7 +112,6 @@ OReportSection::OReportSection(OSectionWindow* _pParent,const uno::Reference< re
 //------------------------------------------------------------------------------
 OReportSection::~OReportSection()
 {
-    DBG_DTOR( rpt_OReportSection,NULL);
     m_pPage = NULL;
     if ( m_pMulti.is() )
         m_pMulti->dispose();

@@ -37,7 +37,6 @@ namespace rptxml
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
-DBG_NAME( rpt_OXMLImage )
 
 
 // -----------------------------------------------------------------------------
@@ -48,7 +47,6 @@ OXMLImage::OXMLImage( ORptFilter& rImport,
                 ,OXMLTable* _pContainer) :
     OXMLReportElementBase( rImport, nPrfx, rLName,_xComponent.get(),_pContainer)
 {
-    DBG_CTOR( rpt_OXMLImage,NULL);
 
     OSL_ENSURE(m_xComponent.is(),"Component is NULL!");
     const SvXMLNamespaceMap& rMap = m_rImport.GetNamespaceMap();
@@ -111,7 +109,6 @@ OXMLImage::OXMLImage( ORptFilter& rImport,
 OXMLImage::~OXMLImage()
 {
 
-    DBG_DTOR( rpt_OXMLImage,NULL);
 }
 // -----------------------------------------------------------------------------
 

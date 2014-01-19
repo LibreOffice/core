@@ -33,7 +33,6 @@ namespace rptxml
     using namespace report;
     using namespace uno;
     using namespace xml::sax;
-DBG_NAME( rpt_OXMLCondPrtExpr )
 
 OXMLCondPrtExpr::OXMLCondPrtExpr( ORptFilter& _rImport,
                 sal_uInt16 nPrfx
@@ -43,8 +42,6 @@ OXMLCondPrtExpr::OXMLCondPrtExpr( ORptFilter& _rImport,
     SvXMLImportContext( _rImport, nPrfx, rLName )
 ,m_xComponent(_xComponent)
 {
-    DBG_CTOR( rpt_OXMLCondPrtExpr,NULL);
-
     OSL_ENSURE(m_xComponent.is(),"Component is NULL!");
     const SvXMLNamespaceMap& rMap = _rImport.GetNamespaceMap();
     const SvXMLTokenMap& rTokenMap = _rImport.GetFunctionElemTokenMap();
@@ -78,8 +75,6 @@ OXMLCondPrtExpr::OXMLCondPrtExpr( ORptFilter& _rImport,
 
 OXMLCondPrtExpr::~OXMLCondPrtExpr()
 {
-
-    DBG_DTOR( rpt_OXMLCondPrtExpr,NULL);
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------

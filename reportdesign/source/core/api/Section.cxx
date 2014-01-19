@@ -43,7 +43,6 @@ namespace reportdesign
 // =============================================================================
     using namespace com::sun::star;
     using namespace comphelper;
-DBG_NAME( rpt_OSection )
 
 // -----------------------------------------------------------------------------
 uno::Sequence< OUString> lcl_getGroupAbsent()
@@ -127,14 +126,12 @@ OSection::OSection(const uno::Reference< report::XReportDefinition >& xParentDef
 ,m_bInRemoveNotify(false)
 ,m_bInInsertNotify(false)
 {
-    DBG_CTOR( rpt_OSection,NULL);
 }
 //--------------------------------------------------------------------------
 // TODO: VirtualFunctionFinder: This is virtual function!
 //
 OSection::~OSection()
 {
-    DBG_DTOR( rpt_OSection,NULL);
 }
 //--------------------------------------------------------------------------
 //IMPLEMENT_FORWARD_XINTERFACE2(OSection,SectionBase,SectionPropertySet)

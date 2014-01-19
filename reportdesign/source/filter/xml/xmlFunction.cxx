@@ -33,7 +33,6 @@ namespace rptxml
     using namespace ::com::sun::star::report;
     using namespace ::com::sun::star::xml::sax;
 
-DBG_NAME( rpt_OXMLFunction )
 
 OXMLFunction::OXMLFunction( ORptFilter& _rImport
                 ,sal_uInt16 nPrfx
@@ -46,7 +45,6 @@ OXMLFunction::OXMLFunction( ORptFilter& _rImport
     ,m_xFunctions(_xFunctions->getFunctions())
     ,m_bAddToReport(_bAddToReport)
 {
-    DBG_CTOR( rpt_OXMLFunction,NULL);
 
     OSL_ENSURE(m_xFunctions.is(),"Functions is NULL!");
     m_xFunction = m_xFunctions->createFunction();
@@ -99,7 +97,6 @@ OXMLFunction::OXMLFunction( ORptFilter& _rImport
 
 OXMLFunction::~OXMLFunction()
 {
-    DBG_DTOR( rpt_OXMLFunction,NULL);
 }
 // -----------------------------------------------------------------------------
 ORptFilter& OXMLFunction::GetOwnImport()

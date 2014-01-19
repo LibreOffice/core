@@ -60,7 +60,6 @@ namespace reportdesign
     using namespace com::sun::star;
     using namespace comphelper;
 
-DBG_NAME( rpt_OReportEngineJFree )
 // -----------------------------------------------------------------------------
 OReportEngineJFree::OReportEngineJFree( const uno::Reference< uno::XComponentContext >& context)
 :ReportEngineBase(m_aMutex)
@@ -68,14 +67,12 @@ OReportEngineJFree::OReportEngineJFree( const uno::Reference< uno::XComponentCon
 ,m_xContext(context)
 ,m_nMaxRows(0)
 {
-    DBG_CTOR( rpt_OReportEngineJFree,NULL);
 }
 // -----------------------------------------------------------------------------
 // TODO: VirtualFunctionFinder: This is virtual function!
 //
 OReportEngineJFree::~OReportEngineJFree()
 {
-    DBG_DTOR( rpt_OReportEngineJFree,NULL);
 }
 //--------------------------------------------------------------------------
 IMPLEMENT_FORWARD_XINTERFACE2(OReportEngineJFree,ReportEngineBase,ReportEnginePropertySet)

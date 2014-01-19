@@ -34,7 +34,6 @@ namespace rptxml
 {
     using namespace ::com::sun::star;
     using namespace xml::sax;
-DBG_NAME( rpt_OXMLFormattedField )
 
 OXMLFormattedField::OXMLFormattedField( ORptFilter& rImport,
                 sal_uInt16 nPrfx, const OUString& rLName
@@ -44,7 +43,6 @@ OXMLFormattedField::OXMLFormattedField( ORptFilter& rImport,
                 ,bool _bPageCount) :
     OXMLReportElementBase( rImport, nPrfx, rLName,_xComponent.get(),_pContainer)
 {
-    DBG_CTOR( rpt_OXMLFormattedField,NULL);
     OSL_ENSURE(m_xComponent.is(),"Component is NULL!");
     const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
     const SvXMLTokenMap& rTokenMap = rImport.GetControlElemTokenMap();
@@ -88,7 +86,6 @@ OXMLFormattedField::OXMLFormattedField( ORptFilter& rImport,
 // -----------------------------------------------------------------------------
 OXMLFormattedField::~OXMLFormattedField()
 {
-    DBG_DTOR( rpt_OXMLFormattedField,NULL);
 }
 // -----------------------------------------------------------------------------
 //----------------------------------------------------------------------------

@@ -106,7 +106,6 @@ void OXMLCharContent::InsertString(const OUString& _sString)
 }
 // -----------------------------------------------------------------------------
 
-DBG_NAME( rpt_OXMLFixedContent )
 
 OXMLFixedContent::OXMLFixedContent( ORptFilter& rImport,
                 sal_uInt16 nPrfx, const OUString& rLName
@@ -118,14 +117,12 @@ OXMLFixedContent::OXMLFixedContent( ORptFilter& rImport,
 ,m_pInP(_pInP)
 ,m_bFormattedField(false)
 {
-    DBG_CTOR( rpt_OXMLFixedContent,NULL);
 }
 // -----------------------------------------------------------------------------
 
 OXMLFixedContent::~OXMLFixedContent()
 {
 
-    DBG_DTOR( rpt_OXMLFixedContent,NULL);
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------

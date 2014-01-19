@@ -43,7 +43,6 @@ Image*  OStartMarker::s_pDefCollapsed       = NULL;
 Image*  OStartMarker::s_pDefExpanded        = NULL;
 oslInterlockedCount OStartMarker::s_nImageRefCount  = 0;
 
-DBG_NAME( rpt_OStartMarker )
 // -----------------------------------------------------------------------------
 OStartMarker::OStartMarker(OSectionWindow* _pParent,const OUString& _sColorEntry)
 : OColorListener(_pParent,_sColorEntry)
@@ -53,7 +52,6 @@ OStartMarker::OStartMarker(OSectionWindow* _pParent,const OUString& _sColorEntry
 ,m_pParent(_pParent)
 ,m_bShowRuler(sal_True)
 {
-    DBG_CTOR( rpt_OStartMarker,NULL);
     SetUniqueId(HID_RPT_STARTMARKER);
 
     osl_atomic_increment(&s_nImageRefCount);
@@ -80,7 +78,6 @@ OStartMarker::OStartMarker(OSectionWindow* _pParent,const OUString& _sColorEntry
 // -----------------------------------------------------------------------------
 OStartMarker::~OStartMarker()
 {
-    DBG_DTOR( rpt_OStartMarker,NULL);
     if ( osl_atomic_decrement(&s_nImageRefCount) == 0 )
     {
         DELETEZ(s_pDefCollapsed);

@@ -166,7 +166,6 @@ public:
 //========================================================================
 // class OFieldExpressionControl
 //========================================================================
-DBG_NAME( rpt_OFieldExpressionControl )
 //------------------------------------------------------------------------
 OFieldExpressionControl::OFieldExpressionControl( OGroupsSortingDialog* _pParent,const ResId& _rResId )
     :EditBrowseBox( _pParent, _rResId,EBBF_NONE, WB_TABSTOP | BROWSER_COLUMNSELECTION | BROWSER_MULTISELECTION | BROWSER_AUTOSIZE_LASTCOL |
@@ -180,7 +179,6 @@ OFieldExpressionControl::OFieldExpressionControl( OGroupsSortingDialog* _pParent
     ,m_pParent(_pParent)
     ,m_bIgnoreEvent(false)
 {
-    DBG_CTOR( rpt_OFieldExpressionControl,NULL);
     SetBorderStyle(WINDOW_BORDER_MONO);
 }
 
@@ -198,7 +196,6 @@ OFieldExpressionControl::~OFieldExpressionControl()
         Application::RemoveUserEvent( m_nDeleteEvent );
 
     delete m_pComboCell;
-    DBG_DTOR( rpt_OFieldExpressionControl,NULL);
 }
 //------------------------------------------------------------------------------
 uno::Sequence<uno::Any> OFieldExpressionControl::fillSelectedGroups()
@@ -236,7 +233,6 @@ uno::Sequence<uno::Any> OFieldExpressionControl::fillSelectedGroups()
 //------------------------------------------------------------------------------
 void OFieldExpressionControl::StartDrag( sal_Int8 /*_nAction*/ , const Point& /*_rPosPixel*/ )
 {
-    DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
     if ( m_pParent && !m_pParent->isReadOnly( ) )
     {
         uno::Sequence<uno::Any> aClipboardList = fillSelectedGroups();
@@ -252,7 +248,6 @@ void OFieldExpressionControl::StartDrag( sal_Int8 /*_nAction*/ , const Point& /*
 //------------------------------------------------------------------------------
 sal_Int8 OFieldExpressionControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
 {
-    DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
     sal_Int8 nAction = DND_ACTION_NONE;
     if ( IsEditing() )
     {
@@ -270,7 +265,6 @@ sal_Int8 OFieldExpressionControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt
 //------------------------------------------------------------------------------
 sal_Int8 OFieldExpressionControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
 {
-    DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
     sal_Int8 nAction = DND_ACTION_NONE;
     if ( IsDropFormatSupported( OGroupExchange::getReportGroupId() ) )
     {
@@ -390,7 +384,6 @@ void OFieldExpressionControl::lateInit()
 // -----------------------------------------------------------------------------
 IMPL_LINK( OFieldExpressionControl, CBChangeHdl, ComboBox*, /*pComboBox*/ )
 {
-    DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
 
     SaveModified();
     return 0L;
@@ -399,7 +392,6 @@ IMPL_LINK( OFieldExpressionControl, CBChangeHdl, ComboBox*, /*pComboBox*/ )
 //------------------------------------------------------------------------------
 sal_Bool OFieldExpressionControl::IsTabAllowed(sal_Bool /*bForward*/) const
 {
-    DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
     return sal_False;
 }
 
@@ -411,7 +403,6 @@ sal_Bool OFieldExpressionControl::SaveModified()
 //------------------------------------------------------------------------------
 sal_Bool OFieldExpressionControl::SaveModified(bool _bAppendRow)
 {
-    DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
     sal_Int32 nRow = GetCurRow();
     if ( nRow != BROWSER_ENDOFSELECTION )
     {
@@ -492,7 +483,6 @@ sal_Bool OFieldExpressionControl::SaveModified(bool _bAppendRow)
 //------------------------------------------------------------------------------
 OUString OFieldExpressionControl::GetCellText( long nRow, sal_uInt16 /*nColId*/ ) const
 {
-    DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
     OUString sText;
     if ( nRow != BROWSER_ENDOFSELECTION && m_aGroupPositions[nRow] != NO_GROUP )
     {
@@ -523,14 +513,12 @@ OUString OFieldExpressionControl::GetCellText( long nRow, sal_uInt16 /*nColId*/ 
 //------------------------------------------------------------------------------
 void OFieldExpressionControl::InitController( CellControllerRef& /*rController*/, long nRow, sal_uInt16 nColumnId )
 {
-    DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
 
     m_pComboCell->SetText( GetCellText( nRow, nColumnId ) );
 }
 //------------------------------------------------------------------------------
 sal_Bool OFieldExpressionControl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
 {
-    DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
 
     if (!EditBrowseBox::CursorMoving(nNewRow, nNewCol))
         return sal_False;
@@ -546,7 +534,6 @@ sal_Bool OFieldExpressionControl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
 //------------------------------------------------------------------------------
 CellController* OFieldExpressionControl::GetController( long /*nRow*/, sal_uInt16 /*nColumnId*/ )
 {
-    DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
     ComboBoxCellController* pCellController = new ComboBoxCellController( m_pComboCell );
     pCellController->GetComboBox().SetReadOnly(!m_pParent->m_pController->isEditable());
     return pCellController;
@@ -555,7 +542,6 @@ CellController* OFieldExpressionControl::GetController( long /*nRow*/, sal_uInt1
 //------------------------------------------------------------------------------
 sal_Bool OFieldExpressionControl::SeekRow( long _nRow )
 {
-    DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
     // die Basisklasse braucht den Aufruf, da sie sich dort merkt, welche Zeile gepainted wird
     EditBrowseBox::SeekRow(_nRow);
     m_nCurrentPos = _nRow;
@@ -565,7 +551,6 @@ sal_Bool OFieldExpressionControl::SeekRow( long _nRow )
 //------------------------------------------------------------------------------
 void OFieldExpressionControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const
 {
-    DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
     OUString aText  =const_cast< OFieldExpressionControl*>(this)->GetCellText( m_nCurrentPos, nColumnId );
 
     Point aPos( rRect.TopLeft() );
@@ -583,7 +568,6 @@ void OFieldExpressionControl::PaintCell( OutputDevice& rDev, const Rectangle& rR
 //------------------------------------------------------------------------------
 EditBrowseBox::RowStatus OFieldExpressionControl::GetRowStatus(long nRow) const
 {
-    DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
     if (nRow >= 0 && nRow == m_nDataPos)
         return EditBrowseBox::CURRENT;
     if ( nRow != BROWSER_ENDOFSELECTION && nRow < static_cast<long>(m_aGroupPositions.size()) && m_aGroupPositions[nRow] != NO_GROUP )
@@ -753,7 +737,6 @@ void OFieldExpressionControl::Command(const CommandEvent& rEvt)
 //------------------------------------------------------------------------------
 void OFieldExpressionControl::DeleteRows()
 {
-    DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
 
     sal_Bool bIsEditing = IsEditing();
     if (bIsEditing)
@@ -820,7 +803,6 @@ void OFieldExpressionControl::cut()
 //------------------------------------------------------------------------------
 void OFieldExpressionControl::copy()
 {
-    DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
     //////////////////////////////////////////////////////////////////////
     // set to the right row and save it
     m_pParent->SaveData( m_nDataPos );
@@ -869,7 +851,6 @@ IMPL_LINK( OFieldExpressionControl, DelayedDelete, void*,  )
 //------------------------------------------------------------------------------
 void OFieldExpressionControl::InsertRows( long nRow )
 {
-    DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
 
     sal_Int32 nSize = 0;
     //////////////////////////////////////////////////////////////////////
@@ -927,7 +908,6 @@ void OFieldExpressionControl::InsertRows( long nRow )
 }
 //------------------------------------------------------------------------------
 
-DBG_NAME( rpt_OGroupsSortingDialog )
 //========================================================================
 // class OGroupsSortingDialog
 //========================================================================
@@ -961,7 +941,6 @@ OGroupsSortingDialog::OGroupsSortingDialog( Window* _pParent
     ,m_xGroups(m_pController->getReportDefinition()->getGroups())
     ,m_bReadOnly(_bReadOnly)
 {
-    DBG_CTOR( rpt_OGroupsSortingDialog,NULL);
 
     Control* pControlsLst[] = { &m_aHeaderLst, &m_aFooterLst, &m_aGroupOnLst, &m_aKeepTogetherLst, &m_aOrderLst, &m_aGroupIntervalEd};
     for (size_t i = 0; i < sizeof (pControlsLst) / sizeof (pControlsLst[0]); ++i)
@@ -1025,7 +1004,6 @@ OGroupsSortingDialog::OGroupsSortingDialog( Window* _pParent
 //------------------------------------------------------------------------
 OGroupsSortingDialog::~OGroupsSortingDialog()
 {
-    DBG_DTOR( rpt_OGroupsSortingDialog,NULL);
     delete m_pFieldExpression;
     m_xColumns.clear();
     m_pReportListener->dispose();
@@ -1049,7 +1027,6 @@ void OGroupsSortingDialog::UpdateData( )
 //------------------------------------------------------------------------------
 void OGroupsSortingDialog::DisplayData( sal_Int32 _nRow )
 {
-    DBG_CHKTHIS( rpt_OGroupsSortingDialog,NULL);
     sal_Int32 nGroupPos = m_pFieldExpression->getGroupPosition(_nRow);
     sal_Bool bEmpty = nGroupPos == NO_GROUP;
     m_aHeaderLst.Enable(!bEmpty);
@@ -1086,7 +1063,6 @@ void OGroupsSortingDialog::DisplayData( sal_Int32 _nRow )
 //------------------------------------------------------------------------------
 void OGroupsSortingDialog::SaveData( sal_Int32 _nRow)
 {
-    DBG_CHKTHIS( rpt_OGroupsSortingDialog,NULL);
     sal_Int32 nGroupPos = m_pFieldExpression->getGroupPosition(_nRow);
     if ( nGroupPos == NO_GROUP )
         return;
@@ -1174,7 +1150,6 @@ IMPL_LINK(OGroupsSortingDialog, OnControlFocusLost, Control*, pControl )
 // -----------------------------------------------------------------------------
 IMPL_LINK( OGroupsSortingDialog, OnFormatAction, ToolBox*, /*NOTINTERESTEDIN*/ )
 {
-    DBG_CHKTHIS( rpt_OGroupsSortingDialog,NULL);
 
     sal_uInt16 nCommand = m_aToolBox.GetCurItemId();
 
@@ -1218,7 +1193,6 @@ IMPL_LINK( OGroupsSortingDialog, OnFormatAction, ToolBox*, /*NOTINTERESTEDIN*/ )
 // -----------------------------------------------------------------------------
 IMPL_LINK( OGroupsSortingDialog, LBChangeHdl, ListBox*, pListBox )
 {
-    DBG_CHKTHIS( rpt_OGroupsSortingDialog,NULL);
     if ( pListBox->GetSavedValue() != pListBox->GetSelectEntryPos() )
     {
         sal_Int32 nRow = m_pFieldExpression->GetCurRow();

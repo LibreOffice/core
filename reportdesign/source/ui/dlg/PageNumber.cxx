@@ -36,7 +36,6 @@ namespace rptui
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
-DBG_NAME( rpt_OPageNumberDialog )
 //========================================================================
 // class OPageNumberDialog
 //========================================================================
@@ -54,7 +53,6 @@ OPageNumberDialog::OPageNumberDialog( Window* _pParent
     get(m_pAlignmentLst,"alignment");
     get(m_pShowNumberOnFirstPage,"shownumberonfirstpage");
 
-    DBG_CTOR( rpt_OPageNumberDialog,NULL);
 
     m_pShowNumberOnFirstPage->Hide();
 
@@ -63,7 +61,6 @@ OPageNumberDialog::OPageNumberDialog( Window* _pParent
 //------------------------------------------------------------------------
 OPageNumberDialog::~OPageNumberDialog()
 {
-    DBG_DTOR( rpt_OPageNumberDialog,NULL);
 }
 // -----------------------------------------------------------------------------
 short OPageNumberDialog::Execute()

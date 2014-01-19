@@ -44,7 +44,6 @@ namespace rptui
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
-DBG_NAME( rpt_ODateTimeDialog )
 //========================================================================
 // class ODateTimeDialog
 //========================================================================
@@ -66,7 +65,6 @@ ODateTimeDialog::ODateTimeDialog( Window* _pParent
     get(m_pTimeListBox,"timelistbox");
     get(m_pPB_OK,"ok");
 
-    DBG_CTOR( rpt_ODateTimeDialog,NULL);
 
     try
     {
@@ -115,12 +113,10 @@ ODateTimeDialog::ODateTimeDialog( Window* _pParent
 //------------------------------------------------------------------------
 ODateTimeDialog::~ODateTimeDialog()
 {
-    DBG_DTOR( rpt_ODateTimeDialog,NULL);
 }
 // -----------------------------------------------------------------------------
 short ODateTimeDialog::Execute()
 {
-    DBG_CHKTHIS( rpt_ODateTimeDialog,NULL);
     short nRet = ModalDialog::Execute();
     if ( nRet == RET_OK && (m_pDate->IsChecked() || m_pTime->IsChecked()) )
     {
@@ -199,7 +195,6 @@ OUString ODateTimeDialog::getFormatStringByKey(::sal_Int32 _nNumberFormatKey,con
 IMPL_LINK( ODateTimeDialog, CBClickHdl, CheckBox*, _pBox )
 {
    (void)_pBox;
-    DBG_CHKTHIS( rpt_ODateTimeDialog,NULL);
 
      if ( _pBox == m_pDate || _pBox == m_pTime)
      {
@@ -219,7 +214,6 @@ IMPL_LINK( ODateTimeDialog, CBClickHdl, CheckBox*, _pBox )
 // -----------------------------------------------------------------------------
 sal_Int32 ODateTimeDialog::getFormatKey(sal_Bool _bDate) const
 {
-    DBG_CHKTHIS( rpt_ODateTimeDialog,NULL);
     sal_Int32 nFormatKey;
     if ( _bDate )
     {

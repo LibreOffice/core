@@ -53,7 +53,6 @@ namespace rptxml
         SvXMLUnitConverter::convertEnum( nRet,_sValue,aXML_EnumMap );
         return nRet;
     }
-DBG_NAME( rpt_OXMLTable )
 
 OXMLTable::OXMLTable( ORptFilter& rImport
                 ,sal_uInt16 nPrfx
@@ -68,7 +67,6 @@ OXMLTable::OXMLTable( ORptFilter& rImport
 ,m_nRowIndex(0)
 ,m_nColumnIndex(0)
 {
-    DBG_CTOR( rpt_OXMLTable,NULL);
     OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
     const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
     const SvXMLTokenMap& rTokenMap = rImport.GetSectionElemTokenMap();
@@ -117,7 +115,6 @@ OXMLTable::OXMLTable( ORptFilter& rImport
 // -----------------------------------------------------------------------------
 OXMLTable::~OXMLTable()
 {
-    DBG_DTOR( rpt_OXMLTable,NULL);
 }
 // -----------------------------------------------------------------------------
 

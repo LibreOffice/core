@@ -38,7 +38,6 @@ namespace rptxml
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::xml::sax;
 
-DBG_NAME( rpt_OXMLRow )
 
 OXMLRow::OXMLRow( ORptFilter& rImport
                 ,sal_uInt16 nPrfx
@@ -48,7 +47,6 @@ OXMLRow::OXMLRow( ORptFilter& rImport
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
     ,m_pContainer(_pContainer)
 {
-    DBG_CTOR( rpt_OXMLRow,NULL);
 
     OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
 
@@ -81,7 +79,6 @@ OXMLRow::OXMLRow( ORptFilter& rImport
 
 OXMLRow::~OXMLRow()
 {
-    DBG_DTOR( rpt_OXMLRow,NULL);
 }
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLRow::CreateChildContext(

@@ -41,16 +41,13 @@ SdrUndoAction* lcl_createUndo(SdrObject& rObject,Action _eAction,sal_uInt16 _nCo
     return pUndo;
 }
 // -----------------------------------------------------------------------------
-DBG_NAME( rpt_OReportUndoFactory )
 // -----------------------------------------------------------------------------
 OReportUndoFactory::OReportUndoFactory() : m_pUndoFactory(new SdrUndoFactory)
 {
-    DBG_CTOR( rpt_OReportUndoFactory,NULL);
 }
 // -----------------------------------------------------------------------------
 OReportUndoFactory::~OReportUndoFactory()
 {
-    DBG_DTOR( rpt_OReportUndoFactory,NULL);
 }
 ///////////////////////////////////////////////////////////////////////
 // shapes

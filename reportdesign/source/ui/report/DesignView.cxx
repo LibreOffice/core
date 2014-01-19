@@ -84,7 +84,6 @@ public:
 //==================================================================
 // class ODesignView
 //==================================================================
-DBG_NAME( rpt_ODesignView )
 //------------------------------------------------------------------------------
 ODesignView::ODesignView(   Window* pParent,
                             const Reference< XComponentContext >& _rxOrb,
@@ -107,7 +106,6 @@ ODesignView::ODesignView(   Window* pParent,
     ,m_bGridSnap(sal_True)
     ,m_bDeleted( sal_False )
 {
-    DBG_CTOR( rpt_ODesignView,NULL);
     SetHelpId(UID_RPT_RPT_APP_VIEW);
     ImplInitSettings();
 
@@ -132,7 +130,6 @@ ODesignView::ODesignView(   Window* pParent,
 //------------------------------------------------------------------------------
 ODesignView::~ODesignView()
 {
-    DBG_DTOR( rpt_ODesignView,NULL);
     m_bDeleted = sal_True;
     Hide();
     m_aScrollWindow.Hide();

@@ -99,13 +99,11 @@ uno::Sequence< beans::PropertyValue > OAddFieldWindowListBox::getSelectedFieldDe
 //==================================================================
 // class OAddFieldWindowListBox
 //==================================================================
-DBG_NAME( rpt_OAddFieldWindowListBox );
 //------------------------------------------------------------------------------
 OAddFieldWindowListBox::OAddFieldWindowListBox( OAddFieldWindow* _pParent )
     :SvTreeListBox( _pParent, WB_TABSTOP|WB_BORDER|WB_SORT )
     ,m_pTabWin( _pParent )
 {
-    DBG_CTOR( rpt_OAddFieldWindowListBox,NULL);
     SetHelpId( HID_RPT_FIELD_SEL );
     SetSelectionMode(MULTIPLE_SELECTION);
     SetDragDropMode( 0xFFFF );
@@ -115,7 +113,6 @@ OAddFieldWindowListBox::OAddFieldWindowListBox( OAddFieldWindow* _pParent )
 //------------------------------------------------------------------------------
 OAddFieldWindowListBox::~OAddFieldWindowListBox()
 {
-    DBG_DTOR( rpt_OAddFieldWindowListBox,NULL);
 }
 
 //------------------------------------------------------------------------------
@@ -146,7 +143,6 @@ void OAddFieldWindowListBox::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_r
 //========================================================================
 // class OAddFieldWindow
 //========================================================================
-DBG_NAME( rpt_OAddFieldWindow );
 //-----------------------------------------------------------------------
 OAddFieldWindow::OAddFieldWindow(Window* pParent
                                  ,const uno::Reference< beans::XPropertySet >& _xRowSet
@@ -165,7 +161,6 @@ OAddFieldWindow::OAddFieldWindow(Window* pParent
             ,m_pChangeListener(NULL)
             ,m_pContainerListener(NULL)
 {
-    DBG_CTOR( rpt_OAddFieldWindow,NULL);
     SetHelpId( HID_RPT_FIELD_SEL_WIN );
     SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor()) );
     SetMinOutputSizePixel(Size(STD_WIN_SIZE_X,STD_WIN_SIZE_Y));
@@ -227,7 +222,6 @@ OAddFieldWindow::~OAddFieldWindow()
         m_pChangeListener->dispose();
     if ( m_pContainerListener.is() )
         m_pContainerListener->dispose();
-    DBG_DTOR( rpt_OAddFieldWindow,NULL);
 }
 
 //-----------------------------------------------------------------------

@@ -42,7 +42,6 @@ namespace rptxml
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::report;
     using namespace ::com::sun::star::xml::sax;
-    DBG_NAME( rpt_OXMLComponent )
 OXMLComponent::OXMLComponent( ORptFilter& _rImport
                 ,sal_uInt16 nPrfx
                 ,const OUString& _sLocalName
@@ -52,7 +51,6 @@ OXMLComponent::OXMLComponent( ORptFilter& _rImport
     SvXMLImportContext( _rImport, nPrfx, _sLocalName )
     ,m_xComponent(_xComponent)
 {
-    DBG_CTOR( rpt_OXMLComponent,NULL);
     OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
     OSL_ENSURE(m_xComponent.is(),"Component is NULL!");
 
@@ -94,7 +92,6 @@ OXMLComponent::OXMLComponent( ORptFilter& _rImport
 
 OXMLComponent::~OXMLComponent()
 {
-    DBG_DTOR( rpt_OXMLComponent,NULL);
 }
 // -----------------------------------------------------------------------------
 //----------------------------------------------------------------------------

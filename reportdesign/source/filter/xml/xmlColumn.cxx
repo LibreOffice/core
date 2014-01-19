@@ -43,7 +43,6 @@ namespace rptxml
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::xml::sax;
 
-DBG_NAME( rpt_OXMLRowColumn )
 
 OXMLRowColumn::OXMLRowColumn( ORptFilter& rImport
                 ,sal_uInt16 nPrfx
@@ -54,7 +53,6 @@ OXMLRowColumn::OXMLRowColumn( ORptFilter& rImport
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
     ,m_pContainer(_pContainer)
 {
-    DBG_CTOR( rpt_OXMLRowColumn,NULL);
 
     const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
     const SvXMLTokenMap& rTokenMap = rImport.GetColumnTokenMap();
@@ -81,7 +79,6 @@ OXMLRowColumn::OXMLRowColumn( ORptFilter& rImport
 
 OXMLRowColumn::~OXMLRowColumn()
 {
-    DBG_DTOR( rpt_OXMLRowColumn,NULL);
 }
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLRowColumn::CreateChildContext(

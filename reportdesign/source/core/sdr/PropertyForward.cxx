@@ -33,7 +33,6 @@ namespace rptui
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
 
-DBG_NAME( rpt_OPropertyMediator )
 OPropertyMediator::OPropertyMediator(const Reference< XPropertySet>& _xSource
                                      ,const Reference< XPropertySet>& _xDest
                                      ,const TPropertyNamePair& _aNameMap
@@ -44,7 +43,6 @@ OPropertyMediator::OPropertyMediator(const Reference< XPropertySet>& _xSource
                                 ,m_xDest(_xDest)
                                 ,m_bInChange(sal_False)
 {
-    DBG_CTOR( rpt_OPropertyMediator,NULL);
     osl_atomic_increment(&m_refCount);
     OSL_ENSURE(m_xDest.is(),"Dest is NULL!");
     OSL_ENSURE(m_xSource.is(),"Source is NULL!");
@@ -91,7 +89,6 @@ OPropertyMediator::OPropertyMediator(const Reference< XPropertySet>& _xSource
 // -----------------------------------------------------------------------------
 OPropertyMediator::~OPropertyMediator()
 {
-    DBG_DTOR( rpt_OPropertyMediator,NULL);
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OPropertyMediator::propertyChange( const PropertyChangeEvent& evt ) throw(RuntimeException)

@@ -112,7 +112,6 @@ uno::Sequence< OUString > lcl_getImageOptionals()
     return uno::Sequence< OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
 }
 
-DBG_NAME( rpt_OImageControl )
 // -----------------------------------------------------------------------------
 OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _xContext)
 :ImageControlBase(m_aMutex)
@@ -121,7 +120,6 @@ OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _x
 ,m_nScaleMode(awt::ImageScaleMode::NONE)
 ,m_bPreserveIRI(sal_True)
 {
-    DBG_CTOR( rpt_OImageControl,NULL);
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_IMAGECONTROL,m_aProps.aComponent.m_xContext->getServiceManager());
 }
 // -----------------------------------------------------------------------------
@@ -134,7 +132,6 @@ OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _x
 ,m_nScaleMode(awt::ImageScaleMode::NONE)
 ,m_bPreserveIRI(sal_True)
 {
-    DBG_CTOR( rpt_OImageControl,NULL);
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_IMAGECONTROL,m_aProps.aComponent.m_xContext->getServiceManager());
     m_aProps.aComponent.m_xFactory = _xFactory;
     osl_atomic_increment( &m_refCount );
@@ -146,7 +143,6 @@ OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _x
 // -----------------------------------------------------------------------------
 OImageControl::~OImageControl()
 {
-    DBG_DTOR( rpt_OImageControl,NULL);
 }
 // -----------------------------------------------------------------------------
 //IMPLEMENT_FORWARD_XINTERFACE2(OImageControl,ImageControlBase,ImageControlPropertySet)

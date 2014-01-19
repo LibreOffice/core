@@ -123,19 +123,16 @@ OXUndoEnvironmentImpl::OXUndoEnvironmentImpl(OReportModel& _rModel) : m_rModel(_
 }
 
 //------------------------------------------------------------------------------
-DBG_NAME( rpt_OXUndoEnvironment );
 //------------------------------------------------------------------------------
 OXUndoEnvironment::OXUndoEnvironment(OReportModel& _rModel)
                    :m_pImpl(new OXUndoEnvironmentImpl(_rModel) )
 {
-    DBG_CTOR( rpt_OXUndoEnvironment,NULL);
     StartListening(m_pImpl->m_rModel);
 }
 
 //------------------------------------------------------------------------------
 OXUndoEnvironment::~OXUndoEnvironment()
 {
-    DBG_DTOR( rpt_OXUndoEnvironment,NULL);
 }
 // -----------------------------------------------------------------------------
 void OXUndoEnvironment::Lock()

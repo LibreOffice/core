@@ -30,7 +30,6 @@ using namespace ::com::sun::star;
 TYPEINIT1( OReportPage, SdrPage );
 
 //----------------------------------------------------------------------------
-DBG_NAME( rpt_OReportPage )
 OReportPage::OReportPage( OReportModel& _rModel
                          ,const uno::Reference< report::XSection >& _xSection
                          ,bool bMasterPage )
@@ -39,7 +38,6 @@ OReportPage::OReportPage( OReportModel& _rModel
     ,m_xSection(_xSection)
      ,m_bSpecialInsertMode(false)
 {
-    DBG_CTOR( rpt_OReportPage,NULL);
 }
 
 //----------------------------------------------------------------------------
@@ -51,28 +49,24 @@ OReportPage::OReportPage( const OReportPage& rPage )
      ,m_bSpecialInsertMode(rPage.m_bSpecialInsertMode)
      ,m_aTemporaryObjectList(rPage.m_aTemporaryObjectList)
 {
-    DBG_CTOR( rpt_OReportPage,NULL);
 }
 
 //----------------------------------------------------------------------------
 
 OReportPage::~OReportPage()
 {
-    DBG_DTOR( rpt_OReportPage,NULL);
 }
 
 //----------------------------------------------------------------------------
 
 SdrPage* OReportPage::Clone() const
 {
-    DBG_CHKTHIS( rpt_OReportPage,NULL);
     return new OReportPage( *this );
 }
 
 //----------------------------------------------------------------------------
 sal_uLong OReportPage::getIndexOf(const uno::Reference< report::XReportComponent >& _xObject)
 {
-    DBG_CHKTHIS( rpt_OReportPage,NULL);
     sal_uLong nCount = GetObjCount();
     sal_uLong i = 0;
     for (; i < nCount; ++i)
@@ -89,7 +83,6 @@ sal_uLong OReportPage::getIndexOf(const uno::Reference< report::XReportComponent
 //----------------------------------------------------------------------------
 void OReportPage::removeSdrObject(const uno::Reference< report::XReportComponent >& _xObject)
 {
-    DBG_CHKTHIS( rpt_OReportPage,NULL);
     sal_uLong nPos = getIndexOf(_xObject);
     if ( nPos < GetObjCount() )
     {
@@ -125,7 +118,6 @@ SdrObject* OReportPage::RemoveObject(sal_uLong nObjNum)
 //----------------------------------------------------------------------------
 void OReportPage::insertObject(const uno::Reference< report::XReportComponent >& _xObject)
 {
-    DBG_CHKTHIS( rpt_OReportPage,NULL);
     OSL_ENSURE(_xObject.is(),"Object is not valid to create a SdrObject!");
     if ( !_xObject.is() )
         return;

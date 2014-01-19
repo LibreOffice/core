@@ -82,7 +82,6 @@ namespace rptui
     //========================================================================
     // class ConditionalFormattingDialog
     //========================================================================
-    DBG_NAME(rpt_ConditionalFormattingDialog)
     ConditionalFormattingDialog::ConditionalFormattingDialog(
             Window* _pParent, const Reference< XReportControlModel >& _rxFormatConditions, ::rptui::OReportController& _rController )
         :ModalDialog( _pParent, ModuleRes(RID_CONDFORMAT) )
@@ -96,7 +95,6 @@ namespace rptui
         ,m_xFormatConditions( _rxFormatConditions )
         ,m_bDeletingCondition( false )
     {
-        DBG_CTOR(rpt_ConditionalFormattingDialog,NULL);
         OSL_ENSURE( m_xFormatConditions.is(), "ConditionalFormattingDialog::ConditionalFormattingDialog: ReportControlModel is NULL -> Prepare for GPF!" );
 
         m_xCopy.set( m_xFormatConditions->createClone(), UNO_QUERY_THROW );
@@ -112,7 +110,6 @@ namespace rptui
     ConditionalFormattingDialog::~ConditionalFormattingDialog()
     {
         m_aConditions.clear();
-        DBG_DTOR(rpt_ConditionalFormattingDialog,NULL);
     }
 
     // -----------------------------------------------------------------------------

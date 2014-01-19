@@ -30,18 +30,15 @@
 namespace rptui
 {
 //=====================================================================
-    DBG_NAME( rpt_OEndMarker )
 OEndMarker::OEndMarker(Window* _pParent ,const OUString& _sColorEntry)
 : OColorListener(_pParent,_sColorEntry)
 {
-    DBG_CTOR( rpt_OEndMarker,NULL);
     SetUniqueId(HID_RPT_ENDMARKER);
     ImplInitSettings();
 }
 // -----------------------------------------------------------------------------
 OEndMarker::~OEndMarker()
 {
-    DBG_DTOR( rpt_OEndMarker,NULL);
 }
 // -----------------------------------------------------------------------------
 void OEndMarker::Paint( const Rectangle& /*rRect*/ )

@@ -41,8 +41,6 @@ namespace rptxml
     using namespace ::com::sun::star::xml::sax;
     using namespace ::com::sun::star::beans;
 
-DBG_NAME( rpt_OXMLFormatCondition )
-
 OXMLFormatCondition::OXMLFormatCondition( ORptFilter& rImport,
                 sal_uInt16 nPrfx, const OUString& rLName,
                 const Reference< XAttributeList > & _xAttrList
@@ -51,7 +49,6 @@ OXMLFormatCondition::OXMLFormatCondition( ORptFilter& rImport,
 ,m_rImport(rImport)
 ,m_xComponent(_xComponent)
 {
-    DBG_CTOR( rpt_OXMLFormatCondition,NULL);
 
     OSL_ENSURE(m_xComponent.is(),"Component is NULL!");
     const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
@@ -92,8 +89,6 @@ OXMLFormatCondition::OXMLFormatCondition( ORptFilter& rImport,
 
 OXMLFormatCondition::~OXMLFormatCondition()
 {
-
-    DBG_DTOR( rpt_OXMLFormatCondition,NULL);
 }
 // -----------------------------------------------------------------------------
 void OXMLFormatCondition::EndElement()
