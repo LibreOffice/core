@@ -80,6 +80,8 @@ SwLoadOptPage::SwLoadOptPage(Window* pParent, const SfxItemSet& rSet)
     get(m_pUseSquaredPageMode, "squaremode");
     get(m_pUseCharUnit, "usecharunit");
     get(m_pWordCountED, "wordcount");
+    get(m_pShowStandardizedPageCount, "standardizedpageshow");
+    get(m_pStandardizedPageSizeNF, "standardpagesize");
 
     SvxStringArray aMetricArr( SW_RES( STR_ARR_METRIC ) );
     for ( sal_uInt16 i = 0; i < aMetricArr.Count(); ++i )
@@ -118,12 +120,21 @@ SwLoadOptPage::SwLoadOptPage(Window* pParent, const SfxItemSet& rSet)
         m_pUseSquaredPageMode->Hide();
         m_pUseCharUnit->Hide();
     }
+
+    Link aLink = LINK(this, SwLoadOptPage, StandardizedPageCountCheckHdl);
+    m_pShowStandardizedPageCount->SetClickHdl(aLink);
 }
 
 SfxTabPage* SwLoadOptPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet )
 {
     return new SwLoadOptPage(pParent, rAttrSet );
+}
+
+IMPL_LINK_NOARG(SwLoadOptPage, StandardizedPageCountCheckHdl)
+{
+    m_pStandardizedPageSizeNF->Enable(m_pShowStandardizedPageCount->IsChecked());
+    return 0;
 }
 
 sal_Bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
@@ -193,6 +204,28 @@ sal_Bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
         boost::shared_ptr< comphelper::ConfigurationChanges > batch(
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Writer::WordCount::AdditionalSeparators::set(m_pWordCountED->GetText(), batch);
+        batch->commit();
+        bRet = sal_True;
+    }
+
+    if (m_pShowStandardizedPageCount->GetState() != m_pShowStandardizedPageCount->GetSavedValue())
+    {
+        boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Writer::WordCount::ShowStandardizedPageCount::set(
+          m_pShowStandardizedPageCount->IsChecked(),
+          batch);
+        batch->commit();
+        bRet = sal_True;
+    }
+
+    if (m_pStandardizedPageSizeNF->GetText() != m_pStandardizedPageSizeNF->GetSavedValue())
+    {
+        boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Writer::WordCount::StandardizedPageSize::set(
+          m_pStandardizedPageSizeNF->GetValue(),
+          batch);
         batch->commit();
         bRet = sal_True;
     }
@@ -290,6 +323,11 @@ void SwLoadOptPage::Reset( const SfxItemSet& rSet)
 
     m_pWordCountED->SetText(officecfg::Office::Writer::WordCount::AdditionalSeparators::get());
     m_pWordCountED->SaveValue();
+    m_pShowStandardizedPageCount->Check(officecfg::Office::Writer::WordCount::ShowStandardizedPageCount::get());
+    m_pShowStandardizedPageCount->SaveValue();
+    m_pStandardizedPageSizeNF->SetValue(officecfg::Office::Writer::WordCount::StandardizedPageSize::get());
+    m_pStandardizedPageSizeNF->SaveValue();
+    m_pStandardizedPageSizeNF->Enable(m_pShowStandardizedPageCount->IsChecked());
 }
 
 IMPL_LINK_NOARG(SwLoadOptPage, MetricHdl)
