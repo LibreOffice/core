@@ -895,7 +895,9 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
 
     // nLinepPage is not correct if there's a line break
     sal_uInt16 nLinespPage = (sal_uInt16) (aPaperSz.Height()/nLineHeight);
-    sal_uInt16 nCharspLine = (sal_uInt16) (aPaperSz.Width() / pPrinter->GetTextWidth( "X" ) );
+    long nXTextWidth = pPrinter->GetTextWidth( "X" );
+
+    sal_uInt16 nCharspLine = (sal_uInt16) (aPaperSz.Width() / nXTextWidth > 1 ? nXTextWidth : 1);
     sal_uLong nParas = GetEditEngine()->GetParagraphCount();
 
     sal_uInt16 nPages = (sal_uInt16) (nParas/nLinespPage+1 );
