@@ -791,9 +791,9 @@ void ModulWindow::EditMacro( const OUString& rMacroName )
                 long nVisHeight = GetOutputSizePixel().Height();
                 if ( (long)pView->GetTextEngine()->GetTextHeight() > nVisHeight )
                 {
-                    long nMaxY = pView->GetTextEngine()->GetTextHeight() - nVisHeight;
+                    long nMaxY = (long)pView->GetTextEngine()->GetTextHeight() - nVisHeight;
                     long nOldStartY = pView->GetStartDocPos().Y();
-                    long nNewStartY = nStart * pView->GetTextEngine()->GetCharHeight();
+                    long nNewStartY = (long)nStart * (long)pView->GetTextEngine()->GetCharHeight();
                     nNewStartY = std::min( nNewStartY, nMaxY );
                     pView->Scroll( 0, -(nNewStartY-nOldStartY) );
                     pView->ShowCursor( false, true );
