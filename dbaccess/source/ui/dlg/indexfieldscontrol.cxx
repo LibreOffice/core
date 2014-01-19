@@ -88,7 +88,6 @@ namespace dbaui
     }
 
     // IndexFieldsControl
-DBG_NAME(IndexFieldsControl)
     IndexFieldsControl::IndexFieldsControl( Window* _pParent, const ResId& _rId ,sal_Int32 _nMaxColumnsInIndex,sal_Bool _bAddIndexAppendix)
         :EditBrowseBox(_pParent, _rId, EBBF_SMART_TAB_TRAVEL | EBBF_ACTIVATE_ON_BUTTONDOWN, BROWSER_STANDARD_FLAGS)
         ,m_aSeekRow(m_aFields.end())
@@ -97,7 +96,6 @@ DBG_NAME(IndexFieldsControl)
         ,m_nMaxColumnsInIndex(_nMaxColumnsInIndex)
         ,m_bAddIndexAppendix(_bAddIndexAppendix)
     {
-        DBG_CTOR(IndexFieldsControl,NULL);
 
         SetUniqueId( UID_DLGINDEX_INDEXDETAILS_BACK );
         GetDataWindow().SetUniqueId( UID_DLGINDEX_INDEXDETAILS_MAIN );
@@ -108,7 +106,6 @@ DBG_NAME(IndexFieldsControl)
         delete m_pSortingCell;
         delete m_pFieldNameCell;
 
-        DBG_DTOR(IndexFieldsControl,NULL);
     }
 
     sal_Bool IndexFieldsControl::SeekRow(long nRow)

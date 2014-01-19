@@ -74,7 +74,6 @@ connectivity::sdbcx::ObjectType OEmptyCollection::createObject(const OUString& /
 }
 
 // ORowSetBase
-DBG_NAME(ORowSetBase)
 
 ORowSetBase::ORowSetBase( const Reference<XComponentContext>& _rContext, ::cppu::OBroadcastHelper& _rBHelper, ::osl::Mutex* _pMutex )
     :OPropertyStateContainer(_rBHelper)
@@ -96,7 +95,6 @@ ORowSetBase::ORowSetBase( const Reference<XComponentContext>& _rContext, ::cppu:
     ,m_bIsInsertRow(sal_False)
 {
     SAL_INFO("dbaccess", "ORowSetBase::ORowSetBase" );
-    DBG_CTOR(ORowSetBase,NULL);
 
     sal_Int32 nRBT  = PropertyAttribute::READONLY   | PropertyAttribute::BOUND      | PropertyAttribute::TRANSIENT;
 
@@ -120,7 +118,6 @@ ORowSetBase::~ORowSetBase()
     if ( m_pEmptyCollection )
         delete m_pEmptyCollection;
 
-    DBG_DTOR(ORowSetBase,NULL);
 }
 
 // com::sun::star::lang::XTypeProvider
@@ -1455,7 +1452,6 @@ struct ORowSetNotifierImpl
 
 };
 
-DBG_NAME(ORowSetNotifier)
 
 ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet )
     :m_pRowSet( _pRowSet )
@@ -1465,7 +1461,6 @@ ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet )
     ,m_bNotifyCalled( sal_False )
 #endif
 {
-    DBG_CTOR(ORowSetNotifier,NULL);
 
     OSL_ENSURE( m_pRowSet, "ORowSetNotifier::ORowSetNotifier: invalid row set. This wil crash." );
 
@@ -1487,7 +1482,6 @@ ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet,const ORowSetValueVector
     ,m_bNotifyCalled( sal_False )
 #endif
 {
-    DBG_CTOR(ORowSetNotifier,NULL);
 
     OSL_ENSURE( m_pRowSet, "ORowSetNotifier::ORowSetNotifier: invalid row set. This wil crash." );
     m_pImpl->aRow = i_aRow; // yes, create a copy to store the old values
@@ -1496,7 +1490,6 @@ ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet,const ORowSetValueVector
 ORowSetNotifier::~ORowSetNotifier( )
 {
     SAL_INFO("dbaccess", "ORowSetNotifier::~ORowSetNotifier" );
-    DBG_DTOR(ORowSetNotifier,NULL);
 }
 
 void ORowSetNotifier::fire()

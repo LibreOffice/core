@@ -104,7 +104,6 @@ using namespace ::com::sun::star::document;
 using namespace ::comphelper;
 using namespace ::cppu;
 
-DBG_NAME(ODbTypeWizDialogSetup)
 // ODbTypeWizDialogSetup
 ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
                                ,SfxItemSet* _pItems
@@ -139,7 +138,6 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     , m_pFinalPage( NULL )
     , m_pCollection( NULL )
 {
-    DBG_CTOR(ODbTypeWizDialogSetup,NULL);
     // no local resources needed anymore
     // extract the datasource type collection from the item set
     DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _pItems->GetItem(DSID_TYPECOLLECTION));
@@ -278,7 +276,6 @@ OUString ODbTypeWizDialogSetup::getStateDisplayName( WizardState _nState ) const
 ODbTypeWizDialogSetup::~ODbTypeWizDialogSetup()
 {
     delete m_pOutSet;
-    DBG_DTOR(ODbTypeWizDialogSetup,NULL);
 }
 
 IMPL_LINK(ODbTypeWizDialogSetup, OnTypeSelected, OGeneralPage*, /*_pTabPage*/)

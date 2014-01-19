@@ -123,7 +123,6 @@ IMPL_LINK( OPasswordDialog, ModifiedHdl, Edit *, pEdit )
     return 0;
 }
 
-DBG_NAME(OUserAdmin);
 // OUserAdmin
 OUserAdmin::OUserAdmin(Window* pParent,const SfxItemSet& _rAttrSet)
     : OGenericAdministrationPage( pParent, ModuleRes(TAB_PAGE_USERADMIN), _rAttrSet)
@@ -136,7 +135,6 @@ OUserAdmin::OUserAdmin(Window* pParent,const SfxItemSet& _rAttrSet)
     ,m_FL_TABLE_GRANTS( this , ModuleRes(FL_TABLE_GRANTS))
     ,m_TableCtrl(       this , ModuleRes(CTRL_TABLE_GRANTS))
 {
-    DBG_CTOR(OUserAdmin,NULL);
     m_LB_USER.SetSelectHdl(LINK(this, OUserAdmin, ListDblClickHdl));
 
     m_PB_NEWUSER.SetClickHdl(LINK(this, OUserAdmin, UserHdl));
@@ -148,7 +146,6 @@ OUserAdmin::OUserAdmin(Window* pParent,const SfxItemSet& _rAttrSet)
 
 OUserAdmin::~OUserAdmin()
 {
-    DBG_DTOR(OUserAdmin,NULL);
     m_xConnection = NULL;
 }
 

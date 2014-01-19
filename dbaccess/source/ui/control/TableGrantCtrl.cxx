@@ -44,7 +44,6 @@ const sal_uInt16 COL_ALTER      = 6;
 const sal_uInt16 COL_REF        = 7;
 const sal_uInt16 COL_DROP       = 8;
 
-DBG_NAME(OTableGrantControl)
 
 // OTableGrantControl
 OTableGrantControl::OTableGrantControl( Window* pParent,const ResId& _RsId)
@@ -54,7 +53,6 @@ OTableGrantControl::OTableGrantControl( Window* pParent,const ResId& _RsId)
     ,m_nDataPos( 0 )
     ,m_nDeactivateEvent(0)
 {
-    DBG_CTOR(OTableGrantControl,NULL);
     // Spalten einfuegen
     sal_uInt16 i=1;
     InsertDataColumn( i, OUString(ModuleRes(STR_TABLE_PRIV_NAME)  ), 75);
@@ -73,7 +71,6 @@ OTableGrantControl::OTableGrantControl( Window* pParent,const ResId& _RsId)
 
 OTableGrantControl::~OTableGrantControl()
 {
-    DBG_DTOR(OTableGrantControl,NULL);
     if (m_nDeactivateEvent)
     {
         Application::RemoveUserEvent(m_nDeactivateEvent);
@@ -120,7 +117,6 @@ void OTableGrantControl::UpdateTables()
 
 void OTableGrantControl::Init()
 {
-    DBG_CHKTHIS(OTableGrantControl,NULL);
     EditBrowseBox::Init();
 
     // ComboBox instanzieren
@@ -144,13 +140,11 @@ void OTableGrantControl::Init()
 
 void OTableGrantControl::Resize()
 {
-    DBG_CHKTHIS(OTableGrantControl,NULL);
     EditBrowseBox::Resize();
 }
 
 bool OTableGrantControl::PreNotify(NotifyEvent& rNEvt)
 {
-    DBG_CHKTHIS(OTableGrantControl,NULL);
     if (rNEvt.GetType() == EVENT_LOSEFOCUS)
         if (!HasChildPathFocus())
         {
@@ -183,7 +177,6 @@ IMPL_LINK_NOARG(OTableGrantControl, AsynchDeactivate)
 
 sal_Bool OTableGrantControl::IsTabAllowed(sal_Bool bForward) const
 {
-    DBG_CHKTHIS(OTableGrantControl,NULL);
     long nRow = GetCurRow();
     sal_uInt16 nCol = GetCurColumnId();
 
@@ -204,7 +197,6 @@ sal_Bool OTableGrantControl::IsTabAllowed(sal_Bool bForward) const
 
 sal_Bool OTableGrantControl::SaveModified()
 {
-    DBG_CHKTHIS(OTableGrantControl,NULL);
 
     sal_Int32 nRow = GetCurRow();
     if(nRow == -1 || nRow >= m_aTableNames.getLength())
@@ -263,7 +255,6 @@ sal_Bool OTableGrantControl::SaveModified()
 
 OUString OTableGrantControl::GetCellText( long nRow, sal_uInt16 nColId ) const
 {
-    DBG_CHKTHIS(OTableGrantControl,NULL);
     if(COL_TABLE_NAME == nColId)
         return m_aTableNames[nRow];
 
@@ -277,7 +268,6 @@ OUString OTableGrantControl::GetCellText( long nRow, sal_uInt16 nColId ) const
 
 void OTableGrantControl::InitController( CellControllerRef& /*rController*/, long nRow, sal_uInt16 nColumnId )
 {
-    DBG_CHKTHIS(OTableGrantControl,NULL);
     OUString sTablename = m_aTableNames[nRow];
     // special case for tablename
     if(nColumnId == COL_TABLE_NAME)
@@ -365,7 +355,6 @@ void OTableGrantControl::setGrantUser(const Reference< XAuthorizable>& _xGrantUs
 
 CellController* OTableGrantControl::GetController( long nRow, sal_uInt16 nColumnId )
 {
-    DBG_CHKTHIS(OTableGrantControl,NULL);
 
     CellController* pController = NULL;
     switch( nColumnId )
@@ -393,7 +382,6 @@ CellController* OTableGrantControl::GetController( long nRow, sal_uInt16 nColumn
 
 sal_Bool OTableGrantControl::SeekRow( long nRow )
 {
-    DBG_CHKTHIS(OTableGrantControl,NULL);
     m_nDataPos = nRow;
 
     return (nRow <= m_aTableNames.getLength());
@@ -401,7 +389,6 @@ sal_Bool OTableGrantControl::SeekRow( long nRow )
 
 void OTableGrantControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const
 {
-    DBG_CHKTHIS(OTableGrantControl,NULL);
 
     if(nColumnId != COL_TABLE_NAME)
     {
@@ -433,7 +420,6 @@ void OTableGrantControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, 
 
 void OTableGrantControl::CellModified()
 {
-    DBG_CHKTHIS(OTableGrantControl,NULL);
     EditBrowseBox::CellModified();
     SaveModified();
 }

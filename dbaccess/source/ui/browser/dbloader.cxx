@@ -93,19 +93,16 @@ public:
     virtual void SAL_CALL cancel(void) throw();
 };
 
-DBG_NAME(DBContentLoader)
 
 DBContentLoader::DBContentLoader(const Reference< XComponentContext >& _rxContext)
     :m_xContext(_rxContext)
 {
-    DBG_CTOR(DBContentLoader,NULL);
 
 }
 
 DBContentLoader::~DBContentLoader()
 {
 
-    DBG_DTOR(DBContentLoader,NULL);
 }
 
 extern "C" void SAL_CALL createRegistryInfo_DBContentLoader()

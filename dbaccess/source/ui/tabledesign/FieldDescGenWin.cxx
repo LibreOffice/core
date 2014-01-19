@@ -28,11 +28,9 @@ using namespace dbaui;
 
 // class OFieldDescGenWin
 
-DBG_NAME(OFieldDescGenWin)
 OFieldDescGenWin::OFieldDescGenWin( Window* pParent, OTableDesignHelpBar* pHelp ) :
      TabPage( pParent, WB_3DLOOK | WB_DIALOGCONTROL )
 {
-    DBG_CTOR(OFieldDescGenWin,NULL);
     m_pFieldControl = new OTableFieldControl(this,pHelp);
     m_pFieldControl->SetHelpId(HID_TAB_DESIGN_FIELDCONTROL);
     m_pFieldControl->Show();
@@ -40,7 +38,6 @@ OFieldDescGenWin::OFieldDescGenWin( Window* pParent, OTableDesignHelpBar* pHelp 
 
 OFieldDescGenWin::~OFieldDescGenWin()
 {
-    DBG_DTOR(OFieldDescGenWin,NULL);
     ::std::auto_ptr<Window> aTemp(m_pFieldControl);
     m_pFieldControl = NULL;
 }
@@ -60,27 +57,23 @@ void OFieldDescGenWin::Resize()
 
 void OFieldDescGenWin::SetReadOnly( sal_Bool bReadOnly )
 {
-    DBG_CHKTHIS(OFieldDescGenWin,NULL);
 
     m_pFieldControl->SetReadOnly(bReadOnly);
 }
 
 OUString OFieldDescGenWin::GetControlText( sal_uInt16 nControlId )
 {
-    DBG_CHKTHIS(OFieldDescGenWin,NULL);
     return m_pFieldControl->GetControlText(nControlId);
 }
 
 void OFieldDescGenWin::SetControlText( sal_uInt16 nControlId, const OUString& rText )
 {
-    DBG_CHKTHIS(OFieldDescGenWin,NULL);
     // Texte der Controls setzen
     m_pFieldControl->SetControlText(nControlId,rText);
 }
 
 void OFieldDescGenWin::DisplayData( OFieldDescription* pFieldDescr )
 {
-    DBG_CHKTHIS(OFieldDescGenWin,NULL);
 
     m_pFieldControl->DisplayData(pFieldDescr);
 }
@@ -88,7 +81,6 @@ void OFieldDescGenWin::DisplayData( OFieldDescription* pFieldDescr )
 #if OSL_DEBUG_LEVEL > 0
 OTableEditorCtrl* OFieldDescGenWin::GetEditorCtrl()
 {
-    DBG_CHKTHIS(OFieldDescGenWin,NULL);
     OTableDesignView* pDesignWin = static_cast<OTableDesignView*>(GetParent()->GetParent()->GetParent());
     return pDesignWin->GetEditorCtrl();
 }
@@ -96,13 +88,11 @@ OTableEditorCtrl* OFieldDescGenWin::GetEditorCtrl()
 #endif
 void OFieldDescGenWin::SaveData( OFieldDescription* pFieldDescr )
 {
-    DBG_CHKTHIS(OFieldDescGenWin,NULL);
     m_pFieldControl->SaveData(pFieldDescr);
 }
 
 void OFieldDescGenWin::GetFocus()
 {
-    DBG_CHKTHIS(OFieldDescGenWin,NULL);
     // Setzt den Focus auf das zuletzt aktive Control
     TabPage::GetFocus();
     if(m_pFieldControl)
@@ -112,7 +102,6 @@ void OFieldDescGenWin::GetFocus()
 
 void OFieldDescGenWin::LoseFocus()
 {
-    DBG_CHKTHIS(OFieldDescGenWin,NULL);
     m_pFieldControl->LoseFocus();
     TabPage::LoseFocus();
 }

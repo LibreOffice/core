@@ -40,7 +40,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 
 // class OFieldDescription
-DBG_NAME(OFieldDescription)
 OFieldDescription::OFieldDescription()
     :m_pType()
     ,m_nType(DataType::VARCHAR)
@@ -54,7 +53,6 @@ OFieldDescription::OFieldDescription()
     ,m_bIsCurrency(sal_False)
     ,m_bHidden(sal_False)
 {
-    DBG_CTOR(OFieldDescription,NULL);
 }
 
 OFieldDescription::OFieldDescription( const OFieldDescription& rDescr )
@@ -80,12 +78,10 @@ OFieldDescription::OFieldDescription( const OFieldDescription& rDescr )
     ,m_bIsCurrency(rDescr.m_bIsCurrency)
     ,m_bHidden(rDescr.m_bHidden)
 {
-    DBG_CTOR(OFieldDescription,NULL);
 }
 
 OFieldDescription::~OFieldDescription()
 {
-    DBG_DTOR(OFieldDescription,NULL);
 }
 
 OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedCol,sal_Bool _bUseAsDest)
@@ -101,7 +97,6 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
     ,m_bIsCurrency(sal_False)
     ,m_bHidden(sal_False)
 {
-    DBG_CTOR(OFieldDescription,NULL);
     OSL_ENSURE(xAffectedCol.is(),"PropetySet can notbe null!");
     if ( xAffectedCol.is() )
     {

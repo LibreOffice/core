@@ -27,20 +27,17 @@
 using namespace ::dbaui;
 
 // class OSplitterView
-DBG_NAME(OSplitterView)
 OSplitterView::OSplitterView(Window* _pParent,sal_Bool _bVertical) : Window(_pParent,WB_DIALOGCONTROL) // ,WB_BORDER
     ,m_pSplitter( NULL )
     ,m_pLeft(NULL)
     ,m_pRight(NULL)
     ,m_bVertical(_bVertical)
 {
-    DBG_CTOR(OSplitterView,NULL);
     ImplInitSettings( sal_True, sal_True, sal_True );
 }
 
 OSplitterView::~OSplitterView()
 {
-    DBG_DTOR(OSplitterView,NULL);
     m_pRight = m_pLeft = NULL;
 }
 

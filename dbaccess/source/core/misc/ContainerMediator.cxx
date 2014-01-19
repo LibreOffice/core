@@ -39,14 +39,12 @@ namespace dbaccess
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
 
-DBG_NAME(OContainerMediator)
 OContainerMediator::OContainerMediator( const Reference< XContainer >& _xContainer, const Reference< XNameAccess >& _xSettings,
     const Reference< XConnection >& _rxConnection )
     : m_xSettings( _xSettings )
     , m_xContainer( _xContainer )
     , m_aConnection( _rxConnection )
 {
-    DBG_CTOR(OContainerMediator,NULL);
 
     if ( _xSettings.is() && _xContainer.is() )
     {
@@ -73,7 +71,6 @@ OContainerMediator::OContainerMediator( const Reference< XContainer >& _xContain
 
 OContainerMediator::~OContainerMediator()
 {
-    DBG_DTOR(OContainerMediator,NULL);
     acquire();
     impl_cleanup_nothrow();
 }

@@ -55,7 +55,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::awt;
 
-DBG_NAME(ORTFReader)
 // ORTFReader
 ORTFReader::ORTFReader( SvStream& rIn,
                         const SharedConnection& _rxConnection,
@@ -67,7 +66,6 @@ ORTFReader::ORTFReader( SvStream& rIn,
     ,ODatabaseExport( _rxConnection, _rxNumberF, _rxContext, pList, _pInfoMap, rIn )
 {
     SAL_INFO("dbaccess.ui", "ORTFReader::ORTFReader" );
-    DBG_CTOR(ORTFReader,NULL);
     m_bAppendFirstLine = false;
 }
 
@@ -83,19 +81,16 @@ ORTFReader::ORTFReader(SvStream& rIn,
    ,ODatabaseExport( nRows, _rColumnPositions, _rxNumberF, _rxContext, pList, _pInfoMap, _bAutoIncrementEnabled, rIn )
 {
     SAL_INFO("dbaccess.ui", "ORTFReader::ORTFReader" );
-    DBG_CTOR(ORTFReader,NULL);
     m_bAppendFirstLine = false;
 }
 
 ORTFReader::~ORTFReader()
 {
-    DBG_DTOR(ORTFReader,NULL);
 }
 
 SvParserState ORTFReader::CallParser()
 {
     SAL_INFO("dbaccess.ui", "ORTFReader::CallParser" );
-    DBG_CHKTHIS(ORTFReader,NULL);
     rInput.Seek(STREAM_SEEK_TO_BEGIN);
     rInput.ResetError();
     SvParserState  eParseState = SvRTFParser::CallParser();
@@ -106,7 +101,6 @@ SvParserState ORTFReader::CallParser()
 void ORTFReader::NextToken( int nToken )
 {
     SAL_INFO("dbaccess.ui", "ORTFReader::NextToken" );
-    DBG_CHKTHIS(ORTFReader,NULL);
     if(m_bError || !m_nRows) // if there is an error or no more rows to check, return immediatelly
         return;
 
@@ -259,7 +253,6 @@ void ORTFReader::NextToken( int nToken )
 sal_Bool ORTFReader::CreateTable(int nToken)
 {
     SAL_INFO("dbaccess.ui", "ORTFReader::CreateTable" );
-    DBG_CHKTHIS(ORTFReader,NULL);
     OUString aTableName(ModuleRes(STR_TBL_TITLE));
     aTableName = aTableName.getToken(0,' ');
     aTableName = ::dbtools::createUniqueName(m_xTables, aTableName);
@@ -343,14 +336,12 @@ sal_Bool ORTFReader::CreateTable(int nToken)
 void ORTFReader::release()
 {
     SAL_INFO("dbaccess.ui", "ORTFReader::release" );
-    DBG_CHKTHIS(ORTFReader,NULL);
     ReleaseRef();
 }
 
 TypeSelectionPageFactory ORTFReader::getTypeSelectionPageFactory()
 {
     SAL_INFO("dbaccess.ui", "ORTFReader::getTypeSelectionPageFactory" );
-    DBG_CHKTHIS(ORTFReader,NULL);
     return &OWizRTFExtend::Create;
 }
 

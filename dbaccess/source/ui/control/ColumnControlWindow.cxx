@@ -35,7 +35,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 
 // OColumnControlWindow
-DBG_NAME(OColumnControlWindow)
 OColumnControlWindow::OColumnControlWindow(Window* pParent
                                            ,const Reference<XComponentContext>& _rxContext)
             : OFieldDescControl(pParent,NULL)
@@ -43,7 +42,6 @@ OColumnControlWindow::OColumnControlWindow(Window* pParent
             , m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
             , m_bAutoIncrementEnabled(sal_True)
 {
-    DBG_CTOR(OColumnControlWindow,NULL);
 
     setRightAligned();
     m_aLocale = SvtSysLocale().GetLanguageTag().getLocale();
@@ -52,7 +50,6 @@ OColumnControlWindow::OColumnControlWindow(Window* pParent
 OColumnControlWindow::~OColumnControlWindow()
 {
 
-    DBG_DTOR(OColumnControlWindow,NULL);
 }
 
 void OColumnControlWindow::ActivateAggregate( EControlType eType )

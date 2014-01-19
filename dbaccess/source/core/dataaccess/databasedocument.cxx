@@ -146,7 +146,6 @@ bool ViewMonitor::onSetCurrentController( const Reference< XController >& _rxCon
 }
 
 // ODatabaseDocument
-DBG_NAME(ODatabaseDocument)
 
 extern "C" void SAL_CALL createRegistryInfo_ODatabaseDocument()
 {
@@ -168,7 +167,6 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
             ,m_bAllowDocumentScripting( false )
             ,m_bHasBeenRecovered( false )
 {
-    DBG_CTOR(ODatabaseDocument,NULL);
     OSL_TRACE( "DD: ctor: %p: %p", this, m_pImpl.get() );
 
     osl_atomic_increment( &m_refCount );
@@ -205,7 +203,6 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
 ODatabaseDocument::~ODatabaseDocument()
 {
     OSL_TRACE( "DD: dtor: %p: %p", this, m_pImpl.get() );
-    DBG_DTOR(ODatabaseDocument,NULL);
     if ( !ODatabaseDocument_OfficeDocument::rBHelper.bInDispose && !ODatabaseDocument_OfficeDocument::rBHelper.bDisposed )
     {
         acquire();

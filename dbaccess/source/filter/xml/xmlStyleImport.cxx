@@ -48,7 +48,6 @@ using namespace xmloff::token;
 
 TYPEINIT1( OTableStyleContext, XMLPropStyleContext );
 TYPEINIT1( OTableStylesContext, SvXMLStylesContext );
-DBG_NAME(OTableStyleContext)
 
 OTableStyleContext::OTableStyleContext( ODBFilter& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
@@ -59,14 +58,12 @@ OTableStyleContext::OTableStyleContext( ODBFilter& rImport,
     ,pStyles(&rStyles)
     ,m_nNumberFormat(-1)
 {
-    DBG_CTOR(OTableStyleContext,NULL);
 
 }
 
 OTableStyleContext::~OTableStyleContext()
 {
 
-    DBG_DTOR(OTableStyleContext,NULL);
 }
 
 void OTableStyleContext::FillPropertySet(
@@ -142,7 +139,6 @@ ODBFilter& OTableStyleContext::GetOwnImport()
     return static_cast<ODBFilter&>(GetImport());
 }
 
-DBG_NAME(OTableStylesContext)
 
 OTableStylesContext::OTableStylesContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx ,
@@ -156,14 +152,12 @@ OTableStylesContext::OTableStylesContext( SvXMLImport& rImport,
     m_nNumberFormatIndex(-1),
     bAutoStyles(bTempAutoStyles)
 {
-    DBG_CTOR(OTableStylesContext,NULL);
 
 }
 
 OTableStylesContext::~OTableStylesContext()
 {
 
-    DBG_DTOR(OTableStylesContext,NULL);
 }
 
 void OTableStylesContext::EndElement()

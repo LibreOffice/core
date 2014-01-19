@@ -38,20 +38,17 @@ namespace dbaxml
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::xml::sax;
-DBG_NAME(OXMLDatabase)
 
 OXMLDatabase::OXMLDatabase( ODBFilter& rImport,
                 sal_uInt16 nPrfx, const OUString& rLName ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
-    DBG_CTOR(OXMLDatabase,NULL);
 
 }
 
 OXMLDatabase::~OXMLDatabase()
 {
 
-    DBG_DTOR(OXMLDatabase,NULL);
 }
 
 SvXMLImportContext* OXMLDatabase::CreateChildContext(

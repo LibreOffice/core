@@ -118,19 +118,16 @@ Reference< XInterface > SAL_CALL ORelationController::Create(const Reference<XMu
     return *(new ORelationController(comphelper::getComponentContext(_rxFactory)));
 }
 
-DBG_NAME(ORelationController);
 ORelationController::ORelationController(const Reference< XComponentContext >& _rM)
     : OJoinController(_rM)
     ,m_nThreadEvent(0)
     ,m_bRelationsPossible(sal_True)
 {
-    DBG_CTOR(ORelationController,NULL);
     InvalidateAll();
 }
 
 ORelationController::~ORelationController()
 {
-    DBG_DTOR(ORelationController,NULL);
 }
 
 FeatureState ORelationController::GetState(sal_uInt16 _nId) const

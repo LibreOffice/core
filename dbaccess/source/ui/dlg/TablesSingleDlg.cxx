@@ -36,7 +36,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
-DBG_NAME(OTableSubscriptionDialog)
     // OTableSubscriptionDialog
 OTableSubscriptionDialog::OTableSubscriptionDialog(Window* pParent
             ,SfxItemSet* _pItems
@@ -48,7 +47,6 @@ OTableSubscriptionDialog::OTableSubscriptionDialog(Window* pParent
     , m_bStopExecution(sal_False)
     , m_pOutSet(_pItems)
 {
-    DBG_CTOR(OTableSubscriptionDialog,NULL);
     m_pImpl->setDataSourceOrName(_aDataSourceName);
     Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
     m_pOutSet = new SfxItemSet( *_pItems );
@@ -63,7 +61,6 @@ OTableSubscriptionDialog::OTableSubscriptionDialog(Window* pParent
 
 OTableSubscriptionDialog::~OTableSubscriptionDialog()
 {
-    DBG_DTOR(OTableSubscriptionDialog,NULL);
     delete m_pOutSet;
 }
 

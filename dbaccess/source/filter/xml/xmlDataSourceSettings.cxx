@@ -34,21 +34,18 @@ namespace dbaxml
 {
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
-DBG_NAME(OXMLDataSourceSettings)
 
 OXMLDataSourceSettings::OXMLDataSourceSettings( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
                 ,const OUString& _sLocalName) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
 {
-    DBG_CTOR(OXMLDataSourceSettings,NULL);
 
 }
 
 OXMLDataSourceSettings::~OXMLDataSourceSettings()
 {
 
-    DBG_DTOR(OXMLDataSourceSettings,NULL);
 }
 
 SvXMLImportContext* OXMLDataSourceSettings::CreateChildContext(

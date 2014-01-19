@@ -26,12 +26,10 @@ namespace dbaui
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
 
-DBG_NAME(OMarkableTreeListBox)
 
 OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, WinBits nWinStyle )
     : DBTreeListBox(pParent, nWinStyle)
 {
-    DBG_CTOR(OMarkableTreeListBox,NULL);
 
     InitButtonData();
 }
@@ -39,7 +37,6 @@ OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, WinBits nWinStyle )
 OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, const ResId& rResId)
     : DBTreeListBox(pParent, rResId)
 {
-    DBG_CTOR(OMarkableTreeListBox,NULL);
 
     InitButtonData();
 }
@@ -48,7 +45,6 @@ OMarkableTreeListBox::~OMarkableTreeListBox()
 {
     delete m_pCheckButton;
 
-    DBG_DTOR(OMarkableTreeListBox,NULL);
 }
 
 void OMarkableTreeListBox::Paint(const Rectangle& _rRect)

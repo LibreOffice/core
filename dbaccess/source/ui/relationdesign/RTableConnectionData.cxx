@@ -42,7 +42,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-DBG_NAME(ORelationTableConnectionData)
 // class ORelationTableConnectionData
 ORelationTableConnectionData::ORelationTableConnectionData()
     :OTableConnectionData()
@@ -50,7 +49,6 @@ ORelationTableConnectionData::ORelationTableConnectionData()
     ,m_nDeleteRules(KeyRule::NO_ACTION)
     ,m_nCardinality(CARDINAL_UNDEFINED)
 {
-    DBG_CTOR(ORelationTableConnectionData,NULL);
 }
 
 ORelationTableConnectionData::ORelationTableConnectionData( const TTableWindowData::value_type& _pReferencingTable,
@@ -61,7 +59,6 @@ ORelationTableConnectionData::ORelationTableConnectionData( const TTableWindowDa
     ,m_nDeleteRules(KeyRule::NO_ACTION)
     ,m_nCardinality(CARDINAL_UNDEFINED)
 {
-    DBG_CTOR(ORelationTableConnectionData,NULL);
     m_aConnName = rConnName;
 
     if ( !m_aConnName.isEmpty() )
@@ -71,18 +68,15 @@ ORelationTableConnectionData::ORelationTableConnectionData( const TTableWindowDa
 ORelationTableConnectionData::ORelationTableConnectionData( const ORelationTableConnectionData& rConnData )
     :OTableConnectionData( rConnData )
 {
-    DBG_CTOR(ORelationTableConnectionData,NULL);
     *this = rConnData;
 }
 
 ORelationTableConnectionData::~ORelationTableConnectionData()
 {
-    DBG_DTOR(ORelationTableConnectionData,NULL);
 }
 
 sal_Bool ORelationTableConnectionData::DropRelation()
 {
-    DBG_CHKTHIS(ORelationTableConnectionData,NULL);
     ::osl::MutexGuard aGuard( m_aMutex );
     // Relation loeschen
     Reference< XIndexAccess> xKeys = getReferencingTable()->getKeys();
@@ -113,7 +107,6 @@ sal_Bool ORelationTableConnectionData::DropRelation()
 
 void ORelationTableConnectionData::ChangeOrientation()
 {
-    DBG_CHKTHIS(ORelationTableConnectionData,NULL);
     // Source- und DestFieldName der Linien austauschen
     OUString sTempString;
     OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
@@ -133,7 +126,6 @@ void ORelationTableConnectionData::ChangeOrientation()
 
 void ORelationTableConnectionData::SetCardinality()
 {
-    DBG_CHKTHIS(ORelationTableConnectionData,NULL);
     ::osl::MutexGuard aGuard( m_aMutex );
     m_nCardinality = CARDINAL_UNDEFINED;
 
@@ -190,7 +182,6 @@ sal_Bool ORelationTableConnectionData::checkPrimaryKey(const Reference< XPropert
 
 sal_Bool ORelationTableConnectionData::IsConnectionPossible()
 {
-    DBG_CHKTHIS(ORelationTableConnectionData,NULL);
     ::osl::MutexGuard aGuard( m_aMutex );
 
     // Wenn die SourceFelder ein PrimKey sind, ist nur die Orientierung falsch

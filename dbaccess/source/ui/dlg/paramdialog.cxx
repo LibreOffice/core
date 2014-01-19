@@ -50,7 +50,6 @@ namespace dbaui
 
     // OParameterDialog
 
-DBG_NAME(OParameterDialog)
 
     OParameterDialog::OParameterDialog(
             Window* pParent, const Reference< XIndexAccess > & rParamContainer,
@@ -68,7 +67,6 @@ DBG_NAME(OParameterDialog)
         ,m_aPredicateInput( rxContext, _rxConnection, getParseContext() )
         ,m_bNeedErrorOnCurrent(sal_True)
     {
-        DBG_CTOR(OParameterDialog,NULL);
 
         if (rxContext.is())
             m_xFormatter = Reference< XNumberFormatter>( NumberFormatter::create( rxContext ), UNO_QUERY_THROW);
@@ -127,7 +125,6 @@ DBG_NAME(OParameterDialog)
         if (m_aResetVisitFlag.IsActive())
             m_aResetVisitFlag.Stop();
 
-        DBG_DTOR(OParameterDialog,NULL);
     }
 
     void OParameterDialog::Construct()

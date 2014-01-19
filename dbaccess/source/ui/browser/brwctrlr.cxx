@@ -240,12 +240,10 @@ protected:
     ~FormControllerImpl();
 };
 
-DBG_NAME(FormControllerImpl)
 SbaXDataBrowserController::FormControllerImpl::FormControllerImpl(SbaXDataBrowserController* _pOwner)
     :m_aActivateListeners(_pOwner->getMutex())
     ,m_pOwner(_pOwner)
 {
-    DBG_CTOR(FormControllerImpl,NULL);
 
     OSL_ENSURE(m_pOwner, "SbaXDataBrowserController::FormControllerImpl::FormControllerImpl : invalid Owner !");
 }
@@ -253,7 +251,6 @@ SbaXDataBrowserController::FormControllerImpl::FormControllerImpl(SbaXDataBrowse
 SbaXDataBrowserController::FormControllerImpl::~FormControllerImpl()
 {
 
-    DBG_DTOR(FormControllerImpl,NULL);
 }
 
 Reference< runtime::XFormOperations > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getFormOperations() throw (RuntimeException)
@@ -545,7 +542,6 @@ Any SAL_CALL SbaXDataBrowserController::queryInterface(const Type& _rType) throw
     return aRet;
 }
 
-DBG_NAME(SbaXDataBrowserController)
 SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun::star::uno::XComponentContext >& _rM)
     :SbaXDataBrowserController_Base(_rM)
     ,m_nRowSetPrivileges(0)
@@ -561,7 +557,6 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun
     ,m_bCannotSelectUnfiltered( true )
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::SbaXDataBrowserController" );
-    DBG_CTOR(SbaXDataBrowserController,NULL);
 
     // create the form controller aggregate
     ::comphelper::increment(m_refCount);
@@ -587,7 +582,6 @@ SbaXDataBrowserController::~SbaXDataBrowserController()
         m_xFormControllerImpl->setDelegator(xEmpty);
     }
 
-    DBG_DTOR(SbaXDataBrowserController,NULL);
 }
 
 void SbaXDataBrowserController::startFrameListening( const Reference< XFrame >& _rxFrame )

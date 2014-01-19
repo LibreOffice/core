@@ -48,7 +48,6 @@ using namespace ::dbaui;
 using namespace ::dbtools;
 
 // class ORelationDialog
-DBG_NAME(ORelationDialog)
 ORelationDialog::ORelationDialog( OJoinTableView* pParent,
                                  const TTableConnectionData::value_type& pConnectionData,
                                  sal_Bool bAllowTableSelect )
@@ -73,7 +72,6 @@ ORelationDialog::ORelationDialog( OJoinTableView* pParent,
     ,m_pOrigConnData( pConnectionData )
     ,m_bTriedOneUpdate(sal_False)
 {
-    DBG_CTOR(ORelationDialog,NULL);
 
     m_xConnection = pParent->getDesignView()->getController().getConnection();
 
@@ -145,7 +143,6 @@ void ORelationDialog::Init(const TTableConnectionData::value_type& _pConnectionD
 
 ORelationDialog::~ORelationDialog()
 {
-    DBG_DTOR(ORelationDialog,NULL);
 }
 
 IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )

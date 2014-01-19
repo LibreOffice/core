@@ -64,7 +64,6 @@ namespace
 
 // UnoDataBrowserView
 
-DBG_NAME(UnoDataBrowserView)
 UnoDataBrowserView::UnoDataBrowserView( Window* pParent,
                                         IController& _rController,
                                         const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
@@ -74,7 +73,6 @@ UnoDataBrowserView::UnoDataBrowserView( Window* pParent,
     ,m_pVclControl(NULL)
     ,m_pStatus(NULL)
 {
-    DBG_CTOR(UnoDataBrowserView,NULL);
 
 }
 
@@ -138,7 +136,6 @@ UnoDataBrowserView::~UnoDataBrowserView()
     catch(const Exception&)
     {}
 
-    DBG_DTOR(UnoDataBrowserView,NULL);
 }
 
 IMPL_LINK( UnoDataBrowserView, SplitHdl, void*, /*NOINTERESTEDIN*/ )
@@ -330,11 +327,9 @@ bool UnoDataBrowserView::PreNotify( NotifyEvent& rNEvt )
     return nDone || ODataView::PreNotify(rNEvt);
 }
 
-DBG_NAME(BrowserViewStatusDisplay)
 BrowserViewStatusDisplay::BrowserViewStatusDisplay( UnoDataBrowserView* _pView, const OUString& _rStatus )
     :m_pView(_pView)
 {
-    DBG_CTOR(BrowserViewStatusDisplay,NULL);
 
     if (m_pView)
         m_pView->showStatus(_rStatus);
@@ -345,7 +340,6 @@ BrowserViewStatusDisplay::~BrowserViewStatusDisplay( )
     if (m_pView)
         m_pView->showStatus(OUString());
 
-    DBG_DTOR(BrowserViewStatusDisplay,NULL);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

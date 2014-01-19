@@ -2487,7 +2487,6 @@ namespace
 }
 
 // end of anonymouse namespace
-DBG_NAME(OQueryDesignView)
 
 OQueryDesignView::OQueryDesignView( OQueryContainerWindow* _pParent,
                                     OQueryController& _rController,
@@ -2497,7 +2496,6 @@ OQueryDesignView::OQueryDesignView( OQueryContainerWindow* _pParent,
     ,m_eChildFocus(NONE)
     ,m_bInSplitHandler( sal_False )
 {
-    DBG_CTOR(OQueryDesignView,NULL);
 
     try
     {
@@ -2528,7 +2526,6 @@ OQueryDesignView::~OQueryDesignView()
     SAL_WNODEPRECATED_DECLARATIONS_POP
     m_pSelectionBox = NULL;
 
-    DBG_DTOR(OQueryDesignView,NULL);
 }
 
 IMPL_LINK( OQueryDesignView, SplitHdl, void*, /*p*/ )

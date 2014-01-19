@@ -411,7 +411,6 @@ OUString ODocumentDefinition::GetDocumentServiceFromMediaType( const OUString& _
 }
 
 // ODocumentDefinition
-DBG_NAME(ODocumentDefinition)
 
 ODocumentDefinition::ODocumentDefinition( const Reference< XInterface >& _rxContainer, const Reference< XComponentContext >& _xORB,
                                           const TContentPtr& _pImpl, sal_Bool _bForm )
@@ -424,7 +423,6 @@ ODocumentDefinition::ODocumentDefinition( const Reference< XInterface >& _rxCont
     ,m_bRemoveListener(sal_False)
     ,m_pClientHelper(NULL)
 {
-    DBG_CTOR(ODocumentDefinition, NULL);
     registerProperties();
 }
 
@@ -440,7 +438,6 @@ void ODocumentDefinition::initialLoad( const Sequence< sal_Int8 >& i_rClassID, c
 
 ODocumentDefinition::~ODocumentDefinition()
 {
-    DBG_DTOR(ODocumentDefinition, NULL);
     if ( !OContentHelper::rBHelper.bInDispose && !OContentHelper::rBHelper.bDisposed )
     {
         acquire();

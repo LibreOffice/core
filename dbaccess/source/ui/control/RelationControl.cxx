@@ -123,24 +123,20 @@ namespace dbaui
     };
 
     // class ORelationControl
-    DBG_NAME(ORelationControl)
     ORelationControl::ORelationControl( OTableListBoxControl* pParent )
         :EditBrowseBox( pParent, EBBF_SMART_TAB_TRAVEL | EBBF_NOROWPICTURE, WB_TABSTOP | WB_BORDER | BROWSER_AUTOSIZE_LASTCOL)
         ,m_pBoxControl(pParent)
         ,m_xSourceDef( NULL )
         ,m_xDestDef( NULL )
     {
-        DBG_CTOR(ORelationControl,NULL);
     }
 
     ORelationControl::~ORelationControl()
     {
-        DBG_DTOR(ORelationControl,NULL);
     }
 
     void ORelationControl::Init(const TTableConnectionData::value_type& _pConnData)
     {
-        DBG_CHKTHIS(ORelationControl,NULL);
 
         m_pConnData = _pConnData;
         OSL_ENSURE(m_pConnData, "No data supplied!");
@@ -179,7 +175,6 @@ namespace dbaui
     }
     void ORelationControl::Resize()
     {
-        DBG_CHKTHIS(ORelationControl,NULL);
         EditBrowseBox::Resize();
         long nOutputWidth = GetOutputSizePixel().Width();
         SetColumnWidth(1, (nOutputWidth / 2));
@@ -188,7 +183,6 @@ namespace dbaui
 
     bool ORelationControl::PreNotify(NotifyEvent& rNEvt)
     {
-        DBG_CHKTHIS(ORelationControl,NULL);
         if (rNEvt.GetType() == EVENT_LOSEFOCUS && !HasChildPathFocus() )
             PostUserEvent(LINK(this, ORelationControl, AsynchDeactivate));
         else if (rNEvt.GetType() == EVENT_GETFOCUS)
@@ -211,7 +205,6 @@ namespace dbaui
 
     sal_Bool ORelationControl::IsTabAllowed(sal_Bool bForward) const
     {
-        DBG_CHKTHIS(ORelationControl,NULL);
         long nRow = GetCurRow();
         sal_uInt16 nCol = GetCurColumnId();
 
@@ -223,7 +216,6 @@ namespace dbaui
 
     sal_Bool ORelationControl::SaveModified()
     {
-        DBG_CHKTHIS(ORelationControl,NULL);
         long nRow = GetCurRow();
         if ( nRow != BROWSER_ENDOFSELECTION )
         {
@@ -272,7 +264,6 @@ namespace dbaui
 
     OUString ORelationControl::GetCellText( long nRow, sal_uInt16 nColId ) const
     {
-        DBG_CHKTHIS(ORelationControl,NULL);
         OUString sText;
         if ( m_pConnData->GetConnLineDataList()->size() > static_cast<size_t>(nRow) )
         {
@@ -292,7 +283,6 @@ namespace dbaui
 
     void ORelationControl::InitController( CellControllerRef& /*rController*/, long nRow, sal_uInt16 nColumnId )
     {
-        DBG_CHKTHIS(ORelationControl,NULL);
 
         OString sHelpId( HID_RELATIONDIALOG_LEFTFIELDCELL );
 
@@ -329,20 +319,17 @@ namespace dbaui
 
     CellController* ORelationControl::GetController( long /*nRow*/, sal_uInt16 /*nColumnId*/ )
     {
-        DBG_CHKTHIS(ORelationControl,NULL);
         return new ListBoxCellController( m_pListCell.get() );
     }
 
     sal_Bool ORelationControl::SeekRow( long nRow )
     {
-        DBG_CHKTHIS(ORelationControl,NULL);
         m_nDataPos = nRow;
         return sal_True;
     }
 
     void ORelationControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const
     {
-        DBG_CHKTHIS(ORelationControl,NULL);
         OUString aText = const_cast< ORelationControl*>(this)->GetCellText( m_nDataPos, nColumnId );
 
         Point aPos( rRect.TopLeft() );
@@ -432,7 +419,6 @@ namespace dbaui
     }
     void ORelationControl::CellModified()
     {
-        DBG_CHKTHIS(ORelationControl,NULL);
         EditBrowseBox::CellModified();
         SaveModified();
 #if OSL_DEBUG_LEVEL > 0
@@ -444,7 +430,6 @@ namespace dbaui
         parent->NotifyCellChange();
     }
     // class OTableListBoxControl
-DBG_NAME(OTableListBoxControl)
 
 OTableListBoxControl::OTableListBoxControl(  Window* _pParent
                                             ,const ResId& _rResId
@@ -470,14 +455,12 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
         m_lmbRightTable.SetSelectHdl(aLink);
 
         FreeResource();
-        DBG_CTOR(OTableListBoxControl,NULL);
     }
     OTableListBoxControl::~OTableListBoxControl()
     {
         ORelationControl* pTemp = m_pRC_Tables;
         m_pRC_Tables = NULL;
         delete pTemp;
-        DBG_DTOR(OTableListBoxControl,NULL);
     }
     void OTableListBoxControl::fillListBoxes()
     {

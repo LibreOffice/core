@@ -344,13 +344,11 @@ sal_Int32 ReadThroughComponent(
 }
 
 // - ODBFilter -
-DBG_NAME(ODBFilter)
 
 ODBFilter::ODBFilter( const uno::Reference< XComponentContext >& _rxContext )
     :SvXMLImport(_rxContext, getImplementationName_Static())
     ,m_bNewFormat(false)
 {
-    DBG_CTOR(ODBFilter,NULL);
 
     GetMM100UnitConverter().SetCoreMeasureUnit(util::MeasureUnit::MM_10TH);
     GetMM100UnitConverter().SetXMLMeasureUnit(util::MeasureUnit::CM);
@@ -366,7 +364,6 @@ ODBFilter::ODBFilter( const uno::Reference< XComponentContext >& _rxContext )
 ODBFilter::~ODBFilter() throw()
 {
 
-    DBG_DTOR(ODBFilter,NULL);
 }
 
 OUString ODBFilter::getImplementationName_Static()

@@ -35,7 +35,6 @@ namespace dbaui
     using namespace ::com::sun::star::lang;
 
     // DirectSQLDialog
-DBG_NAME(DirectSQLDialog)
     DirectSQLDialog::DirectSQLDialog( Window* _pParent, const Reference< XConnection >& _rxConn )
         :ModalDialog(_pParent, "DirectSQLDialog" , "dbaccess/ui/directsqldialog.ui")
         ,m_nHistoryLimit(20)
@@ -57,7 +56,6 @@ DBG_NAME(DirectSQLDialog)
         m_pOutput->set_height_request(aSize.Height());
         get(m_pClose,"close");
 
-        DBG_CTOR(DirectSQLDialog,NULL);
 
         m_pSQL->GrabFocus();
 
@@ -83,7 +81,6 @@ DBG_NAME(DirectSQLDialog)
             stopAllComponentListening();
         }
 
-        DBG_DTOR(DirectSQLDialog,NULL);
     }
 
     void DirectSQLDialog::_disposing( const EventObject& _rSource )
