@@ -55,6 +55,7 @@ static const unsigned long __nan[2] = {0xffffffff, 0x7fffffff};
 #include <memory>
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/scoped_array.hpp>
 
 #undef NO_FALLBACK_TO_SWINTERP /* undef this for non-TDD runs */
 
@@ -1098,12 +1099,12 @@ public:
         if ( dynamic_cast<OpAverage*>(mpCodeGen.get()))
         {
              /*average need more reduction kernel for count computing*/
-             double *pAllBuffer  = new double[2*w];
-             double *resbuf = (double*)clEnqueueMapBuffer(kEnv.mpkCmdQueue,
-                mpClmem2,
-                CL_TRUE, CL_MAP_READ, 0,
-                sizeof(double)*w, 0, NULL, NULL,
-                &err);
+            boost::scoped_array<double> pAllBuffer(new double[2*w]);
+            double *resbuf = (double*)clEnqueueMapBuffer(kEnv.mpkCmdQueue,
+                    mpClmem2,
+                    CL_TRUE, CL_MAP_READ, 0,
+                    sizeof(double)*w, 0, NULL, NULL,
+                    &err);
             if (err != CL_SUCCESS)
                 throw OpenCLError(err, __FILE__, __LINE__);
 
@@ -1163,10 +1164,9 @@ public:
             }
             mpClmem2 = clCreateBuffer(kEnv.mpkContext,
                 (cl_mem_flags) CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR,
-                w*sizeof(double)*2, pAllBuffer, &err);
+                w*sizeof(double)*2, pAllBuffer.get(), &err);
             if (CL_SUCCESS != err)
                 throw OpenCLError(err, __FILE__, __LINE__);
-            delete pAllBuffer;
         }
         // set kernel arg
         err = clSetKernelArg(k, argno, sizeof(cl_mem), (void*)&(mpClmem2));
