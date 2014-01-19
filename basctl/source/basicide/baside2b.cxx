@@ -1453,6 +1453,7 @@ void BreakPointWindow::ShowMarker( bool bShow )
 BreakPoint* BreakPointWindow::FindBreakPoint( const Point& rMousePos )
 {
     size_t nLineHeight = GetTextHeight();
+    nLineHeight = nLineHeight > 0 ? nLineHeight : 1;
     size_t nYPos = rMousePos.Y() + nCurYOffset;
 
     for ( size_t i = 0, n = GetBreakPoints().size(); i < n ; ++i )
