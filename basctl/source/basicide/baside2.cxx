@@ -886,7 +886,11 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
 
     OUString aTitle( CreateQualifiedName() );
 
-    sal_uInt16 nLineHeight = (sal_uInt16) pPrinter->GetTextHeight(); // etwas mehr.
+    sal_uInt16 nLineHeight = (sal_uInt16) pPrinter->GetTextHeight();
+    if(nLineHeight == 0)
+    {
+        nLineHeight = 1;
+    }
     sal_uInt16 nParaSpace = 10;
 
     Size aPaperSz = pPrinter->GetOutputSize();
