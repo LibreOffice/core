@@ -41,8 +41,6 @@
 #include <limits.h>
 #include <cmath>
 
-DBG_NAME( Polygon )
-
 #define EDGE_LEFT       1
 #define EDGE_TOP        2
 #define EDGE_RIGHT      4
@@ -300,13 +298,11 @@ inline double ImplGetParameter( const Point& rCenter, const Point& rPt, double f
 
 Polygon::Polygon()
 {
-    DBG_CTOR( Polygon, NULL );
     mpImplPolygon = (ImplPolygon*)(&aStaticImplPolygon);
 }
 
 Polygon::Polygon( sal_uInt16 nSize )
 {
-    DBG_CTOR( Polygon, NULL );
 
     if ( nSize )
         mpImplPolygon = new ImplPolygon( nSize );
@@ -316,7 +312,6 @@ Polygon::Polygon( sal_uInt16 nSize )
 
 Polygon::Polygon( sal_uInt16 nPoints, const Point* pPtAry, const sal_uInt8* pFlagAry )
 {
-    DBG_CTOR( Polygon, NULL );
 
     if( nPoints )
         mpImplPolygon = new ImplPolygon( nPoints, pPtAry, pFlagAry );
@@ -326,8 +321,6 @@ Polygon::Polygon( sal_uInt16 nPoints, const Point* pPtAry, const sal_uInt8* pFla
 
 Polygon::Polygon( const Polygon& rPoly )
 {
-    DBG_CTOR( Polygon, NULL );
-    DBG_CHKOBJ( &rPoly, Polygon, NULL );
     DBG_ASSERT( rPoly.mpImplPolygon->mnRefCount < 0xFFFFFFFE, "Polygon: RefCount overflow" );
 
     mpImplPolygon = rPoly.mpImplPolygon;
@@ -337,7 +330,6 @@ Polygon::Polygon( const Polygon& rPoly )
 
 Polygon::Polygon( const Rectangle& rRect )
 {
-    DBG_CTOR( Polygon, NULL );
 
     if ( rRect.IsEmpty() )
         mpImplPolygon = (ImplPolygon*)(&aStaticImplPolygon);
@@ -354,8 +346,6 @@ Polygon::Polygon( const Rectangle& rRect )
 
 Polygon::Polygon( const Rectangle& rRect, sal_uIntPtr nHorzRound, sal_uIntPtr nVertRound )
 {
-    DBG_CTOR( Polygon, NULL );
-
     if ( rRect.IsEmpty() )
         mpImplPolygon = (ImplPolygon*)(&aStaticImplPolygon);
     else
@@ -409,8 +399,6 @@ Polygon::Polygon( const Rectangle& rRect, sal_uIntPtr nHorzRound, sal_uIntPtr nV
 
 Polygon::Polygon( const Point& rCenter, long nRadX, long nRadY, sal_uInt16 nPoints )
 {
-    DBG_CTOR( Polygon, NULL );
-
     if( nRadX && nRadY )
     {
         // Compute default (depends on size)
@@ -461,8 +449,6 @@ Polygon::Polygon( const Point& rCenter, long nRadX, long nRadY, sal_uInt16 nPoin
 Polygon::Polygon( const Rectangle& rBound, const Point& rStart, const Point& rEnd,
                   PolyStyle eStyle, bool bFullCircle )
 {
-    DBG_CTOR( Polygon, NULL );
-
     const long  nWidth = rBound.GetWidth();
     const long  nHeight = rBound.GetHeight();
 
@@ -539,8 +525,6 @@ Polygon::Polygon( const Point& rBezPt1, const Point& rCtrlPt1,
                   const Point& rBezPt2, const Point& rCtrlPt2,
                   sal_uInt16 nPoints )
 {
-    DBG_CTOR( Polygon, NULL );
-
     nPoints = ( 0 == nPoints ) ? 25 : ( ( nPoints < 2 ) ? 2 : nPoints );
 
     const double    fInc = 1.0 / ( nPoints - 1 );
@@ -572,7 +556,6 @@ Polygon::Polygon( const Point& rBezPt1, const Point& rCtrlPt1,
 
 Polygon::~Polygon()
 {
-    DBG_DTOR( Polygon, NULL );
 
     // Remove if refcount == 0, otherwise decrement refcount
     if ( mpImplPolygon->mnRefCount )
@@ -586,19 +569,16 @@ Polygon::~Polygon()
 
 const Point* Polygon::GetConstPointAry() const
 {
-    DBG_CHKTHIS( Polygon, NULL );
     return (Point*)mpImplPolygon->mpPointAry;
 }
 
 const sal_uInt8* Polygon::GetConstFlagAry() const
 {
-    DBG_CHKTHIS( Polygon, NULL );
     return mpImplPolygon->mpFlagAry;
 }
 
 void Polygon::SetPoint( const Point& rPt, sal_uInt16 nPos )
 {
-    DBG_CHKTHIS( Polygon, NULL );
     DBG_ASSERT( nPos < mpImplPolygon->mnPoints,
                 "Polygon::SetPoint(): nPos >= nPoints" );
 
@@ -608,7 +588,6 @@ void Polygon::SetPoint( const Point& rPt, sal_uInt16 nPos )
 
 void Polygon::SetFlags( sal_uInt16 nPos, PolyFlags eFlags )
 {
-    DBG_CHKTHIS( Polygon, NULL );
     DBG_ASSERT( nPos < mpImplPolygon->mnPoints,
                 "Polygon::SetFlags(): nPos >= nPoints" );
 
@@ -624,7 +603,6 @@ void Polygon::SetFlags( sal_uInt16 nPos, PolyFlags eFlags )
 
 const Point& Polygon::GetPoint( sal_uInt16 nPos ) const
 {
-    DBG_CHKTHIS( Polygon, NULL );
     DBG_ASSERT( nPos < mpImplPolygon->mnPoints,
                 "Polygon::GetPoint(): nPos >= nPoints" );
 
@@ -633,7 +611,6 @@ const Point& Polygon::GetPoint( sal_uInt16 nPos ) const
 
 PolyFlags Polygon::GetFlags( sal_uInt16 nPos ) const
 {
-    DBG_CHKTHIS( Polygon, NULL );
     DBG_ASSERT( nPos < mpImplPolygon->mnPoints,
                 "Polygon::GetFlags(): nPos >= nPoints" );
     return( mpImplPolygon->mpFlagAry ?
@@ -666,8 +643,6 @@ bool Polygon::IsRect() const
 
 void Polygon::SetSize( sal_uInt16 nNewSize )
 {
-    DBG_CHKTHIS( Polygon, NULL );
-
     if( nNewSize != mpImplPolygon->mnPoints )
     {
         ImplMakeUnique();
@@ -677,15 +652,11 @@ void Polygon::SetSize( sal_uInt16 nNewSize )
 
 sal_uInt16 Polygon::GetSize() const
 {
-    DBG_CHKTHIS( Polygon, NULL );
-
     return mpImplPolygon->mnPoints;
 }
 
 void Polygon::Clear()
 {
-    DBG_CHKTHIS( Polygon, NULL );
-
     if ( mpImplPolygon->mnRefCount )
     {
         if ( mpImplPolygon->mnRefCount > 1 )
@@ -714,7 +685,6 @@ double Polygon::CalcDistance( sal_uInt16 nP1, sal_uInt16 nP2 )
 
 void Polygon::Optimize( sal_uIntPtr nOptimizeFlags, const PolyOptimizeData* pData )
 {
-    DBG_CHKTHIS( Polygon, NULL );
     DBG_ASSERT( !mpImplPolygon->mpFlagAry, "Optimizing could fail with beziers!" );
 
     sal_uInt16 nSize = mpImplPolygon->mnPoints;
@@ -1021,8 +991,6 @@ void Polygon::ImplReduceEdges( Polygon& rPoly, const double& rArea, sal_uInt16 n
 
 void Polygon::Move( long nHorzMove, long nVertMove )
 {
-    DBG_CHKTHIS( Polygon, NULL );
-
     // This check is required for DrawEngine
     if ( !nHorzMove && !nVertMove )
         return;
@@ -1041,7 +1009,6 @@ void Polygon::Move( long nHorzMove, long nVertMove )
 
 void Polygon::Translate(const Point& rTrans)
 {
-    DBG_CHKTHIS( Polygon, NULL );
     ImplMakeUnique();
 
     for ( sal_uInt16 i = 0, nCount = mpImplPolygon->mnPoints; i < nCount; i++ )
@@ -1050,7 +1017,6 @@ void Polygon::Translate(const Point& rTrans)
 
 void Polygon::Scale( double fScaleX, double fScaleY )
 {
-    DBG_CHKTHIS( Polygon, NULL );
     ImplMakeUnique();
 
     for ( sal_uInt16 i = 0, nCount = mpImplPolygon->mnPoints; i < nCount; i++ )
@@ -1063,7 +1029,6 @@ void Polygon::Scale( double fScaleX, double fScaleY )
 
 void Polygon::Rotate( const Point& rCenter, sal_uInt16 nAngle10 )
 {
-    DBG_CHKTHIS( Polygon, NULL );
     nAngle10 %= 3600;
 
     if( nAngle10 )
@@ -1075,7 +1040,6 @@ void Polygon::Rotate( const Point& rCenter, sal_uInt16 nAngle10 )
 
 void Polygon::Rotate( const Point& rCenter, double fSin, double fCos )
 {
-    DBG_CHKTHIS( Polygon, NULL );
     ImplMakeUnique();
 
     long nX, nY;
@@ -1326,7 +1290,6 @@ void Polygon::Clip( const Rectangle& rRect, bool bPolygon )
 
 Rectangle Polygon::GetBoundRect() const
 {
-    DBG_CHKTHIS( Polygon, NULL );
     // Removing the assert. Bezier curves have the attribute that each single
     // curve segment defined by four points can not exit the four-point polygon
     // defined by that points. This allows to say that the curve segment can also
@@ -1367,7 +1330,6 @@ Rectangle Polygon::GetBoundRect() const
 
 double Polygon::GetSignedArea() const
 {
-    DBG_CHKTHIS( Polygon, NULL );
     DBG_ASSERT( !mpImplPolygon->mpFlagAry, "GetArea could fail with beziers!" );
 
     double fArea = 0.0;
@@ -1393,7 +1355,6 @@ double Polygon::GetSignedArea() const
 
 bool Polygon::IsInside( const Point& rPoint ) const
 {
-    DBG_CHKTHIS( Polygon, NULL );
     DBG_ASSERT( !mpImplPolygon->mpFlagAry, "IsInside could fail with beziers!" );
 
     const Rectangle aBound( GetBoundRect() );
@@ -1442,13 +1403,11 @@ bool Polygon::IsInside( const Point& rPoint ) const
 
 bool Polygon::IsRightOrientated() const
 {
-    DBG_CHKTHIS( Polygon, NULL );
     return GetSignedArea() >= 0.0;
 }
 
 void Polygon::Insert( sal_uInt16 nPos, const Point& rPt, PolyFlags eFlags )
 {
-    DBG_CHKTHIS( Polygon, NULL );
     ImplMakeUnique();
 
     if( nPos >= mpImplPolygon->mnPoints )
@@ -1466,7 +1425,6 @@ void Polygon::Insert( sal_uInt16 nPos, const Point& rPt, PolyFlags eFlags )
 
 void Polygon::Insert( sal_uInt16 nPos, const Polygon& rPoly )
 {
-    DBG_CHKTHIS( Polygon, NULL );
     const sal_uInt16 nInsertCount = rPoly.mpImplPolygon->mnPoints;
 
     if( nInsertCount )
@@ -1485,7 +1443,6 @@ void Polygon::Insert( sal_uInt16 nPos, const Polygon& rPoly )
 
 Point& Polygon::operator[]( sal_uInt16 nPos )
 {
-    DBG_CHKTHIS( Polygon, NULL );
     DBG_ASSERT( nPos < mpImplPolygon->mnPoints, "Polygon::[]: nPos >= nPoints" );
 
     ImplMakeUnique();
@@ -1494,8 +1451,6 @@ Point& Polygon::operator[]( sal_uInt16 nPos )
 
 Polygon& Polygon::operator=( const Polygon& rPoly )
 {
-    DBG_CHKTHIS( Polygon, NULL );
-    DBG_CHKOBJ( &rPoly, Polygon, NULL );
     DBG_ASSERT( rPoly.mpImplPolygon->mnRefCount < 0xFFFFFFFE, "Polygon: RefCount overflow" );
 
     // Increase refcounter before assigning
@@ -1518,8 +1473,6 @@ Polygon& Polygon::operator=( const Polygon& rPoly )
 
 bool Polygon::operator==( const Polygon& rPoly ) const
 {
-    DBG_CHKTHIS( Polygon, NULL );
-    DBG_CHKOBJ( &rPoly, Polygon, NULL );
 
     if ( (rPoly.mpImplPolygon == mpImplPolygon) )
         return true;
@@ -1550,7 +1503,6 @@ bool Polygon::IsEqual( const Polygon& rPoly ) const
 
 SvStream& operator>>( SvStream& rIStream, Polygon& rPoly )
 {
-    DBG_CHKOBJ( &rPoly, Polygon, NULL );
     DBG_ASSERTWARNING( rIStream.GetVersion(), "Polygon::>> - Solar-Version not set on rIStream" );
 
     sal_uInt16          i;
@@ -1597,7 +1549,6 @@ SvStream& operator>>( SvStream& rIStream, Polygon& rPoly )
 
 SvStream& WritePolygon( SvStream& rOStream, const Polygon& rPoly )
 {
-    DBG_CHKOBJ( &rPoly, Polygon, NULL );
     DBG_ASSERTWARNING( rOStream.GetVersion(), "Polygon::<< - Solar-Version not set on rOStream" );
 
     sal_uInt16          i;
@@ -1829,8 +1780,6 @@ basegfx::B2DPolygon Polygon::getB2DPolygon() const
 Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
 :   mpImplPolygon(0)
 {
-    DBG_CTOR( Polygon, NULL );
-
     const bool bCurve(rPolygon.areControlPointsUsed());
     const bool bClosed(rPolygon.isClosed());
     sal_uInt32 nB2DLocalCount(rPolygon.count());

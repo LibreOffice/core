@@ -408,8 +408,6 @@ void SvStream::ImpInit()
 
 SvStream::SvStream( SvLockBytes* pLockBytesP )
 {
-    DBG_CTOR( Stream, NULL );
-
     ImpInit();
     xLockBytes = pLockBytesP;
     if( pLockBytesP ) {
@@ -423,15 +421,11 @@ SvStream::SvStream( SvLockBytes* pLockBytesP )
 
 SvStream::SvStream()
 {
-    DBG_CTOR( Stream, NULL );
-
     ImpInit();
 }
 
 SvStream::~SvStream()
 {
-    DBG_DTOR( Stream, NULL );
-
     if ( xLockBytes.Is() )
         Flush();
 
