@@ -272,12 +272,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_rtf::LN_LINETYPE:
             break;
-        case NS_rtf::LN_LINEPROPSLEFT:
-            break;
-        case NS_rtf::LN_LINEPROPSBOTTOM:
-            break;
-        case NS_rtf::LN_LINEPROPSRIGHT:
-            break;
         case NS_ooxml::LN_headerr:
             break;
         case NS_ooxml::LN_footerr:
@@ -311,10 +305,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             //footnote reference descriptor, if nIntValue > 0 then automatic, custom otherwise
             //ignored
         break;
-        case NS_rtf::LN_FONT: //font of footnote symbol
-            if (m_pImpl->GetTopContext())
-                m_pImpl->GetTopContext()->SetFootnoteFontId( nIntValue );
-        break;
         case NS_ooxml::LN_CT_Sym_char:
         if( m_pImpl->GetTopContext() && m_pImpl->GetTopContext()->GetFootnote().is())
         {
@@ -325,10 +315,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         {
             utext( reinterpret_cast < const sal_uInt8 * >( &nIntValue ), 1 );
         }
-        break;
-        case NS_rtf::LN_CHAR: //footnote symbol character
-            if (m_pImpl->GetTopContext())
-                m_pImpl->GetTopContext()->SetFootnoteSymbol( sal_Unicode(nIntValue));
         break;
         case NS_ooxml::LN_CT_Sym_font:
             //the footnote symbol and font are provided after the footnote is already inserted
