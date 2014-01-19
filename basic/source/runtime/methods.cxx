@@ -1302,7 +1302,10 @@ RTLFUNC(Mid)
                     {
                         nLen = aArgStr.getLength() - nStartPos;
                     }
-                    aResultStr = aArgStr.copy( nStartPos, nLen );
+                    if (nLen > 0)
+                        aResultStr = aArgStr.copy( nStartPos, nLen );
+                    else
+                        aResultStr = OUString();
                 }
                 rPar.Get(0)->PutString( aResultStr );
             }
