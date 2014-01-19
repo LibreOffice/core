@@ -701,19 +701,37 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                             aLineInfo.SetWidth( aSize.Width() );
 
                         sal_Bool bTransparent = sal_False;
-                        sal_uInt16 nDashCount = 0;
-                        sal_uInt16 nDotCount = 0;
                         switch( nStyle & 0xFF )
                         {
                             case PS_DASHDOTDOT :
-                                nDotCount++;
+                                aLineInfo.SetStyle( LINE_DASH );
+                                aLineInfo.SetDashCount( 1 );
+                                aLineInfo.SetDotCount( 2 );
+                                aLineInfo.SetDashLen( 150 );
+                                aLineInfo.SetDotLen( 30 );
+                                aLineInfo.SetDistance( 50 );
+                            break;
                             case PS_DASHDOT :
-                                nDashCount++;
+                                aLineInfo.SetStyle( LINE_DASH );
+                                aLineInfo.SetDashCount( 1 );
+                                aLineInfo.SetDotCount( 1 );
+                                aLineInfo.SetDashLen( 150 );
+                                aLineInfo.SetDotLen( 30 );
+                                aLineInfo.SetDistance( 90 );
+                            break;
                             case PS_DOT :
-                                nDotCount++;
+                                aLineInfo.SetStyle( LINE_DASH );
+                                aLineInfo.SetDashCount( 0 );
+                                aLineInfo.SetDotCount( 1 );
+                                aLineInfo.SetDotLen( 30 );
+                                aLineInfo.SetDistance( 50 );
                             break;
                             case PS_DASH :
-                                nDashCount++;
+                                aLineInfo.SetStyle( LINE_DASH );
+                                aLineInfo.SetDashCount( 1 );
+                                aLineInfo.SetDotCount( 0 );
+                                aLineInfo.SetDashLen( 225 );
+                                aLineInfo.SetDistance( 100 );
                             break;
                             case PS_NULL :
                                 bTransparent = sal_True;
@@ -749,12 +767,6 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                             break;
                             default :
                                 aLineInfo.SetLineJoin ( basegfx::B2DLINEJOIN_NONE );
-                        }
-                        if ( nDashCount | nDotCount )
-                        {
-                            aLineInfo.SetStyle( LINE_DASH );
-                            aLineInfo.SetDashCount( nDashCount );
-                            aLineInfo.SetDotCount( nDotCount );
                         }
                         pOut->CreateObject( nIndex, GDI_PEN, new WinMtfLineStyle( ReadColor(), aLineInfo, bTransparent ) );
                     }
