@@ -121,17 +121,17 @@
                 <property name="entry_text_column">0</property>
                 <property name="id_column">1</property>
                 <items>
-                  <item>Sum</item>
-                  <item>Count</item>
-                  <item>Average</item>
-                  <item>Max</item>
-                  <item>Min</item>
-                  <item>Product</item>
-                  <item>Count (numbers only)</item>
-                  <item>StDev (sample)</item>
-                  <item>StDevP (population)</item>
-                  <item>Var (sample)</item>
-                  <item>VarP (population)</item>
+                  <item translatable="yes">Sum</item>
+                  <item translatable="yes">Count</item>
+                  <item translatable="yes">Average</item>
+                  <item translatable="yes">Max</item>
+                  <item translatable="yes">Min</item>
+                  <item translatable="yes">Product</item>
+                  <item translatable="yes">Count (numbers only)</item>
+                  <item translatable="yes">StDev (sample)</item>
+                  <item translatable="yes">StDevP (population)</item>
+                  <item translatable="yes">Var (sample)</item>
+                  <item translatable="yes">VarP (population)</item>
                 </items>
               </object>
               <packing>

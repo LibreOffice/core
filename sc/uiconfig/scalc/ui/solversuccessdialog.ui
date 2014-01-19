@@ -73,7 +73,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="ok">
-                <property name="label">Keep Result</property>
+                <property name="label" translatable="yes">Keep Result</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -89,7 +89,7 @@
             </child>
             <child>
               <object class="GtkButton" id="cancel">
-                <property name="label">Restore Previous</property>
+                <property name="label" translatable="yes">Restore Previous</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
