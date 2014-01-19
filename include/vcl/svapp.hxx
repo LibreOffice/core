@@ -183,7 +183,8 @@ public:
     static oslThreadIdentifier  GetMainThreadIdentifier();
     static sal_uLong                ReleaseSolarMutex();
     static void                 AcquireSolarMutex( sal_uLong nCount );
-    static void                 EnableNoYieldMode( bool i_bNoYield );
+    static void                 EnableNoYieldMode();
+    static void                 DisableNoYieldMode();
     static void                 AddPostYieldListener( const Link& i_rListener );
     static void                 RemovePostYieldListener( const Link& i_rListener );
 

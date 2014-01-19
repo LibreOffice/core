@@ -987,10 +987,16 @@ void Application::RemoveIdleHdl( const Link& rLink )
         pSVData->maAppData.mpIdleMgr->RemoveIdleHdl( rLink );
 }
 
-void Application::EnableNoYieldMode( bool i_bNoYield )
+void Application::EnableNoYieldMode()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    pSVData->maAppData.mbNoYield = i_bNoYield;
+    pSVData->maAppData.mbNoYield = true;
+}
+
+void Application::DisableNoYieldMode()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    pSVData->maAppData.mbNoYield = false;
 }
 
 void Application::AddPostYieldListener( const Link& i_rListener )

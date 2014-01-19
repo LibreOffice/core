@@ -760,7 +760,7 @@ void SAL_CALL SlideshowImpl::disposing()
 
     setActiveXToolbarsVisible( sal_True );
 
-    Application::EnableNoYieldMode(false);
+    Application::DisableNoYieldMode();
     Application::RemovePostYieldListener(LINK(this, SlideshowImpl, PostYieldListener));
 
     mbDisposed = true;
@@ -1855,7 +1855,7 @@ IMPL_LINK_NOARG(SlideshowImpl, PostYieldListener)
     // prevent me from deletion when recursing (App::Reschedule does)
     const rtl::Reference<SlideshowImpl> this_(this);
 
-    Application::EnableNoYieldMode(false);
+    Application::DisableNoYieldMode();
     Application::RemovePostYieldListener(LINK(this, SlideshowImpl, PostYieldListener));
     Application::Reschedule(true); // fix for fdo#32861 - process
                                    // *all* outstanding events after
@@ -1896,7 +1896,7 @@ sal_Int32 SlideshowImpl::updateSlideShow (void)
             if (::basegfx::fTools::equalZero(fUpdate))
             {
                 // Use post yield listener for short update intervalls.
-                Application::EnableNoYieldMode(true);
+                Application::EnableNoYieldMode();
                 Application::AddPostYieldListener(LINK(this, SlideshowImpl, PostYieldListener));
             }
             else
@@ -1917,7 +1917,7 @@ sal_Int32 SlideshowImpl::updateSlideShow (void)
                 // integer may lead to zero value.)
                 OSL_ASSERT(static_cast<sal_uLong>(fUpdate * 1000.0) > 0);
 
-                Application::EnableNoYieldMode(false);
+                Application::DisableNoYieldMode();
                 Application::RemovePostYieldListener(LINK(this, SlideshowImpl, PostYieldListener));
 
                 // Use a timer for the asynchronous callback.
