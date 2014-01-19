@@ -563,9 +563,9 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <items>
-                          <item>Microsoft Internet Explorer</item>
-                          <item>Mozilla Firefox</item>
-                          <item>%PRODUCTNAME Writer</item>
+                          <item translatable="yes">Microsoft Internet Explorer</item>
+                          <item translatable="yes">Mozilla Firefox</item>
+                          <item translatable="yes">%PRODUCTNAME Writer</item>
                         </items>
                       </object>
                       <packing>

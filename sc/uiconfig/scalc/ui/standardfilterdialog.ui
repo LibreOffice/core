@@ -119,8 +119,8 @@
                           <relation type="labelled-by" target="label2"/>
                         </accessibility>
                         <items>
-                          <item>AND</item>
-                          <item>OR</item>
+                          <item translatable="yes">AND</item>
+                          <item translatable="yes">OR</item>
                         </items>
                       </object>
                       <packing>
@@ -140,8 +140,8 @@
                           <relation type="labelled-by" target="label2"/>
                         </accessibility>
                         <items>
-                          <item>AND</item>
-                          <item>OR</item>
+                          <item translatable="yes">AND</item>
+                          <item translatable="yes">OR</item>
                         </items>
                       </object>
                       <packing>
@@ -158,8 +158,8 @@
                         <property name="entry_text_column">0</property>
                         <property name="id_column">1</property>
                         <items>
-                          <item>AND</item>
-                          <item>OR</item>
+                          <item translatable="yes">AND</item>
+                          <item translatable="yes">OR</item>
                         </items>
                       </object>
                       <packing>
@@ -176,8 +176,8 @@
                         <property name="entry_text_column">0</property>
                         <property name="id_column">1</property>
                         <items>
-                          <item>AND</item>
-                          <item>OR</item>
+                          <item translatable="yes">AND</item>
+                          <item translatable="yes">OR</item>
                         </items>
                       </object>
                       <packing>
@@ -314,12 +314,12 @@
                           <relation type="labelled-by" target="label4"/>
                         </accessibility>
                         <items>
-                          <item>=</item>
-                          <item>&lt;</item>
-                          <item>&gt;</item>
-                          <item>&lt;=</item>
-                          <item>&gt;=</item>
-                          <item>&lt;&gt;</item>
+                          <item translatable="no">=</item>
+                          <item translatable="no">&lt;</item>
+                          <item translatable="no">&gt;</item>
+                          <item translatable="no">&lt;=</item>
+                          <item translatable="no">&gt;=</item>
+                          <item translatable="no">&lt;&gt;</item>
                           <item translatable="yes">Largest</item>
                           <item translatable="yes">Smallest</item>
                           <item translatable="yes">Largest %</item>
@@ -349,12 +349,12 @@
                           <relation type="labelled-by" target="label4"/>
                         </accessibility>
                         <items>
-                          <item>=</item>
-                          <item>&lt;</item>
-                          <item>&gt;</item>
-                          <item>&lt;=</item>
-                          <item>&gt;=</item>
-                          <item>&lt;&gt;</item>
+                          <item translatable="no">=</item>
+                          <item translatable="no">&lt;</item>
+                          <item translatable="no">&gt;</item>
+                          <item translatable="no">&lt;=</item>
+                          <item translatable="no">&gt;=</item>
+                          <item translatable="no">&lt;&gt;</item>
                           <item translatable="yes">Largest</item>
                           <item translatable="yes">Smallest</item>
                           <item translatable="yes">Largest %</item>
@@ -384,12 +384,12 @@
                           <relation type="labelled-by" target="label4"/>
                         </accessibility>
                         <items>
-                          <item>=</item>
-                          <item>&lt;</item>
-                          <item>&gt;</item>
-                          <item>&lt;=</item>
-                          <item>&gt;=</item>
-                          <item>&lt;&gt;</item>
+                          <item translatable="no">=</item>
+                          <item translatable="no">&lt;</item>
+                          <item translatable="no">&gt;</item>
+                          <item translatable="no">&lt;=</item>
+                          <item translatable="no">&gt;=</item>
+                          <item translatable="no">&lt;&gt;</item>
                           <item translatable="yes">Largest</item>
                           <item translatable="yes">Smallest</item>
                           <item translatable="yes">Largest %</item>
@@ -416,12 +416,12 @@
                         <property name="entry_text_column">0</property>
                         <property name="id_column">1</property>
                         <items>
-                          <item>=</item>
-                          <item>&lt;</item>
-                          <item>&gt;</item>
-                          <item>&lt;=</item>
-                          <item>&gt;=</item>
-                          <item>&lt;&gt;</item>
+                          <item translatable="no">=</item>
+                          <item translatable="no">&lt;</item>
+                          <item translatable="no">&gt;</item>
+                          <item translatable="no">&lt;=</item>
+                          <item translatable="no">&gt;=</item>
+                          <item translatable="no">&lt;&gt;</item>
                           <item translatable="yes">Largest</item>
                           <item translatable="yes">Smallest</item>
                           <item translatable="yes">Largest %</item>
