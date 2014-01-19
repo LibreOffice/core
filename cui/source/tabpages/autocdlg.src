@@ -280,8 +280,7 @@ ModalDialog RID_OFADLG_PRCNT_SET
         Spin = TRUE ;
         Maximum = 100 ;
         Value = 77 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         First = 10 ;
         Last = 100 ;
         SpinSize = 5 ;

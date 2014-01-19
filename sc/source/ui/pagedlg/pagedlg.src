@@ -331,8 +331,7 @@ TabPage RID_SCPAGE_TABLE
         First = 15 ;
         Last = 200 ;
         SpinSize = 1 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
     };
     NumericField ED_SCALEPAGEWIDTH
     {

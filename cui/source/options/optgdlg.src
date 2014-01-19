@@ -211,8 +211,7 @@ TabPage OFA_TP_VIEW
         First = 80 ;
         Last = 130 ;
         SpinSize = 1 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
     };
     FixedText FT_ICONSIZESTYLE
     {
@@ -448,8 +447,7 @@ TabPage OFA_TP_VIEW
         First = 10 ;
         Last = 90 ;
         SpinSize = 5 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText [ en-US ] = "%" ;
+        Unit = FUNIT_PERCENT ;
     };
 };
 // *******************************************************************

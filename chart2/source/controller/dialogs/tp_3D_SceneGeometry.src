@@ -143,8 +143,7 @@ TabPage TP_3D_SCENEGEOMETRY
         First = 0 ;
         Last = 100 ;
         SpinSize = 5 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
     };
 };
 

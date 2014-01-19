@@ -447,8 +447,7 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
         Minimum = 0 ;
         Maximum = 1024 ;
         DecimalDigits = 1 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText [ en-US ] = "%";
+        Unit = FUNIT_PERCENT ;
         SpinSize = 1 ;
 
     };

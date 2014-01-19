@@ -212,8 +212,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Minimum = 50 ;
         Maximum = 200 ;
         Value = 100 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         First = 50 ;
         Last = 200 ;
         SpinSize = 1 ;

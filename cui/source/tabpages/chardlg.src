@@ -747,8 +747,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Spin = TRUE ;
         Minimum = 1 ;
         Maximum = 100 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         First = 1 ;
         Last = 100 ;
         SpinSize = 1 ;
@@ -778,8 +777,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Spin = TRUE ;
         Minimum = 1 ;
         Maximum = 100 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         First = 1 ;
         Last = 100 ;
         SpinSize = 1 ;
@@ -845,8 +843,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Spin = TRUE ;
         Minimum = 1 ;
         Maximum = 999 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         First = 50 ;
         Last = 200 ;
         SpinSize = 1 ;

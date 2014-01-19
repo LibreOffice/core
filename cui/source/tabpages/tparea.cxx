@@ -2523,13 +2523,13 @@ IMPL_LINK( SvxAreaTabPage, ClickScaleHdl_Impl, void *, EMPTYARG )
     if( aTsbScale.GetState() == STATE_CHECK )
     {
         aMtrFldXSize.SetDecimalDigits( 0 );
-        aMtrFldXSize.SetUnit( FUNIT_CUSTOM );
+        aMtrFldXSize.SetUnit( FUNIT_PERCENT );
         aMtrFldXSize.SetValue( 100 );
         aMtrFldXSize.SetMax( 100 );
         aMtrFldXSize.SetLast( 100 );
 
         aMtrFldYSize.SetDecimalDigits( 0 );
-        aMtrFldYSize.SetUnit( FUNIT_CUSTOM );
+        aMtrFldYSize.SetUnit( FUNIT_PERCENT );
         aMtrFldYSize.SetValue( 100 );
         aMtrFldYSize.SetMax( 100 );
         aMtrFldYSize.SetLast( 100 );

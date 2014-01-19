@@ -69,8 +69,7 @@ Control RID_SIDEBAR_GRAPHIC_PANEL
         Maximum = 100 ;
         Minimum = -100 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         SpinSize = 1 ;
     };
     FixedText FT_CONTRAST
@@ -92,8 +91,7 @@ Control RID_SIDEBAR_GRAPHIC_PANEL
         Maximum = 100 ;
         Minimum = -100 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         SpinSize = 1 ;
     };
     FixedText FT_COLOR_MODE
@@ -124,14 +122,13 @@ Control RID_SIDEBAR_GRAPHIC_PANEL
         Pos = MAP_APPFONT (X2, Y3) ;
         Size = MAP_APPFONT ( MBOX_WIDTH ,MBOX_HEIGHT ) ;
         HelpID = HID_PROPERTY_PANEL_GRAPHIC_MTR_TRANSP;
-        QuickHelpText [ en-US ] = "Specify the percentage of transparency; 0% is fully opaque and 100% is fully transparent.";
+        QuickHelpText [ en-US ] = "Specify the percentage of transparency; 0 % is fully opaque and 100 % is fully transparent.";
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
         Maximum = 100 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         SpinSize = 1 ;
     };
     MetricField MF_RED
@@ -147,8 +144,7 @@ Control RID_SIDEBAR_GRAPHIC_PANEL
         Maximum = 100 ;
         Minimum = -100 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         SpinSize = 1 ;
     };
     MetricField MF_GREEN
@@ -164,8 +160,7 @@ Control RID_SIDEBAR_GRAPHIC_PANEL
         Maximum = 100 ;
         Minimum = -100 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         SpinSize = 1 ;
     };
     MetricField MF_BLUE
@@ -181,8 +176,7 @@ Control RID_SIDEBAR_GRAPHIC_PANEL
         Maximum = 100 ;
         Minimum = -100 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         SpinSize = 1 ;
     };
     MetricField MF_GAMMA

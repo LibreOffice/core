@@ -67,7 +67,7 @@ ModalDialog RID_SVXDLG_ZOOM
         HelpID = "cui:RadioButton:RID_SVXDLG_ZOOM:BTN_100";
         Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 105, 10 ) ;
-        Text = "~100%" ;
+        Text = "~100 %" ;
     };
     RadioButton BTN_USER
     {
@@ -86,8 +86,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Left = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         SpinSize = 1 ;
     };
     FixedLine FL_VIEWLAYOUT

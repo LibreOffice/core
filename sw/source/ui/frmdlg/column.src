@@ -293,8 +293,7 @@ TabPage TP_COLUMN
         Minimum = 25 ;
         Maximum = 100 ;
         Value = 100 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         First = 25 ;
         Last = 100 ;
     };

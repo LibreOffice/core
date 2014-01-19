@@ -183,9 +183,8 @@ FloatingWindow RID_SVXDLG_CONTOUR
         Maximum = 99 ;
         Last = 99 ;
         SpinSize = 1 ;
-        Unit = FUNIT_CUSTOM ;
+        Unit = FUNIT_PERCENT ;
         QuickHelpText [ en-US ] = "Color Tolerance" ;
-        CustomUnitText [ en-US ] = "%" ;
     };
     Control CTL_CONTOUR
     {

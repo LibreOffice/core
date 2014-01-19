@@ -197,8 +197,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Last = 1000 ;
         Maximum = 9999 ;
         Value = 100 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         SpinSize = 10 ;
     };
     FixedText FT_HEIGHTZOOM
@@ -224,8 +223,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Last = 1000 ;
         Maximum = 9999 ;
         Value = 100 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         SpinSize = 10 ;
     };
     FixedLine FL_SIZE
