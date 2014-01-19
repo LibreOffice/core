@@ -109,53 +109,11 @@
     </xsl:for-each>
 </xsl:template>
 
-<xsl:template name="qnametostrops">
-  <xsl:text>
-    /* Operations */</xsl:text>
-    <xsl:for-each select='.//UML:Operation[@name!="reserved"]'>
-      <xsl:for-each select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="opid"]'>
-        <xsl:choose>
-          <xsl:when test='.//UML:Stereotype[@xmi.idref="noresolve"]'>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:text>
-    mMap[</xsl:text>
-    <xsl:call-template name='idtoqname'>
-      <xsl:with-param name='id'><xsl:value-of select='.//UML:TaggedValue.dataValue'/></xsl:with-param>
-    </xsl:call-template>
-    <xsl:text>] = "</xsl:text>
-    <xsl:value-of select='.//UML:TaggedValue.dataValue'/>
-    <xsl:text>";</xsl:text>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:for-each>
-    </xsl:for-each>
-</xsl:template>
-
-<xsl:template name="qnametostrclasses">
-  <xsl:text>
-    /* Classes */</xsl:text>
-    <xsl:for-each select='.//UML:Class[@name!="reserved"]'>
-      <xsl:for-each select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="classid"]'>
-        <xsl:text>
-    mMap[</xsl:text>
-    <xsl:call-template name='idtoqname'>
-      <xsl:with-param name='id'><xsl:value-of select='.//UML:TaggedValue.dataValue'/></xsl:with-param>
-    </xsl:call-template>
-    <xsl:text>] = "</xsl:text>
-    <xsl:value-of select='.//UML:TaggedValue.dataValue'/>
-    <xsl:text>";</xsl:text>
-      </xsl:for-each>
-    </xsl:for-each>
-</xsl:template>
-
 <xsl:template match='UML:Model' mode='qnametostr'>
   <xsl:text>
 void QNameToString::init_doctok()
 {</xsl:text>
 <xsl:call-template name="qnametostrattrs"/>
-<xsl:call-template name="qnametostrops"/>
-<xsl:call-template name="qnametostrclasses"/>
 <xsl:text>
 }
 </xsl:text>
