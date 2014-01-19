@@ -351,7 +351,7 @@ Point WinMtfOutput::ImplScale( const Point& rPt) // Hack to set varying defaults
 {
         if (mbIsMapDevSet && mbIsMapWinSet)
         {
-            return Point((rPt.X())*mnWinExtX/mnDevWidth-mrclFrame.Left(),(rPt.Y())*mnWinExtY/mnDevHeight-mrclFrame.Top());
+            return rPt; //fdo#73764
         }
         else
         {
