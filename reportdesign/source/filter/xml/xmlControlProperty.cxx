@@ -46,8 +46,6 @@ namespace rptxml
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::xml::sax;
 
-DBG_NAME( rpt_OXMLControlProperty )
-
 OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
                 ,sal_uInt16 nPrfx
                 ,const OUString& _sLocalName
@@ -59,8 +57,6 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
     ,m_pContainer(_pContainer)
     ,m_bIsList(sal_False)
 {
-    DBG_CTOR( rpt_OXMLControlProperty,NULL);
-
     m_aPropType = ::getVoidCppuType();
 
     OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
@@ -118,7 +114,6 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
 
 OXMLControlProperty::~OXMLControlProperty()
 {
-    DBG_DTOR( rpt_OXMLControlProperty,NULL);
 }
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLControlProperty::CreateChildContext(

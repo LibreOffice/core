@@ -47,14 +47,12 @@ namespace rptui
 {
     using namespace ::com::sun::star;
 
-    DBG_NAME(rpt_FormattedFieldBeautifier)
 
     //--------------------------------------------------------------------
     FormattedFieldBeautifier::FormattedFieldBeautifier(const OReportController& _aController)
         :m_rReportController(_aController)
         ,m_nTextColor(-1)
     {
-        DBG_CTOR(rpt_FormattedFieldBeautifier, NULL);
     }
 
     //--------------------------------------------------------------------
@@ -71,7 +69,6 @@ namespace rptui
     //--------------------------------------------------------------------
     FormattedFieldBeautifier::~FormattedFieldBeautifier()
     {
-        DBG_DTOR(rpt_FormattedFieldBeautifier,NULL);
     }
 
     // -----------------------------------------------------------------------------

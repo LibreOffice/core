@@ -310,11 +310,9 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
 }
 // -----------------------------------------------------------------------------
 
-DBG_NAME( rpt_OObjectBase )
 OObjectBase::OObjectBase(const uno::Reference< report::XReportComponent>& _xComponent)
 :m_bIsListening(sal_False)
 {
-    DBG_CTOR( rpt_OObjectBase,NULL);
     m_xReportComponent = _xComponent;
 }
 //----------------------------------------------------------------------------
@@ -322,12 +320,10 @@ OObjectBase::OObjectBase(const OUString& _sComponentName)
 :m_sComponentName(_sComponentName)
 ,m_bIsListening(sal_False)
 {
-    DBG_CTOR( rpt_OObjectBase,NULL);
 }
 //----------------------------------------------------------------------------
 OObjectBase::~OObjectBase()
 {
-    DBG_DTOR( rpt_OObjectBase,NULL);
     m_xMediator.reset();
     if ( isListening() )
         EndListening();
@@ -355,7 +351,6 @@ uno::Reference< beans::XPropertySet> OObjectBase::getAwtComponent()
 //----------------------------------------------------------------------------
 void OObjectBase::StartListening()
 {
-    DBG_CHKTHIS( rpt_OObjectBase,NULL);
     OSL_ENSURE(!isListening(), "OUnoObject::StartListening: already listening!");
 
     if ( !isListening() && m_xReportComponent.is() )
@@ -373,7 +368,6 @@ void OObjectBase::StartListening()
 //----------------------------------------------------------------------------
 void OObjectBase::EndListening(sal_Bool /*bRemoveListener*/)
 {
-    DBG_CHKTHIS( rpt_OObjectBase,NULL);
     OSL_ENSURE(!m_xReportComponent.is() || isListening(), "OUnoObject::EndListening: not listening currently!");
 
     m_bIsListening = sal_False;
@@ -398,7 +392,6 @@ void OObjectBase::EndListening(sal_Bool /*bRemoveListener*/)
 //----------------------------------------------------------------------------
 void OObjectBase::SetPropsFromRect(const Rectangle& _rRect)
 {
-    DBG_CHKTHIS( rpt_OObjectBase,NULL);
     // set properties
     OReportPage* pPage = dynamic_cast<OReportPage*>(GetImplPage());
     if ( pPage && !_rRect.IsEmpty() )
@@ -416,7 +409,6 @@ void OObjectBase::SetPropsFromRect(const Rectangle& _rRect)
 //----------------------------------------------------------------------------
 void OObjectBase::_propertyChange( const  beans::PropertyChangeEvent& /*evt*/ ) throw( uno::RuntimeException)
 {
-    DBG_CHKTHIS( rpt_OObjectBase,NULL);
 }
 //----------------------------------------------------------------------------
 void OObjectBase::SetObjectItemHelper(const SfxPoolItem& /*rItem*/)
@@ -427,7 +419,6 @@ void OObjectBase::SetObjectItemHelper(const SfxPoolItem& /*rItem*/)
 //----------------------------------------------------------------------------
 sal_Bool OObjectBase::supportsService( const OUString& _sServiceName ) const
 {
-    DBG_CHKTHIS( rpt_OObjectBase,NULL);
     sal_Bool bSupports = sal_False;
 
     Reference< lang::XServiceInfo > xServiceInfo( m_xReportComponent , UNO_QUERY );
@@ -478,13 +469,11 @@ uno::Reference< uno::XInterface > OObjectBase::getUnoShapeOf( SdrObject& _rSdrOb
 
 //----------------------------------------------------------------------------
 TYPEINIT1(OCustomShape, SdrObjCustomShape);
-DBG_NAME( rpt_OCustomShape );
 OCustomShape::OCustomShape(const uno::Reference< report::XReportComponent>& _xComponent
                            )
           :SdrObjCustomShape()
           ,OObjectBase(_xComponent)
 {
-    DBG_CTOR( rpt_OCustomShape, NULL);
     impl_setUnoShape( uno::Reference< uno::XInterface >(_xComponent,uno::UNO_QUERY) );
     m_bIsListening = sal_True;
 }
@@ -493,14 +482,12 @@ OCustomShape::OCustomShape(const OUString& _sComponentName)
           :SdrObjCustomShape()
           ,OObjectBase(_sComponentName)
 {
-    DBG_CTOR( rpt_OCustomShape, NULL);
     m_bIsListening = sal_True;
 }
 
 //----------------------------------------------------------------------------
 OCustomShape::~OCustomShape()
 {
-    DBG_DTOR( rpt_OCustomShape, NULL);
 }
 // -----------------------------------------------------------------------------
 sal_uInt16 OCustomShape::GetObjIdentifier() const
@@ -622,7 +609,6 @@ void OCustomShape::impl_setUnoShape( const uno::Reference< uno::XInterface >& rx
 //----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
 TYPEINIT1(OUnoObject, SdrUnoObj);
-DBG_NAME( rpt_OUnoObject );
 //----------------------------------------------------------------------------
 OUnoObject::OUnoObject(const OUString& _sComponentName
                        ,const OUString& rModelName
@@ -631,7 +617,6 @@ OUnoObject::OUnoObject(const OUString& _sComponentName
           ,OObjectBase(_sComponentName)
           ,m_nObjectType(_nObjectType)
 {
-    DBG_CTOR( rpt_OUnoObject, NULL);
     if ( !rModelName.isEmpty() )
         impl_initializeModel_nothrow();
 }
@@ -643,7 +628,6 @@ OUnoObject::OUnoObject(const uno::Reference< report::XReportComponent>& _xCompon
           ,OObjectBase(_xComponent)
           ,m_nObjectType(_nObjectType)
 {
-    DBG_CTOR( rpt_OUnoObject, NULL);
     impl_setUnoShape( uno::Reference< uno::XInterface >( _xComponent, uno::UNO_QUERY ) );
 
     if ( !rModelName.isEmpty() )
@@ -653,7 +637,6 @@ OUnoObject::OUnoObject(const uno::Reference< report::XReportComponent>& _xCompon
 //----------------------------------------------------------------------------
 OUnoObject::~OUnoObject()
 {
-    DBG_DTOR( rpt_OUnoObject, NULL);
 }
 // -----------------------------------------------------------------------------
 void OUnoObject::impl_initializeModel_nothrow()
@@ -703,19 +686,16 @@ sal_uInt32 OUnoObject::GetObjInventor() const
 //----------------------------------------------------------------------------
 SdrPage* OUnoObject::GetImplPage() const
 {
-    DBG_CHKTHIS( rpt_OUnoObject,NULL);
     return GetPage();
 }
 //----------------------------------------------------------------------------
 void OUnoObject::SetSnapRectImpl(const Rectangle& _rRect)
 {
-    DBG_CHKTHIS( rpt_OUnoObject,NULL);
     SetSnapRect( _rRect );
 }
 //----------------------------------------------------------------------------
 sal_Int32 OUnoObject::GetStep() const
 {
-    DBG_CHKTHIS( rpt_OUnoObject,NULL);
     // get step property
     sal_Int32 nStep = 0;
     OSL_FAIL("Who called me!");
@@ -725,7 +705,6 @@ sal_Int32 OUnoObject::GetStep() const
 //----------------------------------------------------------------------------
 void OUnoObject::NbcMove( const Size& rSize )
 {
-    DBG_CHKTHIS( rpt_OUnoObject,NULL);
 
     if ( m_bIsListening )
     {
@@ -775,7 +754,6 @@ void OUnoObject::NbcMove( const Size& rSize )
 
 void OUnoObject::NbcResize(const Point& rRef, const Fraction& xFract, const Fraction& yFract)
 {
-    DBG_CHKTHIS( rpt_OUnoObject,NULL);
     SdrUnoObj::NbcResize( rRef, xFract, yFract );
 
     // stop listening
@@ -804,7 +782,6 @@ void OUnoObject::NbcSetLogicRect(const Rectangle& rRect)
 
 bool OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
-    DBG_CHKTHIS( rpt_OUnoObject,NULL);
     bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
     if ( bResult )
     {
@@ -863,7 +840,6 @@ OUString OUnoObject::GetDefaultName(const OUnoObject* _pObj)
 // -----------------------------------------------------------------------------
 void OUnoObject::_propertyChange( const  beans::PropertyChangeEvent& evt ) throw( uno::RuntimeException)
 {
-    DBG_CHKTHIS( rpt_OUnoObject,NULL);
     OObjectBase::_propertyChange(evt);
     if (isListening())
     {
@@ -970,14 +946,12 @@ OUnoObject* OUnoObject::Clone() const
 // OOle2Obj
 //----------------------------------------------------------------------------
 TYPEINIT1(OOle2Obj, SdrOle2Obj);
-DBG_NAME( rpt_OOle2Obj );
 OOle2Obj::OOle2Obj(const uno::Reference< report::XReportComponent>& _xComponent,sal_uInt16 _nType)
           :SdrOle2Obj()
           ,OObjectBase(_xComponent)
           ,m_nType(_nType)
           ,m_bOnlyOnce(true)
 {
-    DBG_CTOR( rpt_OOle2Obj, NULL);
 
     impl_setUnoShape( uno::Reference< uno::XInterface >( _xComponent, uno::UNO_QUERY ) );
     m_bIsListening = sal_True;
@@ -989,13 +963,11 @@ OOle2Obj::OOle2Obj(const OUString& _sComponentName,sal_uInt16 _nType)
           ,m_nType(_nType)
           ,m_bOnlyOnce(true)
 {
-    DBG_CTOR( rpt_OOle2Obj, NULL);
     m_bIsListening = sal_True;
 }
 //----------------------------------------------------------------------------
 OOle2Obj::~OOle2Obj()
 {
-    DBG_DTOR( rpt_OOle2Obj, NULL);
 }
 // -----------------------------------------------------------------------------
 sal_uInt16 OOle2Obj::GetObjIdentifier() const
@@ -1010,19 +982,16 @@ sal_uInt32 OOle2Obj::GetObjInventor() const
 //----------------------------------------------------------------------------
 SdrPage* OOle2Obj::GetImplPage() const
 {
-    DBG_CHKTHIS( rpt_OOle2Obj,NULL);
     return GetPage();
 }
 //----------------------------------------------------------------------------
 void OOle2Obj::SetSnapRectImpl(const Rectangle& _rRect)
 {
-    DBG_CHKTHIS( rpt_OOle2Obj,NULL);
     SetSnapRect( _rRect );
 }
 //----------------------------------------------------------------------------
 sal_Int32 OOle2Obj::GetStep() const
 {
-    DBG_CHKTHIS( rpt_OOle2Obj,NULL);
     // get step property
     sal_Int32 nStep = 0;
     OSL_FAIL("Who called me!");
@@ -1032,7 +1001,6 @@ sal_Int32 OOle2Obj::GetStep() const
 //----------------------------------------------------------------------------
 void OOle2Obj::NbcMove( const Size& rSize )
 {
-    DBG_CHKTHIS( rpt_OOle2Obj,NULL);
 
     if ( m_bIsListening )
     {
@@ -1087,7 +1055,6 @@ void OOle2Obj::NbcMove( const Size& rSize )
 
 void OOle2Obj::NbcResize(const Point& rRef, const Fraction& xFract, const Fraction& yFract)
 {
-    DBG_CHKTHIS( rpt_OOle2Obj,NULL);
     SdrOle2Obj::NbcResize( rRef, xFract, yFract );
 
     // stop listening
@@ -1116,7 +1083,6 @@ void OOle2Obj::NbcSetLogicRect(const Rectangle& rRect)
 
 bool OOle2Obj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
-    DBG_CHKTHIS( rpt_OOle2Obj,NULL);
     bool bResult = SdrOle2Obj::EndCreate(rStat, eCmd);
     if ( bResult )
     {

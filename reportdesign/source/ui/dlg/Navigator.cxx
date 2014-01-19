@@ -206,7 +206,6 @@ public:
 private:
     using SvTreeListBox::ExecuteDrop;
 };
-DBG_NAME(rpt_NavigatorTree)
 // -----------------------------------------------------------------------------
 NavigatorTree::NavigatorTree( Window* pParent,OReportController& _rController )
         :SvTreeListBox( pParent, WB_TABSTOP| WB_HASBUTTONS|WB_HASLINES|WB_BORDER|WB_HSCROLL|WB_HASBUTTONSATROOT )
@@ -219,7 +218,6 @@ NavigatorTree::NavigatorTree( Window* pParent,OReportController& _rController )
         ,m_pDragedEntry(NULL)
         ,m_nTimerCounter( DROP_ACTION_TIMER_INITIAL_TICKS )
 {
-    DBG_CTOR(rpt_NavigatorTree,NULL);
     m_pReportListener = new OPropertyChangeMultiplexer(this,m_rController.getReportDefinition().get());
     m_pReportListener->addProperty(PROPERTY_PAGEHEADERON);
     m_pReportListener->addProperty(PROPERTY_PAGEFOOTERON);
@@ -257,7 +255,6 @@ NavigatorTree::~NavigatorTree()
     }
     m_pReportListener->dispose();
     m_pSelectionListener->dispose();
-    DBG_DTOR(rpt_NavigatorTree,NULL);
 }
 //------------------------------------------------------------------------------
 void NavigatorTree::Command( const CommandEvent& rEvt )
@@ -751,7 +748,6 @@ void NavigatorTree::removeEntry(SvTreeListEntry* _pEntry,bool _bRemove)
             GetModel()->Remove(_pEntry);
     }
 }
-DBG_NAME(rpt_NavigatorTree_UserData)
 // -----------------------------------------------------------------------------
 NavigatorTree::UserData::UserData(NavigatorTree* _pTree,const uno::Reference<uno::XInterface>& _xContent)
     : OPropertyChangeListener(m_aMutex)
@@ -759,7 +755,6 @@ NavigatorTree::UserData::UserData(NavigatorTree* _pTree,const uno::Reference<uno
     , m_xContent(_xContent)
     , m_pTree(_pTree)
 {
-    DBG_CTOR(rpt_NavigatorTree_UserData,NULL);
     uno::Reference<beans::XPropertySet> xProp(m_xContent,uno::UNO_QUERY);
     if ( xProp.is() )
     {
@@ -790,7 +785,6 @@ NavigatorTree::UserData::UserData(NavigatorTree* _pTree,const uno::Reference<uno
 // -----------------------------------------------------------------------------
 NavigatorTree::UserData::~UserData()
 {
-    DBG_DTOR(rpt_NavigatorTree_UserData,NULL);
     if ( m_pContainerListener.is() )
         m_pContainerListener->dispose();
     if ( m_pListener.is() )
@@ -893,7 +887,6 @@ ONavigatorImpl::~ONavigatorImpl()
 {
 }
 // -----------------------------------------------------------------------------
-DBG_NAME( rpt_ONavigator )
 const long STD_WIN_SIZE_X = 210;
 const long STD_WIN_SIZE_Y = 280;
 const long LISTBOX_BORDER = 2;
@@ -904,7 +897,6 @@ ONavigator::ONavigator( Window* _pParent
                         ,OReportController& _rController)
     : FloatingWindow( _pParent, ModuleRes(RID_NAVIGATOR) )
 {
-    DBG_CTOR( rpt_ONavigator,NULL);
 
     m_pImpl.reset(new ONavigatorImpl(_rController,this));
 
@@ -920,7 +912,6 @@ ONavigator::ONavigator( Window* _pParent
 //------------------------------------------------------------------------
 ONavigator::~ONavigator()
 {
-    DBG_DTOR( rpt_ONavigator,NULL);
 }
 //------------------------------------------------------------------------------
 void ONavigator::Resize()

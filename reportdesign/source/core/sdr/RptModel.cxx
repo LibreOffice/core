@@ -43,7 +43,6 @@ namespace rptui
 {
 using namespace reportdesign;
 using namespace com::sun::star;
-DBG_NAME( rpt_OReportModel )
 TYPEINIT1(OReportModel,SdrModel);
 
 //----------------------------------------------------------------------------
@@ -53,7 +52,6 @@ OReportModel::OReportModel(::reportdesign::OReportDefinition* _pReportDefinition
     ,m_pController(NULL)
     ,m_pReportDefinition(_pReportDefinition)
 {
-    DBG_CTOR( rpt_OReportModel,0);
     m_pUndoEnv = new OXUndoEnvironment(*this);
     m_pUndoEnv->acquire();
     SetSdrUndoFactory(new OReportUndoFactory);
@@ -62,7 +60,6 @@ OReportModel::OReportModel(::reportdesign::OReportDefinition* _pReportDefinition
 //----------------------------------------------------------------------------
 OReportModel::~OReportModel()
 {
-    DBG_DTOR( rpt_OReportModel,0);
     detachController();
     m_pUndoEnv->release();
 }
@@ -78,7 +75,6 @@ void OReportModel::detachController()
 //----------------------------------------------------------------------------
 SdrPage* OReportModel::AllocPage(bool /*bMasterPage*/)
 {
-    DBG_CHKTHIS( rpt_OReportModel, 0);
     OSL_FAIL("Who called me!");
     return NULL;
 }

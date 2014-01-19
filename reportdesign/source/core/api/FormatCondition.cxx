@@ -39,19 +39,16 @@ uno::Reference< uno::XInterface > OFormatCondition::create(uno::Reference< uno::
     return *(new OFormatCondition(xContext));
 }
 
-DBG_NAME( rpt_OFormatCondition )
 // -----------------------------------------------------------------------------
 OFormatCondition::OFormatCondition(uno::Reference< uno::XComponentContext > const & _xContext)
 :FormatConditionBase(m_aMutex)
 ,FormatConditionPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),uno::Sequence< OUString >())
 ,m_bEnabled(sal_True)
 {
-    DBG_CTOR( rpt_OFormatCondition,NULL);
 }
 // -----------------------------------------------------------------------------
 OFormatCondition::~OFormatCondition()
 {
-    DBG_DTOR( rpt_OFormatCondition,NULL);
 }
 // -----------------------------------------------------------------------------
 IMPLEMENT_FORWARD_XINTERFACE2(OFormatCondition,FormatConditionBase,FormatConditionPropertySet)

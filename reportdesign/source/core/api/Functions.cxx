@@ -29,7 +29,6 @@ namespace reportdesign
 {
 // =============================================================================
     using namespace com::sun::star;
-DBG_NAME( rpt_OFunctions )
 // -----------------------------------------------------------------------------
 OFunctions::OFunctions(const uno::Reference< report::XFunctionsSupplier >& _xParent,const uno::Reference< uno::XComponentContext >& context)
 :FunctionsBase(m_aMutex)
@@ -37,14 +36,12 @@ OFunctions::OFunctions(const uno::Reference< report::XFunctionsSupplier >& _xPar
 ,m_xContext(context)
 ,m_xParent(_xParent)
 {
-    DBG_CTOR( rpt_OFunctions,NULL);
 }
 //--------------------------------------------------------------------------
 // TODO: VirtualFunctionFinder: This is virtual function!
 //
 OFunctions::~OFunctions()
 {
-    DBG_DTOR( rpt_OFunctions,NULL);
 }
 //--------------------------------------------------------------------------
 void SAL_CALL OFunctions::dispose() throw(uno::RuntimeException)

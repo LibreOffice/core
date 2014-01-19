@@ -109,7 +109,6 @@ namespace
 }
 //----------------------------------------------------------------------------
 TYPEINIT1( OSectionUndo,         OCommentUndoAction );
-DBG_NAME(rpt_OSectionUndo)
 //----------------------------------------------------------------------------
 OSectionUndo::OSectionUndo(OReportModel& _rMod
                            ,sal_uInt16 _nSlot
@@ -120,7 +119,6 @@ OSectionUndo::OSectionUndo(OReportModel& _rMod
 ,m_nSlot(_nSlot)
 ,m_bInserted(false)
 {
-    DBG_CTOR(rpt_OSectionUndo,NULL);
 }
 // -----------------------------------------------------------------------------
 OSectionUndo::~OSectionUndo()
@@ -150,7 +148,6 @@ OSectionUndo::~OSectionUndo()
             }
         }
     }
-    DBG_DTOR(rpt_OSectionUndo,NULL);
 }
 // -----------------------------------------------------------------------------
 void OSectionUndo::collectControls(const uno::Reference< report::XSection >& _xSection)

@@ -36,13 +36,11 @@ namespace rptui
 TYPEINIT1( OSectionView, SdrView );
 
 //----------------------------------------------------------------------------
-DBG_NAME( rpt_OSectionView )
 OSectionView::OSectionView( SdrModel* pModel, OReportSection* _pSectionWindow, OReportWindow* pEditor )
     :SdrView( pModel, _pSectionWindow )
     ,m_pReportWindow( pEditor )
     ,m_pSectionWindow(_pSectionWindow)
 {
-    DBG_CTOR( rpt_OSectionView,NULL);
     // SetPagePaintingAllowed(false);
     SetBufferedOutputAllowed(true);
     SetBufferedOverlayAllowed(true);
@@ -55,14 +53,12 @@ OSectionView::OSectionView( SdrModel* pModel, OReportSection* _pSectionWindow, O
 
 OSectionView::~OSectionView()
 {
-    DBG_DTOR( rpt_OSectionView,NULL);
 }
 
 //----------------------------------------------------------------------------
 
 void OSectionView::MarkListHasChanged()
 {
-    DBG_CHKTHIS( rpt_OSectionView,NULL);
     SdrView::MarkListHasChanged();
 
     if ( m_pReportWindow && m_pSectionWindow && !m_pSectionWindow->getPage()->getSpecialMode() )
@@ -77,7 +73,6 @@ void OSectionView::MarkListHasChanged()
 
 void OSectionView::MakeVisible( const Rectangle& rRect, Window& rWin )
 {
-    DBG_CHKTHIS( rpt_OSectionView,NULL);
     // visible area
     MapMode aMap( rWin.GetMapMode() );
     const Point aOrg( aMap.GetOrigin() );
@@ -134,7 +129,6 @@ void OSectionView::MakeVisible( const Rectangle& rRect, Window& rWin )
 //------------------------------------------------------------------------------
 void OSectionView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    DBG_CHKTHIS( rpt_OSectionView,NULL);
     SdrView::Notify(rBC,rHint);
     if ( rHint.ISA(SdrHint) )
     {
@@ -151,7 +145,6 @@ void OSectionView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 //------------------------------------------------------------------------------
 void OSectionView::ObjectRemovedInAliveMode( const SdrObject* _pObject )
 {
-    DBG_CHKTHIS( rpt_OSectionView,NULL);
     const SdrMarkList& rMarkedList = GetMarkedObjectList();
     const sal_uLong nMark = rMarkedList.GetMarkCount();
 

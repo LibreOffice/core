@@ -126,7 +126,6 @@ uno::Sequence< OUString > lcl_getLineOptionals()
     };
     return uno::Sequence< OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
 }
-DBG_NAME(rpt_OFixedLine)
 // -----------------------------------------------------------------------------
 OFixedLine::OFixedLine(uno::Reference< uno::XComponentContext > const & _xContext)
 :FixedLineBase(m_aMutex)
@@ -137,7 +136,6 @@ OFixedLine::OFixedLine(uno::Reference< uno::XComponentContext > const & _xContex
 ,m_LineTransparence(0)
 ,m_LineWidth(0)
 {
-    DBG_CTOR(rpt_OFixedLine,NULL);
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FIXEDLINE,m_aProps.aComponent.m_xContext->getServiceManager());
     m_aProps.aComponent.m_nWidth = MIN_WIDTH;
 }
@@ -154,7 +152,6 @@ OFixedLine::OFixedLine(uno::Reference< uno::XComponentContext > const & _xContex
 ,m_LineTransparence(0)
 ,m_LineWidth(0)
 {
-    DBG_CTOR(rpt_OFixedLine,NULL);
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FIXEDLINE,m_aProps.aComponent.m_xContext->getServiceManager());
     m_aProps.aComponent.m_xFactory = _xFactory;
     osl_atomic_increment( &m_refCount );
@@ -185,7 +182,6 @@ OFixedLine::OFixedLine(uno::Reference< uno::XComponentContext > const & _xContex
 // -----------------------------------------------------------------------------
 OFixedLine::~OFixedLine()
 {
-    DBG_DTOR(rpt_OFixedLine,NULL);
 }
 // -----------------------------------------------------------------------------
 IMPLEMENT_FORWARD_REFCOUNT( OFixedLine, FixedLineBase )

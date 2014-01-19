@@ -41,14 +41,12 @@ uno::Sequence< OUString > lcl_getFixedTextOptionals()
     OUString pProps[] = { OUString(PROPERTY_DATAFIELD),OUString(PROPERTY_MASTERFIELDS),OUString(PROPERTY_DETAILFIELDS) };
     return uno::Sequence< OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
 }
-DBG_NAME( rpt_OFixedText )
 // -----------------------------------------------------------------------------
 OFixedText::OFixedText(uno::Reference< uno::XComponentContext > const & _xContext)
 :FixedTextBase(m_aMutex)
 ,FixedTextPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getFixedTextOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 {
-    DBG_CTOR( rpt_OFixedText,NULL);
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FIXEDTEXT,m_aProps.aComponent.m_xContext->getServiceManager());
     m_aProps.aComponent.m_nBorder = 0; // no border
 }
@@ -60,7 +58,6 @@ OFixedText::OFixedText(uno::Reference< uno::XComponentContext > const & _xContex
 ,FixedTextPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getFixedTextOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 {
-    DBG_CTOR( rpt_OFixedText,NULL);
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FIXEDTEXT,m_aProps.aComponent.m_xContext->getServiceManager());
     m_aProps.aComponent.m_nBorder = 0; // no border
     m_aProps.aComponent.m_xFactory = _xFactory;
@@ -73,7 +70,6 @@ OFixedText::OFixedText(uno::Reference< uno::XComponentContext > const & _xContex
 // -----------------------------------------------------------------------------
 OFixedText::~OFixedText()
 {
-    DBG_DTOR( rpt_OFixedText,NULL);
 }
 // -----------------------------------------------------------------------------
 IMPLEMENT_FORWARD_REFCOUNT( OFixedText, FixedTextBase )

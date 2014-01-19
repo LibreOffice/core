@@ -32,7 +32,6 @@ namespace rptxml
     using namespace ::com::sun::star::report;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
-DBG_NAME( rpt_OXMLMasterFields )
 
 OXMLMasterFields::OXMLMasterFields( ORptFilter& rImport,
                 sal_uInt16 nPrfx, const OUString& rLName,
@@ -42,7 +41,6 @@ OXMLMasterFields::OXMLMasterFields( ORptFilter& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName)
 ,m_pReport(_pReport)
 {
-    DBG_CTOR( rpt_OXMLMasterFields,NULL);
 
     const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
     const SvXMLTokenMap& rTokenMap = rImport.GetSubDocumentElemTokenMap();
@@ -77,7 +75,6 @@ OXMLMasterFields::OXMLMasterFields( ORptFilter& rImport,
 
 OXMLMasterFields::~OXMLMasterFields()
 {
-    DBG_DTOR( rpt_OXMLMasterFields,NULL);
 }
 
 // -----------------------------------------------------------------------------

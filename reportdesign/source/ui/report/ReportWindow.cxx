@@ -53,7 +53,6 @@ using namespace ::comphelper;
 //==================================================================
 // class OReportWindow
 //==================================================================
-DBG_NAME( rpt_OReportWindow )
 //------------------------------------------------------------------------------
 OReportWindow::OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView)
 : Window(_pParent,WB_DIALOGCONTROL)
@@ -64,7 +63,6 @@ OReportWindow::OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView)
 ,m_aViewsWindow(this)
 ,m_pObjFac( new DlgEdFactory() )
 {
-    DBG_CTOR( rpt_OReportWindow,NULL);
     SetHelpId(UID_RPT_REPORTWINDOW);
     SetMapMode( MapMode( MAP_100TH_MM ) );
 
@@ -86,7 +84,6 @@ OReportWindow::OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView)
 //------------------------------------------------------------------------------
 OReportWindow::~OReportWindow()
 {
-    DBG_DTOR( rpt_OReportWindow,NULL);
     if ( m_pReportListener.is() )
         m_pReportListener->dispose();
 }

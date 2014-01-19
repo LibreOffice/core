@@ -50,7 +50,6 @@ namespace rptui
     //====================================================================
     //= DefaultComponentInspectorModel
     //====================================================================
-    DBG_NAME(DefaultComponentInspectorModel)
     //--------------------------------------------------------------------
     DefaultComponentInspectorModel::DefaultComponentInspectorModel( const Reference< XComponentContext >& _rxContext)
         :m_xContext( _rxContext )
@@ -61,12 +60,10 @@ namespace rptui
         ,m_nMaxHelpTextLines( 8 )
         ,m_pInfoService(new OPropertyInfoService())
     {
-        DBG_CTOR(DefaultComponentInspectorModel,NULL);
     }
 
     DefaultComponentInspectorModel::~DefaultComponentInspectorModel()
     {
-        DBG_DTOR(DefaultComponentInspectorModel,NULL);
     }
 
     OUString SAL_CALL DefaultComponentInspectorModel::getImplementationName(  ) throw(RuntimeException)

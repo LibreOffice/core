@@ -27,18 +27,15 @@ namespace rptui
 //============================================================================
 
 //----------------------------------------------------------------------------
-DBG_NAME(rpt_OObjectListener)
 OObjectListener::OObjectListener(OObjectBase* _pObject)
           :m_pObject(_pObject)
 {
-    DBG_CTOR(rpt_OObjectListener,NULL);
 }
 
 //----------------------------------------------------------------------------
 
 OObjectListener::~OObjectListener()
 {
-    DBG_DTOR(rpt_OObjectListener,NULL);
 }
 
 // XEventListener

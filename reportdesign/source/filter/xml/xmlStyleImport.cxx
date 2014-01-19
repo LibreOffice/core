@@ -70,7 +70,6 @@ public:
 
 TYPEINIT1( OControlStyleContext, XMLPropStyleContext );
 TYPEINIT1( OReportStylesContext, SvXMLStylesContext );
-DBG_NAME( rpt_OControlStyleContext )
 
 OControlStyleContext::OControlStyleContext( ORptFilter& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
@@ -84,7 +83,6 @@ OControlStyleContext::OControlStyleContext( ORptFilter& rImport,
     bConditionalFormatCreated(sal_False),
     bParentSet(sal_False)
 {
-    DBG_CTOR( rpt_OControlStyleContext,NULL);
 
 }
 // -----------------------------------------------------------------------------
@@ -92,7 +90,6 @@ OControlStyleContext::OControlStyleContext( ORptFilter& rImport,
 OControlStyleContext::~OControlStyleContext()
 {
 
-    DBG_DTOR( rpt_OControlStyleContext,NULL);
 }
 // -----------------------------------------------------------------------------
 
@@ -158,7 +155,6 @@ ORptFilter& OControlStyleContext::GetOwnImport() const
     return m_rImport;
 }
 // -----------------------------------------------------------------------------
-DBG_NAME( rpt_OReportStylesContext )
 
 OReportStylesContext::OReportStylesContext( ORptFilter& rImport,
         sal_uInt16 nPrfx ,
@@ -174,7 +170,6 @@ OReportStylesContext::OReportStylesContext( ORptFilter& rImport,
     m_nNumberFormatIndex(-1),
     bAutoStyles(bTempAutoStyles)
 {
-    DBG_CTOR( rpt_OReportStylesContext,NULL);
 
 }
 // -----------------------------------------------------------------------------
@@ -182,7 +177,6 @@ OReportStylesContext::OReportStylesContext( ORptFilter& rImport,
 OReportStylesContext::~OReportStylesContext()
 {
 
-    DBG_DTOR( rpt_OReportStylesContext,NULL);
 }
 // -----------------------------------------------------------------------------
 

@@ -35,7 +35,6 @@ namespace rptxml
     using namespace ::com::sun::star::report;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
-DBG_NAME( rpt_OXMLSubDocument )
 
 OXMLSubDocument::OXMLSubDocument( ORptFilter& rImport,
                 sal_uInt16 nPrfx
@@ -49,14 +48,12 @@ OXMLSubDocument::OXMLSubDocument( ORptFilter& rImport,
 ,m_nCurrentCount(0)
 ,m_bContainsShape(false)
 {
-    DBG_CTOR( rpt_OXMLSubDocument,NULL);
 
 }
 // -----------------------------------------------------------------------------
 
 OXMLSubDocument::~OXMLSubDocument()
 {
-    DBG_DTOR( rpt_OXMLSubDocument,NULL);
 }
 
 // -----------------------------------------------------------------------------

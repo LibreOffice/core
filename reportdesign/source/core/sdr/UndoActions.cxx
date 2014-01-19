@@ -83,19 +83,16 @@ namespace rptui
 
 //------------------------------------------------------------------------------
 TYPEINIT1( OCommentUndoAction,          SdrUndoAction );
-DBG_NAME(rpt_OCommentUndoAction)
 //----------------------------------------------------------------------------
 OCommentUndoAction::OCommentUndoAction(SdrModel& _rMod,sal_uInt16 nCommentID)
     :SdrUndoAction(_rMod)
 {
-    DBG_CTOR(rpt_OCommentUndoAction,NULL);
     m_pController = static_cast< OReportModel& >( _rMod ).getController();
     if ( nCommentID )
         m_strComment = ModuleRes(nCommentID);
 }
 OCommentUndoAction::~OCommentUndoAction()
 {
-    DBG_DTOR(rpt_OCommentUndoAction,NULL);
 }
 //----------------------------------------------------------------------------
 void OCommentUndoAction::Undo()
@@ -105,7 +102,6 @@ void OCommentUndoAction::Undo()
 void OCommentUndoAction::Redo()
 {
 }
-DBG_NAME( rpt_OUndoContainerAction );
 //------------------------------------------------------------------------------
 OUndoContainerAction::OUndoContainerAction(SdrModel& _rMod
                                              ,Action _eAction
@@ -117,7 +113,6 @@ OUndoContainerAction::OUndoContainerAction(SdrModel& _rMod
                       ,m_xContainer(_xContainer)
                          ,m_eAction( _eAction )
 {
-    DBG_CTOR( rpt_OUndoContainerAction,NULL);
     // normalize
     if ( m_eAction == Removed )
         // we now own the element
@@ -154,7 +149,6 @@ OUndoContainerAction::~OUndoContainerAction()
             }
         }
     }
-    DBG_DTOR( rpt_OUndoContainerAction,NULL);
 }
 //------------------------------------------------------------------------------
 void OUndoContainerAction::implReInsert( ) SAL_THROW( ( Exception ) )

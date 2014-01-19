@@ -54,20 +54,17 @@ namespace rptui
     //====================================================================
     //= FormatNormalizer
     //====================================================================
-    DBG_NAME(rpt_FormatNormalizer)
     //--------------------------------------------------------------------
     FormatNormalizer::FormatNormalizer( const OReportModel& _rModel )
         :m_rModel( _rModel )
         ,m_xReportDefinition( )
         ,m_bFieldListDirty( true )
     {
-        DBG_CTOR(rpt_FormatNormalizer,NULL);
     }
 
     //--------------------------------------------------------------------
     FormatNormalizer::~FormatNormalizer()
     {
-        DBG_DTOR(rpt_FormatNormalizer,NULL);
     }
 
     //--------------------------------------------------------------------

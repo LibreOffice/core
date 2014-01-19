@@ -168,13 +168,11 @@ bool lcl_getNewRectSize(const Rectangle& _aObjRect,long& _nXMov, long& _nYMov,Sd
 }
 // -----------------------------------------------------------------------------
 
-DBG_NAME( rpt_OViewsWindow );
 OViewsWindow::OViewsWindow( OReportWindow* _pReportWindow)
 : Window( _pReportWindow,WB_DIALOGCONTROL)
 ,m_pParent(_pReportWindow)
 ,m_bInUnmark(sal_False)
 {
-    DBG_CTOR( rpt_OViewsWindow,NULL);
     SetPaintTransparent(sal_True);
     SetUniqueId(UID_RPT_VIEWSWINDOW);
     SetMapMode( MapMode( MAP_100TH_MM ) );
@@ -186,13 +184,10 @@ OViewsWindow::~OViewsWindow()
 {
     m_aColorConfig.RemoveListener(this);
     m_aSections.clear();
-
-    DBG_DTOR( rpt_OViewsWindow,NULL);
 }
 // -----------------------------------------------------------------------------
 void OViewsWindow::initialize()
 {
-
 }
 // -----------------------------------------------------------------------------
 void OViewsWindow::impl_resizeSectionWindow(OSectionWindow& _rSectionWindow,Point& _rStartPoint,bool _bSet)

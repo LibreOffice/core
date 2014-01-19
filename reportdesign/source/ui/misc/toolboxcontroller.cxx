@@ -89,13 +89,11 @@ Reference< XInterface > OToolboxController::create(Reference< XComponentContext 
     return * new OToolboxController(xContext);
 }
 // -----------------------------------------------------------------------------
-DBG_NAME(rpt_OToolboxController)
 OToolboxController::OToolboxController(const Reference< XComponentContext >& _rxORB)
     : m_pToolbarController(NULL)
     ,m_nToolBoxId(1)
     ,m_nSlotId(0)
 {
-    DBG_CTOR(rpt_OToolboxController,NULL);
     osl_atomic_increment(&m_refCount);
     m_xContext = _rxORB;
     osl_atomic_decrement(&m_refCount);
@@ -104,7 +102,6 @@ OToolboxController::OToolboxController(const Reference< XComponentContext >& _rx
 // -----------------------------------------------------------------------------
 OToolboxController::~OToolboxController()
 {
-    DBG_DTOR(rpt_OToolboxController,NULL);
 }
 // -----------------------------------------------------------------------------
 // XInterface

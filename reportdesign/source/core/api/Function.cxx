@@ -36,7 +36,6 @@ uno::Reference< uno::XInterface > OFunction::create(uno::Reference< uno::XCompon
     return *(new OFunction(xContext));
 }
 
-DBG_NAME( rpt_OFunction )
 // -----------------------------------------------------------------------------
 OFunction::OFunction(uno::Reference< uno::XComponentContext > const & _xContext)
 :FunctionBase(m_aMutex)
@@ -46,12 +45,10 @@ OFunction::OFunction(uno::Reference< uno::XComponentContext > const & _xContext)
 ,m_bDeepTraversing(sal_False)
 {
     m_sInitialFormula.IsPresent = sal_False;
-    DBG_CTOR( rpt_OFunction,NULL);
 }
 // -----------------------------------------------------------------------------
 OFunction::~OFunction()
 {
-    DBG_DTOR( rpt_OFunction,NULL);
 }
 // -----------------------------------------------------------------------------
 IMPLEMENT_FORWARD_XINTERFACE2(OFunction,FunctionBase,FunctionPropertySet)

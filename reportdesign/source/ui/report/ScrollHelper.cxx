@@ -41,7 +41,6 @@ void lcl_setScrollBar(sal_Int32 _nNewValue,const Point& _aPos,const Size& _aSize
 }
 
 // -----------------------------------------------------------------------------
-DBG_NAME( rpt_OScrollWindowHelper );
 OScrollWindowHelper::OScrollWindowHelper( ODesignView* _pDesignView)
     : OScrollWindowHelper_BASE( _pDesignView,WB_DIALOGCONTROL)
     ,OPropertyChangeListener(m_aMutex)
@@ -52,7 +51,6 @@ OScrollWindowHelper::OScrollWindowHelper( ODesignView* _pDesignView)
     ,m_aReportWindow(this,m_pParent)
     ,m_pReportDefintionMultiPlexer(NULL)
 {
-    DBG_CTOR( rpt_OScrollWindowHelper,NULL);
     SetMapMode( MapMode( MAP_100TH_MM ) );
 
     impl_initScrollBar( m_aHScroll );
@@ -69,7 +67,6 @@ OScrollWindowHelper::OScrollWindowHelper( ODesignView* _pDesignView)
 // -----------------------------------------------------------------------------
 OScrollWindowHelper::~OScrollWindowHelper()
 {
-    DBG_DTOR( rpt_OScrollWindowHelper,NULL);
     if ( m_pReportDefintionMultiPlexer.is() )
         m_pReportDefintionMultiPlexer->dispose();
 }

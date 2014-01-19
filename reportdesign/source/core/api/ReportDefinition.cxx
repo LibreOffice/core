@@ -632,7 +632,6 @@ OReportDefinitionImpl::~OReportDefinitionImpl()
 {
 }
 
-DBG_NAME( rpt_OReportDefinition )
 // -----------------------------------------------------------------------------
 OReportDefinition::OReportDefinition(uno::Reference< uno::XComponentContext > const & _xContext)
 : ReportDefinitionBase(m_aMutex)
@@ -640,7 +639,6 @@ OReportDefinition::OReportDefinition(uno::Reference< uno::XComponentContext > co
 ,m_aProps(new OReportComponentProperties(_xContext))
 ,m_pImpl(new OReportDefinitionImpl(m_aMutex))
 {
-    DBG_CTOR( rpt_OReportDefinition,NULL);
     m_aProps->m_sName  = RPT_RESSTRING(RID_STR_REPORT,m_aProps->m_xContext->getServiceManager());
     osl_atomic_increment(&m_refCount);
     {
@@ -681,7 +679,6 @@ OReportDefinition::OReportDefinition(const OReportDefinition& _rCopy)
 ,m_aProps(new OReportComponentProperties(*_rCopy.m_aProps))
 ,m_pImpl(new OReportDefinitionImpl(m_aMutex,*_rCopy.m_pImpl))
 {
-    DBG_CTOR( rpt_OReportDefinition,NULL);
     osl_atomic_increment(&m_refCount);
     {
         init();
@@ -705,7 +702,6 @@ OReportDefinition::OReportDefinition(const OReportDefinition& _rCopy)
 // -----------------------------------------------------------------------------
 OReportDefinition::~OReportDefinition()
 {
-    DBG_DTOR( rpt_OReportDefinition,NULL);
     if ( !ReportDefinitionBase::rBHelper.bInDispose && !ReportDefinitionBase::rBHelper.bDisposed )
     {
         acquire();

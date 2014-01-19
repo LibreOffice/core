@@ -28,7 +28,6 @@ namespace reportdesign
 {
 // =============================================================================
     using namespace com::sun::star;
-DBG_NAME( rpt_OGroups )
 // -----------------------------------------------------------------------------
 OGroups::OGroups(const uno::Reference< report::XReportDefinition >& _xParent,const uno::Reference< uno::XComponentContext >& context)
 :GroupsBase(m_aMutex)
@@ -36,14 +35,12 @@ OGroups::OGroups(const uno::Reference< report::XReportDefinition >& _xParent,con
 ,m_xContext(context)
 ,m_xParent(_xParent)
 {
-    DBG_CTOR( rpt_OGroups,NULL);
 }
 //--------------------------------------------------------------------------
 // TODO: VirtualFunctionFinder: This is virtual function!
 //
 OGroups::~OGroups()
 {
-    DBG_DTOR( rpt_OGroups,NULL);
 }
 //--------------------------------------------------------------------------
 void OGroups::copyGroups(const uno::Reference< report::XGroups >& _xSource)
