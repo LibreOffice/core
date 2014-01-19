@@ -586,6 +586,9 @@ void lclDrawPolygon( OutputDevice& rDev, const basegfx::B2DPolygon& rPolygon, lo
 
 namespace svtools {
 
+/**
+ * Dashing array must start with a line width and end with a blank width.
+ */
 std::vector<double> GetDashing( sal_uInt16 nDashing )
 {
     std::vector<double> aPattern;
@@ -623,6 +626,13 @@ public:
     }
 };
 
+}
+
+std::vector<double> GetLineDashing( sal_uInt16 nDashing, double fScale )
+{
+    std::vector<double> aPattern = GetDashing(nDashing);
+    std::for_each(aPattern.begin(), aPattern.end(), ApplyScale(fScale));
+    return aPattern;
 }
 
 basegfx::B2DPolyPolygon ApplyLineDashing( const basegfx::B2DPolygon& rPolygon, sal_uInt16 nDashing, double fScale )

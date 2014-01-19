@@ -52,6 +52,7 @@
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
+#include <svtools/borderhelper.hxx>
 
 #include <com/sun/star/table/BorderLineStyle.hpp>
 
@@ -59,7 +60,20 @@
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+namespace {
+
+basegfx::B2DPolygon makeRectPolygon( double fX, double fY, double fW, double fH )
+{
+    basegfx::B2DPolygon aPoly;
+    aPoly.append(basegfx::B2DPoint(fX, fY));
+    aPoly.append(basegfx::B2DPoint(fX+fW, fY));
+    aPoly.append(basegfx::B2DPoint(fX+fW, fY+fH));
+    aPoly.append(basegfx::B2DPoint(fX, fY+fH));
+    aPoly.setClosed(true);
+    return aPoly;
+}
+
+}
 
 namespace drawinglayer
 {
@@ -245,56 +259,145 @@ namespace drawinglayer
         bool VclPixelProcessor2D::tryDrawBorderLinePrimitive2DDirect(
             const drawinglayer::primitive2d::BorderLinePrimitive2D& rSource)
         {
-            if (rSource.getStyle() == table::BorderLineStyle::SOLID)
+            const basegfx::B2DPoint& rS = rSource.getStart();
+            const basegfx::B2DPoint& rE = rSource.getEnd();
+
+            double fX1 = rS.getX();
+            double fY1 = rS.getY();
+            double fX2 = rE.getX();
+            double fY2 = rE.getY();
+
+            switch (rSource.getStyle())
             {
-                const basegfx::B2DPoint& rS = rSource.getStart();
-                const basegfx::B2DPoint& rE = rSource.getEnd();
-
-                double nX1 = rS.getX();
-                double nY1 = rS.getY();
-                double nX2 = rE.getX();
-                double nY2 = rE.getY();
-
-                if (nY1 == nY2)
+                case table::BorderLineStyle::SOLID:
                 {
-                    // Horizontal line.  Draw it as a rectangle.
-                    basegfx::B2DPolygon aTarget;
-
-                    const basegfx::BColor aLineColor =
-                        maBColorModifierStack.getModifiedColor(rSource.getRGBColorLeft());
-                    double nThick = rtl::math::round(rSource.getLeftWidth());
-
-                    aTarget.append(basegfx::B2DPoint(nX1, nY1));
-                    aTarget.append(basegfx::B2DPoint(nX2, nY1));
-                    aTarget.append(basegfx::B2DPoint(nX2, nY1+nThick));
-                    aTarget.append(basegfx::B2DPoint(nX1, nY1+nThick));
-                    aTarget.setClosed(true);
-                    aTarget.transform(maCurrentTransformation);
-
-                    basegfx::B2DRange aRange = aTarget.getB2DRange();
-                    double fH = aRange.getHeight();
-
-                    if (fH <= 1.0)
+                    if (fY1 == fY2)
                     {
-                        // Draw it as a line.
-                        aTarget.clear();
-                        aTarget.append(basegfx::B2DPoint(aRange.getMinX(), aRange.getMinY()));
-                        aTarget.append(basegfx::B2DPoint(aRange.getMaxX(), aRange.getMinY()));
+                        // Horizontal line.  Draw it as a rectangle.
 
-                        mpOutputDevice->SetFillColor();
-                        mpOutputDevice->SetLineColor(Color(aLineColor));
+                        const basegfx::BColor aLineColor =
+                            maBColorModifierStack.getModifiedColor(rSource.getRGBColorLeft());
+                        double nThick = rtl::math::round(rSource.getLeftWidth());
 
-                        mpOutputDevice->DrawPolyLine(aTarget);
+                        basegfx::B2DPolygon aTarget = makeRectPolygon(fX1, fY1, fX2-fX1, nThick);
+                        aTarget.transform(maCurrentTransformation);
+
+                        basegfx::B2DRange aRange = aTarget.getB2DRange();
+                        double fH = aRange.getHeight();
+
+                        if (fH <= 1.0)
+                        {
+                            // Draw it as a line.
+                            aTarget.clear();
+                            aTarget.append(basegfx::B2DPoint(aRange.getMinX(), aRange.getMinY()));
+                            aTarget.append(basegfx::B2DPoint(aRange.getMaxX(), aRange.getMinY()));
+
+                            mpOutputDevice->SetFillColor();
+                            mpOutputDevice->SetLineColor(Color(aLineColor));
+
+                            mpOutputDevice->DrawPolyLine(aTarget);
+                            return true;
+                        }
+
+                        mpOutputDevice->SetFillColor(Color(aLineColor));
+                        mpOutputDevice->SetLineColor();
+
+                        mpOutputDevice->DrawPolygon(aTarget);
                         return true;
                     }
-
-                    mpOutputDevice->SetFillColor(Color(aLineColor));
-                    mpOutputDevice->SetLineColor();
-
-                    mpOutputDevice->DrawPolygon(aTarget);
-                    return true;
                 }
+                break;
+                case table::BorderLineStyle::DOTTED:
+                case table::BorderLineStyle::DASHED:
+                case table::BorderLineStyle::FINE_DASHED:
+                {
+                    double fH = rtl::math::round(rSource.getLeftWidth());
 
+                    if (fY1 == fY2)
+                    {
+                        // Horizontal line.
+
+                        basegfx::B2DPolyPolygon aDashes;
+                        std::vector<double> aPattern =
+                            svtools::GetLineDashing(rSource.getStyle(), rSource.getPatternScale()*10.0);
+
+                        if (aPattern.empty())
+                            // Failed to get pattern values.
+                            return false;
+
+                        // Create a dash unit polygon set.
+                        std::vector<double>::const_iterator it = aPattern.begin(), itEnd = aPattern.end();
+                        for (; it != itEnd; ++it)
+                        {
+                            double fW = *it;
+                            aDashes.append(makeRectPolygon(0, 0, fW, fH));
+                        }
+
+                        aDashes.transform(maCurrentTransformation);
+                        rtl::math::setNan(&fH);
+
+                        // Pixelize the dash unit.  We use the same height for
+                        // all dash polygons.
+                        basegfx::B2DPolyPolygon aDashesPix;
+
+                        for (sal_uInt32 i = 0, n = aDashes.count(); i < n; ++i)
+                        {
+                            basegfx::B2DPolygon aPoly = aDashes.getB2DPolygon(i);
+                            basegfx::B2DRange aRange = aPoly.getB2DRange();
+                            double fW = rtl::math::round(aRange.getWidth());
+                            if (rtl::math::isNan(fH))
+                                fH = rtl::math::round(aRange.getHeight());
+
+                            aDashesPix.append(makeRectPolygon(0, 0, fW, fH));
+                        }
+
+                        // Transform the current line range before using it for rendering.
+                        basegfx::B2DRange aRange(fX1, fY1, fX2, fY2);
+                        aRange.transform(maCurrentTransformation);
+                        fX1 = aRange.getMinX();
+                        fX2 = aRange.getMaxX();
+                        fY1 = aRange.getMinY();
+                        fY2 = aRange.getMaxY();
+
+                        // Make all dash polygons and render them.
+                        basegfx::B2DPolyPolygon aTarget;
+                        double fX = fX1;
+                        bool bLine = true;
+                        sal_uInt32 i = 0, n = aDashesPix.count();
+                        while (fX <= fX2)
+                        {
+                            basegfx::B2DPolygon aPoly = aDashesPix.getB2DPolygon(i);
+                            aRange = aPoly.getB2DRange();
+                            if (bLine)
+                            {
+                                double fBlockW = aRange.getWidth();
+                                if (fX + fBlockW > fX2)
+                                    // Clip the right end in case it spills over the range.
+                                    fBlockW = fX2 - fX + 1;
+                                aTarget.append(makeRectPolygon(fX, fY1, fBlockW, aRange.getHeight()));
+                            }
+
+                            bLine = !bLine; // line and blank alternate.
+                            fX += aRange.getWidth();
+
+                            ++i;
+                            if (i >= n)
+                                i = 0;
+                        }
+
+                        const basegfx::BColor aLineColor =
+                            maBColorModifierStack.getModifiedColor(rSource.getRGBColorLeft());
+                        mpOutputDevice->SetFillColor(Color(aLineColor));
+                        mpOutputDevice->SetLineColor();
+
+                        mpOutputDevice->DrawPolyPolygon(aTarget);
+
+                        return true;
+                    }
+                }
+                break;
+                default:
+                    ;
             }
             return false;
         }
