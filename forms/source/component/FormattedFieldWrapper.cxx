@@ -45,7 +45,6 @@ using namespace ::com::sun::star::util;
 //==================================================================
 // OFormattedFieldWrapper
 //==================================================================
-DBG_NAME(OFormattedFieldWrapper)
 
 Reference<XInterface> SAL_CALL OFormattedFieldWrapper_CreateInstance_ForceFormatted(const Reference<XMultiServiceFactory>& _rxFactory)
 {
@@ -60,7 +59,6 @@ InterfaceRef SAL_CALL OFormattedFieldWrapper_CreateInstance(const Reference<XMul
 OFormattedFieldWrapper::OFormattedFieldWrapper(const Reference<XComponentContext>& _rxFactory)
     :m_xContext(_rxFactory)
 {
-    DBG_CTOR(OFormattedFieldWrapper, NULL);
 }
 
 InterfaceRef OFormattedFieldWrapper::createFormattedFieldWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory, bool bActAsFormatted)
@@ -138,7 +136,6 @@ OFormattedFieldWrapper::~OFormattedFieldWrapper()
     if (m_xAggregate.is())
         m_xAggregate->setDelegator(InterfaceRef ());
 
-    DBG_DTOR(OFormattedFieldWrapper, NULL);
 }
 
 //------------------------------------------------------------------

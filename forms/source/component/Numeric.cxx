@@ -88,13 +88,11 @@ Sequence<Type> ONumericModel::_getTypes()
 }
 
 //------------------------------------------------------------------
-DBG_NAME( ONumericModel )
 //------------------------------------------------------------------
 ONumericModel::ONumericModel(const Reference<XComponentContext>& _rxFactory)
                 :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_NUMERICFIELD, FRM_SUN_CONTROL_NUMERICFIELD, sal_True, sal_True )
                                     // use the old control name for compytibility reasons
 {
-    DBG_CTOR( ONumericModel, NULL );
 
     m_nClassId = FormComponentType::NUMERICFIELD;
     initValueProperty( PROPERTY_VALUE, PROPERTY_ID_VALUE );
@@ -104,13 +102,11 @@ ONumericModel::ONumericModel(const Reference<XComponentContext>& _rxFactory)
 ONumericModel::ONumericModel( const ONumericModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OEditBaseModel( _pOriginal, _rxFactory )
 {
-    DBG_CTOR( ONumericModel, NULL );
 }
 
 //------------------------------------------------------------------
 ONumericModel::~ONumericModel()
 {
-    DBG_DTOR( ONumericModel, NULL );
 }
 
 // XCloneable

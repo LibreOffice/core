@@ -83,13 +83,11 @@ StringSequence  OFileControlModel::getSupportedServiceNames() throw(RuntimeExcep
 }
 
 //------------------------------------------------------------------
-DBG_NAME( OFileControlModel )
 //------------------------------------------------------------------
 OFileControlModel::OFileControlModel(const Reference<XComponentContext>& _rxFactory)
                     :OControlModel(_rxFactory, VCL_CONTROLMODEL_FILECONTROL)
                     ,m_aResetListeners(m_aMutex)
 {
-    DBG_CTOR( OFileControlModel, NULL );
     m_nClassId = FormComponentType::FILECONTROL;
 }
 
@@ -98,7 +96,6 @@ OFileControlModel::OFileControlModel( const OFileControlModel* _pOriginal, const
     :OControlModel( _pOriginal, _rxFactory )
     ,m_aResetListeners( m_aMutex )
 {
-    DBG_CTOR( OFileControlModel, NULL );
 
     m_sDefaultValue = _pOriginal->m_sDefaultValue;
 }
@@ -111,7 +108,6 @@ OFileControlModel::~OFileControlModel()
         acquire();
         dispose();
     }
-    DBG_DTOR( OFileControlModel, NULL );
 }
 
 //------------------------------------------------------------------------------

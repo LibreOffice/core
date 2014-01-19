@@ -54,11 +54,9 @@ namespace xforms
     //====================================================================
     //= ODataTypeRepository
     //====================================================================
-    DBG_NAME( ODataTypeRepository )
     //--------------------------------------------------------------------
     ODataTypeRepository::ODataTypeRepository( )
     {
-        DBG_CTOR( ODataTypeRepository, NULL );
 
         // insert some basic types
         OUString sName( FRM_RES_STRING( RID_STR_DATATYPE_STRING ) );
@@ -101,7 +99,6 @@ namespace xforms
     //--------------------------------------------------------------------
     ODataTypeRepository::~ODataTypeRepository( )
     {
-        DBG_DTOR( ODataTypeRepository, NULL );
     }
 
     //--------------------------------------------------------------------

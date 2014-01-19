@@ -47,12 +47,10 @@ InterfaceRef SAL_CALL OHiddenModel_CreateInstance(const Reference<XMultiServiceF
 }
 
 //------------------------------------------------------------------
-DBG_NAME( OHiddenModel )
 //------------------------------------------------------------------
 OHiddenModel::OHiddenModel(const Reference<XComponentContext>& _rxFactory)
     :OControlModel(_rxFactory, OUString())
 {
-    DBG_CTOR( OHiddenModel, NULL );
     m_nClassId = FormComponentType::HIDDENCONTROL;
 }
 
@@ -60,14 +58,12 @@ OHiddenModel::OHiddenModel(const Reference<XComponentContext>& _rxFactory)
 OHiddenModel::OHiddenModel( const OHiddenModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OControlModel( _pOriginal, _rxFactory )
 {
-    DBG_CTOR( OHiddenModel, NULL );
     m_sHiddenValue = _pOriginal->m_sHiddenValue;
 }
 
 //------------------------------------------------------------------------------
 OHiddenModel::~OHiddenModel( )
 {
-    DBG_CTOR( OHiddenModel, NULL );
 }
 
 //------------------------------------------------------------------------------

@@ -88,13 +88,11 @@ Sequence<Type> OPatternModel::_getTypes()
 }
 
 //------------------------------------------------------------------
-DBG_NAME( OPatternModel )
 //------------------------------------------------------------------
 OPatternModel::OPatternModel(const Reference<XComponentContext>& _rxFactory)
     :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_PATTERNFIELD, FRM_SUN_CONTROL_PATTERNFIELD, sal_False, sal_False )
                                     // use the old control name for compytibility reasons
 {
-    DBG_CTOR( OPatternModel, NULL );
 
     m_nClassId = FormComponentType::PATTERNFIELD;
     initValueProperty( PROPERTY_TEXT, PROPERTY_ID_TEXT );
@@ -104,13 +102,11 @@ OPatternModel::OPatternModel(const Reference<XComponentContext>& _rxFactory)
 OPatternModel::OPatternModel( const OPatternModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OEditBaseModel( _pOriginal, _rxFactory )
 {
-    DBG_CTOR( OPatternModel, NULL );
 }
 
 //------------------------------------------------------------------
 OPatternModel::~OPatternModel()
 {
-    DBG_DTOR( OPatternModel, NULL );
 }
 
 // XCloneable

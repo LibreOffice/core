@@ -120,14 +120,12 @@ Sequence<Type> OTimeModel::_getTypes()
 }
 
 //------------------------------------------------------------------
-DBG_NAME( OTimeModel )
 //------------------------------------------------------------------
 OTimeModel::OTimeModel(const Reference<XComponentContext>& _rxFactory)
             :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_TIMEFIELD, FRM_SUN_CONTROL_TIMEFIELD, sal_True, sal_True )
                                     // use the old control name for compytibility reasons
             ,OLimitedFormats( _rxFactory, FormComponentType::TIMEFIELD)
 {
-    DBG_CTOR( OTimeModel, NULL );
 
     m_nClassId = FormComponentType::TIMEFIELD;
     initValueProperty( PROPERTY_TIME, PROPERTY_ID_TIME );
@@ -140,7 +138,6 @@ OTimeModel::OTimeModel( const OTimeModel* _pOriginal, const Reference<XComponent
     :OEditBaseModel( _pOriginal, _rxFactory )
     ,OLimitedFormats( _rxFactory, FormComponentType::TIMEFIELD )
 {
-    DBG_CTOR( OTimeModel, NULL );
 
     setAggregateSet( m_xAggregateFastSet, getOriginalHandle( PROPERTY_ID_TIMEFORMAT ) );
 }
@@ -149,7 +146,6 @@ OTimeModel::OTimeModel( const OTimeModel* _pOriginal, const Reference<XComponent
 OTimeModel::~OTimeModel( )
 {
     setAggregateSet(Reference< XFastPropertySet >(), -1);
-    DBG_DTOR( OTimeModel, NULL );
 }
 
 // XCloneable

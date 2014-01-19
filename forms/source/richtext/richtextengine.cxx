@@ -97,19 +97,16 @@ namespace frm
         return pClone;
     }
 
-    DBG_NAME(RichTextEngine)
     //--------------------------------------------------------------------
     RichTextEngine::RichTextEngine( SfxItemPool* _pPool )
         :EditEngine( _pPool )
         ,m_pEnginePool( _pPool )
     {
-        DBG_CTOR(RichTextEngine,NULL);
     }
 
     //--------------------------------------------------------------------
     RichTextEngine::~RichTextEngine( )
     {
-        DBG_DTOR(RichTextEngine,NULL);
     }
 
     //--------------------------------------------------------------------

@@ -58,7 +58,6 @@ namespace frm
     //====================================================================
     //= ORichTextModel
     //====================================================================
-    DBG_NAME( ORichTextModel )
     //--------------------------------------------------------------------
     ORichTextModel::ORichTextModel( const Reference< XComponentContext >& _rxFactory )
         :OControlModel       ( _rxFactory, OUString() )
@@ -67,7 +66,6 @@ namespace frm
         ,m_bSettingEngineText( false                         )
         ,m_aModifyListeners  ( m_aMutex                      )
     {
-        DBG_CTOR( ORichTextModel, NULL );
         m_nClassId = FormComponentType::TEXTFIELD;
 
         getPropertyDefaultByHandle( PROPERTY_ID_DEFAULTCONTROL          ) >>= m_sDefaultControl;
@@ -100,7 +98,6 @@ namespace frm
         ,m_bSettingEngineText( false                             )
         ,m_aModifyListeners  ( m_aMutex                          )
     {
-        DBG_CTOR( ORichTextModel, NULL );
 
         m_aTabStop               = _pOriginal->m_aTabStop;
         m_aBackgroundColor       = _pOriginal->m_aBackgroundColor;
@@ -222,7 +219,6 @@ namespace frm
         }
 
 
-        DBG_DTOR( ORichTextModel, NULL );
     }
 
     //------------------------------------------------------------------

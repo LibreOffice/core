@@ -153,7 +153,6 @@ namespace frm
         startAggregatePropertyListening( PROPERTY_STRINGITEMLIST );
     }
 
-    DBG_NAME(OListBoxModel);
     //------------------------------------------------------------------
     OListBoxModel::OListBoxModel(const Reference<XComponentContext>& _rxFactory)
         :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_LISTBOX, FRM_SUN_CONTROL_LISTBOX, sal_True, sal_True, sal_True )
@@ -164,7 +163,6 @@ namespace frm
         ,m_nNULLPos(-1)
         ,m_nBoundColumnType( DataType::SQLNULL )
     {
-        DBG_CTOR(OListBoxModel,NULL);
 
         m_nClassId = FormComponentType::LISTBOX;
         m_eListSourceType = ListSourceType_VALUELIST;
@@ -188,7 +186,6 @@ namespace frm
         ,m_nNULLPos(-1)
         ,m_nBoundColumnType( DataType::SQLNULL )
     {
-        DBG_CTOR(OListBoxModel,NULL);
 
         init();
     }
@@ -202,7 +199,6 @@ namespace frm
             dispose();
         }
 
-        DBG_DTOR(OListBoxModel,NULL);
     }
 
     // XCloneable
@@ -1756,14 +1752,12 @@ namespace frm
         return aReturn;
     }
 
-    DBG_NAME(OListBoxControl);
     //------------------------------------------------------------------------------
     OListBoxControl::OListBoxControl(const Reference<XComponentContext>& _rxFactory)
         :OBoundControl( _rxFactory, VCL_CONTROL_LISTBOX, sal_False )
         ,m_aChangeListeners( m_aMutex )
         ,m_aItemListeners( m_aMutex )
     {
-        DBG_CTOR(OListBoxControl,NULL);
 
         increment(m_refCount);
         {
@@ -1797,7 +1791,6 @@ namespace frm
         doResetDelegator();
         m_xAggregateListBox.clear();
 
-        DBG_DTOR(OListBoxControl,NULL);
     }
 
     //------------------------------------------------------------------------------

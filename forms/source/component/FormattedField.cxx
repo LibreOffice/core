@@ -204,13 +204,11 @@ Any SAL_CALL OFormattedControl::queryAggregation(const Type& _rType) throw (Runt
 }
 
 
-DBG_NAME(OFormattedControl);
 //------------------------------------------------------------------------------
 OFormattedControl::OFormattedControl(const Reference<XComponentContext>& _rxFactory)
                :OBoundControl(_rxFactory, VCL_CONTROL_FORMATTEDFIELD)
                ,m_nKeyEvent(0)
 {
-    DBG_CTOR(OFormattedControl,NULL);
 
     increment(m_refCount);
     {
@@ -235,7 +233,6 @@ OFormattedControl::~OFormattedControl()
         dispose();
     }
 
-    DBG_DTOR(OFormattedControl,NULL);
 }
 
 // XKeyListener
@@ -334,7 +331,6 @@ void OFormattedControl::setDesignMode(sal_Bool bOn) throw ( ::com::sun::star::un
 }
 
 /*************************************************************************/
-DBG_NAME(OFormattedModel)
 //------------------------------------------------------------------
 void OFormattedModel::implConstruct()
 {
@@ -361,7 +357,6 @@ OFormattedModel::OFormattedModel(const Reference<XComponentContext>& _rxFactory)
                             // use the old control name for compytibility reasons
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
 {
-    DBG_CTOR(OFormattedModel, NULL);
 
     implConstruct();
 
@@ -374,7 +369,6 @@ OFormattedModel::OFormattedModel( const OFormattedModel* _pOriginal, const Refer
     :OEditBaseModel( _pOriginal, _rxFactory )
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
 {
-    DBG_CTOR(OFormattedModel, NULL);
 
     implConstruct();
 }
@@ -382,7 +376,6 @@ OFormattedModel::OFormattedModel( const OFormattedModel* _pOriginal, const Refer
 //------------------------------------------------------------------------------
 OFormattedModel::~OFormattedModel()
 {
-    DBG_DTOR(OFormattedModel, NULL);
 }
 
 // XCloneable

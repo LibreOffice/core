@@ -198,7 +198,6 @@ Any SAL_CALL OGridColumn::queryAggregation( const Type& _rType ) throw (RuntimeE
     return aReturn;
 }
 
-DBG_NAME(OGridColumn);
 //------------------------------------------------------------------------------
 OGridColumn::OGridColumn( const Reference<XComponentContext>& _rContext, const OUString& _sModelName )
     :OGridColumn_BASE(m_aMutex)
@@ -206,7 +205,6 @@ OGridColumn::OGridColumn( const Reference<XComponentContext>& _rContext, const O
     ,m_aHidden( makeAny( sal_False ) )
     ,m_aModelName(_sModelName)
 {
-    DBG_CTOR(OGridColumn,NULL);
 
     // Create the UnoControlModel
     if ( !m_aModelName.isEmpty() ) // is there a to-be-aggregated model?
@@ -233,7 +231,6 @@ OGridColumn::OGridColumn( const OGridColumn* _pOriginal )
     :OGridColumn_BASE( m_aMutex )
     ,OPropertySetAggregationHelper( OGridColumn_BASE::rBHelper )
 {
-    DBG_CTOR(OGridColumn,NULL);
 
     m_aWidth = _pOriginal->m_aWidth;
     m_aAlign = _pOriginal->m_aAlign;
@@ -272,7 +269,6 @@ OGridColumn::~OGridColumn()
         m_xAggregate->setDelegator(xIface);
     }
 
-    DBG_DTOR(OGridColumn,NULL);
 }
 
 // XEventListener

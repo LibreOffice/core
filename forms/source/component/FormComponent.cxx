@@ -130,13 +130,11 @@ namespace frm
 //=============================================================================
 //= base class for form layer controls
 //=============================================================================
-DBG_NAME(frm_OControl)
 //------------------------------------------------------------------------------
 OControl::OControl( const Reference< XComponentContext >& _rxContext, const OUString& _rAggregateService, const sal_Bool _bSetDelegator )
             :OComponentHelper(m_aMutex)
             ,m_xContext( _rxContext )
 {
-    DBG_CTOR(frm_OControl, NULL);
     // VCL-Control aggregieren
     // bei Aggregation den Refcount um eins erhoehen da im setDelegator
     // das Aggregat selbst den Refcount erhoeht
@@ -154,7 +152,6 @@ OControl::OControl( const Reference< XComponentContext >& _rxContext, const OUSt
 //------------------------------------------------------------------------------
 OControl::~OControl()
 {
-    DBG_DTOR(frm_OControl, NULL);
     doResetDelegator();
 }
 
@@ -379,7 +376,6 @@ sal_Bool SAL_CALL OControl::isTransparent() throw ( RuntimeException)
 //==================================================================
 //= OBoundControl
 //==================================================================
-DBG_NAME(frm_OBoundControl);
 //------------------------------------------------------------------
 OBoundControl::OBoundControl( const Reference< XComponentContext >& _rxContext,
             const OUString& _rAggregateService, const sal_Bool _bSetDelegator )
@@ -388,13 +384,11 @@ OBoundControl::OBoundControl( const Reference< XComponentContext >& _rxContext,
     ,m_aOriginalFont( EmptyFontDescriptor() )
     ,m_nOriginalTextLineColor( 0 )
 {
-    DBG_CTOR(frm_OBoundControl, NULL);
 }
 
 //------------------------------------------------------------------
 OBoundControl::~OBoundControl()
 {
-    DBG_DTOR(frm_OBoundControl, NULL);
 }
 // -----------------------------------------------------------------------------
 Sequence< Type> OBoundControl::_getTypes()
@@ -479,7 +473,6 @@ void OBoundControl::disposing()
 //==================================================================
 //= OControlModel
 //==================================================================
-DBG_NAME(OControlModel)
 //------------------------------------------------------------------
 Sequence<sal_Int8> SAL_CALL OControlModel::getImplementationId() throw(RuntimeException)
 {
@@ -584,7 +577,6 @@ OControlModel::OControlModel(
         // the native look is ugly ....
         // #i37342#
 {
-    DBG_CTOR(OControlModel, NULL);
     if (!_rUnoControlModelTypeName.isEmpty())  // the is a model we have to aggregate
     {
         increment(m_refCount);
@@ -627,7 +619,6 @@ OControlModel::OControlModel( const OControlModel* _pOriginal, const Reference< 
     ,m_nTabIndex( FRM_DEFAULT_TABINDEX )
     ,m_nClassId( FormComponentType::CONTROL )
 {
-    DBG_CTOR( OControlModel, NULL );
     DBG_ASSERT( _pOriginal, "OControlModel::OControlModel: invalid original!" );
 
     // copy members
@@ -669,7 +660,6 @@ OControlModel::~OControlModel()
     // release the aggregate
     doResetDelegator( );
 
-    DBG_DTOR(OControlModel, NULL);
 }
 
 //------------------------------------------------------------------
@@ -1218,7 +1208,6 @@ void OControlModel::firePropertyChanges( const Sequence< sal_Int32 >& _rHandles,
 //==================================================================
 //= OBoundControlModel
 //==================================================================
-DBG_NAME(frm_OBoundControlModel);
 //------------------------------------------------------------------
 Any SAL_CALL OBoundControlModel::queryAggregation( const Type& _rType ) throw (RuntimeException)
 {
@@ -1271,7 +1260,6 @@ OBoundControlModel::OBoundControlModel(
     ,m_eControlValueChangeInstigator( eOther )
     ,m_aLabelServiceName(FRM_SUN_COMPONENT_FIXEDTEXT)
 {
-    DBG_CTOR(frm_OBoundControlModel, NULL);
 
     // start property listening at the aggregate
     implInitAggMultiplexer( );
@@ -1306,7 +1294,6 @@ OBoundControlModel::OBoundControlModel(
     ,m_bBindingControlsEnable( sal_False )
     ,m_eControlValueChangeInstigator( eOther )
 {
-    DBG_CTOR(frm_OBoundControlModel, NULL);
 
     // start property listening at the aggregate
     implInitAggMultiplexer( );
@@ -1346,7 +1333,6 @@ OBoundControlModel::~OBoundControlModel()
         m_pAggPropMultiplexer = NULL;
     }
 
-    DBG_DTOR(frm_OBoundControlModel, NULL);
 }
 
 //------------------------------------------------------------------

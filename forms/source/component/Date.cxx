@@ -87,15 +87,11 @@ Sequence<Type> ODateModel::_getTypes()
 }
 
 //------------------------------------------------------------------
-DBG_NAME( ODateModel )
-//------------------------------------------------------------------
 ODateModel::ODateModel(const Reference<XComponentContext>& _rxFactory)
             :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_DATEFIELD, FRM_SUN_CONTROL_DATEFIELD, sal_True, sal_True )
                         // use the old control name for compytibility reasons
             ,OLimitedFormats( _rxFactory, FormComponentType::DATEFIELD )
 {
-    DBG_CTOR( ODateModel, NULL );
-
     m_nClassId = FormComponentType::DATEFIELD;
     initValueProperty( PROPERTY_DATE, PROPERTY_ID_DATE );
 
@@ -119,8 +115,6 @@ ODateModel::ODateModel( const ODateModel* _pOriginal, const Reference<XComponent
     :OEditBaseModel( _pOriginal, _rxFactory )
     ,OLimitedFormats( _rxFactory, FormComponentType::DATEFIELD )
 {
-    DBG_CTOR( ODateModel, NULL );
-
     setAggregateSet( m_xAggregateFastSet, getOriginalHandle( PROPERTY_ID_DATEFORMAT ) );
 }
 
@@ -128,7 +122,6 @@ ODateModel::ODateModel( const ODateModel* _pOriginal, const Reference<XComponent
 ODateModel::~ODateModel( )
 {
     setAggregateSet(Reference< XFastPropertySet >(), -1);
-    DBG_DTOR( ODateModel, NULL );
 }
 
 // XCloneable

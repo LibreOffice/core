@@ -137,7 +137,6 @@ Sequence<Type> OImageControlModel::_getTypes()
     );
 }
 
-DBG_NAME(OImageControlModel)
 //------------------------------------------------------------------
 OImageControlModel::OImageControlModel(const Reference<XComponentContext>& _rxFactory)
     :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_IMAGECONTROL, FRM_SUN_CONTROL_IMAGECONTROL, sal_False, sal_False, sal_False )
@@ -148,7 +147,6 @@ OImageControlModel::OImageControlModel(const Reference<XComponentContext>& _rxFa
     ,m_sImageURL()
     ,m_xGraphicObject()
 {
-    DBG_CTOR( OImageControlModel, NULL );
     m_nClassId = FormComponentType::IMAGECONTROL;
     initOwnValueProperty( PROPERTY_IMAGE_URL );
 
@@ -165,7 +163,6 @@ OImageControlModel::OImageControlModel( const OImageControlModel* _pOriginal, co
     ,m_sImageURL( _pOriginal->m_sImageURL )
     ,m_xGraphicObject( _pOriginal->m_xGraphicObject )
 {
-    DBG_CTOR( OImageControlModel, NULL );
     implConstruct();
 
     osl_atomic_increment( &m_refCount );
@@ -194,7 +191,6 @@ OImageControlModel::~OImageControlModel()
         dispose();
     }
 
-    DBG_DTOR(OImageControlModel,NULL);
 }
 
 // XCloneable

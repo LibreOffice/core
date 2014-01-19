@@ -37,7 +37,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 
 //------------------------------------------------------------------
-DBG_NAME(OFormsCollection)
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OFormsCollection_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
@@ -68,7 +67,6 @@ OFormsCollection::OFormsCollection(const Reference<XComponentContext>& _rxFactor
     ,OInterfaceContainer( _rxFactory, m_aMutex, cppu::UnoType<XForm>::get() )
     ,OFormsCollection_BASE()
 {
-    DBG_CTOR(OFormsCollection, NULL);
 }
 
 //------------------------------------------------------------------------------
@@ -77,13 +75,11 @@ OFormsCollection::OFormsCollection( const OFormsCollection& _cloneSource )
     ,OInterfaceContainer( m_aMutex, _cloneSource )
     ,OFormsCollection_BASE()
 {
-    DBG_CTOR( OFormsCollection, NULL );
 }
 
 //------------------------------------------------------------------------------
 OFormsCollection::~OFormsCollection()
 {
-    DBG_DTOR(OFormsCollection, NULL);
     if (!FormsCollectionComponentBase::rBHelper.bDisposed)
     {
         acquire();

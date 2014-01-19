@@ -88,14 +88,12 @@ Any SAL_CALL OEditControl::queryAggregation(const Type& _rType) throw (RuntimeEx
     return aReturn;
 }
 
-DBG_NAME(OEditControl);
 //------------------------------------------------------------------------------
 OEditControl::OEditControl(const Reference<XComponentContext>& _rxFactory)
                :OBoundControl( _rxFactory, FRM_SUN_CONTROL_RICHTEXTCONTROL )
                ,m_aChangeListeners(m_aMutex)
                ,m_nKeyEvent( 0 )
 {
-    DBG_CTOR(OEditControl,NULL);
 
     increment(m_refCount);
     {
@@ -121,7 +119,6 @@ OEditControl::~OEditControl()
         dispose();
     }
 
-    DBG_DTOR(OEditControl,NULL);
 }
 
 // XChangeBroadcaster
@@ -287,14 +284,12 @@ Sequence<Type> OEditModel::_getTypes()
 }
 
 
-DBG_NAME(OEditModel);
 //------------------------------------------------------------------
 OEditModel::OEditModel(const Reference<XComponentContext>& _rxFactory)
     :OEditBaseModel( _rxFactory, FRM_SUN_COMPONENT_RICHTEXTCONTROL, FRM_SUN_CONTROL_TEXTFIELD, sal_True, sal_True )
     ,m_bMaxTextLenModified(sal_False)
     ,m_bWritingFormattedFake(sal_False)
 {
-    DBG_CTOR(OEditModel,NULL);
 
     m_nClassId = FormComponentType::TEXTFIELD;
     initValueProperty( PROPERTY_TEXT, PROPERTY_ID_TEXT );
@@ -306,7 +301,6 @@ OEditModel::OEditModel( const OEditModel* _pOriginal, const Reference<XComponent
     ,m_bMaxTextLenModified(sal_False)
     ,m_bWritingFormattedFake(sal_False)
 {
-    DBG_CTOR( OEditModel, NULL );
 
     // Note that most of the properties are not clone from the original object:
     // Things as the format key, it's type, and such, depend on the field being part of a loaded form
@@ -324,7 +318,6 @@ OEditModel::~OEditModel()
         dispose();
     }
 
-    DBG_DTOR(OEditModel,NULL);
 }
 
 //------------------------------------------------------------------------------

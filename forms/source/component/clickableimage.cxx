@@ -447,7 +447,6 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    DBG_NAME( OClickableImageBaseModel )
     //------------------------------------------------------------------
     OClickableImageBaseModel::OClickableImageBaseModel( const Reference< XComponentContext >& _rxFactory, const OUString& _rUnoControlModelTypeName,
             const OUString& rDefault )
@@ -459,7 +458,6 @@ namespace frm
         ,m_bDownloading(sal_False)
         ,m_bProdStarted(sal_False)
     {
-        DBG_CTOR( OClickableImageBaseModel, NULL );
         implConstruct();
         m_eButtonType = FormButtonType_PUSH;
     }
@@ -474,7 +472,6 @@ namespace frm
         ,m_bDownloading( sal_False )
         ,m_bProdStarted( sal_False )
     {
-        DBG_CTOR( OClickableImageBaseModel, NULL );
         implConstruct();
 
         // copy properties
@@ -525,7 +522,6 @@ namespace frm
         DBG_ASSERT(m_pMedium == NULL, "OClickableImageBaseModel::~OClickableImageBaseModel : leaving a memory leak ...");
             // spaetestens im dispose sollte das aufgeraeumt worden sein
 
-        DBG_DTOR( OClickableImageBaseModel, NULL );
     }
 
     // XImageProducer

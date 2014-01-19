@@ -45,7 +45,6 @@ using namespace ::com::sun::star::util;
 //==================================================================
 //= OImageButtonModel
 //==================================================================
-DBG_NAME(OImageButtonModel)
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OImageButtonModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
@@ -57,7 +56,6 @@ OImageButtonModel::OImageButtonModel(const Reference<XComponentContext>& _rxFact
                     :OClickableImageBaseModel( _rxFactory, VCL_CONTROLMODEL_IMAGEBUTTON, FRM_SUN_CONTROL_IMAGEBUTTON )
                                     // use the old control name for compytibility reasons
 {
-    DBG_CTOR(OImageButtonModel, NULL);
     m_nClassId = FormComponentType::IMAGEBUTTON;
 }
 
@@ -65,7 +63,6 @@ OImageButtonModel::OImageButtonModel(const Reference<XComponentContext>& _rxFact
 OImageButtonModel::OImageButtonModel( const OImageButtonModel* _pOriginal, const Reference<XComponentContext>& _rxFactory)
     :OClickableImageBaseModel( _pOriginal, _rxFactory )
 {
-    DBG_CTOR(OImageButtonModel, NULL);
     implInitializeImageURL();
 }
 
@@ -75,7 +72,6 @@ IMPLEMENT_DEFAULT_CLONING( OImageButtonModel )
 //------------------------------------------------------------------------------
 OImageButtonModel::~OImageButtonModel()
 {
-    DBG_DTOR(OImageButtonModel, NULL);
 }
 
 // XServiceInfo

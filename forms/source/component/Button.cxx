@@ -52,7 +52,6 @@ using ::com::sun::star::frame::XDispatchProviderInterceptor;
 //==================================================================
 //= OButtonModel
 //==================================================================
-DBG_NAME(OButtonModel)
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OButtonModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
@@ -66,7 +65,6 @@ OButtonModel::OButtonModel(const Reference<XComponentContext>& _rxFactory)
     ,m_aResetHelper( *this, m_aMutex )
     ,m_eDefaultState( STATE_NOCHECK )
 {
-    DBG_CTOR( OButtonModel, NULL );
     m_nClassId = FormComponentType::COMMANDBUTTON;
 }
 
@@ -94,7 +92,6 @@ OButtonModel::OButtonModel( const OButtonModel* _pOriginal, const Reference<XCom
     ,m_aResetHelper( *this, m_aMutex )
     ,m_eDefaultState( _pOriginal->m_eDefaultState )
 {
-    DBG_CTOR( OButtonModel, NULL );
     m_nClassId = FormComponentType::COMMANDBUTTON;
 
     implInitializeImageURL();
@@ -103,7 +100,6 @@ OButtonModel::OButtonModel( const OButtonModel* _pOriginal, const Reference<XCom
 //------------------------------------------------------------------------------
 OButtonModel::~OButtonModel()
 {
-    DBG_DTOR(OButtonModel, NULL);
 }
 
 //------------------------------------------------------------------------------

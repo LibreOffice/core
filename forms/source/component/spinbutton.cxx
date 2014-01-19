@@ -54,13 +54,11 @@ namespace frm
     //= OSpinButtonModel
     //====================================================================
     //--------------------------------------------------------------------
-    DBG_NAME( OSpinButtonModel )
     //--------------------------------------------------------------------
     OSpinButtonModel::OSpinButtonModel( const Reference<XComponentContext>& _rxFactory )
         :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_SPINBUTTON, VCL_CONTROL_SPINBUTTON, sal_True, sal_True, sal_False )
         ,m_nDefaultSpinValue( 0 )
     {
-        DBG_CTOR( OSpinButtonModel, NULL );
 
         m_nClassId = FormComponentType::SPINBUTTON;
         initValueProperty( PROPERTY_SPIN_VALUE, PROPERTY_ID_SPIN_VALUE );
@@ -70,14 +68,12 @@ namespace frm
     OSpinButtonModel::OSpinButtonModel( const OSpinButtonModel* _pOriginal, const Reference< XComponentContext >& _rxFactory )
         :OBoundControlModel( _pOriginal, _rxFactory )
     {
-        DBG_CTOR( OSpinButtonModel, NULL );
         m_nDefaultSpinValue = _pOriginal->m_nDefaultSpinValue;
     }
 
     //--------------------------------------------------------------------
     OSpinButtonModel::~OSpinButtonModel( )
     {
-        DBG_DTOR( OSpinButtonModel, NULL );
     }
 
     //--------------------------------------------------------------------
