@@ -363,6 +363,7 @@ inline ds_status readProFile(const char* fileName, char** content, size_t* conte
     binary = (char*)malloc(size);
     if (binary == NULL)
     {
+        fclose(input);
         return DS_FILE_ERROR;
     }
     size_t bytesRead = fread(binary, sizeof(char), size, input);
