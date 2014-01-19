@@ -144,6 +144,24 @@
     },
     {
       "key": {
+        "uuid": "da9df570_74b586cc",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-01-19T15:11:11Z",
+      "side": 1,
+      "message": "Of course. I didn\u0027t check the code that closely yet but each range should be only once in the vector.",
+      "parentUuid": "da9df570_b4ca8e6c",
+      "revId": "9cb68cf2e6c18acf48198ffa872b8736300a4ae7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9df570_343cde93",
         "filename": "sc/source/ui/app/rfindlst.cxx",
         "patchSetId": 1
@@ -320,6 +338,24 @@
     },
     {
       "key": {
+        "uuid": "da9df570_94c90a5d",
+        "filename": "sc/source/ui/miscdlgs/anyrefdg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-01-19T15:11:11Z",
+      "side": 1,
+      "message": "Yes. See the other code in this file that already gets the ScInputHandler.",
+      "parentUuid": "da9df570_d4c71263",
+      "revId": "9cb68cf2e6c18acf48198ffa872b8736300a4ae7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9df570_b4c0ce7d",
         "filename": "sc/source/ui/miscdlgs/anyrefdg.cxx",
         "patchSetId": 1
@@ -402,6 +438,24 @@
       "side": 1,
       "message": "When i tried using pData\u0027s nIndex to set the color, i am getting random colors. The reason i think is that while inserting, the nIndex is set to maEntries.size(), meaning different index for different entry. The color, however, is matched by comparing the ScRange of entries, which is not being done in the second overloaded method. What to do then?",
       "parentUuid": "da9df570_d402b2b3",
+      "revId": "9cb68cf2e6c18acf48198ffa872b8736300a4ae7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_b4c60e48",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-01-19T15:11:11Z",
+      "side": 1,
+      "message": "If you make sure that each range is only once in the vector that problem is solved automatically.",
+      "parentUuid": "da9df570_94cd8a89",
       "revId": "9cb68cf2e6c18acf48198ffa872b8736300a4ae7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
