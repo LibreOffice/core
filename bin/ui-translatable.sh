@@ -15,4 +15,8 @@ for i in `git ls-files *.ui`; do
             then echo "Source: $i^";
         fi
     done
+    grep -s "<item>" $i | grep -v "translatable\=\"yes" | grep -v "translatable\=\"no" | grep ">.*[A-Za-z].*<";
+    if [ "$?" -eq 0 ] ;
+        then echo "Source: $i^";
+    fi
 done
