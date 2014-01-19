@@ -62,13 +62,11 @@ using namespace ::osl;
 using namespace ::utl;
 
 
-DBG_NAME(OQueryComposer)
 
 OQueryComposer::OQueryComposer(const Reference< XConnection>& _xConnection)
  : OSubComponent(m_aMutex,_xConnection)
 {
     SAL_INFO("dbaccess", "OQueryComposer::OQueryComposer" );
-    DBG_CTOR(OQueryComposer,NULL);
     OSL_ENSURE(_xConnection.is()," Connection cant be null!");
 
     Reference<XMultiServiceFactory> xFac( _xConnection, UNO_QUERY_THROW );
@@ -78,7 +76,6 @@ OQueryComposer::OQueryComposer(const Reference< XConnection>& _xConnection)
 
 OQueryComposer::~OQueryComposer()
 {
-    DBG_DTOR(OQueryComposer,NULL);
 }
 
 void SAL_CALL OQueryComposer::disposing()

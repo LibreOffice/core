@@ -41,7 +41,6 @@ using namespace ::comphelper;
 using namespace ::cppu;
 using namespace dbaccess;
 
-DBG_NAME(OResultColumn)
 
 OResultColumn::OResultColumn( const Reference < XResultSetMetaData >& _xMetaData, sal_Int32 _nPos,
         const Reference< XDatabaseMetaData >& _rxDBMeta )
@@ -50,7 +49,6 @@ OResultColumn::OResultColumn( const Reference < XResultSetMetaData >& _xMetaData
     ,m_xDBMetaData( _rxDBMeta )
     ,m_nPos( _nPos )
 {
-    DBG_CTOR(OResultColumn,NULL);
 }
 
 void OResultColumn::impl_determineIsRowVersion_nothrow()
@@ -100,7 +98,6 @@ void OResultColumn::impl_determineIsRowVersion_nothrow()
 
 OResultColumn::~OResultColumn()
 {
-    DBG_DTOR(OResultColumn,NULL);
 }
 
 // com::sun::star::lang::XTypeProvider

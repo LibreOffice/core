@@ -55,7 +55,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
 using namespace ::osl;
 
-DBG_NAME(OCacheSet)
 
 OCacheSet::OCacheSet(sal_Int32 i_nMaxRows)
             :m_nMaxRows(i_nMaxRows)
@@ -64,7 +63,6 @@ OCacheSet::OCacheSet(sal_Int32 i_nMaxRows)
             ,m_bDeleted(sal_False)
 {
     SAL_INFO("dbaccess", "OCacheSet::OCacheSet" );
-    DBG_CTOR(OCacheSet,NULL);
 
 }
 
@@ -136,7 +134,6 @@ OCacheSet::~OCacheSet()
         SAL_WARN("dbaccess", "Unknown Exception occurred");
     }
 
-    DBG_DTOR(OCacheSet,NULL);
 }
 
 void OCacheSet::fillTableName(const Reference<XPropertySet>& _xTable)  throw(SQLException, RuntimeException)

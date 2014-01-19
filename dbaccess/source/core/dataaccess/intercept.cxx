@@ -74,7 +74,6 @@ void SAL_CALL OInterceptor::dispose()
 }
 
 
-DBG_NAME(OInterceptor)
 
 OInterceptor::OInterceptor( ODocumentDefinition* _pContentHolder )
     :m_pContentHolder( _pContentHolder )
@@ -82,7 +81,6 @@ OInterceptor::OInterceptor( ODocumentDefinition* _pContentHolder )
     ,m_pDisposeEventListeners(0)
     ,m_pStatCL(0)
 {
-    DBG_CTOR(OInterceptor,NULL);
 
     OSL_ENSURE(DISPATCH_RELOAD < m_aInterceptedURL.getLength(),"Illegal size.");
 
@@ -103,7 +101,6 @@ OInterceptor::~OInterceptor()
     if(m_pStatCL)
         delete m_pStatCL;
 
-    DBG_DTOR(OInterceptor,NULL);
 }
 
 struct DispatchHelper

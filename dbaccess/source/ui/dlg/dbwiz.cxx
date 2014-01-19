@@ -62,7 +62,6 @@ using namespace com::sun::star::container;
 #define ADDITIONAL_USERDEFINED         11
 #define ADDITIONAL_PAGE_MYSQL_NATIVE   12
 
-DBG_NAME(ODbTypeWizDialog)
 // ODbTypeWizDialog
 ODbTypeWizDialog::ODbTypeWizDialog(Window* _pParent
                                ,SfxItemSet* _pItems
@@ -75,7 +74,6 @@ ODbTypeWizDialog::ODbTypeWizDialog(Window* _pParent
     ,m_bApplied(sal_False)
     ,m_bUIEnabled( sal_True )
 {
-    DBG_CTOR(ODbTypeWizDialog,NULL);
     m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxORB,this,this));
     m_pImpl->setDataSourceOrName(_aDataSourceName);
     Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
@@ -106,7 +104,6 @@ ODbTypeWizDialog::ODbTypeWizDialog(Window* _pParent
 
 ODbTypeWizDialog::~ODbTypeWizDialog()
 {
-    DBG_DTOR(ODbTypeWizDialog,NULL);
     delete m_pOutSet;
 }
 

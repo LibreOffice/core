@@ -37,14 +37,12 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
 // class OApplicationSwapWindow
-DBG_NAME(OApplicationSwapWindow)
 OApplicationSwapWindow::OApplicationSwapWindow( Window* _pParent, OAppBorderWindow& _rBorderWindow )
     :Window(_pParent,WB_DIALOGCONTROL )
     ,m_aIconControl(this)
     ,m_eLastType(E_NONE)
     ,m_rBorderWin( _rBorderWindow )
 {
-    DBG_CTOR(OApplicationSwapWindow,NULL);
 
     ImplInitSettings( sal_True, sal_True, sal_True );
 
@@ -57,7 +55,6 @@ OApplicationSwapWindow::OApplicationSwapWindow( Window* _pParent, OAppBorderWind
 OApplicationSwapWindow::~OApplicationSwapWindow()
 {
 
-    DBG_DTOR(OApplicationSwapWindow,NULL);
 }
 
 void OApplicationSwapWindow::Resize()

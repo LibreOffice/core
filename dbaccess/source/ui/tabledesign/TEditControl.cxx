@@ -67,7 +67,6 @@ namespace dbaui
 }
 
 //  TYPEINIT1(OTableEditorCtrl, DBView);
-DBG_NAME(OTableEditorCtrl)
 
 #define HANDLE_ID       0
 
@@ -79,11 +78,9 @@ DBG_NAME(OTableEditorCtrl)
 // Maximum length in description field
 #define MAX_DESCR_LEN       256
 
-DBG_NAME(ClipboardInvalidator)
 OTableEditorCtrl::ClipboardInvalidator::ClipboardInvalidator(sal_uLong nTimeout,OTableEditorCtrl* _pOwner)
 : m_pOwner(_pOwner)
 {
-    DBG_CTOR(ClipboardInvalidator,NULL);
 
     m_aInvalidateTimer.SetTimeout(nTimeout);
     m_aInvalidateTimer.SetTimeoutHdl(LINK(this, OTableEditorCtrl::ClipboardInvalidator, OnInvalidate));
@@ -94,7 +91,6 @@ OTableEditorCtrl::ClipboardInvalidator::~ClipboardInvalidator()
 {
     m_aInvalidateTimer.Stop();
 
-    DBG_DTOR(ClipboardInvalidator,NULL);
 }
 
 IMPL_LINK_NOARG(OTableEditorCtrl::ClipboardInvalidator, OnInvalidate)
@@ -107,7 +103,6 @@ IMPL_LINK_NOARG(OTableEditorCtrl::ClipboardInvalidator, OnInvalidate)
 
 void OTableEditorCtrl::Init()
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     OTableRowView::Init();
 
     // Should it be opened ReadOnly ?
@@ -141,7 +136,6 @@ void OTableEditorCtrl::Init()
 
 void OTableEditorCtrl::UpdateAll()
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     RowRemoved(0, GetRowCount(), sal_False);
     m_nDataPos = 0;
 
@@ -168,7 +162,6 @@ OTableEditorCtrl::OTableEditorCtrl(Window* pWindow)
     ,bReadOnly(sal_True)
     ,m_aInvalidate(500,this)
 {
-    DBG_CTOR(OTableEditorCtrl,NULL);
 
     SetHelpId(HID_TABDESIGN_BACKGROUND);
     GetDataWindow().SetHelpId(HID_CTL_TABLEEDIT);
@@ -184,7 +177,6 @@ SfxUndoManager& OTableEditorCtrl::GetUndoManager() const
 
 sal_Bool OTableEditorCtrl::IsReadOnly()
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     return bReadOnly;
 }
 
@@ -196,7 +188,6 @@ void OTableEditorCtrl::SetReadOnly( sal_Bool bRead )
         // or worse, this action may not be reversed afterwards
         return;
 
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     bReadOnly = bRead;
 
     // Disable active cells
@@ -217,7 +208,6 @@ void OTableEditorCtrl::SetReadOnly( sal_Bool bRead )
 
 void OTableEditorCtrl::InitCellController()
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     // Cell Field name
     sal_Int32 nMaxTextLen = EDIT_NOLIMIT;
     OUString sExtraNameChars;
@@ -274,7 +264,6 @@ void OTableEditorCtrl::InitCellController()
 
 void OTableEditorCtrl::ClearModified()
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     pNameCell->ClearModifyFlag();
     pDescrCell->ClearModifyFlag();
     pHelpTextCell->ClearModifyFlag();
@@ -283,7 +272,6 @@ void OTableEditorCtrl::ClearModified()
 
 OTableEditorCtrl::~OTableEditorCtrl()
 {
-    DBG_DTOR(OTableEditorCtrl,NULL);
     // Reset the Undo-Manager
     GetUndoManager().Clear();
 
@@ -308,7 +296,6 @@ OTableEditorCtrl::~OTableEditorCtrl()
 
 sal_Bool OTableEditorCtrl::SetDataPtr( long nRow )
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     if(nRow == -1)
         return sal_False;
 
@@ -324,7 +311,6 @@ sal_Bool OTableEditorCtrl::SeekRow(long _nRow)
     // Call the Base class to remember which row must be repainted
     EditBrowseBox::SeekRow(_nRow);
 
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     m_nCurrentPos = _nRow;
     return SetDataPtr(_nRow);
 }
@@ -332,7 +318,6 @@ sal_Bool OTableEditorCtrl::SeekRow(long _nRow)
 void OTableEditorCtrl::PaintCell(OutputDevice& rDev, const Rectangle& rRect,
                                    sal_uInt16 nColumnId ) const
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     const OUString aText( GetCellText( m_nCurrentPos, nColumnId ));
 
     rDev.Push( PUSH_CLIPREGION );
@@ -343,7 +328,6 @@ void OTableEditorCtrl::PaintCell(OutputDevice& rDev, const Rectangle& rRect,
 
 CellController* OTableEditorCtrl::GetController(long nRow, sal_uInt16 nColumnId)
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     // If EditorCtrl is ReadOnly, editing is forbidden
     Reference<XPropertySet> xTable = GetView()->getController().getTable();
     if (IsReadOnly() || (   xTable.is() &&
@@ -382,7 +366,6 @@ CellController* OTableEditorCtrl::GetController(long nRow, sal_uInt16 nColumnId)
 
 void OTableEditorCtrl::InitController(CellControllerRef&, long nRow, sal_uInt16 nColumnId)
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     SeekRow( nRow == -1 ? GetCurRow() : nRow);
     OFieldDescription* pActFieldDescr = pActRow->GetActFieldDescr();
     OUString aInitString;
@@ -432,7 +415,6 @@ void OTableEditorCtrl::InitController(CellControllerRef&, long nRow, sal_uInt16 
 
 EditBrowseBox::RowStatus OTableEditorCtrl::GetRowStatus(long nRow) const
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     const_cast<OTableEditorCtrl*>(this)->SetDataPtr( nRow );
     if( !pActRow )
         return EditBrowseBox::CLEAN;
@@ -452,7 +434,6 @@ EditBrowseBox::RowStatus OTableEditorCtrl::GetRowStatus(long nRow) const
 
 sal_Bool OTableEditorCtrl::SaveCurRow()
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     if (GetFieldDescr(GetCurRow()) == NULL)
         // there is no data in the current row
         return sal_True;
@@ -493,7 +474,6 @@ void OTableEditorCtrl::DisplayData(long nRow, sal_Bool bGrabFocus)
 
 void OTableEditorCtrl::CursorMoved()
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     // New line ?
     m_nDataPos = GetCurRow();
     if( m_nDataPos != nOldDataPos && m_nDataPos != -1)
@@ -510,7 +490,6 @@ void OTableEditorCtrl::CursorMoved()
 
 sal_Int32 OTableEditorCtrl::HasFieldName( const OUString& rFieldName )
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
 
     Reference<XConnection> xCon = GetView()->getController().getConnection();
     Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : Reference< XDatabaseMetaData>();
@@ -532,7 +511,6 @@ sal_Int32 OTableEditorCtrl::HasFieldName( const OUString& rFieldName )
 
 sal_Bool OTableEditorCtrl::SaveData(long nRow, sal_uInt16 nColId)
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     // Store the cell content
     SetDataPtr( nRow == -1 ? GetCurRow() : nRow);
     OFieldDescription* pActFieldDescr = pActRow->GetActFieldDescr();
@@ -620,7 +598,6 @@ sal_Bool OTableEditorCtrl::SaveData(long nRow, sal_uInt16 nColId)
 
 sal_Bool OTableEditorCtrl::SaveModified()
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     sal_uInt16 nColId = GetCurColumnId();
 
     switch( nColId )
@@ -638,7 +615,6 @@ sal_Bool OTableEditorCtrl::SaveModified()
 
 sal_Bool OTableEditorCtrl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
 
     if (!EditBrowseBox::CursorMoving(nNewRow, nNewCol))
         return sal_False;
@@ -664,7 +640,6 @@ sal_Bool OTableEditorCtrl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
 
 IMPL_LINK( OTableEditorCtrl, InvalidateFieldType, void*, /*EMPTYTAG*/ )
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     nInvalidateTypeEvent = 0;
     Invalidate( GetFieldRectPixel(nOldDataPos, FIELD_TYPE) );
 
@@ -673,7 +648,6 @@ IMPL_LINK( OTableEditorCtrl, InvalidateFieldType, void*, /*EMPTYTAG*/ )
 
 void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
 
     // If the description is null, use the default
     if(nRow == -1)
@@ -743,7 +717,6 @@ void OTableEditorCtrl::resetType()
 
 void OTableEditorCtrl::CellModified()
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     CellModified( GetCurRow(), GetCurColumnId() );
 }
 
@@ -756,20 +729,17 @@ void OTableEditorCtrl::InvalidateFeatures()
 
 void OTableEditorCtrl::Undo()
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
 
     InvalidateFeatures();
 }
 
 void OTableEditorCtrl::Redo()
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     InvalidateFeatures();
 }
 
 void OTableEditorCtrl::CopyRows()
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     // set to the right row and save it
     if( SetDataPtr(m_nDataPos) )
         pDescrWin->SaveData( pActRow->GetActFieldDescr() );
@@ -800,7 +770,6 @@ void OTableEditorCtrl::CopyRows()
 
 OUString OTableEditorCtrl::GenerateName( const OUString& rName )
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     // Create a base name for appending numbers to
     OUString aBaseName;
     Reference<XConnection> xCon = GetView()->getController().getConnection();
@@ -827,7 +796,6 @@ OUString OTableEditorCtrl::GenerateName( const OUString& rName )
 
 void OTableEditorCtrl::InsertRows( long nRow )
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
 
     ::std::vector<  ::boost::shared_ptr<OTableRow> > vInsertedUndoRedoRows; // need for undo/redo handling
     // get rows from clipboard
@@ -878,7 +846,6 @@ void OTableEditorCtrl::InsertRows( long nRow )
 
 void OTableEditorCtrl::DeleteRows()
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     OSL_ENSURE(GetView()->getController().isDropAllowed(),"Call of DeleteRows not valid here. Please check isDropAllowed!");
     // Create the Undo-Action
     GetUndoManager().AddUndoAction( new OTableEditorDelUndoAct(this) );
@@ -916,7 +883,6 @@ void OTableEditorCtrl::DeleteRows()
 
 void OTableEditorCtrl::InsertNewRows( long nRow )
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     OSL_ENSURE(GetView()->getController().isAddAllowed(),"Call of InsertNewRows not valid here. Please check isAppendAllowed!");
     // Create Undo-Action
     long nInsertRows = GetSelectRowCount();
@@ -934,7 +900,6 @@ void OTableEditorCtrl::InsertNewRows( long nRow )
 
 OUString OTableEditorCtrl::GetControlText( long nRow, sal_uInt16 nColId )
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     // Read the Browser Controls
     if( nColId < FIELD_FIRST_VIRTUAL_COLUMN )
     {
@@ -954,7 +919,6 @@ OUString OTableEditorCtrl::GetControlText( long nRow, sal_uInt16 nColId )
 
 void OTableEditorCtrl::SetControlText( long nRow, sal_uInt16 nColId, const OUString& rText )
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     // Set the Browser Controls
     if( nColId < FIELD_FIRST_VIRTUAL_COLUMN )
     {
@@ -976,7 +940,6 @@ void OTableEditorCtrl::SetControlText( long nRow, sal_uInt16 nColId, const OUStr
 
 void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const TOTypeInfoSP& _pTypeInfo )
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     // Relocate the current pointer
     if( nRow == -1 )
         nRow = GetCurRow();
@@ -998,7 +961,6 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const TOTypeIn
 
 void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const ::com::sun::star::uno::Any& _rNewData )
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     // Relocate the current pointer
     if( nRow == -1 )
         nRow = GetCurRow();
@@ -1079,7 +1041,6 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const ::com::s
 
 Any OTableEditorCtrl::GetCellData( long nRow, sal_uInt16 nColId )
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     OFieldDescription* pFieldDescr = GetFieldDescr( nRow );
     if( !pFieldDescr )
         return Any();
@@ -1149,7 +1110,6 @@ Any OTableEditorCtrl::GetCellData( long nRow, sal_uInt16 nColId )
 
 OUString OTableEditorCtrl::GetCellText( long nRow, sal_uInt16 nColId ) const
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     OUString sCellText;
     const_cast< OTableEditorCtrl* >( this )->GetCellData( nRow, nColId ) >>= sCellText;
     return sCellText;
@@ -1157,13 +1117,11 @@ OUString OTableEditorCtrl::GetCellText( long nRow, sal_uInt16 nColId ) const
 
 sal_uInt32 OTableEditorCtrl::GetTotalCellWidth(long nRow, sal_uInt16 nColId)
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     return GetTextWidth(GetCellText(nRow, nColId)) + 2 * GetTextWidth(OUString('0'));
 }
 
 OFieldDescription* OTableEditorCtrl::GetFieldDescr( long nRow )
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     std::vector< ::boost::shared_ptr<OTableRow> >::size_type nListCount(
         m_pRowList->size());
     if( (nRow<0) || (sal::static_int_cast< unsigned long >(nRow)>=nListCount) )
@@ -1179,7 +1137,6 @@ OFieldDescription* OTableEditorCtrl::GetFieldDescr( long nRow )
 
 sal_Bool OTableEditorCtrl::IsCutAllowed( long nRow )
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     sal_Bool bIsCutAllowed = (GetView()->getController().isAddAllowed() && GetView()->getController().isDropAllowed()) ||
                             GetView()->getController().isAlterAllowed();
 
@@ -1210,7 +1167,6 @@ sal_Bool OTableEditorCtrl::IsCutAllowed( long nRow )
 
 sal_Bool OTableEditorCtrl::IsCopyAllowed( long /*nRow*/ )
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     sal_Bool bIsCopyAllowed = sal_False;
     if(m_eChildFocus == DESCRIPTION )
         bIsCopyAllowed = !pDescrCell->GetSelected().isEmpty();
@@ -1244,7 +1200,6 @@ sal_Bool OTableEditorCtrl::IsCopyAllowed( long /*nRow*/ )
 
 sal_Bool OTableEditorCtrl::IsPasteAllowed( long /*nRow*/ )
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     sal_Bool bAllowed = GetView()->getController().isAddAllowed();
     if ( bAllowed )
     {
@@ -1345,14 +1300,12 @@ void OTableEditorCtrl::paste()
 
 sal_Bool OTableEditorCtrl::IsDeleteAllowed( long /*nRow*/ )
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
 
     return GetSelectRowCount() != 0 && GetView()->getController().isDropAllowed();
 }
 
 sal_Bool OTableEditorCtrl::IsInsertNewAllowed( long nRow )
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
 
     sal_Bool bInsertNewAllowed = GetView()->getController().isAddAllowed();
     // If fields can be added, Paste in the new fields
@@ -1368,7 +1321,6 @@ sal_Bool OTableEditorCtrl::IsInsertNewAllowed( long nRow )
 
 sal_Bool OTableEditorCtrl::IsPrimaryKeyAllowed( long /*nRow*/ )
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     if( !GetSelectRowCount() )
         return sal_False;
 
@@ -1415,7 +1367,6 @@ sal_Bool OTableEditorCtrl::IsPrimaryKeyAllowed( long /*nRow*/ )
 
 void OTableEditorCtrl::Command(const CommandEvent& rEvt)
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     switch (rEvt.GetCommand())
     {
         case COMMAND_CONTEXTMENU:
@@ -1574,7 +1525,6 @@ IMPL_LINK( OTableEditorCtrl, DelayedDelete, void*, /*EMPTYTAG*/ )
 
 IMPL_LINK( OTableEditorCtrl, DelayedInsNewRows, void*, /*EMPTYTAG*/ )
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     nInsNewRowsEvent = 0;
     sal_Int32 nPastePosition = GetView()->getController().getFirstEmptyRowPosition();
     if ( !GetView()->getController().getTable().is() )
@@ -1616,7 +1566,6 @@ void OTableEditorCtrl::AdjustFieldDescription(OFieldDescription* _pFieldDesc,
 
 void OTableEditorCtrl::SetPrimaryKey( sal_Bool bSet )
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     // Delete any existing Primary Keys
     MultiSelection aDeletedPrimKeys;
     aDeletedPrimKeys.SetTotalRange( Range(0,GetRowCount()) );
@@ -1662,7 +1611,6 @@ void OTableEditorCtrl::SetPrimaryKey( sal_Bool bSet )
 
 sal_Bool OTableEditorCtrl::IsPrimaryKey()
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     // Are all marked fields part of the Primary Key ?
     long nPrimaryKeys = 0;
     ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aIter = m_pRowList->begin();
@@ -1681,7 +1629,6 @@ sal_Bool OTableEditorCtrl::IsPrimaryKey()
 
 void OTableEditorCtrl::SwitchType( const TOTypeInfoSP& _pType )
 {
-    DBG_CHKTHIS(OTableEditorCtrl,NULL);
     // if there is no assigned field name
     long nRow(GetCurRow());
     OFieldDescription* pActFieldDescr = GetFieldDescr( nRow );

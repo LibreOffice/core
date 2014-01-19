@@ -46,18 +46,15 @@ namespace dbaui
     using namespace ::com::sun::star::sdb;
 
     // ODirectSQLDialog
-DBG_NAME(ODirectSQLDialog)
     ODirectSQLDialog::ODirectSQLDialog(const Reference< XComponentContext >& _rxORB)
         :ODirectSQLDialog_BASE( _rxORB )
     {
-        DBG_CTOR(ODirectSQLDialog,NULL);
 
     }
 
     ODirectSQLDialog::~ODirectSQLDialog()
     {
 
-        DBG_DTOR(ODirectSQLDialog,NULL);
     }
 
     IMPLEMENT_IMPLEMENTATION_ID( ODirectSQLDialog )

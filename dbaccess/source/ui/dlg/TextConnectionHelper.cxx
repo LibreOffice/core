@@ -56,7 +56,6 @@
 
 namespace dbaui
 {
-DBG_NAME(OTextConnectionHelper)
 
     OTextConnectionHelper::OTextConnectionHelper( Window* pParent, const short _nAvailableSections )
         :Control( pParent, WB_DIALOGCONTROL )
@@ -84,7 +83,6 @@ DBG_NAME(OTextConnectionHelper)
         ,m_aTextNone                (ModuleRes(STR_AUTOTEXT_FIELD_SEP_NONE))
         ,m_nAvailableSections( _nAvailableSections )
     {
-        DBG_CTOR(OTextConnectionHelper,NULL);
 
         sal_Int32 nCnt = comphelper::string::getTokenCount(m_aFieldSeparatorList, '\t');
         sal_Int32 i;
@@ -207,7 +205,6 @@ DBG_NAME(OTextConnectionHelper)
     OTextConnectionHelper::~OTextConnectionHelper()
     {
 
-        DBG_DTOR(OTextConnectionHelper,NULL);
     }
 
     IMPL_LINK(OTextConnectionHelper, OnControlModified, Control*, /*EMPTYARG*/)

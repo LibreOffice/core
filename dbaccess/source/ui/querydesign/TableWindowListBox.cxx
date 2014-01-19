@@ -40,7 +40,6 @@ OJoinExchangeData::OJoinExchangeData(OTableWindowListBox* pBox)
 const sal_uLong SCROLLING_TIMESPAN = 500;
 const long LISTBOX_SCROLLING_AREA = 6;
 // class OTableWindowListBox
-DBG_NAME(OTableWindowListBox)
 OTableWindowListBox::OTableWindowListBox( OTableWindow* pParent )
     :SvTreeListBox( pParent, WB_HASBUTTONS | WB_BORDER)
     ,m_aMousePos( Point(0,0) )
@@ -49,7 +48,6 @@ OTableWindowListBox::OTableWindowListBox( OTableWindow* pParent )
     ,m_nUiEvent(0)
     ,m_bReallyScrolled( sal_False )
 {
-    DBG_CTOR(OTableWindowListBox,NULL);
     m_aScrollTimer.SetTimeout( SCROLLING_TIMESPAN );
     SetDoubleClickHdl( LINK(this, OTableWindowListBox, OnDoubleClick) );
 
@@ -70,7 +68,6 @@ void OTableWindowListBox::dragFinished( )
 
 OTableWindowListBox::~OTableWindowListBox()
 {
-    DBG_DTOR(OTableWindowListBox,NULL);
     if (m_nDropEvent)
         Application::RemoveUserEvent(m_nDropEvent);
     if (m_nUiEvent)

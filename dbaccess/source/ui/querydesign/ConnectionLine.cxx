@@ -109,24 +109,20 @@ namespace
 }
 
 // class OConnectionLine
-DBG_NAME(OConnectionLine)
 OConnectionLine::OConnectionLine( OTableConnection* _pConn, OConnectionLineDataRef _pLineData )
     : m_pTabConn( _pConn )
      ,m_pData( _pLineData )
 {
-    DBG_CTOR(OConnectionLine,NULL);
 }
 
 OConnectionLine::OConnectionLine( const OConnectionLine& _rLine )
 {
-    DBG_CTOR(OConnectionLine,NULL);
     m_pData = new OConnectionLineData( *_rLine.GetData() );
     *this = _rLine;
 }
 
 OConnectionLine::~OConnectionLine()
 {
-    DBG_DTOR(OConnectionLine,NULL);
 }
 
 OConnectionLine& OConnectionLine::operator=( const OConnectionLine& rLine )

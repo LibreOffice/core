@@ -103,7 +103,6 @@ namespace dbaui
     }
 
     // OLinkedDocumentsAccess
-    DBG_NAME(OLinkedDocumentsAccess)
     OLinkedDocumentsAccess::OLinkedDocumentsAccess( Window* _pDialogParent, const Reference< XDatabaseDocumentUI >& i_rDocumentUI,
         const Reference< XComponentContext >& _rxContext, const Reference< XNameAccess >& _rxContainer,
         const Reference< XConnection>& _xConnection, const OUString& _sDataSourceName )
@@ -114,13 +113,11 @@ namespace dbaui
         ,m_pDialogParent(_pDialogParent)
         ,m_sDataSourceName(_sDataSourceName)
     {
-        DBG_CTOR(OLinkedDocumentsAccess,NULL);
         OSL_ENSURE(m_xContext.is(), "OLinkedDocumentsAccess::OLinkedDocumentsAccess: invalid service factory!");
         OSL_ENSURE(m_pDialogParent, "OLinkedDocumentsAccess::OLinkedDocumentsAccess: really need a dialog parent!");
     }
     OLinkedDocumentsAccess::~OLinkedDocumentsAccess()
     {
-        DBG_DTOR(OLinkedDocumentsAccess,NULL);
     }
     Reference< XComponent> OLinkedDocumentsAccess::impl_open( const OUString& _rLinkName, Reference< XComponent >& _xDefinition,
         ElementOpenMode _eOpenMode, const ::comphelper::NamedValueCollection& _rAdditionalArgs )

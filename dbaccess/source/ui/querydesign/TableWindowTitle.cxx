@@ -38,12 +38,10 @@ using namespace dbaui;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 // class OTableWindowTitle
-DBG_NAME(OTableWindowTitle)
 OTableWindowTitle::OTableWindowTitle( OTableWindow* pParent ) :
      FixedText( pParent, WB_3DLOOK|WB_LEFT|WB_NOLABEL|WB_VCENTER )
     ,m_pTabWin( pParent )
 {
-    DBG_CTOR(OTableWindowTitle,NULL);
     // set background- and text colour
     StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
     SetBackground(Wallpaper(Color(aSystemStyle.GetFaceColor())));
@@ -56,7 +54,6 @@ OTableWindowTitle::OTableWindowTitle( OTableWindow* pParent ) :
 
 OTableWindowTitle::~OTableWindowTitle()
 {
-    DBG_DTOR(OTableWindowTitle,NULL);
     m_pTabWin = NULL;
 }
 

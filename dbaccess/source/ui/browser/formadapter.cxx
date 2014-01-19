@@ -38,7 +38,6 @@ using namespace ::com::sun::star::container;
 
 // SbaXFormAdapter
 
-DBG_NAME(SbaXFormAdapter)
 SbaXFormAdapter::SbaXFormAdapter()
             :m_aLoadListeners(*this, m_aMutex)
             ,m_aRowSetListeners(*this, m_aMutex)
@@ -54,14 +53,12 @@ SbaXFormAdapter::SbaXFormAdapter()
             ,m_aContainerListeners(m_aMutex)
             ,m_nNamePropHandle(-1)
 {
-    DBG_CTOR(SbaXFormAdapter,NULL);
 
 }
 
 SbaXFormAdapter::~SbaXFormAdapter()
 {
 
-    DBG_DTOR(SbaXFormAdapter,NULL);
 }
 
 Sequence< Type > SAL_CALL SbaXFormAdapter::getTypes(  ) throw (RuntimeException)

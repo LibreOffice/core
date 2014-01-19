@@ -33,7 +33,6 @@ namespace dbaxml
 {
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
-DBG_NAME(OXMLDataSourceInfo)
 
 OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
@@ -42,7 +41,6 @@ OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
                 ,const sal_uInt16 _nToken) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
 {
-    DBG_CTOR(OXMLDataSourceInfo,NULL);
 
     OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
     const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
@@ -134,7 +132,6 @@ OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
 OXMLDataSourceInfo::~OXMLDataSourceInfo()
 {
 
-    DBG_DTOR(OXMLDataSourceInfo,NULL);
 }
 
 } // namespace dbaxml

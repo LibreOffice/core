@@ -35,7 +35,6 @@ namespace dbaxml
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::xml::sax;
-DBG_NAME(OXMLComponent)
 
 OXMLComponent::OXMLComponent( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
@@ -47,7 +46,6 @@ OXMLComponent::OXMLComponent( ODBFilter& rImport
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
     ,m_bAsTemplate(sal_False)
 {
-    DBG_CTOR(OXMLComponent,NULL);
 
     OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
     const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
@@ -114,7 +112,6 @@ OXMLComponent::OXMLComponent( ODBFilter& rImport
 OXMLComponent::~OXMLComponent()
 {
 
-    DBG_DTOR(OXMLComponent,NULL);
 }
 
 } // namespace dbaxml

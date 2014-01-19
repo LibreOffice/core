@@ -102,13 +102,11 @@ namespace dbaui
     }
 
     // OConnectionTabPageSetup
-    DBG_NAME(OConnectionTabPageSetup)
     OConnectionTabPageSetup::OConnectionTabPageSetup(Window* pParent, sal_uInt16 _rId, const SfxItemSet& _rCoreAttrs, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderResId, sal_uInt16 _nUrlResId)
         :OConnectionHelper(pParent, ModuleRes(_rId), _rCoreAttrs)
         ,m_bUserGrabFocus(sal_True)
         ,m_aFT_HelpText(this, ModuleRes(FT_AUTOWIZARDHELPTEXT))
     {
-        DBG_CTOR(OConnectionTabPageSetup, NULL);
 
         if ( USHRT_MAX != _nHelpTextResId )
         {
@@ -150,7 +148,6 @@ namespace dbaui
 
     OConnectionTabPageSetup::~OConnectionTabPageSetup()
     {
-        DBG_DTOR(OConnectionTabPageSetup,NULL);
     }
 
     void OConnectionTabPageSetup::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)

@@ -88,7 +88,6 @@ namespace dbaui
         return ( new OConnectionTabPage( pParent, _rAttrSet ) );
     }
     // OConnectionTabPage
-    DBG_NAME(OConnectionTabPage)
     OConnectionTabPage::OConnectionTabPage(Window* pParent, const SfxItemSet& _rCoreAttrs)
         :OConnectionHelper(pParent, ModuleRes(PAGE_CONNECTION), _rCoreAttrs)
         ,m_aFL1(this, ModuleRes(FL_SEPARATOR1))
@@ -102,7 +101,6 @@ namespace dbaui
         ,m_aTestJavaDriver(this, ModuleRes(PB_TESTDRIVERCLASS))
         ,m_aTestConnection(this, ModuleRes(PB_TESTCONNECTION))
     {
-        DBG_CTOR(OConnectionTabPage,NULL);
         m_aConnectionURL.SetModifyHdl(LINK(this, OConnectionTabPage, OnEditModified));
         m_aJavaDriver.SetModifyHdl(getControlModifiedLink());
         m_aJavaDriver.SetModifyHdl(LINK(this, OConnectionTabPage, OnEditModified));
@@ -119,7 +117,6 @@ namespace dbaui
 
     OConnectionTabPage::~OConnectionTabPage()
     {
-        DBG_DTOR(OConnectionTabPage,NULL);
     }
 
     void OConnectionTabPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)

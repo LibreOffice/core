@@ -29,14 +29,12 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
 // class OTableRow
-DBG_NAME(OTableRow)
 OTableRow::OTableRow()
     :m_pActFieldDescr( NULL )
     ,m_nPos( -1 )
     ,m_bReadOnly( false )
     ,m_bOwnsDescriptions(false)
 {
-    DBG_CTOR(OTableRow,NULL);
 }
 
 OTableRow::OTableRow(const Reference< XPropertySet >& xAffectedCol)
@@ -45,7 +43,6 @@ OTableRow::OTableRow(const Reference< XPropertySet >& xAffectedCol)
     ,m_bReadOnly( false )
     ,m_bOwnsDescriptions(true)
 {
-    DBG_CTOR(OTableRow,NULL);
     m_pActFieldDescr = new OFieldDescription(xAffectedCol);
 }
 
@@ -55,7 +52,6 @@ OTableRow::OTableRow( const OTableRow& rRow, long nPosition )
     ,m_bReadOnly(rRow.IsReadOnly())
     ,m_bOwnsDescriptions(false)
 {
-    DBG_CTOR(OTableRow,NULL);
 
     OFieldDescription* pSrcField = rRow.GetActFieldDescr();
     if(pSrcField)
@@ -67,27 +63,23 @@ OTableRow::OTableRow( const OTableRow& rRow, long nPosition )
 
 OTableRow::~OTableRow()
 {
-    DBG_DTOR(OTableRow,NULL);
     if(m_bOwnsDescriptions)
         delete m_pActFieldDescr;
 }
 
 void OTableRow::SetPrimaryKey( sal_Bool bSet )
 {
-    DBG_CHKTHIS(OTableRow,NULL);
     if(m_pActFieldDescr)
         m_pActFieldDescr->SetPrimaryKey(bSet);
 }
 
 sal_Bool OTableRow::IsPrimaryKey() const
 {
-    DBG_CHKTHIS(OTableRow,NULL);
     return m_pActFieldDescr && m_pActFieldDescr->IsPrimaryKey();
 }
 
 void OTableRow::SetFieldType( const TOTypeInfoSP& _pType, sal_Bool _bForce )
 {
-    DBG_CHKTHIS(OTableRow,NULL);
     if ( _pType.get() )
     {
         if( !m_pActFieldDescr )

@@ -80,7 +80,6 @@ namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOper
 
 #define MAX_PAGES   4   // max. number of pages, which are shown
 
-DBG_NAME(OCopyTableWizard)
 namespace
 {
     void clearColumns(ODatabaseExport::TColumns& _rColumns, ODatabaseExport::TColumnVector& _rColumnsVec)
@@ -527,7 +526,6 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const OUString& _rDefaultN
     ,m_bCreatePrimaryKeyColumn(sal_False)
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::OCopyTableWizard" );
-    DBG_CTOR(OCopyTableWizard,NULL);
     construct();
 
     // extract table name
@@ -626,7 +624,6 @@ OCopyTableWizard::OCopyTableWizard( Window* pParent, const OUString& _rDefaultNa
     ,m_bCreatePrimaryKeyColumn(sal_False)
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::OCopyTableWizard" );
-    DBG_CTOR(OCopyTableWizard,NULL);
     construct();
     ODatabaseExport::TColumnVector::const_iterator aIter = _rSourceColVec.begin();
     ODatabaseExport::TColumnVector::const_iterator aEnd = _rSourceColVec.end();
@@ -689,7 +686,6 @@ void OCopyTableWizard::construct()
 
 OCopyTableWizard::~OCopyTableWizard()
 {
-    DBG_DTOR(OCopyTableWizard,NULL);
     for ( ;; )
     {
         TabPage *pPage = GetPage(0);

@@ -132,12 +132,10 @@ protected:
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 };
 
-DBG_NAME( FlushNotificationAdapter )
 FlushNotificationAdapter::FlushNotificationAdapter( const Reference< XFlushable >& _rxBroadcaster, const Reference< XFlushListener >& _rxListener )
     :m_aBroadcaster( _rxBroadcaster )
     ,m_aListener( _rxListener )
 {
-    DBG_CTOR( FlushNotificationAdapter, NULL );
     OSL_ENSURE( _rxBroadcaster.is(), "FlushNotificationAdapter::FlushNotificationAdapter: invalid flushable!" );
 
     osl_atomic_increment( &m_refCount );
@@ -151,7 +149,6 @@ FlushNotificationAdapter::FlushNotificationAdapter( const Reference< XFlushable 
 
 FlushNotificationAdapter::~FlushNotificationAdapter()
 {
-    DBG_DTOR( FlushNotificationAdapter, NULL );
 }
 
 void SAL_CALL FlushNotificationAdapter::impl_dispose( bool _bRevokeListener )
@@ -320,16 +317,13 @@ public:
     void addEventListener(const Reference<XConnection>& _rxConnection,TConnectionMap::iterator& _rIter);
 };
 
-DBG_NAME(OSharedConnectionManager)
 OSharedConnectionManager::OSharedConnectionManager(const Reference< XComponentContext >& _rxContext)
 {
-    DBG_CTOR(OSharedConnectionManager,NULL);
     m_xProxyFactory.set( ProxyFactory::create( _rxContext ) );
 }
 
 OSharedConnectionManager::~OSharedConnectionManager()
 {
-    DBG_DTOR(OSharedConnectionManager,NULL);
 }
 
 void SAL_CALL OSharedConnectionManager::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(RuntimeException)
@@ -482,7 +476,6 @@ namespace
 }
 
 // ODatabaseContext
-DBG_NAME(ODatabaseSource)
 
 extern "C" void SAL_CALL createRegistryInfo_ODatabaseSource()
 {
@@ -497,14 +490,12 @@ ODatabaseSource::ODatabaseSource(const ::rtl::Reference<ODatabaseModelImpl>& _pI
             ,m_aFlushListeners( getMutex() )
 {
     // some kind of default
-    DBG_CTOR(ODatabaseSource,NULL);
     SAL_INFO("dbaccess", "DS: ctor: " << std::hex << this << ": " << std::hex << m_pImpl.get() );
 }
 
 ODatabaseSource::~ODatabaseSource()
 {
     SAL_INFO("dbaccess", "DS: dtor: " << std::hex << this << ": " << std::hex << m_pImpl.get() );
-    DBG_DTOR(ODatabaseSource,NULL);
     if ( !ODatabaseSource_Base::rBHelper.bInDispose && !ODatabaseSource_Base::rBHelper.bDisposed )
     {
         acquire();

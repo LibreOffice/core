@@ -148,17 +148,14 @@ OJoinTableView* AddTableDialogContext::getTableView() const
 
 // OJoinController
 
-DBG_NAME(OJoinController)
 OJoinController::OJoinController(const Reference< XComponentContext >& _rM)
     :OJoinController_BASE(_rM)
     ,m_pAddTableDialog(NULL)
 {
-    DBG_CTOR(OJoinController,NULL);
 }
 
 OJoinController::~OJoinController()
 {
-    DBG_DTOR(OJoinController,NULL);
 }
 
 void SAL_CALL OJoinController::disposing( const EventObject& _rSource ) throw(RuntimeException)

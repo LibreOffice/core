@@ -39,11 +39,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
 // class OTableBorderWindow
-DBG_NAME(OTableBorderWindow)
 OTableBorderWindow::OTableBorderWindow(Window* pParent) : Window(pParent,WB_BORDER)
     ,m_aHorzSplitter( this )
 {
-    DBG_CTOR(OTableBorderWindow,NULL);
 
     ImplInitSettings( sal_True, sal_True, sal_True );
     // Children erzeugen
@@ -80,7 +78,6 @@ OTableBorderWindow::~OTableBorderWindow()
         m_pFieldDescWin = NULL;
     }
 
-    DBG_DTOR(OTableBorderWindow,NULL);
 }
 
 void OTableBorderWindow::Resize()
@@ -172,7 +169,6 @@ void OTableBorderWindow::GetFocus()
 }
 
 // class OTableDesignView
-DBG_NAME(OTableDesignView);
 OTableDesignView::OTableDesignView( Window* pParent,
                                     const Reference< XComponentContext >& _rxOrb,
                                     OTableController& _rController
@@ -181,7 +177,6 @@ OTableDesignView::OTableDesignView( Window* pParent,
     ,m_rController( _rController )
     ,m_eChildFocus(NONE)
 {
-    DBG_CTOR(OTableDesignView,NULL);
 
     try
     {
@@ -197,7 +192,6 @@ OTableDesignView::OTableDesignView( Window* pParent,
 
 OTableDesignView::~OTableDesignView()
 {
-    DBG_DTOR(OTableDesignView,NULL);
     m_pWin->Hide();
 
     {

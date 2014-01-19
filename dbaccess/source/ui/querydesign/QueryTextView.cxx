@@ -38,11 +38,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 
 // end of temp classes
-DBG_NAME(OQueryTextView)
 OQueryTextView::OQueryTextView(OQueryContainerWindow* _pParent)
     :Window(_pParent)
 {
-    DBG_CTOR(OQueryTextView,NULL);
     m_pEdit = new OSqlEdit(this);
     m_pEdit->SetRightToLeft(sal_False);
     m_pEdit->ClearModifyFlag();
@@ -53,7 +51,6 @@ OQueryTextView::OQueryTextView(OQueryContainerWindow* _pParent)
 
 OQueryTextView::~OQueryTextView()
 {
-    DBG_DTOR(OQueryTextView,NULL);
     ::std::auto_ptr<Window> aTemp(m_pEdit);
     m_pEdit = NULL;
 }

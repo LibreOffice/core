@@ -38,7 +38,6 @@ using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
 
-DBG_NAME(ODataColumn)
 
 ODataColumn::ODataColumn(
                          const Reference < XResultSetMetaData >& _xMetaData,
@@ -50,12 +49,10 @@ ODataColumn::ODataColumn(
                      ,m_xRow(_xRow)
                      ,m_xRowUpdate(_xRowUpdate)
 {
-    DBG_CTOR(ODataColumn,NULL);
 }
 
 ODataColumn::~ODataColumn()
 {
-    DBG_DTOR(ODataColumn,NULL);
 }
 
 // com::sun::star::lang::XTypeProvider

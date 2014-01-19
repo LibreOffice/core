@@ -58,7 +58,6 @@ namespace dbaui
     }
 
     // OGenericAdministrationPage
-    DBG_NAME(OGenericAdministrationPage)
     OGenericAdministrationPage::OGenericAdministrationPage(Window* _pParent, const ResId& _rId, const SfxItemSet& _rAttrSet)
         :SfxTabPage(_pParent, _rId, _rAttrSet)
         ,m_abEnableRoadmap(sal_False)
@@ -66,7 +65,6 @@ namespace dbaui
         ,m_pItemSetHelper(NULL)
         ,m_pFT_HeaderText(NULL)
     {
-        DBG_CTOR(OGenericAdministrationPage,NULL);
 
         SetExchangeSupport(sal_True);
     }
@@ -78,7 +76,6 @@ namespace dbaui
         ,m_pItemSetHelper(NULL)
         ,m_pFT_HeaderText(NULL)
     {
-        DBG_CTOR(OGenericAdministrationPage,NULL);
 
         SetExchangeSupport(sal_True);
     }
@@ -87,7 +84,6 @@ namespace dbaui
     {
         DELETEZ(m_pFT_HeaderText);
 
-        DBG_DTOR(OGenericAdministrationPage,NULL);
     }
 
     int OGenericAdministrationPage::DeactivatePage(SfxItemSet* _pSet)

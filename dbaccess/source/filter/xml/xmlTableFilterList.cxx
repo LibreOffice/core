@@ -35,18 +35,15 @@ namespace dbaxml
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::xml::sax;
-DBG_NAME(OXMLTableFilterList)
 
 OXMLTableFilterList::OXMLTableFilterList( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& _sLocalName )
     :SvXMLImportContext( rImport, nPrfx, _sLocalName )
 {
-    DBG_CTOR(OXMLTableFilterList,NULL);
 
 }
 
 OXMLTableFilterList::~OXMLTableFilterList()
 {
-    DBG_DTOR(OXMLTableFilterList,NULL);
 }
 
 SvXMLImportContext* OXMLTableFilterList::CreateChildContext(

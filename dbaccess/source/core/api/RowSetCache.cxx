@@ -77,7 +77,6 @@ using namespace ::osl;
 // until m_pCacheSet is moved (or refreshed) again.
 // So always make sure m_pCacheSet is moved or refreshed before accessing column values.
 
-DBG_NAME(ORowSetCache)
 
 ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                            const Reference< XSingleSelectQueryAnalyzer >& _xAnalyzer,
@@ -108,7 +107,6 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     ,m_bModified(_bModified)
     ,m_bNew(_bNew)
 {
-    DBG_CTOR(ORowSetCache,NULL);
 
     // first try if the result can be used to do inserts and updates
     Reference< XPropertySet> xProp(_xRs,UNO_QUERY);
@@ -376,7 +374,6 @@ ORowSetCache::~ORowSetCache()
     m_xMetaData     = NULL;
     m_aUpdateTable  = NULL;
 
-    DBG_DTOR(ORowSetCache,NULL);
 }
 
 void ORowSetCache::setFetchSize(sal_Int32 _nSize)

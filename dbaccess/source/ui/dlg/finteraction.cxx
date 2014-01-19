@@ -29,18 +29,15 @@ namespace dbaui
     using namespace ::com::sun::star::ucb;
 
     // OFilePickerInteractionHandler
-    DBG_NAME( OFilePickerInteractionHandler )
     OFilePickerInteractionHandler::OFilePickerInteractionHandler( const Reference< XInteractionHandler >& _rxMaster )
         :m_xMaster( _rxMaster )
         ,m_bDoesNotExist(sal_False)
     {
-        DBG_CTOR( OFilePickerInteractionHandler, NULL );
         OSL_ENSURE( m_xMaster.is(), "OFilePickerInteractionHandler::OFilePickerInteractionHandler: invalid master handler!" );
     }
 
     OFilePickerInteractionHandler::~OFilePickerInteractionHandler( )
     {
-        DBG_DTOR( OFilePickerInteractionHandler, NULL );
     }
 
     void SAL_CALL OFilePickerInteractionHandler::handle( const Reference< XInteractionRequest >& _rxRequest ) throw (RuntimeException)

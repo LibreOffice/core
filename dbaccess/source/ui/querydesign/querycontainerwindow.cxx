@@ -40,13 +40,11 @@ namespace dbaui
     using namespace ::com::sun::star::beans;
 
     // OQueryContainerWindow
-    DBG_NAME(OQueryContainerWindow)
     OQueryContainerWindow::OQueryContainerWindow(Window* pParent, OQueryController& _rController,const Reference< XComponentContext >& _rxContext)
         :ODataView( pParent, _rController, _rxContext )
         ,m_pViewSwitch(NULL)
         ,m_pBeamer(NULL)
     {
-        DBG_CTOR(OQueryContainerWindow,NULL);
         m_pViewSwitch = new OQueryViewSwitch( this, _rController, _rxContext );
 
         m_pSplitter = new Splitter(this,WB_VSCROLL);
@@ -56,7 +54,6 @@ namespace dbaui
     }
     OQueryContainerWindow::~OQueryContainerWindow()
     {
-        DBG_DTOR(OQueryContainerWindow,NULL);
         {
             ::std::auto_ptr<OQueryViewSwitch> aTemp(m_pViewSwitch);
             m_pViewSwitch = NULL;

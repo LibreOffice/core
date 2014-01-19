@@ -215,7 +215,6 @@ namespace
 
 }
 
-DBG_NAME(OSingleSelectQueryComposer)
 
 OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAccess>& _rxTables,
                                const Reference< XConnection>& _xConnection,
@@ -235,7 +234,6 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
     ,m_nCommandType(CommandType::COMMAND)
 {
     SAL_INFO("dbaccess", "OSingleSelectQueryComposer::OSingleSelectQueryComposer" );
-    DBG_CTOR(OSingleSelectQueryComposer,NULL);
 
     if ( !m_aContext.is() || !m_xConnection.is() || !m_xConnectionTables.is() )
         throw IllegalArgumentException();
@@ -269,7 +267,6 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
 
 OSingleSelectQueryComposer::~OSingleSelectQueryComposer()
 {
-    DBG_DTOR(OSingleSelectQueryComposer,NULL);
     ::std::vector<OPrivateColumns*>::iterator aColIter = m_aColumnsCollection.begin();
     ::std::vector<OPrivateColumns*>::iterator aEnd = m_aColumnsCollection.end();
     for(;aColIter != aEnd;++aColIter)

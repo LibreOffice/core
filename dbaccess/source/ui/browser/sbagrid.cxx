@@ -136,16 +136,13 @@ Sequence< OUString> SbaXGridControl::getSupportedServiceNames_Static(void) throw
     return aSupported;
 }
 
-DBG_NAME(SbaXGridControl );
 SbaXGridControl::SbaXGridControl(const Reference< XComponentContext >& _rM)
     : FmXGridControl(_rM)
 {
-    DBG_CTOR(SbaXGridControl ,NULL);
 }
 
 SbaXGridControl::~SbaXGridControl()
 {
-    DBG_DTOR(SbaXGridControl ,NULL);
 }
 
 FmXGridPeer* SbaXGridControl::imp_CreatePeer(Window* pParent)
@@ -301,17 +298,14 @@ void SAL_CALL SbaXGridControl::dispose(void) throw( RuntimeException )
 }
 
 // SbaXGridPeer
-DBG_NAME(SbaXGridPeer )
 SbaXGridPeer::SbaXGridPeer(const Reference< XComponentContext >& _rM)
 : FmXGridPeer(_rM)
 ,m_aStatusListeners(m_aMutex)
 {
-    DBG_CTOR(SbaXGridPeer ,NULL);
 }
 
 SbaXGridPeer::~SbaXGridPeer()
 {
-    DBG_DTOR(SbaXGridPeer ,NULL);
 }
 
 void SAL_CALL SbaXGridPeer::dispose(void) throw( RuntimeException )
@@ -721,7 +715,6 @@ void SbaGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupM
 }
 
 // SbaGridControl
-DBG_NAME(SbaGridControl );
 SbaGridControl::SbaGridControl(Reference< XComponentContext > _rM,
                                Window* pParent, FmXGridPeer* _pPeer, WinBits nBits)
     :FmGridControl(_rM,pParent, _pPeer, nBits)
@@ -730,12 +723,10 @@ SbaGridControl::SbaGridControl(Reference< XComponentContext > _rM,
     ,m_nCurrentActionColId((sal_uInt16)-1)
     ,m_bActivatingForDrop(sal_False)
 {
-    DBG_CTOR(SbaGridControl ,NULL);
 }
 
 SbaGridControl::~SbaGridControl()
 {
-    DBG_DTOR(SbaGridControl ,NULL);
     if (m_nAsyncDropEvent)
         Application::RemoveUserEvent(m_nAsyncDropEvent);
 }

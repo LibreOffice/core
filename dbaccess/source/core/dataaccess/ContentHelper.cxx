@@ -50,15 +50,12 @@ using namespace ::com::sun::star::container;
 using namespace ::comphelper;
 using namespace ::cppu;
 
-DBG_NAME(OContentHelper_Impl)
 OContentHelper_Impl::OContentHelper_Impl()
 {
-    DBG_CTOR(OContentHelper_Impl,NULL);
 }
 
 OContentHelper_Impl::~OContentHelper_Impl()
 {
-    DBG_DTOR(OContentHelper_Impl,NULL);
 }
 
 OContentHelper::OContentHelper(const Reference< XComponentContext >& _xORB

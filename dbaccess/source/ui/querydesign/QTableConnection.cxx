@@ -23,25 +23,21 @@
 #include "ConnectionLine.hxx"
 using namespace dbaui;
 // class OQueryTableConnection
-DBG_NAME(OQueryTableConnection)
 
 OQueryTableConnection::OQueryTableConnection(OQueryTableView* pContainer, const TTableConnectionData::value_type& pTabConnData)
     :OTableConnection(pContainer, pTabConnData)
     ,m_bVisited(sal_False)
 {
-    DBG_CTOR(OQueryTableConnection,NULL);
 }
 
 OQueryTableConnection::OQueryTableConnection(const OQueryTableConnection& rConn)
     :OTableConnection( rConn )
 {
-    DBG_CTOR(OQueryTableConnection,NULL);
     // no own members, so base class functionality is sufficient
 }
 
 OQueryTableConnection::~OQueryTableConnection()
 {
-    DBG_DTOR(OQueryTableConnection,NULL);
 }
 
 OQueryTableConnection& OQueryTableConnection::operator=(const OQueryTableConnection& rConn)

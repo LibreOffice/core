@@ -29,17 +29,14 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace connectivity;
 
-DBG_NAME(OSharedConnection)
 OSharedConnection::OSharedConnection(Reference< XAggregation >& _rxProxyConnection)
             : OSharedConnection_BASE(m_aMutex)
 {
-    DBG_CTOR(OSharedConnection,NULL);
     setDelegation(_rxProxyConnection,m_refCount);
 }
 
 OSharedConnection::~OSharedConnection()
 {
-    DBG_DTOR(OSharedConnection,NULL);
 }
 
 void SAL_CALL OSharedConnection::disposing(void)

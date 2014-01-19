@@ -33,14 +33,12 @@ using namespace ::com::sun::star::accessibility;
 // class OTableConnection
 namespace dbaui
 {
-    DBG_NAME(OTableConnection)
     OTableConnection::OTableConnection( OJoinTableView* _pContainer,const TTableConnectionData::value_type& _pTabConnData )
         :Window(_pContainer)
         ,m_pData( _pTabConnData )
         ,m_pParent( _pContainer )
         ,m_bSelected( sal_False )
     {
-        DBG_CTOR(OTableConnection,NULL);
         Init();
         Show();
     }
@@ -48,7 +46,6 @@ namespace dbaui
     OTableConnection::OTableConnection( const OTableConnection& _rConn ) : Window(_rConn.m_pParent)
         ,m_pData(_rConn.GetData()->NewInstance())
     {
-        DBG_CTOR(OTableConnection,NULL);
         *this = _rConn;
     }
 

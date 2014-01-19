@@ -23,17 +23,14 @@
 using namespace dbaui;
 // class OTableFieldInfo
 
-DBG_NAME(OTableFieldInfo)
 OTableFieldInfo::OTableFieldInfo()  :
     m_eDataType(1000)
 {
-    DBG_CTOR(OTableFieldInfo,NULL);
     m_eFieldType = TAB_NORMAL_FIELD;
 }
 
 OTableFieldInfo::~OTableFieldInfo()
 {
-    DBG_DTOR(OTableFieldInfo,NULL);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

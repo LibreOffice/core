@@ -50,7 +50,6 @@ namespace dbaccess
         }
     }
 // ODsnTypeCollection
-DBG_NAME(ODsnTypeCollection)
 ODsnTypeCollection::ODsnTypeCollection(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xContext)
 :m_aDriverConfig(_xContext)
 ,m_xContext(_xContext)
@@ -58,7 +57,6 @@ ODsnTypeCollection::ODsnTypeCollection(const ::com::sun::star::uno::Reference< :
 ,m_nLivingIterators(0)
 #endif
 {
-    DBG_CTOR(ODsnTypeCollection,NULL);
     const uno::Sequence< OUString > aURLs = m_aDriverConfig.getURLs();
     const OUString* pIter = aURLs.getConstArray();
     const OUString* pEnd = pIter + aURLs.getLength();
@@ -74,7 +72,6 @@ ODsnTypeCollection::ODsnTypeCollection(const ::com::sun::star::uno::Reference< :
 
 ODsnTypeCollection::~ODsnTypeCollection()
 {
-    DBG_DTOR(ODsnTypeCollection,NULL);
     OSL_ENSURE(0 == m_nLivingIterators, "ODsnTypeCollection::~ODsnTypeCollection : there are still living iterator objects!");
 }
 

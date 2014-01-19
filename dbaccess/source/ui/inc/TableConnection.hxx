@@ -36,7 +36,6 @@ namespace dbaui
     class OJoinTableView;
     class OConnectionLine;
 
-    DBG_NAMEEX(OTableConnection)
     class OTableConnection : public Window
     {
         ::std::vector<OConnectionLine*> m_vConnLine;

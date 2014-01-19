@@ -44,11 +44,9 @@
 
 using namespace dbaui;
 // class OTableFieldDescWin
-DBG_NAME(OTableFieldDescWin)
 OTableFieldDescWin::OTableFieldDescWin( Window* pParent)
     :TabPage(pParent, WB_3DLOOK)
 {
-    DBG_CTOR(OTableFieldDescWin,NULL);
     // Header
     m_pHeader = new FixedText( this, WB_CENTER | WB_INFO ); //  | WB_3DLOOK
     m_pHeader->SetText( OUString(ModuleRes(STR_TAB_PROPERTIES)) );
@@ -66,7 +64,6 @@ OTableFieldDescWin::OTableFieldDescWin( Window* pParent)
 
 OTableFieldDescWin::~OTableFieldDescWin()
 {
-    DBG_DTOR(OTableFieldDescWin,NULL);
     // Children zerstoeren
     m_pHelpBar->Hide();
     getGenPage()->Hide();
@@ -100,25 +97,21 @@ void OTableFieldDescWin::Init()
 
 void OTableFieldDescWin::SetReadOnly( sal_Bool bRead )
 {
-    DBG_CHKTHIS(OTableFieldDescWin,NULL);
     getGenPage()->SetReadOnly( bRead );
 }
 
 void OTableFieldDescWin::DisplayData( OFieldDescription* pFieldDescr )
 {
-    DBG_CHKTHIS(OTableFieldDescWin,NULL);
     getGenPage()->DisplayData( pFieldDescr );
 }
 
 void OTableFieldDescWin::SaveData( OFieldDescription* pFieldDescr )
 {
-    DBG_CHKTHIS(OTableFieldDescWin,NULL);
     getGenPage()->SaveData( pFieldDescr );
 }
 
 void OTableFieldDescWin::Paint( const Rectangle& /*rRect*/ )
 {
-    DBG_CHKTHIS(OTableFieldDescWin,NULL);
     // 3D-Linie am oberen Fensterrand
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -133,7 +126,6 @@ void OTableFieldDescWin::Paint( const Rectangle& /*rRect*/ )
 
 void OTableFieldDescWin::Resize()
 {
-    DBG_CHKTHIS(OTableFieldDescWin,NULL);
     // Abmessungen parent window
     Size aOutputSize( GetOutputSizePixel() );
     long nOutputWidth = aOutputSize.Width();

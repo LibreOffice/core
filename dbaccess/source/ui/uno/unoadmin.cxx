@@ -41,7 +41,6 @@ namespace dbaui
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
 
-DBG_NAME(ODatabaseAdministrationDialog)
 ODatabaseAdministrationDialog::ODatabaseAdministrationDialog(const Reference< XComponentContext >& _rxORB)
     :ODatabaseAdministrationDialogBase(_rxORB)
     ,m_pDatasourceItems(NULL)
@@ -49,7 +48,6 @@ ODatabaseAdministrationDialog::ODatabaseAdministrationDialog(const Reference< XC
     ,m_pItemPoolDefaults(NULL)
     ,m_pCollection(NULL)
 {
-    DBG_CTOR(ODatabaseAdministrationDialog,NULL);
 
     m_pCollection = new ::dbaccess::ODsnTypeCollection(_rxORB);
     ODbAdminDialog::createItemSet(m_pDatasourceItems, m_pItemPool, m_pItemPoolDefaults, m_pCollection);
@@ -69,7 +67,6 @@ ODatabaseAdministrationDialog::~ODatabaseAdministrationDialog()
     delete m_pCollection;
     m_pCollection = NULL;
 
-    DBG_DTOR(ODatabaseAdministrationDialog,NULL);
 }
 
 void ODatabaseAdministrationDialog::destroyDialog()

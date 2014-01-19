@@ -48,7 +48,6 @@ using namespace ::osl;
 using namespace dbaccess;
 using namespace dbtools;
 
-DBG_NAME(OResultSet)
 
 OResultSet::OResultSet(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& _xResultSet,
                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xStatement,
@@ -60,7 +59,6 @@ OResultSet::OResultSet(const ::com::sun::star::uno::Reference< ::com::sun::star:
            ,m_bIsBookmarkable(sal_False)
 {
     SAL_INFO("dbaccess", "OResultSet::OResultSet" );
-    DBG_CTOR(OResultSet, NULL);
 
     m_pColumns = new OColumns(*this, m_aMutex, _bCaseSensitive, ::std::vector< OUString>(), NULL,NULL);
 
@@ -99,7 +97,6 @@ OResultSet::~OResultSet()
     m_pColumns->disposing();
     delete m_pColumns;
 
-    DBG_DTOR(OResultSet, NULL);
 }
 
 // com::sun::star::lang::XTypeProvider

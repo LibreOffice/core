@@ -34,20 +34,17 @@ namespace dbaxml
 {
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
-DBG_NAME(OXMLDatabaseDescription)
 
 OXMLDatabaseDescription::OXMLDatabaseDescription( ODBFilter& rImport,
                 sal_uInt16 nPrfx, const OUString& _sLocalName) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
     ,m_bFoundOne(false)
 {
-    DBG_CTOR(OXMLDatabaseDescription,NULL);
 }
 
 OXMLDatabaseDescription::~OXMLDatabaseDescription()
 {
 
-    DBG_DTOR(OXMLDatabaseDescription,NULL);
 }
 
 SvXMLImportContext* OXMLDatabaseDescription::CreateChildContext(

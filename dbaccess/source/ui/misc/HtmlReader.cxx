@@ -66,7 +66,6 @@ using namespace ::com::sun::star::awt;
 
 #define DBAUI_HTML_FONTSIZES    8       // like export, HTML-Options
 
-DBG_NAME(OHTMLReader)
 // OHTMLReader
 OHTMLReader::OHTMLReader(SvStream& rIn,const SharedConnection& _rxConnection,
                         const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
@@ -81,7 +80,6 @@ OHTMLReader::OHTMLReader(SvStream& rIn,const SharedConnection& _rxConnection,
     ,m_bSDNum(sal_False)
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::OHTMLReader" );
-    DBG_CTOR(OHTMLReader,NULL);
     SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
     // If the file starts with a BOM, switch to UCS2.
     SetSwitchToUCS2( sal_True );
@@ -103,7 +101,6 @@ OHTMLReader::OHTMLReader(SvStream& rIn,
     ,m_bSDNum(sal_False)
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::OHTMLReader" );
-    DBG_CTOR(OHTMLReader,NULL);
     SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
     // If the file starts with a BOM, switch to UCS2.
     SetSwitchToUCS2( sal_True );
@@ -111,13 +108,11 @@ OHTMLReader::OHTMLReader(SvStream& rIn,
 
 OHTMLReader::~OHTMLReader()
 {
-    DBG_DTOR(OHTMLReader,NULL);
 }
 
 SvParserState OHTMLReader::CallParser()
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::CallParser" );
-    DBG_CHKTHIS(OHTMLReader,NULL);
     rInput.Seek(STREAM_SEEK_TO_BEGIN);
     rInput.ResetError();
     SvParserState  eParseState = HTMLParser::CallParser();
@@ -128,7 +123,6 @@ SvParserState OHTMLReader::CallParser()
 void OHTMLReader::NextToken( int nToken )
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::NextToken" );
-    DBG_CHKTHIS(OHTMLReader,NULL);
     if(m_bError || !m_nRows) // if there is an error or no more rows to check, return immediatelly
         return;
     if ( nToken ==  HTML_META )
@@ -320,7 +314,6 @@ void OHTMLReader::fetchOptions()
 void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal)
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::TableDataOn" );
-    DBG_CHKTHIS(OHTMLReader,NULL);
     const HTMLOptions& rHtmlOptions = GetOptions();
     for (size_t i = 0, n = rHtmlOptions.size(); i < n; ++i)
     {
@@ -350,7 +343,6 @@ void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal)
 void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::TableFontOn" );
-    DBG_CHKTHIS(OHTMLReader,NULL);
     const HTMLOptions& rHtmlOptions = GetOptions();
     for (size_t i = 0, n = rHtmlOptions.size(); i < n; ++i)
     {
@@ -400,7 +392,6 @@ void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
 sal_Int16 OHTMLReader::GetWidthPixel( const HTMLOption& rOption )
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::GetWidthPixel" );
-    DBG_CHKTHIS(OHTMLReader,NULL);
     const OUString& rOptVal = rOption.GetString();
     if ( rOptVal.indexOf('%') != -1 )
     {   // percentage
@@ -422,7 +413,6 @@ sal_Int16 OHTMLReader::GetWidthPixel( const HTMLOption& rOption )
 sal_Bool OHTMLReader::CreateTable(int nToken)
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::CreateTable" );
-    DBG_CHKTHIS(OHTMLReader,NULL);
     OUString aTempName(ModuleRes(STR_TBL_TITLE));
     aTempName = aTempName.getToken(0,' ');
     aTempName = ::dbtools::createUniqueName(m_xTables, aTempName);
@@ -533,7 +523,6 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
 void OHTMLReader::setTextEncoding()
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::setTextEncoding" );
-    DBG_CHKTHIS(OHTMLReader,NULL);
     m_bMetaOptions = sal_True;
     ParseMetaOptions(NULL, NULL);
 }
@@ -541,14 +530,12 @@ void OHTMLReader::setTextEncoding()
 void OHTMLReader::release()
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::release" );
-    DBG_CHKTHIS(OHTMLReader,NULL);
     ReleaseRef();
 }
 
 TypeSelectionPageFactory OHTMLReader::getTypeSelectionPageFactory()
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::getTypeSelectionPageFactory" );
-    DBG_CHKTHIS(OHTMLReader,NULL);
     return &OWizHTMLExtend::Create;
 }
 

@@ -46,11 +46,9 @@ public:
     ResMgr* getResManager();
 };
 
-DBG_NAME(OModuleImpl)
 OModuleImpl::OModuleImpl()
     :m_pResources(NULL)
 {
-    DBG_CTOR(OModuleImpl,NULL);
 
 }
 
@@ -59,7 +57,6 @@ OModuleImpl::~OModuleImpl()
     if (m_pResources)
         delete m_pResources;
 
-    DBG_DTOR(OModuleImpl,NULL);
 }
 
 ResMgr* OModuleImpl::getResManager()

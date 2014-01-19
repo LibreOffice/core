@@ -206,7 +206,6 @@ Reference< XInterface > SAL_CALL SbaTableQueryBrowser::Create(const Reference<XM
     return *(new SbaTableQueryBrowser(comphelper::getComponentContext(_rxFactory)));
 }
 
-DBG_NAME(SbaTableQueryBrowser);
 SbaTableQueryBrowser::SbaTableQueryBrowser(const Reference< XComponentContext >& _rM)
     :SbaXDataBrowserController(_rM)
     ,m_aSelectionListeners( getMutex() )
@@ -223,12 +222,10 @@ SbaTableQueryBrowser::SbaTableQueryBrowser(const Reference< XComponentContext >&
     ,m_bInSuspend(sal_False)
     ,m_bEnableBrowser(sal_True)
 {
-    DBG_CTOR(SbaTableQueryBrowser,NULL);
 }
 
 SbaTableQueryBrowser::~SbaTableQueryBrowser()
 {
-    DBG_DTOR(SbaTableQueryBrowser,NULL);
     if ( !rBHelper.bDisposed && !rBHelper.bInDispose )
     {
         SAL_WARN("dbaccess.ui", "Please check who doesn't dispose this component!");

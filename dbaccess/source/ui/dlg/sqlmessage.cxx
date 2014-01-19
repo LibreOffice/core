@@ -313,7 +313,6 @@ protected:
     DECL_LINK(OnExceptionSelected, void*);
 };
 
-DBG_NAME(OExceptionChainDialog)
 OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDisplayChain& _rExceptions )
     :ModalDialog(pParent, ModuleRes(DLG_SQLEXCEPTIONCHAIN))
     ,m_aFrame           (this, ModuleRes(FL_DETAILS))
@@ -324,7 +323,6 @@ OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDi
     ,m_aOK              (this, ModuleRes(PB_OK))
     ,m_aExceptions( _rExceptions )
 {
-    DBG_CTOR(OExceptionChainDialog,NULL);
 
     m_sStatusLabel = ModuleRes( STR_EXCEPTION_STATUS );
     m_sErrorCodeLabel = ModuleRes( STR_EXCEPTION_ERRORCODE );
@@ -370,7 +368,6 @@ OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDi
 
 OExceptionChainDialog::~OExceptionChainDialog()
 {
-    DBG_DTOR(OExceptionChainDialog,NULL);
 }
 
 IMPL_LINK_NOARG(OExceptionChainDialog, OnExceptionSelected)

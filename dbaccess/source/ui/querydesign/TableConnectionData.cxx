@@ -24,10 +24,8 @@
 using namespace dbaui;
 
 // class OTableConnectionData
-DBG_NAME(OTableConnectionData)
 OTableConnectionData::OTableConnectionData()
 {
-    DBG_CTOR(OTableConnectionData,NULL);
     Init();
 }
 
@@ -38,7 +36,6 @@ OTableConnectionData::OTableConnectionData(const TTableWindowData::value_type& _
  ,m_pReferencedTable(_pReferencedTable)
  ,m_aConnName( rConnName )
 {
-    DBG_CTOR(OTableConnectionData,NULL);
     Init();
 }
 
@@ -52,7 +49,6 @@ void OTableConnectionData::Init()
 
 OTableConnectionData::OTableConnectionData( const OTableConnectionData& rConnData )
 {
-    DBG_CTOR(OTableConnectionData,NULL);
     *this = rConnData;
 }
 
@@ -64,7 +60,6 @@ void OTableConnectionData::CopyFrom(const OTableConnectionData& rSource)
 
 OTableConnectionData::~OTableConnectionData()
 {
-    DBG_DTOR(OTableConnectionData,NULL);
     // delete LineDataList
     OConnectionLineDataVec().swap(m_vConnLineData);
 }

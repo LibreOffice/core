@@ -44,14 +44,12 @@ namespace dbaccess
 {
 
 // OBookmarkContainer
-DBG_NAME(OBookmarkContainer)
 
 OBookmarkContainer::OBookmarkContainer(OWeakObject& _rParent, Mutex& _rMutex)
     :m_rParent(_rParent)
     ,m_aContainerListeners(_rMutex)
     ,m_rMutex(_rMutex)
 {
-    DBG_CTOR(OBookmarkContainer, NULL);
 }
 
 void OBookmarkContainer::dispose()
@@ -79,7 +77,6 @@ void SAL_CALL OBookmarkContainer::release(  ) throw()
 
 OBookmarkContainer::~OBookmarkContainer()
 {
-    DBG_DTOR(OBookmarkContainer, NULL);
 }
 
 // XServiceInfo

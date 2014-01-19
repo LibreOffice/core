@@ -46,7 +46,6 @@ extern "C" void SAL_CALL createRegistryInfo_OCommandDefinition()
     static ::dba::OAutoRegistration< OCommandDefinition > aAutoRegistration;
 }
 
-DBG_NAME(OCommandDefinition)
 
 void OCommandDefinition::registerProperties()
 {
@@ -129,13 +128,11 @@ OCommandDefinition::OCommandDefinition(const Reference< XComponentContext >& _xO
                                        ,const TContentPtr& _pImpl)
     :OComponentDefinition(_xORB,_rxContainer,_pImpl,sal_False)
 {
-    DBG_CTOR(OCommandDefinition, NULL);
     registerProperties();
 }
 
 OCommandDefinition::~OCommandDefinition()
 {
-    DBG_DTOR(OCommandDefinition, NULL);
 }
 
 OCommandDefinition::OCommandDefinition( const Reference< XInterface >& _rxContainer
@@ -144,7 +141,6 @@ OCommandDefinition::OCommandDefinition( const Reference< XInterface >& _rxContai
                                        ,const TContentPtr& _pImpl)
     :OComponentDefinition(_rxContainer,_rElementName,_xORB,_pImpl,sal_False)
 {
-    DBG_CTOR(OCommandDefinition, NULL);
     registerProperties();
 }
 

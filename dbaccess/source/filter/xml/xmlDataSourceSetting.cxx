@@ -37,7 +37,6 @@ namespace dbaxml
 {
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
-DBG_NAME(OXMLDataSourceSetting)
 
 OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
@@ -48,7 +47,6 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
     ,m_pContainer(_pContainer)
     ,m_bIsList(sal_False)
 {
-    DBG_CTOR(OXMLDataSourceSetting,NULL);
 
     m_aPropType = ::getVoidCppuType();
 
@@ -100,7 +98,6 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
 
 OXMLDataSourceSetting::~OXMLDataSourceSetting()
 {
-    DBG_DTOR(OXMLDataSourceSetting,NULL);
 }
 
 SvXMLImportContext* OXMLDataSourceSetting::CreateChildContext(

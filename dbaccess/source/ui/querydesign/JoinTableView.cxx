@@ -62,14 +62,12 @@ using namespace ::com::sun::star::lang;
 #define TABWIN_WIDTH_STD    120
 #define TABWIN_HEIGHT_STD   120
 
-DBG_NAME(OScrollWindowHelper)
 OScrollWindowHelper::OScrollWindowHelper( Window* pParent) : Window( pParent)
     ,m_aHScrollBar( this, WB_HSCROLL|WB_REPEAT|WB_DRAG )
     ,m_aVScrollBar( this, WB_VSCROLL|WB_REPEAT|WB_DRAG )
     ,m_pCornerWindow(new ScrollBarBox(this, WB_3DLOOK))
     ,m_pTableView(NULL)
 {
-    DBG_CTOR(OScrollWindowHelper,NULL);
 
     // ScrollBars
 
@@ -89,7 +87,6 @@ OScrollWindowHelper::OScrollWindowHelper( Window* pParent) : Window( pParent)
 
 OScrollWindowHelper::~OScrollWindowHelper()
 {
-    DBG_DTOR(OScrollWindowHelper,NULL);
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<Window> aTemp(m_pCornerWindow);
     SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -155,7 +152,6 @@ void OScrollWindowHelper::Resize()
 
 // class OJoinTableView
 
-DBG_NAME(OJoinTableView);
 OJoinTableView::OJoinTableView( Window* pParent, OJoinDesignView* pView )
     :Window( pParent,WB_BORDER )
     ,DropTargetHelper(this)
@@ -169,7 +165,6 @@ OJoinTableView::OJoinTableView( Window* pParent, OJoinDesignView* pView )
     ,m_pView( pView )
     ,m_pAccessible(NULL)
 {
-    DBG_CTOR(OJoinTableView,NULL);
     SetSizePixel( Size(1000, 1000) );
 
     InitColors();
@@ -179,7 +174,6 @@ OJoinTableView::OJoinTableView( Window* pParent, OJoinDesignView* pView )
 
 OJoinTableView::~OJoinTableView()
 {
-    DBG_DTOR(OJoinTableView,NULL);
     if( m_pAccessible )
     {
         m_pAccessible->clearTableView();
@@ -199,7 +193,6 @@ IMPL_LINK( OJoinTableView, ScrollHdl, ScrollBar*, pScrollBar )
 
 void OJoinTableView::Resize()
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
     Window::Resize();
     m_aOutputSize = GetSizePixel();
 
@@ -232,13 +225,11 @@ void OJoinTableView::Resize()
 
 sal_uLong OJoinTableView::GetTabWinCount()
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
     return m_aTableMap.size();
 }
 
 bool OJoinTableView::RemoveConnection( OTableConnection* _pConn,sal_Bool _bDelete )
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
     DeselectConn(_pConn);
 
     // to force a redraw
@@ -264,7 +255,6 @@ bool OJoinTableView::RemoveConnection( OTableConnection* _pConn,sal_Bool _bDelet
 
 OTableWindow* OJoinTableView::GetTabWindow( const OUString& rName )
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
     OTableWindowMap::iterator aIter = m_aTableMap.find(rName);
 
     return aIter == m_aTableMap.end() ? NULL : aIter->second;
@@ -313,7 +303,6 @@ OTableWindowData* OJoinTableView::CreateImpl(const OUString& _rComposedName
 
 void OJoinTableView::AddTabWin(const OUString& _rComposedName, const OUString& rWinName, sal_Bool /*bNewTable*/)
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
     OSL_ENSURE(!_rComposedName.isEmpty(),"There must be a table name supplied!");
 
     TTableWindowData::value_type pNewTabWinData(createTableWindowData( _rComposedName, rWinName,rWinName ));
@@ -347,7 +336,6 @@ void OJoinTableView::AddTabWin(const OUString& _rComposedName, const OUString& r
 
 void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
     // first delete all connections of this window to others
     bool bRemove = true;
     TTableWindowData::value_type pData = pTabWin->GetData();
@@ -519,7 +507,6 @@ void OJoinTableView::EnsureVisible(const Point& _rPoint,const Size& _rSize)
 
 void OJoinTableView::SetDefaultTabWinPosSize( OTableWindow* pTabWin )
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
     // determine position:
     // the window is divided into lines with height TABWIN_SPACING_Y+TABWIN_HEIGHT_STD.
     // Then for each line is checked, if there is space for another window.
@@ -599,7 +586,6 @@ void OJoinTableView::SetDefaultTabWinPosSize( OTableWindow* pTabWin )
 
 void OJoinTableView::DataChanged(const DataChangedEvent& rDCEvt)
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
     if (rDCEvt.GetType() == DATACHANGED_SETTINGS)
     {
         // consider the worst case: the colors changed, so adjust me
@@ -611,7 +597,6 @@ void OJoinTableView::DataChanged(const DataChangedEvent& rDCEvt)
 
 void OJoinTableView::InitColors()
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
     // the colors for the illustration should be the system colors
     StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
     SetBackground(Wallpaper(Color(aSystemStyle.GetDialogColor())));
@@ -619,7 +604,6 @@ void OJoinTableView::InitColors()
 
 void OJoinTableView::BeginChildMove( OTableWindow* pTabWin, const Point& rMousePos  )
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
 
     if (m_pView->getController().isReadOnly())
         return;
@@ -635,14 +619,12 @@ void OJoinTableView::BeginChildMove( OTableWindow* pTabWin, const Point& rMouseP
 
 void OJoinTableView::NotifyTitleClicked( OTableWindow* pTabWin, const Point rMousePos )
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
     DeselectConn(GetSelectedConn());
     BeginChildMove(pTabWin, rMousePos);
 }
 
 void OJoinTableView::BeginChildSizing( OTableWindow* pTabWin, const Pointer& rPointer )
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
 
     if (m_pView->getController().isReadOnly())
         return;
@@ -654,7 +636,6 @@ void OJoinTableView::BeginChildSizing( OTableWindow* pTabWin, const Pointer& rPo
 
 sal_Bool OJoinTableView::ScrollPane( long nDelta, sal_Bool bHoriz, sal_Bool bPaintScrollBars )
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
     sal_Bool bRet = sal_True;
 
     // adjust ScrollBar-Positions
@@ -732,7 +713,6 @@ sal_Bool OJoinTableView::ScrollPane( long nDelta, sal_Bool bHoriz, sal_Bool bPai
 
 void OJoinTableView::Tracking( const TrackingEvent& rTEvt )
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
     HideTracking();
 
     if (rTEvt.IsTrackingEnded())
@@ -824,19 +804,16 @@ void OJoinTableView::Tracking( const TrackingEvent& rTEvt )
 
 void OJoinTableView::ConnDoubleClicked( OTableConnection* /*pConnection*/ )
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
 }
 
 void OJoinTableView::MouseButtonDown( const MouseEvent& rEvt )
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
     GrabFocus();
     Window::MouseButtonDown(rEvt);
 }
 
 void OJoinTableView::MouseButtonUp( const MouseEvent& rEvt )
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
     Window::MouseButtonUp(rEvt);
     // Has a connection been selected?
     if( !m_vTableConnection.empty() )
@@ -863,7 +840,6 @@ void OJoinTableView::MouseButtonUp( const MouseEvent& rEvt )
 
 void OJoinTableView::KeyInput( const KeyEvent& rEvt )
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
     sal_uInt16 nCode = rEvt.GetKeyCode().GetCode();
     sal_Bool   bShift = rEvt.GetKeyCode().IsShift();
     sal_Bool   bCtrl = rEvt.GetKeyCode().IsMod1();
@@ -879,7 +855,6 @@ void OJoinTableView::KeyInput( const KeyEvent& rEvt )
 
 void OJoinTableView::DeselectConn(OTableConnection* pConn)
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
     if (!pConn || !pConn->IsSelected())
         return;
 
@@ -898,7 +873,6 @@ void OJoinTableView::DeselectConn(OTableConnection* pConn)
 
 void OJoinTableView::SelectConn(OTableConnection* pConn)
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
     DeselectConn(GetSelectedConn());
 
     pConn->Select();
@@ -953,13 +927,11 @@ void OJoinTableView::SelectConn(OTableConnection* pConn)
 
 void OJoinTableView::Paint( const Rectangle& rRect )
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
     DrawConnections( rRect );
 }
 
 void OJoinTableView::InvalidateConnections()
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
     // draw Joins
     ::std::for_each(m_vTableConnection.begin(),m_vTableConnection.end(),
         ::std::mem_fun(& OTableConnection::InvalidateConnection));
@@ -967,7 +939,6 @@ void OJoinTableView::InvalidateConnections()
 
 void OJoinTableView::DrawConnections( const Rectangle& rRect )
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
     // draw Joins
     ::std::for_each(m_vTableConnection.begin(),m_vTableConnection.end(),boost::bind( &OTableConnection::Draw, _1, boost::cref( rRect )));
     // finally redraw the selected one above all others
@@ -991,13 +962,11 @@ sal_Int32 OJoinTableView::getConnectionCount(const OTableWindow* _pFromWin) cons
 
 sal_Bool OJoinTableView::ExistsAConn(const OTableWindow* pFrom) const
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
     return getTableConnections(pFrom) != m_vTableConnection.end();
 }
 
 void OJoinTableView::ClearAll()
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
     SetUpdateMode(sal_False);
 
     HideTabWins();
@@ -1020,7 +989,6 @@ void OJoinTableView::ClearAll()
 
 sal_Bool OJoinTableView::ScrollWhileDragging()
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
     OSL_ENSURE(m_pDragWin != NULL, "OJoinTableView::ScrollWhileDragging must not be called when a window is being dragged !");
 
     // kill the timer
@@ -1109,7 +1077,6 @@ void OJoinTableView::invalidateAndModify(SfxUndoAction *_pAction)
 
 void OJoinTableView::TabWinMoved(OTableWindow* ptWhich, const Point& ptOldPosition)
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
     Point ptThumbPos(GetHScrollBar()->GetThumbPos(), GetVScrollBar()->GetThumbPos());
     ptWhich->GetData()->SetPosition(ptWhich->GetPosPixel() + ptThumbPos);
 
@@ -1118,7 +1085,6 @@ void OJoinTableView::TabWinMoved(OTableWindow* ptWhich, const Point& ptOldPositi
 
 void OJoinTableView::TabWinSized(OTableWindow* ptWhich, const Point& ptOldPosition, const Size& szOldSize)
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
     ptWhich->GetData()->SetSize(ptWhich->GetSizePixel());
     ptWhich->GetData()->SetPosition(ptWhich->GetPosPixel());
 
@@ -1127,7 +1093,6 @@ void OJoinTableView::TabWinSized(OTableWindow* ptWhich, const Point& ptOldPositi
 
 sal_Bool OJoinTableView::IsAddAllowed()
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
 
     // not, if Db readonly
     if (m_pView->getController().isReadOnly())
@@ -1169,7 +1134,6 @@ void OJoinTableView::executePopup(const Point& _aPos,OTableConnection* _pSelConn
 
 void OJoinTableView::Command(const CommandEvent& rEvt)
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
 
     sal_Bool bHandled = sal_False;
 
@@ -1509,7 +1473,6 @@ void OJoinTableView::StateChanged( StateChangedType nType )
 
 void OJoinTableView::HideTabWins()
 {
-    DBG_CHKTHIS(OJoinTableView,NULL);
     SetUpdateMode(sal_False);
 
     OTableWindowMap* pTabWins = GetTabWinMap();

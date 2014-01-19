@@ -183,7 +183,6 @@ namespace
 }
 
 // class OAppDetailPageHelper
-DBG_NAME(OAppDetailPageHelper)
 OAppDetailPageHelper::OAppDetailPageHelper(Window* _pParent,OAppBorderWindow& _rBorderWin,PreviewMode _ePreviewMode) : Window(_pParent,WB_DIALOGCONTROL)
     ,m_rBorderWin(_rBorderWin)
     ,m_aFL(this,WB_VERT)
@@ -194,7 +193,6 @@ OAppDetailPageHelper::OAppDetailPageHelper(Window* _pParent,OAppBorderWindow& _r
     ,m_pTablePreview(NULL)
     ,m_ePreviewMode(_ePreviewMode)
 {
-    DBG_CTOR(OAppDetailPageHelper,NULL);
 
     m_aBorder.SetBorderStyle(WINDOW_BORDER_MONO);
 
@@ -252,7 +250,6 @@ OAppDetailPageHelper::~OAppDetailPageHelper()
 
     }
 
-    DBG_DTOR(OAppDetailPageHelper,NULL);
 }
 
 int OAppDetailPageHelper::getVisibleControlIndex() const

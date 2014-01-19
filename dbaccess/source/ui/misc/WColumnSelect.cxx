@@ -52,7 +52,6 @@ OWizardPage::OWizardPage( Window* pParent, const ResId& rResId )
 }
 
 // OWizColumnSelect
-DBG_NAME(OWizColumnSelect);
 OWizColumnSelect::OWizColumnSelect( Window* pParent)
     :OWizardPage( pParent, ModuleRes( TAB_WIZ_COLUMN_SELECT ))
     ,m_flColumns( this, ModuleRes( FL_COLUMN_SELECT ) )
@@ -63,7 +62,6 @@ OWizColumnSelect::OWizColumnSelect( Window* pParent)
     ,m_ibColumns_LH( this, ModuleRes( IB_COLUMNS_LH ) )
     ,m_lbNewColumnNames( this, ModuleRes( LB_NEW_COLUMN_NAMES ) )
 {
-    DBG_CTOR(OWizColumnSelect,NULL);
     m_ibColumn_RH.SetClickHdl(LINK(this,OWizColumnSelect,ButtonClickHdl));
     m_ibColumn_LH.SetClickHdl(LINK(this,OWizColumnSelect,ButtonClickHdl));
     m_ibColumns_RH.SetClickHdl(LINK(this,OWizColumnSelect,ButtonClickHdl));
@@ -79,7 +77,6 @@ OWizColumnSelect::OWizColumnSelect( Window* pParent)
 
 OWizColumnSelect::~OWizColumnSelect()
 {
-    DBG_DTOR(OWizColumnSelect,NULL);
     while ( m_lbNewColumnNames.GetEntryCount() )
     {
         void* pData = m_lbNewColumnNames.GetEntryData(0);
@@ -94,7 +91,6 @@ OWizColumnSelect::~OWizColumnSelect()
 void OWizColumnSelect::Reset()
 {
     // restore original state
-    DBG_CHKTHIS(OWizColumnSelect,NULL);
 
     clearListBox(m_lbOrgColumnNames);
     clearListBox(m_lbNewColumnNames);
@@ -119,7 +115,6 @@ void OWizColumnSelect::Reset()
 
 void OWizColumnSelect::ActivatePage( )
 {
-    DBG_CHKTHIS(OWizColumnSelect,NULL);
     // if there are no dest columns reset the left side with the origibnal columns
     if(m_pParent->getDestColumns()->empty())
         Reset();
@@ -143,7 +138,6 @@ void OWizColumnSelect::ActivatePage( )
 
 sal_Bool OWizColumnSelect::LeavePage()
 {
-    DBG_CHKTHIS(OWizColumnSelect,NULL);
 
     m_pParent->clearDestColumns();
 

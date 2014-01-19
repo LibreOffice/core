@@ -61,7 +61,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::accessibility;
 
 // class ORelationTableView
-DBG_NAME(ORelationTableView)
 ORelationTableView::ORelationTableView( Window* pParent, ORelationDesignView* pView )
     :OJoinTableView( pParent, pView )
     , ::comphelper::OContainerListener(m_aMutex)
@@ -69,20 +68,17 @@ ORelationTableView::ORelationTableView( Window* pParent, ORelationDesignView* pV
     ,m_bInRemove(false)
 
 {
-    DBG_CTOR(ORelationTableView,NULL);
     SetHelpId(HID_CTL_RELATIONTAB);
 }
 
 ORelationTableView::~ORelationTableView()
 {
-    DBG_DTOR(ORelationTableView,NULL);
     if ( m_pContainerListener.is() )
         m_pContainerListener->dispose();
 }
 
 void ORelationTableView::ReSync()
 {
-    DBG_CHKTHIS(ORelationTableView,NULL);
     if ( !m_pContainerListener.is() )
     {
         Reference< XConnection> xConnection = m_pView->getController().getConnection();
@@ -156,14 +152,12 @@ void ORelationTableView::ReSync()
 
 sal_Bool ORelationTableView::IsAddAllowed()
 {
-    DBG_CHKTHIS(ORelationTableView,NULL);
 
     return !m_pView->getController().isReadOnly();
 }
 
 void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest)
 {
-    DBG_CHKTHIS(ORelationTableView,NULL);
     // Aus selektierten Feldnamen LineDataObject setzen
     // check if relation already exists
     OTableWindow* pSourceWin = jxdSource.pListBox->GetTabWin();
@@ -222,7 +216,6 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
 
 void ORelationTableView::ConnDoubleClicked( OTableConnection* pConnection )
 {
-    DBG_CHKTHIS(ORelationTableView,NULL);
     ORelationDialog aRelDlg( this, pConnection->GetData() );
     switch (aRelDlg.Execute())
     {
@@ -249,7 +242,6 @@ void ORelationTableView::ConnDoubleClicked( OTableConnection* pConnection )
 
 void ORelationTableView::AddNewRelation()
 {
-    DBG_CHKTHIS(ORelationTableView,NULL);
 
     TTableConnectionData::value_type pNewConnData( new ORelationTableConnectionData() );
     ORelationDialog aRelDlg(this, pNewConnData, sal_True);
@@ -265,7 +257,6 @@ void ORelationTableView::AddNewRelation()
 
 bool ORelationTableView::RemoveConnection( OTableConnection* pConn ,sal_Bool /*_bDelete*/)
 {
-    DBG_CHKTHIS(ORelationTableView,NULL);
     ORelationTableConnectionData* pTabConnData = (ORelationTableConnectionData*)pConn->GetData().get();
     try
     {
@@ -285,7 +276,6 @@ bool ORelationTableView::RemoveConnection( OTableConnection* pConn ,sal_Bool /*_
 
 void ORelationTableView::AddTabWin(const OUString& _rComposedName, const OUString& rWinName, sal_Bool /*bNewTable*/)
 {
-    DBG_CHKTHIS(ORelationTableView,NULL);
     OSL_ENSURE(!_rComposedName.isEmpty(),"There must be a table name supplied!");
     OJoinTableView::OTableWindowMap::iterator aIter = GetTabWinMap()->find(_rComposedName);
 

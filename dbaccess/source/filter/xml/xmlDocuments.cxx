@@ -34,7 +34,6 @@ namespace dbaxml
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::xml::sax;
-DBG_NAME(OXMLDocuments)
 
 OXMLDocuments::OXMLDocuments( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
@@ -47,7 +46,6 @@ OXMLDocuments::OXMLDocuments( ODBFilter& rImport
         ,m_sCollectionServiceName(_sCollectionServiceName)
         ,m_sComponentServiceName(_sComponentServiceName)
 {
-    DBG_CTOR(OXMLDocuments,NULL);
 
 }
 
@@ -61,13 +59,11 @@ OXMLDocuments::OXMLDocuments( ODBFilter& rImport
         ,m_xContainer(_xContainer)
         ,m_sCollectionServiceName(_sCollectionServiceName)
 {
-    DBG_CTOR(OXMLDocuments,NULL);
 }
 
 OXMLDocuments::~OXMLDocuments()
 {
 
-    DBG_DTOR(OXMLDocuments,NULL);
 }
 
 SvXMLImportContext* OXMLDocuments::CreateChildContext(

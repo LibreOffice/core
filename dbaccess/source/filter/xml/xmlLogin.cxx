@@ -34,14 +34,12 @@ namespace dbaxml
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::xml::sax;
-DBG_NAME(OXMLLogin)
 
 OXMLLogin::OXMLLogin( ODBFilter& rImport,
                 sal_uInt16 nPrfx, const OUString& _sLocalName,
                 const Reference< XAttributeList > & _xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
 {
-    DBG_CTOR(OXMLLogin,NULL);
 
     OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
     const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
@@ -119,7 +117,6 @@ OXMLLogin::OXMLLogin( ODBFilter& rImport,
 OXMLLogin::~OXMLLogin()
 {
 
-    DBG_DTOR(OXMLLogin,NULL);
 }
 
 } // namespace dbaxml

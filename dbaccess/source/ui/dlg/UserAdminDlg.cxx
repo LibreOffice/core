@@ -47,7 +47,6 @@ namespace dbaui
     using namespace ::com::sun::star::sdbcx;
 
     // OUserAdminDlg
-DBG_NAME(OUserAdminDlg)
     OUserAdminDlg::OUserAdminDlg(Window* _pParent
                                             , SfxItemSet* _pItems
                                             ,const Reference< XComponentContext >& _rxORB
@@ -58,7 +57,6 @@ DBG_NAME(OUserAdminDlg)
         ,m_xConnection(_xConnection)
         ,m_bOwnConnection(!_xConnection.is())
     {
-        DBG_CTOR(OUserAdminDlg,NULL);
 
         m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxORB,_pParent,this));
         m_pImpl->setDataSourceOrName(_aDataSourceName);
@@ -92,7 +90,6 @@ DBG_NAME(OUserAdminDlg)
         SetInputSet(NULL);
         DELETEZ(pExampleSet);
 
-        DBG_DTOR(OUserAdminDlg,NULL);
     }
     short OUserAdminDlg::Execute()
     {

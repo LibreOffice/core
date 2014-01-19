@@ -45,7 +45,6 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-DBG_NAME(OColumnControlModel)
 OColumnControlModel::OColumnControlModel(const Reference<XMultiServiceFactory>& _rxFactory)
     :OPropertyContainer(m_aBHelper)
     ,OColumnControlModel_BASE(m_aMutex)
@@ -55,7 +54,6 @@ OColumnControlModel::OColumnControlModel(const Reference<XMultiServiceFactory>& 
     ,m_nBorder(0)
     ,m_nWidth(50)
 {
-    DBG_CTOR(OColumnControlModel,NULL);
     registerProperties();
 }
 
@@ -69,13 +67,11 @@ OColumnControlModel::OColumnControlModel(const OColumnControlModel* _pSource,con
     ,m_nBorder(_pSource->m_nBorder)
     ,m_nWidth(50)
 {
-    DBG_CTOR(OColumnControlModel,NULL);
     registerProperties();
 }
 
 OColumnControlModel::~OColumnControlModel()
 {
-    DBG_DTOR(OColumnControlModel,NULL);
     if ( !OColumnControlModel_BASE::rBHelper.bDisposed && !OColumnControlModel_BASE::rBHelper.bInDispose )
     {
         acquire();

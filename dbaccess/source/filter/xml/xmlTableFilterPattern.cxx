@@ -25,7 +25,6 @@ namespace dbaxml
 {
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
-DBG_NAME(OXMLTableFilterPattern)
 
 OXMLTableFilterPattern::OXMLTableFilterPattern( SvXMLImport& rImport,
                 sal_uInt16 nPrfx
@@ -36,14 +35,12 @@ OXMLTableFilterPattern::OXMLTableFilterPattern( SvXMLImport& rImport,
     ,m_rParent(_rParent)
     ,m_bNameFilter(_bNameFilter)
 {
-    DBG_CTOR(OXMLTableFilterPattern,NULL);
 
 }
 
 OXMLTableFilterPattern::~OXMLTableFilterPattern()
 {
 
-    DBG_DTOR(OXMLTableFilterPattern,NULL);
 }
 
 void OXMLTableFilterPattern::Characters( const OUString& rChars )

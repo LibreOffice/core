@@ -44,13 +44,11 @@ namespace dbaccess
 {
 
 // OQueryDescriptor
-DBG_NAME(OQueryDescriptor)
 
 OQueryDescriptor::OQueryDescriptor()
     :OQueryDescriptor_Base(m_aMutex,*this)
     ,ODataSettings(m_aBHelper,sal_True)
 {
-    DBG_CTOR(OQueryDescriptor,NULL);
     registerProperties();
     ODataSettings::registerPropertiesFor(this);
 }
@@ -59,14 +57,12 @@ OQueryDescriptor::OQueryDescriptor(const OQueryDescriptor_Base& _rSource)
     :OQueryDescriptor_Base(_rSource,*this)
     ,ODataSettings(m_aBHelper,sal_True)
 {
-    DBG_CTOR(OQueryDescriptor,NULL);
     registerProperties();
     ODataSettings::registerPropertiesFor(this);
 }
 
 OQueryDescriptor::~OQueryDescriptor()
 {
-    DBG_DTOR(OQueryDescriptor,NULL);
 }
 
 IMPLEMENT_TYPEPROVIDER2(OQueryDescriptor,OQueryDescriptor_Base,ODataSettings);
@@ -115,13 +111,11 @@ Reference< XPropertySetInfo > SAL_CALL OQueryDescriptor::getPropertySetInfo(  ) 
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-DBG_NAME(OQueryDescriptor_Base);
 
 OQueryDescriptor_Base::OQueryDescriptor_Base(::osl::Mutex&  _rMutex,::cppu::OWeakObject& _rMySelf)
     :m_bColumnsOutOfDate(sal_True)
     ,m_rMutex(_rMutex)
 {
-    DBG_CTOR(OQueryDescriptor_Base,NULL);
     m_pColumns = new OColumns(_rMySelf, m_rMutex, sal_True,::std::vector< OUString>(), this,this);
 }
 
@@ -129,7 +123,6 @@ OQueryDescriptor_Base::OQueryDescriptor_Base(const OQueryDescriptor_Base& _rSour
     :m_bColumnsOutOfDate(sal_True)
     ,m_rMutex(_rSource.m_rMutex)
 {
-    DBG_CTOR(OQueryDescriptor_Base,NULL);
     m_pColumns = new OColumns(_rMySelf, m_rMutex, sal_True,::std::vector< OUString>(), this,this);
 
     m_sCommand = _rSource.m_sCommand;
@@ -146,7 +139,6 @@ OQueryDescriptor_Base::~OQueryDescriptor_Base()
     m_pColumns->disposing();
     delete m_pColumns;
 
-    DBG_DTOR(OQueryDescriptor_Base,NULL);
 }
 
 sal_Int64 SAL_CALL OQueryDescriptor_Base::getSomething( const Sequence< sal_Int8 >& _rIdentifier ) throw(RuntimeException)

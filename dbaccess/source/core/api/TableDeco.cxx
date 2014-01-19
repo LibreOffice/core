@@ -57,7 +57,6 @@ using namespace ::dbtools;
 using namespace ::cppu;
 
 // ODBTableDecorator
-DBG_NAME(ODBTableDecorator)
 
 ODBTableDecorator::ODBTableDecorator( const Reference< XConnection >& _rxConnection, const Reference< XColumnsSupplier >& _rxNewTable,
         const Reference< XNumberFormatsSupplier >& _rxNumberFormats, const Reference< XNameAccess >& _xColumnDefinitions ) throw(SQLException)
@@ -72,13 +71,11 @@ ODBTableDecorator::ODBTableDecorator( const Reference< XConnection >& _rxConnect
     ,m_pColumns(NULL)
 {
     SAL_INFO("dbaccess", "ODBTableDecorator::ODBTableDecorator" );
-    DBG_CTOR(ODBTableDecorator, NULL);
     ODataSettings::registerPropertiesFor(this);
 }
 
 ODBTableDecorator::~ODBTableDecorator()
 {
-    DBG_DTOR(ODBTableDecorator, NULL);
     if ( m_pColumns )
         delete m_pColumns;
 }

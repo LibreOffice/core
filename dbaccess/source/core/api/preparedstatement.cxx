@@ -43,13 +43,11 @@ using namespace ::cppu;
 using namespace ::osl;
 using namespace dbaccess;
 
-DBG_NAME(OPreparedStatement)
 
 OPreparedStatement::OPreparedStatement(const Reference< XConnection > & _xConn,
                                       const Reference< XInterface > & _xStatement)
                    :OStatementBase(_xConn, _xStatement)
 {
-    DBG_CTOR(OPreparedStatement, NULL);
     m_xAggregateAsParameters = Reference< XParameters >( m_xAggregateAsSet, UNO_QUERY_THROW );
 
     Reference<XDatabaseMetaData> xMeta = _xConn->getMetaData();
@@ -62,7 +60,6 @@ OPreparedStatement::~OPreparedStatement()
     m_pColumns->disposing();
     delete m_pColumns;
 
-    DBG_DTOR(OPreparedStatement, NULL);
 }
 
 // com::sun::star::lang::XTypeProvider

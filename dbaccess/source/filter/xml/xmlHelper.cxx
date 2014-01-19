@@ -32,17 +32,14 @@ namespace dbaxml
 {
     using namespace ::xmloff::token;
     using namespace ::com::sun::star::awt;
-DBG_NAME(OPropertyHandlerFactory)
 
 OPropertyHandlerFactory::OPropertyHandlerFactory()
 {
-    DBG_CTOR(OPropertyHandlerFactory,NULL);
 }
 
 OPropertyHandlerFactory::~OPropertyHandlerFactory()
 {
 
-    DBG_DTOR(OPropertyHandlerFactory,NULL);
 }
 
 const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 _nType) const

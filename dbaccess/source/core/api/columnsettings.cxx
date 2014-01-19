@@ -48,17 +48,14 @@ namespace dbaccess
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
     // OColumnSettings
-    DBG_NAME( OColumnSettings )
 
     OColumnSettings::OColumnSettings()
         :m_bHidden(sal_False)
     {
-        DBG_CTOR( OColumnSettings, NULL );
     }
 
     OColumnSettings::~OColumnSettings()
     {
-        DBG_DTOR( OColumnSettings, NULL );
     }
 
     void OColumnSettings::registerProperties( IPropertyContainer& _rPropertyContainer )

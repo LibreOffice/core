@@ -25,11 +25,9 @@
 using namespace dbaui;
 #define STANDARD_MARGIN                 6
 // class OTableDesignHelpBar
-DBG_NAME(OTableDesignHelpBar)
 OTableDesignHelpBar::OTableDesignHelpBar( Window* pParent ) :
      TabPage( pParent, WB_3DLOOK )
 {
-    DBG_CTOR(OTableDesignHelpBar,NULL);
     m_pTextWin = new MultiLineEdit( this, WB_VSCROLL | WB_LEFT | WB_BORDER | WB_NOTABSTOP | WB_READONLY);
     m_pTextWin->SetHelpId(HID_TABLE_DESIGN_HELP_WINDOW);
     m_pTextWin->SetReadOnly();
@@ -39,14 +37,12 @@ OTableDesignHelpBar::OTableDesignHelpBar( Window* pParent ) :
 
 OTableDesignHelpBar::~OTableDesignHelpBar()
 {
-    DBG_DTOR(OTableDesignHelpBar,NULL);
     ::std::auto_ptr<Window> aTemp(m_pTextWin);
     m_pTextWin = NULL;
 }
 
 void OTableDesignHelpBar::SetHelpText( const OUString& rText )
 {
-    DBG_CHKTHIS(OTableDesignHelpBar,NULL);
     if(m_pTextWin)
         m_pTextWin->SetText( rText );
     Invalidate();
@@ -54,7 +50,6 @@ void OTableDesignHelpBar::SetHelpText( const OUString& rText )
 
 void OTableDesignHelpBar::Resize()
 {
-    DBG_CHKTHIS(OTableDesignHelpBar,NULL);
     // Abmessungen parent window
     Size aOutputSize( GetOutputSizePixel() );
 

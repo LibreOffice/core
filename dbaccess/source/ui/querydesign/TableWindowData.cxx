@@ -36,7 +36,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 
 // class OTableWindowData
-DBG_NAME(OTableWindowData)
 OTableWindowData::OTableWindowData( const Reference< XPropertySet>& _xTable
                                    ,const OUString& _rComposedName
                                    ,const OUString& rTableName
@@ -51,7 +50,6 @@ OTableWindowData::OTableWindowData( const Reference< XPropertySet>& _xTable
     ,m_bIsQuery(false)
     ,m_bIsValid(true)
 {
-    DBG_CTOR(OTableWindowData,NULL);
     if( m_aWinName.isEmpty() )
         m_aWinName = m_aTableName;
 
@@ -60,7 +58,6 @@ OTableWindowData::OTableWindowData( const Reference< XPropertySet>& _xTable
 
 OTableWindowData::~OTableWindowData()
 {
-    DBG_DTOR(OTableWindowData,NULL);
     Reference<XComponent> xComponent( m_xTable, UNO_QUERY );
     if ( xComponent.is() )
         stopComponentListening( xComponent );

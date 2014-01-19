@@ -21,30 +21,25 @@
 #include <tools/debug.hxx>
 
 using namespace dbaui;
-DBG_NAME(OConnectionLineData)
 //class OConnectionLineData
 OConnectionLineData::OConnectionLineData()
 {
-    DBG_CTOR(OConnectionLineData,NULL);
 }
 
 OConnectionLineData::OConnectionLineData( const OUString& rSourceFieldName, const OUString& rDestFieldName )
     :m_aSourceFieldName( rSourceFieldName )
     ,m_aDestFieldName( rDestFieldName )
 {
-    DBG_CTOR(OConnectionLineData,NULL);
 }
 
 OConnectionLineData::OConnectionLineData( const OConnectionLineData& rConnLineData )
     : ::salhelper::SimpleReferenceObject()
 {
-    DBG_CTOR(OConnectionLineData,NULL);
     *this = rConnLineData;
 }
 
 OConnectionLineData::~OConnectionLineData()
 {
-    DBG_DTOR(OConnectionLineData,NULL);
 }
 
 void OConnectionLineData::CopyFrom(const OConnectionLineData& rSource)

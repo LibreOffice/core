@@ -29,13 +29,11 @@ namespace dbaui
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-DBG_NAME(DBTreeView)
 // class DBTreeView
 DBTreeView::DBTreeView( Window* pParent, WinBits nBits)
                     :   Window( pParent, nBits )
                     , m_pTreeListBox(NULL)
 {
-    DBG_CTOR(DBTreeView,NULL);
 
     m_pTreeListBox = new DBTreeListBox(this, WB_BORDER | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT);
     m_pTreeListBox->EnableCheckButton(NULL);
@@ -47,7 +45,6 @@ DBTreeView::DBTreeView( Window* pParent, WinBits nBits)
 
 DBTreeView::~DBTreeView()
 {
-    DBG_DTOR(DBTreeView,NULL);
     if (m_pTreeListBox)
     {
         if (m_pTreeListBox->GetModel())

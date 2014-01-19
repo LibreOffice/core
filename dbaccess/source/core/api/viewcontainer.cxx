@@ -57,7 +57,6 @@ using namespace ::cppu;
 using namespace ::connectivity::sdbcx;
 
 // OViewContainer
-DBG_NAME(OViewContainer)
 
 OViewContainer::OViewContainer(::cppu::OWeakObject& _rParent
                                  ,::osl::Mutex& _rMutex
@@ -69,12 +68,10 @@ OViewContainer::OViewContainer(::cppu::OWeakObject& _rParent
     :OFilteredContainer(_rParent,_rMutex,_xCon,_bCase,_pRefreshListener,_pWarningsContainer,_nInAppend)
     ,m_bInElementRemoved(false)
 {
-    DBG_CTOR(OViewContainer, NULL);
 }
 
 OViewContainer::~OViewContainer()
 {
-    DBG_DTOR(OViewContainer, NULL);
 }
 
 // XServiceInfo

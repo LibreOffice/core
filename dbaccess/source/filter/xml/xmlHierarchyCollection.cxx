@@ -37,7 +37,6 @@ namespace dbaxml
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::xml::sax;
-DBG_NAME(OXMLHierarchyCollection)
 
 OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
@@ -51,7 +50,6 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
     ,m_sCollectionServiceName(_sCollectionServiceName)
     ,m_sComponentServiceName(_sComponentServiceName)
 {
-    DBG_CTOR(OXMLHierarchyCollection,NULL);
 
     const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
     const SvXMLTokenMap& rTokenMap = rImport.GetComponentElemTokenMap();
@@ -112,13 +110,11 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
     ,m_xContainer(_xContainer)
     ,m_xTable(_xTable)
 {
-    DBG_CTOR(OXMLHierarchyCollection,NULL);
 }
 
 OXMLHierarchyCollection::~OXMLHierarchyCollection()
 {
 
-    DBG_DTOR(OXMLHierarchyCollection,NULL);
 }
 
 SvXMLImportContext* OXMLHierarchyCollection::CreateChildContext(

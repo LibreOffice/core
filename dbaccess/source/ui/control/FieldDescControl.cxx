@@ -94,7 +94,6 @@ namespace
 
 // class OFieldDescControl
 
-DBG_NAME(OFieldDescControl)
 
 OFieldDescControl::OFieldDescControl( Window* pParent, const ResId& rResId, OTableDesignHelpBar* pHelpBar)
     :TabPage( pParent, rResId )
@@ -139,7 +138,6 @@ OFieldDescControl::OFieldDescControl( Window* pParent, const ResId& rResId, OTab
     ,m_bRightAligned(false)
     ,pActFieldDescr(NULL)
 {
-    DBG_CTOR(OFieldDescControl,NULL);
 
     Contruct();
 }
@@ -187,7 +185,6 @@ OFieldDescControl::OFieldDescControl( Window* pParent, OTableDesignHelpBar* pHel
     ,m_bRightAligned(false)
     ,pActFieldDescr(NULL)
 {
-    DBG_CTOR(OFieldDescControl,NULL);
     Contruct();
 }
 
@@ -213,7 +210,6 @@ void OFieldDescControl::Contruct()
 
 OFieldDescControl::~OFieldDescControl()
 {
-    DBG_DTOR(OFieldDescControl,NULL);
 
     {
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -460,7 +456,6 @@ sal_Int32 OFieldDescControl::GetMaxControlHeight() const
 
 void OFieldDescControl::SetReadOnly( sal_Bool bReadOnly )
 {
-    DBG_CHKTHIS(OFieldDescControl,NULL);
     // Enable/disable Controls
     Control* ppAggregates[]     = {   pRequired, pNumType
                                         , pAutoIncrement, pDefault
@@ -488,7 +483,6 @@ void OFieldDescControl::SetReadOnly( sal_Bool bReadOnly )
 
 OUString OFieldDescControl::GetControlText( sal_uInt16 nControlId )
 {
-    DBG_CHKTHIS(OFieldDescControl,NULL);
     // Read out the Controls' texts
     switch( nControlId )
     {
@@ -544,7 +538,6 @@ OUString OFieldDescControl::GetControlText( sal_uInt16 nControlId )
 
 void OFieldDescControl::SetControlText( sal_uInt16 nControlId, const OUString& rText )
 {
-    DBG_CHKTHIS(OFieldDescControl,NULL);
     // Set the Controls' texts
     switch( nControlId )
     {
@@ -621,7 +614,6 @@ void OFieldDescControl::SetControlText( sal_uInt16 nControlId, const OUString& r
 
 IMPL_LINK( OFieldDescControl, FormatClickHdl, Button *, /*pButton*/ )
 {
-    DBG_CHKTHIS(OFieldDescControl,NULL);
     // Create temporary Column, which is used for data exchange with Dialog
     if( !pActFieldDescr )
         return 0;
@@ -661,7 +653,6 @@ void OFieldDescControl::SetModified(sal_Bool /*bModified*/)
 
 IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
 {
-    DBG_CHKTHIS(OFieldDescControl,NULL);
     if ( !pActFieldDescr )
         return 0;
 
@@ -736,7 +727,6 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
 // of the DescriptionPage
 void OFieldDescControl::ArrangeAggregates()
 {
-    DBG_CHKTHIS(OFieldDescControl,NULL);
     // A Control's description
     struct AGGREGATE_DESCRIPTION
     {
@@ -810,7 +800,6 @@ void OFieldDescControl::ArrangeAggregates()
 
 void OFieldDescControl::ActivateAggregate( EControlType eType )
 {
-    DBG_CHKTHIS(OFieldDescControl,NULL);
     // Create Controls
     switch( eType )
     {
@@ -1027,7 +1016,6 @@ OPropNumericEditCtrl* OFieldDescControl::CreateNumericControl(sal_uInt16 _nHelpS
 
 void OFieldDescControl::DeactivateAggregate( EControlType eType )
 {
-    DBG_CHKTHIS(OFieldDescControl,NULL);
     pLastFocusWindow = NULL;
     // Destroy Controls
     switch( eType )
@@ -1090,7 +1078,6 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
 
 void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 nCol )
 {
-    DBG_CHKTHIS(OFieldDescControl,NULL);
 
     // Calculate size
     const sal_Int32 nControlHeight = GetMaxControlHeight();
@@ -1156,7 +1143,6 @@ void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 n
 
 void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 {
-    DBG_CHKTHIS(OFieldDescControl,NULL);
     pActFieldDescr = pFieldDescr;
     if(!pFieldDescr)
     {
@@ -1562,7 +1548,6 @@ IMPL_LINK(OFieldDescControl, OnControlFocusLost, Control*, pControl )
 
 void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
 {
-    DBG_CHKTHIS(OFieldDescControl,NULL);
     if( !pFieldDescr )
         return;
 
@@ -1612,7 +1597,6 @@ void OFieldDescControl::UpdateFormatSample(OFieldDescription* pFieldDescr)
 
 void OFieldDescControl::GetFocus()
 {
-    DBG_CHKTHIS(OFieldDescControl,NULL);
     // Set the Focus to the Control that has been active last
     TabPage::GetFocus();
     if( pLastFocusWindow )
@@ -1624,7 +1608,6 @@ void OFieldDescControl::GetFocus()
 
 void OFieldDescControl::implFocusLost(Window* _pWhich)
 {
-    DBG_CHKTHIS(OFieldDescControl,NULL);
     OSL_ENSURE(!_pWhich || IsChild(_pWhich), "OFieldDescControl::implFocusLost : invalid window !");
 
     // Remember the active Control
@@ -1638,7 +1621,6 @@ void OFieldDescControl::implFocusLost(Window* _pWhich)
 
 void OFieldDescControl::LoseFocus()
 {
-    DBG_CHKTHIS(OFieldDescControl,NULL);
 
     implFocusLost(NULL);
 

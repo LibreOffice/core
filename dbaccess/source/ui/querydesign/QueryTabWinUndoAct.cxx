@@ -27,32 +27,26 @@
 #include "QueryTableView.hxx"
 
 using namespace dbaui;
-DBG_NAME(OQueryDesignFieldUndoAct)
 OQueryDesignFieldUndoAct::OQueryDesignFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, sal_uInt16 nCommentID)
     : OCommentUndoAction(nCommentID)
     , pOwner(pSelBrwBox)
     , m_nColumnPostion(BROWSER_INVALIDID)
 {
-    DBG_CTOR(OQueryDesignFieldUndoAct,NULL);
 }
 
 OQueryDesignFieldUndoAct::~OQueryDesignFieldUndoAct()
 {
-    DBG_DTOR(OQueryDesignFieldUndoAct,NULL);
     pOwner = NULL;
 }
 
-DBG_NAME(OQueryTabWinUndoAct )
 OQueryTabWinUndoAct::OQueryTabWinUndoAct(OQueryTableView* pOwner, sal_uInt16 nCommentID)
     :OQueryDesignUndoAction(pOwner, nCommentID)
     ,m_pTabWin(NULL)
 {
-    DBG_CTOR(OQueryTabWinUndoAct ,NULL);
 }
 
 OQueryTabWinUndoAct::~OQueryTabWinUndoAct()
 {
-    DBG_DTOR(OQueryTabWinUndoAct ,NULL);
     if (m_bOwnerOfObjects)
     {
         // I should take care to delete the window if I am the only owner

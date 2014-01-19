@@ -42,18 +42,15 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdbc;
 
 // OWizTypeSelectControl
-DBG_NAME(OWizTypeSelectControl)
 OWizTypeSelectControl::OWizTypeSelectControl(Window* pParent, const ResId& rResId,OTableDesignHelpBar* pHelpBar)
     : OFieldDescControl(pParent,rResId,pHelpBar)
 {
-    DBG_CTOR(OWizTypeSelectControl,NULL);
 
 }
 
 OWizTypeSelectControl::~OWizTypeSelectControl()
 {
 
-    DBG_DTOR(OWizTypeSelectControl,NULL);
 }
 
 void OWizTypeSelectControl::ActivateAggregate( EControlType eType )
@@ -212,7 +209,6 @@ OUString OWizTypeSelectControl::getAutoIncrementValue() const
     return ((OWizTypeSelect*)GetParent())->m_sAutoIncrementValue;
 }
 
-DBG_NAME(OWizTypeSelect);
 #define IMG_PRIMARY_KEY 1
 OWizTypeSelect::OWizTypeSelect( Window* pParent, SvStream* _pStream )
                :OWizardPage( pParent, ModuleRes( TAB_WIZ_TYPE_SELECT ))
@@ -228,7 +224,6 @@ OWizTypeSelect::OWizTypeSelect( Window* pParent, SvStream* _pStream )
                ,m_bAutoIncrementEnabled(sal_False)
                ,m_bDuplicateName(sal_False)
 {
-    DBG_CTOR(OWizTypeSelect,NULL);
     m_lbColumnNames.SetSelectHdl(LINK(this,OWizTypeSelect,ColumnSelectHdl));
 
     ModuleRes aModuleRes(IMG_JOINS);
@@ -257,18 +252,15 @@ OWizTypeSelect::OWizTypeSelect( Window* pParent, SvStream* _pStream )
 
 OWizTypeSelect::~OWizTypeSelect()
 {
-    DBG_DTOR(OWizTypeSelect,NULL);
 }
 
 OUString OWizTypeSelect::GetTitle() const
 {
-    DBG_CHKTHIS(OWizTypeSelect,NULL);
     return ModuleRes(STR_WIZ_TYPE_SELECT_TITEL);
 }
 
 void OWizTypeSelect::Resize()
 {
-    DBG_CHKTHIS(OWizTypeSelect,NULL);
 }
 
 IMPL_LINK( OWizTypeSelect, ColumnSelectHdl, MultiListBox *, /*pListBox*/ )
@@ -286,7 +278,6 @@ IMPL_LINK( OWizTypeSelect, ColumnSelectHdl, MultiListBox *, /*pListBox*/ )
 void OWizTypeSelect::Reset()
 {
     // restore original state
-    DBG_CHKTHIS(OWizTypeSelect,NULL);
 
     while(m_lbColumnNames.GetEntryCount())
         m_lbColumnNames.RemoveEntry(0);
@@ -311,7 +302,6 @@ void OWizTypeSelect::Reset()
 
 void OWizTypeSelect::ActivatePage( )
 {
-    DBG_CHKTHIS(OWizTypeSelect,NULL);
     sal_Bool bOldFirstTime = m_bFirstTime;
     Reset();
     m_bFirstTime = bOldFirstTime;
@@ -323,7 +313,6 @@ void OWizTypeSelect::ActivatePage( )
 
 sal_Bool OWizTypeSelect::LeavePage()
 {
-    DBG_CHKTHIS(OWizTypeSelect,NULL);
     OUString aColumnName( m_lbColumnNames.GetSelectEntry() );
 
     sal_Bool bDuplicateName = sal_False;
@@ -338,7 +327,6 @@ sal_Bool OWizTypeSelect::LeavePage()
 
 void OWizTypeSelect::EnableAuto(sal_Bool bEnable)
 {
-    DBG_CHKTHIS(OWizTypeSelect,NULL);
     m_ftAuto.Show(bEnable);
     m_etAuto.Show(bEnable);
     m_pbAuto.Show(bEnable);
@@ -347,7 +335,6 @@ void OWizTypeSelect::EnableAuto(sal_Bool bEnable)
 
 IMPL_LINK( OWizTypeSelect, ButtonClickHdl, Button *, /*pButton*/ )
 {
-    DBG_CHKTHIS(OWizTypeSelect,NULL);
     sal_Int32 nBreakPos;
     m_pParent->CheckColumns(nBreakPos);
     fillColumnList(m_etAuto.GetText().toInt32());
@@ -359,7 +346,6 @@ IMPL_LINK( OWizTypeSelect, ButtonClickHdl, Button *, /*pButton*/ )
 
 sal_Bool OWizTypeSelectList::IsPrimaryKeyAllowed() const
 {
-    DBG_CHKTHIS(OWizTypeSelect,NULL);
     sal_uInt16 nCount = GetSelectEntryCount();
     sal_uInt16 j;
 
@@ -445,7 +431,6 @@ bool OWizTypeSelectList::PreNotify( NotifyEvent& rEvt )
 
 void OWizTypeSelect::fillColumnList(sal_uInt32 nRows)
 {
-    DBG_CHKTHIS(OWizTypeSelect,NULL);
     if(m_pParserStream)
     {
         sal_uInt32 nTell = m_pParserStream->Tell(); // might change seek position of stream

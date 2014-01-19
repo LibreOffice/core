@@ -85,7 +85,6 @@ ODefinitionContainer_Impl::iterator ODefinitionContainer_Impl::find( TContentPtr
 }
 
 // ODefinitionContainer
-DBG_NAME(ODefinitionContainer)
 
 ODefinitionContainer::ODefinitionContainer(   const Reference< XComponentContext >& _xORB
                                             , const Reference< XInterface >&    _xParentContainer
@@ -111,7 +110,6 @@ ODefinitionContainer::ODefinitionContainer(   const Reference< XComponentContext
             m_aDocumentMap.insert(
                 Documents::value_type( aDefinition->first, Documents::mapped_type() ) ).first );
 
-    DBG_CTOR(ODefinitionContainer, NULL);
 }
 
 void SAL_CALL ODefinitionContainer::disposing()
@@ -147,7 +145,6 @@ void SAL_CALL ODefinitionContainer::disposing()
 
 ODefinitionContainer::~ODefinitionContainer()
 {
-    DBG_DTOR(ODefinitionContainer, NULL);
 }
 
 IMPLEMENT_FORWARD_XINTERFACE2( ODefinitionContainer,OContentHelper,ODefinitionContainer_Base)

@@ -41,7 +41,6 @@ using namespace ::osl;
 using namespace dbaccess;
 using namespace dbtools;
 
-DBG_NAME(OStatementBase)
 
 OStatementBase::OStatementBase(const Reference< XConnection > & _xConn,
                                const Reference< XInterface > & _xStatement)
@@ -52,7 +51,6 @@ OStatementBase::OStatementBase(const Reference< XConnection > & _xConn,
 
 {
     SAL_INFO("dbaccess", "OStatementBase::OStatementBase" );
-    DBG_CTOR(OStatementBase, NULL);
     OSL_ENSURE(_xStatement.is() ,"Statement is NULL!");
     m_xAggregateAsSet.set(_xStatement,UNO_QUERY);
     m_xAggregateAsCancellable = Reference< ::com::sun::star::util::XCancellable > (m_xAggregateAsSet, UNO_QUERY);
@@ -60,7 +58,6 @@ OStatementBase::OStatementBase(const Reference< XConnection > & _xConn,
 
 OStatementBase::~OStatementBase()
 {
-    DBG_DTOR(OStatementBase, NULL);
 }
 
 // com::sun::star::lang::XTypeProvider

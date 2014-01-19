@@ -80,7 +80,6 @@ const static char sFontSize[]       = "font-size: ";
 #define SBA_FORMAT_SELECTION_COUNT  4
 #define CELL_X                      1437
 
-DBG_NAME(ODatabaseImportExport)
 ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor& _aDataDescriptor,
                                              const Reference< XComponentContext >& _rM,
                                              const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
@@ -96,7 +95,6 @@ ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor&
     ,m_bCheckOnly(sal_False)
 {
     SAL_INFO("dbaccess.ui", "ODatabaseImportExport::ODatabaseImportExport" );
-    DBG_CTOR(ODatabaseImportExport,NULL);
 
     m_eDestEnc = osl_getThreadTextEncoding();
 
@@ -128,7 +126,6 @@ ODatabaseImportExport::ODatabaseImportExport( const ::dbtools::SharedConnection&
     ,m_bCheckOnly(sal_False)
 {
     SAL_INFO("dbaccess.ui", "ODatabaseImportExport::ODatabaseImportExport" );
-    DBG_CTOR(ODatabaseImportExport,NULL);
     m_eDestEnc = osl_getThreadTextEncoding();
     try
     {
@@ -142,7 +139,6 @@ ODatabaseImportExport::ODatabaseImportExport( const ::dbtools::SharedConnection&
 
 ODatabaseImportExport::~ODatabaseImportExport()
 {
-    DBG_DTOR(ODatabaseImportExport,NULL);
     acquire();
 
     dispose();
@@ -155,7 +151,6 @@ ODatabaseImportExport::~ODatabaseImportExport()
 void ODatabaseImportExport::dispose()
 {
     SAL_INFO("dbaccess.ui", "ODatabaseImportExport::disposing" );
-    DBG_CHKTHIS(ODatabaseImportExport,NULL);
     // remove me as listener
     Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
     if (xComponent.is())
@@ -178,7 +173,6 @@ void ODatabaseImportExport::dispose()
 void SAL_CALL ODatabaseImportExport::disposing( const EventObject& Source ) throw(::com::sun::star::uno::RuntimeException)
 {
     SAL_INFO("dbaccess.ui", "ODatabaseImportExport::disposing" );
-    DBG_CHKTHIS(ODatabaseImportExport,NULL);
     Reference<XConnection> xCon(Source.Source,UNO_QUERY);
     if(m_xConnection.is() && m_xConnection == xCon)
     {
@@ -197,7 +191,6 @@ void ODatabaseImportExport::initialize( const ODataAccessDescriptor& _aDataDescr
 void ODatabaseImportExport::impl_initFromDescriptor( const ODataAccessDescriptor& _aDataDescriptor, bool _bPlusDefaultInit)
 {
     SAL_INFO("dbaccess.ui", "ODatabaseImportExport::impl_initFromDescriptor" );
-    DBG_CHKTHIS(ODatabaseImportExport,NULL);
     if ( !_bPlusDefaultInit )
     {
         m_sDataSourceName = _aDataDescriptor.getDataSource();
@@ -260,7 +253,6 @@ void ODatabaseImportExport::impl_initFromDescriptor( const ODataAccessDescriptor
 void ODatabaseImportExport::initialize()
 {
     SAL_INFO("dbaccess.ui", "ODatabaseImportExport::initialize" );
-    DBG_CHKTHIS(ODatabaseImportExport,NULL);
     m_bInInitialize = sal_True;
     m_bNeedToReInitialize = false;
 

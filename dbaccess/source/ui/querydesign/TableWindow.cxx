@@ -61,7 +61,6 @@ using namespace ::com::sun::star::accessibility;
 #define TABWIN_HEIGHT_MIN   80
 
 // class OTableWindow
-DBG_NAME(OTableWindow)
 OTableWindow::OTableWindow( Window* pParent, const TTableWindowData::value_type& pTabWinData )
           : ::comphelper::OContainerListener(m_aMutex)
           ,Window( pParent, WB_3DLOOK|WB_MOVEABLE )
@@ -75,7 +74,6 @@ OTableWindow::OTableWindow( Window* pParent, const TTableWindowData::value_type&
           ,m_nSizingFlags( SIZING_NONE )
           ,m_bActive( sal_False )
 {
-    DBG_CTOR(OTableWindow,NULL);
 
     // Set position and size
     if( GetData()->HasPosition() )
@@ -96,7 +94,6 @@ OTableWindow::OTableWindow( Window* pParent, const TTableWindowData::value_type&
 
 OTableWindow::~OTableWindow()
 {
-    DBG_DTOR(OTableWindow,NULL);
 
     if (m_pListBox)
     {

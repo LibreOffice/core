@@ -2743,7 +2743,6 @@ void ORowSet::impl_rebuild_throw(::osl::ResettableMutexGuard& _rGuard)
 // ***********************************************************
 //  ORowSetClone
 // ***********************************************************
-DBG_NAME(ORowSetClone);
 
 ORowSetClone::ORowSetClone( const Reference<XComponentContext>& _rContext, ORowSet& rParent, ::osl::Mutex* _pMutex )
              :OSubComponent(m_aMutex, rParent)
@@ -2753,7 +2752,6 @@ ORowSetClone::ORowSetClone( const Reference<XComponentContext>& _rContext, ORowS
              ,m_nFetchSize(rParent.m_nFetchSize)
              ,m_bIsBookmarkable(sal_True)
 {
-    DBG_CTOR(ORowSetClone, NULL);
 
     m_nResultSetType        = rParent.m_nResultSetType;
     m_nResultSetConcurrency = ResultSetConcurrency::READ_ONLY;
@@ -2833,7 +2831,6 @@ ORowSetClone::ORowSetClone( const Reference<XComponentContext>& _rContext, ORowS
 
 ORowSetClone::~ORowSetClone()
 {
-    DBG_DTOR(ORowSetClone, NULL);
 }
 
 // com::sun::star::XTypeProvider

@@ -222,22 +222,18 @@ namespace
 }
 
 // class OQueryTableView
-DBG_NAME(OQueryTableView)
 OQueryTableView::OQueryTableView( Window* pParent,OQueryDesignView* pView)
     : OJoinTableView( pParent,pView)
 {
-    DBG_CTOR(OQueryTableView,NULL);
     SetHelpId(HID_CTL_QRYDGNTAB);
 }
 
 OQueryTableView::~OQueryTableView()
 {
-    DBG_DTOR(OQueryTableView,NULL);
 }
 
 sal_Int32 OQueryTableView::CountTableAlias(const OUString& rName, sal_Int32& rMax)
 {
-    DBG_CHKTHIS(OQueryTableView,NULL);
     sal_Int32 nRet = 0;
 
     OTableWindowMap::iterator aIter = GetTabWinMap()->find(rName);
@@ -254,7 +250,6 @@ sal_Int32 OQueryTableView::CountTableAlias(const OUString& rName, sal_Int32& rMa
 
 void OQueryTableView::ReSync()
 {
-    DBG_CHKTHIS(OQueryTableView,NULL);
     TTableWindowData* pTabWinDataList = m_pView->getController().getTableWindowData();
     OSL_ENSURE((getTableConnections()->size()==0) && (GetTabWinMap()->size()==0),
         "before calling OQueryTableView::ReSync() please call ClearAll !");
@@ -321,7 +316,6 @@ void OQueryTableView::ReSync()
 
 void OQueryTableView::ClearAll()
 {
-    DBG_CHKTHIS(OQueryTableView,NULL);
     OJoinTableView::ClearAll();
 
     SetUpdateMode(sal_True);
@@ -335,7 +329,6 @@ OTableWindow* OQueryTableView::createWindow(const TTableWindowData::value_type& 
 
 void OQueryTableView::NotifyTabConnection(const OQueryTableConnection& rNewConn, sal_Bool _bCreateUndoAction)
 {
-    DBG_CHKTHIS(OQueryTableView,NULL);
     // let's first check if I have the connection already
     OQueryTableConnection* pTabConn = NULL;
     const ::std::vector<OTableConnection*>* pConnections = getTableConnections();
@@ -382,7 +375,6 @@ OTableWindowData* OQueryTableView::CreateImpl(const OUString& _rComposedName
 
 void OQueryTableView::AddTabWin(const OUString& _rTableName, const OUString& _rAliasName, sal_Bool bNewTable)
 {
-    DBG_CHKTHIS(OQueryTableView,NULL);
     // this method has been inherited from the base class, linking back to the parent and which constructs
     // an Alias and which passes on to my other AddTabWin
 
@@ -446,7 +438,6 @@ Reference<XPropertySet> getKeyReferencedTo(const Reference<XIndexAccess>& _rxKey
 
 void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& _rTableName, const OUString& strAlias, sal_Bool bNewTable)
 {
-    DBG_CHKTHIS(OQueryTableView,NULL);
     OSL_ENSURE(!_rTableName.isEmpty() || !strAlias.isEmpty(), "OQueryTableView::AddTabWin : no tables or aliases !");
         // If the table is not set, then it is a dummy window, but at least the alias must be set
 
@@ -597,7 +588,6 @@ void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& 
 
 void OQueryTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest)
 {
-    DBG_CHKTHIS(OQueryTableView,NULL);
     OQueryTableWindow* pSourceWin = static_cast< OQueryTableWindow*>(jxdSource.pListBox->GetTabWin());
     OQueryTableWindow* pDestWin = static_cast< OQueryTableWindow*>(jxdDest.pListBox->GetTabWin());
 
@@ -657,7 +647,6 @@ void OQueryTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJ
 
 void OQueryTableView::ConnDoubleClicked(OTableConnection* pConnection)
 {
-    DBG_CHKTHIS(OQueryTableView,NULL);
     if( openJoinDialog(this,pConnection->GetData(),sal_False) )
     {
         connectionModified(this,pConnection,sal_False);
@@ -696,7 +685,6 @@ void OQueryTableView::createNewConnection()
 
 bool OQueryTableView::RemoveConnection( OTableConnection* _pConnection,sal_Bool /*_bDelete*/ )
 {
-    DBG_CHKTHIS(OQueryTableView,NULL);
 
     // we don't want that our connection will be deleted, we put it in the undo manager
     bool bRet = OJoinTableView::RemoveConnection( _pConnection,sal_False);
@@ -711,13 +699,11 @@ bool OQueryTableView::RemoveConnection( OTableConnection* _pConnection,sal_Bool 
 
 void OQueryTableView::KeyInput( const KeyEvent& rEvt )
 {
-    DBG_CHKTHIS(OQueryTableView,NULL);
     OJoinTableView::KeyInput( rEvt );
 }
 
 OQueryTableWindow* OQueryTableView::FindTable(const OUString& rAliasName)
 {
-    DBG_CHKTHIS(OQueryTableView,NULL);
     OSL_ENSURE(!rAliasName.isEmpty(), "OQueryTableView::FindTable : the  AliasName should not be empty !");
         // (it is harmless but does not make sense and indicates that there is probably an error in the caller)
     OTableWindowMap::const_iterator aIter = GetTabWinMap()->find(rAliasName);
@@ -728,7 +714,6 @@ OQueryTableWindow* OQueryTableView::FindTable(const OUString& rAliasName)
 
 sal_Bool OQueryTableView::FindTableFromField(const OUString& rFieldName, OTableFieldDescRef& rInfo, sal_uInt16& rCnt)
 {
-    DBG_CHKTHIS(OQueryTableView,NULL);
     rCnt = 0;
     OTableWindowMap::const_iterator aIter = GetTabWinMap()->begin();
     OTableWindowMap::const_iterator aEnd  = GetTabWinMap()->end();
@@ -762,7 +747,6 @@ bool OQueryTableView::ContainsTabWin(const OTableWindow& rTabWin)
 
 void OQueryTableView::RemoveTabWin(OTableWindow* pTabWin)
 {
-    DBG_CHKTHIS(OQueryTableView,NULL);
     OSL_ENSURE(pTabWin != NULL, "OQueryTableView::RemoveTabWin : Window should not be NULL !");
 
     if(pTabWin && ContainsTabWin(*pTabWin)) // #i122589# check if registered before deleting
@@ -803,7 +787,6 @@ void OQueryTableView::RemoveTabWin(OTableWindow* pTabWin)
 
 void OQueryTableView::EnsureVisible(const OTableWindow* pWin)
 {
-    DBG_CHKTHIS(OQueryTableView,NULL);
 
     Invalidate(INVALIDATE_NOCHILDREN);
     OJoinTableView::EnsureVisible(pWin);
@@ -811,7 +794,6 @@ void OQueryTableView::EnsureVisible(const OTableWindow* pWin)
 
 void OQueryTableView::GetConnection(OQueryTableConnection* pConn)
 {
-    DBG_CHKTHIS(OQueryTableView,NULL);
     // add to me and the document
 
     addConnection( pConn );
@@ -819,7 +801,6 @@ void OQueryTableView::GetConnection(OQueryTableConnection* pConn)
 
 void OQueryTableView::DropConnection(OQueryTableConnection* pConn)
 {
-    DBG_CHKTHIS(OQueryTableView,NULL);
     // Pay attention to the selection
     // remove from me and the document
     RemoveConnection( pConn ,sal_False);
@@ -827,7 +808,6 @@ void OQueryTableView::DropConnection(OQueryTableConnection* pConn)
 
 void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction )
 {
-    DBG_CHKTHIS(OQueryTableView,NULL);
     OTableWindowMap* pTabWins = GetTabWinMap();
     OSL_ENSURE(pTabWins != NULL, "OQueryTableView::HideTabWin : have no TabWins !");
 
@@ -900,7 +880,6 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
 
 sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction,sal_Bool _bAppend )
 {
-    DBG_CHKTHIS(OQueryTableView,NULL);
 
     sal_Bool bSuccess = sal_False;
 
@@ -974,14 +953,12 @@ sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUn
 
 void OQueryTableView::InsertField(const OTableFieldDescRef& rInfo)
 {
-    DBG_CHKTHIS(OQueryTableView,NULL);
     OSL_ENSURE(getDesignView() != NULL, "OQueryTableView::InsertField : has no Parent !");
     static_cast<OQueryDesignView*>(getDesignView())->InsertField(rInfo);
 }
 
 sal_Bool OQueryTableView::ExistsAVisitedConn(const OQueryTableWindow* pFrom) const
 {
-    DBG_CHKTHIS(OQueryTableView,NULL);
     const ::std::vector<OTableConnection*>* pList = getTableConnections();
     if (pList)
     {

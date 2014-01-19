@@ -67,11 +67,9 @@ using namespace ::com::sun::star;
     }
 
     // OTextConnectionPageSetup
-DBG_NAME(OTextConnectionPageSetup)
     OTextConnectionPageSetup::OTextConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OConnectionTabPageSetup(pParent, PAGE_DBWIZARD_TEXT, _rCoreAttrs, STR_TEXT_HELPTEXT, STR_TEXT_HEADERTEXT, STR_TEXT_PATH_OR_FILE)
     {
-        DBG_CTOR(OTextConnectionPageSetup,NULL);
 
         m_pTextConnectionHelper = new OTextConnectionHelper( this, TC_EXTENSION | TC_SEPARATORS );
         m_pTextConnectionHelper->SetClickHandler(LINK( this, OTextConnectionPageSetup, ImplGetExtensionHdl ) );
@@ -83,7 +81,6 @@ DBG_NAME(OTextConnectionPageSetup)
     {
         DELETEZ(m_pTextConnectionHelper);
 
-        DBG_DTOR(OTextConnectionPageSetup,NULL);
     }
 
     IMPL_LINK(OTextConnectionPageSetup, ImplGetExtensionHdl, OTextConnectionHelper*, /*_pTextConnectionHelper*/)
@@ -228,7 +225,6 @@ DBG_NAME(OTextConnectionPageSetup)
         return ( new OMySQLIntroPageSetup( _pParent, _rAttrSet) );
     }
 
-DBG_NAME(OMySQLIntroPageSetup)
 
     OMySQLIntroPageSetup::OMySQLIntroPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs )
             :OGenericAdministrationPage(pParent, ModuleRes(PAGE_DBWIZARD_MYSQL_INTRO), _rCoreAttrs)
@@ -239,7 +235,6 @@ DBG_NAME(OMySQLIntroPageSetup)
             ,m_aFT_Helptext(this, ModuleRes(FT_MYSQL_HELPTEXT))
             ,m_aFT_Headertext(this, ModuleRes(FT_MYSQL_HEADERTEXT))
     {
-        DBG_CTOR(OMySQLIntroPageSetup,NULL);
 
         SetControlFontWeight(&m_aFT_Headertext);
            m_aRB_ODBCDatabase.SetToggleHdl(LINK(this, OMySQLIntroPageSetup, OnSetupModeSelected));
@@ -257,7 +252,6 @@ DBG_NAME(OMySQLIntroPageSetup)
     OMySQLIntroPageSetup::~OMySQLIntroPageSetup()
     {
 
-        DBG_DTOR(OMySQLIntroPageSetup,NULL);
     }
 
     void OMySQLIntroPageSetup::implInitControls(const SfxItemSet& _rSet, sal_Bool /*_bSaveValue*/)
@@ -643,13 +637,11 @@ DBG_NAME(OMySQLIntroPageSetup)
         return ( new OSpreadSheetConnectionPageSetup( pParent, _rAttrSet ) );
     }
 
-DBG_NAME(OSpreadSheetConnectionPageSetup)
 
     OSpreadSheetConnectionPageSetup::OSpreadSheetConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OConnectionTabPageSetup(pParent, PAGE_DBWIZARD_SPREADSHEET, _rCoreAttrs, STR_SPREADSHEET_HELPTEXT, STR_SPREADSHEET_HEADERTEXT, STR_SPREADSHEETPATH)
             , m_aCBPasswordrequired(this, ModuleRes(CB_SPREADSHEETPASSWORDREQUIRED))
     {
-        DBG_CTOR(OSpreadSheetConnectionPageSetup,NULL);
 
            m_aCBPasswordrequired.SetToggleHdl(getControlModifiedLink());
         FreeResource();
@@ -658,7 +650,6 @@ DBG_NAME(OSpreadSheetConnectionPageSetup)
     OSpreadSheetConnectionPageSetup::~OSpreadSheetConnectionPageSetup()
     {
 
-        DBG_DTOR(OSpreadSheetConnectionPageSetup,NULL);
     }
 
     void OSpreadSheetConnectionPageSetup::fillWindows(::std::vector< ISaveValueWrapper* >& /*_rControlList*/)
@@ -689,7 +680,6 @@ DBG_NAME(OSpreadSheetConnectionPageSetup)
         return ( new OAuthentificationPageSetup( pParent, _rAttrSet) );
     }
 
-DBG_NAME(OAuthentificationPageSetup)
 
     OAuthentificationPageSetup::OAuthentificationPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OGenericAdministrationPage(pParent, ModuleRes(PAGE_DBWIZARD_AUTHENTIFICATION), _rCoreAttrs )
@@ -700,7 +690,6 @@ DBG_NAME(OAuthentificationPageSetup)
         , m_aCBPasswordRequired     (this, ModuleRes(CB_GENERALPASSWORDREQUIRED))
         , m_aPBTestConnection       (this, ModuleRes(PB_TESTCONNECTION))
     {
-        DBG_CTOR(OAuthentificationPageSetup,NULL);
 
         SetControlFontWeight(&m_aFTHeaderText);
         m_aETUserName.SetModifyHdl(getControlModifiedLink());
@@ -714,7 +703,6 @@ DBG_NAME(OAuthentificationPageSetup)
     OAuthentificationPageSetup::~OAuthentificationPageSetup()
     {
 
-        DBG_DTOR(OAuthentificationPageSetup,NULL);
     }
 
     void OAuthentificationPageSetup::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
@@ -763,7 +751,6 @@ DBG_NAME(OAuthentificationPageSetup)
         return ( new OFinalDBPageSetup( pParent, _rAttrSet) );
     }
 
-DBG_NAME(OFinalDBPageSetup)
 
     OFinalDBPageSetup::OFinalDBPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs )
     :OGenericAdministrationPage(pParent, ModuleRes(PAGE_DBWIZARD_FINAL), _rCoreAttrs )
@@ -776,7 +763,6 @@ DBG_NAME(OFinalDBPageSetup)
     , m_aCBStartTableWizard         (this, ModuleRes(CB_STARTTABLEWIZARD))
     , m_aFTFinalText                (this, ModuleRes(FT_FINALTEXT))
     {
-        DBG_CTOR(OFinalDBPageSetup,NULL);
 
         SetControlFontWeight(&m_aFTFinalHeader);
         m_aCBOpenAfterwards.SetClickHdl(LINK(this, OFinalDBPageSetup, OnOpenSelected));
@@ -816,7 +802,6 @@ DBG_NAME(OFinalDBPageSetup)
     OFinalDBPageSetup::~OFinalDBPageSetup()
     {
 
-        DBG_DTOR(OFinalDBPageSetup,NULL);
     }
 
     sal_Bool OFinalDBPageSetup::IsDatabaseDocumentToBeRegistered()

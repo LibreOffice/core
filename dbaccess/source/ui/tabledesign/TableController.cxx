@@ -138,14 +138,12 @@ Reference< XInterface > SAL_CALL OTableController::Create(const Reference<XMulti
     return *(new OTableController(comphelper::getComponentContext(_rxFactory)));
 }
 
-DBG_NAME(OTableController)
 OTableController::OTableController(const Reference< XComponentContext >& _rM) : OTableController_BASE(_rM)
     ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
     ,m_pTypeInfo()
     ,m_bAllowAutoIncrementValue(sal_False)
     ,m_bNew(sal_True)
 {
-    DBG_CTOR(OTableController,NULL);
 
     InvalidateAll();
     m_pTypeInfo = TOTypeInfoSP(new OTypeInfo());
@@ -157,7 +155,6 @@ OTableController::~OTableController()
     m_aTypeInfoIndex.clear();
     m_aTypeInfo.clear();
 
-    DBG_DTOR(OTableController,NULL);
 }
 
 void OTableController::startTableListening()

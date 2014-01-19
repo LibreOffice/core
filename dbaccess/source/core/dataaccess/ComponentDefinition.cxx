@@ -74,20 +74,16 @@ public:
     void clear() { m_pComponent = NULL; }
 };
 
-DBG_NAME(OComponentDefinition_Impl)
 OComponentDefinition_Impl::OComponentDefinition_Impl()
 {
-    DBG_CTOR(OComponentDefinition_Impl,NULL);
 }
 
 OComponentDefinition_Impl::~OComponentDefinition_Impl()
 {
-    DBG_DTOR(OComponentDefinition_Impl,NULL);
 }
 
 // OComponentDefinition
 
-DBG_NAME(OComponentDefinition)
 
 void OComponentDefinition::initialize( const Sequence< Any >& aArguments ) throw(Exception)
 {
@@ -132,13 +128,11 @@ OComponentDefinition::OComponentDefinition(const Reference< XComponentContext >&
     ,ODataSettings(OContentHelper::rBHelper,!_bTable)
     ,m_bTable(_bTable)
 {
-    DBG_CTOR(OComponentDefinition, NULL);
     registerProperties();
 }
 
 OComponentDefinition::~OComponentDefinition()
 {
-    DBG_DTOR(OComponentDefinition, NULL);
 }
 
 OComponentDefinition::OComponentDefinition( const Reference< XInterface >& _rxContainer
@@ -150,7 +144,6 @@ OComponentDefinition::OComponentDefinition( const Reference< XInterface >& _rxCo
     ,ODataSettings(OContentHelper::rBHelper,!_bTable)
     ,m_bTable(_bTable)
 {
-    DBG_CTOR(OComponentDefinition, NULL);
     registerProperties();
 
     m_pImpl->m_aProps.aTitle = _rElementName;
