@@ -193,7 +193,7 @@ void DrawingML::WriteSolidFill( Reference< XPropertySet > rXPropSet )
 
     // get InteropGrabBag and search the relevant attributes
     OUString sColorFillScheme;
-    sal_uInt32 nOriginalColor;
+    sal_uInt32 nOriginalColor = 0;
     Sequence< PropertyValue > aStyleProperties;
     if ( GetProperty( rXPropSet, "InteropGrabBag" ) )
     {
@@ -217,7 +217,7 @@ void DrawingML::WriteSolidFill( Reference< XPropertySet > rXPropSet )
         WriteSolidFill( sColorFillScheme );
     else if ( aStyleProperties.hasElements() )
     {
-        sal_uInt32 nThemeColor;
+        sal_uInt32 nThemeColor = 0;
         for( sal_Int32 i=0; i < aStyleProperties.getLength(); ++i )
             if( aStyleProperties[i].Name == "Color" )
             {
