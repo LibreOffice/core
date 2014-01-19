@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_74b026f5",
+        "filename": "vcl/source/filter/igif/gifread.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-19T10:34:59Z",
+      "side": 1,
+      "message": "This should be still Netscape in English (browser name)",
+      "range": {
+        "startLine": 274,
+        "startChar": 35,
+        "endLine": 274,
+        "endChar": 44
+      },
+      "revId": "a238f819eb6f4dfdac25bbbf62ab8d86313fe353",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
