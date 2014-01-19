@@ -27,6 +27,7 @@
 #include "oox/vml/vmldrawingfragment.hxx"
 #include "oox/vml/vmlshape.hxx"
 #include "oox/drawingml/themefragmenthandler.hxx"
+#include <boost/scoped_ptr.hpp>
 
 namespace oox { namespace shape {
 
@@ -103,10 +104,10 @@ uno::Reference<xml::sax::XFastContextHandler> ShapeContextHandler::getChartShape
         {
             case XML_chart:
             {
-                ContextHandler2Helper *rFragmentHandler
-                            (new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
+                boost::scoped_ptr<ContextHandler2Helper> pFragmentHandler(
+                        new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
                 mpShape.reset(new Shape("com.sun.star.drawing.OLE2Shape" ));
-                mxChartShapeContext.set(new ChartGraphicDataContext(*rFragmentHandler, mpShape, true));
+                mxChartShapeContext.set(new ChartGraphicDataContext(*pFragmentHandler, mpShape, true));
                 break;
             }
             default:
