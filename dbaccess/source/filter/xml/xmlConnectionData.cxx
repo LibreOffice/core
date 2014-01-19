@@ -35,7 +35,6 @@ namespace dbaxml
 {
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
-DBG_NAME(OXMLConnectionData)
 
 OXMLConnectionData::OXMLConnectionData( ODBFilter& rImport,
                 sal_uInt16 nPrfx, const OUString& _sLocalName) :
@@ -43,13 +42,11 @@ OXMLConnectionData::OXMLConnectionData( ODBFilter& rImport,
     ,m_bFoundOne(false)
 {
     rImport.setNewFormat(true);
-    DBG_CTOR(OXMLConnectionData,NULL);
 }
 
 OXMLConnectionData::~OXMLConnectionData()
 {
 
-    DBG_DTOR(OXMLConnectionData,NULL);
 }
 
 SvXMLImportContext* OXMLConnectionData::CreateChildContext(

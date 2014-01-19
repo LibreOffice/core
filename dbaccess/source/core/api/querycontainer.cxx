@@ -58,7 +58,6 @@ namespace dbaccess
 {
 
 // OQueryContainer
-DBG_NAME(OQueryContainer)
 
 OQueryContainer::OQueryContainer(
                   const Reference< XNameContainer >& _rxCommandDefinitions
@@ -70,7 +69,6 @@ OQueryContainer::OQueryContainer(
     ,m_xCommandDefinitions(_rxCommandDefinitions)
     ,m_xConnection(_rxConn)
 {
-    DBG_CTOR(OQueryContainer, NULL);
 }
 
 void OQueryContainer::init()
@@ -110,7 +108,6 @@ rtl::Reference<OQueryContainer> OQueryContainer::create(
 
 OQueryContainer::~OQueryContainer()
 {
-    DBG_DTOR(OQueryContainer, NULL);
     //  dispose();
         //  maybe we're already disposed, but this should be uncritical
 }

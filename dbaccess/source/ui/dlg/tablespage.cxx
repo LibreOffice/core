@@ -70,8 +70,6 @@ namespace dbaui
     using namespace ::comphelper;
 
     // OTableSubscriptionPage
-DBG_NAME(OTableSubscriptionPage)
-
     OTableSubscriptionPage::OTableSubscriptionPage(Window* pParent, const SfxItemSet& _rCoreAttrs,
         OTableSubscriptionDialog* _pTablesDlg)
         : OGenericAdministrationPage(pParent, "TablesFilterPage",
@@ -84,8 +82,6 @@ DBG_NAME(OTableSubscriptionPage)
         get(m_pTablesList, "treeview");
         m_pTablesList->set_width_request(56 * m_pTablesList->approximate_char_width());
         m_pTablesList->set_height_request(12 * m_pTablesList->GetTextHeight());
-
-        DBG_CTOR(OTableSubscriptionPage,NULL);
 
         m_pTablesList->SetCheckHandler(getControlModifiedLink());
 
@@ -110,7 +106,6 @@ DBG_NAME(OTableSubscriptionPage)
         }
         catch (RuntimeException&) { }
 
-        DBG_DTOR(OTableSubscriptionPage,NULL);
     }
 
     void OTableSubscriptionPage::StateChanged( StateChangedType nType )

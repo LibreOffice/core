@@ -87,7 +87,6 @@ void SAL_CALL LocalNameApproval::approveElement( const OUString& _rName, const R
 }
 
 // ODocumentContainer
-DBG_NAME(ODocumentContainer)
 
 ODocumentContainer::ODocumentContainer(const Reference< XComponentContext >& _xORB
                                     ,const Reference< XInterface >& _xParentContainer
@@ -98,7 +97,6 @@ ODocumentContainer::ODocumentContainer(const Reference< XComponentContext >& _xO
     ,OPropertyStateContainer(OContentHelper::rBHelper)
     ,m_bFormsContainer(_bFormsContainer)
 {
-    DBG_CTOR(ODocumentContainer, NULL);
     registerProperty(PROPERTY_NAME, PROPERTY_ID_NAME, PropertyAttribute::BOUND | PropertyAttribute::READONLY | PropertyAttribute::CONSTRAINED,
                     &m_pImpl->m_aProps.aTitle, ::getCppuType(&m_pImpl->m_aProps.aTitle));
 
@@ -107,7 +105,6 @@ ODocumentContainer::ODocumentContainer(const Reference< XComponentContext >& _xO
 
 ODocumentContainer::~ODocumentContainer()
 {
-    DBG_DTOR(ODocumentContainer, NULL);
 
     if ( !OContentHelper::rBHelper.bInDispose && !OContentHelper::rBHelper.bDisposed )
     {

@@ -88,7 +88,6 @@ namespace dbaui
     using namespace ::dbtools;
     using namespace ::svt;
 
-DBG_NAME(OConnectionHelper)
 
     OConnectionHelper::OConnectionHelper( Window* pParent, const ResId& _rId, const SfxItemSet& _rCoreAttrs)
         :OGenericAdministrationPage(pParent, _rId, _rCoreAttrs)
@@ -97,7 +96,6 @@ DBG_NAME(OConnectionHelper)
         ,m_aPB_Connection   ( this, ResId( PB_AUTOBROWSEURL, *_rId.GetResMgr() ) )
         ,m_aPB_CreateDB     ( this, ResId( PB_CREATEDB, *_rId.GetResMgr() ) )
     {
-        DBG_CTOR(OConnectionHelper,NULL);
 
         // extract the datasource type collection from the item set
         DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rCoreAttrs.GetItem(DSID_TYPECOLLECTION));
@@ -112,7 +110,6 @@ DBG_NAME(OConnectionHelper)
     OConnectionHelper::~OConnectionHelper()
     {
 
-        DBG_DTOR(OConnectionHelper,NULL);
     }
 
     void OConnectionHelper::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)

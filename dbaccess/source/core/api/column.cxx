@@ -61,14 +61,12 @@ using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
 
-DBG_NAME(OColumn)
 
 // OColumn
 OColumn::OColumn( const bool _bNameIsReadOnly )
         :OColumnBase( m_aMutex )
         ,::comphelper::OPropertyContainer( OColumnBase::rBHelper )
 {
-    DBG_CTOR(OColumn, NULL);
 
     registerProperty( PROPERTY_NAME, PROPERTY_ID_NAME, _bNameIsReadOnly ? PropertyAttribute::READONLY : 0,
         &m_sName, ::getCppuType( &m_sName ) );
@@ -76,7 +74,6 @@ OColumn::OColumn( const bool _bNameIsReadOnly )
 
 OColumn::~OColumn()
 {
-    DBG_DTOR(OColumn, NULL);
 }
 
 // com::sun::star::lang::XTypeProvider
@@ -152,7 +149,6 @@ void OColumn::registerPropertyNoMember( const OUString& _rName, sal_Int32 _nHand
 }
 
 // OColumns
-DBG_NAME(OColumns);
 
 OColumns::OColumns(::cppu::OWeakObject& _rParent,
                    ::osl::Mutex& _rMutex,
@@ -171,7 +167,6 @@ OColumns::OColumns(::cppu::OWeakObject& _rParent,
     ,m_bAddColumn(_bAddColumn)
     ,m_bDropColumn(_bDropColumn)
 {
-    DBG_CTOR(OColumns, NULL);
 }
 
 OColumns::OColumns(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
@@ -191,12 +186,10 @@ OColumns::OColumns(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
     ,m_bAddColumn(_bAddColumn)
     ,m_bDropColumn(_bDropColumn)
 {
-    DBG_CTOR(OColumns, NULL);
 }
 
 OColumns::~OColumns()
 {
-    DBG_DTOR(OColumns, NULL);
 }
 
 // XServiceInfo

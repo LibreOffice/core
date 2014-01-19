@@ -34,7 +34,6 @@ using namespace ::com::sun::star::util;
 //--- Defines
 #define HANDLE_ID 0
 
-DBG_NAME(OTableRowView)
 OTableRowView::OTableRowView(Window* pParent)
     :EditBrowseBox(pParent, ModuleRes(RID_DB_TAB_EDITOR),EBBF_NONE,
                     BROWSER_COLUMNSELECTION | BROWSER_MULTISELECTION | BROWSER_AUTOSIZE_LASTCOL |
@@ -46,14 +45,12 @@ OTableRowView::OTableRowView(Window* pParent)
     ,m_bUpdatable(sal_False)
     ,m_bClipboardFilled(sal_False)
 {
-    DBG_CTOR(OTableRowView,NULL);
 
 }
 
 OTableRowView::~OTableRowView()
 {
 
-    DBG_DTOR(OTableRowView,NULL);
 }
 
 void OTableRowView::Init()

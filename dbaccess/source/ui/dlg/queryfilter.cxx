@@ -62,7 +62,6 @@ void Replace_SQL_PlaceHolder(OUString& aString)
     aString = aString.replaceAll( "_", "?" );
 }
 
-DBG_NAME(DlgFilterCrit);
 
 DlgFilterCrit::DlgFilterCrit(Window * pParent,
                              const Reference< XComponentContext >& rxContext,
@@ -98,7 +97,6 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
     ,m_xMetaData( _rxConnection->getMetaData() )
     ,m_aPredicateInput( rxContext, _rxConnection, getParseContext() )
 {
-    DBG_CTOR(DlgFilterCrit,NULL);
     // Write the String for noEntry into the ListBoxes of the field names
     aLB_WHEREFIELD1.InsertEntry( aSTR_NOENTRY );
     aLB_WHEREFIELD2.InsertEntry( aSTR_NOENTRY );
@@ -201,7 +199,6 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
 
 DlgFilterCrit::~DlgFilterCrit()
 {
-    DBG_DTOR(DlgFilterCrit,NULL);
 }
 
 #define LbText(x)       ((x).GetSelectEntry())
@@ -466,7 +463,6 @@ IMPL_LINK( DlgFilterCrit, PredicateLoseFocus, Edit*, _pField )
 
 void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Bool _bOr  )
 {
-    DBG_CHKTHIS(DlgFilterCrit,NULL);
     OUString aCondition;
     _rItem.Value >>= aCondition;
     OUString aStr = aCondition;
@@ -563,7 +559,6 @@ void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Boo
 
 void DlgFilterCrit::SelectField( ListBox& rBox, const OUString& rField )
 {
-    DBG_CHKTHIS(DlgFilterCrit,NULL);
     sal_uInt16 nCnt = rBox.GetEntryCount();
 
     for( sal_uInt16 i=0 ; i<nCnt ; i++ )
@@ -580,7 +575,6 @@ void DlgFilterCrit::SelectField( ListBox& rBox, const OUString& rField )
 
 void DlgFilterCrit::EnableLines()
 {
-    DBG_CHKTHIS(DlgFilterCrit,NULL);
     // enabling/disabling of whole lines
     if( LbPos(aLB_WHEREFIELD1) == 0 )
     {
@@ -749,7 +743,6 @@ IMPL_LINK_INLINE_END( DlgFilterCrit, ListSelectCompHdl, ListBox *, pListBox )
 
 void DlgFilterCrit::BuildWherePart()
 {
-    DBG_CHKTHIS(DlgFilterCrit,NULL);
     Sequence<Sequence<PropertyValue> > aFilter,aHaving;
     aFilter.realloc(1);
     aHaving.realloc(1);

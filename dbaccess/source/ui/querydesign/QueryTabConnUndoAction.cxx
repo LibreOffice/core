@@ -27,10 +27,8 @@
 
 using namespace dbaui;
 
-DBG_NAME(OQueryTabConnUndoAction)
 OQueryTabConnUndoAction::~OQueryTabConnUndoAction()
 {
-    DBG_DTOR(OQueryTabConnUndoAction,NULL);
     if (m_bOwnerOfConn)
     {   // I have the connection -> delete
         m_pOwner->DeselectConn(m_pConnection);
@@ -43,7 +41,6 @@ OQueryTabConnUndoAction::OQueryTabConnUndoAction(OQueryTableView* pOwner, sal_uI
     ,m_pConnection(NULL)
     ,m_bOwnerOfConn(sal_False)
 {
-    DBG_CTOR(OQueryTabConnUndoAction,NULL);
 }
 
 OQueryAddTabConnUndoAction::OQueryAddTabConnUndoAction(OQueryTableView* pOwner)

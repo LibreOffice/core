@@ -49,12 +49,10 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace dbaui;
 // class OQueryTableWindow
-DBG_NAME(OQueryTableWindow)
 OQueryTableWindow::OQueryTableWindow( Window* pParent, const TTableWindowData::value_type& pTabWinData, sal_Unicode* pszInitialAlias)
     :OTableWindow( pParent, pTabWinData )
     ,m_nAliasNum(0)
 {
-    DBG_CTOR(OQueryTableWindow,NULL);
     if (pszInitialAlias != NULL)
         m_strInitialAlias = OUString(pszInitialAlias);
     else
@@ -70,7 +68,6 @@ OQueryTableWindow::OQueryTableWindow( Window* pParent, const TTableWindowData::v
 
 OQueryTableWindow::~OQueryTableWindow()
 {
-    DBG_DTOR(OQueryTableWindow,NULL);
 }
 
 sal_Bool OQueryTableWindow::Init()

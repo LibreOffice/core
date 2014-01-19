@@ -107,7 +107,6 @@ bool VosMutexFacade::tryToAcquire()
 }
 
 // DocumentStorageAccess
-DBG_NAME( DocumentStorageAccess )
 class DocumentStorageAccess : public ::cppu::WeakImplHelper2<   XDocumentSubStorageSupplier
                                                             ,   XTransactionListener >
 {
@@ -126,13 +125,11 @@ public:
         ,m_bPropagateCommitToRoot( true )
         ,m_bDisposingSubStorages( false )
     {
-        DBG_CTOR( DocumentStorageAccess, NULL );
     }
 
 protected:
     ~DocumentStorageAccess()
     {
-        DBG_DTOR( DocumentStorageAccess, NULL );
     }
 
 public:
@@ -392,7 +389,6 @@ void SAL_CALL DocumentStorageAccess::disposing( const css::lang::EventObject& So
 }
 
 // ODatabaseModelImpl
-DBG_NAME(ODatabaseModelImpl)
 
 ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XComponentContext >& _rxContext, ODatabaseContext& _rDBContext )
             :m_xModel()
@@ -419,7 +415,6 @@ ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XComponentContext >& _r
             ,m_nControllerLockCount(0)
 {
     // some kind of default
-    DBG_CTOR(ODatabaseModelImpl,NULL);
     m_sConnectURL = "jdbc:";
     m_aTableFilter.realloc(1);
     m_aTableFilter[0] = "%";
@@ -455,13 +450,11 @@ ODatabaseModelImpl::ODatabaseModelImpl(
             ,m_pSharedConnectionManager(NULL)
             ,m_nControllerLockCount(0)
 {
-    DBG_CTOR(ODatabaseModelImpl,NULL);
     impl_construct_nothrow();
 }
 
 ODatabaseModelImpl::~ODatabaseModelImpl()
 {
-    DBG_DTOR(ODatabaseModelImpl,NULL);
 }
 
 void ODatabaseModelImpl::impl_construct_nothrow()

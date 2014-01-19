@@ -58,21 +58,18 @@ Any SAL_CALL SbaExternalSourceBrowser::queryInterface(const Type& _rType) throw 
     return aRet;
 }
 
-DBG_NAME(SbaExternalSourceBrowser)
 SbaExternalSourceBrowser::SbaExternalSourceBrowser(const Reference< ::com::sun::star::uno::XComponentContext >& _rM)
     :SbaXDataBrowserController(_rM)
     ,m_aModifyListeners(getMutex())
     ,m_pDataSourceImpl(NULL)
     ,m_bInQueryDispatch( sal_False )
 {
-    DBG_CTOR(SbaExternalSourceBrowser,NULL);
 
 }
 
 SbaExternalSourceBrowser::~SbaExternalSourceBrowser()
 {
 
-    DBG_DTOR(SbaExternalSourceBrowser,NULL);
 }
 
 ::comphelper::StringSequence SAL_CALL SbaExternalSourceBrowser::getSupportedServiceNames() throw(RuntimeException)

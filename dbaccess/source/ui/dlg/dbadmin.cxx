@@ -48,7 +48,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
 // ODbAdminDialog
-DBG_NAME(ODbAdminDialog)
 ODbAdminDialog::ODbAdminDialog(Window* _pParent
                                , SfxItemSet* _pItems
                                , const Reference< XComponentContext >& _rxContext
@@ -58,7 +57,6 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent
     ,m_bUIEnabled( sal_True )
     ,m_nMainPageID( PAGE_CONNECTION )
 {
-    DBG_CTOR(ODbAdminDialog,NULL);
 
     m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxContext,this,this));
 
@@ -76,7 +74,6 @@ ODbAdminDialog::~ODbAdminDialog()
     SetInputSet(NULL);
     DELETEZ(pExampleSet);
 
-    DBG_DTOR(ODbAdminDialog,NULL);
 }
 
 short ODbAdminDialog::Ok()

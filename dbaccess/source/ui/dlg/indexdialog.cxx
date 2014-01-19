@@ -153,7 +153,6 @@ namespace dbaui
     }
 
     // DbaIndexDialog
-DBG_NAME(DbaIndexDialog)
     DbaIndexDialog::DbaIndexDialog( Window* _pParent, const Sequence< OUString >& _rFieldNames,
                                     const Reference< XNameAccess >& _rxIndexes,
                                     const Reference< XConnection >& _rxConnection,
@@ -176,7 +175,6 @@ DBG_NAME(DbaIndexDialog)
         ,m_bEditAgain(sal_False)
         ,m_xContext(_rxContext)
     {
-        DBG_CTOR(DbaIndexDialog,NULL);
 
         FreeResource();
 
@@ -304,7 +302,6 @@ DBG_NAME(DbaIndexDialog)
         delete m_pIndexes;
         delete m_pFields;
 
-        DBG_DTOR(DbaIndexDialog,NULL);
     }
 
     sal_Bool DbaIndexDialog::implCommit(SvTreeListEntry* _pEntry)

@@ -26,7 +26,6 @@
 namespace dbaui
 {
 
-DBG_NAME(OTitleWindow)
 OTitleWindow::OTitleWindow(Window* _pParent,sal_uInt16 _nTitleId,WinBits _nBits,sal_Bool _bShift)
 : Window(_pParent,_nBits | WB_DIALOGCONTROL)
 , m_aSpace1(this)
@@ -35,7 +34,6 @@ OTitleWindow::OTitleWindow(Window* _pParent,sal_uInt16 _nTitleId,WinBits _nBits,
 , m_pChild(NULL)
 , m_bShift(_bShift)
 {
-    DBG_CTOR(OTitleWindow,NULL);
 
     setTitle(_nTitleId);
     SetBorderStyle(WINDOW_BORDER_MONO);
@@ -55,7 +53,6 @@ OTitleWindow::~OTitleWindow()
         m_pChild = NULL;
     }
 
-    DBG_DTOR(OTitleWindow,NULL);
 }
 
 void OTitleWindow::setChildWindow(Window* _pChild)

@@ -103,12 +103,10 @@ typedef SQLRETURN (SQL_API* TSQLDataSources) (SQLHENV EnvironmentHandle, SQLUSMA
 #endif
 
 // OOdbcLibWrapper
-DBG_NAME(OOdbcLibWrapper)
 #ifdef HAVE_ODBC_SUPPORT
 OOdbcLibWrapper::OOdbcLibWrapper()
     :m_pOdbcLib(NULL)
 {
-    DBG_CTOR(OOdbcLibWrapper,NULL);
 
 }
 
@@ -146,7 +144,6 @@ OOdbcLibWrapper::~OOdbcLibWrapper()
 {
     unload();
 
-    DBG_DTOR(OOdbcLibWrapper,NULL);
 }
 
 // OOdbcEnumeration
@@ -160,7 +157,6 @@ struct OdbcTypesImpl
 #endif
 };
 
-DBG_NAME(OOdbcEnumeration)
 OOdbcEnumeration::OOdbcEnumeration()
 #ifdef HAVE_ODBC_SUPPORT
     :m_pAllocHandle(NULL)
@@ -169,7 +165,6 @@ OOdbcEnumeration::OOdbcEnumeration()
     ,m_pImpl(new OdbcTypesImpl)
 #endif
 {
-    DBG_CTOR(OOdbcEnumeration,NULL);
 
     sal_Bool bLoaded = load(ODBC_LIBRARY);
 #ifdef ODBC_LIBRARY_1
@@ -201,7 +196,6 @@ OOdbcEnumeration::~OOdbcEnumeration()
     freeEnv();
     delete m_pImpl;
 
-    DBG_DTOR(OOdbcEnumeration,NULL);
 }
 
 sal_Bool OOdbcEnumeration::allocEnv()

@@ -23,14 +23,12 @@
 
 // OAsyncronousLink
 using namespace dbaui;
-DBG_NAME(OAsyncronousLink)
 OAsyncronousLink::OAsyncronousLink( const Link& _rHandler )
     :m_aHandler(_rHandler)
     ,m_aEventSafety()
     ,m_aDestructionSafety()
     ,m_nEventId(0)
 {
-    DBG_CTOR(OAsyncronousLink,NULL);
 }
 
 OAsyncronousLink::~OAsyncronousLink()
@@ -49,7 +47,6 @@ OAsyncronousLink::~OAsyncronousLink()
         // link handler blocked. With leaving the above block it continued, but now we are prevented
         // to leave this destructor 'til the link handler recognizes that nEvent == 0 and leaves.
     }
-    DBG_DTOR(OAsyncronousLink,NULL);
 }
 
 void OAsyncronousLink::Call( void* _pArgument )

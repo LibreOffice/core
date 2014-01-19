@@ -284,7 +284,6 @@ private:
 };
 
 // OApplicationController
-DBG_NAME(OApplicationController)
 OApplicationController::OApplicationController(const Reference< XComponentContext >& _rxORB)
     :OApplicationController_CBASE( _rxORB )
     ,m_aContextMenuInterceptors( getMutex() )
@@ -300,7 +299,6 @@ OApplicationController::OApplicationController(const Reference< XComponentContex
     ,m_bSuspended( sal_False )
     ,m_pSelectionNotifier( new SelectionNotifier( getMutex(), *this ) )
 {
-    DBG_CTOR(OApplicationController,NULL);
 }
 
 OApplicationController::~OApplicationController()
@@ -317,7 +315,6 @@ OApplicationController::~OApplicationController()
     SAL_WNODEPRECATED_DECLARATIONS_POP
     clearView();
 
-    DBG_DTOR(OApplicationController,NULL);
 }
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2(OApplicationController,OApplicationController_CBASE,OApplicationController_Base)

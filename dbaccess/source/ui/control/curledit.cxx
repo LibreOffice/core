@@ -23,7 +23,6 @@
 
 namespace dbaui
 {
-    DBG_NAME(OConnectionURLEdit)
 // OConnectionURLEdit
 OConnectionURLEdit::OConnectionURLEdit(Window* _pParent, const ResId& _rResId,sal_Bool _bShowPrefix)
     :Edit(_pParent, _rResId)
@@ -31,12 +30,10 @@ OConnectionURLEdit::OConnectionURLEdit(Window* _pParent, const ResId& _rResId,sa
     ,m_pForcedPrefix(NULL)
     ,m_bShowPrefix(_bShowPrefix)
 {
-    DBG_CTOR(OConnectionURLEdit ,NULL);
 }
 
 OConnectionURLEdit::~OConnectionURLEdit()
 {
-    DBG_DTOR(OConnectionURLEdit ,NULL);
     // delete my sub controls
     Edit* pSubEdit = GetSubEdit();
     SetSubEdit(NULL);

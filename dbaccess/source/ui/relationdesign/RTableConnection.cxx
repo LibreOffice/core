@@ -25,29 +25,24 @@
 
 using namespace dbaui;
 // class ORelationTableConnection
-DBG_NAME(ORelationTableConnection)
 ORelationTableConnection::ORelationTableConnection( ORelationTableView* pContainer,
                                                    const TTableConnectionData::value_type& pTabConnData )
     :OTableConnection( pContainer, pTabConnData )
 {
-    DBG_CTOR(ORelationTableConnection,NULL);
 }
 
 ORelationTableConnection::ORelationTableConnection( const ORelationTableConnection& rConn )
     : OTableConnection( rConn )
 {
-    DBG_CTOR(ORelationTableConnection,NULL);
     // keine eigenen Members, also reicht die Basisklassenfunktionalitaet
 }
 
 ORelationTableConnection::~ORelationTableConnection()
 {
-    DBG_DTOR(ORelationTableConnection,NULL);
 }
 
 ORelationTableConnection& ORelationTableConnection::operator=( const ORelationTableConnection& rConn )
 {
-    DBG_CHKTHIS(ORelationTableConnection,NULL);
     // nicht dass es was aendern wuerde, da die Basisklasse das auch testet und ich keine eigenen Members zu kopieren habe
     if (&rConn == this)
         return *this;
@@ -58,7 +53,6 @@ ORelationTableConnection& ORelationTableConnection::operator=( const ORelationTa
 
 void ORelationTableConnection::Draw( const Rectangle& rRect )
 {
-    DBG_CHKTHIS(ORelationTableConnection,NULL);
     OTableConnection::Draw( rRect );
     ORelationTableConnectionData* pData = static_cast< ORelationTableConnectionData* >(GetData().get());
     if ( pData && (pData->GetCardinality() == CARDINAL_UNDEFINED) )

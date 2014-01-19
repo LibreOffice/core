@@ -23,16 +23,13 @@
 #define LISTBOX_SCROLLING_AREA  12
 namespace dbaui
 {
-DBG_NAME(OScrollHelper)
 
     OScrollHelper::OScrollHelper()
     {
-        DBG_CTOR(OScrollHelper,NULL);
     }
     OScrollHelper::~OScrollHelper()
     {
 
-        DBG_DTOR(OScrollHelper,NULL);
     }
     void OScrollHelper::scroll(const Point& _rPoint, const Size& _rOutputSize)
     {

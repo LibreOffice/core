@@ -53,11 +53,9 @@ namespace dbaui
     using namespace ::com::sun::star::sdb;
 
     // ComposerDialog
-    DBG_NAME(ComposerDialog)
     ComposerDialog::ComposerDialog(const Reference< XComponentContext >& _rxORB)
         :OGenericUnoDialog( _rxORB )
     {
-        DBG_CTOR(ComposerDialog,NULL);
 
         registerProperty( PROPERTY_QUERYCOMPOSER, PROPERTY_ID_QUERYCOMPOSER, PropertyAttribute::TRANSIENT,
             &m_xComposer, ::getCppuType( &m_xComposer ) );
@@ -68,7 +66,6 @@ namespace dbaui
     ComposerDialog::~ComposerDialog()
     {
 
-        DBG_DTOR(ComposerDialog,NULL);
     }
 
     IMPLEMENT_IMPLEMENTATION_ID( ComposerDialog )

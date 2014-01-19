@@ -94,7 +94,6 @@ namespace
 }
 
 // OTableContainer
-DBG_NAME(OTableContainer)
 
 OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent,
                                  ::osl::Mutex& _rMutex,
@@ -109,13 +108,11 @@ OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent,
     ,m_pTableMediator( NULL )
     ,m_bInDrop(sal_False)
 {
-    DBG_CTOR(OTableContainer, NULL);
 }
 
 OTableContainer::~OTableContainer()
 {
    SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::OTableContainer" );
-    DBG_DTOR(OTableContainer, NULL);
 }
 
 void OTableContainer::removeMasterContainerListener()

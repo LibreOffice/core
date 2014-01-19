@@ -64,14 +64,12 @@ private:
     OSqlEdit & editor_;
 };
 
-DBG_NAME(OSqlEdit)
 OSqlEdit::OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle ) :
     MultiLineEditSyntaxHighlight( pParent, nWinStyle )
     ,m_pView(pParent)
     ,m_bAccelAction( sal_False )
     ,m_bStopTimer(sal_False )
 {
-    DBG_CTOR(OSqlEdit,NULL);
     SetHelpId( HID_CTL_QRYSQLEDIT );
     SetModifyHdl( LINK(this, OSqlEdit, ModifyHdl) );
 
@@ -106,7 +104,6 @@ OSqlEdit::OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle ) :
 
 OSqlEdit::~OSqlEdit()
 {
-    DBG_DTOR(OSqlEdit,NULL);
     if (m_timerUndoActionCreation.IsActive())
         m_timerUndoActionCreation.Stop();
     css::uno::Reference< css::beans::XMultiPropertySet > n;
@@ -122,7 +119,6 @@ OSqlEdit::~OSqlEdit()
 
 void OSqlEdit::KeyInput( const KeyEvent& rKEvt )
 {
-    DBG_CHKTHIS(OSqlEdit,NULL);
     OJoinController& rController = m_pView->getContainerWindow()->getDesignView()->getController();
     rController.InvalidateFeature(SID_CUT);
     rController.InvalidateFeature(SID_COPY);
@@ -140,7 +136,6 @@ void OSqlEdit::KeyInput( const KeyEvent& rKEvt )
 
 sal_Bool OSqlEdit::IsInAccelAct()
 {
-    DBG_CHKTHIS(OSqlEdit,NULL);
     // Cut, Copy, Paste by Accel. runs the action in the Edit but also the
     // corresponding slot in the View. Therefore, the action occurs twice.
     // To prevent this, SlotExec in View can call this function.
@@ -150,7 +145,6 @@ sal_Bool OSqlEdit::IsInAccelAct()
 
 void OSqlEdit::GetFocus()
 {
-    DBG_CHKTHIS(OSqlEdit,NULL);
     m_strOrigText  =GetText();
     MultiLineEditSyntaxHighlight::GetFocus();
 }
@@ -206,7 +200,6 @@ IMPL_LINK(OSqlEdit, ModifyHdl, void*, /*EMPTYTAG*/)
 
 void OSqlEdit::SetText(const OUString& rNewText)
 {
-    DBG_CHKTHIS(OSqlEdit,NULL);
     if (m_timerUndoActionCreation.IsActive())
     {   // create the trailing undo-actions
         m_timerUndoActionCreation.Stop();

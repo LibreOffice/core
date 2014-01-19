@@ -82,7 +82,6 @@ namespace
     }
 }
 
-DBG_NAME(OptimisticSet)
 
 OptimisticSet::OptimisticSet(const Reference<XComponentContext>& _rContext,
                              const Reference< XConnection>& i_xConnection,
@@ -96,12 +95,10 @@ OptimisticSet::OptimisticSet(const Reference<XComponentContext>& _rContext,
             ,m_bResultSetChanged(false)
 {
     SAL_INFO("dbaccess", "OptimisticSet::OptimisticSet" );
-    DBG_CTOR(OptimisticSet,NULL);
 }
 
 OptimisticSet::~OptimisticSet()
 {
-    DBG_DTOR(OptimisticSet,NULL);
 }
 
 void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const OUString& i_sRowSetFilter)

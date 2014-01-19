@@ -31,11 +31,9 @@ using namespace dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-DBG_NAME(OQueryViewSwitch)
 OQueryViewSwitch::OQueryViewSwitch(OQueryContainerWindow* _pParent, OQueryController& _rController,const Reference< XComponentContext >& _rxContext)
 : m_bAddTableDialogWasVisible(sal_False)
 {
-    DBG_CTOR(OQueryViewSwitch,NULL);
 
     m_pTextView     = new OQueryTextView(_pParent);
     m_pDesignView   = new OQueryDesignView( _pParent, _rController, _rxContext );
@@ -43,7 +41,6 @@ OQueryViewSwitch::OQueryViewSwitch(OQueryContainerWindow* _pParent, OQueryContro
 
 OQueryViewSwitch::~OQueryViewSwitch()
 {
-    DBG_DTOR(OQueryViewSwitch,NULL);
     {
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<Window> aTemp(m_pTextView);
