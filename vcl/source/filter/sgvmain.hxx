@@ -42,30 +42,30 @@ public:
 };
 
 struct Seitenformat {
-    PointType Size;       // 0.00mm...819.175mm (Papiergr"u"ue)
-    sal_Int16     RandL;      // links     Rand auf
-    sal_Int16     RandR;      // rechts    dem Papier
-    sal_Int16     RandO;      // oben      Rand auf
-    sal_Int16     RandU;      // unten     dem Papier
-    sal_uInt8      PColor;     // Future Use
-    sal_uInt8      PIntens;    // erst recht Future use
+    PointType        Size;        // 0.00mm...819.175mm (papersize)
+    sal_Int16        RandL;       // left     border on
+    sal_Int16        RandR;       // right    paper
+    sal_Int16        RandO;       // upper    border on
+    sal_Int16        RandU;       // lower    paper
+    sal_uInt8        PColor;      // future use
+    sal_uInt8        PIntens;     // future use
 };
 
 #define PageSize 146
 class PageType {
 public:
-    sal_uInt32       Next;       // N"uchste Seite
-    sal_uInt32       nList;      // Objektdaten, erster Record
-    sal_uInt32       ListEnd;    // Objektdaten, letzter Record
-    Seitenformat Paper;      // Papierdaten
-    sal_Bool         BorderClip; // Objekte am Rand abschneiden (Schummel wg. Allignment unter NT)
-    sal_uInt8         StdPg;      // welche Standardseite einblenden ?
-    PointType    U;          // Nullpunkt
-    sal_Int16        HlpLnH[20]; // Hilfslinien
+    sal_uInt32       Next;        // next page
+    sal_uInt32       nList;       // objectdata, first record
+    sal_uInt32       ListEnd;     // objectdata, last record
+    Seitenformat     Paper;       // data of paper
+    sal_Bool         BorderClip;  // clip objects at border (cheat due to alignment in NT)
+    sal_uInt8        StdPg;       // insert which standardpage ?
+    PointType        U;           // origin
+    sal_Int16        HlpLnH[20];  // guides
     sal_Int16        HlpLnV[20];
-    sal_uInt8         LnAnzH;
-    sal_uInt8         LnAnzV;
-    UCHAR        PgName[32]; // Seitenname
+    sal_uInt8        LnAnzH;
+    sal_uInt8        LnAnzV;
+    UCHAR            PgName[32];  // page name
     friend SvStream& operator>>(SvStream& rIStream, PageType& rPage);
 };
 
@@ -73,70 +73,70 @@ enum ObjArtType {ObjStrk,ObjRect,ObjPoly,ObjCirc,ObjSpln,
                  ObjText,ObjGrup,ObjBmap,ObjVirt,ObjTxtX,ObjMaxi};
 
 struct ObjLineType {
-    sal_uInt8  LFarbe;    //  [Index]
-    sal_uInt8  LBFarbe;   //  [Index]
-    sal_uInt8  LIntens;   //  [%]
-    sal_uInt8  LMuster;   //  [Index] inkl. Transparenz
-    sal_Int16 LMSize;    //  [Koeffizient/100]
-    sal_Int16 LDicke;    //  Strichst"urke
+    sal_uInt8   LFarbe;    //  [Index]
+    sal_uInt8   LBFarbe;   //  [Index]
+    sal_uInt8   LIntens;   //  [%]
+    sal_uInt8   LMuster;   //  [Index] including transparency
+    sal_Int16   LMSize;    //  [coefficient/100]
+    sal_Int16   LDicke;    //  line thickness
 };
 
 struct ObjAreaType {
-    sal_uInt8   FFarbe;   //  [Index]
-    sal_uInt8   FBFarbe;  //  [Index]
-    sal_uInt8   FIntens;  //  [%]
+    sal_uInt8   FFarbe;    //  [Index]
+    sal_uInt8   FBFarbe;   //  [Index]
+    sal_uInt8   FIntens;   //  [%]
     // Despite the "Dummy" in the name, and not being used anywhere in
     // the code, these two fields are *essential*. These structs are
     // 1:1 mappings of actual on-disk/wire file format structures...
     // So don't clean the "unused dummy" fields away. (Actually it
     // might well be that many other fields around here are never used
     // in our code either.)
-    sal_uInt8   FDummy1;  //
-    sal_Int16  FDummy2;  //
-    sal_uInt16 FMuster;  //  [Index] inkl. Invers, Transparenz
+    sal_uInt8   FDummy1;   //
+    sal_Int16   FDummy2;   //
+    sal_uInt16  FMuster;   //  [Index] incl. Invers, transparency
 };
 
 #define ObjTextTypeSize 64
 class ObjTextType {
 public:
-    ObjLineType  L;        // Text-Outline (future)
-    ObjAreaType  F;        // Text innen
-    sal_uInt16       FontLo,FontHi;// z.B. 92500 (CG Times), zweigeteilt wegen DWordAllign in TextType.
-    sal_uInt16       Grad;     // 0.5..32767.5 Pt - bei 1000 Pt sollte aber schlu"u sein
-    sal_uInt16       Breite;   // 1..65535%  bitte nicht mehr als 500%
-    sal_uInt8         Justify;  // 2 Bit Vert (Hi), 3 Bit Hor (Lo)
-    sal_uInt8         Kapit;    // 1..255%
-    sal_uInt16       Schnitt;  // 8 Flags
-    sal_uInt16       LnFeed;   // 1..32767% vom max. Schriftgrad der Zeile
-    sal_uInt16       Slant;    // Kursivwinkel 0.00..89.99"u default 15.00"u          doppelt Breit angesehen)
-    sal_uInt8         ZAbst;    // Zeichenabstand 0..255% (0=auf der Stelle; 100=normal; 200=Zeichen wird als
-    signed char         ChrVPos;  // Zeichen V-Position default 0= on Baseline, 10= 5Pt drunter (-64..63"u)
-    ObjLineType  ShdL;     // Schatten-Outline (neu 2.0)
-    ObjAreaType  ShdF;     // Schatten-innen   (neu 2.0)
-    PointType    ShdVers;  // Schattenversatz Max.300.00%
-    sal_Bool         ShdAbs;   // True-> Schattenversatz ist absolut statt relativ zum Schriftgrad
-    sal_Bool         NoSpc;    // True-> kein Zwischenraum (f"ur BackArea)
-    ObjAreaType  BackF;    // Hintergrundfl"uche
+    ObjLineType  L;             // text outline (future)
+    ObjAreaType  F;             // inner text
+    sal_uInt16   FontLo,FontHi; // e.g. 92500 (CG Times), split due to DWordAllign in TextType.
+    sal_uInt16   Grad;          // 0.5..32767.5 pt - we should stop at 1000 pt
+    sal_uInt16   Breite;        // 1..65535%  please not more as 500%
+    sal_uInt8    Justify;       // 2 bit vertical (Hi), 3 bit horizontal (Lo)
+    sal_uInt8    Kapit;         // 1..255%
+    sal_uInt16   Schnitt;       // 8 flags
+    sal_uInt16   LnFeed;        // 1..32767% of max font size of the line
+    sal_uInt16   Slant;         // slant angle 0.00..89.99deg default 15.00deg viewed double width)
+    sal_uInt8    ZAbst;         // character spacing 0..255% (0=on the line; 100=normal; 200=Zeichen wird als
+    signed char  ChrVPos;       // vertical position of char. Default 0=on baseline, 10=5Pt below (-64..63")
+    ObjLineType  ShdL;          // shadow outline (new 2.0)
+    ObjAreaType  ShdF;          // shadow inside  (new 2.0)
+    PointType    ShdVers;       // shadow offset max. 300.00%
+    sal_Bool     ShdAbs;        // True-> shadow offset is absolute instead of relative to font size
+    sal_Bool     NoSpc;         // True-> no space (for background area)
+    ObjAreaType  BackF;         // background area
     sal_uInt32 GetFont();
     void   SetFont(sal_uInt32 FontID);
 };
 
-class Obj0Type {           // SuperClass f"ur Apple-VMT
+class Obj0Type {                // SuperClass for Apple-VMT
 public:
     virtual void Draw(OutputDevice& rOut);
     virtual ~Obj0Type() {}
 };
 
-#define ObjkSize 20  /* eigentlich 21. Wg. Allignment ist Flags jedoch verschoben worden*/
-class ObjkType: public Obj0Type {  // Grundkomponenten aller Stardraw-Objekte
+#define ObjkSize 20                /* should be 21. due to allignment we shifted the flag */
+class ObjkType: public Obj0Type {  // basic componenents of all Stardraw objects
 public:
     sal_uInt32     Last;
     sal_uInt32     Next;
-    sal_uInt16     MemSize;    // in Bytes
-    PointType  ObjMin;     // XY-Minimum des Objekts
-    PointType  ObjMax;     // XY-Maximum des Objekts
-    sal_uInt8       Art;
-    sal_uInt8       Layer;
+    sal_uInt16     MemSize;    // in bytes
+    PointType      ObjMin;     // XY minimum of the object
+    PointType      ObjMax;     // XY maximum of the object
+    sal_uInt8      Art;
+    sal_uInt8      Layer;
     friend SvStream& operator>>(SvStream& rIStream, ObjkType& rObjk);
     friend sal_Bool ObjOverSeek(SvStream& rInp, ObjkType& rObjk);
     virtual void Draw(OutputDevice& rOut);
@@ -145,11 +145,11 @@ public:
 #define StrkSize 38
 class StrkType: public ObjkType {
 public:
-    sal_uInt8        Flags;     // (Schummel f"ur Allignment unter NT)
-    sal_uInt8        LEnden;    // Linienenden
-    ObjLineType L;
-    PointType   Pos1;      // Anfangspunkt
-    PointType   Pos2;      // Endpunkt
+    sal_uInt8       Flags;     // (cheat due to alignment in NT)
+    sal_uInt8       LEnden;    // line ends
+    ObjLineType     L;
+    PointType       Pos1;      // start point
+    PointType       Pos2;      // end point
     friend SvStream& operator>>(SvStream& rIStream, StrkType& rStrk);
     virtual void Draw(OutputDevice& rOut);
 };
@@ -157,13 +157,13 @@ public:
 #define RectSize 52
 class RectType: public ObjkType {
 public:
-    sal_uInt8        Flags;    // (Schummel f"ur Allignment unter NT)
-    sal_uInt8        Reserve;
-    ObjLineType L;
-    ObjAreaType F;
-    PointType   Pos1;      // LO-Ecke = Bezugspunkt
-    PointType   Pos2;      // R-Ecke
-    sal_Int16       Radius;    // Eckenradius
+    sal_uInt8       Flags;     // (cheat due to alignment in NT)
+    sal_uInt8       Reserve;
+    ObjLineType     L;
+    ObjAreaType     F;
+    PointType       Pos1;      // lower left corner = reference point
+    PointType       Pos2;      // right corner
+    sal_Int16       Radius;    // radius of corner
     sal_uInt16      DrehWink;  //  315...<45
     sal_uInt16      Slant;     // >270...<90
     friend SvStream& operator>>(SvStream& rIStream, RectType& rRect);
@@ -171,81 +171,81 @@ public:
 };
 
 #define PolySize 44
-class PolyType: public ObjkType { // identisch mit Spline !
+class PolyType: public ObjkType { // identical to spline !
 public:
-    sal_uInt8        Flags;    // (Schummel f"ur Allignment unter NT)
-    sal_uInt8        LEnden;  // nur f"ur Polyline
-    ObjLineType L;
-    ObjAreaType F;       // nicht f"ur Polyline
+    sal_uInt8        Flags;   // (cheat due to alignment in NT)
+    sal_uInt8        LEnden;  // only for polyline
+    ObjLineType      L;
+    ObjAreaType      F;       // not for polyline
     sal_uInt8        nPoints;
     sal_uInt8        Reserve;
-    sal_uInt32      SD_EckP; // Zeiger auf die Eckpunkte (StarDraw)
-    PointType*  EckP;    // Zeiger auf die Eckpunkte (StarView (wird nicht von Disk gelesen!))
+    sal_uInt32       SD_EckP; // pointer to corner point (StarDraw)
+    PointType*       EckP;    // pointer to corner points (StarView (is not read from disk!))
     friend SvStream& operator>>(SvStream& rIStream, PolyType& rPoly);
     virtual void Draw(OutputDevice& rOut);
 };
-#define  PolyClosBit 0x01   // Unterarten von Poly:   0: PolyLine  1: Polygon
+#define  PolyClosBit 0x01     // kinds of Poly:   0: polyLine  1: polygon
 
 #define SplnSize 44
-class SplnType: public ObjkType { // identisch mit Poly !
+class SplnType: public ObjkType { // identical to Poly !
 public:
-    sal_uInt8        Flags;    // (Schummel f"ur Allignment unter NT)
-    sal_uInt8        LEnden;  // nur f"ur nSpline
+    sal_uInt8        Flags;   // (cheat due to alignment in NT)
+    sal_uInt8        LEnden;  // only for nSpline
     ObjLineType L;
-    ObjAreaType F;       // nicht f"ur nSpline
+    ObjAreaType F;            // not for nSpline
     sal_uInt8        nPoints;
     sal_uInt8        Reserve;
-    sal_uInt32      SD_EckP; // Zeiger auf die Eckpunkte (StarDraw)
-    PointType*  EckP;    // Zeiger auf die Eckpunkte (StarView (wird nicht von Disk gelesen!))
+    sal_uInt32       SD_EckP; // pointer to corner points (StarDraw)
+    PointType*       EckP;    // pointer to corner points (StarView (is not read from disk!))
     friend SvStream& operator>>(SvStream& rIStream, SplnType& rSpln);
     virtual void Draw(OutputDevice& rOut);
 };
-// Unterarten von Spline: siehe Poly
+// kinds of Spline: see Poly
 
 #define CircSize 52
 class CircType: public ObjkType {
 public:
-    sal_uInt8        Flags;    // (Schummel f"ur Allignment unter NT)
-    sal_uInt8        LEnden;    // nur Bogen (Kr & El)
-    ObjLineType L;
-    ObjAreaType F;         // nicht f"ur Bogen (Kr & El)
-    PointType   Center;    // Mittelpunkt
-    PointType   Radius;    // Radius
-    sal_uInt16      DrehWink;  // nur Ellipse
-    sal_uInt16      StartWink; // "u nicht f"ur Vollkreis
-    sal_uInt16      RelWink;   // "u und Vollellipse
+    sal_uInt8       Flags;     // (cheat due to alignment in NT)
+    sal_uInt8       LEnden;    // only arcs (circle & ellips)
+    ObjLineType     L;
+    ObjAreaType     F;         // not for arcs (circly & ellips)
+    PointType       Center;    // center
+    PointType       Radius;    // radius
+    sal_uInt16      DrehWink;  // only ellipses
+    sal_uInt16      StartWink; // and not for full circles
+    sal_uInt16      RelWink;   // and full ellipses
     friend SvStream& operator>>(SvStream& rIStream, CircType& rCirc);
     virtual void Draw(OutputDevice& rOut);
 };
-#define CircFull 0x00  /* Unterarten von Kreis:  0: Kreis          */
-#define CircSect 0x01  /*                        1: Kreissektor    */
-#define CircAbsn 0x02  /*                        2: Kreisabschnitt */
-#define CircArc  0x03  /*                        3: Kreisbogen     */
+#define CircFull 0x00  /* kinds of circle: 0: full circle    */
+#define CircSect 0x01  /*                  1: circle sector  */
+#define CircAbsn 0x02  /*                  2: circle segment */
+#define CircArc  0x03  /*                  3: circle arc     */
 
 #define TextSize 116
 class TextType: public ObjkType {
 public:
-    sal_uInt8        Flags;    // (Schummel f"ur Allignment unter NT)
-    sal_uInt8        Reserve;   // f"ur Word Allign
-    ObjTextType T;         // 64 Bytes  << DWord-Allign bei FontID erforderlich
-    PointType   Pos1;      // Bezugspunkt (ObenLinks)
-    PointType   Pos2;      //             (untenRechts)
-    sal_Int16       TopOfs;    // Von Oberkante bis Textbegin (future f"ur vJustify)
-    sal_uInt16      DrehWink;  //    0...<360
-    sal_uInt16      BoxSlant;  // >270...<90 (nur Box)
-    sal_uInt16      BufSize;   // Gr"u"ue von Buf f"ur Load, Save, Copy und so
-    sal_uInt16      BufLo,BufHi;// (UCHAR*) Zeiger auf den Textbuffer << ShortArr, weil sonst DWord-Allign erforderlich
-    sal_uInt16      ExtLo,ExtHi;// (Ptr)  Text "uber mehrere Rahmen    << ShortArr, weil sonst DWord-Allign erforderlich
-    PointType   FitSize;   // Ursprungsgr"u"ue f"ur Fit2Size
-    sal_Int16       FitBreit;  // Breite zum formatieren bei Fit2Size
-    UCHAR*      Buffer;    // Diese Variable wird nicht durch Lesen von Disk gef"ullt, sondern explizit!
+    sal_uInt8   Flags;       // (cheat due to alignment in NT)
+    sal_uInt8   Reserve;     // for Word Allign
+    ObjTextType T;           // 64 bytes  << DWord-Allign needed for FontID
+    PointType   Pos1;        // reference point (upper left)
+    PointType   Pos2;        //                 (lower right)
+    sal_Int16   TopOfs;      // from upper side to start of text (future for vJustify)
+    sal_uInt16  DrehWink;    //    0...<360
+    sal_uInt16  BoxSlant;    // >270...<90 (only Box)
+    sal_uInt16  BufSize;     // size of buffer for Load, Save, Copy etc.
+    sal_uInt16  BufLo,BufHi; // (UCHAR*) pointer to Textbuffer << ShortArr, otherwise DWord-Allign needed
+    sal_uInt16  ExtLo,ExtHi; // (Ptr)  text over more frames << ShortArr, otherwise DWord-Allign needed
+    PointType   FitSize;     // size of origin for Fit2Size
+    sal_Int16   FitBreit;    // width to format for Fit2Size
+    UCHAR*      Buffer;      // this variable is not set by reading from disk, but explicit!
     friend SvStream& operator>>(SvStream& rIStream, TextType& rText);
     virtual void Draw(OutputDevice& rOut);
 };
-#define TextOutlBit 0x01     /*       1=Sourcecode f"ur Outliner (wird von DrawObjekt() ignoriert) */
-#define TextFitSBit 0x02     /* Bit1: 1=Text-FitToSize, auch Outliner (2.0)       */
-#define TextFitZBit 0x08     /* Bit3: 1=Fit2Size Zeilenweise          (2.0)       */
-#define TextDrftBit 0x04     /* Bit2: 1=DraftDraw                     (2.0)       */
+#define TextOutlBit 0x01     /*       1=Sourcecode for outliner (ignored byDrawObjekt()) */
+#define TextFitSBit 0x02     /* Bit1: 1=Text-Fit2Size, also outliner  (2.0)              */
+#define TextDrftBit 0x04     /* Bit2: 1=DraftDraw                     (2.0)              */
+#define TextFitZBit 0x08     /* Bit3: 1=Fit2Size line by line         (2.0)              */
 #define TextFitBits (TextFitSBit | TextFitZBit)
 
 enum GrafStat {NoGraf,Pic,Pcx,Hpgl,Img,Msp,Tiff,Dxf,Lot,Usr,Sgf};
@@ -253,23 +253,22 @@ enum GrafStat {NoGraf,Pic,Pcx,Hpgl,Img,Msp,Tiff,Dxf,Lot,Usr,Sgf};
 #define BmapSize 132
 class BmapType: public ObjkType {
 public:
-    sal_uInt8        Flags;    // (Schummel f"ur Allignment unter NT)
-    sal_uInt8        Reserve;
-    ObjAreaType F;            // Farbe und Muster der 1-Plane Bitmap
+    sal_uInt8   Flags;        // (cheat due to alignment in NT)
+    sal_uInt8   Reserve;
+    ObjAreaType F;            // colour and pattern of first plane bitmap
     PointType   Pos1;
     PointType   Pos2;
-    sal_uInt16      DrehWink;     //  315...<45   (Future)
-    sal_uInt16      Slant;        // >270...<90   (Future)
-    UCHAR       Filename[80]; //  Pfad
-    PointType   PixSize;      // Gr"u"ue in Pixel (0 bei Vektor)
-    GrafStat    Format;       // siehe GpmDef.Pas
-    sal_uInt8        nPlanes;      // Anzahl der Bitplanes (0 bei Vektor)
-    sal_Bool        RawOut;       // als Raw ausgeben ?
-    sal_Bool        InvOut;       // invertiert ausgeben ?
-    sal_Bool        LightOut;     // aufhellen? (SD20)
-    sal_uInt8        GrfFlg;       // (SD20) 0=nSGF 1=Pcx 2=Hpgl 4=Raw $FF=Undef(f"ur Fix in DrawBmp)
-
-    INetURLObject aFltPath;     // F"ur GraphicFilter
+    sal_uInt16  DrehWink;     //  315...<45   (future)
+    sal_uInt16  Slant;        // >270...<90   (future)
+    UCHAR       Filename[80]; // path
+    PointType   PixSize;      // size in Pixel (0 for vector)
+    GrafStat    Format;       // see: GpmDef.Pas
+    sal_uInt8   nPlanes;      // number of bitplanes (0 for vector)
+    sal_Bool    RawOut;       // output as raw  ?
+    sal_Bool    InvOut;       // output inverted ?
+    sal_Bool    LightOut;     // brighten? (SD20)
+    sal_uInt8   GrfFlg;       // (SD20) 0=nSGF 1=Pcx 2=HPGL 4=Raw $FF=Undef (to fix DrawBmp)
+    INetURLObject aFltPath;   // for GraphicFilter
     friend SvStream& operator>>(SvStream& rIStream, BmapType& rBmap);
     virtual void Draw(OutputDevice& rOut);
     void SetPaths( const INetURLObject rFltPath );
@@ -278,13 +277,13 @@ public:
 #define GrupSize 48
 class GrupType: public ObjkType {
 public:
-    sal_uInt8        Flags;    // (Schummel f"ur Allignment unter NT)
-    UCHAR       Name[13];  // Name der Gruppe
-    sal_uInt16      SbLo,SbHi; // (Ptr) Gruppenliste << ShortArr, weil sonst DWord Allign erforderlich
-    sal_uInt16      UpLo,UpHi; // (Ptr) Vaterliste   << ShortArr, weil sonst DWord Allign erforderlich
-    sal_uInt16      ChartSize; // Speicherbedarf der Diagrammstruktur Struktur
-    sal_uInt32      ChartPtr;  // Diagrammstruktur
-    sal_uInt32 GetSubPtr();    // hier nur zum Checken, ob Sublist evtl. leer ist.
+    sal_uInt8   Flags;         // (cheat due to alignment in NT)
+    UCHAR       Name[13];      // name of group
+    sal_uInt16  SbLo,SbHi;     // (Ptr) group list << ShortArr, as otherwise DWord alignment needed
+    sal_uInt16  UpLo,UpHi;     // (Ptr) parent list << ShortArr, as otherwise DWord alignment needed
+    sal_uInt16  ChartSize;     // required amount of memory for structure of diagram structure
+    sal_uInt32  ChartPtr;      // diagram structure
+    sal_uInt32  GetSubPtr();   // only to check if Sublist is empty
     friend SvStream& operator>>(SvStream& rIStream, GrupType& rGrup);
 };
 
@@ -298,7 +297,7 @@ sal_uInt16 MulDiv(sal_uInt16 a, sal_uInt16 Mul, sal_uInt16 Div);
 
 class SgfFontOne {
 public:
-    SgfFontOne*      Next;        // Zeiger f"ur Listenverkettung
+    SgfFontOne*      Next;        // pointer to list
     sal_uInt32       IFID;
     sal_Bool         Bold;
     sal_Bool         Ital;
@@ -307,19 +306,19 @@ public:
     sal_Bool         Fixd;
     FontFamily       SVFamil;
     rtl_TextEncoding SVChSet;
-    OUString         SVFName;    // z.B. "Times New Roman" = 15 Chars
-    sal_uInt16       SVWidth;    // Durchschnittliche Zeichenbreite in %
-         SgfFontOne();
+    OUString         SVFName;    // e.g. "Times New Roman" = 15 chars
+    sal_uInt16       SVWidth;    // average character width in %
+    SgfFontOne();
     void ReadOne(const OString& rID, OString& rDsc);
 };
 
 class SgfFontLst {
 public:
-    OUString    FNam;   // vollst"undiger Filename des Inifiles
-    SgfFontOne* pList;  // Listenanfang
-    SgfFontOne* Last;   // Listenende
-    sal_uInt32      LastID; // f"ur schnelleren Zugriff bei Wiederholungen
-    SgfFontOne* LastLn; // f"ur schnelleren Zugriff bei Wiederholungen
+    OUString    FNam;   // complete filename of the Ini-file
+    SgfFontOne* pList;  // start of list
+    SgfFontOne* Last;   // end of list
+    sal_uInt32  LastID; // for faster access during repeats
+    SgfFontOne* LastLn; // for faster access during repeats
     bool        Tried;
                 SgfFontLst();
                 ~SgfFontLst();

@@ -85,27 +85,23 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-//  Einschraenkungen:
+//  Restrictions:
 //
-//  - Flaechenmuster werden den unter StarView verfuegbaren Mustern angenaehert.
-//  - Linienenden werden unter StarView immer rund dargestellt und gehen ueber
-//    den Endpunkt der Linie hinaus.
-//  - Linienmuster werden den unter StarView verfuegbaren Mustern angenaehert.
-//    Transparent/Opak wird zur Zeit noch nicht beruecksichtigt.
-//  - Keine gedrehten Ellipsen
-//
-//
-//
+//  - area patterns are matched to the available ones in Starview.
+//  - line ends are always rounded in StarView and continue past the end of line.
+//  - line patterns are matched to the available ones in Starview.
+//    transparency/opacity is not taken into account
+//  - no rotated ellipses
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// Fuer Fontuebersetzung ///////////////////////////////////////////////////////////////////////////
+// for font translation  ///////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 SgfFontLst* pSgfFonts = 0;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// Fuer Kreisunterarten, Text und gedrehte Rechtecke ///////////////////////////////////////////////
+// for circle kinds, text and rotated rectangles     ///////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void RotatePoint(PointType& P, sal_Int16 cx, sal_Int16 cy, double sn, double cs)
 {
@@ -179,7 +175,8 @@ void ObjkOverSeek(SvStream& rInp, ObjkType& rObjk)
 }
 
 SvStream& operator>>(SvStream& rInp, ObjkType& rObjk)
-{   // Die Fileposition im Stream bleibt unveraendert!
+{
+    // fileposition in stream is not changed!
     sal_uLong nPos;
     nPos=rInp.Tell();
     rInp.Read((char*)&rObjk.Last,ObjkSize);
@@ -188,11 +185,11 @@ SvStream& operator>>(SvStream& rInp, ObjkType& rObjk)
 #endif
 #ifdef InArbeit
     sal_uLong nPos1=rInp.Tell();
-    if(nPos == nPos1) InfoBox( NULL, "tellg funkt nich" ).Execute();
+    if(nPos == nPos1) InfoBox( NULL, "tellg is not working" ).Execute();
 #endif
     rInp.Seek(nPos);
 #ifdef InArbeit
-    if (rInp.Tell() != nPos) InfoBox( NULL, "seekg funkt nich" ).Execute();
+    if (rInp.Tell() != nPos) InfoBox( NULL, "seekg is not working" ).Execute();
 #endif
     return rInp;
 }
@@ -317,23 +314,23 @@ Color Sgv2SvFarbe(sal_uInt8 nFrb1, sal_uInt8 nFrb2, sal_uInt8 nInts)
     sal_uInt8   nInt2=100-nInts;
     switch(nFrb1 & 0x07) {
         case 0:  r1=0xFF; g1=0xFF; b1=0xFF; break;
-        case 1:  r1=0xFF; g1=0xFF;            break;
+        case 1:  r1=0xFF; g1=0xFF;          break;
         case 2:           g1=0xFF; b1=0xFF; break;
-        case 3:           g1=0xFF;            break;
+        case 3:           g1=0xFF;          break;
         case 4:  r1=0xFF;          b1=0xFF; break;
-        case 5:  r1=0xFF;                       break;
+        case 5:  r1=0xFF;                   break;
         case 6:                    b1=0xFF; break;
-        case 7:                                   break;
+        case 7:                             break;
     }
     switch(nFrb2 & 0x07) {
         case 0:  r2=0xFF; g2=0xFF; b2=0xFF; break;
-        case 1:  r2=0xFF; g2=0xFF;            break;
+        case 1:  r2=0xFF; g2=0xFF;          break;
         case 2:           g2=0xFF; b2=0xFF; break;
-        case 3:           g2=0xFF;            break;
+        case 3:           g2=0xFF;          break;
         case 4:  r2=0xFF;          b2=0xFF; break;
-        case 5:  r2=0xFF;                       break;
+        case 5:  r2=0xFF;                   break;
         case 6:                    b2=0xFF; break;
-        case 7:                                   break;
+        case 7:                             break;
     }
     r1=(sal_uInt16)((sal_uInt32)r1*nInts/100+(sal_uInt32)r2*nInt2/100);
     g1=(sal_uInt16)((sal_uInt32)g1*nInts/100+(sal_uInt32)g2*nInt2/100);
@@ -447,7 +444,7 @@ void DrawSlideRect(sal_Int16 x1, sal_Int16 y1, sal_Int16 x2, sal_Int16 y2, ObjAr
                 rOut.DrawRect(Rectangle(i0,y1,x2,y2));
             } break;
 
-            case 0x18: case 0x38: { // Kreis
+            case 0x18: case 0x38: { // circle
                 Region ClipMerk=rOut.GetClipRegion();
                 double a;
 
@@ -473,7 +470,7 @@ void DrawSlideRect(sal_Int16 x1, sal_Int16 y1, sal_Int16 x2, sal_Int16 y2, ObjAr
                 SgfAreaColorIntens(F.FMuster,(sal_uInt8)Col1,(sal_uInt8)Col2,(sal_uInt8)Int1,rOut);
                 rOut.DrawEllipse(Rectangle(cx-i0,cy-i0,cx+i0,cy+i0));
                 rOut.SetClipRegion(ClipMerk);
-            } break; // Kreis
+            } break; // circle
         }
     }
 }
@@ -481,7 +478,7 @@ void DrawSlideRect(sal_Int16 x1, sal_Int16 y1, sal_Int16 x2, sal_Int16 y2, ObjAr
 
 void RectType::Draw(OutputDevice& rOut)
 {
-    if (L.LMuster!=0) L.LMuster=1; // keine Linienmuster hier, nur an oder aus
+    if (L.LMuster!=0) L.LMuster=1; // no line separator here, only on or off
     SetArea(F,rOut);
     if (DrehWink==0) {
     if ((F.FBFarbe & 0x38)==0 || Radius!=0) {
@@ -580,7 +577,7 @@ void DrawSlideCirc(sal_Int16 cx, sal_Int16 cy, sal_Int16 rx, sal_Int16 ry, ObjAr
     } else {
         b0=Int1;
         switch (F.FBFarbe & 0x38) {
-            case 0x08: { // vertikal
+            case 0x08: { // vertical
                 Region ClipMerk=rOut.GetClipRegion();
                 i0=y1;
                 i=y1;
@@ -619,7 +616,7 @@ void DrawSlideCirc(sal_Int16 cx, sal_Int16 cy, sal_Int16 rx, sal_Int16 ry, ObjAr
                 rOut.SetClipRegion(ClipMerk);
             } break;
 
-            case 0x18: case 0x38: { // Kreis
+            case 0x18: case 0x38: { // circle
                 sal_Int16 MaxR;
 
                 if (rx<1) rx=1;
@@ -641,7 +638,7 @@ void DrawSlideCirc(sal_Int16 cx, sal_Int16 cy, sal_Int16 rx, sal_Int16 ry, ObjAr
                 }
                 SgfAreaColorIntens(F.FMuster,(sal_uInt8)Col1,(sal_uInt8)Col2,(sal_uInt8)Int1,rOut);
                 rOut.DrawEllipse(Rectangle(cx-i0,cy-i0,cx+i0,cy+i0));
-            } break; // Kreis
+            } break; // circle
         }
     }
 }
@@ -651,7 +648,7 @@ void CircType::Draw(OutputDevice& rOut)
 {
     Rectangle aRect(Center.x-Radius.x,Center.y-Radius.y,Center.x+Radius.x,Center.y+Radius.y);
 
-    if (L.LMuster!=0) L.LMuster=1; // keine Linienmuster hier, nur an oder aus
+    if (L.LMuster!=0) L.LMuster=1; // no line pattern here, only on or off
     SetArea(F,rOut);
     if ((Flags & 0x03)==CircFull) {
         if ((F.FBFarbe & 0x38)==0) {
@@ -781,7 +778,7 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
                     TextType aText;
                     rInp>>aText;
                     if (!rInp.GetError()) {
-                        aText.Buffer=new UCHAR[aText.BufSize+1]; // Ein mehr fuer LookAhead bei CK-Trennung
+                        aText.Buffer=new UCHAR[aText.BufSize+1]; // add one for LookAhead at CK-separation
                         rInp.Read((char* )aText.Buffer,aText.BufSize);
                         if (!rInp.GetError()) aText.Draw(rOut);
                         delete[] aText.Buffer;
@@ -824,13 +821,13 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
                     GrupType aGrup;
                     rInp>>aGrup;
                     if (!rInp.GetError()) {
-                        rInp.Seek(rInp.Tell()+aGrup.Last); // Obj-Anhaengsel
-                        if(aGrup.GetSubPtr()!=0L) nGrpCnt++;// DrawObjkList(rInp,rOut );
+                        rInp.Seek(rInp.Tell()+aGrup.Last);   // object appendix
+                        if(aGrup.GetSubPtr()!=0L) nGrpCnt++; // DrawObjkList(rInp,rOut );
                     }
                 } break;
                 default: {
-                    aObjk.Draw(rOut);          // Objektbezeichnung auf 2. Screen
-                    ObjkOverSeek(rInp,aObjk);  // zum naechsten Objekt
+                    aObjk.Draw(rOut);          // object name on 2. Screen
+                    ObjkOverSeek(rInp,aObjk);  // to next object
                 }
             }
         } // if rInp
@@ -840,7 +837,7 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
                 else nGrpCnt--;
             }
         } else {
-            bEnde=true;  // Lesefehler
+            bEnde=true;  // read error
         }
     } while (!bEnde);
 }
@@ -859,10 +856,10 @@ void SkipObjkList(SvStream& rInp)
         if(aObjk.Art==ObjGrup) {
             GrupType aGrup;
             rInp>>aGrup;
-            rInp.Seek(rInp.Tell()+aGrup.Last); // Obj-Anhaengsel
+            rInp.Seek(rInp.Tell()+aGrup.Last); // object appendix
             if(aGrup.GetSubPtr()!=0L) SkipObjkList(rInp);
         } else {
-            ObjkOverSeek(rInp,aObjk);  // zum naechsten Objekt
+            ObjkOverSeek(rInp,aObjk);  // to next object
         }
     } while (aObjk.Next!=0L && !rInp.GetError());
 }
@@ -883,15 +880,15 @@ bool SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
     sal_uInt16        Num;
 
     pOutDev=&aOutDev;
-    DtHdOverSeek(rInp); // DataHeader weglesen
+    DtHdOverSeek(rInp); // read dataheader
 
     nStdPos=rInp.Tell();
-    do {                // Standardseiten weglesen
+    do {                // read standard page
         rInp>>aPage;
         if (aPage.nList!=0) SkipObjkList(rInp);
     } while (aPage.Next!=0L && !rInp.GetError());
 
-//    ShowMsg("Zeichnungseite(n)\n");
+//    ShowMsg("Drawingpage(n)\n");
     nZchPos=rInp.Tell();
     rInp>>aPage;
 
@@ -899,7 +896,7 @@ bool SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
     Num=aPage.StdPg;
     if (Num!=0) {
       rInp.Seek(nStdPos);
-      while(Num>1 && aPage.Next!=0L && !rInp.GetError()) { // Standardseite suchen
+      while(Num>1 && aPage.Next!=0L && !rInp.GetError()) { // search standard page
         rInp>>aPage;
         if (aPage.nList!=0) SkipObjkList(rInp);
         Num--;
@@ -930,16 +927,16 @@ bool SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
 *************************************************************************/
 bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath )
 {
-#if OSL_DEBUG_LEVEL > 1 // Recordgroessen checken. Neuer Compiler hat vielleichte anderes Alignment!
+#if OSL_DEBUG_LEVEL > 1 // check record size. New compiler possibly aligns different!
     if (sizeof(ObjTextType)!=ObjTextTypeSize)  return false;
 #endif
 
-    sal_uLong     nFileStart;            // Offset des SgfHeaders. Im allgemeinen 0.
-    SgfHeader aHead;
-    SgfEntry  aEntr;
-    sal_uLong     nNext;
-    bool      bRdFlag=false;         // Grafikentry gelesen ?
-    bool      bRet=false;            // Returncode
+    sal_uLong   nFileStart;        // offset of SgfHeaders. In general 0.
+    SgfHeader   aHead;
+    SgfEntry    aEntr;
+    sal_uLong   nNext;
+    bool        bRdFlag=false;     // graphic entry read ?
+    bool        bRet=false;        // return value
 
     aIniPath.Append(OUString("sgf.ini"));
 
@@ -959,7 +956,7 @@ bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath )
             }
         } // while(nNext)
         if (bRdFlag) {
-            if (!rInp.GetError()) bRet=true;  // Scheinbar Ok
+            if (!rInp.GetError()) bRet=true;  // seems ok
         }
     }
     delete pSgfFonts;
