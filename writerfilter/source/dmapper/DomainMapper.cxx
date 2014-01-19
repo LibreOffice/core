@@ -244,7 +244,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_FHIDDEN:
             break;
         case NS_rtf::LN_WIDENT:
-        case NS_rtf::LN_LID:
         case NS_rtf::LN_LCBSTTBFUSSR:
             {
                 m_pImpl->GetFIB().SetData( nName, nIntValue );
@@ -301,10 +300,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_STYLESHEET:
             break;
 
-        case NS_rtf::LN_FRD :
-            //footnote reference descriptor, if nIntValue > 0 then automatic, custom otherwise
-            //ignored
-        break;
         case NS_ooxml::LN_CT_Sym_char:
         if( m_pImpl->GetTopContext() && m_pImpl->GetTopContext()->GetFootnote().is())
         {
