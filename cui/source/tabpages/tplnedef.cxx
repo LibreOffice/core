@@ -445,7 +445,7 @@ IMPL_LINK( SvxLineDefTabPage, ChangeMetricHdl_Impl, void *, p )
         SetMetricValue( *m_pMtrLength2, nTmp2, ePoolUnit );
         SetMetricValue( *m_pMtrDistance, nTmp3, ePoolUnit );
     }
-    else if( m_pCbxSynchronize->IsChecked() && m_pMtrLength1->GetUnit() != FUNIT_CUSTOM )
+    else if( m_pCbxSynchronize->IsChecked() && m_pMtrLength1->GetUnit() != FUNIT_PERCENT )
     {
         long nTmp1, nTmp2, nTmp3;
 
@@ -467,10 +467,9 @@ IMPL_LINK( SvxLineDefTabPage, ChangeMetricHdl_Impl, void *, p )
         m_pMtrLength2->SetDecimalDigits( 0 );
         m_pMtrDistance->SetDecimalDigits( 0 );
 
-        m_pMtrLength1->SetUnit( FUNIT_CUSTOM );
-        m_pMtrLength2->SetUnit( FUNIT_CUSTOM );
-        m_pMtrDistance->SetUnit( FUNIT_CUSTOM );
-
+        m_pMtrLength1->SetUnit( FUNIT_PERCENT );
+        m_pMtrLength2->SetUnit( FUNIT_PERCENT );
+        m_pMtrDistance->SetUnit( FUNIT_PERCENT );
 
         SetMetricValue( *m_pMtrLength1, nTmp1, ePoolUnit );
         SetMetricValue( *m_pMtrLength2, nTmp2, ePoolUnit );

@@ -516,7 +516,7 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
                 aMtrFldShadowX.SetMax( 1800);
                 aMtrFldShadowX.SetSpinSize(10);
 
-                aMtrFldShadowY.SetUnit(FUNIT_CUSTOM);
+                aMtrFldShadowY.SetUnit(FUNIT_PERCENT);
                 aMtrFldShadowY.SetDecimalDigits(0);
                 aMtrFldShadowY.SetMin(-999);
                 aMtrFldShadowY.SetMax( 999);

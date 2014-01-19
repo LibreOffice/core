@@ -303,19 +303,19 @@ Menu RID_VIEWMENU
         {
             Identifier = SID_ZOOM_50_PERCENT;
             HelpId = CMD_SID_VIEW050 ;
-            Text [ en-US ] = "~View 50%" ;
+            Text [ en-US ] = "~View 50 %" ;
         };
         MenuItem
         {
             Identifier = SID_ZOOM_100_PERCENT ;
             HelpId = CMD_SID_VIEW100 ;
-            Text [ en-US ] = "View ~100%" ;
+            Text [ en-US ] = "View ~100 %" ;
         };
         MenuItem
         {
             Identifier = SID_ZOOM_200_PERCENT ;
             HelpId = CMD_SID_VIEW200 ;
-            Text [ en-US ] = "View ~200%" ;
+            Text [ en-US ] = "View ~200 %" ;
         };
         MenuItem
         {
