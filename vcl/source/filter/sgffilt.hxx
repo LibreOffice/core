@@ -26,15 +26,15 @@ bool SgfBMapFilter(SvStream& rInp, SvStream& rOut);
 bool SgfVectFilter(SvStream& rInp, GDIMetaFile& rMtf);
 bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath );
 
-// Konstanten fÅr CheckSgfTyp()
-#define SGF_BITIMAGE   1     /* Bitmap                      */
-#define SGF_SIMPVECT   2     /* Einfaches Vectorformat      */
-#define SGF_POSTSCRP   3     /* Postscript file             */
-#define SGF_STARDRAW   7     /* StarDraw SGV-Datei          */
-#define SGF_DONTKNOW 255     /* Unbekannt oder kein SGF/SGV */
+// constants for CheckSgfTyp()
+#define SGF_BITIMAGE   1     /* Bitmap                 */
+#define SGF_SIMPVECT   2     /* simple vectorformat    */
+#define SGF_POSTSCRP   3     /* Postscript file        */
+#define SGF_STARDRAW   7     /* StarDraw SGV file      */
+#define SGF_DONTKNOW 255     /* unknown or no SGF/SGV  */
 
-#define SGV_VERSION    3     /* SGV mit anderer Version wird abgewiesen */
-                             /* 3 entspricht StarDraw 2.00/2.01 MÑrz'93 */
+#define SGV_VERSION    3     /* reject SGV with other version         */
+                             /* 3 matches StarDraw 2.00/2.01 march'93 */
 #endif // INCLUDED_VCL_SOURCE_FILTER_SGFFILT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

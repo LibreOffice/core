@@ -22,22 +22,22 @@
 
 #include <tools/solar.h>
 
-#define SgfBitImag0   1 /* Bitmap                      */
-#define SgfBitImag1   4 /* Bitmap                      */
-#define SgfBitImag2   5 /* Bitmap                      */
-#define SgfBitImgMo   6 /* Monochrome Bitmap           */
-#define SgfSimpVect   2 /* Einfaches Vectorformat      */
-#define SgfPostScrp   3 /* Postscript file             */
-#define SgfStarDraw   7 /* StarDraw SGV-Datei          */
-#define SgfDontKnow 255 /* Unbekannt oder kein SGF/SGV */
+#define SgfBitImag0   1 /* Bitmap                  */
+#define SgfBitImag1   4 /* Bitmap                  */
+#define SgfBitImag2   5 /* Bitmap                  */
+#define SgfBitImgMo   6 /* Monochrome bitmap       */
+#define SgfSimpVect   2 /* Simple vectorformat     */
+#define SgfPostScrp   3 /* Postscript file         */
+#define SgfStarDraw   7 /* StarDraw SGV-file       */
+#define SgfDontKnow 255 /* Unknown or no SGF/SGV   */
 
-// Konstanten fr SgfHeader.SwGrCol
-#define SgfBlckWhit 1 /* Schwarz/Wei?Bild                  Ä¿ SimpVector,  */
-#define SgfGrayscal 2 /* Bild mit Graustufen                 ?StarDraw und */
-#define Sgf16Colors 3 /* Farbbild (16 Farben)               ÄÙ Bit Image    */
-#define SgfVectFarb 4 /* Farben fr Linien verwenden        Ä¿              */
-#define SgfVectGray 5 /* Graustufen fr Linien verwenden     ?Nur fr      */
-#define SgfVectWdth 6 /* Strichst„rken fr Linien verwenden ÄÙ SimpVector   */
+// constants for SgfHeader.SwGrCol
+#define SgfBlckWhit 1 /* black/white image                  SimpVector,  */
+#define SgfGrayscal 2 /* image with greyscale               StarDraw and */
+#define Sgf16Colors 3 /* colour image  (16 colours)         Bit Image    */
+#define SgfVectFarb 4 /* use colours in lines                            */
+#define SgfVectGray 5 /* use greyscale for lines only for                */
+#define SgfVectWdth 6 /* use line widths for lines          SimpVector   */
 
 
 #define SgfHeaderSize 42
@@ -55,7 +55,7 @@ public:
     sal_uInt16 SwGrCol;
     char   Autor[10];
     char   Programm[10];
-    sal_uInt16 OfsLo,OfsHi; // DWord-Allignment ist notwendig (38 mod 4 =2) !
+    sal_uInt16 OfsLo,OfsHi; // DWord allignment is necessary (38 mod 4 =2) !
 
     sal_uInt32 GetOffset();
     friend SvStream& operator>>(SvStream& rIStream, SgfHeader& rHead);
@@ -70,7 +70,7 @@ public:
     sal_uInt16 iFrei;
     sal_uInt16 lFreiLo,lFreiHi;
     char   cFrei[10];
-    sal_uInt16 OfsLo,OfsHi; // DWord-Allignment ist notwendig (18 mod 4 =2) !
+    sal_uInt16 OfsLo,OfsHi; // DWord allignment is necessary (18 mod 4 =2) !
 
     sal_uInt32 GetOffset();
     friend SvStream& operator>>(SvStream& rIStream, SgfEntry& rEntr);
@@ -83,7 +83,7 @@ public:
     sal_uInt16 Flag;
     sal_Int16 x;
     sal_Int16 y;
-    sal_uInt16 OfsLo,OfsHi; // DWord-Allignment ist notwendig (6 mod 4 =2) !
+    sal_uInt16 OfsLo,OfsHi; // DWord allignment is necessary (6 mod 4 =2) !
 
     friend SvStream& operator>>(SvStream& rIStream, SgfVector& rEntr);
 };
@@ -105,9 +105,9 @@ class BmpFileHeader
 {
 public:
     sal_uInt16 Typ;            // = "BM"
-    sal_uInt16 SizeLo,SizeHi;  // Filesize in Bytes
-    sal_uInt16 Reserve1;       // Reserviert
-    sal_uInt16 Reserve2;       // Reserviert
+    sal_uInt16 SizeLo,SizeHi;  // filesize in bytes
+    sal_uInt16 Reserve1;       // reserved
+    sal_uInt16 Reserve2;       // reserved
     sal_uInt16 OfsLo,OfsHi;    // Offset?
 
     void   SetSize(sal_uInt32 Size);
@@ -120,17 +120,17 @@ public:
 class BmpInfoHeader
 {
 public:
-    sal_uInt32 Size;       // Gr”áe des BmpInfoHeaders
-    sal_Int32  Width;      // Breite in Pixel
-    sal_Int32  Hight;      // H”he in Pixel
-    sal_uInt16 Planes;     // Anzahl der Planes (immer 1)
-    sal_uInt16 PixBits;    // Anzahl der Bit je Pixel (1,4,8,oder 24)
-    sal_uInt32 Compress;   // Datenkompression
-    sal_uInt32 ImgSize;    // Gr”áe der Images in Bytes. Ohne Kompression ist auch 0 erlaubt.
-    sal_Int32  xDpmm;      // Dot per Meter (0 ist erlaubt)
-    sal_Int32  yDpmm;      // Dot per Meter (0 ist erlaubt)
-    sal_uInt32 ColUsed;    // Anzahl der verwendeten Farben (0=alle)
-    sal_uInt32 ColMust;    // Anzahl der wichtigen Farben (0=alle)
+    sal_uInt32 Size;       // size of BmpInfoHeaders
+    sal_Int32  Width;      // width in Pixel
+    sal_Int32  Hight;      // height in Pixel
+    sal_uInt16 Planes;     // number of planes (always 1)
+    sal_uInt16 PixBits;    // number of bits per pixel (1,4,8 or 24)
+    sal_uInt32 Compress;   // datakompression
+    sal_uInt32 ImgSize;    // size of  image in bytes. Without compression also 0 is allowed.
+    sal_Int32  xDpmm;      // Dot per Meter (0 is allowed)
+    sal_Int32  yDpmm;      // Dot per Meter (0 is allowed)
+    sal_uInt32 ColUsed;    // number of colours used (0=all
+    sal_uInt32 ColMust;    // number of important colours (0=all)
 
     friend SvStream& WriteBmpInfoHeader(SvStream& rOStream, BmpInfoHeader& rHead);
 };

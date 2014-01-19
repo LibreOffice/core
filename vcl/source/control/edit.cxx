@@ -2107,7 +2107,7 @@ void Edit::Command( const CommandEvent& rCEvt )
         }
         else
         {
-            // Paste nur, wenn Text im Clipboard
+            // only paste if text available in clipboard
             sal_Bool bData = sal_False;
             uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = GetClipboard();
             if ( xClipboard.is() )
