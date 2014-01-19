@@ -31,6 +31,10 @@ struct DocumentStreamAccessImpl
 DocumentStreamAccess::DocumentStreamAccess( ScDocument& rDoc ) :
     mpImpl(new DocumentStreamAccessImpl(rDoc)) {}
 
+DocumentStreamAccess::~DocumentStreamAccess()
+{
+}
+
 void DocumentStreamAccess::setNumericCell( const ScAddress& rPos, double fVal )
 {
     ScTable* pTab = mpImpl->mrDoc.FetchTable(rPos.Tab());
