@@ -87,8 +87,10 @@ VCLXAccessibleList::VCLXAccessibleList (VCLXWindow* pVCLWindow, BoxType aBoxType
         }
     }
     UpdateVisibleLineCount();
-    m_nCurSelectedPos=m_pListBoxHelper->GetSelectEntryPos();
-
+    if(m_pListBoxHelper)
+    {
+        m_nCurSelectedPos=m_pListBoxHelper->GetSelectEntryPos();
+    }
     sal_uInt16 nCount = static_cast<sal_uInt16>(getAccessibleChildCount());
     m_aAccessibleChildren.reserve(nCount);
 }
