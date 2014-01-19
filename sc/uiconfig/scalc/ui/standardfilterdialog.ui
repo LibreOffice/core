@@ -320,16 +320,16 @@
                           <item>&lt;=</item>
                           <item>&gt;=</item>
                           <item>&lt;&gt;</item>
-                          <item>Largest</item>
-                          <item>Smallest</item>
-                          <item>Largest %</item>
-                          <item>Smallest %</item>
-                          <item>Contains</item>
-                          <item>Does not contain</item>
-                          <item>Begins with</item>
-                          <item>Does not begin with</item>
-                          <item>Ends with</item>
-                          <item>Does not end with</item>
+                          <item translatable="yes">Largest</item>
+                          <item translatable="yes">Smallest</item>
+                          <item translatable="yes">Largest %</item>
+                          <item translatable="yes">Smallest %</item>
+                          <item translatable="yes">Contains</item>
+                          <item translatable="yes">Does not contain</item>
+                          <item translatable="yes">Begins with</item>
+                          <item translatable="yes">Does not begin with</item>
+                          <item translatable="yes">Ends with</item>
+                          <item translatable="yes">Does not end with</item>
                         </items>
                       </object>
                       <packing>
@@ -355,16 +355,16 @@
                           <item>&lt;=</item>
                           <item>&gt;=</item>
                           <item>&lt;&gt;</item>
-                          <item>Largest</item>
-                          <item>Smallest</item>
-                          <item>Largest %</item>
-                          <item>Smallest %</item>
-                          <item>Contains</item>
-                          <item>Does not contain</item>
-                          <item>Begins with</item>
-                          <item>Does not begin with</item>
-                          <item>Ends with</item>
-                          <item>Does not end with</item>
+                          <item translatable="yes">Largest</item>
+                          <item translatable="yes">Smallest</item>
+                          <item translatable="yes">Largest %</item>
+                          <item translatable="yes">Smallest %</item>
+                          <item translatable="yes">Contains</item>
+                          <item translatable="yes">Does not contain</item>
+                          <item translatable="yes">Begins with</item>
+                          <item translatable="yes">Does not begin with</item>
+                          <item translatable="yes">Ends with</item>
+                          <item translatable="yes">Does not end with</item>
                         </items>
                       </object>
                       <packing>
@@ -390,16 +390,16 @@
                           <item>&lt;=</item>
                           <item>&gt;=</item>
                           <item>&lt;&gt;</item>
-                          <item>Largest</item>
-                          <item>Smallest</item>
-                          <item>Largest %</item>
-                          <item>Smallest %</item>
-                          <item>Contains</item>
-                          <item>Does not contain</item>
-                          <item>Begins with</item>
-                          <item>Does not begin with</item>
-                          <item>Ends with</item>
-                          <item>Does not end with</item>
+                          <item translatable="yes">Largest</item>
+                          <item translatable="yes">Smallest</item>
+                          <item translatable="yes">Largest %</item>
+                          <item translatable="yes">Smallest %</item>
+                          <item translatable="yes">Contains</item>
+                          <item translatable="yes">Does not contain</item>
+                          <item translatable="yes">Begins with</item>
+                          <item translatable="yes">Does not begin with</item>
+                          <item translatable="yes">Ends with</item>
+                          <item translatable="yes">Does not end with</item>
                         </items>
                       </object>
                       <packing>
@@ -422,16 +422,16 @@
                           <item>&lt;=</item>
                           <item>&gt;=</item>
                           <item>&lt;&gt;</item>
-                          <item>Largest</item>
-                          <item>Smallest</item>
-                          <item>Largest %</item>
-                          <item>Smallest %</item>
-                          <item>Contains</item>
-                          <item>Does not contain</item>
-                          <item>Begins with</item>
-                          <item>Does not begin with</item>
-                          <item>Ends with</item>
-                          <item>Does not end with</item>
+                          <item translatable="yes">Largest</item>
+                          <item translatable="yes">Smallest</item>
+                          <item translatable="yes">Largest %</item>
+                          <item translatable="yes">Smallest %</item>
+                          <item translatable="yes">Contains</item>
+                          <item translatable="yes">Does not contain</item>
+                          <item translatable="yes">Begins with</item>
+                          <item translatable="yes">Does not begin with</item>
+                          <item translatable="yes">Ends with</item>
+                          <item translatable="yes">Does not end with</item>
                         </items>
                       </object>
                       <packing>
