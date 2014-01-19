@@ -856,147 +856,72 @@ bool DummyChart::initWindow()
 
     GLWin.screen = XScreenNumberOfScreen( xattr.screen );
 
-    XVisualInfo* vi( NULL );
-    XVisualInfo* visinfo;
-    XVisualInfo* firstVisual( NULL );
-    static int attrList3[] =
+    static int visual_attribs[] =
     {
-        GLX_RGBA,//only TrueColor or DirectColor
-        //single buffered
-        GLX_RED_SIZE,8,//use the maximum red bits, with a minimum of 4 bits
-        GLX_GREEN_SIZE,8,//use the maximum green bits, with a minimum of 4 bits
-        GLX_BLUE_SIZE,8,//use the maximum blue bits, with a minimum of 4 bits
-        GLX_DEPTH_SIZE,0,//no depth buffer
+        GLX_RED_SIZE,           8,
+        GLX_GREEN_SIZE,         8,
+        GLX_BLUE_SIZE,          8,
+        GLX_ALPHA_SIZE,         8,
+        GLX_DEPTH_SIZE,         24,
+        GLX_X_VISUAL_TYPE,      GLX_TRUE_COLOR,
         None
-    };
-    static int attrList2[] =
-    {
-        GLX_RGBA,//only TrueColor or DirectColor
-        /// single buffered
-        GLX_RED_SIZE,8,/// use the maximum red bits, with a minimum of 4 bits
-        GLX_GREEN_SIZE,8,/// use the maximum green bits, with a minimum of 4 bits
-        GLX_BLUE_SIZE,8,/// use the maximum blue bits, with a minimum of 4 bits
-        GLX_DEPTH_SIZE,1,/// use the maximum depth bits, making sure there is a depth buffer
-        None
-    };
-    static int attrList1[] =
-    {
-        GLX_RGBA,//only TrueColor or DirectColor
-        GLX_DOUBLEBUFFER,/// only double buffer
-        GLX_RED_SIZE,8,/// use the maximum red bits, with a minimum of 4 bits
-        GLX_GREEN_SIZE,8,/// use the maximum green bits, with a minimum of 4 bits
-        GLX_BLUE_SIZE,8,/// use the maximum blue bits, with a minimum of 4 bits
-        GLX_DEPTH_SIZE,0,/// no depth buffer
-        None
-    };
-    static int attrList0[] =
-    {
-        GLX_RGBA,//only TrueColor or DirectColor
-        GLX_DOUBLEBUFFER,/// only double buffer
-        GLX_RED_SIZE,8,/// use the maximum red bits, with a minimum of 4 bits
-        GLX_GREEN_SIZE,8,/// use the maximum green bits, with a minimum of 4 bits
-        GLX_BLUE_SIZE,8,/// use the maximum blue bits, with a minimum of 4 bits
-        GLX_DEPTH_SIZE,1,/// use the maximum depth bits, making sure there is a depth buffer
-        GLX_SAMPLE_BUFFERS, 1,
-        GLX_SAMPLES, 4,
-        None
-    };
-    static int* attrTable[] =
-    {
-        attrList0,
-        attrList1,
-        attrList2,
-        attrList3,
-        NULL
     };
 
-    int** pAttributeTable = attrTable;
     const SystemEnvData* pChildSysData = NULL;
     pWindow.reset();
 
-    GLXFBConfig* fbconfigs = NULL;
-    int nfbconfigs, value, i = 0;
+    glXChooseFBConfig = (GLXFBConfig*(*)(Display *dpy, int screen, const int *attrib_list, int *nelements))glXGetProcAddressARB((GLubyte*)"glXChooseFBConfig");
+    glXGetVisualFromFBConfig = (XVisualInfo*(*)(Display *dpy, GLXFBConfig config))glXGetProcAddressARB((GLubyte*)"glXGetVisualFromFBConfig");    // try to find a visual for the current set of attributes
+    glXGetFBConfigAttrib = (int(*)(Display *dpy, GLXFBConfig config, int attribute, int* value))glXGetProcAddressARB((GLubyte*)"glXGetFBConfigAttrib");
 
-    while( *pAttributeTable )
+
+
+    int fbCount = 0;
+    GLXFBConfig* pFBC = glXChooseFBConfig( GLWin.dpy,
+            GLWin.screen,
+            visual_attribs, &fbCount );
+
+    if(!pFBC)
     {
-        // try to find a visual for the current set of attributes
-        vi = glXChooseVisual( GLWin.dpy,
-                GLWin.screen,
-                *pAttributeTable );
-        if( vi )
-        {
-            if( GLXEW_EXT_texture_from_pixmap )
-            {
-                if( !firstVisual )
-                    firstVisual = vi;
-                OSL_TRACE("trying VisualID %08X", vi->visualid);
-                fbconfigs = glXGetFBConfigs (GLWin.dpy, GLWin.screen, &nfbconfigs);
-
-                for ( ; i < nfbconfigs; i++)
-                {
-                    visinfo = glXGetVisualFromFBConfig (GLWin.dpy, fbconfigs[i]);
-                    if( !visinfo || visinfo->visualid != vi->visualid )
-                        continue;
-
-                    glXGetFBConfigAttrib (GLWin.dpy, fbconfigs[i], GLX_DRAWABLE_TYPE, &value);
-                    if (!(value & GLX_PIXMAP_BIT))
-                        continue;
-
-                    glXGetFBConfigAttrib (GLWin.dpy, fbconfigs[i],
-                            GLX_BIND_TO_TEXTURE_TARGETS_EXT,
-                            &value);
-                    if (!(value & GLX_TEXTURE_2D_BIT_EXT))
-                        continue;
-
-                    glXGetFBConfigAttrib (GLWin.dpy, fbconfigs[i],
-                            GLX_BIND_TO_TEXTURE_RGB_EXT,
-                            &value);
-                    if (value == sal_False)
-                        continue;
-
-                    glXGetFBConfigAttrib (GLWin.dpy, fbconfigs[i],
-                            GLX_BIND_TO_MIPMAP_TEXTURE_EXT,
-                            &value);
-                    if (value == sal_False)
-                        continue;
-
-                    // TODO: handle non Y inverted cases
-                    break;
-                }
-
-                if( i != nfbconfigs || ( firstVisual && pAttributeTable[1] == NULL ) ) {
-                    if( i != nfbconfigs ) {
-                        vi = glXGetVisualFromFBConfig( GLWin.dpy, fbconfigs[i] );
-                        // TODO:moggi
-                        // mbHasTFPVisual = true;
-                        OSL_TRACE("found visual suitable for texture_from_pixmap");
-                    } else {
-                        vi = firstVisual;
-                        // TODO:moggi
-                        // mbHasTFPVisual = false;
-                        OSL_TRACE("did not find visual suitable for texture_from_pixmap, using %08X", vi->visualid);
-                    }
-
-                }
-
-            }
-            SystemWindowData winData;
-            winData.nSize = sizeof(winData);
-            OSL_TRACE("using VisualID %08X", vi->visualid);
-            winData.pVisual = (void*)(vi->visual);
-            pWindow.reset(new SystemChildWindow(mpWindow.get(), 0, &winData, sal_False));
-            pChildSysData = pWindow->GetSystemData();
-
-            if( pChildSysData ) {
-                break;
-            } else {
-                pWindow.reset();
-            }
-
-        }
-
-        ++pAttributeTable;
+        SAL_WARN("chart2.opengl", "no suitable fb format found");
+        return false;
     }
+
+    int best_fbc = -1, best_num_samp = -1;
+    for(int i = 0; i < fbCount; ++i)
+    {
+        XVisualInfo* pVi = glXGetVisualFromFBConfig( GLWin.dpy, pFBC[i] );
+        if(pVi)
+        {
+            // pick the one with the most samples per pixel
+            int nSampleBuf = 0;
+            int nSamples = 0;
+            glXGetFBConfigAttrib( GLWin.dpy, pFBC[i], GLX_SAMPLE_BUFFERS, &nSampleBuf );
+            glXGetFBConfigAttrib( GLWin.dpy, pFBC[i], GLX_SAMPLES       , &nSamples  );
+
+            if ( best_fbc < 0 || (nSampleBuf && ( nSamples > best_num_samp )) )
+            {
+                best_fbc = i;
+                best_num_samp = nSamples;
+            }
+        }
+        XFree( pVi );
+    }
+
+    XVisualInfo* vi = glXGetVisualFromFBConfig( GLWin.dpy, pFBC[best_fbc] );
+    if( vi )
+    {
+        SystemWindowData winData;
+        winData.nSize = sizeof(winData);
+        OSL_TRACE("using VisualID %08X", vi->visualid);
+        winData.pVisual = (void*)(vi->visual);
+        pWindow.reset(new SystemChildWindow(mpWindow.get(), 0, &winData, sal_False));
+        pChildSysData = pWindow->GetSystemData();
+
+        if( !pChildSysData )
+            return false;
+    }
+
 
     if( pWindow )
     {
@@ -1008,11 +933,6 @@ bool DummyChart::initWindow()
 
         GLWin.dpy = reinterpret_cast<Display*>(pChildSysData->pDisplay);
         GLWin.win = pChildSysData->aWindow;
-        //TODO: moggi
-        /*
-           if( mbHasTFPVisual )
-           GLWin.fbc = fbconfigs[i];
-           */
         GLWin.vi = vi;
         GLWin.GLXExtensions = glXQueryExtensionsString( GLWin.dpy, GLWin.screen );
         OSL_TRACE("available GLX extensions: %s", GLWin.GLXExtensions);
@@ -1109,10 +1029,6 @@ bool DummyChart::initOpengl()
 
     GLWin.GLExtensions = glGetString( GL_EXTENSIONS );
     OSL_TRACE("available GL  extensions: %s", GLWin.GLExtensions);
-
-    // TODO: moggi
-    // mbTextureFromPixmap = GLWin.HasGLXExtension( "GLX_EXT_texture_from_pixmap" );
-    // mbGenerateMipmap = GLWin.HasGLExtension( "GL_SGIS_generate_mipmap" );
 
     if( GLWin.HasGLXExtension("GLX_SGI_swap_control" ) )
     {
