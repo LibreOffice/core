@@ -197,15 +197,15 @@ String RID_SVXITEMS_BRUSHSTYLE_DOWNDIAG
 };
 String RID_SVXITEMS_BRUSHSTYLE_25
 {
-    Text = "25%" ;
+    Text = "25 %" ;
 };
 String RID_SVXITEMS_BRUSHSTYLE_50
 {
-    Text = "50%" ;
+    Text = "50 %" ;
 };
 String RID_SVXITEMS_BRUSHSTYLE_75
 {
-    Text = "75%" ;
+    Text = "75 %" ;
 };
 String RID_SVXITEMS_BRUSHSTYLE_BITMAP
 {
