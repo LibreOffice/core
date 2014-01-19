@@ -260,45 +260,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_ooxml::LN_CT_Border_frame:
             break;
-        case NS_rtf::LN_VERTALIGN:
-            break;
-        case NS_rtf::LN_FUNUSED:
-            break;
-        case NS_rtf::LN_BRCTOP:
-        case NS_rtf::LN_BRCLEFT:
-        case NS_rtf::LN_BRCBOTTOM:
-        case NS_rtf::LN_BRCRIGHT:
-        {
-            table::BorderLine2 aBorderLine;
-            sal_Int32 nLineDistance = ConversionHelper::MakeBorderLine( nIntValue, aBorderLine );
-            (void)nLineDistance;
-            PropertyIds eBorderId = PROP_LEFT_BORDER;
-            PropertyIds eBorderDistId = PROP_LEFT_BORDER_DISTANCE  ;
-            switch( nName )
-            {
-                case NS_rtf::LN_BRCTOP:
-                    eBorderId = PROP_TOP_BORDER            ;
-                    eBorderDistId = PROP_TOP_BORDER_DISTANCE;
-                break;
-                case NS_rtf::LN_BRCLEFT:
-                break;
-                case NS_rtf::LN_BRCBOTTOM:
-                    eBorderId = PROP_BOTTOM_BORDER         ;
-                    eBorderDistId = PROP_BOTTOM_BORDER_DISTANCE;
-                break;
-                case NS_rtf::LN_BRCRIGHT:
-                    eBorderId = PROP_RIGHT_BORDER          ;
-                    eBorderDistId = PROP_RIGHT_BORDER_DISTANCE ;
-                break;
-                default:;
-            }
-            //todo: where to put the border properties
-            //rContext->Insert(eBorderId, uno::makeAny( aBorderLine ));
-            //rContext->Insert(eBorderDistId, uno::makeAny( nLineDistance ));
-            (void)eBorderId;
-            (void)eBorderDistId;
-        }
-        break;
         case NS_rtf::LN_ITCFIRST:
             break;
         case NS_rtf::LN_FPUB:
@@ -310,48 +271,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_LINEWIDTH:
             break;
         case NS_rtf::LN_LINETYPE:
-            break;
-        case NS_rtf::LN_CBHEADER:
-            break;
-        case NS_rtf::LN_MFP:
-            break;
-        case NS_rtf::LN_BM_RCWINMF:
-            break;
-        case NS_rtf::LN_DXAGOAL:
-            break;
-        case NS_rtf::LN_DYAGOAL:
-            break;
-        case NS_rtf::LN_MX:
-            break;
-        case NS_rtf::LN_MY:
-            break;
-        case NS_rtf::LN_DXACROPLEFT:
-            break;
-        case NS_rtf::LN_DYACROPTOP:
-            break;
-        case NS_rtf::LN_DXACROPRIGHT:
-            break;
-        case NS_rtf::LN_DYACROPBOTTOM:
-            break;
-        case NS_rtf::LN_BRCL:
-            break;
-        case NS_rtf::LN_FFRAMEEMPTY:
-            break;
-        case NS_rtf::LN_FBITMAP:
-            break;
-        case NS_rtf::LN_FDRAWHATCH:
-            break;
-        case NS_rtf::LN_FERROR:
-            break;
-        case NS_rtf::LN_BPP:
-            break;
-        case NS_rtf::LN_DXAORIGIN:
-            break;
-        case NS_rtf::LN_DYAORIGIN:
-            break;
-        case NS_rtf::LN_CPROPS:
-            break;
-        case NS_rtf::LN_LINEPROPSTOP:
             break;
         case NS_rtf::LN_LINEPROPSLEFT:
             break;

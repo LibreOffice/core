@@ -457,30 +457,8 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
     sal_Int32 nIntValue = val.getInt();
     switch( nName )
     {
-        case NS_rtf::LN_CBHEADER: break;//ignored
-        case NS_rtf::LN_MFP: //MetafilePict
-        case NS_rtf::LN_BRCTOP: //top border
-        case NS_rtf::LN_BRCLEFT: //left border
-        case NS_rtf::LN_BRCBOTTOM: //bottom border
-        case NS_rtf::LN_BRCRIGHT: //right border
         case NS_ooxml::LN_blip: //the binary graphic data in a shape
             {
-                switch(nName)
-                {
-                    case NS_rtf::LN_BRCTOP: //top border
-                        m_pImpl->nCurrentBorderLine = BORDER_TOP;
-                    break;
-                    case NS_rtf::LN_BRCLEFT: //left border
-                        m_pImpl->nCurrentBorderLine = BORDER_LEFT;
-                    break;
-                    case NS_rtf::LN_BRCBOTTOM: //bottom border
-                        m_pImpl->nCurrentBorderLine = BORDER_BOTTOM;
-                    break;
-                    case NS_rtf::LN_BRCRIGHT: //right border
-                        m_pImpl->nCurrentBorderLine = BORDER_RIGHT;
-                    break;
-                    default:;
-                }
             writerfilter::Reference<Properties>::Pointer_t pProperties = val.getProperties();
             if( pProperties.get())
             {
@@ -495,48 +473,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                 pPictureData->resolve(*this);
         }
         break;
-        case NS_rtf::LN_BM_RCWINMF: //windows bitmap structure - if it's a bitmap
-        break;
-        case NS_rtf::LN_DXAGOAL: //x-size in twip
-        case NS_rtf::LN_DYAGOAL: //y-size in twip
-            break;
-        case NS_rtf::LN_MX:
-            m_pImpl->nHoriScaling = nIntValue;
-            break;// hori scaling in 0.001%
-        case NS_rtf::LN_MY:
-            m_pImpl->nVertScaling = nIntValue;
-            break;// vert scaling in 0.001%
-        case NS_rtf::LN_DXACROPLEFT:
-            m_pImpl->nLeftCrop  = ConversionHelper::convertTwipToMM100(nIntValue);
-            break;// left crop in twips
-        case NS_rtf::LN_DYACROPTOP:
-            m_pImpl->nTopCrop   = ConversionHelper::convertTwipToMM100(nIntValue);
-            break;// top crop in twips
-        case NS_rtf::LN_DXACROPRIGHT:
-            m_pImpl->nRightCrop = ConversionHelper::convertTwipToMM100(nIntValue);
-            break;// right crop in twips
-        case NS_rtf::LN_DYACROPBOTTOM:
-            m_pImpl->nBottomCrop = ConversionHelper::convertTwipToMM100(nIntValue);
-            break;// bottom crop in twips
-        case NS_rtf::LN_BRCL:
-            break;//border type - legacy -
-        case NS_rtf::LN_FFRAMEEMPTY:
-            break;// picture consists of a single frame
-        case NS_rtf::LN_FBITMAP:
-            m_pImpl->bIsBitmap = nIntValue > 0 ? true : false;
-        break;//1 if it's a bitmap ???
-        case NS_rtf::LN_FDRAWHATCH:
-            break;//1 if it's an active OLE object
-        case NS_rtf::LN_FERROR:
-            break;// 1 if picture is an error message
-        case NS_rtf::LN_BPP:
-            m_pImpl->nBitsPerPixel = nIntValue;
-            break;//bits per pixel 0 - unknown, 1- mono, 4 - VGA
-
-        case NS_rtf::LN_DXAORIGIN: //horizontal offset of hand annotation origin
-        case NS_rtf::LN_DYAORIGIN: //vertical offset of hand annotation origin
-        break;
-        case NS_rtf::LN_CPROPS:break;// unknown - ignored
 
         case NS_rtf::LN_shpfBid:
             break; //ignored

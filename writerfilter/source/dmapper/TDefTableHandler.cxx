@@ -283,22 +283,6 @@ void TDefTableHandler::lcl_attribute(Id rName, Value & rVal)
     (void)rName;
     switch( rName )
     {
-        case NS_rtf::LN_VERTALIGN:
-            //TODO: m_aCellVertAlign is just a temporary solution! 0 - top 1 - center 2 - bottom
-            m_aCellVertAlign.push_back( nIntValue );
-        break;
-        case NS_rtf::LN_FUNUSED:
-        case NS_rtf::LN_CellPrefferedSize:
-        break;
-        case NS_rtf::LN_BRCTOP:
-        case NS_rtf::LN_BRCLEFT:
-        case NS_rtf::LN_BRCBOTTOM:
-        case NS_rtf::LN_BRCRIGHT:
-        {
-            writerfilter::Reference<Properties>::Pointer_t pProperties = rVal.getProperties();
-            localResolve( rName, pProperties );
-        }
-        break;
         case NS_ooxml::LN_CT_Border_sz:
             //  width of a single line in 1/8 pt, max of 32 pt -> twip * 5 / 2.
             m_nLineWidth = nIntValue * 5 / 2;
@@ -353,7 +337,6 @@ void TDefTableHandler::localResolve(Id rName, writerfilter::Reference<Properties
         switch( rName )
         {
             case NS_ooxml::LN_CT_TcBorders_top:
-            case NS_rtf::LN_BRCTOP:
                 m_aTopBorderLines.push_back(aBorderLine);
                 if (!m_aInteropGrabBagName.isEmpty())
                     aSavedGrabBag.push_back(getInteropGrabBag("top"));
@@ -367,13 +350,11 @@ void TDefTableHandler::localResolve(Id rName, writerfilter::Reference<Properties
                     aSavedGrabBag.push_back(getInteropGrabBag("start"));
             break;
             case NS_ooxml::LN_CT_TcBorders_left:
-            case NS_rtf::LN_BRCLEFT:
                 m_aLeftBorderLines.push_back(aBorderLine);
                 if (!m_aInteropGrabBagName.isEmpty())
                     aSavedGrabBag.push_back(getInteropGrabBag("left"));
             break;
             case NS_ooxml::LN_CT_TcBorders_bottom:
-            case NS_rtf::LN_BRCBOTTOM:
                 m_aBottomBorderLines.push_back(aBorderLine);
                 if (!m_aInteropGrabBagName.isEmpty())
                     aSavedGrabBag.push_back(getInteropGrabBag("bottom"));
@@ -387,7 +368,6 @@ void TDefTableHandler::localResolve(Id rName, writerfilter::Reference<Properties
                     aSavedGrabBag.push_back(getInteropGrabBag("end"));
             break;
             case NS_ooxml::LN_CT_TcBorders_right:
-            case NS_rtf::LN_BRCRIGHT:
                 m_aRightBorderLines.push_back(aBorderLine);
                 if (!m_aInteropGrabBagName.isEmpty())
                     aSavedGrabBag.push_back(getInteropGrabBag("right"));
