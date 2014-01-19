@@ -60,12 +60,6 @@
 #define DEBUG_POSITIONING 0
 #define RENDER_TO_FILE 0
 
-typedef struct PosVeci3
-{
-    int x;
-    int y;
-    int z;
-}PosVeci3;
 typedef struct PosVecf3
 {
     float x;
