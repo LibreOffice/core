@@ -1348,13 +1348,13 @@ int OpenGLRender::RectangleShapePoint(float x, float y, float directionX, float 
     aRectangle.points[1] = actualY;
     aRectangle.points[2] = m_fZStep;
     aRectangle.points[3] = actualX + actualSizeX;
-    aRectangle.points[4] = actualX;
+    aRectangle.points[4] = actualY;
     aRectangle.points[5] = m_fZStep;
     aRectangle.points[6] = actualX + actualSizeX;
-    aRectangle.points[7] = actualX + actualSizeY;
+    aRectangle.points[7] = actualY + actualSizeY;
     aRectangle.points[8] = m_fZStep;
     aRectangle.points[9] = actualX;
-    aRectangle.points[10] = actualX + actualSizeY;
+    aRectangle.points[10] = actualY + actualSizeY;
     aRectangle.points[11] = m_fZStep;
 
     m_RectangleShapePointList.push_back(aRectangle);
@@ -1362,7 +1362,7 @@ int OpenGLRender::RectangleShapePoint(float x, float y, float directionX, float 
 }
 
 
-int OpenGLRender::RenderRectangleShape()
+int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
 {
     m_fZStep += 0.001;
     size_t listNum = m_RectangleShapePointList.size();
@@ -1386,31 +1386,68 @@ int OpenGLRender::RenderRectangleShape()
         glUseProgram(m_BackgroundProID);
 
         glUniformMatrix4fv(m_BackgroundMatrixID, 1, GL_FALSE, &m_MVP[0][0]);
-        // 1rst attribute buffer : vertices
-        glEnableVertexAttribArray(m_BackgroundVertexID);
-        glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
-        glVertexAttribPointer(
-            m_BackgroundVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
-            2,                  // size
-            GL_FLOAT,           // type
-            GL_FALSE,           // normalized?
-            0,                  // stride
-            (void*)0            // array buffer offset
-            );
+        if(bFill)
+        {
+            glEnableVertexAttribArray(m_BackgroundVertexID);
+            glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+            glVertexAttribPointer(
+                    m_BackgroundVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+                    3,                  // size
+                    GL_FLOAT,           // type
+                    GL_FALSE,           // normalized?
+                    0,                  // stride
+                    (void*)0            // array buffer offset
+                    );
 
-        // 2nd attribute buffer : color
-        glEnableVertexAttribArray(m_BackgroundColorID);
-        glBindBuffer(GL_ARRAY_BUFFER, m_ColorBuffer);
-        glVertexAttribPointer(
-            m_BackgroundColorID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
-            4,                  // size
-            GL_FLOAT,           // type
-            GL_FALSE,           // normalized?
-            0,                  // stride
-            (void*)0            // array buffer offset
-            );
-        //TODO: moggi: get rid of GL_QUADS
-        glDrawArrays(GL_QUADS, 0, 4);
+            // 2nd attribute buffer : color
+            glEnableVertexAttribArray(m_BackgroundColorID);
+            glBindBuffer(GL_ARRAY_BUFFER, m_ColorBuffer);
+            glVertexAttribPointer(
+                    m_BackgroundColorID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+                    4,                  // size
+                    GL_FLOAT,           // type
+                    GL_FALSE,           // normalized?
+                    0,                  // stride
+                    (void*)0            // array buffer offset
+                    );
+            //TODO: moggi: get rid of GL_QUADS
+            glDrawArrays(GL_QUADS, 0, 4);
+            glDisableVertexAttribArray(m_BackgroundVertexID);
+            glDisableVertexAttribArray(m_BackgroundColorID);
+        }
+        if(bBorder)
+        {
+            SetBackGroundColor(COL_BLACK, COL_BLACK);
+
+            glBindBuffer(GL_ARRAY_BUFFER, m_ColorBuffer);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(m_BackgroundColor), m_BackgroundColor, GL_STATIC_DRAW);
+            // 1rst attribute buffer : vertices
+            glEnableVertexAttribArray(m_BackgroundVertexID);
+            glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+            glVertexAttribPointer(
+                    m_BackgroundVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+                    3,                  // size
+                    GL_FLOAT,           // type
+                    GL_FALSE,           // normalized?
+                    0,                  // stride
+                    (void*)0            // array buffer offset
+                    );
+
+            // 2nd attribute buffer : color
+            glEnableVertexAttribArray(m_BackgroundColorID);
+            glBindBuffer(GL_ARRAY_BUFFER, m_ColorBuffer);
+            glVertexAttribPointer(
+                    m_BackgroundColorID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+                    4,                  // size
+                    GL_FLOAT,           // type
+                    GL_FALSE,           // normalized?
+                    0,                  // stride
+                    (void*)0            // array buffer offset
+                    );
+            glDrawArrays(GL_LINE_LOOP, 0, 4);
+            glDisableVertexAttribArray(m_BackgroundVertexID);
+            glDisableVertexAttribArray(m_BackgroundColorID);
+        }
         glDisableVertexAttribArray(m_BackgroundVertexID);
         glDisableVertexAttribArray(m_BackgroundColorID);
         glUseProgram(0);

@@ -165,7 +165,7 @@ public:
 
 
     void SetTransparency(sal_uInt32 transparency);
-    int RenderRectangleShape();
+    int RenderRectangleShape(bool bBorder, bool bFill);
     int RectangleShapePoint(float x, float y, float directionX, float directionY);
 
     int CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color, const Font& rFont,
@@ -180,6 +180,8 @@ public:
     void renderDebug();
 #endif
 
+    void SetBackGroundColor(sal_uInt32 color1, sal_uInt32 color2);
+
 private:
     GLint LoadShaders(const char *vertexShader,const char *fragmentShader);
     int CreateTextureObj(int width, int height);
@@ -193,7 +195,6 @@ private:
 #endif
     int CreateMultiSampleFrameBufObj();
     int Create2DCircle(int detail);
-    void SetBackGroundColor(sal_uInt32 color1, sal_uInt32 color2);
 
 private:
     // Projection matrix : default 45 degree Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units

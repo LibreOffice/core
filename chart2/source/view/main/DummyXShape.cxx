@@ -572,14 +572,14 @@ void DummyRectangle::render()
         return;
     }
 
+    bool bFill = true;
     itr = maProperties.find("FillStyle");
     if(itr != maProperties.end())
     {
         drawing::FillStyle eStyle = itr->second.get<drawing::FillStyle>();
         if(eStyle == drawing::FillStyle_NONE)
         {
-            SAL_WARN("chart2.opengl", "no fill style");
-            return;
+            bFill = false;
         }
     }
 
@@ -588,7 +588,19 @@ void DummyRectangle::render()
     {
         uno::Any co =  itr->second;
         sal_Int32 nColorValue = co.get<sal_Int32>();
-        pChart->m_GLRender.SetColor(nColorValue);
+        pChart->m_GLRender.SetBackGroundColor(nColorValue, nColorValue);
+    }
+
+    bool bBorder = true;
+    itr =  maProperties.find(UNO_NAME_LINESTYLE);
+    if (itr != maProperties.end())
+    {
+        uno::Any cow = itr->second;
+        drawing::LineStyle nStyle = cow.get<drawing::LineStyle>();
+        if (drawing::LineStyle_NONE == nStyle)
+        {
+            bBorder = false;
+        }
     }
 
     //TODO: moggi: correct handling of gradients
@@ -603,7 +615,7 @@ void DummyRectangle::render()
         }
     }
     pChart->m_GLRender.RectangleShapePoint(maPosition.X, maPosition.Y, maSize.Width, maSize.Height);
-    pChart->m_GLRender.RenderRectangleShape();
+    pChart->m_GLRender.RenderRectangleShape(bBorder, bFill);
 }
 
 DummyText::DummyText(const OUString& rText, const tNameSequence& rNames,
