@@ -46,7 +46,6 @@ class ListLevel : public PropertyMap
     sal_Int32                                     m_nNFC;            //LN_CT_Lvl_numFmt
     sal_Int32                                     m_nJC;             //LN_JC
     sal_Int32                                     m_nFLegal;         //LN_FLEGAL
-    sal_Int32                                     m_nFNoRestart;     //LN_FNORESTART
     sal_Int32                                     m_nFPrev;          //LN_FPREV
     sal_Int32                                     m_nFPrevSpace;     //LN_FPREVSPACE
     sal_Int32                                     m_nFWord6;         //LN_FWORD6
@@ -68,7 +67,6 @@ public:
         ,m_nNFC(-1)
         ,m_nJC(-1)
         ,m_nFLegal(-1)
-        ,m_nFNoRestart(-1)
         ,m_nFPrev(-1)
         ,m_nFPrevSpace(-1)
         ,m_nFWord6(-1)
@@ -134,9 +132,6 @@ class AbstractListDef
 private:
     sal_Int32                            m_nTmpl;
     OUString                      m_sRGISTD;        //LN_RGISTD
-    sal_Int32                            m_nSimpleList;    //LN_FSIMPLELIST
-    sal_Int32                            m_nRestart;       //LN_FRESTARTHDN
-    sal_Int32                            m_nUnsigned;      //LN_UNSIGNED26_2
 
     // The ID member reflects either the abstractNumId or the numId
     // depending on the use of the class

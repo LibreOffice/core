@@ -443,9 +443,6 @@ uno::Reference<drawing::XShape> NumPicBullet::GetShape()
 
 AbstractListDef::AbstractListDef( ) :
     m_nTmpl( -1 )
-    ,m_nSimpleList( -1 )
-    ,m_nRestart( -1 )
-    ,m_nUnsigned( -1 )
     ,m_nId( -1 )
 {
 }
