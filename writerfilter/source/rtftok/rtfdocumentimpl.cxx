@@ -2787,7 +2787,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     // Trivial table sprms.
     switch (nKeyword)
     {
-        case RTF_FPRQ: nSprm = NS_rtf::LN_PRQ; break;
         case RTF_LEVELJC: nSprm = NS_ooxml::LN_CT_Lvl_lvlJc; break;
         case RTF_LEVELNFC: nSprm = NS_ooxml::LN_CT_Lvl_numFmt; break;
         case RTF_LEVELSTARTAT: nSprm = NS_ooxml::LN_CT_Lvl_start; break;
@@ -3206,6 +3205,29 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 }
                 if (!sValue.isEmpty())
                     m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_suff, RTFValue::Pointer_t(new RTFValue(sValue)));
+            }
+            break;
+        case RTF_FPRQ:
+            {
+                sal_Int32 nValue = 0;
+                switch (nParam)
+                {
+                case 0:
+                    nValue = NS_ooxml::LN_Value_ST_Pitch_default;
+                    break;
+                case 1:
+                    nValue = NS_ooxml::LN_Value_ST_Pitch_fixed;
+                    break;
+                case 2:
+                    nValue = NS_ooxml::LN_Value_ST_Pitch_variable;
+                    break;
+                }
+                if (nValue)
+                {
+                    RTFSprms aAttributes;
+                    aAttributes.set(NS_ooxml::LN_CT_Pitch_val, RTFValue::Pointer_t(new RTFValue(nValue)));
+                    m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Font_pitch, RTFValue::Pointer_t(new RTFValue(aAttributes)));
+                }
             }
             break;
         case RTF_LISTOVERRIDECOUNT:

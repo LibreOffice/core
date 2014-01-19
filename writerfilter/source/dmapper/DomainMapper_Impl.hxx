@@ -206,16 +206,12 @@ typedef std::stack< AnchoredContext >           TextContentStack;
 class FIB
 {
     sal_Int32   aFIBData[ NS_rtf::LN_LCBSTTBFUSSR - NS_rtf::LN_WIDENT + 1];
-    sal_Int32   nLNCHS;
     public:
-        FIB() :
-            nLNCHS( 0 )
+        FIB()
             {
                 memset(&aFIBData, 0x00, sizeof(aFIBData));
             }
 
-        sal_Int32 GetLNCHS() const {return nLNCHS;}
-        void      SetLNCHS(sal_Int32 nValue) {nLNCHS = nValue;}
         void      SetData( Id nName, sal_Int32 nValue );
 };
 

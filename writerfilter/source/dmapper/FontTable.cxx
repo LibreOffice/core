@@ -26,6 +26,7 @@
 #include <rtl/tencinfo.h>
 #include <vcl/embeddedfontshelper.hxx>
 #include <unotools/fontdefs.hxx>
+#include <com/sun/star/awt/FontPitch.hpp>
 
 #include "dmapperLoggers.hxx"
 
@@ -62,26 +63,16 @@ void FontTable::lcl_attribute(Id Name, Value & val)
     OUString sValue = val.getString();
     switch(Name)
     {
-        case NS_rtf::LN_CBFFNM1:
-            m_pImpl->pCurrentEntry->sFontName1 = sValue;
-        break;
-        case NS_rtf::LN_PRQ:
-            m_pImpl->pCurrentEntry->nPitchRequest = static_cast<sal_Int16>( nIntValue );
-        break;
-        case NS_rtf::LN_FTRUETYPE:
-            m_pImpl->pCurrentEntry->bTrueType = nIntValue == 1 ? true : false;
-        break;
-        case NS_rtf::LN_FF: //unused
-        break;
-        case NS_rtf::LN_WWEIGHT:
-            m_pImpl->pCurrentEntry->nBaseWeight = nIntValue;
-        break;
-        case NS_rtf::LN_CHS:
-            m_pImpl->pCurrentEntry->nTextEncoding = nIntValue;
-        break;
-        case NS_rtf::LN_FS:
-            m_pImpl->pCurrentEntry->sFontSignature += sValue;
-        break;
+        case NS_ooxml::LN_CT_Pitch_val:
+            if (nIntValue == NS_ooxml::LN_Value_ST_Pitch_fixed)
+                m_pImpl->pCurrentEntry->nPitchRequest = awt::FontPitch::FIXED;
+            else if (nIntValue == NS_ooxml::LN_Value_ST_Pitch_variable)
+                m_pImpl->pCurrentEntry->nPitchRequest = awt::FontPitch::VARIABLE;
+            else if (nIntValue == NS_ooxml::LN_Value_ST_Pitch_default)
+                m_pImpl->pCurrentEntry->nPitchRequest = awt::FontPitch::DONTKNOW;
+            else
+                SAL_WARN("writerfilter", "FontTable::lcl_attribute: unhandled NS_ooxml::CT_Pitch_val: " << nIntValue);
+            break;
         case NS_ooxml::LN_CT_Font_name:
             m_pImpl->pCurrentEntry->sFontName = sValue;
         break;
@@ -127,6 +118,7 @@ void FontTable::lcl_sprm(Sprm& rSprm)
     switch(nSprmId)
     {
         case NS_ooxml::LN_CT_Font_charset:
+        case NS_ooxml::LN_CT_Font_pitch:
             resolveSprm( rSprm );
             break;
         case NS_ooxml::LN_CT_Font_embedRegular:
@@ -146,6 +138,15 @@ void FontTable::lcl_sprm(Sprm& rSprm)
             }
             break;
         }
+        case NS_ooxml::LN_CT_Font_panose1:
+            break;
+        case NS_ooxml::LN_CT_Font_family:
+            break;
+        case NS_ooxml::LN_CT_Font_sig:
+            break;
+        default:
+            SAL_WARN("writerfilter", "FontTable::lcl_sprm: unhandled token: " << nSprmId);
+            break;
     }
 }
 

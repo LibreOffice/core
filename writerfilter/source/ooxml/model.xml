@@ -23696,8 +23696,8 @@
       <value tokenid="ooxml:Value_ST_Pitch_variable">variable</value>
       <value tokenid="ooxml:Value_ST_Pitch_default">default</value>
     </resource>
-    <resource name="CT_Pitch" resource="Value" tag="font">
-      <attribute name="val" tokenid="ooxml:CT_Pitch_val" action="setValue"/>
+    <resource name="CT_Pitch" resource="Properties" tag="font">
+      <attribute name="val" tokenid="ooxml:CT_Pitch_val"/>
     </resource>
     <resource name="CT_FontSig" resource="Properties" tag="font">
       <attribute name="usb0" tokenid="ooxml:CT_FontSig_usb0"/>

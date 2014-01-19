@@ -219,24 +219,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_ooxml::LN_CT_AbstractNum_tmpl:
             break;
-        case NS_rtf::LN_CBFFNM1:
-            break;
-        case NS_rtf::LN_PRQ:
-            break;
-        case NS_rtf::LN_FTRUETYPE:
-            break;
-        case NS_rtf::LN_FF:
-            break;
-        case NS_rtf::LN_WWEIGHT:
-            break;
-        case NS_rtf::LN_CHS:
-
-            {
-                m_pImpl->GetFIB().SetLNCHS( nIntValue );
-            }
-            break;
-        case NS_rtf::LN_FS:
-            break;
         case NS_rtf::LN_STI:
             break;
         case NS_rtf::LN_FSCRATCH:
