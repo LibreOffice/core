@@ -5368,7 +5368,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
         else
         {
             delete pImpRec;
-            delete pTextImpRec,
+            delete pTextImpRec;
         }
     }
 
