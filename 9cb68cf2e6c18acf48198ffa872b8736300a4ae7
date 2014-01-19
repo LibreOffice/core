@@ -162,6 +162,24 @@
     },
     {
       "key": {
+        "uuid": "da9df570_74eca6c8",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1000507
+      },
+      "writtenOn": "2014-01-19T17:38:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9df570_74b586cc",
+      "revId": "9cb68cf2e6c18acf48198ffa872b8736300a4ae7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9df570_343cde93",
         "filename": "sc/source/ui/app/rfindlst.cxx",
         "patchSetId": 1
@@ -356,6 +374,24 @@
     },
     {
       "key": {
+        "uuid": "da9df570_14dd1a15",
+        "filename": "sc/source/ui/miscdlgs/anyrefdg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000507
+      },
+      "writtenOn": "2014-01-19T17:38:04Z",
+      "side": 1,
+      "message": "Except for this file, in the other 2 files, GetColorName is now called using an index. So can we revert back to the implementation in this file? that is, by calling GetColorName via an nCount variable? this file does not affect the coloring of the text or the cells.\nwe can avoid the non-static version of GetColorName with this.",
+      "parentUuid": "da9df570_94c90a5d",
+      "revId": "9cb68cf2e6c18acf48198ffa872b8736300a4ae7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9df570_b4c0ce7d",
         "filename": "sc/source/ui/miscdlgs/anyrefdg.cxx",
         "patchSetId": 1
@@ -456,6 +492,24 @@
       "side": 1,
       "message": "If you make sure that each range is only once in the vector that problem is solved automatically.",
       "parentUuid": "da9df570_94cd8a89",
+      "revId": "9cb68cf2e6c18acf48198ffa872b8736300a4ae7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_54e7a2e4",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1000507
+      },
+      "writtenOn": "2014-01-19T17:38:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9df570_b4c60e48",
       "revId": "9cb68cf2e6c18acf48198ffa872b8736300a4ae7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
