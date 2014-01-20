@@ -202,6 +202,19 @@ $(call gb_UnoApiHeadersTarget_get_real_comprehensive_dir,$(1))/%.hpp :| \
 
 endef
 
+# ensure that idl change triggers the dummy rule to rebuild the headers
+# call gb_UnoApiHeadersTarget_add_headerfile,unoapi,headerfile
+define gb_UnoApiHeadersTarget_add_headerfile
+$(call gb_UnoApiHeadersTarget_get_dir,$(1))/$(2) : \
+	$(SRCDIR)/$(basename $(gb_UnoApiTarget_REG_$(1))/$(2)).idl
+
+endef
+
+# call gb_UnoApiHeadersTarget_add_headerfiles,unoapi,directory,headerfilenames
+define gb_UnoApiHeadersTarget_add_headerfiles
+$(foreach hdr,$(3),$(call gb_UnoApiHeadersTarget_add_headerfile,$(1),$(2)/$(hdr)))
+endef
+
 define gb_UnoApiHeadersTarget__use_api_for_target
 $(call gb_UnoApiHeadersTarget_get_$(3),$(1)) : $(call gb_UnoApiTarget_get_target,$(2))
 $(call gb_UnoApiHeadersTarget_get_$(3),$(1)) : UNOAPI_DEPS += -X$(call gb_UnoApiTarget_get_target,$(2))
