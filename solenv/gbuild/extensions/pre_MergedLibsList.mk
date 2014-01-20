@@ -46,6 +46,7 @@ gb_EXTRAMERGEDLIBS := \
 	graphicfilter \
 	guesslang \
 	$(if $(ENABLE_JAVA),hsqldb) \
+	htmlfd \
 	hyphen \
 	icd \
 	icg \

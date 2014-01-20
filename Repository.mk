@@ -270,6 +270,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(if $(ENABLE_DIRECTX),gdipluscanvas) \
 	guesslang \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),helplinker) \
+	htmlfd \
 	i18npool \
 	i18nsearch \
 	hyphen \
