@@ -50,6 +50,7 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
 			$(if $(filter TRUE,$(ENABLE_DEBUG)),--enable-debug) \
+			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 		&& cd lib \
 		&& $(MAKE) \
 	)
