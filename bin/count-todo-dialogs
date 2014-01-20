@@ -22,3 +22,7 @@ echo There are $tabpages unconverted tabpages
 
 num=$(($dialogs + $tabpages))
 echo An estimated additional $num .ui are required
+
+percent=$(($converted * 100 / ($num + $converted)))
+echo We are $percent% of the way through.
+
