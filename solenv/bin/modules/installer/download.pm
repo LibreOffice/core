@@ -829,13 +829,16 @@ sub resolve_variables_in_downloadname
 
     # Typical name: soa-{productversion}-{extension}-bin-{os}-{languages}
 
-    my $productversion = $allvariables->{'PRODUCTVERSION'} // "";
+    my $productversion = $allvariables->{'PRODUCTVERSION'};
+    $productversion = "" unless defined $productversion;
     $downloadname =~ s/\{productversion\}/$productversion/;
 
-    my $packageversion = $allvariables->{'PACKAGEVERSION'} // "";
+    my $packageversion = $allvariables->{'PACKAGEVERSION'};
+    $packageversion = "" unless defined $packageversion;
     $downloadname =~ s/\{packageversion\}/$packageversion/;
 
-    my $extension = $allvariables->{'SHORT_PRODUCTEXTENSION'} // "";
+    my $extension = $allvariables->{'SHORT_PRODUCTEXTENSION'};
+    $extension = "" unless defined $extension;
     $extension = lc($extension);
     $downloadname =~ s/\{extension\}/$extension/;
 
@@ -1049,7 +1052,8 @@ sub put_publisher_into_template ($$)
 {
     my ($templatefile, $variables) = @_;
 
-    my $publisher = $variables->{'OOOVENDOR'} // "";
+    my $publisher = $variables->{'OOOVENDOR'};
+    $publisher = "" unless defined $publisher;
 
     replace_one_variable($templatefile, "PUBLISHERPLACEHOLDER", $publisher);
 }
@@ -1062,7 +1066,8 @@ sub put_website_into_template ($$)
 {
     my ($templatefile, $variables) = @_;
 
-    my $website = $variables->{'STARTCENTER_INFO_URL'} // "";
+    my $website = $variables->{'STARTCENTER_INFO_URL'};
+    $website = "" unless defined $website;
 
     replace_one_variable($templatefile, "WEBSITEPLACEHOLDER", $website);
 }

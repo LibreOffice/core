@@ -104,11 +104,12 @@ sub get_file_component_directory_for_file ($$)
 {
     my ($onefile, $dirref) = @_;
 
-    my $localstyles = $onefile->{'Styles'} // "";
+    my $localstyles = $onefile->{'Styles'};
+    $localstyles = "" unless defined $localstyles;
 
     if ( $localstyles =~ /\bFONT\b/ )   # special handling for font files
     {
-        return $installer::globals::fontsfolder;
+    return $installer::globals::fontsfolder;
     }
 
     my $destdir = "";
@@ -117,7 +118,7 @@ sub get_file_component_directory_for_file ($$)
 
     if ( $destdir =~ /\bPREDEFINED_OSSHELLNEWDIR\b/ )   # special handling for shellnew files
     {
-        return $installer::globals::templatefolder;
+    return $installer::globals::templatefolder;
     }
 
     my $destination = $onefile->{'destination'};
@@ -131,32 +132,32 @@ sub get_file_component_directory_for_file ($$)
     my $uniquedir = undef;
     if ($destination eq "")     # files in the installation root
     {
-        $uniquedir = "INSTALLLOCATION";
+    $uniquedir = "INSTALLLOCATION";
     }
     else
     {
-        my $found = 0;
+    my $found = 0;
         foreach my $directory (@$dirref)
+    {
+        if ($directory->{'HostName'} eq $destination)
         {
-            if ($directory->{'HostName'} eq $destination)
-            {
-                $found = 1;
+        $found = 1;
                 $uniquedir = $directory->{'uniquename'};
-                last;
-            }
+        last;
         }
+    }
 
-        if ( ! $found)
-        {
-            installer::exiter::exit_program(
+    if ( ! $found)
+    {
+        installer::exiter::exit_program(
                 "ERROR: Did not find destination $destination in directory collection",
                 "get_file_component_directory");
-        }
+    }
 
-        if ( $uniquedir eq $installer::globals::officeinstalldirectory )
-        {
-            $uniquedir = "INSTALLLOCATION";
-        }
+    if ( $uniquedir eq $installer::globals::officeinstalldirectory )
+    {
+        $uniquedir = "INSTALLLOCATION";
+    }
     }
 
     $onefile->{'uniquedirname'} = $uniquedir;       # saving it in the file collection

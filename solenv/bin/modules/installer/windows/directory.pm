@@ -366,7 +366,8 @@ sub create_unique_directorynames ($)
     {
         next if defined $directory->{'uniquename'};
 
-        my $styles = $directory->{'Styles'} // "";
+        my $styles = $directory->{'Styles'};
+        $styles = "" unless defined $styles;
 
         my ($originaluniquename, $uniquename) = get_unique_name(
             $directory->{'HostName'},

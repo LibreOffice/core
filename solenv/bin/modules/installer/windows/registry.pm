@@ -84,7 +84,8 @@ sub get_registry_component_name
     # Previously that was the full version number as provided by 'PRODUCTVERSION'.
     # But MSI patches introduce the restriction that component names must not change.
     # Use just the major version number.
-    my $version = $allvariables->{"BRANDPACKAGEVERSION"} // "";
+    my $version = $allvariables->{"BRANDPACKAGEVERSION"};
+    $version = "" unless defined $version;
     $addon .= $version;
     $addon = lc($addon);
     $addon =~ s/ //g;
@@ -386,7 +387,8 @@ sub prepare_registry_table ($$$)
             $registry{'Component_'} = $component_name;
 
             # Collecting all components with DONT_DELETE style
-            my $style = $oneregistry->{'Styles'} // "";
+            my $style = $oneregistry->{'Styles'};
+            $style = "" unless defined $style;
             $registry{'styles'} = $style;
 
             if ( $style =~ /\bDONT_DELETE\b/ )

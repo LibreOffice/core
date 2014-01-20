@@ -372,7 +372,8 @@ sub prepare_feature_table ($$$)
     foreach my $onefeature (@$modules)
     {
         # Java and Ada only, if the correct settings are set
-        my $styles = $onefeature->{'Styles'} // "";
+        my $styles = $onefeature->{'Styles'};
+        $styles = "" unless defined $styles;
         if (( $styles =~ /\bJAVAMODULE\b/ ) && ( ! ($variables->{'JAVAPRODUCT'} ))) { next; }
 
         # Controlling the language!

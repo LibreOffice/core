@@ -169,7 +169,8 @@ sub generate_cab_file_list ($$$$)
     write_ddf_file_header(\@ddffile, $cabinetfile, $installdir);
     foreach my $onefile (@sorted_files)
     {
-        my $styles = $onefile->{'Styles'} // "";
+        my $styles = $onefile->{'Styles'};
+        $styles = "" unless defined $styles;
         if ($styles =~ /\bDONT_PACK\b/)
         {
             $installer::logger::Lang->printf("    excluding '%s' from ddf\n", $onefile->{'uniquename'});
