@@ -151,8 +151,12 @@ bool ChartController::EndTextEdit()
 void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
 {
     SolarMutexGuard aGuard;
-
-    if( m_pDrawViewWrapper && !m_pDrawViewWrapper->IsTextEdit() )
+    if( !m_pDrawViewWrapper)
+    {
+        OSL_ENSURE( m_pDrawViewWrapper, "No DrawViewWrapper for ChartController" );
+        return;
+    }
+    if( !m_pDrawViewWrapper->IsTextEdit() )
         this->StartTextEdit();
 
     SvxAbstractDialogFactory * pFact = SvxAbstractDialogFactory::Create();
