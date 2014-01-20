@@ -2603,6 +2603,27 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69616, "fdo69616.docx")
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Fallback/w:pict/v:group", "coordorigin").match("696,725"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo73556,"fdo73556.docx")
+{
+    /*
+    *  The file contains a table with 3 columns
+    *  the girdcols are as follows: {1210, 1331, 1210}
+    *  whereas the individual cells have {1210, 400, 1210}
+    *  The table column separators were taken from the Grid, while
+    *  the table width was calculated as 2820 from cells instead
+    *  of 3751 from the Grid.
+    */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblGrid/w:gridCol", 3);
+    sal_Int32 tableWidth = 0;
+    tableWidth += getXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblGrid/w:gridCol[1]", "w").toInt32();
+    tableWidth += getXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblGrid/w:gridCol[2]", "w").toInt32();
+    tableWidth += getXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblGrid/w:gridCol[3]", "w").toInt32();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3751), tableWidth);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
