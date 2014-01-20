@@ -64,11 +64,11 @@ void FontTable::lcl_attribute(Id Name, Value & val)
     switch(Name)
     {
         case NS_ooxml::LN_CT_Pitch_val:
-            if (nIntValue == NS_ooxml::LN_Value_ST_Pitch_fixed)
+            if (static_cast<Id>(nIntValue) == NS_ooxml::LN_Value_ST_Pitch_fixed)
                 m_pImpl->pCurrentEntry->nPitchRequest = awt::FontPitch::FIXED;
-            else if (nIntValue == NS_ooxml::LN_Value_ST_Pitch_variable)
+            else if (static_cast<Id>(nIntValue) == NS_ooxml::LN_Value_ST_Pitch_variable)
                 m_pImpl->pCurrentEntry->nPitchRequest = awt::FontPitch::VARIABLE;
-            else if (nIntValue == NS_ooxml::LN_Value_ST_Pitch_default)
+            else if (static_cast<Id>(nIntValue) == NS_ooxml::LN_Value_ST_Pitch_default)
                 m_pImpl->pCurrentEntry->nPitchRequest = awt::FontPitch::DONTKNOW;
             else
                 SAL_WARN("writerfilter", "FontTable::lcl_attribute: unhandled NS_ooxml::CT_Pitch_val: " << nIntValue);
