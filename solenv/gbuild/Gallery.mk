@@ -23,8 +23,8 @@ define gb_Gallery__make_env_args
 		$(call gb_Helper_make_url,$(call gb_ComponentTarget_get_target_for_build,$(item))))" \
 "-env:UNO_TYPES=$(foreach item,offapi udkapi,\
 	$(call gb_Helper_make_url,$(call gb_UnoApi_get_target,$(item))))" \
--env:URE_INTERNAL_LIB_DIR=$(call gb_Helper_make_url,$(INSTROOT)/$(LIBO_URE_LIB_FOLDER)) \
--env:LO_LIB_DIR=$(call gb_Helper_make_url,$(INSTROOT)/$(LIBO_LIB_FOLDER))
+-env:URE_INTERNAL_LIB_DIR=$(call gb_Helper_make_url,$(INSTROOT_FOR_BUILD)/$(LIBO_URE_LIB_FOLDER_FOR_BUILD)) \
+-env:LO_LIB_DIR=$(call gb_Helper_make_url,$(INSTROOT_FOR_BUILD)/$(LIBO_LIB_FOLDER_FOR_BUILD))
 endef
 
 define gb_Gallery__command
