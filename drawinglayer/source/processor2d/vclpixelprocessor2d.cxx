@@ -297,10 +297,13 @@ namespace drawinglayer
             switch (rSource.getStyle())
             {
                 case table::BorderLineStyle::SOLID:
+                case table::BorderLineStyle::DOUBLE:
                 {
                     const basegfx::BColor aLineColor =
                         maBColorModifierStack.getModifiedColor(rSource.getRGBColorLeft());
                     double nThick = rtl::math::round(rSource.getLeftWidth());
+
+                    bool bDouble = rSource.getStyle() == table::BorderLineStyle::DOUBLE;
 
                     basegfx::B2DPolygon aTarget;
 
@@ -314,12 +317,20 @@ namespace drawinglayer
                         basegfx::B2DRange aRange = aTarget.getB2DRange();
                         double fH = aRange.getHeight();
 
-                        if (fH <= 1.0)
+                        if (fH <= 1.0 || bDouble)
                         {
                             // Draw it as a line.
                             drawHairLine(
                                 mpOutputDevice, aRange.getMinX(), aRange.getMinY(), aRange.getMaxX(), aRange.getMinY(),
                                 aLineColor);
+
+                            if (bDouble)
+                            {
+                                drawHairLine(
+                                    mpOutputDevice, aRange.getMinX(), aRange.getMinY()+2.0, aRange.getMaxX(), aRange.getMinY()+2.0,
+                                    aLineColor);
+                            }
+
                             return true;
                         }
                     }
@@ -333,12 +344,19 @@ namespace drawinglayer
                         basegfx::B2DRange aRange = aTarget.getB2DRange();
                         double fW = aRange.getWidth();
 
-                        if (fW <= 1.0)
+                        if (fW <= 1.0 || bDouble)
                         {
                             // Draw it as a line.
                             drawHairLine(
                                 mpOutputDevice, aRange.getMinX(), aRange.getMinY(), aRange.getMinX(), aRange.getMaxY(),
                                 aLineColor);
+
+                            if (bDouble)
+                            {
+                                drawHairLine(
+                                    mpOutputDevice, aRange.getMinX()+2.0, aRange.getMinY(), aRange.getMinX()+2.0, aRange.getMaxY(),
+                                    aLineColor);
+                            }
                             return true;
                         }
                     }
