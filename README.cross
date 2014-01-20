@@ -386,28 +386,36 @@ Raspbian
 In theory, this should work also for another Linux, it does not need to be Raspbian.
 But this cross-compilation work is tested from Debian based system to Raspbian.
 
-You will need Raspbian's pkg-config files and system libraries to build against.
-Available at http://dev-www.libreoffice.org/extern/raspbian_rootfs.tar.bz2
-$ wget http://dev-www.libreoffice.org/extern/raspbian_rootfs.tar.bz2
-$ tar -xf raspbian_rootfs.tar.bz2
+You will need headers, pkg-config files and libraries from a Raspbian
+system to build against. Available at
+http://dev-www.libreoffice.org/extern/ . Look for the latest
+raspbian-root-*.tar.gz . For instance:
+
+$ wget http://dev-www.libreoffice.org/extern/raspbian-root-20140120.tar.gz
+$ mkdir raspbian-root
+$ cd raspbian-root
+$ tar -xf raspbian-root-20140120.tar.gz
 
 You can build cross-compiler yourself or get the executables here:
 $ git clone git://github.com/raspberrypi/tools
+
 tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian is known to work.
 
 Then create pkg-config wrapper, something like:
 $ cat > pkg-config-wrapper-host << _EOF
 #!/bin/sh
 
-SYSROOT=<path-to-raspbian_rootfs>
-
-export PKG_CONFIG_DIR=
-export PKG_CONFIG_LIBDIR=\${SYSROOT}/usr/lib/pkgconfig:\${SYSROOT}/usr/lib/arm-linux-gnueabihf/pkgconfig:\${SYSROOT}/usr/share/pkgconfig
-export PKG_CONFIG_SYSROOT_DIR=\${SYSROOT}
+if [ "$CROSS_COMPILING" = YES ]; then
+   SYSROOT=$HOME/lo/raspbian-root
+   export PKG_CONFIG_PATH=${SYSROOT}/usr/lib/arm-linux-gnueabihf/pkgconfig:${SYSROOT}/usr/share/pkgconfig
+   export PKG_CONFIG_LIBDIR=${SYSROOT}/usr/lib/pkgconfig
+   export PKG_CONFIG_SYSROOT_DIR=${SYSROOT}
+fi
 
 exec pkg-config "\$@"
 _EOF
 $ chmod +x pkg-config-wrapper-host
+
 This does not work with pkg-config 0.23. 0.26 is known to work.
 
 And you are ready to build with autogen.input similar to:
