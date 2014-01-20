@@ -40,6 +40,7 @@ $(eval $(call gb_Library_use_libraries,cui,\
     drawinglayer \
     editeng \
     i18nlangtag \
+    i18nutil \
     $(if $(ENABLE_JAVA), \
         jvmfwk) \
     lng \

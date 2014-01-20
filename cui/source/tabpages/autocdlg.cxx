@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <i18nutil/unicode.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/field.hxx>
@@ -659,7 +660,8 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
     m_pCheckLB->SetUserData(  REPLACE_BULLETS, pUserData );
 
     nPercent = pOpt->nRightMargin;
-    sMargin = " " + OUString::number( nPercent ) + "%";
+    sMargin = " " +
+        unicode::formatPercent(nPercent, Application::GetSettings().GetUILanguageTag());
     pUserData = new ImpUserData(&sMargin, 0);
     m_pCheckLB->SetUserData( MERGE_SINGLE_LINE_PARA, pUserData );
 
@@ -713,7 +715,8 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl)
         if(RET_OK == aDlg.Execute())
         {
             nPercent = (sal_uInt16)aDlg.GetPrcntFld().GetValue();
-            sMargin = " " + OUString::number( nPercent ) + "%";
+            sMargin = " " +
+                unicode::formatPercent(nPercent, Application::GetSettings().GetUILanguageTag());
         }
     }
     m_pCheckLB->Invalidate();
