@@ -1704,7 +1704,17 @@ DECLARE_OOXMLIMPORT_TEST(testFdo69649, "fdo69649.docx")
     xTocString = xTocString.copy(256);
     CPPUNIT_ASSERT(xTocString.startsWithIgnoreAsciiCase( "Heading 15.1:\t15" ) );
 }
+
+DECLARE_OOXMLIMPORT_TEST(testFdo73389,"fdo73389.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    // This was 9340, i.e. the width of the inner table was too large.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2842), getProperty<sal_Int32>(xTables->getByIndex(0), "Width"));
+}
 #endif
+
+
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
