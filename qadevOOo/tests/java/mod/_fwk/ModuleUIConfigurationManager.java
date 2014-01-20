@@ -22,11 +22,7 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XIndexContainer;
 import com.sun.star.container.XNameAccess;
-import com.sun.star.embed.ElementModes;
-import com.sun.star.embed.XStorage;
-import com.sun.star.embed.XTransactedObject;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.ui.XModuleUIConfigurationManagerSupplier;
@@ -51,7 +47,6 @@ public class ModuleUIConfigurationManager extends TestCase {
     XInterface oObj = null;
     XMultiServiceFactory xMSF = null;
     XTextDocument xTextDoc = null;
-    XStorage xStore = null;
 
     /**
      * Cleanup: close the created document
@@ -72,9 +67,6 @@ public class ModuleUIConfigurationManager extends TestCase {
             }
         }
         log.println("   disposing storage");
-        if (xStore != null) {
-            xStore.dispose();
-        }
     }
 
     /**
@@ -100,38 +92,6 @@ public class ModuleUIConfigurationManager extends TestCase {
 
             XNameAccess xMM = UnoRuntime.queryInterface(XNameAccess.class, xMSF.createInstance("com.sun.star.comp.framework.ModuleManager"));
             xMM.getElementNames();
-
-            o = xMSF.createInstance("com.sun.star.embed.StorageFactory");
-            XSingleServiceFactory xStorageService = UnoRuntime.queryInterface(XSingleServiceFactory.class, o);
-            Object[]props = new Object[2];
-
-            String aFile = util.utils.getOfficeTempDir(xMSF) + "dummyFile.dat";
-            log.println("storage file : '"+ aFile + "'");
-
-            props[0] = aFile;
-            props[1] = new Integer(ElementModes.READWRITE);
-            xStore = UnoRuntime.queryInterface(XStorage.class, xStorageService.createInstanceWithArguments(props));
-
-            PropertyValue[] initProps = new PropertyValue[4];
-            PropertyValue propVal = new PropertyValue();
-            propVal.Name = "DefaultConfigStorage";
-            propVal.Value = xStore;
-            initProps[0] = propVal;
-            propVal = new PropertyValue();
-            propVal.Name = "UserConfigStorage";
-            propVal.Value = xStore;
-            initProps[1] = propVal;
-            propVal = new PropertyValue();
-            propVal.Name = "ModuleIdentifier";
-            propVal.Value = "swriter";
-            initProps[2] = propVal;
-            propVal = new PropertyValue();
-            propVal.Name = "UserRootCommit";
-            propVal.Value = UnoRuntime.queryInterface(XTransactedObject.class, xStore);
-            initProps[3] = propVal;
-
-
-            tEnv.addObjRelation("XInitialization.args", initProps);
 
             // the short cut manager service name
             // 2do: correct the service name when it's no longer in
