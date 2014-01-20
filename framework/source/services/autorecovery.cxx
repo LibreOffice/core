@@ -65,6 +65,7 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -76,7 +77,7 @@
 
 #include <comphelper/configurationhelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase6.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -188,8 +189,9 @@ public:
     of documents - including features of an EmergencySave in
     case a GPF occurs.
  */
-typedef ::cppu::WeakImplHelper5<
+typedef ::cppu::WeakImplHelper6<
             css::lang::XServiceInfo,
+            css::lang::XInitialization,
             css::frame::XDispatch,
             css::document::XEventListener,    // => css.lang.XEventListener
             css::util::XChangesListener,      // => css.lang.XEventListener
