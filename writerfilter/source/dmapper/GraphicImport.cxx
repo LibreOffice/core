@@ -479,30 +479,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_shpfComplex:
             break;
 
-        //BLIP store entry
-        case NS_rtf::LN_shpbtWin32:
-            break;
-        case NS_rtf::LN_shpbtMacOS:
-            break;
-        case NS_rtf::LN_shprgbUid:
-            break;
-        case NS_rtf::LN_shptag:
-            break;
-        case NS_rtf::LN_shpsize:
-            break;
-        case NS_rtf::LN_shpcRef:
-            break;
-        case NS_rtf::LN_shpfoDelay:
-            break;
-        case NS_rtf::LN_shpusage:
-            break;
-        case NS_rtf::LN_shpcbName:
-            break;
-        case NS_rtf::LN_shpunused2:
-            break;
-        case NS_rtf::LN_shpunused3:
-            break;
-
         //border properties
         case NS_ooxml::LN_CT_Border_sz:
             m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineWidth = nIntValue;
