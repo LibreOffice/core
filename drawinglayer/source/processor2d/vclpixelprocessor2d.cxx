@@ -271,15 +271,20 @@ namespace drawinglayer
             {
                 case table::BorderLineStyle::SOLID:
                 {
+                    const basegfx::BColor aLineColor =
+                        maBColorModifierStack.getModifiedColor(rSource.getRGBColorLeft());
+                    double nThick = rtl::math::round(rSource.getLeftWidth());
+
+                    bool bDraw = false;
+                    bool bAsLine = false;
+                    basegfx::B2DPolygon aTarget;
+
                     if (fY1 == fY2)
                     {
                         // Horizontal line.  Draw it as a rectangle.
+                        bDraw = true;
 
-                        const basegfx::BColor aLineColor =
-                            maBColorModifierStack.getModifiedColor(rSource.getRGBColorLeft());
-                        double nThick = rtl::math::round(rSource.getLeftWidth());
-
-                        basegfx::B2DPolygon aTarget = makeRectPolygon(fX1, fY1, fX2-fX1, nThick);
+                        aTarget = makeRectPolygon(fX1, fY1, fX2-fX1, nThick);
                         aTarget.transform(maCurrentTransformation);
 
                         basegfx::B2DRange aRange = aTarget.getB2DRange();
@@ -291,20 +296,46 @@ namespace drawinglayer
                             aTarget.clear();
                             aTarget.append(basegfx::B2DPoint(aRange.getMinX(), aRange.getMinY()));
                             aTarget.append(basegfx::B2DPoint(aRange.getMaxX(), aRange.getMinY()));
-
-                            mpOutputDevice->SetFillColor();
-                            mpOutputDevice->SetLineColor(Color(aLineColor));
-
-                            mpOutputDevice->DrawPolyLine(aTarget);
-                            return true;
+                            bAsLine = true;
                         }
+                    }
+                    else if (fX1 == fX2)
+                    {
+                        // Vertical line.  Draw it as a rectangle.
+                        bDraw = true;
 
+                        aTarget = makeRectPolygon(fX1, fY1, nThick, fY2-fY1);
+                        aTarget.transform(maCurrentTransformation);
+
+                        basegfx::B2DRange aRange = aTarget.getB2DRange();
+                        double fW = aRange.getWidth();
+
+                        if (fW <= 1.0)
+                        {
+                            // Draw it as a line.
+                            aTarget.clear();
+                            aTarget.append(basegfx::B2DPoint(aRange.getMinX(), aRange.getMinY()));
+                            aTarget.append(basegfx::B2DPoint(aRange.getMinX(), aRange.getMaxY()));
+                            bAsLine = true;
+                        }
+                    }
+
+                    if (!bDraw)
+                        return false;
+
+                    if (bAsLine)
+                    {
+                        mpOutputDevice->SetFillColor();
+                        mpOutputDevice->SetLineColor(Color(aLineColor));
+                        mpOutputDevice->DrawPolyLine(aTarget);
+                    }
+                    else
+                    {
                         mpOutputDevice->SetFillColor(Color(aLineColor));
                         mpOutputDevice->SetLineColor();
-
                         mpOutputDevice->DrawPolygon(aTarget);
-                        return true;
                     }
+                    return true;
                 }
                 break;
                 case table::BorderLineStyle::DOTTED:
