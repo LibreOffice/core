@@ -46,7 +46,7 @@ static void entry_group_callback(AvahiEntryGroup *g, AvahiEntryGroupState state,
     switch (state) {
         case AVAHI_ENTRY_GROUP_ESTABLISHED :
             /* The entry group has been established successfully */
-            SAL_INFO( "sdremote.wifi", "Service " << avahiService->getName() << " successfully established." );
+            SAL_INFO( "sdremote.wifi", "Service '" << avahiService->getName() << "' successfully established." );
             break;
 
         case AVAHI_ENTRY_GROUP_COLLISION : {
@@ -57,7 +57,7 @@ static void entry_group_callback(AvahiEntryGroup *g, AvahiEntryGroupState state,
             n = avahi_alternative_service_name(avahiService->getName().c_str());
             avahiService->setName(n);
 
-            SAL_INFO( "sdremote.wifi", "Service name collision, renaming service to " << avahiService->getName() );
+            SAL_INFO( "sdremote.wifi", "Service name collision, renaming service to '" << avahiService->getName() << "'");
 
             /* And recreate the services */
             create_services(avahi_entry_group_get_client(g));
@@ -94,7 +94,7 @@ static void create_services(AvahiClient *c) {
      * because it was reset previously, add our entries.  */
 
     if (avahi_entry_group_is_empty(group)) {
-        fprintf(stderr, "Adding service '%s'\n", avahiService->getName().c_str());
+        SAL_INFO("sdremote.wifi", "Adding service '" << avahiService->getName() << "'");
         char r[128];
         snprintf(r, sizeof(r), "random=%i", rand());
         int ret = avahi_entry_group_add_service(
