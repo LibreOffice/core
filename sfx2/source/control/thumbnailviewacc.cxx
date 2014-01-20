@@ -97,7 +97,7 @@ void ThumbnailViewAcc::GetFocus (void)
 {
     mbIsFocused = true;
 
-    // Boradcast the state change.
+    // Broadcast the state change.
     ::com::sun::star::uno::Any aOldState, aNewState;
     aNewState <<= ::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
     FireAccessibleEvent(
@@ -109,7 +109,7 @@ void ThumbnailViewAcc::LoseFocus (void)
 {
     mbIsFocused = false;
 
-    // Boradcast the state change.
+    // Broadcast the state change.
     ::com::sun::star::uno::Any aOldState, aNewState;
     aOldState <<= ::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
     FireAccessibleEvent(
@@ -612,6 +612,32 @@ ThumbnailViewItemAcc::~ThumbnailViewItemAcc()
 {
 }
 
+void ThumbnailViewItemAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue, const uno::Any& rNewValue )
+{
+    if( nEventId )
+    {
+        ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > > aTmpListeners( mxEventListeners );
+        accessibility::AccessibleEventObject aEvtObject;
+
+        aEvtObject.EventId = nEventId;
+        aEvtObject.Source = static_cast<uno::XWeak*>(this);
+        aEvtObject.NewValue = rNewValue;
+        aEvtObject.OldValue = rOldValue;
+
+        for (::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter( aTmpListeners.begin() ), aEnd( aTmpListeners.end() );
+            aIter != aEnd ; ++aIter)
+        {
+            try
+            {
+                (*aIter)->notifyEvent( aEvtObject );
+            }
+            catch(const uno::Exception&)
+            {
+            }
+        }
+    }
+}
+
 void ThumbnailViewItemAcc::ParentDestroyed()
 {
     const ::osl::MutexGuard aGuard( maMutex );
@@ -626,6 +652,23 @@ namespace
 const uno::Sequence< sal_Int8 >& ThumbnailViewItemAcc::getUnoTunnelId()
 {
     return theValueItemAccUnoTunnelId::get().getSeq();
+}
+
+ThumbnailViewItemAcc* ThumbnailViewItemAcc::getImplementation( const uno::Reference< uno::XInterface >& rxData )
+    throw()
+{
+    try
+    {
+        uno::Reference< lang::XUnoTunnel > xUnoTunnel( rxData, uno::UNO_QUERY );
+        return( xUnoTunnel.is() ?
+                reinterpret_cast<ThumbnailViewItemAcc*>(sal::static_int_cast<sal_IntPtr>(
+                        xUnoTunnel->getSomething( ThumbnailViewItemAcc::getUnoTunnelId() ))) :
+                NULL );
+    }
+    catch(const ::com::sun::star::uno::Exception&)
+    {
+        return NULL;
+    }
 }
 
 uno::Reference< accessibility::XAccessibleContext > SAL_CALL ThumbnailViewItemAcc::getAccessibleContext()
