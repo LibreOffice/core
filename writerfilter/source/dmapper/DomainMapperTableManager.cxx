@@ -142,24 +142,17 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                             */
                             bool bFixed = true;
                             sal_Int32 nRowFixedWidth = 0;
-                            if (!m_aCellWidths.empty())
+                            IntVectorPtr pCellWidths = getCurrentCellWidths();
+                            // Step 1. Check whether all cells have fixed widths in the given row of table.
+                            for (std::vector<sal_Int32>::const_iterator aValIter = pCellWidths->begin(); aValIter != pCellWidths->end(); ++aValIter)
                             {
-                                // Step 1. Check whether all cells have fixed widths in the given row of table.
-                                ::std::vector< IntVectorPtr >::iterator itr;
-                                for (itr = m_aCellWidths.begin(); itr != m_aCellWidths.end(); ++itr )
+                                if (*aValIter == -1)
                                 {
-                                    IntVectorPtr itrVal = (*itr);
-                                    for (std::vector<sal_Int32>::const_iterator aValIter = itrVal->begin(); aValIter != itrVal->end(); ++aValIter)
-                                    {
-                                        if (*aValIter == -1)
-                                        {
-                                            bFixed = false;
-                                            break;
-                                        }
-                                        // Sum the width of cells to find the total width of given row
-                                        nRowFixedWidth += (*aValIter);
-                                    }
+                                    bFixed = false;
+                                    break;
                                 }
+                                // Sum the width of cells to find the total width of given row
+                                nRowFixedWidth += (*aValIter);
                             }
 
                             // Check whether the total width of given row is compared with the maximum value of rows (m_nMaxFixedWidth).
