@@ -300,14 +300,14 @@ public:
     uno::Any SAL_CALL nextElement() throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         if( m_nCount > 0 )
-            throw container::NoSuchElementException(OUString::boolean(m_nCount), *this);
+            throw container::NoSuchElementException(OUString::number(m_nCount), *this);
 
         ++m_nCount;
         return uno::makeAny(m_aEntry);
     };
 
 private:
-    sal_uInt8 m_nCount;
+    sal_Int32 m_nCount;
     deployment::UpdateInformationEntry m_aEntry;
 };
 

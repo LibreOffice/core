@@ -213,12 +213,12 @@ SfxItemPresentation SwFmtDrop::GetPresentation
             {
                 if ( GetChars() > 1 )
                 {
-                    rText = OUString::boolean( GetChars() ) + " ";
+                    rText = OUString::number( GetChars() ) + " ";
                 }
                 rText = rText +
                         OUString( SW_RESSTR( STR_DROP_OVER ) ) +
                         " " +
-                        OUString::boolean( GetLines() ) +
+                        OUString::number( GetLines() ) +
                         " " +
                         OUString( SW_RESSTR( STR_DROP_LINES ) );
             }
@@ -336,7 +336,7 @@ SfxItemPresentation SwFmtFrmSize::GetPresentation
             rText = SW_RESSTR( STR_FRM_WIDTH ) + " ";
             if ( GetWidthPercent() )
             {
-                rText = rText + OUString::boolean(GetWidthPercent()) + "%";
+                rText = rText + OUString::number(GetWidthPercent()) + "%";
             }
             else
             {
@@ -350,7 +350,7 @@ SfxItemPresentation SwFmtFrmSize::GetPresentation
                 rText = rText + ", " + SW_RESSTR( nId ) + " ";
                 if ( GetHeightPercent() )
                 {
-                    rText = rText + OUString::boolean(GetHeightPercent()) + "%";
+                    rText = rText + OUString::number(GetHeightPercent()) + "%";
                 }
                 else
                 {
