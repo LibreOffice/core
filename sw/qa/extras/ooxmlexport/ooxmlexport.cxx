@@ -2469,6 +2469,22 @@ DECLARE_OOXMLEXPORT_TEST(testMsoSpt180, "mso-spt180.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("ooxml-borderCallout1"), aType);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testDmlTextshape, "dml-textshape.docx")
+{
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(1), uno::UNO_QUERY);
+    // This was drawing::FillStyle_NONE.
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xShape, "FillStyle"));
+    // This was drawing::LineStyle_NONE.
+    CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_SOLID, getProperty<drawing::LineStyle>(xShape, "LineStyle"));
+
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+    // This was wrap="none".
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wpg:wgp/wps:wsp[2]/wps:bodyPr", "wrap", "square");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testShapeThemePreservation, "shape-theme-preservation.docx")
 {
     xmlDocPtr pXmlDocument = parseExport("word/document.xml");
