@@ -50,6 +50,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc, \
     for \
     forui \
     i18nlangtag \
+    i18nutil \
     sal \
     salhelper \
     sax \

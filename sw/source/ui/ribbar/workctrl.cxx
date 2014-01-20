@@ -19,6 +19,7 @@
 
 #include <string>
 #include <comphelper/string.hxx>
+#include <i18nutil/unicode.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <sfx2/dispatch.hxx>
@@ -643,7 +644,8 @@ SwZoomBox_Impl::SwZoomBox_Impl(
     {   25, 50, 75, 100, 150, 200 };
     for(sal_uInt16 i = 0; i < sizeof(aZoomValues)/sizeof(sal_uInt16); i++)
     {
-        OUString sEntry = OUString::number(aZoomValues[i]) + "%";
+        OUString sEntry = unicode::formatPercent(aZoomValues[i],
+            Application::GetSettings().GetUILanguageTag());
         InsertEntry(sEntry);
     }
 }
@@ -758,8 +760,8 @@ void SwPreviewZoomControl::StateChanged( sal_uInt16 /*nSID*/,
     SwZoomBox_Impl* pBox = (SwZoomBox_Impl*)GetToolBox().GetItemWindow( GetId() );
     if(SFX_ITEM_AVAILABLE <= eState)
     {
-        OUString sZoom(OUString::number(((const SfxUInt16Item*)pState)->GetValue()));
-        sZoom += "%";
+        OUString sZoom(unicode::formatPercent(((const SfxUInt16Item*)pState)->GetValue(),
+            Application::GetSettings().GetUILanguageTag()));
         pBox->SetText(sZoom);
         pBox->SaveValue();
     }

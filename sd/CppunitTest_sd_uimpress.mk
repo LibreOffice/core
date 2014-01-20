@@ -32,6 +32,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_uimpress,\
     drawinglayer \
     editeng \
     i18nlangtag \
+    i18nutil \
     msfilter \
     sal \
     sax \

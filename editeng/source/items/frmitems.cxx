@@ -43,6 +43,7 @@
 #include <com/sun/star/frame/status/UpperLowerMarginScale.hpp>
 #include <com/sun/star/drawing/ShadingPattern.hpp>
 
+#include <i18nutil/unicode.hxx>
 #include <unotools/securityoptions.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <limits.h>
@@ -56,6 +57,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/svapp.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/editrids.hrc>
 #include <editeng/pbinitem.hxx>
@@ -600,19 +602,28 @@ SfxItemPresentation SvxLRSpaceItem::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         {
             if ( 100 != nPropLeftMargin )
-                rText = OUString::number( nPropLeftMargin ) + "%";
+            {
+                rText = unicode::formatPercent(nPropLeftMargin,
+                    Application::GetSettings().GetUILanguageTag());
+            }
             else
                 rText = GetMetricText( (long)nLeftMargin,
                                        eCoreUnit, ePresUnit, pIntl );
             rText += OUString(cpDelim);
             if ( 100 != nPropFirstLineOfst )
-                rText = rText + OUString::number( nPropFirstLineOfst ) + "%";
+            {
+                rText += unicode::formatPercent(nPropFirstLineOfst,
+                    Application::GetSettings().GetUILanguageTag());
+            }
             else
                 rText += GetMetricText( (long)nFirstLineOfst,
                                         eCoreUnit, ePresUnit, pIntl );
             rText += OUString(cpDelim);
             if ( 100 != nRightMargin )
-                rText = rText + OUString::number( nRightMargin ) + "%";
+            {
+                rText += unicode::formatPercent(nRightMargin,
+                    Application::GetSettings().GetUILanguageTag());
+            }
             else
                 rText += GetMetricText( (long)nRightMargin,
                                         eCoreUnit, ePresUnit, pIntl );
@@ -622,7 +633,8 @@ SfxItemPresentation SvxLRSpaceItem::GetPresentation
         {
             rText = EE_RESSTR(RID_SVXITEMS_LRSPACE_LEFT);
             if ( 100 != nPropLeftMargin )
-                rText += OUString::number( nPropLeftMargin ) + "%";
+                rText += unicode::formatPercent(nPropLeftMargin,
+                    Application::GetSettings().GetUILanguageTag());
             else
             {
                 rText = rText +
@@ -634,7 +646,8 @@ SfxItemPresentation SvxLRSpaceItem::GetPresentation
             {
                 rText += EE_RESSTR(RID_SVXITEMS_LRSPACE_FLINE);
                 if ( 100 != nPropFirstLineOfst )
-                    rText = rText + OUString::number( nPropFirstLineOfst ) + "%";
+                    rText = rText + unicode::formatPercent(nPropFirstLineOfst,
+                    Application::GetSettings().GetUILanguageTag());
                 else
                 {
                     rText = rText +
@@ -646,7 +659,8 @@ SfxItemPresentation SvxLRSpaceItem::GetPresentation
             }
             rText += EE_RESSTR(RID_SVXITEMS_LRSPACE_RIGHT);
             if ( 100 != nPropRightMargin )
-                rText = rText + OUString::number( nPropRightMargin ) + "%";
+                rText = rText + unicode::formatPercent(nPropRightMargin,
+                    Application::GetSettings().GetUILanguageTag());
             else
             {
                 rText = rText +
@@ -961,12 +975,18 @@ SfxItemPresentation SvxULSpaceItem::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         {
             if ( 100 != nPropUpper )
-                rText = OUString::number( nPropUpper ) + "%";
+            {
+                rText = unicode::formatPercent(nPropUpper,
+                    Application::GetSettings().GetUILanguageTag());
+            }
             else
                 rText = GetMetricText( (long)nUpper, eCoreUnit, ePresUnit, pIntl );
             rText += OUString(cpDelim);
             if ( 100 != nPropLower )
-                rText += OUString::number( nPropLower ) + "%";
+            {
+                rText += unicode::formatPercent(nPropLower,
+                    Application::GetSettings().GetUILanguageTag());
+            }
             else
                 rText += GetMetricText( (long)nLower, eCoreUnit, ePresUnit, pIntl );
             return SFX_ITEM_PRESENTATION_NAMELESS;
@@ -975,7 +995,10 @@ SfxItemPresentation SvxULSpaceItem::GetPresentation
         {
             rText = EE_RESSTR(RID_SVXITEMS_ULSPACE_UPPER);
             if ( 100 != nPropUpper )
-                rText += OUString::number( nPropUpper ) + "%";
+            {
+                rText += unicode::formatPercent(nPropUpper,
+                    Application::GetSettings().GetUILanguageTag());
+            }
             else
             {
                 rText = rText +
@@ -984,7 +1007,10 @@ SfxItemPresentation SvxULSpaceItem::GetPresentation
             }
             rText = rText + OUString(cpDelim) + EE_RESSTR(RID_SVXITEMS_ULSPACE_LOWER);
             if ( 100 != nPropLower )
-                rText += OUString::number( nPropLower ) + "%";
+            {
+                rText += unicode::formatPercent(nPropLower,
+                    Application::GetSettings().GetUILanguageTag());
+            }
             else
             {
                 rText = rText +

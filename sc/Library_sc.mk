@@ -71,6 +71,7 @@ $(eval $(call gb_Library_use_libraries,sc,\
     for \
     forui \
     i18nlangtag \
+    i18nutil \
     sal \
     salhelper \
     sax \

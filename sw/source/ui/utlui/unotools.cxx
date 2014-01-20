@@ -26,8 +26,10 @@
 #include <unotools.hrc>
 #include <unotools.hxx>
 #include <unoprnms.hxx>
+#include <i18nutil/unicode.hxx>
 #include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/view/XScreenCursor.hpp>
 #include <com/sun/star/view/DocumentZoomType.hpp>
@@ -471,7 +473,8 @@ void SwOneExampleFrame::CreatePopup(const Point& rPt)
         for (sal_uInt16 i = 0;
                 i < (sizeof(nZoomValues)/sizeof(nZoomValues[0])); ++i)
         {
-            OUString sTemp = OUString::number(nZoomValues[i]) + " %";
+            OUString sTemp = unicode::formatPercent(nZoomValues[i],
+                Application::GetSettings().GetUILanguageTag());
             aSubPop1.InsertItem( ITEM_ZOOM + i + 1, sTemp);
             if(nZoom == nZoomValues[i])
                 aSubPop1.CheckItem(ITEM_ZOOM + i + 1);

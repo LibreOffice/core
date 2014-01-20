@@ -21,6 +21,7 @@
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/uno/Any.hxx>
 
+#include <i18nutil/unicode.hxx>
 #include <svx/dialogs.hrc>
 #include "svx/xattr.hxx"
 #include <svx/xtable.hxx>
@@ -28,6 +29,7 @@
 #include <editeng/itemtype.hxx>
 #include <svx/xdef.hxx>
 #include <svx/AffineMatrixItem.hxx>
+#include <vcl/svapp.hxx>
 
 // class XLineTransparenceItem
 
@@ -70,7 +72,8 @@ SfxItemPresentation XLineTransparenceItem::GetPresentation
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = OUString( ResId( RID_SVXSTR_TRANSPARENCE, DIALOG_MGR() ) ) + ": ";
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            rText = rText + OUString::number( GetValue() ) + "%";
+            rText += unicode::formatPercent(GetValue(),
+                Application::GetSettings().GetUILanguageTag());
             return ePres;
         default:
             return SFX_ITEM_PRESENTATION_NONE;
@@ -459,7 +462,8 @@ SfxItemPresentation XFillTransparenceItem::GetPresentation
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = OUString( ResId( RID_SVXSTR_TRANSPARENCE, DIALOG_MGR() ) ) + ": ";
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            rText = rText + OUString::number( GetValue() ) + "%";
+            rText += unicode::formatPercent(GetValue(),
+                Application::GetSettings().GetUILanguageTag());
             return ePres;
         default:
             return SFX_ITEM_PRESENTATION_NONE;

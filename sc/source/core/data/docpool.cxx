@@ -20,8 +20,10 @@
 
 #include "scitems.hxx"
 #include <comphelper/string.hxx>
+#include <i18nutil/unicode.hxx>
 #include <tools/shl.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/svapp.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/stritem.hxx>
@@ -743,7 +745,8 @@ static SfxItemPresentation lcl_HFPresentation
                 aText = EE_RESSTR(RID_SVXITEMS_LRSPACE_LEFT);
                 if ( 100 != nPropLeftMargin )
                 {
-                    aText = aText + OUString::number( nPropLeftMargin ) + "%";
+                    aText = aText + unicode::formatPercent(nPropLeftMargin,
+                        Application::GetSettings().GetUILanguageTag());
                 }
                 else
                 {
@@ -758,7 +761,8 @@ static SfxItemPresentation lcl_HFPresentation
                 aText += EE_RESSTR(RID_SVXITEMS_LRSPACE_RIGHT);
                 if ( 100 != nPropRightMargin )
                 {
-                    aText = aText + OUString::number( nPropLeftMargin ) + "%";
+                    aText = aText + unicode::formatPercent(nPropLeftMargin,
+                        Application::GetSettings().GetUILanguageTag());
                 }
                 else
                 {
@@ -974,7 +978,8 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
                     rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_SCALE) + aStrSep;
 //                  break; // DURCHFALLEN!!!
                     case SFX_ITEM_PRESENTATION_NAMELESS:
-                    rText = rText + OUString::number( nPercent ) + "%";
+                    rText = rText + unicode::formatPercent(nPercent,
+                        Application::GetSettings().GetUILanguageTag());
                     break;
                     default:
                     {

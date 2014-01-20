@@ -38,6 +38,7 @@
 #include <editeng/adjustitem.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/writingmodeitem.hxx>
+#include <i18nutil/unicode.hxx>
 #include <svl/solar.hrc>
 #include <tools/bigint.hxx>
 #include <tools/stream.hxx>
@@ -837,7 +838,8 @@ SfxItemPresentation SdrPercentItem::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit /*eCoreMetric*/,
     SfxMapUnit /*ePresMetric*/, OUString& rText, const IntlWrapper *) const
 {
-    rText = OUString::number(GetValue()) + "%";
+    rText = unicode::formatPercent(GetValue(),
+        Application::GetSettings().GetUILanguageTag());
 
     if(ePres == SFX_ITEM_PRESENTATION_COMPLETE)
     {
@@ -2056,7 +2058,8 @@ SfxItemPresentation SdrSignedPercentItem::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
     OUString& rText, const IntlWrapper *) const
 {
-    rText = OUString::number(GetValue()) + "%";
+    rText = unicode::formatPercent(GetValue(),
+        Application::GetSettings().GetUILanguageTag());
 
     if(ePres == SFX_ITEM_PRESENTATION_COMPLETE)
     {

@@ -60,6 +60,7 @@ $(eval $(call gb_Library_use_libraries,svxcore,\
     editeng \
     fwe \
     i18nlangtag \
+    i18nutil \
     lng \
     sal \
     salhelper \

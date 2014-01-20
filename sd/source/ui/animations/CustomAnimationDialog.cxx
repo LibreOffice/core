@@ -35,6 +35,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <i18nutil/unicode.hxx>
 #include <unotools/pathoptions.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
@@ -566,7 +567,8 @@ TransparencyPropertyBox::TransparencyPropertyBox( sal_Int32 nControlType, Window
     mpMenu = new PopupMenu();
     for( sal_Int32 i = 25; i < 101; i += 25 )
     {
-        OUString aStr(OUString::number(i) + "%");
+        OUString aStr(unicode::formatPercent(i,
+            Application::GetSettings().GetUILanguageTag()));
         mpMenu->InsertItem( i, aStr );
     }
 
