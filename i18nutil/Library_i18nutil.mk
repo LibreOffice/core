@@ -21,6 +21,8 @@ $(eval $(call gb_Library_Library,i18nutil))
 $(eval $(call gb_Library_use_externals,i18nutil,\
 	boost_headers \
 	icu_headers \
+	icui18n \
+	icuuc \
 ))
 
 $(eval $(call gb_Library_use_custom_headers,i18nutil,\
@@ -34,6 +36,7 @@ $(eval $(call gb_Library_add_defs,i18nutil,\
 ))
 
 $(eval $(call gb_Library_use_libraries,i18nutil,\
+	i18nlangtag \
 	comphelper \
 	cppu \
 	sal \

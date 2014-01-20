@@ -24,6 +24,8 @@
 #include <unicode/uscript.h>
 #include <i18nutil/i18nutildllapi.h>
 
+class LanguageTag;
+
 typedef struct _ScriptTypeList {
     sal_Int16 from;
     sal_Int16 to;
@@ -54,6 +56,11 @@ public:
 
     //Return a language that can be written in a given ISO 15924 script code
     static OString SAL_CALL getExemplarLanguageForUScriptCode(UScriptCode eScript);
+
+    //Format a number as a percentage according to the rules of the given
+    //language, e.g. 100 -> "100%" for en-US vs "100 %" for de-DE
+    static OUString SAL_CALL formatPercent(double dNumber,
+        const LanguageTag &rLangTag);
 };
 
 #endif

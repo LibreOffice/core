@@ -17,10 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/languagetagicu.hxx>
 #include <i18nutil/unicode.hxx>
+#include <unicode/numfmt.h>
 #include "unicode_data.h"
 
 // Workaround for glibc braindamage:
@@ -932,6 +936,28 @@ OString SAL_CALL unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
 #endif
     }
     return sRet;
+}
+
+//Format a number as a percentage according to the rules of the given
+//language, e.g. 100 -> "100%" for en-US vs "100 %" for de-DE
+OUString SAL_CALL unicode::formatPercent(double dNumber,
+    const LanguageTag &rLangTag)
+{
+    // get a currency formatter for this locale ID
+    UErrorCode errorCode=U_ZERO_ERROR;
+    icu::Locale aLocale = LanguageTagIcu::getIcuLocale(rLangTag);
+    boost::scoped_ptr<NumberFormat> xF(
+        NumberFormat::createPercentInstance(aLocale, errorCode));
+    if(U_FAILURE(errorCode))
+    {
+        SAL_WARN("i18n", "NumberFormat::createPercentInstance failed");
+        return OUString::number(dNumber) + "%";
+    }
+
+    UnicodeString output;
+    xF->format(dNumber, output);
+    return OUString(reinterpret_cast<const sal_Unicode *>(output.getBuffer()),
+        output.length());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
