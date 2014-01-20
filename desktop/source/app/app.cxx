@@ -1933,7 +1933,7 @@ sal_Bool Desktop::InitializeQuickstartMode( const Reference< XComponentContext >
     }
 }
 
-void Desktop::SystemSettingsChanging( AllSettings& rSettings, Window* )
+void Desktop::SystemSettingsChanging( AllSettings& rSettings )
 {
     if ( !SvtTabAppearanceCfg::IsInitialized () )
         return;
