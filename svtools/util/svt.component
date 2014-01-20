@@ -18,7 +18,7 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    xmlns="http://openoffice.org/2010/uno-components">
+    prefix="svt" xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.graphic.GraphicProvider"
       constructor="com_sun_star_comp_graphic_GraphicProvider_get_implementation">
     <service name="com.sun.star.graphic.GraphicProvider"/>
@@ -43,12 +43,10 @@
       constructor="com_sun_star_svtools_SvFilterOptionsDialog_get_implementation">
     <service name="com.sun.star.ui.dialogs.FilterOptionsDialog"/>
   </implementation>
-  <implementation name="com.sun.star.comp.svt.FilePicker"
-      constructor="com_sun_star_comp_svt_FilePicker_get_implementation">
+  <implementation name="com.sun.star.comp.svt.FilePicker">
     <service name="com.sun.star.ui.dialogs.FilePicker"/>
   </implementation>
-  <implementation name="com.sun.star.comp.svt.FolderPicker"
-      constructor="com_sun_star_comp_svt_FolderPicker_get_implementation">
+  <implementation name="com.sun.star.comp.svt.FolderPicker">
     <service name="com.sun.star.ui.dialogs.FolderPicker"/>
   </implementation>
   <implementation name="com.sun.star.comp.embed.DocumentCloser"

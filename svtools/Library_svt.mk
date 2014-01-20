@@ -230,6 +230,7 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/uno/framestatuslistener \
     svtools/source/uno/generictoolboxcontroller \
     svtools/source/uno/genericunodialog \
+    svtools/source/uno/miscservices \
     svtools/source/uno/popupmenucontrollerbase \
     svtools/source/uno/popupwindowcontroller \
     svtools/source/uno/statusbarcontroller \
