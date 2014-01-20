@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_943e6a28",
+        "filename": "oox/source/export/vmlexport.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-20T08:04:38Z",
+      "side": 1,
+      "message": "Why this is necessary? This change would break valid \"moveto 0,0\" commands. Could this be avoided?",
+      "revId": "d89eb704a6b04586652eeed2338baa3bef7c8bec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_b43b6e37",
+        "filename": "oox/source/export/vmlexport.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-20T08:04:38Z",
+      "side": 1,
+      "message": "Again, .getStr() after .makeStringAndClear() makes no sense, that would be an empty string.",
+      "revId": "d89eb704a6b04586652eeed2338baa3bef7c8bec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
