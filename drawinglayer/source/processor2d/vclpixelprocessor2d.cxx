@@ -73,6 +73,19 @@ basegfx::B2DPolygon makeRectPolygon( double fX, double fY, double fW, double fH 
     return aPoly;
 }
 
+void drawHairLine(
+    OutputDevice* pOutDev, double fX1, double fY1, double fX2, double fY2,
+    const basegfx::BColor& rColor )
+{
+    basegfx::B2DPolygon aTarget;
+    aTarget.append(basegfx::B2DPoint(fX1, fY1));
+    aTarget.append(basegfx::B2DPoint(fX2, fY2));
+
+    pOutDev->SetFillColor();
+    pOutDev->SetLineColor(Color(rColor));
+    pOutDev->DrawPolyLine(aTarget);
+}
+
 }
 
 namespace drawinglayer
@@ -289,7 +302,6 @@ namespace drawinglayer
                         maBColorModifierStack.getModifiedColor(rSource.getRGBColorLeft());
                     double nThick = rtl::math::round(rSource.getLeftWidth());
 
-                    bool bAsLine = false;
                     basegfx::B2DPolygon aTarget;
 
                     if (bHorizontal)
@@ -305,10 +317,10 @@ namespace drawinglayer
                         if (fH <= 1.0)
                         {
                             // Draw it as a line.
-                            aTarget.clear();
-                            aTarget.append(basegfx::B2DPoint(aRange.getMinX(), aRange.getMinY()));
-                            aTarget.append(basegfx::B2DPoint(aRange.getMaxX(), aRange.getMinY()));
-                            bAsLine = true;
+                            drawHairLine(
+                                mpOutputDevice, aRange.getMinX(), aRange.getMinY(), aRange.getMaxX(), aRange.getMinY(),
+                                aLineColor);
+                            return true;
                         }
                     }
                     else
@@ -324,25 +336,16 @@ namespace drawinglayer
                         if (fW <= 1.0)
                         {
                             // Draw it as a line.
-                            aTarget.clear();
-                            aTarget.append(basegfx::B2DPoint(aRange.getMinX(), aRange.getMinY()));
-                            aTarget.append(basegfx::B2DPoint(aRange.getMinX(), aRange.getMaxY()));
-                            bAsLine = true;
+                            drawHairLine(
+                                mpOutputDevice, aRange.getMinX(), aRange.getMinY(), aRange.getMinX(), aRange.getMaxY(),
+                                aLineColor);
+                            return true;
                         }
                     }
 
-                    if (bAsLine)
-                    {
-                        mpOutputDevice->SetFillColor();
-                        mpOutputDevice->SetLineColor(Color(aLineColor));
-                        mpOutputDevice->DrawPolyLine(aTarget);
-                    }
-                    else
-                    {
-                        mpOutputDevice->SetFillColor(Color(aLineColor));
-                        mpOutputDevice->SetLineColor();
-                        mpOutputDevice->DrawPolygon(aTarget);
-                    }
+                    mpOutputDevice->SetFillColor(Color(aLineColor));
+                    mpOutputDevice->SetLineColor();
+                    mpOutputDevice->DrawPolygon(aTarget);
                     return true;
                 }
                 break;
@@ -358,6 +361,8 @@ namespace drawinglayer
                         return false;
 
                     double nThick = rtl::math::round(rSource.getLeftWidth());
+                    const basegfx::BColor aLineColor =
+                        maBColorModifierStack.getModifiedColor(rSource.getRGBColorLeft());
 
                     // Transform the current line range before using it for rendering.
                     basegfx::B2DRange aRange(fX1, fY1, fX2, fY2);
@@ -391,6 +396,13 @@ namespace drawinglayer
                             basegfx::B2DPolygon aPoly = aDashes.getB2DPolygon(i);
                             aRange = aPoly.getB2DRange();
                             double fW = rtl::math::round(aRange.getWidth());
+                            if (basegfx::fTools::equalZero(fW))
+                            {
+                                // Dash line segment too small to draw.  Substitute it with a solid line.
+                                drawHairLine(mpOutputDevice, fX1, fY1, fX2, fY1, aLineColor);
+                                return true;
+                            }
+
                             if (rtl::math::isNan(nThick))
                                 nThick = rtl::math::round(aRange.getHeight());
 
@@ -444,6 +456,13 @@ namespace drawinglayer
                             basegfx::B2DPolygon aPoly = aDashes.getB2DPolygon(i);
                             aRange = aPoly.getB2DRange();
                             double fH = rtl::math::round(aRange.getHeight());
+                            if (basegfx::fTools::equalZero(fH))
+                            {
+                                // Dash line segment too small to draw.  Substitute it with a solid line.
+                                drawHairLine(mpOutputDevice, fX1, fY1, fX1, fY2, aLineColor);
+                                return true;
+                            }
+
                             if (rtl::math::isNan(nThick))
                                 nThick = rtl::math::round(aRange.getWidth());
 
@@ -476,8 +495,6 @@ namespace drawinglayer
                         }
                     }
 
-                    const basegfx::BColor aLineColor =
-                        maBColorModifierStack.getModifiedColor(rSource.getRGBColorLeft());
                     mpOutputDevice->SetFillColor(Color(aLineColor));
                     mpOutputDevice->SetLineColor();
                     mpOutputDevice->DrawPolyPolygon(aTarget);
