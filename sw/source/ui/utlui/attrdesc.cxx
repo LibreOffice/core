@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <i18nutil/unicode.hxx>
 #include <svl/itemiter.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/itemtype.hxx>
@@ -336,7 +337,8 @@ SfxItemPresentation SwFmtFrmSize::GetPresentation
             rText = SW_RESSTR( STR_FRM_WIDTH ) + " ";
             if ( GetWidthPercent() )
             {
-                rText = rText + OUString::number(GetWidthPercent()) + "%";
+                rText = rText + unicode::formatPercent(GetWidthPercent(),
+                    Application::GetSettings().GetUILanguageTag());
             }
             else
             {
@@ -350,7 +352,8 @@ SfxItemPresentation SwFmtFrmSize::GetPresentation
                 rText = rText + ", " + SW_RESSTR( nId ) + " ";
                 if ( GetHeightPercent() )
                 {
-                    rText = rText + OUString::number(GetHeightPercent()) + "%";
+                    rText = rText + unicode::formatPercent(GetHeightPercent(),
+                        Application::GetSettings().GetUILanguageTag());
                 }
                 else
                 {
@@ -1042,7 +1045,8 @@ SfxItemPresentation SwLuminanceGrf::GetPresentation(
             rText = SW_RESSTR( STR_LUMINANCE );
         else if( rText.getLength() )
             rText = OUString();
-        rText = rText + OUString::number( GetValue() ) + "%";
+        rText = rText + unicode::formatPercent(GetValue(),
+            Application::GetSettings().GetUILanguageTag());
         break;
 
     default:
@@ -1065,7 +1069,8 @@ SfxItemPresentation SwContrastGrf::GetPresentation(
             rText = SW_RESSTR( STR_CONTRAST );
         else if( rText.getLength() )
             rText = OUString();
-        rText = rText + OUString::number( GetValue() ) + "%";
+        rText = rText + unicode::formatPercent(GetValue(),
+            Application::GetSettings().GetUILanguageTag());
         break;
 
     default:
@@ -1101,7 +1106,8 @@ SfxItemPresentation SwChannelGrf::GetPresentation(
         }
         else if( rText.getLength() )
             rText = OUString();
-        rText = rText + OUString::number( GetValue() ) + "%";
+        rText = rText + unicode::formatPercent(GetValue(),
+            Application::GetSettings().GetUILanguageTag());
         break;
 
     default:
@@ -1123,7 +1129,8 @@ SfxItemPresentation SwGammaGrf::GetPresentation(
     case SFX_ITEM_PRESENTATION_COMPLETE:
         if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
             aText.append(SW_RESSTR(STR_GAMMA));
-        aText.append(GetValue()).append('%');
+        aText.append(unicode::formatPercent(GetValue(),
+            Application::GetSettings().GetUILanguageTag()));
         break;
 
     default:
@@ -1169,7 +1176,8 @@ SfxItemPresentation SwTransparencyGrf::GetPresentation(
             rText = SW_RESSTR( STR_TRANSPARENCY );
         else if( rText.getLength() )
             rText = OUString();
-        rText = rText + OUString::number( GetValue() ) + "%";
+        rText = rText + unicode::formatPercent(GetValue(),
+            Application::GetSettings().GetUILanguageTag());
         break;
 
     default:
