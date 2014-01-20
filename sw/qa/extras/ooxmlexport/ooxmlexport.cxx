@@ -2547,6 +2547,27 @@ DECLARE_OOXMLEXPORT_TEST(testTOCFlag_u,"testTOCFlag_u.docx")
     CPPUNIT_ASSERT(contents.match(" TOC \\z \\o \"1-9\" \\u \\h"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo73556,"fdo73556.docx")
+{
+    /*
+    *  The file contains a table with 3 columns
+    *  the girdcols are as follows: {1210, 1331, 1210}
+    *  whereas the individual cells have {1210, 400, 1210}
+    *  The table colum sepeartors were taken from the grid while
+    *  the table width was calculated as 2820 from cells
+    *  instead of 3751 from the grid
+    */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblGrid/w:gridCol", 3);
+    sal_Int32 tableWidth = 0;
+    tableWidth += getXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblGrid/w:gridCol[1]", "w").toInt32();
+    tableWidth += getXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblGrid/w:gridCol[2]", "w").toInt32();
+    tableWidth += getXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblGrid/w:gridCol[3]", "w").toInt32();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3751), tableWidth);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

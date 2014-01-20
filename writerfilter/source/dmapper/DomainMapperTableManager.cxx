@@ -661,6 +661,18 @@ void DomainMapperTableManager::endOfRowAction()
 
     if( pTableGrid->size() == ( m_nGridBefore + nGrids + m_nGridAfter ) && m_nCell.back( ) > 0 )
     {
+        /*
+         * If table width property set earlier is smaller than the current table width,
+         * replace the property set earlier.
+         */
+        TablePropertyMapPtr propMap = m_aTmpTableProperties.back();
+        sal_Int32 pTableWidth;
+        propMap->getValue( TablePropertyMap::TABLE_WIDTH, pTableWidth );
+        if ((pTableWidth != 100) && (pTableWidth < m_nTableWidth))
+        {
+            propMap->setValue( TablePropertyMap::TABLE_WIDTH, m_nTableWidth );
+        }
+
         uno::Sequence< text::TableColumnSeparator > aSeparators( m_nCell.back( ) - 1 );
         text::TableColumnSeparator* pSeparators = aSeparators.getArray();
         sal_Int16 nLastRelPos = 0;
