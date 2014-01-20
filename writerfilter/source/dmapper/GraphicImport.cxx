@@ -490,41 +490,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_Border_frame: // ignored
             break;
 
-        case NS_rtf::LN_SPID:
-            break;
-        case NS_rtf::LN_XALEFT:
-            m_pImpl->nLeftPosition = ConversionHelper::convertTwipToMM100(nIntValue);
-            break; //left position
-        case NS_rtf::LN_YATOP:
-            m_pImpl->nTopPosition = ConversionHelper::convertTwipToMM100(nIntValue);
-            break; //top position
-        case NS_rtf::LN_XARIGHT:
-            m_pImpl->nRightPosition = ConversionHelper::convertTwipToMM100(nIntValue);
-            break; //right position
-        case NS_rtf::LN_YABOTTOM:
-            m_pImpl->nBottomPosition = ConversionHelper::convertTwipToMM100(nIntValue);
-            break;//bottom position
-        case NS_rtf::LN_BX: //hori orient relation
-            switch( nIntValue )
-            {
-                case  0: m_pImpl->nHoriRelation = text::RelOrientation::PAGE_PRINT_AREA; break;
-                case  1: m_pImpl->nHoriRelation = text::RelOrientation::PAGE_FRAME; break;
-                case  2: m_pImpl->nHoriRelation = text::RelOrientation::FRAME; break;
-                //case  :
-                default:m_pImpl->nHoriRelation = text::RelOrientation::CHAR;
-            }
-        break;
-        case NS_rtf::LN_BY: //vert orient relation
-            switch( nIntValue )
-            {
-                case  0: m_pImpl->nVertRelation = text::RelOrientation::PAGE_PRINT_AREA; break;
-                case  1: m_pImpl->nVertRelation = text::RelOrientation::PAGE_FRAME; break;
-                case  2: m_pImpl->nVertRelation = text::RelOrientation::FRAME; break;
-                //case  :
-                default:m_pImpl->nVertRelation = text::RelOrientation::TEXT_LINE;
-            }
-
-        break;
         case NS_rtf::LN_WR: //wrapping
             switch( nIntValue )
             {
@@ -547,33 +512,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                 break;
                 default:;
             }
-        break;
-        case NS_rtf::LN_WRK:
-            if( !m_pImpl->bIgnoreWRK )
-                switch( nIntValue )
-                {
-                    case 0: //0 like 2, but doesn't require absolute object
-                    case 2: //2 wrap around absolute object
-                        m_pImpl->nWrap = text::WrapTextMode_PARALLEL;
-                        break;
-                    case 1: //1 no text next to shape
-                        m_pImpl->nWrap = text::WrapTextMode_NONE;
-                        break;
-                    case 3: //3 wrap as if no object present
-                        m_pImpl->nWrap = text::WrapTextMode_THROUGHT;
-                        break;
-                    case 4: //4 wrap tightly around object
-                    case 5: //5 wrap tightly, but allow holes
-                        m_pImpl->nWrap = text::WrapTextMode_PARALLEL;
-                        m_pImpl->bContour = true;
-                    break;
-                    default:;
-                }
-        break;
-        case NS_rtf::LN_FRCASIMPLE:
-        case NS_rtf::LN_FBELOWTEXT:
-        case NS_rtf::LN_FANCHORLOCK:
-        case NS_rtf::LN_CTXBX:
         break;
         case NS_ooxml::LN_CT_PositiveSize2D_cx:// 90407;
         case NS_ooxml::LN_CT_PositiveSize2D_cy:// 90408;
