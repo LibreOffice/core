@@ -430,7 +430,12 @@ namespace drawinglayer
                                 if (fX + fBlockW > fX2)
                                     // Clip the right end in case it spills over the range.
                                     fBlockW = fX2 - fX + 1;
-                                aTarget.append(makeRectPolygon(fX, fY1, fBlockW, aRange.getHeight()));
+
+                                double fH = aRange.getHeight();
+                                if (basegfx::fTools::equalZero(fH))
+                                    fH = 1.0;
+
+                                aTarget.append(makeRectPolygon(fX, fY1, fBlockW, fH));
                             }
 
                             bLine = !bLine; // line and blank alternate.
@@ -497,7 +502,12 @@ namespace drawinglayer
                                 if (fY + fBlockH > fY2)
                                     // Clip the bottom end in case it spills over the range.
                                     fBlockH = fY2 - fY + 1;
-                                aTarget.append(makeRectPolygon(fX1, fY, aRange.getWidth(), fBlockH));
+
+                                double fW = aRange.getWidth();
+                                if (basegfx::fTools::equalZero(fW))
+                                    fW = 1.0;
+
+                                aTarget.append(makeRectPolygon(fX1, fY, fW, fBlockH));
                             }
 
                             bLine = !bLine; // line and blank alternate.
