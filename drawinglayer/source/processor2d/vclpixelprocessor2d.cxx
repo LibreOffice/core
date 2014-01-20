@@ -267,6 +267,20 @@ namespace drawinglayer
             double fX2 = rE.getX();
             double fY2 = rE.getY();
 
+            bool bHorizontal = false;
+            if (fX1 == fX2)
+            {
+                // Vertical line.
+            }
+            else if (fY1 == fY2)
+            {
+                // Horizontal line.
+                bHorizontal = true;
+            }
+            else
+                // Neither.  Bail out.
+                return false;
+
             switch (rSource.getStyle())
             {
                 case table::BorderLineStyle::SOLID:
@@ -275,14 +289,12 @@ namespace drawinglayer
                         maBColorModifierStack.getModifiedColor(rSource.getRGBColorLeft());
                     double nThick = rtl::math::round(rSource.getLeftWidth());
 
-                    bool bDraw = false;
                     bool bAsLine = false;
                     basegfx::B2DPolygon aTarget;
 
-                    if (fY1 == fY2)
+                    if (bHorizontal)
                     {
                         // Horizontal line.  Draw it as a rectangle.
-                        bDraw = true;
 
                         aTarget = makeRectPolygon(fX1, fY1, fX2-fX1, nThick);
                         aTarget.transform(maCurrentTransformation);
@@ -299,10 +311,9 @@ namespace drawinglayer
                             bAsLine = true;
                         }
                     }
-                    else if (fX1 == fX2)
+                    else
                     {
                         // Vertical line.  Draw it as a rectangle.
-                        bDraw = true;
 
                         aTarget = makeRectPolygon(fX1, fY1, nThick, fY2-fY1);
                         aTarget.transform(maCurrentTransformation);
@@ -319,9 +330,6 @@ namespace drawinglayer
                             bAsLine = true;
                         }
                     }
-
-                    if (!bDraw)
-                        return false;
 
                     if (bAsLine)
                     {
@@ -342,30 +350,37 @@ namespace drawinglayer
                 case table::BorderLineStyle::DASHED:
                 case table::BorderLineStyle::FINE_DASHED:
                 {
-                    double fH = rtl::math::round(rSource.getLeftWidth());
+                    std::vector<double> aPattern =
+                        svtools::GetLineDashing(rSource.getStyle(), rSource.getPatternScale()*10.0);
 
-                    if (fY1 == fY2)
+                    if (aPattern.empty())
+                        // Failed to get pattern values.
+                        return false;
+
+                    double nThick = rtl::math::round(rSource.getLeftWidth());
+
+                    // Transform the current line range before using it for rendering.
+                    basegfx::B2DRange aRange(fX1, fY1, fX2, fY2);
+                    aRange.transform(maCurrentTransformation);
+                    fX1 = aRange.getMinX();
+                    fX2 = aRange.getMaxX();
+                    fY1 = aRange.getMinY();
+                    fY2 = aRange.getMaxY();
+
+                    basegfx::B2DPolyPolygon aTarget;
+
+                    if (bHorizontal)
                     {
                         // Horizontal line.
 
-                        basegfx::B2DPolyPolygon aDashes;
-                        std::vector<double> aPattern =
-                            svtools::GetLineDashing(rSource.getStyle(), rSource.getPatternScale()*10.0);
-
-                        if (aPattern.empty())
-                            // Failed to get pattern values.
-                            return false;
-
                         // Create a dash unit polygon set.
+                        basegfx::B2DPolyPolygon aDashes;
                         std::vector<double>::const_iterator it = aPattern.begin(), itEnd = aPattern.end();
                         for (; it != itEnd; ++it)
-                        {
-                            double fW = *it;
-                            aDashes.append(makeRectPolygon(0, 0, fW, fH));
-                        }
+                            aDashes.append(makeRectPolygon(0, 0, *it, nThick));
 
                         aDashes.transform(maCurrentTransformation);
-                        rtl::math::setNan(&fH);
+                        rtl::math::setNan(&nThick);
 
                         // Pixelize the dash unit.  We use the same height for
                         // all dash polygons.
@@ -374,24 +389,15 @@ namespace drawinglayer
                         for (sal_uInt32 i = 0, n = aDashes.count(); i < n; ++i)
                         {
                             basegfx::B2DPolygon aPoly = aDashes.getB2DPolygon(i);
-                            basegfx::B2DRange aRange = aPoly.getB2DRange();
+                            aRange = aPoly.getB2DRange();
                             double fW = rtl::math::round(aRange.getWidth());
-                            if (rtl::math::isNan(fH))
-                                fH = rtl::math::round(aRange.getHeight());
+                            if (rtl::math::isNan(nThick))
+                                nThick = rtl::math::round(aRange.getHeight());
 
-                            aDashesPix.append(makeRectPolygon(0, 0, fW, fH));
+                            aDashesPix.append(makeRectPolygon(0, 0, fW, nThick));
                         }
 
-                        // Transform the current line range before using it for rendering.
-                        basegfx::B2DRange aRange(fX1, fY1, fX2, fY2);
-                        aRange.transform(maCurrentTransformation);
-                        fX1 = aRange.getMinX();
-                        fX2 = aRange.getMaxX();
-                        fY1 = aRange.getMinY();
-                        fY2 = aRange.getMaxY();
-
                         // Make all dash polygons and render them.
-                        basegfx::B2DPolyPolygon aTarget;
                         double fX = fX1;
                         bool bLine = true;
                         sal_uInt32 i = 0, n = aDashesPix.count();
@@ -415,16 +421,68 @@ namespace drawinglayer
                             if (i >= n)
                                 i = 0;
                         }
-
-                        const basegfx::BColor aLineColor =
-                            maBColorModifierStack.getModifiedColor(rSource.getRGBColorLeft());
-                        mpOutputDevice->SetFillColor(Color(aLineColor));
-                        mpOutputDevice->SetLineColor();
-
-                        mpOutputDevice->DrawPolyPolygon(aTarget);
-
-                        return true;
                     }
+                    else
+                    {
+                        // Vertical line.
+
+                        // Create a dash unit polygon set.
+                        basegfx::B2DPolyPolygon aDashes;
+                        std::vector<double>::const_iterator it = aPattern.begin(), itEnd = aPattern.end();
+                        for (; it != itEnd; ++it)
+                            aDashes.append(makeRectPolygon(0, 0, nThick, *it));
+
+                        aDashes.transform(maCurrentTransformation);
+                        rtl::math::setNan(&nThick);
+
+                        // Pixelize the dash unit.  We use the same width for
+                        // all dash polygons.
+                        basegfx::B2DPolyPolygon aDashesPix;
+
+                        for (sal_uInt32 i = 0, n = aDashes.count(); i < n; ++i)
+                        {
+                            basegfx::B2DPolygon aPoly = aDashes.getB2DPolygon(i);
+                            aRange = aPoly.getB2DRange();
+                            double fH = rtl::math::round(aRange.getHeight());
+                            if (rtl::math::isNan(nThick))
+                                nThick = rtl::math::round(aRange.getWidth());
+
+                            aDashesPix.append(makeRectPolygon(0, 0, nThick, fH));
+                        }
+
+                        // Make all dash polygons and render them.
+                        double fY = fY1;
+                        bool bLine = true;
+                        sal_uInt32 i = 0, n = aDashesPix.count();
+                        while (fY <= fY2)
+                        {
+                            basegfx::B2DPolygon aPoly = aDashesPix.getB2DPolygon(i);
+                            aRange = aPoly.getB2DRange();
+                            if (bLine)
+                            {
+                                double fBlockH = aRange.getHeight();
+                                if (fY + fBlockH > fY2)
+                                    // Clip the bottom end in case it spills over the range.
+                                    fBlockH = fY2 - fY + 1;
+                                aTarget.append(makeRectPolygon(fX1, fY, aRange.getWidth(), fBlockH));
+                            }
+
+                            bLine = !bLine; // line and blank alternate.
+                            fY += aRange.getHeight();
+
+                            ++i;
+                            if (i >= n)
+                                i = 0;
+                        }
+                    }
+
+                    const basegfx::BColor aLineColor =
+                        maBColorModifierStack.getModifiedColor(rSource.getRGBColorLeft());
+                    mpOutputDevice->SetFillColor(Color(aLineColor));
+                    mpOutputDevice->SetLineColor();
+                    mpOutputDevice->DrawPolyPolygon(aTarget);
+
+                    return true;
                 }
                 break;
                 default:
