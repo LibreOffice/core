@@ -35,7 +35,6 @@
 
 void SwView::ExecDlg(SfxRequest &rReq)
 {
-    ModalDialog *pDialog = 0;
     // Thus, from the basic no dialogues for background views are called:
     const SfxPoolItem* pItem = 0;
     const SfxItemSet* pArgs = rReq.GetArgs();
@@ -70,12 +69,6 @@ void SwView::ExecDlg(SfxRequest &rReq)
         default:
             OSL_ENSURE(!this, "wrong dispatcher");
             return;
-    }
-
-    if( pDialog )
-    {
-        pDialog->Execute();
-        delete pDialog;
     }
 }
 
