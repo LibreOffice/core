@@ -515,8 +515,6 @@ public:
              AutoRecovery(const css::uno::Reference< css::uno::XComponentContext >& xContext);
     virtual ~AutoRecovery(                                                                   );
 
-    void onCreate();
-
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException)
     {
@@ -546,6 +544,9 @@ public:
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException);
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException);
 
     //---------------------------------------
     // css.frame.XDispatch
@@ -1419,7 +1420,7 @@ AutoRecovery::AutoRecovery(const css::uno::Reference< css::uno::XComponentContex
 {
 }
 
-void AutoRecovery::onCreate()
+void AutoRecovery::initialize(const css::uno::Sequence< css::uno::Any >& ) throw (css::uno::Exception, css::uno::RuntimeException)
 {
     // read configuration to know if autosave/recovery is on/off etcpp...
     implts_readConfig();
@@ -4637,10 +4638,7 @@ com_sun_star_comp_framework_AutoRecovery_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    rtl::Reference<AutoRecovery> x(new AutoRecovery(context));
-    x->onCreate();
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new AutoRecovery(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
