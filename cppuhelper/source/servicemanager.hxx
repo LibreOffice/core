@@ -121,7 +121,7 @@ public:
                 factory1(theFactory1), factory2(theFactory2),
                 component(theComponent), status(STATUS_LOADED),
                 dispose(false)
-            {}
+            { assert(theFactory1.is() || theFactory2.is()); }
 
             css::uno::Reference<css::uno::XInterface> createInstance(
                 css::uno::Reference<css::uno::XComponentContext> const &

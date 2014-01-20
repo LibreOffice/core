@@ -711,13 +711,8 @@ cppuhelper::ServiceManager::Data::Implementation::createInstance(
         if (factory1.is()) {
             return factory1->createInstanceWithContext(context);
         }
-        if (factory2.is()) {
-            return factory2->createInstance();
-        }
-        throw css::uno::DeploymentException(
-            ("Implementation " + info->name
-             + " does not provide a constructor or factory"),
-            css::uno::Reference<css::uno::XInterface>());
+        assert(factory2.is());
+        return factory2->createInstance();
     } else {
         osl::MutexGuard g(mutex); //TODO: must be a non-recursive mutex
         if (singleton.is()) {
@@ -732,13 +727,9 @@ cppuhelper::ServiceManager::Data::Implementation::createInstance(
                     context.get(), css::uno::Sequence<css::uno::Any>()));
         } else if (factory1.is()) {
             singleton = factory1->createInstanceWithContext(context);
-        } else if (factory2.is()) {
-            singleton = factory2->createInstance();
         } else {
-            throw css::uno::DeploymentException(
-                ("Implementation " + info->name
-                 + " does not provide a constructor or factory"),
-            css::uno::Reference<css::uno::XInterface>());
+            assert(factory2.is());
+            singleton = factory2->createInstance();
         }
         dispose = singleton.is() && !singletonRequest;
         return singleton;
@@ -771,12 +762,8 @@ cppuhelper::ServiceManager::Data::Implementation::createInstanceWithArguments(
             return factory1->createInstanceWithArgumentsAndContext(
                 arguments, context);
         }
-        if (factory2.is()) {
-            return factory2->createInstanceWithArguments(arguments);
-        }
-        throw css::uno::DeploymentException(
-            "Implementation " + info->name + " does not provide a factory",
-            css::uno::Reference<css::uno::XInterface>());
+        assert(factory2.is());
+        return factory2->createInstanceWithArguments(arguments);
     } else {
         osl::MutexGuard g(mutex); //TODO: must be a non-recursive mutex
         if (singleton.is()) {
@@ -800,12 +787,9 @@ cppuhelper::ServiceManager::Data::Implementation::createInstanceWithArguments(
         } else if (factory1.is()) {
             singleton = factory1->createInstanceWithArgumentsAndContext(
                 arguments, context);
-        } else if (factory2.is()) {
-            singleton = factory2->createInstanceWithArguments(arguments);
         } else {
-            throw css::uno::DeploymentException(
-                "Implementation " + info->name + " does not provide a factory",
-            css::uno::Reference<css::uno::XInterface>());
+            assert(factory2.is());
+            singleton = factory2->createInstanceWithArguments(arguments);
         }
         dispose = singleton.is() && !singletonRequest;
         return singleton;
@@ -1694,6 +1678,12 @@ void cppuhelper::ServiceManager::insertLegacyFactory(
     if (!f1.is()) {
         f2 = css::uno::Reference< css::lang::XSingleServiceFactory >(
             factoryInfo, css::uno::UNO_QUERY);
+        if (!f2.is()) {
+            throw css::lang::IllegalArgumentException(
+                ("Bad XServiceInfo argument implements neither"
+                 " XSingleComponentFactory nor XSingleServiceFactory"),
+                static_cast< cppu::OWeakObject * >(this), 0);
+        }
     }
     css::uno::Reference< css::lang::XComponent > comp(
         factoryInfo, css::uno::UNO_QUERY);
