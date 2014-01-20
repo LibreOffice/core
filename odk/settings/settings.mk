@@ -371,22 +371,30 @@ ifeq "$(PROCTYPE)" "x86"
 UNOPKG_PLATFORM=MacOSX_x86
 else
 ifeq "$(PROCTYPE)" "x86_64"
-UNOPKG_PLATFORM=MacOSX_x86
+UNOPKG_PLATFORM=MacOSX_x86_64
 endif
 endif
 JAVABIN=Commands
 
+ifeq "$(PROCTYPE)" "x86"
 GCC_VERSION =$(shell gcc -dumpversion| cut -d"." -f1,2)
 ifeq "$(GCC_VERSION)" "4.2"
 GCC_ARCH_OPTION=-arch i386
+endif
 endif
 
 OS=MACOSX
 PS=/
 ICL=\$$
+ifeq "$(PROCTYPE)" "x86"
 CC=gcc-$(GCC_VERSION)
 LINK=g++-$(GCC_VERSION)
 LIB=g++-$(GCC_VERSION)
+else
+CC=clang++
+LINK=clang++
+LIB=clang++
+endif
 ECHO=@echo
 MKDIR=mkdir -p
 CAT=cat
