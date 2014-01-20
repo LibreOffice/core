@@ -3551,7 +3551,7 @@ namespace basegfx
                     if(bCurve)
                     {
                         // calculate target point count
-                        const sal_uInt32 nLoopCount(bClosed ? nPointCount : (nPointCount ? nPointCount - 1 : 0));
+                        const sal_uInt32 nLoopCount(bClosed ? nPointCount : nPointCount - 1);
 
                         if(nLoopCount)
                         {
