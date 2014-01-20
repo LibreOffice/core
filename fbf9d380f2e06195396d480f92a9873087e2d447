@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "da9df570_9453ca6b",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-01-20T12:51:22Z",
+      "side": 1,
+      "message": "You got that right! OK, I\u0027ll update this.",
+      "parentUuid": "da9df570_b469ae27",
+      "range": {
+        "startLine": 144,
+        "startChar": 8,
+        "endLine": 144,
+        "endChar": 16
+      },
+      "revId": "fbf9d380f2e06195396d480f92a9873087e2d447",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9df570_d4763206",
         "filename": "include/vcl/svapp.hxx",
         "patchSetId": 4
@@ -53,6 +77,24 @@
       "writtenOn": "2014-01-20T11:59:21Z",
       "side": 1,
       "message": "Application:: is used in a ton of places \u003d)\n\ngit grep Application:: # and count \u003d)",
+      "revId": "fbf9d380f2e06195396d480f92a9873087e2d447",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_b450ce5f",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-01-20T12:51:22Z",
+      "side": 1,
+      "message": "Too true. Far too many static functions...",
+      "parentUuid": "da9df570_d4763206",
       "revId": "fbf9d380f2e06195396d480f92a9873087e2d447",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -76,6 +118,24 @@
     },
     {
       "key": {
+        "uuid": "da9df570_d44d52c6",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-01-20T12:51:22Z",
+      "side": 1,
+      "message": "Will do :-)",
+      "parentUuid": "da9df570_1460ba34",
+      "revId": "fbf9d380f2e06195396d480f92a9873087e2d447",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9df570_3465be45",
         "filename": "include/vcl/svapp.hxx",
         "patchSetId": 4
@@ -87,6 +147,24 @@
       "writtenOn": "2014-01-20T11:59:21Z",
       "side": 1,
       "message": "Run the main event processing loop until it is quit by @Quit ? :-)",
+      "revId": "fbf9d380f2e06195396d480f92a9873087e2d447",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_f44a56ab",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-01-20T12:51:22Z",
+      "side": 1,
+      "message": "A much more clear explanation. Done :-)",
+      "parentUuid": "da9df570_3465be45",
       "revId": "fbf9d380f2e06195396d480f92a9873087e2d447",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
