@@ -68,6 +68,8 @@ endef
 
 define gb_UnoApi_add_idlfiles
 $(call gb_UnoApiTarget_add_idlfiles,$(1),$(2),$(3))
+$(call gb_UnoApiHeadersTarget_add_headerfiles,$(1),$(2),$(addsuffix .hpp,$(3)))
+$(call gb_UnoApiHeadersTarget_add_headerfiles,$(1),$(2),$(addsuffix .hdl,$(3)))
 $(foreach idl,$(3),$(call gb_UnoApi__add_idlfile,$(1),$(gb_UnoApiTarget_REG_$(1))/$(2)/$(idl)))
 
 endef
@@ -81,6 +83,7 @@ endef
 
 define gb_UnoApi_add_idlfiles_nohdl
 $(call gb_UnoApiTarget_add_idlfiles,$(1),$(2),$(3))
+$(call gb_UnoApiHeadersTarget_add_headerfiles,$(1),$(2),$(addsuffix .hpp,$(3)))
 $(foreach idl,$(3),$(call gb_UnoApi__add_idlfile,$(1),$(gb_UnoApiTarget_REG_$(1))/$(2)/$(idl)))
 
 endef
