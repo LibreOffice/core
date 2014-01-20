@@ -2882,13 +2882,15 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
             break;
         case table::CellContentType_TEXT :
             {
-                GetCellText(aCell, aCellPos);
                 OUString sFormula(lcl_GetRawString(pDoc, aCellPos));
+                if (aCell.maBaseCell.isEmpty())
+                    aCell.maBaseCell.assign( *pDoc, aCellPos);
+                OUString sCellString = aCell.maBaseCell.getString(pDoc);
                 GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                        sFormula, aCell.sStringValue, true, true);
+                        sCellString, sFormula, true, true);
                 if( getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
                     GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                            sFormula, aCell.sStringValue, false, true, XML_NAMESPACE_CALC_EXT);
+                            sCellString, sFormula, false, true, XML_NAMESPACE_CALC_EXT);
             }
             break;
         case table::CellContentType_FORMULA :
