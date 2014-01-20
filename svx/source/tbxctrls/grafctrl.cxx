@@ -130,8 +130,7 @@ ImplGrafMetricField::ImplGrafMetricField( Window* pParent, const OUString& rCmd,
     {
         const long nMinVal = maCommand.startsWith( ".uno:GrafTransparence" ) ? 0 : -100;
 
-        SetUnit( FUNIT_CUSTOM );
-        SetCustomUnitText( OUString(" %") );
+        SetUnit(FUNIT_PERCENT);
         SetDecimalDigits( 0 );
 
         SetMin( nMinVal );
