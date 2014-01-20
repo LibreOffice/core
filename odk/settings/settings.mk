@@ -21,14 +21,6 @@
 
 include $(OO_SDK_HOME)/settings/dk.mk
 
-# test for the platform
-PLATFORM := $(shell $(PRJ)/config.guess | cut -d"-" -f3,4)
-
-# config.guess is missing for windows. We rely on getting "" in this case.
-ifeq "$(PLATFORM)" ""
-PLATFORM = windows
-endif
-
 # debug option, default is no debug
 DEBUG=no
 ifeq "$(MAKECMDGOALS)" "debug"
@@ -153,10 +145,8 @@ endif
 # Solaris specific settings
 #
 ###########################################################################
-ifneq (,$(findstring solaris,$(PLATFORM)))
+ifeq "$(PLATFORM)" "solaris"
 # Settings for Solaris using Sun Workshop compiler
-
-PROCTYPE := $(shell $(PRJ)/config.guess | cut -d"-" -f1)$(shell /usr/ccs/bin/elfdump -e "$(OO_SDK_URE_HOME)/lib/libuno_sal.so.3" | /usr/xpg4/bin/grep -q -w ELFCLASS64 && echo 64)
 
 ifeq "$(PROCTYPE)" "sparc"
 PLATFORM=solsparc
@@ -269,17 +259,13 @@ endif
 # Linux specific settings
 #
 ###########################################################################
-ifneq (,$(findstring linux,$(PLATFORM)))
+ifeq "$(PLATFORM)" "linux"
 # Settings for Linux using gcc compiler
-
-PROCTYPE := $(shell $(PRJ)/config.guess | cut -d "-" -f1 | sed -e 's/^i.86$$/i386/')
-PLATFORM=linux
 
 UNOPKG_PLATFORM=Linux_$(PROCTYPE)
 JAVA_PROC_TYPE=$(PROCTYPE)
 
-ifeq "$(PROCTYPE)" "i386"
-UNOPKG_PLATFORM=Linux_x86
+ifeq "$(PROCTYPE)" "x86"
 JAVA_PROC_TYPE=i386
 endif
 
@@ -290,7 +276,6 @@ endif
 
 ifeq "$(PROCTYPE)" "sparc"
 UNOPKG_PLATFORM=Linux_SPARC
-JAVA_PROC_TYPE=sparc
 endif
 
 ifeq "$(PROCTYPE)" "x86_64"
@@ -351,7 +336,7 @@ endif
 CC_FLAGS_JNI=-c -fpic $(OPT_FLAGS)
 CC_FLAGS=-c -fpic -fvisibility=hidden $(OPT_FLAGS)
 
-ifeq "$(PROCTYPE)" "ppc"
+ifeq "$(PROCTYPE)" "powerpc"
 CC_FLAGS+=-fPIC
 endif
 
@@ -366,7 +351,7 @@ LIBO_SDK_LDFLAGS_STDLIBS =
 
 LIBRARY_LINK_FLAGS=-shared -Wl,-z,origin '-Wl,-rpath,$$ORIGIN'
 
-ifeq "$(PROCTYPE)" "ppc"
+ifeq "$(PROCTYPE)" "powerpc"
 LIBRARY_LINK_FLAGS+=-fPIC
 endif
 COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)
@@ -386,36 +371,37 @@ endif
 # MacOSX/Darwin specific settings
 #
 ###########################################################################
-ifneq (,$(findstring darwin,$(PLATFORM)))
+ifeq "$(PLATFORM)" "macosx"
 # Settings for MacOSX using gcc 4.0.1 compiler
 
-PROCTYPE := $(shell $(PRJ)/config.guess | cut -d"-" -f1)
-
-# Default is MacOSX on a Intel machine    
-PLATFORM=macosx
-
-ifeq "$(PROCTYPE)" "i386"
+ifeq "$(PROCTYPE)" "x86"
 UNOPKG_PLATFORM=MacOSX_x86
-JAVA_PROC_TYPE=x86
 else
 ifeq "$(PROCTYPE)" "x86_64"
-UNOPKG_PLATFORM=MacOSX_x86
-JAVA_PROC_TYPE=x86
+UNOPKG_PLATFORM=MacOSX_x86_64
 endif
 endif
 JAVABIN=Commands
 
+ifeq "$(PROCTYPE)" "x86"
 GCC_VERSION =$(shell gcc -dumpversion| cut -d"." -f1,2)
 ifeq "$(GCC_VERSION)" "4.2"
 GCC_ARCH_OPTION=-arch i386
+endif
 endif
 
 OS=MACOSX
 PS=/
 ICL=\$$
+ifeq "$(PROCTYPE)" "x86"
 CC=gcc-$(GCC_VERSION)
 LINK=g++-$(GCC_VERSION)
 LIB=g++-$(GCC_VERSION)
+else
+CC=clang++
+LINK=clang++
+LIB=clang++
+endif
 ECHO=@echo
 MKDIR=mkdir -p
 CAT=cat
@@ -493,8 +479,6 @@ endif
 ###########################################################################
 ifneq (,$(findstring freebsd,$(PLATFORM)))
 # Settings for FreeBSD using gcc compiler
-
-PROCTYPE := $(shell $(PRJ)/config.guess | cut -d"-" -f1)
 
 ifeq (kfreebsd,$(findstring kfreebsd,$(PLATFORM)))
 PLATFORM=kfreebsd
