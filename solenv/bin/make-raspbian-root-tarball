@@ -48,6 +48,8 @@ find lib/*.so* \
      usr/lib/liblpsolve*.a \
      usr/lib/*.so* \
      usr/lib/arm-linux-gnueabihf \
+     usr/lib/jvm/java-6-openjdk-armhf/include \
+     usr/lib/jvm/java-6-openjdk-armhf/jre/lib/arm \
      usr/lib/pkgconfig \
      usr/share/pkgconfig \
     -type f -o -type l |
