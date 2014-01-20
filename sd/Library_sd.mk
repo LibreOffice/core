@@ -102,6 +102,7 @@ $(eval $(call gb_Library_use_externals,sd,\
 	$(if $(ENABLE_AVAHI), \
 		avahi \
 	) \
+	icu_headers \
 ))
 
 ifeq ($(OS),WNT)
