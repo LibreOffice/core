@@ -608,7 +608,6 @@ public:
     inline void Right( const SwTwips nNew ) { nRight = nNew; }
     inline SwTwips First() const { return nFirst; }
     inline void First( const SwTwips nNew ) { nFirst = nNew; }
-    inline SwTwips CurrLeft() const { return (nLineStart ? nLeft : nFirst); }
     inline KSHORT RealWidth() const { return nRealWidth; }
     inline void RealWidth( const KSHORT nNew ) { nRealWidth = nNew; }
     inline KSHORT ForcedLeftMargin() const { return nForcedLeftMargin; }

@@ -747,6 +747,12 @@ sal_Bool SwTxtInputFldPortion::Format( SwTxtFormatInfo &rInf )
         }
         else
         {
+            const xub_StrLen nFormerLineStart = rInf.GetLineStart();
+            if ( !mbContainsInputFieldStart )
+            {
+                rInf.SetLineStart( 0 );
+            }
+
             bRet = SwTxtPortion::Format( rInf );
 
             if ( mbContainsInputFieldEnd )
@@ -762,6 +768,10 @@ sal_Bool SwTxtInputFldPortion::Format( SwTxtFormatInfo &rInf )
             {
                 // adjust portion length accordingly
                 SetLen( GetLen() + 1 );
+            }
+            else
+            {
+                rInf.SetLineStart( nFormerLineStart );
             }
         }
     }
