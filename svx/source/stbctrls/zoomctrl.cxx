@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <i18nutil/unicode.hxx>
 #include <tools/shl.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/status.hxx>
 #include <vcl/menu.hxx>
 #include <sfx2/dispatch.hxx>
@@ -120,8 +122,8 @@ void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,
     {
         const SfxUInt16Item* pItem = (const SfxUInt16Item*)pState;
         nZoom = pItem->GetValue();
-        OUString aStr( OUString::number(nZoom) );
-        aStr += "%";
+
+        OUString aStr(unicode::formatPercent(nZoom, Application::GetSettings().GetUILanguageTag()));
         GetStatusBar().SetItemText( GetId(), aStr );
 
         if ( pState->ISA(SvxZoomItem) )
@@ -140,8 +142,7 @@ void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,
 
 void SvxZoomStatusBarControl::Paint( const UserDrawEvent& )
 {
-    OUString aStr( OUString::number( nZoom ));
-    aStr += "%";
+    OUString aStr(unicode::formatPercent(nZoom, Application::GetSettings().GetUILanguageTag()));
     GetStatusBar().SetItemText( GetId(), aStr );
 }
 
