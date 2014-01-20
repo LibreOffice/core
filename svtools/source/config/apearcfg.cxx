@@ -219,7 +219,7 @@ void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
 
     hAppSettings.SetStyleSettings( hAppStyle );
     pApp->MergeSystemSettings    ( hAppSettings );      // Allow system-settings to apply
-    pApp->SystemSettingsChanging ( hAppSettings, NULL );// Allow overruling of system-settings
+    pApp->SystemSettingsChanging ( hAppSettings );      // Allow overruling of system-settings
                                                         //is concerned with window drag
 
     pApp->SetSettings ( hAppSettings );

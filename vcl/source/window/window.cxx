@@ -689,7 +689,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl
 #endif
 
     if ( bCallHdl )
-        GetpApp()->SystemSettingsChanging( rSettings, this );
+        GetpApp()->SystemSettingsChanging( rSettings );
 }
 
 // -----------------------------------------------------------------------

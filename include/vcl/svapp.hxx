@@ -563,8 +563,7 @@ public:
      */
     static sal_Bool             IsUICaptured();
 
-    virtual void                SystemSettingsChanging( AllSettings& rSettings,
-                                                        Window* pFrame );
+    virtual void                SystemSettingsChanging( AllSettings& rSettings );
     static void                 MergeSystemSettings( AllSettings& rSettings );
 
     static void                 SetSettings( const AllSettings& rSettings );
