@@ -43,6 +43,7 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <rtl/strbuf.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 
 #include <libxml/xpathInternals.h>
@@ -2483,6 +2484,13 @@ DECLARE_OOXMLEXPORT_TEST(testDmlTextshape, "dml-textshape.docx")
         return;
     // This was wrap="none".
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wpg:wgp/wps:wsp[2]/wps:bodyPr", "wrap", "square");
+
+    xShape.set(xGroup->getByIndex(3), uno::UNO_QUERY);
+    OUString aType = comphelper::SequenceAsHashMap(getProperty<beans::PropertyValues>(xShape, "CustomShapeGeometry"))["Type"].get<OUString>();
+    CPPUNIT_ASSERT_EQUAL(OUString("ooxml-bentConnector3"), aType);
+    // Connector was incorrectly shifted towards the top left corner, X was 552, Y was 0.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4018), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1256), xShape->getPosition().Y);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testShapeThemePreservation, "shape-theme-preservation.docx")
