@@ -2128,8 +2128,6 @@ static void ImplHandleSalSettings( Window* pWindow, sal_uInt16 nEvent )
 {
     // Application Notification werden nur fuer das erste Window ausgeloest
     ImplSVData* pSVData = ImplGetSVData();
-    if ( pWindow != pSVData->maWinData.mpFirstFrame )
-        return;
 
     Application* pApp = GetpApp();
     if ( !pApp )
@@ -2139,7 +2137,7 @@ static void ImplHandleSalSettings( Window* pWindow, sal_uInt16 nEvent )
     {
         AllSettings aSettings = pApp->GetSettings();
         pApp->MergeSystemSettings( aSettings );
-        pApp->SystemSettingsChanging( aSettings, pWindow );
+        pApp->SystemSettingsChanging( aSettings );
         pApp->SetSettings( aSettings );
     }
     else
