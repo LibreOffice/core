@@ -796,7 +796,19 @@ namespace drawinglayer
                             sal_Int32(floor(aCurrentRange.getMinX())), sal_Int32(floor(aCurrentRange.getMinY())),
                             sal_Int32(ceil(aCurrentRange.getMaxX())), sal_Int32(ceil(aCurrentRange.getMaxY())));
                         const GraphicAttr& rAttr = rGraphicPrimitive.getGraphicAttr();
-                        Rectangle aCropRect;
+
+                        // #123295# As described below this is the expanded, uncropped region
+                        // and needs to be given in any case, especially when no cropping it is
+                        // equal to the current rect. To make clear: normally the uncropped region
+                        // (aka the aCropRect) is bigger than the CurrentRect. Or in other words:
+                        // The current rect is the object area. This internal crop definition is
+                        // somewhat crude, but used (and defined in graphic-dependent units what
+                        // leads to even more problems, percentages would have been better). All
+                        // in all this is a place that makes clear that a pure PDF export which does
+                        // not use Metafile and the associated hacks (like this one) but is based on
+                        // Primitves and uses a Primitive Renderer would be the better choice for
+                        // the future.
+                        Rectangle aCropRect(aCurrentRect);
 
                         if(rAttr.IsCropped())
                         {
