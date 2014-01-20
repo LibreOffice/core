@@ -12,6 +12,9 @@
 
 /* Experimental direct constructor calls, under construction */
 
+/* FIXME: Rather than hardcoded, this should be generated from
+   solenv/bin/native-code.py */
+
 #define LO_URE_CURRENT_ENV 1 /*TODO*/
 
 #define LO_URE_CTOR_ENV_com_dot_sun_dot_star_dot_xml_dot_sax_dot_FastParser 1 /*TODO*/
