@@ -501,11 +501,6 @@ void SAL_CALL Listener::propertyChange (
                     String(RTL_CONSTASCII_USTRINGPARAM("Number")));
                 sal_Int32 nCurrentPage = 0;
                 aPageNumber >>= nCurrentPage;
-                // The selection is already set but we call SelectPage()
-                // nevertheless in order to make the new current page the
-                // last recently selected page of the PageSelector.  This is
-                // used when making the selection visible.
-                mrController.GetPageSelector().SelectPage(nCurrentPage-1);
                 mrController.GetCurrentSlideManager()->NotifyCurrentSlideChange(nCurrentPage-1);
             }
             catch (beans::UnknownPropertyException aEvent)
