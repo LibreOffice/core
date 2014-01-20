@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_545a4284",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2014-01-20T11:59:21Z",
+      "side": 1,
+      "message": "An",
+      "revId": "fbf9d380f2e06195396d480f92a9873087e2d447",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_b469ae27",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2014-01-20T11:59:21Z",
+      "side": 1,
+      "message": "Application is Abstract I guess, but it\u0027s not your average pure abstract base class :-) I would say it is intended to be sub-classed to provide a global singleton. It has a grab-bag of static methods vital for apps.",
+      "range": {
+        "startLine": 144,
+        "startChar": 8,
+        "endLine": 144,
+        "endChar": 16
+      },
+      "revId": "fbf9d380f2e06195396d480f92a9873087e2d447",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_d4763206",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2014-01-20T11:59:21Z",
+      "side": 1,
+      "message": "Application:: is used in a ton of places \u003d)\n\ngit grep Application:: # and count \u003d)",
+      "revId": "fbf9d380f2e06195396d480f92a9873087e2d447",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_1460ba34",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2014-01-20T11:59:21Z",
+      "side": 1,
+      "message": "This is the key end-user method - right ?\n\n\"Sub class this method to implement the body of your application .. see @Foo and @Baa to get the command-line parameters\" etc.\n\nI\u0027d bulk up this description \u003d)",
+      "revId": "fbf9d380f2e06195396d480f92a9873087e2d447",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_3465be45",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2014-01-20T11:59:21Z",
+      "side": 1,
+      "message": "Run the main event processing loop until it is quit by @Quit ? :-)",
+      "revId": "fbf9d380f2e06195396d480f92a9873087e2d447",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
