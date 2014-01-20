@@ -1423,13 +1423,22 @@ void MetricFormatter::SetValue( sal_Int64 nNewValue, FieldUnit eInUnit )
 
 OUString MetricFormatter::CreateFieldText( sal_Int64 nValue ) const
 {
+    //whether percent is separated from its number is locale
+    //specific, pawn it off to icu to decide
+    if (meUnit == FUNIT_PERCENT)
+    {
+        double dValue = nValue;
+        dValue /= ImplPower10(GetDecimalDigits());
+        return unicode::formatPercent(dValue, Application::GetSettings().GetUILanguageTag());
+    }
+
     OUString aStr = NumericFormatter::CreateFieldText( nValue );
 
     if( meUnit == FUNIT_CUSTOM )
         aStr += maCustomUnitText;
     else
     {
-        if (meUnit != FUNIT_NONE && meUnit != FUNIT_PERCENT && meUnit != FUNIT_DEGREE)
+        if (meUnit != FUNIT_NONE && meUnit != FUNIT_DEGREE)
             aStr += " ";
         aStr += ImplMetricToString( meUnit );
     }

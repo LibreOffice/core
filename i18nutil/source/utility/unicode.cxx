@@ -955,7 +955,7 @@ OUString SAL_CALL unicode::formatPercent(double dNumber,
     }
 
     UnicodeString output;
-    xF->format(dNumber, output);
+    xF->format(dNumber/100, output);
     return OUString(reinterpret_cast<const sal_Unicode *>(output.getBuffer()),
         output.length());
 }
