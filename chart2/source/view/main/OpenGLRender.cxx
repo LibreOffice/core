@@ -1456,8 +1456,12 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
 }
 
 
-int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, awt::Point aPos, awt::Size aSize, long rotation)
+int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, awt::Point aPos, awt::Size aSize, long rotation,
+        bool bRotation, const drawing::HomogenMatrix3& rTrans)
 {
+    glm::mat3 aTrans(rTrans.Line1.Column1, rTrans.Line1.Column2, rTrans.Line1.Column3,
+                    rTrans.Line2.Column1, rTrans.Line2.Column2, rTrans.Line2.Column3,
+                    rTrans.Line3.Column1, rTrans.Line3.Column3, rTrans.Line3.Column3);
 
 #if DEBUG_PNG // debug PNG writing
     static int nIdx = 0;
@@ -1500,17 +1504,29 @@ int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, awt::Point aPos, 
     aTextInfo.y = (float)(aPos.Y + aSize.Height / 2);
     aTextInfo.z = m_fZStep;
     aTextInfo.rotation = -(double)rotation * GL_PI / 18000.0f;
-    aTextInfo.vertex[0] = (float)(aPos.X);
-    aTextInfo.vertex[1] = (float)(aPos.Y);
+    glm::vec3 aPos1( 0, 0, 1 );
+    glm::vec3 aPos1Trans = aTrans * aPos1;
+    aTextInfo.vertex[0] = rTrans.Line1.Column3 / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[1] = rTrans.Line2.Column3 / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[2] = m_fZStep;
 
-    aTextInfo.vertex[2] = (float)(aPos.X + aSize.Width);
-    aTextInfo.vertex[3] = (float)(aPos.Y);
+    glm::vec3 aPos2( 1, 0, 1 );
+    glm::vec3 aPos2Trans = aTrans * aPos2;
+    aTextInfo.vertex[3] = (rTrans.Line1.Column3 + aSize.Width ) / OPENGL_SCALE_VALUE ;
+    aTextInfo.vertex[4] = rTrans.Line2.Column3 / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[5] = m_fZStep;
 
-    aTextInfo.vertex[4] = (float)(aPos.X + aSize.Width);
-    aTextInfo.vertex[5] = (float)(aPos.Y + aSize.Height);
+    glm::vec3 aPos3( 1, 1, 1 );
+    glm::vec3 aPos3Trans = aTrans * aPos3;
+    aTextInfo.vertex[6] = (rTrans.Line1.Column3 + aSize.Width) / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[7] = (rTrans.Line2.Column3 + aSize.Height) / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[8] = m_fZStep;
 
-    aTextInfo.vertex[6] = (float)(aPos.X);
-    aTextInfo.vertex[7] = (float)(aPos.Y + aSize.Height);
+    glm::vec3 aPos4( 0, 1, 1 );
+    glm::vec3 aPos4Trans = aTrans * aPos4;
+    aTextInfo.vertex[9] = rTrans.Line1.Column3 / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[10] = (rTrans.Line2.Column3 + aSize.Height) / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[11] = m_fZStep;
 
     //if has ratotion, we must re caculate the central pos
     if (!rtl::math::approxEqual(0, rotation))
@@ -1574,7 +1590,7 @@ int OpenGLRender::RenderTextShape()
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         glVertexAttribPointer(
             m_TextVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
-            2,                  // size
+            3,                  // size
             GL_FLOAT,           // type
             GL_FALSE,           // normalized?
             0,                  // stride

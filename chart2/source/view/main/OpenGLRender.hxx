@@ -29,6 +29,7 @@
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/bitmapex.hxx>
+#include <com/sun/star/drawing/HomogenMatrix3.hpp>
 
 #if defined( _WIN32 )
 #include <GL/glu.h>
@@ -95,7 +96,7 @@ typedef struct TextInfo
     float y;
     float z;
     double rotation;
-    float vertex[8];
+    float vertex[12];
 }TextInfo;
 
 typedef std::vector<GLfloat> Area2DPointList;
@@ -166,7 +167,8 @@ public:
     int RectangleShapePoint(float x, float y, float directionX, float directionY);
 
     int CreateTextTexture(const BitmapEx& rBitmapEx,
-            com::sun::star::awt::Point aPos, com::sun::star::awt::Size aSize, long rotation);
+            com::sun::star::awt::Point aPos, com::sun::star::awt::Size aSize, long rotation,
+            bool bTransformation, const com::sun::star::drawing::HomogenMatrix3& rTrans);
     int RenderTextShape();
 
     int SetArea2DShapePoint(float x, float y, int listLength);

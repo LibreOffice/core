@@ -122,6 +122,10 @@ void DummyXShape::setPropertyValue( const OUString& rName, const uno::Any& rValu
 {
     SAL_WARN("chart2", "DummyXShape::setProperty: " << rName << " " << "Any");
     maProperties[rName] = rValue;
+    if(rName == "Transformation")
+    {
+        SAL_WARN("chart2.opengl", "Transformation");
+    }
 }
 
 uno::Any DummyXShape::getPropertyValue( const OUString& rName )
@@ -642,8 +646,8 @@ struct FontAttribSetter
         }
         else if(rPropName == "CharHeight")
         {
-            //float fHeight = rProp.second.get<float>();
-            mrFont.SetSize(Size(0,100)); //taken from the MCW implementation
+            float fHeight = rProp.second.get<float>();
+            mrFont.SetSize(Size(0,(fHeight*127+36)/72)); //taken from the MCW implementation
         }
         else if(rPropName == "CharUnderline")
         {
@@ -693,7 +697,14 @@ DummyText::DummyText(const OUString& rText, const tNameSequence& rNames,
     int bmpHeight = (aRect.Bottom() - aRect.Top() + 3) & ~3;
     maBitmap = BitmapEx(aDevice.GetBitmapEx(aRect.TopLeft(), Size(bmpWidth, bmpHeight)));
 
-    setSize(awt::Size(bmpWidth, bmpHeight));
+    if(rTrans.hasValue())
+    {
+        drawing::HomogenMatrix3 aTrans = rTrans.get<drawing::HomogenMatrix3>();
+        setSize(awt::Size(20*bmpWidth, 20*bmpHeight));
+        setPosition(awt::Point(aTrans.Line1.Column3, aTrans.Line2.Column3));
+    }
+    else
+        setSize(awt::Size(20*bmpWidth, 20*bmpHeight));
 }
 
 void DummyText::render()
@@ -702,7 +713,26 @@ void DummyText::render()
     debugProperties(maProperties);
 
     DummyChart* pChart = getRootShape();
-    pChart->m_GLRender.CreateTextTexture(maBitmap, maPosition, maSize, 0);
+
+    drawing::HomogenMatrix3 aTransformation;
+    bool bHasTransformation = false;
+    std::map<OUString, uno::Any>::const_iterator itr =
+        maProperties.find("Transformation");
+    if(itr != maProperties.end())
+    {
+        SAL_WARN("chart2.opengl", "found a transformation");
+        if(itr->second.hasValue())
+        {
+            aTransformation = itr->second.get<drawing::HomogenMatrix3>();
+            bHasTransformation = true;
+        }
+    }
+    else if(maTrans.hasValue())
+    {
+        aTransformation = maTrans.get<drawing::HomogenMatrix3>();
+    }
+    pChart->m_GLRender.CreateTextTexture(maBitmap, maPosition, maSize, 0,
+            bHasTransformation, aTransformation);
     pChart->m_GLRender.RenderTextShape();
 }
 
