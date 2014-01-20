@@ -285,7 +285,7 @@ Control RID_POPUPPANEL_AREAPAGE_TRGR
         Border = TRUE ;
         Size = MAP_APPFONT ( CONTROL_WIDTH , MBOX_HEIGHT ) ;
         HelpID = HID_PPROPERTYPANEL_AREA_MTR_TRGR_SVALUE ;
-        QuickHelpText [ en-US ] = "Enter a transparency value for the beginning point of the gradient, where 0% is fully opaque and 100 % is fully transparent." ;
+        QuickHelpText [ en-US ] = "Enter a transparency value for the beginning point of the gradient, where 0 % is fully opaque and 100 % is fully transparent." ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
