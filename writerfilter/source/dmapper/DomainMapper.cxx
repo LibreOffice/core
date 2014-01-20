@@ -2263,32 +2263,45 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         break;  // sprmPBrcl
     case NS_sprm::LN_PBrcp:
         break;  // sprmPBrcp
+
     case NS_sprm::LN_PIlvl: // sprmPIlvl
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 1 */
         /* WRITERFILTERSTATUS: comment:  */
-        //todo: Numbering level will be implemented in the near future (OOo 3.0?)
-            if( m_pImpl->IsStyleSheetImport() )
+        {
+            StyleSheetPropertyMap* pStyleSheetPropertyMap = NULL;
+            if ( m_pImpl->IsStyleSheetImport() )
             {
-                //style sheets cannot have a numbering rule attached
                 StyleSheetPropertyMap* pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
+            }
+
+            if ( pStyleSheetPropertyMap != NULL )
+            {
                 pStyleSheetPropertyMap->SetListLevel( (sal_Int16)nIntValue );
             }
             else
+            {
                 rContext->Insert( PROP_NUMBERING_LEVEL, true, uno::makeAny( (sal_Int16)nIntValue ));
+            }
+        }
         break;
+
     case NS_sprm::LN_PIlfo: // sprmPIlfo
         /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 1 */
         /* WRITERFILTERSTATUS: comment:  */
         {
             //convert the ListTable entry to a NumberingRules propery and apply it
+            StyleSheetPropertyMap* pStyleSheetPropertyMap = NULL;
+            if ( m_pImpl->IsStyleSheetImport() )
+            {
+                StyleSheetPropertyMap* pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
+            }
+
             ListsManager::Pointer pListTable = m_pImpl->GetListTable();
             ListDef::Pointer pList = pListTable->GetList( nIntValue );
             if( pList.get( ) )
             {
-                if( m_pImpl->IsStyleSheetImport() )
+                if ( pStyleSheetPropertyMap != NULL )
                 {
-                    //style sheets cannot have a numbering rule attached
-                    StyleSheetPropertyMap* pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
                     pStyleSheetPropertyMap->SetListId( nIntValue );
                 }
                 else
@@ -2299,10 +2312,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             }
             else
             {
-                if( m_pImpl->IsStyleSheetImport() )
+                if ( pStyleSheetPropertyMap != NULL )
                 {
                     // set the number id for AbstractNum references
-                    StyleSheetPropertyMap* pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
                     pStyleSheetPropertyMap->SetNumId( nIntValue );
                 }
                 else
@@ -2313,6 +2325,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             }
         }
         break;
+
     case NS_sprm::LN_PFNoLineNumb:   // sprmPFNoLineNumb
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 1 */
         /* WRITERFILTERSTATUS: comment:  */
