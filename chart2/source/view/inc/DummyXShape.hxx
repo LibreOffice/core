@@ -239,7 +239,7 @@ public:
     DummyPieSegment2D(double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree,
             double fUnitCircleInnerRadius, double fUnitCircleOuterRadius,
             const drawing::Direction3D& rOffset, const drawing::HomogenMatrix& rUnitCircleToScene);
-
+    void render();
 private:
     double mfUnitCircleStartAngleDegree;
     double mfUnitCircleWidthAngleDegree;

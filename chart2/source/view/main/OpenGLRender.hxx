@@ -100,6 +100,7 @@ typedef struct TextInfo
 }TextInfo;
 
 typedef std::vector<GLfloat> Area2DPointList;
+typedef std::vector<GLfloat> PieSegment2DPointList;
 
 /// Holds the information of our new child window
 struct GLWindow
@@ -175,6 +176,8 @@ public:
     int RenderArea2DShape();
     void SetChartTransparencyGradient(long transparencyGradient);
 
+    int SetPieSegment2DShapePoint(float x, float y, int listLength);
+    int RenderPieSegment2DShape();
 #if DEBUG_POSITIONING
     void renderDebug();
 #endif
@@ -294,6 +297,9 @@ private:
 
     float m_BackgroundColor[16];
     glm::vec4 m_ClearColor;
+
+    PieSegment2DPointList m_PieSegment2DPointList;
+    std::list <PieSegment2DPointList> m_PieSegment2DShapePointList;
 
 #if DEBUG_POSITIONING
     GLuint m_DebugProID;

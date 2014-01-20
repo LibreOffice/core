@@ -1726,4 +1726,70 @@ void OpenGLRender::SetChartTransparencyGradient(long transparencyGradient)
         m_BackgroundColor[15] = 0.0;
     }
 }
+int OpenGLRender::SetPieSegment2DShapePoint(float x, float y, int listLength)
+{
+    if (m_PieSegment2DPointList.empty())
+    {
+        m_PieSegment2DPointList.reserve(listLength);
+    }
+    float actualX = (x / OPENGL_SCALE_VALUE);
+    float actualY = (y / OPENGL_SCALE_VALUE);
+    m_PieSegment2DPointList.push_back(actualX);
+    m_PieSegment2DPointList.push_back(actualY);
+    m_PieSegment2DPointList.push_back(m_fZStep);
+
+    if (m_PieSegment2DPointList.size() == size_t(listLength * 3))
+    {
+        m_PieSegment2DShapePointList.push_back(m_PieSegment2DPointList);
+        m_PieSegment2DPointList.clear();
+    }
+    return 0;
+}
+
+int OpenGLRender::RenderPieSegment2DShape()
+{
+    int listNum = m_PieSegment2DShapePointList.size();
+    PosVecf3 trans = {0.0f, 0.0f, 0.0f};
+    PosVecf3 angle = {0.0f, 0.0f, 0.0f};
+    PosVecf3 scale = {1.0f, 1.0f, 1.0f};
+    MoveModelf(trans, angle, scale);
+    m_MVP = m_Projection * m_View * m_Model;
+
+    for (int i = 0; i < listNum; i++)
+    {
+        PieSegment2DPointList &pointList = m_PieSegment2DShapePointList.back();
+        //fill vertex buffer
+        glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+        glBufferData(GL_ARRAY_BUFFER, pointList.size() * sizeof(float), &pointList[0] , GL_STATIC_DRAW);
+        // Use our shader
+        glUseProgram(m_CommonProID);
+
+        glUniform4fv(m_2DColorID, 1, &m_2DColor[0]);
+
+        glUniformMatrix4fv(m_MatrixID, 1, GL_FALSE, &m_MVP[0][0]);
+
+        // 1rst attribute buffer : vertices
+        glEnableVertexAttribArray(m_2DVertexID);
+        glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+        glVertexAttribPointer(
+            m_2DVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+            3,                  // size
+            GL_FLOAT,           // type
+            GL_FALSE,           // normalized?
+            0,                  // stride
+            (void*)0            // array buffer offset
+            );
+        glDrawArrays(GL_POLYGON, 0, pointList.size() / 3); // 12*3 indices starting at 0 -> 12 triangles
+        glDisableVertexAttribArray(m_2DVertexID);
+        glUseProgram(0);
+        m_PieSegment2DShapePointList.pop_back();
+
+    }
+    glEnable(GL_MULTISAMPLE);
+    m_fZStep += 0.01f;
+
+    CHECK_GL_ERROR();
+    return 0;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
