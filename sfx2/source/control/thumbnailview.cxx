@@ -1139,7 +1139,7 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
         if( ImplHasAccessibleListeners() )
         {
             // focus event (select)
-            ThumbnailViewAcc* pItemAcc = ThumbnailViewAcc::getImplementation( pItem->GetAccessible( mbIsTransientChildrenDisabled ) );
+            ThumbnailViewItemAcc* pItemAcc = ThumbnailViewItemAcc::getImplementation( pItem->GetAccessible( mbIsTransientChildrenDisabled ) );
 
             if( pItemAcc )
             {
