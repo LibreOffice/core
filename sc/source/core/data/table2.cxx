@@ -267,18 +267,24 @@ void ScTable::InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
 
         if (!maColManualBreaks.empty())
         {
-            std::set<SCCOL>::reverse_iterator rit = maColManualBreaks.rbegin();
-            while (rit != maColManualBreaks.rend())
+            std::vector<SCCOL> aUpdatedBreaks;
+
+            while ( ! maColManualBreaks.empty())
             {
-                SCCOL nCol = *rit;
-                if (nCol < nStartCol)
-                    break;  // while
-                else
-                {
-                    maColManualBreaks.erase( (++rit).base());
-                    maColManualBreaks.insert( static_cast<SCCOL>( nCol + nSize));
-                }
+                std::set<SCCOL>::iterator aLast (--maColManualBreaks.end());
+
+                // Check if there are more entries that have to be processed.
+                if (*aLast < nStartRow)
+                    break;
+
+                // Remember the updated break location and erase the entry.
+                aUpdatedBreaks.push_back(static_cast<SCCOL>(*aLast + nSize));
+                maColManualBreaks.erase(aLast);
             }
+
+            // Insert the updated break locations.
+            if ( ! aUpdatedBreaks.empty())
+                maColManualBreaks.insert(aUpdatedBreaks.begin(), aUpdatedBreaks.end());
         }
     }
 
