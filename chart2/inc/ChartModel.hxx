@@ -164,7 +164,6 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitle >
                                           m_xTitle;
 
-    bool                                  m_bIsDisposed;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                           m_xPageBackground;
 
