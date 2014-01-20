@@ -206,7 +206,7 @@ OUString lcl_RangeSequenceToString(
     return aResult.makeStringAndClear();
 }
 
-OUString lcl_GetRawString( ScDocument* pDoc, const ScAddress& rPos )
+OUString lcl_GetFormattedString( ScDocument* pDoc, const ScAddress& rPos )
 {
     // return text/edit cell string content, with line feeds in edit cells
 
@@ -3169,13 +3169,13 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
             break;
         case table::CellContentType_TEXT :
             {
-                OUString sFormula(lcl_GetRawString(pDoc, aCellPos));
+                OUString sFormattedString(lcl_GetFormattedString(pDoc, aCellPos));
                 OUString sCellString = aCell.maBaseCell.getString(pDoc);
                 GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                        sCellString, sFormula, true, true);
+                        sCellString, sFormattedString, true, true);
                 if( getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
                     GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                            sCellString, sFormula, false, true, XML_NAMESPACE_CALC_EXT);
+                            sCellString, sFormattedString, false, true, XML_NAMESPACE_CALC_EXT);
             }
             break;
         case table::CellContentType_FORMULA :
