@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_1418ba83",
+        "filename": "vcl/win/source/gdi/salgdi3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-01-20T20:07:21Z",
+      "side": 1,
+      "message": "\"ReaduInt32\" looks wrong here?",
+      "revId": "8c5b8a4cf4d6e70848e5a6c2c1a536d67e9dca5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
