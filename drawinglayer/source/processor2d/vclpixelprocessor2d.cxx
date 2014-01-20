@@ -317,21 +317,37 @@ namespace drawinglayer
                         basegfx::B2DRange aRange = aTarget.getB2DRange();
                         double fH = aRange.getHeight();
 
-                        if (fH <= 1.0 || bDouble)
+                        if (bDouble)
+                        {
+                            // Double line
+                            drawHairLine(
+                                mpOutputDevice, aRange.getMinX(), aRange.getMinY()-1.0, aRange.getMaxX(), aRange.getMinY()-1.0,
+                                aLineColor);
+
+                            drawHairLine(
+                                mpOutputDevice, aRange.getMinX(), aRange.getMinY()+1.0, aRange.getMaxX(), aRange.getMinY()+1.0,
+                                aLineColor);
+
+                            return true;
+                        }
+
+                        if (fH <= 1.0)
                         {
                             // Draw it as a line.
                             drawHairLine(
                                 mpOutputDevice, aRange.getMinX(), aRange.getMinY(), aRange.getMaxX(), aRange.getMinY(),
                                 aLineColor);
 
-                            if (bDouble)
-                            {
-                                drawHairLine(
-                                    mpOutputDevice, aRange.getMinX(), aRange.getMinY()+2.0, aRange.getMaxX(), aRange.getMinY()+2.0,
-                                    aLineColor);
-                            }
-
                             return true;
+                        }
+
+                        double fOffset = rtl::math::round(fH/2.0, 0, rtl_math_RoundingMode_Down);
+                        if (fOffset != 0.0)
+                        {
+                            // Move it up a bit to align it vertically centered.
+                            basegfx::B2DHomMatrix aMat;
+                            aMat.set(1, 2, -fOffset);
+                            aTarget.transform(aMat);
                         }
                     }
                     else
@@ -344,20 +360,37 @@ namespace drawinglayer
                         basegfx::B2DRange aRange = aTarget.getB2DRange();
                         double fW = aRange.getWidth();
 
-                        if (fW <= 1.0 || bDouble)
+                        if (bDouble)
+                        {
+                            // Draw it as a line.
+                            drawHairLine(
+                                mpOutputDevice, aRange.getMinX()-1.0, aRange.getMinY(), aRange.getMinX()-1.0, aRange.getMaxY(),
+                                aLineColor);
+
+                            drawHairLine(
+                                mpOutputDevice, aRange.getMinX()+1.0, aRange.getMinY(), aRange.getMinX()+1.0, aRange.getMaxY(),
+                                aLineColor);
+
+                            return true;
+                        }
+
+                        if (fW <= 1.0)
                         {
                             // Draw it as a line.
                             drawHairLine(
                                 mpOutputDevice, aRange.getMinX(), aRange.getMinY(), aRange.getMinX(), aRange.getMaxY(),
                                 aLineColor);
 
-                            if (bDouble)
-                            {
-                                drawHairLine(
-                                    mpOutputDevice, aRange.getMinX()+2.0, aRange.getMinY(), aRange.getMinX()+2.0, aRange.getMaxY(),
-                                    aLineColor);
-                            }
                             return true;
+                        }
+
+                        double fOffset = rtl::math::round(fW/2.0, 0, rtl_math_RoundingMode_Down);
+                        if (fOffset != 0.0)
+                        {
+                            // Move it to the left a bit to center it horizontally.
+                            basegfx::B2DHomMatrix aMat;
+                            aMat.set(0, 2, -fOffset);
+                            aTarget.transform(aMat);
                         }
                     }
 
@@ -463,6 +496,15 @@ namespace drawinglayer
                             if (i >= n)
                                 i = 0;
                         }
+
+                        double fOffset = rtl::math::round(nThick/2.0, 0, rtl_math_RoundingMode_Down);
+                        if (fOffset != 0.0)
+                        {
+                            // Move it up a bit to align it vertically centered.
+                            basegfx::B2DHomMatrix aMat;
+                            aMat.set(1, 2, -fOffset);
+                            aTarget.transform(aMat);
+                        }
                     }
                     else
                     {
@@ -534,6 +576,15 @@ namespace drawinglayer
                             ++i;
                             if (i >= n)
                                 i = 0;
+                        }
+
+                        double fOffset = rtl::math::round(nThick/2.0, 0, rtl_math_RoundingMode_Down);
+                        if (fOffset != 0.0)
+                        {
+                            // Move it to the left a bit to center it horizontally.
+                            basegfx::B2DHomMatrix aMat;
+                            aMat.set(0, 2, -fOffset);
+                            aTarget.transform(aMat);
                         }
                     }
 
