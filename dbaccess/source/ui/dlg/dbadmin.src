@@ -90,7 +90,6 @@ TabDialog DLG_DATABASE_ADMINISTRATION
     TabControl 1
     {
         OutputSize = TRUE ;
-        HelpId = HID_DSADMIN_TABCONTROL;
     };
 
     //.........................................................................
@@ -123,7 +122,6 @@ ModalDialog DLG_DATABASE_TYPE_CHANGE
     TabControl 1
     {
         OutputSize = TRUE ;
-        HelpId = HID_DSADMIN_TABCONTROL;
     };
     Text [ en-US ] = "Database properties" ;
 };

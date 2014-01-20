@@ -10,6 +10,7 @@
 $(eval $(call gb_UIConfig_UIConfig,dbaccess))
 
 $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
+    dbaccess/uiconfig/ui/advancedsettingsdialog \
     dbaccess/uiconfig/ui/colwidthdialog \
     dbaccess/uiconfig/ui/directsqldialog  \
     dbaccess/uiconfig/ui/fielddialog \

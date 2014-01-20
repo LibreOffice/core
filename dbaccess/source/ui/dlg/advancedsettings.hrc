@@ -32,9 +32,6 @@
     /* bottom space */  START_Y
 
 
-#define STR_GENERATED_VALUE     1
-#define STR_DS_BEHAVIOUR        2
-
 #define FL_SEPARATORAUTO        1
 #define FL_DATAHANDLING         2
 

@@ -358,34 +358,4 @@ TabPage PAGE_ADVANCED_SETTINGS_SPECIAL
     AUTO_MAXROWSCAN(           18*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 15*CHECKBOX_HEIGHT + RELATED_CONTROLS + ( LISTBOX_HEIGHT - CHECKBOX_HEIGHT ) / 2 )
 };
 
-//-------------------------------------------------------------------------
-
-TabDialog DLG_DATABASE_ADVANCED
-{
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Hide = TRUE;
-    HelpId = HID_DSADMIN_ADVANCED;
-
-    TabControl 1
-    {
-        OutputSize = TRUE ;
-        HelpId = HID_DSADMIN_TABCONTROL;
-    };
-
-    String STR_GENERATED_VALUE
-    {
-        Text [ en-US ] = "Generated Values";
-    };
-
-    String STR_DS_BEHAVIOUR
-    {
-        Text [ en-US ] = "Special Settings";
-    };
-
-    Text [ en-US ] = "Advanced Settings" ;
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -429,7 +429,8 @@ namespace dbaui
     // AdvancedSettingsDialog
     AdvancedSettingsDialog::AdvancedSettingsDialog( Window* _pParent, SfxItemSet* _pItems,
         const Reference< XComponentContext >& _rxContext, const Any& _aDataSourceName )
-        :SfxTabDialog(_pParent, ModuleRes(DLG_DATABASE_ADVANCED), _pItems)
+        : SfxTabDialog(_pParent, "AdvancedSettingsDialog",
+            "dbaccess/ui/advancedsettingsdialog.ui", _pItems)
     {
         m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxContext,_pParent,this));
         m_pImpl->setDataSourceOrName(_aDataSourceName);
@@ -446,16 +447,19 @@ namespace dbaui
         const FeatureSet& rFeatures( aMeta.getFeatureSet() );
 
         // auto-generated values?
-        if ( rFeatures.supportsGeneratedValues() )
-            AddTabPage( PAGE_GENERATED_VALUES, OUString( ModuleRes( STR_GENERATED_VALUE ) ), ODriversSettings::CreateGeneratedValuesPage, NULL );
+        if (rFeatures.supportsGeneratedValues())
+            AddTabPage("generated", ODriversSettings::CreateGeneratedValuesPage, NULL);
+        else
+            RemoveTabPage("generated");
 
         // any "special settings"?
-        if ( rFeatures.supportsAnySpecialSetting() )
-            AddTabPage( PAGE_ADVANCED_SETTINGS_SPECIAL, OUString( ModuleRes( STR_DS_BEHAVIOUR ) ), ODriversSettings::CreateSpecialSettingsPage, NULL );
+        if (rFeatures.supportsAnySpecialSetting())
+            AddTabPage("special", ODriversSettings::CreateSpecialSettingsPage, NULL);
+        else
+            RemoveTabPage("special");
 
         // remove the reset button - it's meaning is much too ambiguous in this dialog
         RemoveResetButton();
-        FreeResource();
     }
 
     AdvancedSettingsDialog::~AdvancedSettingsDialog()
