@@ -143,14 +143,16 @@ OUString ScCellFormat::GetString(
     {
         case CELLTYPE_STRING:
         {
-            OUString aCellString = rDoc.GetString(rPos);
-            rFormatter.GetOutputString(aCellString, nFormat, aString, ppColor, bUseStarFormat);
+            ScRefCellValue aCell;
+            aCell.assign(rDoc, rPos);
+            rFormatter.GetOutputString(aCell.getString(&rDoc), nFormat, aString, ppColor, bUseStarFormat);
         }
         break;
         case CELLTYPE_EDIT:
         {
-            OUString aCellString = rDoc.GetString(rPos);
-            rFormatter.GetOutputString(aCellString, nFormat, aString, ppColor);
+            ScRefCellValue aCell;
+            aCell.assign(rDoc, rPos);
+            rFormatter.GetOutputString(aCell.getString(&rDoc), nFormat, aString, ppColor);
         }
         break;
         case CELLTYPE_VALUE:
