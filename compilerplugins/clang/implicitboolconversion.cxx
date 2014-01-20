@@ -65,6 +65,33 @@ bool isBoolExpr(Expr const * expr) {
     return false;
 }
 
+// It appears that, given a function declaration, there is no way to determine
+// the language linkage of the function's type, only of the function's name
+// (via FunctionDecl::isExternC); however, in a case like
+//
+//   extern "C" { static void f(); }
+//
+// the function's name does not have C language linkage while the function's
+// type does (as clarified in C++11 [decl.link]); cf. <http://clang-developers.
+// 42468.n3.nabble.com/Language-linkage-of-function-type-tt4037248.html>
+// "Language linkage of function type":
+bool hasCLanguageLinkageType(FunctionDecl const * decl) {
+    assert(decl != nullptr);
+    if (decl->isExternC()) {
+        return true;
+    }
+#if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
+    if (decl->isInExternCContext()) {
+        return true;
+    }
+#else
+    if (decl->getDeclContext()->isExternCContext()) {
+        return true;
+    }
+#endif
+    return false;
+}
+
 class ImplicitBoolConversion:
     public RecursiveASTVisitor<ImplicitBoolConversion>, public loplugin::Plugin
 {
@@ -126,14 +153,14 @@ bool ImplicitBoolConversion::TraverseCallExpr(CallExpr * expr) {
     FunctionProtoType const * t = nullptr;
     if (d != nullptr) {
         FunctionDecl const * fd = dyn_cast<FunctionDecl>(d);
-        if (fd != nullptr && (fd->isExternC() || fd->isInExternCContext())) {
+        if (fd != nullptr && fd->isExternC()) {
             ext = true;
             PointerType const * pt = dyn_cast<PointerType>(fd->getType());
             t = (pt == nullptr ? fd->getType() : pt->getPointeeType())
                 ->getAs<FunctionProtoType>();
         } else {
             VarDecl const * vd = dyn_cast<VarDecl>(d);
-            if (vd != nullptr && (vd->isExternC() || vd->isInExternCContext()))
+            if (vd != nullptr && vd->isExternC())
             {
                 ext = true;
                 PointerType const * pt = dyn_cast<PointerType>(vd->getType());
@@ -432,7 +459,7 @@ bool ImplicitBoolConversion::TraverseReturnStmt(ReturnStmt * stmt) {
 }
 
 bool ImplicitBoolConversion::TraverseFunctionDecl(FunctionDecl * decl) {
-    bool ext = (decl->isExternC() || decl->isInExternCContext())
+    bool ext = hasCLanguageLinkageType(decl)
         && decl->isThisDeclarationADefinition()
         && (decl->getResultType()->isSpecificBuiltinType(BuiltinType::Int)
             || decl->getResultType()->isSpecificBuiltinType(BuiltinType::UInt));
