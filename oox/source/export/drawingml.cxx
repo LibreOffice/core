@@ -1396,8 +1396,19 @@ void DrawingML::WriteText( Reference< XInterface > rXIface, bool bBodyPr, bool b
     }
 
     if (bBodyPr)
+    {
+        const char* pWrap = bHasWrap && !bWrap ? "none" : NULL;
+        if (GetDocumentType() == DOCUMENT_DOCX)
+        {
+            // In case of DOCX, if we want to have the same effect as
+            // TextShape's automatic word wrapping, then we need to set
+            // wrapping to square.
+            uno::Reference<lang::XServiceInfo> xServiceInfo(rXIface, uno::UNO_QUERY);
+            if (xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.drawing.TextShape"))
+                pWrap = "square";
+        }
         mpFS->singleElementNS( (nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr,
-                               XML_wrap, bHasWrap && !bWrap ? "none" : NULL,
+                               XML_wrap, pWrap,
                                XML_lIns, (nLeft != DEFLRINS) ? IS( MM100toEMU( nLeft ) ) : NULL,
                                XML_rIns, (nRight != DEFLRINS) ? IS( MM100toEMU( nRight ) ) : NULL,
                                XML_tIns, (nTop != DEFTBINS) ? IS( MM100toEMU( nTop ) ) : NULL,
@@ -1406,6 +1417,7 @@ void DrawingML::WriteText( Reference< XInterface > rXIface, bool bBodyPr, bool b
                                XML_anchorCtr, bHorizontalCenter ? "1" : NULL,
                                XML_vert, sWritingMode,
                                FSEND );
+    }
 
     Reference< XEnumerationAccess > access( xXText, UNO_QUERY );
     if( !access.is() || !bText )
