@@ -378,6 +378,13 @@ namespace drawinglayer
                     {
                         // Horizontal line.
 
+                        if (basegfx::fTools::equalZero(nThick))
+                        {
+                            // Dash line segment too small to draw.  Substitute it with a solid line.
+                            drawHairLine(mpOutputDevice, fX1, fY1, fX2, fY1, aLineColor);
+                            return true;
+                        }
+
                         // Create a dash unit polygon set.
                         basegfx::B2DPolyPolygon aDashes;
                         std::vector<double>::const_iterator it = aPattern.begin(), itEnd = aPattern.end();
@@ -437,6 +444,13 @@ namespace drawinglayer
                     else
                     {
                         // Vertical line.
+
+                        if (basegfx::fTools::equalZero(nThick))
+                        {
+                            // Dash line segment too small to draw.  Substitute it with a solid line.
+                            drawHairLine(mpOutputDevice, fX1, fY1, fX1, fY2, aLineColor);
+                            return true;
+                        }
 
                         // Create a dash unit polygon set.
                         basegfx::B2DPolyPolygon aDashes;
