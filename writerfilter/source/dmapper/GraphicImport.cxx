@@ -474,11 +474,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
         }
         break;
 
-        case NS_rtf::LN_shpfBid:
-            break; //ignored
-        case NS_rtf::LN_shpfComplex:
-            break;
-
         //border properties
         case NS_ooxml::LN_CT_Border_sz:
             m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineWidth = nIntValue;
