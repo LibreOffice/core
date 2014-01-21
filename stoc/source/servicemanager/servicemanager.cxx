@@ -138,7 +138,7 @@ struct hashRef_Impl
 
 struct equaltoRef_Impl
 {
-    size_t operator()(const Reference<XInterface > & rName1, const Reference<XInterface > & rName2 ) const
+    bool operator()(const Reference<XInterface > & rName1, const Reference<XInterface > & rName2 ) const
         { return rName1 == rName2; }
 };
 
