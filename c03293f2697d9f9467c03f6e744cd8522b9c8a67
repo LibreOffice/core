@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_575a4484",
+        "filename": "ucb/source/ucp/webdav/webdavcontent.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-01-21T19:17:12Z",
+      "side": 1,
+      "message": "this should be \u003d\u003d not !\u003d",
+      "revId": "c03293f2697d9f9467c03f6e744cd8522b9c8a67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
