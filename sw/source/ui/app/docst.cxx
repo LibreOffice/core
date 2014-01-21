@@ -339,15 +339,13 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                 {
                     case SID_STYLE_NEW_BY_EXAMPLE:
                     {
-                        SfxNewStyleDlg *pDlg = new SfxNewStyleDlg( 0,
-                                                    *GetStyleSheetPool());
+                        boost::scoped_ptr<SfxNewStyleDlg> pDlg(new SfxNewStyleDlg( 0,
+                                                    *GetStyleSheetPool()));
                         if(RET_OK == pDlg->Execute())
                         {
                             aParam = pDlg->GetName();
                             rReq.AppendItem(SfxStringItem(nSlot, aParam));
                         }
-
-                        delete pDlg;
                     }
                     break;
 
@@ -739,11 +737,11 @@ sal_uInt16 SwDocShell::Edit(
         SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         assert( pFact );
-        SfxAbstractApplyTabDialog* pDlg = pFact->CreateTemplateDialog(
+        boost::scoped_ptr<SfxAbstractApplyTabDialog> pDlg(pFact->CreateTemplateDialog(
                                                     0, *(xTmp.get()), nFamily, sPage,
-                                                    pActShell ? pActShell : pWrtShell, bNew);
+                                                    pActShell ? pActShell : pWrtShell, bNew));
         assert( pDlg );
-        ApplyStyle aApplyStyleHelper(*this, bNew, pStyle, nRet, xTmp, nFamily, pDlg, mxBasePool, bModified);
+        ApplyStyle aApplyStyleHelper(*this, bNew, pStyle, nRet, xTmp, nFamily, pDlg.get(), mxBasePool, bModified);
         pDlg->SetApplyHdl(LINK(&aApplyStyleHelper, ApplyStyle, ApplyHdl));
 
         if (RET_OK == pDlg->Execute())
@@ -763,8 +761,6 @@ sal_uInt16 SwDocShell::Edit(
         }
 
         nRet = aApplyStyleHelper.getRet();
-
-        delete pDlg;
     }
     else
     {

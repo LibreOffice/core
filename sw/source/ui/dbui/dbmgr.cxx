@@ -2581,10 +2581,10 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    AbstractSwInsertDBColAutoPilot* pDlg = pFact->CreateSwInsertDBColAutoPilot( rSh.GetView(),
+    boost::scoped_ptr<AbstractSwInsertDBColAutoPilot> pDlg(pFact->CreateSwInsertDBColAutoPilot( rSh.GetView(),
                                                                                 xSource,
                                                                                 xColSupp,
-                                                                                aDBData );
+                                                                                aDBData ));
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if( RET_OK == pDlg->Execute() )
     {
@@ -2600,8 +2600,6 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
             OSL_FAIL("exception caught");
         }
     }
-    delete pDlg;
-
 }
 
 SwDbtoolsClient* SwNewDBMgr::pDbtoolsClient = NULL;

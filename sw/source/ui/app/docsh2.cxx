@@ -113,6 +113,8 @@
 
 #include <ndtxt.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -682,7 +684,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-            AbstractSwInsertAbstractDlg* pDlg = pFact->CreateSwInsertAbstractDlg(0);
+            boost::scoped_ptr<AbstractSwInsertAbstractDlg> pDlg(pFact->CreateSwInsertAbstractDlg(0));
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             if(RET_OK == pDlg->Execute())
             {
@@ -749,7 +751,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 }
 
             }
-            delete pDlg;
         }
         break;
         case FN_OUTLINE_TO_CLIPBOARD:

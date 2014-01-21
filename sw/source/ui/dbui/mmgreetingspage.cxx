@@ -30,6 +30,8 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <helpid.h>
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace svt;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -105,11 +107,11 @@ IMPL_LINK_NOARG(SwGreetingsHandler, IndividualHdl_Impl)
 
 IMPL_LINK(SwGreetingsHandler, GreetingHdl_Impl, PushButton*, pButton)
 {
-    SwCustomizeAddressBlockDialog* pDlg =
+    boost::scoped_ptr<SwCustomizeAddressBlockDialog> pDlg(
             new SwCustomizeAddressBlockDialog(pButton, m_pWizard->GetConfigItem(),
                         pButton == m_pMalePB ?
                         SwCustomizeAddressBlockDialog::GREETING_MALE :
-                        SwCustomizeAddressBlockDialog::GREETING_FEMALE );
+                        SwCustomizeAddressBlockDialog::GREETING_FEMALE ));
     if(RET_OK == pDlg->Execute())
     {
         ListBox* pToInsert = pButton == m_pMalePB ? m_pMaleLB : m_pFemaleLB;
@@ -121,7 +123,6 @@ IMPL_LINK(SwGreetingsHandler, GreetingHdl_Impl, PushButton*, pButton)
         }
         UpdatePreview();
     }
-    delete pDlg;
     return 0;
 }
 
@@ -135,15 +136,14 @@ IMPL_LINK(SwMailMergeGreetingsPage, AssignHdl_Impl, PushButton*, pButton)
     OUString sPreview = m_aFemaleLB.GetSelectEntry();
     sPreview += "\n";
     sPreview += m_aMaleLB.GetSelectEntry();
-    SwAssignFieldsDialog* pDlg =
-            new SwAssignFieldsDialog(pButton, m_pWizard->GetConfigItem(), sPreview, false);
+    boost::scoped_ptr<SwAssignFieldsDialog> pDlg(
+            new SwAssignFieldsDialog(pButton, m_pWizard->GetConfigItem(), sPreview, false));
     if(RET_OK == pDlg->Execute())
     {
         UpdatePreview();
         m_pWizard->UpdateRoadmap();
         m_pWizard->enableButtons(WZB_NEXT, m_pWizard->isStateEnabled(MM_PREPAREMERGEPAGE));
     }
-    delete pDlg;
     return 0;
 }
 

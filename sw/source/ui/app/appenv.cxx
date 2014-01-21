@@ -69,6 +69,8 @@
 #include "envelp.hrc"
 #include "envimg.hxx"
 
+#include <boost/scoped_ptr.hpp>
+
 #define ENV_NEWDOC      RET_OK
 #define ENV_INSERT      RET_USER
 
@@ -202,7 +204,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
     }
 
     Window *pParent = pOldSh ? pOldSh->GetWin() : 0;
-    SfxAbstractTabDialog * pDlg=NULL;
+    boost::scoped_ptr<SfxAbstractTabDialog> pDlg;
     short nMode = ENV_INSERT;
 
     SFX_REQUEST_ARG( rReq, pItem, SwEnvItem, FN_ENVELOP, sal_False );
@@ -211,7 +213,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-        pDlg = pFact->CreateSwEnvDlg( pParent, aSet, pOldSh, pTempPrinter, !bEnvChange );
+        pDlg.reset(pFact->CreateSwEnvDlg( pParent, aSet, pOldSh, pTempPrinter, !bEnvChange ));
         OSL_ENSURE(pDlg, "Dialogdiet fail!");
         nMode = pDlg->Execute();
     }
@@ -502,7 +504,6 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         if (pOldSh)
             SetView(&pOldSh->GetView());
     }
-    delete pDlg;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

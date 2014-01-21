@@ -67,6 +67,8 @@
 #include <swmodule.hxx>
 #include <sfx2/filedlghelper.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 #include "access.hrc"
 
 using namespace ::com::sun::star;
@@ -620,7 +622,7 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
         if(bIsWritable)
         {
 
-            SwGlossaryGroupDlg *pDlg = new SwGlossaryGroupDlg( this, pGloss->GetPathArray(), pGlossaryHdl );
+            boost::scoped_ptr<SwGlossaryGroupDlg> pDlg(new SwGlossaryGroupDlg( this, pGloss->GetPathArray(), pGlossaryHdl ));
             if ( RET_OK == pDlg->Execute() )
             {
                 Init();
@@ -647,7 +649,6 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
                 }
 
             }
-            delete pDlg;
         }
         else
         {
@@ -1022,7 +1023,7 @@ IMPL_LINK( SwGlossaryDlg, PathHdl, Button *, pBtn )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        AbstractSvxMultiPathDialog* pDlg = pFact->CreateSvxMultiPathDialog( pBtn );
+        boost::scoped_ptr<AbstractSvxMultiPathDialog> pDlg(pFact->CreateSvxMultiPathDialog( pBtn ));
         OSL_ENSURE(pDlg, "Dialogdiet fail!");
         SvtPathOptions aPathOpt;
         const OUString sGlosPath( aPathOpt.GetAutoTextPath() );
@@ -1037,7 +1038,6 @@ IMPL_LINK( SwGlossaryDlg, PathHdl, Button *, pBtn )
                 Init();
             }
         }
-        delete pDlg;
     }
     return 0;
 }

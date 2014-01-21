@@ -570,25 +570,23 @@ void SwView::StartThesaurus()
     OUString aTmp = GetThesaurusLookUpText( bSelection );
 
     Reference< XThesaurus >  xThes( ::GetThesaurus() );
-    AbstractThesaurusDialog *pDlg = NULL;
 
     if ( !xThes.is() || !xThes->hasLocale( LanguageTag::convertToLocale( eLang ) ) )
         SpellError( eLang );
     else
     {
+        boost::scoped_ptr<AbstractThesaurusDialog> pDlg;
         // create dialog
         {   //Scope for SwWait-Object
             SwWait aWait( *GetDocShell(), true );
             // load library with dialog only on demand ...
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            pDlg = pFact->CreateThesaurusDialog( &GetEditWin(), xThes, aTmp, eLang );
+            pDlg.reset(pFact->CreateThesaurusDialog( &GetEditWin(), xThes, aTmp, eLang ));
         }
 
         if ( pDlg->Execute()== RET_OK )
             InsertThesaurusSynonym( pDlg->GetWord(), aTmp, bSelection );
     }
-
-    delete pDlg;
 
     pVOpt->SetIdle( bOldIdle );
 }

@@ -77,6 +77,7 @@
 #include <svx/dialogs.hrc>
 #include <osl/mutex.hxx>
 
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 SFX_IMPL_NAMED_VIEWFACTORY(SwPagePreview, "PrintPreview")
@@ -735,7 +736,7 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
         {
             const SfxItemSet *pArgs = rReq.GetArgs();
             const SfxPoolItem* pItem;
-            AbstractSvxZoomDialog *pDlg = 0;
+            boost::scoped_ptr<AbstractSvxZoomDialog> pDlg;
             if(!pArgs)
             {
                 SfxItemSet aCoreSet(GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM);
@@ -754,7 +755,7 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if(pFact)
                 {
-                    pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet);
+                    pDlg.reset(pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet));
                     OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 }
 
@@ -777,7 +778,6 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
                 if(USHRT_MAX != nZoomFactor)
                     SetZoom(eType, nZoomFactor);
             }
-            delete pDlg;
         }
         break;
         case SID_ATTR_ZOOMSLIDER :

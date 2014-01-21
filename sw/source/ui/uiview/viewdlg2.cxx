@@ -44,6 +44,8 @@
 
 #include "view.hrc"
 
+#include <boost/scoped_ptr.hpp>
+
 void SwView::ExecDlgExt(SfxRequest &rReq)
 {
     Window *pMDI = &GetViewFrame()->GetWindow();
@@ -55,12 +57,11 @@ void SwView::ExecDlgExt(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-            VclAbstractDialog* pDialog = pFact->CreateSwCaptionDialog( pMDI, *this, DLG_CAPTION );
+            boost::scoped_ptr<VclAbstractDialog> pDialog(pFact->CreateSwCaptionDialog( pMDI, *this, DLG_CAPTION ));
             OSL_ENSURE(pDialog, "Dialogdiet fail!");
             if ( pDialog )
             {
                 pDialog->Execute();
-                delete pDialog;
             }
             break;
         }
@@ -68,14 +69,13 @@ void SwView::ExecDlgExt(SfxRequest &rReq)
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialogdiet fail!");
-            AbstractInsFootNoteDlg* pDlg = pFact->CreateInsFootNoteDlg(
-                pMDI, *m_pWrtShell, sal_True);
+            boost::scoped_ptr<AbstractInsFootNoteDlg> pDlg(pFact->CreateInsFootNoteDlg(
+                pMDI, *m_pWrtShell, sal_True));
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
             pDlg->SetHelpId(GetStaticInterface()->GetSlot(FN_EDIT_FOOTNOTE)->GetCommand());
             pDlg->SetText( SW_RESSTR(STR_EDIT_FOOTNOTE) );
             pDlg->Execute();
-            delete pDlg;
             break;
         }
     }

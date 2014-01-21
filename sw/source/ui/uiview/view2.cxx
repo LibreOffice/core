@@ -138,6 +138,8 @@
 #include <vcl/GraphicNativeTransform.hxx>
 #include <vcl/GraphicNativeMetadata.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 const char sStatusDelim[] = " : ";
 const char sStatusComma[] = " , ";
 
@@ -268,9 +270,9 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     SwDocShell* pDocShell = GetDocShell();
     sal_uInt16 nHtmlMode = ::GetHtmlMode(pDocShell);
     // when in HTML mode insert only as a link
-    FileDialogHelper* pFileDlg = new FileDialogHelper(
+    boost::scoped_ptr<FileDialogHelper> pFileDlg(new FileDialogHelper(
         ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE,
-        SFXWB_GRAPHIC );
+        SFXWB_GRAPHIC ));
     pFileDlg->SetTitle(SW_RESSTR(STR_INSERT_GRAPHIC ));
     pFileDlg->SetContext( FileDialogHelper::SW_INSERT_GRAPHIC );
     uno::Reference < XFilePicker > xFP = pFileDlg->GetFilePicker();
@@ -487,8 +489,6 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         rSh.EndUndo(); // due to possible change of Shell
     }
 
-    delete pFileDlg;
-
     return bReturn;
 }
 
@@ -508,10 +508,9 @@ void SwView::Execute(SfxRequest &rReq)
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialogdiet fail!");
-            VclAbstractDialog* pDlg = pFact->CreateVclSwViewDialog(*this);
+            boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateVclSwViewDialog(*this));
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
-            delete pDlg;
             break;
         }
         case FN_EDIT_LINK_DLG:
@@ -1634,7 +1633,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
             if ( ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED ) || !GetDocShell()->IsInPlaceActive() )
             {
                 const SfxItemSet *pSet = 0;
-                AbstractSvxZoomDialog *pDlg = 0;
+                boost::scoped_ptr<AbstractSvxZoomDialog> pDlg;
                 if ( pArgs )
                     pSet = pArgs;
                 else
@@ -1664,7 +1663,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet);
+                        pDlg.reset(pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet));
                         OSL_ENSURE(pDlg, "Zooming fail!");
                         if (pDlg)
                         {
@@ -1692,8 +1691,6 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                 if ( pItem )
                     rReq.AppendItem( *pItem );
                 rReq.Done();
-
-                delete pDlg;
             }
         }
         break;
@@ -1870,11 +1867,10 @@ void SwView::EditLinkDlg()
 {
     sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    SfxAbstractLinksDialog* pDlg = pFact->CreateLinksDialog( &GetViewFrame()->GetWindow(), &GetWrtShell().GetLinkManager(), bWeb );
+    boost::scoped_ptr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog( &GetViewFrame()->GetWindow(), &GetWrtShell().GetLinkManager(), bWeb ));
     if ( pDlg )
     {
         pDlg->Execute();
-        delete pDlg;
     }
 }
 
@@ -2332,9 +2328,8 @@ void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
                     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
                     if ( pFact )
                     {
-                        VclAbstractDialog* pDlg = pFact->CreateVclDialog( NULL, SID_OPTIONS_DATABASES );
+                        boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( NULL, SID_OPTIONS_DATABASES ));
                         pDlg->Execute();
-                        delete pDlg;
                     }
                 }
                 return ;

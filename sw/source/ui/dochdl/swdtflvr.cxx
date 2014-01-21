@@ -119,6 +119,8 @@
 #include <vcl/GraphicNativeTransform.hxx>
 #include <vcl/GraphicNativeMetadata.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 extern bool bFrmDrag;
 extern bool bDDINetAttr;
 extern bool bExecuteDrag;
@@ -2821,7 +2823,7 @@ bool SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rDat
 {
     bool nRet = false;
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    SfxAbstractPasteDialog* pDlg = pFact->CreatePasteDialog( &rSh.GetView().GetEditWin() );
+    boost::scoped_ptr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( &rSh.GetView().GetEditWin() ));
 
     DataFlavorExVector aFormats( rData.GetDataFlavorExVector() );
     TransferableObjectDescriptor aDesc;
@@ -2884,7 +2886,6 @@ bool SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rDat
     if ( nRet )
         rFormatUsed = nFormat;
 
-    delete pDlg;
     return nRet;
 }
 

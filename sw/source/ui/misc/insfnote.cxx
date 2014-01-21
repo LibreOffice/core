@@ -38,6 +38,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/layout.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 static sal_Bool bFootnote = sal_True;
 
 /*------------------------------------------------------------------------
@@ -121,8 +123,8 @@ IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberExtCharHdl)
     aAllSet.Put( rFont );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( this, aAllSet,
-        rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP );
+    boost::scoped_ptr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( this, aAllSet,
+        rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP ));
     if (RET_OK == pDlg->Execute())
     {
         SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pItem, SfxStringItem, SID_CHARMAP, sal_False );
@@ -145,7 +147,6 @@ IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberExtCharHdl)
             m_pOkBtn->Enable(!m_pNumberCharEdit->GetText().isEmpty());
         }
     }
-    delete pDlg;
 
     return 0;
 }

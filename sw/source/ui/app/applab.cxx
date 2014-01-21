@@ -73,6 +73,8 @@
 
 #include <IDocumentDeviceAccess.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace ::com::sun::star;
 
 // is in appenv.cxx
@@ -169,7 +171,7 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
     SwAbstractDialogFactory* pDialogFactory = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pDialogFactory, "SwAbstractDialogFactory fail!");
 
-    AbstractSwLabDlg* pDlg = pDialogFactory->CreateSwLabDlg(0, aSet, pNewDBMgr, bLabel);
+    boost::scoped_ptr<AbstractSwLabDlg> pDlg(pDialogFactory->CreateSwLabDlg(0, aSet, pNewDBMgr, bLabel));
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
     if ( RET_OK == pDlg->Execute() )
@@ -398,7 +400,6 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
         }
         rReq.SetReturnValue(SfxVoidItem(bLabel ? FN_LABEL : FN_BUSINESS_CARD));
     }
-    delete pDlg;
     delete pNewDBMgr;
 }
 

@@ -53,6 +53,8 @@
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace ::com::sun::star;
 
 DBG_NAME(outlinehdl)
@@ -264,7 +266,7 @@ IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu )
         nLevelNo = 9;
     else if (sIdent == "saveas")
     {
-        SwNumNamesDlg *pDlg = new SwNumNamesDlg(this);
+        boost::scoped_ptr<SwNumNamesDlg> pDlg(new SwNumNamesDlg(this));
         const OUString *aStrArr[SwChapterNumRules::nMaxRules];
         for(sal_uInt16 i = 0; i < SwChapterNumRules::nMaxRules; ++i)
         {
@@ -282,7 +284,6 @@ IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu )
                     *pNumRule, aName ), pDlg->GetCurEntryPos() );
             pMenu->SetItemText(pMenu->GetItemId(pDlg->GetCurEntryPos()), aName);
         }
-        delete pDlg;
         return 0;
     }
 

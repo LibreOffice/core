@@ -214,8 +214,8 @@ IMPL_LINK(SwMailMergeAddressBlockPage, AssignHdl_Impl, PushButton*, pButton)
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     sal_uInt16 nSel = m_aSettingsWIN.GetSelectedAddress();
     const uno::Sequence< OUString> aBlocks = rConfigItem.GetAddressBlocks();
-    SwAssignFieldsDialog* pDlg =
-            new SwAssignFieldsDialog(pButton, m_pWizard->GetConfigItem(), aBlocks[nSel], true);
+    boost::scoped_ptr<SwAssignFieldsDialog> pDlg(
+            new SwAssignFieldsDialog(pButton, m_pWizard->GetConfigItem(), aBlocks[nSel], true));
     if(RET_OK == pDlg->Execute())
     {
         //preview update
@@ -223,7 +223,6 @@ IMPL_LINK(SwMailMergeAddressBlockPage, AssignHdl_Impl, PushButton*, pButton)
         GetWizard()->UpdateRoadmap();
         GetWizard()->enableButtons(WZB_NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
     }
-    delete pDlg;
     return 0;
 }
 
@@ -443,8 +442,8 @@ IMPL_LINK(SwSelectAddressBlockDialog, NewCustomizeHdl_Impl, PushButton*, pButton
     SwCustomizeAddressBlockDialog::DialogType nType = bCustomize ?
         SwCustomizeAddressBlockDialog::ADDRESSBLOCK_EDIT :
         SwCustomizeAddressBlockDialog::ADDRESSBLOCK_NEW;
-    SwCustomizeAddressBlockDialog *pDlg =
-        new SwCustomizeAddressBlockDialog(pButton,m_rConfig,nType);
+    boost::scoped_ptr<SwCustomizeAddressBlockDialog> pDlg(
+        new SwCustomizeAddressBlockDialog(pButton,m_rConfig,nType));
     if(bCustomize)
     {
         pDlg->SetAddress(m_aAddressBlocks[m_pPreview->GetSelectedAddress()]);
@@ -468,7 +467,6 @@ IMPL_LINK(SwSelectAddressBlockDialog, NewCustomizeHdl_Impl, PushButton*, pButton
         }
         m_pDeletePB->Enable( m_aAddressBlocks.getLength() > 1);
     }
-    delete pDlg;
     return 0;
 }
 

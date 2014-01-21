@@ -59,6 +59,7 @@
 #include <helpid.h>
 #include <unomid.h>
 
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -351,11 +352,11 @@ IMPL_LINK_NOARG(SwAddressListDialog, LoadHdl_Impl)
 IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
 {
     OUString sInputURL;
-    SwCreateAddressListDialog* pDlg =
+    boost::scoped_ptr<SwCreateAddressListDialog> pDlg(
             new SwCreateAddressListDialog(
                     pButton,
                     sInputURL,
-                    m_pAddressPage->GetWizard()->GetConfigItem());
+                    m_pAddressPage->GetWizard()->GetConfigItem()));
     if(RET_OK == pDlg->Execute())
     {
         //register the URL a new datasource
@@ -434,7 +435,6 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
         {
         }
     }
-    delete pDlg;
     return 0;
 }
 
@@ -457,15 +457,14 @@ IMPL_LINK(SwAddressListDialog, EditHdl_Impl, PushButton*, pButton)
         pUserData->xColumnsSupplier.clear();
         pUserData->xConnection.clear();
             // will automatically close if it was the las reference
-        SwCreateAddressListDialog* pDlg =
+        boost::scoped_ptr<SwCreateAddressListDialog> pDlg(
                 new SwCreateAddressListDialog(
                         pButton,
                         pUserData->sURL,
-                        m_pAddressPage->GetWizard()->GetConfigItem());
+                        m_pAddressPage->GetWizard()->GetConfigItem()));
         if(RET_OK == pDlg->Execute())
         {
         }
-        delete pDlg;
     }
     return 0;
 };
@@ -578,7 +577,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
             if(nTables > 1 && bWidthDialog)
             {
                 //now call the table select dialog - if more than one table exists
-                SwSelectDBTableDialog* pDlg = new SwSelectDBTableDialog(this, pUserData->xConnection);
+                boost::scoped_ptr<SwSelectDBTableDialog> pDlg(new SwSelectDBTableDialog(this, pUserData->xConnection));
                 OUString sTable = m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1);
                 if(!sTable.isEmpty())
                     pDlg->SetSelectedTable(sTable, pUserData->nCommandType == CommandType::TABLE);
@@ -589,7 +588,6 @@ void SwAddressListDialog::DetectTablesAndQueries(
                     m_aDBData.nCommandType = bIsTable ? CommandType::TABLE : CommandType::QUERY;
                     pUserData->nCommandType = m_aDBData.nCommandType;
                 }
-                delete pDlg;
             }
             else if(nTables == 1)
             {

@@ -44,6 +44,8 @@
 #include <vector>
 #include <algorithm>
 
+#include <boost/scoped_ptr.hpp>
+
 #include "swabstdlg.hxx"
 #include "chrdlg.hrc"
 
@@ -263,7 +265,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
         const OUString sFmtStr = pColl->GetName();
-        SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg(GetParentSwEnvDlg(), pSh->GetView(), aTmpSet, DLG_CHAR_ENV, &sFmtStr);
+        boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(GetParentSwEnvDlg(), pSh->GetView(), aTmpSet, DLG_CHAR_ENV, &sFmtStr));
         OSL_ENSURE(pDlg, "Dialogdiet fail!");
         if (pDlg->Execute() == RET_OK)
         {
@@ -271,7 +273,6 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
             ::ConvertAttrGenToChar(aOutputSet, CONV_ATTR_ENV);
             pCollSet->Put(aOutputSet);
         }
-        delete pDlg;
     }
     else if (sIdent == "paragraph")
     {
@@ -302,7 +303,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
         ::PrepareBoxInfo( aTmpSet, *pSh );
 
         const OUString sFmtStr = pColl->GetName();
-        SwParaDlg *pDlg = new SwParaDlg(GetParentSwEnvDlg(), pSh->GetView(), aTmpSet, DLG_ENVELOP, &sFmtStr);
+        boost::scoped_ptr<SwParaDlg> pDlg(new SwParaDlg(GetParentSwEnvDlg(), pSh->GetView(), aTmpSet, DLG_ENVELOP, &sFmtStr));
 
         if ( pDlg->Execute() == RET_OK )
         {
@@ -325,7 +326,6 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
                 pCollSet->Put(*pOutputSet);
             }
         }
-        delete pDlg;
     }
     return 0;
 }
