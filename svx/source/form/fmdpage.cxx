@@ -85,8 +85,8 @@ SdrObject *SvxFmDrawPage::_CreateSdrObject( const ::com::sun::star::uno::Referen
 {
     OUString aShapeType( xDescr->getShapeType() );
 
-    if  (   aShapeType.startsWith( "com.sun.star.drawing.ShapeControl" )   // compatibility
-        ||  aShapeType.startsWith( "com.sun.star.drawing.ControlShape" )
+    if  (   aShapeType == "com.sun.star.drawing.ShapeControl"   // compatibility
+        ||  aShapeType == "com.sun.star.drawing.ControlShape"
         )
         return new FmFormObj();
     else

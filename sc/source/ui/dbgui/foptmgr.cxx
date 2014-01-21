@@ -159,7 +159,7 @@ void ScFilterOptionsMgr::Init()
             }
         }
 
-        if ( !theDbName.startsWith(STR_DB_LOCAL_NONAME) )
+        if ( theDbName != STR_DB_LOCAL_NONAME )
         {
             theDbArea.append(" (");
             theDbArea.append(theDbName).append(')');

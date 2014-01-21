@@ -633,36 +633,36 @@ Any XLB_Invocation::getValue( const OUString & rName )
 sal_Bool XLB_Invocation::hasMethod( const OUString & rName )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return (rName.startsWith( "raiseException" ) ||
-            rName.startsWith( "getValues" ) ||
-            rName.startsWith( "setValues2" ) ||
-            rName.startsWith( "setValues" ) ||
-            rName.startsWith( "acquire" ) ||
-            rName.startsWith( "release" ) ||
-            rName.startsWith( "queryInterface" ));
+    return (rName == "raiseException" ||
+            rName == "getValues" ||
+            rName == "setValues2" ||
+            rName == "setValues" ||
+            rName == "acquire" ||
+            rName == "release" ||
+            rName == "queryInterface" );
 }
 //__________________________________________________________________________________________________
 sal_Bool XLB_Invocation::hasProperty( const OUString & rName )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return (rName.startsWith( "Bool" ) ||
-            rName.startsWith( "Byte" ) ||
-            rName.startsWith( "Char" ) ||
-            rName.startsWith( "Short" ) ||
-            rName.startsWith( "UShort" ) ||
-            rName.startsWith( "Long" ) ||
-            rName.startsWith( "ULong" ) ||
-            rName.startsWith( "Hyper" ) ||
-            rName.startsWith( "UHyper" ) ||
-            rName.startsWith( "Float" ) ||
-            rName.startsWith( "Double" ) ||
-            rName.startsWith( "Enum" ) ||
-            rName.startsWith( "String" ) ||
-            rName.startsWith( "Interface" ) ||
-            rName.startsWith( "Any" ) ||
-            rName.startsWith( "Sequence" ) ||
-            rName.startsWith( "Struct" ) ||
-            rName.startsWith( "RuntimeException" ) );
+    return (rName == "Bool" ||
+            rName == "Byte" ||
+            rName == "Char" ||
+            rName == "Short" ||
+            rName == "UShort" ||
+            rName == "Long" ||
+            rName == "ULong" ||
+            rName == "Hyper" ||
+            rName == "UHyper" ||
+            rName == "Float" ||
+            rName == "Double" ||
+            rName == "Enum" ||
+            rName == "String" ||
+            rName == "Interface" ||
+            rName == "Any" ||
+            rName == "Sequence" ||
+            rName == "Struct" ||
+            rName == "RuntimeException" );
 }
 
 //##################################################################################################
@@ -895,7 +895,7 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
             catch (const IllegalArgumentException &aExc)
             {
                 OSL_ENSURE( aExc.ArgumentPosition == 5 &&
-                             aExc.Message.startsWith("dum dum dum ich tanz im kreis herum..."),
+                             aExc.Message == "dum dum dum ich tanz im kreis herum...",
                              "### unexpected exception content!" );
 
                 Reference<XLanguageBindingTest > xLBT2(
@@ -910,7 +910,7 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
         }
         catch (const RuntimeException & rExc)
         {
-            OSL_ENSURE( rExc.Message.startsWith("dum dum dum ich tanz im kreis herum..."),
+            OSL_ENSURE( rExc.Message == "dum dum dum ich tanz im kreis herum...",
                         "### unexpected exception content!" );
 
             Reference<XLanguageBindingTest > xLBT2(
@@ -925,9 +925,9 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
     }
     catch (const Exception & aExc)
     {
-        OSL_ENSURE( aExc.Message.startsWith("dum dum dum ich tanz im kreis herum..."),
+        OSL_ENSURE( aExc.Message == "dum dum dum ich tanz im kreis herum...",
                      "### unexpected exception content!" );
-        return aExc.Message.startsWith("dum dum dum ich tanz im kreis herum...");
+        return aExc.Message == "dum dum dum ich tanz im kreis herum...";
     }
     return sal_False;
 }
