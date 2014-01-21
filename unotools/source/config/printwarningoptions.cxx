@@ -129,7 +129,7 @@ SvtPrintWarningOptions_Impl::SvtPrintWarningOptions_Impl() :
 
     for( nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
-        DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False), "SvtPrintWarningOptions_Impl::SvtPrintWarningOptions_Impl()\nInvalid property value for property detected!\n" );
+        DBG_ASSERT( seqValues[nProperty].hasValue(), "SvtPrintWarningOptions_Impl::SvtPrintWarningOptions_Impl()\nInvalid property value for property detected!\n" );
 
         switch( nProperty )
         {

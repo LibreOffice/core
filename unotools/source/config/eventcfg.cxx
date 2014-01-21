@@ -236,7 +236,7 @@ void SAL_CALL GlobalEventConfig_Impl::replaceByName( const OUString& aName, cons
 {
     Sequence< beans::PropertyValue > props;
     //DF should we prepopulate the hash with a list of valid event Names?
-    if( sal_False == ( aElement >>= props ) )
+    if( !( aElement >>= props ) )
     {
         throw lang::IllegalArgumentException( OUString(),
                 Reference< XInterface > (), 2);

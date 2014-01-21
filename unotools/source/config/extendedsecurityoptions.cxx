@@ -159,7 +159,7 @@ SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()
     {
         // Safe impossible cases.
         // Check any for valid value.
-        DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False), "SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()\nInvalid property value detected!\n" );
+        DBG_ASSERT( seqValues[nProperty].hasValue(), "SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()\nInvalid property value detected!\n" );
         switch( nProperty )
         {
             case PROPERTYHANDLE_HYPERLINKS_OPEN:

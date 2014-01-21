@@ -234,7 +234,7 @@ void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   
         {
             lInValues[nSourceCounter] >>= xLocalizedNode;
             Reference< XNameContainer > xSetAccess( xLocalizedNode, UNO_QUERY );
-            if( xSetAccess.is() == sal_True )
+            if( xSetAccess.is() )
             {
                 lPropertyNames  =   xSetAccess->getElementNames()   ;
                 nPropertiesSize =   lPropertyNames.getLength()      ;

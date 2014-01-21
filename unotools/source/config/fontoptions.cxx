@@ -152,7 +152,7 @@ SvtFontOptions_Impl::SvtFontOptions_Impl()
     {
         // Safe impossible cases.
         // Check any for valid value.
-        DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False), "SvtFontOptions_Impl::SvtFontOptions_Impl()\nInvalid property value detected!\n" );
+        DBG_ASSERT( seqValues[nProperty].hasValue(), "SvtFontOptions_Impl::SvtFontOptions_Impl()\nInvalid property value detected!\n" );
         switch( nProperty )
         {
             case PROPERTYHANDLE_REPLACEMENTTABLE    :   {
