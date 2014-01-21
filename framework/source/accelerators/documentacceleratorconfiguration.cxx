@@ -68,8 +68,10 @@ public:
                 reference to an uno service manager, which is used internaly.
      */
     DocumentAcceleratorConfiguration(
-            const css::uno::Reference< css::uno::XComponentContext >& xContext,
-            const css::uno::Sequence< css::uno::Any >& lArguments);
+            const css::uno::Reference< css::uno::XComponentContext >& xContext);
+
+    void SAL_CALL constructorInit(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments)
+        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     virtual ~DocumentAcceleratorConfiguration();
 
@@ -112,9 +114,12 @@ private:
 
 //-----------------------------------------------
 DocumentAcceleratorConfiguration::DocumentAcceleratorConfiguration(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
-        const css::uno::Sequence< css::uno::Any >& lArguments)
+        const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : DocumentAcceleratorConfiguration_BASE(xContext)
+{
+}
+
+void DocumentAcceleratorConfiguration::constructorInit(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& lArguments) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
     WriteGuard aWriteLock(m_aLock);
 
@@ -224,11 +229,12 @@ void DocumentAcceleratorConfiguration::impl_ts_clearCache()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_framework_DocumentAcceleratorConfiguration_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &arguments)
+    cppu::constructor_InitializationFunc &init_func)
 {
-    rtl::Reference<DocumentAcceleratorConfiguration> x(new DocumentAcceleratorConfiguration(context, arguments));
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    // 2nd phase initialization needed
+    init_func = static_cast<cppu::constructor_InitializationFunc>(&DocumentAcceleratorConfiguration::constructorInit);
+
+    return static_cast<cppu::OWeakObject *>(new DocumentAcceleratorConfiguration(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

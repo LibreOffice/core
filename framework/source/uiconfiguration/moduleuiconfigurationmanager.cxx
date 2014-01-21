@@ -72,8 +72,10 @@ class ModuleUIConfigurationManager : private ThreadHelpBase,   // Struct for rig
 {
 public:
     ModuleUIConfigurationManager(
-            const css::uno::Reference< css::uno::XComponentContext >& xServiceManager,
-            const css::uno::Sequence< css::uno::Any >& aArguments );
+            const css::uno::Reference< css::uno::XComponentContext >& xServiceManager);
+
+    /// Initialization function after having acquire()'d.
+    void SAL_CALL constructorInit( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException);
 
     virtual ~ModuleUIConfigurationManager();
 
@@ -845,8 +847,7 @@ void ModuleUIConfigurationManager::impl_Initialize()
 }
 
 ModuleUIConfigurationManager::ModuleUIConfigurationManager(
-        const Reference< XComponentContext >& xContext,
-        const Sequence< Any >& aArguments )
+        const Reference< XComponentContext >& xContext)
     : ThreadHelpBase( &Application::GetSolarMutex() )
     , m_xDefaultConfigStorage( 0 )
     , m_xUserConfigStorage( 0 )
@@ -867,7 +868,10 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager(
     // The following code depends on this!
     m_aUIElements[LAYER_DEFAULT].resize( ::com::sun::star::ui::UIElementType::COUNT );
     m_aUIElements[LAYER_USERDEFINED].resize( ::com::sun::star::ui::UIElementType::COUNT );
+}
 
+void ModuleUIConfigurationManager::constructorInit(const css::uno::Sequence< css::uno::Any >& aArguments) throw (css::uno::Exception, css::uno::RuntimeException)
+{
     ResetableGuard aLock( m_aLock );
 
     if( aArguments.getLength() == 2 && (aArguments[0] >>= m_aModuleShortName) && (aArguments[1] >>= m_aModuleIdentifier))
@@ -1711,11 +1715,12 @@ void ModuleUIConfigurationManager::implts_notifyContainerListener( const ui::Con
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_framework_ModuleUIConfigurationManager_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &arguments)
+    cppu::constructor_InitializationFunc &init_func)
 {
-    rtl::Reference<ModuleUIConfigurationManager> x(new ModuleUIConfigurationManager(context, arguments));
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    // 2nd phase initialization needed
+    init_func = static_cast<cppu::constructor_InitializationFunc>(&ModuleUIConfigurationManager::constructorInit);
+
+    return static_cast<cppu::OWeakObject *>(new ModuleUIConfigurationManager(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -39,7 +39,9 @@ class GObjectImpl : public GObjectAccess_BASE
      ::osl::Mutex m_aMutex;
      std::auto_ptr< GraphicObject > mpGObject;
 public:
-     GObjectImpl( uno::Sequence< uno::Any > const & args ) throw (uno::RuntimeException);
+    GObjectImpl() throw (uno::RuntimeException);
+
+    void SAL_CALL constructorInit( const uno::Sequence< uno::Any >& aArguments ) throw (uno::Exception, uno::RuntimeException);
 
      // XGraphicObject
     virtual uno::Reference< graphic::XGraphic > SAL_CALL getGraphic() throw (uno::RuntimeException);
@@ -68,7 +70,11 @@ public:
     }
 };
 
-GObjectImpl::GObjectImpl( uno::Sequence< uno::Any > const & args) throw (uno::RuntimeException)
+GObjectImpl::GObjectImpl() throw (uno::RuntimeException)
+{
+}
+
+void GObjectImpl::constructorInit( const uno::Sequence< uno::Any >& args ) throw (uno::Exception, uno::RuntimeException)
 {
     if ( args.getLength() == 1 )
     {
@@ -112,10 +118,13 @@ OUString SAL_CALL GObjectImpl::getUniqueID() throw (uno::RuntimeException)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_graphic_GraphicObject_get_implementation(
-        SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
-        css::uno::Sequence<css::uno::Any> const &arguments)
+    SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
+    cppu::constructor_InitializationFunc &init_func)
 {
-    return static_cast<cppu::OWeakObject *>(new GObjectImpl(arguments));
+    // 2nd phase initialization needed
+    init_func = static_cast<cppu::constructor_InitializationFunc>(&GObjectImpl::constructorInit);
+
+    return static_cast<cppu::OWeakObject *>(new GObjectImpl);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

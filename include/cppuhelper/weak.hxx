@@ -156,9 +156,24 @@ public:
         { return this; }
 };
 
+/** Function pointer declaration.
+
+  2nd stage initialization using the service implementation pointer.
+
+  Some services have to be initialized after the object has been acquire()'d - so the
+  implementation has to provide function that does this 2nd stage initialization.
+
+  Typically, this happens in framework/.
+
+  @param aArguments
+  Arguments the instance will use for its own initialization.
+*/
+
+typedef void (SAL_CALL OWeakObject::* constructor_InitializationFunc)(
+    const css::uno::Sequence< css::uno::Any >& aArguments);
+
 }
 
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

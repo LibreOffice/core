@@ -33,6 +33,7 @@
 #include "osl/mutex.hxx"
 #include "registry/registry.hxx"
 #include "rtl/ustring.hxx"
+#include "cppuhelper/weak.hxx"
 
 namespace com { namespace sun { namespace star { namespace lang {
     class XSingleComponentFactory;
@@ -44,7 +45,7 @@ namespace cppuhelper {
 extern "C" {
 
 typedef css::uno::XInterface * SAL_CALL ImplementationConstructorFn(
-    css::uno::XComponentContext *, css::uno::Sequence<css::uno::Any> const &);
+    css::uno::XComponentContext *, cppu::constructor_InitializationFunc &);
 
 }
 

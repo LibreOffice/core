@@ -65,7 +65,6 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -77,7 +76,7 @@
 
 #include <comphelper/configurationhelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -189,9 +188,8 @@ public:
     of documents - including features of an EmergencySave in
     case a GPF occurs.
  */
-typedef ::cppu::WeakImplHelper6<
+typedef ::cppu::WeakImplHelper5<
             css::lang::XServiceInfo,
-            css::lang::XInitialization,
             css::frame::XDispatch,
             css::document::XEventListener,    // => css.lang.XEventListener
             css::util::XChangesListener,      // => css.lang.XEventListener
@@ -542,11 +540,11 @@ public:
         { OWeakObject::release(); }
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& type) throw ( css::uno::RuntimeException );
 
+    /// Initialization function after having acquire()'d.
+    void SAL_CALL constructorInit( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException);
+
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException);
-
-    // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException);
 
     //---------------------------------------
     // css.frame.XDispatch
@@ -1420,7 +1418,7 @@ AutoRecovery::AutoRecovery(const css::uno::Reference< css::uno::XComponentContex
 {
 }
 
-void AutoRecovery::initialize(const css::uno::Sequence< css::uno::Any >& ) throw (css::uno::Exception, css::uno::RuntimeException)
+void AutoRecovery::constructorInit(const css::uno::Sequence< css::uno::Any >& ) throw (css::uno::Exception, css::uno::RuntimeException)
 {
     // read configuration to know if autosave/recovery is on/off etcpp...
     implts_readConfig();
@@ -4636,8 +4634,11 @@ void AutoRecovery::st_impl_removeLockFile()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_framework_AutoRecovery_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    cppu::constructor_InitializationFunc &init_func)
 {
+    // 2nd phase initialization needed
+    init_func = static_cast<cppu::constructor_InitializationFunc>(&AutoRecovery::constructorInit);
+
     return static_cast<cppu::OWeakObject *>(new AutoRecovery(context));
 }
 

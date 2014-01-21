@@ -2317,7 +2317,7 @@ void SfxDocumentMetaData::createUserDefined()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 CompatWriterDocPropsImpl_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    cppu::constructor_InitializationFunc &)
 {
     return static_cast<cppu::OWeakObject *>(new CompatWriterDocPropsImpl(context));
 }
@@ -2325,7 +2325,7 @@ CompatWriterDocPropsImpl_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 SfxDocumentMetaData_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    cppu::constructor_InitializationFunc &)
 {
     return static_cast<cppu::OWeakObject *>(new SfxDocumentMetaData(context));
 }

@@ -309,7 +309,7 @@ void SAL_CALL PluginObject::removeVetoableChangeListener(const OUString&, const 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_sfx2_PluginObject_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    cppu::constructor_InitializationFunc &)
 {
     return static_cast<cppu::OWeakObject *>(new PluginObject());
 }

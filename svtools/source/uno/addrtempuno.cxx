@@ -19,8 +19,8 @@
 
 #include <svtools/addresstemplate.hxx>
 #include <svtools/genericunodialog.hxx>
-#include <comphelper/extract.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <comphelper/extract.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/sdbc/XDataSource.hpp>
@@ -226,7 +226,7 @@ namespace {
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_svtools_OAddressBookSourceDialogUno_get_implementation(
         css::uno::XComponentContext * context,
-        css::uno::Sequence<css::uno::Any> const &)
+        cppu::constructor_InitializationFunc &)
 {
     return static_cast<cppu::OWeakObject *>(new OAddressBookSourceDialogUno(context));
 }

@@ -96,7 +96,8 @@ public:
     TabWindowService();
     virtual ~TabWindowService();
 
-    void onCreate();
+    /// Initialization function after having acquire()'d.
+    void SAL_CALL constructorInit( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException);
 
     FWK_DECLARE_XINTERFACE
     FWK_DECLARE_XTYPEPROVIDER
@@ -228,7 +229,7 @@ TabWindowService::TabWindowService()
 {
 }
 
-void TabWindowService::onCreate()
+void TabWindowService::constructorInit(const css::uno::Sequence< css::uno::Any >&) throw (css::uno::Exception, css::uno::RuntimeException)
 {
     impl_initializePropInfo();
     m_aTransactionManager.setWorkingMode( E_WORK );
@@ -583,12 +584,12 @@ FwkTabWindow* TabWindowService::mem_TabWin ()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_framework_TabWindowService_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    cppu::constructor_InitializationFunc &init_func)
 {
-    rtl::Reference<TabWindowService> x(new TabWindowService);
-    x->onCreate();
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    // 2nd phase initialization needed
+    init_func = static_cast<cppu::constructor_InitializationFunc>(&TabWindowService::constructorInit);
+
+    return static_cast<cppu::OWeakObject *>(new TabWindowService);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

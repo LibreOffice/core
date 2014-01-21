@@ -153,7 +153,8 @@ public:
              Frame( const css::uno::Reference< css::uno::XComponentContext >& xContext );
     virtual ~Frame();
 
-    void onCreate();
+    /// Initialization function after having acquire()'d.
+    void SAL_CALL constructorInit( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException);
 
     FWK_DECLARE_XINTERFACE
     FWK_DECLARE_XTYPEPROVIDER
@@ -584,7 +585,7 @@ Frame::Frame( const css::uno::Reference< css::uno::XComponentContext >& xContext
 {
 }
 
-void Frame::onCreate()
+void Frame::constructorInit(const css::uno::Sequence< css::uno::Any >&) throw (css::uno::Exception, css::uno::RuntimeException)
 {
     css::uno::Reference< css::uno::XInterface > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY_THROW);
 
@@ -3583,12 +3584,12 @@ sal_Bool Frame::implcp_disposing( const css::lang::EventObject& aEvent )
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_framework_Frame_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    cppu::constructor_InitializationFunc &init_func)
 {
-    rtl::Reference<Frame> x(new Frame(context));
-    x->onCreate();
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    // 2nd phase initialization needed
+    init_func = static_cast<cppu::constructor_InitializationFunc>(&Frame::constructorInit);
+
+    return static_cast<cppu::OWeakObject *>(new Frame(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

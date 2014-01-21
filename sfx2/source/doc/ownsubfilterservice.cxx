@@ -41,8 +41,13 @@ class OwnSubFilterService : public cppu::WeakImplHelper2 < document::XFilter
     SfxObjectShell* m_pObjectShell;
 
 public:
-    OwnSubFilterService( const uno::Sequence< uno::Any >& aArguments )
+    OwnSubFilterService()
         throw (uno::Exception, uno::RuntimeException);
+
+    /// Initialization function after having acquire()'d.
+    void SAL_CALL constructorInit(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments)
+        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+
     virtual ~OwnSubFilterService();
 
     // XFilter
@@ -55,9 +60,13 @@ public:
     virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (uno::RuntimeException);
 };
 
-OwnSubFilterService::OwnSubFilterService( const uno::Sequence< uno::Any >& aArguments )
+OwnSubFilterService::OwnSubFilterService()
     throw (uno::Exception, uno::RuntimeException)
     : m_pObjectShell( NULL )
+{
+}
+
+void OwnSubFilterService::constructorInit( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException)
 {
     if ( aArguments.getLength() != 2 )
         throw lang::IllegalArgumentException();
@@ -124,9 +133,12 @@ uno::Sequence< OUString > SAL_CALL OwnSubFilterService::getSupportedServiceNames
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_document_OwnSubFilter_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &arguments)
+    cppu::constructor_InitializationFunc &init_func)
 {
-    return static_cast<cppu::OWeakObject *>(new OwnSubFilterService(arguments));
+    // 2nd phase initialization needed
+    init_func = static_cast<cppu::constructor_InitializationFunc>(&OwnSubFilterService::constructorInit);
+
+    return static_cast<cppu::OWeakObject *>(new OwnSubFilterService);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -3225,11 +3225,9 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL LayoutManager::getPropertySet
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_framework_LayoutManager_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    cppu::constructor_InitializationFunc &)
 {
-    rtl::Reference<framework::LayoutManager> x(new framework::LayoutManager(context));
-    x->acquire();
-    return static_cast<cppu::OWeakObject *>(x.get());
+    return static_cast<cppu::OWeakObject *>(new framework::LayoutManager(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

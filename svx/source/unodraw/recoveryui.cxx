@@ -423,7 +423,7 @@ void RecoveryUI::impl_showAllRecoveredDocs()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_svx_RecoveryUI_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    cppu::constructor_InitializationFunc &)
 {
     return static_cast<cppu::OWeakObject *>(new RecoveryUI(context));
 }

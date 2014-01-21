@@ -27,6 +27,7 @@
 #include <basic/basmgr.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/weak.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -158,7 +159,7 @@ SfxBasicManagerHolder::LegacyPsswdBinaryLimitExceeded( Sequence< OUString >& sMo
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_sfx2_ApplicationDialogLibraryContainer_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    cppu::constructor_InitializationFunc &)
 {
     SFX_APP()->GetBasicManager();
     return SFX_APP()->GetDialogContainer();
@@ -170,7 +171,7 @@ com_sun_star_comp_sfx2_ApplicationDialogLibraryContainer_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_sfx2_ApplicationScriptLibraryContainer_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    cppu::constructor_InitializationFunc &)
 {
     SFX_APP()->GetBasicManager();
     return SFX_APP()->GetBasicContainer();

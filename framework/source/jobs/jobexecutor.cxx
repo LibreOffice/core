@@ -37,12 +37,11 @@
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
 
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/configpaths.hxx>
 #include <rtl/ref.hxx>
@@ -60,10 +59,9 @@ namespace {
             liftime of such jobs too.
  */
 class JobExecutor : private ThreadHelpBase
-                  , public  ::cppu::WeakImplHelper5<
+                  , public  ::cppu::WeakImplHelper4<
                                 css::lang::XServiceInfo
                               , css::task::XJobExecutor
-                              , css::lang::XInitialization
                               , css::container::XContainerListener // => lang.XEventListener
                               , css::document::XEventListener >
 {
@@ -112,8 +110,8 @@ public:
     // task.XJobExecutor
     virtual void SAL_CALL trigger( const OUString& sEvent ) throw(css::uno::RuntimeException);
 
-    // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException);
+    /// Initialization function after having acquire()'d.
+    void SAL_CALL constructorInit( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException);
 
     // document.XEventListener
     virtual void SAL_CALL notifyEvent( const css::document::EventObject& aEvent ) throw(css::uno::RuntimeException);
@@ -144,7 +142,7 @@ JobExecutor::JobExecutor( /*IN*/ const css::uno::Reference< css::uno::XComponent
 {
 }
 
-void JobExecutor::initialize(const css::uno::Sequence< css::uno::Any >& ) throw (css::uno::Exception, css::uno::RuntimeException)
+void JobExecutor::constructorInit(const css::uno::Sequence< css::uno::Any >& ) throw (css::uno::Exception, css::uno::RuntimeException)
 {
     // read the list of all currently registered events inside configuration.
     // e.g. "/org.openoffice.Office.Jobs/Events/<event name>"
@@ -406,8 +404,11 @@ void SAL_CALL JobExecutor::disposing( const css::lang::EventObject& aEvent ) thr
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_framework_JobExecutor_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    cppu::constructor_InitializationFunc &init_func)
 {
+    // 2nd phase initialization needed
+    init_func = static_cast<cppu::constructor_InitializationFunc>(&JobExecutor::constructorInit);
+
     return static_cast<cppu::OWeakObject *>(new JobExecutor(context));
 }
 

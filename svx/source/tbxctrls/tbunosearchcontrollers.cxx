@@ -1053,7 +1053,7 @@ void SAL_CALL FindbarDispatcher::removeStatusListener( const css::uno::Reference
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_svx_FindTextToolboxController_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    cppu::constructor_InitializationFunc &)
 {
     return static_cast<cppu::OWeakObject *>(new FindTextToolbarController(context));
 }
@@ -1061,7 +1061,7 @@ com_sun_star_svx_FindTextToolboxController_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_svx_ExitFindbarToolboxController_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    cppu::constructor_InitializationFunc &)
 {
     return static_cast<cppu::OWeakObject *>(new ExitSearchToolboxController(context));
 }
@@ -1069,7 +1069,7 @@ com_sun_star_svx_ExitFindbarToolboxController_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_svx_UpSearchToolboxController_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    cppu::constructor_InitializationFunc &)
 {
     return static_cast<cppu::OWeakObject *>(new UpDownSearchToolboxController(context, UpDownSearchToolboxController::UP));
 }
@@ -1077,7 +1077,7 @@ com_sun_star_svx_UpSearchToolboxController_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_svx_DownSearchToolboxController_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    cppu::constructor_InitializationFunc &)
 {
     return static_cast<cppu::OWeakObject *>(new UpDownSearchToolboxController(context, UpDownSearchToolboxController::DOWN));
 }
@@ -1085,7 +1085,7 @@ com_sun_star_svx_DownSearchToolboxController_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_svx_MatchCaseToolboxController_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    cppu::constructor_InitializationFunc &)
 {
     return static_cast<cppu::OWeakObject *>(new MatchCaseToolboxController(context));
 }
@@ -1093,7 +1093,7 @@ com_sun_star_svx_MatchCaseToolboxController_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_svx_FindAllToolboxController_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    cppu::constructor_InitializationFunc &)
 {
     return static_cast<cppu::OWeakObject *>(new FindAllToolboxController(context));
 }
@@ -1101,7 +1101,7 @@ com_sun_star_svx_FindAllToolboxController_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_svx_Impl_FindbarDispatcher_get_implementation(
     SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &)
+    cppu::constructor_InitializationFunc &)
 {
     return static_cast<cppu::OWeakObject *>(new FindbarDispatcher);
 }

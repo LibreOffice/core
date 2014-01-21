@@ -704,9 +704,14 @@ cppuhelper::ServiceManager::Data::Implementation::createInstance(
     if (info->singletons.empty()) {
         assert(!singletonRequest);
         if (constructor != 0) {
-            return css::uno::Reference<css::uno::XInterface>(
-                (*constructor)(
-                    context.get(), css::uno::Sequence<css::uno::Any>()));
+            cppu::constructor_InitializationFunc init = NULL;
+            css::uno::Reference<css::uno::XInterface> inst(
+                (*constructor)(context.get(), init));
+            // call the initialization on the acquired instance
+            if (init)
+                (static_cast<OWeakObject*>(inst.get())->*init)(
+                        css::uno::Sequence<css::uno::Any>());
+            return inst;
         }
         if (factory1.is()) {
             return factory1->createInstanceWithContext(context);
@@ -722,9 +727,13 @@ cppuhelper::ServiceManager::Data::Implementation::createInstance(
             return singleton;
         }
         if (constructor != 0) {
+            cppu::constructor_InitializationFunc init = NULL;
             singleton.set(
-                (*constructor)(
-                    context.get(), css::uno::Sequence<css::uno::Any>()));
+                (*constructor)(context.get(), init));
+            // call the initialization on the acquired instance
+            if (init)
+                (static_cast<OWeakObject*>(singleton.get())->*init)(
+                        css::uno::Sequence<css::uno::Any>());
         } else if (factory1.is()) {
             singleton = factory1->createInstanceWithContext(context);
         } else {
@@ -744,17 +753,24 @@ cppuhelper::ServiceManager::Data::Implementation::createInstanceWithArguments(
     if (info->singletons.empty()) {
         assert(!singletonRequest);
         if (constructor != 0) {
-            //HACK: The constructor will either observe arguments and return
-            // inst that does not implement XInitialization (or null), or ignore
-            // arguments and return inst that implements XInitialization; this
-            // should be removed again once XInitialization-based
-            // implementations have become rare:
+            cppu::constructor_InitializationFunc init = NULL;
             css::uno::Reference<css::uno::XInterface> inst(
-                (*constructor)(context.get(), arguments));
-            css::uno::Reference<css::lang::XInitialization> init(
-                inst, css::uno::UNO_QUERY);
-            if (init.is()) {
-                init->initialize(arguments);
+                (*constructor)(context.get(), init));
+            // call the initialization on the acquired instance
+            if (init)
+                (static_cast<OWeakObject*>(inst.get())->*init)(
+                    arguments);
+            else {
+                // The service can implement XInitialization, and it is just
+                // too easy to do a mistake during conversion to the
+                // constructor-based initialization, and forget to add the
+                // above callback that would call it; so allow initialization
+                // through XInitialization still too.
+                css::uno::Reference<css::lang::XInitialization> xinit(
+                    inst, css::uno::UNO_QUERY);
+                if (xinit.is()) {
+                    xinit->initialize(arguments);
+                }
             }
             return inst;
         }
@@ -777,12 +793,23 @@ cppuhelper::ServiceManager::Data::Implementation::createInstanceWithArguments(
             return singleton;
         }
         if (constructor != 0) {
-            //HACK: see above
-            singleton.set((*constructor)(context.get(), arguments));
-            css::uno::Reference<css::lang::XInitialization> init(
-                singleton, css::uno::UNO_QUERY);
-            if (init.is()) {
-                init->initialize(arguments);
+            cppu::constructor_InitializationFunc init = NULL;
+            singleton.set((*constructor)(context.get(), init));
+            // call the initialization on the acquired instance
+            if (init)
+                (static_cast<OWeakObject*>(singleton.get())->*init)(
+                    arguments);
+            else {
+                // The service can implement XInitialization, and it is just
+                // too easy to do a mistake during conversion to the
+                // constructor-based initialization, and forget to add the
+                // above callback that would call it; so allow initialization
+                // through XInitialization still too.
+                css::uno::Reference<css::lang::XInitialization> xinit(
+                    singleton, css::uno::UNO_QUERY);
+                if (xinit.is()) {
+                    xinit->initialize(arguments);
+                }
             }
         } else if (factory1.is()) {
             singleton = factory1->createInstanceWithArgumentsAndContext(
