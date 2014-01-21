@@ -2076,7 +2076,7 @@ void ScTable::CompileColRowNameFormula()
     for (SCCOL i=0; i<=MAXCOL; i++) aCol[i].CompileColRowNameFormula();
 }
 
-SCSIZE ScTable::GetPatternCount( SCCOL nCol )
+SCSIZE ScTable::GetPatternCount( SCCOL nCol ) const
 {
     if( ValidCol( nCol ) )
         return aCol[nCol].GetPatternCount();
@@ -2084,18 +2084,18 @@ SCSIZE ScTable::GetPatternCount( SCCOL nCol )
         return 0;
 }
 
-SCSIZE ScTable::GetPatternCount( SCCOL nCol, SCROW nRw1, SCROW nRw2 )
+SCSIZE ScTable::GetPatternCount( SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const
 {
-    if( ValidCol( nCol ) && ValidRow( nRw1 ) && ValidRow( nRw2 ) )
-        return aCol[nCol].GetPatternCount( nRw1, nRw2 );
+    if( ValidCol( nCol ) && ValidRow( nRow1 ) && ValidRow( nRow2 ) )
+        return aCol[nCol].GetPatternCount( nRow1, nRow2 );
     else
         return 0;
 }
 
-bool ScTable::ReservedPatternCount( SCCOL nCol, SCSIZE nReserved )
+bool ScTable::ReservePatternCount( SCCOL nCol, SCSIZE nReserve )
 {
     if( ValidCol( nCol ) )
-        return aCol[nCol].ReservedPatternCount( nReserved );
+        return aCol[nCol].ReservePatternCount( nReserve );
     else
         return false;
 }

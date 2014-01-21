@@ -189,9 +189,9 @@ public:
     void    DeleteHardAttr( SCROW nStartRow, SCROW nEndRow );
 
     /* i123909: Pre-calculate needed memory, and pre-reserve enough memory */
-    bool    Reserve( SCSIZE nCount );
+    bool    Reserve( SCSIZE nReserve );
     SCSIZE  Count() const { return nCount; }
-    SCSIZE  Count( SCROW nRw1, SCROW nRw2 );
+    SCSIZE  Count( SCROW nRow1, SCROW nRow2 ) const;
 };
 
 //                              Iterator for attributes

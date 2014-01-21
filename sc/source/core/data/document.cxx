@@ -2714,7 +2714,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
                 vvPatternCount[i].resize( vTables.size() );
 
                 for (std::vector< SCTAB >::size_type j = 0; j < vTables.size(); ++j)
-                    vvPatternCount[i][j] = this->GetPatternCount( vTables[j], nCol1+i );
+                    vvPatternCount[i][j] = GetPatternCount( vTables[j], nCol1+i );
             }
         }
 
@@ -2759,7 +2759,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
                     vvPatternCount[i].resize( vTables.size() );
 
                     for (std::vector< SCTAB >::size_type j = 0; j<vTables.size(); ++j)
-                        this->ReservedPatternCount( vTables[j], nCol1+i, vvPatternCount[i][j] + ( this->GetPatternCount( vTables[j], nCol1+i, nR1, nR2 ) ) * ( ( nRow2 - nRow1 + 1 ) / ( nYw + 1 ) ) );
+                        ReservePatternCount( vTables[j], nCol1+i, vvPatternCount[i][j] + ( GetPatternCount( vTables[j], nCol1+i, nR1, nR2 ) ) * ( ( nRow2 - nRow1 + 1 ) / ( nYw + 1 ) ) );
                 }
 
                 bNeedPerformanceOptimization4Pattern = false;

@@ -2089,9 +2089,9 @@ private: // CLOOK-Impl-methods
 
     std::map< SCTAB, ScSortParam > mSheetSortParams;
 
-    SCSIZE GetPatternCount( SCTAB nTab, SCCOL nCol );
-    SCSIZE GetPatternCount( SCTAB nTab, SCCOL nCol, SCROW nRw1, SCROW nRw2 );
-    bool   ReservedPatternCount( SCTAB nTab, SCCOL nCol, SCSIZE nReserved );
+    SCSIZE GetPatternCount( SCTAB nTab, SCCOL nCol ) const;
+    SCSIZE GetPatternCount( SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const;
+    bool   ReservePatternCount( SCTAB nTab, SCCOL nCol, SCSIZE nReserve );
 };
 inline void ScDocument::GetSortParam( ScSortParam& rParam, SCTAB nTab )
 {

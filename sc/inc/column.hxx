@@ -536,9 +536,9 @@ public:
     void DumpFormulaGroups() const;
 #endif
 
-    SCSIZE      GetPatternCount( );
-    SCSIZE      GetPatternCount( SCROW nRw1, SCROW nRw2 );
-    bool        ReservedPatternCount( SCSIZE nReserved );
+    SCSIZE      GetPatternCount() const;
+    SCSIZE      GetPatternCount( SCROW nRow1, SCROW nRow2 ) const;
+    bool        ReservePatternCount( SCSIZE nReserve );
 private:
 
     sc::CellStoreType::iterator GetPositionToInsert( SCROW nRow );

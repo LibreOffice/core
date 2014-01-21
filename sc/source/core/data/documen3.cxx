@@ -2016,7 +2016,7 @@ void ScDocument::ExtendPrintArea( OutputDevice* pDev, SCTAB nTab,
         maTabs[nTab]->ExtendPrintArea( pDev, nStartCol, nStartRow, rEndCol, nEndRow );
 }
 
-SCSIZE ScDocument::GetPatternCount( SCTAB nTab, SCCOL nCol )
+SCSIZE ScDocument::GetPatternCount( SCTAB nTab, SCCOL nCol ) const
 {
     if( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         return maTabs[nTab]->GetPatternCount( nCol );
@@ -2024,18 +2024,18 @@ SCSIZE ScDocument::GetPatternCount( SCTAB nTab, SCCOL nCol )
         return 0;
 }
 
-SCSIZE ScDocument::GetPatternCount( SCTAB nTab, SCCOL nCol, SCROW nRw1, SCROW nRw2 )
+SCSIZE ScDocument::GetPatternCount( SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const
 {
     if( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
-        return maTabs[nTab]->GetPatternCount( nCol, nRw1, nRw2 );
+        return maTabs[nTab]->GetPatternCount( nCol, nRow1, nRow2 );
     else
         return 0;
 }
 
-bool ScDocument::ReservedPatternCount( SCTAB nTab, SCCOL nCol, SCSIZE nReserved )
+bool ScDocument::ReservePatternCount( SCTAB nTab, SCCOL nCol, SCSIZE nReserve )
 {
     if( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
-        return maTabs[nTab]->ReservedPatternCount( nCol, nReserved );
+        return maTabs[nTab]->ReservePatternCount( nCol, nReserve );
     else
         return false;
 }

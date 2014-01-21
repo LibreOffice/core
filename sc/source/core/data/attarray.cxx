@@ -2458,7 +2458,7 @@ bool ScAttrArray::SearchStyleRange(
         return false;
 }
 
-SCSIZE ScAttrArray::Count( SCROW nStartRow, SCROW nEndRow )
+SCSIZE ScAttrArray::Count( SCROW nStartRow, SCROW nEndRow ) const
 {
     SCSIZE  nIndex1, nIndex2;
 
@@ -2466,7 +2466,7 @@ SCSIZE ScAttrArray::Count( SCROW nStartRow, SCROW nEndRow )
         return 0;
 
     if( !Search( nEndRow, nIndex2 ) )
-        nIndex2 = this->nCount - 1;
+        nIndex2 = nCount - 1;
 
     return nIndex2 - nIndex1 + 1;
 }

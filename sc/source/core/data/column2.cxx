@@ -3489,19 +3489,19 @@ sal_uInt32 ScColumn::GetCodeCount() const
     return aFunc.getCount();
 }
 
-SCSIZE ScColumn::GetPatternCount()
+SCSIZE ScColumn::GetPatternCount() const
 {
-    return this->pAttrArray ? this->pAttrArray->Count() : 0;
+    return pAttrArray ? pAttrArray->Count() : 0;
 }
 
-SCSIZE ScColumn::GetPatternCount( SCROW nRw1, SCROW nRw2 )
+SCSIZE ScColumn::GetPatternCount( SCROW nRow1, SCROW nRow2 ) const
 {
-    return this->pAttrArray ? this->pAttrArray->Count( nRw1, nRw2 ) : 0;
+    return pAttrArray ? pAttrArray->Count( nRow1, nRow2 ) : 0;
 }
 
-bool ScColumn::ReservedPatternCount( SCSIZE nReserved )
+bool ScColumn::ReservePatternCount( SCSIZE nReserve )
 {
-    return this->pAttrArray ? this->pAttrArray->Reserve( nReserved ) : false;
+    return pAttrArray ? pAttrArray->Reserve( nReserve ) : false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
