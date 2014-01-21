@@ -577,7 +577,7 @@
                         generic-name="CropExample" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
 
-    <glade-widget-class title="ScCondFormatList" name="scuilo-ScCondFormatList"
+    <glade-widget-class title="ScCondFormatList" name="sclo-ScCondFormatList"
                         generic-name="CondFormatList" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
 
