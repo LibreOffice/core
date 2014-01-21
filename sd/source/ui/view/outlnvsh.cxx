@@ -1147,7 +1147,7 @@ long OutlineViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
  */
 bool OutlineViewShell::PrepareClose( sal_Bool bUI )
 {
-    if( ViewShell::PrepareClose(bUI) != sal_True )
+    if( !ViewShell::PrepareClose(bUI) )
         return false;
 
     return pOlView == NULL || pOlView->PrepareClose(bUI);

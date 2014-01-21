@@ -99,7 +99,7 @@ public:
 
 protected:
     sal_Bool getMasterPageMode(void) const throw();
-    void setMasterPageMode(sal_Bool MasterPageMode_) throw();
+    void setMasterPageMode(bool MasterPageMode_) throw();
     sal_Bool getLayerMode(void) const throw();
     void setLayerMode(sal_Bool LayerMode_) throw();
 public:

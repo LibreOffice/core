@@ -1406,7 +1406,7 @@ sal_Bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                         sal_Bool bTmp = sal_False;
                         if ( eErr == ERRCODE_NONE &&
                              aRet.getValueType() == getCppuBooleanType() &&
-                             sal_True == ( aRet >>= bTmp ) &&
+                             ( aRet >>= bTmp ) &&
                              bTmp == sal_True )
                         {
                             bAnimated = sal_True;

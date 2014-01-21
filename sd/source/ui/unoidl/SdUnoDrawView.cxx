@@ -80,7 +80,7 @@ sal_Bool SdUnoDrawView::getMasterPageMode(void) const throw()
 
 
 
-void SdUnoDrawView::setMasterPageMode (sal_Bool bMasterPageMode) throw()
+void SdUnoDrawView::setMasterPageMode (bool bMasterPageMode) throw()
 {
     if ((mrDrawViewShell.GetEditMode() == EM_MASTERPAGE) != bMasterPageMode)
     {

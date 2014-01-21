@@ -49,15 +49,15 @@ ToolPanelModule::ToolPanelModule (
 {
     if (mxConfigurationController.is())
     {
-        if (SvtToolPanelOptions().GetVisibleImpressView()==sal_True)
+        if (SvtToolPanelOptions().GetVisibleImpressView())
             AddActiveMainView(FrameworkHelper::msImpressViewURL);
-        if (SvtToolPanelOptions().GetVisibleOutlineView()==sal_True)
+        if (SvtToolPanelOptions().GetVisibleOutlineView())
             AddActiveMainView(FrameworkHelper::msOutlineViewURL);
-        if (SvtToolPanelOptions().GetVisibleNotesView()==sal_True)
+        if (SvtToolPanelOptions().GetVisibleNotesView())
             AddActiveMainView(FrameworkHelper::msNotesViewURL);
-        if (SvtToolPanelOptions().GetVisibleHandoutView()==sal_True)
+        if (SvtToolPanelOptions().GetVisibleHandoutView())
             AddActiveMainView(FrameworkHelper::msHandoutViewURL);
-        if (SvtToolPanelOptions().GetVisibleSlideSorterView()==sal_True)
+        if (SvtToolPanelOptions().GetVisibleSlideSorterView())
             AddActiveMainView(FrameworkHelper::msSlideSorterURL);
 
         mxConfigurationController->addConfigurationChangeListener(

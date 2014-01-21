@@ -54,17 +54,17 @@ SlideSorterModule::SlideSorterModule (
     {
         UpdateViewTabBar(NULL);
 
-        if (SvtSlideSorterBarOptions().GetVisibleImpressView()==sal_True)
+        if (SvtSlideSorterBarOptions().GetVisibleImpressView())
             AddActiveMainView(FrameworkHelper::msImpressViewURL);
-        if (SvtSlideSorterBarOptions().GetVisibleOutlineView()==sal_True)
+        if (SvtSlideSorterBarOptions().GetVisibleOutlineView())
             AddActiveMainView(FrameworkHelper::msOutlineViewURL);
-        if (SvtSlideSorterBarOptions().GetVisibleNotesView()==sal_True)
+        if (SvtSlideSorterBarOptions().GetVisibleNotesView())
             AddActiveMainView(FrameworkHelper::msNotesViewURL);
-        if (SvtSlideSorterBarOptions().GetVisibleHandoutView()==sal_True)
+        if (SvtSlideSorterBarOptions().GetVisibleHandoutView())
             AddActiveMainView(FrameworkHelper::msHandoutViewURL);
-        if (SvtSlideSorterBarOptions().GetVisibleSlideSorterView()==sal_True)
+        if (SvtSlideSorterBarOptions().GetVisibleSlideSorterView())
             AddActiveMainView(FrameworkHelper::msSlideSorterURL);
-        if (SvtSlideSorterBarOptions().GetVisibleDrawView()==sal_True)
+        if (SvtSlideSorterBarOptions().GetVisibleDrawView())
             AddActiveMainView(FrameworkHelper::msDrawViewURL);
 
         mxConfigurationController->addConfigurationChangeListener(
