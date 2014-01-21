@@ -388,7 +388,6 @@
 #include <tools/globname.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/multisel.hxx>
-#include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/time.hxx>
 #include <unotools/fltrcfg.hxx>
