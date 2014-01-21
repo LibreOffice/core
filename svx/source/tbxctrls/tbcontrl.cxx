@@ -2548,6 +2548,8 @@ void SvxColorExtToolBoxControl::StateChanged(
 
 {
     const SvxColorItem* pItem = 0;
+    sal_uInt16 nId = GetId();
+    ToolBox& rTbx = GetToolBox();
     if ( bChoiceFromPalette && nSID == GetSlotId() )
     {
         bChoiceFromPalette = sal_False;
@@ -2568,10 +2570,6 @@ void SvxColorExtToolBoxControl::StateChanged(
                 break;
 
             case SID_FRAME_LINECOLOR :
-                ToolBox& rTbx = GetToolBox();
-                rTbx.EnableItem( nSID, SFX_ITEM_DISABLED != eState );
-                rTbx.SetItemState( nSID, ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
-
                 if ( SFX_ITEM_DONTCARE != eState )
                 {
                     pItem = PTR_CAST( SvxColorItem, pState );
@@ -2584,6 +2582,8 @@ void SvxColorExtToolBoxControl::StateChanged(
                 break;
         }
     }
+    rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
+    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
 }
 
 // -----------------------------------------------------------------------
