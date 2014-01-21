@@ -1070,7 +1070,7 @@ void FmGridControl::propertyChange(const ::com::sun::star::beans::PropertyChange
 
 void FmGridControl::SetDesignMode(bool bMode)
 {
-    sal_Bool bOldMode = IsDesignMode();
+    bool bOldMode = IsDesignMode();
     DbGridControl::SetDesignMode(bMode);
     if (bOldMode != bMode)
     {
