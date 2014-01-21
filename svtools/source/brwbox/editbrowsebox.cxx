@@ -1339,7 +1339,7 @@ namespace svt
     //------------------------------------------------------------------------------
     CellController::CellController(Control* pW)
                    :pWindow( pW )
-                   ,bSuspended( sal_True )
+                   ,bSuspended( true )
     {
         DBG_CTOR(CellController,NULL);
 
@@ -1363,7 +1363,7 @@ namespace svt
             CommitModifications();
             GetWindow().Hide( );
             GetWindow().Disable( );
-            bSuspended = sal_True;
+            bSuspended = true;
         }
     }
 
@@ -1375,7 +1375,7 @@ namespace svt
         {
             GetWindow().Enable( );
             GetWindow().Show( );
-            bSuspended = sal_False;
+            bSuspended = false;
         }
     }
 

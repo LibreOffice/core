@@ -296,9 +296,9 @@ bool TreeControlPeer::updateEntry( UnoTreeListEntry* pEntry )
             }
         }
 
-        if( (pEntry->mxNode->hasChildrenOnDemand() == sal_True) != (pEntry->HasChildrenOnDemand() == sal_True) )
+        if( bool(pEntry->mxNode->hasChildrenOnDemand()) != pEntry->HasChildrenOnDemand() )
         {
-            pEntry->EnableChildrenOnDemand( pEntry->mxNode->hasChildrenOnDemand() ? sal_True : sal_False );
+            pEntry->EnableChildrenOnDemand( pEntry->mxNode->hasChildrenOnDemand() );
             bChanged = true;
         }
 

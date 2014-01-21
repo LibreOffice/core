@@ -404,7 +404,7 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
 SvtMiscOptions_Impl::~SvtMiscOptions_Impl()
 {
     // We must save our current values .. if user forgets it!
-    if( IsModified() == sal_True )
+    if( IsModified() )
     {
         Commit();
     }

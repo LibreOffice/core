@@ -280,7 +280,7 @@ SvtMenuOptions_Impl::~SvtMenuOptions_Impl()
 {
     // Flush data to configuration!
     // User has no chance to do that.
-    if( IsModified() == sal_True )
+    if( IsModified() )
     {
         Commit();
     }

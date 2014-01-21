@@ -87,7 +87,7 @@ namespace svt
 
     protected:
         Control*    pWindow;
-        sal_Bool    bSuspended;     // <sal_True> if the window is hidden and disabled
+        bool        bSuspended;     // <true> if the window is hidden and disabled
 
     public:
         TYPEINFO();
@@ -108,7 +108,7 @@ namespace svt
         // suspending the controller is not culmulative!
                 void        suspend( );
                 void        resume( );
-        inline  sal_Bool    isSuspended( ) const { return bSuspended; }
+        inline  bool        isSuspended( ) const { return bSuspended; }
 
     protected:
         virtual sal_Bool MoveAllowed(const KeyEvent& rEvt) const;
