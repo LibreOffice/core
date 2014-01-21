@@ -59,8 +59,13 @@ SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(URE
 
 # Targets
 .PHONY: ALL
+ifeq "$(OS)" "MACOSX"
+ALL :
+	@printf 'This example does not work on Mac OS X\n'
+else
 ALL : \
     OOoBeanViewer
+endif
 
 include $(SETTINGS)/stdtarget.mk
 
