@@ -103,11 +103,6 @@ namespace pdfi
 
     private:
         void processGlyphLine();
-        void processGlyph(   double       fPreAvarageSpaceValue,
-                             CharGlyph&   rGlyph,
-                             ParagraphElement* pPara,
-                             FrameElement* pFrame,
-                             bool         bIsWhiteSpaceInLine );
 
         void drawGlyphLine( const OUString&                               rGlyphs,
                             const ::com::sun::star::geometry::RealRectangle2D& rRect,
@@ -226,7 +221,6 @@ namespace pdfi
 
         sal_Int32                          m_nPages;
         sal_Int32                          m_nNextZOrder;
-        bool                               m_bIsWhiteSpaceInLine;
         com::sun::star::uno::Reference<
             com::sun::star::task::XStatusIndicator >
                                            m_xStatusIndicator;
@@ -236,11 +230,9 @@ namespace pdfi
     class CharGlyph
     {
         public:
-            CharGlyph(double fXPrevGlyphPosition, double fYPrevGlyphPosition, double fPrevGlyphHeight, double fPrevGlyphWidth,
-               Element* pCurElement, const GraphicsContext& rCurrentContext, const com::sun::star::geometry::Matrix2D& rFontMatrix,
+            CharGlyph(Element* pCurElement, const GraphicsContext& rCurrentContext, const com::sun::star::geometry::Matrix2D& rFontMatrix,
                const com::sun::star::geometry::RealRectangle2D& rRect, const OUString& rGlyphs  )
-               : m_fXPrevGlyphPosition(fXPrevGlyphPosition), m_fYPrevGlyphPosition(fYPrevGlyphPosition), m_fPrevGlyphHeight(fPrevGlyphHeight),
-                 m_fPrevGlyphWidth(fPrevGlyphWidth), m_pCurElement(pCurElement), m_rCurrentContext(rCurrentContext),
+               : m_pCurElement(pCurElement), m_rCurrentContext(rCurrentContext),
                  m_rFontMatrix(rFontMatrix), m_rRect(rRect), m_rGlyphs(rGlyphs) {};
 
             virtual ~CharGlyph(){};
@@ -250,24 +242,7 @@ namespace pdfi
             GraphicsContext&  getGC(){ return m_rCurrentContext; }
             Element*  getCurElement(){ return m_pCurElement; }
 
-            double getYPrevGlyphPosition() const { return m_fYPrevGlyphPosition; }
-            double getXPrevGlyphPosition() const { return m_fXPrevGlyphPosition; }
-            double getPrevGlyphHeight() const { return m_fPrevGlyphHeight; }
-            double getPrevGlyphWidth () const { return m_fPrevGlyphWidth; }
-            double getPrevGlyphsSpace() const
-            {
-                if( (m_rRect.X1-m_fXPrevGlyphPosition)<0 )
-                    return 0;
-                else
-                    return m_rRect.X1-m_fXPrevGlyphPosition;
-            }
-
         private:
-
-            double                      m_fXPrevGlyphPosition ;
-            double                      m_fYPrevGlyphPosition ;
-            double                      m_fPrevGlyphHeight ;
-            double                      m_fPrevGlyphWidth ;
             Element*                    m_pCurElement ;
             GraphicsContext             m_rCurrentContext ;
             com::sun::star::geometry::Matrix2D          m_rFontMatrix ;
