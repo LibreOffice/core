@@ -259,7 +259,7 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
 
     VCLXWindow* pWindowPeer = pWindow->GetWindowPeer();
     uno::Reference< lang::XComponent > xWindowPeerComp( pWindow->GetComponentInterface( sal_False ), uno::UNO_QUERY );
-    OSL_ENSURE( ( pWindowPeer != NULL ) == ( xWindowPeerComp.is() == sal_True ),
+    OSL_ENSURE( ( pWindowPeer != NULL ) == xWindowPeerComp.is(),
         "UnoWrapper::WindowDestroyed: inconsistency in the window's peers!" );
     if ( pWindowPeer )
     {
