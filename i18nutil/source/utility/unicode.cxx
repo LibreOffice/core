@@ -956,8 +956,14 @@ OUString SAL_CALL unicode::formatPercent(double dNumber,
 
     UnicodeString output;
     xF->format(dNumber/100, output);
-    return OUString(reinterpret_cast<const sal_Unicode *>(output.getBuffer()),
+    OUString aRet(reinterpret_cast<const sal_Unicode *>(output.getBuffer()),
         output.length());
+    if (rLangTag.getLanguage() == "de")
+    {
+        //narrow no-break space instead of (normal) no-break space
+        return aRet.replace(0x00A0, 0x202F);
+    }
+    return aRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
