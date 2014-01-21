@@ -169,7 +169,7 @@ void SAL_CALL SfxDialogLibraryContainer::writeLibraryElement
         bComplete = writeOasis2OOoLibraryElement( xInput, xOutput );
     }
 
-    if ( bComplete == sal_False )
+    if ( !bComplete )
     {
         Sequence< sal_Int8 > bytes;
         sal_Int32 nRead = xInput->readBytes( bytes, xInput->available() );
