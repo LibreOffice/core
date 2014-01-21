@@ -482,9 +482,7 @@ bool Bootstrap_Impl::getValue(
     LookupMode mode, bool override, ExpandRequestLink const * requestStack)
     const
 {
-    if (mode == LOOKUP_MODE_NORMAL &&
-        key.startsWith("URE_BOOTSTRAP"))
-    {
+    if (mode == LOOKUP_MODE_NORMAL && key == "URE_BOOTSTRAP") {
         mode = LOOKUP_MODE_URE_BOOTSTRAP;
     }
     if (override && getDirectValue(key, value, mode, requestStack)) {

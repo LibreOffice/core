@@ -294,7 +294,7 @@ void acc_CurrentContext::release()
 Any acc_CurrentContext::getValueByName( OUString const & name )
     throw (RuntimeException)
 {
-    if (name.startsWith(s_acRestriction))
+    if (name == s_acRestriction)
     {
         return m_restriction;
     }

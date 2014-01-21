@@ -114,17 +114,17 @@ NumSettings_ImplPtr lcl_CreateNumberingSettingsPtr(const Sequence<PropertyValue>
     NumSettings_ImplPtr pNew = new NumSettings_Impl;
     for(sal_Int32 j = 0; j < rLevelProps.getLength(); j++)
     {
-        if(pValues[j].Name.startsWith(sNumberingType))
+        if(pValues[j].Name == sNumberingType)
             pValues[j].Value >>= pNew->nNumberType;
-        else if(pValues[j].Name.startsWith(sPrefix))
+        else if(pValues[j].Name == sPrefix)
             pValues[j].Value >>= pNew->sPrefix;
-        else if(pValues[j].Name.startsWith(sSuffix))
+        else if(pValues[j].Name == sSuffix)
             pValues[j].Value >>= pNew->sSuffix;
-        else if(pValues[j].Name.startsWith(sParentNumbering))
+        else if(pValues[j].Name == sParentNumbering)
             pValues[j].Value >>= pNew->nParentNumbering;
-        else if(pValues[j].Name.startsWith(sBulletChar))
+        else if(pValues[j].Name == sBulletChar)
             pValues[j].Value >>= pNew->sBulletChar;
-        else if(pValues[j].Name.startsWith(sBulletFontName))
+        else if(pValues[j].Name == sBulletFontName)
             pValues[j].Value >>= pNew->sBulletFont;
     }
     const sal_Unicode cLocalPrefix = pNew->sPrefix.getLength() ? pNew->sPrefix[0] : 0;

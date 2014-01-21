@@ -128,7 +128,7 @@ ImplGrafMetricField::ImplGrafMetricField( Window* pParent, const OUString& rCmd,
     }
     else
     {
-        const long nMinVal = maCommand.startsWith( ".uno:GrafTransparence" ) ? 0 : -100;
+        const long nMinVal = maCommand == ".uno:GrafTransparence" ? 0 : -100;
 
         SetUnit(FUNIT_PERCENT);
         SetDecimalDigits( 0 );
@@ -159,14 +159,14 @@ IMPL_LINK_NOARG(ImplGrafMetricField, ImplModifyHdl)
 
     // Convert value to an any to be usable with dispatch API
     Any a;
-    if ( maCommand.startsWith( ".uno:GrafRed" ) ||
-         maCommand.startsWith( ".uno:GrafGreen" ) ||
-         maCommand.startsWith( ".uno:GrafBlue" ) ||
-         maCommand.startsWith( ".uno:GrafLuminance" ) ||
-         maCommand.startsWith( ".uno:GrafContrast" ))
+    if ( maCommand == ".uno:GrafRed" ||
+         maCommand == ".uno:GrafGreen" ||
+         maCommand == ".uno:GrafBlue" ||
+         maCommand == ".uno:GrafLuminance" ||
+         maCommand == ".uno:GrafContrast" )
         a = makeAny( sal_Int16( nVal ));
-    else if ( maCommand.startsWith( ".uno:GrafGamma" ) ||
-              maCommand.startsWith( ".uno:GrafTransparence" ))
+    else if ( maCommand == ".uno:GrafGamma" ||
+              maCommand == ".uno:GrafTransparence" )
         a = makeAny( sal_Int32( nVal ));
 
     if ( a.hasValue() )

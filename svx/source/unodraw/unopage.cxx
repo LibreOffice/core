@@ -532,8 +532,8 @@ void SvxDrawPage::GetTypeAndInventor( sal_uInt16& rType, sal_uInt32& rInventor, 
 
     if( nTempType == UHASHMAP_NOTFOUND )
     {
-        if( aName.startsWith("com.sun.star.drawing.TableShape") ||
-            aName.startsWith("com.sun.star.presentation.TableShape") )
+        if( aName == "com.sun.star.drawing.TableShape" ||
+            aName == "com.sun.star.presentation.TableShape" )
         {
             rInventor = SdrInventor;
             rType = OBJ_TABLE;

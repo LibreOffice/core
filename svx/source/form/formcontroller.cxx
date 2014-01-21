@@ -4115,7 +4115,7 @@ FormController::interceptedQueryDispatch( const URL& aURL,
     Reference< XDispatch >  xReturn;
     // dispatches handled by ourself
     if  (   ( aURL.Complete == FMURL_CONFIRM_DELETION )
-        ||  (   ( aURL.Complete.startsWith( "private:/InteractionHandler" ) )
+        ||  (   ( aURL.Complete == "private:/InteractionHandler" )
             &&  ensureInteractionHandler()
             )
         )

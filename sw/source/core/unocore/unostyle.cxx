@@ -1692,7 +1692,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             sal_uInt16 nBin = USHRT_MAX;
             if ( !( rValue >>= sTmp ) )
                 throw lang::IllegalArgumentException();
-            if ( sTmp.startsWith ( "[From printer settings]" ) )
+            if ( sTmp == "[From printer settings]" )
                 nBin = USHRT_MAX-1;
             else if ( pPrinter )
             {

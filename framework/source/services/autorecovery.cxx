@@ -1743,8 +1743,8 @@ void SAL_CALL AutoRecovery::notifyEvent(const css::document::EventObject& aEvent
 
     // new document => put it into the internal list
     if (
-        (aEvent.EventName.startsWith(EVENT_ON_NEW)) ||
-        (aEvent.EventName.startsWith(EVENT_ON_LOAD))
+        (aEvent.EventName == EVENT_ON_NEW) ||
+        (aEvent.EventName == EVENT_ON_LOAD)
        )
     {
         implts_registerDocument(xDocument);
@@ -1760,17 +1760,17 @@ void SAL_CALL AutoRecovery::notifyEvent(const css::document::EventObject& aEvent
        for the moment, till this other save requests will be finished.
      */
     else if (
-        (aEvent.EventName.startsWith(EVENT_ON_SAVE)) ||
-        (aEvent.EventName.startsWith(EVENT_ON_SAVEAS)) ||
-        (aEvent.EventName.startsWith(EVENT_ON_SAVETO))
+        (aEvent.EventName == EVENT_ON_SAVE) ||
+        (aEvent.EventName == EVENT_ON_SAVEAS) ||
+        (aEvent.EventName == EVENT_ON_SAVETO)
        )
     {
         implts_updateDocumentUsedForSavingState(xDocument, SAVE_IN_PROGRESS);
     }
     // document saved => remove tmp. files - but hold config entries alive!
     else if (
-        (aEvent.EventName.startsWith(EVENT_ON_SAVEDONE)) ||
-        (aEvent.EventName.startsWith(EVENT_ON_SAVEASDONE))
+        (aEvent.EventName == EVENT_ON_SAVEDONE) ||
+        (aEvent.EventName == EVENT_ON_SAVEASDONE)
        )
     {
         implts_markDocumentAsSaved(xDocument);
@@ -1790,9 +1790,9 @@ void SAL_CALL AutoRecovery::notifyEvent(const css::document::EventObject& aEvent
     // But we can reset the state "used for other save requests". Otherwhise
     // these documents will never be saved!
     else if (
-        (aEvent.EventName.startsWith(EVENT_ON_SAVEFAILED)) ||
-        (aEvent.EventName.startsWith(EVENT_ON_SAVEASFAILED)) ||
-        (aEvent.EventName.startsWith(EVENT_ON_SAVETOFAILED))
+        (aEvent.EventName == EVENT_ON_SAVEFAILED) ||
+        (aEvent.EventName == EVENT_ON_SAVEASFAILED) ||
+        (aEvent.EventName == EVENT_ON_SAVETOFAILED)
        )
     {
         implts_updateDocumentUsedForSavingState(xDocument, SAVE_FINISHED);
@@ -3890,7 +3890,7 @@ css::frame::FeatureStateEvent AutoRecovery::implst_createFeatureStateEvent(     
     aEvent.FeatureURL.Complete   = AutoRecovery::implst_getJobDescription(eJob);
     aEvent.FeatureDescriptor     = sEventType;
 
-    if (pInfo && sEventType.startsWith(OPERATION_UPDATE))
+    if (pInfo && sEventType == OPERATION_UPDATE)
     {
         // pack rInfo for transport via UNO
         ::comphelper::NamedValueCollection aInfo;

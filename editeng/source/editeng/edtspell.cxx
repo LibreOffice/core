@@ -652,7 +652,7 @@ sal_Bool EdtAutoCorrDoc::SetAttr(sal_Int32 nStt, sal_Int32 nEnd,
 {
     SfxItemPool* pPool = &mpEditEngine->GetEditDoc().GetItemPool();
     while ( pPool->GetSecondaryPool() &&
-            !pPool->GetName().startsWith("EditEngineItemPool") )
+            pPool->GetName() != "EditEngineItemPool" )
     {
         pPool = pPool->GetSecondaryPool();
 

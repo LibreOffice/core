@@ -141,9 +141,9 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                 } else {
                     if ( rLocale.Language == "ja" ) {
                         // replace algorithm name to implementation name.
-                        if (rAlgorithm.startsWith("phonetic (alphanumeric first)") )
+                        if (rAlgorithm == "phonetic (alphanumeric first)")
                             aBuf.appendAscii("phonetic_alphanumeric_first");
-                        else if (rAlgorithm.startsWith("phonetic (alphanumeric last)"))
+                        else if (rAlgorithm == "phonetic (alphanumeric last)")
                             aBuf.appendAscii("phonetic_alphanumeric_last");
                         else
                             aBuf.append(rAlgorithm);

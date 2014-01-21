@@ -1108,7 +1108,7 @@ const char aInvalidStyle[] = "__XXX___invalid";
 
 bool SwXNumberingRules::isInvalidStyle(const OUString &rName)
 {
-    return rName.startsWith(aInvalidStyle);
+    return rName == aInvalidStyle;
 }
 
 namespace

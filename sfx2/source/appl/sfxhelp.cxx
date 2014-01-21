@@ -328,21 +328,21 @@ OUString SfxHelp::GetHelpModuleName_Impl()
             aFactoryShortName = "schart" ;
         else if ( aFactoryShortName == "BasicIDE" )
             aFactoryShortName = "sbasic";
-        else if ( aFactoryShortName.startsWith("sweb")
-                || aFactoryShortName.startsWith("sglobal")
-                || aFactoryShortName.startsWith("swxform") )
+        else if ( aFactoryShortName == "sweb"
+                || aFactoryShortName == "sglobal"
+                || aFactoryShortName == "swxform" )
             aFactoryShortName = "swriter" ;
-        else if ( aFactoryShortName.startsWith("dbquery")
-                || aFactoryShortName.startsWith("dbbrowser")
-                || aFactoryShortName.startsWith("dbrelation")
-                || aFactoryShortName.startsWith("dbtable")
-                || aFactoryShortName.startsWith("dbapp")
-                || aFactoryShortName.startsWith("dbreport")
-                || aFactoryShortName.startsWith("swreport")
-                || aFactoryShortName.startsWith("swform") )
+        else if ( aFactoryShortName == "dbquery"
+                || aFactoryShortName == "dbbrowser"
+                || aFactoryShortName == "dbrelation"
+                || aFactoryShortName == "dbtable"
+                || aFactoryShortName == "dbapp"
+                || aFactoryShortName == "dbreport"
+                || aFactoryShortName == "swreport"
+                || aFactoryShortName == "swform" )
             aFactoryShortName = "sdatabase";
-        else if ( aFactoryShortName.startsWith("sbibliography")
-                || aFactoryShortName.startsWith("StartModule") )
+        else if ( aFactoryShortName == "sbibliography"
+                || aFactoryShortName == "StartModule" )
             aFactoryShortName = sDefaultModule;
     }
     else

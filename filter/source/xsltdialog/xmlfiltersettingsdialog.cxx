@@ -1115,7 +1115,7 @@ void XMLFilterSettingsDialog::initFilterList()
                 }
 
                 // if this is not a XmlFilterAdaptor entry, skip it
-                if( !aFilterService.startsWith( "com.sun.star.comp.Writer.XmlFilterAdaptor" ) )
+                if( aFilterService != "com.sun.star.comp.Writer.XmlFilterAdaptor" )
                     continue;
 
 

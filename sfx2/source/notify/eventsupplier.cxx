@@ -211,13 +211,13 @@ void SfxEvents_Impl::Execute( uno::Any& aEventData, const document::DocumentEven
             nIndex += 1;
         }
 
-        if (aType.startsWith(STAR_BASIC) && !aScript.isEmpty())
+        if (aType == STAR_BASIC && !aScript.isEmpty())
         {
             uno::Any aAny;
             SfxMacroLoader::loadMacro( aScript, aAny, pDoc );
         }
-        else if (aType.startsWith("Service") ||
-                  aType.startsWith("Script"))
+        else if (aType == "Service" ||
+                  aType == "Script")
         {
             if ( !aScript.isEmpty() )
             {
@@ -385,7 +385,7 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const uno::Any& rElement, SfxObjectShe
         ScriptType  eType( STARBASIC );
         if ( aType == STAR_BASIC )
             eType = STARBASIC;
-        else if (aType.startsWith("Script") && !aScriptURL.isEmpty())
+        else if (aType == "Script" && !aScriptURL.isEmpty())
             eType = EXTENDED_STYPE;
         else if ( aType == SVX_MACRO_LANGUAGE_JAVASCRIPT )
             eType = JAVASCRIPT;

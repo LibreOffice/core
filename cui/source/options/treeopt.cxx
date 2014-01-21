@@ -1613,9 +1613,9 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     {
         // text document
         ResStringArray& rTextArray = aDlgResource.GetTextArray();
-        if (   aFactory.startsWith( "com.sun.star.text.TextDocument" )
-            || aFactory.startsWith( "com.sun.star.text.WebDocument" )
-            || aFactory.startsWith( "com.sun.star.text.GlobalDocument" ) )
+        if (   aFactory == "com.sun.star.text.TextDocument"
+            || aFactory == "com.sun.star.text.WebDocument"
+            || aFactory == "com.sun.star.text.GlobalDocument" )
         {
             SfxModule* pSwMod = (*(SfxModule**) GetAppData(SHL_WRITER));
             if ( !lcl_isOptionHidden( SID_SW_EDITOPTIONS, aOptionsDlgOpt ) )

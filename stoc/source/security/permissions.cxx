@@ -318,7 +318,7 @@ FilePermission::FilePermission(
     : Permission( FILE, next )
     , m_actions( makeMask( perm.Actions, s_actions ) )
     , m_url( perm.URL )
-    , m_allFiles( perm.URL.startsWith("<<ALL FILES>>") )
+    , m_allFiles( perm.URL == "<<ALL FILES>>" )
 {
     if (! m_allFiles)
     {

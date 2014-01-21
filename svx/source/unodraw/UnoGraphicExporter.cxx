@@ -495,15 +495,15 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
         {
             pValues->Value >>= rSettings.mxInteractionHandler;
         }
-        else if( pValues->Name.startsWith( "Width" ) )  // for compatibility reasons, deprecated
+        else if( pValues->Name == "Width" )  // for compatibility reasons, deprecated
         {
             pValues->Value >>= rSettings.mnWidth;
         }
-        else if( pValues->Name.startsWith( "Height" ) ) // for compatibility reasons, deprecated
+        else if( pValues->Name == "Height" ) // for compatibility reasons, deprecated
         {
             pValues->Value >>= rSettings.mnHeight;
         }
-        else if( pValues->Name.startsWith( "ExportOnlyBackground" ) )   // for compatibility reasons, deprecated
+        else if( pValues->Name == "ExportOnlyBackground" )   // for compatibility reasons, deprecated
         {
             pValues->Value >>= rSettings.mbExportOnlyBackground;
         }
@@ -532,12 +532,12 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
                 {
                     pDataValues->Value >>= rSettings.mnHeight;
                 }
-                else if( pDataValues->Name.startsWith( "Width" ) )  // for compatibility reasons, deprecated
+                else if( pDataValues->Name == "Width" )  // for compatibility reasons, deprecated
                 {
                     pDataValues->Value >>= rSettings.mnWidth;
                     pDataValues->Name = "PixelWidth";
                 }
-                else if( pDataValues->Name.startsWith( "Height" ) ) // for compatibility reasons, deprecated
+                else if( pDataValues->Name == "Height" ) // for compatibility reasons, deprecated
                 {
                     pDataValues->Value >>= rSettings.mnHeight;
                     pDataValues->Name = "PixelHeight";

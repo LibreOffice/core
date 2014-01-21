@@ -390,7 +390,7 @@ static Mapping loadExternalMapping(
         OUString aName;
         uno_ext_getMappingFunc fpGetMapFunc = 0;
 
-        if (EnvDcp::getTypeName(rFrom.getTypeName()).startsWith( UNO_LB_UNO ))
+        if (EnvDcp::getTypeName(rFrom.getTypeName()) == UNO_LB_UNO)
         {
             aName = getBridgeName( rTo, rFrom, rAddPurpose );
             fpGetMapFunc = selectMapFunc( aName );

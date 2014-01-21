@@ -557,7 +557,7 @@ GtkPrintDialog::impl_initCustomTab()
         if ( aPropertyName == "PrintContent" )
             bGtkInternal = true;
 
-        if (aCtrlType.startsWith("Group") || !pCurParent)
+        if (aCtrlType == "Group" || !pCurParent)
         {
             pCurTabPage = gtk_vbox_new(FALSE, 12);
             gtk_container_set_border_width(GTK_CONTAINER(pCurTabPage), 6);
@@ -566,7 +566,7 @@ GtkPrintDialog::impl_initCustomTab()
             pCurParent = pCurTabPage;
             aCustomTabs.push_back(std::make_pair(pCurTabPage, aText));
         }
-        else if (aCtrlType.startsWith("Subgroup") && (pCurParent /*|| bOnJobPageValue*/))
+        else if (aCtrlType == "Subgroup" && (pCurParent /*|| bOnJobPageValue*/))
         {
             bIgnoreSubgroup = bIgnore;
             if (bIgnore)
@@ -600,7 +600,7 @@ GtkPrintDialog::impl_initCustomTab()
 
             GtkWidget* pWidget = NULL;
             beans::PropertyValue* pVal = NULL;
-            if (aCtrlType.startsWith("Bool") && pCurParent)
+            if (aCtrlType == "Bool" && pCurParent)
             {
                 pWidget = gtk_check_button_new_with_mnemonic(
                     OUStringToOString(aText, RTL_TEXTENCODING_UTF8).getStr());
@@ -616,7 +616,7 @@ GtkPrintDialog::impl_initCustomTab()
                     m_rController.isUIOptionEnabled(aPropertyName) && pVal != NULL);
                 g_signal_connect(pWidget, "toggled", G_CALLBACK(GtkPrintDialog::UIOption_CheckHdl), this);
             }
-            else if (aCtrlType.startsWith("Radio") && pCurParent)
+            else if (aCtrlType == "Radio" && pCurParent)
             {
                 GtkWidget* const pVbox = gtk_vbox_new(FALSE, 12);
                 gtk_container_set_border_width(GTK_CONTAINER(pVbox), 0);
@@ -653,9 +653,9 @@ GtkPrintDialog::impl_initCustomTab()
                 else
                     pWidget = pVbox;
             }
-            else if ((aCtrlType.startsWith("List")   ||
-                       aCtrlType.startsWith("Range")  ||
-                       aCtrlType.startsWith("Edit")
+            else if ((aCtrlType == "List"   ||
+                       aCtrlType == "Range"  ||
+                       aCtrlType == "Edit"
                     ) && pCurParent)
             {
                 GtkWidget* const pHbox = gtk_hbox_new(FALSE, 12);
@@ -678,7 +678,7 @@ GtkPrintDialog::impl_initCustomTab()
                    gtk_combo_box_set_active(GTK_COMBO_BOX(pWidget), nSelectVal);
                    g_signal_connect(pWidget, "changed", G_CALLBACK(GtkPrintDialog::UIOption_SelectHdl), this);
                 }
-                else if (aCtrlType.startsWith("Edit") && pCurParent)
+                else if (aCtrlType == "Edit" && pCurParent)
                 {
                    pWidget = gtk_entry_new();
 
@@ -689,7 +689,7 @@ GtkPrintDialog::impl_initCustomTab()
                    gtk_entry_set_text(GTK_ENTRY(pWidget),
                        OUStringToOString(aCurVal, RTL_TEXTENCODING_UTF8).getStr());
                 }
-                else if (aCtrlType.startsWith("Range") && pCurParent)
+                else if (aCtrlType == "Range" && pCurParent)
                 {
                     pWidget = gtk_spin_button_new_with_range(nMinValue, nMaxValue, 1.0);
 
