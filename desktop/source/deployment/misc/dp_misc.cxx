@@ -563,7 +563,7 @@ void syncRepositories(
         if (restarter.is())
         {
             OSL_TRACE( "Request restart for modified extensions manager" );
-            restarter->requestRestart(xCmdEnv.is() == sal_True ? xCmdEnv->getInteractionHandler() :
+            restarter->requestRestart(xCmdEnv.is() ? xCmdEnv->getInteractionHandler() :
                                       Reference<task::XInteractionHandler>());
         }
      }

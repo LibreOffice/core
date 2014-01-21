@@ -418,7 +418,7 @@ void SAL_CALL  JavaMigration::setPropertyValue(
         case ENABLE_JAVA:
         {
             sal_Bool val = sal_Bool();
-            if ((aValue >>= val) == sal_False)
+            if (!(aValue >>= val))
                 throw MalformedDataException(
                        OUString("[Service implementation ") + IMPL_NAME +
                        "] XLayerHandler::setPropertyValue received wrong type for Enable property", 0, Any());
@@ -432,7 +432,7 @@ void SAL_CALL  JavaMigration::setPropertyValue(
         case USER_CLASS_PATH:
          {
              OUString cp;
-             if ((aValue >>= cp) == sal_False)
+             if (!(aValue >>= cp))
                  throw MalformedDataException(
                            OUString("[Service implementation ") + IMPL_NAME +
                            "] XLayerHandler::setPropertyValue received wrong type for UserClassPath property", 0, Any());

@@ -277,12 +277,12 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
             Reference < XDispatch >         xDispatcher ;
             Reference < XURLTransformer >   xParser     ( URLTransformer::create(::comphelper::getProcessComponentContext()) );
 
-            if( xParser.is() == sal_True )
+            if( xParser.is() )
                 xParser->parseStrict( aURL );
 
             xDispatcher = xDesktop->queryDispatch( aURL, OUString(), 0 );
 
-            if( xDispatcher.is() == sal_True )
+            if( xDispatcher.is() )
             {
                 {
                     ::osl::ClearableMutexGuard aGuard( GetMutex() );
@@ -305,12 +305,12 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
             Reference < XDispatch >         xDispatcher ;
             Reference < XURLTransformer >   xParser     ( URLTransformer::create(::comphelper::getProcessComponentContext()) );
 
-            if( xParser.is() == sal_True )
+            if( xParser.is() )
                 xParser->parseStrict( aURL );
 
             xDispatcher = xDesktop->queryDispatch( aURL, OUString(), 0 );
 
-            if( xDispatcher.is() == sal_True )
+            if( xDispatcher.is() )
             {
                 try
                 {
