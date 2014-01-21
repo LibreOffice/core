@@ -39,14 +39,13 @@ sal_Bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     sal_Bool bRet = SfxObjectShell::InitNew( xStor );
 
     aDocument.MakeTable(0);
-    //  zusaetzliche Tabellen werden von der ersten View angelegt,
-    //  wenn bIsEmpty dann noch sal_True ist
 
+    //  Additional tables are created by the first View, if bIsEmpty is still sal_True
     if( bRet )
     {
         Size aSize( (long) ( STD_COL_WIDTH           * HMM_PER_TWIPS * OLE_STD_CELLS_X ),
                     (long) ( ScGlobal::nStdRowHeight * HMM_PER_TWIPS * OLE_STD_CELLS_Y ) );
-        // hier muss auch der Start angepasst werden
+        // Also adjust start here
         SetVisAreaOrSize( Rectangle( Point(), aSize ), sal_True );
     }
 
@@ -56,8 +55,7 @@ sal_Bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     aDocument.GetStyleSheetPool()->CreateStandardStyles();
     aDocument.UpdStlShtPtrsFrmNms();
 
-    //  SetDocumentModified ist in Load/InitNew nicht mehr erlaubt!
-
+    //  SetDocumentModified is not allowed anymoe in Load/InitNew!
     InitItems();
     CalcOutputFactor();
 
@@ -81,10 +79,8 @@ void ScDocShell::SetEmpty(bool bSet)
 
 void ScDocShell::InitItems()
 {
-    // AllItemSet fuer Controller mit benoetigten Items fuellen:
-
-    //  Druck-Optionen werden beim Drucken und evtl. in GetPrinter gesetzt
-
+    // Fill AllItemSet for Controller with needed Items:
+    // Printer Options are set in GetPrinter when printing
     UpdateFontList();
 
     ScDrawLayer* pDrawLayer = aDocument.GetDrawLayer();
@@ -97,8 +93,7 @@ void ScDocShell::InitItems()
         PutItem( SvxDashListItem    ( pDrawLayer->GetDashList(), SID_DASH_LIST ) );
         PutItem( SvxLineEndListItem ( pDrawLayer->GetLineEndList(), SID_LINEEND_LIST ) );
 
-            //  andere Anpassungen nach dem Anlegen des DrawLayers
-
+        // Other modifications after creation of the DrawLayer
         pDrawLayer->SetNotifyUndoActionHdl( LINK( pDocFunc, ScDocFunc, NotifyDrawUndo ) );
     }
     else
@@ -180,7 +175,7 @@ ScDrawLayer* ScDocShell::MakeDrawLayer()
     {
         aDocument.InitDrawLayer(this);
         pDrawLayer = aDocument.GetDrawLayer();
-        InitItems();                                            // incl. Undo und Basic
+        InitItems(); // including Undo and Basic
         Broadcast( SfxSimpleHint( SC_HINT_DRWLAYER_NEW ) );
         if (nDocumentLock)
             pDrawLayer->setLock(true);

@@ -140,7 +140,7 @@ using ::std::vector;
 
 // STATIC DATA -----------------------------------------------------------
 
-//  Filter-Namen (wie in sclib.cxx)
+//  Filter names (like in sclib.cxx)
 
 static const sal_Char pFilterSc50[]     = "StarCalc 5.0";
 static const sal_Char pFilterSc40[]     = "StarCalc 4.0";
@@ -175,10 +175,10 @@ SFX_IMPL_INTERFACE(ScDocShell,SfxObjectShell, ScResId(SCSTR_DOCSHELL))
 {
 }
 
-//  GlobalName der aktuellen Version:
+//  GlobalName of the current version:
 SFX_IMPL_OBJECTFACTORY( ScDocShell, SvGlobalName(SO3_SC_CLASSID), SFXOBJECTSHELL_STD_NORMAL, "scalc" )
 
-TYPEINIT1( ScDocShell, SfxObjectShell );        // SfxInPlaceObject: kein Type-Info ?
+TYPEINIT1( ScDocShell, SfxObjectShell ); // SfxInPlaceObject: No TypeInfo?
 
 //------------------------------------------------------------------
 
@@ -206,7 +206,7 @@ void ScDocShell::FillClass( SvGlobalName* pClassName,
     }
     else
     {
-        OSL_FAIL("wat fuer ne Version?");
+        OSL_FAIL("Which version?");
     }
 }
 
@@ -309,14 +309,14 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
                             ScGlobal::UnicodeStrChr( pNameBuffer, SC_COMPILER_FILE_TAB_SEP ) )
                         {
                             OUStringBuffer aDocURLBuffer;
-                            sal_Bool bQuote = sal_True;         // Dokumentenname ist immer quoted
+                            sal_Bool bQuote = sal_True; // Document name is always quoted
                             ++pNameBuffer;
                             while ( bQuote && *pNameBuffer )
                             {
                                 if ( *pNameBuffer == '\'' && *(pNameBuffer-1) != '\\' )
                                     bQuote = false;
                                 else if( !(*pNameBuffer == '\\' && *(pNameBuffer+1) == '\'') )
-                                    aDocURLBuffer.append(*pNameBuffer);     // falls escaped Quote: nur Quote in den Namen
+                                    aDocURLBuffer.append(*pNameBuffer); // If escaped quote: only quote in the name
                                 ++pNameBuffer;
                             }
 
@@ -628,7 +628,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         }
     }
 
-    if (rHint.ISA(SfxSimpleHint))                               // ohne Parameter
+    if (rHint.ISA(SfxSimpleHint)) // Without parameter
     {
         sal_uLong nSlot = ((const SfxSimpleHint&)rHint).GetId();
         switch ( nSlot )
@@ -640,7 +640,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 break;
         }
     }
-    else if (rHint.ISA(SfxStyleSheetHint))                      // Vorlagen geaendert
+    else if (rHint.ISA(SfxStyleSheetHint)) // Template changed
         NotifyStyle((const SfxStyleSheetHint&) rHint);
     else if (rHint.ISA(ScAutoStyleHint))
     {
@@ -981,9 +981,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-    // Inhalte fuer Organizer laden
-
-
+// Load contents for organizer
 sal_Bool ScDocShell::LoadFrom( SfxMedium& rMedium )
 {
     LoadMediumGuard aLoadGuard(&aDocument);
@@ -1043,27 +1041,26 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
 {
     LoadMediumGuard aLoadGuard(&aDocument);
 
-    sal_Bool bRet = false;              // sal_False heisst Benutzerabbruch !!
-                                    // bei Fehler: Fehler am Stream setzen!!
+    sal_Bool bRet = false; // sal_False means user quit!
+                           // On error: Set error at stream
 
     ScRefreshTimerProtector aProt( aDocument.GetRefreshTimerControlAddress() );
 
     GetUndoManager()->Clear();
 
-    // ob nach dem Import optimale Spaltenbreiten gesetzt werden sollen
+    // Set optimal col width after import?
     sal_Bool bSetColWidths = false;
     sal_Bool bSetSimpleTextColWidths = false;
     ScColWidthParam aColWidthParam[MAXCOLCOUNT];
     ScRange aColWidthRange;
-    // ob nach dem Import optimale Zeilenhoehen gesetzt werden sollen
+    // Set optimal row height after import?
     sal_Bool bSetRowHeights = false;
 
     vector<ScDocRowHeightUpdater::TabRanges> aRecalcRowRangesArray;
 
-    //  Alle Filter brauchen die komplette Datei am Stueck (nicht asynchron),
-    //  darum vorher per CreateFileStream dafuer sorgen, dass die komplette
-    //  Datei uebertragen wird.
-    rMedium.GetPhysicalName();  //! CreateFileStream direkt rufen, wenn verfuegbar
+    //  All filters need the complete file in one piece (not asynchronously)
+    //  So make sure that we transfer the whole file with CreateFileStream
+    rMedium.GetPhysicalName();  //! Call CreateFileStream directly, if available
 
     SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, false);
     nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : com::sun::star::document::UpdateDocMode::NO_UPDATE;
@@ -1142,12 +1139,12 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             else if ( aFltName.equalsAscii(pFilterExcel97) || aFltName.equalsAscii(pFilterEx97Temp) )
                 eFormat = EIF_BIFF8;
 
-            MakeDrawLayer();                //! im Filter
-            CalcOutputFactor();             // prepare update of row height
+            MakeDrawLayer(); //! In the filter
+            CalcOutputFactor(); // prepare update of row height
             FltError eError = ScFormatFilter::Get().ScImportExcel( rMedium, &aDocument, eFormat );
             aDocument.UpdateFontCharSet();
             if ( aDocument.IsChartListenerCollectionNeedsUpdate() )
-                aDocument.UpdateChartListenerCollection();              //! fuer alle Importe?
+                aDocument.UpdateChartListenerCollection(); //! For all imports?
 
             // all graphics objects must have names
             aDocument.EnsureGraphicNames();
@@ -1267,7 +1264,7 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             else
                 bRet = sal_True;
 
-            aColWidthRange.aStart.SetRow( 1 );  // Spaltenheader nicht
+            aColWidthRange.aStart.SetRow( 1 );  // Except for the column header
             bSetColWidths = true;
             bSetSimpleTextColWidths = true;
         }
@@ -1414,7 +1411,7 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
 
                     pInStream->Seek( 0 );
                     ScRange aRange;
-                    // HTML macht eigenes ColWidth/RowHeight
+                    // HTML does its own ColWidth/RowHeight
                     CalcOutputFactor();
                     SvNumberFormatter aNumFormatter( comphelper::getProcessComponentContext(), eLang);
                     eError = ScFormatFilter::Get().ScImportHTML( *pInStream, rMedium.GetBaseURL(), &aDocument, aRange,
@@ -1452,16 +1449,15 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
     }
     else
     {
-        OSL_FAIL("Kein Filter bei ConvertFrom");
+        OSL_FAIL("No Filter in ConvertFrom");
     }
 
     InitItems();
     CalcOutputFactor();
     if ( bRet && (bSetColWidths || bSetRowHeights) )
-    {   // Spaltenbreiten/Zeilenhoehen anpassen, Basis 100% Zoom
+    {   // Adjust column width/row height; base 100 % zoom
         Fraction aZoom( 1, 1 );
-        double nPPTX = ScGlobal::nScreenPPTX * (double) aZoom
-            / GetOutputFactor();    // Faktor ist Drucker zu Bildschirm
+        double nPPTX = ScGlobal::nScreenPPTX * (double) aZoom / GetOutputFactor(); // Factor is printer display ratio
         double nPPTY = ScGlobal::nScreenPPTY * (double) aZoom;
         VirtualDevice aVirtDev;
         //  all sheets (for Excel import)
@@ -1476,7 +1472,8 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             ScMarkData aMark;
             aMark.SetMarkArea( aColWidthRange );
             aMark.MarkToMulti();
-            // Reihenfolge erst Breite dann Hoehe ist wichtig (vergl. hund.rtf)
+
+            // Order is important: First width, then height (cf. WHAT?! hund.rtf)
             if ( bSetColWidths )
             {
                 for ( SCCOL nCol=0; nCol <= nEndCol; nCol++ )
@@ -1705,8 +1702,7 @@ sal_Bool ScDocShell::SaveAs( SfxMedium& rMedium )
 
 sal_Bool ScDocShell::IsInformationLost()
 {
-    //!!! bei Gelegenheit ein korrekte eigene Behandlung einbauen
-
+    //FIXME: If we have time build a correct own way how to handle this
     return SfxObjectShell::IsInformationLost();
 }
 
@@ -2055,7 +2051,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
         }
         else
         {
-            OUString aUniString = aString;//remove that later
+            OUString aUniString = aString;// TODO: remove that later
             if (!bString && cStrDelim != 0 && !aUniString.isEmpty())
             {
                 sal_Unicode c = aUniString[0];
@@ -2203,9 +2199,9 @@ sal_Bool ScDocShell::ConvertTo( SfxMedium &rMed )
     //  it's already in ExecuteSave (as for Save and SaveAs)
 
     if (pAutoStyleList)
-        pAutoStyleList->ExecuteAllNow();                // Vorlagen-Timeouts jetzt ausfuehren
+        pAutoStyleList->ExecuteAllNow(); // Execute template timeouts now
     if (GetCreateMode()== SFX_CREATE_MODE_STANDARD)
-        SfxObjectShell::SetVisArea( Rectangle() );     // normal bearbeitet -> keine VisArea
+        SfxObjectShell::SetVisArea( Rectangle() ); // Edited normally -> no VisArea
 
     OSL_ENSURE( rMed.GetFilter(), "Filter == 0" );
 
@@ -2327,7 +2323,7 @@ sal_Bool ScDocShell::ConvertTo( SfxMedium &rMed )
         }
 
         WaitObject aWait( GetActiveDialogParent() );
-// HACK damit Sba geoffnetes TempFile ueberschreiben kann
+        // FIXME:  Hack so that the Sba opened TempFile can be overwritten
         rMed.CloseOutStream();
         bool bHasMemo = false;
 
@@ -2455,7 +2451,7 @@ sal_Bool ScDocShell::DoSaveCompleted( SfxMedium * pNewStor )
 {
     sal_Bool bRet = SfxObjectShell::DoSaveCompleted( pNewStor );
 
-    //  SC_HINT_DOC_SAVED fuer Wechsel ReadOnly -> Read/Write
+    //  SC_HINT_DOC_SAVED for change ReadOnly -> Read/Write
     Broadcast( SfxSimpleHint( SC_HINT_DOC_SAVED ) );
     return bRet;
 }
@@ -2547,22 +2543,22 @@ bool ScDocShell::PrepareClose( sal_Bool bUI )
     // end handler code
 
     bool nRet = SfxObjectShell::PrepareClose( bUI );
-    if (nRet)                       // true = close
-        aDocument.EnableIdle(false);        // nicht mehr drin rumpfuschen !!!
+    if (nRet) // true == close
+        aDocument.EnableIdle(false); // Do not mess around with it anymore!
 
     return nRet;
 }
 
 void ScDocShell::PrepareReload()
 {
-    SfxObjectShell::PrepareReload();    // tut nichts?
+    SfxObjectShell::PrepareReload(); // FIXME: Doesn't do a thing?
 
-    //  Das Disconnect von DDE-Links kann Reschedule ausloesen.
-    //  Wenn die DDE-Links erst im Dokument-dtor geloescht werden, kann beim Reload
-    //  aus diesem Reschedule das DDE-Link-Update fuer das neue Dokument ausgeloest
-    //  werden. Dabei verklemmt sicht dann irgendwas.
-    //  -> Beim Reload die DDE-Links des alten Dokuments vorher disconnecten
-
+    //  The Disconnect of DDE Links can trigger a Reschedule.
+    //  If the DDE Links are not deleted before the Document dtor,
+    //  the DDE Link Update for this Document can be triggered ofrom this Reschedule on Reload.
+    //  This causes a hang.
+    //
+    //  Thus: Disconnect the DDE Links of the old Document before Reload
     aDocument.GetDocLinkManager().disconnectDdeLinks();
 }
 
@@ -2675,7 +2671,7 @@ ScDocShell::ScDocShell( const ScDocShell& rShell ) :
     GetPageOnFromPageStyleSet( NULL, 0, bHeaderOn, bFooterOn );
     SetHelpId( HID_SCSHELL_DOCSH );
 
-    //  InitItems und CalcOutputFactor werden jetzt nach bei Load/ConvertFrom/InitNew gerufen
+    // InitItems and CalcOutputFactor are called now in Load/ConvertFrom/InitNew
 }
 
 //------------------------------------------------------------------
@@ -2708,7 +2704,7 @@ ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
     SetPool( &SC_MOD()->GetPool() );
 
     bIsInplace = (GetCreateMode() == SFX_CREATE_MODE_EMBEDDED);
-    //  wird zurueckgesetzt, wenn nicht inplace
+    //  Will be reset if not in place
 
     pDocFunc = CreateDocFunc();
 
@@ -2724,14 +2720,14 @@ ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
     aDocument.GetDBCollection()->SetRefreshHandler(
         LINK( this, ScDocShell, RefreshDBDataHdl ) );
 
-    //  InitItems und CalcOutputFactor werden jetzt nach bei Load/ConvertFrom/InitNew gerufen
+    // InitItems and CalcOutputFactor are called now in Load/ConvertFrom/InitNew
 }
 
 //------------------------------------------------------------------
 
 ScDocShell::~ScDocShell()
 {
-    ResetDrawObjectShell(); // falls der Drawing-Layer noch versucht, darauf zuzugreifen
+    ResetDrawObjectShell(); // If the Drawing Layer still tries to access it, access it
 
     SfxStyleSheetPool* pStlPool = aDocument.GetStyleSheetPool();
     if (pStlPool)
@@ -2741,7 +2737,7 @@ ScDocShell::~ScDocShell()
     delete pAutoStyleList;
 
     SfxApplication *pSfxApp = SFX_APP();
-    if ( pSfxApp->GetDdeService() )             // DDE vor Dokument loeschen
+    if ( pSfxApp->GetDdeService() ) // Delete DDE for Document
         pSfxApp->RemoveDdeTopic( this );
 
     delete pDocFunc;
@@ -2784,9 +2780,9 @@ void ScDocShell::SetModified( sal_Bool bModified )
 
 void ScDocShell::SetDocumentModified( sal_Bool bIsModified /* = sal_True */ )
 {
-    //  BroadcastUno muss auch mit pPaintLockData sofort passieren
-    //! auch bei SetDrawModified, wenn Drawing angebunden ist
-    //! dann eigener Hint???
+    //  BroadcastUno must also happen right away with pPaintLockData
+    //  FIXME: Also for SetDrawModified, if Drawing is connected
+    //  FIXME: Then own Hint?
 
     if ( pPaintLockData && bIsModified )
     {
@@ -2796,7 +2792,7 @@ void ScDocShell::SetDocumentModified( sal_Bool bIsModified /* = sal_True */ )
         aDocument.InvalidateTableArea();    // #i105279# needed here
         aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
 
-        pPaintLockData->SetModified();          // spaeter...
+        pPaintLockData->SetModified(); // Later on ...
         return;
     }
 
@@ -2836,10 +2832,12 @@ void ScDocShell::SetDocumentModified( sal_Bool bIsModified /* = sal_True */ )
     }
 }
 
-//  SetDrawModified - ohne Formel-Update
-//  (Drawing muss auch beim normalen SetDocumentModified upgedated werden,
-//   z.B. bei Tabelle loeschen etc.)
-
+/**
+ * SetDrawModified - without Formula update
+ *
+ * Drawing also needs to be updated for the normal SetDocumentModified
+ * e.g.: when deleting tables etc.
+ */
 void ScDocShell::SetDrawModified( sal_Bool bIsModified /* = sal_True */ )
 {
     sal_Bool bUpdate = ( bIsModified != IsModified() );
@@ -2903,9 +2901,7 @@ SfxDocumentInfoDialog* ScDocShell::CreateDocumentInfoDialog(
     SfxDocumentInfoDialog* pDlg   = new SfxDocumentInfoDialog( pParent, rSet );
     ScDocShell*            pDocSh = PTR_CAST(ScDocShell,SfxObjectShell::Current());
 
-    //nur mit Statistik, wenn dieses Doc auch angezeigt wird, nicht
-    //aus dem Doc-Manager
-
+    // Only for statistics, if this Doc is shown; not from the Doc Manager
     if( pDocSh == this )
     {
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
