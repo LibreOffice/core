@@ -161,7 +161,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion, OutputD
 
     if ( !pRegion )
     {
-        if ( pEditEngine->pImpEditEngine->GetUpdateMode() == sal_False )
+        if ( !pEditEngine->pImpEditEngine->GetUpdateMode() )
             return;
         if ( pEditEngine->pImpEditEngine->IsInUndo() )
             return;
@@ -642,7 +642,7 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
     // is initialized in Paint, because no SetPool();
     if ( pEditEngine->pImpEditEngine->IsFormatting() )
         return;
-    if ( pEditEngine->pImpEditEngine->GetUpdateMode() == sal_False )
+    if ( !pEditEngine->pImpEditEngine->GetUpdateMode() )
         return;
     if ( pEditEngine->pImpEditEngine->IsInUndo() )
         return;

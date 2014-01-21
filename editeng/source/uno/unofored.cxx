@@ -295,7 +295,7 @@ Rectangle SvxEditEngineForwarder::GetCharBounds( sal_Int32 nPara, sal_uInt16 nIn
     // don't rotate for vertical text.
     Size aSize( rEditEngine.CalcTextWidth(), rEditEngine.GetTextHeight() );
     ::std::swap( aSize.Width(), aSize.Height() );
-    bool bIsVertical( rEditEngine.IsVertical() == sal_True );
+    bool bIsVertical( rEditEngine.IsVertical() );
 
     // #108900# Handle virtual position one-past-the end of the string
     if( nIndex >= rEditEngine.GetTextLen(nPara) )
@@ -380,7 +380,7 @@ sal_Bool SvxEditEngineForwarder::GetIndexAtPoint( const Point& rPos, sal_Int32& 
     ::std::swap( aSize.Width(), aSize.Height() );
     Point aEEPos( SvxEditSourceHelper::UserSpaceToEE( rPos,
                                                       aSize,
-                                                      rEditEngine.IsVertical() == sal_True ));
+                                                      rEditEngine.IsVertical() ));
 
     EPosition aDocPos = rEditEngine.FindDocPosition( aEEPos );
 

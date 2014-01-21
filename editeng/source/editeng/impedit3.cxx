@@ -3953,7 +3953,7 @@ EditSelection ImpEditEngine::MoveParagraphs( Range aOldPositions, sal_Int32 nNew
     // Where the paragraph was inserted it has to be properly redrawn:
     // Where the paragraph was removed it has to be properly redrawn:
     // ( and correspondingly in between as well...)
-    if ( pCurView && ( GetUpdateMode() == sal_True ) )
+    if ( pCurView && GetUpdateMode() )
     {
         // in this case one can redraw directly without invalidating the
         // Portions
