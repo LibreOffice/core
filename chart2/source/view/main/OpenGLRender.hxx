@@ -168,7 +168,7 @@ public:
 
     int CreateTextTexture(const BitmapEx& rBitmapEx,
             com::sun::star::awt::Point aPos, com::sun::star::awt::Size aSize, long rotation,
-            bool bTransformation, const com::sun::star::drawing::HomogenMatrix3& rTrans);
+            const com::sun::star::drawing::HomogenMatrix3& rTrans);
     int RenderTextShape();
 
     int SetArea2DShapePoint(float x, float y, int listLength);

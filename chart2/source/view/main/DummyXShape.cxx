@@ -715,7 +715,6 @@ void DummyText::render()
     DummyChart* pChart = getRootShape();
 
     drawing::HomogenMatrix3 aTransformation;
-    bool bHasTransformation = false;
     std::map<OUString, uno::Any>::const_iterator itr =
         maProperties.find("Transformation");
     if(itr != maProperties.end())
@@ -724,7 +723,6 @@ void DummyText::render()
         if(itr->second.hasValue())
         {
             aTransformation = itr->second.get<drawing::HomogenMatrix3>();
-            bHasTransformation = true;
         }
     }
     else if(maTrans.hasValue())
@@ -732,7 +730,7 @@ void DummyText::render()
         aTransformation = maTrans.get<drawing::HomogenMatrix3>();
     }
     pChart->m_GLRender.CreateTextTexture(maBitmap, maPosition, maSize, 0,
-            bHasTransformation, aTransformation);
+            aTransformation);
     pChart->m_GLRender.RenderTextShape();
 }
 
