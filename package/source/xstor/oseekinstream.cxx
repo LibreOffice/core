@@ -86,7 +86,7 @@ uno::Any SAL_CALL OInputSeekStream::queryInterface( const uno::Type& rType )
     uno::Any aReturn( ::cppu::queryInterface( rType,
                                            static_cast< io::XSeekable* >( this ) ) );
 
-    if ( aReturn.hasValue() == sal_True )
+    if ( aReturn.hasValue() )
     {
         return aReturn ;
     }

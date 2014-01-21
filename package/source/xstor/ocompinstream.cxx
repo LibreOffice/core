@@ -90,7 +90,7 @@ uno::Any SAL_CALL OInputCompStream::queryInterface( const uno::Type& rType )
                     ,   static_cast<beans::XPropertySet*> ( this )
                     ,   static_cast<embed::XExtendedStorageStream*> ( this ) );
 
-    if ( aReturn.hasValue() == sal_True )
+    if ( aReturn.hasValue() )
         return aReturn ;
 
     if ( m_nStorageType == embed::StorageFormats::OFOPXML )
@@ -99,7 +99,7 @@ uno::Any SAL_CALL OInputCompStream::queryInterface( const uno::Type& rType )
                     (   rType
                         ,   static_cast<embed::XRelationshipAccess*> ( this ) );
 
-        if ( aReturn.hasValue() == sal_True )
+        if ( aReturn.hasValue() )
             return aReturn ;
     }
 

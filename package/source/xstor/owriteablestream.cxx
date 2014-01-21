@@ -1890,7 +1890,7 @@ uno::Any SAL_CALL OWriteStream::queryInterface( const uno::Type& rType )
                     ,   static_cast<lang::XComponent*> ( this )
                     ,   static_cast<beans::XPropertySet*> ( this ) );
 
-    if ( aReturn.hasValue() == sal_True )
+    if ( aReturn.hasValue() )
         return aReturn ;
 
     if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
@@ -1907,7 +1907,7 @@ uno::Any SAL_CALL OWriteStream::queryInterface( const uno::Type& rType )
                         ,   static_cast<embed::XRelationshipAccess*> ( this ) );
     }
 
-    if ( aReturn.hasValue() == sal_True )
+    if ( aReturn.hasValue() )
         return aReturn ;
 
     if ( m_bTransacted )
@@ -1917,7 +1917,7 @@ uno::Any SAL_CALL OWriteStream::queryInterface( const uno::Type& rType )
                         ,   static_cast<embed::XTransactedObject*> ( this )
                         ,   static_cast<embed::XTransactionBroadcaster*> ( this ) );
 
-        if ( aReturn.hasValue() == sal_True )
+        if ( aReturn.hasValue() )
             return aReturn ;
     }
 

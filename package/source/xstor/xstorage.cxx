@@ -2204,7 +2204,7 @@ uno::Any SAL_CALL OStorage::queryInterface( const uno::Type& rType )
                 ,   static_cast<beans::XPropertySet*> ( this )
                 ,   static_cast<embed::XOptimizedStorage*> ( this ) );
 
-    if ( aReturn.hasValue() == sal_True )
+    if ( aReturn.hasValue() )
         return aReturn ;
 
     aReturn <<= ::cppu::queryInterface
@@ -2212,7 +2212,7 @@ uno::Any SAL_CALL OStorage::queryInterface( const uno::Type& rType )
                 ,   static_cast<embed::XHierarchicalStorageAccess*> ( this )
                 ,   static_cast<embed::XHierarchicalStorageAccess2*> ( this ) );
 
-    if ( aReturn.hasValue() == sal_True )
+    if ( aReturn.hasValue() )
         return aReturn ;
 
     if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
@@ -2240,7 +2240,7 @@ uno::Any SAL_CALL OStorage::queryInterface( const uno::Type& rType )
                     ,   static_cast<embed::XRelationshipAccess*> ( this ) );
     }
 
-    if ( aReturn.hasValue() == sal_True )
+    if ( aReturn.hasValue() )
         return aReturn ;
 
     return OWeakObject::queryInterface( rType );
