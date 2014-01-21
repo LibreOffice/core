@@ -36,7 +36,6 @@
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertyset.hxx"
 
-#include <tools/solar.h>
 #include <tools/gen.hxx>
 #include <tools/mapunit.hxx>
 #include <editeng/unoprnms.hxx>
@@ -79,8 +78,6 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::style;
 
 namespace oox { namespace drawingml {
-
-// ============================================================================
 
 Shape::Shape( const sal_Char* pServiceName, bool bDefaultHeight )
 : mbIsChild( false )
@@ -1110,8 +1107,6 @@ void Shape::putPropertiesToGrabBag( const Sequence< PropertyValue >& aProperties
         xSet->setPropertyValue( aGrabBagPropName, Any( aGrabBag ) );
     }
 }
-
-// ============================================================================
 
 } }
 
