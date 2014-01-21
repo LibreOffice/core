@@ -308,9 +308,10 @@ handleCertificateValidationRequest_(
 
     certHostNames[0] = certHostName;
 
-    for(int n = 1; n < altNames.getLength(); n++){
+    for(int n = 0; n < altNames.getLength(); ++n)
+    {
         if (altNames[n].Type ==  security::ExtAltNameType_DNS_NAME){
-           altNames[n].Value >>= certHostNames[n];
+           altNames[n].Value >>= certHostNames[n+1];
         }
     }
 
