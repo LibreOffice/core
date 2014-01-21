@@ -40,7 +40,7 @@ namespace dbaui
 {
 class ODbDataSourceAdministrationHelper;
     // OTableSubscriptionDialog
-    class OTableSubscriptionDialog : public SfxNoLayoutSingleTabDialog, public IItemSetHelper
+    class OTableSubscriptionDialog : public SfxSingleTabDialog, public IItemSetHelper
     {
         ::std::auto_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
         sal_Bool m_bStopExecution; // set when the dialog should not be executed

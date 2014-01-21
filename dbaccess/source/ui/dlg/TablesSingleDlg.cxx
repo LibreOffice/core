@@ -42,10 +42,11 @@ OTableSubscriptionDialog::OTableSubscriptionDialog(Window* pParent
             ,SfxItemSet* _pItems
             ,const Reference< XComponentContext >& _rxORB
             ,const ::com::sun::star::uno::Any& _aDataSourceName)
-    :SfxNoLayoutSingleTabDialog(pParent,DLG_TABLE_FILTER,_pItems)
-    ,m_pImpl( new ODbDataSourceAdministrationHelper( _rxORB, pParent, this ) )
-    ,m_bStopExecution(sal_False)
-    ,m_pOutSet(_pItems)
+    : SfxSingleTabDialog(pParent, _pItems, "TablesFilterDialog",
+        "dbaccess/ui/tablesfilterdialog.ui")
+    , m_pImpl( new ODbDataSourceAdministrationHelper( _rxORB, pParent, this ) )
+    , m_bStopExecution(sal_False)
+    , m_pOutSet(_pItems)
 {
     DBG_CTOR(OTableSubscriptionDialog,NULL);
     m_pImpl->setDataSourceOrName(_aDataSourceName);
@@ -55,9 +56,9 @@ OTableSubscriptionDialog::OTableSubscriptionDialog(Window* pParent
     m_pImpl->translateProperties(xDatasource, *m_pOutSet);
     SetInputSet(m_pOutSet);
 
-    OTableSubscriptionPage* pTabPage = new OTableSubscriptionPage(this,*m_pOutSet,this);
+    OTableSubscriptionPage* pTabPage = new OTableSubscriptionPage(get_content_area(), *m_pOutSet, this);
     pTabPage->SetServiceFactory(_rxORB);
-    SetTabPage(pTabPage);
+    setTabPage(pTabPage);
 }
 
 OTableSubscriptionDialog::~OTableSubscriptionDialog()
@@ -71,7 +72,7 @@ short OTableSubscriptionDialog::Execute()
     short nRet = RET_CANCEL;
     if ( !m_bStopExecution )
     {
-        nRet = SfxNoLayoutSingleTabDialog::Execute();
+        nRet = SfxSingleTabDialog::Execute();
         if ( nRet == RET_OK )
         {
             m_pOutSet->Put(*GetOutputItemSet());

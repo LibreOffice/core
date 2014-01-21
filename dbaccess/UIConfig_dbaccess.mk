@@ -19,6 +19,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/querypropertiesdialog  \
     dbaccess/uiconfig/ui/rowheightdialog \
     dbaccess/uiconfig/ui/sortdialog \
+    dbaccess/uiconfig/ui/tablesfilterdialog \
 ))
 
 # vim: set noet sw=4 ts=4:
