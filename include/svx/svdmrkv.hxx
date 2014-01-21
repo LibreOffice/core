@@ -203,7 +203,7 @@ public:
     void SetDragMode(SdrDragMode eMode);
     SdrDragMode GetDragMode() const { return eDragMode; }
     sal_Bool ChkDragMode(SdrDragMode eMode) const;
-    void SetFrameHandles(sal_Bool bOn);
+    void SetFrameHandles(bool bOn);
     sal_Bool IsFrameHandles() const { return bForceFrameHandles; }
 
     sal_uIntPtr GetMarkableObjCount() const;

@@ -1282,7 +1282,7 @@ void SdrMarkView::SetMarkRects()
     }
 }
 
-void SdrMarkView::SetFrameHandles(sal_Bool bOn)
+void SdrMarkView::SetFrameHandles(bool bOn)
 {
     if (bOn!=bForceFrameHandles) {
         sal_Bool bOld=ImpIsFrameHandles();
