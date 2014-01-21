@@ -714,7 +714,15 @@ void DrawingML::WriteTransformation( const Rectangle& rRect,
                           XML_rot, (nRotation % 21600000) ? I32S( nRotation ) : NULL,
                           FSEND );
 
-    mpFS->singleElementNS( XML_a, XML_off, XML_x, IS( MM100toEMU( rRect.Left() ) ), XML_y, IS( MM100toEMU( rRect.Top() ) ), FSEND );
+    sal_Int32 nLeft = rRect.Left();
+    sal_Int32 nTop = rRect.Top();
+    if (GetDocumentType() == DOCUMENT_DOCX && !m_xParent.is())
+    {
+        nLeft = 0;
+        nTop = 0;
+    }
+
+    mpFS->singleElementNS( XML_a, XML_off, XML_x, IS( MM100toEMU( nLeft ) ), XML_y, IS( MM100toEMU( nTop ) ), FSEND );
     mpFS->singleElementNS( XML_a, XML_ext, XML_cx, IS( MM100toEMU( rRect.GetWidth() ) ), XML_cy, IS( MM100toEMU( rRect.GetHeight() ) ), FSEND );
 
     mpFS->endElementNS( nXmlNamespace, XML_xfrm );
