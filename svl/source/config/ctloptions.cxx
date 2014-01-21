@@ -130,7 +130,7 @@ SvtCTLOptions_Impl::SvtCTLOptions_Impl() :
 }
 SvtCTLOptions_Impl::~SvtCTLOptions_Impl()
 {
-    if ( IsModified() == sal_True )
+    if ( IsModified() )
         Commit();
 }
 // -----------------------------------------------------------------------------
