@@ -24,7 +24,7 @@
 #ifndef INCLUDED_SERFTYPES_HXX
 #define INCLUDED_SERFTYPES_HXX
 
-#include <serf.h>
+#include <serf/serf.h>
 
 typedef serf_connection_t SerfConnection;
 

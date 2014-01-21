@@ -30,7 +30,7 @@
 #include "ucbhelper/simplecertificatevalidationrequest.hxx"
 
 #include "AprEnv.hxx"
-#include <apr_strings.h>
+#include <apr/apr_strings.h>
 
 #include "DAVAuthListener.hxx"
 #include "SerfTypes.hxx"
@@ -47,6 +47,10 @@
 #include <com/sun/star/security/CertificateContainerStatus.hpp>
 #include <com/sun/star/security/CertificateContainer.hpp>
 #include <com/sun/star/security/XCertificateContainer.hpp>
+#include <com/sun/star/security/CertAltNameEntry.hpp>
+#include <com/sun/star/security/XSanExtension.hpp>
+#define OID_SUBJECT_ALTERNATIVE_NAME "2.5.29.17"
+
 #include <com/sun/star/ucb/Lock.hpp>
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
 
@@ -479,7 +483,40 @@ apr_status_t SerfSession::verifySerfCertificateChain (
 
     // When the certificate matches the host name then we can use the
     // result of the verification.
-    if (isDomainMatch(sServerCertificateSubject))
+    bool bHostnameMatchesCertHostnames = false;
+    {
+        uno::Sequence< uno::Reference< security::XCertificateExtension > > extensions = xServerCertificate->getExtensions();
+        uno::Sequence< security::CertAltNameEntry > altNames;
+        for (sal_Int32 i = 0 ; i < extensions.getLength(); ++i)
+        {
+            uno::Reference< security::XCertificateExtension >element = extensions[i];
+
+            const rtl::OString aId ( (const sal_Char *)element->getExtensionId().getArray(), element->getExtensionId().getLength());
+            if ( aId.equals( OID_SUBJECT_ALTERNATIVE_NAME ) )
+            {
+                uno::Reference< security::XSanExtension > sanExtension ( element, uno::UNO_QUERY );
+                altNames =  sanExtension->getAlternativeNames();
+                break;
+            }
+        }
+
+        uno::Sequence< ::rtl::OUString > certHostNames(altNames.getLength() + 1);
+        certHostNames[0] = sServerCertificateSubject;
+        for( int n = 0; n < altNames.getLength(); ++n )
+        {
+            if (altNames[n].Type ==  security::ExtAltNameType_DNS_NAME)
+            {
+                altNames[n].Value >>= certHostNames[n+1];
+            }
+        }
+
+        for ( int i = 0; i < certHostNames.getLength() && !bHostnameMatchesCertHostnames; ++i )
+        {
+            bHostnameMatchesCertHostnames = isDomainMatch( certHostNames[i] );
+        }
+
+    }
+    if ( bHostnameMatchesCertHostnames )
     {
 
         if (nVerificationResult == 0)
@@ -526,8 +563,7 @@ apr_status_t SerfSession::verifySerfCertificateChain (
 
             if ( xSelection.is() )
             {
-                uno::Reference< task::XInteractionApprove > xApprove(
-                    xSelection.get(), uno::UNO_QUERY );
+                uno::Reference< task::XInteractionApprove > xApprove( xSelection.get(), uno::UNO_QUERY );
                 if ( xApprove.is() )
                 {
                     xCertificateContainer->addCertificate( getHostName(), sServerCertificateSubject,  sal_True );
