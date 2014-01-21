@@ -320,7 +320,7 @@ void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
         bool bPrevCharWasSpace(true);
         while(i < sText.getLength())
         {
-            if ((sText[i] == '\n'))
+            if( sText[i] == '\n')
             {
                 SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, true, false);
                 rExport.GetTextParagraphExport()->exportText(sTemp.makeStringAndClear(), bPrevCharWasSpace);
