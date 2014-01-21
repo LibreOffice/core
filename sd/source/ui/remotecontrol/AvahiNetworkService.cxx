@@ -66,7 +66,7 @@ static void entry_group_callback(AvahiEntryGroup *g, AvahiEntryGroupState state,
 
         case AVAHI_ENTRY_GROUP_FAILURE :
 
-            fprintf(stderr, "Entry group failure: %s\n", avahi_strerror(avahi_client_errno(avahi_entry_group_get_client(g))));
+            SAL_WARN("sdremote.wifi", "Entry group failure: " << avahi_strerror(avahi_client_errno(avahi_entry_group_get_client(g))));
 
             /* Some kind of failure happened while we were registering our services */
             avahi_threaded_poll_quit(threaded_poll);
@@ -86,7 +86,7 @@ static void create_services(AvahiClient *c) {
 
     if (!group)
         if (!(group = avahi_entry_group_new(c, entry_group_callback, NULL))) {
-            fprintf(stderr, "avahi_entry_group_new() failed: %s\n", avahi_strerror(avahi_client_errno(c)));
+            SAL_WARN("sdremote.wifi", "avahi_entry_group_new() failed: " << avahi_strerror(avahi_client_errno(c)));
             avahiService->clear();
         }
 
@@ -109,7 +109,7 @@ static void create_services(AvahiClient *c) {
                 char *n = avahi_alternative_service_name(avahiService->getName().c_str());
                 avahiService->setName(n);
 
-                fprintf(stderr, "Service name collision, renaming service to '%s'\n", avahiService->getName().c_str());
+                SAL_WARN("sdremote.wifi", "Service name collision, renaming service to '" << avahiService->getName() << "'");
 
                 avahi_entry_group_reset(group);
 
@@ -117,13 +117,13 @@ static void create_services(AvahiClient *c) {
                 return;
             }
 
-            fprintf(stderr, "Failed to add _impressremote._tcp service: %s\n", avahi_strerror(ret));
+            SAL_WARN("sdremote.wifi", "Failed to add _impressremote._tcp service: " << avahi_strerror(ret));
             avahiService->clear();
         }
 
         /* Tell the server to register the service */
         if ((ret = avahi_entry_group_commit(group)) < 0) {
-            fprintf(stderr, "Failed to commit entry group: %s\n", avahi_strerror(ret));
+            SAL_WARN("sdremote.wifi", "Failed to commit entry group: " << avahi_strerror(ret));
             avahiService->clear();
         }
     }
@@ -141,7 +141,7 @@ static void client_callback(AvahiClient *c, AvahiClientState state, AVAHI_GCC_UN
             create_services(c);
             break;
         case AVAHI_CLIENT_FAILURE:
-            fprintf(stderr, "Client failure: %s\n", avahi_strerror(avahi_client_errno(c)));
+            SAL_WARN("sdremote.wifi", "Client failure: " << avahi_strerror(avahi_client_errno(c)));
             avahiService->clear();
             break;
         case AVAHI_CLIENT_S_COLLISION:
@@ -165,27 +165,27 @@ void AvahiNetworkService::setup() {
    int error = 0;
    avahiService = this;
    if (!(threaded_poll = avahi_threaded_poll_new())) {
-     fprintf(stderr, "avahi_threaded_poll_new '%s' failed.\n", avahi_strdup( avahiService->getName().c_str() ));
-     return;
+       SAL_WARN("sdremote.wifi", "avahi_threaded_poll_new '" << avahiService->getName() << "' failed");
+       return;
    }
 
    if (!(client = avahi_client_new(avahi_threaded_poll_get(threaded_poll), static_cast<AvahiClientFlags>(0), client_callback, NULL, &error))) {
-     fprintf(stderr, "avahi_client_new failed.\n");
-     return;
+       SAL_WARN("sdremote.wifi", "avahi_client_new failed");
+       return;
    }
 
    create_services(client);
 
    /* Finally, start the event loop thread */
    if (avahi_threaded_poll_start(threaded_poll) < 0) {
-     fprintf(stderr, "avahi_threaded_poll_start failed.\n");
-     return;
+       SAL_WARN("sdremote.wifi", "avahi_threaded_poll_start failed");
+       return;
    }
 }
 
 void AvahiNetworkService::clear() {
-  /* Call this when the app shuts down */
-  avahi_threaded_poll_stop(threaded_poll);
-  avahi_client_free(client);
-  avahi_threaded_poll_free(threaded_poll);
+    /* Call this when the app shuts down */
+    avahi_threaded_poll_stop(threaded_poll);
+    avahi_client_free(client);
+    avahi_threaded_poll_free(threaded_poll);
 }
