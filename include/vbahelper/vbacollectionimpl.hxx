@@ -292,7 +292,7 @@ public:
         {
             sal_Int32 nIndex = 0;
 
-            if ( ( Index1 >>= nIndex ) != sal_True )
+            if ( !( Index1 >>= nIndex ) )
             {
                 OUString message;
                 message = OUString( "Couldn't convert index to Int32");
