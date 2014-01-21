@@ -521,7 +521,7 @@ void SAL_CALL NewMenuController::initialize( const Sequence< Any >& aArguments )
             const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
             m_bShowImages   = rSettings.GetUseImagesInMenus();
-            m_bNewMenu      = m_aCommandURL.startsWith( ".uno:AddDirect" );
+            m_bNewMenu      = m_aCommandURL == ".uno:AddDirect";
         }
     }
 }
