@@ -2706,7 +2706,7 @@ throw( uno::RuntimeException )
         // the container window of my DockingAreaAcceptor is not the same as of my frame
         // I still have to resize my frames' window as nobody else will do it
         Reference< awt::XWindow > xComponentWindow( m_xFrame->getComponentWindow() );
-        if( xComponentWindow.is() == sal_True )
+        if( xComponentWindow.is() )
         {
             uno::Reference< awt::XDevice > xDevice( m_xFrame->getContainerWindow(), uno::UNO_QUERY );
 

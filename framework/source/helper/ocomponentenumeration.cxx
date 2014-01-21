@@ -174,18 +174,7 @@ sal_Bool OComponentEnumeration::impldbg_checkParameter_OComponentEnumerationCtor
 //*****************************************************************************************************************
 sal_Bool OComponentEnumeration::impldbg_checkParameter_disposing( const EventObject& aEvent )
 {
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &aEvent               ==  NULL        )   ||
-            ( aEvent.Source.is()    ==  sal_False   )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
+    return aEvent.Source.is();
 }
 
 }       //  namespace framework

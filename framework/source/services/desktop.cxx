@@ -530,7 +530,7 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::getCurrentCompone
     // ... get component of this frame ... (It can be the window, the model or the controller.)
     // ... and return the result.
     css::uno::Reference< css::frame::XFrame > xCurrentFrame = getCurrentFrame();
-    if( xCurrentFrame.is() == sal_True )
+    if( xCurrentFrame.is() )
     {
         xComponent = impl_getFrameComponent( xCurrentFrame );
     }
@@ -564,10 +564,10 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::getCurrentFrame() th
     // Search on his children for other active frames too.
     // Stop if no one could be found and return last of found ones.
     css::uno::Reference< css::frame::XFramesSupplier > xLast = css::uno::Reference< css::frame::XFramesSupplier >( getActiveFrame(), css::uno::UNO_QUERY );
-    if( xLast.is() == sal_True )
+    if( xLast.is() )
     {
         css::uno::Reference< css::frame::XFramesSupplier > xNext = css::uno::Reference< css::frame::XFramesSupplier >( xLast->getActiveFrame(), css::uno::UNO_QUERY );
-        while( xNext.is() == sal_True )
+        while( xNext.is() )
         {
             xLast = xNext;
             xNext = css::uno::Reference< css::frame::XFramesSupplier >( xNext->getActiveFrame(), css::uno::UNO_QUERY );
@@ -811,7 +811,7 @@ void SAL_CALL Desktop::setActiveFrame( const css::uno::Reference< css::frame::XF
     if( xLastActiveChild != xFrame )
     {
         m_aChildTaskContainer.setActive( xFrame );
-        if( xLastActiveChild.is() == sal_True )
+        if( xLastActiveChild.is() )
         {
             xLastActiveChild->deactivate();
         }
@@ -1688,7 +1688,7 @@ css::uno::Reference< css::lang::XComponent > Desktop::impl_getFrameComponent( co
     css::uno::Reference< css::lang::XComponent > xComponent;
     // Does no controller exists?
     css::uno::Reference< css::frame::XController > xController = xFrame->getController();
-    if( xController.is() == sal_False )
+    if( !xController.is() )
     {
         // Controller not exist - use the VCL-component.
         xComponent = css::uno::Reference< css::lang::XComponent >( xFrame->getComponentWindow(), css::uno::UNO_QUERY );
@@ -1697,7 +1697,7 @@ css::uno::Reference< css::lang::XComponent > Desktop::impl_getFrameComponent( co
     {
         // Does no model exists?
         css::uno::Reference< css::frame::XModel > xModel( xController->getModel(), css::uno::UNO_QUERY );
-        if( xModel.is() == sal_True )
+        if( xModel.is() )
         {
             // Model exist - use the model as component.
             xComponent = css::uno::Reference< css::lang::XComponent >( xModel, css::uno::UNO_QUERY );
@@ -1935,28 +1935,19 @@ void Desktop::impl_sendNotifyTerminationEvent()
 //  We work with valid servicemanager only.
 sal_Bool Desktop::implcp_ctor( const css::uno::Reference< css::uno::XComponentContext >& xContext )
 {
-    return(
-            ( &xContext     ==  NULL        )   ||
-            ( xContext.is() ==  sal_False   )
-          );
+    return !xContext.is();
 }
 
 //  We work with valid listener only.
 sal_Bool Desktop::implcp_addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
 {
-    return(
-            ( &xListener        ==  NULL        )   ||
-            ( xListener.is()    ==  sal_False   )
-          );
+    return !xListener.is();
 }
 
 //  We work with valid listener only.
 sal_Bool Desktop::implcp_removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
 {
-    return(
-            ( &xListener        ==  NULL        )   ||
-            ( xListener.is()    ==  sal_False   )
-          );
+    return !xListener.is();
 }
 
 }   // namespace framework

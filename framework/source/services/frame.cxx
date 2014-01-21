@@ -807,14 +807,14 @@ void SAL_CALL Frame::setActiveFrame( const css::uno::Reference< css::frame::XFra
         m_aChildFrameContainer.setActive( xFrame );
         if  (
                 ( eActiveState      !=  E_INACTIVE  )   &&
-                ( xActiveChild.is() ==  sal_True    )
+                xActiveChild.is()
             )
         {
             xActiveChild->deactivate();
         }
     }
 
-    if( xFrame.is() == sal_True )
+    if( xFrame.is() )
     {
         // If last active frame had focus ...
         // ... reset state to ACTIVE and send right FrameActionEvent for focus lost.
@@ -1447,7 +1447,7 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException )
         m_eActiveState = eState;
         aWriteLock.unlock();
         // Deactivate sibling path and forward activation to parent ... if any parent exist!
-        if( xParent.is() == sal_True )
+        if( xParent.is() )
         {
             // Everytime set THIS frame as active child of parent and activate it.
             // We MUST have a valid path from bottom to top as active path!
@@ -1475,21 +1475,14 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException )
     //      But ouer direct child of path is not active yet.
     //      (It can be, if activation occur in the middle of a current path!)
     //      In these case we activate path to bottom to set focus on right frame!
-    if  (
-            ( eState                    ==  E_ACTIVE    )   &&
-            ( xActiveChild.is()         ==  sal_True    )   &&
-            ( xActiveChild->isActive()  ==  sal_False   )
-        )
+    if ( eState == E_ACTIVE && xActiveChild.is() && !xActiveChild->isActive() )
     {
         xActiveChild->activate();
     }
 
     //_________________________________________________________________________________________________________
     //  3)  I was active before or current activated. But if I have no active child => I will get the focus!
-    if  (
-            ( eState            ==  E_ACTIVE    )   &&
-            ( xActiveChild.is() ==  sal_False   )
-        )
+    if ( eState == E_ACTIVE && !xActiveChild.is() )
     {
         aWriteLock.lock();
         eState         = E_FOCUS;
@@ -1537,10 +1530,7 @@ void SAL_CALL Frame::deactivate() throw( css::uno::RuntimeException )
     {
         //_____________________________________________________________________________________________________
         //  1)  Deactivate all active children.
-        if  (
-                ( xActiveChild.is()         ==  sal_True    )   &&
-                ( xActiveChild->isActive()  ==  sal_True    )
-            )
+        if ( xActiveChild.is() && xActiveChild->isActive() )
         {
             xActiveChild->deactivate();
         }
@@ -1575,10 +1565,7 @@ void SAL_CALL Frame::deactivate() throw( css::uno::RuntimeException )
         //      ... I'am on the top or in the middle of deactivated subtree and action was started here.
         //      I must deactivate all frames from here to top, which are members of current path.
         //      Stop, if THESE frame not the active frame of ouer parent!
-        if  (
-                ( xParent.is()              ==  sal_True    )   &&
-                ( xParent->getActiveFrame() ==  xThis       )
-            )
+        if ( xParent.is() && xParent->getActiveFrame() == xThis )
         {
             // We MUST break the path - otherwise we will get the focus - not ouer parent! ...
             // Attention: Ouer parent don't call us again - WE ARE NOT ACTIVE YET!
@@ -2261,7 +2248,7 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     // It's important to do that before we free some other internal structures.
     // Because if our parent gets an activate and found us as last possible active frame
     // he try to deactivate us ... and we run into some trouble (DisposedExceptions!).
-    if( m_xParent.is() == sal_True )
+    if( m_xParent.is() )
     {
         m_xParent->getFrames()->remove( xThis );
         m_xParent = css::uno::Reference< css::frame::XFramesSupplier >();
@@ -2582,7 +2569,7 @@ void SAL_CALL Frame::focusGained( const css::awt::FocusEvent& aEvent ) throw( cs
     aReadLock.unlock();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
-    if( xComponentWindow.is() == sal_True )
+    if( xComponentWindow.is() )
     {
         xComponentWindow->setFocus();
     }
@@ -2652,10 +2639,8 @@ void SAL_CALL Frame::windowDeactivated( const css::lang::EventObject& aEvent ) t
         // is a parent window of the last active Window!
         SolarMutexClearableGuard aSolarGuard;
         Window* pFocusWindow = Application::GetFocusWindow();
-        if  (
-                ( xContainerWindow.is()                                                              ==  sal_True    )   &&
-                ( xParent.is()                                                                       ==  sal_True    )   &&
-                ( (css::uno::Reference< css::frame::XDesktop >( xParent, css::uno::UNO_QUERY )).is() ==  sal_False   )
+        if  ( xContainerWindow.is() && xParent.is() &&
+              !css::uno::Reference< css::frame::XDesktop >( xParent, css::uno::UNO_QUERY ).is()
             )
         {
             css::uno::Reference< css::awt::XWindow >  xParentWindow   = xParent->getContainerWindow()             ;
@@ -2668,7 +2653,7 @@ void SAL_CALL Frame::windowDeactivated( const css::lang::EventObject& aEvent ) t
             if( pFocusWindow && pParentWindow->IsChild( pFocusWindow ) )
             {
                 css::uno::Reference< css::frame::XFramesSupplier > xSupplier( xParent, css::uno::UNO_QUERY );
-                if( xSupplier.is() == sal_True )
+                if( xSupplier.is() )
                 {
                     aSolarGuard.clear();
                     xSupplier->setActiveFrame( css::uno::Reference< css::frame::XFrame >() );
@@ -3071,7 +3056,7 @@ css::uno::Any SAL_CALL Frame::impl_getPropertyValue(const OUString& /*sProperty*
 *//*-*****************************************************************************************************/
 void Frame::impl_disposeContainerWindow( css::uno::Reference< css::awt::XWindow >& xWindow )
 {
-    if( xWindow.is() == sal_True )
+    if( xWindow.is() )
     {
         xWindow->setVisible( sal_False );
         // All VclComponents are XComponents; so call dispose before discarding
@@ -3162,7 +3147,7 @@ void Frame::implts_resizeComponentWindow()
     if ( !m_xLayoutManager.is() )
     {
         css::uno::Reference< css::awt::XWindow > xComponentWindow( getComponentWindow() );
-        if( xComponentWindow.is() == sal_True )
+        if( xComponentWindow.is() )
         {
             css::uno::Reference< css::awt::XDevice > xDevice( getContainerWindow(), css::uno::UNO_QUERY );
 
@@ -3205,10 +3190,7 @@ void Frame::implts_setIconOnWindow()
     aReadLock.unlock();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
-    if(
-        ( xContainerWindow.is() == sal_True )   &&
-        ( xController.is()      == sal_True )
-      )
+    if( xContainerWindow.is() && xController.is() )
     {
         //-------------------------------------------------------------------------------------------------------------
         // a) set default value to an invalid one. So we can start further searches for right icon id, if
@@ -3220,7 +3202,7 @@ void Frame::implts_setIconOnWindow()
         // b) try to find information on controller propertyset directly
         //    Don't forget to catch possible exceptions - because these property is an optional one!
         css::uno::Reference< css::beans::XPropertySet > xSet( xController, css::uno::UNO_QUERY );
-        if( xSet.is() == sal_True )
+        if( xSet.is() )
         {
             try
             {
@@ -3240,7 +3222,7 @@ void Frame::implts_setIconOnWindow()
         if( nIcon == -1 )
         {
             css::uno::Reference< css::frame::XModel > xModel = xController->getModel();
-            if( xModel.is() == sal_True )
+            if( xModel.is() )
             {
                 SvtModuleOptions::EFactory eFactory = SvtModuleOptions::ClassifyFactoryByModel(xModel);
                 if (eFactory != SvtModuleOptions::E_UNKNOWN_FACTORY)
@@ -3309,19 +3291,19 @@ void Frame::implts_startWindowListening()
     aReadLock.unlock();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
-    if( xContainerWindow.is() == sal_True )
+    if( xContainerWindow.is() )
     {
         xContainerWindow->addWindowListener( xWindowListener);
         xContainerWindow->addFocusListener ( xFocusListener );
 
         css::uno::Reference< css::awt::XTopWindow > xTopWindow( xContainerWindow, css::uno::UNO_QUERY );
-        if( xTopWindow.is() == sal_True )
+        if( xTopWindow.is() )
         {
             xTopWindow->addTopWindowListener( xTopWindowListener );
 
             css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( xContext );
             css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget = xToolkit->getDropTarget( xContainerWindow );
-            if( xDropTarget.is() == sal_True )
+            if( xDropTarget.is() )
             {
                 xDropTarget->addDropTargetListener( xDragDropListener );
                 xDropTarget->setActive( sal_True );
@@ -3349,19 +3331,19 @@ void Frame::implts_stopWindowListening()
     aReadLock.unlock();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
-    if( xContainerWindow.is() == sal_True )
+    if( xContainerWindow.is() )
     {
         xContainerWindow->removeWindowListener( xWindowListener);
         xContainerWindow->removeFocusListener ( xFocusListener );
 
         css::uno::Reference< css::awt::XTopWindow > xTopWindow( xContainerWindow, css::uno::UNO_QUERY );
-        if( xTopWindow.is() == sal_True )
+        if( xTopWindow.is() )
         {
             xTopWindow->removeTopWindowListener( xTopWindowListener );
 
             css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( xContext );
             css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget = xToolkit->getDropTarget( xContainerWindow );
-            if( xDropTarget.is() == sal_True )
+            if( xDropTarget.is() )
             {
                 xDropTarget->removeDropTargetListener( xDragDropListener );
                 xDropTarget->setActive( sal_False );
@@ -3540,90 +3522,60 @@ void Frame::impl_checkMenuCloser()
 // And we accept frames only! No tasks and desktops!
 sal_Bool Frame::implcp_setActiveFrame( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
-    return  (
-                ( &xFrame                                                                                   ==  NULL        )   ||
-                ( css::uno::Reference< css::frame::XDesktop >( xFrame, css::uno::UNO_QUERY ).is()           ==  sal_True    )
-            );
+    return css::uno::Reference< css::frame::XDesktop >( xFrame, css::uno::UNO_QUERY ).is();
 }
 
 //*****************************************************************************************************************
 sal_Bool Frame::implcp_addFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener )
 {
-    return  (
-                ( &xListener        ==  NULL        )   ||
-                ( xListener.is()    ==  sal_False   )
-            );
+    return !xListener.is();
 }
 
 //*****************************************************************************************************************
 sal_Bool Frame::implcp_removeFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener )
 {
-    return  (
-                ( &xListener        ==  NULL        )   ||
-                ( xListener.is()    ==  sal_False   )
-            );
+    return !xListener.is();
 }
 
 //*****************************************************************************************************************
 sal_Bool Frame::implcp_addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
 {
-    return  (
-                ( &xListener        ==  NULL        )   ||
-                ( xListener.is()    ==  sal_False   )
-            );
+    return !xListener.is();
 }
 
 //*****************************************************************************************************************
 sal_Bool Frame::implcp_removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
 {
-    return  (
-                ( &xListener        ==  NULL        )   ||
-                ( xListener.is()    ==  sal_False   )
-            );
+    return !xListener.is();
 }
 
 //*****************************************************************************************************************
 sal_Bool Frame::implcp_windowResized( const css::awt::WindowEvent& aEvent )
 {
-    return  (
-                ( &aEvent               ==  NULL        )   ||
-                ( aEvent.Source.is()    ==  sal_False   )
-            );
+    return !aEvent.Source.is();
 }
 
 //*****************************************************************************************************************
 sal_Bool Frame::implcp_focusGained( const css::awt::FocusEvent& aEvent )
 {
-    return  (
-                ( &aEvent               ==  NULL        )   ||
-                ( aEvent.Source.is()    ==  sal_False   )
-            );
+    return !aEvent.Source.is();
 }
 
 //*****************************************************************************************************************
 sal_Bool Frame::implcp_windowActivated( const css::lang::EventObject& aEvent )
 {
-    return  (
-                ( &aEvent               ==  NULL        )   ||
-                ( aEvent.Source.is()    ==  sal_False   )
-            );
+    return !aEvent.Source.is();
 }
 
 //*****************************************************************************************************************
 sal_Bool Frame::implcp_windowDeactivated( const css::lang::EventObject& aEvent )
 {
-    return  (
-                ( &aEvent               ==  NULL        )   ||
-                ( aEvent.Source.is()    ==  sal_False   )
-            );
+    return !aEvent.Source.is();
 }
 
 sal_Bool Frame::implcp_disposing( const css::lang::EventObject& aEvent )
 {
-    return  (
-                ( &aEvent               ==  NULL        )   ||
-                ( aEvent.Source.is()    ==  sal_False   )
-            );
+    return !aEvent.Source.is();
 }
 
 }

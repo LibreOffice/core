@@ -315,20 +315,7 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
 static sal_Bool impldbg_checkParameter_MenuDispatcher(   const   uno::Reference< XComponentContext >&  xContext    ,
                                                                   const   uno::Reference< XFrame >&             xOwner      )
 {
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &xContext     ==  NULL        )   ||
-            ( &xOwner       ==  NULL        )   ||
-            ( xContext.is() ==  sal_False   )   ||
-            ( xOwner.is()   ==  sal_False   )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
+    return xContext.is() && xOwner.is();
 }
 
 //*****************************************************************************************************************

@@ -176,7 +176,7 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 sta
     while ( xEnum->hasMoreElements() )
     {
         Reference< XServiceInfo > xServiceInfo;
-        if ( sal_False == ( xEnum->nextElement() >>= xServiceInfo ) )
+        if ( !( xEnum->nextElement() >>= xServiceInfo ) )
         {
             break;
         }

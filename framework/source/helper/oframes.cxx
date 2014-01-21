@@ -78,7 +78,7 @@ void SAL_CALL OFrames::append( const css::uno::Reference< XFrame >& xFrame ) thr
     // Do the follow only, if owner instance valid!
     // Lock owner for follow operations - make a "hard reference"!
     css::uno::Reference< XFramesSupplier > xOwner( m_xOwner.get(), UNO_QUERY );
-    if ( xOwner.is() == sal_True )
+    if ( xOwner.is() )
     {
         // Append frame to the end of the container ...
         m_pFrameContainer->append( xFrame );
@@ -104,7 +104,7 @@ void SAL_CALL OFrames::remove( const css::uno::Reference< XFrame >& xFrame ) thr
     // Do the follow only, if owner instance valid!
     // Lock owner for follow operations - make a "hard reference"!
     css::uno::Reference< XFramesSupplier > xOwner( m_xOwner.get(), UNO_QUERY );
-    if ( xOwner.is() == sal_True )
+    if ( xOwner.is() )
     {
         // Search frame and remove it from container ...
         m_pFrameContainer->remove( xFrame );
@@ -134,7 +134,7 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
     // Do the follow only, if owner instance valid.
     // Lock owner for follow operations - make a "hard reference"!
     css::uno::Reference< XFrame > xOwner( m_xOwner.get(), UNO_QUERY );
-    if ( xOwner.is() == sal_True )
+    if ( xOwner.is() )
     {
         // Work only, if search was not started here ...!
         if( m_bRecursiveSearchProtection == sal_False )
@@ -160,7 +160,7 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
             if( nSearchFlags & FrameSearchFlag::PARENT )
             {
                 css::uno::Reference< XFrame > xParent( xOwner->getCreator(), UNO_QUERY );
-                if( xParent.is() == sal_True )
+                if( xParent.is() )
                 {
                     Sequence< css::uno::Reference< XFrame > > seqParent( 1 );
                     seqParent[0] = xParent;
@@ -187,7 +187,7 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
                 // Ask parent of my owner for frames and append results to return list.
                 css::uno::Reference< XFramesSupplier > xParent( xOwner->getCreator(), UNO_QUERY );
                 // If a parent exist ...
-                if ( xParent.is() == sal_True )
+                if ( xParent.is() )
                 {
                     // ... ask him for right frames.
                     impl_appendSequence( seqFrames, xParent->getFrames()->queryFrames( nSearchFlags ) );
@@ -237,7 +237,7 @@ sal_Int32 SAL_CALL OFrames::getCount() throw( RuntimeException )
     // Do the follow only, if owner instance valid.
     // Lock owner for follow operations - make a "hard reference"!
     css::uno::Reference< XFrame > xOwner( m_xOwner.get(), UNO_QUERY );
-    if ( xOwner.is() == sal_True )
+    if ( xOwner.is() )
     {
         // Set CURRENT size of container for return.
         nCount = m_pFrameContainer->getCount();
@@ -268,7 +268,7 @@ Any SAL_CALL OFrames::getByIndex( sal_Int32 nIndex ) throw( IndexOutOfBoundsExce
     // Do the follow only, if owner instance valid.
     // Lock owner for follow operations - make a "hard reference"!
     css::uno::Reference< XFrame > xOwner( m_xOwner.get(), UNO_QUERY );
-    if ( xOwner.is() == sal_True )
+    if ( xOwner.is() )
     {
         // Get element form container.
         // (If index not valid, FrameContainer return NULL!)
@@ -301,7 +301,7 @@ sal_Bool SAL_CALL OFrames::hasElements() throw( RuntimeException )
     // Do the follow only, if owner instance valid.
     // Lock owner for follow operations - make a "hard reference"!
     css::uno::Reference< XFrame > xOwner( m_xOwner.get(), UNO_QUERY );
-    if ( xOwner.is() == sal_True )
+    if ( xOwner.is() )
     {
         // If some elements exist ...
         if ( m_pFrameContainer->getCount() > 0 )
@@ -391,19 +391,7 @@ void OFrames::impl_appendSequence(          Sequence< css::uno::Reference< XFram
 sal_Bool OFrames::impldbg_checkParameter_OFramesCtor(   const   css::uno::Reference< XFrame >&              xOwner          ,
                                                                 FrameContainer*                     pFrameContainer )
 {
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &xOwner           ==  NULL        )   ||
-            ( xOwner.is()       ==  sal_False   )   ||
-            ( pFrameContainer   ==  NULL        )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
+    return xOwner.is() && pFrameContainer != 0;
 }
 
 //*****************************************************************************************************************
@@ -411,18 +399,7 @@ sal_Bool OFrames::impldbg_checkParameter_OFramesCtor(   const   css::uno::Refere
 // AND - alle frames must support XFrames-interface!
 sal_Bool OFrames::impldbg_checkParameter_append( const css::uno::Reference< XFrame >& xFrame )
 {
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &xFrame       ==  NULL        )   ||
-            ( xFrame.is()   ==  sal_False   )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
+    return xFrame.is();
 }
 
 //*****************************************************************************************************************
@@ -430,18 +407,7 @@ sal_Bool OFrames::impldbg_checkParameter_append( const css::uno::Reference< XFra
 // ... => You can only delete valid references!
 sal_Bool OFrames::impldbg_checkParameter_remove( const css::uno::Reference< XFrame >& xFrame )
 {
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &xFrame       ==  NULL        )   ||
-            ( xFrame.is()   ==  sal_False   )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
+    return xFrame.is();
 }
 
 //*****************************************************************************************************************

@@ -77,13 +77,12 @@ sal_Bool SAL_CALL DockingAreaDefaultAcceptor::requestDockingAreaSpace( const css
     css::uno::Reference< XFrame > xFrame( m_xOwner.get(), UNO_QUERY );
     aGuard.unlock();
 
-    if ( xFrame.is() == sal_True )
+    if ( xFrame.is() )
     {
         css::uno::Reference< css::awt::XWindow > xContainerWindow( xFrame->getContainerWindow() );
         css::uno::Reference< css::awt::XWindow > xComponentWindow( xFrame->getComponentWindow() );
 
-        if (( xContainerWindow.is() == sal_True ) &&
-            ( xComponentWindow.is() == sal_True )       )
+        if ( xContainerWindow.is() && xComponentWindow.is() )
         {
             css::uno::Reference< css::awt::XDevice > xDevice( xContainerWindow, css::uno::UNO_QUERY );
             // Convert relativ size to output size.
@@ -113,13 +112,12 @@ void SAL_CALL DockingAreaDefaultAcceptor::setDockingAreaSpace( const css::awt::R
 
     // Try to "lock" the frame for access to taskscontainer.
     css::uno::Reference< XFrame > xFrame( m_xOwner.get(), UNO_QUERY );
-    if ( xFrame.is() == sal_True )
+    if ( xFrame.is() )
     {
         css::uno::Reference< css::awt::XWindow > xContainerWindow( xFrame->getContainerWindow() );
         css::uno::Reference< css::awt::XWindow > xComponentWindow( xFrame->getComponentWindow() );
 
-        if (( xContainerWindow.is() == sal_True ) &&
-            ( xComponentWindow.is() == sal_True )       )
+        if ( xContainerWindow.is() && xComponentWindow.is() )
         {
             css::uno::Reference< css::awt::XDevice > xDevice( xContainerWindow, css::uno::UNO_QUERY );
             // Convert relativ size to output size.

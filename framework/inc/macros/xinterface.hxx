@@ -88,7 +88,7 @@ ________________________________________________________________________________
         ::com::sun::star::uno::Any aReturn  ( ::cppu::queryInterface INTERFACES                                                                             \
                                             );                                                                                                              \
         /* If searched interface not supported by this class ... */                                                                                         \
-        if ( aReturn.hasValue() == sal_False )                                                                                                              \
+        if ( !aReturn.hasValue() )                                                                                                                          \
         {                                                                                                                                                   \
             /* ... ask baseclass for interfaces! */                                                                                                         \
             aReturn = BASECLASS::queryInterface( aType );                                                                                                   \
@@ -109,12 +109,12 @@ ________________________________________________________________________________
         ::com::sun::star::uno::Any aReturn  ( ::cppu::queryInterface INTERFACES_FIRST                                                                       \
                                             );                                                                                                              \
         /* If searched interface not supported by first group ... */                                                                                        \
-        if ( aReturn.hasValue() == sal_False )                                                                                                              \
+        if ( !aReturn.hasValue() )                                                                                                                          \
         {                                                                                                                                                   \
             /* ... search in second group. (cppuhelper support 12 items only!) */                                                                           \
             aReturn = ::cppu::queryInterface INTERFACES_SECOND ;                                                                                            \
             /* If searched interface not supported by this class ... */                                                                                     \
-            if ( aReturn.hasValue() == sal_False )                                                                                                          \
+            if ( !aReturn.hasValue() )                                                                                                                      \
             {                                                                                                                                               \
                 /* ... ask baseclass for interfaces! */                                                                                                     \
                 aReturn = BASECLASS::queryInterface( aType );                                                                                               \

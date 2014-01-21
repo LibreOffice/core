@@ -70,7 +70,7 @@ css::uno::Reference< XEnumeration > SAL_CALL OComponentAccess::createEnumeration
 
     // Try to "lock" the desktop for access to task container.
     css::uno::Reference< XInterface > xLock = m_xOwner.get();
-    if ( xLock.is() == sal_True )
+    if ( xLock.is() )
     {
         // Desktop exist => pointer to task container must be valid.
         // Initialize a new enumeration ... if some tasks and his components exist!
@@ -109,7 +109,7 @@ sal_Bool SAL_CALL OComponentAccess::hasElements() throw( RuntimeException )
 
     // Try to "lock" the desktop for access to task container.
     css::uno::Reference< XFramesSupplier > xLock( m_xOwner.get(), UNO_QUERY );
-    if ( xLock.is() == sal_True )
+    if ( xLock.is() )
     {
         // Ask container of owner for existing elements.
         bReturn = xLock->getFrames()->hasElements();
@@ -126,7 +126,7 @@ void OComponentAccess::impl_collectAllChildComponents(  const   css::uno::Refere
                                                                  Sequence< css::uno::Reference< XComponent > >& seqComponents   )
 {
     // If valid node was given ...
-    if( xNode.is() == sal_True )
+    if( xNode.is() )
     {
         // ... continue collection at these.
 
@@ -142,7 +142,7 @@ void OComponentAccess::impl_collectAllChildComponents(  const   css::uno::Refere
         for( sal_Int32 nFrame=0; nFrame<nFrameCount; ++nFrame )
         {
             css::uno::Reference< XComponent > xComponent = impl_getFrameComponent( seqFrames[nFrame] );
-            if( xComponent.is() == sal_True )
+            if( xComponent.is() )
             {
                 nComponentCount++;
                 seqComponents.realloc( nComponentCount );
@@ -162,7 +162,7 @@ css::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( cons
     css::uno::Reference< XComponent > xComponent = css::uno::Reference< XComponent >();
     // Does no controller exists?
     css::uno::Reference< XController > xController = xFrame->getController();
-    if ( xController.is() == sal_False )
+    if ( !xController.is() )
     {
         // Controller not exist - use the VCL-component.
         xComponent = css::uno::Reference< XComponent >( xFrame->getComponentWindow(), UNO_QUERY );
@@ -171,7 +171,7 @@ css::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( cons
     {
         // Does no model exists?
         css::uno::Reference< XModel > xModel( xController->getModel(), UNO_QUERY );
-        if ( xModel.is() == sal_True )
+        if ( xModel.is() )
         {
             // Model exist - use the model as component.
             xComponent = css::uno::Reference< XComponent >( xModel, UNO_QUERY );
@@ -203,18 +203,7 @@ css::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( cons
 //*****************************************************************************************************************
 sal_Bool OComponentAccess::impldbg_checkParameter_OComponentAccessCtor( const   css::uno::Reference< XDesktop >&      xOwner  )
 {
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &xOwner       ==  NULL        )   ||
-            ( xOwner.is()   ==  sal_False   )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
+    return xOwner.is();
 }
 
 }       //  namespace framework

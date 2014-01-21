@@ -78,7 +78,7 @@ ________________________________________________________________________________
             /*  IF_NAME_CREATECOMPONENTFACTORY(z)" */                                                                                   \
             IFFACTORIES                                                                                                                 \
             /* Factory is valid, if service was found. */                                                                               \
-            if ( xFactory.is() == sal_True )                                                                                            \
+            if ( xFactory.is() )                                                                                                        \
             {                                                                                                                           \
                 xFactory->acquire();                                                                                                    \
                 pReturn = xFactory.get();                                                                                               \
