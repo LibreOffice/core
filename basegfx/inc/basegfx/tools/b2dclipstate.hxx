@@ -38,7 +38,7 @@ namespace basegfx
 
     namespace tools
     {
-        class ImplB2DClipState;
+        struct ImplB2DClipState;
 
         /** This class provides an optimized, symbolic clip state for graphical output
 

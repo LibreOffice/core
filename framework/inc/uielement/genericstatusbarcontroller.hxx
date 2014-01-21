@@ -29,7 +29,7 @@
 namespace framework
 {
 
-class AddonStatusbarItemData;
+struct AddonStatusbarItemData;
 
 class GenericStatusbarController : public svt::StatusbarController
 {
