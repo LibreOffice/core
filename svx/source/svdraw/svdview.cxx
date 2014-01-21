@@ -1442,7 +1442,7 @@ void SdrView::onAccessibilityOptionsChanged()
 
 void SdrView::SetMasterPagePaintCaching(sal_Bool bOn)
 {
-    if(mbMasterPagePaintCaching != bOn)
+    if(mbMasterPagePaintCaching != (bool) bOn)
     {
         mbMasterPagePaintCaching = bOn;
 
