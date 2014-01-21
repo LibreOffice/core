@@ -69,6 +69,7 @@ uninstall:
 clean: android_version_setup properties
 	$(ANT) -quiet -keep-going clean
 	rm -rf assets libs $(SODEST) $(OBJLOCAL) $(BOOTSTRAPDIR)/no-resource-compress.xml
+	rm -f native-code.cxx
 
 #
 # Build / link the single .so for this app
