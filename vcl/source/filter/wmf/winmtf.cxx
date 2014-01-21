@@ -518,7 +518,10 @@ Polygon& WinMtfOutput::ImplScale( Polygon& rPolygon )
 PolyPolygon& WinMtfOutput::ImplScale( PolyPolygon& rPolyPolygon )
 {
     sal_uInt16 nPolys = rPolyPolygon.Count();
-    for ( sal_uInt16 i = 0; i < nPolys; ImplScale( rPolyPolygon[ i++ ] ) ) ;
+    for (sal_uInt16 i = 0; i < nPolys; ++i)
+    {
+        ImplScale(rPolyPolygon[i]);
+    }
     return rPolyPolygon;
 }
 
