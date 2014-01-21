@@ -216,7 +216,7 @@ OUString FilterDialog::impl_buildUIFileName( const OUString& sName )
     {
         // otherwise its really a url ... build short name by using INetURLObject
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XStringWidth > xStringCalculator( new StringCalculator(&m_ftURL) );
-        if( xStringCalculator.is() == sal_True )
+        if( xStringCalculator.is() )
         {
             INetURLObject aBuilder   ( sName );
             Size          aSize      = m_ftURL.GetOutputSize();
