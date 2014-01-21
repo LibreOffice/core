@@ -419,7 +419,7 @@ public:
     sal_uInt16 GetColumnIdFromViewPos( sal_uInt16 nPos ) const { return GetColumnId(nPos + 1); }
     sal_uInt16 GetColumnIdFromModelPos( sal_uInt16 nPos ) const;
 
-    virtual void SetDesignMode(sal_Bool bMode);
+    virtual void SetDesignMode(bool bMode);
     sal_Bool IsDesignMode() const {return m_bDesignMode;}
     sal_Bool IsOpen() const {return m_pSeekCursor != NULL;}
 

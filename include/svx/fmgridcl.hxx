@@ -159,7 +159,7 @@ protected:
     virtual void ColumnResized(sal_uInt16 nId);
     virtual void ColumnMoved(sal_uInt16 nId);
     virtual void DeleteSelectedRows();
-    virtual void SetDesignMode(sal_Bool bMode);
+    virtual void SetDesignMode(bool bMode) SAL_OVERRIDE;
     virtual void CellModified();
     virtual void HideColumn(sal_uInt16 nId);
     virtual void ShowColumn(sal_uInt16 nId);

@@ -2117,7 +2117,7 @@ void SdrMarkView::SetMoveOutside(sal_Bool bOn)
     aHdl.SetMoveOutside(bOn);
 }
 
-void SdrMarkView::SetDesignMode( sal_Bool _bOn )
+void SdrMarkView::SetDesignMode( bool _bOn )
 {
     if ( bDesignMode != _bOn )
     {

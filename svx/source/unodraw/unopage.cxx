@@ -75,7 +75,7 @@ SvxDrawPage::SvxDrawPage( SdrPage* pInPage ) throw()
     // Erzeugen der (hidden) ::com::sun::star::sdbcx::View
     mpView = new SdrView( mpModel );
     if( mpView )
-        mpView->SetDesignMode(sal_True);
+        mpView->SetDesignMode(true);
 }
 
 SvxDrawPage::~SvxDrawPage() throw()
@@ -848,7 +848,7 @@ void SvxDrawPage::ChangeModel( SdrModel* pNewModel )
             delete mpView;
             mpView = new SdrView( mpModel );
             if( mpView )
-                mpView->SetDesignMode(sal_True);
+                mpView->SetDesignMode(true);
         }
     }
 }

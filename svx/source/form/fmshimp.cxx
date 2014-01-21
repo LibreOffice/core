@@ -2799,7 +2799,7 @@ public:
 };
 
 //------------------------------------------------------------------------------
-void FmXFormShell::SetDesignMode(sal_Bool bDesign)
+void FmXFormShell::SetDesignMode(bool bDesign)
 {
     if ( impl_checkDisposed() )
         return;

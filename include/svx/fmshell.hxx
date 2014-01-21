@@ -162,7 +162,7 @@ public:
             ) const;
 
     sal_Bool    IsDesignMode() const { return m_bDesignMode; }
-    void        SetDesignMode( sal_Bool _bDesignMode );
+    void        SetDesignMode( bool _bDesignMode );
 
 protected:
     void GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich);

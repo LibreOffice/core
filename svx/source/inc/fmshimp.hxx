@@ -412,7 +412,7 @@ public:
     void SetSelection(const SdrMarkList& rMarkList);
     void SetSelectionDelayed();
 
-    void SetDesignMode(sal_Bool bDesign);
+    void SetDesignMode(bool bDesign);
 
     sal_Bool    GetWizardUsing() const { return m_bUseWizards; }
     void        SetWizardUsing(sal_Bool _bUseThem);

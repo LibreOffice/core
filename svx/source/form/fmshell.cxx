@@ -1450,7 +1450,7 @@ Reference< runtime::XFormController > FmFormShell::GetFormController( const Refe
 }
 
 //------------------------------------------------------------------------
-void FmFormShell::SetDesignMode( sal_Bool _bDesignMode )
+void FmFormShell::SetDesignMode( bool _bDesignMode )
 {
     if ( _bDesignMode == m_bDesignMode )
         return;

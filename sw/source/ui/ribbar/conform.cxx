@@ -101,7 +101,7 @@ void ConstFormControl::CreateDefaultObject()
         m_pSh->MakeDrawView();
 
     SdrView *pSdrView = m_pSh->GetDrawView();
-    pSdrView->SetDesignMode(sal_True);
+    pSdrView->SetDesignMode(true);
     m_pSh->BeginCreate( static_cast< sal_uInt16 >(m_pWin->GetSdrDrawMode()), FmFormInventor, aStartPos);
     m_pSh->MoveCreate(aEndPos);
     m_pSh->EndCreate(SDRCREATE_FORCEEND);

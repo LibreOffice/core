@@ -222,7 +222,7 @@ public:
     void SetGluePointEditMode(sal_Bool bOn=sal_True) { SetEditMode(bOn?SDREDITMODE_GLUEPOINTEDIT:eEditMode0); }
     sal_Bool IsGluePointEditMode() const { return eEditMode==SDREDITMODE_GLUEPOINTEDIT; }
 
-    void SetDesignMode(sal_Bool bOn=sal_True);
+    void SetDesignMode(bool bOn = true);
     sal_Bool IsDesignMode() const { return bDesignMode; }
 
     void SetFrameDragSingles(sal_Bool bOn=sal_True) { SetFrameHandles(bOn); }

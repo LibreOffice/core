@@ -1504,7 +1504,7 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
 
         sal_Bool bDesignMode = pView->IsDesignMode();
         if( !bDesignMode )
-            pView->SetDesignMode( sal_True );
+            pView->SetDesignMode( true );
 
         // #i50824#
         // method <lcl_RemoveOleObjsFromSdrModel> replaced by <lcl_ConvertSdrOle2ObjsToSdrGrafObjs>
@@ -1537,7 +1537,7 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
             pView->MoveMarkedObj( aDiff );
             ImpEndCreate();
             if( !bDesignMode )
-                pView->SetDesignMode( sal_False );
+                pView->SetDesignMode( false );
         }
     }
     EndUndo();

@@ -2537,7 +2537,7 @@ void DbGridControl::AppendNew()
         MoveToPosition(nNewRow - 1);
 }
 
-void DbGridControl::SetDesignMode(sal_Bool bMode)
+void DbGridControl::SetDesignMode(bool bMode)
 {
     if (IsDesignMode() != bMode)
     {
