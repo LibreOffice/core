@@ -362,9 +362,9 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         if ( rProp.Name.equalsAscii( "PaperOrientation" ) )
         {
             view::PaperOrientation eOrient;
-            if ( ( rProp.Value >>= eOrient ) == sal_False )
+            if ( !( rProp.Value >>= eOrient ) )
             {
-                if ( ( rProp.Value >>= lDummy ) == sal_False )
+                if ( !( rProp.Value >>= lDummy ) )
                     throw ::com::sun::star::lang::IllegalArgumentException();
                 eOrient = ( view::PaperOrientation) lDummy;
             }
@@ -379,9 +379,9 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         // PaperFormat-Property?
         else if ( rProp.Name.equalsAscii( "PaperFormat" ) )
         {
-            if ( ( rProp.Value >>= nPaperFormat ) == sal_False )
+            if ( !( rProp.Value >>= nPaperFormat ) )
             {
-                if ( ( rProp.Value >>= lDummy ) == sal_False )
+                if ( !( rProp.Value >>= lDummy ) )
                     throw ::com::sun::star::lang::IllegalArgumentException();
                 nPaperFormat = ( view::PaperFormat ) lDummy;
             }
@@ -397,7 +397,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         else if ( rProp.Name.equalsAscii( "PaperSize" ) )
         {
             awt::Size aTempSize ;
-            if ( ( rProp.Value >>= aTempSize ) == sal_False )
+            if ( !( rProp.Value >>= aTempSize ) )
             {
                 throw ::com::sun::star::lang::IllegalArgumentException();
             }
@@ -411,7 +411,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         else if ( rProp.Name.equalsAscii( "PrinterPaperTray" ) )
         {
             OUString aTmp;
-            if ( ( rProp.Value >>= aTmp ) == sal_False )
+            if ( !( rProp.Value >>= aTmp ) )
                 throw ::com::sun::star::lang::IllegalArgumentException();
             sal_uInt16 nCount = pPrinter->GetPaperBinCount();
             for (sal_uInt16 nBin=0; nBin<nCount; nBin++)
@@ -695,7 +695,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         else if ( rProp.Name.equalsAscii( "CopyCount" ) )
         {
             sal_Int32 nCopies = 0;
-            if ( ( rProp.Value >>= nCopies ) == sal_False )
+            if ( !( rProp.Value >>= nCopies ) )
                 throw ::com::sun::star::lang::IllegalArgumentException();
 
             aCheckedArgs[nProps].Name = rProp.Name;

@@ -100,7 +100,7 @@ void SAL_CALL SfxTerminateListener_Impl::queryTermination( const EventObject& ) 
 void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& aEvent ) throw(RuntimeException )
 {
     Reference< XDesktop > xDesktop( aEvent.Source, UNO_QUERY );
-    if( xDesktop.is() == sal_True )
+    if( xDesktop.is() )
         xDesktop->removeTerminateListener( this );
 
     SolarMutexGuard aGuard;

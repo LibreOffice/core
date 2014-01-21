@@ -1543,7 +1543,7 @@ bool CustomPropertiesWindow::IsLineValid( CustomPropertyLine* pLine ) const
         sal_uInt32 nTemp = nIndex;
         double fDummy = 0.0;
         bIsValid = const_cast< SvNumberFormatter& >(
-            m_aNumberFormatter ).IsNumberFormat( sValue, nIndex, fDummy ) != sal_False;
+            m_aNumberFormatter ).IsNumberFormat( sValue, nIndex, fDummy );
         if ( bIsValid && nTemp != nIndex )
             // sValue is a number but the format doesn't match the index
             bIsValid = false;

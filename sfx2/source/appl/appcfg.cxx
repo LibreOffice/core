@@ -691,7 +691,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_QUICKLAUNCHER), sal_True, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
-        ShutdownIcon::SetAutostart( ( (const SfxBoolItem*)pItem )->GetValue() != sal_False );
+        ShutdownIcon::SetAutostart( ( (const SfxBoolItem*)pItem )->GetValue() );
     }
 
     // StarBasic Enable

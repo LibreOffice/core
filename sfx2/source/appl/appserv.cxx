@@ -580,7 +580,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                                 TYPE(SfxBoolItem)));
                 bool bShow = pItem == 0
                     ? !pAppData_Impl->m_xImeStatusWindow->isShowing()
-                    : ( pItem->GetValue() == sal_True );
+                    : pItem->GetValue();
                 pAppData_Impl->m_xImeStatusWindow->show(bShow);
                 if (pItem == 0)
                     rReq.AppendItem(SfxBoolItem(SID_SHOW_IME_STATUS_WINDOW,

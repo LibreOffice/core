@@ -3235,7 +3235,7 @@ sal_Bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >&
 
 #ifdef DBG_UTIL
     // check for wrong creation of object container
-    sal_Bool bHasContainer = ( pImp->mpObjectContainer != 0 );
+    bool bHasContainer = ( pImp->mpObjectContainer != 0 );
 #endif
 
     if ( !xStorage.is() || xStorage == GetStorage() )
@@ -3384,7 +3384,7 @@ sal_Bool SfxObjectShell::SwitchPersistance( const uno::Reference< embed::XStorag
     sal_Bool bResult = sal_False;
 #ifdef DBG_UTIL
     // check for wrong creation of object container
-    sal_Bool bHasContainer = ( pImp->mpObjectContainer != 0 );
+    bool bHasContainer = ( pImp->mpObjectContainer != 0 );
 #endif
     if ( xStorage.is() )
     {
