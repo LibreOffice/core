@@ -136,6 +136,23 @@
     },
     {
       "key": {
+        "uuid": "da9df570_17d35c39",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2014-01-21T11:53:58Z",
+      "side": 1,
+      "message": "Doxygen supports function grouping: http://www.stack.nl/~dimitri/doxygen/manual/grouping.html#memgroup\n\nMaybe that\u0027s appropriate here?",
+      "revId": "fbf9d380f2e06195396d480f92a9873087e2d447",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9df570_3465be45",
         "filename": "include/vcl/svapp.hxx",
         "patchSetId": 4
@@ -165,6 +182,23 @@
       "side": 1,
       "message": "A much more clear explanation. Done :-)",
       "parentUuid": "da9df570_3465be45",
+      "revId": "fbf9d380f2e06195396d480f92a9873087e2d447",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_946caa38",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2014-01-21T11:53:58Z",
+      "side": 1,
+      "message": "This comment now belongs to the wrong function",
       "revId": "fbf9d380f2e06195396d480f92a9873087e2d447",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
