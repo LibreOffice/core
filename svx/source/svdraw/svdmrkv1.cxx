@@ -272,7 +272,7 @@ const Rectangle& SdrMarkView::GetMarkedPointsRect() const
     return aMarkedPointsRect;
 }
 
-void SdrMarkView::SetPlusHandlesAlwaysVisible(sal_Bool bOn)
+void SdrMarkView::SetPlusHandlesAlwaysVisible(bool bOn)
 { // TODO: Optimize HandlePaint!
     ForceUndirtyMrkPnt();
     if (bOn!=bPlusHdlAlways) {

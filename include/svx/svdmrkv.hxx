@@ -363,7 +363,7 @@ public:
     sal_Bool IsMarkPoints() const { return (0L != mpMarkPointsOverlay); }
 
     // Select that additional handles are displayed permanently.
-    void SetPlusHandlesAlwaysVisible(sal_Bool bOn);
+    void SetPlusHandlesAlwaysVisible(bool bOn);
     sal_Bool IsPlusHandlesAlwaysVisible() const { return bPlusHdlAlways; }
 
     // Are Handles visible during TextEdit (in double size)?
