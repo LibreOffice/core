@@ -1245,7 +1245,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                 aScriptChanges.insert(aScriptChanges.begin() + nScriptIdx,
                                       ScriptChangeInfo(nEnd, i18n::ScriptType::COMPLEX) );
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
                 // Check that ScriptChangeInfos are in increasing order of
                 // position and that we don't have "empty" changes.
                 sal_uInt8 nLastTyp = i18n::ScriptType::WEAK;
