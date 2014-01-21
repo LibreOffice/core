@@ -6016,11 +6016,11 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
 }
 
 sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
-                                       sal_Unicode nHyphenatorChar, sal_Int32& rHyphenatorPos,
+                                       sal_Unicode nHyphenChar, sal_Int32& rHyphenPos,
                                        sal_Int32 nIndex, sal_Int32 nLen,
                                        long nCharExtra ) const
 {
-    rHyphenatorPos = -1;
+    rHyphenPos = -1;
 
     SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen );
     sal_Int32 nRetVal = -1;
@@ -6046,24 +6046,24 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
         nRetVal = pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor );
 
         // calculate hyphenated break position
-        OUString aHyphenatorStr(nHyphenatorChar);
+        OUString aHyphenStr(nHyphenChar);
         sal_Int32 nTempLen = 1;
-        SalLayout* pHyphenatorLayout = ImplLayout( aHyphenatorStr, 0, nTempLen );
-        if( pHyphenatorLayout )
+        SalLayout* pHyphenLayout = ImplLayout( aHyphenStr, 0, nTempLen );
+        if( pHyphenLayout )
         {
             // calculate subpixel width of hyphenation character
-            long nHyphenatorPixelWidth = pHyphenatorLayout->GetTextWidth() * nSubPixelFactor;
-            pHyphenatorLayout->Release();
+            long nHyphenPixelWidth = pHyphenLayout->GetTextWidth() * nSubPixelFactor;
+            pHyphenLayout->Release();
 
             // calculate hyphenated break position
-            nTextPixelWidth -= nHyphenatorPixelWidth;
+            nTextPixelWidth -= nHyphenPixelWidth;
             if( nExtraPixelWidth > 0 )
                 nTextPixelWidth -= nExtraPixelWidth;
 
-            rHyphenatorPos = pSalLayout->GetTextBreak(nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor);
+            rHyphenPos = pSalLayout->GetTextBreak(nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor);
 
-            if( rHyphenatorPos > nRetVal )
-                rHyphenatorPos = nRetVal;
+            if( rHyphenPos > nRetVal )
+                rHyphenPos = nRetVal;
         }
 
         pSalLayout->Release();
