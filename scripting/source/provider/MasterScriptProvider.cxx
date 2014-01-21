@@ -203,7 +203,7 @@ throw ( Exception, RuntimeException )
     }
     m_sAargs = invokeArgs;
     // don't create pkg mgr MSP for documents, not supported
-    if ( m_bIsPkgMSP == sal_False && !m_xModel.is() )
+    if ( !m_bIsPkgMSP && !m_xModel.is() )
     {
         createPkgProvider();
     }

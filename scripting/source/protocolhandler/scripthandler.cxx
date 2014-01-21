@@ -79,8 +79,7 @@ void SAL_CALL ScriptProtocolHandler::initialize(
 
     // first argument contains a reference to the frame (may be empty or the desktop,
     // but usually it's a "real" frame)
-    if ( aArguments.getLength() &&
-         sal_False == ( aArguments[ 0 ] >>= m_xFrame ) )
+    if ( aArguments.getLength() && !( aArguments[ 0 ] >>= m_xFrame ) )
     {
         OUString temp = "ScriptProtocolHandler::initialize: could not extract reference to the frame";
         throw RuntimeException( temp, Reference< XInterface >() );

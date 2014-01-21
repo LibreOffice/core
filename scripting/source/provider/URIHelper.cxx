@@ -93,8 +93,7 @@ throw ( uno::Exception, uno::RuntimeException )
                 uno::Reference< uno::XInterface >() );
     }
 
-    if ( (args[0] >>= m_sLanguage) == sal_False ||
-         (args[1] >>= m_sLocation) == sal_False )
+    if ( !(args[0] >>= m_sLanguage) || !(args[1] >>= m_sLocation) )
     {
         throw uno::RuntimeException( OUString(
             "ScriptingFrameworkURIHelper error parsing args" ),
