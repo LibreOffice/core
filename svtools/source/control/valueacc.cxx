@@ -144,7 +144,7 @@ void ValueSetAcc::GetFocus (void)
 {
     mbIsFocused = true;
 
-    // Boradcast the state change.
+    // Broadcast the state change.
     ::com::sun::star::uno::Any aOldState, aNewState;
     aNewState <<= ::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
     FireAccessibleEvent(
@@ -158,7 +158,7 @@ void ValueSetAcc::LoseFocus (void)
 {
     mbIsFocused = false;
 
-    // Boradcast the state change.
+    // Broadcast the state change.
     ::com::sun::star::uno::Any aOldState, aNewState;
     aOldState <<= ::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
     FireAccessibleEvent(
