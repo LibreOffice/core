@@ -5810,6 +5810,8 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
                             XML_val, sColor,
                             FSEND);
                     m_pSerializer->endElementNS(XML_a, XML_solidFill);
+                    if( LineStyle_DASH == pTop->GetBorderLineStyle() ) // Line Style is Dash type
+                        m_pSerializer->singleElementNS(XML_a, XML_prstDash, XML_val, "dash", FSEND);
                     m_pSerializer->endElementNS(XML_a, XML_ln);
                 }
             }

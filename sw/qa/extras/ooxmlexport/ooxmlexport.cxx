@@ -2687,6 +2687,17 @@ DECLARE_OOXMLEXPORT_TEST(testAlignForShape,"Shape.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp:positionH/wp:align","1");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testLineStyle_DashType, "LineStyle_DashType.docx")
+{
+    /* DOCX contatining Shape with LineStyle as Dash Type should get preserved inside
+     * an XMl tag <a:prstDash> with value "dash".
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash", "val", "dash");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
