@@ -2555,6 +2555,16 @@ DECLARE_OOXMLEXPORT_TEST(testTOCFlag_u,"testTOCFlag_u.docx")
     CPPUNIT_ASSERT(contents.match(" TOC \\z \\o \"1-9\" \\u \\h"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testAlignForShape,"Shape.docx")
+{
+    //fdo73545:Shape Horizontal and vertical orientation is wrong
+    //The wp:align tag is missing after roundtrip
+     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp:positionH/wp:align","1");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
