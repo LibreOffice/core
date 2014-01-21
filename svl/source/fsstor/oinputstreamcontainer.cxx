@@ -94,7 +94,7 @@ uno::Any SAL_CALL OFSInputStreamContainer::queryInterface( const uno::Type& rTyp
                                            static_cast< io::XStream* >( this ),
                                            static_cast< io::XInputStream* >( this ) ) );
 
-    if ( aReturn.hasValue() == sal_True )
+    if ( aReturn.hasValue() )
         return aReturn ;
 
     return ::cppu::OWeakObject::queryInterface( rType ) ;

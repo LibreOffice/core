@@ -75,7 +75,7 @@ uno::Any SAL_CALL OFSStreamContainer::queryInterface( const uno::Type& rType )
                     ,   static_cast<embed::XExtendedStorageStream*> ( this )
                     ,   static_cast<lang::XComponent*> ( this ) );
 
-    if ( aReturn.hasValue() == sal_True )
+    if ( aReturn.hasValue() )
         return aReturn ;
 
     if ( m_xSeekable.is() )
@@ -84,7 +84,7 @@ uno::Any SAL_CALL OFSStreamContainer::queryInterface( const uno::Type& rType )
                 (   rType
                     ,   static_cast<io::XSeekable*> ( this ) );
 
-        if ( aReturn.hasValue() == sal_True )
+        if ( aReturn.hasValue() )
             return aReturn ;
     }
 
@@ -94,7 +94,7 @@ uno::Any SAL_CALL OFSStreamContainer::queryInterface( const uno::Type& rType )
                 (   rType
                     ,   static_cast<io::XInputStream*> ( this ) );
 
-        if ( aReturn.hasValue() == sal_True )
+        if ( aReturn.hasValue() )
             return aReturn ;
     }
     if ( m_xOutputStream.is() )
@@ -103,7 +103,7 @@ uno::Any SAL_CALL OFSStreamContainer::queryInterface( const uno::Type& rType )
                 (   rType
                     ,   static_cast<io::XOutputStream*> ( this ) );
 
-        if ( aReturn.hasValue() == sal_True )
+        if ( aReturn.hasValue() )
             return aReturn ;
     }
     if ( m_xTruncate.is() )
@@ -112,7 +112,7 @@ uno::Any SAL_CALL OFSStreamContainer::queryInterface( const uno::Type& rType )
                 (   rType
                     ,   static_cast<io::XTruncate*> ( this ) );
 
-        if ( aReturn.hasValue() == sal_True )
+        if ( aReturn.hasValue() )
             return aReturn ;
     }
     if ( m_xAsyncOutputMonitor.is() )
@@ -121,7 +121,7 @@ uno::Any SAL_CALL OFSStreamContainer::queryInterface( const uno::Type& rType )
                 (   rType
                     ,   static_cast<io::XAsyncOutputMonitor*> ( this ) );
 
-        if ( aReturn.hasValue() == sal_True )
+        if ( aReturn.hasValue() )
             return aReturn ;
     }
 

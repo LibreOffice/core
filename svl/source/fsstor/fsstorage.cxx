@@ -301,7 +301,7 @@ uno::Any SAL_CALL FSStorage::queryInterface( const uno::Type& rType )
                 ,   static_cast<lang::XComponent*> ( this )
                 ,   static_cast<beans::XPropertySet*> ( this ) );
 
-    if ( aReturn.hasValue() == sal_True )
+    if ( aReturn.hasValue() )
         return aReturn ;
 
     return OWeakObject::queryInterface( rType );
