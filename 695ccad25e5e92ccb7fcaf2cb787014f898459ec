@@ -22,6 +22,30 @@
       "revId": "695ccad25e5e92ccb7fcaf2cb787014f898459ec",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_57b404f2",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableManager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1000274
+      },
+      "writtenOn": "2014-01-21T13:11:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9df570_f7edf8f0",
+      "range": {
+        "startLine": 671,
+        "startChar": 13,
+        "endLine": 671,
+        "endChar": 24
+      },
+      "revId": "695ccad25e5e92ccb7fcaf2cb787014f898459ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
