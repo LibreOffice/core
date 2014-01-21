@@ -106,7 +106,7 @@ bool DocumentLinkManager::idleCheckLinks()
             continue;
 
         pDdeLink->TryUpdate();
-        if (pDdeLink->NeedsUpdate())        // war nix?
+        if (pDdeLink->NeedsUpdate()) // Was not successful?
             bAnyLeft = true;
     }
 
@@ -137,8 +137,8 @@ bool DocumentLinkManager::updateDdeLinks( Window* pWin )
     sfx2::LinkManager* pMgr = mpImpl->mpLinkManager.get();
     const sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
 
-    //  falls das Updaten laenger dauert, erstmal alle Werte
-    //  zuruecksetzen, damit nichts altes (falsches) stehen bleibt
+    // If the update takes longer, reset all values so that nothing
+    // old (wrong) is left behind
     bool bAny = false;
     for (size_t i = 0, n = rLinks.size(); i < n; ++i)
     {
@@ -196,7 +196,7 @@ bool DocumentLinkManager::updateDdeLink( const OUString& rAppl, const OUString& 
              OUString(pDdeLink->GetItem()) == rItem )
         {
             pDdeLink->TryUpdate();
-            bFound = true;          // koennen theoretisch mehrere sein (Mode), darum weitersuchen
+            bFound = true; // Could be multiple (Mode), so continue searching
         }
     }
 
