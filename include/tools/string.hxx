@@ -20,13 +20,10 @@
 #ifndef _STRING_HXX
 #define _STRING_HXX
 
-#include <tools/solar.h>
-
 /*******************************************************************************
  * THIS CODE IS DEPRECATED.  DO NOT USE IT IN ANY NEW CODE.
  ******************************************************************************/
 
-#define STRING_LEN         ((xub_StrLen)0xFFFF)
 #define STRING_MAXLEN      ((xub_StrLen)0xFFFF)
 
 #endif
