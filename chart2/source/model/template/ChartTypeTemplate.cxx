@@ -661,7 +661,7 @@ void ChartTypeTemplate::adaptScales(
                     Reference< chart2::XAxis > xAxis( xCooSys->getAxisByDimension( 1,nI ));
                     if( xAxis.is())
                     {
-                        sal_Bool bPercent = (getStackMode(0) == StackMode_Y_STACKED_PERCENT);
+                        bool bPercent = (getStackMode(0) == StackMode_Y_STACKED_PERCENT);
                         chart2::ScaleData aScaleData = xAxis->getScaleData();
 
                         if( bPercent != (aScaleData.AxisType==AxisType::PERCENT) )

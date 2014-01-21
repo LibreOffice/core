@@ -268,9 +268,9 @@ void DiagramHelper::setStackMode(
 
         uno::Any aNewDirection( uno::makeAny(eNewDirection) );
 
-        sal_Bool bPercent = sal_False;
+        bool bPercent = false;
         if( eStackMode == StackMode_Y_STACKED_PERCENT )
-            bPercent = sal_True;
+            bPercent = true;
 
         //iterate through all coordinate systems
         uno::Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );

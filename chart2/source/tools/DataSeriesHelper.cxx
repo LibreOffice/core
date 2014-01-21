@@ -429,7 +429,7 @@ void setStackModeAtSeries(
                 xCorrespondingCoordinateSystem->getAxisByDimension( 1, nAxisIndex ));
             if( xAxis.is())
             {
-                sal_Bool bPercent = (eStackMode == StackMode_Y_STACKED_PERCENT);
+                bool bPercent = (eStackMode == StackMode_Y_STACKED_PERCENT);
                 chart2::ScaleData aScaleData = xAxis->getScaleData();
 
                 if( bPercent != (aScaleData.AxisType==chart2::AxisType::PERCENT) )
