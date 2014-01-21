@@ -294,7 +294,7 @@ void SAL_CALL OReadMenuDocumentHandler::endElement( const OUString& aName )
             m_xReader->endDocument();
             m_xReader.clear();
             m_bMenuBarMode = sal_False;
-            if ( !aName.startsWith( ELEMENT_MENUBAR ))
+            if ( aName != ELEMENT_MENUBAR )
             {
                 OUString aErrorMessage = getErrorLineString();
                 aErrorMessage += "closing element menubar expected!";
@@ -442,7 +442,7 @@ void OReadMenuBarHandler::endElement( const OUString& aName )
             m_xReader->endDocument();
             m_xReader.clear();
             m_bMenuMode = sal_False;
-            if ( !aName.startsWith( ELEMENT_MENU ))
+            if ( aName != ELEMENT_MENU )
             {
                 OUString aErrorMessage = getErrorLineString();
                 aErrorMessage += "closing element menu expected!";
@@ -528,7 +528,7 @@ void SAL_CALL OReadMenuHandler::endElement( const OUString& aName )
             m_xReader->endDocument();
             m_xReader.clear();
             m_bMenuPopupMode = sal_False;
-            if ( !aName.startsWith( ELEMENT_MENUPOPUP ))
+            if ( aName != ELEMENT_MENUPOPUP )
             {
                 OUString aErrorMessage = getErrorLineString();
                 aErrorMessage += "closing element menupopup expected!";
@@ -732,7 +732,7 @@ void SAL_CALL OReadMenuPopupHandler::endElement( const OUString& aName )
             m_xReader->endDocument();
             m_xReader.clear();
             m_bMenuMode = sal_False;
-            if ( !aName.startsWith( ELEMENT_MENU ))
+            if ( aName != ELEMENT_MENU )
             {
                 OUString aErrorMessage = getErrorLineString();
                 aErrorMessage += "closing element menu expected!";
@@ -746,7 +746,7 @@ void SAL_CALL OReadMenuPopupHandler::endElement( const OUString& aName )
     {
         if ( m_nNextElementExpected == ELEM_CLOSE_MENUITEM )
         {
-            if ( !aName.startsWith( ELEMENT_MENUITEM ))
+            if ( aName != ELEMENT_MENUITEM )
             {
                 OUString aErrorMessage = getErrorLineString();
                 aErrorMessage += "closing element menuitem expected!";
@@ -755,7 +755,7 @@ void SAL_CALL OReadMenuPopupHandler::endElement( const OUString& aName )
         }
         else if ( m_nNextElementExpected == ELEM_CLOSE_MENUSEPARATOR )
         {
-            if ( !aName.startsWith( ELEMENT_MENUSEPARATOR ))
+            if ( aName != ELEMENT_MENUSEPARATOR )
             {
                 OUString aErrorMessage = getErrorLineString();
                 aErrorMessage += "closing element menuseparator expected!";
@@ -847,8 +847,8 @@ throw ( SAXException, RuntimeException )
             ExtractMenuParameters( aProps, aCommandURL, aLabel, aHelpURL, xSubMenu, nType, nItemBits );
             if ( xSubMenu.is() )
             {
-                if ( aCommandURL.startsWith(ADDDIRECT_CMD) ||
-                    aCommandURL.startsWith(AUTOPILOTMENU_CMD) )
+                if ( aCommandURL == ADDDIRECT_CMD ||
+                    aCommandURL == AUTOPILOTMENU_CMD )
                 {
                     WriteMenuItem( aCommandURL, aLabel, aHelpURL, nItemBits );
                     bSeparator = sal_False;
@@ -862,7 +862,7 @@ throw ( SAXException, RuntimeException )
                                             m_aAttributeType,
                                             aCommandURL );
 
-                    if ( !( aCommandURL.copy( CMD_PROTOCOL_SIZE ).startsWith(CMD_PROTOCOL)) )
+                    if ( aCommandURL.copy( CMD_PROTOCOL_SIZE ) != CMD_PROTOCOL )
                         pListMenu->AddAttribute( OUString( ATTRIBUTE_NS_LABEL ),
                                                  m_aAttributeType,
                                                  aLabel );
@@ -921,13 +921,13 @@ void OWriteMenuDocumentHandler::WriteMenuItem( const OUString& aCommandURL, cons
                              aHelpURL );
     }
 
-    if ( !aLabel.isEmpty() && !aCommandURL.copy( CMD_PROTOCOL_SIZE ).startsWith(CMD_PROTOCOL) )
+    if ( !aLabel.isEmpty() && aCommandURL.copy( CMD_PROTOCOL_SIZE ) != CMD_PROTOCOL )
     {
         pList->AddAttribute( OUString( ATTRIBUTE_NS_LABEL ),
                                 m_aAttributeType,
                                 aLabel );
     }
-    if (( nStyle > 0 ) && !( aCommandURL.copy( CMD_PROTOCOL_SIZE ).startsWith(CMD_PROTOCOL) ))
+    if (( nStyle > 0 ) && aCommandURL.copy( CMD_PROTOCOL_SIZE ) != CMD_PROTOCOL )
     {
         OUString aValue;
         MenuStyleItem* pStyle = MenuItemStyles;

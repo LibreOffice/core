@@ -226,7 +226,7 @@ UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
     m_pInitThread.reset(
         new InitUpdateCheckJobThread(
             m_xContext, aConfig,
-            !aEventName.startsWith("onFirstVisibleTask")));
+            aEventName != "onFirstVisibleTask"));
 
     return uno::Any();
 }
