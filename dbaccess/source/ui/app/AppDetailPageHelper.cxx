@@ -589,9 +589,8 @@ void OAppDetailPageHelper::createTablesPage(const Reference< XConnection>& _xCon
 
     if ( !m_pLists[E_TABLE] )
     {
-        OTableTreeListBox* pTreeView = new OTableTreeListBox(this
-                                                            ,WB_HASLINES | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT | WB_TABSTOP
-                                                            ,sal_False);
+        OTableTreeListBox* pTreeView = new OTableTreeListBox(this,
+            WB_HASLINES | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT | WB_TABSTOP);
         pTreeView->SetHelpId(HID_APP_TABLE_TREE);
         m_pLists[E_TABLE] = pTreeView;
 

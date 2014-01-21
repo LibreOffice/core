@@ -64,10 +64,10 @@ namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
 namespace DatabaseObjectContainer = ::com::sun::star::sdb::application::DatabaseObjectContainer;
 
 // OTableTreeListBox
-OTableTreeListBox::OTableTreeListBox( Window* pParent, WinBits nWinStyle, sal_Bool _bVirtualRoot )
+OTableTreeListBox::OTableTreeListBox(Window* pParent, WinBits nWinStyle)
     :OMarkableTreeListBox(pParent, nWinStyle)
-    ,m_pImageProvider( new ImageProvider )
-    ,m_bVirtualRoot(_bVirtualRoot)
+    ,m_xImageProvider( new ImageProvider )
+    ,m_bVirtualRoot(false)
     ,m_bNoEmptyFolders( false )
 {
     implSetDefaultImages();
@@ -75,15 +75,11 @@ OTableTreeListBox::OTableTreeListBox( Window* pParent, WinBits nWinStyle, sal_Bo
 
 OTableTreeListBox::OTableTreeListBox( Window* pParent, const ResId& rResId, sal_Bool _bVirtualRoot)
     :OMarkableTreeListBox(pParent, rResId)
-    ,m_pImageProvider( new ImageProvider )
+    ,m_xImageProvider( new ImageProvider )
     ,m_bVirtualRoot(_bVirtualRoot)
     ,m_bNoEmptyFolders( false )
 {
     implSetDefaultImages();
-}
-
-OTableTreeListBox::~OTableTreeListBox()
-{
 }
 
 void OTableTreeListBox::implSetDefaultImages()
@@ -122,12 +118,12 @@ void OTableTreeListBox::notifyHiContrastChanged()
                 Image aImage;
                 if ( isFolderEntry( pEntryLoop ) )
                 {
-                    aImage = m_pImageProvider->getFolderImage( DatabaseObject::TABLE );
+                    aImage = m_xImageProvider->getFolderImage( DatabaseObject::TABLE );
                 }
                 else
                 {
                     OUString sCompleteName( getQualifiedTableName( pEntryLoop ) );
-                    m_pImageProvider->getImages( sCompleteName, DatabaseObject::TABLE, aImage );
+                    m_xImageProvider->getImages( sCompleteName, DatabaseObject::TABLE, aImage );
                 }
 
                 pContextBitmapItem->SetBitmap1( aImage );
@@ -142,7 +138,7 @@ void OTableTreeListBox::notifyHiContrastChanged()
 void OTableTreeListBox::implOnNewConnection( const Reference< XConnection >& _rxConnection )
 {
     m_xConnection = _rxConnection;
-    m_pImageProvider.reset( new ImageProvider( m_xConnection  ) );
+    m_xImageProvider.reset( new ImageProvider( m_xConnection  ) );
 }
 
 void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConnection ) throw(SQLException)
@@ -469,7 +465,7 @@ SvTreeListEntry* OTableTreeListBox::implAddEntry(
         pRet = InsertEntry( sName, pParentEntry, sal_False, LIST_APPEND );
 
         Image aImage;
-        m_pImageProvider->getImages( _rTableName, DatabaseObject::TABLE, aImage );
+        m_xImageProvider->getImages( _rTableName, DatabaseObject::TABLE, aImage );
 
         SetExpandedEntryBmp( pRet, aImage );
         SetCollapsedEntryBmp( pRet, aImage );

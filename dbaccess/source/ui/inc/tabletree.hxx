@@ -20,6 +20,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_TABLETREE_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_TABLETREE_HXX
 
+#include "imageprovider.hxx"
 #include "marktree.hxx"
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -28,13 +29,10 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
-
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace dbaui
 {
-
-class ImageProvider;
 
 // OTableTreeListBox
 class OTableTreeListBox : public OMarkableTreeListBox
@@ -42,23 +40,20 @@ class OTableTreeListBox : public OMarkableTreeListBox
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                     m_xConnection;      // the connection we're working for, set in implOnNewConnection, called by UpdateTableList
-    ::std::auto_ptr< ImageProvider >
-                    m_pImageProvider;   // provider for our images
-    sal_Bool        m_bVirtualRoot; // should the first entry be visible
+    boost::scoped_ptr< ImageProvider >
+                    m_xImageProvider;   // provider for our images
+    sal_Bool        m_bVirtualRoot;     // should the first entry be visible
     bool            m_bNoEmptyFolders;  // should empty catalogs/schematas be prevented from being displayed?
 
 public:
-    OTableTreeListBox(
-        Window* pParent,
-        WinBits nWinStyle,
-        sal_Bool _bVirtualRoot );
+    OTableTreeListBox(Window* pParent, WinBits nWinStyle);
+
+    void init(bool bVirtualRoot) { m_bVirtualRoot = bVirtualRoot; }
 
     OTableTreeListBox(
         Window* pParent,
         const ResId& rResId,
         sal_Bool _bVirtualRoot );
-
-    ~OTableTreeListBox();
 
     typedef ::std::pair< OUString,sal_Bool>  TTableViewName;
     typedef ::std::vector< TTableViewName >         TNames;
