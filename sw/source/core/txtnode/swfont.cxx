@@ -1195,12 +1195,12 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const sal_Bool bGrey )
 
     SwDigitModeModifier aDigitModeModifier( rInf.GetOut(), rInf.GetFont()->GetLanguage() );
 
+    const Point aOldPos(rInf.GetPos());
     Point aPos( rInf.GetPos() );
 
     if( GetEscapement() )
         CalcEsc( rInf, aPos );
 
-    const Point &rOld = rInf.GetPos();
     rInf.SetPos( aPos );
     rInf.SetKern( CheckKerning() + rInf.GetSperren() / SPACING_PRECISION_FACTOR );
 
@@ -1300,7 +1300,7 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const sal_Bool bGrey )
         rInf.SetLen( nOldLen );
     }
 
-    rInf.SetPos( rOld );
+    rInf.SetPos(aOldPos);
 }
 
 void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
@@ -1325,13 +1325,13 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
 
     rInf.ApplyAutoColor();
 
+    const Point aOldPos(rInf.GetPos());
     Point aPos( rInf.GetPos() );
 
     if( GetEscapement() )
         CalcEsc( rInf, aPos );
 
     rInf.SetKern( CheckKerning() + rInf.GetSperren() / SPACING_PRECISION_FACTOR );
-    const Point &rOld = rInf.GetPos();
     rInf.SetPos( aPos );
 
     if( IsCapital() )
@@ -1382,7 +1382,7 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
         rInf.SetLen( nOldLen );
     }
 
-    rInf.SetPos( rOld );
+    rInf.SetPos(aOldPos);
 }
 
 sal_Int32 SwSubFont::_GetCrsrOfst( SwDrawTextInfo& rInf )

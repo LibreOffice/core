@@ -516,9 +516,9 @@ void SwSubFont::DrawStretchCapital( SwDrawTextInfo &rInf )
     if( rInf.GetLen() == COMPLETE_STRING )
         rInf.SetLen( rInf.GetText().getLength() );
 
-    const Point& rOldPos = rInf.GetPos();
+    const Point aOldPos = rInf.GetPos();
     const sal_uInt16 nCapWidth = (sal_uInt16)( GetCapitalSize( rInf ).Width() );
-    rInf.SetPos( rOldPos );
+    rInf.SetPos(aOldPos);
 
     rInf.SetDrawSpace( GetUnderline() != UNDERLINE_NONE ||
                        GetOverline()  != UNDERLINE_NONE ||

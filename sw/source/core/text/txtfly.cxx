@@ -568,7 +568,7 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
     }
 
     Point aPos( rInf.GetPos().X(), rInf.GetPos().Y() + rInf.GetAscent() );
-    const Point &rOld = rInf.GetPos();
+    const Point aOldPos(rInf.GetPos());
     rInf.SetPos( aPos );
 
     if( !bOpaque )
@@ -577,7 +577,7 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
             rInf.GetFont()->_DrawStretchText( rInf );
         else
             rInf.GetFont()->_DrawText( rInf );
-        rInf.SetPos( rOld );
+        rInf.SetPos(aOldPos);
         return sal_False;
     }
     else if( !aRegion.empty() )
@@ -595,7 +595,7 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
                 rInf.GetFont()->_DrawText( rInf );
         }
     }
-    rInf.SetPos( rOld );
+    rInf.SetPos(aOldPos);
     return sal_True;
 }
 
