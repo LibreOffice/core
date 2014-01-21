@@ -75,7 +75,6 @@ namespace pdfi
     m_eTextDirection( LrTb ),
     m_nPages(0),
     m_nNextZOrder( 1 ),
-    m_bIsWhiteSpaceInLine( false ),
     m_xStatusIndicator( xStat ),
     m_bHaveTextOnDocLevel(false)
 {
@@ -210,219 +209,64 @@ sal_Int32 PDFIProcessor::getFontId( const FontAttributes& rAttr ) const
 // line diagnose block - start
 void PDFIProcessor::processGlyphLine()
 {
-    if( m_GlyphsList.empty() )
+    if (m_GlyphsList.empty())
         return;
 
-    double fPreAvarageSpaceValue= 0.0;
-    double fAvarageDiffCharSpaceValue= 0.0;
-    double fMinPreSpaceValue= 0.0;
-    double fMaxPreSpaceValue= 0.0;
-    double fNullSpaceBreakerAvaregeSpaceValue = 0.0;
+    double spaceDetectBoundary = 0.0;
 
-    unsigned int    nSpaceCount( 0 );
-    unsigned int    nDiffSpaceCount( 0 );
-    unsigned int    nNullSpaceBreakerCount=0;
-    bool preSpaceNull(true);
-
-    for ( unsigned int i=0; i<m_GlyphsList.size()-1; i++ ) // i=1 because the first glyph doesn't have a prevGlyphSpace value
+    // Try to find space glyph and it's width
+    for (size_t i = 0; i < m_GlyphsList.size(); i++)
     {
-        if( m_GlyphsList[i].getPrevGlyphsSpace()>0.0 )
+        OUString& glyph = m_GlyphsList[i].getGlyph();
+
+        sal_Unicode ch = '\0';
+        if (!glyph.isEmpty())
+            ch = glyph[0];
+
+        if ((ch == '\x20') || (ch == '\xa0'))
         {
-           if( fMinPreSpaceValue>m_GlyphsList[i].getPrevGlyphsSpace() )
-               fMinPreSpaceValue=m_GlyphsList[i].getPrevGlyphsSpace();
-
-           if( fMaxPreSpaceValue<m_GlyphsList[i].getPrevGlyphsSpace() )
-               fMaxPreSpaceValue=m_GlyphsList[i].getPrevGlyphsSpace();
-
-           fPreAvarageSpaceValue+= m_GlyphsList[i].getPrevGlyphsSpace();
-           nSpaceCount++;
+            double spaceWidth =
+                m_GlyphsList[i].getRect().X2 -
+                m_GlyphsList[i].getRect().X1;
+            spaceDetectBoundary = spaceWidth * 0.5;
+            break;
         }
     }
 
-    if( nSpaceCount!=0 )
-     fPreAvarageSpaceValue= fPreAvarageSpaceValue/( nSpaceCount );
-
-    for ( unsigned int i=0; i<m_GlyphsList.size()-1; i++ ) // i=1 because the first glyph doesn't have a prevGlyphSpace value
+    // If space glyph is not found, use average glyph width instead
+    if (spaceDetectBoundary == 0.0)
     {
-       if ( m_GlyphsList[i].getPrevGlyphsSpace()==0.0 )
-       {
-            if (
-                 ( m_GlyphsList[i+1].getPrevGlyphsSpace()>0.0)&&
-                 ( fPreAvarageSpaceValue>m_GlyphsList[i+1].getPrevGlyphsSpace())
-               )
-            {
-              fNullSpaceBreakerAvaregeSpaceValue+=m_GlyphsList[i+1].getPrevGlyphsSpace();
-              nNullSpaceBreakerCount++;
-            }
-        }
-    }
-
-    if( ( fNullSpaceBreakerAvaregeSpaceValue!= 0.0 )&&
-        ( fNullSpaceBreakerAvaregeSpaceValue < fPreAvarageSpaceValue )
-      )
-    {
-        fPreAvarageSpaceValue = fNullSpaceBreakerAvaregeSpaceValue;
-    }
-
-    for ( unsigned int i=0; i<m_GlyphsList.size()-1; i++ ) // i=1 cose the first Glypth dont have prevGlyphSpace value
-    {
-        if  ( ( m_GlyphsList[i].getPrevGlyphsSpace()>0.0 )
-            )
+        double avgGlyphWidth = 0.0;
+        for (size_t i = 0; i < m_GlyphsList.size(); i++)
         {
-          if (
-              ( m_GlyphsList[i].getPrevGlyphsSpace()  <= fPreAvarageSpaceValue )&&
-              ( m_GlyphsList[i+1].getPrevGlyphsSpace()<= fPreAvarageSpaceValue )
-             )
-          {
-               double temp= m_GlyphsList[i].getPrevGlyphsSpace()-m_GlyphsList[i+1].getPrevGlyphsSpace();
-
-               if(temp!=0.0)
-               {
-                 if( temp< 0.0)
-                  temp= temp* -1.0;
-
-                 fAvarageDiffCharSpaceValue+=temp;
-                 nDiffSpaceCount++;
-               }
-          }
+            avgGlyphWidth +=
+                m_GlyphsList[i].getRect().X2 -
+                m_GlyphsList[i].getRect().X1;
         }
-
+        avgGlyphWidth /= m_GlyphsList.size();
+        spaceDetectBoundary = avgGlyphWidth * 0.2;
     }
 
-    if (
-         ( nNullSpaceBreakerCount>0 )
-       )
+    FrameElement* frame = m_pElFactory->createFrameElement(m_GlyphsList[0].getCurElement(),
+        getGCId(getTransformGlyphContext(m_GlyphsList[0])));
+    frame->ZOrder = m_nNextZOrder++;
+    ParagraphElement* para = m_pElFactory->createParagraphElement(frame);
+
+    for (size_t i = 0; i < m_GlyphsList.size(); i++)
     {
-       fNullSpaceBreakerAvaregeSpaceValue=fNullSpaceBreakerAvaregeSpaceValue/nNullSpaceBreakerCount;
+        double spaceSize = 0.0;
+        if (i != 0)
+            spaceSize = m_GlyphsList[i].getRect().X1 - m_GlyphsList[i - 1].getRect().X2;
+        bool prependSpace = spaceSize > spaceDetectBoundary;
+        drawCharGlyphs(m_GlyphsList[i].getGlyph(),
+                       m_GlyphsList[i].getRect(),
+                       m_GlyphsList[i].getGC(),
+                       para,
+                       frame,
+                       prependSpace);
     }
-
-    if (
-         ( nDiffSpaceCount>0 )&&(fAvarageDiffCharSpaceValue>0)
-       )
-    {
-        fAvarageDiffCharSpaceValue= fAvarageDiffCharSpaceValue/ nDiffSpaceCount;
-    }
-
-    ParagraphElement* pPara= NULL ;
-    FrameElement* pFrame= NULL ;
-
-    if(!m_GlyphsList.empty())
-    {
-        pFrame = m_pElFactory->createFrameElement( m_GlyphsList[0].getCurElement(), getGCId( getTransformGlyphContext( m_GlyphsList[0])) );
-        pFrame->ZOrder = m_nNextZOrder++;
-        pPara = m_pElFactory->createParagraphElement( pFrame );
-
-        processGlyph( 0,
-                  m_GlyphsList[0],
-                  pPara,
-                  pFrame,
-                  m_bIsWhiteSpaceInLine );
-    }
-
-
-    preSpaceNull=false;
-
-    for ( unsigned int i=1; i<m_GlyphsList.size()-1; i++ )
-    {
-        double fPrevDiffCharSpace= m_GlyphsList[i].getPrevGlyphsSpace()-m_GlyphsList[i-1].getPrevGlyphsSpace();
-        double fPostDiffCharSpace= m_GlyphsList[i].getPrevGlyphsSpace()-m_GlyphsList[i+1].getPrevGlyphsSpace();
-
-
-         if(
-             preSpaceNull && (m_GlyphsList[i].getPrevGlyphsSpace()!= 0.0)
-            )
-         {
-               preSpaceNull=false;
-              if( fNullSpaceBreakerAvaregeSpaceValue > m_GlyphsList[i].getPrevGlyphsSpace() )
-              {
-                processGlyph( 0,
-                                      m_GlyphsList[i],
-                              pPara,
-                              pFrame,
-                              m_bIsWhiteSpaceInLine );
-
-              }
-              else
-              {
-                processGlyph( 1,
-                              m_GlyphsList[i],
-                              pPara,
-                              pFrame,
-                              m_bIsWhiteSpaceInLine );
-
-              }
-
-         }
-         else
-         {
-            if (
-                ( ( m_GlyphsList[i].getPrevGlyphsSpace()<= fPreAvarageSpaceValue )&&
-                  ( fPrevDiffCharSpace<=fAvarageDiffCharSpaceValue )&&
-                  ( fPostDiffCharSpace<=fAvarageDiffCharSpaceValue )
-                ) ||
-                ( m_GlyphsList[i].getPrevGlyphsSpace() == 0.0 )
-            )
-            {
-                preSpaceNull=true;
-
-            processGlyph( 0,
-                        m_GlyphsList[i],
-                        pPara,
-                        pFrame,
-                        m_bIsWhiteSpaceInLine );
-
-            }
-            else
-            {
-                processGlyph( 1,
-                        m_GlyphsList[i],
-                        pPara,
-                        pFrame,
-                        m_bIsWhiteSpaceInLine );
-
-            }
-
-         }
-
-    }
-
-    if(m_GlyphsList.size()>1)
-     processGlyph( 0,
-                  m_GlyphsList[m_GlyphsList.size()-1],
-                  pPara,
-                  pFrame,
-                  m_bIsWhiteSpaceInLine );
 
     m_GlyphsList.clear();
-}
-
-void PDFIProcessor::processGlyph( double       fPreAvarageSpaceValue,
-                                  CharGlyph&   aGlyph,
-                                  ParagraphElement* pPara,
-                                  FrameElement* pFrame,
-                                  bool         bIsWhiteSpaceInLine
-                                      )
-{
-    if( !bIsWhiteSpaceInLine )
-    {
-        bool flag=( 0 < fPreAvarageSpaceValue );
-
-        drawCharGlyphs(  aGlyph.getGlyph(),
-                         aGlyph.getRect(),
-                         aGlyph.getGC(),
-                         pPara,
-                         pFrame,
-                         flag);
-    }
-    else
-    {
-        drawCharGlyphs( aGlyph.getGlyph(),
-                        aGlyph.getRect(),
-                        aGlyph.getGC(),
-                        pPara,
-                        pFrame,
-                        false );
-    }
 }
 
 void PDFIProcessor::drawGlyphLine( const OUString&             rGlyphs,
@@ -440,9 +284,7 @@ void PDFIProcessor::drawGlyphLine( const OUString&             rGlyphs,
         processGlyphLine();
     }
 
-    CharGlyph aGlyph(fXPrevTextPosition, fYPrevTextPosition, fPrevTextHeight, fPrevTextWidth,
-               m_pCurElement, getCurrentContext(), rFontMatrix, rRect, rGlyphs);
-
+    CharGlyph aGlyph(m_pCurElement, getCurrentContext(), rFontMatrix, rRect, rGlyphs);
 
     getGCId(getCurrentContext());
 
@@ -452,13 +294,6 @@ void PDFIProcessor::drawGlyphLine( const OUString&             rGlyphs,
     fXPrevTextPosition  = rRect.X2;
     fPrevTextHeight     = rRect.Y2-rRect.Y1;
     fPrevTextWidth      = rRect.X2-rRect.X1;
-
-    if( !m_bIsWhiteSpaceInLine )
-    {
-        static OUString tempWhiteSpaceStr( 0x20 );
-        static OUString tempWhiteSpaceNonBreakingStr( 0xa0 );
-        m_bIsWhiteSpaceInLine=(rGlyphs.equals( tempWhiteSpaceStr ) || rGlyphs.equals( tempWhiteSpaceNonBreakingStr ));
-    }
 }
 
 GraphicsContext& PDFIProcessor::getTransformGlyphContext( CharGlyph& rGlyph )
