@@ -237,7 +237,7 @@ SvtMenuOptions_Impl::SvtMenuOptions_Impl()
     {
         // Safe impossible cases.
         // Check any for valid value.
-        DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False), "SvtMenuOptions_Impl::SvtMenuOptions_Impl()\nInvalid property value for property detected!\n" );
+        DBG_ASSERT( seqValues[nProperty].hasValue(), "SvtMenuOptions_Impl::SvtMenuOptions_Impl()\nInvalid property value for property detected!\n" );
 
         if (!seqValues[nProperty].hasValue())
             continue;

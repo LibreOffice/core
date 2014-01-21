@@ -59,7 +59,7 @@ bool XWindowItem::operator == ( const SfxPoolItem & rAttr ) const
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
     const XWindowItem * pItem = dynamic_cast< const XWindowItem * >(&rAttr);
-    return pItem ? m_xWin == pItem->m_xWin : 0;
+    return pItem && m_xWin == pItem->m_xWin;
 }
 
 

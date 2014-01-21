@@ -339,7 +339,7 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
     sal_Int32 nPropertyCount = seqValues.getLength();
     for(sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
-        if (seqValues[nProperty].hasValue()==sal_False)
+        if (!seqValues[nProperty].hasValue())
             continue;
 
         switch( nProperty )

@@ -133,7 +133,7 @@ SvtToolPanelOptions_Impl::SvtToolPanelOptions_Impl()
     // Copy values from list in right order to our internal member.
     for( sal_Int32 nProperty=0; nProperty<seqValues.getLength(); ++nProperty )
     {
-        if (seqValues[nProperty].hasValue()==sal_False)
+        if (!seqValues[nProperty].hasValue())
             continue;
         switch( nProperty )
         {
@@ -205,7 +205,7 @@ void SvtToolPanelOptions_Impl::Load( const Sequence< OUString >& rPropertyNames 
     // Copy values from list in right order to our internal member.
     for( sal_Int32 nProperty=0; nProperty<seqValues.getLength(); ++nProperty )
     {
-        if (seqValues[nProperty].hasValue()==sal_False)
+        if (!seqValues[nProperty].hasValue())
             continue;
         switch( lcl_MapPropertyName(rPropertyNames[nProperty], aInternalPropertyNames) )
         {
