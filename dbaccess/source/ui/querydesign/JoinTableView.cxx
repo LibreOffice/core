@@ -1462,7 +1462,7 @@ long OJoinTableView::PreNotify(NotifyEvent& rNEvt)
                                 // no conn for any reason -> select the next or previous tab win
                                 if(bForward)
                                 {
-                                    if ((aIter->second == m_aTableMap.rbegin()->second))
+                                    if( aIter->second == m_aTableMap.rbegin()->second)
                                         pNextWin = m_aTableMap.begin()->second;
                                     else
                                     {
