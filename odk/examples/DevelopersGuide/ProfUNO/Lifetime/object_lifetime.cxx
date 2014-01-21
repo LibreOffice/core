@@ -62,7 +62,7 @@ void simple_object_creation_and_destruction()
 }
 
 
-int main( char * argv[] )
+int main()
 {
     simple_object_creation_and_destruction();
     return 0;
