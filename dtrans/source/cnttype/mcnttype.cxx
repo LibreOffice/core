@@ -170,7 +170,7 @@ void SAL_CALL CMimeContentType::acceptSym( const OUString& pSymTlb )
 
 void SAL_CALL CMimeContentType::skipSpaces( void )
 {
-    while (m_nxtSym.startsWith(SPACE))
+    while (m_nxtSym == SPACE)
         getSym( );
 }
 
@@ -353,8 +353,8 @@ OUString SAL_CALL CMimeContentType::quotedPValue( )
     while ( !m_nxtSym.isEmpty( ) )
     {
         if ( bAfterQuoteSign && (
-            (m_nxtSym.startsWith(SPACE)) ||
-            (m_nxtSym.startsWith(SEMICOLON)))
+            (m_nxtSym == SPACE) ||
+            (m_nxtSym == SEMICOLON))
            )
         {
             break;
