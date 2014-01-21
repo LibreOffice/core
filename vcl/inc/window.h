@@ -320,7 +320,7 @@ public:
     sal_Int32           mnMarginRight;
     sal_Int32           mnMarginTop;
     sal_Int32           mnMarginBottom;
-    sal_uInt8           mbFrame:1,
+    bool                mbFrame:1,
                         mbBorderWin:1,
                         mbOverlapWin:1,
                         mbSysWin:1,

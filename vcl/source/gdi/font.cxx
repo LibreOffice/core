@@ -996,7 +996,7 @@ LanguageType Font::GetCJKContextLanguage() const { return mpImplFont->maCJKLangu
 
 short Font::GetOrientation() const { return mpImplFont->mnOrientation; }
 
-sal_Bool Font::IsVertical() const { return mpImplFont->mbVertical; }
+bool Font::IsVertical() const { return mpImplFont->mbVertical; }
 
 FontKerning Font::GetKerning() const { return mpImplFont->mnKerning; }
 

@@ -73,7 +73,7 @@ GlyphSet::GetFontType ()
     return meBaseType;
 }
 
-sal_Bool
+bool
 GlyphSet::IsVertical ()
 {
     return mbVertical;

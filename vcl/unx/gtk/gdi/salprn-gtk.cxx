@@ -1133,7 +1133,7 @@ GtkPrintDialog::impl_readFromSettings()
         m_pWrapper->print_settings_set_n_copies(pSettings, sal::static_int_cast<gint>(nCopyCount));
     }
 
-    const gboolean bOldCollate(m_pWrapper->print_settings_get_collate(pSettings));
+    const bool bOldCollate(m_pWrapper->print_settings_get_collate(pSettings));
     const bool bCollate(aCollate.equalsIgnoreAsciiCase("true"));
     if (bOldCollate != bCollate)
     {

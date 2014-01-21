@@ -6192,7 +6192,7 @@ void Window::SetParent( Window* pNewParent )
 
 // -----------------------------------------------------------------------
 
-void Window::Show( sal_Bool bVisible, sal_uInt16 nFlags )
+void Window::Show( bool bVisible, sal_uInt16 nFlags )
 {
 
     if ( mpWindowImpl->mbVisible == bVisible )
@@ -6201,7 +6201,7 @@ void Window::Show( sal_Bool bVisible, sal_uInt16 nFlags )
     ImplDelData aDogTag( this );
 
     sal_Bool bRealVisibilityChanged = sal_False;
-    mpWindowImpl->mbVisible = (bVisible != 0);
+    mpWindowImpl->mbVisible = bVisible;
 
     if ( !bVisible )
     {
@@ -6561,7 +6561,7 @@ bool Window::IsCallHandlersOnInputDisabled() const
 
 // -----------------------------------------------------------------------
 
-void Window::EnableInput( sal_Bool bEnable, sal_Bool bChild )
+void Window::EnableInput( bool bEnable, sal_Bool bChild )
 {
 
     sal_Bool bNotify = (bEnable != mpWindowImpl->mbInputDisabled);
@@ -6626,7 +6626,7 @@ void Window::EnableInput( sal_Bool bEnable, sal_Bool bChild )
 
 // -----------------------------------------------------------------------
 
-void Window::EnableInput( sal_Bool bEnable, sal_Bool bChild, sal_Bool bSysWin,
+void Window::EnableInput( bool bEnable, sal_Bool bChild, sal_Bool bSysWin,
                           const Window* pExcludeWindow )
 {
 
@@ -7604,7 +7604,7 @@ void Window::SetPointer( const Pointer& rPointer )
 
 // -----------------------------------------------------------------------
 
-void Window::EnableChildPointerOverwrite( sal_Bool bOverwrite )
+void Window::EnableChildPointerOverwrite( bool bOverwrite )
 {
 
     if ( mpWindowImpl->mbChildPtrOverwrite == bOverwrite )

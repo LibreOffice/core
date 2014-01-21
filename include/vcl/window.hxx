@@ -720,8 +720,8 @@ public:
     // return the dialog we are contained in or NULL if un-contained
     Dialog*             GetParentDialog() const;
 
-    void                Show( sal_Bool bVisible = sal_True, sal_uInt16 nFlags = 0 );
-    void                Hide() { Show( sal_False ); }
+    void                Show( bool bVisible = true, sal_uInt16 nFlags = 0 );
+    void                Hide() { Show( false ); }
     sal_Bool                IsVisible() const;
     sal_Bool                IsReallyVisible() const;
     sal_Bool                IsReallyShown() const;
@@ -731,8 +731,8 @@ public:
     void                Disable( bool bChild = true ) { Enable( false, bChild ); }
     sal_Bool                IsEnabled() const;
 
-    void                EnableInput( sal_Bool bEnable = sal_True, sal_Bool bChild = sal_True );
-    void                EnableInput( sal_Bool bEnable, sal_Bool bChild, sal_Bool bSysWin,
+    void                EnableInput( bool bEnable = true, sal_Bool bChild = sal_True );
+    void                EnableInput( bool bEnable, sal_Bool bChild, sal_Bool bSysWin,
                                      const Window* pExcludeWindow = NULL );
     sal_Bool                IsInputEnabled() const;
 
@@ -890,7 +890,7 @@ public:
 
     void                SetPointer( const Pointer& rPointer );
     const Pointer&      GetPointer() const;
-    void                EnableChildPointerOverwrite( sal_Bool bOverwrite = sal_True );
+    void                EnableChildPointerOverwrite( bool bOverwrite );
     void                SetPointerPosPixel( const Point& rPos );
     Point               GetPointerPosPixel();
     Point               GetLastPointerPosPixel();

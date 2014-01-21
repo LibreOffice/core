@@ -3239,7 +3239,7 @@ void CheckBox::ImplDrawCheckBoxState()
 {
     bool    bNativeOK = sal_True;
 
-    if ( (bNativeOK=IsNativeControlSupported(CTRL_CHECKBOX, PART_ENTIRE_CONTROL)) == sal_True )
+    if ( (bNativeOK=IsNativeControlSupported(CTRL_CHECKBOX, PART_ENTIRE_CONTROL)) )
     {
         ImplControlValue    aControlValue( meState == STATE_CHECK ? BUTTONVALUE_ON : BUTTONVALUE_OFF );
         Rectangle           aCtrlRegion( maStateRect );
@@ -3262,7 +3262,7 @@ void CheckBox::ImplDrawCheckBoxState()
                                  aControlValue, OUString() );
     }
 
-    if ( bNativeOK == sal_False )
+    if ( !bNativeOK )
     {
         sal_uInt16 nStyle = ImplGetButtonState();
         if ( !IsEnabled() )

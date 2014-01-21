@@ -75,7 +75,7 @@ init_from_window( AtkObject *accessible, Window *pWindow )
             Window *pParent = pWindow->GetParent();
             if( pParent ) {
                 type = pParent->GetType();
-                parentIsMenuFloatingWindow = ( TRUE == pParent->IsMenuFloatingWindow() );
+                parentIsMenuFloatingWindow = pParent->IsMenuFloatingWindow();
             }
 
             if( (WINDOW_LISTBOX != type) && (WINDOW_COMBOBOX != type) &&

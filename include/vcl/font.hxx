@@ -94,7 +94,7 @@ public:
     void                SetOrientation( short nLineOrientation );
     short               GetOrientation() const;
     void                SetVertical( sal_Bool bVertical );
-    sal_Bool            IsVertical() const;
+    bool                IsVertical() const;
     void                SetKerning( FontKerning nKerning );
     FontKerning         GetKerning() const;
     sal_Bool            IsKerning() const;

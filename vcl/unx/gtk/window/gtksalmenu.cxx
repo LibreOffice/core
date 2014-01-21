@@ -679,7 +679,7 @@ void GtkSalMenu::DispatchCommand( gint itemId, const gchar *aCommand )
 {
     SolarMutexGuard aGuard;
     // Only the menubar is allowed to dispatch commands.
-    if ( mbMenuBar != TRUE )
+    if ( !mbMenuBar )
         return;
 
     GtkSalMenu* pSalSubMenu = GetMenuForItemCommand( (gchar*) aCommand, FALSE );
@@ -705,7 +705,7 @@ void GtkSalMenu::ActivateAllSubmenus(MenuBar* pMenuBar)
 
 void GtkSalMenu::Activate()
 {
-    if ( mbMenuBar != TRUE )
+    if ( !mbMenuBar )
         return;
     ActivateAllSubmenus(static_cast<MenuBar*>(mpVCLMenu));
 }

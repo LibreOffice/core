@@ -102,7 +102,7 @@ public:
     static OString
     GetGlyphSetEncodingName (rtl_TextEncoding nEnc,
                              const OString &rFontName);
-    sal_Bool        IsVertical ();
+    bool            IsVertical ();
 
     void            DrawText (PrinterGfx &rGfx, const Point& rPoint,
                               const sal_Unicode* pStr, sal_Int16 nLen,

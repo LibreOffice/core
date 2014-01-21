@@ -1162,7 +1162,7 @@ void PPDParser::parse( ::std::list< OString >& rLines )
             m_pTranslator->insertValue( aUniKey, aOption, aValue, aValueTranslation, aTransLocale );
 
         // eventually update query and remove from option list
-        if( bQuery && pKey->m_bQueryValue == sal_False )
+        if( bQuery && !pKey->m_bQueryValue )
         {
             pKey->m_aQueryValue = *pValue;
             pKey->m_bQueryValue = true;
