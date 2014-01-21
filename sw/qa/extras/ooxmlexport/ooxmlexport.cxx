@@ -2555,6 +2555,18 @@ DECLARE_OOXMLEXPORT_TEST(testTOCFlag_u,"testTOCFlag_u.docx")
     CPPUNIT_ASSERT(contents.match(" TOC \\z \\o \"1-9\" \\u \\h"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testLineStyle_DashType, "LineStyle_DashType.docx")
+{
+    /* DOCX contatining Shape with LineStyle as Dash Type should get preserved inside
+     * an XMl tag <a:prstDash> with value "dash".
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash",
+                "val", "dash");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
