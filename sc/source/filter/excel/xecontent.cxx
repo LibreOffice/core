@@ -1483,7 +1483,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
     {
         // prompt box - empty string represented by single NUL character
         OUString aTitle, aText;
-        bool bShowPrompt = (pValData->GetInput( aTitle, aText ) == sal_True);
+        bool bShowPrompt = pValData->GetInput( aTitle, aText );
         if( !aTitle.isEmpty() )
             maPromptTitle.Assign( aTitle );
         else
@@ -1495,7 +1495,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
 
         // error box - empty string represented by single NUL character
         ScValidErrorStyle eScErrorStyle;
-        bool bShowError = (pValData->GetErrMsg( aTitle, aText, eScErrorStyle ) == sal_True);
+        bool bShowError = pValData->GetErrMsg( aTitle, aText, eScErrorStyle );
         if( !aTitle.isEmpty() )
             maErrorTitle.Assign( aTitle );
         else

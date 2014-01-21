@@ -319,7 +319,7 @@ void ScFunctionDockWin::SetSize()
 
 void ScFunctionDockWin::SetLeftRightSize()
 {
-    if(bSizeFlag==false)
+    if(!bSizeFlag)
     {
         bSizeFlag=sal_True;
 
@@ -366,7 +366,7 @@ void ScFunctionDockWin::SetLeftRightSize()
 
 void ScFunctionDockWin::SetTopBottonSize()
 {
-    if(bSizeFlag==false)
+    if(!bSizeFlag)
     {
         bSizeFlag=sal_True;
         Size aDiffSize=GetSizePixel();

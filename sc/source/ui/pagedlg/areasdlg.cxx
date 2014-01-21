@@ -699,7 +699,7 @@ static bool lcl_CheckOne_OOO( const OUString& rStr, bool bIsRow, SCCOLROW& rVal 
             {
                 sal_Int32 n = aStr.toInt32();
 
-                if ( ( bStrOk = (n > 0) && ( n <= MAXROWCOUNT ) ) != false )
+                if ( ( bStrOk = (n > 0) && ( n <= MAXROWCOUNT ) ) )
                     nNum = static_cast<SCCOLROW>(n - 1);
             }
         }

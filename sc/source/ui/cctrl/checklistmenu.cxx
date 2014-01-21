@@ -1474,7 +1474,7 @@ void ScCheckListBox::KeyInput( const KeyEvent& rKEvt )
 
         if ( pEntry )
         {
-            sal_Bool bCheck = ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED );
+            bool bCheck = ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED );
             CheckEntry( pEntry, !bCheck );
             if ( bCheck != ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED ) )
                 CheckButtonHdl();

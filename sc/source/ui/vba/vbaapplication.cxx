@@ -423,7 +423,7 @@ ScVbaApplication::setStatusBar( const uno::Any& _statusbar ) throw (uno::Runtime
     }
     else if( _statusbar >>= bDefault )
     {
-        if( bDefault == false )
+        if( !bDefault )
         {
             xStatusIndicator->end();
             setDisplayStatusBar( sal_True );

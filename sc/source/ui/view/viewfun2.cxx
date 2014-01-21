@@ -481,7 +481,7 @@ sal_Bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
                 if ( bRow )
                 {
                     nEndRow = static_cast< SCROW >( nExtend );
-                    if ( ( bContinue = lcl_FindNextSumEntryInColumn( pDoc, nCol, nEndRow /*inout*/, nTab, nExtend /*out*/, 0 ) ) == true )
+                    if ( ( bContinue = lcl_FindNextSumEntryInColumn( pDoc, nCol, nEndRow /*inout*/, nTab, nExtend /*out*/, 0 ) ) )
                     {
                         nStartRow = nEndRow;
                     }
@@ -489,7 +489,7 @@ sal_Bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
                 else
                 {
                     nEndCol = static_cast< SCCOL >( nExtend );
-                    if ( ( bContinue = lcl_FindNextSumEntryInRow( pDoc, nEndCol /*inout*/, nRow, nTab, nExtend /*out*/, 0 ) ) == true )
+                    if ( ( bContinue = lcl_FindNextSumEntryInRow( pDoc, nEndCol /*inout*/, nRow, nTab, nExtend /*out*/, 0 ) ) )
                     {
                         nStartCol = nEndCol;
                     }

@@ -525,7 +525,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 const SfxPoolItem* pItem;
                 if ( pReqArgs && pReqArgs->GetItemState(nSlot, sal_True, &pItem) == SFX_ITEM_SET )
                 {
-                    sal_Bool bItemValue = ((const SfxBoolItem*)pItem)->GetValue();
+                    bool bItemValue = ((const SfxBoolItem*)pItem)->GetValue();
                     bWantPageBreak = (nSlot == FID_PAGEBREAKMODE) == bItemValue;
                 }
 
@@ -977,7 +977,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     const SfxPoolItem* pItem;
                     if( pReqArgs->HasItem( FID_PROTECT_DOC, &pItem ) &&
-                        ((const SfxBoolItem*)pItem)->GetValue() == static_cast<sal_Bool>(pDoc->IsDocProtected()) )
+                        ((const SfxBoolItem*)pItem)->GetValue() == pDoc->IsDocProtected() )
                     {
                         rReq.Ignore();
                         break;

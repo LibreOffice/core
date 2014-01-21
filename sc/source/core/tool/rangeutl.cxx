@@ -356,7 +356,7 @@ sal_Int32 ScRangeStringConverter::IndexOf(
 {
     sal_Int32       nLength     = rString.getLength();
     sal_Int32       nIndex      = nOffset;
-    sal_Bool        bQuoted     = false;
+    bool            bQuoted     = false;
     sal_Bool        bExitLoop   = false;
 
     while( !bExitLoop && (nIndex >= 0 && nIndex < nLength) )

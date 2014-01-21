@@ -346,7 +346,7 @@ bool ScValidationData::DoMacro( const ScAddress& rPos, const OUString& rInput,
             pDocument->SetInLinkUpdate( false );
 
         //  Eingabe abbrechen, wenn Basic-Makro sal_False zurueckgibt
-        if ( eRet == ERRCODE_NONE && refRes->GetType() == SbxBOOL && refRes->GetBool() == false )
+        if ( eRet == ERRCODE_NONE && refRes->GetType() == SbxBOOL && !refRes->GetBool() )
             bRet = true;
         bDone = true;
     }

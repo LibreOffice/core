@@ -674,7 +674,7 @@ void SAL_CALL ScChartObj::setHasColumnHeaders( sal_Bool bHasColumnHeaders )
     ScRangeListRef xRanges = new ScRangeList;
     bool bOldColHeaders, bOldRowHeaders;
     GetData_Impl( xRanges, bOldColHeaders, bOldRowHeaders );
-    if ( bOldColHeaders != (bHasColumnHeaders != false) )
+    if ( bOldColHeaders != bool(bHasColumnHeaders) )
         Update_Impl( xRanges, bHasColumnHeaders, bOldRowHeaders );
 }
 
@@ -694,7 +694,7 @@ void SAL_CALL ScChartObj::setHasRowHeaders( sal_Bool bHasRowHeaders )
     ScRangeListRef xRanges = new ScRangeList;
     bool bOldColHeaders, bOldRowHeaders;
     GetData_Impl( xRanges, bOldColHeaders, bOldRowHeaders );
-    if ( bOldRowHeaders != (bHasRowHeaders != false) )
+    if ( bOldRowHeaders != bool(bHasRowHeaders) )
         Update_Impl( xRanges, bOldColHeaders, bHasRowHeaders );
 }
 

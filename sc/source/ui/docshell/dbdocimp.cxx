@@ -316,7 +316,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                     //  skip rows that are not selected
                     if ( !bDoSelection )
                     {
-                        if ( (bEnd = !xRowSet->next()) == false )
+                        if ( !(bEnd = !xRowSet->next()) )
                             ++nRowsRead;
                     }
                     else
