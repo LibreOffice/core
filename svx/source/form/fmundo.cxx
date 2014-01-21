@@ -179,7 +179,7 @@ FmXUndoEnvironment::FmXUndoEnvironment(FmFormModel& _rModel)
                    ,m_pPropertySetCache( NULL )
                    ,m_pScriptingEnv( ::svxform::createDefaultFormScriptingEnvironment( _rModel ) )
                    ,m_Locks( 0 )
-                   ,bReadOnly( sal_False )
+                   ,bReadOnly( false )
                    ,m_bDisposed( false )
 {
     DBG_CTOR(FmXUndoEnvironment,NULL);

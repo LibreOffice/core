@@ -79,8 +79,8 @@ class SVX_DLLPUBLIC FmFormShell : public SfxShell
     SfxViewShell*   m_pParentShell;
 
     sal_uInt16  m_nLastSlot;
-    sal_Bool    m_bDesignMode : 1;
-    sal_Bool    m_bHasForms : 1;    // flag storing if the forms on a page exist,
+    bool        m_bDesignMode : 1;
+    bool        m_bHasForms : 1;    // flag storing if the forms on a page exist,
                                         // only for the DesignMode, see UIFeatureChanged!
 
     // the marks of a FormView have changed...

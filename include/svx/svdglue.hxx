@@ -55,18 +55,18 @@ class SdrObject;
 
 class SVX_DLLPUBLIC SdrGluePoint {
     // Bezugspunkt ist SdrObject::GetSnapRect().Center()
-    // bNoPercent=FALSE: Position ist -5000..5000 (1/100)% bzw. 0..10000 (je nach Align)
-    // bNoPercent=sal_True : Position ist in log Einh, rel zum Bezugspunkt
+    // bNoPercent=false: Position ist -5000..5000 (1/100)% bzw. 0..10000 (je nach Align)
+    // bNoPercent=true : Position ist in log Einh, rel zum Bezugspunkt
     Point    aPos;
     sal_uInt16   nEscDir;
     sal_uInt16   nId;
     sal_uInt16   nAlign;
-    sal_uInt8 bNoPercent:1;
-    sal_uInt8 bReallyAbsolute:1; // Temporaer zu setzen fuer Transformationen am Bezugsobjekt
-    sal_uInt8 bUserDefined:1; // #i38892#
+    bool bNoPercent:1;
+    bool bReallyAbsolute:1; // Temporaer zu setzen fuer Transformationen am Bezugsobjekt
+    bool bUserDefined:1; // #i38892#
 public:
-    SdrGluePoint(): nEscDir(SDRESC_SMART),nId(0),nAlign(0) { bNoPercent=sal_False; bReallyAbsolute=sal_False; bUserDefined=sal_True; }
-    SdrGluePoint(const Point& rNewPos, bool bNewPercent= sal_True, sal_uInt16 nNewAlign=0): aPos(rNewPos),nEscDir(SDRESC_SMART),nId(0),nAlign(nNewAlign) { bNoPercent=!bNewPercent; bReallyAbsolute = sal_False; bUserDefined = sal_True; }
+    SdrGluePoint(): nEscDir(SDRESC_SMART),nId(0),nAlign(0),bNoPercent(false),bReallyAbsolute(false),bUserDefined(true) {}
+    SdrGluePoint(const Point& rNewPos, bool bNewPercent=true, sal_uInt16 nNewAlign=0): aPos(rNewPos),nEscDir(SDRESC_SMART),nId(0),nAlign(nNewAlign),bNoPercent(!bNewPercent),bReallyAbsolute(false),bUserDefined(true) {}
     bool operator==(const SdrGluePoint& rCmpGP) const   { return aPos==rCmpGP.aPos && nEscDir==rCmpGP.nEscDir && nId==rCmpGP.nId && nAlign==rCmpGP.nAlign && bNoPercent==rCmpGP.bNoPercent && bReallyAbsolute==rCmpGP.bReallyAbsolute && bUserDefined==rCmpGP.bUserDefined; }
     bool operator!=(const SdrGluePoint& rCmpGP) const   { return !operator==(rCmpGP); }
     const Point& GetPos() const                             { return aPos; }
@@ -75,15 +75,15 @@ public:
     void         SetEscDir(sal_uInt16 nNewEsc)                  { nEscDir=nNewEsc; }
     sal_uInt16       GetId() const                              { return nId; }
     void         SetId(sal_uInt16 nNewId)                       { nId=nNewId; }
-    bool         IsPercent() const                          { return bNoPercent ? false : true; }
+    bool         IsPercent() const                          { return !bNoPercent; }
     void         SetPercent(bool bOn)                   { bNoPercent  = !bOn; }
     // Temporaer zu setzen fuer Transformationen am Bezugsobjekt
-    bool         IsReallyAbsolute() const                   { return bReallyAbsolute ? true : false; }
+    bool         IsReallyAbsolute() const                   { return bReallyAbsolute; }
     void         SetReallyAbsolute(bool bOn, const SdrObject& rObj);
 
     // #i38892#
-    bool         IsUserDefined() const                      { return bUserDefined ? true : false; }
-    void         SetUserDefined(bool bNew)              { bUserDefined = bNew ? true : false; }
+    bool         IsUserDefined() const                      { return bUserDefined; }
+    void         SetUserDefined(bool bNew)              { bUserDefined = bNew; }
 
     sal_uInt16       GetAlign() const                           { return nAlign; }
     void         SetAlign(sal_uInt16 nAlg)                      { nAlign=nAlg; }

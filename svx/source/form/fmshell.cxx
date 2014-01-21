@@ -672,7 +672,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_DESIGN_MODE:
         {
             SFX_REQUEST_ARG(rReq, pDesignItem, SfxBoolItem, nSlot, sal_False);
-            sal_Bool bDesignMode = pDesignItem ? pDesignItem->GetValue() : !m_bDesignMode;
+            bool bDesignMode = pDesignItem ? pDesignItem->GetValue() : !m_bDesignMode;
             SetDesignMode( bDesignMode );
             if ( m_bDesignMode == bDesignMode )
                 rReq.Done();
@@ -1229,7 +1229,7 @@ void FmFormShell::SetView( FmFormView* _pView )
 void FmFormShell::DetermineForms(sal_Bool bInvalidate)
 {
     // Existieren Formulare auf der aktuellen Page
-    sal_Bool bForms = GetImpl()->hasForms();
+    bool bForms = GetImpl()->hasForms();
     if (bForms != m_bHasForms)
     {
         m_bHasForms = bForms;

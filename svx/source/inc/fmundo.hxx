@@ -143,7 +143,7 @@ class SVX_DLLPRIVATE FmXUndoEnvironment
     ::svxform::PFormScriptingEnvironment    m_pScriptingEnv;
     oslInterlockedCount                     m_Locks;
     ::osl::Mutex                            m_aMutex;
-    sal_Bool                                bReadOnly;
+    bool                                    bReadOnly;
     bool                                    m_bDisposed;
 
 public:

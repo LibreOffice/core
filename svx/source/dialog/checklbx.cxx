@@ -214,7 +214,7 @@ void SvxCheckListBox::MouseButtonDown( const MouseEvent& rMEvt )
 
         if ( pEntry )
         {
-            sal_Bool bCheck = ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED );
+            bool bCheck = ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED );
             SvLBoxItem* pItem = GetItem( pEntry, aPnt.X() );
 
             if (pItem && pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
@@ -255,7 +255,7 @@ void SvxCheckListBox::KeyInput( const KeyEvent& rKEvt )
 
         if ( pEntry )
         {
-            sal_Bool bCheck = ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED );
+            bool bCheck = ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED );
             ToggleCheckButton( pEntry );
             if ( bCheck != ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED ) )
                 CheckButtonHdl();
