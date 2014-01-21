@@ -81,8 +81,13 @@ endif
 
 # Targets
 .PHONY: ALL
+ifeq "$(OS)" "MACOSX"
+ALL :
+	@printf 'This example does not work on Mac OS X\n'
+else
 ALL : $(SUBDIR) \
 	$(EXAMPLE_NAME)
+endif
 
 include $(SETTINGS)/stdtarget.mk
 
