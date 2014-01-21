@@ -1549,7 +1549,14 @@ sub CreatePcp ($$$$$$%)
 
     # Create filenames.
     my $pcp_filename = File::Spec->catfile($msp_path, "openoffice.pcp");
-    my $msp_filename = File::Spec->catfile($msp_path, "openoffice.msp");
+    # Create basename to include product name and source and target version.
+    # Hard code platform because that is the only platform supported at the moment.
+    my $msp_basename = sprintf("%s_%s-%s_Win_x86_patch_%s.msp",
+        $context->{'product-name'},
+        $source_msi->{'version'},
+        $target_msi->{'version'},
+        $context->{'language'});
+    my $msp_filename = File::Spec->catfile($msp_path, $msp_basename);
 
     # Setup msp path and filename.
     unlink($pcp_filename) if -f $pcp_filename;
