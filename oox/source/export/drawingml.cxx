@@ -1722,7 +1722,7 @@ void DrawingML::WriteShapeStyle( Reference< XPropertySet > xPropSet )
     if( aFillRefProperties.getLength() > 0 )
     {
         OUString sSchemeClr;
-        sal_uInt32 nIdx;
+        sal_uInt32 nIdx = 0;
         for( sal_Int32 i=0; i < aFillRefProperties.getLength(); ++i)
             if( aFillRefProperties[i].Name == "SchemeClr" )
                 aFillRefProperties[i].Value >>= sSchemeClr;
