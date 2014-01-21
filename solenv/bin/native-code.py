@@ -56,6 +56,9 @@ core_constructor_list = [
     "com_sun_star_comp_framework_Frame_get_implementation",
     "com_sun_star_comp_framework_LayoutManager_get_implementation",
     "com_sun_star_comp_framework_AddonsToolBarFactory_get_implementation",
+    "com_sun_star_comp_framework_AutoRecovery_get_implementation",
+    "com_sun_star_comp_framework_JobExecutor_get_implementation",
+    "com_sun_star_comp_framework_StatusIndicatorFactory_get_implementation",
 # sax/source/expatwrap/expwrap.component
     "com_sun_star_comp_extensions_xml_sax_ParserExpat_get_implementation",
     "com_sun_star_comp_extensions_xml_sax_FastParser_get_implementation",
