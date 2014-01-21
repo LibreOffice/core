@@ -897,7 +897,7 @@ Sequence<OUString> ODataOutputStream_getSupportedServiceNames(void)
 //--------------------------------------
 struct equalObjectContainer_Impl
 {
-    sal_Int32 operator()(const Reference< XInterface > & s1,
+    bool operator()(const Reference< XInterface > & s1,
                          const Reference< XInterface > & s2) const
       {
         return s1 == s2;
