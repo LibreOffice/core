@@ -23,7 +23,7 @@
 #include "adminpages.hxx"
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <osl/mutex.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
 #include "tabletree.hxx"
 #include <com/sun/star/sdbc/XConnection.hpp>
 
@@ -36,9 +36,8 @@ namespace dbaui
             :public OGenericAdministrationPage
     {
     private:
-        FixedLine               m_aTables;
-        OTableTreeListBox       m_aTablesList;
-        FixedText               m_aExplanation;
+        VclContainer*           m_pTables;
+        OTableTreeListBox*      m_pTablesList;
 
         OUString         m_sCatalogSeparator;
         sal_Bool                m_bCatalogAtStart : 1;

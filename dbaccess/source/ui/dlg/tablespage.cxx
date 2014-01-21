@@ -71,30 +71,34 @@ namespace dbaui
 
     // OTableSubscriptionPage
 DBG_NAME(OTableSubscriptionPage)
-    OTableSubscriptionPage::OTableSubscriptionPage( Window* pParent, const SfxItemSet& _rCoreAttrs,OTableSubscriptionDialog* _pTablesDlg )
-        :OGenericAdministrationPage( pParent, ModuleRes(PAGE_TABLESUBSCRIPTION), _rCoreAttrs )
-        ,m_aTables              (this, ModuleRes(FL_SEPARATOR1))
-        ,m_aTablesList          (this, ModuleRes(CTL_TABLESUBSCRIPTION),sal_True)
-        ,m_aExplanation         (this, ModuleRes(FT_FILTER_EXPLANATION))
-        ,m_bCatalogAtStart      ( sal_True )
-        ,m_pTablesDlg(_pTablesDlg)
+
+    OTableSubscriptionPage::OTableSubscriptionPage(Window* pParent, const SfxItemSet& _rCoreAttrs,
+        OTableSubscriptionDialog* _pTablesDlg)
+        : OGenericAdministrationPage(pParent, "TablesFilterPage",
+            "dbaccess/ui/tablesfilterpage.ui", _rCoreAttrs)
+        , m_bCatalogAtStart(true)
+        , m_pTablesDlg(_pTablesDlg)
     {
+        get(m_pTables, "TablesFilterPage");
+
+        get(m_pTablesList, "treeview");
+        m_pTablesList->set_width_request(56 * m_pTablesList->approximate_char_width());
+        m_pTablesList->set_height_request(12 * m_pTablesList->GetTextHeight());
+
         DBG_CTOR(OTableSubscriptionPage,NULL);
 
-        m_aTablesList.SetCheckHandler(getControlModifiedLink());
+        m_pTablesList->SetCheckHandler(getControlModifiedLink());
 
         // initialize the TabListBox
-        m_aTablesList.SetSelectionMode( MULTIPLE_SELECTION );
-        m_aTablesList.SetDragDropMode( 0 );
-        m_aTablesList.EnableInplaceEditing( sal_False );
-        m_aTablesList.SetStyle(m_aTablesList.GetStyle() | WB_BORDER | WB_HASLINES | WB_HASLINESATROOT | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT);
+        m_pTablesList->SetSelectionMode( MULTIPLE_SELECTION );
+        m_pTablesList->SetDragDropMode( 0 );
+        m_pTablesList->EnableInplaceEditing( sal_False );
+        m_pTablesList->SetStyle(m_pTablesList->GetStyle() | WB_BORDER | WB_HASLINES | WB_HASLINESATROOT | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT);
 
-        m_aTablesList.Clear();
+        m_pTablesList->Clear();
 
-        FreeResource();
-
-        m_aTablesList.SetCheckButtonHdl(LINK(this, OTableSubscriptionPage, OnTreeEntryChecked));
-        m_aTablesList.SetCheckHandler(LINK(this, OTableSubscriptionPage, OnTreeEntryChecked));
+        m_pTablesList->SetCheckButtonHdl(LINK(this, OTableSubscriptionPage, OnTreeEntryChecked));
+        m_pTablesList->SetCheckHandler(LINK(this, OTableSubscriptionPage, OnTreeEntryChecked));
     }
 
     OTableSubscriptionPage::~OTableSubscriptionPage()
@@ -116,7 +120,7 @@ DBG_NAME(OTableSubscriptionPage)
         if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
         {
             // Check if we need to get new images for normal/high contrast mode
-            m_aTablesList.notifyHiContrastChanged();
+            m_pTablesList->notifyHiContrastChanged();
         }
     }
     void OTableSubscriptionPage::DataChanged( const DataChangedEvent& rDCEvt )
@@ -128,17 +132,17 @@ DBG_NAME(OTableSubscriptionPage)
             ( rDCEvt.GetFlags() & SETTINGS_STYLE        ))
         {
             // Check if we need to get new images for normal/high contrast mode
-            m_aTablesList.notifyHiContrastChanged();
+            m_pTablesList->notifyHiContrastChanged();
         }
     }
     void OTableSubscriptionPage::resizeControls(const Size& _rDiff)
     {
         if ( _rDiff.Height() )
         {
-            Size aOldSize = m_aTablesList.GetSizePixel();
+            Size aOldSize = m_pTablesList->GetSizePixel();
             aOldSize.Height() -= _rDiff.Height();
-            m_aTablesList.SetPosSizePixel(
-                    m_aTablesList.GetPosPixel()+Point(0,_rDiff.Height()),
+            m_pTablesList->SetPosSizePixel(
+                    m_pTablesList->GetPosPixel()+Point(0,_rDiff.Height()),
                     aOldSize
                     );
         }
@@ -163,7 +167,7 @@ DBG_NAME(OTableSubscriptionPage)
         // check the ones which are in the list
         OUString sCatalog, sSchema, sName;
 
-        SvTreeListEntry* pRootEntry = m_aTablesList.getAllObjectsEntry();
+        SvTreeListEntry* pRootEntry = m_pTablesList->getAllObjectsEntry();
         sal_Bool bAllTables = sal_False;
         sal_Bool bAllSchemas = sal_False;
 
@@ -179,34 +183,34 @@ DBG_NAME(OTableSubscriptionPage)
             bAllSchemas = (1 == sSchema.getLength()) && ('%' == sSchema[0]);
 
             // the catalog entry
-            SvTreeListEntry* pCatalog = m_aTablesList.GetEntryPosByName(sCatalog, pRootEntry);
+            SvTreeListEntry* pCatalog = m_pTablesList->GetEntryPosByName(sCatalog, pRootEntry);
             if (!(pCatalog || sCatalog.isEmpty()))
                 // the table (resp. its catalog) refered in this filter entry does not exist anymore
                 continue;
 
             if (bAllSchemas && pCatalog)
             {
-                m_aTablesList.checkWildcard(pCatalog);
+                m_pTablesList->checkWildcard(pCatalog);
                 continue;
             }
 
             // the schema entry
-            SvTreeListEntry* pSchema = m_aTablesList.GetEntryPosByName(sSchema, (pCatalog ? pCatalog : pRootEntry));
+            SvTreeListEntry* pSchema = m_pTablesList->GetEntryPosByName(sSchema, (pCatalog ? pCatalog : pRootEntry));
             if (!(pSchema || sSchema.isEmpty()))
                 // the table (resp. its schema) refered in this filter entry does not exist anymore
                 continue;
 
             if (bAllTables && pSchema)
             {
-                m_aTablesList.checkWildcard(pSchema);
+                m_pTablesList->checkWildcard(pSchema);
                 continue;
             }
 
-            SvTreeListEntry* pEntry = m_aTablesList.GetEntryPosByName(sName, pSchema ? pSchema : (pCatalog ? pCatalog : pRootEntry) );
+            SvTreeListEntry* pEntry = m_pTablesList->GetEntryPosByName(sName, pSchema ? pSchema : (pCatalog ? pCatalog : pRootEntry) );
             if (pEntry)
-                m_aTablesList.SetCheckButtonState(pEntry, SV_BUTTON_CHECKED);
+                m_pTablesList->SetCheckButtonState(pEntry, SV_BUTTON_CHECKED);
         }
-        m_aTablesList.CheckButtons();
+        m_pTablesList->CheckButtons();
     }
 
     void OTableSubscriptionPage::implCompleteTablesCheck( const ::com::sun::star::uno::Sequence< OUString >& _rTableFilter )
@@ -247,7 +251,7 @@ DBG_NAME(OTableSubscriptionPage)
             {
                 if (!m_pTablesDlg->getCurrentSettings(aConnectionParams))
                 {
-                    m_aTablesList.Clear();
+                    m_pTablesList->Clear();
                     m_pTablesDlg->endExecution();
                     return;
                 }
@@ -277,8 +281,8 @@ DBG_NAME(OTableSubscriptionPage)
             try
             {
                 WaitObject aWaitCursor(this);
-                m_aTablesList.GetModel()->SetSortMode(SortAscending);
-                m_aTablesList.GetModel()->SetCompareHdl(LINK(this, OTableSubscriptionPage, OnTreeEntryCompare));
+                m_pTablesList->GetModel()->SetSortMode(SortAscending);
+                m_pTablesList->GetModel()->SetCompareHdl(LINK(this, OTableSubscriptionPage, OnTreeEntryCompare));
 
                 Reference< XDriver > xDriver;
                 Reference<XPropertySet> xProp = m_pTablesDlg->getCurrentDataSource();
@@ -309,7 +313,7 @@ DBG_NAME(OTableSubscriptionPage)
 
                 if ( m_xCurrentConnection.is() )
                 {
-                    m_aTablesList.UpdateTableList( m_xCurrentConnection );
+                    m_pTablesList->UpdateTableList( m_xCurrentConnection );
                     if (m_pTablesDlg)
                         m_pTablesDlg->successfullyConnected();
                 }
@@ -324,10 +328,8 @@ DBG_NAME(OTableSubscriptionPage)
                 // establishing the connection failed. Show an error window and exit.
                 OSQLMessageBox aMessageBox( GetParentDialog(), aErrorInfo );
                 aMessageBox.Execute();
-                m_aTables.Enable(sal_False);
-                m_aTablesList.Enable(sal_False);
-                m_aExplanation.Enable(sal_False);
-                m_aTablesList.Clear();
+                m_pTables->Enable(false);
+                m_pTablesList->Clear();
 
                 if ( m_pTablesDlg )
                 {
@@ -370,12 +372,12 @@ DBG_NAME(OTableSubscriptionPage)
         implCompleteTablesCheck( aTableFilter );
 
         // expand the first entry by default
-        SvTreeListEntry* pExpand = m_aTablesList.getAllObjectsEntry();
+        SvTreeListEntry* pExpand = m_pTablesList->getAllObjectsEntry();
         while (pExpand)
         {
-            m_aTablesList.Expand(pExpand);
-            pExpand = m_aTablesList.FirstChild(pExpand);
-            if (pExpand && m_aTablesList.NextSibling(pExpand))
+            m_pTablesList->Expand(pExpand);
+            pExpand = m_pTablesList->FirstChild(pExpand);
+            if (pExpand && m_pTablesList->NextSibling(pExpand))
                 pExpand = NULL;
         }
 
@@ -386,15 +388,15 @@ DBG_NAME(OTableSubscriptionPage)
     void OTableSubscriptionPage::CheckAll( sal_Bool _bCheck )
     {
         SvButtonState eState = _bCheck ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED;
-        SvTreeListEntry* pEntry = m_aTablesList.First();
+        SvTreeListEntry* pEntry = m_pTablesList->First();
         while (pEntry)
         {
-            m_aTablesList.SetCheckButtonState( pEntry, eState);
-            pEntry = m_aTablesList.Next(pEntry);
+            m_pTablesList->SetCheckButtonState( pEntry, eState);
+            pEntry = m_pTablesList->Next(pEntry);
         }
 
-        if (_bCheck && m_aTablesList.getAllObjectsEntry())
-            m_aTablesList.checkWildcard(m_aTablesList.getAllObjectsEntry());
+        if (_bCheck && m_pTablesList->getAllObjectsEntry())
+            m_pTablesList->checkWildcard(m_pTablesList->getAllObjectsEntry());
     }
 
     int OTableSubscriptionPage::DeactivatePage(SfxItemSet* _pSet)
@@ -453,10 +455,10 @@ DBG_NAME(OTableSubscriptionPage)
         static const OUString sWildcard("%");
 
         OUString sComposedName;
-        const SvTreeListEntry* pAllObjectsEntry = m_aTablesList.getAllObjectsEntry();
+        const SvTreeListEntry* pAllObjectsEntry = m_pTablesList->getAllObjectsEntry();
         if (!pAllObjectsEntry)
             return aTableFilter;
-        SvTreeListEntry* pEntry = m_aTablesList.GetModel()->Next(const_cast<SvTreeListEntry*>(pAllObjectsEntry));
+        SvTreeListEntry* pEntry = m_pTablesList->GetModel()->Next(const_cast<SvTreeListEntry*>(pAllObjectsEntry));
         while(pEntry)
         {
             sal_Bool bCatalogWildcard = sal_False;
@@ -464,31 +466,31 @@ DBG_NAME(OTableSubscriptionPage)
             SvTreeListEntry* pSchema = NULL;
             SvTreeListEntry* pCatalog = NULL;
 
-            if (m_aTablesList.GetCheckButtonState(pEntry) == SV_BUTTON_CHECKED && !m_aTablesList.GetModel()->HasChildren(pEntry))
+            if (m_pTablesList->GetCheckButtonState(pEntry) == SV_BUTTON_CHECKED && !m_pTablesList->GetModel()->HasChildren(pEntry))
             {   // checked and a leaf, which means it's no catalog, no schema, but a real table
                 OUString sCatalog;
-                if(m_aTablesList.GetModel()->HasParent(pEntry))
+                if(m_pTablesList->GetModel()->HasParent(pEntry))
                 {
-                    pSchema = m_aTablesList.GetModel()->GetParent(pEntry);
+                    pSchema = m_pTablesList->GetModel()->GetParent(pEntry);
                     if (pAllObjectsEntry == pSchema)
                         // do not want to have the root entry
                         pSchema = NULL;
 
                     if (pSchema)
                     {   // it's a real schema entry, not the "all objects" root
-                        if(m_aTablesList.GetModel()->HasParent(pSchema))
+                        if(m_pTablesList->GetModel()->HasParent(pSchema))
                         {
-                            pCatalog = m_aTablesList.GetModel()->GetParent(pSchema);
+                            pCatalog = m_pTablesList->GetModel()->GetParent(pSchema);
                             if (pAllObjectsEntry == pCatalog)
                                 // do not want to have the root entry
                                 pCatalog = NULL;
 
                             if (pCatalog)
                             {   // it's a real catalog entry, not the "all objects" root
-                                bCatalogWildcard = m_aTablesList.isWildcardChecked(pCatalog);
+                                bCatalogWildcard = m_pTablesList->isWildcardChecked(pCatalog);
                                 if (m_bCatalogAtStart)
                                 {
-                                    sComposedName += m_aTablesList.GetEntryText( pCatalog );
+                                    sComposedName += m_pTablesList->GetEntryText( pCatalog );
                                     sComposedName += m_sCatalogSeparator;
                                     if (bCatalogWildcard)
                                         sComposedName += sWildcard;
@@ -500,12 +502,12 @@ DBG_NAME(OTableSubscriptionPage)
                                     else
                                         sCatalog = "";
                                     sCatalog += m_sCatalogSeparator;
-                                    sCatalog += m_aTablesList.GetEntryText( pCatalog );
+                                    sCatalog += m_pTablesList->GetEntryText( pCatalog );
                                 }
                             }
                         }
-                        bSchemaWildcard = m_aTablesList.isWildcardChecked(pSchema);
-                        sComposedName += m_aTablesList.GetEntryText( pSchema );
+                        bSchemaWildcard = m_pTablesList->isWildcardChecked(pSchema);
+                        sComposedName += m_pTablesList->GetEntryText( pSchema );
                         sComposedName += sDot;
                     }
 
@@ -513,7 +515,7 @@ DBG_NAME(OTableSubscriptionPage)
                         sComposedName += sWildcard;
                 }
                 if (!bSchemaWildcard && !bCatalogWildcard)
-                    sComposedName += m_aTablesList.GetEntryText( pEntry );
+                    sComposedName += m_pTablesList->GetEntryText( pEntry );
 
                 if (!m_bCatalogAtStart && !bCatalogWildcard)
                     sComposedName += sCatalog;
@@ -533,7 +535,7 @@ DBG_NAME(OTableSubscriptionPage)
             else if (bSchemaWildcard)
                 pEntry = implNextSibling(pSchema);
             else
-                pEntry = m_aTablesList.GetModel()->Next(pEntry);
+                pEntry = m_pTablesList->GetModel()->Next(pEntry);
         }
 
         return aTableFilter;
@@ -544,9 +546,9 @@ DBG_NAME(OTableSubscriptionPage)
         SvTreeListEntry* pReturn = NULL;
         if (_pEntry)
         {
-            pReturn = m_aTablesList.NextSibling(_pEntry);
+            pReturn = m_pTablesList->NextSibling(_pEntry);
             if (!pReturn)
-                pReturn = implNextSibling(m_aTablesList.GetParent(_pEntry));
+                pReturn = implNextSibling(m_pTablesList->GetParent(_pEntry));
         }
         return pReturn;
     }
@@ -564,7 +566,7 @@ DBG_NAME(OTableSubscriptionPage)
         if ( m_xCurrentConnection.is() )
         {   // collect the table filter data only if we have a connection - else no tables are displayed at all
             Sequence< OUString > aTableFilter;
-            if (m_aTablesList.isWildcardChecked(m_aTablesList.getAllObjectsEntry()))
+            if (m_pTablesList->isWildcardChecked(m_pTablesList->getAllObjectsEntry()))
             {
                 aTableFilter.realloc(1);
                 aTableFilter[0] = "%";
@@ -582,11 +584,10 @@ DBG_NAME(OTableSubscriptionPage)
     void OTableSubscriptionPage::fillControls(::std::vector< ISaveValueWrapper* >& /*_rControlList*/)
     {
     }
+
     void OTableSubscriptionPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
-        _rControlList.push_back(new ODisableWrapper<OTableTreeListBox>(&m_aTablesList));
-        _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aTables));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aExplanation));
+        _rControlList.push_back(new ODisableWrapper<VclContainer>(m_pTables));
     }
 }   // namespace dbaui
 

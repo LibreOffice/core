@@ -31,7 +31,6 @@
     // FREE
 #define FT_JDBCDRIVERCLASS      7
 #define FT_SPECIAL_MESSAGE      8
-#define FT_FILTER_EXPLANATION   9
 #define FT_HOSTNAME             10
 #define FT_BASEDN               11
 #define FT_PORTNUMBER           12
@@ -52,8 +51,6 @@
 #define CB_USECATALOG           4
 
 #define FL_SEPARATOR2           1
-
-#define CTL_TABLESUBSCRIPTION   1
 
 #define TLB_ACTIONS             1
 

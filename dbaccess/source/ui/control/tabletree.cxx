@@ -21,6 +21,7 @@
 #include "imageprovider.hxx"
 #include "moduledbu.hxx"
 #include "dbu_control.hrc"
+#include <vcl/layout.hxx>
 #include <vcl/menu.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/types.hxx>
@@ -71,6 +72,15 @@ OTableTreeListBox::OTableTreeListBox(Window* pParent, WinBits nWinStyle)
     ,m_bNoEmptyFolders( false )
 {
     implSetDefaultImages();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeOTableTreeListBox(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinStyle = 0;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+    return new OTableTreeListBox(pParent, nWinStyle);
 }
 
 OTableTreeListBox::OTableTreeListBox( Window* pParent, const ResId& rResId, sal_Bool _bVirtualRoot)
