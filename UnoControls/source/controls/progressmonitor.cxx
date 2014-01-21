@@ -207,7 +207,7 @@ Any SAL_CALL ProgressMonitor::queryAggregation( const Type& aType ) throw( Runti
                 );
 
     // If searched interface not supported by this class ...
-    if ( aReturn.hasValue() == sal_False )
+    if ( !aReturn.hasValue() )
     {
         // ... ask baseclasses.
         aReturn = BaseControl::queryAggregation( aType );

@@ -167,7 +167,7 @@ Any SAL_CALL StatusIndicator::queryAggregation( const Type& aType ) throw( Runti
                 );
 
     // If searched interface not supported by this class ...
-    if ( aReturn.hasValue() == sal_False )
+    if ( !aReturn.hasValue() )
     {
         // ... ask baseclasses.
         aReturn = BaseControl::queryAggregation( aType );
@@ -308,7 +308,7 @@ void SAL_CALL StatusIndicator::createPeer (
     const css::uno::Reference< XWindowPeer > & rParent
 ) throw( RuntimeException )
 {
-    if( getPeer().is() == sal_False )
+    if( !getPeer().is() )
     {
         BaseContainerControl::createPeer( rToolkit, rParent );
 
@@ -447,18 +447,18 @@ void StatusIndicator::impl_paint ( sal_Int32 nX, sal_Int32 nY, const css::uno::R
 
         // background = gray
         css::uno::Reference< XWindowPeer > xPeer( impl_getPeerWindow(), UNO_QUERY );
-        if( xPeer.is() == sal_True )
+        if( xPeer.is() )
             xPeer->setBackground( STATUSINDICATOR_BACKGROUNDCOLOR );
 
         // FixedText background = gray
         css::uno::Reference< XControl > xTextControl( m_xText, UNO_QUERY );
         xPeer = xTextControl->getPeer();
-        if( xPeer.is() == sal_True )
+        if( xPeer.is() )
             xPeer->setBackground( STATUSINDICATOR_BACKGROUNDCOLOR );
 
         // Progress background = gray
         xPeer = m_xProgressBar->getPeer();
-        if( xPeer.is() == sal_True )
+        if( xPeer.is() )
             xPeer->setBackground( STATUSINDICATOR_BACKGROUNDCOLOR );
 
         // paint shadow border

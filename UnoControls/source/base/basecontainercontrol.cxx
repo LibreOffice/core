@@ -60,7 +60,7 @@ Any SAL_CALL BaseContainerControl::queryInterface( const Type& rType ) throw( Ru
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
     Any aReturn ;
     Reference< XInterface > xDel = BaseControl::impl_getDelegator();
-    if ( xDel.is() == sal_True )
+    if ( xDel.is() )
     {
         // If an delegator exist, forward question to his queryInterface.
         // Delegator will ask his own queryAggregation!
@@ -122,7 +122,7 @@ Any SAL_CALL BaseContainerControl::queryAggregation( const Type& aType ) throw( 
                 );
 
     // If searched interface supported by this class ...
-    if ( aReturn.hasValue() == sal_True )
+    if ( aReturn.hasValue() )
     {
         // ... return this information.
         return aReturn ;
@@ -141,7 +141,7 @@ Any SAL_CALL BaseContainerControl::queryAggregation( const Type& aType ) throw( 
 void SAL_CALL BaseContainerControl::createPeer( const   Reference< XToolkit >&      xToolkit    ,
                                                 const   Reference< XWindowPeer >&   xParent     ) throw( RuntimeException )
 {
-    if ( getPeer().is() == sal_False )
+    if ( !getPeer().is() )
     {
         // create own peer
         BaseControl::createPeer( xToolkit, xParent );

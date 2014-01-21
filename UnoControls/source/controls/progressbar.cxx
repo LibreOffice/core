@@ -157,7 +157,7 @@ Any SAL_CALL ProgressBar::queryAggregation( const Type& aType ) throw( RuntimeEx
                 );
 
     // If searched interface not supported by this class ...
-    if ( aReturn.hasValue() == sal_False )
+    if ( !aReturn.hasValue() )
     {
         // ... ask baseclasses.
         aReturn = BaseControl::queryAggregation( aType );

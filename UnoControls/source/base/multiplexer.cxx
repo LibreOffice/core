@@ -46,7 +46,7 @@ namespace unocontrols{
         /*         We must change the source of the event.      */                                                                  \
         aLocalEvent.Source = m_xControl ;                                                                                           \
         /* Is the control not destroyed? */                                                                                         \
-        if( aLocalEvent.Source.is() == sal_True )                                                                                   \
+        if( aLocalEvent.Source.is() )                                                                                               \
         {                                                                                                                           \
             if( aIterator.hasMoreElements() )                                                                                       \
             {                                                                                                                       \
@@ -116,7 +116,7 @@ Any SAL_CALL OMRCListenerMultiplexerHelper::queryInterface( const Type& rType ) 
                 );
 
     // If searched interface supported by this class ...
-    if ( aReturn.hasValue() == sal_True )
+    if ( aReturn.hasValue() )
     {
         // ... return this information.
         return aReturn ;

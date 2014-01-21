@@ -162,11 +162,11 @@ Any SAL_CALL FrameControl::queryAggregation( const Type& aType ) throw( RuntimeE
                 );
 
     // If searched interface not supported by this class ...
-    if ( aReturn.hasValue() == sal_False )
+    if ( !aReturn.hasValue() )
     {
         // ... ask baseclasses.
         aReturn = OPropertySetHelper::queryInterface( aType );
-        if ( aReturn.hasValue() == sal_False )
+        if ( !aReturn.hasValue() )
         {
             aReturn = BaseControl::queryAggregation( aType );
         }

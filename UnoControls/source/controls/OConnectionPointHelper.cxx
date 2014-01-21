@@ -68,7 +68,7 @@ Any SAL_CALL OConnectionPointHelper::queryInterface( const Type& aType ) throw( 
                 );
 
     // If searched interface not supported by this class ...
-    if ( aReturn.hasValue() == sal_False )
+    if ( !aReturn.hasValue() )
     {
         // ... ask baseclasses.
         aReturn = OWeakObject::queryInterface( aType );

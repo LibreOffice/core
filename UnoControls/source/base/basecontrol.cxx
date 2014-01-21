@@ -81,7 +81,7 @@ BaseControl::~BaseControl()
 Any SAL_CALL BaseControl::queryInterface( const Type& rType ) throw( RuntimeException )
 {
     Any aReturn ;
-    if ( m_xDelegator.is() == sal_True )
+    if ( m_xDelegator.is() )
     {
         // If an delegator exist, forward question to his queryInterface.
         // Delegator will ask his own queryAggregation!
@@ -221,7 +221,7 @@ Any SAL_CALL BaseControl::queryAggregation( const Type& aType ) throw( RuntimeEx
                 );
 
     // If searched interface supported by this class ...
-    if ( aReturn.hasValue() == sal_True )
+    if ( aReturn.hasValue() )
     {
         // ... return this information.
         return aReturn ;
@@ -283,7 +283,7 @@ void SAL_CALL BaseControl::dispose() throw( RuntimeException )
     impl_releasePeer();
 
     // release view
-    if ( m_xGraphicsView.is() == sal_True )
+    if ( m_xGraphicsView.is() )
     {
         m_xGraphicsView.clear();
     }
@@ -321,7 +321,7 @@ void SAL_CALL BaseControl::createPeer(  const   Reference< XToolkit >&      xToo
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
 
-    if ( m_xPeer.is() == sal_False )
+    if ( !m_xPeer.is() )
     {
         // use method "BaseControl::getWindowDescriptor()" fot change window attributes !!!
         WindowDescriptor* pDescriptor = impl_getWindowDescriptor( xParentPeer );
@@ -334,7 +334,7 @@ void SAL_CALL BaseControl::createPeer(  const   Reference< XToolkit >&      xToo
         // very slow under remote conditions!
         // create the window on the server
         Reference< XToolkit > xLocalToolkit = xToolkit ;
-        if ( xLocalToolkit.is() == sal_False )
+        if ( !xLocalToolkit.is() )
         {
             // but first create well known toolkit, if it not exist
             xLocalToolkit = Reference< XToolkit > ( Toolkit::create(m_xComponentContext), UNO_QUERY_THROW );
@@ -345,7 +345,7 @@ void SAL_CALL BaseControl::createPeer(  const   Reference< XToolkit >&      xToo
         // don't forget to release the memory!
         delete pDescriptor ;
 
-        if ( m_xPeerWindow.is() == sal_True )
+        if ( m_xPeerWindow.is() )
         {
             if ( m_pMultiplexer != NULL )
             {
@@ -356,12 +356,12 @@ void SAL_CALL BaseControl::createPeer(  const   Reference< XToolkit >&      xToo
             // and add a paint listener
             Reference< XDevice > xDevice( m_xPeerWindow, UNO_QUERY );
 
-            if ( xDevice.is() == sal_True )
+            if ( xDevice.is() )
             {
                 m_xGraphicsPeer = xDevice->createGraphics();
             }
 
-            if ( m_xGraphicsPeer.is() == sal_True )
+            if ( m_xGraphicsPeer.is() )
             {
                 addPaintListener( this );
                 addWindowListener( this );
@@ -504,7 +504,7 @@ void SAL_CALL BaseControl::setVisible( sal_Bool bVisible ) throw( RuntimeExcepti
     // Set new state of flag
     m_bVisible = bVisible ;
 
-    if ( m_xPeerWindow.is() == sal_True )
+    if ( m_xPeerWindow.is() )
     {
         // Set it also on peerwindow
         m_xPeerWindow->setVisible( m_bVisible );
@@ -523,7 +523,7 @@ void SAL_CALL BaseControl::setEnable( sal_Bool bEnable ) throw( RuntimeException
     // Set new state of flag
     m_bEnable = bEnable ;
 
-    if ( m_xPeerWindow.is() == sal_True )
+    if ( m_xPeerWindow.is() )
     {
         // Set it also on peerwindow
         m_xPeerWindow->setEnable( m_bEnable );
@@ -539,7 +539,7 @@ void SAL_CALL BaseControl::setFocus() throw( RuntimeException )
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
 
-    if ( m_xPeerWindow.is() == sal_True )
+    if ( m_xPeerWindow.is() )
     {
         m_xPeerWindow->setFocus();
     }
@@ -690,7 +690,7 @@ sal_Bool SAL_CALL BaseControl::setGraphics( const Reference< XGraphics >& xDevic
     // - in this class exist 2 graphics-member ... one for peer[_xGraphicsPeer] and one for view[_xGraphicsView]
     // - they are used by "windowPaint() and draw()", forwarded to "paint ()"
     sal_Bool bReturn = sal_False ;
-    if ( xDevice.is() == sal_True )
+    if ( xDevice.is() )
     {
         // Ready for multithreading
         MutexGuard aGuard( m_aMutex );
@@ -745,14 +745,14 @@ void SAL_CALL BaseControl::disposing( const EventObject& /*aSource*/ ) throw( Ru
 
     // - release ALL references
     // - it must be !!!
-    if ( m_xGraphicsPeer.is() == sal_True )
+    if ( m_xGraphicsPeer.is() )
     {
         removePaintListener( this );
         removeWindowListener( this );
         m_xGraphicsPeer.clear();
     }
 
-    if ( m_xGraphicsView.is() == sal_True )
+    if ( m_xGraphicsView.is() )
     {
         m_xGraphicsView.clear();
     }
@@ -948,9 +948,9 @@ Reference< XInterface > BaseControl::impl_getDelegator()
 
 void BaseControl::impl_releasePeer()
 {
-    if ( m_xPeer.is() == sal_True )
+    if ( m_xPeer.is() )
     {
-        if ( m_xGraphicsPeer.is() == sal_True )
+        if ( m_xGraphicsPeer.is() )
         {
             removePaintListener( this );
             removeWindowListener( this );
