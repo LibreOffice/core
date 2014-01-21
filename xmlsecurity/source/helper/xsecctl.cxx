@@ -147,7 +147,7 @@ void XSecController::createXSecComponent( )
         xMCF->createInstanceWithContext( sXMLSignature, mxCtx ),
         cssu::UNO_QUERY );
 
-    bool bSuccess = (0!=m_xXMLSignature.is());
+    bool bSuccess = m_xXMLSignature.is();
     if ( bSuccess )
     /*
      * XMLSignature created successfully.
@@ -158,7 +158,7 @@ void XSecController::createXSecComponent( )
             cssu::UNO_QUERY );
     }
 
-    bSuccess &= (0!=m_xXMLDocumentWrapper.is());
+    bSuccess &= m_xXMLDocumentWrapper.is();
     if ( bSuccess )
     /*
      * XMLDocumentWrapper created successfully.
@@ -169,7 +169,7 @@ void XSecController::createXSecComponent( )
             cssu::UNO_QUERY );
     }
 
-    bSuccess &= (0!=m_xSAXEventKeeper.is());
+    bSuccess &= m_xSAXEventKeeper.is();
 
     if (bSuccess)
     /*
