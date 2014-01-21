@@ -167,7 +167,7 @@ PropertyMapPtr TableStyleSheetEntry::GetProperties( sal_Int32 nMask, StyleSheetE
             pStack->push_back(pEntry);
 
         TableStyleSheetEntry* pParent = static_cast<TableStyleSheetEntry *>( pEntry.get( ) );
-            pProps->insert( pParent->GetProperties( nMask ), pStack );
+            pProps->insert( pParent->GetProperties( nMask ), (pStack.get() != NULL) );
 
             pStack->pop_back();
     }

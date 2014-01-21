@@ -157,7 +157,7 @@ namespace slideshow
                 }
             }
 
-            return mpSprite;
+            return (mpSprite.get() != NULL);
         }
 
         void AnimatedSprite::setPixelOffset( const ::basegfx::B2DSize& rPixelOffset )

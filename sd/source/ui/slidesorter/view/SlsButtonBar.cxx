@@ -469,7 +469,7 @@ void ButtonBar::Paint (
 
 bool ButtonBar::IsMouseOverButton (void) const
 {
-    return mpButtonUnderMouse;
+    return (mpButtonUnderMouse.get() != NULL);
 }
 
 

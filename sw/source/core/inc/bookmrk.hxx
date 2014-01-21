@@ -76,7 +76,7 @@ namespace sw { namespace mark
                     return GetOtherMarkPos( );
             }
             virtual bool IsExpanded() const
-                { return m_pPos2; }
+                { return (m_pPos2.get() != NULL); }
 
             //setters
             virtual void SetName(const ::rtl::OUString& rName)
