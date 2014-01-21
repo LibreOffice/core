@@ -403,7 +403,7 @@ SvtModuleOptions_Impl::SvtModuleOptions_Impl()
 *//*-*************************************************************************************************************/
 SvtModuleOptions_Impl::~SvtModuleOptions_Impl()
 {
-    if( IsModified() == sal_True )
+    if( IsModified() )
     {
         Commit();
     }

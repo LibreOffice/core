@@ -456,7 +456,7 @@ SvtDynamicMenuOptions_Impl::SvtDynamicMenuOptions_Impl()
 SvtDynamicMenuOptions_Impl::~SvtDynamicMenuOptions_Impl()
 {
     // We must save our current values .. if user forget it!
-    if( IsModified() == sal_True )
+    if( IsModified() )
     {
         Commit();
     }
