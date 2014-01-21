@@ -3960,7 +3960,7 @@ bool INetURLObject::operator ==(INetURLObject const & rObject) const
         }
 
         default:
-            return (aPath1 == aPath2) != false;
+            return aPath1 == aPath2;
     }
 }
 
