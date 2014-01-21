@@ -302,7 +302,7 @@ javaFrameworkError SAL_CALL jfw_startVM(
             if (mode == jfw::JFW_MODE_APPLICATION)
             {
                 const jfw::MergedSettings settings;
-                if (sal_False == settings.getEnabled())
+                if (!settings.getEnabled())
                     return JFW_E_JAVA_DISABLED;
                 aInfo.attach(settings.createJavaInfo());
                 //check if a Java has ever been selected
@@ -949,7 +949,7 @@ javaFrameworkError SAL_CALL jfw_setEnabled(sal_Bool bEnabled)
 
             //check if Enabled is false;
             const jfw::MergedSettings settings;
-            if (settings.getEnabled() == sal_False)
+            if (!settings.getEnabled())
                 g_bEnabledSwitchedOn = true;
         }
         jfw::NodeJava node(jfw::NodeJava::USER);

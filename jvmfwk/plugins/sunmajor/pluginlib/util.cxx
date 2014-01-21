@@ -1032,7 +1032,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
             }
         }
     }
-    if (ret.is() == false)
+    if (!ret.is())
         vecBadPaths.push_back(sFilePath);
     else
     {
