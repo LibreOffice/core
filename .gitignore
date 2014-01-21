@@ -87,3 +87,12 @@ build
 project.xcworkspace
 xcuserdata
 *.xuserstate
+
+# MSVS specific
+*/Debug
+*.sdf
+*.sln
+*.v11*
+*.vcxproj*
+*.opensdf
+
