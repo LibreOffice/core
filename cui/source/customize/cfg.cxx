@@ -600,7 +600,7 @@ ConvertSvxConfigEntry(
     // as an empty string.
     // It will be initialised again later using the command to label map.
     aPropSeq[2].Name = aDescriptorLabel;
-    if ( pEntry->HasChangedName() == sal_False && !pEntry->GetCommand().isEmpty() )
+    if ( !pEntry->HasChangedName() && !pEntry->GetCommand().isEmpty() )
     {
         sal_Bool isDefaultName = sal_False;
         try
@@ -678,7 +678,7 @@ ConvertToolbarEntry(
     // as an empty string.
     // It will be initialised again later using the command to label map.
     aPropSeq[2].Name = aDescriptorLabel;
-    if ( pEntry->HasChangedName() == sal_False && !pEntry->GetCommand().isEmpty() )
+    if ( !pEntry->HasChangedName() && !pEntry->GetCommand().isEmpty() )
     {
         sal_Bool isDefaultName = sal_False;
         try
@@ -1455,7 +1455,7 @@ sal_Bool SvxMenuEntriesListBox::NotifyMoving(
     // only try to do a move if we are dragging within the list box
     if ( m_bIsInternalDrag )
     {
-        if ( pPage->MoveEntryData( pSource, pTarget ) == sal_True )
+        if ( pPage->MoveEntryData( pSource, pTarget ) )
         {
             SvTreeListBox::NotifyMoving(
                 pTarget, pSource, rpNewParent, rNewChildPos );
@@ -1719,7 +1719,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
             }
         }
 
-        if ( bURLToSelectFound == sal_False )
+        if ( !bURLToSelectFound )
         {
             // if the document has menu configuration settings select it
             // it the SaveIn listbox, otherwise select the module data
@@ -3546,7 +3546,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
         }
     }
 
-    if ( bNeedsApply == sal_True )
+    if ( bNeedsApply )
     {
         (( ToolbarSaveInData* ) GetSaveInData())->ApplyToolbar( pToolbar );
         UpdateButtonStates();
@@ -4818,7 +4818,7 @@ sal_Bool SvxToolbarEntriesListBox::NotifyMoving(
     bool result = SvxMenuEntriesListBox::NotifyMoving(
         pTarget, pSource, rpNewParent, rNewChildPos );
 
-    if ( result == sal_True )
+    if ( result )
     {
         // Instant Apply changes to UI
         SvxConfigEntry* pToolbar = pPage->GetTopLevelSelection();
@@ -5313,7 +5313,7 @@ void SvxIconSelectorDialog::ImportGraphics(
         }
         else
         {
-            if ( ImportGraphic( rPaths[0] ) == sal_False )
+            if ( !ImportGraphic( rPaths[0] ) )
             {
                 rejected[0] = rPaths[0];
                 rejectedCount = 1;
@@ -5348,7 +5348,7 @@ void SvxIconSelectorDialog::ImportGraphics(
                         if ( !bHasReplaced )
                         {
                             bool result = ImportGraphic( aPath );
-                            if ( result == sal_False )
+                            if ( !result )
                             {
                                 rejected[ rejectedCount ] = rPaths[i];
                                 ++rejectedCount;
@@ -5361,7 +5361,7 @@ void SvxIconSelectorDialog::ImportGraphics(
             else
             {
                 bool result = ImportGraphic( aSourcePath + rPaths[i] );
-                if ( result == sal_False )
+                if ( !result )
                 {
                     rejected[ rejectedCount ] = rPaths[i];
                     ++rejectedCount;

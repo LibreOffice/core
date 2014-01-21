@@ -1576,7 +1576,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     // check the box "For the current document only"
     // set the focus to the Western Language box
     const SfxPoolItem* pLang = 0;
-    if ( SFX_ITEM_SET == rSet.GetItemState(SID_SET_DOCUMENT_LANGUAGE, sal_False, &pLang ) &&( (const SfxBoolItem*)pLang)->GetValue() == sal_True )
+    if ( SFX_ITEM_SET == rSet.GetItemState(SID_SET_DOCUMENT_LANGUAGE, sal_False, &pLang ) && ((const SfxBoolItem*)pLang)->GetValue() )
     {
         m_pWesternLanguageLB->GrabFocus();
         m_pCurrentDocCB->Enable(sal_True);

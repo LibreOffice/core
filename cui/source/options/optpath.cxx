@@ -700,7 +700,7 @@ IMPL_LINK( SvxPathTabPage, DialogClosedHdl, DialogClosedEvent*, pEvt )
 {
     if ( RET_OK == pEvt->DialogResult )
     {
-        DBG_ASSERT( xFolderPicker.is() == sal_True, "SvxPathTabPage::DialogClosedHdl(): no folder picker" );
+        DBG_ASSERT( xFolderPicker.is(), "SvxPathTabPage::DialogClosedHdl(): no folder picker" );
 
         OUString sURL = xFolderPicker->getDirectory();
         ChangeCurrentEntry( sURL );

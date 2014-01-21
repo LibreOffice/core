@@ -1236,7 +1236,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, EndSearchProgressHdl)
 
 IMPL_LINK( TPGalleryThemeProperties, DialogClosedHdl, ::com::sun::star::ui::dialogs::DialogClosedEvent*, pEvt )
 {
-    DBG_ASSERT( xFolderPicker.is() == sal_True, "TPGalleryThemeProperties::DialogClosedHdl(): no folder picker" );
+    DBG_ASSERT( xFolderPicker.is(), "TPGalleryThemeProperties::DialogClosedHdl(): no folder picker" );
 
     OUString sURL = xFolderPicker->getDirectory();
     StartSearchFiles( sURL, pEvt->DialogResult );

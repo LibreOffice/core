@@ -801,7 +801,7 @@ Any _SvxMacroTabPage::GetPropsByName( const OUString& eventName, EventsHash& eve
 {
     Sequence< beans::PropertyValue > props;
     OUString type, url;
-    if( sal_True == ( aAny >>= props ) )
+    if( aAny >>= props )
     {
         ::comphelper::NamedValueCollection aProps( props );
         type = aProps.getOrDefault( "EventType", type );

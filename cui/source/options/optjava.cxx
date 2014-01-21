@@ -409,7 +409,7 @@ IMPL_LINK( SvxJavaOptionsPage, DialogClosedHdl, DialogClosedEvent*, pEvt )
 {
     if ( RET_OK == pEvt->DialogResult )
     {
-        DBG_ASSERT( xFolderPicker.is() == sal_True, "SvxJavaOptionsPage::DialogClosedHdl(): no folder picker" );
+        DBG_ASSERT( xFolderPicker.is(), "SvxJavaOptionsPage::DialogClosedHdl(): no folder picker" );
 
         AddFolder( xFolderPicker->getDirectory() );
     }
