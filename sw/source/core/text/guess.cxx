@@ -365,7 +365,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         // which can corrupt the locale pointer inside pBreakIt.
         const lang::Locale aLocale = g_pBreakIt->GetLocale( aLang );
 
-        // determines first possible line break from nRightPos to
+        // determines first possible line break from nCutPos to
         // start index of current line
         LineBreakResults aResult = g_pBreakIt->GetBreakIter()->getLineBreak(
             rInf.GetTxt(), nCutPos, aLocale,
