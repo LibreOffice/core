@@ -2624,6 +2624,16 @@ DECLARE_OOXMLEXPORT_TEST(testFdo73556,"fdo73556.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3751), tableWidth);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testAlignForShape,"Shape.docx")
+{
+    //fdo73545:Shape Horizontal and vertical orientation is wrong
+    //The wp:align tag is missing after roundtrip
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp:positionH/wp:align","1");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

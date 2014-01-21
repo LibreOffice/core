@@ -696,13 +696,11 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                         // This needs to be AT_PARAGRAPH and not AT_CHARACTER, otherwise shape will move when the user inserts a new paragraph.
                         xShapeProps->setPropertyValue("AnchorType", uno::makeAny(text::TextContentAnchorType_AT_PARAGRAPH));
 
+                        //only the position orientation is handled in applyPosition()
+                        m_pImpl->applyPosition(xShapeProps);
+
                         uno::Reference<lang::XServiceInfo> xServiceInfo(m_xShape, uno::UNO_QUERY_THROW);
-                        if (xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
-                        {
-                            // For non-textframes, this is handled already in oox::drawingml::Shape::createAndInsert().
-                            m_pImpl->applyPosition(xShapeProps);
-                        }
-                        else if (xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
+                        if (xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
                         {
                             // Position of the groupshape should be set after children have been added.
                             m_xShape->setPosition(awt::Point(m_pImpl->nLeftPosition, m_pImpl->nTopPosition));
