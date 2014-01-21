@@ -60,7 +60,7 @@ css::uno::Any SAL_CALL SoundHandler::queryInterface( const css::uno::Type& aType
                static_cast< css::frame::XDispatch* >(this),
                static_cast< css::document::XExtendedFilterDetection* >(this)));
        /* If searched interface not supported by this class ... */
-       if ( aReturn.hasValue() == sal_False )
+       if ( !aReturn.hasValue() )
        {
                /* ... ask baseclass for interfaces! */
                aReturn = OWeakObject::queryInterface( aType );
@@ -431,7 +431,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL avmedia_component_getFactory(cons
         if ( avmedia::SoundHandler::impl_getStaticImplementationName().equals( OUString::createFromAscii( pImplementationName ) ) )
             xFactory = avmedia::SoundHandler::impl_createFactory( xServiceManager );
 
-        if ( xFactory.is() == sal_True )
+        if ( xFactory.is() )
         {
             xFactory->acquire();
             pReturn = xFactory.get();
