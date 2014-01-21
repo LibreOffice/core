@@ -2699,23 +2699,14 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
             nR2 = nRow2;
 
         const SCCOLROW PERFORMANCEOPTIMIZATION4PATTERNTHRESHOLD = 8192;
-        bool bNeedPerformanceOptimization4Pattern = nRow2 - nRow1 > PERFORMANCEOPTIMIZATION4PATTERNTHRESHOLD;
-        std::vector< std::vector< SCSIZE > > vvPatternCount( bNeedPerformanceOptimization4Pattern ? nCol2 - nCol1 + 1 : 0 );
+        bool bPreallocatePattern = ((nInsFlag & IDF_ATTRIB) && (nRow2 - nRow1 > PERFORMANCEOPTIMIZATION4PATTERNTHRESHOLD));
         std::vector< SCTAB > vTables;
 
-        if (bNeedPerformanceOptimization4Pattern)
+        if (bPreallocatePattern)
         {
             for (SCTAB i = aCxt.getTabStart(); i <= aCxt.getTabEnd(); ++i)
                 if (maTabs[i] && rMark.GetTableSelect( i ) )
                     vTables.push_back( i );
-
-            for (SCSIZE i = 0; i < vvPatternCount.size(); ++i)
-            {
-                vvPatternCount[i].resize( vTables.size() );
-
-                for (std::vector< SCTAB >::size_type j = 0; j < vTables.size(); ++j)
-                    vvPatternCount[i][j] = GetPatternCount( vTables[j], nCol1+i );
-            }
         }
 
         do
@@ -2752,18 +2743,35 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
             if (nC2 > nCol2)
                 nC2 = nCol2;
 
-            if (bNeedPerformanceOptimization4Pattern && !vvPatternCount.empty())
+            // Preallocate pattern memory once if further chunks are to be pasted.
+            if (bPreallocatePattern && (nR2+1) <= nRow2)
             {
-                for (SCSIZE i = 0; i < vvPatternCount.size(); ++i)
+                SCROW nR3 = nR2 + 1;
+                for (size_t j = 0; j < vTables.size(); ++j)
                 {
-                    vvPatternCount[i].resize( vTables.size() );
-
-                    for (std::vector< SCTAB >::size_type j = 0; j<vTables.size(); ++j)
-                        ReservePatternCount( vTables[j], nCol1+i, vvPatternCount[i][j] + ( GetPatternCount( vTables[j], nCol1+i, nR1, nR2 ) ) * ( ( nRow2 - nRow1 + 1 ) / ( nYw + 1 ) ) );
+                    SCTAB nTab = vTables[j];
+                    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+                    {
+                        // Pattern count of the first chunk pasted.
+                        SCSIZE nChunk = GetPatternCount( nTab, nCol, nR1, nR2);
+                        // If it is only one pattern per chunk and chunks are
+                        // pasted consecutively then it will get its range
+                        // enlarged for each chunk and no further allocation
+                        // happens. For non-consecutive chunks we're out of
+                        // luck in this case.
+                        if (nChunk > 1)
+                        {
+                            SCSIZE nNeeded = nChunk * (nRow2 - nR3 + 1) / (nYw + 1);
+                            SCSIZE nRemain = GetPatternCount( nTab, nCol, nR3, nRow2);
+                            if (nNeeded > nRemain)
+                            {
+                                SCSIZE nCurr = GetPatternCount( nTab, nCol);
+                                ReservePatternCount( nTab, nCol, nCurr + nNeeded);
+                            }
+                        }
+                    }
                 }
-
-                bNeedPerformanceOptimization4Pattern = false;
-                vvPatternCount.clear();
+                bPreallocatePattern = false;
             }
 
             nR1 = nR2 + 1;

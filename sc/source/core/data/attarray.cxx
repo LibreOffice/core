@@ -378,7 +378,7 @@ void ScAttrArray::RemoveCellCharAttribs( SCROW nStartRow, SCROW nEndRow,
 
 bool ScAttrArray::Reserve( SCSIZE nReserve )
 {
-    if ( nCount <= nReserve )
+    if ( nLimit < nReserve )
     {
         if( ScAttrEntry* pNewData = new (std::nothrow) ScAttrEntry[nReserve] )
         {
