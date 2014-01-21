@@ -142,6 +142,7 @@ public:
     void testBnc780044Spacing();
     void testRPrChangeClosed();
     void testFdo65090();
+    void testFdo73389();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -248,6 +249,7 @@ void Test::run()
         {"bnc780044_spacing.docx", &Test::testBnc780044Spacing},
         {"rprchange_closed.docx",&Test::testRPrChangeClosed},
         {"fdo65090.docx", &Test::testFdo65090},
+        {"fdo73389.docx", &Test::testFdo73389},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1721,6 +1723,15 @@ void Test::testFdo65090()
     // The first row had two cells, instead of a single horizontally merged one.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators").getLength());
 }
+
+void Test::testFdo73389()
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    // This was 9340, i.e. the width of the inner table was too large.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2842), getProperty<sal_Int32>(xTables->getByIndex(0), "Width"));
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
