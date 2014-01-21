@@ -216,8 +216,7 @@ getCurrentDoc( const OUString& sKey ) throw (uno::RuntimeException)
     if ( pCompVar )
     {
         aModel = sbxToUnoValue( pCompVar );
-        if ( sal_False == ( aModel >>= xModel ) ||
-            !xModel.is() )
+        if ( !( aModel >>= xModel ) || !xModel.is() )
         {
             throw uno::RuntimeException(
                 "Can't extract model from basic ( it's obviously not set yet  therefore don't know the current document context)" , uno::Reference< uno::XInterface >() );
