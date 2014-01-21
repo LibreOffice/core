@@ -175,7 +175,7 @@ namespace drawinglayer
 
         bool arePrimitive2DReferencesEqual(const Primitive2DReference& rxA, const Primitive2DReference& rxB)
         {
-            const sal_Bool bAIs(rxA.is());
+            const bool bAIs(rxA.is());
 
             if(bAIs != rxB.is())
             {
@@ -206,7 +206,7 @@ namespace drawinglayer
 
         bool arePrimitive2DSequencesEqual(const Primitive2DSequence& rA, const Primitive2DSequence& rB)
         {
-            const sal_Bool bAHasElements(rA.hasElements());
+            const bool bAHasElements(rA.hasElements());
 
             if(bAHasElements != rB.hasElements())
             {

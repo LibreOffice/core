@@ -154,7 +154,7 @@ namespace drawinglayer
 
         bool arePrimitive3DReferencesEqual(const Primitive3DReference& rxA, const Primitive3DReference& rxB)
         {
-            const sal_Bool bAIs(rxA.is());
+            const bool bAIs(rxA.is());
 
             if(bAIs != rxB.is())
             {
@@ -185,7 +185,7 @@ namespace drawinglayer
 
         bool arePrimitive3DSequencesEqual(const Primitive3DSequence& rA, const Primitive3DSequence& rB)
         {
-            const sal_Bool bAHasElements(rA.hasElements());
+            const bool bAHasElements(rA.hasElements());
 
             if(bAHasElements != rB.hasElements())
             {
