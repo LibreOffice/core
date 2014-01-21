@@ -163,7 +163,7 @@ static void lcl_sendPartialGETRequest( bool &bError,
                         for ( std::vector< DAVPropertyValue >::iterator it = aResponseProps.begin();
                                 it != aResponseProps.end(); ++it )
                         {
-                            if ( it->Name != "Content-Length" )
+                            if (it->Name == "Content-Length")
                             {
                                 it->Value <<= aSize;
                                 break;
