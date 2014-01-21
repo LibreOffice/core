@@ -1370,6 +1370,10 @@ bool PDFWriterImpl::computeEncryptionKey( EncHashTransporter* i_pTransporter, vc
                 }
             }
         }
+        else
+        {
+            bSuccess = false;
+        }
     }
     else
         bSuccess = false;
