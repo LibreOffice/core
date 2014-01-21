@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_f7edf8f0",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableManager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1000542
+      },
+      "writtenOn": "2014-01-21T12:15:33Z",
+      "side": 1,
+      "message": "Why \"nTableWidth !\u003d 100\", If you want to check type is relative please check of TABLE_WIDTH_TYPE instead of \"nTableWidth !\u003d 100\".",
+      "range": {
+        "startLine": 671,
+        "startChar": 13,
+        "endLine": 671,
+        "endChar": 24
+      },
+      "revId": "695ccad25e5e92ccb7fcaf2cb787014f898459ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
