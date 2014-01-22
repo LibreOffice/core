@@ -620,14 +620,14 @@ public:
 
      @see MergeSystemSettings, SetSettings, GetSettings
     */
-    virtual void                SystemSettingsChanging( AllSettings& rSettings );
+    virtual void                OverrideSystemSettings( AllSettings& rSettings );
 
     /** Set the settings object to the platform/desktop environment system
      settings.
 
      @param     rSettings       Reference to the settings object to change.
 
-     @see SystemSettingsChanging, SetSettings, GetSettings
+     @see OverrideSystemSettings, SetSettings, GetSettings
     */
     static void                 MergeSystemSettings( AllSettings& rSettings );
 
@@ -641,9 +641,8 @@ public:
     */
     static void                 SetSettings( const AllSettings& rSettings );
 
-
     /** Gets the application's settings. If the application hasn't initialized
-     it's settings, then it does so (lazy initialization).
+     its settings, then it does so (lazy initialization).
 
      @returns AllSettings instance that contains the current settings of the
         application.
