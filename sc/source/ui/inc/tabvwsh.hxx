@@ -388,9 +388,7 @@ public:
 
     void    ForceMove()     { Move(); }
 
-    void    MakeNumberInfoItem      ( ScDocument*            pDoc,
-                                      ScViewData*            pViewData,
-                                      SvxNumberInfoItem**    ppItem );
+    SvxNumberInfoItem* MakeNumberInfoItem( ScDocument* pDoc, ScViewData* pViewData );
 
     void    UpdateNumberFormatter   ( const SvxNumberInfoItem&  rInfoItem );
 

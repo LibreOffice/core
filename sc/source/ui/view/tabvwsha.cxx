@@ -464,17 +464,16 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
 //------------------------------------------------------------------
 void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName)
 {
-    SfxAbstractTabDialog * pDlg = NULL;
     ScDocument*             pDoc    = GetViewData()->GetDocument();
 
     SvxBoxItem              aLineOuter( ATTR_BORDER );
     SvxBoxInfoItem          aLineInner( ATTR_BORDER_INNER );
 
-    SvxNumberInfoItem*      pNumberInfoItem = NULL;
     const ScPatternAttr*    pOldAttrs       = GetSelectionPattern();
-    SfxItemSet*             pOldSet         = new SfxItemSet(
-                                                    pOldAttrs->GetItemSet() );
 
+    boost::scoped_ptr<SfxAbstractTabDialog> pDlg;
+    boost::scoped_ptr<SfxItemSet> pOldSet(new SfxItemSet(pOldAttrs->GetItemSet()));
+    boost::scoped_ptr<SvxNumberInfoItem> pNumberInfoItem;
 
     // Get border items and put them in the set:
     GetSelectionFrame( aLineOuter, aLineInner );
@@ -503,7 +502,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     pOldSet->Put( SfxUInt32Item( ATTR_VALUE_FORMAT,
         pOldAttrs->GetNumberFormat( pDoc->GetFormatTable() ) ) );
 
-    MakeNumberInfoItem( pDoc, GetViewData(), &pNumberInfoItem );
+    pNumberInfoItem.reset(MakeNumberInfoItem(pDoc, GetViewData()));
 
     pOldSet->MergeRange( SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO );
     pOldSet->Put(*pNumberInfoItem );
@@ -512,8 +511,8 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-    pDlg = pFact->CreateScAttrDlg(GetViewFrame(), GetDialogParent(), pOldSet);
-    OSL_ENSURE(pDlg, "Dialog create fail!");
+    pDlg.reset(pFact->CreateScAttrDlg(GetViewFrame(), GetDialogParent(), pOldSet.get()));
+
     if (!rName.isEmpty())
         pDlg->SetCurPageId(rName);
     short nResult = pDlg->Execute();
@@ -530,13 +529,10 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
             UpdateNumberFormatter((const SvxNumberInfoItem&)*pItem);
         }
 
-        ApplyAttributes( pOutSet, pOldSet );
+        ApplyAttributes(pOutSet, pOldSet.get());
 
         rReq.Done( *pOutSet );
     }
-    delete pOldSet;
-    delete pNumberInfoItem;
-    delete pDlg;
 }
 
 //------------------------------------------------------------------

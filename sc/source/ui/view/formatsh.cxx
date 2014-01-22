@@ -81,6 +81,8 @@
 #include "scabstdlg.hxx"
 #include <editeng/fontitem.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace ::com::sun::star;
 
 namespace {
@@ -774,8 +776,6 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
         {
             if ( pStyleSheet )
             {
-                SvxNumberInfoItem* pNumberInfoItem = NULL;
-
                 SfxStyleFamily  eFam    = pStyleSheet->GetFamily();
                 SfxAbstractTabDialog* pDlg    = NULL;
                 sal_uInt16          nRsc    = 0;
@@ -818,7 +818,9 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                                 }
                             }
 
-                            pTabViewShell->MakeNumberInfoItem( pDoc, GetViewData(), &pNumberInfoItem );
+                            boost::scoped_ptr<SvxNumberInfoItem> pNumberInfoItem(
+                                pTabViewShell->MakeNumberInfoItem(pDoc, GetViewData()));
+
                             pDocSh->PutItem( *pNumberInfoItem );
                             nRsc = RID_SCDLG_STYLES_PAR;
 
