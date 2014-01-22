@@ -1018,7 +1018,7 @@ static void lcl_MoveCursor( SwUnoCrsr * const pUnoCrsr,
 
     if (nMovePos > nCurrentIndex)
     {
-        pUnoCrsr->GetPoint()->nContent = static_cast<sal_uInt16>(nMovePos);
+        pUnoCrsr->GetPoint()->nContent = nMovePos;
     }
 }
 

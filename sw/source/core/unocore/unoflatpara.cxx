@@ -193,7 +193,7 @@ lang::Locale SAL_CALL SwXFlatParagraph::getLanguageOfText(::sal_Int32 nPos, ::sa
     if (!mpTxtNode)
         return LanguageTag::convertToLocale( LANGUAGE_NONE );
 
-    const lang::Locale aLocale( SW_BREAKITER()->GetLocale( mpTxtNode->GetLang( static_cast<sal_uInt16>(nPos), static_cast<sal_uInt16>(nLen) ) ) );
+    const lang::Locale aLocale( SW_BREAKITER()->GetLocale( mpTxtNode->GetLang(nPos, nLen) ) );
     return aLocale;
 }
 
@@ -206,7 +206,7 @@ lang::Locale SAL_CALL SwXFlatParagraph::getPrimaryLanguageOfText(::sal_Int32 nPo
     if (!mpTxtNode)
         return LanguageTag::convertToLocale( LANGUAGE_NONE );
 
-    const lang::Locale aLocale( SW_BREAKITER()->GetLocale( mpTxtNode->GetLang( static_cast<sal_uInt16>(nPos), static_cast<sal_uInt16>(nLen) ) ) );
+    const lang::Locale aLocale( SW_BREAKITER()->GetLocale( mpTxtNode->GetLang(nPos, nLen) ) );
     return aLocale;
 }
 
