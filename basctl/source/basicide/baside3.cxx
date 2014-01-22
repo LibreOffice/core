@@ -431,6 +431,12 @@ void __EXPORT DialogWindow::GetState( SfxItemSet& rSet )
                     rSet.DisableItem( nWh );
             }
             break;
+
+            case SID_SELECTALL:
+            {
+                rSet.DisableItem( nWh );
+            }
+            break;
         }
     }
 }

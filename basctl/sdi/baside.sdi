@@ -101,6 +101,12 @@ shell BasicIDEShell
         StateMethod = GetState;
     ]
 
+    SID_SELECTALL
+    [
+        ExecMethod  = ExecuteCurrent;
+        StateMethod = GetState;
+    ]
+
     SID_SEARCH_ITEM
     [
         ExecMethod  = ExecuteCurrent;
