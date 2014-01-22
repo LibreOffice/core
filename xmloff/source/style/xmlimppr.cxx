@@ -188,7 +188,7 @@ void SvXMLImportPropertyMapper::importXML(
                                 nReference = -1;
                         }
 
-                        sal_Bool bSet = sal_False;
+                        bool bSet = false;
                         if( ( nFlags & MID_FLAG_SPECIAL_ITEM_IMPORT ) == 0 )
                         {
                             // let the XMLPropertySetMapper decide how to import the value
