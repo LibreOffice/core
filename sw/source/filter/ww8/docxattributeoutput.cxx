@@ -2229,21 +2229,36 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
     m_pSerializer->mark( aSeqOrder );
 
     sal_uInt32 nPageSize = 0;
+    const char* widthType = "dxa";
     bool bRelBoxSize = false;
 
-    // Create the SwWriteTable instance to use col spans (and maybe other infos)
-    GetTablePageSize( pTableTextNodeInfoInner.get(), nPageSize, bRelBoxSize );
-
-    // Output the table preferred width
-    if ( nPageSize != 0 )
-        m_pSerializer->singleElementNS( XML_w, XML_tblW,
-                FSNS( XML_w, XML_w ), OString::number( nPageSize ).getStr( ),
-                FSNS( XML_w, XML_type ), "dxa",
-                FSEND );
-
-    // Output the table alignement
+    // If actual width of table is relative it shoud export is as "auto".
     const SwTable *pTable = pTableTextNodeInfoInner->getTable();
     SwFrmFmt *pTblFmt = pTable->GetFrmFmt( );
+    uno::Reference<beans::XPropertySet> xPropertySet(SwXTextTables::GetObject(const_cast<SwFrmFmt&>(*pTable->GetFrmFmt( ))),uno::UNO_QUERY);
+    bool isWidthRelative = false;
+    xPropertySet->getPropertyValue("IsWidthRelative") >>= isWidthRelative;
+
+    if(isWidthRelative)
+    {
+        nPageSize = 0;
+        widthType = "auto";
+    }
+    else
+    {
+        // Create the SwWriteTable instance to use col spans (and maybe other infos)
+        GetTablePageSize( pTableTextNodeInfoInner.get(), nPageSize, bRelBoxSize );
+        if(nPageSize == 0)
+            widthType = "auto";
+    }
+
+    // Output the table preferred width
+    m_pSerializer->singleElementNS( XML_w, XML_tblW,
+            FSNS( XML_w, XML_w ), OString::number( nPageSize ).getStr( ),
+            FSNS( XML_w, XML_type ), widthType,
+            FSEND );
+
+    // Output the table alignement
     const char* pJcVal;
     sal_Int32 nIndent = 0;
     switch ( pTblFmt->GetHoriOrient( ).GetHoriOrient( ) )

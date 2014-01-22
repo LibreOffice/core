@@ -2845,6 +2845,15 @@ DECLARE_OOXMLEXPORT_TEST(testGradientFillPreservation, "gradient-fill-preservati
             "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill/a:gsLst/a:gs[@pos='50000']/a:schemeClr/a:satMod",
             "val", "160000");
 }
+DECLARE_OOXMLEXPORT_TEST(fdo69656, "Table_cell_auto_width_fdo69656.docx")
+{
+    // Check for the width type of table and its cells.
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblW","type","auto");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
