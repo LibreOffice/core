@@ -106,7 +106,7 @@
 #include <com/sun/star/embed/XPackageStructureCreator.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/frame/AppDispatchProvider.hpp>
-#include <com/sun/star/frame/AutoRecovery.hpp>
+#include <com/sun/star/frame/theAutoRecovery.hpp>
 #include <com/sun/star/frame/CommandGroup.hpp>
 #include <com/sun/star/frame/ContentHandlerFactory.hpp>
 #include <com/sun/star/frame/Desktop.hpp>

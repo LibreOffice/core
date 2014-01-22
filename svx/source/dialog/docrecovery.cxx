@@ -44,7 +44,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/frame/AutoRecovery.hpp>
+#include <com/sun/star/frame/theAutoRecovery.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
@@ -533,7 +533,7 @@ void RecoveryCore::impl_startListening()
     // listening already initialized ?
     if (m_xRealCore.is())
         return;
-    m_xRealCore = css::frame::AutoRecovery::create(m_xContext);
+    m_xRealCore = css::frame::theAutoRecovery::get(m_xContext);
 
     css::util::URL aURL;
     if (m_bListenForSaving)

@@ -26,6 +26,7 @@ import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStatusListener;
+import com.sun.star.frame.theAutoRecovery;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.FillDirection;
 import com.sun.star.sheet.XCellSeries;
@@ -204,7 +205,7 @@ public class AutoSave
             m_aSOF = SOfficeFactory.getFactory(m_xSMGR);
 
             // create AutoSave instance
-            m_xAutoSave = UnoRuntime.queryInterface(XDispatch.class, m_xSMGR.createInstance("com.sun.star.comp.framework.AutoRecovery"));
+            m_xAutoSave = theAutoRecovery.get(connection.getComponentContext());
 
             // prepare AutoSave
             // make sure it will be started every 1 min

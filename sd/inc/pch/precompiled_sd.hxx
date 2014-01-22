@@ -203,7 +203,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/form/FormButtonType.hpp>
-#include <com/sun/star/frame/AutoRecovery.hpp>
+#include <com/sun/star/frame/theAutoRecovery.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/DocumentTemplates.hpp>

@@ -118,7 +118,7 @@
 #include <com/sun/star/drawing/XShapeDescriptor.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
-#include <com/sun/star/frame/AutoRecovery.hpp>
+#include <com/sun/star/frame/theAutoRecovery.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XController.hpp>

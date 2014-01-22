@@ -39,7 +39,7 @@
 #include <svl/languageoptions.hxx>
 #include <svtools/javacontext.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/frame/AutoRecovery.hpp>
+#include <com/sun/star/frame/theAutoRecovery.hpp>
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/SessionListener.hpp>
 #include <com/sun/star/frame/XSessionManagerListener.hpp>
@@ -2344,7 +2344,7 @@ void Desktop::OpenClients()
     {
         try
         {
-            Reference< XDispatch > xRecovery = css::frame::AutoRecovery::create( ::comphelper::getProcessComponentContext() );
+            Reference< XDispatch > xRecovery = css::frame::theAutoRecovery::get( ::comphelper::getProcessComponentContext() );
             Reference< css::util::XURLTransformer > xParser = css::util::URLTransformer::create( ::comphelper::getProcessComponentContext() );
 
             css::util::URL aCmd;

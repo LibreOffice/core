@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/frame/AutoRecovery.hpp>
+#include <com/sun/star/frame/theAutoRecovery.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
@@ -2870,7 +2870,7 @@ void SlideshowImpl::setAutoSaveState( bool bOn)
         aArgs[0].Name = "AutoSaveState";
         aArgs[0].Value <<= bOn ? sal_True : sal_False;
 
-        uno::Reference< frame::XDispatch > xAutoSave = frame::AutoRecovery::create(xContext);
+        uno::Reference< frame::XDispatch > xAutoSave = frame::theAutoRecovery::get(xContext);
         xAutoSave->dispatch(aURL, aArgs);
     }
     catch( Exception& )
