@@ -115,9 +115,6 @@ void ListLevel::SetValue( Id nId, sal_Int32 nValue )
         case NS_ooxml::LN_CT_Lvl_numFmt:
             m_nNFC = nValue;
         break;
-        case NS_rtf::LN_JC:
-            m_nJC = nValue;
-        break;
         case NS_ooxml::LN_CT_Lvl_isLgl:
             m_nFLegal = nValue;
         break;
@@ -750,7 +747,6 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
         break;
         case NS_ooxml::LN_CT_Lvl_start:
         case NS_ooxml::LN_CT_Lvl_numFmt:
-        case NS_rtf::LN_JC:
         case NS_ooxml::LN_CT_Lvl_isLgl:
         case NS_ooxml::LN_CT_Lvl_legacy:
             if ( pCurrentLvl.get( ) )
@@ -958,7 +954,6 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
             break;
             case NS_ooxml::LN_CT_Lvl_start:
             case NS_ooxml::LN_CT_Lvl_numFmt:
-            case NS_rtf::LN_JC:
             case NS_ooxml::LN_CT_Lvl_isLgl:
             case NS_ooxml::LN_CT_Lvl_legacy:
                 if (m_pCurrentDefinition->GetCurrentLevel().get())

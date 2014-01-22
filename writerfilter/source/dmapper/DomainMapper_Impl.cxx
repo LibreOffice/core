@@ -478,48 +478,6 @@ void DomainMapper_Impl::InitTabStopFromStyle( const uno::Sequence< style::TabSto
     }
 }
 
-
-
-void DomainMapper_Impl::ModifyCurrentTabStop( Id nId, sal_Int32 nValue)
-{
-    OSL_ENSURE(m_nCurrentTabStopIndex < m_aCurrentTabStops.size(),
-        "tab stop creation error");
-
-    if( m_nCurrentTabStopIndex >= m_aCurrentTabStops.size())
-        return;
-    static const style::TabAlign aTabAlignFromWord[] =
-    {
-        style::TabAlign_LEFT,
-        style::TabAlign_CENTER,
-        style::TabAlign_RIGHT,
-        style::TabAlign_DECIMAL,
-        style::TabAlign_LEFT
-    };
-    static const sal_Unicode aTabFillCharWord[] =
-    {
-        ' ',
-        '.',
-        '-',
-        '_',
-        '_',
-        0xb7
-    };
-
-    switch(nId)
-    {
-        case NS_rtf::LN_TLC: //tab leading characters - for decimal tabs
-            // 0 - no leader, 1- dotted, 2 - hyphenated, 3 - single line, 4 - heavy line, 5 - middle dot
-            if( nValue >= 0 &&  nValue < sal::static_int_cast<sal_Int32>(sizeof(aTabFillCharWord) / sizeof (sal_Unicode)))
-                m_aCurrentTabStops[m_nCurrentTabStopIndex].FillChar = aTabFillCharWord[nValue];
-        break;
-        case NS_rtf::LN_JC: //tab justification
-            //0 - left, 1 - centered, 2 - right, 3 - decimal 4 - bar
-            if( nValue >= 0 && nValue < sal::static_int_cast<sal_Int32>(sizeof(aTabAlignFromWord) / sizeof (style::TabAlign)))
-                m_aCurrentTabStops[m_nCurrentTabStopIndex].Alignment = aTabAlignFromWord[nValue];
-        break;
-    }
-}
-
 void DomainMapper_Impl::IncorporateTabStop( const DeletableTabStop &  rTabStop )
 {
     ::std::vector<DeletableTabStop>::iterator aIt = m_aCurrentTabStops.begin();

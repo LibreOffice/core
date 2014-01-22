@@ -529,7 +529,6 @@ public:
     void    ImportGraphic(writerfilter::Reference< Properties>::Pointer_t, GraphicImportType eGraphicImportType );
 
     void    InitTabStopFromStyle( const ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop >& rInitTabStops );
-    void    ModifyCurrentTabStop( Id nId, sal_Int32 nValue);
     void    IncorporateTabStop( const DeletableTabStop &aTabStop );
     ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop >     GetCurrentTabStopAndClear();
     void                                NextTabStop() {++m_nCurrentTabStopIndex;}
