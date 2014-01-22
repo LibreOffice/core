@@ -129,7 +129,9 @@ enum EActiveState
     @devstatus  ready to use
     @threadsafe yes
 *//*-*************************************************************************************************************/
-class Frame :   // interfaces
+class Frame :
+                public  ::cppu::OWeakObject                         ,   // helper implements XInterface, XWeak
+                // interfaces
                 public  css::lang::XTypeProvider                    ,
                 public  css::lang::XServiceInfo                     ,
                 public  css::frame::XFrame2                         ,
@@ -145,8 +147,7 @@ class Frame :   // interfaces
                 // Order is necessary for right initialization of this class!
                 public  ThreadHelpBase                              ,
                 public  TransactionBase                             ,
-                public  PropertySetHelper                           ,   // helper implements ThreadHelpbase, TransactionBase, XPropertySet, XPropertySetInfo
-                public  ::cppu::OWeakObject                             // helper implements XInterface, XWeak
+                public  PropertySetHelper                               // helper implements ThreadHelpbase, TransactionBase, XPropertySet, XPropertySetInfo
 {
 public:
 
