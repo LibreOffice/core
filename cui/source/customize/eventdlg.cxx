@@ -61,14 +61,14 @@ SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet,
     aSaveInListBox( this, CUI_RES( LB_SAVEIN ) ),
     bAppConfig  ( sal_True )
 {
-    mpImpl->pStrEvent           = new OUString( CUI_RES( STR_EVENT ));
-    mpImpl->pAssignedMacro      = new OUString( CUI_RES( STR_ASSMACRO ));
+    mpImpl->sStrEvent           = OUString( CUI_RES( STR_EVENT ));
+    mpImpl->sAssignedMacro      = OUString( CUI_RES( STR_ASSMACRO ));
     mpImpl->pEventLB            = new MacroEventListBox( this, CUI_RES( LB_EVENT ));
     mpImpl->pAssignFT           = new FixedText( this,  CUI_RES( FT_ASSIGN ));
     mpImpl->pAssignPB           = new PushButton( this, CUI_RES( PB_ASSIGN ));
     mpImpl->pDeletePB           = new PushButton( this, CUI_RES( PB_DELETE ));
-    mpImpl->pMacroImg           = new Image( CUI_RES( IMG_MACRO) );
-    mpImpl->pComponentImg       = new Image( CUI_RES( IMG_COMPONENT) );
+    mpImpl->aMacroImg           = Image( CUI_RES( IMG_MACRO) );
+    mpImpl->aComponentImg       = Image( CUI_RES( IMG_COMPONENT) );
 
     FreeResource();
 
@@ -108,7 +108,10 @@ void SvxEventConfigPage::LateInit( const uno::Reference< frame::XFrame >& _rxFra
 
 SvxEventConfigPage::~SvxEventConfigPage()
 {
-    //DF Do I need to delete bools?
+    delete mpImpl->pEventLB;
+    delete mpImpl->pAssignFT;
+    delete mpImpl->pAssignPB;
+    delete mpImpl->pDeletePB;
 }
 
 // -----------------------------------------------------------------------
@@ -211,13 +214,6 @@ IMPL_LINK( SvxEventConfigPage, SelectHdl_Impl, ListBox *, pBox )
 sal_Bool SvxEventConfigPage::FillItemSet( SfxItemSet& rSet )
 {
     return _SvxMacroTabPage::FillItemSet( rSet );
-}
-
-// -----------------------------------------------------------------------
-
-void SvxEventConfigPage::Reset( const SfxItemSet& )
-{
-    _SvxMacroTabPage::Reset();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -72,7 +72,8 @@ protected:
     bool bReadOnly, bDocModified, bAppEvents, bInitialized;
     EventDisplayNames aDisplayNames;
 
-                                _SvxMacroTabPage( Window* pParent, const ResId& rId, const SfxItemSet& rItemSet );
+    _SvxMacroTabPage( Window* pParent, const ResId& rId, const SfxItemSet& rItemSet );
+    _SvxMacroTabPage( Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet& rItemSet );
 
     void                        EnableButtons();
     ::com::sun::star::uno::Any  GetPropsByName( const OUString& eventName, EventsHash& eventsHash );
@@ -86,8 +87,7 @@ public:
     void                        InitAndSetHandler( ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xAppEvents, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xDocEvents, ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifiable > xModifiable );
     virtual sal_Bool                FillItemSet( SfxItemSet& rSet );
 
-    using SfxTabPage::Reset;
-    virtual void                Reset();
+    virtual void        Reset( const SfxItemSet& );
 
     void                        DisplayAppEvents( bool appEvents);
     void                        SetReadOnly( sal_Bool bSet );
@@ -104,33 +104,18 @@ public:
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xNameReplace,
         sal_uInt16 nSelectedIndex
     );
-    virtual ~SvxMacroTabPage();
 };
 
 // class SvxMacroAssignDlg --------------------------------------------------
 
 typedef sal_uInt16* (*GetTabPageRanges)(); // gives international Which-values
 
-class SvxMacroAssignSingleTabDialog : public SfxModalDialog
+class SvxMacroAssignSingleTabDialog : public SfxSingleTabDialog
 {
 public:
-    SvxMacroAssignSingleTabDialog( Window* pParent, const SfxItemSet& rOptionsSet, sal_uInt16 nUniqueId );
-
-    virtual             ~SvxMacroAssignSingleTabDialog();
-
-    void                SetTabPage( SfxTabPage* pTabPage );
+    SvxMacroAssignSingleTabDialog(Window* pParent, const SfxItemSet& rOptionsSet);
 
 private:
-    FixedLine*          pFixedLine;
-
-    OKButton*           pOKBtn;
-    CancelButton*       pCancelBtn;
-    HelpButton*         pHelpBtn;
-
-    SfxTabPage*         pPage;
-    const SfxItemSet*   pOptions;
-    SfxItemSet*         pOutSet;
-
     DECL_DLLPRIVATE_LINK( OKHdl_Impl, Button * );
 };
 
@@ -145,7 +130,6 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace >& xNameReplace,
         sal_uInt16 nSelectedIndex
     );
-    virtual ~SvxMacroAssignDlg();
 };
 
 #endif

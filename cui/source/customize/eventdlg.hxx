@@ -55,8 +55,6 @@ public:
 
 protected:
     virtual sal_Bool    FillItemSet( SfxItemSet& );
-    virtual void    Reset( const SfxItemSet& );
-    using _SvxMacroTabPage::Reset;
 
 private:
     void    ImplInitDocument();

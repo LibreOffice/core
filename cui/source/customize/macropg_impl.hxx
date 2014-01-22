@@ -23,20 +23,19 @@
 class _SvxMacroTabPage_Impl
 {
 public:
-                                    _SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet );
-                                    ~_SvxMacroTabPage_Impl();
+    _SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet );
 
     FixedText*                      pAssignFT;
     PushButton*                     pAssignPB;
     PushButton*                     pAssignComponentPB;
     PushButton*                     pDeletePB;
-    Image*                          pMacroImg;
-    Image*                          pComponentImg;
-    OUString*                       pStrEvent;
-    OUString*                       pAssignedMacro;
+    Image                           aMacroImg;
+    Image                           aComponentImg;
+    OUString                        sStrEvent;
+    OUString                        sAssignedMacro;
     MacroEventListBox*              pEventLB;
-    sal_Bool                            bReadOnly;
-    sal_Bool                            bIDEDialogMode;
+    sal_Bool                        bReadOnly;
+    sal_Bool                        bIDEDialogMode;
 };
 
 class AssignComponentDialog : public ModalDialog

@@ -20,6 +20,7 @@
 #include <basic/basmgr.hxx>
 
 #include "macropg.hxx"
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/svmedit.hxx>
 #include <svtools/svlbitm.hxx>
@@ -52,14 +53,9 @@ static OUString aVndSunStarUNO( "vnd.sun.star.UNO:" );
 static OUString aVndSunStarScript( "vnd.sun.star.script:" );
 
 _SvxMacroTabPage_Impl::_SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet ) :
-    pAssignFT( NULL ),
     pAssignPB( NULL ),
     pAssignComponentPB( NULL ),
     pDeletePB( NULL ),
-    pMacroImg( NULL ),
-    pComponentImg( NULL ),
-    pStrEvent( NULL ),
-    pAssignedMacro( NULL ),
     pEventLB( NULL ),
     bReadOnly( sal_False ),
     bIDEDialogMode( sal_False )
@@ -67,19 +63,6 @@ _SvxMacroTabPage_Impl::_SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet ) :
     const SfxPoolItem* pItem;
     if ( SFX_ITEM_SET == rAttrSet.GetItemState( SID_ATTR_MACROITEM, sal_False, &pItem ) )
         bIDEDialogMode = ((const SfxBoolItem*)pItem)->GetValue();
-}
-
-_SvxMacroTabPage_Impl::~_SvxMacroTabPage_Impl()
-{
-    delete pAssignFT;
-    delete pAssignPB;
-    delete pAssignComponentPB;
-    delete pDeletePB;
-    delete pMacroImg;
-    delete pComponentImg;
-    delete pStrEvent;
-    delete pAssignedMacro;
-    delete pEventLB;
 }
 
 // attention, this array is indexed directly (0, 1, ...) in the code
@@ -157,6 +140,33 @@ MacroEventListBox::MacroEventListBox( Window* pParent, const ResId& rId )
     maListBox.EnableCellFocus();
 }
 
+MacroEventListBox::MacroEventListBox( Window* pParent, WinBits nStyle )
+    : Control( pParent, nStyle )
+    , maHeaderBar( this, WB_BUTTONSTYLE | WB_BOTTOMBORDER )
+    , maListBox( this, WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP )
+{
+    maListBox.SetHelpId( HID_MACRO_HEADERTABLISTBOX );
+
+    // enable the cell focus to show visible focus
+    maListBox.EnableCellFocus();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeMacroEventListBox(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinBits = WB_TABSTOP;
+
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+       nWinBits |= WB_BORDER;
+
+    return new MacroEventListBox(pParent, nWinBits);
+}
+
+Size MacroEventListBox::GetOptimalSize() const
+{
+    return LogicToPixel(Size(192, 200), MapMode(MAP_APPFONT ));
+}
+
 void MacroEventListBox::Resize()
 {
     Control::Resize();
@@ -215,6 +225,19 @@ void _SvxMacroTabPage::EnableButtons()
 
 _SvxMacroTabPage::_SvxMacroTabPage( Window* pParent, const ResId& rResId, const SfxItemSet& rAttrSet )
     : SfxTabPage( pParent, rResId, rAttrSet ),
+    m_xAppEvents(0),
+    m_xDocEvents(0),
+    bReadOnly(false),
+    bDocModified(false),
+    bAppEvents(false),
+    bInitialized(false)
+{
+    mpImpl = new _SvxMacroTabPage_Impl( rAttrSet );
+}
+
+_SvxMacroTabPage::_SvxMacroTabPage(Window* pParent, const OString& rID,
+    const OUString& rUIXMLDescription, const SfxItemSet& rAttrSet)
+    : SfxTabPage( pParent, rID, rUIXMLDescription, rAttrSet ),
     m_xAppEvents(0),
     m_xDocEvents(0),
     bReadOnly(false),
@@ -379,7 +402,7 @@ sal_Bool _SvxMacroTabPage::FillItemSet( SfxItemSet& /*rSet*/ )
 }
 
 // the following method clears the bindings in the hashes for both doc & app
-void _SvxMacroTabPage::Reset()
+void _SvxMacroTabPage::Reset( const SfxItemSet& )
 {
     // called once in creation - don't reset the data this time
     if(!bInitialized)
@@ -514,9 +537,7 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
     // have to use the original XNameReplace since the hash iterators do
     // not guarantee the order in which the elements are returned
     if(!nameReplace.is())
-    {
         return;
-    }
 
     Sequence< OUString > eventNames = nameReplace->getElementNames();
     ::std::set< OUString > aEventNamesCache;
@@ -546,12 +567,13 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
         OUString displayName( CUI_RES( displayableEvent->nEventResourceID ) );
 
         displayName += "\t";
+
         SvTreeListEntry*    _pE = rListBox.InsertEntry( displayName );
         OUString* pEventName = new OUString( sEventName );
         _pE->SetUserData( (void*)pEventName );
         OUString sNew( eventURL );
         _pE->ReplaceItem( new IconLBoxString( _pE, 0, sNew,
-            mpImpl->pMacroImg, mpImpl->pComponentImg ), LB_MACROS_ITEMPOS );
+            &mpImpl->aMacroImg, &mpImpl->aComponentImg ), LB_MACROS_ITEMPOS );
         rListBox.GetModel()->InvalidateEntry( _pE );
         rListBox.Select( _pE );
         rListBox.MakeVisible( _pE );
@@ -700,7 +722,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
     // update the listbox entry
     pImpl->pEventLB->SetUpdateMode( sal_False );
     pE->ReplaceItem( new IconLBoxString( pE, 0, sEventURL,
-            pImpl->pMacroImg, pImpl->pComponentImg ), LB_MACROS_ITEMPOS );
+            &pImpl->aMacroImg, &pImpl->aComponentImg ), LB_MACROS_ITEMPOS );
 
     rListBox.GetModel()->InvalidateEntry( pE );
     rListBox.Select( pE );
@@ -732,15 +754,15 @@ void _SvxMacroTabPage::InitAndSetHandler( Reference< container::XNameReplace> xA
     rListBox.SetSelectionMode( SINGLE_SELECTION );
     rListBox.SetTabs( &nTabs[0], MAP_APPFONT );
     Size aSize( nTabs[ 2 ], 0 );
-    rHeaderBar.InsertItem( ITEMID_EVENT, *mpImpl->pStrEvent, LogicToPixel( aSize, MapMode( MAP_APPFONT ) ).Width() );
+    rHeaderBar.InsertItem( ITEMID_EVENT, mpImpl->sStrEvent, LogicToPixel( aSize, MapMode( MAP_APPFONT ) ).Width() );
     aSize.Width() = 1764;        // don't know what, so 42^2 is best to use...
-    rHeaderBar.InsertItem( ITMEID_ASSMACRO, *mpImpl->pAssignedMacro, LogicToPixel( aSize, MapMode( MAP_APPFONT ) ).Width() );
+    rHeaderBar.InsertItem( ITMEID_ASSMACRO, mpImpl->sAssignedMacro, LogicToPixel( aSize, MapMode( MAP_APPFONT ) ).Width() );
     rListBox.SetSpaceBetweenEntries( 0 );
 
     mpImpl->pEventLB->Show();
     mpImpl->pEventLB->ConnectElements();
 
-    long nMinLineHeight = mpImpl->pMacroImg->GetSizePixel().Height() + 2;
+    long nMinLineHeight = mpImpl->aMacroImg.GetSizePixel().Height() + 2;
     if( nMinLineHeight > mpImpl->pEventLB->GetListBox().GetEntryHeight() )
         mpImpl->pEventLB->GetListBox().SetEntryHeight(
             sal::static_int_cast< short >(nMinLineHeight) );
@@ -813,41 +835,31 @@ Any _SvxMacroTabPage::GetPropsByName( const OUString& eventName, EventsHash& eve
     return ::std::make_pair( type, url );
 }
 
-SvxMacroTabPage::SvxMacroTabPage( Window* pParent, const Reference< frame::XFrame >& _rxDocumentFrame, const SfxItemSet& rSet, Reference< container::XNameReplace > xNameReplace, sal_uInt16 nSelectedIndex )
-    : _SvxMacroTabPage( pParent, CUI_RES( RID_SVXPAGE_MACROASSIGN ), rSet )
+SvxMacroTabPage::SvxMacroTabPage(Window* pParent,
+    const Reference< frame::XFrame >& _rxDocumentFrame,
+    const SfxItemSet& rSet,
+    Reference< container::XNameReplace > xNameReplace,
+    sal_uInt16 nSelectedIndex)
+    : _SvxMacroTabPage(pParent, "MacroAssignPage", "cui/ui/macroassignpage.ui", rSet)
 {
-    mpImpl->pStrEvent           = new OUString(                     CUI_RES( STR_EVENT ) );
-    mpImpl->pAssignedMacro      = new OUString(                     CUI_RES( STR_ASSMACRO ) );
-    mpImpl->pEventLB            = new MacroEventListBox( this,      CUI_RES( LB_EVENT ) );
-    mpImpl->pAssignFT           = new FixedText( this,              CUI_RES( FT_ASSIGN ) );
-    mpImpl->pAssignPB           = new PushButton( this,             CUI_RES( PB_ASSIGN ) );
-    mpImpl->pDeletePB           = new PushButton( this,             CUI_RES( PB_DELETE ) );
-    mpImpl->pAssignComponentPB  = new PushButton( this,         CUI_RES( PB_ASSIGN_COMPONENT ) );
-    mpImpl->pMacroImg           = new Image(                        CUI_RES(IMG_MACRO) );
-    mpImpl->pComponentImg       = new Image(                        CUI_RES(IMG_COMPONENT) );
-
-    FreeResource();
+    mpImpl->sStrEvent = get<FixedText>("eventft")->GetText();
+    mpImpl->sAssignedMacro = get<FixedText>("assignft")->GetText();
+    get(mpImpl->pEventLB, "assignments");
+    get(mpImpl->pAssignPB, "assign");
+    get(mpImpl->pDeletePB, "delete");
+    get(mpImpl->pAssignComponentPB, "component");
+    mpImpl->aMacroImg = get<FixedImage>("macroimg")->GetImage();
+    mpImpl->aComponentImg = get<FixedImage>("componentimg")->GetImage();
 
     SetFrame( _rxDocumentFrame );
 
     if( !mpImpl->bIDEDialogMode )
     {
-        Point aPosAssign = mpImpl->pAssignPB->GetPosPixel();
-        Point aPosComp = mpImpl->pAssignComponentPB->GetPosPixel();
-
-        Point aPosDelete = mpImpl->pDeletePB->GetPosPixel();
-        long nYDiff = aPosComp.Y() - aPosAssign.Y();
-        aPosDelete.Y() -= nYDiff;
-        mpImpl->pDeletePB->SetPosPixel( aPosDelete );
-
         mpImpl->pAssignComponentPB->Hide();
         mpImpl->pAssignComponentPB->Disable();
     }
 
-    // must be done after FreeResource is called
     InitResources();
-
-    mpImpl->pEventLB->GetListBox().SetHelpId( HID_SVX_MACRO_LB_EVENT );
 
     InitAndSetHandler( xNameReplace, Reference< container::XNameReplace>(0), Reference< util::XModifiable >(0));
     DisplayAppEvents(true);
@@ -857,21 +869,12 @@ SvxMacroTabPage::SvxMacroTabPage( Window* pParent, const Reference< frame::XFram
         rListBox.Select(pE);
 }
 
-SvxMacroTabPage::~SvxMacroTabPage()
-{
-}
-
 SvxMacroAssignDlg::SvxMacroAssignDlg( Window* pParent, const Reference< frame::XFrame >& _rxDocumentFrame, const SfxItemSet& rSet,
     const Reference< container::XNameReplace >& xNameReplace, sal_uInt16 nSelectedIndex )
-        : SvxMacroAssignSingleTabDialog( pParent, rSet, 0 )
+        : SvxMacroAssignSingleTabDialog(pParent, rSet)
 {
-    SetTabPage( new SvxMacroTabPage( this, _rxDocumentFrame, rSet, xNameReplace, nSelectedIndex ) );
+    setTabPage(new SvxMacroTabPage(get_content_area(), _rxDocumentFrame, rSet, xNameReplace, nSelectedIndex));
 }
-
-SvxMacroAssignDlg::~SvxMacroAssignDlg()
-{
-}
-
 
 //===============================================
 
@@ -918,103 +921,18 @@ AssignComponentDialog::~AssignComponentDialog()
 IMPL_LINK( SvxMacroAssignSingleTabDialog, OKHdl_Impl, Button *, pButton )
 {
     (void)pButton; //unused
-    pPage->FillItemSet( *pOutSet );
+    GetTabPage()->FillItemSet( *(SfxItemSet*)0 );
     EndDialog( RET_OK );
     return 0;
 }
 
 // -----------------------------------------------------------------------
 
-SvxMacroAssignSingleTabDialog::SvxMacroAssignSingleTabDialog
-    ( Window *pParent, const SfxItemSet& rSet, sal_uInt16 nUniqueId ) :
-        SfxModalDialog( pParent, nUniqueId, WinBits( WB_STDMODAL | WB_3DLOOK ) ),
-        pFixedLine      ( 0 ),
-        pOKBtn          ( 0 ),
-        pCancelBtn      ( 0 ),
-        pHelpBtn        ( 0 ),
-        pPage           ( 0 ),
-        pOptions        ( &rSet ),
-        pOutSet         ( 0 )
-{}
-
-
-// -----------------------------------------------------------------------
-
-SvxMacroAssignSingleTabDialog::~SvxMacroAssignSingleTabDialog()
+SvxMacroAssignSingleTabDialog::SvxMacroAssignSingleTabDialog(Window *pParent,
+    const SfxItemSet& rSet)
+    : SfxSingleTabDialog(pParent, rSet)
 {
-    delete pFixedLine;
-    delete pOKBtn;
-    delete pCancelBtn;
-    delete pHelpBtn;
-    delete pPage;
-}
-
-// -----------------------------------------------------------------------
-
-// According to SfxNoLayoutSingleTabDialog
-void SvxMacroAssignSingleTabDialog::SetTabPage( SfxTabPage* pTabPage )
-{
-    pFixedLine = new FixedLine( this );
-
-    pOKBtn = new OKButton( this, WB_DEFBUTTON );
-    pOKBtn->SetClickHdl( LINK( this, SvxMacroAssignSingleTabDialog, OKHdl_Impl ) );
-
-    pCancelBtn = new CancelButton( this );
-    pHelpBtn = new HelpButton( this );
-
-    pPage = pTabPage;
-
-    if ( pPage )
-    {
-        OUString sUserData;
-        pPage->SetUserData( sUserData );
-        pPage->Reset( *pOptions );
-        pPage->Show();
-
-        // Set dialog's and buttons' size and position according to tabpage size
-        long nSpaceX = LogicToPixel( Size( 6, 0 ), MAP_APPFONT ).Width();
-        long nSpaceY = LogicToPixel( Size( 0, 6 ), MAP_APPFONT ).Height();
-        long nHalfSpaceX = LogicToPixel( Size( 3, 0 ), MAP_APPFONT ).Width();
-        long nHalfSpaceY = LogicToPixel( Size( 0, 3 ), MAP_APPFONT ).Height();
-
-        pPage->SetPosPixel( Point() );
-        Size aTabpageSize( pPage->GetSizePixel() );
-        Size aDialogSize( aTabpageSize );
-        Size aButtonSize = LogicToPixel( Size( 50, 14 ), MAP_APPFONT );
-        long nButtonWidth  = aButtonSize.Width();
-        long nButtonHeight = aButtonSize.Height();
-
-        Size aFixedLineSize( aTabpageSize );
-        long nFixedLineHeight = LogicToPixel( Size( 0, 8 ), MAP_APPFONT ).Height();
-        aFixedLineSize.Height() = nFixedLineHeight;
-
-        aDialogSize.Height() += nFixedLineHeight + nButtonHeight + nSpaceY + nHalfSpaceY;
-        SetOutputSizePixel( aDialogSize );
-
-        long nButtonPosY = aTabpageSize.Height() + nFixedLineHeight + nHalfSpaceY;
-        long nHelpButtonPosX = nSpaceX;
-        pHelpBtn->SetPosSizePixel( Point( nHelpButtonPosX, nButtonPosY), aButtonSize );
-        pHelpBtn->Show();
-
-        long nCancelButtonPosX = aDialogSize.Width() - nButtonWidth - nSpaceX + 1;
-        pCancelBtn->SetPosSizePixel( Point( nCancelButtonPosX, nButtonPosY), aButtonSize );
-        pCancelBtn->Show();
-
-        long nOkButtonPosX = nCancelButtonPosX - nButtonWidth - nHalfSpaceX;
-        pOKBtn->SetPosSizePixel( Point( nOkButtonPosX, nButtonPosY), aButtonSize );
-        pOKBtn->Show();
-
-        long nFixedLinePosY = aTabpageSize.Height();
-        pFixedLine->SetPosSizePixel( Point( 0, nFixedLinePosY), aFixedLineSize );
-        pFixedLine->Show();
-
-        // Get text from TabPage
-        SetText( pPage->GetText() );
-
-        // Get IDs from TabPage
-        SetHelpId( pPage->GetHelpId() );
-        SetUniqueId( pPage->GetUniqueId() );
-    }
+    GetOKButton()->SetClickHdl( LINK( this, SvxMacroAssignSingleTabDialog, OKHdl_Impl ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

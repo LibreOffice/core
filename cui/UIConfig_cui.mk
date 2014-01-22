@@ -66,6 +66,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/linetabpage \
 	cui/uiconfig/ui/lineendstabpage \
 	cui/uiconfig/ui/linestyletabpage \
+	cui/uiconfig/ui/macroassignpage \
 	cui/uiconfig/ui/macroselectordialog \
 	cui/uiconfig/ui/messbox \
 	cui/uiconfig/ui/movemenu \
