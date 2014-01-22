@@ -1938,13 +1938,6 @@ void Desktop::SystemSettingsChanging( AllSettings& rSettings )
     if ( !SvtTabAppearanceCfg::IsInitialized () )
         return;
 
-#   define DRAGFULL_OPTION_ALL \
-         ( DRAGFULL_OPTION_WINDOWMOVE | DRAGFULL_OPTION_WINDOWSIZE  \
-         | DRAGFULL_OPTION_OBJECTMOVE  | DRAGFULL_OPTION_OBJECTSIZE \
-         | DRAGFULL_OPTION_DOCKING     | DRAGFULL_OPTION_SPLIT      \
-         | DRAGFULL_OPTION_SCROLL )
-#   define DRAGFULL_OPTION_NONE ((sal_uInt32)~DRAGFULL_OPTION_ALL)
-
     StyleSettings hStyleSettings   = rSettings.GetStyleSettings();
     MouseSettings hMouseSettings = rSettings.GetMouseSettings();
 
@@ -1958,7 +1951,7 @@ void Desktop::SystemSettingsChanging( AllSettings& rSettings )
         nDragFullOptions |= DRAGFULL_OPTION_ALL;
         break;
     case DragFrame:
-        nDragFullOptions &= DRAGFULL_OPTION_NONE;
+        nDragFullOptions &= ((sal_uInt32)~DRAGFULL_OPTION_ALL);
         break;
     case DragSystemDep:
     default:
