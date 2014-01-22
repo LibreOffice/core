@@ -2470,6 +2470,15 @@ DECLARE_OOXMLEXPORT_TEST(testMsoSpt180, "mso-spt180.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("ooxml-borderCallout1"), aType);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo73550, "fdo73550.docx")
+{
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+    // This was wrap="none".
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:rFonts");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testDmlTextshape, "dml-textshape.docx")
 {
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
@@ -2492,7 +2501,6 @@ DECLARE_OOXMLEXPORT_TEST(testDmlTextshape, "dml-textshape.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4018), xShape->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1256), xShape->getPosition().Y);
 }
-
 DECLARE_OOXMLEXPORT_TEST(testShapeThemePreservation, "shape-theme-preservation.docx")
 {
     xmlDocPtr pXmlDocument = parseExport("word/document.xml");
