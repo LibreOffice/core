@@ -221,10 +221,7 @@ ImplStyleData::ImplStyleData() :
     mnScreenZoom                = 100;
     mnScreenFontZoom            = 100;
     mnLogoDisplayTime           = LOGO_DISPLAYTIME_STARTTIME;
-    mnDragFullOptions           = DRAGFULL_OPTION_WINDOWMOVE | DRAGFULL_OPTION_WINDOWSIZE |
-                                  DRAGFULL_OPTION_OBJECTMOVE | DRAGFULL_OPTION_OBJECTSIZE |
-                                  DRAGFULL_OPTION_DOCKING    | DRAGFULL_OPTION_SPLIT      |
-                                  DRAGFULL_OPTION_SCROLL;
+    mnDragFullOptions           = DRAGFULL_OPTION_ALL;
     mnAnimationOptions          = 0;
     mnSelectionOptions          = 0;
     mnDisplayOptions            = 0;
