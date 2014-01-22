@@ -732,7 +732,7 @@ void CanvasBitmapTest::runTest()
 
     BitmapEx aBmp = vcl::unotools::bitmapExFromXBitmap(xTestBmp);
     CPPUNIT_ASSERT_MESSAGE( "Palette bitmap is transparent",
-                            aBmp.IsTransparent() == false);
+                            !aBmp.IsTransparent());
     CPPUNIT_ASSERT_MESSAGE( "Bitmap does not have size (10,10)",
                             aBmp.GetSizePixel() == Size(10,10));
     CPPUNIT_ASSERT_MESSAGE( "Bitmap does not have bitcount of 8",
