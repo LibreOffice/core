@@ -572,7 +572,7 @@ public:
      */
     static sal_Bool             IsUICaptured();
 
-    virtual void                SystemSettingsChanging( AllSettings& rSettings );
+    virtual void                OverrideSystemSettings( AllSettings& rSettings );
     static void                 MergeSystemSettings( AllSettings& rSettings );
 
     static void                 SetSettings( const AllSettings& rSettings );

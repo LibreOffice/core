@@ -476,7 +476,7 @@ sal_Bool Application::IsUICaptured()
         return sal_False;
 }
 
-void Application::SystemSettingsChanging( AllSettings& /*rSettings*/ )
+void Application::OverrideSystemSettings( AllSettings& /*rSettings*/ )
 {
 }
 
