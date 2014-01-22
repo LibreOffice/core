@@ -27,6 +27,7 @@ namespace writerfilter {
                 RTFValue(int nValue, OUString sValue, RTFSprms rAttributes, RTFSprms rSprms, uno::Reference<drawing::XShape> rShape,
                         uno::Reference<io::XInputStream> rStream, uno::Reference<embed::XEmbeddedObject> rObject, bool bForceString,
                         RTFShape aShape);
+                RTFValue();
                 RTFValue(int nValue);
                 RTFValue(OUString sValue, bool bForce = false);
                 RTFValue(RTFSprms rAttributes);

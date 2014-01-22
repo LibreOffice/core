@@ -30,6 +30,19 @@ RTFValue::RTFValue(int nValue, OUString sValue, RTFSprms rAttributes,
     m_pShape.reset(new RTFShape(aShape));
 }
 
+RTFValue::RTFValue()
+    : m_nValue(0),
+    m_sValue(),
+    m_xShape(),
+    m_xStream(),
+    m_xObject(),
+    m_bForceString(false)
+{
+    m_pAttributes.reset(new RTFSprms());
+    m_pSprms.reset(new RTFSprms());
+    m_pShape.reset(new RTFShape());
+}
+
 RTFValue::RTFValue(int nValue)
     : m_nValue(nValue),
     m_sValue(),

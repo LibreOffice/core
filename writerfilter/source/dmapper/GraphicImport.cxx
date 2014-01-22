@@ -489,30 +489,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
         break;
         case NS_ooxml::LN_CT_Border_frame: // ignored
             break;
-
-        case NS_rtf::LN_WR: //wrapping
-            switch( nIntValue )
-            {
-                case 0: //0 like 2, but doesn't require absolute object
-                    m_pImpl->bIgnoreWRK = false;
-                case 2: //2 wrap around absolute object
-                    m_pImpl->nWrap = text::WrapTextMode_PARALLEL;
-                    break;
-                case 1: //1 no text next to shape
-                    m_pImpl->nWrap = text::WrapTextMode_NONE;
-                    break;
-                case 3: //3 wrap as if no object present
-                    m_pImpl->nWrap = text::WrapTextMode_THROUGHT;
-                    break;
-                case 4: //4 wrap tightly around object
-                    m_pImpl->bIgnoreWRK = false;
-                case 5: //5 wrap tightly, but allow holes
-                    m_pImpl->nWrap = text::WrapTextMode_PARALLEL;
-                    m_pImpl->bContour = true;
-                break;
-                default:;
-            }
-        break;
         case NS_ooxml::LN_CT_PositiveSize2D_cx:// 90407;
         case NS_ooxml::LN_CT_PositiveSize2D_cy:// 90408;
         {
