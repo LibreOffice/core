@@ -447,7 +447,7 @@ bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
            ( RES_GRFFMTCOLL == nFmtWhich ||
              RES_TXTFMTCOLL == nFmtWhich ) ) )
     {
-        if( ( bRet = (0 != aSet.Put( rSet ))) )
+        if( ( bRet = aSet.Put( rSet )) )
             aSet.SetModifyAtAttr( this );
         // #i71574#
         if ( nFmtWhich == RES_TXTFMTCOLL )

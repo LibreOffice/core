@@ -139,7 +139,7 @@ const SfxPoolItem* Put( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
     return pRet;
 }
 
-int Put( boost::shared_ptr<const SfxItemSet>& mrpAttrSet, const SwCntntNode& rNode,
+bool Put( boost::shared_ptr<const SfxItemSet>& mrpAttrSet, const SwCntntNode& rNode,
          const SfxItemSet& rSet )
 {
     SwAttrSet aNewSet( (SwAttrSet&)*mrpAttrSet );
@@ -152,7 +152,7 @@ int Put( boost::shared_ptr<const SfxItemSet>& mrpAttrSet, const SwCntntNode& rNo
         pStyleNames->Put( aNewSet );
     }
 
-    const int nRet = aNewSet.Put( rSet );
+    const bool nRet = aNewSet.Put( rSet );
 
     // #i76273# Robust
     if ( pStyleNames )
@@ -1437,7 +1437,7 @@ sal_Bool SwCntntNode::SetAttr( const SfxItemSet& rSet )
            SFX_ITEM_SET != rSet.GetItemState( RES_PARATR_NUMRULE, sal_False ) ) )
     {
         // Some special treatment for Attributes
-        bRet = 0 != AttrSetHandleHelper::Put( mpAttrSet, *this, rSet );
+        bRet = AttrSetHandleHelper::Put( mpAttrSet, *this, rSet );
     }
     else
     {

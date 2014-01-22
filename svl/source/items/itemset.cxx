@@ -630,7 +630,7 @@ const SfxPoolItem* SfxItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich 
 
 // -----------------------------------------------------------------------
 
-int SfxItemSet::Put( const SfxItemSet& rSet, sal_Bool bInvalidAsDefault )
+bool SfxItemSet::Put( const SfxItemSet& rSet, bool bInvalidAsDefault )
 {
     DBG_CHKTHIS(SfxItemSet, DbgCheckItemSet);
     bool bRet = false;
@@ -658,7 +658,7 @@ int SfxItemSet::Put( const SfxItemSet& rSet, sal_Bool bInvalidAsDefault )
             pPtr += 2;
         }
     }
-    return int(bRet);
+    return bRet;
 }
 
 // -----------------------------------------------------------------------
@@ -922,7 +922,7 @@ bool SfxItemSet::Set
         }
     }
     else
-        bRet = Put(rSet, sal_False);
+        bRet = Put(rSet, false);
 
     return bRet;
 }
@@ -2002,19 +2002,6 @@ const SfxPoolItem* SfxAllItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhi
         ++_nCount;
 
     return &rNew;
-}
-
-// -----------------------------------------------------------------------
-
-
-/*  Diese Methode wird forwarded, damit sie nicht durch die anderen
-    Put-Methoden dieser SubClass gehided wird.
-*/
-
-int SfxAllItemSet::Put( const SfxItemSet& rSet, sal_Bool bInvalidAsDefault )
-{
-    //? pruefen, ob Which-Ranges erweitert werden
-    return SfxItemSet::Put( rSet, bInvalidAsDefault );
 }
 
 // -----------------------------------------------------------------------

@@ -127,8 +127,8 @@ public:
     virtual const SfxPoolItem*  Put( const SfxPoolItem&, sal_uInt16 nWhich );
     const SfxPoolItem*          Put( const SfxPoolItem& rItem )
                                 { return Put(rItem, rItem.Which()); }
-    virtual int                 Put( const SfxItemSet&,
-                                     sal_Bool bInvalidAsDefault = sal_True );
+    bool                        Put( const SfxItemSet&,
+                                     bool bInvalidAsDefault = true );
     void                        PutExtended( const SfxItemSet&,
                                              SfxItemState eDontCareAs = SFX_ITEM_UNKNOWN,
                                              SfxItemState eDefaultAs = SFX_ITEM_UNKNOWN );
@@ -181,10 +181,7 @@ public:
 
     virtual SfxItemSet *        Clone( sal_Bool bItems = sal_True, SfxItemPool *pToPool = 0 ) const;
     virtual const SfxPoolItem*  Put( const SfxPoolItem&, sal_uInt16 nWhich );
-    const SfxPoolItem*          Put( const SfxPoolItem& rItem )
-    { return Put(rItem, rItem.Which()); }
-    virtual int                 Put( const SfxItemSet&,
-                                     sal_Bool bInvalidAsDefault = sal_True );
+    using SfxItemSet::Put;
 };
 
 #endif // INCLUDED_SVL_ITEMSET_HXX

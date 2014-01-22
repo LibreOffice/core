@@ -127,7 +127,7 @@ bool SwAttrSet::Put_BC( const SfxItemSet& rSet,
 {
     pNewSet = pNew;
     pOldSet = pOld;
-    bool nRet = 0 != SfxItemSet::Put( rSet );
+    bool nRet = SfxItemSet::Put( rSet );
     pOldSet = pNewSet = 0;
     return nRet;
 }
