@@ -85,7 +85,7 @@ bool hasCLanguageLinkageType(FunctionDecl const * decl) {
         return true;
     }
 #else
-    if (decl->getDeclContext()->isExternCContext()) {
+    if (decl->getCanonicalDecl()->getDeclContext()->isExternCContext()) {
         return true;
     }
 #endif
