@@ -182,30 +182,6 @@ public:
     static SfxTabPage*          Create( Window* pParent, const SfxItemSet& rAttrSet );
 };
 
-
-class SfxAcceleratorConfigListBox : public ListBox
-{
-    void KeyInput( const KeyEvent &rKEvt );
-
-public:
-
-    SfxAcceleratorConfigListBox( Window *pParent, ResId &rResId ) :
-        ListBox( pParent, rResId ) {}
-
-    void ReplaceEntry( sal_uInt16 nPos, const OUString &rStr );
-    void ExpandEntry ( sal_uInt16 nPos, const OUString &rStr );
-};
-
-class SvxShortcutAssignDlg : public SfxNoLayoutSingleTabDialog
-{
-public:
-    SvxShortcutAssignDlg(
-        Window* pParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxDocumentFrame,
-        const SfxItemSet& rSet );
-    virtual ~SvxShortcutAssignDlg();
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

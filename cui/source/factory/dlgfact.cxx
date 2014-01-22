@@ -1593,9 +1593,6 @@ SfxAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( Window* pParent,
         case SID_EVENTCONFIG :
             pDlg = new SfxMacroAssignDlg( pParent, _rxDocumentFrame, rAttr );
             break;
-        case RID_SVXPAGE_MACROASSIGN :
-            pDlg = new SvxShortcutAssignDlg( pParent, _rxDocumentFrame, rAttr );
-            break;
         case RID_SVXDLG_CHARMAP :
             pDlg = new SvxCharacterMap( pParent, sal_True, &rAttr );
             break;

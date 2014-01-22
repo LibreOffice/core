@@ -1538,20 +1538,4 @@ css::uno::Reference< css::frame::XModel > SfxAcceleratorConfigPage::SearchForAlr
     return css::uno::Reference< css::frame::XModel >();
 }
 
-SvxShortcutAssignDlg::SvxShortcutAssignDlg( Window* pParent, const uno::Reference< frame::XFrame >& rxDocumentFrame, const SfxItemSet& rSet )
-    : SfxNoLayoutSingleTabDialog( pParent, rSet, 0 )
-{
-    SfxTabPage* pPage = SfxAcceleratorConfigPage::Create( this, rSet );
-    pPage->SetFrame( rxDocumentFrame );
-    SetTabPage( pPage );
-
-}
-
-SvxShortcutAssignDlg::~SvxShortcutAssignDlg()
-{
-}
-
-
-// .uno:InsertSymbol?Symbols:string=bla
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
