@@ -58,13 +58,15 @@ gb_OSDEFS := \
 gb_COMPILERDEFS := \
 	-D$(COM) \
 	-DHAVE_GCC_VISIBILITY_FEATURE \
-	-DCPPU_ENV=gcc3 \
+	-DCPPU_ENV=$(COMID) \
 	-DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) \
 
 ifeq ($(CPUNAME),POWERPC)
 gb_CPUDEFS := -DPOWERPC -DPPC
-else
+else ifeq ($(CPUNAME),INTEL)
 gb_CPUDEFS := -DX86
+else ifeq ($(CPUNAME),X86_64)
+gb_CPUDEFS := -DX86_64
 endif
 
 ifeq ($(strip $(SYSBASE)),)
@@ -98,11 +100,7 @@ gb_CXXFLAGS := \
 	-fno-common \
 	-fno-strict-aliasing \
 	-fsigned-char \
-	-malign-natural \
-	-pipe \
-	#-Wshadow \ break in compiler headers already
-	#-fsigned-char \ might be removed?
-	#-malign-natural \ might be removed?
+	-pipe
 
 # these are to get g++ to switch to Objective-C++ mode
 # (see toolkit module for a case where it is necessary to do it this way)
@@ -115,12 +113,15 @@ endif
 
 gb_LinkTarget_EXCEPTIONFLAGS := \
 	-DEXCEPTIONS_ON \
-	-fexceptions \
-	-fno-enforce-eh-specs \
+	-fexceptions
+
+ifeq ($(COM),GCC)
+    gb_LinkTarget_EXCEPTIONFLAGS += -fno-enforce-eh-specs
+endif
 
 gb_LinkTarget_NOEXCEPTIONFLAGS := \
 	-DEXCEPTIONS_OFF \
-	-fno-exceptions \
+	-fno-exceptions
 
 gb_LinkTarget_LDFLAGS := \
 	-Wl,-syslibroot,$(gb_SDKDIR) \
@@ -302,7 +303,7 @@ gb_Library_TARGETTYPEFLAGS := -dynamiclib -single_module
 gb_Library_SYSPRE := lib
 gb_Library_UNOVERPRE := $(gb_Library_SYSPRE)uno_
 gb_Library_PLAINEXT := .dylib
-gb_Library_RTEXT := gcc3$(gb_Library_PLAINEXT)
+gb_Library_RTEXT := $(COMID)$(gb_Library_PLAINEXT)
 
 gb_Library_OOOEXT := $(gb_Library_PLAINEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
