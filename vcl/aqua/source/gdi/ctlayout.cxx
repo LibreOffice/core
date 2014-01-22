@@ -166,6 +166,13 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         nPixelWidth = rArgs.mpDXArray[ mnCharCount - 1 - mnTrailingSpaces ];
     }
 
+    // short-circuit when justifying an all-whitespace string
+    if( mnTrailingSpaces >= mnCharCount)
+    {
+        mfCachedWidth = mfTrailingSpaceWidth = nPixelWidth / mfFontScale;
+        return;
+    }
+
     // in RTL-layouts trailing spaces are leftmost
     // TODO: use BiDi-algorithm to thoroughly check this assumption
     if( rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL)
