@@ -17,73 +17,149 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <services/sessionlistener.hxx>
-#include <services/desktop.hxx>
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/resetableguard.hxx>
-#include <protocols.h>
-#include <services.h>
+#include <sal/types.h>
 
-#include <osl/thread.h>
+#include <services/desktop.hxx>
+#include <classes/filtercache.hxx>
+#include <protocols.h>
+#include <general.h>
 
 #include <vcl/svapp.hxx>
 #include <unotools/tempfile.hxx>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/PropertyState.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/theAutoRecovery.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/util/XChangesBatch.hpp>
+#include <com/sun/star/frame/FeatureStateEvent.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XSessionManagerListener2.hpp>
+#include <com/sun/star/frame/XSessionManagerClient.hpp>
+#include <com/sun/star/frame/XStatusListener.hpp>
+#include <com/sun/star/lang/EventObject.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/URL.hpp>
-#include <osl/time.h>
-#include <comphelper/processfactory.hxx>
+#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <unotools/pathoptions.hxx>
-#include <stdio.h>
 
 #include <com/sun/star/uno/Any.hxx>
-
 #include <com/sun/star/uno/Sequence.hxx>
 
+using namespace css;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
-using namespace com::sun::star::frame;
-using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
-using namespace com::sun::star::container;
+using namespace framework;
+
+namespace {
+
+/// @HTML
+/** @short  implements flat/deep detection of file/stream formats and provides
+            further read/write access to the global office type configuration.
+
+    @descr  Using of this class makes it possible to get information about the
+            format type of a given URL or stream. The returned internal type name
+            can be used to get more information about this format. Further this
+            class provides full access to the configuration data and following
+            implementations will support some special query modes.
+
+    @author     as96863
+
+    @docdate    10.03.2003 by as96863
+
+    @todo       <ul>
+                    <li>implementation of query mode</li>
+                    <li>simple restore mechanism of last consistent cache state,
+                        if flush failed</li>
+                </ul>
+ */
+typedef cppu::WeakImplHelper4<
+    css::lang::XInitialization,
+    css::frame::XSessionManagerListener2,
+    css::frame::XStatusListener,
+    css::lang::XServiceInfo> SessionListener_BASE;
+
+class SessionListener : public SessionListener_BASE
+{
+private:
+    osl::Mutex m_aMutex;
+
+    /** reference to the uno service manager, which created this service.
+        It can be used to create own needed helper services. */
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+
+    css::uno::Reference< css::frame::XSessionManagerClient > m_rSessionManager;
+
+    // restore handling
+    sal_Bool m_bRestored;
+
+    sal_Bool m_bSessionStoreRequested;
+
+    sal_Bool m_bAllowUserInteractionOnQuit;
+    sal_Bool m_bTerminated;
 
 
-namespace framework{
+    // in case of synchronous call the caller should do saveDone() call himself!
+    void StoreSession( sal_Bool bAsync );
 
-// XInterface, XTypeProvider, XServiceInfo
+    // let session quietly close the documents, remove lock files, store configuration and etc.
+    void QuitSessionQuietly();
 
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(
-       SessionListener,
-       cppu::OWeakObject,
-       "com.sun.star.frame.SessionListener",
-       IMPLEMENTATIONNAME_SESSIONLISTENER)
+public:
+    SessionListener( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
-DEFINE_INIT_SERVICE(SessionListener,
-                    {
-                        /* Add special code for initialization here, if you have to use your own instance
-                           during your ctor is still in progress! */
-                    }
-                   )
+    virtual ~SessionListener();
+
+    virtual OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException)
+    {
+        return OUString("com.sun.star.comp.frame.SessionListener");
+    }
+
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException)
+    {
+        return cppu::supportsService(this, ServiceName);
+    }
+
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException)
+    {
+        css::uno::Sequence< OUString > aSeq(1);
+        aSeq[0] = OUString("com.sun.star.frame.SessionListener");
+        return aSeq;
+    }
+
+    virtual void SAL_CALL disposing(const com::sun::star::lang::EventObject&) throw (css::uno::RuntimeException);
+
+    // XInitialization
+    virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any  >& args) throw (css::uno::RuntimeException);
+
+    // XSessionManagerListener
+    virtual void SAL_CALL doSave( sal_Bool bShutdown, sal_Bool bCancelable )
+        throw (css::uno::RuntimeException);
+    virtual void SAL_CALL approveInteraction( sal_Bool bInteractionGranted )
+        throw (css::uno::RuntimeException);
+   virtual void SAL_CALL shutdownCanceled()
+        throw (css::uno::RuntimeException);
+   virtual sal_Bool SAL_CALL doRestore()
+        throw (css::uno::RuntimeException);
+
+    // XSessionManagerListener2
+    virtual void SAL_CALL doQuit()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // XStatusListener
+    virtual void SAL_CALL statusChanged(const com::sun::star::frame::FeatureStateEvent& event)
+        throw (css::uno::RuntimeException);
+
+    void doSaveImpl( sal_Bool bShutdown, sal_Bool bCancelable ) throw (css::uno::RuntimeException);
+};
 
 SessionListener::SessionListener(const css::uno::Reference< css::uno::XComponentContext >& rxContext )
-        : ThreadHelpBase      (&Application::GetSolarMutex())
-        , m_xContext          (rxContext                    )
+        : m_xContext( rxContext )
         , m_bRestored( sal_False )
         , m_bSessionStoreRequested( sal_False )
         , m_bAllowUserInteractionOnQuit( sal_False )
@@ -105,15 +181,15 @@ SessionListener::~SessionListener()
 void SessionListener::StoreSession( sal_Bool bAsync )
 {
     SAL_INFO("fwk.session", "SessionListener::StoreSession");
-    ResetableGuard aGuard(m_aLock);
+    osl::MutexGuard g(m_aMutex);
     try
     {
-        // xd create SERVICENAME_AUTORECOVERY -> XDispatch
+        // xd create SERVICENAME_AUTORECOVERY -> frame::XDispatch
         // xd->dispatch("vnd.sun.star.autorecovery:/doSessionSave, async=bAsync
         // on stop event m_rSessionManager->saveDone(this); in case of asynchronous call
         // in case of synchronous call the caller should do saveDone() call himself!
 
-        css::uno::Reference< XDispatch > xDispatch = css::frame::theAutoRecovery::get( m_xContext );
+        css::uno::Reference< frame::XDispatch > xDispatch = css::frame::theAutoRecovery::get( m_xContext );
         css::uno::Reference< XURLTransformer > xURLTransformer = URLTransformer::create( m_xContext );
         URL aURL;
         aURL.Complete = "vnd.sun.star.autorecovery:/doSessionSave";
@@ -138,14 +214,14 @@ void SessionListener::StoreSession( sal_Bool bAsync )
 void SessionListener::QuitSessionQuietly()
 {
     SAL_INFO("fwk.session", "SessionListener::QuitSessionQuietly");
-    ResetableGuard aGuard(m_aLock);
+    osl::MutexGuard g(m_aMutex);
     try
     {
-        // xd create SERVICENAME_AUTORECOVERY -> XDispatch
+        // xd create SERVICENAME_AUTORECOVERY -> frame::XDispatch
         // xd->dispatch("vnd.sun.star.autorecovery:/doSessionQuietQuit, async=false
         // it is done synchronously to avoid conflict with normal quit process
 
-        css::uno::Reference< XDispatch > xDispatch = css::frame::theAutoRecovery::get( m_xContext );
+        css::uno::Reference< frame::XDispatch > xDispatch = css::frame::theAutoRecovery::get( m_xContext );
         css::uno::Reference< XURLTransformer > xURLTransformer = URLTransformer::create( m_xContext );
         URL aURL;
         aURL.Complete = "vnd.sun.star.autorecovery:/doSessionQuietQuit";
@@ -189,7 +265,7 @@ void SAL_CALL SessionListener::initialize(const Sequence< Any  >& args)
         }
     }
     if (!m_rSessionManager.is())
-        m_rSessionManager = css::uno::Reference< XSessionManagerClient >
+        m_rSessionManager = css::uno::Reference< frame::XSessionManagerClient >
             (m_xContext->getServiceManager()->createInstanceWithContext(aSMgr, m_xContext), UNO_QUERY);
 
     if (m_rSessionManager.is())
@@ -198,7 +274,7 @@ void SAL_CALL SessionListener::initialize(const Sequence< Any  >& args)
     }
 }
 
-void SAL_CALL SessionListener::statusChanged(const FeatureStateEvent& event)
+void SAL_CALL SessionListener::statusChanged(const frame::FeatureStateEvent& event)
     throw (css::uno::RuntimeException)
 {
    SAL_INFO("fwk.session", "SessionListener::statusChanged");
@@ -223,10 +299,10 @@ sal_Bool SAL_CALL SessionListener::doRestore()
     throw (RuntimeException)
 {
     SAL_INFO("fwk.session", "SessionListener::doRestore");
-    ResetableGuard aGuard(m_aLock);
+    osl::MutexGuard g(m_aMutex);
     m_bRestored = sal_False;
     try {
-        css::uno::Reference< XDispatch > xDispatch = css::frame::theAutoRecovery::get( m_xContext );
+        css::uno::Reference< frame::XDispatch > xDispatch = css::frame::theAutoRecovery::get( m_xContext );
 
         URL aURL;
         aURL.Complete = "vnd.sun.star.autorecovery:/doSessionRestore";
@@ -267,7 +343,7 @@ void SAL_CALL SessionListener::approveInteraction( sal_Bool bInteractionGranted 
 {
     SAL_INFO("fwk.session", "SessionListener::approveInteraction");
     // do AutoSave as the first step
-    ResetableGuard aGuard(m_aLock);
+    osl::MutexGuard g(m_aMutex);
 
     if ( bInteractionGranted )
     {
@@ -335,6 +411,14 @@ void SessionListener::doQuit()
     }
 }
 
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_frame_SessionListener_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SessionListener(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

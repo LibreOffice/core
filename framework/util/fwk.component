@@ -19,7 +19,8 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="fwk" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.frame.SessionListener">
+  <implementation name="com.sun.star.comp.frame.SessionListener"
+      constructor="com_sun_star_comp_frame_SessionListener_get_implementation">
     <service name="com.sun.star.frame.SessionListener"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.AddonsToolBarFactory"

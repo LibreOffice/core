@@ -2358,23 +2358,15 @@ void Desktop::OpenClients()
         try
         {
             // specifies whether the UI-interaction on Session shutdown is allowed
-            sal_Bool bAllowUI = isUIOnSessionShutdownAllowed();
-
-            xSessionListener = SessionListener::createWithOnQuitFlag(::comphelper::getProcessComponentContext(), bAllowUI);
-
-//            css::beans::NamedValue aProperty( OUString( "AllowUserInteractionOnQuit"  ),
- //                                             css::uno::makeAny( bAllowUI ) );
-  //          css::uno::Sequence< css::uno::Any > aArgs( 1 );
-   //         aArgs[0] <<= aProperty;
-
-     //       xSessionListener->initialize( aArgs );
+            xSessionListener = SessionListener::createWithOnQuitFlag(
+                    ::comphelper::getProcessComponentContext(), isUIOnSessionShutdownAllowed());
         }
         catch(const com::sun::star::uno::Exception& e)
         {
             SAL_WARN( "desktop.app", "Registration of session listener failed" << e.Message);
         }
 
-        if ( !bExistsRecoveryData )
+        if ( !bExistsRecoveryData && xSessionListener.is() )
         {
             // session management
             try

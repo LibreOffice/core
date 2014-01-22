@@ -32,10 +32,7 @@
 
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
-#include <com/sun/star/frame/WindowArrange.hpp>
-#include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
-#include <com/sun/star/frame/XWindowArranger.hpp>
 #include <com/sun/star/frame/XTask.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -51,9 +48,10 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/frame/FeatureStateEvent.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <unotools/cmdoptions.hxx>
 #include <cppuhelper/propshlp.hxx>
