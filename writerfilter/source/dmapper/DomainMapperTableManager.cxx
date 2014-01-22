@@ -48,6 +48,7 @@ DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
     m_nGridBefore(0),
     m_nGridAfter(0),
     m_nCellBorderIndex(0),
+    m_nCellWidthTypeIndex(0),
     m_nHeaderRepeat(0),
     m_nTableWidth(0),
     m_bOOXML( bOOXML ),
@@ -169,9 +170,38 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                             {
                                 // Set the width type of table with 'Auto' and set the width value to 100(%)
                                 pPropMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::VARIABLE );
-                                pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, 100 );
+                                pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, 0 );
                             }
                         }
+
+                        // Set width type of cell's here. In case of "auto" width type, each cell should store it's original
+                        // width type.
+                        if (!m_aCellWidths.empty())
+                        {
+                            ::std::vector< IntVectorPtr >::iterator itr;
+                            for (itr = m_aCellWidths.begin(); itr != m_aCellWidths.end(); ++itr )
+                            {
+                                IntVectorPtr itrVal = (*itr);
+                                std::vector<sal_Int32>::const_iterator aValIter;
+                                for (aValIter = itrVal->begin(); aValIter != itrVal->end(); ++aValIter)
+                                {
+                                    if (*aValIter == -1)
+                                    {
+                                        PropertyMapPtr pCellPropMap1( new PropertyMap );
+                                        pCellPropMap1->Insert(PROP_WIDTH_TYPE,uno::makeAny(text::SizeType::VARIABLE));
+                                        TablePropertyMapPtr pCellPropMap( new TablePropertyMap() );
+                                        pCellPropMap->InsertProps(pCellPropMap1);
+                                        cellPropsByCell( m_nCellWidthTypeIndex, pCellPropMap );
+                                        ++m_nCellWidthTypeIndex;
+                                    }
+                                    else
+                                    {
+                                        ++m_nCellWidthTypeIndex;
+                                    }
+                                }
+                            }
+                        }
+
                         m_bTableSizeTypeInserted = true;
                     }
 #ifdef DEBUG_DOMAINMAPPER
@@ -654,6 +684,21 @@ void DomainMapperTableManager::endOfRowAction()
 
     if( pTableGrid->size() == ( m_nGridBefore + nGrids + m_nGridAfter ) && m_nCell.back( ) > 0 )
     {
+        TablePropertyMapPtr propMap = m_aTmpTableProperties.back();
+        sal_Int32 pTableWidthType;
+        sal_Int32 pTableWidth;
+        propMap->getValue( TablePropertyMap::TABLE_WIDTH_TYPE, pTableWidthType );
+        propMap->getValue( TablePropertyMap::TABLE_WIDTH, pTableWidth );
+        // Update table width if it is relative i.e "auto" width.
+        if (pTableWidthType == text::SizeType::VARIABLE )
+        {
+            if(pTableWidth > 100 || pTableWidth <= 0)
+            {
+                propMap->setValue( TablePropertyMap::TABLE_WIDTH, (sal_Int32)(m_nTableWidth));
+                propMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::FIX);
+            }
+        }
+
         uno::Sequence< text::TableColumnSeparator > aSeparators( m_nCell.back( ) - 1 );
         text::TableColumnSeparator* pSeparators = aSeparators.getArray();
         sal_Int16 nLastRelPos = 0;
@@ -728,6 +773,7 @@ void DomainMapperTableManager::endOfRowAction()
     ++m_nRow;
     m_nCell.back( ) = 0;
     m_nCellBorderIndex = 0;
+    m_nCellWidthTypeIndex = 0;
     getCurrentGrid()->clear();
     pCurrentSpans->clear();
     pCellWidths->clear();
@@ -745,6 +791,7 @@ void DomainMapperTableManager::endOfRowAction()
 void DomainMapperTableManager::clearData()
 {
     m_nRow = m_nCellBorderIndex = m_nHeaderRepeat = m_nTableWidth = m_nLayoutType = 0;
+    m_nCellWidthTypeIndex = 0;
     m_sTableStyleName = OUString();
     m_pTableStyleTextProperies.reset();
 }

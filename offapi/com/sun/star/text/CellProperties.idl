@@ -122,6 +122,10 @@ published service CellProperties
      */
     [property] short VertOrient;
 
+    /** contains width type of a cell.
+     */
+    [optional, property] short WidthType;
+
 };
 
 

@@ -41,6 +41,7 @@ class DomainMapperTableManager : public DomainMapperTableManager_Base_t
     sal_uInt32      m_nGridBefore; ///< number of grid columns in the parent table's table grid which must be skipped before the contents of this table row are added to the parent table
     sal_uInt32      m_nGridAfter; ///< number of grid columns in the parent table's table grid which shall be left after the last cell in the table row
     sal_uInt32      m_nCellBorderIndex; //borders are provided for all cells and need counting
+    sal_uInt32      m_nCellWidthTypeIndex;
     sal_Int32       m_nHeaderRepeat; //counter of repeated headers - if == -1 then the repeating stops
     sal_Int32       m_nTableWidth; //might be set directly or has to be calculated from the column positions
     bool            m_bOOXML;
