@@ -419,12 +419,6 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
     // Read data
     if(bNative)
     {
-        // true color DIB's can have a (optimization) palette
-        if(rHeader.nColsUsed && 8 < rHeader.nBitCount)
-        {
-            rIStm.SeekRel(rHeader.nColsUsed * ((rHeader.nSize != DIBCOREHEADERSIZE ) ? 4 : 3));
-        }
-
         rIStm.Read(rAcc.GetBuffer(), rHeader.nHeight * nAlignedWidth);
     }
     else
@@ -459,12 +453,6 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
             const long nWidth(rHeader.nWidth);
             const long nHeight(rHeader.nHeight);
             sal_uInt8* pBuf = new sal_uInt8[nAlignedWidth];
-
-            // true color DIB's can have a (optimization) palette
-            if(rHeader.nColsUsed && 8 < rHeader.nBitCount)
-            {
-                rIStm.SeekRel(rHeader.nColsUsed * ((rHeader.nSize != DIBCOREHEADERSIZE ) ? 4 : 3));
-            }
 
             const long nI(bTopDown ? 1 : -1);
             long nY(bTopDown ? 0 : nHeight - 1);
