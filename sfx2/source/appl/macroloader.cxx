@@ -44,12 +44,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
-SfxMacroLoader::SfxMacroLoader()
+SfxMacroLoader::SfxMacroLoader(const css::uno::Sequence< css::uno::Any >& aArguments)
     throw (css::uno::Exception, css::uno::RuntimeException)
-{
-}
-
-void SAL_CALL SfxMacroLoader::constructorInit(const css::uno::Sequence< css::uno::Any >& aArguments) throw (css::uno::Exception, css::uno::RuntimeException)
 {
     Reference < XFrame > xFrame;
     if ( aArguments.getLength() )
@@ -343,12 +339,9 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, com::sun::star::uno::An
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_sfx2_SfxMacroLoader_get_implementation(
     css::uno::XComponentContext *,
-    cppu::constructor_InitializationFunc &init_func)
+    css::uno::Sequence<css::uno::Any> const &arguments)
 {
-    // 2nd phase initialization needed
-    init_func = static_cast<cppu::constructor_InitializationFunc>(&SfxMacroLoader::constructorInit);
-
-    return static_cast<cppu::OWeakObject *>(new SfxMacroLoader());
+    return cppu::acquire(new SfxMacroLoader(arguments));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

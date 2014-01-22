@@ -176,9 +176,9 @@ void ObjectMenuController::impl_select(const Reference< XDispatch >& _xDispatch,
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_framework_ObjectMenuController_get_implementation(
     css::uno::XComponentContext *context,
-    cppu::constructor_InitializationFunc &)
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return static_cast<cppu::OWeakObject *>(new ObjectMenuController(context));
+    return cppu::acquire(new ObjectMenuController(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

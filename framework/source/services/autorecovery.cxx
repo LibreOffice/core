@@ -541,7 +541,7 @@ public:
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& type) throw ( css::uno::RuntimeException );
 
     /// Initialization function after having acquire()'d.
-    void SAL_CALL constructorInit( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException);
+    void initListeners();
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException);
@@ -1418,7 +1418,7 @@ AutoRecovery::AutoRecovery(const css::uno::Reference< css::uno::XComponentContex
 {
 }
 
-void AutoRecovery::constructorInit(const css::uno::Sequence< css::uno::Any >& ) throw (css::uno::Exception, css::uno::RuntimeException)
+void AutoRecovery::initListeners()
 {
     // read configuration to know if autosave/recovery is on/off etcpp...
     implts_readConfig();
@@ -4634,12 +4634,14 @@ void AutoRecovery::st_impl_removeLockFile()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_framework_AutoRecovery_get_implementation(
     css::uno::XComponentContext *context,
-    cppu::constructor_InitializationFunc &init_func)
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    // 2nd phase initialization needed
-    init_func = static_cast<cppu::constructor_InitializationFunc>(&AutoRecovery::constructorInit);
+    AutoRecovery *inst = new AutoRecovery(context);
+    css::uno::XInterface *acquired_inst = cppu::acquire(inst);
 
-    return static_cast<cppu::OWeakObject *>(new AutoRecovery(context));
+    inst->initListeners();
+
+    return acquired_inst;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -234,9 +234,9 @@ void SAL_CALL GalleryThemeProvider::removeByName( const OUString& rName )
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_gallery_GalleryThemeProvider_get_implementation(
     css::uno::XComponentContext *,
-    cppu::constructor_InitializationFunc &)
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return static_cast<cppu::OWeakObject *>(new GalleryThemeProvider);
+    return cppu::acquire(new GalleryThemeProvider);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

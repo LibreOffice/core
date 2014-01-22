@@ -91,9 +91,9 @@ Primitive2DSequence SAL_CALL PrimitiveFactory2D::createPrimitivesFromXDrawPage(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_graphic_PrimitiveFactory2D_get_implementation(
     css::uno::XComponentContext *,
-    cppu::constructor_InitializationFunc &)
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return static_cast<cppu::OWeakObject *>(new PrimitiveFactory2D);
+    return cppu::acquire(new PrimitiveFactory2D);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

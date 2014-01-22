@@ -1283,9 +1283,9 @@ Graphic SvxGetGraphicForShape( SdrObject& rShape, bool bVector )
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_Draw_GraphicExporter_get_implementation(
     css::uno::XComponentContext *,
-    cppu::constructor_InitializationFunc &)
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return static_cast<cppu::OWeakObject *>(new GraphicExporter);
+    return cppu::acquire(new GraphicExporter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

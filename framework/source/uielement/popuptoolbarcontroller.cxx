@@ -580,23 +580,23 @@ void NewToolbarController::setItemImage( const OUString &rCommand )
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 org_apache_openoffice_comp_framework_WizardsToolbarController_get_implementation(
     css::uno::XComponentContext *context,
-    cppu::constructor_InitializationFunc &)
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return static_cast<cppu::OWeakObject *>(new WizardsToolbarController(context));
+    return cppu::acquire(new WizardsToolbarController(context));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 org_apache_openoffice_comp_framework_OpenToolbarController_get_implementation(
     css::uno::XComponentContext *context,
-    cppu::constructor_InitializationFunc &)
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return static_cast<cppu::OWeakObject *>(new OpenToolbarController(context));
+    return cppu::acquire(new OpenToolbarController(context));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 org_apache_openoffice_comp_framework_NewToolbarController_get_implementation(
     css::uno::XComponentContext *context,
-    cppu::constructor_InitializationFunc &)
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return static_cast<cppu::OWeakObject *>(new NewToolbarController(context));
+    return cppu::acquire(new NewToolbarController(context));
 }

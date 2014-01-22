@@ -168,9 +168,9 @@ sal_Bool SAL_CALL DllComponentLoader::writeRegistryInfo(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_stoc_DLLComponentLoader_get_implementation(
     css::uno::XComponentContext *context,
-    cppu::constructor_InitializationFunc &)
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return static_cast<cppu::OWeakObject *>(new DllComponentLoader(context));
+    return cppu::acquire(new DllComponentLoader(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

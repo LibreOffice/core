@@ -974,9 +974,9 @@ void SAL_CALL ShutdownIcon::setFastPropertyValue(       ::sal_Int32             
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_desktop_QuickstartWrapper_get_implementation(
     css::uno::XComponentContext *context,
-    cppu::constructor_InitializationFunc &)
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return static_cast<cppu::OWeakObject *>(new ShutdownIcon(context));
+    return cppu::acquire(new ShutdownIcon(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

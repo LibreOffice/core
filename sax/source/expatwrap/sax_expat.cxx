@@ -1023,9 +1023,9 @@ void SaxExpatParser_Impl::callbackEndCDATA( void *pvThis )
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_extensions_xml_sax_ParserExpat_get_implementation(
     css::uno::XComponentContext *,
-    cppu::constructor_InitializationFunc &)
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return static_cast<cppu::OWeakObject *>(new SaxExpatParser);
+    return cppu::acquire(new SaxExpatParser);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

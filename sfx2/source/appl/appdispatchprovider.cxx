@@ -62,11 +62,7 @@ class SfxAppDispatchProvider : public ::cppu::WeakImplHelper2< css::frame::XAppD
 {
     css::uno::WeakReference < css::frame::XFrame > m_xFrame;
 public:
-    SfxAppDispatchProvider()
-        throw (css::uno::Exception, css::uno::RuntimeException);
-
-    /// Initialization function after having acquire()'d.
-    void SAL_CALL constructorInit(const css::uno::Sequence< css::uno::Any >&)
+    SfxAppDispatchProvider(const css::uno::Sequence< css::uno::Any >&aArguments)
         throw (css::uno::Exception, css::uno::RuntimeException);
 
     virtual OUString SAL_CALL getImplementationName()
@@ -94,12 +90,8 @@ public:
         throw (css::uno::RuntimeException);
 };
 
-SfxAppDispatchProvider::SfxAppDispatchProvider()
+SfxAppDispatchProvider::SfxAppDispatchProvider(const css::uno::Sequence< css::uno::Any >& aArguments)
     throw (uno::Exception, uno::RuntimeException)
-{
-}
-
-void SfxAppDispatchProvider::constructorInit(const css::uno::Sequence< css::uno::Any >& aArguments) throw (css::uno::Exception, css::uno::RuntimeException)
 {
     Reference < XFrame > xFrame;
     if ( aArguments.getLength() )
@@ -261,12 +253,9 @@ throw (uno::RuntimeException)
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_sfx2_AppDispatchProvider_get_implementation(
     css::uno::XComponentContext *,
-    cppu::constructor_InitializationFunc &init_func)
+    css::uno::Sequence<css::uno::Any> const &arguments)
 {
-    // 2nd phase initialization needed
-    init_func = static_cast<cppu::constructor_InitializationFunc>(&SfxAppDispatchProvider::constructorInit);
-
-    return static_cast<cppu::OWeakObject *>(new SfxAppDispatchProvider());
+    return cppu::acquire(new SfxAppDispatchProvider(arguments));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

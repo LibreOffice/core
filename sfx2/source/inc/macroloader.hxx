@@ -50,12 +50,8 @@ class SfxMacroLoader : public cppu::WeakImplHelper4<
     SfxObjectShell* GetObjectShell_Impl();
 
 public:
-    SfxMacroLoader()
+    SfxMacroLoader(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments)
         throw (css::uno::Exception, css::uno::RuntimeException);
-
-    /// Initialization function after having acquire()'d.
-    void SAL_CALL constructorInit(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >&)
-        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException);

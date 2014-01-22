@@ -1373,9 +1373,9 @@ void SAXWriter::unknown(const OUString& sString) throw (SAXException, RuntimeExc
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_extensions_xml_sax_Writer_get_implementation(
     css::uno::XComponentContext *,
-    cppu::constructor_InitializationFunc &)
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return static_cast<cppu::OWeakObject *>(new SAXWriter);
+    return cppu::acquire(new SAXWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

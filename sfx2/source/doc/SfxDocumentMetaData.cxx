@@ -2317,17 +2317,17 @@ void SfxDocumentMetaData::createUserDefined()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 CompatWriterDocPropsImpl_get_implementation(
     css::uno::XComponentContext *context,
-    cppu::constructor_InitializationFunc &)
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return static_cast<cppu::OWeakObject *>(new CompatWriterDocPropsImpl(context));
+    return cppu::acquire(new CompatWriterDocPropsImpl(context));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 SfxDocumentMetaData_get_implementation(
     css::uno::XComponentContext *context,
-    cppu::constructor_InitializationFunc &)
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return static_cast<cppu::OWeakObject *>(new SfxDocumentMetaData(context));
+    return cppu::acquire(new SfxDocumentMetaData(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

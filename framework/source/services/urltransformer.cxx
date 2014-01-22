@@ -337,9 +337,9 @@ OUString SAL_CALL URLTransformer::getPresentation( const css::util::URL& aURL,
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_framework_URLTransformer_get_implementation(
     css::uno::XComponentContext *,
-    cppu::constructor_InitializationFunc &)
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return static_cast<cppu::OWeakObject *>(new URLTransformer());
+    return cppu::acquire(new URLTransformer());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
