@@ -608,7 +608,13 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider( const NSString* systemFlavo
             }
           else
           */
-          if ([systemFlavor caseInsensitiveCompare: NSPICTPboardType] == NSOrderedSame)
+#ifdef MAC_OS_X_VERSION_10_6
+          if ([systemFlavor caseInsensitiveCompare: NSPasteboardTypePNG] == NSOrderedSame)
+            {
+              dp = DataProviderPtr_t( new PNGDataProvider( data, NSPNGFileType));
+            } else
+#endif // MAC_OS_X_VERSION_10_5
+         if ([systemFlavor caseInsensitiveCompare: NSPICTPboardType] == NSOrderedSame)
             {
               dp = DataProviderPtr_t( new PNGDataProvider( data, PICTImageFileType));
             }
@@ -657,6 +663,12 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider( const NSString* systemFlavo
     {
       dp = DataProviderPtr_t(new HTMLFormatDataProvider(systemData));
     }
+#ifdef MAC_OS_X_VERSION_10_6
+  else if ([systemFlavor caseInsensitiveCompare: NSPasteboardTypePNG] == NSOrderedSame)
+    {
+      dp = DataProviderPtr_t( new PNGDataProvider(systemData, NSPNGFileType));
+    }
+#endif // MAC_OS_X_VERSION_10_6
   else if ([systemFlavor caseInsensitiveCompare: NSPICTPboardType] == NSOrderedSame)
     {
       dp = DataProviderPtr_t( new PNGDataProvider(systemData, PICTImageFileType));
