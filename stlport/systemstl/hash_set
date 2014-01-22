@@ -61,13 +61,6 @@ public:
 	hash_set( void) {}
 	hash_set( size_t n) : _super(n) {}
 
-#ifdef BOOST_TR1_UNORDERED_SET_INCLUDED // workaround pre-BOOST_UNORDERED_USE_MOVE problem 
-	// in derived classes the copy assignment operator can only be declared implicitly if
-	// its base class's assignment operator has the canonical signature.
-	// boost's assignment operators don't have this canonical signature when move-semantics are enabled
-	hash_set& operator=( const hash_set& r) { hash_set c(r); this->swap(c); return *this; }
-#endif
-
 private:
 	// setting the hasher dynamically is not supported in the emulation!
 	hash_set( size_t, const __H&, const __E& rE=__E(), const __A& rA=__A()); // not implemented
@@ -85,13 +78,6 @@ class hash_multiset
 public:
 	hash_multiset( void) {}
 	hash_multiset( size_t n) : _super( n) {}
-
-#ifdef BOOST_TR1_UNORDERED_SET_INCLUDED // workaround pre-BOOST_UNORDERED_USE_MOVE problem 
-	// in derived classes the copy assignment operator can only be declared implicitly if
-	// its base class's assignment operator has the canonical signature.
-	// boost's assignment operators don't have this canonical signature when move-semantics are enabled
-	hash_multiset& operator=( const hash_multiset& r) { hash_multiset c(r); this->swap(c); return *this; }
-#endif
 
 private:
 	// setting the hasher dynamically is not supported in the emulation!

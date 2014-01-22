@@ -64,13 +64,6 @@ public:
 	hash_map( void) {}
 	hash_map( size_t n) : _super( n) {}
 
-#ifdef BOOST_TR1_UNORDERED_MAP_INCLUDED // workaround pre-BOOST_UNORDERED_USE_MOVE problem 
-	// in derived classes the copy assignment operator can only be declared implicitly if
-	// its base class's assignment operator has the canonical signature.
-	// boost's assignment operators don't have this canonical signature when move-semantics are enabled
-	hash_map& operator=( const hash_map& r) { hash_map c(r); this->swap(c); return *this; }
-#endif
-
 private:
 	// setting the hasher dynamically is not supported in the emulation!
 	hash_map( size_t, const __H&, const __E& rE=__E(), const __A& rA=__A()); // not implemented
@@ -91,13 +84,6 @@ public:
 
 	hash_multimap( void) {}
 	hash_multimap( size_t n) : _super( n) {}
-
-#ifdef BOOST_TR1_UNORDERED_MAP_INCLUDED // workaround pre-BOOST_UNORDERED_USE_MOVE problem
-	// in derived classes the copy assignment operator can only be declared implicitly if
-	// its base class's assignment operator has the canonical signature.
-	// boost's assignment operators don't have this canonical signature when move-semantics are enabled
-	hash_multimap& operator=( const hash_multimap& r) { hash_multimap c(r); this->swap(c); return *this; }
-#endif
 
 private:
 	// setting the hasher dynamically is not supported in the emulation!
