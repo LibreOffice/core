@@ -123,21 +123,21 @@ private:
     sal_uLong           mnLines;
     sal_uInt16          mnMode;
     sal_uInt16          mnCode;
-    sal_Bool            mbHorz;
-    sal_Bool            mbDeltaIsPixel;
+    bool            mbHorz;
+    bool            mbDeltaIsPixel;
 
 public:
                     CommandWheelData();
                     CommandWheelData( long nWheelDelta, long nWheelNotchDelta,
                                       sal_uLong nScrollLines,
                                       sal_uInt16 nWheelMode, sal_uInt16 nKeyModifier,
-                                      sal_Bool bHorz = sal_False, sal_Bool bDeltaIsPixel = sal_False );
+                                      bool bHorz = false, bool bDeltaIsPixel = false );
 
     long            GetDelta() const { return mnDelta; }
     long            GetNotchDelta() const { return mnNotchDelta; }
     sal_uLong           GetScrollLines() const { return mnLines; }
-    sal_Bool            IsHorz() const { return mbHorz; }
-    sal_Bool            IsDeltaPixel() const { return mbDeltaIsPixel; }
+    bool            IsHorz() const { return mbHorz; }
+    bool            IsDeltaPixel() const { return mbDeltaIsPixel; }
 
     sal_uInt16          GetMode() const { return mnMode; }
 
@@ -145,11 +145,11 @@ public:
                         { return (mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2)); }
     bool            IsShift() const
                         { return ((mnCode & KEY_SHIFT) != 0); }
-    sal_Bool            IsMod1() const
+    bool            IsMod1() const
                         { return ((mnCode & KEY_MOD1) != 0); }
-    sal_Bool            IsMod2() const
+    bool            IsMod2() const
                         { return ((mnCode & KEY_MOD2) != 0); }
-    sal_Bool            IsMod3() const
+    bool            IsMod3() const
                         { return ((mnCode & KEY_MOD3) != 0); }
 };
 
@@ -160,14 +160,14 @@ inline CommandWheelData::CommandWheelData()
     mnLines         = 0;
     mnMode          = 0;
     mnCode          = 0;
-    mbHorz          = sal_False;
-    mbDeltaIsPixel  = sal_False;
+    mbHorz          = false;
+    mbDeltaIsPixel  = false;
 }
 
 inline CommandWheelData::CommandWheelData( long nWheelDelta, long nWheelNotchDelta,
                                            sal_uLong nScrollLines,
                                            sal_uInt16 nWheelMode, sal_uInt16 nKeyModifier,
-                                           sal_Bool bHorz, sal_Bool bDeltaIsPixel )
+                                           bool bHorz, bool bDeltaIsPixel )
 {
     mnDelta         = nWheelDelta;
     mnNotchDelta    = nWheelNotchDelta;
@@ -221,20 +221,20 @@ public:
                     CommandModKeyData();
                     CommandModKeyData( sal_uInt16 nCode );
 
-    bool            IsShift()   const { return (mnCode & MODKEY_SHIFT) ? true : false; }
-    sal_Bool            IsMod1()    const { return (mnCode & MODKEY_MOD1) ? sal_True : sal_False; }
-    sal_Bool            IsMod2()    const { return (mnCode & MODKEY_MOD2) ? sal_True : sal_False; }
-    sal_Bool            IsMod3()    const { return (mnCode & MODKEY_MOD3) ? sal_True : sal_False; }
+    bool            IsShift()   const { return (mnCode & MODKEY_SHIFT) != 0; }
+    bool            IsMod1()    const { return (mnCode & MODKEY_MOD1) != 0; }
+    bool            IsMod2()    const { return (mnCode & MODKEY_MOD2) != 0; }
+    bool            IsMod3()    const { return (mnCode & MODKEY_MOD3) != 0; }
 
-    sal_Bool            IsLeftShift() const { return (mnCode & MODKEY_LSHIFT) ? sal_True : sal_False; }
-    sal_Bool            IsLeftMod1()  const { return (mnCode & MODKEY_LMOD1) ? sal_True : sal_False; }
-    sal_Bool            IsLeftMod2()  const { return (mnCode & MODKEY_LMOD2) ? sal_True : sal_False; }
-    sal_Bool            IsLeftMod3()  const { return (mnCode & MODKEY_LMOD3) ? sal_True : sal_False; }
+    bool            IsLeftShift() const { return (mnCode & MODKEY_LSHIFT) != 0; }
+    bool            IsLeftMod1()  const { return (mnCode & MODKEY_LMOD1) != 0; }
+    bool            IsLeftMod2()  const { return (mnCode & MODKEY_LMOD2) != 0; }
+    bool            IsLeftMod3()  const { return (mnCode & MODKEY_LMOD3) != 0; }
 
-    sal_Bool            IsRightShift() const { return (mnCode & MODKEY_RSHIFT) ? sal_True : sal_False; }
-    sal_Bool            IsRightMod1()  const { return (mnCode & MODKEY_RMOD1) ? sal_True : sal_False; }
-    sal_Bool            IsRightMod2()  const { return (mnCode & MODKEY_RMOD2) ? sal_True : sal_False; }
-    sal_Bool            IsRightMod3()  const { return (mnCode & MODKEY_RMOD3) ? sal_True : sal_False; }
+    bool            IsRightShift() const { return (mnCode & MODKEY_RSHIFT) != 0; }
+    bool            IsRightMod1()  const { return (mnCode & MODKEY_RMOD1) != 0; }
+    bool            IsRightMod2()  const { return (mnCode & MODKEY_RMOD2) != 0; }
+    bool            IsRightMod3()  const { return (mnCode & MODKEY_RMOD3) != 0; }
 };
 
 inline CommandModKeyData::CommandModKeyData()
@@ -354,16 +354,16 @@ private:
     Point                               maPos;
     void*                               mpData;
     sal_uInt16                              mnCommand;
-    sal_Bool                                mbMouseEvent;
+    bool                                mbMouseEvent;
 
 public:
                                         CommandEvent();
                                         CommandEvent( const Point& rMousePos, sal_uInt16 nCmd,
-                                                      sal_Bool bMEvt = sal_False, const void* pCmdData = NULL );
+                                                      bool bMEvt = false, const void* pCmdData = NULL );
 
     sal_uInt16                              GetCommand() const { return mnCommand; }
     const Point&                        GetMousePosPixel() const { return maPos; }
-    sal_Bool                                IsMouseEvent() const { return mbMouseEvent; }
+    bool                                IsMouseEvent() const { return mbMouseEvent; }
     void*                               GetData() const { return mpData; }
 
     const CommandExtTextInputData*      GetExtTextInputData() const;
@@ -380,11 +380,11 @@ inline CommandEvent::CommandEvent()
 {
     mpData          = NULL;
     mnCommand       = 0;
-    mbMouseEvent    = sal_False;
+    mbMouseEvent    = false;
 }
 
 inline CommandEvent::CommandEvent( const Point& rMousePos,
-                                   sal_uInt16 nCmd, sal_Bool bMEvt, const void* pCmdData ) :
+                                   sal_uInt16 nCmd, bool bMEvt, const void* pCmdData ) :
             maPos( rMousePos )
 {
     mpData          = (void*)pCmdData;
