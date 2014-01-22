@@ -375,7 +375,8 @@ public:
 
      @see Quit, Reschedule, Yield, EndYield, GetSolarMutex,
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
-          EnableNoYieldMode, AddPostYieldListener, RemovePostYieldListener
+          EnableNoYieldMode, DisableNoYieldMode, AddPostYieldListener,
+          RemovePostYieldListener
     */
     static void                 Execute();
 
@@ -383,7 +384,8 @@ public:
 
      @see Execute, Reschedule, Yield, EndYield, GetSolarMutex,
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
-          EnableNoYieldMode, AddPostYieldListener, RemovePostYieldListener
+          EnableNoYieldMode, DisableNoYieldMode, AddPostYieldListener,
+          RemovePostYieldListener
     */
     static void                 Quit();
 
@@ -395,8 +397,8 @@ public:
 
      @see Execute, Quit, Yield, EndYield, GetSolarMutex,
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
-          EnableNoYieldMode, AddPostYieldListener, RemovePostYieldListener
-
+          EnableNoYieldMode, DisableNoYieldMode, AddPostYieldListener,
+          RemovePostYieldListener
      */
     static void                 Reschedule( bool bAllEvents = false );
 
@@ -404,7 +406,8 @@ public:
 
      @see Execute, Quit, Reschedule, EndYield, GetSolarMutex,
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
-          EnableNoYieldMode, AddPostYieldListener, RemovePostYieldListener
+          EnableNoYieldMode, DisableNoYieldMode, AddPostYieldListener,
+          RemovePostYieldListener
     */
     static void                 Yield();
 
@@ -412,7 +415,8 @@ public:
 
      @see Execute, Quit, Reschedule, Yield, GetSolarMutex,
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
-          EnableNoYieldMode, AddPostYieldListener, RemovePostYieldListener
+          EnableNoYieldMode, DisableNoYieldMode, AddPostYieldListener,
+          RemovePostYieldListener
     */
     static void                 EndYield();
 
@@ -425,7 +429,8 @@ public:
 
      @see Execute, Quit, Reschedule, Yield, EndYield,
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
-          EnableNoYieldMode, AddPostYieldListener, RemovePostYieldListener
+          EnableNoYieldMode, DisableNoYieldMode, AddPostYieldListener,
+          RemovePostYieldListener
     */
     static comphelper::SolarMutex& GetSolarMutex();
 
@@ -435,7 +440,8 @@ public:
 
      @see Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
           ReleaseSolarMutex, AcquireSolarMutex,
-          EnableNoYieldMode, AddPostYieldListener, RemovePostYieldListener
+          EnableNoYieldMode, DisableNoYieldMode, AddPostYieldListener,
+          RemovePostYieldListener
     */
     static oslThreadIdentifier  GetMainThreadIdentifier();
 
@@ -448,9 +454,9 @@ public:
 
      @see Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
           GetMainThreadIdentifier, AcquireSolarMutex,
-          EnableNoYieldMode, AddPostYieldListener, RemovePostYieldListener
+          EnableNoYieldMode, DisableNoYieldMode, AddPostYieldListener,
+          RemovePostYieldListener
     */
-
     static sal_uLong            ReleaseSolarMutex();
 
     /** @Brief Acquire Solar Mutex(es) for this thread.
@@ -460,7 +466,8 @@ public:
 
      @see Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
           GetMainThreadIdentifier, ReleaseSolarMutex,
-          EnableNoYieldMode, AddPostYieldListener, RemovePostYieldListener
+          EnableNoYieldMode, DisableNoYieldMode, AddPostYieldListener,
+          RemovePostYieldListener
     */
     static void                 AcquireSolarMutex( sal_uLong nCount );
 
@@ -473,7 +480,7 @@ public:
 
      @see DisableNoYieldMode, Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
-          AddPostYieldListener, RemovePostYieldListener
+          DisableNoYield, AddPostYieldListener, RemovePostYieldListener
     */
     static void                 EnableNoYieldMode();
 
@@ -486,8 +493,9 @@ public:
 
      @see EnableNoYieldMode, Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
-          AddPostYieldListener, RemovePostYieldListener
+          EnableNoYield, AddPostYieldListener, RemovePostYieldListener
     */
+
     static void                 DisableNoYieldMode();
 
     /** Add a listener for yield events
@@ -496,10 +504,9 @@ public:
 
      @see Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
-          RemovePostYieldListener
+          EnableNoYieldMode, DisableNoYieldMode, RemovePostYieldListener
     */
     static void                 AddPostYieldListener( const Link& i_rListener );
-
 
     /** Remove listener for yield events
 
@@ -507,7 +514,7 @@ public:
 
      @see Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
-          AddPostYieldListener
+          AddPostYieldListener, EnableNoYieldMode, DisableNoYieldMode
     */
     static void                 RemovePostYieldListener( const Link& i_rListener );
 
@@ -572,11 +579,96 @@ public:
      */
     static sal_Bool             IsUICaptured();
 
+
+    /** Overrides system settings with user settings.
+
+     The system settings that can be overridden are:
+        - window dragging options (on or off, including live scrolling!)
+        - style settings (e.g. cehckbox color, border color, 3D colors,
+          button rollover colors, etc.)
+        - mouse settings
+        - menu options, including the mouse follows the menu and whether menu
+          icons are used
+
+     @remark One wonders why this is a virtual function when all the other
+        settings options are static functions. What is it about overridding
+        an AllSettings object that requires it to have it's own Application
+        instance, when LibreOffice only keeps one Application instance around
+        at any time?
+
+        Another thing about this function is that it is a remarkably awkward
+        name that doesn't \em really describe what it does.
+
+     @todo Recommend that rSettings be made immutable and
+        we return a new AllSettings because as it stands it would be easy to
+        believe that this function changes system settings, which it does not
+        as this is the job of @SetSettings.
+
+     @param      rSettings      Reference to the settings object to change.
+
+     @see MergeSystemSettings, SetSettings, GetSettings
+    */
     virtual void                SystemSettingsChanging( AllSettings& rSettings );
+
+    /** Set the settings object to the platform/desktop environment system
+     settings.
+
+     @todo Incredibly, this gets the default window, then it uses whatever
+        the system settings of this window are. This seems entirely unnecessary.
+        Furthermore, to do this trick it then calls on @ImplUpdateGlobalSettings
+        (a function of the @Window class, which in turn calls on a platform
+        specific SalFrame UpdateSettings to update the settings object to the
+        environment's defaults.
+
+        This would be better refactored to a function that gets the environment's
+        defaults without having to get a Window instance.
+
+     @todo Recommend that rSettings be made immutable and
+        we return a new AllSettings because as it stands it would be easy to
+        believe that this function changes system settings, which it does not
+        as this is the job of @SetSettings.
+
+     @param     rSettings       Reference to the settings object to change.
+
+     @see SystemSettingsChanging, SetSettings, GetSettings
+    */
     static void                 MergeSystemSettings( AllSettings& rSettings );
 
+    /** Sets the application's settings and notifies all windows of the
+     change.
+
+     @todo If the application hasn't initialized its settings yet, then
+        currently it calls on GetSettings to initialize the settings. Recommend
+        moving the initialization to a private function and call on this
+        instead.
+
+     @param     rSettings       const reference to settings object used to
+                                change the application's settings.
+
+     @see SystemSettingsChanging, MergeSystemSettings, GetSettings
+    */
     static void                 SetSettings( const AllSettings& rSettings );
+
+
+    /** Gets the application's settings. If the application hasn't initialized
+     it's settings, then it does so (lazy initialization).
+
+     @remark This is a const function. However, it can update the
+        application's settings object in pSVData. Be warned!
+
+     @todo  We need to call on @GetSettings to initialize the application's
+        settings! This makes absolutely no sense. See @SetSettings, which does
+        exactly this and doesn't care about the return value. Recommend
+        moving this initialization code to a private function and call on
+        this seperately.
+
+     @returns AllSettings instance that contains the current settings of the
+        application.
+
+     @see SystemSettingsChanging, MergeSystemSettings, SetSettings
+    */
     static const AllSettings&   GetSettings();
+
     static void                 NotifyAllWindows( DataChangedEvent& rDCEvt );
 
     static void                 AddEventListener( const Link& rEventListener );
