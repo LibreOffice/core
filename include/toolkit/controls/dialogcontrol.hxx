@@ -328,7 +328,7 @@ public:
     OUString     GetComponentServiceName();
 
 // ::com::sun::star::lang::XServiceInfo
-DECLIMPL_SERVICEINFO_DERIVED( UnoFrameControl, ControlContainerBase, szServiceName_UnoPageControl )
+DECLIMPL_SERVICEINFO_DERIVED( UnoFrameControl, ControlContainerBase, szServiceName_UnoFrameControl )
 };
 
 #endif // INCLUDED_TOOLKIT_CONTROLS_DIALOGCONTROL_HXX
