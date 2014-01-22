@@ -169,7 +169,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                             {
                                 // Set the width type of table with 'Auto' and set the width value to 100(%)
                                 pPropMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::VARIABLE );
-                                pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, 100 );
+                                pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, 0 );
                             }
                         }
                         m_bTableSizeTypeInserted = true;
@@ -667,7 +667,14 @@ void DomainMapperTableManager::endOfRowAction()
         {
             propMap->setValue( TablePropertyMap::TABLE_WIDTH, m_nTableWidth );
         }
-
+        if (nTableWidthType == text::SizeType::VARIABLE )
+        {
+            if(nTableWidth > 100 || nTableWidth <= 0)
+            {
+                propMap->setValue( TablePropertyMap::TABLE_WIDTH, m_nTableWidth);
+                propMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::FIX);
+            }
+        }
         uno::Sequence< text::TableColumnSeparator > aSeparators( m_nCell.back( ) - 1 );
         text::TableColumnSeparator* pSeparators = aSeparators.getArray();
         sal_Int16 nLastRelPos = 0;
