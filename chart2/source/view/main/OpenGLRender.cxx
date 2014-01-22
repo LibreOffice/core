@@ -1726,32 +1726,51 @@ void OpenGLRender::SetChartTransparencyGradient(long transparencyGradient)
         m_BackgroundColor[15] = 0.0;
     }
 }
-int OpenGLRender::SetPieSegment2DShapePoint(float x, float y, int listLength)
-{
-    if (m_PieSegment2DPointList.empty())
-    {
-        m_PieSegment2DPointList.reserve(listLength);
-    }
-    float actualX = (x / OPENGL_SCALE_VALUE);
-    float actualY = (y / OPENGL_SCALE_VALUE);
-    m_PieSegment2DPointList.push_back(actualX);
-    m_PieSegment2DPointList.push_back(actualY);
-    m_PieSegment2DPointList.push_back(m_fZStep);
 
-    if (m_PieSegment2DPointList.size() == size_t(listLength * 3))
+void OpenGLRender::GeneratePieSegment2D(double fInnerRadius, double fOutterRadius, double nAngleStart, double nAngleWidth)
+{
+    double nAngleStep = 1;
+    PieSegment2DPointList aPointList;
+    // TODO: moggi: GL_TRIANGLE_FAN seems not to work
+    bool bInnerRadiusNotZero = true; //!rtl::math::approxEqual(0.0, fInnerRadius);
+    size_t nVectorSize = 3*(nAngleWidth/nAngleStep);
+    if(bInnerRadiusNotZero)
+        nVectorSize *= 2;
+
+    aPointList.reserve(nVectorSize);
+    // if inner radius = 0 generate a normal pie segment (triangle fan)
+    // if inner radius != 0 generate a pie segment - inner pie (triangle strip)
+    if(!bInnerRadiusNotZero)
     {
-        m_PieSegment2DShapePointList.push_back(m_PieSegment2DPointList);
-        m_PieSegment2DPointList.clear();
+        aPointList.push_back(0);
+        aPointList.push_back(0);
+        aPointList.push_back(m_fZStep);
     }
-    return 0;
+    for(double nAngle = nAngleStart; nAngle <= nAngleStart + nAngleWidth; nAngle += nAngleStep)
+    {
+        float xVal = sin(nAngle/360*2*GL_PI);
+        float yVal = cos(nAngle/360*2*GL_PI);
+        aPointList.push_back(fOutterRadius * xVal);
+        aPointList.push_back(fOutterRadius * yVal);
+        aPointList.push_back(m_fZStep);
+
+        if(bInnerRadiusNotZero)
+        {
+            aPointList.push_back(fInnerRadius * xVal);
+            aPointList.push_back(fInnerRadius * yVal);
+            aPointList.push_back(m_fZStep);
+        }
+    }
+
+    m_PieSegment2DShapePointList.push_back(aPointList);
 }
 
-int OpenGLRender::RenderPieSegment2DShape()
+int OpenGLRender::RenderPieSegment2DShape(float fSize, float fPosX, float fPosY)
 {
     int listNum = m_PieSegment2DShapePointList.size();
-    PosVecf3 trans = {0.0f, 0.0f, 0.0f};
+    PosVecf3 trans = {fPosX/OPENGL_SCALE_VALUE, fPosY/OPENGL_SCALE_VALUE, 0.0f};
     PosVecf3 angle = {0.0f, 0.0f, 0.0f};
-    PosVecf3 scale = {1.0f, 1.0f, 1.0f};
+    PosVecf3 scale = {fSize/OPENGL_SCALE_VALUE, fSize/OPENGL_SCALE_VALUE, 1.0f};
     MoveModelf(trans, angle, scale);
     m_MVP = m_Projection * m_View * m_Model;
 
@@ -1779,10 +1798,11 @@ int OpenGLRender::RenderPieSegment2DShape()
             0,                  // stride
             (void*)0            // array buffer offset
             );
-        glDrawArrays(GL_POLYGON, 0, pointList.size() / 3); // 12*3 indices starting at 0 -> 12 triangles
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, pointList.size() / 3); // 12*3 indices starting at 0 -> 12 triangles
         glDisableVertexAttribArray(m_2DVertexID);
         glUseProgram(0);
         m_PieSegment2DShapePointList.pop_back();
+        CHECK_GL_ERROR();
 
     }
     glEnable(GL_MULTISAMPLE);

@@ -176,8 +176,8 @@ public:
     int RenderArea2DShape();
     void SetChartTransparencyGradient(long transparencyGradient);
 
-    int SetPieSegment2DShapePoint(float x, float y, int listLength);
-    int RenderPieSegment2DShape();
+    void GeneratePieSegment2D(double, double, double, double);
+    int RenderPieSegment2DShape(float, float, float);
 #if DEBUG_POSITIONING
     void renderDebug();
 #endif

@@ -324,168 +324,6 @@ DummyCone::DummyCone(const drawing::Position3D& rPos, const drawing::Direction3D
     setPosition(Position3DToAWTPoint(rPos));
     setSize(Direction3DToAWTSize(rSize));
 }
-void appendAndCloseBezierCoords( drawing::PolyPolygonBezierCoords& rReturn, const drawing::PolyPolygonBezierCoords& rAdd, sal_Bool bAppendInverse )
-{
-    if(!rAdd.Coordinates.getLength())
-        return;
-    sal_Int32 nAddCount = rAdd.Coordinates[0].getLength();
-    if(!nAddCount)
-        return;
-
-    sal_Int32 nOldCount = rReturn.Coordinates[0].getLength();
-
-    rReturn.Coordinates[0].realloc(nOldCount+nAddCount+1);
-    rReturn.Flags[0].realloc(nOldCount+nAddCount+1);
-
-    for(sal_Int32 nN=0;nN<nAddCount; nN++ )
-    {
-        sal_Int32 nAdd = bAppendInverse ? (nAddCount-1-nN) : nN;
-        rReturn.Coordinates[0][nOldCount+nN] = rAdd.Coordinates[0][nAdd];
-        rReturn.Flags[0][nOldCount+nN] = rAdd.Flags[0][nAdd];
-    }
-
-    //close
-    rReturn.Coordinates[0][nOldCount+nAddCount] = rReturn.Coordinates[0][0];
-    rReturn.Flags[0][nOldCount+nAddCount] = rReturn.Flags[0][0];
-}
-
-drawing::PolyPolygonBezierCoords getCircularArcBezierCoords(
-        double fStartAngleRadian, double fWidthAngleRadian, double fUnitRadius
-        , const ::basegfx::B2DHomMatrix& rTransformationFromUnitCircle
-        , const double fAngleSubdivisionRadian )
-{
-    //at least one polygon is created using two normal and two control points
-    //if the angle is larger it is separated into multiple sub angles
-
-    drawing::PolyPolygonBezierCoords aReturn = drawing::PolyPolygonBezierCoords();
-    sal_Int32 nSegmentCount = static_cast< sal_Int32 >( fWidthAngleRadian/fAngleSubdivisionRadian );
-    if( fWidthAngleRadian > fAngleSubdivisionRadian*nSegmentCount )
-        nSegmentCount++;
-
-    double fFirstSegmentAngle = fAngleSubdivisionRadian;
-    double fLastSegmentAngle = fAngleSubdivisionRadian;
-    if(nSegmentCount==1)
-    {
-        fFirstSegmentAngle = fWidthAngleRadian;
-        fLastSegmentAngle = 0.0;
-    }
-    else
-    {
-        double fFirstAngleOnSubDevision = (static_cast<sal_Int32>(fStartAngleRadian/fAngleSubdivisionRadian)+1)*fAngleSubdivisionRadian;
-        if( !::rtl::math::approxEqual( fStartAngleRadian, fFirstAngleOnSubDevision ) )
-            fFirstSegmentAngle = fFirstAngleOnSubDevision-fStartAngleRadian;
-
-        if(nSegmentCount>1)
-        {
-            fLastSegmentAngle = fWidthAngleRadian-fFirstSegmentAngle-fAngleSubdivisionRadian*(nSegmentCount-2);
-            if( fLastSegmentAngle<0 )
-                nSegmentCount--;
-            if( fLastSegmentAngle>fAngleSubdivisionRadian )
-            {
-                fLastSegmentAngle-=fAngleSubdivisionRadian;
-                nSegmentCount++;
-            }
-        }
-    }
-
-    sal_Int32 nPointCount     = 1 + 3*nSegmentCount; //first point of next segment equals last point of former segment
-
-    aReturn.Coordinates = drawing::PointSequenceSequence(1);
-    aReturn.Flags       = drawing::FlagSequenceSequence(1);
-
-    drawing::PointSequence aPoints(nPointCount);
-    drawing::FlagSequence  aFlags(nPointCount);
-
-    //
-
-    //!! applying matrix to vector does ignore translation, so it is important to use a B2DPoint here instead of B2DVector
-    ::basegfx::B2DPoint P0,P1,P2,P3;
-
-    sal_Int32 nPoint=0;
-    double fCurrentRotateAngle = fStartAngleRadian;
-    for(sal_Int32 nSegment=0; nSegment<nSegmentCount; nSegment++)
-    {
-        double fCurrentSegmentAngle = fAngleSubdivisionRadian;
-        if(nSegment==0)//first segment gets only a smaller peace until the next subdevision
-            fCurrentSegmentAngle = fFirstSegmentAngle;
-        else if(nSegment==(nSegmentCount-1)) //the last segment gets the rest angle that does not fit into equal pieces
-            fCurrentSegmentAngle = fLastSegmentAngle;
-
-        //first create untransformed points for a unit circle arc:
-        const double fCos = cos(fCurrentSegmentAngle/2.0);
-        const double fSin = sin(fCurrentSegmentAngle/2.0);
-        P0.setX(fCos);
-        P3.setX(fCos);
-        P0.setY(-fSin);
-        P3.setY(-P0.getY());
-
-        P1.setX((4.0-fCos)/3.0);
-        P2.setX(P1.getX());
-        P1.setY((1.0-fCos)*(fCos-3.0)/(3.0*fSin));
-        P2.setY(-P1.getY());
-        //transform thus startangle equals NULL
-        ::basegfx::B2DHomMatrix aStart;
-        aStart.rotate(fCurrentSegmentAngle/2.0 + fCurrentRotateAngle );
-        fCurrentRotateAngle+=fCurrentSegmentAngle;
-
-        aStart.scale( fUnitRadius, fUnitRadius );
-
-        //apply given transformation to get final points
-        P0 = rTransformationFromUnitCircle*(aStart*P0);
-        P1 = rTransformationFromUnitCircle*(aStart*P1);
-        P2 = rTransformationFromUnitCircle*(aStart*P2);
-        P3 = rTransformationFromUnitCircle*(aStart*P3);
-
-        aPoints[nPoint].X = static_cast< sal_Int32 >( P0.getX());
-        aPoints[nPoint].Y = static_cast< sal_Int32 >( P0.getY());
-        aFlags [nPoint++] = drawing::PolygonFlags_NORMAL;
-
-        aPoints[nPoint].X = static_cast< sal_Int32 >( P1.getX());
-        aPoints[nPoint].Y = static_cast< sal_Int32 >( P1.getY());
-        aFlags[nPoint++] = drawing::PolygonFlags_CONTROL;
-
-        aPoints[nPoint].X = static_cast< sal_Int32 >( P2.getX());
-        aPoints[nPoint].Y = static_cast< sal_Int32 >( P2.getY());
-        aFlags [nPoint++] = drawing::PolygonFlags_CONTROL;
-
-        if(nSegment==(nSegmentCount-1))
-        {
-            aPoints[nPoint].X = static_cast< sal_Int32 >( P3.getX());
-            aPoints[nPoint].Y = static_cast< sal_Int32 >( P3.getY());
-            aFlags [nPoint++] = drawing::PolygonFlags_NORMAL;
-        }
-    }
-
-    aReturn.Coordinates[0] = aPoints;
-    aReturn.Flags[0] = aFlags;
-
-    return aReturn;
-}
-
-
-drawing::PolyPolygonBezierCoords getRingBezierCoords(
-            double fUnitCircleInnerRadius
-            , double fUnitCircleOuterRadius
-            , double fStartAngleRadian, double fWidthAngleRadian
-            , ::basegfx::B2DHomMatrix aTransformationFromUnitCircle
-            , const double fAngleSubdivisionRadian )
-{
-    drawing::PolyPolygonBezierCoords aReturn = drawing::PolyPolygonBezierCoords();
-
-    aReturn.Coordinates = drawing::PointSequenceSequence(1);
-    aReturn.Flags       = drawing::FlagSequenceSequence(1);
-
-    drawing::PolyPolygonBezierCoords aOuterArc = getCircularArcBezierCoords(
-        fStartAngleRadian, fWidthAngleRadian, fUnitCircleOuterRadius, aTransformationFromUnitCircle, fAngleSubdivisionRadian );
-    aReturn.Coordinates[0] = aOuterArc.Coordinates[0];
-    aReturn.Flags[0] = aOuterArc.Flags[0];
-
-    drawing::PolyPolygonBezierCoords aInnerArc = getCircularArcBezierCoords(
-        fStartAngleRadian, fWidthAngleRadian, fUnitCircleInnerRadius, aTransformationFromUnitCircle, fAngleSubdivisionRadian );
-    appendAndCloseBezierCoords( aReturn, aInnerArc, sal_True );
-
-    return aReturn;
-}
 
 DummyPieSegment2D::DummyPieSegment2D(double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree,
         double fUnitCircleInnerRadius, double fUnitCircleOuterRadius,
@@ -506,21 +344,9 @@ void DummyPieSegment2D::render()
         mfUnitCircleWidthAngleDegree -= 360.0;
     while(mfUnitCircleWidthAngleDegree<0)
         mfUnitCircleWidthAngleDegree += 360.0;
-    ::basegfx::B2DHomMatrix aTransformationFromUnitCircle( IgnoreZ( HomogenMatrixToB3DHomMatrix(maUnitCircleToScene) ) );
-    aTransformationFromUnitCircle.translate(maOffset.DirectionX,maOffset.DirectionY);
-    const double fAngleSubdivisionRadian = F_PI/30.0;
 
-    drawing::PolyPolygonBezierCoords aCoords = getRingBezierCoords(
-                    mfUnitCircleInnerRadius, mfUnitCircleOuterRadius
-                    , mfUnitCircleStartAngleDegree*F_PI/180.0, mfUnitCircleWidthAngleDegree*F_PI/180.0
-                    , aTransformationFromUnitCircle, fAngleSubdivisionRadian );
-
-    sal_Int32 pointCount = aCoords.Coordinates[0].getLength();
-    for (sal_Int32 i = 0; i < pointCount; i++)
-    {
-        com::sun::star::awt::Point p = aCoords.Coordinates[0][i];
-        pChart->m_GLRender.SetPieSegment2DShapePoint((float)p.X, (float)p.Y, pointCount);
-    }
+    pChart->m_GLRender.GeneratePieSegment2D(mfUnitCircleInnerRadius, mfUnitCircleOuterRadius,
+            mfUnitCircleStartAngleDegree, mfUnitCircleWidthAngleDegree);
 
     std::map<OUString, uno::Any>::const_iterator itr = maProperties.find(UNO_NAME_FILLCOLOR);
     if(itr != maProperties.end())
@@ -528,14 +354,17 @@ void DummyPieSegment2D::render()
         sal_Int32 nColor = itr->second.get<sal_Int32>();
         pChart->m_GLRender.SetColor(nColor);
     }
+    /*
     itr = maProperties.find(UNO_NAME_FILL_TRANSPARENCE);
     if(itr != maProperties.end())
     {
         sal_Int32 transparency = itr->second.get<sal_Int32>();
         pChart->m_GLRender.SetTransparency(transparency&(0xFF));
     }
+    */
 
-    pChart->m_GLRender.RenderPieSegment2DShape();
+    float nSize = std::max<float>(maUnitCircleToScene.Line1.Column1, maUnitCircleToScene.Line2.Column2);
+    pChart->m_GLRender.RenderPieSegment2DShape(nSize, maUnitCircleToScene.Line1.Column4, maUnitCircleToScene.Line2.Column4);
 
 }
 
