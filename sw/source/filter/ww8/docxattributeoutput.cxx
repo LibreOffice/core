@@ -502,7 +502,7 @@ void DocxAttributeOutput::WriteCollectedParagraphProperties()
     }
 }
 
-void DocxAttributeOutput::EndParagraphProperties( const boost::shared_ptr<SfxItemSet> pParagraphMarkerProperties, const SwRedlineData* pRedlineData, const SwRedlineData* pRedlineParagraphMarkerDeleted, const SwRedlineData* pRedlineParagraphMarkerInserted)
+void DocxAttributeOutput::EndParagraphProperties( const SfxItemSet* pParagraphMarkerProperties, const SwRedlineData* pRedlineData, const SwRedlineData* pRedlineParagraphMarkerDeleted, const SwRedlineData* pRedlineParagraphMarkerInserted)
 {
     // Call the 'Redline' function. This will add redline (change-tracking) information that regards to paragraph properties.
     // This includes changes like 'Bold', 'Underline', 'Strikethrough' etc.
@@ -540,7 +540,8 @@ void DocxAttributeOutput::EndParagraphProperties( const boost::shared_ptr<SfxIte
                 if( SFX_ITEM_SET == pParagraphMarkerProperties->GetItemState( nWhichId, sal_True, &pItem ))
                 {
                     SAL_INFO( "sw.ww8", "nWhichId " << nWhichId);
-                    OutputItem( *pItem );
+                    if (isCHRATR( nWhichId ))
+                        OutputItem( *pItem );
                 }
                 nWhichId = aIter.NextWhich();
             }

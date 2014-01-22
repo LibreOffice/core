@@ -2472,6 +2472,15 @@ DECLARE_OOXMLEXPORT_TEST(testMsoSpt180, "mso-spt180.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("ooxml-borderCallout1"), aType);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo73550, "fdo73550.docx")
+{
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+    // This was wrap="none".
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:rFonts");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testDmlTextshape, "dml-textshape.docx")
 {
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
@@ -2512,7 +2521,6 @@ DECLARE_OOXMLEXPORT_TEST(testDrawinglayerPicPos, "drawinglayer-pic-pos.docx")
     // This was 1828800.
     assertXPath(pXmlDocument, aXPath, "y", "0");
 }
-
 DECLARE_OOXMLEXPORT_TEST(testShapeThemePreservation, "shape-theme-preservation.docx")
 {
     xmlDocPtr pXmlDocument = parseExport("word/document.xml");

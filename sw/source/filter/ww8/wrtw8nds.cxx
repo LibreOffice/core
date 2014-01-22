@@ -2521,7 +2521,9 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 delete pNewSet;
         }
     }
-    boost::shared_ptr<SfxItemSet> sfxItemSet ;
+
+
+    const SfxItemSet* sfxItemSet = NULL;
     if(const SwpHints* pTxtAttrs = rNode.GetpSwpHints())
     {
         for( sal_uInt16 i = 0; i < pTxtAttrs->Count(); i++ )
@@ -2540,10 +2542,14 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 if (nWhich == RES_TXTATR_AUTOFMT)
                 {
                     const SwFmtAutoFmt& rAutoFmt = static_cast<const SwFmtAutoFmt&>(pHt->GetAttr());
-                    sfxItemSet = rAutoFmt.GetStyleHandle();
+                    sfxItemSet = rAutoFmt.GetStyleHandle().get();
                 }
             }
         }
+    }
+    else
+    {
+        sfxItemSet = rNode.GetpSwAttrSet();
     }
     const SwRedlineData* pRedlineParagraphMarkerDelete = AttrOutput().GetParagraphMarkerRedline( rNode, nsRedlineType_t::REDLINE_DELETE );
     const SwRedlineData* pRedlineParagraphMarkerInsert = AttrOutput().GetParagraphMarkerRedline( rNode, nsRedlineType_t::REDLINE_INSERT );
