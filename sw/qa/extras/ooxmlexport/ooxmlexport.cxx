@@ -2085,6 +2085,14 @@ DECLARE_OOXMLEXPORT_TEST(testBnc884615, "bnc884615.docx")
     CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(getShape(1), "Opaque")));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTestTitlePage, "testTitlePage.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPathChildren(pXmlDoc, "/w:document/w:body/w:sectPr/w:titlePg", 0);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
