@@ -559,8 +559,7 @@ DEFINE_XTYPEPROVIDER_21             (   Frame                                   
     @onerror    ASSERT in debug version or nothing in relaese version.
 *//*-*****************************************************************************************************/
 Frame::Frame( const css::uno::Reference< css::uno::XComponentContext >& xContext )
-        :   ::cppu::OWeakObject         (                                                   )
-        ,   ThreadHelpBase              ( &Application::GetSolarMutex()                     )
+        :   ThreadHelpBase              ( &Application::GetSolarMutex()                     )
         ,   TransactionBase             (                                                   )
         ,   PropertySetHelper           ( &m_aLock,
                                           &m_aTransactionManager,
