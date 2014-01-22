@@ -55,7 +55,7 @@ extern "C" {
 
 
 /* SAL_MATH_FINITE(d): test double d on INFINITY, NaN et al. */
-#if defined(__GNUC__) // workaround gcc bug 14608
+#if defined(__GNUC__) && !defined(__clang__) // workaround gcc bug 14608
     #if (__GNUC_MINOR__ >= 3) // gcc>=4.3 has a builtin
         #define SAL_MATH_FINITE(d) __builtin_isfinite(d)
     #else
