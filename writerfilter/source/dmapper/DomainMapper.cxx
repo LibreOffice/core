@@ -247,12 +247,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_ooxml::LN_CT_Border_frame:
             break;
-        case NS_rtf::LN_ITCFIRST:
-            break;
-        case NS_rtf::LN_FPUB:
-            break;
-        case NS_rtf::LN_ITCLIM:
-            break;
         case NS_ooxml::LN_headerr:
             break;
         case NS_ooxml::LN_footerr:
