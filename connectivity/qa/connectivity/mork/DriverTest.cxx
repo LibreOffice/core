@@ -49,7 +49,7 @@ private:
 
 void MorkDriverTest::checkAcceptsURL(Reference< XDriver> xDriver, const char* url, bool expected)
 {
-    sal_Bool res = xDriver->acceptsURL(OUString::createFromAscii(url));
+    bool res = xDriver->acceptsURL(OUString::createFromAscii(url));
     if (res != expected)
     {
         CPPUNIT_ASSERT_MESSAGE("wrong URL outcome!", true);
