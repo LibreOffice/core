@@ -157,12 +157,10 @@ _HeaderTabListBox::_HeaderTabListBox( Window* pParent, const ResId& rId )
     maListBox.EnableCellFocus();
 }
 
-_HeaderTabListBox::~_HeaderTabListBox()
+void _HeaderTabListBox::Resize()
 {
-}
+    Control::Resize();
 
-void _HeaderTabListBox::ConnectElements( void )
-{
     // calc pos and size of header bar
     Point    aPnt( 0, 0 );
     Size    aSize( maHeaderBar.CalcWindowSizePixel() );
@@ -174,6 +172,11 @@ void _HeaderTabListBox::ConnectElements( void )
     aPnt.Y() += aSize.Height();
     aSize.Height() = aCtrlSize.Height() - aSize.Height();
     maListBox.SetPosSizePixel( aPnt, aSize );
+}
+
+void _HeaderTabListBox::ConnectElements( void )
+{
+    Resize();
 
     // set handler
     maHeaderBar.SetEndDragHdl( LINK( this, _HeaderTabListBox, HeaderEndDrag_Impl ) );

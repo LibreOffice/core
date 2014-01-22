@@ -33,28 +33,25 @@ protected:
     DECL_LINK( HeaderEndDrag_Impl, HeaderBar* );
     virtual bool                Notify( NotifyEvent& rNEvt );
 public:
-                                _HeaderTabListBox( Window* pParent, const ResId& rId );
-    virtual                     ~_HeaderTabListBox();
+    _HeaderTabListBox( Window* pParent, const ResId& rId );
 
-    inline SvHeaderTabListBox&  GetListBox( void );
-    inline HeaderBar&           GetHeaderBar( void );
+    void Resize();
+
+    SvHeaderTabListBox& GetListBox()
+    {
+        return maListBox;
+    }
+
+    HeaderBar& GetHeaderBar()
+    {
+        return maHeaderBar;
+    }
 
     void                        ConnectElements( void );/**< should be called after all manipulations on elements are done
                                                              calcs real sizes depending on sizes of this */
     void                        Show( sal_Bool bVisible = sal_True, sal_uInt16 nFlags = 0 );    ///< same meaning as Windows::Show()
     void                        Enable( bool bEnable = true, bool bChild = true );  ///< same meaning as Windows::Enable()
 };
-
-inline SvHeaderTabListBox& _HeaderTabListBox::GetListBox( void )
-{
-    return maListBox;
-}
-
-inline HeaderBar& _HeaderTabListBox::GetHeaderBar( void )
-{
-    return maHeaderBar;
-}
-
 
 #endif
 
