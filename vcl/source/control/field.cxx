@@ -1440,6 +1440,7 @@ OUString MetricFormatter::CreateFieldText( sal_Int64 nValue ) const
     {
         if (meUnit != FUNIT_NONE && meUnit != FUNIT_DEGREE)
             aStr += " ";
+        assert(meUnit != FUNIT_PERCENT);
         aStr += ImplMetricToString( meUnit );
     }
     return aStr;
