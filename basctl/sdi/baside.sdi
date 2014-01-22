@@ -57,6 +57,7 @@ shell basctl_Shell
     SID_SELECTALL
     [
         ExecMethod  = ExecuteCurrent;
+        StateMethod = GetState;
     ]
 
     SID_CUT

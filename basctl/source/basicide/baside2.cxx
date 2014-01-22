@@ -952,8 +952,13 @@ void ModulWindow::ExecuteCommand (SfxRequest& rReq)
             break;
         }
         case SID_SELECTALL:
-            GetEditView()->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( 0xFFFFFFFF, 0xFFFF ) ) );
+        {
+            TextSelection aSel( TextPaM( 0, 0 ), TextPaM( TEXT_PARA_ALL, 0xFFFF ) );
+            TextView * pView = GetEditView();
+            pView->SetSelection( aSel );
+            pView->GetWindow()->GrabFocus();
             break;
+        }
         case SID_BASICRUN:
         {
             BasicRun();
@@ -1170,6 +1175,12 @@ void ModulWindow::GetState( SfxItemSet &rSet )
                 rSet.Put(SfxBoolItem(nWh, bSourceLinesEnabled));
                 break;
             }
+            case SID_SELECTALL:
+            {
+                if ( !GetEditView() )
+                    rSet.DisableItem( nWh );
+            }
+            break;
         }
     }
 }

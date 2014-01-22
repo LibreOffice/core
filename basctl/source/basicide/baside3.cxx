@@ -409,6 +409,11 @@ void DialogWindow::GetState( SfxItemSet& rSet )
                 rSet.Put(SfxVisibilityItem(nWh, false));
                 break;
             }
+            case SID_SELECTALL:
+            {
+                rSet.DisableItem( nWh );
+            }
+            break;
         }
     }
 }
