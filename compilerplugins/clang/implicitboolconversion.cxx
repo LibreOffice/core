@@ -399,7 +399,7 @@ bool ImplicitBoolConversion::TraverseBinAndAssign(CompoundAssignOperator * expr)
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (i != expr->getRHS()->IgnoreParens()
-            || !isBool(expr->getLHS()->IgnoreParens()))
+            || !isBool(expr->getLHS()->IgnoreParens(), false))
         {
             reportWarning(i);
         }
@@ -415,7 +415,7 @@ bool ImplicitBoolConversion::TraverseBinOrAssign(CompoundAssignOperator * expr)
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (i != expr->getRHS()->IgnoreParens()
-            || !isBool(expr->getLHS()->IgnoreParens()))
+            || !isBool(expr->getLHS()->IgnoreParens(), false))
         {
             reportWarning(i);
         }
@@ -431,7 +431,7 @@ bool ImplicitBoolConversion::TraverseBinXorAssign(CompoundAssignOperator * expr)
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (i != expr->getRHS()->IgnoreParens()
-            || !isBool(expr->getLHS()->IgnoreParens()))
+            || !isBool(expr->getLHS()->IgnoreParens(), false))
         {
             reportWarning(i);
         }
