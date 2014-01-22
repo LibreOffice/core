@@ -141,7 +141,7 @@ public:
     void    EnterBlockMode();
     void    LeaveBlockMode();
     bool    ToggleBlockMode();
-    sal_Bool    IsBlockMode() const { return bBlockMode; }
+    bool    IsBlockMode() const { return bBlockMode; }
 
     void    SetInsMode( sal_Bool bOn = sal_True );
     void    ToggleInsMode() { SetInsMode( !bIns ); }

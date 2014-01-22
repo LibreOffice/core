@@ -46,10 +46,10 @@ public:
 struct SwTOXSortKey
 {
     ToxAuthorityField   eField;
-    sal_Bool                bSortAscending;
+    bool                bSortAscending;
     SwTOXSortKey() :
         eField(AUTH_FIELD_END),
-        bSortAscending(sal_True){}
+        bSortAscending(true){}
 };
 
 class SwAuthorityField;

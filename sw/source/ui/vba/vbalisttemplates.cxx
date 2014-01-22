@@ -54,7 +54,7 @@ SwVbaListTemplates::SwVbaListTemplates( const uno::Reference< XHelperInterface >
 uno::Any SAL_CALL SwVbaListTemplates::Item( const uno::Any& Index1, const uno::Any& /*not processed in this base class*/ ) throw (uno::RuntimeException)
 {
     sal_Int32 nIndex = 0;
-    if( ( Index1 >>= nIndex ) == sal_False )
+    if( !( Index1 >>= nIndex ) )
         throw uno::RuntimeException();
     if( nIndex <=0 || nIndex > getCount() )
         throw  uno::RuntimeException("Index out of bounds", uno::Reference< uno::XInterface >() );

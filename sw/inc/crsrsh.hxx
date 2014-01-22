@@ -587,7 +587,7 @@ public:
     inline const SwTableNode* IsCrsrInTbl( sal_Bool bIsPtInTbl = sal_True ) const;
 
     inline Point& GetCrsrDocPos( sal_Bool bPoint = sal_True ) const;
-    inline sal_Bool IsCrsrPtAtEnd() const;
+    inline bool IsCrsrPtAtEnd() const;
 
     inline const  SwPaM* GetTblCrs() const;
     inline        SwPaM* GetTblCrs();
@@ -897,7 +897,7 @@ inline const SwTableNode* SwCrsrShell::IsCrsrInTbl( sal_Bool bIsPtInTbl ) const
     return m_pCurCrsr->GetNode( bIsPtInTbl )->FindTableNode();
 }
 
-inline sal_Bool SwCrsrShell::IsCrsrPtAtEnd() const
+inline bool SwCrsrShell::IsCrsrPtAtEnd() const
 {
     return m_pCurCrsr->End() == m_pCurCrsr->GetPoint();
 }

@@ -60,7 +60,7 @@ public:
     sal_uInt8 GetCol() const                { return nCol; }
     void SetCol( sal_uInt8 n )              { nCol = n; }
 
-    sal_Bool GetLandscape() const           { return bLandscape; }
+    bool GetLandscape() const               { return bLandscape; }
     void SetLandscape( sal_Bool b )         { bLandscape = b; }
 };
 

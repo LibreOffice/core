@@ -124,7 +124,7 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, sal_Int32 nCnt,
 SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd )
     : SwUndo(UNDO_SPLITNODE), pTxt( 0 ),
         pRedlData( 0 ), nNode( rNd.GetIndex() ), nCntnt(0), nLen(1),
-        bIsWordDelim( sal_False ), bIsAppend( sal_True )
+        bIsWordDelim( false ), bIsAppend( sal_True )
     , m_bWithRsid(false)
     , m_nInsertFlags(IDocumentContentOperations::INS_EMPTYEXPAND)
 {

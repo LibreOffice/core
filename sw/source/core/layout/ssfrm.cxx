@@ -213,9 +213,9 @@ const sal_uInt16 nMinVertCellHeight = 1135;
 
 void SwFrm::CheckDirChange()
 {
-    sal_Bool bOldVert = GetVerticalFlag();
-    sal_Bool bOldRev = IsReverse();
-    sal_Bool bOldR2L = GetRightToLeftFlag();
+    bool bOldVert = GetVerticalFlag();
+    bool bOldRev = IsReverse();
+    bool bOldR2L = GetRightToLeftFlag();
     SetInvalidVert( sal_True );
     SetInvalidR2L( sal_True );
     bool bChg = bOldR2L != IsRightToLeft();

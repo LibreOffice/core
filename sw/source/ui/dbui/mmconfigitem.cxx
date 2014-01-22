@@ -778,7 +778,7 @@ const Sequence< OUString> SwMailMergeConfigItem::GetAddressBlocks() const
     return m_pImpl->GetAddressBlocks();
 }
 
-sal_Bool SwMailMergeConfigItem::IsAddressBlock()const
+bool SwMailMergeConfigItem::IsAddressBlock()const
 {
     return m_pImpl->bIsAddressBlock && IsOutputToLetter();
 }

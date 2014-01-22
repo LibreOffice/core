@@ -823,7 +823,7 @@ void SwLayoutFrm::MakeAll()
 
     // takes care of the notification in the dtor
     const SwLayNotify aNotify( this );
-    sal_Bool bVert = IsVertical();
+    bool bVert = IsVertical();
     //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     SwRectFn fnRect = ( IsNeighbourFrm() == bVert )? fnRectHori : ( IsVertLR() ? fnRectVertL2R : fnRectVert );
 

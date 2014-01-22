@@ -355,7 +355,7 @@ void SwNumPositionTabPage::InitControls()
         m_pIndentAtMF->SetText(aEmptyOUStr);
     }
 
-    if(sal_True == bSetDistEmpty)
+    if(bSetDistEmpty)
         m_pDistBorderMF->SetText(aEmptyOUStr);
 
     bInInintControl = sal_False;

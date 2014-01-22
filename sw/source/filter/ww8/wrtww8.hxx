@@ -519,26 +519,26 @@ public:
 
     sal_uInt8 nTxtTyp;
 
-    sal_uInt8 bStyDef : 1;           // should Style be written?
-    sal_uInt8 bBreakBefore : 1;      // Breaks are being written 2 times
-    sal_uInt8 bOutKF : 1;            // Header/Footer texts are being written
-    sal_uInt8 bOutFlyFrmAttrs : 1;   // Frame-attr of Flys are being written
-    sal_uInt8 bOutPageDescs : 1;     ///< PageDescs (section properties) are being written
-    sal_uInt8 bOutFirstPage : 1;     // write Attrset of FirstPageDesc
-    sal_uInt8 bOutTable : 1;         // table is being written
+    bool bStyDef : 1;           // should Style be written?
+    bool bBreakBefore : 1;      // Breaks are being written 2 times
+    bool bOutKF : 1;            // Header/Footer texts are being written
+    bool bOutFlyFrmAttrs : 1;   // Frame-attr of Flys are being written
+    bool bOutPageDescs : 1;     ///< PageDescs (section properties) are being written
+    bool bOutFirstPage : 1;     // write Attrset of FirstPageDesc
+    bool bOutTable : 1;         // table is being written
                                      // ( wird zB bei Flys in Tabelle zurueckgesetzt )
-    sal_uInt8 bOutGrf : 1;           // graphics are being written
-    sal_uInt8 bInWriteEscher : 1;    // in write textboxes
-    sal_uInt8 bStartTOX : 1;         // true: a TOX is startet
-    sal_uInt8 bInWriteTOX : 1;       // true: all content are in a TOX
-    sal_uInt8 bFtnAtTxtEnd : 1;      // true: all FTN at Textend
-    sal_uInt8 bEndAtTxtEnd : 1;      // true: all END at Textend
-    sal_uInt8 bHasHdr : 1;
-    sal_uInt8 bHasFtr : 1;
-    sal_uInt8 bSubstituteBullets : 1; // true: SubstituteBullet() gets called
-    sal_uInt8 bTabInTOC : 1; //true for TOC field flag 'w'
+    bool bOutGrf : 1;           // graphics are being written
+    bool bInWriteEscher : 1;    // in write textboxes
+    bool bStartTOX : 1;         // true: a TOX is startet
+    bool bInWriteTOX : 1;       // true: all content are in a TOX
+    bool bFtnAtTxtEnd : 1;      // true: all FTN at Textend
+    bool bEndAtTxtEnd : 1;      // true: all END at Textend
+    bool bHasHdr : 1;
+    bool bHasFtr : 1;
+    bool bSubstituteBullets : 1; // true: SubstituteBullet() gets called
+    bool bTabInTOC : 1; //true for TOC field flag 'w'
 
-    sal_uInt8 bHideTabLeaderAndPageNumbers : 1 ; // true: the 'z' field of TOC is set.
+    bool bHideTabLeaderAndPageNumbers : 1 ; // true: the 'z' field of TOC is set.
     bool mbExportModeRTF;
     bool mbOutOutlineOnly;   // export outline nodes, only (send outline to clipboard/presentation)
 

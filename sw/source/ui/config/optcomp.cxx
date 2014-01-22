@@ -375,17 +375,17 @@ sal_uLong SwCompatibilityOptPage::GetDocumentOptions() const
     {
         const IDocumentSettingAccess& rIDocumentSettingAccess = *m_pWrtShell->getIDocumentSettingAccess();
         nRet = convertBools2Ulong_Impl(
-                rIDocumentSettingAccess.get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) == sal_False,
-                rIDocumentSettingAccess.get(IDocumentSettingAccess::PARA_SPACE_MAX) != sal_False,
-                rIDocumentSettingAccess.get(IDocumentSettingAccess::PARA_SPACE_MAX_AT_PAGES) != sal_False,
-                rIDocumentSettingAccess.get(IDocumentSettingAccess::TAB_COMPAT) == sal_False,
-                rIDocumentSettingAccess.get(IDocumentSettingAccess::ADD_EXT_LEADING) == sal_False,
-                rIDocumentSettingAccess.get(IDocumentSettingAccess::OLD_LINE_SPACING) != sal_False,
-                rIDocumentSettingAccess.get(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS) != sal_False,
-                rIDocumentSettingAccess.get(IDocumentSettingAccess::USE_FORMER_OBJECT_POS) != sal_False,
-                rIDocumentSettingAccess.get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) != sal_False,
-                rIDocumentSettingAccess.get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) != sal_False,
-                rIDocumentSettingAccess.get(IDocumentSettingAccess::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK) != sal_True );
+                !rIDocumentSettingAccess.get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE),
+                rIDocumentSettingAccess.get(IDocumentSettingAccess::PARA_SPACE_MAX),
+                rIDocumentSettingAccess.get(IDocumentSettingAccess::PARA_SPACE_MAX_AT_PAGES),
+                !rIDocumentSettingAccess.get(IDocumentSettingAccess::TAB_COMPAT),
+                !rIDocumentSettingAccess.get(IDocumentSettingAccess::ADD_EXT_LEADING),
+                rIDocumentSettingAccess.get(IDocumentSettingAccess::OLD_LINE_SPACING),
+                rIDocumentSettingAccess.get(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS),
+                rIDocumentSettingAccess.get(IDocumentSettingAccess::USE_FORMER_OBJECT_POS),
+                rIDocumentSettingAccess.get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING),
+                rIDocumentSettingAccess.get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION),
+                !rIDocumentSettingAccess.get(IDocumentSettingAccess::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK) );
     }
     return nRet;
 }

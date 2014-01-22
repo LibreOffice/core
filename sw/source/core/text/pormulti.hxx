@@ -125,7 +125,7 @@ public:
     inline sal_Bool IsDouble() const { return bDouble; }
     inline bool IsRuby() const { return bRuby; }
     inline sal_Bool IsBidi() const { return bBidi; }
-    inline sal_Bool OnTop() const { return bTop; }
+    inline bool OnTop() const { return bTop; }
     void ActualizeTabulator();
 
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;

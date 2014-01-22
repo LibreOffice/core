@@ -1591,7 +1591,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
     // Test
             {
                 SetInvalidVert( sal_False );
-                sal_Bool bOld = IsVertical();
+                bool bOld = IsVertical();
                 SetInvalidVert( sal_True );
                 if( bOld != IsVertical() )
                     InvalidateRange( SwCharRange( GetOfst(), COMPLETE_STRING ) );

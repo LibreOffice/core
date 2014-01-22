@@ -207,7 +207,7 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
     pPref->SetIdle(sal_True);
 }
 
-void SwModule::ApplyUserMetric( FieldUnit eMetric, sal_Bool bWeb )
+void SwModule::ApplyUserMetric( FieldUnit eMetric, bool bWeb )
 {
         SwMasterUsrPref* pPref;
         if(bWeb)
@@ -243,7 +243,7 @@ void SwModule::ApplyUserMetric( FieldUnit eMetric, sal_Bool bWeb )
         }
 }
 
-void SwModule::ApplyRulerMetric( FieldUnit eMetric, sal_Bool bHorizontal, sal_Bool bWeb )
+void SwModule::ApplyRulerMetric( FieldUnit eMetric, sal_Bool bHorizontal, bool bWeb )
 {
     SwMasterUsrPref* pPref;
     if(bWeb)
@@ -279,7 +279,7 @@ void SwModule::ApplyRulerMetric( FieldUnit eMetric, sal_Bool bHorizontal, sal_Bo
 }
 
 //set the usrpref 's char unit attribute and set rulers unit as char if the "apply char unit" is checked
-void SwModule::ApplyUserCharUnit(sal_Bool bApplyChar, sal_Bool bWeb)
+void SwModule::ApplyUserCharUnit(sal_Bool bApplyChar, bool bWeb)
 {
     SwMasterUsrPref* pPref;
     if(bWeb)

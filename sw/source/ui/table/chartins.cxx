@@ -165,7 +165,7 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
     }
 
     SwFlyFrmFmt *pFlyFrmFmt = 0;
-    xChartModel.set( SwTableFUNC( &rWrtShell, sal_False ).InsertChart( xDataProvider, (sal_True == xDataProvider.is()), aRangeString, &pFlyFrmFmt ));
+    xChartModel.set( SwTableFUNC( &rWrtShell, sal_False ).InsertChart( xDataProvider, xDataProvider.is(), aRangeString, &pFlyFrmFmt ));
 
     //open wizard
     //@todo get context from writer if that has one

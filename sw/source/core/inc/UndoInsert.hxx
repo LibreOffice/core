@@ -39,7 +39,7 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
     SwRedlineData* pRedlData;
     sal_uLong nNode;
     sal_Int32 nCntnt, nLen;
-    sal_Bool bIsWordDelim : 1;
+    bool bIsWordDelim : 1;
     sal_Bool bIsAppend : 1;
     sal_Bool m_bWithRsid : 1;
 

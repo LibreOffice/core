@@ -3349,8 +3349,8 @@ public:
 
 SwShortCut::SwShortCut( const SwFrm& rFrm, const SwRect& rRect )
 {
-    sal_Bool bVert = rFrm.IsVertical();
-    sal_Bool bR2L = rFrm.IsRightToLeft();
+    bool bVert = rFrm.IsVertical();
+    bool bR2L = rFrm.IsRightToLeft();
     if( rFrm.IsNeighbourFrm() && bVert == bR2L )
     {
         if( bVert )

@@ -4382,7 +4382,7 @@ namespace {
                 const SfxBoolItem& aListIsRestartItem =
                                     dynamic_cast<const SfxBoolItem&>(pItem);
                 if ( aListIsRestartItem.GetValue() !=
-                                    (mrTxtNode.IsListRestart() ? sal_True : sal_False) )
+                                    mrTxtNode.IsListRestart() )
                 {
                     mbUpdateListRestart = true;
                 }
@@ -4408,7 +4408,7 @@ namespace {
                 const SfxBoolItem& aIsCountedInListItem =
                                     dynamic_cast<const SfxBoolItem&>(pItem);
                 if ( aIsCountedInListItem.GetValue() !=
-                                    (mrTxtNode.IsCountedInList() ? sal_True : sal_False) )
+                                    mrTxtNode.IsCountedInList() )
                 {
                     mbUpdateListCount = true;
                 }
@@ -4490,8 +4490,7 @@ namespace {
         {
             const SfxBoolItem* pListIsRestartItem =
                                 dynamic_cast<const SfxBoolItem*>(pItem);
-            if ( pListIsRestartItem->GetValue() !=
-                                    (mrTxtNode.IsListRestart() ? sal_True : sal_False) )
+            if ( pListIsRestartItem->GetValue() != mrTxtNode.IsListRestart() )
             {
                 mbUpdateListRestart = true;
             }
@@ -4515,7 +4514,7 @@ namespace {
             const SfxBoolItem* pIsCountedInListItem =
                                 dynamic_cast<const SfxBoolItem*>(pItem);
             if ( pIsCountedInListItem->GetValue() !=
-                                (mrTxtNode.IsCountedInList() ? sal_True : sal_False) )
+                                mrTxtNode.IsCountedInList() )
             {
                 mbUpdateListCount = true;
             }

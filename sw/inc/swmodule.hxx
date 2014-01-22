@@ -145,15 +145,15 @@ public:
     const SwViewOption* GetViewOption(sal_Bool bWeb);
     void                ApplyUsrPref(const SwViewOption &, SwView*,
                                      sal_uInt16 nDest = VIEWOPT_DEST_VIEW );
-    void ApplyUserMetric( FieldUnit eMetric, sal_Bool bWeb );
-    void ApplyRulerMetric( FieldUnit eMetric, sal_Bool bHorizontal, sal_Bool bWeb );
+    void ApplyUserMetric( FieldUnit eMetric, bool bWeb );
+    void ApplyRulerMetric( FieldUnit eMetric, sal_Bool bHorizontal, bool bWeb );
     void ApplyFldUpdateFlags(SwFldUpdateFlags eFldFlags);
     void ApplyLinkMode(sal_Int32 nNewLinkMode);
 
     // Default page mode for text grid.
     void ApplyDefaultPageMode(sal_Bool bIsSquaredPageMode);
 
-    void ApplyUserCharUnit(sal_Bool bApplyChar, sal_Bool bWeb);  // apply_char_unit
+    void ApplyUserCharUnit(sal_Bool bApplyChar, bool bWeb);  // apply_char_unit
 
     // Create ConfigItems.
     SwModuleOptions*    GetModuleConfig()       { return pModuleConfig;}

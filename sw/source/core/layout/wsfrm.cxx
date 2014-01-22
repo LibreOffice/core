@@ -1238,7 +1238,7 @@ SwTwips SwFrm::Grow( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
                 const SwTabFrm* pTab = FindTabFrm();
 
                 // NEW TABLES
-                if ( ( 0 != pTab->IsVertical() ) != ( 0 != IsVertical() ) ||
+                if ( pTab->IsVertical() != IsVertical() ||
                      pThisCell->GetLayoutRowSpan() < 1 )
                     return 0;
             }
@@ -1281,7 +1281,7 @@ SwTwips SwFrm::Shrink( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
                 const SwTabFrm* pTab = FindTabFrm();
 
                 // NEW TABLES
-                if ( ( 0 != pTab->IsVertical() ) != ( 0 != IsVertical() ) ||
+                if ( pTab->IsVertical() != IsVertical() ||
                      pThisCell->GetLayoutRowSpan() < 1 )
                     return 0;
             }

@@ -789,7 +789,7 @@ static sal_Bool lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
         // (is this really necessary?)
         if ( !pTable->GetUpper()->IsInTab() )
         {
-            const sal_Bool bRTL = pTable->IsRightToLeft();
+            const bool bRTL = pTable->IsRightToLeft();
             const long nPrtLeft = bRTL ?
                                 (pTable->*fnRect->fnGetPrtRight)() :
                                 (pTable->*fnRect->fnGetPrtLeft)();

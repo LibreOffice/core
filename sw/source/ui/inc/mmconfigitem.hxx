@@ -124,7 +124,7 @@ public:
     sal_Bool            IsOutputToLetter()const;
     void                SetOutputToLetter(sal_Bool bSet);
 
-    sal_Bool            IsAddressBlock()const;
+    bool                IsAddressBlock()const;
     void                SetAddressBlock(sal_Bool bSet);
 
     sal_Bool            IsHideEmptyParagraphs() const;

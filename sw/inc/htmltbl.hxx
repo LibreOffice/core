@@ -303,7 +303,7 @@ public:
     bool HasColsOption() const { return bColsOption; }
     bool HasColTags() const { return bColTags; }
 
-    sal_Bool IsTopTable() const  { return pSwTable != 0; }
+    bool IsTopTable() const  { return pSwTable != 0; }
 
     void SetMustResize( sal_Bool bSet ) { bMustResize = bSet; }
     void SetMustNotResize( sal_Bool bSet ) { bMustNotResize = bSet; }

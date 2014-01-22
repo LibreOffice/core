@@ -4029,7 +4029,7 @@ static SwTwips lcl_CalcMinRowHeight( const SwRowFrm* _pRow,
         // <-- NEW TABLES
 
         // Do not consider rotated cells:
-        if ( ( 0 != pLow->IsVertical() ) == ( 0 != bVert ) && nTmp > nHeight )
+        if ( pLow->IsVertical() == bVert && nTmp > nHeight )
             nHeight = nTmp;
 
         pLow = static_cast<const SwCellFrm*>(pLow->GetNext());

@@ -182,15 +182,15 @@ typedef SwRectFnCollection* SwRectFn;
 
 // Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
 extern SwRectFn fnRectHori, fnRectVert, fnRectB2T, fnRectVL2R, fnRectVertL2R;
-#define SWRECTFN( pFrm )    sal_Bool bVert = pFrm->IsVertical(); \
-                            sal_Bool bRev = pFrm->IsReverse(); \
-                            sal_Bool bVertL2R = pFrm->IsVertLR(); \
+#define SWRECTFN( pFrm )    bool bVert = pFrm->IsVertical(); \
+                            bool bRev = pFrm->IsReverse(); \
+                            bool bVertL2R = pFrm->IsVertLR(); \
                             SwRectFn fnRect = bVert ? \
                                 ( bRev ? fnRectVL2R : ( bVertL2R ? fnRectVertL2R : fnRectVert ) ): \
                                 ( bRev ? fnRectB2T : fnRectHori );
-#define SWRECTFNX( pFrm )   sal_Bool bVertX = pFrm->IsVertical(); \
-                            sal_Bool bRevX = pFrm->IsReverse(); \
-                            sal_Bool bVertL2RX = pFrm->IsVertLR(); \
+#define SWRECTFNX( pFrm )   bool bVertX = pFrm->IsVertical(); \
+                            bool bRevX = pFrm->IsReverse(); \
+                            bool bVertL2RX = pFrm->IsVertLR(); \
                             SwRectFn fnRectX = bVertX ? \
                                 ( bRevX ? fnRectVL2R : ( bVertL2RX ? fnRectVertL2R : fnRectVert ) ): \
                                 ( bRevX ? fnRectB2T : fnRectHori );
@@ -202,9 +202,9 @@ extern SwRectFn fnRectHori, fnRectVert, fnRectB2T, fnRectVL2R, fnRectVertL2R;
                                 fnRect = bVert ? \
                                     ( bRev ? fnRectVL2R : ( bVertL2R ? fnRectVertL2R : fnRectVert ) ): \
                                     ( bRev ? fnRectB2T : fnRectHori ); }
-#define SWRECTFN2( pFrm )   sal_Bool bVert = pFrm->IsVertical(); \
-                sal_Bool bVertL2R = pFrm->IsVertLR(); \
-                            sal_Bool bNeighb = pFrm->IsNeighbourFrm(); \
+#define SWRECTFN2( pFrm )   bool bVert = pFrm->IsVertical(); \
+                bool bVertL2R = pFrm->IsVertLR(); \
+                            bool bNeighb = pFrm->IsNeighbourFrm(); \
                             SwRectFn fnRect = bVert == bNeighb ? \
                                 fnRectHori : ( bVertL2R ? fnRectVertL2R : fnRectVert );
 //End of SCMS
@@ -545,9 +545,9 @@ public:
 
     bool IsInBalancedSection() const;
 
-    inline sal_Bool IsReverse() const { return mbReverse; }
+    inline bool IsReverse() const { return mbReverse; }
     inline void SetReverse( sal_Bool bNew ){ mbReverse = bNew ? 1 : 0; }
-    inline sal_Bool IsVertical() const;
+    inline bool IsVertical() const;
     //Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     inline sal_Bool IsVertLR() const;
     inline sal_Bool GetVerticalFlag() const;
@@ -556,7 +556,7 @@ public:
     inline void SetbVertLR( sal_Bool bNew ) { mbVertLR = bNew ? 1 : 0; }
     inline void SetDerivedVert( sal_Bool bNew ){ mbDerivedVert = bNew ? 1 : 0; }
     inline void SetInvalidVert( sal_Bool bNew) { mbInvalidVert = bNew ? 1 : 0; }
-    inline sal_Bool IsRightToLeft() const;
+    inline bool IsRightToLeft() const;
     inline sal_Bool GetRightToLeftFlag() const;
     inline void SetRightToLeft( sal_Bool bNew ){ mbRightToLeft = bNew ? 1 : 0; }
     inline void SetDerivedR2L( sal_Bool bNew ) { mbDerivedR2L  = bNew ? 1 : 0; }
@@ -868,8 +868,8 @@ public:
     void MakeUpperPos( const SwFrm*, const SwFrm*, sal_Bool );
     void MakeLeftPos( const SwFrm*, const SwFrm*, sal_Bool );
     void MakeRightPos( const SwFrm*, const SwFrm*, sal_Bool );
-    inline sal_Bool IsNeighbourFrm() const
-        { return GetType() & FRM_NEIGHBOUR ? sal_True : sal_False; }
+    inline bool IsNeighbourFrm() const
+        { return (GetType() & FRM_NEIGHBOUR) != 0; }
 
     // #i65250#
     inline sal_uInt32 GetFrmId() const { return mnFrmId; }
@@ -926,7 +926,7 @@ inline sal_Bool SwFrm::IsInSct() const
         ((SwFrm*)this)->SetInfFlags();
     return mbInfSct;
 }
-sal_Bool SwFrm::IsVertical() const
+bool SwFrm::IsVertical() const
 {
     if( mbInvalidVert )
         ((SwFrm*)this)->SetDirFlags( sal_True );
@@ -942,7 +942,7 @@ sal_Bool SwFrm::GetVerticalFlag() const
 {
     return mbVertical != 0;
 }
-inline sal_Bool SwFrm::IsRightToLeft() const
+inline bool SwFrm::IsRightToLeft() const
 {
     if( mbInvalidR2L )
         ((SwFrm*)this)->SetDirFlags( sal_False );

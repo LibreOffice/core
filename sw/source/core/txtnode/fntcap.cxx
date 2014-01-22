@@ -313,7 +313,7 @@ void SwDoDrawCapital::DrawSpace( Point &rPos )
     long nDiff = rInf.GetPos().X() - rPos.X();
 
     Point aPos( rPos );
-    const sal_Bool bSwitchL2R = rInf.GetFrm()->IsRightToLeft() &&
+    const bool bSwitchL2R = rInf.GetFrm()->IsRightToLeft() &&
                           ! rInf.IsIgnoreFrmRTL();
 
 

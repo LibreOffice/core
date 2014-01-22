@@ -936,7 +936,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     // line of the ExtendedAttributeSets will appear in the font color first
 
     const sal_Bool bSwitchH2V = rInf.GetFrm() && rInf.GetFrm()->IsVertical();
-    const sal_Bool bSwitchL2R = rInf.GetFrm() && rInf.GetFrm()->IsRightToLeft() &&
+    const bool bSwitchL2R = rInf.GetFrm() && rInf.GetFrm()->IsRightToLeft() &&
                             ! rInf.IsIgnoreFrmRTL();
     const sal_uLong nMode = rInf.GetOut().GetLayoutMode();
     const sal_Bool bBidiPor = ( bSwitchL2R !=
