@@ -53,6 +53,8 @@
 #include <pagedeschint.hxx>
 #include <tgrditem.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace com::sun::star;
 
 static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId,
@@ -653,7 +655,7 @@ void SwDoc::PrtDataChanged()
     OSL_ENSURE( get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) ||
             0 != getPrinter( sal_False ), "PrtDataChanged will be called recursively!" );
     SwRootFrm* pTmpRoot = GetCurrentLayout();
-    SwWait *pWait = 0;
+    boost::scoped_ptr<SwWait> pWait;
     bool bEndAction = false;
 
     if( GetDocShell() )
@@ -668,7 +670,7 @@ void SwDoc::PrtDataChanged()
              pSh->GetViewOptions()->IsPrtFormat()) )
         {
             if ( GetDocShell() )
-                pWait = new SwWait( *GetDocShell(), true );
+                pWait.reset(new SwWait( *GetDocShell(), true ));
 
             pTmpRoot->StartAllAction();
             bEndAction = true;
@@ -708,7 +710,6 @@ void SwDoc::PrtDataChanged()
 
     if ( bEndAction )
         pTmpRoot->EndAllAction();
-    delete pWait;
 }
 
 // We collect the GlobalNames of the servers at runtime, who don't want to be notified

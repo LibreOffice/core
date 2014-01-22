@@ -835,9 +835,9 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
     else if ( pWrtShell->IsSelection() || pWrtShell->IsFrmSelected() ||
               pWrtShell->IsObjSelected() )
     {
-        SwWait *pWait = 0;
+        boost::scoped_ptr<SwWait> pWait;
         if( pWrtShell->ShouldWait() )
-            pWait = new SwWait( *pWrtShell->GetView().GetDocShell(), true );
+            pWait.reset(new SwWait( *pWrtShell->GetView().GetDocShell(), true ));
 
         pClpDocFac = new SwDocFac;
 
@@ -958,8 +958,6 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
 
         PrepareOLE( aObjDesc );
         AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
-
-        delete pWait;
     }
     else
         nRet = 0;

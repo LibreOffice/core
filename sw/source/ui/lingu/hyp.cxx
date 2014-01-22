@@ -36,6 +36,8 @@
 
 #include <unomid.h>
 
+#include <boost/scoped_ptr.hpp>
+
 #define PSH         (&pView->GetWrtShell())
 
 using namespace ::com::sun::star;
@@ -77,11 +79,11 @@ void SwHyphWrapper::SpellStart( SvxSpellArea eSpell )
 sal_Bool SwHyphWrapper::SpellContinue()
 {
     // for automatic separation, make actions visible only at the end
-    SwWait *pWait = 0;
+    boost::scoped_ptr<SwWait> pWait;
     if( bAutomatic )
     {
         PSH->StartAllAction();
-        pWait = new SwWait( *pView->GetDocShell(), true );
+        pWait.reset(new SwWait( *pView->GetDocShell(), true ));
     }
 
         uno::Reference< uno::XInterface >  xHyphWord = bInSelection ?
@@ -93,7 +95,7 @@ sal_Bool SwHyphWrapper::SpellContinue()
     if( bAutomatic )
     {
         PSH->EndAllAction();
-        delete pWait;
+        pWait.reset();
     }
 
     return GetLast().is();

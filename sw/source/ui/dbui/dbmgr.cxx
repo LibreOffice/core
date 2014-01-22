@@ -473,7 +473,7 @@ void SwNewDBMgr::ImportFromConnection(  SwWrtShell* pSh )
             if( pSh->HasSelection() )
                 pSh->DelRight();
 
-            SwWait *pWait = 0;
+            boost::scoped_ptr<SwWait> pWait;
 
             {
                 sal_uLong i = 0;
@@ -481,7 +481,7 @@ void SwNewDBMgr::ImportFromConnection(  SwWrtShell* pSh )
 
                     ImportDBEntry(pSh);
                     if( 10 == ++i )
-                        pWait = new SwWait( *pSh->GetView().GetDocShell(), true);
+                        pWait.reset(new SwWait( *pSh->GetView().GetDocShell(), true));
 
                 } while(ToNextMergeRecord());
             }
@@ -489,7 +489,6 @@ void SwNewDBMgr::ImportFromConnection(  SwWrtShell* pSh )
             pSh->DoGroupUndo(bGroupUndo);
             pSh->EndUndo(UNDO_EMPTY);
             pSh->EndAllAction();
-            delete pWait;
         }
     }
 }

@@ -64,6 +64,8 @@
 #include <comcore.hrc>
 #include <numrule.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace ::com::sun::star;
 
 //JP 16.12.99: definition:
@@ -2537,7 +2539,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
 
 void SwEditShell::AutoFormat( const SvxSwAutoFmtFlags* pAFlags )
 {
-    SwWait* pWait = 0;
+    boost::scoped_ptr<SwWait> pWait;
 
     SET_CURR_SHELL( this );
     StartAllAction();
@@ -2548,7 +2550,7 @@ void SwEditShell::AutoFormat( const SvxSwAutoFmtFlags* pAFlags )
     {
         aAFFlags = *pAFlags;
         if( !aAFFlags.bAFmtByInput )
-            pWait = new SwWait( *GetDoc()->GetDocShell(), true );
+            pWait.reset(new SwWait( *GetDoc()->GetDocShell(), true ));
     }
 
     SwPaM* pCrsr = GetCrsr();
@@ -2570,8 +2572,6 @@ void SwEditShell::AutoFormat( const SvxSwAutoFmtFlags* pAFlags )
 
     EndUndo( UNDO_AUTOFORMAT );
     EndAllAction();
-
-    delete pWait;
 }
 
 void SwEditShell::AutoFmtBySplitNode()

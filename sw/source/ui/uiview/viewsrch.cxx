@@ -485,7 +485,7 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
     if (!m_pSrchItem->GetSelection())
         m_pWrtShell->KillSelection(0, false);
 
-    SwWait *pWait = new SwWait( *GetDocShell(), true );
+    boost::scoped_ptr<SwWait> pWait(new SwWait( *GetDocShell(), true ));
     if( FUNC_Search( aOpts ) )
     {
         m_bFound = sal_True;
@@ -496,10 +496,9 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
         }
         m_pWrtShell->Pop();
         m_pWrtShell->EndAllAction();
-        delete pWait;
         return sal_True;
     }
-    delete pWait, pWait = 0;
+    pWait.reset();
 
         // Search in the specialized areas when no search is present in selections.
         // When searching selections will already searched in these special areas.
@@ -561,7 +560,7 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
     }
     m_pWrtShell->StartAllAction();
     m_pWrtShell->Pop(sal_False);
-    pWait = new SwWait( *GetDocShell(), true );
+    pWait.reset(new SwWait( *GetDocShell(), true ));
 
     bool bSrchBkwrd = DOCPOS_START == aOpts.eEnd;
 
@@ -579,7 +578,7 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
 
     m_bFound = 0 != FUNC_Search( aOpts );
     m_pWrtShell->EndAllAction();
-    delete pWait;
+    pWait.reset();
     if ( m_bFound )
         return m_bFound;
     if(!bApi)
