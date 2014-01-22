@@ -25,8 +25,11 @@ PRJ=..$/..
 PRJNAME=avmedia
 TARGET=avmediaQuickTime
 
-# the QuickTime API has been removed in OSX SDK 10.7
-.IF "$(GUIBASE)"=="aqua" && "${MACOSX_DEPLOYMENT_TARGET:s/.//}"<"107"
+# the QuickTime API has been deprecated since OSX 10.5 and has been removed in the OSX SDK 10.7
+.IF ("$(GUIBASE)" != "aqua") || ("${MACOSX_DEPLOYMENT_TARGET:s/.//}" >= "106")
+dummy:
+    @echo " Nothing to build for GUIBASE=$(GUIBASE) and OSX$(MACOSX_DEPLOYMENT_TARGET)"
+.ELSE
 
 # --- Settings ----------------------------------
 
@@ -77,9 +80,6 @@ SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 .INCLUDE : target.mk
 
-.ELSE
-dummy:
-    @echo " Nothing to build for GUIBASE=$(GUIBASE)"
 .ENDIF
 
 ALLTAR : $(MISC)/avmediaQuickTime.component
