@@ -239,6 +239,7 @@ ContextHandlerRef TextBoxContext::onCreateContext( sal_Int32 nElement, const Att
         break;
         case OOX_TOKEN(doc, p):
         case OOX_TOKEN(doc, sdtContent):
+        case OOX_TOKEN(doc, smartTag):
             if (nElement == OOX_TOKEN(doc, r))
                 return new TextPortionContext( *this, mrTextBox, maParagraph, TextFontModel(), nElement, rAttribs );
             else

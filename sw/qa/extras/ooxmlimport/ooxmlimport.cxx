@@ -981,6 +981,13 @@ DECLARE_OOXMLIMPORT_TEST(testGroupshapeChildRotation, "groupshape-child-rotation
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.TextShape"), xShapeDescriptor->getShapeType());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testGroupshapeSmarttag, "groupshape-smarttag.docx")
+{
+    uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
+    // First run of shape text was missing due to the w:smartTag wrapper around it.
+    CPPUNIT_ASSERT_EQUAL(OUString("Box 2"), uno::Reference<text::XTextRange>(xGroupShape->getByIndex(0), uno::UNO_QUERY)->getString());
+}
+
 DECLARE_OOXMLIMPORT_TEST(testN793262, "n793262.docx")
 {
     uno::Reference<container::XEnumerationAccess> xHeaderText = getProperty< uno::Reference<container::XEnumerationAccess> >(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "HeaderText");
