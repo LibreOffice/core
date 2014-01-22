@@ -178,7 +178,7 @@ public:
 
     void                        SetChildWindow(sal_uInt16 nId, sal_Bool bVisible, sal_Bool bSetFocus=sal_True);
     void                        ToggleChildWindow(sal_uInt16);
-    sal_Bool                        HasChildWindow(sal_uInt16);
+    bool                        HasChildWindow(sal_uInt16);
     sal_Bool                        KnowsChildWindow(sal_uInt16);
     void                        ShowChildWindow(sal_uInt16,sal_Bool bVisible=sal_True);
     SfxChildWindow*             GetChildWindow(sal_uInt16);

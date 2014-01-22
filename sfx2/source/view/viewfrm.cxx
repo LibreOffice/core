@@ -3262,10 +3262,10 @@ void SfxViewFrame::ToggleChildWindow(sal_uInt16 nId)
 
 //--------------------------------------------------------------------
 
-sal_Bool SfxViewFrame::HasChildWindow( sal_uInt16 nId )
+bool SfxViewFrame::HasChildWindow( sal_uInt16 nId )
 {
     SfxWorkWindow* pWork = GetWorkWindow_Impl( nId );
-    return pWork ? pWork->HasChildWindow_Impl(nId) : sal_False;
+    return pWork && pWork->HasChildWindow_Impl(nId);
 }
 
 //--------------------------------------------------------------------
