@@ -34,7 +34,7 @@ public:
     Image*                          pComponentImg;
     OUString*                       pStrEvent;
     OUString*                       pAssignedMacro;
-    _HeaderTabListBox*              pEventLB;
+    MacroEventListBox*              pEventLB;
     sal_Bool                            bReadOnly;
     sal_Bool                            bIDEDialogMode;
 };

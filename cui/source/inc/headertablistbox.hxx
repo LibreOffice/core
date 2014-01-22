@@ -24,7 +24,7 @@
 #include <svtools/svtabbx.hxx>
 
 
-class _HeaderTabListBox : public Control
+class MacroEventListBox : public Control
 {
 private:
     HeaderBar                   maHeaderBar;
@@ -33,7 +33,7 @@ protected:
     DECL_LINK( HeaderEndDrag_Impl, HeaderBar* );
     virtual bool                Notify( NotifyEvent& rNEvt );
 public:
-    _HeaderTabListBox( Window* pParent, const ResId& rId );
+    MacroEventListBox( Window* pParent, const ResId& rId );
 
     void Resize();
 

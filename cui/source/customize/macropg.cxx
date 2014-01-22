@@ -99,9 +99,9 @@ static long nTabs[] =
 #define LB_MACROS_ITEMPOS    2
 
 
-IMPL_LINK( _HeaderTabListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
+IMPL_LINK( MacroEventListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
 {
-    DBG_ASSERT( pBar == &maHeaderBar, "*_HeaderTabListBox::HeaderEndDrag_Impl: something is wrong here..." );
+    DBG_ASSERT( pBar == &maHeaderBar, "*MacroEventListBox::HeaderEndDrag_Impl: something is wrong here..." );
     (void)pBar;
 
     if( !maHeaderBar.GetCurItemId() )
@@ -133,7 +133,7 @@ IMPL_LINK( _HeaderTabListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
     return 1;
 }
 
-bool _HeaderTabListBox::Notify( NotifyEvent& rNEvt )
+bool MacroEventListBox::Notify( NotifyEvent& rNEvt )
 {
     bool nRet = Control::Notify( rNEvt );
 
@@ -146,7 +146,7 @@ bool _HeaderTabListBox::Notify( NotifyEvent& rNEvt )
     return nRet;
 }
 
-_HeaderTabListBox::_HeaderTabListBox( Window* pParent, const ResId& rId )
+MacroEventListBox::MacroEventListBox( Window* pParent, const ResId& rId )
     : Control( pParent, rId )
     , maHeaderBar( this, WB_BUTTONSTYLE | WB_BOTTOMBORDER )
     , maListBox( this, WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP )
@@ -157,7 +157,7 @@ _HeaderTabListBox::_HeaderTabListBox( Window* pParent, const ResId& rId )
     maListBox.EnableCellFocus();
 }
 
-void _HeaderTabListBox::Resize()
+void MacroEventListBox::Resize()
 {
     Control::Resize();
 
@@ -174,23 +174,23 @@ void _HeaderTabListBox::Resize()
     maListBox.SetPosSizePixel( aPnt, aSize );
 }
 
-void _HeaderTabListBox::ConnectElements( void )
+void MacroEventListBox::ConnectElements( void )
 {
     Resize();
 
     // set handler
-    maHeaderBar.SetEndDragHdl( LINK( this, _HeaderTabListBox, HeaderEndDrag_Impl ) );
+    maHeaderBar.SetEndDragHdl( LINK( this, MacroEventListBox, HeaderEndDrag_Impl ) );
 
     maListBox.InitHeaderBar( &maHeaderBar );
 }
 
-void _HeaderTabListBox::Show( sal_Bool bVisible, sal_uInt16 nFlags )
+void MacroEventListBox::Show( sal_Bool bVisible, sal_uInt16 nFlags )
 {
     maListBox.Show( bVisible, nFlags );
     maHeaderBar.Show( bVisible, nFlags );
 }
 
-void _HeaderTabListBox::Enable( bool bEnable, bool bChild )
+void MacroEventListBox::Enable( bool bEnable, bool bChild )
 {
     maListBox.Enable( bEnable, bChild );
     maHeaderBar.Enable( bEnable, bChild );
@@ -818,7 +818,7 @@ SvxMacroTabPage::SvxMacroTabPage( Window* pParent, const Reference< frame::XFram
 {
     mpImpl->pStrEvent           = new OUString(                     CUI_RES( STR_EVENT ) );
     mpImpl->pAssignedMacro      = new OUString(                     CUI_RES( STR_ASSMACRO ) );
-    mpImpl->pEventLB            = new _HeaderTabListBox( this,      CUI_RES( LB_EVENT ) );
+    mpImpl->pEventLB            = new MacroEventListBox( this,      CUI_RES( LB_EVENT ) );
     mpImpl->pAssignFT           = new FixedText( this,              CUI_RES( FT_ASSIGN ) );
     mpImpl->pAssignPB           = new PushButton( this,             CUI_RES( PB_ASSIGN ) );
     mpImpl->pDeletePB           = new PushButton( this,             CUI_RES( PB_DELETE ) );
