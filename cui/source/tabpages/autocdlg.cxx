@@ -487,7 +487,7 @@ sal_Bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet&  )
     SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
     long nFlags = pAutoCorrect->GetFlags();
 
-    sal_Bool bCheck = m_pCheckLB->IsChecked(USE_REPLACE_TABLE, CBCOL_FIRST);
+    bool bCheck = m_pCheckLB->IsChecked(USE_REPLACE_TABLE, CBCOL_FIRST);
     bModified |= pOpt->bAutoCorrect != bCheck;
     pOpt->bAutoCorrect = bCheck;
     pAutoCorrect->SetAutoCorrFlag(Autocorrect,
@@ -1826,7 +1826,7 @@ sal_Bool OfaQuoteTabPage::FillItemSet( SfxItemSet&  )
     {
         SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
 
-        sal_Bool bCheck = m_pSwCheckLB->IsChecked(ADD_NONBRK_SPACE, CBCOL_FIRST);
+        bool bCheck = m_pSwCheckLB->IsChecked(ADD_NONBRK_SPACE, CBCOL_FIRST);
         bModified |= pOpt->bAddNonBrkSpace != bCheck;
         pOpt->bAddNonBrkSpace = bCheck;
         pAutoCorrect->SetAutoCorrFlag(AddNonBrkSpace,
@@ -2124,7 +2124,7 @@ SfxTabPage* OfaAutoCompleteTabPage::Create( Window* pParent,
 
 sal_Bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet& )
 {
-    sal_Bool bModified = sal_False, bCheck;
+    bool bModified = false, bCheck;
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
     sal_uInt16 nVal;
@@ -2180,11 +2180,11 @@ void OfaAutoCompleteTabPage::Reset( const SfxItemSet&  )
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
 
-    aCBActiv.Check( 0 != pOpt->bAutoCompleteWords );
-    aCBCollect.Check( 0 != pOpt->bAutoCmpltCollectWords );
+    aCBActiv.Check( pOpt->bAutoCompleteWords );
+    aCBCollect.Check( pOpt->bAutoCmpltCollectWords );
     aCBRemoveList.Check( !pOpt->bAutoCmpltKeepList ); //inverted value!
-    aCBAppendSpace.Check( 0 != pOpt->bAutoCmpltAppendBlanc );
-    aCBAsTip.Check( 0 != pOpt->bAutoCmpltShowAsTip );
+    aCBAppendSpace.Check( pOpt->bAutoCmpltAppendBlanc );
+    aCBAsTip.Check( pOpt->bAutoCmpltShowAsTip );
 
     aNFMinWordlen.SetValue( pOpt->nAutoCmpltWordLen );
     aNFMaxEntries.SetValue( pOpt->nAutoCmpltListLen );
