@@ -1806,7 +1806,6 @@ int OpenGLRender::RenderPieSegment2DShape(float fSize, float fPosX, float fPosY)
         CHECK_GL_ERROR();
 
     }
-    glEnable(GL_MULTISAMPLE);
     m_fZStep += 0.01f;
 
     CHECK_GL_ERROR();

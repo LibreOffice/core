@@ -354,14 +354,12 @@ void DummyPieSegment2D::render()
         sal_Int32 nColor = itr->second.get<sal_Int32>();
         pChart->m_GLRender.SetColor(nColor);
     }
-    /*
     itr = maProperties.find(UNO_NAME_FILL_TRANSPARENCE);
     if(itr != maProperties.end())
     {
         sal_Int32 transparency = itr->second.get<sal_Int32>();
-        pChart->m_GLRender.SetTransparency(transparency&(0xFF));
+        pChart->m_GLRender.SetTransparency(255-(transparency&(0xFF)));
     }
-    */
 
     float nSize = std::max<float>(maUnitCircleToScene.Line1.Column1, maUnitCircleToScene.Line2.Column2);
     pChart->m_GLRender.RenderPieSegment2DShape(nSize, maUnitCircleToScene.Line1.Column4 + maOffset.DirectionX,
