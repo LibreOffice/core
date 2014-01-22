@@ -164,17 +164,17 @@ sal_Bool isAssignableFrom(const Type& _rAssignable, const Type& _rFrom)
 
 //------------------------------------------------------------------
 template<class TYPE>
-sal_Bool tryCompare(const void* _pData, const Any& _rValue, sal_Bool& _bIdentical, TYPE& _rOut)
+bool tryCompare(const void* _pData, const Any& _rValue, sal_Bool& _bIdentical, TYPE& _rOut)
 {
-    sal_Bool bSuccess = _rValue >>= _rOut;
+    bool bSuccess = _rValue >>= _rOut;
     _bIdentical = bSuccess && (_rOut == *reinterpret_cast<const TYPE*>(_pData));
     return bSuccess;
 }
 
 //------------------------------------------------------------------
-sal_Bool tryCompare(const void* _pData, const Any& _rValue, sal_Bool& _bIdentical, sal_Unicode& _rOut)
+bool tryCompare(const void* _pData, const Any& _rValue, sal_Bool& _bIdentical, sal_Unicode& _rOut)
 {
-    sal_Bool bSuccess = ( _rValue.getValueTypeClass() == TypeClass_CHAR );
+    bool bSuccess = ( _rValue.getValueTypeClass() == TypeClass_CHAR );
     if ( bSuccess )
         _rOut = *static_cast< const sal_Unicode* >( _rValue.getValue() );
     _bIdentical = bSuccess && ( _rOut == *static_cast< const sal_Unicode* >( _pData ) );
