@@ -265,12 +265,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_rtf::LN_ITCLIM:
             break;
-        case NS_rtf::LN_LINECOLOR:
-            break;
-        case NS_rtf::LN_LINEWIDTH:
-            break;
-        case NS_rtf::LN_LINETYPE:
-            break;
         case NS_ooxml::LN_headerr:
             break;
         case NS_ooxml::LN_footerr:
