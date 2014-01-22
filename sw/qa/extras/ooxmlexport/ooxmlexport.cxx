@@ -2554,6 +2554,13 @@ DECLARE_OOXMLEXPORT_TEST(testTOCFlag_u,"testTOCFlag_u.docx")
     OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
     CPPUNIT_ASSERT(contents.match(" TOC \\z \\o \"1-9\" \\u \\h"));
 }
+DECLARE_OOXMLEXPORT_TEST(testTestTitlePage, "testTitlePage.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPathChildren(pXmlDoc, "/w:document/w:body/w:sectPr/w:titlePg", 0);
+}
 
 #endif
 
