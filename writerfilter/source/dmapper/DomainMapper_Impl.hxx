@@ -201,20 +201,6 @@ typedef std::stack< TextAppendContext >         TextAppendStack;
 typedef std::stack<FieldContextPtr>                FieldStack;
 typedef std::stack< AnchoredContext >           TextContentStack;
 
-
-
-class FIB
-{
-    sal_Int32   aFIBData[ NS_rtf::LN_LCBSTTBFUSSR - NS_rtf::LN_WIDENT + 1];
-    public:
-        FIB()
-            {
-                memset(&aFIBData, 0x00, sizeof(aFIBData));
-            }
-
-        void      SetData( Id nName, sal_Int32 nValue );
-};
-
 /*-------------------------------------------------------------------------
     extended tab stop struct
   -----------------------------------------------------------------------*/
@@ -341,7 +327,6 @@ private:
     TableDataHandler_t::Pointer_t m_pTableHandler;
 
     //each context needs a stack of currently used attributes
-    FIB                     m_aFIB;
     PropertyStack           m_aPropertyStacks[NUMBER_OF_CONTEXTS];
     ContextStack            m_aContextStack;
     FontTablePtr            m_pFontTable;
@@ -480,7 +465,6 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > appendTextSectionAfter(
                     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xBefore );
 
-    FIB&    GetFIB() {return m_aFIB;}
     // push the new properties onto the stack and make it the 'current' property map
     void    PushProperties(ContextType eId);
     void    PushStyleProperties(PropertyMapPtr pStyleProperties);

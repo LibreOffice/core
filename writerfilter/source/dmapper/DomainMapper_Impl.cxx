@@ -128,14 +128,6 @@ typedef ::std::map< OUString, FieldConversion>
             FieldConversionMap_t;
 
 
-void FIB::SetData( Id nName, sal_Int32 nValue )
-{
-    OSL_ENSURE( nName >= NS_rtf::LN_WIDENT && nName <= NS_rtf::LN_LCBSTTBFUSSR, "invalid index in FIB");
-    if( nName >= NS_rtf::LN_WIDENT && nName <= NS_rtf::LN_LCBSTTBFUSSR)
-        aFIBData[nName - NS_rtf::LN_WIDENT] = nValue;
-}
-
-
 DomainMapper_Impl::DomainMapper_Impl(
             DomainMapper& rDMapper,
             uno::Reference < uno::XComponentContext >  xContext,

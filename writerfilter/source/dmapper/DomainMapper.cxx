@@ -177,12 +177,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
 
     SectionPropertyMap * pSectionContext = m_pImpl->GetSectionContext();
     PropertyMap::iterator oldPropValue;
-    if( nName >= NS_rtf::LN_WIDENT && nName <= NS_rtf::LN_LCBSTTBFUSSR )
-        m_pImpl->GetFIB().SetData( nName, nIntValue );
-    else
-    {
-
-
         switch( nName )
         {
         case NS_rtf::LN_ISTD: //index of applied style
@@ -242,12 +236,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_FAUTOREDEF:
             break;
         case NS_rtf::LN_FHIDDEN:
-            break;
-        case NS_rtf::LN_WIDENT:
-        case NS_rtf::LN_LCBSTTBFUSSR:
-            {
-                m_pImpl->GetFIB().SetData( nName, nIntValue );
-            }
             break;
         case NS_ooxml::LN_CT_Border_sz:
             break;
@@ -957,7 +945,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
 #endif
             }
         }
-    }
 }
 
 void DomainMapper::lcl_sprm(Sprm & rSprm)
