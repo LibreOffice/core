@@ -134,7 +134,7 @@ void SAL_CALL OGroup::setSortAscending( ::sal_Bool _sortascending ) throw (uno::
 // -----------------------------------------------------------------------------
 void SAL_CALL OGroup::setHeaderOn( ::sal_Bool _headeron ) throw (uno::RuntimeException)
 {
-    if ( _headeron != m_xHeader.is() )
+    if ( bool(_headeron) != m_xHeader.is() )
     {
         OUString sName(RPT_RESSTRING(RID_STR_GROUP_HEADER,m_xContext->getServiceManager()));
         setSection(PROPERTY_HEADERON,_headeron,sName,m_xHeader);
@@ -149,7 +149,7 @@ void SAL_CALL OGroup::setHeaderOn( ::sal_Bool _headeron ) throw (uno::RuntimeExc
 // -----------------------------------------------------------------------------
 void SAL_CALL OGroup::setFooterOn( ::sal_Bool _footeron ) throw (uno::RuntimeException)
 {
-    if ( _footeron != m_xFooter.is() )
+    if ( bool(_footeron) != m_xFooter.is() )
     {
         OUString sName(RPT_RESSTRING(RID_STR_GROUP_FOOTER,m_xContext->getServiceManager()));
         setSection(PROPERTY_FOOTERON,_footeron,sName,m_xFooter);

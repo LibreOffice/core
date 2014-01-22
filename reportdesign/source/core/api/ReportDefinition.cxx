@@ -1007,7 +1007,7 @@ void SAL_CALL OReportDefinition::setEscapeProcessing( ::sal_Bool _escapeprocessi
 // -----------------------------------------------------------------------------
 void SAL_CALL OReportDefinition::setReportHeaderOn( ::sal_Bool _reportheaderon ) throw (uno::RuntimeException)
 {
-    if ( _reportheaderon != m_pImpl->m_xReportHeader.is() )
+    if ( bool(_reportheaderon) != m_pImpl->m_xReportHeader.is() )
     {
         setSection(PROPERTY_REPORTHEADERON,_reportheaderon,RPT_RESSTRING(RID_STR_REPORT_HEADER,m_aProps->m_xContext->getServiceManager()),m_pImpl->m_xReportHeader);
     }
@@ -1021,7 +1021,7 @@ void SAL_CALL OReportDefinition::setReportHeaderOn( ::sal_Bool _reportheaderon )
 // -----------------------------------------------------------------------------
 void SAL_CALL OReportDefinition::setReportFooterOn( ::sal_Bool _reportfooteron ) throw (uno::RuntimeException)
 {
-    if ( _reportfooteron != m_pImpl->m_xReportFooter.is() )
+    if ( bool(_reportfooteron) != m_pImpl->m_xReportFooter.is() )
     {
         setSection(PROPERTY_REPORTFOOTERON,_reportfooteron,RPT_RESSTRING(RID_STR_REPORT_FOOTER,m_aProps->m_xContext->getServiceManager()),m_pImpl->m_xReportFooter);
     }
@@ -1035,7 +1035,7 @@ void SAL_CALL OReportDefinition::setReportFooterOn( ::sal_Bool _reportfooteron )
 // -----------------------------------------------------------------------------
 void SAL_CALL OReportDefinition::setPageHeaderOn( ::sal_Bool _pageheaderon ) throw (uno::RuntimeException)
 {
-    if ( _pageheaderon != m_pImpl->m_xPageHeader.is() )
+    if ( bool(_pageheaderon) != m_pImpl->m_xPageHeader.is() )
     {
         setSection(PROPERTY_PAGEHEADERON,_pageheaderon,RPT_RESSTRING(RID_STR_PAGE_HEADER,m_aProps->m_xContext->getServiceManager()),m_pImpl->m_xPageHeader);
     }
@@ -1049,7 +1049,7 @@ void SAL_CALL OReportDefinition::setPageHeaderOn( ::sal_Bool _pageheaderon ) thr
 // -----------------------------------------------------------------------------
 void SAL_CALL OReportDefinition::setPageFooterOn( ::sal_Bool _pagefooteron ) throw (uno::RuntimeException)
 {
-    if ( _pagefooteron != m_pImpl->m_xPageFooter.is() )
+    if ( bool(_pagefooteron) != m_pImpl->m_xPageFooter.is() )
     {
         setSection(PROPERTY_PAGEFOOTERON,_pagefooteron,RPT_RESSTRING(RID_STR_PAGE_FOOTER,m_aProps->m_xContext->getServiceManager()),m_pImpl->m_xPageFooter);
     }
