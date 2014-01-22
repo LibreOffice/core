@@ -519,7 +519,7 @@ void Application::SetSettings( const AllSettings& rSettings )
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->maAppData.mpSettings )
     {
-        GetSettings();
+        InitSettings();
         *pSVData->maAppData.mpSettings = rSettings;
         ResMgr::SetDefaultLocale( rSettings.GetUILanguageTag() );
     }
@@ -618,12 +618,21 @@ const AllSettings& Application::GetSettings()
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->maAppData.mpSettings )
     {
-        pSVData->maAppData.mpCfgListener = new LocaleConfigurationListener;
-        pSVData->maAppData.mpSettings = new AllSettings();
-        pSVData->maAppData.mpSettings->GetSysLocale().GetOptions().AddListener( pSVData->maAppData.mpCfgListener );
+        InitSettings();
     }
 
     return *(pSVData->maAppData.mpSettings);
+}
+
+void Application::InitSettings()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+
+    assert(!pSVData->maAppData.mpSettings);     // initialization should not happen twice!
+
+    pSVData->maAppData.mpCfgListener = new LocaleConfigurationListener;
+    pSVData->maAppData.mpSettings = new AllSettings();
+    pSVData->maAppData.mpSettings->GetSysLocale().GetOptions().AddListener( pSVData->maAppData.mpCfgListener );
 }
 
 void Application::NotifyAllWindows( DataChangedEvent& rDCEvt )

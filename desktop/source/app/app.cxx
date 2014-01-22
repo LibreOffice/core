@@ -1951,8 +1951,8 @@ void Desktop::SystemSettingsChanging( AllSettings& rSettings )
     sal_uInt32 nDragFullOptions = hStyleSettings.GetDragFullOptions();
 
     SvtTabAppearanceCfg aAppearanceCfg;
-    sal_uInt16 nGet = aAppearanceCfg.GetDragMode();
-    switch ( nGet )
+    sal_uInt16 nDragMode = aAppearanceCfg.GetDragMode();
+    switch ( nDragMode )
     {
     case DragFullWindow:
         nDragFullOptions |= DRAGFULL_OPTION_ALL;

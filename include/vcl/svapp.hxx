@@ -780,6 +780,8 @@ public:
 
 private:
 
+    static void InitSettings();
+
     DECL_STATIC_LINK( Application, PostEventHandler, void* );
 };
 
