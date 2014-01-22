@@ -302,8 +302,6 @@ namespace drawinglayer
                     const basegfx::BColor aLineColor =
                         maBColorModifierStack.getModifiedColor(rSource.getRGBColorLeft());
                     double nThick = rtl::math::round(rSource.getLeftWidth());
-                    if (!nThick)
-                        nThick = rtl::math::round(rSource.getRightWidth());
 
                     bool bDouble = rSource.getStyle() == table::BorderLineStyle::DOUBLE;
 
@@ -414,8 +412,6 @@ namespace drawinglayer
                         return false;
 
                     double nThick = rtl::math::round(rSource.getLeftWidth());
-                    if (!nThick)
-                        nThick = rtl::math::round(rSource.getRightWidth());
 
                     const basegfx::BColor aLineColor =
                         maBColorModifierStack.getModifiedColor(rSource.getRGBColorLeft());
