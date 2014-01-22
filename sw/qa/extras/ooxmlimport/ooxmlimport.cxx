@@ -984,8 +984,12 @@ DECLARE_OOXMLIMPORT_TEST(testGroupshapeChildRotation, "groupshape-child-rotation
 DECLARE_OOXMLIMPORT_TEST(testGroupshapeSmarttag, "groupshape-smarttag.docx")
 {
     uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xGroupShape->getByIndex(0), uno::UNO_QUERY);
     // First run of shape text was missing due to the w:smartTag wrapper around it.
-    CPPUNIT_ASSERT_EQUAL(OUString("Box 2"), uno::Reference<text::XTextRange>(xGroupShape->getByIndex(0), uno::UNO_QUERY)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Box 2"), xShape->getString());
+
+    // Font size of the shape text was 10.
+    CPPUNIT_ASSERT_EQUAL(12.f, getProperty<float>(xShape->getText(), "CharHeight"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testN793262, "n793262.docx")

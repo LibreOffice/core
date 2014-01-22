@@ -2590,6 +2590,21 @@ void DocxAttributeOutput::LatentStyles()
     m_pSerializer->endElementNS(XML_w, XML_latentStyles);
 }
 
+/// Should the font size we have written out as a default one?
+bool lcl_isDefaultFontSize(const SvxFontHeightItem& rFontHeight, SwDoc* pDoc)
+{
+    bool bRet = rFontHeight.GetHeight() != 200; // see StyleSheetTable_Impl::StyleSheetTable_Impl() where we set this default
+    // Additionally, if the default para style has the same font size, then don't write it here.
+    SwTxtFmtColl* pDefaultStyle = pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
+    if (pDefaultStyle)
+    {
+        const SfxPoolItem* pItem = 0;
+        if (pDefaultStyle->GetAttrSet().HasItem(RES_CHRATR_FONTSIZE, &pItem))
+            return static_cast<const SvxFontHeightItem*>(pItem)->GetHeight() != rFontHeight.GetHeight();
+    }
+    return bRet;
+}
+
 void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
 {
     bool bMustWrite = true;
@@ -2614,7 +2629,7 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
             bMustWrite = true;
             break;
         case RES_CHRATR_FONTSIZE:
-            bMustWrite = static_cast< const SvxFontHeightItem& >(rHt).GetHeight() != 200; // see StyleSheetTable_Impl::StyleSheetTable_Impl() where we set this default
+            bMustWrite = lcl_isDefaultFontSize(static_cast< const SvxFontHeightItem& >(rHt), m_rExport.pDoc);
             break;
         case RES_CHRATR_KERNING:
             bMustWrite = static_cast< const SvxKerningItem& >(rHt).GetValue() != 0;
