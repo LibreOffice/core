@@ -1334,7 +1334,7 @@ DECLARE_OOXMLIMPORT_TEST(testFdo66474, "fdo66474.docx")
     // take the full available width, like it would have to.
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xTables->getByIndex(0), "RelativeWidth"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xTables->getByIndex(0), "RelativeWidth"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testGroupshapeRotation, "groupshape-rotation.docx")
@@ -1722,6 +1722,13 @@ DECLARE_OOXMLIMPORT_TEST(testFdo73389,"fdo73389.docx")
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     // This was 9340, i.e. the width of the inner table was too large.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2842), getProperty<sal_Int32>(xTables->getByIndex(0), "Width"));
+}
+
+DECLARE_OOXMLIMPORT_TEST(testFdo69656, "Table_cell_auto_width_fdo69656.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8154), getProperty<sal_Int32>(xTables->getByIndex(0), "Width"));
 }
 #endif
 

@@ -169,7 +169,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                             {
                                 // Set the width type of table with 'Auto' and set the width value to 100(%)
                                 pPropMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::VARIABLE );
-                                pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, 100 );
+                                pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, 0 );
                             }
                         }
                         m_bTableSizeTypeInserted = true;
@@ -654,6 +654,21 @@ void DomainMapperTableManager::endOfRowAction()
 
     if( pTableGrid->size() == ( m_nGridBefore + nGrids + m_nGridAfter ) && m_nCell.back( ) > 0 )
     {
+        TablePropertyMapPtr propMap = m_aTmpTableProperties.back();
+        sal_Int32 pTableWidthType;
+        sal_Int32 pTableWidth;
+        propMap->getValue( TablePropertyMap::TABLE_WIDTH_TYPE, pTableWidthType );
+        propMap->getValue( TablePropertyMap::TABLE_WIDTH, pTableWidth );
+        // Update table width if it is relative i.e "auto" width.
+        if (pTableWidthType == text::SizeType::VARIABLE )
+        {
+            if(pTableWidth > 100 || pTableWidth <= 0)
+            {
+                propMap->setValue( TablePropertyMap::TABLE_WIDTH, (sal_Int32)(m_nTableWidth));
+                propMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::FIX);
+            }
+        }
+
         uno::Sequence< text::TableColumnSeparator > aSeparators( m_nCell.back( ) - 1 );
         text::TableColumnSeparator* pSeparators = aSeparators.getArray();
         sal_Int16 nLastRelPos = 0;
