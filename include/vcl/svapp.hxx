@@ -631,10 +631,9 @@ public:
         <TRUE/> if the system font is suitable for our UI
         <FALSE/> if the test string could not be displayed with the system font
      */
-
-    // default name of the application for message dialogs and printing
     static bool                 ValidateSystemFont();
 
+    // default name of the application for message dialogs and printing
     static void                 SetDisplayName( const OUString& rDisplayName );
     static OUString             GetDisplayName();
 
