@@ -6,6 +6,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include "config_test.h"
+
 #include <swmodeltestbase.hxx>
 
 #if !defined(WNT)
@@ -972,9 +974,11 @@ DECLARE_OOXMLIMPORT_TEST(testGroupshapeChildRotation, "groupshape-child-rotation
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xShape->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xShape->getPosition().Y);
 
+#if ! TEST_FONTS_MISSING
     xShape.set(xGroupShape->getByIndex(4), uno::UNO_QUERY);
     // This was 887, i.e. border distances were included in the height.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(686), xShape->getSize().Height);
+#endif
 
     uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xGroupShape->getByIndex(5), uno::UNO_QUERY);
     // This was com.sun.star.drawing.RectangleShape, all shape text in a single line.

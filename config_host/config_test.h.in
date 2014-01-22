@@ -1,0 +1,10 @@
+/*
+Settings for test suite dependencies.
+*/
+
+#ifndef CONFIG_TEST_H
+#define CONFIG_TEST_H
+
+#define TEST_FONTS_MISSING 0
+
+#endif

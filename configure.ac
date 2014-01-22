@@ -11520,6 +11520,31 @@ AC_SUBST(SUNTEMPLATES_FR_PACK)
 AC_SUBST(SUNTEMPLATES_HU_PACK)
 AC_SUBST(SUNTEMPLATES_IT_PACK)
 
+TEST_FONTS_MISSING=0
+
+# $1  = font family
+# $2+ = accepted font mappings
+test_font_map()
+{
+    FONT=$1 ; shift
+    AC_MSG_CHECKING([Checking font mapping for '$FONT'])
+    FONTFILE="$(basename `$FCMATCH -f '%{file}' "$FONT"`)"
+
+    TESTEXPR="'${FONTFILE}' = '$1.ttf'"
+    while true ; do
+        MAPPING="$1" ; shift
+        test -n "$MAPPING" || break
+        TESTEXPR="${TESTEXPR} -o '$FONTFILE' = '$MAPPING-Regular.ttf'"
+    done
+    if test $TESTEXPR
+    then
+        AC_MSG_RESULT([ok])
+    else
+        AC_MSG_RESULT([unknown ($FONTFILE)])
+        TEST_FONTS_MISSING=1
+    fi
+}
+
 dnl ===================================================================
 dnl Test whether to include fonts
 dnl ===================================================================
@@ -11532,8 +11557,29 @@ else
     AC_MSG_RESULT([no])
     WITH_FONTS=NO
     SCPDEFS="$SCPDEFS -DWITHOUT_FONTS"
+    if test "$test_fontconfig" = "yes"; then
+        AC_PATH_PROG([FCMATCH], [fc-match])
+        if test -z "$FCMATCH"; then
+            AC_MSG_WARN([Unable to query installed fonts - unit tests disabled.])
+            TEST_FONTS_MISSING=1
+        else
+#            test_font_map 'Arial' 'LiberationSans'
+#            test_font_map 'Arial Narrow' 'LiberationSansNarrow'
+            test_font_map 'Calibri' 'Carlito'
+#            test_font_map 'Cambria' 'Caladea'
+#            test_font_map 'Courier New' 'LiberationMono'
+#            test_font_map 'Times New Roman' 'LiberationSerif'
+            if test ${TEST_FONTS_MISSING} -eq 1
+            then
+                AC_MSG_WARN([Unknown font mappings - unit tests disabled.])
+            fi
+        fi
+    else
+        TEST_FONTS_MISSING=0
+    fi
 fi
 AC_SUBST(WITH_FONTS)
+AC_DEFINE_UNQUOTED([TEST_FONTS_MISSING], $TEST_FONTS_MISSING)
 
 dnl ===================================================================
 dnl Test whether to include ppds
@@ -12762,6 +12808,7 @@ AC_CONFIG_HEADERS([config_host/config_orcus.h])
 AC_CONFIG_HEADERS([config_host/config_kde4.h])
 AC_CONFIG_HEADERS([config_host/config_mingw.h])
 AC_CONFIG_HEADERS([config_host/config_oox.h])
+AC_CONFIG_HEADERS([config_host/config_test.h])
 AC_CONFIG_HEADERS([config_host/config_telepathy.h])
 AC_CONFIG_HEADERS([config_host/config_typesizes.h])
 AC_CONFIG_HEADERS([config_host/config_vclplug.h])
