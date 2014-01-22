@@ -641,7 +641,6 @@ public:
     */
     static void                 SetSettings( const AllSettings& rSettings );
 
-
     /** Gets the application's settings. If the application hasn't initialized
      it's settings, then it does so (lazy initialization).
 
