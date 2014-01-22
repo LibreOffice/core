@@ -26,6 +26,9 @@
 #include <svtools/valueset.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/frmsel.hxx>
+#include <svx/flagsdef.hxx>
+
+#include <set>
 
 // forward ---------------------------------------------------------------
 
@@ -34,7 +37,6 @@ namespace editeng
     class SvxBorderLine;
 }
 
-#include <svx/flagsdef.hxx>
 
 class SvxBorderTabPage : public SfxTabPage
 {
@@ -106,6 +108,8 @@ private:
     bool                mbUseMarginItem;
     bool                mbSync;
 
+    std::set<sal_Int16> maUsedBorderStyles;
+
     // Handler
     DECL_LINK( SelStyleHdl_Impl, ListBox* pLb );
     DECL_LINK( SelColHdl_Impl, ListBox* pLb );
@@ -130,6 +134,8 @@ private:
     void                ResetFrameLine_Impl( svx::FrameBorderType eBorder,
                                              const editeng::SvxBorderLine* pCurLine,
                                              bool bValid );
+
+    bool IsBorderLineStyleAllowed( sal_Int16 nStyle ) const;
 };
 
 

@@ -310,6 +310,9 @@ class SVT_DLLPUBLIC LineListBox : public ListBox
     sal_uInt16           GetStylePos( sal_uInt16 nListPos, long nWidth );
 
 public:
+    typedef Color (*ColorFunc)(Color);
+    typedef Color (*ColorDistFunc)(Color, Color);
+
                     LineListBox( Window* pParent, WinBits nWinStyle = WB_BORDER );
     virtual         ~LineListBox();
 
@@ -323,9 +326,9 @@ public:
     /** Insert a listbox entry with all widths in Twips. */
     void            InsertEntry( BorderWidthImpl aWidthImpl,
                         sal_uInt16 nStyle, long nMinWidth = 0,
-                        Color (*pColor1Fn)(Color) = &sameColor,
-                        Color (*pColor2Fn)( Color ) = &sameColor,
-                        Color (*pColorDistFn)( Color, Color ) = &sameDistColor );
+                        ColorFunc pColor1Fn = &sameColor,
+                        ColorFunc pColor2Fn = &sameColor,
+                        ColorDistFunc pColorDistFn = &sameDistColor );
 
     using ListBox::RemoveEntry;
     virtual void    RemoveEntry( sal_uInt16 nPos );

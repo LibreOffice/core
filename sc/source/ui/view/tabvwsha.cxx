@@ -24,6 +24,7 @@
 #include <editeng/boxitem.hxx>
 #include <svx/numinf.hxx>
 #include <svl/srchitem.hxx>
+#include <svl/ilstitem.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -53,7 +54,11 @@
 #include "cellvalue.hxx"
 #include "tokenarray.hxx"
 
+#include <com/sun/star/table/BorderLineStyle.hpp>
+
 #include <boost/scoped_ptr.hpp>
+
+using namespace com::sun::star;
 
 sal_Bool ScTabViewShell::GetFunction( OUString& rFuncStr, sal_uInt16 nErrCode )
 {
@@ -474,6 +479,19 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     boost::scoped_ptr<SfxAbstractTabDialog> pDlg;
     boost::scoped_ptr<SfxItemSet> pOldSet(new SfxItemSet(pOldAttrs->GetItemSet()));
     boost::scoped_ptr<SvxNumberInfoItem> pNumberInfoItem;
+
+    // We only allow these border line types.
+    std::vector<sal_Int32> aBorderStyles;
+    aBorderStyles.reserve(5);
+    aBorderStyles.push_back(table::BorderLineStyle::SOLID);
+    aBorderStyles.push_back(table::BorderLineStyle::DOTTED);
+    aBorderStyles.push_back(table::BorderLineStyle::DASHED);
+    aBorderStyles.push_back(table::BorderLineStyle::FINE_DASHED);
+    aBorderStyles.push_back(table::BorderLineStyle::DOUBLE);
+
+    SfxIntegerListItem aBorderStylesItem(SID_ATTR_BORDER_STYLES, aBorderStyles);
+    pOldSet->MergeRange(SID_ATTR_BORDER_STYLES, SID_ATTR_BORDER_STYLES);
+    pOldSet->Put(aBorderStylesItem);
 
     // Get border items and put them in the set:
     GetSelectionFrame( aLineOuter, aLineInner );

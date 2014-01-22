@@ -839,14 +839,11 @@ sal_uInt16 LineListBox::InsertEntry( const OUString& rStr, sal_uInt16 nPos )
 // -----------------------------------------------------------------------
 
 void LineListBox::InsertEntry(
-        BorderWidthImpl aWidthImpl,
-        sal_uInt16 nStyle, long nMinWidth,
-        Color ( *pColor1Fn )( Color ), Color ( *pColor2Fn )( Color ),
-        Color ( *pColorDistFn )( Color, Color ) )
+    BorderWidthImpl aWidthImpl, sal_uInt16 nStyle, long nMinWidth,
+    ColorFunc pColor1Fn, ColorFunc pColor2Fn, ColorDistFunc pColorDistFn )
 {
     ImpLineListData* pData = new ImpLineListData(
-            aWidthImpl, nStyle, nMinWidth,
-           pColor1Fn, pColor2Fn, pColorDistFn );
+        aWidthImpl, nStyle, nMinWidth, pColor1Fn, pColor2Fn, pColorDistFn);
     pLineList->push_back( pData );
 }
 

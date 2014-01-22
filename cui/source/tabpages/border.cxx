@@ -39,6 +39,7 @@
 #include "svx/flagsdef.hxx"
 #include <sfx2/request.hxx>
 #include <svl/intitem.hxx>
+#include <svl/ilstitem.hxx>
 #include <sfx2/itemconnect.hxx>
 #include <sal/macros.h>
 #include "borderconn.hxx"
@@ -155,6 +156,16 @@ SvxBorderTabPage::SvxBorderTabPage(Window* pParent, const SfxItemSet& rCoreAttrs
             is needed across various functions... */
     mbUseMarginItem = rCoreAttrs.GetItemState(GetWhich(SID_ATTR_ALIGN_MARGIN),sal_True) != SFX_ITEM_UNKNOWN;
 
+    const SfxPoolItem* pItem = NULL;
+    if (rCoreAttrs.HasItem(SID_ATTR_BORDER_STYLES, &pItem))
+    {
+        const SfxIntegerListItem* p = static_cast<const SfxIntegerListItem*>(pItem);
+        std::vector<sal_Int32> aUsedStyles;
+        p->GetList(aUsedStyles);
+        for (size_t i = 0, n = aUsedStyles.size(); i < n; ++i)
+            maUsedBorderStyles.insert(static_cast<sal_Int16>(aUsedStyles[i]));
+    }
+
     // set metric
     FieldUnit eFUnit = GetModuleFieldUnit( rCoreAttrs );
 
@@ -268,7 +279,7 @@ SvxBorderTabPage::SvxBorderTabPage(Window* pParent, const SfxItemSet& rCoreAttrs
 
     if ( pDocSh )
     {
-        const SfxPoolItem* pItem = pDocSh->GetItem( SID_COLOR_TABLE );
+        pItem = pDocSh->GetItem( SID_COLOR_TABLE );
         if ( pItem != NULL )
             pColorTable = ( (SvxColorListItem*)pItem )->GetColorList();
     }
@@ -346,6 +357,15 @@ void SvxBorderTabPage::ResetFrameLine_Impl( svx::FrameBorderType eBorder, const 
         else
             m_pFrameSel->SetBorderDontCare( eBorder );
     }
+}
+
+bool SvxBorderTabPage::IsBorderLineStyleAllowed( sal_Int16 nStyle ) const
+{
+    if (maUsedBorderStyles.empty())
+        // All border styles are allowed.
+        return true;
+
+    return maUsedBorderStyles.count(nStyle) > 0;
 }
 
 // -----------------------------------------------------------------------
@@ -1001,38 +1021,48 @@ void SvxBorderTabPage::FillLineListBox_Impl()
 {
     using namespace ::com::sun::star::table::BorderLineStyle;
 
+    struct {
+        sal_Int16 mnStyle;
+        long mnMinWidth;
+        LineListBox::ColorFunc mpColor1Fn;
+        LineListBox::ColorFunc mpColor2Fn;
+        LineListBox::ColorDistFunc mpColorDistFn;
+    } aLines[] = {
+        // Simple lines
+        { SOLID,       0, &sameColor, &sameColor, &sameDistColor },
+        { DOTTED,      0, &sameColor, &sameColor, &sameDistColor },
+        { DASHED,      0, &sameColor, &sameColor, &sameDistColor },
+        { FINE_DASHED, 0, &sameColor, &sameColor, &sameDistColor },
+
+        // Double lines
+        { DOUBLE,              10, &sameColor, &sameColor, &sameDistColor },
+        { THINTHICK_SMALLGAP,  20, &sameColor, &sameColor, &sameDistColor },
+        { THINTHICK_MEDIUMGAP,  0, &sameColor, &sameColor, &sameDistColor },
+        { THINTHICK_LARGEGAP,   0, &sameColor, &sameColor, &sameDistColor },
+        { THICKTHIN_SMALLGAP,  20, &sameColor, &sameColor, &sameDistColor },
+        { THICKTHIN_MEDIUMGAP,  0, &sameColor, &sameColor, &sameDistColor },
+        { THICKTHIN_LARGEGAP,   0, &sameColor, &sameColor, &sameDistColor },
+
+        { EMBOSSED, 15, &SvxBorderLine::threeDLightColor, &SvxBorderLine::threeDDarkColor, &lcl_mediumColor },
+        { ENGRAVED, 15, &SvxBorderLine::threeDDarkColor, &SvxBorderLine::threeDLightColor, &lcl_mediumColor },
+
+        { OUTSET, 10, &SvxBorderLine::lightColor, &SvxBorderLine::darkColor, &sameDistColor },
+        { INSET,  10, &SvxBorderLine::darkColor, &SvxBorderLine::lightColor, &sameDistColor }
+    };
+
     m_pLbLineStyle->SetSourceUnit( FUNIT_TWIP );
 
     m_pLbLineStyle->SetNone( SVX_RESSTR( RID_SVXSTR_NONE ) );
 
-    // Simple lines
-    m_pLbLineStyle->InsertEntry( SvxBorderLine::getWidthImpl( SOLID ), SOLID );
-    m_pLbLineStyle->InsertEntry( SvxBorderLine::getWidthImpl( DOTTED ), DOTTED );
-    m_pLbLineStyle->InsertEntry( SvxBorderLine::getWidthImpl( DASHED ), DASHED );
-    m_pLbLineStyle->InsertEntry( SvxBorderLine::getWidthImpl( FINE_DASHED ), FINE_DASHED );
+    for (size_t i = 0, n = SAL_N_ELEMENTS(aLines); i < n; ++i)
+    {
+        if (!IsBorderLineStyleAllowed(aLines[i].mnStyle))
+            continue;
 
-    // Double lines
-    m_pLbLineStyle->InsertEntry( SvxBorderLine::getWidthImpl( DOUBLE ), DOUBLE );
-    m_pLbLineStyle->InsertEntry( SvxBorderLine::getWidthImpl( THINTHICK_SMALLGAP ), THINTHICK_SMALLGAP, 20 );
-    m_pLbLineStyle->InsertEntry( SvxBorderLine::getWidthImpl( THINTHICK_MEDIUMGAP ), THINTHICK_MEDIUMGAP );
-    m_pLbLineStyle->InsertEntry( SvxBorderLine::getWidthImpl( THINTHICK_LARGEGAP ), THINTHICK_LARGEGAP );
-    m_pLbLineStyle->InsertEntry( SvxBorderLine::getWidthImpl( THICKTHIN_SMALLGAP ), THICKTHIN_SMALLGAP, 20 );
-    m_pLbLineStyle->InsertEntry( SvxBorderLine::getWidthImpl( THICKTHIN_MEDIUMGAP ), THICKTHIN_MEDIUMGAP );
-    m_pLbLineStyle->InsertEntry( SvxBorderLine::getWidthImpl( THICKTHIN_LARGEGAP ), THICKTHIN_LARGEGAP );
-
-    // Engraved / Embossed
-    m_pLbLineStyle->InsertEntry( SvxBorderLine::getWidthImpl( EMBOSSED ), EMBOSSED, 15,
-            &SvxBorderLine::threeDLightColor, &SvxBorderLine::threeDDarkColor,
-            &lcl_mediumColor );
-    m_pLbLineStyle->InsertEntry( SvxBorderLine::getWidthImpl( ENGRAVED ), ENGRAVED, 15,
-            &SvxBorderLine::threeDDarkColor, &SvxBorderLine::threeDLightColor,
-            &lcl_mediumColor );
-
-    // Inset / Outset
-    m_pLbLineStyle->InsertEntry( SvxBorderLine::getWidthImpl( OUTSET ), OUTSET, 10,
-           &SvxBorderLine::lightColor, &SvxBorderLine::darkColor );
-    m_pLbLineStyle->InsertEntry( SvxBorderLine::getWidthImpl( INSET ), INSET, 10,
-           &SvxBorderLine::darkColor, &SvxBorderLine::lightColor );
+        m_pLbLineStyle->InsertEntry(
+            SvxBorderLine::getWidthImpl(aLines[i].mnStyle), aLines[i].mnStyle,
+            aLines[i].mnMinWidth, aLines[i].mpColor1Fn, aLines[i].mpColor2Fn, aLines[i].mpColorDistFn);
+    }
 
     sal_Int64 nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
                 m_pLineWidthMF->GetValue( ),
