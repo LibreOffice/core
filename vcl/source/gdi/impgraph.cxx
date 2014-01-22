@@ -630,22 +630,21 @@ const GDIMetaFile& ImpGraphic::ImplGetGDIMetaFile() const
             pThat->maEx = maSvgData->getReplacement();
         }
 
-        VirtualDevice aVirDev;
-        const Size aSizePixel(maEx.GetSizePixel());
-
-        pThat->maMetaFile.Record(&aVirDev);
-
+        // #123983# directly create a metafile with the same PrefSize and PrefMapMode
+        // the bitmap has, this will be an always correct metafile
         if(maEx.IsTransparent())
         {
-            aVirDev.DrawBitmapEx(Point(), maEx);
+            pThat->maMetaFile.AddAction(new MetaBmpExScaleAction(Point(), maEx.GetPrefSize(), maEx));
         }
         else
         {
-            aVirDev.DrawBitmap(Point(), maEx.GetBitmap());
+            pThat->maMetaFile.AddAction(new MetaBmpScaleAction(Point(), maEx.GetPrefSize(), maEx.GetBitmap()));
         }
 
         pThat->maMetaFile.Stop();
-        pThat->maMetaFile.SetPrefSize(aSizePixel);
+        pThat->maMetaFile.WindStart();
+        pThat->maMetaFile.SetPrefSize(maEx.GetPrefSize());
+        pThat->maMetaFile.SetPrefMapMode(maEx.GetPrefMapMode());
     }
 
     return maMetaFile;
