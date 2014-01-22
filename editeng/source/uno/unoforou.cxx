@@ -298,7 +298,7 @@ Rectangle SvxOutlinerForwarder::GetCharBounds( sal_Int32 nPara, sal_uInt16 nInde
     // don't rotate for vertical text.
     Size aSize( rOutliner.CalcTextSize() );
     ::std::swap( aSize.Width(), aSize.Height() );
-    bool bIsVertical( rOutliner.IsVertical() == sal_True );
+    bool bIsVertical( rOutliner.IsVertical() );
 
     // #108900# Handle virtual position one-past-the end of the string
     if( nIndex >= GetTextLen(nPara) )
@@ -377,7 +377,7 @@ sal_Bool SvxOutlinerForwarder::GetIndexAtPoint( const Point& rPos, sal_Int32& nP
     ::std::swap( aSize.Width(), aSize.Height() );
     Point aEEPos( SvxEditSourceHelper::UserSpaceToEE( rPos,
                                                       aSize,
-                                                      rOutliner.IsVertical() == sal_True ));
+                                                      rOutliner.IsVertical() ));
 
     EPosition aDocPos = rOutliner.GetEditEngine().FindDocPosition( aEEPos );
 

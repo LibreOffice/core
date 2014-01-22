@@ -75,49 +75,49 @@ struct EDITENG_DLLPUBLIC SvxSwAutoFmtFlags
 
     sal_uInt8 nRightMargin;
 
-    sal_Bool bAutoCorrect : 1;
-    sal_Bool bCptlSttSntnc : 1;
-    sal_Bool bCptlSttWrd : 1;
-    sal_Bool bChkFontAttr : 1;
+    bool bAutoCorrect : 1;
+    bool bCptlSttSntnc : 1;
+    bool bCptlSttWrd : 1;
+    bool bChkFontAttr : 1;
 
-    sal_Bool bChgUserColl : 1;
-    sal_Bool bChgEnumNum : 1;
+    bool bChgUserColl : 1;
+    bool bChgEnumNum : 1;
 
-    sal_Bool bAFmtByInput : 1;
-    sal_Bool bDelEmptyNode : 1;
-    sal_Bool bSetNumRule : 1;
+    bool bAFmtByInput : 1;
+    bool bDelEmptyNode : 1;
+    bool bSetNumRule : 1;
 
-    sal_Bool bChgOrdinalNumber : 1;
-    sal_Bool bChgToEnEmDash : 1;
-    sal_Bool bAddNonBrkSpace : 1;
-    sal_Bool bChgWeightUnderl : 1;
-    sal_Bool bSetINetAttr : 1;
+    bool bChgOrdinalNumber : 1;
+    bool bChgToEnEmDash : 1;
+    bool bAddNonBrkSpace : 1;
+    bool bChgWeightUnderl : 1;
+    bool bSetINetAttr : 1;
 
-    sal_Bool bSetBorder : 1;
-    sal_Bool bCreateTable : 1;
-    sal_Bool bReplaceStyles : 1;
-    sal_Bool bDummy : 1;
+    bool bSetBorder : 1;
+    bool bCreateTable : 1;
+    bool bReplaceStyles : 1;
+    bool bDummy : 1;
 
-    sal_Bool bWithRedlining : 1;
+    bool bWithRedlining : 1;
 
-    sal_Bool bRightMargin : 1;
+    bool bRightMargin : 1;
 
-    sal_Bool bAutoCompleteWords : 1;
-    sal_Bool bAutoCmpltCollectWords : 1;
-    sal_Bool bAutoCmpltEndless : 1;
+    bool bAutoCompleteWords : 1;
+    bool bAutoCmpltCollectWords : 1;
+    bool bAutoCmpltEndless : 1;
 // -- under NT here starts a new long
-    sal_Bool bAutoCmpltAppendBlanc : 1;
-    sal_Bool bAutoCmpltShowAsTip : 1;
+    bool bAutoCmpltAppendBlanc : 1;
+    bool bAutoCmpltShowAsTip : 1;
 
-    sal_Bool bAFmtDelSpacesAtSttEnd : 1;
-    sal_Bool bAFmtDelSpacesBetweenLines : 1;
-    sal_Bool bAFmtByInpDelSpacesAtSttEnd : 1;
-    sal_Bool bAFmtByInpDelSpacesBetweenLines : 1;
+    bool bAFmtDelSpacesAtSttEnd : 1;
+    bool bAFmtDelSpacesBetweenLines : 1;
+    bool bAFmtByInpDelSpacesAtSttEnd : 1;
+    bool bAFmtByInpDelSpacesBetweenLines : 1;
 
-    sal_Bool bAutoCmpltKeepList : 1;
+    bool bAutoCmpltKeepList : 1;
 
     // some dummies for any new options
-    sal_Bool bDummy6 : 1,
+    bool bDummy6 : 1,
          bDummy7 : 1,
          bDummy8 : 1
          ;

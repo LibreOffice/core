@@ -527,7 +527,7 @@ void Outliner::SetVertical( sal_Bool b )
     pEditEngine->SetVertical( b );
 }
 
-sal_Bool Outliner::IsVertical() const
+bool Outliner::IsVertical() const
 {
     return pEditEngine->IsVertical();
 }
