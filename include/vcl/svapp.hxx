@@ -268,7 +268,10 @@ public:
     */
     virtual void                UserEvent( sal_uLong nEvent, void* pEventData );
 
-    // Functions that notify when changes occur in the application
+    /** @defgroup changes Change notification functions
+        Functions that notify when changes occur in the application
+        @{
+    */
 
     /** Notify that the application is no longer the "focused" (or current)
         application - needed for Windowing systems where an end user can switch
@@ -287,7 +290,11 @@ public:
     */
     virtual void                DataChanged( const DataChangedEvent& rDCEvt );
 
-    // Initialization functions
+    /** @} */ // end of changes
+
+    /** @defgroup Initialization Initialization functions
+        @{
+    */
 
     /** Initialize the application itself.
 
@@ -313,7 +320,12 @@ public:
     */
     virtual void                DeInit();
 
-    // Command line processing:
+    /** @} */ // end of Initialization
+
+
+    /** @defgroup CommandLine Command line processing
+        @{
+    */
 
     /** Gets the number of command line parameters passed to the application
 
@@ -341,7 +353,12 @@ public:
     */
     static OUString             GetAppFileName();
 
-    // Error handling
+    /** @} */ // end of CommandLine
+
+    /** @defgroup ErrorHandling Error handling
+        @{
+    */
+
     /** Handles an error code.
 
      @remark This is not actually an exception. It merely takes an
@@ -369,13 +386,18 @@ public:
     */
     static void                 Abort( const OUString& rErrorText );
 
-    // Event loop functions:
+    /** @} */ // end of CommandLine
+
+    /** @defgroup EventLoop Event loop functions
+        @{
+    */
 
     /** Run the main event processing loop until it is quit by @Quit.
 
      @see Quit, Reschedule, Yield, EndYield, GetSolarMutex,
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
-          EnableNoYieldMode, AddPostYieldListener, RemovePostYieldListener
+          EnableNoYieldMode, DisableNoYieldMode, AddPostYieldListener,
+          RemovePostYieldListener
     */
     static void                 Execute();
 
@@ -383,7 +405,8 @@ public:
 
      @see Execute, Reschedule, Yield, EndYield, GetSolarMutex,
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
-          EnableNoYieldMode, AddPostYieldListener, RemovePostYieldListener
+          EnableNoYieldMode, DisableNoYieldMode, AddPostYieldListener,
+          RemovePostYieldListener
     */
     static void                 Quit();
 
@@ -395,8 +418,8 @@ public:
 
      @see Execute, Quit, Yield, EndYield, GetSolarMutex,
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
-          EnableNoYieldMode, AddPostYieldListener, RemovePostYieldListener
-
+          EnableNoYieldMode, DisableNoYieldMode, AddPostYieldListener,
+          RemovePostYieldListener
      */
     static void                 Reschedule( bool bAllEvents = false );
 
@@ -404,7 +427,8 @@ public:
 
      @see Execute, Quit, Reschedule, EndYield, GetSolarMutex,
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
-          EnableNoYieldMode, AddPostYieldListener, RemovePostYieldListener
+          EnableNoYieldMode, DisableNoYieldMode, AddPostYieldListener,
+          RemovePostYieldListener
     */
     static void                 Yield();
 
@@ -412,7 +436,8 @@ public:
 
      @see Execute, Quit, Reschedule, Yield, GetSolarMutex,
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
-          EnableNoYieldMode, AddPostYieldListener, RemovePostYieldListener
+          EnableNoYieldMode, DisableNoYieldMode, AddPostYieldListener,
+          RemovePostYieldListener
     */
     static void                 EndYield();
 
@@ -425,7 +450,8 @@ public:
 
      @see Execute, Quit, Reschedule, Yield, EndYield,
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
-          EnableNoYieldMode, AddPostYieldListener, RemovePostYieldListener
+          EnableNoYieldMode, DisableNoYieldMode, AddPostYieldListener,
+          RemovePostYieldListener
     */
     static comphelper::SolarMutex& GetSolarMutex();
 
@@ -435,7 +461,8 @@ public:
 
      @see Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
           ReleaseSolarMutex, AcquireSolarMutex,
-          EnableNoYieldMode, AddPostYieldListener, RemovePostYieldListener
+          EnableNoYieldMode, DisableNoYieldMode, AddPostYieldListener,
+          RemovePostYieldListener
     */
     static oslThreadIdentifier  GetMainThreadIdentifier();
 
@@ -448,9 +475,9 @@ public:
 
      @see Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
           GetMainThreadIdentifier, AcquireSolarMutex,
-          EnableNoYieldMode, AddPostYieldListener, RemovePostYieldListener
+          EnableNoYieldMode, DisableNoYieldMode, AddPostYieldListener,
+          RemovePostYieldListener
     */
-
     static sal_uLong            ReleaseSolarMutex();
 
     /** @Brief Acquire Solar Mutex(es) for this thread.
@@ -460,7 +487,8 @@ public:
 
      @see Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
           GetMainThreadIdentifier, ReleaseSolarMutex,
-          EnableNoYieldMode, AddPostYieldListener, RemovePostYieldListener
+          EnableNoYieldMode, DisableNoYieldMode, AddPostYieldListener,
+          RemovePostYieldListener
     */
     static void                 AcquireSolarMutex( sal_uLong nCount );
 
@@ -473,7 +501,7 @@ public:
 
      @see DisableNoYieldMode, Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
-          AddPostYieldListener, RemovePostYieldListener
+          DisableNoYield, AddPostYieldListener, RemovePostYieldListener
     */
     static void                 EnableNoYieldMode();
 
@@ -486,8 +514,9 @@ public:
 
      @see EnableNoYieldMode, Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
-          AddPostYieldListener, RemovePostYieldListener
+          EnableNoYield, AddPostYieldListener, RemovePostYieldListener
     */
+
     static void                 DisableNoYieldMode();
 
     /** Add a listener for yield events
@@ -496,10 +525,9 @@ public:
 
      @see Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
-          RemovePostYieldListener
+          EnableNoYieldMode, DisableNoYieldMode, RemovePostYieldListener
     */
     static void                 AddPostYieldListener( const Link& i_rListener );
-
 
     /** Remove listener for yield events
 
@@ -507,7 +535,7 @@ public:
 
      @see Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
-          AddPostYieldListener
+          AddPostYieldListener, EnableNoYieldMode, DisableNoYieldMode
     */
     static void                 RemovePostYieldListener( const Link& i_rListener );
 
@@ -562,6 +590,8 @@ public:
     */
     static sal_uLong            GetLastInputInterval();
 
+    /** @} */ // end of EventLoop
+
     /* Determines if the UI is captured.
 
      The UI is considered captured if a system dialog is open (e.g. printer setup),
@@ -572,11 +602,58 @@ public:
      */
     static sal_Bool             IsUICaptured();
 
+    /** defgroup Settings Application settings
+        @{
+    */
+
+    /** Sets user settings in settings object to override system settings.
+
+     The system settings that can be overridden are:
+        - window dragging options (on or off, including live scrolling!)
+        - style settings (e.g. checkbox color, border color, 3D colors,
+          button rollover colors, etc.)
+        - mouse settings
+        - menu options, including the mouse follows the menu and whether menu
+          icons are used
+
+     @param      rSettings      Reference to the settings object to change.
+
+     @see MergeSystemSettings, SetSettings, GetSettings
+    */
     virtual void                SystemSettingsChanging( AllSettings& rSettings );
+
+    /** Set the settings object to the platform/desktop environment system
+     settings.
+
+     @param     rSettings       Reference to the settings object to change.
+
+     @see SystemSettingsChanging, SetSettings, GetSettings
+    */
     static void                 MergeSystemSettings( AllSettings& rSettings );
 
+    /** Sets the application's settings and notifies all windows of the
+     change.
+
+     @param     rSettings       const reference to settings object used to
+                                change the application's settings.
+
+     @see SystemSettingsChanging, MergeSystemSettings, GetSettings
+    */
     static void                 SetSettings( const AllSettings& rSettings );
+
+
+    /** Gets the application's settings. If the application hasn't initialized
+     it's settings, then it does so (lazy initialization).
+
+     @returns AllSettings instance that contains the current settings of the
+        application.
+
+     @see SystemSettingsChanging, MergeSystemSettings, SetSettings
+    */
     static const AllSettings&   GetSettings();
+
+    /** @} */ // end of Settings
+
     static void                 NotifyAllWindows( DataChangedEvent& rDCEvt );
 
     static void                 AddEventListener( const Link& rEventListener );
