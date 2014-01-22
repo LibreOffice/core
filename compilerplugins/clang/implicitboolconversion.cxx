@@ -27,10 +27,13 @@ template<> struct std::iterator_traits<ExprIterator> {
 
 namespace {
 
-bool isBool(Expr const * expr) {
+bool isBool(Expr const * expr, bool allowTypedefs = true) {
     QualType t1 { expr->getType() };
     if (t1->isBooleanType()) {
         return true;
+    }
+    if (!allowTypedefs) {
+        return false;
     }
 // css::uno::Sequence<sal_Bool> s(1);s[0]=false /*unotools/source/config/configitem.cxx*/:
 if(t1->isSpecificBuiltinType(BuiltinType::UChar))return true;
@@ -265,9 +268,9 @@ bool ImplicitBoolConversion::TraverseBinLT(BinaryOperator * expr) {
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (!((i == expr->getLHS()->IgnoreParens()
-               && isBool(expr->getRHS()->IgnoreParenImpCasts()))
+               && isBool(expr->getRHS()->IgnoreParenImpCasts(), false))
               || (i == expr->getRHS()->IgnoreParens()
-                  && isBool(expr->getLHS()->IgnoreParenImpCasts()))))
+                  && isBool(expr->getLHS()->IgnoreParenImpCasts(), false))))
         {
             reportWarning(i);
         }
@@ -282,9 +285,9 @@ bool ImplicitBoolConversion::TraverseBinLE(BinaryOperator * expr) {
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (!((i == expr->getLHS()->IgnoreParens()
-               && isBool(expr->getRHS()->IgnoreParenImpCasts()))
+               && isBool(expr->getRHS()->IgnoreParenImpCasts(), false))
               || (i == expr->getRHS()->IgnoreParens()
-                  && isBool(expr->getLHS()->IgnoreParenImpCasts()))))
+                  && isBool(expr->getLHS()->IgnoreParenImpCasts(), false))))
         {
             reportWarning(i);
         }
@@ -299,9 +302,9 @@ bool ImplicitBoolConversion::TraverseBinGT(BinaryOperator * expr) {
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (!((i == expr->getLHS()->IgnoreParens()
-               && isBool(expr->getRHS()->IgnoreParenImpCasts()))
+               && isBool(expr->getRHS()->IgnoreParenImpCasts(), false))
               || (i == expr->getRHS()->IgnoreParens()
-                  && isBool(expr->getLHS()->IgnoreParenImpCasts()))))
+                  && isBool(expr->getLHS()->IgnoreParenImpCasts(), false))))
         {
             reportWarning(i);
         }
@@ -316,9 +319,9 @@ bool ImplicitBoolConversion::TraverseBinGE(BinaryOperator * expr) {
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (!((i == expr->getLHS()->IgnoreParens()
-               && isBool(expr->getRHS()->IgnoreParenImpCasts()))
+               && isBool(expr->getRHS()->IgnoreParenImpCasts(), false))
               || (i == expr->getRHS()->IgnoreParens()
-                  && isBool(expr->getLHS()->IgnoreParenImpCasts()))))
+                  && isBool(expr->getLHS()->IgnoreParenImpCasts(), false))))
         {
             reportWarning(i);
         }
@@ -333,9 +336,9 @@ bool ImplicitBoolConversion::TraverseBinEQ(BinaryOperator * expr) {
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (!((i == expr->getLHS()->IgnoreParens()
-               && isBool(expr->getRHS()->IgnoreParenImpCasts()))
+               && isBool(expr->getRHS()->IgnoreParenImpCasts(), false))
               || (i == expr->getRHS()->IgnoreParens()
-                  && isBool(expr->getLHS()->IgnoreParenImpCasts()))))
+                  && isBool(expr->getLHS()->IgnoreParenImpCasts(), false))))
         {
             reportWarning(i);
         }
@@ -350,9 +353,9 @@ bool ImplicitBoolConversion::TraverseBinNE(BinaryOperator * expr) {
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (!((i == expr->getLHS()->IgnoreParens()
-               && isBool(expr->getRHS()->IgnoreParenImpCasts()))
+               && isBool(expr->getRHS()->IgnoreParenImpCasts(), false))
               || (i == expr->getRHS()->IgnoreParens()
-                  && isBool(expr->getLHS()->IgnoreParenImpCasts()))))
+                  && isBool(expr->getLHS()->IgnoreParenImpCasts(), false))))
         {
             reportWarning(i);
         }
