@@ -36,7 +36,7 @@ module com {  module sun {  module star {  module task {
     a new event will be detected later.
     </p>
 
-    @see JobExecutor
+    @see theJobExecutor
  */
 published interface XJobExecutor : com::sun::star::uno::XInterface
 {

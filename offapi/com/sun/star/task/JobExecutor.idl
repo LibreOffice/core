@@ -25,18 +25,10 @@
 
 module com { module sun { module star { module task {
 
-/** generic job execution service
+/**
+    A legacy (single-instance) service-variant of theJobExecutor singleton.
 
-    <p>
-    Can start registered uno services on triggered events and handle there
-    own configuration and there lifetime. Such events are simple strings
-    which meaning doesn't matter for any real service implementation of this
-    specification. But triggered events must be available inside the
-    configuration and some Jobs or AsyncJobs must be registered for that.
-    </p>
-
-    @see Job
-    @see AsyncJob
+    @deprecated Use theJobExecutor singleton instead.
  */
 published service JobExecutor : XJobExecutor;
 

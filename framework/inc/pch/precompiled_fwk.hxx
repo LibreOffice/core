@@ -179,7 +179,7 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
-#include <com/sun/star/task/JobExecutor.hpp>
+#include <com/sun/star/task/theJobExecutor.hpp>
 #include <com/sun/star/task/StatusIndicatorFactory.hpp>
 #include <com/sun/star/task/XAsyncJob.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>

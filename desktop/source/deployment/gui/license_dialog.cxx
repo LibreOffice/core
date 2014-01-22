@@ -28,7 +28,6 @@
 #include "vcl/msgbox.hxx"
 #include "toolkit/helper/vclunohelper.hxx"
 #include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/task/XJobExecutor.hpp"
 #include "svtools/svmedit.hxx"
 #include "svl/lstner.hxx"
 #include "vcl/xtextedt.hxx"

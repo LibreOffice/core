@@ -44,7 +44,7 @@ published interface XJob : com::sun::star::uno::XInterface
         @param Arguments
             are arguments for executing the job. Their semantics is completely implementation dependent. Usually,
             a concrete implementation of a job specifies in its service descriptions which parameters are allowed
-            (or expected). This values are persistent by the configuration of the JobExecutor
+            (or expected). This values are persistent by the configuration of theJobExecutor
             which use this synchronous job. It's possible to write it back by use special protocol
             in return value.
 
