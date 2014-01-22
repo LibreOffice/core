@@ -35,11 +35,8 @@
 =================================================================================================================*/
 #include <services/desktop.hxx>
 
-#include <services/ContextChangeEventMultiplexer.hxx>
-
 COMPONENTGETFACTORY ( fwk,
-                        IFFACTORY( ::framework::Desktop                                 )   else
-                        IFFACTORY( ::framework::ContextChangeEventMultiplexer           )
+                        IFFACTORY( ::framework::Desktop                                 )
             )
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

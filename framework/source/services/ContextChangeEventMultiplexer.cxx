@@ -17,25 +17,107 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "services/ContextChangeEventMultiplexer.hxx"
-#include "services.h"
-#include <cppuhelper/supportsservice.hxx>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/ui/XContextChangeEventMultiplexer.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
-using ::rtl::OUString;
+#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/basemutex.hxx>
+
+#include <algorithm>
+#include <map>
+#include <vector>
+#include <boost/noncopyable.hpp>
+
+namespace cssl = css::lang;
+namespace cssu = css::uno;
 
 using namespace css;
-using namespace cssu;
+using namespace css::uno;
 
-namespace framework {
+namespace {
 
-#define IMPLEMENTATION_NAME "org.apache.openoffice.comp.framework.ContextChangeEventMultiplexer"
+typedef ::cppu::WeakComponentImplHelper3 <
+    css::ui::XContextChangeEventMultiplexer,
+    css::lang::XServiceInfo,
+    css::lang::XEventListener
+    > ContextChangeEventMultiplexerInterfaceBase;
 
-ContextChangeEventMultiplexer::ContextChangeEventMultiplexer (
-    const cssu::Reference<cssu::XComponentContext>& rxContext)
+class ContextChangeEventMultiplexer
+    : private ::boost::noncopyable,
+      private ::cppu::BaseMutex,
+      public ContextChangeEventMultiplexerInterfaceBase
+{
+public:
+    ContextChangeEventMultiplexer();
+    virtual ~ContextChangeEventMultiplexer (void);
+
+    virtual void SAL_CALL disposing (void);
+
+    // XContextChangeEventMultiplexer
+    virtual void SAL_CALL addContextChangeEventListener (
+        const cssu::Reference<css::ui::XContextChangeEventListener>& rxListener,
+        const cssu::Reference<cssu::XInterface>& rxEventFocus)
+        throw(cssu::RuntimeException, cssl::IllegalArgumentException);
+    virtual void SAL_CALL removeContextChangeEventListener (
+        const cssu::Reference<css::ui::XContextChangeEventListener>& rxListener,
+        const cssu::Reference<cssu::XInterface>& rxEventFocus)
+        throw(cssu::RuntimeException, cssl::IllegalArgumentException);
+    virtual void SAL_CALL removeAllContextChangeEventListeners (
+        const cssu::Reference<css::ui::XContextChangeEventListener>& rxListener)
+        throw(cssu::RuntimeException, cssl::IllegalArgumentException);
+    virtual void SAL_CALL broadcastContextChangeEvent (
+        const css::ui::ContextChangeEventObject& rContextChangeEventObject,
+        const cssu::Reference<cssu::XInterface>& rxEventFocus)
+        throw(cssu::RuntimeException);
+
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName (void)
+        throw (cssu::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService  (
+        const ::rtl::OUString& rsServiceName)
+        throw (cssu::RuntimeException);
+    virtual cssu::Sequence< ::rtl::OUString> SAL_CALL getSupportedServiceNames (void)
+        throw (cssu::RuntimeException);
+
+    // XEventListener
+    virtual void SAL_CALL disposing (
+        const css::lang::EventObject& rEvent)
+        throw (cssu::RuntimeException);
+
+private:
+    typedef ::std::vector<cssu::Reference<css::ui::XContextChangeEventListener> > ListenerContainer;
+    class FocusDescriptor
+    {
+    public:
+        ListenerContainer maListeners;
+        ::rtl::OUString msCurrentApplicationName;
+        ::rtl::OUString msCurrentContextName;
+    };
+    typedef ::std::map<cssu::Reference<cssu::XInterface>, FocusDescriptor> ListenerMap;
+    ListenerMap maListeners;
+
+    /** Notify all listeners in the container that is associated with
+        the given event focus.
+
+        Typically called twice from broadcastEvent(), once for the
+        given event focus and onece for NULL.
+    */
+    void BroadcastEventToSingleContainer (
+        const css::ui::ContextChangeEventObject& rEventObject,
+        const cssu::Reference<cssu::XInterface>& rxEventFocus);
+    FocusDescriptor* GetFocusDescriptor (
+        const cssu::Reference<cssu::XInterface>& rxEventFocus,
+        const bool bCreateWhenMissing);
+};
+
+ContextChangeEventMultiplexer::ContextChangeEventMultiplexer()
     : ContextChangeEventMultiplexerInterfaceBase(m_aMutex),
       maListeners()
 {
-    (void)rxContext;
 }
 
 ContextChangeEventMultiplexer::~ContextChangeEventMultiplexer (void)
@@ -229,30 +311,10 @@ ContextChangeEventMultiplexer::FocusDescriptor* ContextChangeEventMultiplexer::G
         return NULL;
 }
 
-// XSingleComponentFactory
-cssu::Reference<cssu::XInterface> SAL_CALL ContextChangeEventMultiplexer::createInstanceWithContext (
-    const cssu::Reference<cssu::XComponentContext>& rxContext)
-    throw (cssu::Exception, cssu::RuntimeException)
-{
-    (void)rxContext;
-    return cssu::Reference<cssu::XInterface>();
-}
-
-cssu::Reference<cssu::XInterface > SAL_CALL ContextChangeEventMultiplexer::createInstanceWithArgumentsAndContext (
-    const cssu::Sequence<cssu::Any>& rArguments,
-    const cssu::Reference<cssu::XComponentContext>& rxContext)
-    throw (cssu::Exception, cssu::RuntimeException)
-{
-    (void)rArguments;
-    (void)rxContext;
-    return cssu::Reference<cssu::XInterface>();
-}
-
-// XServiceInfo
-::rtl::OUString SAL_CALL ContextChangeEventMultiplexer::getImplementationName (void)
+OUString SAL_CALL ContextChangeEventMultiplexer::getImplementationName()
     throw(cssu::RuntimeException)
 {
-    return impl_getStaticImplementationName();
+    return OUString("org.apache.openoffice.comp.framework.ContextChangeEventMultiplexer");
 }
 
 sal_Bool SAL_CALL ContextChangeEventMultiplexer::supportsService ( const ::rtl::OUString& rsServiceName)
@@ -261,10 +323,11 @@ sal_Bool SAL_CALL ContextChangeEventMultiplexer::supportsService ( const ::rtl::
     return cppu::supportsService(this, rsServiceName);
 }
 
-cssu::Sequence<OUString> SAL_CALL ContextChangeEventMultiplexer::getSupportedServiceNames (void)
+css::uno::Sequence<OUString> SAL_CALL ContextChangeEventMultiplexer::getSupportedServiceNames()
     throw (cssu::RuntimeException)
 {
-    return static_GetSupportedServiceNames();
+    // it's a singleton, not a service
+    return css::uno::Sequence<OUString>();
 }
 
 void SAL_CALL ContextChangeEventMultiplexer::disposing ( const css::lang::EventObject& rEvent)
@@ -283,37 +346,29 @@ void SAL_CALL ContextChangeEventMultiplexer::disposing ( const css::lang::EventO
     maListeners.erase(iDescriptor);
 }
 
-// Local and static methods.
-OUString SAL_CALL ContextChangeEventMultiplexer::impl_getStaticImplementationName (void)
-{
-    return OUString(IMPLEMENTATION_NAME);
+struct Instance {
+    explicit Instance():
+        instance(static_cast<cppu::OWeakObject *>(
+                    new ContextChangeEventMultiplexer()))
+    {
+    }
+
+    css::uno::Reference<css::uno::XInterface> instance;
+};
+
+struct Singleton:
+    public rtl::Static<Instance, Singleton>
+{};
+
 }
 
-cssu::Sequence<OUString> SAL_CALL ContextChangeEventMultiplexer::static_GetSupportedServiceNames (void)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+org_apache_openoffice_comp_framework_ContextChangeEventMultiplexer_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return css::uno::Sequence<OUString>();
+    return cppu::acquire(static_cast<cppu::OWeakObject *>(
+                Singleton::get().instance.get()));
 }
-
-cssu::Reference<cssu::XInterface> ContextChangeEventMultiplexer::impl_createFactory (
-    const cssu::Reference<cssl::XMultiServiceFactory>& rxServiceManager)
-{
-    (void)rxServiceManager;
-    return cppu::createSingleComponentFactory(
-        ContextChangeEventMultiplexer::static_CreateInstance,
-        ContextChangeEventMultiplexer::impl_getStaticImplementationName(),
-        ContextChangeEventMultiplexer::static_GetSupportedServiceNames()
-        );
-}
-
-cssu::Reference<cssu::XInterface> SAL_CALL ContextChangeEventMultiplexer::static_CreateInstance (
-    const cssu::Reference<cssu::XComponentContext>& rxComponentContext)
-    throw (cssu::Exception)
-{
-    ContextChangeEventMultiplexer* pObject = new ContextChangeEventMultiplexer(rxComponentContext);
-    cssu::Reference<cssu::XInterface> xService (static_cast<XWeak*>(pObject), cssu::UNO_QUERY);
-    return xService;
-}
-
-}  // end of namespace framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
