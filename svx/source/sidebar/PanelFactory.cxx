@@ -207,7 +207,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 org_apache_openoffice_comp_svx_sidebar_PanelFactory_get_implementation(
     css::uno::XComponentContext *,
-    cppu::constructor_InitializationFunc &)
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return static_cast<cppu::OWeakObject *>(new PanelFactory);
+    return cppu::acquire(new PanelFactory);
 }

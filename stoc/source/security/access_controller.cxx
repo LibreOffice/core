@@ -982,9 +982,9 @@ Sequence< OUString > AccessController::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_security_comp_stoc_AccessController_get_implementation(
     css::uno::XComponentContext *context,
-    cppu::constructor_InitializationFunc &)
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return static_cast<cppu::OWeakObject *>(new AccessController(context));
+    return cppu::acquire(new AccessController(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

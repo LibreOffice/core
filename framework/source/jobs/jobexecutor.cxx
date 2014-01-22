@@ -111,7 +111,7 @@ public:
     virtual void SAL_CALL trigger( const OUString& sEvent ) throw(css::uno::RuntimeException);
 
     /// Initialization function after having acquire()'d.
-    void SAL_CALL constructorInit( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException);
+    void initListeners();
 
     // document.XEventListener
     virtual void SAL_CALL notifyEvent( const css::document::EventObject& aEvent ) throw(css::uno::RuntimeException);
@@ -123,8 +123,6 @@ public:
 
     // lang.XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException);
-
-    void onCreate();
 };
 
 /**
@@ -142,7 +140,7 @@ JobExecutor::JobExecutor( /*IN*/ const css::uno::Reference< css::uno::XComponent
 {
 }
 
-void JobExecutor::constructorInit(const css::uno::Sequence< css::uno::Any >& ) throw (css::uno::Exception, css::uno::RuntimeException)
+void JobExecutor::initListeners()
 {
     // read the list of all currently registered events inside configuration.
     // e.g. "/org.openoffice.Office.Jobs/Events/<event name>"
@@ -404,12 +402,14 @@ void SAL_CALL JobExecutor::disposing( const css::lang::EventObject& aEvent ) thr
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_framework_JobExecutor_get_implementation(
     css::uno::XComponentContext *context,
-    cppu::constructor_InitializationFunc &init_func)
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    // 2nd phase initialization needed
-    init_func = static_cast<cppu::constructor_InitializationFunc>(&JobExecutor::constructorInit);
+    JobExecutor *inst = new JobExecutor(context);
+    css::uno::XInterface *acquired_inst = cppu::acquire(inst);
 
-    return static_cast<cppu::OWeakObject *>(new JobExecutor(context));
+    inst->initListeners();
+
+    return acquired_inst;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

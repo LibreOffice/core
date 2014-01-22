@@ -54,11 +54,8 @@ class ODocumentCloser : public ::cppu::WeakImplHelper2< ::com::sun::star::lang::
     sal_Bool m_bDisposed;
 
 public:
-    ODocumentCloser();
+    ODocumentCloser(const css::uno::Sequence< css::uno::Any >& aArguments);
     ~ODocumentCloser();
-
-    /// Initialization function after having acquire()'d.
-    void SAL_CALL constructorInit( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException);
 
 // XComponent
     virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
@@ -148,13 +145,9 @@ IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, MainThreadFrameCloserReq
     return 0;
 }
 
-ODocumentCloser::ODocumentCloser()
+ODocumentCloser::ODocumentCloser(const css::uno::Sequence< css::uno::Any >& aArguments)
 : m_pListenersContainer( NULL )
 , m_bDisposed( sal_False )
-{
-}
-
-void ODocumentCloser::constructorInit(const css::uno::Sequence< css::uno::Any >& aArguments) throw (css::uno::Exception, css::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( !m_refCount )
@@ -256,13 +249,10 @@ uno::Sequence< OUString > SAL_CALL ODocumentCloser::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_embed_DocumentCloser_get_implementation(
-        SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
-        cppu::constructor_InitializationFunc &init_func)
+    SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &arguments)
 {
-    // 2nd phase initialization needed
-    init_func = static_cast<cppu::constructor_InitializationFunc>(&ODocumentCloser::constructorInit);
-
-    return static_cast<cppu::OWeakObject *>(new ODocumentCloser());
+    return cppu::acquire(new ODocumentCloser(arguments));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

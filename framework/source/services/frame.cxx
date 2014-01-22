@@ -129,9 +129,7 @@ enum EActiveState
     @devstatus  ready to use
     @threadsafe yes
 *//*-*************************************************************************************************************/
-class Frame :
-                public  ::cppu::OWeakObject                         ,   // helper implements XInterface, XWeak
-                // interfaces
+class Frame :   // interfaces
                 public  css::lang::XTypeProvider                    ,
                 public  css::lang::XServiceInfo                     ,
                 public  css::frame::XFrame2                         ,
@@ -147,7 +145,8 @@ class Frame :
                 // Order is necessary for right initialization of this class!
                 public  ThreadHelpBase                              ,
                 public  TransactionBase                             ,
-                public  PropertySetHelper                               // helper implements ThreadHelpbase, TransactionBase, XPropertySet, XPropertySetInfo
+                public  PropertySetHelper                           ,   // helper implements ThreadHelpbase, TransactionBase, XPropertySet, XPropertySetInfo
+                public  ::cppu::OWeakObject                             // helper implements XInterface, XWeak
 {
 public:
 
@@ -155,7 +154,7 @@ public:
     virtual ~Frame();
 
     /// Initialization function after having acquire()'d.
-    void SAL_CALL constructorInit( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException);
+    void initListeners();
 
     FWK_DECLARE_XINTERFACE
     FWK_DECLARE_XTYPEPROVIDER
@@ -586,7 +585,7 @@ Frame::Frame( const css::uno::Reference< css::uno::XComponentContext >& xContext
 {
 }
 
-void Frame::constructorInit(const css::uno::Sequence< css::uno::Any >&) throw (css::uno::Exception, css::uno::RuntimeException)
+void Frame::initListeners()
 {
     css::uno::Reference< css::uno::XInterface > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY_THROW);
 
@@ -3585,12 +3584,14 @@ sal_Bool Frame::implcp_disposing( const css::lang::EventObject& aEvent )
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_framework_Frame_get_implementation(
     css::uno::XComponentContext *context,
-    cppu::constructor_InitializationFunc &init_func)
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    // 2nd phase initialization needed
-    init_func = static_cast<cppu::constructor_InitializationFunc>(&Frame::constructorInit);
+    Frame *inst = new Frame(context);
+    css::uno::XInterface *acquired_inst = cppu::acquire(inst);
 
-    return static_cast<cppu::OWeakObject *>(new Frame(context));
+    inst->initListeners();
+
+    return acquired_inst;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

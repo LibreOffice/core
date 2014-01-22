@@ -1053,9 +1053,9 @@ Sequence< OUString > SAL_CALL SvXMLGraphicImportExportHelper::getSupportedServic
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_Svx_GraphicImportHelper_get_implementation(
     css::uno::XComponentContext *,
-    cppu::constructor_InitializationFunc &)
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return static_cast<cppu::OWeakObject *>(new SvXMLGraphicImportExportHelper(GRAPHICHELPER_MODE_READ));
+    return cppu::acquire(new SvXMLGraphicImportExportHelper(GRAPHICHELPER_MODE_READ));
 }
 
 /** Create this with createInstanceWithArguments. service name
@@ -1073,9 +1073,9 @@ com_sun_star_comp_Svx_GraphicImportHelper_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_Svx_GraphicExportHelper_get_implementation(
     css::uno::XComponentContext *,
-    cppu::constructor_InitializationFunc &)
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return static_cast<cppu::OWeakObject *>(new SvXMLGraphicImportExportHelper(GRAPHICHELPER_MODE_WRITE));
+    return cppu::acquire(new SvXMLGraphicImportExportHelper(GRAPHICHELPER_MODE_WRITE));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

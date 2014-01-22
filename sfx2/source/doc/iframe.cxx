@@ -63,13 +63,9 @@ class IFrameObject : public ::cppu::WeakImplHelper6 <
     SfxFrameDescriptor  maFrmDescr;
 
 public:
-    IFrameObject( const css::uno::Reference < css::uno::XComponentContext>& rxContext)
+    IFrameObject(const css::uno::Reference < css::uno::XComponentContext>& rxContext, const css::uno::Sequence< css::uno::Any >& aArguments)
         throw (css::uno::Exception, css::uno::RuntimeException);
     ~IFrameObject();
-
-    /// Initialization function after having acquire()'d.
-    void SAL_CALL constructorInit(const css::uno::Sequence< css::uno::Any >& aArguments)
-        throw (css::uno::Exception, css::uno::RuntimeException);
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException)
@@ -161,14 +157,10 @@ const SfxItemPropertyMapEntry* lcl_GetIFramePropertyMap_Impl()
     return aIFramePropertyMap_Impl;
 }
 
-IFrameObject::IFrameObject( const uno::Reference < uno::XComponentContext >& rxContext )
+IFrameObject::IFrameObject(const uno::Reference < uno::XComponentContext >& rxContext, const css::uno::Sequence< css::uno::Any >& aArguments)
     throw ( uno::Exception, uno::RuntimeException )
     : mxContext( rxContext )
     , maPropMap( lcl_GetIFramePropertyMap_Impl() )
-{
-}
-
-void SAL_CALL IFrameObject::constructorInit(const css::uno::Sequence< css::uno::Any >& aArguments) throw (css::uno::Exception, css::uno::RuntimeException)
 {
     if ( aArguments.getLength() )
         aArguments[0] >>= mxObj;
@@ -436,12 +428,9 @@ void SAL_CALL IFrameObject::setTitle( const OUString& ) throw (::com::sun::star:
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_sfx2_IFrameObject_get_implementation(
     css::uno::XComponentContext *context,
-    cppu::constructor_InitializationFunc &init_func)
+    css::uno::Sequence<css::uno::Any> const &arguments)
 {
-    // 2nd phase initialization needed
-    init_func = static_cast<cppu::constructor_InitializationFunc>(&IFrameObject::constructorInit);
-
-    return static_cast<cppu::OWeakObject *>(new IFrameObject(context));
+    return cppu::acquire(new IFrameObject(context, arguments));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

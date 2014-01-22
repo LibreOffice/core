@@ -156,21 +156,25 @@ public:
         { return this; }
 };
 
-/** Function pointer declaration.
+/// @cond INTERNAL
+/** Convenience function for constructor-based service implementations.
 
-  2nd stage initialization using the service implementation pointer.
+    To be used like:
 
-  Some services have to be initialized after the object has been acquire()'d - so the
-  implementation has to provide function that does this 2nd stage initialization.
+    css::uno::XInterface * FOO_constructor_function(...) {
+        return cppu::acquire(new FOO(...));
+    }
 
-  Typically, this happens in framework/.
-
-  @param aArguments
-  Arguments the instance will use for its own initialization.
+    @param instance
+    Newly created instance that should be acquired.
 */
-
-typedef void (SAL_CALL OWeakObject::* constructor_InitializationFunc)(
-    const css::uno::Sequence< css::uno::Any >& aArguments);
+static inline ::com::sun::star::uno::XInterface * acquire(OWeakObject * instance)
+{
+    assert(instance != 0);
+    instance->acquire();
+    return instance;
+}
+/// @endcond
 
 }
 

@@ -547,9 +547,11 @@ struct Singleton:
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_sfx2_GlobalEventBroadcaster_get_implementation(
     css::uno::XComponentContext *context,
-    cppu::constructor_InitializationFunc &)
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return Singleton::get(context).instance.get();
+    css::uno::XInterface *inst = Singleton::get(context).instance.get();
+    inst->acquire();
+    return inst;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

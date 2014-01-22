@@ -68,7 +68,8 @@ public:
                 reference to an uno service manager, which is used internaly.
      */
     ModuleAcceleratorConfiguration(
-            const css::uno::Reference< css::uno::XComponentContext >& xContext);
+            const css::uno::Reference< css::uno::XComponentContext >& xContext,
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& lArguments);
 
     /** TODO */
     virtual ~ModuleAcceleratorConfiguration();
@@ -96,9 +97,8 @@ public:
     // XComponent
     virtual  void SAL_CALL dispose() throw (css::uno::RuntimeException);
 
-    /// Initialization function after having acquire()'d.
-    void SAL_CALL constructorInit(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >&)
-        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    /// This has to be called after when the instance is acquire()'d.
+    void SAL_CALL fillCache();
 
 private:
     /** helper to listen for configuration changes without ownership cycle problems */
@@ -106,16 +106,9 @@ private:
 };
 
 ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext)
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& lArguments)
     : ModuleAcceleratorConfiguration_BASE(xContext)
-{
-}
-
-ModuleAcceleratorConfiguration::~ModuleAcceleratorConfiguration()
-{
-}
-
-void ModuleAcceleratorConfiguration::constructorInit(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& lArguments) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
     WriteGuard aWriteLock(m_aLock);
 
@@ -136,7 +129,14 @@ void ModuleAcceleratorConfiguration::constructorInit(const ::com::sun::star::uno
                 static_cast< ::cppu::OWeakObject* >(this));
 
     aWriteLock.unlock();
+}
 
+ModuleAcceleratorConfiguration::~ModuleAcceleratorConfiguration()
+{
+}
+
+void ModuleAcceleratorConfiguration::fillCache()
+{
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
     m_sModuleCFG = m_sModule;
@@ -192,12 +192,14 @@ void SAL_CALL ModuleAcceleratorConfiguration::dispose()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_framework_ModuleAcceleratorConfiguration_get_implementation(
     css::uno::XComponentContext *context,
-    cppu::constructor_InitializationFunc &init_func)
+    css::uno::Sequence<css::uno::Any> const &arguments)
 {
-    // 2nd phase initialization needed
-    init_func = static_cast<cppu::constructor_InitializationFunc>(&ModuleAcceleratorConfiguration::constructorInit);
+    ModuleAcceleratorConfiguration *inst = new ModuleAcceleratorConfiguration(context, arguments);
+    css::uno::XInterface *acquired_inst = cppu::acquire(inst);
 
-    return static_cast<cppu::OWeakObject *>(new ModuleAcceleratorConfiguration(context));
+    inst->fillCache();
+
+    return acquired_inst;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

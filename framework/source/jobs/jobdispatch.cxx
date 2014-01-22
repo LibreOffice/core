@@ -534,9 +534,9 @@ void SAL_CALL JobDispatch::removeStatusListener( /*IN*/ const css::uno::Referenc
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_framework_jobs_JobDispatch_get_implementation(
     css::uno::XComponentContext *context,
-    cppu::constructor_InitializationFunc &)
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return static_cast<cppu::OWeakObject *>(new JobDispatch(context));
+    return cppu::acquire(new JobDispatch(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

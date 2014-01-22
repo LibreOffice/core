@@ -2898,9 +2898,9 @@ void SfxURLRelocator_Impl::makeAbsoluteURL( OUString & rURL )
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_sfx2_DocumentTemplates_get_implementation(
     css::uno::XComponentContext *context,
-    cppu::constructor_InitializationFunc &)
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return static_cast<cppu::OWeakObject *>(new SfxDocTplService(context));
+    return cppu::acquire(new SfxDocTplService(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

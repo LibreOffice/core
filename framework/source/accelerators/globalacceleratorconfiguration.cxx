@@ -81,9 +81,8 @@ public:
     // XComponent
     virtual  void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
 
-    /// Initialization function after having acquire()'d.
-    void SAL_CALL constructorInit(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >&)
-        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    /// This has to be called after when the instance is acquire()'d.
+    void fillCache();
 
 private:
 
@@ -98,7 +97,7 @@ GlobalAcceleratorConfiguration::GlobalAcceleratorConfiguration(const css::uno::R
 {
 }
 
-void GlobalAcceleratorConfiguration::constructorInit(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >&) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+void GlobalAcceleratorConfiguration::fillCache()
 {
     /** read all data into the cache. */
 
@@ -150,12 +149,14 @@ void SAL_CALL GlobalAcceleratorConfiguration::dispose()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_framework_GlobalAcceleratorConfiguration_get_implementation(
     css::uno::XComponentContext *context,
-    cppu::constructor_InitializationFunc &init_func)
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    // 2nd phase initialization needed
-    init_func = static_cast<cppu::constructor_InitializationFunc>(&GlobalAcceleratorConfiguration::constructorInit);
+    GlobalAcceleratorConfiguration *inst = new GlobalAcceleratorConfiguration(context);
+    css::uno::XInterface *acquired_inst = cppu::acquire(inst);
 
-    return static_cast<cppu::OWeakObject *>(new GlobalAcceleratorConfiguration(context));
+    inst->fillCache();
+
+    return acquired_inst;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
