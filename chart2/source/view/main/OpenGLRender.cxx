@@ -1737,6 +1737,7 @@ void OpenGLRender::GeneratePieSegment2D(double fInnerRadius, double fOutterRadiu
     if(bInnerRadiusNotZero)
         nVectorSize *= 2;
 
+    nAngleStart += 90;
     aPointList.reserve(nVectorSize);
     // if inner radius = 0 generate a normal pie segment (triangle fan)
     // if inner radius != 0 generate a pie segment - inner pie (triangle strip)

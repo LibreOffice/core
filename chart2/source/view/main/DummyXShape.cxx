@@ -364,7 +364,8 @@ void DummyPieSegment2D::render()
     */
 
     float nSize = std::max<float>(maUnitCircleToScene.Line1.Column1, maUnitCircleToScene.Line2.Column2);
-    pChart->m_GLRender.RenderPieSegment2DShape(nSize, maUnitCircleToScene.Line1.Column4, maUnitCircleToScene.Line2.Column4);
+    pChart->m_GLRender.RenderPieSegment2DShape(nSize, maUnitCircleToScene.Line1.Column4 + maOffset.DirectionX,
+            maUnitCircleToScene.Line2.Column4 + maOffset.DirectionY);
 
 }
 
