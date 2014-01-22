@@ -280,12 +280,11 @@ public:
 
     /** Notify the application that data has changed via an event.
 
-     @param rDCEvt      Reference to a @DataChangedEvent object - this will not
-                        be changed
+     @param rDCEvt      Reference to a @DataChangedEvent object
 
      @see FocusChanged
     */
-    virtual void                DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void                DataChanged( DataChangedEvent& rDCEvt );
 
     // Initialization functions
 

@@ -225,8 +225,11 @@ void Application::FocusChanged()
 {
 }
 
-void Application::DataChanged( const DataChangedEvent& )
+void Application::DataChanged( DataChangedEvent &aDCEvt )
 {
+    // notify data change handler
+    ImplCallEventListeners( VCLEVENT_APPLICATION_DATACHANGED, NULL, &aDCEvt);
+
 }
 
 void Application::Init()
@@ -539,9 +542,6 @@ void Application::SetSettings( const AllSettings& rSettings )
         {
             DataChangedEvent aDCEvt( DATACHANGED_SETTINGS, &aOldSettings, nChangeFlags );
             GetpApp()->DataChanged( aDCEvt );
-
-            // notify data change handler
-            ImplCallEventListeners( VCLEVENT_APPLICATION_DATACHANGED, NULL, &aDCEvt);
 
             // Update all windows
             Window* pFirstFrame = pSVData->maWinData.mpFirstFrame;
