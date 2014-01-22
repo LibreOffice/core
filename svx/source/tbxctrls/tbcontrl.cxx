@@ -2547,41 +2547,26 @@ void SvxColorExtToolBoxControl::StateChanged(
     sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 
 {
-    const SvxColorItem* pItem = 0;
-    if ( bChoiceFromPalette && nSID == GetSlotId() )
+    if (nSID == GetSlotId())
     {
-        bChoiceFromPalette = sal_False;
-        switch( nSID )
+        ToolBox& rTbx = GetToolBox();
+        sal_uInt16 nId = GetId();
+        rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
+        rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
+
+        if (bChoiceFromPalette)
         {
-            case SID_ATTR_CHAR_COLOR :
-            case SID_ATTR_CHAR_COLOR2 :
-            case SID_ATTR_CHAR_COLOR_BACKGROUND :
-            case SID_BACKGROUND_COLOR :
-                if ( SFX_ITEM_DONTCARE != eState )
-                    pItem = PTR_CAST( SvxColorItem, pState );
+            bChoiceFromPalette = sal_False;
 
-                if ( pItem )
-                {
-                    pBtnUpdater->Update( pItem->GetValue() );
-                    mLastColor = pItem->GetValue();
-                }
-                break;
+            const SvxColorItem* pItem = 0;
+            if ( SFX_ITEM_DONTCARE != eState )
+                pItem = PTR_CAST( SvxColorItem, pState );
 
-            case SID_FRAME_LINECOLOR :
-                ToolBox& rTbx = GetToolBox();
-                rTbx.EnableItem( nSID, SFX_ITEM_DISABLED != eState );
-                rTbx.SetItemState( nSID, ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
-
-                if ( SFX_ITEM_DONTCARE != eState )
-                {
-                    pItem = PTR_CAST( SvxColorItem, pState );
-                    if ( pItem )
-                    {
-                        pBtnUpdater->Update( pItem->GetValue());
-                        mLastColor = pItem->GetValue();
-                    }
-                }
-                break;
+            if ( pItem )
+            {
+                pBtnUpdater->Update( pItem->GetValue() );
+                mLastColor = pItem->GetValue();
+            }
         }
     }
 }
