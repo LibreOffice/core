@@ -21,10 +21,6 @@
 #include <jobs/joburl.hxx>
 #include <jobs/configaccess.hxx>
 #include <classes/converter.hxx>
-#include <threadhelp/transactionguard.hxx>
-#include <threadhelp/threadhelpbase.hxx>
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
 #include <general.h>
 #include <stdtypes.h>
 
@@ -41,7 +37,7 @@
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
 
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/compbase4.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/configpaths.hxx>
 #include <rtl/ref.hxx>
@@ -52,26 +48,25 @@ using namespace framework;
 
 namespace {
 
+typedef cppu::WeakComponentImplHelper4<
+          css::lang::XServiceInfo
+        , css::task::XJobExecutor
+        , css::container::XContainerListener // => lang.XEventListener
+        , css::document::XEventListener >
+    Base;
+
 /**
     @short  implements a job executor, which can be triggered from any code
     @descr  It uses the given trigger event to locate any registered job service
             inside the configuration and execute it. Of course it controls the
             liftime of such jobs too.
  */
-class JobExecutor : private ThreadHelpBase
-                  , public  ::cppu::WeakImplHelper4<
-                                css::lang::XServiceInfo
-                              , css::task::XJobExecutor
-                              , css::container::XContainerListener // => lang.XEventListener
-                              , css::document::XEventListener >
+class JobExecutor : private osl::Mutex, public Base
 {
 private:
 
     /** reference to the uno service manager */
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
-
-    /** reference to the module info service */
-    css::uno::Reference< css::frame::XModuleManager2 > m_xModuleManager;
 
     /** cached list of all registered event names of cfg for call optimization. */
     OUStringList m_lEvents;
@@ -81,6 +76,8 @@ private:
 
     /** helper to allow us listen to the configuration without a cyclic dependency */
     com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> m_xConfigListener;
+
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 public:
 
@@ -133,9 +130,8 @@ public:
                     reference to the uno service manager
  */
 JobExecutor::JobExecutor( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xContext )
-    : ThreadHelpBase      (&Application::GetSolarMutex()                                   )
+    : Base                (*static_cast<Mutex *>(this))
     , m_xContext          (xContext                                                        )
-    , m_xModuleManager    (css::frame::ModuleManager::create( m_xContext ))
     , m_aConfig           (xContext, OUString::createFromAscii(JobData::EVENTCFG_ROOT) )
 {
 }
@@ -172,9 +168,24 @@ void JobExecutor::initListeners()
 
 JobExecutor::~JobExecutor()
 {
-    css::uno::Reference< css::container::XContainer > xNotifier(m_aConfig.cfg(), css::uno::UNO_QUERY);
-    if (xNotifier.is())
-        xNotifier->removeContainerListener(m_xConfigListener);
+    disposing();
+}
+
+void JobExecutor::disposing() {
+    css::uno::Reference<css::container::XContainer> notifier;
+    css::uno::Reference<css::container::XContainerListener> listener;
+    {
+        osl::MutexGuard g(rBHelper.rMutex);
+        if (m_aConfig.getMode() != ConfigAccess::E_CLOSED) {
+            notifier.set(m_aConfig.cfg(), css::uno::UNO_QUERY);
+            listener = m_xConfigListener;
+            m_aConfig.close();
+        }
+        m_xConfigListener.clear();
+    }
+    if (notifier.is()) {
+        notifier->removeContainerListener(listener);
+    }
 }
 
 //________________________________
@@ -192,8 +203,10 @@ void SAL_CALL JobExecutor::trigger( const OUString& sEvent ) throw(css::uno::Run
 {
     SAL_INFO( "fwk", "fwk (as96863) JobExecutor::trigger()");
 
-    /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    css::uno::Sequence< OUString > lJobs;
+
+    /* SAFE */ {
+    osl::MutexGuard g(rBHelper.rMutex);
 
     // Optimization!
     // Check if the given event name exist inside configuration and reject wrong requests.
@@ -204,17 +217,17 @@ void SAL_CALL JobExecutor::trigger( const OUString& sEvent ) throw(css::uno::Run
     // get list of all enabled jobs
     // The called static helper methods read it from the configuration and
     // filter disabled jobs using it's time stamp values.
-    css::uno::Sequence< OUString > lJobs = JobData::getEnabledJobsForEvent(m_xContext, sEvent);
-
-    aReadLock.unlock();
-    /* } SAFE */
+    lJobs = JobData::getEnabledJobsForEvent(m_xContext, sEvent);
+    } /* SAFE */
 
     // step over all enabled jobs and execute it
     sal_Int32 c = lJobs.getLength();
     for (sal_Int32 j=0; j<c; ++j)
     {
-        /* SAFE { */
-        aReadLock.lock();
+        rtl::Reference<Job> pJob;
+
+        /* SAFE */ {
+        SolarMutexGuard g2;
 
         JobData aCfg(m_xContext);
         aCfg.setEvent(sEvent, lJobs[j]);
@@ -225,14 +238,11 @@ void SAL_CALL JobExecutor::trigger( const OUString& sEvent ) throw(css::uno::Run
             And freeing of such uno object is done by uno itself.
             So we have to use dynamic memory everytimes.
          */
-        Job* pJob = new Job(m_xContext, css::uno::Reference< css::frame::XFrame >());
-        css::uno::Reference< css::uno::XInterface > xJob(static_cast< ::cppu::OWeakObject* >(pJob), css::uno::UNO_QUERY);
+        pJob = new Job(m_xContext, css::uno::Reference< css::frame::XFrame >());
         pJob->setJobData(aCfg);
+        } /* SAFE */
 
-        aReadLock.unlock();
-        /* } SAFE */
-
-        pJob->execute(css::uno::Sequence< css::beans::NamedValue >());
+       pJob->execute(css::uno::Sequence< css::beans::NamedValue >());
     }
 }
 
@@ -247,10 +257,11 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
     OUString EVENT_ON_DOCUMENT_OPENED("onDocumentOpened");   // Job UI  event : OnNew    or OnLoad
     OUString EVENT_ON_DOCUMENT_ADDED("onDocumentAdded");     // Job API event : OnCreate or OnLoadFinished
 
-    /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
-
+    OUString aModuleIdentifier;
     ::comphelper::SequenceAsVector< JobData::TJob2DocEventBinding > lJobs;
+
+    /* SAFE */ {
+    osl::MutexGuard g(rBHelper.rMutex);
 
     // Optimization!
     // Check if the given event name exist inside configuration and reject wrong requests.
@@ -258,10 +269,9 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
     // see using of m_lEvents.find() below ...
 
     // retrieve event context from event source
-    OUString aModuleIdentifier;
     try
     {
-        aModuleIdentifier = m_xModuleManager->identify( aEvent.Source );
+        aModuleIdentifier = css::frame::ModuleManager::create( m_xContext )->identify( aEvent.Source );
     }
     catch( const css::uno::Exception& )
     {}
@@ -289,9 +299,7 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
     // Add all jobs for "real" notified event too .-)
     if (m_lEvents.find(aEvent.EventName) != m_lEvents.end())
         JobData::appendEnabledJobsForEvent(m_xContext, aEvent.EventName, lJobs);
-
-    aReadLock.unlock();
-    /* } SAFE */
+    } /* SAFE */
 
     // step over all enabled jobs and execute it
     ::comphelper::SequenceAsVector< JobData::TJob2DocEventBinding >::const_iterator pIt;
@@ -299,8 +307,10 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
            pIt != lJobs.end()  ;
          ++pIt                 )
     {
-        /* SAFE { */
-        aReadLock.lock();
+        rtl::Reference<Job> pJob;
+
+        /* SAFE */ {
+        SolarMutexGuard g2;
 
         const JobData::TJob2DocEventBinding& rBinding = *pIt;
 
@@ -317,12 +327,9 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
             So we have to use dynamic memory everytimes.
          */
         css::uno::Reference< css::frame::XModel > xModel(aEvent.Source, css::uno::UNO_QUERY);
-        Job* pJob = new Job(m_xContext, xModel);
-        css::uno::Reference< css::uno::XInterface > xJob(static_cast< ::cppu::OWeakObject* >(pJob), css::uno::UNO_QUERY);
+        pJob = new Job(m_xContext, xModel);
         pJob->setJobData(aCfg);
-
-        aReadLock.unlock();
-        /* } SAFE */
+        } /* SAFE */
 
         pJob->execute(css::uno::Sequence< css::beans::NamedValue >());
     }
@@ -384,7 +391,7 @@ void SAL_CALL JobExecutor::elementReplaced( const css::container::ContainerEvent
 void SAL_CALL JobExecutor::disposing( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException)
 {
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    osl::MutexGuard g(rBHelper.rMutex);
     css::uno::Reference< css::uno::XInterface > xCFG(m_aConfig.cfg(), css::uno::UNO_QUERY);
     if (
         (xCFG                == aEvent.Source        ) &&
@@ -393,9 +400,27 @@ void SAL_CALL JobExecutor::disposing( const css::lang::EventObject& aEvent ) thr
     {
         m_aConfig.close();
     }
-    aReadLock.unlock();
     /* } SAFE */
 }
+
+struct Instance {
+    explicit Instance(
+        css::uno::Reference<css::uno::XComponentContext> const & context):
+        instance(
+            static_cast<cppu::OWeakObject *>(new JobExecutor(context)))
+    {
+        // 2nd phase initialization needed
+        static_cast<JobExecutor *>(static_cast<cppu::OWeakObject *>
+                (instance.get()))->initListeners();
+    }
+
+    rtl::Reference<css::uno::XInterface> instance;
+};
+
+struct Singleton:
+    public rtl::StaticWithArg<
+        Instance, css::uno::Reference<css::uno::XComponentContext>, Singleton>
+{};
 
 }
 
@@ -404,12 +429,9 @@ com_sun_star_comp_framework_JobExecutor_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    JobExecutor *inst = new JobExecutor(context);
-    css::uno::XInterface *acquired_inst = cppu::acquire(inst);
-
-    inst->initListeners();
-
-    return acquired_inst;
+    css::uno::XInterface *inst = Singleton::get(context).instance.get();
+    inst->acquire();
+    return inst;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,43 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef __com_sun_star_task_theJobExecutor_idl__
+#define __com_sun_star_task_theJobExecutor_idl__
+
+#include <com/sun/star/task/XJobExecutor.idl>
+
+
+module com { module sun { module star { module task {
+
+/**
+    Generic job execution singleton
+
+    <p>
+    Can start registered uno services on triggered events and handle there
+    own configuration and there lifetime. Such events are simple strings
+    which meaning doesn't matter for any real service implementation of this
+    specification. But triggered events must be available inside the
+    configuration and some Jobs or AsyncJobs must be registered for that.
+    </p>
+
+    Prior to LibreOffice 4.3, this singleton was only available as a
+    (single-instance) JobExecutor service.
+
+    @see Job
+    @see AsyncJob
+
+    @since LibreOffice 4.3
+ */
+published singleton theJobExecutor : XJobExecutor;
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
