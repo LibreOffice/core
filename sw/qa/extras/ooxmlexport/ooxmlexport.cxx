@@ -2582,6 +2582,15 @@ DECLARE_OOXMLEXPORT_TEST(testTableRowDataDisplayedTwice,"table-row-data-displaye
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
 }
 
+DECLARE_OOXMLEXPORT_TEST(fdo69656, "Table_cell_auto_width_fdo69656.docx")
+{
+    // Check for the width type of table and its cells.
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblW","type","auto");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
