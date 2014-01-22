@@ -2066,7 +2066,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
 
         sal_Int32 nStart = 0, nLocalIndex = 0;
         Sequence< OUString > aChange;
-        sal_Bool bChanged = sal_False;
+        bool bChanged = false;
         for(sal_uInt16 i = 0; i < aModulesCLB.GetEntryCount(); i++)
         {
             SvTreeListEntry *pEntry = aModulesCLB.GetEntry(i);
@@ -2092,7 +2092,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
                 }
                 nLocalIndex = nStart = 0;
                 aChange.realloc(aModulesCLB.GetEntryCount());
-                bChanged = sal_False;
+                bChanged = false;
             }
             else
             {

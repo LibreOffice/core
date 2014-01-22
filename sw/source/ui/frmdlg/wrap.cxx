@@ -270,7 +270,7 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
  --------------------------------------------------------------------*/
 sal_Bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
     const SfxPoolItem* pOldItem;
 
     const SwFmtSurround& rOldSur = (const SwFmtSurround&)GetItemSet().Get(RES_SURROUND);
@@ -313,7 +313,7 @@ sal_Bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
                 aSur != *pOldItem )
     {
         rSet.Put(aSur);
-        bModified = sal_True;
+        bModified = true;
     }
 
     if (!bDrawMode)
@@ -322,7 +322,7 @@ sal_Bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
                     aOp != *pOldItem )
         {
             rSet.Put(aOp);
-            bModified = sal_True;
+            bModified = true;
         }
     }
 
@@ -339,7 +339,7 @@ sal_Bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
                 aUL != *pOldItem )
         {
             rSet.Put( aUL, RES_UL_SPACE );
-            bModified = sal_True;
+            bModified = true;
         }
     }
 
@@ -356,7 +356,7 @@ sal_Bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
                 aLR != *pOldItem )
         {
             rSet.Put(aLR, RES_LR_SPACE);
-            bModified = sal_True;
+            bModified = true;
         }
     }
 
@@ -599,7 +599,7 @@ IMPL_LINK( SwWrapTabPage, RangeModifyHdl, MetricField *, pEdit )
 
 IMPL_LINK( SwWrapTabPage, WrapTypeHdl, RadioButton *, pBtn )
 {
-    sal_Bool bWrapThrough = (pBtn == m_pWrapThroughRB);
+    bool bWrapThrough = (pBtn == m_pWrapThroughRB);
     m_pWrapTransparentCB->Enable( bWrapThrough && !bHtmlMode );
     bWrapThrough |= ( nAnchorId == FLY_AS_CHAR );
     m_pWrapOutlineCB->Enable( !bWrapThrough && pBtn != m_pNoWrapRB);

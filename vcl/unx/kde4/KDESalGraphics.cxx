@@ -952,7 +952,7 @@ sal_Bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart p
 */
 sal_Bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
                                            const Rectangle& rControlRegion, const Point& rPos,
-                                           sal_Bool& rIsInside )
+                                           bool& rIsInside )
 {
     if ( nType == CTRL_SCROLLBAR )
     {

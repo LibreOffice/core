@@ -667,7 +667,7 @@ sal_Bool GtkSalGraphics::hitTestNativeControl( ControlType        nType,
                                 ControlPart        nPart,
                                 const Rectangle&        rControlRegion,
                                 const Point&        aPos,
-                                sal_Bool&            rIsInside )
+                                bool&            rIsInside )
 {
     if ( ( nType == CTRL_SCROLLBAR ) &&
          ( ( nPart == PART_BUTTON_UP ) ||

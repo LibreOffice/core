@@ -443,12 +443,12 @@ void    SwOutlineSettingsTabPage::Update()
     m_pCollBox->Enable(USHRT_MAX != nActLevel);
     if(USHRT_MAX == nActLevel)
     {
-        sal_Bool bSamePrefix = sal_True;
-        sal_Bool bSameSuffix = sal_True;
-        sal_Bool bSameType = sal_True;
-        sal_Bool bSameComplete = sal_True;
-        sal_Bool bSameStart = sal_True;
-        sal_Bool bSameCharFmt = sal_True;
+        bool bSamePrefix = true;
+        bool bSameSuffix = true;
+        bool bSameType = true;
+        bool bSameComplete = true;
+        bool bSameStart = true;
+        bool bSameCharFmt = true;
 
         const SwNumFmt* aNumFmtArr[MAXLEVEL];
         const SwCharFmt* pFirstFmt = 0;

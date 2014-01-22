@@ -368,7 +368,7 @@ IMPL_LINK( SwGlossaryDlg, NameModify, Edit *, pEdit )
         //ShortNameEdit
         if(!bNotFound)
         {
-            sal_Bool bEnable = !bNotFound;
+            bool bEnable = !bNotFound;
             bEnable &= !bIsDocReadOnly;
             m_pInsertBtn->Enable(bEnable);
         }

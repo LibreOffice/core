@@ -278,7 +278,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
     bool bBorder = ( SFX_ITEM_SET == rSet.GetItemState( RES_BOX ) ||
             SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BORDER_INNER ) );
     pItem = 0;
-    sal_Bool bBackground = SFX_ITEM_SET == rSet.GetItemState( RES_BACKGROUND, sal_False, &pItem );
+    bool bBackground = SFX_ITEM_SET == rSet.GetItemState( RES_BACKGROUND, sal_False, &pItem );
     const SfxPoolItem* pRowItem = 0, *pTableItem = 0;
     bBackground |= SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BRUSH_ROW, sal_False, &pRowItem );
     bBackground |= SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BRUSH_TABLE, sal_False, &pTableItem );

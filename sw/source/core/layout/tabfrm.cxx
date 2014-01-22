@@ -1575,7 +1575,7 @@ static sal_Bool lcl_InnerCalcLayout( SwFrm *pFrm,
 {
     // LONG_MAX == nBottom means we have to calculate all
     bool bAll = LONG_MAX == nBottom;
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const SwFrm* pOldUp = pFrm->GetUpper();
     SWRECTFN( pFrm )
     do

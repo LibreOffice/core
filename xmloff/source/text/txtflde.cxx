@@ -2883,7 +2883,7 @@ sal_Bool XMLTextFieldExport::ExplodeFieldMasterName(
 {
     sal_Int32 nLength = sFieldMasterPrefix.getLength();
     sal_Int32 nSeparator = sMasterName.indexOf('.', nLength);
-    sal_Bool bReturn = sal_True;
+    bool bReturn = true;
 
 #ifdef DBG_UTIL
     // check for service name
@@ -2894,7 +2894,7 @@ sal_Bool XMLTextFieldExport::ExplodeFieldMasterName(
     if (nSeparator <= nLength) {
         nSeparator = sMasterName.getLength();
         DBG_WARNING("no field var name!");
-        bReturn = sal_False;
+        bReturn = false;
     }
     else
     {

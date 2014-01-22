@@ -1182,7 +1182,7 @@ public:
                                                 ControlPart nPart,
                                                 const Rectangle& rControlRegion,
                                                 const Point& aPos,
-                                                sal_Bool& rIsInside ) const;
+                                                bool& rIsInside ) const;
 
     // Request rendering of a particular control and/or part
     sal_Bool                DrawNativeControl(  ControlType nType,

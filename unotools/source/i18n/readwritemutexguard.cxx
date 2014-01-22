@@ -36,7 +36,7 @@ ReadWriteGuard::ReadWriteGuard( ReadWriteMutex& rMutexP,
         rMutex.pWriteMutex->acquire();
         // wait for any read to complete
 // TODO: set up a waiting thread instead of a loop
-        sal_Bool bWait = sal_True;
+        bool bWait = true;
         do
         {
             rMutex.pMutex->acquire();

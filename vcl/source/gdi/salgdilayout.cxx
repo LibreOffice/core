@@ -660,7 +660,7 @@ sal_Bool    SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight, v
 }
 
 sal_Bool SalGraphics::HitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
-                                                const Point& aPos, sal_Bool& rIsInside, const OutputDevice *pOutDev )
+                                                const Point& aPos, bool& rIsInside, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {

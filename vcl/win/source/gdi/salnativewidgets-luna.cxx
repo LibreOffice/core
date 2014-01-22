@@ -354,7 +354,7 @@ sal_Bool WinSalGraphics::hitTestNativeControl( ControlType,
                               ControlPart,
                               const Rectangle&,
                               const Point&,
-                              sal_Bool& )
+                              bool& )
 {
     return FALSE;
 }

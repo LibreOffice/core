@@ -202,12 +202,12 @@ void XMLBackgroundImageContext::ProcessAttrs(
                 SvXMLTokenEnumerator aTokenEnum( rValue );
                 OUString aToken;
                 sal_Bool bHori = sal_False, bVert = sal_False;
-                sal_Bool bOK = sal_True;
+                bool bOK = true;
                 while( bOK && aTokenEnum.getNextToken( aToken ) )
                 {
                     if( bHori && bVert )
                     {
-                        bOK = sal_False;
+                        bOK = false;
                     }
                     else if( -1 != aToken.indexOf( '%' ) )
                     {
@@ -235,7 +235,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
                         else
                         {
                             // wrong percentage
-                            bOK = sal_False;
+                            bOK = false;
                         }
                     }
                     else if( IsXMLToken( aToken, XML_CENTER ) )
@@ -258,7 +258,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
                         else if( !bHori )
                             eNewPos = (GraphicLocation)nTmp;
                         else
-                            bOK = sal_False;
+                            bOK = false;
                         bHori = sal_True;
                     }
                     else if( SvXMLUnitConverter::convertEnum( nTmp, aToken,
@@ -270,12 +270,12 @@ void XMLBackgroundImageContext::ProcessAttrs(
                         else if( !bVert )
                             eNewPos = (GraphicLocation)nTmp;
                         else
-                            bOK = sal_False;
+                            bOK = false;
                         bVert = sal_True;
                     }
                     else
                     {
-                        bOK = sal_False;
+                        bOK = false;
                     }
                 }
 

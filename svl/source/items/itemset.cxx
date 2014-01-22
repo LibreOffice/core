@@ -633,7 +633,7 @@ const SfxPoolItem* SfxItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich 
 int SfxItemSet::Put( const SfxItemSet& rSet, sal_Bool bInvalidAsDefault )
 {
     DBG_CHKTHIS(SfxItemSet, DbgCheckItemSet);
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( rSet.Count() )
     {
         SfxItemArray ppFnd = rSet._aItems;
@@ -658,7 +658,7 @@ int SfxItemSet::Put( const SfxItemSet& rSet, sal_Bool bInvalidAsDefault )
             pPtr += 2;
         }
     }
-    return bRet;
+    return int(bRet);
 }
 
 // -----------------------------------------------------------------------

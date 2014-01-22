@@ -2271,9 +2271,9 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
             // Can be split after current HTML table column?
             // If yes, can the created region still be split to
             // rows if the next column is added to it?
-            sal_Bool bSplit = sal_True;
-            sal_Bool bHoriSplitMayContinue = sal_False;
-            sal_Bool bHoriSplitPossible = sal_False;
+            bool bSplit = true;
+            bool bHoriSplitMayContinue = false;
+            bool bHoriSplitPossible = false;
 
             if ( bHasSubTables )
             {
@@ -2283,7 +2283,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                     SwXMLTableCell_Impl *pCell = GetCell(nRow,nCol);
                     // Could the table fragment be splitted horizontally behind
                     // the current line?
-                    sal_Bool bHoriSplit = (*pRows)[(sal_uInt16)nRow].IsSplitable() &&
+                    bool bHoriSplit = (*pRows)[(sal_uInt16)nRow].IsSplitable() &&
                                       nRow+1UL < nBottomRow &&
                                       1UL == pCell->GetRowSpan();
                     (*pRows)[(sal_uInt16)nRow].SetSplitable( bHoriSplit );

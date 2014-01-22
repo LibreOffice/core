@@ -542,7 +542,7 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, sal_Bool bAllPages,
         if(  (mbShowAllPages || pPage->GetPageKind() == PK_STANDARD)
              && !(pPage->GetPageKind()==PK_HANDOUT)   ) //#94954# never list the normal handout page ( handout-masterpage is used instead )
         {
-            sal_Bool bPageExluded = pPage->IsExcluded();
+            bool bPageExluded = pPage->IsExcluded();
 
             bool bPageBelongsToShow = PageBelongsToCurrentShow (pPage);
             bPageExluded |= !bPageBelongsToShow;

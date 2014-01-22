@@ -475,7 +475,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     case FN_INSERT_FRAME_INTERACT:
     {
         sal_uInt16 nCols = 1;
-        sal_Bool bModifier1 = rReq.GetModifier() == KEY_MOD1;
+        bool bModifier1 = rReq.GetModifier() == KEY_MOD1;
         if(pArgs)
         {
             if(FN_INSERT_FRAME_INTERACT_NOCOL != nSlot &&

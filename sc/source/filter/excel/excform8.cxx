@@ -144,7 +144,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
     sal_uInt16                  nUINT16;
     double                  fDouble;
     OUString                aString;
-    sal_Bool                    bError = false;
+    bool                    bError = false;
     sal_Bool                    bArrayFormula = false;
     TokenId                 nMerk0;
     const bool              bCondFormat = eFT == FT_CondFormat;
@@ -881,7 +881,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 }
             }
                 break;
-            default: bError = sal_True;
+            default: bError = true;
         }
         bError |= !aIn.IsValid();
     }
@@ -927,7 +927,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
                               SCsTAB nTab, const FORMULA_TYPE eFT )
 {
     sal_uInt8                   nOp, nLen;
-    sal_Bool                    bError = false;
+    bool                    bError = false;
     const bool              bCondFormat = eFT == FT_CondFormat;
     const bool              bRangeName = eFT == FT_RangeName || bCondFormat;
     const bool              bSharedFormula = eFT == FT_SharedFormula;
@@ -1234,7 +1234,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
                 aIn.Ignore( 10 );
                 break;
             default:
-                bError = sal_True;
+                bError = true;
         }
         bError |= !aIn.IsValid();
     }

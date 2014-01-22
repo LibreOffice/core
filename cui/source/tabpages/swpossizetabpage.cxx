@@ -730,11 +730,11 @@ sal_Bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
 {
     bool bAnchorChanged = false;
     short nAnchor = GetAnchorType(&bAnchorChanged);
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
     if(bAnchorChanged)
     {
         rSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_ANCHOR, nAnchor));
-        bModified |= sal_True;
+        bModified = true;
     }
     if ( m_pPositionCB->GetState() != m_pPositionCB->GetSavedValue() )
     {
@@ -744,7 +744,7 @@ sal_Bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
             rSet.Put(
                 SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_PROTECT_POS ),
                 m_pPositionCB->GetState() == STATE_CHECK ? sal_True : sal_False ) );
-        bModified |= sal_True;
+        bModified = true;
     }
 
     if ( m_pSizeCB->GetState() != m_pSizeCB->GetSavedValue() )
@@ -755,7 +755,7 @@ sal_Bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
             rSet.Put(
                 SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_PROTECT_SIZE ),
                 m_pSizeCB->GetState() == STATE_CHECK ? sal_True : sal_False ) );
-        bModified |= sal_True;
+        bModified = true;
     }
 
     const SfxItemSet& rOldSet = GetItemSet();
@@ -782,7 +782,7 @@ sal_Bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
                 rSet.Put( SfxInt32Item( GetWhich( SID_ATTR_TRANSFORM_POS_X ), nHoriByPos ) );
                 rSet.Put( SfxInt32Item( GetWhich( SID_ATTR_TRANSFORM_POS_Y ), nVertByPos ) );
 
-                bModified |= sal_True;
+                bModified = true;
             }
         }
         else
@@ -811,7 +811,7 @@ sal_Bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
                     rSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_HORI_RELATION, nRel));
                     if(m_pHoriByMF->IsEnabled())
                         rSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_HORI_POSITION, nHoriByPos));
-                    bModified |= sal_True;
+                    bModified = true;
                 }
             }
             if(m_pHoriMirrorCB->IsEnabled() && m_pHoriMirrorCB->IsChecked() != m_pHoriMirrorCB->GetSavedValue())
@@ -846,7 +846,7 @@ sal_Bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
                     rSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_VERT_RELATION, nRel));
                     if(m_pVertByMF->IsEnabled())
                         rSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_VERT_POSITION, nVertByPos));
-                    bModified |= sal_True;
+                    bModified = true;
                 }
             }
 
@@ -876,7 +876,7 @@ sal_Bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
         //this item is required by SdrEditView::SetGeoAttrToMarked()
         rSet.Put( SfxAllEnumItem( GetWhich( SID_ATTR_TRANSFORM_SIZE_POINT ), RP_LT ) );
 
-        bModified |= sal_True;
+        bModified = true;
     }
 
     return bModified;

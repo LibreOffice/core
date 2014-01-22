@@ -136,7 +136,7 @@ SwXMLConditionParser_Impl::SwXMLConditionParser_Impl( const OUString& rInp ) :
     OUString sFunc;
     bool bHasSub = false;
     sal_uInt32 nSub = 0;
-    sal_Bool bOK = SkipWS() && MatchName( sFunc ) && SkipWS() &&
+    bool bOK = SkipWS() && MatchName( sFunc ) && SkipWS() &&
                MatchChar( '(' ) && SkipWS() && MatchChar( ')' ) && SkipWS();
     if( bOK && MatchChar( '=' ) )
     {

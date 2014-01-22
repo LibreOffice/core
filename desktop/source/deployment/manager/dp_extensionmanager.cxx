@@ -327,7 +327,7 @@ ExtensionManager::getExtensionsWithSameIdentifier(
         ::std::list<Reference<css::deployment::XPackage> > listExtensions =
             getExtensionsWithSameId(
                 identifier, fileName, xCmdEnv);
-        sal_Bool bHasExtension = false;
+        bool bHasExtension = false;
 
         //throw an IllegalArgumentException if there is no extension at all.
         typedef  ::std::list<Reference<css::deployment::XPackage> >::const_iterator CIT;

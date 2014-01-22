@@ -141,9 +141,9 @@ static const sal_Unicode aBulletTypes[] =
 };
 
 // Is one of the masked formats set?
-static sal_Bool lcl_IsNumFmtSet(SvxNumRule* pNum, sal_uInt16 nLevelMask)
+static bool lcl_IsNumFmtSet(SvxNumRule* pNum, sal_uInt16 nLevelMask)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_uInt16 nMask = 1;
     for( sal_uInt16 i = 0; i < SVX_MAX_NUM && !bRet; i++ )
     {
@@ -1381,8 +1381,8 @@ void SvxNumOptionsTabPage::InitControls()
     bool bSamePrefix    = true;
     bool bSameSuffix    = true;
     bool bAllLevel      = true;
-    sal_Bool bSameCharFmt   = true;
-    sal_Bool bSameVOrient   = true;
+    bool bSameCharFmt   = true;
+    bool bSameVOrient   = true;
     bool bSameSize      = true;
     bool bSameBulColor  = true;
     bool bSameBulRelSize= true;
@@ -1694,7 +1694,7 @@ IMPL_LINK( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox *, pBox )
 {
     OUString sSelectStyle;
     sal_Bool bShowOrient = sal_False;
-    sal_Bool bBmp = sal_False;
+    bool bBmp = false;
     OUString aEmptyStr;
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)

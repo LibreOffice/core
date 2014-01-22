@@ -820,7 +820,7 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, sal_Bool bCallAction 
     sal_uInt16  nOldStateFlags = mnStateFlags;
     sal_Bool    bAction = sal_False;
     bool        bHorizontal = ( GetStyle() & WB_HORZ )? true: false;
-    sal_Bool    bIsInside = sal_False;
+    bool        bIsInside = false;
 
     Point aPoint( 0, 0 );
     Rectangle aControlRegion( aPoint, GetOutputSizePixel() );
@@ -930,7 +930,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
         const Point&        rMousePos = rMEvt.GetPosPixel();
         sal_uInt16          nTrackFlags = 0;
         bool                bHorizontal = ( GetStyle() & WB_HORZ )? true: false;
-        sal_Bool            bIsInside = sal_False;
+        bool                bIsInside = false;
         bool                bDragToMouse = false;
 
         Point aPoint( 0, 0 );
@@ -1266,7 +1266,7 @@ void ScrollBar::DataChanged( const DataChangedEvent& rDCEvt )
 Rectangle* ScrollBar::ImplFindPartRect( const Point& rPt )
 {
     bool    bHorizontal = ( GetStyle() & WB_HORZ )? true: false;
-    sal_Bool    bIsInside = sal_False;
+    bool    bIsInside = false;
 
     Point aPoint( 0, 0 );
     Rectangle aControlRegion( aPoint, GetOutputSizePixel() );

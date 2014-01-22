@@ -821,7 +821,7 @@ namespace svxform
     {
         // gehen wir durch alle markierten Objekte und suchen wir die raus, mit denen ich was anfangen kann
         FmNavRequestSelectHint rshRequestSelection;
-        sal_Bool bIsMixedSelection = sal_False;
+        bool bIsMixedSelection = false;
 
         for (sal_uLong i=0; (i<mlMarked.GetMarkCount()) && !bIsMixedSelection; i++)
         {

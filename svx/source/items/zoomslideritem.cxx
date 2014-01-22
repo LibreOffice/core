@@ -149,7 +149,7 @@ bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
                     sal_Int32 nCurrentZoom( 0 );
                     com::sun::star::uno::Sequence < sal_Int32 > aValues;
 
-                    sal_Bool  bAllConverted( sal_True );
+                    bool bAllConverted( true );
                     sal_Int16 nConvertedCount( 0 );
                     sal_Int32 nMinZoom( 0 ), nMaxZoom( 0 );
 

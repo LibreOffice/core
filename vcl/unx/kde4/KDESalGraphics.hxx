@@ -52,7 +52,7 @@ class KDESalGraphics : public X11SalGraphics
         */
         virtual sal_Bool hitTestNativeControl( ControlType type, ControlPart part,
                                         const Rectangle& rControlRegion, const Point& aPos,
-                                        sal_Bool& rIsInside );
+                                        bool& rIsInside ) SAL_OVERRIDE;
         /** Draw the requested control described by part/nControlState.
 
             @param rControlRegion

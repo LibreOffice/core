@@ -710,7 +710,7 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
         // #i68520#
         // bEvade: consider pNew, if we are not inside a fly
         //         consider pNew, if pNew is lower of <mpCurrAnchoredObj>
-        sal_Bool bEvade = !mpCurrAnchoredObj ||
+        bool bEvade = !mpCurrAnchoredObj ||
                           Is_Lower_Of( dynamic_cast<const SwFlyFrm*>(mpCurrAnchoredObj), pNew);
 
         if ( !bEvade )
@@ -722,7 +722,7 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
             // If bTopRule is not set, we ignore the frame types.
             // We directly check the z-order
             if ( !bTopRule )
-                bEvade = sal_True;
+                bEvade = true;
             else
             {
                 // Within chained Flys we only avoid Lower
@@ -748,7 +748,7 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
                     {
                         if (FLY_AT_PAGE == rCurrA.GetAnchorId())
                         {
-                            bEvade = sal_True;
+                            bEvade = true;
                         }
                         else
                             return sal_False;
@@ -756,7 +756,7 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
                     else if (FLY_AT_PAGE == rCurrA.GetAnchorId())
                         return sal_False; // Page anchored ones only avoid page anchored ones
                     else if (FLY_AT_FLY == rNewA.GetAnchorId())
-                        bEvade = sal_True; // Non-page anchored ones avoid frame anchored ones
+                        bEvade = true; // Non-page anchored ones avoid frame anchored ones
                     else if( FLY_AT_FLY == rCurrA.GetAnchorId() )
                         return sal_False; // Frame anchored ones do not avoid paragraph anchored ones
                     // #i57062#
@@ -778,7 +778,7 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
                 // #i68520#
                 SwRect aTmp( _pAnchoredObj->GetObjRectWithSpaces() );
                 if ( !aTmp.IsOver( mpCurrAnchoredObj->GetObjRectWithSpaces() ) )
-                    bEvade = sal_False;
+                    bEvade = false;
             }
         }
 

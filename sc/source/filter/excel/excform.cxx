@@ -214,7 +214,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
     sal_Int16           nINT16;
     double          fDouble;
     OUString        aString;
-    sal_Bool            bError = false;
+    bool            bError = false;
     sal_Bool            bArrayFormula = false;
     TokenId         nMerk0;
     const sal_Bool      bRangeName = eFT == FT_RangeName;
@@ -848,7 +848,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 }//END in current Workbook
             }
                 break;
-            default: bError = sal_True;
+            default: bError = true;
         }
         bError |= !aIn.IsValid();
     }
@@ -903,7 +903,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
     sal_Size        nIgnore;
     sal_uInt16          nUINT16;
     sal_uInt8           nByte;
-    sal_Bool            bError = false;
+    bool            bError = false;
     const sal_Bool      bRangeName = eFT == FT_RangeName;
     const sal_Bool      bSharedFormula = eFT == FT_SharedFormula;
     const sal_Bool      bRNorSF = bRangeName || bSharedFormula;
@@ -1286,7 +1286,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
             case 0x3D: // Deleted 3-D Area Reference            [    277]
                 nIgnore = 20;
                 break;
-            default: bError = sal_True;
+            default: bError = true;
         }
         bError |= !aIn.IsValid();
 

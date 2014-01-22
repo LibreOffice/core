@@ -1349,7 +1349,7 @@ SfxTabPage*   SwTextFlowPage::Create( Window* pParent,
 
 sal_Bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
 
     // Repeat Heading
     if(m_pHeadLineCB->IsChecked() != m_pHeadLineCB->GetSavedValue() ||

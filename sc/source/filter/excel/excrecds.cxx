@@ -952,7 +952,7 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
         {
             sal_Bool    bConflict   = false;
             sal_Bool    bContLoop   = sal_True;
-            sal_Bool    bHasOr      = false;
+            bool        bHasOr      = false;
             SCCOLROW nFirstField = aParam.GetEntry( 0 ).nField;
 
             // create AUTOFILTER records for filtered columns

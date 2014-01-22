@@ -596,7 +596,7 @@ void SwHTMLParser::Continue( int nToken )
 
     bSetModEnabled = sal_False;
     if( pDoc->GetDocShell() &&
-        0 != (bSetModEnabled = pDoc->GetDocShell()->IsEnableSetModified()) )
+        (bSetModEnabled = pDoc->GetDocShell()->IsEnableSetModified()) )
     {
         pDoc->GetDocShell()->EnableSetModified( sal_False );
     }

@@ -727,7 +727,7 @@ void OfficeIPCThread::execute()
                 continue;
             }
 
-            sal_Bool bDocRequestSent = sal_False;
+            bool bDocRequestSent = false;
 
             OUString aUnknown( aCmdLineArgs->GetUnknown() );
             if ( !aUnknown.isEmpty() || aCmdLineArgs->IsHelp() )
@@ -810,7 +810,7 @@ void OfficeIPCThread::execute()
                     // we only do this if no document was specified on the command line,
                     // since this would be inconsistent with the behaviour of
                     // the first process, see OpenClients() (call to OpenDefault()) in app.cxx
-                    if ( aCmdLineArgs->HasModuleParam() && (!bDocRequestSent) )
+                    if ( aCmdLineArgs->HasModuleParam() && !bDocRequestSent )
                     {
                         SvtModuleOptions aOpt;
                         SvtModuleOptions::EFactory eFactory = SvtModuleOptions::E_WRITER;
@@ -835,7 +835,7 @@ void OfficeIPCThread::execute()
                             pRequest->aModule = aOpt.GetFactoryName( eFactory );
                         else
                             pRequest->aOpenList.push_back( aOpt.GetFactoryEmptyDocumentURL( eFactory ) );
-                        bDocRequestSent = sal_True;
+                        bDocRequestSent = true;
                     }
                 }
 

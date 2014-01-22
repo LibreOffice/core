@@ -1473,7 +1473,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
         nOfst = nOldY - rMulti.GetAscent();
 
     sal_Bool bRest = pLay->IsRest();
-    sal_Bool bFirst = sal_True;
+    bool bFirst = true;
 
     OSL_ENSURE( 0 == GetInfo().GetUnderFnt() || rMulti.IsBidi(),
             " Only BiDi portions are allowed to use the common underlining font" );

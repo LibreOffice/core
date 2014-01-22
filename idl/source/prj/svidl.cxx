@@ -238,7 +238,7 @@ int main ( int argc, char ** argv)
 
     if( nExit == 0 )
     {
-        sal_Bool bErr = sal_False;
+        bool bErr = false;
         sal_Bool bDoMove = aCommand.aTargetFile.isEmpty();
         OUString aErrFile, aErrFile2;
         if( !bErr && !aCommand.aListFile.isEmpty() )

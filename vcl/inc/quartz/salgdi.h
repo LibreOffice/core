@@ -282,7 +282,7 @@ public:
     CGPoint*                makeCGptArray(sal_uLong nPoints, const SalPoint*  pPtAry);
     // native widget rendering methods that require mirroring
     virtual sal_Bool        hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
-                                              const Point& aPos, sal_Bool& rIsInside );
+                                              const Point& aPos, bool& rIsInside ) SAL_OVERRIDE;
     virtual sal_Bool        drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                            ControlState nState, const ImplControlValue& aValue,
                                            const OUString& aCaption );

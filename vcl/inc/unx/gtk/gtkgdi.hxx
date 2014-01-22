@@ -136,7 +136,7 @@ public:
     // native widget methods
     virtual sal_Bool        IsNativeControlSupported( ControlType nType, ControlPart nPart );
     virtual sal_Bool        hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
-                                              const Point& aPos, sal_Bool& rIsInside );
+                                              const Point& aPos, bool& rIsInside ) SAL_OVERRIDE;
     virtual sal_Bool        drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                            ControlState nState, const ImplControlValue& aValue,
                                            const OUString& rCaption );

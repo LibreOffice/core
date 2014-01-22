@@ -486,7 +486,7 @@ namespace dbp
     //---------------------------------------------------------------------
     void OLinkFieldsPage::implCheckFinish()
     {
-        sal_Bool bInvalidSelection = (COMBOBOX_ENTRY_NOTFOUND == m_aValueListField.GetEntryPos(m_aValueListField.GetText()));
+        bool bInvalidSelection = (COMBOBOX_ENTRY_NOTFOUND == m_aValueListField.GetEntryPos(m_aValueListField.GetText()));
         bInvalidSelection |= (COMBOBOX_ENTRY_NOTFOUND == m_aTableField.GetEntryPos(m_aTableField.GetText()));
         getDialog()->enableButtons(WZB_FINISH, !bInvalidSelection);
     }

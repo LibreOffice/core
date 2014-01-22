@@ -140,7 +140,7 @@ void SvXMLImportPropertyMapper::importXML(
 
         // for better error reporting: this should be set true if no
         // warning is needed
-        sal_Bool bNoWarning = sal_False;
+        bool bNoWarning = false;
         bool bAlienImport = false;
 
         do

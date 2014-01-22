@@ -147,7 +147,7 @@ long SwWrtShell::SelAll()
                 pEndPos = new SwPosition( *pTmpCrsr->GetMark() );
             }
             Push();
-            sal_Bool bIsFullSel = !MoveSection( fnSectionCurr, fnSectionStart);
+            bool bIsFullSel = !MoveSection( fnSectionCurr, fnSectionStart);
             SwapPam();
             bIsFullSel &= !MoveSection( fnSectionCurr, fnSectionEnd);
             Pop(sal_False);

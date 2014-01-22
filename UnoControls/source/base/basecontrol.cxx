@@ -464,7 +464,7 @@ void SAL_CALL BaseControl::setPosSize(  sal_Int32   nX      ,
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
 
-    sal_Bool bChanged = sal_False ;
+    bool bChanged = false ;
 
     if ( nFlags & PosSize::X )
     {

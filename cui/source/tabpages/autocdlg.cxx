@@ -482,7 +482,7 @@ SfxTabPage* OfaSwAutoFmtOptionsPage::Create( Window* pParent,
 
 sal_Bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet&  )
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
     long nFlags = pAutoCorrect->GetFlags();
@@ -1821,7 +1821,7 @@ sal_Bool OfaQuoteTabPage::FillItemSet( SfxItemSet&  )
         pAutoCorrect->SetAutoCorrFlag(ChgOrdinalNumber, m_pCheckLB->IsChecked(nPos++));
     }
 
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
     if (m_pSwCheckLB->IsVisible())
     {
         SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
@@ -2163,7 +2163,7 @@ sal_Bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet& )
 
     if (m_pAutoCompleteList && nAutoCmpltListCnt != aLBEntries.GetEntryCount())
     {
-        bModified = sal_True;
+        bModified = true;
         pOpt->m_pAutoCompleteList = m_pAutoCompleteList;
     }
     if( bModified )

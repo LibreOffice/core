@@ -259,7 +259,7 @@ void SwRedlineAcceptDlg::InitAuthors()
 
     bOnlyFormatedRedlines = sal_True;
     bHasReadonlySel = sal_False;
-    sal_Bool bIsNotFormated = sal_False;
+    bool bIsNotFormated = false;
     sal_uInt16 i;
 
     // determine authors
@@ -924,7 +924,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl)
     SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
     aSelectTimer.Stop();
 
-    sal_Bool bIsNotFormated = sal_False;
+    bool bIsNotFormated = false;
     bool bSel = false;
 
     //#98883# don't select redlines while the dialog is not focussed

@@ -75,7 +75,7 @@ bool SvxGalleryItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /* nMemberId
         return false;
 
     int nConverted(0);
-    sal_Bool bAllConverted( sal_True );
+    bool bAllConverted( true );
     sal_Bool bIsSetType( sal_False );
 
     sal_Int8 nType(0);

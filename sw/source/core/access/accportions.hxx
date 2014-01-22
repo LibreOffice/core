@@ -89,7 +89,7 @@ class SwAccessiblePortionData : public SwPortionHandler
 
     // helper method for GetEditableRange(...):
     void AdjustAndCheck( sal_Int32 nPos, size_t& nPortionNo,
-                         sal_Int32& nCorePos, sal_Bool& bEdit ) const;
+                         sal_Int32& nCorePos, bool& bEdit ) const;
 
 public:
     SwAccessiblePortionData( const SwTxtNode* pTxtNd,

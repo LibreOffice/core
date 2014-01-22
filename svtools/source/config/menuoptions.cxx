@@ -297,7 +297,7 @@ void SvtMenuOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
     // We need values from ALL notified configuration keys.
     DBG_ASSERT( !(seqPropertyNames.getLength()!=seqValues.getLength()), "SvtMenuOptions_Impl::Notify()\nI miss some values of configuration keys!\n" );
 
-    sal_Bool bMenuSettingsChanged = sal_False;
+    bool bMenuSettingsChanged = false;
     sal_Bool bMenuIcons = sal_True;
     sal_Bool bSystemMenuIcons = sal_True;
     if (m_nMenuIcons == 2)

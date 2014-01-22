@@ -708,7 +708,7 @@ void SwAccessiblePortionData::AdjustAndCheck(
     sal_Int32 nPos,
     size_t& nPortionNo,
     sal_Int32& nCorePos,
-    sal_Bool& bEdit) const
+    bool& bEdit) const
 {
     // find portion and get mode position
     nPortionNo = FindBreak( aAccessiblePositions, nPos );
@@ -726,7 +726,7 @@ sal_Bool SwAccessiblePortionData::GetEditableRange(
     sal_Int32 nStart, sal_Int32 nEnd,
     sal_Int32& nCoreStart, sal_Int32& nCoreEnd ) const
 {
-    sal_Bool bIsEditable = sal_True;
+    bool bIsEditable = true;
 
     // get start and end portions
     size_t nStartPortion, nEndPortion;

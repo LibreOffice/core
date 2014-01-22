@@ -1356,13 +1356,13 @@ sal_Bool SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet& rSet )
         eMode = FILL_SPACE;
     aOpt.SetMode( eMode );
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const SfxPoolItem* pItem = 0;
     if( SFX_ITEM_SET != rSet.GetItemState( FN_PARAM_SHADOWCURSOR, sal_False, &pItem )
         ||  ((SwShadowCursorItem&)*pItem) != aOpt )
     {
         rSet.Put( aOpt );
-        bRet = sal_True;
+        bRet = true;
     }
 
     if (m_pWrtShell) {
@@ -1374,7 +1374,7 @@ sal_Bool SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet& rSet )
     if( m_pCrsrInProtCB->IsChecked() != m_pCrsrInProtCB->GetSavedValue())
     {
         rSet.Put(SfxBoolItem(FN_PARAM_CRSR_IN_PROTECTED, m_pCrsrInProtCB->IsChecked()));
-        bRet |= sal_True;
+        bRet = true;
     }
 
     const SwDocDisplayItem* pOldAttr = (const SwDocDisplayItem*)

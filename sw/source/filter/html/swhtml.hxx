@@ -73,9 +73,9 @@ class _HTMLAttr
 
     SwNodeIndex nSttPara, nEndPara;
     sal_Int32 nSttCntnt, nEndCntnt;
-    sal_Bool bInsAtStart : 1;
-    sal_Bool bLikePara : 1; // Attribut ueber dem gesamten Absatz setzen
-    sal_Bool bValid : 1;    // ist das Attribut gueltig?
+    bool bInsAtStart : 1;
+    bool bLikePara : 1; // Attribut ueber dem gesamten Absatz setzen
+    bool bValid : 1;    // ist das Attribut gueltig?
 
     SfxPoolItem* pItem;
     sal_uInt16 nCount;      // Anzahl noch zu schliessender Attrs mit einem Wert
@@ -214,15 +214,15 @@ class _HTMLAttrContext
 
     SwHTMLAppendMode eAppend;
 
-    sal_Bool    bLRSpaceChanged : 1;// linker/rechtr Rand, Einzug veraendert?
-    sal_Bool    bULSpaceChanged : 1;// oberer/unterer Rand veraendert?
-    sal_Bool    bDfltTxtFmtColl : 1;// nTxtFmtColl ist nur ein default
-    sal_Bool    bSpansSection : 1;  // Der Kontext spannt eine SwSection auf
-    sal_Bool    bPopStack : 1;      // Oberhalb liegende Stack-Elemente entf.
-    sal_Bool    bFinishPREListingXMP : 1;
-    sal_Bool    bRestartPRE : 1;
-    sal_Bool    bRestartXMP : 1;
-    sal_Bool    bRestartListing : 1;
+    bool    bLRSpaceChanged : 1;// linker/rechtr Rand, Einzug veraendert?
+    bool    bULSpaceChanged : 1;// oberer/unterer Rand veraendert?
+    bool    bDfltTxtFmtColl : 1;// nTxtFmtColl ist nur ein default
+    bool    bSpansSection : 1;  // Der Kontext spannt eine SwSection auf
+    bool    bPopStack : 1;      // Oberhalb liegende Stack-Elemente entf.
+    bool    bFinishPREListingXMP : 1;
+    bool    bRestartPRE : 1;
+    bool    bRestartXMP : 1;
+    bool    bRestartListing : 1;
 
 public:
     void ClearSaveDocContext();
@@ -431,46 +431,46 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     SvxAdjust   eParaAdjust;    // Ausrichtung des aktuellen Absatz
     HTMLScriptLanguage eScriptLang; // die aktuelle Script-Language
 
-    sal_Bool bOldIsHTMLMode : 1;    // War's mal ein HTML-Dokument?
+    bool bOldIsHTMLMode : 1;    // War's mal ein HTML-Dokument?
 
-    sal_Bool bDocInitalized : 1;    // Dokument bzw. Shell wurden initialisiert
+    bool bDocInitalized : 1;    // Dokument bzw. Shell wurden initialisiert
                                 // Flag um doppeltes init durch Rekursion
                                 // zu verhindern.
-    sal_Bool bViewCreated : 1;      // die View wurde schon erzeugt (asynchron)
-    sal_Bool bSetCrsr : 1;          // Crsr wieder auf den Anfang setzen
-    sal_Bool bSetModEnabled : 1;
+    bool bViewCreated : 1;      // die View wurde schon erzeugt (asynchron)
+    bool bSetCrsr : 1;          // Crsr wieder auf den Anfang setzen
+    bool bSetModEnabled : 1;
 
-    sal_Bool bInFloatingFrame : 1;  // Wir sind in einen Floating ::com::sun::star::frame::Frame
-    sal_Bool bInField : 1;
-    sal_Bool bKeepUnknown : 1;      // unbekannte/nicht unterstuetze Tokens beh.
+    bool bInFloatingFrame : 1;  // Wir sind in einen Floating ::com::sun::star::frame::Frame
+    bool bInField : 1;
+    bool bKeepUnknown : 1;      // unbekannte/nicht unterstuetze Tokens beh.
     // 8
-    sal_Bool bCallNextToken : 1;    // In Tabellen: NextToken in jedem Fall rufen
-    sal_Bool bIgnoreRawData : 1;    // Inhalt eines Scripts/Styles ignorieren.
-    sal_Bool bLBEntrySelected : 1;  // Ist der aktuelle Listbox-Eintrag selekt.
-    sal_Bool bTAIgnoreNewPara : 1;  // naechstes LF in TextArea ignorieren?
-    sal_Bool bFixMarqueeWidth : 1;  // Groesse einer Laufschrift anpassen?
-    sal_Bool bFixMarqueeHeight : 1;
+    bool bCallNextToken : 1;    // In Tabellen: NextToken in jedem Fall rufen
+    bool bIgnoreRawData : 1;    // Inhalt eines Scripts/Styles ignorieren.
+    bool bLBEntrySelected : 1;  // Ist der aktuelle Listbox-Eintrag selekt.
+    bool bTAIgnoreNewPara : 1;  // naechstes LF in TextArea ignorieren?
+    bool bFixMarqueeWidth : 1;  // Groesse einer Laufschrift anpassen?
+    bool bFixMarqueeHeight : 1;
 
-    sal_Bool bUpperSpace : 1;       // obererer Absatz-Abstand wird benoetigt
-    sal_Bool bNoParSpace : 1;
+    bool bUpperSpace : 1;       // obererer Absatz-Abstand wird benoetigt
+    bool bNoParSpace : 1;
     // 16
 
-    sal_Bool bAnyStarBasic : 1;     // gibt es ueberhaupt ein StarBasic-Modul
-    sal_Bool bInNoEmbed : 1;        // Wir sind in einem NOEMBED-Bereich
+    bool bAnyStarBasic : 1;     // gibt es ueberhaupt ein StarBasic-Modul
+    bool bInNoEmbed : 1;        // Wir sind in einem NOEMBED-Bereich
 
-    sal_Bool bInTitle : 1;          // Wir sind im Titel
+    bool bInTitle : 1;          // Wir sind im Titel
 
-    sal_Bool bChkJumpMark : 1;      // springe ggfs. zu einem vorgegebenem Mark
-    sal_Bool bUpdateDocStat : 1;
-    sal_Bool bFixSelectWidth : 1;   // Breite eines Selects neu setzen?
-    sal_Bool bFixSelectHeight : 1;  // Breite eines Selects neu setzen?
-    sal_Bool bTextArea : 1;
+    bool bChkJumpMark : 1;      // springe ggfs. zu einem vorgegebenem Mark
+    bool bUpdateDocStat : 1;
+    bool bFixSelectWidth : 1;   // Breite eines Selects neu setzen?
+    bool bFixSelectHeight : 1;  // Breite eines Selects neu setzen?
+    bool bTextArea : 1;
     // 24
-    sal_Bool bSelect : 1;
-    sal_Bool bInFootEndNoteAnchor : 1;
-    sal_Bool bInFootEndNoteSymbol : 1;
-    sal_Bool bIgnoreHTMLComments : 1;
-    sal_Bool bRemoveHidden : 1; // the filter implementation might set the hidden flag
+    bool bSelect : 1;
+    bool bInFootEndNoteAnchor : 1;
+    bool bInFootEndNoteSymbol : 1;
+    bool bIgnoreHTMLComments : 1;
+    bool bRemoveHidden : 1; // the filter implementation might set the hidden flag
 
     /// the names corresponding to the DOCINFO field subtypes INFO[1-4]
     OUString m_InfoNames[4];

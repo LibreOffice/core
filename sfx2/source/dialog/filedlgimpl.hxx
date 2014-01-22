@@ -78,26 +78,26 @@ namespace sfx2
 
         FileDialogHelper::Context   meContext;
 
-        sal_Bool                    mbHasPassword           : 1;
-        sal_Bool                    mbIsPwdEnabled          : 1;
-        sal_Bool                    m_bHaveFilterOptions    : 1;
-        sal_Bool                    mbHasVersions           : 1;
-        sal_Bool                    mbHasAutoExt            : 1;
-        sal_Bool                    mbAddGraphicFilter      : 1;
-        sal_Bool                    mbHasPreview            : 1;
-        sal_Bool                    mbShowPreview           : 1;
-        sal_Bool                    mbIsSaveDlg             : 1;
-        sal_Bool                    mbIsSaveACopyDlg        : 1;
-        sal_Bool                    mbExport                : 1;
+        bool                    mbHasPassword           : 1;
+        bool                    mbIsPwdEnabled          : 1;
+        bool                    m_bHaveFilterOptions    : 1;
+        bool                    mbHasVersions           : 1;
+        bool                    mbHasAutoExt            : 1;
+        bool                    mbAddGraphicFilter      : 1;
+        bool                    mbHasPreview            : 1;
+        bool                    mbShowPreview           : 1;
+        bool                    mbIsSaveDlg             : 1;
+        bool                    mbIsSaveACopyDlg        : 1;
+        bool                    mbExport                : 1;
 
-        sal_Bool                    mbDeleteMatcher         : 1;
-        sal_Bool                    mbInsert                : 1;
-        sal_Bool                    mbSystemPicker          : 1;
-        sal_Bool                    mbPwdCheckBoxState      : 1;
-        sal_Bool                    mbSelection             : 1;
-        sal_Bool                    mbSelectionEnabled      : 1;
-        sal_Bool                    mbHasSelectionBox       : 1;
-        sal_Bool                    mbSelectionFltrEnabled  : 1;
+        bool                    mbDeleteMatcher         : 1;
+        bool                    mbInsert                : 1;
+        bool                    mbSystemPicker          : 1;
+        bool                    mbPwdCheckBoxState      : 1;
+        bool                    mbSelection             : 1;
+        bool                    mbSelectionEnabled      : 1;
+        bool                    mbHasSelectionBox       : 1;
+        bool                    mbSelectionFltrEnabled  : 1;
 
     private:
         void                    addFilters( const OUString& rFactory,

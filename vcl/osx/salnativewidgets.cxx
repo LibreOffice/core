@@ -392,7 +392,7 @@ sal_Bool AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPa
  *  nType/nPart combination.
  */
 sal_Bool AquaSalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
-                        const Point& rPos, sal_Bool& rIsInside )
+                        const Point& rPos, bool& rIsInside )
 {
     if ( nType == CTRL_SCROLLBAR )
     {

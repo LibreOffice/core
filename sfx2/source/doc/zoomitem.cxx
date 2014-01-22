@@ -147,7 +147,7 @@ bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMem
                 sal_Int32 nValueTmp( 0 );
                 sal_Int16 nValueSetTmp( 0 );
                 sal_Int16 nTypeTmp( 0 );
-                sal_Bool  bAllConverted( sal_True );
+                bool bAllConverted( true );
                 sal_Int16 nConvertedCount( 0 );
                 for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
                 {

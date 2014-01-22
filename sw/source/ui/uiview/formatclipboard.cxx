@@ -141,7 +141,7 @@ void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
     const SfxPoolItem* pItem = 0;
     bool bBorder = ( SFX_ITEM_SET == rSet.GetItemState( RES_BOX ) ||
             SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BORDER_INNER ) );
-    sal_Bool bBackground = SFX_ITEM_SET == rSet.GetItemState( RES_BACKGROUND, sal_False, &pItem );
+    bool bBackground = SFX_ITEM_SET == rSet.GetItemState( RES_BACKGROUND, sal_False, &pItem );
     const SfxPoolItem* pRowItem = 0, *pTableItem = 0;
     bBackground |= SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BRUSH_ROW, sal_False, &pRowItem );
     bBackground |= SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BRUSH_TABLE, sal_False, &pTableItem );

@@ -129,7 +129,7 @@ bool SvxViewLayoutItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
             {
                 sal_Int32 nColumns( 0 );
                 sal_Bool  bBookMode = sal_False;
-                sal_Bool  bAllConverted( sal_True );
+                bool bAllConverted( true );
                 sal_Int16 nConvertedCount( 0 );
                 for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
                 {

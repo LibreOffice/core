@@ -286,7 +286,7 @@ sal_Bool SvMetaSlot::IsVariable() const
 
 sal_Bool SvMetaSlot::IsMethod() const
 {
-    sal_Bool b = SvMetaAttribute::IsMethod();
+    bool b = SvMetaAttribute::IsMethod();
     b |= NULL != GetMethod();
     return b;
 }

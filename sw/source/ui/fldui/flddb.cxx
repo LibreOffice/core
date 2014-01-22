@@ -391,7 +391,7 @@ IMPL_LINK( SwFldDBPage, NumSelectHdl, NumFormatListBox *, pLB )
 
 void SwFldDBPage::CheckInsert()
 {
-    sal_Bool bInsert = sal_True;
+    bool bInsert = true;
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
     SvTreeListEntry* pEntry = m_pDatabaseTLB->GetCurEntry();
@@ -406,7 +406,7 @@ void SwFldDBPage::CheckInsert()
         bInsert &= pEntry != 0;
     }
     else
-        bInsert = sal_False;
+        bInsert = false;
 
     if (nTypeId == TYP_DBNUMSETFLD)
     {

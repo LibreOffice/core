@@ -281,7 +281,7 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
     SdrView* pSdrView = rSh.GetDrawViewWithValidMarkList();
     SfxWhichIter aIter( rSet );
     sal_uInt16 nWhich = aIter.FirstWhich();
-    sal_Bool bProtected = rSh.IsSelObjProtected(FLYPROTECT_CONTENT);
+    bool bProtected = rSh.IsSelObjProtected(FLYPROTECT_CONTENT);
 
     if (!bProtected)    // Check the parent
         bProtected |= rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;

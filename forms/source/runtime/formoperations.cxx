@@ -293,7 +293,7 @@ namespace frm
                 // and an active command
                 OUString sActiveCommand;
                 m_xCursorProperties->getPropertyValue( PROPERTY_ACTIVECOMMAND ) >>= sActiveCommand;
-                aState.Enabled &= !sActiveCommand.isEmpty();
+                aState.Enabled = aState.Enabled && !sActiveCommand.isEmpty();
             }
             break;
 

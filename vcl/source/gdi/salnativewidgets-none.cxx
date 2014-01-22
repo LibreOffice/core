@@ -49,7 +49,7 @@ sal_Bool SalGraphics::hitTestNativeControl( ControlType,
                               ControlPart,
                               const Rectangle&,
                               const Point&,
-                              sal_Bool& )
+                              bool& )
 {
     return( sal_False );
 }

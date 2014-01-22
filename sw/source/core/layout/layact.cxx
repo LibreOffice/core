@@ -2309,14 +2309,14 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
 
         // Further start/end actions only happen if there were paints started
         // somewhere or if the visibility of the CharRects has changed.
-        sal_Bool bActions = sal_False;
+        bool bActions = false;
         sal_uInt16 nBoolIdx = 0;
         do
         {
             --pSh->mnStartAction;
 
             if ( pSh->Imp()->GetRegion() )
-                bActions = sal_True;
+                bActions = true;
             else
             {
                 SwRect aTmp( pSh->VisArea() );

@@ -122,7 +122,7 @@ sal_Bool SwEditShell::TextToTable( const SwInsertTableOptions& rInsTblOpts,
                                const SwTableAutoFmt* pTAFmt )
 {
     SwWait aWait( *GetDoc()->GetDocShell(), true );
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     StartAllAction();
     FOREACHPAM_START(GetCrsr())
         if( PCURCRSR->HasMark() )

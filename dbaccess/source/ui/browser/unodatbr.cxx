@@ -2581,7 +2581,7 @@ bool SbaTableQueryBrowser::implSelect( SvTreeListEntry* _pEntry )
                             :   CommandType::QUERY;
 
     // check if need to rebuild the rowset
-    sal_Bool bRebuild = ( xOldConnection != pConData->xConnection )
+    bool bRebuild = ( xOldConnection != pConData->xConnection )
                      || ( nOldType != nCommandType )
                      || ( aName != aOldName );
 
@@ -3187,13 +3187,13 @@ void SbaTableQueryBrowser::impl_initialize()
 
     // should we display all registered databases in the left hand side tree?
     // or only *one* special?
-    sal_Bool bLimitedTreeEntries = sal_False;
+    bool bLimitedTreeEntries = false;
     // if we're part of a frame which is a secondary frame of a database document, then only
     // display the database for this document, not all registered ones
     bLimitedTreeEntries |= bSubFrameOfEmbeddedDocument;
     // if the tree view is not to be displayed at all, then only display the data source
     // which was given as initial selection
-    bLimitedTreeEntries |= ( m_bEnableBrowser != sal_True );
+    bLimitedTreeEntries |= !m_bEnableBrowser;
 
     if ( bLimitedTreeEntries )
     {

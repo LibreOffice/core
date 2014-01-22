@@ -1024,7 +1024,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
  --------------------------------------------------------------------*/
 sal_Bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwWrtShell* pSh = bFormat ? ::GetActiveWrtShell()
                         : getFrmDlgParentShell();
     OSL_ENSURE( pSh , "shell not found");
@@ -1059,7 +1059,7 @@ sal_Bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
         aHoriOrient.SetRelationOrient( eRel );
         aHoriOrient.SetPosToggle(m_pMirrorPagesCB->IsChecked());
 
-        sal_Bool bMod = m_pAtHorzPosED->GetText() != m_pAtHorzPosED->GetSavedValue();
+        bool bMod = m_pAtHorzPosED->GetText() != m_pAtHorzPosED->GetSavedValue();
         bMod |= m_pMirrorPagesCB->GetState() != m_pMirrorPagesCB->GetSavedValue();
 
         if ( eHOri == text::HoriOrientation::NONE &&
@@ -3019,7 +3019,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
 
 sal_Bool SwFrmAddPage::FillItemSet(SfxItemSet &rSet)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if (pNameED->GetText() != pNameED->GetSavedValue())
         bRet |= 0 != rSet.Put(SfxStringItem(FN_SET_FRM_NAME, pNameED->GetText()));
     if (pAltNameED->GetText()  != pAltNameED->GetSavedValue())

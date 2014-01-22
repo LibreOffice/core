@@ -285,7 +285,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         SeekStartAndChg( GetInfo() );
 
     sal_Bool bRest = pCurr->IsRest();
-    sal_Bool bFirst = sal_True;
+    bool bFirst = true;
 
     SwArrowPortion *pArrow = NULL;
     // Reference portion for the paragraph end portion

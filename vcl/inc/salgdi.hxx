@@ -143,7 +143,7 @@ protected:
 
     // native widget rendering methods that require mirroring
     virtual sal_Bool        hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
-                                                  const Point& aPos, sal_Bool& rIsInside );
+                                                  const Point& aPos, bool& rIsInside );
     virtual sal_Bool        drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,
                                                const OUString& aCaption );
@@ -458,7 +458,7 @@ public:
                                                   ControlPart nPart,
                                                   const Rectangle& rControlRegion,
                                                   const Point& aPos,
-                                                  sal_Bool& rIsInside,
+                                                  bool& rIsInside,
                                                   const OutputDevice *pOutDev );
 
     // Request rendering of a particular control and/or part

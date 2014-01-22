@@ -54,7 +54,7 @@ XMLTokenEnum XMLFormPropOASISTransformerContext::GetValueType(
     }
 
     // get number
-    sal_Bool bOverflow = sal_False;
+    bool bOverflow = false;
     while( nPos < nLen &&
            '0' <= rValue[nPos] &&
            '9' >= rValue[nPos] )

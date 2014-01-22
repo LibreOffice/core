@@ -233,7 +233,7 @@ void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
 sal_Bool SvxGrfCropPage::FillItemSet(SfxItemSet &rSet)
 {
     const SfxItemPool& rPool = *rSet.GetPool();
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
     if( m_pWidthMF->GetSavedValue() != m_pWidthMF->GetText() ||
         m_pHeightMF->GetSavedValue() != m_pHeightMF->GetText() )
     {

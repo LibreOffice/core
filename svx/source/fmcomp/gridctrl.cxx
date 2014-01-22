@@ -2640,7 +2640,7 @@ void DbGridControl::PreExecuteRowContextMenu(sal_uInt16 /*nRow*/, PopupMenu& rMe
     rMenu.EnableItem(SID_FM_RECORD_SAVE, IsModified());
 
     // the undo is more difficult
-    sal_Bool bCanUndo = IsModified();
+    bool bCanUndo = IsModified();
     long nState = -1;
     if (m_aMasterStateProvider.IsSet())
         nState = m_aMasterStateProvider.Call((void*)SID_FM_RECORD_UNDO);
