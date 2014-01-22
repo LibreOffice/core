@@ -945,7 +945,18 @@ OUString SAL_CALL unicode::formatPercent(double dNumber,
 {
     // get a currency formatter for this locale ID
     UErrorCode errorCode=U_ZERO_ERROR;
-    icu::Locale aLocale = LanguageTagIcu::getIcuLocale(rLangTag);
+
+    LanguageTag aLangTag(rLangTag);
+
+    // As of CLDR Version 24 these languages were not listed as using spacing
+    // between number and % but are reported as such by our l10n groups
+    // http://www.unicode.org/cldr/charts/24/by_type/numbers.number_formatting_patterns.html
+    // so format using French which has the desired rules
+    if (aLangTag.getLanguage() == "es" || aLangTag.getLanguage() == "sl")
+        aLangTag = LanguageTag("fr-FR");
+
+    icu::Locale aLocale = LanguageTagIcu::getIcuLocale(aLangTag);
+
     boost::scoped_ptr<NumberFormat> xF(
         NumberFormat::createPercentInstance(aLocale, errorCode));
     if(U_FAILURE(errorCode))
