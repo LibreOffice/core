@@ -146,7 +146,7 @@ ImpPDFTabDialog::ImpPDFTabDialog(Window* pParent, Sequence< PropertyValue >& rFi
     if ( mbSelectionPresent )
     {
         Reference< drawing::XShapes > xShapes;
-        if ( ( maSelection >>= xShapes ) == sal_False ) // XShapes is always a selection
+        if ( !( maSelection >>= xShapes ) ) // XShapes is always a selection
         {
             // even if nothing is selected in writer the selection is not empty
             Reference< container::XIndexAccess > xIndexAccess;
@@ -582,7 +582,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
         mpRbJPEGCompression->Check();
 
     mpNfQuality->SetValue( paParent->mnQuality, FUNIT_PERCENT );
-    mpQualityFrame->Enable(bUseLosslessCompression == false);
+    mpQualityFrame->Enable(!bUseLosslessCompression);
 
     mpCbReduceImageResolution->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl ) );
     const sal_Bool  bReduceImageResolution = paParent->mbReduceImageResolution;
