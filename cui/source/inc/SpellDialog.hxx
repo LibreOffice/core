@@ -83,7 +83,7 @@ public:
     void            SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd );
     void            SetText( const OUString& rStr );
 
-    bool            MarkNextError( bool bIgnoreCurrentError );
+    bool            MarkNextError( bool bIgnoreCurrentError, com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellChecker1> );
     void            ChangeMarkedWord(const OUString& rNewWord, LanguageType eLanguage);
     void            MoveErrorMarkTo(sal_uInt16 nErrorStart, sal_uInt16 nErrorEnd, bool bGrammar);
     OUString        GetErrorText() const;

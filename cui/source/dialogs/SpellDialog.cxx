@@ -386,8 +386,8 @@ void SpellDialog::SpellContinue_Impl(bool bUseSavedSentence, bool bIgnoreCurrent
     //then GetNextSentence() has to be called followed again by MarkNextError()
     //MarkNextError is not initally called if the UndoEdit mode is active
     bool bNextSentence = false;
-    if((!m_pSentenceED->IsUndoEditMode() && m_pSentenceED->MarkNextError( bIgnoreCurrentError )) ||
-            true == ( bNextSentence = GetNextSentence_Impl(bUseSavedSentence, m_pSentenceED->IsUndoEditMode()) && m_pSentenceED->MarkNextError( false )))
+    if((!m_pSentenceED->IsUndoEditMode() && m_pSentenceED->MarkNextError( bIgnoreCurrentError, xSpell )) ||
+            true == ( bNextSentence = GetNextSentence_Impl(bUseSavedSentence, m_pSentenceED->IsUndoEditMode()) && m_pSentenceED->MarkNextError( false, xSpell )))
     {
         const SpellErrorDescription* pSpellErrorDescription = m_pSentenceED->GetAlternatives();
         if( pSpellErrorDescription )
@@ -1542,7 +1542,7 @@ bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 }
 
 //-----------------------------------------------------------------------
-bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError )
+bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellChecker1> xSpell )
 {
     if (bIgnoreCurrentError)
         m_aIgnoreErrorsAt.insert( m_nErrorStart );
@@ -1582,18 +1582,21 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError )
         {
             pSpellErrorDescription = &static_cast<const SpellErrorAttrib&>(pNextError->GetAttr()).GetErrorDescription();
             bGrammarError = pSpellErrorDescription->bIsGrammarError;
+            m_nErrorStart = pNextError->GetStart();
+            m_nErrorEnd = pNextError->GetEnd();
         }
         if(xChangeAll->getCount() && pSpellErrorDescription &&
                 (xEntry = xChangeAll->getEntry( pSpellErrorDescription->sErrorText )).is())
         {
-            m_nErrorStart = pNextError->GetStart();
-            m_nErrorEnd = pNextError->GetEnd();
 
             OUString sReplacement(getDotReplacementString(GetErrorText(), xEntry->getReplacementText()));
 
             ChangeMarkedWord(sReplacement, LanguageTag::convertToLanguageType( pSpellErrorDescription->aLocale ));
 
             aCursor.GetIndex() = aCursor.GetIndex() + (sal_uInt16)(xEntry->getReplacementText().getLength());
+        // maybe the error found here is already added to the dictionary and has to be ignored
+        } else if(pSpellErrorDescription && !bGrammarError && xSpell->isValid( GetErrorText(), LanguageTag::convertToLanguageType( pSpellErrorDescription->aLocale ), Sequence< PropertyValue >() )) {
+            aCursor.GetIndex() = aCursor.GetIndex() + 1;
         }
         else
             break;
