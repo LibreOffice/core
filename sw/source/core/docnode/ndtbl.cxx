@@ -4460,22 +4460,23 @@ sal_Bool SwDoc::UnProtectCells( const SwSelBoxes& rBoxes )
                 ? new SwUndoAttrTbl( *rBoxes[0]->GetSttNd()->FindTableNode() )
                 : 0;
 
-        std::vector<SwFrmFmt*> aFmts, aNewFmts;
+        std::map<SwFrmFmt*, SwTableBoxFmt*> aFmtsMap;
         for (size_t i = rBoxes.size(); i; )
         {
             SwTableBox* pBox = rBoxes[ --i ];
             SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
             if( pBoxFmt->GetProtect().IsCntntProtected() )
             {
-                std::vector<SwFrmFmt*>::iterator it = std::find( aFmts.begin(), aFmts.end(), pBoxFmt );
-                if( aFmts.end() != it )
-                    pBox->ChgFrmFmt( (SwTableBoxFmt*)*it );
+                std::map<SwFrmFmt*, SwTableBoxFmt*>::const_iterator const it =
+                    aFmtsMap.find(pBoxFmt);
+                if (aFmtsMap.end() != it)
+                    pBox->ChgFrmFmt(it->second);
                 else
                 {
-                    aFmts.push_back( pBoxFmt );
-                    pBoxFmt = pBox->ClaimFrmFmt();
-                    pBoxFmt->ResetFmtAttr( RES_PROTECT );
-                    aNewFmts.push_back( pBoxFmt );
+                    SwTableBoxFmt *const pNewBoxFmt(
+                        dynamic_cast<SwTableBoxFmt*>(pBox->ClaimFrmFmt()));
+                    pNewBoxFmt->ResetFmtAttr( RES_PROTECT );
+                    aFmtsMap.insert(std::make_pair(pBoxFmt, pNewBoxFmt));
                 }
                 bChgd = sal_True;
             }
