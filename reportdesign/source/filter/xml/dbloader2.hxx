@@ -58,7 +58,6 @@
 #include <sfx2/docfile.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <com/sun/star/task/XJobExecutor.hpp>
 #include <vcl/msgbox.hxx>
 
 // -------------------------------------------------------------------------

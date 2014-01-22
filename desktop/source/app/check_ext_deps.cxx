@@ -45,7 +45,6 @@
 #include "com/sun/star/deployment/ui/LicenseDialog.hpp"
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XJob.hpp>
-#include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>

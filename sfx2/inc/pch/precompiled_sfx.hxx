@@ -392,7 +392,7 @@
 #include <com/sun/star/task/FutureDocumentVersionProductUpdateRequest.hpp>
 #include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
-#include <com/sun/star/task/JobExecutor.hpp>
+#include <com/sun/star/task/theJobExecutor.hpp>
 #include <com/sun/star/task/StatusIndicatorFactory.hpp>
 #include <com/sun/star/task/XInteractionAskLater.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>

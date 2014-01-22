@@ -60,7 +60,7 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/task/StatusIndicatorFactory.hpp>
-#include <com/sun/star/task/JobExecutor.hpp>
+#include <com/sun/star/task/theJobExecutor.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -2757,7 +2757,7 @@ void SAL_CALL Frame::windowShown( const css::lang::EventObject& ) throw(css::uno
         if (bMustBeTriggered)
         {
             css::uno::Reference< css::task::XJobExecutor > xExecutor
-                = css::task::JobExecutor::create( xContext );
+                = css::task::theJobExecutor::get( xContext );
             xExecutor->trigger( "onFirstVisibleTask" );
         }
     }

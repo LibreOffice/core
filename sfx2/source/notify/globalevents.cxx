@@ -19,7 +19,7 @@
 
 #include <sal/types.h>
 
-#include <com/sun/star/task/JobExecutor.hpp>
+#include <com/sun/star/task/theJobExecutor.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
@@ -230,7 +230,7 @@ uno::Any SAL_CALL ModelCollectionEnumeration::nextElement()
 //-----------------------------------------------------------------------------
 SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const uno::Reference < uno::XComponentContext >& rxContext)
     : ModelCollectionMutexBase(       )
-    , m_xJobExecutorListener( task::JobExecutor::create( rxContext ), uno::UNO_QUERY_THROW )
+    , m_xJobExecutorListener( task::theJobExecutor::get( rxContext ), uno::UNO_QUERY_THROW )
     , m_aLegacyListeners      (m_aLock)
     , m_aDocumentListeners    (m_aLock)
     , pImp                    (0      )

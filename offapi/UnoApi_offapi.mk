@@ -390,6 +390,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/task,\
 	PasswordContainer \
 	PasswordContainerInteractionHandler \
 	StatusIndicatorFactory \
+	theJobExecutor \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/text,\
 	AutoTextContainer \

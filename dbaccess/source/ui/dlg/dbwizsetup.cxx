@@ -59,7 +59,6 @@
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
