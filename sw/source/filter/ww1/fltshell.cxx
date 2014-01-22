@@ -72,7 +72,7 @@ static SwCntntNode* GetCntntNode(SwDoc* pDoc, SwNodeIndex& rIdx, bool bNext)
     {
         pCNd = bNext ? pDoc->GetNodes().GoPrevious(&rIdx)
                      : pDoc->GetNodes().GoNext(&rIdx);
-        OSL_ENSURE(pCNd, "kein ContentNode gefunden");
+        OSL_ENSURE(pCNd, "no ContentNode found");
     }
     return pCNd;
 }
@@ -193,7 +193,7 @@ void SwFltControlStack::MoveAttrs( const SwPosition& rPos )
             rEntry.m_aMkPos.m_nCntnt++;
             OSL_ENSURE( rEntry.m_aMkPos.m_nCntnt
                 <= pDoc->GetNodes()[nPosNd]->GetCntntNode()->Len(),
-                    "Attribut-Anfang hinter Zeilenende" );
+                    "Attribute ends after end of line" );
         }
         if (
             (rEntry.m_aPtPos.m_nNode.GetIndex()+1 == nPosNd) &&
@@ -203,7 +203,7 @@ void SwFltControlStack::MoveAttrs( const SwPosition& rPos )
             rEntry.m_aPtPos.m_nCntnt++;
             OSL_ENSURE( rEntry.m_aPtPos.m_nCntnt
                 <= pDoc->GetNodes()[nPosNd]->GetCntntNode()->Len(),
-                    "Attribut-Ende hinter Zeilenende" );
+                    "Attribute ends after end of line" );
         }
     }
 }
@@ -332,7 +332,7 @@ SwFltStackEntry* SwFltControlStack::SetAttr(const SwPosition& rPos,
     OSL_ENSURE(!nAttrId ||
         (POOLATTR_BEGIN <= nAttrId && POOLATTR_END > nAttrId) ||
         (RES_FLTRATTR_BEGIN <= nAttrId && RES_FLTRATTR_END > nAttrId),
-        "Falsche Id fuers Attribut");
+        "Wrong id for attribute");
 
     myEIter aI = maEntries.begin();
     while (aI != maEntries.end())
@@ -1257,7 +1257,7 @@ SwFltShell& SwFltShell::SetStyle( sal_uInt16 nStyle )
     }
     else
     {
-        OSL_FAIL( "Ungueltiger SwFltStyleCode" );
+        OSL_FAIL( "Invalid SwFltStyleCode" );
     }
     return *this;
 }
@@ -1280,7 +1280,7 @@ SwFltShell& SwFltShell::EndItem( sal_uInt16 nAttrId )
     switch( nAttrId )
     {
     case RES_FLTR_BOOKMARK:
-        OSL_FAIL( "Falscher Aufruf fuer Bookmark-Ende" );
+        OSL_FAIL( "Wrong invocation for bookmark end" );
         break;
 
     case RES_FLTR_TOX:
@@ -1412,64 +1412,64 @@ SwFltOutBase::SwFltOutBase(SwDoc& rDocu)
 
 const SfxPoolItem& SwFltOutBase::GetCellAttr(sal_uInt16 nWhich)
 {
-    OSL_FAIL("GetCellAttr ausserhalb von normalem Text");
+    OSL_FAIL("GetCellAttr outside of normal text");
     return GetDoc().GetAttrPool().GetDefaultItem(nWhich);
 }
 
 bool SwFltOutBase::BeginTable()
 {
-    OSL_FAIL("BeginTable ausserhalb von normalem Text");
+    OSL_FAIL("BeginTable outside of normal text");
     return false;
 }
 
 void SwFltOutBase::NextTableCell()
 {
-    OSL_FAIL("NextTableCell ausserhalb von normalem Text");
+    OSL_FAIL("NextTableCell outside of normal text");
 }
 
 void SwFltOutBase::NextTableRow()
 {
-    OSL_FAIL("NextTableRow ausserhalb von normalem Text");
+    OSL_FAIL("NextTableRow outside of normal text");
 }
 
 void SwFltOutBase::SetTableWidth(SwTwips /*nW*/)
 {
-    OSL_FAIL("SetTableWidth ausserhalb von normalem Text");
+    OSL_FAIL("SetTableWidth outside of normal text");
 }
 
 void SwFltOutBase::SetTableOrient(sal_Int16 /*eOri*/)
 {
-    OSL_FAIL("SetTableOrient ausserhalb von normalem Text");
+    OSL_FAIL("SetTableOrient outside of normal text");
 }
 
 void SwFltOutBase::SetCellWidth(SwTwips /*nWidth*/, sal_uInt16 /*nCell*/)
 {
-    OSL_FAIL("SetCellWidth ausserhalb von normalem Text");
+    OSL_FAIL("SetCellWidth outside of normal text");
 }
 
 void SwFltOutBase::SetCellHeight(SwTwips /*nH*/)
 {
-    OSL_FAIL("SetCellHeight ausserhalb von normalem Text");
+    OSL_FAIL("SetCellHeight outside of normal text");
 }
 
 void SwFltOutBase::SetCellBorder(const SvxBoxItem& /*rFmtBox*/, sal_uInt16 /*nCell*/)
 {
-    OSL_FAIL("SetCellBorder ausserhalb von normalem Text");
+    OSL_FAIL("SetCellBorder outside of normal text");
 }
 
 void SwFltOutBase::SetCellSpace(sal_uInt16 /*nSp*/)
 {
-    OSL_FAIL("SetCellSpace ausserhalb von normalem Text");
+    OSL_FAIL("SetCellSpace outside of normal text");
 }
 
 void SwFltOutBase::DeleteCell(sal_uInt16 /*nCell*/)
 {
-    OSL_FAIL("DeleteCell ausserhalb von normalem Text");
+    OSL_FAIL("DeleteCell outside of normal text");
 }
 
 void SwFltOutBase::EndTable()
 {
-    OSL_FAIL("EndTable ausserhalb von normalem Text");
+    OSL_FAIL("EndTable outside of normal text");
 }
 
 /*virtual*/ sal_Bool SwFltOutDoc::IsInTable()
@@ -1509,7 +1509,7 @@ bool SwFltOutDoc::BeginTable()
 SwTableBox* SwFltOutDoc::GetBox(sal_uInt16 ny, sal_uInt16 nx /*= USHRT_MAX */)
 {
     if(!pTable){
-        OSL_ENSURE(pTable, "GetBox ohne Tabelle");
+        OSL_ENSURE(pTable, "GetBox without table");
         return 0;
     }
     if( nx == USHRT_MAX )   // aktuelle Zelle
@@ -1548,7 +1548,7 @@ SwTableBox* SwFltOutDoc::GetBox(sal_uInt16 ny, sal_uInt16 nx /*= USHRT_MAX */)
 void SwFltOutDoc::NextTableCell()
 {
     if(!pTable){
-        OSL_ENSURE(pTable, "NextTableCell ohne Tabelle");
+        OSL_ENSURE(pTable, "NextTableCell without table");
         return;
     }
     const SwTableLines* pTableLines = &pTable->GetTabLines();
@@ -1594,10 +1594,10 @@ void SwFltOutDoc::NextTableRow()
 void SwFltOutDoc::SetTableWidth(SwTwips nSwWidth)
 {
     if(!pTable){
-        OSL_ENSURE(pTable, "SetTableWidth ohne Tabelle");
+        OSL_ENSURE(pTable, "SetTableWidth without table");
         return;
     }
-    OSL_ENSURE( nSwWidth > MINLAY, "Tabellenbreite <= MINLAY" );
+    OSL_ENSURE( nSwWidth > MINLAY, "Table width <= MINLAY" );
     if( nSwWidth != nTableWidth ){
         if( nTableWidth )           // Nicht beim ersten Setzen
             SplitTable();
@@ -1609,7 +1609,7 @@ void SwFltOutDoc::SetTableWidth(SwTwips nSwWidth)
 void SwFltOutDoc::SetTableOrient(sal_Int16 eOri)
 {
     if(!pTable){
-        OSL_ENSURE(pTable, "SetTableOrient ohne Tabelle");
+        OSL_ENSURE(pTable, "SetTableOrient without table");
         return;
     }
     pTable->GetFrmFmt()->SetFmtAttr( SwFmtHoriOrient( 0, eOri ));
@@ -1618,10 +1618,10 @@ void SwFltOutDoc::SetTableOrient(sal_Int16 eOri)
 void SwFltOutDoc::SetCellWidth(SwTwips nWidth, sal_uInt16 nCell /* = USHRT_MAX */ )
 {
     if(!pTable){
-        OSL_ENSURE(pTable, "SetCellWidth ohne Tabelle");
+        OSL_ENSURE(pTable, "SetCellWidth without table");
         return;
     }
-    OSL_ENSURE( nWidth > MINLAY, "Tabellenzellenbreite <= MINLAY" );
+    OSL_ENSURE( nWidth > MINLAY, "Table cell width <= MINLAY" );
     if (nWidth < MINLAY)
         nWidth = MINLAY;
 
@@ -1636,7 +1636,7 @@ void SwFltOutDoc::SetCellWidth(SwTwips nWidth, sal_uInt16 nCell /* = USHRT_MAX *
 void SwFltOutDoc::SetCellHeight(SwTwips nHeight)
 {
     if(!pTable){
-        OSL_ENSURE(pTable, "SetCellHeight ohne Tabelle");
+        OSL_ENSURE(pTable, "SetCellHeight without table");
         return;
     }
 
@@ -1652,7 +1652,7 @@ void SwFltOutDoc::SetCellHeight(SwTwips nHeight)
 const SfxPoolItem& SwFltOutDoc::GetCellAttr(sal_uInt16 nWhich)
 {
     if (!pTable){
-        OSL_ENSURE(pTable, "GetCellAttr ohne Table");
+        OSL_ENSURE(pTable, "GetCellAttr without table");
         return GetDoc().GetAttrPool().GetDefaultItem(nWhich);
     }
 
@@ -1674,7 +1674,7 @@ void SwFltOutDoc::SetCellBorder(const SvxBoxItem& rFmtBox,
 void SwFltOutDoc::SetCellSpace(sal_uInt16 nDist)
 {
     if(!pTable){
-        OSL_ENSURE(pTable, "SetCellSpace ohne Tabelle");
+        OSL_ENSURE(pTable, "SetCellSpace without table");
         return;
     }
     SwTableBox* pTableBox = GetBox(usTableY, usTableX);
@@ -1710,7 +1710,7 @@ void SwFltOutDoc::SplitTable()
 {
     if(!pTable)
     {
-        OSL_ENSURE(pTable, "SplitTable ohne Tabelle");
+        OSL_ENSURE(pTable, "SplitTable without table");
         return;
     }
     SwTableBox* pAktBox = GetBox(usTableY, usTableX);
@@ -1723,7 +1723,7 @@ void SwFltOutDoc::SplitTable()
 void SwFltOutDoc::EndTable()
 {
     if (!pTable){
-        OSL_ENSURE(pTable, "EndTable ohne Table");
+        OSL_ENSURE(pTable, "EndTable without table");
         return;
     }
                             // Alle Attribute schliessen, da sonst Attribute
@@ -1804,7 +1804,7 @@ bool SwFltOutBase::BeginFly( RndStdIds eAnchor /*= FLY_AT_PARA*/,
                            const SfxItemSet* pMoreAttrs /*= 0*/)
 {
     (void) pMoreAttrs; // unused in non-debug
-    OSL_ENSURE(!pMoreAttrs, "SwFltOutBase:BeginFly mit pMoreAttrs" );
+    OSL_ENSURE(!pMoreAttrs, "SwFltOutBase:BeginFly with pMoreAttrs" );
     eFlyAnchor = eAnchor;
     bFlyAbsPos = bAbsolutePos;      // Bloedsinn eigentlich
     return true;
@@ -1813,11 +1813,11 @@ bool SwFltOutBase::BeginFly( RndStdIds eAnchor /*= FLY_AT_PARA*/,
 /*virtual*/ void SwFltOutBase::SetFlyAnchor( RndStdIds eAnchor )
 {
     if( !IsInFly() ){
-        OSL_FAIL( "SetFlyAnchor() ohne Fly" );
+        OSL_FAIL( "SetFlyAnchor() without Fly" );
         return;
     }
     if ( eAnchor == FLY_AS_CHAR ){
-        OSL_FAIL( "SetFlyAnchor( FLY_AS_CHAR ) nicht implementiert" );
+        OSL_FAIL( "SetFlyAnchor( FLY_AS_CHAR ) not implemented" );
         return;
     }
     SwFmtAnchor& rAnchor = (SwFmtAnchor&)GetFlyFrmAttr( RES_ANCHOR );
@@ -1882,7 +1882,7 @@ bool SwFltOutDoc::BeginFly( RndStdIds eAnchor,
 
 // set pam in Fly
     const SwFmtCntnt& rCntnt = pF->GetCntnt();
-    OSL_ENSURE( rCntnt.GetCntntIdx(), "Kein Inhalt vorbereitet." );
+    OSL_ENSURE( rCntnt.GetCntntIdx(), "No prepared content." );
     pPaM->GetPoint()->nNode = rCntnt.GetCntntIdx()->GetIndex() + 1;
     SwCntntNode *pNode = pPaM->GetCntntNode();
     pPaM->GetPoint()->nContent.Assign( pNode, 0 );
@@ -1895,7 +1895,7 @@ bool SwFltOutDoc::BeginFly( RndStdIds eAnchor,
     if (pFly){
         pFly->SetFmtAttr( rAttr );
     }else{
-        OSL_ENSURE(pFly, "SetFlyAttr ohne Doc-Fly");
+        OSL_ENSURE(pFly, "SetFlyAttr without Doc-Fly");
         return;
     }
 }
@@ -1905,7 +1905,7 @@ bool SwFltOutDoc::BeginFly( RndStdIds eAnchor,
     if (pFly){
         return pFly->GetFmtAttr( nWhich );
     }else{
-        OSL_ENSURE(pFly, "GetFlyAttr ohne Fly");
+        OSL_ENSURE(pFly, "GetFlyAttr without Fly");
         return GetDoc().GetAttrPool().GetDefaultItem(nWhich);
     }
 }
@@ -1968,7 +1968,7 @@ void SwFltFormatCollection::EndFly()    // Wird nie aufgerufen
 
 bool SwFltFormatCollection::BeginStyleFly( SwFltOutDoc* pOutDoc )
 {
-    OSL_ENSURE( pOutDoc, "BeginStyleFly ohne pOutDoc" );
+    OSL_ENSURE( pOutDoc, "BeginStyleFly without pOutDoc" );
     OSL_ENSURE( pOutDoc && !pOutDoc->IsInFly(), "BeginStyleFly in Fly" );
     if( pOutDoc && !pOutDoc->IsInFly() )
         return pOutDoc->BeginFly( eFlyAnchor, bFlyAbsPos, pFlyAttrs );
@@ -2012,11 +2012,11 @@ void SwFltShell::SetFlyYPos( short nYPos, sal_Int16 eVRel,
 void SwFltShell::EndFly()
 {
     if (!pOut->IsInFly()){
-        OSL_FAIL("EndFly ohne Fly");
+        OSL_FAIL("EndFly without Fly");
         return;
     }
     if (pOutDoc->IsInTable()){      // Table verschraenkt mit Fly macht keinen Sinn
-        OSL_FAIL("EndFly in Table ( verschraenkt )");
+        OSL_FAIL("EndFly in Table ( intermingled )");
         EndTable();     // -> Table beenden
     }
     pOut->EndFly();
@@ -2030,11 +2030,11 @@ void SwFltShell::EndFly()
 void SwFltShell::BeginFootnote()
 {
     if( pOut->IsInFly() ){          // Passiert z.B. bei Fussnote in Fly
-        OSL_FAIL("Fussnote in Fly nicht erlaubt");
+        OSL_FAIL("Footnote in Fly not permitted");
         return;
     }
     if( pOutDoc->IsInTable() ){
-        OSL_FAIL("Fussnote in Table z.Zt. nicht erlaubt");
+        OSL_FAIL("Footnote in table currently not allowed");
         return;
     }
 
@@ -2053,11 +2053,11 @@ void SwFltShell::BeginFootnote()
     SwTxtAttr *const pFN = pTxt->GetTxtAttrForCharAt(
         pPaM->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
     if( !pFN ){         // Passiert z.B. bei Fussnote in Fly
-        OSL_ENSURE(pFN, "Probleme beim Anlegen des Fussnoten-Textes");
+        OSL_ENSURE(pFN, "Problems with creating footnote text");
         return;
     }
     const SwNodeIndex* pStartIndex = ((SwTxtFtn*)pFN)->GetStartNode();
-    OSL_ENSURE(pStartIndex, "Probleme beim Anlegen des Fussnoten-Textes");
+    OSL_ENSURE(pStartIndex, "Problems with creating footnote text");
     pPaM->GetPoint()->nNode = pStartIndex->GetIndex() + 1;
     pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0);
     eSubMode = Footnote;
