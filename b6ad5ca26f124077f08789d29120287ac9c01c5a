@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_b7fe1037",
+        "filename": "include/vcl/settings.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-01-22T07:48:29Z",
+      "side": 1,
+      "message": "From the name \"DRAGFULL_OPTION_NONE\" one would probably expect it to have value 0, not that odd ~DRAGFULL_OPTION_ALL bitmask, so I would not add this define in this form to the general header.\nEither get rid of the DRAGFULL_OPTION_NONE define and just use ~DRAGFULL_OPTION_ALL in the statement in app.cxx, or make sure that the statement in app.cxx could instead of\n\n  nDragFullOptions \u0026\u003d DRAGFULL_OPTION_NONE;\n\n(with the current definition of DRAGFULL_OPTION_NONE) just as well read\n\n  nDragFullOptions \u003d DRAGFULL_OPTION_NONE;\n\nwith DRAGFULL_OPTION_NONE defined as 0 (and keep that define in this header then).",
+      "range": {
+        "startLine": 401,
+        "startChar": 8,
+        "endLine": 401,
+        "endChar": 28
+      },
+      "revId": "b6ad5ca26f124077f08789d29120287ac9c01c5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
