@@ -110,11 +110,11 @@ inline Sequence< E > & Sequence< E >::operator = ( const Sequence< E > & rSeq ) 
 }
 
 template< class E >
-inline sal_Bool Sequence< E >::operator == ( const Sequence< E > & rSeq ) const
+inline bool Sequence< E >::operator == ( const Sequence< E > & rSeq ) const
     SAL_THROW(())
 {
     if (_pSequence == rSeq._pSequence)
-        return sal_True;
+        return true;
     const Type & rType = ::cppu::getTypeFavourUnsigned( this );
     return ::uno_type_equalData(
         const_cast< Sequence< E > * >( this ), rType.getTypeLibType(),
@@ -124,7 +124,7 @@ inline sal_Bool Sequence< E >::operator == ( const Sequence< E > & rSeq ) const
 }
 
 template< class E >
-inline sal_Bool Sequence< E >::operator != ( const Sequence< E > & rSeq ) const
+inline bool Sequence< E >::operator != ( const Sequence< E > & rSeq ) const
     SAL_THROW(())
 {
     return (! operator == ( rSeq ));

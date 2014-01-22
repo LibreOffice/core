@@ -140,7 +140,7 @@ public:
 
         @return true, if elements count is greater than zero
     */
-    inline sal_Bool SAL_CALL hasElements() const SAL_THROW(())
+    inline bool SAL_CALL hasElements() const SAL_THROW(())
         { return (_pSequence->nElements > 0); }
 
     /** Gets a pointer to elements array for reading.
@@ -217,7 +217,7 @@ public:
         @param rSeq another sequence of same type (right side)
         @return true if both sequences are equal, false otherwise
     */
-    inline sal_Bool SAL_CALL operator == ( const Sequence< E > & rSeq ) const
+    inline bool SAL_CALL operator == ( const Sequence< E > & rSeq ) const
         SAL_THROW(());
 
     /** Unequality operator: Compares two sequences.
@@ -225,7 +225,7 @@ public:
         @param rSeq another sequence of same type (right side)
         @return false if both sequences are equal, true otherwise
     */
-    inline sal_Bool SAL_CALL operator != ( const Sequence< E > & rSeq ) const
+    inline bool SAL_CALL operator != ( const Sequence< E > & rSeq ) const
         SAL_THROW(());
 
     /** Reallocates sequence to new length.

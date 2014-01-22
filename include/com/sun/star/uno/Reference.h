@@ -88,7 +88,7 @@ public:
 
         @return true if reference acquires an interface, i.e. true if it is not null
     */
-    inline sal_Bool SAL_CALL is() const SAL_THROW(())
+    inline bool SAL_CALL is() const SAL_THROW(())
         { return (0 != _pInterface); }
 
     /** Equality operator: compares two interfaces
@@ -97,14 +97,14 @@ public:
         @param pInterface another interface
         @return true if both references are null or refer to the same object, false otherwise
     */
-    inline sal_Bool SAL_CALL operator == ( XInterface * pInterface ) const SAL_THROW(());
+    inline bool SAL_CALL operator == ( XInterface * pInterface ) const SAL_THROW(());
     /** Unequality operator: compares two interfaces
         Checks if both references are null or refer to the same object.
 
         @param pInterface another interface
         @return false if both references are null or refer to the same object, true otherwise
     */
-    inline sal_Bool SAL_CALL operator != ( XInterface * pInterface ) const SAL_THROW(());
+    inline bool SAL_CALL operator != ( XInterface * pInterface ) const SAL_THROW(());
 
     /** Equality operator: compares two interfaces
         Checks if both references are null or refer to the same object.
@@ -112,21 +112,21 @@ public:
         @param rRef another reference
         @return true if both references are null or refer to the same object, false otherwise
     */
-    inline sal_Bool SAL_CALL operator == ( const BaseReference & rRef ) const SAL_THROW(());
+    inline bool SAL_CALL operator == ( const BaseReference & rRef ) const SAL_THROW(());
     /** Unequality operator: compares two interfaces
         Checks if both references are null or refer to the same object.
 
         @param rRef another reference
         @return false if both references are null or refer to the same object, true otherwise
     */
-    inline sal_Bool SAL_CALL operator != ( const BaseReference & rRef ) const SAL_THROW(());
+    inline bool SAL_CALL operator != ( const BaseReference & rRef ) const SAL_THROW(());
 
     /** Needed by some STL containers.
 
         @param rRef another reference
         @return true, if this reference is less than rRef
     */
-    inline sal_Bool SAL_CALL operator < ( const BaseReference & rRef ) const SAL_THROW(());
+    inline bool SAL_CALL operator < ( const BaseReference & rRef ) const SAL_THROW(());
 };
 
 /** Enum defining UNO_QUERY for implicit interface query.
@@ -420,13 +420,13 @@ public:
         @param rRef another reference
         @return true, if non-null interface was set
     */
-    inline sal_Bool SAL_CALL set( const Reference< interface_type > & rRef ) SAL_THROW(());
+    inline bool SAL_CALL set( const Reference< interface_type > & rRef ) SAL_THROW(());
     /** Sets the given interface. An interface already set will be released.
 
         @param pInterface another interface
         @return true, if non-null interface was set
     */
-    inline sal_Bool SAL_CALL set( interface_type * pInterface ) SAL_THROW(());
+    inline bool SAL_CALL set( interface_type * pInterface ) SAL_THROW(());
 
     /** Sets interface pointer without acquiring it. An interface already set will be released.
 
@@ -434,7 +434,7 @@ public:
         @param dummy SAL_NO_ACQUIRE to force obvious distinction to set methods
         @return true, if non-null interface was set
     */
-    inline sal_Bool SAL_CALL set( interface_type * pInterface, __sal_NoAcquire dummy) SAL_THROW(());
+    inline bool SAL_CALL set( interface_type * pInterface, __sal_NoAcquire dummy) SAL_THROW(());
     /** Sets interface pointer without acquiring it. An interface already set will be released.
         Deprecated, please use SAL_NO_ACQUIRE version.
 
@@ -443,7 +443,7 @@ public:
         @param dummy UNO_REF_NO_ACQUIRE to force obvious distinction to set methods
         @return true, if non-null interface was set
     */
-    inline sal_Bool SAL_CALL set( interface_type * pInterface, UnoReference_NoAcquire dummy) SAL_THROW(());
+    inline bool SAL_CALL set( interface_type * pInterface, UnoReference_NoAcquire dummy) SAL_THROW(());
 
     /** Queries given interface for reference interface type (interface_type) and sets it.
         An interface already set will be released.
@@ -452,7 +452,7 @@ public:
         @param dummy UNO_QUERY to force obvious distinction to set methods
         @return true, if non-null interface was set
     */
-    inline sal_Bool SAL_CALL set( XInterface * pInterface, UnoReference_Query dummy ) SAL_THROW( (RuntimeException) );
+    inline bool SAL_CALL set( XInterface * pInterface, UnoReference_Query dummy ) SAL_THROW( (RuntimeException) );
     /** Queries given interface for reference interface type (interface_type) and sets it.
         An interface already set will be released.
 
@@ -460,7 +460,7 @@ public:
         @param dummy UNO_QUERY to force obvious distinction to set methods
         @return true, if non-null interface was set
     */
-    inline sal_Bool SAL_CALL set( const BaseReference & rRef, UnoReference_Query dummy) SAL_THROW( (RuntimeException) );
+    inline bool SAL_CALL set( const BaseReference & rRef, UnoReference_Query dummy) SAL_THROW( (RuntimeException) );
 
     /** Queries given any for reference interface type (interface_type)
         and sets it.  An interface already set will be released.

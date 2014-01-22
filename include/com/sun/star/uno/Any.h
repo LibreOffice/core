@@ -147,7 +147,7 @@ public:
 
         @return true if any has a value, false otherwise
     */
-    inline sal_Bool SAL_CALL hasValue() const SAL_THROW(())
+    inline bool SAL_CALL hasValue() const SAL_THROW(())
         { return (typelib_TypeClass_VOID != pType->eTypeClass); }
 
     /** Gets a pointer to the set value.
@@ -205,7 +205,7 @@ public:
         @param rType destination type
         @return true if this any is extractable to value of given type (e.g. using >>= operator)
     */
-    inline sal_Bool SAL_CALL isExtractableTo( const Type & rType ) const SAL_THROW(());
+    inline bool SAL_CALL isExtractableTo( const Type & rType ) const SAL_THROW(());
 
     /** Tests whether this any can provide a value of specified type.
         Widening conversion without data loss is taken into account.
@@ -222,14 +222,14 @@ public:
         @param rAny another any (right side)
         @return true if both any contains equal values
     */
-    inline sal_Bool SAL_CALL operator == ( const Any & rAny ) const SAL_THROW(());
+    inline bool SAL_CALL operator == ( const Any & rAny ) const SAL_THROW(());
     /** Unequality operator: compares two anys.
         The values need not be of equal type, e.g. a short integer is compared to a long integer.
 
         @param rAny another any (right side)
         @return true if both any contains unequal values
     */
-    inline sal_Bool SAL_CALL operator != ( const Any & rAny ) const SAL_THROW(());
+    inline bool SAL_CALL operator != ( const Any & rAny ) const SAL_THROW(());
 
 private:
     /// @cond INTERNAL
@@ -283,7 +283,7 @@ inline void SAL_CALL operator <<= ( Any & rAny, bool const & value )
     @return true if assignment was possible without data loss
 */
 template< class C >
-inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, C & value ) SAL_THROW(());
+inline bool SAL_CALL operator >>= ( const Any & rAny, C & value ) SAL_THROW(());
 
 /** Template equality operator: compares set value of left side any to right side value.
     The values need not be of equal type, e.g. a short integer is compared to a long integer.
@@ -296,7 +296,7 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, C & value ) SAL_THROW(
     @return true if values are equal, false otherwise
 */
 template< class C >
-inline sal_Bool SAL_CALL operator == ( const Any & rAny, const C & value ) SAL_THROW(());
+inline bool SAL_CALL operator == ( const Any & rAny, const C & value ) SAL_THROW(());
 /** Template unequality operator: compares set value of left side any to right side value.
     The values need not be of equal type, e.g. a short integer is compared to a long integer.
     This operator can be implemented as template member function, if all supported compilers
@@ -308,43 +308,43 @@ inline sal_Bool SAL_CALL operator == ( const Any & rAny, const C & value ) SAL_T
     @return true if values are unequal, false otherwise
 */
 template< class C >
-inline sal_Bool SAL_CALL operator != ( const Any & rAny, const C & value ) SAL_THROW(());
+inline bool SAL_CALL operator != ( const Any & rAny, const C & value ) SAL_THROW(());
 
 // additional specialized >>= and == operators
 // bool
-inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_Bool & value ) SAL_THROW(());
-inline sal_Bool SAL_CALL operator == ( const Any & rAny, const sal_Bool & value ) SAL_THROW(());
+inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Bool & value ) SAL_THROW(());
+inline bool SAL_CALL operator == ( const Any & rAny, const sal_Bool & value ) SAL_THROW(());
 template<>
-inline sal_Bool SAL_CALL operator >>= ( Any const & rAny, bool & value )
+inline bool SAL_CALL operator >>= ( Any const & rAny, bool & value )
     SAL_THROW(());
 template<>
-inline sal_Bool SAL_CALL operator == ( Any const & rAny, bool const & value )
+inline bool SAL_CALL operator == ( Any const & rAny, bool const & value )
     SAL_THROW(());
 // byte
-inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_Int8 & value ) SAL_THROW(());
+inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int8 & value ) SAL_THROW(());
 // short
-inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_Int16 & value ) SAL_THROW(());
-inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt16 & value ) SAL_THROW(());
+inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int16 & value ) SAL_THROW(());
+inline bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt16 & value ) SAL_THROW(());
 // long
-inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_Int32 & value ) SAL_THROW(());
-inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt32 & value ) SAL_THROW(());
+inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int32 & value ) SAL_THROW(());
+inline bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt32 & value ) SAL_THROW(());
 // hyper
-inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_Int64 & value ) SAL_THROW(());
-inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt64 & value ) SAL_THROW(());
+inline bool SAL_CALL operator >>= ( const Any & rAny, sal_Int64 & value ) SAL_THROW(());
+inline bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt64 & value ) SAL_THROW(());
 // float
-inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, float & value ) SAL_THROW(());
+inline bool SAL_CALL operator >>= ( const Any & rAny, float & value ) SAL_THROW(());
 // double
-inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, double & value ) SAL_THROW(());
+inline bool SAL_CALL operator >>= ( const Any & rAny, double & value ) SAL_THROW(());
 // string
-inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, ::rtl::OUString & value ) SAL_THROW(());
-inline sal_Bool SAL_CALL operator == ( const Any & rAny, const ::rtl::OUString & value ) SAL_THROW(());
+inline bool SAL_CALL operator >>= ( const Any & rAny, ::rtl::OUString & value ) SAL_THROW(());
+inline bool SAL_CALL operator == ( const Any & rAny, const ::rtl::OUString & value ) SAL_THROW(());
 // type
-inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, Type & value ) SAL_THROW(());
-inline sal_Bool SAL_CALL operator == ( const Any & rAny, const Type & value ) SAL_THROW(());
+inline bool SAL_CALL operator >>= ( const Any & rAny, Type & value ) SAL_THROW(());
+inline bool SAL_CALL operator == ( const Any & rAny, const Type & value ) SAL_THROW(());
 // any
-inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, Any & value ) SAL_THROW(());
+inline bool SAL_CALL operator >>= ( const Any & rAny, Any & value ) SAL_THROW(());
 // interface
-inline sal_Bool SAL_CALL operator == ( const Any & rAny, const BaseReference & value ) SAL_THROW(());
+inline bool SAL_CALL operator == ( const Any & rAny, const BaseReference & value ) SAL_THROW(());
 
 }
 }

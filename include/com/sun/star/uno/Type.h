@@ -163,7 +163,7 @@ public:
         @return true if values of this type can be assigned from values of given type,
                 false otherwise
     */
-    inline sal_Bool SAL_CALL isAssignableFrom( const Type & rType ) const SAL_THROW(())
+    inline bool SAL_CALL isAssignableFrom( const Type & rType ) const SAL_THROW(())
         { return ::typelib_typedescriptionreference_isAssignableFrom( _pType, rType._pType ); }
 
     /** Compares two types.
@@ -171,21 +171,21 @@ public:
         @param rType another type
         @return true if both types refer the same type, false otherwise
     */
-    inline sal_Bool SAL_CALL equals( const Type & rType ) const SAL_THROW(())
+    inline bool SAL_CALL equals( const Type & rType ) const SAL_THROW(())
         { return ::typelib_typedescriptionreference_equals( _pType, rType._pType ); }
     /** Equality operator: Compares two types.
 
         @param rType another type
         @return true if both types refer the same type, false otherwise
     */
-    inline sal_Bool SAL_CALL operator == ( const Type & rType ) const SAL_THROW(())
+    inline bool SAL_CALL operator == ( const Type & rType ) const SAL_THROW(())
         { return ::typelib_typedescriptionreference_equals( _pType, rType._pType ); }
     /** Unequality operator: Compares two types.
 
         @param rType another type
         @return false if both types refer the same type, true otherwise
     */
-    inline sal_Bool SAL_CALL operator != ( const Type & rType ) const SAL_THROW(())
+    inline bool SAL_CALL operator != ( const Type & rType ) const SAL_THROW(())
         { return (! ::typelib_typedescriptionreference_equals( _pType, rType._pType )); }
 };
 

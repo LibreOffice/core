@@ -215,7 +215,7 @@ inline void Reference< interface_type >::clear() SAL_THROW(())
 }
 //__________________________________________________________________________________________________
 template< class interface_type >
-inline sal_Bool Reference< interface_type >::set(
+inline bool Reference< interface_type >::set(
     interface_type * pInterface ) SAL_THROW(())
 {
     if (pInterface)
@@ -228,7 +228,7 @@ inline sal_Bool Reference< interface_type >::set(
 }
 //__________________________________________________________________________________________________
 template< class interface_type >
-inline sal_Bool Reference< interface_type >::set(
+inline bool Reference< interface_type >::set(
     interface_type * pInterface, __sal_NoAcquire ) SAL_THROW(())
 {
     XInterface * const pOld = _pInterface;
@@ -239,7 +239,7 @@ inline sal_Bool Reference< interface_type >::set(
 }
 //__________________________________________________________________________________________________
 template< class interface_type >
-inline sal_Bool Reference< interface_type >::set(
+inline bool Reference< interface_type >::set(
     interface_type * pInterface, UnoReference_NoAcquire ) SAL_THROW(())
 {
     return set( pInterface, SAL_NO_ACQUIRE );
@@ -247,21 +247,21 @@ inline sal_Bool Reference< interface_type >::set(
 
 //__________________________________________________________________________________________________
 template< class interface_type >
-inline sal_Bool Reference< interface_type >::set(
+inline bool Reference< interface_type >::set(
     const Reference< interface_type > & rRef ) SAL_THROW(())
 {
     return set( castFromXInterface( rRef._pInterface ) );
 }
 //__________________________________________________________________________________________________
 template< class interface_type >
-inline sal_Bool Reference< interface_type >::set(
+inline bool Reference< interface_type >::set(
     XInterface * pInterface, UnoReference_Query ) SAL_THROW( (RuntimeException) )
 {
     return set( castFromXInterface(iquery( pInterface )), SAL_NO_ACQUIRE );
 }
 //__________________________________________________________________________________________________
 template< class interface_type >
-inline sal_Bool Reference< interface_type >::set(
+inline bool Reference< interface_type >::set(
     const BaseReference & rRef, UnoReference_Query ) SAL_THROW( (RuntimeException) )
 {
     return set( castFromXInterface(iquery( rRef.get() )), SAL_NO_ACQUIRE );
@@ -358,10 +358,10 @@ inline Reference< interface_type > Reference< interface_type >::query(
 //##################################################################################################
 
 //__________________________________________________________________________________________________
-inline sal_Bool BaseReference::operator == ( XInterface * pInterface ) const SAL_THROW(())
+inline bool BaseReference::operator == ( XInterface * pInterface ) const SAL_THROW(())
 {
     if (_pInterface == pInterface)
-        return sal_True;
+        return true;
     try
     {
         // only the query to XInterface must return the same pointer if they belong to same objects
@@ -371,16 +371,16 @@ inline sal_Bool BaseReference::operator == ( XInterface * pInterface ) const SAL
     }
     catch (RuntimeException &)
     {
-        return sal_False;
+        return false;
     }
 }
 
 //______________________________________________________________________________
-inline sal_Bool BaseReference::operator < (
+inline bool BaseReference::operator < (
     const BaseReference & rRef ) const SAL_THROW(())
 {
     if (_pInterface == rRef._pInterface)
-        return sal_False;
+        return false;
     try
     {
         // only the query to XInterface must return the same pointer:
@@ -390,22 +390,22 @@ inline sal_Bool BaseReference::operator < (
     }
     catch (RuntimeException &)
     {
-        return sal_False;
+        return false;
     }
 }
 
 //__________________________________________________________________________________________________
-inline sal_Bool BaseReference::operator != ( XInterface * pInterface ) const SAL_THROW(())
+inline bool BaseReference::operator != ( XInterface * pInterface ) const SAL_THROW(())
 {
     return (! operator == ( pInterface ));
 }
 //__________________________________________________________________________________________________
-inline sal_Bool BaseReference::operator == ( const BaseReference & rRef ) const SAL_THROW(())
+inline bool BaseReference::operator == ( const BaseReference & rRef ) const SAL_THROW(())
 {
     return operator == ( rRef._pInterface );
 }
 //__________________________________________________________________________________________________
-inline sal_Bool BaseReference::operator != ( const BaseReference & rRef ) const SAL_THROW(())
+inline bool BaseReference::operator != ( const BaseReference & rRef ) const SAL_THROW(())
 {
     return (! operator == ( rRef._pInterface ));
 }

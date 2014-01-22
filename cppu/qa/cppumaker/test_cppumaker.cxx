@@ -443,13 +443,13 @@ void Test::testBigStruct() {
     CPPUNIT_ASSERT_EQUAL(guard.p->m12.getLength(), static_cast< sal_Int32 >(0));
     CPPUNIT_ASSERT_EQUAL(
         +guard.p->m13.getTypeClass(), +com::sun::star::uno::TypeClass_VOID);
-    CPPUNIT_ASSERT_EQUAL(guard.p->m14.hasValue(), sal_False);
+    CPPUNIT_ASSERT_EQUAL(guard.p->m14.hasValue(), false);
     CPPUNIT_ASSERT_EQUAL(guard.p->m15.getLength(), static_cast< sal_Int32 >(0));
     CPPUNIT_ASSERT_EQUAL(
         +guard.p->m16, +test::codemaker::cppumaker::HelperEnum_ZERO);
     CPPUNIT_ASSERT_EQUAL(guard.p->m17.m1, sal_False);
-    CPPUNIT_ASSERT_EQUAL(guard.p->m17.m2.is(), sal_False);
-    CPPUNIT_ASSERT_EQUAL(guard.p->m18.is(), sal_False);
+    CPPUNIT_ASSERT_EQUAL(guard.p->m17.m2.is(), false);
+    CPPUNIT_ASSERT_EQUAL(guard.p->m18.is(), false);
     CPPUNIT_ASSERT_EQUAL(guard.p->m19, static_cast< sal_Int8 >(0));
     CPPUNIT_ASSERT_EQUAL(
         +guard.p->m20, +test::codemaker::cppumaker::HelperEnum_ZERO);
