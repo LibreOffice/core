@@ -298,7 +298,6 @@ private:
     float m_BackgroundColor[16];
     glm::vec4 m_ClearColor;
 
-    PieSegment2DPointList m_PieSegment2DPointList;
     std::list <PieSegment2DPointList> m_PieSegment2DShapePointList;
 
 #if DEBUG_POSITIONING
