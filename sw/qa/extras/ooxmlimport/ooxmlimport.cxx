@@ -1343,7 +1343,7 @@ DECLARE_OOXMLIMPORT_TEST(testFdo66474, "fdo66474.docx")
     // take the full available width, like it would have to.
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xTables->getByIndex(0), "RelativeWidth"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xTables->getByIndex(0), "RelativeWidth"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testGroupshapeRotation, "groupshape-rotation.docx")
@@ -1841,6 +1841,13 @@ DECLARE_OOXMLIMPORT_TEST(testPictureWithSchemeColor, "picture-with-schemecolor.d
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int8>(-91), aDIB[135] );
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int8>(110), aDIB[136] );
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int8>(49), aDIB[137] );
+}
+
+DECLARE_OOXMLIMPORT_TEST(testFdo69656, "Table_cell_auto_width_fdo69656.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8154), getProperty<sal_Int32>(xTables->getByIndex(0), "Width"));
 }
 #endif
 
