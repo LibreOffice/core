@@ -140,6 +140,31 @@
 		BE35B5871886C50A001B7439 /* textlayout.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textlayout.cxx; path = ../../../vcl/source/gdi/textlayout.cxx; sourceTree = "<group>"; };
 		BE35B5881886C50A001B7439 /* virdev.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = virdev.cxx; path = ../../../vcl/source/gdi/virdev.cxx; sourceTree = "<group>"; };
 		BE35B5891886C50A001B7439 /* wall.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = wall.cxx; path = ../../../vcl/source/gdi/wall.cxx; sourceTree = "<group>"; };
+		BE35B58B188FFA88001B7439 /* access_control.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = access_control.cxx; path = ../../../cppuhelper/source/access_control.cxx; sourceTree = "<group>"; };
+		BE35B58C188FFA88001B7439 /* bootstrap.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bootstrap.cxx; path = ../../../cppuhelper/source/bootstrap.cxx; sourceTree = "<group>"; };
+		BE35B58D188FFA88001B7439 /* compat.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = compat.cxx; path = ../../../cppuhelper/source/compat.cxx; sourceTree = "<group>"; };
+		BE35B58E188FFA88001B7439 /* component_context.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = component_context.cxx; path = ../../../cppuhelper/source/component_context.cxx; sourceTree = "<group>"; };
+		BE35B58F188FFA88001B7439 /* component.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = component.cxx; path = ../../../cppuhelper/source/component.cxx; sourceTree = "<group>"; };
+		BE35B590188FFA88001B7439 /* defaultbootstrap.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = defaultbootstrap.cxx; path = ../../../cppuhelper/source/defaultbootstrap.cxx; sourceTree = "<group>"; };
+		BE35B591188FFA88001B7439 /* exc_thrower.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = exc_thrower.cxx; path = ../../../cppuhelper/source/exc_thrower.cxx; sourceTree = "<group>"; };
+		BE35B592188FFA88001B7439 /* factory.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = factory.cxx; path = ../../../cppuhelper/source/factory.cxx; sourceTree = "<group>"; };
+		BE35B593188FFA88001B7439 /* findsofficepath.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = findsofficepath.c; path = ../../../cppuhelper/source/findsofficepath.c; sourceTree = "<group>"; };
+		BE35B594188FFA88001B7439 /* implbase_ex.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = implbase_ex.cxx; path = ../../../cppuhelper/source/implbase_ex.cxx; sourceTree = "<group>"; };
+		BE35B595188FFA88001B7439 /* implbase.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = implbase.cxx; path = ../../../cppuhelper/source/implbase.cxx; sourceTree = "<group>"; };
+		BE35B596188FFA88001B7439 /* implementationentry.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = implementationentry.cxx; path = ../../../cppuhelper/source/implementationentry.cxx; sourceTree = "<group>"; };
+		BE35B597188FFA88001B7439 /* interfacecontainer.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = interfacecontainer.cxx; path = ../../../cppuhelper/source/interfacecontainer.cxx; sourceTree = "<group>"; };
+		BE35B598188FFA88001B7439 /* macro_expander.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = macro_expander.cxx; path = ../../../cppuhelper/source/macro_expander.cxx; sourceTree = "<group>"; };
+		BE35B599188FFA88001B7439 /* paths.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = paths.cxx; path = ../../../cppuhelper/source/paths.cxx; sourceTree = "<group>"; };
+		BE35B59A188FFA88001B7439 /* propertysetmixin.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = propertysetmixin.cxx; path = ../../../cppuhelper/source/propertysetmixin.cxx; sourceTree = "<group>"; };
+		BE35B59B188FFA88001B7439 /* propshlp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = propshlp.cxx; path = ../../../cppuhelper/source/propshlp.cxx; sourceTree = "<group>"; };
+		BE35B59C188FFA88001B7439 /* servicemanager.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = servicemanager.cxx; path = ../../../cppuhelper/source/servicemanager.cxx; sourceTree = "<group>"; };
+		BE35B59D188FFA88001B7439 /* shlib.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = shlib.cxx; path = ../../../cppuhelper/source/shlib.cxx; sourceTree = "<group>"; };
+		BE35B59E188FFA88001B7439 /* supportsservice.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = supportsservice.cxx; path = ../../../cppuhelper/source/supportsservice.cxx; sourceTree = "<group>"; };
+		BE35B59F188FFA88001B7439 /* tdmgr.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tdmgr.cxx; path = ../../../cppuhelper/source/tdmgr.cxx; sourceTree = "<group>"; };
+		BE35B5A0188FFA88001B7439 /* typemanager.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = typemanager.cxx; path = ../../../cppuhelper/source/typemanager.cxx; sourceTree = "<group>"; };
+		BE35B5A1188FFA88001B7439 /* typeprovider.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = typeprovider.cxx; path = ../../../cppuhelper/source/typeprovider.cxx; sourceTree = "<group>"; };
+		BE35B5A2188FFA88001B7439 /* unourl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = unourl.cxx; path = ../../../cppuhelper/source/unourl.cxx; sourceTree = "<group>"; };
+		BE35B5A3188FFA88001B7439 /* weak.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = weak.cxx; path = ../../../cppuhelper/source/weak.cxx; sourceTree = "<group>"; };
 		BE82BD7218218E2E00A447B5 /* TiledLibreOffice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TiledLibreOffice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE82BD7518218E2E00A447B5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BE82BD7718218E2E00A447B5 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -213,6 +238,7 @@
 		BE0898E61860D3CD0021A679 /* LibreOffice source files */ = {
 			isa = PBXGroup;
 			children = (
+				BE35B58A188FFA43001B7439 /* cppuhelper */,
 				BE9F45F81868393D00B8BE69 /* bridges */,
 				BE0898E71860D3DA0021A679 /* vcl */,
 			);
@@ -370,6 +396,38 @@
 				BE35B5891886C50A001B7439 /* wall.cxx */,
 			);
 			name = gdi;
+			sourceTree = "<group>";
+		};
+		BE35B58A188FFA43001B7439 /* cppuhelper */ = {
+			isa = PBXGroup;
+			children = (
+				BE35B58B188FFA88001B7439 /* access_control.cxx */,
+				BE35B58C188FFA88001B7439 /* bootstrap.cxx */,
+				BE35B58D188FFA88001B7439 /* compat.cxx */,
+				BE35B58E188FFA88001B7439 /* component_context.cxx */,
+				BE35B58F188FFA88001B7439 /* component.cxx */,
+				BE35B590188FFA88001B7439 /* defaultbootstrap.cxx */,
+				BE35B591188FFA88001B7439 /* exc_thrower.cxx */,
+				BE35B592188FFA88001B7439 /* factory.cxx */,
+				BE35B593188FFA88001B7439 /* findsofficepath.c */,
+				BE35B594188FFA88001B7439 /* implbase_ex.cxx */,
+				BE35B595188FFA88001B7439 /* implbase.cxx */,
+				BE35B596188FFA88001B7439 /* implementationentry.cxx */,
+				BE35B597188FFA88001B7439 /* interfacecontainer.cxx */,
+				BE35B598188FFA88001B7439 /* macro_expander.cxx */,
+				BE35B599188FFA88001B7439 /* paths.cxx */,
+				BE35B59A188FFA88001B7439 /* propertysetmixin.cxx */,
+				BE35B59B188FFA88001B7439 /* propshlp.cxx */,
+				BE35B59C188FFA88001B7439 /* servicemanager.cxx */,
+				BE35B59D188FFA88001B7439 /* shlib.cxx */,
+				BE35B59E188FFA88001B7439 /* supportsservice.cxx */,
+				BE35B59F188FFA88001B7439 /* tdmgr.cxx */,
+				BE35B5A0188FFA88001B7439 /* typemanager.cxx */,
+				BE35B5A1188FFA88001B7439 /* typeprovider.cxx */,
+				BE35B5A2188FFA88001B7439 /* unourl.cxx */,
+				BE35B5A3188FFA88001B7439 /* weak.cxx */,
+			);
+			name = cppuhelper;
 			sourceTree = "<group>";
 		};
 		BE82BD6918218E2E00A447B5 = {
