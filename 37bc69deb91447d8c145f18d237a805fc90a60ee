@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_1718bc83",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2014-01-22T14:17:00Z",
+      "side": 1,
+      "message": "Not a big fan of these remarks and todos etc. lets have them as a warning on the method and/or better fix the thing \u003d) surely\n\nAlso the signature appears to return a const reference rather than being a \u0027GetSettings() const\u0027 method - which is what I\u0027d call a const member function \u003d)",
+      "revId": "37bc69deb91447d8c145f18d237a805fc90a60ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
