@@ -930,7 +930,7 @@ IMPL_LINK( SvxMacroAssignSingleTabDialog, OKHdl_Impl, Button *, pButton )
 
 SvxMacroAssignSingleTabDialog::SvxMacroAssignSingleTabDialog(Window *pParent,
     const SfxItemSet& rSet)
-    : SfxSingleTabDialog(pParent, rSet)
+    : SfxSingleTabDialog(pParent, rSet, "MacroAssignDialog", "cui/ui/macroassigndialog.ui")
 {
     GetOKButton()->SetClickHdl( LINK( this, SvxMacroAssignSingleTabDialog, OKHdl_Impl ) );
 }
