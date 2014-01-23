@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_1add4115",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 11582,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-23T17:07:22Z",
+      "side": 1,
+      "message": "You actually probably want \u0027AC_DEFINE_UNQUOTED([TEST_FONTS_MISSING], $TEST_FONTS_MISSING)\u0027 here, so that the .h won\u0027t always have 0. ;-)",
+      "revId": "38f7ce1d0061a6f7b1be33ea67a8e1e3abb43994",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
