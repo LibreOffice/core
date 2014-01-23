@@ -47,12 +47,13 @@ void SvTreeListEntry::InvalidateChildrensListPositions()
     nListPos |= 0x80000000;
 }
 
-SvTreeListEntry::SvTreeListEntry() :
-    pParent(NULL),
-    nAbsPos(0),
-    nListPos(0),
-    pUserData(NULL),
-    nEntryFlags(0)
+SvTreeListEntry::SvTreeListEntry()
+    : pParent(NULL)
+    , nAbsPos(0)
+    , nListPos(0)
+    , bIsMarked(false)
+    , pUserData(NULL)
+    , nEntryFlags(0)
 {
 }
 
