@@ -20,17 +20,16 @@
 
 #include <treecontrol.hxx>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/view/SelectionType.hpp>
+#include <com/sun/star/awt/tree/XTreeControl.hpp>
 #include <com/sun/star/awt/tree/XTreeDataModel.hpp>
+#include <com/sun/star/view/SelectionType.hpp>
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
 #include <toolkit/helper/property.hxx>
-#include <com/sun/star/awt/XVclWindowPeer.hpp>
-#include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::awt::tree;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
@@ -124,10 +123,70 @@ Reference< XPropertySetInfo > UnoTreeModel::getPropertySetInfo(  ) throw(Runtime
     return xInfo;
 }
 
+}
 
-//  ----------------------------------------------------
-//  class UnoTreeControl
-//  ----------------------------------------------------
+namespace {
+
+typedef ::cppu::ImplInheritanceHelper1< UnoControlBase, css::awt::tree::XTreeControl > UnoTreeControl_Base;
+class UnoTreeControl : public UnoTreeControl_Base
+{
+public:
+    UnoTreeControl();
+    OUString GetComponentServiceName();
+
+    // css::lang::XComponent
+    void SAL_CALL dispose(  ) throw(css::uno::RuntimeException);
+
+    // css::awt::XControl
+    void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) throw(css::uno::RuntimeException);
+
+    // css::view::XSelectionSupplier
+    virtual ::sal_Bool SAL_CALL select( const css::uno::Any& xSelection ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getSelection(  ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) throw (css::uno::RuntimeException);
+
+    // css::view::XMultiSelectionSupplier
+    virtual ::sal_Bool SAL_CALL addSelection( const css::uno::Any& Selection ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    virtual void SAL_CALL removeSelection( const css::uno::Any& Selection ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    virtual void SAL_CALL clearSelection(  ) throw (css::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getSelectionCount(  ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSelectionEnumeration(  ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createReverseSelectionEnumeration(  ) throw (css::uno::RuntimeException);
+
+    // css::awt::XTreeControl
+    virtual OUString SAL_CALL getDefaultExpandedGraphicURL() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setDefaultExpandedGraphicURL( const OUString& _defaultexpandedgraphicurl ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getDefaultCollapsedGraphicURL() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setDefaultCollapsedGraphicURL( const OUString& _defaultcollapsedgraphicurl ) throw (css::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL isNodeExpanded( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL isNodeCollapsed( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    virtual void SAL_CALL makeNodeVisible( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) throw (css::lang::IllegalArgumentException, css::awt::tree::ExpandVetoException, css::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL isNodeVisible( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    virtual void SAL_CALL expandNode( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) throw (css::lang::IllegalArgumentException, css::awt::tree::ExpandVetoException, css::uno::RuntimeException);
+    virtual void SAL_CALL collapseNode( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) throw (css::lang::IllegalArgumentException, css::awt::tree::ExpandVetoException, css::uno::RuntimeException);
+    virtual void SAL_CALL addTreeExpansionListener( const css::uno::Reference< css::awt::tree::XTreeExpansionListener >& Listener ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL removeTreeExpansionListener( const css::uno::Reference< css::awt::tree::XTreeExpansionListener >& Listener ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< css::awt::tree::XTreeNode > SAL_CALL getNodeForLocation( ::sal_Int32 x, ::sal_Int32 y ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< css::awt::tree::XTreeNode > SAL_CALL getClosestNodeForLocation( ::sal_Int32 x, ::sal_Int32 y ) throw (css::uno::RuntimeException);
+    virtual css::awt::Rectangle SAL_CALL getNodeRect( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL isEditing(  ) throw (css::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL stopEditing(  ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL cancelEditing(  ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL startEditingAtNode( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    virtual void SAL_CALL addTreeEditListener( const css::uno::Reference< css::awt::tree::XTreeEditListener >& Listener ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL removeTreeEditListener( const css::uno::Reference< css::awt::tree::XTreeEditListener >& Listener ) throw (css::uno::RuntimeException);
+
+    // css::lang::XServiceInfo
+    DECLIMPL_SERVICEINFO_DERIVED( UnoTreeControl, UnoControlBase, szServiceName_TreeControl )
+
+    using UnoControl::getPeer;
+private:
+    TreeSelectionListenerMultiplexer maSelectionListeners;
+    TreeExpansionListenerMultiplexer maTreeExpansionListeners;
+    TreeEditListenerMultiplexer maTreeEditListeners;
+};
+
 UnoTreeControl::UnoTreeControl()
 : UnoTreeControl_Base()
 , maSelectionListeners( *this )
@@ -441,16 +500,6 @@ void UnoTreeControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolk
 
 }
 
-Reference< XInterface > SAL_CALL TreeControl_CreateInstance( const Reference< XMultiServiceFactory >& )
-{
-    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::UnoTreeControl() );
-}
-
-Reference< XInterface > SAL_CALL TreeControlModel_CreateInstance( const Reference< XMultiServiceFactory >& i_factory )
-{
-    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::UnoTreeModel( comphelper::getComponentContext(i_factory) ) );
-}
-
 void SAL_CALL TreeEditListenerMultiplexer::nodeEditing( const Reference< XTreeNode >& Node ) throw (RuntimeException, ::com::sun::star::util::VetoException)
 {
     ::cppu::OInterfaceIteratorHelper aIt( *this );
@@ -497,6 +546,22 @@ void SAL_CALL TreeEditListenerMultiplexer::nodeEdited( const Reference< XTreeNod
             DISPLAY_EXCEPTION( TreeEditListenerMultiplexer, nodeEdited, e )
         }
     }
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_TreeControlModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new toolkit::UnoTreeModel(context));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_TreeControl_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoTreeControl());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
