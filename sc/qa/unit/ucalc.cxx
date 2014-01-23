@@ -634,6 +634,27 @@ void Test::testInput()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testDocStatistics()
+{
+    SCTAB nStartTabs = m_pDoc->GetTableCount();
+    m_pDoc->InsertTab(0, "Sheet1");
+    CPPUNIT_ASSERT_MESSAGE("Failed to increment sheet count.", m_pDoc->GetTableCount() == nStartTabs+1);
+    m_pDoc->InsertTab(1, "Sheet2");
+    CPPUNIT_ASSERT_MESSAGE("Failed to increment sheet count.", m_pDoc->GetTableCount() == nStartTabs+2);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(0), m_pDoc->GetCellCount());
+    m_pDoc->SetValue(ScAddress(0,0,0), 2.0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(1), m_pDoc->GetCellCount());
+    m_pDoc->SetValue(ScAddress(2,2,0), 2.5);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(2), m_pDoc->GetCellCount());
+    m_pDoc->SetString(ScAddress(1,1,1), "Test");
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(3), m_pDoc->GetCellCount());
+
+    m_pDoc->DeleteTab(1);
+    CPPUNIT_ASSERT_MESSAGE("Failed to decrement sheet count.", m_pDoc->GetTableCount() == nStartTabs+1);
+    m_pDoc->DeleteTab(0); // This may fail in case there is only one sheet in the document.
+}
+
 void Test::testDataEntries()
 {
     m_pDoc->InsertTab(0, "Test");
