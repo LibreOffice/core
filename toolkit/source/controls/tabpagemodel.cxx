@@ -17,19 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <toolkit/controls/tabpagemodel.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wall.hxx>
-#include <toolkit/controls/tabpagemodel.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
 #include <toolkit/controls/stdtabcontroller.hxx>
-#include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/UnoControlDialogModelProvider.hpp>
-#include <com/sun/star/resource/XStringResourceResolver.hpp>
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/awt/tab/XTabPage.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
@@ -41,28 +40,15 @@
 #include <vcl/graph.hxx>
 #include <vcl/image.hxx>
 #include <toolkit/controls/geometrycontrolmodel.hxx>
-
-#include <map>
-#include <algorithm>
-#include <functional>
-#include "osl/file.hxx"
-
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <toolkit/controls/controlmodelcontainerbase.hxx>
+#include <toolkit/controls/unocontrolcontainer.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/implbase2.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::util;
 
-////HELPER
-OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::com::sun::star::uno::Any& rUrl );
-
-//  ----------------------------------------------------
-//  class UnoControlTabPageModel
-//  ----------------------------------------------------
 UnoControlTabPageModel::UnoControlTabPageModel( Reference< XComponentContext > const & i_factory )
     :ControlModelContainerBase( i_factory )
 {
@@ -72,9 +58,22 @@ UnoControlTabPageModel::UnoControlTabPageModel( Reference< XComponentContext > c
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
 }
 
+OUString SAL_CALL UnoControlTabPageModel::getImplementationName() throw(css::uno::RuntimeException)
+{
+    return OUString("stardiv.Toolkit.UnoControlTabPageModel");
+}
+
+css::uno::Sequence< OUString > SAL_CALL UnoControlTabPageModel::getSupportedServiceNames() throw(css::uno::RuntimeException)
+{
+    css::uno::Sequence< OUString > aNames = ControlModelContainerBase::getSupportedServiceNames( );
+    aNames.realloc( aNames.getLength() + 1 );
+    aNames[ aNames.getLength() - 1 ] = OUString("com.sun.star.awt.tab.UnoControlTabPageModel");
+    return aNames;
+}
+
 OUString UnoControlTabPageModel::getServiceName( ) throw(RuntimeException)
 {
-    return OUString::createFromAscii( szServiceName_UnoControlTabPageModel );
+    return OUString("com.sun.star.awt.tab.UnoControlTabPageModel");
 }
 
 Any UnoControlTabPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -84,7 +83,7 @@ Any UnoControlTabPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     switch ( nPropId )
     {
         case BASEPROPERTY_DEFAULTCONTROL:
-            aAny <<= OUString::createFromAscii( szServiceName_UnoControlTabPage );
+            aAny <<= OUString("com.sun.star.awt.tab.UnoControlTabPage");
             break;
         default:
             aAny = UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -162,21 +161,7 @@ void SAL_CALL UnoControlTabPageModel::initialize (const Sequence<Any>& rArgument
     else
         m_nTabPageId = -1;
 }
-//===== Service ===============================================================
-OUString UnoControlTabPageModel_getImplementationName (void) throw(RuntimeException)
-{
-    return OUString("com.sun.star.awt.tab.UnoControlTabPageModel");
-}
 
-Sequence<OUString> SAL_CALL UnoControlTabPageModel_getSupportedServiceNames (void)
-     throw (RuntimeException)
-{
-     const OUString sServiceName("com.sun.star.awt.tab.UnoControlTabPageModel");
-     return Sequence<OUString>(&sServiceName, 1);
-}
-//=============================================================================
-// = class UnoControlTabPage
-// ============================================================================
 
 UnoControlTabPage::UnoControlTabPage( const uno::Reference< uno::XComponentContext >& rxContext )
     :UnoControlTabPage_Base(rxContext)
@@ -194,16 +179,36 @@ OUString UnoControlTabPage::GetComponentServiceName()
     return OUString("TabPageModel");
 }
 
+OUString SAL_CALL UnoControlTabPage::getImplementationName()
+    throw (css::uno::RuntimeException)
+{
+    return OUString("stardiv.Toolkit.UnoControlTabPage");
+}
+
+sal_Bool SAL_CALL UnoControlTabPage::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> SAL_CALL UnoControlTabPage::getSupportedServiceNames()
+    throw (css::uno::RuntimeException)
+{
+    css::uno::Sequence< OUString > aSeq(1);
+    aSeq[0] = OUString("com.sun.star.awt.tab.UnoControlTabPage");
+    return aSeq;
+}
+
 void UnoControlTabPage::dispose() throw(RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
 
-    EventObject aEvt;
+    lang::EventObject aEvt;
     aEvt.Source = static_cast< ::cppu::OWeakObject* >( this );
     ControlContainerBase::dispose();
 }
 
-void SAL_CALL UnoControlTabPage::disposing(    const EventObject& Source )throw(RuntimeException)
+void SAL_CALL UnoControlTabPage::disposing( const lang::EventObject& Source )throw(RuntimeException)
 {
      ControlContainerBase::disposing( Source );
 }
@@ -307,6 +312,22 @@ void SAL_CALL UnoControlTabPage::windowHidden( const ::com::sun::star::lang::Eve
 throw (::com::sun::star::uno::RuntimeException)
 {
     (void)e;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoControlTabPageModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoControlTabPageModel(context));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoControlTabPage_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoControlTabPage(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,10 +26,12 @@
     <service name="com.sun.star.awt.Layout"/>
     <service name="com.sun.star.comp.awt.Layout"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoControlTabPage">
+  <implementation name="stardiv.Toolkit.UnoControlTabPage"
+      constructor="stardiv_Toolkit_UnoControlTabPage_get_implementation">
     <service name="com.sun.star.awt.tab.UnoControlTabPage"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoControlTabPageModel">
+  <implementation name="stardiv.Toolkit.UnoControlTabPageModel"
+      constructor="stardiv_Toolkit_UnoControlTabPageModel_get_implementation">
     <service name="com.sun.star.awt.tab.UnoControlTabPageModel"/>
   </implementation>
   <implementation name="stardiv.Toolkit.UnoControlTabPageContainerModel">

@@ -41,7 +41,6 @@
 #include <toolkit/controls/roadmapcontrol.hxx>
 #include <toolkit/controls/tkscrollbar.hxx>
 #include "toolkit/controls/tkspinbutton.hxx"
-#include <toolkit/controls/tabpagemodel.hxx>
 #include <toolkit/controls/tabpagecontainer.hxx>
 #include "toolkit/dllapi.h"
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -170,8 +169,6 @@ IMPL_CREATEINSTANCE( VCLXPopupMenu )
 IMPL_CREATEINSTANCE( VCLXPrinterServer )
 IMPL_CREATEINSTANCE( UnoRoadmapControl )
 IMPL_CREATEINSTANCE_CTX( UnoControlRoadmapModel )
-IMPL_CREATEINSTANCE_CTX( UnoControlTabPage )
-IMPL_CREATEINSTANCE_CTX( UnoControlTabPageModel )
 IMPL_CREATEINSTANCE_CTX( UnoControlTabPageContainer )
 IMPL_CREATEINSTANCE_CTX( UnoControlTabPageContainerModel )
 
@@ -273,8 +270,6 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL tk_component_getFactory( const sal_Char* sImple
         GET_FACTORY( DefaultGridColumnModel, szServiceName_DefaultGridColumnModel, NULL );
         GET_FACTORY_WITH_IMPL_PREFIX( GridColumn, "org.openoffice.comp.toolkit", szServiceName_GridColumn, NULL );
         GET_FACTORY_WITH_IMPL_PREFIX( SortableGridDataModel, "org.openoffice.comp.toolkit", szServiceName_SortableGridDataModel, NULL );
-        GET_FACTORY( UnoControlTabPageModel, szServiceName_UnoControlTabPageModel, NULL )
-        GET_FACTORY( UnoControlTabPage, szServiceName_UnoControlTabPage, NULL )
         GET_FACTORY( UnoControlTabPageContainerModel, szServiceName_UnoControlTabPageContainerModel, NULL )
         GET_FACTORY( UnoControlTabPageContainer, szServiceName_UnoControlTabPageContainer, NULL )
 

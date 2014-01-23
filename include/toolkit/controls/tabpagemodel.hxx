@@ -50,8 +50,9 @@ public:
             throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    DECLIMPL_SERVICEINFO_DERIVED( UnoControlTabPageModel, ControlModelContainerBase, szServiceName_UnoControlTabPageModel )
+    OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException);
 
+    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException);
 };
 
 //  ----------------------------------------------------
@@ -81,7 +82,14 @@ public:
     virtual void SAL_CALL windowShown( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL windowHidden( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoControlTabPage, szServiceName_UnoControlTabPage)
+    virtual OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException);
+
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException);
 };
 
 #endif // INCLUDED_TOOLKIT_CONTROLS_TABPAGEMODEL_HXX

@@ -381,7 +381,7 @@ Reference< XInterface > ControlModelContainerBase::createInstance( const OUStrin
         pNewModel = new OGeometryControlModel< UnoControlTabPageContainerModel >( m_xContext );
     else if ( aServiceSpecifier.equalsAscii( szServiceName_UnoMultiPageModel ) )
         pNewModel = new OGeometryControlModel< UnoMultiPageModel >( m_xContext );
-    else if ( aServiceSpecifier.equalsAscii( szServiceName_UnoControlTabPageModel ) )
+    else if ( aServiceSpecifier == "com.sun.star.awt.tab.UnoControlTabPageModel" )
         pNewModel = new OGeometryControlModel< UnoControlTabPageModel >( m_xContext );
     else if ( aServiceSpecifier.equalsAscii( szServiceName_UnoPageModel ) )
         pNewModel = new OGeometryControlModel< UnoPageModel >( m_xContext );
@@ -451,7 +451,7 @@ Sequence< OUString > ControlModelContainerBase::getAvailableServiceNames() throw
         pNames[20] = OUString::createFromAscii( szServiceName_TreeControlModel );
         pNames[21] = OUString::createFromAscii( szServiceName_GridControlModel );
         pNames[22] = OUString::createFromAscii( szServiceName_UnoControlTabPageContainerModel );
-        pNames[23] = OUString::createFromAscii( szServiceName_UnoControlTabPageModel );
+        pNames[23] = OUString( "com.sun.star.awt.tab.UnoControlTabPageModel" );
         pNames[24] = OUString::createFromAscii( szServiceName_UnoMultiPageModel );
         pNames[25] = OUString::createFromAscii( szServiceName_UnoFrameModel );
     }
