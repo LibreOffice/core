@@ -647,7 +647,8 @@ Rectangle ScAccessiblePreviewTable::GetBoundingBoxOnScreen() const throw (uno::R
     return aCellRect;
 }
 
-Rectangle ScAccessiblePreviewTable::GetBoundingBox() const throw (uno::RuntimeException)
+Rectangle ScAccessiblePreviewTable::GetBoundingBox() const
+    throw (uno::RuntimeException, std::exception)
 {
     FillTableInfo();
 
