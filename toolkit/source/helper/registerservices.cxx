@@ -27,7 +27,6 @@
 #include <osl/mutex.hxx>
 #include <toolkit/helper/servicenames.hxx>
 #include <toolkit/helper/macros.hxx>
-#include <toolkit/awt/vclxtoolkit.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/awt/vclxpointer.hxx>
 #include <toolkit/awt/vclxprinter.hxx>
@@ -100,7 +99,6 @@ namespace toolkit
 
 using namespace toolkit;
 
-IMPL_CREATEINSTANCE( VCLXToolkit )
 IMPL_CREATEINSTANCE( StdTabController )
 IMPL_CREATEINSTANCE( StdTabControllerModel )
 IMPL_CREATEINSTANCE( UnoControlContainer )
@@ -137,7 +135,6 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL tk_component_getFactory( const sal_Char* sImple
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory =
             static_cast< ::com::sun::star::lang::XMultiServiceFactory* >( _pServiceManager );
-        GET_FACTORY( VCLXToolkit, szServiceName_Toolkit, szServiceName2_Toolkit )
         GET_FACTORY( VCLXPopupMenu, szServiceName_PopupMenu, szServiceName2_PopupMenu )
         GET_FACTORY( VCLXMenuBar, szServiceName_MenuBar, szServiceName2_MenuBar )
         GET_FACTORY( VCLXPointer, szServiceName_Pointer, szServiceName2_Pointer )

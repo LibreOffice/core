@@ -345,7 +345,8 @@
     <service name="com.sun.star.awt.PrinterServer"/>
     <service name="stardiv.vcl.PrinterServer"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.VCLXToolkit">
+  <implementation name="stardiv.Toolkit.VCLXToolkit"
+      constructor="stardiv_Toolkit_VCLXToolkit_get_implementation">
     <service name="com.sun.star.awt.Toolkit"/>
     <service name="stardiv.vcl.VclToolkit"/>
   </implementation>

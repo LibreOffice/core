@@ -17,17 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <boost/ptr_container/ptr_vector.hpp>
-
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-
 #include <stdio.h>
 #ifdef WNT
 #include <prewin.h>
 #include <postwin.h>
 #endif
-#include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
 #include <com/sun/star/awt/WindowClass.hpp>
@@ -43,11 +37,21 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/awt/XToolkitExperimental.hpp>
+#include <com/sun/star/awt/XMessageBoxFactory.hpp>
+
+#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/conditn.hxx>
+#include <osl/module.h>
+#include <osl/mutex.hxx>
 #include <rtl/uuid.h>
 #include <rtl/process.h>
+#include <tools/link.hxx>
+#include <tools/wintypes.hxx>
 
 #ifdef MACOSX
 #include "premac.h"
@@ -65,7 +69,6 @@ using org::libreoffice::touch::ByteBufferWrapper;
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/awt/vclxsystemdependentwindow.hxx>
 #include <toolkit/awt/vclxregion.hxx>
-#include <toolkit/awt/vclxtoolkit.hxx>
 #include <toolkit/awt/vclxtabpagecontainer.hxx>
 #include <toolkit/awt/vclxtabpagemodel.hxx>
 
@@ -129,7 +132,154 @@ using org::libreoffice::touch::ByteBufferWrapper;
 #define SYSTEM_DEPENDENT_TYPE ::com::sun::star::lang::SystemDependent::SYSTEM_XWINDOW
 #endif
 
-TOOLKIT_DLLPUBLIC WinBits ImplGetWinBits( sal_uInt32 nComponentAttribs, sal_uInt16 nCompType )
+namespace {
+
+extern "C" typedef Window* (SAL_CALL *FN_SvtCreateWindow)(
+        VCLXWindow** ppNewComp,
+        const css::awt::WindowDescriptor* pDescriptor,
+        Window* pParent,
+        WinBits nWinBits );
+
+class VCLXToolkit_Impl
+{
+protected:
+    ::osl::Mutex    maMutex;
+};
+
+class VCLXToolkit : public VCLXToolkit_Impl,
+                    public cppu::WeakComponentImplHelper2<
+                    css::awt::XToolkitExperimental,
+                    css::lang::XServiceInfo >
+{
+    css::uno::Reference< css::datatransfer::clipboard::XClipboard > mxClipboard;
+    css::uno::Reference< css::datatransfer::clipboard::XClipboard > mxSelection;
+
+    oslModule           hSvToolsLib;
+    FN_SvtCreateWindow  fnSvtCreateWindow;
+
+    ::cppu::OInterfaceContainerHelper m_aTopWindowListeners;
+    ::cppu::OInterfaceContainerHelper m_aKeyHandlers;
+    ::cppu::OInterfaceContainerHelper m_aFocusListeners;
+    ::Link m_aEventListenerLink;
+    ::Link m_aKeyListenerLink;
+    bool m_bEventListener;
+    bool m_bKeyListener;
+
+    DECL_LINK(eventListenerHandler, ::VclSimpleEvent const *);
+
+    DECL_LINK(keyListenerHandler, ::VclSimpleEvent const *);
+
+    void callTopWindowListeners(
+        ::VclSimpleEvent const * pEvent,
+        void (SAL_CALL css::awt::XTopWindowListener::* pFn)(
+            css::lang::EventObject const &));
+
+    long callKeyHandlers(::VclSimpleEvent const * pEvent, bool bPressed);
+
+    void callFocusListeners(::VclSimpleEvent const * pEvent, bool bGained);
+
+protected:
+    ::osl::Mutex&   GetMutex() { return maMutex; }
+
+    virtual void SAL_CALL disposing();
+
+    Window* ImplCreateWindow( VCLXWindow** ppNewComp, const css::awt::WindowDescriptor& rDescriptor, Window* pParent, WinBits nWinBits );
+    css::uno::Reference< css::awt::XWindowPeer > ImplCreateWindow( const css::awt::WindowDescriptor& Descriptor, WinBits nWinBits );
+
+public:
+
+    VCLXToolkit();
+    ~VCLXToolkit();
+
+    // css::awt::XToolkitExperimental
+    css::uno::Reference< css::awt::XDevice >      SAL_CALL createScreenCompatibleDeviceUsingBuffer( sal_Int32 Width, sal_Int32 Height, sal_Int32 ScaleNumerator, sal_Int32 ScaleDenominator, sal_Int32 XOffset, sal_Int32 YOffset, sal_Int64 AddressOfMemoryBufferForSharedArrayWrapper ) throw
+(css::uno::RuntimeException);
+
+    // css::awt::XToolkit
+    css::uno::Reference< css::awt::XWindowPeer >  SAL_CALL getDesktopWindow(  ) throw(css::uno::RuntimeException);
+    css::awt::Rectangle                                        SAL_CALL getWorkArea(  ) throw(css::uno::RuntimeException);
+    css::uno::Reference< css::awt::XWindowPeer >  SAL_CALL createWindow( const css::awt::WindowDescriptor& Descriptor ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    css::uno::Sequence< css::uno::Reference< css::awt::XWindowPeer > > SAL_CALL createWindows( const css::uno::Sequence< css::awt::WindowDescriptor >& Descriptors ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    css::uno::Reference< css::awt::XDevice >      SAL_CALL createScreenCompatibleDevice( sal_Int32 Width, sal_Int32 Height ) throw
+(css::uno::RuntimeException);
+    css::uno::Reference< css::awt::XRegion >      SAL_CALL createRegion(  ) throw(css::uno::RuntimeException);
+
+    // css::awt::XSystemChildFactory
+    css::uno::Reference< css::awt::XWindowPeer > SAL_CALL createSystemChild( const css::uno::Any& Parent, const css::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) throw(css::uno::RuntimeException);
+
+    // css::awt::XMessageBoxFactory
+    virtual css::uno::Reference< css::awt::XMessageBox > SAL_CALL createMessageBox( const css::uno::Reference< css::awt::XWindowPeer >& aParent, css::awt::MessageBoxType eType, ::sal_Int32 aButtons, const OUString& aTitle, const OUString& aMessage ) throw (css::uno::RuntimeException);
+
+    // css::awt::XDataTransfer
+    css::uno::Reference< css::datatransfer::dnd::XDragGestureRecognizer > SAL_CALL getDragGestureRecognizer( const css::uno::Reference< css::awt::XWindow >& window ) throw(css::uno::RuntimeException);
+    css::uno::Reference< css::datatransfer::dnd::XDragSource > SAL_CALL getDragSource( const css::uno::Reference< css::awt::XWindow >& window ) throw(css::uno::RuntimeException);
+    css::uno::Reference< css::datatransfer::dnd::XDropTarget > SAL_CALL getDropTarget( const css::uno::Reference< css::awt::XWindow >& window ) throw(css::uno::RuntimeException);
+    css::uno::Reference< css::datatransfer::clipboard::XClipboard > SAL_CALL getClipboard( const OUString& clipboardName ) throw(css::uno::RuntimeException);
+
+    // css::lang::XServiceInfo
+    OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException);
+    sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException);
+    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException);
+
+    // css::awt::XExtendedToolkit:
+
+    virtual ::sal_Int32 SAL_CALL getTopWindowCount()
+        throw (css::uno::RuntimeException);
+
+    virtual css::uno::Reference< css::awt::XTopWindow >
+    SAL_CALL getTopWindow(::sal_Int32 nIndex)
+        throw (css::uno::RuntimeException);
+
+    virtual css::uno::Reference< css::awt::XTopWindow >
+    SAL_CALL getActiveTopWindow()
+        throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL addTopWindowListener(
+        css::uno::Reference<
+        css::awt::XTopWindowListener > const & rListener)
+        throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL removeTopWindowListener(
+        css::uno::Reference<
+        css::awt::XTopWindowListener > const & rListener)
+        throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL addKeyHandler(
+        css::uno::Reference<
+        css::awt::XKeyHandler > const & rHandler)
+        throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL removeKeyHandler(
+        css::uno::Reference<
+        css::awt::XKeyHandler > const & rHandler)
+        throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL addFocusListener(
+        css::uno::Reference<
+        css::awt::XFocusListener > const & rListener)
+        throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL removeFocusListener(
+        css::uno::Reference<
+        css::awt::XFocusListener > const & rListener)
+        throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL fireFocusGained(
+        css::uno::Reference<
+        css::uno::XInterface > const & source)
+        throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL fireFocusLost(
+        css::uno::Reference<
+        css::uno::XInterface > const & source)
+        throw (css::uno::RuntimeException);
+
+    // css::awt::XReschedule:
+    virtual void SAL_CALL reschedule()
+        throw (css::uno::RuntimeException);
+};
+
+WinBits ImplGetWinBits( sal_uInt32 nComponentAttribs, sal_uInt16 nCompType )
 {
     WinBits nWinBits = 0;
 
@@ -406,10 +556,6 @@ namespace
         return ( eVal != css::awt::MessageBoxType_MAKE_FIXED_SIZE );
     }
 }
-
-//  ----------------------------------------------------
-//  class VCLXToolkit
-//  ----------------------------------------------------
 
 static sal_Int32                            nVCLToolkitInstanceCount = 0;
 static bool                                 bInitedByVCLToolkit = false;
@@ -1387,7 +1533,7 @@ sal_Bool VCLXToolkit::supportsService( const OUString& rServiceName ) throw(::co
 
 ::com::sun::star::uno::Sequence< OUString > VCLXToolkit::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
 {
-    OUString aServiceName( OUString::createFromAscii( szServiceName2_Toolkit ) );
+    OUString aServiceName("com.sun.star.awt.Toolkit");
     return ::com::sun::star::uno::Sequence< OUString >( &aServiceName, 1);
 }
 
@@ -1741,6 +1887,16 @@ void SAL_CALL VCLXToolkit::reschedule()
 {
     SolarMutexGuard aSolarGuard;
     Application::Reschedule(true);
+}
+
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_VCLXToolkit_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new VCLXToolkit());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
