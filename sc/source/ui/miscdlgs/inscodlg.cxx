@@ -37,10 +37,8 @@
 
 //==================================================================
 
-sal_Bool   ScInsertContentsDlg::bPreviousAllCheck = sal_True;
-sal_uInt16 ScInsertContentsDlg::nPreviousChecks   = (IDF_DATETIME | IDF_STRING  |
-                                                 IDF_NOTE     | IDF_FORMULA |
-                                                 IDF_ATTRIB   | IDF_OBJECTS);
+sal_Bool   ScInsertContentsDlg::bPreviousAllCheck = sal_False;
+sal_uInt16 ScInsertContentsDlg::nPreviousChecks   = (IDF_VALUE | IDF_DATETIME | IDF_STRING);
 sal_uInt16 ScInsertContentsDlg::nPreviousFormulaChecks = PASTE_NOFUNC;
 sal_uInt16 ScInsertContentsDlg::nPreviousChecks2 = 0;
 sal_uInt16 ScInsertContentsDlg::nPreviousMoveMode = INS_NONE;   // enum InsCellCmd
