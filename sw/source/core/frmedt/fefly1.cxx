@@ -1899,7 +1899,7 @@ sal_Bool SwFEShell::ReplaceSdrObj( const OUString& rGrfName, const OUString& rFl
         // delete "Sdr-Object", insert the graphic instead
         DelSelectedObj();
 
-        pFmt = GetDoc()->Insert( *GetCrsr(), rGrfName, rFltName, pGrf, &aFrmSet, NULL, NULL );
+        GetDoc()->Insert( *GetCrsr(), rGrfName, rFltName, pGrf, &aFrmSet, NULL, NULL );
 
         EndUndo();
         EndAllAction();
