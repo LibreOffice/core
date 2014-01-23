@@ -24,6 +24,7 @@
 #include <com/sun/star/awt/grid/XGridColumnModel.hpp>
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <comphelper/sequence.hxx>
 #include <comphelper/componentguard.hxx>
@@ -38,6 +39,7 @@
 using namespace css::awt;
 using namespace css::awt::grid;
 using namespace css::container;
+using namespace css::lang;
 using namespace css::uno;
 using namespace toolkit;
 
@@ -108,7 +110,7 @@ private:
                     ++col
                 )
             {
-                Reference< XCloneable > const xCloneable( *col, UNO_QUERY_THROW );
+                Reference< css::util::XCloneable > const xCloneable( *col, UNO_QUERY_THROW );
                 Reference< XGridColumn > const xClone( xCloneable->createClone(), UNO_QUERY_THROW );
 
                 GridColumn* const pGridColumn = GridColumn::getImplementation( xClone );
@@ -390,7 +392,7 @@ private:
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Reference< XCloneable > SAL_CALL DefaultGridColumnModel::createClone(  ) throw (RuntimeException)
+    Reference< css::util::XCloneable > SAL_CALL DefaultGridColumnModel::createClone(  ) throw (RuntimeException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return new DefaultGridColumnModel( *this );
