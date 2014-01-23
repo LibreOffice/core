@@ -362,9 +362,12 @@ void SwEditShell::ChangeIndentOfAllListLevels( short nDiff )
     if (pCurNumRule)
     {
         SwNumRule aRule(*pCurNumRule);
-        // #i90078#
-        aRule.ChangeIndent( nDiff );
-
+        const SwNumFmt& aRootNumFmt(aRule.Get(0));
+        if( nDiff > 0 || aRootNumFmt.GetIndentAt() + nDiff > 0) // fdo#42708
+        {
+            // #i90078#
+            aRule.ChangeIndent( nDiff );
+        }
         // no start of new list
         SetCurNumRule( aRule, false );
     }
