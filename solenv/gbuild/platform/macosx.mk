@@ -22,7 +22,8 @@
 
 
 GUI := UNX
-COM := GCC
+COM := S5ABI
+COMID := s5abi
 #COM := S5ABI
 #COMID := s5abi
 
@@ -70,9 +71,9 @@ gb_CPUDEFS := -DX86_64
 endif
 
 ifeq ($(strip $(SYSBASE)),)
-gb_SDKDIR := /Developer/SDKs/MacOSX10.4u.sdk
+gb_SDKDIR := $(SDK_PATH)
 else
-gb_SDKDIR := $(SYSBASE)/MacOSX10.4u.sdk
+gb_SDKDIR := $(SYSBASE)/MacOSX10.7.sdk
 endif
 
 
@@ -101,6 +102,10 @@ gb_CXXFLAGS := \
 	-fno-strict-aliasing \
 	-fsigned-char \
 	-pipe
+
+ifneq ($(COM),GCC)
+	gb_CXXFLAGS += -DHAVE_STL_INCLUDE_PATH -I../v1/
+endif
 
 # these are to get g++ to switch to Objective-C++ mode
 # (see toolkit module for a case where it is necessary to do it this way)

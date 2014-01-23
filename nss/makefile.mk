@@ -45,7 +45,7 @@ TARFILE_ROOTDIR=nss-3.14.4
 PATCH_FILES=nss.patch
 
 .IF "$(OS)"=="MACOSX"
-MACOS_SDK_DIR=/Developer/SDKs/MacOSX10.4u.sdk
+MACOS_SDK_DIR=$(SDK_PATH)
 .EXPORT : MACOS_SDK_DIR
 PATCH_FILES+=nss_macosx.patch
 .ENDIF # "$(OS)"=="MACOSX"

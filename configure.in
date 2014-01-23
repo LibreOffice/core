@@ -1679,6 +1679,7 @@ if test "$COMPATH" = "." ; then
     dnl double square bracket to get single because of M4 quote...
     COMPATH=`echo $COMPATH | $SED "s@/[[^/:]]*\\\$@@"`;
 fi
+CC_PATH="$COMPATH/"
 COMPATH=`echo $COMPATH | $SED "s@/[[Bb]][[Ii]][[Nn]]\\\$@@"`;
 
 dnl ===================================================================
@@ -1700,20 +1701,8 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes" \) -a "$GCC" = "yes"; th
 	    fi
       fi
    fi
-   if test "$_os" = "Darwin" -a "$GCCVER" -ge "040100" ; then
-      if test -z "$save_CC" -a -x "$GCC_HOME/bin/gcc-4.0" ; then
-         export CC=$GCC_HOME/bin/gcc-4.0
-          dnl  export CC to have it available in set_soenv -> config.guess
-         GCCVER2=`"$CC" -dumpversion | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
-         if test "$GCCVER2" -ge "040000" -a "$GCCVER2" -lt "040100" ; then
-            GCCVER=$GCCVER2
-         fi
-      fi
-      if test "$GCCVER" -ge "040100" ; then
-         AC_MSG_ERROR([You need to use the gcc-4.0 compiler (gcc $_gcc_version won't work with the MacOSX10.4u.sdk) - set CC accordingly])
-      else
+   if test "$_os" = "Darwin" ; then
          AC_MSG_RESULT([implicitly using CC=$CC])
-      fi
    else
       AC_MSG_RESULT([checked (gcc $_gcc_version)])
    fi
@@ -1798,16 +1787,12 @@ dnl ===================================================================
 dnl Search for a pre-installed dmake
 dnl ===================================================================
 AC_MSG_CHECKING([for dmake])
-DMAKE="no"
-# Override system dmake if --with-dmake-path or --with-dmake-url is used.
-if test -z "$with_dmake_path" && test -z "$with_dmake_url"; then
-   AC_PATH_PROG(DMAKE, dmake, no)
-   IS_SYSTEM_DMAKE=NO
-   if test "$DMAKE" != "no"; then
-      AC_MSG_RESULT([using system dmake])
-      DMAKE_PATH="$DMAKE"
-      IS_SYSTEM_DMAKE=YES
-   fi
+AC_PATH_PROG(DMAKE, dmake, no)
+IS_SYSTEM_DMAKE=NO
+if test "$DMAKE" != "no"; then
+   AC_MSG_RESULT([using system dmake])
+   DMAKE_PATH="$DMAKE"
+   IS_SYSTEM_DMAKE=YES
 elif test -n "$with_dmake_path" ; then
    # Did not find pre-installed dmake.
    # Is it at a nonstandard location provided by --with-dmake-path ?
@@ -2364,22 +2349,7 @@ if test "$GXX" = "yes"; then
    _gpp_version=`$CXX -dumpversion`
    _gpp_majmin=`echo $_gpp_version | $AWK -F. '{ print \$1*100+\$2 }'`
 
-   if test "$_os" = "Darwin" -a "$_gpp_majmin" -ge "401" ; then
-      if test -z "$save_CXX" -a -x "$GCC_HOME/bin/g++-4.0" ; then
-         CXX=$GCC_HOME/bin/g++-4.0
-         _gpp_majmin_2=`"$CXX" -dumpversion | $AWK -F. '{ print \$1*100+\$2 }'`
-         if test "$_gpp_majmin_2" -ge "400" -a "$_gpp_majmin_2" -lt "401" ; then
-            _gpp_majmin=$_gpp_majmin_2
-         fi
-      fi
-      if test "$_gpp_majmin" -ge "401" ; then
-         AC_MSG_ERROR([You need to use the g++-4.0 compiler (g++ $_gpp_version won't work with the MacOSX10.4u.sdk) - set CXX accordingly])
-      else
-         AC_MSG_RESULT([implicitly using CXX=$CXX])
-      fi
-   else
-      AC_MSG_RESULT([checked (g++ $_gpp_version)])
-   fi
+   AC_MSG_RESULT([checked (g++ $_gpp_version)])
 
    if test "$_gpp_majmin" = "304"; then
       AC_MSG_CHECKING([whether $CXX has the enum bug])
@@ -3812,7 +3782,7 @@ if test -n "$with_system_cppunit" -o -n "$with_system_libs" && \
     PKG_CHECK_MODULES( CPPUNIT, 
                        cppunit >= 1.12.0,
                        WITH_CPPUNIT="YES",
-                       WITH_CPPUNIT=")
+                       WITH_CPPUNIT="")
     if test -n "$WITH_CPPUNIT"; then
        AC_MSG_RESULT([found system cppunit $CPPUNIT])
     else
@@ -3951,15 +3921,15 @@ if test "$_os" = "Darwin" && test "$with_system_python" != "no"; then
  
    dnl hex version of Python 2.7.1 = 34013680
    if test $_python_hexversion -ge 34013680 ; then
-   	  _python_version=`$_python -c "import sys; print sys.version;" | head -n 1`
+   	  _python_version=`$_python -c "import sys; print sys.version;" | head -c 3`
       AC_MSG_RESULT([compiling against system python (version $_python_version)])
 
 	  _python_ver=`$_python -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('VERSION'));"`
 	  
 	  if test -d "/Library/Frameworks/Python.framework/Versions/$_python_ver/include/python$_python_ver"; then
 	  	 PYTHON_CFLAGS="-I/Library/Frameworks/Python.framework/Versions/$_python_ver/include/python$_python_ver"
-	  elif test -d "/Developer/SDKs/MacOSX10.4u.sdk/Library/Frameworks/Python.framework/Versions/$_python_ver/include/python$_python_ver"; then
-	  	 PYTHON_CFLAGS="-I/Developer/SDKs/MacOSX10.4u.sdk/Library/Frameworks/Python.framework/Versions/$_python_ver/include/python$_python_ver"  
+	  elif test -d "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk/usr/include/python$_python_ver"; then
+	  	 PYTHON_CFLAGS="-I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk/usr/include/python$_python_ver"  
 	  else
 		 PYTHON_CFLAGS="-I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk/System/Library/Frameworks/Python.framework/Versions/$_python_ver/include/python$_python_ver"
 	  fi
@@ -3972,7 +3942,7 @@ elif test -n "$with_system_python" -o -n "$with_system_libs" && \
 	test "$with_system_python" != "no"; then
    with_system_python=yes
    AC_MSG_RESULT([external])
-   AM_PATH_PYTHON([2.3])
+   AM_PATH_PYTHON([2.7])
 
    python_include=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('INCLUDEPY'));"`
    python_version=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('VERSION'));"`
@@ -7278,6 +7248,7 @@ if test -z "$COMPATH"; then
    AC_MSG_ERROR([No compiler found.])
 fi
 AC_SUBST(COMPATH)
+AC_SUBST(CC_PATH)
 
 AC_MSG_CHECKING([solver path])
 if test -z "$with_local_solver"; then

@@ -43,7 +43,7 @@ CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY $(PROCESSOR_DEFI
 #MACOSX_DEPLOYMENT_TARGET=10.7
 #.EXPORT: MACOSX_DEPLOYMENT_TARGET
 CDEFS+=-DQUARTZ 
-EXTRA_CDEFS*=-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk
+EXTRA_CDEFS*=-isysroot $(SDK_PATH)
 
 # Name of library where static data members are initialized
 # STATICLIBNAME=static$(DLLPOSTFIX)
@@ -169,9 +169,7 @@ LINK*=$(CXX)
 LINKC*=$(CC)
 
 ###LINKFLAGSDEFS*=-Wl,-multiply_defined,suppress
-# assure backwards-compatibility
-###EXTRA_LINKFLAGS*=-Wl,-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk
-EXTRA_LINKFLAGS*=-L/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk
+EXTRA_LINKFLAGS*=-L$(SDK_PATH)
 # Very long install_names are needed so that install_name_tool -change later on
 # does not complain that "larger updated load commands do not fit:"
 LINKFLAGSRUNPATH_URELIB=-install_name '@__________________________________________________URELIB/$(@:f)'
@@ -184,13 +182,8 @@ LINKFLAGSRUNPATH_BOXT=
 LINKFLAGSRUNPATH_NONE=-install_name '@__________________________________________________NONE/$(@:f)'
 LINKFLAGS=$(LINKFLAGSDEFS)
 
-# [ed] 5/14/02 If we're building for aqua, add in the objc runtime library into our link line
-.IF "$(GUIBASE)" == "aqua"
-    LINKFLAGS+=-lobjc
-    # Sometimes we still use files that would be in a GUIBASE="unx" specific directory
-    # because they really aren't GUIBASE specific, so we've got to account for that here.
-    INCGUI+= -I$(PRJ)/unx/inc
-.ENDIF
+LINKFLAGS+=-lobjc
+LINKFLAGS+=-lc++
 
 #special settings form environment
 LINKFLAGS+=$(EXTRA_LINKFLAGS)
@@ -224,8 +217,6 @@ LINKVERSIONMAPFLAG=-Wl,-map -Wl,
 
 SONAME_SWITCH=-Wl,-h
 
-###    STDLIBCPP=-stdlib=libc++
-STDLIBCPP=-lc++
 
 STDOBJVCL=$(L)/salmain.o
 STDOBJGUI=
@@ -233,17 +224,10 @@ STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
 
-.IF "$(GUIBASE)" == "aqua"
-    STDLIBCUIMT=CPPRUNTIME -lm
-    STDLIBGUIMT=-framework Carbon -framework Cocoa -lpthread CPPRUNTIME -lm
-    STDSHLCUIMT=-lpthread CPPRUNTIME -lm
-    STDSHLGUIMT=-framework Carbon -framework CoreFoundation -framework Cocoa -lpthread CPPRUNTIME -lm
-.ELSE
-    STDLIBCUIMT= CPPRUNTIME -lm
-    STDLIBGUIMT=-lX11 -lpthread CPPRUNTIME -lm
-    STDSHLCUIMT=-lpthread CPPRUNTIME -lm
-    STDSHLGUIMT=-lX11 -lXext -lpthread CPPRUNTIME -lm -framework CoreFoundation
-.ENDIF
+#STDLIBCUIMT=CPPRUNTIME -lm
+#STDLIBGUIMT=-framework Carbon -framework Cocoa -lpthread CPPRUNTIME -lm
+STDSHLCUIMT=-lpthread CPPRUNTIME -lm
+STDSHLGUIMT=-framework Carbon -framework CoreFoundation -framework Cocoa -lpthread CPPRUNTIME -lm
 
 LIBMGR=ar
 LIBFLAGS=-r

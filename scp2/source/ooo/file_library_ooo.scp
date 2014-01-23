@@ -600,14 +600,14 @@ File gid_File_Lib_MacOSXSpell
 	Dir = SCP2_OOO_BIN_DIR;
 End
 
-#if MACOSX_DEPLOYMENT_TARGET<107
+#if (MACOSX_DEPLOYMENT_TARGET_NUM < 106)
 File gid_File_Lib_avmediaQuickTime
 	TXT_FILE_BODY;
 	Styles = (PACKED);
 	Name = LIBNAME(avmediaQuickTime);
 	Dir = SCP2_OOO_BIN_DIR;
 End
-#endif // MACOSX_DEPLOYMENT_TARGET
+#endif // MACOSX_DEPLOYMENT_TARGET_NUM
 #endif // MACOSX
 
 #ifdef OS2

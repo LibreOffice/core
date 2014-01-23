@@ -314,7 +314,7 @@ my_components += \
     macab1 \
     macbe1 \
     MacOSXSpell
-.IF "${MACOSX_DEPLOYMENT_TARGET:s/.//}"<"107"
+.IF "${MACOSX_DEPLOYMENT_TARGET}" == ""
     my_components += avmediaQuickTime
 .END
 .END
