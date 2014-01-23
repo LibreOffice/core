@@ -1249,9 +1249,10 @@ bool OSQLParseTreeIterator::traverseSelectionCriteria(const OSQLParseNode* pSele
         return false;
     }
 
-    if (! SQL_ISRULE(pWhereClause,where_clause)) {
+    if (!pWhereClause || !SQL_ISRULE(pWhereClause,where_clause))
+    {
         // The WHERE clause is optional most of the time; which means it could be a "optional_where_clause".
-        OSL_ENSURE(SQL_ISRULE(pWhereClause,opt_where_clause),"OSQLParseTreeIterator: error in parse tree!");
+        OSL_ENSURE(pWhereClause && SQL_ISRULE(pWhereClause,opt_where_clause),"OSQLParseTreeIterator: error in parse tree!");
         return false;
     }
 
