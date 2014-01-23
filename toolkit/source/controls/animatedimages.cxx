@@ -18,53 +18,69 @@
  */
 
 
-#include "toolkit/controls/animatedimages.hxx"
-#include "toolkit/helper/servicenames.hxx"
-#include "toolkit/helper/property.hxx"
-#include "toolkit/helper/unopropertyarrayhelper.hxx"
+#include <toolkit/controls/animatedimages.hxx>
+#include <toolkit/helper/property.hxx>
+#include <toolkit/helper/unopropertyarrayhelper.hxx>
 
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
+#include <com/sun/star/awt/XAnimation.hpp>
+#include <com/sun/star/awt/XAnimatedImages.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/container/XContainerListener.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 
-//......................................................................................................................
-namespace toolkit
+#include <toolkit/controls/unocontrolbase.hxx>
+#include <toolkit/controls/unocontrolmodel.hxx>
+
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
+
+#include <boost/scoped_ptr.hpp>
+
+using namespace css::awt;
+using namespace css::container;
+using namespace css::lang;
+using namespace css::uno;
+
+namespace {
+
+typedef ::cppu::AggImplInheritanceHelper2   <   UnoControlBase
+                                            ,   css::awt::XAnimation
+                                            ,   css::container::XContainerListener
+                                            >   AnimatedImagesControl_Base;
+
+class AnimatedImagesControl : public AnimatedImagesControl_Base
 {
-//......................................................................................................................
+public:
+    AnimatedImagesControl();
+    OUString GetComponentServiceName();
 
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::UNO_SET_THROW;
-    using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::uno::Any;
-    using ::com::sun::star::uno::makeAny;
-    using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::uno::Type;
-    using ::com::sun::star::container::ContainerEvent;
-    using ::com::sun::star::container::XContainerListener;
-    using ::com::sun::star::beans::XPropertySetInfo;
-    using ::com::sun::star::lang::DisposedException;
-    using ::com::sun::star::lang::IndexOutOfBoundsException;
-    using ::com::sun::star::lang::EventObject;
-    using ::com::sun::star::awt::XControlModel;
-    using ::com::sun::star::awt::XAnimatedImages;
-    using ::com::sun::star::lang::IllegalArgumentException;
-    using ::com::sun::star::awt::XWindowPeer;
-    using ::com::sun::star::util::XModifyListener;
-    using ::com::sun::star::awt::XToolkit;
-    using ::com::sun::star::lang::XMultiServiceFactory;
+    // XAnimation
+    virtual void SAL_CALL startAnimation(  ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL stopAnimation(  ) throw (css::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL isAnimationRunning(  ) throw (css::uno::RuntimeException);
 
-    namespace VisualEffect = ::com::sun::star::awt::VisualEffect;
-    namespace ImageScaleMode = ::com::sun::star::awt::ImageScaleMode;
+    // XServiceInfo
+    OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException);
+    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException);
 
-    //==================================================================================================================
-    //= AnimatedImagesControl
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    // XControl
+    sal_Bool SAL_CALL setModel( const css::uno::Reference< css::awt::XControlModel >& i_rModel ) throw ( css::uno::RuntimeException );
+    void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& i_toolkit, const css::uno::Reference< css::awt::XWindowPeer >& i_parentPeer ) throw(css::uno::RuntimeException);
+
+
+    // XContainerListener
+    virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException);
+
+    // XEventListener
+    virtual void SAL_CALL disposing( const css::lang::EventObject& i_event ) throw (css::uno::RuntimeException);
+};
+
     AnimatedImagesControl::AnimatedImagesControl()
         :AnimatedImagesControl_Base()
     {
@@ -112,7 +128,7 @@ namespace toolkit
     {
         Sequence< OUString > aServices( AnimatedImagesControl_Base::getSupportedServiceNames() );
         aServices.realloc( aServices.getLength() + 1 );
-        aServices[ aServices.getLength() - 1 ] = OUString::createFromAscii( szServiceName_AnimatedImagesControl );
+        aServices[ aServices.getLength() - 1 ] = OUString("com.sun.star.awt.AnimatedImagesControl");
         return aServices;
     }
 
@@ -121,7 +137,7 @@ namespace toolkit
     {
         void lcl_updatePeer( Reference< XWindowPeer > const& i_peer, Reference< XControlModel > const& i_model )
         {
-            const Reference< XModifyListener > xPeerModify( i_peer, UNO_QUERY );
+            const Reference< css::util::XModifyListener > xPeerModify( i_peer, UNO_QUERY );
             if ( xPeerModify.is() )
             {
                 EventObject aEvent;
@@ -189,9 +205,10 @@ namespace toolkit
         UnoControlBase::disposing( i_event );
     }
 
-    //==================================================================================================================
-    //= AnimatedImagesControlModel_Data
-    //==================================================================================================================
+}
+
+namespace toolkit {
+
     struct AnimatedImagesControlModel_Data
     {
         ::std::vector< Sequence< OUString > >    aImageSets;
@@ -224,10 +241,7 @@ namespace toolkit
         }
     }
 
-    //==================================================================================================================
-    //= AnimatedImagesControlModel
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
     AnimatedImagesControlModel::AnimatedImagesControlModel( Reference< com::sun::star::uno::XComponentContext > const & i_factory )
         :AnimatedImagesControlModel_Base( i_factory )
         ,m_pData( new AnimatedImagesControlModel_Data )
@@ -263,16 +277,16 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Reference< XPropertySetInfo > SAL_CALL AnimatedImagesControlModel::getPropertySetInfo(  ) throw(RuntimeException)
+    Reference< css::beans::XPropertySetInfo > SAL_CALL AnimatedImagesControlModel::getPropertySetInfo(  ) throw(RuntimeException)
     {
-        static Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+        static Reference< css::beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
     }
 
     //------------------------------------------------------------------------------------------------------------------
     OUString SAL_CALL AnimatedImagesControlModel::getServiceName() throw(RuntimeException)
     {
-        return OUString::createFromAscii( szServiceName_AnimatedImagesControlModel );
+        return OUString("com.sun.star.awt.AnimatedImagesControlModel");
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -285,7 +299,7 @@ namespace toolkit
     Sequence< OUString > SAL_CALL AnimatedImagesControlModel::getSupportedServiceNames() throw(RuntimeException)
     {
         Sequence< OUString > aServiceNames(2);
-        aServiceNames[0] = OUString::createFromAscii( szServiceName_AnimatedImagesControlModel );
+        aServiceNames[0] = "com.sun.star.awt.AnimatedImagesControlModel";
         aServiceNames[1] = "com.sun.star.awt.UnoControlModel";
         return aServiceNames;
     }
@@ -317,10 +331,10 @@ namespace toolkit
         switch ( i_propertyId )
         {
         case BASEPROPERTY_DEFAULTCONTROL:
-            return makeAny( OUString::createFromAscii( szServiceName_AnimatedImagesControl ) );
+            return makeAny( OUString("com.sun.star.awt.AnimatedImagesControl") );
 
         case BASEPROPERTY_BORDER:
-            return makeAny( VisualEffect::NONE );
+            return makeAny( css::awt::VisualEffect::NONE );
 
         case BASEPROPERTY_STEP_TIME:
             return makeAny( (sal_Int32) 100 );
@@ -477,8 +491,22 @@ namespace toolkit
         BrdcstHelper.removeListener( cppu::UnoType<XContainerListener>::get(), i_listener );
     }
 
-//......................................................................................................................
-} // namespace toolkit
-//......................................................................................................................
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+org_openoffice_comp_toolkit_AnimatedImagesControl_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new AnimatedImagesControl());
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+org_openoffice_comp_toolkit_AnimatedImagesControlModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new toolkit::AnimatedImagesControlModel(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

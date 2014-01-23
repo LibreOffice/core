@@ -23,13 +23,11 @@
 #include <toolkit/controls/unocontrolbase.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
 
-#include <com/sun/star/awt/XAnimation.hpp>
 #include <com/sun/star/awt/XAnimatedImages.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -38,46 +36,6 @@ namespace toolkit
 {
 //......................................................................................................................
 
-    //==================================================================================================================
-    //=
-    //==================================================================================================================
-    typedef ::cppu::AggImplInheritanceHelper2   <   UnoControlBase
-                                                ,   ::com::sun::star::awt::XAnimation
-                                                ,   ::com::sun::star::container::XContainerListener
-                                                >   AnimatedImagesControl_Base;
-
-    class AnimatedImagesControl : public AnimatedImagesControl_Base
-    {
-    public:
-                                    AnimatedImagesControl();
-        OUString             GetComponentServiceName();
-
-        // XAnimation
-        virtual void SAL_CALL startAnimation(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL stopAnimation(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::sal_Bool SAL_CALL isAnimationRunning(  ) throw (::com::sun::star::uno::RuntimeException);
-
-        // XServiceInfo
-        OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-        ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
-
-        // XControl
-        sal_Bool SAL_CALL setModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& i_rModel ) throw ( ::com::sun::star::uno::RuntimeException );
-        void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& i_toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& i_parentPeer ) throw(::com::sun::star::uno::RuntimeException);
-
-
-        // XContainerListener
-        virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
-
-        // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& i_event ) throw (::com::sun::star::uno::RuntimeException);
-    };
-
-    //==================================================================================================================
-    //= AnimatedImagesControlModel
-    //==================================================================================================================
     struct AnimatedImagesControlModel_Data;
     typedef ::cppu::AggImplInheritanceHelper1   <   UnoControlModel
                                                 ,   ::com::sun::star::awt::XAnimatedImages

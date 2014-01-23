@@ -259,10 +259,12 @@
       constructor="org_openoffice_comp_toolkit_SpinningProgressControlModel_get_implementation">
     <service name="com.sun.star.awt.SpinningProgressControlModel"/>
   </implementation>
-  <implementation name="org.openoffice.comp.toolkit.AnimatedImagesControlModel">
+  <implementation name="org.openoffice.comp.toolkit.AnimatedImagesControlModel"
+      constructor="org_openoffice_comp_toolkit_AnimatedImagesControlModel_get_implementation">
     <service name="com.sun.star.awt.AnimatedImagesControlModel"/>
   </implementation>
-  <implementation name="org.openoffice.comp.toolkit.AnimatedImagesControl">
+  <implementation name="org.openoffice.comp.toolkit.AnimatedImagesControl"
+      constructor="org_openoffice_comp_toolkit_AnimatedImagesControl_get_implementation">
     <service name="com.sun.star.awt.AnimatedImagesControl"/>
   </implementation>
   <implementation name="stardiv.Toolkit.UnoSpinButtonControl">
