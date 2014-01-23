@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_faedddf0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-01-23T10:55:56Z",
+      "side": 1,
+      "message": "Can you reduce the commit message lines to 72 chars?",
+      "revId": "f12f4773296df6d981e519693fc7a884be437cbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_daf019cc",
+        "filename": "sc/source/ui/app/rfindlst.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-01-23T10:55:56Z",
+      "side": 1,
+      "message": "Any reason there is commented out code?",
+      "revId": "f12f4773296df6d981e519693fc7a884be437cbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_3abf65d2",
+        "filename": "sc/source/ui/inc/rfindlst.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-01-23T10:55:56Z",
+      "side": 1,
+      "message": "What is implementing this function now?",
+      "revId": "f12f4773296df6d981e519693fc7a884be437cbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_1abaa1e1",
+        "filename": "sc/source/ui/inc/rfindlst.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-01-23T10:55:56Z",
+      "side": 1,
+      "message": "Can you remove this commented out code?",
+      "revId": "f12f4773296df6d981e519693fc7a884be437cbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
