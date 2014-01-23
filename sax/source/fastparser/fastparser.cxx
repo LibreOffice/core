@@ -384,10 +384,13 @@ ParserData::~ParserData()
 
 // --------------------------------------------------------------------
 
-Entity::Entity( const ParserData& rData ) :
-    ParserData( rData )
+Entity::Entity(const ParserData& rData)
+    : ParserData(rData)
+    , mnProducedEventsSize(0)
+    , mpProducedEvents(NULL)
+    , mbEnableThreads(false)
+    , mpParser(NULL)
 {
-    mpProducedEvents = 0;
 }
 
 Entity::Entity(const Entity& e)
