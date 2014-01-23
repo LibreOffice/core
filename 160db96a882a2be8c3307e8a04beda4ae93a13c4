@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_dadad916",
+        "filename": "sal/textenc/tcvtkr2.tab",
+        "patchSetId": 2
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2014-01-23T19:09:44Z",
+      "side": 0,
+      "message": "@mmeeks, I\u0027m not sure about this one, can\u0027t be sure why the is a one element shift",
+      "revId": "160db96a882a2be8c3307e8a04beda4ae93a13c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
