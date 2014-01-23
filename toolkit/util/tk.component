@@ -52,7 +52,8 @@
   <implementation name="org.openoffice.comp.toolkit.GridColumn">
     <service name="com.sun.star.awt.grid.GridColumn"/>
   </implementation>
-  <implementation name="org.openoffice.comp.toolkit.SortableGridDataModel">
+  <implementation name="org.openoffice.comp.toolkit.SortableGridDataModel"
+      constructor="org_openoffice_comp_toolkit_SortableGridDataModel_get_implementation">
     <service name="com.sun.star.awt.grid.SortableGridDataModel"/>
   </implementation>
   <implementation name="stardiv.Toolkit.GridControl"

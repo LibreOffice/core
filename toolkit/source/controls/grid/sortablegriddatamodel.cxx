@@ -17,54 +17,188 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include "sortablegriddatamodel.hxx"
-#include "toolkit/helper/servicenames.hxx"
+#include "initguard.hxx"
 
 #include <com/sun/star/i18n/Collator.hpp>
+#include <com/sun/star/i18n/XCollator.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
+#include <com/sun/star/awt/grid/XGridDataListener.hpp>
+#include <com/sun/star/awt/grid/XSortableMutableGridDataModel.hpp>
 
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <comphelper/anycompare.hxx>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 
-#include <set>
+using namespace css::awt;
+using namespace css::awt::grid;
+using namespace css::i18n;
+using namespace css::lang;
+using namespace css::ucb;
+using namespace css::uno;
+using namespace toolkit;
 
-//......................................................................................................................
-namespace toolkit
+namespace {
+
+class SortableGridDataModel;
+typedef InitGuard< SortableGridDataModel >  MethodGuard;
+
+typedef ::cppu::WeakComponentImplHelper3    <   css::awt::grid::XSortableMutableGridDataModel
+                                            ,   css::lang::XServiceInfo
+                                            ,   css::lang::XInitialization
+                                            >   SortableGridDataModel_Base;
+typedef ::cppu::ImplHelper1 <   css::awt::grid::XGridDataListener
+                            >   SortableGridDataModel_PrivateBase;
+class SortableGridDataModel :public ::cppu::BaseMutex
+                            ,public SortableGridDataModel_Base
+                            ,public SortableGridDataModel_PrivateBase
 {
-//......................................................................................................................
+public:
+    SortableGridDataModel( const css::uno::Reference< css::uno::XComponentContext > & rxContext );
+    SortableGridDataModel( SortableGridDataModel const & i_copySource );
 
-    using ::com::sun::star::uno::TypeClass;
-    using ::com::sun::star::uno::TypeClass_VOID;
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::UNO_SET_THROW;
-    using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::uno::Any;
-    using ::com::sun::star::uno::makeAny;
-    using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::uno::Type;
-    using ::com::sun::star::uno::XComponentContext;
-    using ::com::sun::star::lang::IndexOutOfBoundsException;
-    using ::com::sun::star::lang::IllegalArgumentException;
-    using ::com::sun::star::awt::grid::XGridDataListener;
-    using ::com::sun::star::beans::Pair;
-    using ::com::sun::star::util::XCloneable;
-    using ::com::sun::star::i18n::XCollator;
-    using ::com::sun::star::i18n::Collator;
-    using ::com::sun::star::lang::XMultiServiceFactory;
-    using ::com::sun::star::awt::grid::GridDataEvent;
-    using ::com::sun::star::lang::EventObject;
-    using ::com::sun::star::ucb::AlreadyInitializedException;
+    bool    isInitialized() const { return m_isInitialized; }
+
+#ifdef DBG_UTIL
+    const char* checkInvariants() const;
+#endif
+
+protected:
+    ~SortableGridDataModel();
+
+public:
+    // XSortableGridData
+    virtual void SAL_CALL sortByColumn( ::sal_Int32 ColumnIndex, ::sal_Bool SortAscending ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    virtual void SAL_CALL removeColumnSort(  ) throw (css::uno::RuntimeException);
+    virtual css::beans::Pair< ::sal_Int32, ::sal_Bool > SAL_CALL getCurrentSortOrder(  ) throw (css::uno::RuntimeException);
+
+    // XMutableGridDataModel
+    virtual void SAL_CALL addRow( const css::uno::Any& Heading, const css::uno::Sequence< css::uno::Any >& Data ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL addRows( const css::uno::Sequence< css::uno::Any >& Headings, const css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& Data ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    virtual void SAL_CALL insertRow( ::sal_Int32 i_index, const css::uno::Any& i_heading, const css::uno::Sequence< css::uno::Any >& Data ) throw (css::uno::RuntimeException, css::lang::IndexOutOfBoundsException);
+    virtual void SAL_CALL insertRows( ::sal_Int32 i_index, const css::uno::Sequence< css::uno::Any>& Headings, const css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& Data ) throw (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    virtual void SAL_CALL removeRow( ::sal_Int32 RowIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    virtual void SAL_CALL removeAllRows(  ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL updateCellData( ::sal_Int32 ColumnIndex, ::sal_Int32 RowIndex, const css::uno::Any& Value ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    virtual void SAL_CALL updateRowData( const css::uno::Sequence< ::sal_Int32 >& ColumnIndexes, ::sal_Int32 RowIndex, const css::uno::Sequence< css::uno::Any >& Values ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    virtual void SAL_CALL updateRowHeading( ::sal_Int32 RowIndex, const css::uno::Any& Heading ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    virtual void SAL_CALL updateCellToolTip( ::sal_Int32 ColumnIndex, ::sal_Int32 RowIndex, const css::uno::Any& Value ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    virtual void SAL_CALL updateRowToolTip( ::sal_Int32 RowIndex, const css::uno::Any& Value ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    virtual void SAL_CALL addGridDataListener( const css::uno::Reference< css::awt::grid::XGridDataListener >& Listener ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL removeGridDataListener( const css::uno::Reference< css::awt::grid::XGridDataListener >& Listener ) throw (css::uno::RuntimeException);
+
+    // XGridDataModel
+    virtual ::sal_Int32 SAL_CALL getRowCount() throw (css::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getColumnCount() throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getCellData( ::sal_Int32 Column, ::sal_Int32 RowIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getCellToolTip( ::sal_Int32 Column, ::sal_Int32 RowIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getRowHeading( ::sal_Int32 RowIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    virtual css::uno::Sequence< css::uno::Any > SAL_CALL getRowData( ::sal_Int32 RowIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+
+    // OComponentHelper
+    virtual void SAL_CALL disposing();
+
+    // XCloneable
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException);
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException);
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException);
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException);
+
+    // XGridDataListener
+    virtual void SAL_CALL rowsInserted( const css::awt::grid::GridDataEvent& Event ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL rowsRemoved( const css::awt::grid::GridDataEvent& Event ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL dataChanged( const css::awt::grid::GridDataEvent& Event ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL rowHeadingChanged( const css::awt::grid::GridDataEvent& Event ) throw (css::uno::RuntimeException);
+
+    // XEventListener
+    virtual void SAL_CALL disposing( const css::lang::EventObject& i_event ) throw (css::uno::RuntimeException);
+
+    // XInterface
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL acquire(  ) throw ();
+    virtual void SAL_CALL release(  ) throw ();
+
+    // XTypeProvider
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw (css::uno::RuntimeException);
+    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getImplementationId(  ) throw (css::uno::RuntimeException);
+
+private:
+    /** translates the given public index into one to be passed to our delegator
+        @throws css::lang::IndexOutOfBoundsException
+            if the given index does not denote a valid row
+    */
+    ::sal_Int32 impl_getPrivateRowIndex_throw( ::sal_Int32 const i_publicRowIndex ) const;
+
+    /** translates the given private row index to a public one
+    */
+    ::sal_Int32 impl_getPublicRowIndex_nothrow( ::sal_Int32 const i_privateRowIndex ) const;
+
+    inline bool impl_isSorted_nothrow() const
+    {
+        return m_currentSortColumn >= 0;
+    }
+
+    /** rebuilds the index translation structure.
+
+        Neither <member>m_currentSortColumn</member> nor <member>m_sortAscending</member> are touched by this method.
+        Also, the given column index is not checked, this is the responsibility of the caller.
+    */
+    bool    impl_reIndex_nothrow( ::sal_Int32 const i_columnIndex, sal_Bool const i_sortAscending );
+
+    /** translates the given event, obtained from our delegator, to a version which can be broadcasted to our own
+        clients.
+    */
+    css::awt::grid::GridDataEvent
+            impl_createPublicEvent( css::awt::grid::GridDataEvent const & i_originalEvent ) const;
+
+    /** broadcasts the given event to our registered XGridDataListeners
+    */
+    void    impl_broadcast(
+                void ( SAL_CALL css::awt::grid::XGridDataListener::*i_listenerMethod )( const css::awt::grid::GridDataEvent & ),
+                css::awt::grid::GridDataEvent const & i_publicEvent,
+                MethodGuard& i_instanceLock
+            );
+
+    /** rebuilds our indexes, notifying row removal and row addition events
+
+        First, a rowsRemoved event is notified to our registered listeners. Then, the index translation tables are
+        rebuilt, and a rowsInserted event is notified.
+
+        Only to be called when we're sorted.
+    */
+    void    impl_rebuildIndexesAndNotify( MethodGuard& i_instanceLock );
+
+    /** removes the current sorting, and notifies a change of all data
+    */
+    void    impl_removeColumnSort( MethodGuard& i_instanceLock );
+
+    /** removes the current sorting, without any broadcast
+    */
+    void    impl_removeColumnSort_noBroadcast();
+
+private:
+    css::uno::Reference< css::uno::XComponentContext >            m_xContext;
+    bool                                                          m_isInitialized;
+    css::uno::Reference< css::awt::grid::XMutableGridDataModel >  m_delegator;
+    css::uno::Reference< css::i18n::XCollator >                   m_collator;
+    ::sal_Int32                                                   m_currentSortColumn;
+    ::sal_Bool                                                    m_sortAscending;
+    ::std::vector< ::sal_Int32 >                                  m_publicToPrivateRowIndex;
+    ::std::vector< ::sal_Int32 >                                  m_privateToPublicRowIndex;
+};
 
 #ifdef DBG_UTIL
     const char* SortableGridDataModel_checkInvariants( const void* _pInstance )
@@ -567,12 +701,12 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Pair< ::sal_Int32, ::sal_Bool > SAL_CALL SortableGridDataModel::getCurrentSortOrder(  ) throw (RuntimeException)
+    css::beans::Pair< ::sal_Int32, ::sal_Bool > SAL_CALL SortableGridDataModel::getCurrentSortOrder(  ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this, rBHelper );
         DBG_CHECK_ME();
 
-        return Pair< ::sal_Int32, ::sal_Bool >( m_currentSortColumn, m_sortAscending );
+        return css::beans::Pair< ::sal_Int32, ::sal_Bool >( m_currentSortColumn, m_sortAscending );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -820,7 +954,7 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Reference< XCloneable > SAL_CALL SortableGridDataModel::createClone(  ) throw (RuntimeException)
+    Reference< css::util::XCloneable > SAL_CALL SortableGridDataModel::createClone(  ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this, rBHelper );
         DBG_CHECK_ME();
@@ -842,7 +976,7 @@ namespace toolkit
     Sequence< OUString > SAL_CALL SortableGridDataModel::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         Sequence< OUString > aServiceNames(1);
-        aServiceNames[0] = OUString::createFromAscii( szServiceName_SortableGridDataModel );
+        aServiceNames[0] = OUString("com.sun.star.awt.grid.SortableGridDataModel");
         return aServiceNames;
     }
 
@@ -880,13 +1014,14 @@ namespace toolkit
         return m_privateToPublicRowIndex[ i_privateRowIndex ];
     }
 
-//......................................................................................................................
-} // namespace toolkit
-//......................................................................................................................
+}
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SortableGridDataModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+org_openoffice_comp_toolkit_SortableGridDataModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return *( new ::toolkit::SortableGridDataModel( comphelper::getComponentContext(i_factory) ) );
+    return cppu::acquire(new SortableGridDataModel(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
