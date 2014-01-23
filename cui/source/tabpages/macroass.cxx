@@ -53,7 +53,7 @@ public:
     MacroEventListBox*              pEventLB;
     SfxConfigGroupListBox*          pGroupLB;
     FixedText*                      pFT_MacroLBLabel;
-    SfxConfigFunctionListBox_Impl*  pMacroLB;
+    SfxConfigFunctionListBox*       pMacroLB;
 
     FixedText*                      pMacroFT;
     OUString*                       pMacroStr;

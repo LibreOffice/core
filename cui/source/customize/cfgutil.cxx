@@ -248,7 +248,7 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
     return lStyles;
 }
 
-SfxConfigFunctionListBox_Impl::SfxConfigFunctionListBox_Impl( Window* pParent, const ResId& rResId)
+SfxConfigFunctionListBox::SfxConfigFunctionListBox( Window* pParent, const ResId& rResId)
     : SvTreeListBox( pParent, rResId )
     , pCurEntry( 0 )
     , pStylesInfo( 0 )
@@ -259,19 +259,19 @@ SfxConfigFunctionListBox_Impl::SfxConfigFunctionListBox_Impl( Window* pParent, c
     // Timer for the BallonHelp
     aTimer.SetTimeout( 200 );
     aTimer.SetTimeoutHdl(
-        LINK( this, SfxConfigFunctionListBox_Impl, TimerHdl ) );
+        LINK( this, SfxConfigFunctionListBox, TimerHdl ) );
 }
 
-SfxConfigFunctionListBox_Impl::~SfxConfigFunctionListBox_Impl()
+SfxConfigFunctionListBox::~SfxConfigFunctionListBox()
 {
     ClearAll();
 }
 
-void SfxConfigFunctionListBox_Impl::MouseMove( const MouseEvent& )
+void SfxConfigFunctionListBox::MouseMove( const MouseEvent& )
 {
 }
 
-IMPL_LINK( SfxConfigFunctionListBox_Impl, TimerHdl, Timer*, pTimer)
+IMPL_LINK( SfxConfigFunctionListBox, TimerHdl, Timer*, pTimer)
 /*  Description
     Timer-handler for showing a help-text. If the mouse pointer is
     still on the currently selected entry after the timer has run out,
@@ -282,7 +282,7 @@ IMPL_LINK( SfxConfigFunctionListBox_Impl, TimerHdl, Timer*, pTimer)
     return 0L;
 }
 
-void SfxConfigFunctionListBox_Impl::ClearAll()
+void SfxConfigFunctionListBox::ClearAll()
 /*  Description
     Deletes all entries in the FunctionListBox, all UserData and all
     possibly existing MacroInfo.
@@ -313,7 +313,7 @@ void SfxConfigFunctionListBox_Impl::ClearAll()
     Clear();
 }
 
-OUString SfxConfigFunctionListBox_Impl::GetSelectedScriptURI()
+OUString SfxConfigFunctionListBox::GetSelectedScriptURI()
 {
     SvTreeListEntry *pEntry = FirstSelected();
     if ( pEntry )
@@ -325,7 +325,7 @@ OUString SfxConfigFunctionListBox_Impl::GetSelectedScriptURI()
     return OUString();
 }
 
-OUString SfxConfigFunctionListBox_Impl::GetCurCommand()
+OUString SfxConfigFunctionListBox::GetCurCommand()
 {
     SvTreeListEntry *pEntry = FirstSelected();
     if (!pEntry)
@@ -336,7 +336,7 @@ OUString SfxConfigFunctionListBox_Impl::GetCurCommand()
     return pData->sCommand;
 }
 
-OUString SfxConfigFunctionListBox_Impl::GetCurLabel()
+OUString SfxConfigFunctionListBox::GetCurLabel()
 {
     SvTreeListEntry *pEntry = FirstSelected();
     if (!pEntry)
@@ -349,7 +349,7 @@ OUString SfxConfigFunctionListBox_Impl::GetCurLabel()
     return pData->sCommand;
 }
 
-void SfxConfigFunctionListBox_Impl::FunctionSelected()
+void SfxConfigFunctionListBox::FunctionSelected()
 /*  Description
     Resets the balloon-help because it shall
     always show the help-text of the selected entry.
@@ -357,7 +357,7 @@ void SfxConfigFunctionListBox_Impl::FunctionSelected()
 {
 }
 
-void SfxConfigFunctionListBox_Impl::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
+void SfxConfigFunctionListBox::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
 {
     pStylesInfo = pStyles;
 }

@@ -728,7 +728,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
     , aGroupText              (this   , CUI_RES(TXT_ACC_GROUP           ))
     , pGroupLBox(new SfxConfigGroupListBox( this, CUI_RES(BOX_ACC_GROUP), SFX_SLOT_ACCELCONFIG ))
     , aFunctionText           (this   , CUI_RES(TXT_ACC_FUNCTION        ))
-    , pFunctionBox(new SfxConfigFunctionListBox_Impl( this, CUI_RES( BOX_ACC_FUNCTION )))
+    , pFunctionBox(new SfxConfigFunctionListBox( this, CUI_RES( BOX_ACC_FUNCTION )))
     , aKeyText                (this   , CUI_RES(TXT_ACC_KEY             ))
     , aKeyBox                 (this   , CUI_RES(BOX_ACC_KEY             ))
     , aFunctionsGroup         (this   , CUI_RES(GRP_ACC_FUNCTIONS       ))

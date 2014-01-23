@@ -47,7 +47,7 @@
 
 class SfxMacroInfoItem;
 class SfxConfigGroupListBox;
-class SfxConfigFunctionListBox_Impl;
+class SfxConfigFunctionListBox;
 class SfxAcceleratorConfigPage;
 class SfxStringItem;
 
@@ -124,7 +124,7 @@ private:
     FixedText                       aGroupText;
     SfxConfigGroupListBox*     pGroupLBox;
     FixedText                       aFunctionText;
-    SfxConfigFunctionListBox_Impl*  pFunctionBox;
+    SfxConfigFunctionListBox*  pFunctionBox;
     FixedText                       aKeyText;
     SvTreeListBox                   aKeyBox;
     FixedLine                       aFunctionsGroup;

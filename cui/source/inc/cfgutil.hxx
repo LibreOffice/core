@@ -99,7 +99,7 @@ struct CuiMacroInfo
 
 typedef boost::ptr_vector<SfxGroupInfo_Impl> SfxGroupInfoArr_Impl;
 
-class SfxConfigFunctionListBox_Impl : public SvTreeListBox
+class SfxConfigFunctionListBox : public SvTreeListBox
 {
     friend class SfxConfigGroupListBox;
     Timer                aTimer;
@@ -111,8 +111,8 @@ class SfxConfigFunctionListBox_Impl : public SvTreeListBox
     virtual void  MouseMove( const MouseEvent& rMEvt );
 
 public:
-                  SfxConfigFunctionListBox_Impl( Window*, const ResId& );
-                  ~SfxConfigFunctionListBox_Impl();
+                  SfxConfigFunctionListBox( Window*, const ResId& );
+                  ~SfxConfigFunctionListBox();
 
     void          ClearAll();
     using Window::GetHelpText;
@@ -128,7 +128,7 @@ struct SvxConfigGroupBoxResource_Impl;
 class SfxConfigGroupListBox : public SvTreeListBox
 {
     SvxConfigGroupBoxResource_Impl* pImp;
-    SfxConfigFunctionListBox_Impl*  pFunctionListBox;
+    SfxConfigFunctionListBox*  pFunctionListBox;
     SfxGroupInfoArr_Impl            aArr;
     sal_uLong                       nMode;
 
@@ -174,7 +174,7 @@ public:
     void                Init(const css::uno::Reference< css::uno::XComponentContext >& xContext,
                              const css::uno::Reference< css::frame::XFrame >&          xFrame,
                              const OUString&                                        sModuleLongName);
-    void                SetFunctionListBox( SfxConfigFunctionListBox_Impl *pBox )
+    void                SetFunctionListBox( SfxConfigFunctionListBox *pBox )
                         { pFunctionListBox = pBox; }
     void                Open( SvTreeListEntry*, sal_Bool );
     void                GroupSelected();
