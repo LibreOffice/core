@@ -163,7 +163,7 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent ) const
     aDevice.SetDigitLanguage( eLang );
 
     {
-        SAL_INFO( "sfx2.doc", "PERFORMANCE SfxObjectShell::CreatePreviewMetaFile_Impl" );
+        SAL_INFO( "sfx.doc", "PERFORMANCE SfxObjectShell::CreatePreviewMetaFile_Impl" );
         ((SfxObjectShell*)this)->DoDraw( &aDevice, Point(0,0), aTmpSize, JobSetup(), nAspect );
     }
     pFile->Stop();

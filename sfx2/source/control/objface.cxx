@@ -212,7 +212,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
         {
 
             if ( pNext->GetSlotId() <= pIter->GetSlotId() )
-                SAL_WARN( "sfx2.control", "Wrong order" );
+                SAL_WARN( "sfx.control", "Wrong order" );
 
             if ( pIter->GetKind() == SFX_KIND_ENUM )
             {
@@ -229,7 +229,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
                         aStr.append(" , ");
                         aStr.append(static_cast<sal_Int32>(
                             pSlave->GetSlotId()));
-                        SAL_WARN("sfx2.control", aStr.getStr());
+                        SAL_WARN("sfx.control", aStr.getStr());
                     }
 
                     if ( pSlave->nMasterSlotId != pMasterSlot->GetSlotId() )
@@ -240,7 +240,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
                         aStr.append(" , ");
                         aStr.append(static_cast<sal_Int32>(
                             pSlave->GetSlotId()));
-                        SAL_WARN("sfx2.control", aStr.getStr());
+                        SAL_WARN("sfx.control", aStr.getStr());
                     }
 
                     pSlave = pSlave->pNextSlot;
@@ -258,7 +258,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
                         aStr.append(" , ");
                         aStr.append(static_cast<sal_Int32>(
                             pIter->pLinkedSlot->GetSlotId()));
-                        SAL_WARN("sfx2.control", aStr.getStr());
+                        SAL_WARN("sfx.control", aStr.getStr());
                     }
                 }
 
@@ -273,7 +273,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
                             pCurSlot->GetSlotId()));
                         aStr.append(" , ");
                         aStr.append(static_cast<sal_Int32>(pIter->GetSlotId()));
-                        SAL_WARN("sfx2.control", aStr.getStr());
+                        SAL_WARN("sfx.control", aStr.getStr());
                     }
                 }
                 while ( pCurSlot != pIter );
@@ -353,7 +353,7 @@ const SfxSlot* SfxInterface::GetRealSlot( const SfxSlot *pSlot ) const
     {
         if(pGenoType)
             return pGenoType->GetRealSlot(pSlot);
-        SAL_WARN( "sfx2.control", "unknown Slot" );
+        SAL_WARN( "sfx.control", "unknown Slot" );
         return 0;
     }
 
@@ -374,7 +374,7 @@ const SfxSlot* SfxInterface::GetRealSlot( sal_uInt16 nSlotId ) const
     {
         if(pGenoType)
             return pGenoType->GetRealSlot(nSlotId);
-        SAL_WARN( "sfx2.control", "unknown Slot" );
+        SAL_WARN( "sfx.control", "unknown Slot" );
         return 0;
     }
 
