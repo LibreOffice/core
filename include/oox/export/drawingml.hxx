@@ -28,6 +28,8 @@
 #include <tools/poly.hxx>
 #include <filter/msfilter/escherex.hxx>
 #ifndef PPTX_EXPORT_ROTATE_CLOCKWISIFY
+// Our rotation is counter-clockwise and is in 100ths of a degree.
+// drawingML rotation is clockwise and is in 60000ths of a degree.
 #define PPTX_EXPORT_ROTATE_CLOCKWISIFY(input) ((21600000-input*600)%21600000)
 #endif
 

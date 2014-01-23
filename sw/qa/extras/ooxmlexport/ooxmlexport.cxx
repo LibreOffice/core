@@ -2492,6 +2492,10 @@ DECLARE_OOXMLEXPORT_TEST(testDmlTextshape, "dml-textshape.docx")
     // Connector was incorrectly shifted towards the top left corner, X was 552, Y was 0.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4018), xShape->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1256), xShape->getPosition().Y);
+
+    xShape.set(xGroup->getByIndex(5), uno::UNO_QUERY);
+    // This was incorrectly shifted towards the top of the page, Y was 106.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1016), xShape->getPosition().Y);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDrawinglayerPicPos, "drawinglayer-pic-pos.docx")
