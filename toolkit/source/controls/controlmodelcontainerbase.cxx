@@ -672,7 +672,7 @@ sal_Bool SAL_CALL ControlModelContainerBase::getGroupControl(  ) throw (RuntimeE
 // ----------------------------------------------------------------------------
 void SAL_CALL ControlModelContainerBase::setGroupControl( sal_Bool ) throw (RuntimeException)
 {
-    OSL_TRACE( "UnoControlDialogModel::setGroupControl: explicit grouping not supported" );
+    OSL_TRACE( "ControlModelContainerBase::setGroupControl: explicit grouping not supported" );
 }
 
 // ----------------------------------------------------------------------------
@@ -732,7 +732,7 @@ Sequence< Reference< XControlModel > > SAL_CALL ControlModelContainerBase::getCo
         Reference< XPropertySetInfo > xPSI;
         if ( xControlProps.is() )
             xPSI = xControlProps->getPropertySetInfo( );
-        DBG_ASSERT( xPSI.is(), "UnoControlDialogModel::getControlModels: invalid child model!" );
+        DBG_ASSERT( xPSI.is(), "ControlModelContainerBase::getControlModels: invalid child model!" );
 
         // has it?
         if ( xPSI.is() && xPSI->hasPropertyByName( getTabIndexPropertyName() ) )
@@ -767,7 +767,7 @@ void SAL_CALL ControlModelContainerBase::setGroup( const Sequence< Reference< XC
     // We only have a sequence of control models, and we _know_ (yes, that's a HACK relying on
     // implementation details) that VCL does grouping according to the order of controls automatically
     // At least VCL does this for all we're interested in: Radio buttons.
-    OSL_TRACE( "UnoControlDialogModel::setGroup: grouping not supported" );
+    OSL_TRACE( "ControlModelContainerBase::setGroup: grouping not supported" );
 }
 
 ////----- XInitialization -------------------------------------------------------------------
@@ -871,7 +871,7 @@ void SAL_CALL ControlModelContainerBase::getGroup( sal_Int32 _nGroup, Sequence< 
 
     if ( ( _nGroup < 0 ) || ( _nGroup >= (sal_Int32)maGroups.size() ) )
     {
-        OSL_TRACE( "UnoControlDialogModel::getGroup: invalid argument and I am not allowed to throw an exception!" );
+        OSL_TRACE( "ControlModelContainerBase::getGroup: invalid argument and I am not allowed to throw an exception!" );
         _rGroup.realloc( 0 );
         _rName = OUString();
     }
@@ -1072,7 +1072,7 @@ void SAL_CALL ControlModelContainerBase::propertyChange( const PropertyChangeEve
     SolarMutexGuard aGuard;
 
     DBG_ASSERT( _rEvent.PropertyName.equalsAscii( "TabIndex" ),
-        "UnoControlDialogModel::propertyChange: not listening for this property!" );
+        "ControlModelContainerBase::propertyChange: not listening for this property!" );
 
     // the accessor for the changed element
     OUString sAccessor;
@@ -1081,7 +1081,7 @@ void SAL_CALL ControlModelContainerBase::propertyChange( const PropertyChangeEve
             maModels.begin(), maModels.end(),
             CompareControlModel( Reference< XControlModel >( _rEvent.Source, UNO_QUERY ) )
         );
-    OSL_ENSURE( maModels.end() != aPos, "UnoControlDialogModel::propertyChange: don't know this model!" );
+    OSL_ENSURE( maModels.end() != aPos, "ControlModelContainerBase::propertyChange: don't know this model!" );
     if ( maModels.end() != aPos )
         sAccessor = aPos->second;
 
