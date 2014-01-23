@@ -260,10 +260,12 @@ sal_Int32 SwBidiPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf ) const
  * brackets, these will be deleted.
  * --------------------------------------------------*/
 
-SwDoubleLinePortion::SwDoubleLinePortion( SwDoubleLinePortion& rDouble,
-                                          sal_Int32 nEnd ) :
-    SwMultiPortion( nEnd ),
-    pBracket( 0 )
+SwDoubleLinePortion::SwDoubleLinePortion(SwDoubleLinePortion& rDouble, sal_Int32 nEnd)
+    : SwMultiPortion(nEnd)
+    , pBracket(0)
+    , nLineDiff(0)
+    , nBlank1(0)
+    , nBlank2(0)
 {
     SetDirection( rDouble.GetDirection() );
     SetDouble();
