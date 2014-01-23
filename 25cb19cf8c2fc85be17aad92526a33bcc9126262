@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_9a3e9128",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2436,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-01-23T23:10:49Z",
+      "side": 1,
+      "message": "Just a nitpick: less confusing might be to write\n\n CellCounter aFunc \u003d std::for_each(maCells.begin(), maCells.end(), CellCounter());",
+      "range": {
+        "startLine": 2436,
+        "startChar": 10,
+        "endLine": 2436,
+        "endChar": 11
+      },
+      "revId": "25cb19cf8c2fc85be17aad92526a33bcc9126262",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
