@@ -28,7 +28,8 @@
 @implementation AquaA11yWrapperRow : AquaA11yWrapper
 
 -(id)disclosingAttribute {
-    return NULL; // TODO
+    // TODO: implement
+    return nil;
 }
 
 -(NSArray *)accessibilityAttributeNames {

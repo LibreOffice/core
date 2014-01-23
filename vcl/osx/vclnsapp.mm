@@ -82,19 +82,7 @@
                 if( nModMask == NSCommandKeyMask
                     && [[pEvent charactersIgnoringModifiers] isEqualToString: @"w"] )
                 {
-                    // Note: gcc 4.2.1 (in the 10.6 SDK) tells us
-                    // 'NSWindow' may not respond to
-                    // '-windowShouldClose:' . Is that a bogus
-                    // warning, or is this code bogus? No idea.
-                    // Anyway, so that we can compile also against
-                    // this SDK with -Werror, use objc_msgSend
-                    // instead.
-
-                    // Instead of:
-                    // [pFrame->getNSWindow() windowShouldClose: nil];
-                    // do:
-                    objc_msgSend(pFrame->getNSWindow(), @selector(windowShouldClose:), nil);
-
+                    [(SalFrameWindow*)pFrame->getNSWindow() windowShouldClose: nil];
                     return;
                 }
             }

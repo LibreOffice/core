@@ -22,7 +22,7 @@
 
 #include "osx/a11ywrapper.h"
 
-@interface SalFrameWindow : NSWindow
+@interface SalFrameWindow : NSWindow<NSWindowDelegate>
 {
     AquaSalFrame*       mpFrame;
     id mDraggingDestinationHandler;
@@ -38,6 +38,9 @@
 -(void)windowDidMiniaturize: (NSNotification*)pNotification;
 -(void)windowDidDeminiaturize: (NSNotification*)pNotification;
 -(BOOL)windowShouldClose: (NSNotification*)pNotification;
+//-(void)willEncodeRestorableState:(NSCoder*)pCoderState;
+//-(void)didDecodeRestorableState:(NSCoder*)pCoderState;
+//-(void)windowWillEnterVersionBrowser:(NSNotification*)pNotification;
 -(void)dockMenuItemTriggered: (id)sender;
 -(AquaSalFrame*)getSalFrame;
 -(BOOL)containsMouse;

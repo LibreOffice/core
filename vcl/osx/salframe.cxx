@@ -200,17 +200,7 @@ void AquaSalFrame::initWindowAndView()
     else
         [mpNSWindow setAcceptsMouseMovedEvents: YES];
     [mpNSWindow setHasShadow: YES];
-
-    // WTF? With the 10.6 SDK and gcc 4.2.1, we get: class 'NSWindow'
-    // does not implement the 'NSWindowDelegate' protocol. Anyway,
-    // having the window object be its own delegate object is
-    // apparently what the code does on purpose, see discussion in
-    // https://issues.apache.org/ooo/show_bug.cgi?id=91990
-
-    // So to silence the warning when compiling with -Werror, instead of:
-    // [mpNSWindow setDelegate: mpNSWindow];
-    // do this:
-    objc_msgSend(mpNSWindow, @selector(setDelegate:), mpNSWindow);
+    [mpNSWindow setDelegate: static_cast<id<NSWindowDelegate> >(mpNSWindow)];
 
     if( [mpNSWindow respondsToSelector: @selector(setRestorable:)])
     {
