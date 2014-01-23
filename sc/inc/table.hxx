@@ -882,10 +882,10 @@ public:
     void StartNeededListeners();
 
     /**
-     * Mark dirty those formula cells that has named ranges with relative
-     * references.
+     * Mark formula cells dirty that have the mbPostponedDirty flag set or
+     * contain named ranges with relative references.
      */
-    void SetRelNameDirty();
+    void SetDirtyIfPostponed();
 
     /**
      * Broadcast dirty formula cells that contain functions such as CELL(),
