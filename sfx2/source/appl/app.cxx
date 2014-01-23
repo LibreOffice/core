@@ -146,7 +146,7 @@ SfxApplication* SfxApplication::GetOrCreate()
     ::osl::MutexGuard aGuard(theApplicationMutex::get());
     if (!pApp)
     {
-        SAL_INFO( "sfx.appl", "sfx2 (mb93783) ::SfxApplication::SetApp" );
+        SAL_INFO( "sfx.appl", "SfxApplication::SetApp" );
 
         pApp = new SfxApplication;
 
@@ -180,7 +180,7 @@ SfxApplication* SfxApplication::GetOrCreate()
 SfxApplication::SfxApplication()
     : pAppData_Impl( 0 )
 {
-    SAL_INFO( "sfx.appl", "sfx2 (mb93783) ::SfxApplication::SfxApplication" );
+    SAL_INFO( "sfx.appl", "SfxApplication::SfxApplication" );
 
     SetName( OUString("StarOffice") );
     SvtViewOptions::AcquireOptions();

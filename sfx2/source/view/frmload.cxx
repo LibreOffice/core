@@ -617,7 +617,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
 
     SolarMutexGuard aGuard;
 
-    SAL_INFO( "sfx.view", "sfx2 (mb93783) ::SfxFrameLoader::load" );
+    SAL_INFO( "sfx.view", "SfxFrameLoader::load" );
 
     ::comphelper::NamedValueCollection aDescriptor( rArgs );
 

@@ -1767,7 +1767,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 //------------------------------------------------------------------------
 sal_Bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMedium& rTargetMedium )
 {
-    SAL_INFO( "sfx.doc", "sfx2 (mv76033) SfxObjectShell::DisconnectStorage_Impl" );
+    SAL_INFO( "sfx.doc", "SfxObjectShell::DisconnectStorage_Impl" );
 
     // this method disconnects the storage from source medium, and attaches it to the backup created by the target medium
 
@@ -1825,7 +1825,7 @@ sal_Bool SfxObjectShell::ConnectTmpStorage_Impl(
 */
 
 {
-    SAL_INFO( "sfx.doc", "sfx2 (mv76033) SfxObjectShell::ConnectTmpStorage_Impl" );
+    SAL_INFO( "sfx.doc", "SfxObjectShell::ConnectTmpStorage_Impl" );
 
     sal_Bool bResult = sal_False;
 
@@ -1961,7 +1961,7 @@ sal_Bool SfxObjectShell::DoSaveAs( SfxMedium& rMedium )
 
 sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
 {
-    SAL_INFO( "sfx.doc", "sfx2 (mv76033) SfxObjectShell::DoSaveCompleted" );
+    SAL_INFO( "sfx.doc", "SfxObjectShell::DoSaveCompleted" );
 
     sal_Bool bOk = sal_True;
     sal_Bool bMedChanged = pNewMed && pNewMed!=pMedium;
@@ -3131,7 +3131,7 @@ uno::Reference< embed::XStorage > SfxObjectShell::GetStorage()
 
 sal_Bool SfxObjectShell::SaveChildren( sal_Bool bObjectsOnly )
 {
-    SAL_INFO( "sfx.doc", "sfx2 (mv76033) SfxObjectShell::SaveChildren" );
+    SAL_INFO( "sfx.doc", "SfxObjectShell::SaveChildren" );
 
     sal_Bool bResult = sal_True;
     if ( pImp->mpObjectContainer )
@@ -3145,7 +3145,7 @@ sal_Bool SfxObjectShell::SaveChildren( sal_Bool bObjectsOnly )
 
 sal_Bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
 {
-    SAL_INFO( "sfx.doc", "sfx2 (mv76033) SfxObjectShell::SaveAsChildren" );
+    SAL_INFO( "sfx.doc", "SfxObjectShell::SaveAsChildren" );
 
     sal_Bool bResult = sal_True;
 
@@ -3171,7 +3171,7 @@ sal_Bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
 
 sal_Bool SfxObjectShell::SaveCompletedChildren( sal_Bool bSuccess )
 {
-    SAL_INFO( "sfx.doc", "sfx2 (mv76033) SfxObjectShell::SaveCompletedChildren" );
+    SAL_INFO( "sfx.doc", "SfxObjectShell::SaveCompletedChildren" );
 
     sal_Bool bResult = sal_True;
 
@@ -3208,7 +3208,7 @@ sal_Bool SfxObjectShell::SaveCompletedChildren( sal_Bool bSuccess )
 sal_Bool SfxObjectShell::SwitchChildrenPersistance( const uno::Reference< embed::XStorage >& xStorage,
                                                     sal_Bool bForceNonModified )
 {
-    SAL_INFO( "sfx.doc", "sfx2 (mv76033) SfxObjectShell::SwitchChildrenPersistence" );
+    SAL_INFO( "sfx.doc", "SfxObjectShell::SwitchChildrenPersistence" );
 
     if ( !xStorage.is() )
     {
@@ -3227,7 +3227,7 @@ sal_Bool SfxObjectShell::SwitchChildrenPersistance( const uno::Reference< embed:
 // Never call this method directly, always use the DoSaveCompleted call
 sal_Bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >& xStorage )
 {
-    SAL_INFO( "sfx.doc", "sfx2 (mv76033) SfxObjectShell::SaveCompleted" );
+    SAL_INFO( "sfx.doc", "SfxObjectShell::SaveCompleted" );
 
     sal_Bool bResult = sal_False;
     sal_Bool bSendNotification = sal_False;
@@ -3379,7 +3379,7 @@ sal_Bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embed::
 
 sal_Bool SfxObjectShell::SwitchPersistance( const uno::Reference< embed::XStorage >& xStorage )
 {
-    SAL_INFO( "sfx.doc", "sfx2 (mv76033) SfxObjectShell::SwitchPersistance" );
+    SAL_INFO( "sfx.doc", "SfxObjectShell::SwitchPersistance" );
 
     sal_Bool bResult = sal_False;
 #ifdef DBG_UTIL
@@ -3414,7 +3414,7 @@ sal_Bool SfxObjectShell::SwitchPersistance( const uno::Reference< embed::XStorag
 sal_Bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< embed::XStorage >& xSource,
                                                          const uno::Reference< embed::XStorage >& xTarget )
 {
-    SAL_INFO( "sfx.doc", "sfx2 (mv76033) SfxObjectShell::CopyStoragesOfUnknownMediaType" );
+    SAL_INFO( "sfx.doc", "SfxObjectShell::CopyStoragesOfUnknownMediaType" );
 
     // This method does not commit the target storage and should not do it
     sal_Bool bResult = sal_True;
@@ -3529,7 +3529,7 @@ sal_Bool SfxObjectShell::GenerateAndStoreThumbnail( sal_Bool bEncrypted,
                                                     sal_Bool bIsTemplate,
                                                     const uno::Reference< embed::XStorage >& xStor )
 {
-    SAL_INFO( "sfx.doc", "sfx2 (mv76033) SfxObjectShell::GenerateAndStoreThumbnail" );
+    SAL_INFO( "sfx.doc", "SfxObjectShell::GenerateAndStoreThumbnail" );
 
     bIsInGenerateThumbnail = sal_True;//optimize thumbnail generate and store procedure to improve odt saving performance, i120030
 

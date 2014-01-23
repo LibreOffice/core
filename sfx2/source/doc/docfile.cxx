@@ -1798,7 +1798,7 @@ void SfxMedium::Transfer_Impl()
 
     if ( !aNameURL.isEmpty() && ( !pImp->m_eError || (pImp->m_eError & ERRCODE_WARNING_MASK) ) )
     {
-        SAL_INFO( "sfx.doc", "sfx2 (mv76033) SfxMedium::Transfer_Impl, copying to target" );
+        SAL_INFO( "sfx.doc", "SfxMedium::Transfer_Impl, copying to target" );
 
         Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
         Reference< XOutputStream > rOutStream;
@@ -2084,7 +2084,7 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
                                        const OUString& aExtension,
                                        const OUString& aDestDir )
 {
-    SAL_INFO( "sfx.doc", "sfx2 (mv76033) SfxMedium::DoInternalBackup_Impl( with destdir )" );
+    SAL_INFO( "sfx.doc", "SfxMedium::DoInternalBackup_Impl( with destdir )" );
 
     if ( !pImp->m_aBackupURL.isEmpty() )
         return; // the backup was done already
@@ -2160,7 +2160,7 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
 //------------------------------------------------------------------
 void SfxMedium::DoBackup_Impl()
 {
-    SAL_INFO( "sfx.doc", "sfx2 (mv76033) SfxMedium::DoBackup_Impl" );
+    SAL_INFO( "sfx.doc", "SfxMedium::DoBackup_Impl" );
 
        // source file name is the logical name of this medium
     INetURLObject aSource( GetURLObject() );

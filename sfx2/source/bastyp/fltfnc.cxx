@@ -1126,7 +1126,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
 
 void SfxFilterContainer::ReadFilters_Impl( sal_Bool bUpdate )
 {
-    SAL_INFO( "sfx.bastyp", "sfx2 (as96863) ::SfxFilterContainer::ReadFilters" );
+    SAL_INFO( "sfx.bastyp", "SfxFilterContainer::ReadFilters" );
     if ( !pFilterArr )
         CreateFilterArr();
 
