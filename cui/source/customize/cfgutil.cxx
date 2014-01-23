@@ -59,6 +59,7 @@
 #include <unotools/configmgr.hxx>
 #include "dialmgr.hxx"
 #include <svl/stritem.hxx>
+#include <vcl/builder.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -248,7 +249,7 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
     return lStyles;
 }
 
-SfxConfigFunctionListBox::SfxConfigFunctionListBox( Window* pParent, const ResId& rResId)
+SfxConfigFunctionListBox::SfxConfigFunctionListBox(Window* pParent, const ResId& rResId)
     : SvTreeListBox( pParent, rResId )
     , pCurEntry( 0 )
     , pStylesInfo( 0 )
@@ -260,6 +261,31 @@ SfxConfigFunctionListBox::SfxConfigFunctionListBox( Window* pParent, const ResId
     aTimer.SetTimeout( 200 );
     aTimer.SetTimeoutHdl(
         LINK( this, SfxConfigFunctionListBox, TimerHdl ) );
+}
+
+SfxConfigFunctionListBox::SfxConfigFunctionListBox(Window* pParent, WinBits nStyle)
+    : SvTreeListBox( pParent, nStyle )
+    , pCurEntry( 0 )
+    , pStylesInfo( 0 )
+{
+    SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
+    GetModel()->SetSortMode( SortAscending );
+
+    // Timer for the BallonHelp
+    aTimer.SetTimeout( 200 );
+    aTimer.SetTimeoutHdl(
+        LINK( this, SfxConfigFunctionListBox, TimerHdl ) );
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSfxConfigFunctionListBox(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinBits = WB_TABSTOP;
+
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+       nWinBits |= WB_BORDER;
+
+    return new SfxConfigFunctionListBox(pParent, nWinBits);
 }
 
 SfxConfigFunctionListBox::~SfxConfigFunctionListBox()
@@ -398,15 +424,32 @@ SvxConfigGroupBoxResource_Impl::SvxConfigGroupBoxResource_Impl() :
     FreeResource();
 }
 
-SfxConfigGroupListBox::SfxConfigGroupListBox(
-    Window* pParent, const ResId& rResId, sal_uLong nConfigMode )
-        : SvTreeListBox( pParent, rResId )
-        , pImp(new SvxConfigGroupBoxResource_Impl()), pFunctionListBox(0), nMode( nConfigMode ), pStylesInfo(0)
+SfxConfigGroupListBox::SfxConfigGroupListBox(Window* pParent, const ResId& rResId)
+    : SvTreeListBox( pParent, rResId )
+    , pImp(new SvxConfigGroupBoxResource_Impl()), pFunctionListBox(0), pStylesInfo(0)
 {
     SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT );
     SetNodeBitmaps( pImp->m_collapsedImage, pImp->m_expandedImage );
 }
 
+SfxConfigGroupListBox::SfxConfigGroupListBox(Window* pParent, WinBits nStyle)
+    : SvTreeListBox(pParent, nStyle)
+    , pImp(new SvxConfigGroupBoxResource_Impl()), pFunctionListBox(0), pStylesInfo(0)
+{
+    SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT );
+    SetNodeBitmaps( pImp->m_collapsedImage, pImp->m_expandedImage );
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSfxConfigGroupListBox(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinBits = WB_TABSTOP;
+
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+       nWinBits |= WB_BORDER;
+
+    return new SfxConfigGroupListBox(pParent, nWinBits);
+}
 
 SfxConfigGroupListBox::~SfxConfigGroupListBox()
 {
@@ -539,8 +582,9 @@ namespace
 
 //-----------------------------------------------
 void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                                      const css::uno::Reference< css::frame::XFrame >&          xFrame,
-                                      const OUString&                                        sModuleLongName)
+    const css::uno::Reference< css::frame::XFrame >& xFrame,
+    const OUString& sModuleLongName,
+    bool bEventMode)
 {
     SetUpdateMode(sal_False);
     ClearAll(); // Remove all old entries from treelist box
@@ -580,7 +624,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
 
     if ( rootNode.is() )
     {
-        if ( nMode )
+        if ( bEventMode )
         {
                 //We call acquire on the XBrowseNode so that it does not
                 //get autodestructed and become invalid when accessed later.

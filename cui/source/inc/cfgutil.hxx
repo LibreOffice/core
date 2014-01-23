@@ -111,8 +111,9 @@ class SfxConfigFunctionListBox : public SvTreeListBox
     virtual void  MouseMove( const MouseEvent& rMEvt );
 
 public:
-                  SfxConfigFunctionListBox( Window*, const ResId& );
-                  ~SfxConfigFunctionListBox();
+    SfxConfigFunctionListBox(Window*, const ResId&);
+    SfxConfigFunctionListBox(Window*, WinBits nStyle);
+    ~SfxConfigFunctionListBox();
 
     void          ClearAll();
     using Window::GetHelpText;
@@ -130,7 +131,6 @@ class SfxConfigGroupListBox : public SvTreeListBox
     SvxConfigGroupBoxResource_Impl* pImp;
     SfxConfigFunctionListBox*  pFunctionListBox;
     SfxGroupInfoArr_Impl            aArr;
-    sal_uLong                       nMode;
 
     OUString m_sModuleLongName;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
@@ -165,15 +165,15 @@ protected:
     virtual sal_Bool        Expand( SvTreeListEntry* pParent );
 
 public:
-    SfxConfigGroupListBox ( Window* pParent,
-                                 const ResId&,
-                                 sal_uLong nConfigMode = 0 );
+    SfxConfigGroupListBox(Window* pParent, const ResId&);
+    SfxConfigGroupListBox(Window* pParent, WinBits nStyle);
     ~SfxConfigGroupListBox();
     void                ClearAll();
 
     void                Init(const css::uno::Reference< css::uno::XComponentContext >& xContext,
                              const css::uno::Reference< css::frame::XFrame >&          xFrame,
-                             const OUString&                                        sModuleLongName);
+                             const OUString&                                        sModuleLongName,
+                             bool bEventMode);
     void                SetFunctionListBox( SfxConfigFunctionListBox *pBox )
                         { pFunctionListBox = pBox; }
     void                Open( SvTreeListEntry*, sal_Bool );

@@ -47,7 +47,7 @@ class _SfxMacroTabPage : public SfxTabPage
 protected:
     _SfxMacroTabPage_Impl*      mpImpl;
 
-                                _SfxMacroTabPage( Window* pParent, const ResId& rId, const SfxItemSet& rItemSet );
+                                _SfxMacroTabPage( Window* pParent, const SfxItemSet& rItemSet );
 
     void                        InitAndSetHandler();
     void                        FillEvents();
@@ -91,7 +91,6 @@ class SfxMacroTabPage : public _SfxMacroTabPage
 public:
     SfxMacroTabPage(
         Window* pParent,
-        const ResId& rId,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxDocumentFrame,
         const SfxItemSet& rSet
     );
@@ -100,14 +99,13 @@ public:
     static SfxTabPage* Create( Window* pParent, const SfxItemSet& rAttrSet );
 };
 
-class SfxMacroAssignDlg : public SfxNoLayoutSingleTabDialog
+class SfxMacroAssignDlg : public SfxSingleTabDialog
 {
 public:
     SfxMacroAssignDlg(
         Window* pParent,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxDocumentFrame,
         const SfxItemSet& rSet );
-    virtual ~SfxMacroAssignDlg();
 };
 
 #endif

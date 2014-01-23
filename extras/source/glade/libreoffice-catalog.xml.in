@@ -18,9 +18,6 @@
     <glade-widget-class title="Font PickListBox" name="smlo-SmFontPickListBox"
                         generic-name="SmFontPickListBox" parent="GtkComboBoxText"
                         icon-name="widget-gtk-comboboxtext"/>
-    <glade-widget-class title="Macro EventListBox" name="cuilo-MacroEventListBox"
-                        generic-name="Macro EventListBox" parent="GtkComboBoxText"
-                        icon-name="widget-gtk-comboboxtext"/>
     <glade-widget-class title="Thesaurus View" name="cuilo-ThesaurusAlternativesCtrl"
                         generic-name="ThesaurusAlternativesCtrl" parent="GtkTextView"
                         icon-name="widget-gtk-textview"/>
@@ -309,6 +306,15 @@
                         icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="SwDBTreeList" name="swlo-SwDBTreeList"
                         generic-name="SwDBTreeList" parent="GtkTreeView"
+                        icon-name="widget-gtk-treeview"/>
+    <glade-widget-class title="Macro EventListBox" name="cuilo-MacroEventListBox"
+                        generic-name="Macro EventListBox" parent="GtkTreeView"
+                        icon-name="widget-gtk-treeview"/>
+    <glade-widget-class title="ConfigGroup ListBox" name="cuilo-SfxConfigGroupListBox"
+                        generic-name="ConfigGroup ListBox" parent="GtkTreeView"
+                        icon-name="widget-gtk-treeview"/>
+    <glade-widget-class title="ConfigGroupFunction ListBox" name="cuilo-SfxConfigFunctionListBox"
+                        generic-name="ConfigGroupFunction ListBox" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Paragraph Preview" name="svxlo-SvxParaPrevWindow"
                         generic-name="Paragraph Preview Window" parent="GtkDrawingArea"

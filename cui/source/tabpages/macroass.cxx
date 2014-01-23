@@ -29,7 +29,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/objsh.hxx>
-#include "macroass.hrc"
 #include "cuires.hrc"
 #include <vcl/fixed.hxx>
 #include "headertablistbox.hxx"
@@ -42,21 +41,18 @@ using ::com::sun::star::frame::XFrame;
 class _SfxMacroTabPage_Impl
 {
 public:
-    _SfxMacroTabPage_Impl( void );
-    ~_SfxMacroTabPage_Impl();
+    _SfxMacroTabPage_Impl();
 
     OUString                        maStaticMacroLBLabel;
     PushButton*                     pAssignPB;
     PushButton*                     pDeletePB;
-    OUString*                       pStrEvent;
-    OUString*                       pAssignedMacro;
+    OUString                        sStrEvent;
+    OUString                        sAssignedMacro;
     MacroEventListBox*              pEventLB;
+    VclFrame*                       pGroupFrame;
     SfxConfigGroupListBox*          pGroupLB;
-    FixedText*                      pFT_MacroLBLabel;
+    VclFrame*                       pMacroFrame;
     SfxConfigFunctionListBox*       pMacroLB;
-
-    FixedText*                      pMacroFT;
-    OUString*                       pMacroStr;
 
     sal_Bool                            bReadOnly;
     Timer                           maFillGroupTimer;
@@ -64,37 +60,19 @@ public:
     bool m_bDummyActivated; ///< has this tab page already been activated
 };
 
-_SfxMacroTabPage_Impl::_SfxMacroTabPage_Impl( void ) :
-    pAssignPB( NULL ),
-    pDeletePB( NULL ),
-    pStrEvent( NULL ),
-    pAssignedMacro( NULL ),
-    pEventLB( NULL ),
-    pGroupLB( NULL ),
-    pFT_MacroLBLabel( NULL ),
-    pMacroLB( NULL ),
-    pMacroFT( NULL ),
-    pMacroStr( NULL ),
-    bReadOnly( sal_False ),
-    bGotEvents( sal_False )
+_SfxMacroTabPage_Impl::_SfxMacroTabPage_Impl()
+    : pAssignPB(NULL)
+    , pDeletePB(NULL)
+    , pEventLB(NULL)
+    , pGroupFrame(NULL)
+    , pGroupLB(NULL)
+    , pMacroFrame(NULL)
+    , pMacroLB(NULL)
+    , bReadOnly(false)
+    , bGotEvents(false)
     , m_bDummyActivated(false)
 {
 }
-
-_SfxMacroTabPage_Impl::~_SfxMacroTabPage_Impl()
-{
-    delete pAssignPB;
-    delete pDeletePB;
-    delete pStrEvent;
-    delete pAssignedMacro;
-    delete pEventLB;
-    delete pGroupLB;
-    delete pMacroLB;
-    delete pFT_MacroLBLabel;
-    delete pMacroFT;
-    delete pMacroStr;
-}
-
 
 static sal_uInt16 aPageRg[] = {
     SID_ATTR_MACROITEM, SID_ATTR_MACROITEM,
@@ -157,9 +135,8 @@ void _SfxMacroTabPage::EnableButtons()
         mpImpl->pAssignPB->Enable( sal_False );
 }
 
-_SfxMacroTabPage::_SfxMacroTabPage( Window* pParent, const ResId& rResId, const SfxItemSet& rAttrSet )
-    : SfxTabPage( pParent, rResId, rAttrSet )
-
+_SfxMacroTabPage::_SfxMacroTabPage(Window* pParent, const SfxItemSet& rAttrSet)
+    : SfxTabPage(pParent, "EventAssignPage", "cui/ui/eventassignpage.ui", rAttrSet)
 {
     mpImpl = new _SfxMacroTabPage_Impl;
 }
@@ -189,11 +166,8 @@ void _SfxMacroTabPage::AddEvent( const OUString & rEventName, sal_uInt16 nEventI
 void _SfxMacroTabPage::ScriptChanged()
 {
     // get new areas and their functions
-    {
-        mpImpl->pGroupLB->Show();
-        mpImpl->pMacroLB->Show();
-        mpImpl->pMacroFT->SetText( *mpImpl->pMacroStr );
-    }
+    mpImpl->pGroupFrame->Show();
+    mpImpl->pMacroFrame->Show();
 
     EnableButtons();
 }
@@ -307,7 +281,7 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, SelectGroup_Impl, ListBox*, EMPTYARG )
     OUString       aLabelText;
     if( !sScriptURI.isEmpty() )
         aLabelText = pImpl->maStaticMacroLBLabel;
-    pImpl->pFT_MacroLBLabel->SetText( aLabelText );
+    pImpl->pMacroFrame->set_label( aLabelText );
 
     pThis->EnableButtons();
     return 0;
@@ -404,9 +378,9 @@ void _SfxMacroTabPage::InitAndSetHandler()
     rListBox.SetSelectionMode( SINGLE_SELECTION );
     rListBox.SetTabs( &nTabs[0], MAP_APPFONT );
     Size aSize( nTabs[ 2 ], 0 );
-    rHeaderBar.InsertItem( ITEMID_EVENT, *mpImpl->pStrEvent, LogicToPixel( aSize, MapMode( MAP_APPFONT ) ).Width() );
+    rHeaderBar.InsertItem( ITEMID_EVENT, mpImpl->sStrEvent, LogicToPixel( aSize, MapMode( MAP_APPFONT ) ).Width() );
     aSize.Width() = 1764;       // don't know what, so 42^2 is best to use...
-    rHeaderBar.InsertItem( ITMEID_ASSMACRO, *mpImpl->pAssignedMacro, LogicToPixel( aSize, MapMode( MAP_APPFONT ) ).Width() );
+    rHeaderBar.InsertItem( ITMEID_ASSMACRO, mpImpl->sAssignedMacro, LogicToPixel( aSize, MapMode( MAP_APPFONT ) ).Width() );
     rListBox.SetSpaceBetweenEntries( 0 );
 
     mpImpl->pEventLB->Show();
@@ -426,7 +400,7 @@ void _SfxMacroTabPage::FillMacroList()
         ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext >(),
         GetFrame(),
-        OUString() );
+        OUString(), false);
 }
 
 void _SfxMacroTabPage::FillEvents()
@@ -459,22 +433,19 @@ void _SfxMacroTabPage::FillEvents()
     }
 }
 
-SfxMacroTabPage::SfxMacroTabPage( Window* pParent, const ResId& rResId, const Reference< XFrame >& rxDocumentFrame, const SfxItemSet& rSet )
-    : _SfxMacroTabPage( pParent, rResId, rSet )
+SfxMacroTabPage::SfxMacroTabPage(Window* pParent, const Reference< XFrame >& rxDocumentFrame, const SfxItemSet& rSet )
+    : _SfxMacroTabPage( pParent, rSet )
 {
-    mpImpl->pStrEvent           = new OUString(                 CUI_RES( STR_EVENT ) );
-    mpImpl->pAssignedMacro      = new OUString(                 CUI_RES( STR_ASSMACRO ) );
-    mpImpl->pEventLB            = new MacroEventListBox( this,  CUI_RES( LB_EVENT ) );
-    mpImpl->pAssignPB           = new PushButton( this,         CUI_RES( PB_ASSIGN ) );
-    mpImpl->pDeletePB           = new PushButton( this,         CUI_RES( PB_DELETE ) );
-    mpImpl->pMacroFT            = new FixedText( this,          CUI_RES( FT_MACRO ) );
-    mpImpl->pGroupLB            = new SfxConfigGroupListBox_Impl( this,     CUI_RES( LB_GROUP ) );
-    mpImpl->pFT_MacroLBLabel    = new FixedText( this,          CUI_RES( FT_LABEL4LB_MACROS ) );
-    mpImpl->maStaticMacroLBLabel= mpImpl->pFT_MacroLBLabel->GetText();
-    mpImpl->pMacroLB            = new SfxConfigFunctionListBox_Impl( this,  CUI_RES( LB_MACROS ) );
-    mpImpl->pMacroStr           = new OUString(                 CUI_RES( STR_MACROS ) );
-
-    FreeResource();
+    mpImpl->sStrEvent = get<FixedText>("eventft")->GetText();
+    mpImpl->sAssignedMacro = get<FixedText>("assignft")->GetText();
+    get(mpImpl->pEventLB , "assignments");
+    get(mpImpl->pAssignPB, "assign");
+    get(mpImpl->pDeletePB, "delete");
+    get(mpImpl->pGroupFrame, "groupframe");
+    get(mpImpl->pGroupLB, "libraries");
+    get(mpImpl->pMacroFrame, "macroframe");
+    mpImpl->maStaticMacroLBLabel = mpImpl->pMacroFrame->get_label();
+    get(mpImpl->pMacroLB, "macros");
 
     SetFrame( rxDocumentFrame );
 
@@ -487,7 +458,7 @@ namespace
 {
     SfxMacroTabPage* CreateSfxMacroTabPage( Window* pParent, const SfxItemSet& rAttrSet )
     {
-        return new SfxMacroTabPage( pParent, CUI_RES( RID_SVXPAGE_EVENTASSIGN ), NULL, rAttrSet );
+        return new SfxMacroTabPage( pParent, NULL, rAttrSet );
     }
 }
 
@@ -496,18 +467,14 @@ SfxTabPage* SfxMacroTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet
     return CreateSfxMacroTabPage(pParent, rAttrSet);
 }
 
-SfxMacroAssignDlg::SfxMacroAssignDlg( Window* pParent, const Reference< XFrame >& rxDocumentFrame, const SfxItemSet& rSet )
-    : SfxNoLayoutSingleTabDialog( pParent, rSet, 0 )
+SfxMacroAssignDlg::SfxMacroAssignDlg(Window* pParent,
+    const Reference< XFrame >& rxDocumentFrame, const SfxItemSet& rSet)
+    : SfxSingleTabDialog(pParent, rSet)
 {
-    SfxMacroTabPage* pPage = CreateSfxMacroTabPage(this, rSet);
+    SfxMacroTabPage* pPage = CreateSfxMacroTabPage(get_content_area(), rSet);
     pPage->SetFrame( rxDocumentFrame );
-    SetTabPage( pPage );
+    setTabPage( pPage );
     pPage->LaunchFillGroup();
 }
-
-SfxMacroAssignDlg::~SfxMacroAssignDlg()
-{
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

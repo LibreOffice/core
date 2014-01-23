@@ -164,7 +164,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeMacroEventListBox(Window *p
 
 Size MacroEventListBox::GetOptimalSize() const
 {
-    return LogicToPixel(Size(192, 200), MapMode(MAP_APPFONT ));
+    return LogicToPixel(Size(192, 72), MapMode(MAP_APPFONT ));
 }
 
 void MacroEventListBox::Resize()

@@ -726,7 +726,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
     , aChangeButton           (this   , CUI_RES(BTN_ACC_CHANGE          ))
     , aRemoveButton           (this   , CUI_RES(BTN_ACC_REMOVE          ))
     , aGroupText              (this   , CUI_RES(TXT_ACC_GROUP           ))
-    , pGroupLBox(new SfxConfigGroupListBox( this, CUI_RES(BOX_ACC_GROUP), SFX_SLOT_ACCELCONFIG ))
+    , pGroupLBox(new SfxConfigGroupListBox( this, CUI_RES(BOX_ACC_GROUP) ))
     , aFunctionText           (this   , CUI_RES(TXT_ACC_FUNCTION        ))
     , pFunctionBox(new SfxConfigFunctionListBox( this, CUI_RES( BOX_ACC_FUNCTION )))
     , aKeyText                (this   , CUI_RES(TXT_ACC_KEY             ))
@@ -1184,7 +1184,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RadioHdl)
     aEntriesBox.SetUpdateMode( sal_True );
     aEntriesBox.Invalidate();
 
-    pGroupLBox->Init(m_xContext, m_xFrame, m_sModuleLongName);
+    pGroupLBox->Init(m_xContext, m_xFrame, m_sModuleLongName, true);
 
     // pb: #133213# do not select NULL entries
     SvTreeListEntry* pEntry = aEntriesBox.GetEntry( 0, 0 );
