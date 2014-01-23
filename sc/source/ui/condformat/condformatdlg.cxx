@@ -37,6 +37,7 @@ ScCondFormatList::ScCondFormatList(Window* pParent, WinBits nStyle)
     : Control(pParent, nStyle | WB_DIALOGCONTROL)
     , mbHasScrollBar(false)
     , mpScrollBar(new ScrollBar(this, WB_VERT ))
+    , mpDoc(NULL)
 {
     mpScrollBar->SetScrollHdl( LINK( this, ScCondFormatList, ScrollHdl ) );
     mpScrollBar->EnableDrag();
