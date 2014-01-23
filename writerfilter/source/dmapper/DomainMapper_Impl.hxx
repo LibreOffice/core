@@ -332,6 +332,8 @@ private:
     bool                                                                            m_bIsColumnBreakDeferred;
     bool                                                                            m_bIsPageBreakDeferred;
     bool                                                                            m_bStartTOC;
+    /// If we got any text that is the pre-rendered result of the TOC field.
+    bool                                                                            m_bStartedTOC;
     bool                                                                            m_bTOCPageRef;
 
     LineNumberSettings                                                              m_aLineNumberSettings;
