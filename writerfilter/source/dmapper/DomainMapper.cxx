@@ -223,8 +223,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_rtf::LN_FMASSCOPY:
             break;
-        case NS_rtf::LN_SGC:
-            break;
         case NS_rtf::LN_ISTDBASE:
             break;
         case NS_rtf::LN_CUPX:

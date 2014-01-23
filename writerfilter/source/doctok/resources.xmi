@@ -248,18 +248,6 @@
             </UML:Attribute>
           </UML:Classifier.feature>
           <UML:Classifier.feature>
-            <UML:Attribute name="sgc">
-              <UML:ModelElement.taggedValue>
-                <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>rtf:SGC</UML:TaggedValue.dataValue>
-                  <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="attrid"/>
-                  </UML:TaggedValue.type>
-                </UML:TaggedValue>
-              </UML:ModelElement.taggedValue>
-            </UML:Attribute>
-          </UML:Classifier.feature>
-          <UML:Classifier.feature>
             <UML:Attribute name="istdBase">
               <UML:ModelElement.taggedValue>
                 <UML:TaggedValue>

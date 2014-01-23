@@ -1057,7 +1057,7 @@ void RTFDocumentImpl::text(OUString& rString)
                             break;
                         case DESTINATION_STYLESHEET:
                         case DESTINATION_STYLEENTRY:
-                            if (m_aStates.top().aTableAttributes.find(NS_rtf::LN_SGC))
+                            if (m_aStates.top().aTableAttributes.find(NS_ooxml::LN_CT_Style_type))
                             {
                                 RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aDestinationText.makeStringAndClear()));
                                 m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Style_name, pValue);
@@ -3016,7 +3016,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     m_nCurrentStyleIndex = nParam;
                     m_aStates.top().aTableAttributes.set(NS_rtf::LN_ISTD, pIntValue);
                     RTFValue::Pointer_t pValue(new RTFValue(1));
-                    m_aStates.top().aTableAttributes.set(NS_rtf::LN_SGC, pValue); // paragraph style
+                    m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Style_type, pValue); // paragraph style
                 }
                 else
                    m_aStates.top().aParagraphAttributes.set(NS_rtf::LN_ISTD, pIntValue);
@@ -3028,7 +3028,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_nCurrentStyleIndex = nParam;
                 m_aStates.top().aTableAttributes.set(NS_rtf::LN_ISTD, pIntValue);
                 RTFValue::Pointer_t pValue(new RTFValue(2));
-                m_aStates.top().aTableAttributes.set(NS_rtf::LN_SGC, pValue); // character style
+                m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Style_type, pValue); // character style
             }
             else
                 m_aStates.top().aCharacterAttributes.set(NS_rtf::LN_ISTD, pIntValue);

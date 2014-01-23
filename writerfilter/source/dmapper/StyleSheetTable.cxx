@@ -414,7 +414,7 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
     // to point to a different object.
     if( m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_UNKNOWN )
     {
-        if( Name != NS_rtf::LN_SGC && Name != NS_ooxml::LN_CT_Style_type )
+        if( Name != NS_ooxml::LN_CT_Style_type )
             m_pImpl->m_pCurrentEntry->nStyleTypeCode = STYLE_TYPE_PARA;
     }
     switch(Name)
@@ -430,11 +430,6 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
             if (nIntValue == 0 || nIntValue == 65)
                 m_pImpl->m_pCurrentEntry->bIsDefaultStyle = true;
         }
-        break;
-        case NS_rtf::LN_SGC:
-            SAL_WARN_IF( m_pImpl->m_pCurrentEntry->nStyleTypeCode != STYLE_TYPE_UNKNOWN,
-                "writerfilter", "Style type needs to be processed first" );
-            m_pImpl->m_pCurrentEntry->nStyleTypeCode = (StyleType)nIntValue;
         break;
         case NS_rtf::LN_ISTDBASE:
             if (static_cast<sal_uInt32>(nIntValue) != 0xfff)
