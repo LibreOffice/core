@@ -1438,7 +1438,7 @@ bool Outliner::HasNoPreviousMatch (void)
 
     // Detect whether the cursor stands at the beginning
     // resp. at the end of the text.
-    return pOutlinerView->GetSelection().IsEqual(GetSearchStartPosition ()) == sal_True;
+    return pOutlinerView->GetSelection().IsEqual(GetSearchStartPosition ());
 }
 
 
