@@ -18,7 +18,7 @@
 [Desktop Entry]
 Version=1.0
 Terminal=false
-NoDisplay=false
+NoDisplay=true
 Icon=math
 Type=Application
 Categories=Office;Spreadsheet;Education;Science;Math;X-Red-Hat-Base;X-MandrivaLinux-Office-Other;
