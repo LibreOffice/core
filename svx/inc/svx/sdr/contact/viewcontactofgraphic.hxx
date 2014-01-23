@@ -46,8 +46,7 @@ namespace sdr
             // helpers for constructing various primitive visualisations in various states
             drawinglayer::primitive2d::Primitive2DSequence createVIP2DSForPresObj(
                 const basegfx::B2DHomMatrix& rObjectMatrix,
-                const drawinglayer::attribute::SdrLineFillShadowTextAttribute& rAttribute,
-                const GraphicAttr& rLocalGrafInfo) const;
+                const drawinglayer::attribute::SdrLineFillShadowTextAttribute& rAttribute) const;
             drawinglayer::primitive2d::Primitive2DSequence createVIP2DSForDraft(
                 const basegfx::B2DHomMatrix& rObjectMatrix,
                 const drawinglayer::attribute::SdrLineFillShadowTextAttribute& rAttribute) const;
