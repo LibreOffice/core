@@ -874,15 +874,19 @@ class SAXWriter :
             XServiceInfo >
 {
 public:
-    SAXWriter( ) :
-        m_seqStartElement(),
-        mp_SaxWriterHelper( NULL ),
-        m_bForceLineBreak(sal_False),
-        m_bAllowLineBreak(sal_False)
-        {}
+    SAXWriter()
+        : m_seqStartElement()
+        , m_pSaxWriterHelper(NULL)
+        , m_bDocStarted(false)
+        , m_bIsCDATA(false)
+        , m_bForceLineBreak(false)
+        , m_bAllowLineBreak(false)
+        , m_nLevel(0)
+    {
+    }
     ~SAXWriter()
     {
-        delete mp_SaxWriterHelper;
+        delete m_pSaxWriterHelper;
     }
 
 public: // XActiveDataSource
@@ -890,14 +894,14 @@ public: // XActiveDataSource
         throw (RuntimeException)
             {
                 // temporary: set same stream again to clear buffer
-                if ( m_out == aStream && mp_SaxWriterHelper && m_bDocStarted )
-                    mp_SaxWriterHelper->clearBuffer();
+                if ( m_out == aStream && m_pSaxWriterHelper && m_bDocStarted )
+                    m_pSaxWriterHelper->clearBuffer();
                 else
                 {
 
                 m_out = aStream;
-                delete mp_SaxWriterHelper;
-                mp_SaxWriterHelper = new SaxWriterHelper(m_out);
+                delete m_pSaxWriterHelper;
+                m_pSaxWriterHelper = new SaxWriterHelper(m_out);
                 m_bDocStarted = sal_False;
                 m_nLevel = 0;
                 m_bIsCDATA = sal_False;
@@ -955,7 +959,7 @@ private:
 
     Reference< XOutputStream >  m_out;
     Sequence < sal_Int8 >       m_seqStartElement;
-    SaxWriterHelper*            mp_SaxWriterHelper;
+    SaxWriterHelper*            m_pSaxWriterHelper;
 
     // Status information
     sal_Bool m_bDocStarted : 1;
@@ -968,11 +972,11 @@ private:
 sal_Int32 SAXWriter::getIndentPrefixLength( sal_Int32 nFirstLineBreakOccurrence ) throw()
 {
     sal_Int32 nLength =-1;
-    if (mp_SaxWriterHelper)
+    if (m_pSaxWriterHelper)
     {
         if ( m_bForceLineBreak ||
             (m_bAllowLineBreak &&
-            ((nFirstLineBreakOccurrence + mp_SaxWriterHelper->GetLastColumnCount()) > MAXCOLUMNCOUNT)) )
+            ((nFirstLineBreakOccurrence + m_pSaxWriterHelper->GetLastColumnCount()) > MAXCOLUMNCOUNT)) )
             nLength = m_nLevel;
     }
     m_bForceLineBreak = sal_False;
@@ -1007,11 +1011,11 @@ Sequence< OUString > SAXWriter::getSupportedServiceNames(void) throw ()
 
 void SAXWriter::startDocument()                     throw(SAXException, RuntimeException )
 {
-    if( m_bDocStarted || ! m_out.is() || !mp_SaxWriterHelper ) {
+    if( m_bDocStarted || ! m_out.is() || !m_pSaxWriterHelper ) {
         throw SAXException();
     }
     m_bDocStarted = sal_True;
-    mp_SaxWriterHelper->startDocument();
+    m_pSaxWriterHelper->startDocument();
 }
 
 
@@ -1028,7 +1032,7 @@ void SAXWriter::endDocument(void)                   throw(SAXException, RuntimeE
             OUString("unexpected end of document"),
             Reference< XInterface >() , Any() );
     }
-    mp_SaxWriterHelper->endDocument();
+    m_pSaxWriterHelper->endDocument();
     try
     {
         m_out->closeOutput();
@@ -1094,9 +1098,9 @@ void SAXWriter::startElement(const OUString& aName, const Reference< XAttributeL
 
     // write into sequence
     if( nPrefix >= 0 )
-        mp_SaxWriterHelper->insertIndentation( nPrefix );
+        m_pSaxWriterHelper->insertIndentation( nPrefix );
 
-    SaxInvalidCharacterError eRet(mp_SaxWriterHelper->startElement(aName, xAttribs));
+    SaxInvalidCharacterError eRet(m_pSaxWriterHelper->startElement(aName, xAttribs));
 
     m_nLevel++;
 
@@ -1128,13 +1132,13 @@ void SAXWriter::endElement(const OUString& aName)   throw (SAXException, Runtime
 
     // check here because Helper's endElement is not always called
 #ifdef DBG_UTIL
-    assert(!mp_SaxWriterHelper->m_DebugStartedElements.empty());
+    assert(!m_pSaxWriterHelper->m_DebugStartedElements.empty());
     // Well-formedness constraint: Element Type Match
-    assert(aName == mp_SaxWriterHelper->m_DebugStartedElements.top());
-    mp_SaxWriterHelper->m_DebugStartedElements.pop();
+    assert(aName == m_pSaxWriterHelper->m_DebugStartedElements.top());
+    m_pSaxWriterHelper->m_DebugStartedElements.pop();
 #endif
 
-    if( mp_SaxWriterHelper->FinishEmptyElement() )
+    if( m_pSaxWriterHelper->FinishEmptyElement() )
         m_bForceLineBreak = sal_False;
     else
     {
@@ -1145,9 +1149,9 @@ void SAXWriter::endElement(const OUString& aName)   throw (SAXException, Runtime
         sal_Int32 nPrefix = getIndentPrefixLength( nLength );
 
         if( nPrefix >= 0 )
-            mp_SaxWriterHelper->insertIndentation( nPrefix );
+            m_pSaxWriterHelper->insertIndentation( nPrefix );
 
-        bRet = mp_SaxWriterHelper->endElement(aName);
+        bRet = m_pSaxWriterHelper->endElement(aName);
     }
 
     if (!bRet)
@@ -1171,7 +1175,7 @@ void SAXWriter::characters(const OUString& aChars)  throw(SAXException, RuntimeE
     if( !aChars.isEmpty() )
     {
         if( m_bIsCDATA )
-            bThrowException = !mp_SaxWriterHelper->writeString( aChars, sal_False, sal_False );
+            bThrowException = !m_pSaxWriterHelper->writeString( aChars, sal_False, sal_False );
         else
         {
             // Note : nFirstLineBreakOccurrence is not exact, because we don't know, how
@@ -1195,11 +1199,11 @@ void SAXWriter::characters(const OUString& aChars)  throw(SAXException, RuntimeE
             if( nIndentPrefix >= 0 )
             {
                 if( isFirstCharWhitespace( aChars.getStr() ) )
-                    mp_SaxWriterHelper->insertIndentation( nIndentPrefix - 1 );
+                    m_pSaxWriterHelper->insertIndentation( nIndentPrefix - 1 );
                 else
-                    mp_SaxWriterHelper->insertIndentation( nIndentPrefix );
+                    m_pSaxWriterHelper->insertIndentation( nIndentPrefix );
             }
-            bThrowException = !mp_SaxWriterHelper->writeString(aChars, sal_True , sal_False);
+            bThrowException = !m_pSaxWriterHelper->writeString(aChars, sal_True , sal_False);
         }
     }
     if (bThrowException)
@@ -1245,9 +1249,9 @@ void SAXWriter::processingInstruction(const OUString& aTarget, const OUString& a
     sal_Int32 nPrefix = getIndentPrefixLength( nLength );
 
     if( nPrefix >= 0 )
-        mp_SaxWriterHelper->insertIndentation( nPrefix );
+        m_pSaxWriterHelper->insertIndentation( nPrefix );
 
-    if (!mp_SaxWriterHelper->processingInstruction(aTarget, aData))
+    if (!m_pSaxWriterHelper->processingInstruction(aTarget, aData))
     {
         SAXException except;
         except.Message = "Invalid character during XML-Export";
@@ -1272,9 +1276,9 @@ void SAXWriter::startCDATA(void) throw(SAXException, RuntimeException)
     sal_Int32 nLength = 9;
     sal_Int32 nPrefix = getIndentPrefixLength( nLength );
     if( nPrefix >= 0 )
-        mp_SaxWriterHelper->insertIndentation( nPrefix );
+        m_pSaxWriterHelper->insertIndentation( nPrefix );
 
-    mp_SaxWriterHelper->startCDATA();
+    m_pSaxWriterHelper->startCDATA();
 
     m_bIsCDATA = sal_True;
 }
@@ -1291,9 +1295,9 @@ void SAXWriter::endCDATA(void) throw (RuntimeException)
     sal_Int32 nLength = 3;
     sal_Int32 nPrefix = getIndentPrefixLength( nLength );
     if( nPrefix >= 0 )
-        mp_SaxWriterHelper->insertIndentation( nPrefix );
+        m_pSaxWriterHelper->insertIndentation( nPrefix );
 
-    mp_SaxWriterHelper->endCDATA();
+    m_pSaxWriterHelper->endCDATA();
 
     m_bIsCDATA = sal_False;
 }
@@ -1317,9 +1321,9 @@ void SAXWriter::comment(const OUString& sComment) throw(SAXException, RuntimeExc
 
     sal_Int32 nPrefix = getIndentPrefixLength( nLength );
     if( nPrefix >= 0 )
-        mp_SaxWriterHelper->insertIndentation( nPrefix );
+        m_pSaxWriterHelper->insertIndentation( nPrefix );
 
-    if (!mp_SaxWriterHelper->comment(sComment))
+    if (!m_pSaxWriterHelper->comment(sComment))
     {
         SAXException except;
         except.Message = "Invalid character during XML-Export";
@@ -1358,9 +1362,9 @@ void SAXWriter::unknown(const OUString& sString) throw (SAXException, RuntimeExc
 
     sal_Int32 nPrefix = getIndentPrefixLength( nLength );
     if( nPrefix >= 0 )
-        mp_SaxWriterHelper->insertIndentation( nPrefix );
+        m_pSaxWriterHelper->insertIndentation( nPrefix );
 
-    if (!mp_SaxWriterHelper->writeString( sString, sal_False, sal_False))
+    if (!m_pSaxWriterHelper->writeString( sString, sal_False, sal_False))
     {
         SAXException except;
         except.Message = "Invalid character during XML-Export";
