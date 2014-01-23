@@ -225,8 +225,9 @@ void Application::FocusChanged()
 {
 }
 
-void Application::DataChanged( const DataChangedEvent& )
+void Application::DataChanged( DataChangedEvent& aDCEvt )
 {
+    NotifyAllWindows ( aDCEvt );
 }
 
 void Application::Init()

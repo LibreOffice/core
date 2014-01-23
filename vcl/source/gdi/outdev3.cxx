@@ -299,7 +299,6 @@ void OutputDevice::EndFontSubstitution()
         Application* pApp = GetpApp();
         DataChangedEvent aDCEvt( DATACHANGED_FONTSUBSTITUTION );
         pApp->DataChanged( aDCEvt );
-        pApp->NotifyAllWindows( aDCEvt );
         pSVData->maGDIData.mbFontSubChanged = sal_False;
     }
 }

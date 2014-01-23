@@ -290,6 +290,8 @@ public:
     */
     virtual void                DataChanged( const DataChangedEvent& rDCEvt );
 
+    static void                 NotifyAllWindows( DataChangedEvent& rDCEvt );
+
     /** @} */ // end of changes
 
     /** @defgroup Initialization Initialization functions
@@ -650,10 +652,13 @@ public:
      @see SystemSettingsChanging, MergeSystemSettings, SetSettings
     */
     static const AllSettings&   GetSettings();
+<<<<<<< HEAD
 
     /** @} */ // end of Settings
 
     static void                 NotifyAllWindows( DataChangedEvent& rDCEvt );
+=======
+>>>>>>> DataChanged should call on NotifyAllWindows
 
     static void                 AddEventListener( const Link& rEventListener );
     static void                 RemoveEventListener( const Link& rEventListener );
