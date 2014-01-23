@@ -18,10 +18,12 @@ $(eval $(call gb_Module_add_targets,smoketest,\
 ))
 
 ifneq ($(ENABLE_JAVA),)
+ifneq ($(filter EXTENSIONS,$(BUILD_TYPE)),)
 $(eval $(call gb_Module_add_targets,smoketest,\
 	Extension_TestExtension \
 	Jar_TestExtension \
 ))
+endif
 endif
 
 ifeq ($(OS),LINUX)
@@ -31,9 +33,11 @@ $(eval $(call gb_Module_add_check_targets,smoketest,\
 endif
 
 ifneq (MACOSX/TRUE,$(OS)/$(ENABLE_MACOSX_SANDBOX))
+ifneq ($(filter EXTENSIONS,$(BUILD_TYPE)),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,smoketest,\
 	CppunitTest_smoketest \
 ))
+endif
 endif
 
 endif
