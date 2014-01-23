@@ -285,7 +285,9 @@ public:
 
      @see FocusChanged
     */
-    virtual void                DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void                DataChanged( DataChangedEvent& rDCEvt );
+
+    static void                 NotifyAllWindows( DataChangedEvent& rDCEvt );
 
     // Initialization functions
 
@@ -577,7 +579,6 @@ public:
 
     static void                 SetSettings( const AllSettings& rSettings );
     static const AllSettings&   GetSettings();
-    static void                 NotifyAllWindows( DataChangedEvent& rDCEvt );
 
     static void                 AddEventListener( const Link& rEventListener );
     static void                 RemoveEventListener( const Link& rEventListener );
