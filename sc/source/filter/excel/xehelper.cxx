@@ -166,10 +166,13 @@ bool XclExpAddressConverter::CheckAddress( const ScAddress& rScPos, bool bWarn )
     bool bValidTab = (0 <= rScPos.Tab()) && (rScPos.Tab() <= maMaxPos.Tab());
 
     bool bValid = bValidCol && bValidRow && bValidTab;
-    if( !bValid && bWarn )
+    if( !bValid )
     {
         mbColTrunc |= !bValidCol;
         mbRowTrunc |= !bValidRow;
+    }
+    if( !bValid && bWarn )
+    {
         mbTabTrunc |= (rScPos.Tab() > maMaxPos.Tab());  // do not warn for deleted refs
         mrTracer.TraceInvalidAddress( rScPos, maMaxPos );
     }
