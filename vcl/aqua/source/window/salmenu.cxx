@@ -255,7 +255,7 @@ AquaSalMenu::AquaSalMenu( bool bMenuBar ) :
     if( ! mbMenuBar )
     {
         mpMenu = [[SalNSMenu alloc] initWithMenu: this];
-        [mpMenu setDelegate: mpMenu];
+        [mpMenu setDelegate: (id<NSMenuDelegate>)mpMenu];
     }
     else
     {

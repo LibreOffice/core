@@ -207,7 +207,7 @@ void AquaSalFrame::initWindowAndView()
     else
         [mpNSWindow setAcceptsMouseMovedEvents: YES];
     [mpNSWindow setHasShadow: YES];
-    [mpNSWindow setDelegate: mpNSWindow];
+    [mpNSWindow setDelegate: static_cast<id<NSWindowDelegate> >(mpNSWindow)];
 
     const NSRect aRect = NSMakeRect( 0,0, maGeometry.nWidth, maGeometry.nHeight );
     mnTrackingRectTag = [mpNSView addTrackingRect: aRect owner: mpNSView userData: nil assumeInside: NO];

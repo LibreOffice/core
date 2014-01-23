@@ -44,6 +44,8 @@ class ImplMacTextStyle;
 
 struct CGRect;
 
+typedef std::vector<unsigned char> ByteVector;
+
 #ifndef CGFLOAT_TYPE
 typedef float CGFloat;
 #endif
@@ -52,13 +54,15 @@ typedef float CGFloat;
 class ImplMacFontData : public ImplFontData
 {
 public:
-    ImplMacFontData( const ImplDevFontAttributes&, ATSUFontID );
-
+    ImplMacFontData( const ImplDevFontAttributes&, sal_IntPtr nFontID );
     virtual ~ImplMacFontData();
 
-    virtual ImplFontData*   Clone() const;
+    virtual ImplFontData*   Clone() const = 0;
     virtual ImplFontEntry*  CreateFontInstance( ImplFontSelectData& ) const;
     virtual sal_IntPtr      GetFontId() const;
+
+    virtual ImplMacTextStyle* CreateMacTextStyle( const ImplFontSelectData& ) const = 0;
+    virtual int             GetFontTable( const char pTagName[5], unsigned char* ) const = 0;
 
     const ImplFontCharMap*  GetImplFontCharMap() const;
     bool                    HasChar( sal_uInt32 cChar ) const;
@@ -67,8 +71,10 @@ public:
     void                    ReadMacCmapEncoding() const;
     bool                    HasCJKSupport() const;
 
+protected:
+    ImplMacFontData( const ImplMacFontData&);
 private:
-    const ATSUFontID            mnFontId;
+    const sal_IntPtr            mnFontId;
     mutable const ImplFontCharMap*  mpCharMap;
     mutable bool                mbOs2Read;       // true if OS2-table related info is valid
     mutable bool                mbHasOs2Table;
@@ -90,8 +96,48 @@ public:
     CGFloat GetGreen() const { return mfRGBA[1]; }
     CGFloat GetBlue() const  { return mfRGBA[2]; }
     CGFloat GetAlpha() const { return mfRGBA[3]; }
- private:
+private:
     CGFloat mfRGBA[4]; // RGBA
+};
+
+// --------------------
+// - ImplMacTextStyle -
+// --------------------
+class ImplMacTextStyle
+{
+public:
+    explicit        ImplMacTextStyle( const ImplFontSelectData& );
+    virtual         ~ImplMacTextStyle( void );
+
+    virtual SalLayout* GetTextLayout( void ) const = 0;
+
+    virtual void    GetFontMetric( float fPDIY, ImplFontMetricData& ) const = 0;
+    virtual bool    GetGlyphBoundRect( sal_GlyphId, Rectangle& ) const = 0;
+    virtual bool    GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) const = 0;
+
+    virtual void    SetTextColor( const RGBAColor& ) = 0;
+
+//###protected:
+    const ImplMacFontData*  mpFontData;
+    /// workaround to prevent overflows for huge font sizes
+    float               mfFontScale;
+    /// <1.0: font is squeezed, >1.0 font is stretched, else 1.0
+    float               mfFontStretch;
+    /// text rotation in radian
+    float               mfFontRotation;
+};
+
+// ------------------
+// - SystemFontList -
+// TODO: move into cross-platform headers
+// ------------------
+class SystemFontList
+{
+public:
+    virtual ~SystemFontList( void );
+
+    virtual void    AnnounceFonts( ImplDevFontList& ) const = 0;
+    virtual ImplMacFontData* GetFontDataFromId( sal_IntPtr nFontId ) const = 0;
 };
 
 // -------------------
@@ -100,6 +146,7 @@ public:
 class AquaSalGraphics : public SalGraphics
 {
     friend class ATSLayout;
+    friend class CTLayout;
 protected:
     AquaSalFrame*                           mpFrame;
     CGLayerRef                              mxLayer;    // Quartz graphics layer
@@ -128,15 +175,9 @@ protected:
 
     // Device Font settings
      const ImplMacFontData*                  mpMacFontData;
-    /// ATSU style object which carries all font attributes
-    ATSUStyle                               maATSUStyle;
-    /// text rotation as ATSU angle
-    Fixed                                   mnATSUIRotation;
-    /// workaround to prevent ATSU overflows for huge font sizes
-    float                                   mfFontScale;
-    /// <1.0: font is squeezed, >1.0 font is stretched, else 1.0
-    float                                   mfFontStretch;
-    /// allows text to be rendered without antialiasing
+    ImplMacTextStyle*                       mpMacTextStyle;
+    RGBAColor                               maTextColor;
+    // allows text to be rendered without antialiasing
     bool                                    mbNonAntialiasedText;
 
     // Graphics types

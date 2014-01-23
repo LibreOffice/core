@@ -79,7 +79,7 @@
                 if( nModMask == NSCommandKeyMask
                     && [[pEvent charactersIgnoringModifiers] isEqualToString: @"w"] )
                 {
-                    [pFrame->getNSWindow() windowShouldClose: nil];
+                    [(SalFrameWindow*)pFrame->getNSWindow() windowShouldClose: nil];
                     return;
                 }
             }

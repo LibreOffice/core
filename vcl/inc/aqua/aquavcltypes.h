@@ -29,4 +29,5 @@
 #import <AppKit/NSEvent.h>
 #include "postmac.h"
 
-#endif _AQUAVCLTYPES_H
+#endif // _AQUAVCLTYPES_H
+

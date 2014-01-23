@@ -175,7 +175,7 @@ void AquaSalGraphics::SetState()
 
 bool AquaSalGraphics::CheckContext()
 {
-    if( mbWindow && mpFrame != NULL )
+    if( mbWindow && mpFrame && mpFrame->getNSWindow() )
     {
         const unsigned int nWidth = mpFrame->maGeometry.nWidth;
         const unsigned int nHeight = mpFrame->maGeometry.nHeight;

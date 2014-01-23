@@ -299,15 +299,12 @@ NSDragOperation DropTarget::draggingUpdated(id sender)
       //NSLog(@"Drag update: Source actions: %x proposed action %x selected action %x", mDragSourceSupportedActions, currentAction, mSelectedDropAction);
     }
 
-  // Weird but it appears as if there is no method in Cocoa
-  // to create a kThemeCopyArrowCursor hence we have to use
-  // Carbon to do it
   if (dragOp == NSDragOperationNone)
-    SetThemeCursor(kThemeNotAllowedCursor);
+    [[NSCursor operationNotAllowedCursor] set];
   else if (dragOp == NSDragOperationCopy)
-    SetThemeCursor(kThemeCopyArrowCursor);
+    [[NSCursor dragCopyCursor] set];
   else
-    SetThemeCursor(kThemeArrowCursor);
+    [[NSCursor arrowCursor] set];
 
   return dragOp;
 }
@@ -319,7 +316,7 @@ void DropTarget::draggingExited(id /*sender*/)
     fire_dragExit(dte);
     mDragSourceSupportedActions = DNDConstants::ACTION_NONE;
     mSelectedDropAction = DNDConstants::ACTION_NONE;
-    SetThemeCursor(kThemeArrowCursor);
+    [[NSCursor arrowCursor] set];
 }
 
 
@@ -373,7 +370,7 @@ void DropTarget::concludeDragOperation(id /*sender*/)
     mDragSourceSupportedActions = DNDConstants::ACTION_NONE;
     mSelectedDropAction = DNDConstants::ACTION_NONE;
     mXCurrentDragClipboard = uno::Reference<XClipboard>();
-    SetThemeCursor(kThemeArrowCursor);
+    [[NSCursor arrowCursor] set];
 }
 
 
