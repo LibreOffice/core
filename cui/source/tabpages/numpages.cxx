@@ -1422,7 +1422,7 @@ void SvxNumOptionsTabPage::InitControls()
                 bSamePrefix = aNumFmtArr[i]->GetPrefix() == aNumFmtArr[nLvl]->GetPrefix();
                 bSameSuffix = aNumFmtArr[i]->GetSuffix() == aNumFmtArr[nLvl]->GetSuffix();
                 bAllLevel &= aNumFmtArr[i]->GetIncludeUpperLevels() == aNumFmtArr[nLvl]->GetIncludeUpperLevels();
-                bSameCharFmt    &=  (sal_Bool) (sFirstCharFmt == aNumFmtArr[i]->GetCharFmtName());
+                bSameCharFmt    &= sFirstCharFmt == aNumFmtArr[i]->GetCharFmtName();
                 bSameVOrient    &= eFirstOrient == aNumFmtArr[i]->GetVertOrient();
                 if(bShowBitmap && bSameSize)
                     bSameSize &= aNumFmtArr[i]->GetGraphicSize() == aFirstSize;
