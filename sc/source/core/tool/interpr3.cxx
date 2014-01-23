@@ -2055,7 +2055,7 @@ void ScInterpreter::ScGammaDist( int nMinParamCount )
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, nMinParamCount, 4 ) )
         return;
-    double bCumulative;
+    bool bCumulative;
     if (nParamCount == 4)
         bCumulative = GetBool();
     else
@@ -3342,7 +3342,72 @@ void ScInterpreter::ScQuartile()
     PushDouble( fFlag == 2.0 ? GetMedian( aArray) : GetPercentile( aArray, 0.25 * fFlag));
 }
 
+// fdo 72197 modified function to get a MODE.MLT behaviour
 void ScInterpreter::ScModalValue()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if ( !MustHaveParamCountMin( nParamCount, 1 ) )
+        return;
+    vector<double> aSortArray;
+    GetSortArray(nParamCount, aSortArray);
+    SCSIZE nSize = aSortArray.size();
+    if (aSortArray.empty() || nSize == 0 || nGlobalError)
+        PushNoValue();
+    else
+    {
+        SCSIZE nMax = 1, nCount = 1;
+        double nOldVal = aSortArray[0];
+        vector<double> aResultArray;
+        aResultArray.resize( 1 );
+        aResultArray[ 0 ] = aSortArray[ 0 ];
+        SCSIZE i;
+
+        for ( i = 1; i < nSize; i++ )
+        {
+            if ( aSortArray[ i ] == nOldVal )
+            {
+                nCount++;
+                if ( nCount > nMax && aResultArray.size() > 1 )
+                {
+                    aResultArray.clear();
+                    aResultArray.resize( 1 );
+                    aResultArray[ 0 ] = nOldVal;
+                }
+            }
+            else
+            {
+                nOldVal = aSortArray[ i ];
+                if ( nCount >= nMax )
+                {
+                    if ( nCount > nMax )
+                        nMax = nCount;
+                    aResultArray.resize( aResultArray.size() + 1 );
+                }
+                aResultArray[ aResultArray.size() -1  ] = nOldVal;
+                nCount = 1;
+            }
+        }
+        if (nCount > nMax)
+            nMax = nCount;
+        else
+        {
+            if ( nCount < nMax )
+                aResultArray.resize( aResultArray.size() - 1 );
+        }
+
+        if (nMax == 1 && nCount == 1)
+            PushNoValue();
+        else
+        {
+for ( i = 0; i < aResultArray.size(); i++ )
+    SAL_WARN( "72197", "value[ " << i << " ] = " << aResultArray[ i ] );
+            ScMatrixRef pResMatrix = GetNewMat( 1, aResultArray.size(), true );
+            pResMatrix->PutDoubleVector( aResultArray, 0, 0 );
+            PushMatrix( pResMatrix );
+        }
+    }
+}
+/*
 {
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCountMin( nParamCount, 1 ) )
@@ -3386,7 +3451,7 @@ void ScInterpreter::ScModalValue()
             PushDouble(aSortArray[nMaxIndex]);
     }
 }
-
+*/
 void ScInterpreter::CalculateSmallLarge(bool bSmall)
 {
     if ( !MustHaveParamCount( GetByte(), 2 )  )
