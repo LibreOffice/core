@@ -838,6 +838,7 @@ bool FormulaCompiler::IsMatrixFunction( OpCode eOpCode )
         case ocMatMult :
         case ocMatInv :
         case ocMatrixUnit :
+        case ocModalValue : // fdo 72197, for tests ONLY!!
             return true;
         default:
         {
