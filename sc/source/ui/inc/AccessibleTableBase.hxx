@@ -201,7 +201,8 @@ public:
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException,
                std::exception);
     virtual sal_Bool SAL_CALL unselectRow( sal_Int32 row )
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException,
+               std::exception);
     virtual sal_Bool SAL_CALL unselectColumn( sal_Int32 column )
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
 
