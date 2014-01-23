@@ -57,8 +57,10 @@ struct HorizontallyMergedCell
     sal_Int32 m_nLastRow;
     sal_Int32 m_nLastCol;
     HorizontallyMergedCell(sal_Int32 nFirstRow, sal_Int32 nFirstCol)
-        : m_nFirstRow(nFirstRow),
-        m_nFirstCol(nFirstCol)
+        : m_nFirstRow(nFirstRow)
+        , m_nFirstCol(nFirstCol)
+        , m_nLastRow(0)
+        , m_nLastCol(0)
     {
     }
 };
