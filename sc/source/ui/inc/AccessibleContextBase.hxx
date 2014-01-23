@@ -270,8 +270,8 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the object's current bounding box relative to the desktop.
-    virtual Rectangle GetBoundingBoxOnScreen(void) const
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual Rectangle GetBoundingBoxOnScreen() const
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /// Return the object's current bounding box relative to the parent object.
     virtual Rectangle GetBoundingBox() const

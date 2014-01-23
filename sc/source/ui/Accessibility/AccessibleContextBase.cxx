@@ -573,8 +573,8 @@ void ScAccessibleContextBase::CommitFocusLost() const
     vcl::unohelper::NotifyAccessibleStateEventGlobally(aEvent);
 }
 
-Rectangle ScAccessibleContextBase::GetBoundingBoxOnScreen(void) const
-        throw (uno::RuntimeException)
+Rectangle ScAccessibleContextBase::GetBoundingBoxOnScreen() const
+        throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented");
     return Rectangle();
