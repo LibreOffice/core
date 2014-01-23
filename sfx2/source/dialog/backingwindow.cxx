@@ -557,5 +557,6 @@ Size BackingWindow::GetOptimalSize() const
 void BackingWindow::clearRecentFileList()
 {
     mpAllRecentThumbnails->Clear();
+    set_width_request(mpAllRecentThumbnails->get_width_request() + mpAllButtonsBox->GetOptimalSize().Width());
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab:*/

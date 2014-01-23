@@ -808,7 +808,19 @@ void SAL_CALL BackingComp::dispatch( const css::util::URL& aURL, const css::uno:
         Window* pWindow = VCLUnoHelper::GetWindow(m_xWindow);
         BackingWindow* pBack = dynamic_cast<BackingWindow*>(pWindow );
         if( pBack )
+        {
             pBack->clearRecentFileList();
+
+            // Recalculate minimum width
+            css::uno::Reference< css::awt::XWindow > xParentWindow = m_xFrame->getContainerWindow();
+            WorkWindow* pParent = (WorkWindow*)VCLUnoHelper::GetWindow(xParentWindow);
+            if( pParent )
+            {
+                pParent->SetMinOutputSizePixel( Size(
+                        pBack->get_width_request(),
+                        pParent->GetMinOutputSizePixel().Height()) );
+            }
+        }
     }
 }
 

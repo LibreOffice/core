@@ -56,6 +56,8 @@ public:
 
     int     mnFileTypes;
 
+    virtual void Clear();
+
     DECL_STATIC_LINK( RecentDocsView, ExecuteHdl_Impl, LoadRecentFile* );
 
 protected:
