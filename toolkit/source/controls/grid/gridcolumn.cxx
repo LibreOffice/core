@@ -19,10 +19,10 @@
 
 #include "gridcolumn.hxx"
 
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <toolkit/helper/servicenames.hxx>
 
 namespace toolkit
 {
@@ -272,7 +272,7 @@ namespace toolkit
 
     ::com::sun::star::uno::Sequence< OUString > SAL_CALL GridColumn::getSupportedServiceNames(  ) throw (RuntimeException)
     {
-        const OUString aServiceName( OUString::createFromAscii( szServiceName_GridColumn ) );
+        const OUString aServiceName("com.sun.star.awt.grid.GridColumn");
         const Sequence< OUString > aSeq( &aServiceName, 1 );
         return aSeq;
     }
@@ -308,9 +308,12 @@ namespace toolkit
     }
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL GridColumn_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+org_openoffice_comp_toolkit_GridColumn_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return *( new ::toolkit::GridColumn );
+    return cppu::acquire(new toolkit::GridColumn());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
