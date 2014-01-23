@@ -121,6 +121,7 @@ private:
     bool            bTableOpDirty  : 1; // Dirty flag for TableOp
     bool            bNeedListening : 1; // Listeners need to be re-established after UpdateReference
     bool            mbNeedsNumberFormat : 1; // set the calculated number format as hard number format
+    bool            mbPostponedDirty : 1;   // if cell needs to be set dirty later
 
                     enum ScInterpretTailParameter
                     {
@@ -371,6 +372,8 @@ public:
     SCROW GetSharedLength() const;
     ScTokenArray* GetSharedCode();
     const ScTokenArray* GetSharedCode() const;
+
+    bool IsPostponedDirty() const;
 };
 
 #endif
