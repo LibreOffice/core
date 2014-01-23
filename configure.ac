@@ -2883,7 +2883,7 @@ if test $_os = Darwin; then
         # the App Store, the "3rd Party Mac Developer" one. I think it works best to the the
         # "Developer ID Application" one.
 
-        identity=`security find-identity -p codesigning -v 2>/dev/null | grep 'Developer ID Application:' | awk '{print $2}' |head -1`
+        identity=`security find-identity -p codesigning -v 2>/dev/null | grep 'Developer ID Application:' | $AWK '{print $2}' |head -1`
         if test -n "$identity"; then
             MACOSX_CODESIGNING_IDENTITY=$identity
             pretty_name=`security find-identity -p codesigning -v | grep "$MACOSX_CODESIGNING_IDENTITY" | sed -e 's/^[[^"]]*"//' -e 's/"//'`
@@ -11526,15 +11526,16 @@ TEST_FONTS_MISSING=0
 # $2+ = accepted font mappings
 test_font_map()
 {
-    FONT=$1 ; shift
-    AC_MSG_CHECKING([Checking font mapping for '$FONT'])
+    FONT="$1" ; shift
+    AC_MSG_CHECKING([font mapping for '$FONT'])
     FONTFILE="$(basename `$FCMATCH -f '%{file}' "$FONT"`)"
+    FONTFILE_LOWER="$(echo $FONTFILE | $AWK '{print tolower($0)}')"
 
-    TESTEXPR="'${FONTFILE}' = '$1.ttf'"
+    TESTEXPR="'${FONTFILE_LOWER}' = '$(echo $FONT | $AWK '{print tolower($0)}').ttf'"
     while true ; do
-        MAPPING="$1" ; shift
+        MAPPING="$(echo $1 | $AWK '{print tolower($0)}')"; shift
         test -n "$MAPPING" || break
-        TESTEXPR="${TESTEXPR} -o '$FONTFILE' = '$MAPPING-Regular.ttf'"
+        TESTEXPR="${TESTEXPR} -o '${FONTFILE_LOWER}' = '$MAPPING-regular.ttf'"
     done
     if test $TESTEXPR
     then
@@ -11563,12 +11564,7 @@ else
             AC_MSG_WARN([Unable to query installed fonts - unit tests disabled.])
             TEST_FONTS_MISSING=1
         else
-#            test_font_map 'Arial' 'LiberationSans'
-#            test_font_map 'Arial Narrow' 'LiberationSansNarrow'
             test_font_map 'Calibri' 'Carlito'
-#            test_font_map 'Cambria' 'Caladea'
-#            test_font_map 'Courier New' 'LiberationMono'
-#            test_font_map 'Times New Roman' 'LiberationSerif'
             if test ${TEST_FONTS_MISSING} -eq 1
             then
                 AC_MSG_WARN([Unknown font mappings - unit tests disabled.])
@@ -12371,7 +12367,7 @@ else
 fi
 AC_SUBST(WITH_COMPAT_OOWRAPPERS)
 
-INSTALLDIRNAME=`echo AC_PACKAGE_NAME | tr '[[:upper:]]' '[[:lower:]]'`
+INSTALLDIRNAME=`echo AC_PACKAGE_NAME | $AWK '{print tolower($0)}'`
 AC_MSG_CHECKING([for install dirname])
 if test -n "$with_install_dirname" -a "$with_install_dirname" != "no" -a "$with_install_dirname" != "yes"; then
     INSTALLDIRNAME="$with_install_dirname"
