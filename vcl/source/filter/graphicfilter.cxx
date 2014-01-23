@@ -960,7 +960,7 @@ struct ImpFilterLibCacheEntry
     PFilterDlgCall          mpfnImportDlg;
 
                             ImpFilterLibCacheEntry( const OUString& rPathname, const OUString& rFiltername );
-    int                     operator==( const OUString& rFiltername ) const { return maFiltername == rFiltername; }
+    bool                    operator==( const OUString& rFiltername ) const { return maFiltername == rFiltername; }
 
     PFilterCall             GetImportFunction();
 };

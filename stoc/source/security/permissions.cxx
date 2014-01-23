@@ -236,7 +236,7 @@ bool SocketPermission::implies( Permission const & perm ) const SAL_THROW(())
         return false;
     if (! demanded.resolveHost())
         return false;
-    return (sal_False != m_ip.equals( demanded.m_ip ));
+    return m_ip.equals( demanded.m_ip );
 }
 //__________________________________________________________________________________________________
 OUString SocketPermission::toString() const SAL_THROW(())
@@ -455,7 +455,7 @@ bool RuntimePermission::implies( Permission const & perm ) const SAL_THROW(())
     RuntimePermission const & demanded = static_cast< RuntimePermission const & >( perm );
 
     // check name
-    return (sal_False != m_name.equals( demanded.m_name ));
+    return m_name.equals( demanded.m_name );
 }
 //__________________________________________________________________________________________________
 OUString RuntimePermission::toString() const SAL_THROW(())

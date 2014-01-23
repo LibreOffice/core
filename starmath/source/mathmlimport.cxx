@@ -643,10 +643,10 @@ void SmXMLContext_Helper::RetrieveAttrs(const uno::Reference<
         switch(rAttrTokenMap.Get(nPrefix,aLocalName))
         {
             case XML_TOK_FONTWEIGHT:
-                nIsBold = sValue.equals(GetXMLToken(XML_BOLD));
+                nIsBold = sal_Int8(sValue.equals(GetXMLToken(XML_BOLD)));
                 break;
             case XML_TOK_FONTSTYLE:
-                nIsItalic = sValue.equals(GetXMLToken(XML_ITALIC));
+                nIsItalic = sal_Int8(sValue.equals(GetXMLToken(XML_ITALIC)));
                 break;
             case XML_TOK_FONTSIZE:
                 ::sax::Converter::convertDouble(nFontSize, sValue);

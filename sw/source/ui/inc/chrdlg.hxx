@@ -72,7 +72,7 @@ class SwCharURLPage : public SfxTabPage
     VclContainer*       m_pCharStyleContainer;
 
     SvxMacroItem*       pINetItem;
-    sal_Bool                bModified;
+    bool                bModified;
 
     DECL_LINK(InsertFileHdl, void *);
     DECL_LINK(EventHdl, void *);

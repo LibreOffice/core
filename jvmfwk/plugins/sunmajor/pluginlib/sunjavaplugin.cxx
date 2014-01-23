@@ -240,7 +240,7 @@ javaPluginError jfw_plugin_getAllJavaInfos(
     {
         const rtl::Reference<VendorBase>& cur = *i;
 
-        if (ouVendor.equals(cur->getVendor()) == sal_False)
+        if (!ouVendor.equals(cur->getVendor()))
             continue;
 
         if (!ouMinVer.isEmpty())
@@ -364,7 +364,7 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
         return JFW_PLUGIN_E_NO_JRE;
 
     //Check if the detected JRE matches the version requirements
-    if (ouVendor.equals(aVendorInfo->getVendor()) == sal_False)
+    if (!ouVendor.equals(aVendorInfo->getVendor()))
         return JFW_PLUGIN_E_NO_JRE;
 
     if (!ouMinVer.isEmpty())
@@ -646,7 +646,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     // Until java 1.5 we need to put a plugin.jar or javaplugin.jar (<1.4.2)
     // in the class path in order to have applet support.
         OString sClassPath = arOptions[i].optionString;
-        if (sClassPath.match(sClassPathProp, 0) == sal_True)
+        if (sClassPath.match(sClassPathProp, 0))
         {
             char sep[] =  {SAL_PATHSEPARATOR, 0};
             OString sAddPath = getPluginJarPath(pInfo->sVendor, pInfo->sLocation,pInfo->sVersion);

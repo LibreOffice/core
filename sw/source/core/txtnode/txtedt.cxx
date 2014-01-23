@@ -2017,8 +2017,7 @@ bool SwTxtNode::CountWords( SwDocStat& rStat,
 
             while ( aScanner.NextWord() )
             {
-                //  1 is len(CH_TXTATR_BREAKWORD) : match returns length of match
-                if( 1 != aExpandText.match(aBreakWord, aScanner.GetBegin() ))
+                if( !aExpandText.match(aBreakWord, aScanner.GetBegin() ))
                 {
                     ++nTmpWords;
                     const OUString &rWord = aScanner.GetWord();

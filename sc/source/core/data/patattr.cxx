@@ -120,7 +120,7 @@ SfxPoolItem* ScPatternAttr::Clone( SfxItemPool *pPool ) const
     return pPattern;
 }
 
-inline int StrCmp( const OUString* pStr1, const OUString* pStr2 )
+inline bool StrCmp( const OUString* pStr1, const OUString* pStr2 )
 {
     return ( pStr1 ? ( pStr2 ? ( *pStr1 == *pStr2 ) : false ) : ( pStr2 ? false : true ) );
 }

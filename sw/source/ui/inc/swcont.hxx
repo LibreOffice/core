@@ -84,7 +84,7 @@ public:
                                     // they're never equal, otherwise they'd fall out of the array
                                     return sal_False;
                                 }
-    int                     operator<(const SwContent& rCont) const
+    bool                    operator<(const SwContent& rCont) const
                                 {
                                     // at first sort by position and then by name
                                     return nYPosition != rCont.nYPosition ?

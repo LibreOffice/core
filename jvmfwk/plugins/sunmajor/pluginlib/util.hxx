@@ -59,7 +59,7 @@ struct InfoFindSame
 
     bool operator () (const rtl::Reference<VendorBase> & aVendorInfo)
     {
-        return aVendorInfo->getHome().equals(sJava) == sal_True ? true : false;
+        return aVendorInfo->getHome().equals(sJava);
     }
 };
 
@@ -75,7 +75,7 @@ struct SameOrSubDirJREMap
             return true;
         OUString sSub;
         sSub = s2.first + OUString("/");
-        if (s1.match(sSub) == sal_True)
+        if (s1.match(sSub))
             return true;
         return false;
     }

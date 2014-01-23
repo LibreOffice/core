@@ -546,7 +546,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
     }
 
     // Einzel-Header
-    int bOwnPool = sal_True;
+    bool bOwnPool = true;
     OUString aExternName;
     {
         // Header-Record suchen
@@ -730,7 +730,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
         rStream >> pImp->nMajorVer >> pImp->nMinorVer;
     }
     sal_uInt32 nAttribSize(0);
-    int bOwnPool = sal_True;
+    bool bOwnPool = true;
     OUString aExternName;
     if ( pImp->nMajorVer > 1 || pImp->nMinorVer >= 2 )
         rStream >> pImp->nLoadingVersion;

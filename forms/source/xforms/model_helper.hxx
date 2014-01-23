@@ -120,12 +120,12 @@ public:
     {
         const com::sun::star::beans::PropertyValue* pValues = t.getConstArray();
         OUString sInstance( "Instance" );
-        sal_Bool bFound = sal_False;
+        bool bFound = false;
         for( sal_Int32 i = 0; ( ! bFound ) && ( i < t.getLength() ); i++ )
         {
             bFound |= ( pValues[i].Name == sInstance );
         }
-        return bFound ? true : false;
+        return bFound;
     }
 };
 

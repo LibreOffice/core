@@ -266,7 +266,7 @@ public:
         osl_readFile( *pChildOutputRead, pUUID2, 32, &nRead );
         printf("read buffer is %s, nRead is %" SAL_PRIdINT64 "\n", pUUID2, nRead );
         OUString suUUID2 = OUString::createFromAscii( pUUID2 );
-        CPPUNIT_ASSERT_MESSAGE("getGlobalProcessId: got two same ProcessIds.", suUUID2.equalsAsciiL( pUUID1, 32) == sal_False );
+        CPPUNIT_ASSERT_MESSAGE("getGlobalProcessId: got two same ProcessIds.", !suUUID2.equalsAsciiL( pUUID1, 32) );
     }
 
     CPPUNIT_TEST_SUITE(getGlobalProcessId);

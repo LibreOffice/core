@@ -128,7 +128,7 @@ struct OUStringLess
 {
     bool operator() ( const OUString& r1, const OUString& r2 ) const
     {
-        return (r1 < r2) != sal_False;
+        return r1 < r2;
     }
 };
 

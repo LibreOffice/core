@@ -401,7 +401,7 @@ SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl()
         lValues[ nPosition++ ] >>= aItem.bExpandWordSpace;
         m_aOptions.AppendEntry( aItem );
 
-        if ( !bDefaultFound && aItem.sName.equals( COMPATIBILITY_DEFAULT_NAME ) != sal_False )
+        if ( !bDefaultFound && aItem.sName.equals( COMPATIBILITY_DEFAULT_NAME ) )
         {
             SvtSysLocale aSysLocale;
             com::sun::star::lang::Locale aLocale = aSysLocale.GetLanguageTag().getLocale();
@@ -561,7 +561,7 @@ void SvtCompatibilityOptions_Impl::AppendItem(  const OUString& _sName,
     m_aOptions.AppendEntry( aItem );
 
     // default item reset?
-    if ( _sName.equals( COMPATIBILITY_DEFAULT_NAME ) != sal_False )
+    if ( _sName.equals( COMPATIBILITY_DEFAULT_NAME ) )
         m_aDefOptions = aItem;
 
     SetModified();

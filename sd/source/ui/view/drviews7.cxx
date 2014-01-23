@@ -894,7 +894,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         sal_uInt16        nCurrentLayer = GetLayerTabControl()->GetCurPageId();
         const OUString& rName = GetLayerTabControl()->GetPageText(nCurrentLayer);
 
-        sal_Bool bDisableIt = !IsLayerModeActive();
+        bool bDisableIt = !IsLayerModeActive();
         bDisableIt |= (rName == SD_RESSTR(STR_LAYER_LAYOUT));
         bDisableIt |= (rName == SD_RESSTR(STR_LAYER_BCKGRND));
         bDisableIt |= (rName == SD_RESSTR(STR_LAYER_BCKGRNDOBJ));

@@ -117,7 +117,7 @@ static inline OUString getBaseInstallation()
 
 inline bool isObsoleteUpdateInfo(const OUString& rBuildId)
 {
-    return sal_True != rBuildId.equals(getBuildId()) && !rBuildId.isEmpty();
+    return !rBuildId.equals(getBuildId()) && !rBuildId.isEmpty();
 }
 
 
@@ -1267,7 +1267,7 @@ UpdateCheck::setUpdateInfo(const UpdateInfo& aInfo)
 {
     osl::ClearableMutexGuard aGuard(m_aMutex);
 
-    bool bSuppressBubble = (sal_True == aInfo.BuildId.equals(m_aUpdateInfo.BuildId));
+    bool bSuppressBubble = aInfo.BuildId.equals(m_aUpdateInfo.BuildId);
     m_aUpdateInfo = aInfo;
 
     OSL_ASSERT(DISABLED == m_eState || CHECK_SCHEDULED == m_eState);

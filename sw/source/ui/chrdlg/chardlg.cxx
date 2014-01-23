@@ -139,7 +139,7 @@ void SwCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 SwCharURLPage::SwCharURLPage(Window* pParent, const SfxItemSet& rCoreSet)
     : SfxTabPage(pParent, "CharURLPage", "modules/swriter/ui/charurlpage.ui", rCoreSet)
     , pINetItem(0)
-    , bModified(sal_False)
+    , bModified(false)
 
 {
     get(m_pURLED, "urled");
@@ -268,14 +268,14 @@ sal_Bool SwCharURLPage::FillItemSet(SfxItemSet& rSet)
         aINetFmt.SetMacroTbl( &pINetItem->GetMacroTable() );
 
     if(m_pVisitedLB->GetSavedValue() != m_pVisitedLB->GetSelectEntryPos())
-        bModified = sal_True;
+        bModified = true;
 
     if(m_pNotVisitedLB->GetSavedValue() != m_pNotVisitedLB->GetSelectEntryPos())
-        bModified = sal_True;
+        bModified = true;
 
     if(m_pTextED->IsModified())
     {
-        bModified = sal_True;
+        bModified = true;
         rSet.Put(SfxStringItem(FN_PARAM_SELECTION, m_pTextED->GetText()));
     }
     if(bModified)

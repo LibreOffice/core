@@ -187,7 +187,7 @@ throw ( Exception, RuntimeException )
         sal_Int32 indexOfPkgSpec = m_sCtxString.lastIndexOf( pkgSpec );
 
         // if contex string ends with "uno_packages"
-        if ( indexOfPkgSpec > -1 && ( m_sCtxString.match( pkgSpec, indexOfPkgSpec ) == sal_True ) )
+        if ( indexOfPkgSpec > -1 && m_sCtxString.match( pkgSpec, indexOfPkgSpec ) )
         {
             m_bIsPkgMSP = sal_True;
         }

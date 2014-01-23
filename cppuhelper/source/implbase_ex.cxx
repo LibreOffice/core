@@ -73,7 +73,7 @@ static inline bool __td_equals(
     SAL_THROW(())
 {
     return ((pTDR1 == pTDR2) ||
-            ((OUString const *)&pTDR1->pTypeName)->equals( *(OUString const *)&pTDR2->pTypeName ) != sal_False);
+            ((OUString const *)&pTDR1->pTypeName)->equals( *(OUString const *)&pTDR2->pTypeName ));
 }
 //--------------------------------------------------------------------------------------------------
 static inline type_entry * __getTypeEntries( class_data * cd )

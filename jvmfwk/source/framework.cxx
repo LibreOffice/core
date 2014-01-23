@@ -686,9 +686,9 @@ sal_Bool SAL_CALL jfw_areEqualJavaInfo(
     OUString sLocation(pInfoA->sLocation);
     OUString sVersion(pInfoA->sVersion);
     rtl::ByteSequence sData(pInfoA->arVendorData);
-    if (sVendor.equals(pInfoB->sVendor) == sal_True
-        && sLocation.equals(pInfoB->sLocation) == sal_True
-        && sVersion.equals(pInfoB->sVersion) == sal_True
+    if (sVendor.equals(pInfoB->sVendor)
+        && sLocation.equals(pInfoB->sLocation)
+        && sVersion.equals(pInfoB->sVersion)
         && pInfoA->nFeatures == pInfoB->nFeatures
         && pInfoA->nRequirements == pInfoB->nRequirements
         && sData == pInfoB->arVendorData)
@@ -751,7 +751,7 @@ javaFrameworkError SAL_CALL jfw_getSelectedJRE(JavaInfo **ppInfo)
         // /java/javaInfo/@vendorUpdate != javaSelection/updated (javavendors.xml)
         OString sUpdated = jfw::getElementUpdated();
 
-        if (sUpdated.equals(settings.getJavaInfoAttrVendorUpdate()) == sal_False)
+        if (!sUpdated.equals(settings.getJavaInfoAttrVendorUpdate()))
             return JFW_E_INVALID_SETTINGS;
         *ppInfo = aInfo.detach();
     }

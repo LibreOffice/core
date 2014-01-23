@@ -430,15 +430,15 @@ public:
       This function can't be used for language specific comparison.
 
       @param    str         the object to be compared.
-      @return   sal_True if the strings are equal;
-                sal_False, otherwise.
+      @return   true if the strings are equal;
+                false, otherwise.
     */
-    sal_Bool equals( const OString & str ) const SAL_THROW(())
+    bool equals( const OString & str ) const SAL_THROW(())
     {
         if ( pData->length != str.pData->length )
-            return sal_False;
+            return false;
         if ( pData == str.pData )
-            return sal_True;
+            return true;
         return rtl_str_reverseCompare_WithLength( pData->buffer, pData->length,
                                                   str.pData->buffer, str.pData->length ) == 0;
     }
@@ -455,13 +455,13 @@ public:
 
       @param    value       a character array.
       @param    length      the length of the character array.
-      @return   sal_True if the strings are equal;
-                sal_False, otherwise.
+      @return   true if the strings are equal;
+                false, otherwise.
     */
-    sal_Bool equalsL( const sal_Char* value, sal_Int32 length ) const SAL_THROW(())
+    bool equalsL( const sal_Char* value, sal_Int32 length ) const SAL_THROW(())
     {
         if ( pData->length != length )
-            return sal_False;
+            return false;
 
         return rtl_str_reverseCompare_WithLength( pData->buffer, pData->length,
                                                   value, length ) == 0;
@@ -478,15 +478,15 @@ public:
       This function can't be used for language specific comparison.
 
       @param    str         the object to be compared.
-      @return   sal_True if the strings are equal;
-                sal_False, otherwise.
+      @return   true if the strings are equal;
+                false, otherwise.
     */
-    sal_Bool equalsIgnoreAsciiCase( const OString & str ) const SAL_THROW(())
+    bool equalsIgnoreAsciiCase( const OString & str ) const SAL_THROW(())
     {
         if ( pData->length != str.pData->length )
-            return sal_False;
+            return false;
         if ( pData == str.pData )
-            return sal_True;
+            return true;
         return rtl_str_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length,
                                                           str.pData->buffer, str.pData->length ) == 0;
     }
@@ -509,8 +509,8 @@ public:
       The template is used only for technical reasons.
 
       @param    asciiStr        the 8-Bit ASCII character string to be compared.
-      @return   sal_True if the strings are equal;
-                sal_False, otherwise.
+      @return   true if the strings are equal;
+                false, otherwise.
     */
     template< typename T >
     typename internal::CharPtrDetector< T, bool >::Type equalsIgnoreAsciiCase( const T& asciiStr ) const SAL_THROW(())
@@ -556,13 +556,13 @@ public:
 
       @param    asciiStr        the 8-Bit ASCII character string to be compared.
       @param    asciiStrLength  the length of the ascii string
-      @return   sal_True if the strings are equal;
-                sal_False, otherwise.
+      @return   true if the strings are equal;
+                false, otherwise.
     */
-    sal_Bool equalsIgnoreAsciiCaseL( const sal_Char * asciiStr, sal_Int32 asciiStrLength ) const SAL_THROW(())
+    bool equalsIgnoreAsciiCaseL( const sal_Char * asciiStr, sal_Int32 asciiStrLength ) const SAL_THROW(())
     {
         if ( pData->length != asciiStrLength )
-            return sal_False;
+            return false;
 
         return rtl_str_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length,
                                                           asciiStr, asciiStrLength ) == 0;
@@ -579,11 +579,11 @@ public:
       @param    fromIndex   the index to start the comparion from.
                             The index must be greater or equal than 0
                             and less or equal as the string length.
-      @return   sal_True if str match with the characters in the string
+      @return   true if str match with the characters in the string
                 at the given position;
-                sal_False, otherwise.
+                false, otherwise.
     */
-    sal_Bool match( const OString & str, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    bool match( const OString & str, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
     {
         return rtl_str_shortenedCompare_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                     str.pData->buffer, str.pData->length, str.pData->length ) == 0;
@@ -651,11 +651,11 @@ public:
       @param    fromIndex   the index to start the comparion from.
                             The index must be greater or equal than 0
                             and less or equal as the string length.
-      @return   sal_True if str match with the characters in the string
+      @return   true if str match with the characters in the string
                 at the given position;
-                sal_False, otherwise.
+                false, otherwise.
     */
-    sal_Bool matchIgnoreAsciiCase( const OString & str, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    bool matchIgnoreAsciiCase( const OString & str, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
     {
         return rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                                    str.pData->buffer, str.pData->length,
@@ -778,17 +778,17 @@ public:
             && matchL(str, strLength, getLength() - strLength);
     }
 
-    friend sal_Bool     operator == ( const OString& rStr1, const OString& rStr2 ) SAL_THROW(())
+    friend bool     operator == ( const OString& rStr1, const OString& rStr2 ) SAL_THROW(())
                         { return rStr1.equals(rStr2); }
-    friend sal_Bool     operator != ( const OString& rStr1,     const OString& rStr2 ) SAL_THROW(())
+    friend bool     operator != ( const OString& rStr1,     const OString& rStr2 ) SAL_THROW(())
                         { return !(operator == ( rStr1, rStr2 )); }
-    friend sal_Bool     operator <  ( const OString& rStr1,    const OString& rStr2 ) SAL_THROW(())
+    friend bool     operator <  ( const OString& rStr1,    const OString& rStr2 ) SAL_THROW(())
                         { return rStr1.compareTo( rStr2 ) < 0; }
-    friend sal_Bool     operator >  ( const OString& rStr1,    const OString& rStr2 ) SAL_THROW(())
+    friend bool     operator >  ( const OString& rStr1,    const OString& rStr2 ) SAL_THROW(())
                         { return rStr1.compareTo( rStr2 ) > 0; }
-    friend sal_Bool     operator <= ( const OString& rStr1,    const OString& rStr2 ) SAL_THROW(())
+    friend bool     operator <= ( const OString& rStr1,    const OString& rStr2 ) SAL_THROW(())
                         { return rStr1.compareTo( rStr2 ) <= 0; }
-    friend sal_Bool     operator >= ( const OString& rStr1,    const OString& rStr2 ) SAL_THROW(())
+    friend bool     operator >= ( const OString& rStr1,    const OString& rStr2 ) SAL_THROW(())
                         { return rStr1.compareTo( rStr2 ) >= 0; }
 
     template< typename T >
@@ -1322,10 +1322,10 @@ public:
 
       This function can't be used for language specific conversion.
 
-      @return   sal_True, if the string is 1 or "True" in any ASCII case.
-                sal_False in any other case.
+      @return   true, if the string is 1 or "True" in any ASCII case.
+                false in any other case.
     */
-    sal_Bool toBoolean() const SAL_THROW(())
+    bool toBoolean() const SAL_THROW(())
     {
         return rtl_str_toBoolean( pData->buffer );
     }

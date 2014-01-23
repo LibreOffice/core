@@ -269,8 +269,8 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
             bAddSpacingAtPages, bUseOurTabStops, bNoExtLeading,
             bUseLineSpacing, bAddTableSpacing, bUseObjPos,
             bUseOurTextWrapping, bConsiderWrappingStyle, bExpandWordSpace,
-            ( sName.equals( DEFAULT_ENTRY ) != sal_False ),
-            ( sName.equals( USER_ENTRY ) != sal_False ) );
+            sName.equals( DEFAULT_ENTRY ),
+            sName.equals( USER_ENTRY ) );
         m_pImpl->m_aList.push_back( aItem );
 
         if ( aItem.m_bIsDefault )

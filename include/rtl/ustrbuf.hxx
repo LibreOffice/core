@@ -838,6 +838,31 @@ public:
     }
 
     /**
+        Inserts the string representation of the <code>bool</code>
+        argument into this string buffer.
+
+        The second argument is converted to a string as if by the method
+        <code>OUString::boolean</code>, and the characters of that
+        string are then inserted into this string buffer at the indicated
+        offset.
+        <p>
+        The offset argument must be greater than or equal to
+        <code>0</code>, and less than or equal to the length of this
+        string buffer.
+
+        @param      offset   the offset.
+        @param      b        a <code>bool</code>.
+        @return     this string buffer.
+
+        @since LibreOffice 4.3
+     */
+    OUStringBuffer & insert(sal_Int32 offset, bool b)
+    {
+        sal_Unicode sz[RTL_USTR_MAX_VALUEOFBOOLEAN];
+        return insert( offset, sz, rtl_ustr_valueOfBoolean( sz, b ) );
+    }
+
+    /**
         Inserts the string representation of the <code>char</code>
         argument into this string buffer.
 
