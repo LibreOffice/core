@@ -18,45 +18,74 @@
  */
 
 
-#include "defaultgridcolumnmodel.hxx"
 #include "gridcolumn.hxx"
 
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
+#include <com/sun/star/awt/grid/XGridColumnModel.hpp>
+#include <com/sun/star/awt/grid/XGridColumn.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <comphelper/sequence.hxx>
 #include <comphelper/componentguard.hxx>
-#include <comphelper/processfactory.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <toolkit/helper/servicenames.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
 
-//......................................................................................................................
-namespace toolkit
-//......................................................................................................................
-{
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XComponentContext;
-    using ::com::sun::star::lang::XMultiServiceFactory;
-    using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::awt::grid::XGridColumn;
-    using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::lang::XComponent;
-    using ::com::sun::star::lang::EventObject;
-    using ::com::sun::star::container::XContainerListener;
-    using ::com::sun::star::container::ContainerEvent;
-    using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::lang::IndexOutOfBoundsException;
-    using ::com::sun::star::util::XCloneable;
-    using ::com::sun::star::lang::IllegalArgumentException;
+#include <vector>
 
-    //==================================================================================================================
-    //= DefaultGridColumnModel
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+using namespace css::awt;
+using namespace css::awt::grid;
+using namespace css::container;
+using namespace css::uno;
+using namespace toolkit;
+
+namespace {
+
+typedef ::cppu::WeakComponentImplHelper2    <   css::awt::grid::XGridColumnModel
+                                            ,   css::lang::XServiceInfo
+                                            >   DefaultGridColumnModel_Base;
+
+class DefaultGridColumnModel    :public ::cppu::BaseMutex
+                                ,public DefaultGridColumnModel_Base
+{
+public:
+    DefaultGridColumnModel();
+    DefaultGridColumnModel( DefaultGridColumnModel const & i_copySource );
+    virtual ~DefaultGridColumnModel();
+
+    // XGridColumnModel
+    virtual ::sal_Int32 SAL_CALL getColumnCount() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< css::awt::grid::XGridColumn > SAL_CALL createColumn(  ) throw (css::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL addColumn(const css::uno::Reference< css::awt::grid::XGridColumn > & column) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException);
+    virtual void SAL_CALL removeColumn( ::sal_Int32 i_columnIndex )  throw (css::uno::RuntimeException, css::lang::IndexOutOfBoundsException);
+    virtual css::uno::Sequence< css::uno::Reference< css::awt::grid::XGridColumn > > SAL_CALL getColumns() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< css::awt::grid::XGridColumn > SAL_CALL getColumn(::sal_Int32 index) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    virtual void SAL_CALL setDefaultColumns(sal_Int32 rowElements) throw (css::uno::RuntimeException);
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException);
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException);
+
+    // XContainer
+    virtual void SAL_CALL addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) throw (css::uno::RuntimeException);
+
+    // XCloneable
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException);
+
+    // OComponentHelper
+    virtual void SAL_CALL disposing();
+
+private:
+    typedef ::std::vector< css::uno::Reference< css::awt::grid::XGridColumn > >   Columns;
+
+    ::cppu::OInterfaceContainerHelper   m_aContainerListeners;
+    Columns                             m_aColumns;
+};
+
     DefaultGridColumnModel::DefaultGridColumnModel()
         :DefaultGridColumnModel_Base( m_aMutex )
         ,m_aContainerListeners( m_aMutex )
@@ -64,7 +93,6 @@ namespace toolkit
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     DefaultGridColumnModel::DefaultGridColumnModel( DefaultGridColumnModel const & i_copySource )
         :cppu::BaseMutex()
         ,DefaultGridColumnModel_Base( m_aMutex )
@@ -121,13 +149,14 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::sal_Int32 SAL_CALL DefaultGridColumnModel::addColumn( const Reference< XGridColumn > & i_column ) throw (RuntimeException, IllegalArgumentException)
+    ::sal_Int32 SAL_CALL DefaultGridColumnModel::addColumn( const Reference< XGridColumn > & i_column )
+        throw (RuntimeException, css::lang::IllegalArgumentException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
         GridColumn* const pGridColumn = GridColumn::getImplementation( i_column );
         if ( pGridColumn == NULL )
-            throw IllegalArgumentException( "invalid column implementation", *this, 1 );
+            throw css::lang::IllegalArgumentException( "invalid column implementation", *this, 1 );
 
         m_aColumns.push_back( i_column );
         sal_Int32 index = m_aColumns.size() - 1;
@@ -146,12 +175,13 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL DefaultGridColumnModel::removeColumn( ::sal_Int32 i_columnIndex )  throw (RuntimeException, IndexOutOfBoundsException)
+    void SAL_CALL DefaultGridColumnModel::removeColumn( ::sal_Int32 i_columnIndex )
+        throw (RuntimeException, css::lang::IndexOutOfBoundsException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
         if ( ( i_columnIndex < 0 ) || ( size_t( i_columnIndex ) >= m_aColumns.size() ) )
-            throw IndexOutOfBoundsException( OUString(), *this );
+            throw css::lang::IndexOutOfBoundsException( OUString(), *this );
 
         Columns::iterator const pos = m_aColumns.begin() + i_columnIndex;
         Reference< XGridColumn > const xColumn( *pos );
@@ -202,14 +232,15 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Reference< XGridColumn > SAL_CALL DefaultGridColumnModel::getColumn(::sal_Int32 index) throw (IndexOutOfBoundsException, RuntimeException)
+    Reference< XGridColumn > SAL_CALL DefaultGridColumnModel::getColumn(::sal_Int32 index)
+        throw (css::lang::IndexOutOfBoundsException, RuntimeException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
         if ( index >=0 && index < ((sal_Int32)m_aColumns.size()))
             return m_aColumns[index];
 
-        throw IndexOutOfBoundsException();
+        throw css::lang::IndexOutOfBoundsException();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -299,7 +330,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     OUString SAL_CALL DefaultGridColumnModel::getImplementationName(  ) throw (RuntimeException)
     {
-        return OUString( "org.openoffice.comp.toolkit.DefaultGridColumnModel" );
+        return OUString("stardiv.Toolkit.DefaultGridColumnModel");
     }
 
     sal_Bool SAL_CALL DefaultGridColumnModel::supportsService( const OUString& i_serviceName ) throw (RuntimeException)
@@ -309,7 +340,7 @@ namespace toolkit
 
     Sequence< OUString > SAL_CALL DefaultGridColumnModel::getSupportedServiceNames(  ) throw (RuntimeException)
     {
-        const OUString aServiceName( OUString::createFromAscii( szServiceName_DefaultGridColumnModel ) );
+        const OUString aServiceName("com.sun.star.awt.grid.DefaultGridColumnModel");
         const Sequence< OUString > aSeq( &aServiceName, 1 );
         return aSeq;
     }
@@ -365,13 +396,14 @@ namespace toolkit
         return new DefaultGridColumnModel( *this );
     }
 
-//......................................................................................................................
-}   // namespace toolkit
-//......................................................................................................................
-
-//----------------------------------------------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL DefaultGridColumnModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& )
-{
-    return ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::DefaultGridColumnModel );
 }
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_DefaultGridColumnModel_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new DefaultGridColumnModel());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
