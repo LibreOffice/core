@@ -53,14 +53,6 @@ RecentDocsView::RecentDocsView( Window* pParent )
     SetStyle(GetStyle() | WB_VSCROLL);
     setItemMaxTextLength( mnItemMaxTextLength );
     setItemDimensions( mnItemMaxSize, mnItemMaxSize, mnTextHeight, mnItemPadding );
-
-    // Set prefered width so text lines will not be cut off
-    Font aOldFont(GetFont());
-    Font aNewFont(aOldFont);
-    aNewFont.SetHeight(20);
-    SetFont(aNewFont);
-    set_width_request(std::max(GetTextWidth(maWelcomeLine1),GetTextWidth(maWelcomeLine2)));
-    SetFont(aOldFont);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeRecentDocsView(Window *pParent, VclBuilder::stringmap &)
@@ -184,6 +176,21 @@ void RecentDocsView::loadRecentDocs()
 
     CalculateItemPositions();
     Invalidate();
+
+    // Set prefered width
+    if( mFilteredItemList.empty() )
+    {
+        Font aOldFont(GetFont());
+        Font aNewFont(aOldFont);
+        aNewFont.SetHeight(20);
+        SetFont(aNewFont);
+        set_width_request(std::max(GetTextWidth(maWelcomeLine1),GetTextWidth(maWelcomeLine2)));
+        SetFont(aOldFont);
+    }
+    else
+    {
+        set_width_request(mnItemMaxSize);
+    }
 }
 
 void RecentDocsView::MouseButtonDown( const MouseEvent& rMEvt )
@@ -301,6 +308,18 @@ void RecentDocsView::SetThumbnailSize(long thumbnailSize)
 long RecentDocsView::GetThumbnailSize() const
 {
     return mnItemMaxSize;
+}
+
+void RecentDocsView::Clear()
+{
+    Font aOldFont(GetFont());
+    Font aNewFont(aOldFont);
+    aNewFont.SetHeight(20);
+    SetFont(aNewFont);
+    set_width_request(std::max(GetTextWidth(maWelcomeLine1),GetTextWidth(maWelcomeLine2)));
+    SetFont(aOldFont);
+
+    ThumbnailView::Clear();
 }
 
 IMPL_STATIC_LINK_NOINSTANCE( RecentDocsView, ExecuteHdl_Impl, LoadRecentFile*, pLoadRecentFile )
