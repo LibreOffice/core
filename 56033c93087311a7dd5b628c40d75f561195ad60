@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_7a03ad73",
+        "filename": "sc/source/filter/excel/xehelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-01-23T19:13:10Z",
+      "side": 1,
+      "message": "please intend properly.\n\nhere you want\nif(foo)\n{\n   xxxx;\n   yyyy;\n}\n\nnot\nif(foo)\n{\n    xxxx;\n    yyyy;}",
+      "revId": "56033c93087311a7dd5b628c40d75f561195ad60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
