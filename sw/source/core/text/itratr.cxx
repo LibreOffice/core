@@ -236,8 +236,8 @@ void SwAttrIter::SeekFwd( const sal_Int32 nNewPos )
     }
     else // ueberlies die nicht geoeffneten Enden
     {
-        while ( ( nEndIndex < pHints->GetEndCount() ) &&
-                (*(pTxtAttr=pHints->GetEnd(nEndIndex))->GetAnyEnd()<=nNewPos))
+        while ( (nEndIndex < pHints->GetEndCount()) &&
+                (*pHints->GetEnd(nEndIndex)->GetAnyEnd() <= nNewPos) )
         {
             nEndIndex++;
         }
