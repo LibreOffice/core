@@ -74,6 +74,7 @@ struct DocxSdrExport::Impl
     sax_fastparser::FastAttributeList* m_pFlyFillAttrList;
     sax_fastparser::FastAttributeList* m_pFlyWrapAttrList;
     sax_fastparser::FastAttributeList* m_pBodyPrAttrList;
+    sax_fastparser::FastAttributeList* m_pDashLineStyleAttr;
 
     Impl(DocxSdrExport& rSdrExport, DocxExport& rExport, sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML)
         : m_rSdrExport(rSdrExport),
@@ -88,7 +89,8 @@ struct DocxSdrExport::Impl
           m_bFrameBtLr(false),
           m_pFlyFillAttrList(0),
           m_pFlyWrapAttrList(0),
-          m_pBodyPrAttrList(0)
+          m_pBodyPrAttrList(0),
+          m_pDashLineStyleAttr(0)
     {
     }
 
@@ -175,6 +177,11 @@ sax_fastparser::FastAttributeList* DocxSdrExport::getFlyWrapAttrList()
 sax_fastparser::FastAttributeList* DocxSdrExport::getBodyPrAttrList()
 {
     return m_pImpl->m_pBodyPrAttrList;
+}
+
+sax_fastparser::FastAttributeList*& DocxSdrExport::getDashLineStyle()
+{
+    return m_pImpl->m_pDashLineStyleAttr;
 }
 
 void DocxSdrExport::setFlyWrapAttrList(sax_fastparser::FastAttributeList* pAttrList)
@@ -980,6 +987,12 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame)
         sax_fastparser::XFastAttributeListRef xFlyFillAttrList(m_pImpl->m_pFlyFillAttrList);
         m_pImpl->m_pFlyFillAttrList = NULL;
         pFS->singleElementNS(XML_v, XML_fill, xFlyFillAttrList);
+    }
+    if (m_pImpl->m_pDashLineStyleAttr)
+    {
+        sax_fastparser::XFastAttributeListRef xDashLineStyleAttr(m_pImpl->m_pDashLineStyleAttr);
+        m_pImpl->m_pFlyFillAttrList = NULL;
+        pFS->singleElementNS(XML_v, XML_stroke, xDashLineStyleAttr);
     }
     pFS->startElementNS(XML_v, XML_textbox, xTextboxAttrList);
     pFS->startElementNS(XML_w, XML_txbxContent, FSEND);

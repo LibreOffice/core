@@ -2974,6 +2974,17 @@ DECLARE_OOXMLEXPORT_TEST(fdo69656, "Table_cell_auto_width_fdo69656.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblW","type","auto");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testLineStyle_DashType_VML, "LineStyle_DashType_VML.docx")
+{
+    /* DOCX contatining "Shape with text inside" having Line Style as "Dash Type" should get
+     * preserved inside an XML tag <v:stroke> with attribute dashstyle having value "dash".
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:stroke", "dashstyle", "dash");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
