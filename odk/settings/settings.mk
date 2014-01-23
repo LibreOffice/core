@@ -72,7 +72,6 @@ EXE_EXT=.exe
 COPY=copy
 SHAREDLIB_EXT=dll
 SHAREDLIB_OUT=$(OUT_BIN)
-PACKAGE_LIB_DIR=windows.plt
 UNOPKG_PLATFORM=Windows
 
 OSEP=^<
@@ -153,18 +152,15 @@ PROCTYPE := $(shell $(PRJ)/config.guess | cut -d"-" -f1)$(shell /usr/ccs/bin/elf
 
 ifeq "$(PROCTYPE)" "sparc"
 PLATFORM=solsparc
-PACKAGE_LIB_DIR=solaris_sparc.plt
 UNOPKG_PLATFORM=Solaris_SPARC
 JAVA_PROC_TYPE=sparc
 else
 ifeq "$(PROCTYPE)" "sparc64"
 PLATFORM=solsparc
-PACKAGE_LIB_DIR=solaris_sparc64.plt
 UNOPKG_PLATFORM=Solaris_SPARC64
 JAVA_PROC_TYPE=sparcv9
 else
 PLATFORM=solintel
-PACKAGE_LIB_DIR=solaris_x86.plt
 UNOPKG_PLATFORM=Solaris_x86
 JAVA_PROC_TYPE=i386
 endif
@@ -260,24 +256,20 @@ ifneq (,$(findstring linux,$(PLATFORM)))
 PROCTYPE := $(shell $(PRJ)/config.guess | cut -d "-" -f1 | sed -e 's/^i.86$$/i386/')
 PLATFORM=linux
 
-PACKAGE_LIB_DIR=linux_$(PROCTYPE).plt
 UNOPKG_PLATFORM=Linux_$(PROCTYPE)
 JAVA_PROC_TYPE=$(PROCTYPE)
 
 ifeq "$(PROCTYPE)" "i386"
-PACKAGE_LIB_DIR=linux_x86.plt
 UNOPKG_PLATFORM=Linux_x86
 JAVA_PROC_TYPE=i386
 endif
 
 ifeq "$(PROCTYPE)" "powerpc"
-PACKAGE_LIB_DIR=linux_powerpc.plt
 UNOPKG_PLATFORM=Linux_PowerPC
 JAVA_PROC_TYPE=ppc
 endif
 
 ifeq "$(PROCTYPE)" "sparc"
-PACKAGE_LIB_DIR=linux_sparc.plt
 UNOPKG_PLATFORM=Linux_SPARC
 JAVA_PROC_TYPE=sparc
 endif
@@ -383,41 +375,30 @@ endif
 #
 ###########################################################################
 ifneq (,$(findstring darwin,$(PLATFORM)))
-# Settings for MacOSX using gcc 4.0.1 compiler
+# Settings for MacOSX using LLVM version 4.2 (clang-425.0.28)
 
 PROCTYPE := $(shell $(PRJ)/config.guess | cut -d"-" -f1)
 
 # Default is MacOSX on a Intel machine    
 PLATFORM=macosx
 
-ifeq "$(PROCTYPE)" "i386"
-PACKAGE_LIB_DIR=macosx_x86.plt
-UNOPKG_PLATFORM=MacOSX_x86
-JAVA_PROC_TYPE=x86
-else
 ifeq "$(PROCTYPE)" "x86_64"
-PACKAGE_LIB_DIR=macosx_x86.plt
-UNOPKG_PLATFORM=MacOSX_x86
-JAVA_PROC_TYPE=x86
-else
-PACKAGE_LIB_DIR=macosx_ppc.plt
-UNOPKG_PLATFORM=MacOSX_PowerPC
-JAVA_PROC_TYPE=ppc
+UNOPKG_PLATFORM=MacOSX_x86_64
 endif
-endif
+
 JAVABIN=Commands
 
-GCC_VERSION =$(shell gcc -dumpversion| cut -d"." -f1,2)
-ifeq "$(GCC_VERSION)" "4.2"
-GCC_ARCH_OPTION=-arch i386
-endif
+GCC_ARCH_OPTION=-arch x86_64
 
 OS=MACOSX
 PS=/
 ICL=\$$
-CC=gcc-$(GCC_VERSION)
-LINK=g++-$(GCC_VERSION)
-LIB=g++-$(GCC_VERSION)
+CC=`xcrun -f clang` -arch x86_64
+CXX=`xcrun -f clang++` -arch x86_64 -std=c++11
+LINK=`xcrun -f clang++` -arch x86_64 -std=c++11
+LIB=`xcrun -f clang++` -arch x86_64 -std=c++11
+INSTALLTOOL=`xcrun -f install_name_tool`
+
 ECHO=@echo
 MKDIR=mkdir -p
 CAT=cat
@@ -428,6 +409,8 @@ SHAREDLIB_OUT=$(OUT_LIB)
 
 COMID=gcc3
 CPPU_ENV=gcc3
+COMID=s5abi
+CPPU_ENV=s5abi
 
 OSEP=\<
 CSEP=\>
@@ -459,15 +442,16 @@ SALHELPERDYLIB=-Wl,-dylib_file,@________________________________________________
 REGDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libreg.dylib.3:'$(OO_SDK_OFFICE_LIB_DIR)/libreg.dylib'
 STOREDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libstore.dylib.3:'$(OO_SDK_OFFICE_LIB_DIR)/libstore.dylib'
 
-INSTALL_NAME_URELIBS=install_name_tool -change @__________________________________________________URELIB/libuno_sal.dylib.3 @executable_path/libuno_sal.dylib.3 -change  @__________________________________________________URELIB/libuno_cppu.dylib.3 @executable_path/libuno_cppu.dylib.3 -change @__________________________________________________URELIB/libuno_cppuhelper$(COMID).dylib.3 @executable_path/libuno_cppuhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libuno_salhelper$(COMID).dylib.3 @executable_path/libuno_salhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libreg.dylib.3 @executable_path/libreg.dylib.3 -change @__________________________________________________URELIB/libstore.dylib.3 @executable_path/libstore.dylib.3
+INSTALL_NAME_URELIBS=$(INSTALLTOOL) -change @__________________________________________________URELIB/libuno_sal.dylib.3 @executable_path/libuno_sal.dylib.3 -change  @__________________________________________________URELIB/libuno_cppu.dylib.3 @executable_path/libuno_cppu.dylib.3 -change @__________________________________________________URELIB/libuno_cppuhelper$(COMID).dylib.3 @executable_path/libuno_cppuhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libuno_salhelper$(COMID).dylib.3 @executable_path/libuno_salhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libreg.dylib.3 @executable_path/libreg.dylib.3 -change @__________________________________________________URELIB/libstore.dylib.3 @executable_path/libstore.dylib.3
 
-INSTALL_NAME_URELIBS_BIN=install_name_tool -change @__________________________________________________URELIB/libuno_sal.dylib.3 libuno_sal.dylib.3 -change  @__________________________________________________URELIB/libuno_cppu.dylib.3 libuno_cppu.dylib.3 -change @__________________________________________________URELIB/libuno_cppuhelper$(COMID).dylib.3 libuno_cppuhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libuno_salhelper$(COMID).dylib.3 libuno_salhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libreg.dylib.3 libreg.dylib.3 -change @__________________________________________________URELIB/libstore.dylib.3 libstore.dylib.3
+INSTALL_NAME_URELIBS_BIN=$(INSTALLTOOL) -change @__________________________________________________URELIB/libuno_sal.dylib.3 libuno_sal.dylib.3 -change  @__________________________________________________URELIB/libuno_cppu.dylib.3 libuno_cppu.dylib.3 -change @__________________________________________________URELIB/libuno_cppuhelper$(COMID).dylib.3 libuno_cppuhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libuno_salhelper$(COMID).dylib.3 libuno_salhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libreg.dylib.3 libreg.dylib.3 -change @__________________________________________________URELIB/libstore.dylib.3 libstore.dylib.3
 
 EMPTYSTRING=
 PATH_SEPARATOR=:
 
-CC_FLAGS_JNI=-malign-natural -c -fPIC -fno-common $(GCC_ARCH_OPTION)
-CC_FLAGS=-malign-natural -c -fPIC -fno-common $(GCC_ARCH_OPTION) -fvisibility=hidden
+CC_FLAGS_JNI=-c -fPIC -fno-common $(GCC_ARCH_OPTION)
+CC_FLAGS=-c -fPIC -fno-common $(GCC_ARCH_OPTION) -fvisibility=hidden
+
 # -O is necessary for inlining (see gcc documentation)
 ifeq "$(DEBUG)" "yes"
 CC_FLAGS_JNI+=-g
@@ -512,19 +496,15 @@ PROCTYPE := $(shell $(PRJ)/config.guess | cut -d"-" -f1)
 ifeq (kfreebsd,$(findstring kfreebsd,$(PLATFORM)))
 PLATFORM=kfreebsd
 ifeq "$(PROCTYPE)" "x86_64"
-PACKAGE_LIB_DIR=kfreebsd_x86_64.plt
 UNOPKG_PLATFORM=kFreeBSD_x86_64
 else
-PACKAGE_LIB_DIR=kfreebsd_x86.plt
 UNOPKG_PLATFORM=kFreeBSD_x86
 endif
 else
 PLATFORM=freebsd
 ifeq "$(PROCTYPE)" "x86_64"
-PACKAGE_LIB_DIR=freebsd_x86_64.plt
 UNOPKG_PLATFORM=FreeBSD_x86_64
 else
-PACKAGE_LIB_DIR=freebsd_x86.plt
 UNOPKG_PLATFORM=FreeBSD_x86
 endif
 endif

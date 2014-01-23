@@ -151,7 +151,6 @@ case ${sdk_platform} in
 	platform='Solaris x86'
     fi
     comid=C52
-    pltfrm=sunpro
     soext=so
     exampleout=SOLARISexample.out
     stldebug=_debug
@@ -162,13 +161,12 @@ case ${sdk_platform} in
   darwin*)
     if [ -n "$OO_SDK_CPP_HOME" ]
     then
-	SDK_GXX_INCLUDE_PATH=`echo "#include <cstring>" | ${OO_SDK_CPP_HOME}/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
+	SDK_GXX_INCLUDE_PATH=`echo "#include <cstring>" | ${OO_SDK_CPP_HOME}/clang++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
 	export SDK_GXX_INCLUDE_PATH
     fi	
 
     directoryname=macosx
-    comid=gcc3
-    pltfrm=gcc
+    comid=s5abi
     soext=dylib
     exampleout=MACOSXexample.out
     platform=MacOSX
@@ -186,7 +184,6 @@ case ${sdk_platform} in
 
     directoryname=linux
     comid=gcc3
-    pltfrm=gcc
     soext=so
     exampleout=LINUXexample.out
     platform=Linux
@@ -204,7 +201,6 @@ case ${sdk_platform} in
 
     directoryname=freebsd
     comid=gcc3
-    pltfrm=gcc
     soext=so
     exampleout=FREEBSDexample.out
     platform=FreeBSD
