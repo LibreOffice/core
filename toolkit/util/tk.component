@@ -86,27 +86,33 @@
       constructor="stardiv_Toolkit_TreeControlModel_get_implementation">
     <service name="com.sun.star.awt.tree.TreeControlModel"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoButtonControl">
+  <implementation name="stardiv.Toolkit.UnoButtonControl"
+      constructor="stardiv_Toolkit_UnoButtonControl_get_implementation">
     <service name="com.sun.star.awt.UnoControlButton"/>
     <service name="stardiv.vcl.control.Button"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoCheckBoxControl">
+  <implementation name="stardiv.Toolkit.UnoCheckBoxControl"
+      constructor="stardiv_Toolkit_UnoCheckBoxControl_get_implementation">
     <service name="com.sun.star.awt.UnoControlCheckBox"/>
     <service name="stardiv.vcl.control.CheckBox"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoComboBoxControl">
+  <implementation name="stardiv.Toolkit.UnoComboBoxControl"
+      constructor="stardiv_Toolkit_UnoComboBoxControl_get_implementation">
     <service name="com.sun.star.awt.UnoControlComboBox"/>
     <service name="stardiv.vcl.control.ComboBox"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoControlButtonModel">
+  <implementation name="stardiv.Toolkit.UnoControlButtonModel"
+      constructor="stardiv_Toolkit_UnoControlButtonModel_get_implementation">
     <service name="com.sun.star.awt.UnoControlButtonModel"/>
     <service name="stardiv.vcl.controlmodel.Button"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoControlCheckBoxModel">
+  <implementation name="stardiv.Toolkit.UnoControlCheckBoxModel"
+      constructor="stardiv_Toolkit_UnoControlCheckBoxModel_get_implementation">
     <service name="com.sun.star.awt.UnoControlCheckBoxModel"/>
     <service name="stardiv.vcl.controlmodel.CheckBox"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoControlComboBoxModel">
+  <implementation name="stardiv.Toolkit.UnoControlComboBoxModel"
+      constructor="stardiv_Toolkit_UnoControlComboBoxModel_get_implementation">
     <service name="com.sun.star.awt.UnoControlComboBoxModel"/>
     <service name="stardiv.vcl.controlmodel.ComboBox"/>
   </implementation>
@@ -118,11 +124,13 @@
     <service name="com.sun.star.awt.UnoControlContainerModel"/>
     <service name="stardiv.vcl.controlmodel.ControlContainer"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoControlCurrencyFieldModel">
+  <implementation name="stardiv.Toolkit.UnoControlCurrencyFieldModel"
+      constructor="stardiv_Toolkit_UnoControlCurrencyFieldModel_get_implementation">
     <service name="com.sun.star.awt.UnoControlCurrencyFieldModel"/>
     <service name="stardiv.vcl.controlmodel.CurrencyField"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoControlDateFieldModel">
+  <implementation name="stardiv.Toolkit.UnoControlDateFieldModel"
+      constructor="stardiv_Toolkit_UnoControlDateFieldModel_get_implementation">
     <service name="com.sun.star.awt.UnoControlDateFieldModel"/>
     <service name="stardiv.vcl.controlmodel.DateField"/>
   </implementation>
@@ -131,22 +139,27 @@
     <service name="com.sun.star.awt.UnoControlDialogModel"/>
     <service name="stardiv.vcl.controlmodel.Dialog"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoControlEditModel">
+  <implementation name="stardiv.Toolkit.UnoControlEditModel"
+      constructor="stardiv_Toolkit_UnoControlEditModel_get_implementation">
     <service name="com.sun.star.awt.UnoControlEditModel"/>
     <service name="stardiv.vcl.controlmodel.Edit"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoControlFileControlModel">
+  <implementation name="stardiv.Toolkit.UnoControlFileControlModel"
+      constructor="stardiv_Toolkit_UnoControlFileControlModel_get_implementation">
     <service name="com.sun.star.awt.UnoControlFileControlModel"/>
     <service name="stardiv.vcl.controlmodel.FileControl"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoControlFixedHyperlinkModel">
+  <implementation name="stardiv.Toolkit.UnoControlFixedHyperlinkModel"
+      constructor="stardiv_Toolkit_UnoControlFixedHyperlinkModel_get_implementation">
     <service name="com.sun.star.awt.UnoControlFixedHyperlinkModel"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoControlFixedLineModel">
+  <implementation name="stardiv.Toolkit.UnoControlFixedLineModel"
+      constructor="stardiv_Toolkit_UnoControlFixedLineModel_get_implementation">
     <service name="com.sun.star.awt.UnoControlFixedLineModel"/>
     <service name="stardiv.vcl.controlmodel.FixedLine"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoControlFixedTextModel">
+  <implementation name="stardiv.Toolkit.UnoControlFixedTextModel"
+      constructor="stardiv_Toolkit_UnoControlFixedTextModel_get_implementation">
     <service name="com.sun.star.awt.UnoControlFixedTextModel"/>
     <service name="stardiv.vcl.controlmodel.FixedText"/>
   </implementation>
@@ -154,33 +167,40 @@
     <service name="com.sun.star.awt.UnoControlFormattedFieldModel"/>
     <service name="stardiv.vcl.controlmodel.FormattedField"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoControlGroupBoxModel">
+  <implementation name="stardiv.Toolkit.UnoControlGroupBoxModel"
+      constructor="stardiv_Toolkit_UnoControlGroupBoxModel_get_implementation">
     <service name="com.sun.star.awt.UnoControlGroupBoxModel"/>
     <service name="stardiv.vcl.controlmodel.GroupBox"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoControlImageControlModel">
+  <implementation name="stardiv.Toolkit.UnoControlImageControlModel"
+      constructor="stardiv_Toolkit_UnoControlImageControlModel_get_implementation">
     <service name="com.sun.star.awt.UnoControlImageButtonModel"/>
     <service name="com.sun.star.awt.UnoControlImageControlModel"/>
     <service name="stardiv.vcl.controlmodel.ImageButton"/>
     <service name="stardiv.vcl.controlmodel.ImageControl"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoControlListBoxModel">
+  <implementation name="stardiv.Toolkit.UnoControlListBoxModel"
+      constructor="stardiv_Toolkit_UnoControlListBoxModel_get_implementation">
     <service name="com.sun.star.awt.UnoControlListBoxModel"/>
     <service name="stardiv.vcl.controlmodel.ListBox"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoControlNumericFieldModel">
+  <implementation name="stardiv.Toolkit.UnoControlNumericFieldModel"
+      constructor="stardiv_Toolkit_UnoControlNumericFieldModel_get_implementation">
     <service name="com.sun.star.awt.UnoControlNumericFieldModel"/>
     <service name="stardiv.vcl.controlmodel.NumericField"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoControlPatternFieldModel">
+  <implementation name="stardiv.Toolkit.UnoControlPatternFieldModel"
+      constructor="stardiv_Toolkit_UnoControlPatternFieldModel_get_implementation">
     <service name="com.sun.star.awt.UnoControlPatternFieldModel"/>
     <service name="stardiv.vcl.controlmodel.PatternField"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoControlProgressBarModel">
+  <implementation name="stardiv.Toolkit.UnoControlProgressBarModel"
+      constructor="stardiv_Toolkit_UnoControlProgressBarModel_get_implementation">
     <service name="com.sun.star.awt.UnoControlProgressBarModel"/>
     <service name="stardiv.vcl.controlmodel.ProgressBar"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoControlRadioButtonModel">
+  <implementation name="stardiv.Toolkit.UnoControlRadioButtonModel"
+      constructor="stardiv_Toolkit_UnoControlRadioButtonModel_get_implementation">
     <service name="com.sun.star.awt.UnoControlRadioButtonModel"/>
     <service name="stardiv.vcl.controlmodel.RadioButton"/>
   </implementation>
@@ -192,15 +212,18 @@
     <service name="com.sun.star.awt.UnoControlScrollBarModel"/>
     <service name="stardiv.vcl.controlmodel.ScrollBar"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoControlTimeFieldModel">
+  <implementation name="stardiv.Toolkit.UnoControlTimeFieldModel"
+      constructor="stardiv_Toolkit_UnoControlTimeFieldModel_get_implementation">
     <service name="com.sun.star.awt.UnoControlTimeFieldModel"/>
     <service name="stardiv.vcl.controlmodel.TimeField"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoCurrencyFieldControl">
+  <implementation name="stardiv.Toolkit.UnoCurrencyFieldControl"
+      constructor="stardiv_Toolkit_UnoCurrencyFieldControl_get_implementation">
     <service name="com.sun.star.awt.UnoControlCurrencyField"/>
     <service name="stardiv.vcl.control.CurrencyField"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoDateFieldControl">
+  <implementation name="stardiv.Toolkit.UnoDateFieldControl"
+      constructor="stardiv_Toolkit_UnoDateFieldControl_get_implementation">
     <service name="com.sun.star.awt.UnoControlDateField"/>
     <service name="stardiv.vcl.control.DateField"/>
   </implementation>
@@ -208,22 +231,27 @@
     <service name="com.sun.star.awt.UnoControlDialog"/>
     <service name="stardiv.vcl.control.Dialog"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoEditControl">
+  <implementation name="stardiv.Toolkit.UnoEditControl"
+      constructor="stardiv_Toolkit_UnoEditControl_get_implementation">
     <service name="com.sun.star.awt.UnoControlEdit"/>
     <service name="stardiv.vcl.control.Edit"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoFileControl">
+  <implementation name="stardiv.Toolkit.UnoFileControl"
+      constructor="stardiv_Toolkit_UnoFileControl_get_implementation">
     <service name="com.sun.star.awt.UnoControlFileControl"/>
     <service name="stardiv.vcl.control.FileControl"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoFixedHyperlinkControl">
+  <implementation name="stardiv.Toolkit.UnoFixedHyperlinkControl"
+      constructor="stardiv_Toolkit_UnoFixedHyperlinkControl_get_implementation">
     <service name="com.sun.star.awt.UnoControlFixedHyperlink"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoFixedLineControl">
+  <implementation name="stardiv.Toolkit.UnoFixedLineControl"
+      constructor="stardiv_Toolkit_UnoFixedLineControl_get_implementation">
     <service name="com.sun.star.awt.UnoControlFixedLine"/>
     <service name="stardiv.vcl.control.FixedLine"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoFixedTextControl">
+  <implementation name="stardiv.Toolkit.UnoFixedTextControl"
+      constructor="stardiv_Toolkit_UnoFixedTextControl_get_implementation">
     <service name="com.sun.star.awt.UnoControlFixedText"/>
     <service name="stardiv.vcl.control.FixedText"/>
   </implementation>
@@ -231,33 +259,40 @@
     <service name="com.sun.star.awt.UnoControlFormattedField"/>
     <service name="stardiv.vcl.control.FormattedField"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoGroupBoxControl">
+  <implementation name="stardiv.Toolkit.UnoGroupBoxControl"
+      constructor="stardiv_Toolkit_UnoGroupBoxControl_get_implementation">
     <service name="com.sun.star.awt.UnoControlGroupBox"/>
     <service name="stardiv.vcl.control.GroupBox"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoImageControlControl">
+  <implementation name="stardiv.Toolkit.UnoImageControlControl"
+      constructor="stardiv_Toolkit_UnoImageControlControl_get_implementation">
     <service name="com.sun.star.awt.UnoControlImageButton"/>
     <service name="com.sun.star.awt.UnoControlImageControl"/>
     <service name="stardiv.vcl.control.ImageButton"/>
     <service name="stardiv.vcl.control.ImageControl"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoListBoxControl">
+  <implementation name="stardiv.Toolkit.UnoListBoxControl"
+      constructor="stardiv_Toolkit_UnoListBoxControl_get_implementation">
     <service name="com.sun.star.awt.UnoControlListBox"/>
     <service name="stardiv.vcl.control.ListBox"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoNumericFieldControl">
+  <implementation name="stardiv.Toolkit.UnoNumericFieldControl"
+      constructor="stardiv_Toolkit_UnoNumericFieldControl_get_implementation">
     <service name="com.sun.star.awt.UnoControlNumericField"/>
     <service name="stardiv.vcl.control.NumericField"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoPatternFieldControl">
+  <implementation name="stardiv.Toolkit.UnoPatternFieldControl"
+      constructor="stardiv_Toolkit_UnoPatternFieldControl_get_implementation">
     <service name="com.sun.star.awt.UnoControlPatternField"/>
     <service name="stardiv.vcl.control.PatternField"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoProgressBarControl">
+  <implementation name="stardiv.Toolkit.UnoProgressBarControl"
+      constructor="stardiv_Toolkit_UnoProgressBarControl_get_implementation">
     <service name="com.sun.star.awt.UnoControlProgressBar"/>
     <service name="stardiv.vcl.control.ProgressBar"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoRadioButtonControl">
+  <implementation name="stardiv.Toolkit.UnoRadioButtonControl"
+      constructor="stardiv_Toolkit_UnoRadioButtonControl_get_implementation">
     <service name="com.sun.star.awt.UnoControlRadioButton"/>
     <service name="stardiv.vcl.control.RadioButton"/>
   </implementation>
@@ -287,7 +322,8 @@
   <implementation name="stardiv.Toolkit.UnoSpinButtonModel">
     <service name="com.sun.star.awt.UnoControlSpinButtonModel"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoTimeFieldControl">
+  <implementation name="stardiv.Toolkit.UnoTimeFieldControl"
+      constructor="stardiv_Toolkit_UnoTimeFieldControl_get_implementation">
     <service name="com.sun.star.awt.UnoControlTimeField"/>
     <service name="stardiv.vcl.control.TimeField"/>
   </implementation>

@@ -169,6 +169,13 @@ uno::Reference< beans::XPropertySetInfo > UnoControlEditModel::getPropertySetInf
     return xInfo;
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoControlEditModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoControlEditModel(context));
+}
 
 //  ----------------------------------------------------
 //  class UnoEditControl
@@ -488,6 +495,14 @@ uno::Sequence< OUString > UnoEditControl::getSupportedServiceNames() throw(uno::
     return aNames;
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoEditControl_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoEditControl());
+}
+
 //  ----------------------------------------------------
 //  class UnoControlFileControlModel
 //  ----------------------------------------------------
@@ -548,6 +563,14 @@ uno::Reference< beans::XPropertySetInfo > UnoControlFileControlModel::getPropert
     return xInfo;
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoControlFileControlModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoControlFileControlModel(context));
+}
+
 //  ----------------------------------------------------
 //  class UnoFileControl
 //  ----------------------------------------------------
@@ -559,6 +582,14 @@ UnoFileControl::UnoFileControl()
 OUString UnoFileControl::GetComponentServiceName()
 {
     return OUString("filecontrol");
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoFileControl_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoFileControl());
 }
 
 //  ----------------------------------------------------
@@ -687,6 +718,14 @@ uno::Reference< beans::XPropertySetInfo > UnoControlButtonModel::getPropertySetI
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoControlButtonModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoControlButtonModel(context));
 }
 
 //  ----------------------------------------------------
@@ -829,6 +868,14 @@ awt::Size UnoButtonControl::calcAdjustedSize( const awt::Size& rNewSize ) throw(
     return Impl_calcAdjustedSize( rNewSize );
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoButtonControl_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoButtonControl());
+}
+
 //  ----------------------------------------------------
 //  class UnoControlImageControlModel
 //  ----------------------------------------------------
@@ -911,6 +958,14 @@ void SAL_CALL UnoControlImageControlModel::setFastPropertyValue_NoBroadcast( sal
     }
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoControlImageControlModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoControlImageControlModel(context));
+}
+
 //  ----------------------------------------------------
 //  class UnoImageControlControl
 //  ----------------------------------------------------
@@ -954,6 +1009,14 @@ awt::Size UnoImageControlControl::getPreferredSize(  ) throw(uno::RuntimeExcepti
 awt::Size UnoImageControlControl::calcAdjustedSize( const awt::Size& rNewSize ) throw(uno::RuntimeException)
 {
     return Impl_calcAdjustedSize( rNewSize );
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoImageControlControl_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoImageControlControl());
 }
 
 //  ----------------------------------------------------
@@ -1002,7 +1065,13 @@ uno::Reference< beans::XPropertySetInfo > UnoControlRadioButtonModel::getPropert
     return xInfo;
 }
 
-
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoControlRadioButtonModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoControlRadioButtonModel(context));
+}
 
 //  ----------------------------------------------------
 //  class UnoRadioButtonControl
@@ -1166,6 +1235,14 @@ awt::Size UnoRadioButtonControl::calcAdjustedSize( const awt::Size& rNewSize ) t
     return Impl_calcAdjustedSize( rNewSize );
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoRadioButtonControl_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoRadioButtonControl());
+}
+
 //  ----------------------------------------------------
 //  class UnoControlCheckBoxModel
 //  ----------------------------------------------------
@@ -1212,7 +1289,13 @@ uno::Reference< beans::XPropertySetInfo > UnoControlCheckBoxModel::getPropertySe
     return xInfo;
 }
 
-
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoControlCheckBoxModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoControlCheckBoxModel(context));
+}
 
 //  ----------------------------------------------------
 //  class UnoCheckBoxControl
@@ -1351,6 +1434,14 @@ awt::Size UnoCheckBoxControl::calcAdjustedSize( const awt::Size& rNewSize ) thro
     return Impl_calcAdjustedSize( rNewSize );
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoCheckBoxControl_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoCheckBoxControl());
+}
+
 //  ----------------------------------------------------
 //  class UnoControlFixedHyperlinkModel
 //  ----------------------------------------------------
@@ -1405,6 +1496,14 @@ uno::Reference< beans::XPropertySetInfo > UnoControlFixedHyperlinkModel::getProp
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoControlFixedHyperlinkModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoControlFixedHyperlinkModel(context));
 }
 
 //  ----------------------------------------------------
@@ -1538,6 +1637,14 @@ void UnoFixedHyperlinkControl::removeActionListener(const uno::Reference< awt::X
     maActionListeners.removeInterface( l );
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoFixedHyperlinkControl_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoFixedHyperlinkControl());
+}
+
 //  ----------------------------------------------------
 //  class UnoControlFixedTextModel
 //  ----------------------------------------------------
@@ -1588,6 +1695,13 @@ uno::Reference< beans::XPropertySetInfo > UnoControlFixedTextModel::getPropertyS
     return xInfo;
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoControlFixedTextModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoControlFixedTextModel(context));
+}
 
 //  ----------------------------------------------------
 //  class UnoFixedTextControl
@@ -1670,6 +1784,14 @@ awt::Size UnoFixedTextControl::calcAdjustedSize( const awt::Size& rNewSize ) thr
     return Impl_calcAdjustedSize( rNewSize );
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoFixedTextControl_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoFixedTextControl());
+}
+
 //  ----------------------------------------------------
 //  class UnoControlGroupBoxModel
 //  ----------------------------------------------------
@@ -1722,6 +1844,14 @@ uno::Reference< beans::XPropertySetInfo > UnoControlGroupBoxModel::getPropertySe
     return xInfo;
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoControlGroupBoxModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoControlGroupBoxModel(context));
+}
+
 //  ----------------------------------------------------
 //  class UnoGroupBoxControl
 //  ----------------------------------------------------
@@ -1740,6 +1870,14 @@ OUString UnoGroupBoxControl::GetComponentServiceName()
 sal_Bool UnoGroupBoxControl::isTransparent() throw(uno::RuntimeException)
 {
     return sal_True;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoGroupBoxControl_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoGroupBoxControl());
 }
 
 // =====================================================================================================================
@@ -2288,6 +2426,14 @@ void UnoControlListBoxModel::impl_notifyItemListEvent_nolck( const sal_Int32 i_n
     m_aItemListListeners.notifyEach( NotificationMethod, aEvent );
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoControlListBoxModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoControlListBoxModel(context));
+}
+
 //  ----------------------------------------------------
 //  class UnoListBoxControl
 //  ----------------------------------------------------
@@ -2712,6 +2858,14 @@ void SAL_CALL UnoListBoxControl::itemListChanged( const lang::EventObject& i_rEv
         xPeerListener->itemListChanged( i_rEvent );
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoListBoxControl_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoListBoxControl());
+}
+
 //  ----------------------------------------------------
 //  class UnoControlComboBoxModel
 //  ----------------------------------------------------
@@ -2786,6 +2940,14 @@ uno::Any UnoControlComboBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) cons
         return aAny;
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoControlComboBoxModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoControlComboBoxModel(context));
 }
 
 //  ----------------------------------------------------
@@ -3101,6 +3263,13 @@ sal_Int16 UnoComboBoxControl::getDropDownLineCount() throw(uno::RuntimeException
     return ImplGetPropertyValue_INT16( BASEPROPERTY_LINECOUNT );
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoComboBoxControl_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoComboBoxControl());
+}
 
 //  ----------------------------------------------------
 //  UnoSpinFieldControl
@@ -3238,7 +3407,13 @@ uno::Reference< beans::XPropertySetInfo > UnoControlDateFieldModel::getPropertyS
     return xInfo;
 }
 
-
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoControlDateFieldModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoControlDateFieldModel(context));
+}
 
 //  ----------------------------------------------------
 //  class UnoDateFieldControl
@@ -3436,6 +3611,14 @@ sal_Bool UnoDateFieldControl::isStrictFormat() throw(uno::RuntimeException)
     return ImplGetPropertyValue_BOOL( BASEPROPERTY_STRICTFORMAT );
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoDateFieldControl_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoDateFieldControl());
+}
+
 //  ----------------------------------------------------
 //  class UnoControlTimeFieldModel
 //  ----------------------------------------------------
@@ -3480,7 +3663,13 @@ uno::Reference< beans::XPropertySetInfo > UnoControlTimeFieldModel::getPropertyS
     return xInfo;
 }
 
-
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoControlTimeFieldModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoControlTimeFieldModel(context));
+}
 
 //  ----------------------------------------------------
 //  class UnoTimeFieldControl
@@ -3637,6 +3826,14 @@ sal_Bool UnoTimeFieldControl::isStrictFormat() throw(uno::RuntimeException)
     return ImplGetPropertyValue_BOOL( BASEPROPERTY_STRICTFORMAT );
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoTimeFieldControl_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoTimeFieldControl());
+}
+
 //  ----------------------------------------------------
 //  class UnoControlNumericFieldModel
 //  ----------------------------------------------------
@@ -3681,7 +3878,13 @@ uno::Reference< beans::XPropertySetInfo > UnoControlNumericFieldModel::getProper
     return xInfo;
 }
 
-
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoControlNumericFieldModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoControlNumericFieldModel(context));
+}
 
 //  ----------------------------------------------------
 //  class UnoNumericFieldControl
@@ -3835,6 +4038,14 @@ sal_Int16 UnoNumericFieldControl::getDecimalDigits() throw(uno::RuntimeException
     return ImplGetPropertyValue_INT16( BASEPROPERTY_DECIMALACCURACY );
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoNumericFieldControl_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoNumericFieldControl());
+}
+
 //  ----------------------------------------------------
 //  class UnoControlCurrencyFieldModel
 //  ----------------------------------------------------
@@ -3883,6 +4094,14 @@ uno::Reference< beans::XPropertySetInfo > UnoControlCurrencyFieldModel::getPrope
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoControlCurrencyFieldModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoControlCurrencyFieldModel(context));
 }
 
 //  ----------------------------------------------------
@@ -4036,6 +4255,14 @@ sal_Int16 UnoCurrencyFieldControl::getDecimalDigits() throw(uno::RuntimeExceptio
     return ImplGetPropertyValue_INT16( BASEPROPERTY_DECIMALACCURACY );
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoCurrencyFieldControl_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoCurrencyFieldControl());
+}
+
 //  ----------------------------------------------------
 //  class UnoControlPatternFieldModel
 //  ----------------------------------------------------
@@ -4079,6 +4306,13 @@ uno::Reference< beans::XPropertySetInfo > UnoControlPatternFieldModel::getProper
     return xInfo;
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoControlPatternFieldModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoControlPatternFieldModel(context));
+}
 
 //  ----------------------------------------------------
 //  class UnoPatternFieldControl
@@ -4169,6 +4403,13 @@ sal_Bool UnoPatternFieldControl::isStrictFormat() throw(uno::RuntimeException)
     return ImplGetPropertyValue_BOOL( BASEPROPERTY_STRICTFORMAT );
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoPatternFieldControl_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoPatternFieldControl());
+}
 
 //  ----------------------------------------------------
 //  class UnoControlProgressBarModel
@@ -4226,6 +4467,13 @@ uno::Reference< beans::XPropertySetInfo > UnoControlProgressBarModel::getPropert
     return xInfo;
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoControlProgressBarModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoControlProgressBarModel(context));
+}
 
 //  ----------------------------------------------------
 //  class UnoProgressBarControl
@@ -4303,6 +4551,13 @@ sal_Int32 UnoProgressBarControl::getValue() throw(::com::sun::star::uno::Runtime
     return ImplGetPropertyValue_INT32( BASEPROPERTY_PROGRESSVALUE );
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoProgressBarControl_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoProgressBarControl());
+}
 
 //  ----------------------------------------------------
 //  class UnoControlFixedLineModel
@@ -4356,6 +4611,14 @@ uno::Reference< beans::XPropertySetInfo > UnoControlFixedLineModel::getPropertyS
     return xInfo;
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoControlFixedLineModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoControlFixedLineModel(context));
+}
+
 //  ----------------------------------------------------
 //  class UnoFixedLineControl
 //  ----------------------------------------------------
@@ -4374,6 +4637,14 @@ OUString UnoFixedLineControl::GetComponentServiceName()
 sal_Bool UnoFixedLineControl::isTransparent() throw(uno::RuntimeException)
 {
     return sal_True;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoFixedLineControl_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoFixedLineControl());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
