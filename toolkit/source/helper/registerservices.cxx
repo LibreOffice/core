@@ -89,12 +89,6 @@ namespace toolkit
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ImplName##_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory ) \
     { return ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface >( ( ::cppu::OWeakObject* ) new ImplName( comphelper::getComponentContext(i_factory) ) ); }
 
-#define IMPL_CREATE_INSTANCE_WITH_GEOMETRY( ImplName ) \
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ImplName##_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory ) \
-{ \
-    return ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface >( ( ::cppu::OWeakObject* ) new OGeometryControlModel< ImplName >( comphelper::getComponentContext( i_factory ) ) ); \
-}
-
 #define GET_FACTORY_WITH_IMPL_PREFIX( ClassName, ImplNamePrefix, ServiceName1, ServiceName2 ) \
     pRet = tryCreateFactory( sImplementationName, ImplNamePrefix "." #ClassName, \
                 ServiceName1, ServiceName2, \
@@ -169,8 +163,6 @@ IMPL_CREATEINSTANCE( VCLXPrinterServer )
 IMPL_CREATEINSTANCE( UnoRoadmapControl )
 IMPL_CREATEINSTANCE_CTX( UnoControlRoadmapModel )
 
-IMPL_CREATE_INSTANCE_WITH_GEOMETRY( UnoControlDialogModel )
-
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL MutableTreeDataModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
 
 extern "C"
@@ -194,7 +186,6 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL tk_component_getFactory( const sal_Char* sImple
         GET_FACTORY( StdTabController, szServiceName_TabController, szServiceName2_TabController )
         GET_FACTORY( StdTabControllerModel, szServiceName_TabControllerModel, szServiceName2_TabControllerModel )
         GET_FACTORY( UnoDialogControl, szServiceName_UnoControlDialog, szServiceName2_UnoControlDialog )
-        GET_FACTORY( UnoControlDialogModel, szServiceName_UnoControlDialogModel, szServiceName2_UnoControlDialogModel )
         GET_FACTORY( UnoEditControl, szServiceName_UnoControlEdit, szServiceName2_UnoControlEdit )
         GET_FACTORY( UnoControlEditModel, szServiceName_UnoControlEditModel, szServiceName2_UnoControlEditModel )
         GET_FACTORY( UnoDateFieldControl, szServiceName_UnoControlDateField, szServiceName2_UnoControlDateField )

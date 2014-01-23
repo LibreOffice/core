@@ -35,35 +35,6 @@
 #include <cppuhelper/implbase3.hxx>
 #include <list>
 
-//  ----------------------------------------------------
-//  class UnoControlDialogModel
-//  ----------------------------------------------------
-
-class UnoControlDialogModel :   public ControlModelContainerBase
-{
-protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicObject > mxGrfObj;
-    ::com::sun::star::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const;
-    ::cppu::IPropertyArrayHelper&       SAL_CALL getInfoHelper();
-    // ::cppu::OPropertySetHelper
-	void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception);
-public:
-                        UnoControlDialogModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
-                        UnoControlDialogModel( const UnoControlDialogModel& rModel );
-                        ~UnoControlDialogModel();
-
-    UnoControlModel*    Clone() const;
-    // ::com::sun::star::beans::XMultiPropertySet
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::io::XPersistObject
-    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
-
-    // XServiceInfo
-    DECLIMPL_SERVICEINFO_DERIVED( UnoControlDialogModel, ControlModelContainerBase, szServiceName2_UnoControlDialogModel )
-
-};
-
 typedef ::cppu::AggImplInheritanceHelper2   <   ControlContainerBase
                                             ,   ::com::sun::star::awt::XUnoControlDialog
                                             ,   ::com::sun::star::awt::XWindowListener

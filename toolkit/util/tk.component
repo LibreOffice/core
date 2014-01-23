@@ -126,7 +126,8 @@
     <service name="com.sun.star.awt.UnoControlDateFieldModel"/>
     <service name="stardiv.vcl.controlmodel.DateField"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoControlDialogModel">
+  <implementation name="stardiv.Toolkit.UnoControlDialogModel"
+      constructor="stardiv_Toolkit_UnoControlDialogModel_get_implementation">
     <service name="com.sun.star.awt.UnoControlDialogModel"/>
     <service name="stardiv.vcl.controlmodel.Dialog"/>
   </implementation>

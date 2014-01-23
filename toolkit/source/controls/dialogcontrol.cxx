@@ -23,6 +23,7 @@
 #include <vcl/wall.hxx>
 #include <osl/mutex.hxx>
 #include <toolkit/controls/dialogcontrol.hxx>
+#include <toolkit/controls/geometrycontrolmodel.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
 #include <toolkit/controls/stdtabcontroller.hxx>
@@ -142,9 +143,32 @@ public:
 ////HELPER
 OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::com::sun::star::uno::Any& rUrl );
 
-//  ----------------------------------------------------
-//  class UnoControlDialogModel
-//  ----------------------------------------------------
+namespace {
+
+class UnoControlDialogModel :   public ControlModelContainerBase
+{
+protected:
+    css::uno::Reference< css::graphic::XGraphicObject > mxGrfObj;
+    css::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const;
+    ::cppu::IPropertyArrayHelper&       SAL_CALL getInfoHelper();
+    // ::cppu::OPropertySetHelper
+    void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) throw (css::uno::Exception);
+public:
+    UnoControlDialogModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    UnoControlDialogModel( const UnoControlDialogModel& rModel );
+    ~UnoControlDialogModel();
+
+    UnoControlModel*    Clone() const;
+    // css::beans::XMultiPropertySet
+    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException);
+
+    // css::io::XPersistObject
+    OUString SAL_CALL getServiceName() throw(css::uno::RuntimeException);
+
+    // XServiceInfo
+    DECLIMPL_SERVICEINFO_DERIVED( UnoControlDialogModel, ControlModelContainerBase, "com.sun.star.awt.UnoControlDialogModel" )
+};
+
 UnoControlDialogModel::UnoControlDialogModel( const Reference< XComponentContext >& rxContext )
     :ControlModelContainerBase( rxContext )
 {
@@ -214,7 +238,7 @@ UnoControlModel* UnoControlDialogModel::Clone() const
 
 OUString UnoControlDialogModel::getServiceName( ) throw(RuntimeException)
 {
-    return OUString::createFromAscii( szServiceName_UnoControlDialogModel );
+    return OUString("stardiv.vcl.controlmodel.Dialog");
 }
 
 Any UnoControlDialogModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -274,6 +298,9 @@ void SAL_CALL UnoControlDialogModel::setFastPropertyValue_NoBroadcast( sal_Int32
         OSL_ENSURE( sal_False, "UnoControlDialogModel::setFastPropertyValue_NoBroadcast: caught an exception while setting ImageURL properties!" );
     }
 }
+
+}
+
 // ============================================================================
 // = class UnoDialogControl
 // ============================================================================
@@ -1200,6 +1227,14 @@ uno::Reference< beans::XPropertySetInfo > UnoFrameModel::getPropertySetInfo(  ) 
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoControlDialogModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OGeometryControlModel<UnoControlDialogModel>(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
