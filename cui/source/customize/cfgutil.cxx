@@ -398,7 +398,7 @@ SvxConfigGroupBoxResource_Impl::SvxConfigGroupBoxResource_Impl() :
     FreeResource();
 }
 
-SfxConfigGroupListBox_Impl::SfxConfigGroupListBox_Impl(
+SfxConfigGroupListBox::SfxConfigGroupListBox(
     Window* pParent, const ResId& rResId, sal_uLong nConfigMode )
         : SvTreeListBox( pParent, rResId )
         , pImp(new SvxConfigGroupBoxResource_Impl()), pFunctionListBox(0), nMode( nConfigMode ), pStylesInfo(0)
@@ -408,12 +408,12 @@ SfxConfigGroupListBox_Impl::SfxConfigGroupListBox_Impl(
 }
 
 
-SfxConfigGroupListBox_Impl::~SfxConfigGroupListBox_Impl()
+SfxConfigGroupListBox::~SfxConfigGroupListBox()
 {
     ClearAll();
 }
 
-void SfxConfigGroupListBox_Impl::ClearAll()
+void SfxConfigGroupListBox::ClearAll()
 {
     sal_uInt16 nCount = aArr.size();
     for ( sal_uInt16 i=0; i<nCount; ++i )
@@ -433,13 +433,13 @@ void SfxConfigGroupListBox_Impl::ClearAll()
     Clear();
 }
 
-void SfxConfigGroupListBox_Impl::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
+void SfxConfigGroupListBox::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
 {
     pStylesInfo = pStyles;
 }
 
 //-----------------------------------------------
-void SfxConfigGroupListBox_Impl::InitModule()
+void SfxConfigGroupListBox::InitModule()
 {
     try
     {
@@ -475,12 +475,12 @@ void SfxConfigGroupListBox_Impl::InitModule()
 }
 
 //-----------------------------------------------
-void SfxConfigGroupListBox_Impl::InitBasic()
+void SfxConfigGroupListBox::InitBasic()
 {
 }
 
 //-----------------------------------------------
-void SfxConfigGroupListBox_Impl::InitStyles()
+void SfxConfigGroupListBox::InitStyles()
 {
 }
 
@@ -538,7 +538,7 @@ namespace
 }
 
 //-----------------------------------------------
-void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::uno::XComponentContext >& xContext,
+void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponentContext >& xContext,
                                       const css::uno::Reference< css::frame::XFrame >&          xFrame,
                                       const OUString&                                        sModuleLongName)
 {
@@ -708,7 +708,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::uno::XComp
     MakeVisible( GetEntry( 0,0 ) );
     SetUpdateMode( sal_True );
 }
-Image SfxConfigGroupListBox_Impl::GetImage(
+Image SfxConfigGroupListBox::GetImage(
     Reference< browse::XBrowseNode > node,
     Reference< XComponentContext > xCtx,
     bool bIsRootNode
@@ -774,7 +774,7 @@ Image SfxConfigGroupListBox_Impl::GetImage(
 }
 
 Reference< XInterface  >
-SfxConfigGroupListBox_Impl::getDocumentModel( Reference< XComponentContext >& xCtx, OUString& docName )
+SfxConfigGroupListBox::getDocumentModel( Reference< XComponentContext >& xCtx, OUString& docName )
 {
     Reference< XInterface > xModel;
     Reference< frame::XDesktop2 > desktop = frame::Desktop::create( xCtx );
@@ -802,7 +802,7 @@ SfxConfigGroupListBox_Impl::getDocumentModel( Reference< XComponentContext >& xC
 }
 
 //-----------------------------------------------
-OUString SfxConfigGroupListBox_Impl::MapCommand2UIName(const OUString& sCommand)
+OUString SfxConfigGroupListBox::MapCommand2UIName(const OUString& sCommand)
 {
     OUString sUIName;
     try
@@ -830,7 +830,7 @@ OUString SfxConfigGroupListBox_Impl::MapCommand2UIName(const OUString& sCommand)
 }
 
 //-----------------------------------------------
-void SfxConfigGroupListBox_Impl::GroupSelected()
+void SfxConfigGroupListBox::GroupSelected()
 /*  Description
     A function group or a basic module has been selected.
     All functions/macros are displayed in the functionlistbox.
@@ -960,7 +960,7 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
     pFunctionListBox->SetUpdateMode(sal_True);
 }
 
-sal_Bool SfxConfigGroupListBox_Impl::Expand( SvTreeListEntry* pParent )
+sal_Bool SfxConfigGroupListBox::Expand( SvTreeListEntry* pParent )
 {
     sal_Bool bRet = SvTreeListBox::Expand( pParent );
     if ( bRet )
@@ -991,7 +991,7 @@ sal_Bool SfxConfigGroupListBox_Impl::Expand( SvTreeListEntry* pParent )
     return bRet;
 }
 
-void SfxConfigGroupListBox_Impl::RequestingChildren( SvTreeListEntry *pEntry )
+void SfxConfigGroupListBox::RequestingChildren( SvTreeListEntry *pEntry )
 /*  Description
     A basic or a library is opened.
 */
@@ -1119,13 +1119,13 @@ void SfxConfigGroupListBox_Impl::RequestingChildren( SvTreeListEntry *pEntry )
     }
 }
 
-void SfxConfigGroupListBox_Impl::SelectMacro( const SfxMacroInfoItem *pItem )
+void SfxConfigGroupListBox::SelectMacro( const SfxMacroInfoItem *pItem )
 {
     SelectMacro( pItem->GetBasicManager()->GetName(),
                  pItem->GetQualifiedName() );
 }
 
-void SfxConfigGroupListBox_Impl::SelectMacro( const OUString& rBasic,
+void SfxConfigGroupListBox::SelectMacro( const OUString& rBasic,
          const OUString& rMacro )
 {
     OUString aBasicName( rBasic );

@@ -726,7 +726,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
     , aChangeButton           (this   , CUI_RES(BTN_ACC_CHANGE          ))
     , aRemoveButton           (this   , CUI_RES(BTN_ACC_REMOVE          ))
     , aGroupText              (this   , CUI_RES(TXT_ACC_GROUP           ))
-    , pGroupLBox(new SfxConfigGroupListBox_Impl( this, CUI_RES(BOX_ACC_GROUP), SFX_SLOT_ACCELCONFIG ))
+    , pGroupLBox(new SfxConfigGroupListBox( this, CUI_RES(BOX_ACC_GROUP), SFX_SLOT_ACCELCONFIG ))
     , aFunctionText           (this   , CUI_RES(TXT_ACC_FUNCTION        ))
     , pFunctionBox(new SfxConfigFunctionListBox_Impl( this, CUI_RES( BOX_ACC_FUNCTION )))
     , aKeyText                (this   , CUI_RES(TXT_ACC_KEY             ))

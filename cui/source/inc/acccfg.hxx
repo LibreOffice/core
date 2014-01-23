@@ -46,7 +46,7 @@
 #include "cfgutil.hxx"
 
 class SfxMacroInfoItem;
-class SfxConfigGroupListBox_Impl;
+class SfxConfigGroupListBox;
 class SfxConfigFunctionListBox_Impl;
 class SfxAcceleratorConfigPage;
 class SfxStringItem;
@@ -122,7 +122,7 @@ private:
     PushButton                      aChangeButton;
     PushButton                      aRemoveButton;
     FixedText                       aGroupText;
-    SfxConfigGroupListBox_Impl*     pGroupLBox;
+    SfxConfigGroupListBox*     pGroupLBox;
     FixedText                       aFunctionText;
     SfxConfigFunctionListBox_Impl*  pFunctionBox;
     FixedText                       aKeyText;

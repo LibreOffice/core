@@ -101,7 +101,7 @@ typedef boost::ptr_vector<SfxGroupInfo_Impl> SfxGroupInfoArr_Impl;
 
 class SfxConfigFunctionListBox_Impl : public SvTreeListBox
 {
-    friend class SfxConfigGroupListBox_Impl;
+    friend class SfxConfigGroupListBox;
     Timer                aTimer;
     SvTreeListEntry*         pCurEntry;
     SfxGroupInfoArr_Impl aArr;
@@ -125,7 +125,7 @@ public:
 };
 
 struct SvxConfigGroupBoxResource_Impl;
-class SfxConfigGroupListBox_Impl : public SvTreeListBox
+class SfxConfigGroupListBox : public SvTreeListBox
 {
     SvxConfigGroupBoxResource_Impl* pImp;
     SfxConfigFunctionListBox_Impl*  pFunctionListBox;
@@ -165,10 +165,10 @@ protected:
     virtual sal_Bool        Expand( SvTreeListEntry* pParent );
 
 public:
-    SfxConfigGroupListBox_Impl ( Window* pParent,
+    SfxConfigGroupListBox ( Window* pParent,
                                  const ResId&,
                                  sal_uLong nConfigMode = 0 );
-    ~SfxConfigGroupListBox_Impl();
+    ~SfxConfigGroupListBox();
     void                ClearAll();
 
     void                Init(const css::uno::Reference< css::uno::XComponentContext >& xContext,
