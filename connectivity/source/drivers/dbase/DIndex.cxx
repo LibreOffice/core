@@ -557,11 +557,9 @@ sal_Bool ODbaseIndex::CreateImpl()
 
     if(xSet->last())
     {
-        Reference< XUnoTunnel> xTunnel(xSet,UNO_QUERY);
-        ODbaseResultSet* pDbaseRes = NULL;
-        if(xTunnel.is())
-            pDbaseRes = reinterpret_cast< ODbaseResultSet* >( xTunnel->getSomething(ODbaseResultSet::getUnoTunnelImplementationId()) );
-        OSL_ENSURE(pDbaseRes,"No dbase resultset found? What's going on here!");
+        Reference< XUnoTunnel> xTunnel(xSet, UNO_QUERY_THROW);
+        ODbaseResultSet* pDbaseRes = reinterpret_cast< ODbaseResultSet* >( xTunnel->getSomething(ODbaseResultSet::getUnoTunnelImplementationId()) );
+        assert(pDbaseRes); //"No dbase resultset found? What's going on here!
         Reference<XRowLocate> xRowLocate(xSet,UNO_QUERY);
         nRowsLeft = xSet->getRow();
 
