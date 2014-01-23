@@ -145,6 +145,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsColumnBreakDeferred( false ),
         m_bIsPageBreakDeferred( false ),
         m_bStartTOC(false),
+        m_bStartedTOC(false),
         m_bTOCPageRef(false),
         m_pLastSectionContext( ),
         m_pLastCharacterContext(),
@@ -1164,6 +1165,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, PropertyMapP
             {
                 if (m_bStartTOC)
                 {
+                    m_bStartedTOC = true;
                     uno::Reference< text::XTextCursor > xTOCTextCursor;
                     xTOCTextCursor = xTextAppend->getEnd()->getText( )->createTextCursor( );
                     xTOCTextCursor->gotoEnd(false);
@@ -3584,7 +3586,11 @@ void DomainMapper_Impl::PopFieldContext()
                 if( xToInsert.is() )
                 {
                     m_bStartTOC = false;
-                    m_aTextAppendStack.pop();
+                    if (m_bStartedTOC)
+                    {
+                        m_aTextAppendStack.pop();
+                        m_bStartedTOC = false;
+                    }
                     if(xTOCMarkerCursor.is())
                     {
                         xTOCMarkerCursor->goLeft(1,sal_True);
