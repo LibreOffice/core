@@ -143,54 +143,44 @@ struct ESelection
     }
 
     void    Adjust();
-    sal_Bool    IsEqual( const ESelection& rS ) const;
-    sal_Bool    IsLess( const ESelection& rS ) const;
-    sal_Bool    IsGreater( const ESelection& rS ) const;
-    sal_Bool    IsZero() const;
-    sal_Bool    HasRange() const;
+    bool    IsEqual( const ESelection& rS ) const;
+    bool    IsLess( const ESelection& rS ) const;
+    bool    IsGreater( const ESelection& rS ) const;
+    bool    IsZero() const;
+    bool    HasRange() const;
 };
 
-inline sal_Bool ESelection::HasRange() const
+inline bool ESelection::HasRange() const
 {
     return ( nStartPara != nEndPara ) || ( nStartPos != nEndPos );
 }
 
-inline sal_Bool ESelection::IsZero() const
+inline bool ESelection::IsZero() const
 {
     return ( ( nStartPara == 0 ) && ( nStartPos == 0 ) &&
              ( nEndPara == 0 ) && ( nEndPos == 0 ) );
 }
 
-inline sal_Bool ESelection::IsEqual( const ESelection& rS ) const
+inline bool ESelection::IsEqual( const ESelection& rS ) const
 {
     return ( ( nStartPara == rS.nStartPara ) && ( nStartPos == rS.nStartPos ) &&
              ( nEndPara == rS.nEndPara ) && ( nEndPos == rS.nEndPos ) );
 }
 
-inline sal_Bool ESelection::IsLess( const ESelection& rS ) const
+inline bool ESelection::IsLess( const ESelection& rS ) const
 {
     // The selection must be adjusted.
     // => Only check if end of 'this' < Start of rS
-
-    if ( ( nEndPara < rS.nStartPara ) ||
-         ( ( nEndPara == rS.nStartPara ) && ( nEndPos < rS.nStartPos ) && !IsEqual( rS ) ) )
-    {
-        return sal_True;
-    }
-    return sal_False;
+    return ( nEndPara < rS.nStartPara ) ||
+        ( ( nEndPara == rS.nStartPara ) && ( nEndPos < rS.nStartPos ) && !IsEqual( rS ) );
 }
 
-inline sal_Bool ESelection::IsGreater( const ESelection& rS ) const
+inline bool ESelection::IsGreater( const ESelection& rS ) const
 {
     // The selection must be adjusted.
     // => Only check if end of 'this' < Start of rS
-
-    if ( ( nStartPara > rS.nEndPara ) ||
-         ( ( nStartPara == rS.nEndPara ) && ( nStartPos > rS.nEndPos ) && !IsEqual( rS ) ) )
-    {
-        return sal_True;
-    }
-    return sal_False;
+    return ( nStartPara > rS.nEndPara ) ||
+        ( ( nStartPara == rS.nEndPara ) && ( nStartPos > rS.nEndPos ) && !IsEqual( rS ) );
 }
 
 inline void ESelection::Adjust()
