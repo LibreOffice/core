@@ -228,6 +228,9 @@ public:
     SaxExpatParser_Impl()
         : sCDATA("CDATA")
         , m_bEnableDoS(false)
+        , pAttrList(NULL)
+        , bExceptionWasThrown(false)
+        , bRTExceptionWasThrown(false)
     {
     }
 
