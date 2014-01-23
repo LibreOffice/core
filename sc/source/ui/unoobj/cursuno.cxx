@@ -239,8 +239,8 @@ void SAL_CALL ScCellCursorObj::collapseToSize( sal_Int32 nColumns, sal_Int32 nRo
 
 // XUsedAreaCursor
 
-void SAL_CALL ScCellCursorObj::gotoStartOfUsedArea( sal_Bool bExpand )
-                                            throw(uno::RuntimeException)
+void SAL_CALL ScCellCursorObj::gotoStartOfUsedArea(sal_Bool bExpand)
+    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();

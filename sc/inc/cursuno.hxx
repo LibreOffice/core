@@ -51,7 +51,7 @@ public:
 
                             // XUsedAreaCursor
     virtual void SAL_CALL   gotoStartOfUsedArea( sal_Bool bExpand )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   gotoEndOfUsedArea( sal_Bool bExpand )
                                 throw(::com::sun::star::uno::RuntimeException);
 
