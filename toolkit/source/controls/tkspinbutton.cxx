@@ -17,23 +17,99 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "toolkit/controls/tkspinbutton.hxx"
-#include "toolkit/helper/property.hxx"
-#include "toolkit/helper/unopropertyarrayhelper.hxx"
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
+#include <com/sun/star/awt/XSpinValue.hpp>
+#include <com/sun/star/awt/XAdjustmentListener.hpp>
 
-
+#include <comphelper/uno3.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <toolkit/controls/unocontrolmodel.hxx>
+#include <toolkit/controls/unocontrolbase.hxx>
+#include <toolkit/helper/macros.hxx>
+#include <toolkit/helper/property.hxx>
+#include <toolkit/helper/unopropertyarrayhelper.hxx>
 
-//........................................................................
-namespace toolkit
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
+
+namespace {
+
+class UnoSpinButtonModel : public UnoControlModel
 {
-//........................................................................
+protected:
+    css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const;
+    ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
 
-    using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::awt;
-    using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::beans;
+public:
+                        UnoSpinButtonModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory );
+                        UnoSpinButtonModel( const UnoSpinButtonModel& rModel ) : UnoControlModel( rModel ) {;}
+
+    UnoControlModel*    Clone() const { return new UnoSpinButtonModel( *this ); }
+
+    // XMultiPropertySet
+    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException);
+
+    // XPersistObject
+    OUString SAL_CALL getServiceName() throw(css::uno::RuntimeException);
+
+    // XServiceInfo
+    OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException);
+    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException);
+};
+
+//====================================================================
+//= UnoSpinButtonControl
+//====================================================================
+
+typedef ::cppu::ImplHelper2 <   css::awt::XAdjustmentListener
+                            ,   css::awt::XSpinValue
+                            >   UnoSpinButtonControl_Base;
+
+class UnoSpinButtonControl :public UnoControlBase
+                           ,public UnoSpinButtonControl_Base
+{
+private:
+    AdjustmentListenerMultiplexer maAdjustmentListeners;
+
+public:
+                                UnoSpinButtonControl();
+    OUString             GetComponentServiceName();
+
+    DECLARE_UNO3_AGG_DEFAULTS( UnoSpinButtonControl, UnoControlBase );
+    css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException);
+
+    void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) throw(css::uno::RuntimeException);
+    void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException) { UnoControlBase::disposing( Source ); }
+    void SAL_CALL dispose(  ) throw(css::uno::RuntimeException);
+
+    // XTypeProvider
+    DECLARE_XTYPEPROVIDER()
+
+    // XAdjustmentListener
+    void SAL_CALL adjustmentValueChanged( const css::awt::AdjustmentEvent& rEvent ) throw(css::uno::RuntimeException);
+
+    // XSpinValue
+    virtual void SAL_CALL addAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& listener ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL removeAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& listener ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setValue( sal_Int32 value ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setValues( sal_Int32 minValue, sal_Int32 maxValue, sal_Int32 currentValue ) throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getValue(  ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setMinimum( sal_Int32 minValue ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setMaximum( sal_Int32 maxValue ) throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getMinimum(  ) throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getMaximum(  ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setSpinIncrement( sal_Int32 spinIncrement ) throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getSpinIncrement(  ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setOrientation( sal_Int32 orientation ) throw (css::lang::NoSupportException, css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getOrientation(  ) throw (css::uno::RuntimeException);
+
+    // XServiceInfo
+    OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException);
+    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException);
+};
 
     //====================================================================
     //= UnoSpinButtonModel
@@ -67,7 +143,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     OUString UnoSpinButtonModel::getServiceName( ) throw (RuntimeException)
     {
-        return OUString::createFromAscii( szServiceName_UnoSpinButtonModel );
+        return OUString("com.sun.star.awt.UnoControlSpinButtonModel");
     }
 
     //--------------------------------------------------------------------
@@ -76,7 +152,7 @@ namespace toolkit
         switch ( nPropId )
         {
         case BASEPROPERTY_DEFAULTCONTROL:
-            return makeAny( OUString::createFromAscii( szServiceName_UnoSpinButtonControl ) );
+            return makeAny( OUString("com.sun.star.awt.UnoControlSpinButton") );
 
         case BASEPROPERTY_BORDER:
             return makeAny( (sal_Int16) 0 );
@@ -119,7 +195,7 @@ namespace toolkit
     {
         Sequence< OUString > aServices( UnoControlModel::getSupportedServiceNames() );
         aServices.realloc( aServices.getLength() + 1 );
-        aServices[ aServices.getLength() - 1 ] = OUString::createFromAscii( szServiceName_UnoSpinButtonModel );
+        aServices[ aServices.getLength() - 1 ] = OUString("com.sun.star.awt.UnoControlSpinButtonModel");
         return aServices;
     }
 
@@ -182,7 +258,7 @@ namespace toolkit
     {
         Sequence< OUString > aServices( UnoControlBase::getSupportedServiceNames() );
         aServices.realloc( aServices.getLength() + 1 );
-        aServices[ aServices.getLength() - 1 ] = OUString::createFromAscii( szServiceName_UnoSpinButtonControl );
+        aServices[ aServices.getLength() - 1 ] = OUString("com.sun.star.awt.UnoControlSpinButton");
         return aServices;
     }
 
@@ -335,8 +411,22 @@ namespace toolkit
         return nOrientation;
     }
 
-//........................................................................
-}  // namespace toolkit
-//........................................................................
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoSpinButtonModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoSpinButtonModel(context));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoSpinButtonControl_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoSpinButtonControl());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

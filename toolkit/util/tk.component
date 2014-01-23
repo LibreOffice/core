@@ -316,10 +316,12 @@
       constructor="org_openoffice_comp_toolkit_AnimatedImagesControl_get_implementation">
     <service name="com.sun.star.awt.AnimatedImagesControl"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoSpinButtonControl">
+  <implementation name="stardiv.Toolkit.UnoSpinButtonControl"
+      constructor="stardiv_Toolkit_UnoSpinButtonControl_get_implementation">
     <service name="com.sun.star.awt.UnoControlSpinButton"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoSpinButtonModel">
+  <implementation name="stardiv.Toolkit.UnoSpinButtonModel"
+      constructor="stardiv_Toolkit_UnoSpinButtonModel_get_implementation">
     <service name="com.sun.star.awt.UnoControlSpinButtonModel"/>
   </implementation>
   <implementation name="stardiv.Toolkit.UnoTimeFieldControl"

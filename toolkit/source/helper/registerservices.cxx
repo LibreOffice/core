@@ -39,7 +39,6 @@
 #include <toolkit/controls/formattedcontrol.hxx>
 #include <toolkit/controls/roadmapcontrol.hxx>
 #include <toolkit/controls/tkscrollbar.hxx>
-#include "toolkit/controls/tkspinbutton.hxx"
 #include "toolkit/dllapi.h"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -108,14 +107,12 @@ IMPL_CREATEINSTANCE( UnoControlContainer )
 IMPL_CREATEINSTANCE_CTX( UnoControlContainerModel )
 IMPL_CREATEINSTANCE_CTX( UnoControlFormattedFieldModel )
 IMPL_CREATEINSTANCE_CTX( UnoControlScrollBarModel )
-IMPL_CREATEINSTANCE_CTX( UnoSpinButtonModel )
 IMPL_CREATEINSTANCE_CTX( UnoMultiPageModel )
 IMPL_CREATEINSTANCE_CTX( UnoPageModel )
 IMPL_CREATEINSTANCE_CTX( UnoFrameModel )
 IMPL_CREATEINSTANCE_CTX( UnoDialogControl )
 IMPL_CREATEINSTANCE( UnoFormattedFieldControl )
 IMPL_CREATEINSTANCE( UnoScrollBarControl )
-IMPL_CREATEINSTANCE( UnoSpinButtonControl )
 IMPL_CREATEINSTANCE_CTX( UnoMultiPageControl )
 IMPL_CREATEINSTANCE_CTX( UnoPageControl )
 IMPL_CREATEINSTANCE_CTX( UnoFrameControl )
@@ -162,8 +159,6 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL tk_component_getFactory( const sal_Char* sImple
         GET_FACTORY( UnoPageControl, szServiceName_UnoPageControl, NULL )
         GET_FACTORY( UnoFrameModel, szServiceName_UnoFrameModel, NULL )
         GET_FACTORY( UnoFrameControl, szServiceName_UnoFrameControl, NULL )
-        GET_FACTORY( UnoSpinButtonModel, szServiceName_UnoSpinButtonModel, NULL )
-        GET_FACTORY( UnoSpinButtonControl, szServiceName_UnoSpinButtonControl, NULL )
         GET_FACTORY( MutableTreeDataModel, szServiceName_MutableTreeDataModel, NULL )
     }
     return pRet;
