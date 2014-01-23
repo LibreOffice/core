@@ -126,8 +126,8 @@ public:
     void                GetFontAttributes( ImplFontAttributes& rAttrs ) const;
 
     Font&               operator=( const Font& );
-    sal_Bool                operator==( const Font& ) const;
-    sal_Bool                operator!=( const Font& rFont ) const
+    bool                operator==( const Font& ) const;
+    bool                operator!=( const Font& rFont ) const
                             { return !(Font::operator==( rFont )); }
     sal_Bool                IsSameInstance( const Font& ) const;
 

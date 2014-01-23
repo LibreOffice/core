@@ -587,15 +587,9 @@ Font& Font::operator=( const Font& rFont )
     return *this;
 }
 
-sal_Bool Font::operator==( const Font& rFont ) const
+bool Font::operator==( const Font& rFont ) const
 {
-
-    if( mpImplFont == rFont.mpImplFont )
-        return sal_True;
-    if( *mpImplFont == *rFont.mpImplFont )
-        return sal_True;
-
-    return sal_False;
+    return mpImplFont == rFont.mpImplFont || *mpImplFont == *rFont.mpImplFont;
 }
 
 void Font::Merge( const Font& rFont )
