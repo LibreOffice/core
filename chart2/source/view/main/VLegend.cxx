@@ -782,13 +782,14 @@ VLegend::VLegend(
     const std::vector< LegendEntryProvider* >& rLegendEntryProviderList,
     const Reference< drawing::XShapes >& xTargetPage,
     const Reference< lang::XMultiServiceFactory >& xFactory,
-    ChartModel& rModel ) :
-        m_xTarget(xTargetPage),
-        m_xShapeFactory(xFactory),
-        m_xLegend( xLegend ),
-        mrModel(rModel),
-        m_xContext( xContext ),
-        m_aLegendEntryProviderList( rLegendEntryProviderList )
+    ChartModel& rModel )
+        : m_xTarget(xTargetPage)
+        , m_xShapeFactory(xFactory)
+        , m_xLegend(xLegend)
+        , mrModel(rModel)
+        , m_xContext(xContext)
+        , m_aLegendEntryProviderList(rLegendEntryProviderList)
+        , m_nDefaultWritingMode(text::WritingMode2::LR_TB)
 {
 }
 
