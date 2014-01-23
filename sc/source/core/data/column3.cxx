@@ -2433,7 +2433,7 @@ public:
 SCSIZE ScColumn::GetCellCount() const
 {
     CellCounter aFunc;
-    std::for_each(maCells.begin(), maCells.end(), aFunc);
+    aFunc = std::for_each(maCells.begin(), maCells.end(), aFunc);
     return aFunc.getCount();
 }
 
