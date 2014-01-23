@@ -290,6 +290,8 @@ public:
     */
     virtual void                DataChanged( const DataChangedEvent& rDCEvt );
 
+    static void                 NotifyAllWindows( DataChangedEvent& rDCEvt );
+
     /** @} */ // end of changes
 
     /** @defgroup Initialization Initialization functions
@@ -652,8 +654,6 @@ public:
     static const AllSettings&   GetSettings();
 
     /** @} */ // end of Settings
-
-    static void                 NotifyAllWindows( DataChangedEvent& rDCEvt );
 
     static void                 AddEventListener( const Link& rEventListener );
     static void                 RemoveEventListener( const Link& rEventListener );

@@ -2171,7 +2171,6 @@ static void ImplHandleSalSettings( sal_uInt16 nEvent )
         {
             DataChangedEvent aDCEvt( nType );
             pApp->DataChanged( aDCEvt );
-            pApp->NotifyAllWindows( aDCEvt );
         }
     }
 }
