@@ -174,7 +174,9 @@ public:
     bool                CheckContext();
     void                UpdateWindow( NSRect& ); // delivered in NSView coordinates
     void                RefreshRect( const CGRect& );
+#ifndef __x86_64__ // on 64bit OSX NSRect is typedef'ed as CGRect
     void                RefreshRect( const NSRect& );
+#endif
     void                RefreshRect(float lX, float lY, float lWidth, float lHeight);
 
     void                SetState();
@@ -406,10 +408,12 @@ inline void AquaSalGraphics::RefreshRect( const CGRect& rRect )
     RefreshRect( rRect.origin.x, rRect.origin.y, rRect.size.width, rRect.size.height );
 }
 
+#ifndef __x86_64__ // on 64bit OSX NSRect is typedef'ed as CGRect
 inline void AquaSalGraphics::RefreshRect( const NSRect& rRect )
 {
     RefreshRect( rRect.origin.x, rRect.origin.y, rRect.size.width, rRect.size.height );
 }
+#endif
 
 inline RGBAColor::RGBAColor( SalColor nSalColor )
 {
