@@ -86,7 +86,7 @@ class SwMultiPortion : public SwLinePortion
     sal_Bool bTab1      :1; // First line tabulator
     sal_Bool bTab2      :1; // Second line includes tabulator
     sal_Bool bDouble    :1; // Double line
-    bool bRuby      :1; // Phonetics
+    bool bRuby          :1; // Phonetics
     sal_Bool bBidi      :1;
     sal_Bool bTop       :1; // Phonetic position
     sal_Bool bFormatted :1; // Already formatted
@@ -94,20 +94,31 @@ class SwMultiPortion : public SwLinePortion
     sal_uInt8 nDirection:2; // Direction (0/90/180/270 degrees)
     sal_Bool bFlyInCntnt:1; // Fly as character inside
 protected:
-    SwMultiPortion( sal_Int32 nEnd ) : pFldRest( 0 ), bTab1( sal_False ),
-        bTab2( sal_False ), bDouble( sal_False ), bRuby( false ),
-        bBidi( sal_False ), bFormatted( sal_False ), bFollowFld( sal_False ),
-        nDirection( 0 ), bFlyInCntnt( sal_False )
-        { SetWhichPor( POR_MULTI ); SetLen( nEnd ); }
-    inline void SetDouble() { bDouble = sal_True; }
-    inline void SetRuby() { bRuby = true; }
-    inline void SetBidi() { bBidi = sal_True; }
-    inline void SetTop( sal_Bool bNew ) { bTop = bNew; }
-    inline void SetTab1( sal_Bool bNew ) { bTab1 = bNew; }
-    inline void SetTab2( sal_Bool bNew ) { bTab2 = bNew; }
-    inline void SetDirection( sal_uInt8 nNew ) { nDirection = nNew; }
-    inline sal_Bool GetTab1() const { return bTab1; }
-    inline sal_Bool GetTab2() const { return bTab2; }
+    SwMultiPortion(sal_Int32 nEnd)
+        : pFldRest(0)
+        , bTab1(false)
+        , bTab2(false)
+        , bDouble(false)
+        , bRuby(false)
+        , bBidi(false)
+        , bTop(false)
+        , bFormatted(false)
+        , bFollowFld(false)
+        , nDirection(0)
+        , bFlyInCntnt(false)
+    {
+        SetWhichPor(POR_MULTI);
+        SetLen(nEnd);
+    }
+    void SetDouble() { bDouble = sal_True; }
+    void SetRuby() { bRuby = true; }
+    void SetBidi() { bBidi = sal_True; }
+    void SetTop( sal_Bool bNew ) { bTop = bNew; }
+    void SetTab1( sal_Bool bNew ) { bTab1 = bNew; }
+    void SetTab2( sal_Bool bNew ) { bTab2 = bNew; }
+    void SetDirection( sal_uInt8 nNew ) { nDirection = nNew; }
+    sal_Bool GetTab1() const { return bTab1; }
+    sal_Bool GetTab2() const { return bTab2; }
 public:
     ~SwMultiPortion();
     const SwLineLayout& GetRoot() const { return aRoot; }
