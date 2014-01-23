@@ -33,6 +33,24 @@
       "revId": "826584ad357a2b1fdf17a65beb532aef3f7796d1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_7ab00df5",
+        "filename": "offapi/com/sun/star/text/CellProperties.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000542
+      },
+      "writtenOn": "2014-01-23T12:25:56Z",
+      "side": 1,
+      "message": "Thanks for your code review comments.\nI have changes is changes set. I have removed cell properties related changes from this review. Will update you\nonce I push new changeset for cellproperties.\n\nThanks.",
+      "parentUuid": "da9df570_da8f3974",
+      "revId": "826584ad357a2b1fdf17a65beb532aef3f7796d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
