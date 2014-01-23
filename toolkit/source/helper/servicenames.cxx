@@ -85,7 +85,6 @@ const sal_Char szServiceName_UnoPageModel[] = "com.sun.star.awt.UnoPageModel";
 const sal_Char szServiceName_UnoFrameControl[] = "com.sun.star.awt.UnoControlFrame";
 const sal_Char szServiceName_AnimatedImagesControl[] = "com.sun.star.awt.AnimatedImagesControl";
 const sal_Char szServiceName_AnimatedImagesControlModel[] = "com.sun.star.awt.AnimatedImagesControlModel";
-const sal_Char szServiceName_SpinningProgressControlModel[] = "com.sun.star.awt.SpinningProgressControlModel";
 const sal_Char szServiceName_UnoFrameModel[] = "com.sun.star.awt.UnoFrameModel";
 const sal_Char szServiceName_TreeControl[] = "com.sun.star.awt.tree.TreeControl";
 const sal_Char szServiceName_TreeControlModel[] = "com.sun.star.awt.tree.TreeControlModel";

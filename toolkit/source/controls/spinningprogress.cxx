@@ -17,39 +17,39 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include "toolkit/controls/spinningprogress.hxx"
-#include "toolkit/helper/servicenames.hxx"
-#include "toolkit/helper/unopropertyarrayhelper.hxx"
-
-
 #include <rtl/ustrbuf.hxx>
+#include <toolkit/controls/animatedimages.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/throbber.hxx>
 
-//......................................................................................................................
-namespace toolkit
+using namespace css;
+using namespace css::uno;
+
+namespace {
+
+typedef toolkit::AnimatedImagesControlModel SpinningProgressControlModel_Base;
+class SpinningProgressControlModel : public SpinningProgressControlModel_Base
 {
-//......................................................................................................................
+public:
+    SpinningProgressControlModel( css::uno::Reference< css::uno::XComponentContext > const & i_factory );
+    SpinningProgressControlModel( const SpinningProgressControlModel& i_copySource );
 
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::UNO_SET_THROW;
-    using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::uno::Any;
-    using ::com::sun::star::uno::makeAny;
-    using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::uno::Type;
-    using ::com::sun::star::beans::XPropertySetInfo;
-    using ::com::sun::star::uno::XComponentContext;
+    virtual UnoControlModel* Clone() const;
 
-    //==================================================================================================================
-    //= SpinningProgressControlModel
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    // XPropertySet
+    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException);
+
+    // XPersistObject
+    OUString SAL_CALL getServiceName() throw(css::uno::RuntimeException);
+
+    // XServiceInfo
+    OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException);
+    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException);
+
+protected:
+    ~SpinningProgressControlModel();
+};
+
     SpinningProgressControlModel::SpinningProgressControlModel( Reference< XComponentContext > const & i_factory )
         :SpinningProgressControlModel_Base( i_factory )
     {
@@ -95,16 +95,16 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Reference< XPropertySetInfo > SAL_CALL SpinningProgressControlModel::getPropertySetInfo(  ) throw(RuntimeException)
+    Reference< beans::XPropertySetInfo > SAL_CALL SpinningProgressControlModel::getPropertySetInfo(  ) throw(RuntimeException)
     {
-        static Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+        static Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
     }
 
     //------------------------------------------------------------------------------------------------------------------
     OUString SAL_CALL SpinningProgressControlModel::getServiceName() throw(RuntimeException)
     {
-        return OUString::createFromAscii( szServiceName_SpinningProgressControlModel );
+        return OUString("com.sun.star.awt.SpinningProgressControlModel");
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -117,14 +117,20 @@ namespace toolkit
     Sequence< OUString > SAL_CALL SpinningProgressControlModel::getSupportedServiceNames() throw(RuntimeException)
     {
         Sequence< OUString > aServiceNames(3);
-        aServiceNames[0] = OUString::createFromAscii( szServiceName_SpinningProgressControlModel );
-        aServiceNames[1] = OUString::createFromAscii( szServiceName_AnimatedImagesControlModel );
+        aServiceNames[0] = "com.sun.star.awt.SpinningProgressControlModel";
+        aServiceNames[1] = "com.sun.star.awt.AnimatedImagesControlModel";
         aServiceNames[2] = "com.sun.star.awt.UnoControlModel";
         return aServiceNames;
     }
 
-//......................................................................................................................
-} // namespace toolkit
-//......................................................................................................................
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+org_openoffice_comp_toolkit_SpinningProgressControlModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SpinningProgressControlModel(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

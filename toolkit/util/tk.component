@@ -255,7 +255,8 @@
     <service name="com.sun.star.awt.UnoControlScrollBar"/>
     <service name="stardiv.vcl.control.ScrollBar"/>
   </implementation>
-  <implementation name="org.openoffice.comp.toolkit.SpinningProgressControlModel">
+  <implementation name="org.openoffice.comp.toolkit.SpinningProgressControlModel"
+      constructor="org_openoffice_comp_toolkit_SpinningProgressControlModel_get_implementation">
     <service name="com.sun.star.awt.SpinningProgressControlModel"/>
   </implementation>
   <implementation name="org.openoffice.comp.toolkit.AnimatedImagesControlModel">

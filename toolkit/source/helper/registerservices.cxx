@@ -42,7 +42,6 @@
 #include <toolkit/controls/tkscrollbar.hxx>
 #include "toolkit/controls/tkspinbutton.hxx"
 #include <toolkit/controls/animatedimages.hxx>
-#include <toolkit/controls/spinningprogress.hxx>
 #include <toolkit/controls/tabpagemodel.hxx>
 #include <toolkit/controls/tabpagecontainer.hxx>
 #include "toolkit/dllapi.h"
@@ -178,7 +177,6 @@ IMPL_CREATEINSTANCE_CTX( UnoControlTabPageContainer )
 IMPL_CREATEINSTANCE_CTX( UnoControlTabPageContainerModel )
 IMPL_CREATEINSTANCE( AnimatedImagesControl )
 IMPL_CREATEINSTANCE_CTX( AnimatedImagesControlModel )
-IMPL_CREATEINSTANCE_CTX( SpinningProgressControlModel )
 
 IMPL_CREATE_INSTANCE_WITH_GEOMETRY( UnoControlDialogModel )
 
@@ -284,7 +282,6 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL tk_component_getFactory( const sal_Char* sImple
         GET_FACTORY( UnoControlTabPageContainer, szServiceName_UnoControlTabPageContainer, NULL )
         GET_FACTORY_WITH_IMPL_PREFIX( AnimatedImagesControl, "org.openoffice.comp.toolkit", szServiceName_AnimatedImagesControl, NULL )
         GET_FACTORY_WITH_IMPL_PREFIX( AnimatedImagesControlModel, "org.openoffice.comp.toolkit", szServiceName_AnimatedImagesControlModel, NULL )
-        GET_FACTORY_WITH_IMPL_PREFIX( SpinningProgressControlModel, "org.openoffice.comp.toolkit", szServiceName_SpinningProgressControlModel, NULL )
 
         if ( rtl_str_compare( sImplementationName, "com.sun.star.awt.comp.AsyncCallback" ) == 0 )
             return comp_AsyncCallback_component_getFactory( sImplementationName, _pServiceManager, _pRegistryKey );
