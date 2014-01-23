@@ -469,7 +469,8 @@ SfxTabPage* SfxMacroTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet
 
 SfxMacroAssignDlg::SfxMacroAssignDlg(Window* pParent,
     const Reference< XFrame >& rxDocumentFrame, const SfxItemSet& rSet)
-    : SfxSingleTabDialog(pParent, rSet)
+    : SfxSingleTabDialog(pParent, rSet, "EventAssignDialog",
+        "cui/ui/eventassigndialog.ui")
 {
     SfxMacroTabPage* pPage = CreateSfxMacroTabPage(get_content_area(), rSet);
     pPage->SetFrame( rxDocumentFrame );
