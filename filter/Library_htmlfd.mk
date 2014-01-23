@@ -13,7 +13,7 @@ $(eval $(call gb_Library_Library,htmlfd))
 
 $(eval $(call gb_Library_set_componentfile,htmlfd,filter/source/htmlfilterdetect/htmlfd))
 
-$(eval $(call gb_Library_use_external,xmlfd,boost_headers))
+$(eval $(call gb_Library_use_external,htmlfd,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,htmlfd))
 
