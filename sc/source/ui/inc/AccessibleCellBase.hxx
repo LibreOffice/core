@@ -58,8 +58,8 @@ public:
 
     ///=====  XAccessibleComponent  ============================================
 
-    virtual sal_Bool SAL_CALL isVisible(  )
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isVisible()
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual sal_Int32 SAL_CALL getForeground(  )
         throw (::com::sun::star::uno::RuntimeException);

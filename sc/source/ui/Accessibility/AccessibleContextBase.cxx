@@ -224,8 +224,8 @@ sal_Bool SAL_CALL ScAccessibleContextBase::isShowing(  )
     return bShowing;
 }
 
-sal_Bool SAL_CALL ScAccessibleContextBase::isVisible(  )
-        throw (uno::RuntimeException)
+sal_Bool SAL_CALL ScAccessibleContextBase::isVisible()
+    throw (uno::RuntimeException, std::exception)
 {
     return sal_True;
 }

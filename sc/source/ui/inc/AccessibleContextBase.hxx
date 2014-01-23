@@ -126,8 +126,8 @@ public:
     virtual sal_Bool SAL_CALL isShowing(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL isVisible(  )
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isVisible()
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL grabFocus(  )
         throw (::com::sun::star::uno::RuntimeException);

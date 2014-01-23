@@ -70,8 +70,8 @@ ScAccessibleCellBase::~ScAccessibleCellBase()
 
     //=====  XAccessibleComponent  ============================================
 
-sal_Bool SAL_CALL ScAccessibleCellBase::isVisible(  )
-        throw (uno::RuntimeException)
+sal_Bool SAL_CALL ScAccessibleCellBase::isVisible()
+    throw (uno::RuntimeException, std::exception)
 {
      SolarMutexGuard aGuard;
     IsObjectValid();
