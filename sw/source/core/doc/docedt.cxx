@@ -60,7 +60,9 @@ struct _SaveRedline
     sal_Int32 nEndCnt;
 
     _SaveRedline( SwRangeRedline* pR, const SwNodeIndex& rSttIdx )
-        : pRedl( pR )
+        : pRedl(pR)
+        , nEnd(0)
+        , nEndCnt(0)
     {
         const SwPosition* pStt = pR->Start(),
             * pEnd = pR->GetMark() == pStt ? pR->GetPoint() : pR->GetMark();
@@ -80,7 +82,9 @@ struct _SaveRedline
     }
 
     _SaveRedline( SwRangeRedline* pR, const SwPosition& rPos )
-        : pRedl( pR )
+        : pRedl(pR)
+        , nEnd(0)
+        , nEndCnt(0)
     {
         const SwPosition* pStt = pR->Start(),
             * pEnd = pR->GetMark() == pStt ? pR->GetPoint() : pR->GetMark();
