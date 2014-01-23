@@ -57,6 +57,8 @@ bool isSpace(char c) {
 XmlReader::XmlReader(char const *sStr, size_t nLength)
     : fileUrl_("stream")
     , fileHandle_(0)
+    , fileSize_(0)
+    , fileAddress_(0)
 {
     namespaceIris_.push_back(Span("http://www.w3.org/XML/1998/namespace"));
     namespaces_.push_back(NamespaceData(Span("xml"), NAMESPACE_XML));
