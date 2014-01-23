@@ -2590,6 +2590,17 @@ DECLARE_OOXMLEXPORT_TEST(testFDO73546, "FDO73546.docx")
     assertXPath(pXmlDoc, "/w:hdr/w:p[1]/w:r[3]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor", "distL","0");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testLineStyle_DashType_VML, "LineStyle_DashType_VML.docx")
+{
+    /* DOCX contatining "Shape with text inside" having Line Style as "Dash Type" should get
+     * preserved inside an XML tag <v:stroke> with attribute dashstyle having value "dash".
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:stroke", "dashstyle", "dash");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
