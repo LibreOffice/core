@@ -28,9 +28,6 @@
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/CameraGeometry.hpp>
 
-// for F_PI
-#include <tools/solar.h>
-
 using namespace ::com::sun::star;
 
 using ::com::sun::star::beans::Property;

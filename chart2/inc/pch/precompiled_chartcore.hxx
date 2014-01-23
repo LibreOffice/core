@@ -282,7 +282,6 @@
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <tools/resmgr.hxx>
-#include <tools/solar.h>
 #include <ucbhelper/content.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/configitem.hxx>

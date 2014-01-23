@@ -21,8 +21,6 @@
 
 #include "FeatureCommandDispatchBase.hxx"
 
-#include <tools/solar.h>
-
 class SfxItemSet;
 class SdrObject;
 
