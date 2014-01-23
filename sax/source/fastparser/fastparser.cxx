@@ -390,19 +390,20 @@ Entity::Entity( const ParserData& rData ) :
     mpProducedEvents = 0;
 }
 
-Entity::Entity( const Entity& e ) :
-    ParserData( e )
-    ,mbEnableThreads(e.mbEnableThreads)
-    ,maStructSource(e.maStructSource)
-    ,mpParser(e.mpParser)
-    ,maConverter(e.maConverter)
-    ,maSavedException(e.maSavedException)
-    ,maNamespaceStack(e.maNamespaceStack)
-    ,maContextStack(e.maContextStack)
-    ,maNamespaceCount(e.maNamespaceCount)
-    ,maNamespaceDefines(e.maNamespaceDefines)
+Entity::Entity(const Entity& e)
+    : ParserData(e)
+    , mnProducedEventsSize(0)
+    , mpProducedEvents(NULL)
+    , mbEnableThreads(e.mbEnableThreads)
+    , maStructSource(e.maStructSource)
+    , mpParser(e.mpParser)
+    , maConverter(e.maConverter)
+    , maSavedException(e.maSavedException)
+    , maNamespaceStack(e.maNamespaceStack)
+    , maContextStack(e.maContextStack)
+    , maNamespaceCount(e.maNamespaceCount)
+    , maNamespaceDefines(e.maNamespaceDefines)
 {
-    mpProducedEvents = 0;
 }
 
 Entity::~Entity()
