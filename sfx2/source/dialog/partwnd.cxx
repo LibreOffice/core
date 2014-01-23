@@ -61,8 +61,9 @@ SfxPartChildWnd_Impl::SfxPartChildWnd_Impl
     // Create Window
     pWindow = new SfxPartDockWnd_Impl( pBindings, this, pParentWnd, WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK );
     eChildAlignment = SFX_ALIGN_TOP;
-    if ( pInfo )
-        pInfo->nFlags |= SFX_CHILDWIN_FORCEDOCK;
+
+    assert(pInfo);
+    pInfo->nFlags |= SFX_CHILDWIN_FORCEDOCK;
 
     ((SfxDockingWindow*)pWindow)->SetFloatingSize( Size( 175, 175 ) );
     pWindow->SetSizePixel( Size( 175, 175 ) );
