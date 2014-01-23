@@ -848,7 +848,8 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPage& rPage)
 SvStream& connectivity::dbase::WriteONDXPage(SvStream &rStream, const ONDXPage& rPage)
 {
     // Page doesn't exist yet
-    sal_uIntPtr nSize = (rPage.GetPagePos() + 1) * DINDEX_PAGE_SIZE;
+    sal_Size nSize = rPage.GetPagePos() + 1;
+    nSize *= DINDEX_PAGE_SIZE;
     if (nSize > rStream.Seek(STREAM_SEEK_TO_END))
     {
         rStream.SetStreamSize(nSize);
