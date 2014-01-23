@@ -580,8 +580,8 @@ Rectangle ScAccessibleContextBase::GetBoundingBoxOnScreen(void) const
     return Rectangle();
 }
 
-Rectangle ScAccessibleContextBase::GetBoundingBox(void) const
-        throw (uno::RuntimeException)
+Rectangle ScAccessibleContextBase::GetBoundingBox() const
+        throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented");
     return Rectangle();

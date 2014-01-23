@@ -101,8 +101,8 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the object's current bounding box relative to the parent object.
-    virtual Rectangle GetBoundingBox(void) const
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual Rectangle GetBoundingBox() const
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 public:
     ///=====  XAccessibleContext  ==============================================

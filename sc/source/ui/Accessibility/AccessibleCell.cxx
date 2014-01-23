@@ -166,8 +166,8 @@ Rectangle ScAccessibleCell::GetBoundingBoxOnScreen(void) const
     return aCellRect;
 }
 
-Rectangle ScAccessibleCell::GetBoundingBox(void) const
-        throw (uno::RuntimeException)
+Rectangle ScAccessibleCell::GetBoundingBox() const
+        throw (uno::RuntimeException, std::exception)
 {
     Rectangle aCellRect;
     if (mpViewShell)
