@@ -37,14 +37,14 @@
 class ATSLayout : public SalLayout
 {
 public:
-                    ATSLayout( ATSUStyle&, float fFontScale );
+    explicit        ATSLayout( ATSUStyle&, float fFontScale );
     virtual         ~ATSLayout();
 
     virtual bool    LayoutText( ImplLayoutArgs& );
     virtual void    AdjustLayout( ImplLayoutArgs& );
     virtual void    DrawText( SalGraphics& ) const;
 
-    virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
+    virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, int&,
                         sal_Int32* pGlyphAdvances, int* pCharIndexes ) const;
 
     virtual long    GetTextWidth() const;
@@ -110,7 +110,7 @@ private:
 class FallbackInfo
 {
 public:
-        FallbackInfo() : mnMaxLevel(0) {}
+    FallbackInfo() : mnMaxLevel(0) {}
     int AddFallback( ATSUFontID );
     const ImplFontData* GetFallbackFontData( int nLevel ) const;
 
@@ -219,23 +219,12 @@ bool ATSLayout::LayoutText( ImplLayoutArgs& rArgs )
     if( mnCharCount<=0 )
         return false;
 
-#if (OSL_DEBUG_LEVEL > 3)
-    Fixed fFontSize = 0;
-    ByteCount nDummy;
-    ATSUGetAttribute( mrATSUStyle, kATSUSizeTag, sizeof(fFontSize), &fFontSize, &nDummy);
-    String aUniName( &rArgs.mpStr[rArgs.mnMinCharPos], mnCharCount );
-    ByteString aCName( aUniName, RTL_TEXTENCODING_UTF8 );
-    fprintf( stderr, "ATSLayout( \"%s\" %d..%d of %d) with h=%4.1f\n",
-        aCName.GetBuffer(),rArgs.mnMinCharPos,rArgs.mnEndCharPos,rArgs.mnLength,Fix2X(fFontSize) );
-#endif
-
     // create the ATSUI layout
     UniCharCount nRunLengths[1] = { mnCharCount };
     const int nRunCount = sizeof(nRunLengths)/sizeof(*nRunLengths);
     OSStatus eStatus = ATSUCreateTextLayoutWithTextPtr( rArgs.mpStr,
         rArgs.mnMinCharPos, mnCharCount, rArgs.mnLength,
-        nRunCount, &nRunLengths[0], &mrATSUStyle,
-        &maATSULayout);
+        nRunCount, &nRunLengths[0], &mrATSUStyle, &maATSULayout);
 
     DBG_ASSERT( (eStatus==noErr), "ATSUCreateTextLayoutWithTextPtr failed\n");
     if( eStatus != noErr )
@@ -271,7 +260,7 @@ bool ATSLayout::LayoutText( ImplLayoutArgs& rArgs )
         aTagSizes[0] = sizeof( nLineDirTag );
         aTagValues[0] = &nLineDirTag;
         // set run-specific layout controls
-#if 0 // why don't line-controls work as reliably as layout-controls???
+#if 0 // why don't line-controls work as reliable as layout-controls???
         ATSUSetLineControls( maATSULayout, rArgs.mnMinCharPos, 1, aTagAttrs, aTagSizes, aTagValues );
 #else
         ATSUSetLayoutControls( maATSULayout, 1, aTagAttrs, aTagSizes, aTagValues );
@@ -454,8 +443,8 @@ void ATSLayout::DrawText( SalGraphics& rGraphics ) const
             drawRect.top -= d;
             drawRect.bottom += d;
             CGRect aRect = CGRectMake( drawRect.left, drawRect.top,
-                                       drawRect.right - drawRect.left,
-                                       drawRect.bottom - drawRect.top );
+                    drawRect.right - drawRect.left,
+                    drawRect.bottom - drawRect.top );
             aRect = CGContextConvertRectToDeviceSpace( rAquaGraphics.mrContext, aRect );
             rAquaGraphics.RefreshRect( aRect );
         }
@@ -539,7 +528,7 @@ int ATSLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, 
     while( nCount < nLen )
     {
         ++nCount;
-        sal_GlyphId aGlyphId = mpGlyphIds[ nStart];
+        sal_GlyphId aGlyphId = mpGlyphIds[nStart];
 
         // check if glyph fallback is needed for this glyph
         // TODO: use ATSUDirectGetLayoutDataArrayPtrFromTextLayout(kATSUDirectDataStyleIndex) API instead?
@@ -548,7 +537,7 @@ int ATSLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, 
         UniCharArrayOffset nChangedOffset = 0;
         UniCharCount nChangedLength = 0;
         OSStatus eStatus = ATSUMatchFontsToText( maATSULayout, nCharPos, kATSUToTextEnd,
-                      &nFallbackFontID, &nChangedOffset, &nChangedLength );
+            &nFallbackFontID, &nChangedOffset, &nChangedLength );
         if( (eStatus == kATSUFontsMatched) && ((int)nChangedOffset == nCharPos) )
         {
             // fallback is needed

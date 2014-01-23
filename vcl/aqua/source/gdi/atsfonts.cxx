@@ -19,23 +19,317 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
 #include <boost/assert.hpp>
 #include <vector>
+#include <hash_map>
 #include <set>
 
-#include "vcl/svapp.hxx"
-
-#include "aqua/salgdi.h"
-#include "aqua/saldata.hxx"
+#include "salgdi.h"
 #include "atsfonts.hxx"
-#include "impfont.hxx"
+
+#include "vcl/svapp.hxx"
+#include "vcl/impfont.hxx"
+
+#include "basegfx/polygon/b2dpolygon.hxx"
+#include "basegfx/matrix/b2dhommatrix.hxx"
+
+typedef GlyphID ATSGlyphID;
+
+// =======================================================================
+
+// mac specific physically available font face
+class AtsFontData
+:   public ImplMacFontData
+{
+public:
+    explicit                AtsFontData( const ImplDevFontAttributes&, ATSUFontID );
+    virtual                 ~AtsFontData( void );
+    virtual ImplFontData*   Clone( void ) const;
+
+    virtual ImplMacTextStyle*   CreateMacTextStyle( const ImplFontSelectData& ) const;
+    virtual ImplFontEntry*      CreateFontInstance( /*const*/ ImplFontSelectData& ) const;
+    virtual int                 GetFontTable( const char pTagName[5], unsigned char* ) const;
+};
+
+// =======================================================================
+
+class AtsFontList
+:   public SystemFontList
+{
+public:
+    explicit    AtsFontList( void );
+    virtual     ~AtsFontList( void );
+
+    virtual void            AnnounceFonts( ImplDevFontList& ) const;
+    virtual ImplMacFontData* GetFontDataFromId( sal_IntPtr nFontId ) const;
+
+private:
+    typedef std::hash_map<sal_IntPtr,AtsFontData*> AtsFontContainer;
+    AtsFontContainer maFontContainer;
+
+    void InitGlyphFallbacks( void );
+    ATSUFontFallbacks   maFontFallbacks;
+};
+
+// =======================================================================
+
+AtsFontData::AtsFontData( const ImplDevFontAttributes& rDFA, ATSUFontID nFontId )
+:   ImplMacFontData( rDFA, (sal_IntPtr)nFontId )
+{}
 
 // -----------------------------------------------------------------------
+
+AtsFontData::~AtsFontData( void )
+{}
+
+// -----------------------------------------------------------------------
+
+ImplFontData* AtsFontData::Clone( void ) const
+{
+    AtsFontData* pClone = new AtsFontData(*this);
+    return pClone;
+}
+
+// -----------------------------------------------------------------------
+
+ImplMacTextStyle* AtsFontData::CreateMacTextStyle( const ImplFontSelectData& rFSD ) const
+{
+    return new AtsTextStyle( rFSD );
+}
+
+// -----------------------------------------------------------------------
+
+ImplFontEntry* AtsFontData::CreateFontInstance( /*const*/ ImplFontSelectData& rFSD ) const
+{
+    return new ImplFontEntry( rFSD );
+}
+
+// -----------------------------------------------------------------------
+
+int AtsFontData::GetFontTable( const char pTagName[5], unsigned char* pResultBuf ) const
+{
+    DBG_ASSERT( aTagName[4]=='\0', "AtsFontData::GetFontTable with invalid tagname!\n" );
+
+    const FourCharCode pTagCode = (pTagName[0]<<24) + (pTagName[1]<<16) + (pTagName[2]<<8) + (pTagName[3]<<0);
+
+    // get the byte size of the raw table
+    ATSFontRef rATSFont = FMGetATSFontRefFromFont( (ATSUFontID)mnFontId );
+    ByteCount nBufSize = 0;
+    OSStatus eStatus = ATSFontGetTable( rATSFont, pTagCode, 0, 0, NULL, &nBufSize );
+    if( eStatus != noErr )
+        return 0;
+
+    // get the raw table data if requested
+    if( pResultBuf && (nBufSize > 0))
+    {
+        ByteCount nRawLength = 0;
+        eStatus = ATSFontGetTable( rATSFont, pTagCode, 0, nBufSize, (void*)pResultBuf, &nRawLength );
+        if( eStatus != noErr )
+            return 0;
+        DBG_ASSERT( (nBufSize==nRawLength), "AtsFontData::GetFontTable ByteCount mismatch!\n");
+    }
+
+    return nBufSize;
+}
+
+// =======================================================================
+
+AtsTextStyle::AtsTextStyle( const ImplFontSelectData& rFSD )
+:   ImplMacTextStyle( rFSD )
+{
+    // create the style object for ATSUI font attributes
+    ATSUCreateStyle( &maATSUStyle );
+    const ImplFontSelectData* const pReqFont = &rFSD;
+
+    mpFontData = (AtsFontData*)rFSD.mpFontData;
+
+    // limit the ATS font size to avoid Fixed16.16 overflows
+    double fScaledFontHeight = pReqFont->mfExactHeight;
+    static const float fMaxFontHeight = 144.0;
+    if( fScaledFontHeight > fMaxFontHeight )
+    {
+        mfFontScale = fScaledFontHeight / fMaxFontHeight;
+        fScaledFontHeight = fMaxFontHeight;
+    }
+
+    // convert font rotation to radian
+    mfFontRotation = pReqFont->mnOrientation * (M_PI / 1800.0);
+
+    // determine if font stretching is needed
+    if( (pReqFont->mnWidth != 0) && (pReqFont->mnWidth != pReqFont->mnHeight) )
+    {
+        mfFontStretch = (float)pReqFont->mnWidth / pReqFont->mnHeight;
+        // set text style to stretching matrix
+        CGAffineTransform aMatrix = CGAffineTransformMakeScale( mfFontStretch, 1.0F );
+        const ATSUAttributeTag aMatrixTag = kATSUFontMatrixTag;
+        const ATSUAttributeValuePtr aAttr = &aMatrix;
+        const ByteCount aMatrixBytes = sizeof(aMatrix);
+        /*OSStatus eStatus =*/ ATSUSetAttributes( maATSUStyle, 1, &aMatrixTag, &aMatrixBytes, &aAttr );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+AtsTextStyle::~AtsTextStyle( void )
+{
+    ATSUDisposeStyle( maATSUStyle );
+}
+
+// -----------------------------------------------------------------------
+
+void AtsTextStyle::GetFontMetric( float fDPIY, ImplFontMetricData& rMetric ) const
+{
+    // get the font metrics (in point units)
+    // of the font that has eventually been size-limited
+
+    // get the matching ATSU font handle
+    ATSUFontID fontId;
+    OSStatus err = ::ATSUGetAttribute( maATSUStyle, kATSUFontTag, sizeof(ATSUFontID), &fontId, 0 );
+    DBG_ASSERT( (err==noErr), "AquaSalGraphics::GetFontMetric() : could not get font id\n");
+
+    ATSFontMetrics aMetrics;
+    ATSFontRef rFont = FMGetATSFontRefFromFont( fontId );
+    err = ATSFontGetHorizontalMetrics ( rFont, kATSOptionFlagsDefault, &aMetrics );
+    DBG_ASSERT( (err==noErr), "AquaSalGraphics::GetFontMetric() : could not get font metrics\n");
+    if( err != noErr )
+        return;
+
+    // all ATS fonts are scalable fonts
+    rMetric.mbScalableFont = true;
+    // TODO: check if any kerning is possible
+    rMetric.mbKernableFont = true;
+
+    // convert into VCL font metrics (in unscaled pixel units)
+
+    Fixed ptSize;
+    err = ATSUGetAttribute( maATSUStyle, kATSUSizeTag, sizeof(Fixed), &ptSize, 0);
+    DBG_ASSERT( (err==noErr), "AquaSalGraphics::GetFontMetric() : could not get font size\n");
+    const double fPointSize = Fix2X( ptSize );
+
+    // convert quartz units to pixel units
+    // please see the comment in AquaSalGraphics::SetFont() for details
+    const double fPixelSize = (mfFontScale * fDPIY * fPointSize);
+    rMetric.mnAscent       = static_cast<long>(+aMetrics.ascent  * fPixelSize + 0.5);
+    rMetric.mnDescent      = static_cast<long>(-aMetrics.descent * fPixelSize + 0.5);
+    const long nExtDescent = static_cast<long>((-aMetrics.descent + aMetrics.leading) * fPixelSize + 0.5);
+    rMetric.mnExtLeading   = nExtDescent - rMetric.mnDescent;
+    rMetric.mnIntLeading   = 0;
+    // since ImplFontMetricData::mnWidth is only used for stretching/squeezing fonts
+    // setting this width to the pixel height of the fontsize is good enough
+    // it also makes the calculation of the stretch factor simple
+    rMetric.mnWidth        = static_cast<long>(mfFontStretch * fPixelSize + 0.5);
+}
+
+// -----------------------------------------------------------------------
+
+void AtsTextStyle::SetTextColor( const RGBAColor& rColor )
+{
+    RGBColor aAtsColor;
+    aAtsColor.red   = (unsigned short)( rColor.GetRed()   * 65535.0 );
+    aAtsColor.green = (unsigned short)( rColor.GetGreen() * 65535.0 );
+    aAtsColor.blue  = (unsigned short)( rColor.GetColor() * 65535.0 );
+
+    ATSUAttributeTag aTag = kATSUColorTag;
+    ByteCount aValueSize = sizeof( aAtsColor );
+    ATSUAttributeValuePtr aValue = &aAtsColor;
+
+    /*OSStatus err =*/ ATSUSetAttributes( maATSUStyle, 1, &aTag, &aValueSize, &aValue );
+}
+
+// -----------------------------------------------------------------------
+
+bool AtsTextStyle::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect ) const
+{
+    ATSUStyle rATSUStyle = maATSUStyle; // TODO: handle glyph fallback
+    ATSGlyphID aGlyphId = aGlyphId;
+    ATSGlyphScreenMetrics aGlyphMetrics;
+    const bool bNonAntialiasedText = false;
+    OSStatus eStatus = ATSUGlyphGetScreenMetrics( rATSUStyle,
+        1, &aGlyphId, 0, FALSE, !bNonAntialiasedText, &aGlyphMetrics );
+    if( eStatus != noErr )
+        return false;
+
+    const long nMinX = (long)(+aGlyphMetrics.topLeft.x * mfFontScale - 0.5);
+    const long nMaxX = (long)(aGlyphMetrics.width * mfFontScale + 0.5) + nMinX;
+    const long nMinY = (long)(-aGlyphMetrics.topLeft.y * mfFontScale - 0.5);
+    const long nMaxY = (long)(aGlyphMetrics.height * mfFontScale + 0.5) + nMinY;
+    rRect = Rectangle( nMinX, nMinY, nMaxX, nMaxY );
+    return true;
+}
+
+// -----------------------------------------------------------------------
+
+// callbacks from ATSUGlyphGetCubicPaths() fore GetGlyphOutline()
+struct GgoData { basegfx::B2DPolygon maPolygon; basegfx::B2DPolyPolygon* mpPolyPoly; };
+
+static OSStatus GgoLineToProc( const Float32Point* pPoint, void* pData )
+{
+    basegfx::B2DPolygon& rPolygon = static_cast<GgoData*>(pData)->maPolygon;
+    const basegfx::B2DPoint aB2DPoint( pPoint->x, pPoint->y );
+    rPolygon.append( aB2DPoint );
+    return noErr;
+}
+
+static OSStatus GgoCurveToProc( const Float32Point* pCP1, const Float32Point* pCP2,
+    const Float32Point* pPoint, void* pData )
+{
+    basegfx::B2DPolygon& rPolygon = static_cast<GgoData*>(pData)->maPolygon;
+    const sal_uInt32 nPointCount = rPolygon.count();
+    const basegfx::B2DPoint aB2DControlPoint1( pCP1->x, pCP1->y );
+    rPolygon.setNextControlPoint( nPointCount-1, aB2DControlPoint1 );
+    const basegfx::B2DPoint aB2DEndPoint( pPoint->x, pPoint->y );
+    rPolygon.append( aB2DEndPoint );
+    const basegfx::B2DPoint aB2DControlPoint2( pCP2->x, pCP2->y );
+    rPolygon.setPrevControlPoint( nPointCount, aB2DControlPoint2 );
+    return noErr;
+}
+
+static OSStatus GgoClosePathProc( void* pData )
+{
+    GgoData* pGgoData = static_cast<GgoData*>(pData);
+    basegfx::B2DPolygon& rPolygon = pGgoData->maPolygon;
+    if( rPolygon.count() > 0 )
+        pGgoData->mpPolyPoly->append( rPolygon );
+    rPolygon.clear();
+    return noErr;
+}
+
+static OSStatus GgoMoveToProc( const Float32Point* pPoint, void* pData )
+{
+    GgoClosePathProc( pData );
+    OSStatus eStatus = GgoLineToProc( pPoint, pData );
+    return eStatus;
+}
+
+bool AtsTextStyle::GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPolygon& rResult ) const
+{
+    GgoData aGgoData;
+    aGgoData.mpPolyPoly = &rResult;
+    rResult.clear();
+
+    OSStatus eGgoStatus = noErr;
+    OSStatus eStatus = ATSUGlyphGetCubicPaths( maATSUStyle, aGlyphId,
+        GgoMoveToProc, GgoLineToProc, GgoCurveToProc, GgoClosePathProc,
+        &aGgoData, &eGgoStatus );
+    if( (eStatus != noErr) ) // TODO: why is (eGgoStatus!=noErr) when curves are involved?
+        return false;
+
+    GgoClosePathProc( &aGgoData );
+
+    // apply the font scale
+    if( mfFontScale != 1.0 ) {
+        basegfx::B2DHomMatrix aScale;
+        aScale.scale( +mfFontScale, +mfFontScale );
+        rResult.transform( aScale );
+    }
+
+    return true;
+}
+
+// =======================================================================
 
 static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDFA )
 {
@@ -62,6 +356,9 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
     // all scalable fonts on this platform are subsettable
     rDFA.mbSubsettable  = true;
     rDFA.mbEmbeddable   = false;
+    // TODO: these members are needed only for our X11 platform targets
+    rDFA.meAntiAlias    = ANTIALIAS_DONTKNOW;
+    rDFA.meEmbeddedBitmap = EMBEDDEDBITMAP_DONTKNOW;
 
     // prepare iterating over all name strings of the font
     ItemCount nFontNameCount = 0;
@@ -109,16 +406,16 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
             case 0x301: nNameValue += 27; break;    // Win UCS-2
             case 0x004:                             // UCS-4
             case 0x30A: nNameValue += 0;            // Win-UCS-4
-                        eEncoding = RTL_TEXTENCODING_UCS4;
-                        break;
+                eEncoding = RTL_TEXTENCODING_UCS4;
+                break;
             case 0x100: nNameValue += 21;           // Mac Roman
-                        eEncoding = RTL_TEXTENCODING_APPLE_ROMAN;
-                        break;
+                eEncoding = RTL_TEXTENCODING_APPLE_ROMAN;
+                break;
             case 0x300: nNameValue =  0;            // Win Symbol encoded name!
-                        rDFA.mbSymbolFlag = true;   // (often seen for symbol fonts)
-                        break;
-            default:    nNameValue = 0;             // ignore other encodings
-            break;
+                rDFA.mbSymbolFlag = true;           // (often seen for symbol fonts)
+                break;
+            default: nNameValue = 0;                // ignore other encodings
+                break;
         }
 
         // ignore name entries with no useful encoding
@@ -130,7 +427,7 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
         // get the encoded name
         aNameBuffer.reserve( nNameLength+1 ); // extra byte helps for debugging
         rc = ATSUGetIndFontName( nFontID, nNameIndex, nNameLength, &aNameBuffer[0],
-           &nNameLength, &eFontNameCode, &eFontNamePlatform, &eFontNameScript, &eFontNameLanguage );
+            &nNameLength, &eFontNameCode, &eFontNamePlatform, &eFontNameScript, &eFontNameLanguage );
         if( rc != noErr )
             continue;
 
@@ -150,112 +447,43 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
         // handle the name depending on its namecode
         switch( eFontNameCode )
         {
-            case kFontFamilyName:
-                // ignore font names starting with '.'
-                if( aUtf16Name.GetChar(0) == '.' )
-                    nNameValue = 0;
-                else if( rDFA.maName.Len() )
-                {
-                    // even if a family name is not the one we are looking for
-                    // it is still useful as a font name alternative
-                    if( rDFA.maMapNames.Len() )
-                        rDFA.maMapNames += ';';
-                    rDFA.maMapNames += (nBestNameValue < nNameValue) ? rDFA.maName : aUtf16Name;
-                }
-                if( nBestNameValue < nNameValue )
-                {
-                    // get the best family name
-                    nBestNameValue = nNameValue;
-                    eBestLangCode = eFontNameLanguage;
-                    rDFA.maName = aUtf16Name;
-                }
-                break;
-            case kFontStyleName:
-                // get a style name matching to the family name
-                if( nBestStyleValue < nNameValue )
-                {
-                    nBestStyleValue = nNameValue;
-                    rDFA.maStyleName = aUtf16Name;
-                }
-                break;
-            case kFontPostscriptName:
-                // use the postscript name to get some useful info
-                UpdateAttributesFromPSName( aUtf16Name, rDFA );
-                break;
-            default:
-                // TODO: use other name entries too?
-                break;
+        case kFontFamilyName:
+            // ignore font names starting with '.'
+            if( aUtf16Name.GetChar(0) == '.' )
+                nNameValue = 0;
+            else if( rDFA.maName.Len() )
+            {
+                // even if a family name is not the one we are looking for
+                // it is still useful as a font name alternative
+                if( rDFA.maMapNames.Len() )
+                    rDFA.maMapNames += ';';
+                rDFA.maMapNames += (nBestNameValue < nNameValue) ? rDFA.maName : aUtf16Name;
+            }
+            if( nBestNameValue < nNameValue )
+            {
+                // get the best family name
+                nBestNameValue = nNameValue;
+                eBestLangCode = eFontNameLanguage;
+                rDFA.maName = aUtf16Name;
+            }
+            break;
+        case kFontStyleName:
+            // get a style name matching to the family name
+            if( nBestStyleValue < nNameValue )
+            {
+                nBestStyleValue = nNameValue;
+                rDFA.maStyleName = aUtf16Name;
+            }
+            break;
+        case kFontPostscriptName:
+            // use the postscript name to get some useful info
+            UpdateAttributesFromPSName( aUtf16Name, rDFA );
+            break;
+        default:
+            // TODO: use other name entries too?
+            break;
         }
     }
-
-#if 0 // multiple-master fonts are mostly obsolete nowadays
-      // if we still want to support them this should probably be done one frame higher
-    ItemCount nMaxInstances = 0;
-    rc = ATSUCountFontInstances ( nFontID, &nMaxInstances );
-    for( ItemCount nInstanceIndex = 0; nInstanceIndex < nMaxInstances; ++nInstanceIndex )
-    {
-        ItemCount nMaxVariations = 0;
-        rc = ATSUGetFontInstance( nFontID, nInstanceIndex, 0, NULL, NULL, &nMaxVariations );
-        if( (rc == noErr) && (nMaxVariations > 0) )
-        {
-            fprintf(stderr,"\tnMaxVariations=%d\n",(int)nMaxVariations);
-            typedef ::std::vector<ATSUFontVariationAxis> VariationAxisVector;
-            typedef ::std::vector<ATSUFontVariationValue> VariationValueVector;
-            VariationAxisVector aVariationAxes( nMaxVariations );
-            VariationValueVector aVariationValues( nMaxVariations );
-            ItemCount nVariationCount = 0;
-            rc = ATSUGetFontInstance ( nFontID, nInstanceIndex, nMaxVariations,
-                &aVariationAxes[0], &aVariationValues[0], &nVariationCount );
-            fprintf(stderr,"\tnVariationCount=%d\n",(int)nVariationCount);
-            for( ItemCount nVariationIndex = 0; nVariationIndex < nMaxVariations; ++nVariationIndex )
-            {
-                const char* pTag = (const char*)&aVariationAxes[nVariationIndex];
-                fprintf(stderr,"\tvariation[%d] \'%c%c%c%c\' is %d\n", (int)nVariationIndex,
-                    pTag[3],pTag[2],pTag[1],pTag[0], (int)aVariationValues[nVariationIndex]);
-            }
-       }
-    }
-#endif
-
-#if 0 // selecting non-defaulted font features is not enabled yet
-    ByteString aFName( rDFA.maName, RTL_TEXTENCODING_UTF8 );
-    ByteString aSName( rDFA.maStyleName, RTL_TEXTENCODING_UTF8 );
-    ItemCount nMaxFeatures = 0;
-    rc = ATSUCountFontFeatureTypes( nFontID, &nMaxFeatures );
-    fprintf(stderr,"Font \"%s\" \"%s\" has %d features\n",aFName.GetBuffer(),aSName.GetBuffer(),rc);
-    if( (rc == noErr) && (nMaxFeatures > 0) )
-    {
-        typedef std::vector<ATSUFontFeatureType> FeatureVector;
-        FeatureVector aFeatureVector( nMaxFeatures );
-        ItemCount nFeatureCount = 0;
-        rc = ATSUGetFontFeatureTypes( nFontID, nMaxFeatures, &aFeatureVector[0], &nFeatureCount );
-        fprintf(stderr,"nFeatureCount=%d\n",(int)nFeatureCount);
-        for( ItemCount nFeatureIndex = 0; nFeatureIndex < nFeatureCount; ++nFeatureIndex )
-        {
-            ItemCount nMaxSelectors = 0;
-            rc = ATSUCountFontFeatureSelectors( nFontID, aFeatureVector[nFeatureIndex], &nMaxSelectors );
-            fprintf(stderr,"\tFeature[%d] = %d has %d selectors\n",
-               (int)nFeatureIndex, (int)aFeatureVector[nFeatureIndex], (int)nMaxSelectors );
-            typedef std::vector<ATSUFontFeatureSelector> SelectorVector;
-            SelectorVector aSelectorVector( nMaxSelectors );
-            typedef std::vector<MacOSBoolean> BooleanVector;
-            BooleanVector aEnabledVector( nMaxSelectors );
-            BooleanVector aExclusiveVector( nMaxSelectors );
-            ItemCount nSelectorCount = 0;
-            rc = ATSUGetFontFeatureSelectors ( nFontID, aFeatureVector[nFeatureIndex], nMaxSelectors,
-                &aSelectorVector[0], &aEnabledVector[0], &nSelectorCount, &aExclusiveVector[0]);
-            for( ItemCount nSelectorIndex = 0; nSelectorIndex < nSelectorCount; ++nSelectorIndex )
-            {
-                FontNameCode eFontNameCode;
-                rc = ATSUGetFontFeatureNameCode( nFontID, aFeatureVector[nFeatureIndex],
-                    aSelectorVector[nSelectorIndex], &eFontNameCode );
-                fprintf(stderr,"\t\tselector[%d] n=%d e=%d, x=%d\n",
-                    (int)nSelectorIndex, (int)eFontNameCode,
-                    aEnabledVector[nSelectorIndex], aExclusiveVector[nSelectorIndex] );
-            }
-        }
-    }
-#endif
 
     bool bRet = (rDFA.maName.Len() > 0);
     return bRet;
@@ -263,21 +491,28 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
 
 // =======================================================================
 
-SystemFontList::SystemFontList()
+SystemFontList* GetAtsFontList( void )
+{
+    return new AtsFontList();
+}
+
+// =======================================================================
+
+AtsFontList::AtsFontList()
 {
     // count available system fonts
     ItemCount nATSUICompatibleFontsAvailable = 0;
     if( ATSUFontCount(&nATSUICompatibleFontsAvailable) != noErr )
         return;
     if( nATSUICompatibleFontsAvailable <= 0 )
-       return;
+        return;
 
     // enumerate available system fonts
     typedef std::vector<ATSUFontID> AtsFontIDVector;
     AtsFontIDVector aFontIDVector( nATSUICompatibleFontsAvailable );
     ItemCount nFontItemsCount = 0;
     if( ATSUGetFontIDs( &aFontIDVector[0], aFontIDVector.capacity(), &nFontItemsCount ) != noErr )
-       return;
+        return;
 
     BOOST_ASSERT(nATSUICompatibleFontsAvailable == nFontItemsCount && "Strange I would expect them to be equal");
 
@@ -285,11 +520,11 @@ SystemFontList::SystemFontList()
     AtsFontIDVector::const_iterator it = aFontIDVector.begin();
     for(; it != aFontIDVector.end(); ++it )
     {
-    const ATSUFontID nFontID = *it;
+        const ATSUFontID nFontID = *it;
         ImplDevFontAttributes aDevFontAttr;
         if( !GetDevFontAttributes( nFontID, aDevFontAttr ) )
             continue;
-        ImplMacFontData* pFontData = new ImplMacFontData(  aDevFontAttr, nFontID );
+        AtsFontData* pFontData = new AtsFontData( aDevFontAttr, nFontID );
         maFontContainer[ nFontID ] = pFontData;
     }
 
@@ -298,9 +533,9 @@ SystemFontList::SystemFontList()
 
 // -----------------------------------------------------------------------
 
-SystemFontList::~SystemFontList()
+AtsFontList::~AtsFontList()
 {
-    MacFontContainer::const_iterator it = maFontContainer.begin();
+    AtsFontContainer::const_iterator it = maFontContainer.begin();
     for(; it != maFontContainer.end(); ++it )
         delete (*it).second;
     maFontContainer.clear();
@@ -310,11 +545,21 @@ SystemFontList::~SystemFontList()
 
 // -----------------------------------------------------------------------
 
-void SystemFontList::AnnounceFonts( ImplDevFontList& rFontList ) const
+void AtsFontList::AnnounceFonts( ImplDevFontList& rFontList ) const
 {
-    MacFontContainer::const_iterator it = maFontContainer.begin();
+    AtsFontContainer::const_iterator it = maFontContainer.begin();
     for(; it != maFontContainer.end(); ++it )
         rFontList.Add( (*it).second->Clone() );
+}
+
+// -----------------------------------------------------------------------
+
+ImplMacFontData* AtsFontList::GetFontDataFromId( sal_IntPtr nFontId ) const
+{
+    AtsFontContainer::const_iterator it = maFontContainer.find( nFontId );
+    if( it == maFontContainer.end() )
+        return NULL;
+    return (*it).second;
 }
 
 // -----------------------------------------------------------------------
@@ -352,18 +597,20 @@ inline bool GfbCompare::operator()( const ImplMacFontData* pA, const ImplMacFont
     return false;
 }
 
-void SystemFontList::InitGlyphFallbacks()
+// -----------------------------------------------------------------------
+
+void AtsFontList::InitGlyphFallbacks()
 {
     // sort fonts for "glyph fallback"
     typedef std::multiset<const ImplMacFontData*,GfbCompare> FallbackSet;
     FallbackSet aFallbackSet;
-    MacFontContainer::const_iterator it = maFontContainer.begin();
+    AtsFontContainer::const_iterator it = maFontContainer.begin();
     for(; it != maFontContainer.end(); ++it )
     {
-    const ImplMacFontData* pIFD = (*it).second;
-    // TODO: subsettable/embeddable glyph fallback only for PDF export?
+        const ImplMacFontData* pIFD = (*it).second;
+        // TODO: subsettable/embeddable glyph fallback only for PDF export?
         if( pIFD->IsSubsettable() || pIFD->IsEmbeddable() )
-        aFallbackSet.insert( pIFD );
+            aFallbackSet.insert( pIFD );
     }
 
     // tell ATSU about font preferences for "glyph fallback"
@@ -383,15 +630,5 @@ void SystemFontList::InitGlyphFallbacks()
         aFallbackVector.size(), &aFallbackVector[0], kATSUSequentialFallbacksPreferred );
 }
 
-// -----------------------------------------------------------------------
-
-ImplMacFontData* SystemFontList::GetFontDataFromId( ATSUFontID nFontId ) const
-{
-    MacFontContainer::const_iterator it = maFontContainer.find( nFontId );
-    if( it == maFontContainer.end() )
-    return NULL;
-    return (*it).second;
-}
-
-// -----------------------------------------------------------------------
+// =======================================================================
 

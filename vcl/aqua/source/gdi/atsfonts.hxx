@@ -19,39 +19,27 @@
  *
  *************************************************************/
 
-#ifndef _ATSFONTS_HXX
-#define _ATSFONTS_HXX
+// =======================================================================
 
-class ImplMacFontData;
-class ImplDevFontList;
-
-#include <premac.h>
-#include <ApplicationServices/ApplicationServices.h>
-#include <postmac.h>
-
-#include <map>
-
-/* This class has the responsibility of assembling a list
-   of atsui compatible fonts available on the system and
-   enabling access to that list.
- */
-class SystemFontList
+class AtsTextStyle
+:   public ImplMacTextStyle
 {
 public:
-    SystemFontList();
-    ~SystemFontList();
+    explicit    AtsTextStyle( const ImplFontSelectData& );
+    virtual     ~AtsTextStyle( void );
 
-    void AnnounceFonts( ImplDevFontList& ) const;
-    ImplMacFontData* GetFontDataFromId( ATSUFontID ) const;
+    virtual SalLayout* GetTextLayout( void ) const;
 
-    ATSUFontFallbacks maFontFallbacks;
+    virtual void    GetFontMetric( float fDPIY, ImplFontMetricData& ) const;
+    virtual bool    GetGlyphBoundRect( sal_GlyphId, Rectangle& ) const;
+    virtual bool    GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) const;
+
+    virtual void    SetTextColor( const RGBAColor& );
 
 private:
-    typedef std::hash_map<ATSUFontID,ImplMacFontData*> MacFontContainer;
-    MacFontContainer maFontContainer;
-
-    void InitGlyphFallbacks();
+    /// ATSU text style object
+    ATSUStyle   maATSUStyle;
 };
 
-#endif // _ATSFONTS_HXX
+// =======================================================================
 
