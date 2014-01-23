@@ -17,14 +17,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-
 # CppunitTest class
-
-# $(1): "Cppunit" or "Python"
-# $(2): the name of the unit test that failed
-define gb_UNIT_FAILED_MSG
-printf '\nError: a unit test failed, please do one of:\n\nexport DEBUGCPPUNIT=TRUE            # for exception catching\nexport CPPUNITTRACE="gdb --args" # for interactive debugging on linux\nexport CPPUNITTRACE="\"[full path to devenv.exe]\" /debugexe" # for interactive debugging in Visual Studio\nexport VALGRIND=memcheck            # for memory checking\n\nand retry using: make %sTest_%s\n\n' $(1) $(2)
-endef
 
 ifeq ($(strip $(DEBUGCPPUNIT)),TRUE)
 gb_CppunitTest_GDBTRACE := gdb -nx -ex "add-auto-load-safe-path $(INSTDIR)" --command=$(SRCDIR)/solenv/bin/gdbtrycatchtrace-stdout -return-child-result --args
@@ -96,7 +89,7 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_CPPTESTDEPS)
 			|| ($(if $(value gb_CppunitTest_postprocess), \
 					RET=$$?; \
 					$(call gb_CppunitTest_postprocess,$(gb_CppunitTest_CPPTESTCOMMAND),$@.core,$$RET) >> $@.log 2>&1;) \
-				cat $@.log; $(call gb_UNIT_FAILED_MSG,Cppunit,$*); false))))
+				cat $@.log; $(SRCDIR)/solenv/bin/unittest-failed.sh Cppunit $*))))
 
 define gb_CppunitTest_CppunitTest
 $(call gb_CppunitTest__CppunitTest_impl,$(1),$(call gb_CppunitTest_get_linktarget,$(1)))

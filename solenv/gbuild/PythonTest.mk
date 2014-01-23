@@ -51,10 +51,10 @@ $(call gb_PythonTest_get_target,%) :
 			$(MODULES) \
 		$(if $(gb_CppunitTest__interactive),, \
 			> $@.log 2>&1 \
-			|| (cat $@.log && $(call gb_UNIT_FAILED_MSG,Python,$*) \
+			|| (cat $@.log \
 				$(if $(value gb_CppunitTest_postprocess), \
 					&& $(call gb_CppunitTest_postprocess,$(gb_PythonTest_EXECUTABLE_GDB),$@.core,139)) \
-				&& false))))
+				&& $(SRCDIR)/solenv/bin/unittest-failed.sh Python $*))))
 
 # always use udkapi and URE services
 define gb_PythonTest_PythonTest
