@@ -96,7 +96,10 @@ SwFmtFld::SwFmtFld( const SwFmtFld& rAttr )
         {
             // input field in-place editing
             SetWhich( RES_TXTATR_INPUTFIELD );
-            dynamic_cast<SwInputField*>(GetField())->SetFmtFld( *this );
+            SwInputField *pField = dynamic_cast<SwInputField*>(GetField());
+            assert(pField);
+            if (pField)
+                pField->SetFmtFld( *this );
         }
         else if ( GetField()->GetTyp()->Which() == RES_POSTITFLD )
         {
