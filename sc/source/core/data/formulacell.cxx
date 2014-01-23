@@ -504,6 +504,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos ) :
     bTableOpDirty(false),
     bNeedListening(false),
     mbNeedsNumberFormat(false),
+    mbPostponedDirty(false),
     aPos(rPos)
 {
 }
@@ -532,6 +533,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     bTableOpDirty( false ),
     bNeedListening( false ),
     mbNeedsNumberFormat( false ),
+    mbPostponedDirty(false),
     aPos( rPos )
 {
     Compile( rFormula, true, eGrammar );    // bNoListening, Insert does that
@@ -563,6 +565,7 @@ ScFormulaCell::ScFormulaCell(
     bTableOpDirty( false ),
     bNeedListening( false ),
     mbNeedsNumberFormat( false ),
+    mbPostponedDirty(false),
     aPos( rPos )
 {
     assert(pArray); // Never pass a NULL pointer here.
@@ -611,6 +614,7 @@ ScFormulaCell::ScFormulaCell(
     bTableOpDirty( false ),
     bNeedListening( false ),
     mbNeedsNumberFormat( false ),
+    mbPostponedDirty(false),
     aPos( rPos )
 {
     // RPN array generation
@@ -658,6 +662,7 @@ ScFormulaCell::ScFormulaCell(
     bTableOpDirty( false ),
     bNeedListening( false ),
     mbNeedsNumberFormat( false ),
+    mbPostponedDirty(false),
     aPos( rPos )
 {
     if (bSubTotal)
@@ -686,6 +691,7 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
     bTableOpDirty( false ),
     bNeedListening( false ),
     mbNeedsNumberFormat( false ),
+    mbPostponedDirty(false),
     aPos( rPos )
 {
     pCode = rCell.pCode->Clone();
@@ -892,7 +898,7 @@ void ScFormulaCell::GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows )
 }
 
 bool ScFormulaCell::GetDirty() const { return bDirty; }
-void ScFormulaCell::ResetDirty() { bDirty = false; }
+void ScFormulaCell::ResetDirty() { bDirty = bTableOpDirty = mbPostponedDirty = false; }
 bool ScFormulaCell::NeedsListening() const { return bNeedListening; }
 void ScFormulaCell::SetNeedsListening( bool bVar ) { bNeedListening = bVar; }
 void ScFormulaCell::SetNeedNumberFormat( bool bVal ) { mbNeedsNumberFormat = bVal; }
@@ -1291,8 +1297,7 @@ void ScFormulaCell::Interpret()
                             // If one cell didn't converge, all cells of this
                             // circular dependency don't, no matter whether
                             // single cells did.
-                            pIterCell->bDirty = false;
-                            pIterCell->bTableOpDirty = false;
+                            pIterCell->ResetDirty();
                             pIterCell->aResult.SetResultError( errNoConvergence);
                             pIterCell->bChanged = true;
                         }
@@ -1449,8 +1454,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
 
         if( p->GetError() && p->GetError() != errCircularReference)
         {
-            bDirty = false;
-            bTableOpDirty = false;
+            ResetDirty();
             bChanged = true;
         }
         if (eTailParam == SCITP_FROM_ITERATION && IsDirtyOrInTableOpDirty())
@@ -1473,8 +1477,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
                 if (nSeenInIteration > 1 ||
                         pDocument->GetDocOptions().GetIterCount() == 1)
                 {
-                    bDirty = false;
-                    bTableOpDirty = false;
+                    ResetDirty();
                 }
             }
         }
@@ -1575,8 +1578,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         }
         if (eTailParam == SCITP_NORMAL)
         {
-            bDirty = false;
-            bTableOpDirty = false;
+            ResetDirty();
         }
         if( aResult.GetMatrix() )
         {
@@ -1655,8 +1657,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
     {
         // Cells with compiler errors should not be marked dirty forever
         OSL_ENSURE( pCode->GetCodeError(), "no RPN code und no errors ?!?!" );
-        bDirty = false;
-        bTableOpDirty = false;
+        ResetDirty();
     }
 }
 
@@ -1758,7 +1759,7 @@ void ScFormulaCell::SetDirty( bool bDirtyFlag )
             // by Scenario and Copy Block From Clip.
             // If unconditional required Formula tracking is set before SetDirty
             // bDirty = false, eg in CompileTokenArray
-            if ( !bDirty || !pDocument->IsInFormulaTree( this ) )
+            if ( !bDirty || mbPostponedDirty || !pDocument->IsInFormulaTree( this ) )
             {
                 if( bDirtyFlag )
                     SetDirtyVar();
@@ -1775,6 +1776,7 @@ void ScFormulaCell::SetDirty( bool bDirtyFlag )
 void ScFormulaCell::SetDirtyVar()
 {
     bDirty = true;
+    mbPostponedDirty = false;
     if (mxGroup && mxGroup->meCalcState == sc::GroupCalcRunning)
         mxGroup->meCalcState = sc::GroupCalcEnabled;
 
@@ -2567,8 +2569,9 @@ bool ScFormulaCell::UpdateReferenceOnShift(
 
     if (bNeedDirty && !bHasRelName)
     {   // Cut off references, invalid or similar?
-        sc::AutoCalcSwitch(*pDocument, false);
-        SetDirty();
+        // Postpone SetDirty() until all listeners have been re-established in
+        // Inserts/Deletes.
+        mbPostponedDirty = true;
     }
 
     return bCellStateChanged;
@@ -3860,6 +3863,11 @@ ScTokenArray* ScFormulaCell::GetSharedCode()
 const ScTokenArray* ScFormulaCell::GetSharedCode() const
 {
     return mxGroup ? mxGroup->mpCode : NULL;
+}
+
+bool ScFormulaCell::IsPostponedDirty() const
+{
+    return mbPostponedDirty;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

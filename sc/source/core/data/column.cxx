@@ -2806,11 +2806,11 @@ struct SetDirtyAfterLoadHandler
     }
 };
 
-struct SetRelNameDirtyHandler
+struct SetDirtyIfPostponedHandler
 {
     void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
     {
-        if (pCell->HasRelNameReference())
+        if (pCell->IsPostponedDirty() || pCell->HasRelNameReference())
             pCell->SetDirty();
     }
 };
@@ -3144,10 +3144,10 @@ public:
 
 }
 
-void ScColumn::SetRelNameDirty()
+void ScColumn::SetDirtyIfPostponed()
 {
     sc::AutoCalcSwitch aSwitch(*pDocument, false);
-    SetRelNameDirtyHandler aFunc;
+    SetDirtyIfPostponedHandler aFunc;
     sc::ProcessFormula(maCells, aFunc);
 }
 
