@@ -233,6 +233,8 @@ SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId )
 ,   maImgGraphic         ( BitmapEx( SdResId( BMP_GRAPHIC ) ) )
 ,   mbLinkableSelected  ( sal_False )
 ,   mpDropNavWin        ( NULL )
+,   mpFrame             ( NULL )
+,   mbSaveTreeItemState ( false )
 ,   mbShowAllShapes     ( false )
 ,   mbShowAllPages      ( false )
 {
@@ -252,6 +254,7 @@ SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId )
 
 SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, WinBits nStyle )
 :   SvTreeListBox       ( pParentWin, nStyle )
+,   bisInSdNavigatorWin ( false )
 ,   mpParent            ( pParentWin )
 ,   mpDoc               ( NULL )
 ,   mpBookmarkDoc       ( NULL )
@@ -261,9 +264,10 @@ SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, WinBits nStyle )
 ,   maImgGraphic         ( BitmapEx( SdResId( BMP_GRAPHIC ) ) )
 ,   mbLinkableSelected  ( sal_False )
 ,   mpDropNavWin        ( NULL )
+,   mpFrame             ( NULL )
+,   mbSaveTreeItemState ( false )
 ,   mbShowAllShapes     ( false )
 ,   mbShowAllPages      ( false )
-
 {
     // add lines to Tree-ListBox
     SetStyle( GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES |

@@ -130,10 +130,8 @@ protected:
     Image                   maImgOle;
     Image                   maImgGraphic;
     sal_Bool                mbLinkableSelected;
-    sal_Bool                mbDragEnabled;
     OUString                maDocName;
     ::sd::DrawDocShellRef   mxBookmarkDocShRef; ///< for the loading of bookmarks
-    ::sd::DrawDocShell*     mpDropDocSh;
     SdNavigatorWin*         mpDropNavWin;
     SfxViewFrame*           mpFrame;
     vector<OUString>        maTreeItem;
@@ -226,7 +224,6 @@ public:
     std::vector<OUString> GetSelectEntryList (const sal_uInt16 nDepth) const;
 
     SdDrawDocument*         GetBookmarkDoc(SfxMedium* pMedium = NULL);
-    ::sd::DrawDocShell*     GetDropDocSh() { return(mpDropDocSh); }
 
     sal_Bool                    IsLinkableSelected() const { return mbLinkableSelected; }
 
