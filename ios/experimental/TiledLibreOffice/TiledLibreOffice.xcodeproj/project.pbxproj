@@ -165,6 +165,7 @@
 		BE35B5A1188FFA88001B7439 /* typeprovider.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = typeprovider.cxx; path = ../../../cppuhelper/source/typeprovider.cxx; sourceTree = "<group>"; };
 		BE35B5A2188FFA88001B7439 /* unourl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = unourl.cxx; path = ../../../cppuhelper/source/unourl.cxx; sourceTree = "<group>"; };
 		BE35B5A3188FFA88001B7439 /* weak.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = weak.cxx; path = ../../../cppuhelper/source/weak.cxx; sourceTree = "<group>"; };
+		BE35B5A71890520E001B7439 /* objface.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = objface.cxx; path = ../../../sfx2/source/control/objface.cxx; sourceTree = "<group>"; };
 		BE82BD7218218E2E00A447B5 /* TiledLibreOffice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TiledLibreOffice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE82BD7518218E2E00A447B5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BE82BD7718218E2E00A447B5 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -430,10 +431,19 @@
 			name = cppuhelper;
 			sourceTree = "<group>";
 		};
+		BE35B5A6189051F7001B7439 /* sfx2 */ = {
+			isa = PBXGroup;
+			children = (
+				BE35B5A71890520E001B7439 /* objface.cxx */,
+			);
+			name = sfx2;
+			sourceTree = "<group>";
+		};
 		BE82BD6918218E2E00A447B5 = {
 			isa = PBXGroup;
 			children = (
 				BE0898E61860D3CD0021A679 /* LibreOffice source files */,
+				BE35B5A6189051F7001B7439 /* sfx2 */,
 				BE82BD7B18218E2E00A447B5 /* TiledLibreOffice */,
 				BEEEF9681860A21F00FBDE67 /* Resources */,
 				BE82BD7418218E2E00A447B5 /* Frameworks */,
