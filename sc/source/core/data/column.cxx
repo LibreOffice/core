@@ -2168,14 +2168,14 @@ void ScColumn::SetDirtyAfterLoad()
 }
 
 
-void ScColumn::SetRelNameDirty()
+void ScColumn::SetDirtyIfPostponed()
 {
     bool bOldAutoCalc = pDocument->GetAutoCalc();
     pDocument->SetAutoCalc( false );    // no multiple recalculation
     for (SCSIZE i=0; i<maItems.size(); i++)
     {
         ScFormulaCell* p = (ScFormulaCell*) maItems[i].pCell;
-        if( p->GetCellType() == CELLTYPE_FORMULA && p->HasRelNameReference() )
+        if( p->GetCellType() == CELLTYPE_FORMULA && (p->IsPostponedDirty() || p->HasRelNameReference()) )
             p->SetDirty();
     }
     pDocument->SetAutoCalc( bOldAutoCalc );

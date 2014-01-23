@@ -446,7 +446,7 @@ public:
     void        MoveListeners( SvtBroadcaster& rSource, SCROW nDestRow );
     void        StartAllListeners();
     void        StartNeededListeners(); // only for cells where NeedsListening()==true
-    void        SetRelNameDirty();
+    void        SetDirtyIfPostponed();
     void BroadcastRecalcOnRefMove();
 
     void        CompileDBFormula();
