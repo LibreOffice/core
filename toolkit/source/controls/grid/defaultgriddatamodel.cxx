@@ -17,38 +17,103 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include "defaultgriddatamodel.hxx"
+#include <com/sun/star/awt/grid/XMutableGridDataModel.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <comphelper/componentguard.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <toolkit/helper/servicenames.hxx>
 #include <tools/diagnose_ex.h>
-#include <rtl/ref.hxx>
+#include <toolkit/helper/mutexandbroadcasthelper.hxx>
 
 #include <algorithm>
 #include <functional>
+#include <vector>
 #include <boost/bind.hpp>
 
-//......................................................................................................................
-namespace toolkit
-//......................................................................................................................
-{
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::lang::XComponent;
-    using ::com::sun::star::lang::EventObject;
-    using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::util::XCloneable;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::awt::grid;
+using namespace ::com::sun::star::lang;
 
-    //==================================================================================================================
-    //= DefaultGridDataModel
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+namespace {
+
+enum broadcast_type { row_added, row_removed, data_changed};
+
+typedef ::cppu::WeakComponentImplHelper2    <   XMutableGridDataModel
+                                            ,   XServiceInfo
+                                            >   DefaultGridDataModel_Base;
+
+class DefaultGridDataModel  :public ::cppu::BaseMutex
+                            ,public DefaultGridDataModel_Base
+{
+public:
+    DefaultGridDataModel();
+    DefaultGridDataModel( DefaultGridDataModel const & i_copySource );
+    virtual ~DefaultGridDataModel();
+
+    // XMutableGridDataModel
+    virtual void SAL_CALL addRow( const Any& i_heading, const css::uno::Sequence< css::uno::Any >& Data ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL addRows( const css::uno::Sequence< css::uno::Any>& Headings, const css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& Data ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    virtual void SAL_CALL insertRow( ::sal_Int32 i_index, const css::uno::Any& i_heading, const css::uno::Sequence< css::uno::Any >& Data ) throw (css::uno::RuntimeException, css::lang::IndexOutOfBoundsException);
+    virtual void SAL_CALL insertRows( ::sal_Int32 i_index, const css::uno::Sequence< css::uno::Any>& Headings, const css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& Data ) throw (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    virtual void SAL_CALL removeRow( ::sal_Int32 RowIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    virtual void SAL_CALL removeAllRows(  ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL updateCellData( ::sal_Int32 ColumnIndex, ::sal_Int32 RowIndex, const css::uno::Any& Value ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    virtual void SAL_CALL updateRowData( const css::uno::Sequence< ::sal_Int32 >& ColumnIndexes, ::sal_Int32 RowIndex, const css::uno::Sequence< css::uno::Any >& Values ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    virtual void SAL_CALL updateRowHeading( ::sal_Int32 RowIndex, const css::uno::Any& Heading ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    virtual void SAL_CALL updateCellToolTip( ::sal_Int32 ColumnIndex, ::sal_Int32 RowIndex, const css::uno::Any& Value ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    virtual void SAL_CALL updateRowToolTip( ::sal_Int32 RowIndex, const css::uno::Any& Value ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    virtual void SAL_CALL addGridDataListener( const css::uno::Reference< css::awt::grid::XGridDataListener >& Listener ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL removeGridDataListener( const css::uno::Reference< css::awt::grid::XGridDataListener >& Listener ) throw (css::uno::RuntimeException);
+
+    // XGridDataModel
+    virtual ::sal_Int32 SAL_CALL getRowCount() throw (css::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getColumnCount() throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getCellData( ::sal_Int32 Column, ::sal_Int32 Row ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getCellToolTip( ::sal_Int32 Column, ::sal_Int32 Row ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getRowHeading( ::sal_Int32 RowIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    virtual css::uno::Sequence< css::uno::Any > SAL_CALL getRowData( ::sal_Int32 RowIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+
+    // OComponentHelper
+    virtual void SAL_CALL disposing();
+
+    // XCloneable
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException);
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
+    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException);
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
+
+private:
+    typedef ::std::pair< Any, Any >     CellData;
+    typedef ::std::vector< CellData >   RowData;
+    typedef ::std::vector< RowData >    GridData;
+
+    void broadcast(
+        GridDataEvent const & i_event,
+        void ( SAL_CALL css::awt::grid::XGridDataListener::*i_listenerMethod )( css::awt::grid::GridDataEvent const & ),
+        ::comphelper::ComponentGuard & i_instanceLock
+    );
+
+    void    impl_insertRow( sal_Int32 const i_position, Any const & i_heading, Sequence< Any > const & i_rowData, sal_Int32 const i_assumedColCount = -1 );
+
+    ::sal_Int32 impl_getRowCount_nolck() const { return sal_Int32( m_aData.size() ); }
+
+    CellData const &    impl_getCellData_throw( sal_Int32 const i_columnIndex, sal_Int32 const i_rowIndex ) const;
+    CellData&           impl_getCellDataAccess_throw( sal_Int32 const i_columnIndex, sal_Int32 const i_rowIndex );
+    RowData&            impl_getRowDataAccess_throw( sal_Int32 const i_rowIndex, size_t const i_requiredColumnCount );
+
+    GridData m_aData;
+    ::std::vector< css::uno::Any > m_aRowHeaders;
+    sal_Int32 m_nColumnCount;
+};
+
     DefaultGridDataModel::DefaultGridDataModel()
         :DefaultGridDataModel_Base( m_aMutex )
         ,m_aRowHeaders()
@@ -420,8 +485,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     OUString SAL_CALL DefaultGridDataModel::getImplementationName(  ) throw (RuntimeException)
     {
-        static const OUString aImplName( "toolkit.DefaultGridDataModel" );
-        return aImplName;
+        return OUString("stardiv.Toolkit.DefaultGridDataModel");
     }
 
     sal_Bool SAL_CALL DefaultGridDataModel::supportsService( const OUString& ServiceName ) throw (RuntimeException)
@@ -431,24 +495,25 @@ namespace toolkit
 
     Sequence< OUString > SAL_CALL DefaultGridDataModel::getSupportedServiceNames(  ) throw (RuntimeException)
     {
-        static const OUString aServiceName( OUString::createFromAscii( szServiceName_DefaultGridDataModel ) );
+        static const OUString aServiceName("com.sun.star.awt.grid.DefaultGridDataModel");
         static const Sequence< OUString > aSeq( &aServiceName, 1 );
         return aSeq;
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Reference< XCloneable > SAL_CALL DefaultGridDataModel::createClone(  ) throw (RuntimeException)
+    Reference< css::util::XCloneable > SAL_CALL DefaultGridDataModel::createClone(  ) throw (RuntimeException)
     {
         return new DefaultGridDataModel( *this );
     }
 
-//......................................................................................................................
-}   // namespace toolkit
-//......................................................................................................................
+}
 
-Reference< XInterface > SAL_CALL DefaultGridDataModel_CreateInstance( const Reference< XMultiServiceFactory >& )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_DefaultGridDataModel_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::DefaultGridDataModel() );
+    return cppu::acquire(new DefaultGridDataModel());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
