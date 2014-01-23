@@ -89,7 +89,7 @@ SdActionDlg::SdActionDlg (
     ( (SdTPAction*) pNewPage )->SetView( pView );
     ( (SdTPAction*) pNewPage )->Construct();
 
-    setTabPage( pNewPage );
+    SetTabPage( pNewPage );
 }
 
 

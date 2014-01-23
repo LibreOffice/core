@@ -60,7 +60,7 @@ SvxConnectionDialog::SvxConnectionDialog( Window* pParent, const SfxItemSet& rIn
     _pPage->SetView( pSdrView );
     _pPage->Construct();
 
-    setTabPage( _pPage );
+    SetTabPage( _pPage );
     SetText(CUI_RESSTR( RID_SVXSTR_CONNECTOR ));
 }
 

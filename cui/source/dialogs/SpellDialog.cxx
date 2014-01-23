@@ -506,7 +506,7 @@ void SpellDialog::StartSpellOptDlg_Impl()
         new SfxSingleTabDialog(this, aSet, "SpellOptionsDialog", "cui/ui/spelloptionsdialog.ui");
     SfxTabPage* pPage = SvxLinguTabPage::Create( pDlg->get_content_area(), aSet );
     ( (SvxLinguTabPage*)pPage )->HideGroups( GROUP_MODULES );
-    pDlg->setTabPage( pPage );
+    pDlg->SetTabPage( pPage );
     if(RET_OK == pDlg->Execute())
     {
         InitUserDicts();

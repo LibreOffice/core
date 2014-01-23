@@ -526,7 +526,7 @@ SwDropCapsDlg::SwDropCapsDlg(Window *pParent, const SfxItemSet &rSet )
 {
     SwDropCapsPage* pNewPage = (SwDropCapsPage*) SwDropCapsPage::Create(get_content_area(), rSet);
     pNewPage->SetFormat(false);
-    setTabPage(pNewPage);
+    SetTabPage(pNewPage);
 }
 
 SwDropCapsPage::SwDropCapsPage(Window *pParent, const SfxItemSet &rSet)

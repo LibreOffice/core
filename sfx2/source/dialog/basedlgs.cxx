@@ -648,9 +648,9 @@ void SfxFloatingWindow::FillInfo(SfxChildWinInfo& rInfo) const
         rInfo.nFlags |= SFX_CHILDWIN_ZOOMIN;
 }
 
-// SfxSingleTabDialogBase ----------------------------------------------------
+// SfxSingleTabDialog ----------------------------------------------------
 
-IMPL_LINK_NOARG(SfxSingleTabDialogBase, OKHdl_Impl)
+IMPL_LINK_NOARG(SfxSingleTabDialog, OKHdl_Impl)
 
 /*  [Description]
 
@@ -698,76 +698,25 @@ IMPL_LINK_NOARG(SfxSingleTabDialogBase, OKHdl_Impl)
 
 // -----------------------------------------------------------------------
 
-SfxSingleTabDialogBase::SfxSingleTabDialogBase
-(
-    Window *pParent,
-    const SfxItemSet& rSet,
-    sal_uInt16 nUniqueId
-) :
-
-/*  [Description]
-
-    Constructor of the general base class for SingleTab-Dialoge;
-    ID for the ini-file is handed over.
-*/
-
-    SfxModalDialog( pParent, nUniqueId, WinBits( WB_STDMODAL | WB_3DLOOK ) ),
-
-    pOKBtn          ( 0 ),
-    pCancelBtn      ( 0 ),
-    pHelpBtn        ( 0 ),
-    pImpl           ( new SingleTabDlgImpl )
-{
-    DBG_WARNING( "please use the constructor with ViewFrame" );
-    SetInputSet( &rSet );
-}
-
-// -----------------------------------------------------------------------
-
-SfxSingleTabDialogBase::SfxSingleTabDialogBase
-(
-    Window* pParent,
-    sal_uInt16 nUniqueId,
-    const SfxItemSet* pInSet
-)
-
-/*  [Description]
-
-    Constructor of the general base class for SingleTab-Dialoge;
-    ID for the ini-file is handed over.
-    Deprecated.
- */
-
-:   SfxModalDialog( pParent, nUniqueId, WinBits( WB_STDMODAL | WB_3DLOOK ) ),
-
-    pOKBtn          ( 0 ),
-    pCancelBtn      ( 0 ),
-    pHelpBtn        ( 0 ),
-    pImpl           ( new SingleTabDlgImpl )
-{
-    DBG_WARNING( "please use the constructor with ViewFrame" );
-    SetInputSet( pInSet );
-}
-
-SfxSingleTabDialogBase::SfxSingleTabDialogBase(Window *pParent, const SfxItemSet& rSet,
+SfxSingleTabDialog::SfxSingleTabDialog(Window *pParent, const SfxItemSet& rSet,
     const OString& rID, const OUString& rUIXMLDescription)
     : SfxModalDialog(pParent, rID, rUIXMLDescription)
     , pImpl(new SingleTabDlgImpl)
 {
     get(pOKBtn, "ok");
-    pOKBtn->SetClickHdl( LINK( this, SfxSingleTabDialogBase, OKHdl_Impl ) );
+    pOKBtn->SetClickHdl( LINK( this, SfxSingleTabDialog, OKHdl_Impl ) );
     get(pCancelBtn, "cancel");
     get(pHelpBtn, "help");
     SetInputSet( &rSet );
 }
 
-SfxSingleTabDialogBase::SfxSingleTabDialogBase(Window* pParent, const SfxItemSet* pInSet,
+SfxSingleTabDialog::SfxSingleTabDialog(Window* pParent, const SfxItemSet* pInSet,
     const OString& rID, const OUString& rUIXMLDescription)
     : SfxModalDialog(pParent, rID, rUIXMLDescription)
     , pImpl(new SingleTabDlgImpl)
 {
     get(pOKBtn, "ok");
-    pOKBtn->SetClickHdl( LINK( this, SfxSingleTabDialogBase, OKHdl_Impl ) );
+    pOKBtn->SetClickHdl( LINK( this, SfxSingleTabDialog, OKHdl_Impl ) );
     get(pCancelBtn, "cancel");
     get(pHelpBtn, "help");
     SetInputSet( pInSet );
@@ -775,14 +724,14 @@ SfxSingleTabDialogBase::SfxSingleTabDialogBase(Window* pParent, const SfxItemSet
 
 // -----------------------------------------------------------------------
 
-SfxSingleTabDialogBase::~SfxSingleTabDialogBase()
+SfxSingleTabDialog::~SfxSingleTabDialog()
 {
     delete pImpl->m_pSfxPage;
     delete pImpl->m_pLine;
     delete pImpl;
 }
 
-void SfxSingleTabDialog::setTabPage(SfxTabPage* pTabPage,
+void SfxSingleTabDialog::SetTabPage(SfxTabPage* pTabPage,
     GetTabPageRanges pRangesFunc, sal_uInt32 nSettingsId)
 /*  [Description]
 
@@ -823,79 +772,6 @@ void SfxSingleTabDialog::setTabPage(SfxTabPage* pTabPage,
         if (!sUniqueId.isEmpty())
             SetUniqueId(sUniqueId);
     }
-}
-
-// -----------------------------------------------------------------------
-
-void SfxNoLayoutSingleTabDialog::SetTabPage( SfxTabPage* pTabPage,
-                                     GetTabPageRanges pRangesFunc )
-/*  [Description]
-
-    Insert a (new) TabPage; an existing page is deleted.
-    The passed on page is initialized with the initially given Itemset
-    through calling Reset().
-*/
-
-{
-    if ( !pOKBtn )
-    {
-        pOKBtn = new OKButton( this, WB_DEFBUTTON );
-        pOKBtn->SetClickHdl( LINK( this, SfxSingleTabDialogBase, OKHdl_Impl ) );
-    }
-    if ( !pCancelBtn )
-        pCancelBtn = new CancelButton( this );
-    if ( !pHelpBtn )
-        pHelpBtn = new HelpButton( this );
-
-    delete pImpl->m_pSfxPage;
-    pImpl->m_pSfxPage = pTabPage;
-    fnGetRanges = pRangesFunc;
-
-    if ( pImpl->m_pSfxPage )
-    {
-        // First obtain the user data, only then Reset()
-        SvtViewOptions aPageOpt( E_TABPAGE, OUString::number( GetUniqId() ) );
-        OUString sUserData;
-        Any aUserItem = aPageOpt.GetUserItem( USERITEM_NAME );
-        OUString aTemp;
-        if ( aUserItem >>= aTemp )
-            sUserData = aTemp;
-        pImpl->m_pSfxPage->SetUserData( sUserData );
-        pImpl->m_pSfxPage->Reset( *GetInputItemSet() );
-        pImpl->m_pSfxPage->Show();
-
-        // Adjust size and position
-        pImpl->m_pSfxPage->SetPosPixel( Point() );
-        Size aOutSz( pImpl->m_pSfxPage->GetSizePixel() );
-        Size aBtnSiz = LogicToPixel( Size( 50, 14 ), MAP_APPFONT );
-        Point aPnt( aOutSz.Width(), LogicToPixel( Point( 0, 6 ), MAP_APPFONT ).Y() );
-        aOutSz.Width() += aBtnSiz.Width() + LogicToPixel( Size( 6, 0 ), MAP_APPFONT ).Width();
-        SetOutputSizePixel( aOutSz );
-        pOKBtn->SetPosSizePixel( aPnt, aBtnSiz );
-        pOKBtn->Show();
-        aPnt.Y() = LogicToPixel( Point( 0, 23 ), MAP_APPFONT ).Y();
-        pCancelBtn->SetPosSizePixel( aPnt, aBtnSiz );
-        pCancelBtn->Show();
-        aPnt.Y() = LogicToPixel( Point( 0, 43 ), MAP_APPFONT ).Y();
-        pHelpBtn->SetPosSizePixel( aPnt, aBtnSiz );
-
-        if ( Help::IsContextHelpEnabled() )
-            pHelpBtn->Show();
-
-        // Set TabPage text in the Dialog
-        SetText( pImpl->m_pSfxPage->GetText() );
-
-        // Dialog receives the HelpId of TabPage
-        SetHelpId( pImpl->m_pSfxPage->GetHelpId() );
-        SetUniqueId( pImpl->m_pSfxPage->GetUniqueId() );
-    }
-}
-
-SfxNoLayoutSingleTabDialog::~SfxNoLayoutSingleTabDialog()
-{
-    delete pOKBtn;
-    delete pCancelBtn;
-    delete pHelpBtn;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -474,7 +474,7 @@ SfxMacroAssignDlg::SfxMacroAssignDlg(Window* pParent,
 {
     SfxMacroTabPage* pPage = CreateSfxMacroTabPage(get_content_area(), rSet);
     pPage->SetFrame( rxDocumentFrame );
-    setTabPage( pPage );
+    SetTabPage( pPage );
     pPage->LaunchFillGroup();
 }
 

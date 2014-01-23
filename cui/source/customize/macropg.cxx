@@ -873,7 +873,7 @@ SvxMacroAssignDlg::SvxMacroAssignDlg( Window* pParent, const Reference< frame::X
     const Reference< container::XNameReplace >& xNameReplace, sal_uInt16 nSelectedIndex )
         : SvxMacroAssignSingleTabDialog(pParent, rSet)
 {
-    setTabPage(new SvxMacroTabPage(get_content_area(), _rxDocumentFrame, rSet, xNameReplace, nSelectedIndex));
+    SetTabPage(new SvxMacroTabPage(get_content_area(), _rxDocumentFrame, rSet, xNameReplace, nSelectedIndex));
 }
 
 //===============================================

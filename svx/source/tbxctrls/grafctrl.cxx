@@ -748,7 +748,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                     SfxTabPage* pTabPage = (*fnCreatePage)( aCropDialog.get_content_area(), aCropDlgAttr );
 
                     pTabPage->SetText( aCropStr );
-                    aCropDialog.setTabPage( pTabPage );
+                    aCropDialog.SetTabPage( pTabPage );
 
                     if( aCropDialog.Execute() == RET_OK )
                     {

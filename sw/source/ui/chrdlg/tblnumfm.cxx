@@ -44,7 +44,7 @@ SwNumFmtDlg::SwNumFmtDlg(Window* pParent, const SfxItemSet& rSet)
         SfxAllItemSet aSet(*(rSet.GetPool()));
         aSet.Put ( SvxNumberInfoItem( (const SvxNumberInfoItem&)pNewPage->GetItemSet().Get( SID_ATTR_NUMBERFORMAT_INFO )));
         pNewPage->PageCreated(aSet);
-        setTabPage(pNewPage);
+        SetTabPage(pNewPage);
     }
 }
 

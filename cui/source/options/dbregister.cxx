@@ -79,7 +79,7 @@ DatabaseRegistrationDialog::DatabaseRegistrationDialog( Window* pParent, const S
     , SfxSingleTabDialog(pParent, getRegistrationItems())
 {
     SfxTabPage* page = DbRegistrationOptionsPage::Create(get_content_area(), getRegistrationItems());
-    setTabPage(page);
+    SetTabPage(page);
     SetText(page->get<VclFrame>("frame1")->get_label());
 }
 

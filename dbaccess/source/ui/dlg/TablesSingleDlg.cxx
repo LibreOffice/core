@@ -56,7 +56,7 @@ OTableSubscriptionDialog::OTableSubscriptionDialog(Window* pParent
 
     OTableSubscriptionPage* pTabPage = new OTableSubscriptionPage(get_content_area(), *m_pOutSet, this);
     pTabPage->SetServiceFactory(_rxORB);
-    setTabPage(pTabPage);
+    SetTabPage(pTabPage);
 }
 
 OTableSubscriptionDialog::~OTableSubscriptionDialog()

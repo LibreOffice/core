@@ -56,7 +56,7 @@ SvxJSearchOptionsDialog::SvxJSearchOptionsDialog(Window *pParent,
     // SfxSingleTabDialog destructor
     pPage = (SvxJSearchOptionsPage *)
         SvxJSearchOptionsPage::Create(get_content_area(), rOptionsSet );
-    setTabPage( pPage );    //! implicitly calls pPage->Reset(...)!
+    SetTabPage( pPage );    //! implicitly calls pPage->Reset(...)!
     pPage->EnableSaveOptions(false);
 }
 

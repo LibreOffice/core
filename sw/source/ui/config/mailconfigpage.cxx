@@ -357,7 +357,7 @@ SwMailConfigDlg::SwMailConfigDlg(Window* pParent, SfxItemSet& rSet)
     : SfxSingleTabDialog(pParent, rSet)
 {
     // create TabPage
-    setTabPage(SwMailConfigPage::Create(get_content_area(), rSet));
+    SetTabPage(SwMailConfigPage::Create(get_content_area(), rSet));
 }
 
 SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(

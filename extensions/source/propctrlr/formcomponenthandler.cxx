@@ -2730,7 +2730,7 @@ namespace pcr
                 throw RuntimeException();   // caught below
 
             SfxTabPage* pPage = (*fnCreatePage)( xDialog->get_content_area(), aCoreSet );
-            xDialog->setTabPage( pPage );
+            xDialog->SetTabPage( pPage );
 
             _rClearBeforeDialog.clear();
             if ( RET_OK == xDialog->Execute() )

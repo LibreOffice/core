@@ -317,7 +317,7 @@ SwCaptionOptDlg::SwCaptionOptDlg(Window* pParent, const SfxItemSet& rSet)
         "modules/swriter/ui/captiondialog.ui")
 {
     // create TabPage
-    setTabPage(SwCaptionOptPage::Create(get_content_area(), rSet));
+    SetTabPage(SwCaptionOptPage::Create(get_content_area(), rSet));
 }
 
 SwCaptionPreview::SwCaptionPreview( Window* pParent, WinBits nStyle )
@@ -746,7 +746,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ModifyHdl)
 {
     OUString sFldTypeName = m_pCategoryBox->GetText();
 
-    SfxSingleTabDialogBase *pDlg = dynamic_cast<SfxSingleTabDialogBase*>(GetParentDialog());
+    SfxSingleTabDialog *pDlg = dynamic_cast<SfxSingleTabDialog*>(GetParentDialog());
     PushButton *pBtn = pDlg ? pDlg->GetOKButton() : NULL;
     if (pBtn)
         pBtn->Enable(!sFldTypeName.isEmpty());

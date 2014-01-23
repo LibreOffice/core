@@ -69,7 +69,7 @@ SvxMeasureDialog::SvxMeasureDialog( Window* pParent, const SfxItemSet& rInAttrs,
     _pPage->SetView( pSdrView );
     _pPage->Construct();
 
-    setTabPage(_pPage );
+    SetTabPage(_pPage );
     SetText(CUI_RESSTR(RID_SVXSTR_DIMENSION_LINE));
 }
 

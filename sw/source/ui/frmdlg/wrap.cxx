@@ -60,7 +60,7 @@ SwWrapDlg::SwWrapDlg(Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bD
     SwWrapTabPage* pNewPage = (SwWrapTabPage*) SwWrapTabPage::Create(get_content_area(), rSet);
     pNewPage->SetFormatUsed(sal_False, bDrawMode);
     pNewPage->SetShell(pWrtShell);
-    setTabPage(pNewPage);
+    SetTabPage(pNewPage);
 }
 
 SwWrapTabPage::SwWrapTabPage(Window *pParent, const SfxItemSet &rSet)

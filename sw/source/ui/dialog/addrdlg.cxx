@@ -30,7 +30,7 @@ SwAddrDlg::SwAddrDlg(Window* pParent, const SfxItemSet& rSet)
     if ( fnCreatePage )
     {
         SfxTabPage* pPage2 = (*fnCreatePage)(get_content_area(), rSet);
-        setTabPage(pPage2);
+        SetTabPage(pPage2);
     }
 }
 

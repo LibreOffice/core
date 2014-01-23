@@ -46,7 +46,7 @@ SvxDistributeDialog::SvxDistributeDialog(Window* pParent,
     , mpPage(NULL)
 {
     mpPage = new SvxDistributePage(get_content_area(), rInAttrs, eHor, eVer);
-    setTabPage(mpPage);
+    SetTabPage(mpPage);
 }
 
 /*************************************************************************
