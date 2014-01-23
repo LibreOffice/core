@@ -181,12 +181,10 @@ extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL GridColumn_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SortableGridDataModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
 
-extern void * SAL_CALL comp_AsyncCallback_component_getFactory( const char * implName, void * serviceManager, void * registryKey );
-
 extern "C"
 {
 
-TOOLKIT_DLLPUBLIC void* SAL_CALL tk_component_getFactory( const sal_Char* sImplementationName, void* _pServiceManager, void* _pRegistryKey )
+TOOLKIT_DLLPUBLIC void* SAL_CALL tk_component_getFactory( const sal_Char* sImplementationName, void* _pServiceManager, void* )
 {
 
     void* pRet = NULL;
@@ -267,9 +265,6 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL tk_component_getFactory( const sal_Char* sImple
         GET_FACTORY( DefaultGridColumnModel, szServiceName_DefaultGridColumnModel, NULL );
         GET_FACTORY_WITH_IMPL_PREFIX( GridColumn, "org.openoffice.comp.toolkit", szServiceName_GridColumn, NULL );
         GET_FACTORY_WITH_IMPL_PREFIX( SortableGridDataModel, "org.openoffice.comp.toolkit", szServiceName_SortableGridDataModel, NULL );
-
-        if ( rtl_str_compare( sImplementationName, "com.sun.star.awt.comp.AsyncCallback" ) == 0 )
-            return comp_AsyncCallback_component_getFactory( sImplementationName, _pServiceManager, _pRegistryKey );
     }
     return pRet;
 }

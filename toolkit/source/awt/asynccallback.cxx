@@ -28,19 +28,6 @@
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/awt/XRequestCallback.hpp"
 
-
-// component helper namespace
-namespace comp_AsyncCallback {
-
-// component and service helper functions:
-OUString SAL_CALL _getImplementationName();
-css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames();
-css::uno::Reference< css::uno::XInterface > SAL_CALL _create( css::uno::Reference< css::uno::XComponentContext > const & context );
-
-} // closing component helper namespace
-
-
-
 /// anonymous implementation namespace
 namespace {
 
@@ -50,7 +37,7 @@ class AsyncCallback:
         css::awt::XRequestCallback>
 {
 public:
-    explicit AsyncCallback(css::uno::Reference< css::uno::XComponentContext > const & context);
+    AsyncCallback() {}
 
     // ::com::sun::star::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException);
@@ -77,18 +64,12 @@ private:
     void operator =(AsyncCallback &); // not defined
 
     virtual ~AsyncCallback() {}
-
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 };
-
-AsyncCallback::AsyncCallback(css::uno::Reference< css::uno::XComponentContext > const & context) :
-    m_xContext(context)
-{}
 
 // com.sun.star.uno.XServiceInfo:
 OUString SAL_CALL AsyncCallback::getImplementationName() throw (css::uno::RuntimeException)
 {
-    return comp_AsyncCallback::_getImplementationName();
+    return OUString("com.sun.star.awt.comp.AsyncCallback");
 }
 
 ::sal_Bool SAL_CALL AsyncCallback::supportsService(OUString const & serviceName) throw (css::uno::RuntimeException)
@@ -98,7 +79,9 @@ OUString SAL_CALL AsyncCallback::getImplementationName() throw (css::uno::Runtim
 
 css::uno::Sequence< OUString > SAL_CALL AsyncCallback::getSupportedServiceNames() throw (css::uno::RuntimeException)
 {
-    return comp_AsyncCallback::_getSupportedServiceNames();
+    css::uno::Sequence< OUString > s(1);
+    s[0] = "com.sun.star.awt.AsyncCallback";
+    return s;
 }
 
 // ::com::sun::star::awt::XRequestCallback:
@@ -133,45 +116,12 @@ IMPL_STATIC_LINK_NOINSTANCE( AsyncCallback, Notify_Impl, CallbackData*, pCallbac
 
 } // closing anonymous implementation namespace
 
-
-
-// component helper namespace
-namespace comp_AsyncCallback {
-
-OUString SAL_CALL _getImplementationName() {
-    return OUString("com.sun.star.awt.comp.AsyncCallback");
-}
-
-css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_awt_comp_AsyncCallback_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    css::uno::Sequence< OUString > s(1);
-    s[0] = "com.sun.star.awt.AsyncCallback";
-    return s;
+    return cppu::acquire(new AsyncCallback());
 }
-
-css::uno::Reference< css::uno::XInterface > SAL_CALL _create(
-    const css::uno::Reference< css::uno::XComponentContext > & context)
-        SAL_THROW((css::uno::Exception))
-{
-    return static_cast< ::cppu::OWeakObject * >(new AsyncCallback(context));
-}
-
-} // closing component helper namespace
-
-static ::cppu::ImplementationEntry const entries[] = {
-    { &comp_AsyncCallback::_create,
-      &comp_AsyncCallback::_getImplementationName,
-      &comp_AsyncCallback::_getSupportedServiceNames,
-      &::cppu::createSingleComponentFactory, 0, 0 },
-    { 0, 0, 0, 0, 0, 0 }
-};
-
-void * SAL_CALL comp_AsyncCallback_component_getFactory(
-    const char * implName, void * serviceManager, void * registryKey)
-{
-    return ::cppu::component_getFactoryHelper(
-        implName, serviceManager, registryKey, entries);
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
