@@ -101,6 +101,7 @@ typedef struct TextInfo
 
 typedef std::vector<GLfloat> Area2DPointList;
 typedef std::vector<GLfloat> PieSegment2DPointList;
+typedef std::vector<GLfloat> PointList;
 
 /// Holds the information of our new child window
 struct GLWindow
@@ -178,6 +179,9 @@ public:
 
     void GeneratePieSegment2D(double, double, double, double);
     int RenderPieSegment2DShape(float, float, float);
+
+    int SetSymbol2DShapePoint(float, float, int);
+    int RenderSymbol2DShape();
 #if DEBUG_POSITIONING
     void renderDebug();
 #endif
@@ -185,7 +189,7 @@ public:
     void SetBackGroundColor(sal_uInt32 color1, sal_uInt32 color2);
 
 private:
-    GLint LoadShaders(const char *vertexShader,const char *fragmentShader);
+    GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName);
     int CreateTextureObj(int width, int height);
     int CreateRenderObj(int width, int height);
     int CreateFrameBufferObj();
@@ -203,7 +207,7 @@ private:
     glm::mat4 m_Projection;
     // Camera matrix
     glm::mat4 m_View;
-    // Model matrix : an identity matrix (model will be at the origin)
+    // Model matrix : an identity matrix (model will be at the origin#elif defined( UNX )
     glm::mat4 m_Model;
     // Our ModelViewProjection : multiplication of our 3 matrices
     glm::mat4 m_MVP;
@@ -299,6 +303,8 @@ private:
     glm::vec4 m_ClearColor;
 
     std::list <PieSegment2DPointList> m_PieSegment2DShapePointList;
+    PointList m_Symbol2DPointList;
+    std::list<PointList> m_Symbol2DShapePointList;
 
 #if DEBUG_POSITIONING
     GLuint m_DebugProID;

@@ -14,6 +14,7 @@ $(eval $(call gb_Module_add_targets,chart2,\
     Library_chartcore \
 	$(if $(filter LINUX FREEBSD WNT,$(OS)), \
 		Library_chartopengl \
+		Package_opengl \
 	) \
 ))
 

@@ -311,9 +311,13 @@ class DummySymbol2D : public DummyXShape
 public:
     DummySymbol2D(const drawing::Position3D& rPosition, const drawing::Direction3D& rSize,
             sal_Int32 nStandardSymbol, sal_Int32 nBorderColor, sal_Int32 nFillColor);
-
+    void render();
 private:
+    drawing::Position3D mrPosition;
+    drawing::Direction3D mrSize;
     sal_Int32 mnStandardSymbol;
+    sal_Int32 mnBorderColor;
+    sal_Int32 mnFillColor;
 };
 
 class DummyGraphic2D : public DummyXShape

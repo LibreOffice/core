@@ -36,6 +36,10 @@
 #include <vcl/virdev.hxx>
 #include <vcl/dibtools.hxx>
 
+#include <osl/file.hxx>
+#include <rtl/bootstrap.hxx>
+#include <config_folders.h>
+
 #include <boost/scoped_array.hpp>
 
 using namespace com::sun::star;
@@ -51,148 +55,12 @@ using namespace std;
 #include <vcl/pngwrite.hxx>
 #endif
 
-#define OPENGL_SHADER( ... )# __VA_ARGS__
-
 #define GL_PI 3.14159f
 
 #if defined( _WIN32 )
 #define WGL_SAMPLE_BUFFERS_ARB   0x2041
 #define WGL_SAMPLES_ARB          0x2042
 #endif
-
-//begin shaders
-
-#if DEBUG_POSITIONING
-
-const char* DebugVertexShader = OPENGL_SHADER (
-
-attribute vec3 vPosition;
-uniform vec4 vColor;
-varying vec4 fragmentColor;
-
-void main()
-{
-    gl_Position = vec4(vPosition, 1);
-}
-
-);
-
-const char* DebugFragmentShader = OPENGL_SHADER (
-
-varying vec4 fragmentColor;
-
-void main()
-{
-    gl_FragColor = vec4(1.0, 1.0, 0.0, 0.5);
-}
-
-);
-
-#endif
-
-const char *CommonFragmemtShader = OPENGL_SHADER (
-
-varying vec4 fragmentColor;
-
-void main()
-{
-    gl_FragColor = fragmentColor;
-}
-
-);
-
-const char *CommonVertexShader = OPENGL_SHADER (
-
-attribute vec3 vPosition;
-uniform mat4 MVP;
-uniform vec4 vColor;
-varying vec4 fragmentColor;
-
-void main()
-{
-    gl_Position =  MVP * vec4(vPosition, 1);
-    fragmentColor = vColor;
-}
-
-);
-
-
-const char *BackgroundFragmemtShader = OPENGL_SHADER (
-
-varying vec4 fragmentColor;
-
-void main()
-{
-    gl_FragColor = fragmentColor;
-}
-
-);
-
-const char *BackgroundVertexShader = OPENGL_SHADER (
-
-attribute vec3 vPosition;
-uniform mat4 MVP;
-attribute vec4 vColor;
-varying vec4 fragmentColor;
-
-void main()
-{
-    gl_Position =  MVP * vec4(vPosition, 1);
-    fragmentColor = vColor;
-}
-
-);
-
-
-const char *RenderFragmentShader = OPENGL_SHADER (
-
-uniform sampler2D RenderTex;
-varying vec2 vTexCoord;
-
-void main()
-{
-    gl_FragColor = vec4(texture2D(RenderTex, vTexCoord).rgb, 1.0);
-}
-
-);
-
-const char *RenderVertexShader = OPENGL_SHADER (
-
-attribute vec4 vPosition;
-attribute vec2 texCoord;
-varying vec2 vTexCoord;
-
-void main()
-{
-    gl_Position =  vPosition;
-    vTexCoord = texCoord;
-}
-
-);
-
-const char *TextFragmentShader = OPENGL_SHADER (
-uniform sampler2D TextTex;
-varying vec2 vTexCoord;
-void main()
-{
-    gl_FragColor = vec4(texture2D(TextTex, vTexCoord).rgba);
-}
-
-);
-
-const char *TextVertexShader = OPENGL_SHADER (
-
-attribute vec3 vPosition;
-uniform mat4 MVP;
-attribute vec2 texCoord;
-varying vec2 vTexCoord;
-void main()
-{
-    gl_Position =  MVP * vec4(vPosition, 1);
-    vTexCoord = texCoord;
-}
-
-);
 
 // end shaders
 
@@ -321,7 +189,46 @@ int static checkGLError(const char *file, int line)
         return -1;\
     }
 
-GLint OpenGLRender::LoadShaders(const char *vertexShader,const char *fragmentShader)
+namespace {
+
+OUString getShaderFolder()
+{
+    OUString aUrl("$BRAND_BASE_DIR/" LIBO_ETC_FOLDER);
+    rtl::Bootstrap::expandMacros(aUrl);
+
+    return aUrl + "/opengl/";
+}
+
+OUString maShaderFolder = getShaderFolder();
+
+OString loadShader(const OUString& rFilename)
+{
+    OUString aFileURL = maShaderFolder + rFilename +".glsl";
+    osl::File aFile(aFileURL);
+    if(aFile.open(osl_File_OpenFlag_Read) == osl::FileBase::E_None)
+    {
+        sal_uInt64 nSize = 0;
+        aFile.getSize(nSize);
+        char* content = new char[nSize+1];
+        sal_uInt64 nBytesRead = 0;
+        aFile.read(content, nSize, nBytesRead);
+        if(nSize != nBytesRead)
+            assert(false);
+
+        content[nSize] = 0;
+        return OString(content);
+    }
+    else
+    {
+        SAL_WARN("chart2.opengl", "could not load the file: " << aFileURL);
+    }
+
+    return OString();
+}
+
+}
+
+GLint OpenGLRender::LoadShaders(const OUString& rVertexShaderName,const OUString& rFragmentShaderName)
 {
     // Create the shaders
     GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
@@ -331,7 +238,8 @@ GLint OpenGLRender::LoadShaders(const char *vertexShader,const char *fragmentSha
     int InfoLogLength;
 
     // Compile Vertex Shader
-    char const * VertexSourcePointer = vertexShader;
+    OString aVertexShaderSource = loadShader(rVertexShaderName);
+    char const * VertexSourcePointer = aVertexShaderSource.getStr();
     glShaderSource(VertexShaderID, 1, &VertexSourcePointer , NULL);
     glCompileShader(VertexShaderID);
 
@@ -354,7 +262,8 @@ GLint OpenGLRender::LoadShaders(const char *vertexShader,const char *fragmentSha
     }
 
     // Compile Fragment Shader
-    char const * FragmentSourcePointer = fragmentShader;
+    OString aFragmentShaderSource = loadShader(rFragmentShaderName);
+    char const * FragmentSourcePointer = aFragmentShaderSource.getStr();
     glShaderSource(FragmentShaderID, 1, &FragmentSourcePointer , NULL);
     glCompileShader(FragmentShaderID);
 
@@ -453,29 +362,29 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
     glGenBuffers(1, &m_VertexBuffer);
     glGenBuffers(1, &m_ColorBuffer);
 
-    m_RenderProID = LoadShaders(RenderVertexShader, RenderFragmentShader);
+    m_RenderProID = LoadShaders("renderVertexShader", "renderFragmentShader");
     m_RenderVertexID = glGetAttribLocation(m_RenderProID, "vPosition");
     m_RenderTexCoordID = glGetAttribLocation(m_RenderProID, "texCoord");
     m_RenderTexID = glGetUniformLocation(m_RenderProID, "RenderTex");
 
-    m_CommonProID = LoadShaders(CommonVertexShader, CommonFragmemtShader);
+    m_CommonProID = LoadShaders("commonVertexShader", "commonFragmentShader");
     m_MatrixID = glGetUniformLocation(m_CommonProID, "MVP");
     m_2DVertexID = glGetAttribLocation(m_CommonProID, "vPosition");
     m_2DColorID = glGetUniformLocation(m_CommonProID, "vColor");
     CHECK_GL_ERROR();
 
 #if DEBUG_POSITIONING
-    m_DebugProID = LoadShaders(DebugVertexShader, DebugFragmentShader);
+    m_DebugProID = LoadShaders("debugVertexShader", "debugFragmentShader");
     m_DebugVertexID = glGetAttribLocation(m_DebugProID, "vPosition");
 #endif
     CHECK_GL_ERROR();
 
-    m_BackgroundProID = LoadShaders(BackgroundVertexShader, BackgroundFragmemtShader);
+    m_BackgroundProID = LoadShaders("backgroundVertexShader", "backgroundFragmentShader");
     m_BackgroundMatrixID = glGetUniformLocation(m_BackgroundProID, "MVP");
     m_BackgroundVertexID = glGetAttribLocation(m_BackgroundProID, "vPosition");
     m_BackgroundColorID = glGetAttribLocation(m_BackgroundProID, "vColor");
 
-    m_TextProID = LoadShaders(TextVertexShader, TextFragmentShader);
+    m_TextProID = LoadShaders("textVertexShader", "textFragmentShader");
     m_TextMatrixID = glGetUniformLocation(m_TextProID, "MVP");
     m_TextVertexID = glGetAttribLocation(m_TextProID, "vPosition");
     m_TextTexCoordID = glGetAttribLocation(m_TextProID, "texCoord");
@@ -1811,5 +1720,73 @@ int OpenGLRender::RenderPieSegment2DShape(float fSize, float fPosX, float fPosY)
     CHECK_GL_ERROR();
     return 0;
 }
+int OpenGLRender::SetSymbol2DShapePoint(float x, float y, int listLength)
+{
+    if (m_Symbol2DPointList.empty())
+    {
+        m_Symbol2DPointList.reserve(listLength);
+    }
+    float actualX = (x / OPENGL_SCALE_VALUE);
+    float actualY = (y / OPENGL_SCALE_VALUE);
+    m_Symbol2DPointList.push_back(actualX);
+    m_Symbol2DPointList.push_back(actualY);
+    m_Symbol2DPointList.push_back(m_fZStep);
+
+    if (m_Symbol2DPointList.size() == size_t(listLength * 3))
+    {
+        m_Symbol2DShapePointList.push_back(m_Symbol2DPointList);
+        m_Symbol2DPointList.clear();
+    }
+    return 0;
+}
+
+int OpenGLRender::RenderSymbol2DShape()
+{
+    CHECK_GL_ERROR();
+
+    glDisable(GL_MULTISAMPLE);
+    size_t listNum = m_Symbol2DShapePointList.size();
+    PosVecf3 trans = {0.0f, 0.0f, 0.0f};
+    PosVecf3 angle = {0.0f, 0.0f, 0.0f};
+    PosVecf3 scale = {1.0f, 1.0f, 1.0f};
+    MoveModelf(trans, angle, scale);
+    m_MVP = m_Projection * m_View * m_Model;
+    for (size_t i = 0; i < listNum; ++i)
+    {
+        PointList &pointList = m_Symbol2DShapePointList.back();
+        //fill vertex buffer
+        glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+        glBufferData(GL_ARRAY_BUFFER, pointList.size() * sizeof(float), &pointList[0], GL_STATIC_DRAW);
+        // Use our shader
+        glUseProgram(m_CommonProID);
+
+        glUniform4fv(m_2DColorID, 1, &m_2DColor[0]);
+
+        glUniformMatrix4fv(m_MatrixID, 1, GL_FALSE, &m_MVP[0][0]);
+
+        // 1rst attribute buffer : vertices
+        glEnableVertexAttribArray(m_2DVertexID);
+        glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+        glVertexAttribPointer(
+            m_2DVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+            3,                  // size
+            GL_FLOAT,           // type
+            GL_FALSE,           // normalized?
+            0,                  // stride
+            (void*)0            // array buffer offset
+            );
+        glDrawArrays(GL_POLYGON, 0, pointList.size() / 3); // 12*3 indices starting at 0 -> 12 triangles
+        glDisableVertexAttribArray(m_2DVertexID);
+        glUseProgram(0);
+        m_Symbol2DShapePointList.pop_back();
+    }
+    glEnable(GL_MULTISAMPLE);
+    m_fZStep += 0.01f;
+
+    CHECK_GL_ERROR();
+
+    return 0;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
