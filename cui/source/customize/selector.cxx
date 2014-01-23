@@ -197,6 +197,8 @@ SvxConfigGroupListBox::SvxConfigGroupListBox(Window* pParent, WinBits nStyle)
     : SvTreeListBox(pParent, nStyle |
             WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT | WB_TABSTOP)
     , m_bShowSlots(false)
+    , pFunctionListBox(NULL)
+    , m_pImageProvider(NULL)
     , m_hdImage(CUI_RES(RID_CUIIMG_HARDDISK))
     , m_libImage(CUI_RES(RID_CUIIMG_LIB))
     , m_macImage(CUI_RES(RID_CUIIMG_MACRO))
