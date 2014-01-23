@@ -55,10 +55,12 @@
   <implementation name="org.openoffice.comp.toolkit.SortableGridDataModel">
     <service name="com.sun.star.awt.grid.SortableGridDataModel"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.GridControl">
+  <implementation name="stardiv.Toolkit.GridControl"
+      constructor="stardiv_Toolkit_GridControl_get_implementation">
     <service name="com.sun.star.awt.grid.UnoControlGrid"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.GridControlModel">
+  <implementation name="stardiv.Toolkit.GridControlModel"
+      constructor="stardiv_Toolkit_GridControlModel_get_implementation">
     <service name="com.sun.star.awt.grid.UnoControlGridModel"/>
   </implementation>
   <implementation name="stardiv.Toolkit.MutableTreeDataModel">

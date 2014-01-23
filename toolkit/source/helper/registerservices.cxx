@@ -174,8 +174,6 @@ IMPL_CREATE_INSTANCE_WITH_GEOMETRY( UnoControlDialogModel )
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL TreeControl_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL TreeControlModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL MutableTreeDataModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
-extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL GridControl_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
-extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL GridControlModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL DefaultGridDataModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL DefaultGridColumnModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL GridColumn_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
@@ -259,8 +257,6 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL tk_component_getFactory( const sal_Char* sImple
         GET_FACTORY( MutableTreeDataModel, szServiceName_MutableTreeDataModel, NULL )
         GET_FACTORY( UnoFixedHyperlinkControl, szServiceName_UnoControlFixedHyperlink, NULL )
         GET_FACTORY( UnoControlFixedHyperlinkModel, szServiceName_UnoControlFixedHyperlinkModel, NULL )
-        GET_FACTORY( GridControl, szServiceName_GridControl, NULL );
-         GET_FACTORY( GridControlModel, szServiceName_GridControlModel, NULL );
         GET_FACTORY( DefaultGridDataModel, szServiceName_DefaultGridDataModel, NULL );
         GET_FACTORY( DefaultGridColumnModel, szServiceName_DefaultGridColumnModel, NULL );
         GET_FACTORY_WITH_IMPL_PREFIX( GridColumn, "org.openoffice.comp.toolkit", szServiceName_GridColumn, NULL );

@@ -65,7 +65,7 @@ public:
     void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception);
 
     // XServiceInfo
-    DECLIMPL_SERVICEINFO_DERIVED( UnoGridModel, UnoControlModel, szServiceName_GridControlModel )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoGridModel, UnoControlModel, "com.sun.star.awt.grid.UnoControlGridModel" )
 };
 
 
@@ -108,7 +108,7 @@ public:
     virtual void SAL_CALL removeSelectionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridSelectionListener > & listener) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO_DERIVED( UnoGridControl, UnoControlBase, szServiceName_GridControl )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoGridControl, UnoControlBase, "com.sun.star.awt.grid.UnoControlGrid" )
 
     using UnoControl::getPeer;
 

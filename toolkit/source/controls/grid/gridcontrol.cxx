@@ -21,19 +21,23 @@
 #include "gridcontrol.hxx"
 #include "grideventforwarder.hxx"
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
+#include <com/sun/star/awt/grid/XGridControl.hpp>
 #include <com/sun/star/awt/grid/XGridDataModel.hpp>
+#include <com/sun/star/awt/grid/XGridRowSelection.hpp>
 #include <com/sun/star/awt/grid/XMutableGridDataModel.hpp>
 #include <com/sun/star/awt/grid/DefaultGridDataModel.hpp>
 #include <com/sun/star/awt/grid/SortableGridDataModel.hpp>
 #include <com/sun/star/awt/grid/DefaultGridColumnModel.hpp>
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
 #include <toolkit/helper/property.hxx>
-#include <com/sun/star/awt/XVclWindowPeer.hpp>
-#include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/color.hxx>
+#include <toolkit/controls/unocontrolbase.hxx>
+#include <toolkit/controls/unocontrolmodel.hxx>
+#include <toolkit/helper/listenermultiplexer.hxx>
+
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -45,11 +49,8 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::util;
 
-namespace toolkit
-{
-//======================================================================================================================
-//= UnoGridModel
-//======================================================================================================================
+namespace toolkit {
+
 namespace
 {
     Reference< XGridDataModel > lcl_getDefaultDataModel_throw( const Reference<XComponentContext> & i_context )
@@ -209,7 +210,7 @@ void SAL_CALL UnoGridModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,
 //----------------------------------------------------------------------------------------------------------------------
 OUString UnoGridModel::getServiceName() throw(RuntimeException)
 {
-    return OUString::createFromAscii( szServiceName_GridControlModel );
+    return OUString("com.sun.star.awt.grid.UnoControlGridModel");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -218,7 +219,7 @@ Any UnoGridModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     switch( nPropId )
     {
         case BASEPROPERTY_DEFAULTCONTROL:
-            return uno::makeAny( OUString::createFromAscii( szServiceName_GridControl ) );
+            return uno::makeAny( OUString("com.sun.star.awt.grid.UnoControlGrid") );
         case BASEPROPERTY_GRID_SELECTIONMODE:
             return uno::makeAny( SelectionType(1) );
         case BASEPROPERTY_GRID_SHOWROWHEADER:
@@ -272,7 +273,7 @@ Reference< XPropertySetInfo > UnoGridModel::getPropertySetInfo(  ) throw(Runtime
 UnoGridControl::UnoGridControl()
     :UnoGridControl_Base()
     ,m_aSelectionListeners( *this )
-    ,m_pEventForwarder( new GridEventForwarder( *this ) )
+    ,m_pEventForwarder( new toolkit::GridEventForwarder( *this ) )
 {
 }
 
@@ -308,7 +309,7 @@ void SAL_CALL UnoGridControl::createPeer( const uno::Reference< awt::XToolkit > 
 //----------------------------------------------------------------------------------------------------------------------
 namespace
 {
-    void lcl_setEventForwarding( const Reference< XControlModel >& i_gridControlModel, const ::boost::scoped_ptr< GridEventForwarder >& i_listener,
+    void lcl_setEventForwarding( const Reference< XControlModel >& i_gridControlModel, const ::boost::scoped_ptr< toolkit::GridEventForwarder >& i_listener,
         bool const i_add )
     {
         const Reference< XPropertySet > xModelProps( i_gridControlModel, UNO_QUERY );
@@ -444,16 +445,22 @@ void SAL_CALL UnoGridControl::removeSelectionListener(const ::com::sun::star::un
     m_aSelectionListeners.removeInterface( listener );
 }
 
-}//namespace toolkit
-
-Reference< XInterface > SAL_CALL GridControl_CreateInstance( const Reference< XMultiServiceFactory >& )
-{
-    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::UnoGridControl() );
 }
 
-Reference< XInterface > SAL_CALL GridControlModel_CreateInstance( const Reference< XMultiServiceFactory >& i_factory )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_GridControl_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::UnoGridModel( comphelper::getComponentContext(i_factory) ) );
+    return cppu::acquire(new toolkit::UnoGridControl());
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_GridControlModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new toolkit::UnoGridModel(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
