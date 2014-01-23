@@ -645,7 +645,14 @@ namespace cppcanvas
             bool mbIsFilled;
 
         public:
-            EMFPCustomLineCap() : EMFPObject()
+            EMFPCustomLineCap()
+                : EMFPObject()
+                , type(0)
+                , strokeStartCap(0)
+                , strokeEndCap(0)
+                , strokeJoin(0)
+                , miterLimit(0.0)
+                , mbIsFilled(false)
             {
             }
 
