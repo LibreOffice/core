@@ -1489,7 +1489,7 @@ throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 }
 
 sal_Bool SAL_CALL ScAccessibleSpreadsheet::selectColumn( sal_Int32 column )
-        throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+        throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     if (IsFormulaMode())
     {

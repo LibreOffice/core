@@ -504,7 +504,8 @@ throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 }
 
 sal_Bool SAL_CALL ScAccessibleTableBase::selectColumn( sal_Int32 )
-        throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+        throw (lang::IndexOutOfBoundsException, uno::RuntimeException,
+               std::exception)
 {
     return sal_True;
 }
