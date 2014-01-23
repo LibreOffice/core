@@ -88,7 +88,7 @@ public:
 
 protected:
     virtual Rectangle GetBoundingBoxOnScreen() const throw(::com::sun::star::uno::RuntimeException, std::exception);
-    virtual Rectangle GetBoundingBox(void) const throw (::com::sun::star::uno::RuntimeException);
+    virtual Rectangle GetBoundingBox() const throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 private:
     ScPreviewShell* mpViewShell;
