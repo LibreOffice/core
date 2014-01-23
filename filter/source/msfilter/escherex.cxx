@@ -4950,19 +4950,18 @@ public:
     virtual ~SvNullStream() {}
 };
 
-EscherEx::EscherEx( const EscherExGlobalRef& rxGlobal, SvStream* pOutStrm, bool bOOXML ) :
-    mxGlobal                ( rxGlobal ),
-    mpOutStrm               ( pOutStrm ),
-    mbOwnsStrm              ( false ),
-
-    mnCurrentDg                         ( 0 ),
-
-    mnGroupLevel            ( 0 ),
-    mnHellLayerId           ( USHRT_MAX ),
-
-    mbEscherSpgr            ( sal_False ),
-    mbEscherDg              ( sal_False ),
-    mbOOXML(bOOXML)
+EscherEx::EscherEx(const EscherExGlobalRef& rxGlobal, SvStream* pOutStrm, bool bOOXML)
+    : mxGlobal(rxGlobal)
+    , mpOutStrm(pOutStrm)
+    , mbOwnsStrm(false)
+    , mnCurrentDg(0)
+    , mnCountOfs(0)
+    , mnGroupLevel(0)
+    , mnHellLayerId(USHRT_MAX)
+    , mbEscherSpgr(false)
+    , mbEscherDg(false)
+    , mbOleEmf(false)
+    , mbOOXML(bOOXML)
 {
     if (!mpOutStrm)
     {
