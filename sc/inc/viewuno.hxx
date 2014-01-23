@@ -80,7 +80,7 @@ public:
                             // XViewPane
     virtual sal_Int32 SAL_CALL getFirstVisibleColumn() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setFirstVisibleColumn( sal_Int32 nFirstVisibleColumn )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Int32 SAL_CALL getFirstVisibleRow() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setFirstVisibleRow( sal_Int32 nFirstVisibleRow )
                                 throw(::com::sun::star::uno::RuntimeException);
