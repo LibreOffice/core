@@ -21,7 +21,6 @@
 #define INCLUDED_TOOLKIT_HELPER_SERVICENAMES_HXX
 
 #include <sal/types.h>
-#include <tools/solar.h>
 
 extern const sal_Char szServiceName_Toolkit[], szServiceName2_Toolkit[];
 extern const sal_Char szServiceName_MVCIntrospection[], szServiceName2_MVCIntrospection[];

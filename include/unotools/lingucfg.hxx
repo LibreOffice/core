@@ -26,18 +26,14 @@
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
-#include <tools/solar.h>
 #include <rtl/ustring.hxx>
 #include <unotools/configitem.hxx>
 #include <osl/mutex.hxx>
 #include <unotools/options.hxx>
 #include <i18nlangtag/lang.h>
-
 #include <vector>
 
 class SvtLinguConfigItem;
-
-//////////////////////////////////////////////////////////////////////
 
 struct UNOTOOLS_DLLPUBLIC SvtLinguOptions
 {
@@ -131,8 +127,6 @@ struct UNOTOOLS_DLLPUBLIC SvtLinguOptions
     SvtLinguOptions();
 };
 
-//////////////////////////////////////////////////////////////////////
-
 struct UNOTOOLS_DLLPUBLIC SvtLinguConfigDictionaryEntry
 {
     // the URL's pointing to the location of the files the dictionary consists of
@@ -142,8 +136,6 @@ struct UNOTOOLS_DLLPUBLIC SvtLinguConfigDictionaryEntry
     // the list of languages (ISO names) the dictionary can be used for
     com::sun::star::uno::Sequence< OUString >  aLocaleNames;
 };
-
-//////////////////////////////////////////////////////////////////////
 
 class UNOTOOLS_DLLPUBLIC SvtLinguConfig: public utl::detail::Options
 {
@@ -220,8 +212,6 @@ public:
 
     bool                HasGrammarChecker() const;
 };
-
-//////////////////////////////////////////////////////////////////////
 
 #endif
 

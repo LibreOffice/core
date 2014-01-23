@@ -23,7 +23,6 @@
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <tools/solar.h>
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include "itemholder1.hxx"
@@ -74,8 +73,6 @@ const sal_uInt16 nOptionNameCount = SAL_N_ELEMENTS(vOptionNames);
 
 boost::weak_ptr<SvtUserOptions::Impl> SvtUserOptions::pSharedImpl;
 
-// class ChangeListener --------------------------------------------------
-
 class SvtUserOptions::ChangeListener : public cppu::WeakImplHelper1<util::XChangesListener>
 {
 public:
@@ -89,8 +86,6 @@ public:
 private:
     Impl& m_rParent;
 };
-
-// class Impl ------------------------------------------------------------
 
 class SvtUserOptions::Impl : public utl::ConfigurationBroadcaster
 {
@@ -110,8 +105,6 @@ private:
     uno::Reference<beans::XPropertySet>    m_xData;
 };
 
-// class SvtUserOptions::ChangeListener ----------------------------------
-
 void SvtUserOptions::ChangeListener::changesOccurred (util::ChangesEvent const& rEvent) throw(uno::RuntimeException)
 {
     if (rEvent.Changes.getLength())
@@ -129,8 +122,6 @@ void SvtUserOptions::ChangeListener::disposing (lang::EventObject const& rSource
     {
     }
 }
-
-// class SvtUserOptions::Impl --------------------------------------------
 
 SvtUserOptions::Impl::Impl() :
     m_xChangeListener( new ChangeListener(*this) )
@@ -163,8 +154,6 @@ SvtUserOptions::Impl::Impl() :
     }
 }
 
-// -----------------------------------------------------------------------
-
 OUString SvtUserOptions::Impl::GetToken (sal_uInt16 nToken) const
 {
     OUString sToken;
@@ -185,8 +174,6 @@ OUString SvtUserOptions::Impl::GetToken (sal_uInt16 nToken) const
     return sToken;
 }
 
-// -----------------------------------------------------------------------
-
 void SvtUserOptions::Impl::SetToken (sal_uInt16 nToken, OUString const& sToken)
 {
     if (nToken < nOptionNameCount)
@@ -206,8 +193,6 @@ void SvtUserOptions::Impl::SetToken (sal_uInt16 nToken, OUString const& sToken)
         SAL_WARN("unotools.config", "SvtUserOptions::Impl::GetToken(): invalid token");
 }
 
-// -----------------------------------------------------------------------
-
 OUString SvtUserOptions::Impl::GetFullName () const
 {
     // TODO international name
@@ -218,14 +203,10 @@ OUString SvtUserOptions::Impl::GetFullName () const
     return sFullName;
 }
 
-// -----------------------------------------------------------------------
-
 void SvtUserOptions::Impl::Notify ()
 {
     NotifyListeners(0);
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool SvtUserOptions::Impl::IsTokenReadonly (sal_uInt16 nToken) const
 {
@@ -244,8 +225,6 @@ sal_Bool SvtUserOptions::Impl::IsTokenReadonly (sal_uInt16 nToken) const
     }
 }
 
-// class SvtUserOptions --------------------------------------------------
-
 SvtUserOptions::SvtUserOptions ()
 {
     // Global access, must be guarded (multithreading)
@@ -261,16 +240,12 @@ SvtUserOptions::SvtUserOptions ()
     pImpl->AddListener(this);
 }
 
-// -----------------------------------------------------------------------
-
 SvtUserOptions::~SvtUserOptions()
 {
     // Global access, must be guarded (multithreading)
     osl::MutexGuard aGuard( GetInitMutex() );
     pImpl->RemoveListener(this);
 }
-
-// -----------------------------------------------------------------------
 
 namespace
 {
@@ -282,11 +257,7 @@ osl::Mutex& SvtUserOptions::GetInitMutex()
     return theUserOptionsMutex::get();
 }
 
-// -----------------------------------------------------------------------
 
-//
-// getters
-//
 OUString SvtUserOptions::GetCompany        () const { return GetToken(USER_OPT_COMPANY); }
 OUString SvtUserOptions::GetFirstName      () const { return GetToken(USER_OPT_FIRSTNAME); }
 OUString SvtUserOptions::GetLastName       () const { return GetToken(USER_OPT_LASTNAME); }
@@ -304,14 +275,8 @@ OUString SvtUserOptions::GetFax            () const { return GetToken(USER_OPT_F
 OUString SvtUserOptions::GetEmail          () const { return GetToken(USER_OPT_EMAIL); }
 OUString SvtUserOptions::GetCustomerNumber () const { return GetToken(USER_OPT_CUSTOMERNUMBER); }
 
-// -----------------------------------------------------------------------
 
-//
-// setters
-//
 void SvtUserOptions::SetCustomerNumber (OUString const& sToken) { SetToken(USER_OPT_CUSTOMERNUMBER, sToken); }
-
-// -----------------------------------------------------------------------
 
 sal_Bool SvtUserOptions::IsTokenReadonly (sal_uInt16 nToken) const
 {
@@ -319,23 +284,17 @@ sal_Bool SvtUserOptions::IsTokenReadonly (sal_uInt16 nToken) const
     return pImpl->IsTokenReadonly(nToken);
 }
 
-// -----------------------------------------------------------------------
-
 OUString SvtUserOptions::GetToken (sal_uInt16 nToken) const
 {
     osl::MutexGuard aGuard(GetInitMutex());
     return pImpl->GetToken(nToken);
 }
 
-// -----------------------------------------------------------------------
-
 void SvtUserOptions::SetToken (sal_uInt16 nToken, OUString const& rNewToken)
 {
     osl::MutexGuard aGuard(GetInitMutex());
     pImpl->SetToken(nToken, rNewToken);
 }
-
-// -----------------------------------------------------------------------
 
 OUString SvtUserOptions::GetFullName () const
 {

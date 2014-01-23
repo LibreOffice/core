@@ -19,7 +19,6 @@
 
 
 #include <unotools/searchopt.hxx>
-#include <tools/solar.h>
 #include <tools/debug.hxx>
 #include <unotools/configitem.hxx>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
@@ -28,15 +27,12 @@
 #include <com/sun/star/uno/Any.h>
 #include <sal/macros.h>
 
-
 using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::i18n;
 
 
 #define MAX_FLAGS_OFFSET    26
-
-//////////////////////////////////////////////////////////////////////
 
 
 class SvtSearchOptions_Impl : public ConfigItem
@@ -70,7 +66,6 @@ public:
 };
 
 
-
 SvtSearchOptions_Impl::SvtSearchOptions_Impl() :
     ConfigItem( OUString("Office.Common/SearchOptions") )
 {
@@ -96,13 +91,11 @@ void SvtSearchOptions_Impl::Notify( const Sequence< OUString >&  )
 {
 }
 
-
 sal_Bool SvtSearchOptions_Impl::GetFlag( sal_uInt16 nOffset ) const
 {
     DBG_ASSERT( nOffset <= MAX_FLAGS_OFFSET, "offset out of range");
     return ((nFlags >> nOffset) & 0x01) ? sal_True : sal_False;
 }
-
 
 void SvtSearchOptions_Impl::SetFlag( sal_uInt16 nOffset, sal_Bool bVal )
 {
@@ -117,7 +110,6 @@ void SvtSearchOptions_Impl::SetFlag( sal_uInt16 nOffset, sal_Bool bVal )
         SetModified( sal_True );
 }
 
-
 void SvtSearchOptions_Impl::SetModified( sal_Bool bVal )
 {
     bModified = bVal;
@@ -126,7 +118,6 @@ void SvtSearchOptions_Impl::SetModified( sal_Bool bVal )
         ConfigItem::SetModified();
     }
 }
-
 
 Sequence< OUString > SvtSearchOptions_Impl::GetPropertyNames() const
 {
@@ -170,7 +161,6 @@ Sequence< OUString > SvtSearchOptions_Impl::GetPropertyNames() const
 
     return aNames;
 }
-
 
 sal_Bool SvtSearchOptions_Impl::Load()
 {
@@ -225,7 +215,6 @@ sal_Bool SvtSearchOptions_Impl::Load()
     return bSucc;
 }
 
-
 sal_Bool SvtSearchOptions_Impl::Save()
 {
     sal_Bool bSucc = sal_False;
@@ -251,20 +240,15 @@ sal_Bool SvtSearchOptions_Impl::Save()
     return bSucc;
 }
 
-
-//////////////////////////////////////////////////////////////////////
-
 SvtSearchOptions::SvtSearchOptions()
 {
     pImpl = new SvtSearchOptions_Impl;
 }
 
-
 SvtSearchOptions::~SvtSearchOptions()
 {
     delete pImpl;
 }
-
 
 sal_Int32 SvtSearchOptions::GetTransliterationFlags() const
 {
@@ -313,36 +297,30 @@ sal_Int32 SvtSearchOptions::GetTransliterationFlags() const
     return nRes;
 }
 
-
 sal_Bool SvtSearchOptions::IsWholeWordsOnly() const
 {
     return pImpl->GetFlag( 0 );
 }
-
 
 void SvtSearchOptions::SetWholeWordsOnly( sal_Bool bVal )
 {
     pImpl->SetFlag( 0, bVal );
 }
 
-
 sal_Bool SvtSearchOptions::IsBackwards() const
 {
     return pImpl->GetFlag( 1 );
 }
-
 
 void SvtSearchOptions::SetBackwards( sal_Bool bVal )
 {
     pImpl->SetFlag( 1, bVal );
 }
 
-
 sal_Bool SvtSearchOptions::IsUseRegularExpression() const
 {
     return pImpl->GetFlag( 2 );
 }
-
 
 void SvtSearchOptions::SetUseRegularExpression( sal_Bool bVal )
 {
@@ -354,252 +332,210 @@ void SvtSearchOptions::SetSearchForStyles( sal_Bool bVal )
     pImpl->SetFlag( 3, bVal );
 }
 
-
 sal_Bool SvtSearchOptions::IsSimilaritySearch() const
 {
     return pImpl->GetFlag( 4 );
 }
-
 
 void SvtSearchOptions::SetSimilaritySearch( sal_Bool bVal )
 {
     pImpl->SetFlag( 4, bVal );
 }
 
-
 sal_Bool SvtSearchOptions::IsUseAsianOptions() const
 {
     return pImpl->GetFlag( 5 );
 }
-
 
 void SvtSearchOptions::SetUseAsianOptions( sal_Bool bVal )
 {
     pImpl->SetFlag( 5, bVal );
 }
 
-
 sal_Bool SvtSearchOptions::IsMatchCase() const
 {
     return pImpl->GetFlag( 6 );
 }
-
 
 void SvtSearchOptions::SetMatchCase( sal_Bool bVal )
 {
     pImpl->SetFlag( 6, bVal );
 }
 
-
 sal_Bool SvtSearchOptions::IsMatchFullHalfWidthForms() const
 {
     return pImpl->GetFlag( 7 );
 }
-
 
 void SvtSearchOptions::SetMatchFullHalfWidthForms( sal_Bool bVal )
 {
     pImpl->SetFlag( 7, bVal );
 }
 
-
 sal_Bool SvtSearchOptions::IsMatchHiraganaKatakana() const
 {
     return pImpl->GetFlag( 8 );
 }
-
 
 void SvtSearchOptions::SetMatchHiraganaKatakana( sal_Bool bVal )
 {
     pImpl->SetFlag( 8, bVal );
 }
 
-
 sal_Bool SvtSearchOptions::IsMatchContractions() const
 {
     return pImpl->GetFlag( 9 );
 }
-
 
 void SvtSearchOptions::SetMatchContractions( sal_Bool bVal )
 {
     pImpl->SetFlag( 9, bVal );
 }
 
-
 sal_Bool SvtSearchOptions::IsMatchMinusDashChoon() const
 {
     return pImpl->GetFlag( 10 );
 }
-
 
 void SvtSearchOptions::SetMatchMinusDashChoon( sal_Bool bVal )
 {
     pImpl->SetFlag( 10, bVal );
 }
 
-
 sal_Bool SvtSearchOptions::IsMatchRepeatCharMarks() const
 {
     return pImpl->GetFlag( 11 );
 }
-
 
 void SvtSearchOptions::SetMatchRepeatCharMarks( sal_Bool bVal )
 {
     pImpl->SetFlag( 11, bVal );
 }
 
-
 sal_Bool SvtSearchOptions::IsMatchVariantFormKanji() const
 {
     return pImpl->GetFlag( 12 );
 }
-
 
 void SvtSearchOptions::SetMatchVariantFormKanji( sal_Bool bVal )
 {
     pImpl->SetFlag( 12, bVal );
 }
 
-
 sal_Bool SvtSearchOptions::IsMatchOldKanaForms() const
 {
     return pImpl->GetFlag( 13 );
 }
-
 
 void SvtSearchOptions::SetMatchOldKanaForms( sal_Bool bVal )
 {
     pImpl->SetFlag( 13, bVal );
 }
 
-
 sal_Bool SvtSearchOptions::IsMatchDiziDuzu() const
 {
     return pImpl->GetFlag( 14 );
 }
-
 
 void SvtSearchOptions::SetMatchDiziDuzu( sal_Bool bVal )
 {
     pImpl->SetFlag( 14, bVal );
 }
 
-
 sal_Bool SvtSearchOptions::IsMatchBavaHafa() const
 {
     return pImpl->GetFlag( 15 );
 }
-
 
 void SvtSearchOptions::SetMatchBavaHafa( sal_Bool bVal )
 {
     pImpl->SetFlag( 15, bVal );
 }
 
-
 sal_Bool SvtSearchOptions::IsMatchTsithichiDhizi() const
 {
     return pImpl->GetFlag( 16 );
 }
-
 
 void SvtSearchOptions::SetMatchTsithichiDhizi( sal_Bool bVal )
 {
     pImpl->SetFlag( 16, bVal );
 }
 
-
 sal_Bool SvtSearchOptions::IsMatchHyuiyuByuvyu() const
 {
     return pImpl->GetFlag( 17 );
 }
-
 
 void SvtSearchOptions::SetMatchHyuiyuByuvyu( sal_Bool bVal )
 {
     pImpl->SetFlag( 17, bVal );
 }
 
-
 sal_Bool SvtSearchOptions::IsMatchSesheZeje() const
 {
     return pImpl->GetFlag( 18 );
 }
-
 
 void SvtSearchOptions::SetMatchSesheZeje( sal_Bool bVal )
 {
     pImpl->SetFlag( 18, bVal );
 }
 
-
 sal_Bool SvtSearchOptions::IsMatchIaiya() const
 {
     return pImpl->GetFlag( 19 );
 }
-
 
 void SvtSearchOptions::SetMatchIaiya( sal_Bool bVal )
 {
     pImpl->SetFlag( 19, bVal );
 }
 
-
 sal_Bool SvtSearchOptions::IsMatchKiku() const
 {
     return pImpl->GetFlag( 20 );
 }
-
 
 void SvtSearchOptions::SetMatchKiku( sal_Bool bVal )
 {
     pImpl->SetFlag( 20, bVal );
 }
 
-
 sal_Bool SvtSearchOptions::IsIgnorePunctuation() const
 {
     return pImpl->GetFlag( 21 );
 }
-
 
 void SvtSearchOptions::SetIgnorePunctuation( sal_Bool bVal )
 {
     pImpl->SetFlag( 21, bVal );
 }
 
-
 sal_Bool SvtSearchOptions::IsIgnoreWhitespace() const
 {
     return pImpl->GetFlag( 22 );
 }
-
 
 void SvtSearchOptions::SetIgnoreWhitespace( sal_Bool bVal )
 {
     pImpl->SetFlag( 22, bVal );
 }
 
-
 sal_Bool SvtSearchOptions::IsIgnoreProlongedSoundMark() const
 {
     return pImpl->GetFlag( 23 );
 }
-
 
 void SvtSearchOptions::SetIgnoreProlongedSoundMark( sal_Bool bVal )
 {
     pImpl->SetFlag( 23, bVal );
 }
 
-
 sal_Bool SvtSearchOptions::IsIgnoreMiddleDot() const
 {
     return pImpl->GetFlag( 24 );
 }
-
 
 void SvtSearchOptions::SetIgnoreMiddleDot( sal_Bool bVal )
 {
@@ -608,13 +544,12 @@ void SvtSearchOptions::SetIgnoreMiddleDot( sal_Bool bVal )
 
 sal_Bool SvtSearchOptions::IsNotes() const
 {
-        return pImpl->GetFlag( 25 );
+    return pImpl->GetFlag( 25 );
 }
-
 
 void SvtSearchOptions::SetNotes( sal_Bool bVal )
 {
-        pImpl->SetFlag( 25, bVal );
+    pImpl->SetFlag( 25, bVal );
 }
 
 sal_Bool SvtSearchOptions::IsIgnoreDiacritics_CTL() const
@@ -626,7 +561,5 @@ void SvtSearchOptions::SetIgnoreDiacritics_CTL( sal_Bool bVal )
 {
     pImpl->SetFlag( 26, bVal );
 }
-
-//////////////////////////////////////////////////////////////////////
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

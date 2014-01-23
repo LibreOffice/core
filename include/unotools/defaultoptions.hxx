@@ -21,12 +21,9 @@
 
 #include <unotools/unotoolsdllapi.h>
 #include <rtl/ustring.hxx>
-#include <tools/solar.h>
 #include <unotools/options.hxx>
 
 class SvtDefaultOptions_Impl;
-
-// class SvtDefaultOptions -----------------------------------------------
 
 class SvtDefaultOptions_Impl;
 class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtDefaultOptions : public utl::detail::Options

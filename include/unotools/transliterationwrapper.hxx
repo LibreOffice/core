@@ -20,8 +20,8 @@
 
 #ifndef INCLUDED_UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
 #define INCLUDED_UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+
 #include <rtl/ustring.hxx>
-#include <tools/solar.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <com/sun/star/i18n/XExtendedTransliteration.hpp>
 
@@ -124,9 +124,7 @@ public:
 
 };
 
-// ............................................................................
 }       // namespace utl
-// ............................................................................
 
 #endif
 

@@ -30,9 +30,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase4.hxx>
 #include <comphelper/accessibletexthelper.hxx>
-#include <tools/solar.h>
-
-// class VCLXAccessibleToolBoxItem ---------------------------------------------
 
 class ToolBox;
 
