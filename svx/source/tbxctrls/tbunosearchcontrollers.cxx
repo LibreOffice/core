@@ -348,9 +348,10 @@ css::uno::Reference< css::frame::XStatusListener > SearchToolbarControllersManag
 // FindTextToolbarController
 
 FindTextToolbarController::FindTextToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
-    :svt::ToolboxController( rxContext,
-    css::uno::Reference< css::frame::XFrame >(),
-    OUString(COMMAND_FINDTEXT) )
+    : svt::ToolboxController(rxContext, css::uno::Reference< css::frame::XFrame >(), OUString(COMMAND_FINDTEXT))
+    , m_pFindTextFieldControl(NULL)
+    , m_nDownSearchId(0)
+    , m_nUpSearchId(0)
 {
 }
 
