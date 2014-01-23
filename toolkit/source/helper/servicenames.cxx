@@ -94,8 +94,6 @@ const sal_Char szServiceName_GridControlModel[] = "com.sun.star.awt.grid.UnoCont
 const sal_Char szServiceName_DefaultGridDataModel[] = "com.sun.star.awt.grid.DefaultGridDataModel";
 const sal_Char szServiceName_DefaultGridColumnModel[] = "com.sun.star.awt.grid.DefaultGridColumnModel";
 const sal_Char szServiceName_GridColumn[] = "com.sun.star.awt.grid.GridColumn";
-const sal_Char szServiceName_UnoControlTabPageContainerModel[] = "com.sun.star.awt.tab.UnoControlTabPageContainerModel";
-const sal_Char szServiceName_UnoControlTabPageContainer[] = "com.sun.star.awt.tab.UnoControlTabPageContainer";
 const sal_Char szServiceName_SortableGridDataModel[] = "com.sun.star.awt.grid.SortableGridDataModel";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

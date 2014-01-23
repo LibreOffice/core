@@ -34,10 +34,12 @@
       constructor="stardiv_Toolkit_UnoControlTabPageModel_get_implementation">
     <service name="com.sun.star.awt.tab.UnoControlTabPageModel"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoControlTabPageContainerModel">
+  <implementation name="stardiv.Toolkit.UnoControlTabPageContainerModel"
+      constructor="stardiv_Toolkit_UnoControlTabPageContainerModel_get_implementation">
     <service name="com.sun.star.awt.tab.UnoControlTabPageContainerModel"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoControlTabPageContainer">
+  <implementation name="stardiv.Toolkit.UnoControlTabPageContainer"
+      constructor="stardiv_Toolkit_UnoControlTabPageContainer_get_implementation">
     <service name="com.sun.star.awt.tab.UnoControlTabPageContainer"/>
   </implementation>
   <implementation name="stardiv.Toolkit.DefaultGridColumnModel">

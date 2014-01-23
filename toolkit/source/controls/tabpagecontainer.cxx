@@ -28,7 +28,6 @@
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
@@ -62,7 +61,7 @@ UnoControlTabPageContainerModel::UnoControlTabPageContainerModel( const Referenc
 
 OUString UnoControlTabPageContainerModel::getServiceName() throw(RuntimeException)
 {
-    return OUString::createFromAscii( szServiceName_UnoControlTabPageContainerModel );
+    return OUString("com.sun.star.awt.tab.UnoControlTabPageContainerModel");
 }
 
 uno::Any UnoControlTabPageContainerModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -70,7 +69,7 @@ uno::Any UnoControlTabPageContainerModel::ImplGetDefaultValue( sal_uInt16 nPropI
     switch(nPropId)
     {
         case BASEPROPERTY_DEFAULTCONTROL:
-            return uno::makeAny( OUString::createFromAscii( szServiceName_UnoControlTabPageContainer ) );
+            return uno::makeAny( OUString("com.sun.star.awt.tab.UnoControlTabPageContainer") );
         case BASEPROPERTY_BORDER:
             return uno::makeAny((sal_Int16) 0);              // No Border
         default:
@@ -331,6 +330,22 @@ void SAL_CALL UnoControlTabPageContainer::addControl( const OUString& Name, cons
     aEvent.Source = getModel();
     aEvent.Element <<= Control;
     xContainerListener->elementInserted( aEvent );
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoControlTabPageContainerModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoControlTabPageContainerModel(context));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoControlTabPageContainer_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoControlTabPageContainer(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
