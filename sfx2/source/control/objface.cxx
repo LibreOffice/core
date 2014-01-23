@@ -17,8 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <assert.h>
 #include <stdlib.h>
+
+#include <sal/log.hxx>
+
 #include <tools/rcid.h>
 #include <tools/stream.hxx>
 
@@ -155,9 +158,8 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
         for ( pIter = pSlots; nIter <= nCount; ++pIter, ++nIter )
         {
 
-            DBG_ASSERT( nIter == nCount ||
-                        pIter->GetSlotId() != (pIter+1)->GetSlotId(),
-                        "doppelte SID" );
+            assert( nIter == nCount ||
+                    pIter->GetSlotId() != (pIter+1)->GetSlotId() );
 
             // every master refers to his first slave (ENUM),
             // all slaves refer to their master.
@@ -165,7 +167,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
             if ( pIter->GetKind() == SFX_KIND_ENUM )
             {
                 pIter->pLinkedSlot = GetSlot( pIter->nMasterSlotId );
-                DBG_ASSERT( pIter->pLinkedSlot, "slave without master" );
+                assert( pIter->pLinkedSlot );
                 if ( !pIter->pLinkedSlot->pLinkedSlot )
                     ( (SfxSlot*) pIter->pLinkedSlot)->pLinkedSlot = pIter;
 
@@ -210,7 +212,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
         {
 
             if ( pNext->GetSlotId() <= pIter->GetSlotId() )
-                OSL_FAIL("Wrong order!");
+                SAL_WARN( "sfx2.control", "Wrong order" );
 
             if ( pIter->GetKind() == SFX_KIND_ENUM )
             {
@@ -227,7 +229,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
                         aStr.append(" , ");
                         aStr.append(static_cast<sal_Int32>(
                             pSlave->GetSlotId()));
-                        OSL_FAIL(aStr.getStr());
+                        SAL_WARN("sfx2.control", aStr.getStr());
                     }
 
                     if ( pSlave->nMasterSlotId != pMasterSlot->GetSlotId() )
@@ -238,7 +240,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
                         aStr.append(" , ");
                         aStr.append(static_cast<sal_Int32>(
                             pSlave->GetSlotId()));
-                        OSL_FAIL(aStr.getStr());
+                        SAL_WARN("sfx2.control", aStr.getStr());
                     }
 
                     pSlave = pSlave->pNextSlot;
@@ -256,7 +258,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
                         aStr.append(" , ");
                         aStr.append(static_cast<sal_Int32>(
                             pIter->pLinkedSlot->GetSlotId()));
-                        OSL_FAIL(aStr.getStr());
+                        SAL_WARN("sfx2.control", aStr.getStr());
                     }
                 }
 
@@ -271,7 +273,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
                             pCurSlot->GetSlotId()));
                         aStr.append(" , ");
                         aStr.append(static_cast<sal_Int32>(pIter->GetSlotId()));
-                        OSL_FAIL(aStr.getStr());
+                        SAL_WARN("sfx2.control", aStr.getStr());
                     }
                 }
                 while ( pCurSlot != pIter );
@@ -290,7 +292,7 @@ SfxInterface::~SfxInterface()
     SfxModule *pMod = pImpData->pModule;
     sal_Bool bRegistered = pImpData->bRegistered;
     delete pImpData;
-    DBG_ASSERT( bRegistered, "Interface not registered!" );
+    assert( bRegistered );
     if ( bRegistered )
     {
         if ( pMod )
@@ -307,7 +309,9 @@ SfxInterface::~SfxInterface()
 const SfxSlot* SfxInterface::GetSlot( sal_uInt16 nFuncId ) const
 {
     DBG_CHKTHIS(SfxInterface, 0);
-    DBG_ASSERT( this && pSlots && nCount, "" );
+
+    assert( pSlots );
+    assert( nCount );
 
     // find the id using binary search
     void* p = bsearch( &nFuncId, pSlots, nCount, sizeof(SfxSlot),
@@ -341,13 +345,15 @@ const SfxSlot* SfxInterface::GetSlot( const OUString& rCommand ) const
 const SfxSlot* SfxInterface::GetRealSlot( const SfxSlot *pSlot ) const
 {
     DBG_CHKTHIS(SfxInterface, 0);
-    DBG_ASSERT( this && pSlots && nCount, "" );
+
+    assert( pSlots );
+    assert( nCount );
 
     if ( !ContainsSlot_Impl(pSlot) )
     {
         if(pGenoType)
             return pGenoType->GetRealSlot(pSlot);
-        OSL_FAIL("unknown Slot");
+        SAL_WARN( "sfx2.control", "unknown Slot" );
         return 0;
     }
 
@@ -359,14 +365,16 @@ const SfxSlot* SfxInterface::GetRealSlot( const SfxSlot *pSlot ) const
 const SfxSlot* SfxInterface::GetRealSlot( sal_uInt16 nSlotId ) const
 {
     DBG_CHKTHIS(SfxInterface, 0);
-    DBG_ASSERT( this && pSlots && nCount, "" );
+
+    assert( pSlots );
+    assert( nCount );
 
     const SfxSlot *pSlot = GetSlot(nSlotId);
     if ( !pSlot )
     {
         if(pGenoType)
             return pGenoType->GetRealSlot(nSlotId);
-        OSL_FAIL("unknown Slot");
+        SAL_WARN( "sfx2.control", "unknown Slot" );
         return 0;
     }
 
@@ -378,6 +386,7 @@ const SfxSlot* SfxInterface::GetRealSlot( sal_uInt16 nSlotId ) const
 void SfxInterface::RegisterPopupMenu( const ResId& rResId )
 {
     DBG_CHKTHIS(SfxInterface, 0);
+
     pImpData->aPopupRes = rResId;
 }
 
@@ -436,10 +445,8 @@ const ResId& SfxInterface::GetObjectBarResId( sal_uInt16 nNo ) const
             nNo = nNo - nBaseCount;
     }
 
-#ifdef DBG_UTIL
-    sal_uInt16 nObjBarCount = pImpData->aObjectBars.size();
-    DBG_ASSERT( nNo<nObjBarCount,"Objectbar is unknown!" );
-#endif
+    assert( nNo<pImpData->aObjectBars.size() );
+
     return pImpData->aObjectBars[nNo]->aResId;
 }
 
@@ -460,10 +467,8 @@ sal_uInt16 SfxInterface::GetObjectBarPos( sal_uInt16 nNo ) const
             nNo = nNo - nBaseCount;
     }
 
-#ifdef DBG_UTIL
-    sal_uInt16 nObjBarCount = pImpData->aObjectBars.size();
-    DBG_ASSERT( nNo<nObjBarCount,"Objectbar is unknown!" );
-#endif
+    assert( nNo<pImpData->aObjectBars.size() );
+
     return pImpData->aObjectBars[nNo]->nPos;
 }
 
@@ -510,10 +515,8 @@ sal_uInt32 SfxInterface::GetChildWindowId (sal_uInt16 nNo) const
             nNo = nNo - nBaseCount;
     }
 
-#ifdef DBG_UTIL
-    sal_uInt16 nCWCount = pImpData->aChildWindows.size();
-    DBG_ASSERT( nNo<nCWCount,"ChildWindow is unknown!" );
-#endif
+    assert( nNo<pImpData->aChildWindows.size() );
+
     sal_uInt32 nRet = pImpData->aChildWindows[nNo]->aResId.GetId();
     if ( pImpData->aChildWindows[nNo]->bContext )
         nRet += sal_uInt32( nClassId ) << 16;
@@ -533,10 +536,8 @@ sal_uInt32 SfxInterface::GetChildWindowFeature (sal_uInt16 nNo) const
             nNo = nNo - nBaseCount;
     }
 
-#ifdef DBG_UTIL
-    sal_uInt16 nCWCount = pImpData->aChildWindows.size();
-    DBG_ASSERT( nNo<nCWCount,"ChildWindow is unknown!" );
-#endif
+    assert( nNo<pImpData->aChildWindows.size() );
+
     return pImpData->aChildWindows[nNo]->nFeature;
 }
 
@@ -582,10 +583,8 @@ const OUString* SfxInterface::GetObjectBarName ( sal_uInt16 nNo ) const
             nNo = nNo - nBaseCount;
     }
 
-#ifdef DBG_UTIL
-    sal_uInt16 nObjBarCount = pImpData->aObjectBars.size();
-    DBG_ASSERT( nNo<nObjBarCount,"Objectbar is unknown!" );
-#endif
+    assert( nNo<pImpData->aObjectBars.size() );
+
     return pImpData->aObjectBars[nNo]->pName;
 }
 
@@ -603,10 +602,8 @@ sal_uInt32 SfxInterface::GetObjectBarFeature ( sal_uInt16 nNo ) const
             nNo = nNo - nBaseCount;
     }
 
-#ifdef DBG_UTIL
-    sal_uInt16 nObjBarCount = pImpData->aObjectBars.size();
-    DBG_ASSERT( nNo<nObjBarCount,"Objectbar is unknown!" );
-#endif
+    assert( nNo<pImpData->aObjectBars.size() );
+
     return pImpData->aObjectBars[nNo]->nFeature;
 }
 
@@ -624,16 +621,15 @@ sal_Bool SfxInterface::IsObjectBarVisible(sal_uInt16 nNo) const
             nNo = nNo - nBaseCount;
     }
 
-#ifdef DBG_UTIL
-    sal_uInt16 nObjBarCount = pImpData->aObjectBars.size();
-    DBG_ASSERT( nNo<nObjBarCount,"Objectbar is unknown!" );
-#endif
+    assert( nNo<pImpData->aObjectBars.size() );
+
     return pImpData->aObjectBars[nNo]->bVisible;
 }
 
 const SfxInterface* SfxInterface::GetRealInterfaceForSlot( const SfxSlot *pRealSlot ) const
 {
-    DBG_ASSERT( pImpData->bRegistered, "Interface not registered!" );
+    assert( pImpData->bRegistered );
+
     const SfxInterface* pInterface = this;
 
     // The slot could also originate from the interface of a shell base class.
