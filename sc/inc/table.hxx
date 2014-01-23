@@ -854,6 +854,12 @@ public:
     bool HasBroadcaster( SCCOL nCol ) const;
 
     /**
+     * Mark formula cells dirty that have the mbPostponedDirty flag set or
+     * contain named ranges with relative references.
+     */
+    void SetDirtyIfPostponed();
+
+    /**
      * Broadcast dirty formula cells that contain functions such as CELL(),
      * COLUMN() or ROW() which may change its value on move.
      */
@@ -961,7 +967,6 @@ private:
     void EndListening( sc::EndListeningContext& rCxt, SCCOL nCol, SCROW nRow, SvtListener& rListener );
     void        StartAllListeners();
     void        StartNeededListeners(); // only for cells where NeedsListening()==TRUE
-    void        SetRelNameDirty();
 
     void        SetLoadingMedium(bool bLoading);
 

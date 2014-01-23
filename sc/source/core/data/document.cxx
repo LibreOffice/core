@@ -1200,12 +1200,13 @@ bool ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
             for (; it != maTabs.end(); ++it)
                 if (*it)
                     (*it)->StartNeededListeners();
-            // at least all cells using range names pointing relative
-            // to the moved range must recalculate
+            // At least all cells using range names pointing relative to the
+            // moved range must be recalculated, and all cells marked postponed
+            // dirty.
             it = maTabs.begin();
             for (; it != maTabs.end(); ++it)
                 if (*it)
-                    (*it)->SetRelNameDirty();
+                    (*it)->SetDirtyIfPostponed();
 
             // Cells containing functions such as CELL, COLUMN or ROW may have
             // changed their values on relocation. Broadcast them.
@@ -1295,12 +1296,12 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
         for (; it != maTabs.end(); ++it)
             if (*it)
                 (*it)->StartNeededListeners();
-        // at least all cells using range names pointing relative
-        // to the moved range must recalculate
+        // At least all cells using range names pointing relative to the moved
+        // range must be recalculated, and all cells marked postponed dirty.
         it = maTabs.begin();
         for (; it != maTabs.end(); ++it)
             if (*it)
-                (*it)->SetRelNameDirty();
+                (*it)->SetDirtyIfPostponed();
 
         // Cells containing functions such as CELL, COLUMN or ROW may have
         // changed their values on relocation. Broadcast them.
@@ -1404,12 +1405,13 @@ bool ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
             for (; it != maTabs.end(); ++it)
                 if (*it)
                     (*it)->StartNeededListeners();
-            // at least all cells using range names pointing relative
-            // to the moved range must recalculate
+            // At least all cells using range names pointing relative to the
+            // moved range must be recalculated, and all cells marked postponed
+            // dirty.
             it = maTabs.begin();
             for (; it != maTabs.end(); ++it)
                 if (*it)
-                    (*it)->SetRelNameDirty();
+                    (*it)->SetDirtyIfPostponed();
 
             // Cells containing functions such as CELL, COLUMN or ROW may have
             // changed their values on relocation. Broadcast them.
@@ -1497,12 +1499,12 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
         for (; it != maTabs.end(); ++it)
             if (*it)
                 (*it)->StartNeededListeners();
-        // at least all cells using range names pointing relative
-        // to the moved range must recalculate
+        // At least all cells using range names pointing relative to the moved
+        // range must be recalculated, and all cells marked postponed dirty.
         it = maTabs.begin();
         for (; it != maTabs.end(); ++it)
             if (*it)
-                (*it)->SetRelNameDirty();
+                (*it)->SetDirtyIfPostponed();
 
         // Cells containing functions such as CELL, COLUMN or ROW may have
         // changed their values on relocation. Broadcast them.

@@ -1670,12 +1670,12 @@ void ScTable::SetDirtyAfterLoad()
 }
 
 
-void ScTable::SetRelNameDirty()
+void ScTable::SetDirtyIfPostponed()
 {
     bool bOldAutoCalc = pDocument->GetAutoCalc();
     pDocument->SetAutoCalc( false );    // Mehrfachberechnungen vermeiden
     for (SCCOL i=0; i<=MAXCOL; i++)
-        aCol[i].SetRelNameDirty();
+        aCol[i].SetDirtyIfPostponed();
     pDocument->SetAutoCalc( bOldAutoCalc );
 }
 

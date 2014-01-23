@@ -90,6 +90,7 @@ private:
     bool            bTableOpDirty  : 1; // Dirty flag for TableOp
     bool            bNeedListening : 1; // Listeners need to be re-established after UpdateReference
     bool            mbNeedsNumberFormat : 1; // set the calculated number format as hard number format
+    bool            mbPostponedDirty : 1;   // if cell needs to be set dirty later
 
                     enum ScInterpretTailParameter
                     {
@@ -149,7 +150,7 @@ public:
     void            SetTableOpDirty();
     bool            IsDirtyOrInTableOpDirty() const;
     bool            GetDirty() const { return bDirty; }
-    void            ResetDirty() { bDirty = false; }
+    void            ResetDirty() { bDirty = bTableOpDirty = mbPostponedDirty = false; }
     bool            NeedsListening() const { return bNeedListening; }
     void            SetNeedsListening( bool bVar ) { bNeedListening = bVar; }
     void            SetNeedNumberFormat( bool bVal ) { mbNeedsNumberFormat = bVal; }
@@ -304,6 +305,8 @@ public:
     void EndListeningTo(
         ScDocument* pDoc, ScTokenArray* pArr = NULL, ScAddress aPos = ScAddress() );
     void EndListeningTo( sc::EndListeningContext& rCxt );
+
+    bool IsPostponedDirty() const { return mbPostponedDirty; }
 };
 
 #endif

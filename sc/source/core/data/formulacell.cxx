@@ -414,6 +414,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     bTableOpDirty( false ),
     bNeedListening( false ),
     mbNeedsNumberFormat( false ),
+    mbPostponedDirty(false),
     aPos( rPos )
 {
     Compile( rFormula, true, eGrammar );    // bNoListening, Insert does that
@@ -448,6 +449,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     bTableOpDirty( false ),
     bNeedListening( false ),
     mbNeedsNumberFormat( false ),
+    mbPostponedDirty(false),
     aPos( rPos )
 {
     // UPN-Array generation
@@ -494,6 +496,7 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
     bTableOpDirty( false ),
     bNeedListening( false ),
     mbNeedsNumberFormat( false ),
+    mbPostponedDirty(false),
     aPos( rPos )
 {
     pCode = rCell.pCode->Clone();
@@ -1094,8 +1097,7 @@ void ScFormulaCell::Interpret()
                             // If one cell didn't converge, all cells of this
                             // circular dependency don't, no matter whether
                             // single cells did.
-                            pIterCell->bDirty = false;
-                            pIterCell->bTableOpDirty = false;
+                            pIterCell->ResetDirty();
                             pIterCell->aResult.SetResultError( errNoConvergence);
                             pIterCell->bChanged = true;
                             pDocument->SetTextWidth(pIterCell->aPos, TEXTWIDTH_DIRTY);
@@ -1251,8 +1253,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
 
         if( p->GetError() && p->GetError() != errCircularReference)
         {
-            bDirty = false;
-            bTableOpDirty = false;
+            ResetDirty();
             bChanged = true;
         }
         if (eTailParam == SCITP_FROM_ITERATION && IsDirtyOrInTableOpDirty())
@@ -1275,8 +1276,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
                 if (nSeenInIteration > 1 ||
                         pDocument->GetDocOptions().GetIterCount() == 1)
                 {
-                    bDirty = false;
-                    bTableOpDirty = false;
+                    ResetDirty();
                 }
             }
         }
@@ -1377,8 +1377,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         }
         if (eTailParam == SCITP_NORMAL)
         {
-            bDirty = false;
-            bTableOpDirty = false;
+            ResetDirty();
         }
         if( aResult.GetMatrix() )
         {
@@ -1460,9 +1459,8 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
     else
     {
         // Cells with compiler errors should not be marked dirty forever
-        OSL_ENSURE( pCode->GetCodeError(), "no UPN-Code und no errors ?!?!" );
-        bDirty = false;
-        bTableOpDirty = false;
+        OSL_ENSURE( pCode->GetCodeError(), "no RPN code und no errors ?!?!" );
+        ResetDirty();
     }
 }
 
@@ -1546,7 +1544,7 @@ void ScFormulaCell::SetDirty( bool bDirtyFlag )
             // by Scenario and Copy Block From Clip.
             // If unconditional required Formula tracking is set before SetDirty
             // bDirty = false, eg in CompileTokenArray
-            if ( !bDirty || !pDocument->IsInFormulaTree( this ) )
+            if ( !bDirty || mbPostponedDirty || !pDocument->IsInFormulaTree( this ) )
             {
                 if( bDirtyFlag )
                     SetDirtyVar();
@@ -1563,6 +1561,7 @@ void ScFormulaCell::SetDirty( bool bDirtyFlag )
 void ScFormulaCell::SetDirtyVar()
 {
     bDirty = true;
+    mbPostponedDirty = false;
     // mark the sheet of this cell to be calculated
     //#FIXME do we need to revert this remnant of old fake vba events? pDocument->AddCalculateTable( aPos.Tab() );
 }
@@ -2293,11 +2292,18 @@ bool ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
         }
         if ( bNeedDirty && (!(eUpdateRefMode == URM_INSDEL && bHasRelName) || pRangeData) )
         {   // Cut off references, invalid or similar?
-            bool bOldAutoCalc = pDocument->GetAutoCalc();
-            // No Interpret in SubMinimalRecalc because of eventual wrong reference
-            pDocument->SetAutoCalc( false );
-            SetDirty();
-            pDocument->SetAutoCalc( bOldAutoCalc );
+            if (eUpdateRefMode == URM_INSDEL)
+            {
+                mbPostponedDirty = true;
+            }
+            else
+            {
+                bool bOldAutoCalc = pDocument->GetAutoCalc();
+                // No Interpret in SubMinimalRecalc because of eventual wrong reference
+                pDocument->SetAutoCalc( false );
+                SetDirty();
+                pDocument->SetAutoCalc( bOldAutoCalc );
+            }
         }
 
         delete pOld;
