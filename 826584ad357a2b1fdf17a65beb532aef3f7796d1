@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_da8f3974",
+        "filename": "offapi/com/sun/star/text/CellProperties.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-01-23T07:34:13Z",
+      "side": 1,
+      "message": "What do the values of type short actually represent here?  Is there maybe some UNOIDL constant group from which the values must be drawn?  (Depending on that, type short may not be the best solution here.)",
+      "revId": "826584ad357a2b1fdf17a65beb532aef3f7796d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
