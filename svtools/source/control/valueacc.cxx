@@ -40,6 +40,7 @@ ValueSetItem::ValueSetItem( ValueSet& rParent )
     , meType(VALUESETITEM_NONE)
     , mbVisible(true)
     , mpData(NULL)
+    , mbSelected(false)
     , mpxAcc(NULL)
 {
 }
