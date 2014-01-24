@@ -234,7 +234,8 @@
     <service name="com.sun.star.awt.UnoControlDateField"/>
     <service name="stardiv.vcl.control.DateField"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoDialogControl">
+  <implementation name="stardiv.Toolkit.UnoDialogControl"
+      constructor="stardiv_Toolkit_UnoDialogControl_get_implementation">
     <service name="com.sun.star.awt.UnoControlDialog"/>
     <service name="stardiv.vcl.control.Dialog"/>
   </implementation>
@@ -363,22 +364,28 @@
     <service name="com.sun.star.awt.Toolkit"/>
     <service name="stardiv.vcl.VclToolkit"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoMultiPageModel">
+  <implementation name="stardiv.Toolkit.UnoMultiPageModel"
+      constructor="stardiv_Toolkit_UnoMultiPageModel_get_implementation">
     <service name="com.sun.star.awt.UnoMultiPageModel"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoMultiPageControl">
+  <implementation name="stardiv.Toolkit.UnoMultiPageControl"
+      constructor="stardiv_Toolkit_UnoMultiPageControl_get_implementation">
     <service name="com.sun.star.awt.UnoControlMultiPage"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoPageModel">
+  <implementation name="stardiv.Toolkit.UnoPageModel"
+      constructor="stardiv_Toolkit_UnoPageModel_get_implementation">
     <service name="com.sun.star.awt.UnoPageModel"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoPageControl">
+  <implementation name="stardiv.Toolkit.UnoPageControl"
+      constructor="stardiv_Toolkit_UnoPageControl_get_implementation">
     <service name="com.sun.star.awt.UnoControlPage"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoFrameModel">
+  <implementation name="stardiv.Toolkit.UnoFrameModel"
+      constructor="stardiv_Toolkit_UnoFrameModel_get_implementation">
     <service name="com.sun.star.awt.UnoFrameModel"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoFrameControl">
+  <implementation name="stardiv.Toolkit.UnoFrameControl"
+      constructor="stardiv_Toolkit_UnoFrameControl_get_implementation">
     <service name="com.sun.star.awt.UnoControlFrame"/>
   </implementation>
 </component>
