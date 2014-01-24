@@ -1776,7 +1776,13 @@ Region OutputDevice::PixelToLogic( const Region& rDeviceRegion, const MapMode& r
     ENTER0( rSource, pMapModeSource, pMapModeDest );                    \
                                                                         \
     ImplMapRes aMapResSource;                                           \
-    ImplMapRes aMapResDest;                                             \
+    aMapResSource.mnMapOfsX          = 0;                               \
+    aMapResSource.mnMapOfsY          = 0;                               \
+    aMapResSource.mnMapScNumX        = 1;                               \
+    aMapResSource.mnMapScNumY        = 1;                               \
+    aMapResSource.mnMapScDenomX      = 1;                               \
+    aMapResSource.mnMapScDenomY      = 1;                               \
+    ImplMapRes aMapResDest(aMapResSource);                              \
                                                                         \
     if ( !mbMap || pMapModeSource != &maMapMode )                       \
     {                                                                   \
@@ -1836,7 +1842,13 @@ Region OutputDevice::PixelToLogic( const Region& rDeviceRegion, const MapMode& r
 
 #define ENTER4( rMapModeSource, rMapModeDest )                          \
     ImplMapRes aMapResSource;                                           \
-    ImplMapRes aMapResDest;                                             \
+    aMapResSource.mnMapOfsX          = 0;                               \
+    aMapResSource.mnMapOfsY          = 0;                               \
+    aMapResSource.mnMapScNumX        = 1;                               \
+    aMapResSource.mnMapScNumY        = 1;                               \
+    aMapResSource.mnMapScDenomX      = 1;                               \
+    aMapResSource.mnMapScDenomY      = 1;                               \
+    ImplMapRes aMapResDest(aMapResSource);                              \
                                                                         \
     ImplCalcMapResolution( rMapModeSource, 72, 72, aMapResSource );     \
     ImplCalcMapResolution( rMapModeDest, 72, 72, aMapResDest )
