@@ -212,7 +212,8 @@
     <service name="com.sun.star.awt.UnoControlRoadmapModel"/>
     <service name="stardiv.vcl.controlmodel.Roadmap"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoControlScrollBarModel">
+  <implementation name="stardiv.Toolkit.UnoControlScrollBarModel"
+      constructor="stardiv_Toolkit_UnoControlScrollBarModel_get_implementation">
     <service name="com.sun.star.awt.UnoControlScrollBarModel"/>
     <service name="stardiv.vcl.controlmodel.ScrollBar"/>
   </implementation>
@@ -305,7 +306,8 @@
     <service name="com.sun.star.awt.UnoControlRoadmap"/>
     <service name="stardiv.vcl.control.Roadmap"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoScrollBarControl">
+  <implementation name="stardiv.Toolkit.UnoScrollBarControl"
+      constructor="stardiv_Toolkit_UnoScrollBarControl_get_implementation">
     <service name="com.sun.star.awt.UnoControlScrollBar"/>
     <service name="stardiv.vcl.control.ScrollBar"/>
   </implementation>

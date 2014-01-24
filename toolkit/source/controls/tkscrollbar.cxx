@@ -283,4 +283,20 @@ namespace toolkit
 }  // namespace toolkit
 //........................................................................
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoControlScrollBarModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new toolkit::UnoControlScrollBarModel(context));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoScrollBarControl_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new toolkit::UnoScrollBarControl());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
