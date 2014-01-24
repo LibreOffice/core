@@ -53,8 +53,11 @@ private:
 
 public:
 
-    PrinterColor () :
-            meColorspace(eInvalid)
+    PrinterColor()
+        : mnRed(0)
+        , mnGreen(0)
+        , mnBlue(0)
+        , meColorspace(eInvalid)
     {}
     PrinterColor (sal_uInt16 nRed, sal_uInt16 nGreen,
                   sal_uInt16 nBlue) :
