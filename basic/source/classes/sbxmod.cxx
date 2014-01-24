@@ -410,7 +410,7 @@ SbPropertyRef DocObjectWrapper::getProperty( const OUString& aName ) throw (Runt
         sal_uInt16 nSaveFlgs = m_pMod->GetFlags();
         // Limit search to this module.
         m_pMod->ResetFlag( SBX_GBLSEARCH );
-        pProperty = (SbProperty*)m_pMod->SbModule::Find( aName,  SbxCLASS_PROPERTY );
+        pProperty = dynamic_cast<SbProperty*>(m_pMod->SbModule::Find(aName,  SbxCLASS_PROPERTY));
         m_pMod->SetFlag( nSaveFlgs );
     }
 
