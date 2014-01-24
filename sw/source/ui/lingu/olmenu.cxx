@@ -88,7 +88,6 @@
 #include <com/sun/star/linguistic2/SingleProofreadingError.hpp>
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
-#include <com/sun/star/linguistic2/DictionaryEventFlags.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
