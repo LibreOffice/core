@@ -101,6 +101,17 @@ SAL_DLLPUBLIC void SAL_CALL sal_detail_logFormat(
 
 /** @endcond */
 
+#if defined( __GNUC__ ) || defined(__clang__)
+#define likeky(expr) __builtin_expect(!!(expr) , 1)
+#define unlikely(expr) __builint_expect(!!(expr), 0)
+#else
+#define likely(expr) (expr)
+#define unlikely(expr) (expr)
+#endif
+
+#define release_assert(expr) \
+if(unlikely(!(expr))) { fprintf(stderr, "assert(%s) failed in %s(%s:%d)", #expr, __FILE__, __func__, __LINE__) ; abort(); }
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
