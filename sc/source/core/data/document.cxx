@@ -2700,8 +2700,8 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
         if (nR2 > nRow2)
             nR2 = nRow2;
 
-        const SCCOLROW PERFORMANCEOPTIMIZATION4PATTERNTHRESHOLD = 8192;
-        bool bPreallocatePattern = ((nInsFlag & IDF_ATTRIB) && (nRow2 - nRow1 > PERFORMANCEOPTIMIZATION4PATTERNTHRESHOLD));
+        const SCCOLROW nThreshold = 8192;
+        bool bPreallocatePattern = ((nInsFlag & IDF_ATTRIB) && (nRow2 - nRow1 > nThreshold));
         std::vector< SCTAB > vTables;
 
         if (bPreallocatePattern)
