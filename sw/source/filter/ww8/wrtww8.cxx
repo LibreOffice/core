@@ -1536,11 +1536,13 @@ void WW8Export::OutGrfBullets(const sw::Frame & rFrame)
 int MSWordExportBase::GetGrfIndex(const SvxBrushItem& rBrush)
 {
     int nIndex = -1;
-    if ( rBrush.GetGraphic() )
+
+    const Graphic* pGraphic = rBrush.GetGraphic();
+    if (pGraphic)
     {
         for (size_t i = 0; i < m_vecBulletPic.size(); ++i)
         {
-            if (m_vecBulletPic[i]->GetChecksum() == rBrush.GetGraphic()->GetChecksum())
+            if (m_vecBulletPic[i]->GetChecksum() == pGraphic->GetChecksum())
             {
                 nIndex = i;
                 break;
