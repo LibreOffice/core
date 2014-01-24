@@ -498,7 +498,8 @@ void ScAccessibleTableBase::CommitTableModelChange(sal_Int32 nStartRow, sal_Int3
 }
 
 sal_Bool SAL_CALL ScAccessibleTableBase::selectRow( sal_Int32 )
-    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException,
+           std::exception)
 {
     return sal_True;
 }
