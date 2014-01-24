@@ -97,7 +97,7 @@ sal_Bool XMLMarkerStyleImport::importXML(
     {
         basegfx::B2DPolyPolygon aPolyPolygon;
 
-        if(basegfx::tools::importFromSvgD(aPolyPolygon, strPathData, true, 0))
+        if(basegfx::tools::importFromSvgD(aPolyPolygon, strPathData, rImport.needFixPositionAfterZ(), 0))
         {
             if(aPolyPolygon.count())
             {
