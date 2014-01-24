@@ -1085,7 +1085,7 @@ static const CustomShapeTypeTranslationTable pCustomShapeTypeTranslationTable[] 
     { "ooxml-cloudCallout", "cloudCallout" },
     { "ooxml-callout1", "callout1" },
     { "ooxml-ribbon", "ribbon" },
-    { "ooxml-rect", "rectangle" },
+    { "ooxml-rect", "rect" },
 };
 
 static struct {
