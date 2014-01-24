@@ -615,10 +615,9 @@ void SwViewShell::UpdateAllCharts()
 sal_Bool SwViewShell::HasCharts() const
 {
     sal_Bool bRet = sal_False;
-    const SwStartNode *pStNd;
     SwNodeIndex aIdx( *GetDoc()->GetNodes().GetEndOfAutotext().
                         StartOfSectionNode(), 1 );
-    while ( 0 != (pStNd = aIdx.GetNode().GetStartNode()) )
+    while (aIdx.GetNode().GetStartNode())
     {
         ++aIdx;
         const SwOLENode *pNd = aIdx.GetNode().GetOLENode();
