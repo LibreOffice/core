@@ -34,6 +34,7 @@ void ScSingleRefData::InitAddress( SCCOL nColP, SCROW nRowP, SCTAB nTabP )
 
 void ScSingleRefData::InitAddressRel( const ScAddress& rAdr, const ScAddress& rPos )
 {
+    InitFlags();
     SetColRel(true);
     SetRowRel(true);
     SetTabRel(true);
