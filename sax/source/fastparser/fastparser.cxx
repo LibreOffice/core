@@ -203,7 +203,7 @@ public:
     ~FastSaxParserImpl();
 
     // XFastParser
-    void parseStream( const ::com::sun::star::xml::sax::InputSource& aInputSource ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    void parseStream( const ::com::sun::star::xml::sax::InputSource& aInputSource ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception);
     void setFastDocumentHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastDocumentHandler >& Handler ) throw (::com::sun::star::uno::RuntimeException);
     void setTokenHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& Handler ) throw (::com::sun::star::uno::RuntimeException);
     void registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
@@ -795,7 +795,8 @@ void FastSaxParserImpl::splitName( const XML_Char *pwName, const XML_Char *&rpPr
 * the file-specific initialization work. (During a parser run, external files may be opened)
 *
 ****************/
-void FastSaxParserImpl::parseStream( const InputSource& maStructSource) throw (SAXException, IOException, RuntimeException)
+void FastSaxParserImpl::parseStream(const InputSource& maStructSource)
+    throw (SAXException, IOException, RuntimeException, std::exception)
 {
     // Only one text at one time
     MutexGuard guard( maMutex );
