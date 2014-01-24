@@ -18,7 +18,7 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="tk" xmlns="http://openoffice.org/2010/uno-components">
+    xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.awt.comp.AsyncCallback"
       constructor="com_sun_star_awt_comp_AsyncCallback_get_implementation">
     <service name="com.sun.star.awt.AsyncCallback"/>
@@ -168,7 +168,8 @@
     <service name="com.sun.star.awt.UnoControlFixedTextModel"/>
     <service name="stardiv.vcl.controlmodel.FixedText"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoControlFormattedFieldModel">
+  <implementation name="stardiv.Toolkit.UnoControlFormattedFieldModel"
+      constructor="stardiv_Toolkit_UnoControlFormattedFieldModel_get_implementation">
     <service name="com.sun.star.awt.UnoControlFormattedFieldModel"/>
     <service name="stardiv.vcl.controlmodel.FormattedField"/>
   </implementation>
@@ -263,7 +264,8 @@
     <service name="com.sun.star.awt.UnoControlFixedText"/>
     <service name="stardiv.vcl.control.FixedText"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoFormattedFieldControl">
+  <implementation name="stardiv.Toolkit.UnoFormattedFieldControl"
+      constructor="stardiv_Toolkit_UnoFormattedFieldControl_get_implementation">
     <service name="com.sun.star.awt.UnoControlFormattedField"/>
     <service name="stardiv.vcl.control.FormattedField"/>
   </implementation>
