@@ -71,6 +71,8 @@ core_constructor_list = [
     "com_sun_star_comp_graphic_GraphicProvider_get_implementation",
 # svx/util/svx.component
     "com_sun_star_drawing_EnhancedCustomShapeEngine_get_implementation",
+#
+    "stardiv_Toolkit_VCLXToolkit_get_implementation",
     ]
 
 extended_core_factory_list = core_factory_list + [
