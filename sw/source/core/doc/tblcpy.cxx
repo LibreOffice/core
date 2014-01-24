@@ -938,7 +938,10 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                 {
                     if( !( pTmpBox = pLine->GetTabBoxes()[ nSttBox + nBx ])
                         ->GetSttNd() )
+                    {
+                        delete pInsFLine;
                         return sal_False;
+                    }
                     // if Ok, insert the Box into the FndLine
                     pFndBox = new _FndBox( pTmpBox, pInsFLine );
                     pInsFLine->GetBoxes().insert( pInsFLine->GetBoxes().begin() + nBx, pFndBox );
