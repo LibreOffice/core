@@ -153,6 +153,11 @@ struct ExtGlyphData
 class GlyphData
 {
 public:
+    mnLruValue()
+        : mnLruValue(0)
+    {
+    }
+
     const GlyphMetric&      GetMetric() const           { return maMetric; }
     Size                    GetSize() const             { return maMetric.GetSize(); }
 
