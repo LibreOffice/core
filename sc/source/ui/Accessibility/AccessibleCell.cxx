@@ -508,7 +508,9 @@ static OUString ReplaceFourChar(OUString oldOUString)
 }
 
 uno::Any SAL_CALL ScAccessibleCell::getExtendedAttributes()
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::lang::IndexOutOfBoundsException,
+           ::com::sun::star::uno::RuntimeException,
+           std::exception)
 {
     uno::Any strRet;
     if (mpViewShell)

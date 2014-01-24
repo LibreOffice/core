@@ -146,7 +146,9 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::uno::Any SAL_CALL getExtendedAttributes()
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+               ::com::sun::star::uno::RuntimeException,
+               std::exception);
 
     // Override this method to handle cell's ParaIndent attribute specially.
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< OUString >& aRequestedAttributes )
