@@ -186,6 +186,7 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
             std::abort();//TODO
         }
         rtl::OUString name(prefix == "direct" ? implementation : uri);
+        SAL_INFO("cppuhelper.shlib", "prefix=" << prefix << " implementation=" << implementation << " uri=" << uri);
         lib_to_factory_mapping const * map = lo_get_factory_map();
         component_getFactoryFunc fp = 0;
         for (int i = 0; map[i].name != 0; ++i) {
@@ -205,6 +206,7 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
             getEnvironment(environment, implementation), fp, uri,
             implementation, serviceManager);
     } else {
+        SAL_INFO("cppuhelper.shlib", "constructor=" << constructor);
         lib_to_constructor_mapping const * map = lo_get_constructor_map();
         for (int i = 0; map[i].name != 0; ++i) {
             if (constructor.equalsAscii(map[i].name)) {
