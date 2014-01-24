@@ -10,6 +10,10 @@
 #include "clipcontext.hxx"
 #include "document.hxx"
 #include "mtvelements.hxx"
+#include <column.hxx>
+#include <scitems.hxx>
+
+#include <svl/intitem.hxx>
 
 namespace sc {
 
@@ -29,8 +33,9 @@ CopyFromClipContext::CopyFromClipContext(ScDocument& rDoc,
     ClipContextBase(rDoc),
     mnTabStart(-1), mnTabEnd(-1),
     mpRefUndoDoc(pRefUndoDoc), mpClipDoc(pClipDoc), mnInsertFlag(nInsertFlag),
+    mpSinglePattern(NULL),
     mbAsLink(bAsLink), mbSkipAttrForEmptyCells(bSkipAttrForEmptyCells),
-    mbCloneNotes (mnInsertFlag & (IDF_NOTE|IDF_ADDNOTES) )
+    mbCloneNotes (mnInsertFlag & (IDF_NOTE|IDF_ADDNOTES))
 {
 }
 
@@ -69,6 +74,21 @@ sal_uInt16 CopyFromClipContext::getInsertFlag() const
     return mnInsertFlag;
 }
 
+ScCellValue& CopyFromClipContext::getSingleCell()
+{
+    return maSingleCell;
+}
+
+const ScPatternAttr* CopyFromClipContext::getSingleCellPattern() const
+{
+    return mpSinglePattern;
+}
+
+void CopyFromClipContext::setSingleCellPattern( const ScPatternAttr* pAttr )
+{
+    mpSinglePattern = pAttr;
+}
+
 bool CopyFromClipContext::isAsLink() const
 {
     return mbAsLink;
@@ -82,6 +102,13 @@ bool CopyFromClipContext::isSkipAttrForEmptyCells() const
 bool CopyFromClipContext::isCloneNotes() const
 {
     return mbCloneNotes;
+}
+
+bool CopyFromClipContext::isDateCell( const ScColumn& rCol, SCROW nRow ) const
+{
+    sal_uLong nNumIndex = static_cast<const SfxUInt32Item*>(rCol.GetAttr(nRow, ATTR_VALUE_FORMAT))->GetValue();
+    short nType = mpClipDoc->GetFormatTable()->GetType(nNumIndex);
+    return (nType == NUMBERFORMAT_DATE) || (nType == NUMBERFORMAT_TIME) || (nType == NUMBERFORMAT_DATETIME);
 }
 
 CopyToClipContext::CopyToClipContext(

@@ -11,6 +11,7 @@
 #define SC_CLIPCONTEXT_HXX
 
 #include "address.hxx"
+#include <cellvalue.hxx>
 
 #include <vector>
 #include <boost/unordered_map.hpp>
@@ -18,6 +19,8 @@
 #include <boost/scoped_ptr.hpp>
 
 class ScDocument;
+class ScColumn;
+class ScPatternAttr;
 
 namespace sc {
 
@@ -44,9 +47,11 @@ class CopyFromClipContext : public ClipContextBase
     ScDocument* mpRefUndoDoc;
     ScDocument* mpClipDoc;
     sal_uInt16  mnInsertFlag;
-    bool        mbAsLink:1;
-    bool        mbSkipAttrForEmptyCells:1;
-    bool        mbCloneNotes;
+    ScCellValue maSingleCell;
+    const ScPatternAttr* mpSinglePattern;
+    bool mbAsLink:1;
+    bool mbSkipAttrForEmptyCells:1;
+    bool mbCloneNotes:1;
 
     CopyFromClipContext(); // disabled
 
@@ -65,9 +70,16 @@ public:
     ScDocument* getUndoDoc();
     ScDocument* getClipDoc();
     sal_uInt16 getInsertFlag() const;
+
+    ScCellValue& getSingleCell();
+
+    const ScPatternAttr* getSingleCellPattern() const;
+    void setSingleCellPattern( const ScPatternAttr* pAttr );
+
     bool isAsLink() const;
     bool isSkipAttrForEmptyCells() const;
-    bool  isCloneNotes() const;
+    bool isCloneNotes() const;
+    bool isDateCell( const ScColumn& rCol, SCROW nRow ) const;
 };
 
 class CopyToClipContext : public ClipContextBase

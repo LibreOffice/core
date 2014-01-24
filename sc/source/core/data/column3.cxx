@@ -680,14 +680,6 @@ class CopyCellsFromClipHandler
     sc::ColumnBlockPosition maDestBlockPos;
     sc::ColumnBlockPosition* mpDestBlockPos; // to save it for next iteration.
 
-    bool isDateCell(SCROW nSrcRow) const
-    {
-        ScDocument* pSrcDoc = mrCxt.getClipDoc(); // clip document is the source.
-        sal_uLong nNumIndex = static_cast<const SfxUInt32Item*>(mrSrcCol.GetAttr(nSrcRow, ATTR_VALUE_FORMAT))->GetValue();
-        short nType = pSrcDoc->GetFormatTable()->GetType(nNumIndex);
-        return (nType == NUMBERFORMAT_DATE) || (nType == NUMBERFORMAT_TIME) || (nType == NUMBERFORMAT_DATETIME);
-    }
-
     void insertRefCell(SCROW nSrcRow, SCROW nDestRow)
     {
         ScAddress aSrcPos(mnSrcCol, nSrcRow, mnSrcTab);
@@ -770,7 +762,7 @@ public:
                 std::advance(itEnd, nDataSize);
                 for (SCROW nSrcRow = nSrcRow1; it != itEnd; ++it, ++nSrcRow)
                 {
-                    bool bCopy = isDateCell(nSrcRow) ? bDateTime : bNumeric;
+                    bool bCopy = mrCxt.isDateCell(mrSrcCol, nSrcRow) ? bDateTime : bNumeric;
                     if (!bCopy)
                         continue;
 
@@ -877,7 +869,7 @@ public:
                         }
                         else if (rSrcCell.IsValue())
                         {
-                            bool bCopy = isDateCell(nSrcRow) ? bDateTime : bNumeric;
+                            bool bCopy = mrCxt.isDateCell(mrSrcCol, nSrcRow) ? bDateTime : bNumeric;
                             if (!bCopy)
                                 continue;
 

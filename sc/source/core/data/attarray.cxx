@@ -1374,6 +1374,16 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
     return bFound;
 }
 
+bool ScAttrArray::IsMerged( SCROW nRow ) const
+{
+    SCSIZE nIndex;
+    Search(nRow, nIndex);
+    const ScMergeAttr& rItem =
+        static_cast<const ScMergeAttr&>(pData[nIndex].pPattern->GetItem(ATTR_MERGE));
+
+    return rItem.IsMerged();
+}
+
 // Area around any given summaries expand and adapt any MergeFlag (bRefresh)
 bool ScAttrArray::ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
                                 SCCOL& rPaintCol, SCROW& rPaintRow,

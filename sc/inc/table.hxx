@@ -409,6 +409,9 @@ public:
 
     bool InitColumnBlockPosition( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol );
 
+    void CopyOneCellFromClip(
+        sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
+
     void CopyFromClip(
         sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         SCsCOL nDx, SCsROW nDy, ScTable* pTable );
@@ -560,6 +563,7 @@ public:
 
     bool        HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sal_uInt16 nMask ) const;
     bool        HasAttribSelection( const ScMarkData& rMark, sal_uInt16 nMask ) const;
+    bool IsMerged( SCCOL nCol, SCROW nRow ) const;
     bool        ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL& rEndCol, SCROW& rEndRow,
                                 bool bRefresh );

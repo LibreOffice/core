@@ -917,6 +917,8 @@ public:
 
     SC_DLLPUBLIC void            SetDrawPageSize(SCTAB nTab);
 
+    bool IsMerged( const ScAddress& rPos ) const;
+
     bool            ExtendMergeSel( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL& rEndCol, SCROW& rEndRow, const ScMarkData& rMark,
                                 bool bRefresh = false );
@@ -1192,6 +1194,8 @@ public:
 
     bool InitColumnBlockPosition( sc::ColumnBlockPosition& rBlokPos, SCTAB nTab, SCCOL nCol );
 
+    bool CopyOneCellFromClip(
+        sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
     void CopyBlockFromClip(
         sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         const ScMarkData& rMark, SCsCOL nDx, SCsROW nDy );

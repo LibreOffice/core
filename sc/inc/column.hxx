@@ -177,6 +177,7 @@ public:
 
     bool        HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const;
     bool    HasAttribSelection( const ScMarkData& rMark, sal_uInt16 nMask ) const;
+    bool IsMerged( SCROW nRow ) const;
     bool    ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
                                 SCCOL& rPaintCol, SCROW& rPaintRow,
                                 bool bRefresh );
@@ -220,6 +221,9 @@ public:
     void CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDestCol );
     bool InitBlockPosition( sc::ColumnBlockPosition& rBlockPos );
     bool InitBlockPosition( sc::ColumnBlockConstPosition& rBlockPos ) const;
+
+    void CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, SCROW nRow2 );
+
     void CopyFromClip(
         sc::CopyFromClipContext& rCxt, SCROW nRow1, SCROW nRow2, long nDy, ScColumn& rColumn );
 
@@ -509,8 +513,10 @@ public:
     SCROW GetCellNotesMaxRow() const;
     SCROW GetCellNotesMinRow() const;
 
-    void CopyCellNotesToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol, bool bCloneCaption = true,
-                                     SCROW nRowOffsetDest=0) const;
+    void CopyCellNotesToDocument(
+        SCROW nRow1, SCROW nRow2, ScColumn& rDestCol, bool bCloneCaption = true,
+        SCROW nRowOffsetDest = 0) const;
+
     void DuplicateNotes(SCROW nStartRow, size_t nDataSize, ScColumn& rDestCol,
                             sc::ColumnBlockPosition& maDestBlockPos, bool bCloneCaption = true, SCROW nRowOffsetDest=0 ) const;
     void UpdateNoteCaptions();

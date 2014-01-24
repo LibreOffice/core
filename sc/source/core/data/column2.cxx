@@ -1749,7 +1749,8 @@ void ScColumn::CopyCellTextAttrsToDocument(SCROW nRow1, SCROW nRow2, ScColumn& r
     }
 }
 
-void ScColumn::CopyCellNotesToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol, bool bCloneCaption, SCROW nRowOffsetDest) const
+void ScColumn::CopyCellNotesToDocument(
+    SCROW nRow1, SCROW nRow2, ScColumn& rDestCol, bool bCloneCaption, SCROW nRowOffsetDest ) const
 {
     SCCOL nDestCol = rDestCol.GetCol();
     SCTAB nDestTab = rDestCol.GetTab();
@@ -1825,7 +1826,6 @@ void ScColumn::CopyCellNotesToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDest
                 vCloned.push_back(pClonedNote);
             }
             rDestCol.maCellNotes.set(rDestCol.maCellNotes.begin(), nBlockStart + nOffsetInBlock + nRowOffsetDest, vCloned.begin(), vCloned.end());
-
         }
     }
 }
@@ -1833,8 +1833,8 @@ void ScColumn::CopyCellNotesToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDest
 void ScColumn::DuplicateNotes(SCROW nStartRow, size_t nDataSize, ScColumn& rDestCol, sc::ColumnBlockPosition& maDestBlockPos,
                               bool bCloneCaption, SCROW nRowOffsetDest ) const
 {
-        CopyCellNotesToDocument(nStartRow, nStartRow + nDataSize -1, rDestCol, bCloneCaption, nRowOffsetDest);
-        maDestBlockPos.miCellNotePos = rDestCol.maCellNotes.begin();
+    CopyCellNotesToDocument(nStartRow, nStartRow + nDataSize -1, rDestCol, bCloneCaption, nRowOffsetDest);
+    maDestBlockPos.miCellNotePos = rDestCol.maCellNotes.begin();
 }
 
 void ScColumn::SwapCellTextAttrs( SCROW nRow1, SCROW nRow2 )

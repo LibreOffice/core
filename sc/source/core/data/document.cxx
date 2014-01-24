@@ -95,6 +95,7 @@
 #include "scopetools.hxx"
 #include "refupdatecontext.hxx"
 #include "formulagroup.hxx"
+#include <tokenarray.hxx>
 
 #include "formula/vectortoken.hxx"
 
@@ -2689,6 +2690,9 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
         SCROW nRow2 = pRange->aEnd.Row();
 
         DeleteArea(nCol1, nRow1, nCol2, nRow2, rMark, nDelFlag);
+
+        if (CopyOneCellFromClip(aCxt, nCol1, nRow1, nCol2, nRow2))
+            continue;
 
         SCCOL nC1 = nCol1;
         SCROW nR1 = nRow1;
@@ -5289,7 +5293,6 @@ bool ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
 
     return bFound;
 }
-
 
 bool ScDocument::ExtendMergeSel( SCCOL nStartCol, SCROW nStartRow,
                               SCCOL& rEndCol, SCROW& rEndRow,
