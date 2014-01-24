@@ -818,8 +818,8 @@ void SwDrawView::CheckPossibilities()
     //OLE-Objects may themselves wish a resize protection (StarMath)
 
     const SdrMarkList &rMrkList = GetMarkedObjectList();
-    sal_Bool bProtect = sal_False,
-             bSzProtect = sal_False;
+    bool bProtect = false;
+    bool bSzProtect = false;
     for ( sal_uInt16 i = 0; !bProtect && i < rMrkList.GetMarkCount(); ++i )
     {
         const SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
@@ -842,7 +842,7 @@ void SwDrawView::CheckPossibilities()
                             // than one Writer fly frame can be selected.
 
                             // TODO/LATER: retrieve Aspect - from where?!
-                            bSzProtect |= ( embed::EmbedMisc::EMBED_NEVERRESIZE & xObj->getStatus( embed::Aspects::MSOLE_CONTENT ) ) ? sal_True : sal_False;
+                            bSzProtect |= ( embed::EmbedMisc::EMBED_NEVERRESIZE & xObj->getStatus( embed::Aspects::MSOLE_CONTENT ) ) != 0;
 
                             // #i972: protect position if it is a Math object anchored 'as char' and baseline alignment is activated
                             SwDoc* pDoc = Imp().GetShell()->GetDoc();
@@ -869,17 +869,17 @@ void SwDrawView::CheckPossibilities()
             if ( !pFrmFmt )
             {
                 OSL_FAIL( "<SwDrawView::CheckPossibilities()> - missing frame format" );
-                bProtect = sal_True;
+                bProtect = true;
             }
             else if ((FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId()) &&
                       rMrkList.GetMarkCount() > 1 )
             {
-                bProtect = sal_True;
+                bProtect = true;
             }
         }
     }
     bMoveProtect    |= bProtect;
-    bResizeProtect  |= bProtect | bSzProtect;
+    bResizeProtect  |= bProtect || bSzProtect;
 }
 
 /// replace marked <SwDrawVirtObj>-objects by its reference object for delete marked objects.
