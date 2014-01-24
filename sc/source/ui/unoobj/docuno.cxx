@@ -932,9 +932,9 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
 }
 
 
-sal_Int32 SAL_CALL ScModelObj::getRendererCount( const uno::Any& aSelection,
-                                    const uno::Sequence<beans::PropertyValue>& rOptions )
-                                throw (lang::IllegalArgumentException, uno::RuntimeException)
+sal_Int32 SAL_CALL ScModelObj::getRendererCount(const uno::Any& aSelection,
+    const uno::Sequence<beans::PropertyValue>& rOptions)
+        throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (!pDocShell)
