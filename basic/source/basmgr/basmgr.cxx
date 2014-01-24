@@ -2074,8 +2074,8 @@ SbxObject* implCreateDialog( uno::Sequence< sal_Int8 > aData )
 {
     sal_Int8* pData = aData.getArray();
     SvMemoryStream aMemStream( pData, aData.getLength(), STREAM_READ );
-    SbxObject* pDialog = (SbxObject*)SbxBase::Load( aMemStream );
-    return pDialog;
+    SbxBase* pBase = SbxBase::Load( aMemStream );
+    return dynamic_cast<SbxObject*>(pBase);
 }
 
 // HACK! Because this value is defined in basctl/inc/vcsbxdef.hxx
