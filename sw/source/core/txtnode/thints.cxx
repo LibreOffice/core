@@ -3421,8 +3421,10 @@ sal_uInt16 SwTxtNode::GetLang( const sal_Int32 nBegin, const sal_Int32 nLen,
                 const sal_Int32 *pEndIdx = pHt->End();
                 // Ueberlappt das Attribut den Bereich?
 
-                if( pEndIdx &&
-                    nLen ? ( nAttrStart < nEnd && nBegin < *pEndIdx )
+                if (!pEndIdx)
+                    continue;
+
+                if( nLen ? ( nAttrStart < nEnd && nBegin < *pEndIdx )
                          : (( nAttrStart < nBegin &&
                                 ( pHt->DontExpand() ? nBegin < *pEndIdx
                                                     : nBegin <= *pEndIdx )) ||
