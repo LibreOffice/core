@@ -936,6 +936,13 @@ VCLXMenuBar::VCLXMenuBar( MenuBar* pMenuBar ) : VCLXMenu( (Menu *)pMenuBar )
     DBG_CTOR( VCLXMenuBar, 0 );
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_VCLXMenuBar_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new VCLXMenuBar());
+}
 
 DBG_NAME(VCLXPopupMenu);
 
@@ -948,6 +955,14 @@ VCLXPopupMenu::VCLXPopupMenu()
 VCLXPopupMenu::VCLXPopupMenu( PopupMenu* pPopMenu ) : VCLXMenu( (Menu *)pPopMenu )
 {
     DBG_CTOR( VCLXPopupMenu, 0 );
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_VCLXPopupMenu_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new VCLXPopupMenu());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -338,19 +338,23 @@
     <service name="com.sun.star.awt.UnoControlTimeField"/>
     <service name="stardiv.vcl.control.TimeField"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.VCLXMenuBar">
+  <implementation name="stardiv.Toolkit.VCLXMenuBar"
+      constructor="stardiv_Toolkit_VCLXMenuBar_get_implementation">
     <service name="com.sun.star.awt.MenuBar"/>
     <service name="stardiv.vcl.MenuBar"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.VCLXPointer">
+  <implementation name="stardiv.Toolkit.VCLXPointer"
+      constructor="stardiv_Toolkit_VCLXPointer_get_implementation">
     <service name="com.sun.star.awt.Pointer"/>
     <service name="stardiv.vcl.Pointer"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.VCLXPopupMenu">
+  <implementation name="stardiv.Toolkit.VCLXPopupMenu"
+      constructor="stardiv_Toolkit_VCLXPopupMenu_get_implementation">
     <service name="com.sun.star.awt.PopupMenu"/>
     <service name="stardiv.vcl.PopupMenu"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.VCLXPrinterServer">
+  <implementation name="stardiv.Toolkit.VCLXPrinterServer"
+      constructor="stardiv_Toolkit_VCLXPrinterServer_get_implementation">
     <service name="com.sun.star.awt.PrinterServer"/>
     <service name="stardiv.vcl.PrinterServer"/>
   </implementation>

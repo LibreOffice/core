@@ -108,10 +108,6 @@ IMPL_CREATEINSTANCE( UnoFormattedFieldControl )
 IMPL_CREATEINSTANCE_CTX( UnoMultiPageControl )
 IMPL_CREATEINSTANCE_CTX( UnoPageControl )
 IMPL_CREATEINSTANCE_CTX( UnoFrameControl )
-IMPL_CREATEINSTANCE( VCLXMenuBar )
-IMPL_CREATEINSTANCE( VCLXPointer )
-IMPL_CREATEINSTANCE( VCLXPopupMenu )
-IMPL_CREATEINSTANCE( VCLXPrinterServer )
 
 extern "C"
 {
@@ -125,13 +121,9 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL tk_component_getFactory( const sal_Char* sImple
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory =
             static_cast< ::com::sun::star::lang::XMultiServiceFactory* >( _pServiceManager );
-        GET_FACTORY( VCLXPopupMenu, szServiceName_PopupMenu, szServiceName2_PopupMenu )
-        GET_FACTORY( VCLXMenuBar, szServiceName_MenuBar, szServiceName2_MenuBar )
-        GET_FACTORY( VCLXPointer, szServiceName_Pointer, szServiceName2_Pointer )
         GET_FACTORY( UnoDialogControl, szServiceName_UnoControlDialog, szServiceName2_UnoControlDialog )
         GET_FACTORY( UnoFormattedFieldControl, szServiceName_UnoControlFormattedField, szServiceName2_UnoControlFormattedField )
         GET_FACTORY( UnoControlFormattedFieldModel, szServiceName_UnoControlFormattedFieldModel, szServiceName2_UnoControlFormattedFieldModel )
-        GET_FACTORY( VCLXPrinterServer, szServiceName_PrinterServer, szServiceName2_PrinterServer )
         GET_FACTORY( UnoMultiPageModel, szServiceName_UnoMultiPageModel, NULL )
         GET_FACTORY( UnoMultiPageControl, szServiceName_UnoMultiPageControl, NULL )
         GET_FACTORY( UnoPageModel, szServiceName_UnoPageModel, NULL )

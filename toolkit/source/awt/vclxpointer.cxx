@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <toolkit/awt/vclxpointer.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -64,6 +65,12 @@ sal_Int32 VCLXPointer::getType() throw(::com::sun::star::uno::RuntimeException)
     return (sal_Int32)maPointer.GetStyle();
 }
 
-
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_VCLXPointer_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new VCLXPointer());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
