@@ -115,6 +115,8 @@ private:
 class GlyphMetric
 {
 public:
+    GlyphMetric() : mnAdvanceWidth(0) {}
+
     Point                   GetOffset() const   { return maOffset; }
     Point                   GetDelta() const    { return maDelta; }
     Size                    GetSize() const     { return maSize; }
@@ -153,10 +155,7 @@ struct ExtGlyphData
 class GlyphData
 {
 public:
-    mnLruValue()
-        : mnLruValue(0)
-    {
-    }
+    GlyphData() : mnLruValue(0) {}
 
     const GlyphMetric&      GetMetric() const           { return maMetric; }
     Size                    GetSize() const             { return maMetric.GetSize(); }
