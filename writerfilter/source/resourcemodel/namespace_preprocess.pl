@@ -52,7 +52,7 @@ while ( <NAMESPACES> )
 {
     chomp( $_ );
     # line format is: numeric-id short-name namespace-URL
-    $_ =~ /^([0-9]+)\s+([a-zA-Z]+)\s+([a-zA-Z0-9-.:\/]+)\s*$/ or die "Error: invalid character in input data";
+    $_ =~ /^([0-9]+)\s+([a-zA-Z][a-zA-Z0-9]*)\s+([a-zA-Z0-9-.:\/]+)\s*$/ or die "Error: invalid character in input data";
     print <<EOF;
       <xsl:when test="\$id = '$2'">
         <xsl:text>$1</xsl:text>

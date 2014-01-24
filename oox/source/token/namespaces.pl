@@ -38,7 +38,7 @@ while( <INFILE> )
     if( $_ )
     {
         # check for valid characters
-        $_ =~ /^([a-zA-Z]+)\s+([a-zA-Z0-9-.:\/]+)\s*$/ or die "Error: invalid character in input data";
+        $_ =~ /^([a-zA-Z][a-zA-Z0-9]*)\s+([a-zA-Z0-9-.:\/]+)\s*$/ or die "Error: invalid character in input data";
         $namespaces{$1} = $2;
     }
 }
