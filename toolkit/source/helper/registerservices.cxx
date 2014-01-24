@@ -99,8 +99,6 @@ namespace toolkit
 
 using namespace toolkit;
 
-IMPL_CREATEINSTANCE( StdTabController )
-IMPL_CREATEINSTANCE( StdTabControllerModel )
 IMPL_CREATEINSTANCE( UnoControlContainer )
 IMPL_CREATEINSTANCE_CTX( UnoControlContainerModel )
 IMPL_CREATEINSTANCE_CTX( UnoControlFormattedFieldModel )
@@ -136,8 +134,6 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL tk_component_getFactory( const sal_Char* sImple
         GET_FACTORY( VCLXPointer, szServiceName_Pointer, szServiceName2_Pointer )
         GET_FACTORY( UnoControlContainer, szServiceName_UnoControlContainer, szServiceName2_UnoControlContainer )
         GET_FACTORY( UnoControlContainerModel, szServiceName_UnoControlContainerModel, szServiceName2_UnoControlContainerModel )
-        GET_FACTORY( StdTabController, szServiceName_TabController, szServiceName2_TabController )
-        GET_FACTORY( StdTabControllerModel, szServiceName_TabControllerModel, szServiceName2_TabControllerModel )
         GET_FACTORY( UnoDialogControl, szServiceName_UnoControlDialog, szServiceName2_UnoControlDialog )
         GET_FACTORY( UnoFormattedFieldControl, szServiceName_UnoControlFormattedField, szServiceName2_UnoControlFormattedField )
         GET_FACTORY( UnoControlFormattedFieldModel, szServiceName_UnoControlFormattedFieldModel, szServiceName2_UnoControlFormattedFieldModel )

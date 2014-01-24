@@ -384,4 +384,12 @@ Reference< XControl >  StdTabController::FindControl( Sequence< Reference< XCont
     return Reference< XControl > ();
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_StdTabController_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new StdTabController());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

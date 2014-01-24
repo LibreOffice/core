@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/io/XMarkableStream.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <toolkit/controls/stdtabcontrollermodel.hxx>
 #include <toolkit/helper/macros.hxx>
@@ -412,8 +413,12 @@ void StdTabControllerModel::read( const ::com::sun::star::uno::Reference< ::com:
     }
 }
 
-
-
-
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_StdTabControllerModel_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new StdTabControllerModel());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
