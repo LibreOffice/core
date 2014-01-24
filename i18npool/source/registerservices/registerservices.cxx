@@ -26,14 +26,12 @@
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
 
-#include <localedata.hxx>
 #include <numberformatcode.hxx>
 #include <nativenumbersupplier.hxx>
 #include <defaultnumberingprovider.hxx>
 #include <servicename.hxx>
 
 #define TRANSLITERATION_ALL
-#include <transliterationImpl.hxx>
 #include <transliteration_body.hxx>
 #include <transliteration_caseignore.hxx>
 #include <transliteration_Ignore.hxx>
@@ -50,7 +48,6 @@
 #include <calendar_jewish.hxx>
 
 #define BREAKITERATOR_ALL
-#include <breakiteratorImpl.hxx>
 #include <breakiterator_cjk.hxx>
 #include <breakiterator_th.hxx>
 #include <breakiterator_unicode.hxx>
@@ -65,7 +62,6 @@
 #include <unoscripttypedetector.hxx>
 #include <cclass_unicode.hxx>
 
-#include <collatorImpl.hxx>
 #include <chaptercollator.hxx>
 #include <collator_unicode.hxx>
 
@@ -118,7 +114,6 @@ using namespace i18n;
 
 IMPL_CREATEINSTANCE_CTX( NumberFormatCodeMapper )
 IMPL_CREATEINSTANCE( NativeNumberSupplier )
-IMPL_CREATEINSTANCE( LocaleDataImpl )
 IMPL_CREATEINSTANCE_CTX( DefaultNumberingProvider )
 IMPL_CREATEINSTANCE_CTX( IndexEntrySupplier )
 IMPL_CREATEINSTANCE_CTX( IndexEntrySupplier_asian )
@@ -135,7 +130,6 @@ IMPL_CREATEINSTANCE( Calendar_ROC )
 IMPL_CREATEINSTANCE( Calendar_hijri )
 IMPL_CREATEINSTANCE( Calendar_jewish )
 IMPL_CREATEINSTANCE( Calendar_buddhist )
-IMPL_CREATEINSTANCE_CTX( BreakIteratorImpl )
 IMPL_CREATEINSTANCE( BreakIterator_Unicode )
 IMPL_CREATEINSTANCE( BreakIterator_ja )
 IMPL_CREATEINSTANCE( BreakIterator_zh )
@@ -143,12 +137,10 @@ IMPL_CREATEINSTANCE( BreakIterator_zh_TW )
 IMPL_CREATEINSTANCE( BreakIterator_ko )
 IMPL_CREATEINSTANCE( BreakIterator_th )
 IMPL_CREATEINSTANCE_CTX( ChapterCollator )
-IMPL_CREATEINSTANCE_CTX( CollatorImpl )
 IMPL_CREATEINSTANCE( Collator_Unicode )
 
 IMPL_CREATEINSTANCE_CTX( CharacterClassificationImpl )
 IMPL_CREATEINSTANCE_CTX( cclass_Unicode )
-IMPL_CREATEINSTANCE_CTX( TransliterationImpl )
 IMPL_CREATEINSTANCE( UnoScriptTypeDetector )
 
 IMPL_CREATEINSTANCE_CTX( InputSequenceCheckerImpl )
@@ -283,9 +275,6 @@ static const struct InstancesArray {
         const sal_Char* pImplementationNm;
         FN_CreateInstance pFn;
 } aInstances[] = {
-    {   "com.sun.star.i18n.LocaleData",
-        "com.sun.star.i18n.LocaleDataImpl",
-        & LocaleDataImpl_CreateInstance },
     {   "com.sun.star.i18n.NumberFormatMapper",
         "com.sun.star.i18n.NumberFormatCodeMapper",
         & NumberFormatCodeMapper_CreateInstance },
@@ -349,9 +338,6 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.Calendar_buddhist",
         "com.sun.star.i18n.Calendar_buddhist",
         &Calendar_buddhist_CreateInstance },
-    {   "com.sun.star.i18n.BreakIterator",
-        "com.sun.star.i18n.BreakIterator",
-        &BreakIteratorImpl_CreateInstance },
     {   "com.sun.star.i18n.BreakIterator_Unicode",
         "com.sun.star.i18n.BreakIterator_Unicode",
         &BreakIterator_Unicode_CreateInstance },
@@ -370,9 +356,6 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.BreakIterator_th",
         "com.sun.star.i18n.BreakIterator_th",
         &BreakIterator_th_CreateInstance },
-    {   "com.sun.star.i18n.Collator",
-        "com.sun.star.i18n.Collator",
-        &CollatorImpl_CreateInstance },
     {   "com.sun.star.i18n.ChapterCollator",
         "com.sun.star.i18n.ChapterCollator",
         &ChapterCollator_CreateInstance },
@@ -406,9 +389,6 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.TextConversion_zh",
         "com.sun.star.i18n.TextConversion_zh",
         &TextConversion_zh_CreateInstance },
-    {   TRLT_SERVICELNAME,
-        TRLT_IMPLNAME ,
-        &TransliterationImpl_CreateInstance },
     {   TRLT_SERVICELNAME_L10N,
         TRLT_IMPLNAME_PREFIX  "UPPERCASE_LOWERCASE",
         &Transliteration_u2l_CreateInstance },

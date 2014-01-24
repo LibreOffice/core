@@ -19,7 +19,8 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="i18npool" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.i18n.BreakIterator">
+  <implementation name="com.sun.star.i18n.BreakIterator"
+      constructor="com_sun_star_i18n_BreakIterator_get_implementation">
     <service name="com.sun.star.i18n.BreakIterator"/>
   </implementation>
   <implementation name="com.sun.star.i18n.BreakIterator_Unicode">
@@ -76,7 +77,8 @@
   <implementation name="com.sun.star.i18n.CharacterClassification_Unicode">
     <service name="com.sun.star.i18n.CharacterClassification_Unicode"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Collator">
+  <implementation name="com.sun.star.i18n.Collator"
+      constructor="com_sun_star_i18n_Collator_get_implementation">
     <service name="com.sun.star.i18n.Collator"/>
   </implementation>
   <implementation name="com.sun.star.i18n.Collator_Unicode">
@@ -118,7 +120,8 @@
   <implementation name="com.sun.star.i18n.InputSequenceChecker_th">
     <service name="com.sun.star.i18n.InputSequenceChecker_th"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.LocaleDataImpl">
+  <implementation name="com.sun.star.i18n.LocaleDataImpl"
+      constructor="com_sun_star_i18n_LocaleDataImpl_get_implementation">
     <service name="com.sun.star.i18n.LocaleData"/>
   </implementation>
   <implementation name="com.sun.star.i18n.NativeNumberSupplier">
@@ -142,7 +145,8 @@
   <implementation name="com.sun.star.i18n.TextConversion_zh">
     <service name="com.sun.star.i18n.TextConversion_zh"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Transliteration">
+  <implementation name="com.sun.star.i18n.Transliteration"
+      constructor="com_sun_star_i18n_Transliteration_get_implementation">
     <service name="com.sun.star.i18n.Transliteration"/>
   </implementation>
   <implementation name="com.sun.star.i18n.Transliteration.CharToNumEastIndic_ar">

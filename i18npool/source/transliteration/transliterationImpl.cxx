@@ -632,12 +632,10 @@ TransliterationImpl::loadModuleByName( const OUString& implName,
     return body.is();
 }
 
-const sal_Char cTrans[] = "com.sun.star.i18n.Transliteration";
-
 OUString SAL_CALL
 TransliterationImpl::getImplementationName() throw( RuntimeException )
 {
-    return OUString::createFromAscii(cTrans);
+    return OUString("com.sun.star.i18n.Transliteration");
 }
 
 sal_Bool SAL_CALL
@@ -650,10 +648,18 @@ Sequence< OUString > SAL_CALL
 TransliterationImpl::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii(cTrans);
+    aRet[0] = OUString("com.sun.star.i18n.Transliteration");
     return aRet;
 }
 
 } } } }
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_i18n_Transliteration_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new com::sun::star::i18n::TransliterationImpl(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

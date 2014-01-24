@@ -212,11 +212,9 @@ CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rS
     }
 }
 
-const sal_Char cCollator[] = "com.sun.star.i18n.Collator";
-
 OUString SAL_CALL CollatorImpl::getImplementationName() throw( RuntimeException )
 {
-    return OUString::createFromAscii(cCollator);
+    return OUString("com.sun.star.i18n.Collator");
 }
 
 sal_Bool SAL_CALL CollatorImpl::supportsService(const OUString& rServiceName)
@@ -229,10 +227,18 @@ Sequence< OUString > SAL_CALL
 CollatorImpl::getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii(cCollator);
+    aRet[0] = OUString("com.sun.star.i18n.Collator");
     return aRet;
 }
 
 } } } }
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_i18n_Collator_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new com::sun::star::i18n::CollatorImpl(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

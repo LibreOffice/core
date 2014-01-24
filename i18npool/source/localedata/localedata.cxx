@@ -1664,4 +1664,12 @@ OUString LocaleDataImpl::getFirstLocaleServiceName( const com::sun::star::lang::
     return aVec;
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_i18n_LocaleDataImpl_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new LocaleDataImpl());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

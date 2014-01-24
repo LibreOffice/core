@@ -605,12 +605,10 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale) throw (
     throw RuntimeException();
 }
 
-const sal_Char cBreakIterator[] = "com.sun.star.i18n.BreakIterator";
-
 OUString SAL_CALL
 BreakIteratorImpl::getImplementationName(void) throw( RuntimeException )
 {
-    return OUString::createFromAscii(cBreakIterator);
+    return OUString("com.sun.star.i18n.BreakIterator");
 }
 
 sal_Bool SAL_CALL
@@ -623,10 +621,18 @@ Sequence< OUString > SAL_CALL
 BreakIteratorImpl::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii(cBreakIterator);
+    aRet[0] = OUString("com.sun.star.i18n.BreakIterator");
     return aRet;
 }
 
 } } } }
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_i18n_BreakIterator_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new com::sun::star::i18n::BreakIteratorImpl(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
