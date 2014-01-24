@@ -335,7 +335,7 @@ SvxColorTabPage::SvxColorTabPage(Window* pParent, const SfxItemSet& rInAttrs)
     get(m_pR, "R");
     get(m_pG, "G");
     get(m_pB, "B");
-    get(m_pCYMK, "cymk");
+    get(m_pCYMK, "cmyk");
     get(m_pC, "C");
     get(m_pY, "Y");
     get(m_pM, "M");
