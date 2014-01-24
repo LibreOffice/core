@@ -614,6 +614,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         fprintf(stderr,"[Java framework]sunjavaplugin" SAL_DLLEXTENSION
                 "Java runtime library: %s does not export symbol %s !\n",
                 sLib.getStr(), sSymbol.getStr());
+        osl_unloadModule(moduleRt);
         return JFW_PLUGIN_E_VM_CREATION_FAILED;
     }
 
