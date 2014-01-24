@@ -1001,6 +1001,10 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         const OUString sTrayIndex = rPropNameSupplier.GetName( PROP_PRINTER_PAPER_TRAY_INDEX );
         if( m_nPaperBin >= 0 )
             xFollowPageStyle->setPropertyValue( sTrayIndex, uno::makeAny( m_nPaperBin ) );
+        if ( rDM_Impl.GetSettingsTable()->GetMirrorMarginSettings() )
+        {
+            Insert(PROP_PAGE_STYLE_LAYOUT, uno::makeAny(style::PageStyleLayout_MIRRORED));
+        }
         uno::Reference< text::XTextColumns > xColumns;
         if( m_nColumnCount > 0 )
             xColumns = ApplyColumnProperties( xFollowPageStyle );

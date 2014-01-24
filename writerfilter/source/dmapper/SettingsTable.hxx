@@ -70,6 +70,7 @@ class SettingsTable : public LoggedProperties, public LoggedTable
 
     bool GetDoNotUseHTMLParagraphAutoSpacing() const;
     bool GetSplitPgBreakAndParaMark() const;
+    bool GetMirrorMarginSettings() const;
 
     uno::Sequence<beans::PropertyValue> GetThemeFontLangProperties() const;
 

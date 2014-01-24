@@ -768,6 +768,10 @@ void DocxExport::WriteSettings()
     if ( settings.trackRevisions )
         pFS->singleElementNS( XML_w, XML_trackRevisions, FSEND );
 
+    // Mirror Margins
+    if(isMirroredMargin())
+        pFS->singleElementNS( XML_w, XML_mirrorMargins, FSEND );
+
     // Embed Fonts
     if( pDoc->get( IDocumentSettingAccess::EMBED_FONTS ))
         pFS->singleElementNS( XML_w, XML_embedTrueTypeFonts, FSEND );
@@ -1174,6 +1178,16 @@ VMLExport& DocxExport::VMLExporter()
 DocxSdrExport& DocxExport::SdrExporter()
 {
     return *m_pSdrExport;
+}
+
+bool DocxExport::isMirroredMargin()
+{
+    bool bMirroredMargins = false;
+    if ( nsUseOnPage::PD_MIRROR == (nsUseOnPage::PD_MIRROR & pDoc->GetPageDesc(0).ReadUseOn()) )
+    {
+        bMirroredMargins = true;
+    }
+    return bMirroredMargins;
 }
 
 boost::optional<const SvxBrushItem*> DocxExport::getBackground()
