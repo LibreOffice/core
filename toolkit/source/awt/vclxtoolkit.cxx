@@ -82,7 +82,6 @@ using org::libreoffice::touch::ByteBufferWrapper;
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <vcl/unohelp.hxx>
-#include <vcl/btndlg.hxx>
 #include <vcl/button.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/ctrl.hxx>
