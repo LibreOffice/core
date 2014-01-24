@@ -119,6 +119,10 @@ bool ExcelFilter::importDocument() throw()
         {
             SAL_WARN("sc", "exception when importing document properties " << e.Message);
         }
+        catch( ... )
+        {
+            SAL_WARN("sc", "exception when importing document properties");
+        }
         return true;
     }
     return false;
