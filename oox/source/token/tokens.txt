@@ -3823,6 +3823,10 @@ pct85
 pct87
 pct90
 pct95
+pctHeight
+pctPosHOffset
+pctPosVOffset
+pctWidth
 peachPuff
 penClr
 pencils
@@ -4640,6 +4644,8 @@ singleXmlCells
 singleclick
 size
 sizeAuto
+sizeRelH
+sizeRelV
 sizeRepresents
 sizeWithCells
 skew
