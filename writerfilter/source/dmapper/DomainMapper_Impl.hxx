@@ -315,6 +315,7 @@ private:
     bool                                                                            m_bStartTOC;
     /// If we got any text that is the pre-rendered result of the TOC field.
     bool                                                                            m_bStartedTOC;
+    bool                                                                            m_bStartIndex;
     bool                                                                            m_bTOCPageRef;
 
     LineNumberSettings                                                              m_aLineNumberSettings;
@@ -583,6 +584,12 @@ public:
         uno::Reference< uno::XInterface > & xFieldInterface,
         uno::Reference< beans::XPropertySet > xFieldProperties,
         const OUString & sTOCServiceName);
+    void handleIndex
+        (FieldContextPtr pContext,
+        PropertyNameSupplier& rPropNameSupplier,
+        uno::Reference< uno::XInterface > & xFieldInterface,
+        uno::Reference< beans::XPropertySet > xFieldProperties,
+        const OUString & sTOCServiceName);
     //the field command has to be closed (0x14 appeared)
     void CloseFieldCommand();
     //the _current_ fields require a string type result while TOCs accept richt results
@@ -739,6 +746,8 @@ public:
 
     /// A sub-grabbag of m_aInteropGrabBag, like 'spacing'.
     std::vector<beans::PropertyValue> m_aSubInteropGrabBag;
+
+    bool isInIndexContext() { return m_bStartIndex;}
 };
 } //namespace dmapper
 } //namespace writerfilter

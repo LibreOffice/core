@@ -2603,6 +2603,17 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69616, "fdo69616.docx")
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Fallback/w:pict/v:group", "coordorigin").match("696,725"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo73596,"fdo73596.docx")
+{
+    // DOCX contaning TOC should preserve code field '\u'.
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/w:instrText");
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
+    CPPUNIT_ASSERT(contents.match(" INDEX \\e \""));
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
