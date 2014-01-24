@@ -250,9 +250,8 @@ sal_Int32 SAL_CALL ScAccessibleContextBase::getBackground(  )
 
 //=====  XAccessibleContext  ==================================================
 
-sal_Int32 SAL_CALL
-       ScAccessibleContextBase::getAccessibleChildCount(void)
-    throw (uno::RuntimeException)
+sal_Int32 SAL_CALL ScAccessibleContextBase::getAccessibleChildCount()
+    throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("should be implemented in the abrevated class");
     return 0;

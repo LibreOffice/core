@@ -1483,7 +1483,8 @@ void SAL_CALL ScAccessibleDocumentPagePreview::grabFocus() throw (uno::RuntimeEx
 
 //=====  XAccessibleContext  ==============================================
 
-sal_Int32 SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleChildCount(void) throw (uno::RuntimeException)
+sal_Int32 SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleChildCount()
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
