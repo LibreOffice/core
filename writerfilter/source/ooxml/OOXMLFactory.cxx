@@ -269,7 +269,7 @@ OOXMLFactory::createFastChildContext(OOXMLFastContextHandler * pHandler,
         ret = createFastChildContextFromFactory(pHandler, pFactory, Element);
 
 #ifdef DEBUG_FACTORY
-    debug_logger->endElement("factory.createFastChildContext");
+    debug_logger->endElement();
 #endif
 
     return ret;
@@ -292,7 +292,7 @@ void OOXMLFactory::characters(OOXMLFastContextHandler * pHandler,
     }
 
 #ifdef DEBUG_FACTORY
-    debug_logger->endElement("factory.characters");
+    debug_logger->endElement();
 #endif
 }
 

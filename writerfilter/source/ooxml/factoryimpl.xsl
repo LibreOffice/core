@@ -127,7 +127,7 @@ uno::Reference&lt; xml::sax::XFastContextHandler &gt; OOXMLFactory::createFastCh
     }
     
 #ifdef DEBUG_FACTORY
-    debug_logger->endElement("factory.createFastChildContextFromFactory");        
+    debug_logger->endElement();
 #endif
 
     return aResult;
@@ -189,7 +189,7 @@ uno::Reference&lt; xml::sax::XFastContextHandler &gt; OOXMLFactory::createFastCh
     <xsl:text>
     
 #ifdef DEBUG_FACTORY
-    debug_logger->endElement("factory.createFastChildContextFromStart");
+    debug_logger->endElement();
 #endif
     return aResult;
 }
