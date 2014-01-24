@@ -26,7 +26,6 @@
 #include <nativenumbersupplier.hxx>
 #include <stdio.h>
 #include <string.h>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 // Cyrillic upper case
@@ -57,7 +56,6 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-using namespace ::rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -1043,11 +1041,10 @@ OUString DefaultNumberingProvider::getNumberingIdentifier( sal_Int16 nNumberingT
     return OUString();
 }
 
-static const sal_Char cDefaultNumberingProvider[] = "com.sun.star.text.DefaultNumberingProvider";
 OUString DefaultNumberingProvider::getImplementationName(void)
                 throw( RuntimeException )
 {
-    return OUString::createFromAscii(cDefaultNumberingProvider);
+    return OUString("com.sun.star.text.DefaultNumberingProvider");
 }
 
 sal_Bool DefaultNumberingProvider::supportsService(const OUString& rServiceName)
@@ -1060,10 +1057,18 @@ Sequence< OUString > DefaultNumberingProvider::getSupportedServiceNames(void)
                 throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii(cDefaultNumberingProvider);
+    aRet[0] = OUString("com.sun.star.text.DefaultNumberingProvider");
     return aRet;
 }
 
 } } } }
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_text_DefaultNumberingProvider_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new css::i18n::DefaultNumberingProvider(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

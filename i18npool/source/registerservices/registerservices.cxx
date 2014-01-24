@@ -26,9 +26,6 @@
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
 
-#include <numberformatcode.hxx>
-#include <nativenumbersupplier.hxx>
-#include <defaultnumberingprovider.hxx>
 #include <servicename.hxx>
 
 #define TRANSLITERATION_ALL
@@ -59,7 +56,6 @@
 #include <indexentrysupplier_default.hxx>
 
 #include <characterclassificationImpl.hxx>
-#include <unoscripttypedetector.hxx>
 #include <cclass_unicode.hxx>
 
 #include <chaptercollator.hxx>
@@ -69,10 +65,7 @@
 #include <inputsequencechecker_th.hxx>
 #include <inputsequencechecker_hi.hxx>
 
-#include <textconversionImpl.hxx>
 #include <textconversion.hxx>
-
-#include <ordinalsuffix.hxx>
 
 using namespace ::com::sun::star;
 
@@ -112,9 +105,6 @@ typedef uno::Reference<
 
 using namespace i18n;
 
-IMPL_CREATEINSTANCE_CTX( NumberFormatCodeMapper )
-IMPL_CREATEINSTANCE( NativeNumberSupplier )
-IMPL_CREATEINSTANCE_CTX( DefaultNumberingProvider )
 IMPL_CREATEINSTANCE_CTX( IndexEntrySupplier )
 IMPL_CREATEINSTANCE_CTX( IndexEntrySupplier_asian )
 IMPL_CREATEINSTANCE_CTX( IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_syllable )
@@ -141,13 +131,11 @@ IMPL_CREATEINSTANCE( Collator_Unicode )
 
 IMPL_CREATEINSTANCE_CTX( CharacterClassificationImpl )
 IMPL_CREATEINSTANCE_CTX( cclass_Unicode )
-IMPL_CREATEINSTANCE( UnoScriptTypeDetector )
 
 IMPL_CREATEINSTANCE_CTX( InputSequenceCheckerImpl )
 IMPL_CREATEINSTANCE( InputSequenceChecker_th )
 IMPL_CREATEINSTANCE( InputSequenceChecker_hi )
 
-IMPL_CREATEINSTANCE_CTX( TextConversionImpl )
 IMPL_CREATEINSTANCE_CTX( TextConversion_ko )
 IMPL_CREATEINSTANCE_CTX( TextConversion_zh )
 
@@ -268,22 +256,11 @@ IMPL_CREATEINSTANCE( halfwidthKatakanaToFullwidthKatakana )
 IMPL_CREATEINSTANCE( fullwidthToHalfwidthLikeASC )
 IMPL_CREATEINSTANCE( halfwidthToFullwidthLikeJIS )
 
-IMPL_CREATEINSTANCE( OrdinalSuffix )
-
 static const struct InstancesArray {
         const sal_Char* pServiceNm;
         const sal_Char* pImplementationNm;
         FN_CreateInstance pFn;
 } aInstances[] = {
-    {   "com.sun.star.i18n.NumberFormatMapper",
-        "com.sun.star.i18n.NumberFormatCodeMapper",
-        & NumberFormatCodeMapper_CreateInstance },
-    {   "com.sun.star.i18n.NativeNumberSupplier",
-        "com.sun.star.i18n.NativeNumberSupplier",
-        & NativeNumberSupplier_CreateInstance },
-    {   "com.sun.star.text.DefaultNumberingProvider",
-        "com.sun.star.text.DefaultNumberingProvider",
-        &DefaultNumberingProvider_CreateInstance },
     {   "com.sun.star.i18n.IndexEntrySupplier",
         "com.sun.star.i18n.IndexEntrySupplier",
         &IndexEntrySupplier_CreateInstance },
@@ -362,9 +339,6 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.Collator_Unicode",
         "com.sun.star.i18n.Collator_Unicode",
         &Collator_Unicode_CreateInstance },
-    {   "com.sun.star.i18n.ScriptTypeDetector",
-        "com.sun.star.i18n.ScriptTypeDetector",
-        &UnoScriptTypeDetector_CreateInstance },
     {   "com.sun.star.i18n.CharacterClassification",
         "com.sun.star.i18n.CharacterClassification",
         &CharacterClassificationImpl_CreateInstance },
@@ -380,9 +354,6 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.InputSequenceChecker_hi",
         "com.sun.star.i18n.InputSequenceChecker_hi",
         &InputSequenceChecker_hi_CreateInstance },
-    {   "com.sun.star.i18n.TextConversion",
-        "com.sun.star.i18n.TextConversion",
-        &TextConversionImpl_CreateInstance },
     {   "com.sun.star.i18n.TextConversion_ko",
         "com.sun.star.i18n.TextConversion_ko",
         &TextConversion_ko_CreateInstance },
@@ -523,10 +494,6 @@ static const struct InstancesArray {
     IMPL_TRANSLITERATION_ITEM (NumToTextHangulCircledSyllable_ko),
     IMPL_TRANSLITERATION_ITEM (NumToTextTianGan_zh),
     IMPL_TRANSLITERATION_ITEM (NumToTextDiZi_zh),
-
-    {   "com.sun.star.i18n.OrdinalSuffix",
-        "com.sun.star.i18n.OrdinalSuffix",
-        & OrdinalSuffix_CreateInstance },
 
     {   TRLT_SERVICELNAME_L10N,
         TRLT_IMPLNAME_PREFIX  "FULLWIDTHKATAKANA_HALFWIDTHKATAKANA",

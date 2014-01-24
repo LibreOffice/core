@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/languagetagicu.hxx>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <string.h>
 #include "ordinalsuffix.hxx"
@@ -31,7 +31,6 @@
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
-using namespace ::rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -154,5 +153,13 @@ Sequence< OUString > SAL_CALL OrdinalSuffix::getSupportedServiceNames(void) thro
 }
 
 } } } }
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_i18n_OrdinalSuffix_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new css::i18n::OrdinalSuffix());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

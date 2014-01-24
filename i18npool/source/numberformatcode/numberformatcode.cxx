@@ -281,4 +281,12 @@ NumberFormatCodeMapper::getSupportedServiceNames(void) throw( ::com::sun::star::
     return aRet;
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_i18n_NumberFormatCodeMapper_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new NumberFormatCodeMapper(context));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

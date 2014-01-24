@@ -124,19 +124,24 @@
       constructor="com_sun_star_i18n_LocaleDataImpl_get_implementation">
     <service name="com.sun.star.i18n.LocaleData"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.NativeNumberSupplier">
+  <implementation name="com.sun.star.i18n.NativeNumberSupplier"
+      constructor="com_sun_star_i18n_NativeNumberSupplier_get_implementation">
     <service name="com.sun.star.i18n.NativeNumberSupplier"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.NumberFormatCodeMapper">
+  <implementation name="com.sun.star.i18n.NumberFormatCodeMapper"
+      constructor="com_sun_star_i18n_NumberFormatCodeMapper_get_implementation">
     <service name="com.sun.star.i18n.NumberFormatMapper"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.OrdinalSuffix">
+  <implementation name="com.sun.star.i18n.OrdinalSuffix"
+      constructor="com_sun_star_i18n_OrdinalSuffix_get_implementation">
     <service name="com.sun.star.i18n.OrdinalSuffix"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.ScriptTypeDetector">
+  <implementation name="com.sun.star.i18n.ScriptTypeDetector"
+      constructor="com_sun_star_i18n_ScriptTypeDetector_get_implementation">
     <service name="com.sun.star.i18n.ScriptTypeDetector"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.TextConversion">
+  <implementation name="com.sun.star.i18n.TextConversion"
+      constructor="com_sun_star_i18n_TextConversion_get_implementation">
     <service name="com.sun.star.i18n.TextConversion"/>
   </implementation>
   <implementation name="com.sun.star.i18n.TextConversion_ko">
@@ -473,7 +478,8 @@
   <implementation name="com.sun.star.i18n.Transliteration.smallToLarge_ja_JP">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
-  <implementation name="com.sun.star.text.DefaultNumberingProvider">
+  <implementation name="com.sun.star.text.DefaultNumberingProvider"
+      constructor="com_sun_star_text_DefaultNumberingProvider_get_implementation">
     <service name="com.sun.star.text.DefaultNumberingProvider"/>
   </implementation>
   <implementation name="com.sun.star.i18n.Transliteration.ignoreDiacritics_CTL">

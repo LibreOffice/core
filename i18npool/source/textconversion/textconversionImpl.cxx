@@ -110,12 +110,10 @@ TextConversionImpl::getLocaleSpecificTextConversion(const Locale& rLocale) throw
         throw NoSupportException(); // aLocale is not supported
 }
 
-const sal_Char cTextConversion[] = "com.sun.star.i18n.TextConversion";
-
 OUString SAL_CALL
 TextConversionImpl::getImplementationName() throw( RuntimeException )
 {
-    return OUString::createFromAscii(cTextConversion);
+    return OUString("com.sun.star.i18n.TextConversion");
 }
 
 sal_Bool SAL_CALL
@@ -129,10 +127,18 @@ Sequence< OUString > SAL_CALL
 TextConversionImpl::getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii(cTextConversion);
+    aRet[0] = OUString("com.sun.star.i18n.TextConversion");
     return aRet;
 }
 
 } } } }
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_i18n_TextConversion_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new css::i18n::TextConversionImpl(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
