@@ -79,6 +79,11 @@ certain functionality.
 @li @c comphelper
 @li @c comphelper.container
 
+@section cppuhelper
+
+@li @c cppuhelper
+@li @c cppuhelper.shlib
+
 @section cui
 
 @li @c cui.customize
@@ -430,7 +435,6 @@ certain functionality.
 @li @c cppcanvas
 @li @c cppcanvas.emf
 @li @c cppu
-@li @c cppuhelper
 @li @c helpcompiler
 @li @c linguistic
 @li @c oox
