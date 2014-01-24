@@ -621,6 +621,9 @@ IMPL_LINK( SpellDialog, IgnoreAllHdl, Button *, pButton )
             {
                 pSpellErrorDescription->xGrammarChecker->ignoreRule( pSpellErrorDescription->sRuleId,
                     pSpellErrorDescription->aLocale );
+                // refresh the layout (workaround to launch a dictionary event)
+                aXDictionary->setActive(sal_False);
+                aXDictionary->setActive(sal_True);
             }
         }
         catch( const uno::Exception& )

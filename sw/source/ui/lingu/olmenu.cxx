@@ -88,6 +88,7 @@
 #include <com/sun/star/linguistic2/SingleProofreadingError.hpp>
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
+#include <com/sun/star/linguistic2/DictionaryEventFlags.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
@@ -564,7 +565,6 @@ m_aInfo16( SW_RES(IMG_INFO_16) )
             m_nGuessLangPara = m_nGuessLangWord;
     }
 
-    EnableItem( MN_IGNORE_WORD, false );
     EnableItem( MN_ADD_TO_DIC, false );
     EnableItem( MN_ADD_TO_DIC_SINGLE, false );
 
@@ -740,26 +740,33 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
     else if (nId == MN_IGNORE_SELECTION)
     {
         SwPaM *pPaM = m_pSh->GetCrsr();
-        if (pPaM) {
-            if (m_bGrammarResults) {
-                try
-                {
-                    m_xGrammarResult.xProofreader->ignoreRule(
-                        m_xGrammarResult.aErrors[ m_nGrammarError ].aRuleIdentifier,
-                            m_xGrammarResult.aLocale );
-                }
-                catch( const uno::Exception& )
-                {
-                }
-            }
+        if (pPaM)
             m_pSh->IgnoreGrammarErrorAt( *pPaM );
-        }
     }
     else if (nId == MN_IGNORE_WORD)
     {
         uno::Reference< linguistic2::XDictionary > xDictionary( SvxGetIgnoreAllList(), uno::UNO_QUERY );
-        linguistic::AddEntryToDic( xDictionary,
-                m_xSpellAlt->getWord(), sal_False, OUString(), LANGUAGE_NONE );
+        if (m_bGrammarResults) {
+            try
+            {
+                m_xGrammarResult.xProofreader->ignoreRule(
+                    m_xGrammarResult.aErrors[ m_nGrammarError ].aRuleIdentifier,
+                        m_xGrammarResult.aLocale );
+                // refresh the layout of the actual paragraph (faster)
+                SwPaM *pPaM = m_pSh->GetCrsr();
+                if (pPaM)
+                    m_pSh->IgnoreGrammarErrorAt( *pPaM );
+                // refresh the layout of all paragraphs (workaround to launch a dictionary event)
+                xDictionary->setActive(sal_False);
+                xDictionary->setActive(sal_True);
+            }
+            catch( const uno::Exception& )
+            {
+            }
+        } else {
+            linguistic::AddEntryToDic( xDictionary,
+                    m_xSpellAlt->getWord(), sal_False, OUString(), LANGUAGE_NONE );
+        }
     }
     else if ((MN_DICTIONARIES_START <= nId && nId <= MN_DICTIONARIES_END) || nId == MN_ADD_TO_DIC_SINGLE)
     {
