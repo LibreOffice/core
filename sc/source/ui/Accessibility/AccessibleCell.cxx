@@ -282,8 +282,8 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 }
 
 uno::Reference<XAccessibleRelationSet> SAL_CALL
-       ScAccessibleCell::getAccessibleRelationSet(void)
-    throw (uno::RuntimeException)
+       ScAccessibleCell::getAccessibleRelationSet()
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();

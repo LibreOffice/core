@@ -368,8 +368,8 @@ OUString SAL_CALL
 }
 
 uno::Reference<XAccessibleRelationSet> SAL_CALL
-       ScAccessibleContextBase::getAccessibleRelationSet(void)
-    throw (uno::RuntimeException)
+       ScAccessibleContextBase::getAccessibleRelationSet()
+    throw (uno::RuntimeException, std::exception)
 {
     return new utl::AccessibleRelationSetHelper();
 }

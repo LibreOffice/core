@@ -178,8 +178,8 @@ public:
     /// Return NULL to indicate that an empty relation set.
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
-        getAccessibleRelationSet(void)
-        throw (::com::sun::star::uno::RuntimeException);
+        getAccessibleRelationSet()
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /// Return the set of current states.
     virtual ::com::sun::star::uno::Reference<

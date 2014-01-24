@@ -128,8 +128,8 @@ public:
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
-           getAccessibleRelationSet(void)
-        throw (::com::sun::star::uno::RuntimeException);
+           getAccessibleRelationSet()
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     ///=====  XServiceInfo  ====================================================
 
