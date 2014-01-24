@@ -103,19 +103,21 @@ void SwFntCache::Flush( )
 |*
 |*************************************************************************/
 
-SwFntObj::SwFntObj( const SwSubFont &rFont, const void *pOwn, SwViewShell *pSh ) :
-    SwCacheObj( (void*)pOwn ),
-    aFont( rFont ),
-    pScrFont( NULL ),
-    pPrtFont( &aFont ),
-    pPrinter( NULL ),
-    nPropWidth( rFont.GetPropWidth() )
+SwFntObj::SwFntObj(const SwSubFont &rFont, const void *pOwn, SwViewShell *pSh)
+    : SwCacheObj((void*)pOwn)
+    , aFont(rFont)
+    , pScrFont(NULL)
+    , pPrtFont(&aFont)
+    , pPrinter(NULL)
+    , nGuessedLeading(USHRT_MAX)
+    , nExtLeading(USHRT_MAX)
+    , nScrAscent(0)
+    , nPrtAscent(USHRT_MAX)
+    , nScrHeight(0)
+    , nPrtHeight(USHRT_MAX)
+    , nPropWidth(rFont.GetPropWidth())
 {
     nZoom = pSh ? pSh->GetViewOptions()->GetZoom() : USHRT_MAX;
-    nGuessedLeading = USHRT_MAX;
-    nExtLeading = USHRT_MAX;
-    nPrtAscent = USHRT_MAX;
-    nPrtHeight = USHRT_MAX;
     bSymbol = RTL_TEXTENCODING_SYMBOL == aFont.GetCharSet();
     bPaintBlank = ( UNDERLINE_NONE != aFont.GetUnderline()
                  || UNDERLINE_NONE != aFont.GetOverline()
