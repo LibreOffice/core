@@ -1727,6 +1727,13 @@ DECLARE_OOXMLIMPORT_TEST(testFdo73389,"fdo73389.docx")
     // This was 9340, i.e. the width of the inner table was too large.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2842), getProperty<sal_Int32>(xTables->getByIndex(0), "Width"));
 }
+
+DECLARE_OOXMLIMPORT_TEST(testDMLGroupshapeSdt, "dml-groupshape-sdt.docx")
+{
+    uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
+    // The text in the groupshape was missing due to the w:sdt and w:sdtContent wrapper around it.
+    CPPUNIT_ASSERT_EQUAL(OUString("sdt and sdtContent inside groupshape"), uno::Reference<text::XTextRange>(xGroupShape->getByIndex(1), uno::UNO_QUERY)->getString());
+}
 #endif
 
 
