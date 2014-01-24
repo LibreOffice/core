@@ -2612,8 +2612,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
     if (!pClipDoc->bIsClip || !pClipDoc->GetTableCount())
         return;
 
-    bool bOldAutoCalc = GetAutoCalc();
-    SetAutoCalc( false );   // avoid multiple recalculations
+    sc::AutoCalcSwitch aACSwitch(*this, false); // temporarily turn off auto calc.
 
     NumFmtMergeHandler aNumFmtMergeHdl(this, pClipDoc);
 
@@ -2789,7 +2788,6 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
     BroadcastFromClip( nAllCol1, nAllRow1, nAllCol2, nAllRow2, rMark, nInsFlag );
     if (bResetCut)
         pClipDoc->GetClipParam().mbCutMode = false;
-    SetAutoCalc( bOldAutoCalc );
 }
 
 static SCROW lcl_getLastNonFilteredRow(
