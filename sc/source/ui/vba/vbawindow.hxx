@@ -102,7 +102,7 @@ public:
     virtual css::uno::Any SAL_CALL getWindowState() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setWindowState( const css::uno::Any& _windowstate ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getZoom() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setZoom( const css::uno::Any& _zoom ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setZoom(const css::uno::Any& _zoom) throw (css::uno::RuntimeException, std::exception);
     virtual double SAL_CALL getTabRatio() throw (css::uno::RuntimeException) ;
     virtual void SAL_CALL setTabRatio( double _tabratio ) throw (css::uno::RuntimeException) ;
 

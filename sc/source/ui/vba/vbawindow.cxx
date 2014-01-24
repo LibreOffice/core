@@ -764,8 +764,8 @@ ScVbaWindow::getZoom() throw (uno::RuntimeException)
     return uno::Any();
 }
 
-void SAL_CALL
-ScVbaWindow::setZoom( const uno::Any& _zoom ) throw (uno::RuntimeException)
+void SAL_CALL ScVbaWindow::setZoom(const uno::Any& _zoom)
+    throw (uno::RuntimeException, std::exception)
 {
     sal_Int16 nZoom = 100;
     _zoom >>= nZoom;
