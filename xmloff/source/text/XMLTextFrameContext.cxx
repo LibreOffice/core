@@ -295,7 +295,7 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
 
         if( bPath )
         {
-            basegfx::tools::importFromSvgD(aPolyPolygon, sD, true, 0);
+            basegfx::tools::importFromSvgD(aPolyPolygon, sD, GetImport().needFixPositionAfterZ(), 0);
         }
         else
         {
