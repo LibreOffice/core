@@ -1138,7 +1138,7 @@ OString AstExpression::toString()
 {
     OString exprStr;
     if ( m_combOperator == EC_symbol )
-        return *m_pSymbolicName;
+        return m_pSymbolicName ? *m_pSymbolicName : OString("<Undefined Name>");
 
     if ( m_exprValue )
     {
