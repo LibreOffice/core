@@ -90,8 +90,8 @@ public:
 
     inline SwRect &operator = ( const SwRect &rRect );
 
-    inline sal_Bool operator == ( const SwRect& rRect ) const;
-    inline sal_Bool operator != ( const SwRect& rRect ) const;
+    inline bool operator == ( const SwRect& rRect ) const;
+    inline bool operator != ( const SwRect& rRect ) const;
 
     inline SwRect &operator+=( const Point &rPt );
     inline SwRect &operator-=( const Point &rPt );
@@ -254,11 +254,11 @@ inline SwRect &SwRect::operator = ( const SwRect &rRect )
     m_Size = rRect.m_Size;
     return *this;
 }
-inline sal_Bool SwRect::operator == ( const SwRect& rRect ) const
+inline bool SwRect::operator == ( const SwRect& rRect ) const
 {
     return (m_Point == rRect.m_Point && m_Size == rRect.m_Size);
 }
-inline sal_Bool SwRect::operator != ( const SwRect& rRect ) const
+inline bool SwRect::operator != ( const SwRect& rRect ) const
 {
     return (m_Point != rRect.m_Point || m_Size != rRect.m_Size);
 }
