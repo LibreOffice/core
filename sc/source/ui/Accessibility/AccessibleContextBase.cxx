@@ -259,7 +259,8 @@ sal_Int32 SAL_CALL ScAccessibleContextBase::getAccessibleChildCount()
 
 uno::Reference<XAccessible> SAL_CALL
     ScAccessibleContextBase::getAccessibleChild(sal_Int32 /* nIndex */)
-        throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+        throw (lang::IndexOutOfBoundsException, uno::RuntimeException,
+               std::exception)
 {
     OSL_FAIL("should be implemented in the abrevated class");
     return uno::Reference<XAccessible>();

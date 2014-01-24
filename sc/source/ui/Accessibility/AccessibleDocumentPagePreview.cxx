@@ -1500,7 +1500,7 @@ sal_Int32 SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleChildCount()
 }
 
 uno::Reference<XAccessible> SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleChild(sal_Int32 nIndex)
-                throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
+    throw (uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
