@@ -179,28 +179,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
     PropertyMap::iterator oldPropValue;
         switch( nName )
         {
-        case NS_rtf::LN_ISTD: //index of applied style
-            {
-            //search for the style with the given id and apply it
-            //as CharStyleName or ParaStyleName
-            //if the style is a user defined style then it must have an ISTD - built-in styles might not have it
-            StyleSheetTablePtr pStyleSheets = m_pImpl->GetStyleSheetTable();
-            OUString sValue = OUString::number(nIntValue, 16);
-            const StyleSheetEntryPtr pEntry = pStyleSheets->FindStyleSheetByISTD(sValue);
-            if( pEntry.get( ) )
-            {
-                bool bParaStyle = (pEntry->nStyleTypeCode == STYLE_TYPE_PARA);
-                if(bParaStyle)
-                    m_pImpl->SetCurrentParaStyleId(OUString::number(nIntValue, 16));
-                if (m_pImpl->GetTopContext() && m_pImpl->GetTopContextType() != CONTEXT_SECTION)
-                    m_pImpl->GetTopContext()->Insert(
-                                                 bParaStyle ?
-                                                 PROP_PARA_STYLE_NAME  : PROP_CHAR_STYLE_NAME,
-                                                 uno::makeAny(
-                                                 m_pImpl->GetStyleSheetTable()->ConvertStyleName( pEntry->sStyleName ) ) );
-            }
-        }
-        break;
         case NS_ooxml::LN_CT_Lvl_start:
             break;
         case NS_ooxml::LN_CT_Lvl_numFmt:
@@ -223,11 +201,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_rtf::LN_FMASSCOPY:
             break;
-        case NS_rtf::LN_ISTDBASE:
-            break;
         case NS_rtf::LN_CUPX:
-            break;
-        case NS_rtf::LN_ISTDNEXT:
             break;
         case NS_rtf::LN_BCHUPE:
             break;

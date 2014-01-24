@@ -419,9 +419,6 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
     }
     switch(Name)
     {
-        case NS_rtf::LN_ISTD:
-            m_pImpl->m_pCurrentEntry->sStyleIdentifierD = OUString::number(nIntValue, 16);
-        break;
         case NS_rtf::LN_STI:
         {
             OUString tempStyleIdentifier = GetStyleIdFromIndex(static_cast<sal_uInt32>(nIntValue));
@@ -430,14 +427,6 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
             if (nIntValue == 0 || nIntValue == 65)
                 m_pImpl->m_pCurrentEntry->bIsDefaultStyle = true;
         }
-        break;
-        case NS_rtf::LN_ISTDBASE:
-            if (static_cast<sal_uInt32>(nIntValue) != 0xfff)
-                m_pImpl->m_pCurrentEntry->sBaseStyleIdentifier = OUString::number(nIntValue, 16);
-        break;
-        case NS_rtf::LN_ISTDNEXT:
-            if (static_cast<sal_uInt32>(nIntValue) != 0xfff)
-                m_pImpl->m_pCurrentEntry->sNextStyleIdentifier = OUString::number(nIntValue, 16);
         break;
         case NS_rtf::LN_FSCRATCH:
         case NS_rtf::LN_FINVALHEIGHT:
