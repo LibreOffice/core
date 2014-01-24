@@ -21,6 +21,10 @@
 #include <stack>
 #include <vector>
 #include <boost/noncopyable.hpp>
+#ifdef check
+#  //some problem with MacOSX and a check define
+#  undef check
+#endif
 #include <boost/ptr_container/ptr_map.hpp>
 
 #include <com/sun/star/frame/XFrame.hpp>
