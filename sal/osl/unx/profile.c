@@ -1501,17 +1501,15 @@ static sal_Char* addLine(osl_TProfileImpl* pProfile, const sal_Char* Line)
                 pProfile->m_Lines[idx]=0;
             }
         }
-
-        if (pProfile->m_Lines == NULL)
-        {
-            pProfile->m_NoLines  = 0;
-            pProfile->m_MaxLines = 0;
-            return (NULL);
-        }
-
+    }
+    if (pProfile->m_Lines == NULL)
+    {
+        pProfile->m_NoLines  = 0;
+        pProfile->m_MaxLines = 0;
+        return (NULL);
     }
 
-    if ( pProfile->m_Lines != 0 && pProfile->m_Lines[pProfile->m_NoLines] != 0 )
+    if ( pProfile->m_Lines[pProfile->m_NoLines] != 0 )
     {
         free(pProfile->m_Lines[pProfile->m_NoLines]);
     }
