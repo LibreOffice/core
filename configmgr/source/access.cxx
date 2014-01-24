@@ -135,7 +135,7 @@ void Access::markChildAsModified(rtl::Reference< ChildAccess > const & child) {
         parent->modifiedChildren_.insert(
             ModifiedChildren::value_type(
                 p->getNameInternal(),
-                ModifiedChild(dynamic_cast< ChildAccess * >(p.get()), false)));
+                ModifiedChild(static_cast< ChildAccess * >(p.get()), false)));
         p = parent;
     }
 }
@@ -185,7 +185,7 @@ css::uno::Sequence< css::uno::Type > Access::getTypes()
         types.push_back(
             cppu::UnoType< css::container::XHierarchicalNameReplace >::get());
         if (getNode()->kind() != Node::KIND_GROUP ||
-            dynamic_cast< GroupNode * >(getNode().get())->isExtensible())
+            static_cast< GroupNode * >(getNode().get())->isExtensible())
         {
             types.push_back(
                 cppu::UnoType< css::container::XNameContainer >::get());
@@ -322,7 +322,7 @@ css::uno::Type Access::getElementType() throw (css::uno::RuntimeException) {
     switch (p->kind()) {
     case Node::KIND_LOCALIZED_PROPERTY:
         return mapType(
-            dynamic_cast< LocalizedPropertyNode * >(p.get())->getStaticType());
+            static_cast< LocalizedPropertyNode * >(p.get())->getStaticType());
     case Node::KIND_GROUP:
         //TODO: Should a specific type be returned for a non-extensible group
         // with homogeneous members or for an extensible group that currently
@@ -614,7 +614,7 @@ void Access::setName(OUString const & aName)
                         {
                             rtl::Reference< RootAccess > root(getRootAccess());
                             rtl::Reference< ChildAccess > childAccess(
-                                dynamic_cast< ChildAccess * >(this));
+                                static_cast< ChildAccess * >(this));
                             localMods.add(getRelativePath());
                             // unbind() modifies the parent chain that
                             // markChildAsModified() walks, so order is
@@ -1179,7 +1179,7 @@ void Access::removeByName(OUString const & aName)
         if (getNode()->kind() == Node::KIND_GROUP) {
             rtl::Reference< Node > p(child->getNode());
             if (p->kind() != Node::KIND_PROPERTY ||
-                !dynamic_cast< PropertyNode * >(p.get())->isExtension())
+                !static_cast< PropertyNode * >(p.get())->isExtension())
             {
                 throw css::container::NoSuchElementException(
                     aName, static_cast< cppu::OWeakObject * >(this));
@@ -1201,7 +1201,7 @@ css::uno::Reference< css::uno::XInterface > Access::createInstance()
 {
     assert(thisIs(IS_SET|IS_UPDATE));
     OUString tmplName(
-        dynamic_cast< SetNode * >(getNode().get())->getDefaultTemplateName());
+        static_cast< SetNode * >(getNode().get())->getDefaultTemplateName());
     rtl::Reference< Node > tmpl(
         components_.getTemplate(Data::NO_LAYER, tmplName));
     if (!tmpl.is()) {
@@ -1355,7 +1355,7 @@ css::uno::Any Access::queryInterface(css::uno::Type const & aType)
             return res;
         }
         if (getNode()->kind() != Node::KIND_GROUP ||
-            dynamic_cast< GroupNode * >(getNode().get())->isExtensible())
+            static_cast< GroupNode * >(getNode().get())->isExtensible())
         {
             res = cppu::queryInterface(
                 aType, static_cast< css::container::XNameContainer * >(this));
@@ -1534,7 +1534,7 @@ void Access::insertLocalizedValueChild(
     Modifications * localModifications)
 {
     assert(localModifications != 0);
-    LocalizedPropertyNode * locprop = dynamic_cast< LocalizedPropertyNode * >(
+    LocalizedPropertyNode * locprop = static_cast< LocalizedPropertyNode * >(
         getNode().get());
     checkValue(value, locprop->getStaticType(), locprop->isNillable());
     rtl::Reference< ChildAccess > child(
@@ -2075,7 +2075,7 @@ rtl::Reference< ChildAccess > Access::getSubChild(OUString const & path) {
                 break;
             case Node::KIND_SET:
                 if (!templateName.isEmpty() &&
-                    !dynamic_cast< SetNode * >(p.get())->isValidTemplate(
+                    !static_cast< SetNode * >(p.get())->isValidTemplate(
                         templateName))
                 {
                     return rtl::Reference< ChildAccess >();
@@ -2120,7 +2120,7 @@ css::beans::Property Access::asProperty() {
     switch (p->kind()) {
     case Node::KIND_PROPERTY:
         {
-            PropertyNode * prop = dynamic_cast< PropertyNode * >(p.get());
+            PropertyNode * prop = static_cast< PropertyNode * >(p.get());
             type = mapType(prop->getStaticType());
             nillable = prop->isNillable();
             removable = prop->isExtension();
@@ -2129,7 +2129,7 @@ css::beans::Property Access::asProperty() {
     case Node::KIND_LOCALIZED_PROPERTY:
         {
             LocalizedPropertyNode * locprop =
-                dynamic_cast< LocalizedPropertyNode *>(p.get());
+                static_cast< LocalizedPropertyNode *>(p.get());
             if (Components::allLocales(getRootAccess()->getLocale())) {
                 type = cppu::UnoType< css::uno::XInterface >::get();
                     //TODO: correct?
@@ -2144,7 +2144,7 @@ css::beans::Property Access::asProperty() {
     case Node::KIND_LOCALIZED_VALUE:
         {
             LocalizedPropertyNode * locprop =
-                dynamic_cast< LocalizedPropertyNode * >(getParentNode().get());
+                static_cast< LocalizedPropertyNode * >(getParentNode().get());
             type = mapType(locprop->getStaticType());
             nillable = locprop->isNillable();
             removable = false; //TODO ???
@@ -2223,7 +2223,7 @@ rtl::Reference< ChildAccess > Access::getFreeSetMember(
             static_cast< cppu::OWeakObject * >(this), 1);
     }
     assert(dynamic_cast< SetNode * >(getNode().get()) != 0);
-    if (!dynamic_cast< SetNode * >(getNode().get())->isValidTemplate(
+    if (!static_cast< SetNode * >(getNode().get())->isValidTemplate(
             freeAcc->getNode()->getTemplateName()))
     {
         throw css::lang::IllegalArgumentException(
@@ -2252,7 +2252,7 @@ bool Access::thisIs(int what) {
         ((what & IS_GROUP) == 0 || k == Node::KIND_GROUP) &&
         ((what & IS_SET) == 0 || k == Node::KIND_SET) &&
         ((what & IS_EXTENSIBLE) == 0 || k != Node::KIND_GROUP ||
-         dynamic_cast< GroupNode * >(p.get())->isExtensible()) &&
+         static_cast< GroupNode * >(p.get())->isExtensible()) &&
         ((what & IS_GROUP_MEMBER) == 0 ||
          getParentNode()->kind() == Node::KIND_GROUP)) ||
         ((what & IS_SET_MEMBER) == 0 ||

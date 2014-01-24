@@ -389,7 +389,7 @@ bool ValueParser::endElement() {
             }
             switch (node_->kind()) {
             case Node::KIND_PROPERTY:
-                dynamic_cast< PropertyNode * >(node_.get())->setValue(
+                static_cast< PropertyNode * >(node_.get())->setValue(
                     layer_, value);
                 break;
             case Node::KIND_LOCALIZED_PROPERTY:
@@ -402,7 +402,7 @@ bool ValueParser::endElement() {
                                 localizedName_,
                                 new LocalizedValueNode(layer_, value)));
                     } else {
-                        dynamic_cast< LocalizedValueNode * >(i->second.get())->
+                        static_cast< LocalizedValueNode * >(i->second.get())->
                             setValue(layer_, value);
                     }
                 }

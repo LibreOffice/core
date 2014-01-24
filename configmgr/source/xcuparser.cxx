@@ -112,7 +112,7 @@ bool XcuParser::startElement(
             {
                 handlePropValue(
                     reader,
-                    dynamic_cast< PropertyNode * >(state_.top().node.get()));
+                    static_cast< PropertyNode * >(state_.top().node.get()));
             } else {
                 throw css::uno::RuntimeException(
                     ("bad property node member <" + name.convertFromUtf8() +
@@ -126,7 +126,7 @@ bool XcuParser::startElement(
             {
                 handleLocpropValue(
                     reader,
-                    dynamic_cast< LocalizedPropertyNode * >(
+                    static_cast< LocalizedPropertyNode * >(
                         state_.top().node.get()));
             } else {
                 throw css::uno::RuntimeException(
@@ -146,7 +146,7 @@ bool XcuParser::startElement(
             {
                 handleGroupProp(
                     reader,
-                    dynamic_cast< GroupNode * >(state_.top().node.get()));
+                    static_cast< GroupNode * >(state_.top().node.get()));
             } else if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
                        name.equals("node"))
             {
@@ -163,7 +163,7 @@ bool XcuParser::startElement(
                 name.equals("node"))
             {
                 handleSetNode(
-                    reader, dynamic_cast< SetNode * >(state_.top().node.get()));
+                    reader, static_cast< SetNode * >(state_.top().node.get()));
             } else if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
                        name.equals("prop"))
             {
@@ -383,7 +383,7 @@ void XcuParser::handleItem(xmlreader::XmlReader & reader) {
         state_.push(State::Ignore(true));
         return;
     case Node::KIND_LOCALIZED_PROPERTY:
-        valueParser_.type_ = dynamic_cast< LocalizedPropertyNode * >(
+        valueParser_.type_ = static_cast< LocalizedPropertyNode * >(
             node.get())->getStaticType();
         break;
     default:
@@ -542,7 +542,7 @@ void XcuParser::handleLocpropValue(
                     members[name] = new LocalizedValueNode(
                         valueParser_.getLayer(), css::uno::Any());
                 } else {
-                    dynamic_cast< LocalizedValueNode * >(
+                    static_cast< LocalizedValueNode * >(
                         i->second.get())->setValue(
                             valueParser_.getLayer(), css::uno::Any());
                 }
@@ -635,7 +635,7 @@ void XcuParser::handleGroupProp(
         case Node::KIND_LOCALIZED_PROPERTY:
             handleLocalizedGroupProp(
                 reader,
-                dynamic_cast< LocalizedPropertyNode * >(i->second.get()), name,
+                static_cast< LocalizedPropertyNode * >(i->second.get()), name,
                 type, op, finalized);
             break;
         default:
@@ -688,7 +688,7 @@ void XcuParser::handlePlainGroupProp(
     NodeMap::iterator const & propertyIndex, OUString const & name,
     Type type, Operation operation, bool finalized)
 {
-    PropertyNode * property = dynamic_cast< PropertyNode * >(
+    PropertyNode * property = static_cast< PropertyNode * >(
         propertyIndex->second.get());
     if (property->getLayer() > valueParser_.getLayer()) {
         state_.push(State::Ignore(true));

@@ -279,7 +279,7 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
                 break;
             case Node::KIND_SET:
                 if (!templateName.isEmpty() &&
-                    !dynamic_cast< SetNode * >(parent.get())->isValidTemplate(
+                    !static_cast< SetNode * >(parent.get())->isValidTemplate(
                         templateName))
                 {
                     throw css::uno::RuntimeException(

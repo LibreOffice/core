@@ -74,7 +74,7 @@ void merge(
                 NodeMap::iterator i1(members.find(i2->first));
                 if (i1 == members.end()) {
                     if (i2->second->kind() == Node::KIND_PROPERTY &&
-                        dynamic_cast< GroupNode * >(
+                        static_cast< GroupNode * >(
                             original.get())->isExtensible())
                     {
                         members.insert(*i2);
@@ -91,7 +91,7 @@ void merge(
                 NodeMap & members = original->getMembers();
                 NodeMap::iterator i1(members.find(i2->first));
                 if (i1 == members.end()) {
-                    if (dynamic_cast< SetNode * >(original.get())->
+                    if (static_cast< SetNode * >(original.get())->
                         isValidTemplate(i2->second->getTemplateName()))
                     {
                         members.insert(*i2);
@@ -235,7 +235,7 @@ bool XcsParser::startElement(
                 {
                     handleSetItem(
                         reader,
-                        dynamic_cast< SetNode * >(elements_.top().node.get()));
+                        static_cast< SetNode * >(elements_.top().node.get()));
                     return true;
                 }
                 break;

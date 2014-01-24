@@ -267,7 +267,7 @@ void writeNode(
     switch (node->kind()) {
     case Node::KIND_PROPERTY:
         {
-            PropertyNode * prop = dynamic_cast< PropertyNode * >(node.get());
+            PropertyNode * prop = static_cast< PropertyNode * >(node.get());
             writeData_(handle, RTL_CONSTASCII_STRINGPARAM("<prop oor:name=\""));
             writeAttributeValue(handle, name);
             writeData_(
@@ -314,10 +314,10 @@ void writeNode(
                 writeAttributeValue(handle, name);
                 writeData_(handle, RTL_CONSTASCII_STRINGPARAM("\""));
             }
-            Type type = dynamic_cast< LocalizedPropertyNode * >(parent.get())->
+            Type type = static_cast< LocalizedPropertyNode * >(parent.get())->
                 getStaticType();
             css::uno::Any value(
-                dynamic_cast< LocalizedValueNode * >(node.get())->getValue());
+                static_cast< LocalizedValueNode * >(node.get())->getValue());
             Type dynType = getDynamicType(value);
             assert(dynType != TYPE_ERROR);
             if (type == TYPE_ANY) {
@@ -392,7 +392,7 @@ void writeModifications(
                 break;
             case Node::KIND_GROUP:
                 assert(
-                    dynamic_cast< GroupNode * >(parent.get())->isExtensible());
+                    static_cast< GroupNode * >(parent.get())->isExtensible());
                 writeData_(
                     handle, RTL_CONSTASCII_STRINGPARAM("<prop oor:name=\""));
                 writeAttributeValue(handle, nodeName);

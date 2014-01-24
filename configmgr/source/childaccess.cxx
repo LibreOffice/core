@@ -215,7 +215,7 @@ void ChildAccess::setProperty(
     switch (node_->kind()) {
     case Node::KIND_PROPERTY:
         {
-            PropertyNode * prop = dynamic_cast< PropertyNode * >(node_.get());
+            PropertyNode * prop = static_cast< PropertyNode * >(node_.get());
             type = prop->getStaticType();
             nillable = prop->isNillable();
         }
@@ -238,7 +238,7 @@ void ChildAccess::setProperty(
     case Node::KIND_LOCALIZED_VALUE:
         {
             LocalizedPropertyNode * locprop =
-                dynamic_cast< LocalizedPropertyNode * >(getParentNode().get());
+                static_cast< LocalizedPropertyNode * >(getParentNode().get());
             type = locprop->getStaticType();
             nillable = locprop->isNillable();
         }
@@ -258,7 +258,7 @@ css::uno::Any ChildAccess::asValue() {
     }
     switch (node_->kind()) {
     case Node::KIND_PROPERTY:
-        return dynamic_cast< PropertyNode * >(node_.get())->getValue(
+        return static_cast< PropertyNode * >(node_.get())->getValue(
             getComponents());
     case Node::KIND_LOCALIZED_PROPERTY:
         {
@@ -272,7 +272,7 @@ css::uno::Any ChildAccess::asValue() {
         }
         break;
     case Node::KIND_LOCALIZED_VALUE:
-        return dynamic_cast< LocalizedValueNode * >(node_.get())->getValue();
+        return static_cast< LocalizedValueNode * >(node_.get())->getValue();
     default:
         break;
     }
@@ -291,11 +291,11 @@ void ChildAccess::commitChanges(bool valid, Modifications * globalModifications)
         globalModifications->add(path);
         switch (node_->kind()) {
         case Node::KIND_PROPERTY:
-            dynamic_cast< PropertyNode * >(node_.get())->setValue(
+            static_cast< PropertyNode * >(node_.get())->setValue(
                 Data::NO_LAYER, *changedValue_);
             break;
         case Node::KIND_LOCALIZED_VALUE:
-            dynamic_cast< LocalizedValueNode * >(node_.get())->setValue(
+            static_cast< LocalizedValueNode * >(node_.get())->setValue(
                 Data::NO_LAYER, *changedValue_);
             break;
         default:
