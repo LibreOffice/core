@@ -1754,10 +1754,10 @@ void ScFormulaCell::SetDirty( bool bDirtyFlag )
             SetDirtyVar();
         else
         {
-            // Multiple Formulas avoid tracking in Load and Copy compileAll
-            // by Scenario and Copy Block From Clip.
-            // If unconditional required Formula tracking is set before SetDirty
-            // bDirty = false, eg in CompileTokenArray
+            // Avoid multiple formula tracking in Load() and in CompileAll()
+            // after CopyScenario() and CopyBlockFromClip().
+            // If unconditional formula tracking is needed, set bDirty=false
+            // before calling SetDirty(), for example in CompileTokenArray().
             if ( !bDirty || mbPostponedDirty || !pDocument->IsInFormulaTree( this ) )
             {
                 if( bDirtyFlag )
