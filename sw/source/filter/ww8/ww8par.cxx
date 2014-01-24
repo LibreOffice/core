@@ -2190,8 +2190,8 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
                             }
                             while( !pNode->IsTxtNode() && pPaM->GetPoint()->nNode >= 0 );
 
-                            // Subtrackt previous text node's length
-                            if( pNode && pNode->IsTxtNode() )
+                            // Subtract previous text node's length
+                            if( pNode->IsTxtNode() )
                             {
                                 pTxtNode = pNode->GetTxtNode();
                                 if( nLen < pTxtNode->Len() )
