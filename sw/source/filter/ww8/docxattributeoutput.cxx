@@ -3131,7 +3131,7 @@ void DocxAttributeOutput::WritePostponedChart()
         static sal_Int32 nChartCount = 0;
         nChartCount++;
         uno::Reference< frame::XModel > xModel( xChartDoc, uno::UNO_QUERY );
-        aRelId = m_rExport.OutputChart( xModel, nChartCount );
+        aRelId = m_rExport.OutputChart( xModel, nChartCount, m_pSerializer );
 
         m_pSerializer->singleElementNS( XML_c, XML_chart,
             FSNS( XML_xmlns, XML_c ), "http://schemas.openxmlformats.org/drawingml/2006/chart",

@@ -154,7 +154,7 @@ public:
     virtual sal_uLong ReplaceCr( sal_uInt8 nChar );
 
     /// Returns the relationd id
-    OString OutputChart( com::sun::star::uno::Reference< com::sun::star::frame::XModel >& xModel, sal_Int32 nCount );
+    OString OutputChart( com::sun::star::uno::Reference< com::sun::star::frame::XModel >& xModel, sal_Int32 nCount, ::sax_fastparser::FSHelperPtr m_pSerializer );
     /// Writes the shape using drawingML syntax.
     void OutputDML( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
 
