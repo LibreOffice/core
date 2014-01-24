@@ -20,8 +20,8 @@
 #include <com/sun/star/awt/tree/XMutableTreeDataModel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
 #include <rtl/ref.hxx>
 #include <toolkit/helper/mutexandbroadcasthelper.hxx>
 #include <toolkit/helper/servicenames.hxx>
@@ -32,8 +32,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::awt::tree;
 using namespace ::com::sun::star::lang;
 
-namespace toolkit
-{
+namespace {
 
     enum broadcast_type { nodes_changed, nodes_inserted, nodes_removed, structure_changed };
 
@@ -652,9 +651,12 @@ Sequence< OUString > SAL_CALL MutableTreeNode::getSupportedServiceNames(  ) thro
 
 }
 
-Reference< XInterface > SAL_CALL MutableTreeDataModel_CreateInstance( const Reference< XMultiServiceFactory >& )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_MutableTreeDataModel_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::MutableTreeDataModel );
+    return cppu::acquire(new MutableTreeDataModel());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -67,7 +67,8 @@
       constructor="stardiv_Toolkit_GridControlModel_get_implementation">
     <service name="com.sun.star.awt.grid.UnoControlGridModel"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.MutableTreeDataModel">
+  <implementation name="stardiv.Toolkit.MutableTreeDataModel"
+      constructor="stardiv_Toolkit_MutableTreeDataModel_get_implementation">
     <service name="com.sun.star.awt.tree.MutableTreeDataModel"/>
   </implementation>
   <implementation name="stardiv.Toolkit.StdTabController">

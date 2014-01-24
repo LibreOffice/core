@@ -121,8 +121,6 @@ IMPL_CREATEINSTANCE( VCLXPrinterServer )
 IMPL_CREATEINSTANCE( UnoRoadmapControl )
 IMPL_CREATEINSTANCE_CTX( UnoControlRoadmapModel )
 
-extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL MutableTreeDataModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
-
 extern "C"
 {
 
@@ -156,7 +154,6 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL tk_component_getFactory( const sal_Char* sImple
         GET_FACTORY( UnoPageControl, szServiceName_UnoPageControl, NULL )
         GET_FACTORY( UnoFrameModel, szServiceName_UnoFrameModel, NULL )
         GET_FACTORY( UnoFrameControl, szServiceName_UnoFrameControl, NULL )
-        GET_FACTORY( MutableTreeDataModel, szServiceName_MutableTreeDataModel, NULL )
     }
     return pRet;
 }
