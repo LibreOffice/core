@@ -2134,7 +2134,7 @@ static void ImplHandleSalSettings( sal_uInt16 nEvent )
     {
         AllSettings aSettings = pApp->GetSettings();
         pApp->MergeSystemSettings( aSettings );
-        pApp->SystemSettingsChanging( aSettings );
+        pApp->OverrideSystemSettings( aSettings );
         pApp->SetSettings( aSettings );
     }
     else
