@@ -2051,8 +2051,7 @@ void OpSumIf::GenSlidingWindowFunction(std::stringstream &ss,
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
-    int flag = 0;
-    (3 == vSubArguments.size()) && (flag = 2);
+    int flag = 3 == vSubArguments.size() ? 2 : 0;
     for (unsigned i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
