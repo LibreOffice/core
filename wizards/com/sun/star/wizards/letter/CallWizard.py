@@ -18,7 +18,7 @@
 import unohelper
 import traceback
 
-from .LetterWizardDialogImpl import LetterWizardDialogImpl
+from .LetterWizardDialogImpl import LetterWizardDialogImpl, Desktop
 
 from com.sun.star.task import XJobExecutor
 
@@ -38,6 +38,20 @@ class CallWizard(unohelper.Base, XJobExecutor):
                    " message " + str(e) + " args " + str(e.args) +
                    traceback.format_exc())
 
+    @classmethod
+    def callRemote(self):
+        #Call the wizard remotely(see README)
+        try:
+            ConnectStr = \
+                "uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext"
+            xLocMSF = Desktop.connect(ConnectStr)
+            lw = LetterWizardDialogImpl(xLocMSF)
+            lw.startWizard(xLocMSF)
+        except Exception as e:
+            print ("Wizard failure exception " + str(type(e)) +
+                   " message " + str(e) + " args " + str(e.args) +
+                   traceback.format_exc())
+                   
 # pythonloader looks for a static g_ImplementationHelper variable
 g_ImplementationHelper = unohelper.ImplementationHelper()
 

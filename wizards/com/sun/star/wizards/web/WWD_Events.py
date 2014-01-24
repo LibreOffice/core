@@ -65,18 +65,6 @@ class WWD_Events(WWD_Startup):
         self.iconsDialog = None
         self.docPreview = None
 
-    @classmethod
-    def main(self, args):
-        ConnectStr = \
-            "uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext"
-        try:
-            xmsf = Desktop.connect(ConnectStr)
-            ww = WWD_Events(xmsf)
-            ww.show()
-            ww.cleanup()
-        except Exception:
-            traceback.print_exc()
-
     def leaveStep(self, nOldStep, nNewStep):
         pass
 

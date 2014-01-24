@@ -61,20 +61,6 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.bSaveSuccess = False
         self.filenameChanged = False
 
-    @classmethod
-    def main(self):
-        #Call the wizard remotely(see README)
-        try:
-            ConnectStr = \
-                "uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext"
-            xLocMSF = Desktop.connect(ConnectStr)
-            lw = FaxWizardDialogImpl(xLocMSF)
-            lw.startWizard(xLocMSF)
-        except Exception as e:
-            print ("Wizard failure exception " + str(type(e)) +
-                   " message " + str(e) + " args " + str(e.args) +
-                   traceback.format_exc())
-
     def startWizard(self, xMSF):
         self.running = True
         try:

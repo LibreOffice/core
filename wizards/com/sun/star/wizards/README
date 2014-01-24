@@ -14,6 +14,5 @@ To call a wizard remotely you need to:
       
 -> Launch the wizard from wizards parent folder:
     python
-    #Fax wizard
-    from wizards.fax.FaxWizardDialogImpl import FaxWizardDialogImpl
-    FaxWizardDialogImpl.main()
+    from wizards.[Wizard's folder].CallWizard import CallWizard
+    CallWizard.callRemote()

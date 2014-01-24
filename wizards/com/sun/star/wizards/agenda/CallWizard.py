@@ -18,7 +18,7 @@
 import unohelper
 import traceback
 
-from .AgendaWizardDialogImpl import AgendaWizardDialogImpl
+from .AgendaWizardDialogImpl import AgendaWizardDialogImpl, Desktop
 
 from com.sun.star.task import XJobExecutor
 
@@ -33,6 +33,20 @@ class CallWizard(unohelper.Base, XJobExecutor):
         try:
             fw = AgendaWizardDialogImpl(self.ctx.ServiceManager)
             fw.startWizard(self.ctx.ServiceManager)
+        except Exception as e:
+            print ("Wizard failure exception " + str(type(e)) +
+                   " message " + str(e) + " args " + str(e.args) +
+                   traceback.format_exc())
+
+    @classmethod
+    def callRemote(self):
+        #Call the wizard remotely(see README)
+        try:
+            ConnectStr = \
+                "uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext"
+            xLocMSF = Desktop.connect(ConnectStr)
+            lw = AgendaWizardDialogImpl(xLocMSF)
+            lw.startWizard(xLocMSF)
         except Exception as e:
             print ("Wizard failure exception " + str(type(e)) +
                    " message " + str(e) + " args " + str(e.args) +

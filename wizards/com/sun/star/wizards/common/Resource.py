@@ -16,7 +16,8 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-
+#import uno before importing from VclWindowPeerAttribute
+import uno
 from com.sun.star.awt.VclWindowPeerAttribute import OK
 
 class Resource(object):

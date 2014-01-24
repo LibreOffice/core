@@ -18,7 +18,8 @@
 import unohelper
 import traceback
 
-from .WebWizard import WebWizard
+from .WWD_Events import WWD_Events
+from ..common.Desktop import Desktop
 
 from com.sun.star.task import XJobExecutor
 
@@ -31,13 +32,25 @@ class CallWizard(unohelper.Base, XJobExecutor):
 
     def trigger(self, args):
         try:
-            ww = WebWizard(self.ctx.ServiceManager)
+            ww = WWD_Events(self.ctx.ServiceManager)
             ww.show()
             ww.cleanup()
         except Exception as e:
             print ("Wizard failure exception " + str(type(e)) +
                    " message " + str(e) + " args " + str(e.args) +
                    traceback.format_exc())
+
+    @classmethod
+    def callRemote(self):
+        ConnectStr = \
+            "uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext"
+        try:
+            xmsf = Desktop.connect(ConnectStr)
+            ww = WWD_Events(xmsf)
+            ww.show()
+            ww.cleanup()
+        except Exception:
+            traceback.print_exc()
 
 # pythonloader looks for a static g_ImplementationHelper variable
 g_ImplementationHelper = unohelper.ImplementationHelper()

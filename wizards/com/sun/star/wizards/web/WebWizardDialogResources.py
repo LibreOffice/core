@@ -31,9 +31,15 @@ class WebWizardDialogResources(Resource):
     def __init__(self, xmsf):
         super(WebWizardDialogResources,self).__init__(xmsf,
             WebWizardDialogResources.MODULE_NAME)
-        self.resbtnDocUp_value = chr(8743)
-        self.resbtnDocDown_value = chr(8744)
-
+        try:
+            #python 3
+            self.resbtnDocUp_value = chr(8743)
+            self.resbtnDocDown_value = chr(8744)
+        except ValueError:
+            #python 2
+            self.resbtnDocUp_value = unichr(8743)
+            self.resbtnDocDown_value = unichr(8744) 
+                    
         #Delete the String, uncomment the getResText method
         self.resWebWizardDialog_title = self.getResText(
             WebWizardDialogResources.RID_WEBWIZARDDIALOG_START + 1)

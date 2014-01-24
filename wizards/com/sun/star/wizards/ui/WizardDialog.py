@@ -59,8 +59,6 @@ class WizardDialog(UnoDialog2):
         self.nMaxStep = 1
         self.__bTerminateListenermustberemoved = True
         self.__oWizardResource = Resource(xMSF, "dbw")
-        self.sMsgEndAutopilot = self.__oWizardResource.getResText(
-            UIConsts.RID_DB_COMMON + 33)
         self.oRoadmap = None
         self.terminateListener = None
 

@@ -29,7 +29,6 @@ $(eval $(call gb_Pyuno_add_files,web,wizards/web,\
 	WWD_General.py \
 	WWD_Startup.py \
 	WWHID.py \
-	WebWizard.py \
 	WebWizardConst.py \
 	WebWizardDialog.py \
 	WebWizardDialogResources.py \
