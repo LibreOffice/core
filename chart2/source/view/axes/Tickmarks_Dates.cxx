@@ -105,6 +105,7 @@ void DateTickFactory::getAllTicks( ::std::vector< ::std::vector< TickInfo > >& r
             break;
 
         //find next major date
+        const Date aTmpDate (aDate);
         switch( m_aIncrement.MajorTimeInterval.TimeUnit )
         {
         case DAY:
@@ -118,6 +119,8 @@ void DateTickFactory::getAllTicks( ::std::vector< ::std::vector< TickInfo > >& r
             aDate = DateHelper::GetDateSomeMonthsAway( aDate, m_aIncrement.MajorTimeInterval.Number );
             break;
         }
+        if ( ! aDate.IsValid() || aDate == aTmpDate)
+            break;
     }
 
     //create minor date tickinfos
@@ -136,6 +139,7 @@ void DateTickFactory::getAllTicks( ::std::vector< ::std::vector< TickInfo > >& r
             break;
 
         //find next minor date
+        const Date aTmpDate (aDate);
         switch( m_aIncrement.MinorTimeInterval.TimeUnit )
         {
         case DAY:
@@ -149,6 +153,8 @@ void DateTickFactory::getAllTicks( ::std::vector< ::std::vector< TickInfo > >& r
             aDate = DateHelper::GetDateSomeMonthsAway( aDate, m_aIncrement.MinorTimeInterval.Number );
             break;
         }
+        if ( ! aDate.IsValid() || aDate == aTmpDate)
+            break;
     }
 }
 
