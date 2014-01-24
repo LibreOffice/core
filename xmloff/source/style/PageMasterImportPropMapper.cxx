@@ -25,6 +25,7 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <xmloff/xmlimp.hxx>
+#include <boost/scoped_ptr.hpp>
 
 #define XML_LINE_LEFT 0
 #define XML_LINE_RIGHT 1
@@ -110,10 +111,10 @@ void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >&
     XMLPropertyState* pFooterBorderWidths[4] = { NULL, NULL, NULL, NULL };
     XMLPropertyState* pHeaderHeight = NULL;
     XMLPropertyState* pHeaderMinHeight = NULL;
-    XMLPropertyState* pHeaderDynamic = NULL;
+    boost::scoped_ptr<XMLPropertyState> xHeaderDynamic;
     XMLPropertyState* pFooterHeight = NULL;
     XMLPropertyState* pFooterMinHeight = NULL;
-    XMLPropertyState* pFooterDynamic = NULL;
+    boost::scoped_ptr<XMLPropertyState> xFooterDynamic;
     XMLPropertyState* pAllMarginProperty = NULL;
     XMLPropertyState* pMargins[4] = { NULL, NULL, NULL, NULL };
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -321,28 +322,28 @@ void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >&
         sal_Bool bValue(sal_False);
         uno::Any aAny;
         aAny.setValue( &bValue, ::getBooleanCppuType() );
-        pHeaderDynamic = new XMLPropertyState(pHeaderHeight->mnIndex + 2, aAny);
+        xHeaderDynamic.reset(new XMLPropertyState(pHeaderHeight->mnIndex + 2, aAny));
     }
     if (pHeaderMinHeight)
     {
         sal_Bool bValue(sal_True);
         uno::Any aAny;
         aAny.setValue( &bValue, ::getBooleanCppuType() );
-        pHeaderDynamic = new XMLPropertyState(pHeaderMinHeight->mnIndex + 1, aAny);
+        xHeaderDynamic.reset(new XMLPropertyState(pHeaderMinHeight->mnIndex + 1, aAny));
     }
     if (pFooterHeight)
     {
         sal_Bool bValue(sal_False);
         uno::Any aAny;
         aAny.setValue( &bValue, ::getBooleanCppuType() );
-        pFooterDynamic = new XMLPropertyState(pFooterHeight->mnIndex + 2, aAny);
+        xFooterDynamic.reset(new XMLPropertyState(pFooterHeight->mnIndex + 2, aAny));
     }
     if (pFooterMinHeight)
     {
         sal_Bool bValue(sal_True);
         uno::Any aAny;
         aAny.setValue( &bValue, ::getBooleanCppuType() );
-        pFooterDynamic = new XMLPropertyState(pFooterMinHeight->mnIndex + 1, aAny);
+        xFooterDynamic.reset(new XMLPropertyState(pFooterMinHeight->mnIndex + 1, aAny));
     }
 
     // fdo#38056: nerf the various AllFoo properties so they do not override
@@ -441,15 +442,15 @@ void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >&
             delete pFooterNewBorders[i];
         }
     }
-    if(pHeaderDynamic)
+    if(xHeaderDynamic)
     {
-        rProperties.push_back(*pHeaderDynamic);
-        delete pHeaderDynamic;
+        rProperties.push_back(*xHeaderDynamic);
+        xHeaderDynamic.reset();
     }
-    if(pFooterDynamic)
+    if(xFooterDynamic)
     {
-        rProperties.push_back(*pFooterDynamic);
-        delete pFooterDynamic;
+        rProperties.push_back(*xFooterDynamic);
+        xFooterDynamic.reset();
     }
 }
 
