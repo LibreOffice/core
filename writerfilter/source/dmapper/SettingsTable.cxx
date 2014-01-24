@@ -73,6 +73,7 @@ struct SettingsTable_Impl
     bool                embedSystemFonts;
     bool                m_bDoNotUseHTMLParagraphAutoSpacing;
     bool                m_bSplitPgBreakAndParaMark;
+    bool                m_bMirrorMargin;
     uno::Sequence<beans::PropertyValue> m_pThemeFontLangProps;
 
     SettingsTable_Impl( DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > xTextFactory ) :
@@ -98,6 +99,7 @@ struct SettingsTable_Impl
     , embedSystemFonts(false)
     , m_bDoNotUseHTMLParagraphAutoSpacing(false)
     , m_bSplitPgBreakAndParaMark(false)
+    , m_bMirrorMargin(false)
     , m_pThemeFontLangProps(3)
     {}
 
@@ -234,6 +236,9 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Compat_splitPgBreakAndParaMark:
         m_pImpl->m_bSplitPgBreakAndParaMark = nIntValue;
         break;
+    case NS_ooxml::LN_CT_Settings_mirrorMargins:
+        m_pImpl->m_bMirrorMargin = nIntValue;
+        break;
     default:
     {
 #ifdef DEBUG_DMAPPER_SETTINGS_TABLE
@@ -294,6 +299,11 @@ bool SettingsTable::GetDoNotUseHTMLParagraphAutoSpacing() const
 bool SettingsTable::GetSplitPgBreakAndParaMark() const
 {
     return m_pImpl->m_bSplitPgBreakAndParaMark;
+}
+
+bool SettingsTable::GetMirrorMarginSettings() const
+{
+    return m_pImpl->m_bMirrorMargin;
 }
 
 uno::Sequence<beans::PropertyValue> SettingsTable::GetThemeFontLangProperties() const

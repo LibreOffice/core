@@ -2603,6 +2603,16 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69616, "fdo69616.docx")
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Fallback/w:pict/v:group", "coordorigin").match("696,725"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo73541,"fdo73541.docx")
+{
+    // fdo#73541: The mirrored margins were not imported and mapped correctly in Page Layout
+    // Hence <w:mirrorMargins /> tag was not exported back in settings.xml
+    xmlDocPtr pXmlDoc = parseExport("word/settings.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:settings/w:mirrorMargins");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

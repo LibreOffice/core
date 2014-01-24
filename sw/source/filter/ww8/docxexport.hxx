@@ -236,6 +236,9 @@ private:
     /// Get background color of the document, if there is one.
     boost::optional<const SvxBrushItem*> getBackground();
 
+    /// return true if Page Layout is set as Mirrored
+    bool isMirroredMargin();
+
 public:
     /// FIXME this is temporary, remotely reminding the method of the same
     /// name in WW8Export.

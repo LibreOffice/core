@@ -70,6 +70,7 @@ class WRITERFILTER_DLLPRIVATE SettingsTable : public LoggedProperties, public Lo
 
     bool GetDoNotUseHTMLParagraphAutoSpacing() const;
     bool GetSplitPgBreakAndParaMark() const;
+    bool GetMirrorMarginSettings() const;
 
     uno::Sequence<beans::PropertyValue> GetThemeFontLangProperties() const;
 
