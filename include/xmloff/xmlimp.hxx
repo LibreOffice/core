@@ -462,6 +462,8 @@ public:
     bool embeddedFontAlreadyProcessed( const OUString& url );
 
     virtual void NotifyEmbeddedFontRead() {};
+
+    bool needFixPositionAfterZ() const;
 };
 
 inline UniReference< XMLTextImportHelper > SvXMLImport::GetTextImport()

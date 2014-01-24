@@ -1398,7 +1398,7 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
 
         basegfx::B2DPolyPolygon aPolyPolygon;
 
-        if(basegfx::tools::importFromSvgD(aPolyPolygon, maD, true, 0))
+        if(basegfx::tools::importFromSvgD(aPolyPolygon, maD, GetImport().needFixPositionAfterZ(), 0))
         {
             if(aPolyPolygon.count())
             {
@@ -1752,6 +1752,22 @@ SdXMLConnectorShapeContext::~SdXMLConnectorShapeContext()
 {
 }
 
+bool SvXMLImport::needFixPositionAfterZ() const
+{
+    bool bWrongPositionAfterZ( false );
+    sal_Int32 nUPD( 0 );
+    sal_Int32 nBuildId( 0 );
+    if ( getBuildIds( nUPD, nBuildId ) &&
+       ( ( nUPD == 641 ) || ( nUPD == 645 ) || ( nUPD == 680 ) || ( nUPD == 300 ) ||
+         ( nUPD == 310 ) || ( nUPD == 320 ) || ( nUPD == 330 ) || ( nUPD == 340 ) ||
+         ( nUPD == 350 && nBuildId < 202 ) ) )
+    {
+        bWrongPositionAfterZ = true;
+    }
+    return bWrongPositionAfterZ;
+}
+
+
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
 {
@@ -1841,7 +1857,7 @@ void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const OUS
         {
             basegfx::B2DPolyPolygon aPolyPolygon;
 
-            if(basegfx::tools::importFromSvgD(aPolyPolygon, rValue, true, 0))
+            if(basegfx::tools::importFromSvgD(aPolyPolygon, rValue, GetImport().needFixPositionAfterZ(), 0))
             {
                 if(aPolyPolygon.count())
                 {
