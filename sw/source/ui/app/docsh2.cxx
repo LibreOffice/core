@@ -1433,19 +1433,19 @@ sal_uLong SwDocShell::LoadStylesFromFile( const OUString& rURL,
     if ( bImport )
     {
         SwRead pRead =  ReadXML;
-        SwReader* pReader = 0;
-        SwPaM* pPam = 0;
+        boost::scoped_ptr<SwReader> pReader;
+        boost::scoped_ptr<SwPaM> pPam;
         // the SW3IO - Reader need the pam/wrtshell, because only then he
         // insert the styles!
         if( bUnoCall )
         {
             SwNodeIndex aIdx( pDoc->GetNodes().GetEndOfContent(), -1 );
-            pPam = new SwPaM( aIdx );
-            pReader = new SwReader( aMed, rURL, *pPam );
+            pPam.reset(new SwPaM( aIdx ));
+            pReader.reset(new SwReader( aMed, rURL, *pPam ));
         }
         else
         {
-            pReader = new SwReader( aMed, rURL, *pWrtShell->GetCrsr() );
+            pReader.reset(new SwReader( aMed, rURL, *pWrtShell->GetCrsr() ));
         }
 
         pRead->GetReaderOpt().SetTxtFmts( rOpt.IsTxtFmts() );
@@ -1465,8 +1465,6 @@ sal_uLong SwDocShell::LoadStylesFromFile( const OUString& rURL,
             nErr = pReader->Read( *pRead );
             pWrtShell->EndAllAction();
         }
-        delete pPam;
-        delete pReader;
     }
 
     return nErr;

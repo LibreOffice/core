@@ -159,7 +159,7 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
     static sal_uInt16 nBCTitleNo = 0;
 
     // Create DB-Manager
-    SwNewDBMgr* pNewDBMgr = new SwNewDBMgr;
+    boost::scoped_ptr<SwNewDBMgr> pNewDBMgr(new SwNewDBMgr);
 
     // Read SwLabItem from Config
     SwLabCfgItem aLabCfg(bLabel);
@@ -171,7 +171,7 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
     SwAbstractDialogFactory* pDialogFactory = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pDialogFactory, "SwAbstractDialogFactory fail!");
 
-    boost::scoped_ptr<AbstractSwLabDlg> pDlg(pDialogFactory->CreateSwLabDlg(0, aSet, pNewDBMgr, bLabel));
+    boost::scoped_ptr<AbstractSwLabDlg> pDlg(pDialogFactory->CreateSwLabDlg(0, aSet, pNewDBMgr.get(), bLabel));
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
     if ( RET_OK == pDlg->Execute() )
@@ -277,7 +277,7 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
             pSh->ChgPageDesc( 0, aDesc );
 
             // Insert frame
-            SwFldMgr*        pFldMgr = new SwFldMgr;
+            boost::scoped_ptr<SwFldMgr> pFldMgr(new SwFldMgr);
             pFldMgr->SetEvalExpFlds(sal_False);
 
             // Prepare border template
@@ -377,7 +377,7 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
             pFldMgr->SetEvalExpFlds(sal_True);
             pFldMgr->EvalExpFlds(pSh);
 
-            delete pFldMgr;
+            pFldMgr.reset();
 
             if (pFirstFlyFmt)
                 pSh->GotoFly(pFirstFlyFmt->GetName(), FLYCNTTYPE_ALL, sal_False);
@@ -400,7 +400,6 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
         }
         rReq.SetReturnValue(SfxVoidItem(bLabel ? FN_LABEL : FN_BUSINESS_CARD));
     }
-    delete pNewDBMgr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

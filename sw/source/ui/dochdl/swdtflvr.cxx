@@ -1160,7 +1160,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
 {
     SwWait aWait( *rSh.GetView().
         GetDocShell(), false );
-    SwTrnsfrActionAndUndo* pAction = 0;
+    boost::scoped_ptr<SwTrnsfrActionAndUndo> pAction;
     SwModule* pMod = SW_MOD();
 
     bool nRet = false;
@@ -1214,8 +1214,8 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
 
         if( bDelSel )
             // #i34830#
-            pAction = new SwTrnsfrActionAndUndo( &rSh, UNDO_PASTE_CLIPBOARD, NULL,
-                                                 sal_True );
+            pAction.reset(new SwTrnsfrActionAndUndo( &rSh, UNDO_PASTE_CLIPBOARD, NULL,
+                                                     sal_True ));
     }
 
     SwTransferable *pTrans=0, *pTunneledTrans=GetSwTransferable( rData );
@@ -1260,7 +1260,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
     {
         if( !pAction )
         {
-            pAction = new SwTrnsfrActionAndUndo( &rSh, UNDO_PASTE_CLIPBOARD);
+            pAction.reset(new SwTrnsfrActionAndUndo( &rSh, UNDO_PASTE_CLIPBOARD));
         }
 
         // in Drag&Drop MessageBoxes must not be showed
@@ -1521,7 +1521,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
         rSh.GetView().StopShellTimer();
     }
 
-    delete pAction;
+    pAction.reset();
     if( bCallAutoCaption )
         rSh.GetView().AutoCaption( GRAPHIC_CAP );
 
