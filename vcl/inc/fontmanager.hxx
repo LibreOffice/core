@@ -72,31 +72,33 @@ enum type {
 
 struct FastPrintFontInfo
 {
-    fontID                              m_nID; // FontID
-    fonttype::type                      m_eType;
+    fontID                         m_nID; // FontID
+    fonttype::type                 m_eType;
 
     // font attributes
     OUString                       m_aFamilyName;
     OUString                       m_aStyleName;
     std::list< OUString >          m_aAliases;
-    FontFamily                          m_eFamilyStyle;
-    FontItalic                          m_eItalic;
-    FontWidth                           m_eWidth;
-    FontWeight                          m_eWeight;
-    FontPitch                           m_ePitch;
-    rtl_TextEncoding                    m_aEncoding;
-    bool                                m_bSubsettable;
-    bool                                m_bEmbeddable;
+    FontFamily                     m_eFamilyStyle;
+    FontItalic                     m_eItalic;
+    FontWidth                      m_eWidth;
+    FontWeight                     m_eWeight;
+    FontPitch                      m_ePitch;
+    rtl_TextEncoding               m_aEncoding;
+    bool                           m_bSubsettable;
+    bool                           m_bEmbeddable;
 
-    FastPrintFontInfo() :
-            m_nID( 0 ),
-            m_eType( fonttype::Unknown ),
-            m_eFamilyStyle( FAMILY_DONTKNOW ),
-            m_eItalic( ITALIC_DONTKNOW ),
-            m_eWidth( WIDTH_DONTKNOW ),
-            m_eWeight( WEIGHT_DONTKNOW ),
-            m_ePitch( PITCH_DONTKNOW ),
-            m_aEncoding( RTL_TEXTENCODING_DONTKNOW )
+    FastPrintFontInfo()
+        : m_nID(0)
+        , m_eType(fonttype::Unknown)
+        , m_eFamilyStyle(FAMILY_DONTKNOW)
+        , m_eItalic(ITALIC_DONTKNOW)
+        , m_eWidth(WIDTH_DONTKNOW)
+        , m_eWeight(WEIGHT_DONTKNOW)
+        , m_ePitch(PITCH_DONTKNOW)
+        , m_aEncoding(RTL_TEXTENCODING_DONTKNOW)
+        , m_bSubsettable(false)
+        , m_bEmbeddable(false)
     {}
 };
 
