@@ -395,7 +395,7 @@ SbMethodRef DocObjectWrapper::getMethod( const OUString& aName ) throw (RuntimeE
         sal_uInt16 nSaveFlgs = m_pMod->GetFlags();
         // Limit search to this module
         m_pMod->ResetFlag( SBX_GBLSEARCH );
-        pMethod = (SbMethod*) m_pMod->SbModule::Find( aName,  SbxCLASS_METHOD );
+        pMethod = dynamic_cast<SbMethod*>(m_pMod->SbModule::Find(aName,  SbxCLASS_METHOD));
         m_pMod->SetFlags( nSaveFlgs );
     }
 
