@@ -632,6 +632,19 @@ int RTFDocumentImpl::getFontIndex(int nIndex)
         return m_pSuperstream->getFontIndex(nIndex);
 }
 
+OUString RTFDocumentImpl::getStyleName(int nIndex)
+{
+    if (!m_pSuperstream)
+    {
+        OUString aRet;
+        if (m_aStyleNames.find(nIndex) != m_aStyleNames.end())
+            aRet = m_aStyleNames[nIndex];
+        return aRet;
+    }
+    else
+        return m_pSuperstream->getStyleName(nIndex);
+}
+
 RTFParserState& RTFDocumentImpl::getDefaultState()
 {
     if (!m_pSuperstream)
@@ -1075,8 +1088,11 @@ void RTFDocumentImpl::text(OUString& rString)
                         case DESTINATION_STYLEENTRY:
                             if (m_aStates.top().aTableAttributes.find(NS_rtf::LN_SGC))
                             {
-                                RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aDestinationText.makeStringAndClear()));
-                                m_aStates.top().aTableAttributes.set(NS_rtf::LN_XSTZNAME1, pValue);
+                                OUString aName = m_aStates.top().aDestinationText.makeStringAndClear();
+                                m_aStyleNames[m_nCurrentStyleIndex] = aName;
+                                RTFValue::Pointer_t pValue(new RTFValue(aName));
+                                m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Style_styleId, pValue);
+                                m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Style_name, pValue);
 
                                 writerfilter::Reference<Properties>::Pointer_t const pProp(
                                         new RTFReferenceProperties(mergeAttributes(), mergeSprms())
@@ -3039,6 +3055,10 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_RI: nSprm = NS_sprm::LN_PDxaRight; break;
         case RTF_RIN: nSprm = 0x845d; break;
         case RTF_ITAP: nSprm = NS_sprm::LN_PTableDepth; break;
+        case RTF_SBASEDON:
+           nSprm = (nKeyword == RTF_SBASEDON) ? NS_ooxml::LN_CT_Style_basedOn : NS_ooxml::LN_CT_Style_next;
+           pIntValue.reset(new RTFValue(getStyleName(nParam)));
+           break;
         default: break;
     }
     if (nSprm > 0)
@@ -3054,19 +3074,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             dispatchFlag(RTF_INTBL); // sets newly pushed buffer as current
             assert(m_aStates.top().pCurrentBuffer == &m_aTableBufferStack.back());
         }
-        return 0;
-    }
-
-    // Trivial table attributes.
-    switch (nKeyword)
-    {
-        case RTF_SBASEDON: nSprm = NS_rtf::LN_ISTDBASE; break;
-        case RTF_SNEXT: nSprm = NS_rtf::LN_ISTDNEXT; break;
-        default: break;
-    }
-    if (nSprm > 0)
-    {
-        m_aStates.top().aTableAttributes.set(nSprm, pIntValue);
         return 0;
     }
 
@@ -3231,24 +3238,30 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 if (m_aStates.top().nDestinationState == DESTINATION_STYLESHEET || m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
                 {
                     m_nCurrentStyleIndex = nParam;
-                    m_aStates.top().aTableAttributes.set(NS_rtf::LN_ISTD, pIntValue);
                     RTFValue::Pointer_t pValue(new RTFValue(1));
                     m_aStates.top().aTableAttributes.set(NS_rtf::LN_SGC, pValue); // paragraph style
                 }
                 else
-                   m_aStates.top().aParagraphAttributes.set(NS_rtf::LN_ISTD, pIntValue);
+                {
+                    OUString aName = getStyleName(nParam);
+                    if (!aName.isEmpty())
+                        m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_pStyle, RTFValue::Pointer_t(new RTFValue(aName)));
+                }
             }
             break;
         case RTF_CS:
             if (m_aStates.top().nDestinationState == DESTINATION_STYLESHEET || m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
             {
                 m_nCurrentStyleIndex = nParam;
-                m_aStates.top().aTableAttributes.set(NS_rtf::LN_ISTD, pIntValue);
                 RTFValue::Pointer_t pValue(new RTFValue(2));
                 m_aStates.top().aTableAttributes.set(NS_rtf::LN_SGC, pValue); // character style
             }
             else
-                m_aStates.top().aCharacterAttributes.set(NS_rtf::LN_ISTD, pIntValue);
+            {
+                OUString aName = getStyleName(nParam);
+                if (!aName.isEmpty())
+                    m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_rStyle, RTFValue::Pointer_t(new RTFValue(aName)));
+            }
             break;
         case RTF_DEFF:
             m_aDefaultState.aCharacterSprms.set(NS_sprm::LN_CRgFtc0, pIntValue);

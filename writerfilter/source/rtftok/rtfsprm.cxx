@@ -133,12 +133,9 @@ void RTFSprms::deduplicate(RTFSprms& rReference)
     while (i != m_pSprms->end())
     {
         bool bIgnore = false;
-        if (i->first != NS_rtf::LN_ISTD)
-        {
-            RTFValue::Pointer_t pValue(rReference.find(i->first));
-            if (pValue.get() && i->second->equals(*pValue))
-                bIgnore = true;
-        }
+        RTFValue::Pointer_t pValue(rReference.find(i->first));
+        if (pValue.get() && i->second->equals(*pValue))
+            bIgnore = true;
         if (bIgnore)
             i = m_pSprms->erase(i);
         else
