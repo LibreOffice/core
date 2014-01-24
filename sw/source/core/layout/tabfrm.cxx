@@ -215,7 +215,7 @@ static void lcl_RecalcRow( SwRowFrm& rRow, long nBottom );
 static bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, bool bInva );
 // #i26945# - add parameter <_bOnlyRowsAndCells> to control
 // that only row and cell frames are formatted.
-static sal_Bool lcl_InnerCalcLayout( SwFrm *pFrm,
+static bool lcl_InnerCalcLayout( SwFrm *pFrm,
                                       long nBottom,
                                       bool _bOnlyRowsAndCells = false );
 // OD 2004-02-18 #106629# - correct type of 1st parameter
@@ -1569,7 +1569,7 @@ bool SwCntntFrm::CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeave,
 
 // #i26945# - add parameter <_bOnlyRowsAndCells> to control
 // that only row and cell frames are formatted.
-static sal_Bool lcl_InnerCalcLayout( SwFrm *pFrm,
+static bool lcl_InnerCalcLayout( SwFrm *pFrm,
                                       long nBottom,
                                       bool _bOnlyRowsAndCells )
 {
