@@ -332,7 +332,8 @@ public:
     virtual sal_Int32 SAL_CALL getSplitHorizontal() throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getSplitVertical() throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getSplitColumn() throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getSplitRow() throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getSplitRow()
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
     virtual void SAL_CALL   splitAtPosition( sal_Int32 nPixelX, sal_Int32 nPixelY )
                                 throw(::com::sun::star::uno::RuntimeException);
 

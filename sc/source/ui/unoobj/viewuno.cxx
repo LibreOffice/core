@@ -1664,7 +1664,7 @@ sal_Int32 SAL_CALL ScTabViewObj::getSplitColumn() throw(uno::RuntimeException)
     return 0;
 }
 
-sal_Int32 SAL_CALL ScTabViewObj::getSplitRow() throw(uno::RuntimeException)
+sal_Int32 SAL_CALL ScTabViewObj::getSplitRow() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScTabViewShell* pViewSh = GetViewShell();
