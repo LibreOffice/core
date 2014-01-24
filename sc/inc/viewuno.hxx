@@ -233,7 +233,8 @@ public:
                             // XSelectionSupplier
     virtual sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& aSelection )
                                 throw(::com::sun::star::lang::IllegalArgumentException,
-                                    ::com::sun::star::uno::RuntimeException);
+                                      ::com::sun::star::uno::RuntimeException,
+                                      std::exception);
     virtual ::com::sun::star::uno::Any SAL_CALL getSelection()
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   addSelectionChangeListener( const ::com::sun::star::uno::Reference<

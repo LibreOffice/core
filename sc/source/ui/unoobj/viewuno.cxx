@@ -695,7 +695,8 @@ static void lcl_ShowObject( ScTabViewShell& rViewSh, ScDrawView& rDrawView, SdrO
 }
 
 sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
-                        throw(lang::IllegalArgumentException, uno::RuntimeException)
+    throw(lang::IllegalArgumentException, uno::RuntimeException,
+          std::exception)
 {
     SolarMutexGuard aGuard;
     ScTabViewShell* pViewSh = GetViewShell();
