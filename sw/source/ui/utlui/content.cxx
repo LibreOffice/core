@@ -2736,7 +2736,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
                                 }
                                 //mod end
                             }
-                            if ( pActiveShell && !hasObjectMarked )
+                            if ( !hasObjectMarked )
                             {
                                 SwEditWin& pEditWindow =
                                     pActiveShell->GetView().GetEditWin();
