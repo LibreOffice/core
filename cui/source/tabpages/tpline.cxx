@@ -1720,9 +1720,10 @@ IMPL_STATIC_LINK(SvxLineTabPage, GraphicArrivedHdl_Impl, SvxBrushItem*, pItem)
     }
     if( pBmpInfo )
     {
-        if( pItem->GetGraphic() )
+        const Graphic* pGraphic = pItem->GetGraphic();
+        if (pGraphic)
         {
-            Bitmap aBitmap(pItem->GetGraphic()->GetBitmap());
+            Bitmap aBitmap(pGraphic->GetBitmap());
             Size aSize(aBitmap.GetSizePixel());
             if(aSize.Width()  > MAX_BMP_WIDTH || aSize.Height() > MAX_BMP_HEIGHT)
             {
