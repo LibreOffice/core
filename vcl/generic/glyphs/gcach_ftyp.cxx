@@ -172,7 +172,12 @@ bool FtFontFile::Map()
             return false;
 
         struct stat aStat;
-        fstat( nFile, &aStat );
+        int nRet = fstat( nFile, &aStat );
+        if (nRet < 0)
+        {
+            close (nFile);
+            return false;
+        }
         mnFileSize = aStat.st_size;
         mpFileMap = (const unsigned char*)
             mmap( NULL, mnFileSize, PROT_READ, MAP_SHARED, nFile, 0 );
