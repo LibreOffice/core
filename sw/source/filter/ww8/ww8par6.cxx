@@ -2275,8 +2275,14 @@ bool SwWW8ImplReader::IsDropCap()
             pDCS = pPlcxMan->GetPapPLCF()->HasSprm(0x442C);
         if(pDCS)
         {
+            /*
+              fdct   short :3   0007     drop cap type
+                                         0 no drop cap
+                                         1 normal drop cap
+                                         2 drop cap in margin
+            */
             short nDCS = SVBT16ToShort( pDCS );
-            if((nDCS | 7) != 0)
+            if (nDCS & 7)
                 return true;
         }
     }
