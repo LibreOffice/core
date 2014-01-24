@@ -752,51 +752,22 @@ using namespace ::com::sun::star;
     }
 
 
-    OFinalDBPageSetup::OFinalDBPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs )
-    :OGenericAdministrationPage(pParent, ModuleRes(PAGE_DBWIZARD_FINAL), _rCoreAttrs )
-    , m_aFTFinalHeader              (this, ModuleRes(FT_FINALHEADER))
-    , m_aFTFinalHelpText            (this, ModuleRes(FT_FINALHELPTEXT))
-    , m_aRBRegisterDataSource       (this, ModuleRes(RB_REGISTERDATASOURCE))
-    , m_aRBDontregisterDataSource   (this, ModuleRes(RB_DONTREGISTERDATASOURCE))
-    , m_aFTAdditionalSettings       (this, ModuleRes(FT_ADDITIONALSETTINGS))
-    , m_aCBOpenAfterwards           (this, ModuleRes(CB_OPENAFTERWARDS))
-    , m_aCBStartTableWizard         (this, ModuleRes(CB_STARTTABLEWIZARD))
-    , m_aFTFinalText                (this, ModuleRes(FT_FINALTEXT))
+    OFinalDBPageSetup::OFinalDBPageSetup(Window* pParent, const SfxItemSet& _rCoreAttrs)
+        : OGenericAdministrationPage(pParent, "PageFinal",
+            "dbaccess/ui/finalpagewizard.ui", _rCoreAttrs)
     {
+        get(m_pFTFinalHeader, "headerText");
+        get(m_pFTFinalHelpText, "helpText");
+        get(m_pRBRegisterDataSource, "yesregister");
+        get(m_pRBDontregisterDataSource, "noregister");
+        get(m_pFTAdditionalSettings, "additionalText");
+        get(m_pCBOpenAfterwards, "openediting");
+        get(m_pCBStartTableWizard, "usewizard");
+        get(m_pFTFinalText, "finishText");
 
-        SetControlFontWeight(&m_aFTFinalHeader);
-        m_aCBOpenAfterwards.SetClickHdl(LINK(this, OFinalDBPageSetup, OnOpenSelected));
-        m_aCBStartTableWizard.SetClickHdl(getControlModifiedLink());
-        m_aRBRegisterDataSource.SetState(sal_True);
-        FreeResource();
-
-        sal_Int32 nUnrelatedHeight  = LogicToPixel( Size( 0, UNRELATED_CONTROLS ), MAP_APPFONT ).Height();
-        sal_Int32 nRelatedHeight    = LogicToPixel( Size( 0, RELATED_CONTROLS ), MAP_APPFONT ).Height();
-
-        ::std::pair<Window*,sal_Int32> pWindows[] = {
-            ::std::pair<Window*,sal_Int32>(&m_aFTFinalHelpText,nRelatedHeight)
-            ,::std::pair<Window*,sal_Int32>(&m_aRBRegisterDataSource,nRelatedHeight)
-            ,::std::pair<Window*,sal_Int32>(&m_aRBDontregisterDataSource,nUnrelatedHeight)
-            ,::std::pair<Window*,sal_Int32>(&m_aFTAdditionalSettings,nRelatedHeight)
-            ,::std::pair<Window*,sal_Int32>(&m_aCBOpenAfterwards,nRelatedHeight)
-            ,::std::pair<Window*,sal_Int32>(&m_aCBStartTableWizard,nUnrelatedHeight)
-            ,::std::pair<Window*,sal_Int32>(&m_aFTFinalText,nUnrelatedHeight)
-        };
-
-        Point aPos(m_aFTFinalHeader.GetPosPixel());
-        Size aStart(m_aFTFinalHeader.GetSizePixel());
-        aPos.Y() += aStart.Height() + nUnrelatedHeight;
-        sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
-        for (sal_Int32 i=0; i < nCount; ++i)
-        {
-            aPos.X() = pWindows[i].first->GetPosPixel().X();
-            Size aSize = pWindows[i].first->GetSizePixel();
-            FixedText* pText = dynamic_cast<FixedText*>(pWindows[i].first);
-            if ( pText )
-                aSize = pText->CalcMinimumSize(aSize.Width());
-            pWindows[i].first->SetPosSizePixel(aPos,aSize);
-            aPos.Y() += aSize.Height() + pWindows[i].second;
-        }
+        m_pCBOpenAfterwards->SetClickHdl(LINK(this, OFinalDBPageSetup, OnOpenSelected));
+        m_pCBStartTableWizard->SetClickHdl(getControlModifiedLink());
+        m_pRBRegisterDataSource->SetState(sal_True);
     }
 
     OFinalDBPageSetup::~OFinalDBPageSetup()
@@ -806,43 +777,43 @@ using namespace ::com::sun::star;
 
     sal_Bool OFinalDBPageSetup::IsDatabaseDocumentToBeRegistered()
     {
-        return m_aRBRegisterDataSource.IsChecked() && m_aRBRegisterDataSource.IsEnabled();
+        return m_pRBRegisterDataSource->IsChecked() && m_pRBRegisterDataSource->IsEnabled();
     }
 
     sal_Bool OFinalDBPageSetup::IsDatabaseDocumentToBeOpened()
     {
-        return m_aCBOpenAfterwards.IsChecked() && m_aCBOpenAfterwards.IsEnabled();
+        return m_pCBOpenAfterwards->IsChecked() && m_pCBOpenAfterwards->IsEnabled();
     }
 
     sal_Bool OFinalDBPageSetup::IsTableWizardToBeStarted()
     {
-        return m_aCBStartTableWizard.IsChecked() && m_aCBStartTableWizard.IsEnabled();
+        return m_pCBStartTableWizard->IsChecked() && m_pCBStartTableWizard->IsEnabled();
     }
 
     void OFinalDBPageSetup::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTFinalHeader));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTFinalHelpText));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTAdditionalSettings));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTFinalText));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFTFinalHeader));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFTFinalHelpText));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFTAdditionalSettings));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFTFinalText));
     }
 
     void OFinalDBPageSetup::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
-        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(&m_aCBOpenAfterwards));
-        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(&m_aCBStartTableWizard));
-        _rControlList.push_back(new OSaveValueWrapper<RadioButton>(&m_aRBRegisterDataSource));
-        _rControlList.push_back(new OSaveValueWrapper<RadioButton>(&m_aRBDontregisterDataSource));
+        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pCBOpenAfterwards));
+        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pCBStartTableWizard));
+        _rControlList.push_back(new OSaveValueWrapper<RadioButton>(m_pRBRegisterDataSource));
+        _rControlList.push_back(new OSaveValueWrapper<RadioButton>(m_pRBDontregisterDataSource));
     }
 
     void OFinalDBPageSetup::implInitControls(const SfxItemSet& /*_rSet*/, sal_Bool /*_bSaveValue*/)
     {
-        m_aCBOpenAfterwards.Check();
+        m_pCBOpenAfterwards->Check();
     }
 
     void OFinalDBPageSetup::enableTableWizardCheckBox( sal_Bool _bSupportsTableCreation)
     {
-        m_aCBStartTableWizard.Enable(_bSupportsTableCreation);
+        m_pCBStartTableWizard->Enable(_bSupportsTableCreation);
     }
 
     sal_Bool OFinalDBPageSetup::FillItemSet( SfxItemSet& /*_rSet*/ )
@@ -851,7 +822,7 @@ using namespace ::com::sun::star;
     }
     IMPL_LINK(OFinalDBPageSetup, OnOpenSelected, CheckBox*, _pBox)
     {
-        m_aCBStartTableWizard.Enable( _pBox->IsEnabled() && _pBox->IsChecked() );
+        m_pCBStartTableWizard->Enable( _pBox->IsEnabled() && _pBox->IsChecked() );
         callModifiedHdl();
         // outta here
         return 0L;

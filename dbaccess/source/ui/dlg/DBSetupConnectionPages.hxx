@@ -262,14 +262,14 @@ namespace dbaui
         virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
            static   OGenericAdministrationPage* CreateFinalDBTabPageSetup( Window* pParent, const SfxItemSet& _rAttrSet);
 
-        FixedText   m_aFTFinalHeader;
-        FixedText   m_aFTFinalHelpText;
-        RadioButton m_aRBRegisterDataSource;
-        RadioButton m_aRBDontregisterDataSource;
-        FixedText   m_aFTAdditionalSettings;
-        CheckBox    m_aCBOpenAfterwards;
-        CheckBox    m_aCBStartTableWizard;
-        FixedText   m_aFTFinalText;
+        FixedText*   m_pFTFinalHeader;
+        FixedText*   m_pFTFinalHelpText;
+        RadioButton* m_pRBRegisterDataSource;
+        RadioButton* m_pRBDontregisterDataSource;
+        FixedText*   m_pFTAdditionalSettings;
+        CheckBox*    m_pCBOpenAfterwards;
+        CheckBox*    m_pCBStartTableWizard;
+        FixedText*   m_pFTFinalText;
 
         OFinalDBPageSetup(Window* pParent, const SfxItemSet& _rCoreAttrs);
         sal_Bool IsDatabaseDocumentToBeRegistered();

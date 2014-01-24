@@ -83,10 +83,6 @@
 #define FT_AUTHENTIFICATIONHEADERTEXT   8
 #define FT_LDAP_HEADERTEXT              9
 #define FT_GENERALUSERNAME              10
-#define FT_FINALHEADER                  11
-#define FT_FINALTEXT                    12
-#define FT_FINALHELPTEXT                13
-#define FT_ADDITIONALSETTINGS           14
 #define FT_SETUP_WIZARD_HEADER          15
 #define FT_SETUP_WIZARD_HELP            16
 
