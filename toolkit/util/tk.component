@@ -205,7 +205,8 @@
     <service name="com.sun.star.awt.UnoControlRadioButtonModel"/>
     <service name="stardiv.vcl.controlmodel.RadioButton"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoControlRoadmapModel">
+  <implementation name="stardiv.Toolkit.UnoControlRoadmapModel"
+      constructor="stardiv_Toolkit_UnoControlRoadmapModel_get_implementation">
     <service name="com.sun.star.awt.UnoControlRoadmapModel"/>
     <service name="stardiv.vcl.controlmodel.Roadmap"/>
   </implementation>
@@ -297,7 +298,8 @@
     <service name="com.sun.star.awt.UnoControlRadioButton"/>
     <service name="stardiv.vcl.control.RadioButton"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoRoadmapControl">
+  <implementation name="stardiv.Toolkit.UnoRoadmapControl"
+      constructor="stardiv_Toolkit_UnoRoadmapControl_get_implementation">
     <service name="com.sun.star.awt.UnoControlRoadmap"/>
     <service name="stardiv.vcl.control.Roadmap"/>
   </implementation>

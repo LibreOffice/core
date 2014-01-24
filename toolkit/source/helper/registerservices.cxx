@@ -118,8 +118,6 @@ IMPL_CREATEINSTANCE( VCLXMenuBar )
 IMPL_CREATEINSTANCE( VCLXPointer )
 IMPL_CREATEINSTANCE( VCLXPopupMenu )
 IMPL_CREATEINSTANCE( VCLXPrinterServer )
-IMPL_CREATEINSTANCE( UnoRoadmapControl )
-IMPL_CREATEINSTANCE_CTX( UnoControlRoadmapModel )
 
 extern "C"
 {
@@ -146,8 +144,6 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL tk_component_getFactory( const sal_Char* sImple
         GET_FACTORY( UnoScrollBarControl, szServiceName_UnoControlScrollBar, szServiceName2_UnoControlScrollBar )
         GET_FACTORY( UnoControlScrollBarModel, szServiceName_UnoControlScrollBarModel, szServiceName2_UnoControlScrollBarModel )
         GET_FACTORY( VCLXPrinterServer, szServiceName_PrinterServer, szServiceName2_PrinterServer )
-        GET_FACTORY( UnoRoadmapControl, szServiceName_UnoControlRoadmap, szServiceName2_UnoControlRoadmap )
-        GET_FACTORY( UnoControlRoadmapModel, szServiceName_UnoControlRoadmapModel, szServiceName2_UnoControlRoadmapModel )
         GET_FACTORY( UnoMultiPageModel, szServiceName_UnoMultiPageModel, NULL )
         GET_FACTORY( UnoMultiPageControl, szServiceName_UnoMultiPageControl, NULL )
         GET_FACTORY( UnoPageModel, szServiceName_UnoPageModel, NULL )
