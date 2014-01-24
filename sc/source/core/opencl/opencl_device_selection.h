@@ -347,6 +347,7 @@ inline ds_status readProFile(const char* fileName, char** content, size_t* conte
     FILE* input = NULL;
     size_t size = 0;
     char* binary = NULL;
+    long pos = -1;
 
     *contentSize = 0;
     *content = NULL;
@@ -358,7 +359,14 @@ inline ds_status readProFile(const char* fileName, char** content, size_t* conte
     }
 
     fseek(input, 0L, SEEK_END);
-    size = ftell(input);
+    pos = ftell(input);
+    if (pos < 0)
+    {
+        fclose(input);
+        return DS_FILE_ERROR;
+    }
+
+    size = pos;
     rewind(input);
     binary = (char*)malloc(size);
     if (binary == NULL)
