@@ -181,7 +181,7 @@ void SAL_CALL OMySQLTable::alterColumnByName( const OUString& colName, const Ref
 #endif
         );
 
-    if ( m_pColumns && !m_pColumns->hasByName(colName) )
+    if ( !m_pColumns || !m_pColumns->hasByName(colName) )
         throw NoSuchElementException(colName,*this);
 
 
