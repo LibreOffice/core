@@ -36,8 +36,7 @@ private:
     XColorListRef pList;
 
 public:
-    SvxUnoColorTable() throw();
-    virtual ~SvxUnoColorTable() throw();
+    SvxUnoColorTable();
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw( uno::RuntimeException );
@@ -63,13 +62,9 @@ public:
     virtual sal_Bool SAL_CALL hasElements() throw( uno::RuntimeException);
 };
 
-SvxUnoColorTable::SvxUnoColorTable() throw()
+SvxUnoColorTable::SvxUnoColorTable()
 {
     pList = XPropertyList::CreatePropertyList( XCOLOR_LIST, SvtPathOptions().GetPalettePath(), "" )->AsColorList();
-}
-
-SvxUnoColorTable::~SvxUnoColorTable() throw()
-{
 }
 
 sal_Bool SAL_CALL SvxUnoColorTable::supportsService( const  OUString& ServiceName ) throw(uno::RuntimeException)
