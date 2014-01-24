@@ -162,7 +162,7 @@ void SAL_CALL OHSQLTable::alterColumnByName( const OUString& colName, const Refe
 #endif
         );
 
-    if ( m_pColumns && !m_pColumns->hasByName(colName) )
+    if ( !m_pColumns || !m_pColumns->hasByName(colName) )
         throw NoSuchElementException(colName,*this);
 
 
