@@ -21,7 +21,7 @@ $(LO_XCCONFIG) :
     #
 	all_libs=`$(SRCDIR)/bin/lo-all-static-libs`; \
 	\
-	sed -e "s,^\(LINK_LDFLAGS =\).*$$,\1 $$all_libs," \
+	sed -e "s;^\(LINK_LDFLAGS =\).*$$;\1 -Wl,-map,$(WORKDIR)/\$$(TARGET_NAME).map $$all_libs;" \
 		-e "s,^\(OTHER_CFLAGS =\).*$$,\1 $(gb_GLOBALDEFS)," \
 		-e "s,^\(OTHER_CPLUSPLUSFLAGS =\).*$$,\1 $(gb_GLOBALDEFS)," \
 			< $(LO_XCCONFIG) > $(LO_XCCONFIG).new && mv $(LO_XCCONFIG).new $(LO_XCCONFIG)
