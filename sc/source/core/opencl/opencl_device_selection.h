@@ -551,7 +551,7 @@ inline ds_status readProfileFromFile(ds_profile* profile, ds_score_deserializer 
                         {
 
                             deviceScoreStart = findString(dataStart, contentEnd, DS_TAG_SCORE);
-                            if (deviceNameStart == NULL)
+                            if (deviceScoreStart == NULL)
                             {
                                 status = DS_PROFILE_FILE_ERROR;
                                 goto cleanup;
