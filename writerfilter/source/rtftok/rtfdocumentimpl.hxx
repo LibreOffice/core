@@ -266,7 +266,7 @@ namespace writerfilter {
                 /// Text from special destinations.
                 OUStringBuffer aDestinationText;
 
-                /// Same as the int value of NS_rtf::LN_ISTD in aParagraphAttributes, for performance reasons.
+                /// Index of the current style.
                 int nCurrentStyleIndex;
 
                 /// Points to the active buffer, if there is one.
@@ -356,6 +356,8 @@ namespace writerfilter {
                 void setNeedPar(bool bNeedPar);
                 /// Return the dmapper index of an RTF index for fonts.
                 int getFontIndex(int nIndex);
+                /// Return the style name of an RTF style index.
+                OUString getStyleName(int nIndex);
                 /// Return the encoding associated with a dmapper font index.
                 rtl_TextEncoding getEncoding(sal_uInt32 nFontIndex);
                 /// Get the default parser state.
@@ -427,6 +429,8 @@ namespace writerfilter {
                 std::map<int, rtl_TextEncoding> m_aFontEncodings;
                 /// Maps the non-continious font indexes to the continous dmapper indexes.
                 std::vector<int> m_aFontIndexes;
+                /// Maps style indexes to style names.
+                std::map<int, OUString> m_aStyleNames;
                 /// Color index <-> RGB color value map
                 std::vector<sal_uInt32> m_aColorTable;
                 bool m_bFirstRun;
