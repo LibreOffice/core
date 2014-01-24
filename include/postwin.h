@@ -24,6 +24,7 @@
 #undef Polygon
 #undef Rectangle
 #undef DELETE
+#undef OPTIONAL
 
 #undef Folder
 #undef GradientStyle_RECT
