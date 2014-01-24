@@ -77,7 +77,7 @@
 #include <tdeabc/field.h>
 #include <tdeabc/stdaddressbook.h>
 
-#include <tde_defines.h>
+#include <shell/tde_defines.h>
 
 #endif
 
