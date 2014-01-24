@@ -109,7 +109,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
         SAL_CALL getAccessibleAtPoint(
         const ::com::sun::star::awt::Point& rPoint )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds(  )
         throw (::com::sun::star::uno::RuntimeException);

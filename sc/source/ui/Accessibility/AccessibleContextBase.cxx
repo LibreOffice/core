@@ -167,7 +167,7 @@ sal_Bool SAL_CALL ScAccessibleContextBase::containsPoint(const awt::Point& rPoin
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleContextBase::getAccessibleAtPoint(
         const awt::Point& /* rPoint */ )
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented");
     return uno::Reference<XAccessible>();
