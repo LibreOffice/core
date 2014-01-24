@@ -3172,7 +3172,7 @@ void SbaTableQueryBrowser::impl_initialize()
 
     // are we loaded into a (sub)frame of an embedded document (i.e. a form belonging to a database
     // document)?
-    sal_Bool bSubFrameOfEmbeddedDocument = sal_False;
+    bool bSubFrameOfEmbeddedDocument = false;
     if ( xFrame.is() )
     {
         Reference<XFramesSupplier> xSup = xFrame->getCreator();
