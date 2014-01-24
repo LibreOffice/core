@@ -75,91 +75,78 @@ ChildAccess::ChildAccess(
     Components & components, rtl::Reference< RootAccess > const & root,
     rtl::Reference< Access > const & parent, OUString const & name,
     rtl::Reference< Node > const & node):
-    Access(components), m_rRoot(root), m_rParent(parent), m_sName(name), m_rNode(node),
-    m_bInTransaction(false)
+    Access(components), root_(root), parent_(parent), name_(name), node_(node),
+    inTransaction_(false)
 {
-    m_pLock = lock();
+    lock_ = lock();
     assert(root.is() && parent.is() && node.is());
 }
 
 ChildAccess::ChildAccess(
     Components & components, rtl::Reference< RootAccess > const & root,
     rtl::Reference< Node > const & node):
-    Access(components), m_rRoot(root), m_rNode(node), m_bInTransaction(false)
+    Access(components), root_(root), node_(node), inTransaction_(false)
 {
-    m_pLock = lock();
+    lock_ = lock();
     assert(root.is() && node.is());
 }
 
-Path ChildAccess::getAbsolutePath()
-{
+Path ChildAccess::getAbsolutePath() {
     assert(getParentAccess().is());
     Path path(getParentAccess()->getAbsolutePath());
-    path.push_back(m_sName);
+    path.push_back(name_);
     return path;
 }
 
-Path ChildAccess::getRelativePath()
-{
+Path ChildAccess::getRelativePath() {
     Path path;
     rtl::Reference< Access > parent(getParentAccess());
-    if (parent.is())
-    {
+    if (parent.is()) {
         path = parent->getRelativePath();
     }
-    path.push_back(m_sName);
+    path.push_back(name_);
     return path;
 }
 
-OUString ChildAccess::getRelativePathRepresentation()
-{
+OUString ChildAccess::getRelativePathRepresentation() {
     OUStringBuffer path;
     rtl::Reference< Access > parent(getParentAccess());
-    if (parent.is())
-    {
+    if (parent.is()) {
         path.append(parent->getRelativePathRepresentation());
-        if (!path.isEmpty())
-        {
+        if (!path.isEmpty()) {
             path.append('/');
         }
     }
-    path.append(Data::createSegment(m_rNode->getTemplateName(), m_sName));
+    path.append(Data::createSegment(node_->getTemplateName(), name_));
     return path.makeStringAndClear();
 }
 
-rtl::Reference< Node > ChildAccess::getNode()
-{
-    return m_rNode;
+rtl::Reference< Node > ChildAccess::getNode() {
+    return node_;
 }
 
-bool ChildAccess::isFinalized()
-{
-    return m_rNode->getFinalized() != Data::NO_LAYER ||
-        (m_rParent.is() && m_rParent->isFinalized());
+bool ChildAccess::isFinalized() {
+    return node_->getFinalized() != Data::NO_LAYER ||
+        (parent_.is() && parent_->isFinalized());
 }
 
-OUString ChildAccess::getNameInternal()
-{
-    return m_sName;
+OUString ChildAccess::getNameInternal() {
+    return name_;
 }
 
-rtl::Reference< RootAccess > ChildAccess::getRootAccess()
-{
-    return m_rRoot;
+rtl::Reference< RootAccess > ChildAccess::getRootAccess() {
+    return root_;
 }
 
-rtl::Reference< Access > ChildAccess::getParentAccess()
-{
-    return m_rParent;
+rtl::Reference< Access > ChildAccess::getParentAccess() {
+    return parent_;
 }
 
-void ChildAccess::acquire() throw ()
-{
+void ChildAccess::acquire() throw () {
     Access::acquire();
 }
 
-void ChildAccess::release() throw ()
-{
+void ChildAccess::release() throw () {
     Access::release();
 }
 
@@ -167,16 +154,16 @@ css::uno::Reference< css::uno::XInterface > ChildAccess::getParent()
     throw (css::uno::RuntimeException)
 {
     assert(thisIs(IS_ANY));
-    osl::MutexGuard g(*m_pLock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    return static_cast< cppu::OWeakObject * >(m_rParent.get());
+    return static_cast< cppu::OWeakObject * >(parent_.get());
 }
 
 void ChildAccess::setParent(css::uno::Reference< css::uno::XInterface > const &)
     throw (css::lang::NoSupportException, css::uno::RuntimeException)
 {
     assert(thisIs(IS_ANY));
-    osl::MutexGuard g(*m_pLock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     throw css::lang::NoSupportException(
         "setParent", static_cast< cppu::OWeakObject * >(this));
@@ -187,7 +174,7 @@ sal_Int64 ChildAccess::getSomething(
     throw (css::uno::RuntimeException)
 {
     assert(thisIs(IS_ANY));
-    osl::MutexGuard g(*m_pLock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     return aIdentifier == getTunnelId()
         ? reinterpret_cast< sal_Int64 >(this) : 0;
@@ -198,61 +185,51 @@ void ChildAccess::bind(
     rtl::Reference< Access > const & parent, OUString const & name)
     throw ()
 {
-    assert(!m_rParent.is() && root.is() && parent.is() && !name.isEmpty());
-    m_rRoot = root;
-    m_rParent = parent;
-    m_sName = name;
+    assert(!parent_.is() && root.is() && parent.is() && !name.isEmpty());
+    root_ = root;
+    parent_ = parent;
+    name_ = name;
 }
 
-void ChildAccess::unbind() throw ()
-{
-    assert(m_rParent.is());
-    m_rParent->releaseChild(m_sName);
-    m_rParent.clear();
-    m_bInTransaction = true;
+void ChildAccess::unbind() throw () {
+    assert(parent_.is());
+    parent_->releaseChild(name_);
+    parent_.clear();
+    inTransaction_ = true;
 }
 
-void ChildAccess::committed()
-{
-    m_bInTransaction = false;
+void ChildAccess::committed() {
+    inTransaction_ = false;
 }
 
-void ChildAccess::setNode(rtl::Reference< Node > const & node)
-{
-    m_rNode = node;
+void ChildAccess::setNode(rtl::Reference< Node > const & node) {
+    node_ = node;
 }
 
-void ChildAccess::setProperty( css::uno::Any const & value,
-                               Modifications * localModifications)
+void ChildAccess::setProperty(
+    css::uno::Any const & value, Modifications * localModifications)
 {
     assert(localModifications != 0);
     Type type = TYPE_ERROR;
     bool nillable = false;
-    switch (m_rNode->kind())
-    {
+    switch (node_->kind()) {
     case Node::KIND_PROPERTY:
         {
-            PropertyNode * prop = dynamic_cast< PropertyNode * >(m_rNode.get());
-            if(prop)
-            {
-                type = prop->getStaticType();
-                nillable = prop->isNillable();
-            }
+            PropertyNode * prop = dynamic_cast< PropertyNode * >(node_.get());
+            type = prop->getStaticType();
+            nillable = prop->isNillable();
         }
         break;
     case Node::KIND_LOCALIZED_PROPERTY:
         {
             OUString locale(getRootAccess()->getLocale());
-            if (!Components::allLocales(locale))
-            {
+            if (!Components::allLocales(locale)) {
                 rtl::Reference< ChildAccess > child(getChild(locale));
-                if (child.is())
-                {
+                if (child.is()) {
                     child->setProperty(value, localModifications);
-                }
-                else
-                {
-                    insertLocalizedValueChild( locale, value, localModifications);
+                } else {
+                    insertLocalizedValueChild(
+                        locale, value, localModifications);
                 }
                 return;
             }
@@ -262,11 +239,8 @@ void ChildAccess::setProperty( css::uno::Any const & value,
         {
             LocalizedPropertyNode * locprop =
                 dynamic_cast< LocalizedPropertyNode * >(getParentNode().get());
-            if(locprop)
-            {
-                type = locprop->getStaticType();
-                nillable = locprop->isNillable();
-            }
+            type = locprop->getStaticType();
+            nillable = locprop->isNillable();
         }
         break;
     default:
@@ -274,32 +248,22 @@ void ChildAccess::setProperty( css::uno::Any const & value,
     }
     checkValue(value, type, nillable);
     getParentAccess()->markChildAsModified(this);
-    m_changedValue.reset(new css::uno::Any(value));
+    changedValue_.reset(new css::uno::Any(value));
     localModifications->add(getRelativePath());
 }
 
-css::uno::Any ChildAccess::asValue()
-{
-    if (m_changedValue.get() != 0)
-    {
-        return *m_changedValue;
+css::uno::Any ChildAccess::asValue() {
+    if (changedValue_.get() != 0) {
+        return *changedValue_;
     }
-    switch (m_rNode->kind())
-    {
+    switch (node_->kind()) {
     case Node::KIND_PROPERTY:
-        {
-            PropertyNode* propnode = dynamic_cast< PropertyNode * >(m_rNode.get());
-            if(propnode)
-            {
-                return propnode->getValue(getComponents());
-            }
-        }
-        break;
+        return dynamic_cast< PropertyNode * >(node_.get())->getValue(
+            getComponents());
     case Node::KIND_LOCALIZED_PROPERTY:
         {
             OUString locale(getRootAccess()->getLocale());
-            if (!Components::allLocales(locale))
-            {
+            if (!Components::allLocales(locale)) {
                 rtl::Reference< ChildAccess > child(getChild("*" + locale));
                 // As a last resort, return a nil value even though it may be
                 // illegal for the given property:
@@ -308,14 +272,7 @@ css::uno::Any ChildAccess::asValue()
         }
         break;
     case Node::KIND_LOCALIZED_VALUE:
-        {
-            LocalizedValueNode* locnode = dynamic_cast< LocalizedValueNode * >(m_rNode.get());
-            if(locnode)
-            {
-                return locnode->getValue();
-            }
-        }
-        break;
+        return dynamic_cast< LocalizedValueNode * >(node_.get())->getValue();
     default:
         break;
     }
@@ -328,56 +285,42 @@ void ChildAccess::commitChanges(bool valid, Modifications * globalModifications)
 {
     assert(globalModifications != 0);
     commitChildChanges(valid, globalModifications);
-    if (valid && m_changedValue.get() != 0)
-    {
+    if (valid && changedValue_.get() != 0) {
         Path path(getAbsolutePath());
         getComponents().addModification(path);
         globalModifications->add(path);
-        switch (m_rNode->kind())
-        {
+        switch (node_->kind()) {
         case Node::KIND_PROPERTY:
-            {
-                PropertyNode* propnode = dynamic_cast< PropertyNode * >(m_rNode.get());
-                if(propnode)
-                {
-                    propnode->setValue( Data::NO_LAYER, *m_changedValue);
-                }
-            }
+            dynamic_cast< PropertyNode * >(node_.get())->setValue(
+                Data::NO_LAYER, *changedValue_);
             break;
         case Node::KIND_LOCALIZED_VALUE:
-            {
-                LocalizedValueNode* locnode = dynamic_cast< LocalizedValueNode * >(m_rNode.get());
-                if(locnode)
-                {
-                    locnode->setValue( Data::NO_LAYER, *m_changedValue);
-                }
-            }
+            dynamic_cast< LocalizedValueNode * >(node_.get())->setValue(
+                Data::NO_LAYER, *changedValue_);
             break;
         default:
             assert(false); // this cannot happen
             break;
         }
     }
-    m_changedValue.reset();
+    changedValue_.reset();
 }
 
-ChildAccess::~ChildAccess()
-{
-    osl::MutexGuard g(*m_pLock);
-    if (m_rParent.is())
-    {
-        m_rParent->releaseChild(m_sName);
+ChildAccess::~ChildAccess() {
+    osl::MutexGuard g(*lock_);
+    if (parent_.is()) {
+        parent_->releaseChild(name_);
     }
 }
 
-void ChildAccess::addTypes(std::vector< css::uno::Type > * types) const
-{
+void ChildAccess::addTypes(std::vector< css::uno::Type > * types) const {
     assert(types != 0);
     types->push_back(cppu::UnoType< css::container::XChild >::get());
     types->push_back(cppu::UnoType< css::lang::XUnoTunnel >::get());
 }
 
-void ChildAccess::addSupportedServiceNames( std::vector< OUString > * services)
+void ChildAccess::addSupportedServiceNames(
+    std::vector< OUString > * services)
 {
     assert(services != 0);
     services->push_back(
@@ -390,7 +333,7 @@ css::uno::Any ChildAccess::queryInterface(css::uno::Type const & aType)
     throw (css::uno::RuntimeException)
 {
     assert(thisIs(IS_ANY));
-    osl::MutexGuard g(*m_pLock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     css::uno::Any res(Access::queryInterface(aType));
     return res.hasValue()

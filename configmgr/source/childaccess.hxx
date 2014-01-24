@@ -105,7 +105,7 @@ public:
 
     void unbind() throw ();
 
-    bool isInTransaction() const { return m_bInTransaction; }
+    bool isInTransaction() const { return inTransaction_; }
     void committed();
     void setNode(rtl::Reference< Node > const & node);
 
@@ -130,14 +130,14 @@ private:
         com::sun::star::uno::Type const & aType)
         throw (com::sun::star::uno::RuntimeException);
 
-    rtl::Reference< RootAccess > m_rRoot;
-    rtl::Reference< Access > m_rParent; // null if free node
-    OUString m_sName;
-    rtl::Reference< Node > m_rNode;
-    std::auto_ptr< com::sun::star::uno::Any > m_changedValue;
-    bool m_bInTransaction;
+    rtl::Reference< RootAccess > root_;
+    rtl::Reference< Access > parent_; // null if free node
+    OUString name_;
+    rtl::Reference< Node > node_;
+    std::auto_ptr< com::sun::star::uno::Any > changedValue_;
+    bool inTransaction_;
         // to determine if a free node can be inserted underneath some root
-    boost::shared_ptr<osl::Mutex> m_pLock;
+    boost::shared_ptr<osl::Mutex> lock_;
 };
 
 }
