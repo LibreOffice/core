@@ -72,16 +72,16 @@ class Desktop : public Application
 
                                 Desktop();
                                 ~Desktop();
-        virtual int         Main( );
+        virtual int             Main( );
         virtual void            Init();
         virtual void            InitFinished();
         virtual void            DeInit();
-        virtual sal_Bool            QueryExit();
-        virtual sal_uInt16          Exception(sal_uInt16 nError);
-        virtual void            SystemSettingsChanging( AllSettings& rSettings );
+        virtual sal_Bool        QueryExit();
+        virtual sal_uInt16      Exception(sal_uInt16 nError);
+        virtual void            OverrideSystemSettings( AllSettings& rSettings );
         virtual void            AppEvent( const ApplicationEvent& rAppEvent );
 
-        DECL_LINK(          OpenClients_Impl, void* );
+        DECL_LINK( OpenClients_Impl, void* );
 
         static void             OpenClients();
         static void             OpenDefault();
@@ -93,9 +93,9 @@ class Desktop : public Application
         static CommandLineArgs& GetCommandLineArgs();
 
         void                    HandleBootstrapErrors(
-            BootstrapError nError, OUString const & aMessage );
+                                    BootstrapError nError, OUString const & aMessage );
         void                    SetBootstrapError(
-            BootstrapError nError, OUString const & aMessage )
+                                    BootstrapError nError, OUString const & aMessage )
         {
             if ( m_aBootstrapError == BE_OK )
             {
@@ -127,9 +127,8 @@ class Desktop : public Application
             // throws an exception upon failure
 
     private:
-        void RegisterServices(
-            css::uno::Reference<
-                css::uno::XComponentContext > const & context);
+        void                    RegisterServices(
+                                    css::uno::Reference< css::uno::XComponentContext > const & context);
         void                    DeregisterServices();
 
         void                    CreateTemporaryDirectory();
@@ -144,7 +143,7 @@ class Desktop : public Application
         void                    StartSetup( const OUString& aParameters );
 
         // Create a error message depending on bootstrap failure code and an optional file url
-        OUString         CreateErrorMsgString( utl::Bootstrap::FailureCode nFailureCode,
+        OUString                CreateErrorMsgString( utl::Bootstrap::FailureCode nFailureCode,
                                                       const OUString& aFileURL );
 
         static void             PreloadModuleData( const CommandLineArgs& );
@@ -156,7 +155,7 @@ class Desktop : public Application
 
         void                    EnableOleAutomation();
                                 DECL_LINK( ImplInitFilterHdl, ConvertData* );
-        DECL_LINK(          AsyncInitFirstRun, void* );
+        DECL_LINK( AsyncInitFirstRun, void* );
         /** checks if the office is run the first time
             <p>If so, <method>DoFirstRunInitializations</method> is called (asynchronously and delayed) and the
             respective flag in the configuration is reset.</p>
@@ -174,20 +173,20 @@ class Desktop : public Application
         static sal_Bool         isUIOnSessionShutdownAllowed();
 
         // on-demand acceptors
-        static void                         createAcceptor(const OUString& aDescription);
-        static void                         enableAcceptors();
-        static void                         destroyAcceptor(const OUString& aDescription);
+        static void             createAcceptor(const OUString& aDescription);
+        static void             enableAcceptors();
+        static void             destroyAcceptor(const OUString& aDescription);
 
-        bool                            m_bCleanedExtensionCache;
-        bool                            m_bServicesRegistered;
-        BootstrapError                  m_aBootstrapError;
-        OUString                        m_aBootstrapErrorMessage;
-        BootstrapStatus                 m_aBootstrapStatus;
+        bool                    m_bCleanedExtensionCache;
+        bool                    m_bServicesRegistered;
+        BootstrapError          m_aBootstrapError;
+        OUString                m_aBootstrapErrorMessage;
+        BootstrapStatus         m_aBootstrapStatus;
 
         boost::scoped_ptr<Lockfile> m_xLockfile;
-        Timer    m_firstRunTimer;
+        Timer                   m_firstRunTimer;
 
-        static ResMgr*                  pResMgr;
+        static ResMgr*          pResMgr;
 };
 
 }
