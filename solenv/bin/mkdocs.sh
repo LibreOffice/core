@@ -157,7 +157,17 @@ DOXYGEN_REF_TAGFILES=""
 for PROJECT in $INPUT_PROJECTS;
 do
   # avoid processing of full project subdirs, only add source and inc
-  DOXYGEN_INPUT=`printf "%s" "$PROJECT/source $PROJECT/inc include/$PROJECT "`
+
+  # project header files can be in $PROJECT/inc and/pr include/$PROJECT
+  if [ -d "$PROJECT/inc" ]; then
+      PROJECT_INCLUDE="$PROJECT/inc"
+  fi
+
+  if [ -d "include/$PROJECT" ]; then
+      PROJECT_INCLUDE="$PROJECT_INCLUDE $PROJECT_INCLUDE"
+  fi
+
+  DOXYGEN_INPUT=`printf "%s" "$PROJECT/source $PROJECT_INCLUDE"`
 
   DOXYGEN_OUTPUT="$BASE_OUTPUT/$PROJECT"
   DOXYGEN_OUR_TAGFILE="$DOXYGEN_OUTPUT/$PROJECT.tags"
