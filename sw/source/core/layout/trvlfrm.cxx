@@ -1782,7 +1782,7 @@ bool SwFrm::OnFirstPage() const
         if (pPrevFrm)
         {
             const SwPageDesc* pDesc = pPage->GetPageDesc();
-            bRet = pPrevFrm->GetPageDesc() != pDesc && !pDesc->IsFirstShared();
+            bRet = pPrevFrm->GetPageDesc() != pDesc;
         }
         else
             bRet = true;
