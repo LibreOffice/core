@@ -75,7 +75,12 @@ OUString UnoControlContainerModel::getServiceName() throw(::com::sun::star::uno:
     return *pHelper;
 }
 
-
-
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+stardiv_Toolkit_UnoControlContainerModel_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new UnoControlContainerModel(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

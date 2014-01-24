@@ -119,11 +119,13 @@
     <service name="com.sun.star.awt.UnoControlComboBoxModel"/>
     <service name="stardiv.vcl.controlmodel.ComboBox"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoControlContainer">
+  <implementation name="stardiv.Toolkit.UnoControlContainer"
+      constructor="stardiv_Toolkit_UnoControlContainer_get_implementation">
     <service name="com.sun.star.awt.UnoControlContainer"/>
     <service name="stardiv.vcl.control.ControlContainer"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.UnoControlContainerModel">
+  <implementation name="stardiv.Toolkit.UnoControlContainerModel"
+      constructor="stardiv_Toolkit_UnoControlContainerModel_get_implementation">
     <service name="com.sun.star.awt.UnoControlContainerModel"/>
     <service name="stardiv.vcl.controlmodel.ControlContainer"/>
   </implementation>
