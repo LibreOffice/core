@@ -528,8 +528,7 @@ void Edit::ImplRepaint(bool bLayout)
         return;
 
     OUString aText = ImplGetText();
-    sal_Int32 nStart = 0;
-    sal_Int32 nEnd = aText.getLength();
+    sal_Int32 nLen = aText.getLength();
 
     sal_Int32   nDXBuffer[256];
     sal_Int32*  pDXBuffer = NULL;
@@ -543,7 +542,7 @@ void Edit::ImplRepaint(bool bLayout)
             pDX = pDXBuffer;
         }
 
-        GetCaretPositions( aText, pDX, nStart, nEnd );
+        GetCaretPositions( aText, pDX, 0, nLen );
     }
 
     long    nTH = GetTextHeight();
@@ -551,16 +550,14 @@ void Edit::ImplRepaint(bool bLayout)
 
     if( bLayout )
     {
-        long nPos = nStart ? pDX[2*nStart] : 0;
-        aPos.X() = nPos + mnXOffset + ImplGetExtraOffset();
+        aPos.X() = mnXOffset + ImplGetExtraOffset();
 
         MetricVector* pVector = &mpControlData->mpLayoutData->m_aUnicodeBoundRects;
         OUString* pDisplayText = &mpControlData->mpLayoutData->m_aDisplayText;
 
-        DrawText( aPos, aText, nStart, nEnd - nStart, pVector, pDisplayText );
+        DrawText( aPos, aText, 0, nLen, pVector, pDisplayText );
 
-        if( pDXBuffer )
-            delete [] pDXBuffer;
+        delete [] pDXBuffer;
         return;
     }
 
@@ -600,15 +597,14 @@ void Edit::ImplRepaint(bool bLayout)
 
     bool bDrawSelection = maSelection.Len() && ( HasFocus() || ( GetStyle() & WB_NOHIDESELECTION ) || mbActivePopup );
 
-    long nPos = nStart ? pDX[2*nStart] : 0;
-    aPos.X() = nPos + mnXOffset + ImplGetExtraOffset();
+    aPos.X() = mnXOffset + ImplGetExtraOffset();
     if ( bPaintPlaceholderText )
     {
         DrawText( aPos, maPlaceholderText );
     }
     else if ( !bDrawSelection && !mpIMEInfos )
     {
-        DrawText( aPos, aText, nStart, nEnd - nStart );
+        DrawText( aPos, aText, 0, nLen );
     }
     else
     {
@@ -660,13 +656,13 @@ void Edit::ImplRepaint(bool bLayout)
             else
                 SetTextFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
         }
-        DrawText( aPos, aText, nStart, nEnd - nStart );
+        DrawText( aPos, aText, 0, nLen );
 
         // draw highlighted text
         SetClipRegion( aHiglightClipRegion );
         SetTextColor( rStyleSettings.GetHighlightTextColor() );
         SetTextFillColor( rStyleSettings.GetHighlightColor() );
-        DrawText( aPos, aText, nStart, nEnd - nStart );
+        DrawText( aPos, aText, 0, nLen );
 
         // if IME info exists loop over portions and output different font attributes
         if( mpIMEInfos && mpIMEInfos->pAttribs )
@@ -730,7 +726,7 @@ void Edit::ImplRepaint(bool bLayout)
                             SetTextColor( Color( COL_LIGHTGRAY ) );
 
                         SetClipRegion( aClip );
-                        DrawText( aPos, aText, nStart, nEnd - nStart );
+                        DrawText( aPos, aText, 0, nLen );
                     }
                 }
             }
@@ -743,8 +739,7 @@ void Edit::ImplRepaint(bool bLayout)
     if ( bVisCursor && ( !mpIMEInfos || mpIMEInfos->bCursor ) )
         pCursor->Show();
 
-    if( pDXBuffer )
-        delete [] pDXBuffer;
+    delete [] pDXBuffer;
 }
 
 // -----------------------------------------------------------------------
