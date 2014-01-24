@@ -2515,7 +2515,6 @@ bool ScFormulaCell::UpdateReferenceOnShift(
         // Cell may reference itself, e.g. ocColumn, ocRow without parameter
         bOnRefMove = (bValChanged || (aPos != aOldPos));
 
-    bool bHasRelName = false;
     bool bNewListening = false;
     bool bInDeleteUndo = false;
 
@@ -2530,7 +2529,7 @@ bool ScFormulaCell::UpdateReferenceOnShift(
         bInDeleteUndo = (pChangeTrack && pChangeTrack->IsInDeleteUndo());
 
         // RelNameRefs are always moved
-        bHasRelName = HasRelNameReference();
+        bool bHasRelName = HasRelNameReference();
         // Reference changed and new listening needed?
         // Except in Insert/Delete without specialties.
         bNewListening = (bRefModified || bRecompile
@@ -2566,7 +2565,7 @@ bool ScFormulaCell::UpdateReferenceOnShift(
         }
     }
 
-    if (bNeedDirty && !bHasRelName)
+    if (bNeedDirty)
     {   // Cut off references, invalid or similar?
         // Postpone SetDirty() until all listeners have been re-established in
         // Inserts/Deletes.
