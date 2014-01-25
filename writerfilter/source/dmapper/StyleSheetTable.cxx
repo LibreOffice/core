@@ -419,25 +419,6 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
     }
     switch(Name)
     {
-        case NS_rtf::LN_STI:
-        {
-            OUString tempStyleIdentifier = GetStyleIdFromIndex(static_cast<sal_uInt32>(nIntValue));
-            if (!tempStyleIdentifier.isEmpty())
-                m_pImpl->m_pCurrentEntry->sStyleIdentifierI = tempStyleIdentifier;
-            if (nIntValue == 0 || nIntValue == 65)
-                m_pImpl->m_pCurrentEntry->bIsDefaultStyle = true;
-        }
-        break;
-        case NS_rtf::LN_FSCRATCH:
-        case NS_rtf::LN_FINVALHEIGHT:
-        case NS_rtf::LN_FHASUPE:
-        case NS_rtf::LN_FMASSCOPY:
-        case NS_rtf::LN_CUPX:
-        case NS_rtf::LN_BCHUPE:
-        case NS_rtf::LN_FAUTOREDEF:
-        case NS_rtf::LN_FHIDDEN:
-            //noone seems to care about it
-        break;
         case NS_ooxml::LN_CT_Style_type:
         {
             SAL_WARN_IF( m_pImpl->m_pCurrentEntry->nStyleTypeCode != STYLE_TYPE_UNKNOWN,

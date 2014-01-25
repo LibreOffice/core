@@ -191,24 +191,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_ooxml::LN_CT_AbstractNum_tmpl:
             break;
-        case NS_rtf::LN_STI:
-            break;
-        case NS_rtf::LN_FSCRATCH:
-            break;
-        case NS_rtf::LN_FINVALHEIGHT:
-            break;
-        case NS_rtf::LN_FHASUPE:
-            break;
-        case NS_rtf::LN_FMASSCOPY:
-            break;
-        case NS_rtf::LN_CUPX:
-            break;
-        case NS_rtf::LN_BCHUPE:
-            break;
-        case NS_rtf::LN_FAUTOREDEF:
-            break;
-        case NS_rtf::LN_FHIDDEN:
-            break;
         case NS_ooxml::LN_CT_Border_sz:
             break;
         case NS_ooxml::LN_CT_Border_val:
