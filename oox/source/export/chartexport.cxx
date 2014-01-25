@@ -1650,7 +1650,6 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
                         case chart::TYPEID_SCATTER:
                         {
                             exportMarker( );
-                            exportSmooth( );
                             break;
                         }
                         case chart::TYPEID_RADARLINE:
@@ -1722,6 +1721,9 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
                             nYValueType = XML_bubbleSize;
                         exportSeriesValues( xValuesSeq, nYValueType );
                     }
+
+                    if( eChartType == chart::TYPEID_SCATTER )
+                        exportSmooth();
 
                     pFS->endElement( FSNS( XML_c, XML_ser ) );
                 }
