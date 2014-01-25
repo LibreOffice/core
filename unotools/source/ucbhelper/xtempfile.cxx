@@ -16,12 +16,14 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <XTempFile.hxx>
+
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <unotools/tempfile.hxx>
 #include <osl/file.hxx>
 #include <unotools/configmgr.hxx>
+#include <unotools/tempfile.hxx>
+#include <XTempFile.hxx>
 
 OTempFileService::OTempFileService(css::uno::Reference< css::uno::XComponentContext > const & context)
 : ::cppu::PropertySetMixin< css::io::XTempFile >(
@@ -432,8 +434,7 @@ throw ( css::uno::RuntimeException )
 sal_Bool SAL_CALL OTempFileService::supportsService( OUString const & rServiceName )
 throw ( css::uno::RuntimeException )
 {
-    css::uno::Sequence< OUString > aServices(getSupportedServiceNames_Static());
-    return rServiceName == aServices[0];
+    return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence < OUString > SAL_CALL OTempFileService::getSupportedServiceNames()

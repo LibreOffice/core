@@ -20,14 +20,14 @@
 #include "FormattedFieldWrapper.hxx"
 #include "Edit.hxx"
 #include "FormattedField.hxx"
-#include <tools/debug.hxx>
 #include "EditBase.hxx"
 #include "services.hxx"
-#include <connectivity/dbtools.hxx>
-#include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <connectivity/dbtools.hxx>
+#include <tools/debug.hxx>
+#include <vcl/svapp.hxx>
 
-//.........................................................................
 namespace frm
 {
 using namespace ::com::sun::star::uno;
@@ -42,9 +42,6 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-//==================================================================
-// OFormattedFieldWrapper
-//==================================================================
 
 Reference<XInterface> SAL_CALL OFormattedFieldWrapper_CreateInstance_ForceFormatted(const Reference<XMultiServiceFactory>& _rxFactory)
 {
@@ -138,7 +135,6 @@ OFormattedFieldWrapper::~OFormattedFieldWrapper()
 
 }
 
-//------------------------------------------------------------------
 Any SAL_CALL OFormattedFieldWrapper::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
     Any aReturn;
@@ -183,29 +179,22 @@ Any SAL_CALL OFormattedFieldWrapper::queryAggregation(const Type& _rType) throw 
     return aReturn;
 }
 
-//------------------------------------------------------------------
 OUString SAL_CALL OFormattedFieldWrapper::getServiceName() throw(RuntimeException)
 {
     // return the old compatibility name for an EditModel
     return OUString(FRM_COMPONENT_EDIT);
 }
 
-//------------------------------------------------------------------
 OUString SAL_CALL OFormattedFieldWrapper::getImplementationName(  ) throw (RuntimeException)
 {
     return OUString("com.sun.star.comp.forms.OFormattedFieldWrapper");
 }
 
-//------------------------------------------------------------------
 sal_Bool SAL_CALL OFormattedFieldWrapper::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
 {
-    DBG_ASSERT(m_xAggregate.is(), "OFormattedFieldWrapper::supportsService: should never have made it 'til here without an aggregate!");
-    Reference< XServiceInfo > xSI;
-    m_xAggregate->queryAggregation(::getCppuType(static_cast< Reference< XServiceInfo >* >(NULL))) >>= xSI;
-    return xSI->supportsService(_rServiceName);
+    return cppu::supportsService(this, _rServiceName);
 }
 
-//------------------------------------------------------------------
 Sequence< OUString > SAL_CALL OFormattedFieldWrapper::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     DBG_ASSERT(m_xAggregate.is(), "OFormattedFieldWrapper::getSupportedServiceNames: should never have made it 'til here without an aggregate!");
@@ -214,7 +203,6 @@ Sequence< OUString > SAL_CALL OFormattedFieldWrapper::getSupportedServiceNames( 
     return xSI->getSupportedServiceNames();
 }
 
-//------------------------------------------------------------------
 void SAL_CALL OFormattedFieldWrapper::write(const Reference<XObjectOutputStream>& _rxOutStream) throw( IOException, RuntimeException )
 {
     // can't write myself
@@ -254,7 +242,6 @@ void SAL_CALL OFormattedFieldWrapper::write(const Reference<XObjectOutputStream>
     m_xFormattedPart->write(_rxOutStream);
 }
 
-//------------------------------------------------------------------
 void SAL_CALL OFormattedFieldWrapper::read(const Reference<XObjectInputStream>& _rxInStream) throw( IOException, RuntimeException )
 {
     SolarMutexGuard g;
@@ -327,7 +314,6 @@ void SAL_CALL OFormattedFieldWrapper::read(const Reference<XObjectInputStream>& 
     decrement(m_refCount);
 }
 
-//------------------------------------------------------------------
 void OFormattedFieldWrapper::ensureAggregate()
 {
     if (m_xAggregate.is())
@@ -365,9 +351,7 @@ void OFormattedFieldWrapper::ensureAggregate()
     decrement(m_refCount);
 }
 
-//.........................................................................
 }
-//.........................................................................
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
