@@ -105,9 +105,7 @@ static OString getEnvironmentPath( const char* pKey )
     return aPath;
 }
 
-} // namespace psp
-
-void psp::getPrinterPathList( std::list< OUString >& rPathList, const char* pSubDir )
+void getPrinterPathList( std::list< OUString >& rPathList, const char* pSubDir )
 {
     rPathList.clear();
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
@@ -184,7 +182,7 @@ void psp::getPrinterPathList( std::list< OUString >& rPathList, const char* pSub
     }
 }
 
-OUString psp::getFontPath()
+OUString getFontPath()
 {
     static OUString aPath;
 
@@ -236,7 +234,7 @@ OUString psp::getFontPath()
     return aPath;
 }
 
-bool psp::convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile )
+bool convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile )
 {
     static const unsigned char hexDigits[] =
         {
@@ -349,7 +347,7 @@ bool psp::convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile )
     return bSuccess;
 }
 
-void psp::normPath( OString& rPath )
+void normPath( OString& rPath )
 {
     char buf[PATH_MAX];
 
@@ -373,7 +371,7 @@ void psp::normPath( OString& rPath )
     }
 }
 
-void psp::splitPath( OString& rPath, OString& rDir, OString& rBase )
+void splitPath( OString& rPath, OString& rDir, OString& rBase )
 {
     normPath( rPath );
     sal_Int32 nIndex = rPath.lastIndexOf( '/' );
@@ -385,5 +383,6 @@ void psp::splitPath( OString& rPath, OString& rDir, OString& rBase )
         rBase = rPath.copy( nIndex+1 );
 }
 
+} // namespace psp
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
