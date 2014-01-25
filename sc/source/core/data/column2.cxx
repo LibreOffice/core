@@ -1929,7 +1929,7 @@ void ScColumn::SwapCellNotes( SCROW nRow1, SCROW nRow2 )
         // row 1 is empty while row 2 is non-empty.
         ScPostIt* pVal2 = sc::cellnote_block::at(*it2->data, aPos2.second);
         it1 = maCellNotes.set(it1, nRow1, pVal2);
-        maCellNotes.release<ScPostIt*>(nRow2);
+        maCellNotes.release(it1, nRow2, pVal2);
         pVal2->UpdateCaptionPos(ScAddress(nCol,nRow1,nTab)); //update Note caption with position
 
         return;
