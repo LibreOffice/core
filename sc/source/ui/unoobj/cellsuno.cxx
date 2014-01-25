@@ -2462,9 +2462,8 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyValue( const OUString& aPropertyN
     return aAny;
 }
 
-void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
-                                                uno::Any& rAny )
-                                                throw(uno::RuntimeException)
+void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry, uno::Any& rAny )
+    throw(uno::RuntimeException, std::exception)
 {
     if ( pEntry )
     {
@@ -5992,9 +5991,8 @@ void ScCellRangeObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEnt
     ScCellRangesBase::SetOnePropertyValue( pEntry, aValue );
 }
 
-void ScCellRangeObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
-                                            uno::Any& rAny )
-                                                throw(uno::RuntimeException)
+void ScCellRangeObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry, uno::Any& rAny )
+    throw(uno::RuntimeException, std::exception)
 {
     if ( pEntry )
     {
@@ -6027,7 +6025,6 @@ void ScCellRangeObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEnt
         }
         else
             ScCellRangesBase::GetOnePropertyValue( pEntry, rAny );
-
     }
 }
 
@@ -6738,9 +6735,8 @@ void ScCellObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry, c
     }
 }
 
-void ScCellObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
-                                        uno::Any& rAny )
-                                            throw(uno::RuntimeException)
+void ScCellObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry, uno::Any& rAny )
+    throw(uno::RuntimeException, std::exception)
 {
     if ( pEntry )
     {
@@ -9045,9 +9041,8 @@ void ScTableRowObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
     }
 }
 
-void ScTableRowObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
-                                        uno::Any& rAny )
-                                                throw(uno::RuntimeException)
+void ScTableRowObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry, uno::Any& rAny )
+    throw(uno::RuntimeException, std::exception)
 {
     if ( pEntry )
     {
