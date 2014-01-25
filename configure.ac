@@ -8661,39 +8661,31 @@ if test "$with_system_curl" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_CURL=YES
 
-    curl_version=""
-    if test "$cross_compiling" = "yes"; then
-        dnl At least the OBS mingw32-libcurl-devel package
-        dnl comes with a proper .pc file
-        PKG_CHECK_MODULES(CURL, libcurl,, [:])
-        if test -n "$CURL_PKG_ERRORS"; then
-            AC_MSG_RESULT([no])
-        else
-            curl_version=`$PKG_CONFIG --modversion libcurl`
-        fi
-    fi
-    if test -z "$curl_version"; then
+    AC_MSG_CHECKING([whether libcurl is >= 7.19.4])
+
+    # First try PKGCONFIG and then fall back
+    PKG_CHECK_MODULES(CURL, libcurl >= 7.19.4,, [:])
+
+    if test -n "$CURL_PKG_ERRORS"; then
         AC_PATH_PROG(CURLCONFIG, curl-config)
         if test -z "$CURLCONFIG"; then
-            AC_MSG_ERROR([install the libcurl development package])
+            AC_MSG_ERROR([curl developement files not found])
         fi
         CURL_LIBS=`$CURLCONFIG --libs`
         CURL_CFLAGS=$("$CURLCONFIG" --cflags | sed -e "s/-I/${ISYSTEM?}/g")
         curl_version=`$CURLCONFIG --version | $SED -e 's/^libcurl //'`
+
+        case $curl_version in
+        dnl brackets doubled below because Autoconf uses them as m4 quote characters,
+        dnl so they need to be doubled to end up in the configure script
+        7.19.4|7.19.[[5-9]]|7.[[2-9]]?.*|7.???.*|[[8-9]].*|[[1-9]][[0-9]].*)
+            ;;
+        *)
+            AC_MSG_ERROR([no, you have $curl_version])
+            ;;
+        esac
     fi
-
-    AC_MSG_CHECKING([whether libcurl is >= 7.19.4])
-
-    case $curl_version in
-    dnl brackets doubled below because Autoconf uses them as m4 quote characters,
-    dnl so they need to be doubled to end up in the configure script
-    7.19.4|7.19.[[5-9]]|7.[[2-9]]?.*|7.???.*|[[8-9]].*|[[1-9]][[0-9]].*)
-        AC_MSG_RESULT([yes, you have $curl_version])
-        ;;
-    *)
-        AC_MSG_ERROR([no, you have $curl_version])
-        ;;
-    esac
+    AC_MSG_RESULT([yes])
 
     libo_MINGW_CHECK_DLL([libcurl])
     libo_MINGW_TRY_DLL([libintl])
