@@ -136,7 +136,8 @@ public:
     virtual sal_Bool SAL_CALL
                 isAccessibleRowSelected( sal_Int32 nRow )
                     throw (::com::sun::star::uno::RuntimeException,
-                    ::com::sun::star::lang::IndexOutOfBoundsException);
+                           ::com::sun::star::lang::IndexOutOfBoundsException,
+                           std::exception);
 
     /// Returns a boolean value indicating whether the specified column is selected.
     virtual sal_Bool SAL_CALL

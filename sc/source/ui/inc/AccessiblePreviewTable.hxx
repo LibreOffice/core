@@ -95,7 +95,8 @@ public:
                                 throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL isAccessibleRowSelected( sal_Int32 nRow )
                                 throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                                    ::com::sun::star::uno::RuntimeException);
+                                       ::com::sun::star::uno::RuntimeException,
+                                       std::exception);
     virtual sal_Bool SAL_CALL isAccessibleColumnSelected( sal_Int32 nColumn )
                                 throw (::com::sun::star::lang::IndexOutOfBoundsException,
                                        ::com::sun::star::uno::RuntimeException,
