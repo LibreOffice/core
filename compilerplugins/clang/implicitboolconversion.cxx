@@ -405,6 +405,16 @@ bool ImplicitBoolConversion::TraverseBinAndAssign(CompoundAssignOperator * expr)
         }
     }
     nested.pop();
+    if (!ignoreLocation(expr) && isBool(expr->getLHS(), false)
+        && !isBool(expr->getRHS()->IgnoreParenImpCasts(), false))
+    {
+        report(
+            DiagnosticsEngine::Warning, "mix of %0 and %1 in operator &=",
+            expr->getRHS()->getLocStart())
+            << expr->getLHS()->getType()
+            << expr->getRHS()->IgnoreParenImpCasts()->getType()
+            << expr->getSourceRange();
+    }
     return ret;
 }
 
@@ -421,6 +431,16 @@ bool ImplicitBoolConversion::TraverseBinOrAssign(CompoundAssignOperator * expr)
         }
     }
     nested.pop();
+    if (!ignoreLocation(expr) && isBool(expr->getLHS(), false)
+        && !isBool(expr->getRHS()->IgnoreParenImpCasts(), false))
+    {
+        report(
+            DiagnosticsEngine::Warning, "mix of %0 and %1 in operator |=",
+            expr->getRHS()->getLocStart())
+            << expr->getLHS()->getType()
+            << expr->getRHS()->IgnoreParenImpCasts()->getType()
+            << expr->getSourceRange();
+    }
     return ret;
 }
 
@@ -437,6 +457,16 @@ bool ImplicitBoolConversion::TraverseBinXorAssign(CompoundAssignOperator * expr)
         }
     }
     nested.pop();
+    if (!ignoreLocation(expr) && isBool(expr->getLHS(), false)
+        && !isBool(expr->getRHS()->IgnoreParenImpCasts(), false))
+    {
+        report(
+            DiagnosticsEngine::Warning, "mix of %0 and %1 in operator ^=",
+            expr->getRHS()->getLocStart())
+            << expr->getLHS()->getType()
+            << expr->getRHS()->IgnoreParenImpCasts()->getType()
+            << expr->getSourceRange();
+    }
     return ret;
 }
 
