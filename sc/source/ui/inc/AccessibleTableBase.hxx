@@ -89,7 +89,8 @@ public:
     virtual OUString SAL_CALL
                 getAccessibleColumnDescription( sal_Int32 nColumn )
                     throw (::com::sun::star::uno::RuntimeException,
-                    ::com::sun::star::lang::IndexOutOfBoundsException);
+                           ::com::sun::star::lang::IndexOutOfBoundsException,
+                           std::exception);
 
     /** Returns the number of rows occupied by the Accessible at a specified row and column in the table.
     Returns 1 if it is only a cell and the number of rows the cell is merged if the cell is a merged cell.

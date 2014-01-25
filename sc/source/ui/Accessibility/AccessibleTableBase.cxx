@@ -119,7 +119,7 @@ OUString SAL_CALL ScAccessibleTableBase::getAccessibleRowDescription( sal_Int32 
 }
 
 OUString SAL_CALL ScAccessibleTableBase::getAccessibleColumnDescription( sal_Int32 nColumn )
-    throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
+    throw (uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
 {
     OSL_FAIL("Here should be a implementation to fill the description");
 

@@ -171,7 +171,7 @@ OUString SAL_CALL ScAccessiblePreviewTable::getAccessibleRowDescription( sal_Int
 }
 
 OUString SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnDescription( sal_Int32 nColumn )
-                                throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     FillTableInfo();
