@@ -69,7 +69,8 @@ public:
     virtual sal_Int32 SAL_CALL getAccessibleColumnCount() throw (::com::sun::star::uno::RuntimeException);
     virtual OUString SAL_CALL getAccessibleRowDescription( sal_Int32 nRow )
                                 throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                                    ::com::sun::star::uno::RuntimeException);
+                                       ::com::sun::star::uno::RuntimeException,
+                                       std::exception);
     virtual OUString SAL_CALL getAccessibleColumnDescription( sal_Int32 nColumn )
                                 throw (::com::sun::star::lang::IndexOutOfBoundsException,
                                        ::com::sun::star::uno::RuntimeException,

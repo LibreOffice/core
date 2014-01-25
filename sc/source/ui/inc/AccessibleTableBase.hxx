@@ -83,7 +83,8 @@ public:
     virtual OUString SAL_CALL
                 getAccessibleRowDescription( sal_Int32 nRow )
                     throw (::com::sun::star::uno::RuntimeException,
-                    ::com::sun::star::lang::IndexOutOfBoundsException);
+                           ::com::sun::star::lang::IndexOutOfBoundsException,
+                           std::exception);
 
     /// Returns the description text of the specified column in the table.
     virtual OUString SAL_CALL
