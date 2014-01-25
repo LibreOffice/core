@@ -54,6 +54,7 @@
 #include <comphelper/evtmethodhelper.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sfx2/app.hxx>
@@ -68,16 +69,13 @@
 #include <algorithm>
 #include <o3tl/compat_functional.hxx>
 
-//------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_EventHandler()
 {
     ::pcr::OAutoRegistration< ::pcr::EventHandler > aAutoRegistration;
 }
 
-//........................................................................
 namespace pcr
 {
-//........................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
@@ -138,9 +136,6 @@ namespace pcr
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
     namespace FormComponentType = ::com::sun::star::form::FormComponentType;
 
-    //====================================================================
-    //= EventDescription
-    //====================================================================
     EventDescription::EventDescription( EventId _nId, const sal_Char* _pListenerNamespaceAscii, const sal_Char* _pListenerClassAsciiName,
             const sal_Char* _pListenerMethodAsciiName, sal_uInt16 _nDisplayNameResId, const OString& _sHelpId, const OString& _sUniqueBrowseId )
         :sDisplayName(PcrRes( _nDisplayNameResId ).toString())
@@ -157,18 +152,13 @@ namespace pcr
         sListenerClassName = aQualifiedListenerClass.makeStringAndClear();
     }
 
-    //========================================================================
-    //= helper
-    //========================================================================
     namespace
     {
-        //....................................................................
         #define DESCRIBE_EVENT( asciinamespace, asciilistener, asciimethod, id_postfix ) \
             s_aKnownEvents.insert( EventMap::value_type( \
                 OUString::createFromAscii( asciimethod ), \
                 EventDescription( ++nEventId, asciinamespace, asciilistener, asciimethod, RID_STR_EVT_##id_postfix, HID_EVT_##id_postfix, UID_BRWEVT_##id_postfix ) ) )
 
-        //....................................................................
         bool lcl_getEventDescriptionForMethod( const OUString& _rMethodName, EventDescription& _out_rDescription )
         {
             static EventMap s_aKnownEvents;
@@ -223,7 +213,6 @@ namespace pcr
             return true;
         }
 
-        //....................................................................
         OUString lcl_getEventPropertyName( const OUString& _rListenerClassName, const OUString& _rMethodName )
         {
             OUStringBuffer aPropertyName;
@@ -233,7 +222,6 @@ namespace pcr
             return aPropertyName.makeStringAndClear();
         }
 
-        //................................................................
         ScriptEventDescriptor lcl_getAssignedScriptEvent( const EventDescription& _rEvent, const Sequence< ScriptEventDescriptor >& _rAllAssignedMacros )
         {
             ScriptEventDescriptor aScriptEvent;
@@ -288,7 +276,6 @@ namespace pcr
             return aScriptEvent;
         }
 
-        //................................................................
         OUString lcl_getQualifiedKnownListenerName( const ScriptEventDescriptor& _rFormComponentEventDescriptor )
         {
             EventDescription aKnownEvent;
@@ -302,10 +289,8 @@ namespace pcr
             return _rFormComponentEventDescriptor.ListenerType;
         }
 
-        //................................................................
         typedef ::std::set< Type, TypeLessByName > TypeBag;
 
-        //................................................................
         void lcl_addListenerTypesFor_throw( const Reference< XInterface >& _rxComponent,
             const Reference< XIntrospection >& _rxIntrospection, TypeBag& _out_rTypes )
         {
@@ -322,7 +307,6 @@ namespace pcr
                 ::std::insert_iterator< TypeBag >( _out_rTypes, _out_rTypes.begin() ) );
         }
 
-        //................................................................
         bool operator ==( const ScriptEventDescriptor _lhs, const ScriptEventDescriptor _rhs )
         {
             return  (   ( _lhs.ListenerType         == _rhs.ListenerType        )
@@ -334,13 +318,9 @@ namespace pcr
         }
     }
 
-    //====================================================================
-    //= EventHandler
-    //====================================================================
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::container::XNameReplace
                                     >   EventHolder_Base;
-    /** a UNO component holding assigned event descriptions, for use with a SvxMacroAssignDlg
-    */
+    /* An UNO component holding assigned event descriptions, for use with a SvxMacroAssignDlg */
     class EventHolder : public EventHolder_Base
     {
     private:
@@ -376,13 +356,12 @@ namespace pcr
     };
 
     DBG_NAME( EventHolder )
-    //------------------------------------------------------------------------
+
     EventHolder::EventHolder()
     {
         DBG_CTOR( EventHolder, NULL );
     }
 
-    //------------------------------------------------------------------------
     EventHolder::~EventHolder()
     {
         m_aEventNameAccess.clear();
@@ -390,7 +369,6 @@ namespace pcr
         DBG_DTOR( EventHolder, NULL );
     }
 
-    //------------------------------------------------------------------------
     void EventHolder::addEvent( EventId _nId, const OUString& _rEventName, const ScriptEventDescriptor& _rScriptEvent )
     {
         ::std::pair< EventMap::iterator, bool > insertionResult =
@@ -399,13 +377,11 @@ namespace pcr
         m_aEventIndexAccess[ _nId ] = insertionResult.first;
     }
 
-    //------------------------------------------------------------------------
     ScriptEventDescriptor EventHolder::getNormalizedDescriptorByName( const OUString& _rEventName ) const
     {
         return impl_getDescriptor_throw( _rEventName );
     }
 
-    //------------------------------------------------------------------------
     ScriptEventDescriptor EventHolder::impl_getDescriptor_throw( const OUString& _rEventName ) const
     {
         EventMap::const_iterator pos = m_aEventNameAccess.find( _rEventName );
@@ -414,7 +390,6 @@ namespace pcr
         return pos->second;
     }
 
-    //------------------------------------------------------------------------
     void SAL_CALL EventHolder::replaceByName( const OUString& _rName, const Any& _rElement ) throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
     {
         EventMap::iterator pos = m_aEventNameAccess.find( _rName );
@@ -430,7 +405,6 @@ namespace pcr
         pos->second.ScriptCode = aExtractor.getOrDefault( "Script", OUString() );
     }
 
-    //------------------------------------------------------------------------
     Any SAL_CALL EventHolder::getByName( const OUString& _rName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
     {
         ScriptEventDescriptor aDescriptor( impl_getDescriptor_throw( _rName ) );
@@ -444,7 +418,6 @@ namespace pcr
         return makeAny( aScriptDescriptor );
     }
 
-    //------------------------------------------------------------------------
     Sequence< OUString > SAL_CALL EventHolder::getElementNames(  ) throw (RuntimeException)
     {
         Sequence< OUString > aReturn( m_aEventIndexAccess.size() );
@@ -467,31 +440,24 @@ namespace pcr
         return aReturn;
     }
 
-     //------------------------------------------------------------------------
     sal_Bool SAL_CALL EventHolder::hasByName( const OUString& _rName ) throw (RuntimeException)
     {
         EventMap::const_iterator pos = m_aEventNameAccess.find( _rName );
         return pos != m_aEventNameAccess.end();
     }
 
-    //------------------------------------------------------------------------
     Type SAL_CALL EventHolder::getElementType(  ) throw (RuntimeException)
     {
         return ::getCppuType( static_cast< Sequence< PropertyValue >* >( NULL ) );
     }
 
-    //------------------------------------------------------------------------
     sal_Bool SAL_CALL EventHolder::hasElements(  ) throw (RuntimeException)
     {
         return !m_aEventNameAccess.empty();
     }
 
-
-    //====================================================================
-    //= EventHandler
-    //====================================================================
     DBG_NAME( EventHandler )
-    //--------------------------------------------------------------------
+
     EventHandler::EventHandler( const Reference< XComponentContext >& _rxContext )
         :EventHandler_Base( m_aMutex )
         ,m_xContext( _rxContext )
@@ -503,38 +469,31 @@ namespace pcr
         DBG_CTOR( EventHandler, NULL );
     }
 
-    //--------------------------------------------------------------------
     EventHandler::~EventHandler()
     {
         DBG_DTOR( EventHandler, NULL );
     }
 
-    //--------------------------------------------------------------------
     OUString SAL_CALL EventHandler::getImplementationName(  ) throw (RuntimeException)
     {
         return getImplementationName_static();
     }
 
-    //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL EventHandler::supportsService( const OUString& ServiceName ) throw (RuntimeException)
     {
-        StlSyntaxSequence< OUString > aAllServices( getSupportedServiceNames() );
-        return ::std::find( aAllServices.begin(), aAllServices.end(), ServiceName ) != aAllServices.end();
+        return cppu::supportsService(this, ServiceName);
     }
 
-    //--------------------------------------------------------------------
     Sequence< OUString > SAL_CALL EventHandler::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
-    //--------------------------------------------------------------------
     OUString SAL_CALL EventHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
         return OUString(  "com.sun.star.comp.extensions.EventHandler"  );
     }
 
-    //--------------------------------------------------------------------
     Sequence< OUString > SAL_CALL EventHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< OUString > aSupported( 1 );
@@ -542,13 +501,11 @@ namespace pcr
         return aSupported;
     }
 
-    //--------------------------------------------------------------------
     Reference< XInterface > SAL_CALL EventHandler::Create( const Reference< XComponentContext >& _rxContext )
     {
         return *( new EventHandler( _rxContext ) );
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL EventHandler::inspect( const Reference< XInterface >& _rxIntrospectee ) throw (RuntimeException, NullPointerException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -588,7 +545,6 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
     Any SAL_CALL EventHandler::getPropertyValue( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -616,7 +572,6 @@ namespace pcr
         return makeAny( aPropertyValue );
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL EventHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -647,7 +602,6 @@ namespace pcr
         m_aPropertyListeners.notify( aEvent, &XPropertyChangeListener::propertyChange );
     }
 
-    //--------------------------------------------------------------------
     Any SAL_CALL EventHandler::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -675,7 +629,6 @@ namespace pcr
         return makeAny( aAssignedScript );
     }
 
-    //--------------------------------------------------------------------
     Any SAL_CALL EventHandler::convertToControlValue( const OUString& /*_rPropertyName*/, const Any& _rPropertyValue, const Type& _rControlValueType ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -740,13 +693,11 @@ namespace pcr
         return makeAny( sScript );
     }
 
-    //--------------------------------------------------------------------
     PropertyState SAL_CALL EventHandler::getPropertyState( const OUString& /*_rPropertyName*/ ) throw (UnknownPropertyException, RuntimeException)
     {
         return PropertyState_DIRECT_VALUE;
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL EventHandler::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -755,14 +706,12 @@ namespace pcr
         m_aPropertyListeners.addListener( _rxListener );
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL EventHandler::removePropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         m_aPropertyListeners.removeListener( _rxListener );
     }
 
-    //--------------------------------------------------------------------
     Sequence< Property > SAL_CALL EventHandler::getSupportedProperties() throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -836,21 +785,18 @@ namespace pcr
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
     Sequence< OUString > SAL_CALL EventHandler::getSupersededProperties( ) throw (RuntimeException)
     {
         // none
         return Sequence< OUString >( );
     }
 
-    //--------------------------------------------------------------------
     Sequence< OUString > SAL_CALL EventHandler::getActuatingProperties( ) throw (RuntimeException)
     {
         // none
         return Sequence< OUString >( );
     }
 
-    //--------------------------------------------------------------------
     LineDescriptor SAL_CALL EventHandler::describePropertyLine( const OUString& _rPropertyName,
         const Reference< XPropertyControlFactory >& _rxControlFactory )
         throw (UnknownPropertyException, NullPointerException, RuntimeException)
@@ -874,13 +820,11 @@ namespace pcr
         return aDescriptor;
     }
 
-    //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL EventHandler::isComposable( const OUString& /*_rPropertyName*/ ) throw (UnknownPropertyException, RuntimeException)
     {
         return sal_False;
     }
 
-    //--------------------------------------------------------------------
     InteractiveSelectionResult SAL_CALL EventHandler::onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool /*_bPrimary*/, Any& /*_rData*/, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
         if ( !_rxInspectorUI.is() )
@@ -955,16 +899,13 @@ namespace pcr
         return InteractiveSelectionResult_Success;
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL EventHandler::actuatingPropertyChanged( const OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, sal_Bool /*_bFirstTimeInit*/ ) throw (NullPointerException, RuntimeException)
     {
         OSL_FAIL( "EventHandler::actuatingPropertyChanged: no actuating properties -> no callback (well, this is how it *should* be!)" );
     }
 
-    //--------------------------------------------------------------------
     IMPLEMENT_FORWARD_XCOMPONENT( EventHandler, EventHandler_Base )
 
-    //--------------------------------------------------------------------
     void SAL_CALL EventHandler::disposing()
     {
         EventMap aEmpty;
@@ -972,13 +913,11 @@ namespace pcr
         m_xComponent.clear();
     }
 
-    //--------------------------------------------------------------------
     sal_Bool SAL_CALL EventHandler::suspend( sal_Bool /*_bSuspend*/ ) throw (RuntimeException)
     {
         return sal_True;
     }
 
-    //------------------------------------------------------------------------
     Reference< XFrame > EventHandler::impl_getContextFrame_nothrow() const
     {
         Reference< XFrame > xContextFrame;
@@ -997,7 +936,6 @@ namespace pcr
         return xContextFrame;
     }
 
-    //--------------------------------------------------------------------
     sal_Int32 EventHandler::impl_getComponentIndexInParent_throw() const
     {
         Reference< XChild > xChild( m_xComponent, UNO_QUERY_THROW );
@@ -1014,7 +952,6 @@ namespace pcr
         throw NoSuchElementException();
     }
 
-    //--------------------------------------------------------------------
     void EventHandler::impl_getFormComponentScriptEvents_nothrow( Sequence < ScriptEventDescriptor >& _out_rEvents ) const
     {
         _out_rEvents = Sequence < ScriptEventDescriptor >();
@@ -1040,7 +977,6 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
     void EventHandler::impl_getCopmonentListenerTypes_nothrow( Sequence< Type >& _out_rTypes ) const
     {
         _out_rTypes.realloc( 0 );
@@ -1072,7 +1008,6 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
     void EventHandler::impl_getDialogElementScriptEvents_nothrow( Sequence < ScriptEventDescriptor >& _out_rEvents ) const
     {
         _out_rEvents = Sequence < ScriptEventDescriptor >();
@@ -1097,7 +1032,6 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
     Reference< XInterface > EventHandler::impl_getSecondaryComponentForEventInspection_throw( ) const
     {
         Reference< XInterface > xReturn;
@@ -1122,7 +1056,6 @@ namespace pcr
         return xReturn;
     }
 
-    //--------------------------------------------------------------------
     const EventDescription& EventHandler::impl_getEventForName_throw( const OUString& _rPropertyName ) const
     {
         EventMap::const_iterator pos = m_aEvents.find( _rPropertyName );
@@ -1131,7 +1064,6 @@ namespace pcr
         return pos->second;
     }
 
-    //--------------------------------------------------------------------
     namespace
     {
         static bool lcl_endsWith( const OUString& _rText, const OUString& _rCheck )
@@ -1144,7 +1076,7 @@ namespace pcr
             return _rText.indexOf( _rCheck ) == ( nTextLen - nCheckLen );
         }
     }
-    //--------------------------------------------------------------------
+
     void EventHandler::impl_setFormComponentScriptEvent_nothrow( const ScriptEventDescriptor& _rScriptEvent )
     {
         try
@@ -1203,7 +1135,6 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
     void EventHandler::impl_setDialogElementScriptEvent_nothrow( const ScriptEventDescriptor& _rScriptEvent )
     {
         try
@@ -1243,7 +1174,6 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
     bool EventHandler::impl_filterMethod_nothrow( const EventDescription& _rEvent ) const
     {
         // some (control-triggered) events do not make sense for certain grid control columns. However,
@@ -1266,8 +1196,6 @@ namespace pcr
         return true;
     }
 
-//........................................................................
 } // namespace pcr
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

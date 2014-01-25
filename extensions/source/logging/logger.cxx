@@ -28,19 +28,17 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/logging/XLoggerPool.hpp>
 
+#include <boost/bind.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakref.hxx>
-
-#include <boost/bind.hpp>
-
 #include <map>
 
-//........................................................................
+
 namespace logging
 {
-//........................................................................
 
     using ::com::sun::star::logging::XLogger;
     using ::com::sun::star::uno::Reference;
@@ -59,27 +57,6 @@ namespace logging
 
     namespace LogLevel = ::com::sun::star::logging::LogLevel;
 
-    //====================================================================
-    //= helper
-    //====================================================================
-    namespace
-    {
-        sal_Bool lcl_supportsService_nothrow( XServiceInfo& _rSI, const OUString& _rServiceName )
-        {
-            const Sequence< OUString > aServiceNames( _rSI.getSupportedServiceNames() );
-            for (   const OUString* pServiceNames = aServiceNames.getConstArray();
-                    pServiceNames != aServiceNames.getConstArray() + aServiceNames.getLength();
-                    ++pServiceNames
-                )
-                if ( _rServiceName == *pServiceNames )
-                    return sal_True;
-            return sal_False;
-        }
-    }
-
-    //====================================================================
-    //= EventLogger - declaration
-    //====================================================================
     typedef ::cppu::WeakImplHelper2 <   XLogger
                                     ,   XServiceInfo
                                     >   EventLogger_Base;
@@ -126,9 +103,6 @@ namespace logging
         bool    impl_nts_isLoggable_nothrow( ::sal_Int32 _nLevel );
     };
 
-    //====================================================================
-    //= LoggerPool - declaration
-    //====================================================================
     typedef ::cppu::WeakImplHelper2 <   XLoggerPool
                                     ,   XServiceInfo
                                     >   LoggerPool_Base;
@@ -164,10 +138,6 @@ namespace logging
         virtual Reference< XLogger > SAL_CALL getDefaultLogger(  ) throw (RuntimeException);
     };
 
-    //====================================================================
-    //= EventLogger - implementation
-    //====================================================================
-    //--------------------------------------------------------------------
     EventLogger::EventLogger( const Reference< XComponentContext >& _rxContext, const OUString& _rName )
         :m_aHandlers( m_aMutex )
         ,m_nEventNumber( 0 )
@@ -181,12 +151,10 @@ namespace logging
         osl_atomic_decrement( &m_refCount );
     }
 
-    //--------------------------------------------------------------------
     EventLogger::~EventLogger()
     {
     }
 
-    //--------------------------------------------------------------------
     bool EventLogger::impl_nts_isLoggable_nothrow( ::sal_Int32 _nLevel )
     {
         if ( _nLevel < m_nLogLevel )
@@ -198,7 +166,6 @@ namespace logging
         return true;
     }
 
-    //--------------------------------------------------------------------
     void EventLogger::impl_ts_logEvent_nothrow( const LogRecord& _rRecord )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -212,48 +179,41 @@ namespace logging
             ::boost::bind( &XLogHandler::flush, _1 ) );
     }
 
-    //--------------------------------------------------------------------
     OUString SAL_CALL EventLogger::getName() throw (RuntimeException)
     {
         return m_sName;
     }
 
-    //--------------------------------------------------------------------
     ::sal_Int32 SAL_CALL EventLogger::getLevel() throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return m_nLogLevel;
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL EventLogger::setLevel( ::sal_Int32 _level ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         m_nLogLevel = _level;
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL EventLogger::addLogHandler( const Reference< XLogHandler >& _rxLogHandler ) throw (RuntimeException)
     {
         if ( _rxLogHandler.is() )
             m_aHandlers.addInterface( _rxLogHandler );
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL EventLogger::removeLogHandler( const Reference< XLogHandler >& _rxLogHandler ) throw (RuntimeException)
     {
         if ( _rxLogHandler.is() )
             m_aHandlers.removeInterface( _rxLogHandler );
     }
 
-    //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL EventLogger::isLoggable( ::sal_Int32 _nLevel ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return impl_nts_isLoggable_nothrow( _nLevel );
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL EventLogger::log( ::sal_Int32 _nLevel, const OUString& _rMessage ) throw (RuntimeException)
     {
         impl_ts_logEvent_nothrow( createLogRecord(
@@ -264,7 +224,6 @@ namespace logging
         ) );
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL EventLogger::logp( ::sal_Int32 _nLevel, const OUString& _rSourceClass, const OUString& _rSourceMethod, const OUString& _rMessage ) throw (RuntimeException)
     {
         impl_ts_logEvent_nothrow( createLogRecord(
@@ -277,19 +236,16 @@ namespace logging
         ) );
     }
 
-    //--------------------------------------------------------------------
     OUString SAL_CALL EventLogger::getImplementationName() throw(RuntimeException)
     {
         return OUString( "com.sun.star.comp.extensions.EventLogger" );
     }
 
-    //--------------------------------------------------------------------
     ::sal_Bool EventLogger::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
     {
-        return lcl_supportsService_nothrow( *this, _rServiceName );
+        return cppu::supportsService(this, _rServiceName);
     }
 
-    //--------------------------------------------------------------------
     Sequence< OUString > SAL_CALL EventLogger::getSupportedServiceNames() throw(RuntimeException)
     {
         Sequence< OUString > aServiceNames(1);
@@ -297,40 +253,31 @@ namespace logging
         return aServiceNames;
     }
 
-    //====================================================================
-    //= LoggerPool - implementation
-    //====================================================================
-    //--------------------------------------------------------------------
     LoggerPool::LoggerPool( const Reference< XComponentContext >& _rxContext )
         :m_xContext( _rxContext )
     {
     }
 
-    //--------------------------------------------------------------------
     OUString SAL_CALL LoggerPool::getImplementationName() throw(RuntimeException)
     {
         return getImplementationName_static();
     }
 
-    //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL LoggerPool::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
     {
-        return lcl_supportsService_nothrow( *this, _rServiceName );
+        return cppu::supportsService(this, _rServiceName);
     }
 
-    //--------------------------------------------------------------------
     Sequence< OUString > SAL_CALL LoggerPool::getSupportedServiceNames() throw(RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
-    //--------------------------------------------------------------------
     OUString SAL_CALL LoggerPool::getImplementationName_static()
     {
         return OUString( "com.sun.star.comp.extensions.LoggerPool" );
     }
 
-    //--------------------------------------------------------------------
     Sequence< OUString > SAL_CALL LoggerPool::getSupportedServiceNames_static()
     {
         Sequence< OUString > aServiceNames(1);
@@ -338,19 +285,16 @@ namespace logging
         return aServiceNames;
     }
 
-    //--------------------------------------------------------------------
     OUString LoggerPool::getSingletonName_static()
     {
         return OUString( "com.sun.star.logging.LoggerPool" );
     }
 
-    //--------------------------------------------------------------------
     Reference< XInterface > SAL_CALL LoggerPool::Create( const Reference< XComponentContext >& _rxContext )
     {
         return *( new LoggerPool( _rxContext ) );
     }
 
-    //--------------------------------------------------------------------
     Reference< XLogger > SAL_CALL LoggerPool::getNamedLogger( const OUString& _rName ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -367,20 +311,16 @@ namespace logging
         return xLogger;
     }
 
-    //--------------------------------------------------------------------
     Reference< XLogger > SAL_CALL LoggerPool::getDefaultLogger(  ) throw (RuntimeException)
     {
         return getNamedLogger( OUString( "org.openoffice.logging.DefaultLogger" ) );
     }
 
-    //--------------------------------------------------------------------
     void createRegistryInfo_LoggerPool()
     {
         static OSingletonRegistration< LoggerPool > aAutoRegistration;
     }
 
-//........................................................................
 } // namespace logging
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
