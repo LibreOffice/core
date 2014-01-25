@@ -296,8 +296,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
                     {
                         case 4 : eFTS = SDRTEXTFIT_ALLLINES; // passthrough
                         case 3 : eHorzAdjust = SDRTEXTHORZADJUST_BLOCK; break;
-                        default:
-                        case 0 : eHorzAdjust = SDRTEXTHORZADJUST_LEFT; break;
+                        default: eHorzAdjust = SDRTEXTHORZADJUST_LEFT; break;
                         case 1 : eHorzAdjust = SDRTEXTHORZADJUST_CENTER; break;
                         case 2 : eHorzAdjust = SDRTEXTHORZADJUST_RIGHT; break;
                     }
