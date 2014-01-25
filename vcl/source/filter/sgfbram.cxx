@@ -466,14 +466,13 @@ bool SgfVectFilter(SvStream& rInp, GDIMetaFile& rMtf)
     SgfHeader aHead;
     SgfEntry  aEntr;
     sal_uLong     nNext;
-    bool      bRdFlag=false;         // read graphics entry?
     bool      bRet=false;            // return value
 
     nFileStart=rInp.Tell();
     rInp>>aHead;
     if (aHead.ChkMagic() && aHead.Typ==SGF_SIMPVECT) {
         nNext=aHead.GetOffset();
-        while (nNext && !bRdFlag && !rInp.GetError()) {
+        while (nNext && !rInp.GetError()) {
             rInp.Seek(nFileStart+nNext);
             rInp>>aEntr;
             nNext=aEntr.GetOffset();
@@ -481,9 +480,6 @@ bool SgfVectFilter(SvStream& rInp, GDIMetaFile& rMtf)
                 bRet=SgfFilterVect(rInp,aHead,aEntr,rMtf);
             }
         } // while(nNext)
-        if (bRdFlag) {
-            if (!rInp.GetError()) bRet=true;  // apparently okay
-        }
     }
     return(bRet);
 }
