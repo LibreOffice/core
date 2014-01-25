@@ -107,7 +107,8 @@ public:
     virtual sal_Int32 SAL_CALL
                 getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
                     throw (::com::sun::star::uno::RuntimeException,
-                    ::com::sun::star::lang::IndexOutOfBoundsException);
+                           ::com::sun::star::lang::IndexOutOfBoundsException,
+                           std::exception);
 
     /// Returns the row headers as an AccessibleTable.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleTable > SAL_CALL

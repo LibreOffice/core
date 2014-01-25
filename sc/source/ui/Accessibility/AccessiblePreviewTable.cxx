@@ -216,7 +216,7 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRowExtentAt( sal_Int32
 }
 
 sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
-                                throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
