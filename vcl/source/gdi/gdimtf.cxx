@@ -2645,9 +2645,8 @@ sal_uLong GDIMetaFile::GetChecksum() const
                         }
                     }
 
-                    SVBT8 aSVBT8;
-                    ByteToSVBT8((sal_uInt8)pAct->IsClipping(), aSVBT8);
-                    nCrc = rtl_crc32(nCrc, aSVBT8, 1);
+                    sal_uInt8 tmp = (sal_uInt8)pAct->IsClipping();
+                    nCrc = rtl_crc32(nCrc, &tmp, 1);
                 }
                 else
                 {

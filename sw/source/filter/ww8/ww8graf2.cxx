@@ -729,7 +729,7 @@ void WW8PicShadowToReal( WW8_PIC_SHADOW * pPicS, WW8_PIC * pPic )
     pPic->MFP.yExt = SVBT16ToShort( pPicS->MFP.yExt );
     pPic->MFP.hMF = SVBT16ToShort( pPicS->MFP.hMF );
     for( sal_uInt16 i = 0; i < 14 ; i++ )
-        pPic->rcWinMF[i] = SVBT8ToByte( pPicS->rcWinMF[i] );
+        pPic->rcWinMF[i] = pPicS->rcWinMF[i];
     pPic->dxaGoal = SVBT16ToShort( pPicS->dxaGoal );
     pPic->dyaGoal = SVBT16ToShort( pPicS->dyaGoal );
     pPic->mx = SVBT16ToShort( pPicS->mx );
@@ -738,12 +738,12 @@ void WW8PicShadowToReal( WW8_PIC_SHADOW * pPicS, WW8_PIC * pPic )
     pPic->dyaCropTop = SVBT16ToShort( pPicS->dyaCropTop );
     pPic->dxaCropRight = SVBT16ToShort( pPicS->dxaCropRight );
     pPic->dyaCropBottom = SVBT16ToShort( pPicS->dyaCropBottom );
-    pPic->brcl = pPicS->aBits1[0] & 0x0f;
-    pPic->fFrameEmpty = (pPicS->aBits1[0] & 0x10) >> 4;
-    pPic->fBitmap = (pPicS->aBits1[0] & 0x20) >> 5;
-    pPic->fDrawHatch = (pPicS->aBits1[0] & 0x40) >> 6;
-    pPic->fError = (pPicS->aBits1[0] & 0x80) >> 7;
-    pPic->bpp = pPicS->aBits2[0];
+    pPic->brcl = pPicS->aBits1 & 0x0f;
+    pPic->fFrameEmpty = (pPicS->aBits1 & 0x10) >> 4;
+    pPic->fBitmap = (pPicS->aBits1 & 0x20) >> 5;
+    pPic->fDrawHatch = (pPicS->aBits1 & 0x40) >> 6;
+    pPic->fError = (pPicS->aBits1 & 0x80) >> 7;
+    pPic->bpp = pPicS->aBits2;
 }
 
 void WW8FSPAShadowToReal( WW8_FSPA_SHADOW * pFSPAS, WW8_FSPA * pFSPA )

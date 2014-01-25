@@ -1843,7 +1843,7 @@ void Ww1Picture::WriteBmp(SvStream& rOut)
 
     SVBT32 tmpLong;
     SVBT16 tmpShort;
-    SVBT8 tmpByte;
+    sal_uInt8 tmpByte;
 #define wLong(n) \
     UInt32ToSVBT32(n, tmpLong); \
     if ((rOut.Write(tmpLong, sizeof(SVBT32))) != sizeof(SVBT32)) goto error;
@@ -1851,8 +1851,8 @@ void Ww1Picture::WriteBmp(SvStream& rOut)
     ShortToSVBT16(n, tmpShort); \
     if ((rOut.Write(tmpShort, sizeof(SVBT16))) != sizeof(SVBT16)) goto error;
 #define wByte(n) \
-    ByteToSVBT8(n, tmpByte); \
-    if ((rOut.Write(tmpByte, sizeof(SVBT8))) != sizeof(SVBT8)) goto error;
+    tmpByte = n; \
+    if ((rOut.Write(&tmpByte, sizeof(sal_uInt8))) != sizeof(sal_uInt8)) goto error;
     wByte('B'); wByte('M');
     wLong(54 + 4 * 16 + padx * maxy);
     wLong(0);

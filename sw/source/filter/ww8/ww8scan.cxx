@@ -849,7 +849,7 @@ SprmInfo wwSprmParser::GetSprmInfo(sal_uInt16 nId) const
 
 inline sal_uInt8 Get_Byte( sal_uInt8 *& p )
 {
-    sal_uInt8 n = SVBT8ToByte( *(SVBT8*)p );
+    sal_uInt8 n = *p;
     p += 1;
     return n;
 }

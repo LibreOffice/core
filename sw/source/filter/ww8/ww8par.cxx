@@ -1758,7 +1758,7 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
     {
         short nPos = SVBT16ToShort(pIns + i*2);
         aTabStop.GetTabPos() = nPos;
-        switch( SVBT8ToByte( pTyp[i].aBits1 ) & 0x7 ) // pTyp[i].jc
+        switch( pTyp[i].aBits1 & 0x7 ) // pTyp[i].jc
         {
             case 0:
                 aTabStop.GetAdjustment() = SVX_TAB_ADJUST_LEFT;
@@ -1776,7 +1776,7 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
                 continue; // Ignore Bar
         }
 
-        switch( SVBT8ToByte( pTyp[i].aBits1 ) >> 3 & 0x7 )
+        switch( pTyp[i].aBits1 >> 3 & 0x7 )
         {
             case 0:
                 aTabStop.GetFill() = ' ';

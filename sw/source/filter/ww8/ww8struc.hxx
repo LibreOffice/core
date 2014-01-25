@@ -35,7 +35,7 @@
 
 inline void Set_UInt8( sal_uInt8 *& p, sal_uInt8 n )
 {
-    ByteToSVBT8( n, *(SVBT8*)p );
+    *p = n;
     p+= 1;
 }
 
@@ -401,8 +401,8 @@ struct WW8_PIC_SHADOW
         SVBT16 yExt;        // 0xa  int
         SVBT16 hMF;     // 0xc  int
     }MFP;
-//  SVBT8 bm[14];       // 0xe  BITMAP(14 bytes)    Window's bitmap structure when PIC describes a BITMAP.
-    SVBT8 rcWinMF[14];  // 0xe  rc (rectangle - 8 bytes) rect for window origin
+//  sal_uInt8 bm[14];       // 0xe  BITMAP(14 bytes)    Window's bitmap structure when PIC describes a BITMAP.
+    sal_uInt8 rcWinMF[14];  // 0xe  rc (rectangle - 8 bytes) rect for window origin
                         //      and extents when  metafile is stored -- ignored if 0
     SVBT16 dxaGoal;     // 0x1c horizontal  measurement in twips of the  rectangle the picture should be imaged within.
     SVBT16 dyaGoal;     // 0x1e vertical  measurement in twips of the  rectangle the picture should be imaged within.
@@ -412,8 +412,8 @@ struct WW8_PIC_SHADOW
     SVBT16 dyaCropTop;  // 0x26 the amount the picture has been cropped on the top in twips.
     SVBT16 dxaCropRight;    // 0x28 the amount the picture has been cropped on the right in twips.
     SVBT16 dyaCropBottom;// 0x2a    the amount the picture has been cropped on the bottom in twips.
-    SVBT8 aBits1; //0x2c
-    SVBT8 aBits2;
+    sal_uInt8 aBits1; //0x2c
+    sal_uInt8 aBits2;
 //  WW8_BRC rgbrc[4];
 //  BRC brcTop;         // 0x2e specification for border above picture
 //  BRC brcLeft;        // 0x30 specification for border to the left
@@ -421,7 +421,7 @@ struct WW8_PIC_SHADOW
 //  BRC brcRight;       // 0x34 specification for border to the right
 //  SVBT16 dxaOrigin;   // 0x36 horizontal offset of hand annotation origin
 //  SVBT16 dyaOrigin;   // 0x38 vertical offset of hand annotation origin
-//  SVBT8 rgb[];            // 0x3a variable array of bytes containing Window's metafile, bitmap or TIFF file filename.
+//  sal_uInt8 rgb[];            // 0x3a variable array of bytes containing Window's metafile, bitmap or TIFF file filename.
 };
 
 BOOST_STATIC_ASSERT(sizeof (WW8_PIC_SHADOW) == 0x2E);
@@ -429,7 +429,7 @@ BOOST_STATIC_ASSERT(sizeof (WW8_PIC_SHADOW) == 0x2E);
 
 struct WW8_TBD
 {
-    SVBT8 aBits1;
+    sal_uInt8 aBits1;
 //  sal_uInt8 jc : 3;        // 0x07 justification code: 0=left tab, 1=centered tab, 2=right tab, 3=decimal tab, 4=bar
 //  sal_uInt8 tlc : 3;       // 0x38 tab leader code: 0=no leader, 1=dotted leader,
                         // 2=hyphenated leader, 3=single line leader, 4=heavy line leader
@@ -463,8 +463,8 @@ struct WW8_TCell    // hiermit wird weitergearbeitet (entspricht weitestgehend d
 
 struct WW8_TCellVer6    // wird aus der Datei gelesen
 {
-    SVBT8  aBits1Ver6;
-    SVBT8  aBits2Ver6;
+    sal_uInt8  aBits1Ver6;
+    sal_uInt8  aBits2Ver6;
 //  sal_uInt16 fFirstMerged : 1;// 0001 set to 1 when cell is first cell of a range of cells that have been merged.
 //  sal_uInt16 fMerged : 1;     // 0002 set to 1 when cell has been merged with preceding cell.
 //  sal_uInt16 fUnused : 14;    // FFFC reserved
@@ -535,11 +535,11 @@ public:
 
 struct WW8_ANLV
 {
-    SVBT8 nfc;          // 0        number format code, 0=Arabic, 1=Upper case Roman, 2=Lower case Roman
+    sal_uInt8 nfc;          // 0        number format code, 0=Arabic, 1=Upper case Roman, 2=Lower case Roman
                         //          3=Upper case Letter, 4=Lower case letter, 5=Ordinal
-    SVBT8 cbTextBefore; // 1        offset into anld.rgch limit of prefix text
-    SVBT8 cbTextAfter;  // 2
-    SVBT8 aBits1;
+    sal_uInt8 cbTextBefore; // 1        offset into anld.rgch limit of prefix text
+    sal_uInt8 cbTextAfter;  // 2
+    sal_uInt8 aBits1;
 //  sal_uInt8 jc : 2;        // 3 : 0x03 justification code, 0=left, 1=center, 2=right, 3=left and right justify
 //  sal_uInt8 fPrev : 1;     //     0x04 when ==1, include previous levels
 //  sal_uInt8 fHang : 1;     //     0x08 when ==1, number will be displayed using a hanging indent
@@ -547,7 +547,7 @@ struct WW8_ANLV
 //  sal_uInt8 fSetItalic : 1;//     0x20 when ==1, italicness of number will be determined by anld.fItalic
 //  sal_uInt8 fSetSmallCaps : 1;//  0x40 when ==1, anld.fSmallCaps will determine whether number will be displayed in small caps or not.
 //  sal_uInt8 fSetCaps : 1;  //     0x80 when ==1, anld.fCaps will determine whether number will be displayed capitalized or not
-    SVBT8 aBits2;
+    sal_uInt8 aBits2;
 //  sal_uInt8 fSetStrike : 1;// 4 : 0x01 when ==1, anld.fStrike will determine whether the number will be displayed using strikethrough or not.
 //  sal_uInt8 fSetKul : 1;   //     0x02 when ==1, anld.kul will determine the underlining state of the autonumber.
 //  sal_uInt8 fPrevSpace : 1;//     0x04 when ==1, autonumber will be displayed with a single prefixing space character
@@ -556,7 +556,7 @@ struct WW8_ANLV
 //  sal_uInt8 fSmallCaps : 1;//     0x20 determines whether autonumber will be displayed using small caps when anld.fSetSmallCaps == 1.
 //  sal_uInt8 fCaps : 1;     //     0x40 determines whether autonumber will be displayed using caps when anld.fSetCaps == 1.
 //  sal_uInt8 fStrike : 1;   //     0x80 determines whether autonumber will be displayed using caps when anld.fSetStrike == 1.
-    SVBT8 aBits3;
+    sal_uInt8 aBits3;
 //  sal_uInt8 kul : 3;       // 5 : 0x07 determines whether  autonumber will be displayed with underlining when anld.fSetKul == 1.
 //  sal_uInt8 ico : 5;       //     0xF1 color of autonumber
     SVBT16 ftc;         // 6        font code of  autonumber
@@ -570,20 +570,20 @@ struct WW8_ANLV
 struct WW8_ANLD
 {
     WW8_ANLV eAnlv;     // 0
-    SVBT8 fNumber1;     // 0x10     number only 1 item per table cell
-    SVBT8 fNumberAcross;    // 0x11     number across cells in table rows(instead of down)
-    SVBT8 fRestartHdn;  // 0x12     restart heading number on section boundary
-    SVBT8 fSpareX;      // 0x13     unused( should be 0)
+    sal_uInt8 fNumber1;     // 0x10     number only 1 item per table cell
+    sal_uInt8 fNumberAcross;    // 0x11     number across cells in table rows(instead of down)
+    sal_uInt8 fRestartHdn;  // 0x12     restart heading number on section boundary
+    sal_uInt8 fSpareX;      // 0x13     unused( should be 0)
     sal_uInt8  rgchAnld[32]; // 0x14 characters displayed before/after autonumber
 };
 
 struct WW8_OLST
 {
     WW8_ANLV rganlv[9]; // 0    an array of 9 ANLV structures (heading levels)
-    SVBT8 fRestartHdr;  // 0x90 when ==1, restart heading on section break
-    SVBT8 fSpareOlst2;  // 0x91 reserved
-    SVBT8 fSpareOlst3;  // 0x92 reserved
-    SVBT8 fSpareOlst4;  // 0x93 reserved
+    sal_uInt8 fRestartHdr;  // 0x90 when ==1, restart heading on section break
+    sal_uInt8 fSpareOlst2;  // 0x91 reserved
+    sal_uInt8 fSpareOlst3;  // 0x92 reserved
+    sal_uInt8 fSpareOlst4;  // 0x93 reserved
     sal_uInt8 rgch[64];      // 0x94 array of 64 chars       text before/after number
 };
 // cbOLST is 212(decimal), D4(hex).
@@ -598,8 +598,8 @@ struct WW8_DO
 {
     SVBT16 dok;             // 0    Drawn Object Kind, currently this is always 0
     SVBT16 cb;              // 2    size (count of bytes) of the entire DO
-    SVBT8  bx;              // 4    x position relative to anchor CP
-    SVBT8  by;              // 5    y position relative to anchor CP
+    sal_uInt8  bx;              // 4    x position relative to anchor CP
+    sal_uInt8  by;              // 5    y position relative to anchor CP
     SVBT16 dhgt;                // 6    height of DO
     SVBT16 aBits1;
 //  sal_uInt16 fAnchorLock : 1; // 8    1 if the DO anchor is locked
@@ -695,8 +695,8 @@ struct WW8_DP_ARC
     WW8_DP_LINETYPE aLnt;
     WW8_DP_FILL aFill;
     WW8_DP_SHADOW aShd;
-    SVBT8 fLeft;        // 0x24 00ff    REVIEW davebu
-    SVBT8 fUp;          // 0x24 ff00    REVIEW davebu
+    sal_uInt8 fLeft;        // 0x24 00ff    REVIEW davebu
+    sal_uInt8 fUp;          // 0x24 ff00    REVIEW davebu
 //  sal_uInt16 fLeft : 8;   // 0x24 00ff    REVIEW davebu
 //  sal_uInt16 fUp : 8;     // 0x24 ff00    REVIEW davebu
 };
@@ -738,12 +738,12 @@ struct WW8_DP_CALLOUT_TXTBOX
 
 struct WW8_PCD
 {
-    SVBT8 aBits1;
+    sal_uInt8 aBits1;
 //  sal_uInt8 fNoParaLast : 1;   // when 1, means that piece contains no end of paragraph marks.
 //  sal_uInt8 fPaphNil : 1;      // used internally by Word
 //  sal_uInt8 fCopied : 1;       // used internally by Word
 //          *   int :5
-    SVBT8 aBits2;           // fn int:8, used internally by Word
+    sal_uInt8 aBits2;           // fn int:8, used internally by Word
     SVBT32 fc;              // file offset of beginning of piece. The size of the
                             // ithpiece can be determined by subtracting rgcp[i] of
                             // the containing plcfpcd from its rgcp[i+1].

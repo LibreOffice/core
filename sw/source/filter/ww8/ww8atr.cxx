@@ -4863,7 +4863,7 @@ void SwWW8WrTabu::Add(const SvxTabStop & rTS, long nAdjustment)
             break;
     }
 
-    ByteToSVBT8(nPara, pAddTyp + nAdd);
+    pAddTyp[nAdd] = nPara;
     ++nAdd;
 }
 

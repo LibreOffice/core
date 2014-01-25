@@ -501,11 +501,11 @@ struct W1_CHP /////////////////////////////////////////////////////////
 {
     SVBT16  fChar;
     SVBT16  ftc;// Font Code
-    SVBT8   hps;// Font size in half points
-    SVBT8   hpsPos;// Sub/Superscript ( signed number, 0 = normal )
+    sal_uInt8   hps;// Font size in half points
+    sal_uInt8   hpsPos;// Sub/Superscript ( signed number, 0 = normal )
     SVBT16  fText;
     SVBT32  fcPic;// not stored in File
-    SVBT8   fnPic;// internal
+    sal_uInt8   fnPic;// internal
     SVBT16  hpsLargeChp;// ???
 
     W1_CHP() { memset( this, 0, sizeof( *this)); }
@@ -552,10 +552,10 @@ struct W1_CHP /////////////////////////////////////////////////////////
 
     sal_uInt16 ftcGet()         { return SVBT16ToShort(ftc); }
     void ftcSet(sal_uInt16 n)   { ShortToSVBT16(n, ftc); }
-    void hpsSet(sal_uInt8 n)    { ByteToSVBT8(n, hps); }
-    sal_uInt8 hpsGet()          { return SVBT8ToByte(hps); }
+    void hpsSet(sal_uInt8 n)    { hps = n; }
+    sal_uInt8 hpsGet()          { return hps; }
 
-    sal_uInt8 hpsPosGet()       { return SVBT8ToByte(hpsPos); }
+    sal_uInt8 hpsPosGet()       { return hpsPos; }
     sal_uInt16 fTextGet()       { return SVBT16ToShort(fText); }
     void fTextSet(sal_uInt16 n) { ShortToSVBT16(n, fText); }
     sal_uInt16 qpsSpaceGet()    { return (sal_uInt16)((fTextGet() >> 0) & 0x3f); }
@@ -571,7 +571,7 @@ struct W1_CHP /////////////////////////////////////////////////////////
     // SVBT16 fSysVanish: 1;// used internally
 
     sal_uLong fcPicGet()        { return SVBT32ToUInt32(fcPic); }
-    sal_uInt16 fnPicGet()       { return SVBT8ToByte(fnPic); }
+    sal_uInt16 fnPicGet()       { return fnPic; }
     sal_uInt16 hpsLargeChpGet() { return SVBT16ToShort(hpsLargeChp); }
 
     void Out(Ww1Shell&, Ww1Manager&);
@@ -579,23 +579,23 @@ struct W1_CHP /////////////////////////////////////////////////////////
 
 struct W1_FFN ///////////////////////////////////////// Font Descriptor
 {
-    SVBT8 cbFfnM1;// 0x0    total length of FFN - 1.
+    sal_uInt8 cbFfnM1;// 0x0    total length of FFN - 1.
     sal_uInt16 cbFfnM1Get() {
-        return SVBT8ToByte(cbFfnM1); }
-    SVBT8 fFlags;
+        return static_cast<sal_uInt8>(cbFfnM1); }
+    sal_uInt8 fFlags;
     sal_uInt16 fFlagsGet() {
-        return SVBT8ToByte(fFlags); }
-    // SVBT8 prg : 2;// 0x1:03  pitch request
+        return static_cast<sal_uInt8>(fFlags); }
+    // sal_uInt8 prg : 2;// 0x1:03  pitch request
     sal_uInt16 prgGet() {
         return (sal_uInt16)((fFlagsGet() >> 0) & 3); }
-    // SVBT8 fTrueType : 1;//   0x1:04  when 1, font is a TrueType font
+    // sal_uInt8 fTrueType : 1;//   0x1:04  when 1, font is a TrueType font
     sal_Bool fTrueTypeGet() {
         return 0 != ((fFlagsGet() >> 2) & 1); }
-    // SVBT8 : 1;// 0x1:08  reserved
-    // SVBT8 ff : 3;//  0x1:70  font family id
+    // sal_uInt8 : 1;// 0x1:08  reserved
+    // sal_uInt8 ff : 3;//  0x1:70  font family id
     sal_uInt16 ffGet() {
         return (sal_uInt16)((fFlagsGet() >> 4) & 7); }
-    // SVBT8 : 1;// 0x1:80  reserved
+    // sal_uInt8 : 1;// 0x1:80  reserved
     sal_uInt8 szFfn[65];// 0x6      zero terminated string that records name of font.
                             // Vorsicht: Dieses Array kann auch kleiner sein!!!
                             // Possibly followed by a second sz which records the name of an
@@ -631,9 +631,8 @@ struct W1_PHE /////////////////////////////////////// Paragraph Height
 
 struct W1_PAPX ///////////////////////// Paragraph Property Difference
 {
-    SVBT8 stc;
-    sal_uInt8 stcGet() {
-        return SVBT8ToByte(stc); }
+    sal_uInt8 stc;
+    sal_uInt8 stcGet() { return stc; }
     W1_PHE phe;
     sal_uInt8 grpprl[1];
     sal_uInt8* grpprlGet() {
@@ -690,12 +689,10 @@ struct W1_BRC10 ///////////////////////////////// Border Code Word 1.0
 
 struct W1_FLD //////////////////////////////////////// FieldDescriptor
 {
-    SVBT8 ch; // boundary-type (begin(19), separator (20), end (21))
-    sal_uInt8 chGet() {
-        return SVBT8ToByte(ch); }
-    SVBT8 flt; // field type / flags
-    sal_uInt8 fltGet() {
-        return SVBT8ToByte(flt); }
+    sal_uInt8 ch; // boundary-type (begin(19), separator (20), end (21))
+    sal_uInt8 chGet() { return ch; }
+    sal_uInt8 flt; // field type / flags
+    sal_uInt8 fltGet() { return flt; }
     // variant, when ch==21:
     sal_Bool fDifferGet() {
         return (fltGet() >> 0) & 1; }
@@ -734,8 +731,8 @@ struct W1_PIC /////////////////////////////////////// PictureStructure
             return SVBT16ToShort(hMF); }
     } mfp;
     union W1_MFP_BMP {
-        SVBT8 bm[14];// 0xe BITMAP(14 bytes)    Window's bitmap structure when PIC describes a BITMAP.
-        SVBT8 rcWinMF[14];// 0xe    rc (rectangle - 8 bytes) rect for window origin and extents when metafile is stored -- ignored if 0
+        sal_uInt8 bm[14];// 0xe BITMAP(14 bytes)    Window's bitmap structure when PIC describes a BITMAP.
+        sal_uInt8 rcWinMF[14];// 0xe    rc (rectangle - 8 bytes) rect for window origin and extents when metafile is stored -- ignored if 0
     } MFP_BMP;
     SVBT16 dxaGoal;// 0x1c  horizontal measurement in twips of the rectangle the picture should be imaged within.
     sal_uInt16 dxaGoalGet() {
@@ -796,20 +793,18 @@ struct W1_PIC /////////////////////////////////////// PictureStructure
 //  SVBT16 dyaOrigin;// 0x38    vertical offset of hand annotation origin
 //  sal_uInt16 dyaOriginGet() {
 //      return SVBT16ToShort(dyaOrigin); }
-    SVBT8 rgb;// 0x3a   variable array of bytes containing Window's metafile, bitmap or TIFF file filename.
-    sal_uInt8* rgbGet() {
-        return rgb; }
+    sal_uInt8 rgb;// 0x3a   variable array of bytes containing Window's metafile, bitmap or TIFF file filename.
+    sal_uInt8* rgbGet() { return &rgb; }
 };
 
 struct W1_TBD /////////////////////////////////////////////////////////
 {
-    SVBT8 aBits1;
-    sal_uInt8 aBits1Get() {
-        return SVBT8ToByte(aBits1); }
-// SVBT8 jc : 3;// 0x07 justification code: 0=left tab, 1=centered tab, 2=right tab, 3=decimal tab, 4=bar
+    sal_uInt8 aBits1;
+    sal_uInt8 aBits1Get() { return aBits1; }
+// sal_uInt8 jc : 3;// 0x07 justification code: 0=left tab, 1=centered tab, 2=right tab, 3=decimal tab, 4=bar
     sal_uInt8 jcGet() {
         return aBits1Get() & 0x07; }
-// SVBT8 tlc : 3;// 0x38    tab leader code: 0=no leader, 1=dotted leader,
+// sal_uInt8 tlc : 3;// 0x38    tab leader code: 0=no leader, 1=dotted leader,
                         // 2=hyphenated leader, 3=single line leader, 4=heavy line leader
     sal_uInt8 tlcGet() {
         return (aBits1Get() >> 3 ) & 0x07; }
@@ -818,14 +813,13 @@ struct W1_TBD /////////////////////////////////////////////////////////
 
 struct W1_TC //////////////////////////////////////////////////////////
 {
-    SVBT8 aBits1;
-    sal_uInt8 aBits1Get() {
-        return SVBT8ToByte(aBits1); }
+    sal_uInt8 aBits1;
+    sal_uInt8 aBits1Get() { return aBits1; }
     sal_uInt8 fFirstMergedGet() {
         return aBits1Get() & 0x01; }
     sal_uInt8 fMergedGet() {
         return (aBits1Get() >> 1 ) & 0x01; }
-    SVBT8 aBits2;
+    sal_uInt8 aBits2;
 // SVBT16 fFirstMerged : 1;// 0001  set to 1 when cell is first cell of a range of cells that have been merged.
 // SVBT16 fMerged : 1;// 0002   set to 1 when cell has been merged with preceding cell.
 // SVBT16 fUnused : 14;// FFFC  reserved
