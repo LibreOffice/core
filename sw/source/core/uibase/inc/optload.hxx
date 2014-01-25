@@ -39,25 +39,28 @@ class SwWrtShell;
 class SwLoadOptPage : public SfxTabPage
 {
 private:
-    RadioButton* m_pAlwaysRB;
-    RadioButton* m_pRequestRB;
-    RadioButton* m_pNeverRB;
+    RadioButton*     m_pAlwaysRB;
+    RadioButton*     m_pRequestRB;
+    RadioButton*     m_pNeverRB;
 
-    CheckBox*    m_pAutoUpdateFields;
-    CheckBox*    m_pAutoUpdateCharts;
+    CheckBox*        m_pAutoUpdateFields;
+    CheckBox*        m_pAutoUpdateCharts;
 
-    ListBox*     m_pMetricLB;
-    FixedText*   m_pTabFT;
-    MetricField* m_pTabMF;
-    CheckBox*    m_pUseSquaredPageMode;
-    CheckBox*    m_pUseCharUnit;
-    Edit*        m_pWordCountED;
+    ListBox*         m_pMetricLB;
+    FixedText*       m_pTabFT;
+    MetricField*     m_pTabMF;
+    CheckBox*        m_pUseSquaredPageMode;
+    CheckBox*        m_pUseCharUnit;
+    Edit*            m_pWordCountED;
+    CheckBox*        m_pShowStandardizedPageCount;
+    NumericField*    m_pStandardizedPageSizeNF;
 
-    SwWrtShell*  m_pWrtShell;
-    sal_uInt16   m_nLastTab;
-    sal_Int32    m_nOldLinkMode;
+    SwWrtShell*      m_pWrtShell;
+    sal_uInt16       m_nLastTab;
+    sal_Int32        m_nOldLinkMode;
 
     DECL_LINK(MetricHdl, void *);
+    DECL_LINK(StandardizedPageCountCheckHdl, void *);
 
 public:
     SwLoadOptPage(Window* pParent, const SfxItemSet& rSet);

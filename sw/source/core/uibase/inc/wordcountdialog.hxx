@@ -31,18 +31,22 @@ class SwWordCountFloatDlg : public SfxModelessDialog
     virtual void    Activate() SAL_OVERRIDE;
     void SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc);
     void showCJK(bool bShowCJK);
+    void showStandardizedPages(bool bShowStandardizedPages);
 
     FixedText* m_pCurrentWordFT;
     FixedText* m_pCurrentCharacterFT;
     FixedText* m_pCurrentCharacterExcludingSpacesFT;
     FixedText* m_pCurrentCjkcharsFT;
+    FixedText* m_pCurrentStandardizedPagesFT;
 
     FixedText* m_pDocWordFT;
     FixedText* m_pDocCharacterFT;
     FixedText* m_pDocCharacterExcludingSpacesFT;
     FixedText* m_pDocCjkcharsFT;
+    FixedText* m_pDocStandardizedPagesFT;
 
     FixedText* m_pCjkcharsLabelFT;
+    FixedText* m_pStandardizedPagesLabelFT;
 
     CloseButton* m_pClosePB;
 

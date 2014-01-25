@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <officecfg/Office/Writer.hxx>
 #include <swtypes.hxx>
 #include <wordcountdialog.hxx>
 #include <docstat.hxx>
@@ -54,6 +55,12 @@ namespace
     {
         pWidget->SetText(rLocaleData.getNum(nValue, 0));
     }
+
+    void setDoubleValue(FixedText *pWidget, double fValue)
+    {
+        OUString sValue(OUString::number(::rtl::math::round(fValue, 1)));
+        pWidget->SetText(sValue);
+    }
 }
 
 void SwWordCountFloatDlg::SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc)
@@ -67,6 +74,15 @@ void SwWordCountFloatDlg::SetValues(const SwDocStat& rCurrent, const SwDocStat& 
     setValue(m_pDocCharacterFT, rDoc.nChar, rLocaleData);
     setValue(m_pDocCharacterExcludingSpacesFT, rDoc.nCharExcludingSpaces, rLocaleData);
     setValue(m_pDocCjkcharsFT, rDoc.nAsianWord, rLocaleData);
+
+    if (m_pStandardizedPagesLabelFT->IsVisible())
+    {
+        sal_Int64 nCharsPerStandardizedPage = officecfg::Office::Writer::WordCount::StandardizedPageSize::get();
+        setDoubleValue(m_pCurrentStandardizedPagesFT,
+            (double)rCurrent.nChar / nCharsPerStandardizedPage);
+        setDoubleValue(m_pDocStandardizedPagesFT,
+            (double)rDoc.nChar / nCharsPerStandardizedPage);
+    }
 
     bool bShowCJK = (SvtCJKOptions().IsAnyEnabled() || rDoc.nAsianWord);
     bool bToggleCJK = m_pCurrentCjkcharsFT->IsVisible() != bShowCJK;
@@ -84,6 +100,13 @@ void SwWordCountFloatDlg::showCJK(bool bShowCJK)
     m_pCjkcharsLabelFT->Show(bShowCJK);
 }
 
+void SwWordCountFloatDlg::showStandardizedPages(bool bShowStandardizedPages)
+{
+    m_pCurrentStandardizedPagesFT->Show(bShowStandardizedPages);
+    m_pDocStandardizedPagesFT->Show(bShowStandardizedPages);
+    m_pStandardizedPagesLabelFT->Show(bShowStandardizedPages);
+}
+
 SwWordCountFloatDlg::SwWordCountFloatDlg(SfxBindings* _pBindings,
                                          SfxChildWindow* pChild,
                                          Window *pParent,
@@ -94,17 +117,21 @@ SwWordCountFloatDlg::SwWordCountFloatDlg(SfxBindings* _pBindings,
     get(m_pCurrentCharacterFT, "selectchars");
     get(m_pCurrentCharacterExcludingSpacesFT, "selectcharsnospaces");
     get(m_pCurrentCjkcharsFT, "selectcjkchars");
+    get(m_pCurrentStandardizedPagesFT, "selectstandardizedpages");
 
     get(m_pDocWordFT, "docwords");
     get(m_pDocCharacterFT, "docchars");
     get(m_pDocCharacterExcludingSpacesFT, "doccharsnospaces");
     get(m_pDocCjkcharsFT, "doccjkchars");
+    get(m_pDocStandardizedPagesFT, "docstandardizedpages");
 
     get(m_pCjkcharsLabelFT, "cjkcharsft");
+    get(m_pStandardizedPagesLabelFT, "standardizedpages");
 
     get(m_pClosePB, "close");
 
     showCJK(SvtCJKOptions().IsAnyEnabled());
+    showStandardizedPages(officecfg::Office::Writer::WordCount::ShowStandardizedPageCount::get());
 
     Initialize(pInfo);
 
