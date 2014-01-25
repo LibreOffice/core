@@ -99,7 +99,8 @@ public:
     virtual sal_Int32 SAL_CALL
                 getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
                     throw (::com::sun::star::uno::RuntimeException,
-                    ::com::sun::star::lang::IndexOutOfBoundsException);
+                           ::com::sun::star::lang::IndexOutOfBoundsException,
+                           std::exception);
 
     /** Returns the number of columns occupied by the Accessible at a specified row and column in the table.
     Returns 1 if it is only a cell and the number of columns the cell is merged if the cell is a merged cell.
