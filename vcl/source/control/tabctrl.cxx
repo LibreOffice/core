@@ -1631,7 +1631,6 @@ Rectangle* TabControl::ImplFindPartRect( const Point& rPt )
 
 bool TabControl::PreNotify( NotifyEvent& rNEvt )
 {
-    bool nDone = false;
     const MouseEvent* pMouseEvt = NULL;
 
     if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
@@ -1675,7 +1674,7 @@ bool TabControl::PreNotify( NotifyEvent& rNEvt )
         }
     }
 
-    return nDone || Control::PreNotify(rNEvt);
+    return Control::PreNotify(rNEvt);
 }
 
 // -----------------------------------------------------------------------
