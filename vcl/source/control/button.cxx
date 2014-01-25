@@ -1533,7 +1533,6 @@ void PushButton::DataChanged( const DataChangedEvent& rDCEvt )
 
 bool PushButton::PreNotify( NotifyEvent& rNEvt )
 {
-    bool nDone = false;
     const MouseEvent* pMouseEvt = NULL;
 
     if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
@@ -1594,7 +1593,7 @@ bool PushButton::PreNotify( NotifyEvent& rNEvt )
         }
     }
 
-    return nDone || Button::PreNotify(rNEvt);
+    return Button::PreNotify(rNEvt);
 }
 
 // -----------------------------------------------------------------------
@@ -2782,7 +2781,6 @@ void RadioButton::DataChanged( const DataChangedEvent& rDCEvt )
 
 bool RadioButton::PreNotify( NotifyEvent& rNEvt )
 {
-    bool nDone = false;
     const MouseEvent* pMouseEvt = NULL;
 
     if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
@@ -2804,7 +2802,7 @@ bool RadioButton::PreNotify( NotifyEvent& rNEvt )
         }
     }
 
-    return nDone || Button::PreNotify(rNEvt);
+    return Button::PreNotify(rNEvt);
 }
 
 // -----------------------------------------------------------------------
