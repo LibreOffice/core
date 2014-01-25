@@ -1005,7 +1005,8 @@ short SfxTabDialog::Ok()
                 if ( pTabPage->FillItemSet( aTmp ) )
                 {
                     bModified |= sal_True;
-                    pExampleSet->Put( aTmp );
+                    if (pExampleSet)
+                        pExampleSet->Put( aTmp );
                     pOutSet->Put( aTmp );
                 }
             }
