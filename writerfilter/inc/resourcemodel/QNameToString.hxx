@@ -38,7 +38,6 @@ class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC QNameToString
 
     static Pointer_t pInstance;
 
-    void init_doctok();
     void init_ooxml();
 
     Map mMap;

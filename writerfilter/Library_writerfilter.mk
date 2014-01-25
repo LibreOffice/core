@@ -153,7 +153,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,writerfilter,\
     CustomTarget/writerfilter/source/OOXMLFactory_generated \
     CustomTarget/writerfilter/source/OOXMLFactory_values \
     CustomTarget/writerfilter/source/sprmcodetostr \
-    CustomTarget/writerfilter/source/doctok/qnametostr \
     CustomTarget/writerfilter/source/ooxml/qnametostr \
 ))
 

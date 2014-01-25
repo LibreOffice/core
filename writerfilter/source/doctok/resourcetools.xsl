@@ -109,16 +109,6 @@
     </xsl:for-each>
 </xsl:template>
 
-<xsl:template match='UML:Model' mode='qnametostr'>
-  <xsl:text>
-void QNameToString::init_doctok()
-{</xsl:text>
-<xsl:call-template name="qnametostrattrs"/>
-<xsl:text>
-}
-</xsl:text>
-</xsl:template>
-
 <xsl:key name="ids" match='UML:Attribute[@name!="reserved"]//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="attrid"]|UML:Operation[@name!="reserved"]//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="opid"]' use=".//UML:TaggedValue.dataValue"/>
 
 <xsl:template match="UML:Model" mode="qnametostrfunc">

@@ -45,7 +45,6 @@ string WRITERFILTER_RESOURCEMODEL_DLLPUBLIC QNameToString::operator()(Id qName)
 
 QNameToString::QNameToString()
 {
-    init_doctok();
     init_ooxml();
 }
 
