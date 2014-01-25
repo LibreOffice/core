@@ -2442,19 +2442,24 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
             nDelFromLine = nLine;
             break;
         }
-        if ( !pLine && ( nIndex < pNode->GetText().getLength() )  )
+        if ( !pLine )
         {
-            pLine = new TextLine;
-            pTEParaPortion->GetLines().insert( pTEParaPortion->GetLines().begin() + ++nLine, pLine );
+            if ( nIndex < pNode->GetText().getLength() )
+            {
+                pLine = new TextLine;
+                pTEParaPortion->GetLines().insert( pTEParaPortion->GetLines().begin() + ++nLine, pLine );
+            }
+            else
+            {
+                break;
+            }
         }
-        if ( pLine )
-        {
-            aSaveLine = *pLine;
-            pLine->SetStart( nIndex );
-            pLine->SetEnd( nIndex );
-            pLine->SetStartPortion( nEndPortion+1 );
-            pLine->SetEndPortion( nEndPortion+1 );
-        }
+        aSaveLine = *pLine;
+        pLine->SetStart( nIndex );
+        pLine->SetEnd( nIndex );
+        pLine->SetStartPortion( nEndPortion+1 );
+        pLine->SetEndPortion( nEndPortion+1 );
+
     }   // while ( Index < Len )
 
     if (nDelFromLine != std::numeric_limits<size_t>::max())
