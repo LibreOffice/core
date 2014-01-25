@@ -189,7 +189,8 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
                     if( m_bIsCrossingAxisIsCategoryAxis )
                     {
                         ChartModel* pModel = dynamic_cast<ChartModel*>(xChartModel.get());
-                        m_aCategories = DiagramHelper::getExplicitSimpleCategories( *pModel );
+                        if (pModel)
+                            m_aCategories = DiagramHelper::getExplicitSimpleCategories( *pModel );
                     }
                 }
 
@@ -197,8 +198,11 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
                 if ( nDimensionIndex == 0 && aData.AxisType == chart2::AxisType::CATEGORY )
                 {
                     ChartModel* pModel = dynamic_cast<ChartModel*>(xChartModel.get());
-                    ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys, *pModel );
-                    m_bComplexCategoriesAxis = aExplicitCategoriesProvider.hasComplexCategories();
+                    if (pModel)
+                    {
+                        ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys, *pModel );
+                        m_bComplexCategoriesAxis = aExplicitCategoriesProvider.hasComplexCategories();
+                    }
                 }
             }
         }
