@@ -16,19 +16,21 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include "dmapperLoggers.hxx"
 
-namespace writerfilter {
-namespace dmapper {
+namespace writerfilter
+{
+namespace dmapper
+{
 
 using namespace ::com::sun::star;
 
 TablePositionHandler::TablePositionHandler() :
     LoggedProperties(dmapper_logger, "TablePositionHandler"),
-    m_aVertAnchor( "margin" ),
-    m_aYSpec( ),
-    m_aHorzAnchor( "text" ),
-    m_aXSpec( ),
-    m_nY( 0 ),
-    m_nX( 0 ),
+    m_aVertAnchor("margin"),
+    m_aYSpec(),
+    m_aHorzAnchor("text"),
+    m_aXSpec(),
+    m_nY(0),
+    m_nX(0),
     m_nLeftFromText(0),
     m_nRightFromText(0),
     m_nTopFromText(0),
@@ -45,41 +47,41 @@ void TablePositionHandler::lcl_attribute(Id rName, Value& rVal)
 {
     switch (rName)
     {
-        case NS_ooxml::LN_CT_TblPPr_vertAnchor:
-            m_aVertAnchor = rVal.getString();
+    case NS_ooxml::LN_CT_TblPPr_vertAnchor:
+        m_aVertAnchor = rVal.getString();
         break;
-        case NS_ooxml::LN_CT_TblPPr_tblpYSpec:
-            m_aYSpec = rVal.getString();
+    case NS_ooxml::LN_CT_TblPPr_tblpYSpec:
+        m_aYSpec = rVal.getString();
         break;
-        case NS_ooxml::LN_CT_TblPPr_horzAnchor:
-            m_aHorzAnchor = rVal.getString();
+    case NS_ooxml::LN_CT_TblPPr_horzAnchor:
+        m_aHorzAnchor = rVal.getString();
         break;
-        case NS_ooxml::LN_CT_TblPPr_tblpXSpec:
-            m_aXSpec = rVal.getString();
+    case NS_ooxml::LN_CT_TblPPr_tblpXSpec:
+        m_aXSpec = rVal.getString();
         break;
-        case NS_ooxml::LN_CT_TblPPr_tblpY:
-            m_nY = rVal.getInt();
+    case NS_ooxml::LN_CT_TblPPr_tblpY:
+        m_nY = rVal.getInt();
         break;
-        case NS_ooxml::LN_CT_TblPPr_tblpX:
-            m_nX = rVal.getInt();
+    case NS_ooxml::LN_CT_TblPPr_tblpX:
+        m_nX = rVal.getInt();
         break;
-        case NS_ooxml::LN_CT_TblPPr_leftFromText:
-            m_nLeftFromText = rVal.getInt();
+    case NS_ooxml::LN_CT_TblPPr_leftFromText:
+        m_nLeftFromText = rVal.getInt();
         break;
-        case NS_ooxml::LN_CT_TblPPr_rightFromText:
-            m_nRightFromText = rVal.getInt();
+    case NS_ooxml::LN_CT_TblPPr_rightFromText:
+        m_nRightFromText = rVal.getInt();
         break;
-        case NS_ooxml::LN_CT_TblPPr_topFromText:
-            m_nTopFromText = rVal.getInt();
+    case NS_ooxml::LN_CT_TblPPr_topFromText:
+        m_nTopFromText = rVal.getInt();
         break;
-        case NS_ooxml::LN_CT_TblPPr_bottomFromText:
-            m_nBottomFromText = rVal.getInt();
+    case NS_ooxml::LN_CT_TblPPr_bottomFromText:
+        m_nBottomFromText = rVal.getInt();
         break;
-        default:
+    default:
 #ifdef DEBUG_DOMAINMAPPER
-            dmapper_logger->element("unhandled");
+        dmapper_logger->element("unhandled");
 #endif
-            break;
+        break;
     }
 }
 
@@ -124,23 +126,23 @@ uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() con
 
     // Horizontal positioning
     sal_Int16 nHoriOrient = text::HoriOrientation::NONE;
-    if ( m_aXSpec == "center" )
+    if (m_aXSpec == "center")
         nHoriOrient = text::HoriOrientation::CENTER;
-    else if ( m_aXSpec == "inside" )
+    else if (m_aXSpec == "inside")
         nHoriOrient = text::HoriOrientation::INSIDE;
-    else if ( m_aXSpec == "left" )
+    else if (m_aXSpec == "left")
         nHoriOrient = text::HoriOrientation::LEFT;
-    else if ( m_aXSpec == "outside" )
+    else if (m_aXSpec == "outside")
         nHoriOrient = text::HoriOrientation::OUTSIDE;
-    else if ( m_aXSpec == "right" )
+    else if (m_aXSpec == "right")
         nHoriOrient = text::HoriOrientation::RIGHT;
 
     sal_Int16 nHoriOrientRelation;
-    if ( m_aHorzAnchor == "margin" )
+    if (m_aHorzAnchor == "margin")
         nHoriOrientRelation = text::RelOrientation::PAGE_PRINT_AREA;
-    else if ( m_aHorzAnchor == "page" )
+    else if (m_aHorzAnchor == "page")
         nHoriOrientRelation = text::RelOrientation::PAGE_FRAME;
-    else if ( m_aHorzAnchor == "text" )
+    else if (m_aHorzAnchor == "text")
         nHoriOrientRelation = text::RelOrientation::FRAME;
 
     pFrameProperties[12].Name = "HoriOrient";
@@ -153,21 +155,21 @@ uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() con
 
     // Vertical positioning
     sal_Int16 nVertOrient = text::VertOrientation::NONE;
-    if ( m_aYSpec == "bottom" )
+    if (m_aYSpec == "bottom")
         nVertOrient = text::VertOrientation::BOTTOM;
-    else if ( m_aYSpec == "center" )
+    else if (m_aYSpec == "center")
         nVertOrient = text::VertOrientation::CENTER;
-    else if ( m_aYSpec == "top" )
+    else if (m_aYSpec == "top")
         nVertOrient = text::VertOrientation::TOP;
     // TODO There are a few cases we can't map ATM.
 
 
     sal_Int16 nVertOrientRelation;
-    if ( m_aVertAnchor == "margin" )
+    if (m_aVertAnchor == "margin")
         nVertOrientRelation = text::RelOrientation::PAGE_PRINT_AREA;
-    else if ( m_aVertAnchor == "page" )
+    else if (m_aVertAnchor == "page")
         nVertOrientRelation = text::RelOrientation::PAGE_FRAME;
-    else if ( m_aVertAnchor == "text" )
+    else if (m_aVertAnchor == "text")
         nVertOrientRelation = text::RelOrientation::FRAME;
 
     pFrameProperties[15].Name = "VertOrient";
