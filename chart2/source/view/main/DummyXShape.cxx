@@ -13,6 +13,7 @@
 
 #include <vcl/window.hxx>
 #include <tools/gen.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <algorithm>
 
@@ -184,14 +185,7 @@ uno::Sequence< OUString > DummyXShape::getSupportedServiceNames()
 sal_Bool DummyXShape::supportsService( const OUString& rServiceName )
     throw(uno::RuntimeException)
 {
-    uno::Sequence< OUString > aSupportedServices = listSupportedServices();
-    for(sal_Int32 i = 0; i < aSupportedServices.getLength(); ++i)
-    {
-        if(aSupportedServices[i] == rServiceName)
-            return true;
-    }
-
-    return false;
+    return cppu::supportsService(this, ServiceName);
 }
 
 uno::Reference< uno::XInterface > DummyXShape::getParent()
