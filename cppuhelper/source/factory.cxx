@@ -954,8 +954,7 @@ OUString OFactoryProxyHelper::getImplementationName()
 sal_Bool OFactoryProxyHelper::supportsService(const OUString& ServiceName)
     throw(::com::sun::star::uno::RuntimeException)
 {
-    Reference<XServiceInfo > xInfo( xFactory, UNO_QUERY  );
-    return xInfo.is() && xInfo->supportsService( ServiceName );
+    return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo

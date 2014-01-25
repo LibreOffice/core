@@ -26,6 +26,7 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
@@ -89,8 +90,6 @@ static void HSVtoRGB(double dH, double dS, double dV, double& dR, double& dG, do
     dB = result.getBlue();
 }
 
-// -----------------------------------------------------------------------
-
 // CMYK values from 0 to 1
 static void CMYKtoRGB( double fCyan, double fMagenta, double fYellow, double fKey, double& dR, double& dG, double& dB )
 {
@@ -102,8 +101,6 @@ static void CMYKtoRGB( double fCyan, double fMagenta, double fYellow, double fKe
     dG = std::max( std::min( ( 1.0 - fMagenta ), 1.0), 0.0 );
     dB = std::max( std::min( ( 1.0 - fYellow ), 1.0), 0.0 );
 }
-
-// -----------------------------------------------------------------------
 
 // CMY results from 0 to 1
 static void RGBtoCMYK( double dR, double dG, double dB, double& fCyan, double& fMagenta, double& fYellow, double& fKey )
@@ -133,8 +130,6 @@ static void RGBtoCMYK( double dR, double dG, double dB, double& fCyan, double& f
     }
 }
 
-// ====================================================================
-
 class HexColorControl : public Edit
 {
 public:
@@ -156,16 +151,12 @@ HexColorControl::HexColorControl( Window* pParent, const ResId& rResId )
     SetMaxTextLen( 6 );
 }
 
-// -----------------------------------------------------------------------
-
 void HexColorControl::SetColor( sal_Int32 nColor )
 {
     OUStringBuffer aBuffer;
     sax::Converter::convertColor( aBuffer, nColor );
     SetText( aBuffer.makeStringAndClear().copy(1) );
 }
-
-// -----------------------------------------------------------------------
 
 sal_Int32 HexColorControl::GetColor()
 {
@@ -190,8 +181,6 @@ sal_Int32 HexColorControl::GetColor()
     return nColor;
 }
 
-// -----------------------------------------------------------------------
-
 bool HexColorControl::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
@@ -202,8 +191,6 @@ bool HexColorControl::PreNotify( NotifyEvent& rNEvt )
 
     return Edit::PreNotify( rNEvt );
 }
-
-// -----------------------------------------------------------------------
 
 void HexColorControl::Paste()
 {
@@ -249,8 +236,6 @@ void HexColorControl::Paste()
     }
 }
 
-// -----------------------------------------------------------------------
-
 bool HexColorControl::ImplProcessKeyInput( const KeyEvent& rKEv )
 {
     const KeyCode& rKeyCode = rKEv.GetKeyCode();
@@ -268,8 +253,6 @@ bool HexColorControl::ImplProcessKeyInput( const KeyEvent& rKEv )
     return false;
 }
 
-// ====================================================================
-
 class ColorPreviewControl : public Control
 {
 public:
@@ -282,16 +265,12 @@ private:
     Color maColor;
 };
 
-// -----------------------------------------------------------------------
-
 ColorPreviewControl::ColorPreviewControl( Window* pParent, const ResId& rResId )
 : Control( pParent, rResId )
 {
     SetFillColor( maColor );
     SetLineColor( maColor );
 }
-
-// -----------------------------------------------------------------------
 
 void ColorPreviewControl::SetColor( const Color& rCol )
 {
@@ -304,14 +283,10 @@ void ColorPreviewControl::SetColor( const Color& rCol )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void ColorPreviewControl::Paint( const Rectangle& rRect )
 {
     DrawRect( rRect );
 }
-
-// ====================================================================
 
 enum ColorMode { HUE, SATURATION, BRIGHTNESS, RED, GREEN, BLUE };
 const ColorMode DefaultMode = HUE;
@@ -357,8 +332,6 @@ private:
     std::vector< sal_uInt16 > maPercent_Vert;
 };
 
-// -----------------------------------------------------------------------
-
 ColorFieldControl::ColorFieldControl( Window* pParent, const ResId& rResId )
 : Control( pParent, rResId )
 , meMode( DefaultMode )
@@ -369,14 +342,10 @@ ColorFieldControl::ColorFieldControl( Window* pParent, const ResId& rResId )
     SetControlBackground();
 }
 
-// -----------------------------------------------------------------------
-
 ColorFieldControl::~ColorFieldControl()
 {
     delete mpBitmap;
 }
-
-// -----------------------------------------------------------------------
 
 void ColorFieldControl::UpdateBitmap()
 {
@@ -519,8 +488,6 @@ void ColorFieldControl::UpdateBitmap()
     }
 }
 
-// -----------------------------------------------------------------------
-
 void ColorFieldControl::ShowPosition( const Point& rPos, bool bUpdate )
 {
     if( !mpBitmap )
@@ -564,7 +531,6 @@ void ColorFieldControl::ShowPosition( const Point& rPos, bool bUpdate )
         }
     }
 }
-// -----------------------------------------------------------------------
 
 void ColorFieldControl::MouseMove( const MouseEvent& rMEvt )
 {
@@ -575,7 +541,6 @@ void ColorFieldControl::MouseMove( const MouseEvent& rMEvt )
     }
 }
 
-// -----------------------------------------------------------------------
 void ColorFieldControl::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if( rMEvt.IsLeft() && !rMEvt.IsShift() )
@@ -586,14 +551,11 @@ void ColorFieldControl::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-// -----------------------------------------------------------------------
 void ColorFieldControl::MouseButtonUp( const MouseEvent& )
 {
     if( IsMouseCaptured() )
         ReleaseMouse();
 }
-
-// -----------------------------------------------------------------------
 
 void ColorFieldControl::KeyMove( int dx, int dy )
 {
@@ -615,8 +577,6 @@ void ColorFieldControl::KeyMove( int dx, int dy )
     Modify();
 }
 
-// -----------------------------------------------------------------------
-
 void ColorFieldControl::KeyInput( const KeyEvent& rKEvt )
 {
     bool   bShift = rKEvt.GetKeyCode().IsShift();
@@ -635,8 +595,6 @@ void ColorFieldControl::KeyInput( const KeyEvent& rKEvt )
     }
     Control::KeyInput( rKEvt );
 }
-
-// -----------------------------------------------------------------------
 
 void ColorFieldControl::Paint( const Rectangle& rRect )
 {
@@ -661,22 +619,16 @@ void ColorFieldControl::Paint( const Rectangle& rRect )
     DrawEllipse( Rectangle( maPosition, Size( 11, 11) ) );
 }
 
-// -----------------------------------------------------------------------
-
 void ColorFieldControl::Resize()
 {
     UpdateBitmap();
     Control::Resize();
 }
 
-// -----------------------------------------------------------------------
-
 void ColorFieldControl::Modify()
 {
     maModifyHdl.Call( this );
 }
-
-// -----------------------------------------------------------------------
 
 void ColorFieldControl::SetValues( Color aColor, ColorMode eMode, double x, double y )
 {
@@ -696,29 +648,21 @@ void ColorFieldControl::SetValues( Color aColor, ColorMode eMode, double x, doub
     }
 }
 
-// -----------------------------------------------------------------------
-
 double ColorFieldControl::GetX()
 {
     return mdX;
 }
-
-// -----------------------------------------------------------------------
 
 double ColorFieldControl::GetY()
 {
     return mdY;
 }
 
-// -----------------------------------------------------------------------
-
 void ColorFieldControl::UpdatePosition()
 {
     Size aSize( GetOutputSizePixel() );
     ShowPosition( Point(static_cast<long>(mdX * aSize.Width()), static_cast<long>((1.0 - mdY) * aSize.Height())), false );
 }
-
-// ====================================================================
 
 class ColorSliderControl : public Control
 {
@@ -755,8 +699,6 @@ private:
     double mdValue;
 };
 
-// -----------------------------------------------------------------------
-
 ColorSliderControl::ColorSliderControl( Window* pParent, const ResId& rResId )
 : Control( pParent, rResId )
 , meMode( DefaultMode )
@@ -767,14 +709,10 @@ ColorSliderControl::ColorSliderControl( Window* pParent, const ResId& rResId )
     SetControlBackground();
 }
 
-// -----------------------------------------------------------------------
-
 ColorSliderControl::~ColorSliderControl()
 {
     delete mpBitmap;
 }
-
-// -----------------------------------------------------------------------
 
 void ColorSliderControl::UpdateBitmap()
 {
@@ -858,8 +796,6 @@ void ColorSliderControl::UpdateBitmap()
     }
 }
 
-// -----------------------------------------------------------------------
-
 void ColorSliderControl::ChangePosition( long nY )
 {
     const long nHeight = GetOutputSizePixel().Height() - 1;
@@ -873,8 +809,6 @@ void ColorSliderControl::ChangePosition( long nY )
     mdValue = ((double)(nHeight - nY)) / (double)nHeight;
 }
 
-// -----------------------------------------------------------------------
-
 void ColorSliderControl::MouseMove( const MouseEvent& rMEvt )
 {
     if( rMEvt.IsLeft() )
@@ -884,7 +818,6 @@ void ColorSliderControl::MouseMove( const MouseEvent& rMEvt )
     }
 }
 
-// -----------------------------------------------------------------------
 void ColorSliderControl::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if( rMEvt.IsLeft() && !rMEvt.IsShift() )
@@ -895,22 +828,17 @@ void ColorSliderControl::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-// -----------------------------------------------------------------------
 void ColorSliderControl::MouseButtonUp( const MouseEvent& )
 {
     if( IsMouseCaptured() )
         ReleaseMouse();
 }
 
-// -----------------------------------------------------------------------
-
 void ColorSliderControl::KeyMove( int dy )
 {
     ChangePosition( mnLevel + dy );
     Modify();
 }
-
-// -----------------------------------------------------------------------
 
 void ColorSliderControl::KeyInput( const KeyEvent& rKEvt )
 {
@@ -925,7 +853,6 @@ void ColorSliderControl::KeyInput( const KeyEvent& rKEvt )
 
     Control::KeyInput( rKEvt );
 }
-// -----------------------------------------------------------------------
 
 void ColorSliderControl::Paint( const Rectangle& /*rRect*/ )
 {
@@ -948,22 +875,16 @@ void ColorSliderControl::Paint( const Rectangle& /*rRect*/ )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void ColorSliderControl::Resize()
 {
     UpdateBitmap();
     Control::Resize();
 }
 
-// -----------------------------------------------------------------------
-
 void ColorSliderControl::Modify()
 {
     maModifyHdl.Call( this );
 }
-
-// -----------------------------------------------------------------------
 
 void ColorSliderControl::SetValue( const Color& rColor, ColorMode eMode, double dValue )
 {
@@ -979,8 +900,6 @@ void ColorSliderControl::SetValue( const Color& rColor, ColorMode eMode, double 
         Invalidate();
     }
 }
-
-// ====================================================================
 
 const sal_uInt16 UPDATE_RGB = 0x01;
 const sal_uInt16 UPDATE_CMYK = 0x02;
@@ -1068,8 +987,6 @@ private:
     OKButton maBTNOk;
     CancelButton maBTNCancel;
 };
-
-// --------------------------------------------------------------------
 
 ColorPickerDialog::ColorPickerDialog( Window* pParent, sal_Int32 nColor, sal_Int16 nMode )
 : ModalDialog( pParent, CUI_RES( RID_CUI_DIALOG_COLORPICKER ) )
@@ -1193,8 +1110,6 @@ ColorPickerDialog::ColorPickerDialog( Window* pParent, sal_Int32 nColor, sal_Int
     update_color();
 }
 
-// --------------------------------------------------------------------
-
 static int toInt( double dValue, double dRange )
 {
     return static_cast< int >( std::floor((dValue * dRange) + 0.5 ) );
@@ -1281,8 +1196,6 @@ void ColorPickerDialog::update_color( sal_uInt16 n )
 
     maColorPreview.SetColor( aColor );
 }
-
-// --------------------------------------------------------------------
 
 IMPL_LINK( ColorPickerDialog, ColorModifyHdl, void *, p )
 {
@@ -1397,8 +1310,6 @@ IMPL_LINK( ColorPickerDialog, ColorModifyHdl, void *, p )
     return 0;
 }
 
-// --------------------------------------------------------------------
-
 IMPL_LINK_NOARG(ColorPickerDialog, ModeModifyHdl)
 {
     ColorMode eMode = HUE;
@@ -1433,8 +1344,6 @@ IMPL_LINK_NOARG(ColorPickerDialog, ModeModifyHdl)
     return 0;
 }
 
-// --------------------------------------------------------------------
-
 void ColorPickerDialog::setColorComponent( sal_uInt16 nComp, double dValue )
 {
     switch( nComp )
@@ -1467,8 +1376,6 @@ void ColorPickerDialog::setColorComponent( sal_uInt16 nComp, double dValue )
         RGBtoHSV( mdRed, mdGreen, mdBlue, mdHue, mdSat, mdBri );
     }
 }
-
-// --------------------------------------------------------------------
 
 typedef ::cppu::WeakComponentImplHelper4< XServiceInfo, XExecutableDialog, XInitialization, XPropertyAccess > ColorPickerBase;
 
@@ -1504,21 +1411,15 @@ private:
     Reference< ::com::sun::star::awt::XWindow > mxParent;
 };
 
-// --------------------------------------------------------------------
-
 OUString SAL_CALL ColorPicker_getImplementationName()
 {
     return OUString( "com.sun.star.cui.ColorPicker" );
 }
 
-// --------------------------------------------------------------------
-
 Reference< XInterface > SAL_CALL ColorPicker_createInstance( Reference< XComponentContext > const & xContext ) SAL_THROW( (Exception) )
 {
     return static_cast<XWeak*>( new ColorPicker( xContext ) );
 }
-
-// --------------------------------------------------------------------
 
 Sequence< OUString > SAL_CALL ColorPicker_getSupportedServiceNames() throw( RuntimeException )
 {
@@ -1526,8 +1427,6 @@ Sequence< OUString > SAL_CALL ColorPicker_getSupportedServiceNames() throw( Runt
     seq[0] = "com.sun.star.ui.dialogs.ColorPicker";
     return seq;
 }
-
-// --------------------------------------------------------------------
 
 ColorPicker::ColorPicker( Reference< XComponentContext > const & xContext )
 : ColorPickerBase( m_aMutex )
@@ -1539,8 +1438,6 @@ ColorPicker::ColorPicker( Reference< XComponentContext > const & xContext )
 {
 }
 
-// --------------------------------------------------------------------
-
 // XInitialization
 void SAL_CALL ColorPicker::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
 {
@@ -1550,29 +1447,21 @@ void SAL_CALL ColorPicker::initialize( const Sequence< Any >& aArguments ) throw
     }
 }
 
-// --------------------------------------------------------------------
-
 // XInitialization
 OUString SAL_CALL ColorPicker::getImplementationName(  ) throw (RuntimeException)
 {
     return ColorPicker_getImplementationName();
 }
 
-// --------------------------------------------------------------------
-
 sal_Bool SAL_CALL ColorPicker::supportsService( const OUString& sServiceName ) throw (RuntimeException)
 {
-    return sServiceName == "com.sun.star.ui.dialogs.ColorPicker";
+    return cppu::supportsService(this, sServiceName);
 }
-
-// --------------------------------------------------------------------
 
 Sequence< OUString > SAL_CALL ColorPicker::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     return ColorPicker_getSupportedServiceNames();
 }
-
-// --------------------------------------------------------------------
 
 // XPropertyAccess
 Sequence< PropertyValue > SAL_CALL ColorPicker::getPropertyValues(  ) throw (RuntimeException)
@@ -1582,8 +1471,6 @@ Sequence< PropertyValue > SAL_CALL ColorPicker::getPropertyValues(  ) throw (Run
     props[0].Value <<= mnColor;
     return props;
 }
-
-// --------------------------------------------------------------------
 
 void SAL_CALL ColorPicker::setPropertyValues( const Sequence< PropertyValue >& aProps ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
@@ -1600,15 +1487,11 @@ void SAL_CALL ColorPicker::setPropertyValues( const Sequence< PropertyValue >& a
     }
 }
 
-// --------------------------------------------------------------------
-
 // XExecutableDialog
 void SAL_CALL ColorPicker::setTitle( const OUString& sTitle ) throw (RuntimeException)
 {
     msTitle = sTitle;
 }
-
-// --------------------------------------------------------------------
 
 sal_Int16 SAL_CALL ColorPicker::execute(  ) throw (RuntimeException)
 {
@@ -1619,8 +1502,6 @@ sal_Int16 SAL_CALL ColorPicker::execute(  ) throw (RuntimeException)
 
     return ret;
 }
-
-// --------------------------------------------------------------------
 
 }
 
