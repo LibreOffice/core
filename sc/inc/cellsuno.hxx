@@ -1181,7 +1181,8 @@ public:
     virtual void SAL_CALL   hideDetail( const ::com::sun::star::table::CellRangeAddress& aRange )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   showDetail( const ::com::sun::star::table::CellRangeAddress& aRange )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException,
+                                      std::exception);
     virtual void SAL_CALL   showLevel( sal_Int16 nLevel,
                                 ::com::sun::star::table::TableOrientation nOrientation )
                                     throw(::com::sun::star::uno::RuntimeException);
