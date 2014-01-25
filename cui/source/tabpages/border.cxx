@@ -716,14 +716,14 @@ sal_Bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
         if ( !pOldBoxItem || !( *pOldBoxItem == aBoxItem ) )
         {
             rCoreAttrs.Put( aBoxItem );
-            bAttrsChanged |= sal_True;
+            bAttrsChanged |= true;
         }
         const SfxPoolItem* pOld = GetOldItem( rCoreAttrs, SID_ATTR_BORDER_INNER, sal_False );
 
         if ( !pOld || !( *(const SvxBoxInfoItem*)pOld == aBoxInfoItem ) )
         {
             rCoreAttrs.Put( aBoxInfoItem );
-            bAttrsChanged |= sal_True;
+            bAttrsChanged |= true;
         }
     }
     else
