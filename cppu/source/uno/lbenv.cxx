@@ -989,8 +989,7 @@ inline void EnvironmentsData::registerEnvironment( uno_Environment ** ppEnv )
         (*pWeak->harden)( &pHard, pWeak );
         if (pHard)
         {
-            if (pEnv)
-                (*pEnv->release)( pEnv );
+            (*pEnv->release)( pEnv );
             *ppEnv = pHard;
         }
         else // registered one is dead
