@@ -5463,6 +5463,32 @@
         </info>
         <value>—–</value>
       </prop>
+      <prop oor:name="ShowStandardizedPageCount" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>configures if standardized page count should be displayed on the Word Count window</desc>
+          <label>Show Standardized Page Count</label>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="StandardizedPageSize" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>configures how many characters is considered one standardized page</desc>
+          <label>Characters Per Standardized Page</label>
+        </info>
+        <constraints>
+          <minInclusive oor:value="1">
+            <info>
+              <desc>Specifies the minimum value allowed.</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="100000">
+            <info>
+              <desc>Specifies the maximum value allowed.</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+        <value>1800</value>
+      </prop>
     </group>
     <group oor:name="Navigator">
       <info>
