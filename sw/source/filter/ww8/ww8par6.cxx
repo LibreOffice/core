@@ -158,7 +158,7 @@ static sal_uInt16 ReadUSprm( const WW8PLCFx_SEPX* pSep, sal_uInt16 nId, short nD
 static sal_uInt8 ReadBSprm( const WW8PLCFx_SEPX* pSep, sal_uInt16 nId, sal_uInt8 nDefaultVal )
 {
     const sal_uInt8* pS = pSep->HasSprm( nId );          // sprm da ?
-    sal_uInt8 nVal = ( pS ) ? SVBT8ToByte( pS ) : nDefaultVal;
+    sal_uInt8 nVal = pS ? *pS : nDefaultVal;
     return nVal;
 }
 
@@ -3674,7 +3674,7 @@ void SwWW8ImplReader::Read_CharSet(sal_uInt16 , const sal_uInt8* pData, short nL
         eHardCharSet = RTL_TEXTENCODING_DONTKNOW;
         return;
     }
-    sal_uInt8 nfChsDiff = SVBT8ToByte( pData );
+    sal_uInt8 nfChsDiff = *pData;
 
     if( nfChsDiff )
         eHardCharSet = rtl_getTextEncodingFromWindowsCharset( *(pData + 1) );

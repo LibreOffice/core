@@ -162,7 +162,7 @@ void Ww1SingleSprmPJc::Start(
         SVX_ADJUST_CENTER,
         SVX_ADJUST_RIGHT,
         SVX_ADJUST_BLOCK };
-    sal_uInt8 nPara = SVBT8ToByte(pSprm);
+    sal_uInt8 nPara = *pSprm;
     nPara %=SAL_N_ELEMENTS(aAdj);
     rOut << SvxAdjustItem(aAdj[nPara], RES_PARATR_ADJUST);
 }
@@ -172,7 +172,7 @@ STOP1(Ww1SingleSprmPJc, RES_PARATR_ADJUST)
 void Ww1SingleSprmPFKeep::Start(
     Ww1Shell& rOut, sal_uInt8, sal_uInt8* pSprm, sal_uInt16, Ww1Manager&)
 {
-    rOut << SvxFmtSplitItem((SVBT8ToByte(pSprm) & 1) == 0, RES_PARATR_SPLIT);
+    rOut << SvxFmtSplitItem((*pSprm & 1) == 0, RES_PARATR_SPLIT);
 }
 
 STOP1(Ww1SingleSprmPFKeep, RES_PARATR_SPLIT)
@@ -180,7 +180,7 @@ STOP1(Ww1SingleSprmPFKeep, RES_PARATR_SPLIT)
 void Ww1SingleSprmPFKeepFollow::Start(
     Ww1Shell& rOut, sal_uInt8, sal_uInt8* pSprm, sal_uInt16, Ww1Manager&)
 {
-    rOut << SvxFmtKeepItem((SVBT8ToByte(pSprm) & 1) != 0, RES_KEEP);
+    rOut << SvxFmtKeepItem((*pSprm & 1) != 0, RES_KEEP);
 }
 
 STOP1(Ww1SingleSprmPFKeepFollow, RES_KEEP)
@@ -188,7 +188,7 @@ STOP1(Ww1SingleSprmPFKeepFollow, RES_KEEP)
 void Ww1SingleSprmPPageBreakBefore::Start(
     Ww1Shell& rOut, sal_uInt8, sal_uInt8* pSprm, sal_uInt16, Ww1Manager&)
 {
-    rOut << SvxFmtBreakItem(SVBT8ToByte(pSprm) & 1?
+    rOut << SvxFmtBreakItem(*pSprm & 1?
      SVX_BREAK_PAGE_BEFORE:SVX_BREAK_NONE, RES_BREAK );
 }
 
@@ -389,7 +389,7 @@ STOP1(Ww1SingleSprmPChgTabsPapx, RES_PARATR_TABSTOP)
 void Ww1SingleSprmSGprfIhdt::Start(
     Ww1Shell& /*rOut*/, sal_uInt8 /*nId*/, sal_uInt8* pSprm, sal_uInt16 /*nSize*/, Ww1Manager& rMan)
 {
-    rMan.GetSep().SetGrpfIhdt(SVBT8ToByte(pSprm));
+    rMan.GetSep().SetGrpfIhdt(*pSprm);
 }
 
 void Ww1SingleSprmSColumns::Start(
@@ -545,7 +545,7 @@ void Ww1SingleSprmTDyaRowHeight::Start(
 void Ww1SingleSprmPpc::Start(
     Ww1Shell& rOut, sal_uInt8 /*nId*/, sal_uInt8* pSprm, sal_uInt16 /*nSize*/, Ww1Manager& rMan)
 {
-    sal_uInt8 nPpc = SVBT8ToByte(pSprm);
+    sal_uInt8 nPpc = *pSprm;
 
     if (rOut.IsInTable())                       // PMW does not know Flys in tables
         return;

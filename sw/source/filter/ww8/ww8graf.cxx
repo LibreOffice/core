@@ -177,7 +177,7 @@ bool SwWW8ImplReader::ReadGrafStart(void* pData, short nDataSiz,
     if (!bCouldRead)
         return false;
 
-    RndStdIds eAnchor = (SVBT8ToByte(pDo->by) < 2) ? FLY_AT_PAGE : FLY_AT_PARA;
+    RndStdIds eAnchor = (pDo->by < 2) ? FLY_AT_PAGE : FLY_AT_PARA;
     rSet.Put(SwFmtAnchor(eAnchor));
 
     nDrawXOfs2 = nDrawXOfs;
@@ -185,7 +185,7 @@ bool SwWW8ImplReader::ReadGrafStart(void* pData, short nDataSiz,
 
     if (eAnchor == FLY_AT_PARA)
     {
-        if( SVBT8ToByte( pDo->bx ) == 1 )       // Pos: echt links
+        if( pDo->bx == 1 )       // Pos: echt links
             nDrawXOfs2 = static_cast< short >(nDrawXOfs2 - maSectionManager.GetPageLeft());
         if( nInTable )                          // Obj in Table
             nDrawXOfs2 = nDrawXOfs2 - GetTableLeft();       // -> siehe Kommentar
@@ -193,7 +193,7 @@ bool SwWW8ImplReader::ReadGrafStart(void* pData, short nDataSiz,
     }
     else
     {
-        if( SVBT8ToByte( pDo->bx ) != 1 )
+        if( pDo->bx != 1 )
             nDrawXOfs2 = static_cast< short >(nDrawXOfs2 + maSectionManager.GetPageLeft());
     }
 
@@ -407,13 +407,12 @@ SdrObject* SwWW8ImplReader::ReadArc( WW8_DPHEAD* pHd, const WW8_DO* pDo,
     aP1.Y() += (sal_Int16)SVBT16ToShort( pHd->dya ) * 2;
 
     short nA[] = { 2, 3, 1, 0 };
-    short nW = nA[ ( ( SVBT8ToByte( aArc.fLeft ) & 1 ) << 1 )
-                    + ( SVBT8ToByte( aArc.fUp ) & 1 ) ];
-    if( !SVBT8ToByte( aArc.fLeft ) ){
+    short nW = nA[ ( ( aArc.fLeft & 1 ) << 1 ) + ( aArc.fUp & 1 ) ];
+    if( !aArc.fLeft ){
         aP0.Y() -= (sal_Int16)SVBT16ToShort( pHd->dya );
         aP1.Y() -= (sal_Int16)SVBT16ToShort( pHd->dya );
     }
-    if( SVBT8ToByte( aArc.fUp ) ){
+    if( aArc.fUp ){
         aP0.X() -= (sal_Int16)SVBT16ToShort( pHd->dxa );
         aP1.X() -= (sal_Int16)SVBT16ToShort( pHd->dxa );
     }

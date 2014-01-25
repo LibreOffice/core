@@ -103,7 +103,7 @@ void Ww1Style::SetDefaults(sal_uInt8 stc)
 
 sal_uInt16 Ww1Style::ReadName( sal_uInt8*&p, sal_uInt16& rnCountBytes, sal_uInt16 stc )
 {
-    sal_uInt8 nCountBytes = SVBT8ToByte(p);
+    sal_uInt8 nCountBytes = *p;
     p++;
     rnCountBytes--;
     if( !nCountBytes ) // default
@@ -168,7 +168,7 @@ sal_uInt16 Ww1Style::ReadName( sal_uInt8*&p, sal_uInt16& rnCountBytes, sal_uInt1
 
 sal_uInt16 Ww1Style::ReadChpx( sal_uInt8*&p, sal_uInt16& rnCountBytes )
 {
-    sal_uInt16 nCountBytes = SVBT8ToByte(p);
+    sal_uInt16 nCountBytes = *p;
     p++;
     rnCountBytes--;
     if (nCountBytes != 255 // unused
@@ -186,7 +186,7 @@ sal_uInt16 Ww1Style::ReadChpx( sal_uInt8*&p, sal_uInt16& rnCountBytes )
 
 sal_uInt16 Ww1Style::ReadPapx(sal_uInt8*&p, sal_uInt16& rnCountBytes)
 {
-    sal_uInt16 nCountBytes = SVBT8ToByte(p);
+    sal_uInt16 nCountBytes = *p;
     p++;
     rnCountBytes--;
     if (nCountBytes != 255)
@@ -203,10 +203,10 @@ sal_uInt16 Ww1Style::ReadPapx(sal_uInt8*&p, sal_uInt16& rnCountBytes)
 
 sal_uInt16 Ww1Style::ReadEstcp(sal_uInt8*&p, sal_uInt16& rnCountBytes)
 {
-    stcNext = SVBT8ToByte(p);
+    stcNext = *p;
     p++;
     rnCountBytes--;
-    stcBase = SVBT8ToByte(p);
+    stcBase = *p;
     p++;
     OSL_ENSURE(rnCountBytes>0, "Ww1Style");
     rnCountBytes--;
@@ -442,11 +442,10 @@ Ww1Sprm::Ww1Sprm(SvStream& rStream, sal_uLong ulFilePos)
     pArr(NULL),
     count(0)
 {
-    SVBT8 x;
-    ByteToSVBT8(0, x);
+    sal_uInt8 x = 0;
     if (rStream.Seek(ulFilePos) == (sal_uLong)ulFilePos)
         if (rStream.Read(&x, sizeof(x)) == (sal_uLong)sizeof(x))
-            if ((nCountBytes = SVBT8ToByte(x)) == 255
+            if ((nCountBytes = x) == 255
              || !nCountBytes
              || (p = new sal_uInt8[nCountBytes]) != NULL)
                 if (nCountBytes == 255
@@ -474,14 +473,14 @@ Ww1SingleSprm::~Ww1SingleSprm()
 sal_uInt16 Ww1SingleSprmTab::Size(sal_uInt8* pSprm) // Doc 24/25, Fastsave-Sprm
 {
     OSL_ENSURE(nCountBytes==0, "Ww1SingleSprmTab");
-    sal_uInt16 nRet = sizeof(SVBT8);
-    sal_uInt16 nSize = SVBT8ToByte(pSprm);
+    sal_uInt16 nRet = sizeof(sal_uInt8);
+    sal_uInt16 nSize = *pSprm;
     if (nSize != 255)
         nRet = nRet + nSize;
     else
     {
-        sal_uInt16 nDel = SVBT8ToByte(pSprm+1) * 4;
-        sal_uInt16 nIns = SVBT8ToByte(pSprm + 3 + nDel) * 3;
+        sal_uInt16 nDel = (*(pSprm + 1)) * 4;
+        sal_uInt16 nIns = (*(pSprm + 3 + nDel)) * 3;
         nRet += nDel + nIns;
     }
     OSL_ENSURE(nRet <= 354, "Ww1SingleSprmTab");
@@ -492,10 +491,7 @@ sal_uInt16 Ww1SingleSprmTab::Size(sal_uInt8* pSprm) // Doc 24/25, Fastsave-Sprm
 
 sal_uInt16 Ww1SingleSprmByteSized::Size(sal_uInt8* pSprm)
 {
-    sal_uInt16 nRet;
-    nRet = SVBT8ToByte(pSprm);
-    nRet += sizeof(SVBT8);  // var. l. byte-size
-    nRet = nRet + nCountBytes;
+    sal_uInt16 nRet = *pSprm + sizeof(sal_uInt8) + nCountBytes;
     return nRet;
 }
 
@@ -523,7 +519,7 @@ sal_Bool Ww1Sprm::Fill(sal_uInt16 index, sal_uInt8& nId, sal_uInt16& nL, sal_uIn
 {
     OSL_ENSURE(index < Count(), "Ww1Sprm");
     pSprm = p + pArr[index];
-    nId = SVBT8ToByte(pSprm);
+    nId = *pSprm;
     pSprm++;
     nL = GetTab(nId).Size(pSprm);
     return sal_True;
@@ -966,12 +962,12 @@ sal_uInt8* Ww1Fkp::GetData(sal_uInt16 nIndex)
 sal_Bool Ww1FkpPap::Fill(sal_uInt16 nIndex, sal_uInt8*& p, sal_uInt16& rnCountBytes)
 {
     OSL_ENSURE( nIndex < Count(), "Ww1FkpPap::Fill() Index out of Range" );
-    sal_uInt16 nOffset = SVBT8ToByte(GetData(nIndex)) * 2;
+    sal_uInt16 nOffset = *GetData(nIndex) * 2;
     if (nOffset)
     {
         OSL_ENSURE(nOffset>(sal_uInt16)(Count()*sizeof(SVBT32)), "calc error");
-        rnCountBytes = SVBT8ToByte(aFkp+nOffset) * 2;
-        nOffset += sizeof(SVBT8);
+        rnCountBytes = *(aFkp+nOffset) * 2;
+        nOffset += sizeof(sal_uInt8);
         if( nOffset + rnCountBytes < 511 )  // SH: Assert schlug 1 zu frueh zu
             rnCountBytes++;                 // SH: Ich weiss nicht genau,
                                             // ob das letzte Byte des PAPX
@@ -999,7 +995,7 @@ sal_Bool Ww1FkpChp::Fill(sal_uInt16 nIndex, W1_CHP& aChp)
     {
         OSL_ENSURE(nOffset>(sal_uInt16)(Count()*sizeof(SVBT32)), "calc error");
         sal_uInt16 nCountBytes = aFkp[nOffset];
-        nOffset += sizeof(SVBT8);
+        nOffset += sizeof(sal_uInt8);
         OSL_ENSURE(nCountBytes <= 511-nOffset, "calc error");
         OSL_ENSURE(nCountBytes <= sizeof(aChp), "calc error");
         memcpy(&aChp, aFkp+nOffset, nCountBytes);

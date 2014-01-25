@@ -263,11 +263,11 @@ sal_Int16 LwpObjectStream::QuickReadInt16(bool *pFailure)
  */
 sal_uInt8 LwpObjectStream::QuickReaduInt8(bool *pFailure)
 {
-    SVBT8 aValue = {0};
-    sal_uInt16 nRead = QuickRead(aValue, sizeof(aValue));
+    sal_uInt8 aValue = 0;
+    sal_uInt16 nRead = QuickRead(&aValue, sizeof(aValue));
     if (pFailure)
         *pFailure = (nRead != sizeof(aValue));
-    return SVBT8ToByte(aValue);
+    return aValue;
 }
 /**
  * @descr  Quick read double

@@ -986,7 +986,7 @@ protected:
 public:
     Ww1Fkp(SvStream&, sal_uLong, sal_uInt16);
     friend std::ostream& operator <<(std::ostream&, Ww1Fkp&);
-    sal_uInt16 Count() const            { return SVBT8ToByte(aFkp+511); }
+    sal_uInt16 Count() const            { return *(aFkp+511); }
     sal_uLong Where(sal_uInt16); // wie im entsprechenden fkp
 };
 

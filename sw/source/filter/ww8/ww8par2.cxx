@@ -570,16 +570,16 @@ static void SetBaseAnlv(SwNumFmt &rNum, WW8_ANLV &rAV, sal_uInt8 nSwLevel )
 //      in fact the following 2, but writer UI does not provide
 //      SVX_ADJUST_CENTER, SVX_ADJUST_BLOCKLINE };
 
-    rNum.SetNumberingType( static_cast< sal_Int16 >(( SVBT8ToByte( rAV.nfc ) < 8 ) ?
-                    eNumA[SVBT8ToByte( rAV.nfc ) ] : SVX_NUM_NUMBER_NONE) );
-    if ((SVBT8ToByte(rAV.aBits1 ) & 0x4) >> 2)
+    rNum.SetNumberingType( static_cast< sal_Int16 >(( rAV.nfc < 8 ) ?
+                    eNumA[ rAV.nfc ] : SVX_NUM_NUMBER_NONE) );
+    if ((rAV.aBits1 & 0x4) >> 2)
         rNum.SetIncludeUpperLevels(nSwLevel + 1);
     rNum.SetStart( SVBT16ToShort( rAV.iStartAt ) );
-    rNum.SetNumAdjust( eAdjA[SVBT8ToByte( rAV.aBits1 ) & 0x3] );
+    rNum.SetNumAdjust( eAdjA[ rAV.aBits1 & 0x3] );
 
     rNum.SetCharTextDistance( SVBT16ToShort( rAV.dxaSpace ) );
     sal_Int16 nIndent = std::abs((sal_Int16)SVBT16ToShort( rAV.dxaIndent ));
-    if( SVBT8ToByte( rAV.aBits1 ) & 0x08 )      //fHang
+    if( rAV.aBits1 & 0x08 )      //fHang
     {
         rNum.SetFirstLineOffset( -nIndent );
         rNum.SetLSpace( nIndent );
@@ -588,7 +588,7 @@ static void SetBaseAnlv(SwNumFmt &rNum, WW8_ANLV &rAV, sal_uInt8 nSwLevel )
     else
         rNum.SetCharTextDistance( nIndent );        // width of number is missing
 
-    if( SVBT8ToByte( rAV.nfc ) == 5 || SVBT8ToByte( rAV.nfc ) == 7 )
+    if( rAV.nfc == 5 || rAV.nfc == 7 )
     {
         OUString sP = "." + rNum.GetSuffix();
         rNum.SetSuffix( sP );   // ordinal number
@@ -607,11 +607,11 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
     OUString sTxt;
     if (bVer67)
     {
-        sTxt = OUString((sal_Char*)pTxt, SVBT8ToByte(rAV.cbTextBefore) + SVBT8ToByte(rAV.cbTextAfter), eCharSet);
+        sTxt = OUString((sal_Char*)pTxt, rAV.cbTextBefore + rAV.cbTextAfter, eCharSet);
     }
     else
     {
-        for(sal_Int32 i = 0; i < SVBT8ToByte(rAV.cbTextBefore) + SVBT8ToByte(rAV.cbTextAfter); ++i, pTxt += 2)
+        for(sal_Int32 i = 0; i < rAV.cbTextBefore + rAV.cbTextAfter; ++i, pTxt += 2)
         {
             sTxt += OUString(SVBT16ToShort(*(SVBT16*)pTxt));
         }
@@ -630,8 +630,8 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
             {
                 // use cBulletChar for correct mapping on MAC
                 OUStringBuffer aBuf;
-                comphelper::string::padToLength(aBuf, SVBT8ToByte(rAV.cbTextBefore)
-                    + SVBT8ToByte(rAV.cbTextAfter), cBulletChar);
+                comphelper::string::padToLength(aBuf, rAV.cbTextBefore
+                    + rAV.cbTextAfter, cBulletChar);
                 sTxt = aBuf.makeStringAndClear();
             }
         }
@@ -658,7 +658,7 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
                 rNum.SetBulletFont( &aFont );
 
                 // take only the very first character
-                if (SVBT8ToByte(rAV.cbTextBefore) || SVBT8ToByte(rAV.cbTextAfter))
+                if (rAV.cbTextBefore || rAV.cbTextAfter)
                     rNum.SetBulletChar( sTxt[ 0 ] );
                 else
                     rNum.SetBulletChar( 0x2190 );
@@ -667,16 +667,15 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
     }
     if( bInsert )
     {
-        if (SVBT8ToByte(rAV.cbTextBefore))
+        if (rAV.cbTextBefore)
         {
-            OUString sP( sTxt.copy( 0, SVBT8ToByte( rAV.cbTextBefore ) ) );
+            OUString sP( sTxt.copy( 0, rAV.cbTextBefore ) );
             rNum.SetPrefix( sP );
         }
-        if (SVBT8ToByte(rAV.cbTextAfter))
+        if( rAV.cbTextAfter )
         {
             OUString sP( rNum.GetSuffix() );
-            sP += sTxt.copy( SVBT8ToByte( rAV.cbTextBefore ),
-                             SVBT8ToByte( rAV.cbTextAfter  ) );
+            sP += sTxt.copy( rAV.cbTextBefore, rAV.cbTextAfter);
             rNum.SetSuffix( sP );
         }
 // The characters before and after multipe digits do not apply because
@@ -694,7 +693,7 @@ void SwWW8ImplReader::SetAnld(SwNumRule* pNumR, WW8_ANLD* pAD, sal_uInt8 nSwLeve
     SwNumFmt aNF;
     if (pAD)
     {                                                       // there is a Anld-Sprm
-        bAktAND_fNumberAcross = 0 != SVBT8ToByte( pAD->fNumberAcross );
+        bAktAND_fNumberAcross = 0 != pAD->fNumberAcross;
         WW8_ANLV &rAV = pAD->eAnlv;
         SetBaseAnlv(aNF, rAV, nSwLevel);                    // set the base format
         SetAnlvStrings(aNF, rAV, pAD->rgchAnld, bOutLine ); // set the rest
@@ -826,10 +825,7 @@ void SwWW8ImplReader::SetNumOlst(SwNumRule* pNumR, WW8_OLST* pO, sal_uInt8 nSwLe
     sal_uInt8 i;
     WW8_ANLV* pAV1;                 // search String-Positions
     for (i = 0, pAV1 = pO->rganlv; i < nSwLevel; ++i, ++pAV1)
-    {
-        nTxtOfs += SVBT8ToByte(pAV1->cbTextBefore)
-            + SVBT8ToByte(pAV1->cbTextAfter);
-    }
+        nTxtOfs += pAV1->cbTextBefore + pAV1->cbTextAfter;
 
     if (!bVer67)
         nTxtOfs *= 2;
@@ -911,7 +907,7 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
             {
                 // this is ROW numbering ?
                 pS12 = pPlcxMan->HasParaSprm(bVer67 ? 12 : 0xC63E); // sprmAnld
-                if (pS12 && 0 != SVBT8ToByte(((WW8_ANLD*)pS12)->fNumberAcross))
+                if (pS12 && 0 != ((WW8_ANLD*)pS12)->fNumberAcross)
                     sNumRule = "";
             }
         }
@@ -939,7 +935,7 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
         {
             if (!pS12)
                 pS12 = pPlcxMan->HasParaSprm(bVer67 ? 12 : 0xC63E); // sprmAnld
-            if (!pS12 || !SVBT8ToByte( ((WW8_ANLD*)pS12)->fNumberAcross))
+            if (!pS12 || !((WW8_ANLD*)pS12)->fNumberAcross)
                 pTableDesc->SetNumRuleName(pNumRule->GetName());
         }
     }
@@ -1134,7 +1130,7 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS)
             {
                 if( i < nColsToRead )
                 {               // TC from file ?
-                    sal_uInt8 aBits1 = SVBT8ToByte( pTc->aBits1Ver6 );
+                    sal_uInt8 aBits1 = pTc->aBits1Ver6;
                     pAktTC->bFirstMerged    = ( ( aBits1 & 0x01 ) != 0 );
                     pAktTC->bMerged     = ( ( aBits1 & 0x02 ) != 0 );
                     memcpy( pAktTC->rgbrc[ WW8_TOP      ].aBits1,
