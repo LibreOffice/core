@@ -7894,7 +7894,7 @@ void SAL_CALL ScTableSheetObj::ungroup( const table::CellRangeAddress& rGroupRan
 }
 
 void SAL_CALL ScTableSheetObj::autoOutline( const table::CellRangeAddress& rCellRange )
-                                    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
