@@ -401,7 +401,8 @@ public:
                             queryEmptyCells() throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSheetCellRanges > SAL_CALL
                             queryContentCells( sal_Int16 nContentFlags )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException,
+                                      std::exception);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSheetCellRanges > SAL_CALL
                             queryFormulaCells( sal_Int32 nResultFlags )
                                 throw(::com::sun::star::uno::RuntimeException,

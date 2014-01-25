@@ -3530,8 +3530,8 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryEmptyCel
 }
 
 uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryContentCells(
-                                                    sal_Int16 nContentFlags )
-                                    throw(uno::RuntimeException)
+    sal_Int16 nContentFlags )
+        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (pDocShell)
