@@ -1208,9 +1208,8 @@ uno::Reference<XAccessible > SAL_CALL
     return xAccessible;
 }
 
-void SAL_CALL
-        ScAccessibleSpreadsheet::deselectAccessibleChild( sal_Int32 nChildIndex )
-        throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+void SAL_CALL ScAccessibleSpreadsheet::deselectAccessibleChild( sal_Int32 nChildIndex )
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();

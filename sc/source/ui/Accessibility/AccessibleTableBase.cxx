@@ -445,9 +445,8 @@ uno::Reference<XAccessible > SAL_CALL
     return xAccessible;
 }
 
-void SAL_CALL
-        ScAccessibleTableBase::deselectAccessibleChild( sal_Int32 /* nSelectedChildIndex */ )
-        throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+void SAL_CALL ScAccessibleTableBase::deselectAccessibleChild( sal_Int32 /* nSelectedChildIndex */ )
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
 }
 
