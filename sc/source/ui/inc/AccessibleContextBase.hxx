@@ -268,7 +268,8 @@ protected:
     /// Return the object's current name.
     virtual OUString SAL_CALL
         createAccessibleName(void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
 
     /// Return the object's current bounding box relative to the desktop.
     virtual Rectangle GetBoundingBoxOnScreen() const

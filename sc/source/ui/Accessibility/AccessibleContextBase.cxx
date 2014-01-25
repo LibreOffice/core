@@ -520,9 +520,8 @@ OUString SAL_CALL
     return OUString();
 }
 
-OUString SAL_CALL
-    ScAccessibleContextBase::createAccessibleName(void)
-    throw (uno::RuntimeException)
+OUString SAL_CALL ScAccessibleContextBase::createAccessibleName()
+    throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("should be implemented in the abrevated class");
     return OUString();

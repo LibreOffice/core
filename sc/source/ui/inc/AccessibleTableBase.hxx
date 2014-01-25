@@ -229,8 +229,9 @@ protected:
 
     /// Return the object's current name.
     virtual OUString SAL_CALL
-        createAccessibleName(void)
-        throw (::com::sun::star::uno::RuntimeException);
+        createAccessibleName()
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
 
 public:
     /// Return NULL to indicate that an empty relation set.

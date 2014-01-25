@@ -614,8 +614,8 @@ OUString SAL_CALL ScAccessiblePreviewTable::createAccessibleDescription(void)
     return sDesc;
 }
 
-OUString SAL_CALL ScAccessiblePreviewTable::createAccessibleName(void)
-                    throw (uno::RuntimeException)
+OUString SAL_CALL ScAccessiblePreviewTable::createAccessibleName()
+    throw (uno::RuntimeException, std::exception)
 {
     OUString sName(SC_RESSTR(STR_ACC_TABLE_NAME));
 

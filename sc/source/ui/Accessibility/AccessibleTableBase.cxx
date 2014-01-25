@@ -372,9 +372,8 @@ OUString SAL_CALL
     return sDesc;
 }
 
-OUString SAL_CALL
-    ScAccessibleTableBase::createAccessibleName(void)
-    throw (uno::RuntimeException)
+OUString SAL_CALL ScAccessibleTableBase::createAccessibleName()
+    throw (uno::RuntimeException, std::exception)
 {
     OUString sName(SC_RESSTR(STR_ACC_TABLE_NAME));
     OUString sCoreName;
