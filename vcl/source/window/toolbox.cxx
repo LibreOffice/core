@@ -446,26 +446,17 @@ void ToolBox::ImplDrawGradientBackground( ToolBox* pThis, ImplDockingWindowWrapp
     if( pThis->mbHorz )
     {
         long y = 0;
-        sal_Bool bDrawSep = sal_False; // pThis->ImplIsFloatingMode() && ( pThis->mnWinStyle & WB_LINESPACING );
 
         pThis->DrawGradient( Rectangle( 0, y, aTopLineSz.Width(), y+aTopLineSz.Height()), g );
         y += aTopLineSz.Height();
-
-        if ( bDrawSep )
-            pThis->DrawLine( Point(0, y-2), Point(aTopLineSz.Width(), y-2) );
 
         while( y < (pThis->mnDY - aBottomLineSz.Height()) )
         {
             pThis->DrawGradient( Rectangle( 0, y, aLineSz.Width(), y+aLineSz.Height()), g);
             y += aLineSz.Height();
-
-            if ( bDrawSep )
-                pThis->DrawLine( Point(0, y-2), Point(aLineSz.Width(), y-2) );
         }
 
         pThis->DrawGradient( Rectangle( 0, y, aBottomLineSz.Width(), y+aBottomLineSz.Height()), g );
-        if ( bDrawSep )
-            pThis->DrawLine( Point(0, y-2), Point(aBottomLineSz.Width(), y-2) );
     }
     else
     {
