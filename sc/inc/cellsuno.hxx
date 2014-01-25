@@ -394,7 +394,9 @@ public:
 
                             // XCellRangesQuery
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSheetCellRanges > SAL_CALL
-                            queryVisibleCells() throw(::com::sun::star::uno::RuntimeException);
+                            queryVisibleCells()
+                                throw(::com::sun::star::uno::RuntimeException,
+                                      std::exception);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSheetCellRanges > SAL_CALL
                             queryEmptyCells() throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSheetCellRanges > SAL_CALL

@@ -3455,7 +3455,7 @@ void SAL_CALL ScCellRangesBase::removeModifyListener( const uno::Reference<util:
 // XCellRangesQuery
 
 uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryVisibleCells()
-                                    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (pDocShell)
