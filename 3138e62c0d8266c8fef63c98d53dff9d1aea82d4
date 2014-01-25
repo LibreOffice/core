@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_a595f689",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-01-25T22:57:46Z",
+      "side": 1,
+      "message": "Can you append the following text: \"fdo#39468\"\n\ne.g. fdo#39468 Transalate German comments to English (vcl/inc/window.h)\n\nThis allows us to update the bug with your commit once it gets merged with the main tree.",
+      "revId": "3138e62c0d8266c8fef63c98d53dff9d1aea82d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_8581d24c",
+        "filename": "vcl/inc/window.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-01-25T22:57:46Z",
+      "side": 1,
+      "message": "Can you remove these comments? Just not needed.",
+      "revId": "3138e62c0d8266c8fef63c98d53dff9d1aea82d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
