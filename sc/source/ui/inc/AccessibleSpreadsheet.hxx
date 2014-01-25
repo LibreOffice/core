@@ -153,7 +153,7 @@ private:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
         SAL_CALL getAccessibleAtPoint(
         const ::com::sun::star::awt::Point& rPoint )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void SAL_CALL grabFocus(  )
         throw (::com::sun::star::uno::RuntimeException);

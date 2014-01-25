@@ -985,9 +985,8 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleSelected( sal_Int32 nRow,
 
     //=====  XAccessibleComponent  ============================================
 
-uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleAtPoint(
-    const awt::Point& rPoint )
-        throw (uno::RuntimeException)
+uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleAtPoint(const awt::Point& rPoint)
+    throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< XAccessible > xAccessible;
     if (containsPoint(rPoint))
