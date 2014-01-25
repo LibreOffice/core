@@ -604,7 +604,7 @@ void WW8Export::Out_SwNumLvl( sal_uInt8 nSwLevel )
 void WW8Export::BuildAnlvBulletBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
     sal_uInt16& rCharLen, const SwNumFmt& rFmt)
 {
-    ByteToSVBT8(11, rAnlv.nfc);
+    rAnlv.nfc = 11;
 
     sal_uInt8 nb = 0;                                // type of number
     switch (rFmt.GetNumAdjust())
@@ -630,7 +630,7 @@ void WW8Export::BuildAnlvBulletBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
         if (GetWordFirstLineOffset(rFmt) < 0)
             nb |= 0x8;          // number will be displayed using a hanging indent
     }
-    ByteToSVBT8(nb, rAnlv.aBits1);
+    rAnlv.aBits1 = nb;
 
     if (1 < rCharLen)
     {
@@ -678,7 +678,7 @@ void WW8Export::BuildAnlvBulletBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
         rpCh++;
         rCharLen--;
         ShortToSVBT16(nFontId, rAnlv.ftc);
-        ByteToSVBT8( 1, rAnlv.cbTextBefore );
+        rAnlv.cbTextBefore = 1;
     }
     // #i86652#
     if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
@@ -710,7 +710,7 @@ void MSWordExportBase::SubstituteBullet( OUString& rNumStr,
 }
 
 static void SwWw8_InsertAnlText( const OUString& rStr, sal_uInt8*& rpCh,
-                                 sal_uInt16& rCharLen, SVBT8& r8Len )
+                                 sal_uInt16& rCharLen, sal_uInt8& r8Len )
 {
     sal_uInt8 nb = 0;
     ww::bytes aO;
@@ -724,14 +724,14 @@ static void SwWw8_InsertAnlText( const OUString& rStr, sal_uInt8*& rpCh,
         rpCh += nCnt;
         rCharLen = rCharLen - nCnt;
     }
-    ByteToSVBT8( nb, r8Len );
+    r8Len = nb;
 }
 
 void WW8Export::BuildAnlvBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
     sal_uInt16& rCharLen, const SwNumRule& rRul, const SwNumFmt& rFmt,
     sal_uInt8 nSwLevel)
 {
-    ByteToSVBT8(WW8Export::GetNumId(rFmt.GetNumberingType()), rAnlv.nfc);
+    rAnlv.nfc = WW8Export::GetNumId(rFmt.GetNumberingType());
 
     sal_uInt8 nb = 0;
     switch (rFmt.GetNumAdjust())
@@ -757,7 +757,7 @@ void WW8Export::BuildAnlvBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
 
     if (GetWordFirstLineOffset(rFmt) < 0)
         nb |= 0x8;          // number will be displayed using a hanging indent
-    ByteToSVBT8( nb, rAnlv.aBits1 );
+    rAnlv.aBits1 = nb;
 
     if( bInclUpper && !rRul.IsContinusNum() )
     {

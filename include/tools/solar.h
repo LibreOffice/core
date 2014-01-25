@@ -41,14 +41,12 @@ typedef sal_uIntPtr    sal_uLong; /* Replaces type ULONG */
    always little endian;
    not necessarily aligned */
 
-typedef sal_uInt8   SVBT8[1];
 typedef sal_uInt8   SVBT16[2];
 typedef sal_uInt8   SVBT32[4];
 typedef sal_uInt8   SVBT64[8];
 
 #ifdef __cplusplus
 
-inline sal_uInt8  SVBT8ToByte  ( const SVBT8  p ) { return p[0]; }
 inline sal_uInt16 SVBT16ToShort( const SVBT16 p ) { return (sal_uInt16)p[0]
                                                    + ((sal_uInt16)p[1] <<  8); }
 inline sal_uInt32 SVBT32ToUInt32 ( const SVBT32 p ) { return (sal_uInt32)p[0]
@@ -79,7 +77,6 @@ inline double   SVBT64ToDouble( const SVBT64 p ) { double n;
                                                     return n; }
 #endif
 
-inline void     ByteToSVBT8  ( sal_uInt8   n, SVBT8 p ) { p[0] = n; }
 inline void     ShortToSVBT16( sal_uInt16 n, SVBT16 p ) { p[0] = (sal_uInt8) n;
                                                       p[1] = (sal_uInt8)(n >>  8); }
 inline void     UInt32ToSVBT32 ( sal_uInt32  n, SVBT32 p ) { p[0] = (sal_uInt8) n;
