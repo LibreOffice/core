@@ -18,6 +18,7 @@
  */
 #include "sampleaddin.hxx"
 
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/factory.hxx>
 #include <osl/diagnose.h>
 
@@ -633,16 +634,7 @@ OUString SAL_CALL SampleAddIn::getImplementationName() throw( uno::RuntimeExcept
 sal_Bool SAL_CALL SampleAddIn::supportsService( const OUString& ServiceName )
     throw( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aServiceSeq = getSupportedServiceNames_Static();
-
-    sal_Int32 nLength = aServiceSeq.getLength();
-    for( sal_Int32 i=0; i < nLength; i++ )
-    {
-        if( ServiceName.equals( aServiceSeq[ i ] ))
-            return sal_True;
-    }
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SampleAddIn::getSupportedServiceNames()
