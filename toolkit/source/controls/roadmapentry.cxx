@@ -18,10 +18,9 @@
  */
 
 #include <toolkit/controls/roadmapentry.hxx>
-
 #include <rtl/ustring.hxx>
-
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 
 ORoadmapEntry::ORoadmapEntry() : ORoadmapEntry_Base( )
@@ -86,7 +85,7 @@ OUString SAL_CALL ORoadmapEntry::getImplementationName(  ) throw (::com::sun::st
 
 sal_Bool SAL_CALL ORoadmapEntry::supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException)
 {
-    return ServiceName == "com.sun.star.awt.RoadmapItem";
+    return cppu::supportsService(this, ServiceName);
 }
 
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL ORoadmapEntry::getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException)
