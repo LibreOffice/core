@@ -273,7 +273,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleSumma
 }
 
 sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleSelected( sal_Int32 /* nRow */, sal_Int32 /* nColumn */ )
-    throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
+    throw (uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
 {
     OSL_FAIL("not implemented yet");
     return false;

@@ -353,7 +353,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleSu
 }
 
 sal_Bool SAL_CALL ScAccessiblePreviewTable::isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
-                                throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     //  in the page preview, there is no selection
     SolarMutexGuard aGuard;

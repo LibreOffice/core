@@ -113,7 +113,8 @@ public:
                             getAccessibleSummary() throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
                                 throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                                    ::com::sun::star::uno::RuntimeException);
+                                       ::com::sun::star::uno::RuntimeException,
+                                       std::exception);
     virtual sal_Int32 SAL_CALL getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
                                 throw (::com::sun::star::lang::IndexOutOfBoundsException,
                                     ::com::sun::star::uno::RuntimeException);
