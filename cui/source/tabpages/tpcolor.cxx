@@ -335,7 +335,7 @@ SvxColorTabPage::SvxColorTabPage(Window* pParent, const SfxItemSet& rInAttrs)
     get(m_pR, "R");
     get(m_pG, "G");
     get(m_pB, "B");
-    get(m_pCYMK, "cmyk");
+    get(m_pCMYK, "cmyk");
     get(m_pC, "C");
     get(m_pY, "Y");
     get(m_pM, "M");
@@ -981,7 +981,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectColorModelHdl_Impl)
             case CM_RGB:
             {
                 m_pRGB->Show();
-                m_pCYMK->Hide();
+                m_pCMYK->Hide();
 
                 m_pR->SetValue( ColorToPercent_Impl( aCurrentColor.GetRed() ) );
                 m_pG->SetValue( ColorToPercent_Impl( aCurrentColor.GetGreen() ) );
@@ -992,7 +992,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectColorModelHdl_Impl)
 
             case CM_CMYK:
             {
-                m_pCYMK->Show();
+                m_pCMYK->Show();
                 m_pRGB->Hide();
 
                 m_pC->SetValue( ColorToPercent_Impl( aCurrentColor.GetRed() ) );

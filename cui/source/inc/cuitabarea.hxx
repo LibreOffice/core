@@ -661,7 +661,7 @@ private:
     NumericField*       m_pG;
     NumericField*       m_pB;
 
-    VclContainer*       m_pCYMK;
+    VclContainer*       m_pCMYK;
     MetricField*        m_pC;
     MetricField*        m_pY;
     MetricField*        m_pM;

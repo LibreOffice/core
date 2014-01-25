@@ -102,7 +102,7 @@ enum DeviceViewPortMapV { DVPMV_BOTTOM = 0, DVPMV_CENTER = 1, DVPMV_TOP = 2 };
 enum ClipIndicator      { CI_OFF = 0, CI_ON = 1 };
 
 enum ColorSelectionMode { CSM_INDEXED = 0, CSM_DIRECT = 1 };
-enum ColorModel         { CM_RGB = 0, CM_CYMK = 1 };
+enum ColorModel         { CM_RGB = 0, CM_CMYK = 1 };
 
 enum CharacterCodingA   { CCA_BASIC_7 = 0, CCA_BASIC_8 = 1, CCA_EXT_7 = 2, CCA_EXT_8 = 3 };
 enum CharSetType        { CST_CBYTE_94 = 0, CST_CBYTE_96 = 1, CST_MULT94 = 2, CST_MULT96 = 3, CST_CCOMPLETE = 4 };
