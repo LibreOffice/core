@@ -106,9 +106,6 @@ bool ImplWindowFrameProc( Window* pInst, SalFrame* pFrame, sal_uInt16 nEvent, co
 #define WINDOW_HITTEST_INSIDE           ((sal_uInt16)0x0001)
 #define WINDOW_HITTEST_TRANSPARENT      ((sal_uInt16)0x0002)
 
-// ---------------
-// - ImplWinData -
-// ---------------
 
 struct ImplWinData
 {
@@ -129,44 +126,38 @@ struct ImplWinData
                         maTopWindowChildren;
 };
 
-// -------------------
-// - ImplOverlapData -
-// -------------------
 
 struct ImplOverlapData
 {
-    VirtualDevice*      mpSaveBackDev;      // Gesicherte Hintergrund-Bitmap
-    Region*             mpSaveBackRgn;      // Gesicherte Region, was invalidiert werden muss
-    Window*             mpNextBackWin;      // Naechstes Fenster mit Hintergrund-Sicherung
-    sal_uIntPtr               mnSaveBackSize;     // Groesse Bitmap fuer Hintergrund-Sicherung
-    sal_Bool                mbSaveBack;         // sal_True: Background sichern
-    sal_uInt8                mnTopLevel;         // Level for Overlap-Window
+    VirtualDevice*      mpSaveBackDev;      // saved background bitmap
+    Region*             mpSaveBackRgn;      // saved region, which must be invalidated
+    Window*             mpNextBackWin;      // next window with saved background
+    sal_uIntPtr         mnSaveBackSize;     // bitmap size of saved background
+    sal_Bool            mbSaveBack;         // sal_True: save background
+    sal_uInt8           mnTopLevel;         // Level for Overlap-Window
 };
 
-// -----------------
-// - ImplFrameData -
-// -----------------
 
 struct ImplFrameData
 {
     Timer               maPaintTimer;       // paint timer
     Timer               maResizeTimer;      // resize timer
-    InputContext        maOldInputContext;  // Last set Input Context
+    InputContext        maOldInputContext;  // last set Input Context
     Window*             mpNextFrame;        // next frame window
     Window*             mpFirstOverlap;     // first overlap window
     Window*             mpFocusWin;         // focus window (is also set, when frame doesn't have the focous)
     Window*             mpMouseMoveWin;     // last window, where MouseMove() called
     Window*             mpMouseDownWin;     // last window, where MouseButtonDown() called
-    Window*             mpFirstBackWin;     // Erstes Overlap-Window mit Hintergrund-Sicherung
+    Window*             mpFirstBackWin;     // first overlap-window with saved background
     ::std::vector<Window *> maOwnerDrawList; // List of system windows with owner draw decoration
     ImplDevFontList*    mpFontList;         // Font-List for this frame
     ImplFontCache*      mpFontCache;        // Font-Cache for this frame
     sal_Int32           mnDPIX;             // Original Screen Resolution
     sal_Int32           mnDPIY;             // Original Screen Resolution
     ImplMapRes          maMapUnitRes;       // for LogicUnitToPixel
-    sal_uIntPtr               mnAllSaveBackSize;  // Groesse aller Bitmaps fuer Hintergrund-Sicherung
-    sal_uIntPtr               mnFocusId;          // FocusId for PostUserLink
-    sal_uIntPtr               mnMouseMoveId;      // MoveId for PostUserLink
+    sal_uIntPtr         mnAllSaveBackSize;  // size of all bitmaps of saved backgrounds
+    sal_uIntPtr         mnFocusId;          // FocusId for PostUserLink
+    sal_uIntPtr         mnMouseMoveId;      // MoveId for PostUserLink
     long                mnLastMouseX;       // last x mouse position
     long                mnLastMouseY;       // last y mouse position
     long                mnBeforeLastMouseX; // last but one x mouse position
@@ -175,23 +166,23 @@ struct ImplFrameData
     long                mnFirstMouseY;      // first y mouse position by mousebuttondown
     long                mnLastMouseWinX;    // last x mouse position, rel. to pMouseMoveWin
     long                mnLastMouseWinY;    // last y mouse position, rel. to pMouseMoveWin
-    sal_uInt16              mnModalMode;        // frame based modal count (app based makes no sense anymore)
-    sal_uIntPtr               mnMouseDownTime;    // mouse button down time for double click
-    sal_uInt16              mnClickCount;       // mouse click count
-    sal_uInt16              mnFirstMouseCode;   // mouse code by mousebuttondown
-    sal_uInt16              mnMouseCode;        // mouse code
-    sal_uInt16              mnMouseMode;        // mouse mode
+    sal_uInt16          mnModalMode;        // frame based modal count (app based makes no sense anymore)
+    sal_uIntPtr         mnMouseDownTime;    // mouse button down time for double click
+    sal_uInt16          mnClickCount;       // mouse click count
+    sal_uInt16          mnFirstMouseCode;   // mouse code by mousebuttondown
+    sal_uInt16          mnMouseCode;        // mouse code
+    sal_uInt16          mnMouseMode;        // mouse mode
     MapUnit             meMapUnit;          // last MapUnit for LogicUnitToPixel
-    sal_Bool                mbHasFocus;         // focus
-    sal_Bool                mbInMouseMove;      // is MouseMove on stack
-    sal_Bool                mbMouseIn;          // is Mouse inside the frame
-    sal_Bool                mbStartDragCalled;  // is command startdrag called
-    sal_Bool                mbNeedSysWindow;    // set, when FrameSize <= IMPL_MIN_NEEDSYSWIN
-    sal_Bool                mbMinimized;        // set, when FrameSize <= 0
-    sal_Bool                mbStartFocusState;  // FocusState, beim abschicken des Events
-    sal_Bool                mbInSysObjFocusHdl; // Innerhalb vom GetFocus-Handler eines SysChildren
-    sal_Bool                mbInSysObjToTopHdl; // Innerhalb vom ToTop-Handler eines SysChildren
-    sal_Bool                mbSysObjFocus;      // Hat ein SysChild den Focus
+    sal_Bool            mbHasFocus;         // focus
+    sal_Bool            mbInMouseMove;      // is MouseMove on stack
+    sal_Bool            mbMouseIn;          // is Mouse inside the frame
+    sal_Bool            mbStartDragCalled;  // is command startdrag called
+    sal_Bool            mbNeedSysWindow;    // set, when FrameSize <= IMPL_MIN_NEEDSYSWIN
+    sal_Bool            mbMinimized;        // set, when FrameSize <= 0
+    sal_Bool            mbStartFocusState;  // FocusState, when sending the event
+    sal_Bool            mbInSysObjFocusHdl; // within a SysChildren's GetFocus handler
+    sal_Bool            mbInSysObjToTopHdl; // within a SysChildren's ToTop handler
+    sal_Bool            mbSysObjFocus;      // does a SysChild have focus
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource > mxDragSource;
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTarget > mxDropTarget;
@@ -202,9 +193,6 @@ struct ImplFrameData
     sal_Bool                mbInternalDragGestureRecognizer;
 };
 
-// -----------------------
-// - ImplAccessibleInfos -
-// -----------------------
 
 struct ImplAccessibleInfos
 {
@@ -219,10 +207,6 @@ struct ImplAccessibleInfos
     ~ImplAccessibleInfos();
 };
 
-
-// ---------------
-// - WindowImpl -
-// ---------------
 
 enum AlwaysInputMode { AlwaysInputNone = 0, AlwaysInputEnabled = 1, AlwaysInputDisabled =2 };
 
@@ -402,9 +386,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDNDListenerContainer;
 };
 
-// -----------------
-// - Hilfsmethoden -
-// -----------------
+// helper methods
 
 bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouseLeave,
                            long nX, long nY, sal_uIntPtr nMsgTime,
