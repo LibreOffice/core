@@ -410,7 +410,7 @@ void SwFldDBPage::CheckInsert()
 
     if (nTypeId == TYP_DBNUMSETFLD)
     {
-        sal_Bool bHasValue = !m_pValueED->GetText().isEmpty();
+        bool bHasValue = !m_pValueED->GetText().isEmpty();
 
         bInsert &= bHasValue;
     }
