@@ -28,6 +28,7 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/script/Converter.hpp>
 
+#include <cppuhelper/supportsservice.hxx>
 #include <tools/debug.hxx>
 #include <unotools/confignode.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -36,10 +37,8 @@
 
 #include <algorithm>
 
-//........................................................................
 namespace pcr
 {
-//........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
@@ -51,11 +50,8 @@ namespace pcr
     using namespace ::com::sun::star::inspection;
     using namespace ::comphelper;
 
-    //====================================================================
-    //= PropertyHandler
-    //====================================================================
     DBG_NAME( PropertyHandler )
-    //--------------------------------------------------------------------
+
     PropertyHandler::PropertyHandler( const Reference< XComponentContext >& _rxContext )
         :PropertyHandler_Base( m_aMutex )
         ,m_bSupportedPropertiesAreKnown( false )
@@ -68,13 +64,11 @@ namespace pcr
         m_xTypeConverter = Converter::create(_rxContext);
     }
 
-    //--------------------------------------------------------------------
     PropertyHandler::~PropertyHandler()
     {
         DBG_DTOR( PropertyHandler, NULL );
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL PropertyHandler::inspect( const Reference< XInterface >& _rxIntrospectee ) throw (RuntimeException, NullPointerException)
     {
         if ( !_rxIntrospectee.is() )
@@ -104,7 +98,6 @@ namespace pcr
             addPropertyChangeListener( static_cast< XPropertyChangeListener* >( readdListener->next() ) );
     }
 
-    //--------------------------------------------------------------------
     void PropertyHandler::onNewComponent()
     {
         if ( m_xComponent.is() )
@@ -116,7 +109,6 @@ namespace pcr
         m_aSupportedProperties.realloc( 0 );
     }
 
-    //--------------------------------------------------------------------
     Sequence< Property > SAL_CALL PropertyHandler::getSupportedProperties() throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -128,19 +120,16 @@ namespace pcr
         return (Sequence< Property >)m_aSupportedProperties;
     }
 
-    //--------------------------------------------------------------------
     Sequence< OUString > SAL_CALL PropertyHandler::getSupersededProperties( ) throw (RuntimeException)
     {
         return Sequence< OUString >();
     }
 
-    //--------------------------------------------------------------------
     Sequence< OUString > SAL_CALL PropertyHandler::getActuatingProperties( ) throw (RuntimeException)
     {
         return Sequence< OUString >();
     }
 
-    //--------------------------------------------------------------------
     Any SAL_CALL PropertyHandler::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -167,7 +156,6 @@ namespace pcr
         return aPropertyValue;
     }
 
-    //--------------------------------------------------------------------
     Any SAL_CALL PropertyHandler::convertToControlValue( const OUString& _rPropertyName, const Any& _rPropertyValue, const Type& _rControlValueType ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -187,13 +175,11 @@ namespace pcr
             m_xContext, m_xTypeConverter, _rPropertyValue, _rControlValueType );
     }
 
-    //--------------------------------------------------------------------
     PropertyState SAL_CALL PropertyHandler::getPropertyState( const OUString& /*_rPropertyName*/ ) throw (UnknownPropertyException, RuntimeException)
     {
         return PropertyState_DIRECT_VALUE;
     }
 
-    //--------------------------------------------------------------------
     LineDescriptor SAL_CALL PropertyHandler::describePropertyLine( const OUString& _rPropertyName,
         const Reference< XPropertyControlFactory >& _rxControlFactory )
         throw (UnknownPropertyException, NullPointerException, RuntimeException)
@@ -225,27 +211,23 @@ namespace pcr
         return aDescriptor;
     }
 
-    //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL PropertyHandler::isComposable( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return m_pInfoService->isComposeable( _rPropertyName );
     }
 
-    //--------------------------------------------------------------------
     InteractiveSelectionResult SAL_CALL PropertyHandler::onInteractivePropertySelection( const OUString& /*_rPropertyName*/, sal_Bool /*_bPrimary*/, Any& /*_rData*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/ ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
         OSL_FAIL( "PropertyHandler::onInteractivePropertySelection: not implemented!" );
         return InteractiveSelectionResult_Cancelled;
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL PropertyHandler::actuatingPropertyChanged( const OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, sal_Bool /*_bFirstTimeInit*/ ) throw (NullPointerException, RuntimeException)
     {
         OSL_FAIL( "PropertyHandler::actuatingPropertyChanged: not implemented!" );
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL PropertyHandler::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -254,22 +236,19 @@ namespace pcr
         m_aPropertyListeners.addListener( _rxListener );
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL PropertyHandler::removePropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         m_aPropertyListeners.removeListener( _rxListener );
     }
 
-    //--------------------------------------------------------------------
     sal_Bool SAL_CALL PropertyHandler::suspend( sal_Bool /*_bSuspend*/ ) throw (RuntimeException)
     {
         return sal_True;
     }
 
-    //--------------------------------------------------------------------
     IMPLEMENT_FORWARD_XCOMPONENT( PropertyHandler, PropertyHandler_Base )
-    //--------------------------------------------------------------------
+
     void SAL_CALL PropertyHandler::disposing()
     {
         m_xComponent.clear();
@@ -278,7 +257,6 @@ namespace pcr
         m_aSupportedProperties.realloc( 0 );
     }
 
-    //--------------------------------------------------------------------
     void PropertyHandler::firePropertyChange( const OUString& _rPropName, PropertyId _nPropId, const Any& _rOldValue, const Any& _rNewValue ) SAL_THROW(())
     {
         PropertyChangeEvent aEvent;
@@ -290,7 +268,6 @@ namespace pcr
         m_aPropertyListeners.notify( aEvent, &XPropertyChangeListener::propertyChange );
     }
 
-    //--------------------------------------------------------------------
     const Property* PropertyHandler::impl_getPropertyFromId_nothrow( PropertyId _nPropId ) const
     {
         const_cast< PropertyHandler* >( this )->getSupportedProperties();
@@ -302,7 +279,6 @@ namespace pcr
         return NULL;
     }
 
-    //--------------------------------------------------------------------
     const Property& PropertyHandler::impl_getPropertyFromId_throw( PropertyId _nPropId ) const
     {
         const Property* pProperty = impl_getPropertyFromId_nothrow( _nPropId );
@@ -312,7 +288,6 @@ namespace pcr
         return *pProperty;
     }
 
-    //--------------------------------------------------------------------
     const Property& PropertyHandler::impl_getPropertyFromName_throw( const OUString& _rPropertyName ) const
     {
         const_cast< PropertyHandler* >( this )->getSupportedProperties();
@@ -325,7 +300,6 @@ namespace pcr
         return *pFound;
     }
 
-    //--------------------------------------------------------------------
     void PropertyHandler::implAddPropertyDescription( ::std::vector< Property >& _rProperties, const OUString& _rPropertyName, const Type& _rType, sal_Int16 _nAttribs ) const
     {
         _rProperties.push_back( Property(
@@ -336,13 +310,11 @@ namespace pcr
         ) );
     }
 
-    //------------------------------------------------------------------------
     Window* PropertyHandler::impl_getDefaultDialogParent_nothrow() const
     {
         return PropertyHandlerHelper::getDialogParentWindow( m_xContext );
     }
 
-    //------------------------------------------------------------------------
     PropertyId PropertyHandler::impl_getPropertyId_throw( const OUString& _rPropertyName ) const
     {
         PropertyId nPropId = m_pInfoService->getPropertyId( _rPropertyName );
@@ -351,7 +323,6 @@ namespace pcr
         return nPropId;
     }
 
-    //------------------------------------------------------------------------
     void PropertyHandler::impl_setContextDocumentModified_nothrow() const
     {
         Reference< XModifiable > xModifiable( impl_getContextDocument_nothrow(), UNO_QUERY );
@@ -359,13 +330,11 @@ namespace pcr
             xModifiable->setModified( sal_True );
     }
 
-    //------------------------------------------------------------------------
     bool PropertyHandler::impl_componentHasProperty_throw( const OUString& _rPropName ) const
     {
         return m_xComponentPropertyInfo.is() && m_xComponentPropertyInfo->hasPropertyByName( _rPropName );
     }
 
-    //--------------------------------------------------------------------
     sal_Int16 PropertyHandler::impl_getDocumentMeasurementUnit_throw() const
     {
         FieldUnit eUnit = FUNIT_NONE;
@@ -426,28 +395,19 @@ namespace pcr
         return VCLUnoHelper::ConvertToMeasurementUnit( eUnit, 1 );
     }
 
-    //====================================================================
-    //= PropertyHandlerComponent
-    //====================================================================
-    //------------------------------------------------------------------------
     PropertyHandlerComponent::PropertyHandlerComponent( const Reference< XComponentContext >& _rxContext )
         :PropertyHandler( _rxContext )
     {
     }
 
-    //--------------------------------------------------------------------
     IMPLEMENT_FORWARD_XINTERFACE2( PropertyHandlerComponent, PropertyHandler, PropertyHandlerComponent_Base )
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( PropertyHandlerComponent, PropertyHandler, PropertyHandlerComponent_Base )
 
-    //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL PropertyHandlerComponent::supportsService( const OUString& ServiceName ) throw (RuntimeException)
     {
-        StlSyntaxSequence< OUString > aAllServices( getSupportedServiceNames() );
-        return ::std::find( aAllServices.begin(), aAllServices.end(), ServiceName ) != aAllServices.end();
+        return cppu::supportsService(this, ServiceName);
     }
 
-//........................................................................
 }   // namespace pcr
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
