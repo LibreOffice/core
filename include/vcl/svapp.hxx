@@ -283,12 +283,19 @@ public:
 
     /** Notify the application that data has changed via an event.
 
-     @param rDCEvt      Reference to a @DataChangedEvent object - this will not
-                        be changed
+     @param rDCEvt      Const reference to a DataChangedEvent object
 
-     @see FocusChanged
+     @see FocusChanged, NotifyAllWindows
     */
     virtual void                DataChanged( const DataChangedEvent& rDCEvt );
+
+    /** Notify all windows that the application has changed data.
+
+     @param rDCEvt     Reference to a DataChangedEvent object
+
+     @see DataChanged
+    */
+    static void                 NotifyAllWindows( DataChangedEvent& rDCEvt );
 
     /** @} */ // end of changes
 
@@ -392,7 +399,7 @@ public:
         @{
     */
 
-    /** Run the main event processing loop until it is quit by @Quit.
+    /** Run the main event processing loop until it is quit by Quit().
 
      @see Quit, Reschedule, Yield, EndYield, GetSolarMutex,
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
@@ -441,7 +448,7 @@ public:
     */
     static void                 EndYield();
 
-    /** @Brief Get the Solar Mutex for this thread.
+    /** @brief Get the Solar Mutex for this thread.
 
      Get the Solar Mutex that prevents other threads from accessing VCL
      concurrently.
@@ -466,7 +473,7 @@ public:
     */
     static oslThreadIdentifier  GetMainThreadIdentifier();
 
-    /** @Brief Release Solar Mutex(es) for this thread
+    /** @brief Release Solar Mutex(es) for this thread
 
      Release the Solar Mutex(es) that prevents other threads from accessing
      VCL concurrently.
@@ -480,7 +487,7 @@ public:
     */
     static sal_uLong            ReleaseSolarMutex();
 
-    /** @Brief Acquire Solar Mutex(es) for this thread.
+    /** @brief Acquire Solar Mutex(es) for this thread.
 
      Acquire the Solar Mutex(es) that prevents other threads from accessing
      VCL concurrently.
@@ -492,7 +499,7 @@ public:
     */
     static void                 AcquireSolarMutex( sal_uLong nCount );
 
-    /** @Brief Enables "no yield" mode
+    /** @brief Enables "no yield" mode
 
      "No yield" mode prevents @Yield from waiting for events.
 
@@ -505,9 +512,9 @@ public:
     */
     static void                 EnableNoYieldMode();
 
-    /** @Brief Disables "no yield" mode
+    /** @brief Disables "no yield" mode
 
-     "No yield" mode prevents @Yield from waiting for events.
+     "No yield" mode prevents Yield() from waiting for events.
 
      @remarks This was originally implemented in OOo bug 98792 to improve
         Impress slideshows.
@@ -654,22 +661,117 @@ public:
 
     /** @} */ // end of Settings
 
-    static void                 NotifyAllWindows( DataChangedEvent& rDCEvt );
+    /** defgroup EventListeners Event listeners
+        @{
+    */
 
+    /** Add a VCL event listener to the application. If no event listener exists,
+     then initialize the application's event listener with a new one, then add
+     the event listener.
+
+     @param     rEventListener  Const reference to the event listener to add.
+
+     @see RemoveEventListener, AddKeyListener, RemoveKeyListener
+    */
     static void                 AddEventListener( const Link& rEventListener );
+
+    /** Remove a VCL event listener from the application.
+
+     @param     rEventListener  Const refernece to the event listener to be removed
+
+     @see AddEventListener, AddKeyListener, RemoveKeyListener
+    */
     static void                 RemoveEventListener( const Link& rEventListener );
+
+    /** Add a keypress listener to the application. If keypress listener exists,
+     then initialize the application's keypress event listener with a new one, then
+     add the keypress listener.
+
+     @param     rKeyListener    Const reference to the keypress event listener to add
+
+     @see AddEventListener, RemoveEventListener, RemoveKeyListener
+    */
     static void                 AddKeyListener( const Link& rKeyListener );
+
+    /** Remove a keypress listener from the application.
+
+     @param     rKeyListener    Const reference to the keypress event listener to be removed
+
+     @see AddEventListener, RemoveEventListener, AddKeyListener
+    */
     static void                 RemoveKeyListener( const Link& rKeyListener );
+
+    /** Send event to all VCL application event listeners
+
+     @param     nEvent          Event ID
+     @param     pWin            Pointer to window to send event
+     @param     pData           Pointer to data to send with event
+
+     @see ImplCallEventListeners(VclSimpleEvent* pEvent)
+    */
     static void                 ImplCallEventListeners( sal_uLong nEvent, Window* pWin, void* pData );
+
+    /** Send event to all VCL application event listeners
+
+     @param     pEvent          Pointer to @VclSimpleEvent
+
+     @see ImplCallEventListeners(sal_uLong nEvent, Windows* pWin, void* pData);
+    */
     static void                 ImplCallEventListeners( VclSimpleEvent* pEvent );
+
+    /** Handle keypress event
+
+     @param     nEvent          Event ID for keypress
+     @param     pWin            Pointer to window that receives the event
+     @param     pKeyEvent       Received key event
+
+     @see PostKeyEvent
+    */
     static sal_Bool             HandleKey( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent );
 
+    /** Send keypress event
+
+     @param     nEvent          Event ID for keypress
+     @param     pWin            Pointer to window to which the event is sent
+     @param     pKeyEvent       Key event to send
+
+     @see HandleKey
+    */
     static sal_uLong            PostKeyEvent( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent );
+
+    /** Send mouse event
+
+     @param     nEvent          Event ID for mouse event
+     @param     pWin            Pointer to window to which the event is sent
+     @param     pKeyEvent       Mouse event to send
+    */
     static sal_uLong            PostMouseEvent( sal_uLong nEvent, Window *pWin, MouseEvent* pMouseEvent );
+
 #if !HAVE_FEATURE_DESKTOP
+    /** Send zoom event
+
+     @param     nEvent          Event ID for zoom event
+     @param     pWin            Pointer to window to which the event is sent
+     @param     pZoomEvent      Zoom event to send
+    */
     static sal_uLong            PostZoomEvent( sal_uLong nEvent, Window *pWin, ZoomEvent* pZoomEvent );
+
+    /* Send scroll event
+
+     @param      nEvent          Event ID for scroll event
+     @param      pWin            Pointer to window to which the event is sent
+     @param      pScrollEvent    Scroll event to send
+    */
     static sal_uLong            PostScrollEvent( sal_uLong nEvent, Window *pWin, ScrollEvent* pScrollEvent );
 #endif
+
+    /** Remove mouse and keypress events from a window... any also zoom and scroll events
+     if the platform supports it.
+
+     @param     pWin            Window to remove events from
+
+     @see HandleKey, PostKeyEvent, PostMouseEvent, PostZoomEvent, PostScrollEvent
+    */
     static void                 RemoveMouseAndKeyEvents( Window *pWin );
 
     static sal_uLong            PostUserEvent( const Link& rLink, void* pCaller = NULL );
@@ -681,6 +783,12 @@ public:
 
     virtual void                AppEvent( const ApplicationEvent& rAppEvent );
 
+    /* @} */ // end of EventListeners
+
+
+    /** defgroup AppWindow Functions that deal with the application's windows
+        @{
+    */
     static WorkWindow*          GetAppWindow();
     static Window*              GetFocusWindow();
     static OutputDevice*        GetDefaultDevice();
@@ -692,21 +800,21 @@ public:
     static Window*              GetTopWindow( long nIndex );
     static Window*              GetActiveTopWindow();
 
+    /* @} */ // end of AppWindow
+
     static void                 SetAppName( const OUString& rUniqueName );
     static OUString             GetAppName();
     static bool                 LoadBrandBitmap (const char* pName, BitmapEx &rBitmap);
 
-    /** validate that the currently selected system UI font is suitable
-        to display the application's UI.
+    /** Validate that the currently selected system UI font is suitable
+     to display the application's UI.
 
-        A localized test string will be checked if it can be displayed
-        in the currently selected system UI font. If no glyphs are
-        missing it can be assumed that the font is proper for display
-        of the application's UI.
+     A localized test string will be checked if it can be displayed in the currently
+     selected system UI font. If no glyphs are missing it can be assumed that the font
+     is proper for display of the application's UI.
 
-        @returns
-        <TRUE/> if the system font is suitable for our UI
-        <FALSE/> if the test string could not be displayed with the system font
+     @returns true if the system font is suitable for our UI and false if the test
+       string could not be displayed with the system font.
      */
     static bool                 ValidateSystemFont();
 
