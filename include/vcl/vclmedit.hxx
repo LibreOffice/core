@@ -68,7 +68,7 @@ public:
 
     virtual void    SetModifyFlag();
     virtual void    ClearModifyFlag();
-    virtual sal_Bool    IsModified() const;
+    virtual bool    IsModified() const SAL_OVERRIDE;
 
     virtual void    EnableUpdateData( sal_uLong nTimeout = EDIT_UPDATEDATA_TIMEOUT );
     virtual void    DisableUpdateData() { delete pUpdateDataTimer; pUpdateDataTimer = NULL; }

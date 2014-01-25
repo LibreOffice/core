@@ -96,7 +96,7 @@ public:
 
 
     void            ResetModified()   { GetTextEngine()->SetModified(sal_False); m_bIsUndoEditMode = false;}
-    sal_Bool            IsModified() const              { return GetTextEngine()->IsModified(); }
+    virtual bool    IsModified() const SAL_OVERRIDE { return GetTextEngine()->IsModified(); }
 
     bool            IsUndoEditMode() const { return m_bIsUndoEditMode;}
     void            SetUndoEditMode(bool bSet);

@@ -1074,7 +1074,7 @@ void VclMultiLineEdit::ClearModifyFlag()
     pImpVclMEdit->SetModified( sal_False );
 }
 
-sal_Bool VclMultiLineEdit::IsModified() const
+bool VclMultiLineEdit::IsModified() const
 {
     return pImpVclMEdit->IsModified();
 }

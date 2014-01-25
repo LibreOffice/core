@@ -46,7 +46,7 @@ namespace dbaui
     public:
         inline OPropColumnEditCtrl(Window* pParent, OUString& _rAllowedChars, sal_uInt16 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
 
-        inline sal_Bool IsModified() const { return GetText() != GetSavedValue(); }
+        virtual inline bool IsModified() const SAL_OVERRIDE { return GetText() != GetSavedValue(); }
 
         short GetPos() const { return m_nPos; }
         OUString GetHelp() const { return m_strHelpText; }
@@ -77,7 +77,7 @@ namespace dbaui
         inline OPropEditCtrl(Window* pParent, sal_uInt16 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
         inline OPropEditCtrl(Window* pParent, sal_uInt16 nHelpId, const ResId& _rRes,short nPosition = -1);
 
-        inline sal_Bool IsModified() const { return GetText() != GetSavedValue(); }
+        virtual inline bool IsModified() const SAL_OVERRIDE { return GetText() != GetSavedValue(); }
 
         short GetPos() const { return m_nPos; }
         OUString GetHelp() const { return m_strHelpText; }
@@ -111,7 +111,7 @@ namespace dbaui
         inline OPropNumericEditCtrl(Window* pParent, sal_uInt16 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
         inline OPropNumericEditCtrl(Window* pParent, sal_uInt16 nHelpId, const ResId& _rRes,short nPosition = -1);
 
-        inline sal_Bool IsModified() const { return GetText() != GetSavedValue(); }
+        virtual inline bool IsModified() const SAL_OVERRIDE { return GetText() != GetSavedValue(); }
 
         short GetPos() const { return m_nPos; }
         OUString GetHelp() const { return m_strHelpText; }
