@@ -1902,8 +1902,6 @@ void ScColumn::SwapCellNotes( SCROW nRow1, SCROW nRow2 )
     if (aPos2.first == maCellNotes.end())
         return;
 
-    ScPostIt* aNote;
-
     sc::CellNoteStoreType::iterator it1 = aPos1.first, it2 = aPos2.first;
     if (it1->type == it2->type)
     {
@@ -1917,10 +1915,10 @@ void ScColumn::SwapCellNotes( SCROW nRow1, SCROW nRow2 )
             sc::cellnote_block::at(*it2->data, aPos2.second));
 
         //update Note caption with position
-        aNote = sc::cellnote_block::at(*it1->data, aPos1.second);
-        aNote->UpdateCaptionPos(ScAddress(nCol,nRow2,nTab));
-        aNote = sc::cellnote_block::at(*it2->data, aPos2.second);
-        aNote->UpdateCaptionPos(ScAddress(nCol,nRow1,nTab));
+        ScPostIt* pNote = sc::cellnote_block::at(*it1->data, aPos1.second);
+        pNote->UpdateCaptionPos(ScAddress(nCol,nRow2,nTab));
+        pNote = sc::cellnote_block::at(*it2->data, aPos2.second);
+        pNote->UpdateCaptionPos(ScAddress(nCol,nRow1,nTab));
 
         return;
     }
@@ -1931,19 +1929,18 @@ void ScColumn::SwapCellNotes( SCROW nRow1, SCROW nRow2 )
         // row 1 is empty while row 2 is non-empty.
         ScPostIt* pVal2 = sc::cellnote_block::at(*it2->data, aPos2.second);
         it1 = maCellNotes.set(it1, nRow1, pVal2);
-        maCellNotes.set_empty(it1, nRow2, nRow2);
+        maCellNotes.release<ScPostIt*>(nRow2);
         pVal2->UpdateCaptionPos(ScAddress(nCol,nRow1,nTab)); //update Note caption with position
 
         return;
     }
 
     // row 1 is non-empty while row 2 is empty.
-    ScPostIt* pVal1 = sc::cellnote_block::at(*it1->data, aPos1.second);
-    it1 = maCellNotes.set_empty(it1, nRow1, nRow1);
+    ScPostIt* pVal1 = NULL;
+    it1 = maCellNotes.release(it1, nRow1, pVal1);
+    assert(pVal1);
     maCellNotes.set(it1, nRow2, pVal1);
     pVal1->UpdateCaptionPos(ScAddress(nCol,nRow1,nTab));     //update Note caption with position
-
-    CellStorageModified();
 }
 
 SvtBroadcaster* ScColumn::GetBroadcaster(SCROW nRow)
