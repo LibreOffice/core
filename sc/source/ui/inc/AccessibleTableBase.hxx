@@ -254,7 +254,8 @@ public:
     virtual void SAL_CALL
         selectAccessibleChild( sal_Int32 nChildIndex )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
-        ::com::sun::star::uno::RuntimeException);
+               ::com::sun::star::uno::RuntimeException,
+               std::exception);
 
     virtual sal_Bool SAL_CALL
         isAccessibleChildSelected( sal_Int32 nChildIndex )
