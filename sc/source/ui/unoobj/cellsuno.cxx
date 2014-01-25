@@ -7920,7 +7920,7 @@ void SAL_CALL ScTableSheetObj::clearOutline() throw(uno::RuntimeException)
 }
 
 void SAL_CALL ScTableSheetObj::hideDetail( const table::CellRangeAddress& rCellRange )
-                                            throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
