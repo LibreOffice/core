@@ -99,7 +99,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowCount(  )
 }
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnCount(  )
-                    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();

@@ -77,7 +77,8 @@ public:
     /// Returns the number of columns in the table.
     virtual sal_Int32 SAL_CALL
                 getAccessibleColumnCount(  )
-                    throw (::com::sun::star::uno::RuntimeException);
+                    throw (::com::sun::star::uno::RuntimeException,
+                           std::exception);
 
     /// Returns the description of the specified row in the table.
     virtual OUString SAL_CALL

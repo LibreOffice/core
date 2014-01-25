@@ -146,7 +146,8 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRowCount() throw (uno:
     return nRet;
 }
 
-sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnCount() throw (uno::RuntimeException)
+sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnCount()
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
