@@ -76,7 +76,6 @@ bool SvxGalleryItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /* nMemberId
 
     int nConverted(0);
     bool bAllConverted( true );
-    sal_Bool bIsSetType( sal_False );
 
     sal_Int8 nType(0);
     rtl::OUString aURL, aFilterName;
@@ -89,7 +88,7 @@ bool SvxGalleryItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /* nMemberId
     {
         if ( pProp->Name == SVXGALLERYITEM_TYPE )
         {
-            bAllConverted &= bIsSetType = ( pProp->Value >>= nType );
+            bAllConverted &= ( pProp->Value >>= nType );
             ++nConverted;
         }
         else if ( pProp->Name == SVXGALLERYITEM_URL )
