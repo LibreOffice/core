@@ -1177,7 +1177,9 @@ public:
     virtual void SAL_CALL   autoOutline( const ::com::sun::star::table::CellRangeAddress& aRange )
                                 throw(::com::sun::star::uno::RuntimeException,
                                       std::exception);
-    virtual void SAL_CALL   clearOutline() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   clearOutline()
+                                throw(::com::sun::star::uno::RuntimeException,
+                                      std::exception);
     virtual void SAL_CALL   hideDetail( const ::com::sun::star::table::CellRangeAddress& aRange )
                                 throw(::com::sun::star::uno::RuntimeException,
                                       std::exception);
