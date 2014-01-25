@@ -1590,11 +1590,6 @@ Sequence< OUString > ZipPackage::static_getSupportedServiceNames()
     return aNames;
 }
 
-sal_Bool SAL_CALL ZipPackage::static_supportsService( OUString const & rServiceName )
-{
-    return cppu::supportsService(this, rServiceName);
-}
-
 OUString ZipPackage::getImplementationName()
     throw ( RuntimeException )
 {
@@ -1610,7 +1605,7 @@ Sequence< OUString > ZipPackage::getSupportedServiceNames()
 sal_Bool SAL_CALL ZipPackage::supportsService( OUString const & rServiceName )
     throw ( RuntimeException )
 {
-    return static_supportsService ( rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Reference < XSingleServiceFactory > ZipPackage::createServiceFactory( uno::Reference < XMultiServiceFactory > const & rServiceFactory )

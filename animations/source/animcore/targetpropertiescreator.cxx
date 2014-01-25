@@ -31,16 +31,16 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
+
+#include <animations/animationnodehelper.hxx>
+#include <boost/unordered_map.hpp>
 #include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/sequence.hxx>
-
-#include <animations/animationnodehelper.hxx>
-
 #include <vector>
-#include <boost/unordered_map.hpp>
 
 
 using namespace ::com::sun::star;
@@ -88,8 +88,6 @@ namespace animcore
         TargetPropertiesCreator( const uno::Reference< uno::XComponentContext >& rxContext );
     };
 
-    // --------------------------------------------------------------------
-
     uno::Reference< uno::XInterface > SAL_CALL createInstance_TargetPropertiesCreator( const uno::Reference< uno::XComponentContext > & rSMgr ) throw (uno::Exception)
     {
         return TargetPropertiesCreator::createInstance( rSMgr );
@@ -106,8 +104,6 @@ namespace animcore
         aRet.getArray()[0] = SERVICE_NAME;
         return aRet;
     }
-
-    // --------------------------------------------------------------------
 
     namespace
     {
@@ -201,7 +197,6 @@ namespace animcore
                     {
                         // extract target shape from iterate node
                         // (will override the target for all children)
-                        // --------------------------------------------------
 
                         uno::Reference< animations::XIterateContainer > xIterNode( xNode,
                                                                                    uno::UNO_QUERY );
@@ -395,8 +390,6 @@ namespace animcore
         };
     }
 
-    // --------------------------------------------------------------------
-
     TargetPropertiesCreator::TargetPropertiesCreator( const uno::Reference< uno::XComponentContext >&  ) :
         TargetPropertiesCreator_Base( m_aMutex )
     {
@@ -433,10 +426,7 @@ namespace animcore
         // it actually does right now, for the slideshow implementation).
         aFunctor( xRootNode );
 
-
         // output to result sequence
-        // ----------------------------------------------------------------------
-
         uno::Sequence< animations::TargetProperties > aRes( aShapeHash.size() );
 
         ::std::size_t                       nCurrIndex(0);
@@ -474,7 +464,7 @@ namespace animcore
 
     sal_Bool SAL_CALL TargetPropertiesCreator::supportsService( const OUString& ServiceName ) throw( uno::RuntimeException )
     {
-        return ServiceName.equalsIgnoreAsciiCase(SERVICE_NAME);
+        return cppu::supportsService(this, ServiceName);
     }
 
     uno::Sequence< OUString > SAL_CALL TargetPropertiesCreator::getSupportedServiceNames()  throw( uno::RuntimeException )
