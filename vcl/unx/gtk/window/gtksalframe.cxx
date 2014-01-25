@@ -4312,7 +4312,7 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
 
     bool bEndPreedit = (!pText || !*pText) && pThis->m_aInputEvent.mpTextAttr != NULL;
     pThis->m_aInputEvent.mnTime             = 0;
-    pThis->m_aInputEvent.maText             = OUString( pText, strlen(pText), RTL_TEXTENCODING_UTF8 );
+    pThis->m_aInputEvent.maText             = pText ? OUString( pText, strlen(pText), RTL_TEXTENCODING_UTF8 ) : OUString();
     pThis->m_aInputEvent.mnCursorPos        = nCursorPos;
     pThis->m_aInputEvent.mnCursorFlags      = 0;
     pThis->m_aInputEvent.mbOnlyCursor       = False;
