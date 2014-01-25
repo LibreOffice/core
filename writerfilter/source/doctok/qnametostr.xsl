@@ -22,7 +22,6 @@
 <xsl:include href="resourcetools.xsl"/>
 
 <xsl:template match="/">
-#include "doctok/resourceids.hxx"
 #include "resourcemodel/QNameToString.hxx"
 
 namespace writerfilter

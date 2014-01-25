@@ -346,7 +346,6 @@ uno::Reference &lt; xml::sax::XFastParser &gt; OOXMLStreamImpl::getFastParser()
 #include "ooxml/OOXMLFastHelper.hxx"
 #include "ooxml/OOXMLStreamImpl.hxx"
 #include "doctok/sprmids.hxx"
-#include "doctok/resourceids.hxx"
 </xsl:text>
     <xsl:call-template name="factoryincludes"/>
     <xsl:text>

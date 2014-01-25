@@ -22,7 +22,6 @@
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
-#include <doctok/resourceids.hxx>
 #include <ooxml/resourceids.hxx>
 #include "OOXMLStreamImpl.hxx"
 #include "OOXMLDocumentImpl.hxx"

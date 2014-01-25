@@ -20,7 +20,6 @@
 #include <PropertyMap.hxx>
 #include "GraphicHelpers.hxx"
 
-#include <doctok/resourceids.hxx>
 #include <ooxml/resourceids.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>

@@ -20,7 +20,6 @@
 #include <TDefTableHandler.hxx>
 #include <PropertyMap.hxx>
 #include <resourcemodel/QNameToString.hxx>
-#include <doctok/resourceids.hxx>
 #include <ConversionHelper.hxx>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <ooxml/resourceids.hxx>

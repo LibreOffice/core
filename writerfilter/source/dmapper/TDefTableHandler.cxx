@@ -20,7 +20,6 @@
 #include <PropertyMap.hxx>
 #include <ConversionHelper.hxx>
 #include <ooxml/resourceids.hxx>
-#include <doctok/resourceids.hxx>
 #include <filter/msfilter/util.hxx>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>

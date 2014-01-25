@@ -11,7 +11,6 @@
 #include <rtl/strbuf.hxx>
 
 #include <resourcemodel/QNameToString.hxx>
-#include <doctok/resourceids.hxx>
 
 
 namespace writerfilter {

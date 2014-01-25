@@ -24,7 +24,6 @@
 #include <TblStylePrHandler.hxx>
 #include <BorderHandler.hxx>
 #include <LatentStyleHandler.hxx>
-#include <doctok/resourceids.hxx>
 #include <ooxml/resourceids.hxx>
 #include <vector>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>

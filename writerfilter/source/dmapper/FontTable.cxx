@@ -18,7 +18,6 @@
  */
 
 #include <FontTable.hxx>
-#include <doctok/resourceids.hxx>
 #include <ooxml/resourceids.hxx>
 #include <vector>
 #include <osl/file.hxx>

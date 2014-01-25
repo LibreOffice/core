@@ -32,7 +32,6 @@
 #include <boost/optional.hpp>
 
 #ifndef INCLUDED_RESOURCESIDS
-#include <doctok/resourceids.hxx>
 #include <ooxml/resourceids.hxx>
 #endif
 #include <dmapper/DomainMapper.hxx>

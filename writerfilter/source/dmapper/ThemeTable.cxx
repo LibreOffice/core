@@ -18,7 +18,6 @@
  */
 
 #include <ThemeTable.hxx>
-#include <doctok/resourceids.hxx>
 #include <ooxml/resourceids.hxx>
 #include "dmapperLoggers.hxx"
 

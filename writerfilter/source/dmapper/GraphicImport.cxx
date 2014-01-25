@@ -45,7 +45,6 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <dmapper/DomainMapper.hxx>
-#include <doctok/resourceids.hxx>
 #include <ooxml/resourceids.hxx>
 #include <resourcemodel/ResourceModelHelper.hxx>
 
