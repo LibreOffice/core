@@ -32,6 +32,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/tools/unopolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 
 using namespace ::com::sun::star;
@@ -443,7 +444,7 @@ namespace unotools
 
     sal_Bool SAL_CALL UnoPolyPolygon::supportsService( const OUString& ServiceName ) throw( uno::RuntimeException )
     {
-        return ServiceName == SERVICE_NAME;
+        return cppu::supportsService(this, ServiceName);
     }
 
     uno::Sequence< OUString > SAL_CALL UnoPolyPolygon::getSupportedServiceNames()  throw( uno::RuntimeException )
