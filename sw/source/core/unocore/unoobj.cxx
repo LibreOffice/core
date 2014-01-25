@@ -108,9 +108,7 @@
 
 using namespace ::com::sun::star;
 
-/****************************************************************************
-    Hilfsklassen
-****************************************************************************/
+// Helper classes
 SwUnoInternalPaM::SwUnoInternalPaM(SwDoc& rDoc) :
     SwPaM(rDoc.GetNodes())
 {
@@ -352,7 +350,7 @@ lcl_SetNodeNumStart(SwPaM & rCrsr, uno::Any const& rValue)
     SwDoc* pDoc = rCrsr.GetDoc();
     UnoActionContext aAction(pDoc);
 
-    if( rCrsr.GetNext() != &rCrsr )         // Mehrfachselektion ?
+    if( rCrsr.GetNext() != &rCrsr )         // MultiSelection?
     {
         pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( rCrsr );
@@ -663,9 +661,7 @@ SwUnoCursorHelper::GetCurTxtFmtColl(SwPaM & rPaM, const bool bConditional)
     return (bError) ? 0 : pFmt;
 }
 
-/******************************************************************
- * SwXTextCursor
- ******************************************************************/
+// class SwXTextCursor
 class SwXTextCursor::Impl
     : public SwClient
 {
@@ -1222,17 +1218,17 @@ throw (uno::RuntimeException)
         }
     }
 
-    //jetzt muss die Selektion erweitert werden
+    // selection has to be expanded here
     if(bExpand)
     {
-        // der Cursor soll alles einschliessen, was bisher von ihm und dem uebergebenen
-        // Range eingeschlossen wurde
+        // cursor should include its previous range plus the given range
         const SwPosition aOwnLeft(*rOwnCursor.Start());
         const SwPosition aOwnRight(*rOwnCursor.End());
         SwPosition const& rParamLeft  = *pPam->Start();
         SwPosition const& rParamRight = *pPam->End();
 
-        // jetzt sind vier SwPositions da, zwei davon werden gebraucht, also welche?
+        // now there are four SwPositions,
+        // two of them are going to be used, but which ones?
         *rOwnCursor.GetPoint() = (aOwnRight > rParamRight)
             ? aOwnRight : *rOwnCursor.GetPoint() = rParamRight;
         rOwnCursor.SetMark();
@@ -1284,7 +1280,7 @@ SwXTextCursor::gotoNextWord(sal_Bool Expand) throw (uno::RuntimeException)
 
     SwUnoCrsr & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
-    //Probleme gibt's noch mit einem Absatzanfang, an dem kein Wort beginnt.
+    // problems arise when a paragraph starts with something other than a word
     sal_Bool bRet = sal_False;
     // remember old position to check if cursor has moved
     // since the called functions are sometimes a bit unreliable
@@ -1331,7 +1327,7 @@ SwXTextCursor::gotoPreviousWord(sal_Bool Expand) throw (uno::RuntimeException)
 
     SwUnoCrsr & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
-    // hier machen Leerzeichen am Absatzanfang Probleme
+    // white spaces create problems on the paragraph start
     sal_Bool bRet = sal_False;
     SwPosition  *const pPoint     = rUnoCursor.GetPoint();
     SwNode      *const pOldNode   = &pPoint->nNode.GetNode();
@@ -2163,7 +2159,7 @@ SwXTextCursor::getPropertySetInfo() throw (uno::RuntimeException)
         };
         const uno::Reference< beans::XPropertySetInfo >  xInfo =
             m_pImpl->m_rPropSet.getPropertySetInfo();
-        // PropertySetInfo verlaengern!
+        // extend PropertySetInfo!
         const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
         xRef = new SfxExtItemPropertySetInfo(
             aCrsrExtMap_Impl,
@@ -2974,7 +2970,7 @@ throw (uno::RuntimeException)
 
         rUnoCursor.GetDoc()->SortText(rUnoCursor, aSortOpt);
 
-        // Selektion wieder setzen
+        // update selection
         rUnoCursor.DeleteMark();
         rUnoCursor.GetPoint()->nNode.Assign( aPrevIdx.GetNode(), +1 );
         SwCntntNode *const pCNd = rUnoCursor.GetCntntNode();
