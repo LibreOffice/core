@@ -269,7 +269,7 @@ public:
 
     virtual void SAL_CALL
         selectAllAccessibleChildren(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual sal_Int32 SAL_CALL
         getSelectedAccessibleChildCount(  )

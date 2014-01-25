@@ -422,9 +422,8 @@ void SAL_CALL
 {
 }
 
-void SAL_CALL
-        ScAccessibleTableBase::selectAllAccessibleChildren(  )
-        throw (uno::RuntimeException)
+void SAL_CALL ScAccessibleTableBase::selectAllAccessibleChildren()
+    throw (uno::RuntimeException, std::exception)
 {
 }
 

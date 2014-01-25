@@ -1116,9 +1116,8 @@ void SAL_CALL
     }
 }
 
-void SAL_CALL
-        ScAccessibleSpreadsheet::selectAllAccessibleChildren(  )
-        throw (uno::RuntimeException)
+void SAL_CALL ScAccessibleSpreadsheet::selectAllAccessibleChildren(  )
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
