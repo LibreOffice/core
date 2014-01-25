@@ -65,7 +65,9 @@ public:
 
     //=====  XAccessibleTable  ================================================
 
-    virtual sal_Int32 SAL_CALL getAccessibleRowCount() throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getAccessibleRowCount()
+                                throw (::com::sun::star::uno::RuntimeException,
+                                       std::exception);
     virtual sal_Int32 SAL_CALL getAccessibleColumnCount()
                                 throw (::com::sun::star::uno::RuntimeException,
                                        std::exception);

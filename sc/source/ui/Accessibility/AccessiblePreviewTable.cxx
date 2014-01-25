@@ -133,7 +133,8 @@ void SAL_CALL ScAccessiblePreviewTable::release()
 
 //=====  XAccessibleTable  ================================================
 
-sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRowCount() throw (uno::RuntimeException)
+sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRowCount()
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
