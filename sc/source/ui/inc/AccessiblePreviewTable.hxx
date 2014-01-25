@@ -106,7 +106,8 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
                             getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
                                 throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                                    ::com::sun::star::uno::RuntimeException);
+                                       ::com::sun::star::uno::RuntimeException,
+                                       std::exception);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
                             getAccessibleCaption() throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
@@ -117,7 +118,8 @@ public:
                                        std::exception);
     virtual sal_Int32 SAL_CALL getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
                                 throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                                    ::com::sun::star::uno::RuntimeException);
+                                       ::com::sun::star::uno::RuntimeException,
+                                       std::exception);
     virtual sal_Int32 SAL_CALL getAccessibleRow( sal_Int32 nChildIndex )
                                 throw (::com::sun::star::lang::IndexOutOfBoundsException,
                                        ::com::sun::star::uno::RuntimeException,
@@ -143,7 +145,8 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
                             getAccessibleChild( sal_Int32 i )
                                 throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                                    ::com::sun::star::uno::RuntimeException);
+                                       ::com::sun::star::uno::RuntimeException,
+                                       std::exception);
     virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL
                             getAccessibleStateSet() throw (::com::sun::star::uno::RuntimeException);

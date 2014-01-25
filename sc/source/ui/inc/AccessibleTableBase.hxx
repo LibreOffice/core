@@ -151,7 +151,8 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
                 getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
                     throw (::com::sun::star::uno::RuntimeException,
-                            ::com::sun::star::lang::IndexOutOfBoundsException);
+                           ::com::sun::star::lang::IndexOutOfBoundsException,
+                           std::exception);
 
     /// Returns the caption for the table.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
@@ -176,7 +177,8 @@ public:
     virtual sal_Int32 SAL_CALL
                 getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
                     throw (::com::sun::star::uno::RuntimeException,
-                    ::com::sun::star::lang::IndexOutOfBoundsException);
+                           ::com::sun::star::lang::IndexOutOfBoundsException,
+                           std::exception);
 
     /// Returns the row number of an index in the table.
     virtual sal_Int32 SAL_CALL
