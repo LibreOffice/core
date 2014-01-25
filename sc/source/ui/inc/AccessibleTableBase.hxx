@@ -140,7 +140,8 @@ public:
     virtual sal_Bool SAL_CALL
                 isAccessibleColumnSelected( sal_Int32 nColumn )
                     throw (::com::sun::star::uno::RuntimeException,
-                    ::com::sun::star::lang::IndexOutOfBoundsException);
+                           ::com::sun::star::lang::IndexOutOfBoundsException,
+                           std::exception);
 
     /// Returns the Accessible at a specified row and column in the table.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
