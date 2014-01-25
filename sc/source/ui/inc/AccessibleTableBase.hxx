@@ -180,13 +180,15 @@ public:
     virtual sal_Int32 SAL_CALL
                 getAccessibleRow( sal_Int32 nChildIndex )
                     throw (::com::sun::star::uno::RuntimeException,
-                    ::com::sun::star::lang::IndexOutOfBoundsException);
+                           ::com::sun::star::lang::IndexOutOfBoundsException,
+                           std::exception);
 
     /// Returns the column number of an index in the table.
     virtual sal_Int32 SAL_CALL
                 getAccessibleColumn( sal_Int32 nChildIndex )
                     throw (::com::sun::star::uno::RuntimeException,
-                    ::com::sun::star::lang::IndexOutOfBoundsException);
+                           ::com::sun::star::lang::IndexOutOfBoundsException,
+                           std::exception);
 
     //=====  XAccessibleContext  ==============================================
 
@@ -194,14 +196,16 @@ public:
     // is overloaded to calculate this on demand
     virtual sal_Int32 SAL_CALL
         getAccessibleChildCount(void)
-                    throw (::com::sun::star::uno::RuntimeException);
+                    throw (::com::sun::star::uno::RuntimeException,
+                           std::exception);
 
     /// Return the specified child or NULL if index is invalid.
     // is overloaded to calculate this on demand
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild(sal_Int32 nIndex)
         throw (::com::sun::star::uno::RuntimeException,
-                ::com::sun::star::lang::IndexOutOfBoundsException);
+               ::com::sun::star::lang::IndexOutOfBoundsException,
+               std::exception);
     virtual sal_Bool SAL_CALL selectRow( sal_Int32 row )
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException,
                std::exception);
@@ -250,7 +254,8 @@ public:
     virtual sal_Bool SAL_CALL
         isAccessibleChildSelected( sal_Int32 nChildIndex )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
-        ::com::sun::star::uno::RuntimeException);
+               ::com::sun::star::uno::RuntimeException,
+               std::exception);
 
     virtual void SAL_CALL
         clearAccessibleSelection(  )

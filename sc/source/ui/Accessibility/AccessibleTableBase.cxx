@@ -299,7 +299,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleIndex( sal_Int32 nRow, sa
 }
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRow( sal_Int32 nChildIndex )
-    throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
+    throw (uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -311,7 +311,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRow( sal_Int32 nChildInde
 }
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumn( sal_Int32 nChildIndex )
-    throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
+    throw (uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -324,9 +324,8 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumn( sal_Int32 nChildI
 
 // =====  XAccessibleContext  ==============================================
 
-sal_Int32 SAL_CALL
-    ScAccessibleTableBase::getAccessibleChildCount(void)
-                    throw (uno::RuntimeException)
+sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleChildCount()
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -345,7 +344,8 @@ sal_Int32 SAL_CALL
 uno::Reference< XAccessible > SAL_CALL
     ScAccessibleTableBase::getAccessibleChild(sal_Int32 nIndex)
         throw (uno::RuntimeException,
-        lang::IndexOutOfBoundsException)
+        lang::IndexOutOfBoundsException,
+        std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -410,7 +410,7 @@ void SAL_CALL
 
 sal_Bool SAL_CALL
         ScAccessibleTableBase::isAccessibleChildSelected( sal_Int32 nChildIndex )
-        throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+        throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     // I don't need to guard, because the called functions have a guard
     if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
