@@ -227,7 +227,8 @@ protected:
     virtual void            SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                                 const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::lang::IllegalArgumentException,
-                                        ::com::sun::star::uno::RuntimeException);
+                                      ::com::sun::star::uno::RuntimeException,
+                                      std::exception);
 
 public:
                             ScCellRangesBase(ScDocShell* pDocSh, const ScRange& rR);
@@ -621,7 +622,8 @@ protected:
     virtual void            SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                                 const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::lang::IllegalArgumentException,
-                                        ::com::sun::star::uno::RuntimeException);
+                                      ::com::sun::star::uno::RuntimeException,
+                                      std::exception);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >
                             GetCellByPosition_Impl( sal_Int32 nColumn, sal_Int32 nRow )
@@ -1306,7 +1308,8 @@ protected:
     virtual void            SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                                 const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::lang::IllegalArgumentException,
-                                        ::com::sun::star::uno::RuntimeException);
+                                      ::com::sun::star::uno::RuntimeException,
+                                      std::exception);
 
 public:
                             ScTableRowObj(ScDocShell* pDocSh, SCROW nRow, SCTAB nTab);
