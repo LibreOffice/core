@@ -65,7 +65,7 @@ const mdds::mtv::element_t element_type_empty = mdds::mtv::element_type_empty;
 
 /// Custom element blocks.
 
-typedef mdds::mtv::default_element_block<element_type_cellnote, ScPostIt*> cellnote_block;
+typedef mdds::mtv::noncopyable_managed_element_block<element_type_cellnote, ScPostIt> cellnote_block;
 typedef mdds::mtv::noncopyable_managed_element_block<element_type_broadcaster, SvtBroadcaster> broadcaster_block;
 typedef mdds::mtv::default_element_block<element_type_celltextattr, CellTextAttr> celltextattr_block;
 typedef mdds::mtv::default_element_block<element_type_string, svl::SharedString> string_block;
