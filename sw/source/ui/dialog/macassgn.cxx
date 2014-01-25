@@ -107,10 +107,10 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
 }
 
 
-sal_Bool SwMacroAssignDlg::INetFmtDlg( Window* pParent, SwWrtShell& rSh,
+bool SwMacroAssignDlg::INetFmtDlg( Window* pParent, SwWrtShell& rSh,
                                     SvxMacroItem*& rpINetItem )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SfxItemSet aSet( rSh.GetAttrPool(), RES_FRMMACRO, RES_FRMMACRO, SID_EVENTCONFIG, SID_EVENTCONFIG, 0 );
     SvxMacroItem aItem( RES_FRMMACRO );
     if( !rpINetItem )
@@ -132,7 +132,7 @@ sal_Bool SwMacroAssignDlg::INetFmtDlg( Window* pParent, SwWrtShell& rSh,
         if( SFX_ITEM_SET == pOutSet->GetItemState( RES_FRMMACRO, sal_False, &pItem ))
         {
             rpINetItem->SetMacroTable( ((SvxMacroItem*)pItem)->GetMacroTable() );
-            bRet = sal_True;
+            bRet = true;
         }
     }
     return bRet;
