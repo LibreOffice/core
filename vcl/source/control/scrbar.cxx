@@ -1305,7 +1305,6 @@ Rectangle* ScrollBar::ImplFindPartRect( const Point& rPt )
 
 bool ScrollBar::PreNotify( NotifyEvent& rNEvt )
 {
-    bool nDone = false;
     const MouseEvent* pMouseEvt = NULL;
 
     if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
@@ -1343,7 +1342,7 @@ bool ScrollBar::PreNotify( NotifyEvent& rNEvt )
         }
     }
 
-    return nDone || Control::PreNotify(rNEvt);
+    return Control::PreNotify(rNEvt);
 }
 
 
