@@ -29,6 +29,7 @@
 #include "ios/iosinst.hxx"
 #include "headless/svpdummies.hxx"
 #include "generic/gendata.hxx"
+#include "quartz/utils.h"
 
 // Horrible hack
 static int viewWidth = 1, viewHeight = 1;
@@ -280,6 +281,8 @@ int IosSalSystem::ShowNativeDialog( const OUString& rTitle,
 {
     (void)rButtons;
     (void)nDefButton;
+
+    NSLog(@"%@: %@", CreateNSString(rTitle), CreateNSString(rMessage));
 
     if (IosSalInstance::getInstance() != NULL)
     {
