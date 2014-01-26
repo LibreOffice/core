@@ -352,7 +352,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                 }
 
                 const sal_Int32 nPorSttIdx = rInf.GetLineStart() + nLineLength;
-                nLineLength = nLineLength + pPos->GetLen();
+                nLineLength += pPos->GetLen();
                 AddPrtWidth( pPos->Width() );
 
                 // #i3952#
@@ -1629,7 +1629,7 @@ long SwScriptInfo::Compress( sal_Int32* pKernArray, sal_Int32 nIdx, sal_Int32 nL
     sal_Int32 nChg = GetCompStart( nCompIdx );
     sal_Int32 nCompLen = GetCompLen( nCompIdx );
     sal_uInt16 nI = 0;
-    nLen = nLen + nIdx;
+    nLen += nIdx;
 
     if( nChg > nIdx )
     {
@@ -1650,7 +1650,7 @@ long SwScriptInfo::Compress( sal_Int32* pKernArray, sal_Int32 nIdx, sal_Int32 nL
 #ifdef DBG_UTIL
         SAL_WARN_IF( nType != CompType( nIdx ), "sw.core", "Gimme the right type!" );
 #endif
-        nCompLen = nCompLen + nIdx;
+        nCompLen += nIdx;
         if( nCompLen > nLen )
             nCompLen = nLen;
 
@@ -2093,7 +2093,7 @@ sal_Int32 SwParaPortion::GetParLen() const
     const SwLineLayout *pLay = this;
     while( pLay )
     {
-        nLen = nLen + pLay->GetLen();
+        nLen += pLay->GetLen();
         pLay = pLay->GetNext();
     }
     return nLen;
