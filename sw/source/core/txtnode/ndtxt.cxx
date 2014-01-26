@@ -2044,10 +2044,10 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
                     // das Ende liegt dahinter
                 else if (RES_TXTATR_REFMARK != nWhich && !pHt->HasDummyChar())
                 {
-                    pNewHt = MakeTxtAttr( *GetDoc(), pHt->GetAttr(),
-                            nAttrStartIdx - nTxtStartIdx,
-                            !pEndIdx ? 0
-                                     : ( *pEndIdx > nEnd
+                    pNewHt = MakeTxtAttr( *GetDoc(),
+                                          pHt->GetAttr(),
+                                          nAttrStartIdx - nTxtStartIdx,
+                                          ( *pEndIdx > nEnd
                                             ? nLen
                                             : *pEndIdx - nTxtStartIdx ));
                 }
@@ -2223,11 +2223,10 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
                 else if( RES_TXTATR_REFMARK != nWhich || bUndoNodes )
                 {
                     pNewHt = MakeTxtAttr( *GetDoc(), pHt->GetAttr(),
-                            nDestStart + (nAttrStartIdx - nTxtStartIdx),
-                            !pEndIdx ? 0
-                                     : nDestStart + ( *pEndIdx > nEnd
-                                            ? nLen
-                                            : *pEndIdx - nTxtStartIdx ));
+                                          nDestStart + (nAttrStartIdx - nTxtStartIdx),
+                                          nDestStart + ( *pEndIdx > nEnd
+                                                         ? nLen
+                                                         : *pEndIdx - nTxtStartIdx ));
                 }
             }
             if ( pNewHt )
