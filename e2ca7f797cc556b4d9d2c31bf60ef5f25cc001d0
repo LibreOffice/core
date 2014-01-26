@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_a51fb608",
+        "filename": "sc/source/ui/inc/rfindlst.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-01-26T17:27:43Z",
+      "side": 1,
+      "message": "ColorData is ultimately a sal_uInt32 (4 bytes).\nsize_t is 4 or 8 bytes depending on the platform.. mostly 8 bytes these days.\nwhy not save ColorData directly here as nColorData",
+      "revId": "e2ca7f797cc556b4d9d2c31bf60ef5f25cc001d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
