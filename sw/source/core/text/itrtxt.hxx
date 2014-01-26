@@ -63,10 +63,27 @@ protected:
         , pInf(NULL)
         , pCurr(NULL)
         , pPrev(NULL)
-    {}
+        , nFrameStart(0)
+        , nY(0)
+        , nRegStart(0)
+        , nStart(0)
+        , nRegDiff(0)
+        , nLineNr(0)
+        , bPrev(sal_False)
+        , bRegisterOn(sal_False)
+        , bOneBlock(sal_False)
+        , bLastBlock(sal_False)
+        , bLastCenter(sal_False)
+        {}
 public:
-    inline SwTxtIter( SwTxtFrm *pTxtFrm, SwTxtInfo *pTxtInf ) : SwAttrIter(pTxtFrm!=NULL?pTxtFrm->GetTxtNode():NULL)
-           { CtorInitTxtIter( pTxtFrm, pTxtInf ); }
+    inline SwTxtIter( SwTxtFrm *pTxtFrm, SwTxtInfo *pTxtInf )
+        : SwAttrIter( pTxtFrm != NULL ? pTxtFrm->GetTxtNode() : NULL)
+        , bOneBlock(sal_False)
+        , bLastBlock(sal_False)
+        , bLastCenter(sal_False)
+        {
+            CtorInitTxtIter( pTxtFrm, pTxtInf );
+        }
     inline const SwLineLayout *GetCurr() const { return pCurr; } // NEVER 0!
     inline const SwLineLayout *GetNext() const { return pCurr->GetNext(); }
            const SwLineLayout *GetPrev();
