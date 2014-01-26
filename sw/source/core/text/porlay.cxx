@@ -192,11 +192,9 @@ sal_Bool SwLineLayout::Format( SwTxtFormatInfo &rInf )
 {
     if( GetLen() )
         return SwTxtPortion::Format( rInf );
-    else
-    {
-        Height( rInf.GetTxtHeight() );
-        return sal_True;
-    }
+
+    Height( rInf.GetTxtHeight() );
+    return sal_True;
 }
 
 /*************************************************************************
@@ -1491,7 +1489,7 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTxtNode& rNode, sal_Int32 nPo
 
             if ( nHiddenStart > nPos )
                 break;
-            else if ( nHiddenStart <= nPos && nPos < nHiddenEnd )
+            if ( nHiddenStart <= nPos && nPos < nHiddenEnd )
             {
                 rnStartPos = nHiddenStart;
                 rnEndPos   = std::min<sal_Int32>(nHiddenEnd,
@@ -1535,7 +1533,7 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( sal_Int32 nPos, sal_Int32& rnStartPos
 
         if ( nHiddenStart > nPos )
             break;
-        else if ( nHiddenStart <= nPos && nPos < nHiddenEnd )
+        if ( nHiddenStart <= nPos && nPos < nHiddenEnd )
         {
             rnStartPos = nHiddenStart;
             rnEndPos   = nHiddenEnd;
@@ -1752,8 +1750,7 @@ sal_Int32 SwScriptInfo::KashidaJustify( sal_Int32* pKernArray,
     {
         if ( nStt <= GetKashida( nCntKash ) )
             break;
-        else
-            ++nCntKash;
+        ++nCntKash;
     }
 
     const sal_Int32 nEnd = nStt + nLen;
@@ -1763,8 +1760,7 @@ sal_Int32 SwScriptInfo::KashidaJustify( sal_Int32* pKernArray,
     {
         if ( nEnd <= GetKashida( nCntKashEnd ) )
             break;
-        else
-            ++nCntKashEnd;
+        ++nCntKashEnd;
     }
 
     size_t nActualKashCount = nCntKashEnd - nCntKash;
@@ -1900,8 +1896,7 @@ bool SwScriptInfo::MarkOrClearKashidaInvalid(sal_Int32 nStt, sal_Int32 nLen,
     {
         if ( nStt <= GetKashida( nCntKash ) )
             break;
-        else
-            nCntKash++;
+        nCntKash++;
     }
 
     const sal_Int32 nEnd = nStt + nLen;
@@ -1910,24 +1905,21 @@ bool SwScriptInfo::MarkOrClearKashidaInvalid(sal_Int32 nStt, sal_Int32 nLen,
     {
         if ( nEnd <= GetKashida( nCntKash ) )
             break;
+        if(bMark)
+        {
+            if ( IsKashidaValid ( nCntKash ) )
+            {
+                MarkKashidaInvalid ( nCntKash );
+                --nMarkCount;
+                if (!nMarkCount)
+                    return true;
+            }
+        }
         else
         {
-            if(bMark)
-            {
-                if ( IsKashidaValid ( nCntKash ) )
-                {
-                    MarkKashidaInvalid ( nCntKash );
-                    --nMarkCount;
-                    if (!nMarkCount)
-                        return true;
-                }
-            }
-            else
-            {
-                ClearKashidaInvalid ( nCntKash );
-            }
-            nCntKash++;
+            ClearKashidaInvalid ( nCntKash );
         }
+        nCntKash++;
     }
     return false;
 }
@@ -1950,8 +1942,7 @@ sal_Int32 SwScriptInfo::GetKashidaPositions(sal_Int32 nStt, sal_Int32 nLen,
     {
         if ( nStt <= GetKashida( nCntKash ) )
             break;
-        else
-            nCntKash++;
+        nCntKash++;
     }
 
     const sal_Int32 nEnd = nStt + nLen;
@@ -1961,11 +1952,8 @@ sal_Int32 SwScriptInfo::GetKashidaPositions(sal_Int32 nStt, sal_Int32 nLen,
     {
         if ( nEnd <= GetKashida( nCntKashEnd ) )
             break;
-        else
-        {
-            pKashidaPosition [ nCntKashEnd - nCntKash ] = GetKashida ( nCntKashEnd );
-            nCntKashEnd++;
-        }
+        pKashidaPosition [ nCntKashEnd - nCntKash ] = GetKashida ( nCntKashEnd );
+        nCntKashEnd++;
     }
     return nCntKashEnd - nCntKash;
 }
