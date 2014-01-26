@@ -230,13 +230,7 @@ void SAL_CALL SwXTextMarkup::commitStringMarkup(
                                        - nTmpStart - aStartPos.mnSubPos;
             if( nTmpLen > 0 )
             {
-                if( nType == text::TextMarkupType::SENTENCE )
-                {
-                    ((SwGrammarMarkUp*)pSubList)->setSentence( aStartPos.mnSubPos );
-                    bCommit = false;
-                }
-                else
-                    pSubList->Insert( rIdentifier, xMarkupInfoContainer, aStartPos.mnSubPos, nTmpLen );
+                pSubList->Insert( rIdentifier, xMarkupInfoContainer, aStartPos.mnSubPos, nTmpLen );
             }
             ++nStart;
         }
