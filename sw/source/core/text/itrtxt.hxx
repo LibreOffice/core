@@ -150,10 +150,24 @@ protected:
     inline void SetDropLeft( const KSHORT nNew ) { nDropLeft = nNew; }
 
     void CtorInitTxtMargin( SwTxtFrm *pFrm, SwTxtSizeInfo *pInf );
-    inline SwTxtMargin(SwTxtNode* pTxtNode) : SwTxtIter(pTxtNode) { }
+    inline SwTxtMargin(SwTxtNode* pTxtNode)
+        : SwTxtIter(pTxtNode)
+        , nLeft(0)
+        , nRight(0)
+        , nFirst(0)
+        , nDropLeft(0)
+        , nDropHeight(0)
+        , nDropDescent(0)
+        , nDropLines(0)
+        , nAdjust(0)
+        , mnTabLeft(0)
+        { }
 public:
-    inline SwTxtMargin( SwTxtFrm *pTxtFrm, SwTxtSizeInfo *pTxtSizeInf ) : SwTxtIter(pTxtFrm!=NULL?pTxtFrm->GetTxtNode():NULL)
-           { CtorInitTxtMargin( pTxtFrm, pTxtSizeInf ); }
+    inline SwTxtMargin( SwTxtFrm *pTxtFrm, SwTxtSizeInfo *pTxtSizeInf )
+        : SwTxtIter( pTxtFrm != NULL ? pTxtFrm->GetTxtNode() : NULL)
+        {
+            CtorInitTxtMargin( pTxtFrm, pTxtSizeInf );
+        }
     inline SwTwips GetLeftMargin() const;
     inline SwTwips Left() const;
     inline SwTwips Right() const { return nRight; }
