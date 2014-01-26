@@ -153,8 +153,12 @@ public:
     sal_Bool CalcOnceMore();
 
     void CtorInitTxtFormatter( SwTxtFrm *pFrm, SwTxtFormatInfo *pInf );
-    SwTxtFormatter( SwTxtFrm *pTxtFrm, SwTxtFormatInfo *pTxtFmtInf ) : SwTxtPainter(pTxtFrm!=NULL?pTxtFrm->GetTxtNode():NULL)
-           { CtorInitTxtFormatter( pTxtFrm, pTxtFmtInf ); }
+    SwTxtFormatter( SwTxtFrm *pTxtFrm, SwTxtFormatInfo *pTxtFmtInf )
+        : SwTxtPainter(pTxtFrm!=NULL ? pTxtFrm->GetTxtNode() : NULL)
+        , bUnclipped(sal_False)
+        {
+            CtorInitTxtFormatter( pTxtFrm, pTxtFmtInf );
+        }
     ~SwTxtFormatter();
 
     sal_Int32 FormatLine( const sal_Int32 nStart );
