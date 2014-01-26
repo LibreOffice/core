@@ -2981,11 +2981,9 @@ void OpAverageIf::GenSlidingWindowFunction(std::stringstream &ss,
     unsigned paraOneIsDoubleVector = 0;
     unsigned paraOneWidth = 1;
     unsigned paraTwoWidth = 1;
-    unsigned paraThreeWidth = 1;
     unsigned loopTimes = 0;
-    unsigned loopIndex = 0;
-    if(vSubArguments[0]->GetFormulaToken()->GetType() ==
-    formula::svDoubleVectorRef)
+
+    if(vSubArguments[0]->GetFormulaToken()->GetType() == formula::svDoubleVectorRef)
     {
         paraOneIsDoubleVector = 1;
         FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
@@ -3034,6 +3032,7 @@ void OpAverageIf::GenSlidingWindowFunction(std::stringstream &ss,
         if(vSubArguments[paraThreeIndex]->GetFormulaToken()->GetType() ==
         formula::svDoubleVectorRef)
         {
+            unsigned paraThreeWidth = 1;
             FormulaToken *tmpCur2 =
             vSubArguments[paraThreeIndex]->GetFormulaToken();
             const formula::DoubleVectorRefToken*pCurDVR2= dynamic_cast<const
@@ -3048,6 +3047,7 @@ void OpAverageIf::GenSlidingWindowFunction(std::stringstream &ss,
 
     if(paraOneIsDoubleVector)
     {
+        unsigned loopIndex = 0;
         FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
         const formula::DoubleVectorRefToken*pCurDVR0= dynamic_cast<const
             formula::DoubleVectorRefToken *>(tmpCur0);
