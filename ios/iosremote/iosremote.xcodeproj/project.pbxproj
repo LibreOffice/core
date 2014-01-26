@@ -17,7 +17,6 @@
 		5753DD901781EA0300DB71BB /* ServerListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5753DD8F1781EA0300DB71BB /* ServerListViewController.m */; };
 		5753DD9917834D7100DB71BB /* NewServerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5753DD9817834D7100DB71BB /* NewServerViewController.m */; };
 		57701742178B0A6900B99793 /* SlideShowSwipeInList~iphone.m in Sources */ = {isa = PBXBuildFile; fileRef = 57701741178B0A6900B99793 /* SlideShowSwipeInList~iphone.m */; };
-		57867A541787172A00EBBE52 /* impress.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 57867A531787172A00EBBE52 /* impress.jpeg */; };
 		57867A571787385800EBBE52 /* SlideShowViewController~iphone.m in Sources */ = {isa = PBXBuildFile; fileRef = 57867A561787385800EBBE52 /* SlideShowViewController~iphone.m */; };
 		57867A5A1787510700EBBE52 /* pushed_next_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 57867A581787510700EBBE52 /* pushed_next_button.png */; };
 		57867A5B1787510700EBBE52 /* released_next_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 57867A591787510700EBBE52 /* released_next_button.png */; };
@@ -74,13 +73,9 @@
 		8C19F43917B145AD005BDB61 /* backButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C19F43717B145AD005BDB61 /* backButton.png */; };
 		8C19F43A17B145AD005BDB61 /* backButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C19F43817B145AD005BDB61 /* backButton@2x.png */; };
 		8C19F43E17B1D935005BDB61 /* add.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C19F43C17B1D935005BDB61 /* add.png */; };
-		8C19F44717B1FB51005BDB61 /* iosremote_iphone_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C1A16FA17A2853100B4BB3C /* iosremote_iphone_icon@2x.png */; };
 		8C19F44A17B1FEFE005BDB61 /* gear_transparent_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C19F44817B1FEFD005BDB61 /* gear_transparent_bg.png */; };
 		8C19F44B17B1FEFE005BDB61 /* gear_transparent_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C19F44917B1FEFE005BDB61 /* gear_transparent_bg@2x.png */; };
 		8C19F44D17B20427005BDB61 /* add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C19F44C17B20426005BDB61 /* add@2x.png */; };
-		8C1A16FD17A2853700B4BB3C /* iosremote_iphone_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C1A16FC17A2853700B4BB3C /* iosremote_iphone_icon.png */; };
-		8C1A16FF17A2853F00B4BB3C /* iosremote_ipad_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C1A16FE17A2853F00B4BB3C /* iosremote_ipad_icon.png */; };
-		8C1A170117A2854300B4BB3C /* iosremote_ipad_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C1A170017A2854300B4BB3C /* iosremote_ipad_icon@2x.png */; };
 		8C23B46917DA158C00FB4DE6 /* UIView+Shadowing.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C23B46817DA158C00FB4DE6 /* UIView+Shadowing.m */; };
 		8C23B46C17DB3B8600FB4DE6 /* timer_settime_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C23B46A17DB3B8600FB4DE6 /* timer_settime_btn.png */; };
 		8C23B46D17DB3B8600FB4DE6 /* timer_settime_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C23B46B17DB3B8600FB4DE6 /* timer_settime_btn@2x.png */; };
@@ -169,7 +164,6 @@
 		5753DD9817834D7100DB71BB /* NewServerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NewServerViewController.m; path = iosremote/Classes/NewServerViewController.m; sourceTree = "<group>"; };
 		57701740178B0A6800B99793 /* SlideShowSwipeInList~iphone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SlideShowSwipeInList~iphone.h"; path = "iosremote/Classes/SlideShowSwipeInList~iphone.h"; sourceTree = "<group>"; };
 		57701741178B0A6900B99793 /* SlideShowSwipeInList~iphone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "SlideShowSwipeInList~iphone.m"; path = "iosremote/Classes/SlideShowSwipeInList~iphone.m"; sourceTree = "<group>"; };
-		57867A531787172A00EBBE52 /* impress.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = impress.jpeg; sourceTree = "<group>"; };
 		57867A551787385800EBBE52 /* SlideShowViewController~iphone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SlideShowViewController~iphone.h"; path = "iosremote/Classes/SlideShowViewController~iphone.h"; sourceTree = "<group>"; };
 		57867A561787385800EBBE52 /* SlideShowViewController~iphone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "SlideShowViewController~iphone.m"; path = "iosremote/Classes/SlideShowViewController~iphone.m"; sourceTree = "<group>"; };
 		57867A581787510700EBBE52 /* pushed_next_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pushed_next_button.png; sourceTree = "<group>"; };
@@ -260,10 +254,6 @@
 		8C19F44817B1FEFD005BDB61 /* gear_transparent_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gear_transparent_bg.png; sourceTree = "<group>"; };
 		8C19F44917B1FEFE005BDB61 /* gear_transparent_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gear_transparent_bg@2x.png"; sourceTree = "<group>"; };
 		8C19F44C17B20426005BDB61 /* add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add@2x.png"; sourceTree = "<group>"; };
-		8C1A16FA17A2853100B4BB3C /* iosremote_iphone_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iosremote_iphone_icon@2x.png"; sourceTree = "<group>"; };
-		8C1A16FC17A2853700B4BB3C /* iosremote_iphone_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iosremote_iphone_icon.png; sourceTree = "<group>"; };
-		8C1A16FE17A2853F00B4BB3C /* iosremote_ipad_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iosremote_ipad_icon.png; sourceTree = "<group>"; };
-		8C1A170017A2854300B4BB3C /* iosremote_ipad_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iosremote_ipad_icon@2x.png"; sourceTree = "<group>"; };
 		8C23B46717DA158C00FB4DE6 /* UIView+Shadowing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Shadowing.h"; path = "iosremote/Categories/UIView+Shadowing.h"; sourceTree = "<group>"; };
 		8C23B46817DA158C00FB4DE6 /* UIView+Shadowing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+Shadowing.m"; path = "iosremote/Categories/UIView+Shadowing.m"; sourceTree = "<group>"; };
 		8C23B46A17DB3B8600FB4DE6 /* timer_settime_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = timer_settime_btn.png; sourceTree = "<group>"; };
@@ -519,10 +509,6 @@
 				8C0DC83717A4177C0099E5AE /* nextButton_pressed@2x.png */,
 				8C0DC83817A4177C0099E5AE /* previousButton_pressed.png */,
 				8C0DC83917A4177C0099E5AE /* previousButton_pressed@2x.png */,
-				8C1A170017A2854300B4BB3C /* iosremote_ipad_icon@2x.png */,
-				8C1A16FE17A2853F00B4BB3C /* iosremote_ipad_icon.png */,
-				8C1A16FC17A2853700B4BB3C /* iosremote_iphone_icon.png */,
-				8C1A16FA17A2853100B4BB3C /* iosremote_iphone_icon@2x.png */,
 				57CC48C4178B42A400075DE4 /* timer_pause_btn.png */,
 				571BFAD0178AADA200EF1BDB /* more_icon.png */,
 				57AEEDB417899BB4007F4F97 /* slide_finished.png */,
@@ -532,7 +518,6 @@
 				57867A591787510700EBBE52 /* released_next_button.png */,
 				57867A5C178752CD00EBBE52 /* pushed_previous_button.png */,
 				57867A5D178752CD00EBBE52 /* released_previous_button.png */,
-				57867A531787172A00EBBE52 /* impress.jpeg */,
 				571D4805178B2F080063D93B /* timer_clear_btn.png */,
 				571D4806178B2F080063D93B /* timer_start_btn.png */,
 			);
@@ -878,7 +863,6 @@
 				57C6E405175E06E800E8BC5F /* Default.png in Resources */,
 				57C6E407175E06E800E8BC5F /* Default@2x.png in Resources */,
 				57C6E409175E06E800E8BC5F /* Default-568h@2x.png in Resources */,
-				57867A541787172A00EBBE52 /* impress.jpeg in Resources */,
 				8C0C879317F4C46E003CE6B2 /* WalkThroughPageViewController.xib in Resources */,
 				57867A5A1787510700EBBE52 /* pushed_next_button.png in Resources */,
 				57867A5B1787510700EBBE52 /* released_next_button.png in Resources */,
@@ -894,9 +878,6 @@
 				57DF0A85178FFFAB008B2D3D /* iPhone_autosize.storyboard in Resources */,
 				5711026D1794127E007D343B /* README.md in Resources */,
 				5711026E1794127E007D343B /* release_notes.md in Resources */,
-				8C1A16FD17A2853700B4BB3C /* iosremote_iphone_icon.png in Resources */,
-				8C1A16FF17A2853F00B4BB3C /* iosremote_ipad_icon.png in Resources */,
-				8C1A170117A2854300B4BB3C /* iosremote_ipad_icon@2x.png in Resources */,
 				8C06B31E17B7ED1E002F5CF8 /* iPad_autosize.storyboard in Resources */,
 				8C0DC83A17A4177C0099E5AE /* nextButton_pressed.png in Resources */,
 				8C0DC83B17A4177C0099E5AE /* nextButton_pressed@2x.png in Resources */,
@@ -914,7 +895,6 @@
 				8C19F43917B145AD005BDB61 /* backButton.png in Resources */,
 				8C19F43A17B145AD005BDB61 /* backButton@2x.png in Resources */,
 				8C19F43E17B1D935005BDB61 /* add.png in Resources */,
-				8C19F44717B1FB51005BDB61 /* iosremote_iphone_icon@2x.png in Resources */,
 				8C19F44A17B1FEFE005BDB61 /* gear_transparent_bg.png in Resources */,
 				8C19F44B17B1FEFE005BDB61 /* gear_transparent_bg@2x.png in Resources */,
 				8C19F44D17B20427005BDB61 /* add@2x.png in Resources */,
