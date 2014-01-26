@@ -534,9 +534,9 @@ private:
     void                CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uInt32 nStartPosY );
     sal_Bool            FinishCreateLines( ParaPortion* pParaPortion );
     void                CalcCharPositions( ParaPortion* pParaPortion );
-    void                CreateTextPortions( ParaPortion* pParaPortion, sal_uInt16& rStartPos /*, sal_Bool bCreateBlockPortions */ );
-    void                RecalcTextPortion( ParaPortion* pParaPortion, sal_uInt16 nStartPos, short nNewChars );
-    sal_uInt16          SplitTextPortion( ParaPortion* pParaPortion, sal_uInt16 nPos,  EditLine* pCurLine = 0 );
+    void                CreateTextPortions( ParaPortion* pParaPortion, sal_Int32& rStartPos /*, sal_Bool bCreateBlockPortions */ );
+    void                RecalcTextPortion( ParaPortion* pParaPortion, sal_Int32 nStartPos, sal_Int32 nNewChars );
+    size_t              SplitTextPortion( ParaPortion* pParaPortion, sal_Int32 nPos,  EditLine* pCurLine = 0 );
     void                SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rFont, OutputDevice* pOut = NULL, sal_uInt16 nIgnoreWhich = 0 );
     void                RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics, SvxFont& rFont );
     void                CheckAutoPageSize();

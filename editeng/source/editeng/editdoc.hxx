@@ -458,7 +458,7 @@ public:
 
     void    Reset();
     size_t FindPortion(
-        sal_uInt16 nCharPos, sal_uInt16& rPortionStart, bool bPreferStartingPortion = false) const;
+        sal_Int32 nCharPos, sal_Int32& rPortionStart, bool bPreferStartingPortion = false) const;
     sal_uInt16 GetStartPos(size_t nPortion);
     void DeleteFromPortion(size_t nDelFrom);
     size_t Count() const;
@@ -485,8 +485,8 @@ private:
     CharPosArrayType aPositions;
     long            nTxtWidth;
     sal_uInt16          nStartPosX;
-    sal_uInt16          nStart;     // could be replaced by nStartPortion
-    sal_uInt16          nEnd;       // could be replaced by nEndPortion
+    sal_Int32           nStart;     // could be replaced by nStartPortion
+    sal_Int32           nEnd;       // could be replaced by nEndPortion
     sal_uInt16          nStartPortion;
     sal_uInt16          nEndPortion;
     sal_uInt16          nHeight;    //  Total height of the line
@@ -501,19 +501,19 @@ public:
                     EditLine( const EditLine& );
                     ~EditLine();
 
-    sal_Bool            IsIn( sal_uInt16 nIndex ) const
+    sal_Bool            IsIn( sal_Int32 nIndex ) const
                         { return ( (nIndex >= nStart ) && ( nIndex < nEnd ) ); }
 
-    sal_Bool            IsIn( sal_uInt16 nIndex, sal_Bool bInclEnd ) const
+    sal_Bool            IsIn( sal_Int32 nIndex, sal_Bool bInclEnd ) const
                         { return ( ( nIndex >= nStart ) && ( bInclEnd ? ( nIndex <= nEnd ) : ( nIndex < nEnd ) ) ); }
 
-    void            SetStart( sal_uInt16 n )            { nStart = n; }
-    sal_uInt16          GetStart() const                { return nStart; }
-    sal_uInt16&         GetStart()                      { return nStart; }
+    void            SetStart( sal_Int32 n )             { nStart = n; }
+    sal_Int32       GetStart() const                    { return nStart; }
+    sal_Int32&      GetStart()                          { return nStart; }
 
-    void            SetEnd( sal_uInt16 n )              { nEnd = n; }
-    sal_uInt16          GetEnd() const                  { return nEnd; }
-    sal_uInt16&         GetEnd()                        { return nEnd; }
+    void            SetEnd( sal_Int32 n )               { nEnd = n; }
+    sal_Int32       GetEnd() const                      { return nEnd; }
+    sal_Int32&      GetEnd()                            { return nEnd; }
 
     void            SetStartPortion( sal_uInt16 n )     { nStartPortion = n; }
     sal_uInt16          GetStartPortion() const         { return nStartPortion; }
@@ -537,7 +537,7 @@ public:
     void            SetHangingPunctuation( bool b )     { bHangingPunctuation = b; }
     bool            IsHangingPunctuation() const        { return bHangingPunctuation; }
 
-    sal_uInt16          GetLen() const                  { return nEnd - nStart; }
+    sal_Int32       GetLen() const                      { return nEnd - nStart; }
 
     sal_uInt16          GetStartPosX() const            { return nStartPosX; }
     void            SetStartPosX( long start );
@@ -575,7 +575,7 @@ public:
 
     void Reset();
     void DeleteFromLine(size_t nDelFrom);
-    size_t FindLine(sal_uInt16 nChar, bool bInclEnd);
+    size_t FindLine(sal_Int32 nChar, bool bInclEnd);
     size_t Count() const;
     const EditLine* operator[](size_t nPos) const;
     EditLine* operator[](size_t nPos);

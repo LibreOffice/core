@@ -202,14 +202,14 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion, OutputD
         if ( nParaStart > GetVisDocBottom() )
             break;
 
-        sal_uInt16 nStartLine = 0;
-        sal_uInt16 nEndLine = pTmpPortion->GetLines().Count() -1;
+        size_t nStartLine = 0;
+        size_t nEndLine = pTmpPortion->GetLines().Count() -1;
         if ( nPara == nStartPara )
             nStartLine = pTmpPortion->GetLines().FindLine( aTmpSel.Min().GetIndex(), sal_False );
         if ( nPara == nEndPara )
             nEndLine = pTmpPortion->GetLines().FindLine( aTmpSel.Max().GetIndex(), sal_True );
 
-        for ( sal_uInt16 nLine = nStartLine; nLine <= nEndLine; nLine++ )
+        for ( size_t nLine = nStartLine; nLine <= nEndLine; nLine++ )
         {
             const EditLine* pLine = pTmpPortion->GetLines()[nLine];
             DBG_ASSERT( pLine, "Line not found: DrawSelection()" );
@@ -652,7 +652,7 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
 
     EditPaM aPaM( aEditSelection.Max() );
 
-    sal_uInt16 nTextPortionStart = 0;
+    sal_Int32 nTextPortionStart = 0;
     sal_Int32 nPara = pEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
     if (nPara == EE_PARA_NOT_FOUND) // #i94322
         return;
@@ -680,7 +680,8 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
             // If we are behind a portion, and the next portion has other direction, we must change position...
             aEditCursor.Left() = aEditCursor.Right() = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GETCRSR_TXTONLY|GETCRSR_PREFERPORTIONSTART ).Left();
 
-            sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, sal_True );
+            const size_t nTextPortion =
+                pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, sal_True );
             const TextPortion* pTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
             if ( pTextPortion->GetKind() == PORTIONKIND_TAB )
             {
@@ -849,7 +850,8 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
         unsigned char nCursorDir = CURSOR_DIRECTION_NONE;
         if ( IsInsertMode() && !aEditSelection.HasRange() && ( pEditEngine->pImpEditEngine->HasDifferentRTLLevels( aPaM.GetNode() ) ) )
         {
-            sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, nShowCursorFlags & GETCRSR_PREFERPORTIONSTART ? sal_True : sal_False );
+            const size_t nTextPortion =
+                pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, nShowCursorFlags & GETCRSR_PREFERPORTIONSTART ? sal_True : sal_False );
             const TextPortion* pTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
             sal_uInt16 nRTLLevel = pTextPortion->GetRightToLeft();
             if ( nRTLLevel%2 )

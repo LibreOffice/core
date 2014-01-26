@@ -465,10 +465,10 @@ size_t TextPortionList::GetPos(const TextPortion* p) const
 }
 
 size_t TextPortionList::FindPortion(
-    sal_uInt16 nCharPos, sal_uInt16& nPortionStart, bool bPreferStartingPortion) const
+    sal_Int32 nCharPos, sal_Int32& nPortionStart, bool bPreferStartingPortion) const
 {
     // When nCharPos at portion limit, the left portion is found
-    sal_uInt16 nTmpPos = 0;
+    sal_Int32 nTmpPos = 0;
     size_t n = maPortions.size();
     for (size_t i = 0; i < n; ++i)
     {
@@ -629,15 +629,15 @@ void ParaPortion::CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormatte
         const EditLine* pLastFormatted = aLineList[ nLastFormattedLine ];
         const EditLine* pUnformatted = aLineList[ nLastFormattedLine+1 ];
         short nPortionDiff = pUnformatted->GetStartPortion() - pLastFormatted->GetEndPortion();
-        short nTextDiff = pUnformatted->GetStart() - pLastFormatted->GetEnd();
-        nTextDiff++;    // LastFormatted->GetEnd() was included => 1 deducted too much!
+        // LastFormatted->GetEnd() was included => add 1 to compensate it!
+        const sal_Int32 nTextDiff = pUnformatted->GetStart() - pLastFormatted->GetEnd() + 1;
 
         // The first unformatted must begin exactly one Portion behind the last
         // of the formatted:
         // If the modified line was split into one portion, can
         // nLastEnd > nNextStart!
         int nPDiff = -( nPortionDiff-1 );
-        int nTDiff = -( nTextDiff-1 );
+        const sal_Int32 nTDiff = -( nTextDiff-1 );
         if ( nPDiff || nTDiff )
         {
             for ( sal_uInt16 nL = nLastFormattedLine+1; nL < nLines; nL++ )
@@ -649,10 +649,8 @@ void ParaPortion::CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormatte
                 pLine->GetEndPortion() = sal::static_int_cast< sal_uInt16 >(
                     pLine->GetEndPortion() + nPDiff);
 
-                pLine->GetStart() = sal::static_int_cast< sal_uInt16 >(
-                    pLine->GetStart() + nTDiff);
-                pLine->GetEnd() = sal::static_int_cast< sal_uInt16 >(
-                    pLine->GetEnd() + nTDiff);
+                pLine->SetStart(pLine->GetStart() + nTDiff);
+                pLine->SetEnd(pLine->GetEnd() + nTDiff);
 
                 pLine->SetValid();
             }
@@ -1057,7 +1055,7 @@ Size EditLine::CalcTextSize( ParaPortion& rParaPortion )
     Size aTmpSz;
     TextPortion* pPortion;
 
-    sal_uInt16 nIndex = GetStart();
+    sal_Int32 nIndex = GetStart();
 
     DBG_ASSERT( rParaPortion.GetTextPortions().Count(), "GetTextSize before CreatePortions !" );
 
@@ -1111,7 +1109,7 @@ void EditLineList::DeleteFromLine(size_t nDelFrom)
     maLines.erase(it, maLines.end());
 }
 
-size_t EditLineList::FindLine(sal_uInt16 nChar, bool bInclEnd)
+size_t EditLineList::FindLine(sal_Int32 nChar, bool bInclEnd)
 {
     size_t n = maLines.size();
     for (size_t i = 0; i < n; ++i)

@@ -588,10 +588,10 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         sal_Int32 nIndex = 0;
         sal_Int32 nStartPos = 0;
         sal_Int32 nEndPos = pNode->Len();
-        sal_uInt16 nStartPortion = 0;
-        sal_uInt16 nEndPortion = (sal_uInt16)pParaPortion->GetTextPortions().Count() - 1;
+        size_t nStartPortion = 0;
+        size_t nEndPortion = pParaPortion->GetTextPortions().Count() - 1;
         sal_Bool bFinishPortion = sal_False;
-        sal_uInt16 nPortionStart;
+        sal_Int32 nPortionStart;
 
         if ( nNode == nStartNode )
         {
@@ -619,7 +619,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
 
         const EditCharAttrib* pNextFeature = pNode->GetCharAttribs().FindFeature(nIndex);
         // start at 0, so the index is right ...
-        for ( sal_uInt16 n = 0; n <= nEndPortion; n++ )
+        for ( size_t n = 0; n <= nEndPortion; n++ )
         {
             const TextPortion* pTextPortion = pParaPortion->GetTextPortions()[n];
             if ( n < nStartPortion )
@@ -1141,7 +1141,8 @@ EditTextObject* ImpEditEngine::CreateTextObject( EditSelection aSel, SfxItemPool
             }
 #ifdef DBG_UTIL
             sal_uInt16 nTest;
-            int nTPLen = 0, nTxtLen = 0;
+            int nTPLen = 0;
+            sal_Int32 nTxtLen = 0;
             for ( nTest = pParaPortion->GetTextPortions().Count(); nTest; )
                 nTPLen += pParaPortion->GetTextPortions()[--nTest]->GetLen();
             for ( nTest = pParaPortion->GetLines().Count(); nTest; )
@@ -1340,7 +1341,8 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
                 }
 #ifdef DBG_UTIL
                 sal_uInt16 nTest;
-                int nTPLen = 0, nTxtLen = 0;
+                int nTPLen = 0;
+                sal_Int32 nTxtLen = 0;
                 for ( nTest = pParaPortion->GetTextPortions().Count(); nTest; )
                     nTPLen += pParaPortion->GetTextPortions()[--nTest]->GetLen();
                 for ( nTest = pParaPortion->GetLines().Count(); nTest; )
