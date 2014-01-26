@@ -1562,22 +1562,21 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
         const SwpHints* pSwpHints = GetTxtNode()->GetpSwpHints();
         if (pSwpHints)
         {
-            const sal_uInt16  nSize = pSwpHints->Count();
+            const sal_uInt16  nSize = pSwpHints ? pSwpHints->Count() : 0;
             for( sal_uInt16 i = 0; i < nSize; ++i )
             {
                 const SwTxtAttr* pHt = (*pSwpHints)[i];
-                if ( ( pHt->Which() == RES_TXTATR_FIELD ||
-                       pHt->Which() == RES_TXTATR_ANNOTATION ||
-                       pHt->Which() == RES_TXTATR_INPUTFIELD ) &&
-                     ( nFldIndex-- == 0))
+                if ( ( pHt->Which() == RES_TXTATR_FIELD
+                       || pHt->Which() == RES_TXTATR_ANNOTATION
+                       || pHt->Which() == RES_TXTATR_INPUTFIELD )
+                     && (nFldIndex-- == 0))
                 {
                     pTxtFld = (SwTxtFld *)pHt;
                     break;
                 }
-                else if (pHt->Which() == RES_TXTATR_REFMARK && (nFldIndex-- == 0))
-                {
+                else if (pHt->Which() == RES_TXTATR_REFMARK
+                         && (nFldIndex-- == 0))
                     strTypeName = "set reference";
-                }
             }
         }
     }
@@ -2364,7 +2363,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
 
         if (rValue.Name.compareTo( ChangeAttrColor.Name )==0)
         {
-            rValue.Value = ChangeAttr.Value;
+            rValue.Value = ChangeAttrColor.Value;
             continue;
         }
 
