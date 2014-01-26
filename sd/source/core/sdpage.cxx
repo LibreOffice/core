@@ -933,7 +933,6 @@ void getPresObjProp( const SdPage& rPage, const char* sObjKind, const char* sPag
 
 SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
 {
-    double propvalue[] = {0,0,0,0};
 
     if( eObjKind == PRESOBJ_TITLE )
     {
@@ -952,6 +951,7 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
     }
     else if( (eObjKind == PRESOBJ_FOOTER) || (eObjKind == PRESOBJ_DATETIME) || (eObjKind == PRESOBJ_SLIDENUMBER) || (eObjKind == PRESOBJ_HEADER ) )
     {
+        double propvalue[] = {0,0,0,0};
         const char* sObjKind = PresObjKindVector[eObjKind];
         const char* sPageKind = PageKindVector[mePageKind];
         // create footer objects for standard master page
@@ -1026,10 +1026,11 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
 Rectangle SdPage::GetTitleRect() const
 {
     Rectangle aTitleRect;
-    double propvalue[] = {0,0,0,0};
 
     if (mePageKind != PK_HANDOUT)
     {
+        double propvalue[] = {0,0,0,0};
+
         /******************************************************************
         * standard- or note page: title area
         ******************************************************************/
@@ -1110,10 +1111,11 @@ Rectangle SdPage::GetTitleRect() const
 Rectangle SdPage::GetLayoutRect() const
 {
     Rectangle aLayoutRect;
-    double propvalue[] = {0,0,0,0};
 
     if (mePageKind != PK_HANDOUT)
     {
+        double propvalue[] = {0,0,0,0};
+
         Point aLayoutPos ( GetLftBorder(), GetUppBorder() );
         Size aLayoutSize ( GetSize() );
         aLayoutSize.Width()  -= GetLftBorder() + GetRgtBorder();

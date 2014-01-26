@@ -1162,11 +1162,11 @@ size_t WalkAndMatchElements<double>::compare(const MatrixImplType::element_block
 template<>
 size_t WalkAndMatchElements<svl::SharedString>::compare(const MatrixImplType::element_block_node_type& node) const
 {
-    size_t nCount = 0;
     switch (node.type)
     {
         case mdds::mtm::element_string:
         {
+            size_t nCount = 0;
             typedef MatrixImplType::string_block_type block_type;
 
             block_type::const_iterator it = block_type::begin(*node.data);
