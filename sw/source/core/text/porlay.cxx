@@ -1761,7 +1761,7 @@ sal_Int32 SwScriptInfo::KashidaJustify( sal_Int32* pKernArray,
     size_t nCntKashEnd = nCntKash;
     while ( nCntKashEnd < CountKashida() )
     {
-       if ( nEnd <= GetKashida( nCntKashEnd ) )
+        if ( nEnd <= GetKashida( nCntKashEnd ) )
             break;
         else
             ++nCntKashEnd;
@@ -1876,8 +1876,8 @@ void SwScriptInfo::ClearKashidaInvalid(sal_Int32 nKashPos)
     {
         if ( aKashidaInvalid [ i ] == nKashPos )
         {
-           aKashidaInvalid.erase ( aKashidaInvalid.begin() + i );
-           return;
+            aKashidaInvalid.erase ( aKashidaInvalid.begin() + i );
+            return;
         }
     }
 }
@@ -1919,7 +1919,7 @@ bool SwScriptInfo::MarkOrClearKashidaInvalid(sal_Int32 nStt, sal_Int32 nLen,
                     MarkKashidaInvalid ( nCntKash );
                     --nMarkCount;
                     if (!nMarkCount)
-                       return true;
+                        return true;
                 }
             }
             else
@@ -1959,7 +1959,7 @@ sal_Int32 SwScriptInfo::GetKashidaPositions(sal_Int32 nStt, sal_Int32 nLen,
     size_t nCntKashEnd = nCntKash;
     while ( nCntKashEnd < CountKashida() )
     {
-       if ( nEnd <= GetKashida( nCntKashEnd ) )
+        if ( nEnd <= GetKashida( nCntKashEnd ) )
             break;
         else
         {
@@ -2084,14 +2084,14 @@ SwScriptInfo* SwScriptInfo::GetScriptInfo( const SwTxtNode& rTNd,
 
     for( SwTxtFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
     {
-            pScriptInfo = (SwScriptInfo*)pLast->GetScriptInfo();
-            if ( pScriptInfo )
-            {
-                if ( !bAllowInvalid && COMPLETE_STRING != pScriptInfo->GetInvalidityA() )
-                    pScriptInfo = 0;
-                else break;
-            }
+        pScriptInfo = (SwScriptInfo*)pLast->GetScriptInfo();
+        if ( pScriptInfo )
+        {
+            if ( !bAllowInvalid && COMPLETE_STRING != pScriptInfo->GetInvalidityA() )
+                pScriptInfo = 0;
+            else break;
         }
+    }
 
     return pScriptInfo;
 }
