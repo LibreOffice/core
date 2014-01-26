@@ -1418,6 +1418,12 @@ DECLARE_RTFIMPORT_TEST(testLevelfollow, "levelfollow.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(SvxNumberFormat::NOTHING), comphelper::SequenceAsHashMap(xNum3Levels->getByIndex(0))["LabelFollowedBy"].get<sal_Int16>()); // first level, nothing
 }
 
+DECLARE_RTFIMPORT_TEST(testCharColor, "char-color.rtf")
+{
+    // This was -1: character color wasn't set.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x365F91), getProperty<sal_Int32>(getParagraph(1), "CharColor"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
