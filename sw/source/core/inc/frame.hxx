@@ -357,7 +357,6 @@ protected:
     sal_Bool mbValidSize     : 1;
     sal_Bool mbValidLineNum  : 1;
     sal_Bool mbFixSize       : 1;
-    sal_Bool mbUnUsed1       : 1;
     // if sal_True, frame will be painted completely even content was changed
     // only partially. For CntntFrms a border (from Action) will exclusively
     // painted if <mbCompletePaint> is sal_True.
