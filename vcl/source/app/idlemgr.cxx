@@ -21,8 +21,6 @@
 
 #include <idlemgr.hxx>
 
-// =======================================================================
-
 struct ImplIdleData
 {
     Link        maIdleHdl;
@@ -32,8 +30,6 @@ struct ImplIdleData
 
 #define IMPL_IDLETIMEOUT         350
 
-// =======================================================================
-
 ImplIdleMgr::ImplIdleMgr()
 {
     mpIdleList  = new ImplIdleList();
@@ -42,43 +38,47 @@ ImplIdleMgr::ImplIdleMgr()
     maTimer.SetTimeoutHdl( LINK( this, ImplIdleMgr, TimeoutHdl ) );
 }
 
-// -----------------------------------------------------------------------
+struct ImplIdleMgr::DeleteIdleHandler
+{
+    template <typename T>
+    void operator()(const T& element)
+    {
+        delete element;
+    }
+};
 
 ImplIdleMgr::~ImplIdleMgr()
 {
-    // Liste loeschen
-    for ( size_t i = 0, n = mpIdleList->size(); i < n; ++i ) {
-        delete (*mpIdleList)[ i ];
-    }
+    std::for_each( mpIdleList->begin(), mpIdleList->end(), DeleteIdleHandler() );
     mpIdleList->clear();
     delete mpIdleList;
 }
 
-// -----------------------------------------------------------------------
+
+bool IsLinkInIdleList ( const ImplIdleData &idleData, const Link &link ) {
+    return (idleData.maIdleHdl == link);
+}
 
 sal_Bool ImplIdleMgr::InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority )
 {
-    size_t nPos = (size_t)-1;
-    size_t n = mpIdleList->size();
-    for ( size_t i = 0; i < n; ++i ) {
-        // we need to check each element to verify that rLink isn't in the array
-        if ( (*mpIdleList)[ i ]->maIdleHdl == rLink ) {
-            return sal_False;
-        }
-        if ( nPriority <= (*mpIdleList)[ i ]->mnPriority ) {
-            nPos = i;
-        }
+    // we need to check each element to verify that rLink isn't in the vector
+    ImplIdleList::iterator iter = std::find_if ( mpIdleList->begin(), mpIdleList->end(),
+                                    std::bind(IsLinkInIdleList, ImplIdleData(), rLink ) );
+    if ( iter != mpIdleList->end() ) {
+        return sal_False;
     }
+
+    bool isHigherPriority;
+    ImplIdleData found = *(*iter);
+    found.mnPriority >= nPriority ? isHigherPriority = true : isHigherPriority = false;
 
     ImplIdleData* pIdleData = new ImplIdleData;
     pIdleData->maIdleHdl    = rLink;
     pIdleData->mnPriority   = nPriority;
     pIdleData->mbTimeout    = false;
 
-    if ( nPos < mpIdleList->size() ) {
-        ImplIdleList::iterator it = mpIdleList->begin();
-        ::std::advance( it, nPos );
-        mpIdleList->insert( it, pIdleData );
+    if (isHigherPriority) {
+        mpIdleList->insert( iter, pIdleData );
     } else {
         mpIdleList->push_back( pIdleData );
     }
@@ -89,8 +89,6 @@ sal_Bool ImplIdleMgr::InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority )
 
     return sal_True;
 }
-
-// -----------------------------------------------------------------------
 
 void ImplIdleMgr::RemoveIdleHdl( const Link& rLink )
 {
@@ -106,8 +104,6 @@ void ImplIdleMgr::RemoveIdleHdl( const Link& rLink )
     if ( mpIdleList->empty() )
         maTimer.Stop();
 }
-
-// -----------------------------------------------------------------------
 
 IMPL_LINK_NOARG(ImplIdleMgr, TimeoutHdl)
 {
