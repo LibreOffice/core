@@ -173,7 +173,6 @@ public:
 class SwFlyInCntFrm : public SwFlyFrm
 {
     Point aRef;  //Relativ zu diesem Point wird die AbsPos berechnet.
-    long  nLine; //Zeilenhoehe, Ref.Y() - nLine == Zeilenanfang.
 
     sal_Bool bInvalidLayout :1;
     sal_Bool bInvalidCntnt  :1;
@@ -197,7 +196,6 @@ public:
         const Point &rRelPos );
     const Point &GetRefPoint() const { return aRef; }
     const Point GetRelPos() const;
-          long   GetLineHeight() const { return nLine; }
 
     inline void InvalidateLayout() const;
     inline void InvalidateCntnt() const;
