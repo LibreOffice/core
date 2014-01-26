@@ -16,6 +16,24 @@
       "revId": "e2ca7f797cc556b4d9d2c31bf60ef5f25cc001d0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_a5e6d614",
+        "filename": "sc/source/ui/inc/rfindlst.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000507
+      },
+      "writtenOn": "2014-01-26T17:36:24Z",
+      "side": 1,
+      "message": "um, didn\u0027t understand this properly. Do you want me to change size_t with sal_uInt32? :|",
+      "parentUuid": "da9df570_a51fb608",
+      "revId": "e2ca7f797cc556b4d9d2c31bf60ef5f25cc001d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
