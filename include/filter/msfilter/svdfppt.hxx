@@ -103,7 +103,7 @@ struct SdHyperlinkEntry
     sal_Bool    bSelection;
 };
 
-// Hilfsklasse zum Einlesen der PPT InteractiveInfoAtom
+// Helper class for reading the PPT InteractiveInfoAtom
 struct MSFILTER_DLLPUBLIC PptInteractiveInfoAtom
 {
     sal_uInt32          nSoundRef;
@@ -114,7 +114,7 @@ struct MSFILTER_DLLPUBLIC PptInteractiveInfoAtom
     sal_uInt8           nFlags;
     sal_uInt8           nHyperlinkType;
 
-    // unknown, da Gesamtgroesse 16 ist
+    // unknown, because total size is 16
     sal_uInt8           nUnknown1;
     sal_uInt8           nUnknown2;
     sal_uInt8           nUnknown3;
@@ -135,7 +135,7 @@ enum PptPageFormat
     PPTPF_CUSTOM
 };
 
-// Werte fuer den sal_uLong im PPT_PST_TextHeaderAtom
+// values for PPT_PST_TextHeaderAtom's sal_uLong
 enum PPT_TextHeader
 {
     PPTTH_TITLE,
@@ -159,20 +159,20 @@ enum PPT_TextHeader
 #define TSS_TYPE_HALFBODY       (7)
 #define TSS_TYPE_QUARTERBODY    (8)
 
-// Inventor-Id fuer PPT UserData
+// Inventor-Id for PPT UserData
 const sal_uInt32 PPTInventor = sal_uInt32('P') * 0x00000001
                              + sal_uInt32('P') * 0x00000100
                              + sal_uInt32('T') * 0x00010000
                              + sal_uInt32('0') * 0x01000000;
 
-// Object-Ids fuer StarDraw UserData
+// Object IDs for StarDraw UserData
 #define PPT_OBJECTINFO_ID       (1)
 
 struct MSFILTER_DLLPUBLIC PptDocumentAtom
 {
     Size            aSlidesPageSize;                    // page size of the slides in 576DPI
     Size            aNotesPageSize;                     // page size of the notes in 576DPI
-    // RatioAtom erstmal weggelassen
+    // avoid RatioAtom for the time being
     sal_uInt32      nNotesMasterPersist;                // 0=non-existent
     sal_uInt32      nHandoutMasterPersist;              // 0=non-existent
     sal_uInt16      n1stPageNumber;                     // page number of the first slide
@@ -200,7 +200,7 @@ public:
                         PptSlideLayoutAtom() { Clear(); }
     void                Clear();
 
-    // Das SlideLayoutAtom wird ohne Header eingelesen!
+    // SlideLayoutAtom is read without header!
     friend SvStream& operator>>( SvStream& rIn, PptSlideLayoutAtom& rAtom );
 };
 
@@ -313,7 +313,7 @@ struct PptSlidePersistEntry
     PptSlideAtom        aSlideAtom;
     PptNotesAtom        aNotesAtom;
     PptColorSchemeAtom  aColorScheme;           // each slide includes this colorscheme atom
-    PPTStyleSheet*      pStyleSheet;            // stylesheet of this page ( only in masterpages ), since XP supports more than one masterpage
+    PPTStyleSheet*      pStyleSheet;            // stylesheet of this page (only in masterpages), since XP supports more than one masterpage
 
     sal_uInt32          HeaderFooterOfs[ 4 ];   // containing the ofs to the placeholder (only masterpage)
     HeaderFooterEntry*  pHeaderFooterEntry;
@@ -323,11 +323,11 @@ struct PptSlidePersistEntry
     sal_uInt32          nBackgroundOffset;      // fileoffset
     sal_uInt32          nDrawingDgId;           // valid, if not -1
     sal_uInt32*         pPresentationObjects;   // if valid, this is a pointer to an array that includes the offsets to the presentation objects
-                                                // on this masterpage for each instance ( 0 - 8 );
+                                                // on this masterpage for each instance (0 - 8);
     SdrObject*          pBObj;
     sal_Bool            bBObjIsTemporary;
 
-    PptPageKind         ePageKind;              //
+    PptPageKind         ePageKind;
 
     sal_Bool            bNotesMaster    : 1;    // for NotesMaster
     sal_Bool            bHandoutMaster  : 1;    // for HandoutMaster
@@ -416,7 +416,7 @@ protected:
     sal_Bool            bTimesNewRomanAvailable : 1;
 
     sal_Bool            ReadString( OUString& rStr ) const;
-    // nur fuer PowerPoint-Filter:
+    // only for PowerPoint filter:
     virtual const PptSlideLayoutAtom* GetSlideLayoutAtom() const;
 
 public:
@@ -1276,7 +1276,7 @@ public :
     );
 };
 
-// Powerpoint Recordtypen
+// PowerPoint record types
 #define PPT_PST_Unknown                         0
 #define PPT_PST_SubContainerCompleted           1
 #define PPT_PST_IRRAtom                         2
@@ -1471,7 +1471,7 @@ public :
 #define PPT_PST_NewlyAddedAtomByXP12011         12011
 #define PPT_PST_NewlyAddedAtomByXP14001         14001
 
-// Attribute fuer PptTextStyleSheet
+// attributes for PptTextStyleSheet
 #define PPT_ParaAttr_BulletOn       0   //00000001
 #define PPT_ParaAttr_BuHardFont     1   //00000002
 #define PPT_ParaAttr_BuHardColor    2   //00000004
@@ -1485,7 +1485,7 @@ public :
 #define PPT_ParaAttr_DontKnow3      10  //00000400
 #define PPT_ParaAttr_Adjust         11  //00000800 0000=Left, 0001=Center, 0002=Right, 0003=Block
 #define PPT_ParaAttr_LineFeed       12  //00001000
-#define PPT_ParaAttr_UpperDist      13  //00002000 ist bei Textframes default immer auf 0032 gesetzt
+#define PPT_ParaAttr_UpperDist      13  //00002000 is set to 0032 for TextFrames by default
 #define PPT_ParaAttr_LowerDist      14  //00004000
 #define PPT_ParaAttr_TextOfs        15  //00008000
 #define PPT_ParaAttr_BulletOfs      16  //00010000
@@ -1512,7 +1512,7 @@ public :
 #define PPT_CharAttr_FontColor          18  //00040000
 #define PPT_CharAttr_Escapement         19  //00080000
 
-// Werte fuer PptSlideLayoutAtom.eLayout
+// values for PptSlideLayoutAtom.eLayout
 #define PPT_LAYOUT_TITLESLIDE               0   // The slide is a title slide
 #define PPT_LAYOUT_TITLEANDBODYSLIDE        1   // Title and body slide
 #define PPT_LAYOUT_TITLEMASTERSLIDE         2   // Title master slide
