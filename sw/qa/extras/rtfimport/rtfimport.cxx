@@ -1405,6 +1405,12 @@ DECLARE_RTFIMPORT_TEST(testBackground, "background.rtf")
     CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(getShape(2), "Opaque")));
 }
 
+DECLARE_RTFIMPORT_TEST(testCharColor, "char-color.rtf")
+{
+    // This was -1: character color wasn't set.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x365F91), getProperty<sal_Int32>(getParagraph(1), "CharColor"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
