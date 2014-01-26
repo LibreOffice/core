@@ -53,13 +53,6 @@ namespace slideshow
             // poly-polygon with the minuent - i.e. choose the
             // polygon to subtract from sufficiently large.
 
-            // blow up unit rect to (-1,-1),(2,2)
-            // AW: Not needed, just use range
-            // ::basegfx::B2DHomMatrix aMatrix;
-            // aMatrix.scale(3.0,3.0);
-            // aMatrix.translate(-1.0,-1.0);
-            // maBackgroundRect.transform( aMatrix );
-
             // extract modification info from maTransitionInfo
             // -----------------------------------------------
 
@@ -175,7 +168,6 @@ namespace slideshow
                 // calc maBackgroundRect \ aClipPoly
                 // =================================
 
-                // AW: Simplified
                 // use a range with fixed size (-1,-1),(2,2)
                 const basegfx::B2DRange aBackgroundRange(-1, -1, 2, 2);
                 const basegfx::B2DRange aClipPolyRange(aClipPoly.getB2DRange());

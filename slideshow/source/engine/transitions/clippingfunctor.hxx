@@ -73,8 +73,6 @@ namespace slideshow
         private:
             ParametricPolyPolygonSharedPtr     mpParametricPoly;
             ::basegfx::B2DHomMatrix            maStaticTransformation;
-            // AW: Not needed
-            // ::basegfx::B2DPolyPolygon          maBackgroundRect;
             bool                               mbForwardParameterSweep;
             bool                               mbSubtractPolygon;
             const bool                         mbScaleIsotrophically;

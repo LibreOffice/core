@@ -232,11 +232,6 @@ namespace slideshow
                                       "PathAnimation::PathAnimation(): failed to parse SVG:d path" );
                     ENSURE_OR_THROW( aPolyPoly.count() == 1,
                                       "PathAnimation::PathAnimation(): motion path consists of multiple/zero polygon(s)" );
-
-                    // TODO(F2): Since getPositionRelative() currently
-                    // cannot handle beziers, have to subdivide.
-                    // AW: Should be no longer necessary; getPositionRelative is now bezier-safe
-                    maPathPoly = ::basegfx::tools::adaptiveSubdivideByAngle(aPolyPoly.getB2DPolygon(0) );
                 }
 
                 ~PathAnimation()

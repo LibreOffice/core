@@ -115,24 +115,17 @@ typedef std::vector< SpriteEntry > SpriteVector;
     @return the view clip polygon, in view coordinates, which is
     guaranteed to at least clip to the view size.
  */
-basegfx::B2DPolyPolygon createClipPolygon( const basegfx::B2DPolyPolygon&            rClip,
-                                           const uno::Reference<rendering::XCanvas>& /*rCanvas*/,
-                                           const basegfx::B2DSize&                   rUserSize )
+basegfx::B2DPolyPolygon createClipPolygon( const basegfx::B2DPolyPolygon& rClip,
+                                           const basegfx::B2DSize&        rUserSize )
 {
     // setup canvas clipping
     // =====================
 
-    // AW: Simplified
     const basegfx::B2DRange aClipRange(0, 0, rUserSize.getX(), rUserSize.getY());
-
     if(rClip.count())
-    {
         return basegfx::tools::clipPolyPolygonOnRange(rClip, aClipRange, true, false);
-    }
     else
-    {
         return basegfx::B2DPolyPolygon(basegfx::tools::createPolygonFromRect(aClipRange));
-    }
 }
 
 /** Prepare given clip polygon to be stored as the current clip
@@ -145,11 +138,6 @@ basegfx::B2DPolyPolygon createClipPolygon( const basegfx::B2DPolyPolygon&       
 basegfx::B2DPolyPolygon prepareClip( const basegfx::B2DPolyPolygon& rClip )
 {
     basegfx::B2DPolyPolygon aClip( rClip );
-
-    // TODO(P2): unnecessary, once XCanvas is correctly handling this
-    // AW: Should be no longer necessary; tools are now bezier-safe
-    if( aClip.areControlPointsUsed() )
-        aClip = basegfx::tools::adaptiveSubdivideByAngle( aClip );
 
     // normalize polygon, preparation for clipping
     // in updateCanvas()
@@ -1142,7 +1130,6 @@ void SlideView::updateCanvas()
     mpCanvas->setTransformation( getTransformation() );
     mpCanvas->setClip(
         createClipPolygon( maClip,
-                           mpCanvas,
                            maUserSize ));
 #endif
 
@@ -1163,7 +1150,6 @@ void SlideView::updateClip()
     // TODO-NYI
     mpCanvas->setClip(
         createClipPolygon( maClip,
-                           mpCanvas,
                            maUserSize ));
 #endif
     pruneLayers( false );
