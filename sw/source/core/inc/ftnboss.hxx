@@ -65,7 +65,10 @@ protected:
     static void   ResetFtn( const SwFtnFrm *pAssumed );
 
 public:
-    inline SwFtnBossFrm( SwFrmFmt* pFmt, SwFrm* pSib ) : SwLayoutFrm( pFmt, pSib ) {}
+    inline SwFtnBossFrm( SwFrmFmt* pFmt, SwFrm* pSib )
+        : SwLayoutFrm( pFmt, pSib )
+        , nMaxFtnHeight(0)
+        {}
 
                  SwLayoutFrm *FindBodyCont();
     inline const SwLayoutFrm *FindBodyCont() const;
