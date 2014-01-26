@@ -198,7 +198,34 @@ protected:
     void CtorInitTxtSizeInfo( SwTxtFrm *pFrm, SwFont *pFnt = 0,
                    const sal_Int32 nIdx = 0,
                    const sal_Int32 nLen = COMPLETE_STRING );
-    SwTxtSizeInfo() : m_pKanaComp(0), m_pVsh(0), m_pOut(0), m_pRef(0), m_pFnt(0), m_pUnderFnt(0), m_pFrm(0), m_pOpt(0), m_pTxt(0) {}
+    SwTxtSizeInfo()
+        : m_pKanaComp(0)
+        , m_pVsh(0)
+        , m_pOut(0)
+        , m_pRef(0)
+        , m_pFnt(0)
+        , m_pUnderFnt(0)
+        , m_pFrm(0)
+        , m_pOpt(0)
+        , m_pTxt(0)
+        , m_nIdx(0)
+        , m_nLen(0)
+        , m_nKanaIdx(0)
+        , m_bOnWin    (0)
+        , m_bNotEOL   (0)
+        , m_bURLNotify(0)
+        , m_bStopUnderFlow(0)
+        , m_bFtnInside(0)
+        , m_bOtherThanFtnInside(0)
+        , m_bMulti(0)
+        , m_bFirstMulti(0)
+        , m_bRuby(0)
+        , m_bHanging(0)
+        , m_bScriptSpace(0)
+        , m_bForbiddenChars(0)
+        , m_bSnapToGrid(0)
+        , m_nDirection(0)
+        {}
 public:
     SwTxtSizeInfo( const SwTxtSizeInfo &rInf );
     SwTxtSizeInfo( const SwTxtSizeInfo &rInf, const OUString* pTxt,
