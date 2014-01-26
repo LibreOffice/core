@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_c5d91a85",
+        "filename": "vcl/inc/window.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-01-26T07:08:18Z",
+      "side": 1,
+      "message": "Remove this...",
+      "revId": "03959e94a61f111db161f163c5145cc582b36c64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_e5e61e44",
+        "filename": "vcl/inc/window.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-01-26T07:08:18Z",
+      "side": 1,
+      "message": "Remove this comment",
+      "revId": "03959e94a61f111db161f163c5145cc582b36c64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
