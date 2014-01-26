@@ -548,10 +548,7 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
                         }
                         else
                         {
-                            if( bEndn )
-                                pEndBoss->MoveFtns( this, pDest, pFtn );
-                            else
-                                pFtnBoss->MoveFtns( this, pDest, pFtn );
+                            pFtnBoss->MoveFtns( this, pDest, pFtn );
                             bRemove = true;
                         }
                         ((SwTxtFrm*)pDest)->SetFtn( sal_True );
