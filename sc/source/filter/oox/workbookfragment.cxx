@@ -212,14 +212,14 @@ typedef std::vector<SheetFragmentHandler> SheetFragmentVector;
 
 class WorkerThread : public ThreadTask
 {
-    sal_Int32 &mrSheetsLeft;
+    volatile sal_Int32 &mrSheetsLeft;
     WorkbookFragment& mrWorkbookHandler;
     rtl::Reference<FragmentHandler> mxHandler;
 
 public:
     WorkerThread( WorkbookFragment& rWorkbookHandler,
                   const rtl::Reference<FragmentHandler>& xHandler,
-                  sal_Int32 &rSheetsLeft ) :
+                  volatile sal_Int32 &rSheetsLeft ) :
         mrSheetsLeft( rSheetsLeft ),
         mrWorkbookHandler( rWorkbookHandler ),
         mxHandler( xHandler )
@@ -320,7 +320,7 @@ static void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragm
             nThreads = 0;
         ThreadPool aPool( nThreads );
 
-        sal_Int32 nSheetsLeft = 0;
+        volatile sal_Int32 nSheetsLeft = 0;
         ProgressBarTimer aProgressUpdater;
         SheetFragmentVector::iterator it = rSheets.begin(), itEnd = rSheets.end();
         for( ; it != itEnd; ++it )
