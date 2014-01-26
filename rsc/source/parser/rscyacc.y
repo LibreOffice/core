@@ -366,6 +366,7 @@ resource_definitions
       {
           pTC->pEH->Error( ERR_ZERODIVISION, NULL, RscId() );
       }
+      delete pExp;
   }
 ;
 
