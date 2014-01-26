@@ -420,13 +420,19 @@ class SwTxtPaintInfo : public SwTxtSizeInfo
     void _NotifyURL( const SwLinePortion &rPor ) const;
 
 protected:
+    SwTxtPaintInfo()
+        : pWrongList(0)
+        , pGrammarCheckList(0)
+        , pSmartTags(0)
+        , pSpaceAdd(0)
 #ifdef DBG_UTIL
-    SwTxtPaintInfo() { m_pFrm = 0; pWrongList = 0; pGrammarCheckList = 0; pSmartTags = 0; pSpaceAdd = 0;
-                       pBrushItem = ((SvxBrushItem*)-1);}
+        , pBrushItem((SvxBrushItem*)-1)
 #else
-    SwTxtPaintInfo() { m_pFrm = 0; pWrongList = 0; pGrammarCheckList = 0; pSmartTags = 0; pSpaceAdd = 0;
-                       pBrushItem = 0;}
+        , pBrushItem(0)
 #endif
+        , nSpaceIdx(0)
+        {}
+
 public:
     SwTxtPaintInfo( const SwTxtPaintInfo &rInf );
     SwTxtPaintInfo( const SwTxtPaintInfo &rInf, const OUString* pTxt );
