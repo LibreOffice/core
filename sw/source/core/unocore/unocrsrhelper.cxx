@@ -1132,9 +1132,8 @@ bool DocInsertStringSplitCR(
         SAL_INFO("sw.uno", "DocInsertStringSplitCR: need a text node");
         return false;
     }
-    const sal_Int32 nMaxLength = ( pTxtNd )
-        ? COMPLETE_STRING - pTxtNd->GetTxt().getLength()
-        : COMPLETE_STRING;
+    const sal_Int32 nMaxLength = COMPLETE_STRING - pTxtNd->GetTxt().getLength();
+
     sal_Int32 nIdx = rText.indexOf( '\r', nStartIdx );
     if( ( nIdx == -1 && nMaxLength < rText.getLength() ) ||
         ( nIdx != -1 && nMaxLength < nIdx ) )
