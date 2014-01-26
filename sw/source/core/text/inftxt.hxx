@@ -134,7 +134,10 @@ class SwTxtInfo
     sal_Int32 nTxtStart;                 // TxtOfst for Follows
 
 protected:
-    SwTxtInfo() : pPara(0) {}
+    SwTxtInfo()
+        : pPara(0)
+        , nTxtStart(0)
+        {}
 public:
     void CtorInitTxtInfo( SwTxtFrm *pFrm );
     SwTxtInfo( const SwTxtInfo &rInf );
