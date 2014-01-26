@@ -59,7 +59,7 @@ class SwLayCacheImpl : public std::vector<sal_uLong>
     void Insert( sal_uInt16 nType, sal_uLong nIndex, sal_Int32 nOffset );
 
 public:
-    SwLayCacheImpl() {}
+    SwLayCacheImpl() : bUseFlyCache(false) {}
     bool Read( SvStream& rStream );
 
     sal_uLong GetBreakIndex( sal_uInt16 nIdx ) const { return std::vector<sal_uLong>::operator[]( nIdx ); }
