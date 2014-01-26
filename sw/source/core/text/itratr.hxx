@@ -69,7 +69,19 @@ protected:
     void Rst( SwTxtAttr *pHt );
     void CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm* pFrm = 0 );
     SwAttrIter(SwTxtNode* pTxtNode)
-        : pShell(0), pFnt(0), pHints(0), pAttrSet(0), pScriptInfo(0), pLastOut(0), nChgCnt(0), pRedln(0), nPropFont(0), m_pTxtNode(pTxtNode)
+        : pShell(0)
+        , pFnt(0)
+        , pHints(0)
+        , pAttrSet(0)
+        , pScriptInfo(0)
+        , pLastOut(0)
+        , nChgCnt(0)
+        , pRedln(0)
+        , nStartIndex(0)
+        , nEndIndex(0)
+        , nPos(0)
+        , nPropFont(0)
+        , m_pTxtNode(pTxtNode)
         {
             aMagicNo[SW_LATIN] = aMagicNo[SW_CJK] = aMagicNo[SW_CTL] = NULL;
         }
