@@ -3027,7 +3027,6 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
         }
         break;
     case SID_SET_SUB_SCRIPT:
-        if( rReq.GetArgs() )
         {
             SvxEscapementItem aItem( EE_CHAR_ESCAPEMENT );
             SvxEscapement eEsc = (SvxEscapement ) ( (const SvxEscapementItem&)
@@ -3040,7 +3039,6 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
         }
         break;
     case SID_SET_SUPER_SCRIPT:
-        if( rReq.GetArgs() )
         {
             SvxEscapementItem aItem( EE_CHAR_ESCAPEMENT );
             SvxEscapement eEsc = (SvxEscapement ) ( (const SvxEscapementItem&)
@@ -3053,8 +3051,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
         }
         break;
     case SID_SHRINK_FONT_SIZE:
-        case SID_GROW_FONT_SIZE:
-        //if (rReq.GetArgs())
+    case SID_GROW_FONT_SIZE:
         {
             const SvxFontListItem* pFonts = dynamic_cast<const SvxFontListItem*>(GetDocSh()->GetItem( SID_ATTR_CHAR_FONTLIST ) );
             const FontList* pFontList = pFonts->GetFontList();
