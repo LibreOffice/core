@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_25bae6e1",
+        "filename": "vcl/source/app/idlemgr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-01-26T17:43:50Z",
+      "side": 1,
+      "message": "din\u0027t you basically reversed the logic here.. this will return if the object is _not_ found no ?",
+      "revId": "506ddabc0b89bb6ef3877281b3fd53f1fce3550f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
