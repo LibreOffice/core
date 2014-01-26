@@ -1537,6 +1537,12 @@ void Test::testFdo65090()
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
+DECLARE_RTFIMPORT_TEST(testCharColor, "char-color.rtf")
+{
+    // This was -1: character color wasn't set.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x365F91), getProperty<sal_Int32>(getParagraph(1), "CharColor"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
