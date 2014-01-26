@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_85b0f2f5",
+        "filename": "editeng/source/editeng/editdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2566,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-01-26T18:24:37Z",
+      "side": 1,
+      "message": "I presume this is temporary ? until the rest get migrated ?",
+      "revId": "03be4a6c8ab4d8ad38751debaa9f926428d402ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_45a60ac3",
+        "filename": "editeng/source/editeng/impedit3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1743,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-01-26T18:24:37Z",
+      "side": 1,
+      "message": "that is a problem  when uint16 was used 0xFFFF meant\nSTRING_LEN i.e \u0027at the end\u0027 which String was implemented\nto handle \u0027gracefully\u0027\nOUString does not. \nThen again nBreakPos initialization here is superfluous\nsince it is systematically overridden line 1756 or 1792",
+      "revId": "03be4a6c8ab4d8ad38751debaa9f926428d402ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_65ab0e8a",
+        "filename": "editeng/source/editeng/impedit5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 761,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-01-26T18:24:37Z",
+      "side": 1,
+      "message": "that is a bit scary comment.. surely in 32 bits world that\nmust be false.. I wonder if that is completely obsolete\nor there is some trickery hidden somewhere...",
+      "range": {
+        "startLine": 761,
+        "startChar": 20,
+        "endLine": 761,
+        "endChar": 26
+      },
+      "revId": "03be4a6c8ab4d8ad38751debaa9f926428d402ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
