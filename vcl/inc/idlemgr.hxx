@@ -27,27 +27,25 @@
 struct ImplIdleData;
 typedef ::std::vector< ImplIdleData* > ImplIdleList;
 
-// ---------------
-// - ImplIdleMgr -
-// ---------------
-
 class ImplIdleMgr
 {
 private:
     ImplIdleList*   mpIdleList;
     AutoTimer       maTimer;
 
+    struct          DeleteIdleHandler;
+
 public:
                     ImplIdleMgr();
                     ~ImplIdleMgr();
 
-    sal_Bool            InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority );
+    sal_Bool        InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority );
     void            RemoveIdleHdl( const Link& rLink );
 
     void            RestartIdler()
                         { if ( maTimer.IsActive() ) maTimer.Start(); }
 
-                    // Timer* kann auch NULL sein
+                    // Timer* can also be NULL
                     DECL_LINK(TimeoutHdl, void *);
 };
 
