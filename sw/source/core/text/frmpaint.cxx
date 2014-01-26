@@ -94,11 +94,20 @@ public:
 
 
 SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, SwViewShell *pVwSh,
-    const SwLineNumberInfo &rLnInf, const SwRect &rRct,
-    sal_Int16 eHor, bool bLnNm )
-    : aClip( pVwSh->GetWin() || pFrm->IsUndersized() ? pVwSh->GetOut() : 0 ),
-      aRect( rRct ), pTxtFrm( pFrm ), pSh( pVwSh ), pFnt( 0 ), rLineInf( rLnInf ),
-      nLineNr( 1L ), bLineNum( bLnNm )
+                                const SwLineNumberInfo &rLnInf, const SwRect &rRct,
+                                sal_Int16 eHor, bool bLnNm )
+    : aClip( pVwSh->GetWin() || pFrm->IsUndersized() ? pVwSh->GetOut() : 0 )
+    , aRect( rRct )
+    , pTxtFrm( pFrm )
+    , pSh( pVwSh )
+    , pFnt( 0 )
+    , rLineInf( rLnInf )
+    , nX(0)
+    , nRedX(0)
+    , nLineNr( 1L )
+    , nDivider(0)
+    , bGoLeft(false)
+    , bLineNum( bLnNm )
 {
     if( pFrm->IsUndersized() )
     {
@@ -108,14 +117,16 @@ SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, SwViewShell *pVwSh,
     }
     MSHORT nVirtPageNum = 0;
     if( bLineNum )
-        {/* Initializes the Members necessary for line numbering:
+    {
+        /* Initializes the Members necessary for line numbering:
 
             nDivider,   how often do we want a substring; 0 == never
             nX,         line number's x position
             pFnt,       line number's font
             nLineNr,    the first line number
             bLineNum is set back to sal_False if the numbering is completely
-            outside of the paint rect */
+            outside of the paint rect
+        */
         nDivider = !rLineInf.GetDivider().isEmpty() ? rLineInf.GetDividerCountBy() : 0;
         nX = pFrm->Frm().Left();
         SwCharFmt* pFmt = rLineInf.GetCharFmt( const_cast<IDocumentStylePoolAccess&>(*pFrm->GetNode()->getIDocumentStylePoolAccess()) );
