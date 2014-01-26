@@ -20,7 +20,7 @@
             </objects>
             <point key="canvasLocation" x="80" y="-992"/>
         </scene>
-        <!--Server List View Controller - LibreOffice Impress Contrôle Distant-->
+        <!--Server List View Controller - Contrôle distant Impress-->
         <scene sceneID="5">
             <objects>
                 <viewController id="2" customClass="ServerListViewController" sceneMemberID="viewController">
@@ -56,9 +56,7 @@
                             <outlet property="delegate" destination="2" id="owZ-Ow-VEc"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="yR1-m8-JWN">
-                        <string key="title">LibreOffice Impress
-Contrôle Distant</string>
+                    <navigationItem key="navigationItem" title="Contrôle distant Impress" id="yR1-m8-JWN">
                         <barButtonItem key="leftBarButtonItem" image="add.png" style="done" id="bHy-yX-SPg">
                             <connections>
                                 <segue destination="maT-Bx-l5y" kind="push" identifier="create_new_server" id="UYr-8d-fk5"/>
@@ -122,8 +120,8 @@ Contrôle Distant</string>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Veuillez entrer le code ci-dessus dans le fenêtre Impress - Slide Show - Impress Remote" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="upW-oF-qOa">
-                                <rect key="frame" x="29" y="419.00000034394714" width="271" height="65"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Veuillez saisir le code pin ci-dessus dans Impress - Diaporama - Contrôle à distance Impress" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="upW-oF-qOa">
+                                <rect key="frame" x="29" y="419.00000022462569" width="271" height="65"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
                                 <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="15"/>
                                 <color key="textColor" name="alternateSelectedControlColor" catalog="System" colorSpace="catalog"/>
@@ -209,7 +207,7 @@ Contrôle Distant</string>
                                 <rect key="frame" x="0.0" y="20" width="320" height="180"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                 <subviews>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Presentation Title" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3qH-vt-uVP">
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Titre de la présentation" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3qH-vt-uVP">
                                         <rect key="frame" x="20" y="20" width="280" height="140"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="24"/>
@@ -223,7 +221,7 @@ Contrôle Distant</string>
                                 <rect key="frame" x="101" y="392" width="118" height="45"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                                <state key="normal" title="Settings" backgroundImage="buttonBackground.png">
+                                <state key="normal" title="Paramètres" backgroundImage="buttonBackground.png">
                                     <color key="titleColor" red="1" green="0.50196078430000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -238,7 +236,7 @@ Contrôle Distant</string>
                                 <rect key="frame" x="77" y="328" width="166" height="47"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                                <state key="normal" title="Start Presentation" backgroundImage="buttonBackground.png">
+                                <state key="normal" title="Démarrer la présentation" backgroundImage="buttonBackground.png">
                                     <color key="titleColor" red="1" green="0.50196078430000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -463,7 +461,7 @@ Contrôle Distant</string>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="left" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3BV-KX-Qla">
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="left" text="Étiquette" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3BV-KX-Qla">
                                         <rect key="frame" x="3" y="154" width="52" height="21"/>
                                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         <rect key="contentStretch" x="1.3877787807814457e-17" y="0.0" width="1" height="1"/>
@@ -478,7 +476,7 @@ Contrôle Distant</string>
                                 <rect key="frame" x="-13" y="191" width="346" height="289"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="   Notes" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Y23-iV-GJx">
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="   Notes du présentateur" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Y23-iV-GJx">
                                         <rect key="frame" x="20" y="0.0" width="306" height="21"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="1" green="0.66274509803921566" blue="0.074509803921568626" alpha="1" colorSpace="calibratedRGB"/>
@@ -518,7 +516,7 @@ Contrôle Distant</string>
                                         <rect key="frame" x="20" y="14" width="93" height="67"/>
                                         <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="11"/>
                                         <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="-2"/>
-                                        <state key="normal" title="Previous" backgroundImage="released_previous_button.png">
+                                        <state key="normal" title="Précédent" backgroundImage="released_previous_button.png">
                                             <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -533,7 +531,7 @@ Contrôle Distant</string>
                                         <rect key="frame" x="207" y="14" width="93" height="67"/>
                                         <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="11"/>
                                         <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="-2"/>
-                                        <state key="normal" title="Next" backgroundImage="released_next_button.png">
+                                        <state key="normal" title="Suivant" backgroundImage="released_next_button.png">
                                             <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -549,7 +547,7 @@ Contrôle Distant</string>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="11"/>
                                         <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="-2"/>
-                                        <state key="normal" title="Button" backgroundImage="pointer.png">
+                                        <state key="normal" title="Pointeur" backgroundImage="pointer.png">
                                             <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
