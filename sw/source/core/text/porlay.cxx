@@ -750,20 +750,18 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         {
             while( nCntComp < CountCompChg() )
             {
-                if ( nChg > GetCompStart( nCntComp ) )
-                    nCntComp++;
-                else
+                if ( nChg <= GetCompStart( nCntComp ) )
                     break;
+                nCntComp++;
             }
         }
         if ( bAdjustBlock )
         {
             while( nCntKash < CountKashida() )
             {
-                if ( nChg > GetKashida( nCntKash ) )
-                    nCntKash++;
-                else
+                if ( nChg <= GetKashida( nCntKash ) )
                     break;
+                nCntKash++;
             }
         }
     }
@@ -888,10 +886,9 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
             while( com::sun::star::i18n::CTLScriptType::CTL_UNKNOWN == nCurrentScriptType || nScriptType == nCurrentScriptType )
             {
                 nNextCTLScriptStart = ScriptTypeDetector::endOfCTLScriptType( rTxt, nNextCTLScriptStart );
-                if( nNextCTLScriptStart < rTxt.getLength() && nNextCTLScriptStart < nChg )
-                    nCurrentScriptType = ScriptTypeDetector::getCTLScriptType( rTxt, nNextCTLScriptStart );
-                else
+                if( nNextCTLScriptStart >= rTxt.getLength() || nNextCTLScriptStart >= nChg )
                     break;
+                nCurrentScriptType = ScriptTypeDetector::getCTLScriptType( rTxt, nNextCTLScriptStart );
             }
             nChg = std::min( nChg, nNextCTLScriptStart );
         }
@@ -1698,27 +1695,24 @@ long SwScriptInfo::Compress( sal_Int32* pKernArray, sal_Int32 nIdx, sal_Int32 nL
             }
         }
 
-        if( nIdx < nLen )
-        {
-            sal_Int32 nTmpChg;
-            if( ++nCompIdx < nCompCount )
-            {
-                nTmpChg = GetCompStart( nCompIdx );
-                if( nTmpChg > nLen )
-                    nTmpChg = nLen;
-                nCompLen = GetCompLen( nCompIdx );
-            }
-            else
-                nTmpChg = nLen;
-            while( nIdx < nTmpChg )
-            {
-                nLast = pKernArray[ nI ];
-                pKernArray[ nI++ ] -= nSub;
-                ++nIdx;
-            }
-        }
-        else
+        if( nIdx >= nLen )
             break;
+
+        sal_Int32 nTmpChg = nLen;
+        if( ++nCompIdx < nCompCount )
+        {
+            nTmpChg = GetCompStart( nCompIdx );
+            if( nTmpChg > nLen )
+                nTmpChg = nLen;
+            nCompLen = GetCompLen( nCompIdx );
+        }
+
+        while( nIdx < nTmpChg )
+        {
+            nLast = pKernArray[ nI ];
+            pKernArray[ nI++ ] -= nSub;
+            ++nIdx;
+        }
     } while( nIdx < nLen );
     return nSub;
 }
@@ -2015,12 +2009,10 @@ bool SwScriptInfo::MarkKashidasInvalid(sal_Int32 nCnt, sal_Int32* pKashidaPositi
             continue;
         }
 
-        if ( pKashidaPositions [nKashidaPosIdx] == GetKashida( nCntKash ) && IsKashidaValid ( nCntKash ) )
-        {
-            MarkKashidaInvalid ( nCntKash );
-        }
-        else
+        if ( pKashidaPositions [nKashidaPosIdx] != GetKashida( nCntKash ) || !IsKashidaValid ( nCntKash ) )
             return false; // something is wrong
+
+        MarkKashidaInvalid ( nCntKash );
         nKashidaPosIdx++;
     }
     return true;
@@ -2075,9 +2067,9 @@ SwScriptInfo* SwScriptInfo::GetScriptInfo( const SwTxtNode& rTNd,
         pScriptInfo = (SwScriptInfo*)pLast->GetScriptInfo();
         if ( pScriptInfo )
         {
-            if ( !bAllowInvalid && COMPLETE_STRING != pScriptInfo->GetInvalidityA() )
-                pScriptInfo = 0;
-            else break;
+            if ( bAllowInvalid || COMPLETE_STRING == pScriptInfo->GetInvalidityA() )
+                break;
+            pScriptInfo = 0;
         }
     }
 
