@@ -2454,7 +2454,7 @@ void ScInterpreter::ScZTest()
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 2, 3 ) )
         return;
-    double sigma = 0.0, mue, x;
+    double sigma = 0.0, x;
     if (nParamCount == 3)
     {
         sigma = GetDouble();
@@ -2560,7 +2560,8 @@ void ScInterpreter::ScZTest()
         PushError( errDivisionByZero);
     else
     {
-        mue = fSum/rValCount;
+        double mue = fSum/rValCount;
+
         if (nParamCount != 3)
         {
             sigma = (fSumSqr - fSum*fSum/rValCount)/(rValCount-1.0);
@@ -4138,9 +4139,7 @@ void ScInterpreter::CalculatePearsonCovar( bool _bPearson, bool _bStexy, bool _b
     double fCount           = 0.0;
     double fSumX            = 0.0;
     double fSumY            = 0.0;
-    double fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
-    double fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
-    double fSumSqrDeltaY    = 0.0; // sum of (ValY-MeanY)^2
+
     for (SCSIZE i = 0; i < nC1; i++)
     {
         for (SCSIZE j = 0; j < nR1; j++)
@@ -4159,6 +4158,9 @@ void ScInterpreter::CalculatePearsonCovar( bool _bPearson, bool _bStexy, bool _b
         PushNoValue();
     else
     {
+        double fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
+        double fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
+        double fSumSqrDeltaY    = 0.0; // sum of (ValY-MeanY)^2
         const double fMeanX = fSumX / fCount;
         const double fMeanY = fSumY / fCount;
         for (SCSIZE i = 0; i < nC1; i++)
@@ -4247,8 +4249,7 @@ void ScInterpreter::CalculateSlopeIntercept(bool bSlope)
     double fCount           = 0.0;
     double fSumX            = 0.0;
     double fSumY            = 0.0;
-    double fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
-    double fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
+
     for (SCSIZE i = 0; i < nC1; i++)
     {
         for (SCSIZE j = 0; j < nR1; j++)
@@ -4267,6 +4268,8 @@ void ScInterpreter::CalculateSlopeIntercept(bool bSlope)
         PushNoValue();
     else
     {
+        double fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
+        double fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
         double fMeanX = fSumX / fCount;
         double fMeanY = fSumY / fCount;
         for (SCSIZE i = 0; i < nC1; i++)
@@ -4329,8 +4332,7 @@ void ScInterpreter::ScForecast()
     double fCount           = 0.0;
     double fSumX            = 0.0;
     double fSumY            = 0.0;
-    double fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
-    double fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
+
     for (SCSIZE i = 0; i < nC1; i++)
     {
         for (SCSIZE j = 0; j < nR1; j++)
@@ -4349,6 +4351,8 @@ void ScInterpreter::ScForecast()
         PushNoValue();
     else
     {
+        double fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
+        double fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
         double fMeanX = fSumX / fCount;
         double fMeanY = fSumY / fCount;
         for (SCSIZE i = 0; i < nC1; i++)
