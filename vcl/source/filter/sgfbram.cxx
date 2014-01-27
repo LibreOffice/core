@@ -172,7 +172,10 @@ private:
     sal_uInt16 Count;
     sal_uInt8   Data;
 public:
-                  PcxExpand() { Count=0; }
+    PcxExpand()
+        : Count(0)
+        , Data(0)
+    {}
     sal_uInt8 GetByte(SvStream& rInp);
 };
 
