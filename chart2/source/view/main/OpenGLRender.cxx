@@ -384,6 +384,11 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
     m_BackgroundVertexID = glGetAttribLocation(m_BackgroundProID, "vPosition");
     m_BackgroundColorID = glGetAttribLocation(m_BackgroundProID, "vColor");
 
+    m_SymbolProID = LoadShaders("symbolVertexShader", "symbolFragmentShader");
+    m_SymbolVertexID = glGetAttribLocation(m_SymbolProID, "vPosition");
+    m_SymbolMatrixID = glGetAttribLocation(m_SymbolProID, "MVP");
+    m_SymbolColorID = glGetAttribLocation(m_SymbolProID, "vColor");
+
     m_TextProID = LoadShaders("textVertexShader", "textFragmentShader");
     m_TextMatrixID = glGetUniformLocation(m_TextProID, "MVP");
     m_TextVertexID = glGetAttribLocation(m_TextProID, "vPosition");
@@ -1720,67 +1725,48 @@ int OpenGLRender::RenderPieSegment2DShape(float fSize, float fPosX, float fPosY)
     CHECK_GL_ERROR();
     return 0;
 }
-int OpenGLRender::SetSymbol2DShapePoint(float x, float y, int listLength)
-{
-    if (m_Symbol2DPointList.empty())
-    {
-        m_Symbol2DPointList.reserve(listLength);
-    }
-    float actualX = (x / OPENGL_SCALE_VALUE);
-    float actualY = (y / OPENGL_SCALE_VALUE);
-    m_Symbol2DPointList.push_back(actualX);
-    m_Symbol2DPointList.push_back(actualY);
-    m_Symbol2DPointList.push_back(m_fZStep);
-
-    if (m_Symbol2DPointList.size() == size_t(listLength * 3))
-    {
-        m_Symbol2DShapePointList.push_back(m_Symbol2DPointList);
-        m_Symbol2DPointList.clear();
-    }
-    return 0;
-}
-
-int OpenGLRender::RenderSymbol2DShape()
+int OpenGLRender::RenderSymbol2DShape(float x, float y, float width, float height, sal_Int32)
 {
     CHECK_GL_ERROR();
 
+    glDisable(GL_POINT_SMOOTH);
     glDisable(GL_MULTISAMPLE);
-    size_t listNum = m_Symbol2DShapePointList.size();
-    PosVecf3 trans = {0.0f, 0.0f, 0.0f};
+    glPointSize(10.f);
+    PosVecf3 trans = {x/OPENGL_SCALE_VALUE, y/OPENGL_SCALE_VALUE, m_fZStep};
     PosVecf3 angle = {0.0f, 0.0f, 0.0f};
-    PosVecf3 scale = {1.0f, 1.0f, 1.0f};
+    PosVecf3 scale = {width/OPENGL_SCALE_VALUE, height/OPENGL_SCALE_VALUE, 1.0f};
     MoveModelf(trans, angle, scale);
     m_MVP = m_Projection * m_View * m_Model;
-    for (size_t i = 0; i < listNum; ++i)
-    {
-        PointList &pointList = m_Symbol2DShapePointList.back();
-        //fill vertex buffer
-        glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
-        glBufferData(GL_ARRAY_BUFFER, pointList.size() * sizeof(float), &pointList[0], GL_STATIC_DRAW);
-        // Use our shader
-        glUseProgram(m_CommonProID);
 
-        glUniform4fv(m_2DColorID, 1, &m_2DColor[0]);
+    float aPos[3] = { 0.f, 0.f, 0.f };
+    //fill vertex buffer
+    glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(float), aPos, GL_STATIC_DRAW);
 
-        glUniformMatrix4fv(m_MatrixID, 1, GL_FALSE, &m_MVP[0][0]);
+    // Use our shader
+    glUseProgram(m_SymbolProID);
 
-        // 1rst attribute buffer : vertices
-        glEnableVertexAttribArray(m_2DVertexID);
-        glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
-        glVertexAttribPointer(
-            m_2DVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+    glUniform4fv(m_SymbolColorID, 1, &m_2DColor[0]);
+
+    glUniformMatrix4fv(m_SymbolMatrixID, 1, GL_FALSE, &m_MVP[0][0]);
+
+    // 1rst attribute buffer : vertices
+    glEnableVertexAttribArray(m_SymbolVertexID);
+    glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+    glVertexAttribPointer(
+            m_SymbolVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
             3,                  // size
             GL_FLOAT,           // type
             GL_FALSE,           // normalized?
             0,                  // stride
             (void*)0            // array buffer offset
             );
-        glDrawArrays(GL_POLYGON, 0, pointList.size() / 3); // 12*3 indices starting at 0 -> 12 triangles
-        glDisableVertexAttribArray(m_2DVertexID);
-        glUseProgram(0);
-        m_Symbol2DShapePointList.pop_back();
-    }
+    glDrawArrays(GL_POINTS, 0, 1); // 12*3 indices starting at 0 -> 12 triangles
+
+    glDisableVertexAttribArray(m_SymbolVertexID);
+    glUseProgram(0);
     glEnable(GL_MULTISAMPLE);
+    glEnable(GL_POINT_SMOOTH);
     m_fZStep += 0.01f;
 
     CHECK_GL_ERROR();

@@ -180,8 +180,7 @@ public:
     void GeneratePieSegment2D(double, double, double, double);
     int RenderPieSegment2DShape(float, float, float);
 
-    int SetSymbol2DShapePoint(float, float, int);
-    int RenderSymbol2DShape();
+    int RenderSymbol2DShape(float, float, float, float, sal_Int32);
 #if DEBUG_POSITIONING
     void renderDebug();
 #endif
@@ -305,6 +304,11 @@ private:
     std::list <PieSegment2DPointList> m_PieSegment2DShapePointList;
     PointList m_Symbol2DPointList;
     std::list<PointList> m_Symbol2DShapePointList;
+
+    GLuint m_SymbolProID;
+    GLuint m_SymbolVertexID;
+    GLuint m_SymbolMatrixID;
+    GLuint m_SymbolColorID;
 
 #if DEBUG_POSITIONING
     GLuint m_DebugProID;
