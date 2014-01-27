@@ -521,7 +521,7 @@ void SfxDispatchController_Impl::addParametersToArgs( const com::sun::star::util
             {
                 nParmIndex = 0;
                 aToken = aParamName;
-                aParamName = (nParmIndex!=-1) ? aToken.getToken( 0, ':', nParmIndex ) : OUString();
+                aParamName = aToken.getToken( 0, ':', nParmIndex );
                 aParamType = (nParmIndex!=-1) ? aToken.getToken( 0, ':', nParmIndex ) : OUString();
             }
 
