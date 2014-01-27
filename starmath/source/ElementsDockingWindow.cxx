@@ -203,11 +203,12 @@ const sal_uInt16 SmElementsControl::aOthers[][2] =
     {RID_DOTSUP, RID_DOTSUP_HELP}, {RID_DOTSDOWN, RID_DOTSDOWN_HELP}
 };
 
-SmElementsControl::SmElementsControl(Window *pParent, const ResId& rResId) :
-    Control(pParent, rResId),
-    mpDocShell(new SmDocShell(SFXOBJECTSHELL_STD_NORMAL)),
-    mpCurrentElement(NULL),
-    mbVerticalMode(true)
+SmElementsControl::SmElementsControl(Window *pParent, const ResId& rResId)
+    : Control(pParent, rResId)
+    , mpDocShell(new SmDocShell(SFXOBJECTSHELL_STD_NORMAL))
+    , maCurrentSetId(0)
+    , mpCurrentElement(NULL)
+    , mbVerticalMode(true)
 {
     maFormat.SetBaseSize(PixelToLogic(Size(0, 24)));
 }
