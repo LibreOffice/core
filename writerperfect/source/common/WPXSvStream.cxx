@@ -714,11 +714,12 @@ void WPXSvInputStreamImpl::invalidateReadBuffer()
 
 WPXInputStream *WPXSvInputStreamImpl::createWPXStream(const SotStorageStreamRef &rxStorage)
 {
-    Reference < XInputStream > xContents(new utl::OSeekableInputStreamWrapper( rxStorage ));
-    if (xContents.is())
+    if (rxStorage.Is())
+    {
+        Reference < XInputStream > xContents(new utl::OSeekableInputStreamWrapper( rxStorage ));
         return new WPXSvInputStream( xContents );
-    else
-        return 0;
+    }
+    return 0;
 }
 
 WPXInputStream *WPXSvInputStreamImpl::createWPXStream(const Reference<XInputStream> &rxStream)
