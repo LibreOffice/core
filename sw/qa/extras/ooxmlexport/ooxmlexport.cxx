@@ -2624,6 +2624,15 @@ DECLARE_OOXMLEXPORT_TEST(testFdo73556,"fdo73556.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3751), tableWidth);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO74106, "FDO74106.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/numbering.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:numFmt", "val","hebrew1");
+}
+
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
