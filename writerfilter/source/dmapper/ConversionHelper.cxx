@@ -377,6 +377,10 @@ sal_Int16 ConvertNumberingType(sal_Int32 nFmt)
         case NS_ooxml::LN_Value_ST_NumberFormat_chineseLegalSimplified:
             nRet = style::NumberingType::NUMBER_UPPER_ZH;
             break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_hebrew1:
+            //91726
+            nRet = style::NumberingType::CHARS_HEBREW;
+            break;
         default: nRet = style::NumberingType::ARABIC;
     }
 /*  TODO: Lots of additional values are available - some are supported in the I18 framework
@@ -402,7 +406,6 @@ sal_Int16 ConvertNumberingType(sal_Int32 nFmt)
     NS_ooxml::LN_Value_ST_NumberFormat_vietnameseCounting = 91721;
     NS_ooxml::LN_Value_ST_NumberFormat_numberInDash = 91725;
     NS_ooxml::LN_Value_ST_NumberFormat_arabicAbjad:
-    NS_ooxml::LN_Value_ST_NumberFormat_hebrew1 = 91726;
     NS_ooxml::LN_Value_ST_NumberFormat_hindiConsonants = 91731;
     NS_ooxml::LN_Value_ST_NumberFormat_hindiNumbers = 91732;
     NS_ooxml::LN_Value_ST_NumberFormat_hindiCounting = 91733;

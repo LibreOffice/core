@@ -2995,6 +2995,14 @@ DECLARE_OOXMLEXPORT_TEST(testFdo73541,"fdo73541.docx")
     assertXPath(pXmlDoc, "/w:settings/w:mirrorMargins");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO74106, "FDO74106.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/numbering.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:numFmt", "val","hebrew1");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

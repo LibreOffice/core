@@ -3870,6 +3870,7 @@ static OString impl_NumberingType( sal_uInt16 nNumberingType )
 
         case SVX_NUM_BITMAP:
         case SVX_NUM_CHAR_SPECIAL:          aType = "bullet";      break;
+        case style::NumberingType::CHARS_HEBREW: aType = "hebrew1"; break;
 
         default:                            aType = "none";        break;
     }
