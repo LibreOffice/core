@@ -1814,11 +1814,11 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
         {
             aValues.realloc( aValues.getLength() + 1 );
             pValues = aValues.getArray();
-            rValue = pValues[aValues.getLength() - 1];
-            rValue.Name = OUString("FieldType");
-            rValue.Value <<= strTypeName.toAsciiLowerCase();
-            rValue.Handle = -1;
-            rValue.State = PropertyState_DIRECT_VALUE;
+            PropertyValue& rValueFT = pValues[aValues.getLength() - 1];
+            rValueFT.Name = OUString("FieldType");
+            rValueFT.Value <<= strTypeName.toAsciiLowerCase();
+            rValueFT.Handle = -1;
+            rValueFT.State = PropertyState_DIRECT_VALUE;
         }
 
         //sort property values
@@ -2241,9 +2241,6 @@ void SwAccessibleParagraph::_getSupplementalAttributesImpl(
 
     tAccParaPropValMap aSupplementalAttrSeq;
     {
-//        const SfxItemPropertySet& rPropSet =
-//                    aSwMapProvider.GetPropertyMap( PROPERTY_MAP_ACCESSIBILITY_TEXT_ATTRIBUTE );
-//        const SfxItemPropertyMap* pPropMap( rPropSet.getPropertyMap() );
         const SfxItemPropertyMapEntry* pPropMap(
                 aSwMapProvider.GetPropertyMapEntries( PROPERTY_MAP_ACCESSIBILITY_TEXT_ATTRIBUTE ) );
         while ( !pPropMap->aName.isEmpty() )
@@ -3278,14 +3275,6 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkCount()
     while( aIter.next() )
         nCount++;
 
-    /* Can't fin the function "GetTOCFirstWordEndIndex" declaration in sym2.0 (Added by yanjun)
-    if( GetTOXSortTabBase()  )
-    {
-        SwTxtNode* pNode = const_cast<SwTxtNode*>(GetTxtNode());
-        if(pNode && pNode->GetTOCFirstWordEndIndex() > 0)
-            nCount++;
-    }
-    */
     return nCount;
 }
 
@@ -4096,45 +4085,6 @@ sal_Int16 SAL_CALL SwAccessibleParagraph::getAccessibleRole (void) throw (::com:
     }
 }
 
-// End Add
-
-
-/* This funcion is already defined in accpara.cxx(Added by yanjun)
-sal_Int32 SAL_CALL SwAccessibleParagraph::getBackground()
-        throw (::com::sun::star::uno::RuntimeException)
-{
-// Test Code
-//     Sequence<OUString> seNames(1);
-//     OUString* pStrings = seNames.getArray();
-//  pStrings[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("ParaBackColor"));
-//
-//     Sequence<Any> aAnys(1);
-//  Reference<XMultiPropertySet> xPortion = CreateUnoPortion( 0, 0 );
-//     aAnys = xPortion->getPropertyValues( seNames );
-//  const Any* pAnys = aAnys.getConstArray();
-//
-//  sal_uInt32 crColorT=0;
-//  pAnys[0] >>= crColorT;
-// End Test Code
-
-    const SvxBrushItem &rBack = GetFrm()->GetAttrSet()->GetBackground();
-    sal_uInt32 crBack = rBack.GetColor().GetColor();
-
-    if (COL_AUTO == crBack)
-    {
-        Reference<XAccessible> xAccDoc = getAccessibleParent();
-        if (xAccDoc.is())
-        {
-            Reference<XAccessibleComponent> xCompoentDoc(xAccDoc,UNO_QUERY);
-            if (xCompoentDoc.is())
-            {
-                crBack = (sal_uInt32)xCompoentDoc->getBackground();
-            }
-        }
-    }
-    return crBack;
-}
-*/
 
 //Get the real heading level, Heading1 ~ Heading10
 sal_Int32 SwAccessibleParagraph::GetRealHeadingLevel()
@@ -4145,8 +4095,7 @@ sal_Int32 SwAccessibleParagraph::GetRealHeadingLevel()
     OUString sValue;
     if (styleAny >>= sValue)
     {
-        //Modified by yanjun for acc migration
-        sal_Int32 length = sValue.getLength/*GetCharCount*/();
+        sal_Int32 length = sValue.getLength();
         if (length == 9 || length == 10)
         {
             OUString headStr = sValue.copy(0, 7);
