@@ -1193,7 +1193,8 @@ public:
                                       std::exception);
     virtual void SAL_CALL   showLevel( sal_Int16 nLevel,
                                 ::com::sun::star::table::TableOrientation nOrientation )
-                                    throw(::com::sun::star::uno::RuntimeException);
+                                    throw(::com::sun::star::uno::RuntimeException,
+                                          std::exception);
 
                             // XProtectable
     virtual void SAL_CALL   protect( const OUString& aPassword )

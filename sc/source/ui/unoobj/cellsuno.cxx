@@ -7949,7 +7949,7 @@ void SAL_CALL ScTableSheetObj::showDetail( const table::CellRangeAddress& rCellR
 }
 
 void SAL_CALL ScTableSheetObj::showLevel( sal_Int16 nLevel, table::TableOrientation nOrientation )
-                                            throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
