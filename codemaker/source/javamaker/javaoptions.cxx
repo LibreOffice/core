@@ -51,9 +51,6 @@ sal_Bool JavaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
         }
 
         i = 1;
-    } else
-    {
-        i = 0;
     }
 
     char    *s=NULL;
@@ -219,19 +216,7 @@ sal_Bool JavaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                 }
             } else
             {
-                if (bCmdFile)
-                {
-                    m_inputFiles.push_back(av[i]);
-                } else
-                {
-                    OUString system_filepath;
-                    if (osl_getCommandArg( i-1, &system_filepath.pData )
-                        != osl_Process_E_None)
-                    {
-                        OSL_ASSERT(false);
-                    }
-                    m_inputFiles.push_back(OUStringToOString(system_filepath, osl_getThreadTextEncoding()));
-                }
+                m_inputFiles.push_back(av[i]);
             }
         }
     }
