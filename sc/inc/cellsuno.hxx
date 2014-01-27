@@ -426,7 +426,8 @@ public:
                             // XFormulaQuery
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSheetCellRanges > SAL_CALL
                             queryDependents( sal_Bool bRecursive )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException,
+                                      std::exception);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSheetCellRanges > SAL_CALL
                             queryPrecedents( sal_Bool bRecursive )
                                 throw(::com::sun::star::uno::RuntimeException,
