@@ -259,7 +259,8 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getNumberFormatKeyByIndex( ::sal_Int32 nIndex )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
-               ::com::sun::star::uno::RuntimeException);
+               ::com::sun::star::uno::RuntimeException,
+               std::exception);
 
     // XNumericalDataSequence
     virtual ::com::sun::star::uno::Sequence< double >

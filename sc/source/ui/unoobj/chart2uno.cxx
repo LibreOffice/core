@@ -3250,8 +3250,7 @@ sal_uLong getDisplayNumberFormat(ScDocument* pDoc, const ScAddress& rPos)
 }
 
 ::sal_Int32 SAL_CALL ScChart2DataSequence::getNumberFormatKeyByIndex( ::sal_Int32 nIndex )
-    throw (lang::IndexOutOfBoundsException,
-           uno::RuntimeException)
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     // index -1 means a heuristic value for the entire sequence
     bool bGetSeriesFormat = (nIndex == -1);
