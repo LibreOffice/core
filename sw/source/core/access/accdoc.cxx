@@ -784,63 +784,57 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
 
         sValue += ";";
 
-        if(pCurrFrm!=NULL)
+        SwSectionFrm* pCurrSctFrm=((SwFrm*)pCurrFrm)->FindSctFrm();
+        if(pCurrSctFrm!=NULL && pCurrSctFrm->GetSection()!=NULL )
         {
-            SwSectionFrm* pCurrSctFrm=((SwFrm*)pCurrFrm)->FindSctFrm();
-            if(pCurrSctFrm!=NULL && pCurrSctFrm->GetSection()!=NULL )
+            sAttrName = "section-name:";
+
+            sValue += sAttrName;
+            OUString sectionName = pCurrSctFrm->GetSection()->GetSectionName();
+
+            sectionName = sectionName.replaceFirst( "\\" , "\\\\" );
+            sectionName = sectionName.replaceFirst( "=" , "\\=" );
+            sectionName = sectionName.replaceFirst( ";" , "\\;" );
+            sectionName = sectionName.replaceFirst( "," , "\\," );
+            sectionName = sectionName.replaceFirst( ":" , "\\:" );
+
+            sValue += sectionName;
+
+            sValue += ";";
+
+            //section-columns-number
+            sAttrName = "section-columns-number:";
+
+            nCurrCol = 1;
+
+            if(pCurrCol!=NULL)
             {
-                sAttrName = "section-name:";
-
-                sValue += sAttrName;
-                OUString sectionName = pCurrSctFrm->GetSection()->GetSectionName();
-
-                sectionName = sectionName.replaceFirst( "\\" , "\\\\" );
-                sectionName = sectionName.replaceFirst( "=" , "\\=" );
-                sectionName = sectionName.replaceFirst( ";" , "\\;" );
-                sectionName = sectionName.replaceFirst( "," , "\\," );
-                sectionName = sectionName.replaceFirst( ":" , "\\:" );
-
-                sValue += sectionName;
-
-                sValue += ";";
-
-                //section-columns-number
+                SwLayoutFrm* pParent = pCurrCol->GetUpper();
+                if(pParent!=NULL)
                 {
-                sAttrName = "section-columns-number:";
-
-                nCurrCol = 1;
-
-                if(pCurrCol!=NULL)
-                {
-                    SwLayoutFrm* pParent = pCurrCol->GetUpper();
-                    if(pParent!=NULL)
+                    SwFrm* pCol = pParent->Lower();
+                    while(pCol&&(pCol!=pCurrCol))
                     {
-                        SwFrm* pCol = pParent->Lower();
-                        while(pCol&&(pCol!=pCurrCol))
-                        {
-                            pCol = pCol->GetNext();
-                            nCurrCol +=1;
-                        }
+                        pCol = pCol->GetNext();
+                        nCurrCol +=1;
                     }
                 }
-                sValue += sAttrName;
-                sValue += OUString::number( nCurrCol ) ;
-                sValue += ";";
-                }
-
-                //section-total-columns
-                {
-                sAttrName = "section-total-columns:";
-                const SwFmtCol &rFmtSctCol=pCurrSctFrm->GetAttrSet()->GetCol();
-                sal_uInt16 nSctColCount=rFmtSctCol.GetNumCols();
-                nSctColCount = nSctColCount>0?nSctColCount:1;
-                sValue += sAttrName;
-                sValue += OUString::number( nSctColCount ) ;
-
-                sValue += ";";
-                }
             }
+            sValue += sAttrName;
+            sValue += OUString::number( nCurrCol ) ;
+            sValue += ";";
+
+            //section-total-columns
+            sAttrName = "section-total-columns:";
+            const SwFmtCol &rFmtSctCol=pCurrSctFrm->GetAttrSet()->GetCol();
+            sal_uInt16 nSctColCount=rFmtSctCol.GetNumCols();
+            nSctColCount = nSctColCount>0?nSctColCount:1;
+            sValue += sAttrName;
+            sValue += OUString::number( nSctColCount ) ;
+
+            sValue += ";";
         }
+
         anyAtrribute <<= sValue;
     }
     return anyAtrribute;
