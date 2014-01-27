@@ -8888,9 +8888,8 @@ void ScTableColumnObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
     }
 }
 
-void ScTableColumnObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
-                                            uno::Any& rAny )
-                                                throw(uno::RuntimeException)
+void ScTableColumnObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry, uno::Any& rAny )
+    throw(uno::RuntimeException, std::exception)
 {
     if ( pEntry )
     {
