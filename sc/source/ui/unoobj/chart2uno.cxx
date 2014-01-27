@@ -3023,7 +3023,7 @@ uno::Sequence< uno::Any> SAL_CALL ScChart2DataSequence::getData()
 // XNumericalDataSequence --------------------------------------------------
 
 uno::Sequence< double > SAL_CALL ScChart2DataSequence::getNumericalData()
-            throw ( uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( !m_pDocument)

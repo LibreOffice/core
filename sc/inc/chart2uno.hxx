@@ -264,7 +264,9 @@ public:
 
     // XNumericalDataSequence
     virtual ::com::sun::star::uno::Sequence< double >
-        SAL_CALL getNumericalData(  ) throw (::com::sun::star::uno::RuntimeException);
+        SAL_CALL getNumericalData()
+            throw (::com::sun::star::uno::RuntimeException,
+                   std::exception);
 
     // XTextualDataSequence
     virtual ::com::sun::star::uno::Sequence< OUString >
