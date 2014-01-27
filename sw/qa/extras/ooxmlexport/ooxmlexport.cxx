@@ -2698,6 +2698,17 @@ DECLARE_OOXMLEXPORT_TEST(testLineStyle_DashType, "LineStyle_DashType.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash", "val", "dash");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testDMLSolidfillAlpha, "dml-solidfill-alpha.docx")
+{
+    // Problem was that the transparency was not exported (a:alpha).
+    // RGB color (a:srgbClr)
+    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(70), getProperty<sal_Int16>(xShape, "FillTransparence"));
+
+    // Theme color (a:schemeClr)
+    xShape.set(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(20), getProperty<sal_Int16>(xShape, "FillTransparence"));
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

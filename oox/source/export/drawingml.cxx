@@ -22,6 +22,7 @@
 #include "oox/export/utils.hxx"
 #include <oox/drawingml/color.hxx>
 #include <oox/token/tokens.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 
 #include <cstdio>
 #include <com/sun/star/awt/CharSet.hpp>
@@ -149,7 +150,7 @@ bool DrawingML::GetPropertyAndState( Reference< XPropertySet > rXPropSet, Refere
     return bRetValue;
 }
 
-void DrawingML::WriteColor( sal_uInt32 nColor )
+void DrawingML::WriteColor( sal_uInt32 nColor, sal_Int32 nAlpha )
 {
     OString sColor = OString::number(  nColor, 16 );
     if( sColor.getLength() < 6 ) {
@@ -165,22 +166,43 @@ void DrawingML::WriteColor( sal_uInt32 nColor )
 
         sColor = sBuf.getStr();
     }
-    mpFS->singleElementNS( XML_a, XML_srgbClr, XML_val, sColor.getStr(), FSEND );
+    if( nAlpha )
+    {
+        mpFS->startElementNS( XML_a, XML_srgbClr, XML_val, sColor.getStr(), FSEND );
+        mpFS->singleElementNS( XML_a, XML_alpha, XML_val, OString::number(nAlpha), FSEND );
+        mpFS->endElementNS( XML_a, XML_srgbClr );
+
+    }
+    else
+    {
+        mpFS->singleElementNS( XML_a, XML_srgbClr, XML_val, sColor.getStr(), FSEND );
+    }
 }
 
-void DrawingML::WriteSolidFill( sal_uInt32 nColor )
+void DrawingML::WriteSolidFill( sal_uInt32 nColor, sal_Int32 nAlpha )
 {
     mpFS->startElementNS( XML_a, XML_solidFill, FSEND );
-    WriteColor( nColor );
+    WriteColor( nColor, nAlpha );
     mpFS->endElementNS( XML_a, XML_solidFill );
 }
 
-void DrawingML::WriteSolidFill( OUString sSchemeName )
+void DrawingML::WriteSolidFill( OUString sSchemeName, sal_Int32 nAlpha )
 {
     mpFS->startElementNS( XML_a, XML_solidFill, FSEND );
-    mpFS->singleElementNS( XML_a, XML_schemeClr, XML_val,
-                           OUStringToOString( sSchemeName, RTL_TEXTENCODING_ASCII_US ).getStr(),
-                           FSEND );
+    if( nAlpha )
+    {
+        mpFS->startElementNS( XML_a, XML_schemeClr, XML_val,
+            OUStringToOString( sSchemeName, RTL_TEXTENCODING_ASCII_US ).getStr(),
+            FSEND );
+        mpFS->singleElementNS( XML_a, XML_alpha, XML_val, OString::number(nAlpha), FSEND );
+        mpFS->endElementNS( XML_a, XML_schemeClr );
+    }
+    else
+    {
+        mpFS->singleElementNS( XML_a, XML_schemeClr, XML_val,
+            OUStringToOString( sSchemeName, RTL_TEXTENCODING_ASCII_US ).getStr(),
+            FSEND );
+    }
     mpFS->endElementNS( XML_a, XML_solidFill );
 }
 
@@ -209,13 +231,22 @@ void DrawingML::WriteSolidFill( Reference< XPropertySet > rXPropSet )
                 aGrabBag[i].Value >>= aStyleProperties;
     }
 
+    sal_Int32 nAlpha = 0;
+    if( GetProperty( rXPropSet, "FillTransparence" ) )
+    {
+        sal_Int32 nTransparency;
+        rXPropSet->getPropertyValue( "FillTransparence" ) >>= nTransparency;
+        // Calculate alpha value (see oox/source/drawingml/color.cxx : getTransparency())
+        nAlpha = (MAX_PERCENT - ( PER_PERCENT * nTransparency ) );
+    }
+
     // write XML
     if ( nFillColor != nOriginalColor )
         // the user has set a different color for the shape
-        WriteSolidFill( nFillColor & 0xffffff );
+        WriteSolidFill( nFillColor & 0xffffff, nAlpha );
     else if ( !sColorFillScheme.isEmpty() )
         // the shape had a scheme color and the user didn't change it
-        WriteSolidFill( sColorFillScheme );
+        WriteSolidFill( sColorFillScheme, nAlpha );
     else if ( aStyleProperties.hasElements() )
     {
         sal_uInt32 nThemeColor = 0;
@@ -227,13 +258,13 @@ void DrawingML::WriteSolidFill( Reference< XPropertySet > rXPropSet )
             }
         if ( nFillColor != nThemeColor )
             // the shape contains a theme but it wasn't being used
-            WriteSolidFill( nFillColor & 0xffffff );
+            WriteSolidFill( nFillColor & 0xffffff, nAlpha );
         // in case the shape used the style color and the user didn't change it,
         // we must not write a <a: solidFill> tag.
     }
     else
         // the shape had a custom color and the user didn't change it
-        WriteSolidFill( nFillColor & 0xffffff );
+        WriteSolidFill( nFillColor & 0xffffff, nAlpha );
 }
 
 void DrawingML::WriteGradientStop( sal_uInt16 nStop, sal_uInt32 nColor )
