@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_25b666dd",
+        "filename": "vcl/inc/idlemgr.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-01-27T00:05:10Z",
+      "side": 1,
+      "message": "No need for this. Please put the struct into an anonymous namespace and leave it in the cxx file.",
+      "revId": "20a168bc360dccdb6b9d4fdeaee37d599eda6170",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_45bb6ac4",
+        "filename": "vcl/source/app/idlemgr.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-01-27T00:05:10Z",
+      "side": 1,
+      "message": "Put it into an anonymous namespace instead of the class scope.",
+      "revId": "20a168bc360dccdb6b9d4fdeaee37d599eda6170",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_85b552cf",
+        "filename": "vcl/source/app/idlemgr.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-01-27T00:05:10Z",
+      "side": 1,
+      "message": "After line 69 iter is guaranteed to be mpIdleList-\u003eend(). So accessing it is obviously invalid. You missed the whole part of the second if in the loop for the new patch.\nAdditionally your code is creating an unnecessary copy.",
+      "revId": "20a168bc360dccdb6b9d4fdeaee37d599eda6170",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
