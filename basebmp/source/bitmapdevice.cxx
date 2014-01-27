@@ -1462,8 +1462,16 @@ namespace
                        const ::basegfx::B2IBox& rSourceBounds )
     {
         // extract inherent scale
-        const double nScaleX( io_rDestArea.getWidth() / (double)io_rSourceArea.getWidth() );
-        const double nScaleY( io_rDestArea.getHeight() / (double)io_rSourceArea.getHeight() );
+        double fWidth = io_rSourceArea.getWidth();
+        if (fWidth == 0.0)
+            return false;
+
+        double fHeight = io_rSourceArea.getHeight();
+        if (fHeight == 0.0)
+            return false;
+
+        const double nScaleX( io_rDestArea.getWidth() / fWidth );
+        const double nScaleY( io_rDestArea.getHeight() / fHeight );
 
         // extract range origins
         const basegfx::B2IPoint   aDestTopLeft(
