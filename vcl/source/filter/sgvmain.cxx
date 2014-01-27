@@ -935,7 +935,6 @@ bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath )
     SgfHeader   aHead;
     SgfEntry    aEntr;
     sal_uLong   nNext;
-    bool        bRdFlag=false;     // graphic entry read ?
     bool        bRet=false;        // return value
 
     aIniPath.Append(OUString("sgf.ini"));
@@ -947,7 +946,7 @@ bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath )
     rInp>>aHead;
     if (aHead.ChkMagic() && aHead.Typ==SgfStarDraw && aHead.Version==SGV_VERSION) {
         nNext=aHead.GetOffset();
-        while (nNext && !bRdFlag && !rInp.GetError()) {
+        while (nNext && !rInp.GetError()) {
             rInp.Seek(nFileStart+nNext);
             rInp>>aEntr;
             nNext=aEntr.GetOffset();
@@ -955,9 +954,6 @@ bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath )
                 bRet=SgfFilterSDrw( rInp,aHead,aEntr,rMtf );
             }
         } // while(nNext)
-        if (bRdFlag) {
-            if (!rInp.GetError()) bRet=true;  // seems ok
-        }
     }
     delete pSgfFonts;
     return(bRet);
