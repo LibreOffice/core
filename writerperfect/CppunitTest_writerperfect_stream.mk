@@ -34,6 +34,7 @@ $(eval $(call gb_CppunitTest_use_libraries,writerperfect_stream,\
 	sot \
 	test \
 	tl \
+	unotest \
 	utl \
 ))
 
@@ -45,6 +46,8 @@ $(eval $(call gb_CppunitTest_use_configuration,writerperfect_stream))
 
 $(eval $(call gb_CppunitTest_use_components,writerperfect_stream,\
 	configmgr/source/configmgr \
+	i18npool/util/i18npool \
+	package/util/package2 \
 	ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
 ))
