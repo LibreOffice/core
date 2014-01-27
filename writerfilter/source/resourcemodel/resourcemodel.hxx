@@ -20,37 +20,6 @@
 
 namespace writerfilter {
 class WW8TableManager;
-class WW8StreamHandler : public Stream
-{
-    int mnUTextCount;
-    WW8TableManager* mpTableManager;
-
-public:
-    WW8StreamHandler();
-    virtual ~WW8StreamHandler();
-
-    virtual void startSectionGroup();
-    virtual void endSectionGroup();
-    virtual void startParagraphGroup();
-    virtual void endParagraphGroup();
-    virtual void startCharacterGroup();
-    virtual void endCharacterGroup();
-    virtual void text(const sal_uInt8 * data, size_t len);
-    virtual void utext(const sal_uInt8 * data, size_t len);
-    virtual void positivePercentage(const OUString& /*rText*/) { }
-
-    virtual void props(writerfilter::Reference<Properties>::Pointer_t ref);
-    virtual void table(Id name,
-                       writerfilter::Reference<Table>::Pointer_t ref);
-
-    virtual void startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
-    virtual void endShape( );
-
-    virtual void substream(Id name, writerfilter::Reference<Stream>::Pointer_t ref);
-
-    virtual void info(const string & info);
-};
-
 class WW8BinaryObjHandler : public BinaryObj
 {
 public:
