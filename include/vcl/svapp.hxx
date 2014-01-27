@@ -794,7 +794,23 @@ public:
     */
     static void                 RemoveMouseAndKeyEvents( Window *pWin );
 
+    /** Post a user event to the default window.
+
+     @param     rLink           Link to event callback function
+     @param     pCaller         Pointer to data sent to the event by the caller. Optional.
+
+     @return the event ID used to post the event.
+    */
     static sal_uLong            PostUserEvent( const Link& rLink, void* pCaller = NULL );
+
+    /** Post a user event to the default window.
+
+     @param     rEventID        Reference to event ID to be posted
+     @param     rLink           Link to event callback function
+     @param     pCaller         Pointer to data sent to teh event by the caller. Optional.
+
+     @return true if there is a default window and the event could be posted to it successfully.
+    */
     static sal_Bool             PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller = NULL );
     static void                 RemoveUserEvent( sal_uLong nUserEvent );
 
