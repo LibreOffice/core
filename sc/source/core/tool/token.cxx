@@ -3162,36 +3162,35 @@ void checkBounds(
         // No intersections.
         return;
 
-    if (aAbs.aEnd.Row() <= rCxt.maRange.aEnd.Row())
+    if (aAbs.aStart.Row() <= rCxt.maRange.aStart.Row())
     {
         //    +-+ <---- top
         //    | |
         // +--+-+--+ <---- boundary row position
         // |  | |  |
-        // |  +-+  |
+        // |       |
         // +-------+
 
         // Add offset from the reference top to the cell position.
         SCROW nOffset = rCxt.maRange.aStart.Row() - aAbs.aStart.Row();
         rBounds.push_back(rPos.Row()+nOffset);
-        return;
     }
 
-    //    +-+ <---- top
-    //    | |
-    // +--+-+--+ <---- boundary row position
-    // |  | |  |
-    // |  | |  |
-    // +--+-+--+ <---- boundary row position
-    //    | |
-    //    +-+
+    if (aAbs.aEnd.Row() >= rCxt.maRange.aEnd.Row())
+    {
+        // only check for end range
 
-    // Add offset from the reference top to the cell position.
-    SCROW nOffset = rCxt.maRange.aStart.Row() - aAbs.aStart.Row();
-    rBounds.push_back(rPos.Row()+nOffset);
-    // Ditto.
-    nOffset = rCxt.maRange.aEnd.Row() + 1 - aAbs.aStart.Row();
-    rBounds.push_back(rPos.Row()+nOffset);
+        // +-------+
+        // |       |
+        // |  | |  |
+        // +--+-+--+ <---- boundary row position
+        //    | |
+        //    +-+
+
+        // Ditto.
+        SCROW nOffset = rCxt.maRange.aEnd.Row() + 1 - aAbs.aStart.Row();
+        rBounds.push_back(rPos.Row()+nOffset);
+    }
 }
 
 }
