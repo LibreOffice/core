@@ -149,7 +149,8 @@ throw(RuntimeException)
         return bShowing;
     }
     // -----------------------------------------------------------------------------
-    Rectangle AccessibleIconChoiceCtrlEntry::GetBoundingBox() throw ( lang::DisposedException )
+    Rectangle AccessibleIconChoiceCtrlEntry::GetBoundingBox()
+        throw (lang::DisposedException, uno::RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -158,7 +159,8 @@ throw(RuntimeException)
         return GetBoundingBox_Impl();
     }
     // -----------------------------------------------------------------------------
-    Rectangle AccessibleIconChoiceCtrlEntry::GetBoundingBoxOnScreen() throw ( lang::DisposedException )
+    Rectangle AccessibleIconChoiceCtrlEntry::GetBoundingBoxOnScreen()
+        throw (lang::DisposedException, uno::RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );

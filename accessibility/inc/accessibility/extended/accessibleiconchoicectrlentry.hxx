@@ -79,8 +79,12 @@ namespace accessibility
         sal_Bool                IsAlive_Impl() const;
         sal_Bool                IsShowing_Impl() const;
 
-        Rectangle               GetBoundingBox() throw ( ::com::sun::star::lang::DisposedException );
-        Rectangle               GetBoundingBoxOnScreen() throw ( ::com::sun::star::lang::DisposedException );
+        Rectangle               GetBoundingBox()
+            throw (css::lang::DisposedException,
+                   css::uno::RuntimeException);
+        Rectangle               GetBoundingBoxOnScreen()
+            throw (css::lang::DisposedException,
+                   css::uno::RuntimeException);
         void                    EnsureIsAlive() const throw ( ::com::sun::star::lang::DisposedException );
 
     protected:
