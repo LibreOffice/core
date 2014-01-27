@@ -141,12 +141,10 @@ private:
 };
 
 /**
- @brief Abstract base class used for the LibreOffice Desktop class.
-
- Abstract base class used for the LibreOffice Desktop class.
+ @brief Abstract base class used mainly for the LibreOffice Desktop class.
 
  The Application class is an abstract class with one pure virtual
- function: @Main. The main class that is subclassed is the Desktop
+ function: Main(). The main class that is subclassed is the Desktop
  class, however there are a \em lot of static functions that are
  vital for applications. It is really meant to be subclassed to
  provide a global singleton, and heavily relies on a single data
@@ -167,15 +165,19 @@ public:
         DIALOG_CANCEL_FATAL     ///< cancel any dialogs by std::abort
     };
 
-    /**
-    Default constructor for Application class.
+    /** @name Initialization
+        The following functions perform initialization and deinitialization
+        of the application.
+    */
+    ///@{
+
+    /** Default constructor for Application class.
 
     Initializes the LibreOffice global instance data structure if needed,
     and then sets itself to be the Application class. Also initializes any
     platform specific data structures.
 
-    @attention The initialization of the application itself is done in
-            @Init
+    @attention The initialization of the application itself is done in Init()
 
     @see    InitSalData is implemented by platform specific code.
             ImplInitSVData initializes the global instance data
@@ -184,8 +186,8 @@ public:
 
     /** Virtual destructor for Application class.
 
-    Deinitializes the LibreOffice global instance data structure, then
-    deinitializes any platform specific data structures.
+     Deinitializes the LibreOffice global instance data structure, then
+     deinitializes any platform specific data structures.
 
      @see   ImplDeInitSVData deinitializes the global instance data,
             DeInitSalData is implemented by platform specific code
@@ -199,13 +201,13 @@ public:
      implement an application.
 
      The Main() function does not pass in command line parameters,
-     you must use the functions @GetCommandLineParamCount() and
-     @GetCommandLineParam to get these values as these are platform
-     independent ways of getting the command line (use @GetAppFileName
+     you must use the functions GetCommandLineParamCount() and
+     GetCommandLineParam() to get these values as these are platform
+     independent ways of getting the command line (use GetAppFileName()
      to get the invoked executable filename).
 
      Once in this function, you create windows, etc. then call on
-     @Execute to start the application's main event loop.
+     Execute() to start the application's main event loop.
 
      An example code snippet follows (it won't compile, this just gives the
      general flavour of the framework and is adapted from an old HelloWorld
@@ -245,55 +247,12 @@ public:
 
     Some examples in the source tree can be found here:
 
-    \example vcl\workben\svdem.cxx
+    vcl/workben/svdem.cxx
+
     This is an example of how to use the Application and WorkWindow. Unfortunately, it
     no longer compiles.
 
-    \example vcl\fpicker\test\svdem.cxx
-    */
-
-    virtual int                 Main() = 0;
-
-    /** Exit from the application
-
-     @returns true if exited successfully, false if not able to fully exit
-    */
-    virtual sal_Bool           QueryExit();
-
-    /** Send user event.
-
-    @param  nEvent      The numeric ID of the event
-    @param  pEventData  Pointer to a data associated with the event. Use
-                        a reinterpret_cast<void*> to pass in the parameter.
-    */
-    virtual void                UserEvent( sal_uLong nEvent, void* pEventData );
-
-    /** @defgroup changes Change notification functions
-        Functions that notify when changes occur in the application
-        @{
-    */
-
-    /** Notify that the application is no longer the "focused" (or current)
-        application - needed for Windowing systems where an end user can switch
-        from one application to another.
-
-     @see DataChanged
-    */
-    virtual void                FocusChanged();
-
-    /** Notify the application that data has changed via an event.
-
-     @param rDCEvt      Reference to a @DataChangedEvent object - this will not
-                        be changed
-
-     @see FocusChanged
-    */
-    virtual void                DataChanged( const DataChangedEvent& rDCEvt );
-
-    /** @} */ // end of changes
-
-    /** @defgroup Initialization Initialization functions
-        @{
+    vcl/fpicker/test/svdem.cxx
     */
 
     /** Initialize the application itself.
@@ -314,18 +273,70 @@ public:
     /** Deinitialized the application itself.
 
      @attention Note that the global data structures and platform specific
-        deinitialization is done in the destructor.
+         deinitialization is done in the destructor.
 
      @see Init, InitFinished
     */
     virtual void                DeInit();
 
-    /** @} */ // end of Initialization
+    ///@}
 
+    virtual int                 Main() = 0;
 
-    /** @defgroup CommandLine Command line processing
-        @{
+    /** Exit from the application
+
+     @returns true if exited successfully, false if not able to fully exit
     */
+    virtual sal_Bool           QueryExit();
+
+    /** Send user event.
+
+    @param  nEvent      The numeric ID of the event
+    @param  pEventData  Pointer to a data associated with the event. Use
+                        a reinterpret_cast<void*> to pass in the parameter.
+    */
+    virtual void                UserEvent( sal_uLong nEvent, void* pEventData );
+
+    /** @name Change Notification Functions
+
+        Functions that notify when changes occur in the application.
+    */
+    ///@{
+
+    /** Notify that the application is no longer the "focused" (or current)
+        application - needed for Windowing systems where an end user can switch
+        from one application to another.
+
+     @see DataChanged
+    */
+    virtual void                FocusChanged();
+
+    /** Notify the application that data has changed via an event.
+
+     @param rDCEvt      Const reference to a DataChangedEvent object
+
+     @see FocusChanged, NotifyAllWindows
+    */
+    virtual void                DataChanged( const DataChangedEvent& rDCEvt );
+
+    /** Notify all windows that the application has changed data.
+
+     @param rDCEvt     Reference to a DataChangedEvent object
+
+     @see DataChanged
+    */
+    static void                 NotifyAllWindows( DataChangedEvent& rDCEvt );
+
+    ///@}
+
+    /** @name Command Line Processing
+
+        Command line processing is done via the following functions. They
+        give the number of parameters, the parameters themselves and a way
+        to get the name of the invoking application.
+    */
+
+    ///@{
 
     /** Gets the number of command line parameters passed to the application
 
@@ -353,9 +364,13 @@ public:
     */
     static OUString             GetAppFileName();
 
-    /** @} */ // end of CommandLine
+    ///@}
 
-    /** @defgroup ErrorHandling Error handling
+    /** @name Error Handling
+
+        \em Very rudimentary error handling is done by these
+        functions.
+
         @{
     */
 
@@ -376,7 +391,7 @@ public:
 
     /** Ends the program prematurely with an error message.
 
-     If the --norestore command line argument is given (assuming
+     If the \code --norestore \endcode command line argument is given (assuming
      this process is run by developers who are interested in cores,
      vs. end users who are not) then it does a coredump.
 
@@ -386,13 +401,18 @@ public:
     */
     static void                 Abort( const OUString& rErrorText );
 
-    /** @} */ // end of CommandLine
+    ///@}
 
-    /** @defgroup EventLoop Event loop functions
-        @{
+    /** @name Event Loop
+
+        Event loop functions
+
+        Functions that handle the LibreOffice main event loop are here,
+        including a global lock called the Solar Mutex.
     */
+    ///@{
 
-    /** Run the main event processing loop until it is quit by @Quit.
+    /** Run the main event processing loop until it is quit by Quit().
 
      @see Quit, Reschedule, Yield, EndYield, GetSolarMutex,
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
@@ -441,7 +461,7 @@ public:
     */
     static void                 EndYield();
 
-    /** @Brief Get the Solar Mutex for this thread.
+    /** @brief Get the Solar Mutex for this thread.
 
      Get the Solar Mutex that prevents other threads from accessing VCL
      concurrently.
@@ -466,7 +486,7 @@ public:
     */
     static oslThreadIdentifier  GetMainThreadIdentifier();
 
-    /** @Brief Release Solar Mutex(es) for this thread
+    /** @brief Release Solar Mutex(es) for this thread
 
      Release the Solar Mutex(es) that prevents other threads from accessing
      VCL concurrently.
@@ -480,7 +500,7 @@ public:
     */
     static sal_uLong            ReleaseSolarMutex();
 
-    /** @Brief Acquire Solar Mutex(es) for this thread.
+    /** @brief Acquire Solar Mutex(es) for this thread.
 
      Acquire the Solar Mutex(es) that prevents other threads from accessing
      VCL concurrently.
@@ -492,9 +512,9 @@ public:
     */
     static void                 AcquireSolarMutex( sal_uLong nCount );
 
-    /** @Brief Enables "no yield" mode
+    /** @brief Enables "no yield" mode
 
-     "No yield" mode prevents @Yield from waiting for events.
+     "No yield" mode prevents Yield() from waiting for events.
 
      @remarks This was originally implemented in OOo bug 98792 to improve
         Impress slideshows.
@@ -505,9 +525,9 @@ public:
     */
     static void                 EnableNoYieldMode();
 
-    /** @Brief Disables "no yield" mode
+    /** @brief Disables "no yield" mode
 
-     "No yield" mode prevents @Yield from waiting for events.
+     "No yield" mode prevents Yield() from waiting for events.
 
      @remarks This was originally implemented in OOo bug 98792 to improve
         Impress slideshows.
@@ -590,7 +610,7 @@ public:
     */
     static sal_uLong            GetLastInputInterval();
 
-    /** @} */ // end of EventLoop
+    ///@}
 
     /* Determines if the UI is captured.
 
@@ -602,9 +622,13 @@ public:
      */
     static sal_Bool             IsUICaptured();
 
-    /** defgroup Settings Application settings
-        @{
+    /** @name Settings
+
+        The following functions set system settings (e.g. tab color, etc.). There are functions
+        that set settings objects, and functions that set and get the actual system settings for
+        the application.
     */
+    ///@{
 
     /** Sets user settings in settings object to override system settings
 
@@ -652,35 +676,177 @@ public:
     */
     static const AllSettings&   GetSettings();
 
-    /** @} */ // end of Settings
+    ///@}
 
-    static void                 NotifyAllWindows( DataChangedEvent& rDCEvt );
+    /** @name Event Listeners
 
+        A set of event listeners and callers. Note that in this code there is
+        platform specific functions - namely for zoom and scroll events.
+    */
+    ///@{
+
+    /** Add a VCL event listener to the application. If no event listener exists,
+     then initialize the application's event listener with a new one, then add
+     the event listener.
+
+     @param     rEventListener  Const reference to the event listener to add.
+
+     @see RemoveEventListener, AddKeyListener, RemoveKeyListener
+    */
     static void                 AddEventListener( const Link& rEventListener );
+
+    /** Remove a VCL event listener from the application.
+
+     @param     rEventListener  Const refernece to the event listener to be removed
+
+     @see AddEventListener, AddKeyListener, RemoveKeyListener
+    */
     static void                 RemoveEventListener( const Link& rEventListener );
+
+    /** Add a keypress listener to the application. If keypress listener exists,
+     then initialize the application's keypress event listener with a new one, then
+     add the keypress listener.
+
+     @param     rKeyListener    Const reference to the keypress event listener to add
+
+     @see AddEventListener, RemoveEventListener, RemoveKeyListener
+    */
     static void                 AddKeyListener( const Link& rKeyListener );
+
+    /** Remove a keypress listener from the application.
+
+     @param     rKeyListener    Const reference to the keypress event listener to be removed
+
+     @see AddEventListener, RemoveEventListener, AddKeyListener
+    */
     static void                 RemoveKeyListener( const Link& rKeyListener );
+
+    /** Send event to all VCL application event listeners
+
+     @param     nEvent          Event ID
+     @param     pWin            Pointer to window to send event
+     @param     pData           Pointer to data to send with event
+
+     @see ImplCallEventListeners(VclSimpleEvent* pEvent)
+    */
     static void                 ImplCallEventListeners( sal_uLong nEvent, Window* pWin, void* pData );
+
+    /** Send event to all VCL application event listeners
+
+     @param     pEvent          Pointer to VclSimpleEvent
+
+     @see ImplCallEventListeners(sal_uLong nEvent, Windows* pWin, void* pData);
+    */
     static void                 ImplCallEventListeners( VclSimpleEvent* pEvent );
+
+    /** Handle keypress event
+
+     @param     nEvent          Event ID for keypress
+     @param     pWin            Pointer to window that receives the event
+     @param     pKeyEvent       Received key event
+
+     @see PostKeyEvent
+    */
     static sal_Bool             HandleKey( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent );
 
+    /** Send keypress event
+
+     @param     nEvent          Event ID for keypress
+     @param     pWin            Pointer to window to which the event is sent
+     @param     pKeyEvent       Key event to send
+
+     @see HandleKey
+    */
     static sal_uLong            PostKeyEvent( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent );
+
+    /** Send mouse event
+
+     @param     nEvent          Event ID for mouse event
+     @param     pWin            Pointer to window to which the event is sent
+     @param     pKeyEvent       Mouse event to send
+    */
     static sal_uLong            PostMouseEvent( sal_uLong nEvent, Window *pWin, MouseEvent* pMouseEvent );
+
 #if !HAVE_FEATURE_DESKTOP
+    /** Send zoom event
+
+     @param     nEvent          Event ID for zoom event
+     @param     pWin            Pointer to window to which the event is sent
+     @param     pZoomEvent      Zoom event to send
+    */
     static sal_uLong            PostZoomEvent( sal_uLong nEvent, Window *pWin, ZoomEvent* pZoomEvent );
+
+    /* Send scroll event
+
+     @param      nEvent          Event ID for scroll event
+     @param      pWin            Pointer to window to which the event is sent
+     @param      pScrollEvent    Scroll event to send
+    */
     static sal_uLong            PostScrollEvent( sal_uLong nEvent, Window *pWin, ScrollEvent* pScrollEvent );
 #endif
+
+    /** Remove mouse and keypress events from a window... any also zoom and scroll events
+     if the platform supports it.
+
+     @param     pWin            Window to remove events from
+
+     @see HandleKey, PostKeyEvent, PostMouseEvent, PostZoomEvent, PostScrollEvent
+    */
     static void                 RemoveMouseAndKeyEvents( Window *pWin );
 
+    /** Post a user event to the default window.
+
+     @param     rLink           Link to event callback function
+     @param     pCaller         Pointer to data sent to the event by the caller. Optional.
+
+     @return the event ID used to post the event.
+    */
     static sal_uLong            PostUserEvent( const Link& rLink, void* pCaller = NULL );
+
+    /** Post a user event to the default window.
+
+     @param     rEventID        Reference to event ID to be posted
+     @param     rLink           Link to event callback function
+     @param     pCaller         Pointer to data sent to teh event by the caller. Optional.
+
+     @return true if there is a default window and the event could be posted to it successfully.
+    */
     static sal_Bool             PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller = NULL );
+
+    /** Remove user event based on event ID
+
+     @param     nUserEvent      Numeric user event to remove
+    */
     static void                 RemoveUserEvent( sal_uLong nUserEvent );
 
+    /** Insert an idle handler into the application.
+
+     If the idle event manager doesn't exist, then initialize it.
+
+     @param     rLink           const reference to the idle handler
+     @param     nPrio           The priority of the idle handler - idle handlers of a higher
+                                priority will be processed before this handler.
+
+     @return true if the handler was inserted successfully, false if it couldn't be inserted.
+    */
     static sal_Bool             InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority );
+
+    /** Remove an idle handler from the application.
+
+     @param     rLink           const reference to the idle handler to remove
+    */
     static void                 RemoveIdleHdl( const Link& rLink );
 
     virtual void                AppEvent( const ApplicationEvent& rAppEvent );
 
+    ///@}
+
+    /** @name Application Window Functions
+
+        Functions that deal with the application's windows
+    */
+
+    ///@{
     static WorkWindow*          GetAppWindow();
     static Window*              GetFocusWindow();
     static OutputDevice*        GetDefaultDevice();
@@ -692,21 +858,21 @@ public:
     static Window*              GetTopWindow( long nIndex );
     static Window*              GetActiveTopWindow();
 
+    ///@}
+
     static void                 SetAppName( const OUString& rUniqueName );
     static OUString             GetAppName();
     static bool                 LoadBrandBitmap (const char* pName, BitmapEx &rBitmap);
 
-    /** validate that the currently selected system UI font is suitable
-        to display the application's UI.
+    /** Validate that the currently selected system UI font is suitable
+     to display the application's UI.
 
-        A localized test string will be checked if it can be displayed
-        in the currently selected system UI font. If no glyphs are
-        missing it can be assumed that the font is proper for display
-        of the application's UI.
+     A localized test string will be checked if it can be displayed in the currently
+     selected system UI font. If no glyphs are missing it can be assumed that the font
+     is proper for display of the application's UI.
 
-        @returns
-        <TRUE/> if the system font is suitable for our UI
-        <FALSE/> if the test string could not be displayed with the system font
+     @returns true if the system font is suitable for our UI and false if the test
+       string could not be displayed with the system font.
      */
     static bool                 ValidateSystemFont();
 
