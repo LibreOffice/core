@@ -161,12 +161,11 @@ dispatchRequests (const uno::Reference< frame::XModel>& xModel, const OUString &
     uno::Sequence<beans::PropertyValue> dispatchProps(1);
 
     sal_Int32 nProps = sProps.getLength();
-    beans::PropertyValue* pDest = dispatchProps.getArray();
     if ( nProps )
     {
         dispatchProps.realloc( nProps + 1 );
-        // need to reaccquire pDest after realloc
-        pDest = dispatchProps.getArray();
+        // need to accquire pDest after realloc
+        beans::PropertyValue* pDest = dispatchProps.getArray();
         const beans::PropertyValue* pSrc = sProps.getConstArray();
         for ( sal_Int32 index=0; index<nProps; ++index, ++pSrc, ++pDest )
             *pDest = *pSrc;
