@@ -759,7 +759,7 @@ void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
             aAppEventList.pop_front();
             // handle one application event (no recursion)
             const ImplSVData* pSVData = ImplGetSVData();
-            pSVData->mpApp->AppEvent( *pAppEvent );
+            pSVData->mpApp->HandleAppEvent( *pAppEvent );
             delete pAppEvent;
             // allow the next delayed application event
             bInAppEvent = false;
