@@ -107,16 +107,19 @@ IMPL_LINK_NOARG(TableWindow, SelectHdl)
 
 // -----------------------------------------------------------------------
 
-TableWindow::TableWindow( sal_uInt16 nSlotId, const OUString& rCmd, const OUString& rText, ToolBox& rParentTbx, const Reference< XFrame >& rFrame ) :
-    SfxPopupWindow( nSlotId, rFrame, WinBits( WB_STDPOPUP ) ),
-    aTableButton( this ),
-    nCol( 0 ),
-    nLine( 0 ),
-    rTbx(rParentTbx),
-    mxFrame( rFrame ),
-    maCommand( rCmd ),
-    mnTablePosX(2),
-    mnTablePosY(2)
+TableWindow::TableWindow( sal_uInt16 nSlotId, const OUString& rCmd, const OUString& rText,
+                          ToolBox& rParentTbx, const Reference< XFrame >& rFrame )
+    : SfxPopupWindow( nSlotId, rFrame, WinBits( WB_STDPOPUP ) )
+    , aTableButton( this )
+    , nCol( 0 )
+    , nLine( 0 )
+    , bInitialKeyInput(false)
+    , m_bMod1(false)
+    , rTbx(rParentTbx)
+    , mxFrame( rFrame )
+    , maCommand( rCmd )
+    , mnTablePosX(2)
+    , mnTablePosY(2)
 {
     mnTableCellWidth  = 15 * GetDPIScaleFactor();
     mnTableCellHeight = 15 * GetDPIScaleFactor();
