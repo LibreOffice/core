@@ -270,7 +270,9 @@ public:
 
     // XTextualDataSequence
     virtual ::com::sun::star::uno::Sequence< OUString >
-        SAL_CALL getTextualData(  ) throw (::com::sun::star::uno::RuntimeException);
+        SAL_CALL getTextualData()
+            throw (::com::sun::star::uno::RuntimeException,
+                   std::exception);
 
     // XPropertySet
     virtual ::com::sun::star::uno::Reference<
