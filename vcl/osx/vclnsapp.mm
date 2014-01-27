@@ -366,7 +366,7 @@
         if( aReply == NSTerminateNow )
         {
             ApplicationEvent aEv(ApplicationEvent::TYPE_PRIVATE_DOSHUTDOWN);
-            GetpApp()->AppEvent( aEv );
+            GetpApp()->HandleAppEvent( aEv );   // currently, this doens't actually do anything!
             ImplImageTreeSingletonRef()->shutDown();
             // DeInitVCL should be called in ImplSVMain - unless someon _exits first which
             // can occur in Desktop::doShutdown for example

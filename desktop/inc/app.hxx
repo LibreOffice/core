@@ -79,7 +79,6 @@ class Desktop : public Application
         virtual sal_Bool            QueryExit();
         virtual sal_uInt16          Exception(sal_uInt16 nError);
         virtual void            SystemSettingsChanging( AllSettings& rSettings );
-        virtual void            AppEvent( const ApplicationEvent& rAppEvent );
 
         DECL_LINK(          OpenClients_Impl, void* );
 

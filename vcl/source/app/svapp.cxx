@@ -1649,11 +1649,6 @@ bool InitAccessBridge()
 #endif // !UNX
 }
 
-// MT: AppEvent was in oldsv.cxx, but is still needed...
-void Application::AppEvent( const ApplicationEvent& /*rAppEvent*/ )
-{
-}
-
 bool Application::hasNativeFileSelection()
 {
     ImplSVData* pSVData = ImplGetSVData();
