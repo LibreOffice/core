@@ -203,9 +203,11 @@ void AddressWalkerWriter::writeValue(double aValue)
 
 // DataCellIterator
 
-DataCellIterator::DataCellIterator(ScRange aInputRange, bool aByColumn) :
-    mInputRange(aInputRange),
-    mByColumn(aByColumn)
+DataCellIterator::DataCellIterator(ScRange aInputRange, bool aByColumn)
+    : mInputRange(aInputRange)
+    , mByColumn(aByColumn)
+    , mCol(0)
+    , mRow(0)
 {
     if(aByColumn)
         mCol = aInputRange.aStart.Col();
