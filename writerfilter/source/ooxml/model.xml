@@ -5235,6 +5235,11 @@
       <define name="ST_SizeRelFromH">
         <choice>
           <value>margin</value>
+          <value>page</value>
+          <value>leftMargin</value>
+          <value>rightMargin</value>
+          <value>insideMargin</value>
+          <value>outsideMargin</value>
         </choice>
       </define>
       <define name="CT_SizeRelH">
@@ -5248,15 +5253,20 @@
         </element>
       </define>
     </grammar>
-      <resource name="ST_SizeRelFromH" resource="List" generated="yes">
-        <value name="margin" tokenid="ooxml:ST_SizeRelFromH_margin">margin</value>
-      </resource>
-      <resource name="CT_SizeRelH" resource="Properties" tag="shape">
-        <attribute name="relativeFrom" tokenid="ooxml:CT_SizeRelH_relativeFrom"/>
-      </resource>
-      <resource name="sizeRelH" resource="Properties" tag="shape">
-        <element name="sizeRelH" tokenid="ooxml:sizeRelH_sizeRelH"/>
-      </resource>
+    <resource name="ST_SizeRelFromH" resource="List" generated="yes">
+      <value name="margin" tokenid="ooxml:ST_SizeRelFromH_margin">margin</value>
+      <value name="page" tokenid="ooxml:ST_SizeRelFromH_page">page</value>
+      <value name="leftMargin" tokenid="ooxml:ST_SizeRelFromH_leftMargin">leftMargin</value>
+      <value name="rightMargin" tokenid="ooxml:ST_SizeRelFromH_rightMargin">rightMargin</value>
+      <value name="insideMargin" tokenid="ooxml:ST_SizeRelFromH_insideMargin">insideMargin</value>
+      <value name="outsideMargin" tokenid="ooxml:ST_SizeRelFromH_outsideMargin">outsideMargin</value>
+    </resource>
+    <resource name="CT_SizeRelH" resource="Properties" tag="shape">
+      <attribute name="relativeFrom" tokenid="ooxml:CT_SizeRelH_relativeFrom"/>
+    </resource>
+    <resource name="sizeRelH" resource="Properties" tag="shape">
+      <element name="sizeRelH" tokenid="ooxml:sizeRelH_sizeRelH"/>
+    </resource>
   </namespace>
   <namespace name="dml-shapeGeometry" file="dml-shapeGeometry.rng" todo="ignore">
     <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
