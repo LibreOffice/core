@@ -622,31 +622,30 @@ static const FieldMinMax pMinMaxData[10][4] =
 SmCategoryDesc::SmCategoryDesc(VclBuilderContainer& rBuilder, sal_uInt16 nCategoryIdx)
 {
     ++nCategoryIdx;
-    FixedText *pTitle = rBuilder.get<FixedText>(OString::number(nCategoryIdx)+"title");
+    FixedText* pTitle = rBuilder.get<FixedText>(OString::number(nCategoryIdx)+"title");
     if (pTitle)
     {
         Name = pTitle->GetText();
+    }
+    for (int i = 0; i < 4; ++i)
+    {
+        FixedText* pLabel = rBuilder.get<FixedText>(OString::number(nCategoryIdx)+"label"+OString::number(i+1));
 
-        for (int i = 0; i < 4; ++i)
+        if (pLabel)
         {
-            FixedText *pLabel = rBuilder.get<FixedText>(OString::number(nCategoryIdx)+"label"+OString::number(i+1));
-
-            if (pLabel)
-            {
-                Strings  [i] = new OUString(pLabel->GetText());
-                FixedImage *pImage = rBuilder.get<FixedImage>(OString::number(nCategoryIdx)+"image"+OString::number(i+1));
-                Graphics [i] = new Image(pImage->GetImage());
-            }
-            else
-            {
-                Strings  [i] = 0;
-                Graphics [i] = 0;
-            }
-
-            const FieldMinMax &rMinMax = pMinMaxData[ nCategoryIdx ][i];
-            Value[i] = Minimum[i] = rMinMax.nMin;
-            Maximum[i] = rMinMax.nMax;
+            Strings  [i] = new OUString(pLabel->GetText());
+            FixedImage* pImage = rBuilder.get<FixedImage>(OString::number(nCategoryIdx)+"image"+OString::number(i+1));
+            Graphics [i] = new Image(pImage->GetImage());
         }
+        else
+        {
+            Strings  [i] = 0;
+            Graphics [i] = 0;
+        }
+
+        const FieldMinMax& rMinMax = pMinMaxData[ nCategoryIdx ][i];
+        Value[i] = Minimum[i] = rMinMax.nMin;
+        Maximum[i] = rMinMax.nMax;
     }
 }
 
