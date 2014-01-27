@@ -3546,145 +3546,142 @@ namespace basegfx
                 const bool bCurve(rPolygon.areControlPointsUsed());
                 const bool bClosed(rPolygon.isClosed());
 
-                if(nPointCount)
+                if(bCurve)
                 {
-                    if(bCurve)
+                    // calculate target point count
+                    const sal_uInt32 nLoopCount(bClosed ? nPointCount : nPointCount - 1);
+
+                    if(nLoopCount)
                     {
-                        // calculate target point count
-                        const sal_uInt32 nLoopCount(bClosed ? nPointCount : nPointCount - 1);
+                        // prepare target data. The real needed number of target points (and flags)
+                        // could only be calculated by using two loops, so use dynamic memory
+                        std::vector< com::sun::star::awt::Point > aCollectPoints;
+                        std::vector< com::sun::star::drawing::PolygonFlags > aCollectFlags;
 
-                        if(nLoopCount)
+                        // reserve maximum creatable points
+                        const sal_uInt32 nMaxTargetCount((nLoopCount * 3) + 1);
+                        aCollectPoints.reserve(nMaxTargetCount);
+                        aCollectFlags.reserve(nMaxTargetCount);
+
+                        // prepare current bezier segment by setting start point
+                        B2DCubicBezier aBezierSegment;
+                        aBezierSegment.setStartPoint(rPolygon.getB2DPoint(0));
+
+                        for(sal_uInt32 a(0); a < nLoopCount; a++)
                         {
-                            // prepare target data. The real needed number of target points (and flags)
-                            // could only be calculated by using two loops, so use dynamic memory
-                            std::vector< com::sun::star::awt::Point > aCollectPoints;
-                            std::vector< com::sun::star::drawing::PolygonFlags > aCollectFlags;
+                            // add current point (always) and remember StartPointIndex for evtl. later corrections
+                            const sal_uInt32 nStartPointIndex(aCollectPoints.size());
+                            aCollectPoints.push_back(
+                                com::sun::star::awt::Point(
+                                    fround(aBezierSegment.getStartPoint().getX()),
+                                    fround(aBezierSegment.getStartPoint().getY())));
+                            aCollectFlags.push_back(com::sun::star::drawing::PolygonFlags_NORMAL);
 
-                            // reserve maximum creatable points
-                            const sal_uInt32 nMaxTargetCount((nLoopCount * 3) + 1);
-                            aCollectPoints.reserve(nMaxTargetCount);
-                            aCollectFlags.reserve(nMaxTargetCount);
+                            // prepare next segment
+                            const sal_uInt32 nNextIndex((a + 1) % nPointCount);
+                            aBezierSegment.setEndPoint(rPolygon.getB2DPoint(nNextIndex));
+                            aBezierSegment.setControlPointA(rPolygon.getNextControlPoint(a));
+                            aBezierSegment.setControlPointB(rPolygon.getPrevControlPoint(nNextIndex));
 
-                            // prepare current bezier segment by setting start point
-                            B2DCubicBezier aBezierSegment;
-                            aBezierSegment.setStartPoint(rPolygon.getB2DPoint(0));
-
-                            for(sal_uInt32 a(0); a < nLoopCount; a++)
+                            if(aBezierSegment.isBezier())
                             {
-                                // add current point (always) and remember StartPointIndex for evtl. later corrections
-                                const sal_uInt32 nStartPointIndex(aCollectPoints.size());
+                                // if bezier is used, add always two control points due to the old schema
                                 aCollectPoints.push_back(
                                     com::sun::star::awt::Point(
-                                        fround(aBezierSegment.getStartPoint().getX()),
-                                        fround(aBezierSegment.getStartPoint().getY())));
-                                aCollectFlags.push_back(com::sun::star::drawing::PolygonFlags_NORMAL);
+                                        fround(aBezierSegment.getControlPointA().getX()),
+                                        fround(aBezierSegment.getControlPointA().getY())));
+                                aCollectFlags.push_back(com::sun::star::drawing::PolygonFlags_CONTROL);
 
-                                // prepare next segment
-                                const sal_uInt32 nNextIndex((a + 1) % nPointCount);
-                                aBezierSegment.setEndPoint(rPolygon.getB2DPoint(nNextIndex));
-                                aBezierSegment.setControlPointA(rPolygon.getNextControlPoint(a));
-                                aBezierSegment.setControlPointB(rPolygon.getPrevControlPoint(nNextIndex));
-
-                                if(aBezierSegment.isBezier())
-                                {
-                                    // if bezier is used, add always two control points due to the old schema
-                                    aCollectPoints.push_back(
-                                        com::sun::star::awt::Point(
-                                            fround(aBezierSegment.getControlPointA().getX()),
-                                            fround(aBezierSegment.getControlPointA().getY())));
-                                    aCollectFlags.push_back(com::sun::star::drawing::PolygonFlags_CONTROL);
-
-                                    aCollectPoints.push_back(
-                                        com::sun::star::awt::Point(
-                                            fround(aBezierSegment.getControlPointB().getX()),
-                                            fround(aBezierSegment.getControlPointB().getY())));
-                                    aCollectFlags.push_back(com::sun::star::drawing::PolygonFlags_CONTROL);
-                                }
-
-                                // test continuity with previous control point to set flag value
-                                if(aBezierSegment.getControlPointA() != aBezierSegment.getStartPoint() && (bClosed || a))
-                                {
-                                    const B2VectorContinuity eCont(rPolygon.getContinuityInPoint(a));
-
-                                    if(CONTINUITY_C1 == eCont)
-                                    {
-                                        aCollectFlags[nStartPointIndex] = com::sun::star::drawing::PolygonFlags_SMOOTH;
-                                    }
-                                    else if(CONTINUITY_C2 == eCont)
-                                    {
-                                        aCollectFlags[nStartPointIndex] = com::sun::star::drawing::PolygonFlags_SYMMETRIC;
-                                    }
-                                }
-
-                                // prepare next loop
-                                aBezierSegment.setStartPoint(aBezierSegment.getEndPoint());
-                            }
-
-                            if(bClosed)
-                            {
-                                // add first point again as closing point due to old definition
-                                aCollectPoints.push_back(aCollectPoints[0]);
-                                aCollectFlags.push_back(com::sun::star::drawing::PolygonFlags_NORMAL);
-                            }
-                            else
-                            {
-                                // add last point as closing point
-                                const B2DPoint aClosingPoint(rPolygon.getB2DPoint(nPointCount - 1L));
                                 aCollectPoints.push_back(
                                     com::sun::star::awt::Point(
-                                        fround(aClosingPoint.getX()),
-                                        fround(aClosingPoint.getY())));
-                                aCollectFlags.push_back(com::sun::star::drawing::PolygonFlags_NORMAL);
+                                        fround(aBezierSegment.getControlPointB().getX()),
+                                        fround(aBezierSegment.getControlPointB().getY())));
+                                aCollectFlags.push_back(com::sun::star::drawing::PolygonFlags_CONTROL);
                             }
 
-                            // copy collected data to target arrays
-                            const sal_uInt32 nTargetCount(aCollectPoints.size());
-                            OSL_ENSURE(nTargetCount == aCollectFlags.size(), "Unequal Point and Flag count (!)");
-
-                            rPointSequenceRetval.realloc((sal_Int32)nTargetCount);
-                            rFlagSequenceRetval.realloc((sal_Int32)nTargetCount);
-                            com::sun::star::awt::Point* pPointSequence = rPointSequenceRetval.getArray();
-                            com::sun::star::drawing::PolygonFlags* pFlagSequence = rFlagSequenceRetval.getArray();
-
-                            for(sal_uInt32 a(0); a < nTargetCount; a++)
+                            // test continuity with previous control point to set flag value
+                            if(aBezierSegment.getControlPointA() != aBezierSegment.getStartPoint() && (bClosed || a))
                             {
-                                *pPointSequence = aCollectPoints[a];
-                                *pFlagSequence = aCollectFlags[a];
-                                pPointSequence++;
-                                pFlagSequence++;
+                                const B2VectorContinuity eCont(rPolygon.getContinuityInPoint(a));
+
+                                if(CONTINUITY_C1 == eCont)
+                                {
+                                    aCollectFlags[nStartPointIndex] = com::sun::star::drawing::PolygonFlags_SMOOTH;
+                                }
+                                else if(CONTINUITY_C2 == eCont)
+                                {
+                                    aCollectFlags[nStartPointIndex] = com::sun::star::drawing::PolygonFlags_SYMMETRIC;
+                                }
                             }
-                        }
-                    }
-                    else
-                    {
-                        // straightforward point list creation
-                        const sal_uInt32 nTargetCount(nPointCount + (bClosed ? 1 : 0));
 
-                        rPointSequenceRetval.realloc((sal_Int32)nTargetCount);
-                        rFlagSequenceRetval.realloc((sal_Int32)nTargetCount);
-
-                        com::sun::star::awt::Point* pPointSequence = rPointSequenceRetval.getArray();
-                        com::sun::star::drawing::PolygonFlags* pFlagSequence = rFlagSequenceRetval.getArray();
-
-                        for(sal_uInt32 a(0); a < nPointCount; a++)
-                        {
-                            const B2DPoint aB2DPoint(rPolygon.getB2DPoint(a));
-                            const com::sun::star::awt::Point aAPIPoint(
-                                fround(aB2DPoint.getX()),
-                                fround(aB2DPoint.getY()));
-
-                            *pPointSequence = aAPIPoint;
-                            *pFlagSequence = com::sun::star::drawing::PolygonFlags_NORMAL;
-                            pPointSequence++;
-                            pFlagSequence++;
+                            // prepare next loop
+                            aBezierSegment.setStartPoint(aBezierSegment.getEndPoint());
                         }
 
                         if(bClosed)
                         {
-                            // add first point as closing point
-                            *pPointSequence = *rPointSequenceRetval.getConstArray();
-                            *pFlagSequence = com::sun::star::drawing::PolygonFlags_NORMAL;
+                            // add first point again as closing point due to old definition
+                            aCollectPoints.push_back(aCollectPoints[0]);
+                            aCollectFlags.push_back(com::sun::star::drawing::PolygonFlags_NORMAL);
                         }
+                        else
+                        {
+                            // add last point as closing point
+                            const B2DPoint aClosingPoint(rPolygon.getB2DPoint(nPointCount - 1L));
+                            aCollectPoints.push_back(
+                                com::sun::star::awt::Point(
+                                    fround(aClosingPoint.getX()),
+                                    fround(aClosingPoint.getY())));
+                            aCollectFlags.push_back(com::sun::star::drawing::PolygonFlags_NORMAL);
+                        }
+
+                        // copy collected data to target arrays
+                        const sal_uInt32 nTargetCount(aCollectPoints.size());
+                        OSL_ENSURE(nTargetCount == aCollectFlags.size(), "Unequal Point and Flag count (!)");
+
+                        rPointSequenceRetval.realloc((sal_Int32)nTargetCount);
+                        rFlagSequenceRetval.realloc((sal_Int32)nTargetCount);
+                        com::sun::star::awt::Point* pPointSequence = rPointSequenceRetval.getArray();
+                        com::sun::star::drawing::PolygonFlags* pFlagSequence = rFlagSequenceRetval.getArray();
+
+                        for(sal_uInt32 a(0); a < nTargetCount; a++)
+                        {
+                            *pPointSequence = aCollectPoints[a];
+                            *pFlagSequence = aCollectFlags[a];
+                            pPointSequence++;
+                            pFlagSequence++;
+                        }
+                    }
+                }
+                else
+                {
+                    // straightforward point list creation
+                    const sal_uInt32 nTargetCount(nPointCount + (bClosed ? 1 : 0));
+
+                    rPointSequenceRetval.realloc((sal_Int32)nTargetCount);
+                    rFlagSequenceRetval.realloc((sal_Int32)nTargetCount);
+
+                    com::sun::star::awt::Point* pPointSequence = rPointSequenceRetval.getArray();
+                    com::sun::star::drawing::PolygonFlags* pFlagSequence = rFlagSequenceRetval.getArray();
+
+                    for(sal_uInt32 a(0); a < nPointCount; a++)
+                    {
+                        const B2DPoint aB2DPoint(rPolygon.getB2DPoint(a));
+                        const com::sun::star::awt::Point aAPIPoint(
+                            fround(aB2DPoint.getX()),
+                            fround(aB2DPoint.getY()));
+
+                        *pPointSequence = aAPIPoint;
+                        *pFlagSequence = com::sun::star::drawing::PolygonFlags_NORMAL;
+                        pPointSequence++;
+                        pFlagSequence++;
+                    }
+
+                    if(bClosed)
+                    {
+                        // add first point as closing point
+                        *pPointSequence = *rPointSequenceRetval.getConstArray();
+                        *pFlagSequence = com::sun::star::drawing::PolygonFlags_NORMAL;
                     }
                 }
             }
