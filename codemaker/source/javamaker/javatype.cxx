@@ -480,7 +480,8 @@ TypeInfo::TypeInfo(
     m_kind(KIND_PARAMETER), m_name(parameterName),
     m_flags(translateSpecialTypeFlags(specialType, inParameter, outParameter)),
     m_index(index), m_methodName(methodName),
-    m_polymorphicUnoType(polymorphicUnoType)
+    m_polymorphicUnoType(polymorphicUnoType),
+    m_typeParameterIndex(0)
 {}
 
 sal_uInt16 TypeInfo::generateCode(
