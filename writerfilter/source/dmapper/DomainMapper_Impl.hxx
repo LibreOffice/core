@@ -29,6 +29,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <vector>
 #include <stack>
+#include <queue>
 #include <boost/optional.hpp>
 
 #ifndef INCLUDED_RESOURCESIDS
@@ -738,6 +739,9 @@ public:
 
     /// A sub-grabbag of m_aInteropGrabBag, like 'spacing'.
     std::vector<beans::PropertyValue> m_aSubInteropGrabBag;
+
+    /// ST_PositivePercentage values we received
+    std::queue<OUString> m_aPositivePercentages;
 };
 } //namespace dmapper
 } //namespace writerfilter

@@ -3762,7 +3762,7 @@ void DomainMapper_Impl::AddAnnotationPosition(
 GraphicImportPtr DomainMapper_Impl::GetGraphicImport(GraphicImportType eGraphicImportType)
 {
     if(!m_pGraphicImport)
-        m_pGraphicImport.reset( new GraphicImport( m_xComponentContext, m_xTextFactory, m_rDMapper, eGraphicImportType ) );
+        m_pGraphicImport.reset( new GraphicImport( m_xComponentContext, m_xTextFactory, m_rDMapper, eGraphicImportType, m_aPositivePercentages ) );
     return m_pGraphicImport;
 }
 /*-------------------------------------------------------------------------

@@ -255,8 +255,9 @@ public:
     OUString sName;
     OUString sAlternativeText;
     OUString title;
+    std::queue<OUString>& m_rPositivePercentages;
 
-    GraphicImport_Impl(GraphicImportType eImportType, DomainMapper&   rDMapper) :
+    GraphicImport_Impl(GraphicImportType eImportType, DomainMapper&   rDMapper, std::queue<OUString>& rPositivePercentages) :
         nXSize(0)
         ,bXSizeValid(false)
         ,nYSize(0)
@@ -309,6 +310,7 @@ public:
         ,bVertFlip(false)
         ,bSizeProtected(false)
         ,bPositionProtected(false)
+        ,m_rPositivePercentages(rPositivePercentages)
         {}
 
     void setXSize(sal_Int32 _nXSize)
@@ -413,11 +415,12 @@ public:
 GraphicImport::GraphicImport(uno::Reference < uno::XComponentContext >    xComponentContext,
                              uno::Reference< lang::XMultiServiceFactory > xTextFactory,
                              DomainMapper& rDMapper,
-                             GraphicImportType eImportType )
+                             GraphicImportType eImportType,
+                             std::queue<OUString>& rPositivePercentages)
 : LoggedProperties(dmapper_logger, "GraphicImport")
 , LoggedTable(dmapper_logger, "GraphicImport")
 , LoggedStream(dmapper_logger, "GraphicImport")
-, m_pImpl( new GraphicImport_Impl( eImportType, rDMapper ))
+, m_pImpl( new GraphicImport_Impl( eImportType, rDMapper, rPositivePercentages ))
 , m_xComponentContext( xComponentContext )
 , m_xTextFactory( xTextFactory)
 {
@@ -884,6 +887,20 @@ void GraphicImport::lcl_sprm(Sprm & rSprm)
             }
         }
         break;
+        case NS_ooxml::LN_CT_SizeRelH_pctWidth:
+            if (m_xShape.is() && !m_pImpl->m_rPositivePercentages.empty())
+            {
+                sal_Int16 nPositivePercentage = m_pImpl->m_rPositivePercentages.front().toInt32() / 1000;
+                m_pImpl->m_rPositivePercentages.pop();
+
+                uno::Reference<lang::XServiceInfo> xServiceInfo(m_xShape, uno::UNO_QUERY_THROW);
+                if (xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
+                {
+                    uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
+                    xPropertySet->setPropertyValue("RelativeWidth", uno::makeAny(nPositivePercentage));
+                }
+            }
+            break;
         case 0x271b:
         case 0x271c:
         {

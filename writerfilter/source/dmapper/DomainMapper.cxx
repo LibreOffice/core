@@ -3293,6 +3293,11 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
     }
 }
 
+void DomainMapper::lcl_positivePercentage(const OUString& rText)
+{
+    m_pImpl->m_aPositivePercentages.push(rText);
+}
+
 void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
 {
     OUString sText;

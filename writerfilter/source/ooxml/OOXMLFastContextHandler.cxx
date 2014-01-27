@@ -974,6 +974,17 @@ void OOXMLFastContextHandler::alignV(const OUString & sText)
         ::writerfilter::dmapper::PositionHandler::setAlignV( sText );
 }
 
+void OOXMLFastContextHandler::positivePercentage(const OUString& rText)
+{
+#ifdef DEBUG_ELEMENT
+    debug_logger->startElement("positivePercentage");
+    debug_logger->chars(rText);
+    debug_logger->endElement();
+#endif
+    if (isForwardEvents())
+        mpStream->positivePercentage(rText);
+}
+
 void OOXMLFastContextHandler::propagateCharacterProperties()
 {
 #ifdef DEBUG_CONTEXT_HANDLER

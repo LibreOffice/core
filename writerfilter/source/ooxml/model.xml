@@ -4477,6 +4477,9 @@
       <attribute name="val" tokenid="ooxml:CT_Percentage_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
+    <resource name="ST_PositivePercentage" resource="Value">
+      <action name="characters" action="positivePercentage"/>
+    </resource>
     <resource name="CT_PositivePercentage" resource="Value" generated="yes" tag="attribute">
       <attribute name="val" tokenid="ooxml:CT_PositivePercentage_val" action="setValue"/>
     </resource>
@@ -5243,6 +5246,9 @@
         </choice>
       </define>
       <define name="CT_SizeRelH">
+        <element name="pctWidth">
+          <ref name="ST_PositivePercentage"/>
+        </element>
         <attribute name="relativeFrom">
           <ref name="ST_SizeRelFromH"/>
         </attribute>
@@ -5262,6 +5268,7 @@
       <value name="outsideMargin" tokenid="ooxml:ST_SizeRelFromH_outsideMargin">outsideMargin</value>
     </resource>
     <resource name="CT_SizeRelH" resource="Properties" tag="shape">
+      <element name="pctWidth" tokenid="ooxml:CT_SizeRelH_pctWidth"/>
       <attribute name="relativeFrom" tokenid="ooxml:CT_SizeRelH_relativeFrom"/>
     </resource>
     <resource name="sizeRelH" resource="Properties" tag="shape">

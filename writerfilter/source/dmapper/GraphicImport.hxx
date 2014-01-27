@@ -19,6 +19,8 @@
 #ifndef INCLUDED_GRAPHICIMPORT_HXX
 #define INCLUDED_GRAPHICIMPORT_HXX
 
+#include <queue>
+
 #include <resourcemodel/LoggedResources.hxx>
 
 namespace com{ namespace sun { namespace star {
@@ -77,7 +79,8 @@ public:
     explicit GraphicImport(::com::sun::star::uno::Reference < ::com::sun::star::uno::XComponentContext >    xComponentContext,
                   ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xTextFactory,
                   DomainMapper& rDomainMapper,
-                  GraphicImportType eGraphicImportType);
+                  GraphicImportType eGraphicImportType,
+                  std::queue<OUString>& rPositivePercentages);
     virtual ~GraphicImport();
 
     // BinaryObj

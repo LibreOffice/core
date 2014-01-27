@@ -37,6 +37,7 @@ public:
     virtual void endCharacterGroup();
     virtual void text(const sal_uInt8 * data, size_t len);
     virtual void utext(const sal_uInt8 * data, size_t len);
+    virtual void positivePercentage(const OUString& /*rText*/) { }
 
     virtual void props(writerfilter::Reference<Properties>::Pointer_t ref);
     virtual void table(Id name,

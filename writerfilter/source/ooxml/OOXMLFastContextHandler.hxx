@@ -214,6 +214,7 @@ public:
     void positionOffset(const OUString & sText);
     void alignH(const OUString & sText);
     void alignV(const OUString & sText);
+    void positivePercentage(const OUString& rText);
     void startTxbxContent();
     void endTxbxContent();
     virtual void propagateCharacterProperties();

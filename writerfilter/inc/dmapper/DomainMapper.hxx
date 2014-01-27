@@ -142,6 +142,7 @@ private:
 
     virtual void lcl_text(const sal_uInt8 * data, size_t len);
     virtual void lcl_utext(const sal_uInt8 * data, size_t len);
+    virtual void lcl_positivePercentage(const OUString& rText) SAL_OVERRIDE;
     virtual void lcl_props(writerfilter::Reference<Properties>::Pointer_t ref);
     virtual void lcl_table(Id name,
                            writerfilter::Reference<Table>::Pointer_t ref);

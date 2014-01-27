@@ -64,6 +64,7 @@ public:
     void endShape();
     void text(const sal_uInt8 * data, size_t len);
     void utext(const sal_uInt8 * data, size_t len);
+    void positivePercentage(const OUString& rText);
     void props(writerfilter::Reference<Properties>::Pointer_t ref);
     void table(Id name, writerfilter::Reference<Table>::Pointer_t ref);
     void substream(Id name, writerfilter::Reference<Stream>::Pointer_t ref);
@@ -80,6 +81,7 @@ protected:
     virtual void lcl_endShape() = 0;
     virtual void lcl_text(const sal_uInt8 * data, size_t len) = 0;
     virtual void lcl_utext(const sal_uInt8 * data, size_t len) = 0;
+    virtual void lcl_positivePercentage(const OUString& /*rText*/) { }
     virtual void lcl_props(writerfilter::Reference<Properties>::Pointer_t ref) = 0;
     virtual void lcl_table(Id name, writerfilter::Reference<Table>::Pointer_t ref) = 0;
     virtual void lcl_substream(Id name, writerfilter::Reference<Stream>::Pointer_t ref) = 0;

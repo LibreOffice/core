@@ -202,6 +202,20 @@ void LoggedStream::utext(const sal_uInt8 * data, size_t len)
 #endif
 }
 
+void LoggedStream::positivePercentage(const OUString& rText)
+{
+#ifdef DEBUG_LOGGING
+    mHelper.startElement("positivePercentage");
+    mHelper.chars(rText);
+#endif
+
+    lcl_positivePercentage(rText);
+
+#ifdef DEBUG_LOGGING
+    mHelper.endElement("positivePercentage");
+#endif
+}
+
 void LoggedStream::props(writerfilter::Reference<Properties>::Pointer_t ref)
 {
 #ifdef DEBUG_LOGGING

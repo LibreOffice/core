@@ -516,6 +516,9 @@ CreateElementMapPointer </xsl:text>
         <xsl:when test="@action='positionOffset'">
     pHandler-&gt;positionOffset(sText);
         </xsl:when>
+        <xsl:when test="@action='positivePercentage'">
+    pHandler-&gt;positivePercentage(sText);
+        </xsl:when>
         <xsl:when test="@action='alignH'">
     pHandler-&gt;alignH(sText);
         </xsl:when>

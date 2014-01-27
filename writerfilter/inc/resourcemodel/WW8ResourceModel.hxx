@@ -246,6 +246,8 @@ public:
      */
     virtual void utext(const sal_uInt8 * data, size_t len) = 0;
 
+    virtual void positivePercentage(const OUString& rText) = 0;
+
     /**
        Receives properties of the current run of text.
 
