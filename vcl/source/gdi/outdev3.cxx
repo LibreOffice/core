@@ -5791,19 +5791,14 @@ SalLayout* OutputDevice::ImplLayout( const OUString& rOrigStr, sal_Int32 nMinInd
 
         if( bFiltered && nCutStop != nCutStart && pDXArray )
         {
-            if( !nLen )
-                pDXArray = NULL;
-            else
-            {
-                sal_Int32* pAry = (sal_Int32*)alloca(sizeof(sal_Int32)*nLen);
-                if( nCutStart > nMinIndex )
-                    memcpy( pAry, pDXArray, sizeof(sal_Int32)*(nCutStart-nMinIndex) );
-                // note: nCutStart will never be smaller than nMinIndex
-                memcpy( pAry+nCutStart-nMinIndex,
-                        pDXArray + nOrgLen - (nCutStop-nMinIndex),
-                        sizeof(sal_Int32)*(nLen - (nCutStart-nMinIndex)) );
-                pDXArray = pAry;
-            }
+            sal_Int32* pAry = (sal_Int32*)alloca(sizeof(sal_Int32)*nLen);
+            if( nCutStart > nMinIndex )
+                memcpy( pAry, pDXArray, sizeof(sal_Int32)*(nCutStart-nMinIndex) );
+            // note: nCutStart will never be smaller than nMinIndex
+            memcpy( pAry+nCutStart-nMinIndex,
+                    pDXArray + nOrgLen - (nCutStop-nMinIndex),
+                    sizeof(sal_Int32)*(nLen - (nCutStart-nMinIndex)) );
+            pDXArray = pAry;
         }
     }
 
