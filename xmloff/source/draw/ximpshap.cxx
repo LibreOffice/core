@@ -1470,8 +1470,6 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
                                 aPolyPolygon,
                                 aSourcePolyPolygon);
                             aAny <<= aSourcePolyPolygon;
-
-                            xPropSet->setPropertyValue(OUString("PolyPolygonBezier"), aAny);
                         }
                         else
                         {
@@ -1481,9 +1479,9 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
                                 aPolyPolygon,
                                 aSourcePolyPolygon);
                             aAny <<= aSourcePolyPolygon;
-
-                            xPropSet->setPropertyValue(OUString("Geometry"), aAny);
                         }
+
+                        xPropSet->setPropertyValue(OUString("Geometry"), aAny);
                     }
 
                     // set pos, size, shear and rotate
