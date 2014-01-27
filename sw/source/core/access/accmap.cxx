@@ -1222,42 +1222,45 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
     }
 
     //Checked for FlyFrm
-    SwAccessibleContextMap_Impl::iterator aIter = mpFrmMap->begin();
-    while( aIter != mpFrmMap->end() )
+    if (mpFrmMap)
     {
-        const SwFrm *pFrm = (*aIter).first;
-        if(pFrm->IsFlyFrm())
+        SwAccessibleContextMap_Impl::iterator aIter = mpFrmMap->begin();
+        while( aIter != mpFrmMap->end() )
         {
-            sal_Bool bFrmChanged = sal_False;
-            uno::Reference < XAccessible > xAcc = (*aIter).second;
-
-            if(xAcc.is())
+            const SwFrm *pFrm = (*aIter).first;
+            if(pFrm->IsFlyFrm())
             {
-                SwAccessibleFrameBase *pAccFrame = (static_cast< SwAccessibleFrameBase * >(xAcc.get()));
-                bFrmChanged = pAccFrame->SetSelectedState( sal_True );
-                if (bFrmChanged)
+                sal_Bool bFrmChanged = sal_False;
+                uno::Reference < XAccessible > xAcc = (*aIter).second;
+
+                if(xAcc.is())
                 {
-                    const SwFlyFrm *pFlyFrm = static_cast< const SwFlyFrm * >( pFrm );
-                    const SwFrmFmt *pFrmFmt = pFlyFrm->GetFmt();
-                    if (pFrmFmt)
+                    SwAccessibleFrameBase *pAccFrame = (static_cast< SwAccessibleFrameBase * >(xAcc.get()));
+                    bFrmChanged = pAccFrame->SetSelectedState( sal_True );
+                    if (bFrmChanged)
                     {
-                        const SwFmtAnchor& pAnchor = pFrmFmt->GetAnchor();
-                        if( pAnchor.GetAnchorId() == FLY_AS_CHAR )
+                        const SwFlyFrm *pFlyFrm = static_cast< const SwFlyFrm * >( pFrm );
+                        const SwFrmFmt *pFrmFmt = pFlyFrm->GetFmt();
+                        if (pFrmFmt)
                         {
-                            uno::Reference< XAccessible > xAccParent = pAccFrame->getAccessibleParent();
-                            if (xAccParent.is())
+                            const SwFmtAnchor& pAnchor = pFrmFmt->GetAnchor();
+                            if( pAnchor.GetAnchorId() == FLY_AS_CHAR )
                             {
-                                uno::Reference< XAccessibleContext > xAccContext = xAccParent->getAccessibleContext();
-                                if(xAccContext.is() && xAccContext->getAccessibleRole() == AccessibleRole::PARAGRAPH)
+                                uno::Reference< XAccessible > xAccParent = pAccFrame->getAccessibleParent();
+                                if (xAccParent.is())
                                 {
-                                    SwAccessibleParagraph* pAccPara = static_cast< SwAccessibleParagraph *>(xAccContext.get());
-                                    if(pAccFrame->IsSeletedInDoc())
+                                    uno::Reference< XAccessibleContext > xAccContext = xAccParent->getAccessibleContext();
+                                    if(xAccContext.is() && xAccContext->getAccessibleRole() == AccessibleRole::PARAGRAPH)
                                     {
-                                        m_setParaAdd.insert(pAccPara);
-                                    }
-                                    else if(m_setParaAdd.count(pAccPara) == 0)
-                                    {
-                                        m_setParaRemove.insert(pAccPara);
+                                        SwAccessibleParagraph* pAccPara = static_cast< SwAccessibleParagraph *>(xAccContext.get());
+                                        if(pAccFrame->IsSeletedInDoc())
+                                        {
+                                            m_setParaAdd.insert(pAccPara);
+                                        }
+                                        else if(m_setParaAdd.count(pAccPara) == 0)
+                                        {
+                                            m_setParaRemove.insert(pAccPara);
+                                        }
                                     }
                                 }
                             }
@@ -1265,9 +1268,10 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                     }
                 }
             }
+            ++aIter;
         }
-        ++aIter;
     }
+
     typedef std::vector< SwAccessibleContext* > VEC_PARA;
     VEC_PARA vecAdd;
     VEC_PARA vecRemove;
