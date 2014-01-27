@@ -416,7 +416,8 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSheetCellRanges > SAL_CALL
                             queryColumnDifferences(
                                 const ::com::sun::star::table::CellAddress& aCompare )
-                                    throw(::com::sun::star::uno::RuntimeException);
+                                    throw(::com::sun::star::uno::RuntimeException,
+                                          std::exception);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSheetCellRanges > SAL_CALL
                             queryRowDifferences(
                                 const ::com::sun::star::table::CellAddress& aCompare )

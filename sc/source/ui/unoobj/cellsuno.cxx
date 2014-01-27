@@ -3749,7 +3749,7 @@ uno::Reference<sheet::XSheetCellRanges> ScCellRangesBase::QueryDifferences_Impl(
 }
 
 uno::Reference<sheet::XSheetCellRanges > SAL_CALL ScCellRangesBase::queryColumnDifferences(
-                            const table::CellAddress& aCompare ) throw(uno::RuntimeException)
+    const table::CellAddress& aCompare ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return QueryDifferences_Impl( aCompare, true );
