@@ -1306,7 +1306,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
 
                     if( pFrm && mpFrmMap)
                     {
-                        aIter = mpFrmMap->find( pFrm );
+                        SwAccessibleContextMap_Impl::iterator aIter = mpFrmMap->find( pFrm );
                         if( aIter != mpFrmMap->end() )
                         {
                             uno::Reference < XAccessible > xAcc = (*aIter).second;
@@ -1341,7 +1341,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
         mpSeletedFrmMap = new SwAccessibleContextMap_Impl;
     if( !mpSeletedFrmMap->empty() )
     {
-        aIter = mpSeletedFrmMap->begin();
+        SwAccessibleContextMap_Impl::iterator aIter = mpSeletedFrmMap->begin();
         while( aIter != mpSeletedFrmMap->end() )
         {
             uno::Reference < XAccessible > xAcc = (*aIter).second;
@@ -1356,7 +1356,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
 
     if( !mapTemp.empty() )
     {
-        aIter = mapTemp.begin();
+        SwAccessibleContextMap_Impl::iterator aIter = mapTemp.begin();
         while( aIter != mapTemp.end() )
         {
             mpSeletedFrmMap->insert( SwAccessibleContextMap_Impl::value_type( (*aIter).first, (*aIter).second ) );
@@ -2650,77 +2650,74 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
         }
         else if (bShapeSelected)
         {
-            const SwFEShell *pFESh = pVSh ? static_cast< const SwFEShell * >( pVSh ) : NULL ;
-            if(pFESh)
+            const SwFEShell *pFESh = static_cast< const SwFEShell * >( pVSh );
+            const SdrMarkList *pMarkList = pFESh->GetMarkList();
+            if (pMarkList != NULL && pMarkList->GetMarkCount() == 1)
             {
-                const SdrMarkList *pMarkList = pFESh->GetMarkList();
-                if (pMarkList != NULL && pMarkList->GetMarkCount() == 1)
+                SdrObject *pObj = pMarkList->GetMark( 0 )->GetMarkedSdrObj();
+                ::rtl::Reference < ::accessibility::AccessibleShape > pAccShapeImpl = GetContextImpl(pObj,NULL,sal_False);
+                if (!pAccShapeImpl.is())
                 {
-                    SdrObject *pObj = pMarkList->GetMark( 0 )->GetMarkedSdrObj();
-                    ::rtl::Reference < ::accessibility::AccessibleShape > pAccShapeImpl = GetContextImpl(pObj,NULL,sal_False);
-                    if (!pAccShapeImpl.is())
+                    while (pObj && pObj->GetUpGroup())
                     {
-                        while (pObj && pObj->GetUpGroup())
+                        pObj = pObj->GetUpGroup();
+                    }
+                    if (pObj != NULL)
+                    {
+                        const SwFrm *pParent = SwAccessibleFrame::GetParent( SwAccessibleChild(pObj), GetShell()->IsPreview() );
+                        if( pParent )
                         {
-                            pObj = pObj->GetUpGroup();
-                        }
-                        if (pObj != NULL)
-                        {
-                            const SwFrm *pParent = SwAccessibleFrame::GetParent( SwAccessibleChild(pObj), GetShell()->IsPreview() );
-                            if( pParent )
+                            ::rtl::Reference< SwAccessibleContext > xParentAccImpl = GetContextImpl(pParent,sal_False);
+                            if (!xParentAccImpl.is())
                             {
-                                ::rtl::Reference< SwAccessibleContext > xParentAccImpl = GetContextImpl(pParent,sal_False);
-                                if (!xParentAccImpl.is())
+                                const SwTabFrm* pTabFrm = pParent->FindTabFrm();
+                                if (pTabFrm)
                                 {
-                                    const SwTabFrm* pTabFrm = pParent->FindTabFrm();
-                                    if (pTabFrm)
+                                    //The Table should not add in acc.because the "pParent" is not add to acc .
+                                    uno::Reference< XAccessible>  xAccParentTab = GetContext(pTabFrm,sal_True);//Should Create.
+
+                                    const SwFrm *pParentRoot = SwAccessibleFrame::GetParent( SwAccessibleChild(pTabFrm), GetShell()->IsPreview() );
+                                    if (pParentRoot)
                                     {
-                                        //The Table should not add in acc.because the "pParent" is not add to acc .
-                                        uno::Reference< XAccessible>  xAccParentTab = GetContext(pTabFrm,sal_True);//Should Create.
-
-                                        const SwFrm *pParentRoot = SwAccessibleFrame::GetParent( SwAccessibleChild(pTabFrm), GetShell()->IsPreview() );
-                                        if (pParentRoot)
-                                        {
-                                            ::rtl::Reference< SwAccessibleContext > xParentAccImplRoot = GetContextImpl(pParentRoot,sal_False);
-                                            if(xParentAccImplRoot.is())
-                                            {
-                                                AccessibleEventObject aEvent;
-                                                aEvent.EventId = AccessibleEventId::CHILD;
-                                                aEvent.NewValue <<= xAccParentTab;
-                                                xParentAccImplRoot->FireAccessibleEvent( aEvent );
-                                            }
-                                        }
-
-                                        //Get "pParent" acc again.
-                                        xParentAccImpl = GetContextImpl(pParent,sal_False);
-                                    }
-                                    else
-                                    {
-                                        //directly create this acc para .
-                                        xParentAccImpl = GetContextImpl(pParent,sal_True);//Should Create.
-
-                                        const SwFrm *pParentRoot = SwAccessibleFrame::GetParent( SwAccessibleChild(pParent), GetShell()->IsPreview() );
-
                                         ::rtl::Reference< SwAccessibleContext > xParentAccImplRoot = GetContextImpl(pParentRoot,sal_False);
                                         if(xParentAccImplRoot.is())
                                         {
                                             AccessibleEventObject aEvent;
                                             aEvent.EventId = AccessibleEventId::CHILD;
-                                            aEvent.NewValue <<= uno::Reference< XAccessible>(xParentAccImpl.get());
+                                            aEvent.NewValue <<= xAccParentTab;
                                             xParentAccImplRoot->FireAccessibleEvent( aEvent );
                                         }
                                     }
-                                }
-                                if (xParentAccImpl.is())
-                                {
-                                    uno::Reference< XAccessible>  xAccShape =
-                                        GetContext(pObj,xParentAccImpl.get(),sal_True);
 
-                                    AccessibleEventObject aEvent;
-                                    aEvent.EventId = AccessibleEventId::CHILD;
-                                    aEvent.NewValue <<= xAccShape;
-                                    xParentAccImpl->FireAccessibleEvent( aEvent );
+                                    //Get "pParent" acc again.
+                                    xParentAccImpl = GetContextImpl(pParent,sal_False);
                                 }
+                                else
+                                {
+                                    //directly create this acc para .
+                                    xParentAccImpl = GetContextImpl(pParent,sal_True);//Should Create.
+
+                                    const SwFrm *pParentRoot = SwAccessibleFrame::GetParent( SwAccessibleChild(pParent), GetShell()->IsPreview() );
+
+                                    ::rtl::Reference< SwAccessibleContext > xParentAccImplRoot = GetContextImpl(pParentRoot,sal_False);
+                                    if(xParentAccImplRoot.is())
+                                    {
+                                        AccessibleEventObject aEvent;
+                                        aEvent.EventId = AccessibleEventId::CHILD;
+                                        aEvent.NewValue <<= uno::Reference< XAccessible>(xParentAccImpl.get());
+                                        xParentAccImplRoot->FireAccessibleEvent( aEvent );
+                                    }
+                                }
+                            }
+                            if (xParentAccImpl.is())
+                            {
+                                uno::Reference< XAccessible>  xAccShape =
+                                    GetContext(pObj,xParentAccImpl.get(),sal_True);
+
+                                AccessibleEventObject aEvent;
+                                aEvent.EventId = AccessibleEventId::CHILD;
+                                aEvent.NewValue <<= xAccShape;
+                                xParentAccImpl->FireAccessibleEvent( aEvent );
                             }
                         }
                     }
