@@ -791,12 +791,12 @@ void ScFunctionDockWin::UpdateFunctionList()
     }
     else // LRU-Liste
     {
-        for(::std::vector<const formula::IFunctionDescription*>::iterator iter=aLRUList.begin();iter!=aLRUList.end();++iter)
+        for (::std::vector<const formula::IFunctionDescription*>::iterator iter=aLRUList.begin();
+                iter != aLRUList.end(); ++iter)
         {
             const formula::IFunctionDescription* pDesc = *iter;
-            pAllFuncList->SetEntryData(
-                    pAllFuncList->InsertEntry(pDesc->getFunctionName()),
-                    (void*)pDesc );
+            if (pDesc)
+                pAllFuncList->SetEntryData( pAllFuncList->InsertEntry( pDesc->getFunctionName()), (void*)pDesc);
         }
     }
 
