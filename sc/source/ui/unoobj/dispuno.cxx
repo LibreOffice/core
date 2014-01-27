@@ -275,9 +275,9 @@ static void lcl_FillDataSource( frame::FeatureStateEvent& rEvent, const ScImport
 }
 
 void SAL_CALL ScDispatch::addStatusListener(
-                                const uno::Reference<frame::XStatusListener>& xListener,
-                                const util::URL& aURL )
-                                throw(uno::RuntimeException)
+    const uno::Reference<frame::XStatusListener>& xListener,
+    const util::URL& aURL)
+        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
