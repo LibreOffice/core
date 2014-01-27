@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da9df570_459a8a15",
+        "filename": "editeng/source/editeng/editdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2566,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2014-01-27T08:36:38Z",
+      "side": 1,
+      "message": "Temporary, addressed in 7661",
+      "parentUuid": "da9df570_85b0f2f5",
+      "revId": "03be4a6c8ab4d8ad38751debaa9f926428d402ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9df570_45a60ac3",
         "filename": "editeng/source/editeng/impedit3.cxx",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "da9df570_05f9624d",
+        "filename": "editeng/source/editeng/impedit3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1743,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2014-01-27T08:36:38Z",
+      "side": 1,
+      "message": "Addressed in 7657 \"Initial value always rewritten before read: use 0\"",
+      "parentUuid": "da9df570_45a60ac3",
+      "revId": "03be4a6c8ab4d8ad38751debaa9f926428d402ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9df570_65ab0e8a",
         "filename": "editeng/source/editeng/impedit5.cxx",
         "patchSetId": 1
@@ -47,6 +83,30 @@
       "writtenOn": "2014-01-26T18:24:37Z",
       "side": 1,
       "message": "that is a bit scary comment.. surely in 32 bits world that\nmust be false.. I wonder if that is completely obsolete\nor there is some trickery hidden somewhere...",
+      "range": {
+        "startLine": 761,
+        "startChar": 20,
+        "endLine": 761,
+        "endChar": 26
+      },
+      "revId": "03be4a6c8ab4d8ad38751debaa9f926428d402ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9df570_259586e4",
+        "filename": "editeng/source/editeng/impedit5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 761,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2014-01-27T08:36:38Z",
+      "side": 1,
+      "message": "I really cannot say, in my opinion the check shouldn\u0027t harm in any case but more insight is probably needed.",
+      "parentUuid": "da9df570_65ab0e8a",
       "range": {
         "startLine": 761,
         "startChar": 20,
