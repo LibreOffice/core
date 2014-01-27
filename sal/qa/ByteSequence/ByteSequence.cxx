@@ -131,20 +131,20 @@ public:
     void test_same0() {
         rtl::ByteSequence s1;
         rtl::ByteSequence s2;
-        CPPUNIT_ASSERT_EQUAL(sal_True, s1 == s2);
-        CPPUNIT_ASSERT_EQUAL(sal_True, s2 == s1);
-        CPPUNIT_ASSERT_EQUAL(sal_False, s1 != s2);
-        CPPUNIT_ASSERT_EQUAL(sal_False, s2 != s1);
+        CPPUNIT_ASSERT_EQUAL(true, s1 == s2);
+        CPPUNIT_ASSERT_EQUAL(true, s2 == s1);
+        CPPUNIT_ASSERT_EQUAL(false, s1 != s2);
+        CPPUNIT_ASSERT_EQUAL(false, s2 != s1);
     }
 
     void test_diffLen() {
         sal_Int8 const a[5] = { 0, 1, 2, 3, 4 };
         rtl::ByteSequence s1(a, 5);
         rtl::ByteSequence s2(a, 4);
-        CPPUNIT_ASSERT_EQUAL(sal_False, s1 == s2);
-        CPPUNIT_ASSERT_EQUAL(sal_False, s2 == s1);
-        CPPUNIT_ASSERT_EQUAL(sal_True, s1 != s2);
-        CPPUNIT_ASSERT_EQUAL(sal_True, s2 != s1);
+        CPPUNIT_ASSERT_EQUAL(false, s1 == s2);
+        CPPUNIT_ASSERT_EQUAL(false, s2 == s1);
+        CPPUNIT_ASSERT_EQUAL(true, s1 != s2);
+        CPPUNIT_ASSERT_EQUAL(true, s2 != s1);
     }
 
     void test_diffElem() {
@@ -152,10 +152,10 @@ public:
         rtl::ByteSequence s1(a1, 5);
         sal_Int8 const a2[5] = { 0, 1, 10, 3, 4 };
         rtl::ByteSequence s2(a2, 5);
-        CPPUNIT_ASSERT_EQUAL(sal_False, s1 == s2);
-        CPPUNIT_ASSERT_EQUAL(sal_False, s2 == s1);
-        CPPUNIT_ASSERT_EQUAL(sal_True, s1 != s2);
-        CPPUNIT_ASSERT_EQUAL(sal_True, s2 != s1);
+        CPPUNIT_ASSERT_EQUAL(false, s1 == s2);
+        CPPUNIT_ASSERT_EQUAL(false, s2 == s1);
+        CPPUNIT_ASSERT_EQUAL(true, s1 != s2);
+        CPPUNIT_ASSERT_EQUAL(true, s2 != s1);
     }
 
     CPPUNIT_TEST_SUITE(Test);

@@ -438,7 +438,7 @@ inline void deleteTestDirectory( const ::rtl::OUString dirname )
         ::osl::FileBase::getFileURLFromSystemPath( dirname, aPathURL ); //convert if not full qualified URL
 
     ::osl::Directory testDir( aPathURL );
-    if ( testDir.isOpen() == sal_True )
+    if ( testDir.isOpen() )
         testDir.close();  //close if still open.
 
     nError = ::osl::Directory::remove( aPathURL );
@@ -1530,7 +1530,7 @@ namespace osl_VolumeInfo
              sal_Int32 mask1 = osl_VolumeInfo_Mask_FreeSpace;
             ::osl::VolumeInfo aVolumeInfo1( mask1 );
             nError1 = ::osl::Directory::getVolumeInfo( aRootURL, aVolumeInfo1 );
-            CPPUNIT_ASSERT( sal_True == aVolumeInfo1.isValid( mask1 ) );
+            CPPUNIT_ASSERT( aVolumeInfo1.isValid( mask1 ) );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
 
             sal_uInt64 uiTotalSpace1 = aVolumeInfo1.getTotalSpace();
@@ -1539,7 +1539,7 @@ namespace osl_VolumeInfo
              sal_Int32 mask2 = osl_VolumeInfo_Mask_TotalSpace;
             ::osl::VolumeInfo aVolumeInfo2( mask2 );
             nError2 = ::osl::Directory::getVolumeInfo( aRootURL, aVolumeInfo2 );
-            CPPUNIT_ASSERT( sal_True == aVolumeInfo2.isValid( mask2 ) );
+            CPPUNIT_ASSERT( aVolumeInfo2.isValid( mask2 ) );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError2 );
 
             sal_uInt64 uiTotalSpace2 = aVolumeInfo2.getTotalSpace();
@@ -1588,7 +1588,7 @@ namespace osl_VolumeInfo
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
 
             CPPUNIT_ASSERT_MESSAGE( "test for isValid function: no fields specified.",
-                                      sal_True == aVolumeInfo.isValid( mask ) );
+                                      aVolumeInfo.isValid( mask ) );
         }
 
 #if ( defined UNX )
@@ -1602,7 +1602,7 @@ namespace osl_VolumeInfo
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
 
             CPPUNIT_ASSERT_MESSAGE( "test for isValid function: all valid fields specified for a nfs volume.",
-                                     sal_True == aVolumeInfo.isValid( mask ) );
+                                     aVolumeInfo.isValid( mask ) );
         }
 #else           /// Windows version,here we can not determine whichvolume in Windows is serve as an nfs volume.
         void isValid_002()
@@ -1908,7 +1908,7 @@ namespace osl_VolumeInfo
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
-            CPPUNIT_ASSERT( sal_True == aVolumeInfo.isValid( mask ) );
+            CPPUNIT_ASSERT( aVolumeInfo.isValid( mask ) );
             sal_uInt64 uiTotalSpace = aVolumeInfo.getTotalSpace();
 
             CPPUNIT_ASSERT_MESSAGE( "test for getTotalSpace function: get total space of Fixed disk volume mounted on /, it should not be 0",
@@ -1922,7 +1922,7 @@ namespace osl_VolumeInfo
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL3, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
-            CPPUNIT_ASSERT( sal_True == aVolumeInfo.isValid( mask ) );
+            CPPUNIT_ASSERT( aVolumeInfo.isValid( mask ) );
             sal_uInt64 uiTotalSpace = aVolumeInfo.getTotalSpace();
 
             CPPUNIT_ASSERT_MESSAGE( "test for getTotalSpace function: get total space of /proc, it should be 0",
@@ -1990,7 +1990,7 @@ namespace osl_VolumeInfo
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
-            CPPUNIT_ASSERT( sal_True == aVolumeInfo.isValid( mask ) );
+            CPPUNIT_ASSERT( aVolumeInfo.isValid( mask ) );
             sal_uInt64 uiFreeSpace = aVolumeInfo.getFreeSpace();
 
             CPPUNIT_ASSERT_MESSAGE( "test for getFreeSpace function: get free space of Fixed disk volume mounted on /, it should not be 0, suggestion: returned value, -1 is better, since some times the free space may be 0",
@@ -2004,7 +2004,7 @@ namespace osl_VolumeInfo
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL3, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
-            CPPUNIT_ASSERT( sal_True == aVolumeInfo.isValid( mask ) );
+            CPPUNIT_ASSERT( aVolumeInfo.isValid( mask ) );
             sal_uInt64 uiFreeSpace = aVolumeInfo.getFreeSpace();
 
             CPPUNIT_ASSERT_MESSAGE( "test for getFreeSpace function: get free space of /proc, it should be 0",
@@ -2072,7 +2072,7 @@ namespace osl_VolumeInfo
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
-            CPPUNIT_ASSERT( sal_True == aVolumeInfo.isValid( mask ) );
+            CPPUNIT_ASSERT( aVolumeInfo.isValid( mask ) );
             sal_uInt64 uiUsedSpace = aVolumeInfo.getUsedSpace();
 
             CPPUNIT_ASSERT_MESSAGE( "test for getUsedSpace function: get used space of Fixed disk volume mounted on /, it should not be 0, suggestion: returned value, -1 is better, since some times the used space may be 0",
@@ -2086,7 +2086,7 @@ namespace osl_VolumeInfo
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL3, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
-            CPPUNIT_ASSERT( sal_True == aVolumeInfo.isValid( mask ) );
+            CPPUNIT_ASSERT( aVolumeInfo.isValid( mask ) );
             sal_uInt64 uiUsedSpace = aVolumeInfo.getUsedSpace();
 
             CPPUNIT_ASSERT_MESSAGE( "test for getUsedSpace function: get used space of /proc, it should be 0",
@@ -2156,7 +2156,7 @@ namespace osl_VolumeInfo
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
-            CPPUNIT_ASSERT( sal_True == aVolumeInfo.isValid( mask ) );
+            CPPUNIT_ASSERT( aVolumeInfo.isValid( mask ) );
             sal_uInt32 uiMaxNameLength = aVolumeInfo.getMaxNameLength();
 
             CPPUNIT_ASSERT_MESSAGE( "test for getMaxNameLength function: get max name length of Fixed disk volume mounted on /, it should not be 0",
@@ -2178,7 +2178,7 @@ namespace osl_VolumeInfo
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
-            CPPUNIT_ASSERT( sal_True == aVolumeInfo.isValid( mask ) );
+            CPPUNIT_ASSERT( aVolumeInfo.isValid( mask ) );
             sal_uInt64 uiMaxNameLength = aVolumeInfo.getMaxNameLength();
 
              CPPUNIT_ASSERT_MESSAGE( "test for getMaxNameLength function: get max name length by hand, then compare with getMaxNameLength",
@@ -2216,7 +2216,7 @@ namespace osl_VolumeInfo
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
-            CPPUNIT_ASSERT( sal_True == aVolumeInfo.isValid( mask ) );
+            CPPUNIT_ASSERT( aVolumeInfo.isValid( mask ) );
             sal_uInt32 uiMaxPathLength = aVolumeInfo.getMaxPathLength();
 
             CPPUNIT_ASSERT_MESSAGE( "test for getMaxPathLength function: get max path length of Fixed disk volume mounted on /, it should not be 0",
@@ -2231,7 +2231,7 @@ namespace osl_VolumeInfo
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
-            CPPUNIT_ASSERT( sal_True == aVolumeInfo.isValid( mask ) );
+            CPPUNIT_ASSERT( aVolumeInfo.isValid( mask ) );
             sal_uInt64 uiMaxPathLength = aVolumeInfo.getMaxPathLength();
 
              CPPUNIT_ASSERT_MESSAGE( "test for getMaxPathLength function: get max path length by hand, then compare with getMaxPathLength",
@@ -2271,7 +2271,7 @@ namespace osl_VolumeInfo
             ::osl::VolumeInfo aVolumeInfo( mask );
             nError1 = ::osl::Directory::getVolumeInfo( aVolURL1, aVolumeInfo );
             CPPUNIT_ASSERT( osl::FileBase::E_None == nError1 );
-            CPPUNIT_ASSERT( sal_True == aVolumeInfo.isValid( mask ) );
+            CPPUNIT_ASSERT( aVolumeInfo.isValid( mask ) );
             aUStr = aVolumeInfo.getFileSystemName();
 
             CPPUNIT_ASSERT_MESSAGE( "test for getFileSystemName function: get file system name of Fixed disk volume mounted on /, it should not be empty string",
@@ -2595,7 +2595,7 @@ namespace osl_FileStatus
                     if ( compareFileName( rFileStatus.getFileName(), aFileName) == sal_True )
                     {
                         //printf("find the link file");
-                        if ( sal_True == rFileStatus.isValid( osl_FileStatus_Mask_LinkTargetURL ) )
+                        if ( rFileStatus.isValid( osl_FileStatus_Mask_LinkTargetURL ) )
                         {
                             bOk = sal_True;
                             break;
@@ -4937,7 +4937,7 @@ namespace osl_DirectoryItem
             CPPUNIT_ASSERT( FileBase::E_None == nError1 );
 
             CPPUNIT_ASSERT_MESSAGE( "test for is function: use an uninitialized instance.",
-                                    ( sal_True == rItem.is() ) );
+                                    rItem.is() );
         }
 
         CPPUNIT_TEST_SUITE( is );

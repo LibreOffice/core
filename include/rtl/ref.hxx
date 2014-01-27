@@ -176,7 +176,7 @@ public:
 
     /** Returns True if the handle does point to a valid body.
      */
-    inline sal_Bool SAL_CALL is() const
+    inline bool SAL_CALL is() const
     {
         return (m_pBody != 0);
     }
@@ -184,7 +184,7 @@ public:
 
     /** Returns True if this points to pBody.
      */
-    inline sal_Bool SAL_CALL operator== (const reference_type * pBody) const
+    inline bool SAL_CALL operator== (const reference_type * pBody) const
     {
         return (m_pBody == pBody);
     }
@@ -192,7 +192,7 @@ public:
 
     /** Returns True if handle points to the same body.
      */
-    inline sal_Bool
+    inline bool
     SAL_CALL operator== (const Reference<reference_type> & handle) const
     {
         return (m_pBody == handle.m_pBody);
@@ -201,7 +201,7 @@ public:
 
     /** Needed to place References into STL collection.
      */
-    inline sal_Bool
+    inline bool
     SAL_CALL operator!= (const Reference<reference_type> & handle) const
     {
         return (m_pBody != handle.m_pBody);
@@ -210,7 +210,7 @@ public:
 
     /** Needed to place References into STL collection.
      */
-    inline sal_Bool
+    inline bool
     SAL_CALL operator< (const Reference<reference_type> & handle) const
     {
         return (m_pBody < handle.m_pBody);
@@ -219,7 +219,7 @@ public:
 
     /** Needed to place References into STL collection.
      */
-    inline sal_Bool
+    inline bool
     SAL_CALL operator> (const Reference<reference_type> & handle) const
     {
         return (m_pBody > handle.m_pBody);

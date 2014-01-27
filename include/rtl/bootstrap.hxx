@@ -40,10 +40,10 @@ namespace rtl
            @param sName name of the bootstrap value. case insensitive.
            @param outValue (out parameter). On success contains the value, otherwise
                   an empty string.
-           @return sal_False, if no value could be retrieved, otherwise sal_True
+           @return false, if no value could be retrieved, otherwise true
            @see rtl_bootstrap_get()
          */
-        static inline sal_Bool get(
+        static inline bool get(
             const ::rtl::OUString &sName,
             ::rtl::OUString &outValue );
 
@@ -94,7 +94,7 @@ namespace rtl
             @see rtl_bootstrap_get_from_handle()
         */
 
-        inline sal_Bool getFrom(const ::rtl::OUString &sName,
+        inline bool getFrom(const ::rtl::OUString &sName,
                                 ::rtl::OUString &outValue) const;
 
         /** Retrieves a bootstrap argument.
@@ -156,7 +156,7 @@ namespace rtl
         rtl_bootstrap_setIniFileName( sFile.pData );
     }
 
-    inline sal_Bool Bootstrap::get( const ::rtl::OUString &sName,
+    inline bool Bootstrap::get( const ::rtl::OUString &sName,
                                     ::rtl::OUString & outValue )
     {
         return rtl_bootstrap_get( sName.pData , &(outValue.pData) , 0 );
@@ -195,7 +195,7 @@ namespace rtl
     }
 
 
-    inline sal_Bool Bootstrap::getFrom(const ::rtl::OUString &sName,
+    inline bool Bootstrap::getFrom(const ::rtl::OUString &sName,
                                        ::rtl::OUString &outValue) const
     {
         return rtl_bootstrap_get_from_handle(_handle, sName.pData, &outValue.pData, 0);

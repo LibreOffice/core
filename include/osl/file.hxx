@@ -453,10 +453,10 @@ public:
         @param nMask
         Set of flags for the fields to check.
 
-        @return sal_True if all fields are valid else sal_False.
+        @return true if all fields are valid else false.
     */
 
-    inline sal_Bool isValid( sal_uInt32 nMask ) const
+    inline bool isValid( sal_uInt32 nMask ) const
     {
         return ( nMask & _aInfo.uValidFields ) == nMask;
     }
@@ -464,10 +464,10 @@ public:
     /** Check the remote flag.
 
         @return
-        sal_True if Attributes are valid and the volume is remote else sal_False.
+        true if Attributes are valid and the volume is remote else false.
     */
 
-    inline sal_Bool getRemoteFlag() const
+    inline bool getRemoteFlag() const
     {
         return 0 != (_aInfo.uAttributes & osl_Volume_Attribute_Remote);
     }
@@ -475,10 +475,10 @@ public:
     /** Check the removeable flag.
 
         @return
-        sal_True if attributes are valid and the volume is removable else sal_False.
+        true if attributes are valid and the volume is removable else false.
     */
 
-    inline sal_Bool getRemoveableFlag() const
+    inline bool getRemoveableFlag() const
     {
         return 0 != (_aInfo.uAttributes & osl_Volume_Attribute_Removeable);
     }
@@ -486,10 +486,10 @@ public:
     /** Check the compact disc flag.
 
         @return
-        sal_True if attributes are valid and the volume is a CDROM else sal_False.
+        true if attributes are valid and the volume is a CDROM else false.
     */
 
-    inline sal_Bool getCompactDiscFlag() const
+    inline bool getCompactDiscFlag() const
     {
         return 0 != (_aInfo.uAttributes & osl_Volume_Attribute_CompactDisc);
     }
@@ -497,10 +497,10 @@ public:
     /** Check the floppy disc flag.
 
         @return
-        sal_True if attributes are valid and the volume is a floppy disk else sal_False.
+        true if attributes are valid and the volume is a floppy disk else false.
     */
 
-    inline sal_Bool getFloppyDiskFlag() const
+    inline bool getFloppyDiskFlag() const
     {
         return 0 != (_aInfo.uAttributes & osl_Volume_Attribute_FloppyDisk);
     }
@@ -508,10 +508,10 @@ public:
     /** Check the fixed disk flag.
 
         @return
-        sal_True if attributes are valid and the volume is a fixed disk else sal_False.
+        true if attributes are valid and the volume is a fixed disk else false.
     */
 
-    inline sal_Bool getFixedDiskFlag() const
+    inline bool getFixedDiskFlag() const
     {
         return 0 != (_aInfo.uAttributes & osl_Volume_Attribute_FixedDisk);
     }
@@ -519,10 +519,10 @@ public:
     /** Check the RAM disk flag.
 
         @return
-        sal_True if attributes are valid and the volume is a RAM disk else sal_False.
+        true if attributes are valid and the volume is a RAM disk else false.
     */
 
-    inline sal_Bool getRAMDiskFlag() const
+    inline bool getRAMDiskFlag() const
     {
         return 0 != (_aInfo.uAttributes & osl_Volume_Attribute_RAMDisk);
     }
@@ -705,10 +705,10 @@ public:
         Set of flags for the fields to check.
 
         @return
-        sal_True if all fields are valid else sal_False.
+        true if all fields are valid else false.
     */
 
-    inline sal_Bool isValid( sal_uInt32 nMask ) const
+    inline bool isValid( sal_uInt32 nMask ) const
     {
         return ( nMask & _aStatus.uValidFields ) == nMask;
     }
@@ -736,7 +736,7 @@ public:
         @see getFileType
         @since LibreOffice 3.6
     */
-    inline sal_Bool isDirectory() const
+    inline bool isDirectory() const
     {
         return ( getFileType() == Directory || getFileType() == Volume );
     }
@@ -751,7 +751,7 @@ public:
         @see isLink
         @since LibreOffice 3.6
     */
-    inline sal_Bool isRegular() const
+    inline bool isRegular() const
     {
         return ( getFileType() == Regular );
     }
@@ -764,7 +764,7 @@ public:
         @see getFileType
         @since LibreOffice 3.6
     */
-    inline sal_Bool isLink() const
+    inline bool isLink() const
     {
         return ( getFileType() == Link );
     }
@@ -1487,10 +1487,10 @@ public:
     /** Check for validity of this instance.
 
         @return
-        sal_True if object is valid directory item else sal_False.
+        true if object is valid directory item else false.
      */
 
-    inline sal_Bool is()
+    inline bool is()
     {
         return _pData != NULL;
     }
@@ -1586,14 +1586,14 @@ public:
     A directory handle to compare with the underlying object's item
 
     @return
-    sal_True: if the items point to an identical resource<br>
-    sal_False: if the items point to a different resource, or a fatal error occured<br>
+    true: if the items point to an identical resource<br>
+    false: if the items point to a different resource, or a fatal error occured<br>
 
     @see osl_getDirectoryItem()
 
     @since LibreOffice 3.6
 */
-    inline sal_Bool isIdenticalTo( const DirectoryItem &pOther )
+    inline bool isIdenticalTo( const DirectoryItem &pOther )
     {
         return osl_identicalDirectoryItem( _pData, pOther._pData );
     }
@@ -1717,13 +1717,13 @@ public:
         Query if directory is open and so item enumeration is valid.
 
         @return
-        sal_True if the directory is open else sal_False.
+        true if the directory is open else false.
 
         @see open()
         @see close()
     */
 
-    inline sal_Bool isOpen() { return _pData != NULL; }
+    inline bool isOpen() { return _pData != NULL; }
 
     /** Close a directory.
 

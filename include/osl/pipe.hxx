@@ -67,7 +67,7 @@ namespace osl
     }
 
     //______________________________________________________________________________
-    inline sal_Bool Pipe::create( const ::rtl::OUString & strName,
+    inline bool Pipe::create( const ::rtl::OUString & strName,
                                   oslPipeOptions Options, const Security &rSec )
     {
         *this = Pipe( strName, Options, rSec );
@@ -75,7 +75,7 @@ namespace osl
     }
 
     //______________________________________________________________________________
-    inline sal_Bool Pipe::create( const ::rtl::OUString & strName, oslPipeOptions Options  )
+    inline bool Pipe::create( const ::rtl::OUString & strName, oslPipeOptions Options  )
     {
         *this = Pipe( strName, Options );
         return is();
@@ -99,13 +99,13 @@ namespace osl
     }
 
     //______________________________________________________________________________
-    inline sal_Bool SAL_CALL Pipe::is() const
+    inline bool SAL_CALL Pipe::is() const
     {
         return m_handle != 0;
     }
 
     //______________________________________________________________________________
-    inline sal_Bool SAL_CALL Pipe::operator==( const Pipe& rPipe ) const
+    inline bool SAL_CALL Pipe::operator==( const Pipe& rPipe ) const
     {
         return m_handle == rPipe.m_handle;
     }

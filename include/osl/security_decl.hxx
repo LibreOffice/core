@@ -48,7 +48,7 @@ public:
         @return True, if the specified user is known by the underlying operating system,
         otherwise False
     */
-    inline sal_Bool SAL_CALL logonUser(const rtl::OUString& strName,
+    inline bool SAL_CALL logonUser(const rtl::OUString& strName,
                                        const rtl::OUString& strPasswd);
     /** get the security information for one user.
 
@@ -64,7 +64,7 @@ public:
         @return True, if the specified user is known by file server and the
         could be connected, otherwise False
     */
-    inline sal_Bool SAL_CALL logonUser(const rtl::OUString & strName,
+    inline bool SAL_CALL logonUser(const rtl::OUString & strName,
                                        const rtl::OUString & strPasswd,
                                        const rtl::OUString & strFileServer);
 
@@ -72,30 +72,30 @@ public:
         @param[out] strIdent is the OUString which returns the name
         @return True, if any user is successfully logged in, otherwise False
     */
-    inline sal_Bool  SAL_CALL getUserIdent( rtl::OUString& strIdent) const;
+    inline bool  SAL_CALL getUserIdent( rtl::OUString& strIdent) const;
 
     /** get the name of the logged in user.
         @param[out] strName is the OUString which returns the name
         @return True, if any user is successfully logged in, otherwise False
     */
-    inline sal_Bool SAL_CALL getUserName( rtl::OUString& strName) const;
+    inline bool SAL_CALL getUserName( rtl::OUString& strName) const;
 
     /** get the home directory of the logged in user.
         @param[out] strDirectory is the OUString which returns the directory name
          @return True, if any user is successfully logged in, otherwise False
     */
-    inline sal_Bool SAL_CALL getHomeDir( rtl::OUString& strDirectory) const;
+    inline bool SAL_CALL getHomeDir( rtl::OUString& strDirectory) const;
 
     /** get the directory for configuration data of the logged in user.
         @param[out] strDirectory is the OUString which returns the directory name
         @return True, if any user is successfully logged in, otherwise False
     */
-    inline sal_Bool SAL_CALL getConfigDir( rtl::OUString & strDirectory) const;
+    inline bool SAL_CALL getConfigDir( rtl::OUString & strDirectory) const;
 
     /** Query if the user who is logged inhas administrator rights.
         @return True, if the user has administrator rights, otherwise false.
     */
-    inline sal_Bool SAL_CALL isAdministrator() const;
+    inline bool SAL_CALL isAdministrator() const;
 
     /** Returns the underlying oslSecurity handle
      */

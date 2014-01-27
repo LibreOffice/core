@@ -69,10 +69,10 @@ namespace osl
         inline ~SocketAddr();
 
         /** checks, if the SocketAddr was created successful.
-            @return <code>sal_True</code> if there is a valid underlying handle,
-                    otherwise sal_False.
+            @return <code>true</code> if there is a valid underlying handle,
+                    otherwise false.
          */
-        inline sal_Bool is() const;
+        inline bool is() const;
 
         /** Converts the address to a (human readable) domain-name.
 
@@ -86,7 +86,7 @@ namespace osl
 
         /** Sets the ipaddress or hostname of the SocketAddress
          */
-        inline sal_Bool SAL_CALL setHostname( const ::rtl::OUString &sDottedIpOrHostname );
+        inline bool SAL_CALL setHostname( const ::rtl::OUString &sDottedIpOrHostname );
 
         /** Returns the port number of the address.
             @return the port in host-byte order or or OSL_INVALID_PORT on errors.
@@ -96,12 +96,12 @@ namespace osl
         /** Sets the port number of the address.
            @return true if successfule.
          */
-        inline sal_Bool SAL_CALL setPort( sal_Int32 nPort );
+        inline bool SAL_CALL setPort( sal_Int32 nPort );
 
         /** Sets the address of the underlying socket address struct in network byte order.
             @return true on success, false signales falure.
          */
-        inline sal_Bool SAL_CALL setAddr( const ::rtl::ByteSequence & address );
+        inline bool SAL_CALL setAddr( const ::rtl::ByteSequence & address );
 
         /** Returns the address of the underlying socket in network byte order
           */
@@ -123,11 +123,11 @@ namespace osl
 
         /** Returns true if the underlying handle is identical to the Addr handle.
          */
-        inline sal_Bool SAL_CALL operator== (oslSocketAddr Addr) const;
+        inline bool SAL_CALL operator== (oslSocketAddr Addr) const;
 
         /** Returns true if the underlying handle is identical to the Addr handle.
          */
-        inline sal_Bool SAL_CALL operator== (const SocketAddr & Addr) const;
+        inline bool SAL_CALL operator== (const SocketAddr & Addr) const;
 
         /** Returns the underlying SocketAddr handle without copyconstructing it.
          */
@@ -201,16 +201,16 @@ namespace osl
         inline Socket& SAL_CALL operator= (const Socket& sock);
 
         /**
-           @return <code>sal_True</code>, when the underlying handle of both
-                         Socket instances are identical, <code>sal_False</code> otherwise.
+           @return <code>true</code>, when the underlying handle of both
+                         Socket instances are identical, <code>false</code> otherwise.
          */
-        inline sal_Bool SAL_CALL operator==( const Socket& rSocket ) const ;
+        inline bool SAL_CALL operator==( const Socket& rSocket ) const ;
 
         /**
-           @return <code>sal_True</code>, when the underlying handle of both
-                         Socket instances are identical, <code>sal_False</code> otherwise.
+           @return <code>true</code>, when the underlying handle of both
+                         Socket instances are identical, <code>false</code> otherwise.
          */
-        inline sal_Bool SAL_CALL operator==( const oslSocket socketHandle ) const;
+        inline bool SAL_CALL operator==( const oslSocket socketHandle ) const;
 
         /** Closes a definite or both directions of the bidirectional stream.
 
@@ -261,31 +261,31 @@ namespace osl
             @param LocalInterface Address of the Interface
             @return True if bind was successful.
         */
-        inline sal_Bool SAL_CALL bind(const SocketAddr& LocalInterface);
+        inline bool SAL_CALL bind(const SocketAddr& LocalInterface);
 
         /** Checks if read operations will block.
 
             You can specify a timeout-value in seconds/nanoseconds that denotes
             how the operation will block if the Socket is not ready.
-            @return <code>sal_True</code> if read operations (recv, recvFrom, accept) on the Socket
-            will NOT block; <code>sal_False</code> if it would block or if an error occurred.
+            @return <code>true</code> if read operations (recv, recvFrom, accept) on the Socket
+            will NOT block; <code>false</code> if it would block or if an error occurred.
 
             @param pTimeout if 0, the operation will block without a timeout. Otherwise
             the specified amout of time.
         */
-        inline sal_Bool SAL_CALL isRecvReady(const TimeValue *pTimeout = 0) const;
+        inline bool SAL_CALL isRecvReady(const TimeValue *pTimeout = 0) const;
 
         /** Checks if send operations will block.
 
             You can specify a timeout-value in seconds/nanoseconds that denotes
             how the operation will block if the Socket is not ready.
-            @return <code>sal_True</code> if send operations (send, sendTo) on the Socket
-            will NOT block; <code>sal_False</code> if it would block or if an error occurred.
+            @return <code>true</code> if send operations (send, sendTo) on the Socket
+            will NOT block; <code>false</code> if it would block or if an error occurred.
 
             @param pTimeout if 0, the operation will block without a timeout. Otherwise
             the specified amout of time.
         */
-        inline sal_Bool SAL_CALL isSendReady(const TimeValue *pTimeout = 0) const;
+        inline bool SAL_CALL isSendReady(const TimeValue *pTimeout = 0) const;
 
 
         /** Checks if a request for out-of-band data will block.
@@ -293,14 +293,14 @@ namespace osl
             You can specify a timeout-value in seconds/nanoseconds that denotes
             how the operation will block if the Socket has no pending OOB data.
 
-            @return <code>sal_True</code> if OOB-request operations (recv with appropriate flags)
-            on the Socket will NOT block; <code>sal_False</code> if it would block or if
+            @return <code>true</code> if OOB-request operations (recv with appropriate flags)
+            on the Socket will NOT block; <code>false</code> if it would block or if
             an error occurred.
 
             @param pTimeout if 0, the operation will block without a timeout. Otherwise
             the specified amout of time.
         */
-        inline sal_Bool SAL_CALL isExceptionPending(const TimeValue *pTimeout = 0) const;
+        inline bool SAL_CALL isExceptionPending(const TimeValue *pTimeout = 0) const;
 
 
         /** Queries the socket for its type.
@@ -444,7 +444,7 @@ namespace osl
 
             @return True if the option could be changed.
         */
-        inline sal_Bool SAL_CALL setOption( oslSocketOption Option,
+        inline bool SAL_CALL setOption( oslSocketOption Option,
                                             void* pBuffer,
                                             sal_uInt32 BufferLen,
                                             oslSocketOptionLevel Level= osl_Socket_LevelSocket ) const;
@@ -452,7 +452,7 @@ namespace osl
         /** Convenience function for setting sal_Bool and sal_Int32 option values.
             @see setOption()
          */
-        inline sal_Bool setOption( oslSocketOption option, sal_Int32 nValue  );
+        inline bool setOption( oslSocketOption option, sal_Int32 nValue  );
 
         /** Convenience function for retrieving sal_Bool and sal_Int32 option values.
             @see setOption()
@@ -460,17 +460,17 @@ namespace osl
         inline sal_Int32 getOption( oslSocketOption option ) const;
 
         /** Enables/disables non-blocking mode of the socket.
-            @param bNonBlockingMode If <code>sal_True</code>, blocking mode will be switched off
-                   If <code>sal_False</code>, the socket will become a blocking
+            @param bNonBlockingMode If <code>true</code>, blocking mode will be switched off
+                   If <code>false</code>, the socket will become a blocking
                    socket (which is the default behaviour of a socket).
-            @return <code>sal_True</code> if mode could be set.
+            @return <code>true</code> if mode could be set.
         */
-        inline sal_Bool SAL_CALL enableNonBlockingMode( sal_Bool bNonBlockingMode);
+        inline bool SAL_CALL enableNonBlockingMode( bool bNonBlockingMode);
 
         /** Query blocking mode of the socket.
-            @return <code>sal_True</code> if non-blocking mode is set.
+            @return <code>true</code> if non-blocking mode is set.
         */
-        inline sal_Bool SAL_CALL isNonBlockingMode() const;
+        inline bool SAL_CALL isNonBlockingMode() const;
 
 
         /** clears the error status
@@ -621,9 +621,9 @@ namespace osl
             @param MaxPendingConnections The maximum number of pending
             connections (waiting to be accepted) on this socket. If you use
             -1, a system default value is used.
-            @return <code>sal_True</code> if call was successful.
+            @return <code>true</code> if call was successful.
         */
-        inline sal_Bool SAL_CALL listen(sal_Int32 MaxPendingConnections= -1);
+        inline bool SAL_CALL listen(sal_Int32 MaxPendingConnections= -1);
 
         /** Accepts incoming connections on the socket. You must
             precede this call with osl::Socket::bind() and listen().

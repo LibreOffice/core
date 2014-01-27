@@ -50,28 +50,28 @@ namespace osl
         }
 
         /** Acquire the mutex, block if already acquired by another thread.
-            @return sal_False if system-call fails.
+            @return false if system-call fails.
             @see ::osl_acquireMutex()
         */
-        sal_Bool acquire()
+        bool acquire()
         {
             return osl_acquireMutex(mutex);
         }
 
         /** Try to acquire the mutex without blocking.
-            @return sal_False if it could not be acquired.
+            @return false if it could not be acquired.
             @see ::osl_tryToAcquireMutex()
         */
-        sal_Bool tryToAcquire()
+        bool tryToAcquire()
         {
             return osl_tryToAcquireMutex(mutex);
         }
 
         /** Release the mutex.
-            @return sal_False if system-call fails.
+            @return false if system-call fails.
             @see ::osl_releaseMutex()
         */
-        sal_Bool release()
+        bool release()
         {
             return osl_releaseMutex(mutex);
         }

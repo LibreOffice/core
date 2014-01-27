@@ -290,7 +290,7 @@ protected:
     void SAL_CALL run()
         {
             /// if the thread should terminate, schedule return false
-            while (m_aFlag.getValue() < 20 && schedule() == sal_True)
+            while (m_aFlag.getValue() < 20 && schedule())
             {
                 m_aFlag.addValue(1);
                 ThreadHelper::thread_sleep_tenth_sec(1);
@@ -344,7 +344,7 @@ protected:
     void SAL_CALL run()
         {
             //if the thread should terminate, schedule return false
-            while (schedule() == sal_True)
+            while (schedule())
             {
                 m_aFlag.addValue(1);
 
@@ -430,7 +430,7 @@ protected:
     void SAL_CALL run()
         {
             //if the thread should terminate, schedule return false
-            while (schedule() == sal_True)
+            while (schedule())
             {
                 m_aFlag.addValue(1);
             }

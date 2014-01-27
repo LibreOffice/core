@@ -98,7 +98,7 @@ public:
 
     ~IncreaseThread( )
     {
-        CPPUNIT_ASSERT_MESSAGE( "#IncreaseThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
+        CPPUNIT_ASSERT_MESSAGE( "#IncreaseThread does not shutdown properly.\n", !isRunning( ) );
     }
 protected:
     struct resource *pResource;
@@ -126,7 +126,7 @@ public:
 
     ~DecreaseThread( )
     {
-        CPPUNIT_ASSERT_MESSAGE( "#DecreaseThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
+        CPPUNIT_ASSERT_MESSAGE( "#DecreaseThread does not shutdown properly.\n", !isRunning( ) );
     }
 protected:
     struct resource *pResource;
@@ -164,7 +164,7 @@ public:
 
     ~PutThread( )
     {
-        CPPUNIT_ASSERT_MESSAGE( "#PutThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
+        CPPUNIT_ASSERT_MESSAGE( "#PutThread does not shutdown properly.\n", !isRunning( ) );
     }
 protected:
     struct chain* pChain;
@@ -202,7 +202,7 @@ public:
 
     ~HoldThread( )
     {
-        CPPUNIT_ASSERT_MESSAGE( "#HoldThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
+        CPPUNIT_ASSERT_MESSAGE( "#HoldThread does not shutdown properly.\n", !isRunning( ) );
     }
 protected:
     Mutex* pMyMutex;
@@ -224,7 +224,7 @@ public:
 
     ~WaitThread( )
     {
-        CPPUNIT_ASSERT_MESSAGE( "#WaitThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
+        CPPUNIT_ASSERT_MESSAGE( "#WaitThread does not shutdown properly.\n", !isRunning( ) );
     }
 protected:
     Mutex* pMyMutex;
@@ -248,7 +248,7 @@ public:
 
     ~GlobalMutexThread( )
     {
-        CPPUNIT_ASSERT_MESSAGE( "#GlobalMutexThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
+        CPPUNIT_ASSERT_MESSAGE( "#GlobalMutexThread does not shutdown properly.\n", !isRunning( ) );
     }
 protected:
     void SAL_CALL run( )
@@ -573,7 +573,7 @@ public:
 
     ~GuardThread( )
     {
-        CPPUNIT_ASSERT_MESSAGE( "#GuardThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
+        CPPUNIT_ASSERT_MESSAGE( "#GuardThread does not shutdown properly.\n", !isRunning( ) );
     }
 protected:
     Mutex* pMyMutex;
@@ -659,7 +659,7 @@ public:
 
     ~ClearGuardThread( )
     {
-        CPPUNIT_ASSERT_MESSAGE( "#ClearGuardThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
+        CPPUNIT_ASSERT_MESSAGE( "#ClearGuardThread does not shutdown properly.\n", !isRunning( ) );
     }
 protected:
     Mutex* pMyMutex;
@@ -734,7 +734,7 @@ namespace osl_ClearableGuard
 
             while (1)
             {
-                if (aMutex.tryToAcquire() == sal_True)
+                if (aMutex.tryToAcquire())
                 {
                     break;
                 }
@@ -801,7 +801,7 @@ public:
 
     ~ResetGuardThread( )
     {
-        CPPUNIT_ASSERT_MESSAGE( "#ResetGuardThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
+        CPPUNIT_ASSERT_MESSAGE( "#ResetGuardThread does not shutdown properly.\n", !isRunning( ) );
     }
 protected:
     Mutex* pMyMutex;

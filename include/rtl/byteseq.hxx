@@ -87,7 +87,7 @@ inline ByteSequence & ByteSequence::operator = ( const ByteSequence & rSeq ) SAL
     return *this;
 }
 //__________________________________________________________________________________________________
-inline sal_Bool ByteSequence::operator == ( const ByteSequence & rSeq ) const SAL_THROW(())
+inline bool ByteSequence::operator == ( const ByteSequence & rSeq ) const SAL_THROW(())
 {
     return ::rtl_byte_sequence_equals( _pSequence, rSeq._pSequence );
 }
@@ -112,7 +112,7 @@ inline sal_Int8 & ByteSequence::operator [] ( sal_Int32 nIndex )
     return getArray()[ nIndex ];
 }
 //__________________________________________________________________________________________________
-inline sal_Bool ByteSequence::operator != ( const ByteSequence & rSeq ) const SAL_THROW(())
+inline bool ByteSequence::operator != ( const ByteSequence & rSeq ) const SAL_THROW(())
 {
     return (! operator == ( rSeq ));
 }

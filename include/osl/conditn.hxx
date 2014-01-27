@@ -62,14 +62,14 @@ namespace osl
             osl_destroyCondition(condition);
         }
 
-        /* Release all waiting threads, check returns sal_True.
+        /* Release all waiting threads, check returns true.
          */
         void set()
         {
             osl_setCondition(condition);
         }
 
-        /* Reset condition to false: wait() will block, check() returns sal_False.
+        /* Reset condition to false: wait() will block, check() returns false.
          */
         void reset() {
             osl_resetCondition(condition);
@@ -84,7 +84,7 @@ namespace osl
 
         /** Checks if the condition is set without blocking.
          */
-        sal_Bool check()
+        bool check()
         {
             return osl_checkCondition(condition);
         }

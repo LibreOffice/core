@@ -280,13 +280,13 @@ public:
         @param rSeq another byte sequence (right side)
         @return true if both sequences are equal, false otherwise
     */
-    inline sal_Bool SAL_CALL operator == ( const ByteSequence & rSeq ) const SAL_THROW(());
+    inline bool SAL_CALL operator == ( const ByteSequence & rSeq ) const SAL_THROW(());
     /** Unequality operator: Compares two sequences.
 
         @param rSeq another byte sequence (right side)
         @return false if both sequences are equal, true otherwise
     */
-    inline sal_Bool SAL_CALL operator != ( const ByteSequence & rSeq ) const SAL_THROW(());
+    inline bool SAL_CALL operator != ( const ByteSequence & rSeq ) const SAL_THROW(());
 
     /** Reallocates sequence to new length. If the sequence has a handle acquired by other sequences
         (reference count > 1), then the remaining elements are copied to a new sequence handle to

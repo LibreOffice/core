@@ -69,7 +69,7 @@ public:
         osl_destroyThread( m_hThread);
     }
 
-    sal_Bool SAL_CALL create()
+    bool SAL_CALL create()
     {
         assert(m_hThread == 0); // only one running thread per instance
         m_hThread = osl_createSuspendedThread( threadFunc, (void*)this);
@@ -81,11 +81,11 @@ public:
         return true;
     }
 
-    sal_Bool SAL_CALL createSuspended()
+    bool SAL_CALL createSuspended()
     {
         assert(m_hThread == 0); // only one running thread per instance
         if( m_hThread)
-            return sal_False;
+            return false;
         m_hThread= osl_createSuspendedThread( threadFunc,
                                              (void*)this);
         return m_hThread != 0;
@@ -114,7 +114,7 @@ public:
         osl_joinWithThread(m_hThread);
     }
 
-    sal_Bool SAL_CALL isRunning() const
+    bool SAL_CALL isRunning() const
     {
         return osl_isThreadRunning(m_hThread);
     }
@@ -154,9 +154,9 @@ public:
         osl_setThreadName(name);
     }
 
-    virtual sal_Bool SAL_CALL schedule()
+    virtual bool SAL_CALL schedule()
     {
-        return m_hThread ? osl_scheduleThread(m_hThread) : sal_False;
+        return m_hThread && osl_scheduleThread(m_hThread);
     }
 
     SAL_CALL operator oslThread() const
@@ -208,7 +208,7 @@ public:
     /** Set the data associated with the data key.
         @returns True if operation was successful
     */
-    sal_Bool SAL_CALL setData(void *pData)
+    bool SAL_CALL setData(void *pData)
     {
            return (osl_setThreadKeyData(m_hKey, pData));
     }

@@ -91,19 +91,19 @@ namespace osl
     }
 
     //______________________________________________________________________________
-    inline sal_Bool SAL_CALL SocketAddr::setPort( sal_Int32 nPort )
+    inline bool SAL_CALL SocketAddr::setPort( sal_Int32 nPort )
     {
         return osl_setInetPortOfSocketAddr(m_handle, nPort );
     }
 
-    inline sal_Bool SAL_CALL SocketAddr::setHostname( const ::rtl::OUString &sDottedIpOrHostname )
+    inline bool SAL_CALL SocketAddr::setHostname( const ::rtl::OUString &sDottedIpOrHostname )
     {
         *this = SocketAddr( sDottedIpOrHostname , getPort() );
         return is();
     }
 
     //______________________________________________________________________________
-    inline sal_Bool SAL_CALL SocketAddr::setAddr( const ::rtl::ByteSequence & address )
+    inline bool SAL_CALL SocketAddr::setAddr( const ::rtl::ByteSequence & address )
     {
         return osl_setAddrOfSocketAddr( m_handle, address.getHandle() )
             == osl_Socket_Ok;
@@ -144,7 +144,7 @@ namespace osl
     }
 
     //______________________________________________________________________________
-    inline sal_Bool SAL_CALL SocketAddr::operator== (oslSocketAddr Addr) const
+    inline bool SAL_CALL SocketAddr::operator== (oslSocketAddr Addr) const
     {
         return osl_isEqualSocketAddr( m_handle, Addr );
     }
@@ -155,7 +155,7 @@ namespace osl
     }
 
     //______________________________________________________________________________
-    inline sal_Bool SocketAddr::is() const
+    inline bool SocketAddr::is() const
     {
         return m_handle != 0;
     }
@@ -233,13 +233,13 @@ namespace osl
     }
 
     //______________________________________________________________________________
-    inline sal_Bool Socket::operator==( const Socket& rSocket ) const
+    inline bool Socket::operator==( const Socket& rSocket ) const
     {
         return m_handle == rSocket.getHandle();
     }
 
     //______________________________________________________________________________
-    inline sal_Bool Socket::operator==( const oslSocket socketHandle ) const
+    inline bool Socket::operator==( const oslSocket socketHandle ) const
     {
         return m_handle == socketHandle;
     }
@@ -301,25 +301,25 @@ namespace osl
     }
 
     //______________________________________________________________________________
-    inline sal_Bool Socket::bind(const SocketAddr& LocalInterface)
+    inline bool Socket::bind(const SocketAddr& LocalInterface)
     {
         return osl_bindAddrToSocket( m_handle , LocalInterface.getHandle() );
     }
 
     //______________________________________________________________________________
-    inline sal_Bool Socket::isRecvReady(const TimeValue *pTimeout ) const
+    inline bool Socket::isRecvReady(const TimeValue *pTimeout ) const
     {
         return osl_isReceiveReady( m_handle , pTimeout );
     }
 
     //______________________________________________________________________________
-    inline sal_Bool Socket::isSendReady(const TimeValue *pTimeout ) const
+    inline bool Socket::isSendReady(const TimeValue *pTimeout ) const
     {
         return osl_isSendReady( m_handle, pTimeout );
     }
 
     //______________________________________________________________________________
-    inline sal_Bool Socket::isExceptionPending(const TimeValue *pTimeout ) const
+    inline bool Socket::isExceptionPending(const TimeValue *pTimeout ) const
     {
         return osl_isExceptionPending( m_handle, pTimeout );
     }
@@ -341,7 +341,7 @@ namespace osl
     }
 
     //______________________________________________________________________________
-    inline sal_Bool Socket::setOption(  oslSocketOption Option,
+    inline bool Socket::setOption(  oslSocketOption Option,
                                         void* pBuffer,
                                         sal_uInt32 BufferLen,
                                         oslSocketOptionLevel Level ) const
@@ -350,7 +350,7 @@ namespace osl
     }
 
     //______________________________________________________________________________
-    inline sal_Bool Socket::setOption( oslSocketOption option, sal_Int32 nValue  )
+    inline bool Socket::setOption( oslSocketOption option, sal_Int32 nValue  )
     {
         return setOption( option, &nValue, sizeof( nValue ) );
     }
@@ -364,13 +364,13 @@ namespace osl
     }
 
     //______________________________________________________________________________
-    inline sal_Bool Socket::enableNonBlockingMode( sal_Bool bNonBlockingMode)
+    inline bool Socket::enableNonBlockingMode( bool bNonBlockingMode)
     {
         return osl_enableNonBlockingMode( m_handle , bNonBlockingMode );
     }
 
     //______________________________________________________________________________
-    inline sal_Bool Socket::isNonBlockingMode() const
+    inline bool Socket::isNonBlockingMode() const
     {
         return osl_isNonBlockingMode( m_handle );
     }
@@ -475,7 +475,7 @@ namespace osl
     {}
 
     //______________________________________________________________________________
-    inline sal_Bool AcceptorSocket::listen(sal_Int32 MaxPendingConnections)
+    inline bool AcceptorSocket::listen(sal_Int32 MaxPendingConnections)
     {
         return osl_listenOnSocket( m_handle, MaxPendingConnections );
     }

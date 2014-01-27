@@ -32,7 +32,7 @@ class Module
     Module& operator = ( const Module&);
 
 public:
-    static sal_Bool getUrlFromAddress(void * addr, ::rtl::OUString & libraryUrl) {
+    static bool getUrlFromAddress(void * addr, ::rtl::OUString & libraryUrl) {
         return osl_getModuleURLFromAddress(addr, &libraryUrl.pData);
     }
 
@@ -49,15 +49,15 @@ public:
 
         @return
         <dl>
-        <dt>sal_True</dt>
+        <dt>true</dt>
         <dd>on success</dd>
-        <dt>sal_False</dt>
+        <dt>false</dt>
         <dd>can not get the URL from the specified function address or the parameter is invalid.</dd>
         </dl>
 
         @see getUrlFromAddress
     */
-    static sal_Bool getUrlFromAddress( oslGenericFunction addr, ::rtl::OUString & libraryUrl){
+    static bool getUrlFromAddress( oslGenericFunction addr, ::rtl::OUString & libraryUrl){
         return osl_getModuleURLFromFunctionAddress( addr, &libraryUrl.pData );
     }
 
@@ -81,7 +81,7 @@ public:
 
 #ifndef DISABLE_DYNLOADING
 
-    sal_Bool SAL_CALL load( const ::rtl::OUString& strModuleName,
+    bool SAL_CALL load( const ::rtl::OUString& strModuleName,
         sal_Int32 nRtldMode = SAL_LOADMODULE_DEFAULT)
     {
         unload();
@@ -90,7 +90,7 @@ public:
     }
 
     /// @since UDK 3.2.8
-    sal_Bool SAL_CALL loadRelative(
+    bool SAL_CALL loadRelative(
         ::oslGenericFunction baseModule, ::rtl::OUString const & relativePath,
         ::sal_Int32 mode = SAL_LOADMODULE_DEFAULT)
     {
@@ -100,7 +100,7 @@ public:
     }
 
     /// @since LibreOffice 3.5
-    sal_Bool SAL_CALL loadRelative(
+    bool SAL_CALL loadRelative(
         oslGenericFunction baseModule, char const * relativePath,
         sal_Int32 mode = SAL_LOADMODULE_DEFAULT)
     {
@@ -120,7 +120,7 @@ public:
 
 #endif
 
-    sal_Bool SAL_CALL is() const
+    bool SAL_CALL is() const
     {
            return m_Module != NULL;
     }

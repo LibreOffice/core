@@ -71,7 +71,7 @@ public:
     */
     inline ~Pipe();
 
-    inline sal_Bool SAL_CALL is() const;
+    inline bool SAL_CALL is() const;
 
     /** Creates an insecure pipe that is accessible for all users
         with the given attributes.
@@ -81,7 +81,7 @@ public:
         @param rSec
         @return True if socket was successfully created.
     */
-    inline sal_Bool create( const ::rtl::OUString & strName,
+    inline bool create( const ::rtl::OUString & strName,
                             oslPipeOptions Options, const Security &rSec );
 
     /** Creates a secure that access rights depend on the umask settings
@@ -92,7 +92,7 @@ public:
         @param Options
         @return True if socket was successfully created.
     */
-    inline sal_Bool create( const ::rtl::OUString & strName, oslPipeOptions Options = osl_Pipe_OPEN );
+    inline bool create( const ::rtl::OUString & strName, oslPipeOptions Options = osl_Pipe_OPEN );
 
     /** releases the underlying handle
      */
@@ -111,9 +111,9 @@ public:
     /** Checks if the pipe is valid.
         @return True if the object represents a valid pipe.
     */
-    inline sal_Bool SAL_CALL isValid() const;
+    inline bool SAL_CALL isValid() const;
 
-    inline sal_Bool SAL_CALL operator==( const Pipe& rPipe ) const;
+    inline bool SAL_CALL operator==( const Pipe& rPipe ) const;
 
     /** Closes the pipe.
     */

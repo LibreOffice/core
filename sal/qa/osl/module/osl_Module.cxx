@@ -98,7 +98,7 @@ inline void deleteTestDirectory( const ::rtl::OUString dirname )
         ::osl::FileBase::getFileURLFromSystemPath( dirname, aPathURL ); //convert if not full qualified URL
 
     ::osl::Directory testDir( aPathURL );
-    if ( testDir.isOpen( ) == sal_True )
+    if ( testDir.isOpen( ) )
     {
             testDir.close( );  //close if still open.
         }

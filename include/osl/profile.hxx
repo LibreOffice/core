@@ -60,7 +60,7 @@ namespace osl {
         }
 
 
-        sal_Bool flush()
+        bool flush()
         {
             return osl_flushProfile(profile);
         }
@@ -78,7 +78,7 @@ namespace osl {
 
         }
 
-        sal_Bool readBool( const rtl::OString& rSection, const rtl::OString& rEntry, sal_Bool bDefault )
+        bool readBool( const rtl::OString& rSection, const rtl::OString& rEntry, bool bDefault )
         {
             return osl_readProfileBool( profile, rSection.getStr(), rEntry.getStr(), bDefault );
         }
@@ -102,18 +102,18 @@ namespace osl {
             return nRet;
         }
 
-        sal_Bool writeString(const rtl::OString& rSection, const rtl::OString& rEntry,
+        bool writeString(const rtl::OString& rSection, const rtl::OString& rEntry,
                              const rtl::OString& rString)
         {
             return osl_writeProfileString(profile, rSection.getStr(), rEntry.getStr(), rString.getStr());
         }
 
-        sal_Bool writeBool(const rtl::OString& rSection, const rtl::OString& rEntry, sal_Bool Value)
+        bool writeBool(const rtl::OString& rSection, const rtl::OString& rEntry, bool Value)
         {
             return osl_writeProfileBool(profile, rSection.getStr(), rEntry.getStr(), Value);
         }
 
-        sal_Bool writeIdent(const rtl::OString& rSection, const rtl::OString& rEntry,
+        bool writeIdent(const rtl::OString& rSection, const rtl::OString& rEntry,
                             sal_uInt32 nFirstId, const std::list< rtl::OString >& rStrings,
                             sal_uInt32 nValue)
         {
@@ -127,7 +127,7 @@ namespace osl {
                 ++it;
             }
             pStrings[ nItems ] = NULL;
-            sal_Bool bRet =
+            bool bRet =
                 osl_writeProfileIdent(profile, rSection.getStr(), rEntry.getStr(), nFirstId, pStrings, nValue );
             delete pStrings;
             return bRet;
@@ -138,7 +138,7 @@ namespace osl {
             @param rEntry Name of the entry to remove.
             @return False if section or entry could not be found.
         */
-        sal_Bool removeEntry(const rtl::OString& rSection, const rtl::OString& rEntry)
+        bool removeEntry(const rtl::OString& rSection, const rtl::OString& rEntry)
         {
             return osl_removeProfileEntry(profile, rSection.getStr(), rEntry.getStr());
         }

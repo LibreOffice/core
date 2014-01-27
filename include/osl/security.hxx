@@ -36,7 +36,7 @@ inline Security::~Security()
     osl_freeSecurityHandle(m_handle);
 }
 
-inline sal_Bool Security::logonUser(const rtl::OUString& strName,
+inline bool Security::logonUser(const rtl::OUString& strName,
                                     const rtl::OUString& strPasswd)
 {
     osl_freeSecurityHandle(m_handle);
@@ -47,7 +47,7 @@ inline sal_Bool Security::logonUser(const rtl::OUString& strName,
             == osl_Security_E_None);
 }
 
-inline sal_Bool Security::logonUser( const rtl::OUString& strName,
+inline bool Security::logonUser( const rtl::OUString& strName,
                                       const rtl::OUString& strPasswd,
                                       const rtl::OUString& strFileServer )
 {
@@ -59,30 +59,30 @@ inline sal_Bool Security::logonUser( const rtl::OUString& strName,
             == osl_Security_E_None);
 }
 
-inline sal_Bool Security::getUserIdent( rtl::OUString& strIdent) const
+inline bool Security::getUserIdent( rtl::OUString& strIdent) const
 {
     return osl_getUserIdent( m_handle, &strIdent.pData );
 }
 
 
-inline sal_Bool Security::getUserName( rtl::OUString& strName ) const
+inline bool Security::getUserName( rtl::OUString& strName ) const
 {
     return osl_getUserName( m_handle, &strName.pData );
 }
 
 
-inline sal_Bool Security::getHomeDir( rtl::OUString& strDirectory) const
+inline bool Security::getHomeDir( rtl::OUString& strDirectory) const
 {
     return osl_getHomeDir(m_handle, &strDirectory.pData );
 }
 
 
-inline sal_Bool Security::getConfigDir( rtl::OUString& strDirectory ) const
+inline bool Security::getConfigDir( rtl::OUString& strDirectory ) const
 {
     return osl_getConfigDir( m_handle, &strDirectory.pData );
 }
 
-inline sal_Bool Security::isAdministrator() const
+inline bool Security::isAdministrator() const
 {
     return osl_isAdministrator(m_handle);
 }

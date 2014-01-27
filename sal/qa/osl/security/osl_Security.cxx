@@ -247,15 +247,15 @@ namespace osl_Security
     class getHandle : public CppUnit::TestFixture
     {
     public:
-        sal_Bool bRes;
+        bool bRes;
 
         void getHandle_001( )
         {
             ::osl::Security aSec;
-            bRes = aSec.isAdministrator( ) == osl_isAdministrator( aSec.getHandle( ) );
+            bRes = aSec.isAdministrator( ) == bool(osl_isAdministrator( aSec.getHandle( ) ));
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: use getHandle function to call C API.",
-                                     bRes == sal_True );
+                                     bRes );
         }
 
         CPPUNIT_TEST_SUITE( getHandle );
