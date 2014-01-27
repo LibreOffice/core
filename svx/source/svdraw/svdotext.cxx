@@ -573,7 +573,11 @@ void SdrTextObj::AdaptTextMinSize()
 
         if(bW || bH)
         {
-            SfxItemSet aSet(GetObjectItemSet());
+            SfxItemSet aSet(
+                *GetObjectItemSet().GetPool(),
+                SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
+                SDRATTR_TEXT_MINFRAMEWIDTH, SDRATTR_TEXT_AUTOGROWWIDTH, // contains SDRATTR_TEXT_MAXFRAMEWIDTH
+                0, 0);
 
             if(bW)
             {
