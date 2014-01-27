@@ -49,6 +49,10 @@ namespace sdr
             // #i53216# added CursorBlinkTime (in ms)
             sal_uInt32                              mnBlinkTime;
 
+            // optional shear and rotation
+            double                                  mfShearX;
+            double                                  mfRotation;
+
             /// bitfield
             // Flag to remember which state to draw. Inited with false (0)
             bool                                    mbOverlayState : 1;
@@ -65,7 +69,9 @@ namespace sdr
                 sal_uInt16 nCenX1 = 0,
                 sal_uInt16 nCenY1 = 0,
                 sal_uInt16 nCenX2 = 0,
-                sal_uInt16 nCenY2 = 0);
+                sal_uInt16 nCenY2 = 0,
+                double fShearX = 0.0,
+                double fRotation = 0.0);
             virtual ~OverlayAnimatedBitmapEx();
 
             const BitmapEx& getBitmapEx1() const { return maBitmapEx1; }
@@ -87,6 +93,10 @@ namespace sdr
             // execute event from base class ::sdr::animation::Event. Default
             // implementation does nothing and does not create a new event.
             virtual void Trigger(sal_uInt32 nTime);
+
+            // get shearX and rotation
+            double getShearX() const { return mfShearX; }
+            double getRotation() const { return mfRotation; }
         };
     } // end of namespace overlay
 } // end of namespace sdr

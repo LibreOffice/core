@@ -224,6 +224,9 @@ public:
 
     // #i103116# FullDrag support
     virtual SdrObject* getFullDragClone() const;
+
+    // add handles for crop mode when selected
+    void addCropHandles(SdrHdlList& rTarget) const;
 };
 
 #endif //_SVDOGRAF_HXX

@@ -518,8 +518,18 @@ public:
 
 class SVX_DLLPUBLIC SdrCropHdl : public SdrHdl
 {
+private:
+    // evtl. shear and rotation, equal to the object's one to allow adaption of
+    // the visualization handles
+    double          mfShearX;
+    double          mfRotation;
+
 public:
-    SdrCropHdl(const Point& rPnt, SdrHdlKind eNewKind);
+    SdrCropHdl(
+        const Point& rPnt,
+        SdrHdlKind eNewKind,
+        double fShearX,
+        double fRotation);
 
 protected:
     // create marker for this kind
@@ -542,11 +552,6 @@ private:
     double                      mfCropRight;
     double                      mfCropBottom;
 
-    // Argh! The old geometry stuff expresses Y-Mirror using 180 degree rotaton
-    // and the bMirrored bool at the SdrGrafObj, so for now I have to give
-    // this info here. I am sooo looking forward to aw080 and real transformations :-(
-    bool                        mbExtraMirrorXFromGraphic;
-
 public:
     SdrCropViewHdl(
         const basegfx::B2DHomMatrix& rObjectTransform,
@@ -554,8 +559,7 @@ public:
         double fCropLeft,
         double fCropTop,
         double fCropRight,
-        double fCropBottom,
-        bool bExtraMirrorXFromGraphic);
+        double fCropBottom);
 
 protected:
     // create marker for this kind
