@@ -382,6 +382,7 @@ SfxLibraryContainer::SfxLibraryContainer( void )
     , mbOasis2OOoFormat( false )
     , mpBasMgr( NULL )
     , mbOwnBasMgr( false )
+    , meInitMode(DEFAULT)
 {
     DBG_CTOR( SfxLibraryContainer, NULL );
 
