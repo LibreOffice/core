@@ -388,7 +388,8 @@ public:
                                 OUString >& aRowDescriptions )
                                     throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getColumnDescriptions()
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException,
+                                      std::exception);
     virtual void SAL_CALL   setColumnDescriptions( const ::com::sun::star::uno::Sequence<
                                 OUString >& aColumnDescriptions )
                                     throw(::com::sun::star::uno::RuntimeException);

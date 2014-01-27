@@ -3250,7 +3250,7 @@ void SAL_CALL ScCellRangesBase::setRowDescriptions(
 }
 
 uno::Sequence<OUString> SAL_CALL ScCellRangesBase::getColumnDescriptions()
-                                                throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScMemChart* pMemChart = CreateMemChart_Impl();
