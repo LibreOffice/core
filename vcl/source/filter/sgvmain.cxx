@@ -623,7 +623,7 @@ void DrawSlideCirc(sal_Int16 cx, sal_Int16 cy, sal_Int16 rx, sal_Int16 ry, ObjAr
                 if (ry<1) ry=1;
                 MaxR=rx;
                 b0=Int2;
-                i0=MaxR; if (MaxR<1) MaxR=1;
+                i0=MaxR;
                 i=MaxR;
                 while (i>=0) {
                     b=Int1+sal_Int16((sal_Int32(Int2-Int1)*sal_Int32(i)) /sal_Int32(MaxR));
