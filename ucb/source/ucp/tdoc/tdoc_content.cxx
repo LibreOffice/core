@@ -1049,10 +1049,10 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                       -1,
                       getCppuType( static_cast< const OUString * >( 0 ) ),
                       // Title is read-only for root and documents.
-                      beans::PropertyAttribute::BOUND ||
-                      ( ( eType == ROOT ) || ( eType == DOCUMENT ) )
+                      beans::PropertyAttribute::BOUND |
+                      ( ( eType == ROOT ) || ( eType == DOCUMENT )
                         ? beans::PropertyAttribute::READONLY
-                        : 0 ),
+                        : 0 ) ),
             rData.getTitle() );
         xRow->appendBoolean(
             beans::Property( OUString("IsDocument"),
