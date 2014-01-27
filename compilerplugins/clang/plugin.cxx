@@ -11,6 +11,8 @@
 
 #include "plugin.hxx"
 
+#include <cassert>
+
 #include <clang/Basic/FileManager.h>
 #include <clang/Lex/Lexer.h>
 
@@ -22,30 +24,14 @@ Base classes for plugin actions.
 namespace loplugin
 {
 
-Plugin::Plugin( CompilerInstance& compiler )
-    : compiler( compiler )
+Plugin::Plugin( const InstantiationData& data )
+    : compiler( data.compiler ), name( data.name ), handler( data.handler )
     {
     }
 
 DiagnosticBuilder Plugin::report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc )
     {
-    return report( level, message, compiler, loc );
-    }
-
-DiagnosticBuilder Plugin::report( DiagnosticsEngine::Level level, StringRef message, CompilerInstance& compiler,
-    SourceLocation loc )
-    {
-    DiagnosticsEngine& diag = compiler.getDiagnostics();
-    // Do some mappings (e.g. for -Werror) that clang does not do for custom messages for some reason.
-    if( level == DiagnosticsEngine::Warning && diag.getWarningsAsErrors())
-        level = DiagnosticsEngine::Error;
-    if( level == DiagnosticsEngine::Error && diag.getErrorsAsFatal())
-        level = DiagnosticsEngine::Fatal;
-    string fullMessage = ( message + " [loplugin]" ).str();
-    if( loc.isValid())
-        return diag.Report( loc, diag.getCustomDiagID( level, fullMessage ));
-    else
-        return diag.Report( diag.getCustomDiagID( level, fullMessage ));
+    return handler.report( level, name, message, compiler, loc );
     }
 
 bool Plugin::ignoreLocation( SourceLocation loc )
@@ -63,9 +49,9 @@ bool Plugin::ignoreLocation( SourceLocation loc )
     return true;
     }
 
-void Plugin::registerPlugin( Plugin* (*create)( CompilerInstance&, Rewriter& ), const char* optionName, bool isRewriter, bool isPPCallback )
+void Plugin::registerPlugin( Plugin* (*create)( const InstantiationData& ), const char* optionName, bool isPPCallback, bool byDefault )
     {
-    PluginHandler::registerPlugin( create, optionName, isRewriter, isPPCallback );
+    PluginHandler::registerPlugin( create, optionName, isPPCallback, byDefault );
     }
 
 unordered_map< const Stmt*, const Stmt* > Plugin::parents;
@@ -152,36 +138,40 @@ SourceLocation Plugin::locationAfterToken( SourceLocation location )
 
 /////
 
-RewritePlugin::RewritePlugin( CompilerInstance& compiler, Rewriter& rewriter )
-    : Plugin( compiler )
-    , rewriter( rewriter )
+RewritePlugin::RewritePlugin( const InstantiationData& data )
+    : Plugin( data )
+    , rewriter( data.rewriter )
     {
     }
 
 bool RewritePlugin::insertText( SourceLocation Loc, StringRef Str, bool InsertAfter, bool indentNewLines )
     {
-    if( rewriter.InsertText( Loc, Str, InsertAfter, indentNewLines ))
+    assert( rewriter );
+    if( rewriter->InsertText( Loc, Str, InsertAfter, indentNewLines ))
         return reportEditFailure( Loc );
     return true;
     }
 
 bool RewritePlugin::insertTextAfter( SourceLocation Loc, StringRef Str )
     {
-    if( rewriter.InsertTextAfter( Loc, Str ))
+    assert( rewriter );
+    if( rewriter->InsertTextAfter( Loc, Str ))
         return reportEditFailure( Loc );
     return true;
     }
 
 bool RewritePlugin::insertTextAfterToken( SourceLocation Loc, StringRef Str )
     {
-    if( rewriter.InsertTextAfterToken( Loc, Str ))
+    assert( rewriter );
+    if( rewriter->InsertTextAfterToken( Loc, Str ))
         return reportEditFailure( Loc );
     return true;
     }
 
 bool RewritePlugin::insertTextBefore( SourceLocation Loc, StringRef Str )
     {
-    if( rewriter.InsertTextBefore( Loc, Str ))
+    assert( rewriter );
+    if( rewriter->InsertTextBefore( Loc, Str ))
         return reportEditFailure( Loc );
     return true;
     }
@@ -199,7 +189,8 @@ bool RewritePlugin::removeText( SourceRange range, RewriteOptions opts )
 
 bool RewritePlugin::removeText( CharSourceRange range, RewriteOptions opts )
     {
-    if( rewriter.getRangeSize( range, opts ) == -1 )
+    assert( rewriter );
+    if( rewriter->getRangeSize( range, opts ) == -1 )
         return reportEditFailure( range.getBegin());
     if( removals.find( range.getBegin()) != removals.end())
         report( DiagnosticsEngine::Warning, "double code removal, possible plugin error", range.getBegin());
@@ -209,14 +200,15 @@ bool RewritePlugin::removeText( CharSourceRange range, RewriteOptions opts )
         if( !adjustRangeForOptions( &range, opts ))
             return reportEditFailure( range.getBegin());
         }
-    if( rewriter.RemoveText( range, opts ))
+    if( rewriter->RemoveText( range, opts ))
         return reportEditFailure( range.getBegin());
     return true;
     }
 
 bool RewritePlugin::adjustRangeForOptions( CharSourceRange* range, RewriteOptions opts )
     {
-    SourceManager& SM = rewriter.getSourceMgr();
+    assert( rewriter );
+    SourceManager& SM = rewriter->getSourceMgr();
     SourceLocation fileStartLoc = SM.getLocForStartOfFile( SM.getFileID( range->getBegin()));
     if( fileStartLoc.isInvalid())
         return false;
@@ -256,34 +248,37 @@ bool RewritePlugin::adjustRangeForOptions( CharSourceRange* range, RewriteOption
 
 bool RewritePlugin::replaceText( SourceLocation Start, unsigned OrigLength, StringRef NewStr )
     {
+    assert( rewriter );
     if( OrigLength != 0 && removals.find( Start ) != removals.end())
         report( DiagnosticsEngine::Warning, "double code replacement, possible plugin error", Start );
     removals.insert( Start );
-    if( rewriter.ReplaceText( Start, OrigLength, NewStr ))
+    if( rewriter->ReplaceText( Start, OrigLength, NewStr ))
         return reportEditFailure( Start );
     return true;
     }
 
 bool RewritePlugin::replaceText( SourceRange range, StringRef NewStr )
     {
-    if( rewriter.getRangeSize( range ) == -1 )
+    assert( rewriter );
+    if( rewriter->getRangeSize( range ) == -1 )
         return reportEditFailure( range.getBegin());
     if( removals.find( range.getBegin()) != removals.end())
         report( DiagnosticsEngine::Warning, "double code replacement, possible plugin error", range.getBegin());
     removals.insert( range.getBegin());
-    if( rewriter.ReplaceText( range, NewStr ))
+    if( rewriter->ReplaceText( range, NewStr ))
         return reportEditFailure( range.getBegin());
     return true;
     }
 
 bool RewritePlugin::replaceText( SourceRange range, SourceRange replacementRange )
     {
-    if( rewriter.getRangeSize( range ) == -1 )
+    assert( rewriter );
+    if( rewriter->getRangeSize( range ) == -1 )
         return reportEditFailure( range.getBegin());
     if( removals.find( range.getBegin()) != removals.end())
         report( DiagnosticsEngine::Warning, "double code replacement, possible plugin error", range.getBegin());
     removals.insert( range.getBegin());
-    if( rewriter.ReplaceText( range, replacementRange ))
+    if( rewriter->ReplaceText( range, replacementRange ))
         return reportEditFailure( range.getBegin());
     return true;
     }

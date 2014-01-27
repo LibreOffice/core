@@ -21,7 +21,7 @@ class LiteralAlternative:
     public RecursiveASTVisitor<LiteralAlternative>, public loplugin::Plugin
 {
 public:
-    explicit LiteralAlternative(CompilerInstance & compiler): Plugin(compiler) {}
+    explicit LiteralAlternative(InstantiationData const & data): Plugin(data) {}
 
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 

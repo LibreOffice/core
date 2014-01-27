@@ -38,8 +38,8 @@ SAL_WARN_UNUSED (see e.g. OUString). For external classes such as std::vector
 that cannot be edited there is a manual list below.
 */
 
-UnusedVariableCheck::UnusedVariableCheck( CompilerInstance& compiler )
-    : Plugin( compiler )
+UnusedVariableCheck::UnusedVariableCheck( const InstantiationData& data )
+    : Plugin( data )
     {
     }
 

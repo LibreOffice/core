@@ -22,7 +22,7 @@ class BodyNotInBlock
     , public Plugin
     {
     public:
-        explicit BodyNotInBlock( CompilerInstance& compiler );
+        explicit BodyNotInBlock( const InstantiationData& data );
         virtual void run() override;
         bool VisitIfStmt( const IfStmt* stmt );
         bool VisitWhileStmt( const WhileStmt* stmt );

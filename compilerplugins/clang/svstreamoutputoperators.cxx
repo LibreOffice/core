@@ -37,15 +37,15 @@ class SvStreamOutputOperators
     , public RewritePlugin
 {
     public:
-        explicit SvStreamOutputOperators( CompilerInstance& compiler, Rewriter& rewriter );
+        explicit SvStreamOutputOperators( InstantiationData const & data );
         virtual void run() override;
         bool VisitCallExpr( const CallExpr* call );
    private:
         SourceLocation after(const SourceLocation& loc);
 };
 
-SvStreamOutputOperators::SvStreamOutputOperators( CompilerInstance& compiler, Rewriter& rewriter )
-    : RewritePlugin( compiler, rewriter )
+SvStreamOutputOperators::SvStreamOutputOperators( InstantiationData const & data )
+    : RewritePlugin( data )
 {
 }
 

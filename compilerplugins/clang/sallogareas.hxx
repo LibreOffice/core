@@ -24,7 +24,7 @@ class SalLogAreas
     , public Plugin
     {
     public:
-        explicit SalLogAreas( CompilerInstance& compiler );
+        explicit SalLogAreas( const InstantiationData& data );
         virtual void run() override;
         bool VisitFunctionDecl( const FunctionDecl* function );
         bool VisitCallExpr( const CallExpr* call );

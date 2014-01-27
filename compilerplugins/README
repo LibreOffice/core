@@ -46,6 +46,22 @@ Additional optional make arguments:
 
 Modifications will be written directly to the source files.
 
+Some rewriter plugins are dual-mode and can also be used in a non-rewriting mode
+in which they emit warnings for problematic code that they would otherwise
+automatically rewrite.  When any rewriter is enabled explicitly via "make
+COMPILER_PLUGIN_TOOL=<rewriter_name>" it works in rewriting mode (and all other
+plugins are disabled), but when no rewriter is explicitly enabled (i.e., just
+"make"), all dual-mode rewriters are enabled in non-rewriting mode (along with
+all non-rewriter plugins; and all non--dual-mode plugins are disabled).  The
+typical process to use such a dual-mode rewriter X in rewriting mode is
+
+  make COMPILER_PLUGIN_WARNINGS_ONLY=X \
+  && make COMPILER_PLUGIN_TOOL=X FORCE_COMPILE_ALL=1 UPDATE_FILES=all
+
+which first generates a full build without failing due to warnings from plugin
+X in non-rewriting mode (in case of --enable-werror) and then repeats the build
+in rewriting mode (during which no object files are generate).
+
 
 == Code documentation / howtos ==
 

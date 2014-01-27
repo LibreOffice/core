@@ -31,7 +31,7 @@ class CheckConfigMacros
     , public Plugin
     {
     public:
-        explicit CheckConfigMacros( CompilerInstance& compiler );
+        explicit CheckConfigMacros( const InstantiationData& data );
         virtual void run() override;
 #if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 3
         virtual void MacroDefined( const Token& macroToken, const MacroInfo* info ) override;
@@ -56,8 +56,8 @@ class CheckConfigMacros
         std::set< string > configMacros;
     };
 
-CheckConfigMacros::CheckConfigMacros( CompilerInstance& compiler )
-    : Plugin( compiler )
+CheckConfigMacros::CheckConfigMacros( const InstantiationData& data )
+    : Plugin( data )
     {
     compiler.getPreprocessor().addPPCallbacks( this );
     }

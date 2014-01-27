@@ -38,11 +38,11 @@ namespace loplugin
 
 struct PluginData
     {
-    Plugin* (*create)( CompilerInstance&, Rewriter& );
+    Plugin* (*create)( const Plugin::InstantiationData& );
     Plugin* object;
     const char* optionName;
-    bool isRewriter;
     bool isPPCallback;
+    bool byDefault;
     };
 
 const int MAX_PLUGINS = 100;
@@ -100,6 +100,10 @@ void PluginHandler::handleOption( const string& option )
                 report( DiagnosticsEngine::Fatal, "unknown scope %0 (no such module directory)" ) << scope;
             }
         }
+    else if( option.substr( 0, 14 ) == "warnings-only=" )
+        {
+        warningsOnly = option.substr(14);
+        }
     else
         report( DiagnosticsEngine::Fatal, "unknown option %0" ) << option;
     }
@@ -110,14 +114,17 @@ void PluginHandler::createPlugin( const string& name )
          i < pluginCount;
          ++i )
         {
-        if( name.empty())  // no plugin given -> create non-writer plugins
+        // if no plugin is given, create all by-default plugins as non-
+        // rewriters; otherwise, create the given plugin as a potential
+        // rewriter:
+        if( name.empty())
             {
-            if( !plugins[ i ].isRewriter )
-                plugins[ i ].object = plugins[ i ].create( compiler, rewriter );
+            if( plugins[ i ].byDefault )
+                plugins[ i ].object = plugins[ i ].create( Plugin::InstantiationData { plugins[ i ].optionName, *this, compiler, NULL } );
             }
         else if( plugins[ i ].optionName == name )
             {
-            plugins[ i ].object = plugins[ i ].create( compiler, rewriter );
+                plugins[ i ].object = plugins[ i ].create( Plugin::InstantiationData { plugins[ i ].optionName, *this, compiler, &rewriter } );
             return;
             }
         }
@@ -125,21 +132,43 @@ void PluginHandler::createPlugin( const string& name )
         report( DiagnosticsEngine::Fatal, "unknown plugin tool %0" ) << name;
     }
 
-void PluginHandler::registerPlugin( Plugin* (*create)( CompilerInstance&, Rewriter& ), const char* optionName, bool isRewriter, bool isPPCallback )
+void PluginHandler::registerPlugin( Plugin* (*create)( const Plugin::InstantiationData& ), const char* optionName, bool isPPCallback, bool byDefault )
     {
     assert( !pluginObjectsCreated );
     assert( pluginCount < MAX_PLUGINS );
     plugins[ pluginCount ].create = create;
     plugins[ pluginCount ].object = NULL;
     plugins[ pluginCount ].optionName = optionName;
-    plugins[ pluginCount ].isRewriter = isRewriter;
     plugins[ pluginCount ].isPPCallback = isPPCallback;
+    plugins[ pluginCount ].byDefault = byDefault;
     ++pluginCount;
+    }
+
+DiagnosticBuilder PluginHandler::report( DiagnosticsEngine::Level level, const char* plugin, StringRef message, CompilerInstance& compiler,
+    SourceLocation loc )
+    {
+    DiagnosticsEngine& diag = compiler.getDiagnostics();
+    // Do some mappings (e.g. for -Werror) that clang does not do for custom messages for some reason.
+    if( level == DiagnosticsEngine::Warning && diag.getWarningsAsErrors() && (plugin == nullptr || plugin != warningsOnly))
+        level = DiagnosticsEngine::Error;
+    if( level == DiagnosticsEngine::Error && diag.getErrorsAsFatal())
+        level = DiagnosticsEngine::Fatal;
+    string fullMessage = ( message + " [loplugin" ).str();
+    if( plugin )
+        {
+        fullMessage += ":";
+        fullMessage += plugin;
+        }
+    fullMessage += "]";
+    if( loc.isValid())
+        return diag.Report( loc, diag.getCustomDiagID( level, fullMessage ));
+    else
+        return diag.Report( diag.getCustomDiagID( level, fullMessage ));
     }
 
 DiagnosticBuilder PluginHandler::report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc )
     {
-    return Plugin::report( level, message, compiler, loc );
+    return report( level, nullptr, message, compiler, loc );
     }
 
 void PluginHandler::HandleTranslationUnit( ASTContext& context )

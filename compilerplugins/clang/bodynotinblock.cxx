@@ -29,8 +29,8 @@ For example:
 Here either both statements should be inside {} or the second statement in indented wrong.
 */
 
-BodyNotInBlock::BodyNotInBlock( CompilerInstance& compiler )
-    : Plugin( compiler )
+BodyNotInBlock::BodyNotInBlock( const InstantiationData& data )
+    : Plugin( data )
     {
     }
 

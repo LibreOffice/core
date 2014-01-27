@@ -41,15 +41,15 @@ class PointerToBool
     , public Plugin
     {
     public:
-        explicit PointerToBool( CompilerInstance& compiler );
+        explicit PointerToBool( const InstantiationData& data );
         void run();
         bool VisitImplicitCastExpr( const ImplicitCastExpr* expr );
     private:
         bool ignoreConversion( const Stmt* stmt );
     };
 
-PointerToBool::PointerToBool( CompilerInstance& compiler )
-    : Plugin( compiler )
+PointerToBool::PointerToBool( const InstantiationData& data )
+    : Plugin( data )
     {
     }
 

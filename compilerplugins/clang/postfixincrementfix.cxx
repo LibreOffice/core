@@ -20,8 +20,8 @@ Change all postfix ++ operators of non-trivial types to prefix if possible.
 namespace loplugin
 {
 
-PostfixIncrementFix::PostfixIncrementFix( CompilerInstance& compiler, Rewriter& rewriter )
-    : RewritePlugin( compiler, rewriter )
+PostfixIncrementFix::PostfixIncrementFix( const InstantiationData& data )
+    : RewritePlugin( data )
     {
     }
 

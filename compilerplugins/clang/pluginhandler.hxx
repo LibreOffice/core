@@ -30,7 +30,9 @@ class PluginHandler
         PluginHandler( CompilerInstance& compiler, const vector< string >& args );
         virtual ~PluginHandler();
         virtual void HandleTranslationUnit( ASTContext& context ) override;
-        static void registerPlugin( Plugin* (*create)( CompilerInstance&, Rewriter& ), const char* optionName, bool isRewriter, bool isPPCallback );
+        static void registerPlugin( Plugin* (*create)( const Plugin::InstantiationData& ), const char* optionName, bool isPPCallback, bool byDefault );
+        DiagnosticBuilder report( DiagnosticsEngine::Level level, const char * plugin, StringRef message,
+            CompilerInstance& compiler, SourceLocation loc = SourceLocation());
     private:
         void handleOption( const string& option );
         void createPlugin( const string& name );
@@ -38,6 +40,7 @@ class PluginHandler
         CompilerInstance& compiler;
         Rewriter rewriter;
         string scope;
+        string warningsOnly;
     };
 
 /**

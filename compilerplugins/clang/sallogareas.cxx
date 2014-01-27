@@ -26,8 +26,8 @@ report if the area is not listed there. The fix is either use a proper area or a
 if appropriate.
 */
 
-SalLogAreas::SalLogAreas( CompilerInstance& compiler )
-    : Plugin( compiler )
+SalLogAreas::SalLogAreas( const InstantiationData& data )
+    : Plugin( data )
     {
     }
 

@@ -22,7 +22,7 @@ class UnusedVariableCheck
     , public Plugin
     {
     public:
-        explicit UnusedVariableCheck( CompilerInstance& compiler );
+        explicit UnusedVariableCheck( const InstantiationData& data );
         virtual void run() override;
         bool VisitVarDecl( const VarDecl* var );
     };

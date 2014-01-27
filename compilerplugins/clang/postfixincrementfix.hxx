@@ -22,7 +22,7 @@ class PostfixIncrementFix
     , public RewritePlugin
     {
     public:
-        explicit PostfixIncrementFix( CompilerInstance& compiler, Rewriter& rewriter );
+        explicit PostfixIncrementFix( const InstantiationData& data );
         virtual void run() override;
         bool VisitCXXOperatorCallExpr( const CXXOperatorCallExpr* op );
     private:

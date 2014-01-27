@@ -29,7 +29,7 @@ class RtlConstAsciiMacro
     , public RewritePlugin
     {
     public:
-        explicit RtlConstAsciiMacro( CompilerInstance& compiler, Rewriter& rewriter );
+        explicit RtlConstAsciiMacro( const InstantiationData& data );
         virtual void run() override;
         bool VisitCXXConstructExpr( CXXConstructExpr* expr );
         bool VisitCXXTemporaryObjectExpr( CXXTemporaryObjectExpr* expr );
@@ -47,8 +47,8 @@ class RtlConstAsciiMacro
         bool suitableString;
     };
 
-RtlConstAsciiMacro::RtlConstAsciiMacro( CompilerInstance& compiler, Rewriter& rewriter )
-    : RewritePlugin( compiler, rewriter )
+RtlConstAsciiMacro::RtlConstAsciiMacro( const InstantiationData& data )
+    : RewritePlugin( data )
     , searchingForString( false )
     {
     compiler.getPreprocessor().addPPCallbacks( this );

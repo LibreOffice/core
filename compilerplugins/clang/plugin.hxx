@@ -19,6 +19,7 @@
 #include <clang/Basic/FileManager.h>
 #include <clang/Basic/SourceManager.h>
 #include <clang/Frontend/CompilerInstance.h>
+#include <clang/Lex/Preprocessor.h>
 #include <set>
 #include <unordered_map>
 
@@ -35,6 +36,8 @@ using namespace std;
 namespace loplugin
 {
 
+class PluginHandler;
+
 /**
     Base class for plugins.
 
@@ -44,17 +47,22 @@ namespace loplugin
 class Plugin
     {
     public:
-        explicit Plugin( CompilerInstance& compiler );
+        struct InstantiationData
+            {
+            const char* name;
+            PluginHandler& handler;
+            CompilerInstance& compiler;
+            Rewriter* rewriter;
+            };
+        explicit Plugin( const InstantiationData& data );
         virtual ~Plugin();
         virtual void run() = 0;
         template< typename T > class Registration;
         enum { isPPCallback = false };
-        DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc = SourceLocation());
-        static DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message,
-            CompilerInstance& compiler, SourceLocation loc = SourceLocation());
         // Returns location right after the end of the token that starts at the given location.
         SourceLocation locationAfterToken( SourceLocation location );
     protected:
+        DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc = SourceLocation());
         bool ignoreLocation( SourceLocation loc );
         bool ignoreLocation( const Decl* decl );
         bool ignoreLocation( const Stmt* stmt );
@@ -66,9 +74,11 @@ class Plugin
         const Stmt* parentStmt( const Stmt* stmt );
         Stmt* parentStmt( Stmt* stmt );
     private:
-        static void registerPlugin( Plugin* (*create)( CompilerInstance&, Rewriter& ), const char* optionName, bool isRewriter, bool isPPCallback );
-        template< typename T > static Plugin* createHelper( CompilerInstance& compiler, Rewriter& rewriter );
+        static void registerPlugin( Plugin* (*create)( const InstantiationData& ), const char* optionName, bool isPPCallback, bool byDefault );
+        template< typename T > static Plugin* createHelper( const InstantiationData& data );
         enum { isRewriter = false };
+        const char* name;
+        PluginHandler& handler;
         static unordered_map< const Stmt*, const Stmt* > parents;
         static void buildParents( CompilerInstance& compiler );
     };
@@ -82,7 +92,7 @@ class RewritePlugin
     : public Plugin
     {
     public:
-        explicit RewritePlugin( CompilerInstance& compiler, Rewriter& rewriter );
+        explicit RewritePlugin( const InstantiationData& data );
     protected:
         enum RewriteOption
             {
@@ -123,10 +133,9 @@ class RewritePlugin
         bool replaceText( SourceLocation Start, unsigned OrigLength, StringRef NewStr );
         bool replaceText( SourceRange range, StringRef NewStr );
         bool replaceText( SourceRange range, SourceRange replacementRange );
-        Rewriter& rewriter;
+        Rewriter* rewriter;
     private:
         template< typename T > friend class Plugin::Registration;
-        template< typename T > static Plugin* createHelper( CompilerInstance& compiler, Rewriter& rewriter );
         enum { isRewriter = true };
         bool reportEditFailure( SourceLocation loc );
         bool adjustRangeForOptions( CharSourceRange* range, RewriteOptions options );
@@ -148,13 +157,13 @@ template< typename T >
 class Plugin::Registration
     {
     public:
-        Registration( const char* optionName );
+        Registration( const char* optionName, bool byDefault = !T::isRewriter );
     };
 
 class RegistrationCreate
     {
     public:
-        template< typename T, bool > static T* create( CompilerInstance& compiler, Rewriter& rewriter );
+        template< typename T, bool > static T* create( const Plugin::InstantiationData& data );
     };
 
 /////
@@ -177,22 +186,16 @@ bool Plugin::ignoreLocation( const Stmt* stmt )
     }
 
 template< typename T >
-Plugin* Plugin::createHelper( CompilerInstance& compiler, Rewriter& )
+Plugin* Plugin::createHelper( const InstantiationData& data )
     {
-    return new T( compiler );
-    }
-
-template< typename T >
-Plugin* RewritePlugin::createHelper( CompilerInstance& compiler, Rewriter& rewriter )
-    {
-    return new T( compiler, rewriter );
+    return new T( data );
     }
 
 template< typename T >
 inline
-Plugin::Registration< T >::Registration( const char* optionName )
+Plugin::Registration< T >::Registration( const char* optionName, bool byDefault )
     {
-    registerPlugin( &T::template createHelper< T >, optionName, T::isRewriter, T::isPPCallback );
+    registerPlugin( &T::template createHelper< T >, optionName, T::isPPCallback, byDefault );
     }
 
 inline

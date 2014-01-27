@@ -99,8 +99,8 @@ class ImplicitBoolConversion:
     public RecursiveASTVisitor<ImplicitBoolConversion>, public loplugin::Plugin
 {
 public:
-    explicit ImplicitBoolConversion(CompilerInstance & compiler):
-        Plugin(compiler) {}
+    explicit ImplicitBoolConversion(InstantiationData const & data):
+        Plugin(data) {}
 
     virtual void run() override
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
