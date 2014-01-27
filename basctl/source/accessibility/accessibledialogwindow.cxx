@@ -961,7 +961,8 @@ sal_Bool AccessibleDialogWindow::isAccessibleChildSelected( sal_Int32 nChildInde
 
 // -----------------------------------------------------------------------------
 
-void AccessibleDialogWindow::clearAccessibleSelection(  ) throw (RuntimeException)
+void AccessibleDialogWindow::clearAccessibleSelection()
+    throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 
