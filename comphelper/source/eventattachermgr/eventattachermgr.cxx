@@ -464,10 +464,9 @@ void SAL_CALL ImplEventAttacherManager::registerScriptEvent
     ::std::deque< AttachedObject_Impl > aList = (*aIt).aObjList;
 
     ScriptEventDescriptor aEvt = ScriptEvent;
-    const sal_Unicode* pLastDot = aEvt.ListenerType.getStr();
-    pLastDot += rtl_ustr_lastIndexOfChar( pLastDot, '.' );
-    if( pLastDot )
-        aEvt.ListenerType = pLastDot +1;
+    sal_Int32 nLastDot = aEvt.ListenerType.lastIndexOf('.');
+    if (nLastDot != -1)
+        aEvt.ListenerType = aEvt.ListenerType.copy(nLastDot+1);
     (*aIt).aEventList.push_back( aEvt );
 
     // register new new Event
@@ -538,10 +537,9 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvent
     ::std::for_each(aList.begin(), aList.end(), DetachObject(*this, nIndex));
 
     OUString aLstType = ListenerType;
-    const sal_Unicode * pLastDot = aLstType.getStr();
-    pLastDot += rtl_ustr_lastIndexOfChar( pLastDot, '.' );
-    if( pLastDot )
-        aLstType = pLastDot +1;
+    sal_Int32 nLastDot = aLstType.lastIndexOf('.');
+    if (nLastDot != -1)
+        aLstType = aLstType.copy(nLastDot+1);
 
     ::std::deque< ScriptEventDescriptor >::iterator aEvtIt =    (*aIt).aEventList.begin();
     ::std::deque< ScriptEventDescriptor >::iterator aEvtEnd =   (*aIt).aEventList.end();
