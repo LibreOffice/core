@@ -225,7 +225,7 @@
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/util/Color.hpp>
-#include <com/sun/star/util/PathSettings.hpp>
+#include <com/sun/star/util/thePathSettings.hpp>
 #include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>

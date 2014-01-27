@@ -90,7 +90,7 @@
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-#include <com/sun/star/util/PathSettings.hpp>
+#include <com/sun/star/util/thePathSettings.hpp>
 
 #include "dlgname.hxx"
 
@@ -4927,7 +4927,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
         graphic::GraphicProvider::create( xComponentContext ) );
 
     uno::Reference< css::util::XPathSettings > xPathSettings =
-        css::util::PathSettings::create( xComponentContext );
+        css::util::thePathSettings::get( xComponentContext );
 
 
     OUString aDirectory = xPathSettings->getUserConfig();

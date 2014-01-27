@@ -20,7 +20,7 @@
 #include <config_features.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/util/PathSettings.hpp>
+#include <com/sun/star/util/thePathSettings.hpp>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 
@@ -484,7 +484,7 @@ Dialog::Dialog( WindowType nType )
 OUString VclBuilderContainer::getUIRootDir()
 {
     /*to-do, check if user config has an override before using shared one, etc*/
-    css::uno::Reference< css::util::XPathSettings > xPathSettings = css::util::PathSettings::create(
+    css::uno::Reference< css::util::XPathSettings > xPathSettings = css::util::thePathSettings::get(
         ::comphelper::getProcessComponentContext() );
 
     OUString sShareLayer = xPathSettings->getBasePathShareLayer();

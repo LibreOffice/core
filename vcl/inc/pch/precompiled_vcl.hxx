@@ -265,7 +265,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/util/Endianness.hpp>
-#include <com/sun/star/util/PathSettings.hpp>
+#include <com/sun/star/util/thePathSettings.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/URL.hpp>

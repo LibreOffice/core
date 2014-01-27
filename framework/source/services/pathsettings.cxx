@@ -17,18 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
-#include <threadhelp/threadhelpbase.hxx>
 #include <properties.h>
 #include <stdtypes.h>
-
-#include "helper/mischelper.hxx"
+#include <helper/mischelper.hxx>
 
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XProperty.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <com/sun/star/util/PathSubstitution.hpp>
@@ -42,12 +37,10 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/sequenceasvector.hxx>
 #include <comphelper/configurationhelper.hxx>
-#include <comphelper/processfactory.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/configpaths.hxx>
 
@@ -85,18 +78,15 @@ sal_Int32 impl_getPropGroup(sal_Int32 nID)
    disable it in case only the new schema must be used.
  */
 
-typedef ::cppu::WeakImplHelper3<
-                         css::lang::XServiceInfo,
-                         css::util::XChangesListener,               // => XEventListener
-                         css::util::XPathSettings>                  // => XPropertySet
-        PathSettings_BASE;
+typedef ::cppu::WeakComponentImplHelper3<
+            css::lang::XServiceInfo,
+            css::util::XChangesListener,    // => XEventListener
+            css::util::XPathSettings>       // => XPropertySet
+                PathSettings_BASE;
 
-class PathSettings : // base classes
-                     // Order is necessary for right initialization!
-                     private ThreadHelpBase                       ,
-                     public  ::cppu::OBroadcastHelper             ,
-                     public  ::cppu::OPropertySetHelper           , // => XPropertySet / XFastPropertySet / XMultiPropertySet
-                     public  PathSettings_BASE
+class PathSettings : private osl::Mutex
+                   , public  PathSettings_BASE
+                   , public  ::cppu::OPropertySetHelper
 {
     struct PathInfo
     {
@@ -231,9 +221,6 @@ public:
     virtual void SAL_CALL disposing(const css::lang::EventObject& aSource)
         throw(css::uno::RuntimeException);
 
-    using ::cppu::OPropertySetHelper::disposing;
-
-
     /**
      * XPathSettings attribute methods
      */
@@ -342,8 +329,6 @@ public:
     virtual void SAL_CALL setBasePathUserLayer(const OUString& p1) throw (css::uno::RuntimeException)
         { setStringProperty("UserConfig", p1); }
 
-
-
     /**
      * overrides to resolve inheritance ambiguity
      */
@@ -365,11 +350,11 @@ public:
     virtual void SAL_CALL removeVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2)
         throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException)
         { ::cppu::OPropertySetHelper::removeVetoableChangeListener(p1, p2); }
-
     /** read all configured paths and create all needed internal structures. */
     void impl_readAll();
 
 private:
+    virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     OUString getStringProperty(const OUString& p1)
         throw(css::uno::RuntimeException);
@@ -450,17 +435,20 @@ private:
 
 
     //  OPropertySetHelper
-    virtual sal_Bool                                            SAL_CALL convertFastPropertyValue        (       css::uno::Any&  aConvertedValue ,
-                                                                                                                 css::uno::Any&  aOldValue       ,
-                                                                                                                 sal_Int32       nHandle         ,
-                                                                                                           const css::uno::Any&  aValue          ) throw(css::lang::IllegalArgumentException);
-    virtual void                                                SAL_CALL setFastPropertyValue_NoBroadcast(       sal_Int32       nHandle         ,
-                                                                                                           const css::uno::Any&  aValue          ) throw(css::uno::Exception);
+    virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any&  aConvertedValue,
+            css::uno::Any& aOldValue,
+            sal_Int32 nHandle,
+            const css::uno::Any& aValue ) throw(css::lang::IllegalArgumentException);
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,
+            const css::uno::Any&  aValue ) throw(css::uno::Exception);
+    virtual void SAL_CALL getFastPropertyValue( css::uno::Any&  aValue,
+            sal_Int32 nHandle ) const;
+    // Avoid:
+    // warning: ‘virtual com::sun::star::uno::Any cppu::OPropertySetHelper::getFastPropertyValue(sal_Int32)’ was hidden [-Woverloaded-virtual]
+    // warning:   by ‘virtual void {anonymous}::PathSettings::getFastPropertyValue(com::sun::star::uno::Any&, sal_Int32) const’ [-Woverloaded-virtual]
     using cppu::OPropertySetHelper::getFastPropertyValue;
-    virtual void                                                SAL_CALL getFastPropertyValue            (       css::uno::Any&  aValue          ,
-                                                                                                                 sal_Int32       nHandle         ) const;
-    virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper                   (                                       );
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo              (                                       ) throw(::css::uno::RuntimeException);
+    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw(::css::uno::RuntimeException);
 
     /** factory methods to guarantee right (but on demand) initialized members ... */
     css::uno::Reference< css::util::XStringSubstitution > fa_getSubstitution();
@@ -470,14 +458,8 @@ private:
 
 //-----------------------------------------------------------------------------
 PathSettings::PathSettings( const css::uno::Reference< css::uno::XComponentContext >& xContext )
-    //  Init baseclasses first
-    //  Attention: Don't change order of initialization!
-    //      ThreadHelpBase is a struct with a lock as member. We can't use a lock as direct member!
-    //      We must garant right initialization and a valid value of this to initialize other baseclasses!
-    :   ThreadHelpBase()
-    ,   ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >(m_aLock.getShareableOslMutex())
-    ,   ::cppu::OPropertySetHelper(*(static_cast< ::cppu::OBroadcastHelper* >(this)))
-    // Init member
+    : PathSettings_BASE(*(static_cast<osl::Mutex *>(this)))
+    , ::cppu::OPropertySetHelper(cppu::WeakComponentImplHelperBase::rBHelper)
     ,   m_xContext (xContext)
     ,   m_pPropHelp(0    )
     ,  m_bIgnoreEvents(sal_False)
@@ -487,11 +469,25 @@ PathSettings::PathSettings( const css::uno::Reference< css::uno::XComponentConte
 //-----------------------------------------------------------------------------
 PathSettings::~PathSettings()
 {
-    css::uno::Reference< css::util::XChangesNotifier > xBroadcaster(m_xCfgNew, css::uno::UNO_QUERY);
+    disposing();
+}
+
+void SAL_CALL PathSettings::disposing()
+{
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
+
+    css::uno::Reference< css::util::XChangesNotifier >
+        xBroadcaster(m_xCfgNew, css::uno::UNO_QUERY);
     if (xBroadcaster.is())
         xBroadcaster->removeChangesListener(m_xCfgNewListener);
-    if (m_pPropHelp)
-       delete m_pPropHelp;
+
+    m_xSubstitution.clear();
+    m_xCfgOld.clear();
+    m_xCfgNew.clear();
+    m_xCfgNewListener.clear();
+
+    delete m_pPropHelp;
+    m_pPropHelp = 0;
 }
 
 //------------------------------------------------------------------
@@ -500,11 +496,11 @@ css::uno::Any SAL_CALL PathSettings::queryInterface( const css::uno::Type& _rTyp
 {
     css::uno::Any aRet = PathSettings_BASE::queryInterface( _rType );
     if ( !aRet.hasValue() )
-        aRet = OPropertySetHelper::queryInterface( _rType );
+        aRet = ::cppu::OPropertySetHelper::queryInterface( _rType );
     return aRet;
 }
 
-//------------------------------------------------------------------------------
+//------------------------------------------------------------------
 css::uno::Sequence< css::uno::Type > SAL_CALL PathSettings::getTypes(  )
     throw(css::uno::RuntimeException)
 {
@@ -549,12 +545,10 @@ void SAL_CALL PathSettings::changesOccurred(const css::util::ChangesEvent& aEven
 void SAL_CALL PathSettings::disposing(const css::lang::EventObject& aSource)
     throw(css::uno::RuntimeException)
 {
-    WriteGuard aWriteLock(m_aLock);
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     if (aSource.Source == m_xCfgNew)
         m_xCfgNew.clear();
-
-    aWriteLock.unlock();
 }
 
 //-----------------------------------------------------------------------------
@@ -750,7 +744,7 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const OUString& sPath     
                                                             sal_Bool         bNotifyListener)
 {
     // SAFE ->
-    WriteGuard aWriteLock(m_aLock);
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     PathSettings::PathInfo* pPathOld = 0;
     PathSettings::PathInfo* pPathNew = 0;
@@ -1096,7 +1090,7 @@ void PathSettings::impl_purgeKnownPaths(const PathSettings::PathInfo& rPath,
 void PathSettings::impl_rebuildPropertyDescriptor()
 {
     // SAFE ->
-    WriteGuard aWriteLock(m_aLock);
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     sal_Int32 c = (sal_Int32)m_lPaths.size();
     sal_Int32 i = 0;
@@ -1146,11 +1140,9 @@ void PathSettings::impl_rebuildPropertyDescriptor()
         ++i;
     }
 
-    if (m_pPropHelp)
-       delete m_pPropHelp;
+    delete m_pPropHelp;
     m_pPropHelp = new ::cppu::OPropertyArrayHelper(m_lPropDesc, sal_False); // false => not sorted ... must be done inside helper
 
-    aWriteLock.unlock();
     // <- SAFE
 }
 
@@ -1349,7 +1341,7 @@ OUString impl_extractBaseFromPropName(const OUString& sPropName)
 PathSettings::PathInfo* PathSettings::impl_getPathAccess(sal_Int32 nHandle)
 {
     // SAFE ->
-    ReadGuard aReadLock(m_aLock);
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     if (nHandle > (m_lPropDesc.getLength()-1))
         return 0;
@@ -1369,7 +1361,7 @@ PathSettings::PathInfo* PathSettings::impl_getPathAccess(sal_Int32 nHandle)
 const PathSettings::PathInfo* PathSettings::impl_getPathAccessConst(sal_Int32 nHandle) const
 {
     // SAFE ->
-    ReadGuard aReadLock(m_aLock);
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     if (nHandle > (m_lPropDesc.getLength()-1))
         return 0;
@@ -1428,18 +1420,18 @@ void SAL_CALL PathSettings::getFastPropertyValue(css::uno::Any& aValue ,
 css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL PathSettings::getPropertySetInfo()
     throw(css::uno::RuntimeException)
 {
-    return css::uno::Reference< css::beans::XPropertySetInfo >(createPropertySetInfo(getInfoHelper()));
+    return css::uno::Reference< css::beans::XPropertySetInfo >(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper()));
 }
 
 //-----------------------------------------------------------------------------
 css::uno::Reference< css::util::XStringSubstitution > PathSettings::fa_getSubstitution()
 {
-    // SAFE ->
-    ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::uno::XComponentContext >  xContext  = m_xContext;
-    css::uno::Reference< css::util::XStringSubstitution >  xSubst = m_xSubstitution;
-    aReadLock.unlock();
-    // <- SAFE
+    css::uno::Reference< css::util::XStringSubstitution > xSubst;
+    { // SAFE ->
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
+    xSubst = m_xSubstitution;
+    }
 
     if (! xSubst.is())
     {
@@ -1447,12 +1439,12 @@ css::uno::Reference< css::util::XStringSubstitution > PathSettings::fa_getSubsti
         // We must replace all used variables inside readed path values.
         // In case we can't do so ... the whole office can't work really.
         // That's why it seams to be OK to throw a RuntimeException then.
-        xSubst = css::util::PathSubstitution::create(xContext);
+        xSubst = css::util::PathSubstitution::create(m_xContext);
 
-        // SAFE ->
-        WriteGuard aWriteLock(m_aLock);
+        { // SAFE ->
+        osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
         m_xSubstitution = xSubst;
-        aWriteLock.unlock();
+        }
     }
 
     return xSubst;
@@ -1463,26 +1455,25 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgOld()
 {
     const OUString CFG_NODE_OLD("org.openoffice.Office.Common/Path/Current");
 
-    // SAFE ->
-    ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    css::uno::Reference< css::container::XNameAccess >     xCfg  = m_xCfgOld;
-    aReadLock.unlock();
-    // <- SAFE
+    css::uno::Reference< css::container::XNameAccess > xCfg;
+    { // SAFE ->
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
+    xCfg = m_xCfgOld;
+    } // <- SAFE
 
     if (! xCfg.is())
     {
         xCfg = css::uno::Reference< css::container::XNameAccess >(
                    ::comphelper::ConfigurationHelper::openConfig(
-                        xContext,
+                        m_xContext,
                         CFG_NODE_OLD,
                         ::comphelper::ConfigurationHelper::E_STANDARD), // not readonly! Sometimes we need write access there !!!
                    css::uno::UNO_QUERY_THROW);
 
-        // SAFE ->
-        WriteGuard aWriteLock(m_aLock);
+        { // SAFE ->
+        osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
         m_xCfgOld = xCfg;
-        aWriteLock.unlock();
+        }
     }
 
     return xCfg;
@@ -1493,29 +1484,26 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgNew()
 {
     const OUString CFG_NODE_NEW("org.openoffice.Office.Paths/Paths");
 
-    // SAFE ->
-    ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    css::uno::Reference< css::container::XNameAccess >     xCfg  = m_xCfgNew;
-    if (xCfg.is())
-       return xCfg;
-    aReadLock.unlock();
-    // <- SAFE
+    css::uno::Reference< css::container::XNameAccess > xCfg;
+    { // SAFE ->
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
+    xCfg = m_xCfgNew;
+    } // <- SAFE
 
     if (! xCfg.is())
     {
         xCfg = css::uno::Reference< css::container::XNameAccess >(
                    ::comphelper::ConfigurationHelper::openConfig(
-                        xContext,
+                        m_xContext,
                         CFG_NODE_NEW,
                         ::comphelper::ConfigurationHelper::E_STANDARD),
                    css::uno::UNO_QUERY_THROW);
 
-        // SAFE ->
-        WriteGuard aWriteLock(m_aLock);
+        { // SAFE ->
+        osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
         m_xCfgNew = xCfg;
         m_xCfgNewListener = new WeakChangesListener(this);
-        aWriteLock.unlock();
+        }
 
         css::uno::Reference< css::util::XChangesNotifier > xBroadcaster(xCfg, css::uno::UNO_QUERY_THROW);
         xBroadcaster->addChangesListener(m_xCfgNewListener);
@@ -1550,9 +1538,8 @@ com_sun_star_comp_framework_PathSettings_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    css::uno::XInterface *inst = Singleton::get(context).instance.get();
-    inst->acquire();
-    return inst;
+    return cppu::acquire(static_cast<cppu::OWeakObject *>(
+                Singleton::get(context).instance.get()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

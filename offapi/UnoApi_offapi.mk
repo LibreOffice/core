@@ -446,6 +446,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/util,\
 	theOfficeInstallationDirectories \
 	UriAbbreviation \
 	URLTransformer \
+	thePathSettings \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/xforms,\
 	Model \

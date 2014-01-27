@@ -47,7 +47,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
-#include <com/sun/star/util/PathSettings.hpp>
+#include <com/sun/star/util/thePathSettings.hpp>
 #include <officecfg/Office/Common.hxx>
 #include "optHeaderTabListbox.hxx"
 #include <vcl/help.hxx>
@@ -722,7 +722,7 @@ void SvxPathTabPage::GetPathList(
         if ( !pImpl->m_xPathSettings.is() )
         {
             Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
-            pImpl->m_xPathSettings = css::util::PathSettings::create( xContext );
+            pImpl->m_xPathSettings = css::util::thePathSettings::get( xContext );
         }
 
         // load internal paths
@@ -791,7 +791,7 @@ void SvxPathTabPage::SetPathList(
         if ( !pImpl->m_xPathSettings.is() )
         {
             Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
-            pImpl->m_xPathSettings = css::util::PathSettings::create( xContext );
+            pImpl->m_xPathSettings = css::util::thePathSettings::get( xContext );
         }
 
         // save user paths

@@ -42,7 +42,7 @@ import com.sun.star.ui.dialogs.XFilterManager;
 import com.sun.star.ui.dialogs.XFolderPicker2;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
-
+import com.sun.star.util.thePathSettings;
 
 
 public class SystemDialog  {
@@ -86,7 +86,7 @@ public class SystemDialog  {
             xFilePicker.setDefaultName("MyExampleDocument");
 
             // set the initial displaydirectory. In this example the user template directory is used
-            Object oPathSettings = m_xMCF.createInstanceWithContext("com.sun.star.util.PathSettings",m_xContext);
+            Object oPathSettings = thePathSettings.get(m_xContext);
             XPropertySet xPropertySet = com.sun.star.uno.UnoRuntime.queryInterface(XPropertySet.class, oPathSettings);
             String sTemplateUrl = (String) xPropertySet.getPropertyValue("Template_writable");
             xFilePicker.setDisplayDirectory(sTemplateUrl);
@@ -134,7 +134,7 @@ public class SystemDialog  {
         String sWorkUrl = "";
         try{
             // retrieve the configured Work path...
-            Object oPathSettings = m_xMCF.createInstanceWithContext("com.sun.star.util.PathSettings",m_xContext);
+            Object oPathSettings = thePathSettings.get(m_xContext);
             XPropertySet xPropertySet = com.sun.star.uno.UnoRuntime.queryInterface(XPropertySet.class, oPathSettings);
             sWorkUrl = (String) xPropertySet.getPropertyValue("Work");
         } catch (com.sun.star.uno.Exception exception) {

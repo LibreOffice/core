@@ -25,9 +25,9 @@ import com.sun.star.beans.XPropertiesChangeListener;
 import com.sun.star.beans.XPropertyChangeListener;
 import com.sun.star.beans.XVetoableChangeListener;
 import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.AnyConverter;
+import com.sun.star.util.thePathSettings;
 
 // ---------- junit imports -----------------
 import java.util.ArrayList;
@@ -43,7 +43,6 @@ import static org.junit.Assert.*;
 public class PathSettingsTest
 {
 
-    private static XMultiServiceFactory xMSF;
     // the test object: an instance of the tested service
     private static Object aPathSettings = null;
     // the properties of the service
@@ -111,9 +110,8 @@ public class PathSettingsTest
     {
         try
         {
-            xMSF = getMSF();
-            aPathSettings = xMSF.createInstance("com.sun.star.comp.framework.PathSettings");
-            assertNotNull("Can't instantiate com.sun.star.util.PathSettings.", aPathSettings);
+            aPathSettings = thePathSettings.get(connection.getComponentContext());
+            assertNotNull("Can't instantiate com.sun.star.util.thePathSettings.", aPathSettings);
 //            System.out.println("Implementation: " + util.utils.getImplName(aPathSettings));
 //            System.out.println("Service:        ");
             util.dbg.getSuppServices(aPathSettings);
@@ -952,12 +950,6 @@ public class PathSettingsTest
         {
             return vetoableChanged;
         }
-    }
-
-    private XMultiServiceFactory getMSF()
-    {
-        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
-        return xMSF1;
     }
 
     // setup and close connections

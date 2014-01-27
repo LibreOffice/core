@@ -36,7 +36,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/util/PathSettings.hpp>
+#include <com/sun/star/util/thePathSettings.hpp>
 #include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
@@ -410,7 +410,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
 
     // Create necessary services
-    Reference< XPathSettings > xPathSettings = PathSettings::create(xContext);
+    Reference< XPathSettings > xPathSettings = thePathSettings::get(xContext);
     m_xPathSettings.set( xPathSettings, UNO_QUERY_THROW );
     m_xSubstVariables.set( PathSubstitution::create(xContext) );
     m_xMacroExpander = theMacroExpander::get(xContext);

@@ -97,6 +97,7 @@
   <implementation name="com.sun.star.comp.framework.PathSettings"
       constructor="com_sun_star_comp_framework_PathSettings_get_implementation">
     <service name="com.sun.star.util.PathSettings"/>
+    <singleton name="com.sun.star.util.thePathSettings"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.PathSubstitution"
       constructor="com_sun_star_comp_framework_PathSubstitution_get_implementation">

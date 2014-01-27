@@ -30,7 +30,7 @@
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/util/PathSettings.hpp>
+#include <com/sun/star/util/thePathSettings.hpp>
 
 #include "linguistic/misc.hxx"
 
@@ -77,7 +77,7 @@ static uno::Sequence< OUString > GetMultiPaths_Impl(
         OUString aWriteable( rPathPrefix + "_writable" );
 
         uno::Reference< util::XPathSettings > xPathSettings =
-            util::PathSettings::create( xContext );
+            util::thePathSettings::get( xContext );
         xPathSettings->getPropertyValue( aInternal )  >>= aInternalPaths;
         xPathSettings->getPropertyValue( aUser )      >>= aUserPaths;
         xPathSettings->getPropertyValue( aWriteable ) >>= aWritablePath;

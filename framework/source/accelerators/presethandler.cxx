@@ -34,7 +34,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/FileSystemStorageFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/util/PathSettings.hpp>
+#include <com/sun/star/util/thePathSettings.hpp>
 
 #include <vcl/svapp.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -216,7 +216,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     // <- SAFE ----------------------------------
 
     css::uno::Reference< css::util::XPathSettings > xPathSettings =
-        css::util::PathSettings::create( xContext );
+        css::util::thePathSettings::get( xContext );
 
     OUString sShareLayer = xPathSettings->getBasePathShareLayer();
 
@@ -274,7 +274,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     // <- SAFE ----------------------------------
 
     css::uno::Reference< css::util::XPathSettings > xPathSettings =
-        css::util::PathSettings::create( xContext );
+        css::util::thePathSettings::get( xContext );
 
     OUString sUserLayer = xPathSettings->getBasePathUserLayer();
 

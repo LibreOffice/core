@@ -98,6 +98,7 @@ import com.sun.star.util.XNumberFormats;
 import com.sun.star.util.XNumberFormatsSupplier;
 import com.sun.star.util.Date;
 import com.sun.star.util.Time;
+import com.sun.star.util.thePathSettings;
 
 
 // Anregung von DV:
@@ -1116,7 +1117,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
             String sName = createUniqueName(m_xDlgModelNameContainer, "FileControl");
 
             // retrieve the configured Work path...
-            Object oPathSettings = m_xMCF.createInstanceWithContext("com.sun.star.util.PathSettings",m_xContext);
+            Object oPathSettings = thePathSettings.get(m_xContext);
             XPropertySet xPropertySet = com.sun.star.uno.UnoRuntime.queryInterface(XPropertySet.class, oPathSettings);
             String sWorkUrl = (String) xPropertySet.getPropertyValue("Work");
 

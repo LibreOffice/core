@@ -36,6 +36,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.util.thePathSettings;
 
 /*
  * Provides example code how to access and use the
@@ -80,7 +81,6 @@ public class PathSettingsTest extends java.lang.Object {
     public static void main(String[] args) {
 
         XComponentContext xRemoteContext = null;
-        XMultiComponentFactory xRemoteServiceManager = null;
         XPropertySet xPathSettingsService = null;
 
         try {
@@ -88,10 +88,8 @@ public class PathSettingsTest extends java.lang.Object {
             // process is started
             xRemoteContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
             System.out.println("Connected to a running office ...");
-            xRemoteServiceManager = xRemoteContext.getServiceManager();
 
-            Object pathSubst = xRemoteServiceManager.createInstanceWithContext(
-                "com.sun.star.comp.framework.PathSettings", xRemoteContext );
+            Object pathSubst = thePathSettings.get( xRemoteContext );
             xPathSettingsService = UnoRuntime.queryInterface(
                 XPropertySet.class, pathSubst);
 

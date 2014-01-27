@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_util_PathSettings_idl__
-#define __com_sun_star_util_PathSettings_idl__
+#ifndef __com_sun_star_util_thePathSettings_idl__
+#define __com_sun_star_util_thePathSettings_idl__
 
 #include <com/sun/star/util/XPathSettings.idl>
 
@@ -26,14 +26,23 @@
 module com {  module sun {  module star {  module  util {
 
 
-/**
-    A legacy (single-instance) service-variant of thePathSettings singleton.
+/** Supports read/write access and listener for the paths properties that
+    the Office uses.
+    <p>
+    The property names of the Office paths/directories are an exactly match
+    to the configuration entries found in the file
+    (org/openoffice/Office/Common.xml).<br>
+    This service supports the usage of path variables to define
+    paths that a relative to other office or system directories.
+    See PathSubstitution
+    </p>
 
-    @deprecated Use thePathSettings singleton instead.
+    Prior to LibreOffice 4.3, this singleton was only available as a
+    (single-instance) PathSettings service.
 
-    @since OOo 1.1.2
+    @since LibreOffice 4.3
  */
-published service PathSettings : XPathSettings;
+published singleton thePathSettings : XPathSettings;
 
 
 }; }; }; };
