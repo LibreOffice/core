@@ -297,20 +297,25 @@ void SbiInstance::CalcBreakCallLevel( sal_uInt16 nFlags )
 }
 
 SbiInstance::SbiInstance( StarBASIC* p )
+    : pIosys(new SbiIoSystem)
+    , pDdeCtrl(new SbiDdeControl)
+    , pDllMgr(0) // on demand
+    , pBasic(p)
+    , pNumberFormatter(0)
+    , meFormatterLangType(LANGUAGE_DONTKNOW)
+    , meFormatterDateFormat(YMD)
+    , nStdDateIdx(0)
+    , nStdTimeIdx(0)
+    , nStdDateTimeIdx(0)
+    , nErr(0)
+    , nErl(0)
+    , bReschedule(true)
+    , bCompatibility(false)
+    , pRun(NULL)
+    , pNext(NULL)
+    , nCallLvl(0)
+    , nBreakCallLvl(0)
 {
-    pBasic   = p;
-    pNext    = NULL;
-    pRun     = NULL;
-    pIosys   = new SbiIoSystem;
-    pDdeCtrl = new SbiDdeControl;
-    pDllMgr  = 0; // on demand
-    pNumberFormatter = 0; // on demand
-    nCallLvl = 0;
-    nBreakCallLvl = 0;
-    nErr     =
-    nErl     = 0;
-    bReschedule = sal_True;
-    bCompatibility = sal_False;
 }
 
 SbiInstance::~SbiInstance()
