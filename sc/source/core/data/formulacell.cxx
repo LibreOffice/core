@@ -3473,6 +3473,30 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell& r
                     bInvariant = false;
             }
             break;
+            case formula::svDouble:
+            {
+                if(!rtl::math::approxEqual(pThisTok->GetDouble(), pOtherTok->GetDouble()))
+                    return NotEqual;
+            }
+            break;
+            case formula::svString:
+            {
+                if(pThisTok->GetString() != pOtherTok->GetString())
+                    return NotEqual;
+            }
+            break;
+            case formula::svIndex:
+            {
+                if(pThisTok->GetIndex() != pOtherTok->GetIndex())
+                    return NotEqual;
+            }
+            break;
+            case formula::svByte:
+            {
+                if(pThisTok->GetByte() != pOtherTok->GetByte())
+                    return NotEqual;
+            }
+            break;
             default:
                 ;
         }
