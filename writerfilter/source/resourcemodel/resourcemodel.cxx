@@ -350,13 +350,7 @@ void WW8StreamHandler::utext(const sal_uInt8 * data, size_t len)
 
 void WW8StreamHandler::props(writerfilter::Reference<Properties>::Pointer_t ref)
 {
-    WW8PropertiesHandler aHandler(mpTableManager);
-
     output.addItem("<properties type=\"" + ref->getType() + "\">");
-    ref->resolve(aHandler);
-
-    //mpTableManager->props(ref);
-
     output.addItem("</properties>");
 }
 
@@ -400,141 +394,10 @@ void WW8StreamHandler::info(const string & info_)
     output.addItem("<info>" + info_ + "</info>");
 }
 
-void WW8PropertiesHandler::attribute(Id name, Value & val)
-{
-    boost::shared_ptr<OString> pStr(new OString());
-    OUString aStr = val.getString();
-    aStr.convertToString(pStr.get(), RTL_TEXTENCODING_ASCII_US,
-                         OUSTRING_TO_OSTRING_CVTFLAGS);
-    string sXMLValue = xmlify(pStr->getStr());
-
-    char sBuffer[256];
-    snprintf(sBuffer, sizeof(sBuffer), "0x%x", val.getInt());
-
-    output.addItem("<attribute name=\"" +
-                   (*QNameToString::Instance())(name) +
-                   "\" value=\"" +
-                   sXMLValue +
-                   + "\" hexvalue=\""
-                   + sBuffer + "\">");
-
-    writerfilter::Reference<Properties>::Pointer_t pProps = val.getProperties();
-
-    if (pProps.get() != NULL)
-    {
-        output.addItem("<properties name=\"" +
-                       (*QNameToString::Instance())(name)
-                       + "\" type=\"" + pProps->getType() + "\">");
-
-        try
-        {
-            pProps->resolve(*this);
-        }
-        catch (const ExceptionOutOfBounds &)
-        {
-        }
-
-        output.addItem("</properties>");
-    }
-
-    writerfilter::Reference<Stream>::Pointer_t pStream = val.getStream();
-
-    if (pStream.get() != NULL)
-    {
-        try
-        {
-            WW8StreamHandler aHandler;
-
-            pStream->resolve(aHandler);
-        }
-        catch (const ExceptionOutOfBounds &)
-        {
-        }
-    }
-
-    writerfilter::Reference<BinaryObj>::Pointer_t pBinObj = val.getBinary();
-
-    if (pBinObj.get() != NULL)
-    {
-        try
-        {
-            WW8BinaryObjHandler aHandler;
-
-            pBinObj->resolve(aHandler);
-        }
-        catch (const ExceptionOutOfBounds &)
-        {
-        }
-    }
-
-    output.addItem("</attribute>");
-}
-
-void WW8PropertiesHandler::sprm(Sprm & sprm_)
-{
-    string tmpStr = "<sprm id=\"";
-    char buffer[256];
-    snprintf(buffer, sizeof(buffer), "0x%" SAL_PRIxUINT32, sprm_.getId());
-    tmpStr += buffer;
-    tmpStr += "\" name=\"";
-    tmpStr += sprm_.getName();
-    tmpStr += "\">";
-    output.addItem(tmpStr);
-    output.addItem(sprm_.toString());
-
-    writerfilter::Reference<Properties>::Pointer_t pProps = sprm_.getProps();
-
-    if (pProps.get() != NULL)
-    {
-        output.addItem("<properties type=\"" + pProps->getType() + "\">");
-        pProps->resolve(*this);
-        output.addItem("</properties>");
-    }
-
-    writerfilter::Reference<BinaryObj>::Pointer_t pBinObj = sprm_.getBinary();
-
-    if (pBinObj.get() != NULL)
-    {
-        output.addItem("<binary>");
-        WW8BinaryObjHandler aHandler;
-        pBinObj->resolve(aHandler);
-        output.addItem("</binary>");
-    }
-
-    writerfilter::Reference<Stream>::Pointer_t pStream = sprm_.getStream();
-
-    if (pStream.get() != NULL)
-    {
-        output.addItem("<stream>");
-        WW8StreamHandler aHandler;
-        pStream->resolve(aHandler);
-        output.addItem("</stream>");
-    }
-
-    mpTableManager->sprm(sprm_);
-
-    output.addItem("</sprm>");
-}
-
 void WW8TableHandler::entry(int /*pos*/,
-                            writerfilter::Reference<Properties>::Pointer_t ref)
+                            writerfilter::Reference<Properties>::Pointer_t /*ref*/)
 {
     output.addItem("<tableentry>");
-
-    WW8PropertiesHandler aHandler(mpTableManager);
-
-    try
-    {
-        ref->resolve(aHandler);
-    }
-    catch (const Exception &e)
-    {
-        output.addItem("<exception>" + e.getText() + "</exception>");
-        output.addItem("</tableentry>");
-
-        throw;
-    }
-
     output.addItem("</tableentry>");
 }
 

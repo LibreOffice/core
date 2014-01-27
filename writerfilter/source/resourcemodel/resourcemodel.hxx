@@ -51,30 +51,6 @@ public:
     virtual void info(const string & info);
 };
 
-class WW8PropertiesHandler : public Properties
-{
-    typedef boost::shared_ptr<Sprm> SprmSharedPointer_t;
-    typedef vector<SprmSharedPointer_t> SprmPointers_t;
-    SprmPointers_t sprms;
-    WW8TableManager* mpTableManager;
-
-public:
-    WW8PropertiesHandler(WW8TableManager* pTableManager)
-        : mpTableManager(pTableManager)
-    {
-    }
-
-    virtual ~WW8PropertiesHandler()
-    {
-    }
-
-    virtual void attribute(Id name, Value & val);
-    virtual void sprm(Sprm & sprm);
-
-    void dumpSprm(SprmSharedPointer_t sprm);
-    void dumpSprms();
-};
-
 class WW8BinaryObjHandler : public BinaryObj
 {
 public:
