@@ -126,7 +126,13 @@ IMPL_LINK_INLINE_END( SbiInputDialog, Cancel, Window *, pWindow )
 
 
 SbiStream::SbiStream()
-    : pStrm( 0 )
+    : pStrm(0)
+    , nExpandOnWriteTo(0)
+    , nLine(0)
+    , nLen(0)
+    , nMode(0)
+    , nChan(0)
+    , nError(0)
 {
 }
 
