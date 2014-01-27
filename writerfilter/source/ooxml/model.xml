@@ -35,6 +35,7 @@
   <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/math" alias="math" id="officeMath"/>
   <namespace-alias name="http://schemas.openxmlformats.org/schemaLibrary/2006/main" alias="schemaLibrary" id="schema"/>
   <namespace-alias name="http://schemas.openxmlformats.org/markup-compatibility/2006" alias="mce" id="mce"/>
+  <namespace-alias name="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" alias="wp14" id="wp14"/>
   <namespace-alias name="http://sprm" alias="sprm" id="sprm"/>
   <token tokenid="ooxml:shape"/>
   <token tokenid="ooxml:token"/>
@@ -5228,6 +5229,35 @@
       <element name="graphic" tokenid="ooxml:graphic_graphic"/>
     </resource>
   </namespace>
+  <namespace name="wp14" file="wp14.rng">
+    <start name="sizeRelH"/>
+    <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+      <define name="ST_SizeRelFromH">
+        <choice>
+          <value>margin</value>
+        </choice>
+      </define>
+      <define name="CT_SizeRelH">
+        <attribute name="relativeFrom">
+          <ref name="ST_SizeRelFromH"/>
+        </attribute>
+      </define>
+      <define name="sizeRelH">
+        <element name="sizeRelH">
+          <ref name="CT_SizeRelH"/>
+        </element>
+      </define>
+    </grammar>
+      <resource name="ST_SizeRelFromH" resource="List" generated="yes">
+        <value name="margin" tokenid="ooxml:ST_SizeRelFromH_margin">margin</value>
+      </resource>
+      <resource name="CT_SizeRelH" resource="Properties" tag="shape">
+        <attribute name="relativeFrom" tokenid="ooxml:CT_SizeRelH_relativeFrom"/>
+      </resource>
+      <resource name="sizeRelH" resource="Properties" tag="shape">
+        <element name="sizeRelH" tokenid="ooxml:sizeRelH_sizeRelH"/>
+      </resource>
+  </namespace>
   <namespace name="dml-shapeGeometry" file="dml-shapeGeometry.rng" todo="ignore">
     <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
       <!-- ISO RELAX NG Schema -->
@@ -6360,7 +6390,7 @@
   <namespace name="dml-wordprocessingDrawing" file="dml-wordprocessingDrawing.rng">
     <start name="inline"/>
     <start name="anchor"/>
-    <grammar xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    <grammar xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
       <!-- ISO RELAX NG Schema -->
       <include href="dml-graphicalObject.rng"/>
       <include href="dml-documentProperties.rng"/>
@@ -6732,6 +6762,11 @@
           <element name="a:graphic">
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
+          <optional>
+            <element name="wp14:sizeRelH">
+              <ref name="BUILT_IN_ANY_TYPE"/>
+            </element>
+          </optional>
         </group>
         <optional>
           <attribute name="distT">
@@ -6914,7 +6949,7 @@
       <element name="posOffset" tokenid="ooxml:CT_PosV_posOffset"/>
       <attribute name="relativeFrom" tokenid="ooxml:CT_PosV_relativeFrom"/>
     </resource>
-    <resource xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" name="CT_Anchor" resource="Properties" tag="shape">
+    <resource xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" name="CT_Anchor" resource="Properties" tag="shape">
       <element name="simplePos" tokenid="ooxml:CT_Anchor_simplePos_elem"/>
       <element name="positionH" tokenid="ooxml:CT_Anchor_positionH"/>
       <element name="positionV" tokenid="ooxml:CT_Anchor_positionV"/>
@@ -6923,6 +6958,7 @@
       <element name="docPr" tokenid="ooxml:CT_Anchor_docPr"/>
       <element name="cNvGraphicFramePr" tokenid="ooxml:CT_Anchor_cNvGraphicFramePr"/>
       <element name="a:graphic" tokenid="ooxml:CT_Anchor_a_graphic"/>
+      <element name="wp14:sizeRelH" tokenid="ooxml:CT_Anchor_wp14_sizeRelH"/>
       <attribute name="distT" tokenid="ooxml:CT_Anchor_distT"/>
       <attribute name="distB" tokenid="ooxml:CT_Anchor_distB"/>
       <attribute name="distL" tokenid="ooxml:CT_Anchor_distL"/>
