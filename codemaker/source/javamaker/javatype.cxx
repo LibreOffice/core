@@ -467,7 +467,8 @@ TypeInfo::TypeInfo(
     sal_Int32 index, PolymorphicUnoType const & polymorphicUnoType):
     m_kind(kind), m_name(name),
     m_flags(flags | translateSpecialTypeFlags(specialType, false, false)),
-    m_index(index), m_polymorphicUnoType(polymorphicUnoType)
+    m_index(index), m_polymorphicUnoType(polymorphicUnoType),
+    m_typeParameterIndex(0)
 {
     assert(kind == KIND_ATTRIBUTE || kind == KIND_METHOD);
 }
