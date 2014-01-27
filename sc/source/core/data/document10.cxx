@@ -77,7 +77,7 @@ bool ScDocument::CopyOneCellFromClip(
                 bool bPaste = rCxt.isDateCell(pSrcTab->aCol[aSrcPos.Col()], aSrcPos.Row()) ? bDateTime : bNumeric;
                 if (!bPaste)
                     // Don't paste this.
-                    return true;
+                    rSrcCell.clear();
             }
             break;
             case CELLTYPE_STRING:
@@ -85,7 +85,7 @@ bool ScDocument::CopyOneCellFromClip(
             {
                 if (!bString)
                     // Skip pasting.
-                    return true;
+                    rSrcCell.clear();
             }
             break;
             case CELLTYPE_FORMULA:
@@ -113,14 +113,14 @@ bool ScDocument::CopyOneCellFromClip(
                     // error codes are cloned with values
                     if (!bNumeric)
                         // Error code is treated as numeric value. Don't paste it.
-                        return true;
+                        rSrcCell.clear();
                 }
                 else if (rSrcCell.mpFormula->IsValue())
                 {
                     bool bPaste = rCxt.isDateCell(pSrcTab->aCol[aSrcPos.Col()], aSrcPos.Row()) ? bDateTime : bNumeric;
                     if (!bPaste)
                         // Don't paste this.
-                        return true;
+                        rSrcCell.clear();
 
                     // Turn this into a numeric cell.
                     rSrcCell.set(rSrcCell.mpFormula->GetValue());
@@ -130,7 +130,7 @@ bool ScDocument::CopyOneCellFromClip(
                     svl::SharedString aStr = rSrcCell.mpFormula->GetString();
                     if (aStr.isEmpty())
                         // do not clone empty string
-                        return true;
+                        rSrcCell.clear();
 
                     // Turn this into a string or edit cell.
                     if (rSrcCell.mpFormula->IsMultilineResult())
@@ -147,16 +147,19 @@ bool ScDocument::CopyOneCellFromClip(
                         rSrcCell.set(rSrcCell.mpFormula->GetString());
                 }
                 else
-                    // We don't want to paste this. Bail out.
-                    return true;
+                    // We don't want to paste this.
+                    rSrcCell.clear();
             }
             break;
             case CELLTYPE_NONE:
             default:
                 // There is nothing to paste.
-                return true;
+                rSrcCell.clear();
         }
     }
+
+    if ((rCxt.getInsertFlag() & (IDF_NOTE | IDF_ADDNOTES)) != 0)
+        rCxt.setSingleCellNote(pClipDoc->GetNote(aSrcPos));
 
     // All good. Proceed with the pasting.
 

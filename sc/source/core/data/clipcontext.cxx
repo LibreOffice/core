@@ -33,7 +33,7 @@ CopyFromClipContext::CopyFromClipContext(ScDocument& rDoc,
     ClipContextBase(rDoc),
     mnTabStart(-1), mnTabEnd(-1),
     mpRefUndoDoc(pRefUndoDoc), mpClipDoc(pClipDoc), mnInsertFlag(nInsertFlag),
-    mpSinglePattern(NULL),
+    mpSinglePattern(NULL), mpSingleNote(NULL),
     mbAsLink(bAsLink), mbSkipAttrForEmptyCells(bSkipAttrForEmptyCells),
     mbCloneNotes (mnInsertFlag & (IDF_NOTE|IDF_ADDNOTES))
 {
@@ -87,6 +87,16 @@ const ScPatternAttr* CopyFromClipContext::getSingleCellPattern() const
 void CopyFromClipContext::setSingleCellPattern( const ScPatternAttr* pAttr )
 {
     mpSinglePattern = pAttr;
+}
+
+const ScPostIt* CopyFromClipContext::getSingleCellNote() const
+{
+    return mpSingleNote;
+}
+
+void CopyFromClipContext::setSingleCellNote( const ScPostIt* pNote )
+{
+    mpSingleNote = pNote;
 }
 
 bool CopyFromClipContext::isAsLink() const

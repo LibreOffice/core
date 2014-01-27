@@ -9,6 +9,7 @@
 
 #include <column.hxx>
 #include <clipcontext.hxx>
+#include <clipparam.hxx>
 #include <cellvalue.hxx>
 #include <attarray.hxx>
 #include <document.hxx>
@@ -118,6 +119,28 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
             default:
                 ;
         }
+    }
+
+    const ScPostIt* pNote = rCxt.getSingleCellNote();
+    if (pNote && (nFlags & (IDF_NOTE | IDF_ADDNOTES)) != 0)
+    {
+        // Duplicate the cell note over the whole pasted range.
+
+        ScDocument* pClipDoc = rCxt.getClipDoc();
+        const ScAddress& rSrcPos = pClipDoc->GetClipParam().getWholeRange().aStart;
+        std::vector<ScPostIt*> aNotes;
+        ScAddress aDestPos(nCol, nRow1, nTab);
+        aNotes.reserve(nDestSize);
+        for (size_t i = 0; i < nDestSize; ++i)
+        {
+            bool bCloneCaption = (nFlags & IDF_NOCAPTIONS) == 0;
+            aNotes.push_back(pNote->Clone(rSrcPos, *pDocument, aDestPos, bCloneCaption));
+            aDestPos.IncRow();
+        }
+
+        pBlockPos->miCellNotePos =
+            maCellNotes.set(
+                pBlockPos->miCellNotePos, nRow1, aNotes.begin(), aNotes.end());
     }
 }
 

@@ -21,6 +21,7 @@
 class ScDocument;
 class ScColumn;
 class ScPatternAttr;
+class ScPostIt;
 
 namespace sc {
 
@@ -49,6 +50,7 @@ class CopyFromClipContext : public ClipContextBase
     sal_uInt16  mnInsertFlag;
     ScCellValue maSingleCell;
     const ScPatternAttr* mpSinglePattern;
+    const ScPostIt* mpSingleNote;
     bool mbAsLink:1;
     bool mbSkipAttrForEmptyCells:1;
     bool mbCloneNotes:1;
@@ -75,6 +77,9 @@ public:
 
     const ScPatternAttr* getSingleCellPattern() const;
     void setSingleCellPattern( const ScPatternAttr* pAttr );
+
+    const ScPostIt* getSingleCellNote() const;
+    void setSingleCellNote( const ScPostIt* pNote );
 
     bool isAsLink() const;
     bool isSkipAttrForEmptyCells() const;
