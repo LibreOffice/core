@@ -379,8 +379,8 @@ STDMETHODIMP CMAccessible::get_accChild(VARIANT varChild, IDispatch **ppdispChil
                 return S_OK;
             }
             *ppdispChild = GetChildInterface(varChild.lVal);
-            if (!(*ppdispChild))
-                return S_FALSE;
+            if((*ppdispChild) == NULL)
+                return E_FAIL;
             (*ppdispChild)->AddRef();
             return S_OK;
         }
@@ -1710,6 +1710,7 @@ STDMETHODIMP CMAccessible::get_nRelations( long __RPC_FAR *nRelations)
     SolarMutexGuard g;
 
         ENTER_PROTECTED_BLOCK
+        ISDESTROY()
 
         // #CHECK#
         if(nRelations == NULL)
@@ -1803,6 +1804,7 @@ STDMETHODIMP CMAccessible::get_relations( long, IAccessibleRelation __RPC_FAR *_
     SolarMutexGuard g;
 
         ENTER_PROTECTED_BLOCK
+        ISDESTROY()
 
         // #CHECK#
         if(relation == NULL || nRelations == NULL)
@@ -3312,6 +3314,9 @@ STDMETHODIMP CMAccessible::get_attributes(/*[out]*/ BSTR *pAttr)
 {
     SolarMutexGuard g;
 
+    ENTER_PROTECTED_BLOCK
+    ISDESTROY()
+
     Reference<XAccessibleContext> pRContext = m_xAccessible->getAccessibleContext();
     if( !pRContext.is() )
     {
@@ -3335,6 +3340,7 @@ STDMETHODIMP CMAccessible::get_attributes(/*[out]*/ BSTR *pAttr)
 
         return S_OK;
     }
+    LEAVE_PROTECTED_BLOCK
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
