@@ -1434,6 +1434,9 @@ IMAccessible* CMAccessible::GetChildInterface(long dChildID)//for test
     }
     else
     {
+        if (!m_xAccessible.is())
+            return NULL;
+
         Reference<XAccessibleContext> const pRContext =
             m_xAccessible->getAccessibleContext();
         if( !pRContext.is() )
@@ -1947,6 +1950,9 @@ STDMETHODIMP CMAccessible:: get_groupPosition(long __RPC_FAR *groupLevel,long __
         {
             return E_INVALIDARG;
         }
+
+        if (!m_xAccessible.is())
+            return E_FAIL;
 
         Reference<XAccessibleContext> const pRContext =
             m_xAccessible->getAccessibleContext();
@@ -3315,6 +3321,9 @@ STDMETHODIMP CMAccessible::get_attributes(/*[out]*/ BSTR *pAttr)
 
     ENTER_PROTECTED_BLOCK
     ISDESTROY()
+
+    if (!m_xAccessible.is())
+        return E_FAIL;
 
     Reference<XAccessibleContext> pRContext = m_xAccessible->getAccessibleContext();
     if( !pRContext.is() )
