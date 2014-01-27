@@ -25,8 +25,6 @@
 #include <sfx2/sidebar/EnumContext.hxx>
 
 #include <svtools/ctrlbox.hxx>
-#include <svx/tbxcolorupdate.hxx>
-#include <editeng/svxenum.hxx>
 #include <editeng/fhgtitem.hxx>
 
 #include <com/sun/star/ui/XSidebar.hpp>
@@ -35,7 +33,6 @@
 #include <boost/scoped_ptr.hpp>
 #include "TextCharacterSpacingPopup.hxx"
 #include "TextUnderlinePopup.hxx"
-#include <svx/sidebar/ColorPopup.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <vcl/vclenum.hxx>
 
@@ -69,7 +66,6 @@ public:
     void EndUnderlinePopupMode (void);
     void SetUnderline(FontUnderline eUnderline);
     Color& GetUnderlineColor();
-    void SetDefaultUnderline(FontUnderline eUnderline);
 
 
     virtual void HandleContextChange (
@@ -95,36 +91,16 @@ private:
     //control items
     ::sfx2::sidebar::ControllerItem maFontNameControl;
     ::sfx2::sidebar::ControllerItem maFontSizeControl;
-    ::sfx2::sidebar::ControllerItem maWeightControl;
-    ::sfx2::sidebar::ControllerItem maItalicControl;
     ::sfx2::sidebar::ControllerItem maUnderlineControl;
-    ::sfx2::sidebar::ControllerItem maStrikeControl;
-    ::sfx2::sidebar::ControllerItem maShadowControl;
-    ::sfx2::sidebar::ControllerItem maScriptControlSw;
-    ::sfx2::sidebar::ControllerItem maSuperScriptControl;
-    ::sfx2::sidebar::ControllerItem maSubScriptControl;
     ::sfx2::sidebar::ControllerItem maSpacingControl;
-    ::sfx2::sidebar::ControllerItem maSDFontGrow;
-    ::sfx2::sidebar::ControllerItem maSDFontShrink;
 
-    FontWeight                  meWeight;
-    FontItalic                  meItalic;
     FontUnderline               meUnderline;
     Color                       meUnderlineColor;
-    bool                        mbShadow;
-    FontStrikeout               meStrike;
-    bool mbWeightAvailable;
-    bool mbPostureAvailable;
-    SvxEscapement               meEscape;  //for sw
-    bool                        mbSuper;
-    bool                        mbSub;
     bool                        mbKernAvailable;
     bool                        mbKernLBAvailable;
     long                        mlKerning;
     SvxFontHeightItem*          mpHeightItem;
 
-    const FontList* mpFontList;
-    bool mbMustDelete;
     bool mbFocusOnFontSizeCtrl;
     TextCharacterSpacingPopup maCharSpacePopup;
     TextUnderlinePopup maUnderlinePopup;
@@ -148,8 +124,6 @@ private:
     void Initialize (void);
     void SetupToolboxItems (void);
     void InitToolBoxFont();
-    void InitToolBoxIncDec();
-    void InitToolBoxScript();
     void InitToolBoxSpacing();
 
     DECL_LINK(FontSelHdl, FontNameBox *);
@@ -157,19 +131,8 @@ private:
     DECL_LINK(FontSizeSelHdl, FontSizeBox *);
     DECL_LINK(FontSizeLoseFocus, FontSizeBox *);
     DECL_LINK(ToolboxFontSelectHandler, ToolBox *);
-    DECL_LINK(ToolboxIncDecSelectHdl, ToolBox *);
-    DECL_LINK(ToolBoxScriptSelectHdl, ToolBox *);
 
-    void UpdateItem (const sal_uInt16 nSlotId);
-
-    /** Depending on the given context make one of the toolboxes
-        mpToolBoxFontColor and mpToolBoxFontColorSW visible.  Both
-        occupy the same space.
-    */
-    void UpdateFontColorToolbox (
-        const ::sfx2::sidebar::EnumContext aContext);
-
-    bool isWriter();
+    void UpdateFontColorToolbox (bool bWriterText);
 };
 
 } } // end of namespace ::svx::sidebar
