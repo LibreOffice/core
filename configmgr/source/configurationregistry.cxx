@@ -317,6 +317,7 @@ private:
 
 Service::Service(
     css::uno::Reference< css::uno::XComponentContext > const & context)
+    : readOnly_(false)
 {
     assert(context.is());
     try {
