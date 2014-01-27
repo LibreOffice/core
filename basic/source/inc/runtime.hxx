@@ -69,9 +69,12 @@ struct SbiForStack {                // for/next stack:
     css::uno::Reference< css::container::XEnumeration > xEnumeration;
 
     SbiForStack( void )
-        : pArrayCurIndices( NULL )
-        , pArrayLowerBounds( NULL )
-        , pArrayUpperBounds( NULL )
+        : pNext(NULL)
+        , eForType(FOR_TO)
+        , nCurCollectionIndex(0)
+        , pArrayCurIndices(NULL)
+        , pArrayLowerBounds(NULL)
+        , pArrayUpperBounds(NULL)
     {}
     ~SbiForStack()
     {
