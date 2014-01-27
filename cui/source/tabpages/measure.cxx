@@ -708,7 +708,7 @@ IMPL_LINK( SvxMeasurePage, ChangeAttrHdl_Impl, void *, p )
     {
         TriState eState = m_pTsbParallel->GetState();
         if( eState != STATE_DONTKNOW )
-            aAttrSet.Put( SdrMeasureTextRota90Item( (sal_Bool) !STATE_CHECK == eState ) );
+            aAttrSet.Put( SdrMeasureTextRota90Item( (sal_Bool) STATE_NOCHECK == eState ) );
     }
 
     if( p == m_pTsbShowUnit )
