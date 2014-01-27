@@ -22,11 +22,6 @@
 #include <svtools/ctrlbox.hxx>
 #include <svtools/ctrltool.hxx>
 
-namespace svx
-{
-    class ToolboxButtonColorUpdater;
-}
-
 namespace svx { namespace sidebar {
 
 class SvxSBFontNameBox : public FontNameBox//, public SfxListener

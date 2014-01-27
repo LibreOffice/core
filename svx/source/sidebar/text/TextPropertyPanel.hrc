@@ -67,10 +67,6 @@
 
 #define STR_WITHOUT             50
 
-//popup window font color
-#define VS_FONT_COLOR           1
-#define STR_AUTOMATICE          2
-
 //POPUP WINDOW OF SPACING
 #define VS_SPACING                  1
 

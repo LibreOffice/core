@@ -22,17 +22,10 @@
 
 #include "svx/dialmgr.hxx"
 
-#include <editeng/brushitem.hxx>
-#include <editeng/colritem.hxx>
-#include <editeng/crossedoutitem.hxx>
-#include <editeng/escapementitem.hxx>
 #include <editeng/flstitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/kernitem.hxx>
-#include <editeng/postitem.hxx>
-#include <editeng/shdditem.hxx>
 #include <editeng/udlnitem.hxx>
-#include <editeng/wghtitem.hxx>
 #include <rtl/ref.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
@@ -46,14 +39,12 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/unitconv.hxx>
 
-#include <vcl/gradient.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include "TextCharacterSpacingControl.hxx"
 #include "TextCharacterSpacingPopup.hxx"
 #include "TextUnderlineControl.hxx"
 #include "TextUnderlinePopup.hxx"
-#include <svx/sidebar/ColorControl.hxx>
 #include <svx/sidebar/PopupContainer.hxx>
 
 #include <boost/bind.hpp>
@@ -64,17 +55,9 @@ using ::sfx2::sidebar::Theme;
 using ::sfx2::sidebar::ControlFactory;
 
 const char UNO_BACKCOLOR[] = ".uno:BackColor";
-const char UNO_BOLD[] = ".uno:Bold";
 const char UNO_COLOR[] = ".uno:Color";
 const char UNO_FONTCOLOR[] = ".uno:FontColor";
-const char UNO_GROW[] = ".uno:Grow";
-const char UNO_ITALIC[] = ".uno:Italic";
-const char UNO_STRIKEOUT[] = ".uno:Strikeout";
-const char UNO_SHADOWED[] = ".uno:Shadowed";
-const char UNO_SHRINK[] = ".uno:Shrink";
 const char UNO_SPACING[] = ".uno:Spacing";
-const char UNO_SUBSCRIPT[] = ".uno:SubScript";
-const char UNO_SUPERSCRIPT[] = ".uno:SuperScript";
 const char UNO_UNDERLINE[] = ".uno:Underline";
 
 namespace svx { namespace sidebar {
@@ -127,26 +110,14 @@ TextPropertyPanel* TextPropertyPanel::Create (
     return maSpacingControl;
 }
 
-TextPropertyPanel::TextPropertyPanel ( Window* pParent, const cssu::Reference<css::frame::XFrame>& rxFrame, SfxBindings* pBindings, const ::sfx2::sidebar::EnumContext& rContext )
+TextPropertyPanel::TextPropertyPanel ( Window* pParent, const cssu::Reference<css::frame::XFrame>& rxFrame, SfxBindings* pBindings, const ::sfx2::sidebar::EnumContext& /*rContext*/ )
     : PanelLayout(pParent, "SidebarTextPanel", "svx/ui/sidebartextpanel.ui", rxFrame),
         maFontNameControl   (SID_ATTR_CHAR_FONT,        *pBindings, *this, OUString("CharFontName"), rxFrame),
         maFontSizeControl   (SID_ATTR_CHAR_FONTHEIGHT,  *pBindings, *this, OUString("FontHeight"),   rxFrame),
-        maWeightControl     (SID_ATTR_CHAR_WEIGHT,      *pBindings, *this, OUString("Bold"),         rxFrame),
-        maItalicControl     (SID_ATTR_CHAR_POSTURE,     *pBindings, *this, OUString("Italic"),       rxFrame),
         maUnderlineControl  (SID_ATTR_CHAR_UNDERLINE,   *pBindings, *this, OUString("Underline"),    rxFrame),
-        maStrikeControl     (SID_ATTR_CHAR_STRIKEOUT,   *pBindings, *this, OUString("Strikeout"),    rxFrame),
-        maShadowControl     (SID_ATTR_CHAR_SHADOWED,    *pBindings, *this, OUString("Shadowed"),     rxFrame),
-        maScriptControlSw   (SID_ATTR_CHAR_ESCAPEMENT,  *pBindings, *this, OUString("Escapement"),   rxFrame),
-        maSuperScriptControl(SID_SET_SUPER_SCRIPT,      *pBindings, *this, OUString("SuperScript"),  rxFrame),
-        maSubScriptControl  (SID_SET_SUB_SCRIPT,        *pBindings, *this, OUString("SubScript"),    rxFrame),
         maSpacingControl    (SID_ATTR_CHAR_KERNING,     *pBindings, *this, OUString("Spacing"),      rxFrame),
-        maSDFontGrow        (SID_GROW_FONT_SIZE,        *pBindings, *this, OUString("Grow"),         rxFrame),
-        maSDFontShrink      (SID_SHRINK_FONT_SIZE,      *pBindings, *this, OUString("Shrink"),       rxFrame),
 
-        mpFontList          (NULL),
-        mbMustDelete        (false),
         mbFocusOnFontSizeCtrl(false),
-
         maCharSpacePopup(this, ::boost::bind(&TextPropertyPanel::CreateCharacterSpacingControl, this, _1)),
         maUnderlinePopup(this, ::boost::bind(&TextPropertyPanel::CreateUnderlinePopupControl, this, _1)),
         maContext(),
@@ -161,8 +132,6 @@ TextPropertyPanel::TextPropertyPanel ( Window* pParent, const cssu::Reference<cs
     get(mpToolBoxFontColor, "colorbar");
 
     Initialize();
-
-    UpdateFontColorToolbox(rContext);
 }
 
 
@@ -170,8 +139,6 @@ TextPropertyPanel::TextPropertyPanel ( Window* pParent, const cssu::Reference<cs
 
 TextPropertyPanel::~TextPropertyPanel (void)
 {
-    if(mbMustDelete)
-        delete mpFontList;
 }
 
 
@@ -187,42 +154,27 @@ void TextPropertyPanel::HandleContextChange (
     const ::sfx2::sidebar::EnumContext aContext)
 {
     if (maContext == aContext)
-    {
-        // Nothing to do.
         return;
-    }
 
     maContext = aContext;
+
+    if (maContext.GetApplication_DI() == sfx2::sidebar::EnumContext::Application::Application_Calc)
+        mpToolBoxIncDec->Hide();
+    else
+        mpToolBoxIncDec->Show();
+
+    bool bWriterText = false;
     switch (maContext.GetCombinedContext_DI())
     {
         case CombinedEnumContext(Application_Calc, Context_Cell):
         case CombinedEnumContext(Application_Calc, Context_Pivot):
-            mpToolBoxFontColor->HideItem(mpToolBoxFontColor->GetItemId(UNO_BACKCOLOR));
-            mpToolBoxScript->Disable();
             mpToolBoxSpacing->Disable();
             break;
 
         case CombinedEnumContext(Application_Calc, Context_EditCell):
         case CombinedEnumContext(Application_Calc, Context_DrawText):
-            mpToolBoxFontColor->HideItem(mpToolBoxFontColor->GetItemId(UNO_BACKCOLOR));
-            mpToolBoxScript->Enable();
-            mpToolBoxSpacing->Enable();
-            break;
-
-        case CombinedEnumContext(Application_WriterVariants, Context_Text):
-        case CombinedEnumContext(Application_WriterVariants, Context_Table):
-            mpToolBoxFontColor->ShowItem(mpToolBoxFontColor->GetItemId(UNO_BACKCOLOR));
-            mpToolBoxScript->Enable();
-            mpToolBoxSpacing->Show();
-            break;
-
         case CombinedEnumContext(Application_WriterVariants, Context_DrawText):
         case CombinedEnumContext(Application_WriterVariants, Context_Annotation):
-            mpToolBoxFontColor->HideItem(mpToolBoxFontColor->GetItemId(UNO_BACKCOLOR));
-            mpToolBoxScript->Enable();
-            mpToolBoxSpacing->Show();
-            break;
-
         case CombinedEnumContext(Application_DrawImpress, Context_DrawText):
         case CombinedEnumContext(Application_DrawImpress, Context_Text):
         case CombinedEnumContext(Application_DrawImpress, Context_Table):
@@ -230,47 +182,41 @@ void TextPropertyPanel::HandleContextChange (
         case CombinedEnumContext(Application_DrawImpress, Context_Draw):
         case CombinedEnumContext(Application_DrawImpress, Context_TextObject):
         case CombinedEnumContext(Application_DrawImpress, Context_Graphic):
-            mpToolBoxFontColor->HideItem(mpToolBoxFontColor->GetItemId(UNO_BACKCOLOR));
-            mpToolBoxScript->Enable();
-            mpToolBoxSpacing->Show();
+            mpToolBoxSpacing->Enable();
+            break;
+
+        case CombinedEnumContext(Application_WriterVariants, Context_Text):
+        case CombinedEnumContext(Application_WriterVariants, Context_Table):
+            mpToolBoxSpacing->Enable();
+            bWriterText = true;
             break;
 
         default:
             break;
     }
 
-    UpdateFontColorToolbox(aContext);
+    UpdateFontColorToolbox(bWriterText);
 }
 
-
-
-
-void TextPropertyPanel::UpdateFontColorToolbox (
-    const ::sfx2::sidebar::EnumContext /* aContext */)
+void TextPropertyPanel::UpdateFontColorToolbox (bool bWriterText)
 {
-    bool bIsWriterFontColor (false);
-    if (maContext.GetApplication_DI() == sfx2::sidebar::EnumContext::Application_WriterVariants)
-        if (maContext.GetContext() != sfx2::sidebar::EnumContext::Context_DrawText)
-            bIsWriterFontColor = true;
-    if (bIsWriterFontColor)
+    if (bWriterText)
     {
         mpToolBoxFontColor->HideItem(mpToolBoxFontColor->GetItemId(UNO_COLOR));
         mpToolBoxFontColor->ShowItem(mpToolBoxFontColor->GetItemId(UNO_FONTCOLOR));
+        mpToolBoxFontColor->ShowItem(mpToolBoxFontColor->GetItemId(UNO_BACKCOLOR));
     }
     else
     {
         mpToolBoxFontColor->ShowItem(mpToolBoxFontColor->GetItemId(UNO_COLOR));
         mpToolBoxFontColor->HideItem(mpToolBoxFontColor->GetItemId(UNO_FONTCOLOR));
+        mpToolBoxFontColor->HideItem(mpToolBoxFontColor->GetItemId(UNO_BACKCOLOR));
     }
 }
 
 
-
-
-void TextPropertyPanel::DataChanged (const DataChangedEvent& rEvent)
+void TextPropertyPanel::DataChanged (const DataChangedEvent& /*rEvent*/)
 {
-    (void)rEvent;
-
     SetupToolboxItems();
 }
 
@@ -279,30 +225,33 @@ void TextPropertyPanel::DataChanged (const DataChangedEvent& rEvent)
 
 void TextPropertyPanel::Initialize (void)
 {
-    //<<modify fill font list
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SfxPoolItem* pItem = NULL;
+    const FontList* pFontList = NULL;
+    bool  bMustDelete = false;
 
     if (pDocSh != NULL)
         pItem = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST );
     if (pItem != NULL)
-        mpFontList = ( (SvxFontListItem*)pItem )->GetFontList();
+        pFontList = ( (SvxFontListItem*)pItem )->GetFontList();
     else
     {
-        mpFontList = new FontList( Application::GetDefaultDevice() );
-        mbMustDelete = true;
+        pFontList = new FontList( Application::GetDefaultDevice() );
+        bMustDelete = true;
     }
 
+    const FontInfo aFontInfo (pFontList->Get( OUString( "" ), OUString( "" )));
+    mpFontSizeBox->Fill(&aFontInfo,pFontList);
+
+    if (bMustDelete)
+        delete pFontList;
+
     mpFontNameBox->SetAccessibleName(mpFontNameBox->GetQuickHelpText());
-    const FontInfo aFontInfo (mpFontList->Get( OUString( "" ), OUString( "" )));
-    mpFontSizeBox->Fill(&aFontInfo,mpFontList);
     mpFontSizeBox->SetAccessibleName(mpFontSizeBox->GetQuickHelpText());
 
     //toolbox
     SetupToolboxItems();
-    InitToolBoxIncDec();
     InitToolBoxFont();
-    InitToolBoxScript();
     InitToolBoxSpacing();
 
 #ifdef HAS_IA2
@@ -313,23 +262,14 @@ void TextPropertyPanel::Initialize (void)
     mpToolBoxFont->SetAccRelationLabeledBy(mpToolBoxFont);
     mpToolBoxIncDec->SetAccRelationLabeledBy(mpToolBoxIncDec);
     mpToolBoxFontColor->SetAccRelationLabeledBy(mpToolBoxFontColor);
-    mpToolBoxScriptSetAccRelationLabeledBy(mpToolBoxScript);
+    mpToolBoxScript->SetAccRelationLabeledBy(mpToolBoxScript);
     mpToolBoxSpacing->SetAccRelationLabeledBy(mpToolBoxSpacing);
 #endif
 
     //init state
     mpHeightItem = NULL;
-    meWeight = WEIGHT_NORMAL;
-    meItalic = ITALIC_NONE;
-    mbShadow = false;
-    meStrike = STRIKEOUT_NONE;
-    mbPostureAvailable = true;
-    mbWeightAvailable = true;
     meUnderline = UNDERLINE_NONE;
     meUnderlineColor = COL_AUTO;
-    meEscape = SVX_ESCAPEMENT_OFF;
-    mbSuper = false;
-    mbSub = false;
     mbKernAvailable = true;
     mbKernLBAvailable = true;
     mlKerning = 0;
@@ -369,21 +309,6 @@ void TextPropertyPanel::InitToolBoxFont()
 
 
 
-void TextPropertyPanel::InitToolBoxIncDec()
-{
-    Link aLink = LINK(this, TextPropertyPanel, ToolboxIncDecSelectHdl);
-    mpToolBoxIncDec->SetSelectHdl ( aLink );
-}
-
-
-
-
-void TextPropertyPanel::InitToolBoxScript()
-{
-    Link aLink = LINK(this, TextPropertyPanel, ToolBoxScriptSelectHdl);
-    mpToolBoxScript->SetSelectHdl ( aLink );
-}
-
 void TextPropertyPanel::InitToolBoxSpacing()
 {
     const sal_uInt16 nId = mpToolBoxSpacing->GetItemId(UNO_SPACING);
@@ -399,18 +324,7 @@ void TextPropertyPanel::InitToolBoxSpacing()
 
 void TextPropertyPanel::SetupToolboxItems (void)
 {
-    maSDFontGrow.SetupToolBoxItem(*mpToolBoxIncDec, mpToolBoxIncDec->GetItemId(UNO_GROW));
-    maSDFontShrink.SetupToolBoxItem(*mpToolBoxIncDec, mpToolBoxIncDec->GetItemId(UNO_SHRINK));
-
-    maWeightControl.SetupToolBoxItem(*mpToolBoxFont, mpToolBoxFont->GetItemId(UNO_BOLD));
-    maItalicControl.SetupToolBoxItem(*mpToolBoxFont, mpToolBoxFont->GetItemId(UNO_ITALIC));
     maUnderlineControl.SetupToolBoxItem(*mpToolBoxFont, mpToolBoxFont->GetItemId(UNO_UNDERLINE));
-    maStrikeControl.SetupToolBoxItem(*mpToolBoxFont, mpToolBoxFont->GetItemId(UNO_STRIKEOUT));
-    maShadowControl.SetupToolBoxItem(*mpToolBoxFont, mpToolBoxFont->GetItemId(UNO_SHADOWED));
-
-    maSuperScriptControl.SetupToolBoxItem(*mpToolBoxScript, mpToolBoxScript->GetItemId(UNO_SUPERSCRIPT));
-    maSubScriptControl.SetupToolBoxItem(*mpToolBoxScript, mpToolBoxScript->GetItemId(UNO_SUBSCRIPT));
-
     maSpacingControl.SetupToolBoxItem(*mpToolBoxSpacing, mpToolBoxSpacing->GetItemId(UNO_SPACING));
 }
 
@@ -479,85 +393,16 @@ IMPL_LINK(TextPropertyPanel, ToolboxFontSelectHandler, ToolBox*, pToolBox)
     const sal_uInt16 nId = pToolBox->GetCurItemId();
     const OUString aCommand(pToolBox->GetItemCommand(nId));
 
-        if (aCommand == UNO_BOLD)
-        {
-            EndTracking();
-            if(meWeight != WEIGHT_BOLD)
-                meWeight = WEIGHT_BOLD;
-            else
-                meWeight = WEIGHT_NORMAL;
-            SvxWeightItem aWeightItem(meWeight, SID_ATTR_CHAR_WEIGHT);
-            mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_WEIGHT, SFX_CALLMODE_RECORD, &aWeightItem, 0L);
-            UpdateItem(SID_ATTR_CHAR_WEIGHT);
-        }
-        else if (aCommand == UNO_ITALIC)
-        {
-            EndTracking();
-            if(meItalic != ITALIC_NORMAL)
-                meItalic = ITALIC_NORMAL;
-            else
-                meItalic = ITALIC_NONE;
-            SvxPostureItem aPostureItem(meItalic, SID_ATTR_CHAR_POSTURE);
-            mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_POSTURE, SFX_CALLMODE_RECORD, &aPostureItem, 0L);
-            UpdateItem(SID_ATTR_CHAR_POSTURE);
-        }
-        else if (aCommand == UNO_UNDERLINE)
-        {
-            EndTracking();
-            if(meUnderline == UNDERLINE_NONE)
-            {
-                meUnderline = UNDERLINE_SINGLE;
-                SvxUnderlineItem aLineItem(meUnderline, SID_ATTR_CHAR_UNDERLINE);
-                aLineItem.SetColor(meUnderlineColor);
-                mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_UNDERLINE, SFX_CALLMODE_RECORD, &aLineItem, 0L);
-            }
-            else
-            {
-                meUnderline = UNDERLINE_NONE;
-                SvxUnderlineItem aLineItem(meUnderline, SID_ATTR_CHAR_UNDERLINE);
-                mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_UNDERLINE, SFX_CALLMODE_RECORD, &aLineItem, 0L);
-            }
-            UpdateItem(SID_ATTR_CHAR_UNDERLINE);
-        }
-        else if (aCommand == UNO_STRIKEOUT)
-        {
-            EndTracking();
-            if(meStrike !=  STRIKEOUT_NONE && meStrike != STRIKEOUT_DONTKNOW)
-                meStrike = STRIKEOUT_NONE;
-            else
-                meStrike = STRIKEOUT_SINGLE;
-            SvxCrossedOutItem aStrikeItem(meStrike,SID_ATTR_CHAR_STRIKEOUT);
-            mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_STRIKEOUT, SFX_CALLMODE_RECORD, &aStrikeItem, 0L);
-            UpdateItem(SID_ATTR_CHAR_STRIKEOUT);
-        }
-        else if (aCommand == UNO_SHADOWED)
-        {
-            EndTracking();
-            mbShadow = !mbShadow;
-            SvxShadowedItem aShadowItem(mbShadow, SID_ATTR_CHAR_SHADOWED);
-            mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_SHADOWED, SFX_CALLMODE_RECORD, &aShadowItem, 0L);
-            UpdateItem(SID_ATTR_CHAR_SHADOWED);
-        }
-
-    return 0;
-}
-
-
-
-
-IMPL_LINK(TextPropertyPanel, ToolboxIncDecSelectHdl, ToolBox*, pToolBox)
-{
-    const sal_uInt16 nId = pToolBox->GetCurItemId();
-    const OUString aCommand(pToolBox->GetItemCommand(nId));
-
     EndTracking();
+
+    if (aCommand == UNO_UNDERLINE)
+        meUnderline = UNDERLINE_NONE;
 
     dispatch(aCommand);
 
-    UpdateItem(SID_ATTR_CHAR_FONTHEIGHT);
-
     return 0;
 }
+
 
 
 
@@ -574,65 +419,6 @@ IMPL_LINK(TextPropertyPanel, ToolBoxUnderlineClickHdl, ToolBox*, pToolBox)
     }
 
     return 0L;
-}
-
-
-
-
-IMPL_LINK(TextPropertyPanel, ToolBoxScriptSelectHdl, ToolBox*, pToolBox)
-{
-    const sal_uInt16 nId = pToolBox->GetCurItemId();
-    const OUString aCommand(pToolBox->GetItemCommand(nId));
-
-    if (isWriter() && aCommand == UNO_SUPERSCRIPT)
-    {
-        if(meEscape != SVX_ESCAPEMENT_SUPERSCRIPT)
-        {
-            meEscape = SVX_ESCAPEMENT_SUPERSCRIPT;
-            SvxEscapementItem aSupItem(DFLT_ESC_SUPER, DFLT_ESC_PROP, SID_ATTR_CHAR_ESCAPEMENT);
-            mpBindings->GetDispatcher()->Execute( SID_ATTR_CHAR_ESCAPEMENT, SFX_CALLMODE_RECORD, &aSupItem, 0L );
-        }
-        else
-        {
-            meEscape = SVX_ESCAPEMENT_OFF;
-            SvxEscapementItem aNoneItem(0, 100, SID_ATTR_CHAR_ESCAPEMENT);
-            mpBindings->GetDispatcher()->Execute( SID_ATTR_CHAR_ESCAPEMENT, SFX_CALLMODE_RECORD, &aNoneItem, 0L );
-        }
-        UpdateItem(SID_ATTR_CHAR_ESCAPEMENT);
-    }
-    else if (isWriter() && aCommand == UNO_SUBSCRIPT)
-    {
-        if(meEscape != SVX_ESCAPEMENT_SUBSCRIPT)
-        {
-            meEscape = (SvxEscapement)SVX_ESCAPEMENT_SUBSCRIPT;
-            SvxEscapementItem aSubItem(DFLT_ESC_SUB, DFLT_ESC_PROP, SID_ATTR_CHAR_ESCAPEMENT);
-            mpBindings->GetDispatcher()->Execute( SID_ATTR_CHAR_ESCAPEMENT, SFX_CALLMODE_RECORD, &aSubItem, 0L );
-        }
-        else
-        {
-            meEscape = SVX_ESCAPEMENT_OFF;
-            SvxEscapementItem aNoneItem(0, 100, SID_ATTR_CHAR_ESCAPEMENT);
-            mpBindings->GetDispatcher()->Execute( SID_ATTR_CHAR_ESCAPEMENT, SFX_CALLMODE_RECORD, &aNoneItem, 0L );
-        }
-        UpdateItem(SID_ATTR_CHAR_ESCAPEMENT);
-    }
-    else if (!isWriter() && aCommand == UNO_SUPERSCRIPT)
-    {
-        mbSuper = !mbSuper;
-        SfxBoolItem aSupItem(SID_SET_SUPER_SCRIPT, mbSuper);
-        mpBindings->GetDispatcher()->Execute( SID_SET_SUPER_SCRIPT, SFX_CALLMODE_RECORD, &aSupItem, 0L );
-        UpdateItem(SID_SET_SUPER_SCRIPT);
-    }
-    else if (!isWriter() && aCommand == UNO_SUBSCRIPT)
-    {
-
-        mbSub = !mbSub;
-        SfxBoolItem aSubItem(SID_SET_SUB_SCRIPT, mbSub );
-        mpBindings->GetDispatcher()->Execute( SID_SET_SUB_SCRIPT, SFX_CALLMODE_RECORD, &aSubItem, 0L );
-        UpdateItem(SID_SET_SUB_SCRIPT);
-    }
-
-    return 0;
 }
 
 
@@ -662,11 +448,12 @@ void TextPropertyPanel::NotifyItemUpdate (
     const SfxPoolItem* pState,
     const bool bIsEnabled)
 {
+    bool bIsControlEnabled (bIsEnabled);
+
     switch(nSID)
     {
     case SID_ATTR_CHAR_FONT:
         {
-            bool bIsControlEnabled (bIsEnabled);
             if (  eState >= SFX_ITEM_DEFAULT && pState->ISA(SvxFontItem) )
             {
                 const SvxFontItem* pFontItem = (const SvxFontItem*)pState;
@@ -683,109 +470,26 @@ void TextPropertyPanel::NotifyItemUpdate (
         break;
     case SID_ATTR_CHAR_FONTHEIGHT:
         {
-            const sal_uInt16 nIncreaseId = mpToolBoxIncDec->GetItemId(UNO_GROW);
-            const sal_uInt16 nDecreaseId = mpToolBoxIncDec->GetItemId(UNO_SHRINK);
-            bool bIsControlEnabled (bIsEnabled);
             if (  eState >= SFX_ITEM_DEFAULT && pState->ISA(SvxFontHeightItem) )
             {
                 mpHeightItem = (SvxFontHeightItem*)pState;//const SvxFontHeightItem*
                 SfxMapUnit eUnit = maFontSizeControl.GetCoreMetric();
                 const sal_Int64 nValue (CalcToPoint(mpHeightItem->GetHeight(), eUnit, 10 ));
-                mpToolBoxIncDec->Enable();
-
-                mpToolBoxIncDec->SetItemState(nIncreaseId, STATE_NOCHECK);
-                mpToolBoxIncDec->SetItemState(nDecreaseId, STATE_NOCHECK);
-
-                // For Writer we have to update the states of the
-                // increase and decrease buttons here, because we have
-                // no access to the slots used by Writer.
-                switch(maContext.GetCombinedContext_DI())
-                {
-                    case CombinedEnumContext(Application_DrawImpress, Context_DrawText):
-                    case CombinedEnumContext(Application_DrawImpress, Context_Text):
-                    case CombinedEnumContext(Application_DrawImpress, Context_Table):
-                    case CombinedEnumContext(Application_DrawImpress, Context_OutlineText):
-                    case CombinedEnumContext(Application_DrawImpress, Context_Draw):
-                    case CombinedEnumContext(Application_DrawImpress, Context_TextObject):
-                    case CombinedEnumContext(Application_DrawImpress, Context_Graphic):
-                        break;
-
-                    default:
-                    {
-                        mpToolBoxIncDec->EnableItem(nIncreaseId, bIsEnabled && nValue<9999);
-                        mpToolBoxIncDec->EnableItem(nDecreaseId, bIsEnabled && nValue>20);
-                        break;
-                    }
-                }
 
                 if( mbFocusOnFontSizeCtrl )
                     return;
 
                 mpFontSizeBox->SetValue(nValue);
                 mpFontSizeBox->LoseFocus();
-
-                UpdateItem(SID_SHRINK_FONT_SIZE);
-                UpdateItem(SID_GROW_FONT_SIZE);
             }
             else
             {
                 mpHeightItem = NULL;
                 mpFontSizeBox->SetText( "" );
-                //increase decrease disabled when multi-seletion have different font size
-
-                // font size +/- enhancement in sd
-                switch(maContext.GetCombinedContext_DI())
-                {
-                    case CombinedEnumContext(Application_DrawImpress, Context_DrawText):
-                    case CombinedEnumContext(Application_DrawImpress, Context_Text):
-                    case CombinedEnumContext(Application_DrawImpress, Context_Table):
-                    case CombinedEnumContext(Application_DrawImpress, Context_OutlineText):
-                    case CombinedEnumContext(Application_DrawImpress, Context_Draw):
-                    case CombinedEnumContext(Application_DrawImpress, Context_TextObject):
-                    case CombinedEnumContext(Application_DrawImpress, Context_Graphic):
-                        break;
-
-                    default:
-                        mpToolBoxIncDec->Disable();
-                }
                 if ( eState <= SFX_ITEM_READONLY )
                     bIsControlEnabled = false;
             }
             mpFontSizeBox->Enable(bIsControlEnabled);
-        }
-        break;
-    case SID_ATTR_CHAR_WEIGHT:
-        {
-            mbWeightAvailable = (eState >= SFX_ITEM_DONTCARE);
-            if( eState >= SFX_ITEM_DEFAULT && pState->ISA(SvxWeightItem))
-            {
-                const SvxWeightItem* pItem = (const SvxWeightItem*)pState;
-                meWeight = (FontWeight)pItem->GetValue();
-            }
-            else
-            {
-                meWeight = WEIGHT_NORMAL;
-            }
-            const sal_uInt16 nId = mpToolBoxFont->GetItemId(UNO_BOLD);
-            mpToolBoxFont->EnableItem(nId, mbWeightAvailable && bIsEnabled);
-            mpToolBoxFont->SetItemState(nId, meWeight==WEIGHT_BOLD ? STATE_CHECK : STATE_NOCHECK);
-        }
-        break;
-    case SID_ATTR_CHAR_POSTURE:
-        {
-            mbPostureAvailable = (eState >= SFX_ITEM_DONTCARE);
-            if( eState >= SFX_ITEM_DEFAULT && pState->ISA(SvxPostureItem))
-            {
-                const SvxPostureItem* pItem = (const SvxPostureItem*)pState;
-                meItalic = (FontItalic)pItem->GetValue();
-            }
-            else
-            {
-                meItalic = ITALIC_NONE;
-            }
-            const sal_uInt16 nId = mpToolBoxFont->GetItemId(UNO_ITALIC);
-            mpToolBoxFont->EnableItem(nId, mbPostureAvailable && bIsEnabled);
-            mpToolBoxFont->SetItemState(nId, meItalic==ITALIC_NORMAL ? STATE_CHECK : STATE_NOCHECK);
         }
         break;
     case SID_ATTR_CHAR_UNDERLINE:
@@ -803,128 +507,6 @@ void TextPropertyPanel::NotifyItemUpdate (
             {
                 meUnderline = UNDERLINE_NONE;
             }
-            const sal_uInt16 nId = mpToolBoxFont->GetItemId(UNO_UNDERLINE);
-            mpToolBoxFont->EnableItem(nId, bIsEnabled);
-            mpToolBoxFont->SetItemState(nId, meUnderline==UNDERLINE_NONE ? STATE_NOCHECK : STATE_CHECK);
-        }
-        break;
-    case SID_ATTR_CHAR_SHADOWED:
-        {
-            if( eState >= SFX_ITEM_DEFAULT && pState->ISA(SvxShadowedItem))
-            {
-                const SvxShadowedItem* pItem = (const SvxShadowedItem*)pState;
-                mbShadow = pItem->GetValue();
-            }
-            else
-            {
-                mbShadow = false;
-            }
-            const sal_uInt16 nId = mpToolBoxFont->GetItemId(UNO_SHADOWED);
-            mpToolBoxFont->EnableItem(nId, bIsEnabled);
-            mpToolBoxFont->SetItemState(nId, mbShadow ? STATE_CHECK : STATE_NOCHECK);
-        }
-        break;
-    case SID_ATTR_CHAR_STRIKEOUT:
-        {
-            if( eState >= SFX_ITEM_DEFAULT && pState->ISA(SvxCrossedOutItem))
-            {
-                const SvxCrossedOutItem* pItem = (const SvxCrossedOutItem*)pState;
-                meStrike = (FontStrikeout)pItem->GetValue();
-            }
-            else
-            {
-                meStrike = STRIKEOUT_NONE;
-            }
-            const sal_uInt16 nId = mpToolBoxFont->GetItemId(UNO_STRIKEOUT);
-            mpToolBoxFont->EnableItem(nId, bIsEnabled);
-            mpToolBoxFont->SetItemState(nId,
-                meStrike!=STRIKEOUT_NONE && meStrike!=STRIKEOUT_DONTKNOW
-                    ? STATE_CHECK
-                    : STATE_NOCHECK);
-        }
-        break;
-    case SID_ATTR_CHAR_ESCAPEMENT:
-        if (isWriter())
-        {
-            bool bIsItemEnabled (true);
-            const sal_uInt16 nSuperscriptId = mpToolBoxScript->GetItemId(UNO_SUPERSCRIPT);
-            const sal_uInt16 nSubscriptId = mpToolBoxScript->GetItemId(UNO_SUBSCRIPT);
-            if (eState == SFX_ITEM_AVAILABLE)
-            {
-                if (pState->ISA(SvxEscapementItem))
-                {
-                    const SvxEscapementItem* pItem = (const SvxEscapementItem *)pState;
-                    short nEsc = pItem->GetEsc();
-                    if(nEsc == 0)
-                    {
-                        meEscape = SVX_ESCAPEMENT_OFF;
-                        mpToolBoxScript->SetItemState(nSuperscriptId, STATE_NOCHECK);
-                        mpToolBoxScript->SetItemState(nSubscriptId, STATE_NOCHECK);
-                    }
-                    else if(nEsc > 0)
-                    {
-                        meEscape = SVX_ESCAPEMENT_SUPERSCRIPT;
-                        mpToolBoxScript->SetItemState(nSuperscriptId, STATE_CHECK);
-                        mpToolBoxScript->SetItemState(nSubscriptId, STATE_NOCHECK);
-                    }
-                    else
-                    {
-                        meEscape = SVX_ESCAPEMENT_SUBSCRIPT;
-                        mpToolBoxScript->SetItemState(nSuperscriptId, STATE_NOCHECK);
-                        mpToolBoxScript->SetItemState(nSubscriptId, STATE_CHECK);
-                    }
-                }
-                else
-                {
-                    meEscape = SVX_ESCAPEMENT_OFF;
-                    mpToolBoxScript->SetItemState(nSuperscriptId, STATE_NOCHECK);
-                    mpToolBoxScript->SetItemState(nSubscriptId, STATE_NOCHECK);
-                }
-            }
-            else if (eState == SFX_ITEM_DISABLED)
-            {
-                bIsItemEnabled = false;
-            }
-            else
-            {
-                meEscape = SVX_ESCAPEMENT_OFF;
-            }
-            mpToolBoxScript->EnableItem(nSuperscriptId, bIsItemEnabled && bIsEnabled);
-            mpToolBoxScript->EnableItem(nSubscriptId, bIsItemEnabled && bIsEnabled);
-        }
-        break;
-    case SID_SET_SUB_SCRIPT:
-        if (!isWriter())
-        {
-            if( eState >= SFX_ITEM_DEFAULT && pState->ISA(SfxBoolItem))
-            {
-                const SfxBoolItem* pItem = (const SfxBoolItem*)pState;
-                mbSub = pItem->GetValue();
-            }
-            else
-            {
-                mbSub = false;
-            }
-            const sal_uInt16 nSubscriptId = mpToolBoxScript->GetItemId(UNO_SUBSCRIPT);
-            mpToolBoxScript->EnableItem(nSubscriptId, bIsEnabled);
-            mpToolBoxScript->SetItemState(nSubscriptId, mbSub ? STATE_CHECK : STATE_NOCHECK);
-        }
-        break;
-    case SID_SET_SUPER_SCRIPT:
-        if (!isWriter())
-        {
-            if( eState >= SFX_ITEM_DEFAULT && pState->ISA(SfxBoolItem))
-            {
-                const SfxBoolItem* pItem = (const SfxBoolItem*)pState;
-                mbSuper = pItem->GetValue();
-            }
-            else
-            {
-                mbSuper = false;
-            }
-            const sal_uInt16 nSuperscriptId = mpToolBoxScript->GetItemId(UNO_SUPERSCRIPT);
-            mpToolBoxScript->EnableItem(nSuperscriptId, bIsEnabled);
-            mpToolBoxScript->SetItemState(nSuperscriptId, mbSuper ? STATE_CHECK : STATE_NOCHECK);
         }
         break;
     case SID_ATTR_CHAR_KERNING:
@@ -957,91 +539,11 @@ void TextPropertyPanel::NotifyItemUpdate (
                 mbKernAvailable = false;
                 mlKerning = 0;
             }
-            mpToolBoxSpacing->EnableItem(mpToolBoxSpacing->GetItemId(UNO_SPACING), bIsEnabled);
-        }
-        break;
-    case SID_SHRINK_FONT_SIZE:
-    case SID_GROW_FONT_SIZE:
-        {
-            switch(maContext.GetCombinedContext_DI())
-            {
-                case CombinedEnumContext(Application_DrawImpress, Context_DrawText):
-                case CombinedEnumContext(Application_DrawImpress, Context_Text):
-                case CombinedEnumContext(Application_DrawImpress, Context_Table):
-                case CombinedEnumContext(Application_DrawImpress, Context_OutlineText):
-                case CombinedEnumContext(Application_DrawImpress, Context_Draw):
-                case CombinedEnumContext(Application_DrawImpress, Context_TextObject):
-                case CombinedEnumContext(Application_DrawImpress, Context_Graphic):
-                {
-                    if(eState == SFX_ITEM_DISABLED)
-                        mpToolBoxIncDec->Disable();
-                    else
-                        mpToolBoxIncDec->Enable();
-                    const sal_Int64 nSize (mpFontSizeBox->GetValue());
-                    if(nSID == SID_GROW_FONT_SIZE)
-                    {
-                        mpToolBoxIncDec->EnableItem(mpToolBoxIncDec->GetItemId(UNO_GROW), bIsEnabled && nSize<9999);
-                    }
-                    else if (nSID == SID_SHRINK_FONT_SIZE)
-                    {
-                        mpToolBoxIncDec->EnableItem(mpToolBoxIncDec->GetItemId(UNO_SHRINK), bIsEnabled && nSize>20);
-                    }
-                }
-            }
+            mpToolBoxSpacing->Enable(bIsEnabled);
         }
         break;
     }
 }
-
-
-
-
-void TextPropertyPanel::UpdateItem (const sal_uInt16 nSlotId)
-{
-    switch (nSlotId)
-    {
-        case SID_ATTR_CHAR_FONT:
-            maFontNameControl.RequestUpdate();
-            break;
-        case SID_ATTR_CHAR_FONTHEIGHT:
-            maFontSizeControl.RequestUpdate();
-            break;
-        case SID_ATTR_CHAR_WEIGHT:
-            maWeightControl.RequestUpdate();
-            break;
-        case SID_ATTR_CHAR_POSTURE:
-            maItalicControl.RequestUpdate();
-            break;
-        case SID_ATTR_CHAR_UNDERLINE:
-            maUnderlineControl.RequestUpdate();
-            break;
-        case SID_ATTR_CHAR_STRIKEOUT:
-            maStrikeControl.RequestUpdate();
-            break;
-        case SID_ATTR_CHAR_SHADOWED:
-            maShadowControl.RequestUpdate();
-            break;
-        case SID_ATTR_CHAR_ESCAPEMENT:
-            maScriptControlSw.RequestUpdate();
-            break;
-        case SID_SET_SUPER_SCRIPT:
-            maSuperScriptControl.RequestUpdate();
-            break;
-        case SID_SET_SUB_SCRIPT:
-            maSubScriptControl.RequestUpdate();
-            break;
-        case SID_ATTR_CHAR_KERNING:
-            maSpacingControl.RequestUpdate();
-            break;
-        case SID_GROW_FONT_SIZE:
-            maSDFontGrow.RequestUpdate();
-            break;
-        case SID_SHRINK_FONT_SIZE:
-            maSDFontShrink.RequestUpdate();
-            break;
-    }
-}
-
 
 
 
@@ -1054,20 +556,6 @@ Color& TextPropertyPanel::GetUnderlineColor()
 void TextPropertyPanel::SetUnderline(FontUnderline  eUnderline)
 {
     meUnderline = eUnderline;
-}
-
-bool TextPropertyPanel::isWriter()
-{
-    switch (maContext.GetCombinedContext_DI())
-    {
-        case CombinedEnumContext(Application_WriterVariants, Context_Text):
-        case CombinedEnumContext(Application_WriterVariants, Context_Table):
-        case CombinedEnumContext(Application_WriterVariants, Context_DrawText):
-        case CombinedEnumContext(Application_WriterVariants, Context_Annotation):
-            return true;
-        default:
-            return false;
-    }
 }
 
 } } // end of namespace svx::sidebar
