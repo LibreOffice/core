@@ -199,7 +199,7 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
         m_xContentStream = xStream->getInputStream();
         xSeekable = uno::Reference< io::XSeekable >( xStream, uno::UNO_QUERY );
     }
-    else if ( !( aArguments[0] >>= m_xContentStream ) )
+    else if ( aArguments[0] >>= m_xContentStream )
     {
         xSeekable = uno::Reference< io::XSeekable >( m_xContentStream, uno::UNO_QUERY );
     }
