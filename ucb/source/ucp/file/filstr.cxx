@@ -24,12 +24,15 @@
 #include "shell.hxx"
 #include "prov.hxx"
 
-
 using namespace fileaccess;
 using namespace com::sun::star;
 using namespace com::sun::star::ucb;
 
-
+#if OSL_DEBUG_LEVEL > 0
+#define THROW_WHERE SAL_WHERE
+#else
+#define THROW_WHERE ""
+#endif
 
 /******************************************************************************/
 /*                                                                            */
@@ -175,10 +178,10 @@ void SAL_CALL XStream_impl::truncate(void)
     throw( io::IOException, uno::RuntimeException )
 {
     if (osl::FileBase::E_None != m_aFile.setSize(0))
-        throw io::IOException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw io::IOException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
 
     if (osl::FileBase::E_None != m_aFile.setPos(osl_Pos_Absolut,sal_uInt64(0)))
-        throw io::IOException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw io::IOException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
 }
 
 
@@ -197,7 +200,7 @@ XStream_impl::readBytes(
            uno::RuntimeException)
 {
     if( ! m_nIsOpen )
-        throw io::IOException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw io::IOException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
 
     sal_Int8 * buffer;
     try
@@ -207,7 +210,7 @@ XStream_impl::readBytes(
     catch (const std::bad_alloc&)
     {
         if( m_nIsOpen ) m_aFile.close();
-        throw io::BufferSizeExceededException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw io::BufferSizeExceededException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
     }
 
     sal_uInt64 nrc(0);
@@ -215,7 +218,7 @@ XStream_impl::readBytes(
        != osl::FileBase::E_None)
     {
         delete[] buffer;
-        throw io::IOException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw io::IOException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
     }
     aData = uno::Sequence< sal_Int8 > ( buffer, (sal_uInt32)nrc );
     delete[] buffer;
@@ -273,7 +276,7 @@ XStream_impl::writeBytes( const uno::Sequence< sal_Int8 >& aData )
         const sal_Int8* p = aData.getConstArray();
         if(osl::FileBase::E_None != m_aFile.write(((void*)(p)),sal_uInt64(length),nWrittenBytes) ||
            nWrittenBytes != length )
-            throw io::IOException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+            throw io::IOException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
     }
 }
 
@@ -337,9 +340,9 @@ XStream_impl::seek(
            uno::RuntimeException )
 {
     if( location < 0 )
-        throw lang::IllegalArgumentException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >(), 0 );
+        throw lang::IllegalArgumentException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >(), 0 );
     if( osl::FileBase::E_None != m_aFile.setPos( osl_Pos_Absolut, sal_uInt64( location ) ) )
-        throw io::IOException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw io::IOException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
 }
 
 
@@ -351,7 +354,7 @@ XStream_impl::getPosition(
 {
     sal_uInt64 uPos;
     if( osl::FileBase::E_None != m_aFile.getPos( uPos ) )
-        throw io::IOException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw io::IOException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
     return sal_Int64( uPos );
 }
 
@@ -363,7 +366,7 @@ XStream_impl::getLength(
 {
         sal_uInt64 uEndPos;
         if ( m_aFile.getSize(uEndPos) != osl::FileBase::E_None )
-                throw io::IOException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+                throw io::IOException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
         else
                 return sal_Int64( uEndPos );
 }

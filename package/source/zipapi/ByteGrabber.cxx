@@ -23,6 +23,12 @@
 
 using namespace ::com::sun::star;
 
+#if OSL_DEBUG_LEVEL > 0
+#define THROW_WHERE SAL_WHERE
+#else
+#define THROW_WHERE ""
+#endif
+
 /** ByteGrabber implements the >> operators on an XOutputStream. This is
  *  potentially quite slow and may need to be optimised
  */
@@ -64,14 +70,14 @@ sal_Int64 SAL_CALL ByteGrabber::seek( sal_Int64 location )
     {
         sal_Int64 nLen = xSeek->getLength();
         if ( location < 0 || location > nLen )
-            throw lang::IllegalArgumentException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >(), 1 );
+            throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
         if (location > nLen )
             location = nLen;
         xSeek->seek( location );
         return location;
     }
     else
-        throw io::IOException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
+        throw io::IOException(THROW_WHERE, uno::Reference< uno::XInterface >() );
 }
 
 sal_Int64 SAL_CALL ByteGrabber::getPosition(  )
@@ -81,7 +87,7 @@ sal_Int64 SAL_CALL ByteGrabber::getPosition(  )
     if (xSeek.is() )
         return xSeek->getPosition();
     else
-        throw io::IOException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
+        throw io::IOException(THROW_WHERE, uno::Reference< uno::XInterface >() );
 }
 
 sal_Int64 SAL_CALL ByteGrabber::getLength(  )
@@ -91,7 +97,7 @@ sal_Int64 SAL_CALL ByteGrabber::getLength(  )
     if (xSeek.is() )
         return xSeek->getLength();
     else
-        throw io::IOException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
+        throw io::IOException(THROW_WHERE, uno::Reference< uno::XInterface >() );
 }
 
 ByteGrabber& ByteGrabber::operator >> (sal_Int8& rInt8)

@@ -21,11 +21,15 @@
 #include "shell.hxx"
 #include "prov.hxx"
 
-
 using namespace fileaccess;
 using namespace com::sun::star;
 using namespace com::sun::star::ucb;
 
+#if OSL_DEBUG_LEVEL > 0
+#define THROW_WHERE SAL_WHERE
+#else
+#define THROW_WHERE ""
+#endif
 
 XCommandInfo_impl::XCommandInfo_impl( shell* pMyShell )
     : m_pMyShell( pMyShell ),
@@ -87,7 +91,7 @@ XCommandInfo_impl::getCommandInfoByName(
         if( m_pMyShell->m_sCommandInfo[i].Name == aName )
             return m_pMyShell->m_sCommandInfo[i];
 
-    throw UnsupportedCommandException( OUString( OSL_LOG_PREFIX ), uno::Reference< uno::XInterface >() );
+    throw UnsupportedCommandException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
 }
 
 
@@ -101,7 +105,7 @@ XCommandInfo_impl::getCommandInfoByHandle(
         if( m_pMyShell->m_sCommandInfo[i].Handle == Handle )
             return m_pMyShell->m_sCommandInfo[i];
 
-    throw UnsupportedCommandException( OUString( OSL_LOG_PREFIX ), uno::Reference< uno::XInterface >() );
+    throw UnsupportedCommandException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
 }
 
 

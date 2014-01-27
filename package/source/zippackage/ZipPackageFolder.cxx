@@ -51,6 +51,12 @@ using namespace cppu;
 using namespace std;
 using namespace ::com::sun::star;
 
+#if OSL_DEBUG_LEVEL > 0
+#define THROW_WHERE SAL_WHERE
+#else
+#define THROW_WHERE ""
+#endif
+
 namespace { struct lcl_CachedImplId : public rtl::Static< uno::Sequence < sal_Int8 >, lcl_CachedImplId > {}; }
 
 ZipPackageFolder::ZipPackageFolder ( sal_Int32 nFormat,
@@ -182,7 +188,7 @@ void SAL_CALL ZipPackageFolder::insertByName( const OUString& aName, const uno::
         throw(IllegalArgumentException, ElementExistException, WrappedTargetException, uno::RuntimeException)
 {
     if (hasByName(aName))
-        throw ElementExistException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
+        throw ElementExistException(THROW_WHERE, uno::Reference< uno::XInterface >() );
     else
     {
         uno::Reference < XUnoTunnel > xRef;
@@ -202,14 +208,14 @@ void SAL_CALL ZipPackageFolder::insertByName( const OUString& aName, const uno::
                 pEntry = static_cast < ZipPackageEntry * > ( pStream );
             }
             else
-                throw IllegalArgumentException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >(), 0 );
+                throw IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
 
             if (pEntry->getName() != aName )
                 pEntry->setName (aName);
             doInsertByName ( pEntry, sal_True );
         }
         else
-            throw IllegalArgumentException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >(), 0 );
+            throw IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
     }
 }
 void SAL_CALL ZipPackageFolder::removeByName( const OUString& Name )
@@ -217,7 +223,7 @@ void SAL_CALL ZipPackageFolder::removeByName( const OUString& Name )
 {
     ContentHash::iterator aIter = maContents.find ( Name );
     if ( aIter == maContents.end() )
-        throw NoSuchElementException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
+        throw NoSuchElementException(THROW_WHERE, uno::Reference< uno::XInterface >() );
     maContents.erase( aIter );
 }
     // XEnumerationAccess
@@ -243,7 +249,7 @@ ContentInfo& ZipPackageFolder::doGetByName( const OUString& aName )
 {
     ContentHash::iterator aIter = maContents.find ( aName );
     if ( aIter == maContents.end())
-        throw NoSuchElementException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
+        throw NoSuchElementException(THROW_WHERE, uno::Reference< uno::XInterface >() );
     return *(*aIter).second;
 }
 uno::Any SAL_CALL ZipPackageFolder::getByName( const OUString& aName )
@@ -274,7 +280,7 @@ void SAL_CALL ZipPackageFolder::replaceByName( const OUString& aName, const uno:
     if ( hasByName( aName ) )
         removeByName( aName );
     else
-        throw NoSuchElementException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
+        throw NoSuchElementException(THROW_WHERE, uno::Reference< uno::XInterface >() );
     insertByName(aName, aElement);
 }
 
@@ -725,7 +731,7 @@ void ZipPackageFolder::saveContents( OUString &rPath, std::vector < uno::Sequenc
     }
 
     if( bWritingFailed )
-        throw uno::RuntimeException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException(THROW_WHERE, uno::Reference< uno::XInterface >() );
 }
 
 void ZipPackageFolder::releaseUpwardRef( void )
@@ -773,7 +779,7 @@ void SAL_CALL ZipPackageFolder::setPropertyValue( const OUString& aPropertyName,
     {
         // TODO/LATER: activate when zip ucp is ready
         // if ( m_nFormat != embed::StorageFormats::PACKAGE )
-        //  throw UnknownPropertyException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
+        //  throw UnknownPropertyException(THROW_WHERE, uno::Reference< uno::XInterface >() );
 
         aValue >>= sMediaType;
     }
@@ -782,7 +788,7 @@ void SAL_CALL ZipPackageFolder::setPropertyValue( const OUString& aPropertyName,
     else if ( aPropertyName == "Size" )
         aValue >>= aEntry.nSize;
     else
-        throw UnknownPropertyException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
+        throw UnknownPropertyException(THROW_WHERE, uno::Reference< uno::XInterface >() );
 }
 uno::Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyName )
         throw(UnknownPropertyException, WrappedTargetException, uno::RuntimeException)
@@ -791,7 +797,7 @@ uno::Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyNa
     {
         // TODO/LATER: activate when zip ucp is ready
         // if ( m_nFormat != embed::StorageFormats::PACKAGE )
-        //  throw UnknownPropertyException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
+        //  throw UnknownPropertyException(THROW_WHERE, uno::Reference< uno::XInterface >() );
 
         return uno::makeAny ( sMediaType );
     }
@@ -800,7 +806,7 @@ uno::Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyNa
     else if ( PropertyName == "Size" )
         return uno::makeAny ( aEntry.nSize );
     else
-        throw UnknownPropertyException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
+        throw UnknownPropertyException(THROW_WHERE, uno::Reference< uno::XInterface >() );
 }
 
 void ZipPackageFolder::doInsertByName ( ZipPackageEntry *pEntry, sal_Bool bSetParent )

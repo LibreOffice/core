@@ -59,11 +59,15 @@
 #include "prov.hxx"
 #include "bc.hxx"
 
-
 using namespace fileaccess;
 using namespace com::sun::star;
 using namespace com::sun::star::ucb;
 
+#if OSL_DEBUG_LEVEL > 0
+#define THROW_WHERE SAL_WHERE
+#else
+#define THROW_WHERE ""
+#endif
 
 shell::UnqPathData::UnqPathData()
     : properties( 0 ),
@@ -485,7 +489,7 @@ shell::associate( const OUString& aUnqPath,
 
     shell::PropertySet::iterator it1 = m_aDefaultProperties.find( newProperty );
     if( it1 != m_aDefaultProperties.end() )
-        throw beans::PropertyExistException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw beans::PropertyExistException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
 
     {
         osl::MutexGuard aGuard( m_aMutex );
@@ -498,7 +502,7 @@ shell::associate( const OUString& aUnqPath,
         PropertySet& properties = *(it->second.properties);
         it1 = properties.find( newProperty );
         if( it1 != properties.end() )
-            throw beans::PropertyExistException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+            throw beans::PropertyExistException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
 
         // Property does not exist
         properties.insert( newProperty );
@@ -521,7 +525,7 @@ shell::deassociate( const OUString& aUnqPath,
 
     shell::PropertySet::iterator it1 = m_aDefaultProperties.find( oldProperty );
     if( it1 != m_aDefaultProperties.end() )
-        throw beans::NotRemoveableException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw beans::NotRemoveableException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
 
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -533,7 +537,7 @@ shell::deassociate( const OUString& aUnqPath,
 
     it1 = properties.find( oldProperty );
     if( it1 == properties.end() )
-        throw beans::UnknownPropertyException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw beans::UnknownPropertyException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
 
     properties.erase( it1 );
 
@@ -829,7 +833,7 @@ shell::setv( const OUString& aUnqPath,
         it1 = properties.find( toset );
         if( it1 == properties.end() )
         {
-            ret[i] <<= beans::UnknownPropertyException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+            ret[i] <<= beans::UnknownPropertyException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
             continue;
         }
 
@@ -839,7 +843,7 @@ shell::setv( const OUString& aUnqPath,
 
         if( it1->getAttributes() & beans::PropertyAttribute::READONLY )
         {
-            ret[i] <<= lang::IllegalAccessException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+            ret[i] <<= lang::IllegalAccessException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
             continue;
         }
 
@@ -910,7 +914,7 @@ shell::setv( const OUString& aUnqPath,
                     }
                 }
                 else
-                    ret[i] <<= beans::IllegalTypeException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+                    ret[i] <<= beans::IllegalTypeException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
             }
             else if(values[i].Name == IsReadOnly ||
                     values[i].Name == IsHidden)
@@ -1018,7 +1022,7 @@ shell::setv( const OUString& aUnqPath,
                     }
                 }
                 else
-                    ret[i] <<= beans::IllegalTypeException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+                    ret[i] <<= beans::IllegalTypeException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
             }
         }
     }   // end for

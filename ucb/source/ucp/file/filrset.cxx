@@ -35,6 +35,12 @@
 using namespace fileaccess;
 using namespace com::sun::star;
 
+#if OSL_DEBUG_LEVEL > 0
+#define THROW_WHERE SAL_WHERE
+#else
+#define THROW_WHERE ""
+#endif
+
 XResultSet_impl::XResultSet_impl(
     shell* pMyShell,
     const OUString& aUnqPath,
@@ -340,7 +346,7 @@ XResultSet_impl::OneMore(
         }
         else  // error fetching anything
         {
-            throw sdbc::SQLException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
+            throw sdbc::SQLException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
         }
     }
 }
@@ -498,7 +504,7 @@ XResultSet_impl::relative(
            uno::RuntimeException)
 {
     if( isAfterLast() || isBeforeFirst() )
-        throw sdbc::SQLException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
     if( row > 0 )
         while( row-- ) next();
     else if( row < 0 )
@@ -650,7 +656,7 @@ XResultSet_impl::getStaticResultSet()
     osl::MutexGuard aGuard( m_aMutex );
 
     if ( m_xListener.is() )
-        throw ucb::ListenerAlreadySetException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw ucb::ListenerAlreadySetException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
 
     return uno::Reference< sdbc::XResultSet >( this );
 }
@@ -666,7 +672,7 @@ XResultSet_impl::setListener(
     osl::ClearableMutexGuard aGuard( m_aMutex );
 
     if ( m_xListener.is() )
-        throw ucb::ListenerAlreadySetException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw ucb::ListenerAlreadySetException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
 
     m_xListener = Listener;
 
@@ -706,9 +712,9 @@ XResultSet_impl::connectToCache(
            uno::RuntimeException )
 {
     if( m_xListener.is() )
-        throw ucb::ListenerAlreadySetException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw ucb::ListenerAlreadySetException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
     if( m_bStatic )
-        throw ucb::ListenerAlreadySetException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw ucb::ListenerAlreadySetException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
 
     uno::Reference< ucb::XSourceInitialization > xTarget(
         xCache, uno::UNO_QUERY );
@@ -732,7 +738,7 @@ XResultSet_impl::connectToCache(
             return;
         }
     }
-    throw ucb::ServiceNotFoundException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+    throw ucb::ServiceNotFoundException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
 }
 
 //=========================================================================
@@ -816,7 +822,7 @@ void SAL_CALL XResultSet_impl::setPropertyValue(
     if( aPropertyName == "IsRowCountFinal" ||
         aPropertyName == "RowCount" )
         return;
-    throw beans::UnknownPropertyException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+    throw beans::UnknownPropertyException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
 }
 
 
@@ -840,7 +846,7 @@ uno::Any SAL_CALL XResultSet_impl::getPropertyValue(
         return aAny;
     }
     else
-        throw beans::UnknownPropertyException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw beans::UnknownPropertyException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
 }
 
 
@@ -869,7 +875,7 @@ void SAL_CALL XResultSet_impl::addPropertyChangeListener(
         m_pRowCountListeners->addInterface( xListener );
     }
     else
-        throw beans::UnknownPropertyException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw beans::UnknownPropertyException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
 }
 
 
@@ -894,7 +900,7 @@ void SAL_CALL XResultSet_impl::removePropertyChangeListener(
         m_pRowCountListeners->removeInterface( aListener );
     }
     else
-        throw beans::UnknownPropertyException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw beans::UnknownPropertyException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
 }
 
 void SAL_CALL XResultSet_impl::addVetoableChangeListener(

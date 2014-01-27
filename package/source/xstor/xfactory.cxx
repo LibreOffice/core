@@ -33,6 +33,12 @@
 
 using namespace ::com::sun::star;
 
+#if OSL_DEBUG_LEVEL > 0
+#define THROW_WHERE SAL_WHERE
+#else
+#define THROW_WHERE ""
+#endif
+
 sal_Bool CheckPackageSignature_Impl( const uno::Reference< io::XInputStream >& xInputStream,
                                      const uno::Reference< io::XSeekable >& xSeekable )
 {
@@ -203,19 +209,19 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
                         else if ( aFormatName.equals( OFOPXML_STORAGE_FORMAT_STRING ) )
                             nStorageType = embed::StorageFormats::OFOPXML;
                         else
-                            throw lang::IllegalArgumentException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >(), 1 );
+                            throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
                     }
                     else if ( aDescr[nInd].Value >>= nFormatID )
                     {
                         if ( nFormatID != embed::StorageFormats::PACKAGE
                           && nFormatID != embed::StorageFormats::ZIP
                           && nFormatID != embed::StorageFormats::OFOPXML )
-                            throw lang::IllegalArgumentException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >(), 1 );
+                            throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
 
                         nStorageType = nFormatID;
                     }
                     else
-                        throw lang::IllegalArgumentException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >(), 1 );
+                        throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
                 }
                 else
                     OSL_FAIL( "Unacceptable property, will be ignored!\n" );

@@ -31,7 +31,6 @@
 #include "bc.hxx"
 #include "prov.hxx"
 
-
 using namespace fileaccess;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -39,6 +38,12 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::container;
+
+#if OSL_DEBUG_LEVEL > 0
+#define THROW_WHERE SAL_WHERE
+#else
+#define THROW_WHERE ""
+#endif
 
 //=========================================================================
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpfile_component_getFactory(
@@ -268,7 +273,7 @@ FileProvider::queryContent(
                                               aUnc );
 
     if(  err )
-        throw IllegalIdentifierException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw IllegalIdentifierException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
 
     return Reference< XContent >( new BaseContent( m_pMyShell,xIdentifier,aUnc ) );
 }
@@ -459,7 +464,7 @@ XPropertySetInfoImpl2::getPropertyByName(
         if( m_seq[i].Name == aName )
             return m_seq[i];
 
-    throw UnknownPropertyException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+    throw UnknownPropertyException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
 }
 
 
@@ -541,7 +546,7 @@ FileProvider::setPropertyValue( const OUString& aPropertyName,
         aPropertyName.equalsAscii( "HostName" ) )
         return;
     else
-        throw UnknownPropertyException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw UnknownPropertyException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
 }
 
 
@@ -573,7 +578,7 @@ FileProvider::getPropertyValue(
         return aAny;
     }
     else
-        throw UnknownPropertyException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw UnknownPropertyException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
 }
 
 

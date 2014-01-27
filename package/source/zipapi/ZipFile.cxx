@@ -57,6 +57,12 @@ using namespace com::sun::star::packages::zip::ZipConstants;
 
 using ZipUtils::Inflater;
 
+#if OSL_DEBUG_LEVEL > 0
+#define THROW_WHERE SAL_WHERE
+#else
+#define THROW_WHERE ""
+#endif
+
 /** This class is used to read entries from a zip file
  */
 ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference < XComponentContext > & rxContext, sal_Bool bInitialise )
@@ -382,7 +388,7 @@ uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream( const uno::R
                             uno::Reference< XInterface >() );
 
     if ( !rData->m_aKey.getLength() )
-        throw packages::WrongPasswordException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
+        throw packages::WrongPasswordException(THROW_WHERE, uno::Reference< uno::XInterface >() );
 
     uno::Reference< XSeekable > xSeek( xStream, UNO_QUERY );
     if ( !xSeek.is() )
@@ -408,7 +414,7 @@ uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream( const uno::R
         xStream->readBytes( aReadBuffer, nSize );
 
         if ( !StaticHasValidPassword( rxContext, aReadBuffer, rData ) )
-            throw packages::WrongPasswordException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
+            throw packages::WrongPasswordException(THROW_WHERE, uno::Reference< uno::XInterface >() );
     }
 
     return new XUnbufferedStream( rxContext, xStream, rData );
@@ -581,7 +587,7 @@ uno::Reference< XInputStream > SAL_CALL ZipFile::getDataStream( ZipEntry& rEntry
         // check if we can decrypt it or not
         OSL_ENSURE( rData->m_aDigest.getLength(), "Can't detect password correctness without digest!\n" );
         if ( rData->m_aDigest.getLength() && !hasValidPassword ( rEntry, rData ) )
-                throw packages::WrongPasswordException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
+                throw packages::WrongPasswordException(THROW_WHERE, uno::Reference< uno::XInterface >() );
     }
     else
         bNeedRawStream = ( rEntry.nMethod == STORED );
@@ -620,7 +626,7 @@ uno::Reference< XInputStream > SAL_CALL ZipFile::getWrappedRawStream(
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if ( !rData.is() )
-        throw packages::NoEncryptionException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
+        throw packages::NoEncryptionException(THROW_WHERE, uno::Reference< uno::XInterface >() );
 
     if ( rEntry.nOffset <= 0 )
         readLOC( rEntry );

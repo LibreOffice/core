@@ -35,6 +35,12 @@
 
 using namespace ::com::sun::star;
 
+#if OSL_DEBUG_LEVEL > 0
+#define THROW_WHERE SAL_WHERE
+#else
+#define THROW_WHERE ""
+#endif
+
 ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHandler,  const uno::Sequence< uno::Sequence < beans::PropertyValue > >& rManList )
 {
     const OUString sFileEntryElement     ( ELEMENT_FILE_ENTRY );
@@ -257,7 +263,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
             else if ( nDigestAlgID == xml::crypto::DigestID::SHA1_1K )
                 sChecksumType = sSHA1_1k_Name;
             else
-                throw uno::RuntimeException( OSL_LOG_PREFIX "Unexpected digest algorithm is provided!", uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException( THROW_WHERE "Unexpected digest algorithm is provided!", uno::Reference< uno::XInterface >() );
 
             pNewAttrList->AddAttribute ( sChecksumTypeAttribute, sCdataAttribute, sChecksumType );
             *pDigest >>= aSequence;
@@ -280,7 +286,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
             {
                 OSL_ENSURE( nDerivedKeySize, "Unexpected key size is provided!" );
                 if ( nDerivedKeySize != 32 )
-                    throw uno::RuntimeException( OSL_LOG_PREFIX "Unexpected key size is provided!", uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException( THROW_WHERE "Unexpected key size is provided!", uno::Reference< uno::XInterface >() );
 
                 sEncAlgName = sAES256_URL;
             }
@@ -289,7 +295,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
                 sEncAlgName = sBlowfish_Name;
             }
             else
-                throw uno::RuntimeException( OSL_LOG_PREFIX "Unexpected encryption algorithm is provided!", uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException( THROW_WHERE "Unexpected encryption algorithm is provided!", uno::Reference< uno::XInterface >() );
 
             pNewAttrList->AddAttribute ( sAlgorithmNameAttribute, sCdataAttribute, sEncAlgName );
 
@@ -353,7 +359,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
                     sStartKeySize = aBuffer.makeStringAndClear();
                 }
                 else
-                    throw uno::RuntimeException( OSL_LOG_PREFIX "Unexpected start key algorithm is provided!", uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException( THROW_WHERE "Unexpected start key algorithm is provided!", uno::Reference< uno::XInterface >() );
 
                 pNewAttrList->AddAttribute ( sStartKeyGenerationNameAttribute, sCdataAttribute, sStartKeyAlg );
                 pNewAttrList->AddAttribute ( sKeySizeAttribute, sCdataAttribute, sStartKeySize );

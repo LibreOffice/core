@@ -41,6 +41,12 @@ using namespace ::com::sun::star::packages;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::packages::manifest;
 
+#if OSL_DEBUG_LEVEL > 0
+#define THROW_WHERE SAL_WHERE
+#else
+#define THROW_WHERE ""
+#endif
+
 ManifestWriter::ManifestWriter( const Reference < XComponentContext > & xContext )
 : m_xContext ( xContext )
 {
@@ -60,7 +66,7 @@ void SAL_CALL ManifestWriter::writeManifestSequence( const Reference< XOutputStr
     }
     catch( SAXException& )
     {
-        throw RuntimeException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
+        throw RuntimeException( THROW_WHERE, uno::Reference< uno::XInterface >() );
     }
 }
 

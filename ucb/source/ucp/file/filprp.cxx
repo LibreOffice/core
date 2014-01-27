@@ -26,9 +26,13 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
 
-
 #include "filinl.hxx"
 
+#if OSL_DEBUG_LEVEL > 0
+#define THROW_WHERE SAL_WHERE
+#else
+#define THROW_WHERE ""
+#endif
 
 XPropertySetInfo_impl::XPropertySetInfo_impl( shell* pMyShell,const OUString& aUnqPath )
     : m_pMyShell( pMyShell ),
@@ -116,7 +120,7 @@ XPropertySetInfo_impl::getPropertyByName(
   for( sal_Int32 i = 0; i < m_seq.getLength(); ++i )
     if( m_seq[i].Name == aName ) return m_seq[i];
 
-  throw beans::UnknownPropertyException( OUString( OSL_LOG_PREFIX ), uno::Reference< uno::XInterface >() );
+  throw beans::UnknownPropertyException( OUString(THROW_WHERE), uno::Reference< uno::XInterface >() );
 }
 
 

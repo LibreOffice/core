@@ -23,6 +23,12 @@
 
 using namespace com::sun::star;
 
+#if OSL_DEBUG_LEVEL > 0
+#define THROW_WHERE SAL_WHERE
+#else
+#define THROW_WHERE ""
+#endif
+
 ZipPackageFolderEnumeration::ZipPackageFolderEnumeration ( ContentHash &rInput)
 : rContents (rInput)
 , aIterator (rContents.begin())
@@ -43,7 +49,7 @@ uno::Any SAL_CALL ZipPackageFolderEnumeration::nextElement(  )
 {
     uno::Any aAny;
     if (aIterator == rContents.end() )
-        throw container::NoSuchElementException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
+        throw container::NoSuchElementException(THROW_WHERE, uno::Reference< uno::XInterface >() );
     aAny <<= (*aIterator).second->xTunnel;
     aIterator++;
     return aAny;
