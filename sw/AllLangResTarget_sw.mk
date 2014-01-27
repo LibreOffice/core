@@ -58,6 +58,7 @@ $(eval $(call gb_SrsTarget_set_include,sw/res,\
     -I$(SRCDIR)/sw/source/ui/web \
     -I$(SRCDIR)/sw/source/ui/wrtsh \
     -I$(call gb_SrsTemplateTarget_get_include_dir,) \
+    -I$(call gb_SrsTemplateTarget_get_include_dir,sw) \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,sw/res,\
@@ -121,6 +122,10 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/utlui/utlui.src \
     sw/source/ui/web/web.src \
     sw/source/ui/wrtsh/wrtsh.src \
+))
+
+$(eval $(call gb_SrsTarget_add_templates,sw/res,\
+    sw/source/ui/inc/redline_tmpl.hrc \
 ))
 
 # vim: set noet sw=4 ts=4:

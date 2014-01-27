@@ -20,7 +20,7 @@
 
 #include "olmenu.hrc"
 #include "helpid.h"
-#include "misc.hrc"
+#include "redline.hrc"
 
 #define MASKCOLOR   MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 #define SEPARATOR   MenuItem { Separator = TRUE; };
