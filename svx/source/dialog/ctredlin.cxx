@@ -127,19 +127,20 @@ void SvLBoxColorString::Paint(
 //  class SvxRedlinTable
 //----------------------------------------------------------------------------
 
-SvxRedlinTable::SvxRedlinTable(SvSimpleTableContainer& rParent,WinBits nBits)
-    : SvSimpleTable(rParent,nBits),
-    aDaTiFirst( DateTime::EMPTY ),
-    aDaTiLast( DateTime::EMPTY ),
-    aDaTiFilterFirst( DateTime::EMPTY ),
-    aDaTiFilterLast( DateTime::EMPTY )
+SvxRedlinTable::SvxRedlinTable(SvSimpleTableContainer& rParent, WinBits nBits)
+    : SvSimpleTable(rParent,nBits)
+    , bIsCalc(sal_False)
+    , nDatePos(WRITER_DATE)
+    , bAuthor(sal_False)
+    , bDate(sal_False)
+    , bComment(sal_False)
+    , nDaTiMode(0)
+    , aDaTiFirst( DateTime::EMPTY )
+    , aDaTiLast( DateTime::EMPTY )
+    , aDaTiFilterFirst( DateTime::EMPTY )
+    , aDaTiFilterLast( DateTime::EMPTY )
+    , pCommentSearcher(0)
 {
-    bAuthor=sal_False;
-    bDate=sal_False;
-    bIsCalc=sal_False;
-    bComment=sal_False;
-    nDatePos=WRITER_DATE;
-    pCommentSearcher=NULL;
     SetNodeDefaultImages();
 }
 
