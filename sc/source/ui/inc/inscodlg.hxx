@@ -38,9 +38,9 @@ public:
 
     sal_uInt16      GetInsContentsCmdBits() const;
     sal_uInt16      GetFormulaCmdBits() const;
-    sal_Bool        IsSkipEmptyCells() const {return aBtnSkipEmptyCells.IsChecked();}
-    sal_Bool        IsTranspose() const {return aBtnTranspose.IsChecked();}
-    sal_Bool        IsLink() const {return aBtnLink.IsChecked();}
+    sal_Bool        IsSkipEmptyCells() const {return mpBtnSkipEmptyCells->IsChecked();}
+    sal_Bool        IsTranspose() const {return mpBtnTranspose->IsChecked();}
+    sal_Bool        IsLink() const {return mpBtnLink->IsChecked();}
     InsCellCmd  GetMoveMode();
 
     void    SetOtherDoc( sal_Bool bSet );
@@ -49,38 +49,28 @@ public:
     void    SetCellShiftDisabled( int nDisable );
 
 private:
-    FixedLine       aFlFrame;
-    CheckBox        aBtnInsAll;
-    CheckBox        aBtnInsStrings;
-    CheckBox        aBtnInsNumbers;
-    CheckBox        aBtnInsDateTime;
-    CheckBox        aBtnInsFormulas;
-    CheckBox        aBtnInsNotes;
-    CheckBox        aBtnInsAttrs;
-    CheckBox        aBtnInsObjects;
+    CheckBox*        mpBtnInsAll;
+    CheckBox*        mpBtnInsStrings;
+    CheckBox*        mpBtnInsNumbers;
+    CheckBox*        mpBtnInsDateTime;
+    CheckBox*        mpBtnInsFormulas;
+    CheckBox*        mpBtnInsNotes;
+    CheckBox*        mpBtnInsAttrs;
+    CheckBox*        mpBtnInsObjects;
 
-    FixedLine       aFlSep1;
-    FixedLine       aFlOptions;
-    CheckBox        aBtnSkipEmptyCells;
-    CheckBox        aBtnTranspose;
-    CheckBox        aBtnLink;
+    CheckBox*        mpBtnSkipEmptyCells;
+    CheckBox*        mpBtnTranspose;
+    CheckBox*        mpBtnLink;
 
-    FixedLine       aFlOperation;
-    RadioButton     aRbNoOp;
-    RadioButton     aRbAdd;
-    RadioButton     aRbSub;
-    RadioButton     aRbMul;
-    RadioButton     aRbDiv;
+    RadioButton*     mpRbNoOp;
+    RadioButton*     mpRbAdd;
+    RadioButton*     mpRbSub;
+    RadioButton*     mpRbMul;
+    RadioButton*     mpRbDiv;
 
-    FixedLine       aFlSep2;
-    FixedLine       aFlMove;
-    RadioButton     aRbMoveNone;
-    RadioButton     aRbMoveDown;
-    RadioButton     aRbMoveRight;
-
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    RadioButton*     mpRbMoveNone;
+    RadioButton*     mpRbMoveDown;
+    RadioButton*     mpRbMoveRight;
 
     sal_Bool            bOtherDoc;
     sal_Bool            bFillMode;
