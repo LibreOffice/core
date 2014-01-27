@@ -51,12 +51,12 @@ public:
     // XSingleComponentFactory:
     virtual uno::Reference<uno::XInterface> SAL_CALL createInstanceWithContext(
         uno::Reference<uno::XComponentContext> const& xContext )
-        throw (uno::Exception);
+        throw (uno::Exception, std::exception);
     virtual uno::Reference<uno::XInterface> SAL_CALL
     createInstanceWithArgumentsAndContext(
     uno::Sequence<uno::Any> const& args,
     uno::Reference<uno::XComponentContext> const& xContext )
-        throw (uno::Exception);
+        throw (uno::Exception, std::exception);
 
 private:
     virtual ~Factory();
@@ -90,7 +90,7 @@ uno::Sequence<OUString> ServiceDecl::Factory::getSupportedServiceNames()
 // XSingleComponentFactory:
 uno::Reference<uno::XInterface> ServiceDecl::Factory::createInstanceWithContext(
     uno::Reference<uno::XComponentContext> const& xContext )
-    throw (uno::Exception)
+    throw (uno::Exception, std::exception)
 {
     return m_rServiceDecl.m_createFunc(
         m_rServiceDecl, uno::Sequence<uno::Any>(), xContext );
@@ -100,7 +100,7 @@ uno::Reference<uno::XInterface>
 ServiceDecl::Factory::createInstanceWithArgumentsAndContext(
     uno::Sequence<uno::Any > const& args,
     uno::Reference<uno::XComponentContext> const& xContext )
-    throw (uno::Exception)
+    throw (uno::Exception, std::exception)
 {
     return m_rServiceDecl.m_createFunc(
         m_rServiceDecl, args, xContext );
