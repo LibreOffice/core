@@ -41,7 +41,7 @@ namespace cppu_threadpool {
 
     struct EqualThreadId
     {
-        sal_Int32 operator () ( const ::rtl::ByteSequence &a , const ::rtl::ByteSequence &b ) const
+        bool operator () ( const ::rtl::ByteSequence &a , const ::rtl::ByteSequence &b ) const
             {
                 return a == b;
             }

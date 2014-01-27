@@ -107,7 +107,7 @@ class Gate : public  IGate
             m_aPassage.set();
             // Check if operation was successful!
             // Check returns false if condition isn't set => m_bClosed will be true then => we must return false; opening failed
-            m_bClosed = ( m_aPassage.check() == sal_False );
+            m_bClosed = !m_aPassage.check();
         }
 
         /*-****************************************************************************************************//**
@@ -130,7 +130,7 @@ class Gate : public  IGate
             m_aPassage.reset();
             // Check if operation was successful!
             // Check returns false if condition was reseted => m_bClosed will be true then => we can return true; closing ok
-            m_bClosed = ( m_aPassage.check() == sal_False );
+            m_bClosed = !m_aPassage.check();
         }
 
         /*-****************************************************************************************************//**
@@ -156,7 +156,7 @@ class Gate : public  IGate
             m_aPassage.set();
             // Check state of condition.
             // If condition is set check() returns true => m_bGapOpen will be true too => we can use it as return value.
-            m_bGapOpen = ( m_aPassage.check() == sal_True );
+            m_bGapOpen = m_aPassage.check();
         }
 
         /*-****************************************************************************************************//**

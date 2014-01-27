@@ -63,7 +63,7 @@ public:
 
     // returns true if the stop condition is set
     bool isStopped() const
-        { return sal_True == const_cast <Download *> (this)->m_aCondition.check(); };
+        { return const_cast <Download *> (this)->m_aCondition.check(); };
 
 protected:
 

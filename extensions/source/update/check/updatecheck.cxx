@@ -473,7 +473,7 @@ UpdateCheckThread::run()
 
     try {
 
-        while( sal_True == schedule() )
+        while( schedule() )
         {
             /* Use cases:
              *  a) manual check requested from auto check thread - "last check" should not be checked (one time)
@@ -1572,7 +1572,7 @@ bool
 UpdateCheck::isDialogShowing() const
 {
     osl::MutexGuard aGuard(m_aMutex);
-    return sal_True == m_aUpdateHandler.is() && m_aUpdateHandler->isVisible();
+    return m_aUpdateHandler.is() && m_aUpdateHandler->isVisible();
 };
 
 //------------------------------------------------------------------------------

@@ -360,7 +360,7 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
         return JFW_PLUGIN_E_INVALID_ARG;
 
     rtl::Reference<VendorBase> aVendorInfo = getJREInfoByPath(ouPath);
-    if (aVendorInfo.is() == sal_False)
+    if (!aVendorInfo.is())
         return JFW_PLUGIN_E_NO_JRE;
 
     //Check if the detected JRE matches the version requirements

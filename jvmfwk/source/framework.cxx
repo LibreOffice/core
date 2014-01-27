@@ -130,7 +130,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
             arModules[cModule].load(library.sPath);
             osl::Module & pluginLib = arModules[cModule];
 
-            if (pluginLib.is() == sal_False)
+            if (!pluginLib.is())
             {
                 OString msg = OUStringToOString(
                     library.sPath, osl_getThreadTextEncoding());
@@ -504,7 +504,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
 #ifndef DISABLE_DYNLOADING
             arModules[cModule].load(library.sPath);
             osl::Module & pluginLib = arModules[cModule];
-            if (pluginLib.is() == sal_False)
+            if (!pluginLib.is())
                 return JFW_E_NO_PLUGIN;
 
             jfw_plugin_getAllJavaInfos_ptr getAllJavaFunc =
@@ -588,7 +588,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
                     aVendorSettings.getVersionInformation(library.sVendor);
 #ifndef DISABLE_DYNLOADING
                 osl::Module pluginLib(library.sPath);
-                if (pluginLib.is() == sal_False)
+                if (!pluginLib.is())
                     return JFW_E_NO_PLUGIN;
                 //Check if the current plugin can detect JREs at the location
                 // of the paths added by jfw_setJRELocations or jfw_addJRELocation
@@ -815,7 +815,7 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
 #ifndef DISABLE_DYNLOADING
             arModules[cModule].load(library.sPath);
             osl::Module & pluginLib = arModules[cModule];
-            if (pluginLib.is() == sal_False)
+            if (!pluginLib.is())
             {
                 OString msg = OUStringToOString(
                     library.sPath, osl_getThreadTextEncoding());
