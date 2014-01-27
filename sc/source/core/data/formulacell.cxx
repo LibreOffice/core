@@ -3484,6 +3484,18 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell& r
                     return NotEqual;
             }
             break;
+            case formula::svIndex:
+            {
+                if(pThisTok->GetIndex() != pOtherTok->GetIndex())
+                    return NotEqual;
+            }
+            break;
+            case formula::svByte:
+            {
+                if(pThisTok->GetByte() != pOtherTok->GetByte())
+                    return NotEqual;
+            }
+            break;
             default:
                 ;
         }
