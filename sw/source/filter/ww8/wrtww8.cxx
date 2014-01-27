@@ -86,7 +86,7 @@
 #include <fmtfsize.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/string.hxx>
-#include <doctok/sprmids.hxx>
+#include <filter/msfilter/sprmids.hxx>
 
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"

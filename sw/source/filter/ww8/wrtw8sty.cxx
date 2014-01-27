@@ -61,7 +61,7 @@
 #include <msfilter.hxx>
 #include <swmodule.hxx>
 
-#include <doctok/sprmids.hxx>
+#include <filter/msfilter/sprmids.hxx>
 
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"

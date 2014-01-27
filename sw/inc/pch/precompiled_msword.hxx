@@ -102,7 +102,7 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <cstdio>
 #include <cstring>
-#include <doctok/sprmids.hxx>
+#include <filter/msfilter/sprmids.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/autokernitem.hxx>
 #include <editeng/blinkitem.hxx>
