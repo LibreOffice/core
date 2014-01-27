@@ -547,7 +547,7 @@ uno::Sequence< sal_Int32 > SAL_CALL
 }
 
 OUString AccessibleDrawDocumentView::getObjectLink( const uno::Any& rAny )
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     OUString aRet;
     //get the xShape of the current selected drawing object

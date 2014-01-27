@@ -107,7 +107,8 @@ public:
         getGroupPosition( const ::com::sun::star::uno::Any& rAny )
         throw (::com::sun::star::uno::RuntimeException);
     virtual OUString SAL_CALL getObjectLink( const ::com::sun::star::uno::Any& accoject )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception);
 
 protected:
 
