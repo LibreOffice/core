@@ -163,7 +163,8 @@ public:
                                       std::exception);
     virtual sal_Bool SAL_CALL getHasRowHeaders() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setHasRowHeaders( sal_Bool bHasRowHeaders )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException,
+                                      std::exception);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::table::CellRangeAddress > SAL_CALL
                             getRanges(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setRanges( const ::com::sun::star::uno::Sequence<

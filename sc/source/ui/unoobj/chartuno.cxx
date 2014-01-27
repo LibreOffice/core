@@ -689,7 +689,7 @@ sal_Bool SAL_CALL ScChartObj::getHasRowHeaders() throw(uno::RuntimeException)
 }
 
 void SAL_CALL ScChartObj::setHasRowHeaders( sal_Bool bHasRowHeaders )
-                                                throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScRangeListRef xRanges = new ScRangeList;
