@@ -664,22 +664,23 @@ void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, bool bEra
 
     DBG_ASSERTWARNING( nStartPos != -1, "CutLines: Startzeile nicht gefunden!" );
 
-    if ( nStartPos != -1 )
-    {
-        sal_Int32 nEndPos = nStartPos;
+    if ( nStartPos == -1 )
+        return;
 
-        for ( sal_Int32 i = 0; i < nLines; i++ )
-            nEndPos = searchEOL( rStr, nEndPos+1 );
+    sal_Int32 nEndPos = nStartPos;
 
-        if ( nEndPos == -1 ) // might happen at the last line
-            nEndPos = rStr.getLength();
-        else
-            nEndPos++;
+    for ( sal_Int32 i = 0; i < nLines; i++ )
+        nEndPos = searchEOL( rStr, nEndPos+1 );
 
-        OUString aEndStr = rStr.copy( nEndPos );
-        rStr = rStr.copy( 0, nStartPos );
-        rStr += aEndStr;
-    }
+    if ( nEndPos == -1 ) // might happen at the last line
+        nEndPos = rStr.getLength();
+    else
+        nEndPos++;
+
+    OUString aEndStr = rStr.copy( nEndPos );
+    rStr = rStr.copy( 0, nStartPos );
+    rStr += aEndStr;
+
     if ( bEraseTrailingEmptyLines )
     {
         sal_Int32 n = nStartPos;
@@ -692,7 +693,7 @@ void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, bool bEra
 
         if ( n > nStartPos )
         {
-            OUString aEndStr = rStr.copy( n );
+            aEndStr = rStr.copy( n );
             rStr = rStr.copy( 0, nStartPos );
             rStr += aEndStr;
         }
