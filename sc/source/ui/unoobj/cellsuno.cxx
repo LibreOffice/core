@@ -1818,7 +1818,7 @@ void ScCellRangesBase::PaintRanges_Impl( sal_uInt16 nPart )
 // XSheetOperation
 
 double SAL_CALL ScCellRangesBase::computeFunction( sheet::GeneralFunction nFunction )
-                                                throw(uno::Exception, uno::RuntimeException)
+    throw(uno::Exception, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScMarkData aMark(*GetMarkData());

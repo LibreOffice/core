@@ -263,7 +263,8 @@ public:
                             // XSheetOperation
     virtual double SAL_CALL computeFunction( ::com::sun::star::sheet::GeneralFunction nFunction )
                                 throw(::com::sun::star::uno::Exception,
-                                        ::com::sun::star::uno::RuntimeException);
+                                      ::com::sun::star::uno::RuntimeException,
+                                      std::exception);
     virtual void SAL_CALL   clearContents( sal_Int32 nContentFlags )
                                 throw(::com::sun::star::uno::RuntimeException);
 
