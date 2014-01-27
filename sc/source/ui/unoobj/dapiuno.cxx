@@ -407,9 +407,9 @@ static OUString lcl_GetOriginalName( const Reference< XNamed > xDim )
 }
 
 void SAL_CALL ScDataPilotTablesObj::insertNewByName( const OUString& aNewName,
-                                    const CellAddress& aOutputAddress,
-                                    const Reference<XDataPilotDescriptor>& xDescriptor )
-                                throw(RuntimeException)
+    const CellAddress& aOutputAddress,
+    const Reference<XDataPilotDescriptor>& xDescriptor )
+        throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (!xDescriptor.is()) return;

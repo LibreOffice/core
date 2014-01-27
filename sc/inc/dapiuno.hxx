@@ -111,7 +111,8 @@ public:
                                     const ::com::sun::star::table::CellAddress& aOutputAddress,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::sheet::XDataPilotDescriptor >& xDescriptor )
-                                    throw(::com::sun::star::uno::RuntimeException);
+                                    throw(::com::sun::star::uno::RuntimeException,
+                                          std::exception);
     virtual void SAL_CALL   removeByName( const OUString& aName )
                                     throw(::com::sun::star::uno::RuntimeException);
 
