@@ -658,7 +658,7 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
                 rNum.SetBulletFont( &aFont );
 
                 // take only the very first character
-                if( rAV.cbTextBefore || rAV.cbTextAfter)
+                if (SVBT8ToByte(rAV.cbTextBefore) || SVBT8ToByte(rAV.cbTextAfter))
                     rNum.SetBulletChar( sTxt[ 0 ] );
                 else
                     rNum.SetBulletChar( 0x2190 );
@@ -667,12 +667,12 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
     }
     if( bInsert )
     {
-        if( rAV.cbTextBefore )
+        if (SVBT8ToByte(rAV.cbTextBefore))
         {
             OUString sP( sTxt.copy( 0, SVBT8ToByte( rAV.cbTextBefore ) ) );
             rNum.SetPrefix( sP );
         }
-        if( SVBT8ToByte( rAV.cbTextAfter ) )
+        if (SVBT8ToByte(rAV.cbTextAfter))
         {
             OUString sP( rNum.GetSuffix() );
             sP += sTxt.copy( SVBT8ToByte( rAV.cbTextBefore ),
