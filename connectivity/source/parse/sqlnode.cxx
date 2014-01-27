@@ -1983,7 +1983,6 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition, sal_
     {
         assert(pSearchCondition->count() == 3);
         OSQLParseNode* pComparison = pSearchCondition->getChild(1);
-        OSQLParseNode* pNewComparison = NULL;
         if(SQL_ISRULE(pComparison, comparison))
         {
             assert(pComparison->count() == 2 ||
@@ -2004,6 +2003,7 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition, sal_
         }
         else
         {
+            OSQLParseNode* pNewComparison = NULL;
             switch(pComparison->getNodeType())
             {
             case SQL_NODE_EQUAL:
@@ -2028,9 +2028,9 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition, sal_
                 SAL_WARN( "connectivity.parse", "OSQLParseNode::negateSearchCondition: unexpected node type!" );
                 break;
             }
+            pSearchCondition->replace(pComparison, pNewComparison);
+            delete pComparison;
         }
-        pSearchCondition->replace(pComparison, pNewComparison);
-        delete pComparison;
     }
 
     else if(bNegate && (SQL_ISRULE(pSearchCondition,test_for_null) ||
