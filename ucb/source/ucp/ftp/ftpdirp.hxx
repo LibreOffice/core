@@ -105,11 +105,11 @@ namespace ftp {
         }
 
         bool isDir() const {
-            return bool(m_nMode && INETCOREFTP_FILEMODE_ISDIR);
+            return (m_nMode & INETCOREFTP_FILEMODE_ISDIR) != 0;
         }
 
         bool isFile() const {
-            return ! bool(m_nMode && INETCOREFTP_FILEMODE_ISDIR);
+            return (m_nMode & INETCOREFTP_FILEMODE_ISDIR) == 0;
         }
     };
 
