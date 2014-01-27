@@ -6449,6 +6449,11 @@
           <element name="a:graphic">
             <ref name="BUILT_IN_ANY_TYPE"/>
           </element>
+          <optional>
+            <element name="wp14:sizeRelH">
+              <ref name="BUILT_IN_ANY_TYPE"/>
+            </element>
+          </optional>
         </group>
         <optional>
           <attribute name="distT">
@@ -6871,6 +6876,7 @@
       <element name="docPr" tokenid="ooxml:CT_Inline_docPr"/>
       <element name="cNvGraphicFramePr" tokenid="ooxml:CT_Inline_cNvGraphicFramePr"/>
       <element name="a:graphic" tokenid="ooxml:CT_Inline_a_graphic"/>
+      <element name="wp14:sizeRelH" tokenid="ooxml:CT_Inline_wp14_sizeRelH"/>
       <attribute name="distT" tokenid="ooxml:CT_Inline_distT"/>
       <attribute name="distB" tokenid="ooxml:CT_Inline_distB"/>
       <attribute name="distL" tokenid="ooxml:CT_Inline_distL"/>
