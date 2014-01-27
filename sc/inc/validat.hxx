@@ -75,8 +75,6 @@ private:
     OUString aErrorTitle;
     OUString aErrorMessage;
 
-    bool bIsUsed;            // temporary during saving
-
     bool DoMacro( const ScAddress& rPos, const OUString& rInput,
                                 ScFormulaCell* pCell, Window* pParent ) const;
 
@@ -144,9 +142,6 @@ public:
     bool IsEmpty() const;
     sal_uInt32      GetKey() const          { return nKey; }
     void            SetKey(sal_uInt32 nNew) { nKey = nNew; }    // only if not inserted!
-
-    void            SetUsed(bool bSet)      { bIsUsed = bSet; }
-    bool            IsUsed() const          { return bIsUsed; }
 
     bool            EqualEntries( const ScValidationData& r ) const;    // for undo
 

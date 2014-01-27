@@ -57,59 +57,63 @@ using namespace formula;
 //
 
 ScValidationData::ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
-                            const OUString& rExpr1, const OUString& rExpr2,
-                            ScDocument* pDocument, const ScAddress& rPos,
-                            const OUString& rExprNmsp1, const OUString& rExprNmsp2,
-                            FormulaGrammar::Grammar eGrammar1, FormulaGrammar::Grammar eGrammar2 ) :
-    ScConditionEntry( eOper, rExpr1, rExpr2, pDocument, rPos, rExprNmsp1, rExprNmsp2, eGrammar1, eGrammar2 ),
-    nKey( 0 ),
-    eDataMode( eMode ),
-    eErrorStyle( SC_VALERR_STOP ),
-    mnListType( ValidListType::UNSORTED )
+                                    const OUString& rExpr1, const OUString& rExpr2,
+                                    ScDocument* pDocument, const ScAddress& rPos,
+                                    const OUString& rExprNmsp1, const OUString& rExprNmsp2,
+                                    FormulaGrammar::Grammar eGrammar1,
+                                    FormulaGrammar::Grammar eGrammar2 )
+    : ScConditionEntry( eOper, rExpr1, rExpr2, pDocument, rPos, rExprNmsp1,
+                        rExprNmsp2, eGrammar1, eGrammar2 )
+    , nKey( 0 )
+    , eDataMode( eMode )
+    , bShowInput(false)
+    , bShowError(false)
+    , eErrorStyle( SC_VALERR_STOP )
+    , mnListType( ValidListType::UNSORTED )
 {
-    bShowInput = bShowError = false;
 }
 
 ScValidationData::ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
-                            const ScTokenArray* pArr1, const ScTokenArray* pArr2,
-                            ScDocument* pDocument, const ScAddress& rPos ) :
-    ScConditionEntry( eOper, pArr1, pArr2, pDocument, rPos ),
-    nKey( 0 ),
-    eDataMode( eMode ),
-    eErrorStyle( SC_VALERR_STOP ),
-    mnListType( ValidListType::UNSORTED )
+                                    const ScTokenArray* pArr1, const ScTokenArray* pArr2,
+                                    ScDocument* pDocument, const ScAddress& rPos )
+    : ScConditionEntry( eOper, pArr1, pArr2, pDocument, rPos )
+    , nKey( 0 )
+    , eDataMode( eMode )
+    , bShowInput(false)
+    , bShowError(false)
+    , eErrorStyle( SC_VALERR_STOP )
+    , mnListType( ValidListType::UNSORTED )
 {
-    bShowInput = bShowError = false;
 }
 
-ScValidationData::ScValidationData( const ScValidationData& r ) :
-    ScConditionEntry( r ),
-    nKey( r.nKey ),
-    eDataMode( r.eDataMode ),
-    bShowInput( r.bShowInput ),
-    bShowError( r.bShowError ),
-    eErrorStyle( r.eErrorStyle ),
-    mnListType( r.mnListType ),
-    aInputTitle( r.aInputTitle ),
-    aInputMessage( r.aInputMessage ),
-    aErrorTitle( r.aErrorTitle ),
-    aErrorMessage( r.aErrorMessage )
+ScValidationData::ScValidationData( const ScValidationData& r )
+    : ScConditionEntry( r )
+    , nKey( r.nKey )
+    , eDataMode( r.eDataMode )
+    , bShowInput( r.bShowInput )
+    , bShowError( r.bShowError )
+    , eErrorStyle( r.eErrorStyle )
+    , mnListType( r.mnListType )
+    , aInputTitle( r.aInputTitle )
+    , aInputMessage( r.aInputMessage )
+    , aErrorTitle( r.aErrorTitle )
+    , aErrorMessage( r.aErrorMessage )
 {
     //  Formeln per RefCount kopiert
 }
 
-ScValidationData::ScValidationData( ScDocument* pDocument, const ScValidationData& r ) :
-    ScConditionEntry( pDocument, r ),
-    nKey( r.nKey ),
-    eDataMode( r.eDataMode ),
-    bShowInput( r.bShowInput ),
-    bShowError( r.bShowError ),
-    eErrorStyle( r.eErrorStyle ),
-    mnListType( r.mnListType ),
-    aInputTitle( r.aInputTitle ),
-    aInputMessage( r.aInputMessage ),
-    aErrorTitle( r.aErrorTitle ),
-    aErrorMessage( r.aErrorMessage )
+ScValidationData::ScValidationData( ScDocument* pDocument, const ScValidationData& r )
+    : ScConditionEntry( pDocument, r )
+    , nKey( r.nKey )
+    , eDataMode( r.eDataMode )
+    , bShowInput( r.bShowInput )
+    , bShowError( r.bShowError )
+    , eErrorStyle( r.eErrorStyle )
+    , mnListType( r.mnListType )
+    , aInputTitle( r.aInputTitle )
+    , aInputMessage( r.aInputMessage )
+    , aErrorTitle( r.aErrorTitle )
+    , aErrorMessage( r.aErrorMessage )
 {
     //  Formeln wirklich kopiert
 }
