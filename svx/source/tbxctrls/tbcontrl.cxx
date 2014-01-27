@@ -327,27 +327,25 @@ class SfxStyleControllerItem_Impl : public SfxStatusListener
 // class SvxStyleBox_Impl -----------------------------------------------------
 //========================================================================
 
-SvxStyleBox_Impl::SvxStyleBox_Impl(
-    Window*                                 pParent,
-    const OUString&                         rCommand,
-    SfxStyleFamily                          eFamily,
-    const Reference< XDispatchProvider >&   rDispatchProvider,
-    const Reference< XFrame >&              _xFrame,
-    const OUString&                         rClearFormatKey,
-    const OUString&                         rMoreKey,
-    bool                                    bInSpec) :
-
-    ComboBox( pParent, SVX_RES( RID_SVXTBX_STYLE ) ),
-
-    eStyleFamily( eFamily ),
-    bRelease    ( true ),
-    bVisible(false),
-    m_xDispatchProvider( rDispatchProvider ),
-    m_xFrame(_xFrame),
-    m_aCommand  ( rCommand ),
-    aClearFormatKey ( rClearFormatKey ),
-    aMoreKey        ( rMoreKey ),
-    bInSpecialMode  ( bInSpec )
+SvxStyleBox_Impl::SvxStyleBox_Impl(Window* pParent,
+                                   const OUString& rCommand,
+                                   SfxStyleFamily eFamily,
+                                   const Reference< XDispatchProvider >& rDispatchProvider,
+                                   const Reference< XFrame >& _xFrame,
+                                   const OUString& rClearFormatKey,
+                                   const OUString& rMoreKey,
+                                   bool bInSpec)
+    : ComboBox( pParent, SVX_RES( RID_SVXTBX_STYLE ) )
+    , eStyleFamily( eFamily )
+    , nCurSel(0)
+    , bRelease( true )
+    , bVisible(false)
+    , m_xDispatchProvider( rDispatchProvider )
+    , m_xFrame(_xFrame)
+    , m_aCommand( rCommand )
+    , aClearFormatKey( rClearFormatKey )
+    , aMoreKey( rMoreKey )
+    , bInSpecialMode( bInSpec )
 {
     aLogicalSize = PixelToLogic( GetSizePixel(), MAP_APPFONT );
     EnableAutocomplete( sal_True );
