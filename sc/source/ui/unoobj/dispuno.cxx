@@ -347,7 +347,7 @@ void SAL_CALL ScDispatch::removeStatusListener(
 // XSelectionChangeListener
 
 void SAL_CALL ScDispatch::selectionChanged( const ::com::sun::star::lang::EventObject& /* aEvent */ )
-                                throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     //  currently only called for URL cURLDocDataSource
 

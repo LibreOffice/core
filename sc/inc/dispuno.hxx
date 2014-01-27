@@ -132,7 +132,8 @@ public:
 
                             /// XSelectionChangeListener
     virtual void SAL_CALL   selectionChanged( const ::com::sun::star::lang::EventObject& aEvent )
-                                throw (::com::sun::star::uno::RuntimeException);
+                                throw (::com::sun::star::uno::RuntimeException,
+                                       std::exception);
 
                             /// XEventListener
     virtual void SAL_CALL   disposing( const ::com::sun::star::lang::EventObject& Source )
