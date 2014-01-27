@@ -206,9 +206,12 @@ int PowerPointExport::GetPPTXLayoutId( int nOffset )
     return nId;
 }
 
-PowerPointShapeExport::PowerPointShapeExport( FSHelperPtr pFS, ShapeHashMap* pShapeMap, PowerPointExport* pFB )
-        : ShapeExport( XML_p, pFS, pShapeMap, pFB )
+PowerPointShapeExport::PowerPointShapeExport( FSHelperPtr pFS, ShapeHashMap* pShapeMap,
+                                              PowerPointExport* pFB )
+    : ShapeExport( XML_p, pFS, pShapeMap, pFB )
     , mrExport( *pFB )
+    , mePageType(UNDEFINED)
+    , mbMaster(sal_False)
 {
 }
 
