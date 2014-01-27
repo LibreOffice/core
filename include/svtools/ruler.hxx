@@ -579,8 +579,14 @@ struct RulerSelection
     bool        bSizeBar;
     bool        bExpandTest;
 
-    RulerSelection() :
-        bExpandTest( false )
+    RulerSelection()
+        : nPos(0)
+        , eType(RULER_TYPE_DONTKNOW)
+        , nAryPos(0)
+        , mnDragSize(0)
+        , bSize(false)
+        , bSizeBar(false)
+        , bExpandTest( false )
     {}
 };
 
