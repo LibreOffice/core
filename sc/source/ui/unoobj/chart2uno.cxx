@@ -2993,7 +2993,7 @@ const boost::unordered_set<sal_uInt16>& ScChart2DataSequence::ExternalRefListene
 // ----------------------------------------------------------------------------
 
 uno::Sequence< uno::Any> SAL_CALL ScChart2DataSequence::getData()
-            throw ( uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( !m_pDocument)
