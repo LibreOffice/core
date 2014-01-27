@@ -1617,6 +1617,14 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
             m_rExport.Strm().WriteCharPtr( "{" OOO_STRING_SVTOOLS_RTF_SHPTXT );
 
             {
+                // Save table state, in case the inner text also contains a table.
+                ww8::WW8TableInfo::Pointer_t pTableInfoOrig = m_rExport.mpTableInfo;
+                m_rExport.mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
+                SwWriteTable* pTableWrt = m_pTableWrt;
+                m_pTableWrt = 0;
+                sal_uInt32 nTableDepth = m_nTableDepth;
+
+                m_nTableDepth = 0;
                 /*
                  * Save m_aRun as we should not loose the opening brace.
                  * OTOH, just drop the contents of m_aRunText in case something
@@ -1644,6 +1652,12 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                 m_aRunText.clear();
                 m_bInRun = bInRunOrig;
                 m_bSingleEmptyRun = bSingleEmptyRunOrig;
+
+                // Restore table state.
+                m_rExport.mpTableInfo = pTableInfoOrig;
+                delete m_pTableWrt;
+                m_pTableWrt = pTableWrt;
+                m_nTableDepth = nTableDepth;
             }
 
             m_rExport.mpParentFrame = NULL;
