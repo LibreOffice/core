@@ -3742,6 +3742,18 @@ void SingletonType::dumpHxxFile(
     includes.addRtlUstringH();
     includes.addRtlUstringHxx();
     includes.dump(o, 0);
+    o << ("\n#if defined ANDROID || defined IOS //TODO\n"
+          "#include <com/sun/star/lang/XInitialization.hpp>\n"
+          "#include <osl/detail/component-defines.h>\n#endif\n\n"
+          "#if defined LO_URE_CURRENT_ENV && defined LO_URE_CTOR_ENV_")
+      << name_.replaceAll(".", "_dot_")
+      << " && (LO_URE_CURRENT_ENV) == (LO_URE_CTOR_ENV_"
+      << name_.replaceAll(".", "_dot_") << ") && defined LO_URE_CTOR_FUN_"
+      << name_.replaceAll(".", "_dot_")
+      << "\nextern \"C\" ::css::uno::XInterface * SAL_CALL LO_URE_CTOR_FUN_"
+      << name_.replaceAll(".", "_dot_")
+      << "(::css::uno::XComponentContext *, ::css::uno::Sequence< "
+         "::css::uno::Any > const &);\n#endif\n";
     o << "\n";
     if (codemaker::cppumaker::dumpNamespaceOpen(o, name_, false)) {
         o << "\n";
@@ -3758,10 +3770,26 @@ void SingletonType::dumpHxxFile(
     inc();
     o << indent() << "assert(the_context.is());\n" << indent()
       << "::css::uno::Reference< " << scopedBaseName
-      << " > instance;\n" << indent()
-      << ("if (!(the_context->getValueByName("
+      << " > instance;\n"
+      << ("#if defined LO_URE_CURRENT_ENV && defined "
+          "LO_URE_CTOR_ENV_")
+      << name_.replaceAll(".", "_dot_")
+      << " && (LO_URE_CURRENT_ENV) == (LO_URE_CTOR_ENV_"
+      << name_.replaceAll(".", "_dot_")
+      << ") && defined LO_URE_CTOR_FUN_"
+      << name_.replaceAll(".", "_dot_") << "\n" << indent()
+      << "the_instance = ::css::uno::Reference< " << scopedBaseName
+      << (" >(::css::uno::Reference< ::css::uno::XInterface >("
+          "static_cast< ::css::uno::XInterface * >((*"
+          "LO_URE_CTOR_FUN_")
+      << name_.replaceAll(".", "_dot_")
+      << (")(the_context.get(), ::css::uno::Sequence<"
+          " ::css::uno::Any >())), ::SAL_NO_ACQUIRE),"
+                      " ::css::uno::UNO_QUERY);\n#else\n")
+      << indent() << ("the_context->getValueByName("
           "::rtl::OUString( \"/singletons/")
-      << name_ << "\" )) >>= instance) || !instance.is()) {\n";
+      << name_ << "\" )) >>= instance;\n" << "#endif\n"
+      << indent() << "if (!instance.is()) {\n";
     inc();
     o << indent()
       << ("throw ::css::uno::DeploymentException("
