@@ -102,7 +102,7 @@ bool passesPositiveList(const OUString& rUrl) {
         { RTL_CONSTASCII_STRINGPARAM("/description.xml") },
         { RTL_CONSTASCII_STRINGPARAM("/android/sdremote/res/values/strings.xml") },
         { RTL_CONSTASCII_STRINGPARAM("/svx/inc/globlmn_tmpl.hrc") },
-        { RTL_CONSTASCII_STRINGPARAM("/sw/source/ui/inc/misc.hrc") }
+        { RTL_CONSTASCII_STRINGPARAM("/sw/source/ui/inc/redline_tmpl.hrc") }
     };
     return matchList(rUrl, list, SAL_N_ELEMENTS(list));
 }
