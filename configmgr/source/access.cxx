@@ -1976,7 +1976,9 @@ bool Access::isDisposed() const {
     return disposed_;
 }
 
-Access::ModifiedChild::ModifiedChild() {}
+Access::ModifiedChild::ModifiedChild():
+    directlyModified(false)
+{}
 
 Access::ModifiedChild::ModifiedChild(
     rtl::Reference< ChildAccess > const & theChild, bool theDirectlyModified):
