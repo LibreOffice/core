@@ -239,52 +239,42 @@ void SAL_CALL ChartController::setPosSize(
     {
         Size aLogicSize = m_pChartWindow->PixelToLogic( Size( Width, Height ), MapMode( MAP_100TH_MM )  );
 
-        bool bIsEmbedded = true;
         //todo: for standalone chart: detect whether we are standalone
-        if( bIsEmbedded )
+        //change map mode to fit new size
+        awt::Size aModelPageSize = ChartModelHelper::getPageSize( getModel() );
+        sal_Int32 nScaleXNumerator = aLogicSize.Width();
+        sal_Int32 nScaleXDenominator = aModelPageSize.Width;
+        sal_Int32 nScaleYNumerator = aLogicSize.Height();
+        sal_Int32 nScaleYDenominator = aModelPageSize.Height;
+        MapMode aNewMapMode(
+                    MAP_100TH_MM,
+                    Point(0,0),
+                    Fraction(nScaleXNumerator, nScaleXDenominator),
+                    Fraction(nScaleYNumerator, nScaleYDenominator) );
+        m_pChartWindow->SetMapMode(aNewMapMode);
+        m_pChartWindow->setPosSizePixel( X, Y, Width, Height, Flags );
+
+        //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
+        uno::Reference< beans::XPropertySet > xProp( m_xChartView, uno::UNO_QUERY );
+        if( xProp.is() )
         {
-            //change map mode to fit new size
-            awt::Size aModelPageSize = ChartModelHelper::getPageSize( getModel() );
-            sal_Int32 nScaleXNumerator = aLogicSize.Width();
-            sal_Int32 nScaleXDenominator = aModelPageSize.Width;
-            sal_Int32 nScaleYNumerator = aLogicSize.Height();
-            sal_Int32 nScaleYDenominator = aModelPageSize.Height;
-            MapMode aNewMapMode(
-                        MAP_100TH_MM,
-                        Point(0,0),
-                        Fraction(nScaleXNumerator, nScaleXDenominator),
-                        Fraction(nScaleYNumerator, nScaleYDenominator) );
-            m_pChartWindow->SetMapMode(aNewMapMode);
-            m_pChartWindow->setPosSizePixel( X, Y, Width, Height, Flags );
-
-            //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
-            uno::Reference< beans::XPropertySet > xProp( m_xChartView, uno::UNO_QUERY );
-            if( xProp.is() )
-            {
-                uno::Sequence< beans::PropertyValue > aZoomFactors(4);
-                aZoomFactors[0].Name = "ScaleXNumerator";
-                aZoomFactors[0].Value = uno::makeAny( nScaleXNumerator );
-                aZoomFactors[1].Name = "ScaleXDenominator";
-                aZoomFactors[1].Value = uno::makeAny( nScaleXDenominator );
-                aZoomFactors[2].Name = "ScaleYNumerator";
-                aZoomFactors[2].Value = uno::makeAny( nScaleYNumerator );
-                aZoomFactors[3].Name = "ScaleYDenominator";
-                aZoomFactors[3].Value = uno::makeAny( nScaleYDenominator );
-                xProp->setPropertyValue( "ZoomFactors", uno::makeAny( aZoomFactors ));
-            }
-
-            //a correct work area is at least necessary for correct values in the position and  size dialog and for dragging area
-            if(m_pDrawViewWrapper)
-            {
-                Rectangle aRect(Point(0,0), m_pChartWindow->GetOutputSize());
-                m_pDrawViewWrapper->SetWorkArea( aRect );
-            }
+            uno::Sequence< beans::PropertyValue > aZoomFactors(4);
+            aZoomFactors[0].Name = "ScaleXNumerator";
+            aZoomFactors[0].Value = uno::makeAny( nScaleXNumerator );
+            aZoomFactors[1].Name = "ScaleXDenominator";
+            aZoomFactors[1].Value = uno::makeAny( nScaleXDenominator );
+            aZoomFactors[2].Name = "ScaleYNumerator";
+            aZoomFactors[2].Value = uno::makeAny( nScaleYNumerator );
+            aZoomFactors[3].Name = "ScaleYDenominator";
+            aZoomFactors[3].Value = uno::makeAny( nScaleYDenominator );
+            xProp->setPropertyValue( "ZoomFactors", uno::makeAny( aZoomFactors ));
         }
-        else
+
+        //a correct work area is at least necessary for correct values in the position and  size dialog and for dragging area
+        if(m_pDrawViewWrapper)
         {
-            //change visarea
-            ChartModelHelper::setPageSize( awt::Size( aLogicSize.Width(), aLogicSize.Height() ), getModel() );
-            m_pChartWindow->setPosSizePixel( X, Y, Width, Height, Flags );
+            Rectangle aRect(Point(0,0), m_pChartWindow->GetOutputSize());
+            m_pDrawViewWrapper->SetWorkArea( aRect );
         }
         m_pChartWindow->Invalidate();
     }
