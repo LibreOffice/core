@@ -158,6 +158,7 @@ math_constructor_list = [
 writer_core_factory_list = [
     ("libswdlo.a", "swd_component_getFactory"),
     ("libswlo.a", "sw_component_getFactory"),
+    ("libwriterfilterlo.a", "writerfilter_component_getFactory"),
     ]
 
 writer_core_constructor_list = [
@@ -167,7 +168,6 @@ writer_factory_list = writer_core_factory_list + [
     ("libhwplo.a", "hwp_component_getFactory"),
     ("libt602filterlo.a", "t602filter_component_getFactory"),
     ("libwpftwriterlo.a", "wpftwriter_component_getFactory"),
-    ("libwriterfilterlo.a", "writerfilter_component_getFactory"),
     ]
 
 writer_constructor_list = writer_core_constructor_list + [
