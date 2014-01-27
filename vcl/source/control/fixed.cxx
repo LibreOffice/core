@@ -864,36 +864,17 @@ FixedBitmap::~FixedBitmap()
 void FixedBitmap::ImplDraw( OutputDevice* pDev, sal_uLong /* nDrawFlags */,
                             const Point& rPos, const Size& rSize )
 {
-    sal_uInt16 nStyle = 0;
     Bitmap* pBitmap = &maBitmap;
 
-    if( nStyle & IMAGE_DRAW_COLORTRANSFORM )
+    // do we have a Bitmap?
+    if ( !(!(*pBitmap)) )
     {
-        // only images support IMAGE_DRAW_COLORTRANSFORM
-        Image aImage( maBitmap );
-        if ( !(!aImage) )
+        if ( GetStyle() & WB_SCALE )
+            pDev->DrawBitmap( rPos, rSize, *pBitmap );
+        else
         {
-            if ( GetStyle() & WB_SCALE )
-                pDev->DrawImage( rPos, rSize, aImage, nStyle );
-            else
-            {
-                Point aPos = ImplCalcPos( GetStyle(), rPos, aImage.GetSizePixel(), rSize );
-                pDev->DrawImage( aPos, aImage, nStyle );
-            }
-        }
-    }
-    else
-    {
-        // do we have a Bitmap?
-        if ( !(!(*pBitmap)) )
-        {
-            if ( GetStyle() & WB_SCALE )
-                pDev->DrawBitmap( rPos, rSize, *pBitmap );
-            else
-            {
-                Point aPos = ImplCalcPos( GetStyle(), rPos, pBitmap->GetSizePixel(), rSize );
-                pDev->DrawBitmap( aPos, *pBitmap );
-            }
+            Point aPos = ImplCalcPos( GetStyle(), rPos, pBitmap->GetSizePixel(), rSize );
+            pDev->DrawBitmap( aPos, *pBitmap );
         }
     }
 }
