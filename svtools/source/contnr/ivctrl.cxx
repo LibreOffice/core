@@ -31,16 +31,20 @@ using namespace ::com::sun::star::accessibility;
 |
 \*****************************************************************************/
 
-SvxIconChoiceCtrlEntry::SvxIconChoiceCtrlEntry( const OUString& rText, const Image& rImage, sal_uInt16 _nFlags )
+SvxIconChoiceCtrlEntry::SvxIconChoiceCtrlEntry( const OUString& rText,
+                                                const Image& rImage,
+                                                sal_uInt16 _nFlags )
+    : aImage(rImage)
+    , aText(rText)
+    , pUserData(NULL)
+    , nPos(0)
+    , pblink(0)
+    , pflink(0)
+    , eTextMode(IcnShowTextShort)
+    , nX(0)
+    , nY(0)
+    , nFlags(_nFlags)
 {
-    aText = rText;
-    aImage = rImage;
-    pUserData = NULL;
-
-    nFlags = _nFlags;
-    eTextMode = IcnShowTextShort;
-    pblink = 0;
-    pflink = 0;
 }
 
 OUString SvxIconChoiceCtrlEntry::GetDisplayText() const
