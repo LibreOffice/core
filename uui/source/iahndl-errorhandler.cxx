@@ -75,9 +75,9 @@ executeErrorDialog(
             break;
 
         case task::InteractionClassification_INFO:
-            if ((nButtonMask & 0x01F00000) == WB_DEF_OK)
-                //TODO! missing win bit button mask define (want to ignore
-                // any default button settings)...
+#           define WB_DEF_BUTTONS (WB_DEF_OK | WB_DEF_CANCEL | WB_DEF_RETRY)
+            //(want to ignore any default button settings)...
+            if ((nButtonMask & WB_DEF_BUTTONS) == WB_DEF_OK)
                 xBox.reset(new InfoBox(pParent,
                                        aText.makeStringAndClear()));
             else
