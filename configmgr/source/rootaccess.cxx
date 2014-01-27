@@ -155,7 +155,9 @@ void RootAccess::removeChangesListener(
 }
 
 void RootAccess::commitChanges()
-    throw (css::lang::WrappedTargetException, css::uno::RuntimeException)
+    throw (css::lang::WrappedTargetException,
+           css::uno::RuntimeException,
+           std::exception)
 {
     assert(thisIs(IS_UPDATE));
     if (!alive_)

@@ -92,7 +92,8 @@ public:
     virtual void SAL_CALL commitChanges()
         throw (
             com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException,
+            std::exception);
 
     virtual sal_Bool SAL_CALL hasPendingChanges()
         throw (com::sun::star::uno::RuntimeException);
