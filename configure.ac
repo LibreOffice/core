@@ -1211,6 +1211,12 @@ AC_ARG_ENABLE(silent-msi,
         [Enable MSI with LIMITUI=1 (silent install).]),
 ,)
 
+AC_ARG_ENABLE(macosx-retina,
+    AS_HELP_STRING([--enable-macosx-retina],
+        [Declare the application as High Resolution Capable. (retina display)
+         ]),
+,)
+
 AC_ARG_ENABLE(macosx-code-signing,
     AS_HELP_STRING([--enable-macosx-code-signing<=identity>],
         [Sign executables, dylibs, frameworks and the app bundle. If you
@@ -2916,6 +2922,14 @@ if test $_os = Darwin; then
     MACOSX_BUNDLE_IDENTIFIER=$with_macosx_bundle_identifier
 
     AC_MSG_RESULT([$MACOSX_BUNDLE_IDENTIFIER])
+
+    AC_MSG_CHECKING([build with mac retina support])
+    if test "$enable_macosx_retina" = yes ; then
+        MACOSX_HIGH_RESOLUTION_VALUE=true
+    else
+        MACOSX_HIGH_RESOLUTION_VALUE=false
+    fi
+    AC_MSG_RESULT([$MACOSX_HIGH_RESOLUTION_VALUE])
 fi
 AC_SUBST(MACOSX_SDK_PATH)
 AC_SUBST(MACOSX_SDK_VERSION)
@@ -2927,6 +2941,7 @@ AC_SUBST(LIBTOOL) # Note that the OS X libtool command is unrelated to GNU libto
 AC_SUBST(MACOSX_CODESIGNING_IDENTITY)
 AC_SUBST(ENABLE_MACOSX_SANDBOX)
 AC_SUBST(MACOSX_BUNDLE_IDENTIFIER)
+AC_SUBST(MACOSX_HIGH_RESOLUTION_VALUE)
 
 dnl ===================================================================
 dnl Check iOS SDK and compiler

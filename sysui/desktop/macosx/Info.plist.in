@@ -1424,6 +1424,8 @@
     <string>public.app-category.productivity</string>
     <key>LSMinimumSystemVersion</key>
     <string>@MACOSX_DEPLOYMENT_TARGET@.0</string>
+    <key>NSHighResolutionCapable</key>
+    <@MACOSX_HIGH_RESOLUTION_VALUE@/>
 </dict>
 </plist>
 
