@@ -13,6 +13,7 @@
 
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/style/TabStop.hpp>
@@ -2537,27 +2538,73 @@ DECLARE_OOXMLEXPORT_TEST(testShapeThemePreservation, "shape-theme-preservation.d
     assertXPath(pXmlDocument,
             "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:fillRef/a:schemeClr",
             "val", "accent1");
+    assertXPath(pXmlDocument,
+            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:lnRef",
+            "idx", "2");
+    assertXPath(pXmlDocument,
+            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:lnRef/a:schemeClr",
+            "val", "accent1");
+    assertXPath(pXmlDocument,
+            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:lnRef/a:schemeClr/a:shade",
+            "val", "50000");
 
     // check shape style hasn't been overwritten
     assertXPath(pXmlDocument,
             "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:solidFill",
+            0);
+    assertXPath(pXmlDocument,
+            "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill",
             0);
 
     // check direct theme assignments have been preserved
     assertXPath(pXmlDocument,
             "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:solidFill/a:schemeClr",
             "val", "accent6");
+    assertXPath(pXmlDocument,
+            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill/a:schemeClr",
+            "val", "accent3");
 
     // check direct color assignments have been preserved
     OUString sFillColor = getXPath(pXmlDocument,
             "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:solidFill/a:srgbClr",
             "val");
     CPPUNIT_ASSERT_EQUAL(sFillColor.toInt32(16), sal_Int32(0x00b050));
+    sal_Int32 nLineColor = getXPath(pXmlDocument,
+            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill/a:srgbClr",
+            "val").toInt32(16);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xff0000), nLineColor);
+
+    // check direct line type assignments have been preserved
+    sal_Int32 nLineWidth = getXPath(pXmlDocument,
+            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln",
+            "w").toInt32();
+    CPPUNIT_ASSERT(abs(63500 - nLineWidth) < 1000); //some rounding errors in the conversion ooxml -> libo -> ooxml are tolerated
+    assertXPath(pXmlDocument,
+            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:miter",
+            1);
+    assertXPath(pXmlDocument,
+            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:custDash",
+            1);
+
+    uno::Reference<drawing::XShape> xShape1 = getShape(1);
+    uno::Reference<drawing::XShape> xShape2 = getShape(2);
+    uno::Reference<drawing::XShape> xShape3 = getShape(3);
 
     // check colors are properly applied to shapes on import
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4f81bd), getProperty<sal_Int32>(getShape(1), "FillColor"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xf79646), getProperty<sal_Int32>(getShape(2), "FillColor"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00b050), getProperty<sal_Int32>(getShape(3), "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4f81bd), getProperty<sal_Int32>(xShape1, "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xf79646), getProperty<sal_Int32>(xShape2, "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00b050), getProperty<sal_Int32>(xShape3, "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x3a5f8b), getProperty<sal_Int32>(xShape1, "LineColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x9bbb59), getProperty<sal_Int32>(xShape2, "LineColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xff0000), getProperty<sal_Int32>(xShape3, "LineColor"));
+
+    // check line properties are properly applied to shapes on import
+    CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_SOLID, getProperty<drawing::LineStyle>(xShape1, "LineStyle"));
+    CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_SOLID, getProperty<drawing::LineStyle>(xShape2, "LineStyle"));
+    CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_DASH,  getProperty<drawing::LineStyle>(xShape3, "LineStyle"));
+    CPPUNIT_ASSERT_EQUAL(drawing::LineJoint_ROUND, getProperty<drawing::LineJoint>(xShape1, "LineJoint"));
+    CPPUNIT_ASSERT_EQUAL(drawing::LineJoint_ROUND, getProperty<drawing::LineJoint>(xShape2, "LineJoint"));
+    CPPUNIT_ASSERT_EQUAL(drawing::LineJoint_MITER, getProperty<drawing::LineJoint>(xShape3, "LineJoint"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTOCFlag_u,"testTOCFlag_u.docx")

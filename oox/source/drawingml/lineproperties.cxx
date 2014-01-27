@@ -370,7 +370,7 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
         drawing::LineStyle eLineStyle = (maLineFill.moFillType.get() == XML_noFill) ? drawing::LineStyle_NONE : drawing::LineStyle_SOLID;
 
         // convert line width from EMUs to 1/100mm
-        sal_Int32 nLineWidth = convertEmuToHmm( moLineWidth.get( 0 ) );
+        sal_Int32 nLineWidth = getLineWidth();
 
         // create line dash from preset dash token (not for invisible line)
         if( (eLineStyle != drawing::LineStyle_NONE) && (moPresetDash.differsFrom( XML_solid ) || !maCustomDash.empty()) )
@@ -417,6 +417,29 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
         lclPushMarkerProperties( rPropMap, maStartArrow, nLineWidth, false );
         lclPushMarkerProperties( rPropMap, maEndArrow,   nLineWidth, true );
     }
+}
+
+drawing::LineStyle LineProperties::getLineStyle() const
+{
+    // rules to calculate the line style inferred from the code in LineProperties::pushToPropMap
+    return (maLineFill.moFillType.get() == XML_noFill) ?
+            drawing::LineStyle_NONE :
+            (moPresetDash.differsFrom( XML_solid ) || (!moPresetDash && !maCustomDash.empty())) ?
+                    drawing::LineStyle_DASH :
+                    drawing::LineStyle_SOLID;
+}
+
+drawing::LineJoint LineProperties::getLineJoint() const
+{
+    if( moLineJoint.has() )
+        return lclGetLineJoint( moLineJoint.get() );
+
+    return drawing::LineJoint_NONE;
+}
+
+sal_Int32 LineProperties::getLineWidth() const
+{
+    return convertEmuToHmm( moLineWidth.get( 0 ) );
 }
 
 // ============================================================================

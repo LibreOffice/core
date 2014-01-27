@@ -79,6 +79,10 @@ using namespace ::com::sun::star::style;
 
 namespace oox { namespace drawingml {
 
+#define PUT_PROP( aProperties, nPos, sPropName, aPropValue ) \
+    aProperties[nPos].Name = sPropName; \
+    aProperties[nPos].Value = Any( aPropValue );
+
 Shape::Shape( const sal_Char* pServiceName, bool bDefaultHeight )
 : mbIsChild( false )
 , mpLinePropertiesPtr( new LineProperties )
@@ -555,6 +559,20 @@ Reference< XShape > Shape::createAndInsert(
                 if( const LineProperties* pLineProps = pTheme->getLineStyle( pLineRef->mnThemedIdx ) )
                     aLineProperties.assignUsed( *pLineProps );
                 nLinePhClr = pLineRef->maPhClr.getColor( rGraphicHelper );
+
+                // Store style-related properties to InteropGrabBag to be able to export them back
+                Sequence< PropertyValue > aProperties( 7 );
+                PUT_PROP( aProperties, 0, "SchemeClr",      pLineRef->maPhClr.getSchemeName() );
+                PUT_PROP( aProperties, 1, "Idx",            pLineRef->mnThemedIdx );
+                PUT_PROP( aProperties, 2, "Color",          nLinePhClr );
+                PUT_PROP( aProperties, 3, "LineStyle",      aLineProperties.getLineStyle() );
+                PUT_PROP( aProperties, 4, "LineJoint",      aLineProperties.getLineJoint() );
+                PUT_PROP( aProperties, 5, "LineWidth",      aLineProperties.getLineWidth() );
+                PUT_PROP( aProperties, 6, "Transformations", pLineRef->maPhClr.getTransformations() );
+                PropertyValue pStyleFillRef;
+                pStyleFillRef.Name = "StyleLnRef";
+                pStyleFillRef.Value = Any( aProperties );
+                putPropertyToGrabBag( pStyleFillRef );
             }
             if( const ShapeStyleRef* pFillRef = getShapeStyleRef( XML_fillRef ) )
             {
@@ -766,15 +784,22 @@ Reference< XShape > Shape::createAndInsert(
                 mxShape->setSize(awt::Size(aShapeRectHmm.Width, aShapeRectHmm.Height));
             }
 
-            Sequence< PropertyValue > aProperties( 1 );
-            aProperties[0].Name = "OriginalSolidFillClr";
-            aProperties[0].Value = aShapeProps[PROP_FillColor];
+            // Store original fill and line colors of the shape and the theme color name to InteropGrabBag
+            sal_Int32 nSize = 2;
+            Sequence< PropertyValue > aProperties( nSize );
+            PUT_PROP( aProperties, 0, "OriginalSolidFillClr", aShapeProps[PROP_FillColor] );
+            PUT_PROP( aProperties, 1, "OriginalLnSolidFillClr", aShapeProps[PROP_LineColor] );
             OUString sColorFillScheme = aFillProperties.maFillColor.getSchemeName();
             if( !aFillProperties.maFillColor.isPlaceHolder() && !sColorFillScheme.isEmpty() )
             {
-                aProperties.realloc( 2 );
-                aProperties[1].Name = "SpPrSolidFillSchemeClr";
-                aProperties[1].Value = Any( sColorFillScheme );
+                aProperties.realloc( ++nSize );
+                PUT_PROP( aProperties, nSize - 1, "SpPrSolidFillSchemeClr", sColorFillScheme );
+            }
+            OUString sLnColorFillScheme = aLineProperties.maLineFill.maFillColor.getSchemeName();
+            if( !aLineProperties.maLineFill.maFillColor.isPlaceHolder() && !sLnColorFillScheme.isEmpty() )
+            {
+                aProperties.realloc( ++nSize );
+                PUT_PROP( aProperties, nSize - 1, "SpPrLnSolidFillSchemeClr", sLnColorFillScheme );
             }
             putPropertiesToGrabBag( aProperties );
         }

@@ -20,6 +20,8 @@
 #ifndef INCLUDED_OOX_DRAWINGML_LINEPROPERTIES_HXX
 #define INCLUDED_OOX_DRAWINGML_LINEPROPERTIES_HXX
 
+#include <com/sun/star/drawing/LineJoint.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 #include <oox/drawingml/fillproperties.hxx>
 
 namespace oox {
@@ -62,6 +64,13 @@ struct OOX_DLLPUBLIC LineProperties
                             ShapePropertyMap& rPropMap,
                             const GraphicHelper& rGraphicHelper,
                             sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
+
+    /** Calculates the line style attribute from the internal state of the object */
+    ::com::sun::star::drawing::LineStyle  getLineStyle() const;
+    /** Calculates the line joint attribute from the internal state of the object */
+    ::com::sun::star::drawing::LineJoint  getLineJoint() const;
+    /** Calculates the line width attribute from the internal state of the object */
+    sal_Int32           getLineWidth() const;
 };
 
 // ============================================================================

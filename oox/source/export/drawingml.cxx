@@ -386,6 +386,37 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
     sal_Bool bDashSet = sal_False;
     bool bNoFill = false;
 
+    // get InteropGrabBag and search the relevant attributes
+    OUString sColorFillScheme;
+    sal_uInt32 nOriginalColor( 0 ), nStyleColor( 0 ), nStyleLineWidth( 0 );
+    Sequence< PropertyValue > aStyleProperties;
+    drawing::LineStyle aStyleLineStyle( drawing::LineStyle_NONE );
+    drawing::LineJoint aStyleLineJoint( drawing::LineJoint_NONE );
+    if ( GetProperty( rXPropSet, "InteropGrabBag" ) )
+    {
+        Sequence< PropertyValue > aGrabBag;
+        mAny >>= aGrabBag;
+        for( sal_Int32 i=0; i < aGrabBag.getLength(); ++i )
+            if( aGrabBag[i].Name == "SpPrLnSolidFillSchemeClr" )
+                aGrabBag[i].Value >>= sColorFillScheme;
+            else if( aGrabBag[i].Name == "OriginalLnSolidFillClr" )
+                aGrabBag[i].Value >>= nOriginalColor;
+            else if( aGrabBag[i].Name == "StyleLnRef" )
+                aGrabBag[i].Value >>= aStyleProperties;
+        if( aStyleProperties.hasElements() )
+        {
+            for( sal_Int32 i=0; i < aStyleProperties.getLength(); ++i )
+                if( aStyleProperties[i].Name == "Color" )
+                    aStyleProperties[i].Value >>= nStyleColor;
+                else if( aStyleProperties[i].Name == "LineStyle" )
+                    aStyleProperties[i].Value >>= aStyleLineStyle;
+                else if( aStyleProperties[i].Name == "LineJoint" )
+                    aStyleProperties[i].Value >>= aStyleLineJoint;
+                else if( aStyleProperties[i].Name == "LineWidth" )
+                    aStyleProperties[i].Value >>= nStyleLineWidth;
+        }
+    }
+
     GET( nLineWidth, LineWidth );
 
     switch( aLineStyle ) {
@@ -414,12 +445,32 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
 
     mpFS->startElementNS( XML_a, XML_ln,
                           XML_cap, cap,
-                          XML_w, nLineWidth > 1 ? I64S( MM100toEMU( nLineWidth ) ) : NULL,
+                          XML_w, nLineWidth > 1 && nStyleLineWidth != nLineWidth ?
+                                  I64S( MM100toEMU( nLineWidth ) ) :NULL,
                           FSEND );
-    if( bColorSet )
-        WriteSolidFill( nColor );
 
-    if( bDashSet ) {
+    if( bColorSet )
+    {
+        if( nColor != nOriginalColor )
+            // the user has set a different color for the line
+            WriteSolidFill( nColor );
+        else if( !sColorFillScheme.isEmpty() )
+            // the line had a scheme color and the user didn't change it
+            WriteSolidFill( sColorFillScheme );
+        else if( aStyleProperties.hasElements() )
+        {
+            if( nColor != nStyleColor )
+                // the line style defines some color but it wasn't being used
+                WriteSolidFill( nColor );
+            // in case the shape used the style color and the user didn't change it,
+            // we must not write a <a: solidFill> tag.
+        }
+        else
+            WriteSolidFill( nColor );
+    }
+
+    if( bDashSet && aStyleLineStyle != drawing::LineStyle_DASH ) {
+        // line style is a dash and it was not set by the shape style
         mpFS->startElementNS( XML_a, XML_custDash, FSEND );
         int i;
         for( i = 0; i < aLineDash.Dots; i ++ )
@@ -439,20 +490,22 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
         LineJoint eLineJoint;
 
         mAny >>= eLineJoint;
-        switch( eLineJoint ) {
-            case LineJoint_NONE:
-            case LineJoint_MIDDLE:
-            case LineJoint_BEVEL:
-                mpFS->singleElementNS( XML_a, XML_bevel, FSEND );
-                break;
-            default:
-            case LineJoint_MITER:
-                mpFS->singleElementNS( XML_a, XML_miter, FSEND );
-                break;
-            case LineJoint_ROUND:
-                mpFS->singleElementNS( XML_a, XML_round, FSEND );
-                break;
-        }
+        if( aStyleLineJoint == LineJoint_NONE || aStyleLineJoint != eLineJoint )
+            // style-defined line joint does not exist, or is different from the shape's joint
+            switch( eLineJoint ) {
+                case LineJoint_NONE:
+                case LineJoint_MIDDLE:
+                case LineJoint_BEVEL:
+                    mpFS->singleElementNS( XML_a, XML_bevel, FSEND );
+                    break;
+                default:
+                case LineJoint_MITER:
+                    mpFS->singleElementNS( XML_a, XML_miter, FSEND );
+                    break;
+                case LineJoint_ROUND:
+                    mpFS->singleElementNS( XML_a, XML_round, FSEND );
+                    break;
+            }
     }
 
     if( !bNoFill )
@@ -1742,17 +1795,15 @@ void DrawingML::WriteShapeStyle( Reference< XPropertySet > xPropSet )
     // extract the relevant properties from the grab bag
     Sequence< PropertyValue > aGrabBag;
     Sequence< PropertyValue > aFillRefProperties;
+    Sequence< PropertyValue > aLnRefProperties;
     mAny >>= aGrabBag;
     for( sal_Int32 i=0; i < aGrabBag.getLength(); ++i)
         if( aGrabBag[i].Name == "StyleFillRef" )
-        {
             aGrabBag[i].Value >>= aFillRefProperties;
-            break;
-        }
+        else if( aGrabBag[i].Name == "StyleLnRef" )
+            aGrabBag[i].Value >>= aLnRefProperties;
 
-    // write mock <a:lnRef>
-    mpFS->singleElementNS( XML_a, XML_lnRef, XML_idx, I32S( 0 ), FSEND );
-
+    WriteStyleProperties( XML_lnRef, aLnRefProperties );
     WriteStyleProperties( XML_fillRef, aFillRefProperties );
 
     // write mock <a:effectRef>
