@@ -658,6 +658,7 @@ SyntaxHighlighter::Tokenizer::Tokenizer( HighlighterLanguage aLang ): aLanguage(
     aCharTypeTab[(int)'\n'] |= CHAR_EOL;
 
     ppListKeyWords = NULL;
+    nKeyWordCount = 0;
 }
 
 SyntaxHighlighter::Tokenizer::~Tokenizer( void )
