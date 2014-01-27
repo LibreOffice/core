@@ -57,6 +57,7 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet()
     ,::comphelper::OPropertyContainer(ODatabaseMetaDataResultSet_BASE::rBHelper)
     ,m_aStatement(NULL)
     ,m_xMetaData(NULL)
+    ,m_nColPos(0)
     ,m_bBOF(sal_True)
     ,m_bEOF(sal_True)
 {
