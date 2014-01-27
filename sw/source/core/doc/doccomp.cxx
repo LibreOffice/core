@@ -44,6 +44,8 @@
 #include <set>
 #include <cctype>
 
+#include <boost/scoped_array.hpp>
+
 using namespace ::com::sun::star;
 
 using ::std::vector;
@@ -1577,11 +1579,11 @@ void SwCompareData::CheckForChangesInLine( const CompareData& rData,
                               rStt, rEnd );
 
     int nMinLen = std::min( aCmp.GetLen1(), aCmp.GetLen2() );
-    int *pLcsDst = new int[ nMinLen ];
-    int *pLcsSrc = new int[ nMinLen ];
+    boost::scoped_array<int> pLcsDst(new int[ nMinLen ]);
+    boost::scoped_array<int> pLcsSrc(new int[ nMinLen ]);
 
     FastCommonSubseq subseq( aCmp );
-    int nLcsLen = subseq.Find( pLcsDst, pLcsSrc );
+    int nLcsLen = subseq.Find( pLcsDst.get(), pLcsSrc.get() );
     for (int i = 0; i <= nLcsLen; i++)
     {
         // Beginning of inserted lines (inclusive)
