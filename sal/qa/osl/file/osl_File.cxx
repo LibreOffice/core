@@ -1417,7 +1417,7 @@ namespace osl_FileBase
         {
             nError1 = FileBase::createTempFile( pUStr_DirURL, pHandle, 0 );
             //the temp file will be removed when return from createTempFile
-            bOK = ( pHandle != NULL && pHandle != 0);
+            bOK = (pHandle != NULL && nError1 == osl::FileBase::E_None);
             if ( sal_True == bOK )
                 osl_closeFile( *pHandle );
 
