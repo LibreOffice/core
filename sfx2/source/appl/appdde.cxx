@@ -236,7 +236,7 @@ namespace {
 
     Checks if 'rCmd' of the event 'rEvent' is (without '(') and then assemble
     this data into a <ApplicationEvent>, which is then excecuted through
-    <Application::AppEvent()>. If 'rCmd' is the given event 'rEvent', then
+    <Application::HandleAppEvent()>. If 'rCmd' is the given event 'rEvent', then
     TRUE is returned, otherwise FALSE.
 
     [Example]
@@ -299,7 +299,8 @@ sal_Bool SfxAppEvent_Impl( const OUString& rCmd, const OUString& rEvent,
                 }
             }
 
-            GetpApp()->AppEvent( ApplicationEvent(eType, aData) );
+            // currently this doesn't actually do anything
+            GetpApp()->HandleAppEvent( ApplicationEvent(eType, aData) );
             return sal_True;
         }
     }
