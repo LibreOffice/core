@@ -132,6 +132,7 @@ JPEGWriter::JPEGWriter( SvStream& rStream, const css::uno::Sequence< css::beans:
     mrStream     ( rStream ),
     mpReadAccess ( NULL ),
     mpBuffer     ( NULL ),
+    mbNative     ( false ),
     mpExpWasGrey ( pExportWasGrey )
 {
     FilterConfigItem aConfigItem( (css::uno::Sequence< css::beans::PropertyValue >*) pFilterData );
