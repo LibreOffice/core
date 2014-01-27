@@ -3484,9 +3484,11 @@ void ServiceType::dumpHxxFile(
                 o << indent()
                   << ("throw ::css::uno::DeploymentException("
                       "::rtl::OUString( "
-                      "\"component context fails to supply service ")
-                  << name_ << " of type " << baseName
-                  << ": \" ) + the_exception.Message, the_context);\n";
+                      "\"component context fails to supply service \" ) + ")
+                  << "\"" << name_ << "\" + "
+                  << "\" of type \" + "
+                  << "\"" << baseName << "\" + "
+                  << "\": \" + the_exception.Message, the_context);\n";
                 dec();
                 o << indent() << "}\n" << indent()
                   << "if (!the_instance.is()) {\n";
@@ -3494,9 +3496,11 @@ void ServiceType::dumpHxxFile(
                 o << indent()
                   << ("throw ::css::uno::DeploymentException("
                       "::rtl::OUString( "
-                      "\"component context fails to supply service ")
-                  << name_ << " of type " << baseName
-                  << "\" ), the_context);\n";
+                      "\"component context fails to supply service \" ) + ")
+                  << "\"" << name_ << "\" + "
+                  << "\" of type \" + "
+                  << "\"" << baseName << "\""
+                  << ", the_context);\n";
                 dec();
                 o << indent() << "}\n" << indent() << "return the_instance;\n";
                 dec();
