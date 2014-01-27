@@ -910,8 +910,8 @@ public:
     virtual void      SetText( const OUString& rStr );
     virtual OUString      GetText() const;
     // return the actual text displayed
-    // this may have e.g. accellerators removed or portions
-    // replaced by ellipsis
+    // this may have e.g. accelerators removed or portions
+    // replaced by ellipses
     virtual OUString      GetDisplayText() const;
     // gets the visible background color. for transparent windows
     // this may be the parent's background color; for controls
