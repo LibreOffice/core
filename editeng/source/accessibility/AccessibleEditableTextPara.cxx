@@ -885,6 +885,7 @@ namespace accessibility
             STR("CharPosture");
             STR("CharShadowed");
             STR("CharStrikeout");
+            STR("CharCaseMap");
             STR("CharUnderline");
             STR("CharUnderlineColor");
             STR("CharWeight");

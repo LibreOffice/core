@@ -178,6 +178,7 @@ namespace
     {
         if(!rInfo.maText.isEmpty() && rInfo.mnTextLen)
         {
+            OUString caseMappedText = rInfo.mrFont.CalcCaseMap( rInfo.maText );
             basegfx::B2DVector aFontScaling;
             drawinglayer::attribute::FontAttribute aFontAttribute(
                 drawinglayer::primitive2d::getFontAttributeFromVclFont(
@@ -329,7 +330,7 @@ namespace
 
                     // attributes for TextSimplePortionPrimitive2D
                     aNewTransform,
-                    rInfo.maText,
+                    caseMappedText,
                     rInfo.mnTextStart,
                     rInfo.mnTextLen,
                     aDXArray,
@@ -356,7 +357,7 @@ namespace
                 // TextSimplePortionPrimitive2D is enough
                 pNewPrimitive = new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
                     aNewTransform,
-                    rInfo.maText,
+                    caseMappedText,
                     rInfo.mnTextStart,
                     rInfo.mnTextLen,
                     aDXArray,
