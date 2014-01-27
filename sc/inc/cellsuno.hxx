@@ -377,7 +377,9 @@ public:
 
                             // XChartDataArray
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > > SAL_CALL
-                            getData() throw(::com::sun::star::uno::RuntimeException);
+                            getData()
+                                    throw(::com::sun::star::uno::RuntimeException,
+                                          std::exception);
     virtual void SAL_CALL   setData( const ::com::sun::star::uno::Sequence<
                                 ::com::sun::star::uno::Sequence< double > >& aData )
                                     throw(::com::sun::star::uno::RuntimeException);

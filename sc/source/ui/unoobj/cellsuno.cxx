@@ -3063,7 +3063,7 @@ ScMemChart* ScCellRangesBase::CreateMemChart_Impl() const
 }
 
 uno::Sequence< uno::Sequence<double> > SAL_CALL ScCellRangesBase::getData()
-                                                throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScMemChart* pMemChart = CreateMemChart_Impl();
