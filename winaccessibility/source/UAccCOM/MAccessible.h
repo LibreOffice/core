@@ -197,12 +197,12 @@ private:
 
     // the helper methods in order to implement the above public methods
     IMAccessible* GetChildInterface(long dChildIndex);//notice here the parameter is child index,not child id
-    IMAccessible* GetNavigateChildForDM(VARIANT varCur,short flags);//for decendant manage
+    IMAccessible* GetNavigateChildForDM(VARIANT varCur,short flags);//for descendant manage
     HRESULT GetFirstChild(VARIANT varStart,VARIANT* pvarEndUpAt);//for accNavigate implementation
     HRESULT GetLastChild(VARIANT varStart,VARIANT* pvarEndUpAt);//for accNavigate implementation
     HRESULT GetNextSibling(VARIANT varStart,VARIANT* pvarEndUpAt);//for accNavigate implementation
     HRESULT GetPreSibling(VARIANT varStart,VARIANT* pvarEndUpAt);//for accNavigate implementation
-    BOOL IsDecendantManage();//identify whether the current COM belongs to manage_decendant roles
+    BOOL IsDescendantManage();//identify whether the current COM belongs to manage_descendant roles
 
     // the following private methods are used to implement accSelect method
     HRESULT SelectChild(css::accessibility::XAccessible* pItem);
@@ -222,7 +222,7 @@ private:
 public:
     STDMETHOD(Get_XAccChildID)(/*[out,retval]*/ long* childID);
     // AccObjectManagerAgent is a management object in UNO, here keep its pointer for
-    // the implementation of accNavigate when decendant manage happens for List,Tree, or Table
+    // the implementation of accNavigate when descendant manage happens for List,Tree, or Table
     // AccObjectManagerAgent and the following UNO objects XAccessble,XAccessibleSelection,
     // XAccessibleAction are all used to operate UNO accessiblility information directly when
     // implement some specific MSAA methods,such as accSelection,accNavigate

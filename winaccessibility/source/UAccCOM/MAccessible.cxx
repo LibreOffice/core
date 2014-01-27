@@ -137,7 +137,7 @@ BSTR IA2_STATES_NAME[] =
     _T("Horizontal"),
     _T("Iconified"),
     _T("Invalid Entry"),
-    _T("Manages Decendents"),
+    _T("Manages Descendants"),
     _T("Modal"),
     _T("Multi Line"),
     _T("Opaque"),
@@ -1468,18 +1468,18 @@ IMAccessible* CMAccessible::GetChildInterface(long dChildID)//for test
 }
 
 /**
-* For List, tree and table,these roles belong to manage_decendant in UNO,
+* For List, tree and table,these roles belong to manage_descendant in UNO,
 * need to process specifically when navigate
-* @return  BOOL, if it is decendantmanager, return true.
+* @return  BOOL, if it is descendantmanager, return true.
 */
-BOOL CMAccessible::IsDecendantManage()
+BOOL CMAccessible::IsDescendantManage()
 {
 
     return (m_iRole==ROLE_SYSTEM_LIST)||(m_iRole==ROLE_SYSTEM_OUTLINE)||(m_iRole==ROLE_SYSTEM_TABLE);
 }
 
 /**
-* for decendantmanager circumstance,provide child interface when navigate
+* for descendantmanager circumstance,provide child interface when navigate
 * @param    varCur, the current child.
 * @param    flags, the navigation direction.
 * @return  IMAccessible*, the child of the end up node.
@@ -1558,7 +1558,7 @@ IMAccessible* CMAccessible::GetNavigateChildForDM(VARIANT varCur, short flags)
 
 /**
 * Return first child for parent container, process differently according
-* to whether it is decendant manage
+* to whether it is descendant manage
 * @param    varStart, the start child id of this navigation action.
 * @param    pvarEndUpAt, [in,out] the end up child of this navigation action.
 * @return   S_OK if successful and E_FAIL if failure.
@@ -1595,7 +1595,7 @@ HRESULT CMAccessible::GetFirstChild(VARIANT varStart,VARIANT* pvarEndUpAt)
 
 /**
 * Return last child for parent container, process differently according
-* to whether it is decendant manage
+* to whether it is descendant manage
 * @param    varStart, the start child id of this navigation action.
 * @param    pvarEndUpAt, [in,out] the end up child of this navigation action.
 * @return   S_OK if successful and E_FAIL if failure.
@@ -1630,7 +1630,7 @@ HRESULT CMAccessible::GetLastChild(VARIANT varStart,VARIANT* pvarEndUpAt)
 }
 
 /**
-* The method GetNextSibling is general, whatever it is decendant manage or not
+* The method GetNextSibling is general, whatever it is descendant manage or not
 * Get the next sibling object.
 * @param    varStart, the start child id of this navigation action.
 * @param    pvarEndUpAt, [in,out] the end up child of this navigation action.
@@ -1666,7 +1666,7 @@ HRESULT CMAccessible::GetNextSibling(VARIANT varStart,VARIANT* pvarEndUpAt)
 }
 
 /**
-*the method GetPreSibling is general, whatever it is decendant manage or not
+*the method GetPreSibling is general, whatever it is descendant manage or not
 * @param    varStart, the start child id of this navigation action.
 * @param    pvarEndUpAt, [in,out] the end up child of this navigation action.
 * @return   S_OK if successful and E_FAIL if failure.
