@@ -373,13 +373,13 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
         sal_Int32 nLineWidth = convertEmuToHmm( moLineWidth.get( 0 ) );
 
         // create line dash from preset dash token (not for invisible line)
-        if( (eLineStyle != drawing::LineStyle_NONE) && (moPresetDash.differsFrom( XML_solid ) || (!moPresetDash && !maCustomDash.empty())) )
+        if( (eLineStyle != drawing::LineStyle_NONE) && (moPresetDash.differsFrom( XML_solid ) || !maCustomDash.empty()) )
         {
             LineDash aLineDash;
             aLineDash.Style = lclGetDashStyle( moLineCap.get( XML_rnd ) );
 
             // convert preset dash or custom dash
-            if( moPresetDash.has() )
+            if( moPresetDash.differsFrom( XML_solid ) )
                 lclConvertPresetDash( aLineDash, moPresetDash.get() );
             else
                 lclConvertCustomDash( aLineDash, maCustomDash );
