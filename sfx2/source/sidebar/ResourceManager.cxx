@@ -370,7 +370,7 @@ void ResourceManager::ReadContextList (
             }
             else
             {
-                OSL_ASSERT("expecting three or four values per ContextList entry, separated by comma");
+                OSL_FAIL("expecting three or four values per ContextList entry, separated by comma");
                 continue;
             }
         }
@@ -378,7 +378,7 @@ void ResourceManager::ReadContextList (
         const OUString sContextName (sValue.getToken(0, ',', nCharacterIndex).trim());
         if (nCharacterIndex < 0)
         {
-            OSL_ASSERT("expecting three or four values per ContextList entry, separated by comma");
+            OSL_FAIL("expecting three or four values per ContextList entry, separated by comma");
             continue;
         }
 
@@ -436,7 +436,7 @@ void ResourceManager::ReadContextList (
             }
             else
             {
-                OSL_ASSERT("application name not recognized");
+                OSL_FAIL("application name not recognized");
                 continue;
             }
         }
@@ -450,7 +450,7 @@ void ResourceManager::ReadContextList (
         const EnumContext::Context eContext (EnumContext::GetContextEnum(sContextName));
         if (eContext == EnumContext::Context_Unknown)
         {
-            OSL_ASSERT("context name not recognized");
+            OSL_FAIL("context name not recognized");
             continue;
         }
 
@@ -463,7 +463,7 @@ void ResourceManager::ReadContextList (
             bIsInitiallyVisible = false;
         else
         {
-            OSL_ASSERT("unrecognized state");
+            OSL_FAIL("unrecognized state");
             continue;
         }
 
