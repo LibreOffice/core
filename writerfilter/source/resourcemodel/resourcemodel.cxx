@@ -195,13 +195,6 @@ void WW8TableManager::endParagraphGroup()
     TableManager<string, TablePropsRef_t>::endParagraphGroup();
 }
 
-void WW8TableHandler::entry(int /*pos*/,
-                            writerfilter::Reference<Properties>::Pointer_t /*ref*/)
-{
-    output.addItem("<tableentry>");
-    output.addItem("</tableentry>");
-}
-
 void WW8BinaryObjHandler::data
 (const sal_uInt8 * buf, size_t length,
  writerfilter::Reference<Properties>::Pointer_t /*pRef*/)

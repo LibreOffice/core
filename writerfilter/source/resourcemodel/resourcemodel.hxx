@@ -35,23 +35,6 @@ public:
                       writerfilter::Reference<Properties>::Pointer_t ref);
 };
 
-class WW8TableHandler : public Table
-{
-    WW8TableManager* mpTableManager;
-
-public:
-    WW8TableHandler(WW8TableManager* pTableManager)
-        : mpTableManager(pTableManager)
-    {
-    }
-
-    virtual ~WW8TableHandler()
-    {
-    }
-
-    void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
-};
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
