@@ -593,6 +593,13 @@ sal_Bool SdrMarkView::ImpIsFrameHandles() const
             bFrmHdl=!pObj->hasSpecialDrag();
         }
     }
+
+    // no FrameHdl for crop
+    if(bFrmHdl && SDRDRAG_CROP == eDragMode)
+    {
+        bFrmHdl = sal_False;
+    }
+
     return bFrmHdl;
 }
 
@@ -712,67 +719,6 @@ void SdrMarkView::SetMarkHandles()
                         pHdl->SetObjHdlNum(sal_uInt16(i-nSiz0));
                     }
                 }
-                else if( eDragMode==SDRDRAG_CROP )
-                {
-                    const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(pMarkedObj);
-
-                    if(pSdrGrafObj)
-                    {
-                        const SdrGrafCropItem& rCrop = static_cast< const SdrGrafCropItem& >(pSdrGrafObj->GetMergedItem(SDRATTR_GRAFCROP));
-
-                        if(rCrop.GetLeft() || rCrop.GetTop() || rCrop.GetRight() ||rCrop.GetBottom())
-                        {
-                            basegfx::B2DHomMatrix aMatrix;
-                            basegfx::B2DPolyPolygon aPolyPolygon;
-
-                            pSdrGrafObj->TRGetBaseGeometry(aMatrix, aPolyPolygon);
-
-                            // decompose to have current translate and scale
-                            basegfx::B2DVector aScale, aTranslate;
-                            double fRotate, fShearX;
-
-                            aMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
-
-                            if(!aScale.equalZero())
-                            {
-                                // get crop scale
-                                const basegfx::B2DVector aCropScaleFactor(
-                                    pSdrGrafObj->GetGraphicObject().calculateCropScaling(
-                                        aScale.getX(),
-                                        aScale.getY(),
-                                        rCrop.GetLeft(),
-                                        rCrop.GetTop(),
-                                        rCrop.GetRight(),
-                                        rCrop.GetBottom()));
-
-                                // apply crop scale
-                                const double fCropLeft(rCrop.GetLeft() * aCropScaleFactor.getX());
-                                const double fCropTop(rCrop.GetTop() * aCropScaleFactor.getY());
-                                const double fCropRight(rCrop.GetRight() * aCropScaleFactor.getX());
-                                const double fCropBottom(rCrop.GetBottom() * aCropScaleFactor.getY());
-
-                                aHdl.AddHdl(
-                                    new SdrCropViewHdl(
-                                        aMatrix,
-                                        pSdrGrafObj->GetGraphicObject().GetGraphic(),
-                                        fCropLeft,
-                                        fCropTop,
-                                        fCropRight,
-                                        fCropBottom,
-                                        pSdrGrafObj->IsMirrored()));
-                            }
-                        }
-                    }
-
-                    aHdl.AddHdl(new SdrCropHdl(aRect.TopLeft()     ,HDL_UPLFT));
-                    aHdl.AddHdl(new SdrCropHdl(aRect.TopCenter()   ,HDL_UPPER));
-                    aHdl.AddHdl(new SdrCropHdl(aRect.TopRight()    ,HDL_UPRGT));
-                    aHdl.AddHdl(new SdrCropHdl(aRect.LeftCenter()  ,HDL_LEFT ));
-                    aHdl.AddHdl(new SdrCropHdl(aRect.RightCenter() ,HDL_RIGHT));
-                    aHdl.AddHdl(new SdrCropHdl(aRect.BottomLeft()  ,HDL_LWLFT));
-                    aHdl.AddHdl(new SdrCropHdl(aRect.BottomCenter(),HDL_LOWER));
-                    aHdl.AddHdl(new SdrCropHdl(aRect.BottomRight() ,HDL_LWRGT));
-                }
                 else
                 {
                     bool bWdt0=aRect.Left()==aRect.Right();
@@ -802,47 +748,65 @@ void SdrMarkView::SetMarkHandles()
         }
         else
         {
-            for (sal_uIntPtr nMarkNum=0; nMarkNum<nMarkAnz; nMarkNum++)
+            bool bDone(false);
+
+            // moved crop handling to non-frame part and the handle creation to SdrGrafObj
+            if(1 == nMarkAnz && pMarkedObj && SDRDRAG_CROP == eDragMode)
             {
-                const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
-                SdrObject* pObj=pM->GetMarkedSdrObj();
-                SdrPageView* pPV=pM->GetPageView();
-                const sal_uIntPtr nSiz0=aHdl.GetHdlCount();
-                pObj->AddToHdlList(aHdl);
-                const sal_uIntPtr nSiz1=aHdl.GetHdlCount();
-                bool bPoly=pObj->IsPolyObj();
-                const SdrUShortCont* pMrkPnts=pM->GetMarkedPoints();
-                for (sal_uIntPtr i=nSiz0; i<nSiz1; i++)
+                const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(pMarkedObj);
+
+                if(pSdrGrafObj)
                 {
-                    SdrHdl* pHdl=aHdl.GetHdl(i);
-                    pHdl->SetPos( pHdl->GetPos() + aGridOff );
-                    pHdl->SetObj(pObj);
-                    pHdl->SetPageView(pPV);
-                    pHdl->SetObjHdlNum(sal_uInt16(i-nSiz0));
-                    if (bPoly)
+                    pSdrGrafObj->addCropHandles(aHdl);
+                    bDone = true;
+                }
+            }
+
+            if(!bDone)
+            {
+                for (sal_uIntPtr nMarkNum=0; nMarkNum<nMarkAnz; nMarkNum++)
+                {
+                    const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
+                    SdrObject* pObj=pM->GetMarkedSdrObj();
+                    SdrPageView* pPV=pM->GetPageView();
+                    const sal_uIntPtr nSiz0=aHdl.GetHdlCount();
+                    pObj->AddToHdlList(aHdl);
+                    const sal_uIntPtr nSiz1=aHdl.GetHdlCount();
+                    bool bPoly=pObj->IsPolyObj();
+                    const SdrUShortCont* pMrkPnts=pM->GetMarkedPoints();
+                    for (sal_uIntPtr i=nSiz0; i<nSiz1; i++)
                     {
-                        sal_Bool bSelected=pMrkPnts!=NULL
-                                  && pMrkPnts->find( sal_uInt16(i-nSiz0) ) != pMrkPnts->end();
-                        pHdl->SetSelected(bSelected);
-                        if (bPlusHdlAlways || bSelected)
+                        SdrHdl* pHdl=aHdl.GetHdl(i);
+                        pHdl->SetPos( pHdl->GetPos() + aGridOff );
+                        pHdl->SetObj(pObj);
+                        pHdl->SetPageView(pPV);
+                        pHdl->SetObjHdlNum(sal_uInt16(i-nSiz0));
+
+                        if (bPoly)
                         {
-                            sal_uInt32 nPlusAnz=pObj->GetPlusHdlCount(*pHdl);
-                            for (sal_uInt32 nPlusNum=0; nPlusNum<nPlusAnz; nPlusNum++)
+                            sal_Bool bSelected=pMrkPnts!=NULL
+                                      && pMrkPnts->find( sal_uInt16(i-nSiz0) ) != pMrkPnts->end();
+                            pHdl->SetSelected(bSelected);
+                            if (bPlusHdlAlways || bSelected)
                             {
-                                SdrHdl* pPlusHdl=pObj->GetPlusHdl(*pHdl,nPlusNum);
-                                if (pPlusHdl!=NULL)
+                                sal_uInt32 nPlusAnz=pObj->GetPlusHdlCount(*pHdl);
+                                for (sal_uInt32 nPlusNum=0; nPlusNum<nPlusAnz; nPlusNum++)
                                 {
-                                    pPlusHdl->SetObj(pObj);
-                                    pPlusHdl->SetPageView(pPV);
-                                    pPlusHdl->SetPlusHdl(sal_True);
-                                    aHdl.AddHdl(pPlusHdl);
+                                    SdrHdl* pPlusHdl=pObj->GetPlusHdl(*pHdl,nPlusNum);
+                                    if (pPlusHdl!=NULL)
+                                    {
+                                        pPlusHdl->SetObj(pObj);
+                                        pPlusHdl->SetPageView(pPV);
+                                        pPlusHdl->SetPlusHdl(sal_True);
+                                        aHdl.AddHdl(pPlusHdl);
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            } // for nMarkNum
-        } // if bFrmHdl else
+            }
+        }
 
         // GluePoint handles
         for (sal_uIntPtr nMarkNum=0; nMarkNum<nMarkAnz; nMarkNum++)

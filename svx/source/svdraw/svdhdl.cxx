@@ -2212,8 +2212,14 @@ SdrHdl* SdrHdlList::GetHdl(SdrHdlKind eKind1) const
 // SdrCropHdl
 // --------------------------------------------------------------------
 
-SdrCropHdl::SdrCropHdl(const Point& rPnt, SdrHdlKind eNewKind)
-: SdrHdl( rPnt, eNewKind )
+SdrCropHdl::SdrCropHdl(
+    const Point& rPnt,
+    SdrHdlKind eNewKind,
+    double fShearX,
+    double fRotation)
+:   SdrHdl(rPnt, eNewKind),
+    mfShearX(fShearX),
+    mfRotation(fRotation)
 {
 }
 
@@ -2310,18 +2316,29 @@ void SdrCropHdl::CreateB2dIAObject()
 
                         const sal_uInt32 nBlinkTime = sal::static_int_cast<sal_uInt32>(rStyleSettings.GetCursorBlinkTime());
 
-                        pOverlayObject = new ::sdr::overlay::OverlayAnimatedBitmapEx(aPosition, aBmpEx1, aBmpEx2, nBlinkTime,
+                        pOverlayObject = new ::sdr::overlay::OverlayAnimatedBitmapEx(
+                            aPosition,
+                            aBmpEx1,
+                            aBmpEx2,
+                            nBlinkTime,
                             (sal_uInt16)(aBmpEx1.GetSizePixel().Width() - 1) >> 1,
                             (sal_uInt16)(aBmpEx1.GetSizePixel().Height() - 1) >> 1,
                             (sal_uInt16)(aBmpEx2.GetSizePixel().Width() - 1) >> 1,
-                            (sal_uInt16)(aBmpEx2.GetSizePixel().Height() - 1) >> 1);
+                            (sal_uInt16)(aBmpEx2.GetSizePixel().Height() - 1) >> 1,
+                            mfShearX,
+                            mfRotation);
                     }
                     else
                     {
                         // create centered handle as default
-                        pOverlayObject = new ::sdr::overlay::OverlayBitmapEx(aPosition, aBmpEx1,
+                        pOverlayObject = new ::sdr::overlay::OverlayBitmapEx(
+                            aPosition,
+                            aBmpEx1,
                             (sal_uInt16)(aBmpEx1.GetSizePixel().Width() - 1) >> 1,
-                            (sal_uInt16)(aBmpEx1.GetSizePixel().Height() - 1) >> 1);
+                            (sal_uInt16)(aBmpEx1.GetSizePixel().Height() - 1) >> 1,
+                            0.0,
+                            mfShearX,
+                            mfRotation);
                     }
 
                     // OVERLAYMANAGER
@@ -2337,6 +2354,8 @@ void SdrCropHdl::CreateB2dIAObject()
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// with the correction of crop handling I could get rid of the extra mirroring flag, adapted stuff
+// accordingly
 
 SdrCropViewHdl::SdrCropViewHdl(
     const basegfx::B2DHomMatrix& rObjectTransform,
@@ -2344,16 +2363,14 @@ SdrCropViewHdl::SdrCropViewHdl(
     double fCropLeft,
     double fCropTop,
     double fCropRight,
-    double fCropBottom,
-    bool bExtraMirrorXFromGraphic)
+    double fCropBottom)
 :   SdrHdl(Point(), HDL_USER),
     maObjectTransform(rObjectTransform),
     maGraphic(rGraphic),
     mfCropLeft(fCropLeft),
     mfCropTop(fCropTop),
     mfCropRight(fCropRight),
-    mfCropBottom(fCropBottom),
-    mbExtraMirrorXFromGraphic(bExtraMirrorXFromGraphic)
+    mfCropBottom(fCropBottom)
 {
 }
 
@@ -2405,15 +2422,11 @@ void SdrCropViewHdl::CreateB2dIAObject()
     if(bMirroredX)
     {
         aScale.setX(-aScale.getX());
-        fCropLeft = mfCropRight;
-        fCropRight = mfCropLeft;
     }
 
     if(bMirroredY)
     {
         aScale.setY(-aScale.getY());
-        fCropTop = mfCropBottom;
-        fCropBottom = mfCropTop;
     }
 
     // create target translate and scale
@@ -2478,14 +2491,13 @@ void SdrCropViewHdl::CreateB2dIAObject()
 
     // create cropped transformation
     basegfx::B2DHomMatrix aCroppedTransform;
-    const bool bCombinedMirrorX(mbExtraMirrorXFromGraphic || bMirroredX);
 
     aCroppedTransform.scale(
-        bCombinedMirrorX ? -aCropped.getWidth() : aCropped.getWidth(),
-        bMirroredY ? -aCropped.getHeight() : aCropped.getHeight());
+        aCropped.getWidth(),
+        aCropped.getHeight());
     aCroppedTransform.translate(
-        bCombinedMirrorX ? aCropped.getMaxX() : aCropped.getMinX(),
-        bMirroredY ? aCropped.getMaxY() : aCropped.getMinY());
+        aCropped.getMinX(),
+        aCropped.getMinY());
     aCroppedTransform = maObjectTransform * aCroppedTransform;
 
     // prepare graphic primitive (tranformed)

@@ -39,8 +39,10 @@ namespace sdr
             sal_uInt16                              mnCenterX;
             sal_uInt16                              mnCenterY;
 
-            // optional transparency
-            double mfAlpha;
+            // optional transparency, shear and rotation
+            double                                  mfAlpha;
+            double                                  mfShearX;
+            double                                  mfRotation;
 
             virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
@@ -48,13 +50,21 @@ namespace sdr
             OverlayBitmapEx(
                 const basegfx::B2DPoint& rBasePos,
                 const BitmapEx& rBitmapEx,
-                sal_uInt16 nCenX = 0, sal_uInt16 nCenY = 0, double fAlpha = 0.0 );
+                sal_uInt16 nCenX = 0,
+                sal_uInt16 nCenY = 0,
+                double fAlpha = 0.0,
+                double fShearX = 0.0,
+                double fRotation = 0.0);
             virtual ~OverlayBitmapEx();
 
             const BitmapEx& getBitmapEx() const { return maBitmapEx; }
 
             sal_uInt16 getCenterX() const { return mnCenterX; }
             sal_uInt16 getCenterY() const { return mnCenterY; }
+
+            // get shearX and rotation
+            double getShearX() const { return mfShearX; }
+            double getRotation() const { return mfRotation; }
         };
     } // end of namespace overlay
 } // end of namespace sdr

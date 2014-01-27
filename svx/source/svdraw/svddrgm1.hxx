@@ -248,13 +248,16 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //   SdrDragCrop
 
-class SdrDragCrop : public SdrDragResize
+// derive from SdrDragObjOwn to have handles aligned to object when it
+// is sheared or rotated
+class SdrDragCrop : public SdrDragObjOwn
 {
 public:
     TYPEINFO();
     SdrDragCrop(SdrDragView& rNewView);
 
     virtual void TakeSdrDragComment(OUString& rStr) const;
+    virtual bool BeginSdrDrag();
     virtual bool EndSdrDrag(bool bCopy);
     virtual Pointer GetSdrDragPointer() const;
 };
