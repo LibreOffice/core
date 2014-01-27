@@ -258,6 +258,7 @@ private:
                                 LanguageType eOldLanguage,
                                 LanguageType eNewLanguage);
 
+        void setTabs();
 public:
                         OfaAutocorrReplacePage( Window* pParent, const SfxItemSet& rSet );
                         ~OfaAutocorrReplacePage();
@@ -269,6 +270,7 @@ public:
     virtual void        ActivatePage( const SfxItemSet& );
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
     virtual void        Resize();
+    virtual void        StateChanged(StateChangedType nStateChange);
 
     void    SetLanguage(LanguageType eSet);
     void    DeleteEntry(OUString sShort, OUString sLong);

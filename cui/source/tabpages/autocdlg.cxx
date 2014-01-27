@@ -872,11 +872,26 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage( Window* pParent,
     m_pShortED->SetSpaces(true);
 }
 
+void OfaAutocorrReplacePage::setTabs()
+{
+    m_pReplaceTLB->SetTab(0, m_pShortED->GetPosPixel().X(), MAP_PIXEL);
+    m_pReplaceTLB->SetTab(1, m_pReplaceED->GetPosPixel().X(), MAP_PIXEL);
+}
+
+void OfaAutocorrReplacePage::StateChanged(StateChangedType nStateChange)
+{
+    SfxTabPage::StateChanged(nStateChange);
+
+    if (nStateChange == STATE_CHANGE_INITSHOW)
+    {
+        setTabs();
+    }
+}
+
 void OfaAutocorrReplacePage::Resize()
 {
     SfxTabPage::Resize();
-    m_pReplaceTLB->SetTab(0, m_pShortED->GetPosPixel().X(), MAP_PIXEL);
-    m_pReplaceTLB->SetTab(1, m_pReplaceED->GetPosPixel().X(), MAP_PIXEL);
+    setTabs();
 }
 
 OfaAutocorrReplacePage::~OfaAutocorrReplacePage()
