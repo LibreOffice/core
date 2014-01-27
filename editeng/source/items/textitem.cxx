@@ -3390,7 +3390,7 @@ sal_uInt16 SvxCharReliefItem::GetVersion( sal_uInt16 nFFVer ) const
 
 OUString SvxCharReliefItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
-    DBG_ASSERT( RID_SVXITEMS_RELIEF_ENGRAVED - RID_SVXITEMS_RELIEF_NONE,
+    DBG_ASSERT( nPos < RID_SVXITEMS_RELIEF_ENGRAVED - RID_SVXITEMS_RELIEF_NONE,
                     "enum overflow" );
     return EE_RESSTR(RID_SVXITEMS_RELIEF_BEGIN + nPos);
 }
