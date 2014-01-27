@@ -41,7 +41,13 @@ struct SbxAppData
     LanguageType        eBasicFormaterLangType;
     // It might be useful to store this class 'global' because some string reosurces are saved here
 
-    SbxAppData() : eSbxError( SbxERR_OK ), aFacs(), pBasicFormater( NULL ) {}
+    SbxAppData()
+        : eSbxError(SbxERR_OK)
+        , aFacs()
+        , pBasicFormater(NULL)
+        , eBasicFormaterLangType(LANGUAGE_DONTKNOW)
+    {
+    }
     ~SbxAppData();
 };
 
