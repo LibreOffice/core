@@ -163,7 +163,8 @@ namespace accessibility
         return bShowing;
     }
     // -----------------------------------------------------------------------------
-    Rectangle AccessibleListBoxEntry::GetBoundingBox() throw ( lang::DisposedException )
+    Rectangle AccessibleListBoxEntry::GetBoundingBox()
+        throw (lang::DisposedException, uno::RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -172,7 +173,8 @@ namespace accessibility
         return GetBoundingBox_Impl();
     }
     // -----------------------------------------------------------------------------
-    Rectangle AccessibleListBoxEntry::GetBoundingBoxOnScreen() throw ( lang::DisposedException )
+    Rectangle AccessibleListBoxEntry::GetBoundingBoxOnScreen()
+        throw (lang::DisposedException, uno::RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
