@@ -1041,6 +1041,11 @@ void SmAlignDialog::WriteTo(SmFormat &rFormat) const
 SmShowSymbolSetWindow::SmShowSymbolSetWindow(Window *pParent, WinBits nStyle)
     : Control(pParent, nStyle)
     , m_pVScrollBar(0)
+    , nLen(0)
+    , nRows(0)
+    , nColumns(0)
+    , nXOffset(0)
+    , nYOffset(0)
     , nSelectSymbol(SYMBOL_NONE)
 {
     ColorData nBgCol, nTxtCol;
