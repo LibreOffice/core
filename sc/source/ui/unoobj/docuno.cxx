@@ -3397,8 +3397,8 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
 }
 
 uno::Any SAL_CALL ScTableRowsObj::getPropertyValue( const OUString& aPropertyName )
-                throw(beans::UnknownPropertyException, lang::WrappedTargetException,
-                        uno::RuntimeException)
+    throw(beans::UnknownPropertyException, lang::WrappedTargetException,
+          uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (!pDocShell)
