@@ -285,7 +285,7 @@ sub setglobalvariables
         }
     }
 
-    if (( $installer::globals::compiler =~ /unxmacxi/ ) || ( $installer::globals::compiler =~ /unxmacxp/ ))
+    if( $installer::globals::compiler =~ /unxmac/ )
     {
         $installer::globals::ismacbuild = 1;
 
