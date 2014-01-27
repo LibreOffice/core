@@ -154,6 +154,7 @@ umask 022
 # generate docs
 echo "generating doxygen docs"
 DOXYGEN_REF_TAGFILES=""
+INPUT_PROJECTS=vcl
 for PROJECT in $INPUT_PROJECTS;
 do
   # avoid processing of full project subdirs, only add source and inc

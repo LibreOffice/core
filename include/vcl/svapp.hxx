@@ -297,7 +297,7 @@ public:
     */
     virtual void                UserEvent( sal_uLong nEvent, void* pEventData );
 
-    /** @name Change notification functions
+    /** @name Change Notification Functions
 
         Functions that notify when changes occur in the application.
     */
@@ -329,7 +329,7 @@ public:
 
     ///@}
 
-    /** @name CommandLine
+    /** @name Command Line Processing
 
         Command line processing is done via the following functions. They
         give the number of parameters, the parameters themselves and a way
@@ -366,7 +366,7 @@ public:
 
     ///@}
 
-    /** @name ErrorHandling
+    /** @name Error Handling
 
         \em Very rudimentary error handling is done by these
         functions.
@@ -678,7 +678,7 @@ public:
 
     ///@}
 
-    /** @name EventListeners
+    /** @name Event Listeners
 
         A set of event listeners and callers. Note that in this code there is
         platform specific functions - namely for zoom and scroll events.
@@ -806,7 +806,7 @@ public:
     ///@}
 
 
-    /** @name AppWindow
+    /** @name Application Window Functions
 
         Functions that deal with the application's windows
     */
