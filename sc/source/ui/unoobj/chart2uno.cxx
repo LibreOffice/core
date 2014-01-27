@@ -3476,10 +3476,11 @@ void SAL_CALL ScChart2DataSequence::setPropertyValue(
 }
 
 
-uno::Any SAL_CALL ScChart2DataSequence::getPropertyValue(
-        const OUString& rPropertyName)
-            throw( beans::UnknownPropertyException,
-                    lang::WrappedTargetException, uno::RuntimeException)
+uno::Any SAL_CALL ScChart2DataSequence::getPropertyValue(const OUString& rPropertyName)
+    throw(beans::UnknownPropertyException,
+          lang::WrappedTargetException,
+          uno::RuntimeException,
+          std::exception)
 {
     uno::Any aRet;
     if ( rPropertyName == SC_UNONAME_ROLE )

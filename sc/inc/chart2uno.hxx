@@ -286,9 +286,10 @@ public:
 
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
             const OUString& rPropertyName)
-        throw( ::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::beans::UnknownPropertyException,
+              ::com::sun::star::lang::WrappedTargetException,
+              ::com::sun::star::uno::RuntimeException,
+              std::exception);
 
     virtual void SAL_CALL addPropertyChangeListener(
             const OUString& rPropertyName,
