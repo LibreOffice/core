@@ -15,10 +15,12 @@
 
 
 ScSimpleFormulaCalculator::ScSimpleFormulaCalculator( ScDocument* pDoc, const ScAddress& rAddr,
-        const OUString& rFormula, formula::FormulaGrammar::Grammar eGram ):
-    mbCalculated(false),
-    maAddr(rAddr),
-    mpDoc(pDoc)
+        const OUString& rFormula, formula::FormulaGrammar::Grammar eGram )
+    : mnFormatType(0)
+    , mnFormatIndex(0)
+    , mbCalculated(false)
+    , maAddr(rAddr)
+    , mpDoc(pDoc)
 {
     // compile already here
     ScCompiler aComp(pDoc, rAddr);
