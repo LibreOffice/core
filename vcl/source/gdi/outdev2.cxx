@@ -990,7 +990,25 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
 
     if(aBmpEx.IsAlpha())
     {
-        ImplDrawAlpha( aBmpEx.GetBitmap(), aBmpEx.GetAlpha(), rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
+        Size aDestSizePixel(LogicToPixel(rDestSize));
+
+        BitmapEx aScaledBitmapEx(aBmpEx);
+        Point aSrcPtPixel(rSrcPtPixel);
+        Size aSrcSizePixel(rSrcSizePixel);
+
+        // we have beautiful scaling algorithms, let's use them
+        if (aDestSizePixel != rSrcSizePixel && rSrcSizePixel.Width() != 0 && rSrcSizePixel.Height() != 0)
+        {
+            double fScaleX = double(aDestSizePixel.Width()) / rSrcSizePixel.Width();
+            double fScaleY = double(aDestSizePixel.Height()) / rSrcSizePixel.Height();
+
+            aScaledBitmapEx.Scale(fScaleX, fScaleY);
+
+            aSrcSizePixel = aDestSizePixel;
+            aSrcPtPixel.X() = rSrcPtPixel.X() * fScaleX;
+            aSrcPtPixel.Y() = rSrcPtPixel.Y() * fScaleY;
+        }
+        ImplDrawAlpha(aScaledBitmapEx.GetBitmap(), aScaledBitmapEx.GetAlpha(), rDestPt, rDestSize, aSrcPtPixel, aSrcSizePixel);
         return;
     }
 
@@ -2045,6 +2063,9 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
         if( !bNativeAlpha
                 &&  !aBmpRect.Intersection( Rectangle( rSrcPtPixel, rSrcSizePixel ) ).IsEmpty() )
         {
+            // The scaling in this code path produces really ugly results - it
+            // does the most trivial scaling with no smoothing.
+
             GDIMetaFile*    pOldMetaFile = mpMetaFile;
             const bool      bOldMap = mbMap;
             mpMetaFile = NULL; // fdo#55044 reset before GetBitmap!
