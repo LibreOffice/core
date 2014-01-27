@@ -930,7 +930,14 @@ void Application::RemoveMouseAndKeyEvents( Window* pWin )
 sal_uLong Application::PostUserEvent( const Link& rLink, void* pCaller )
 {
     sal_uLong nEventId;
-    PostUserEvent( nEventId, rLink, pCaller );
+    sal_Bool isEventPosted;
+
+    isEventPosted = PostUserEvent( nEventId, rLink, pCaller );
+
+    if (isEventPosted == sal_False) {
+        SAL_WARN("vcl", "Could not post event " << nEventId);
+    }
+
     return nEventId;
 }
 
