@@ -679,8 +679,6 @@ public:
     static sal_Bool             InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority );
     static void                 RemoveIdleHdl( const Link& rLink );
 
-    virtual void                AppEvent( const ApplicationEvent& rAppEvent );
-
     static WorkWindow*          GetAppWindow();
     static Window*              GetFocusWindow();
     static OutputDevice*        GetDefaultDevice();
