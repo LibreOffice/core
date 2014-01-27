@@ -359,12 +359,6 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
 
     if( OUTDEV_PRINTER == meOutDevType )
     {
-        if(100 <= nTransparencePercent)
-        {
-            // #i112959# 100% transparent, draw nothing
-            return;
-        }
-
         Rectangle       aPolyRect( LogicToPixel( rPolyPoly ).GetBoundRect() );
         const Size      aDPISize( LogicToPixel( Size( 1, 1 ), MAP_INCH ) );
         const long      nBaseExtent = std::max( FRound( aDPISize.Width() / 300. ), 1L );
