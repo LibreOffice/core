@@ -361,6 +361,7 @@ ImplEventAttacherManager::ImplEventAttacherManager( const Reference< XIntrospect
     : aScriptListeners( aLock )
     , mxContext( xContext )
     , mxIntrospection( rIntrospection )
+    , nVersion(0)
 {
     if ( xContext.is() )
     {
