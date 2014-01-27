@@ -25,18 +25,10 @@
 #include <svx/svxdllapi.h>
 #include <basegfx/vector/b2enums.hxx>
 
-//************************************************************
-//   Vorausdeklarationen
-//************************************************************
-
 class ImpPathForDragAndCreate;
 
-//************************************************************
-//   Hilfsklasse SdrPathObjGeoData
-//
-// fuer Undo/Redo
-//
-//************************************************************
+// Helper class SdrPathObjGeoData
+// used for undo/redo
 
 class SdrPathObjGeoData : public SdrTextObjGeoData
 {
@@ -48,9 +40,6 @@ public:
     virtual ~SdrPathObjGeoData();
 };
 
-//************************************************************
-//   SdrPathObj
-//************************************************************
 
 class SVX_DLLPUBLIC SdrPathObj : public SdrTextObj
 {
@@ -70,7 +59,7 @@ protected:
     double mdBrightness;
 
 protected:
-    // Hilfsfunktion fuer GET/SET/INS/etc. PNT
+    // helper functions for GET, SET, INS etc. PNT
     void ImpSetClosed(sal_Bool bClose);
     void ImpForceKind();
     void ImpForceLineWink();
@@ -138,11 +127,11 @@ public:
     virtual Point GetPoint(sal_uInt32 nHdlNum) const;
     virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 nHdlNum);
 
-    // Punkt einfuegen
+    // insert point
     sal_uInt32 NbcInsPointOld(const Point& rPos, sal_Bool bNewObj, sal_Bool bHideHim);
     sal_uInt32 NbcInsPoint(sal_uInt32 i, const Point& rPos, sal_Bool bNewObj, sal_Bool bHideHim);
 
-    // An diesem Punkt auftrennen
+    // rip at given point
     SdrObject* RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index);
 
 protected:
@@ -153,30 +142,27 @@ protected:
 public:
     virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
 
-    // Bezierpolygon holen/setzen
+    // Bezier-polygon getter/setter
     const basegfx::B2DPolyPolygon& GetPathPoly() const { return maPathPolygon; }
     void SetPathPoly(const basegfx::B2DPolyPolygon& rPathPoly);
     void NbcSetPathPoly(const basegfx::B2DPolyPolygon& rPathPoly);
 
-    // Spezialfunktionen fuer Bezierpolygon-Bearbeitung
+    // special functions for Bezier-polygon handling
     sal_Bool IsClosed() const { return meKind==OBJ_POLY || meKind==OBJ_PATHPOLY || meKind==OBJ_PATHFILL || meKind==OBJ_FREEFILL || meKind==OBJ_SPLNFILL; }
     sal_Bool IsLine() const { return meKind==OBJ_PLIN || meKind==OBJ_PATHPLIN || meKind==OBJ_PATHLINE || meKind==OBJ_FREELINE || meKind==OBJ_SPLNLINE || meKind==OBJ_LINE; }
     sal_Bool IsFreeHand() const { return meKind==OBJ_FREELINE || meKind==OBJ_FREEFILL; }
     sal_Bool IsBezier() const { return meKind==OBJ_PATHLINE || meKind==OBJ_PATHFILL; }
     sal_Bool IsSpline() const { return meKind==OBJ_SPLNLINE || meKind==OBJ_SPLNFILL; }
 
-    // Pfad schliessen bzw. oeffnen; im letzteren Fall den Endpunkt um
-    // "nOpenDistance" verschieben
+    // close/open path
+    // if opening, move end point by "nOpenDistance"
     void ToggleClosed(); // long nOpenDistance);
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
     // transformation interface for StarOfficeAPI. This implements support for
     // homogen 3x3 matrices containing the transformation of the SdrObject. At the
     // moment it contains a shearX, rotation and translation, but for setting all linear
     // transforms like Scale, ShearX, ShearY, Rotate and Translate are supported.
     //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
     // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
     // with the base geometry and returns TRUE. Otherwise it returns FALSE.
     virtual sal_Bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const;
@@ -185,8 +171,6 @@ public:
     // to use (0,0) as upper left and will be scaled to the given size in the matrix.
     virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon);
 };
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #endif // INCLUDED_SVX_SVDOPATH_HXX
 
