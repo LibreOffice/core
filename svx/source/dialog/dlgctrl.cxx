@@ -784,10 +784,8 @@ void SvxRectCtl::SetCS(CTL_STYLE eNew)
 //Logic Pixel
 long SvxPixelCtl::PointToIndex(const Point &aPt) const
 {
-    sal_uInt16  nX, nY;
-
-    nX = (sal_uInt16) ( aPt.X() * nLines / aRectSize.Width() );
-    nY = (sal_uInt16) ( aPt.Y() * nLines / aRectSize.Height() );
+    sal_Int32 nX = aPt.X() * nLines / aRectSize.Width();
+    sal_Int32 nY = aPt.Y() * nLines / aRectSize.Height();
 
     return nX + nY * nLines ;
 }
@@ -796,8 +794,8 @@ Point SvxPixelCtl::IndexToPoint(long nIndex) const
 {
     DBG_ASSERT(nIndex >= 0 && nIndex < nSquares ," Check Index");
 
-    sal_uInt16 nXIndex = nIndex % nLines ;
-    sal_uInt16 nYIndex = sal_uInt16(nIndex / nLines) ;
+    sal_Int32 nXIndex = nIndex % nLines;
+    sal_Int32 nYIndex = nIndex / nLines;
 
     Point aPtTl;
     aPtTl.Y() = aRectSize.Height() * nYIndex / nLines + 1;
@@ -815,9 +813,8 @@ long SvxPixelCtl::ShowPosition( const Point &pt)
 {
     Point aPt = PixelToLogic( pt );
 
-    sal_uInt16  nX, nY;
-    nX = (sal_uInt16) ( aPt.X() * nLines / aRectSize.Width() );
-    nY = (sal_uInt16) ( aPt.Y() * nLines / aRectSize.Height() );
+    sal_Int32 nX = aPt.X() * nLines / aRectSize.Width();
+    sal_Int32 nY = aPt.Y() * nLines / aRectSize.Height();
 
     ChangePixel( nX + nY * nLines );
 
