@@ -5260,7 +5260,7 @@ namespace osl_Directory
             }
 
             CPPUNIT_ASSERT_MESSAGE( "test for open function: open a file instead of a directory",
-                                     ( ::osl::FileBase::E_NOTDIR == nError1 ) || ( ::osl::FileBase::E_ACCES ) );
+                                     ( ::osl::FileBase::E_NOTDIR == nError1 ) || ( ::osl::FileBase::E_ACCES == nError1 ) );
         }
 
         CPPUNIT_TEST_SUITE( open );
