@@ -169,7 +169,8 @@ public:
                             getRanges(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setRanges( const ::com::sun::star::uno::Sequence<
                                     ::com::sun::star::table::CellRangeAddress >& aRanges )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException,
+                                      std::exception);
 
                             // XEmbeddedObjectSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL
