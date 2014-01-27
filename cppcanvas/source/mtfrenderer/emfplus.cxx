@@ -1821,7 +1821,7 @@ namespace cppcanvas
 
                             rMF >> points;
 
-                            SAL_INFO("cppcanvas.emf", "EMF+ DrawLines in slot: " << (flags && 0xff) << " points: " << points);
+                            SAL_INFO("cppcanvas.emf", "EMF+ DrawLines in slot: " << (flags & 0xff) << " points: " << points);
 
                             EMFPPath path (points, true);
                             path.Read (rMF, flags, *this);
