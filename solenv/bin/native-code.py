@@ -27,7 +27,6 @@ core_factory_list = [
     ("libfsstoragelo.a", "fsstorage_component_getFactory"),
     ("libfwklo.a", "fwk_component_getFactory"),
     ("libhyphenlo.a", "hyphen_component_getFactory"),
-    ("libi18npoollo.a", "i18npool_component_getFactory"),
     ("liblnglo.a", "lng_component_getFactory"),
     ("liblnthlo.a", "lnth_component_getFactory"),
     ("liblocalebe1lo.a", "localebe1_component_getFactory"),
@@ -59,6 +58,18 @@ core_constructor_list = [
     "com_sun_star_comp_framework_PathSettings_get_implementation",
     "com_sun_star_comp_framework_StatusIndicatorFactory_get_implementation",
     "com_sun_star_comp_framework_URLTransformer_get_implementation",
+# i18npool/util/i18npool.component
+    "com_sun_star_i18n_BreakIterator_get_implementation",
+    "com_sun_star_i18n_BreakIterator_Unicode_get_implementation",
+    "com_sun_star_i18n_CharacterClassification_get_implementation",
+    "com_sun_star_i18n_CharacterClassification_Unicode_get_implementation",
+    "com_sun_star_i18n_LocaleDataImpl_get_implementation",
+    "com_sun_star_i18n_NumberFormatCodeMapper_get_implementation",
+    "com_sun_star_i18n_Transliteration_get_implementation",
+    "com_sun_star_i18n_Transliteration_IGNORE_CASE_get_implementation",
+    "com_sun_star_i18n_Transliteration_IGNORE_KANA_get_implementation",
+    "com_sun_star_i18n_Transliteration_IGNORE_WIDTH_get_implementation",
+    "com_sun_star_text_DefaultNumberingProvider_get_implementation",
 # sax/source/expatwrap/expwrap.component
     "com_sun_star_comp_extensions_xml_sax_FastParser_get_implementation",
     "com_sun_star_comp_extensions_xml_sax_ParserExpat_get_implementation",
@@ -71,7 +82,7 @@ core_constructor_list = [
     "com_sun_star_comp_graphic_GraphicProvider_get_implementation",
 # svx/util/svx.component
     "com_sun_star_drawing_EnhancedCustomShapeEngine_get_implementation",
-#
+# toolkit/util/tk.component
     "stardiv_Toolkit_VCLXToolkit_get_implementation",
     ]
 
