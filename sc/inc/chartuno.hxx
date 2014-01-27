@@ -159,7 +159,8 @@ public:
                             // XTableChart
     virtual sal_Bool SAL_CALL getHasColumnHeaders() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setHasColumnHeaders( sal_Bool bHasColumnHeaders )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::uno::RuntimeException,
+                                      std::exception);
     virtual sal_Bool SAL_CALL getHasRowHeaders() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setHasRowHeaders( sal_Bool bHasRowHeaders )
                                 throw(::com::sun::star::uno::RuntimeException);
