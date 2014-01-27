@@ -660,32 +660,21 @@ inline uno_Sequence * icopyConstructSequence(
                 {
                     char * pElements = pDest->elements;
                     void ** pSourceElements = (void **)pSource->elements;
-                    if (mapping)
+                    typelib_TypeDescription * pElementTypeDescr = 0;
+                    TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
+                    for ( sal_Int32 nPos = nElements; nPos--; )
                     {
-                        typelib_TypeDescription * pElementTypeDescr = 0;
-                        TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
-                        for ( sal_Int32 nPos = nElements; nPos--; )
+                        ((void **)pElements)[nPos] = 0;
+                        if (((void **)pSourceElements)[nPos])
                         {
-                            ((void **)pElements)[nPos] = 0;
-                            if (((void **)pSourceElements)[nPos])
-                            {
-                                (*mapping->mapInterface)(
-                                    mapping, (void **)pElements + nPos,
-                                    pSourceElements[nPos],
-                                    (typelib_InterfaceTypeDescription *)
-                                    pElementTypeDescr );
-                            }
-                        }
-                        TYPELIB_DANGER_RELEASE( pElementTypeDescr );
-                    }
-                    else
-                    {
-                        for ( sal_Int32 nPos = nElements; nPos--; )
-                        {
-                            ((void **)pElements)[nPos] = pSourceElements[nPos];
-                            _acquire( ((void **)pElements)[nPos], acquire );
+                            (*mapping->mapInterface)(
+                                mapping, (void **)pElements + nPos,
+                                pSourceElements[nPos],
+                                (typelib_InterfaceTypeDescription *)
+                                pElementTypeDescr );
                         }
                     }
+                    TYPELIB_DANGER_RELEASE( pElementTypeDescr );
                 }
                 break;
             }
