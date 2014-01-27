@@ -65,16 +65,18 @@ SvxNumberFormatShell* SvxNumberFormatShell::Create( SvNumberFormatter* pNumForma
 SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
                                             sal_uInt32          nFormatKey,
                                             SvxNumberValueType  eNumValType,
-                                            const OUString&     rNumStr ) :
-    pFormatter      ( pNumFormatter ),
-    pCurFmtTable    ( NULL ),
-    eValType        ( eNumValType ),
-    bUndoAddList    ( true ),
-    nCurFormatKey   ( nFormatKey ),
-    pCurCurrencyEntry(NULL),
-    bBankingSymbol  (false),
-    nCurCurrencyEntryPos((sal_uInt16) SELPOS_NONE),
-    bUseStarFormat  (false)
+                                            const OUString&     rNumStr )
+    : pFormatter ( pNumFormatter )
+    , pCurFmtTable ( NULL )
+    , eValType ( eNumValType )
+    , bUndoAddList ( true )
+    , nCurFormatKey ( nFormatKey )
+    , nCurCategory (NUMBERFORMAT_ALL)
+    , eCurLanguage (LANGUAGE_NONE)
+    , pCurCurrencyEntry(NULL)
+    , bBankingSymbol  (false)
+    , nCurCurrencyEntryPos((sal_uInt16) SELPOS_NONE)
+    , bUseStarFormat  (false)
 {
     nValNum = DEFAULT_NUMVALUE;
 
