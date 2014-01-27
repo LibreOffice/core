@@ -3596,7 +3596,8 @@ uno::Reference<container::XEnumeration> SAL_CALL ScAnnotationsObj::createEnumera
 
 // XIndexAccess
 
-sal_Int32 SAL_CALL ScAnnotationsObj::getCount() throw(uno::RuntimeException)
+sal_Int32 SAL_CALL ScAnnotationsObj::getCount()
+    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     sal_Int32 nCount = 0;

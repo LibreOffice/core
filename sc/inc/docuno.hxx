@@ -798,7 +798,9 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             /// XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getCount()
+                                throw(::com::sun::star::uno::RuntimeException,
+                                      std::exception);
     virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
                                 throw(::com::sun::star::lang::IndexOutOfBoundsException,
                                     ::com::sun::star::lang::WrappedTargetException,
