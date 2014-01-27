@@ -333,11 +333,10 @@ static awt::Point lcl_GetRelativePos( uno::Reference< drawing::XShape >& xShape,
     return aUnoPoint;
 }
 
-void SAL_CALL ScShapeObj::setPropertyValue(
-                        const OUString& aPropertyName, const uno::Any& aValue )
-                throw(beans::UnknownPropertyException, beans::PropertyVetoException,
-                        lang::IllegalArgumentException, lang::WrappedTargetException,
-                        uno::RuntimeException)
+void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const uno::Any& aValue)
+    throw(beans::UnknownPropertyException, beans::PropertyVetoException,
+          lang::IllegalArgumentException, lang::WrappedTargetException,
+          uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString aNameString(aPropertyName);
