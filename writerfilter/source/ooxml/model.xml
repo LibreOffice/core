@@ -5229,7 +5229,7 @@
       <element name="graphic" tokenid="ooxml:graphic_graphic"/>
     </resource>
   </namespace>
-  <namespace name="wp14" file="wp14.rng">
+  <namespace name="wp14">
     <start name="sizeRelH"/>
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
       <define name="ST_SizeRelFromH">
