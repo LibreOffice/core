@@ -164,7 +164,7 @@ do
   fi
 
   if [ -d "include/$PROJECT" ]; then
-      PROJECT_INCLUDE="$PROJECT_INCLUDE $PROJECT_INCLUDE"
+      PROJECT_INCLUDE="$PROJECT_INCLUDE include/$PROJECT"
   fi
 
   DOXYGEN_INPUT=`printf "%s" "$PROJECT/source $PROJECT_INCLUDE"`
