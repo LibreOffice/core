@@ -830,7 +830,9 @@ void
 }
 
 uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::lang::IndexOutOfBoundsException,
+           ::com::sun::star::uno::RuntimeException,
+           std::exception)
 {
     uno::Any anyAtrribute;
     OUString sValue;

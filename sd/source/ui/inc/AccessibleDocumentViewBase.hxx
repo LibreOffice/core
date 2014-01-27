@@ -259,7 +259,9 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
     //----------------------------xAttribute----------------------------
     virtual com::sun::star::uno::Any SAL_CALL getExtendedAttributes()
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+               ::com::sun::star::uno::RuntimeException,
+               std::exception);
      ::sd::ViewShell* mpViewShell;
 private:
 
