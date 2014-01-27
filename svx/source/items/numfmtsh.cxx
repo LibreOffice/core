@@ -96,16 +96,18 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
                                             sal_uInt32          nFormatKey,
                                             SvxNumberValueType  eNumValType,
                                             double              nNumVal,
-                                            const OUString*     pNumStr ) :
-    pFormatter      ( pNumFormatter ),
-    pCurFmtTable    ( NULL ),
-    eValType        ( eNumValType ),
-    bUndoAddList    ( true ),
-    nCurFormatKey   ( nFormatKey ),
-    pCurCurrencyEntry(NULL),
-    bBankingSymbol  (false),
-    nCurCurrencyEntryPos((sal_uInt16) SELPOS_NONE),
-    bUseStarFormat  (false)
+                                            const OUString*     pNumStr )
+    : pFormatter ( pNumFormatter )
+    , pCurFmtTable ( NULL )
+    , eValType ( eNumValType )
+    , bUndoAddList ( true )
+    , nCurFormatKey ( nFormatKey )
+    , nCurCategory (NUMBERFORMAT_ALL)
+    , eCurLanguage (LANGUAGE_NONE)
+    , pCurCurrencyEntry(NULL)
+    , bBankingSymbol  (false)
+    , nCurCurrencyEntryPos((sal_uInt16) SELPOS_NONE)
+    , bUseStarFormat  (false)
 {
     //  #50441# When used in Writer, the SvxNumberInfoItem contains the
     //  original string in addition to the value
