@@ -36,11 +36,11 @@ extern "C"
 #define JPEG_MIN_READ 512
 #define BUFFER_SIZE  4096
 namespace {
-    // Arbitrary maximal size (256M) of bitmaps after they have been decoded.
+    // Arbitrary maximal size (512M) of a bitmap after it has been decoded.
     // It is used to prevent excessive swapping due to large buffers in
     // virtual memory.
     // May have to be tuned if it turns out to be too large or too small.
-    static const sal_uInt64 MAX_BITMAP_BYTE_SIZE = sal_uInt64(256 * 1024 * 1024);
+    static const sal_uInt64 MAX_BITMAP_BYTE_SIZE = sal_uInt64(512 * 1024 * 1024);
 }
 
 extern "C" void* CreateBitmapFromJPEGReader( void* pJPEGReader, void* pJPEGCreateBitmapParam )
@@ -235,7 +235,7 @@ void* JPEGReader::CreateBitmap( void* _pParam )
 
     sal_uInt64 nSize = aSize.Width();
     nSize *= aSize.Height();
-    if (nSize > SAL_MAX_INT32 / 24)
+    if (nSize > SAL_MAX_INT32 / (bGray?1:3))
         return NULL;
 
     // Check if the bitmap is untypically large.
