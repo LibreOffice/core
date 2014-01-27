@@ -364,7 +364,7 @@ sal_Bool SwWrongList::Fresh( sal_Int32 &rStart, sal_Int32 &rEnd, sal_Int32 nPos,
     MSHORT nCnt = nIndex;
     if( nCnt < Count() )
     {
-        nWrPos = Pos( nIndex );
+        nWrPos = Pos( nCnt );
         if( nWrPos < nPos && rStart > nWrPos )
             rStart = nWrPos;
     }
