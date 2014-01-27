@@ -20,6 +20,8 @@
 // prevent internal compiler error with MSVC6SP3
 #include <utility>
 
+#include <com/sun/star/uno/XComponentContext.hpp>
+
 #define TRANSLITERATION_Width
 #include <transliteration_Ignore.hxx>
 #define TRANSLITERATION_fullwidthToHalfwidth
@@ -58,5 +60,13 @@ ignoreWidth::transliterateChar2Char( sal_Unicode inChar) throw(RuntimeException,
 }
 
 } } } }
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_i18n_Transliteration_IGNORE_WIDTH_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new css::i18n::ignoreWidth());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

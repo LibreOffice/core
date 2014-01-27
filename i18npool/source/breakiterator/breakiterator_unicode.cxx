@@ -36,7 +36,6 @@ U_CDECL_END
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
-using namespace ::rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -461,5 +460,13 @@ BreakIterator_Unicode::getSupportedServiceNames(void) throw( uno::RuntimeExcepti
 }
 
 } } } }
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_i18n_BreakIterator_Unicode_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new css::i18n::BreakIterator_Unicode());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -21,6 +21,8 @@
 // prevent internal compiler error with MSVC6SP3
 #include <utility>
 
+#include <com/sun/star/uno/XComponentContext.hpp>
+
 #define TRANSLITERATION_Kana
 #include <transliteration_Ignore.hxx>
 #define TRANSLITERATION_hiraganaToKatakana
@@ -59,5 +61,13 @@ ignoreKana::transliterateChar2Char( sal_Unicode inChar) throw(RuntimeException, 
 }
 
 } } } }
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_i18n_Transliteration_IGNORE_KANA_get_implementation(
+    css::uno::XComponentContext *,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new css::i18n::ignoreKana());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

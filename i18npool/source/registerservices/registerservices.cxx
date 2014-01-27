@@ -30,8 +30,6 @@
 
 #define TRANSLITERATION_ALL
 #include <transliteration_body.hxx>
-#include <transliteration_caseignore.hxx>
-#include <transliteration_Ignore.hxx>
 #include <transliteration_OneToOne.hxx>
 #include <textToPronounce_zh.hxx>
 #include <numtotext_cjk.hxx>
@@ -47,7 +45,6 @@
 #define BREAKITERATOR_ALL
 #include <breakiterator_cjk.hxx>
 #include <breakiterator_th.hxx>
-#include <breakiterator_unicode.hxx>
 
 #include <indexentrysupplier.hxx>
 #include <indexentrysupplier_asian.hxx>
@@ -117,7 +114,6 @@ IMPL_CREATEINSTANCE( Calendar_ROC )
 IMPL_CREATEINSTANCE( Calendar_hijri )
 IMPL_CREATEINSTANCE( Calendar_jewish )
 IMPL_CREATEINSTANCE( Calendar_buddhist )
-IMPL_CREATEINSTANCE( BreakIterator_Unicode )
 IMPL_CREATEINSTANCE( BreakIterator_ja )
 IMPL_CREATEINSTANCE( BreakIterator_zh )
 IMPL_CREATEINSTANCE( BreakIterator_zh_TW )
@@ -138,13 +134,10 @@ IMPL_CREATEINSTANCE( Transliteration_l2u )
 IMPL_CREATEINSTANCE( Transliteration_sentencecase )
 IMPL_CREATEINSTANCE( Transliteration_titlecase )
 IMPL_CREATEINSTANCE( Transliteration_togglecase )
-IMPL_CREATEINSTANCE( Transliteration_caseignore )
 IMPL_CREATEINSTANCE( hiraganaToKatakana )
 IMPL_CREATEINSTANCE( katakanaToHiragana )
-IMPL_CREATEINSTANCE( ignoreKana )
 IMPL_CREATEINSTANCE( fullwidthToHalfwidth )
 IMPL_CREATEINSTANCE( halfwidthToFullwidth )
-IMPL_CREATEINSTANCE( ignoreWidth )
 
 IMPL_CREATEINSTANCE( smallToLarge_ja_JP)
 IMPL_CREATEINSTANCE( largeToSmall_ja_JP)
@@ -309,9 +302,6 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.Calendar_buddhist",
         "com.sun.star.i18n.Calendar_buddhist",
         &Calendar_buddhist_CreateInstance },
-    {   "com.sun.star.i18n.BreakIterator_Unicode",
-        "com.sun.star.i18n.BreakIterator_Unicode",
-        &BreakIterator_Unicode_CreateInstance },
     {   "com.sun.star.i18n.BreakIterator_ja",
         "com.sun.star.i18n.BreakIterator_ja",
         &BreakIterator_ja_CreateInstance },
@@ -364,31 +354,21 @@ static const struct InstancesArray {
         TRLT_IMPLNAME_PREFIX  "TOGGLE_CASE",
         &Transliteration_togglecase_CreateInstance },
     {   TRLT_SERVICELNAME_L10N,
-        TRLT_IMPLNAME_PREFIX  "IGNORE_CASE",
-        &Transliteration_caseignore_CreateInstance },
-    {   TRLT_SERVICELNAME_L10N,
         TRLT_IMPLNAME_PREFIX  "HIRAGANA_KATAKANA",
         &hiraganaToKatakana_CreateInstance },
     {   TRLT_SERVICELNAME_L10N,
         TRLT_IMPLNAME_PREFIX  "KATAKANA_HIRAGANA",
         &katakanaToHiragana_CreateInstance },
     {   TRLT_SERVICELNAME_L10N,
-        TRLT_IMPLNAME_PREFIX  "IGNORE_KANA",
-        &ignoreKana_CreateInstance },
-    {   TRLT_SERVICELNAME_L10N,
         TRLT_IMPLNAME_PREFIX  "FULLWIDTH_HALFWIDTH",
         &fullwidthToHalfwidth_CreateInstance },
     {   TRLT_SERVICELNAME_L10N,
         TRLT_IMPLNAME_PREFIX  "HALFWIDTH_FULLWIDTH",
         &halfwidthToFullwidth_CreateInstance },
-    {   TRLT_SERVICELNAME_L10N,
-        TRLT_IMPLNAME_PREFIX  "IGNORE_WIDTH",
-        &ignoreWidth_CreateInstance },
     IMPL_TRANSLITERATION_ITEM (smallToLarge_ja_JP),
     IMPL_TRANSLITERATION_ITEM (largeToSmall_ja_JP),
     IMPL_TRANSLITERATION_ITEM (ignoreTraditionalKanji_ja_JP),
     IMPL_TRANSLITERATION_ITEM (ignoreTraditionalKana_ja_JP),
-    IMPL_TRANSLITERATION_ITEM (ignoreKana),
     IMPL_TRANSLITERATION_ITEM (ignoreMinusSign_ja_JP),
     IMPL_TRANSLITERATION_ITEM (ignoreIterationMark_ja_JP),
     IMPL_TRANSLITERATION_ITEM (ignoreSeparator_ja_JP),

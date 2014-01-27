@@ -23,7 +23,8 @@
       constructor="com_sun_star_i18n_BreakIterator_get_implementation">
     <service name="com.sun.star.i18n.BreakIterator"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.BreakIterator_Unicode">
+  <implementation name="com.sun.star.i18n.BreakIterator_Unicode"
+      constructor="com_sun_star_i18n_BreakIterator_Unicode_get_implementation">
     <service name="com.sun.star.i18n.BreakIterator_Unicode"/>
   </implementation>
   <implementation name="com.sun.star.i18n.BreakIterator_ja">
@@ -219,13 +220,16 @@
   <implementation name="com.sun.star.i18n.Transliteration.HIRAGANA_KATAKANA">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Transliteration.IGNORE_CASE">
+  <implementation name="com.sun.star.i18n.Transliteration.IGNORE_CASE"
+      constructor="com_sun_star_i18n_Transliteration_IGNORE_CASE_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Transliteration.IGNORE_KANA">
+  <implementation name="com.sun.star.i18n.Transliteration.IGNORE_KANA"
+      constructor="com_sun_star_i18n_Transliteration_IGNORE_KANA_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.Transliteration.IGNORE_WIDTH">
+  <implementation name="com.sun.star.i18n.Transliteration.IGNORE_WIDTH"
+      constructor="com_sun_star_i18n_Transliteration_IGNORE_WIDTH_get_implementation">
     <service name="com.sun.star.i18n.Transliteration.l10n"/>
   </implementation>
   <implementation name="com.sun.star.i18n.Transliteration.KATAKANA_HIRAGANA">
