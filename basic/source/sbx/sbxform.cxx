@@ -112,17 +112,20 @@ SbxBasicFormater::SbxBasicFormater( sal_Unicode _cDecPoint, sal_Unicode _cThousa
                       OUString _sFalseStrg,
                       OUString _sCurrencyStrg,
                       OUString _sCurrencyFormatStrg )
+    : cDecPoint(_cDecPoint)
+    , cThousandSep(_cThousandSep)
+    , sOnStrg(_sOnStrg)
+    , sOffStrg(_sOffStrg)
+    , sYesStrg(_sYesStrg)
+    , sNoStrg(_sNoStrg)
+    , sTrueStrg(_sTrueStrg)
+    , sFalseStrg(_sFalseStrg)
+    , sCurrencyStrg(_sCurrencyStrg)
+    , sCurrencyFormatStrg(_sCurrencyFormatStrg)
+    , dNum(0.0)
+    , nNumExp(0)
+    , nExpExp(0)
 {
-    cDecPoint = _cDecPoint;
-    cThousandSep = _cThousandSep;
-    sOnStrg = _sOnStrg;
-    sOffStrg = _sOffStrg;
-    sYesStrg = _sYesStrg;
-    sNoStrg = _sNoStrg;
-    sTrueStrg = _sTrueStrg;
-    sFalseStrg = _sFalseStrg;
-    sCurrencyStrg = _sCurrencyStrg;
-    sCurrencyFormatStrg = _sCurrencyFormatStrg;
 }
 
 // function for ouput of a error-text (for debugging)
