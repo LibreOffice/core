@@ -37,8 +37,6 @@ SalSystem* X11SalInstance::CreateSalSystem()
     return new X11SalSystem();
 }
 
-// -----------------------------------------------------------------------
-
 X11SalSystem::~X11SalSystem()
 {
 }
@@ -71,6 +69,10 @@ Rectangle X11SalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
     if( pSalDisp->IsXinerama() )
     {
         const std::vector< Rectangle >& rScreens = pSalDisp->GetXineramaScreens();
+
+        // we shouldn't be able to pick a screen > number of screens available
+        assert(nScreen < rScreens.size() );
+
         if( nScreen < rScreens.size() )
             aRet = rScreens[nScreen];
     }
@@ -153,6 +155,5 @@ int X11SalSystem::ShowNativeDialog( const OUString& rTitle, const OUString& rMes
 
     return nRet;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
