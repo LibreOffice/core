@@ -60,9 +60,10 @@ SfxPoolItem *SbxItem::Clone(SfxItemPool*) const
 bool SbxItem::operator==(const SfxPoolItem& rCmp) const
 {
     SbxItem const* pSbxItem = dynamic_cast<SbxItem const*>(&rCmp);
-    DBG_ASSERT(pSbxItem, "==: no SbxItem!" );
+    assert(pSbxItem); //no SbxItem!
     return
         SfxPoolItem::operator==(rCmp) &&
+        pSbxItem &&
         m_aDocument == pSbxItem->m_aDocument &&
         m_aLibName == pSbxItem->m_aLibName &&
         m_aName == pSbxItem->m_aName &&
