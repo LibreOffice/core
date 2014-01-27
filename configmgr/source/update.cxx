@@ -78,10 +78,12 @@ private:
 
     virtual void SAL_CALL insertExtensionXcuFile(
         sal_Bool shared, OUString const & fileUri)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException,
+               std::exception);
 
     virtual void SAL_CALL removeExtensionXcuFile(OUString const & fileUri)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException,
+               std::exception);
 
     virtual void SAL_CALL insertModificationXcuFile(
         OUString const & fileUri,
@@ -103,7 +105,8 @@ void Service::insertExtensionXcsFile(
 
 void Service::insertExtensionXcuFile(
     sal_Bool shared, OUString const & fileUri)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException,
+           std::exception)
 {
     Broadcaster bc;
     {
@@ -118,7 +121,7 @@ void Service::insertExtensionXcuFile(
 }
 
 void Service::removeExtensionXcuFile(OUString const & fileUri)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     Broadcaster bc;
     {
