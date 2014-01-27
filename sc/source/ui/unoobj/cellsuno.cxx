@@ -3788,7 +3788,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryIntersec
 // XFormulaQuery
 
 uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryPrecedents(
-                                sal_Bool bRecursive ) throw(uno::RuntimeException)
+    sal_Bool bRecursive ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( pDocShell )
