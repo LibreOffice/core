@@ -698,7 +698,7 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                     {
                         // use selected text as name for urls
                         OUString sReturn = pActiveView->GetSelected();
-                        sReturn = sReturn.copy(0, 255);
+                        sReturn = sReturn.copy(0, std::min(sReturn.getLength(), 255));
                         aHLinkItem.SetName(comphelper::string::stripEnd(sReturn, ' '));
                     }
                     rSet.Put(aHLinkItem);
