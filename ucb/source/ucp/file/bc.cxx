@@ -1369,7 +1369,10 @@ BaseContent::cPCL( void )
         ListenerMap* listener = new ListenerMap();
         for( sal_Int32 i = 0; i < length; ++i )
         {
-            (*listener)[seqNames[i]] = m_pPropertyListener->getContainer( seqNames[i] )->getElements();
+            cppu::OInterfaceContainerHelper* pContainer = m_pPropertyListener->getContainer(seqNames[i]);
+            if (!pContainer)
+                continue;
+            (*listener)[seqNames[i]] = pContainer->getElements();
         }
 
         p = new PropertyChangeNotifier( this,
