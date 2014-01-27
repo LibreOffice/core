@@ -948,7 +948,11 @@ void ModulWindow::ExecuteCommand (SfxRequest& rReq)
         case SID_DELETE:
         {
             KeyEvent aFakeDelete( 0, KEY_DELETE );
-            GetEditView()->KeyInput( aFakeDelete );
+            bool bDone = GetEditView()->KeyInput( aFakeDelete );
+            if (!bDone)
+            {
+                BaseWindow::KeyInput(aFakeDelete);
+            }
             break;
         }
         case SID_SELECTALL:
