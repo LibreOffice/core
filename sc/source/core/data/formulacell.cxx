@@ -3472,6 +3472,18 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell& r
                     bInvariant = false;
             }
             break;
+            case formula::svDouble:
+            {
+                if(!rtl::math::approxEqual(pThisTok->GetDouble(), pOtherTok->GetDouble()))
+                    return NotEqual;
+            }
+            break;
+            case formula::svString:
+            {
+                if(pThisTok->GetString() != pOtherTok->GetString())
+                    return NotEqual;
+            }
+            break;
             default:
                 ;
         }
