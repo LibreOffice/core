@@ -206,9 +206,7 @@ BSTR CAccRelation::getRelationTypeBSTR(int type)
             {IA2_RELATION_DESCRIBED_BY  ,  10},
         };
 
-    USES_CONVERSION;
-
-    return (type >= 0 && type <= 10) ? map[type].string : _T("");
+    return ::SysAllocString((type >= 0 && type <= 10) ? map[type].string : _T(""));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
