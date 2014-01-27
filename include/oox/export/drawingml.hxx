@@ -100,6 +100,7 @@ protected:
     const char* GetFieldType( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun, sal_Bool& bIsField );
 
     OUString WriteImage( const OUString& rURL );
+    void WriteStyleProperties( sal_Int32 nTokenId, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aProperties );
 
     const char* GetComponentDir();
     const char* GetRelationCompPrefix();

@@ -20,6 +20,7 @@
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/export/drawingml.hxx"
 #include "oox/export/utils.hxx"
+#include <oox/drawingml/color.hxx>
 #include <oox/token/tokens.hxx>
 
 #include <cstdio>
@@ -1698,6 +1699,40 @@ void DrawingML::WriteFill( Reference< XPropertySet > xPropSet )
     return;
 }
 
+void DrawingML::WriteStyleProperties( sal_Int32 nTokenId, Sequence< PropertyValue > aProperties )
+{
+    if( aProperties.getLength() > 0 )
+    {
+        OUString sSchemeClr;
+        sal_uInt32 nIdx = 0;
+        Sequence< PropertyValue > aTransformations;
+        for( sal_Int32 i=0; i < aProperties.getLength(); ++i)
+            if( aProperties[i].Name == "SchemeClr" )
+                aProperties[i].Value >>= sSchemeClr;
+            else if( aProperties[i].Name == "Idx" )
+                aProperties[i].Value >>= nIdx;
+            else if( aProperties[i].Name == "Transformations" )
+                aProperties[i].Value >>= aTransformations;
+        mpFS->startElementNS( XML_a, nTokenId, XML_idx, I32S( nIdx ), FSEND );
+        mpFS->startElementNS( XML_a, XML_schemeClr,
+                              XML_val, USS( sSchemeClr ),
+                              FSEND );
+        for( sal_Int32 i = 0; i < aTransformations.getLength(); i++ )
+        {
+            sal_Int32 nValue;
+            aTransformations[i].Value >>= nValue;
+            mpFS->singleElementNS( XML_a, Color::getColorTransformationToken( aTransformations[i].Name ),
+                                   XML_val, I32S( nValue ),
+                                   FSEND );
+        }
+        mpFS->endElementNS( XML_a, XML_schemeClr );
+        mpFS->endElementNS( XML_a, nTokenId );
+    }
+    else
+        // write mock <a:*Ref> tag
+        mpFS->singleElementNS( XML_a, nTokenId, XML_idx, I32S( 0 ), FSEND );
+}
+
 void DrawingML::WriteShapeStyle( Reference< XPropertySet > xPropSet )
 {
     // check existence of the grab bag
@@ -1718,25 +1753,7 @@ void DrawingML::WriteShapeStyle( Reference< XPropertySet > xPropSet )
     // write mock <a:lnRef>
     mpFS->singleElementNS( XML_a, XML_lnRef, XML_idx, I32S( 0 ), FSEND );
 
-    // write <a:fillRef>
-    if( aFillRefProperties.getLength() > 0 )
-    {
-        OUString sSchemeClr;
-        sal_uInt32 nIdx = 0;
-        for( sal_Int32 i=0; i < aFillRefProperties.getLength(); ++i)
-            if( aFillRefProperties[i].Name == "SchemeClr" )
-                aFillRefProperties[i].Value >>= sSchemeClr;
-            else if( aFillRefProperties[i].Name == "Idx" )
-                aFillRefProperties[i].Value >>= nIdx;
-        mpFS->startElementNS( XML_a, XML_fillRef, XML_idx, I32S( nIdx ), FSEND );
-        mpFS->singleElementNS( XML_a, XML_schemeClr, XML_val,
-                               OUStringToOString( sSchemeClr, RTL_TEXTENCODING_ASCII_US ).getStr(),
-                               FSEND );
-        mpFS->endElementNS( XML_a, XML_fillRef );
-    }
-    else
-        // write mock <a:fillRef>
-        mpFS->singleElementNS( XML_a, XML_fillRef, XML_idx, I32S( 0 ), FSEND );
+    WriteStyleProperties( XML_fillRef, aFillRefProperties );
 
     // write mock <a:effectRef>
     mpFS->singleElementNS( XML_a, XML_effectRef, XML_idx, I32S( 0 ), FSEND );

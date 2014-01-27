@@ -312,6 +312,10 @@ void Color::addTransformation( sal_Int32 nElement, sal_Int32 nValue )
         case XML_alphaOff:  lclOffValue( mnAlpha, nValue ); break;
         default:            maTransforms.push_back( Transformation( nToken, nValue ) );
     }
+    sal_Int32 nSize = maInteropTransformations.getLength();
+    maInteropTransformations.realloc(nSize + 1);
+    maInteropTransformations[nSize].Name = getColorTransformationName( nToken );
+    maInteropTransformations[nSize].Value = ::com::sun::star::uno::Any( nValue );
 }
 
 void Color::addChartTintTransformation( double fTint )
@@ -332,7 +336,104 @@ void Color::addExcelTintTransformation( double fTint )
 void Color::clearTransformations()
 {
     maTransforms.clear();
+    maInteropTransformations.realloc(0);
     clearTransparence();
+}
+
+::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > Color::getTransformations() const
+{
+    return maInteropTransformations;
+}
+
+OUString Color::getColorTransformationName( sal_Int32 nElement )
+{
+    switch( nElement )
+    {
+        case XML_red:       return OUString( "red" );
+        case XML_redMod:    return OUString( "redMod" );
+        case XML_redOff:    return OUString( "redOff" );
+        case XML_green:     return OUString( "green" );
+        case XML_greenMod:  return OUString( "greenMod" );
+        case XML_greenOff:  return OUString( "greenOff" );
+        case XML_blue:      return OUString( "blue" );
+        case XML_blueMod:   return OUString( "blueMod" );
+        case XML_blueOff:   return OUString( "blueOff" );
+        case XML_hue:       return OUString( "hue" );
+        case XML_hueMod:    return OUString( "hueMod" );
+        case XML_hueOff:    return OUString( "hueOff" );
+        case XML_sat:       return OUString( "sat" );
+        case XML_satMod:    return OUString( "satMod" );
+        case XML_satOff:    return OUString( "satOff" );
+        case XML_lum:       return OUString( "lum" );
+        case XML_lumMod:    return OUString( "lumMod" );
+        case XML_lumOff:    return OUString( "lumOff" );
+        case XML_shade:     return OUString( "shade" );
+        case XML_tint:      return OUString( "tint" );
+        case XML_gray:      return OUString( "gray" );
+        case XML_comp:      return OUString( "comp" );
+        case XML_inv:       return OUString( "inv" );
+        case XML_gamma:     return OUString( "gamma" );
+        case XML_invGamma:  return OUString( "invGamma" );
+    }
+    SAL_WARN( "oox.drawingml", "Color::getColorTransformationName - unexpected transformation type" );
+    return OUString();
+}
+
+sal_Int32 Color::getColorTransformationToken( OUString sName )
+{
+    if( sName == "red" )
+        return XML_red;
+    else if( sName == "redMod" )
+        return XML_redMod;
+    else if( sName == "redOff" )
+        return XML_redOff;
+    else if( sName == "green" )
+        return XML_green;
+    else if( sName == "greenMod" )
+        return XML_greenMod;
+    else if( sName == "greenOff" )
+        return XML_greenOff;
+    else if( sName == "blue" )
+        return XML_blue;
+    else if( sName == "blueMod" )
+        return XML_blueMod;
+    else if( sName == "blueOff" )
+        return XML_blueOff;
+    else if( sName == "hue" )
+        return XML_hue;
+    else if( sName == "hueMod" )
+        return XML_hueMod;
+    else if( sName == "hueOff" )
+        return XML_hueOff;
+    else if( sName == "sat" )
+        return XML_sat;
+    else if( sName == "satMod" )
+        return XML_satMod;
+    else if( sName == "satOff" )
+        return XML_satOff;
+    else if( sName == "lum" )
+        return XML_lum;
+    else if( sName == "lumMod" )
+        return XML_lumMod;
+    else if( sName == "lumOff" )
+        return XML_lumOff;
+    else if( sName == "shade" )
+        return XML_shade;
+    else if( sName == "tint" )
+        return XML_tint;
+    else if( sName == "gray" )
+        return XML_gray;
+    else if( sName == "comp" )
+        return XML_comp;
+    else if( sName == "inv" )
+        return XML_inv;
+    else if( sName == "gamma" )
+        return XML_gamma;
+    else if( sName == "invGamma" )
+        return XML_invGamma;
+
+    SAL_WARN( "oox.drawingml", "Color::getColorTransformationToken - unexpected transformation type" );
+    return XML_TOKEN_INVALID;
 }
 
 void Color::clearTransparence()

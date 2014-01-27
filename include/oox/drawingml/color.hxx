@@ -22,6 +22,8 @@
 
 #include <vector>
 #include <boost/shared_ptr.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <sal/types.h>
 #include <rtl/instance.hxx>
 #include <rtl/ustring.hxx>
@@ -94,6 +96,13 @@ public:
 
     /** Returns the scheme name from the a:schemeClr element for interoperability purposes */
     OUString            getSchemeName() const { return msSchemeName; }
+    /** Returns the unaltered list of transformations for interoperability purposes */
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > getTransformations() const;
+
+    /** Translates between color transformation tokens and their names */
+    static OUString     getColorTransformationName( sal_Int32 nElement );
+    /** Translates between color transformation token names and the corresponding token */
+    static sal_Int32    getColorTransformationToken( OUString sName );
 
 private:
     /** Internal helper for getColor(). */
@@ -137,6 +146,8 @@ private:
     sal_Int32           mnAlpha;        /// Alpha value (color opacity).
 
     OUString            msSchemeName;   /// Scheme name from the a:schemeClr element for interoperability purposes
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+                        maInteropTransformations;   /// Unaltered list of transformations for interoperability purposes
 };
 
 typedef boost::shared_ptr< Color > ColorPtr;

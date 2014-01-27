@@ -565,13 +565,15 @@ Reference< XShape > Shape::createAndInsert(
                 OUString sColorScheme = pFillRef->maPhClr.getSchemeName();
                 if( !sColorScheme.isEmpty() )
                 {
-                    Sequence< PropertyValue > aProperties(3);
+                    Sequence< PropertyValue > aProperties(4);
                     aProperties[0].Name = "SchemeClr";
                     aProperties[0].Value = Any( sColorScheme );
                     aProperties[1].Name = "Idx";
                     aProperties[1].Value = Any( pFillRef->mnThemedIdx );
                     aProperties[2].Name = "Color";
                     aProperties[2].Value = Any( nFillPhClr );
+                    aProperties[3].Name = "Transformations";
+                    aProperties[3].Value = Any( pFillRef->maPhClr.getTransformations() );
 
                     PropertyValue pStyleFillRef;
                     pStyleFillRef.Name = "StyleFillRef";
