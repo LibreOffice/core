@@ -71,10 +71,12 @@
   <implementation name="com.sun.star.i18n.ChapterCollator">
     <service name="com.sun.star.i18n.ChapterCollator"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.CharacterClassification">
+  <implementation name="com.sun.star.i18n.CharacterClassification"
+      constructor="com_sun_star_i18n_CharacterClassification_get_implementation">
     <service name="com.sun.star.i18n.CharacterClassification"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.CharacterClassification_Unicode">
+  <implementation name="com.sun.star.i18n.CharacterClassification_Unicode"
+      constructor="com_sun_star_i18n_CharacterClassification_Unicode_get_implementation">
     <service name="com.sun.star.i18n.CharacterClassification_Unicode"/>
   </implementation>
   <implementation name="com.sun.star.i18n.Collator"

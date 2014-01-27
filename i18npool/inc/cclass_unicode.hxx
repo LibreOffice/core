@@ -69,9 +69,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( com::sun::star::uno::RuntimeException );
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( com::sun::star::uno::RuntimeException );
 
-protected:
-    const sal_Char *cClass;
-
 private:
     Transliteration_casemapping *trans;
 

@@ -28,7 +28,6 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 //  ----------------------------------------------------
@@ -46,7 +45,6 @@ cclass_Unicode::cclass_Unicode( const uno::Reference < XComponentContext >& rxCo
         cDecimalSep( '.' )
 {
     trans = new Transliteration_casemapping();
-    cClass = "com.sun.star.i18n.CharacterClassification_Unicode";
 }
 
 cclass_Unicode::~cclass_Unicode() {
@@ -264,7 +262,7 @@ ParseResult SAL_CALL cclass_Unicode::parsePredefinedToken(
 
 OUString SAL_CALL cclass_Unicode::getImplementationName() throw( RuntimeException )
 {
-    return OUString::createFromAscii(cClass);
+    return OUString("com.sun.star.i18n.CharacterClassification_Unicode");
 }
 
 sal_Bool SAL_CALL cclass_Unicode::supportsService(const OUString& rServiceName) throw( RuntimeException )
@@ -275,10 +273,18 @@ sal_Bool SAL_CALL cclass_Unicode::supportsService(const OUString& rServiceName) 
 Sequence< OUString > SAL_CALL cclass_Unicode::getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii(cClass);
+    aRet[0] = OUString("com.sun.star.i18n.CharacterClassification_Unicode");
     return aRet;
 }
 
 } } } }
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_i18n_CharacterClassification_Unicode_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new css::i18n::cclass_Unicode(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

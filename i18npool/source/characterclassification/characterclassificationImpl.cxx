@@ -191,13 +191,11 @@ CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Loca
     throw RuntimeException();
 }
 
-const sal_Char cClass[] = "com.sun.star.i18n.CharacterClassification";
-
 OUString SAL_CALL
 CharacterClassificationImpl::getImplementationName(void)
                 throw( RuntimeException )
 {
-    return OUString::createFromAscii(cClass);
+    return OUString("com.sun.star.i18n.CharacterClassification");
 }
 
 sal_Bool SAL_CALL
@@ -211,10 +209,18 @@ Sequence< OUString > SAL_CALL
 CharacterClassificationImpl::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii(cClass);
+    aRet[0] = OUString("com.sun.star.i18n.CharacterClassification");
     return aRet;
 }
 
 } } } }
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_i18n_CharacterClassification_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new css::i18n::CharacterClassificationImpl(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

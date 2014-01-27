@@ -55,9 +55,6 @@
 #include <indexentrysupplier_common.hxx>
 #include <indexentrysupplier_default.hxx>
 
-#include <characterclassificationImpl.hxx>
-#include <cclass_unicode.hxx>
-
 #include <chaptercollator.hxx>
 #include <collator_unicode.hxx>
 
@@ -128,9 +125,6 @@ IMPL_CREATEINSTANCE( BreakIterator_ko )
 IMPL_CREATEINSTANCE( BreakIterator_th )
 IMPL_CREATEINSTANCE_CTX( ChapterCollator )
 IMPL_CREATEINSTANCE( Collator_Unicode )
-
-IMPL_CREATEINSTANCE_CTX( CharacterClassificationImpl )
-IMPL_CREATEINSTANCE_CTX( cclass_Unicode )
 
 IMPL_CREATEINSTANCE_CTX( InputSequenceCheckerImpl )
 IMPL_CREATEINSTANCE( InputSequenceChecker_th )
@@ -339,12 +333,6 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.Collator_Unicode",
         "com.sun.star.i18n.Collator_Unicode",
         &Collator_Unicode_CreateInstance },
-    {   "com.sun.star.i18n.CharacterClassification",
-        "com.sun.star.i18n.CharacterClassification",
-        &CharacterClassificationImpl_CreateInstance },
-    {   "com.sun.star.i18n.CharacterClassification_Unicode",
-        "com.sun.star.i18n.CharacterClassification_Unicode",
-        &cclass_Unicode_CreateInstance },
     {   "com.sun.star.i18n.InputSequenceChecker",
         "com.sun.star.i18n.InputSequenceChecker",
         &InputSequenceCheckerImpl_CreateInstance },
