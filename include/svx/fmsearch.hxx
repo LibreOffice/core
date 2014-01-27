@@ -37,27 +37,24 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
-// ===================================================================================================
-// Hilfsmethoden
+// Helper methods
 
 SVX_DLLPUBLIC sal_Bool IsSearchableControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xControl,
                                             OUString* pCurrentText = NULL);
     // check if the control has one of the interfaces we can use for searching
     // *pCurrentText will be filled with the current text of the control (as used when searching this control)
 
-// ===================================================================================================
-// Hilfsstrukturen
+
+// Helper structs
 
 struct FmFoundRecordInformation
 {
     ::com::sun::star::uno::Any      aPosition;  // bookmark of the record in which the text was found
-    sal_Int16       nFieldPos;  // ditto : the relative position of the column (in the string name of the field list in the constructor)
+    sal_Int16       nFieldPos;  // ditto: the relative position of the column (in the string name of the field list in the constructor)
     sal_Int16       nContext;   // the context in which was searched and found (if the current search knows several contexts)
 };
 
-// ===================================================================================================
-// = struct FmSearchContext - information for the search in different contexts
-// ===================================================================================================
+// FmSearchContext - information for the search in different contexts
 
 struct FmSearchContext
 {
@@ -69,7 +66,7 @@ struct FmSearchContext
     OUString                strUsedFields;  // a list of field names separeted by ';'
     ::std::vector< css::uno::Reference< css::uno::XInterface > >
                             arrFields;      // the corresponding text interfaces for the fields in strUsedFields
-    OUString                sFieldDisplayNames;     // if not empty : names to be displayed for the searchable fields (must have the same token count as strUsedFields !)
+    OUString                sFieldDisplayNames;     // if not empty: names to be displayed for the searchable fields (must have the same token count as strUsedFields!)
 };
 
 #endif // INCLUDED_SVX_FMSEARCH_HXX
