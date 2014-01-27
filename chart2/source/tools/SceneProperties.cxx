@@ -318,7 +318,7 @@ void SceneProperties::AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_SHADE_MODE, drawing::ShadeMode_SMOOTH );
 
     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >(
-        rOutMap, PROP_SCENE_AMBIENT_COLOR, ChartTypeHelper::getDefaultAmbientLightColor(ThreeDLookScheme_Simple,0));
+        rOutMap, PROP_SCENE_AMBIENT_COLOR, ChartTypeHelper::getDefaultAmbientLightColor(false,0));
 
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_TWO_SIDED_LIGHTING, true );
 
@@ -351,7 +351,7 @@ void SceneProperties::AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_DIRECTION_8, aDefaultLightDirection );
 
     uno::Any aDefaultLightColor;
-    aDefaultLightColor <<= ChartTypeHelper::getDefaultDirectLightColor(ThreeDLookScheme_Simple,0);
+    aDefaultLightColor <<= ChartTypeHelper::getDefaultDirectLightColor(false,0);
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_COLOR_1, aDefaultLightColor );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_COLOR_2, aDefaultLightColor );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_COLOR_3, aDefaultLightColor );
