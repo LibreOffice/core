@@ -211,13 +211,19 @@ TokenLabelInfo::~TokenLabelInfo()
 // the constructor detects the length of the token table
 
 SbiTokenizer::SbiTokenizer( const OUString& rSrc, StarBASIC* pb )
-           : SbiScanner( rSrc, pb )
+    : SbiScanner(rSrc, pb)
+    , eCurTok(NIL)
+    , ePush(NIL)
+    , nPLine(0)
+    , nPCol1(0)
+    , nPCol2(0)
+    , bEof(false)
+    , bEos(true)
+    , bKeywords(true)
+    , bAs(false)
+    , bErrorIsSymbol(true)
 {
     pTokTable = aTokTable_Basic;
-    bEof = bAs = false;
-    eCurTok = NIL;
-    ePush = NIL;
-    bEos = bKeywords = bErrorIsSymbol = true;
     if( !nToken )
     {
         const TokenTable *tp;
