@@ -585,7 +585,7 @@ void SbiParser::Set()
         Error( SbERR_INVALID_OBJECT );
     TestToken( EQ );
     SbiSymDef* pDef = aLvalue.GetRealVar();
-    if( pDef && pDef->GetConstDef() )
+    if( pDef->GetConstDef() )
         Error( SbERR_DUPLICATE_DEF, pDef->GetName() );
 
     SbiToken eTok = Peek();
