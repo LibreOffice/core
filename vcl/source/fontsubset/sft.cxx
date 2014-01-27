@@ -623,10 +623,6 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
         if (abs3 < 0) abs3 = -abs3;
         if (abs3 <= 33) n *= 2;
 
-        if (!ARGS_ARE_XY_VALUES) {      /* match the points */
-            assert(!"ARGS_ARE_XY_VALUES is not implemented!!!\n");
-        }
-
         for (i=0; i<np; i++) {
             F16Dot16 t;
             ControlPoint cp;
