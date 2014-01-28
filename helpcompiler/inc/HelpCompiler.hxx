@@ -52,9 +52,9 @@
 
 #if OSL_DEBUG_LEVEL > 2
     #include <iostream>
-    #define HCDBG(foo) do { if (1) foo; } while(0)
+    #define HCDBG(foo) do { if (true) foo; } while(false)
 #else
-    #define HCDBG(foo) do { } while(0)
+    #define HCDBG(foo) do { } while(false)
 #endif
 
 namespace fs
