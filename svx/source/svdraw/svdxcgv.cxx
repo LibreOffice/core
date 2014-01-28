@@ -743,7 +743,6 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
         // #i13033#
         // New mechanism to re-create the connections of cloned connectors
         CloneList aCloneList;
-        sal_uInt32 nCloneErrCnt(0);
 
         for( sal_uInt32 i(0); i < aSdrObjects.size(); i++ )
         {
@@ -765,42 +764,16 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
                 pNeuObj->SetModel( pNeuMod );
             }
 
-            if( pNeuObj )
-            {
-                SdrInsertReason aReason(SDRREASON_VIEWCALL);
-                pNeuPag->InsertObject(pNeuObj,CONTAINER_APPEND,&aReason);
+            SdrInsertReason aReason(SDRREASON_VIEWCALL);
+            pNeuPag->InsertObject(pNeuObj,CONTAINER_APPEND,&aReason);
 
-                // #i13033#
-                aCloneList.AddPair(pObj, pNeuObj);
-            }
-            else
-                nCloneErrCnt++;
+            // #i13033#
+            aCloneList.AddPair(pObj, pNeuObj);
         }
 
         // #i13033#
         // New mechanism to re-create the connections of cloned connectors
         aCloneList.CopyConnections();
-
-        if(0L != nCloneErrCnt)
-        {
-#ifdef DBG_UTIL
-            OStringBuffer aStr("SdrExchangeView::GetMarkedObjModel(): Error when cloning ");
-
-            if(nCloneErrCnt == 1)
-            {
-                aStr.append("a drawing object.");
-            }
-            else
-            {
-                aStr.append(static_cast<sal_Int32>(nCloneErrCnt));
-                aStr.append(" drawing objects.");
-            }
-
-            aStr.append(" Not copying object connectors.");
-
-            OSL_FAIL(aStr.getStr());
-#endif
-        }
     }
     return pNeuMod;
 }
