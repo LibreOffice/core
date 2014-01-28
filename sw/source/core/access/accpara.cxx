@@ -3552,7 +3552,8 @@ sal_Bool SAL_CALL SwAccessibleParagraph::scrollToPosition( const ::com::sun::sta
 }
 
 sal_Int32 SAL_CALL SwAccessibleParagraph::getSelectedPortionCount(  )
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException,
+           std::exception)
 {
     SolarMutexGuard g;
 
