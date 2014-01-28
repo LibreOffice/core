@@ -3191,14 +3191,24 @@ void ChartExport::exportView3D()
     FSHelperPtr pFS = GetFS();
     pFS->startElement( FSNS( XML_c, XML_view3D ),
             FSEND );
+    sal_Int32 eChartType = getChartType( );
     // rotX
     if( GetProperty( xPropSet, "RotationHorizontal" ) )
     {
         sal_Int32 nRotationX = 0;
         mAny >>= nRotationX;
-        // X rotation (map Chart2 [-179,180] to OOXML [0..359])
         if( nRotationX < 0 )
-            nRotationX += 360;
+        {
+            if(eChartType == chart::TYPEID_PIE)
+            {
+            /* In OOXML we get value in 0..90 range for pie chart X rotation , whereas we expect it to be in -90..90 range,
+               so we conver that during import. It  is modified in View3DConverter::convertFromModel()
+               here we convert it back to 0..90 as we received in import */
+               nRotationX += 90;  // X rotation (map Chart2 [-179,180] to OOXML [0..90])
+            }
+            else
+                nRotationX += 360; // X rotation (map Chart2 [-179,180] to OOXML [-90..90])
+        }
         pFS->singleElement( FSNS( XML_c, XML_rotX ),
             XML_val, I32S( nRotationX ),
             FSEND );
@@ -3206,14 +3216,29 @@ void ChartExport::exportView3D()
     // rotY
     if( GetProperty( xPropSet, "RotationVertical" ) )
     {
-        sal_Int32 nRotationY = 0;
-        mAny >>= nRotationY;
         // Y rotation (map Chart2 [-179,180] to OOXML [0..359])
-        if( nRotationY < 0 )
-            nRotationY += 360;
-        pFS->singleElement( FSNS( XML_c, XML_rotY ),
-            XML_val, I32S( nRotationY ),
-            FSEND );
+        if( eChartType == chart::TYPEID_PIE && GetProperty( xPropSet, "StartingAngle" ) )
+        {
+         // Y rotation used as 'first pie slice angle' in 3D pie charts
+            sal_Int32 nStartingAngle=0;
+            mAny >>= nStartingAngle;
+            // convert to ooxml angle
+            nStartingAngle = (450 - nStartingAngle ) % 360;
+            pFS->singleElement( FSNS( XML_c, XML_rotY ),
+                           XML_val, I32S( nStartingAngle ),
+                           FSEND );
+        }
+        else
+        {
+            sal_Int32 nRotationY = 0;
+            mAny >>= nRotationY;
+            // Y rotation (map Chart2 [-179,180] to OOXML [0..359])
+            if( nRotationY < 0 )
+                nRotationY += 360;
+            pFS->singleElement( FSNS( XML_c, XML_rotY ),
+                            XML_val, I32S( nRotationY ),
+                            FSEND );
+        }
     }
     // rAngAx
     if( GetProperty( xPropSet, "RightAngledAxes" ) )
