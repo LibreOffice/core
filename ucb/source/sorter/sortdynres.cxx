@@ -321,6 +321,9 @@ SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
         }
     }
 
+    if (!pCurSet)
+        return;
+
     Any  aRet;
 
     try {
