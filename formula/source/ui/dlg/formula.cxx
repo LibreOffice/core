@@ -753,7 +753,7 @@ void FormulaDlg_Impl::UpdateTokenArray( const OUString& rStrExp)
     } // if ( pTokens && nLen == m_aTokenList.getLength() )
 
     FormulaCompiler aCompiler(*m_pTokenArray.get());
-    aCompiler.SetCompileForFAP(sal_True);   // #i101512# special handling is needed
+    aCompiler.SetCompileForFAP(true);   // #i101512# special handling is needed
     aCompiler.CompileTokenArray();
 }
 
@@ -926,7 +926,7 @@ void FormulaDlg_Impl::ClearAllParas()
         aFtEditName.Hide();
         pParaWin->Hide();
 
-        aBtnForward.Enable(sal_True); //@new
+        aBtnForward.Enable(true); //@new
         aFtHeadLine.Show();
         aFtFuncName.Show();
         aFtFuncDesc.Show();
@@ -999,13 +999,13 @@ IMPL_LINK( FormulaDlg_Impl, BtnHdl, PushButton*, pBtn )
         else
         {
             DblClkHdl(pFuncPage);      //new
-            aBtnForward.Enable(sal_False); //new
+            aBtnForward.Enable(false); //new
         }
     }
     else if ( pBtn == &aBtnBackward )
     {
         bEditFlag=sal_False;
-        aBtnForward.Enable(sal_True);
+        aBtnForward.Enable(true);
         EditNextFunc( sal_False );
         aMEFormula.Invalidate();
         aMEFormula.Update();
@@ -1052,7 +1052,7 @@ IMPL_LINK_NOARG(FormulaDlg_Impl, DblClkHdl)
     }
 
     pParaWin->SetEdFocus(0);
-    aBtnForward.Enable(sal_False); //@New
+    aBtnForward.Enable(false); //@New
 
     return 0;
 }
@@ -1192,7 +1192,7 @@ IMPL_LINK( FormulaDlg_Impl, FxHdl, ParaWin*, pPtr )
 {
     if(pPtr==pParaWin)
     {
-        aBtnForward.Enable(sal_True); //@ In order to be able to input another function.
+        aBtnForward.Enable(true); //@ In order to be able to input another function.
         aTabCtrl.SetCurPageId(TP_FUNCTION);
 
         OUString aUndoStr = m_pHelper->getCurrentFormula();       // it will be added before a ";"
@@ -1530,7 +1530,7 @@ sal_Bool FormulaDlg_Impl::CheckMatrix(OUString& aFormula)
 IMPL_LINK_NOARG(FormulaDlg_Impl, StructSelHdl)
 {
     bStructUpdate=sal_False;
-    if(pStructPage->IsVisible())    aBtnForward.Enable(sal_False); //@New
+    if(pStructPage->IsVisible())    aBtnForward.Enable(false); //@New
 
     bStructUpdate=sal_True;
     return 0;
@@ -1553,7 +1553,7 @@ IMPL_LINK_NOARG(FormulaDlg_Impl, FuncSelHdl)
     {
         const IFunctionDescription* pDesc =pFuncPage->GetFuncDesc( pFuncPage->GetFunction() );
 
-        if(pDesc!=pFuncDesc) aBtnForward.Enable(sal_True); //new
+        if(pDesc!=pFuncDesc) aBtnForward.Enable(true); //new
 
         if (pDesc)
         {

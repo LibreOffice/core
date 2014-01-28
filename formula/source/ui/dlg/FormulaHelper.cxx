@@ -45,7 +45,7 @@ namespace formula
             virtual sal_uInt32 getParameterCount() const { return 0; }
             virtual OUString getParameterName(sal_uInt32 ) const { return OUString(); }
             virtual OUString getParameterDescription(sal_uInt32 ) const { return OUString(); }
-            virtual bool isParameterOptional(sal_uInt32 ) const { return sal_False; }
+            virtual bool isParameterOptional(sal_uInt32 ) const { return false; }
         };
     }
 //===================================================================
