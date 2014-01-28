@@ -365,8 +365,11 @@ throw(css::uno::RuntimeException)
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
+    if (!mpMenu)
+        return;
+
     sal_Int32 nItemCount = (sal_Int32)mpMenu->GetItemCount();
-    if ( mpMenu && ( nCount > 0 ) && ( nPos >= 0 ) && ( nPos < nItemCount ) && ( nItemCount > 0 ))
+    if ( ( nCount > 0 ) && ( nPos >= 0 ) && ( nPos < nItemCount ) && ( nItemCount > 0 ))
     {
         sal_Int16 nP = sal::static_int_cast< sal_Int16 >(
             std::min( (int)(nPos+nCount), (int)nItemCount ));
