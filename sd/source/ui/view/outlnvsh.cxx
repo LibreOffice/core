@@ -137,7 +137,7 @@ void OutlineViewShell::Construct(DrawDocShell* )
     Size aSize(29700, 21000);
     Point aWinPos (0, 0);
     Point aViewOrigin(0, 0);
-    GetActiveWindow()->SetMinZoomAutoCalc(sal_False);
+    GetActiveWindow()->SetMinZoomAutoCalc(false);
     GetActiveWindow()->SetMinZoom( MIN_ZOOM );
     GetActiveWindow()->SetMaxZoom( MAX_ZOOM );
     InitWindows(aViewOrigin, aSize, aWinPos);
@@ -280,7 +280,7 @@ void OutlineViewShell::ArrangeGUIElements ()
     ::sd::Window* pWindow = mpContentWindow.get();
     if (pWindow != NULL)
     {
-        pWindow->SetMinZoomAutoCalc(sal_False);
+        pWindow->SetMinZoomAutoCalc(false);
 
 
         // change OuputArea of the OutlinerView
@@ -420,7 +420,7 @@ void OutlineViewShell::GetCtrlState(SfxItemSet &rSet)
     rSet.Put( SfxBoolItem( SID_READONLY_MODE, GetDocSh()->IsReadOnly() ) );
 
     if ( SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_MAIL_SCROLLBODY_PAGEDOWN) )
-        rSet.Put( SfxBoolItem( SID_MAIL_SCROLLBODY_PAGEDOWN, sal_True ) );
+        rSet.Put( SfxBoolItem( SID_MAIL_SCROLLBODY_PAGEDOWN, true ) );
 
     if ( SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_TRANSLITERATE_HALFWIDTH) ||
          SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_TRANSLITERATE_FULLWIDTH) ||
@@ -747,11 +747,11 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
 {
     ViewShell::GetMenuState(rSet);
 
-    rSet.Put(SfxBoolItem(SID_DIAMODE, sal_False));
-    rSet.Put(SfxBoolItem(SID_DRAWINGMODE, sal_False));
-    rSet.Put(SfxBoolItem(SID_OUTLINEMODE, sal_True));
-    rSet.Put(SfxBoolItem(SID_NOTESMODE, sal_False));
-    rSet.Put(SfxBoolItem(SID_HANDOUTMODE, sal_False));
+    rSet.Put(SfxBoolItem(SID_DIAMODE, false));
+    rSet.Put(SfxBoolItem(SID_DRAWINGMODE, false));
+    rSet.Put(SfxBoolItem(SID_OUTLINEMODE, true));
+    rSet.Put(SfxBoolItem(SID_NOTESMODE, false));
+    rSet.Put(SfxBoolItem(SID_HANDOUTMODE, false));
 
     if (!mpZoomList->IsNextPossible())
     {
@@ -951,11 +951,11 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     {
         if (GetDoc()->GetOnlineSpell())
         {
-            rSet.Put(SfxBoolItem(SID_AUTOSPELL_CHECK, sal_True));
+            rSet.Put(SfxBoolItem(SID_AUTOSPELL_CHECK, true));
         }
         else
         {
-            rSet.Put(SfxBoolItem(SID_AUTOSPELL_CHECK, sal_False));
+            rSet.Put(SfxBoolItem(SID_AUTOSPELL_CHECK, false));
         }
     }
 
@@ -1616,7 +1616,7 @@ void OutlineViewShell::GetAttrState( SfxItemSet& rSet )
         nWhich = aIter.NextWhich();
     }
 
-    rSet.Put( aAllSet, sal_False );
+    rSet.Put( aAllSet, false );
 }
 
 
@@ -1695,7 +1695,7 @@ bool OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
         {
             DBG_ASSERT( pOlView->isRecordingUndo(), "sd::OutlineViewShell::UpdateTitleObject(), no undo for model change!?" );
             pTO = pOlView->CreateTitleTextObject(pPage);
-            bNewObject = sal_True;
+            bNewObject = true;
         }
 
         // if we have a title object and a text, set the text
@@ -1716,7 +1716,7 @@ bool OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
                     pOlView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTO,0));
 
                 pTO->SetOutlinerParaObject( pOPO );
-                pTO->SetEmptyPresObj( sal_False );
+                pTO->SetEmptyPresObj( false );
                 pTO->ActionChanged();
             }
         }
@@ -1736,7 +1736,7 @@ bool OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
                 if( pOlView->isRecordingUndo() )
                     pOlView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTO,0));
                 pPage->RestoreDefaultText( pTO );
-                pTO->SetEmptyPresObj(sal_True);
+                pTO->SetEmptyPresObj(true);
                 pTO->ActionChanged();
             }
         }
@@ -1821,7 +1821,7 @@ bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
                     pOlView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTO,0));
 
                 pTO->SetOutlinerParaObject( pOPO );
-                pTO->SetEmptyPresObj( sal_False );
+                pTO->SetEmptyPresObj( false );
                 pTO->ActionChanged();
             }
         }
@@ -1844,7 +1844,7 @@ bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
                 if( pOlView->isRecordingUndo() )
                     pOlView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTO,0));
                 pPage->RestoreDefaultText( pTO );
-                pTO->SetEmptyPresObj(sal_True);
+                pTO->SetEmptyPresObj(true);
                 pTO->ActionChanged();
             }
         }

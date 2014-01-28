@@ -112,7 +112,7 @@ View::View(SdDrawDocument& rDrawDoc, OutputDevice* pOutDev,
     mnDragSrcPgNum(SDRPAGE_NOTFOUND),
     mnAction(DND_ACTION_NONE),
     mnLockRedrawSmph(0),
-    mbIsDropAllowed(sal_True),
+    mbIsDropAllowed(true),
     maSmartTags(*this),
     mpClipboard (new ViewClipboard (*this))
 {
@@ -743,7 +743,7 @@ SdrEndTextEditKind View::SdrEndTextEdit(sal_Bool bDontDeleteReally )
     {
         if( xObj.is() && !xObj->IsEmptyPresObj() )
         {
-            xObj->SetEmptyPresObj( sal_True );
+            xObj->SetEmptyPresObj( true );
         }
         else
         {
@@ -757,7 +757,7 @@ SdrEndTextEditKind View::SdrEndTextEdit(sal_Bool bDontDeleteReally )
         {
             SdrPage* pPage = pObj->GetPage();
             if( !pPage || !pPage->IsMasterPage() )
-                pObj->SetEmptyPresObj( sal_False );
+                pObj->SetEmptyPresObj( false );
         }
     }
 
@@ -1237,10 +1237,10 @@ bool View::ShouldToggleOn(
 {
     // If setting bullets/numbering by the dialog, always should toggle on.
     if (!bBulletOnOffMode)
-        return sal_True;
+        return true;
     SdrModel* pSdrModel = GetModel();
     if (!pSdrModel)
-        return sal_False;
+        return false;
 
     sal_Bool bToggleOn = sal_False;
     SdrOutliner* pOutliner = SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, pSdrModel);

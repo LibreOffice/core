@@ -1117,7 +1117,7 @@ void AssistentDlgImpl::UpdatePage()
         {
             // Show elements on first page depending of start type
             SetStartType( GetStartType() );
-            mpPage1TemplateRB->Enable(sal_True /*mbTemplatesReady*/);
+            mpPage1TemplateRB->Enable(true /*mbTemplatesReady*/);
             break;
         }
 
@@ -1128,11 +1128,11 @@ void AssistentDlgImpl::UpdatePage()
 
             if( GetStartType() != ST_EMPTY )
             {
-                mpPage2Medium5RB->Enable( sal_True );
+                mpPage2Medium5RB->Enable( true );
             }
             else
             {
-                mpPage2Medium5RB->Enable( sal_False );
+                mpPage2Medium5RB->Enable( false );
                 if(mpPage2Medium5RB->IsChecked())
                     mpPage2Medium1RB->Check();
             }
@@ -1423,7 +1423,7 @@ void AssistentDlgImpl::UpdateUserData()
             {
                 pPage->SetObjText( pObj, NULL, PRESOBJ_TITLE, aTopic );
                 pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE ), sal_True );
-                pObj->SetEmptyPresObj(sal_False);
+                pObj->SetEmptyPresObj(false);
             }
 
         }
@@ -1440,7 +1440,7 @@ void AssistentDlgImpl::UpdateUserData()
             {
                 pPage->SetObjText( pObj, NULL, PRESOBJ_OUTLINE, aStrTmp );
                 pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( PRESOBJ_OUTLINE ), sal_True );
-                pObj->SetEmptyPresObj(sal_False);
+                pObj->SetEmptyPresObj(false);
             }
             else
             {
@@ -1449,7 +1449,7 @@ void AssistentDlgImpl::UpdateUserData()
                 {
                     pPage->SetObjText( pObj, NULL, PRESOBJ_TEXT, aStrTmp );
                     pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( PRESOBJ_TEXT ), sal_True );
-                    pObj->SetEmptyPresObj(sal_False);
+                    pObj->SetEmptyPresObj(false);
                 }
             }
         }
@@ -1548,9 +1548,9 @@ void AssistentDlgImpl::UpdatePreview( sal_Bool bDocPreview )
         if(IsOwnFormat(aDocFile))
         {
             SfxItemSet* pSet = new SfxAllItemSet( pSfxApp->GetPool() );
-            pSet->Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
+            pSet->Put( SfxBoolItem( SID_TEMPLATE, true ) );
             if(bDocPreview)
-                pSet->Put( SfxBoolItem( SID_PREVIEW, sal_True ) );
+                pSet->Put( SfxBoolItem( SID_PREVIEW, true ) );
             RestorePassword( pSet, aDocFile );
             if( (lErr = pSfxApp->LoadTemplate( xDocShell, aDocFile, sal_True, pSet )) != 0 )
                 ErrorHandler::HandleError(lErr);
@@ -1563,7 +1563,7 @@ void AssistentDlgImpl::UpdatePreview( sal_Bool bDocPreview )
             aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aDocFile ));
             aReq.AppendItem( SfxStringItem( SID_REFERER, OUString() ) );
             aReq.AppendItem( SfxStringItem( SID_TARGETNAME, OUString("_default") ) );
-            aReq.AppendItem( SfxBoolItem( SID_HIDDEN, sal_True ) );
+            aReq.AppendItem( SfxBoolItem( SID_HIDDEN, true ) );
             aReq.AppendItem( SfxBoolItem( SID_PREVIEW, bDocPreview ) );
 
             const SfxViewFrameItem* pRet = PTR_CAST( SfxViewFrameItem, SFX_APP()->ExecuteSlot( aReq ) );
@@ -1593,8 +1593,8 @@ void AssistentDlgImpl::UpdatePreview( sal_Bool bDocPreview )
         if(IsOwnFormat(aLayoutFile))
         {
             SfxItemSet* pSet = new SfxAllItemSet( pSfxApp->GetPool() );
-            pSet->Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
-            pSet->Put( SfxBoolItem( SID_PREVIEW, sal_True ) );
+            pSet->Put( SfxBoolItem( SID_TEMPLATE, true ) );
+            pSet->Put( SfxBoolItem( SID_PREVIEW, true ) );
 
             RestorePassword( pSet, aLayoutFile );
             if( (lErr = pSfxApp->LoadTemplate( xLayoutDocShell, aLayoutFile, sal_True, pSet )) != 0 )
@@ -1647,7 +1647,7 @@ void AssistentDlgImpl::SavePassword( SfxObjectShellLock xDoc, const OUString& rP
         if(pMedium && pMedium->IsStorage())
         {
           SfxItemSet * pSet = pMedium->GetItemSet();
-          SFX_ITEMSET_ARG( pSet, pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, sal_False);
+          SFX_ITEMSET_ARG( pSet, pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, false);
           uno::Sequence < beans::NamedValue > aEncryptionData;
           if (pEncryptionDataItem)
               pEncryptionDataItem->GetValue() >>= aEncryptionData;

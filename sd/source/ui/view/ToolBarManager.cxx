@@ -1060,7 +1060,7 @@ bool ToolBarManager::Implementation::CheckPlugInMode (const OUString& rsName) co
         if (pMedium == NULL)
             break;
 
-        SFX_ITEMSET_ARG(pMedium->GetItemSet(),pViewOnlyItem,SfxBoolItem,SID_VIEWONLY,sal_False);
+        SFX_ITEMSET_ARG(pMedium->GetItemSet(),pViewOnlyItem,SfxBoolItem,SID_VIEWONLY,false);
         if (pViewOnlyItem == NULL)
             break;
 

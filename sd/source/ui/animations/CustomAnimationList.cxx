@@ -669,7 +669,7 @@ void CustomAnimationList::update()
             if( xShape.is() )
             {
                 SvTreeListEntry* pLBoxEntry = new CustomAnimationListEntry;
-                pLBoxEntry->AddItem( new SvLBoxContextBmp( pLBoxEntry, 0, Image(), Image(), 0));
+                pLBoxEntry->AddItem( new SvLBoxContextBmp( pLBoxEntry, 0, Image(), Image(), false));
                 OUString aDescription = SD_RESSTR(STR_CUSTOMANIMATION_TRIGGER);
                 aDescription += ": ";
                 aDescription += getShapeDescription( xShape, false );
@@ -779,7 +779,7 @@ void CustomAnimationList::append( CustomAnimationEffectPtr pEffect )
         // create an entry for the effect
         SvTreeListEntry* pEntry = new CustomAnimationListEntry( pEffect );
 
-        pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));
+        pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false));
         pEntry->AddItem( new CustomAnimationListEntryItem( pEntry, 0, aDescription, pEffect, this ) );
 
         if( pParentEntry )

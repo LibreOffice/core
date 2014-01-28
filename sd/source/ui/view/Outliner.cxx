@@ -136,13 +136,13 @@ Outliner::Outliner( SdDrawDocument* pDoc, sal_uInt16 nMode )
       mpDrawDocument(pDoc),
       mnConversionLanguage(LANGUAGE_NONE),
       mnIgnoreCurrentPageChangesLevel(0),
-      mbStringFound(sal_False),
+      mbStringFound(false),
       mbMatchMayExist(false),
       mnPageCount(0),
       mnObjectCount(0),
-      mbEndOfSearch(sal_False),
-      mbFoundObject(sal_False),
-      mbError(sal_False),
+      mbEndOfSearch(false),
+      mbFoundObject(false),
+      mbError(false),
       mbDirectionIsForward(true),
       mbRestrictSearchToSelection(false),
       maMarkListCopy(),
@@ -266,13 +266,13 @@ void Outliner::PrepareSpelling (void)
     ::boost::shared_ptr<ViewShell> pViewShell (mpWeakViewShell.lock());
     if (pViewShell)
     {
-        mbStringFound = sal_False;
+        mbStringFound = false;
 
         mbWholeDocumentProcessed = false;
         // Supposed that we are not located at the very beginning/end of
         // the document then there may be a match in the document
         // prior/after the current position.
-        mbMatchMayExist = sal_True;
+        mbMatchMayExist = true;
 
         maObjectIterator = ::sd::outliner::Iterator();
         maSearchStartPosition = ::sd::outliner::Iterator();
@@ -499,7 +499,7 @@ bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
         meMode = SEARCH;
         mpSearchItem = pSearchItem;
 
-        mbFoundObject = sal_False;
+        mbFoundObject = false;
 
         Initialize ( ! mpSearchItem->GetBackward());
 
@@ -1067,7 +1067,7 @@ void Outliner::EndOfSearch (void)
         if ( ! mbMatchMayExist)
         {
             ShowEndOfSearchDialog ();
-            mbEndOfSearch = sal_True;
+            mbEndOfSearch = true;
         }
         // Ask the user whether to wrap arround and continue the search or
         // to terminate.
@@ -1210,8 +1210,8 @@ void Outliner::PrepareSpellCheck (void)
 
     if (eState == EE_SPELL_NOLANGUAGE)
     {
-        mbError = sal_True;
-        mbEndOfSearch = sal_True;
+        mbError = true;
+        mbEndOfSearch = true;
         ErrorBox aErrorBox (NULL,
             WB_OK,
             SD_RESSTR(STR_NOLANGUAGE));
@@ -1269,7 +1269,7 @@ void Outliner::SetViewMode (PageKind ePageKind)
     if (pDrawViewShell.get()!=NULL && ePageKind != pDrawViewShell->GetPageKind())
     {
         // Restore old edit mode.
-        pDrawViewShell->ChangeEditMode(mpImpl->meOriginalEditMode, sal_False);
+        pDrawViewShell->ChangeEditMode(mpImpl->meOriginalEditMode, false);
 
         SetStatusEventHdl(Link());
         OUString sViewURL;
@@ -1338,7 +1338,7 @@ void Outliner::SetPage (EditMode eEditMode, sal_uInt16 nPageIndex)
         OSL_ASSERT(pDrawViewShell.get()!=NULL);
         if (pDrawViewShell.get() != NULL)
         {
-            pDrawViewShell->ChangeEditMode(eEditMode, sal_False);
+            pDrawViewShell->ChangeEditMode(eEditMode, false);
             pDrawViewShell->SwitchPage(nPageIndex);
         }
     }
@@ -1378,7 +1378,7 @@ void Outliner::EnterEditMode (sal_Bool bGrabFocus)
         mpView->SdrBeginTextEdit(mpTextObj, pPV, mpWindow, sal_True, this, pOutlinerView, sal_True, sal_True, bGrabFocus);
 
         SetUpdateMode(sal_True);
-        mbFoundObject = sal_True;
+        mbFoundObject = true;
     }
 }
 
@@ -1583,8 +1583,8 @@ void Outliner::PrepareConversion (void)
     if( HasConvertibleTextPortion( mnConversionLanguage ) )
     {
         SetUpdateMode(sal_False);
-        mbStringFound = sal_True;
-        mbMatchMayExist = sal_True;
+        mbStringFound = true;
+        mbMatchMayExist = true;
 
         EnterEditMode ();
 
@@ -1612,12 +1612,12 @@ void Outliner::BeginConversion (void)
     ::boost::shared_ptr<ViewShell> pViewShell (mpWeakViewShell.lock());
     if (pViewShell)
     {
-        mbStringFound = sal_False;
+        mbStringFound = false;
 
         // Supposed that we are not located at the very beginning/end of the
         // document then there may be a match in the document prior/after
         // the current position.
-        mbMatchMayExist = sal_True;
+        mbMatchMayExist = true;
 
         maObjectIterator = ::sd::outliner::Iterator();
         maSearchStartPosition = ::sd::outliner::Iterator();
@@ -1711,13 +1711,13 @@ sal_uInt16 Outliner::ShowModalMessageBox (Dialog& rMessageBox)
     if (pChildWindow != NULL)
         pSearchDialog = pChildWindow->GetWindow();
     if (pSearchDialog != NULL)
-        pSearchDialog->EnableInput(sal_False,sal_True);
+        pSearchDialog->EnableInput(false,sal_True);
 
     sal_uInt16 nResult = rMessageBox.Execute();
 
     // Unlock the search dialog.
     if (pSearchDialog != NULL)
-        pSearchDialog->EnableInput(sal_True,sal_True);
+        pSearchDialog->EnableInput(true,sal_True);
 
     return nResult;
 }

@@ -237,8 +237,8 @@ void SdDocPreviewWin::updateViewSettings()
 
             const Size aSize( pPage->GetSize() );
 
-            pView->SetBordVisible( sal_False );
-            pView->SetPageVisible( sal_False );
+            pView->SetBordVisible( false );
+            pView->SetPageVisible( false );
             pView->ShowSdrPage( pPage );
 
             const Point aNewOrg( pPage->GetLftBorder(), pPage->GetUppBorder() );

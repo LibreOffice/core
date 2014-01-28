@@ -320,7 +320,7 @@ void ViewShell::Activate(sal_Bool bIsMDIActivate)
     if (bIsMDIActivate)
     {
         // thus, the Navigator will also get a current status
-        SfxBoolItem aItem( SID_NAVIGATOR_INIT, sal_True );
+        SfxBoolItem aItem( SID_NAVIGATOR_INIT, true );
         if (GetDispatcher() != NULL)
             GetDispatcher()->Execute(
                 SID_NAVIGATOR_INIT,

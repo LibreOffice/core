@@ -288,7 +288,7 @@ void DocumentHelper::ProvideStyles (
                new SdMoveStyleSheetsUndoAction (
                    &rTargetDocument,
                    aCreatedStyles,
-                   sal_True);
+                   true);
            pUndoManager->AddUndoAction (pMovStyles);
        }
     }
@@ -436,7 +436,7 @@ void DocumentHelper::AssignMasterPageToPage (
         pDocument->GetDocSh()->GetUndoManager()->AddUndoAction(
             new SdBackgroundObjUndoAction(
                 *pDocument, *pPage, pPage->getSdrPageProperties().GetItemSet()),
-            sal_True);
+            true);
         pPage->getSdrPageProperties().PutItem(XFillStyleItem(XFILL_NONE));
 
         pDocument->SetMasterPage (

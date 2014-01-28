@@ -134,7 +134,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                 if ( nDepth == 0 )
                 {
                     // page with title & structuring!
-                    SdPage* pPage = (SdPage*) mpDoc->AllocPage(sal_False);
+                    SdPage* pPage = (SdPage*) mpDoc->AllocPage(false);
                     pPage->SetSize(pActualPage->GetSize() );
                     pPage->SetBorder(pActualPage->GetLftBorder(),
                                      pActualPage->GetUppBorder(),
@@ -156,7 +156,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
 
                     // notes-page
-                    SdPage* pNotesPage = (SdPage*) mpDoc->AllocPage(sal_False);
+                    SdPage* pNotesPage = (SdPage*) mpDoc->AllocPage(false);
                     pNotesPage->SetSize(pActualNotesPage->GetSize());
                     pNotesPage->SetBorder(pActualNotesPage->GetLftBorder(),
                                           pActualNotesPage->GetUppBorder(),
@@ -200,7 +200,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
 
                     pTextObj->SetOutlinerParaObject(pOutlinerParaObject);
 
-                    pTextObj->SetEmptyPresObj(sal_False);
+                    pTextObj->SetEmptyPresObj(false);
 
                     SfxStyleSheet* pSheet = pPage->GetStyleSheetForPresObj(PRESOBJ_TITLE);
                     pTextObj->NbcSetStyleSheet(pSheet, sal_False);
@@ -232,7 +232,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                         delete pTempOutl;
 
                         pOutlineObj->SetOutlinerParaObject( pOPO );
-                        pOutlineObj->SetEmptyPresObj(sal_False);
+                        pOutlineObj->SetEmptyPresObj(false);
 
                         // remove hard attributes (Flag to sal_True)
                         SfxItemSet aAttr(mpDoc->GetPool());

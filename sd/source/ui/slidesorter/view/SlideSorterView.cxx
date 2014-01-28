@@ -163,7 +163,7 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
       maVisibilityChangeListeners()
 {
     // Hide the page that contains the page objects.
-    SetPageVisible (sal_False);
+    SetPageVisible (false);
 
     // Register the background painter on level 1 to avoid the creation of a
     // background buffer.

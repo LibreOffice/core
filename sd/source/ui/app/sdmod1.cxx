@@ -241,7 +241,7 @@ void SdModule::Execute(SfxRequest& rReq)
             {
                 ErrorBox(NULL, WB_OK, SD_RESSTR(STR_CANT_PERFORM_IN_LIVEMODE)).Execute();
 
-                SFX_REQUEST_ARG( rReq, pLinkItem, SfxLinkItem, SID_DONELINK, sal_False );
+                SFX_REQUEST_ARG( rReq, pLinkItem, SfxLinkItem, SID_DONELINK, false );
                 if( pLinkItem )
                     pLinkItem->GetValue().Call( 0 );
             }
@@ -282,7 +282,7 @@ void SdModule::OutlineToImpress (SfxRequest& rRequest)
                     pDoc->StopWorkStartupDelay();
                 }
 
-                SFX_REQUEST_ARG( rRequest, pFrmItem, SfxFrameItem, SID_DOCFRAME, sal_False);
+                SFX_REQUEST_ARG( rRequest, pFrmItem, SfxFrameItem, SID_DOCFRAME, false);
                 SfxViewFrame::LoadDocumentIntoFrame( *pDocSh, pFrmItem, ::sd::OUTLINE_FACTORY_ID );
 
                 ::sd::ViewShell* pViewSh = pDocSh->GetViewShell();
@@ -507,7 +507,7 @@ SfxFrame* SdModule::CreateFromTemplate( const OUString& rTemplatePath, const Ref
     SfxObjectShellLock xDocShell;
 
     SfxItemSet* pSet = new SfxAllItemSet( SFX_APP()->GetPool() );
-    pSet->Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
+    pSet->Put( SfxBoolItem( SID_TEMPLATE, true ) );
 
     sal_uLong lErr = SFX_APP()->LoadTemplate( xDocShell, rTemplatePath, sal_True, pSet );
 
@@ -534,7 +534,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
     if ( SvtModuleOptions().IsImpress() )
     {
         Reference< XFrame > xTargetFrame;
-        SFX_REQUEST_ARG( rReq, pFrmItem, SfxUnoFrameItem, SID_FILLFRAME, sal_False);
+        SFX_REQUEST_ARG( rReq, pFrmItem, SfxUnoFrameItem, SID_FILLFRAME, false);
         if ( pFrmItem )
             xTargetFrame = pFrmItem->GetFrame();
 
@@ -577,7 +577,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                 // So that you can open the document without AutoLayout-Dialog
                 pOpt->SetStartWithTemplate(sal_False);
                 if(bNewDocDirect && !pPilotDlg->GetStartWithFlag())
-                    bStartWithTemplate = sal_False;
+                    bStartWithTemplate = false;
 
                 if( pPilotDlg->GetStartType() == ST_OPEN )
                 {
@@ -628,7 +628,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                             }
                             catch (const ::com::sun::star::uno::Exception&)
                             {
-                                DBG_ASSERT (sal_False, "caught IllegalArgumentException while loading document from Impress autopilot");
+                                DBG_ASSERT (false, "caught IllegalArgumentException while loading document from Impress autopilot");
                             }
                         }
                     }
@@ -775,7 +775,7 @@ void SdModule::ChangeMedium( ::sd::DrawDocShell* pDocShell, SfxViewFrame* pViewF
                 // Unfortunately, the printer does not provide an exact format
                 // like A4
                 Size aSize(pPrinter->GetPaperSize());
-                Paper ePaper = SvxPaperInfo::GetSvxPaper( aSize, MAP_100TH_MM, sal_True);
+                Paper ePaper = SvxPaperInfo::GetSvxPaper( aSize, MAP_100TH_MM, true);
 
                 if (ePaper != PAPER_USER)
                 {

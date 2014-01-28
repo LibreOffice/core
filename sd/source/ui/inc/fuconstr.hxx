@@ -45,7 +45,7 @@ public:
     virtual void Activate();
     virtual void Deactivate();
 
-    virtual void SelectionHasChanged() { bSelectionChanged = sal_True; }
+    virtual void SelectionHasChanged() { bSelectionChanged = true; }
 
     // SJ: setting stylesheet, the use of a filled or unfilled style
     // is determined by the member nSlotId :

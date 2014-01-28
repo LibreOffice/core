@@ -104,7 +104,7 @@ sal_Bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
     {
         FrameView* pFrameView = mpViewShell->GetFrameView();
 
-        bool bOrtho = sal_False;
+        bool bOrtho = false;
 
         sal_Bool bRestricted = sal_True;
 
@@ -219,7 +219,7 @@ sal_Bool FuDraw::MouseMove(const MouseEvent& rMEvt)
     FrameView* pFrameView = mpViewShell->GetFrameView();
     Point aPos = mpWindow->PixelToLogic( rMEvt.GetPosPixel() );
 
-    bool bOrtho = sal_False;
+    bool bOrtho = false;
 
     sal_Bool bRestricted = sal_True;
 

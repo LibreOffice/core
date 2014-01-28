@@ -148,7 +148,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     {
                         SfxItemSet aAttr( pStyleSheet->GetItemSet() );
                         SfxItemSet aTmpSet( pOLV->GetOutliner()->GetParaAttribs( nPara ) );
-                        aAttr.Put( aTmpSet, sal_False ); // sal_False= InvalidItems is not default, handle it as "holes"
+                        aAttr.Put( aTmpSet, false ); // sal_False= InvalidItems is not default, handle it as "holes"
                         const SvxULSpaceItem& rItem = (const SvxULSpaceItem&) aAttr.Get( EE_PARA_ULSPACE );
                         SvxULSpaceItem* pNewItem = (SvxULSpaceItem*) rItem.Clone();
 
@@ -350,7 +350,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
         case SID_THES:
         {
             OUString aReplaceText;
-            SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES, sal_False );
+            SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES, false );
             if (pItem2)
                 aReplaceText = pItem2->GetValue();
             if (!aReplaceText.isEmpty())

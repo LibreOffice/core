@@ -155,7 +155,7 @@ void DrawViewShell::SelectionHasChanged (void)
     Invalidate();
 
     //Update3DWindow(); // 3D-Controller
-    SfxBoolItem aItem( SID_3D_STATE, sal_True );
+    SfxBoolItem aItem( SID_3D_STATE, true );
     GetViewFrame()->GetDispatcher()->Execute(
         SID_3D_STATE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 

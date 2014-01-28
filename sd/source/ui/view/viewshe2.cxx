@@ -793,7 +793,7 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         if ( xObj.is() )
         {
             // OLE object is no longer empty
-            pObj->SetEmptyPresObj(sal_False);
+            pObj->SetEmptyPresObj(false);
             pObj->SetOutlinerParaObject(NULL);
             pObj->SetGraphic(NULL);
 

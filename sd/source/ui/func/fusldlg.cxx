@@ -118,7 +118,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
         OUString aPage;
         long    nValue32;
         sal_Bool bValue;
-        bool    bValuesChanged = sal_False;
+        bool    bValuesChanged = false;
 
         pDlg->GetAttr( aDlgSet );
 

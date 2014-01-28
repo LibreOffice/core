@@ -69,8 +69,8 @@ void FuConstructUnoControl::DoExecute( SfxRequest& rReq )
 {
     FuConstruct::DoExecute( rReq );
 
-    SFX_REQUEST_ARG( rReq, pInventorItem, SfxUInt32Item, SID_FM_CONTROL_INVENTOR, sal_False );
-    SFX_REQUEST_ARG( rReq, pIdentifierItem, SfxUInt16Item, SID_FM_CONTROL_IDENTIFIER, sal_False );
+    SFX_REQUEST_ARG( rReq, pInventorItem, SfxUInt32Item, SID_FM_CONTROL_INVENTOR, false );
+    SFX_REQUEST_ARG( rReq, pIdentifierItem, SfxUInt16Item, SID_FM_CONTROL_IDENTIFIER, false );
     if( pInventorItem )
         nInventor = pInventorItem->GetValue();
     if( pIdentifierItem )

@@ -185,7 +185,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
     SfxApplication* pApp = SFX_APP();
     SfxAllItemSet *pSet = new SfxAllItemSet( pApp->GetPool() );
     TransformParameters( SID_OPENDOC, lDescriptor, *pSet );
-    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, SID_DOC_READONLY, sal_False );
+    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, SID_DOC_READONLY, false );
 
     bWasReadOnly = pItem && pItem->GetValue();
 
@@ -356,7 +356,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
 
                     if (pFilter && pStm)
                     {
-                        SotStorageRef aStorage = new SotStorage ( pStm, sal_False );
+                        SotStorageRef aStorage = new SotStorage ( pStm, false );
                         if ( !aStorage->GetError() )
                         {
                             OUString aStreamName("PowerPoint Document");

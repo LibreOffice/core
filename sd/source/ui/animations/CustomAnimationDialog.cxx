@@ -158,7 +158,7 @@ void PresetPropertyBox::setValue( const Any& rValue, const OUString& rPresetId )
         }
         else
         {
-            mpControl->Enable( sal_False );
+            mpControl->Enable( false );
         }
     }
 }
@@ -1334,10 +1334,10 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
     }
     else
     {
-        mpFTTextAnim->Enable( sal_False );
-        mpLBTextAnim->Enable( sal_False );
-        mpMFTextDelay->Enable( sal_False );
-        mpFTTextDelay->Enable( sal_False );
+        mpFTTextAnim->Enable( false );
+        mpLBTextAnim->Enable( false );
+        mpMFTextDelay->Enable( false );
+        mpFTTextDelay->Enable( false );
 
     }
 
@@ -2138,7 +2138,7 @@ CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(Window* pParent, 
     }
     else
     {
-        maCBXAnimateForm->Enable( sal_False );
+        maCBXAnimateForm->Enable( false );
     }
 
     maCBXReverse->SetState( STATE_DONTKNOW );
@@ -2233,11 +2233,11 @@ void CustomAnimationTextAnimTabPage::updateControlStates()
     if( !mbHasVisibleShapes && nPos > 0 )
     {
         maCBXAnimateForm->Check(sal_False);
-        maCBXAnimateForm->Enable(sal_False);
+        maCBXAnimateForm->Enable(false);
     }
     else
     {
-        maCBXAnimateForm->Enable(sal_True);
+        maCBXAnimateForm->Enable(true);
     }
 }
 

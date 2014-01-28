@@ -76,7 +76,7 @@ void FuLineEnd::DoExecute( SfxRequest& )
                 // bCanConvToPath is sal_True for group objects,
                 // but it crashes on ConvertToPathObj()!
             {
-                pNewObj = pConvPolyObj = pObj->ConvertToPolyObj( sal_True, sal_False );
+                pNewObj = pConvPolyObj = pObj->ConvertToPolyObj( true, false );
 
                 if( !pNewObj || !pNewObj->ISA( SdrPathObj ) )
                     return; // Cancel, additional security, but it does not help

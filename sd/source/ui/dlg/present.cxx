@@ -316,7 +316,7 @@ IMPL_LINK_NOARG(SdStartPresentationDlg, ClickWindowPresentationHdl)
 
     if( bWindow )
     {
-        aCbxAlwaysOnTop->Enable( sal_False );
+        aCbxAlwaysOnTop->Enable( false );
         aCbxAlwaysOnTop->Check( sal_False );
     }
     else

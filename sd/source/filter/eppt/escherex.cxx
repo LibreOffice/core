@@ -83,7 +83,7 @@ void PptEscherEx::ImplWriteDggContainer( SvStream& rSt )
 sal_uInt32 PptEscherEx::ImplOptAtomSize()
 {
     sal_uInt32 nSize = 0;
-    if ( ESCHER_OPT_COUNT )
+    if ( ESCHER_OPT_COUNT != 0 )
         nSize = ( ESCHER_OPT_COUNT * 6 ) + 8;
     return nSize;
 }
@@ -111,7 +111,7 @@ void PptEscherEx::ImplWriteOptAtom( SvStream& rSt )
 sal_uInt32 PptEscherEx::ImplSplitMenuColorsAtomSize()
 {
     sal_uInt32 nSize = 0;
-    if ( ESCHER_SPLIT_MENU_COLORS_COUNT )
+    if ( ESCHER_SPLIT_MENU_COLORS_COUNT != 0 )
         nSize = ( ESCHER_SPLIT_MENU_COLORS_COUNT << 2 ) + 8;
     return nSize;
 }

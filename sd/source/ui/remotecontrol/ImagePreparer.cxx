@@ -387,7 +387,7 @@ sal_Bool ExportTo( uno::Reference< drawing::XDrawPage>& aNotesPage, OUString aUr
         {
             aArgs.realloc ( ++nEnd );
             aArgs[nEnd-1].Name = "DocumentBaseURL";
-            aArgs[nEnd-1].Value <<= rMedium.GetBaseURL( sal_True );
+            aArgs[nEnd-1].Value <<= rMedium.GetBaseURL( true );
         }
 
         return xFilter->filter( aArgs );

@@ -636,14 +636,14 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                         if(0L == pHdl->GetPointNum())
                         {
-                            if(pEdgeObj->GetConnection(sal_True).GetObject())
+                            if(pEdgeObj->GetConnection(true).GetObject())
                             {
                                 bIsMoveOfConnectedHandle = sal_True;
                             }
                         }
                         if(1L == pHdl->GetPointNum())
                         {
-                            if(pEdgeObj->GetConnection(sal_False).GetObject())
+                            if(pEdgeObj->GetConnection(false).GetObject())
                             {
                                 bIsMoveOfConnectedHandle = sal_True;
                             }
@@ -758,7 +758,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                                 // switch snapping off
                                 if(!bWasNoSnap)
-                                    ((SdrDragStat&)rDragStat).SetNoSnap(sal_True);
+                                    ((SdrDragStat&)rDragStat).SetNoSnap(true);
                                 if(bWasSnapEnabled)
                                     mpView->SetSnapEnabled(sal_False);
 

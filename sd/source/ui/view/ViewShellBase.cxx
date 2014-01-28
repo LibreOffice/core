@@ -1001,7 +1001,7 @@ OUString ViewShellBase::GetInitialViewShellType (void)
                         // The page kind is invalid.  This is probably an
                         // error by the caller.  We use the standard type to
                         // keep things going.
-                        DBG_ASSERT(sal_False, "ViewShellBase::GetInitialViewShellType: invalid page kind");
+                        DBG_ASSERT(false, "ViewShellBase::GetInitialViewShellType: invalid page kind");
                         sRequestedView = FrameworkHelper::msImpressViewURL;
                         break;
                 }

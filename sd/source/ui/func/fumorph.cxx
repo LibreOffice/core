@@ -91,8 +91,8 @@ void FuMorph::DoExecute( SfxRequest& )
         pCloneObj2->SetOutlinerParaObject(NULL);
 
         // create path objects
-        SdrObject*  pPolyObj1 = pCloneObj1->ConvertToPolyObj(sal_False, sal_False);
-        SdrObject*  pPolyObj2 = pCloneObj2->ConvertToPolyObj(sal_False, sal_False);
+        SdrObject*  pPolyObj1 = pCloneObj1->ConvertToPolyObj(false, false);
+        SdrObject*  pPolyObj2 = pCloneObj2->ConvertToPolyObj(false, false);
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         AbstractMorphDlg* pDlg = pFact ? pFact->CreateMorphDlg( static_cast< ::Window*>(mpWindow), pObj1, pObj2 ) : 0;
         if(pPolyObj1 && pPolyObj2 && pDlg && (pDlg->Execute() == RET_OK))

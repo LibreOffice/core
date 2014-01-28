@@ -249,14 +249,14 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
             SfxStyleSheet* pSheet = GetStyleSheetForPresObj(PRESOBJ_TITLE);
 
             if (pSheet)
-                pObj->SetStyleSheet(pSheet, sal_True);
+                pObj->SetStyleSheet(pSheet, true);
         }
         else
         {
             SfxStyleSheet* pSheet = GetStyleSheetForPresObj(GetPresObjKind(pObj));
 
             if (pSheet)
-                pObj->SetStyleSheet(pSheet, sal_True);
+                pObj->SetStyleSheet(pSheet, true);
         }
     }
 }

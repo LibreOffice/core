@@ -142,7 +142,7 @@ void SdParagraphNumTabPage::Reset( const SfxItemSet& rSet )
     ImplNewStartHdl(m_pNewStartCB);
     m_pNewStartNF->SaveValue();
     m_pNewStartNumberCB->SaveValue();
-    mbModified = sal_False;
+    mbModified = false;
 }
 
 IMPL_LINK_NOARG(SdParagraphNumTabPage, ImplNewStartHdl)

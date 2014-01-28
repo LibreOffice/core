@@ -799,7 +799,7 @@ sal_Bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
                 if (eNewEditMode != pDrawViewShell->GetEditMode())
                 {
                     // EditMode setzen
-                    pDrawViewShell->ChangeEditMode(eNewEditMode, sal_False);
+                    pDrawViewShell->ChangeEditMode(eNewEditMode, false);
                 }
 
                 // Make the bookmarked page the current page.  This is done
@@ -924,7 +924,7 @@ sal_Bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark)
             if (eNewEditMode != pDrViewSh->GetEditMode())
             {
                 // EditMode setzen
-                pDrViewSh->ChangeEditMode(eNewEditMode, sal_False);
+                pDrViewSh->ChangeEditMode(eNewEditMode, false);
             }
 
             // Jump to the page.  This is done by using the API because this
@@ -1030,7 +1030,7 @@ sal_Bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
             if (eNewEditMode != pDrViewSh->GetEditMode())
             {
                 // EditMode setzen
-                pDrViewSh->ChangeEditMode(eNewEditMode, sal_False);
+                pDrViewSh->ChangeEditMode(eNewEditMode, false);
             }
 
             // Jump to the page.  This is done by using the API because this

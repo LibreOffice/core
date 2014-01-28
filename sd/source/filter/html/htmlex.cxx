@@ -679,7 +679,7 @@ void HtmlExport::ExportHtml()
     CreateFileNames();
 
     // this is not a true while
-    while( 1 )
+    while( true )
     {
         if( checkForExistingFiles() )
             break;
@@ -847,7 +847,7 @@ void HtmlExport::ExportWebCast()
     }
 
     // this is not a true while
-    while(1)
+    while(true)
     {
         if( checkForExistingFiles() )
             break;
@@ -1434,7 +1434,7 @@ bool HtmlExport::CreateHtmlForPresPages()
         while (!bMasterDone)
         {
             // sal_True = backwards
-            SdrObjListIter aIter(*pPage, IM_DEEPWITHGROUPS, sal_True);
+            SdrObjListIter aIter(*pPage, IM_DEEPWITHGROUPS, true);
 
             SdrObject* pObject = aIter.Next();
             while (pObject)

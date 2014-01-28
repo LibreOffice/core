@@ -2551,7 +2551,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 
                 ::com::sun::star::awt::Size     aSize;
                 OUString          aControlName;
-                SvStorageRef    xTemp( new SvStorage( new SvMemoryStream(), sal_True ) );
+                SvStorageRef    xTemp( new SvStorage( new SvMemoryStream(), true ) );
                 if ( oox::ole::MSConvertOCXControls::WriteOCXStream( mXModel, xTemp, aXControlModel, aSize, aControlName ) )
                 {
                     OUString aUserName( xTemp->GetUserName() );
@@ -3684,7 +3684,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
             if ( nRowCount )
             {
                 SvMemoryStream aMemStrm;
-                aMemStrm.ObjectOwnsMemory( sal_False );
+                aMemStrm.ObjectOwnsMemory( false );
                 aMemStrm.WriteUInt16( nRowCount )
                         .WriteUInt16( nRowCount )
                         .WriteUInt16( (sal_uInt16)4 );

@@ -576,7 +576,7 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
                     pDoc->BurnInStyleSheetAttributes();
                 rxOStm->SetBufferSize( 16348 );
 
-                Reference< XComponent > xComponent( new SdXImpressDocument( pDoc, sal_True ) );
+                Reference< XComponent > xComponent( new SdXImpressDocument( pDoc, true ) );
                 pDoc->setUnoModel( Reference< XInterface >::query( xComponent ) );
 
                 {

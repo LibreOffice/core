@@ -249,8 +249,8 @@ sal_Bool ImplSdPPTImport::Import()
     ((EditEngine&)rOutl.GetEditEngine()).SetControlWord( nControlWord );
 
     SdrLayerAdmin& rAdmin = mpDoc->GetLayerAdmin();
-    mnBackgroundLayerID = rAdmin.GetLayerID( SD_RESSTR( STR_LAYER_BCKGRND ), sal_False );
-    mnBackgroundObjectsLayerID = rAdmin.GetLayerID( SD_RESSTR( STR_LAYER_BCKGRNDOBJ ), sal_False );
+    mnBackgroundLayerID = rAdmin.GetLayerID( SD_RESSTR( STR_LAYER_BCKGRND ), false );
+    mnBackgroundObjectsLayerID = rAdmin.GetLayerID( SD_RESSTR( STR_LAYER_BCKGRNDOBJ ), false );
 
     ::sd::DrawDocShell* pDocShell = mpDoc->GetDocSh();
     if ( pDocShell )
@@ -1403,7 +1403,7 @@ void ImplSdPPTImport::SetHeaderFooterPageSettings( SdPage* pPage, const PptSlide
                 && ( rSlidePersist.aSlideAtom.aLayout.eLayout == PPT_LAYOUT_TITLESLIDE )
                     && ( aDocAtom.bTitlePlaceholdersOmitted == sal_True ) )
             {
-                bVisible = sal_False;
+                bVisible = false;
             }
             if ( bVisible && pMasterPersist )
             {
@@ -1411,7 +1411,7 @@ void ImplSdPPTImport::SetHeaderFooterPageSettings( SdPage* pPage, const PptSlide
                 if ( nPosition )
                 {
                     Rectangle aEmpty;
-                    bVisible = sal_False;
+                    bVisible = false;
                     rStCtrl.Seek( nPosition );
                     ProcessData aProcessData( rSlidePersist, (SdPage*)pPage );
                     SdrObject* pObj = ImportObj( rStCtrl, (void*)&aProcessData, aEmpty, aEmpty );
@@ -1780,9 +1780,9 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
                                     pPage->SetSoundFile( aSoundFile );
                                 }
                                 if ( nBuildFlags & ( 1 << 6 ) )     // Loop until next sound
-                                    pPage->SetLoopSound( sal_True );
+                                    pPage->SetLoopSound( true );
                                 if ( nBuildFlags & ( 1 << 8 ) )     // Stop the previous sound
-                                    pPage->SetStopSound( sal_True );
+                                    pPage->SetStopSound( true );
                                 break;
                             }
                         }
@@ -2282,8 +2282,8 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
             {
                 if ( !bIsHeaderFooter )
                 {
-                    pText->SetNotVisibleAsMaster( sal_True );
-                    pText->SetEmptyPresObj( sal_True );
+                    pText->SetNotVisibleAsMaster( true );
+                    pText->SetEmptyPresObj( true );
                 }
                 pText->SetUserCall( pPage );
                 pPage->InsertPresObj( pText, ePresKind );

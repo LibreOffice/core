@@ -228,7 +228,7 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
 
         mpLayoutSet2->SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectHdl ) );
         mpLayoutSet2->SetColCount( 4 );
-        mpLayoutSet2->EnableFullItemMode( sal_False );
+        mpLayoutSet2->EnableFullItemMode( false );
         mpLayoutSet2->SetColor( GetControlBackground() );
 
         fillLayoutValueSet( mpLayoutSet2, &v_standard[0] );
@@ -254,7 +254,7 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
                 sSlotStr = ".uno:DuplicatePage";
             else
                 sSlotStr = ".uno:Undo";
-            aSlotImage = ::GetImage( mxFrame, sSlotStr, sal_False );
+            aSlotImage = ::GetImage( mxFrame, sSlotStr, false );
 
             OUString sSlotTitle;
             if( bInsertPage )

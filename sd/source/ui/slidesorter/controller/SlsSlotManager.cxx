@@ -161,7 +161,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
             if (rRequest.GetArgs() != NULL)
             {
                 SFX_REQUEST_ARG(rRequest, pPagesPerRow, SfxUInt16Item,
-                    SID_PAGES_PER_ROW, sal_False);
+                    SID_PAGES_PER_ROW, false);
                 if (pPagesPerRow != NULL)
                 {
                     sal_Int32 nColumnCount = pPagesPerRow->GetValue();
@@ -540,13 +540,13 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
     {
         sal_uInt16 nSId = pShell->GetCurrentFunction()->GetSlotID();
 
-        rSet.Put( SfxBoolItem( nSId, sal_True ) );
+        rSet.Put( SfxBoolItem( nSId, true ) );
     }
-    rSet.Put( SfxBoolItem( SID_DRAWINGMODE, sal_False ) );
-    rSet.Put( SfxBoolItem( SID_DIAMODE, sal_True ) );
-    rSet.Put( SfxBoolItem( SID_OUTLINEMODE, sal_False ) );
-    rSet.Put( SfxBoolItem( SID_NOTESMODE, sal_False ) );
-    rSet.Put( SfxBoolItem( SID_HANDOUTMODE, sal_False ) );
+    rSet.Put( SfxBoolItem( SID_DRAWINGMODE, false ) );
+    rSet.Put( SfxBoolItem( SID_DIAMODE, true ) );
+    rSet.Put( SfxBoolItem( SID_OUTLINEMODE, false ) );
+    rSet.Put( SfxBoolItem( SID_NOTESMODE, false ) );
+    rSet.Put( SfxBoolItem( SID_HANDOUTMODE, false ) );
 
     if (pShell!=NULL && pShell->IsMainViewShell())
     {
@@ -984,8 +984,8 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
             // Undo
             SdPage* pUndoPage = pPageToRename;
             SdrLayerAdmin &  rLayerAdmin = pDocument->GetLayerAdmin();
-            sal_uInt8 nBackground = rLayerAdmin.GetLayerID( SD_RESSTR( STR_LAYER_BCKGRND ), sal_False );
-            sal_uInt8 nBgObj = rLayerAdmin.GetLayerID( SD_RESSTR( STR_LAYER_BCKGRNDOBJ ), sal_False );
+            sal_uInt8 nBackground = rLayerAdmin.GetLayerID( SD_RESSTR( STR_LAYER_BCKGRND ), false );
+            sal_uInt8 nBgObj = rLayerAdmin.GetLayerID( SD_RESSTR( STR_LAYER_BCKGRNDOBJ ), false );
             SetOfByte aVisibleLayers = pPageToRename->TRG_GetMasterPageVisibleLayers();
 
             // (#67720#)
@@ -1030,7 +1030,7 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
         pDocument->SetChanged( sal_True );
 
         // inform navigator about change
-        SfxBoolItem aItem( SID_NAVIGATOR_INIT, sal_True );
+        SfxBoolItem aItem( SID_NAVIGATOR_INIT, true );
         if (mrSlideSorter.GetViewShell() != NULL)
             mrSlideSorter.GetViewShell()->GetDispatcher()->Execute(
                 SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );

@@ -81,8 +81,8 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
         // Undo
         SdPage* pUndoPage = pPageToRename;
         SdrLayerAdmin &  rLayerAdmin = GetDoc()->GetLayerAdmin();
-        sal_uInt8 nBackground = rLayerAdmin.GetLayerID( SD_RESSTR(STR_LAYER_BCKGRND), sal_False );
-        sal_uInt8 nBgObj = rLayerAdmin.GetLayerID( SD_RESSTR(STR_LAYER_BCKGRNDOBJ), sal_False );
+        sal_uInt8 nBackground = rLayerAdmin.GetLayerID( SD_RESSTR(STR_LAYER_BCKGRND), false );
+        sal_uInt8 nBgObj = rLayerAdmin.GetLayerID( SD_RESSTR(STR_LAYER_BCKGRNDOBJ), false );
         SetOfByte aVisibleLayers = mpActualPage->TRG_GetMasterPageVisibleLayers();
 
         ::svl::IUndoManager* pManager = GetDoc()->GetDocSh()->GetUndoManager();
@@ -120,7 +120,7 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
         GetDoc()->SetChanged( sal_True );
 
         // inform navigator about change
-        SfxBoolItem aItem( SID_NAVIGATOR_INIT, sal_True );
+        SfxBoolItem aItem( SID_NAVIGATOR_INIT, true );
         GetViewFrame()->GetDispatcher()->Execute(
             SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 

@@ -120,8 +120,8 @@ struct TransitionEffect
         mfTime = 0.0;
         mePresChange = PRESCHANGE_MANUAL;
         mbSoundOn = sal_False;
-        mbLoopSound = sal_False;
-        mbStopSound = sal_False;
+        mbLoopSound = false;
+        mbStopSound = false;
 
         mbEffectAmbiguous = false;
         mbDurationAmbiguous = false;
@@ -170,12 +170,12 @@ struct TransitionEffect
         {
             if( mbStopSound )
             {
-                rOutPage.SetStopSound( sal_True );
+                rOutPage.SetStopSound( true );
                 rOutPage.SetSound( sal_False );
             }
             else
             {
-                rOutPage.SetStopSound( sal_False );
+                rOutPage.SetStopSound( false );
                 rOutPage.SetSound( mbSoundOn );
                 rOutPage.SetSoundFile( maSound );
             }

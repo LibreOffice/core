@@ -446,15 +446,15 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
 {
     sal_uInt16 nPageCount = mpDoc->GetSdPageCount( PK_STANDARD );
     SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
-    sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), sal_False);
-    sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), sal_False);
+    sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), false);
+    sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), false);
 
     SdPage* pStandardPage = NULL;
 
     if( 0 == nPageCount )
     {
         // this is only used for clipboard where we only have one page
-        pStandardPage = (SdPage*) mpDoc->AllocPage(sal_False);
+        pStandardPage = (SdPage*) mpDoc->AllocPage(false);
 
         Size aDefSize(21000, 29700);   // A4-Hochformat
         pStandardPage->SetSize( aDefSize );
@@ -487,7 +487,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
         if( bDuplicate )
             pStandardPage = (SdPage*) pPreviousStandardPage->Clone();
         else
-            pStandardPage = (SdPage*) mpDoc->AllocPage(sal_False);
+            pStandardPage = (SdPage*) mpDoc->AllocPage(false);
 
         pStandardPage->SetSize( pPreviousStandardPage->GetSize() );
         pStandardPage->SetBorder( pPreviousStandardPage->GetLftBorder(),
@@ -508,8 +508,8 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
             pStandardPage->SetAutoLayout(AUTOLAYOUT_NONE, sal_True );
         }
 
-        aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), sal_False);
-        aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), sal_False);
+        aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), false);
+        aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), false);
         aVisibleLayers.Set(aBckgrnd, bIsPageBack);
         aVisibleLayers.Set(aBckgrndObj, bIsPageObj);
         pStandardPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
@@ -522,7 +522,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
         if( bDuplicate )
             pNotesPage = (SdPage*) pPreviousNotesPage->Clone();
         else
-            pNotesPage = (SdPage*) mpDoc->AllocPage(sal_False);
+            pNotesPage = (SdPage*) mpDoc->AllocPage(false);
 
         pNotesPage->SetSize( pPreviousNotesPage->GetSize() );
         pNotesPage->SetBorder( pPreviousNotesPage->GetLftBorder(),
@@ -1888,11 +1888,11 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                     if  ( pOldSdView )
                         pOldSdView->SdrEndTextEdit();
 
-                    pView->SetHlplVisible( sal_False );
-                    pView->SetGridVisible( sal_False );
-                    pView->SetBordVisible( sal_False );
-                    pView->SetPageVisible( sal_False );
-                    pView->SetGlueVisible( sal_False );
+                    pView->SetHlplVisible( false );
+                    pView->SetGridVisible( false );
+                    pView->SetBordVisible( false );
+                    pView->SetPageVisible( false );
+                    pView->SetGlueVisible( false );
 
                     pOut->SetMapMode( MAP_100TH_MM );
                     pOut->IntersectClipRegion( aVisArea );
@@ -2727,7 +2727,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
         SdPage* pRefNotesPage = mpModel->mpDoc->GetSdPage( (sal_uInt16)0, PK_NOTES);
 
         // create and instert new draw masterpage
-        SdPage* pMPage = (SdPage*)mpModel->mpDoc->AllocPage(sal_True);
+        SdPage* pMPage = (SdPage*)mpModel->mpDoc->AllocPage(true);
         pMPage->SetSize( pPage->GetSize() );
         pMPage->SetBorder( pPage->GetLftBorder(),
                            pPage->GetUppBorder(),
@@ -2744,7 +2744,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
         xDrawPage = uno::Reference< drawing::XDrawPage >::query( pMPage->getUnoPage() );
 
         // create and instert new notes masterpage
-        SdPage* pMNotesPage = (SdPage*)mpModel->mpDoc->AllocPage(sal_True);
+        SdPage* pMNotesPage = (SdPage*)mpModel->mpDoc->AllocPage(true);
         pMNotesPage->SetSize( pRefNotesPage->GetSize() );
         pMNotesPage->SetPageKind(PK_NOTES);
         pMNotesPage->SetBorder( pRefNotesPage->GetLftBorder(),

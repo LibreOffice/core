@@ -56,11 +56,11 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
 
     ClientView* pView = new ClientView(this, pOut, NULL);
 
-    pView->SetHlplVisible(sal_False);
-    pView->SetGridVisible(sal_False);
-    pView->SetBordVisible(sal_False);
-    pView->SetPageVisible(sal_False);
-    pView->SetGlueVisible(sal_False);
+    pView->SetHlplVisible(false);
+    pView->SetGridVisible(false);
+    pView->SetBordVisible(false);
+    pView->SetPageVisible(false);
+    pView->SetGlueVisible(false);
 
     SdPage* pSelectedPage = NULL;
 

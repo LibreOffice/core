@@ -134,8 +134,8 @@ void TextObjectBar::GetCharState( SfxItemSet& rSet )
 
     SfxItemSet aNewAttr( mpViewShell->GetPool(),EE_ITEMS_START,EE_ITEMS_END);
 
-    aNewAttr.Put(aCharAttrSet, sal_False);
-    rSet.Put(aNewAttr, sal_False);
+    aNewAttr.Put(aCharAttrSet, false);
+    rSet.Put(aNewAttr, false);
 
     SvxKerningItem aKern = ( (const SvxKerningItem&) aCharAttrSet.Get( EE_CHAR_KERNING ) );
     //aKern.SetWhich(SID_ATTR_CHAR_KERNING);
@@ -180,7 +180,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 sal_uInt16 stretchX = 100;
                 sal_uInt16 stretchY = 100;
                 SvxScriptSetItem aSetItem( nSlotId, GetPool() );
-                aSetItem.GetItemSet().Put( aAttrSet, sal_False );
+                aSetItem.GetItemSet().Put( aAttrSet, false );
 
                 sal_uInt16 nScriptType = mpView->GetScriptType();
 
@@ -420,7 +420,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         nWhich = aIter.NextWhich();
     }
 
-    rSet.Put( aAttrSet, sal_False ); // <- sal_False, so DontCare-Status gets aquired
+    rSet.Put( aAttrSet, false ); // <- sal_False, so DontCare-Status gets aquired
 
 
     // these are disabled in outline-mode
@@ -479,16 +479,16 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         switch( eAdj )
         {
             case SVX_ADJUST_LEFT:
-                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_LEFT, sal_True ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_LEFT, true ) );
             break;
             case SVX_ADJUST_CENTER:
-                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_CENTER, sal_True ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_CENTER, true ) );
             break;
             case SVX_ADJUST_RIGHT:
-                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, sal_True ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, true ) );
             break;
             case SVX_ADJUST_BLOCK:
-                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, sal_True ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, true ) );
             break;
             default:
             break;
@@ -520,13 +520,13 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 break;
 
                 case FRMDIR_HORI_LEFT_TOP:
-                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_LEFT_TO_RIGHT, sal_True ) );
-                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_RIGHT_TO_LEFT, sal_False ) );
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_LEFT_TO_RIGHT, true ) );
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_RIGHT_TO_LEFT, false ) );
                 break;
 
                 case FRMDIR_HORI_RIGHT_TOP:
-                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_LEFT_TO_RIGHT, sal_False ) );
-                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_RIGHT_TO_LEFT, sal_True ) );
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_LEFT_TO_RIGHT, false ) );
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_RIGHT_TO_LEFT, true ) );
                 break;
 
                 // The case for the superordinate object is missing.
@@ -565,13 +565,13 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         switch( nLineSpace )
         {
             case 100:
-                rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_10, sal_True ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_10, true ) );
             break;
             case 150:
-                rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_15, sal_True ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_15, true ) );
             break;
             case 200:
-                rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_20, sal_True ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_20, true ) );
             break;
         }
     }
@@ -581,9 +581,9 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     aAttrSet.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
 
     if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
-        rSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, sal_True ) );
+        rSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, true ) );
     else if( eEsc == SVX_ESCAPEMENT_SUBSCRIPT )
-        rSet.Put( SfxBoolItem( SID_SET_SUB_SCRIPT, sal_True ) );
+        rSet.Put( SfxBoolItem( SID_SET_SUB_SCRIPT, true ) );
 }
 
 /**

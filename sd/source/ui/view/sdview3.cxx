@@ -259,7 +259,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
 {
     maDropPos = rPos;
     mnAction = rDnDAction;
-    mbIsDropAllowed = sal_False;
+    mbIsDropAllowed = false;
 
     TransferableDataHelper  aDataHelper( rDataHelper );
     SdrObject*              pPickObj = NULL;
@@ -501,7 +501,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                             SdrEdgeObj* pCloneEdge = (SdrEdgeObj*)pRem->pClone;
 
                                             // test first connection
-                                            SdrObjConnection& rConn0 = pOrigEdge->GetConnection(sal_False);
+                                            SdrObjConnection& rConn0 = pOrigEdge->GetConnection(false);
                                             SdrObject* pConnObj = rConn0.GetObject();
                                             if(pConnObj)
                                             {
@@ -509,8 +509,8 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                                 if(pConnClone)
                                                 {
                                                     // if dest obj was cloned, too, re-establish connection
-                                                    pCloneEdge->ConnectToNode(sal_False, pConnClone);
-                                                    pCloneEdge->GetConnection(sal_False).SetConnectorId(rConn0.GetConnectorId());
+                                                    pCloneEdge->ConnectToNode(false, pConnClone);
+                                                    pCloneEdge->GetConnection(false).SetConnectorId(rConn0.GetConnectorId());
                                                 }
                                                 else
                                                 {
@@ -533,7 +533,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                             }
 
                                             // test second connection
-                                            SdrObjConnection& rConn1 = pOrigEdge->GetConnection(sal_True);
+                                            SdrObjConnection& rConn1 = pOrigEdge->GetConnection(true);
                                             pConnObj = rConn1.GetObject();
                                             if(pConnObj)
                                             {
@@ -541,8 +541,8 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                                 if(pConnClone)
                                                 {
                                                     // if dest obj was cloned, too, re-establish connection
-                                                    pCloneEdge->ConnectToNode(sal_True, pConnClone);
-                                                    pCloneEdge->GetConnection(sal_True).SetConnectorId(rConn1.GetConnectorId());
+                                                    pCloneEdge->ConnectToNode(true, pConnClone);
+                                                    pCloneEdge->GetConnection(true).SetConnectorId(rConn1.GetConnectorId());
                                                 }
                                                 else
                                                 {
@@ -1483,7 +1483,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
     }
 
     MarkListHasChanged();
-    mbIsDropAllowed = sal_True;
+    mbIsDropAllowed = true;
     rDnDAction = mnAction;
     delete pImageMap;
 
@@ -1499,7 +1499,7 @@ bool View::PasteRTFTable( SotStorageStreamRef xStm, SdrPage* pPage, sal_uLong nP
     pModel->GetItemPool().SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
     pModel->InsertPage(pModel->AllocPage(false));
 
-    Reference< XComponent > xComponent( new SdXImpressDocument( pModel, sal_True ) );
+    Reference< XComponent > xComponent( new SdXImpressDocument( pModel, true ) );
     pModel->setUnoModel( Reference< XInterface >::query( xComponent ) );
 
     CreateTableFromRTF( *xStm, pModel );

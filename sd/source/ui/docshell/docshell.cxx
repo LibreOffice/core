@@ -147,7 +147,7 @@ DrawDocShell::DrawDocShell( const sal_uInt64 nModelCreationFlags, sal_Bool bData
     mbOwnPrinter(sal_False),
     mbNewDocument( sal_True )
 {
-    Construct( sal_False );
+    Construct( false );
 }
 
 DrawDocShell::DrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
@@ -193,7 +193,7 @@ DrawDocShell::~DrawDocShell()
         delete mpDoc;
 
     // that the navigator get informed about the disappearance of the document
-    SfxBoolItem     aItem(SID_NAVIGATOR_INIT, sal_True);
+    SfxBoolItem     aItem(SID_NAVIGATOR_INIT, true);
     SfxViewFrame*   pFrame = mpViewShell ? mpViewShell->GetFrame() : GetFrame();
 
     if( !pFrame )

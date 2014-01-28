@@ -499,7 +499,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
         {
             if( pUndoMgr )
             {
-                SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction(this, aCreatedStyles, sal_True);
+                SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction(this, aCreatedStyles, true);
                 pUndoMgr->AddUndoAction(pMovStyles);
             }
         }
@@ -565,8 +565,8 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
               0xFFFF,            // But all others
               nActualInsertPos,  // Insert at position ...
               bMergeMasterPages, // Move master pages?
-              sal_False,             // But only the master pages used
-              sal_True,              // Create an undo action
+              false,             // But only the master pages used
+              true,              // Create an undo action
               bCopy);            // Copy (or merge) pages?
 
         for (nBMSdPage=0; nBMSdPage < nBMSdPageCount; nBMSdPage++)
@@ -659,8 +659,8 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
                       nBMPage+1,         // To page (notes page)
                       nActualInsertPos,  // Insert at position
                       bMergeMasterPages, // Move master pages?
-                      sal_False,             // But only the master pages used
-                      sal_True,              // Create undo action
+                      false,             // But only the master pages used
+                      true,              // Create undo action
                       bCopy);            // Copy (or merge) pages?
 
                 if( bReplace )
@@ -916,10 +916,10 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     // styles, so it cannot be used after this point
     lcl_removeUnusedStyles(GetStyleSheetPool(), aNewGraphicStyles);
     if (!aNewGraphicStyles.empty() && pUndoMgr)
-        pUndoMgr->AddUndoAction(new SdMoveStyleSheetsUndoAction(this, aNewGraphicStyles, sal_True));
+        pUndoMgr->AddUndoAction(new SdMoveStyleSheetsUndoAction(this, aNewGraphicStyles, true));
     lcl_removeUnusedStyles(GetStyleSheetPool(), aNewCellStyles);
     if (!aNewCellStyles.empty() && pUndoMgr)
-        pUndoMgr->AddUndoAction(new SdMoveStyleSheetsUndoAction(this, aNewCellStyles, sal_True));
+        pUndoMgr->AddUndoAction(new SdMoveStyleSheetsUndoAction(this, aNewCellStyles, true));
 
     if( bUndo )
         EndUndo();
@@ -1111,7 +1111,7 @@ void SdDrawDocument::CloseBookmarkDoc()
 // Is this document read-only?
 bool SdDrawDocument::IsReadOnly() const
 {
-    return sal_False;
+    return false;
 }
 
 
@@ -1608,7 +1608,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             {
                 // Add UndoAction for creating and inserting the stylesheets to
                 // the top of the UndoManager
-                SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction( this, aCreatedStyles, sal_True);
+                SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction( this, aCreatedStyles, true);
                 pUndoMgr->AddUndoAction(pMovStyles);
             }
         }
@@ -1759,7 +1759,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
         if( bUndo )
         {
-            SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction(this, aCreatedStyles, sal_True);
+            SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction(this, aCreatedStyles, true);
             pUndoMgr->AddUndoAction(pMovStyles);
         }
 
@@ -1767,7 +1767,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         if( bUndo )
             BegUndo();
 
-        pMaster = (SdPage*) AllocPage(sal_True);
+        pMaster = (SdPage*) AllocPage(true);
         pMaster->SetSize(pSelectedPage->GetSize());
         pMaster->SetBorder(pSelectedPage->GetLftBorder(),
                            pSelectedPage->GetUppBorder(),
@@ -1782,7 +1782,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
         pMaster->SetAutoLayout(AUTOLAYOUT_NONE, true, true);
 
-        pNotesMaster = (SdPage*) AllocPage(sal_True);
+        pNotesMaster = (SdPage*) AllocPage(true);
         pNotesMaster->SetPageKind(PK_NOTES);
         pNotesMaster->SetSize(pNotes->GetSize());
         pNotesMaster->SetBorder(pNotes->GetLftBorder(),

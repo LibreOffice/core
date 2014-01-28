@@ -82,7 +82,7 @@ SvTreeListEntry* SdPageListControl::InsertPage( const OUString& rPageName )
 
     pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox,
                                        0, m_pCheckButton));
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // otherwise boom!
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false));    // otherwise boom!
     pEntry->AddItem( new SvLBoxString( pEntry, 0, rPageName ) );
 
     GetModel()->Insert( pEntry );
@@ -94,7 +94,7 @@ void SdPageListControl::InsertTitle( SvTreeListEntry* pParent, const OUString& r
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
     pEntry->AddItem( new SvLBoxString( pEntry, 0, OUString() ) );
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // otherwise boom!
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false));    // otherwise boom!
     pEntry->AddItem( new SvLBoxString( pEntry, 0, rTitle ) );
     GetModel()->Insert( pEntry,pParent );
 }

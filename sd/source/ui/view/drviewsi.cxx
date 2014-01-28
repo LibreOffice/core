@@ -135,12 +135,12 @@ void DrawViewShell::AssignFrom3DWindow()
                     // assign only text-attribute
                     SfxItemSet aTextSet( GetDoc()->GetPool(),
                         EE_ITEMS_START, EE_ITEMS_END, 0 );
-                    aTextSet.Put( aSet, sal_False );
+                    aTextSet.Put( aSet, false );
                     GetView()->SetAttributes( aTextSet );
 
                     // transform text into 3D
                     sal_uInt16 nSId = SID_CONVERT_TO_3D;
-                    SfxBoolItem aItem( nSId, sal_True );
+                    SfxBoolItem aItem( nSId, true );
                     GetViewFrame()->GetDispatcher()->Execute(
                         nSId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 

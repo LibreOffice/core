@@ -168,7 +168,7 @@ AnimationWindow::AnimationWindow( SfxBindings* pInBindings,
 
     // create new document with page
     pMyDoc = new SdDrawDocument(DOCUMENT_TYPE_IMPRESS, NULL);
-    SdPage* pPage = (SdPage*) pMyDoc->AllocPage(sal_False);
+    SdPage* pPage = (SdPage*) pMyDoc->AllocPage(false);
     pMyDoc->InsertPage(pPage);
 
     pControllerItem = new AnimationControllerItem( SID_ANIMATOR_STATE, this, pBindings );
@@ -386,8 +386,8 @@ IMPL_LINK( AnimationWindow, ClickRbtHdl, void *, p )
     if (m_FrameList.empty() || p == &aRbtGroup || aRbtGroup.IsChecked())
     {
         aTimeField.SetText( OUString() );
-        aTimeField.Enable( sal_False );
-        aLbLoopCount.Enable( sal_False );
+        aTimeField.Enable( false );
+        aLbLoopCount.Enable( false );
     }
     else if( p == &aRbtBitmap || aRbtBitmap.IsChecked() )
     {
@@ -412,7 +412,7 @@ IMPL_LINK( AnimationWindow, ClickGetObjectHdl, void *, pBtn )
     bAllObjects = pBtn == &aBtnGetAllObjects;
 
     // Code now in AddObj()
-    SfxBoolItem aItem( SID_ANIMATOR_ADD, sal_True );
+    SfxBoolItem aItem( SID_ANIMATOR_ADD, true );
 
     GetBindings().GetDispatcher()->Execute(
         SID_ANIMATOR_ADD, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L );
@@ -501,7 +501,7 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
 IMPL_LINK_NOARG(AnimationWindow, ClickCreateGroupHdl)
 {
     // Code now in CreatePresObj()
-    SfxBoolItem aItem( SID_ANIMATOR_CREATE, sal_True );
+    SfxBoolItem aItem( SID_ANIMATOR_CREATE, true );
 
     GetBindings().GetDispatcher()->Execute(
         SID_ANIMATOR_CREATE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L );
@@ -602,15 +602,15 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
     else
     {
         // if no object is in the list
-        aBtnFirst.Enable( sal_False );
-        aBtnReverse.Enable( sal_False );
-        aBtnPlay.Enable( sal_False );
-        aBtnLast.Enable( sal_False );
-        aNumFldBitmap.Enable( sal_False );
-        aTimeField.Enable( sal_False );
-        aLbLoopCount.Enable( sal_False );
-        aBtnRemoveBitmap.Enable( sal_False );
-        aBtnRemoveAll.Enable( sal_False );
+        aBtnFirst.Enable( false );
+        aBtnReverse.Enable( false );
+        aBtnPlay.Enable( false );
+        aBtnLast.Enable( false );
+        aNumFldBitmap.Enable( false );
+        aTimeField.Enable( false );
+        aLbLoopCount.Enable( false );
+        aBtnRemoveBitmap.Enable( false );
+        aBtnRemoveAll.Enable( false );
 
         //aFtAdjustment.Enable();
         //aLbAdjustment.Enable();
@@ -618,13 +618,13 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
 
     if( bMovie && bDisableCtrls )
     {
-        aBtnGetOneObject.Enable( sal_False );
-        aBtnGetAllObjects.Enable( sal_False );
-        aRbtGroup.Enable( sal_False );
-        aRbtBitmap.Enable( sal_False );
-        aBtnCreateGroup.Enable( sal_False );
-        aFtAdjustment.Enable( sal_False );
-        aLbAdjustment.Enable( sal_False );
+        aBtnGetOneObject.Enable( false );
+        aBtnGetAllObjects.Enable( false );
+        aRbtGroup.Enable( false );
+        aRbtBitmap.Enable( false );
+        aBtnCreateGroup.Enable( false );
+        aFtAdjustment.Enable( false );
+        aLbAdjustment.Enable( false );
     }
     else
     {
@@ -636,8 +636,8 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
 
         aRbtBitmap.Enable();
         aBtnCreateGroup.Enable(!m_FrameList.empty());
-        aFtAdjustment.Enable( sal_True );
-        aLbAdjustment.Enable( sal_True );
+        aFtAdjustment.Enable( true );
+        aLbAdjustment.Enable( true );
     }
 
     ClickRbtHdl( NULL );
@@ -813,7 +813,7 @@ sal_Bool AnimationWindow::Close()
     }
     else
     {
-        SfxBoolItem aItem( SID_ANIMATION_OBJECTS, sal_False );
+        SfxBoolItem aItem( SID_ANIMATION_OBJECTS, false );
 
         GetBindings().GetDispatcher()->Execute(
             SID_ANIMATION_OBJECTS, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
@@ -901,7 +901,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                     }
                     // if a animated GIF is taken, only such one can be created
                     aRbtBitmap.Check();
-                    aRbtGroup.Enable( sal_False );
+                    aRbtGroup.Enable( false );
                     bAnimObj = sal_True;
                 }
             }

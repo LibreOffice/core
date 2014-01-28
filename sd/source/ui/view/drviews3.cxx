@@ -129,7 +129,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             // switch page in running slide show
             if(SlideShow::IsRunning(GetViewShellBase()) && rReq.GetArgs())
             {
-                SFX_REQUEST_ARG(rReq, pWhatPage, SfxUInt32Item, ID_VAL_WHATPAGE, sal_False);
+                SFX_REQUEST_ARG(rReq, pWhatPage, SfxUInt32Item, ID_VAL_WHATPAGE, false);
                 SlideShow::GetSlideShow(GetViewShellBase())->jumpToPageNumber((sal_Int32)((pWhatPage->GetValue()-1)>>1));
             }
             else
@@ -143,8 +143,8 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 }
                 else if (pArgs->Count () == 2)
                 {
-                    SFX_REQUEST_ARG (rReq, pWhatPage, SfxUInt32Item, ID_VAL_WHATPAGE, sal_False);
-                    SFX_REQUEST_ARG (rReq, pWhatKind, SfxUInt32Item, ID_VAL_WHATKIND, sal_False);
+                    SFX_REQUEST_ARG (rReq, pWhatPage, SfxUInt32Item, ID_VAL_WHATPAGE, false);
+                    SFX_REQUEST_ARG (rReq, pWhatKind, SfxUInt32Item, ID_VAL_WHATKIND, false);
 
                     sal_Int32 nWhatPage = (sal_Int32)pWhatPage->GetValue ();
                     sal_Int32 nWhatKind = (sal_Int32)pWhatKind->GetValue ();
@@ -203,7 +203,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
             if( pArgs && pArgs->Count () == 1)
             {
-                SFX_REQUEST_ARG (rReq, pWhatLayer, SfxUInt32Item, ID_VAL_WHATLAYER, sal_False);
+                SFX_REQUEST_ARG (rReq, pWhatLayer, SfxUInt32Item, ID_VAL_WHATLAYER, false);
                 if( pWhatLayer )
                     nCurPage = (short) pWhatLayer->GetValue ();
             }
@@ -222,8 +222,8 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
             if ( pArgs && pArgs->Count () == 2)
             {
-                SFX_REQUEST_ARG (rReq, pIsActive, SfxBoolItem, ID_VAL_ISACTIVE, sal_False);
-                SFX_REQUEST_ARG (rReq, pWhatKind, SfxUInt32Item, ID_VAL_WHATKIND, sal_False);
+                SFX_REQUEST_ARG (rReq, pIsActive, SfxBoolItem, ID_VAL_ISACTIVE, false);
+                SFX_REQUEST_ARG (rReq, pWhatKind, SfxUInt32Item, ID_VAL_WHATKIND, false);
 
                 sal_Int32 nWhatKind = (sal_Int32)pWhatKind->GetValue ();
                 if (CHECK_RANGE (PK_STANDARD, nWhatKind, PK_HANDOUT))
@@ -250,8 +250,8 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
             if ( pArgs && pArgs->Count () == 2)
             {
-                SFX_REQUEST_ARG (rReq, pWhatLayerMode, SfxBoolItem, ID_VAL_ISACTIVE, sal_False);
-                SFX_REQUEST_ARG (rReq, pWhatLayer, SfxUInt32Item, ID_VAL_WHATLAYER, sal_False);
+                SFX_REQUEST_ARG (rReq, pWhatLayerMode, SfxBoolItem, ID_VAL_ISACTIVE, false);
+                SFX_REQUEST_ARG (rReq, pWhatLayer, SfxUInt32Item, ID_VAL_WHATLAYER, false);
 
                 sal_Int32 nWhatLayer = (sal_Int32)pWhatLayer->GetValue ();
                 if (CHECK_RANGE (EM_PAGE, nWhatLayer, EM_MASTERPAGE))
@@ -397,7 +397,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         {
             if( rReq.GetArgs() )
             {
-                SFX_REQUEST_ARG(rReq, pBookmark, SfxStringItem, SID_JUMPTOMARK, sal_False);
+                SFX_REQUEST_ARG(rReq, pBookmark, SfxStringItem, SID_JUMPTOMARK, false);
 
                 if (pBookmark)
                 {

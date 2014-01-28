@@ -118,7 +118,7 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& )
                                 if( pGrafObj->IsEmptyPresObj() )
                                 {
                                     bInsertNewObject = sal_False;
-                                    pGrafObj->SetEmptyPresObj(sal_False);
+                                    pGrafObj->SetEmptyPresObj(false);
                                     pGrafObj->SetOutlinerParaObject(NULL);
                                     pGrafObj->SetGraphic( Graphic( aScanBmp ) );
                                 }

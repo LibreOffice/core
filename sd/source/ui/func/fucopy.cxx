@@ -228,8 +228,8 @@ void FuCopy::DoExecute( SfxRequest& rReq )
 
                 if( pObj )
                 {
-                    pObj->SetMoveProtect( sal_False );
-                    pObj->SetResizeProtect( sal_False );
+                    pObj->SetMoveProtect( false );
+                    pObj->SetResizeProtect( false );
                 }
             }
 

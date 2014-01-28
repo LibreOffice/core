@@ -201,7 +201,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
 
     if ( SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_MAIL_SCROLLBODY_PAGEDOWN) )
     {
-        rSet.Put( SfxBoolItem( SID_MAIL_SCROLLBODY_PAGEDOWN, sal_True ) );
+        rSet.Put( SfxBoolItem( SID_MAIL_SCROLLBODY_PAGEDOWN, true ) );
     }
 
     if ( SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_ATTR_YEAR2000) )
@@ -295,7 +295,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 SvxAdjust eAdj = aItem.GetAdjust();
                 if ( eAdj == SVX_ADJUST_LEFT)
                 {
-                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_LEFT, sal_True ) );
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_LEFT, true ) );
                 }
 
                 bAttr = sal_True;
@@ -312,7 +312,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 SvxAdjust eAdj = aItem.GetAdjust();
                 if ( eAdj == SVX_ADJUST_CENTER)
                 {
-                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_CENTER, sal_True ) );
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_CENTER, true ) );
                 }
 
                 bAttr = sal_True;
@@ -329,7 +329,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 SvxAdjust eAdj = aItem.GetAdjust();
                 if ( eAdj == SVX_ADJUST_RIGHT)
                 {
-                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, sal_True ) );
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, true ) );
                 }
 
                 bAttr = sal_True;
@@ -346,7 +346,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 SvxAdjust eAdj = aItem.GetAdjust();
                 if ( eAdj == SVX_ADJUST_BLOCK)
                 {
-                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, sal_True ) );
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, true ) );
                 }
 
                 bAttr = sal_True;
@@ -487,7 +487,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             {
                 ISfxTemplateCommon* pTemplateCommon = SFX_APP()->GetCurrentTemplateCommon(GetViewFrame()->GetBindings());
                 if (pTemplateCommon && pTemplateCommon->GetActualFamily() == SD_STYLE_FAMILY_PSEUDO)
-                    rSet.Put(SfxBoolItem(nWhich,sal_False));
+                    rSet.Put(SfxBoolItem(nWhich,false));
                 else
                 {
                     SfxBoolItem aItem(nWhich, SD_MOD()->GetWaterCan());
@@ -559,7 +559,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 mpDrawView->GetAttributes( aEditAttr );
 
                 SfxItemSet aNewAttr( GetPool(), EE_ITEMS_START, EE_ITEMS_END );
-                aNewAttr.Put( aEditAttr, sal_False );
+                aNewAttr.Put( aEditAttr, false );
 
 
                 SvxNumRule* pNumRule = NULL;
@@ -652,8 +652,8 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 }
                 if (bEnable)
                 {
-                    rSet.Put(SfxBoolItem(FN_NUM_BULLET_ON, sal_False));
-                    rSet.Put(SfxBoolItem(FN_NUM_NUMBERING_ON, sal_False));
+                    rSet.Put(SfxBoolItem(FN_NUM_BULLET_ON, false));
+                    rSet.Put(SfxBoolItem(FN_NUM_NUMBERING_ON, false));
                 }
                 else
                 {
@@ -672,10 +672,10 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
     {
         pSet = new SfxItemSet( GetDoc()->GetPool() );
         mpDrawView->GetAttributes( *pSet );
-        rSet.Put( *pSet, sal_False );
+        rSet.Put( *pSet, false );
     }
 
-    rSet.Put( aAllSet, sal_False );
+    rSet.Put( aAllSet, false );
 
     // there were changes at area and/or line attributes
     if( bAttr && pSet )
@@ -720,11 +720,11 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                         pSet->Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
         if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
         {
-            rSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, sal_True ) );
+            rSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, true ) );
         }
         else if( eEsc == SVX_ESCAPEMENT_SUBSCRIPT )
         {
-            rSet.Put( SfxBoolItem( SID_SET_SUB_SCRIPT, sal_True ) );
+            rSet.Put( SfxBoolItem( SID_SET_SUB_SCRIPT, true ) );
         }
 
         eState = pSet->GetItemState( EE_CHAR_KERNING, sal_True );

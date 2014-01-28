@@ -348,7 +348,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         else if (nAnimationSet == ATTR_MIXED)
             aSet.InvalidateItem(ATTR_ANIMATION_ACTIVE);
         else
-            aSet.Put(SfxBoolItem(ATTR_ANIMATION_ACTIVE, sal_False));
+            aSet.Put(SfxBoolItem(ATTR_ANIMATION_ACTIVE, false));
 
         if (nEffectSet == ATTR_SET)
             aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_EFFECT, (sal_uInt16)eEffect));
@@ -374,7 +374,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         else if (nFadeOutSet == ATTR_MIXED)
             aSet.InvalidateItem(ATTR_ANIMATION_FADEOUT);
         else
-            aSet.Put(SfxBoolItem(ATTR_ANIMATION_FADEOUT, sal_False));
+            aSet.Put(SfxBoolItem(ATTR_ANIMATION_FADEOUT, false));
 
         if (nFadeColorSet == ATTR_SET)
             aSet.Put(SvxColorItem(aFadeColor, ATTR_ANIMATION_COLOR));
@@ -388,14 +388,14 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         else if (nInvisibleSet == ATTR_MIXED)
             aSet.InvalidateItem(ATTR_ANIMATION_INVISIBLE);
         else
-            aSet.Put(SfxBoolItem(ATTR_ANIMATION_INVISIBLE, sal_False));
+            aSet.Put(SfxBoolItem(ATTR_ANIMATION_INVISIBLE, false));
 
         if (nSoundOnSet == ATTR_SET)
             aSet.Put(SfxBoolItem(ATTR_ANIMATION_SOUNDON, bSoundOn));
         else if (nSoundOnSet == ATTR_MIXED)
             aSet.InvalidateItem(ATTR_ANIMATION_SOUNDON);
         else
-            aSet.Put(SfxBoolItem(ATTR_ANIMATION_SOUNDON, sal_False));
+            aSet.Put(SfxBoolItem(ATTR_ANIMATION_SOUNDON, false));
 
         if (nSoundFileSet == ATTR_SET)
             aSet.Put(SfxStringItem(ATTR_ANIMATION_SOUNDFILE, aSound));
@@ -407,7 +407,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         else if (nPlayFullSet == ATTR_MIXED)
             aSet.InvalidateItem(ATTR_ANIMATION_PLAYFULL);
         else
-            aSet.Put(SfxBoolItem(ATTR_ANIMATION_PLAYFULL, sal_False));
+            aSet.Put(SfxBoolItem(ATTR_ANIMATION_PLAYFULL, false));
 
         if (nClickActionSet == ATTR_SET)
             aSet.Put(SfxAllEnumItem(ATTR_ACTION, (sal_uInt16)eClickAction));
@@ -438,14 +438,14 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         else if (nSecondSoundOnSet == ATTR_MIXED)
             aSet.InvalidateItem(ATTR_ACTION_SOUNDON);
         else
-            aSet.Put(SfxBoolItem(ATTR_ACTION_SOUNDON, sal_False));
+            aSet.Put(SfxBoolItem(ATTR_ACTION_SOUNDON, false));
 
         if (nSecondPlayFullSet == ATTR_SET)
             aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, bSecondPlayFull));
         else if (nPlayFullSet == ATTR_MIXED)
             aSet.InvalidateItem(ATTR_ACTION_PLAYFULL);
         else
-            aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, sal_False));
+            aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, false));
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         SfxAbstractDialog* pDlg = pFact ? pFact->CreatSdActionDialog( NULL, &aSet, mpView ) : 0;

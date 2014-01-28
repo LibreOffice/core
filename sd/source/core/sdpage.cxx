@@ -99,8 +99,8 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, sal_Bool bMasterPage)
 ,   mfTime(1.0)
 ,   mbSoundOn(sal_False)
 ,   mbExcluded(sal_False)
-,   mbLoopSound(sal_False)
-,   mbStopSound(sal_False)
+,   mbLoopSound(false)
+,   mbStopSound(false)
 ,   mbScaleObjects(sal_True)
 ,   mbBackgroundFullSize( sal_False )
 ,   meCharSet(osl_getThreadTextEncoding())
@@ -188,7 +188,7 @@ SdrObject* SdPage::GetPresObj(PresObjKind eObjKind, int nIndex, bool bFuzzySearc
                 case PRESOBJ_CALC:
                 case PRESOBJ_IMAGE:
                 case PRESOBJ_MEDIA:
-                    bFound = sal_True;
+                    bFound = true;
                     break;
                 default:
                     break;
@@ -259,7 +259,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
 
             if (mbMaster)
             {
-                pSdrObj->SetNotVisibleAsMaster(sal_True);
+                pSdrObj->SetNotVisibleAsMaster(true);
             }
         }
         break;
@@ -270,7 +270,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
 
             if (mbMaster)
             {
-                pSdrObj->SetNotVisibleAsMaster(sal_True);
+                pSdrObj->SetNotVisibleAsMaster(true);
             }
         }
         break;
@@ -281,7 +281,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
 
             if (mbMaster)
             {
-                pSdrObj->SetNotVisibleAsMaster(sal_True);
+                pSdrObj->SetNotVisibleAsMaster(true);
             }
         }
         break;
@@ -381,7 +381,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
                 pSdrObj = new SdrPageObj();
             }
 
-            pSdrObj->SetResizeProtect(sal_True);
+            pSdrObj->SetResizeProtect(true);
         }
         break;
 
@@ -502,7 +502,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
 
             // background objects of the master page
             pSdrObj->SetLayer( rLayerAdmin.
-                GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), sal_False) );
+                GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), false) );
         }
 
         // Subscribe object at the style sheet
@@ -511,7 +511,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
         {
             SfxStyleSheet* pSheetForPresObj = GetStyleSheetForPresObj(eObjKind);
             if(pSheetForPresObj)
-                pSdrObj->SetStyleSheet(pSheetForPresObj, sal_False);
+                pSdrObj->SetStyleSheet(pSheetForPresObj, false);
         }
 
         if (eObjKind == PRESOBJ_OUTLINE)
@@ -2080,7 +2080,7 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
             pOutlParaObj = pOutl->CreateParaObject();
             pNewObj->SetOutlinerParaObject( pOutlParaObj );
             pOutl->Clear();
-            pNewObj->SetEmptyPresObj(sal_False);
+            pNewObj->SetEmptyPresObj(false);
 
             for (sal_uInt16 nLevel = 1; nLevel < 10; nLevel++)
             {
@@ -2138,7 +2138,7 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
             pOutlParaObj = pOutl->CreateParaObject();
             pNewObj->SetOutlinerParaObject( pOutlParaObj );
             pOutl->Clear();
-            pNewObj->SetEmptyPresObj(sal_False);
+            pNewObj->SetEmptyPresObj(false);
 
             // reset left indent
             SfxItemSet aSet(pModel->GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
@@ -2154,7 +2154,7 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
 
             SfxStyleSheet* pSheet = rPage.GetStyleSheetForPresObj(PRESOBJ_TEXT);
             if (pSheet)
-                pNewObj->SetStyleSheet(pSheet, sal_True);
+                pNewObj->SetStyleSheet(pSheet, true);
 
             // Remove subtitle shape from page
             if( bUndo )
@@ -2214,7 +2214,7 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
         if( bUndo )
         {
             pUndoManager->AddUndoAction( pModel->GetSdrUndoFactory().CreateUndoGeoObject( *pObj ) );
-            pUndoManager->AddUndoAction( pModel->GetSdrUndoFactory().CreateUndoAttrObject( *pObj, sal_True, sal_True ) );
+            pUndoManager->AddUndoAction( pModel->GetSdrUndoFactory().CreateUndoAttrObject( *pObj, true, true ) );
             pUndoManager->AddUndoAction( new UndoObjectUserCall( *pObj ) );
         }
 
@@ -2896,7 +2896,7 @@ bool SdPage::RestoreDefaultText( SdrObject* pObj )
 
                 pTextObj->SetTextEditOutliner( NULL );  // to make stylesheet settings work
                 pTextObj->NbcSetStyleSheet( GetStyleSheetForPresObj(ePresObjKind), sal_True );
-                pTextObj->SetEmptyPresObj(sal_True);
+                pTextObj->SetEmptyPresObj(true);
                 bRet = true;
             }
         }

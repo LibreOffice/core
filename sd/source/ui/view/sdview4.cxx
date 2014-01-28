@@ -113,15 +113,15 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             else
             {
                 pNewGrafObj = new SdrGrafObj( rGraphic, pPickObj->GetSnapRect() );
-                pNewGrafObj->SetEmptyPresObj(sal_True);
+                pNewGrafObj->SetEmptyPresObj(true);
             }
 
             if ( pNewGrafObj->IsEmptyPresObj() )
             {
                 Rectangle aRect( pNewGrafObj->GetLogicRect() );
-                pNewGrafObj->AdjustToMaxRect( aRect, sal_False );
+                pNewGrafObj->AdjustToMaxRect( aRect, false );
                 pNewGrafObj->SetOutlinerParaObject(NULL);
-                pNewGrafObj->SetEmptyPresObj(sal_False);
+                pNewGrafObj->SetEmptyPresObj(false);
             }
 
             if (pPage && pPage->IsPresObj(pPickObj))
@@ -184,7 +184,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         Size aPageSize( pPage->GetSize() );
         aPageSize.Width()  -= pPage->GetLftBorder() + pPage->GetRgtBorder();
         aPageSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
-        pNewGrafObj->AdjustToMaxRect( Rectangle( Point(), aPageSize ), sal_True );
+        pNewGrafObj->AdjustToMaxRect( Rectangle( Point(), aPageSize ), true );
 
         sal_uLong   nOptions = SDRINSERT_SETDEFLAYER;
         sal_Bool    bIsPresTarget = sal_False;

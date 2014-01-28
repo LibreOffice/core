@@ -1294,13 +1294,13 @@ void PPTWriter::ImplWriteOLE( )
                     ::uno::Reference < embed::XEmbeddedObject > xObj( ( (SdrOle2Obj*) pSdrObj )->GetObjRef() );
                     if( xObj.is() )
                     {
-                        SvStorageRef xTempStorage( new SvStorage( new SvMemoryStream(), sal_True ) );
+                        SvStorageRef xTempStorage( new SvStorage( new SvMemoryStream(), true ) );
                         aOleExport.ExportOLEObject( xObj, *xTempStorage );
 
                         //TODO/MBA: testing
                         OUString aPersistStream( SVEXT_PERSIST_STREAM );
                         SvMemoryStream aStream;
-                        SvStorageRef xCleanStorage( new SvStorage( sal_False, aStream ) );
+                        SvStorageRef xCleanStorage( new SvStorage( false, aStream ) );
                         xTempStorage->CopyTo( xCleanStorage );
                         // create a dummy content stream, the dummy content is necessary for ppt, but not for
                         // doc files, so we can't share code.
@@ -1327,7 +1327,7 @@ void PPTWriter::ImplWriteOLE( )
                     OUString aName;
                     //Initialize the graphic size which will be used on export
                     ::com::sun::star::awt::Size  aSize( pPtr->xShape->getSize() );
-                    SvStorageRef xDest( new SvStorage( new SvMemoryStream(), sal_True ) );
+                    SvStorageRef xDest( new SvStorage( new SvMemoryStream(), true ) );
                     sal_Bool bOk = oox::ole::MSConvertOCXControls::WriteOCXStream( mXModel, xDest, pPtr->xControlModel, aSize, aName );
                     if ( bOk )
                         pStrm = xDest->CreateMemoryStream();
@@ -1488,7 +1488,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL ExportPPT( const std::vector< 
 
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL SaveVBA( SfxObjectShell& rDocShell, SvMemoryStream*& pBas )
 {
-    SvStorageRef xDest( new SvStorage( new SvMemoryStream(), sal_True ) );
+    SvStorageRef xDest( new SvStorage( new SvMemoryStream(), true ) );
     SvxImportMSVBasic aMSVBas( rDocShell, *xDest );
     aMSVBas.SaveOrDelMSVBAStorage( sal_True, OUString( "_MS_VBA_Overhead" ) );
 
@@ -1510,7 +1510,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL SaveVBA( SfxObjectShell& rDocS
                         xTemp->Seek( STREAM_SEEK_TO_BEGIN );
                         xTemp->Read( pTemp, nLen );
                         pBas = new SvMemoryStream( pTemp, nLen, STREAM_READ );
-                        pBas->ObjectOwnsMemory( sal_True );
+                        pBas->ObjectOwnsMemory( true );
                         return sal_True;
                     }
                 }

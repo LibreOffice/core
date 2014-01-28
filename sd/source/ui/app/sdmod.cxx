@@ -198,7 +198,7 @@ SvStorageStreamRef SdModule::GetOptionStream( const OUString& rOptionName,
             SvStream* pStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE );
 
             if( pStm )
-                xOptionStorage = new SvStorage( pStm, sal_True );
+                xOptionStorage = new SvStorage( pStm, true );
         }
 
         OUString        aStmName;

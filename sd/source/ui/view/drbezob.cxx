@@ -93,7 +93,7 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
 {
     SfxItemSet aAttrSet( mpView->GetDoc().GetPool() );
     mpView->GetAttributes( aAttrSet );
-    rSet.Put(aAttrSet, sal_False); // <- sal_False, so DontCare-Status gets aquired
+    rSet.Put(aAttrSet, false); // <- sal_False, so DontCare-Status gets aquired
 
     rtl::Reference<FuPoor> xFunc( mpViewSh->GetCurrentFunction() );
 
@@ -102,12 +102,12 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
         if(xFunc->ISA(FuSelection))
         {
             sal_uInt16 nEditMode = static_cast<FuSelection*>(xFunc.get())->GetEditMode();
-            rSet.Put(SfxBoolItem(nEditMode, sal_True));
+            rSet.Put(SfxBoolItem(nEditMode, true));
         }
         else if (xFunc->ISA(FuConstructBezierPolygon))
         {
             sal_uInt16 nEditMode = static_cast<FuConstructBezierPolygon*>(xFunc.get())->GetEditMode();
-            rSet.Put(SfxBoolItem(nEditMode, sal_True));
+            rSet.Put(SfxBoolItem(nEditMode, true));
         }
     }
 
@@ -155,8 +155,8 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
             switch (eSegm)
             {
                 case SDRPATHSEGMENT_DONTCARE: rSet.InvalidateItem(SID_BEZIER_CONVERT); break;
-                case SDRPATHSEGMENT_LINE    : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,sal_False)); break; // Button down = curve
-                case SDRPATHSEGMENT_CURVE   : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,sal_True));  break;
+                case SDRPATHSEGMENT_LINE    : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,false)); break; // Button down = curve
+                case SDRPATHSEGMENT_CURVE   : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,true));  break;
                 default: break;
             }
         }
@@ -172,9 +172,9 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
             switch (eSmooth)
             {
                 case SDRPATHSMOOTH_DONTCARE  : break;
-                case SDRPATHSMOOTH_ANGULAR   : rSet.Put(SfxBoolItem(SID_BEZIER_EDGE,  sal_True)); break;
-                case SDRPATHSMOOTH_ASYMMETRIC: rSet.Put(SfxBoolItem(SID_BEZIER_SMOOTH,sal_True)); break;
-                case SDRPATHSMOOTH_SYMMETRIC : rSet.Put(SfxBoolItem(SID_BEZIER_SYMMTR,sal_True)); break;
+                case SDRPATHSMOOTH_ANGULAR   : rSet.Put(SfxBoolItem(SID_BEZIER_EDGE,  true)); break;
+                case SDRPATHSMOOTH_ASYMMETRIC: rSet.Put(SfxBoolItem(SID_BEZIER_SMOOTH,true)); break;
+                case SDRPATHSMOOTH_SYMMETRIC : rSet.Put(SfxBoolItem(SID_BEZIER_SYMMTR,true)); break;
             }
         }
         if (!pIPPEC || !pIPPEC->IsOpenCloseMarkedObjectsPossible())
@@ -187,8 +187,8 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
             switch (eClose)
             {
                 case SDROBJCLOSED_DONTCARE: rSet.InvalidateItem(SID_BEZIER_CLOSE); break;
-                case SDROBJCLOSED_OPEN    : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,sal_False)); break;
-                case SDROBJCLOSED_CLOSED  : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,sal_True)); break;
+                case SDROBJCLOSED_OPEN    : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,false)); break;
+                case SDROBJCLOSED_CLOSED  : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,true)); break;
                 default: break;
             }
         }

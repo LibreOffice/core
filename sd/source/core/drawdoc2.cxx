@@ -474,7 +474,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
         Size aDefSize = SvxPaperInfo::GetDefaultPaperSize( MAP_100TH_MM );
 
         // Insert handout page
-        SdPage* pHandoutPage = dynamic_cast< SdPage* >( AllocPage(sal_False) );
+        SdPage* pHandoutPage = dynamic_cast< SdPage* >( AllocPage(false) );
 
         SdPage* pRefPage = NULL;
 
@@ -497,7 +497,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
         InsertPage(pHandoutPage, 0);
 
         // Insert master page and register this with the handout page
-        SdPage* pHandoutMPage = (SdPage*) AllocPage(sal_True);
+        SdPage* pHandoutMPage = (SdPage*) AllocPage(true);
         pHandoutMPage->SetSize( pHandoutPage->GetSize() );
         pHandoutMPage->SetPageKind(PK_HANDOUT);
         pHandoutMPage->SetBorder( pHandoutPage->GetLftBorder(),
@@ -518,7 +518,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
 
         if (nPageCount == 0)
         {
-            pPage = dynamic_cast< SdPage* >( AllocPage(sal_False) );
+            pPage = dynamic_cast< SdPage* >( AllocPage(false) );
 
             if( pRefPage )
             {
@@ -572,7 +572,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
         }
 
         // Insert master page, then register this with the page
-        SdPage* pMPage = (SdPage*) AllocPage(sal_True);
+        SdPage* pMPage = (SdPage*) AllocPage(true);
         pMPage->SetSize( pPage->GetSize() );
         pMPage->SetBorder( pPage->GetLftBorder(),
                            pPage->GetUppBorder(),
@@ -584,7 +584,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
             pMPage->SetLayoutName( pPage->GetLayoutName() );
 
         // Insert notes page
-        SdPage* pNotesPage = (SdPage*) AllocPage(sal_False);
+        SdPage* pNotesPage = (SdPage*) AllocPage(false);
 
         if( pRefDocument )
             pRefPage = pRefDocument->GetSdPage( 0, PK_NOTES );
@@ -614,7 +614,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
             pNotesPage->SetLayoutName( pPage->GetLayoutName() );
 
         // Insert master page, then register this with the notes page
-        SdPage* pNotesMPage = (SdPage*) AllocPage(sal_True);
+        SdPage* pNotesMPage = (SdPage*) AllocPage(true);
         pNotesMPage->SetSize( pNotesPage->GetSize() );
         pNotesMPage->SetPageKind(PK_NOTES);
         pNotesMPage->SetBorder( pNotesPage->GetLftBorder(),
@@ -1096,7 +1096,7 @@ void SdDrawDocument::CheckMasterPages()
                     if( PK_STANDARD == pPage->GetPageKind() )
                     {
                         MoveMasterPage( nFound, nPage );
-                        pPage->SetInserted(sal_True);
+                        pPage->SetInserted(true);
                         break;
 
                     }
@@ -1127,7 +1127,7 @@ void SdDrawDocument::CheckMasterPages()
                     if( (PK_NOTES == pNotesPage->GetPageKind()) && ( pPage->GetLayoutName() == pNotesPage->GetLayoutName() ) )
                     {
                         MoveMasterPage( nFound, nPage );
-                        pNotesPage->SetInserted(sal_True);
+                        pNotesPage->SetInserted(true);
                         break;
                     }
 
@@ -1152,7 +1152,7 @@ void SdDrawDocument::CheckMasterPages()
                     if( nFound == nMaxPages )
                         pRefNotesPage = NULL;
 
-                    SdPage* pNewNotesPage = static_cast<SdPage*>(AllocPage(sal_True));
+                    SdPage* pNewNotesPage = static_cast<SdPage*>(AllocPage(true));
                     pNewNotesPage->SetPageKind(PK_NOTES);
                     if( pRefNotesPage )
                     {
@@ -1184,7 +1184,7 @@ void SdDrawDocument::CheckMasterPages()
         if( bChanged )
         {
             OSL_FAIL( "master pages where in a wrong order" );
-            RecalcPageNums( sal_True);
+            RecalcPageNums( true);
         }
     }
 }
@@ -1223,7 +1223,7 @@ sal_uInt16 SdDrawDocument::CreatePage (
     }
 
     // Create new standard page and set it up
-    pStandardPage = (SdPage*) AllocPage(sal_False);
+    pStandardPage = (SdPage*) AllocPage(false);
 
     // Set the size here since else the presobj autolayout
     // will be wrong.
@@ -1253,7 +1253,7 @@ sal_uInt16 SdDrawDocument::CreatePage (
     pStandardPage->SetTime( pPreviousStandardPage->GetTime() );
 
     // Create new notes page and set it up
-    pNotesPage = (SdPage*) AllocPage(sal_False);
+    pNotesPage = (SdPage*) AllocPage(false);
     pNotesPage->SetPageKind(PK_NOTES);
 
     // Use master page of current page
@@ -1288,8 +1288,8 @@ sal_uInt16 SdDrawDocument::DuplicatePage (sal_uInt16 nPageNum)
 
     // Get background flags
     SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
-    sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), sal_False);
-    sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), sal_False);
+    sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), false);
+    sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), false);
     SetOfByte aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
 
     return DuplicatePage (
@@ -1442,8 +1442,8 @@ void SdDrawDocument::SetupNewPage (
     if (pPreviousPage != NULL)
     {
         SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
-        sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), sal_False);
-        sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), sal_False);
+        sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), false);
+        sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), false);
         SetOfByte aVisibleLayers = pPreviousPage->TRG_GetMasterPageVisibleLayers();
         aVisibleLayers.Set(aBckgrnd, bIsPageBack);
         aVisibleLayers.Set(aBckgrndObj, bIsPageObj);

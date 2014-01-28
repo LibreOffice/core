@@ -404,7 +404,7 @@ SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const 
     // copied code from E3dView::InitScene
     double fCamZ(aVolume.getMaxZ() + ((fW + fH) / 4.0));
     Camera3D aCam(pScene->GetCamera());
-    aCam.SetAutoAdjustProjection(sal_False);
+    aCam.SetAutoAdjustProjection(false);
     aCam.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
     ::basegfx::B3DPoint aLookAt;
     double fDefaultCamPosZ = mpView->GetDefaultCamPosZ();

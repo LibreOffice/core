@@ -632,7 +632,7 @@ void FrameworkHelper::HandleModeChangeSlot (
                     pIsActive,
                     SfxBoolItem,
                     (sal_uInt16)nSlotId,
-                    sal_False);
+                    false);
                 bIsActive = pIsActive->GetValue ();
             }
         }

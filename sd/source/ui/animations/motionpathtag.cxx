@@ -122,7 +122,7 @@ bool PathDragMove::BeginSdrDrag()
         }
     }
     Show();
-    return sal_True;
+    return true;
 }
 
 bool PathDragMove::EndSdrDrag(bool /*bCopy*/)
@@ -130,7 +130,7 @@ bool PathDragMove::EndSdrDrag(bool /*bCopy*/)
     Hide();
     if( mxTag.is() )
         mxTag->MovePath( DragStat().GetDX(), DragStat().GetDY() );
-    return sal_True;
+    return true;
 }
 // --------------------------------------------------------------------
 
@@ -190,7 +190,7 @@ bool PathDragResize::EndSdrDrag(bool /*bCopy*/)
             pPathObj->SetPathPoly( aDragPoly );
         }
     }
-    return sal_True;
+    return true;
 }
 
 // --------------------------------------------------------------------
@@ -792,7 +792,7 @@ bool MotionPathTag::OnMove( const KeyEvent& rKEvt )
 
                 // switch snapping off
                 if(!bWasNoSnap)
-                    ((SdrDragStat&)mrView.GetDragStat()).SetNoSnap(sal_True);
+                    ((SdrDragStat&)mrView.GetDragStat()).SetNoSnap(true);
                 if(bWasSnapEnabled)
                     mrView.SetSnapEnabled(sal_False);
 

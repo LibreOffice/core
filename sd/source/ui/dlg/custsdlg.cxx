@@ -347,7 +347,7 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg( Window* pWindow,
     m_pLbCustomPages->SetDragDropMode( SV_DRAGDROP_CTRL_MOVE );
     m_pLbCustomPages->SetHighlightRange();
 
-    m_pBtnOK->Enable( sal_False );
+    m_pBtnOK->Enable( false );
     CheckState();
 }
 

@@ -117,7 +117,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                     SetOfByte aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
 
                     // page with title & structuring!
-                    pSummaryPage = (SdPage*) mpDoc->AllocPage(sal_False);
+                    pSummaryPage = (SdPage*) mpDoc->AllocPage(false);
                     pSummaryPage->SetSize(pActualPage->GetSize() );
                     pSummaryPage->SetBorder(pActualPage->GetLftBorder(),
                                      pActualPage->GetUppBorder(),
@@ -137,7 +137,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                     pSummaryPage->setHeaderFooterSettings(pActualPage->getHeaderFooterSettings());
 
                     // notes-page
-                    SdPage* pNotesPage = (SdPage*) mpDoc->AllocPage(sal_False);
+                    SdPage* pNotesPage = (SdPage*) mpDoc->AllocPage(false);
                     pNotesPage->SetSize(pActualNotesPage->GetSize());
                     pNotesPage->SetBorder(pActualNotesPage->GetLftBorder(),
                                           pActualNotesPage->GetUppBorder(),
@@ -200,7 +200,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
         }
 
         pTextObj->SetOutlinerParaObject( pOutl->CreateParaObject() );
-        pTextObj->SetEmptyPresObj(sal_False);
+        pTextObj->SetEmptyPresObj(false);
 
         // remove hard attributes (Flag to sal_True)
         SfxItemSet aAttr(mpDoc->GetPool());

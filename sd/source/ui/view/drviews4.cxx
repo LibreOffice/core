@@ -104,7 +104,7 @@ void DrawViewShell::DeleteActualLayer()
 
     if (QueryBox(GetActiveWindow(), WB_YES_NO, aString).Execute() == RET_YES)
     {
-        const SdrLayer* pLayer = rAdmin.GetLayer(rName, sal_False);
+        const SdrLayer* pLayer = rAdmin.GetLayer(rName, false);
         mpDrawView->DeleteLayer( pLayer->GetName() );
 
         /* in order to redraw TabBar and Window; should be initiated later on by
@@ -222,7 +222,7 @@ void DrawViewShell::StartRulerDrag (
     {
         // #i34536# if no guide-lines are visible yet, that show them
         if( ! mpDrawView->IsHlplVisible())
-            mpDrawView->SetHlplVisible( sal_True );
+            mpDrawView->SetHlplVisible( true );
 
         SdrHelpLineKind eKind;
 

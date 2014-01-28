@@ -740,7 +740,7 @@ void SlideSorterController::GetCtrlState (SfxItemSet& rSet)
 
     if (rSet.GetItemState(SID_MAIL_SCROLLBODY_PAGEDOWN) == SFX_ITEM_AVAILABLE)
     {
-        rSet.Put (SfxBoolItem( SID_MAIL_SCROLLBODY_PAGEDOWN, sal_True));
+        rSet.Put (SfxBoolItem( SID_MAIL_SCROLLBODY_PAGEDOWN, true));
     }
 }
 

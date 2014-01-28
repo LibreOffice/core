@@ -665,7 +665,7 @@ void SAL_CALL SlideshowImpl::disposing()
         mpView->DeleteWindowFromPaintView( mpShowWindow );
 
     if( mpView )
-        mpView->SetAnimationPause( sal_False );
+        mpView->SetAnimationPause( false );
 
     if( mpViewShell )
     {
@@ -827,7 +827,7 @@ bool SlideshowImpl::startPreview(
         if( mpView )
         {
             mpView->AddWindowToPaintView( mpShowWindow );
-            mpView->SetAnimationPause( sal_True );
+            mpView->SetAnimationPause( true );
         }
 
         // call resize handler
@@ -1039,7 +1039,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
             if( mpView )
             {
                 mpView->AddWindowToPaintView( mpShowWindow );
-                mpView->SetAnimationPause( sal_True );
+                mpView->SetAnimationPause( true );
             }
 
             SfxBindings* pBindings = getBindings();
@@ -1460,7 +1460,7 @@ void SAL_CALL SlideshowImpl::pause() throw (RuntimeException)
 
     if( !mbIsPaused ) try
     {
-        mbIsPaused = sal_True;
+        mbIsPaused = true;
         if( mxShow.is() )
         {
             mxShow->pause(sal_True);
@@ -1494,7 +1494,7 @@ void SAL_CALL SlideshowImpl::resume() throw (RuntimeException)
         }
         else
         {
-            mbIsPaused = sal_False;;
+            mbIsPaused = false;;
             if( mxShow.is() )
             {
                 mxShow->pause(sal_False);
@@ -1609,7 +1609,7 @@ void SlideshowImpl::click( const Reference< XShape >& xShape, const ::com::sun::
         if( INET_PROT_FILE == aURL.GetProtocol() )
         {
             SfxStringItem aUrl( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE ) );
-            SfxBoolItem aBrowsing( SID_BROWSE, sal_True );
+            SfxBoolItem aBrowsing( SID_BROWSE, true );
 
             SfxViewFrame* pViewFrm = SfxViewFrame::Current();
             if (pViewFrm)
@@ -2186,13 +2186,13 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl)
         Reference< ::com::sun::star::frame::XFrame > xFrame( pViewFrame->GetFrame().GetFrameInterface() );
         if( xFrame.is() )
         {
-            pMenu->SetItemImage( CM_NEXT_SLIDE, GetImage( xFrame, "slot:10617" , sal_False ) );
-            pMenu->SetItemImage( CM_PREV_SLIDE, GetImage( xFrame, "slot:10618" , sal_False ) );
+            pMenu->SetItemImage( CM_NEXT_SLIDE, GetImage( xFrame, "slot:10617" , false ) );
+            pMenu->SetItemImage( CM_PREV_SLIDE, GetImage( xFrame, "slot:10618" , false ) );
 
             if( pPageMenu )
             {
-                pPageMenu->SetItemImage( CM_FIRST_SLIDE, GetImage( xFrame, "slot:10616" , sal_False ) );
-                pPageMenu->SetItemImage( CM_LAST_SLIDE, GetImage( xFrame, "slot:10619" , sal_False ) );
+                pPageMenu->SetItemImage( CM_FIRST_SLIDE, GetImage( xFrame, "slot:10616" , false ) );
+                pPageMenu->SetItemImage( CM_LAST_SLIDE, GetImage( xFrame, "slot:10619" , false ) );
             }
         }
     }
@@ -2688,7 +2688,7 @@ void SlideshowImpl::setActiveXToolbarsVisible( sal_Bool bVisible )
     // actually it runs always in window mode in case of ActiveX control
     if ( !maPresSettings.mbFullScreen && mpDocSh && mpDocSh->GetMedium() )
     {
-        SFX_ITEMSET_ARG( mpDocSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_VIEWONLY, sal_False );
+        SFX_ITEMSET_ARG( mpDocSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_VIEWONLY, false );
         if ( pItem && pItem->GetValue() )
         {
             // this is a plugin/activex mode, no toolbars should be visible during slide show

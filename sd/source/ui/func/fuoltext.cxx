@@ -152,7 +152,7 @@ sal_Bool FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
                 mpWindow->ReleaseMouse();
                 SfxStringItem aStrItem( SID_FILE_NAME, ( (SvxURLField*) pField)->GetURL() );
                 SfxStringItem aReferer( SID_REFERER, mpDocSh->GetMedium()->GetName() );
-                SfxBoolItem aBrowseItem( SID_BROWSE, sal_True );
+                SfxBoolItem aBrowseItem( SID_BROWSE, true );
                 SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
 
                 if ( rMEvt.IsMod1() )

@@ -262,7 +262,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 mpWindow->ReleaseMouse();
                 SfxStringItem aStrItem(SID_FILE_NAME, aVEvt.pURLField->GetURL());
                 SfxStringItem aReferer(SID_REFERER, mpDocSh->GetMedium()->GetName());
-                SfxBoolItem aBrowseItem( SID_BROWSE, sal_True );
+                SfxBoolItem aBrowseItem( SID_BROWSE, true );
                 SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
                 mpWindow->ReleaseMouse();
 
@@ -774,12 +774,12 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                         {
                             // Added UNDOs for the WaterCan mode. This was never done in
                             // the past, thus it was missing all the time.
-                            SdrUndoAction* pUndoAttr = mpDoc->GetSdrUndoFactory().CreateUndoAttrObject(*pWaterCanCandidate, sal_True, sal_True);
+                            SdrUndoAction* pUndoAttr = mpDoc->GetSdrUndoFactory().CreateUndoAttrObject(*pWaterCanCandidate, true, true);
                             mpView->BegUndo(pUndoAttr->GetComment());
                             mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoGeoObject(*pWaterCanCandidate));
                             mpView->AddUndo(pUndoAttr);
 
-                            pWaterCanCandidate->SetStyleSheet (pStyleSheet, sal_False);
+                            pWaterCanCandidate->SetStyleSheet (pStyleSheet, false);
 
                             mpView->EndUndo();
                         }
@@ -1241,7 +1241,7 @@ sal_Bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 SfxStringItem aReferer(SID_REFERER, mpDocSh->GetMedium()->GetName());
                 SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
                 SfxFrameItem aFrameItem(SID_DOCFRAME, pFrame);
-                SfxBoolItem aBrowseItem( SID_BROWSE, sal_True );
+                SfxBoolItem aBrowseItem( SID_BROWSE, true );
                 mpWindow->ReleaseMouse();
                 pFrame->GetDispatcher()->
                     Execute(SID_OPENDOC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
@@ -1283,7 +1283,7 @@ sal_Bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                         SfxStringItem aStrItem(SID_FILE_NAME, sBookmark);
                         SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
                         SfxFrameItem aFrameItem(SID_DOCFRAME, pFrame);
-                        SfxBoolItem aBrowseItem( SID_BROWSE, sal_True );
+                        SfxBoolItem aBrowseItem( SID_BROWSE, true );
                         pFrame->GetDispatcher()->
                         Execute(SID_OPENDOC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
                                 &aStrItem, &aFrameItem, &aBrowseItem, &aReferer, 0L);
@@ -1371,7 +1371,7 @@ sal_Bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                    if( INET_PROT_FILE == aURL.GetProtocol() )
                    {
                         SfxStringItem aUrl( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE ) );
-                        SfxBoolItem aBrowsing( SID_BROWSE, sal_True );
+                        SfxBoolItem aBrowsing( SID_BROWSE, true );
 
                         SfxViewFrame* pViewFrm = SfxViewFrame::Current();
                         if (pViewFrm)

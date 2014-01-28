@@ -866,7 +866,7 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
             if( pDoc )
             {
                 SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
-                SdrLayer* aSdrLayer = rLayerAdmin.GetLayer(sDisplay, sal_False);
+                SdrLayer* aSdrLayer = rLayerAdmin.GetLayer(sDisplay, false);
                 if( aSdrLayer )
                 {
                     OUString layerAltText = aSdrLayer->GetTitle();

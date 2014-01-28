@@ -64,8 +64,8 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
     EnableExtendedMouseEventDispatcher(sal_False);
     EnableExtendedCommandEventDispatcher(sal_False);
 
-    SetGridFront( sal_False );
-    SetHlplFront( sal_False );
+    SetGridFront( false );
+    SetHlplFront( false );
     SetOConSnap( sal_False );
     SetFrameDragSingles( sal_True );
     SetSlidesPerRow(4);

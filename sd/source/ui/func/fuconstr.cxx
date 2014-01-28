@@ -53,7 +53,7 @@ FuConstruct::FuConstruct (
     SdDrawDocument* pDoc,
     SfxRequest&     rReq)
     : FuDraw(pViewSh, pWin, pView, pDoc, rReq),
-      bSelectionChanged(sal_False)
+      bSelectionChanged(false)
 {
 }
 
@@ -68,7 +68,7 @@ sal_Bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
     sal_Bool bReturn = FuDraw::MouseButtonDown(rMEvt);
 
     bMBDown = sal_True;
-    bSelectionChanged = sal_False;
+    bSelectionChanged = false;
 
     if ( mpView->IsAction() )
     {
@@ -350,7 +350,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
         if (pSheet)
         {
             // applying style sheet for background objects
-            pObj->SetStyleSheet(pSheet, sal_False);
+            pObj->SetStyleSheet(pSheet, false);
             SfxItemSet& rSet = pSheet->GetItemSet();
             const XFillStyleItem& rFillStyle = (const XFillStyleItem&)rSet.Get(XATTR_FILLSTYLE);
             if ( bForceFillStyle )
@@ -379,7 +379,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
             DBG_ASSERT(pSheet, "Stylesheet missing");
             if (pSheet)
             {
-                pObj->SetStyleSheet(pSheet, sal_False);
+                pObj->SetStyleSheet(pSheet, false);
                 SfxItemSet aAttr(*mpView->GetDefaultAttr().Clone());
                 aAttr.Put(pSheet->GetItemSet().Get(XATTR_FILLSTYLE));
                 pObj->SetMergedItemSet(aAttr);

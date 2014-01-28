@@ -256,7 +256,7 @@ void Clipboard::DoDelete (::Window* )
 
 void Clipboard::DoCopy (::Window* pWindow )
 {
-    CreateSlideTransferable( pWindow, sal_False );
+    CreateSlideTransferable( pWindow, false );
 }
 
 
@@ -603,7 +603,7 @@ void Clipboard::StartDrag (
     maPagesToRemove.clear();
     maPagesToSelect.clear();
     mbUpdateSelectionPending = false;
-    CreateSlideTransferable(pWindow, sal_True);
+    CreateSlideTransferable(pWindow, true);
 
     mrController.GetInsertionIndicatorHandler()->UpdatePosition(
         rPosition,

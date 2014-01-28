@@ -326,7 +326,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             // const SfxPoolItem* pItem = rReq.GetArg( SID_HYPHENATION );
             //  ^-- should not be used (defaults are wrong) !
-            SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, SID_HYPHENATION, sal_False);
+            SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, SID_HYPHENATION, false);
 
             if( pItem )
             {
@@ -499,9 +499,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if (pArgs)
                 if (pArgs->Count () == 3)
                 {
-                    SFX_REQUEST_ARG (rReq, pWidth, SfxUInt32Item, ID_VAL_PAGEWIDTH, sal_False);
-                    SFX_REQUEST_ARG (rReq, pHeight, SfxUInt32Item, ID_VAL_PAGEHEIGHT, sal_False);
-                    SFX_REQUEST_ARG (rReq, pScaleAll, SfxBoolItem, ID_VAL_SCALEOBJECTS, sal_False);
+                    SFX_REQUEST_ARG (rReq, pWidth, SfxUInt32Item, ID_VAL_PAGEWIDTH, false);
+                    SFX_REQUEST_ARG (rReq, pHeight, SfxUInt32Item, ID_VAL_PAGEHEIGHT, false);
+                    SFX_REQUEST_ARG (rReq, pScaleAll, SfxBoolItem, ID_VAL_SCALEOBJECTS, false);
 
                     Size aSize (pWidth->GetValue (), pHeight->GetValue ());
 
@@ -523,11 +523,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if (pArgs)
                 if (pArgs->Count () == 5)
                 {
-                    SFX_REQUEST_ARG (rReq, pLeft, SfxUInt32Item, ID_VAL_PAGELEFT, sal_False);
-                    SFX_REQUEST_ARG (rReq, pRight, SfxUInt32Item, ID_VAL_PAGERIGHT, sal_False);
-                    SFX_REQUEST_ARG (rReq, pUpper, SfxUInt32Item, ID_VAL_PAGETOP, sal_False);
-                    SFX_REQUEST_ARG (rReq, pLower, SfxUInt32Item, ID_VAL_PAGEBOTTOM, sal_False);
-                    SFX_REQUEST_ARG (rReq, pScaleAll, SfxBoolItem, ID_VAL_SCALEOBJECTS, sal_False);
+                    SFX_REQUEST_ARG (rReq, pLeft, SfxUInt32Item, ID_VAL_PAGELEFT, false);
+                    SFX_REQUEST_ARG (rReq, pRight, SfxUInt32Item, ID_VAL_PAGERIGHT, false);
+                    SFX_REQUEST_ARG (rReq, pUpper, SfxUInt32Item, ID_VAL_PAGETOP, false);
+                    SFX_REQUEST_ARG (rReq, pLower, SfxUInt32Item, ID_VAL_PAGEBOTTOM, false);
+                    SFX_REQUEST_ARG (rReq, pScaleAll, SfxBoolItem, ID_VAL_SCALEOBJECTS, false);
 
                     Size aEmptySize (0, 0);
 
@@ -550,7 +550,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             if (pArgs && pArgs->Count () == 1 )
             {
-                SFX_REQUEST_ARG (rReq, pScale, SfxUInt16Item, SID_ATTR_ZOOMSLIDER, sal_False);
+                SFX_REQUEST_ARG (rReq, pScale, SfxUInt16Item, SID_ATTR_ZOOMSLIDER, false);
                 if (CHECK_RANGE (5, pScale->GetValue (), 3000))
                 {
                     SetZoom (pScale->GetValue ());
@@ -575,7 +575,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if (pArgs)
                 if (pArgs->Count () == 1)
                 {
-                    SFX_REQUEST_ARG (rReq, pScale, SfxUInt32Item, ID_VAL_ZOOM, sal_False);
+                    SFX_REQUEST_ARG (rReq, pScale, SfxUInt32Item, ID_VAL_ZOOM, false);
                     if (CHECK_RANGE (10, pScale->GetValue (), 1000))
                     {
                         SetZoom (pScale->GetValue ());
@@ -875,7 +875,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     {
                         pSheet = mpActualPage->GetStyleSheetForPresObj(PRESOBJ_TITLE);
                         if (pSheet)
-                            pObj->SetStyleSheet(pSheet, sal_False);
+                            pObj->SetStyleSheet(pSheet, false);
                     }
                     else if(pObj->GetObjIdentifier() == OBJ_OUTLINETEXT)
                     {
@@ -1439,7 +1439,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         pDlg->GetAttr( aNewAttr );
                         aLayerName   = ((SdAttrLayerName &) aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
 
-                        if( rLayerAdmin.GetLayer( aLayerName, sal_False )
+                        if( rLayerAdmin.GetLayer( aLayerName, false )
                             || aLayerName.isEmpty() )
                         {
                             // name already exists
@@ -1483,10 +1483,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                  }
                  else
                  {
-                     SFX_REQUEST_ARG (rReq, pLayerName, SfxStringItem, ID_VAL_LAYERNAME, sal_False);
-                     SFX_REQUEST_ARG (rReq, pIsVisible, SfxBoolItem, ID_VAL_ISVISIBLE, sal_False);
-                     SFX_REQUEST_ARG (rReq, pIsLocked, SfxBoolItem, ID_VAL_ISLOCKED, sal_False);
-                     SFX_REQUEST_ARG (rReq, pIsPrintable, SfxBoolItem, ID_VAL_ISPRINTABLE, sal_False);
+                     SFX_REQUEST_ARG (rReq, pLayerName, SfxStringItem, ID_VAL_LAYERNAME, false);
+                     SFX_REQUEST_ARG (rReq, pIsVisible, SfxBoolItem, ID_VAL_ISVISIBLE, false);
+                     SFX_REQUEST_ARG (rReq, pIsLocked, SfxBoolItem, ID_VAL_ISLOCKED, false);
+                     SFX_REQUEST_ARG (rReq, pIsPrintable, SfxBoolItem, ID_VAL_ISPRINTABLE, false);
 
                      aLayerName   = pLayerName->GetValue ();
                      bIsVisible   = pIsVisible->GetValue ();
@@ -1511,7 +1511,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
 
             mpDrawView->InsertNewLayer(aLayerName, nPrevLayer + 1);
-            pLayer = rLayerAdmin.GetLayer(aLayerName, sal_False);
+            pLayer = rLayerAdmin.GetLayer(aLayerName, false);
             if( pLayer )
             {
                 pLayer->SetTitle( aLayerTitle );
@@ -1546,7 +1546,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
             sal_uInt16 nCurPage = GetLayerTabControl()->GetCurPageId();
             OUString aLayerName = GetLayerTabControl()->GetPageText(nCurPage);
-            SdrLayer* pLayer = rLayerAdmin.GetLayer(aLayerName, sal_False);
+            SdrLayer* pLayer = rLayerAdmin.GetLayer(aLayerName, false);
 
             OUString aLayerTitle = pLayer->GetTitle();
             OUString aLayerDesc = pLayer->GetDescription();
@@ -1604,7 +1604,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         pDlg->GetAttr( aNewAttr );
                         aLayerName   = ((SdAttrLayerName &) aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
 
-                        if( (rLayerAdmin.GetLayer( aLayerName, sal_False ) &&
+                        if( (rLayerAdmin.GetLayer( aLayerName, false ) &&
                              aLayerName != aOldLayerName) || aLayerName.isEmpty() )
                         {
                             // name already exists
@@ -1639,10 +1639,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
             else if (pArgs->Count () == 4)
             {
-                SFX_REQUEST_ARG (rReq, pLayerName, SfxStringItem, ID_VAL_LAYERNAME, sal_False);
-                SFX_REQUEST_ARG (rReq, pIsVisible, SfxBoolItem, ID_VAL_ISVISIBLE, sal_False);
-                SFX_REQUEST_ARG (rReq, pIsLocked, SfxBoolItem, ID_VAL_ISLOCKED, sal_False);
-                SFX_REQUEST_ARG (rReq, pIsPrintable, SfxBoolItem, ID_VAL_ISPRINTABLE, sal_False);
+                SFX_REQUEST_ARG (rReq, pLayerName, SfxStringItem, ID_VAL_LAYERNAME, false);
+                SFX_REQUEST_ARG (rReq, pIsVisible, SfxBoolItem, ID_VAL_ISVISIBLE, false);
+                SFX_REQUEST_ARG (rReq, pIsLocked, SfxBoolItem, ID_VAL_ISLOCKED, false);
+                SFX_REQUEST_ARG (rReq, pIsPrintable, SfxBoolItem, ID_VAL_ISPRINTABLE, false);
 
                 aLayerName   = pLayerName->GetValue ();
                 bIsVisible   = pIsVisible->GetValue ();
@@ -1736,8 +1736,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         SfxFrameItem aFrm( SID_DOCFRAME, pFrame );
                         SfxStringItem aReferer( SID_REFERER, aReferName );
 
-                        SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, sal_False );
-                        SfxBoolItem aBrowsing( SID_BROWSE, sal_True );
+                        SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, false );
+                        SfxBoolItem aBrowsing( SID_BROWSE, true );
 
                         SfxViewFrame* pViewFrm = SfxViewFrame::Current();
                         if (pViewFrm)
@@ -2859,9 +2859,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
                 sal_uInt8 aLayerId;
                 if (nSId == SID_DISPLAY_MASTER_BACKGROUND)
-                    aLayerId = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), sal_False);
+                    aLayerId = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), false);
                 else
-                    aLayerId = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), sal_False);
+                    aLayerId = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), false);
                 aVisibleLayers.Set(aLayerId, !aVisibleLayers.IsSet(aLayerId));
                 pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
             }
@@ -2889,7 +2889,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         default:
         {
-            DBG_ASSERT( 0, "Slot without function" );
+            DBG_ASSERT( false, "Slot without function" );
             Cancel();
             rReq.Ignore ();
         }
@@ -2929,7 +2929,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
     case SID_ATTR_CHAR_FONT:
         if( rReq.GetArgs() )
         {
-            SFX_REQUEST_ARG( rReq, pItem, SvxFontItem, SID_ATTR_CHAR_FONT , sal_False );
+            SFX_REQUEST_ARG( rReq, pItem, SvxFontItem, SID_ATTR_CHAR_FONT , false );
             if (pItem)
             {
                 aNewAttr.Put(*pItem);
@@ -2939,7 +2939,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
     case SID_ATTR_CHAR_FONTHEIGHT:
         if( rReq.GetArgs() )
         {
-            SFX_REQUEST_ARG( rReq, pItem, SvxFontHeightItem, SID_ATTR_CHAR_FONTHEIGHT , sal_False );
+            SFX_REQUEST_ARG( rReq, pItem, SvxFontHeightItem, SID_ATTR_CHAR_FONTHEIGHT , false );
             if (pItem)
             {
                 aNewAttr.Put(*pItem);
@@ -2950,7 +2950,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
         if( rReq.GetArgs() )
         {
             //const SvxWeightItem *pItem = (const SvxWeightItem*) rReq.GetArg( SID_ATTR_CHAR_WEIGHT, sal_False, TYPE(SvxWeightItem) );
-            SFX_REQUEST_ARG( rReq, pItem, SvxWeightItem, SID_ATTR_CHAR_WEIGHT , sal_False );
+            SFX_REQUEST_ARG( rReq, pItem, SvxWeightItem, SID_ATTR_CHAR_WEIGHT , false );
             if (pItem)
             {
                 aNewAttr.Put(*pItem);
@@ -2961,7 +2961,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
         if( rReq.GetArgs() )
         {
             //const SvxPostureItem *pItem = (const SvxPostureItem*) rReq.GetArg( SID_ATTR_CHAR_POSTURE, sal_False, TYPE(SvxPostureItem) );
-            SFX_REQUEST_ARG( rReq, pItem, SvxPostureItem, SID_ATTR_CHAR_POSTURE , sal_False );
+            SFX_REQUEST_ARG( rReq, pItem, SvxPostureItem, SID_ATTR_CHAR_POSTURE , false );
             if (pItem)
             {
                 aNewAttr.Put(*pItem);
@@ -2973,7 +2973,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
         {
             //<<modify by wj for sym2_1873
             //SFX_REQUEST_ARG( rReq, pItem, SvxTextLineItem, SID_ATTR_CHAR_UNDERLINE , sal_False );
-            SFX_REQUEST_ARG( rReq, pItem, SvxUnderlineItem, SID_ATTR_CHAR_UNDERLINE , sal_False );
+            SFX_REQUEST_ARG( rReq, pItem, SvxUnderlineItem, SID_ATTR_CHAR_UNDERLINE , false );
             //end>>
             if (pItem)
             {
@@ -2989,7 +2989,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
     case SID_ATTR_CHAR_SHADOWED:
         if( rReq.GetArgs() )
         {
-            SFX_REQUEST_ARG( rReq, pItem, SvxShadowedItem, SID_ATTR_CHAR_SHADOWED , sal_False );
+            SFX_REQUEST_ARG( rReq, pItem, SvxShadowedItem, SID_ATTR_CHAR_SHADOWED , false );
             if (pItem)
             {
                 aNewAttr.Put(*pItem);
@@ -2999,7 +2999,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
     case SID_ATTR_CHAR_STRIKEOUT:
         if( rReq.GetArgs() )
         {
-            SFX_REQUEST_ARG( rReq, pItem, SvxCrossedOutItem, SID_ATTR_CHAR_STRIKEOUT , sal_False );
+            SFX_REQUEST_ARG( rReq, pItem, SvxCrossedOutItem, SID_ATTR_CHAR_STRIKEOUT , false );
             if (pItem)
             {
                 aNewAttr.Put(*pItem);
@@ -3009,7 +3009,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
     case SID_ATTR_CHAR_COLOR:
         if( rReq.GetArgs() )
         {
-            SFX_REQUEST_ARG( rReq, pItem, SvxColorItem, SID_ATTR_CHAR_COLOR , sal_False );
+            SFX_REQUEST_ARG( rReq, pItem, SvxColorItem, SID_ATTR_CHAR_COLOR , false );
             if (pItem)
             {
                 aNewAttr.Put(*pItem);
@@ -3019,7 +3019,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
     case SID_ATTR_CHAR_KERNING:
         if( rReq.GetArgs() )
         {
-            SFX_REQUEST_ARG( rReq, pItem, SvxKerningItem, SID_ATTR_CHAR_KERNING , sal_False );
+            SFX_REQUEST_ARG( rReq, pItem, SvxKerningItem, SID_ATTR_CHAR_KERNING , false );
             if (pItem)
             {
                 aNewAttr.Put(*pItem);
@@ -3170,7 +3170,7 @@ void DrawViewShell::GetStatePropPanelAttr(SfxItemSet& rSet)
                 }
                 else
                 {
-                    rSet.Put(SfxBoolItem(nSlotId, sal_False));
+                    rSet.Put(SfxBoolItem(nSlotId, false));
                 }
                 break;
         }

@@ -139,7 +139,7 @@ sal_Int8 LayerTabBar::AcceptDrop( const AcceptDropEvent& rEvt )
         sal_uInt16          nPageId = SDRPAGE_NOTFOUND;
         Point           aPos( PixelToLogic( rEvt.maPosPixel ) );
         sal_uInt16 nLayerId = pDrViewSh->GetView()->GetDoc().GetLayerAdmin().GetLayerID(
-            GetPageText( GetPageId( aPos ) ), sal_False );
+            GetPageText( GetPageId( aPos ) ), false );
 
         nRet = pDrViewSh->AcceptDrop( rEvt, *this, NULL, nPageId, nLayerId );
 
@@ -156,7 +156,7 @@ sal_Int8 LayerTabBar::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     sal_uInt16          nPageId = SDRPAGE_NOTFOUND;
     sal_uInt16 nLayerId = pDrViewSh->GetView()->GetDoc().GetLayerAdmin().GetLayerID(
-        GetPageText( GetPageId( PixelToLogic( rEvt.maPosPixel ) ) ), sal_False );
+        GetPageText( GetPageId( PixelToLogic( rEvt.maPosPixel ) ) ), false );
     sal_Int8        nRet = pDrViewSh->ExecuteDrop( rEvt, *this, NULL, nPageId, nLayerId );
 
     EndSwitchPage();
@@ -216,7 +216,7 @@ long LayerTabBar::AllowRenaming()
     OUString aNewName( GetEditText() );
 
     if (aNewName.isEmpty() ||
-        (rLayerAdmin.GetLayer( aNewName, sal_False ) && aLayerName != aNewName) )
+        (rLayerAdmin.GetLayer( aNewName, false ) && aLayerName != aNewName) )
     {
         // Name already exists
         WarningBox aWarningBox( &pDrViewSh->GetViewFrame()->GetWindow(), WinBits( WB_OK ),
@@ -255,7 +255,7 @@ void LayerTabBar::EndRenaming()
         SdDrawDocument& rDoc = pView->GetDoc();
         OUString aLayerName = pView->GetActiveLayer();
         SdrLayerAdmin& rLayerAdmin = rDoc.GetLayerAdmin();
-        SdrLayer* pLayer = rLayerAdmin.GetLayer(aLayerName, sal_False);
+        SdrLayer* pLayer = rLayerAdmin.GetLayer(aLayerName, false);
 
         if (pLayer)
         {
@@ -295,7 +295,7 @@ void LayerTabBar::EndRenaming()
 
 void LayerTabBar::ActivatePage()
 {
-    if ( /*IsInSwitching*/ 1 && pDrViewSh!=NULL)
+    if ( /*IsInSwitching*/ true && pDrViewSh!=NULL)
     {
 
         SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();

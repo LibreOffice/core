@@ -397,7 +397,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
         OUString aIconMediaType;
         uno::Reference< io::XInputStream > xIconMetaFile;
 
-        SFX_REQUEST_ARG( rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT, sal_False );
+        SFX_REQUEST_ARG( rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT, false );
         if ( nSlotId == SID_INSERT_OBJECT && pNameItem )
         {
             SvGlobalName aClassName = pNameItem->GetValue();
@@ -548,7 +548,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                             {
                                 // the empty OLE object gets a new IPObj
                                 bInsertNewObject = sal_False;
-                                pObj->SetEmptyPresObj(sal_False);
+                                pObj->SetEmptyPresObj(false);
                                 ( (SdrOle2Obj*) pObj)->SetOutlinerParaObject(NULL);
                                 ( (SdrOle2Obj*) pObj)->SetObjRef(xObj);
                                 ( (SdrOle2Obj*) pObj)->SetPersistName(aName);

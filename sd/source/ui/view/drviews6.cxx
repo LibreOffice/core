@@ -327,7 +327,7 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
                     {
                         SdrPageView* pPV = mpDrawView->GetSdrPageView();
 
-                        pNewObj->SetEmptyPresObj( sal_False );
+                        pNewObj->SetEmptyPresObj( false );
                         pNewObj->SetGraphic( ( (SvxBmpMask*) GetViewFrame()->GetChildWindow(
                                              SvxBmpMaskChildWindow::GetChildWindowId() )->GetWindow() )->
                                              Mask( pNewObj->GetGraphic() ) );

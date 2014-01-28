@@ -68,7 +68,7 @@ void FuChar::DoExecute( SfxRequest& rReq )
 
         SfxItemSet aNewAttr( mpViewShell->GetPool(),
                                 EE_ITEMS_START, EE_ITEMS_END );
-        aNewAttr.Put( aEditAttr, sal_False );
+        aNewAttr.Put( aEditAttr, false );
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         SfxAbstractTabDialog* pDlg = pFact ? pFact->CreateSdTabCharDialog( NULL, &aNewAttr, mpDoc->GetDocSh() ) : 0;

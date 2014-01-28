@@ -264,7 +264,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
         case SID_FM_CREATE_FIELDCONTROL:
         {
-            SFX_REQUEST_ARG( rReq, pDescriptorItem, SfxUnoAnyItem, SID_FM_DATACCESS_DESCRIPTOR, sal_False );
+            SFX_REQUEST_ARG( rReq, pDescriptorItem, SfxUnoAnyItem, SID_FM_DATACCESS_DESCRIPTOR, false );
             DBG_ASSERT( pDescriptorItem, "DrawViewShell::FuPermanent(SID_FM_CREATE_FIELDCONTROL): invalid request args!" );
 
             if(pDescriptorItem)
@@ -807,7 +807,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
             if( pReqArgs )
             {
-                SFX_REQUEST_ARG( rReq, pIsActive, SfxUInt32Item, SID_CLIPBOARD_FORMAT_ITEMS, sal_False );
+                SFX_REQUEST_ARG( rReq, pIsActive, SfxUInt32Item, SID_CLIPBOARD_FORMAT_ITEMS, false );
                 nFormat = pIsActive->GetValue();
             }
 
@@ -900,7 +900,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
             if ( pReqArgs )
             {
-                SFX_REQUEST_ARG (rReq, pIsActive, SfxBoolItem, SID_MASTERPAGE, sal_False);
+                SFX_REQUEST_ARG (rReq, pIsActive, SfxBoolItem, SID_MASTERPAGE, false);
                 mbIsLayerModeActive = pIsActive->GetValue ();
             }
 
@@ -1025,7 +1025,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
             if ( pReqArgs )
             {
-                SFX_REQUEST_ARG (rReq, pIsActive, SfxBoolItem, SID_RULER, sal_False);
+                SFX_REQUEST_ARG (rReq, pIsActive, SfxBoolItem, SID_RULER, false);
                 SetRuler (pIsActive->GetValue ());
             }
             else SetRuler (!HasRuler());

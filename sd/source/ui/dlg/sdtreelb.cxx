@@ -632,7 +632,7 @@ void SdPageObjsTLB::AddShapeList (
         rList,
         !rList.HasObjectNavigationOrder() /* use navigation order, if available */,
         IM_FLAT,
-        sal_False /*not reverse*/);
+        false /*not reverse*/);
 
     sal_Bool  bMarked=sal_False;
     if(bisInSdNavigatorWin)

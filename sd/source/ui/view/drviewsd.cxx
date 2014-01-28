@@ -142,7 +142,7 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
                 SfxStringItem aReferer(SID_REFERER, GetDocSh()->GetMedium()->GetName());
                 SfxViewFrame* pFrame = GetViewFrame();
                 SfxFrameItem aFrameItem(SID_DOCFRAME, pFrame);
-                SfxBoolItem aBrowseItem(SID_BROWSE, sal_True);
+                SfxBoolItem aBrowseItem(SID_BROWSE, true);
                 pFrame->GetDispatcher()->
                 Execute(SID_OPENDOC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
                             &aStrItem, &aFrameItem, &aBrowseItem, &aReferer, 0L);

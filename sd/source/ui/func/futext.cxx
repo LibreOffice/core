@@ -347,7 +347,7 @@ sal_Bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                             mpWindow->ReleaseMouse();
                             SfxStringItem aStrItem(SID_FILE_NAME, aVEvt.pURLField->GetURL());
                             SfxStringItem aReferer(SID_REFERER, mpDocSh->GetMedium()->GetName());
-                            SfxBoolItem aBrowseItem( SID_BROWSE, sal_True );
+                            SfxBoolItem aBrowseItem( SID_BROWSE, true );
                             SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
                             mpWindow->ReleaseMouse();
 
@@ -780,7 +780,7 @@ sal_Bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
             if(mxTextObj.is())
             {
-                GetTextObj()->SetDisableAutoWidthOnDragging(sal_True);
+                GetTextObj()->SetDisableAutoWidthOnDragging(true);
             }
 
             if(!mpView->EndCreateObj(SDRCREATE_FORCEEND))
@@ -823,7 +823,7 @@ sal_Bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
                     if(pPara && !pPara->IsVertical())
                     {
                         // set ParaObject orientation accordingly
-                        pPara->SetVertical(sal_True);
+                        pPara->SetVertical(true);
                     }
 
                     aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
@@ -865,7 +865,7 @@ sal_Bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
                 }
 
                 GetTextObj()->SetMergedItemSet(aSet);
-                GetTextObj()->SetDisableAutoWidthOnDragging(sal_True);
+                GetTextObj()->SetDisableAutoWidthOnDragging(true);
                 SetInEditMode(rMEvt, sal_False);
             }
 
@@ -1158,7 +1158,7 @@ sal_Bool FuText::DeleteDefaultText()
                     (ePresObjKind == PRESOBJ_NOTES || ePresObjKind == PRESOBJ_TEXT))
                     pOutliner->SetStyleSheet(0, pSheet);
 
-                mxTextObj->SetEmptyPresObj(sal_True);
+                mxTextObj->SetEmptyPresObj(true);
                 bDeleted = sal_True;
             }
         }

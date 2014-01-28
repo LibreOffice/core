@@ -84,7 +84,7 @@ SdPPTFilter::~SdPPTFilter()
 sal_Bool SdPPTFilter::Import()
 {
     sal_Bool    bRet = sal_False;
-    SotStorageRef pStorage = new SotStorage( mrMedium.GetInStream(), sal_False );
+    SotStorageRef pStorage = new SotStorage( mrMedium.GetInStream(), false );
     if( !pStorage->GetError() )
     {
         /* check if there is a dualstorage, then the
@@ -146,7 +146,7 @@ sal_Bool SdPPTFilter::Export()
     {
         if( mxModel.is() )
         {
-            SotStorageRef    xStorRef = new SotStorage( mrMedium.GetOutStream(), sal_False );
+            SotStorageRef    xStorRef = new SotStorage( mrMedium.GetOutStream(), false );
 #ifndef DISABLE_DYNLOADING
             ExportPPTPointer PPTExport = reinterpret_cast<ExportPPTPointer>(pLibrary->getFunctionSymbol( "ExportPPT" ));
 #else

@@ -78,7 +78,7 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
 
         SfxItemSet aNewAttr( mpViewShell->GetPool(),
                              EE_ITEMS_START, EE_ITEMS_END );
-        aNewAttr.Put( aEditAttr, sal_False );
+        aNewAttr.Put( aEditAttr, false );
 
         // create and execute dialog
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
@@ -146,7 +146,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
         return;
     }
 
-    SFX_REQUEST_ARG( rReq, pItem, SfxUInt16Item, nSId, sal_False );
+    SFX_REQUEST_ARG( rReq, pItem, SfxUInt16Item, nSId, false );
     if ( !pItem )
     {
         rReq.Done();
@@ -157,7 +157,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
     {
         SfxItemSet aEditAttr( mpDoc->GetPool() );
         mpView->GetAttributes( aEditAttr );
-        aNewAttr.Put( aEditAttr, sal_False );
+        aNewAttr.Put( aEditAttr, false );
     }
 
     const DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >(mpViewShell);

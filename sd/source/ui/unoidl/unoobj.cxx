@@ -1012,7 +1012,7 @@ void SdXShape::SetEmptyPresObj( bool bEmpty ) throw()
                 pObj->SetOutlinerParaObject( pOutliner->CreateParaObject() );
                 pOutliner->Clear();
             }
-            while(0);
+            while(false);
         }
 
         pObj->SetEmptyPresObj(bEmpty);
@@ -1060,7 +1060,7 @@ void SdXShape::SetStyleSheet( const uno::Any& rAny ) throw( lang::IllegalArgumen
         if( pStyleSheet == 0 || (pStyleSheet->GetFamily() != SD_STYLE_FAMILY_GRAPHICS && pStyleSheet->GetFamily() != SD_STYLE_FAMILY_MASTERPAGE) )
             throw lang::IllegalArgumentException();
 
-        pObj->SetStyleSheet( pStyleSheet, sal_False );
+        pObj->SetStyleSheet( pStyleSheet, false );
 
         SdDrawDocument* pDoc = mpModel? mpModel->GetDoc() : NULL;
         if( pDoc )
@@ -1447,7 +1447,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
             bOk = sal_True;
         }
     }
-    while(0);
+    while(false);
 
     if( !bOk )
         throw lang::IllegalArgumentException();

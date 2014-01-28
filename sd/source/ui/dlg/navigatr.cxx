@@ -269,7 +269,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, SelectToolboxHdl)
 
             if( nSId > 0 )
             {
-                SfxBoolItem aItem( nSId, sal_True );
+                SfxBoolItem aItem( nSId, true );
                 mpBindings->GetDispatcher()->Execute(
                     nSId, SFX_CALLMODE_SLOT |SFX_CALLMODE_RECORD, &aItem, 0L );
             }
@@ -806,7 +806,7 @@ bool SdNavigatorWin::Notify(NotifyEvent& rNEvt)
                     // deletion of the navigator window.  Calling the
                     // parents Notify after this is unsafe.  Therefore we
                     // return now.
-                    return sal_True;
+                    return true;
                 }
             }
         }

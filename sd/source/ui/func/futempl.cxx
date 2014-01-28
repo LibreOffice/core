@@ -132,8 +132,8 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
         case SID_STYLE_FAMILY:
         case SID_STYLE_NEW_BY_EXAMPLE:
         {
-            SFX_REQUEST_ARG( rReq, pNameItem, SfxStringItem, SID_APPLY_STYLE, sal_False );
-            SFX_REQUEST_ARG( rReq, pFamilyItem, SfxStringItem, SID_STYLE_FAMILYNAME, sal_False );
+            SFX_REQUEST_ARG( rReq, pNameItem, SfxStringItem, SID_APPLY_STYLE, false );
+            SFX_REQUEST_ARG( rReq, pFamilyItem, SfxStringItem, SID_STYLE_FAMILYNAME, false );
             if ( pFamilyItem && pNameItem )
             {
                 try

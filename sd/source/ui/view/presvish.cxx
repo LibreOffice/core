@@ -133,7 +133,7 @@ void PresentationViewShell::Activate( sal_Bool bIsMDIActivate )
 
     if( bIsMDIActivate )
     {
-        SfxBoolItem aItem( SID_NAVIGATOR_INIT, sal_True );
+        SfxBoolItem aItem( SID_NAVIGATOR_INIT, true );
 
         GetViewFrame()->GetDispatcher()->Execute( SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 

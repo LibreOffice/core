@@ -104,10 +104,10 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
         {
             case SID_DRAW_ELLIPSE :
             {
-                SFX_REQUEST_ARG (rReq, pCenterX, SfxUInt32Item, ID_VAL_CENTER_X, sal_False);
-                SFX_REQUEST_ARG (rReq, pCenterY, SfxUInt32Item, ID_VAL_CENTER_Y, sal_False);
-                SFX_REQUEST_ARG (rReq, pAxisX, SfxUInt32Item, ID_VAL_AXIS_X, sal_False);
-                SFX_REQUEST_ARG (rReq, pAxisY, SfxUInt32Item, ID_VAL_AXIS_Y, sal_False);
+                SFX_REQUEST_ARG (rReq, pCenterX, SfxUInt32Item, ID_VAL_CENTER_X, false);
+                SFX_REQUEST_ARG (rReq, pCenterY, SfxUInt32Item, ID_VAL_CENTER_Y, false);
+                SFX_REQUEST_ARG (rReq, pAxisX, SfxUInt32Item, ID_VAL_AXIS_X, false);
+                SFX_REQUEST_ARG (rReq, pAxisY, SfxUInt32Item, ID_VAL_AXIS_Y, false);
 
                 Rectangle   aNewRectangle (pCenterX->GetValue () - pAxisX->GetValue () / 2,
                                            pCenterY->GetValue () - pAxisY->GetValue () / 2,
@@ -122,10 +122,10 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
 
             case SID_DRAW_RECT :
             {
-                SFX_REQUEST_ARG (rReq, pMouseStartX, SfxUInt32Item, ID_VAL_MOUSESTART_X, sal_False);
-                SFX_REQUEST_ARG (rReq, pMouseStartY, SfxUInt32Item, ID_VAL_MOUSESTART_Y, sal_False);
-                SFX_REQUEST_ARG (rReq, pMouseEndX, SfxUInt32Item, ID_VAL_MOUSEEND_X, sal_False);
-                SFX_REQUEST_ARG (rReq, pMouseEndY, SfxUInt32Item, ID_VAL_MOUSEEND_Y, sal_False);
+                SFX_REQUEST_ARG (rReq, pMouseStartX, SfxUInt32Item, ID_VAL_MOUSESTART_X, false);
+                SFX_REQUEST_ARG (rReq, pMouseStartY, SfxUInt32Item, ID_VAL_MOUSESTART_Y, false);
+                SFX_REQUEST_ARG (rReq, pMouseEndX, SfxUInt32Item, ID_VAL_MOUSEEND_X, false);
+                SFX_REQUEST_ARG (rReq, pMouseEndY, SfxUInt32Item, ID_VAL_MOUSEEND_Y, false);
 
                 Rectangle   aNewRectangle (pMouseStartX->GetValue (),
                                            pMouseStartY->GetValue (),
@@ -241,7 +241,7 @@ sal_Bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
             {
                 SdrLayerAdmin& rAdmin = mpDoc->GetLayerAdmin();
                 OUString aStr(SD_RESSTR(STR_LAYER_MEASURELINES));
-                pObj->SetLayer(rAdmin.GetLayerID(aStr, sal_False));
+                pObj->SetLayer(rAdmin.GetLayerID(aStr, false));
             }
 
             // init text position when vertica caption object is created
@@ -424,7 +424,7 @@ void FuConstructRectangle::Deactivate()
         nSlotId == SID_LINE_ARROW_SQUARE            ||
         nSlotId == SID_LINE_SQUARE_ARROW )
     {
-        mpView->SetGlueVisible( sal_False );
+        mpView->SetGlueVisible( false );
     }
     FuConstruct::Deactivate();
 }
@@ -509,12 +509,12 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
 
         if (pSheet)
         {
-            pObj->SetStyleSheet(pSheet, sal_False);
+            pObj->SetStyleSheet(pSheet, false);
         }
 
         SdrLayerAdmin& rAdmin = mpDoc->GetLayerAdmin();
         OUString aStr(SD_RESSTR(STR_LAYER_MEASURELINES));
-        pObj->SetLayer(rAdmin.GetLayerID(aStr, sal_False));
+        pObj->SetLayer(rAdmin.GetLayerID(aStr, false));
     }
     else if (nSlotId == OBJ_CUSTOMSHAPE )
     {

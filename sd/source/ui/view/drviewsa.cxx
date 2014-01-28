@@ -749,7 +749,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
                     nLayer = pObj->GetLayer();
 
                     if( j != 0 && nLayer != nOldLayer )
-                        bOneLayer = sal_False;
+                        bOneLayer = false;
 
                     nOldLayer = nLayer;
                 }

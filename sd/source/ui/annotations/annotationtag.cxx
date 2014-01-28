@@ -149,7 +149,7 @@ bool AnnotationDragMove::EndSdrDrag(bool /*bCopy*/)
     Hide();
     if( mxTag.is() )
         mxTag->Move( DragStat().GetDX(), DragStat().GetDY() );
-    return sal_True;
+    return true;
 }
 
 void AnnotationDragMove::CancelSdrDrag()

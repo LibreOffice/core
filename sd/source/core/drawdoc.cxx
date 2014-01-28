@@ -183,7 +183,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 
     if (mpDocSh)
     {
-        SetSwapGraphics(sal_True);
+        SetSwapGraphics(true);
     }
 
     // Set measuring unit (of the application) and scale (of SdMod)
@@ -729,7 +729,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 
                     // sal_True: don't delete "hard" attributes when doing this.
                     if (pTitleSheet)
-                        pObj->SetStyleSheet(pTitleSheet, sal_True);
+                        pObj->SetStyleSheet(pTitleSheet, true);
                 }
                 else if (nId == OBJ_OUTLINETEXT)
                 {

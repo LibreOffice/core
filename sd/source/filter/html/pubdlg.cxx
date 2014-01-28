@@ -414,7 +414,7 @@ SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
     pPage3_Png->SetClickHdl(LINK(this,SdPublishingDlg, GfxFormatHdl));
     pPage3_Gif->SetClickHdl(LINK(this,SdPublishingDlg, GfxFormatHdl));
     pPage3_Jpg->SetClickHdl(LINK(this,SdPublishingDlg, GfxFormatHdl));
-    pPage3_Quality->Enable(sal_False);
+    pPage3_Quality->Enable(false);
 
     pPage3_Resolution_1->SetClickHdl(LINK(this,SdPublishingDlg, ResolutionHdl ));
     pPage3_Resolution_2->SetClickHdl(LINK(this,SdPublishingDlg, ResolutionHdl ));

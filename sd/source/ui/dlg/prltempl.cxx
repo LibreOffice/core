@@ -315,7 +315,7 @@ sal_uInt16 SdPresLayoutTemplateDlg::GetOutlineLevel() const
     case PO_OUTLINE_8: return 7;
     case PO_OUTLINE_9: return 8;
     default:
-        DBG_ASSERT( sal_False, "Wrong Po! [CL]");
+        DBG_ASSERT( false, "Wrong Po! [CL]");
     }
     return 0;
 }

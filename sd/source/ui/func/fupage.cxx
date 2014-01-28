@@ -336,7 +336,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
             if( ( ( (XFillStyleItem*) pTempSet->GetItem( XATTR_FILLSTYLE ) )->GetValue() == XFILL_NONE ) ||
                 ( ( pTempSet->GetItemState( XATTR_FILLSTYLE ) == SFX_ITEM_DEFAULT ) &&
                     ( ( (XFillStyleItem*) aMergedAttr.GetItem( XATTR_FILLSTYLE ) )->GetValue() == XFILL_NONE ) ) )
-                mbPageBckgrdDeleted = sal_True;
+                mbPageBckgrdDeleted = true;
 
             bool bSetToAllPages = false;
 
@@ -599,7 +599,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     if( mpBackgroundObjUndoAction )
     {
         // set merge flag, because a SdUndoGroupAction could have been inserted before
-        mpDocSh->GetUndoManager()->AddUndoAction( mpBackgroundObjUndoAction, sal_True );
+        mpDocSh->GetUndoManager()->AddUndoAction( mpBackgroundObjUndoAction, true );
         mpBackgroundObjUndoAction = 0;
     }
 

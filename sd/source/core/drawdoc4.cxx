@@ -907,7 +907,7 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
             {
                 sd::ModifyGuard aGuard( this );
                 SdrModel* pModel = pObj->GetModel();
-                bool bLock = sal_False;
+                bool bLock = false;
                 if ( pModel )
                 {
                     bLock = pModel->isLocked();

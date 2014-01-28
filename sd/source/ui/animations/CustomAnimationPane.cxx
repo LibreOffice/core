@@ -469,14 +469,14 @@ void CustomAnimationPane::updateControls()
 
     if( !mxView.is() )
     {
-        mpPBAddEffect->Enable( sal_False );
-        mpPBChangeEffect->Enable( sal_False );
-        mpPBRemoveEffect->Enable( sal_False );
-        mpFTStart->Enable( sal_False );
-        mpLBStart->Enable( sal_False );
-        mpPBPropertyMore->Enable( sal_False );
-        mpLBProperty->Enable( sal_False );
-        mpFTProperty->Enable( sal_False );
+        mpPBAddEffect->Enable( false );
+        mpPBChangeEffect->Enable( false );
+        mpPBRemoveEffect->Enable( false );
+        mpFTStart->Enable( false );
+        mpLBStart->Enable( false );
+        mpPBPropertyMore->Enable( false );
+        mpLBProperty->Enable( false );
+        mpFTProperty->Enable( false );
         mpCustomAnimationList->clear();
         return;
     }
@@ -552,9 +552,9 @@ void CustomAnimationPane::updateControls()
         else
         {
             mpLBProperty->setSubControl( 0 );
-            mpFTProperty->Enable( sal_False );
-            mpLBProperty->Enable( sal_False );
-            mpPBPropertyMore->Enable( sal_False );
+            mpFTProperty->Enable( false );
+            mpLBProperty->Enable( false );
+            mpPBPropertyMore->Enable( false );
         }
 
         sal_uInt16 nPos = 0xffff;
@@ -593,16 +593,16 @@ void CustomAnimationPane::updateControls()
             mpCBSpeed->SelectEntryPos( nPos );
         }
 
-        mpPBPropertyMore->Enable( sal_True );
+        mpPBPropertyMore->Enable( true );
     }
     else
     {
         mpLBProperty->setSubControl( 0 );
-        mpFTProperty->Enable( sal_False );
-        mpLBProperty->Enable( sal_False );
-        mpPBPropertyMore->Enable( sal_False );
-        mpFTSpeed->Enable(sal_False);
-        mpCBSpeed->Enable(sal_False);
+        mpFTProperty->Enable( false );
+        mpLBProperty->Enable( false );
+        mpPBPropertyMore->Enable( false );
+        mpFTSpeed->Enable(false);
+        mpCBSpeed->Enable(false);
         mpLBStart->SetNoSelection();
         mpCBSpeed->SetNoSelection();
         mpFTEffect->SetText( maStrModify );

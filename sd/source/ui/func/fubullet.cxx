@@ -181,7 +181,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
     if (aChars.isEmpty())
     {
         SfxAllItemSet aSet( mpDoc->GetPool() );
-        aSet.Put( SfxBoolItem( FN_PARAM_1, sal_False ) );
+        aSet.Put( SfxBoolItem( FN_PARAM_1, false ) );
 
         SfxItemSet aFontAttr( mpDoc->GetPool() );
         mpView->GetAttributes( aFontAttr );
@@ -202,8 +202,8 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
         sal_uInt16 nResult = pDlg->Execute();
         if( nResult == RET_OK )
         {
-            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP, sal_False );
-            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFItem, SvxFontItem, SID_ATTR_CHAR_FONT, sal_False );
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP, false );
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFItem, SvxFontItem, SID_ATTR_CHAR_FONT, false );
             if ( pFItem )
             {
                 aFont.SetName( pFItem->GetFamilyName() );
