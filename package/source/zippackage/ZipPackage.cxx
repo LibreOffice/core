@@ -1737,7 +1737,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
             }
             else
             {
-                OSL_ENSURE( sal_False, "Unexpected encryption algorithm is provided!" );
+                OSL_ENSURE( false, "Unexpected encryption algorithm is provided!" );
                 throw IllegalArgumentException(THROW_WHERE "unexpected algorithms list is provided.", uno::Reference< uno::XInterface >(), 2 );
             }
         }

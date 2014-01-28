@@ -92,7 +92,7 @@ ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
 
     this->mbAllowRemoveOnInsert = bAllowRemoveOnInsert;
 
-    SetFolder ( sal_False );
+    SetFolder ( false );
     aEntry.nVersion     = -1;
     aEntry.nFlag        = 0;
     aEntry.nMethod      = -1;

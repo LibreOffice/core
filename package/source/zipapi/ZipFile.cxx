@@ -188,7 +188,7 @@ uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const un
     }
     catch( ... )
     {
-        OSL_ENSURE( sal_False, "Can not create cipher context!" );
+        OSL_ENSURE( false, "Can not create cipher context!" );
     }
 
     return xResult;

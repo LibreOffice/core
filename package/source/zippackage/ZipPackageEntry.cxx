@@ -42,7 +42,7 @@ using namespace com::sun::star::packages::zip::ZipConstants;
 
 ZipPackageEntry::ZipPackageEntry ( bool bNewFolder )
 : mbIsFolder ( bNewFolder )
-, mbAllowRemoveOnInsert( sal_True )
+, mbAllowRemoveOnInsert( true )
 , pParent ( NULL )
 {
 }

@@ -48,7 +48,7 @@ protected:
     ZipPackageFolder * pParent;
 public:
     ZipEntry aEntry;
-    ZipPackageEntry ( bool bNewFolder = sal_False );
+    ZipPackageEntry ( bool bNewFolder = false );
     virtual ~ZipPackageEntry( void );
 
     OUString & GetMediaType () { return sMediaType; }

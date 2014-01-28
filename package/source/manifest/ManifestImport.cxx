@@ -240,7 +240,7 @@ void ManifestImport::doKeyDerivation(StringHashMap &rConvertedAttribs)
             else if ( !nDerivedKeySize )
                 nDerivedKeySize = 16;
             else if ( nDerivedKeySize != 16 )
-                OSL_ENSURE( sal_False, "Default derived key length differs from the expected one!" );
+                OSL_ENSURE( false, "Default derived key length differs from the expected one!" );
 
             aSequence[PKG_MNFST_DERKEYSIZE].Name = sDerivedKeySizeProperty;
             aSequence[PKG_MNFST_DERKEYSIZE].Value <<= nDerivedKeySize;

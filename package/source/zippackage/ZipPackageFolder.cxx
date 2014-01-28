@@ -65,7 +65,7 @@ ZipPackageFolder::ZipPackageFolder ( sal_Int32 nFormat,
 {
     this->mbAllowRemoveOnInsert = bAllowRemoveOnInsert;
 
-    SetFolder ( sal_True );
+    SetFolder ( true );
     aEntry.nVersion     = -1;
     aEntry.nFlag        = 0;
     aEntry.nMethod      = STORED;
