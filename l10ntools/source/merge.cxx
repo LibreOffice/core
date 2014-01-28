@@ -106,21 +106,21 @@ bool MergeEntrys::GetText( OString &rReturn,
             if ( bDel )
                 sText[ nLangIndex ] = "";
             bReturn = bTextFirst[ nLangIndex ];
-            bTextFirst[ nLangIndex ] = sal_False;
+            bTextFirst[ nLangIndex ] = false;
             break;
         case STRING_TYP_QUICKHELPTEXT :
             rReturn = sQuickHelpText[ nLangIndex ];
             if ( bDel )
                 sQuickHelpText[ nLangIndex ] = "";
             bReturn = bQuickHelpTextFirst[ nLangIndex ];
-            bQuickHelpTextFirst[ nLangIndex ] = sal_False;
+            bQuickHelpTextFirst[ nLangIndex ] = false;
             break;
         case STRING_TYP_TITLE :
             rReturn = sTitle[ nLangIndex ];
             if ( bDel )
                 sTitle[ nLangIndex ] = "";
             bReturn = bTitleFirst[ nLangIndex ];
-            bTitleFirst[ nLangIndex ] = sal_False;
+            bTitleFirst[ nLangIndex ] = false;
             break;
     }
     return bReturn;

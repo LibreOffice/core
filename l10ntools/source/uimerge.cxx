@@ -156,7 +156,7 @@ bool Merge(
         }
     }
 
-    MergeDataFile aMergeDataFile( rPOFile, rSourceFile, sal_False );
+    MergeDataFile aMergeDataFile( rPOFile, rSourceFile, false );
     std::vector<OString> aLanguages;
     if( rLanguage.equalsIgnoreAsciiCase("ALL") )
         aLanguages = aMergeDataFile.GetLanguages();

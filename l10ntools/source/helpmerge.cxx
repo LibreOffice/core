@@ -138,7 +138,7 @@ bool HelpParser::CreatePO(
     }
     aPoOutput.close();
 
-    return sal_True;
+    return true;
 }
 
 bool HelpParser::Merge( const OString &rPOFile, const OString &rDestinationFile,
