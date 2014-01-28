@@ -119,13 +119,10 @@ HierarchyEntry::HierarchyEntry(
     HierarchyUri aUri( rURL );
     m_aServiceSpecifier = aUri.getService();
 
-    if ( pProvider )
-    {
-        m_xConfigProvider
-            = pProvider->getConfigProvider( m_aServiceSpecifier );
-        m_xRootReadAccess
-            = pProvider->getRootConfigReadNameAccess( m_aServiceSpecifier );
-    }
+    m_xConfigProvider
+        = pProvider->getConfigProvider( m_aServiceSpecifier );
+    m_xRootReadAccess
+        = pProvider->getRootConfigReadNameAccess( m_aServiceSpecifier );
 
     // Note: do not init m_aPath in init list. createPathFromHierarchyURL
     //       needs m_xContext and m_aMutex.
