@@ -47,6 +47,7 @@
 #include "attrib.hxx"
 #include "dpsave.hxx"
 #include "dpshttab.hxx"
+#include <scopetools.hxx>
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -93,6 +94,7 @@ public:
     void testFunctionsExcel2010();
     void testCachedFormulaResultsODS();
     void testCachedMatrixFormulaResultsODS();
+    void testFormulaDepAcrossSheetsODS();
     void testDatabaseRangesODS();
     void testDatabaseRangesXLS();
     void testDatabaseRangesXLSX();
@@ -164,6 +166,7 @@ public:
     CPPUNIT_TEST(testFunctionsODS);
     CPPUNIT_TEST(testFunctionsExcel2010);
     CPPUNIT_TEST(testCachedFormulaResultsODS);
+    CPPUNIT_TEST(testFormulaDepAcrossSheetsODS);
     CPPUNIT_TEST(testCachedMatrixFormulaResultsODS);
     CPPUNIT_TEST(testDatabaseRangesODS);
     CPPUNIT_TEST(testDatabaseRangesXLS);
@@ -593,6 +596,30 @@ void ScFiltersTest::testCachedMatrixFormulaResultsODS()
     pDoc->SetString(2, 5, 2, "=ISERROR(A6)");
     double nVal = pDoc->GetValue(2,5,2);
     CPPUNIT_ASSERT_EQUAL(1.0, nVal);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testFormulaDepAcrossSheetsODS()
+{
+    ScDocShellRef xDocSh = loadDoc("formula-across-sheets.", ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load the file.", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    sc::AutoCalcSwitch aACSwitch(*pDoc, true); // Make sure auto calc is turned on.
+
+    // Save the original values of A4:C4.
+    double fA4 = pDoc->GetValue(ScAddress(0,3,2));
+    double fB4 = pDoc->GetValue(ScAddress(1,3,2));
+    double fC4 = pDoc->GetValue(ScAddress(2,3,2));
+
+    // Change the value of D4. This should trigger A4:C4 to be recalculated.
+    double fD4 = pDoc->GetValue(ScAddress(3,3,2));
+    pDoc->SetValue(ScAddress(3,3,2), fD4+1.0);
+
+    CPPUNIT_ASSERT_MESSAGE("The value must differ from the original.", fA4 != pDoc->GetValue(ScAddress(0,3,2)));
+    CPPUNIT_ASSERT_MESSAGE("The value must differ from the original.", fB4 != pDoc->GetValue(ScAddress(1,3,2)));
+    CPPUNIT_ASSERT_MESSAGE("The value must differ from the original.", fC4 != pDoc->GetValue(ScAddress(2,3,2)));
 
     xDocSh->DoClose();
 }

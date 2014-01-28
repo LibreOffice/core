@@ -10,6 +10,8 @@
 #ifndef SC_SCOPETOOLS_HXX
 #define SC_SCOPETOOLS_HXX
 
+#include <scdllapi.h>
+
 class ScDocument;
 
 namespace sc {
@@ -17,7 +19,7 @@ namespace sc {
 /**
  * Temporarily switch on/off auto calculation mode.
  */
-class AutoCalcSwitch
+class SC_DLLPUBLIC AutoCalcSwitch
 {
     ScDocument& mrDoc;
     bool mbOldValue;
@@ -26,7 +28,7 @@ public:
     ~AutoCalcSwitch();
 };
 
-class ExpandRefsSwitch
+class SC_DLLPUBLIC ExpandRefsSwitch
 {
     ScDocument& mrDoc;
     bool mbOldValue;
