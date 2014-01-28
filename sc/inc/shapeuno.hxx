@@ -165,7 +165,9 @@ public:
                                 throw( ::com::sun::star::lang::IllegalArgumentException,
                                         ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL
-                            getAnchor(void) throw( ::com::sun::star::uno::RuntimeException );
+                            getAnchor()
+                                throw(::com::sun::star::uno::RuntimeException,
+                                      std::exception);
 
                             // XComponent
     virtual void SAL_CALL   dispose(void) throw( ::com::sun::star::uno::RuntimeException );

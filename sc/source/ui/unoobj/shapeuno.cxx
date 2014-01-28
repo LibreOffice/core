@@ -1027,7 +1027,8 @@ void SAL_CALL ScShapeObj::attach( const uno::Reference<text::XTextRange>& /* xTe
     throw lang::IllegalArgumentException();     // anchor cannot be changed
 }
 
-uno::Reference<text::XTextRange> SAL_CALL ScShapeObj::getAnchor() throw(uno::RuntimeException)
+uno::Reference<text::XTextRange> SAL_CALL ScShapeObj::getAnchor()
+    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
