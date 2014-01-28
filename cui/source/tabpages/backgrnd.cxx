@@ -89,8 +89,11 @@ struct SvxBackgroundPara_Impl
 
     sal_uInt16          nActPos;
 
-    SvxBackgroundPara_Impl() :
-        pParaBrush(NULL), pCharBrush(NULL) {}
+    SvxBackgroundPara_Impl()
+        : pParaBrush(NULL)
+        , pCharBrush(NULL)
+        , nActPos(LISTBOX_ENTRY_NOTFOUND)
+    {}
 };
 
 struct SvxBackgroundPage_Impl
