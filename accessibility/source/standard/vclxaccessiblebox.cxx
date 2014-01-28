@@ -110,6 +110,7 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
 {
     switch ( rVclWindowEvent.GetId() )
     {
+        case VCLEVENT_DROPDOWN_SELECT:
         case VCLEVENT_LISTBOX_SELECT:
         case VCLEVENT_LISTBOX_FOCUSITEMCHANGED:
 

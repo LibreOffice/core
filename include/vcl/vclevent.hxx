@@ -151,6 +151,7 @@ namespace com { namespace sun { namespace star {
 #define VCLEVENT_ITEM_EXPANDED              1174
 #define VCLEVENT_ITEM_COLLAPSED             1175
 #define VCLEVENT_DROPDOWN_PRE_OPEN          1176
+#define VCLEVENT_DROPDOWN_SELECT            1177
 #define VCLEVENT_LISTBOX_FOCUSITEMCHANGED   1180
 
 // VclMenuEvent

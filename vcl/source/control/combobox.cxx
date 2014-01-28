@@ -463,7 +463,7 @@ IMPL_LINK_NOARG(ComboBox, ImplSelectHdl)
 
 IMPL_LINK( ComboBox, ImplListItemSelectHdl,  void*, EMPTYARG )
 {
-    ImplCallEventListeners( VCLEVENT_LISTBOX_SELECT );
+    ImplCallEventListeners( VCLEVENT_DROPDOWN_SELECT );
     return 1;
 }
 

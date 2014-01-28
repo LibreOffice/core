@@ -345,6 +345,7 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
 {
     switch ( rVclWindowEvent.GetId() )
       {
+        case VCLEVENT_DROPDOWN_SELECT:
         case VCLEVENT_LISTBOX_SELECT:
             if ( !m_bDisableProcessEvent )
                 UpdateSelection_Impl_Acc(b_IsDropDownList);
