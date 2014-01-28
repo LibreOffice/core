@@ -215,7 +215,7 @@ namespace DOM { namespace events {
             {
                 pEvent->m_currentTarget = rinode->first;
                 callListeners(captureListeners, rinode->second, aType, xEvent);
-                if  (pEvent->m_canceled) return sal_True;
+                if  (pEvent->m_canceled) return true;
                 ++rinode;
             }
 
@@ -225,7 +225,7 @@ namespace DOM { namespace events {
             pEvent->m_phase = PhaseType_AT_TARGET;
             pEvent->m_currentTarget = inode->first;
             callListeners(targetListeners, inode->second, aType, xEvent);
-            if  (pEvent->m_canceled) return sal_True;
+            if  (pEvent->m_canceled) return true;
             // bubbeling phase
             ++inode;
             if (i_xEvent->getBubbles()) {
@@ -235,12 +235,12 @@ namespace DOM { namespace events {
                     pEvent->m_currentTarget = inode->first;
                     callListeners(targetListeners,
                             inode->second, aType, xEvent);
-                    if  (pEvent->m_canceled) return sal_True;
+                    if  (pEvent->m_canceled) return true;
                     ++inode;
                 }
             }
         }
-        return sal_True;
+        return true;
     }
 }}
 
