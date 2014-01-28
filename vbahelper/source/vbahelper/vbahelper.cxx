@@ -393,7 +393,7 @@ void PrintOutHelper( SfxViewShell* pViewShell, const uno::Any& From, const uno::
         }
         SfxBoolItem sfxSelection( SID_SELECTION, bSelection );
         aArgs.Put( sfxSelection, sfxSelection.Which() );
-        SfxBoolItem sfxAsync( SID_ASYNCHRON, sal_False );
+        SfxBoolItem sfxAsync( SID_ASYNCHRON, false );
         aArgs.Put( sfxAsync, sfxAsync.Which() );
         SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
 
