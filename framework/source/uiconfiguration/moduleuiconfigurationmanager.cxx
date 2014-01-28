@@ -557,7 +557,7 @@ void ModuleUIConfigurationManager::impl_storeElementTypeData( Reference< XStorag
             if ( rElement.bDefault )
             {
                 xStorage->removeElement( rElement.aName );
-                rElement.bModified = sal_False; // mark as not modified
+                rElement.bModified = false; // mark as not modified
             }
             else
             {
@@ -612,7 +612,7 @@ void ModuleUIConfigurationManager::impl_storeElementTypeData( Reference< XStorag
 
                 // mark as not modified if we store to our own storage
                 if ( bResetModifyState )
-                    rElement.bModified = sal_False;
+                    rElement.bModified = false;
             }
         }
 
@@ -626,7 +626,7 @@ void ModuleUIConfigurationManager::impl_storeElementTypeData( Reference< XStorag
 
     // mark UIElementType as not modified if we store to our own storage
     if ( bResetModifyState )
-        rElementType.bModified = sal_False;
+        rElementType.bModified = false;
 }
 
 // This is only allowed to be called on the LAYER_USER_DEFINED!
@@ -776,7 +776,7 @@ void ModuleUIConfigurationManager::impl_reloadElementTypeData(
         ++pIter;
     }
 
-    rUserElementType.bModified = sal_False;
+    rUserElementType.bModified = false;
 }
 
 void ModuleUIConfigurationManager::impl_Initialize()
@@ -1056,7 +1056,7 @@ void SAL_CALL ModuleUIConfigurationManager::reset() throw (::com::sun::star::uno
                     UIElementType& rDefaultElementType  = m_aUIElements[LAYER_DEFAULT][j];
 
                     impl_resetElementTypeData( rUserElementType, rDefaultElementType, aRemoveEventNotifyContainer, aReplaceEventNotifyContainer );
-                    rUserElementType.bModified = sal_False;
+                    rUserElementType.bModified = false;
                 }
                 catch ( const Exception& )
                 {
@@ -1064,7 +1064,7 @@ void SAL_CALL ModuleUIConfigurationManager::reset() throw (::com::sun::star::uno
                 }
             }
 
-            m_bModified = sal_False;
+            m_bModified = false;
 
             // Unlock mutex before notify our listeners
             aGuard.unlock();
@@ -1582,7 +1582,7 @@ void SAL_CALL ModuleUIConfigurationManager::reload() throw (::com::sun::star::un
             }
         }
 
-        m_bModified = sal_False;
+        m_bModified = false;
 
         // Unlock mutex before notify our listeners
         aGuard.unlock();

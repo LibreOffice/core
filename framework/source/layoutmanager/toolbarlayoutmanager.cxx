@@ -584,7 +584,7 @@ bool ToolbarLayoutManager::showToolbar( const OUString& rResourceURL )
         if ( !aUIElement.m_bFloating )
             implts_setLayoutDirty();
         else
-            pWindow->Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+            pWindow->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
 
         aUIElement.m_bVisible = true;
         implts_writeWindowStateData( aUIElement );
@@ -604,7 +604,7 @@ bool ToolbarLayoutManager::hideToolbar( const OUString& rResourceURL )
     Window* pWindow = getWindowFromXUIElement( aUIElement.m_xUIElement );
     if ( pWindow )
     {
-        pWindow->Show( sal_False );
+        pWindow->Show( false );
         if ( !aUIElement.m_bFloating )
             implts_setLayoutDirty();
 
@@ -664,10 +664,10 @@ void ToolbarLayoutManager::setFloatingToolbarsVisibility( bool bVisible )
             if ( bVisible )
             {
                 if ( pIter->m_bVisible && !pIter->m_bMasterHide )
-                    pWindow->Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                    pWindow->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
             }
             else
-                pWindow->Show( sal_False );
+                pWindow->Show( false );
         }
     }
 }
@@ -1511,7 +1511,7 @@ void ToolbarLayoutManager::implts_setElementData( UIElement& rElement, const uno
             if ( bShowElement && pWindow )
             {
                 SolarMutexGuard aGuard;
-                pWindow->Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                pWindow->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
             }
         }
         else
@@ -1590,7 +1590,7 @@ void ToolbarLayoutManager::implts_writeWindowStateData( const UIElement& rElemen
     m_bStoreWindowState = true; // set flag to determine that we triggered the notification
     aWriteLock.unlock();
 
-    bool bPersistent( sal_False );
+    bool bPersistent( false );
     uno::Reference< beans::XPropertySet > xPropSet( rElementData.m_xUIElement, uno::UNO_QUERY );
     if ( xPropSet.is() )
     {
@@ -1847,7 +1847,7 @@ void ToolbarLayoutManager::implts_sortUIElements()
     // We have to reset our temporary flags.
     UIElementVector::iterator pIter;
     for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
-        pIter->m_bUserActive = sal_False;
+        pIter->m_bUserActive = false;
     aWriteLock.unlock();
 }
 
@@ -2583,7 +2583,7 @@ void ToolbarLayoutManager::implts_calcWindowPosSizeOnSingleRowColumn(
             if ( aWinRect.X < nCurrPos )
                 aWinRect.X = nCurrPos;
             pWindow->SetPosSizePixel( ::Point( aWinRect.X, nOffset ), ::Size( aWinRect.Width, rRowColumnWindowData.nStaticSize ));
-            pWindow->Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+            pWindow->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
             nCurrPos += ( aWinRect.X - nCurrPos ) + aWinRect.Width;
         }
         else
@@ -2591,7 +2591,7 @@ void ToolbarLayoutManager::implts_calcWindowPosSizeOnSingleRowColumn(
             if ( aWinRect.Y < nCurrPos )
                 aWinRect.Y = nCurrPos;
             pWindow->SetPosSizePixel( ::Point( nOffset, aWinRect.Y ), ::Size( rRowColumnWindowData.nStaticSize, aWinRect.Height ));
-            pWindow->Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+            pWindow->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
             nCurrPos += ( aWinRect.Y - nCurrPos ) + aWinRect.Height;
         }
     }
@@ -3613,7 +3613,7 @@ throw (uno::RuntimeException)
     implts_sortUIElements();
 
     aWriteLock.lock();
-    m_bDockingInProgress = sal_False;
+    m_bDockingInProgress = false;
     m_bLayoutDirty       = !bStartDockFloated || !bFloating;
     bool bNotify         = m_bLayoutDirty;
     aWriteLock.unlock();
@@ -3817,7 +3817,7 @@ throw (uno::RuntimeException)
                 // context sensitive toolbar: only destroy toolbar and store state.
                 // non context sensitive toolbar: make it invisible, store state and destroy it.
                 if ( !pIter->m_bContextSensitive )
-                    pIter->m_bVisible = sal_False;
+                    pIter->m_bVisible = false;
 
                 aUIElement = *pIter;
                 break;

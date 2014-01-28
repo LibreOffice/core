@@ -119,7 +119,7 @@ throw (uno::RuntimeException)
                 pStatusBar->SetProgressValue( sal_uInt16( nValue ));
                 pStatusBar->SetUpdateMode( sal_True );
             }
-            pStatusBar->Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+            pStatusBar->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
         }
     }
 }

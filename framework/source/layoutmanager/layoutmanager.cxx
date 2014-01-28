@@ -383,7 +383,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
         m_xModuleCfgMgr = xModCfgMgr;
         m_xDocCfgMgr = xDokCfgMgr;
         m_xPersistentWindowState = xPersistentWindowState;
-        m_aStatusBarElement.m_bStateRead = sal_False; // reset state to read data again!
+        m_aStatusBarElement.m_bStateRead = false; // reset state to read data again!
         aWriteLock.unlock();
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
@@ -618,7 +618,7 @@ void LayoutManager::implts_writeWindowStateData( const OUString& aName, const UI
     Reference< XNameAccess > xPersistentWindowState( m_xPersistentWindowState );
 
     // set flag to determine that we triggered the notification
-    m_bStoreWindowState = sal_True;
+    m_bStoreWindowState = true;
     aWriteLock.unlock();
 
     sal_Bool bPersistent( sal_False );
@@ -685,7 +685,7 @@ void LayoutManager::implts_writeWindowStateData( const OUString& aName, const UI
 
     // Reset flag
     aWriteLock.lock();
-    m_bStoreWindowState = sal_False;
+    m_bStoreWindowState = false;
     aWriteLock.unlock();
 }
 
@@ -847,7 +847,7 @@ void LayoutManager::implts_readStatusBarState( const OUString& rStatusBarName )
     {
         // Read persistent data for status bar if not yet read!
         if ( implts_readWindowStateData( rStatusBarName, m_aStatusBarElement ))
-            m_aStatusBarElement.m_bStateRead = sal_True;
+            m_aStatusBarElement.m_bStateRead = true;
     }
 }
 
@@ -999,7 +999,7 @@ sal_Bool LayoutManager::implts_showProgressBar()
     xProgressBar = Reference< XUIElement >( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
     sal_Bool bVisible( m_bVisible );
 
-    m_aProgressBarElement.m_bVisible = sal_True;
+    m_aProgressBarElement.m_bVisible = true;
     if ( bVisible )
     {
         if ( xStatusBar.is() && !m_aStatusBarElement.m_bMasterHide )
@@ -1054,7 +1054,7 @@ sal_Bool LayoutManager::implts_hideProgressBar()
             xStatusBar = Reference< awt::XWindow >( xStatusBarElement->getRealInterface(), UNO_QUERY );
         bInternalStatusBar = xStatusBar != xWindow;
     }
-    m_aProgressBarElement.m_bVisible = sal_False;
+    m_aProgressBarElement.m_bVisible = false;
     implts_readStatusBarState( STATUS_BAR_ALIAS );
     bHideStatusBar = !m_aStatusBarElement.m_bVisible;
     aWriteLock.unlock();
@@ -1078,7 +1078,7 @@ sal_Bool LayoutManager::implts_showStatusBar( sal_Bool bStoreState )
     WriteGuard aWriteLock( m_aLock );
     Reference< ui::XUIElement > xStatusBar = m_aStatusBarElement.m_xUIElement;
     if ( bStoreState )
-        m_aStatusBarElement.m_bVisible = sal_True;
+        m_aStatusBarElement.m_bVisible = true;
     aWriteLock.unlock();
 
     if ( xStatusBar.is() )
@@ -1104,7 +1104,7 @@ sal_Bool LayoutManager::implts_hideStatusBar( sal_Bool bStoreState )
     WriteGuard aWriteLock( m_aLock );
     Reference< ui::XUIElement > xStatusBar = m_aStatusBarElement.m_xUIElement;
     if ( bStoreState )
-        m_aStatusBarElement.m_bVisible = sal_False;
+        m_aStatusBarElement.m_bVisible = false;
     aWriteLock.unlock();
 
     if ( xStatusBar.is() )
@@ -1150,7 +1150,7 @@ throw (uno::RuntimeException)
         if ( m_xInplaceMenuBar.is() )
             m_xInplaceMenuBar->dispose();
         m_xInplaceMenuBar.clear();
-        m_bInplaceMenuSet = sal_False;
+        m_bInplaceMenuSet = false;
 
         if ( m_xFrame.is() && m_xContainerWindow.is() )
         {
@@ -1165,7 +1165,7 @@ throw (uno::RuntimeException)
             if ( pSysWindow )
                             pSysWindow->SetMenuBar( pMenuBar );
 
-                m_bInplaceMenuSet = sal_True;
+                m_bInplaceMenuSet = true;
             m_xInplaceMenuBar = Reference< XComponent >( (OWeakObject *)m_pInplaceMenuBar, UNO_QUERY );
         }
 
@@ -1181,7 +1181,7 @@ throw (uno::RuntimeException)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
-    m_bInplaceMenuSet = sal_False;
+    m_bInplaceMenuSet = false;
 
     if ( m_xContainerWindow.is() )
     {
@@ -1504,7 +1504,7 @@ throw (RuntimeException)
                                     pSysWindow->SetMenuBar( pMenuBar );
                                     pMenuBar->SetDisplayable( m_bMenuVisible );
                                     if ( m_bMenuVisible )
-                                        bNotify = sal_True;
+                                        bNotify = true;
                                     implts_updateMenuBarClose();
                                 }
                             }
@@ -1518,14 +1518,14 @@ throw (RuntimeException)
                   ( implts_isFrameOrWindowTop(xFrame) || implts_isEmbeddedLayoutManager() ))
         {
             implts_createStatusBar( aName );
-            bNotify = sal_True;
+            bNotify = true;
         }
         else if ( aElementType.equalsIgnoreAsciiCase("progressbar") &&
                   aElementName.equalsIgnoreAsciiCase("progressbar") &&
                   implts_isFrameOrWindowTop(xFrame) )
         {
             implts_createProgressBar();
-            bNotify = sal_True;
+            bNotify = true;
         }
         else if ( aElementType.equalsIgnoreAsciiCase("dockingwindow"))
         {
@@ -1561,9 +1561,9 @@ throw (RuntimeException)
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
 
-    bool            bMustBeLayouted( sal_False );
-    bool            bMustBeDestroyed( sal_False );
-    bool            bNotify( sal_False );
+    bool            bMustBeLayouted( false );
+    bool            bMustBeDestroyed( false );
+    bool            bNotify( false );
     OUString aElementType;
     OUString aElementName;
 
@@ -1595,7 +1595,7 @@ throw (RuntimeException)
         aWriteLock.unlock();
         implts_createProgressBar();
         bMustBeLayouted = true;
-        bNotify = sal_True;
+        bNotify = true;
     }
     else if ( aElementType.equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ) && m_pToolbarManager != NULL )
     {
@@ -1667,7 +1667,7 @@ throw (uno::RuntimeException)
                 Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                 if ( pWindow )
                 {
-                    pWindow->Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                    pWindow->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
                     bResult   = true;
                     bNotify   = true;
                 }
@@ -1780,7 +1780,7 @@ throw (RuntimeException)
          aElementName.equalsIgnoreAsciiCase("menubar") )
     {
         WriteGuard aWriteLock( m_aLock );
-        m_bMenuVisible = sal_True;
+        m_bMenuVisible = true;
         aWriteLock.unlock();
 
         bResult = implts_resetMenuBar();
@@ -1866,7 +1866,7 @@ throw (RuntimeException)
 
         if ( m_xContainerWindow.is() )
         {
-            m_bMenuVisible = sal_False;
+            m_bMenuVisible = false;
 
             SolarMutexGuard aGuard;
             SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );
@@ -1890,8 +1890,8 @@ throw (RuntimeException)
              implts_hideStatusBar( sal_True ))
         {
             implts_writeWindowStateData( STATUS_BAR_ALIAS, m_aStatusBarElement );
-            bMustLayout = sal_True;
-            bNotify     = sal_True;
+            bMustLayout = true;
+            bNotify     = true;
         }
     }
     else if ( aElementType.equalsIgnoreAsciiCase("progressbar") &&
@@ -2340,7 +2340,7 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace, sal_
         bLayouted = sal_True;
 
         WriteGuard aWriteGuard( m_aLock );
-        m_bDoLayout = sal_True;
+        m_bDoLayout = true;
         aWriteGuard.unlock();
 
         awt::Rectangle aDockSpace( implts_calcDockingAreaSizes() );
@@ -2388,7 +2388,7 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace, sal_
             {
                 aWriteGuard.lock();
                 m_aDockingArea = aBorderSpace;
-                m_bMustDoLayout = sal_False;
+                m_bMustDoLayout = false;
                 aWriteGuard.unlock();
             }
         }
@@ -2423,7 +2423,7 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace, sal_
             xDockingAreaAcceptor->setDockingAreaSpace( aBorderSpace );
 
             aWriteGuard.lock();
-            m_bDoLayout = sal_False;
+            m_bDoLayout = false;
             aWriteGuard.unlock();
         }
     }
@@ -2691,7 +2691,7 @@ throw( uno::RuntimeException )
         // We have to call our resize handler at least once synchronously, as some
         // application modules need this. So we have to check if this is the first
         // call after the async layout time expired.
-        m_bMustDoLayout = sal_True;
+        m_bMustDoLayout = true;
         if ( !m_aAsyncLayoutTimer.IsActive() )
         {
             const Link& aLink = m_aAsyncLayoutTimer.GetTimeoutHdl();
@@ -2798,8 +2798,8 @@ throw ( RuntimeException )
         SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::frameAction (COMPONENT_ATTACHED|REATTACHED)" );
 
         WriteGuard aWriteLock( m_aLock );
-        m_bComponentAttached = sal_True;
-        m_bMustDoLayout = sal_True;
+        m_bComponentAttached = true;
+        m_bMustDoLayout = true;
         aWriteLock.unlock();
 
         implts_reset( sal_True );
@@ -2821,7 +2821,7 @@ throw ( RuntimeException )
         SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::frameAction (COMPONENT_DETACHING)" );
 
         WriteGuard aWriteLock( m_aLock );
-        m_bComponentAttached = sal_False;
+        m_bComponentAttached = false;
         aWriteLock.unlock();
 
         implts_reset( sal_False );

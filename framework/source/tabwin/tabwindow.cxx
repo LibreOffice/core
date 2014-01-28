@@ -401,16 +401,16 @@ throw (css::uno::Exception, css::uno::RuntimeException)
                     SolarMutexGuard aGuard;
                     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                     if( pWindow )
-                        pWindow->Show( sal_True );
+                        pWindow->Show( true );
 
                     pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
                     if ( pWindow )
-                        pWindow->Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE  );
+                        pWindow->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE  );
 
                     pWindow = VCLUnoHelper::GetWindow( xTabControl );
                     if ( pWindow )
                     {
-                        pWindow->Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE  );
+                        pWindow->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE  );
                         TabControl* pTabControl = (TabControl *)pWindow;
                         pTabControl->SetActivatePageHdl( LINK( this, TabWindow, Activate ));
                         pTabControl->SetDeactivatePageHdl( LINK( this, TabWindow, Deactivate ));

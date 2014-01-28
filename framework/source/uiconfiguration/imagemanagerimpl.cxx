@@ -810,7 +810,7 @@ throw (::com::sun::star::uno::RuntimeException)
         m_bUserImageListModified[i] = true;
     }
 
-    m_bModified = sal_True;
+    m_bModified = true;
 }
 
 Sequence< OUString > ImageManagerImpl::getAllImageNames( ::sal_Int16 nImageType )
@@ -991,7 +991,7 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
 
         if (( pInsertedImages != 0 ) || (  pReplacedImages != 0 ))
         {
-            m_bModified = sal_True;
+            m_bModified = true;
             m_bUserImageListModified[nIndex] = true;
         }
     }
@@ -1095,7 +1095,7 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
 
         if (( pReplacedImages != 0 ) || ( pRemovedImages != 0 ))
         {
-            m_bModified = sal_True;
+            m_bModified = true;
             m_bUserImageListModified[nIndex] = true;
         }
     }
@@ -1318,7 +1318,7 @@ throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException
                 m_xUserRootCommit->commit();
         }
 
-        m_bModified = sal_False;
+        m_bModified = false;
     }
 }
 

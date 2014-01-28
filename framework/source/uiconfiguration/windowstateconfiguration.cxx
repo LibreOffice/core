@@ -609,7 +609,7 @@ Any ConfigurationAccess_WindowState::impl_getSequenceFromStruct( const WindowSta
                 case PROPERTY_DOCKSIZE:
                     aPropSeq[nIndex].Value = makeAny( rWinStateInfo.aDockSize ); break;
                 default:
-                    DBG_ASSERT( sal_False, "Wrong value for ConfigurationAccess_WindowState. Who has forgotten to add this new property!" );
+                    DBG_ASSERT( false, "Wrong value for ConfigurationAccess_WindowState. Who has forgotten to add this new property!" );
             }
         }
     }
@@ -789,7 +789,7 @@ Any ConfigurationAccess_WindowState::impl_insertCacheAndReturnSequence( const OU
                 break;
 
                 default:
-                    DBG_ASSERT( sal_False, "Wrong value for ConfigurationAccess_WindowState. Who has forgotten to add this new property!" );
+                    DBG_ASSERT( false, "Wrong value for ConfigurationAccess_WindowState. Who has forgotten to add this new property!" );
             }
 
             if ( bAddToSeq )
@@ -861,7 +861,7 @@ ConfigurationAccess_WindowState::WindowStateInfo& ConfigurationAccess_WindowStat
                             case PROPERTY_CONTEXTACTIVE:
                                 aWindowStateInfo.bContextActive = bValue; break;
                             default:
-                                DBG_ASSERT( sal_False, "Unknown boolean property in WindowState found!" );
+                                DBG_ASSERT( false, "Unknown boolean property in WindowState found!" );
                         }
                     }
                 }
@@ -972,7 +972,7 @@ ConfigurationAccess_WindowState::WindowStateInfo& ConfigurationAccess_WindowStat
                 }
 
                 default:
-                    DBG_ASSERT( sal_False, "Wrong value for ConfigurationAccess_WindowState. Who has forgotten to add this new property!" );
+                    DBG_ASSERT( false, "Wrong value for ConfigurationAccess_WindowState. Who has forgotten to add this new property!" );
             }
         }
         catch( const com::sun::star::container::NoSuchElementException& )
@@ -1072,7 +1072,7 @@ void ConfigurationAccess_WindowState::impl_fillStructFromSequence( WindowStateIn
                                     rWinStateInfo.bContextActive = bValue;
                                     break;
                                 default:
-                                    DBG_ASSERT( sal_False, "Unknown boolean property in WindowState found!" );
+                                    DBG_ASSERT( false, "Unknown boolean property in WindowState found!" );
                             }
                         }
                     }
@@ -1163,7 +1163,7 @@ void ConfigurationAccess_WindowState::impl_fillStructFromSequence( WindowStateIn
                     break;
 
                     default:
-                        DBG_ASSERT( sal_False, "Wrong value for ConfigurationAccess_WindowState. Who has forgotten to add this new property!" );
+                        DBG_ASSERT( false, "Wrong value for ConfigurationAccess_WindowState. Who has forgotten to add this new property!" );
                 }
 
                 break;
@@ -1244,7 +1244,7 @@ void ConfigurationAccess_WindowState::impl_putPropertiesFromStruct( const Window
                     case PROPERTY_STYLE:
                         xPropSet->setPropertyValue( m_aPropArray[i], makeAny( sal_Int32( rWinStateInfo.nStyle )) ); break;
                     default:
-                        DBG_ASSERT( sal_False, "Wrong value for ConfigurationAccess_WindowState. Who has forgotten to add this new property!" );
+                        DBG_ASSERT( false, "Wrong value for ConfigurationAccess_WindowState. Who has forgotten to add this new property!" );
                 }
             }
             catch( const Exception& )

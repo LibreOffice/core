@@ -109,7 +109,7 @@ void SAL_CALL ToolBarWrapper::dispose() throw ( RuntimeException )
     m_xConfigSource.clear();
     m_xConfigData.clear();
 
-    m_bDisposed = sal_True;
+    m_bDisposed = true;
 }
 
 // XInitialization
@@ -166,7 +166,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                     // Fill toolbar with container contents
                     pToolBarManager->FillToolbar( m_xConfigData );
                     pToolBar->SetOutStyle( SvtMiscOptions().GetToolboxStyle() );
-                    pToolBar->EnableCustomize( sal_True );
+                    pToolBar->EnableCustomize( true );
                     ::Size aActSize( pToolBar->GetSizePixel() );
                     ::Size aSize( pToolBar->CalcWindowSizePixel() );
                     aSize.Width() = aActSize.Width();
@@ -177,11 +177,11 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
             {
                 // No settings in our configuration manager. This means we are
                 // a transient toolbar which has no persistent settings.
-                m_bPersistent = sal_False;
+                m_bPersistent = false;
                 if ( pToolBar && pToolBarManager )
                 {
                     pToolBar->SetOutStyle( SvtMiscOptions().GetToolboxStyle() );
-                    pToolBar->EnableCustomize( sal_True );
+                    pToolBar->EnableCustomize( true );
                     ::Size aActSize( pToolBar->GetSizePixel() );
                     ::Size aSize( pToolBar->CalcWindowSizePixel() );
                     aSize.Width() = aActSize.Width();

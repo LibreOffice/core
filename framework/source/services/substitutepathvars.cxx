@@ -259,7 +259,7 @@ const OUString& SubstitutePathVariables_Impl::GetYPDomainName()
     if ( !m_bYPDomainRetrieved )
     {
         m_aYPDomain = NetworkDomain::GetYPDomainName().toAsciiLowerCase();
-        m_bYPDomainRetrieved = sal_True;
+        m_bYPDomainRetrieved = true;
     }
 
     return m_aYPDomain;
@@ -284,7 +284,7 @@ const OUString& SubstitutePathVariables_Impl::GetDNSDomainName()
         else
             m_aDNSDomain = "";
 
-        m_bDNSDomainRetrieved = sal_True;
+        m_bDNSDomainRetrieved = true;
     }
 
     return m_aDNSDomain;
@@ -295,7 +295,7 @@ const OUString& SubstitutePathVariables_Impl::GetNTDomainName()
     if ( !m_bNTDomainRetrieved )
     {
         m_aNTDomain = NetworkDomain::GetNTDomainName().toAsciiLowerCase();
-        m_bNTDomainRetrieved = sal_True;
+        m_bNTDomainRetrieved = true;
     }
 
     return m_aNTDomain;
@@ -314,7 +314,7 @@ const OUString& SubstitutePathVariables_Impl::GetHostName()
 
 bool SubstitutePathVariables_Impl::FilterRuleSet( const SubstituteRuleVector& aRuleSet, SubstituteRule& aActiveRule )
 {
-    bool bResult = sal_False;
+    bool bResult = false;
 
     if ( !aRuleSet.empty() )
     {
@@ -837,7 +837,7 @@ throw ( NoSuchElementException, RuntimeException )
             sal_Int32 nEndPosition = aWorkText.indexOf( ')', nPosition );
             if ( nEndPosition != -1 )
                 nLength = nEndPosition - nPosition + 1;
-            bVarNotSubstituted = sal_False;
+            bVarNotSubstituted = false;
             ++nDepth;
         }
     }

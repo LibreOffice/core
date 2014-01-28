@@ -109,7 +109,7 @@ void SAL_CALL MenuBarWrapper::dispose() throw (::com::sun::star::uno::RuntimeExc
     m_xConfigData.clear();
 
     m_xMenuBar.clear();
-    m_bDisposed = sal_True;
+    m_bDisposed = true;
 }
 
 // XInitialization

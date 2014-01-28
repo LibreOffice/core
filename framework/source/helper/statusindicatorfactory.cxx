@@ -398,7 +398,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     if ( pWindow )
     {
         bool bForceFrontAndFocus(officecfg::Office::Common::View::NewDocumentHandling::ForceFocusAndToFront::get(xContext));
-        pWindow->Show(sal_True, bForceFrontAndFocus ? SHOW_FOREGROUNDTASK : 0 );
+        pWindow->Show(true, bForceFrontAndFocus ? SHOW_FOREGROUNDTASK : 0 );
     }
 
 }

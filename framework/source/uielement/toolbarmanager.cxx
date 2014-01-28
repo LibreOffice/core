@@ -1736,7 +1736,7 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
                 pItemMenu->CheckItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->IsItemVisible( nId ) );
                 pItemMenu->SetItemCommand( STARTID_CUSTOMIZE_POPUPMENU+nPos, aCommandURL );
                 pItemMenu->SetItemImage( STARTID_CUSTOMIZE_POPUPMENU+nPos,
-                                         GetImageFromURL( m_xFrame, aCommandURL, sal_False )
+                                         GetImageFromURL( m_xFrame, aCommandURL, false )
                                        );
             }
             else

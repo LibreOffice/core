@@ -121,7 +121,7 @@ void SAL_CALL VCLStatusIndicator::end()
         if (m_pStatusBar)
         {
             m_pStatusBar->EndProgressMode();
-            m_pStatusBar->Show(sal_False);
+            m_pStatusBar->Show(false);
 
             delete m_pStatusBar;
             m_pStatusBar = 0;

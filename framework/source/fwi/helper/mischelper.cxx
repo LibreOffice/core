@@ -57,7 +57,7 @@ uno::Reference< linguistic2::XLanguageGuessing > LanguageGuessingHelper::GetGues
         }
         catch (const uno::Exception &)
         {
-            DBG_ASSERT( 0, "failed to get language guessing component" );
+            DBG_ASSERT( false, "failed to get language guessing component" );
         }
     }
     return m_xLanguageGuesser;

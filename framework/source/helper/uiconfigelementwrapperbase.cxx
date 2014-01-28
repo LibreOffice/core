@@ -64,12 +64,12 @@ UIConfigElementWrapperBase::UIConfigElementWrapperBase( sal_Int16 nType )
     ,   ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >( m_aLock.getShareableOslMutex() )
     ,   ::cppu::OPropertySetHelper  ( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
     ,   m_nType                     ( nType                                             )
-    ,   m_bPersistent               ( sal_True                                          )
-    ,   m_bInitialized              ( sal_False                                         )
-    ,   m_bConfigListener           ( sal_False                                         )
-    ,   m_bConfigListening          ( sal_False                                         )
-    ,   m_bDisposed                 ( sal_False                                         )
-    ,   m_bNoClose                  ( sal_False                                         )
+    ,   m_bPersistent               ( true                                          )
+    ,   m_bInitialized              ( false                                         )
+    ,   m_bConfigListener           ( false                                         )
+    ,   m_bConfigListening          ( false                                         )
+    ,   m_bDisposed                 ( false                                         )
+    ,   m_bNoClose                  ( false                                         )
     ,   m_aListenerContainer        ( m_aLock.getShareableOslMutex()                    )
 {
 }
@@ -142,7 +142,7 @@ throw ( Exception, RuntimeException )
             }
         }
 
-        m_bInitialized = sal_True;
+        m_bInitialized = true;
     }
 }
 
@@ -272,7 +272,7 @@ void SAL_CALL UIConfigElementWrapperBase::setFastPropertyValue_NoBroadcast(   sa
                             if ( xUIConfig.is() )
                             {
                                 xUIConfig->removeConfigurationListener( Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
-                                m_bConfigListening = sal_False;
+                                m_bConfigListening = false;
                             }
                         }
                         catch ( const Exception& )
@@ -290,7 +290,7 @@ void SAL_CALL UIConfigElementWrapperBase::setFastPropertyValue_NoBroadcast(   sa
                             if ( xUIConfig.is() )
                             {
                                 xUIConfig->addConfigurationListener( Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
-                                m_bConfigListening = sal_True;
+                                m_bConfigListening = true;
                             }
                         }
                         catch ( const Exception& )

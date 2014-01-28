@@ -69,9 +69,9 @@ namespace framework
                         if ( bEqual )
                         {
                             if ( m_bUserActive && !aUIElement.m_bUserActive )
-                                return sal_True;
+                                return true;
                             else
-                                return sal_False;
+                                return false;
                         }
                         else
                             return ( m_aDockedData.m_aPos.X <= aUIElement.m_aDockedData.m_aPos.X );
@@ -87,9 +87,9 @@ namespace framework
                         if ( bEqual )
                         {
                             if ( m_bUserActive && !aUIElement.m_bUserActive )
-                                return sal_True;
+                                return true;
                             else
-                                return sal_False;
+                                return false;
                         }
                         else
                             return ( m_aDockedData.m_aPos.Y <= aUIElement.m_aDockedData.m_aPos.Y );

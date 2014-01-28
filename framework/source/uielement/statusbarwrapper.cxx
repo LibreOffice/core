@@ -81,7 +81,7 @@ void SAL_CALL StatusBarWrapper::dispose() throw (::com::sun::star::uno::RuntimeE
         m_xConfigData.clear();
         m_xContext.clear();
 
-        m_bDisposed = sal_True;
+        m_bDisposed = true;
     }
     else
         throw DisposedException();

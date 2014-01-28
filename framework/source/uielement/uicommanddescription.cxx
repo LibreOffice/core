@@ -298,7 +298,7 @@ void ConfigurationAccess_UICommand::fillInfoFromResult( CmdToInfoMap& rCmdInfo, 
     rCmdInfo.aLabel = aStr;
     aStr = comphelper::string::stripEnd(aStr, '.'); // Remove "..." from string
     rCmdInfo.aCommandName = MnemonicGenerator::EraseAllMnemonicChars(aStr);
-    rCmdInfo.bCommandNameCreated = sal_True;
+    rCmdInfo.bCommandNameCreated = true;
 }
 
 Any ConfigurationAccess_UICommand::getSequenceFromCache( const OUString& aCommandURL )

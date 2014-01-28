@@ -471,7 +471,7 @@ void UIConfigurationManager::impl_storeElementTypeData( Reference< XStorage >& x
             if ( rElement.bDefault )
             {
                 xStorage->removeElement( rElement.aName );
-                rElement.bModified = sal_False; // mark as not modified
+                rElement.bModified = false; // mark as not modified
             }
             else
             {
@@ -526,7 +526,7 @@ void UIConfigurationManager::impl_storeElementTypeData( Reference< XStorage >& x
 
                 // mark as not modified if we store to our own storage
                 if ( bResetModifyState )
-                    rElement.bModified = sal_False;
+                    rElement.bModified = false;
             }
         }
 
@@ -540,7 +540,7 @@ void UIConfigurationManager::impl_storeElementTypeData( Reference< XStorage >& x
 
     // mark UIElementType as not modified if we store to our own storage
     if ( bResetModifyState )
-        rElementType.bModified = sal_False;
+        rElementType.bModified = false;
 }
 
 void UIConfigurationManager::impl_resetElementTypeData(
@@ -637,7 +637,7 @@ void UIConfigurationManager::impl_reloadElementTypeData(
         ++pIter;
     }
 
-    rDocElementType.bModified = sal_False;
+    rDocElementType.bModified = false;
 }
 
 void UIConfigurationManager::impl_Initialize()
@@ -834,10 +834,10 @@ void SAL_CALL UIConfigurationManager::reset() throw (::com::sun::star::uno::Runt
                 UIElementType& rDocElementType = m_aUIElements[j];
 
                 impl_resetElementTypeData( rDocElementType, aRemoveEventNotifyContainer );
-                rDocElementType.bModified = sal_False;
+                rDocElementType.bModified = false;
             }
 
-            m_bModified = sal_False;
+            m_bModified = false;
 
             // Unlock mutex before notify our listeners
             aGuard.unlock();
@@ -1227,7 +1227,7 @@ void SAL_CALL UIConfigurationManager::setStorage( const Reference< XStorage >& S
 
     // We store the new storage. Be careful it could be an empty reference!
     m_xDocConfigStorage = Storage;
-    m_bReadOnly         = sal_True;
+    m_bReadOnly         = true;
 
     Reference< XUIConfigurationStorage > xAccUpdate(m_xAccConfig, UNO_QUERY);
     if ( xAccUpdate.is() )
@@ -1301,7 +1301,7 @@ void SAL_CALL UIConfigurationManager::reload() throw (::com::sun::star::uno::Exc
             }
         }
 
-        m_bModified = sal_False;
+        m_bModified = false;
 
         // Unlock mutex before notify our listeners
         aGuard.unlock();
