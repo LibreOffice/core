@@ -30,7 +30,7 @@ template< class DestIterator, class DestAccessor, typename T >
 void fillImage( DestIterator begin,
                 DestIterator end,
                 DestAccessor ad,
-                T            fillVal )
+                const T&     fillVal )
 {
     const int width ( end.x - begin.x );
     const int height( end.y - begin.y );
@@ -51,7 +51,7 @@ void fillImage( DestIterator begin,
 
 template< class DestIterator, class DestAccessor, typename T >
 inline void fillImage( vigra::triple<DestIterator,DestIterator,DestAccessor> const& src,
-                       T                                                            fillVal )
+                       const T& fillVal )
 {
     fillImage(src.first,src.second,src.third,fillVal);
 }
