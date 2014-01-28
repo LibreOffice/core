@@ -208,7 +208,7 @@ struct FileHandle
             nFlags |= osl_File_OpenFlag_Read;
             break;
         default:
-            OSL_PRECOND(0, "store::FileHandle: unknown storeAccessMode");
+            OSL_PRECOND(false, "store::FileHandle: unknown storeAccessMode");
         }
         return nFlags;
     }
