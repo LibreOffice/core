@@ -733,6 +733,30 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
             val.getString();
             //TODO: does it need to be handled?
         break;
+        case NS_ooxml::LN_CT_SizeRelH_relativeFrom:
+            {
+                switch (nIntValue)
+                {
+                case NS_ooxml::LN_ST_SizeRelFromH_margin:
+                    break;
+                default:
+                    SAL_WARN("writerfilter", "GraphicImport::lcl_attribute: unhandled NS_ooxml::LN_CT_SizeRelH_relativeFrom value: " << nIntValue);
+                    break;
+                }
+            }
+            break;
+        case NS_ooxml::LN_CT_SizeRelV_relativeFrom:
+            {
+                switch (nIntValue)
+                {
+                case NS_ooxml::LN_ST_SizeRelFromV_margin:
+                    break;
+                default:
+                    SAL_WARN("writerfilter", "GraphicImport::lcl_attribute: unhandled NS_ooxml::LN_CT_SizeRelV_relativeFrom value: " << nIntValue);
+                    break;
+                }
+            }
+            break;
         default:
 #ifdef DEBUG_DMAPPER_GRAPHIC_IMPORT
             dmapper_logger->element("unhandled");
