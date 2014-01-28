@@ -41,6 +41,7 @@ public:
     void testEmbeddingsGrabBag();
     void testAreaChartLoad();
     void testUpDownBars();
+    void testPieChartRotation();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -54,6 +55,7 @@ public:
     CPPUNIT_TEST(testEmbeddingsGrabBag);
     CPPUNIT_TEST(testAreaChartLoad);
     CPPUNIT_TEST(testUpDownBars);
+    CPPUNIT_TEST(testPieChartRotation);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -520,6 +522,16 @@ void Chart2ExportTest::testUpDownBars()
     xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:upDownBars");
+}
+
+void Chart2ExportTest::testPieChartRotation()
+{
+   load ("/chart2/qa/extras/data/docx/", "pieChartRotation.docx");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart","Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:view3D/c:rotX", "val", "40");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:view3D/c:rotY", "val", "30");
+
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
