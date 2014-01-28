@@ -665,12 +665,14 @@ End
 #endif
 
 #if defined(MACOSX)
+#ifndef ENABLE_SANDBOX
 File gid_File_Lib_AppleRemote
     Name = LIBNAME(AppleRemote);
     LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
 End
+#endif
 #endif
 
 #if defined(MACOSX)

@@ -2620,6 +2620,7 @@ if test "$_os" = "Darwin"; then
     elif test -n "$MACOSX_CODESIGNING_IDENTITY" -a "$enable_macosx_sandbox" = yes; then
         ENABLE_MACOSX_SANDBOX=YES
         AC_DEFINE(HAVE_FEATURE_MACOSX_SANDBOX)
+        SCPDEFS="$SCPDEFS -DENABLE_SANDBOX"
         AC_MSG_RESULT([yes])
     else
         AC_MSG_RESULT([no])
