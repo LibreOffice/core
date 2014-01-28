@@ -171,7 +171,7 @@ PackageInformationProvider::isUpdateAvailable( const OUString& _sExtensionId )
 
     if (!extMgr.is())
     {
-        OSL_ASSERT(0);
+        OSL_ASSERT(false);
         return aList;
     }
     std::vector<std::pair<uno::Reference<deployment::XPackage>, uno::Any > > errors;
@@ -189,7 +189,7 @@ PackageInformationProvider::isUpdateAvailable( const OUString& _sExtensionId )
         }
         catch (lang::IllegalArgumentException &)
         {
-            OSL_ASSERT(0);
+            OSL_ASSERT(false);
         }
         updateInfoMap = dp_misc::getOnlineUpdateInfos(
             mxContext, extMgr, mxUpdateInformation, &vecExtensions, errors);

@@ -289,7 +289,7 @@ void UpdateInstallDialog::setError(INSTALL_ERROR err, OUString const & sExtensio
         break;
 
     default:
-        OSL_ASSERT(0);
+        OSL_ASSERT(false);
     }
 
     sError = sError.replaceFirst("%NAME", sExtension);

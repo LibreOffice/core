@@ -401,7 +401,7 @@ OUString getHighestVersion(
     case 1: return sharedVersion;
     case 2: return bundledVersion;
     case 3: return onlineVersion;
-    default: OSL_ASSERT(0);
+    default: OSL_ASSERT(false);
     }
 
     return OUString();

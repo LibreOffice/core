@@ -307,7 +307,7 @@ bool BackendImpl::PackageImpl::extensionContainsCompiledHelp()
             else
             {
                 //Error
-                OSL_ASSERT(0);
+                OSL_ASSERT(false);
                 bCompiled = false;
                 break;
             }
@@ -316,7 +316,7 @@ bool BackendImpl::PackageImpl::extensionContainsCompiledHelp()
             && errorNext != ::osl::File::E_None)
         {
             //Error
-            OSL_ASSERT(0);
+            OSL_ASSERT(false);
             bCompiled = false;
         }
     }

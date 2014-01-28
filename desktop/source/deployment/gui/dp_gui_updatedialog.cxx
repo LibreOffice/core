@@ -330,10 +330,10 @@ void UpdateDialog::Thread::execute()
                 dp_misc::getIdentifier(info.extension), info.extension->getName(),
                 uno::Reference<ucb::XCommandEnvironment>());
         } catch ( const lang::IllegalArgumentException& ) {
-            OSL_ASSERT(0);
+            OSL_ASSERT(false);
             continue;
         } catch ( const css::ucb::CommandFailedException& ) {
-            OSL_ASSERT(0);
+            OSL_ASSERT(false);
             continue;
         }
         OSL_ASSERT(extensions.getLength() == 3);
@@ -705,7 +705,7 @@ sal_uInt16 UpdateDialog::insertItem( UpdateDialog::Index *pEntry, SvLBoxButtonKi
         if ( p == pEntry )
             return i;
     }
-    OSL_ASSERT(0);
+    OSL_ASSERT(false);
     return 0;
 }
 

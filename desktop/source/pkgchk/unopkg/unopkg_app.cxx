@@ -320,7 +320,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
             else if (repository == "bundled")
                 extensionUnorc = "$BUNDLED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc";
             else
-                OSL_ASSERT(0);
+                OSL_ASSERT(false);
 
             ::rtl::Bootstrap::expandMacros(extensionUnorc);
             oslFileError e = osl_removeFile(extensionUnorc.pData);

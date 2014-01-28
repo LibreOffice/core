@@ -299,7 +299,7 @@ void BackendImpl::PackageImpl:: initPackageHandler()
     }
     else
     {
-        OSL_ASSERT( 0 );
+        OSL_ASSERT( false );
         // NOT supported at the momemtn // TODO
     }
 

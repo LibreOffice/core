@@ -153,7 +153,7 @@ ExtensionRemoveGuard::~ExtensionRemoveGuard()
                 css::uno::Reference<css::task::XAbortChannel>(),
                 css::uno::Reference<css::ucb::XCommandEnvironment>());
     } catch (...) {
-        OSL_ASSERT(0);
+        OSL_ASSERT(false);
     }
 }
 

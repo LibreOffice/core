@@ -616,7 +616,7 @@ void Desktop::Init()
         }
     }
 
-    if ( 1 )
+    if ( true )
     {
         const CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
 

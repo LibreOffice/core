@@ -485,7 +485,7 @@ Reference<css::xml::dom::XNode> BackendDb::writeKeyElement(
             getXPathAPI()->selectSingleNode(root, sExpression);
         if (existingNode.is())
         {
-            OSL_ASSERT(0);
+            OSL_ASSERT(false);
             //replace the existing entry.
             removeEntry(url);
         }

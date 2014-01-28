@@ -790,7 +790,7 @@ void BackendImpl::PackageImpl::processPackage_(
             }
             catch(const Exception&)
             {
-                OSL_ASSERT(0);
+                OSL_ASSERT(false);
             }
         }
 #endif

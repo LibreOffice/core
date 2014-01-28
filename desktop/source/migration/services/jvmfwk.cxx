@@ -444,7 +444,7 @@ void SAL_CALL  JavaMigration::setPropertyValue(
              break;
          }
         default:
-            OSL_ASSERT(0);
+            OSL_ASSERT(false);
         }
     }
 }

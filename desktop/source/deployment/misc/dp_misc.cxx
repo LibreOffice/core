@@ -191,13 +191,13 @@ bool compareExtensionFolderWithLastSynchronizedFile(
         }
         else
         {
-            OSL_ASSERT(0);
+            OSL_ASSERT(false);
             bNeedsSync = true;
         }
     }
     else
     {
-        OSL_ASSERT(0);
+        OSL_ASSERT(false);
         bNeedsSync = true;
     }
 
@@ -220,7 +220,7 @@ bool needToSyncRepository(OUString const & name)
     }
     else
     {
-        OSL_ASSERT(0);
+        OSL_ASSERT(false);
         return true;
     }
     ::rtl::Bootstrap::expandMacros(folder);

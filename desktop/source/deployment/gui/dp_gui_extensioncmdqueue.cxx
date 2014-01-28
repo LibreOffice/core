@@ -427,7 +427,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             approve = true;
         else
         {
-            OSL_ASSERT(0);
+            OSL_ASSERT(false);
         }
     }
     else if (request >>= verExc)
