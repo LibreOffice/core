@@ -2482,14 +2482,22 @@ Size SwFlyFrm::CalcRel( const SwFmtFrmSize &rSz ) const
             if ( nDiff > 0 )
                 nRelHeight -= nDiff;
         }
-        nRelWidth  = std::min( nRelWidth,  pRel->Prt().Width() );
+
+        // At the moment only the "== PAGE_FRAME" and "!= PAGE_FRAME" cases are handled.
+        // When size is a relative to page size, ignore size of SwBodyFrm.
+        if (rSz.GetWidthPercentRelation() != text::RelOrientation::PAGE_FRAME)
+            nRelWidth  = std::min( nRelWidth,  pRel->Prt().Width() );
         nRelHeight = std::min( nRelHeight, pRel->Prt().Height() );
         if( !pRel->IsPageFrm() )
         {
             const SwPageFrm* pPage = FindPageFrm();
             if( pPage )
             {
-                nRelWidth  = std::min( nRelWidth,  pPage->Prt().Width() );
+                if (rSz.GetWidthPercentRelation() == text::RelOrientation::PAGE_FRAME)
+                    // Ignore margins of pPage.
+                    nRelWidth  = std::min( nRelWidth,  pPage->Frm().Width() );
+                else
+                    nRelWidth  = std::min( nRelWidth,  pPage->Prt().Width() );
                 nRelHeight = std::min( nRelHeight, pPage->Prt().Height() );
             }
         }
