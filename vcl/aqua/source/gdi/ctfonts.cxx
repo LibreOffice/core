@@ -109,6 +109,16 @@ CTTextStyle::CTTextStyle( const ImplFontSelectData& rFSD )
         pMatrix = &aMatrix;
     }
 
+    // handle emulation of italic/oblique styles if requested and the font doesn't provide them
+    if( ((pReqFont->meItalic == ITALIC_NORMAL) || (pReqFont->meItalic == ITALIC_OBLIQUE))
+    && (mpFontData->meItalic != ITALIC_NORMAL)
+    && (mpFontData->meItalic != ITALIC_OBLIQUE))
+    {
+        if( !pMatrix)
+            pMatrix = &(aMatrix = CGAffineTransformIdentity);
+        aMatrix = CGAffineTransformConcat(aMatrix, CGAffineTransformMake( 1, 0, 0.375F, 1, 0, 0));
+    }
+
     // create the style object for CoreText font attributes
     static const CFIndex nMaxDictSize = 16; // TODO: does this really suffice?
     mpStyleDict = CFDictionaryCreateMutable( NULL, nMaxDictSize,
