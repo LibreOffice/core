@@ -2268,7 +2268,7 @@ void ScColumn::CompileXML( ScProgress& rProgress )
                 if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
                     pFCell->SetNeedNumberFormat(false);
                 else
-                    pFCell->SetDirty(true);
+                    pFCell->SetDirtyVar();
 
                 pFCell->CompileXML( rProgress );
                 if ( nRow != maItems[i].nRow )
