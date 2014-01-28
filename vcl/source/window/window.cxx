@@ -977,6 +977,9 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
 
     }
 
+    // setup the scale factor for Hi-DPI displays
+    mnDPIScaleFactor = std::max((sal_Int32)1, (mpWindowImpl->mpFrameData->mnDPIY + 48) / 96);
+
     const StyleSettings& rStyleSettings = maSettings.GetStyleSettings();
     sal_uInt16 nScreenZoom = rStyleSettings.GetScreenZoom();
     mnDPIX          = (mpWindowImpl->mpFrameData->mnDPIX*nScreenZoom)/100;
