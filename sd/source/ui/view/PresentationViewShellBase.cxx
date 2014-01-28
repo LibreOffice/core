@@ -69,18 +69,15 @@ PresentationViewShellBase::PresentationViewShellBase (
     : ViewShellBase (_pFrame, pOldShell)
 {
     // Hide the automatic (non-context sensitive) tool bars.
-    if (_pFrame!=NULL)
+    Reference<beans::XPropertySet> xFrameSet (
+        _pFrame->GetFrame().GetFrameInterface(),
+        UNO_QUERY);
+    if (xFrameSet.is())
     {
-        Reference<beans::XPropertySet> xFrameSet (
-            _pFrame->GetFrame().GetFrameInterface(),
-            UNO_QUERY);
-        if (xFrameSet.is())
+        Reference<beans::XPropertySet> xLayouterSet(xFrameSet->getPropertyValue("LayoutManager"), UNO_QUERY);
+        if (xLayouterSet.is())
         {
-            Reference<beans::XPropertySet> xLayouterSet(xFrameSet->getPropertyValue("LayoutManager"), UNO_QUERY);
-            if (xLayouterSet.is())
-            {
-                xLayouterSet->setPropertyValue("AutomaticToolbars", makeAny(sal_False));
-            }
+            xLayouterSet->setPropertyValue("AutomaticToolbars", makeAny(sal_False));
         }
     }
 }
