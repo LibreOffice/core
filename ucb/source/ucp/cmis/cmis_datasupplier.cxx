@@ -51,7 +51,7 @@ namespace cmis
                 maResults.push_back( new ResultListEntry( *it ) );
             }
         }
-        mbCountFinal = sal_True;
+        mbCountFinal = true;
 
         return true;
     }

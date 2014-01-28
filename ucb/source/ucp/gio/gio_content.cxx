@@ -147,7 +147,7 @@ OUString SAL_CALL Content::getContentType() throw( uno::RuntimeException )
 do { \
     if (bThrow) throw aExcept;\
     aRet = uno::makeAny( aExcept );\
-} while(0)
+} while(false)
 
 uno::Any convertToException(GError *pError, const uno::Reference< uno::XInterface >& rContext, bool bThrow)
 {
@@ -1068,7 +1068,7 @@ void Content::insert(const uno::Reference< io::XInputStream > &xInputStream,
 
     if (mbTransient)
     {
-        mbTransient = sal_False;
+        mbTransient = false;
         inserted();
     }
 }

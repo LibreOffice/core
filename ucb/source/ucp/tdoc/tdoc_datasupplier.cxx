@@ -262,7 +262,7 @@ sal_Bool ResultSetDataSupplier::getResult( sal_uInt32 nIndex )
     }
 
     if ( !bFound )
-        m_pImpl->m_bCountFinal = sal_True;
+        m_pImpl->m_bCountFinal = true;
 
     rtl::Reference< ::ucbhelper::ResultSet > xResultSet = getResultSet().get();
     if ( xResultSet.is() )
@@ -313,7 +313,7 @@ sal_uInt32 ResultSetDataSupplier::totalCount()
         }
     }
 
-    m_pImpl->m_bCountFinal = sal_True;
+    m_pImpl->m_bCountFinal = true;
 
     rtl::Reference< ::ucbhelper::ResultSet > xResultSet = getResultSet().get();
     if ( xResultSet.is() )
@@ -409,7 +409,7 @@ bool ResultSetDataSupplier::queryNamesOfChildren()
         {
             OSL_FAIL( "Got no list of children!" );
             delete pNamesOfChildren;
-            m_pImpl->m_bThrowException = sal_True;
+            m_pImpl->m_bThrowException = true;
             return false;
         }
         else

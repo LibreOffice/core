@@ -2468,7 +2468,7 @@ void Content::insert(
 
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
-            m_bTransient = sal_False;
+            m_bTransient = false;
         }
     }
     else

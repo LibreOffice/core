@@ -56,7 +56,7 @@ bool DataSupplier::getData()
         G_FILE_QUERY_INFO_NONE, NULL, NULL);
 
     if (!pEnumerator)
-        return sal_False;
+        return false;
 
     GFileInfo *pInfo = NULL;
     while ((pInfo = g_file_enumerator_next_file (pEnumerator, NULL, NULL)))
@@ -80,7 +80,7 @@ bool DataSupplier::getData()
         g_object_unref(pInfo);
     }
 
-    mbCountFinal = sal_True;
+    mbCountFinal = true;
 
     g_file_enumerator_close(pEnumerator, NULL, NULL);
     return true;

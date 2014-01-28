@@ -161,7 +161,7 @@ namespace cmis
 
                     libcmis::Session* session = libcmis::SessionFactory::createSession(
                             OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ),
-                            rUsername, rPassword, "", sal_False, oauth2Data );
+                            rUsername, rPassword, "", false, oauth2Data );
                     if (session == NULL )
                         ucbhelper::cancelCommandExecution(
                                             ucb::IOErrorCode_INVALID_DEVICE,

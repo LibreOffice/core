@@ -129,14 +129,14 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
     }
 
     if ( rResource.uri.endsWith("/") )
-        m_bTrailingSlash = sal_True;
+        m_bTrailingSlash = true;
 }
 
 //=========================================================================
 ContentProperties::ContentProperties(
                         const OUString & rTitle, sal_Bool bFolder )
 : m_xProps( new PropertyValueMap ),
-  m_bTrailingSlash( sal_False )
+  m_bTrailingSlash( false )
 {
     (*m_xProps)[ OUString("Title") ]
         = PropertyValue( uno::makeAny( rTitle ), true );
@@ -149,7 +149,7 @@ ContentProperties::ContentProperties(
 //=========================================================================
 ContentProperties::ContentProperties( const OUString & rTitle )
 : m_xProps( new PropertyValueMap ),
-  m_bTrailingSlash( sal_False )
+  m_bTrailingSlash( false )
 {
     (*m_xProps)[ OUString("Title") ]
         = PropertyValue( uno::makeAny( rTitle ), true );
@@ -158,7 +158,7 @@ ContentProperties::ContentProperties( const OUString & rTitle )
 //=========================================================================
 ContentProperties::ContentProperties()
 : m_xProps( new PropertyValueMap ),
-  m_bTrailingSlash( sal_False )
+  m_bTrailingSlash( false )
 {
 }
 

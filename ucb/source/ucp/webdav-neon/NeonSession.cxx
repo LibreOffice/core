@@ -442,7 +442,7 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
         if ( xImCert.is() )
             vecCerts.push_back( xImCert );
     }
-    while ( 1 );
+    while ( true );
 
     sal_Int64 certValidity = xSecurityEnv->verifyCertificate( xEECert,
         ::comphelper::containerToSequence( vecCerts ) );
