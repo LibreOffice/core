@@ -74,7 +74,9 @@ CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
     CFDictionarySetValue( mpStyleDict, kCTVerticalFormsAttributeName, pCFVertBool );
 
     // fake bold
-    if ((pReqFont->GetWeight() >= WEIGHT_BOLD) && (mpFontData->GetWeight() < WEIGHT_SEMIBOLD))
+    if ( (pReqFont->GetWeight() >= WEIGHT_BOLD) &&
+         ((mpFontData->GetWeight() < WEIGHT_SEMIBOLD) &&
+          (mpFontData->GetWeight() != WEIGHT_DONTKNOW)) )
     {
         int nStroke = -10.0;
         CFNumberRef rStroke = CFNumberCreate(NULL, kCFNumberSInt32Type, &nStroke);
@@ -83,7 +85,7 @@ CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
 
     // fake italic
     if (((pReqFont->GetSlant() == ITALIC_NORMAL) || (pReqFont->GetSlant() == ITALIC_OBLIQUE))
-    && !((mpFontData->GetSlant() == ITALIC_NORMAL) || (mpFontData->GetSlant() == ITALIC_OBLIQUE)))
+    && (mpFontData->GetSlant() == ITALIC_NONE))
     {
         aMatrix = CGAffineTransformConcat(aMatrix, CGAffineTransformMake(1, 0, toRadian(120), 1, 0, 0));
     }
