@@ -851,7 +851,8 @@ sal_Int32 SAL_CALL SwAccessibleDocument::getBackground()
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
         SAL_CALL SwAccessibleDocument::get_AccFlowTo(const ::com::sun::star::uno::Any& rAny, sal_Int32 nType)
-        throw ( ::com::sun::star::uno::RuntimeException )
+        throw (::com::sun::star::uno::RuntimeException,
+               std::exception)
 {
     SolarMutexGuard g;
 
