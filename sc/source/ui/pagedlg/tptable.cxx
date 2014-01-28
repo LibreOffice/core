@@ -17,12 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
-
-
-
-//------------------------------------------------------------------
 
 #include "scitems.hxx"
 
@@ -34,7 +29,7 @@
 #include "pagedlg.hrc"
 
 
-// STATIC DATA -----------------------------------------------------------
+// Static Data
 
 static sal_uInt16 pPageTableRanges[] =
 {
@@ -69,7 +64,6 @@ static sal_Bool lcl_PutBoolItem( sal_uInt16            nWhich,
                       sal_Bool              bIsChecked,
                       sal_Bool              bSavedValue );
 
-//------------------------------------------------------------------------
 
 #define PAGENO_HDL          LINK(this,ScTablePage,PageNoHdl)
 #define PAGEDIR_HDL         LINK(this,ScTablePage,PageDirHdl)
@@ -85,7 +79,6 @@ static sal_Bool lcl_PutBoolItem( sal_uInt16            nWhich,
 #define SC_TPTABLE_SCALE_TO         1
 #define SC_TPTABLE_SCALE_TO_PAGES   2
 
-//========================================================================
 
 ScTablePage::ScTablePage( Window* pParent, const SfxItemSet& rCoreAttrs ) :
 
@@ -124,8 +117,6 @@ ScTablePage::ScTablePage( Window* pParent, const SfxItemSet& rCoreAttrs ) :
 
 }
 
-// -----------------------------------------------------------------------
-
 void ScTablePage::ShowImage()
 {
     Image aImg = Image( ScResId( (m_pBtnLeftRight->IsChecked()) ? IMG_LEFTRIGHT : IMG_TOPDOWN ) );
@@ -133,36 +124,26 @@ void ScTablePage::ShowImage()
     m_pBmpPageDir->SetOutputSizePixel( aImg.GetSizePixel() );
 }
 
-// -----------------------------------------------------------------------
-
 ScTablePage::~ScTablePage()
 {
 }
-
-//------------------------------------------------------------------------
 
 sal_uInt16* ScTablePage::GetRanges()
 {
     return pPageTableRanges;
 }
 
-// -----------------------------------------------------------------------
-
 SfxTabPage* ScTablePage::Create( Window* pParent, const SfxItemSet& rCoreSet )
 {
     return ( new ScTablePage( pParent, rCoreSet ) );
 }
-
-// -----------------------------------------------------------------------
 
 void ScTablePage::Reset( const SfxItemSet& rCoreSet )
 {
     sal_Bool    bTopDown = GET_BOOL( SID_SCATTR_PAGE_TOPDOWN, rCoreSet );
     sal_uInt16  nWhich   = 0;
 
-    //-----------
-    // sal_Bool-Flags
-    //-----------
+    // sal_Bool flags
     m_pBtnNotes->Check( GET_BOOL(SID_SCATTR_PAGE_NOTES,rCoreSet) );
     m_pBtnGrid->Check( GET_BOOL(SID_SCATTR_PAGE_GRID,rCoreSet) );
     m_pBtnHeaders->Check( GET_BOOL(SID_SCATTR_PAGE_HEADERS,rCoreSet) );
@@ -171,25 +152,18 @@ void ScTablePage::Reset( const SfxItemSet& rCoreSet )
     m_pBtnTopDown->Check( bTopDown );
     m_pBtnLeftRight->Check( !bTopDown );
 
-    //------------------
-    // Erste Druckseite:
-    //------------------
+    // first printed page:
     sal_uInt16 nPage = GET_USHORT(SID_SCATTR_PAGE_FIRSTPAGENO,rCoreSet);
     m_pBtnPageNo->Check( nPage != 0 );
     m_pEdPageNo->SetValue( (nPage != 0) ? nPage : 1 );
     PageNoHdl( NULL );
 
-    //-------------------
-    // Objektdarstellung:
-    //-------------------
+    // object representation:
     m_pBtnCharts->Check( GET_SHOW( SID_SCATTR_PAGE_CHARTS, rCoreSet ) );
     m_pBtnObjects->Check( GET_SHOW( SID_SCATTR_PAGE_OBJECTS, rCoreSet ) );
     m_pBtnDrawings->Check( GET_SHOW( SID_SCATTR_PAGE_DRAWINGS, rCoreSet ) );
 
-    //------------
-    // Skalierung:
-    //------------
-
+    // scaling:
     nWhich = GetWhich(SID_SCATTR_PAGE_SCALE);
     if ( rCoreSet.GetItemState( nWhich, sal_True ) >= SFX_ITEM_AVAILABLE )
     {
@@ -235,7 +209,7 @@ void ScTablePage::Reset( const SfxItemSet& rCoreSet )
     PageDirHdl( NULL );
     ScaleHdl( NULL );
 
-    // merken fuer FillItemSet
+    // remember for FillItemSet
     m_pBtnFormulas->SaveValue();
     m_pBtnNullVals->SaveValue();
     m_pBtnNotes->SaveValue();
@@ -255,18 +229,13 @@ void ScTablePage::Reset( const SfxItemSet& rCoreSet )
     m_pEdScalePageNum->SaveValue();
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
 {
     const SfxItemSet&   rOldSet      = GetItemSet();
     sal_uInt16              nWhichPageNo = GetWhich(SID_SCATTR_PAGE_FIRSTPAGENO);
     sal_Bool                bDataChanged = false;
 
-    //-----------
-    // sal_Bool-Flags
-    //-----------
-
+    // sal_Bool flags
     bDataChanged |= lcl_PutBoolItem( GetWhich(SID_SCATTR_PAGE_NOTES),
                                      rCoreSet, rOldSet,
                                      m_pBtnNotes->IsChecked(),
@@ -297,9 +266,7 @@ sal_Bool ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
                                      m_pBtnNullVals->IsChecked(),
                                      m_pBtnNullVals->GetSavedValue() != STATE_NOCHECK );
 
-    //------------------
-    // Erste Druckseite:
-    //------------------
+    // first printed page:
     sal_Bool bUseValue = m_pBtnPageNo->IsChecked();
 
     if (   WAS_DEFAULT(nWhichPageNo,rOldSet)
@@ -319,10 +286,7 @@ sal_Bool ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
         bDataChanged = sal_True;
     }
 
-    //-------------------
-    // Objektdarstellung:
-    //-------------------
-
+    // object representation:
     bDataChanged |= lcl_PutVObjModeItem( GetWhich(SID_SCATTR_PAGE_CHARTS),
                                          rCoreSet, rOldSet, *m_pBtnCharts );
 
@@ -332,10 +296,7 @@ sal_Bool ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
     bDataChanged |= lcl_PutVObjModeItem( GetWhich(SID_SCATTR_PAGE_DRAWINGS),
                                          rCoreSet, rOldSet, *m_pBtnDrawings );
 
-    //------------
-    // Skalierung:
-    //------------
-
+    // scaling:
     if( !m_pEdScalePageWidth->GetValue() && !m_pEdScalePageHeight->GetValue() )
     {
         m_pLbScaleMode->SelectEntryPos( SC_TPTABLE_SCALE_PERCENT );
@@ -360,8 +321,6 @@ sal_Bool ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
     return bDataChanged;
 }
 
-//------------------------------------------------------------------------
-
 int ScTablePage::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( pSetP )
@@ -370,8 +329,6 @@ int ScTablePage::DeactivatePage( SfxItemSet* pSetP )
     return LEAVE_PAGE;
 }
 
-//------------------------------------------------------------------------
-
 void ScTablePage::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
@@ -379,17 +336,13 @@ void ScTablePage::DataChanged( const DataChangedEvent& rDCEvt )
     SfxTabPage::DataChanged( rDCEvt );
 }
 
-//------------------------------------------------------------------------
 // Handler:
-//------------------------------------------------------------------------
 
 IMPL_LINK_NOARG(ScTablePage, PageDirHdl)
 {
     ShowImage();
     return 0;
 }
-
-//------------------------------------------------------------------------
 
 IMPL_LINK( ScTablePage, PageNoHdl, CheckBox*, pBtn )
 {
@@ -405,8 +358,6 @@ IMPL_LINK( ScTablePage, PageNoHdl, CheckBox*, pBtn )
     return 0;
 }
 
-//------------------------------------------------------------------------
-
 IMPL_LINK_NOARG(ScTablePage, ScaleHdl)
 {
     // controls for Box "Reduce/enlarge"
@@ -421,9 +372,7 @@ IMPL_LINK_NOARG(ScTablePage, ScaleHdl)
     return 0;
 }
 
-//========================================================================
-// Hilfsfunktionen fuer FillItemSet:
-//========================================================================
+// Helper functions for FillItemSet:
 
 static sal_Bool lcl_PutBoolItem( sal_uInt16            nWhich,
                      SfxItemSet&        rCoreSet,
@@ -441,8 +390,6 @@ static sal_Bool lcl_PutBoolItem( sal_uInt16            nWhich,
 
     return bDataChanged;
 }
-
-//------------------------------------------------------------------------
 
 static sal_Bool lcl_PutVObjModeItem( sal_uInt16            nWhich,
                          SfxItemSet&        rCoreSet,
@@ -462,8 +409,6 @@ static sal_Bool lcl_PutVObjModeItem( sal_uInt16            nWhich,
                                                     : VOBJ_MODE_HIDE ) );
     return bDataChanged;
 }
-
-//------------------------------------------------------------------------
 
 static sal_Bool lcl_PutScaleItem( sal_uInt16               nWhich,
                       SfxItemSet&           rCoreSet,
@@ -515,7 +460,5 @@ static sal_Bool lcl_PutScaleItem2( sal_uInt16               nWhich,
 
     return bDataChanged;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
