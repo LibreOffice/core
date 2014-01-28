@@ -404,30 +404,7 @@ sub create_package
             if (($volume_name_classic_app eq 'LibreOffice' || $volume_name_classic_app eq 'LibreOfficeDev') &&
                 defined($ENV{'MACOSX_CODESIGNING_IDENTITY'}) && $ENV{'MACOSX_CODESIGNING_IDENTITY'} ne "" )
             {
-                # Sign the .app as a whole, which means (re-)signing
-                # the CFBundleExecutable from Info.plist, i.e.
-                # soffice, plus the contents of the Resources tree
-                # (which at the moment is not much, far from all of
-                # our non-code "resources").
-
-                # Don't bother yet to sign each individual .dylib. (We
-                # do that for "make dev-install", but not here.)
-
-                # The executables have already been signed by
-                # gb_LinkTarget__command_dynamiclink in
-                # solenv/gbuild/platform/macosx.mk.
-
-                # Eventually it would be a good idea to re-organise
-                # the app bundle structure to be more Mac-like and
-                # actually put all non-code resources (including
-                # extension scripts!) into Resources so that they
-                # participate in the signing and their validity can be
-                # guaranteed.
-
-                $entitlements = '';
-                $entitlements = "--entitlements $ENV{'BUILDDIR'}/lo.xcent" if defined($ENV{'ENABLE_MACOSX_SANDBOX'});
-
-                $systemcall = "codesign --sign $ENV{'MACOSX_CODESIGNING_IDENTITY'} --force $entitlements -v -v -v $localtempdir/$folder/$volume_name_classic_app.app";
+                $systemcall = "$ENV{'SRCDIR'}/solenv/bin/macosx-codesign-app-bundle $localtempdir/$folder/$volume_name_classic_app.app";
                 print "... $systemcall ...\n";
                 my $returnvalue = system($systemcall);
                 $infoline = "Systemcall: $systemcall\n";
@@ -448,11 +425,9 @@ sub create_package
             }
         }
 
-        $systemcall = "cd $localtempdir && hdiutil makehybrid -hfs -hfs-openfolder $folder $folder -hfs-volume-name \"$volume_name\" -ov -o $installdir/tmp && hdiutil convert -ov -format UDBZ $installdir/tmp.dmg -o $archive && ";
-        if (( $ref ne "" ) && ( $$ref ne "" )) {
-            $systemcall .= "hdiutil unflatten $archive && Rez -a $$ref -o $archive && hdiutil flatten $archive &&";
-        }
-        $systemcall .= "rm -f $installdir/tmp.dmg";
+        # makehybrid doesn't preserve extended attributes (needed when codesigning data files like .jar)
+        # unfortunately this method is slower than makehybrid followed by convert
+        $systemcall = "cd $localtempdir && hdiutil create -srcfolder $folder -volname \"$volume_name\" -ov -format UDBZ $archive";
     }
     else
     {
