@@ -194,7 +194,6 @@ class AutoRecovery  : private osl::Mutex
                     , public  AutoRecovery_BASE
                     , public  ::cppu::OPropertySetHelper            // => XPropertySet, XFastPropertySet, XMultiPropertySet
 {
-    using cppu::WeakComponentImplHelperBase::rBHelper;
 public:
 
     /** These values are used as flags and represent the current state of a document.
@@ -1382,7 +1381,7 @@ void DispatchParams::forget()
 //-----------------------------------------------
 AutoRecovery::AutoRecovery(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : AutoRecovery_BASE         (*static_cast<Mutex *>(this))
-    , ::cppu::OPropertySetHelper(rBHelper)
+    , ::cppu::OPropertySetHelper(cppu::WeakComponentImplHelperBase::rBHelper)
     , m_xContext                (xContext                                           )
     , m_bListenForDocEvents     (sal_False                                          )
     , m_bListenForConfigChanges (sal_False                                          )
@@ -1391,7 +1390,7 @@ AutoRecovery::AutoRecovery(const css::uno::Reference< css::uno::XComponentContex
     , m_aAsyncDispatcher        ( LINK( this, AutoRecovery, implts_asyncDispatch )  )
     , m_eTimerType              (E_DONT_START_TIMER                                 )
     , m_nIdPool                 (0                                                  )
-    , m_lListener               (rBHelper.rMutex)
+    , m_lListener               (cppu::WeakComponentImplHelperBase::rBHelper.rMutex)
     , m_nDocCacheLock           (0                                                  )
     , m_nMinSpaceDocSave        (MIN_DISCSPACE_DOCSAVE                              )
     , m_nMinSpaceConfigSave     (MIN_DISCSPACE_CONFIGSAVE                           )
@@ -1456,7 +1455,7 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
     sal_Bool bAsync;
     DispatchParams aParams;
     /* SAFE */ {
-    osl::MutexGuard g(rBHelper.rMutex);
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     // still running operation ... ignoring AUTO_SAVE.
     // All other requests has higher prio!
@@ -1543,7 +1542,7 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
 {
     sal_Int32 eJob;
     /* SAFE */ {
-    osl::MutexGuard g(rBHelper.rMutex);
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
     eJob = m_eJob;
     } /* SAFE */
 
@@ -1652,7 +1651,7 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
     aListenerInformer.stop();
 
     /* SAFE */ {
-    osl::MutexGuard g(rBHelper.rMutex);
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
     m_eJob = E_NO_JOB;
     if (
         (bAllowAutoSaveReactivation) &&
@@ -1687,10 +1686,10 @@ void SAL_CALL AutoRecovery::addStatusListener(const css::uno::Reference< css::fr
     m_lListener.addInterface(aURL.Complete, xListener);
 
     // REENTRANT !? -> --------------------------------
-    CacheLockGuard aCacheLock(this, rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
+    CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
 
     /* SAFE */ {
-    osl::ResettableMutexGuard g(rBHelper.rMutex);
+    osl::ResettableMutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     AutoRecovery::TDocumentList::iterator pIt;
     for(  pIt  = m_lDocCache.begin();
@@ -1801,7 +1800,7 @@ void SAL_CALL AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEven
     sal_Int32 i = 0;
 
     /* SAFE */ {
-    osl::ResettableMutexGuard g(rBHelper.rMutex);
+    osl::ResettableMutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     // Changes of the configuration must be ignored if AutoSave/Recovery was disabled for this
     // office session. That can happen if e.g. the command line arguments "--norestore" or "--headless"
@@ -1860,7 +1859,7 @@ void SAL_CALL AutoRecovery::disposing(const css::lang::EventObject& aEvent)
     throw(css::uno::RuntimeException)
 {
     /* SAFE */ {
-    osl::MutexGuard g(rBHelper.rMutex);
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     if (aEvent.Source == m_xNewDocBroadcaster)
     {
@@ -1891,7 +1890,7 @@ void SAL_CALL AutoRecovery::disposing(const css::lang::EventObject& aEvent)
 css::uno::Reference< css::container::XNameAccess > AutoRecovery::implts_openConfig()
 {
     /* SAFE */ {
-    osl::MutexGuard g(rBHelper.rMutex);
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     if (m_xRecoveryCFG.is())
         return m_xRecoveryCFG;
@@ -1931,7 +1930,7 @@ css::uno::Reference< css::container::XNameAccess > AutoRecovery::implts_openConf
     }
 
     /* SAFE */ {
-    osl::MutexGuard g(rBHelper.rMutex);
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
     m_xRecoveryCFG        = xCFG;
     m_nMinSpaceDocSave    = nMinSpaceDocSave;
     m_nMinSpaceConfigSave = nMinSpaceConfigSave;
@@ -1954,7 +1953,7 @@ void AutoRecovery::implts_readAutoSaveConfig()
     xCommonRegistry->getByHierarchicalName(OUString(CFG_ENTRY_USERAUTOSAVE_ENABLED)) >>= bUserEnabled;
 
     /* SAFE */ {
-    osl::MutexGuard g(rBHelper.rMutex);
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
     if (bEnabled)
     {
         m_eJob       |= AutoRecovery::E_AUTO_SAVE;
@@ -1981,7 +1980,7 @@ void AutoRecovery::implts_readAutoSaveConfig()
     xCommonRegistry->getByHierarchicalName(OUString(CFG_ENTRY_AUTOSAVE_TIMEINTERVALL)) >>= nTimeIntervall;
 
     /* SAFE */ {
-    osl::MutexGuard g(rBHelper.rMutex);
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
     m_nAutoSaveTimeIntervall = nTimeIntervall;
     } /* SAFE */
 }
@@ -1994,10 +1993,10 @@ void AutoRecovery::implts_readConfig()
     css::uno::Reference< css::container::XHierarchicalNameAccess > xCommonRegistry(implts_openConfig(), css::uno::UNO_QUERY);
 
     // REENTRANT -> --------------------------------
-    CacheLockGuard aCacheLock(this, rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_ADD_REMOVE);
+    CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_ADD_REMOVE);
 
     /* SAFE */ {
-    osl::MutexGuard g(rBHelper.rMutex);
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
     // reset current cache load cache
     m_lDocCache.clear();
     m_nIdPool = 0;
@@ -2049,7 +2048,7 @@ void AutoRecovery::implts_readConfig()
                 OUString sID = pItems[i].copy(sRECOVERY_ITEM_BASE_IDENTIFIER.getLength());
                 aInfo.ID = sID.toInt32();
                 /* SAFE */ {
-                osl::MutexGuard g(rBHelper.rMutex);
+                osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
                 if (aInfo.ID > m_nIdPool)
                 {
                     m_nIdPool = aInfo.ID+1;
@@ -2061,7 +2060,7 @@ void AutoRecovery::implts_readConfig()
                 SAL_INFO("fwk", "AutoRecovery::implts_readConfig(): Who changed numbering of recovery items? Cache will be inconsistent then! I do not know, what will happen next time .-)");
 
             /* SAFE */ {
-            osl::MutexGuard g(rBHelper.rMutex);
+            osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
             m_lDocCache.push_back(aInfo);
             } /* SAFE */
         }
@@ -2085,7 +2084,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
 
     css::uno::Reference< css::container::XNameAccess> xCFG;
     /* SAFE */ {
-    osl::MutexGuard g(rBHelper.rMutex);
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
     xCFG = m_xModuleCFG;
     } /* SAFE */
 
@@ -2100,7 +2099,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
                 css::uno::UNO_QUERY_THROW);
 
             /* SAFE */ {
-            osl::MutexGuard g2(rBHelper.rMutex);
+            osl::MutexGuard g2(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
             m_xModuleCFG = xCFG;
             } /* SAFE */
         }
@@ -2198,7 +2197,7 @@ void AutoRecovery::implts_collectActiveViewNames( AutoRecovery::TDocumentInfo& i
 //-----------------------------------------------
 void AutoRecovery::implts_persistAllActiveViewNames()
 {
-    osl::MutexGuard g(rBHelper.rMutex);
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     // This list will be filled with every document
     AutoRecovery::TDocumentList::iterator pIt;
@@ -2300,7 +2299,7 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
 
             sal_Int32 nMinSpaceConfigSave;
             /* SAFE */ {
-            osl::MutexGuard g(rBHelper.rMutex);
+            osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
             nMinSpaceConfigSave = m_nMinSpaceConfigSave;
             } /* SAFE */
 
@@ -2324,7 +2323,7 @@ void AutoRecovery::implts_startListening()
     css::uno::Reference< css::frame::XGlobalEventBroadcaster > xBroadcaster;
     sal_Bool bListenForDocEvents;
     /* SAFE */ {
-    osl::MutexGuard g(rBHelper.rMutex);
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
     xCFG.set              (m_xRecoveryCFG, css::uno::UNO_QUERY);
     xBroadcaster        = m_xNewDocBroadcaster;
     bListenForDocEvents = m_bListenForDocEvents;
@@ -2344,7 +2343,7 @@ void AutoRecovery::implts_startListening()
     {
         xBroadcaster = css::frame::theGlobalEventBroadcaster::get(m_xContext);
         /* SAFE */ {
-        osl::MutexGuard g2(rBHelper.rMutex);
+        osl::MutexGuard g2(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
         m_xNewDocBroadcaster = xBroadcaster;
         } /* SAFE */
     }
@@ -2357,7 +2356,7 @@ void AutoRecovery::implts_startListening()
         m_xNewDocBroadcasterListener = new WeakDocumentEventListener(this);
         xBroadcaster->addEventListener(m_xNewDocBroadcasterListener);
         /* SAFE */ {
-        osl::MutexGuard g2(rBHelper.rMutex);
+        osl::MutexGuard g2(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
         m_bListenForDocEvents = sal_True;
         } /* SAFE */
     }
@@ -2369,7 +2368,7 @@ void AutoRecovery::implts_stopListening()
     css::uno::Reference< css::util::XChangesNotifier > xCFG;
     css::uno::Reference< css::document::XEventBroadcaster > xGlobalEventBroadcaster;
     /* SAFE */ {
-    osl::MutexGuard g(rBHelper.rMutex);
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
     // Attention: Dont reset our internal members here too.
     // May be we must work with our configuration, but dont wish to be informed
     // about changes any longer. Needed e.g. during EMERGENCY_SAVE!
@@ -2432,7 +2431,7 @@ void AutoRecovery::implts_updateTimer()
     implts_stopTimer();
 
     /* SAFE */ {
-    osl::MutexGuard g(rBHelper.rMutex);
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     if (
         (m_eJob       == AutoRecovery::E_NO_JOB          ) || // TODO may be superflous - E_DONT_START_TIMER should be used only
@@ -2469,7 +2468,7 @@ void AutoRecovery::implts_updateTimer()
 //-----------------------------------------------
 void AutoRecovery::implts_stopTimer()
 {
-    osl::MutexGuard g(rBHelper.rMutex);
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     if (!m_aTimer.IsActive())
         return;
@@ -2495,7 +2494,7 @@ IMPL_LINK_NOARG(AutoRecovery, implts_timerExpired)
         // was set. But normaly the timer was disabled if recovery was disabled ...
         // But so we are more "safe" .-)
         /* SAFE */ {
-        osl::MutexGuard g(rBHelper.rMutex);
+        osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
         if ((m_eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) == AutoRecovery::E_DISABLE_AUTORECOVERY)
            return 0;
         } /* SAFE */
@@ -2507,7 +2506,7 @@ IMPL_LINK_NOARG(AutoRecovery, implts_timerExpired)
         if (bAutoSaveNotAllowed)
         {
             /* SAFE */ {
-            osl::MutexGuard g(rBHelper.rMutex);
+            osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
             m_eTimerType = AutoRecovery::E_POLL_TILL_AUTOSAVE_IS_ALLOWED;
             } /* SAFE */
             implts_updateTimer();
@@ -2518,7 +2517,7 @@ IMPL_LINK_NOARG(AutoRecovery, implts_timerExpired)
         // If we poll for an user idle period, may be we must
         // do nothing here and start the timer again.
         /* SAFE */ {
-        osl::MutexGuard g(rBHelper.rMutex);
+        osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
         if (m_eTimerType == AutoRecovery::E_POLL_FOR_USER_IDLE)
         {
@@ -2560,7 +2559,7 @@ IMPL_LINK_NOARG(AutoRecovery, implts_timerExpired)
 
         // restart timer - because it was disabled before ...
         /* SAFE */ {
-        osl::MutexGuard g(rBHelper.rMutex);
+        osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
         m_eTimerType = eSuggestedTimer;
         } /* SAFE */
 
@@ -2578,7 +2577,7 @@ IMPL_LINK_NOARG(AutoRecovery, implts_asyncDispatch)
 {
     DispatchParams aParams;
     /* SAFE */ {
-    osl::MutexGuard g(rBHelper.rMutex);
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
     aParams = m_aDispatchParams;
     css::uno::Reference< css::uno::XInterface > xHoldRefForMethodAlive = aParams.m_xHoldRefForAsyncOpAlive;
     m_aDispatchParams.forget(); // clears all members ... including the ref-hold object .-)
@@ -2601,7 +2600,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     if (!xDocument.is())
         return;
 
-    CacheLockGuard aCacheLock(this, rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
+    CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
 
     // notification for already existing document !
     // Can happen if events came in asynchronous on recovery time.
@@ -2698,7 +2697,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
 
     AutoRecovery::TDocumentInfo aInfo;
     /* SAFE */ {
-    osl::MutexGuard g(rBHelper.rMutex);
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     // create a new cache entry ... this document isn't known.
     ++m_nIdPool;
@@ -2723,11 +2722,11 @@ void AutoRecovery::implts_deregisterDocument(const css::uno::Reference< css::fra
 {
     AutoRecovery::TDocumentInfo aInfo;
     /* SAFE */ {
-    osl::MutexGuard g(rBHelper.rMutex);
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     // Attention: Dont leave SAFE section, if you work with pIt!
     // Because it points directly into the m_lDocCache list ...
-    CacheLockGuard aCacheLock(this, rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
+    CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
 
     AutoRecovery::TDocumentList::iterator pIt = AutoRecovery::impl_searchDocument(m_lDocCache, xDocument);
     if (pIt == m_lDocCache.end())
@@ -2744,7 +2743,7 @@ void AutoRecovery::implts_deregisterDocument(const css::uno::Reference< css::fra
     if (aInfo.IgnoreClosing)
         return;
 
-    CacheLockGuard aCacheLock2(this, rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_ADD_REMOVE);
+    CacheLockGuard aCacheLock2(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_ADD_REMOVE);
     pIt = AutoRecovery::impl_searchDocument(m_lDocCache, xDocument);
     if (pIt != m_lDocCache.end())
         m_lDocCache.erase(pIt);
@@ -2768,10 +2767,10 @@ void AutoRecovery::implts_deregisterDocument(const css::uno::Reference< css::fra
 //-----------------------------------------------
 void AutoRecovery::implts_markDocumentModifiedAgainstLastBackup(const css::uno::Reference< css::frame::XModel >& xDocument)
 {
-    CacheLockGuard aCacheLock(this, rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
+    CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
 
     /* SAFE */ {
-    osl::MutexGuard g(rBHelper.rMutex);
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     AutoRecovery::TDocumentList::iterator pIt = AutoRecovery::impl_searchDocument(m_lDocCache, xDocument);
     if (pIt != m_lDocCache.end())
@@ -2790,10 +2789,10 @@ void AutoRecovery::implts_markDocumentModifiedAgainstLastBackup(const css::uno::
 //-----------------------------------------------
 void AutoRecovery::implts_updateModifiedState(const css::uno::Reference< css::frame::XModel >& xDocument)
 {
-    CacheLockGuard aCacheLock(this, rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
+    CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
 
     /* SAFE */ {
-    osl::MutexGuard g(rBHelper.rMutex);
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     AutoRecovery::TDocumentList::iterator pIt = AutoRecovery::impl_searchDocument(m_lDocCache, xDocument);
     if (pIt != m_lDocCache.end())
@@ -2822,10 +2821,10 @@ void AutoRecovery::implts_updateModifiedState(const css::uno::Reference< css::fr
 void AutoRecovery::implts_updateDocumentUsedForSavingState(const css::uno::Reference< css::frame::XModel >& xDocument      ,
                                                                  sal_Bool                                   bSaveInProgress)
 {
-    CacheLockGuard aCacheLock(this, rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
+    CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
 
     /* SAFE */ {
-    osl::MutexGuard g(rBHelper.rMutex);
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     AutoRecovery::TDocumentList::iterator pIt = AutoRecovery::impl_searchDocument(m_lDocCache, xDocument);
     if (pIt == m_lDocCache.end())
@@ -2839,13 +2838,13 @@ void AutoRecovery::implts_updateDocumentUsedForSavingState(const css::uno::Refer
 //-----------------------------------------------
 void AutoRecovery::implts_markDocumentAsSaved(const css::uno::Reference< css::frame::XModel >& xDocument)
 {
-    CacheLockGuard aCacheLock(this, rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
+    CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
 
     AutoRecovery::TDocumentInfo aInfo;
     OUString sRemoveURL1;
     OUString sRemoveURL2;
     /* SAFE */ {
-    osl::MutexGuard g(rBHelper.rMutex);
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     AutoRecovery::TDocumentList::iterator pIt = AutoRecovery::impl_searchDocument(m_lDocCache, xDocument);
     if (pIt == m_lDocCache.end())
@@ -2975,7 +2974,7 @@ void AutoRecovery::implts_prepareSessionShutdown()
     // b) close it without showing any UI!
 
     /* SAFE */ {
-    CacheLockGuard aCacheLock(this, rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
+    CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
 
     AutoRecovery::TDocumentList::iterator pIt;
     for (  pIt  = m_lDocCache.begin();
@@ -3090,10 +3089,10 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(      sal_Bool        bAl
 
     sal_Int32 eJob = m_eJob;
 
-    CacheLockGuard aCacheLock(this, rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
+    CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
 
     /* SAFE */ {
-    osl::ResettableMutexGuard g(rBHelper.rMutex);
+    osl::ResettableMutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     // This list will be filled with every document
     // which should be saved as last one. E.g. if it was used
@@ -3312,7 +3311,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
 
             sal_Int32 nMinSpaceDocSave;
             /* SAFE */ {
-            osl::MutexGuard g(rBHelper.rMutex);
+            osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
             nMinSpaceDocSave = m_nMinSpaceDocSave;
             } /* SAFE */
 
@@ -3368,10 +3367,10 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
 {
     AutoRecovery::ETimerType eTimer = AutoRecovery::E_DONT_START_TIMER;
 
-    CacheLockGuard aCacheLock(this, rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
+    CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
 
     /* SAFE */ {
-    osl::ResettableMutexGuard g(rBHelper.rMutex);
+    osl::ResettableMutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     sal_Int32                             eJob = m_eJob;
     AutoRecovery::TDocumentList::iterator pIt;
@@ -3842,10 +3841,10 @@ css::frame::FeatureStateEvent AutoRecovery::implst_createFeatureStateEvent(     
 //-----------------------------------------------
 void AutoRecovery::implts_resetHandleStates(sal_Bool /*bLoadCache*/)
 {
-    CacheLockGuard aCacheLock(this, rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
+    CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
 
     /* SAFE */ {
-    osl::ResettableMutexGuard g(rBHelper.rMutex);
+    osl::ResettableMutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     AutoRecovery::TDocumentList::iterator pIt;
     for (  pIt  = m_lDocCache.begin();
@@ -4060,7 +4059,7 @@ void AutoRecovery::implts_doSessionRestore(const DispatchParams& aParams)
 //-----------------------------------------------
 void AutoRecovery::implts_backupWorkingEntry(const DispatchParams& aParams)
 {
-    CacheLockGuard aCacheLock(this, rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
+    CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
 
     AutoRecovery::TDocumentList::iterator pIt;
     for (  pIt  = m_lDocCache.begin();
@@ -4097,7 +4096,7 @@ void AutoRecovery::implts_backupWorkingEntry(const DispatchParams& aParams)
 //-----------------------------------------------
 void AutoRecovery::implts_cleanUpWorkingEntry(const DispatchParams& aParams)
 {
-    CacheLockGuard aCacheLock(this, rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_ADD_REMOVE);
+    CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_ADD_REMOVE);
 
     AutoRecovery::TDocumentList::iterator pIt;
     for (  pIt  = m_lDocCache.begin();
@@ -4500,7 +4499,7 @@ void AutoRecovery::impl_flushALLConfigChanges()
     {
         css::uno::Reference< css::uno::XInterface > xRecoveryCfg;
         /* SAFE */ {
-        osl::MutexGuard g(rBHelper.rMutex);
+        osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
         xRecoveryCfg.set(m_xRecoveryCFG, css::uno::UNO_QUERY);
         } /* SAFE */
 
