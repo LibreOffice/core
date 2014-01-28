@@ -147,7 +147,7 @@ ScXMLNamedRangeContext::ScXMLNamedRangeContext(
             break;
         }
     }
-    pNamedExpression->bIsExpression = sal_False;
+    pNamedExpression->bIsExpression = false;
     mpInserter->insert(pNamedExpression);
 }
 

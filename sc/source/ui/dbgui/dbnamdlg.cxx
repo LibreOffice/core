@@ -442,7 +442,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
 
                     pOldEntry->MoveTo( aStart.Tab(), aStart.Col(), aStart.Row(),
                                                         aEnd.Col(), aEnd.Row() );
-                    pOldEntry->SetByRow( sal_True );
+                    pOldEntry->SetByRow( true );
                     pOldEntry->SetHeader( m_pBtnHeader->IsChecked() );
                     pOldEntry->SetDoSize( m_pBtnDoSize->IsChecked() );
                     pOldEntry->SetKeepFmt( m_pBtnKeepFmt->IsChecked() );
@@ -455,7 +455,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
                     ScDBData* pNewEntry = new ScDBData( aNewName, aStart.Tab(),
                                                         aStart.Col(), aStart.Row(),
                                                         aEnd.Col(), aEnd.Row(),
-                                                        sal_True, m_pBtnHeader->IsChecked() );
+                                                        true, m_pBtnHeader->IsChecked() );
                     pNewEntry->SetDoSize( m_pBtnDoSize->IsChecked() );
                     pNewEntry->SetKeepFmt( m_pBtnKeepFmt->IsChecked() );
                     pNewEntry->SetStripData( m_pBtnStripData->IsChecked() );

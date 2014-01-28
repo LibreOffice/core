@@ -904,7 +904,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
     //  MergeChangeData in das aktuelle Dokument uebernehmen
     sal_Bool bHasRejected = false;
     OUString aOldUser = pThisTrack->GetUser();
-    pThisTrack->SetUseFixDateTime( sal_True );
+    pThisTrack->SetUseFixDateTime( true );
     ScMarkData& rMarkData = pViewSh->GetViewData()->GetMarkData();
     ScMarkData aOldMarkData( rMarkData );
     pSourceAction = pFirstMergeAction;
@@ -1048,10 +1048,10 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                         }
                         break;
                         case SC_CAT_INSERT_ROWS:
-                            GetDocFunc().InsertCells( aSourceRange, NULL, INS_INSROWS, sal_True, false );
+                            GetDocFunc().InsertCells( aSourceRange, NULL, INS_INSROWS, true, false );
                         break;
                         case SC_CAT_INSERT_COLS:
-                            GetDocFunc().InsertCells( aSourceRange, NULL, INS_INSCOLS, sal_True, false );
+                            GetDocFunc().InsertCells( aSourceRange, NULL, INS_INSCOLS, true, false );
                         break;
                         case SC_CAT_DELETE_TABS :
                             GetDocFunc().DeleteTable( aSourceRange.aStart.Tab(), sal_True, false );
@@ -1062,7 +1062,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             if ( pDel->IsTopDelete() )
                             {
                                 aSourceRange = pDel->GetOverAllRange().MakeRange();
-                                GetDocFunc().DeleteCells( aSourceRange, NULL, DEL_DELROWS, sal_True, false );
+                                GetDocFunc().DeleteCells( aSourceRange, NULL, DEL_DELROWS, true, false );
 
                                 // #i101099# [Collaboration] Changes are not correctly shown
                                 if ( bShared )
@@ -1082,7 +1082,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             if ( pDel->IsTopDelete() && !pDel->IsTabDeleteCol() )
                             {   // deleted Table enthaelt deleted Cols, die nicht
                                 aSourceRange = pDel->GetOverAllRange().MakeRange();
-                                GetDocFunc().DeleteCells( aSourceRange, NULL, DEL_DELCOLS, sal_True, false );
+                                GetDocFunc().DeleteCells( aSourceRange, NULL, DEL_DELCOLS, true, false );
                             }
                         }
                         break;

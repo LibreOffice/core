@@ -467,7 +467,7 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
     {
         if(aCode.GetCode() == KEY_SPACE )
         {
-            bUsed = sal_True;
+            bUsed = true;
             sal_uInt16 nType;
             sal_uLong nChild;
             SvTreeListEntry* pEntry = GetCurEntry();
@@ -1263,7 +1263,7 @@ static void lcl_DoDragObject( ScDocShell* pSrcShell, const OUString& rName, sal_
 static void lcl_DoDragCells( ScDocShell* pSrcShell, const ScRange& rRange, sal_uInt16 nFlags, Window* pWin )
 {
     ScMarkData aMark;
-    aMark.SelectTable( rRange.aStart.Tab(), sal_True );
+    aMark.SelectTable( rRange.aStart.Tab(), true );
     aMark.SetMarkArea( rRange );
 
     ScDocument* pSrcDoc = pSrcShell->GetDocument();

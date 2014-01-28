@@ -46,7 +46,7 @@ sal_Bool MemNew( void )
     pValueFormCache = new FormCache( pDoc );
 
     // fuer tool.cxx::PutFormString()
-    pAttrUnprot = new ScProtectionAttr( sal_True );
+    pAttrUnprot = new ScProtectionAttr( true );
     pAttrRight = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_RIGHT, ATTR_HOR_JUSTIFY );
     pAttrLeft = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_LEFT, ATTR_HOR_JUSTIFY );
     pAttrCenter = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY );

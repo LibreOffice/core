@@ -217,7 +217,7 @@ void FuMarkRect::Activate()
     ScMarkData& rMark = pViewData->GetMarkData();
 
     if ( !rMark.IsMultiMarked() && !rMark.IsMarked() )
-        pViewShell->MarkDataArea( sal_True );
+        pViewShell->MarkDataArea( true );
 
     pViewData->GetMultiArea( aSourceRange );        // Mehrfachselektion erlaubt
 

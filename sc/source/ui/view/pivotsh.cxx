@@ -130,7 +130,7 @@ void ScPivotShell::Execute( SfxRequest& rReq )
                     ScDPObject aNewObj( *pDPObj );
                     aNewObj.SetSheetDesc( aNewDesc );
                     ScDBDocFunc aFunc( *pViewData->GetDocShell() );
-                    aFunc.DataPilotUpdate( pDPObj, &aNewObj, sal_True, false );
+                    aFunc.DataPilotUpdate( pDPObj, &aNewObj, true, false );
                     pViewData->GetView()->CursorPosChanged();       // shells may be switched
                 }
                 delete pDlg;

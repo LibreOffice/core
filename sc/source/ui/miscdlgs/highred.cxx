@@ -140,7 +140,7 @@ void ScHighlightChgDlg::Init()
         OUString aRefStr(pRangeEntry->Format(ABS_DREF3D, pDoc));
         aFilterCtr.SetRange(aRefStr);
     }
-    aFilterCtr.Enable(sal_True,sal_True);
+    aFilterCtr.Enable(true,true);
     HighlightHandle(&aHighlightBox);
 }
 
@@ -193,13 +193,13 @@ IMPL_LINK( ScHighlightChgDlg, HighlightHandle, CheckBox*, pCb )
     {
         if(aHighlightBox.IsChecked())
         {
-            aFilterCtr.Enable(sal_True,sal_True);
+            aFilterCtr.Enable(true,true);
             aCbAccept.Enable();
             aCbReject.Enable();
         }
         else
         {
-            aFilterCtr.Disable(sal_True);
+            aFilterCtr.Disable(true);
             aCbAccept.Disable();
             aCbReject.Disable();
         }

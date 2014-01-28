@@ -169,7 +169,7 @@ SvTreeListEntry *ScCalcOptionsDialog::createBoolItem(const OUString &rCaption, b
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
     pEntry->AddItem(new SvLBoxString(pEntry, 0, OUString()));
-    pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, Image(), Image(), 0));
+    pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, Image(), Image(), false));
     OptionString* pItem = new OptionString(rCaption, toString(bValue));
     pEntry->AddItem(pItem);
     return pEntry;
@@ -248,7 +248,7 @@ void ScCalcOptionsDialog::FillOptionsList()
         // Syntax for INDIRECT function.
         SvTreeListEntry* pEntry = new SvTreeListEntry;
         pEntry->AddItem(new SvLBoxString(pEntry, 0, OUString()));
-        pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, Image(), Image(), 0));
+        pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, Image(), Image(), false));
         OptionString* pItem = new OptionString(
             maCaptionStringRefSyntax, toString(maConfig.meStringRefAddressSyntax));
         pEntry->AddItem(pItem);

@@ -182,7 +182,7 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     pTextColor( NULL ),
     pFormulaColor( NULL ),
     aGridColor( COL_BLACK ),
-    mbShowNullValues( sal_True ),
+    mbShowNullValues( true ),
     mbShowFormulas( false ),
     bShowSpellErrors( false ),
     bMarkClipped( false ),          // sal_False fuer Drucker/Metafile etc.
@@ -586,7 +586,7 @@ void ScOutputData::SetPagebreakMode( ScPageBreakData* pPageData )
                                            pThisRowInfo->nRowNo <= nEndY )
             {
                 for (SCCOL nX=nStartX; nX<=nEndX; nX++)
-                    pThisRowInfo->pCellInfo[nX+1].bPrinted = sal_True;
+                    pThisRowInfo->pCellInfo[nX+1].bPrinted = true;
             }
         }
     }
@@ -627,7 +627,7 @@ void ScOutputData::FindRotated()
                     if (nDir != SC_ROTDIR_NONE)
                     {
                         pInfo->nRotateDir = nDir;
-                        bAnyRotated = sal_True;
+                        bAnyRotated = true;
                     }
                 }
             }

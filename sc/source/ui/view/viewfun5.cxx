@@ -79,7 +79,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                     SCCOL nPosX, SCROW nPosY, Point* pLogicPos, sal_Bool bLink, sal_Bool bAllowDialogs )
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
-    pDoc->SetPastingDrawFromOtherDoc( sal_True );
+    pDoc->SetPastingDrawFromOtherDoc( true );
 
     Point aPos;                     //  inserting position (1/100 mm)
     if (pLogicPos)

@@ -3253,10 +3253,10 @@ bool XclImpSimpleDffConverter::GetColorFromPalette( sal_uInt16 nIndex, Color& rC
     ColorData nColor = GetPalette().GetColorData( static_cast< sal_uInt16 >( nIndex ) );
 
     if( nColor == COL_AUTO )
-        return 0;
+        return false;
 
     rColor.SetColor( nColor );
-    return 1;
+    return true;
 }
 
 XclImpDffConverter::XclImpDffConvData::XclImpDffConvData(

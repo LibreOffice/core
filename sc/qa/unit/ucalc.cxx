@@ -164,7 +164,7 @@ void Test::tearDown()
             os << message << " took " << dfscaled << " pseudo-cycles (" << df << " real-time seconds), expected: " << time << " pseudo-cycles."; \
             CPPUNIT_FAIL(os.str().c_str()); \
         } \
-    } while (0)
+    } while (false)
 
 void Test::testPerf()
 {

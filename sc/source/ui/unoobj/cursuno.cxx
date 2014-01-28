@@ -369,7 +369,7 @@ void SAL_CALL ScCellCursorObj::gotoNext() throw(uno::RuntimeException)
     SCTAB nTab  = aCursor.Tab();
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
-        pDocSh->GetDocument()->GetNextPos( nNewX,nNewY, nTab,  1,0, false,sal_True, aMark );
+        pDocSh->GetDocument()->GetNextPos( nNewX,nNewY, nTab,  1,0, false,true, aMark );
     //! sonst Exception oder so
 
     SetNewRange( ScRange( nNewX, nNewY, nTab ) );
@@ -391,7 +391,7 @@ void SAL_CALL ScCellCursorObj::gotoPrevious() throw(uno::RuntimeException)
     SCTAB nTab  = aCursor.Tab();
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
-        pDocSh->GetDocument()->GetNextPos( nNewX,nNewY, nTab, -1,0, false,sal_True, aMark );
+        pDocSh->GetDocument()->GetNextPos( nNewX,nNewY, nTab, -1,0, false,true, aMark );
     //! sonst Exception oder so
 
     SetNewRange( ScRange( nNewX, nNewY, nTab ) );

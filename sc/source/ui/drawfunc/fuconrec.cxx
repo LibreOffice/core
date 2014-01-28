@@ -137,7 +137,7 @@ sal_Bool FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                     ((SdrTextObj*)pObj)->ForceOutlinerParaObject();
                 OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
                 if( pOPO && !pOPO->IsVertical() )
-                    pOPO->SetVertical( sal_True );
+                    pOPO->SetVertical( true );
             }
         }
 

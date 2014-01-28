@@ -1033,26 +1033,26 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     {
     case SVX_ADJUST_LEFT:
         {
-            rDestSet.Put( SfxBoolItem( SID_ALIGNLEFT, sal_True ) );
-            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_LEFT, sal_True ) );
+            rDestSet.Put( SfxBoolItem( SID_ALIGNLEFT, true ) );
+            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_LEFT, true ) );
         }
         break;
     case SVX_ADJUST_CENTER:
         {
-            rDestSet.Put( SfxBoolItem( SID_ALIGNCENTERHOR, sal_True ) );
-            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_CENTER, sal_True ) );
+            rDestSet.Put( SfxBoolItem( SID_ALIGNCENTERHOR, true ) );
+            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_CENTER, true ) );
         }
         break;
     case SVX_ADJUST_RIGHT:
         {
-            rDestSet.Put( SfxBoolItem( SID_ALIGNRIGHT, sal_True ) );
-            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, sal_True ) );
+            rDestSet.Put( SfxBoolItem( SID_ALIGNRIGHT, true ) );
+            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, true ) );
         }
         break;
     case SVX_ADJUST_BLOCK:
         {
-            rDestSet.Put( SfxBoolItem( SID_ALIGNBLOCK, sal_True ) );
-            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, sal_True ) );
+            rDestSet.Put( SfxBoolItem( SID_ALIGNBLOCK, true ) );
+            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, true ) );
         }
         break;
         default:
@@ -1100,13 +1100,13 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     switch( nLineSpace )
     {
         case 100:
-            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_10, sal_True ) );
+            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_10, true ) );
             break;
         case 150:
-            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_15, sal_True ) );
+            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_15, true ) );
             break;
         case 200:
-            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_20, sal_True ) );
+            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_20, true ) );
             break;
     }
 
@@ -1115,9 +1115,9 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     SvxEscapement eEsc = (SvxEscapement) ( (const SvxEscapementItem&)
                     aAttrSet.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
     if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
-        rDestSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, sal_True ) );
+        rDestSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, true ) );
     else if( eEsc == SVX_ESCAPEMENT_SUBSCRIPT )
-        rDestSet.Put( SfxBoolItem( SID_SET_SUB_SCRIPT, sal_True ) );
+        rDestSet.Put( SfxBoolItem( SID_SET_SUB_SCRIPT, true ) );
 
     //  Unterstreichung
 
@@ -1142,7 +1142,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
             default:
                 break;
         }
-        rDestSet.Put( SfxBoolItem( nId, sal_True ) );
+        rDestSet.Put( SfxBoolItem( nId, true ) );
     }
 
     //  horizontal / vertical
@@ -1261,7 +1261,7 @@ void ScDrawTextObjectBar::GetStatePropPanelAttr(SfxItemSet &rSet)
                 }
                 else
                 {
-                    rSet.Put(SfxBoolItem(nSlotId, sal_False));
+                    rSet.Put(SfxBoolItem(nSlotId, false));
                 }
                 break;
         }

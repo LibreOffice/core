@@ -513,7 +513,7 @@ void XclImpAutoFilterData::InsertQueryParam()
             pCurrDBData->SetAdvancedQuerySource( &aAdvRange );
         else
         {
-            pCurrDBData->SetAutoFilter( sal_True );
+            pCurrDBData->SetAutoFilter( true );
             SetCellAttribs();
         }
     }
@@ -733,7 +733,7 @@ void XclImpAutoFilterData::SetExtractPos( const ScAddress& rAddr )
     aParam.nDestRow = rAddr.Row();
     aParam.nDestTab = rAddr.Tab();
     aParam.bInplace = false;
-    aParam.bDestPers = sal_True;
+    aParam.bDestPers = true;
 }
 
 void XclImpAutoFilterData::Apply()

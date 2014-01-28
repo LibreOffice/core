@@ -80,7 +80,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
             case T_TABLE:
             {
                 if( aDifParser.nVector != 0 || aDifParser.nVal != 1 )
-                    bSyntErrWarn = sal_True;
+                    bSyntErrWarn = true;
                 if( bData )
                     pDoc->RenameTab( nBaseTab, aData );
             }
@@ -100,7 +100,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
             case T_DATA:
             {
                 if( aDifParser.nVector != 0 || aDifParser.nVal != 0 )
-                    bSyntErrWarn = sal_True;
+                    bSyntErrWarn = true;
             }
                 break;
             case T_LABEL:
@@ -203,7 +203,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
                         }
                     }
                     else
-                        bOverflowWarn = sal_True;
+                        bOverflowWarn = true;
 
                     nColCnt++;
                     break;

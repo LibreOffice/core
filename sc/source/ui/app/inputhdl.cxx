@@ -3321,7 +3321,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
 
             // #i114511# don't count cursor keys as modification
             sal_Bool bSetModified = !bCursorKey;
-            DataChanged(sal_False, bSetModified);  // also calls UpdateParenthesis()
+            DataChanged(false, bSetModified);  // also calls UpdateParenthesis()
             InvalidateAttribs();        //! in DataChanged ?
         }
     }

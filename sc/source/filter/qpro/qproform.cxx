@@ -179,7 +179,7 @@ do { \
     if (nRef < amt)\
         return ret; \
     nRef-=amt; \
-} while(0)
+} while(false)
 
 ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, const FORMULA_TYPE /*eFT*/ )
 {

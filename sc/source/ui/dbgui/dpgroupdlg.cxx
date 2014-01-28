@@ -197,7 +197,7 @@ ScDPNumGroupDlg::ScDPNumGroupDlg( Window* pParent, const ScDPNumGroupInfo& rInfo
 ScDPNumGroupInfo ScDPNumGroupDlg::GetGroupInfo() const
 {
     ScDPNumGroupInfo aInfo;
-    aInfo.mbEnable = sal_True;
+    aInfo.mbEnable = true;
     aInfo.mbDateValues = false;
     aInfo.mbAutoStart = maStartHelper.IsAuto();
     aInfo.mbAutoEnd = maEndHelper.IsAuto();
@@ -294,7 +294,7 @@ ScDPDateGroupDlg::ScDPDateGroupDlg( Window* pParent,
 ScDPNumGroupInfo ScDPDateGroupDlg::GetGroupInfo() const
 {
     ScDPNumGroupInfo aInfo;
-    aInfo.mbEnable = sal_True;
+    aInfo.mbEnable = true;
     aInfo.mbDateValues = maRbNumDays.IsChecked();
     aInfo.mbAutoStart = maStartHelper.IsAuto();
     aInfo.mbAutoEnd = maEndHelper.IsAuto();

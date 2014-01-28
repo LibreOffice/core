@@ -192,7 +192,7 @@ const sal_uInt16 IDF_ATTRIB     = IDF_HARDATTR | IDF_STYLES;
 const sal_uInt16 IDF_CONTENTS   = IDF_VALUE | IDF_DATETIME | IDF_STRING | IDF_NOTE | IDF_FORMULA | IDF_OUTLINE;
 const sal_uInt16 IDF_ALL        = IDF_CONTENTS | IDF_ATTRIB | IDF_OBJECTS;
 
-BOOST_STATIC_ASSERT(!(IDF_ATTRIB & IDF_CONTENTS));
+BOOST_STATIC_ASSERT((IDF_ATTRIB & IDF_CONTENTS) == 0);
 
 /// Copy flags for auto/series fill functions: do not touch notes and drawing objects.
 const sal_uInt16 IDF_AUTOFILL   = IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS);

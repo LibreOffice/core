@@ -112,7 +112,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
 {
     ScSingleRefData aRefData;
     aRefData.InitAddress( rTarget );
-    aRefData.SetFlag3D( sal_True );
+    aRefData.SetFlag3D( true );
     pCode->AddSingleReference( aRefData );
     ScCompiler aComp( pDoc, aPos, *pCode );
     aComp.SetGrammar(pDoc->GetGrammar());

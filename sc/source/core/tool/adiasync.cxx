@@ -110,7 +110,7 @@ void ScAddInAsync::CallBack( sal_uLong nHandleP, void* pData )
             OSL_FAIL( "unknown AsyncType" );
             return;
     }
-    p->bValid = sal_True;
+    p->bValid = true;
     p->Broadcast( ScHint(SC_HINT_DATACHANGED, ScAddress()) );
 
     for ( ScAddInDocs::iterator it = p->pDocs->begin(); it != p->pDocs->end(); ++it )

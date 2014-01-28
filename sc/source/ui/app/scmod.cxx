@@ -1017,19 +1017,19 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     {
         PutItem( *pItem );
         pAppCfg->SetAppMetric( (FieldUnit)((const SfxUInt16Item*)pItem)->GetValue() );
-        bSaveAppOptions = sal_True;
+        bSaveAppOptions = true;
     }
 
     if (rOptSet.HasItem(SCITEM_USERLIST, &pItem))
     {
         ScGlobal::SetUserList( ((const ScUserListItem*)pItem)->GetUserList() );
-        bSaveAppOptions = sal_True;
+        bSaveAppOptions = true;
     }
 
     if (rOptSet.HasItem(SID_SC_OPT_SYNCZOOM, &pItem))
     {
         pAppCfg->SetSynchronizeZoom( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
-        bSaveAppOptions = sal_True;
+        bSaveAppOptions = true;
     }
 
     if (rOptSet.HasItem(SID_SC_OPT_KEY_BINDING_COMPAT, &pItem))
@@ -1104,7 +1104,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
                 pViewData->SetOptions( rNewOpt );   // veraendert rOldOpt
                 pViewData->GetDocument()->SetViewOptions( rNewOpt );
                 pDocSh->SetDocumentModified();
-                bRepaint = sal_True;
+                bRepaint = true;
             }
             if ( bAnchorList )
                 pViewSh->UpdateAnchorHandles();
@@ -1138,7 +1138,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
                 pViewData->SetOptions( aNewViewOpt );
                 pViewData->GetDocument()->SetViewOptions( aNewViewOpt );
                 pDocSh->SetDocumentModified();
-                bRepaint = sal_True;
+                bRepaint = true;
             }
         }
         ScViewOptions aNewViewOpt ( GetViewOptions() );
@@ -1245,38 +1245,38 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     if ( rOptSet.HasItem(SID_SC_INPUT_SELECTIONPOS,&pItem) )
     {
         pInputCfg->SetMoveDir( ((const SfxUInt16Item*)pItem)->GetValue() );
-        bSaveInputOptions = sal_True;
+        bSaveInputOptions = true;
     }
     if ( rOptSet.HasItem(SID_SC_INPUT_SELECTION,&pItem) )
     {
         pInputCfg->SetMoveSelection( ((const SfxBoolItem*)pItem)->GetValue() );
-        bSaveInputOptions = sal_True;
+        bSaveInputOptions = true;
     }
     if ( rOptSet.HasItem(SID_SC_INPUT_EDITMODE,&pItem) )
     {
         pInputCfg->SetEnterEdit( ((const SfxBoolItem*)pItem)->GetValue() );
-        bSaveInputOptions = sal_True;
+        bSaveInputOptions = true;
     }
     if ( rOptSet.HasItem(SID_SC_INPUT_FMT_EXPAND,&pItem) )
     {
         pInputCfg->SetExtendFormat( ((const SfxBoolItem*)pItem)->GetValue() );
-        bSaveInputOptions = sal_True;
+        bSaveInputOptions = true;
     }
     if ( rOptSet.HasItem(SID_SC_INPUT_RANGEFINDER,&pItem) )
     {
         pInputCfg->SetRangeFinder( ((const SfxBoolItem*)pItem)->GetValue() );
-        bSaveInputOptions = sal_True;
+        bSaveInputOptions = true;
     }
     if ( rOptSet.HasItem(SID_SC_INPUT_REF_EXPAND,&pItem) )
     {
         pInputCfg->SetExpandRefs( ((const SfxBoolItem*)pItem)->GetValue() );
-        bSaveInputOptions = sal_True;
+        bSaveInputOptions = true;
     }
     if ( rOptSet.HasItem(SID_SC_INPUT_MARK_HEADER,&pItem) )
     {
         pInputCfg->SetMarkHeader( ((const SfxBoolItem*)pItem)->GetValue() );
-        bSaveInputOptions = sal_True;
-        bUpdateMarks = sal_True;
+        bSaveInputOptions = true;
+        bUpdateMarks = true;
     }
     if ( rOptSet.HasItem(SID_SC_INPUT_TEXTWYSIWYG,&pItem) )
     {
@@ -1284,20 +1284,20 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         if ( bNew != pInputCfg->GetTextWysiwyg() )
         {
             pInputCfg->SetTextWysiwyg( bNew );
-            bSaveInputOptions = sal_True;
-            bUpdateRefDev = sal_True;
+            bSaveInputOptions = true;
+            bUpdateRefDev = true;
         }
     }
     if( rOptSet.HasItem( SID_SC_INPUT_REPLCELLSWARN, &pItem ) )
     {
         pInputCfg->SetReplaceCellsWarn( ((const SfxBoolItem*)pItem)->GetValue() );
-        bSaveInputOptions = sal_True;
+        bSaveInputOptions = true;
     }
 
     if( rOptSet.HasItem( SID_SC_INPUT_LEGACY_CELL_SELECTION, &pItem ) )
     {
         pInputCfg->SetLegacyCellSelection( ((const SfxBoolItem*)pItem)->GetValue() );
-        bSaveInputOptions = sal_True;
+        bSaveInputOptions = true;
     }
 
     //============================================

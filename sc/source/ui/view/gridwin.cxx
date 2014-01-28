@@ -603,7 +603,7 @@ void ScGridWindow::ExecPageFieldSelect( SCCOL nCol, SCROW nRow, sal_Bool bHasSel
                 ScDPObject aNewObj( *pDPObj );
                 aNewObj.SetSaveData( aSaveData );
                 ScDBDocFunc aFunc( *pViewData->GetDocShell() );
-                aFunc.DataPilotUpdate( pDPObj, &aNewObj, sal_True, false );
+                aFunc.DataPilotUpdate( pDPObj, &aNewObj, true, false );
                 pViewData->GetView()->CursorPosChanged();       // shells may be switched
             }
         }
@@ -1080,9 +1080,9 @@ bool ScGridWindow::HasScenarioRange( sal_uInt16 nCol, sal_Int32 nRow, ScRange& r
         SCTAB i;
         ScMarkData aMarks;
         for (i=nTab+1; i<nTabCount && pDoc->IsScenario(i); i++)
-            pDoc->MarkScenario( i, nTab, aMarks, sal_False, SC_SCENARIO_SHOWFRAME );
+            pDoc->MarkScenario( i, nTab, aMarks, false, SC_SCENARIO_SHOWFRAME );
         ScRangeList aRanges;
-        aMarks.FillRangeListWithMarks( &aRanges, sal_False );
+        aMarks.FillRangeListWithMarks( &aRanges, false );
         SCTAB nRangeCount = aRanges.size();
         for (i=0; i<nRangeCount; i++)
         {
@@ -1480,7 +1480,7 @@ void ScGridWindow::ExecFilter( sal_uLong nSel,
                 for (SCSIZE i=0; i<nEC; i++)
                     aParam.GetEntry(i).Clear();
                 nQueryPos = 0;
-                aParam.bInplace = sal_True;
+                aParam.bInplace = true;
                 aParam.bRegExp = false;
             }
 
@@ -1843,7 +1843,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         return;
     }
 
-    sal_Bool bCrossPointer = TestMouse( rMEvt, sal_True );
+    sal_Bool bCrossPointer = TestMouse( rMEvt, true );
     if ( bCrossPointer )
     {
         if ( bDouble )
@@ -1996,7 +1996,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
                 ReleaseMouse();
                 StartTracking();
             }
-            pViewData->GetMarkData().SetMarking(sal_True);
+            pViewData->GetMarkData().SetMarking(true);
             return;
         }
     }
@@ -2287,7 +2287,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                     ScDPObject aNewObj( *pDPObj );
                     pDPObj->ToggleDetails( aData, &aNewObj );
                     ScDBDocFunc aFunc( *pViewData->GetDocShell() );
-                    aFunc.DataPilotUpdate( pDPObj, &aNewObj, sal_True, false );
+                    aFunc.DataPilotUpdate( pDPObj, &aNewObj, true, false );
                     pViewData->GetView()->CursorPosChanged();       // shells may be switched
                 }
             }
@@ -2821,7 +2821,7 @@ void ScGridWindow::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
 
     HideNoteMarker();
 
-    CommandEvent aDragEvent( rPosPixel, COMMAND_STARTDRAG, sal_True );
+    CommandEvent aDragEvent( rPosPixel, COMMAND_STARTDRAG, true );
 
     if (bEEMouse && pViewData->HasEditView( eWhich ))
     {
@@ -2832,7 +2832,7 @@ void ScGridWindow::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
 
         // don't remove the edit view while switching views
         ScModule* pScMod = SC_MOD();
-        pScMod->SetInEditCommand( sal_True );
+        pScMod->SetInEditCommand( true );
 
         pEditView->Command( aDragEvent );
 
@@ -2922,7 +2922,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
         ScInputHandler* pHdl = pScMod->GetInputHdl( pViewData->GetViewShell() );
         if ( pHdl )
         {
-            pHdl->InputCommand( rCEvt, sal_True );
+            pHdl->InputCommand( rCEvt, true );
             return;                                     // done
         }
 
@@ -3365,7 +3365,7 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
             if ( bHadKeyMarker )
                 HideNoteMarker();       // hide when previously visible
             else
-                ShowNoteMarker( pViewData->GetCurX(), pViewData->GetCurY(), sal_True );
+                ShowNoteMarker( pViewData->GetCurX(), pViewData->GetCurY(), true );
             return;
         }
         if (aCode.GetCode() == KEY_BRACKETLEFT && aCode.GetModifier() == KEY_MOD1)
@@ -4085,7 +4085,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
             {
                 SCTAB nSrcTab = aSource.aStart.Tab();
                 pViewData->GetDocShell()->MoveTable( nSrcTab, nThisTab, !bIsMove, sal_True );   // with Undo
-                pView->SetTabNo( nThisTab, sal_True );
+                pView->SetTabNo( nThisTab, true );
                 bDone = sal_True;
             }
         }
@@ -4125,7 +4125,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                 if ( meDragInsertMode != INS_NONE )
                 {
                     // call with bApi = sal_True to avoid error messages in drop handler
-                    bDone = pDocSh->GetDocFunc().InsertCells( aDest, NULL, meDragInsertMode, sal_True /*bRecord*/, sal_True /*bApi*/, sal_True /*bPartOfPaste*/ );
+                    bDone = pDocSh->GetDocFunc().InsertCells( aDest, NULL, meDragInsertMode, true /*bRecord*/, true /*bApi*/, true /*bPartOfPaste*/ );
                     if ( bDone )
                     {
                         if ( nThisTab == nSourceTab )
@@ -4178,7 +4178,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                          ( eCmd == DEL_CELLSLEFT && nDestPosY == aSource.aStart.Row() ) )
                     {
                         // call with bApi = sal_True to avoid error messages in drop handler
-                        bDone = pDocSh->GetDocFunc().DeleteCells( aSource, NULL, eCmd, sal_True /*bRecord*/, sal_True /*bApi*/ );
+                        bDone = pDocSh->GetDocFunc().DeleteCells( aSource, NULL, eCmd, true /*bRecord*/, true /*bApi*/ );
                         if ( bDone )
                         {
                             if ( eCmd == DEL_CELLSUP && nDestPosY > aSource.aEnd.Row() )
@@ -4264,7 +4264,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                 if ( meDragInsertMode != INS_NONE )
                 {
                     // call with bApi = sal_True to avoid error messages in drop handler
-                    bDone = pDocSh->GetDocFunc().InsertCells( aDest, NULL, meDragInsertMode, sal_True /*bRecord*/, sal_True /*bApi*/, sal_True /*bPartOfPaste*/ );
+                    bDone = pDocSh->GetDocFunc().InsertCells( aDest, NULL, meDragInsertMode, true /*bRecord*/, true /*bApi*/, true /*bPartOfPaste*/ );
                     if ( bDone )
                     {
                         pDocSh->UpdateOle( pViewData );
@@ -4324,7 +4324,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
             if ( meDragInsertMode != INS_NONE )
             {
                 // call with bApi = sal_True to avoid error messages in drop handler
-                bDone = pDocSh->GetDocFunc().InsertCells( aDest, NULL, meDragInsertMode, sal_True /*bRecord*/, sal_True /*bApi*/, sal_True /*bPartOfPaste*/ );
+                bDone = pDocSh->GetDocFunc().InsertCells( aDest, NULL, meDragInsertMode, true /*bRecord*/, true /*bApi*/, true /*bPartOfPaste*/ );
                 if ( bDone )
                 {
                     pDocSh->UpdateOle( pViewData );
@@ -4460,7 +4460,7 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
                         lcl_GetDropFormatId( rEvt.maDropEvent.Transferable );
     if ( nFormatId )
     {
-        pScMod->SetInExecuteDrop( sal_True );   // #i28468# prevent error messages from PasteDataFormat
+        pScMod->SetInExecuteDrop( true );   // #i28468# prevent error messages from PasteDataFormat
         bPasteIsDrop = sal_True;
         bDone = pViewData->GetView()->PasteDataFormat(
                     nFormatId, rEvt.maDropEvent.Transferable, nPosX, nPosY, &aLogicPos, bIsLink );

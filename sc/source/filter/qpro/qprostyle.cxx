@@ -125,7 +125,7 @@ void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, 
     if( nTmp & 0x80 )
     {
         SfxBoolItem aWrapItem( ATTR_LINEBREAK );
-        aWrapItem.SetValue( sal_True );
+        aWrapItem.SetValue( true );
         rItemSet.Put( aWrapItem );
     }
 

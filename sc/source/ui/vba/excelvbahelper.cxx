@@ -212,7 +212,7 @@ void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, sal_uInt16
                     pDoc = pOwnClip->GetDocument();
                 pTabViewShell->PasteFromClip( nFlags, pDoc,
                     nFunction, bSkipEmpty, bTranspose, bAsLink,
-                    eMoveMode, IDF_NONE, sal_True );
+                    eMoveMode, IDF_NONE, true );
                 pTabViewShell->CellContentChanged();
             }
         }

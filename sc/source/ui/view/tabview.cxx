@@ -200,7 +200,7 @@ ScTabView::ScTabView( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pView
     aHScrollLeft( pFrameWin, WinBits( WB_HSCROLL | WB_DRAG ) ),
     aHScrollRight( pFrameWin, WinBits( WB_HSCROLL | WB_DRAG ) ),
     aCornerButton( pFrameWin, &aViewData, false ),
-    aTopButton( pFrameWin, &aViewData, sal_True ),
+    aTopButton( pFrameWin, &aViewData, true ),
     aScrollBarBox( pFrameWin, WB_SIZEABLE ),
     mpInputHintWindow( NULL ),
     pPageBreakData( NULL ),
@@ -1540,7 +1540,7 @@ IMPL_LINK( ScTabView, SplitHdl, Splitter*, pSplitter )
         DoVSplit( pVSplitter->GetSplitPosPixel() );
 
     if ( aViewData.GetHSplitMode() == SC_SPLIT_FIX || aViewData.GetVSplitMode() == SC_SPLIT_FIX )
-        FreezeSplitters( sal_True );
+        FreezeSplitters( true );
 
     DoResize( aBorderPos, aFrameSize );
 

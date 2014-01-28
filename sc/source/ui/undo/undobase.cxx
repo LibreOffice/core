@@ -82,7 +82,7 @@ bool ScSimpleUndo::Merge( SfxUndoAction *pNextAction )
         ScUndoDraw* pCalcUndo = (ScUndoDraw*)pNextAction;
         pDetectiveUndo = pCalcUndo->GetDrawUndo();
         pCalcUndo->ForgetDrawUndo();
-        return sal_True;
+        return true;
     }
 
     return false;
@@ -90,7 +90,7 @@ bool ScSimpleUndo::Merge( SfxUndoAction *pNextAction )
 
 void ScSimpleUndo::BeginUndo()
 {
-    pDocShell->SetInUndo( sal_True );
+    pDocShell->SetInUndo( true );
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
@@ -118,7 +118,7 @@ void ScSimpleUndo::EndUndo()
 
 void ScSimpleUndo::BeginRedo()
 {
-    pDocShell->SetInUndo( sal_True );   //! own Flag for Redo?
+    pDocShell->SetInUndo( true );   //! own Flag for Redo?
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
@@ -537,7 +537,7 @@ void ScDBFuncUndo::BeginRedo()
                                   aOriginalRange.aStart.Col(), aOriginalRange.aStart.Row(),
                                   aOriginalRange.aEnd.Col(), aOriginalRange.aEnd.Row() );
 
-            pNoNameData->SetByRow( sal_True );
+            pNoNameData->SetByRow( true );
             pNoNameData->SetAutoFilter( false );
             // header is always set with the operation in redo
         }

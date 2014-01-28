@@ -247,7 +247,7 @@ void XclExpRoot::InitializeGlobals()
             ScCompiler aCompiler( &rDoc, ScAddress());
             aCompiler.SetGrammar( rDoc.GetGrammar());
             mrExpData.mxOpCodeMap = aCompiler.CreateOpCodeMap( aOpCodeMapping, true);
-        } while(0);
+        } while(false);
     }
 
     GetXFBuffer().Initialize();

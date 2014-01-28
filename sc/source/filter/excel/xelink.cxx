@@ -1267,7 +1267,7 @@ void XclExpXct::Save( XclExpStream& rStrm )
         ::std::pair< SCCOL, SCCOL > aColRange = mxCacheTable->getColRange( nScRow );
         for( SCCOL nScCol = aColRange.first; bValid && (nScCol < aColRange.second); ++nScCol )
         {
-            if( maUsedCells.IsCellMarked( nScCol, nScRow, sal_True ) )
+            if( maUsedCells.IsCellMarked( nScCol, nScRow, true ) )
             {
                 sal_uInt32 nScNumFmt = 0;
                 ScExternalRefCache::TokenRef xToken = mxCacheTable->getCell( nScCol, nScRow, &nScNumFmt );

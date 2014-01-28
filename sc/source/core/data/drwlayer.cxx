@@ -195,7 +195,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
                  pGlobalDrawPersist ?
                      pGlobalDrawPersist :
                      ( pDocument ? pDocument->GetDocumentShell() : NULL ),
-                 sal_True ),        // bUseExtColorTable (is set below)
+                 true ),        // bUseExtColorTable (is set below)
     aName( rName ),
     pDoc( pDocument ),
     pUndoGroup( NULL ),
@@ -218,7 +218,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
     }
     SetPropertyList( static_cast<XPropertyList *> (pXCol.get()) );
 
-    SetSwapGraphics(sal_True);
+    SetSwapGraphics(true);
 
     SetScaleUnit(MAP_100TH_MM);
     SfxItemPool& rPool = GetItemPool();
@@ -1518,7 +1518,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
                                 SCCOL nClipEndX;
                                 SCROW nClipEndY;
                                 pClipDoc->GetClipStart( nClipStartX, nClipStartY );
-                                pClipDoc->GetClipArea( nClipEndX, nClipEndY, sal_True );
+                                pClipDoc->GetClipArea( nClipEndX, nClipEndY, true );
                                 nClipEndX = nClipEndX + nClipStartX;
                                 nClipEndY += nClipStartY;   // GetClipArea returns the difference
 
@@ -2064,7 +2064,7 @@ void ScDrawLayer::SetGlobalDrawPersist(SfxObjectShell* pPersist)
 void ScDrawLayer::SetChanged( sal_Bool bFlg /* = sal_True */ )
 {
     if ( bFlg && pDoc )
-        pDoc->SetChartListenerCollectionNeedsUpdate( sal_True );
+        pDoc->SetChartListenerCollectionNeedsUpdate( true );
     FmFormModel::SetChanged( bFlg );
 }
 

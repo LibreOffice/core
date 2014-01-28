@@ -412,7 +412,7 @@ void ScTabView::ViewOptionsHasChanged( bool bHScrollChanged, bool bGraphicsChang
         pDrawView->UpdateUserViewOptions();
 
     if (bGraphicsChanged)
-        DrawEnableAnim(sal_True);   // DrawEnableAnim checks the options state
+        DrawEnableAnim(true);   // DrawEnableAnim checks the options state
 
     // if TabBar is set to visible, make sure its size is not 0
     bool bGrow = ( aViewData.IsTabMode() && pTabControl->GetSizePixel().Width() <= 0 );

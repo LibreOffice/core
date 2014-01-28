@@ -955,7 +955,7 @@ void ScGlobal::OpenURL( const OUString& rURL, const OUString& rTarget )
     SfxStringItem aReferer( SID_REFERER, aReferName );
 
     SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, false );
-    SfxBoolItem aBrowsing( SID_BROWSE, sal_True );
+    SfxBoolItem aBrowsing( SID_BROWSE, true );
 
     //  kein SID_SILENT mehr
 

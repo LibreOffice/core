@@ -425,7 +425,7 @@ A ScBitMaskCompressedArray<A,D>::GetLastAnyBitAccess( A nStart,
 {
     A nEnd = ::std::numeric_limits<A>::max();
     size_t nIndex = this->nCount-1;
-    while (1)
+    while (true)
     {
         if ((this->pData[nIndex].aValue & rBitMask) != 0)
         {

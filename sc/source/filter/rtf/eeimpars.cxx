@@ -314,7 +314,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
             const ScStyleSheet* pStyleSheet =
                 mpDoc->GetPattern( nCol, nRow, nTab )->GetStyleSheet();
             aAttr.SetStyleSheet( (ScStyleSheet*)pStyleSheet );
-            mpDoc->SetPattern( nCol, nRow, nTab, aAttr, sal_True );
+            mpDoc->SetPattern( nCol, nRow, nTab, aAttr, true );
 
             // Add data
             if (bSimple)

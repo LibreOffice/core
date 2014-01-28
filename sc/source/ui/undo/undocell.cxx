@@ -1042,7 +1042,7 @@ OUString ScUndoRangeNames::GetComment() const
 void ScUndoRangeNames::DoChange( sal_Bool bUndo )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
-    pDoc->CompileNameFormula( sal_True );   // CreateFormulaString
+    pDoc->CompileNameFormula( true );   // CreateFormulaString
 
     if ( bUndo )
     {

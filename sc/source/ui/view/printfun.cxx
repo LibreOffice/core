@@ -514,7 +514,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
     {
         pDrawView = new FmFormView( pModel, pDev );
         pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
-        pDrawView->SetPrintPreview( sal_True );
+        pDrawView->SetPrintPreview( true );
         aOutputData.SetDrawView( pDrawView );
     }
 
@@ -1325,7 +1325,7 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
     if (pBorderData)
     {
         ScDocument* pBorderDoc = new ScDocument( SCDOCMODE_UNDO );
-        pBorderDoc->InitUndo( pDoc, 0,0, sal_True,sal_True );
+        pBorderDoc->InitUndo( pDoc, 0,0, true,true );
         if (pBorderData)
             pBorderDoc->ApplyAttr( 0,0,0, *pBorderData );
 
@@ -1549,7 +1549,7 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
 
     ScTableInfo aTabInfo;
     pDoc->FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nPrintTab,
-                                        nScaleX, nScaleY, sal_True, aTableParam.bFormulas );
+                                        nScaleX, nScaleY, true, aTableParam.bFormulas );
     lcl_HidePrint( aTabInfo, nX1, nX2 );
 
     if (bEmbed)
@@ -2578,7 +2578,7 @@ void ScPrintFunc::ApplyPrintSettings()
                 aEnumSize.Width() = aEnumSize.Height();
                 aEnumSize.Height() = nTemp;
         }
-        Paper ePaper = SvxPaperInfo::GetSvxPaper( aEnumSize, MAP_TWIP, sal_True );
+        Paper ePaper = SvxPaperInfo::GetSvxPaper( aEnumSize, MAP_TWIP, true );
         sal_uInt16 nPaperBin = ((const SvxPaperBinItem&)pParamSet->Get(ATTR_PAGE_PAPERBIN)).GetValue();
 
         pPrinter->SetPaper( ePaper );

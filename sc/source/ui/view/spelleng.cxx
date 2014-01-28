@@ -212,7 +212,7 @@ bool ScConversionEngineBase::FindNextConversionCell()
     if( bFound )
     {
         pViewShell->AlignToCursor( nNewCol, nNewRow, SC_FOLLOW_JUMP );
-        pViewShell->SetCursor( nNewCol, nNewRow, sal_True );
+        pViewShell->SetCursor( nNewCol, nNewRow, true );
         mrViewData.GetView()->MakeEditView( this, nNewCol, nNewRow );
         EditView* pEditView = mrViewData.GetSpellingView();
         // maSelState.GetEditSelection() returns (0,0) if not in edit mode -> ok

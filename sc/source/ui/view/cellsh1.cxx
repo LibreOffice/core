@@ -1348,7 +1348,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                     SCROW nStartY, nEndY, nClipStartY, nClipSizeY, nRangeSizeY;
                                     SCTAB nStartTab, nEndTab;
                                     pOwnClip->GetDocument()->GetClipStart( nClipStartX, nClipStartY );
-                                    pOwnClip->GetDocument()->GetClipArea( nClipSizeX, nClipSizeY, sal_True );
+                                    pOwnClip->GetDocument()->GetClipArea( nClipSizeX, nClipSizeY, true );
 
                                     if ( !( pData->GetSimpleArea( nStartX, nStartY, nStartTab,
                                                    nEndX, nEndY, nEndTab ) == SC_MARK_SIMPLE &&
@@ -1423,7 +1423,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             {
                                 pTabViewShell->PasteFromClip( nFlags, pOwnClip->GetDocument(),
                                     nFunction, bSkipEmpty, bTranspose, bAsLink,
-                                    eMoveMode, IDF_NONE, sal_True );    // allow warning dialog
+                                    eMoveMode, IDF_NONE, true );    // allow warning dialog
                             }
                         }
 
@@ -1757,7 +1757,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             pTabViewShell->ChangeIndent( false );
             break;
         case SID_INC_INDENT:
-            pTabViewShell->ChangeIndent( sal_True );
+            pTabViewShell->ChangeIndent( true );
             break;
 
         case FID_USE_NAME:
@@ -2751,8 +2751,8 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
         else // if (bResult == SCRET_REMOVE)
         {
             pOutSet = &aArgSet;
-            aSubTotalParam.bRemoveOnly = sal_True;
-            aSubTotalParam.bReplace    = sal_True;
+            aSubTotalParam.bRemoveOnly = true;
+            aSubTotalParam.bReplace    = true;
             aArgSet.Put( ScSubTotalItem( SCITEM_SUBTDATA,
                                          GetViewData(),
                                          &aSubTotalParam ) );

@@ -115,7 +115,7 @@ void ScTabViewShell::Activate(sal_Bool bMDI)
         ScModule* pScMod = SC_MOD();
         pScMod->ViewShellChanged();
 
-        ActivateView( sal_True, bFirstActivate );
+        ActivateView( true, bFirstActivate );
         ActivateOlk( GetViewData() );
 
         //  AutoCorrect umsetzen, falls der Writer seins neu angelegt hat
@@ -173,7 +173,7 @@ void ScTabViewShell::Activate(sal_Bool bMDI)
             if ( pExtOpt && pExtOpt->IsChanged() )
             {
                 GetViewData()->ReadExtOptions(*pExtOpt);        // Excel view settings
-                SetTabNo( GetViewData()->GetTabNo(), sal_True );
+                SetTabNo( GetViewData()->GetTabNo(), true );
                 pExtOpt->SetChanged( false );
             }
         }
@@ -253,7 +253,7 @@ void ScTabViewShell::Deactivate(sal_Bool bMDI)
             GetViewData()->GetDocShell()->UpdateOle(GetViewData(),sal_True);
 
         if ( pHdl )
-            pHdl->NotifyChange( NULL, sal_True ); // Timer-verzoegert wg. Dokumentwechsel
+            pHdl->NotifyChange( NULL, true ); // Timer-verzoegert wg. Dokumentwechsel
 
         if (pScActiveViewShell == this)
             pScActiveViewShell = NULL;
@@ -373,7 +373,7 @@ void ScTabViewShell::InnerResizePixel( const Point &rOfs, const Size &rSize )
         aNewSize.Height() += aBorder.Top() + aBorder.Bottom();
     }
 
-    DoResize( rOfs, aNewSize, sal_True );                   // rSize = Groesse von gridwin
+    DoResize( rOfs, aNewSize, true );                   // rSize = Groesse von gridwin
 
     UpdateOleZoom();                                    //  Zoom fuer In-Place berechnen
 
@@ -508,7 +508,7 @@ void ScTabViewShell::DoReadUserDataSequence( const uno::Sequence < beans::Proper
     sal_Bool bFocus = pOldWin && pOldWin->HasFocus();
 
     GetViewData()->ReadUserDataSequence(rSettings);
-    SetTabNo( GetViewData()->GetTabNo(), sal_True );
+    SetTabNo( GetViewData()->GetTabNo(), true );
 
     if ( GetViewData()->IsPagebreakMode() )
         SetCurSubShell( GetCurObjectSelectionType(), sal_True );
@@ -543,7 +543,7 @@ void ScTabViewShell::DoReadUserData( const OUString& rData )
     sal_Bool bFocus = pOldWin && pOldWin->HasFocus();
 
     GetViewData()->ReadUserData(rData);
-    SetTabNo( GetViewData()->GetTabNo(), sal_True );
+    SetTabNo( GetViewData()->GetTabNo(), true );
 
     if ( GetViewData()->IsPagebreakMode() )
         SetCurSubShell( GetCurObjectSelectionType(), sal_True );
@@ -651,7 +651,7 @@ void ScTabViewShell::SetDrawShell( sal_Bool bActive )
         {
             //  Aktiven Teil an Cursor anpassen, etc.
             MoveCursorAbs( GetViewData()->GetCurX(), GetViewData()->GetCurY(),
-                            SC_FOLLOW_NONE, false, false, sal_True );
+                            SC_FOLLOW_NONE, false, false, true );
         }
     }
 }
@@ -1562,7 +1562,7 @@ void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
 
         if ( GetViewFrame()->GetFrame().IsInPlace() )                         // inplace
         {
-            pDocSh->SetInplace( sal_True );             // schon so initialisiert
+            pDocSh->SetInplace( true );             // schon so initialisiert
             if (pDoc->IsEmbedded())
                 pDoc->ResetEmbedded();              // keine blaue Markierung
         }
@@ -1616,7 +1616,7 @@ void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
 
     if ( bFirstView )   // first view?
     {
-        pDoc->SetDocVisible( sal_True );        // used when creating new sheets
+        pDoc->SetDocVisible( true );        // used when creating new sheets
         if ( pDocSh->IsEmpty() )
         {
             // set first sheet's RTL flag (following will already be initialized because of SetDocVisible)

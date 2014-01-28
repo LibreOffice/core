@@ -443,7 +443,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, sal_Bool bRecord,
                 pTable->GetColArray()->GetRange( nOutStartCol, nOutEndCol );
                 pTable->GetRowArray()->GetRange( nOutStartRow, nOutEndRow );
 
-                pUndoDoc->InitUndo( pDoc, nTab, nTab, sal_True, sal_True );
+                pUndoDoc->InitUndo( pDoc, nTab, nTab, true, true );
                 pDoc->CopyToDocument( static_cast<SCCOL>(nOutStartCol), 0, nTab, static_cast<SCCOL>(nOutEndCol), MAXROW, nTab, IDF_NONE, false, pUndoDoc );
                 pDoc->CopyToDocument( 0, nOutStartRow, nTab, MAXCOL, nOutEndRow, nTab, IDF_NONE, false, pUndoDoc );
             }
@@ -548,7 +548,7 @@ void ScDBFunc::Consolidate( const ScConsolidateParam& rParam, sal_Bool bRecord )
 {
     ScDocShell* pDocShell = GetViewData()->GetDocShell();
     pDocShell->DoConsolidate( rParam, bRecord );
-    SetTabNo( rParam.nTab, sal_True );
+    SetTabNo( rParam.nTab, true );
 }
 
 //
@@ -791,7 +791,7 @@ bool ScDBFunc::HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& 
                         //  (parts are collected below)
 
                         rOldInfo = pNumGroupDim->GetDateInfo();
-                        bFound = sal_True;
+                        bFound = true;
                     }
                     else if ( pNumGroupDim->GetInfo().mbDateValues )
                     {
@@ -801,7 +801,7 @@ bool ScDBFunc::HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& 
                         rOldInfo = pNumGroupDim->GetInfo();
                         rParts = com::sun::star::sheet::DataPilotFieldGroupBy::DAYS;               // not found in CollectDateParts
                         bFoundParts = sal_True;
-                        bFound = sal_True;
+                        bFound = true;
                     }
                     bInGroupDim = sal_True;
                 }
@@ -816,7 +816,7 @@ bool ScDBFunc::HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& 
 
                         rOldInfo = pGroupDim->GetDateInfo();
                         aBaseDimName = pGroupDim->GetSourceDimName();
-                        bFound = sal_True;
+                        bFound = true;
                     }
                     bInGroupDim = sal_True;
                 }
@@ -845,7 +845,7 @@ bool ScDBFunc::HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& 
                         short nType = pDoc->GetFormatTable()->GetType(nIndex);
                         if ( nType == NUMBERFORMAT_DATE || nType == NUMBERFORMAT_TIME || nType == NUMBERFORMAT_DATETIME )
                         {
-                            bFound = sal_True;
+                            bFound = true;
                             // use currently selected value for automatic limits
                             if( rOldInfo.mbAutoStart )
                                 rOldInfo.mfStart = pDoc->GetValue( aSelRange.aStart );
@@ -897,7 +897,7 @@ bool ScDBFunc::HasSelectionForNumGroup( ScDPNumGroupInfo& rOldInfo )
                     //  -> edit settings of this dimension
 
                     rOldInfo = pNumGroupDim->GetInfo();
-                    bFound = sal_True;
+                    bFound = true;
                 }
                 else if ( pDimData->GetNamedGroupDim( aDimName ) )
                     bInGroupDim = sal_True;                                    // in a group dimension
@@ -914,7 +914,7 @@ bool ScDBFunc::HasSelectionForNumGroup( ScDPNumGroupInfo& rOldInfo )
                     if ( pDoc->HasValueData( aSelRange.aStart.Col(), aSelRange.aStart.Row(),
                                              aSelRange.aStart.Tab() ) )
                     {
-                        bFound = sal_True;
+                        bFound = true;
                         // use currently selected value for automatic limits
                         if( rOldInfo.mbAutoStart )
                             rOldInfo.mfStart = pDoc->GetValue( aSelRange.aStart );
@@ -1853,7 +1853,7 @@ sal_Bool ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest
                 ScDBDocFunc aFunc( *GetViewData()->GetDocShell() );
                 ScDPObject* pNewObj = new ScDPObject( *pDPObj );
                 pNewObj->SetSaveData( aData );
-                aFunc.DataPilotUpdate( pDPObj, pNewObj, sal_True, false );      //! bApi for drag&drop?
+                aFunc.DataPilotUpdate( pDPObj, pNewObj, true, false );      //! bApi for drag&drop?
                 delete pNewObj;
 
                 Unmark();       // entry was moved - no use in leaving the old cell selected
@@ -1982,7 +1982,7 @@ void ScDBFunc::SetDataPilotDetails(bool bShow, const OUString* pNewDimensionName
                 ScDBDocFunc aFunc( *GetViewData()->GetDocShell() );
                 ScDPObject* pNewObj = new ScDPObject( *pDPObj );
                 pNewObj->SetSaveData( aData );
-                aFunc.DataPilotUpdate( pDPObj, pNewObj, sal_True, false );
+                aFunc.DataPilotUpdate( pDPObj, pNewObj, true, false );
                 delete pNewObj;
 
                 // unmark cell selection
@@ -2109,7 +2109,7 @@ void ScDBFunc::RepeatDB( sal_Bool bRecord )
         if (bQuery && !aQueryParam.bInplace)
         {
             ScDBData* pDest = pDoc->GetDBAtCursor( aQueryParam.nDestCol, aQueryParam.nDestRow,
-                                                    aQueryParam.nDestTab, sal_True );
+                                                    aQueryParam.nDestTab, true );
             if (pDest && pDest->IsDoSize())
             {
                 pDest->GetArea( aOldQuery );
@@ -2147,12 +2147,12 @@ void ScDBFunc::RepeatDB( sal_Bool bRecord )
                 pTable->GetColArray()->GetRange( nOutStartCol, nOutEndCol );
                 pTable->GetRowArray()->GetRange( nOutStartRow, nOutEndRow );
 
-                pUndoDoc->InitUndo( pDoc, nTab, nTab, sal_True, sal_True );
+                pUndoDoc->InitUndo( pDoc, nTab, nTab, true, true );
                 pDoc->CopyToDocument( static_cast<SCCOL>(nOutStartCol), 0, nTab, static_cast<SCCOL>(nOutEndCol), MAXROW, nTab, IDF_NONE, false, pUndoDoc );
                 pDoc->CopyToDocument( 0, nOutStartRow, nTab, MAXCOL, nOutEndRow, nTab, IDF_NONE, false, pUndoDoc );
             }
             else
-                pUndoDoc->InitUndo( pDoc, nTab, nTab, false, sal_True );
+                pUndoDoc->InitUndo( pDoc, nTab, nTab, false, true );
 
             //  Datenbereich sichern - incl. Filter-Ergebnis
             pDoc->CopyToDocument( 0,nStartRow,nTab, MAXCOL,nEndRow,nTab, IDF_ALL, false, pUndoDoc );
@@ -2173,7 +2173,7 @@ void ScDBFunc::RepeatDB( sal_Bool bRecord )
         {
             //  Sortieren ohne SubTotals
 
-            aSubTotalParam.bRemoveOnly = sal_True;      // wird unten wieder zurueckgesetzt
+            aSubTotalParam.bRemoveOnly = true;      // wird unten wieder zurueckgesetzt
             DoSubTotals( aSubTotalParam, false );
         }
 
@@ -2220,7 +2220,7 @@ void ScDBFunc::RepeatDB( sal_Bool bRecord )
             if (bQuerySize)
             {
                 ScDBData* pDest = pDoc->GetDBAtCursor( aQueryParam.nDestCol, aQueryParam.nDestRow,
-                                                        aQueryParam.nDestTab, sal_True );
+                                                        aQueryParam.nDestTab, true );
                 if (pDest)
                 {
                     pDest->GetArea( aNewQuery );

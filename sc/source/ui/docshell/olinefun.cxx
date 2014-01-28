@@ -90,7 +90,7 @@ sal_Bool ScOutlineDocFunc::MakeOutline( const ScRange& rRange, sal_Bool bColumns
     SCTAB nTab = rRange.aStart.Tab();
 
     ScDocument* pDoc = rDocShell.GetDocument();
-    ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab, sal_True );
+    ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab, true );
     ScOutlineTable* pUndoTab = NULL;
 
     if (bRecord && !pDoc->IsUndoEnabled())
@@ -233,7 +233,7 @@ sal_Bool ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, sal_Bool bRecord, sal_
             SCROW nEndRow = nRow2;
 
             ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-            pUndoDoc->InitUndo( pDoc, nTab, nTab, sal_True, sal_True );
+            pUndoDoc->InitUndo( pDoc, nTab, nTab, true, true );
             pDoc->CopyToDocument( nStartCol, 0, nTab, nEndCol, MAXROW, nTab, IDF_NONE, false, pUndoDoc );
             pDoc->CopyToDocument( 0, nStartRow, nTab, MAXCOL, nEndRow, nTab, IDF_NONE, false, pUndoDoc );
 
@@ -299,7 +299,7 @@ sal_Bool ScOutlineDocFunc::AutoOutline( const ScRange& rRange, sal_Bool bRecord,
             SCROW nOutEndRow = nRow2;
 
             pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-            pUndoDoc->InitUndo( pDoc, nTab, nTab, sal_True, sal_True );
+            pUndoDoc->InitUndo( pDoc, nTab, nTab, true, true );
             pDoc->CopyToDocument( nOutStartCol, 0, nTab, nOutEndCol, MAXROW, nTab, IDF_NONE, false, pUndoDoc );
             pDoc->CopyToDocument( 0, nOutStartRow, nTab, MAXCOL, nOutEndRow, nTab, IDF_NONE, false, pUndoDoc );
         }
@@ -356,14 +356,14 @@ sal_Bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, sal_Bool bColumns, sal_uInt1
         ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         if (bColumns)
         {
-            pUndoDoc->InitUndo( pDoc, nTab, nTab, sal_True, false );
+            pUndoDoc->InitUndo( pDoc, nTab, nTab, true, false );
             pDoc->CopyToDocument( static_cast<SCCOL>(nStart), 0, nTab,
                     static_cast<SCCOL>(nEnd), MAXROW, nTab, IDF_NONE, false,
                     pUndoDoc );
         }
         else
         {
-            pUndoDoc->InitUndo( pDoc, nTab, nTab, false, sal_True );
+            pUndoDoc->InitUndo( pDoc, nTab, nTab, false, true );
             pDoc->CopyToDocument( 0, nStart, nTab, MAXCOL, nEnd, nTab, IDF_NONE, false, pUndoDoc );
         }
 
@@ -383,12 +383,12 @@ sal_Bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, sal_Bool bColumns, sal_uInt1
         if (bShow)                                          // einblenden
         {
             pEntry->SetHidden( false );
-            pEntry->SetVisible( sal_True );
+            pEntry->SetVisible( true );
         }
         else if ( nThisLevel == nLevel )                    // ausblenden
         {
-            pEntry->SetHidden( sal_True );
-            pEntry->SetVisible( sal_True );
+            pEntry->SetHidden( true );
+            pEntry->SetVisible( true );
         }
         else                                                // verdeckt
         {
@@ -458,7 +458,7 @@ sal_Bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, sal_Bool b
         {
             ScOutlineTable* pUndoTab = new ScOutlineTable( *pTable );
             ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-            pUndoDoc->InitUndo( pDoc, nTab, nTab, sal_True, sal_True );
+            pUndoDoc->InitUndo( pDoc, nTab, nTab, true, true );
             pDoc->CopyToDocument( nStartCol, 0, nTab, nEndCol, MAXROW, nTab, IDF_NONE, false, pUndoDoc );
             pDoc->CopyToDocument( 0, nStartRow, nTab, MAXCOL, nEndRow, nTab, IDF_NONE, false, pUndoDoc );
 
@@ -481,13 +481,13 @@ sal_Bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, sal_Bool b
             if ( nStart>=nStartCol && nEnd<=nEndCol )
             {
                 pEntry->SetHidden( false );
-                pEntry->SetVisible( sal_True );
+                pEntry->SetVisible( true );
                 if (nStart<nMin) nMin=nStart;
                 if (nEnd>nMax) nMax=nEnd;
             }
         }
         for ( i=nMin; i<=nMax; i++ )
-            pDoc->ShowCol( static_cast<SCCOL>(i), nTab, sal_True );
+            pDoc->ShowCol( static_cast<SCCOL>(i), nTab, true );
 
         //  Zeilen
 
@@ -502,7 +502,7 @@ sal_Bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, sal_Bool b
             if ( nStart>=nStartRow && nEnd<=nEndRow )
             {
                 pEntry->SetHidden( false );
-                pEntry->SetVisible( sal_True );
+                pEntry->SetVisible( true );
                 if (nStart<nMin) nMin=nStart;
                 if (nEnd>nMax) nMax=nEnd;
             }
@@ -514,7 +514,7 @@ sal_Bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, sal_Bool b
             bool bFiltered = pDoc->RowFiltered( i, nTab, NULL, &nFilterEnd );
             nFilterEnd = std::min( nMax, nFilterEnd );
             if ( !bFiltered )
-                pDoc->ShowRows( i, nFilterEnd, nTab, sal_True );
+                pDoc->ShowRows( i, nFilterEnd, nTab, true );
             i = nFilterEnd;
         }
 
@@ -572,7 +572,7 @@ sal_Bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, sal_Bool b
         {
             ScOutlineTable* pUndoTab = new ScOutlineTable( *pTable );
             ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-            pUndoDoc->InitUndo( pDoc, nTab, nTab, sal_True, sal_True );
+            pUndoDoc->InitUndo( pDoc, nTab, nTab, true, true );
             pDoc->CopyToDocument( static_cast<SCCOL>(nEffStartCol), 0, nTab,
                     static_cast<SCCOL>(nEffEndCol), MAXROW, nTab, IDF_NONE,
                     false, pUndoDoc );
@@ -644,14 +644,14 @@ sal_Bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt1
         ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         if (bColumns)
         {
-            pUndoDoc->InitUndo( pDoc, nTab, nTab, sal_True, false );
+            pUndoDoc->InitUndo( pDoc, nTab, nTab, true, false );
             pDoc->CopyToDocument( static_cast<SCCOL>(nStart), 0, nTab,
                     static_cast<SCCOL>(nEnd), MAXROW, nTab, IDF_NONE, false,
                     pUndoDoc );
         }
         else
         {
-            pUndoDoc->InitUndo( pDoc, nTab, nTab, false, sal_True );
+            pUndoDoc->InitUndo( pDoc, nTab, nTab, false, true );
             pDoc->CopyToDocument( 0, nStart, nTab, MAXCOL, nEnd, nTab, IDF_NONE, false, pUndoDoc );
         }
 
@@ -666,7 +666,7 @@ sal_Bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt1
     for ( i = nStart; i <= nEnd; i++ )
     {
         if ( bColumns )
-            pDoc->ShowCol( static_cast<SCCOL>(i), nTab, sal_True );
+            pDoc->ShowCol( static_cast<SCCOL>(i), nTab, true );
         else
         {
             // show several rows together, don't show filtered rows
@@ -674,7 +674,7 @@ sal_Bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt1
             bool bFiltered = pDoc->RowFiltered( i, nTab, NULL, &nFilterEnd );
             nFilterEnd = std::min( nEnd, nFilterEnd );
             if ( !bFiltered )
-                pDoc->ShowRows( i, nFilterEnd, nTab, sal_True );
+                pDoc->ShowRows( i, nFilterEnd, nTab, true );
             i = nFilterEnd;
         }
     }
@@ -690,11 +690,11 @@ sal_Bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt1
                 for ( i = nSubStart; i <= nSubEnd; i++ )
                     pDoc->ShowCol( static_cast<SCCOL>(i), nTab, false );
             else
-                pDoc->ShowRows( nSubStart, nSubEnd, nTab, sal_False );
+                pDoc->ShowRows( nSubStart, nSubEnd, nTab, false );
         }
     }
 
-    pArray->SetVisibleBelow( nLevel, nEntry, sal_True, sal_True );
+    pArray->SetVisibleBelow( nLevel, nEntry, true, true );
 
     pDoc->SetDrawPageSize(nTab);
     pDoc->InvalidatePageBreaks(nTab);
@@ -728,14 +728,14 @@ sal_Bool ScOutlineDocFunc::HideOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt1
         ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         if (bColumns)
         {
-            pUndoDoc->InitUndo( pDoc, nTab, nTab, sal_True, false );
+            pUndoDoc->InitUndo( pDoc, nTab, nTab, true, false );
             pDoc->CopyToDocument( static_cast<SCCOL>(nStart), 0, nTab,
                     static_cast<SCCOL>(nEnd), MAXROW, nTab, IDF_NONE, false,
                     pUndoDoc );
         }
         else
         {
-            pUndoDoc->InitUndo( pDoc, nTab, nTab, false, sal_True );
+            pUndoDoc->InitUndo( pDoc, nTab, nTab, false, true );
             pDoc->CopyToDocument( 0, nStart, nTab, MAXCOL, nEnd, nTab, IDF_NONE, false, pUndoDoc );
         }
 
@@ -749,9 +749,9 @@ sal_Bool ScOutlineDocFunc::HideOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt1
     SCCOLROW i;
     if ( bColumns )
         for ( i = nStart; i <= nEnd; i++ )
-            pDoc->ShowCol( static_cast<SCCOL>(i), nTab, sal_False );
+            pDoc->ShowCol( static_cast<SCCOL>(i), nTab, false );
     else
-        pDoc->ShowRows( nStart, nEnd, nTab, sal_False );
+        pDoc->ShowRows( nStart, nEnd, nTab, false );
 
     pArray->SetVisibleBelow( nLevel, nEntry, false );
 

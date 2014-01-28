@@ -325,7 +325,7 @@ lcl_XL_ParseSheetRef( const sal_Unicode* start,
          * Invalid: 1.!a1
          * Invalid: 1e!a1
          */
-        while( 1 )
+        while( true )
         {
             const sal_Unicode uc = *p;
             if( rtl::isAsciiAlpha( uc ) || uc == '_' )

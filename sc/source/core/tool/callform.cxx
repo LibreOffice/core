@@ -240,7 +240,7 @@ bool InitExternalFunc(const OUString& rModuleName)
                                           eAsyncType );
                 pFuncCol->insert(pFuncData);
             }
-            bRet = sal_True;
+            bRet = true;
         }
         else
             delete pLib;

@@ -509,8 +509,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                     case 0x6A:
                     case 0x2A: // Deleted Cell Reference        [323 273]
                         // no information which part is deleted, set both
-                        aSRD.SetColDeleted( sal_True );
-                        aSRD.SetRowDeleted( sal_True );
+                        aSRD.SetColDeleted( true );
+                        aSRD.SetRowDeleted( true );
                 }
 
                 aStack << aPool.Store( aSRD );
@@ -549,10 +549,10 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                     case 0x6B:
                     case 0x2B: // Deleted Area Refernce         [323 273]
                         // no information which part is deleted, set all
-                        rSRef1.SetColDeleted( sal_True );
-                        rSRef1.SetRowDeleted( sal_True );
-                        rSRef2.SetColDeleted( sal_True );
-                        rSRef2.SetRowDeleted( sal_True );
+                        rSRef1.SetColDeleted( true );
+                        rSRef1.SetRowDeleted( true );
+                        rSRef2.SetColDeleted( true );
+                        rSRef2.SetRowDeleted( true );
                 }
 
                 aStack << aPool.Store( aCRD );
@@ -781,8 +781,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                     case 0x7C:
                     case 0x3C: // Deleted 3-D Cell Reference    [    277]
                         // no information which part is deleted, set both
-                        aSRD.SetColDeleted( sal_True );
-                        aSRD.SetRowDeleted( sal_True );
+                        aSRD.SetColDeleted( true );
+                        aSRD.SetRowDeleted( true );
                 }
 
                 if (aExtInfo.mbExternal)
@@ -805,7 +805,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 else
                 {
                     if ( !ValidTab(nTabFirst))
-                        aSRD.SetTabDeleted( sal_True );
+                        aSRD.SetTabDeleted( true );
 
                     if( nTabLast != nTabFirst )
                     {
@@ -860,10 +860,10 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                     case 0x7D:
                     case 0x3D: // Deleted 3-D Area Reference    [    277]
                         // no information which part is deleted, set all
-                        rR1.SetColDeleted( sal_True );
-                        rR1.SetRowDeleted( sal_True );
-                        rR2.SetColDeleted( sal_True );
-                        rR2.SetRowDeleted( sal_True );
+                        rR1.SetColDeleted( true );
+                        rR1.SetRowDeleted( true );
+                        rR2.SetColDeleted( true );
+                        rR2.SetRowDeleted( true );
                 }
 
                 if (aExtInfo.mbExternal)
@@ -873,9 +873,9 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 else
                 {
                     if ( !ValidTab(nTabFirst) )
-                        rR1.SetTabDeleted( sal_True );
+                        rR1.SetTabDeleted( true );
                     if ( !ValidTab(nTabLast) )
-                        rR2.SetTabDeleted( sal_True );
+                        rR2.SetTabDeleted( true );
 
                     aStack << aPool.Store( aCRD );
                 }

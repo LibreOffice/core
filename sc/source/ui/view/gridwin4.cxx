@@ -1341,7 +1341,7 @@ bool ScGridWindow::IsAutoFilterActive( SCCOL nCol, SCROW nRow, SCTAB nTab )
         if ( aQueryParam.GetEntry(nQuery).bDoQuery )
         {
             if (aQueryParam.GetEntry(nQuery).nField == nCol)
-                bColumnFound = sal_True;
+                bColumnFound = true;
 
             if (nQuery > 0)
                 if (aQueryParam.GetEntry(nQuery).eConnect != SC_AND)
@@ -1484,7 +1484,7 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
                             }
                         }
 
-                        if ( aMultiMark.IsCellMarked( nThisX, nThisY, sal_True ) == bRepeat )
+                        if ( aMultiMark.IsCellMarked( nThisX, nThisY, true ) == bRepeat )
                         {
                             if ( !pMergeFlag->IsOverlapped() )
                             {
@@ -1509,7 +1509,7 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
                     }
                     else        // !bTestMerge
                     {
-                        if ( aMultiMark.IsCellMarked( nX, nY, sal_True ) == bRepeat &&
+                        if ( aMultiMark.IsCellMarked( nX, nY, true ) == bRepeat &&
                                                 nEndX * nLayoutSign >= nScrX * nLayoutSign && nEndY >= nScrY )
                         {
                             aInvert.AddRect( Rectangle( nScrX,nScrY,nEndX,nEndY ) );

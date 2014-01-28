@@ -2308,7 +2308,7 @@ void setCursor(  const SCCOL& nCol, const SCROW& nRow, const uno::Reference< fra
         if ( bInSel )
             pShell->SetCursor( nCol, nRow );
         else
-            pShell->MoveCursorAbs( nCol, nRow, SC_FOLLOW_NONE, false, false, sal_True, false );
+            pShell->MoveCursorAbs( nCol, nRow, SC_FOLLOW_NONE, false, false, true, false );
     }
 }
 
@@ -3449,7 +3449,7 @@ ScVbaRange::Sort( const uno::Any& Key1, const uno::Any& Order1, const uno::Any& 
         if ( nOrientation == excel::XlSortOrientation::xlSortRows )
             aSortParam.bByRow = false;
         else
-            aSortParam.bByRow = sal_True;
+            aSortParam.bByRow = true;
 
     }
 
@@ -3605,7 +3605,7 @@ ScVbaRange::End( ::sal_Int32 Direction )  throw (uno::RuntimeException)
         SfxAllItemSet aArgs( SFX_APP()->GetPool() );
         // Hoping this will make sure this slot is called
         // synchronously
-        SfxBoolItem sfxAsync( SID_ASYNCHRON, sal_False );
+        SfxBoolItem sfxAsync( SID_ASYNCHRON, false );
         aArgs.Put( sfxAsync, sfxAsync.Which() );
         SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
 
@@ -4891,7 +4891,7 @@ uno::Any ScVbaRange::getShowDetail() throw ( css::uno::RuntimeException)
     {
         sal_Bool bColumn =thisAddress.StartRow == thisAddress.EndRow ? false:sal_True;
         ScDocument* pDoc = getDocumentFromRange( mxRange );
-        ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(static_cast<SCTAB>(thisAddress.Sheet), sal_True);
+        ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(static_cast<SCTAB>(thisAddress.Sheet), true);
         const ScOutlineArray* pOutlineArray =  bColumn ? pOutlineTable->GetColArray(): pOutlineTable->GetRowArray();
         if( pOutlineArray )
         {

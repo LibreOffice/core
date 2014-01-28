@@ -533,26 +533,26 @@ void lcl_GetColumnTypes(
                     case 'L' :
                         nDbType = sdbc::DataType::BIT;
                         nFieldLen = 1;
-                        bTypeDefined = sal_True;
-                        bPrecDefined = sal_True;
+                        bTypeDefined = true;
+                        bPrecDefined = true;
                         break;
                     case 'D' :
                         nDbType = sdbc::DataType::DATE;
                         nFieldLen = 8;
-                        bTypeDefined = sal_True;
-                        bPrecDefined = sal_True;
+                        bTypeDefined = true;
+                        bPrecDefined = true;
                         break;
                     case 'M' :
                         nDbType = sdbc::DataType::LONGVARCHAR;
                         nFieldLen = 10;
-                        bTypeDefined = sal_True;
-                        bPrecDefined = sal_True;
-                        bHasMemo = sal_True;
+                        bTypeDefined = true;
+                        bPrecDefined = true;
+                        bHasMemo = true;
                         break;
                     case 'C' :
                         nDbType = sdbc::DataType::VARCHAR;
-                        bTypeDefined = sal_True;
-                        bPrecDefined = sal_True;
+                        bTypeDefined = true;
+                        bPrecDefined = true;
                         break;
                     case 'N' :
                         nDbType = sdbc::DataType::DECIMAL;
@@ -567,7 +567,7 @@ void lcl_GetColumnTypes(
                         if ( CharClass::isAsciiNumeric(aTmp) )
                         {
                             nPrecision = aTmp.toInt32();
-                            bPrecDefined = sal_True;
+                            bPrecDefined = true;
                         }
                     }
                 }
@@ -687,9 +687,9 @@ void lcl_GetColumnTypes(
              //! CAVEAT! There is no way to define a numeric field with a length
              //! of 1 and no decimals!
             if ( nFieldLen == 1 && nPrecision == 0 )
-                bSdbLenBad = sal_True;
+                bSdbLenBad = true;
             nFieldLen = SvDbaseConverter::ConvertPrecisionToOdbc( nFieldLen, nPrecision );
-            bSdbLenAdjusted = sal_True;
+            bSdbLenAdjusted = true;
         }
         if ( nFieldLen > 254 )
         {
@@ -697,7 +697,7 @@ void lcl_GetColumnTypes(
             {   // zu lang fuer normales Textfeld => Memofeld
                 nDbType = sdbc::DataType::LONGVARCHAR;
                 nFieldLen = 10;
-                bHasMemo = sal_True;
+                bHasMemo = true;
             }
             else
                 nFieldLen = 254;                    // dumm gelaufen..

@@ -264,13 +264,13 @@ void ScViewFunctionSet::SetAnchor( SCCOL nPosX, SCROW nPosY )
         }
         else
         {
-            pView->DoneBlockMode( sal_True );
+            pView->DoneBlockMode( true );
             aAnchorPos.Set( nPosX, nPosY, nTab );
             ScMarkData& rMark = pViewData->GetMarkData();
             if ( rMark.IsMarked() || rMark.IsMultiMarked() )
             {
                 pView->InitBlockMode( aAnchorPos.Col(), aAnchorPos.Row(),
-                                        aAnchorPos.Tab(), sal_True );
+                                        aAnchorPos.Tab(), true );
                 bStarted = sal_True;
             }
             else
@@ -284,9 +284,9 @@ void ScViewFunctionSet::DestroyAnchor()
 {
     sal_Bool bRefMode = SC_MOD()->IsFormulaMode();
     if (bRefMode)
-        pViewData->GetView()->DoneRefMode( sal_True );
+        pViewData->GetView()->DoneRefMode( true );
     else
-        pViewData->GetView()->DoneBlockMode( sal_True );
+        pViewData->GetView()->DoneBlockMode( true );
 
     bAnchor = false;
 }
@@ -446,7 +446,7 @@ sal_Bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, sal_Boo
         {
             if (!bAnchor)
             {
-                pView->DoneRefMode( sal_True );
+                pView->DoneRefMode( true );
                 pView->InitRefMode( nPosX, nPosY, pViewData->GetTabNo(), SC_REFTYPE_REF );
             }
 
@@ -634,7 +634,7 @@ sal_Bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, sal_Boo
                 if ( bMove || ( pEngine && pEngine->GetMouseEvent().IsShift() ) )
                 {
                     pView->InitBlockMode( aAnchorPos.Col(), aAnchorPos.Row(),
-                                            aAnchorPos.Tab(), sal_True );
+                                            aAnchorPos.Tab(), true );
                     bStarted = sal_True;
                 }
             }
@@ -649,8 +649,8 @@ sal_Bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, sal_Boo
             ScMarkData& rMark = pViewData->GetMarkData();
             if (rMark.IsMarked() || rMark.IsMultiMarked())
             {
-                pView->DoneBlockMode(sal_True);
-                pView->InitBlockMode( nPosX, nPosY, nTab, sal_True );
+                pView->DoneBlockMode(true);
+                pView->InitBlockMode( nPosX, nPosY, nTab, true );
                 pView->MarkCursor( (SCCOL) nPosX, (SCROW) nPosY, nTab );
 
                 aAnchorPos.Set( nPosX, nPosY, nTab );
@@ -665,13 +665,13 @@ sal_Bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, sal_Boo
                 SCCOL nOldX = pViewData->GetCurX();
                 SCROW nOldY = pViewData->GetCurY();
 
-                pView->InitBlockMode( nOldX, nOldY, nTab, sal_True );
+                pView->InitBlockMode( nOldX, nOldY, nTab, true );
                 pView->MarkCursor( (SCCOL) nOldX, (SCROW) nOldY, nTab );
 
                 if ( nOldX != nPosX || nOldY != nPosY )
                 {
-                    pView->DoneBlockMode( sal_True );
-                    pView->InitBlockMode( nPosX, nPosY, nTab, sal_True );
+                    pView->DoneBlockMode( true );
+                    pView->InitBlockMode( nPosX, nPosY, nTab, true );
                     pView->MarkCursor( (SCCOL) nPosX, (SCROW) nPosY, nTab );
                     aAnchorPos.Set( nPosX, nPosY, nTab );
                 }
@@ -786,15 +786,15 @@ void ScHeaderFunctionSet::CreateAnchor()
         return;
 
     ScTabView* pView = pViewData->GetView();
-    pView->DoneBlockMode( sal_True );
+    pView->DoneBlockMode( true );
     if (bColumn)
     {
-        pView->InitBlockMode( static_cast<SCCOL>(nCursorPos), 0, pViewData->GetTabNo(), sal_True, sal_True, false );
+        pView->InitBlockMode( static_cast<SCCOL>(nCursorPos), 0, pViewData->GetTabNo(), true, true, false );
         pView->MarkCursor( static_cast<SCCOL>(nCursorPos), MAXROW, pViewData->GetTabNo() );
     }
     else
     {
-        pView->InitBlockMode( 0, nCursorPos, pViewData->GetTabNo(), sal_True, false, sal_True );
+        pView->InitBlockMode( 0, nCursorPos, pViewData->GetTabNo(), true, false, true );
         pView->MarkCursor( MAXCOL, nCursorPos, pViewData->GetTabNo() );
     }
     bAnchor = sal_True;
@@ -802,7 +802,7 @@ void ScHeaderFunctionSet::CreateAnchor()
 
 void ScHeaderFunctionSet::DestroyAnchor()
 {
-    pViewData->GetView()->DoneBlockMode( sal_True );
+    pViewData->GetView()->DoneBlockMode( true );
     bAnchor = false;
 }
 
@@ -889,9 +889,9 @@ sal_Bool ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bo
 
     if ( !bAnchor || !pView->IsBlockMode() )
     {
-        pView->DoneBlockMode( sal_True );
+        pView->DoneBlockMode( true );
         pViewData->GetMarkData().MarkToMulti();         //! who changes this?
-        pView->InitBlockMode( nPosX, nPosY, pViewData->GetTabNo(), sal_True, bColumn, !bColumn );
+        pView->InitBlockMode( nPosX, nPosY, pViewData->GetTabNo(), true, bColumn, !bColumn );
 
         bAnchor = sal_True;
     }

@@ -258,7 +258,7 @@ void XclPageData::SetScPaperSize( const Size& rSize, bool bPortrait, bool bStric
         }
     }
     if( !bStrictSize )
-        SetScPaperSize( rSize, bPortrait, sal_True );
+        SetScPaperSize( rSize, bPortrait, true );
 }
 
 // ============================================================================

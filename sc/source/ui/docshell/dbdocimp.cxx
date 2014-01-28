@@ -600,8 +600,8 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         if( !bAddrInsert )      // update database range
         {
             pDBData->SetImportParam( rParam );
-            pDBData->SetHeader( sal_True );
-            pDBData->SetByRow( sal_True );
+            pDBData->SetHeader( true );
+            pDBData->SetByRow( true );
             pDBData->SetArea( nTab, rParam.nCol1,rParam.nRow1, nEndCol,nEndRow );
             pDBData->SetImportSelection( bRealSelection );
             pDoc->CompileDBFormula();

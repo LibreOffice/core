@@ -984,12 +984,12 @@ void ScRefHandler::stateChanged(const StateChangedType nStateChange, const bool 
         {
             m_aHelper.enableInput( false );
             m_aHelper.EnableSpreadsheets();
-            m_aHelper.SetDispatcherLock( sal_True );
+            m_aHelper.SetDispatcherLock( true );
             aTimer.Start();
         }
         else
         {
-            m_aHelper.enableInput( sal_True );
+            m_aHelper.enableInput( true );
             m_aHelper.SetDispatcherLock( false );           /*//! here and in DoClose ?*/
         }
     }

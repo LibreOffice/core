@@ -200,7 +200,7 @@ void ImportExcel::ReadFileSharing()
     if( (nRecommendReadOnly != 0) || (nPasswordHash != 0) )
     {
         if( SfxItemSet* pItemSet = GetMedium().GetItemSet() )
-            pItemSet->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
+            pItemSet->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
 
         if( SfxObjectShell* pShell = GetDocShell() )
         {
@@ -832,7 +832,7 @@ void ImportExcel::Bundleheader( void )
 void ImportExcel::Standardwidth( void )
 {
     sal_uInt16 nScWidth = XclTools::GetScColumnWidth( maStrm.ReaduInt16(), GetCharWidth() );
-    pColRowBuff->SetDefWidth( nScWidth, sal_True );
+    pColRowBuff->SetDefWidth( nScWidth, true );
 }
 
 
@@ -1391,10 +1391,10 @@ XclImpOutlineDataBuffer::~XclImpOutlineDataBuffer()
 
 void XclImpOutlineDataBuffer::Convert()
 {
-    mxColOutlineBuff->SetOutlineArray( GetDoc().GetOutlineTable( mnScTab, sal_True )->GetColArray() );
+    mxColOutlineBuff->SetOutlineArray( GetDoc().GetOutlineTable( mnScTab, true )->GetColArray() );
     mxColOutlineBuff->MakeScOutline();
 
-    mxRowOutlineBuff->SetOutlineArray( GetDoc().GetOutlineTable( mnScTab, sal_True )->GetRowArray() );
+    mxRowOutlineBuff->SetOutlineArray( GetDoc().GetOutlineTable( mnScTab, true )->GetRowArray() );
     mxRowOutlineBuff->MakeScOutline();
 
     mxColRowBuff->ConvertHiddenFlags( mnScTab );

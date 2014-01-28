@@ -144,7 +144,7 @@ void ScColBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
         nRangeCnt = 1;
     }
 
-    pViewData->GetView()->SetWidthOrHeight( sal_True, nRangeCnt, pRanges, eMode, nSizeTwips );
+    pViewData->GetView()->SetWidthOrHeight( true, nRangeCnt, pRanges, eMode, nSizeTwips );
     delete[] pRanges;
 }
 
@@ -153,7 +153,7 @@ void ScColBar::HideEntries( SCCOLROW nStart, SCCOLROW nEnd )
     SCCOLROW nRange[2];
     nRange[0] = nStart;
     nRange[1] = nEnd;
-    pViewData->GetView()->SetWidthOrHeight( sal_True, 1, nRange, SC_SIZE_DIRECT, 0 );
+    pViewData->GetView()->SetWidthOrHeight( true, 1, nRange, SC_SIZE_DIRECT, 0 );
 }
 
 void ScColBar::SetMarking( bool bSet )

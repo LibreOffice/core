@@ -104,7 +104,7 @@ void ScXMLTableSourceContext::EndElement()
         {
             ScXMLImport::MutexGuard aGuard(GetScImport());
             if (pDoc->RenameTab( GetScImport().GetTables().GetCurrentSheet(),
-                GetScImport().GetTables().GetCurrentSheetName(), false, sal_True))
+                GetScImport().GetTables().GetCurrentSheetName(), false, true))
             {
                 sLink = ScGlobal::GetAbsDocName( sLink, pDoc->GetDocumentShell() );
                 if (sFilterName.isEmpty())

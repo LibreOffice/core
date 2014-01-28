@@ -617,7 +617,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     const SfxUInt16Item&  rUInt16Item = (const SfxUInt16Item&)pReqArgs->Get( FID_COL_WIDTH );
 
                     // #101390#; the value of the macro is in HMM so use HMMToTwips to convert
-                    pTabViewShell->SetMarkedWidthOrHeight( sal_True, SC_SIZE_DIRECT,
+                    pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_DIRECT,
                                     sal::static_int_cast<sal_uInt16>( HMMToTwips(rUInt16Item.GetValue()) ) );
                     if( ! rReq.IsAPI() )
                         rReq.Done();
@@ -640,7 +640,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     if ( pDlg->Execute() == RET_OK )
                     {
                         long nVal = pDlg->GetInputValue();
-                        pTabViewShell->SetMarkedWidthOrHeight( sal_True, SC_SIZE_DIRECT, (sal_uInt16)nVal );
+                        pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_DIRECT, (sal_uInt16)nVal );
 
                         // #101390#; the value of the macro should be in HMM so use TwipsToEvenHMM to convert
                         rReq.AppendItem( SfxUInt16Item( FID_COL_WIDTH, (sal_uInt16)TwipsToEvenHMM(nVal)) );
@@ -659,7 +659,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     const SfxUInt16Item&  rUInt16Item = (const SfxUInt16Item&)pReqArgs->Get( FID_COL_OPT_WIDTH );
 
                     // #101390#; the value of the macro is in HMM so use HMMToTwips to convert
-                    pTabViewShell->SetMarkedWidthOrHeight( sal_True, SC_SIZE_OPTIMAL,
+                    pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_OPTIMAL,
                                     sal::static_int_cast<sal_uInt16>( HMMToTwips(rUInt16Item.GetValue()) ) );
                     ScGlobal::nLastColWidthExtra = rUInt16Item.GetValue();
 
@@ -680,7 +680,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     if ( pDlg->Execute() == RET_OK )
                     {
                         long nVal = pDlg->GetInputValue();
-                        pTabViewShell->SetMarkedWidthOrHeight( sal_True, SC_SIZE_OPTIMAL, (sal_uInt16)nVal );
+                        pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_OPTIMAL, (sal_uInt16)nVal );
                         ScGlobal::nLastColWidthExtra = nVal;
 
                         // #101390#; the value of the macro should be in HMM so use TwipsToEvenHMM to convert
@@ -693,7 +693,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             break;
 
         case FID_COL_OPT_DIRECT:
-            pTabViewShell->SetMarkedWidthOrHeight( sal_True, SC_SIZE_OPTIMAL, STD_EXTRA_WIDTH );
+            pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_OPTIMAL, STD_EXTRA_WIDTH );
             rReq.Done();
             break;
 
@@ -706,11 +706,11 @@ void ScCellShell::Execute( SfxRequest& rReq )
             rReq.Done();
             break;
         case FID_COL_HIDE:
-            pTabViewShell->SetMarkedWidthOrHeight( sal_True, SC_SIZE_DIRECT, 0 );
+            pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_DIRECT, 0 );
             rReq.Done();
             break;
         case FID_COL_SHOW:
-            pTabViewShell->SetMarkedWidthOrHeight( sal_True, SC_SIZE_SHOW, 0 );
+            pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_SHOW, 0 );
             rReq.Done();
             break;
 
@@ -800,7 +800,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                 const ScMarkData& rMark = GetViewData()->GetMarkData();
                 if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
-                    pTabViewShell->MarkDataArea( sal_True );
+                    pTabViewShell->MarkDataArea( true );
 
                 GetViewData()->GetSimpleArea( nStartCol,nStartRow,nStartTab,
                                               nEndCol,nEndRow,nEndTab );

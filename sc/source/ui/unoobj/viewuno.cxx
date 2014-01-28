@@ -409,7 +409,7 @@ awt::Rectangle ScViewPaneBase::GetVisArea() const
                 pViewShell->GetViewData()->GetPosY(eWhichV),
                 pViewShell->GetViewData()->GetTabNo());
             Rectangle aCellRect( pDoc->GetMMRect( aCell.Col(), aCell.Row(), aCell.Col(), aCell.Row(), aCell.Tab() ) );
-            Size aVisSize( pWindow->PixelToLogic( pWindow->GetSizePixel(), pWindow->GetDrawMapMode( sal_True ) ) );
+            Size aVisSize( pWindow->PixelToLogic( pWindow->GetSizePixel(), pWindow->GetDrawMapMode( true ) ) );
             Point aVisPos( aCellRect.TopLeft() );
             if ( pDoc->IsLayoutRTL( aCell.Tab() ) )
             {
@@ -780,7 +780,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                     pViewSh->SetTabNo( pFirst->aStart.Tab() );
                 pViewSh->DoneBlockMode();
                 pViewSh->InitOwnBlockMode();
-                pViewData->GetMarkData().MarkFromRangeList( rRanges, sal_True );
+                pViewData->GetMarkData().MarkFromRangeList( rRanges, true );
                 pViewSh->MarkDataChanged();
                 pViewData->GetDocShell()->PostPaintGridAll();   // Markierung (alt&neu)
                 if ( pFirst )
@@ -841,7 +841,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                                 {
                                     if (!bDrawSelModeSet && (pObj->GetLayer() == SC_LAYER_BACK))
                                     {
-                                        pViewSh->SetDrawSelMode(sal_True);
+                                        pViewSh->SetDrawSelMode(true);
                                         pViewSh->UpdateLayerLocks();
                                         bDrawSelModeSet = sal_True;
                                     }
@@ -979,7 +979,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection() throw(uno::RuntimeException)
             //  remember if the selection was from the cursor position without anything selected
             //  (used when rendering the selection)
 
-            pObj->SetCursorOnly( sal_True );
+            pObj->SetCursorOnly( true );
         }
     }
 
@@ -1490,7 +1490,7 @@ void ScTabViewObj::SetZoom(sal_Int16 nZoom)
             }
         }
         Fraction aFract( nZoom, 100 );
-        pViewSh->SetZoom( aFract, aFract, sal_True );
+        pViewSh->SetZoom( aFract, aFract, true );
         pViewSh->PaintGrid();
         pViewSh->PaintTop();
         pViewSh->PaintLeft();
@@ -1694,7 +1694,7 @@ void SAL_CALL ScTabViewObj::splitAtPosition( sal_Int32 nPixelX, sal_Int32 nPixel
     ScTabViewShell* pViewSh = GetViewShell();
     if (pViewSh)
     {
-        pViewSh->SplitAtPixel( Point( nPixelX, nPixelY ), sal_True, sal_True );
+        pViewSh->SplitAtPixel( Point( nPixelX, nPixelY ), true, true );
         pViewSh->FreezeSplitters( false );
         pViewSh->InvalidateSplit();
     }
@@ -1720,8 +1720,8 @@ void SAL_CALL ScTabViewObj::freezeAtPosition( sal_Int32 nColumns, sal_Int32 nRow
         Point aSplit(pViewData->GetScrPos( (SCCOL)nColumns, (SCROW)nRows, SC_SPLIT_BOTTOMLEFT, sal_True ));
         aSplit += aWinStart;
 
-        pViewSh->SplitAtPixel( aSplit, sal_True, sal_True );
-        pViewSh->FreezeSplitters( sal_True );
+        pViewSh->SplitAtPixel( aSplit, true, true );
+        pViewSh->FreezeSplitters( true );
         pViewSh->InvalidateSplit();
     }
 }

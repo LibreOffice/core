@@ -722,7 +722,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     pImpl->pRequest = new SfxRequest( rReq );
                     delete pImpl->pDocInserter;
                     pImpl->pDocInserter = new ::sfx2::DocumentInserter(
-                        OUString::createFromAscii( ScDocShell::Factory().GetShortName() ), 0 );
+                        OUString::createFromAscii( ScDocShell::Factory().GetShortName() ), false );
                     pImpl->pDocInserter->StartExecuteModal( LINK( this, ScDocShell, DialogClosedHdl ) );
                     return ;
                 }
@@ -2097,7 +2097,7 @@ bool ScDocShell::DdeGetData( const OUString& rItem,
             return false;                           // ungueltiger Bereich
 
         if( aDdeTextFmt[0] == 'F' )
-            aObj.SetFormulas( sal_True );
+            aObj.SetFormulas( true );
         if( aDdeTextFmt == "SYLK" ||
             aDdeTextFmt == "FSYLK" )
         {
@@ -2142,7 +2142,7 @@ bool ScDocShell::DdeSetData( const OUString& rItem,
         }
         ScImportExport aObj( &aDocument, rItem );
         if( aDdeTextFmt[0] == 'F' )
-            aObj.SetFormulas( sal_True );
+            aObj.SetFormulas( true );
         if( aDdeTextFmt == "SYLK" ||
             aDdeTextFmt == "FSYLK" )
         {

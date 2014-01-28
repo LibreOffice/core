@@ -1185,7 +1185,7 @@ bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
         SfxItemSet aSet( rEngine.GetAttribs( aSel ) );
         SfxItemState eFieldState = aSet.GetItemState( EE_FEATURE_FIELD, false );
         if ( eFieldState == SFX_ITEM_DONTCARE || eFieldState == SFX_ITEM_SET )
-            bFields = sal_True;
+            bFields = true;
     }
     if ( bFields )
     {

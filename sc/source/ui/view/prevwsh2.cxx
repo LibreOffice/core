@@ -69,7 +69,7 @@ void ScPreviewShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 
     if (bDataChanged)
-        pPreview->DataChanged(sal_True);
+        pPreview->DataChanged(true);
 }
 
 

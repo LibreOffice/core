@@ -90,7 +90,7 @@ ScDBData* ScUndoUtil::GetOldDBData( ScDBData* pUndoData, ScDocument* pDoc, SCTAB
         if (!pRet)
         {
             pRet = new ScDBData( OUString(STR_DB_LOCAL_NONAME), nTab,
-                                nCol1,nRow1, nCol2,nRow2, sal_True,
+                                nCol1,nRow1, nCol2,nRow2, true,
                                 pDoc->HasColHeader( nCol1,nRow1,nCol2,nRow2,nTab ) );
             pDoc->SetAnonymousDBData(nTab,pRet);
         }

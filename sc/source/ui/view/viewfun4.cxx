@@ -431,7 +431,7 @@ void ScViewFunc::DoThesaurus( sal_Bool bRecord )
         }
         delete pNewTObj;
     }
-    KillEditView(sal_True);
+    KillEditView(true);
     delete pEditDefaults;
     delete pThesaurusEngine;
     delete pOldTObj;
@@ -571,7 +571,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, sal_Boo
     // *** final cleanup *** --------------------------------------------------
 
     rViewData.SetSpellingView( NULL );
-    KillEditView(sal_True);
+    KillEditView(true);
     delete pEngine;
     pDocSh->PostPaintGridAll();
     rViewData.GetViewShell()->UpdateInputHandler();

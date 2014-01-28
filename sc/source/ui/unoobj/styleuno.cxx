@@ -1646,7 +1646,7 @@ void ScStyleObj::SetOnePropertyValue( const OUString& rPropertyName, const SfxIt
                                                 rSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, 9000 ) );
                                             break;
                                             case table::CellOrientation_STACKED:
-                                                rSet.Put( SfxBoolItem( ATTR_STACKED, sal_True ) );
+                                                rSet.Put( SfxBoolItem( ATTR_STACKED, true ) );
                                             break;
                                             default:
                                             {

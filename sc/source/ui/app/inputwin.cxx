@@ -1659,7 +1659,7 @@ void ScTextWnd::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
 {
     if ( pEditView )
     {
-        CommandEvent aDragEvent( rPosPixel, COMMAND_STARTDRAG, sal_True );
+        CommandEvent aDragEvent( rPosPixel, COMMAND_STARTDRAG, true );
         pEditView->Command( aDragEvent );
 
         //  handling of d&d to different view (CancelHandler) can't be done here,
@@ -1835,7 +1835,7 @@ IMPL_LINK_NOARG(ScTextWnd, NotifyHdl)
         //  while an InputHandler method is modifying the EditEngine content
 
         if ( pHdl && !pHdl->IsInOwnChange() )
-            pHdl->InputChanged( pEditView, sal_True );  // #i20282# InputChanged must know if called from modify handler
+            pHdl->InputChanged( pEditView, true );  // #i20282# InputChanged must know if called from modify handler
     }
 
     return 0;
@@ -2466,7 +2466,7 @@ void ScPosWnd::DoEnter()
                     }
 
                     SfxStringItem aPosItem( SID_CURRENTCELL, aText );
-                    SfxBoolItem aUnmarkItem( FN_PARAM_1, sal_True );        // remove existing selection
+                    SfxBoolItem aUnmarkItem( FN_PARAM_1, true );        // remove existing selection
 
                     pViewSh->GetViewData()->GetDispatcher().Execute( SID_CURRENTCELL,
                                         SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD,

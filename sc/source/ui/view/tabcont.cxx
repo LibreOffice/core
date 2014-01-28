@@ -459,7 +459,7 @@ void ScTabControl::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
     if (!bDisable)
     {
         Region aRegion( Rectangle(0,0,0,0) );
-        CommandEvent aCEvt( rPosPixel, COMMAND_STARTDRAG, sal_True );   // needed for StartDrag
+        CommandEvent aCEvt( rPosPixel, COMMAND_STARTDRAG, true );   // needed for StartDrag
         if (TabBar::StartDrag( aCEvt, aRegion ))
             DoDrag( aRegion );
     }

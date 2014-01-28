@@ -271,7 +271,7 @@ void ScSolverOptionsDialog::FillListBox()
             else
                 pButton->SetStateUnchecked();
             pEntry->AddItem( pButton );
-            pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0 ) );
+            pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false ) );
             pEntry->AddItem( new SvLBoxString( pEntry, 0, aVisName ) );
         }
         else
@@ -279,7 +279,7 @@ void ScSolverOptionsDialog::FillListBox()
             // value entry
             pEntry = new SvTreeListEntry;
             pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty ) );                   // empty column
-            pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0 ) );
+            pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false ) );
             ScSolverOptionsString* pItem = new ScSolverOptionsString( pEntry, 0, aVisName );
             if ( eClass == uno::TypeClass_DOUBLE )
             {

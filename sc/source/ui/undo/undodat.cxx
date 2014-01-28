@@ -702,7 +702,7 @@ void ScUndoSubTotals::Undo()
     if (pUndoRange)
         pDoc->SetRangeName( new ScRangeName( *pUndoRange ) );
     if (pUndoDB)
-        pDoc->SetDBCollection( new ScDBCollection( *pUndoDB ), sal_True );
+        pDoc->SetDBCollection( new ScDBCollection( *pUndoDB ), true );
 
     SCTAB nVisTab = pViewShell->GetViewData()->GetTabNo();
     if ( nVisTab != nTab )
@@ -812,7 +812,7 @@ void ScUndoSort::Undo()
                               IDF_NONE, false, pDoc );
 
     if (pUndoDB)
-        pDoc->SetDBCollection( new ScDBCollection( *pUndoDB ), sal_True );
+        pDoc->SetDBCollection( new ScDBCollection( *pUndoDB ), true );
 
     SCTAB nVisTab = pViewShell->GetViewData()->GetTabNo();
     if ( nVisTab != nSortTab )
@@ -912,7 +912,7 @@ void ScUndoQuery::Undo()
         nDestEndRow = aQueryParam.nDestRow + ( aQueryParam.nRow2-aQueryParam.nRow1 );
 
         ScDBData* pData = pDoc->GetDBAtCursor( aQueryParam.nDestCol, aQueryParam.nDestRow,
-                                                aQueryParam.nDestTab, sal_True );
+                                                aQueryParam.nDestTab, true );
         if (pData)
         {
             ScRange aNewDest;
@@ -955,7 +955,7 @@ void ScUndoQuery::Undo()
                                         IDF_NONE, false, pDoc );
 
     if (pUndoDB)
-        pDoc->SetDBCollection( new ScDBCollection( *pUndoDB ), sal_True );
+        pDoc->SetDBCollection( new ScDBCollection( *pUndoDB ), true );
 
     if (!bCopy)
     {
@@ -1085,7 +1085,7 @@ void ScUndoAutoFilter::DoChange( bool bUndo )
 void ScUndoAutoFilter::Undo()
 {
     BeginUndo();
-    DoChange( sal_True );
+    DoChange( true );
     EndUndo();
 }
 
@@ -1133,8 +1133,8 @@ void ScUndoDBData::Undo()
 
     sal_Bool bOldAutoCalc = pDoc->GetAutoCalc();
     pDoc->SetAutoCalc( false );         // Avoid unnecessary calculations
-    pDoc->CompileDBFormula( sal_True );     // CreateFormulaString
-    pDoc->SetDBCollection( new ScDBCollection(*pUndoColl), sal_True );
+    pDoc->CompileDBFormula( true );     // CreateFormulaString
+    pDoc->SetDBCollection( new ScDBCollection(*pUndoColl), true );
     pDoc->CompileDBFormula( false );    // CompileFormulaString
     pDoc->SetAutoCalc( bOldAutoCalc );
 
@@ -1151,8 +1151,8 @@ void ScUndoDBData::Redo()
 
     sal_Bool bOldAutoCalc = pDoc->GetAutoCalc();
     pDoc->SetAutoCalc( false );         // Avoid unnecessary calculations
-    pDoc->CompileDBFormula( sal_True );     // CreateFormulaString
-    pDoc->SetDBCollection( new ScDBCollection(*pRedoColl), sal_True );
+    pDoc->CompileDBFormula( true );     // CreateFormulaString
+    pDoc->SetDBCollection( new ScDBCollection(*pRedoColl), true );
     pDoc->CompileDBFormula( false );    // CompileFormulaString
     pDoc->SetAutoCalc( bOldAutoCalc );
 
@@ -1503,7 +1503,7 @@ void ScUndoRepeatDB::Undo()
     if (pUndoRange)
         pDoc->SetRangeName( new ScRangeName( *pUndoRange ) );
     if (pUndoDB)
-        pDoc->SetDBCollection( new ScDBCollection( *pUndoDB ), sal_True );
+        pDoc->SetDBCollection( new ScDBCollection( *pUndoDB ), true );
 
     SCTAB nVisTab = pViewShell->GetViewData()->GetTabNo();
     if ( nVisTab != nTab )

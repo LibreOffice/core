@@ -79,7 +79,7 @@ void ScAreaLinkSaver::InsertNewLink( ScDocument* pDoc )
     {
         ScAreaLink* pLink = new ScAreaLink( pObjSh, aFileName, aFilterName, aOptions,
                                             aSourceArea, aDestArea.aStart, nRefresh );
-        pLink->SetInCreate( sal_True );
+        pLink->SetInCreate( true );
         pLink->SetDestArea( aDestArea );
         OUString aTmp1(aFilterName), aTmp2(aSourceArea);
         pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFileName, &aTmp1, &aTmp2 );

@@ -227,7 +227,7 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
                 ScDPObject aNewObj( *pDPObj );
                 aNewObj.SetSheetDesc( aNewDesc );
                 ScDBDocFunc aFunc( *pViewData->GetDocShell() );
-                aFunc.DataPilotUpdate( pDPObj, &aNewObj, sal_True, false );
+                aFunc.DataPilotUpdate( pDPObj, &aNewObj, true, false );
                 pViewData->GetView()->CursorPosChanged();       // shells may be switched
             }
             delete pDlg;
@@ -344,7 +344,7 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, sal_Bool bMove )
             aNewObj.SetSaveData( aSaveData );
             ScDBDocFunc aFunc( *pViewData->GetDocShell() );
             // when dragging fields, allow re-positioning (bAllowMove)
-            aFunc.DataPilotUpdate( pDragDPObj, &aNewObj, sal_True, false, sal_True );
+            aFunc.DataPilotUpdate( pDragDPObj, &aNewObj, true, false, true );
             pViewData->GetView()->CursorPosChanged();       // shells may be switched
         }
     }
@@ -1015,7 +1015,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, sal_Bool bUp )
 
                 if (!bGrow)     // sonst in AdjustPrintZoom schon passiert
                 {
-                    pViewFunc->UpdatePageBreakData( sal_True );
+                    pViewFunc->UpdatePageBreakData( true );
                     pDocSh->SetDocumentModified();
                 }
             }

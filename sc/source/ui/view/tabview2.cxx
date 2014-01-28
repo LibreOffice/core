@@ -365,7 +365,7 @@ void ScTabView::InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
 
         //  Teil von Markierung aufheben?
         if (bForceNeg)
-            bBlockNeg = sal_True;
+            bBlockNeg = true;
         else if (bTestNeg)
         {
             if ( bCols )
@@ -527,7 +527,7 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                         nBlockStartXOrig - nCurX + nColSpan - 1 : 0;
                     nCurYOffset  = (nCurY >= nBlockStartYOrig && nCurY < nBlockStartYOrig + nRowSpan - 1) ?
                         nBlockStartYOrig - nCurY + nRowSpan - 1 : 0;
-                    bBlockStartMerged = sal_True;
+                    bBlockStartMerged = true;
                 }
             }
 

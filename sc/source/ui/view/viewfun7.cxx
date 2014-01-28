@@ -217,7 +217,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         // #89247# Set flag for ScDocument::UpdateChartListeners() which is
         // called during paste.
         if ( !bSameDocClipboard )
-            GetViewData()->GetDocument()->SetPastingDrawFromOtherDoc( sal_True );
+            GetViewData()->GetDocument()->SetPastingDrawFromOtherDoc( true );
 
         pScDrawView->Paste( *pModel, aPos, NULL, nOptions );
 

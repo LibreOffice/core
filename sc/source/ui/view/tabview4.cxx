@@ -290,7 +290,7 @@ void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eT
     ScMarkData& rMark = aViewData.GetMarkData();
     if (!aViewData.IsRefMode())
     {
-        aViewData.SetRefMode( sal_True, eType );
+        aViewData.SetRefMode( true, eType );
         aViewData.SetRefStart( nCurX, nCurY, nCurZ );
         aViewData.SetRefEnd( nCurX, nCurY, nCurZ );
 

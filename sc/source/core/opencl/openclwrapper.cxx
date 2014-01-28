@@ -370,7 +370,7 @@ bool buildProgram(const char* buildOption, GPUEnv* gpuInfo, int idx)
         }
         if ( clStatus != CL_SUCCESS )
         {
-            return 0;
+            return false;
         }
 
         boost::scoped_array<char> buildLog(new char[length]);

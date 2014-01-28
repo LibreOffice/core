@@ -907,7 +907,7 @@ struct ConventionOOO_A1 : public Convention_A1
                 rBuffer.append( '.');      // need at least the sheet separator in ODF
             makeExternalSingleRefStr(
                 rBuffer, rFileName, aLastTabName, rRef.Ref2, rPos, bDisplayTabName, bEncodeUrl);
-        } while (0);
+        } while (false);
 
         if (bODF)
             rBuffer.append( ']');
@@ -2701,7 +2701,7 @@ bool ScCompiler::IsReference( const OUString& rName )
                 // If sheet "1" exists and the expression is 1.E+2 continue as
                 // usual, the ScRange/ScAddress parser will take care of it.
             }
-        } while(0);
+        } while(false);
     }
 
     if (IsSingleReference( rName))

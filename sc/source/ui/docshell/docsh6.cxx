@@ -370,7 +370,7 @@ void ScDocShell::UpdateLinks()
                 aNames.insert(pTabLink->GetFileName());
             else        // nicht mehr benutzt -> loeschen
             {
-                pTabLink->SetAddUndo(sal_True);
+                pTabLink->SetAddUndo(true);
                 pLinkManager->Remove(k);
             }
         }

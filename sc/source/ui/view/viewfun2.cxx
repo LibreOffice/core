@@ -896,7 +896,7 @@ void ScViewFunc::RemoveManualBreaks()
     if (bUndo)
     {
         ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-        pUndoDoc->InitUndo( pDoc, nTab, nTab, sal_True, sal_True );
+        pUndoDoc->InitUndo( pDoc, nTab, nTab, true, true );
         pDoc->CopyToDocument( 0,0,nTab, MAXCOL,MAXROW,nTab, IDF_NONE, false, pUndoDoc );
         pDocSh->GetUndoManager()->AddUndoAction(
                                 new ScUndoRemoveBreaks( pDocSh, nTab, pUndoDoc ) );
@@ -905,7 +905,7 @@ void ScViewFunc::RemoveManualBreaks()
     pDoc->RemoveManualBreaks(nTab);
     pDoc->UpdatePageBreaks(nTab);
 
-    UpdatePageBreakData( sal_True );
+    UpdatePageBreakData( true );
     pDocSh->SetDocumentModified();
     pDocSh->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID );
 }
@@ -1923,7 +1923,7 @@ void ScViewFunc::ExtendScenario()
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScPatternAttr aPattern( pDoc->GetPool() );
     aPattern.GetItemSet().Put( ScMergeFlagAttr( SC_MF_SCENARIO ) );
-    aPattern.GetItemSet().Put( ScProtectionAttr( sal_True ) );
+    aPattern.GetItemSet().Put( ScProtectionAttr( true ) );
     ApplySelectionPattern(aPattern);
 }
 
@@ -1950,7 +1950,7 @@ sal_Bool ScViewFunc::InsertTable( const OUString& rName, SCTAB nTab, sal_Bool bR
     sal_Bool bSuccess = GetViewData()->GetDocShell()->GetDocFunc().
                         InsertTable( nTab, rName, bRecord, false );
     if (bSuccess)
-        SetTabNo( nTab, sal_True );
+        SetTabNo( nTab, true );
 
     return bSuccess;
 }
@@ -2027,7 +2027,7 @@ sal_Bool ScViewFunc::AppendTable( const OUString& rName, sal_Bool bRecord )
             pDocSh->GetUndoManager()->AddUndoAction(
                         new ScUndoInsertTab( pDocSh, nTab, sal_True, rName));
         GetViewData()->InsertTab( nTab );
-        SetTabNo( nTab, sal_True );
+        SetTabNo( nTab, true );
         pDocSh->PostPaintExtras();
         pDocSh->SetDocumentModified();
         SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
@@ -2053,7 +2053,7 @@ sal_Bool ScViewFunc::DeleteTable( SCTAB nTab, sal_Bool bRecord )
         SCTAB nNewTab = nTab;
         if ( nNewTab >= pDoc->GetTableCount() )
             --nNewTab;
-        SetTabNo( nNewTab, sal_True );
+        SetTabNo( nNewTab, true );
     }
     return bSuccess;
 }
@@ -2087,7 +2087,7 @@ bool ScViewFunc::DeleteTables( const SCTAB nTab, SCTAB nSheets )
         pDocSh->Broadcast( ScTablesHint( SC_TABS_DELETED, nTab, nSheets ) );
         if ( nNewTab >= pDoc->GetTableCount() )
             nNewTab = pDoc->GetTableCount() - 1;
-        SetTabNo( nNewTab, sal_True );
+        SetTabNo( nNewTab, true );
 
         pDocSh->PostPaintExtras();
         pDocSh->SetDocumentModified();
@@ -2146,7 +2146,7 @@ sal_Bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, sal_Bool bRecord
             }
             if ( pDoc->IsScenario(nTab) )
             {
-                pUndoDoc->SetScenario( nTab, sal_True );
+                pUndoDoc->SetScenario( nTab, true );
                 OUString aComment;
                 Color  aColor;
                 sal_uInt16 nScenFlags;
@@ -2206,7 +2206,7 @@ sal_Bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, sal_Bool bRecord
         if ( nNewTab >= pDoc->GetTableCount() )
             nNewTab = pDoc->GetTableCount() - 1;
 
-        SetTabNo( nNewTab, sal_True );
+        SetTabNo( nNewTab, true );
 
         if (bWasLinked)
         {
@@ -2252,7 +2252,7 @@ sal_Bool ScViewFunc::RenameTable( const OUString& rName, SCTAB nTab )
 
 bool ScViewFunc::SetTabBgColor( const Color& rColor, SCTAB nTab )
 {
-    bool bSuccess = GetViewData()->GetDocShell()->GetDocFunc().SetTabBgColor( nTab, rColor, sal_True, false );
+    bool bSuccess = GetViewData()->GetDocShell()->GetDocFunc().SetTabBgColor( nTab, rColor, true, false );
     if (bSuccess)
     {
         GetViewData()->GetViewShell()->UpdateInputHandler();
@@ -2262,7 +2262,7 @@ bool ScViewFunc::SetTabBgColor( const Color& rColor, SCTAB nTab )
 
 bool ScViewFunc::SetTabBgColor( ScUndoTabColorInfo::List& rUndoSetTabBgColorInfoList )
 {
-    bool bSuccess = GetViewData()->GetDocShell()->GetDocFunc().SetTabBgColor( rUndoSetTabBgColorInfoList, sal_True, false );
+    bool bSuccess = GetViewData()->GetDocShell()->GetDocFunc().SetTabBgColor( rUndoSetTabBgColorInfoList, true, false );
     if (bSuccess)
     {
         GetViewData()->GetViewShell()->UpdateInputHandler();
@@ -2408,7 +2408,7 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
         if (!bWasThere)         // Insert link only once per source document
         {
             ScTableLink* pLink = new ScTableLink( pDocSh, aFileName, aFilterName, aOptions, nRefresh );
-            pLink->SetInCreate( sal_True );
+            pLink->SetInCreate( true );
             pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFileName, &aFilterName );
             pLink->Update();
             pLink->SetInCreate( false );
@@ -2427,7 +2427,7 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
 
     for (i=0; i<nInsCount; i++)
         GetViewData()->InsertTab(nTab);
-    SetTabNo(nTab,sal_True);
+    SetTabNo(nTab,true);
     pDocSh->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB,
                                 PAINT_GRID | PAINT_TOP | PAINT_LEFT | PAINT_EXTRAS );
 
@@ -2729,7 +2729,7 @@ void ScViewFunc::MoveTable(
                 sal_uInt16 nFlags;
 
                 pDoc->GetScenarioData(nMovTab, aComment,aColor, nFlags);
-                pDoc->SetScenario(nDestTab1,sal_True);
+                pDoc->SetScenario(nDestTab1,true);
                 pDoc->SetScenarioData(nDestTab1,aComment,aColor,nFlags);
                 sal_Bool bActive = pDoc->IsActiveScenario(nMovTab );
                 pDoc->SetActiveScenario( nDestTab1, bActive );
@@ -2793,7 +2793,7 @@ void ScViewFunc::MoveTable(
         else if (!bCopy && nTab<nDestTab)
             nNewTab--;
 
-        SetTabNo( nNewTab, sal_True );
+        SetTabNo( nNewTab, true );
 
         //#i29848# adjust references to data on the copied sheet
         if( bCopy )
@@ -2821,8 +2821,8 @@ void ScViewFunc::ShowTable( const std::vector<OUString>& rNames )
         aName = *itr;
         if (pDoc->GetTable(aName, nPos))
         {
-            pDoc->SetVisible( nPos, sal_True );
-            SetTabNo( nPos, sal_True );
+            pDoc->SetVisible( nPos, true );
+            SetTabNo( nPos, true );
             SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
             if (!bFound)
                 bFound = true;

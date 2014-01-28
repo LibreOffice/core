@@ -460,7 +460,7 @@ inline ds_status readProfileFromFile(ds_profile* profile, ds_score_deserializer 
         currentPosition = dataEnd + strlen(DS_TAG_VERSION_END);
 
         // parse the device information
-        while (1)
+        while (true)
         {
             unsigned int i;
 

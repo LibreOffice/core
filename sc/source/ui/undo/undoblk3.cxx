@@ -199,7 +199,7 @@ void ScUndoDeleteContents::Redo()
 void ScUndoDeleteContents::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->DeleteContents( nFlags, sal_True );
+        ((ScTabViewTarget&)rTarget).GetViewShell()->DeleteContents( nFlags, true );
 }
 
 bool ScUndoDeleteContents::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -469,9 +469,9 @@ void ScUndoSelectionAttr::Repeat(SfxRepeatTarget& rTarget)
     {
         ScTabViewShell& rViewShell = *((ScTabViewTarget&)rTarget).GetViewShell();
         if (pLineOuter)
-            rViewShell.ApplyPatternLines( *pApplyPattern, pLineOuter, pLineInner, sal_True );
+            rViewShell.ApplyPatternLines( *pApplyPattern, pLineOuter, pLineInner, true );
         else
-            rViewShell.ApplySelectionPattern( *pApplyPattern, sal_True );
+            rViewShell.ApplySelectionPattern( *pApplyPattern, true );
     }
 }
 
@@ -538,7 +538,7 @@ void ScUndoAutoFill::Undo()
         pDoc->DeleteAreaTab( aWorkRange, IDF_AUTOFILL );
         pUndoDoc->CopyToDocument( aWorkRange, IDF_AUTOFILL, false, pDoc );
 
-        pDoc->ExtendMerge( aWorkRange, sal_True );
+        pDoc->ExtendMerge( aWorkRange, true );
         pDocShell->PostPaint( aWorkRange, PAINT_GRID, nExtFlags );
     }
     pDocShell->PostDataChanged();
@@ -616,7 +616,7 @@ void ScUndoAutoFill::Repeat(SfxRepeatTarget& rTarget)
     {
         ScTabViewShell& rViewShell = *((ScTabViewTarget&)rTarget).GetViewShell();
         if (eFillCmd==FILL_SIMPLE)
-            rViewShell.FillSimple( eFillDir, sal_True );
+            rViewShell.FillSimple( eFillDir, true );
         else
             rViewShell.FillSeries( eFillDir, eFillCmd, eFillDateCmd,
                                    fStartValue, fStepValue, fMaxValue, sal_True );
@@ -876,7 +876,7 @@ void ScUndoAutoFormat::Redo()
                                                 &aVirtDev, nPPTX, nPPTY, aZoomX, aZoomY, bFormula,
                                                 &aDestMark );
                     pDoc->SetColWidth( nCol, nTab, nThisSize );
-                    pDoc->ShowCol( nCol, nTab, sal_True );
+                    pDoc->ShowCol( nCol, nTab, true );
                 }
         }
 
@@ -991,7 +991,7 @@ void ScUndoReplace::Undo()
         pSearchItem->SetReplaceString(aTempStr);
         pDoc->ReplaceStyle( *pSearchItem,
                             aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(),
-                            aMarkData, sal_True);
+                            aMarkData, true);
         pSearchItem->SetReplaceString(pSearchItem->GetSearchString());
         pSearchItem->SetSearchString(aTempStr);
         if (pViewShell)
@@ -1057,7 +1057,7 @@ void ScUndoReplace::Redo()
     {
         pDoc->ReplaceStyle( *pSearchItem,
                             aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(),
-                            aMarkData, sal_True);
+                            aMarkData, true);
         pDocShell->PostPaintGridAll();
     }
     else
@@ -1385,7 +1385,7 @@ void ScUndoRefreshLink::Undo()
             if (bMakeRedo)
             {
                 if (bFirst)
-                    pRedoDoc->InitUndo( pDoc, nTab, nTab, sal_True, sal_True );
+                    pRedoDoc->InitUndo( pDoc, nTab, nTab, true, true );
                 else
                     pRedoDoc->AddUndoTab( nTab, nTab, true, true );
                 bFirst = false;
@@ -1518,7 +1518,7 @@ void ScUndoInsertAreaLink::Redo()
 
     ScAreaLink* pLink = new ScAreaLink( pDocShell, aDocName, aFltName, aOptions,
                                             aAreaName, aRange.aStart, nRefreshDelay );
-    pLink->SetInCreate( sal_True );
+    pLink->SetInCreate( true );
     pLink->SetDestArea( aRange );
     pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aDocName, &aFltName, &aAreaName );
     pLink->Update();
@@ -1567,7 +1567,7 @@ void ScUndoRemoveAreaLink::Undo()
 
     ScAreaLink* pLink = new ScAreaLink( pDocShell, aDocName, aFltName, aOptions,
                                         aAreaName, aRange.aStart, nRefreshDelay );
-    pLink->SetInCreate( sal_True );
+    pLink->SetInCreate( true );
     pLink->SetDestArea( aRange );
     pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aDocName, &aFltName, &aAreaName );
     pLink->Update();
@@ -1676,7 +1676,7 @@ void ScUndoUpdateAreaLink::DoChange( const sal_Bool bUndo ) const
     }
 
     ScRange aWorkRange( aNewRange.aStart, ScAddress( nEndX, nEndY, nEndZ ) );
-    pDoc->ExtendMerge( aWorkRange, sal_True );
+    pDoc->ExtendMerge( aWorkRange, true );
 
     //  Paint
 

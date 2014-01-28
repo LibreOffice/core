@@ -169,7 +169,7 @@ sal_Bool ScServerObject::GetData(
     {
         ScImportExport aObj( pDoc, aRange );
         if( aDdeTextFmt[0] == 'F' )
-            aObj.SetFormulas( sal_True );
+            aObj.SetFormulas( true );
         if( aDdeTextFmt.equalsAscii( "SYLK" ) ||
             aDdeTextFmt.equalsAscii( "FSYLK" ) )
         {

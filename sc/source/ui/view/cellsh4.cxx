@@ -298,14 +298,14 @@ void ScCellShell::ExecuteMove( SfxRequest& rReq )
             break;
 
         case SID_PREV_UNPROTECT:
-            pTabViewShell->FindNextUnprot( sal_True, !rReq.IsAPI() );
+            pTabViewShell->FindNextUnprot( true, !rReq.IsAPI() );
             break;
 
         case SID_CURSORENTERUP:
             if (rReq.IsAPI())
                 pTabViewShell->MoveCursorRel( 0, -1, SC_FOLLOW_LINE, false );
             else
-                pTabViewShell->MoveCursorEnter( sal_True );
+                pTabViewShell->MoveCursorEnter( true );
             break;
 
         case SID_CURSORENTERDOWN:
@@ -384,7 +384,7 @@ void ScCellShell::ExecutePageSel( SfxRequest& rReq )
             OSL_FAIL("Unknown message in ViewShell (ExecutePageSel)");
             return;
     }
-    rReq.AppendItem( SfxBoolItem(FN_PARAM_2, sal_True) );
+    rReq.AppendItem( SfxBoolItem(FN_PARAM_2, true) );
     ExecuteSlot( rReq, GetInterface() );
 }
 

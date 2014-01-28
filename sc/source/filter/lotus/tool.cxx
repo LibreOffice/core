@@ -242,7 +242,7 @@ SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
             nIndex1 = pFormTable->GetStandardFormat(
                 NUMBERFORMAT_NUMBER, eLanguage );
             aFormString = pFormTable->GenerateFormat(nIndex1,
-                eLanguage, sal_True, false, nL, 1);
+                eLanguage, true, false, nL, 1);
             break;
         case 0x05:  // frei
             //fStandard;nL;
@@ -267,7 +267,7 @@ SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
                     nIndex1 = pFormTable->GetStandardFormat(
                         NUMBERFORMAT_NUMBER, eLanguage );
                     aFormString = pFormTable->GenerateFormat(nIndex1,
-                        eLanguage, false, sal_True, nSt, 1);
+                        eLanguage, false, true, nSt, 1);
                     break;
                 case 0x01:  // generelles Format
                     //fStandard;nSt;
@@ -577,7 +577,7 @@ sal_Bool RangeNameBufferWK3::FindAbs( const OUString& rRef, sal_uInt16& rIndex )
 
                 pRef->SetColRel( false );
                 pRef->SetRowRel( false );
-                pRef->SetTabRel( sal_True );
+                pRef->SetTabRel( true );
 
                 if( itr->bSingleRef )
                     pScTokenArray->AddSingleReference( *pRef );
@@ -586,7 +586,7 @@ sal_Bool RangeNameBufferWK3::FindAbs( const OUString& rRef, sal_uInt16& rIndex )
                     pRef = &itr->aScComplexRefDataRel.Ref2;
                     pRef->SetColRel( false );
                     pRef->SetRowRel( false );
-                    pRef->SetTabRel( sal_True );
+                    pRef->SetTabRel( true );
                     pScTokenArray->AddDoubleReference( itr->aScComplexRefDataRel );
                 }
 

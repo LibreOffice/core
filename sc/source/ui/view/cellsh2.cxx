@@ -239,7 +239,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     //  select current database in database beamer
 
                     ScImportParam aImportParam;
-                    ScDBData* pDBData = pTabViewShell->GetDBData(sal_True,SC_DB_OLD);       // don't create if none found
+                    ScDBData* pDBData = pTabViewShell->GetDBData(true,SC_DB_OLD);       // don't create if none found
                     if (pDBData)
                         pDBData->GetImportParam( aImportParam );
 
@@ -252,7 +252,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         case SID_REIMPORT_DATA:
             {
                 sal_Bool bOk = false;
-                ScDBData* pDBData = pTabViewShell->GetDBData(sal_True,SC_DB_OLD);
+                ScDBData* pDBData = pTabViewShell->GetDBData(true,SC_DB_OLD);
                 if (pDBData)
                 {
                     ScImportParam aImportParam;
@@ -275,7 +275,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
         case SID_REFRESH_DBAREA:
             {
-                ScDBData* pDBData = pTabViewShell->GetDBData(sal_True,SC_DB_OLD);
+                ScDBData* pDBData = pTabViewShell->GetDBData(true,SC_DB_OLD);
                 if (pDBData)
                 {
                     //  repeat import like SID_REIMPORT_DATA
@@ -410,7 +410,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         if( bHasHeader )
                             aSortParam.bHasHeader = bHasHeader;
 
-                        aSortParam.bInplace = sal_True;             // from Basic always
+                        aSortParam.bInplace = true;             // from Basic always
 
                         const SfxPoolItem* pItem;
                         if ( pArgs->GetItemState( SID_SORT_BYROW, sal_True, &pItem ) == SFX_ITEM_SET )
@@ -625,7 +625,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 SCSIZE nEC = aParam.GetEntryCount();
                 for (SCSIZE i=0; i<nEC; i++)
                     aParam.GetEntry(i).bDoQuery = false;
-                aParam.bDuplicate = sal_True;
+                aParam.bDuplicate = true;
                 pTabViewShell->Query( aParam, NULL, sal_True );
                 rReq.Done();
             }
@@ -872,7 +872,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                 if (pDoc->GetFormatTable()->IsNumberFormat(aTemp1, nNumIndex, nVal))
                                     aExpr1 = OUString( ::rtl::math::doubleToUString( nVal,
                                             rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-                                            ScGlobal::pLocaleData->getNumDecimalSep()[0], sal_True));
+                                            ScGlobal::pLocaleData->getNumDecimalSep()[0], true));
                                 else
                                     aExpr1 = aTemp1;
                             }
@@ -889,7 +889,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                 if (pDoc->GetFormatTable()->IsNumberFormat(aTemp2, nNumIndex, nVal))
                                     aExpr2 = OUString( ::rtl::math::doubleToUString( nVal,
                                             rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-                                            ScGlobal::pLocaleData->getNumDecimalSep()[0], sal_True));
+                                            ScGlobal::pLocaleData->getNumDecimalSep()[0], true));
                                 else
                                     aExpr2 = aTemp2;
                             }

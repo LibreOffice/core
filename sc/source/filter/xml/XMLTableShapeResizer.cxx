@@ -96,7 +96,7 @@ void ScMyOLEFixer::CreateChartListener(ScDocument* pDoc,
         //if we have the flat filter we need to set the dirty flag thus the visible charts get repainted
         //otherwise the charts keep their first visual representation which was created at a moment where the calc itself was not loaded completely and is incorect therefor
         if( (rImport.getImportFlags() & IMPORT_ALL) == IMPORT_ALL )
-            pCL->SetDirty( sal_True );
+            pCL->SetDirty( true );
         else
         {
             // #i104899# If a formula cell is already dirty, further changes aren't propagated.

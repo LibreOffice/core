@@ -255,7 +255,7 @@ void ExcScenario::Apply( const XclImpRoot& rRoot, const sal_Bool bLast )
     }
 
     if( bLast )
-        r.SetActiveScenario( nNewTab, sal_True );
+        r.SetActiveScenario( nNewTab, true );
 
     // modify what the Active tab is set to if the new
     // scenario tab occurs before the active tab.

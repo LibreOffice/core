@@ -459,7 +459,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
             bool bAutomaticMark = false;
             if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
             {
-                pViewSh->GetViewData()->GetView()->MarkDataArea( sal_True );
+                pViewSh->GetViewData()->GetView()->MarkDataArea( true );
                 bAutomaticMark = true;
             }
 
@@ -591,7 +591,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                     }
 
                     pScDocSh->Broadcast( ScTablesHint( SC_TAB_INSERTED, nNewTab ) );
-                    pViewSh->SetTabNo( nNewTab, sal_True );
+                    pViewSh->SetTabNo( nNewTab, true );
                     pScDocSh->PostPaintExtras();            //! erst hinterher ???
                 }
                 else
@@ -601,7 +601,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
             }
             else if ( nToTable != pData->GetTabNo() )
             {
-                pViewSh->SetTabNo( nToTable, sal_True );
+                pViewSh->SetTabNo( nToTable, true );
             }
         }
 

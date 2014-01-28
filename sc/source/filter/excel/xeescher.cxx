@@ -163,7 +163,7 @@ static void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, sal_
     sal_Int32 nCol = 0, nRow = 0;
     sal_Int32 nColOff = 0, nRowOff= 0;
 
-    while(1)
+    while(true)
     {
         Rectangle r = rRoot.GetDocPtr()->GetMMRect( nCol,nRow,nCol,nRow,nTab );
         if( !bTo )

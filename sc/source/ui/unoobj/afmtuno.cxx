@@ -612,7 +612,7 @@ void SAL_CALL ScAutoFormatObj::setPropertyValue(
         // else Fehler
 
         //! Notify fuer andere Objekte
-        pFormats->SetSaveLater(sal_True);
+        pFormats->SetSaveLater(true);
     }
 }
 
@@ -727,7 +727,7 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
                                     pData->PutItem( nFieldIndex, SfxInt32Item( ATTR_ROTATE_VALUE, 9000 ) );
                                 break;
                                 case table::CellOrientation_STACKED:
-                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, sal_True ) );
+                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, true ) );
                                 break;
                                 default:
                                 {
@@ -748,7 +748,7 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
 
                 if (bDone)
                     //! Notify fuer andere Objekte?
-                    pFormats->SetSaveLater(sal_True);
+                    pFormats->SetSaveLater(true);
             }
         }
         else
@@ -766,7 +766,7 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
                             pData->PutItem( nFieldIndex, aOuter );
 
                             //! Notify for other objects?
-                            pFormats->SetSaveLater(sal_True);
+                            pFormats->SetSaveLater(true);
                         }
                     }
                     break;
@@ -781,7 +781,7 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
                             pData->PutItem( nFieldIndex, aOuter );
 
                             //! Notify for other objects?
-                            pFormats->SetSaveLater(sal_True);
+                            pFormats->SetSaveLater(true);
                         }
                     }
                     break;

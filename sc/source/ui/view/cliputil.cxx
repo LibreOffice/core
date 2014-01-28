@@ -40,7 +40,7 @@ void ScClipUtil::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTab
         SCCOL nClipEndX;
         SCROW nClipEndY;
         pClipDoc->GetClipStart( nClipStartX, nClipStartY );
-        pClipDoc->GetClipArea( nClipEndX, nClipEndY, sal_True );
+        pClipDoc->GetClipArea( nClipEndX, nClipEndY, true );
         nClipEndX = nClipEndX + nClipStartX;
         nClipEndY = nClipEndY + nClipStartY;   // GetClipArea returns the difference
 

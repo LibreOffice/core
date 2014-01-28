@@ -325,7 +325,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     rBindings.Invalidate( SID_SET_SUPER_SCRIPT );
                     rBindings.Invalidate( SID_SET_SUB_SCRIPT );
                 }
-                bSetModified = sal_False;
+                bSetModified = false;
             }
             return;
 
@@ -629,9 +629,9 @@ void ScEditShell::Execute( SfxRequest& rReq )
         break;
     }
 
-    pHdl->DataChanged(sal_False, bSetModified);
+    pHdl->DataChanged(false, bSetModified);
     if (bSetSelIsRef)
-        pHdl->SetSelIsRef(sal_True);
+        pHdl->SetSelIsRef(true);
 }
 
 static void lcl_DisableAll( SfxItemSet& rSet )    // disable all slots
@@ -1111,7 +1111,7 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
             default:
                 break;
         }
-        rSet.Put( SfxBoolItem( nId, sal_True ) );
+        rSet.Put( SfxBoolItem( nId, true ) );
     }
 
     //! Testen, ob Klammer-Hervorhebung aktiv ist !!!!
@@ -1123,11 +1123,11 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
                     aAttribs.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
     if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
     {
-        rSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, sal_True ) );
+        rSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, true ) );
     }
     else if( eEsc == SVX_ESCAPEMENT_SUBSCRIPT )
     {
-        rSet.Put( SfxBoolItem( SID_SET_SUB_SCRIPT, sal_True ) );
+        rSet.Put( SfxBoolItem( SID_SET_SUB_SCRIPT, true ) );
     }
     pViewData->GetBindings().Invalidate( SID_SET_SUPER_SCRIPT );
     pViewData->GetBindings().Invalidate( SID_SET_SUB_SCRIPT );

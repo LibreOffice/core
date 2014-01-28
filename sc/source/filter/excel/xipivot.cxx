@@ -488,10 +488,10 @@ void XclImpPCField::ConvertDateGroupField( ScDPSaveData& rSaveData, const ScfStr
 ScDPNumGroupInfo XclImpPCField::GetScNumGroupInfo() const
 {
     ScDPNumGroupInfo aNumInfo;
-    aNumInfo.mbEnable = sal_True;
+    aNumInfo.mbEnable = true;
     aNumInfo.mbDateValues = false;
-    aNumInfo.mbAutoStart = sal_True;
-    aNumInfo.mbAutoEnd = sal_True;
+    aNumInfo.mbAutoStart = true;
+    aNumInfo.mbAutoEnd = true;
 
     if( const double* pfMinValue = GetNumGroupLimit( EXC_SXFIELD_INDEX_MIN ) )
     {
@@ -512,10 +512,10 @@ ScDPNumGroupInfo XclImpPCField::GetScNumGroupInfo() const
 ScDPNumGroupInfo XclImpPCField::GetScDateGroupInfo() const
 {
     ScDPNumGroupInfo aDateInfo;
-    aDateInfo.mbEnable = sal_True;
+    aDateInfo.mbEnable = true;
     aDateInfo.mbDateValues = false;
-    aDateInfo.mbAutoStart = sal_True;
-    aDateInfo.mbAutoEnd = sal_True;
+    aDateInfo.mbAutoStart = true;
+    aDateInfo.mbAutoEnd = true;
 
     if( const DateTime* pMinDate = GetDateGroupLimit( EXC_SXFIELD_INDEX_MIN ) )
     {
@@ -531,7 +531,7 @@ ScDPNumGroupInfo XclImpPCField::GetScDateGroupInfo() const
     if( const sal_Int16* pnStepValue = GetDateGroupStep() )
     {
         aDateInfo.mfStep = *pnStepValue;
-        aDateInfo.mbDateValues = sal_True;
+        aDateInfo.mbDateValues = true;
     }
 
     return aDateInfo;

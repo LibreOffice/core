@@ -236,7 +236,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         case SID_DEFINE_DBNAME:
         {
             //  wenn auf einem bestehenden Bereich aufgerufen, den markieren
-            GetDBData( sal_True, SC_DB_OLD );
+            GetDBData( true, SC_DB_OLD );
             const ScMarkData& rMark = GetViewData()->GetMarkData();
             if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
                 MarkDataArea( false );

@@ -133,7 +133,7 @@ bool FuSelection::IsNoteCaptionClicked( const Point& rPos ) const
         bool bProtectDoc =  rDoc.IsTabProtected( nTab ) || (pDocSh && pDocSh->IsReadOnly());
 
         // search the last object (on top) in the object list
-        SdrObjListIter aIter( *pPageView->GetObjList(), IM_DEEPNOGROUPS, sal_True );
+        SdrObjListIter aIter( *pPageView->GetObjList(), IM_DEEPNOGROUPS, true );
         for( SdrObject* pObj = aIter.Next(); pObj; pObj = aIter.Next() )
         {
             if( pObj->GetLogicRect().IsInside( rPos ) )

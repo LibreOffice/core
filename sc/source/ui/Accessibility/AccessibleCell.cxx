@@ -596,9 +596,9 @@ sal_Bool ScAccessibleCell::IsDropdown()
             SCTAB i;
             ScMarkData aMarks;
             for (i=nTab+1; i<nTabCount && mpDoc->IsScenario(i); i++)
-                mpDoc->MarkScenario( i, nTab, aMarks, sal_False, SC_SCENARIO_SHOWFRAME );
+                mpDoc->MarkScenario( i, nTab, aMarks, false, SC_SCENARIO_SHOWFRAME );
             ScRangeList aRanges;
-            aMarks.FillRangeListWithMarks( &aRanges, sal_False );
+            aMarks.FillRangeListWithMarks( &aRanges, false );
             sal_Bool bHasScenario;
             SCTAB nRangeCount = aRanges.size();
             for (i=0; i<nRangeCount; i++)

@@ -78,7 +78,7 @@ void ScTabViewShell::ExecGallery( SfxRequest& rReq )
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
 
-    SFX_ITEMSET_ARG( pArgs, pGalleryItem, SvxGalleryItem, SID_GALLERY_FORMATS, sal_False );
+    SFX_ITEMSET_ARG( pArgs, pGalleryItem, SvxGalleryItem, SID_GALLERY_FORMATS, false );
     if ( !pGalleryItem )
         return;
 

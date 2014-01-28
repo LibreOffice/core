@@ -538,7 +538,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     PaintTop();
                     PaintLeft();
                     rBindings.Invalidate( nSlot );
-                    rReq.AppendItem( SfxBoolItem( nSlot, sal_True ) );
+                    rReq.AppendItem( SfxBoolItem( nSlot, true ) );
                     rReq.Done();
                 }
             }
@@ -843,12 +843,12 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         rMark.SelectTable( nTab, false );
 
                     for( nSelIx = 0; nSelIx < nSelCount; ++nSelIx )
-                        rMark.SelectTable( static_cast<SCTAB>(aIndexList[nSelIx]), sal_True );
+                        rMark.SelectTable( static_cast<SCTAB>(aIndexList[nSelIx]), true );
 
                     // activate another table, if current is deselected
                     if( !rMark.GetTableSelect( rViewData.GetTabNo() ) )
                     {
-                        rMark.SelectTable( nFirstVisTab, sal_True );
+                        rMark.SelectTable( nFirstVisTab, true );
                         SetTabNo( nFirstVisTab );
                     }
 
@@ -898,7 +898,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 if ( eHSplit == SC_SPLIT_FIX || eVSplit == SC_SPLIT_FIX )           // aufheben
                     RemoveSplit();
                 else
-                    FreezeSplitters( sal_True );        // erzeugen oder fixieren
+                    FreezeSplitters( true );        // erzeugen oder fixieren
                 rReq.Done();
 
                 InvalidateSplit();
@@ -1028,7 +1028,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     {
                         OUString aPassword = pDlg->GetPassword();
                         Protect( TABLEID_DOC, aPassword );
-                        rReq.AppendItem( SfxBoolItem( FID_PROTECT_DOC, sal_True ) );
+                        rReq.AppendItem( SfxBoolItem( FID_PROTECT_DOC, true ) );
                         rReq.Done();
                     }
 

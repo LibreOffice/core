@@ -388,7 +388,7 @@ ScVbaWorksheets::Select( const uno::Any& Replace ) throw (uno::RuntimeException)
             bSelectSingle = false;
         }
         else
-            rMarkData.SelectTable( static_cast< SCTAB >( pSheet->getSheetID() ), sal_True );
+            rMarkData.SelectTable( static_cast< SCTAB >( pSheet->getSheetID() ), true );
     }
 
 

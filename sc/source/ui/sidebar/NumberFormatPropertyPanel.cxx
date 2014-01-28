@@ -277,8 +277,8 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
         break;
     case SID_NUMBER_FORMAT:
         {
-            bool          bThousand     =    0;
-            bool          bNegRed       =    0;
+            bool          bThousand     =    false;
+            bool          bNegRed       =    false;
             sal_uInt16        nPrecision    =    0;
             sal_uInt16        nLeadZeroes   =    0;
             if( eState >= SFX_ITEM_AVAILABLE)
@@ -328,8 +328,8 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
             }
             else
             {
-                bThousand   =    0;
-                bNegRed     =    0;
+                bThousand   =    false;
+                bNegRed     =    false;
                 nPrecision  =    0;
                 nLeadZeroes =    1;
             }

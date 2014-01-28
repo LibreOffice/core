@@ -115,7 +115,7 @@ bool lcl_AdjustRanges( ScRangeList& rRanges, SCTAB nSourceTab, SCTAB nDestTab, S
 //static
 sal_uInt16 ScChartHelper::DoUpdateAllCharts( ScDocument* pDoc )
 {
-    return lcl_DoUpdateCharts( ScAddress(), pDoc, sal_True );
+    return lcl_DoUpdateCharts( ScAddress(), pDoc, true );
 }
 
 void ScChartHelper::AdjustRangesOfChartsOnDestinationPage( ScDocument* pSrcDoc, ScDocument* pDestDoc, const SCTAB nSrcTab, const SCTAB nDestTab )

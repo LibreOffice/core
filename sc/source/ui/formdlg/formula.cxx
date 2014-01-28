@@ -114,7 +114,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
     m_aHelper.enableInput( false );
     m_aHelper.EnableSpreadsheets();
     m_aHelper.Init();
-    m_aHelper.SetDispatcherLock( sal_True );
+    m_aHelper.SetDispatcherLock( true );
 
     notifyChange();
     fill();

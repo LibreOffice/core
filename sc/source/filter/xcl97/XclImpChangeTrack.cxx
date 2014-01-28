@@ -63,7 +63,7 @@ XclImpChangeTrack::XclImpChangeTrack( const XclImpRoot& rRoot, const XclImpStrea
             pChangeTrack = new ScChangeTrack( GetDocPtr() );
 
             sOldUsername = pChangeTrack->GetUser();
-            pChangeTrack->SetUseFixDateTime( sal_True );
+            pChangeTrack->SetUseFixDateTime( true );
 
             ReadRecords();
         }

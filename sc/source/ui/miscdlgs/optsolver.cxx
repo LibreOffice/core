@@ -562,7 +562,7 @@ IMPL_LINK( ScOptSolverDlg, BtnHdl, PushButton*, pBtn )
         else
         {
             // no solution -> dialog is kept open
-            SetDispatcherLock( sal_True );
+            SetDispatcherLock( true );
         }
     }
     else if ( pBtn == m_pBtnOpt )

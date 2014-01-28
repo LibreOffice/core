@@ -224,7 +224,7 @@ void ScDBFunc::NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const std::
 
     //  register target in SBA no longer necessary
 
-    pDoc->CompileDBFormula( sal_True );     // CreateFormulaString
+    pDoc->CompileDBFormula( true );     // CreateFormulaString
     pDoc->SetDBCollection( new ScDBCollection( rNewColl ) );
     pDoc->CompileDBFormula( false );    // CompileFormulaString
     pOldColl = NULL;
@@ -310,7 +310,7 @@ void ScDBFunc::Query( const ScQueryParam& rQueryParam, const ScRange* pAdvSource
             ScDocument* pDoc = pDocSh->GetDocument();
             ScDBData* pDestData = pDoc->GetDBAtCursor(
                                             rQueryParam.nDestCol, rQueryParam.nDestRow,
-                                            rQueryParam.nDestTab, sal_True );
+                                            rQueryParam.nDestTab, true );
             if (pDestData)
             {
                 ScRange aDestRange;
@@ -340,7 +340,7 @@ void ScDBFunc::ToggleAutoFilter()
     ScDocument*     pDoc    = GetViewData()->GetDocument();
     ScDBData*       pDBData = GetDBData(false, SC_DB_MAKE, SC_DBSEL_ROW_DOWN);
 
-    pDBData->SetByRow( sal_True );              //! undo, retrieve beforehand ??
+    pDBData->SetByRow( true );              //! undo, retrieve beforehand ??
     pDBData->GetQueryParam( aParam );
 
 
@@ -391,7 +391,7 @@ void ScDBFunc::ToggleAutoFilter()
         SCSIZE nEC = aParam.GetEntryCount();
         for (SCSIZE i=0; i<nEC; i++)
             aParam.GetEntry(i).bDoQuery = false;
-        aParam.bDuplicate = sal_True;
+        aParam.bDuplicate = true;
         Query( aParam, NULL, sal_True );
 
         pDocSh->GetUndoManager()->LeaveListAction();
@@ -411,7 +411,7 @@ void ScDBFunc::ToggleAutoFilter()
                         ScGlobal::GetRscString( STR_MSSG_MAKEAUTOFILTER_0 )     // header from first row?
                     ).Execute() == RET_YES )
                 {
-                    pDBData->SetHeader( sal_True );     //! Undo ??
+                    pDBData->SetHeader( true );     //! Undo ??
                     bHeader = sal_True;
                 }
             }
@@ -419,9 +419,9 @@ void ScDBFunc::ToggleAutoFilter()
             ScRange aRange;
             pDBData->GetArea( aRange );
             pDocSh->GetUndoManager()->AddUndoAction(
-                new ScUndoAutoFilter( pDocSh, aRange, pDBData->GetName(), sal_True ) );
+                new ScUndoAutoFilter( pDocSh, aRange, pDBData->GetName(), true ) );
 
-            pDBData->SetAutoFilter(sal_True);
+            pDBData->SetAutoFilter(true);
 
             for (nCol=aParam.nCol1; nCol<=aParam.nCol2; nCol++)
             {

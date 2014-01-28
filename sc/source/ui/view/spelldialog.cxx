@@ -138,7 +138,7 @@ void ScSpellDialogChildWindow::Reset()
         }
 
         mpViewData->SetSpellingView( 0 );
-        mpViewShell->KillEditView( sal_True );
+        mpViewShell->KillEditView( true );
         mpDocShell->PostPaintGridAll();
         mpViewShell->UpdateInputHandler();
         mpDoc->EnableIdle(mbOldIdleEnabled);

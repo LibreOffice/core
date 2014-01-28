@@ -244,7 +244,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
             pNoNameData->SetSubTotalParam( ScSubTotalParam() );
 
             pNoNameData->SetArea( nTab, nStartCol,nStartRow, nEndCol,nEndRow );     // neu setzen
-            pNoNameData->SetByRow( sal_True );
+            pNoNameData->SetByRow( true );
             pNoNameData->SetHeader( bHasHeader );
             pNoNameData->SetAutoFilter( false );
         }
@@ -255,7 +255,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
             OUString aNewName;
             if (eMode==SC_DB_IMPORT)
             {
-                aDocument.CompileDBFormula( sal_True );         // CreateFormulaString
+                aDocument.CompileDBFormula( true );         // CreateFormulaString
                 pUndoColl = new ScDBCollection( *pColl );   // Undo fuer Import1-Bereich
 
                 OUString aImport = ScGlobal::GetRscString( STR_DBNAME_IMPORT );
@@ -272,7 +272,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
                 while (pDummy);
                 pNoNameData = new ScDBData( aNewName, nTab,
                                 nStartCol,nStartRow, nEndCol,nEndRow,
-                                sal_True, bHasHeader );
+                                true, bHasHeader );
                 rDBs.insert(pNoNameData);
             }
             else
@@ -280,7 +280,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
                 aNewName = OUString(STR_DB_LOCAL_NONAME);
                 pNoNameData = new ScDBData(aNewName , nTab,
                                 nStartCol,nStartRow, nEndCol,nEndRow,
-                                sal_True, bHasHeader );
+                                true, bHasHeader );
                 aDocument.SetAnonymousDBData(nTab, pNoNameData);
             }
 
@@ -404,7 +404,7 @@ void ScDocShell::UpdatePendingRowHeights( SCTAB nUpdateTab, bool bBefore )
         SCTAB nTab;
         for (nTab=0; nTab<=nUpdateTab; ++nTab)
             if ( aDocument.IsPendingRowHeights( nTab ) )
-                aUpdateSheets.SelectTable( nTab, sal_True );
+                aUpdateSheets.SelectTable( nTab, true );
 
         if (aUpdateSheets.GetSelectCount())
             UpdateAllRowHeights(&aUpdateSheets);        // update with a single progress bar
@@ -543,7 +543,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, sal_Bool bReco
             ScOutlineTable* pUndoTab = pTable ? new ScOutlineTable( *pTable ) : NULL;
 
             ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-            pUndoDoc->InitUndo( &aDocument, 0, nTabCount-1, false, sal_True );
+            pUndoDoc->InitUndo( &aDocument, 0, nTabCount-1, false, true );
 
             // Zeilenstatus
             aDocument.CopyToDocument( 0,0,nDestTab, MAXCOL,MAXROW,nDestTab,
@@ -661,11 +661,11 @@ void ScDocShell::UseScenario( SCTAB nTab, const OUString& rName, sal_Bool bRecor
                     pUndoDoc->InitUndo( &aDocument, nTab,nEndTab );             // auch alle Szenarien
                     //  angezeigte Tabelle:
                     aDocument.CopyToDocument( nStartCol,nStartRow,nTab,
-                                    nEndCol,nEndRow,nTab, IDF_ALL,sal_True, pUndoDoc, &aScenMark );
+                                    nEndCol,nEndRow,nTab, IDF_ALL,true, pUndoDoc, &aScenMark );
                     //  Szenarien
                     for (SCTAB i=nTab+1; i<=nEndTab; i++)
                     {
-                        pUndoDoc->SetScenario( i, sal_True );
+                        pUndoDoc->SetScenario( i, true );
                         OUString aComment;
                         Color  aColor;
                         sal_uInt16 nScenFlags;
@@ -775,7 +775,7 @@ SCTAB ScDocShell::MakeScenario( SCTAB nTab, const OUString& rName, const OUStrin
             }
 
             aDocument.RenameTab( nNewTab, rName, false );           // ohne Formel-Update
-            aDocument.SetScenario( nNewTab, sal_True );
+            aDocument.SetScenario( nNewTab, true );
             aDocument.SetScenarioData( nNewTab, rComment, rColor, nFlags );
 
             ScMarkData aDestMark = rMark;
@@ -784,19 +784,19 @@ SCTAB ScDocShell::MakeScenario( SCTAB nTab, const OUString& rName, const OUStrin
             //!     auf Filter / Buttons / Merging testen !
 
             ScPatternAttr aProtPattern( aDocument.GetPool() );
-            aProtPattern.GetItemSet().Put( ScProtectionAttr( sal_True ) );
+            aProtPattern.GetItemSet().Put( ScProtectionAttr( true ) );
             aDocument.ApplyPatternAreaTab( 0,0, MAXCOL,MAXROW, nNewTab, aProtPattern );
 
             ScPatternAttr aPattern( aDocument.GetPool() );
             aPattern.GetItemSet().Put( ScMergeFlagAttr( SC_MF_SCENARIO ) );
-            aPattern.GetItemSet().Put( ScProtectionAttr( sal_True ) );
+            aPattern.GetItemSet().Put( ScProtectionAttr( true ) );
             aDocument.ApplySelectionPattern( aPattern, aDestMark );
 
             if (!bCopyAll)
                 aDocument.SetVisible( nNewTab, false );
 
             //  dies ist dann das aktive Szenario
-            aDocument.CopyScenario( nNewTab, nTab, sal_True );  // sal_True - nicht aus Szenario kopieren
+            aDocument.CopyScenario( nNewTab, nTab, true );  // sal_True - nicht aus Szenario kopieren
 
             if (nFlags & SC_SCENARIO_SHOWFRAME)
                 PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID );  // Rahmen painten
@@ -996,7 +996,7 @@ IMPL_LINK( ScDocShell, RefreshDBDataHdl, ScRefreshTimer*, pRefreshTimer )
         // internal operations (sort, query, subtotal) only if no error
         if (bContinue)
         {
-            aFunc.RepeatDB( pDBData->GetName(), sal_True, sal_True );
+            aFunc.RepeatDB( pDBData->GetName(), true, true );
             RefreshPivotTables(aRange);
         }
     }

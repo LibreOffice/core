@@ -1147,7 +1147,7 @@ bool ScOutputData::IsAvailable( SCCOL nX, SCROW nY )
         return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 // nX, nArrY:       loop variables from DrawStrings / DrawEdit
@@ -1304,13 +1304,13 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
                 rParam.maClipRect.Right() += nAdd * nLayoutSign;
 
                 if ( rThisRowInfo.nRowNo == nCellY && nRightX >= nX1 && nRightX <= nX2 )
-                    rThisRowInfo.pCellInfo[nRightX].bHideGrid = sal_True;
+                    rThisRowInfo.pCellInfo[nRightX].bHideGrid = true;
             }
 
             while ( nLeftMissing > 0 && nLeftX > 0 && ( bOverwrite || IsAvailable( nLeftX-1, nCellY ) ) )
             {
                 if ( rThisRowInfo.nRowNo == nCellY && nLeftX >= nX1 && nLeftX <= nX2 )
-                    rThisRowInfo.pCellInfo[nLeftX].bHideGrid = sal_True;
+                    rThisRowInfo.pCellInfo[nLeftX].bHideGrid = true;
 
                 --nLeftX;
                 long nAdd = (long) ( mpDoc->GetColWidth( nLeftX, nTab ) * mnPPTX );
@@ -1324,14 +1324,14 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
         if ( nRightMissing > 0 && bMarkClipped && nRightX >= nX1 && nRightX <= nX2 && !bBreak && !bCellIsValue )
         {
             rThisRowInfo.pCellInfo[nRightX+1].nClipMark |= SC_CLIPMARK_RIGHT;
-            bAnyClipped = sal_True;
+            bAnyClipped = true;
             long nMarkPixel = (long)( SC_CLIPMARK_SIZE * mnPPTX );
             rParam.maClipRect.Right() -= nMarkPixel * nLayoutSign;
         }
         if ( nLeftMissing > 0 && bMarkClipped && nLeftX >= nX1 && nLeftX <= nX2 && !bBreak && !bCellIsValue )
         {
             rThisRowInfo.pCellInfo[nLeftX+1].nClipMark |= SC_CLIPMARK_LEFT;
-            bAnyClipped = sal_True;
+            bAnyClipped = true;
             long nMarkPixel = (long)( SC_CLIPMARK_SIZE * mnPPTX );
             rParam.maClipRect.Left() += nMarkPixel * nLayoutSign;
         }
@@ -1365,7 +1365,7 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
                 // -> set clip flags, so "###" replacement is used (but also within the smaller area)
 
                 if ( !bFit )
-                    rParam.mbLeftClip = rParam.mbRightClip = sal_True;
+                    rParam.mbLeftClip = rParam.mbRightClip = true;
             }
         }
     }
@@ -1519,7 +1519,7 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                     {
                         nCellX = nOverX;
                         nCellY = nOverY;
-                        bDoCell = sal_True;
+                        bDoCell = true;
                     }
                     else
                         bMergeEmpty = true;
@@ -1561,7 +1561,7 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                          !mpDoc->HasAttrib( nTempX,nY,nTab, nX,nY,nTab, HASATTR_MERGED | HASATTR_OVERLAPPED ) )
                     {
                         nCellX = nTempX;
-                        bDoCell = sal_True;
+                        bDoCell = true;
                     }
                 }
 
@@ -1691,7 +1691,7 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                     //  use edit engine for rotated, stacked or mixed-script text
                     if ( aVars.GetOrient() == SVX_ORIENTATION_STACKED ||
                          aVars.IsRotated() || IsAmbiguousScript(nScript) )
-                        bNeedEdit = sal_True;
+                        bNeedEdit = true;
                 }
                 if (bDoCell && !bNeedEdit)
                 {
@@ -1744,7 +1744,7 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                         {
                             // Only horizontal scaling is handled here.
                             // DrawEdit is used to vertically scale 90 deg rotated text.
-                            bNeedEdit = sal_True;
+                            bNeedEdit = true;
                         }
                         else if ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip )     // horizontal
                         {
@@ -1828,7 +1828,7 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                     //  right are handled by the flag for nX2
                     SCCOL nMarkX = ( nCellX <= nX2 ) ? nCellX : nX2;
                     RowInfo* pMarkRowInfo = ( nCellY == nY ) ? pThisRowInfo : &pRowInfo[0];
-                    pMarkRowInfo->pCellInfo[nMarkX+1].bEditEngine = sal_True;
+                    pMarkRowInfo->pCellInfo[nMarkX+1].bEditEngine = true;
                     bDoCell = false;    // don't draw here
                 }
                 if ( bDoCell )
@@ -1861,12 +1861,12 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                     if ( aAreaParam.maClipRect.Left() < nScrX )
                     {
                         aAreaParam.maClipRect.Left() = nScrX;
-                        aAreaParam.mbLeftClip = sal_True;
+                        aAreaParam.mbLeftClip = true;
                     }
                     if ( aAreaParam.maClipRect.Right() > nScrX + nScrW )
                     {
                         aAreaParam.maClipRect.Right() = nScrX + nScrW;          //! minus one?
-                        aAreaParam.mbRightClip = sal_True;
+                        aAreaParam.mbRightClip = true;
                     }
 
                     sal_Bool bHClip = aAreaParam.mbLeftClip || aAreaParam.mbRightClip;
@@ -5109,7 +5109,7 @@ void ScOutputData::DrawRotated(sal_Bool bPixelToLogic)
 
                                 GetOutputArea( nX, nArrY, nCellStartX, nPosY, nCellX, nCellY, nNeededWidth,
                                                 *pPattern, sal::static_int_cast<sal_uInt16>(eOutHorJust),
-                                                false, false, sal_True, aAreaParam );
+                                                false, false, true, aAreaParam );
 
                                 if ( bShrink )
                                 {
@@ -5117,7 +5117,7 @@ void ScOutputData::DrawRotated(sal_Bool bPixelToLogic)
                                         mpRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width() : nEngineWidth;
                                     long nNeededPixel = nPixelWidth + nLeftM + nRightM;
 
-                                    aAreaParam.mbLeftClip = aAreaParam.mbRightClip = sal_True;
+                                    aAreaParam.mbLeftClip = aAreaParam.mbRightClip = true;
 
                                     // always do height
                                     ShrinkEditEngine( *pEngine, aAreaParam.maAlignRect, nLeftM, nTopM, nRightM, nBottomM,

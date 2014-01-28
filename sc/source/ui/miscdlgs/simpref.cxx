@@ -58,7 +58,7 @@ ScSimpleRefDlg::ScSimpleRefDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pPa
 
     //  damit die Strings in der Resource bei den FixedTexten bleiben koennen:
     Init();
-    SetDispatcherLock( sal_True ); // Modal-Modus einschalten
+    SetDispatcherLock( true ); // Modal-Modus einschalten
 }
 
 //----------------------------------------------------------------------------

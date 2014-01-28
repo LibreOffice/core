@@ -181,7 +181,7 @@ void ScQueryParamBase::FillInExcelSyntax(
         ScQueryEntry& rEntry = GetEntry(nIndex);
         ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
 
-        rEntry.bDoQuery = sal_True;
+        rEntry.bDoQuery = true;
         // Operatoren herausfiltern
         if (aCellStr[0] == '<')
         {
@@ -276,7 +276,7 @@ void ScQueryParam::Clear()
     nRow1=nRow2 = 0;
     nTab = SCTAB_MAX;
     bHasHeader = bCaseSens = bRegExp = false;
-    bInplace = bByRow = bDuplicate = sal_True;
+    bInplace = bByRow = bDuplicate = true;
 
     boost::ptr_vector<ScQueryEntry>::iterator itr = maEntries.begin(), itrEnd = maEntries.end();
     for (; itr != itrEnd; ++itr)
@@ -371,7 +371,7 @@ void ScQueryParam::MoveToDest()
         for (size_t i=0; i<n; i++)
             maEntries[i].nField += nDifX;
 
-        bInplace = sal_True;
+        bInplace = true;
     }
     else
     {

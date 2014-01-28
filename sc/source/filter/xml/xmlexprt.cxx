@@ -2932,7 +2932,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
     FillColumnRowGroups();
     if (bHasColumnHeader)
         pSharedData->SetLastColumn(nTable, aColumnHeaderRange.EndColumn);
-    bRowHeaderOpen = sal_False;
+    bRowHeaderOpen = false;
     if (bHasRowHeader)
         pSharedData->SetLastRow(nTable, aRowHeaderRange.EndRow);
     pDefaults->FillDefaultStyles(nTable, pSharedData->GetLastRow(nTable),
@@ -2950,7 +2950,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
         {
             ExportFormatRanges(0, 0, aCell.aCellAddress.Column - 1, aCell.aCellAddress.Row, nTable);
             aPrevCell = aCell;
-            bIsFirst = sal_False;
+            bIsFirst = false;
         }
         else
         {
@@ -3729,7 +3729,7 @@ void ScXMLExport::SetRepeatAttribute(sal_Int32 nEqualCellCount, bool bIncProgres
         OUString sOUEqualCellCount(OUString::number(nTemp));
         AddAttribute(sAttrColumnsRepeated, sOUEqualCellCount);
         if (bIncProgress)
-            IncrementProgressBar(sal_False, nEqualCellCount);
+            IncrementProgressBar(false, nEqualCellCount);
     }
 }
 

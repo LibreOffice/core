@@ -117,13 +117,13 @@ void ScDrawShell::GetState( SfxItemSet& rSet )          // Zustaende / Toggles
         switch( pView->GetAnchorType() )
         {
         case SCA_PAGE:
-            rSet.Put( SfxBoolItem( SID_ANCHOR_PAGE, sal_True ) );
+            rSet.Put( SfxBoolItem( SID_ANCHOR_PAGE, true ) );
             rSet.Put( SfxBoolItem( SID_ANCHOR_CELL, false ) );
         break;
 
         case SCA_CELL:
         rSet.Put( SfxBoolItem( SID_ANCHOR_PAGE, false ) );
-        rSet.Put( SfxBoolItem( SID_ANCHOR_CELL, sal_True ) );
+        rSet.Put( SfxBoolItem( SID_ANCHOR_CELL, true ) );
         break;
 
         default:
@@ -393,7 +393,7 @@ void ScDrawShell::GetDrawAttrStateForIFBX( SfxItemSet& rSet )
     if( rMarkList.GetMark(0) != 0 )
     {
         SfxItemSet aNewAttr(pView->GetGeoAttrFromMarked());
-        rSet.Put(aNewAttr, sal_False);
+        rSet.Put(aNewAttr, false);
     }
 }
 

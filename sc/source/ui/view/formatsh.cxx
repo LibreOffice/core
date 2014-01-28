@@ -1193,7 +1193,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                     SfxItemPool* pDocPool = GetViewData()->GetDocument()->GetPool();
                     SfxItemSet aNewSet( *pDocPool, ATTR_PATTERN_START, ATTR_PATTERN_END );
                     aNewSet.Put( *pItem );
-                    pTabViewShell->ApplyAttributes( &aNewSet, &rOldSet, sal_True );
+                    pTabViewShell->ApplyAttributes( &aNewSet, &rOldSet, true );
                 }
             }
             break;
@@ -1977,7 +1977,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
                 // handled together because both need the cell border information for decisions
                 // rSet.Put( SvxColorItem( pLine ? pLine->GetColor() : Color(), SID_FRAME_LINECOLOR ) );
                 Color aCol = 0;
-                editeng::SvxBorderLine aLine(0,0,0,0);
+                editeng::SvxBorderLine aLine(0,0,0,false);
                 bool bCol = false;
                 bool bColDisable = false, bStyleDisable = false;
                 SvxBoxItem aBoxItem(ATTR_BORDER);
@@ -2200,7 +2200,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
             default:
                 break;
         }
-        rSet.Put( SfxBoolItem( nId, sal_True ) );
+        rSet.Put( SfxBoolItem( nId, true ) );
     }
 
     //------------------------
@@ -2212,7 +2212,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
     SvxCellVerJustify        eVerJustify = SVX_VER_JUSTIFY_STANDARD;
     sal_uInt16                   nWhich      = 0;
     bool                     bJustifyStd = false;
-    SfxBoolItem              aBoolItem   ( 0, sal_True );
+    SfxBoolItem              aBoolItem   ( 0, true );
 
     eState   = rAttrSet.GetItemState( ATTR_HOR_JUSTIFY, sal_True,
                                         (const SfxPoolItem**)&pHorJustify );
@@ -2243,7 +2243,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
 
                     case SVX_HOR_JUSTIFY_REPEAT:
                     default:
-                        bJustifyStd = sal_True;
+                        bJustifyStd = true;
                         break;
                 }
             }
@@ -2257,7 +2257,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
             break;
 
         default:
-            bJustifyStd = sal_True;
+            bJustifyStd = true;
             break;
     }
 
@@ -2281,7 +2281,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
     //------------------------
 
     nWhich = 0;
-    aBoolItem.SetValue( sal_True );
+    aBoolItem.SetValue( true );
 
     eState = rAttrSet.GetItemState( ATTR_VER_JUSTIFY, sal_True,
                                     (const SfxPoolItem**)&pVerJustify );
@@ -2308,7 +2308,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
 
                     case SVX_VER_JUSTIFY_STANDARD:
                     default:
-                        bJustifyStd = sal_True;
+                        bJustifyStd = true;
                         break;
                 }
             }
@@ -2321,7 +2321,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
             break;
 
         default:
-            bJustifyStd = sal_True;
+            bJustifyStd = true;
             break;
     }
 

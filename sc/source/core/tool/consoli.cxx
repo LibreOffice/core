@@ -697,8 +697,8 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
 
         ScComplexRefData aCRef;         // Daten fuer Summen-Zellen
         aCRef.InitFlags();
-        aCRef.Ref1.SetColRel(sal_True); aCRef.Ref1.SetRowRel(sal_True); aCRef.Ref1.SetTabRel(sal_True);
-        aCRef.Ref2.SetColRel(sal_True); aCRef.Ref2.SetRowRel(sal_True); aCRef.Ref2.SetTabRel(sal_True);
+        aCRef.Ref1.SetColRel(true); aCRef.Ref1.SetRowRel(true); aCRef.Ref1.SetTabRel(true);
+        aCRef.Ref2.SetColRel(true); aCRef.Ref2.SetRowRel(true); aCRef.Ref2.SetTabRel(true);
 
         for (nArrY=0; nArrY<nRowCount; nArrY++)
         {
@@ -759,7 +759,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
 
                 //  Gliederung einfuegen
 
-                ScOutlineArray* pOutArr = pDestDoc->GetOutlineTable( nTab, sal_True )->GetRowArray();
+                ScOutlineArray* pOutArr = pDestDoc->GetOutlineTable( nTab, true )->GetRowArray();
                 SCROW nOutStart = nRow+nArrY;
                 SCROW nOutEnd = nRow+nArrY+nNeeded-1;
                 bool bSize = false;

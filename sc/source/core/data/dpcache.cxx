@@ -560,18 +560,18 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
                         bool bHasStar = false;
                         sal_Int32 nIndex;
                         if (( nIndex = aStr.indexOf('*') ) != -1)
-                            bHasStar = sal_True;
+                            bHasStar = true;
                         if (bHasStar && (nIndex>0))
                         {
                             for (sal_Int32 j=0;(j<nIndex) && (j< aCellStr.getLength()) ; j++)
                             {
                                 if (aCellStr[j] == aStr[j])
                                 {
-                                    bOk=1;
+                                    bOk=true;
                                 }
                                 else
                                 {
-                                    bOk=0;
+                                    bOk=false;
                                     break;
                                 }
                             }

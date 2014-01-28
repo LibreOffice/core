@@ -1413,8 +1413,8 @@ ScDataPilotDescriptor::ScDataPilotDescriptor(ScDocShell* pDocSh) :
 {
     ScDPSaveData aSaveData;
     // set defaults like in ScPivotParam constructor
-     aSaveData.SetColumnGrand( sal_True );
-    aSaveData.SetRowGrand( sal_True );
+     aSaveData.SetColumnGrand( true );
+    aSaveData.SetRowGrand( true );
     aSaveData.SetIgnoreEmptyRows( false );
     aSaveData.SetRepeatIfEmpty( false );
     mpDPObject->SetSaveData(aSaveData);
@@ -2440,7 +2440,7 @@ void ScDataPilotFieldObj::setGroupInfo( const DataPilotFieldGroupInfo* pInfo )
         if( pInfo && lclCheckMinMaxStep( *pInfo ) )
         {
             ScDPNumGroupInfo aInfo;
-            aInfo.mbEnable = sal_True;
+            aInfo.mbEnable = true;
             aInfo.mbDateValues = pInfo->HasDateValues;
             aInfo.mbAutoStart = pInfo->HasAutoStart;
             aInfo.mbAutoEnd = pInfo->HasAutoEnd;

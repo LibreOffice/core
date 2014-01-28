@@ -1084,7 +1084,7 @@ void ScDPSource::FillMemberResults()
 
             long nPos = 0;
             pColResRoot->FillMemberResults( pColResults, nPos, pResData->GetColStartMeasure(),
-                                            sal_True, NULL, NULL );
+                                            true, NULL, NULL );
         }
 
         FillLevelList( sheet::DataPilotFieldOrientation_ROW, aRowLevelList );
@@ -1098,7 +1098,7 @@ void ScDPSource::FillMemberResults()
 
             long nPos = 0;
             pRowResRoot->FillMemberResults( pRowResults, nPos, pResData->GetRowStartMeasure(),
-                                            sal_True, NULL, NULL );
+                                            true, NULL, NULL );
         }
     }
 }

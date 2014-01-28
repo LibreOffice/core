@@ -1827,7 +1827,7 @@ sal_Bool ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWh
                 pDoc->RemoveFlagsTab( 0,0, MAXCOL,MAXROW, nTabNo, SC_MF_HOR | SC_MF_VER );
                 SCCOL nEndCol = MAXCOL;
                 SCROW nEndRow = MAXROW;
-                pDoc->ExtendMerge( 0,0, nEndCol,nEndRow, nTabNo, sal_True );
+                pDoc->ExtendMerge( 0,0, nEndCol,nEndRow, nTabNo, true );
                 if (pDocShell)
                     pDocShell->PostPaint( ScRange(0,0,nTabNo,MAXCOL,MAXROW,nTabNo), PAINT_GRID );
             }
@@ -2428,7 +2428,7 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
             // sheet selection and selected ranges
             const ScMarkData& rMarkData = GetMarkData();
             rTabSett.mbSelected = rMarkData.GetTableSelect( nTab );
-            rMarkData.FillRangeListWithMarks( &rTabSett.maSelection, sal_True );
+            rMarkData.FillRangeListWithMarks( &rTabSett.maSelection, true );
 
             // grid color
             rTabSett.maGridColor.SetColor( COL_AUTO );

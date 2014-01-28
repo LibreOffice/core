@@ -96,7 +96,7 @@ public:
 // IMPORT: Formulas
     static void         ParseFormula(
                             OUString& sFormula,
-                            const bool bIsFormula = sal_True);
+                            const bool bIsFormula = true);
 // EXPORT: Core Date Time
     static void         ConvertDateTimeToString(const DateTime& aDateTime, OUStringBuffer& sDate);
     static void         ConvertCoreToAPIDateTime(const DateTime& aDateTime, com::sun::star::util::DateTime& rDateTime);

@@ -691,7 +691,7 @@ SvXMLStyleContext *XMLTableStylesContext::CreateDefaultStyleStyleChildContext(
         {
             case XML_STYLE_FAMILY_TABLE_CELL:
                 pStyle = new XMLTableStyleContext( GetScImport(), nPrefix, rLocalName,
-                                            xAttrList, *this, nFamily, sal_True);
+                                            xAttrList, *this, nFamily, true);
             break;
             case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
                 pStyle = new XMLGraphicsDefaultStyle( GetScImport(), nPrefix, rLocalName,

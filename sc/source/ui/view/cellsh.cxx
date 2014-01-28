@@ -185,7 +185,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case FID_FILL_SERIES:       // fill block
             case SID_OPENDLG_TABOP:     // multiple-cell operations, are at least 2 cells marked?
                 if (pDoc->GetChangeTrack()!=NULL &&nWhich ==SID_OPENDLG_TABOP)
-                    bDisable = sal_True;
+                    bDisable = true;
                 else
                     bDisable = (!bSimpleArea) || (nCol1 == nCol2 && nRow1 == nRow2);
 
@@ -243,7 +243,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                 {
                     if ( pDocShell && pDocShell->IsDocShared() )
                     {
-                        bDisable = sal_True;
+                        bDisable = true;
                     }
                 }
                 break;
@@ -256,7 +256,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             break;
         }
         if (!bDisable && bNeedEdit && !bEditable)
-            bDisable = sal_True;
+            bDisable = true;
 
         if (bDisable)
             rSet.DisableItem(nWhich);

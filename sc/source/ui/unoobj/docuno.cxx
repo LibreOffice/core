@@ -894,7 +894,7 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
 
             SCTAB nTabCount = pDocShell->GetDocument()->GetTableCount();
             for (SCTAB nTab = 0; nTab < nTabCount; nTab++)
-                rMark.SelectTable( nTab, sal_True );
+                rMark.SelectTable( nTab, true );
             rStatus.SetMode( SC_PRINTSEL_DOCUMENT );
             bDone = true;
         }
@@ -1134,7 +1134,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     {
         pDrawView = new FmFormView( pModel, pDev );
         pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
-        pDrawView->SetPrintPreview( sal_True );
+        pDrawView->SetPrintPreview( true );
     }
 
     ScRange aRange;
@@ -1367,7 +1367,7 @@ void SAL_CALL ScModelObj::calculate() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     if (pDocShell)
-        pDocShell->DoRecalc(sal_True);
+        pDocShell->DoRecalc(true);
     else
     {
         OSL_FAIL("keine DocShell");     //! Exception oder so?
@@ -1378,7 +1378,7 @@ void SAL_CALL ScModelObj::calculateAll() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     if (pDocShell)
-        pDocShell->DoHardRecalc(sal_True);
+        pDocShell->DoHardRecalc(true);
     else
     {
         OSL_FAIL("keine DocShell");     //! Exception oder so?
@@ -1717,7 +1717,7 @@ void SAL_CALL ScModelObj::setPropertyValue(
             pDoc->SetDocOptions( aNewOpt );
             //! Recalc only for options that need it?
             if ( bHardRecalc )
-                pDocShell->DoHardRecalc( sal_True );
+                pDocShell->DoHardRecalc( true );
             pDocShell->SetDocumentModified();
         }
     }
@@ -2961,7 +2961,7 @@ void SAL_CALL ScTableColumnsObj::insertByIndex( sal_Int32 nPosition, sal_Int32 n
     {
         ScRange aRange( (SCCOL)(nStartCol+nPosition), 0, nTab,
                         (SCCOL)(nStartCol+nPosition+nCount-1), MAXROW, nTab );
-        bDone = pDocShell->GetDocFunc().InsertCells( aRange, NULL, INS_INSCOLS, sal_True, sal_True );
+        bDone = pDocShell->GetDocFunc().InsertCells( aRange, NULL, INS_INSCOLS, true, true );
     }
     if (!bDone)
         throw uno::RuntimeException();      // no other exceptions specified
@@ -2977,7 +2977,7 @@ void SAL_CALL ScTableColumnsObj::removeByIndex( sal_Int32 nIndex, sal_Int32 nCou
     {
         ScRange aRange( (SCCOL)(nStartCol+nIndex), 0, nTab,
                         (SCCOL)(nStartCol+nIndex+nCount-1), MAXROW, nTab );
-        bDone = pDocShell->GetDocFunc().DeleteCells( aRange, NULL, DEL_DELCOLS, sal_True, sal_True );
+        bDone = pDocShell->GetDocFunc().DeleteCells( aRange, NULL, DEL_DELCOLS, true, true );
     }
     if (!bDone)
         throw uno::RuntimeException();      // no other exceptions specified
@@ -3220,7 +3220,7 @@ void SAL_CALL ScTableRowsObj::insertByIndex( sal_Int32 nPosition, sal_Int32 nCou
     {
         ScRange aRange( 0, (SCROW)(nStartRow+nPosition), nTab,
                         MAXCOL, (SCROW)(nStartRow+nPosition+nCount-1), nTab );
-        bDone = pDocShell->GetDocFunc().InsertCells( aRange, NULL, INS_INSROWS, sal_True, sal_True );
+        bDone = pDocShell->GetDocFunc().InsertCells( aRange, NULL, INS_INSROWS, true, true );
     }
     if (!bDone)
         throw uno::RuntimeException();      // no other exceptions specified
@@ -3236,7 +3236,7 @@ void SAL_CALL ScTableRowsObj::removeByIndex( sal_Int32 nIndex, sal_Int32 nCount 
     {
         ScRange aRange( 0, (SCROW)(nStartRow+nIndex), nTab,
                         MAXCOL, (SCROW)(nStartRow+nIndex+nCount-1), nTab );
-        bDone = pDocShell->GetDocFunc().DeleteCells( aRange, NULL, DEL_DELROWS, sal_True, sal_True );
+        bDone = pDocShell->GetDocFunc().DeleteCells( aRange, NULL, DEL_DELROWS, true, true );
     }
     if (!bDone)
         throw uno::RuntimeException();      // no other exceptions specified
@@ -3575,7 +3575,7 @@ void SAL_CALL ScAnnotationsObj::removeByIndex( sal_Int32 nIndex ) throw(uno::Run
         if ( GetAddressByIndex_Impl( nIndex, aPos ) )
         {
             ScMarkData aMarkData;
-            aMarkData.SelectTable( aPos.Tab(), sal_True );
+            aMarkData.SelectTable( aPos.Tab(), true );
             aMarkData.SetMultiMarkArea( ScRange(aPos) );
 
             pDocShell->GetDocFunc().DeleteContents( aMarkData, IDF_NOTE, sal_True, sal_True );
@@ -3714,7 +3714,7 @@ void SAL_CALL ScScenariosObj::addNewByName( const OUString& aName,
     if ( pDocShell )
     {
         ScMarkData aMarkData;
-        aMarkData.SelectTable( nTab, sal_True );
+        aMarkData.SelectTable( nTab, true );
 
         sal_uInt16 nRangeCount = (sal_uInt16)aRanges.getLength();
         if (nRangeCount)

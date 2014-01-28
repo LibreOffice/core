@@ -118,7 +118,7 @@ void ScUndoInsertTab::Undo()
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     pViewShell->SetTabNo(nTab);
 
-    pDocShell->SetInUndo( sal_True );               //! BeginUndo
+    pDocShell->SetInUndo( true );               //! BeginUndo
     bDrawIsInUndo = sal_True;
     pViewShell->DeleteTable( nTab, false );
     bDrawIsInUndo = false;
@@ -140,7 +140,7 @@ void ScUndoInsertTab::Redo()
 
     RedoSdrUndoAction( pDrawUndo );             // Draw Redo first
 
-    pDocShell->SetInUndo( sal_True );               //! BeginRedo
+    pDocShell->SetInUndo( true );               //! BeginRedo
     bDrawIsInUndo = sal_True;
     if (bAppend)
         pViewShell->AppendTable( sNewName, false );
@@ -215,7 +215,7 @@ void ScUndoInsertTables::Undo()
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     pViewShell->SetTabNo(nTab);
 
-    pDocShell->SetInUndo( sal_True );               //! BeginUndo
+    pDocShell->SetInUndo( true );               //! BeginUndo
     bDrawIsInUndo = sal_True;
 
     pViewShell->DeleteTables( nTab, static_cast<SCTAB>(aNameList.size()) );
@@ -239,7 +239,7 @@ void ScUndoInsertTables::Redo()
 
     RedoSdrUndoAction( pDrawUndo );             // Draw Redo first
 
-    pDocShell->SetInUndo( sal_True );               //! BeginRedo
+    pDocShell->SetInUndo( true );               //! BeginRedo
     bDrawIsInUndo = sal_True;
     pViewShell->SetTabNo(nTab);
     pViewShell->InsertTables( aNameList, nTab, static_cast<SCTAB>(aNameList.size()),false );
@@ -343,7 +343,7 @@ void ScUndoDeleteTab::Undo()
 
             if ( pRefUndoDoc->IsScenario(nTab) )
             {
-                pDoc->SetScenario( nTab, sal_True );
+                pDoc->SetScenario( nTab, true );
                 OUString aComment;
                 Color  aColor;
                 sal_uInt16 nScenFlags;
@@ -396,11 +396,11 @@ void ScUndoDeleteTab::Redo()
 
     RedoSdrUndoAction( pDrawUndo );             // Draw Redo first
 
-    pDocShell->SetInUndo( sal_True );               //! BeginRedo
+    pDocShell->SetInUndo( true );               //! BeginRedo
     bDrawIsInUndo = sal_True;
     pViewShell->DeleteTables( theTabs, false );
     bDrawIsInUndo = false;
-    pDocShell->SetInUndo( sal_True );               //! EndRedo
+    pDocShell->SetInUndo( true );               //! EndRedo
 
     SetChangeTrack();
 
@@ -684,7 +684,7 @@ void ScUndoCopyTab::Redo()
 
         if ( pDoc->IsScenario(nAdjSource) )
         {
-            pDoc->SetScenario(nNewTab, sal_True );
+            pDoc->SetScenario(nNewTab, true );
             OUString aComment;
             Color  aColor;
             sal_uInt16 nScenFlags;
@@ -708,7 +708,7 @@ void ScUndoCopyTab::Redo()
 
     RedoSdrUndoAction( pDrawUndo );             // after the sheets are inserted
 
-    pViewShell->SetTabNo( nDestTab, sal_True );     // after draw-undo
+    pViewShell->SetTabNo( nDestTab, true );     // after draw-undo
 
     DoChange();
 
@@ -825,7 +825,7 @@ void ScUndoMakeScenario::Undo()
 {
     ScDocument* pDoc = pDocShell->GetDocument();
 
-    pDocShell->SetInUndo( sal_True );
+    pDocShell->SetInUndo( true );
     bDrawIsInUndo = sal_True;
     pDoc->DeleteTab( nDestTab );
     bDrawIsInUndo = false;
@@ -838,7 +838,7 @@ void ScUndoMakeScenario::Undo()
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
-        pViewShell->SetTabNo( nSrcTab, sal_True );
+        pViewShell->SetTabNo( nSrcTab, true );
 
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
 
@@ -852,7 +852,7 @@ void ScUndoMakeScenario::Redo()
 
     RedoSdrUndoAction( pDrawUndo );             // Draw Redo first
 
-    pDocShell->SetInUndo( sal_True );
+    pDocShell->SetInUndo( true );
     bDrawIsInUndo = sal_True;
 
     pDocShell->MakeScenario( nSrcTab, aName, aComment, aColor, nFlags, *mpMarkData, false );
@@ -862,7 +862,7 @@ void ScUndoMakeScenario::Redo()
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
-        pViewShell->SetTabNo( nDestTab, sal_True );
+        pViewShell->SetTabNo( nDestTab, true );
 
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
 }
@@ -911,11 +911,11 @@ void ScUndoImportTab::DoChange() const
     {
         if(nTab<nTabCount)
         {
-            pViewShell->SetTabNo(nTab,sal_True);
+            pViewShell->SetTabNo(nTab,true);
         }
         else
         {
-            pViewShell->SetTabNo(nTab-1,sal_True);
+            pViewShell->SetTabNo(nTab-1,true);
         }
     }
 
@@ -934,7 +934,7 @@ void ScUndoImportTab::Undo()
     if (bMakeRedo)
     {
         pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
-        pRedoDoc->InitUndo( pDoc, nTab,nTab+nCount-1, sal_True,sal_True );
+        pRedoDoc->InitUndo( pDoc, nTab,nTab+nCount-1, true,true );
 
         OUString aOldName;
         for (i=0; i<nCount; i++)
@@ -948,7 +948,7 @@ void ScUndoImportTab::Undo()
 
             if ( pDoc->IsScenario(nTabPos) )
             {
-                pRedoDoc->SetScenario(nTabPos, sal_True );
+                pRedoDoc->SetScenario(nTabPos, true );
                 OUString aComment;
                 Color  aColor;
                 sal_uInt16 nScenFlags;
@@ -1003,7 +1003,7 @@ void ScUndoImportTab::Redo()
 
         if ( pRedoDoc->IsScenario(nTabPos) )
         {
-            pDoc->SetScenario(nTabPos, sal_True );
+            pDoc->SetScenario(nTabPos, true );
             OUString aComment;
             Color  aColor;
             sal_uInt16 nScenFlags;
@@ -1141,7 +1141,7 @@ void ScUndoShowHideTab::DoChange( sal_Bool bShowP ) const
         nTab = *itr;
         pDoc->SetVisible( nTab, bShowP );
         if (pViewShell)
-            pViewShell->SetTabNo(nTab,sal_True);
+            pViewShell->SetTabNo(nTab,true);
     }
 
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
@@ -1549,14 +1549,14 @@ ScUndoLayoutRTL::~ScUndoLayoutRTL()
 
 void ScUndoLayoutRTL::DoChange( sal_Bool bNew )
 {
-    pDocShell->SetInUndo( sal_True );
+    pDocShell->SetInUndo( true );
 
     ScDocument* pDoc = pDocShell->GetDocument();
     pDoc->SetLayoutRTL( nTab, bNew );
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
-        pViewShell->SetTabNo(nTab,sal_True);
+        pViewShell->SetTabNo(nTab,true);
 
     pDocShell->SetDocumentModified();
 

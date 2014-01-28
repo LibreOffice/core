@@ -247,7 +247,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
     ScDocument* pDoc = pImpl->m_pDocSh->GetDocument();
 
     sal_Bool bUndo (pDoc->IsUndoEnabled());
-    pDoc->SetInLinkUpdate( sal_True );
+    pDoc->SetInLinkUpdate( true );
 
     //  wenn neuer Filter ausgewaehlt wurde, Optionen vergessen
     if ( rNewFilter != aFilterName )

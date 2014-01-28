@@ -110,7 +110,7 @@ void ScViewFunc::CutToClip( ScDocument* pClipDoc, sal_Bool bIncludeObjects )
         CopyToClip( pClipDoc, sal_True, false, bIncludeObjects );           // Ab ins Clipboard
 
         ScAddress aOldEnd( aRange.aEnd );       // Zusammengefasste Zellen im Bereich?
-        pDoc->ExtendMerge( aRange, sal_True );
+        pDoc->ExtendMerge( aRange, true );
 
         ScDocument* pUndoDoc = NULL;
         if ( bRecord )
@@ -422,7 +422,7 @@ ScTransferObj* ScViewFunc::CopyToTransferable()
             pDoc->CopyToClip(aClipParam, pClipDoc, &rMark, false, false, true);
 
             ScDrawLayer::SetGlobalDrawPersist(NULL);
-            pClipDoc->ExtendMerge( aRange, sal_True );
+            pClipDoc->ExtendMerge( aRange, true );
 
             ScDocShell* pDocSh = GetViewData()->GetDocShell();
             TransferableObjectDescriptor aObjDesc;
@@ -467,7 +467,7 @@ void ScViewFunc::PasteFromSystem()
         uno::Reference<datatransfer::XTransferable> aOwnClipRef( pOwnClip );
         PasteFromClip( IDF_ALL, pOwnClip->GetDocument(),
                         PASTE_NOFUNC, false, false, false, INS_NONE, IDF_NONE,
-                        sal_True );     // allow warning dialog
+                        true );     // allow warning dialog
     }
     else if (pDrawClip)
         PasteDraw();
@@ -577,7 +577,7 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
     {
         PasteFromClip( IDF_ALL, pOwnClip->GetDocument(),
                         PASTE_NOFUNC, false, false, false, INS_NONE, IDF_NONE,
-                        sal_True );     // allow warning dialog
+                        true );     // allow warning dialog
     }
     else if (pDrawClip)
     {
@@ -1850,7 +1850,7 @@ sal_Bool ScViewFunc::LinkBlock( const ScRange& rSource, const ScAddress& rDestPo
 
     //  Paste
 
-    PasteFromClip( IDF_ALL, pClipDoc, PASTE_NOFUNC, false, false, sal_True );       // als Link
+    PasteFromClip( IDF_ALL, pClipDoc, PASTE_NOFUNC, false, false, true );       // als Link
 
     delete pClipDoc;
 

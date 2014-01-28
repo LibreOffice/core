@@ -812,7 +812,7 @@ sal_uInt16 ScDetectiveFunc::InsertPredLevel( SCCOL nCol, SCROW nRow, ScDetective
 
     if (pFCell->GetDirty())
         pFCell->Interpret();                // nach SetRunning geht's nicht mehr!
-    pFCell->SetRunning(sal_True);
+    pFCell->SetRunning(true);
 
     sal_uInt16 nResult = DET_INS_EMPTY;
 
@@ -901,7 +901,7 @@ sal_uInt16 ScDetectiveFunc::FindPredLevel( SCCOL nCol, SCROW nRow, sal_uInt16 nL
 
     if (pFCell->GetDirty())
         pFCell->Interpret();                // nach SetRunning geht's nicht mehr!
-    pFCell->SetRunning(sal_True);
+    pFCell->SetRunning(true);
 
     sal_uInt16 nResult = nLevel;
     sal_Bool bDelete = ( nDeleteLevel && nLevel == nDeleteLevel-1 );
@@ -959,7 +959,7 @@ sal_uInt16 ScDetectiveFunc::InsertErrorLevel( SCCOL nCol, SCROW nRow, ScDetectiv
 
     if (pFCell->GetDirty())
         pFCell->Interpret();                // nach SetRunning geht's nicht mehr!
-    pFCell->SetRunning(sal_True);
+    pFCell->SetRunning(true);
 
     sal_uInt16 nResult = DET_INS_EMPTY;
 

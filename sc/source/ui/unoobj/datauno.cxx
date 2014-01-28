@@ -608,7 +608,7 @@ void SAL_CALL ScSubTotalDescriptorBase::addNew(
 
     if ( nPos < MAXSUBTOTAL && nColCount <= sal::static_int_cast<sal_uInt32>(SCCOL_MAX) )
     {
-        aParam.bGroupActive[nPos] = sal_True;
+        aParam.bGroupActive[nPos] = true;
         aParam.nField[nPos] = static_cast<SCCOL>(nGroupColumn);
 
         delete aParam.pSubTotals[nPos];

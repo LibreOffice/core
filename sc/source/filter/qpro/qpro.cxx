@@ -175,7 +175,7 @@ FltError ScQProReader::import( ScDocument *pDoc )
                 break;
 
             case 0x0001: // End of file
-                SetEof( sal_True );
+                SetEof( true );
                 break;
 
             case 0x00ce:{ // Attribute cell

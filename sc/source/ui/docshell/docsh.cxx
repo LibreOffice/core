@@ -269,11 +269,11 @@ void ScDocShell::BeforeXMLLoading()
     OSL_ENSURE(pModificator == NULL, "The Modificator should not exist");
     pModificator = new ScDocShellModificator( *this );
 
-    aDocument.SetImportingXML( sal_True );
+    aDocument.SetImportingXML( true );
     aDocument.EnableExecuteLink( false );   // #i101304# to be safe, prevent nested loading from external references
     aDocument.EnableUndo( false );
     // prevent unnecessary broadcasts and "half way listeners"
-    aDocument.SetInsertingFromOtherDoc( sal_True );
+    aDocument.SetInsertingFromOtherDoc( true );
 }
 
 void ScDocShell::AfterXMLLoading(sal_Bool bRet)
@@ -330,7 +330,7 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
                                     !aINetURLObject.HasError()) // the docname should be a valid URL
                                 {
                                     aName = ScGlobal::GetDocTabName( aDocument.GetLinkDoc( i ), aDocument.GetLinkTab( i ) );
-                                    aDocument.RenameTab(i, aName, sal_True, sal_True);
+                                    aDocument.RenameTab(i, aName, true, true);
                                 }
                                 // else;  nothing has to happen, because it is a user given name
                             }
@@ -362,7 +362,7 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
 
     aDocument.SetImportingXML( false );
     aDocument.EnableExecuteLink( true );
-    aDocument.EnableUndo( sal_True );
+    aDocument.EnableUndo( true );
     bIsEmpty = false;
 
     if (pModificator)
@@ -447,7 +447,7 @@ sal_Bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::un
     // #i62677# BeforeXMLLoading is also called from ScXMLImport::startDocument when invoked
     // from an external component. The XMLFromWrapper flag is only set here, when called
     // through ScDocShell.
-    aDocument.SetXMLFromWrapper( sal_True );
+    aDocument.SetXMLFromWrapper( true );
 
     ScXMLImportWrapper aImport( aDocument, pLoadMedium, xStor );
 
@@ -1073,7 +1073,7 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
         sal_Bool bCalc3 = ( aFltName.equalsAscii(pFilterSc30) );
         sal_Bool bCalc4 = ( aFltName.equalsAscii(pFilterSc40) );
         if (!bCalc3 && !bCalc4)
-            aDocument.SetInsertingFromOtherDoc( sal_True );
+            aDocument.SetInsertingFromOtherDoc( true );
 
         if (aFltName.equalsAscii(pFilterXML))
             bRet = LoadXML( &rMedium, NULL );
@@ -2412,7 +2412,7 @@ sal_Bool ScDocShell::ConvertTo( SfxMedium &rMed )
             ScRange aRange( 0,0,0, nEndCol,nEndRow,0 );
 
             ScImportExport aImExport( &aDocument, aRange );
-            aImExport.SetFormulas( sal_True );
+            aImExport.SetFormulas( true );
             bRet = aImExport.ExportStream( *pStream, rMed.GetBaseURL( true ), SOT_FORMATSTR_ID_SYLK );
         }
     }
@@ -2801,7 +2801,7 @@ void ScDocShell::SetDocumentModified( sal_Bool bIsModified /* = sal_True */ )
     if ( bIsModified )
     {
         if ( aDocument.IsAutoCalcShellDisabled() )
-            SetDocumentModifiedPending( sal_True );
+            SetDocumentModifiedPending( true );
         else
         {
             SetDocumentModifiedPending( false );
@@ -2810,7 +2810,7 @@ void ScDocShell::SetDocumentModified( sal_Bool bIsModified /* = sal_True */ )
             aDocument.InvalidateLastTableOpParams();
             aDocument.Broadcast(ScHint(SC_HINT_DATACHANGED, BCA_BRDCST_ALWAYS));
             if ( aDocument.IsForcedFormulaPending() && aDocument.GetAutoCalc() )
-                aDocument.CalcFormulaTree( sal_True );
+                aDocument.CalcFormulaTree( true );
             PostDataChanged();
 
             //  Detective AutoUpdate:

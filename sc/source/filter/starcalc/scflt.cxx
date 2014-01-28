@@ -876,9 +876,9 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
             else
                 aSetItemItemSet.Put( SvxSizeItem( ATTR_PAGE_SIZE, Size( 0, pPage->Bottom - pPage->Foot ) ) );
 
-            aSetItemItemSet.Put(SfxBoolItem( ATTR_PAGE_ON, sal_True ));
+            aSetItemItemSet.Put(SfxBoolItem( ATTR_PAGE_ON, true ));
             aSetItemItemSet.Put(SfxBoolItem( ATTR_PAGE_DYNAMIC, false ));
-            aSetItemItemSet.Put(SfxBoolItem( ATTR_PAGE_SHARED, sal_True ));
+            aSetItemItemSet.Put(SfxBoolItem( ATTR_PAGE_SHARED, true ));
 
             pSet->Put( SvxSetItem( nHeadFoot ? ATTR_PAGE_FOOTERSET : ATTR_PAGE_HEADERSET,
                                     aSetItemItemSet ) );
@@ -1392,7 +1392,7 @@ void Sc10Import::LoadDataBaseCollection()
                                     ( SCROW ) pOldData->DataBaseRec.Block.y1,
                                     ( SCCOL ) pOldData->DataBaseRec.Block.x2,
                                     ( SCROW ) pOldData->DataBaseRec.Block.y2,
-                                    sal_True,
+                                    true,
                                     ( sal_Bool) pOldData->DataBaseRec.RowHeader );
         pDoc->GetDBCollection()->getNamedDBs().insert(pNewData);
     }

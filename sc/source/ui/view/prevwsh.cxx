@@ -680,7 +680,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                             nZoom = pPreview->GetOptimalZoom(false);
                             break;
                         case SVX_ZOOM_PAGEWIDTH:
-                            nZoom = pPreview->GetOptimalZoom(sal_True);
+                            nZoom = pPreview->GetOptimalZoom(true);
                             break;
                         default:
                         {
@@ -785,7 +785,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
 
 void ScPreviewShell::GetState( SfxItemSet& rSet )
 {
-    pPreview->SetInGetState(sal_True);
+    pPreview->SetInGetState(true);
 
     SCTAB nTab      = pPreview->GetTab();
     long nPage      = pPreview->GetPageNo();
@@ -877,7 +877,7 @@ void ScPreviewShell::GetState( SfxItemSet& rSet )
                 rSet.Put( SfxStringItem( nWhich, pPreview->GetPosString() ) );
                 break;
             case SID_PRINTPREVIEW:
-                rSet.Put( SfxBoolItem( nWhich, sal_True ) );
+                rSet.Put( SfxBoolItem( nWhich, true ) );
                 break;
             case SID_FORMATPAGE:
             case SID_PREVIEW_MARGIN:

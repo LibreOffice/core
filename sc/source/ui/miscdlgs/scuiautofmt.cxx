@@ -275,7 +275,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl)
                         }
 
                         SelFmtHdl( 0 );
-                        bOk = sal_True;
+                        bOk = true;
                     }
                     else
                         delete pNewData;
@@ -293,7 +293,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl)
                 }
             }
             else
-                bOk = sal_True;
+                bOk = true;
 
             delete pDlg;
         }

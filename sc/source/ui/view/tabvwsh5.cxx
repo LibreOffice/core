@@ -126,7 +126,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 break;
 
             case SC_HINT_FORCESETTAB:
-                SetTabNo( GetViewData()->GetTabNo(), sal_True );
+                SetTabNo( GetViewData()->GetTabNo(), true );
                 break;
 
             default:

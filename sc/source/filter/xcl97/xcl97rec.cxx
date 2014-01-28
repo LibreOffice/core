@@ -1248,7 +1248,7 @@ ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
                             rtl_math_StringFormat_Automatic,
                             rtl_math_DecimalPlaces_Max,
                             ScGlobal::pLocaleData->getNumDecimalSep()[0],
-                            sal_True );
+                            true );
                 }
                 else
                     sText = rDoc.GetString(nCol, nRow, nTab);
