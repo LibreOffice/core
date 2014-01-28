@@ -1593,7 +1593,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                             sal::static_int_cast< sal_uIntPtr >(
                             xTnnl->getSomething( TransferableHelper::getUnoTunnelId() )));
                     if( pTrans )
-                        pTrans->CopyToClipboard( this ? GetEditWindow() : 0 );
+                        pTrans->CopyToClipboard(GetEditWindow());
                 }
             }
         }
@@ -1601,7 +1601,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
         case SID_PASTEOBJECT:
         {
-            TransferableDataHelper aData( TransferableDataHelper::CreateFromSystemClipboard(this ? GetEditWindow(): 0) );
+            TransferableDataHelper aData( TransferableDataHelper::CreateFromSystemClipboard(GetEditWindow()) );
             uno::Reference < io::XInputStream > xStrm;
             SotFormatStringId nId;
             if( aData.GetTransferable().is() &&
