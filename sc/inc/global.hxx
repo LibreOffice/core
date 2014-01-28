@@ -28,6 +28,7 @@
 #include "scdllapi.h"
 #include <rtl/ustring.hxx>
 
+#include <boost/static_assert.hpp>
 #include <boost/unordered_map.hpp>
 #include <vector>
 
@@ -190,6 +191,8 @@ const sal_uInt16 IDF_SPECIAL_BOOLEAN = 0x1000;
 const sal_uInt16 IDF_ATTRIB     = IDF_HARDATTR | IDF_STYLES;
 const sal_uInt16 IDF_CONTENTS   = IDF_VALUE | IDF_DATETIME | IDF_STRING | IDF_NOTE | IDF_FORMULA | IDF_OUTLINE;
 const sal_uInt16 IDF_ALL        = IDF_CONTENTS | IDF_ATTRIB | IDF_OBJECTS;
+
+BOOST_STATIC_ASSERT(!(IDF_ATTRIB & IDF_CONTENTS));
 
 /// Copy flags for auto/series fill functions: do not touch notes and drawing objects.
 const sal_uInt16 IDF_AUTOFILL   = IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS);

@@ -125,7 +125,6 @@ public:
     void testFuncIFERROR();
     void testFuncGETPIVOTDATA();
     void testFuncGETPIVOTDATALeafAccess();
-    void testCopyAttributes();
 
     void testCopyToDocument();
     /**
