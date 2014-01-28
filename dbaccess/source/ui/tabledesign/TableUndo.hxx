@@ -136,7 +136,6 @@ namespace dbaui
     protected:
         MultiSelection      m_aDelKeys,
                             m_aInsKeys;
-        sal_Bool                m_bActPrimKeySet;
         OTableEditorCtrl* m_pEditorCtrl;
 
         virtual void    Undo();
