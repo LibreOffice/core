@@ -224,7 +224,7 @@ void TimerScheduler::CancelTask (const sal_Int32 nTaskId)
 
 void SAL_CALL TimerScheduler::run (void)
 {
-    while (1)
+    while (true)
     {
         // Get the current time.
         TimeValue aCurrentTime;
