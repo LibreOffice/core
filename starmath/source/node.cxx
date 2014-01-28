@@ -862,7 +862,7 @@ void SmTableNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         nFormulaBaseline = GetBaseline();
     else
     {
-        SmTmpDevice  aTmpDev ((OutputDevice &) rDev, sal_True);
+        SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
         aTmpDev.SetFont(GetFont());
 
         SmRect aRect = (SmRect(aTmpDev, &rFormat, OUString("a"),
@@ -2098,7 +2098,7 @@ void SmFontNode::CreateTextFromNode(OUString &rText)
                 rText += ::rtl::math::doubleToUString(
                             static_cast<double>(aFontSize),
                             rtl_math_StringFormat_Automatic,
-                            rtl_math_DecimalPlaces_Max, '.', sal_True);
+                            rtl_math_DecimalPlaces_Max, '.', true);
                 rText += " ";
             }
             break;

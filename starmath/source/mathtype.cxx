@@ -1740,7 +1740,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                     *pS >> aFont.nStyle;
                     aUserStyles.insert(aFont);
                     std::vector<sal_Char> aSeq;
-                    while(1)
+                    while(true)
                     {
                         sal_Char nChar8(0);
                         *pS >> nChar8;

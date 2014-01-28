@@ -491,9 +491,9 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
     if(HasSelection()) {
         SmNode *pSNode = FindSelectedNode(pTree);
         OSL_ENSURE(pSNode != NULL, "There must be a selected node when HasSelection is true!");
-        pLine = FindTopMostNodeInLine(pSNode, sal_True);
+        pLine = FindTopMostNodeInLine(pSNode, true);
     } else
-        pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, sal_False);
+        pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, false);
 
     //Find Parent and offset in parent
     SmStructureNode *pLineParent = pLine->GetParent();
@@ -594,7 +594,7 @@ bool SmCursor::InsertLimit(SmSubSup eSubSup, bool bMoveCaret) {
         pSubject = (SmOperNode*)position->CaretPos.pSelectedNode;
     else {
         //If not, check if parent of the current line is a SmOperNode
-        SmNode *pLineNode = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, sal_False);
+        SmNode *pLineNode = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, false);
         if(pLineNode->GetParent() && pLineNode->GetParent()->GetType() == NOPER)
             pSubject = (SmOperNode*)pLineNode->GetParent();
     }
@@ -662,9 +662,9 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
     if(HasSelection()) {
         SmNode *pSNode = FindSelectedNode(pTree);
         OSL_ENSURE(pSNode != NULL, "There must be a selected node if HasSelection()");
-        pLine = FindTopMostNodeInLine(pSNode, sal_True);
+        pLine = FindTopMostNodeInLine(pSNode, true);
     } else
-        pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, sal_False);
+        pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, false);
 
     //Find parent and offset in parent
     SmStructureNode *pLineParent = pLine->GetParent();
@@ -797,9 +797,9 @@ bool SmCursor::InsertRow() {
     if(HasSelection()) {
         SmNode *pSNode = FindSelectedNode(pTree);
         OSL_ENSURE(pSNode != NULL, "There must be a selected node if HasSelection()");
-        pLine = FindTopMostNodeInLine(pSNode, sal_True);
+        pLine = FindTopMostNodeInLine(pSNode, true);
     } else
-        pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, sal_False);
+        pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, false);
 
     //Find parent and offset in parent
     SmStructureNode *pLineParent = pLine->GetParent();
@@ -917,9 +917,9 @@ void SmCursor::InsertFraction() {
     if(HasSelection()) {
         SmNode *pSNode = FindSelectedNode(pTree);
         OSL_ENSURE(pSNode != NULL, "There must be a selected node when HasSelection is true!");
-        pLine = FindTopMostNodeInLine(pSNode, sal_True);
+        pLine = FindTopMostNodeInLine(pSNode, true);
     } else
-        pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, sal_False);
+        pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, false);
 
     //Find Parent and offset in parent
     SmStructureNode *pLineParent = pLine->GetParent();
@@ -1422,7 +1422,7 @@ void SmCursor::BeginEdit(){
 void SmCursor::EndEdit(){
     if(--nEditSections > 0) return;
 
-    pDocShell->SetFormulaArranged(sal_False);
+    pDocShell->SetFormulaArranged(false);
     //Okay, I don't know what this does... :)
     //It's used in SmDocShell::SetText and with places where everything is modified.
     //I think it does some magic, with sfx, but everything is totally undocumented so

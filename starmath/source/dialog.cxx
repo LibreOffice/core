@@ -2332,7 +2332,7 @@ bool SmSymDefineDialog::SelectFont(const OUString &rFontName, bool bApplyFont)
         bRet = true;
             aSymbolDisplay.SetSymbol( aCharsetDisplay.GetSelectCharacter(), aCharsetDisplay.GetFont() );
         }
-        bRet = sal_True;
+        bRet = true;
     }
     else
         aFonts.SetNoSelection();
@@ -2362,7 +2362,7 @@ bool SmSymDefineDialog::SelectStyle(const OUString &rStyleName, bool bApplyFont)
         bRet = true;
             aSymbolDisplay.SetSymbol( aCharsetDisplay.GetSelectCharacter(), aCharsetDisplay.GetFont() );
         }
-        bRet = sal_True;
+        bRet = true;
     }
     else
         aStyles.SetText(OUString());
