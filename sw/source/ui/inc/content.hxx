@@ -111,20 +111,26 @@ public:
 class SwPostItContent : public SwContent
 {
     const SwFmtFld*     pFld;
-    SwRangeRedline*          pRedline;
+    SwRangeRedline*     pRedline;
     bool                mbPostIt;
 public:
     SwPostItContent( const SwContentType* pCnt,
                             const OUString& rName,
                             const SwFmtFld* pField,
                             long nYPos )
-        : SwContent( pCnt, rName, nYPos ), pFld( pField ),mbPostIt(true)
+        : SwContent(pCnt, rName, nYPos)
+        , pFld(pField)
+        , pRedline(NULL)
+        , mbPostIt(true)
     {}
     SwPostItContent( const SwContentType* pCnt,
                             const OUString& rName,
                             SwRangeRedline* pRed,
                             long nYPos )
-        : SwContent( pCnt, rName, nYPos ), pRedline( pRed ),mbPostIt(false)
+        : SwContent(pCnt, rName, nYPos)
+        , pFld(NULL)
+        , pRedline(pRed)
+        , mbPostIt(false)
     {}
 
     const SwFmtFld* GetPostIt()     { return pFld; }
