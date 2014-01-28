@@ -250,8 +250,7 @@ static oslFileError osl_create_temp_file_impl_(
 
         if ((osl_File_E_None == osl_error) || (osl_error != osl_File_E_EXIST))
         {
-            if (rand_name)
-                rtl_uString_release(rand_name);
+            rtl_uString_release(rand_name);
 
             if (tmp_file_url)
                 rtl_uString_release(tmp_file_url);
