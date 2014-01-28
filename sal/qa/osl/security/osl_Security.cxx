@@ -280,7 +280,7 @@ namespace osl_Security
             {
                 ::osl::Security aSec;
                 osl_unloadUserProfile(aSec.getHandle());
-                CPPUNIT_ASSERT_MESSAGE( "empty function.", sal_True );
+                CPPUNIT_ASSERT_MESSAGE( "empty function.", true );
             }
 
         CPPUNIT_TEST_SUITE( UserProfile );

@@ -32,7 +32,7 @@
     {  \
         if (!(c) && _OSL_GLOBAL osl_assertFailedLine(f, l, m)) \
             _OSL_GLOBAL osl_breakDebug(); \
-    } while (0)
+    } while (false)
 #define DEBUGBASE_ENSURE(c, m) DEBUGBASE_ENSURE_(c, OSL_THIS_FILE, __LINE__, m)
 
 namespace {
