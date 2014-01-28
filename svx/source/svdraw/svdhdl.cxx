@@ -1678,11 +1678,10 @@ void ImpTextframeHdl::CreateB2dIAObject()
                                 500,
                                 true); // allow animation; the Handle is not shown at text edit time
 
-                            pNewOverlayObject->setHittable(false);
-
                             // OVERLAYMANAGER
                             if(pNewOverlayObject)
                             {
+                                pNewOverlayObject->setHittable(false);
                                 xManager->add(*pNewOverlayObject);
                                 maOverlayGroup.append(*pNewOverlayObject);
                             }
