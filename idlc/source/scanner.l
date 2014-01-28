@@ -140,7 +140,7 @@ static double asciiToFloat(const sal_Char *s)
 {
    	double  	d = 0.0;
    	double  	e, k;
-   	sal_Int32  	neg = 0, negexp = 0;
+   	sal_Int32  	neg = 0;
 
    	if (*s == '-')
    	{
@@ -168,7 +168,6 @@ static double asciiToFloat(const sal_Char *s)
     	s++;
        	if (*s == '-')
         {
-        	negexp = 1;
            	s++;
        	} else
        	{
@@ -184,10 +183,7 @@ static double asciiToFloat(const sal_Char *s)
            	{
                 for (k = 1; e > 0; k *= 10, e--)
                     ;
-               	if (negexp)
-                	d /= k;
-               	else
-                	d *= k;
+                d /= k;
            	}
 		}
    	}
