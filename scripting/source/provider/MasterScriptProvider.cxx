@@ -189,11 +189,11 @@ throw ( Exception, RuntimeException )
         // if contex string ends with "uno_packages"
         if ( indexOfPkgSpec > -1 && m_sCtxString.match( pkgSpec, indexOfPkgSpec ) )
         {
-            m_bIsPkgMSP = sal_True;
+            m_bIsPkgMSP = true;
         }
         else
         {
-            m_bIsPkgMSP = sal_False;
+            m_bIsPkgMSP = false;
         }
     }
     else // no args

@@ -137,7 +137,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
 
     sal_Bool bSuccess = sal_False;
     Any invokeResult;
-    bool bCaughtException = sal_False;
+    bool bCaughtException = false;
     Any aException;
 
     if ( m_bInitialised )
@@ -233,7 +233,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
 
             invokeResult <<= reason.concat( aException.getValueTypeName() ).concat( e.Message );
 
-            bCaughtException = sal_True;
+            bCaughtException = true;
         }
     }
     else
