@@ -950,17 +950,23 @@ typedef boost::ptr_vector<_RefIdsMap> _RefIdsMaps;
 /// @param[in,out] rIds The list of IDs found in the document.
 void _RefIdsMap::GetFieldIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds)
 {
-    const SwTxtNode* pNd;
-    SwFieldType* pType;
+    SwFieldType *const pType = rDoc.GetFldType(RES_SETEXPFLD, aName, false);
 
-    if( 0 != ( pType = rDoc.GetFldType( RES_SETEXPFLD, aName, false ) ))
+    if (!pType)
+        return;
+
+    SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
+    for (SwFmtFld const* pF = aIter.First(); pF; pF = aIter.Next())
     {
-        SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
-        for( SwFmtFld* pF = aIter.First(); pF; pF = aIter.Next() )
-            if( pF->GetTxtFld() &&
-                0 != ( pNd = pF->GetTxtFld()->GetpTxtNode() ) &&
-                pNd->GetNodes().IsDocNodes() )
-                rIds.insert( ((SwSetExpField*)pF->GetField())->GetSeqNumber() );
+        if (pF->GetTxtFld())
+        {
+            SwTxtNode const*const pNd = pF->GetTxtFld()->GetpTxtNode();
+            if (pNd && pNd->GetNodes().IsDocNodes())
+            {
+                rIds.insert(static_cast<SwSetExpField const*>(pF->GetField())
+                                ->GetSeqNumber());
+            }
+        }
     }
 }
 
@@ -999,8 +1005,10 @@ void _RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, bool bField )
             for( SwFmtFld* pF = aIter.First(); pF; pF = aIter.Next() )
                 if( pF->GetTxtFld() )
                 {
-                    sal_uInt16 n = ((SwSetExpField*)pF->GetField())->GetSeqNumber( );
-                    ((SwSetExpField*)pF->GetField())->SetSeqNumber( sequencedIds[ n ] );
+                    SwSetExpField *const pSetExp(
+                            static_cast<SwSetExpField *>(pF->GetField()));
+                    sal_uInt16 const n = pSetExp->GetSeqNumber();
+                    pSetExp->SetSeqNumber( sequencedIds[n] );
                 }
         }
     }
