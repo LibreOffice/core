@@ -1248,7 +1248,8 @@ ScVbaApplication::Volatile( const uno::Any& aVolatile )  throw ( uno::RuntimeExc
 }
 
 ::sal_Bool SAL_CALL
-ScVbaApplication::getDisplayFormulaBar() throw ( css::uno::RuntimeException )
+ScVbaApplication::getDisplayFormulaBar()
+    throw (css::uno::RuntimeException, std::exception)
 {
     sal_Bool bRes = false;
     ScTabViewShell* pViewShell = excel::getCurrentBestViewShell( mxContext );
