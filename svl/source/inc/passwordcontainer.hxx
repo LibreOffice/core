@@ -136,7 +136,7 @@ public:
         if ( nStatus == PERSISTENT_RECORD )
             return m_bHasPersPass;
 
-        return sal_False;
+        return false;
     }
 
     ::std::vector< OUString > GetMemPasswords() const

@@ -59,7 +59,7 @@ SfxIntegerListItem::~SfxIntegerListItem()
 bool SfxIntegerListItem::operator==( const SfxPoolItem& rPoolItem ) const
 {
     if ( !rPoolItem.ISA( SfxIntegerListItem ) )
-        return sal_False;
+        return false;
 
     const SfxIntegerListItem rItem = (const SfxIntegerListItem&) rPoolItem;
     return rItem.m_aList == m_aList;

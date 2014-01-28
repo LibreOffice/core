@@ -1478,7 +1478,7 @@ sal_uInt16 SfxItemSet::GetWhichByPos( sal_uInt16 nPos ) const
         nPos = nPos - n;
         pPtr += 2;
     }
-    DBG_ASSERT( sal_False, "Hier sind wir falsch" );
+    DBG_ASSERT( false, "Hier sind wir falsch" );
     return 0;
 }
 

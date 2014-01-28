@@ -35,7 +35,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-#define CFG_READONLY_DEFAULT    sal_False
+#define CFG_READONLY_DEFAULT false
 
 // SvtCJKOptions_Impl ----------------------------------------------------------
 
@@ -112,11 +112,11 @@ SvtCTLOptions_Impl::SvtCTLOptions_Impl() :
 
     utl::ConfigItem("Office.Common/I18N/CTL"),
 
-    m_bIsLoaded             ( sal_False ),
-    m_bCTLFontEnabled       ( sal_False ),
-    m_bCTLSequenceChecking  ( sal_False ),
-    m_bCTLRestricted        ( sal_False ),
-    m_bCTLTypeAndReplace    ( sal_False ),
+    m_bIsLoaded             ( false ),
+    m_bCTLFontEnabled       ( false ),
+    m_bCTLSequenceChecking  ( false ),
+    m_bCTLRestricted        ( false ),
+    m_bCTLTypeAndReplace    ( false ),
     m_eCTLCursorMovement    ( SvtCTLOptions::MOVEMENT_LOGICAL ),
     m_eCTLTextNumerals      ( SvtCTLOptions::NUMERALS_ARABIC ),
 
@@ -311,7 +311,7 @@ void SvtCTLOptions_Impl::Load()
 
         if (bAutoEnableCTL)
         {
-            m_bCTLFontEnabled = sal_True;
+            m_bCTLFontEnabled = true;
             sal_uInt16 nLanguage = SvtSysLocale().GetLanguageTag().getLanguageType();
             //enable sequence checking for the appropriate languages
             m_bCTLSequenceChecking = m_bCTLRestricted = m_bCTLTypeAndReplace =
@@ -321,7 +321,7 @@ void SvtCTLOptions_Impl::Load()
         }
     }
 
-    m_bIsLoaded = sal_True;
+    m_bIsLoaded = true;
 }
 void SvtCTLOptions_Impl::SetCTLFontEnabled( bool _bEnabled )
 {

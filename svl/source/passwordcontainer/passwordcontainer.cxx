@@ -273,7 +273,7 @@ bool StorageItem::useStorage()
     if( aPropertyValues.getLength() != aNodeNames.getLength() )
     {
         OSL_ENSURE( aPropertyValues.getLength() == aNodeNames.getLength(), "Problems during reading\n" );
-        return sal_False;
+        return false;
     }
 
     bool aResult = false;
@@ -681,7 +681,7 @@ void PasswordContainer::PrivateAdd( const OUString& Url, const OUString& UserNam
 
         if( aIter != m_aContainer.end() )
         {
-            UpdateVector( aIter->first, aIter->second, aRecord, sal_True );
+            UpdateVector( aIter->first, aIter->second, aRecord, true );
             return;
         }
     }
@@ -1256,7 +1256,7 @@ void SAL_CALL PasswordContainer::removeMasterPassword()
 
                 // store the empty string to flag the default master password
                 m_aMasterPasswd = aPass;
-                m_pStorageFile->setEncodedMP( OUString(), sal_True );
+                m_pStorageFile->setEncodedMP( OUString(), true );
 
                 // store all the entries with the new password
                 for ( int nURLInd = 0; nURLInd < aPersistent.getLength(); nURLInd++ )
@@ -1352,7 +1352,7 @@ void PasswordContainer::Notify()
         PassMap::iterator aSearchIter = m_aContainer.find( aIter->first );
         if( aSearchIter != m_aContainer.end() )
             for( list< NamePassRecord >::iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); ++aNPIter )
-                UpdateVector( aSearchIter->first, aSearchIter->second, *aNPIter, sal_False );
+                UpdateVector( aSearchIter->first, aSearchIter->second, *aNPIter, false );
         else
             m_aContainer.insert( PairUrlRecord( aIter->first, aIter->second ) );
     }

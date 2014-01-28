@@ -156,7 +156,7 @@ struct SfxItemPool_Impl
             OSL_FAIL( #nTag ); /*! s.u. */ \
             /*! error-code setzen und auswerten! */ \
             (rStream).SetError(SVSTREAM_FILEFORMAT_ERROR); \
-            pImp->bStreaming = sal_False; \
+            pImp->bStreaming = false; \
             return rStream; \
         } \
     }
@@ -169,7 +169,7 @@ struct SfxItemPool_Impl
            OSL_FAIL( #nTag ); /*! s.u. */ \
            /*! error-code setzen und auswerten! */ \
            (rStream).SetError(SVSTREAM_FILEFORMAT_ERROR); \
-           pImp->bStreaming = sal_False; \
+           pImp->bStreaming = false; \
            delete pPointer; \
             return rStream; \
         } \
@@ -183,7 +183,7 @@ struct SfxItemPool_Impl
             OSL_FAIL( #nTag1 ); /*! s.u. */ \
             /*! error-code setzen und auswerten! */ \
             (rStream).SetError(SVSTREAM_FILEFORMAT_ERROR); \
-            pImp->bStreaming = sal_False; \
+            pImp->bStreaming = false; \
             return rStream; \
         } \
     }

@@ -245,7 +245,7 @@ protected:
    void                 Construct_Impl( SvStream *pStream, sal_uInt8 nTag )
                         {
                             _pStream = pStream;
-                            _bSkipped = sal_False;
+                            _bSkipped = false;
                             _nPreTag = nTag;
                         }
     inline bool         SetHeader_Impl( sal_uInt32 nHeader );
@@ -639,7 +639,7 @@ inline SfxMiniRecordReader::~SfxMiniRecordReader()
 inline void SfxMiniRecordReader::Skip()
 {
     _pStream->Seek(_nEofRec);
-    _bSkipped = sal_True;
+    _bSkipped = true;
 }
 
 /** Get the pre-tag of this record

@@ -113,14 +113,14 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
     nCommand        ( 0 ),
     nCellType       ( SVX_SEARCHIN_FORMULA ),
     nAppFlag        ( SVX_SEARCHAPP_WRITER ),
-    bRowDirection   ( sal_True ),
-    bAllTables      ( sal_False ),
-    bSearchFiltered   ( sal_False ),
-    bNotes          ( sal_False),
-    bBackward       ( sal_False ),
-    bPattern        ( sal_False ),
-    bContent        ( sal_False ),
-    bAsianOptions   ( sal_False )
+    bRowDirection   ( true ),
+    bAllTables      ( false ),
+    bSearchFiltered ( false ),
+    bNotes          ( false),
+    bBackward       ( false ),
+    bPattern        ( false ),
+    bContent        ( false ),
+    bAsianOptions   ( false )
 {
     EnableNotification( lcl_GetNotifyNames() );
 

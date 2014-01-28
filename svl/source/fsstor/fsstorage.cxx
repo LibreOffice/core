@@ -172,7 +172,7 @@ sal_Bool FSStorage::MakeFolderNoUI( const OUString& rFolder )
                                  uno::Reference< ucb::XCommandEnvironment >(),
                                  comphelper::getProcessComponentContext(),
                                  aParent ) )
-        return ::utl::UCBContentHelper::MakeFolder( aParent, aTitle, aResultContent, sal_False );
+        return ::utl::UCBContentHelper::MakeFolder( aParent, aTitle, aResultContent, false );
 
     return sal_False;
 }

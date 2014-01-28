@@ -718,13 +718,13 @@ bool SfxUndoManager::ImplUndo( SfxUndoContext* i_contextOrNull )
     if ( ImplIsInListAction_Lock() )
     {
         OSL_ENSURE( false, "SfxUndoManager::Undo: not possible when within a list action!" );
-        return sal_False;
+        return false;
     }
 
     if ( m_pData->pActUndoArray->nCurUndoAction == 0 )
     {
         OSL_ENSURE( false, "SfxUndoManager::Undo: undo stack is empty!" );
-        return sal_False;
+        return false;
     }
 
     SfxUndoAction* pAction = m_pData->pActUndoArray->aUndoActions[ --m_pData->pActUndoArray->nCurUndoAction ].pAction;
@@ -763,7 +763,7 @@ bool SfxUndoManager::ImplUndo( SfxUndoContext* i_contextOrNull )
 
     aGuard.scheduleNotification( &SfxUndoListener::actionUndone, sActionComment );
 
-    return sal_True;
+    return true;
 }
 
 
@@ -830,13 +830,13 @@ bool SfxUndoManager::ImplRedo( SfxUndoContext* i_contextOrNull )
     if ( ImplIsInListAction_Lock() )
     {
         OSL_ENSURE( false, "SfxUndoManager::Redo: not possible when within a list action!" );
-        return sal_False;
+        return false;
     }
 
     if ( m_pData->pActUndoArray->nCurUndoAction >= m_pData->pActUndoArray->aUndoActions.size() )
     {
         OSL_ENSURE( false, "SfxUndoManager::Redo: redo stack is empty!" );
-        return sal_False;
+        return false;
     }
 
     SfxUndoAction* pAction = m_pData->pActUndoArray->aUndoActions[ m_pData->pActUndoArray->nCurUndoAction++ ].pAction;
@@ -876,7 +876,7 @@ bool SfxUndoManager::ImplRedo( SfxUndoContext* i_contextOrNull )
 
     aGuard.scheduleNotification( &SfxUndoListener::actionRedone, sActionComment );
 
-    return sal_True;
+    return true;
 }
 
 
@@ -904,7 +904,7 @@ bool SfxUndoManager::Repeat( SfxRepeatTarget &rTarget )
         aGuard.clear();
         if ( pAction->CanRepeat( rTarget ) )
             pAction->Repeat( rTarget );
-        return sal_True;
+        return true;
     }
 
     return false;

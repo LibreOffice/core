@@ -38,7 +38,7 @@ SfxLockBytesItem::SfxLockBytesItem( sal_uInt16 nW, SvStream &rStream )
 :   SfxPoolItem( nW )
 {
     rStream.Seek( 0L );
-    _xVal = new SvLockBytes( new SvMemoryStream(), sal_True );
+    _xVal = new SvLockBytes( new SvMemoryStream(), true );
 
     SvStream aLockBytesStream( _xVal );
     rStream >> aLockBytesStream;
@@ -123,7 +123,7 @@ bool SfxLockBytesItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8
             pStream->Write( (void*)aSeq.getConstArray(), aSeq.getLength() );
             pStream->Seek(0);
 
-            _xVal = new SvLockBytes( pStream, sal_True );
+            _xVal = new SvLockBytes( pStream, true );
         }
         else
             _xVal = NULL;

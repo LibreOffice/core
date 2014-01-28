@@ -328,7 +328,7 @@ bool SfxSingleRecordReader::FindHeader_Impl
                     SFX_REC_TYP(nHeader));
                 if ( nTypes & _nRecordType )
                     // ==> gefunden
-                    return sal_True;
+                    return true;
 
                 // error => Such-Schleife abbrechen
                 break;
@@ -343,7 +343,7 @@ bool SfxSingleRecordReader::FindHeader_Impl
     // Fehler setzen und zur"uck-seeken
     _pStream->SetError( ERRCODE_IO_WRONGFORMAT );
     _pStream->Seek( nStartPos );
-    return sal_False;
+    return false;
 }
 
 
@@ -377,7 +377,7 @@ sal_uInt32 SfxMultiFixRecordWriter::Close( bool bSeekToEndOfRec )
     if ( !_bHeaderOk )
     {
         // Position hinter Record merken, um sie restaurieren zu k"onnen
-        sal_uInt32 nEndPos = SfxSingleRecordWriter::Close( sal_False );
+        sal_uInt32 nEndPos = SfxSingleRecordWriter::Close( false );
 
         // gegen"uber SfxSingleRecord erweiterten Header schreiben
         _pStream->WriteUInt16( _nContentCount );
@@ -507,7 +507,7 @@ sal_uInt32 SfxMultiVarRecordWriter::Close( bool bSeekToEndOfRec )
             _pStream->WriteUInt32( _aContentOfs[n] );
 
         // SfxMultiFixRecordWriter::Close() "uberspringen!
-        sal_uInt32 nEndPos = SfxSingleRecordWriter::Close( sal_False );
+        sal_uInt32 nEndPos = SfxSingleRecordWriter::Close( false );
 
         // eigenen Header schreiben
         _pStream->WriteUInt16( _nContentCount );
@@ -670,10 +670,10 @@ bool SfxMultiRecordReader::GetContent()
 
         // ContentNo weiterz"ahlen
         ++_nContentNo;
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 

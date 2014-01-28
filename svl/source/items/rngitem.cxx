@@ -82,8 +82,8 @@ bool SfxRangeItem::operator==( const SfxPoolItem& rItem ) const
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
     SfxRangeItem* pT = (SfxRangeItem*)&rItem;
     if( nFrom==pT->nFrom && nTo==pT->nTo )
-        return 1;
-    return 0;
+        return true;
+    return false;
 }
 
 // -----------------------------------------------------------------------
@@ -150,14 +150,14 @@ bool SfxUShortRangesItem::operator==( const SfxPoolItem &rItem ) const
 {
     const SfxUShortRangesItem &rOther = (const SfxUShortRangesItem&) rItem;
     if ( !_pRanges && !rOther._pRanges )
-        return sal_True;
+        return true;
     if ( _pRanges || rOther._pRanges )
-        return sal_False;
+        return false;
 
     sal_uInt16 n;
     for ( n = 0; _pRanges[n] && rOther._pRanges[n]; ++n )
         if ( *_pRanges != rOther._pRanges[n] )
-            return 0;
+            return false;
 
     return !_pRanges[n] && !rOther._pRanges[n];
 }

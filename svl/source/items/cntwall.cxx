@@ -48,7 +48,7 @@ CntWallpaperItem::CntWallpaperItem( sal_uInt16 which, SvStream& rStream, sal_uIn
         _aURL = readUnicodeString(rStream, nVersion >= 1);
         // !!! Color stream operators do not work - they discard any
         // transparency info !!!
-        _nColor.Read( rStream, sal_True );
+        _nColor.Read( rStream, true );
         rStream >> _nStyle;
     }
     else
@@ -120,7 +120,7 @@ SvStream& CntWallpaperItem::Store( SvStream& rStream, sal_uInt16 ) const
     // !!! Color stream operators do not work - they discard any
     // transparency info !!!
     // ??? Why the hell Color::Write(...) isn't const ???
-    (const_cast< CntWallpaperItem* >(this))->_nColor.Write( rStream, sal_True );
+    (const_cast< CntWallpaperItem* >(this))->_nColor.Write( rStream, true );
     rStream.WriteUInt16( _nStyle );
 
     return rStream;

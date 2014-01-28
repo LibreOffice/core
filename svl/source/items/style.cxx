@@ -96,8 +96,8 @@ SfxStyleSheetBase::SfxStyleSheetBase( const OUString& rName, SfxStyleSheetBasePo
     , pSet( NULL )
     , nMask(mask)
     , nHelpId( 0 )
-    , bMySet( sal_False )
-    , bHidden( sal_False )
+    , bMySet( false )
+    , bHidden( false )
 {
 #ifdef DBG_UTIL
     aDbgStyleSheetReferences.mnStyles++;
@@ -161,7 +161,7 @@ bool SfxStyleSheetBase::SetName( const OUString& rName )
         OUString aOldName = aName;
         SfxStyleSheetBase *pOther = pPool->Find( rName, nFamily ) ;
         if ( pOther && pOther != this )
-            return sal_False;
+            return false;
 
         SfxStyleFamily eTmpFam = pPool->GetSearchFamily();
         sal_uInt16 nTmpMask = pPool->GetSearchMask();
@@ -169,7 +169,7 @@ bool SfxStyleSheetBase::SetName( const OUString& rName )
         pPool->SetSearchMask(nFamily);
 
         if ( !aName.isEmpty() )
-            pPool->ChangeParent( aName, rName, sal_False );
+            pPool->ChangeParent( aName, rName, false );
 
         if ( aFollow == aName )
             aFollow = rName;
@@ -269,7 +269,7 @@ SfxItemSet& SfxStyleSheetBase::GetItemSet()
     if( !pSet )
     {
         pSet = new SfxItemSet( pPool->GetPool() );
-        bMySet = sal_True;
+        bMySet = true;
     }
     return *pSet;
 }
@@ -385,11 +385,11 @@ SfxStyleSheetIterator::SfxStyleSheetIterator(SfxStyleSheetBasePool *pBase,
 {
     pBasePool=pBase;
     nSearchFamily=eFam;
-    bSearchUsed=sal_False;
+    bSearchUsed=false;
         if( (( n & SFXSTYLEBIT_ALL_VISIBLE ) != SFXSTYLEBIT_ALL_VISIBLE )
                 && ((n & SFXSTYLEBIT_USED) == SFXSTYLEBIT_USED))
     {
-        bSearchUsed = sal_True;
+        bSearchUsed = true;
         n &= ~SFXSTYLEBIT_USED;
     }
     nMask=n;

@@ -114,7 +114,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
         pStoreMaster = pStoreMaster->pImp->mpSecondary;
 
     // Alter-Header (Version des Pools an sich und Inhalts-Version 0xffff)
-    pImp->bStreaming = sal_True;
+    pImp->bStreaming = true;
     if ( !pStoreMaster )
     {
         rStream.WriteUInt16(  rStream.GetVersion() >= SOFFICE_FILEFORMAT_50
@@ -273,7 +273,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
     if ( !rStream.GetError() && pImp->mpSecondary )
         pImp->mpSecondary->Store( rStream );
 
-    pImp->bStreaming = sal_False;
+    pImp->bStreaming = false;
     return rStream;
 }
 
@@ -507,7 +507,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
         pLoadMaster = pLoadMaster->pImp->mpSecondary;
 
     // Gesamt Header einlesen
-    pImp->bStreaming = sal_True;
+    pImp->bStreaming = true;
     if ( !pLoadMaster )
     {
         // Format-Version laden
@@ -528,7 +528,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
         if ( pImp->nMajorVer > SFX_ITEMPOOL_VER_MAJOR )
         {
             rStream.SetError(SVSTREAM_FILEFORMAT_ERROR);
-            pImp->bStreaming = sal_False;
+            pImp->bStreaming = false;
             return rStream;
         }
 
@@ -541,7 +541,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
     SfxMiniRecordReader aPoolRec( &rStream, SFX_ITEMPOOL_REC );
     if ( rStream.GetError() )
     {
-        pImp->bStreaming = sal_False;
+        pImp->bStreaming = false;
         return rStream;
     }
 
@@ -553,7 +553,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
         SfxMiniRecordReader aPoolHeaderRec( &rStream, SFX_ITEMPOOL_REC_HEADER );
         if ( rStream.GetError() )
         {
-            pImp->bStreaming = sal_False;
+            pImp->bStreaming = false;
             return rStream;
         }
 
@@ -567,7 +567,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
         {
             rStream.SetError(SVSTREAM_FILEFORMAT_ERROR);
             aPoolRec.Skip();
-            pImp->bStreaming = sal_False;
+            pImp->bStreaming = false;
             return rStream;
         }
     }
@@ -577,7 +577,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
         SfxMultiRecordReader aVerRec( &rStream, SFX_ITEMPOOL_REC_VERSIONMAP );
         if ( rStream.GetError() )
         {
-            pImp->bStreaming = sal_False;
+            pImp->bStreaming = false;
             return rStream;
         }
 
@@ -704,7 +704,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
     if ( aExternName != pImp->aName )
         pImp->aName = OUString();
 
-    pImp->bStreaming = sal_False;
+    pImp->bStreaming = false;
     return rStream;
 };
 
@@ -736,13 +736,13 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
         rStream >> pImp->nLoadingVersion;
     aExternName = SfxPoolItem::readByteString(rStream);
     bOwnPool = aExternName == pImp->aName;
-    pImp->bStreaming = sal_True;
+    pImp->bStreaming = true;
 
     //! solange wir keine fremden laden k"onnen
     if ( !bOwnPool )
     {
         rStream.SetError(SVSTREAM_FILEFORMAT_ERROR);
-        pImp->bStreaming = sal_False;
+        pImp->bStreaming = false;
         return rStream;
     }
 
@@ -751,7 +751,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
          pImp->nVersion < pImp->nLoadingVersion )
     {
         rStream.SetError(ERRCODE_IO_WRONGVERSION);
-        pImp->bStreaming = sal_False;
+        pImp->bStreaming = false;
         return rStream;
     }
 
@@ -1010,7 +1010,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
     if ( aExternName != pImp->aName )
         pImp->aName = OUString();
 
-    pImp->bStreaming = sal_False;
+    pImp->bStreaming = false;
     return rStream;
 }
 
@@ -1090,7 +1090,7 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
         {
             // gemappte SlotId kann "ubernommen werden
             rWhich = nMappedWhich;
-            bResolvable = sal_True;
+            bResolvable = true;
         }
     }
 
@@ -1134,7 +1134,7 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
             }
         }
 
-        SFX_ASSERT( sal_False, rWhich, "can't resolve Which-Id in LoadSurrogate" );
+        SFX_ASSERT( false, rWhich, "can't resolve Which-Id in LoadSurrogate" );
     }
 
     return 0;
@@ -1178,7 +1178,7 @@ bool SfxItemPool::StoreSurrogate
     }
 
     rStream.WriteUInt32( SFX_ITEMS_NULL );
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -1194,7 +1194,7 @@ sal_uInt32 SfxItemPool::GetSurrogate(const SfxPoolItem *pItem) const
     {
         if ( pImp->mpSecondary )
             return pImp->mpSecondary->GetSurrogate( pItem );
-        SFX_ASSERT( 0, pItem->Which(), "unknown Which-Id - dont ask me for surrogates" );
+        SFX_ASSERT( false, pItem->Which(), "unknown Which-Id - dont ask me for surrogates" );
     }
 
     // Pointer auf static- oder pool-dflt-Attribut?
@@ -1210,7 +1210,7 @@ sal_uInt32 SfxItemPool::GetSurrogate(const SfxPoolItem *pItem) const
         if ( p == pItem )
             return i;
     }
-    SFX_ASSERT( 0, pItem->Which(), "Item not in the pool");
+    SFX_ASSERT( false, pItem->Which(), "Item not in the pool");
     return SFX_ITEMS_NULL;
 }
 
@@ -1374,7 +1374,7 @@ sal_uInt16 SfxItemPool::GetNewWhich
     {
         if ( pImp->mpSecondary )
             return pImp->mpSecondary->GetNewWhich( nFileWhich );
-        SFX_ASSERT( 0, nFileWhich, "unknown which in GetNewWhich()" );
+        SFX_ASSERT( false, nFileWhich, "unknown which in GetNewWhich()" );
     }
 
     // Version neuer/gleich/"alter?
@@ -1496,11 +1496,11 @@ bool SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
     DBG_ASSERT( !IsInvalidItem(&rItem), "cannot store invalid items" );
 
     if ( IsSlot( rItem.Which() ) )
-        return sal_False;
+        return false;
     const SfxItemPool *pPool = this;
     while ( !pPool->IsInStoringRange(rItem.Which()) )
         if ( 0 == ( pPool = pPool->pImp->mpSecondary ) )
-            return sal_False;
+            return false;
 
     DBG_ASSERT( !pImp->bInSetItem || !rItem.ISA(SfxSetItem),
                 "SetItem contains ItemSet with SetItem" );
@@ -1508,7 +1508,7 @@ bool SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
     sal_uInt16 nSlotId = pPool->GetSlotId( rItem.Which(), sal_True );
     sal_uInt16 nItemVersion = rItem.GetVersion(pImp->mnFileFormatVersion);
     if ( USHRT_MAX == nItemVersion )
-        return sal_False;
+        return false;
 
     rStream.WriteUInt16( rItem.Which() ).WriteUInt16( nSlotId );
     if ( bDirect || !pPool->StoreSurrogate( rStream, &rItem ) )
@@ -1523,7 +1523,7 @@ bool SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
         rStream.Seek( nIEnd );
     }
 
-    return sal_True;
+    return true;
 }
 
 

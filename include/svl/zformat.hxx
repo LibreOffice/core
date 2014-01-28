@@ -91,7 +91,7 @@ public:
 #endif
 
                     SvNumberNatNum() : eLang( LANGUAGE_DONTKNOW ), nNum(0),
-                                        bDBNum(0), bDate(0), bSet(0) {}
+                                        bDBNum(false), bDate(false), bSet(false) {}
     bool            IsComplete() const  { return bSet && eLang != LANGUAGE_DONTKNOW; }
     sal_uInt8            GetRawNum() const   { return nNum; }
     sal_uInt8            GetNatNum() const   { return bDBNum ? MapDBNumToNatNum( nNum, eLang, bDate ) : nNum; }
