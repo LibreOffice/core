@@ -36,8 +36,8 @@
 #include "tools/getprocessworkingdir.hxx"
 
 // ---------------------------------------------------------------------------------------
-// #define this to a non-zero value, if remembering defaults is not supported properly
-#define RTL_BOOTSTRAP_DEFAULTS_BROKEN 1
+// #define this to true, if remembering defaults is not supported properly
+#define RTL_BOOTSTRAP_DEFAULTS_BROKEN true
 
 #define BOOTSTRAP_ITEM_PRODUCT_KEY          "ProductKey"
 #define BOOTSTRAP_ITEM_VERSIONFILE          "Location"

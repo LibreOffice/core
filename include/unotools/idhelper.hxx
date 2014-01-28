@@ -50,9 +50,9 @@ public:
 
         // first check the two lengths
         if (nLengthLeft < nLengthRight)
-            return sal_True;
+            return true;
         if (nLengthLeft > nLengthRight)
-            return sal_False;
+            return false;
 
         // both sequences have the same length -> check the type names
         const ::com::sun::star::uno::Type* pTypesLeft = lhs.getConstArray();
@@ -61,13 +61,13 @@ public:
         {
             sal_Int32 nTypeNameCompare = pTypesLeft->getTypeName().compareTo(pTypesRight->getTypeName());
             if (nTypeNameCompare < 0)
-                return sal_True;
+                return true;
             if (nTypeNameCompare > 0)
-                return sal_False;
+                return false;
         }
 
         // both sequences are equal ...
-        return sal_False;
+        return false;
     }
 };
 

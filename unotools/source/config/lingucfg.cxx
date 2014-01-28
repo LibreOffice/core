@@ -393,7 +393,7 @@ uno::Any SvtLinguConfigItem::GetProperty( sal_Int32 nPropertyHandle ) const
         case UPH_IS_GRAMMAR_AUTO:                       pbVal = &rOpt.bIsGrammarAuto; break;
         case UPH_IS_GRAMMAR_INTERACTIVE:                pbVal = &rOpt.bIsGrammarInteractive; break;
         default :
-            DBG_ASSERT( 0, "unexpected property handle" );
+            DBG_ASSERT( false, "unexpected property handle" );
     }
 
     if (pbVal)
@@ -494,7 +494,7 @@ sal_Bool SvtLinguConfigItem::SetProperty( sal_Int32 nPropertyHandle, const uno::
         case UPH_IS_GRAMMAR_AUTO:                       pbVal = &rOpt.bIsGrammarAuto; break;
         case UPH_IS_GRAMMAR_INTERACTIVE:                pbVal = &rOpt.bIsGrammarInteractive; break;
         default :
-            DBG_ASSERT( 0, "unexpected property handle" );
+            DBG_ASSERT( false, "unexpected property handle" );
     }
 
     if (pbVal)
@@ -656,7 +656,7 @@ sal_Bool SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProp
                 break;
 
                 default:
-                    DBG_ASSERT( 0, "unexpected case" );
+                    DBG_ASSERT( false, "unexpected case" );
             }
         }
 
@@ -787,7 +787,7 @@ sal_Bool SvtLinguConfigItem::IsReadOnly( sal_Int32 nPropertyHandle ) const
         case UPH_IS_GRAMMAR_AUTO:                       bReadOnly = rOpt.bROIsGrammarAuto; break;
         case UPH_IS_GRAMMAR_INTERACTIVE:                bReadOnly = rOpt.bROIsGrammarInteractive; break;
         default :
-            DBG_ASSERT( 0, "unexpected property handle" );
+            DBG_ASSERT( false, "unexpected property handle" );
     }
     return bReadOnly;
 }
@@ -1148,7 +1148,7 @@ OUString SvtLinguConfig::GetVendorImageUrl_Impl(
     }
     catch (uno::Exception &)
     {
-        DBG_ASSERT( 0, "exception caught. GetVendorImageUrl_Impl failed" );
+        DBG_ASSERT( false, "exception caught. GetVendorImageUrl_Impl failed" );
     }
     return aRes;
 }

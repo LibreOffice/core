@@ -90,7 +90,7 @@ namespace utl
                 .append(aMgrName)
                 .append(")!").getStr() );
 
-            m_bInitialized = sal_True;
+            m_bInitialized = true;
         }
         return m_pResources;
     }

@@ -37,7 +37,7 @@ OTempFileService::OTempFileService(css::uno::Reference< css::uno::XComponentCont
 
 {
     mpTempFile = new ::utl::TempFile;
-    mpTempFile->EnableKillingFile ( sal_True );
+    mpTempFile->EnableKillingFile ( true );
 }
 
 OTempFileService::~OTempFileService ()

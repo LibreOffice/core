@@ -143,14 +143,14 @@ static SvStream* lcl_CreateStream( const OUString& rFileName, StreamMode eOpenMo
 SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode,
                                          UcbLockBytesHandler* pHandler )
 {
-    return lcl_CreateStream( rFileName, eOpenMode, Reference < XInteractionHandler >(), pHandler, sal_True /* bEnsureFileExists */ );
+    return lcl_CreateStream( rFileName, eOpenMode, Reference < XInteractionHandler >(), pHandler, true /* bEnsureFileExists */ );
 }
 
 SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode,
                                          Reference < XInteractionHandler > xInteractionHandler,
                                          UcbLockBytesHandler* pHandler )
 {
-    return lcl_CreateStream( rFileName, eOpenMode, xInteractionHandler, pHandler, sal_True /* bEnsureFileExists */ );
+    return lcl_CreateStream( rFileName, eOpenMode, xInteractionHandler, pHandler, true /* bEnsureFileExists */ );
 }
 
 SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode,

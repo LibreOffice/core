@@ -315,7 +315,7 @@ sal_Bool SvtCommandOptions_Impl::Lookup( SvtCommandOptions::CmdOption eCmdOption
             return m_aDisabledCommands.Lookup( aCommand );
         }
         default:
-            DBG_ASSERT( sal_False, "SvtCommandOptions_Impl::Lookup()\nUnknown option type given!\n" );
+            DBG_ASSERT( false, "SvtCommandOptions_Impl::Lookup()\nUnknown option type given!\n" );
     }
 
     return sal_False;

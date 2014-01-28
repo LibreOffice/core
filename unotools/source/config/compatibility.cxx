@@ -457,7 +457,7 @@ void SvtCompatibilityOptions_Impl::SetDefault( OUString sName, bool bValue )
 //*****************************************************************************************************************
 void SvtCompatibilityOptions_Impl::Notify( const Sequence< OUString >& )
 {
-    DBG_ASSERT( sal_False, "SvtCompatibilityOptions_Impl::Notify()\nNot implemented yet! I don't know how I can handle a dynamical list of unknown properties ...\n" );
+    DBG_ASSERT( false, "SvtCompatibilityOptions_Impl::Notify()\nNot implemented yet! I don't know how I can handle a dynamical list of unknown properties ...\n" );
 }
 
 //*****************************************************************************************************************

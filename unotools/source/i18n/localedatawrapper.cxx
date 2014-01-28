@@ -1337,7 +1337,7 @@ OUString LocaleDataWrapper::getDate( const Date& rDate ) const
     sal_uInt16  nYear   = rDate.GetYear();
     sal_uInt16  nYearLen;
 
-    if ( sal_True /* IsDateCentury() */ )
+    if ( true /* IsDateCentury() */ )
         nYearLen = 4;
     else
     {
@@ -1348,25 +1348,25 @@ OUString LocaleDataWrapper::getDate( const Date& rDate ) const
     switch ( getDateFormat() )
     {
         case DMY :
-            pBuf = ImplAdd2UNum( pBuf, nDay, sal_True /* IsDateDayLeadingZero() */ );
+            pBuf = ImplAdd2UNum( pBuf, nDay, true /* IsDateDayLeadingZero() */ );
             pBuf = ImplAddString( pBuf, getDateSep() );
-            pBuf = ImplAdd2UNum( pBuf, nMonth, sal_True /* IsDateMonthLeadingZero() */ );
+            pBuf = ImplAdd2UNum( pBuf, nMonth, true /* IsDateMonthLeadingZero() */ );
             pBuf = ImplAddString( pBuf, getDateSep() );
             pBuf = ImplAddUNum( pBuf, nYear, nYearLen );
         break;
         case MDY :
-            pBuf = ImplAdd2UNum( pBuf, nMonth, sal_True /* IsDateMonthLeadingZero() */ );
+            pBuf = ImplAdd2UNum( pBuf, nMonth, true /* IsDateMonthLeadingZero() */ );
             pBuf = ImplAddString( pBuf, getDateSep() );
-            pBuf = ImplAdd2UNum( pBuf, nDay, sal_True /* IsDateDayLeadingZero() */ );
+            pBuf = ImplAdd2UNum( pBuf, nDay, true /* IsDateDayLeadingZero() */ );
             pBuf = ImplAddString( pBuf, getDateSep() );
             pBuf = ImplAddUNum( pBuf, nYear, nYearLen );
         break;
         default:
             pBuf = ImplAddUNum( pBuf, nYear, nYearLen );
             pBuf = ImplAddString( pBuf, getDateSep() );
-            pBuf = ImplAdd2UNum( pBuf, nMonth, sal_True /* IsDateMonthLeadingZero() */ );
+            pBuf = ImplAdd2UNum( pBuf, nMonth, true /* IsDateMonthLeadingZero() */ );
             pBuf = ImplAddString( pBuf, getDateSep() );
-            pBuf = ImplAdd2UNum( pBuf, nDay, sal_True /* IsDateDayLeadingZero() */ );
+            pBuf = ImplAdd2UNum( pBuf, nDay, true /* IsDateDayLeadingZero() */ );
     }
 
     return OUString(aBuf, pBuf-aBuf);
@@ -1383,7 +1383,7 @@ OUString LocaleDataWrapper::getTime( const Time& rTime, sal_Bool bSec, sal_Bool 
 
     nHour %= 24;
 
-    pBuf = ImplAdd2UNum( pBuf, nHour, sal_True /* IsTimeLeadingZero() */ );
+    pBuf = ImplAdd2UNum( pBuf, nHour, true /* IsTimeLeadingZero() */ );
     pBuf = ImplAddString( pBuf, getTimeSep() );
     pBuf = ImplAdd2UNum( pBuf, rTime.GetMin(), true );
     if ( bSec )
@@ -1456,7 +1456,7 @@ OUString LocaleDataWrapper::getDuration( const Time& rTime, sal_Bool bSec, sal_B
     if ( rTime < Time( 0 ) )
         pBuf = ImplAddString( pBuf, ' ' );
 
-    if ( sal_True /* IsTimeLeadingZero() */ )
+    if ( true /* IsTimeLeadingZero() */ )
         pBuf = ImplAddUNum( pBuf, rTime.GetHour(), 2 );
     else
         pBuf = ImplAddUNum( pBuf, rTime.GetHour() );

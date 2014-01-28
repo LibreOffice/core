@@ -34,7 +34,7 @@ TransliterationWrapper::TransliterationWrapper(
                     const Reference< XComponentContext > & rxContext,
                     sal_uInt32 nTyp )
     : xTrans( Transliteration::create(rxContext) ),
-      aLanguageTag( LANGUAGE_SYSTEM ), nType( nTyp ), bFirstCall( sal_True )
+      aLanguageTag( LANGUAGE_SYSTEM ), nType( nTyp ), bFirstCall( true )
 {
 }
 

@@ -79,7 +79,7 @@ public:
     };
 
                     UcbLockBytesHandler()
-                        : m_bActive( sal_True )
+                        : m_bActive( true )
                     {}
 
     virtual void    Handle( LoadHandlerItem nWhich, UcbLockBytesRef xLockBytes ) = 0;
@@ -182,7 +182,7 @@ public:
                             }
 
     void                    setDontClose_Impl()
-                            { m_bDontClose = sal_True; }
+                            { m_bDontClose = true; }
 
     void                    SetContentType_Impl( const OUString& rType ) { m_aContentType = rType; }
     void                    SetRealURL_Impl( const OUString& rURL )  { m_aRealURL = rURL; }
