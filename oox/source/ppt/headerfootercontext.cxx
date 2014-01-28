@@ -32,19 +32,19 @@ namespace oox { namespace ppt {
     {
         if ( rAttribs.hasAttribute( XML_sldNum ) )
         {
-            rHeaderFooter.mbSlideNumber = rAttribs.getBool( XML_sldNum, sal_True );
+            rHeaderFooter.mbSlideNumber = rAttribs.getBool( XML_sldNum, true );
         }
         if ( rAttribs.hasAttribute( XML_hdr ) )
         {
-            rHeaderFooter.mbHeader = rAttribs.getBool( XML_hdr, sal_True );
+            rHeaderFooter.mbHeader = rAttribs.getBool( XML_hdr, true );
         }
         if ( rAttribs.hasAttribute( XML_ftr ) )
         {
-            rHeaderFooter.mbFooter = rAttribs.getBool( XML_ftr, sal_True );
+            rHeaderFooter.mbFooter = rAttribs.getBool( XML_ftr, true );
         }
         if ( rAttribs.hasAttribute( XML_dt ) )
         {
-            rHeaderFooter.mbDateTime = rAttribs.getBool( XML_dt, sal_True );
+            rHeaderFooter.mbDateTime = rAttribs.getBool( XML_dt, true );
         }
     }
 

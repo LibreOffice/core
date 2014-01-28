@@ -979,8 +979,8 @@ Path2DContext::Path2DContext( ContextHandler2Helper& rParent, const AttributeLis
     rPath2D.w = rAttribs.getString( XML_w, aEmptyString ).toInt64();
     rPath2D.h = rAttribs.getString( XML_h, aEmptyString ).toInt64();
     rPath2D.fill = rAttribs.getToken( XML_fill, XML_norm );
-    rPath2D.stroke = rAttribs.getBool( XML_stroke, sal_True );
-    rPath2D.extrusionOk = rAttribs.getBool( XML_extrusionOk, sal_True );
+    rPath2D.stroke = rAttribs.getBool( XML_stroke, true );
+    rPath2D.extrusionOk = rAttribs.getBool( XML_extrusionOk, true );
 }
 
 Path2DContext::~Path2DContext()

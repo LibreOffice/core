@@ -39,8 +39,8 @@ TableCellContext::TableCellContext( ContextHandler2Helper& rParent, const Attrib
     if ( rAttribs.hasAttribute( XML_gridSpan ) )
         mrTableCell.setGridSpan( rAttribs.getString( XML_gridSpan ).get().toInt32() );
 
-    mrTableCell.sethMerge( rAttribs.getBool( XML_hMerge, sal_False ) );
-    mrTableCell.setvMerge( rAttribs.getBool( XML_vMerge, sal_False ) );
+    mrTableCell.sethMerge( rAttribs.getBool( XML_hMerge, false ) );
+    mrTableCell.setvMerge( rAttribs.getBool( XML_vMerge, false ) );
 }
 
 TableCellContext::~TableCellContext()
@@ -67,7 +67,7 @@ TableCellContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeLis
             mrTableCell.setBottomMargin( rAttribs.getInteger( XML_marB, 45720 ) );
             mrTableCell.setVertToken( rAttribs.getToken( XML_vert, XML_horz ) );                  // ST_TextVerticalType
             mrTableCell.setAnchorToken( rAttribs.getToken( XML_anchor, XML_t ) );                 // ST_TextAnchoringType
-            mrTableCell.setAnchorCtr( rAttribs.getBool( XML_anchorCtr, sal_False ) );
+            mrTableCell.setAnchorCtr( rAttribs.getBool( XML_anchorCtr, false ) );
             mrTableCell.setHorzOverflowToken( rAttribs.getToken( XML_horzOverflow, XML_clip ) );  // ST_TextHorzOverflowType
         }
         break;

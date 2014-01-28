@@ -48,13 +48,13 @@ TableContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeList& r
     {
     case A_TOKEN( tblPr ):              // CT_TableProperties
         {
-            mrTableProperties.isRtl() = rAttribs.getBool( XML_rtl, sal_False );
-            mrTableProperties.isFirstRow() = rAttribs.getBool( XML_firstRow, sal_False );
-            mrTableProperties.isFirstCol() = rAttribs.getBool( XML_firstCol, sal_False );
-            mrTableProperties.isLastRow() = rAttribs.getBool( XML_lastRow, sal_False );
-            mrTableProperties.isLastCol() = rAttribs.getBool( XML_lastCol, sal_False );
-            mrTableProperties.isBandRow() = rAttribs.getBool( XML_bandRow, sal_False );
-            mrTableProperties.isBandCol() = rAttribs.getBool( XML_bandCol, sal_False );
+            mrTableProperties.isRtl() = rAttribs.getBool( XML_rtl, false );
+            mrTableProperties.isFirstRow() = rAttribs.getBool( XML_firstRow, false );
+            mrTableProperties.isFirstCol() = rAttribs.getBool( XML_firstCol, false );
+            mrTableProperties.isLastRow() = rAttribs.getBool( XML_lastRow, false );
+            mrTableProperties.isLastCol() = rAttribs.getBool( XML_lastCol, false );
+            mrTableProperties.isBandRow() = rAttribs.getBool( XML_bandRow, false );
+            mrTableProperties.isBandCol() = rAttribs.getBool( XML_bandCol, false );
         }
         break;
     case A_TOKEN( tableStyle ):         // CT_TableStyle

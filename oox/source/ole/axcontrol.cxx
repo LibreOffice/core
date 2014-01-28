@@ -2629,7 +2629,7 @@ HtmlSelectModel::importBinaryModel( BinaryInputStream& rInStrm )
         for( std::vector< sal_Int16 >::iterator it = selectedIndices.begin(); it != selectedIndices.end(); ++it, ++index )
              msIndices[ index ] = *it;
     }
-    return sal_True;
+    return true;
 }
 
 

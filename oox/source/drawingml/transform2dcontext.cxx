@@ -42,7 +42,7 @@ Transform2DContext::Transform2DContext( ContextHandler2Helper& rParent, const At
     if( !btxXfrm )
     {
         mrShape.setRotation( rAttribs.getInteger( XML_rot, 0 ) ); // 60000ths of a degree Positive angles are clockwise; negative angles are counter-clockwise
-        mrShape.setFlip( rAttribs.getBool( XML_flipH, sal_False ), rAttribs.getBool( XML_flipV, sal_False ) );
+        mrShape.setFlip( rAttribs.getBool( XML_flipH, false ), rAttribs.getBool( XML_flipV, false ) );
     }
     else
     {

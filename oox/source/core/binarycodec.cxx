@@ -176,7 +176,7 @@ void BinaryCodec_XOR::initKey( const sal_uInt8 pnPassData[ 16 ] )
 
 bool BinaryCodec_XOR::initCodec( const uno::Sequence< beans::NamedValue >& aData )
 {
-    bool bResult = sal_False;
+    bool bResult = false;
 
     ::comphelper::SequenceAsHashMap aHashData( aData );
     uno::Sequence< sal_Int8 > aKey = aHashData.getUnpackedValueOrDefault("XOR95EncryptionKey", uno::Sequence< sal_Int8 >() );
@@ -184,7 +184,7 @@ bool BinaryCodec_XOR::initCodec( const uno::Sequence< beans::NamedValue >& aData
     if ( aKey.getLength() == 16 )
     {
         (void)memcpy( mpnKey, aKey.getConstArray(), 16 );
-        bResult = sal_True;
+        bResult = true;
 
         mnBaseKey = (sal_uInt16)aHashData.getUnpackedValueOrDefault("XOR95BaseKey", (sal_Int16)0 );
         mnHash = (sal_uInt16)aHashData.getUnpackedValueOrDefault("XOR95PasswordHash", (sal_Int16)0 );
@@ -283,7 +283,7 @@ BinaryCodec_RCF::~BinaryCodec_RCF()
 
 bool BinaryCodec_RCF::initCodec( const uno::Sequence< beans::NamedValue >& aData )
 {
-    bool bResult = sal_False;
+    bool bResult = false;
 
     ::comphelper::SequenceAsHashMap aHashData( aData );
     uno::Sequence< sal_Int8 > aKey = aHashData.getUnpackedValueOrDefault("STD97EncryptionKey", uno::Sequence< sal_Int8 >() );
@@ -295,7 +295,7 @@ bool BinaryCodec_RCF::initCodec( const uno::Sequence< beans::NamedValue >& aData
         if ( aUniqueID.getLength() == 16 )
         {
             (void)memcpy( mpnUnique, aUniqueID.getConstArray(), 16 );
-            bResult = sal_False;
+            bResult = false;
         }
         else
             OSL_FAIL( "Unexpected document ID!\n" );
