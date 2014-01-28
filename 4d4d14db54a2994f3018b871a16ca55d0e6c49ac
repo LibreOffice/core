@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_0069508b",
+        "filename": "filter/source/config/fragments/filters/StarOffice_XML__Chart_.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2014-01-28T03:58:42Z",
+      "side": 1,
+      "message": "Is there any reason why you dropped OWN flag here but not in any of the others?  Or is this an accidental omission?",
+      "revId": "4d4d14db54a2994f3018b871a16ca55d0e6c49ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
