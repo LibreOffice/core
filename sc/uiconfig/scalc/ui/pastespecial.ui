@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.0 on Tue Jan 28 13:14:40 2014 -->
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="PasteSpecial">
@@ -70,7 +71,7 @@
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="row_spacing">6</property>
+            <property name="row_spacing">12</property>
             <property name="column_spacing">12</property>
             <child>
               <object class="GtkFrame" id="frame1">
@@ -84,8 +85,8 @@
                   <object class="GtkAlignment" id="alignment1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="left_padding">12</property>
                     <property name="top_padding">6</property>
+                    <property name="left_padding">12</property>
                     <child>
                       <object class="GtkBox" id="box1">
                         <property name="visible">True</property>
@@ -254,8 +255,8 @@
                   <object class="GtkAlignment" id="alignment2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="left_padding">12</property>
                     <property name="top_padding">6</property>
+                    <property name="left_padding">12</property>
                     <child>
                       <object class="GtkBox" id="box4">
                         <property name="visible">True</property>
@@ -386,8 +387,8 @@
                   <object class="GtkAlignment" id="alignment3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="left_padding">12</property>
                     <property name="top_padding">6</property>
+                    <property name="left_padding">12</property>
                     <child>
                       <object class="GtkBox" id="box3">
                         <property name="visible">True</property>
@@ -401,7 +402,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
@@ -419,7 +419,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
@@ -437,7 +436,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
@@ -482,8 +480,8 @@
                   <object class="GtkAlignment" id="alignment4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="left_padding">12</property>
                     <property name="top_padding">6</property>
+                    <property name="left_padding">12</property>
                     <child>
                       <object class="GtkBox" id="box2">
                         <property name="visible">True</property>
@@ -533,7 +531,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>

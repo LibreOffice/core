@@ -383,7 +383,6 @@ public:
                                                             sal_Bool bDisallowCellMove = false ) = 0;
 
     virtual AbstractScInsertContentsDlg * CreateScInsertContentsDlg( Window*        pParent,
-                                                                    int nId,
                                                                     sal_uInt16      nCheckDefaults = 0,
                                                                     const OUString* pStrTitle = NULL ) = 0;
 

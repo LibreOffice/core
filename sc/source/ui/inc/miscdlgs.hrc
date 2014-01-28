@@ -18,7 +18,6 @@
  */
 
 #include "sc.hrc"
-                    // -> RID_SCDLG_INSCONT
                     // -> RID_SCDLG_MOVETAB
                     // -> RID_SCDLG_SELENTRY
                     // -> RID_SCDLG_FILLSERIES
@@ -35,32 +34,6 @@
 #define FL_FRAME        112
 #define STR_BTN_CLOSE   200
 
-
-// Insert Contents Dialog
-#define BTN_INSALL      20
-#define BTN_INSSTRINGS  21
-#define BTN_INSNUMBERS  22
-#define BTN_INSDATETIME 23
-#define BTN_INSFORMULAS 24
-#define BTN_INSATTRS    25
-#define BTN_INSNOTES    26
-#define BTN_OP_NOOP     27
-#define BTN_OP_ADD      28
-#define BTN_OP_SUB      29
-#define BTN_OP_MUL      30
-#define BTN_OP_DIV      31
-#define FL_OPERATION    32
-#define BTN_SKIP_EMPTY  33
-#define BTN_TRANSPOSE   34
-#define BTN_LINK        35
-#define FL_OPTIONS      36
-#define BTN_MV_NONE     37
-#define BTN_MV_DOWN     38
-#define BTN_MV_RIGHT    39
-#define FL_MOVE         40
-#define BTN_INSOBJECTS  41
-#define FL_SEP1         51
-#define FL_SEP2         52
 
 // String input
 #define ED_INPUT        10

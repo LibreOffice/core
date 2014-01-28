@@ -470,7 +470,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                     AbstractScInsertContentsDlg* pDlg = pFact->CreateScInsertContentsDlg( pTabViewShell->GetDialogParent(),
-                                                                                            RID_SCDLG_INSCONT, 0, /* nCheckDefaults */
+                                                                                            0, /* nCheckDefaults */
                                                                                             &ScGlobal::GetRscString(STR_FILL_TAB));
                     OSL_ENSURE(pDlg, "Dialog create fail!");
                     pDlg->SetFillMode(true);
@@ -1333,8 +1333,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                             OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                            AbstractScInsertContentsDlg* pDlg = pFact->CreateScInsertContentsDlg( pTabViewShell->GetDialogParent(),
-                                                                                                    RID_SCDLG_INSCONT);
+                            AbstractScInsertContentsDlg* pDlg = pFact->CreateScInsertContentsDlg(pTabViewShell->GetDialogParent());
                             OSL_ENSURE(pDlg, "Dialog create fail!");
                             pDlg->SetOtherDoc( bOtherDoc );
                             // if ChangeTrack MoveMode disable

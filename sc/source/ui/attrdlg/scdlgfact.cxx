@@ -788,23 +788,11 @@ AbstractScInsertCellDlg * ScAbstractDialogFactory_Impl::CreateScInsertCellDlg( W
 }
 
 AbstractScInsertContentsDlg * ScAbstractDialogFactory_Impl::CreateScInsertContentsDlg( Window*      pParent,
-                                                                                    int nId,
                                                                                     sal_uInt16      nCheckDefaults,
                                                                                     const OUString* pStrTitle )
 {
-    ScInsertContentsDlg * pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_INSCONT :
-            pDlg = new ScInsertContentsDlg( pParent, nCheckDefaults,pStrTitle );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractScInsertContentsDlg_Impl( pDlg );
-    return 0;
+    ScInsertContentsDlg * pDlg = new ScInsertContentsDlg(pParent, nCheckDefaults, pStrTitle);
+    return new AbstractScInsertContentsDlg_Impl( pDlg );
 }
 
 AbstractScInsertTableDlg * ScAbstractDialogFactory_Impl::CreateScInsertTableDlg(Window* pParent, ScViewData& rViewData,
