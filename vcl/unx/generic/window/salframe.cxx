@@ -985,10 +985,12 @@ void X11SalFrame::SetIcon( sal_uInt16 nIcon )
                 for( int i = 0; i < nCount && !bGnomeIconSize; i++ )
                  {
                     char* pName = XGetAtomName( GetXDisplay(), pProps[i] );
-                    if( !strcmp( pName, "GNOME_PANEL_DESKTOP_AREA" ) )
-                        bGnomeIconSize = true;
                     if( pName )
+                    {
+                        if( !strcmp( pName, "GNOME_PANEL_DESKTOP_AREA" ) )
+                            bGnomeIconSize = true;
                         XFree( pName );
+                    }
                  }
                 if( pProps )
                     XFree( pProps );
