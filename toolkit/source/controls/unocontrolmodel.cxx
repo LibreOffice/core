@@ -546,7 +546,7 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
 
     // Save FontProperty always in the old format (due to missing distinction
     // between 5.0 and 5.1)
-    OutStream->writeLong( (long) ( aProps.find( BASEPROPERTY_FONTDESCRIPTOR ) != aProps.end() ) ? ( nProps + 3 ) : nProps );
+    OutStream->writeLong( ( aProps.find( BASEPROPERTY_FONTDESCRIPTOR ) != aProps.end() ) ? ( nProps + 3 ) : nProps );
     for ( std::set<sal_uInt16>::const_iterator it = aProps.begin(); it != aProps.end(); ++it )
     {
         sal_Int32 nPropDataBeginMark = xMark->createMark();
