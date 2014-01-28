@@ -1454,7 +1454,7 @@ Reference< XInputStream > SdrGrafObj::getInputStream()
     if( pModel )
     {
         // can be loaded from the original document stream later
-        if( pGraphic->HasUserData() )
+        if( pGraphic && pGraphic->HasUserData() )
         {
             ::comphelper::LifecycleProxy proxy;
             xStream.set(
