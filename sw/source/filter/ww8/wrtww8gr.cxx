@@ -89,7 +89,7 @@ void WW8Export::OutputGrfNode( const SwGrfNode& /*rNode*/ )
     if ( mpParentFrame )
     {
         OutGrf( *mpParentFrame );
-        pFib->fHasPic = 1;
+        pFib->fHasPic = true;
     }
 }
 

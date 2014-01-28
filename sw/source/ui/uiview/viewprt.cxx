@@ -167,7 +167,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
             if (!sFaxName.isEmpty())
             {
                 SfxStringItem aPrinterName(SID_PRINTER_NAME, sFaxName);
-                SfxBoolItem aSilent( SID_SILENT, sal_True );
+                SfxBoolItem aSilent( SID_SILENT, true );
                 GetViewFrame()->GetDispatcher()->Execute( SID_PRINTDOC,
                             SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD,
                             &aPrinterName, &aSilent, 0L );
@@ -191,9 +191,9 @@ void SwView::ExecutePrint(SfxRequest& rReq)
         case SID_PRINTDOCDIRECT:
         {
             SwWrtShell* pSh = &GetWrtShell();
-            SFX_REQUEST_ARG(rReq, pSilentItem, SfxBoolItem, SID_SILENT, sal_False);
+            SFX_REQUEST_ARG(rReq, pSilentItem, SfxBoolItem, SID_SILENT, false);
             sal_Bool bSilent = pSilentItem ? pSilentItem->GetValue() : sal_False;
-            SFX_REQUEST_ARG(rReq, pPrintFromMergeItem, SfxBoolItem, FN_QRY_MERGE, sal_False);
+            SFX_REQUEST_ARG(rReq, pPrintFromMergeItem, SfxBoolItem, FN_QRY_MERGE, false);
             if(pPrintFromMergeItem)
                 rReq.RemoveItem(FN_QRY_MERGE);
             sal_Bool bFromMerge = pPrintFromMergeItem ? pPrintFromMergeItem->GetValue() : sal_False;
@@ -206,7 +206,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
                 short nRet = aBox.Execute();
                 if(RET_YES == nRet)
                 {
-                    SfxBoolItem aBool(FN_QRY_MERGE, sal_True);
+                    SfxBoolItem aBool(FN_QRY_MERGE, true);
                     GetViewFrame()->GetDispatcher()->Execute(
                                 FN_QRY_MERGE, SFX_CALLMODE_ASYNCHRON, &aBool, 0L);
                     rReq.Ignore();
@@ -265,7 +265,7 @@ SfxTabPage* CreatePrintOptionsPage( Window *pParent,
 
     SfxAllItemSet aSet(*(rOptions.GetPool()));
     aSet.Put(SfxBoolItem(SID_PREVIEWFLAG_TYPE, bPreview));
-    aSet.Put(SfxBoolItem(SID_FAX_LIST, sal_True));
+    aSet.Put(SfxBoolItem(SID_FAX_LIST, true));
     pPage->PageCreated(aSet);
     return pPage;
 }

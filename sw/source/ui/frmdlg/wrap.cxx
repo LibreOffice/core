@@ -188,7 +188,7 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
     }
     else
     {
-        m_pWrapAnchorOnlyCB->Enable( sal_False );
+        m_pWrapAnchorOnlyCB->Enable( false );
     }
 
     sal_Bool bContour = rSurround.IsContour();
@@ -282,7 +282,7 @@ sal_Bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
     {
         const SvxOpaqueItem& rOpaque = (const SvxOpaqueItem&)GetItemSet().Get(RES_OPAQUE);
         aOp = rOpaque;
-        aOp.SetValue(sal_True);
+        aOp.SetValue(true);
     }
 
     if (m_pNoWrapRB->IsChecked())
@@ -297,7 +297,7 @@ sal_Bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
     {
         aSur.SetSurround(SURROUND_THROUGHT);
         if (m_pWrapTransparentCB->IsChecked() && !bDrawMode)
-            aOp.SetValue(sal_False);
+            aOp.SetValue(false);
     }
     else if (m_pIdealWrapRB->IsChecked())
         aSur.SetSurround(SURROUND_IDEAL);
@@ -490,12 +490,12 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
                             (eHOrient == text::HoriOrientation::RIGHT || eHOrient == text::HoriOrientation::LEFT);
         m_pWrapAnchorOnlyCB->Enable( bAllHtmlModes && nSur != SURROUND_NONE );
         m_pWrapOutsideCB->Hide();
-        m_pIdealWrapRB->Enable( sal_False );
+        m_pIdealWrapRB->Enable( false );
 
 
-        m_pWrapTransparentCB->Enable( sal_False );
+        m_pWrapTransparentCB->Enable( false );
         m_pNoWrapRB->Enable( FLY_AT_PARA == nAnchorId );
-        m_pWrapParallelRB->Enable( sal_False  );
+        m_pWrapParallelRB->Enable( false  );
         m_pWrapLeftRB->Enable
                     (  (FLY_AT_PARA == nAnchorId)
                     || (   (FLY_AT_CHAR == nAnchorId)

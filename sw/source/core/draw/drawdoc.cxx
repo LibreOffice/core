@@ -49,11 +49,11 @@ const OUString GetPalettePath()
 
 SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
     FmFormModel( ::GetPalettePath(), &pD->GetAttrPool(),
-                 pD->GetDocShell(), sal_True ),
+                 pD->GetDocShell(), true ),
     pDoc( pD )
 {
     SetScaleUnit( MAP_TWIP );
-    SetSwapGraphics( sal_True );
+    SetSwapGraphics( true );
 
     SwDocShell* pDocSh = pDoc->GetDocShell();
     if ( pDocSh )

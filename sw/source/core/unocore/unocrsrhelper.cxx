@@ -667,7 +667,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         {
 
             SwTxtNode *const pTxtNode = rPam.GetNode()->GetTxtNode();
-            if (rPam.GetNode(sal_True) == rPam.GetNode(sal_False)
+            if (rPam.GetNode(true) == rPam.GetNode(false)
                 && pTxtNode && pTxtNode->GetpSwpHints())
             {
                 sal_uInt16 nPaMStart = rPam.GetPoint()->nContent.GetIndex();
@@ -1067,7 +1067,7 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
     {
         SwReader* pRdr;
         SfxItemSet* pSet =  pMed->GetItemSet();
-        pSet->Put(SfxBoolItem(FN_API_CALL, sal_True));
+        pSet->Put(SfxBoolItem(FN_API_CALL, true));
         if(!sPassword.isEmpty())
             pSet->Put(SfxStringItem(SID_PASSWORD, sPassword));
         Reader *pRead = pDocSh->StartConvertFrom( *pMed, &pRdr, 0, pUnoCrsr);

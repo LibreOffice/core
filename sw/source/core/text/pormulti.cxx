@@ -1620,12 +1620,12 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
                 if ( bRubyTop )
                 {
                     nOfst += nRubyHeight;
-                    GetInfo().SetSnapToGrid( sal_True );
+                    GetInfo().SetSnapToGrid( true );
                 }
                 else
                 {
                     nOfst += pCurr->Height() - nRubyHeight;
-                    GetInfo().SetSnapToGrid( sal_False );
+                    GetInfo().SetSnapToGrid( false );
                 }
             } else
             {
@@ -1884,7 +1884,7 @@ sal_Bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         // in grid mode we temporarily have to disable the grid for the ruby line
         const sal_Bool bOldGridModeAllowed = GetInfo().SnapToGrid();
         if ( bHasGrid && aInf.IsRuby() && bRubyTop )
-            aInf.SetSnapToGrid( sal_False );
+            aInf.SetSnapToGrid( false );
 
         // If there's no more rubytext, then buildportion is forbidden
         if( pFirstRest || !aInf.IsRuby() )
@@ -1934,7 +1934,7 @@ sal_Bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
 
             // in grid mode we temporarily have to disable the grid for the ruby line
             if ( bHasGrid && aTmp.IsRuby() && ! bRubyTop )
-                aTmp.SetSnapToGrid( sal_False );
+                aTmp.SetSnapToGrid( false );
 
             BuildPortions( aTmp );
 
@@ -2013,7 +2013,7 @@ sal_Bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             }
             if( pLine )
             {
-                GetInfo().SetMulti( sal_True );
+                GetInfo().SetMulti( true );
 
                 // If the fourth element bSkipKashida of function CalcNewBlock is true, multiportion will be showed in justification.
                 // Kashida (Persian) is a type of justification used in some cursive scripts, particularly Arabic.
@@ -2024,7 +2024,7 @@ sal_Bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
                 // Only when Adjust is SVX_ADJUST_BLOCK ( alignment is justify ), multiportion will be showed in justification in new code.
                 CalcNewBlock( pLine, NULL, rMulti.Width(), GetAdjust() != SVX_ADJUST_BLOCK );
 
-                GetInfo().SetMulti( sal_False );
+                GetInfo().SetMulti( false );
             }
             rInf.SetIdx( nStartIdx );
         }

@@ -259,8 +259,8 @@ void SwIndexMarkPane::InitControls()
 
         m_pTypeFT->Show();
 
-        m_pTypeDCB->Enable(sal_False);
-        m_pTypeFT->Enable(sal_False);
+        m_pTypeDCB->Enable(false);
+        m_pTypeFT->Enable(false);
 
         UpdateDialog();
     }
@@ -590,7 +590,7 @@ class SwNewUserIdxDlg : public ModalDialog
                 get(m_pOKPB, "ok");
                 get(m_pNameED, "entry");
                 m_pNameED->SetModifyHdl(LINK(this, SwNewUserIdxDlg, ModifyHdl));
-                m_pOKPB->Enable(sal_False);
+                m_pOKPB->Enable(false);
                 m_pNameED->GrabFocus();
             }
 
@@ -1553,8 +1553,8 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
                 m_bNameAllowed = !pFields[nIndex].isEmpty();
                 if(!bCreate)
                 {
-                    pFixedTexts[nIndex]->Enable(sal_False);
-                    pEdits[nIndex]->Enable(sal_False);
+                    pFixedTexts[nIndex]->Enable(false);
+                    pEdits[nIndex]->Enable(false);
                 }
             }
             pFixedTexts[nIndex]->set_mnemonic_widget(pEdits[nIndex]);

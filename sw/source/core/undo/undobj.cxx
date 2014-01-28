@@ -851,10 +851,10 @@ void SwUndoSaveSection::SaveSection(
     aPam.GetPoint()->nNode--;
     aPam.GetMark()->nNode++;
 
-    SwCntntNode* pCNd = aPam.GetCntntNode( sal_False );
+    SwCntntNode* pCNd = aPam.GetCntntNode( false );
     if( pCNd )
         aPam.GetMark()->nContent.Assign( pCNd, 0 );
-    if( 0 != ( pCNd = aPam.GetCntntNode( sal_True )) )
+    if( 0 != ( pCNd = aPam.GetCntntNode( true )) )
         aPam.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
 
     // Keep positions as SwIndex so that this section can be deleted in DTOR

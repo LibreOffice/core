@@ -658,7 +658,7 @@ SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
     pListener( 0 ),
     xOLERef( xObj )
 {
-    xOLERef.Lock( sal_True );
+    xOLERef.Lock( true );
     if ( xObj.is() )
     {
         pListener = new SwOLEListener_Impl( this );
@@ -673,7 +673,7 @@ SwOLEObj::SwOLEObj( const OUString &rString, sal_Int64 nAspect ) :
     pListener( 0 ),
     aName( rString )
 {
-    xOLERef.Lock( sal_True );
+    xOLERef.Lock( true );
     xOLERef.SetViewAspect( nAspect );
 }
 
@@ -713,7 +713,7 @@ SwOLEObj::~SwOLEObj()
 
             // unlock object so that object can be closed in RemoveEmbeddedObject
             // successful closing of the object will automatically clear the reference then
-            xOLERef.Lock(sal_False);
+            xOLERef.Lock(false);
 
             // Always remove object from container it is connected to
             try

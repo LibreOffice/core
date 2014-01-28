@@ -900,9 +900,9 @@ void SwTableShell::Execute(SfxRequest &rReq)
             long nCount=0;
             sal_Bool bHorizontal=sal_True;
             sal_Bool bProportional = sal_False;
-            SFX_REQUEST_ARG( rReq, pSplit, SfxInt32Item, FN_TABLE_SPLIT_CELLS, sal_False );
-            SFX_REQUEST_ARG( rReq, pHor, SfxBoolItem, FN_PARAM_1, sal_False );
-            SFX_REQUEST_ARG( rReq, pProp, SfxBoolItem, FN_PARAM_2, sal_False );
+            SFX_REQUEST_ARG( rReq, pSplit, SfxInt32Item, FN_TABLE_SPLIT_CELLS, false );
+            SFX_REQUEST_ARG( rReq, pHor, SfxBoolItem, FN_PARAM_1, false );
+            SFX_REQUEST_ARG( rReq, pProp, SfxBoolItem, FN_PARAM_2, false );
             if ( pSplit )
             {
                 nCount = pSplit->GetValue();
@@ -943,7 +943,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
         case FN_TABLE_SPLIT_TABLE:
         {
-            SFX_REQUEST_ARG( rReq, pType, SfxUInt16Item, FN_PARAM_1, sal_False );
+            SFX_REQUEST_ARG( rReq, pType, SfxUInt16Item, FN_PARAM_1, false );
             if( pType )
             {
                 switch( pType->GetValue() )
@@ -1328,11 +1328,11 @@ void SwTableShell::GetState(SfxItemSet &rSet)
             break;
             case FN_TABLE_HEADLINE_REPEAT:
                 if(0 != rSh.GetRowsToRepeat())
-                    rSet.Put(SfxBoolItem(nSlot, sal_True));
+                    rSet.Put(SfxBoolItem(nSlot, true));
                 else if(!rSh.GetRowSelectionFromTop())
                     rSet.DisableItem( nSlot );
                 else
-                    rSet.Put(SfxBoolItem(nSlot, sal_False));
+                    rSet.Put(SfxBoolItem(nSlot, false));
             break;
             case FN_TABLE_SELECT_CELL   :
                 if(rSh.HasBoxSelection())

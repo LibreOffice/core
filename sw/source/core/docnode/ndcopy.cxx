@@ -1256,7 +1256,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     if( rPos.nNode != aInsPos )
     {
         pCopyPam->GetMark()->nNode = aInsPos;
-        pCopyPam->GetMark()->nContent.Assign(pCopyPam->GetCntntNode(sal_False), 0);
+        pCopyPam->GetMark()->nContent.Assign(pCopyPam->GetCntntNode(false), 0);
         rPos = *pCopyPam->GetMark();
     }
     else
@@ -1308,7 +1308,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     {
         // #i86492# - use <SwDoc::SetNumRule(..)>, because it also handles the <ListId>
         pDoc->SetNumRule( *pCopyPam, *pNumRuleToPropagate, false,
-                          aListIdToPropagate, sal_True, true );
+                          aListIdToPropagate, true, true );
     }
 
     pDoc->SetRedlineMode_intern( eOld );

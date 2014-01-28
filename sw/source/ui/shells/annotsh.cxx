@@ -234,7 +234,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         {
             if( rReq.GetArgs() )
             {
-                SFX_REQUEST_ARG( rReq, pItem, SvxUnderlineItem, SID_ATTR_CHAR_UNDERLINE , sal_False );
+                SFX_REQUEST_ARG( rReq, pItem, SvxUnderlineItem, SID_ATTR_CHAR_UNDERLINE , false );
                 if (pItem)
                 {
                     aNewAttr.Put(*pItem);
@@ -675,7 +675,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                         if( !pSecondPool )
                             pSecondPool = aEditAttr.GetPool();
                         SvxScriptSetItem aSetItem( nSlotId, *pSecondPool );
-                        aSetItem.GetItemSet().Put( aEditAttr, sal_False );
+                        aSetItem.GetItemSet().Put( aEditAttr, false );
                         const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScriptType );
                         if( pI )
                             rSet.Put( *pI, nWhich );
@@ -709,7 +709,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                     pEscItem = &aEditAttr.Get( EE_CHAR_ESCAPEMENT );
 
                 if( nEsc == ((const SvxEscapementItem*)pEscItem)->GetEnumValue() )
-                    rSet.Put( SfxBoolItem( nWhich, sal_True ));
+                    rSet.Put( SfxBoolItem( nWhich, true ));
                 else
                     rSet.InvalidateItem( nWhich );
                 break;
@@ -739,7 +739,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                     else
                     {
                         if ( eAdjust == ((const SvxAdjustItem*)pAdjust)->GetAdjust())
-                            rSet.Put( SfxBoolItem( nWhich, sal_True ));
+                            rSet.Put( SfxBoolItem( nWhich, true ));
                         else
                             rSet.InvalidateItem( nWhich );
                     }
@@ -767,7 +767,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                     else
                     {
                         if( nLSpace == ((const SvxLineSpacingItem*)pLSpace)->GetPropLineSpace() )
-                            rSet.Put( SfxBoolItem( nWhich, sal_True ));
+                            rSet.Put( SfxBoolItem( nWhich, true ));
                         else
                             rSet.InvalidateItem( nWhich );
                     }
@@ -1091,7 +1091,7 @@ void SwAnnotationShell::NoteExec(SfxRequest &rReq)
             break;
         case FN_DELETE_NOTE_AUTHOR:
         {
-            SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, nSlot, sal_False);
+            SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, nSlot, false);
             if ( pItem )
                 pPostItMgr->Delete( pItem->GetValue() );
             break;
@@ -1103,7 +1103,7 @@ void SwAnnotationShell::NoteExec(SfxRequest &rReq)
             break;
         case FN_HIDE_NOTE_AUTHOR:
         {
-            SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, nSlot, sal_False);
+            SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, nSlot, false);
             if ( pItem )
                 pPostItMgr->Hide( pItem->GetValue() );
         }
@@ -1200,7 +1200,7 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
         case SID_THES:
         {
             OUString aReplaceText;
-            SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES, sal_False );
+            SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES, false );
             if (pItem2)
                 aReplaceText = pItem2->GetValue();
             if (!aReplaceText.isEmpty())
@@ -1653,7 +1653,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
     SvxFontItem aSetDlgFont( RES_CHRATR_FONT );
     {
         SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, *aSet.GetPool() );
-        aSetItem.GetItemSet().Put( aSet, sal_False );
+        aSetItem.GetItemSet().Put( aSet, false );
         const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScript );
         if( pI )
             aSetDlgFont = *(SvxFontItem*)pI;
@@ -1671,7 +1671,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
 
         SfxAllItemSet aAllSet( GetPool() );
-        aAllSet.Put( SfxBoolItem( FN_PARAM_1, sal_False ) );
+        aAllSet.Put( SfxBoolItem( FN_PARAM_1, false ) );
 
         SwViewOption aOpt(*rView.GetWrtShell().GetViewOptions());
         OUString sSymbolFont = aOpt.GetSymbolFont();
@@ -1687,8 +1687,8 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
         sal_uInt16 nResult = pDlg->Execute();
         if( nResult == RET_OK )
         {
-            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP, sal_False );
-            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, sal_False );
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP, false );
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, false );
             if ( pFontItem )
             {
                 aFont.SetName( pFontItem->GetFamilyName() );

@@ -96,11 +96,11 @@ SwDrawView::SwDrawView( SwViewImp &rI, SdrModel *pMd, OutputDevice *pOutDev) :
     FmFormView( (FmFormModel*)pMd, pOutDev ),
     rImp( rI )
 {
-    SetPageVisible( sal_False );
-    SetBordVisible( sal_False );
-    SetGridVisible( sal_False );
-    SetHlplVisible( sal_False );
-    SetGlueVisible( sal_False );
+    SetPageVisible( false );
+    SetBordVisible( false );
+    SetGridVisible( false );
+    SetHlplVisible( false );
+    SetGlueVisible( false );
     SetFrameDragSingles( sal_True );
     SetVirtualObjectBundling( sal_True );
     SetSwapAsynchron( sal_True );

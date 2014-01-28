@@ -1257,7 +1257,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllCheckPageDescs));
             }
 
-            aPrtMonDlg.Show( sal_False );
+            aPrtMonDlg.Show( false );
 
             // save the single output document
             if(rMergeDescriptor.bCreateSingleFile || bAsSingleFile)
@@ -2357,7 +2357,7 @@ OUString SwNewDBMgr::LoadAndRegisterDataSource()
                 OUString sTmpName;
                 {
                     utl::TempFile aTempFile(sNewName , &sOutputExt, &sHomePath);
-                    aTempFile.EnableKillingFile(sal_True);
+                    aTempFile.EnableKillingFile(true);
                     sTmpName = aTempFile.GetURL();
                 }
                 xStore->storeAsURL(sTmpName, Sequence< PropertyValue >());

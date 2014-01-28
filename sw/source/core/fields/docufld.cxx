@@ -1895,7 +1895,7 @@ bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     {
         util::DateTime aDateTimeValue;
         if(!(rAny >>= aDateTimeValue))
-            return sal_False;
+            return false;
         aDateTime.SetNanoSec(aDateTimeValue.NanoSeconds);
         aDateTime.SetSec(aDateTimeValue.Seconds);
         aDateTime.SetMin(aDateTimeValue.Minutes);

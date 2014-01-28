@@ -1708,7 +1708,7 @@ void SwHTMLParser::NewStyle()
 
 void SwHTMLParser::EndStyle()
 {
-    bIgnoreRawData = sal_False;
+    bIgnoreRawData = false;
 
     if( !aStyleSource.isEmpty() )
     {
@@ -1860,7 +1860,7 @@ sal_Bool SwCSS1Parser::ParseStyleSheet( const OUString& rIn )
 
     }
 
-    pPageEntry = GetPage( "first", sal_True );
+    pPageEntry = GetPage( "first", true );
     if( pPageEntry )
     {
         SetPageDescAttrs( GetFirstPageDesc(sal_True), pPageEntry->GetItemSet(),
@@ -1868,7 +1868,7 @@ sal_Bool SwCSS1Parser::ParseStyleSheet( const OUString& rIn )
         bSetFirstPageDesc = sal_True;
     }
 
-    pPageEntry = GetPage( "right", sal_True );
+    pPageEntry = GetPage( "right", true );
     if( pPageEntry )
     {
         SetPageDescAttrs( GetRightPageDesc(sal_True), pPageEntry->GetItemSet(),
@@ -1876,7 +1876,7 @@ sal_Bool SwCSS1Parser::ParseStyleSheet( const OUString& rIn )
         bSetRightPageDesc = sal_True;
     }
 
-    pPageEntry = GetPage( "left", sal_True );
+    pPageEntry = GetPage( "left", true );
     if( pPageEntry )
         SetPageDescAttrs( GetLeftPageDesc(sal_True), pPageEntry->GetItemSet(),
                           pPageEntry->GetPropertyInfo() );

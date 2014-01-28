@@ -66,7 +66,7 @@ void SwHTMLParser::NewScript()
     if( !aScriptURL.isEmpty() )
     {
         // Den Inhalt des Script-Tags ignorieren
-        bIgnoreRawData = sal_True;
+        bIgnoreRawData = true;
     }
 }
 
@@ -85,7 +85,7 @@ void SwHTMLParser::EndScript()
         break;
     }
 
-    bIgnoreRawData = sal_False;
+    bIgnoreRawData = false;
     aScriptSource = convertLineEnd(aScriptSource, GetSystemLineEnd());
 
     // Ausser StarBasic und unbenutzem JavaScript jedes Script oder den

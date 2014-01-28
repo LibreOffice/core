@@ -547,8 +547,8 @@ void SwSpellDialogChildWindow::GetFocus()
                 case SHELL_MODE_TABLE_LIST_TEXT:
                 {
                     SwPaM* pCursor = pWrtShell->GetCrsr();
-                    if(m_pSpellState->m_pPointNode != pCursor->GetNode(sal_True) ||
-                        m_pSpellState->m_pMarkNode != pCursor->GetNode(sal_False)||
+                    if(m_pSpellState->m_pPointNode != pCursor->GetNode(true) ||
+                        m_pSpellState->m_pMarkNode != pCursor->GetNode(false)||
                         m_pSpellState->m_nPointPos != pCursor->GetPoint()->nContent.GetIndex()||
                         m_pSpellState->m_nMarkPos != pCursor->GetMark()->nContent.GetIndex())
                             bInvalidate = true;
@@ -604,8 +604,8 @@ void SwSpellDialogChildWindow::LoseFocus()
             {
                 //store a node pointer and a pam-position to be able to check on next GetFocus();
                 SwPaM* pCursor = pWrtShell->GetCrsr();
-                m_pSpellState->m_pPointNode = pCursor->GetNode(sal_True);
-                m_pSpellState->m_pMarkNode = pCursor->GetNode(sal_False);
+                m_pSpellState->m_pPointNode = pCursor->GetNode(true);
+                m_pSpellState->m_pMarkNode = pCursor->GetNode(false);
                 m_pSpellState->m_nPointPos = pCursor->GetPoint()->nContent.GetIndex();
                 m_pSpellState->m_nMarkPos = pCursor->GetMark()->nContent.GetIndex();
 
@@ -806,7 +806,7 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
                     Point aTmp( 0,0 );
                     rSh.SelectObj( aTmp, 0, pTextObj );
                     SdrPageView* pPV = pDrView->GetSdrPageView();
-                    rView.BeginTextEdit( pTextObj, pPV, &rView.GetEditWin(), sal_False, sal_True );
+                    rView.BeginTextEdit( pTextObj, pPV, &rView.GetEditWin(), false, true );
                     rView.AttrChangedNotify(&rSh);
                     bNextDoc = true;
                 }

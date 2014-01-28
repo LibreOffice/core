@@ -67,7 +67,7 @@ OUString SwIoDetect::IsReader(const sal_Char* pHeader, sal_uLong nLen_) const
 
     bool bRet = false;
     if ( sHTML == sName )
-        bRet = HTMLParser::IsHTMLFormat( pHeader, sal_True, RTL_TEXTENCODING_DONTKNOW );
+        bRet = HTMLParser::IsHTMLFormat( pHeader, true, RTL_TEXTENCODING_DONTKNOW );
     else if ( FILTER_RTF == sName )
         bRet = 0 == strncmp( "{\\rtf", pHeader, 5 );
     else if ( sWW5 == sName )
@@ -214,7 +214,7 @@ sal_Bool SwIoSystem::IsFileFilter(SfxMedium& rMedium, const OUString& rFmtName)
     {
         SvStream* pStream = rMedium.GetInStream();
         if ( pStream && SotStorage::IsStorageFile(pStream) )
-            xStg = new SotStorage( pStream, sal_False );
+            xStg = new SotStorage( pStream, false );
     }
 
     SfxFilterMatcher aMatcher( rFltContainer.GetName() );
@@ -333,7 +333,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName,
         {
             SvStream* pStream = pMedium->GetInStream();
             if ( pStream && SotStorage::IsStorageFile(pStream) )
-                xStg = new SotStorage( pStream, sal_False );
+                xStg = new SotStorage( pStream, false );
 
             if( xStg.Is() && ( xStg->GetError() == SVSTREAM_OK ) )
             {
@@ -510,7 +510,7 @@ bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, sal_uLong &rLen,
             {
                 case 0x0:
                     if( nCnt + 1 < rLen && !*(pBuf+1) )
-                        return 0;
+                        return false;
                     bIsBareUnicode = true;
                     break;
                 case 0xA:

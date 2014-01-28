@@ -467,7 +467,7 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
         {
             const SwTxtNode *pTxtNode = pTxtFrm->GetTxtNode();
             if (pTxtNode && pTxtNode->IsGrammarCheckDirty())
-                pRoot->SetNeedGrammarCheck( sal_True );
+                pRoot->SetNeedGrammarCheck( true );
         }
     }
 }
@@ -3387,7 +3387,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                     if( pFtnAny && pFtnAny->IsValid() )
                     {
                         bBackLock = true;
-                        ((SwSectionFrm*)this)->SetFtnLock( sal_True );
+                        ((SwSectionFrm*)this)->SetFtnLock( true );
                     }
                 }
             }
@@ -3646,7 +3646,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
         // OD 14.03.2003 #i11760# - adjust 2nd parameter - sal_True --> true
         ::CalcCntnt( this, true );
         if( bBackLock )
-            ((SwSectionFrm*)this)->SetFtnLock( sal_False );
+            ((SwSectionFrm*)this)->SetFtnLock( false );
     }
 }
 

@@ -439,7 +439,7 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
         m_pTopMF->Hide();
         m_pBottomFT->Hide();
         m_pBottomMF->Hide();
-        m_pFreeBtn->Enable(sal_False);
+        m_pFreeBtn->Enable(false);
     }
     FieldUnit aMetric = ::GetDfltMetric(bHtmlMode);
     m_aWidthMF.SetMetric(aMetric);
@@ -504,9 +504,9 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
             {
                 bSetRight = bSetLeft = true;
                 m_pFullBtn->Check();
-                m_aWidthMF.Enable(sal_False);
-                m_pRelWidthCB->Enable(sal_False);
-                m_pWidthFT->Enable(sal_False);
+                m_aWidthMF.Enable(false);
+                m_pRelWidthCB->Enable(false);
+                m_pWidthFT->Enable(false);
             }
             break;
             case text::HoriOrientation::LEFT:
@@ -536,13 +536,13 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
         }
         if ( bSetRight )
         {
-            m_aRightMF.Enable(sal_False);
-            m_pRightFT->Enable(sal_False);
+            m_aRightMF.Enable(false);
+            m_pRightFT->Enable(false);
         }
         if ( bSetLeft )
         {
-            m_aLeftMF.Enable(sal_False);
-            m_pLeftFT->Enable(sal_False);
+            m_aLeftMF.Enable(false);
+            m_pLeftFT->Enable(false);
         }
 
     }
@@ -1521,7 +1521,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
                 if (oNumOffset)
                     m_pPageNoNF->SetValue(oNumOffset.get());
                 else
-                    m_pPageNoNF->Enable(sal_False);
+                    m_pPageNoNF->Enable(false);
 
                 if(pDesc)
                     sPageDesc = pDesc->GetName();
@@ -1559,10 +1559,10 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
                 if ( eBreak != SVX_BREAK_NONE )
                 {
                     m_pPgBrkCB->Check();
-                    m_pPageCollCB->Enable(sal_False);
-                    m_pPageCollLB->Enable(sal_False);
-                    m_pPageNoFT->Enable(sal_False);
-                    m_pPageNoNF->Enable(sal_False);
+                    m_pPageCollCB->Enable(false);
+                    m_pPageCollLB->Enable(false);
+                    m_pPageNoFT->Enable(false);
+                    m_pPageNoNF->Enable(false);
                 }
                 switch ( eBreak )
                 {
@@ -1603,15 +1603,15 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
     }
     else
     {
-        m_pPgBrkRB->Enable(sal_False);
-        m_pColBrkRB->Enable(sal_False);
-        m_pPgBrkBeforeRB->Enable(sal_False);
-        m_pPgBrkAfterRB->Enable(sal_False);
-        m_pKeepCB->Enable(sal_False);
-        m_pSplitCB->Enable(sal_False);
-        m_pPgBrkCB->Enable(sal_False);
-        m_pPageCollCB->Enable(sal_False);
-        m_pPageCollLB->Enable(sal_False);
+        m_pPgBrkRB->Enable(false);
+        m_pColBrkRB->Enable(false);
+        m_pPgBrkBeforeRB->Enable(false);
+        m_pPgBrkAfterRB->Enable(false);
+        m_pKeepCB->Enable(false);
+        m_pSplitCB->Enable(false);
+        m_pPgBrkCB->Enable(false);
+        m_pPageCollCB->Enable(false);
+        m_pPageCollLB->Enable(false);
     }
 
     if(SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_TABLE_HEADLINE, sal_False, &pItem ))
@@ -1661,8 +1661,8 @@ void SwTextFlowPage::SetShell(SwWrtShell* pSh)
     bHtmlMode = 0 != (::GetHtmlMode(pShell->GetView().GetDocShell()) & HTMLMODE_ON);
     if(bHtmlMode)
     {
-        m_pPageNoNF->Enable(sal_False);
-        m_pPageNoFT->Enable(sal_False);
+        m_pPageNoNF->Enable(false);
+        m_pPageNoFT->Enable(false);
     }
 }
 
@@ -1692,14 +1692,14 @@ IMPL_LINK_NOARG(SwTextFlowPage, PageBreakHdl_Impl)
     else
     {
             m_pPageCollCB->Check( sal_False );
-            m_pPageCollCB->Enable(sal_False);
-            m_pPageCollLB->Enable(sal_False);
-            m_pPageNoFT->Enable(sal_False);
-            m_pPageNoNF->Enable(sal_False);
-            m_pPgBrkRB->       Enable(sal_False);
-            m_pColBrkRB->      Enable(sal_False);
-            m_pPgBrkBeforeRB-> Enable(sal_False);
-            m_pPgBrkAfterRB->  Enable(sal_False);
+            m_pPageCollCB->Enable(false);
+            m_pPageCollLB->Enable(false);
+            m_pPageNoFT->Enable(false);
+            m_pPageNoNF->Enable(false);
+            m_pPgBrkRB->       Enable(false);
+            m_pColBrkRB->      Enable(false);
+            m_pPgBrkBeforeRB-> Enable(false);
+            m_pPgBrkAfterRB->  Enable(false);
     }
     return 0;
 }
@@ -1747,10 +1747,10 @@ IMPL_LINK( SwTextFlowPage, PageBreakPosHdl_Impl, RadioButton*, pBtn )
         else if (pBtn == m_pPgBrkAfterRB)
         {
             m_pPageCollCB->Check( sal_False );
-            m_pPageCollCB->Enable(sal_False);
-            m_pPageCollLB->Enable(sal_False);
-            m_pPageNoFT->Enable(sal_False);
-            m_pPageNoNF->Enable(sal_False);
+            m_pPageCollCB->Enable(false);
+            m_pPageCollLB->Enable(false);
+            m_pPageNoFT->Enable(false);
+            m_pPageNoNF->Enable(false);
         }
     }
     return 0;
@@ -1761,10 +1761,10 @@ IMPL_LINK( SwTextFlowPage, PageBreakTypeHdl_Impl, RadioButton*, pBtn )
     if ( pBtn == m_pColBrkRB || m_pPgBrkAfterRB->IsChecked() )
     {
         m_pPageCollCB->Check(sal_False);
-        m_pPageCollCB->Enable(sal_False);
-        m_pPageCollLB->Enable(sal_False);
-        m_pPageNoFT->Enable(sal_False);
-        m_pPageNoNF->Enable(sal_False);
+        m_pPageCollCB->Enable(false);
+        m_pPageCollLB->Enable(false);
+        m_pPageNoFT->Enable(false);
+        m_pPageNoNF->Enable(false);
     }
     else if ( m_pPgBrkBeforeRB->IsChecked() )
         PageBreakPosHdl_Impl(m_pPgBrkBeforeRB);

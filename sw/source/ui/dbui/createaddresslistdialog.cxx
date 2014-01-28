@@ -195,11 +195,11 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
             // Reset the scrollbar's thumb to the top before it is disabled.
             m_aScrollBar.DoScroll(0);
             m_aScrollBar.SetThumbPos(0);
-            m_aScrollBar.Enable(sal_False);
+            m_aScrollBar.Enable(false);
         }
         else
         {
-            m_aScrollBar.Enable(sal_True);
+            m_aScrollBar.Enable(true);
             m_aScrollBar.SetRange(Range(0, nLines));
             m_aScrollBar.SetThumbPos(0);
             m_aScrollBar.SetVisibleSize(nVisibleLines);
@@ -217,7 +217,7 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
     if (m_aEdits.size() < 1) {
         m_aScrollBar.DoScroll(0);
         m_aScrollBar.SetThumbPos(0);
-        m_aScrollBar.Enable(sal_False);
+        m_aScrollBar.Enable(false);
     }
 }
 
@@ -493,7 +493,7 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, DeleteHdl_Impl)
         // if only one set is available then clear the data
         OUString sTemp;
         m_pCSVData->aDBData[0].assign(m_pCSVData->aDBData[0].size(), sTemp);
-        m_aDeletePB.Enable(sal_False);
+        m_aDeletePB.Enable(false);
     }
     m_pAddressControl->SetCurrentDataSet(nCurrent);
     m_aSetNoNF.SetMax(m_pCSVData->aDBData.size());
@@ -738,7 +738,7 @@ IMPL_LINK_NOARG(SwFindEntryDialog, FindEnableHdl_Impl)
 
 IMPL_LINK_NOARG(SwFindEntryDialog, CloseHdl_Impl)
 {
-    Show(sal_False);
+    Show(false);
     return 0;
 }
 

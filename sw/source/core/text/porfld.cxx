@@ -76,7 +76,7 @@ void SwFldPortion::TakeNextOffset( const SwFldPortion* pFld )
 SwFldPortion::SwFldPortion( const OUString &rExpand, SwFont *pFont, bool bPlaceHold )
     : aExpand(rExpand), pFnt(pFont), nNextOffset(0), nNextScriptChg(COMPLETE_STRING), nViewWidth(0),
       bFollow( sal_False ), bHasFollow( sal_False ), bPlaceHolder( bPlaceHold )
-    , m_bNoLength( sal_False )
+    , m_bNoLength( false )
 {
     SetWhichPor( POR_FLD );
     m_nAttrFldType = 0;

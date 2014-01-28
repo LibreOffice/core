@@ -126,7 +126,7 @@ uno::Any SwXAutoTextContainer::getByName(const OUString& GroupName)
     uno::Reference< text::XAutoTextGroup > xGroup;
     if ( pGlossaries && hasByName( GroupName ) )    // group name already known?
         // sal_True = create group if not already available
-        xGroup = pGlossaries->GetAutoTextGroup( GroupName, sal_True );
+        xGroup = pGlossaries->GetAutoTextGroup( GroupName, true );
 
     if ( !xGroup.is() )
         throw container::NoSuchElementException();
@@ -807,7 +807,7 @@ void SwXAutoTextEntry::Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint )
         {
             if(SFX_EVENT_PREPARECLOSEDOC == static_cast< const SfxEventHint& >( _rHint ).GetEventId())
             {
-                implFlushDocument( sal_False );
+                implFlushDocument( false );
                 xBodyText = 0;
                 xDocSh.Clear();
             }

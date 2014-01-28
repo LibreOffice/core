@@ -616,7 +616,7 @@ Reference< text::XAutoTextGroup > SwGlossaries::GetAutoTextGroup( const OUString
                 // this group does not exist (anymore) -> release the cached UNO object for it
                 aSearch = m_aGlossaryGroups.erase( aSearch );
                 // so it won't be created below
-                _bCreate = sal_False;
+                _bCreate = false;
                 break;
             }
         }

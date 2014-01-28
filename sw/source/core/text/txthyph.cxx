@@ -247,7 +247,7 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
                 xHyphWord = rInf.HyphWord( aSelTxt, nMinTrail );
                 bRet = xHyphWord.is();
                 if ( !rHyphInf.IsCheck() && sal_False == bRet )
-                    rHyphInf.SetNoLang( sal_True );
+                    rHyphInf.SetNoLang( true );
             }
 
             if( bRet )
@@ -255,8 +255,8 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
                 rHyphInf.SetHyphWord( xHyphWord );
                 rHyphInf.nWordStart = nWrdStart;
                 rHyphInf.nWordLen = nLen;
-                rHyphInf.SetNoLang( sal_False );
-                rHyphInf.SetCheck( sal_True );
+                rHyphInf.SetNoLang( false );
+                rHyphInf.SetCheck( true );
             }
         }
     }

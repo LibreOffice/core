@@ -1348,7 +1348,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                             m_Text = m_Text.replaceAt(*pAttr->GetStart(), 1, "");
                             // Indizies Updaten
                             SwIndex aTmpIdx( this, *pAttr->GetStart() );
-                            Update( aTmpIdx, 1, sal_True );
+                            Update( aTmpIdx, 1, true );
                         }
                         // do not record deletion of Format!
                         ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
@@ -1384,7 +1384,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                         m_Text = m_Text.replaceAt(*pAttr->GetStart(), 1, "");
                         // Indizies Updaten
                         SwIndex aTmpIdx( this, *pAttr->GetStart() );
-                        Update( aTmpIdx, 1, sal_True );
+                        Update( aTmpIdx, 1, true );
                     }
                     DestroyAttr( pAttr );
                     return false;
@@ -3194,7 +3194,7 @@ bool SwpHints::TryInsertHint(
     }
 
     if( nsSetAttrMode::SETATTR_DONTEXPAND & nMode )
-        pHint->SetDontExpand( sal_True );
+        pHint->SetDontExpand( true );
 
     // SwTxtAttrs ohne Ende werden sonderbehandelt:
     // Sie werden natuerlich in das Array insertet, aber sie werden nicht

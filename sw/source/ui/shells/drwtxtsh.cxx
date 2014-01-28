@@ -711,7 +711,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
     SvxFontItem aSetDlgFont( RES_CHRATR_FONT );
     {
         SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, *aSet.GetPool() );
-        aSetItem.GetItemSet().Put( aSet, sal_False );
+        aSetItem.GetItemSet().Put( aSet, false );
         const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScript );
         if( pI )
             aSetDlgFont = *(SvxFontItem*)pI;
@@ -727,7 +727,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
     if(sSym.isEmpty())
     {
         SfxAllItemSet aAllSet( GetPool() );
-        aAllSet.Put( SfxBoolItem( FN_PARAM_1, sal_False ) );
+        aAllSet.Put( SfxBoolItem( FN_PARAM_1, false ) );
 
         SwViewOption aOpt(*rView.GetWrtShell().GetViewOptions());
         OUString sSymbolFont = aOpt.GetSymbolFont();
@@ -743,8 +743,8 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
         sal_uInt16 nResult = pDlg->Execute();
         if( nResult == RET_OK )
         {
-            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP, sal_False );
-            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, sal_False );
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP, false );
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, false );
             if ( pFontItem )
             {
                 aFont.SetName( pFontItem->GetFamilyName() );
@@ -868,7 +868,7 @@ void SwDrawTextShell::GetStatePropPanelAttr(SfxItemSet &rSet)
                 }
                 else
                 {
-                    rSet.Put(SfxBoolItem(nSlotId, sal_False));
+                    rSet.Put(SfxBoolItem(nSlotId, false));
                 }
                 break;
         }

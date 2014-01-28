@@ -617,7 +617,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
             {
                 OUString sTemp(rData.GetCondition());
                 if(sCondition != sTemp)
-                    bConditionValid = sal_False;
+                    bConditionValid = false;
                 bHiddenValid      = (bHidden == rData.IsHidden());
                 bProtectValid     = (bProtect == rData.IsProtectFlag());
                 // edit in readonly sections
@@ -671,7 +671,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
     }
     else if (pEntry )
     {
-        m_pCurName->Enable(sal_True);
+        m_pCurName->Enable(true);
         m_pOptionsPB->Enable(true);
         SectRepr* pRepr=(SectRepr*) pEntry->GetUserData();
         SwSectionData const& rData( pRepr->GetSectionData() );
@@ -737,7 +737,7 @@ IMPL_LINK( SwEditRegionDlg, DeselectHdl, SvTreeListBox *, pBox )
         m_pPasswdCB->Enable(false);
         m_pConditionFT->Enable(false);
         m_pConditionED->Enable(false);
-        m_pFileCB->Enable(sal_False);
+        m_pFileCB->Enable(false);
         m_pDDEFrame->Enable(false);
         m_pDDECB->Enable(false);
         m_pCurName->Enable(false);
@@ -953,7 +953,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl)
     {
         m_pConditionFT->Enable(false);
         m_pConditionED->Enable(false);
-        m_pDismiss->       Enable(sal_False);
+        m_pDismiss->       Enable(false);
         m_pCurName->Enable(false);
         m_pProtectCB->Enable(false);
         m_pPasswdCB->Enable(false);
@@ -995,7 +995,7 @@ IMPL_LINK( SwEditRegionDlg, UseFileHdl, CheckBox *, pBox )
                     pBox->Check( sal_False );
             }
             if( bFile )
-                pSectRepr->SetContent(sal_False);
+                pSectRepr->SetContent(false);
             else
             {
                 pSectRepr->SetFile(aEmptyOUStr);
@@ -2009,21 +2009,21 @@ void SwSectionFtnEndTabPage::ResetState( sal_Bool bFtn,
     switch( eState )
     {
     case FTNEND_ATPGORDOCEND:
-        pNtNumCB->Enable( sal_False );
+        pNtNumCB->Enable( false );
         // no break;
 
     case FTNEND_ATTXTEND:
-        pNtNumFmtCB->Enable( sal_False );
-        pOffsetFld->Enable( sal_False );
-        pOffsetTxt->Enable( sal_False );
+        pNtNumFmtCB->Enable( false );
+        pOffsetFld->Enable( false );
+        pOffsetTxt->Enable( false );
         // no break;
 
     case FTNEND_ATTXTEND_OWNNUMSEQ:
-        pNumViewBox->Enable( sal_False );
-        pPrefixFT->Enable( sal_False );
-        pPrefixED->Enable( sal_False );
-        pSuffixFT->Enable( sal_False );
-        pSuffixED->Enable( sal_False );
+        pNumViewBox->Enable( false );
+        pPrefixFT->Enable( false );
+        pPrefixED->Enable( false );
+        pSuffixFT->Enable( false );
+        pSuffixED->Enable( false );
         // no break;
     }
 }

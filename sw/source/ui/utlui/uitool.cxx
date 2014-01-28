@@ -458,7 +458,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
                     0);
 
         // Dynamic or fixed height
-        SfxBoolItem aOn(SID_ATTR_PAGE_ON, sal_True);
+        SfxBoolItem aOn(SID_ATTR_PAGE_ON, true);
         aHeaderSet.Put(aOn);
 
         const SwFmtFrmSize &rFrmSize = pHeaderFmt->GetFrmSize();
@@ -502,7 +502,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
                     0);
 
         // Dynamic or fixed height
-        SfxBoolItem aOn(SID_ATTR_PAGE_ON, sal_True);
+        SfxBoolItem aOn(SID_ATTR_PAGE_ON, true);
         aFooterSet.Put(aOn);
 
         const SwFmtFrmSize &rFrmSize = pFooterFmt->GetFrmSize();

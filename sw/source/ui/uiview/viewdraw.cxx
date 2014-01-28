@@ -114,7 +114,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
     }
     else if (nSlotId == SID_FM_CREATE_CONTROL)
     {
-        SFX_REQUEST_ARG( rReq, pIdentifierItem, SfxUInt16Item, SID_FM_CONTROL_IDENTIFIER, sal_False );
+        SFX_REQUEST_ARG( rReq, pIdentifierItem, SfxUInt16Item, SID_FM_CONTROL_IDENTIFIER, false );
         if( pIdentifierItem )
         {
             sal_uInt16 nNewId = pIdentifierItem->GetValue();
@@ -130,7 +130,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         FmFormView* pFormView = PTR_CAST( FmFormView, pSdrView );
         if ( pFormView )
         {
-            SFX_REQUEST_ARG( rReq, pDescriptorItem, SfxUnoAnyItem, SID_FM_DATACCESS_DESCRIPTOR, sal_False );
+            SFX_REQUEST_ARG( rReq, pDescriptorItem, SfxUnoAnyItem, SID_FM_DATACCESS_DESCRIPTOR, false );
             OSL_ENSURE( pDescriptorItem, "SwView::ExecDraw(SID_FM_CREATE_FIELDCONTROL): invalid request args!" );
             if( pDescriptorItem )
             {
@@ -296,7 +296,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
 
         case SID_FM_CREATE_CONTROL:
         {
-            SFX_REQUEST_ARG( rReq, pIdentifierItem, SfxUInt16Item, SID_FM_CONTROL_IDENTIFIER, sal_False );
+            SFX_REQUEST_ARG( rReq, pIdentifierItem, SfxUInt16Item, SID_FM_CONTROL_IDENTIFIER, false );
             if( pIdentifierItem )
                 nSlotId = pIdentifierItem->GetValue();
             pFuncPtr = new ConstFormControl(m_pWrtShell, m_pEditWin, this);
@@ -452,7 +452,7 @@ void SwView::NoRotate()
         m_pWrtShell->SetDragMode(SDRDRAG_MOVE);
         FlipDrawRotate();
 
-        const SfxBoolItem aTmp( SID_OBJECT_ROTATE, sal_False );
+        const SfxBoolItem aTmp( SID_OBJECT_ROTATE, false );
         GetViewFrame()->GetBindings().SetState( aTmp );
     }
 }
@@ -483,7 +483,7 @@ sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
 
         !m_pWrtShell->IsSelObjProtected(FLYPROTECT_CONTENT))
     {
-        bReturn = BeginTextEdit( pObj, pPV, m_pEditWin, sal_False );
+        bReturn = BeginTextEdit( pObj, pPV, m_pEditWin, false );
     }
 
     pSdrView->SetHitTolerancePixel( nOld );

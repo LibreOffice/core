@@ -199,7 +199,7 @@ OUString SwUserFieldType::GetName() const
 void SwUserFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     if( !pOld && !pNew )
-        ChgValid( sal_False );
+        ChgValid( false );
 
     NotifyClients( pOld, pNew );
     // update input fields that might be connected to the user field

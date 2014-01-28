@@ -338,7 +338,7 @@ void SwHTMLParser::NewDivision( int nToken )
         // ggfs. einen Bereich anspringen
         if( JUMPTO_REGION == eJumpTo && aName == sJmpMark )
         {
-            bChkJumpMark = sal_True;
+            bChkJumpMark = true;
             eJumpTo = JUMPTO_NONE;
         }
 
@@ -727,7 +727,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         // Jump to section, if this is requested.
         if( JUMPTO_REGION == eJumpTo && aName == sJmpMark )
         {
-            bChkJumpMark = sal_True;
+            bChkJumpMark = true;
             eJumpTo = JUMPTO_NONE;
         }
 

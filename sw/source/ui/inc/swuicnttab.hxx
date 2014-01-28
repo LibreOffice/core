@@ -291,7 +291,7 @@ public:
 
     sal_Bool        IsValid() const {return bValid;}
 
-    void        SetInvalid() {bValid = sal_False;}
+    void        SetInvalid() {bValid = false;}
 
     OUString    GetPattern() const;
 

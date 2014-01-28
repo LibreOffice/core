@@ -88,7 +88,7 @@ void SwWrtShell::Insert(SwField &rFld)
             // - collapse cursor to its end
             if ( IsTableMode() )
             {
-                GetTblCrs()->Normalize( sal_False );
+                GetTblCrs()->Normalize( false );
                 const SwPosition rStartPos( *(GetTblCrs()->GetMark()->nNode.GetNode().GetCntntNode()), 0 );
                 KillPams();
                 EndPara();
@@ -459,9 +459,9 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, sal_uInt16 nFilter,
     SfxStringItem aTargetFrameName( SID_TARGETNAME, sTargetFrame );
     SfxStringItem aReferer( SID_REFERER, sReferer );
 
-    SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, sal_False );
+    SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, false );
     //#39076# Silent can be removed accordingly to SFX.
-    SfxBoolItem aBrowse( SID_BROWSE, sal_True );
+    SfxBoolItem aBrowse( SID_BROWSE, true );
 
     if( nFilter & URLLOAD_NEWVIEW )
         aTargetFrameName.SetValue( OUString("_blank") );

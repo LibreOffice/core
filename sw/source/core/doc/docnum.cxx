@@ -949,7 +949,7 @@ void SwDoc::SetCounted(const SwPaM & rPam, bool bCounted)
     }
     else
     {
-        InsertPoolItem( rPam, SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, sal_False ), 0 );
+        InsertPoolItem( rPam, SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, false ), 0 );
     }
 }
 
@@ -1954,12 +1954,12 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
                 for( sal_uInt16 n = 0; n < GetRedlineTbl().size(); ++n )
                 {
                     SwRangeRedline* pTmp = GetRedlineTbl()[ n ];
-                    if( ( pPos = &pTmp->GetBound(sal_True))->nNode == aIdx )
+                    if( ( pPos = &pTmp->GetBound(true))->nNode == aIdx )
                     {
                         pPos->nNode++;
                         pPos->nContent.Assign( pPos->nNode.GetNode().GetCntntNode(),0);
                     }
-                    if( ( pPos = &pTmp->GetBound(sal_False))->nNode == aIdx )
+                    if( ( pPos = &pTmp->GetBound(false))->nNode == aIdx )
                     {
                         pPos->nNode++;
                         pPos->nContent.Assign( pPos->nNode.GetNode().GetCntntNode(),0);
@@ -1989,8 +1989,8 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
             // prevent assertion from aPam's target being deleted
             // (Alternatively, one could just let aPam go out of scope, but
             // that requires touching a lot of code.)
-            aPam.GetBound(sal_True).nContent.Assign( NULL, 0 );
-            aPam.GetBound(sal_False).nContent.Assign( NULL, 0 );
+            aPam.GetBound(true).nContent.Assign( NULL, 0 );
+            aPam.GetBound(false).nContent.Assign( NULL, 0 );
 
             AppendRedline( pNewRedline, true );
 

@@ -1507,7 +1507,7 @@ void CalcCntnt( SwLayoutFrm *pLay,
                         pLay->GetFmt()->GetDoc()->GetLayouter()->
                             InsertEndnotes( pSect );
                     sal_Bool bLock = pSect->IsFtnLock();
-                    pSect->SetFtnLock( sal_True );
+                    pSect->SetFtnLock( true );
                     pSect->CalcFtnCntnt();
                     pSect->CalcFtnCntnt();
                     pSect->SetFtnLock( bLock );

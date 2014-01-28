@@ -110,7 +110,7 @@ void SwModelessRedlineAcceptDlg::Activate()
         pChildWin->SetOldDocShell(pDocSh);  // avoid recursion (using modified-Hdl)
 
         sal_Bool bMod = pSh->IsModified();
-        SfxBoolItem aShow(FN_REDLINE_SHOW, sal_True);
+        SfxBoolItem aShow(FN_REDLINE_SHOW, true);
         pSh->GetView().GetViewFrame()->GetDispatcher()->Execute(
             FN_REDLINE_SHOW, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aShow, 0L);
         if (!bMod)

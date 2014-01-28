@@ -201,10 +201,10 @@ public:
 
     /** Go to next content-node that is not protected or hidden
        (Both set FALSE ==> GoNext/GoPrevious!!!). */
-    SwCntntNode* GoNextSection( SwNodeIndex *, bool bSkipHidden  = sal_True,
-                                           bool bSkipProtect = sal_True ) const;
-    SwCntntNode* GoPrevSection( SwNodeIndex *, bool bSkipHidden  = sal_True,
-                                           bool bSkipProtect = sal_True ) const;
+    SwCntntNode* GoNextSection( SwNodeIndex *, bool bSkipHidden  = true,
+                                           bool bSkipProtect = true ) const;
+    SwCntntNode* GoPrevSection( SwNodeIndex *, bool bSkipHidden  = true,
+                                           bool bSkipProtect = true ) const;
 
     /** Create an empty section of Start- and EndNote. It may be called
        only if a new section with content is to be created,

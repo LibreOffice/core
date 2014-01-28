@@ -616,7 +616,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
 
     uno::Sequence< OUString > aSubRanges;
     // get sub-ranges and check that they all are from the very same table
-    sal_Bool bOk = GetSubranges( aRangeRepresentation, aSubRanges, sal_True );
+    sal_Bool bOk = GetSubranges( aRangeRepresentation, aSubRanges, true );
 
     if (!bOk && pDoc && !aChartOleObjectName.isEmpty() )
     {
@@ -661,7 +661,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
             OUString aNewEndCell( sw_GetCellName( aDesc.nRight, aDesc.nBottom ) );
             aRangeRepresentation = GetRangeRepFromTableAndCells(
                         aChartTableName, aNewStartCell, aNewEndCell, sal_True );
-            bOk = GetSubranges( aRangeRepresentation, aSubRanges, sal_True );
+            bOk = GetSubranges( aRangeRepresentation, aSubRanges, true );
         }
     }
     if (!bOk)    // different tables used, or incorrect range specifiers
@@ -1307,7 +1307,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     // to be nice to the user we now sort the cell ranges according to
     // rows or columns depending on the direction used in the data source
     uno::Sequence< OUString > aSortedRanges;
-    GetSubranges( aCellRanges, aSortedRanges, sal_False /*sub ranges should already be normalized*/ );
+    GetSubranges( aCellRanges, aSortedRanges, false /*sub ranges should already be normalized*/ );
     SortSubranges( aSortedRanges, (nDtaSrcIsColumns == 1) );
     sal_Int32 nSortedRanges = aSortedRanges.getLength();
     const OUString *pSortedRanges = aSortedRanges.getConstArray();

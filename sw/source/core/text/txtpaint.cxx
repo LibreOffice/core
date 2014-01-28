@@ -40,7 +40,7 @@ void SwSaveClip::Reset()
             else
                 pOut->SetClipRegion();
         }
-        bChg = sal_False;
+        bChg = false;
     }
 }
 
@@ -112,7 +112,7 @@ void SwSaveClip::_ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm,
         }
 #endif
     }
-    bChg = sal_True;
+    bChg = true;
 
     (SwRect&)rRect = aOldRect;
 }

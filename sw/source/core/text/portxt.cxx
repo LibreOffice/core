@@ -971,7 +971,7 @@ void SwFieldFormPortion::Paint( const SwTxtPaintInfo& rInf ) const
         }
         else
         {
-            assert(0); // unknown type...
+            assert(false); // unknown type...
         }
     }
 }
@@ -1004,7 +1004,7 @@ sal_Bool SwFieldFormPortion::Format( SwTxtFormatInfo & rInf )
         }
         else
         {
-            assert( 0 );        // unknown type...
+            assert( false );        // unknown type...
         }
     }
     return ret;

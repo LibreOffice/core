@@ -353,7 +353,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     // when the cursor is inside of a table, table must NEVER be selectable
     if( pView->GetWrtShell().GetTableFmt() )
     {
-        m_pRbAsTable->Enable( sal_False );
+        m_pRbAsTable->Enable( false );
         m_pRbAsField->Check( sal_True );
         m_pRbDbFmtFromDb->Check( sal_True );
     }
@@ -361,8 +361,8 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     {
         m_pRbAsTable->Check( sal_True );
         m_pRbDbFmtFromDb->Check( sal_True );
-        m_pIbDbcolOneFrom->Enable( sal_False );
-        m_pIbDbcolAllFrom->Enable( sal_False );
+        m_pIbDbcolOneFrom->Enable( false );
+        m_pIbDbcolAllFrom->Enable( false );
     }
 
     m_pRbAsTable->SetClickHdl( LINK(this, SwInsertDBColAutoPilot, PageHdl ));
@@ -606,9 +606,9 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
         m_pIbDbcolOneFrom->Enable( bEnableFrom );
         m_pIbDbcolAllFrom->Enable( bEnableFrom );
 
-        m_pRbDbFmtFromDb->Enable( sal_False );
-        m_pRbDbFmtFromUsr->Enable( sal_False );
-        m_pLbDbFmtFromUsr->Enable( sal_False );
+        m_pRbDbFmtFromDb->Enable( false );
+        m_pRbDbFmtFromUsr->Enable( false );
+        m_pLbDbFmtFromUsr->Enable( false );
 
         m_pPbTblFormat->Enable( bEnableFrom );
     }
@@ -791,9 +791,9 @@ IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox*, pBox )
         OUString sTxt( m_pFormatFrame->get_label().copy( 0, nGBFmtLen ));
         if( aSrch.sColumn.isEmpty() )
         {
-            m_pRbDbFmtFromDb->Enable( sal_False );
-            m_pRbDbFmtFromUsr->Enable( sal_False );
-            m_pLbDbFmtFromUsr->Enable( sal_False );
+            m_pRbDbFmtFromDb->Enable( false );
+            m_pRbDbFmtFromUsr->Enable( false );
+            m_pLbDbFmtFromUsr->Enable( false );
         }
         else
         {
@@ -1304,7 +1304,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                                     if(aStandard != aCompare)
                                         nValue += (aStandard - aCompare);
                                 }
-                                pFld->ChgValue( nValue, sal_True );
+                                pFld->ChgValue( nValue, true );
                             }
                             pFld->SetInitialized();
 
@@ -1752,11 +1752,11 @@ void SwInsertDBColAutoPilot::Load()
 
                 if( !m_pLbTblDbColumn->GetEntryCount() )
                 {
-                    m_pIbDbcolAllTo->Enable( sal_False );
-                    m_pIbDbcolOneTo->Enable( sal_False );
+                    m_pIbDbcolAllTo->Enable( false );
+                    m_pIbDbcolOneTo->Enable( false );
                 }
-                m_pIbDbcolOneFrom->Enable( sal_True );
-                m_pIbDbcolAllFrom->Enable( sal_True );
+                m_pIbDbcolOneFrom->Enable( true );
+                m_pIbDbcolAllFrom->Enable( true );
             }
             m_pEdDbText->SetText( pNewData->sEdit );
 

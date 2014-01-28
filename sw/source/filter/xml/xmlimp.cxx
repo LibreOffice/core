@@ -764,26 +764,26 @@ void SwXMLImport::endDocument( void )
 #if OSL_DEBUG_LEVEL > 0
                 // !!! This should be impossible !!!!
                 OSL_ENSURE( pSttNdIdx->GetIndex()+1 !=
-                                        pPaM->GetBound( sal_True ).nNode.GetIndex(),
+                                        pPaM->GetBound( true ).nNode.GetIndex(),
                         "PaM.Bound1 point to new node " );
                 OSL_ENSURE( pSttNdIdx->GetIndex()+1 !=
-                                        pPaM->GetBound( sal_False ).nNode.GetIndex(),
+                                        pPaM->GetBound( false ).nNode.GetIndex(),
                         "PaM.Bound2 points to new node" );
 
                 if( pSttNdIdx->GetIndex()+1 ==
-                                        pPaM->GetBound( sal_True ).nNode.GetIndex() )
+                                        pPaM->GetBound( true ).nNode.GetIndex() )
                 {
                     const sal_Int32 nCntPos =
-                            pPaM->GetBound( sal_True ).nContent.GetIndex();
-                    pPaM->GetBound( sal_True ).nContent.Assign( pTxtNode,
+                            pPaM->GetBound( true ).nContent.GetIndex();
+                    pPaM->GetBound( true ).nContent.Assign( pTxtNode,
                             pTxtNode->GetTxt().getLength() + nCntPos );
                 }
                 if( pSttNdIdx->GetIndex()+1 ==
-                                pPaM->GetBound( sal_False ).nNode.GetIndex() )
+                                pPaM->GetBound( false ).nNode.GetIndex() )
                 {
                     const sal_Int32 nCntPos =
-                            pPaM->GetBound( sal_False ).nContent.GetIndex();
-                    pPaM->GetBound( sal_False ).nContent.Assign( pTxtNode,
+                            pPaM->GetBound( false ).nContent.GetIndex();
+                    pPaM->GetBound( false ).nContent.Assign( pTxtNode,
                             pTxtNode->GetTxt().getLength() + nCntPos );
                 }
 #endif
@@ -821,8 +821,8 @@ void SwXMLImport::endDocument( void )
                     if( pCNd && pCNd->StartOfSectionIndex()+2 <
                         pCNd->EndOfSectionIndex() )
                     {
-                        pPaM->GetBound(sal_True).nContent.Assign( 0, 0 );
-                        pPaM->GetBound(sal_False).nContent.Assign( 0, 0 );
+                        pPaM->GetBound(true).nContent.Assign( 0, 0 );
+                        pPaM->GetBound(false).nContent.Assign( 0, 0 );
                         pDoc->GetNodes().Delete( pPaM->GetPoint()->nNode );
                     }
                 }

@@ -87,7 +87,7 @@ bool SwTabCols::operator==( const SwTabCols& rCmp ) const
         SwTabColsEntry aEntry1 = aData[i];
         SwTabColsEntry aEntry2 = rCmp.GetData()[i];
         if ( aEntry1.nPos != aEntry2.nPos || aEntry1.bHidden != aEntry2.bHidden )
-            return sal_False;
+            return false;
     }
 
     return true;

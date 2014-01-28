@@ -359,7 +359,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             pTxtAttr->SetSeqRefNo();
         }
     }
-    m_pImpl->m_bIsDescriptor = sal_False;
+    m_pImpl->m_bIsDescriptor = false;
     SetDoc(pNewDoc);
 }
 

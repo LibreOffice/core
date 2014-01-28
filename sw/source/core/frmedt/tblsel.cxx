@@ -161,7 +161,7 @@ void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
                 const SwTblSearchType eSearchType )
 {
     // get start and end cell
-    OSL_ENSURE( rCrsr.GetCntntNode() && rCrsr.GetCntntNode( sal_False ),
+    OSL_ENSURE( rCrsr.GetCntntNode() && rCrsr.GetCntntNode( false ),
             "Tabselection not on Cnt." );
 
     // Row-selection:
@@ -188,7 +188,7 @@ void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
         const SwTable& rTbl = pTblNd->GetTable();
         const SwTableLines& rLines = rTbl.GetTabLines();
 
-        const SwNode* pMarkNode = rCrsr.GetNode( sal_False );
+        const SwNode* pMarkNode = rCrsr.GetNode( false );
         const sal_uLong nMarkSectionStart = pMarkNode->StartOfSectionIndex();
         const SwTableBox* pMarkBox = rTbl.GetTblBox( nMarkSectionStart );
 
@@ -197,7 +197,7 @@ void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
         const SwTableLine* pLine = pMarkBox ? pMarkBox->GetUpper() : 0;
         sal_uInt16 nSttPos = rLines.GetPos( pLine );
         OSL_ENSURE( USHRT_MAX != nSttPos, "Where is my row in the table?" );
-        pLine = rTbl.GetTblBox( rCrsr.GetNode( sal_True )->StartOfSectionIndex() )->GetUpper();
+        pLine = rTbl.GetTblBox( rCrsr.GetNode( true )->StartOfSectionIndex() )->GetUpper();
         sal_uInt16 nEndPos = rLines.GetPos( pLine );
         OSL_ENSURE( USHRT_MAX != nEndPos, "Where is my row in the table?" );
         // pb: #i20193# if tableintable then nSttPos == nEndPos == USHRT_MAX
@@ -235,7 +235,7 @@ void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
         const SwCntntNode *pCntNd = rCrsr.GetCntntNode();
         const SwLayoutFrm *pStart = pCntNd ?
             pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(), &aPtPos )->GetUpper() : 0;
-        pCntNd = rCrsr.GetCntntNode(sal_False);
+        pCntNd = rCrsr.GetCntntNode(false);
         const SwLayoutFrm *pEnd = pCntNd ?
             pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(), &aMkPos )->GetUpper() : 0;
         if( pStart && pEnd )
@@ -431,7 +431,7 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
     SwNodeIndex aIdx( rSttNd );
     const SwCntntNode* pCNd = aIdx.GetNode().GetCntntNode();
     if( !pCNd )
-        pCNd = aIdx.GetNodes().GoNextSection( &aIdx, sal_False, sal_False );
+        pCNd = aIdx.GetNodes().GoNextSection( &aIdx, false, false );
 
     // if table is invisible, return
     // (layout needed for forming table selection further down, so we can't
@@ -448,7 +448,7 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
     aIdx = rEndNd;
     pCNd = aIdx.GetNode().GetCntntNode();
     if( !pCNd )
-        pCNd = aIdx.GetNodes().GoNextSection( &aIdx, sal_False, sal_False );
+        pCNd = aIdx.GetNodes().GoNextSection( &aIdx, false, false );
 
     // #i22135# - Robust: check, if content was found and if it's visible
     if ( !pCNd || pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) == NULL )
@@ -686,7 +686,7 @@ sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
 
     const SwLayoutFrm *pStart = pCrsr->GetCntntNode()->getLayoutFrm( rShell.GetLayout(),
                       &pCrsr->GetPtPos() )->GetUpper(),
-                      *pEnd   = pCrsr->GetCntntNode(sal_False)->getLayoutFrm( rShell.GetLayout(),
+                      *pEnd   = pCrsr->GetCntntNode(false)->getLayoutFrm( rShell.GetLayout(),
                       &pCrsr->GetMkPos() )->GetUpper();
 
     const SwLayoutFrm* pSttCell = pStart;
@@ -915,7 +915,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 {
     rBoxes.clear();
 
-    OSL_ENSURE( rPam.GetCntntNode() && rPam.GetCntntNode( sal_False ),
+    OSL_ENSURE( rPam.GetCntntNode() && rPam.GetCntntNode( false ),
             "Tabselection not on Cnt." );
 
 //JP 24.09.96:  Merge with repeating TableHeadLines does not work properly.
@@ -926,7 +926,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
     const SwCntntNode* pCntNd = rPam.GetCntntNode();
     const SwLayoutFrm *pStart = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
                                                         &aPt )->GetUpper();
-    pCntNd = rPam.GetCntntNode(sal_False);
+    pCntNd = rPam.GetCntntNode(false);
     const SwLayoutFrm *pEnd = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
                                                         &aPt )->GetUpper();
 
@@ -1450,7 +1450,7 @@ sal_uInt16 CheckMergeSel( const SwPaM& rPam )
     const SwCntntNode* pCntNd = rPam.GetCntntNode();
     const SwLayoutFrm *pStart = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
                                                         &aPt )->GetUpper();
-    pCntNd = rPam.GetCntntNode(sal_False);
+    pCntNd = rPam.GetCntntNode(false);
     const SwLayoutFrm *pEnd = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
                                                     &aPt )->GetUpper();
     GetTblSel( pStart, pEnd, aBoxes, 0 );
@@ -1982,7 +1982,7 @@ sal_Bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
     const SwCntntNode* pCntNd = rCrsr.GetCntntNode();
     const SwLayoutFrm *pStart = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
                                                         &aPtPos )->GetUpper();
-    pCntNd = rCrsr.GetCntntNode(sal_False);
+    pCntNd = rCrsr.GetCntntNode(false);
     const SwLayoutFrm *pEnd = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
                                 &aMkPos )->GetUpper();
 
@@ -2288,7 +2288,7 @@ void _FndBox::DelFrms( SwTable &rTable,sal_Bool bAccTableDispose )
                         pFrm->SetAccTableDispose( bAccTableDispose );
                         pFrm->Cut();
                         //Set acc table dispose state to default value.
-                        pFrm->SetAccTableDispose( sal_True );
+                        pFrm->SetAccTableDispose( true );
                         delete pFrm;
                     }
                 }

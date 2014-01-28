@@ -430,7 +430,7 @@ IMPL_LINK(SwSelectAddressBlockDialog, DeleteHdl_Impl, PushButton*, pButton)
         }
         m_aAddressBlocks.realloc(m_aAddressBlocks.getLength() - 1);
         if(m_aAddressBlocks.getLength() <= 1)
-            pButton->Enable(sal_False);
+            pButton->Enable(false);
         m_pPreview->RemoveSelectedAddress();
     }
     return 0;
@@ -744,13 +744,13 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl, AddressMultiL
                 m_pFieldCB->InsertEntry(*aIterator);
         }
         m_pFieldCB->SetText(sSelect);
-        m_pFieldCB->Enable(sal_True);
-        m_pFieldFT->Enable(sal_True);
+        m_pFieldCB->Enable(true);
+        m_pFieldFT->Enable(true);
     }
     else
     {
-        m_pFieldCB->Enable(sal_False);
-        m_pFieldFT->Enable(sal_False);
+        m_pFieldCB->Enable(false);
+        m_pFieldFT->Enable(false);
     }
 
     UpdateImageButtons_Impl();

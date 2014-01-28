@@ -466,7 +466,7 @@ uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
         uno::Reference<XInterface> xRet;
         SwNode* pNode = pRedline->GetNode();
         if(!bStart && pRedline->HasMark())
-            pNode = pRedline->GetNode(sal_False);
+            pNode = pRedline->GetNode(false);
         switch(pNode->GetNodeType())
         {
             case ND_SECTIONNODE:

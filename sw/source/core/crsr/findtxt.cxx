@@ -647,8 +647,8 @@ OUString *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam )
     if( pPam && pPam->HasMark() &&
         SearchAlgorithms_REGEXP == rSearchOpt.algorithmType )
     {
-        const SwCntntNode* pTxtNode = pPam->GetCntntNode( sal_True );
-        if( pTxtNode && pTxtNode->IsTxtNode() && pTxtNode == pPam->GetCntntNode( sal_False ) )
+        const SwCntntNode* pTxtNode = pPam->GetCntntNode( true );
+        if( pTxtNode && pTxtNode->IsTxtNode() && pTxtNode == pPam->GetCntntNode( false ) )
         {
             utl::TextSearch aSTxt( rSearchOpt );
             const OUString& rStr = static_cast<const SwTxtNode*>(pTxtNode)->GetTxt();

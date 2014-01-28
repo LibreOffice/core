@@ -192,7 +192,7 @@ void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
         ((SwSetExpFieldType&)rFldTyp).SetDeleted( sal_False );
         break;
     case RES_USERFLD:
-        ((SwUserFieldType&)rFldTyp).SetDeleted( sal_False );
+        ((SwUserFieldType&)rFldTyp).SetDeleted( false );
         break;
     case RES_DDEFLD:
         ((SwDDEFieldType&)rFldTyp).SetDeleted( sal_False );
@@ -226,7 +226,7 @@ void SwDoc::RemoveFldType(sal_uInt16 nFld)
                 if( RES_SETEXPFLD == nWhich )
                     ((SwSetExpFieldType*)pTmp)->SetDeleted( sal_True );
                 else if( RES_USERFLD == nWhich )
-                    ((SwUserFieldType*)pTmp)->SetDeleted( sal_True );
+                    ((SwUserFieldType*)pTmp)->SetDeleted( true );
                 else
                     ((SwDDEFieldType*)pTmp)->SetDeleted( sal_True );
                 nWhich = 0;
@@ -340,7 +340,7 @@ void SwDoc::UpdateFlds( SfxPoolItem *pNewHt, bool bCloseDB )
     }
 
     if( !IsExpFldsLocked() )
-        UpdateExpFlds( 0, sal_False );      // update expression fields
+        UpdateExpFlds( 0, false );      // update expression fields
 
     // Tables
     UpdateTblFlds(pNewHt);
@@ -437,7 +437,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                             if( nsSwExtendedSubType::SUB_CMD & pFld->GetSubType() )
                                 pFld->PtrToBoxNm( pUpdtFld->pTbl );
                             else
-                                pFld->ChgValid( sal_False );
+                                pFld->ChgValid( false );
                             break;
                         case TBL_BOXNAME:
                             // is this the wanted table?
@@ -463,7 +463,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     }
                     else
                         // reset the value flag for all
-                        pFld->ChgValid( sal_False );
+                        pFld->ChgValid( false );
                 }
             }
 
@@ -1082,7 +1082,7 @@ void SwDoc::FldsToCalc( SwCalc& rCalc, const _SetGetExpFld& rToThisFld )
 {
     // create the sorted list of all SetFields
     mpUpdtFlds->MakeFldList( *this, mbNewFldLst, GETFLD_CALC );
-    mbNewFldLst = sal_False;
+    mbNewFldLst = false;
 
     SwNewDBMgr* pMgr = GetNewDBMgr();
     pMgr->CloseAll(sal_False);
@@ -1103,7 +1103,7 @@ void SwDoc::FldsToCalc( SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt )
 {
     // create the sorted list of all SetFields
     mpUpdtFlds->MakeFldList( *this, mbNewFldLst, GETFLD_CALC );
-    mbNewFldLst = sal_False;
+    mbNewFldLst = false;
 
     SwNewDBMgr* pMgr = GetNewDBMgr();
     pMgr->CloseAll(sal_False);
@@ -1126,7 +1126,7 @@ void SwDoc::FldsToExpand( SwHash**& ppHashTbl, sal_uInt16& rTblSize,
 {
     // create the sorted list of all SetFields
     mpUpdtFlds->MakeFldList( *this, mbNewFldLst, GETFLD_EXPAND );
-    mbNewFldLst = sal_False;
+    mbNewFldLst = false;
 
     // Hash table for all string replacements is filled on-the-fly.
     // Try to fabricate an uneven number.
@@ -1210,8 +1210,8 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
     bool bOldInUpdateFlds = mpUpdtFlds->IsInUpdateFlds();
     mpUpdtFlds->SetInUpdateFlds( true );
 
-    mpUpdtFlds->MakeFldList( *this, sal_True, GETFLD_ALL );
-    mbNewFldLst = sal_False;
+    mpUpdtFlds->MakeFldList( *this, true, GETFLD_ALL );
+    mbNewFldLst = false;
 
     if( mpUpdtFlds->GetSortLst()->empty() )
     {
@@ -2250,13 +2250,13 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         {
             pSectNd = rDoc.GetNodes()[ aTmpArr[ n ] ]->GetSectionNode();
             OSL_ENSURE( pSectNd, "Where is my SectionNode" );
-            pSectNd->GetSection().SetCondHidden( sal_False );
+            pSectNd->GetSection().SetCondHidden( false );
         }
         for (sal_uInt16 n = 0; n < nArrStt; ++n)
         {
             pSectNd = rDoc.GetNodes()[ aTmpArr[ n ] ]->GetSectionNode();
             OSL_ENSURE( pSectNd, "Where is my SectionNode" );
-            pSectNd->GetSection().SetCondHidden( sal_False );
+            pSectNd->GetSection().SetCondHidden( false );
         }
 
         // add all to the list so that they are sorted
@@ -2544,7 +2544,7 @@ void SwDocUpdtFld::RemoveFldType( const SwFieldType& rType )
 SwDocUpdtFld::SwDocUpdtFld(SwDoc* pDoc)
     : pFldSortLst(0), nFldLstGetMode(0), pDocument(pDoc)
 {
-    bInUpdateFlds = bFldsDirty = sal_False;
+    bInUpdateFlds = bFldsDirty = false;
     memset( aFldTypeTable, 0, sizeof( aFldTypeTable ) );
 }
 
@@ -2633,7 +2633,7 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
                 // ContentString correctly
                 SwDBField* pDBFld = (SwDBField*)pNewFld;
                 if (pDBFld->IsInitialized())
-                    pDBFld->ChgValue( pDBFld->GetValue(), sal_True );
+                    pDBFld->ChgValue( pDBFld->GetValue(), true );
 
                 pDBFld->ClearInitialized();
                 pDBFld->InitContent();

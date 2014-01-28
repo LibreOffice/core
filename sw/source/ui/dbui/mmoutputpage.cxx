@@ -375,7 +375,7 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
     Control** pControl = aControls;
     do
     {
-        (*pControl)->Show(sal_False);
+        (*pControl)->Show(false);
 
     } while(*(++pControl));
 
@@ -397,7 +397,7 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
         Control** pSaveMergeControl = aSaveMergedControls;
         do
         {
-            (*pSaveMergeControl)->Show(sal_True);
+            (*pSaveMergeControl)->Show(true);
 
         } while(*(++pSaveMergeControl));
         if(!m_aFromRB.IsChecked() && !m_aSaveAsOneRB.IsChecked())
@@ -426,7 +426,7 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
         Control** pPrinterControl = aPrintControls;
         do
         {
-            (*pPrinterControl)->Show(sal_True);
+            (*pPrinterControl)->Show(true);
 
         } while(*(++pPrinterControl));
         if(!m_aFromRB.IsChecked())
@@ -456,7 +456,7 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
         Control** pMailControl = aMailControls;
         do
         {
-            (*pMailControl)->Show(sal_True);
+            (*pMailControl)->Show(true);
 
         } while(*(++pMailControl));
 
@@ -571,9 +571,9 @@ IMPL_LINK(SwMailMergeOutputPage, SaveStartHdl_Impl, PushButton*, pButton)
 
             rConfigItem.AddSavedDocument(
                     aURL.GetMainURL(INetURLObject::DECODE_TO_IURI));
-            pButton->Enable(sal_False);
+            pButton->Enable(false);
             m_pWizard->enableButtons(WZB_FINISH, sal_True);
-            pButton->Enable(sal_False);
+            pButton->Enable(false);
 
         }
     }
@@ -850,7 +850,7 @@ IMPL_LINK_NOARG(SwMailMergeOutputPage, PrintHdl_Impl)
 
     SfxObjectShell* pObjSh = pTargetView->GetViewFrame()->GetObjectShell();
     SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE), pObjSh));
-    SfxBoolItem aMergeSilent(SID_SILENT, sal_False);
+    SfxBoolItem aMergeSilent(SID_SILENT, false);
     m_pWizard->enableButtons(WZB_CANCEL, sal_False);
 
     uno::Sequence < beans::PropertyValue > aProps( 2 );

@@ -185,7 +185,7 @@ void SwView::GetState(SfxItemSet &rSet)
                     if(m_pWrtShell->IsInVerticalText())
                         aImgItem.SetRotation(2700);
                     if(m_pWrtShell->IsInRightToLeftText())
-                        aImgItem.SetMirrored(sal_True);
+                        aImgItem.SetMirrored(true);
                 }
                 rSet.Put(aImgItem);
             }
@@ -207,7 +207,7 @@ void SwView::GetState(SfxItemSet &rSet)
                         if (m_pWrtShell->IsInVerticalText())
                             aImgItem.SetRotation(2700);
                         if (m_pWrtShell->IsInRightToLeftText())
-                            aImgItem.SetMirrored(sal_True);
+                            aImgItem.SetMirrored(true);
                     }
                     rSet.Put(aImgItem);
                 }
@@ -368,7 +368,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 if(m_pWrtShell->IsInVerticalText())
                     aImageItem.SetRotation( 2700 );
                 if(m_pWrtShell->IsInRightToLeftText())
-                    aImageItem.SetMirrored( sal_True );
+                    aImageItem.SetMirrored( true );
                 rSet.Put(aImageItem);
             }
             break;

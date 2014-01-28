@@ -1140,7 +1140,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
         SfxViewFrame* pFrame = SfxViewFrame::LoadHiddenDocument( *pDocShell, 7 );
         SfxRequest aReq(FN_PRINT_PAGEPREVIEW, SFX_CALLMODE_SYNCHRON,
                                     pDocShell->GetDoc()->GetAttrPool());
-            aReq.AppendItem(SfxBoolItem(FN_PRINT_PAGEPREVIEW, sal_True));
+            aReq.AppendItem(SfxBoolItem(FN_PRINT_PAGEPREVIEW, true));
 
         for ( int n = 0; n < xOptions.getLength(); ++n )
         {
@@ -3016,7 +3016,7 @@ void SAL_CALL SwXTextDocument::render(
 
                     if (bIsPDFExport && bFirstPage && pWrtShell)
                     {
-                        SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, aPageRange, bIsSkipEmptyPages, sal_False );
+                        SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, aPageRange, bIsSkipEmptyPages, false );
                     }
 
                     SwPrintData const& rSwPrtOptions =
@@ -3034,7 +3034,7 @@ void SAL_CALL SwXTextDocument::render(
                     //
                     if (bIsPDFExport && bLastPage && pWrtShell)
                     {
-                        SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, aPageRange, bIsSkipEmptyPages,  sal_True );
+                        SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, aPageRange, bIsSkipEmptyPages,  true );
                     }
 
                     pVwSh->SetPDFExportOption( sal_False );
@@ -3058,7 +3058,7 @@ void SAL_CALL SwXTextDocument::render(
                             // prevent crash described in #i108805
                             SwDocShell *pRenderDocShell = pDoc->GetDocShell();
                             SfxItemSet *pSet = pRenderDocShell->GetMedium()->GetItemSet();
-                            pSet->Put( SfxBoolItem( SID_HIDDEN, sal_False ) );
+                            pSet->Put( SfxBoolItem( SID_HIDDEN, false ) );
 
                         }
                     }

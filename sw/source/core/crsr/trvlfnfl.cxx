@@ -63,7 +63,7 @@ sal_Bool SwCursor::GotoFtnTxt()
 
         SwCntntNode* pCNd = GetDoc()->GetNodes().GoNextSection(
                                             &GetPoint()->nNode,
-                                            sal_True, !IsReadOnlyAvailable() );
+                                            true, !IsReadOnlyAvailable() );
         if( pCNd )
         {
             GetPoint()->nContent.Assign( pCNd, 0 );

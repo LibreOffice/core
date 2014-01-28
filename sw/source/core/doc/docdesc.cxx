@@ -653,7 +653,7 @@ void SwDoc::PrtDataChanged()
 
     // #i41075#
     OSL_ENSURE( get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) ||
-            0 != getPrinter( sal_False ), "PrtDataChanged will be called recursively!" );
+            0 != getPrinter( false ), "PrtDataChanged will be called recursively!" );
     SwRootFrm* pTmpRoot = GetCurrentLayout();
     boost::scoped_ptr<SwWait> pWait;
     bool bEndAction = false;
@@ -740,16 +740,16 @@ void SwDoc::PrtOLENotify( sal_Bool bAll )
         // Because we don't have a Shell we remember this unfortunate situation
         // in the document,
         // which is made up for later on when creating the first Shell.
-        mbOLEPrtNotifyPending = sal_True;
+        mbOLEPrtNotifyPending = true;
         if ( bAll )
-            mbAllOLENotify = sal_True;
+            mbAllOLENotify = true;
     }
     else
     {
         if ( mbAllOLENotify )
             bAll = sal_True;
 
-        mbOLEPrtNotifyPending = mbAllOLENotify = sal_False;
+        mbOLEPrtNotifyPending = mbAllOLENotify = false;
 
         SwOLENodes *pNodes = SwCntntNode::CreateOLENodesArray( *GetDfltGrfFmtColl(), !bAll );
         if ( pNodes )
@@ -806,7 +806,7 @@ IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, )
     SwFEShell* pSh = (SwFEShell*)GetEditShell();
     if( pSh )
     {
-        mbOLEPrtNotifyPending = mbAllOLENotify = sal_False;
+        mbOLEPrtNotifyPending = mbAllOLENotify = false;
 
         SwOLENodes *pNodes = SwCntntNode::CreateOLENodesArray( *GetDfltGrfFmtColl(), true );
         if( pNodes )

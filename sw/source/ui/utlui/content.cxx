@@ -1942,7 +1942,7 @@ bool SwContentTree::ToggleToRoot()
         {
             HideFocus();
             ShowFocus( oldRectangle);
-            bIsKeySpace = sal_False;
+            bIsKeySpace = false;
         }
     }
     pConfig->SetRootType( nRootType );
@@ -2142,7 +2142,7 @@ bool SwContentTree::HasContentChanged()
                     }
                     if(!nChildCount)
                     {
-                        pEntry->EnableChildrenOnDemand(sal_False);
+                        pEntry->EnableChildrenOnDemand(false);
                         InvalidateEntry(pEntry);
                     }
 
@@ -2653,7 +2653,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
 
         SvTreeListEntry* pEntry = GetCurEntry();
         if( GetChildCount( pEntry ) == 0 )
-            bIsKeySpace = sal_True;
+            bIsKeySpace = true;
         Point tempPoint = GetEntryPosition( pEntry );//Change from "GetEntryPos" to "GetEntryPosition" for acc migration
         oldRectangle = GetFocusRect( pEntry,tempPoint.Y() );
 
@@ -2755,7 +2755,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
                 }
 
 
-                bViewHasChanged = sal_True;
+                bViewHasChanged = true;
             }
         }
 

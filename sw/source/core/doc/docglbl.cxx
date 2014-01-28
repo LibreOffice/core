@@ -507,7 +507,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
     // The medium isn't locked after reopening the document.
     SfxRequest aReq( SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON, GetAttrPool() );
     aReq.AppendItem( SfxStringItem( SID_FILE_NAME, rPath ) );
-    aReq.AppendItem( SfxBoolItem( SID_SAVETO, sal_True ) );
+    aReq.AppendItem( SfxBoolItem( SID_SAVETO, true ) );
     if(pFilter)
         aReq.AppendItem( SfxStringItem( SID_FILTER_NAME, pFilter->GetName() ) );
     const SfxBoolItem *pRet = (const SfxBoolItem*)mpDocShell->ExecuteSlot( aReq );

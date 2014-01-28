@@ -487,13 +487,13 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject() const
 void SwVirtFlyDrawObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
 {
     rInfo.bSelectAllowed     = rInfo.bMoveAllowed =
-    rInfo.bResizeFreeAllowed = rInfo.bResizePropAllowed = sal_True;
+    rInfo.bResizeFreeAllowed = rInfo.bResizePropAllowed = true;
 
     rInfo.bRotateFreeAllowed = rInfo.bRotate90Allowed =
     rInfo.bMirrorFreeAllowed = rInfo.bMirror45Allowed =
     rInfo.bMirror90Allowed   = rInfo.bShearAllowed    =
     rInfo.bCanConvToPath     = rInfo.bCanConvToPoly   =
-    rInfo.bCanConvToPathLineToArea = rInfo.bCanConvToPolyLineToArea = sal_False;
+    rInfo.bCanConvToPathLineToArea = rInfo.bCanConvToPolyLineToArea = false;
 }
 
 // SwVirtFlyDrawObj - Size Determination

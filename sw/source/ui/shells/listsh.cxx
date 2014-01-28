@@ -168,7 +168,7 @@ void SwListShell::Execute(SfxRequest &rReq)
         {
             rReq.Ignore();
             SfxRequest aReq( GetView().GetViewFrame(), FN_NUM_BULLET_ON );
-            aReq.AppendItem( SfxBoolItem( FN_PARAM_1, sal_False ) );
+            aReq.AppendItem( SfxBoolItem( FN_PARAM_1, false ) );
             aReq.Done();
             rSh.DelNumRules();
             break;

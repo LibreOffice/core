@@ -257,7 +257,7 @@ void SwAddressPreview::SetAddress(const OUString& rAddress)
 {
     pImpl->aAdresses.clear();
     pImpl->aAdresses.push_back(rAddress);
-    aVScrollBar.Show(sal_False);
+    aVScrollBar.Show(false);
     Invalidate();
 }
 

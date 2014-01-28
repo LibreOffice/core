@@ -220,7 +220,7 @@ SwAttrCheckArr::SwAttrCheckArr( const SfxItemSet& rSet, bool bFwd,
                                 bool bNoCollections )
     : aCmpSet( *rSet.GetPool(), RES_CHRATR_BEGIN, RES_TXTATR_END-1 )
 {
-    aCmpSet.Put( rSet, sal_False );
+    aCmpSet.Put( rSet, false );
     bNoColls = bNoCollections;
     bForward = bFwd;
 
@@ -971,7 +971,7 @@ bool SwPaM::Find( const SfxItemSet& rSet, bool bNoColls, SwMoveFn fnMove,
     SwAttrCheckArr aCmpArr( rSet, bSrchForward, bNoColls );
     SfxItemSet aOtherSet( GetDoc()->GetAttrPool(),
                             RES_PARATR_BEGIN, RES_GRFATR_END-1 );
-    aOtherSet.Put( rSet, sal_False );   // got all invalid items
+    aOtherSet.Put( rSet, false );   // got all invalid items
 
     FnSearchAttr fnSearch = bSrchForward
                                 ? (&::lcl_SearchForward)

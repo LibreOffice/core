@@ -195,7 +195,7 @@ SwPaM* SwCrsrShell::GetCrsr( sal_Bool bMakeTblCrsr ) const
             if( m_pTblCrsr->GetPoint()->nNode.GetIndex() &&
                 m_pTblCrsr->GetMark()->nNode.GetIndex() &&
                 0 != ( pCNd = m_pTblCrsr->GetCntntNode() ) && pCNd->getLayoutFrm( GetLayout() ) &&
-                0 != ( pCNd = m_pTblCrsr->GetCntntNode(sal_False) ) && pCNd->getLayoutFrm( GetLayout() ) )
+                0 != ( pCNd = m_pTblCrsr->GetCntntNode(false) ) && pCNd->getLayoutFrm( GetLayout() ) )
             {
                 SwShellTableCrsr* pTC = (SwShellTableCrsr*)m_pTblCrsr;
                 GetLayout()->MakeTblCrsrs( *pTC );
@@ -472,7 +472,7 @@ bool SwCrsrShell::bColumnChange()
 
     if (pCurrFrm == NULL)
     {
-        return sal_False;
+        return false;
     }
 
     SwFrm* pCurrCol=((SwFrm*)pCurrFrm)->FindColFrm();
@@ -492,11 +492,11 @@ bool SwCrsrShell::bColumnChange()
     }
 
     if(m_oldColFrm == pCurrCol)
-        return sal_False;
+        return false;
     else
     {
         m_oldColFrm = pCurrCol;
-        return sal_True;
+        return true;
     }
 }
 
@@ -1407,8 +1407,8 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
     if( pTstCrsr->HasMark() && !m_pBlockCrsr &&
         mpDoc->IsIdxInTbl( pTstCrsr->GetPoint()->nNode ) &&
           ( m_pTblCrsr ||
-            pTstCrsr->GetNode( sal_True )->StartOfSectionNode() !=
-            pTstCrsr->GetNode( sal_False )->StartOfSectionNode() ) && !mbSelectAll)
+            pTstCrsr->GetNode( true )->StartOfSectionNode() !=
+            pTstCrsr->GetNode( false )->StartOfSectionNode() ) && !mbSelectAll)
     {
         SwShellCrsr* pITmpCrsr = getShellCrsr( true );
         Point aTmpPt( pITmpCrsr->GetPtPos() );
@@ -1443,7 +1443,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
             // Second check if mark is in repeated headline:
             if ( !bInRepeatedHeadline )
             {
-                SwCntntFrm* pMarkTblFrm = pITmpCrsr->GetCntntNode( sal_False )->
+                SwCntntFrm* pMarkTblFrm = pITmpCrsr->GetCntntNode( false )->
                     getLayoutFrm( GetLayout(), &aTmpMk, pITmpCrsr->GetMark(), sal_False );
                 OSL_ENSURE( pMarkTblFrm, "Tabelle Crsr nicht im Content ??" );
 
@@ -2849,7 +2849,7 @@ sal_Bool SwCrsrShell::FindValidCntntNode( sal_Bool bOnlyText )
             do {
                 bContinue = false;
                 while( 0 != ( pCNd = (rNds.*funcGoSection)( &rNdIdx,
-                                            sal_True, !IsReadOnlyAvailable() )) )
+                                            true, !IsReadOnlyAvailable() )) )
                 {
                     // moved inside a table -> check if it is protected
                     if( pCNd->FindTableNode() )

@@ -351,7 +351,7 @@ bool SwFmtFrmSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 aSize.Width() = nWd;
             }
             else
-                bRet = sal_False;
+                bRet = false;
         }
         break;
         case MID_FRMSIZE_HEIGHT:
@@ -545,10 +545,10 @@ bool SwFmtCntnt::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     if( (sal_IntPtr)pStartNode ^ (sal_IntPtr)((SwFmtCntnt&)rAttr).pStartNode )
-        return 0;
+        return false;
     if( pStartNode )
         return ( *pStartNode == *((SwFmtCntnt&)rAttr).GetCntntIdx() );
-    return 1;
+    return true;
 }
 
 SfxPoolItem*  SwFmtCntnt::Clone( SfxItemPool* ) const
@@ -836,13 +836,13 @@ bool SwFmtCol::operator==( const SfxPoolItem& rAttr ) const
           aColumns.size() == rCmp.GetNumCols() &&
           aWidthAdjustValue == rCmp.GetAdjustValue()
          ) )
-        return 0;
+        return false;
 
     for ( sal_uInt16 i = 0; i < aColumns.size(); ++i )
         if ( !(aColumns[i] == rCmp.GetColumns()[i]) )
-            return 0;
+            return false;
 
-    return 1;
+    return true;
 }
 
 SfxPoolItem*  SwFmtCol::Clone( SfxItemPool* ) const
@@ -1865,7 +1865,7 @@ bool SwFmtFtnEndAtTxtEnd::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) cons
         case MID_NUM_TYPE    : rVal <<= aFmt.GetNumberingType(); break;
         case MID_PREFIX      : rVal <<= OUString(sPrefix); break;
         case MID_SUFFIX      : rVal <<= OUString(sSuffix); break;
-        default: return sal_False;
+        default: return false;
     }
     return true;
 }

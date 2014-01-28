@@ -435,7 +435,7 @@ IMPL_LINK( SwSendMailDialog, StopHdl_Impl, PushButton*, pButton )
         {
             m_pImpl->xMailDispatcher->start();
             pButton->SetText(m_sStop);
-            m_PausedFI.Show(sal_False);
+            m_PausedFI.Show(false);
         }
     }
     return 0;
@@ -443,7 +443,7 @@ IMPL_LINK( SwSendMailDialog, StopHdl_Impl, PushButton*, pButton )
 
 IMPL_LINK_NOARG(SwSendMailDialog, CloseHdl_Impl)
 {
-    ModelessDialog::Show( sal_False );
+    ModelessDialog::Show( false );
     return 0;
 }
 
@@ -662,7 +662,7 @@ void SwSendMailDialog::UpdateTransferStatus()
 
 void SwSendMailDialog::AllMailsSent()
 {
-    m_aStopPB.Enable(sal_False);
+    m_aStopPB.Enable(false);
 }
 
 

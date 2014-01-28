@@ -580,7 +580,7 @@ static void lcl_ProcessLineGet( const SwTableLine *pLine, SwTabCols &rToFill,
     {
         const SwTableBox *pBox = pLine->GetTabBoxes()[i];
         if ( pBox->GetSttNd() )
-            ::lcl_SortedTabColInsert( rToFill, pBox, pTabFmt, sal_True, sal_False );
+            ::lcl_SortedTabColInsert( rToFill, pBox, pTabFmt, sal_True, false );
         else
             for ( sal_uInt16 j = 0; j < pBox->GetTabLines().size(); ++j )
                 ::lcl_ProcessLineGet( pBox->GetTabLines()[j], rToFill, pTabFmt );
@@ -1892,7 +1892,7 @@ void sw_GetTblBoxColStr( sal_uInt16 nCol, OUString& rNm )
             break;
         nCol /= coDiff;
         --nCol;
-    } while( 1 );
+    } while( true );
 }
 
 OUString SwTableBox::GetName() const

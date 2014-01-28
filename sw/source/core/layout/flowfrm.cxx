@@ -645,10 +645,10 @@ void SwFlowFrm::MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling )
     {
         SwSectionFrm* pTmpSct = (SwSectionFrm*)m_rThis.GetUpper();
         sal_Bool bOld = pTmpSct->IsCntntLocked();
-        pTmpSct->SetCntntLock( sal_True );
+        pTmpSct->SetCntntLock( true );
         pTmpSct->Calc();
         if( !bOld )
-            pTmpSct->SetCntntLock( sal_False );
+            pTmpSct->SetCntntLock( false );
     }
     SwPageFrm *pPage = m_rThis.FindPageFrm();
 

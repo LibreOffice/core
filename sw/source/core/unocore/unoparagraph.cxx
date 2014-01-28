@@ -788,7 +788,7 @@ bool ::sw::GetDefaultTextContentValue(
         else if(rPropertyName == UNO_NAME_TEXT_WRAP)
             nWID = FN_UNO_TEXT_WRAP;
         else
-            return sal_False;
+            return false;
     }
 
     switch(nWID)
@@ -803,9 +803,9 @@ bool ::sw::GetDefaultTextContentValue(
         }
         break;
         default:
-            return sal_False;
+            return false;
     }
-    return sal_True;
+    return true;
 }
 
 void SAL_CALL

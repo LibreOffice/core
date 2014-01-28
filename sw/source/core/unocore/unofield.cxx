@@ -597,7 +597,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         rValue >>= uTmp;
         OUString sTypeName(uTmp);
         SwFieldType * pType2 = m_pImpl->m_pDoc->GetFldType(
-                m_pImpl->m_nResTypeId, sTypeName, sal_False);
+                m_pImpl->m_nResTypeId, sTypeName, false);
 
         OUString sTable(SW_RES(STR_POOLCOLL_LABEL_TABLE));
         OUString sDrawing(SW_RES(STR_POOLCOLL_LABEL_DRAWING));
@@ -1735,7 +1735,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             }
             //make sure the SubType matches the field type
             SwFieldType* pSetExpFld = pDoc->GetFldType(
-                    RES_SETEXPFLD, m_pImpl->m_pProps->sPar1, sal_False);
+                    RES_SETEXPFLD, m_pImpl->m_pProps->sPar1, false);
             bool bSetGetExpFieldUninitialized = false;
             if (pSetExpFld)
             {
@@ -2700,7 +2700,7 @@ uno::Any SwXTextFieldMasters::getByName(const OUString& rName)
             css::uno::Reference<css::uno::XInterface>());
 
     sName = sName.copy(std::min(sTypeName.getLength()+1, sName.getLength()));
-    SwFieldType* pType = GetDoc()->GetFldType(nResId, sName, sal_True);
+    SwFieldType* pType = GetDoc()->GetFldType(nResId, sName, true);
     if(!pType)
         throw container::NoSuchElementException(
             "SwXTextFieldMasters::getByName(" + rName + ")",
@@ -2789,7 +2789,7 @@ sal_Bool SwXTextFieldMasters::hasByName(const OUString& rName) throw( uno::Runti
     if( USHRT_MAX != nResId )
     {
         sName = sName.copy(std::min(sTypeName.getLength()+1, sName.getLength()));
-        bRet = USHRT_MAX != nResId && 0 != GetDoc()->GetFldType(nResId, sName, sal_True);
+        bRet = USHRT_MAX != nResId && 0 != GetDoc()->GetFldType(nResId, sName, true);
     }
     return bRet;
 }
@@ -2888,7 +2888,7 @@ void SAL_CALL SwXTextFieldTypes::refresh() throw (uno::RuntimeException)
             throw uno::RuntimeException();
         UnoActionContext aContext(GetDoc());
         GetDoc()->UpdateDocStat();
-        GetDoc()->UpdateFlds(0, sal_False);
+        GetDoc()->UpdateFlds(0, false);
     }
     // call refresh listeners (without SolarMutex locked)
     lang::EventObject const event(static_cast< ::cppu::OWeakObject*>(this));

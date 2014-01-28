@@ -674,7 +674,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 }
                 if (m_bIsDescriptor)
                 {
-                    m_pProps->m_bDDE = sal_False;
+                    m_pProps->m_bDDE = false;
                     m_pProps->m_sLinkFileName = aLink.FileURL;
                     m_pProps->m_sSectionFilter = aLink.FilterName;
                 }
@@ -715,7 +715,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 pValues[nProperty] >>= sLink;
                 if (m_bIsDescriptor)
                 {
-                    m_pProps->m_bDDE = sal_False;
+                    m_pProps->m_bDDE = false;
                     m_pProps->m_sSectionRegion = sLink;
                 }
                 else
@@ -1158,8 +1158,8 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 for (sal_uInt16 nRed = 0; nRed < rRedTbl.size(); nRed++)
                 {
                     const SwRangeRedline* pRedline = rRedTbl[nRed];
-                    SwNode const*const pRedPointNode = pRedline->GetNode(sal_True);
-                    SwNode const*const pRedMarkNode = pRedline->GetNode(sal_False);
+                    SwNode const*const pRedPointNode = pRedline->GetNode(true);
+                    SwNode const*const pRedMarkNode = pRedline->GetNode(false);
                     if ((pRedPointNode == pSectNode) ||
                         (pRedMarkNode == pSectNode))
                     {

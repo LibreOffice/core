@@ -176,7 +176,7 @@ bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
     {
         const SwShellCrsr *pCrsr = _GetCrsr();
         const SwFrm* pStartFrm = pFrm;
-        const SwCntntNode *pCNd = pCrsr->GetCntntNode( sal_False );
+        const SwCntntNode *pCNd = pCrsr->GetCntntNode( false );
         const SwFrm* pEndFrm   = pCNd ? pCNd->getLayoutFrm( GetLayout(), &pCrsr->GetMkPos() ) : 0;
 
         if ( bRow )

@@ -268,7 +268,7 @@ void SwNumPositionTabPage::InitControls()
         m_pDistBorderMF->SetValue(m_pDistBorderMF->Normalize(nDistBorderNum),FUNIT_TWIP);
     }
     else
-        bSetDistEmpty = sal_True;
+        bSetDistEmpty = true;
 
     if(bSameDist)
         m_pDistNumMF->SetValue(m_pDistNumMF->Normalize(aNumFmtArr[nLvl]->GetCharTextDistance()), FUNIT_TWIP);
@@ -416,7 +416,7 @@ sal_Bool SwNumPositionTabPage::FillItemSet( SfxItemSet& rSet )
     {
         *pSaveNum = *pActNum;
         rSet.Put(SwUINumRuleItem( *pSaveNum ));
-        rSet.Put(SfxBoolItem(FN_PARAM_NUM_PRESET, sal_False));
+        rSet.Put(SfxBoolItem(FN_PARAM_NUM_PRESET, false));
     }
     return bModified;
 }

@@ -135,8 +135,8 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
         if ( rInf.ePos == FTNPOS_PAGE )
         {
             m_pPosPageBox->Check();
-            m_pPageTemplLbl->Enable(sal_False);
-            m_pPageTemplBox->Enable(sal_False);
+            m_pPageTemplLbl->Enable(false);
+            m_pPageTemplBox->Enable(false);
         }
         else
         {
@@ -292,8 +292,8 @@ IMPL_LINK_NOARG(SwEndNoteOptionPage, PosPageHdl)
         m_pNumCountBox->InsertEntry(aNumChapter, FTNNUM_CHAPTER);
         SelectNumbering(eNum);
     }
-    m_pPageTemplLbl->Enable(sal_False);
-    m_pPageTemplBox->Enable(sal_False);
+    m_pPageTemplLbl->Enable(false);
+    m_pPageTemplBox->Enable(false);
 
     return 0;
 }

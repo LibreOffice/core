@@ -92,8 +92,8 @@ static void lcl_EnsureValidPam( SwPaM& rPam )
         // else: point was already valid
 
         // if mark is invalid, we delete it
-        if( ( rPam.GetCntntNode( sal_False ) == NULL ) ||
-            ( rPam.GetCntntNode( sal_False ) != rPam.GetMark()->nContent.GetIdxReg() ) )
+        if( ( rPam.GetCntntNode( false ) == NULL ) ||
+            ( rPam.GetCntntNode( false ) != rPam.GetMark()->nContent.GetIdxReg() ) )
         {
             rPam.DeleteMark();
         }
@@ -956,7 +956,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
         }
         // Fix #i58251#: Unfortunately is the static default different to SO7 behaviour,
         // so we have to set a dynamic default after importing SO7
-        rDoc.SetDefault( SfxBoolItem( RES_ROW_SPLIT, sal_False ) );
+        rDoc.SetDefault( SfxBoolItem( RES_ROW_SPLIT, false ) );
     }
 
     rDoc.PropagateOutlineRule();

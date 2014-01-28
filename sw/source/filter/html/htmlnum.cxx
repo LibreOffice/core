@@ -501,7 +501,7 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
     // einen neuen Absatz aufmachen
     if( pPam->GetPoint()->nContent.GetIndex() )
         AppendTxtNode( AM_NOSPACE, sal_False );
-    bNoParSpace = sal_False;    // In <LI> wird kein Abstand eingefuegt!
+    bNoParSpace = false;    // In <LI> wird kein Abstand eingefuegt!
 
     const bool bCountedInList( HTML_LISTHEADER_ON==nToken ? false : true );
 

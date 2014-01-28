@@ -475,11 +475,11 @@ IMPL_LINK(SwTextGridPage, GridTypeHdl, RadioButton*, pButton)
     bEnable = m_pLinesGridRB == pButton;
     if(bEnable && !m_bSquaredMode )
     {
-        m_pCharsPerLineFT->Enable(sal_False);
-        m_pCharsPerLineNF->Enable(sal_False);
-        m_pCharsRangeFT->Enable(sal_False);
-        m_pCharWidthFT->Enable(sal_False);
-        m_pCharWidthMF->Enable(sal_False);
+        m_pCharsPerLineFT->Enable(false);
+        m_pCharsPerLineNF->Enable(false);
+        m_pCharsRangeFT->Enable(false);
+        m_pCharWidthFT->Enable(false);
+        m_pCharWidthMF->Enable(false);
     }
 
     GridModifyHdl(0);

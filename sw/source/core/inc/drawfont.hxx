@@ -451,7 +451,7 @@ public:
     {
         pFnt = pNew;
 #ifdef DBG_UTIL
-        m_bFnt = sal_True;
+        m_bFnt = true;
 #endif
     }
 

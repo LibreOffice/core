@@ -330,7 +330,7 @@ SwMultiTOXTabDialog::~SwMultiTOXTabDialog()
     SW_MOD()->GetModuleConfig()->SetShowIndexPreview(m_pShowExampleCB->IsChecked());
 
     // fdo#38515 Avoid setting focus on deleted controls in the destructors
-    EnableInput( sal_False );
+    EnableInput( false );
 
     for(sal_uInt16 i = 0; i < nTypeCount; i++)
     {
@@ -969,8 +969,8 @@ void SwTOXSelectTabPage::SelectType(TOXTypes eSet)
 
     sal_IntPtr nData = lcl_TOXTypesToUserData(eCurType);
     m_pTypeLB->SelectEntryPos(m_pTypeLB->GetEntryPos((void*)nData));
-    m_pTypeFT->Enable(sal_False);
-    m_pTypeLB->Enable(sal_False);
+    m_pTypeFT->Enable(false);
+    m_pTypeLB->Enable(false);
     TOXTypeHdl(m_pTypeLB);
 }
 
@@ -1056,9 +1056,9 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
         m_pUseFFCB->           Check( 0 != (nIndexOptions & nsSwTOIOptions::TOI_FF) );
         m_pUseDashCB->         Check( 0 != (nIndexOptions & nsSwTOIOptions::TOI_DASH) );
         if(m_pUseFFCB->IsChecked())
-            m_pUseDashCB->Enable(sal_False);
+            m_pUseDashCB->Enable(false);
         else if(m_pUseDashCB->IsChecked())
-            m_pUseFFCB->Enable(sal_False);
+            m_pUseFFCB->Enable(false);
 
         m_pCaseSensitiveCB->   Check( 0 != (nIndexOptions & nsSwTOIOptions::TOI_CASE_SENSITIVE) );
         m_pInitialCapsCB->     Check( 0 != (nIndexOptions & nsSwTOIOptions::TOI_INITIAL_CAPS) );
@@ -1248,8 +1248,8 @@ void SwTOXSelectTabPage::Reset( const SfxItemSet& )
 
     if(pTOXDlg->IsTOXEditMode())
     {
-        m_pTypeFT->Enable(sal_False);
-        m_pTypeLB->Enable(sal_False);
+        m_pTypeFT->Enable(false);
+        m_pTypeLB->Enable(false);
     }
 
     if(!m_bWaitingInitialSettings)
@@ -1877,7 +1877,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     m_pFillCharCB->InsertEntry(OUString('-'));
     m_pFillCharCB->InsertEntry(OUString('_'));
 
-    m_pEditStylePB->Enable(sal_False);
+    m_pEditStylePB->Enable(false);
 
     //fill the types in
     for (sal_uInt16 i = 0; i < AUTH_FIELD_END; ++i)
@@ -2283,7 +2283,7 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
 {
     if(bInLevelHdl)
         return 0;
-    bInLevelHdl = sal_True;
+    bInLevelHdl = true;
     WriteBackLevel();
 
     sal_uInt16 nLevel = static_cast< sal_uInt16 >(pBox->GetModel()->GetAbsPos(pBox->FirstSelected()));
@@ -2318,7 +2318,7 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
         }
         m_pAuthFieldsLB->SelectEntryPos(0);
     }
-    bInLevelHdl = sal_False;
+    bInLevelHdl = false;
     pBox->GrabFocus();
     return 0;
 }
@@ -2390,7 +2390,7 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
     }
     else
     {
-        m_pTabPosMF->Enable(sal_False);
+        m_pTabPosMF->Enable(false);
     }
 
     sal_Bool bIsChapterInfo = pToken->eTokenType == TOKEN_CHAPTER_INFO;
@@ -2675,7 +2675,7 @@ SwTokenWindow::~SwTokenWindow()
 void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
 {
     SetActiveControl(0);
-    bValid = sal_True;
+    bValid = true;
 
     if(pForm)
     {
@@ -2943,14 +2943,14 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
                     {
                         if(bPostLinkStartFound)
                             break;
-                        bPostLinkStartFound = sal_True;
+                        bPostLinkStartFound = true;
                         pExchange = pControl;
                     }
                     else if(TOKEN_LINK_END == rNewToken.eTokenType )
                     {
                         if(bPostLinkStartFound)
                         {
-                            bPostLinkStartFound = sal_False;
+                            bPostLinkStartFound = false;
                             pExchange = 0;
                         }
                         break;

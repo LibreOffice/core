@@ -796,8 +796,8 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
     SwSetToRightMargin aSet;
 
     if( IsInTab() &&
-        pPam->GetNode( sal_True )->StartOfSectionNode() !=
-        pPam->GetNode( sal_False )->StartOfSectionNode() )
+        pPam->GetNode( true )->StartOfSectionNode() !=
+        pPam->GetNode( false )->StartOfSectionNode() )
     {
         // If the PaM is located within different boxes, we have a table selection,
         // which is handled by the base class.
@@ -1189,8 +1189,8 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
 {
 
     if ( IsInTab() &&
-        pPam->GetNode( sal_True )->StartOfSectionNode() !=
-        pPam->GetNode( sal_False )->StartOfSectionNode() )
+        pPam->GetNode( true )->StartOfSectionNode() !=
+        pPam->GetNode( false )->StartOfSectionNode() )
     {
         // If the PaM is located within different boxes, we have a table selection,
         // which is handled by the base class.

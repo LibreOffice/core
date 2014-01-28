@@ -138,17 +138,17 @@ Reference< XAccessibleKeyBinding > SAL_CALL
     if(nIndex < 0 || nIndex >= getAccessibleActionCount())
         throw lang::IndexOutOfBoundsException();
 
-    bool bIsValid = sal_False;
+    bool bIsValid = false;
     SwFmtURL aURL( GetFmt()->GetURL() );
     ImageMap* pMap = aURL.GetMap();
     if( pMap != NULL )
     {
         IMapObject* pMapObj = pMap->GetIMapObject(nIndex);
         if (!pMapObj->GetURL().isEmpty())
-            bIsValid = sal_True;
+            bIsValid = true;
     }
     else if (!aURL.GetURL().isEmpty())
-        bIsValid = sal_True;
+        bIsValid = true;
 
     if(bIsValid)
     {

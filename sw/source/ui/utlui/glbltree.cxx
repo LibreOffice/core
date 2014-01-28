@@ -1178,7 +1178,7 @@ void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
     if(!bFound)
     {
         SfxStringItem aURL(SID_FILE_NAME, sFileName);
-        SfxBoolItem aReadOnly(SID_DOC_READONLY, sal_False);
+        SfxBoolItem aReadOnly(SID_DOC_READONLY, false);
         SfxStringItem aTargetFrameName( SID_TARGETNAME, "_blank" );
         SfxStringItem aReferer(SID_REFERER, pActiveShell->GetView().GetDocShell()->GetTitle());
         pActiveShell->GetView().GetViewFrame()->GetDispatcher()->

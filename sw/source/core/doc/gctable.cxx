@@ -208,8 +208,8 @@ void sw_GC_Line_Border( const SwTableLine* pLine, _SwGCLineBorder* pGCPara )
     // And now the own bottom edge with the succeeding top edge
     if( !pGCPara->IsLastLine() )
     {
-        SwCollectTblLineBoxes aBottom( sal_False );
-        SwCollectTblLineBoxes aTop( sal_True );
+        SwCollectTblLineBoxes aBottom( false );
+        SwCollectTblLineBoxes aTop( true );
 
         sw_Line_CollectBox( pLine, &aBottom );
 

@@ -298,7 +298,7 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         pDoc->SetDefault( SvxAdjustItem(SVX_ADJUST_RIGHT, RES_PARATR_ADJUST ) );
 
 // #i29550#
-    pDoc->SetDefault( SfxBoolItem( RES_COLLAPSING_BORDERS, sal_True ) );
+    pDoc->SetDefault( SfxBoolItem( RES_COLLAPSING_BORDERS, true ) );
 // <-- collapsing
 
     //#i16874# AutoKerning as default for new documents
@@ -482,7 +482,7 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
         mxBasePool = new SwDocStyleSheetPool( *pDoc, SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
         if(GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
         {
-            SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
+            SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, false);
             nUpdateDocMode = pUpdateDocItem ? pUpdateDocItem->GetValue() : document::UpdateDocMode::NO_UPDATE;
         }
 

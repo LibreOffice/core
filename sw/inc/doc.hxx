@@ -2145,7 +2145,7 @@ inline void SwDoc::SetOLEPrtNotifyPending( bool bSet )
 {
     mbOLEPrtNotifyPending = bSet;
     if( !bSet )
-        mbAllOLENotify = sal_False;
+        mbAllOLENotify = false;
 }
 
 // namespace <docfunc> for functions and procedures working on a Writer document.

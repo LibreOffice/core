@@ -112,7 +112,7 @@ sal_Bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
             if( pObj )
             {
                 SdrPageView* pPV = pSdrView->GetSdrPageView();
-                m_pView->BeginTextEdit( pObj, pPV, m_pWin, sal_True );
+                m_pView->BeginTextEdit( pObj, pPV, m_pWin, true );
             }
             m_pView->LeaveDrawCreate();  // Switch to selection mode
             m_pSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
@@ -126,7 +126,7 @@ sal_Bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                 pCaptObj->ForceOutlinerParaObject();
                 OutlinerParaObject* pOPO = pCaptObj->GetOutlinerParaObject();
                 if( pOPO && !pOPO->IsVertical() )
-                    pOPO->SetVertical( sal_True );
+                    pOPO->SetVertical( true );
             }
         }
         break;

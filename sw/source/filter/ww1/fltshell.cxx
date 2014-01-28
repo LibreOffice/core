@@ -529,7 +529,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
             SwNumRule* pRul = pDoc->FindNumRulePtr( rNumNm );
             if( pRul )
             {
-                if( rEntry.MakeRegion(pDoc, aRegion, sal_True))
+                if( rEntry.MakeRegion(pDoc, aRegion, true))
                 {
                     SwNodeIndex aTmpStart( aRegion.Start()->nNode );
                     SwNodeIndex aTmpEnd( aTmpStart );
@@ -638,7 +638,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
         break;
     case RES_FLTR_REDLINE:
         {
-            if (rEntry.MakeRegion(pDoc, aRegion, sal_True))
+            if (rEntry.MakeRegion(pDoc, aRegion, true))
             {
               pDoc->SetRedlineMode((RedlineMode_t)(   nsRedlineMode_t::REDLINE_ON
                                               | nsRedlineMode_t::REDLINE_SHOW_INSERT
@@ -682,7 +682,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
             {
                 rEntry.SetIsParaEnd( IsParaEndInCPs(nStart,nEnd,bHasSdOD) );
             }
-            if (rEntry.MakeRegion(pDoc, aRegion, sal_False))
+            if (rEntry.MakeRegion(pDoc, aRegion, false))
             {
                 nStart = rEntry.GetStartCP();
                 nEnd = rEntry.GetEndCP();

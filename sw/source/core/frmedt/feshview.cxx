@@ -1265,7 +1265,7 @@ static bool lcl_IsControlGroup( const SdrObject *pObj )
 {
     bool bRet = false;
     if(pObj->ISA(SdrUnoObj))
-        bRet = sal_True;
+        bRet = true;
     else if( pObj->ISA( SdrObjGroup ) )
     {
         bRet = true;
@@ -1812,7 +1812,7 @@ sal_Bool SwFEShell::ImpEndCreate()
         if( !pPg )
         {
             SdrModel* pTmpSdrModel = getIDocumentDrawModelAccess()->GetDrawModel();
-            pPg = pTmpSdrModel->AllocPage( sal_False );
+            pPg = pTmpSdrModel->AllocPage( false );
             pTmpSdrModel->InsertPage( pPg );
         }
         pPg->RecalcObjOrdNums();

@@ -1669,7 +1669,7 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
     {
         for( i=GetColumnCount(); i<nColsReq; i++ )
         {
-            aColumnWidths.push_back( ColumnWidthInfo(MINLAY, sal_True) );
+            aColumnWidths.push_back( ColumnWidthInfo(MINLAY, true) );
         }
         // adjust columns in *all* rows, if columns must be inserted
         for( i=0; i<pRows->size(); i++ )
@@ -1727,7 +1727,7 @@ void SwXMLTableContext::InsertRow( const OUString& rStyleName,
 
     // Make sure there is at least one column.
     if( 0==nCurRow && 0UL == GetColumnCount()  )
-        InsertColumn( USHRT_MAX, sal_True );
+        InsertColumn( USHRT_MAX, true );
 
     if( nCurRow < pRows->size() )
     {

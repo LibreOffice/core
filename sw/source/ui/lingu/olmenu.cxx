@@ -449,7 +449,7 @@ SwSpellPopup::SwSpellPopup(
     if (bUseImagesInMenus)
     {
         uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
-        Image rImg = ::GetImage( xFrame, ".uno:SpellingAndGrammarDialog", sal_False );
+        Image rImg = ::GetImage( xFrame, ".uno:SpellingAndGrammarDialog", false );
         SetItemImage( MN_SPELLING_DLG, rImg );
     }
 
@@ -603,7 +603,7 @@ m_aInfo16( SW_RES(IMG_INFO_16) )
     if (bUseImagesInMenus)
     {
         uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
-        Image rImg = ::GetImage( xFrame, ".uno:SpellingAndGrammarDialog", sal_False );
+        Image rImg = ::GetImage( xFrame, ".uno:SpellingAndGrammarDialog", false );
         SetItemImage( MN_SPELLING_DLG, rImg );
     }
 

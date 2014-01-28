@@ -435,7 +435,7 @@ void SwDrawBase::Activate(const sal_uInt16 nSlot)
 void SwDrawBase::Deactivate()
 {
     SdrView *pSdrView = m_pSh->GetDrawView();
-    pSdrView->SetOrtho(sal_False);
+    pSdrView->SetOrtho(false);
     pSdrView->SetAngleSnapEnabled(sal_False);
 
     if (m_pWin->IsDrawAction() && m_pSh->IsDrawCreate())

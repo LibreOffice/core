@@ -431,7 +431,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         case text::ControlCharacter::PARAGRAPH_BREAK :
             // a table cell now becomes an ordinary text cell!
             m_pImpl->m_pDoc->ClearBoxNumAttrs( aTmp.GetPoint()->nNode );
-            m_pImpl->m_pDoc->SplitNode( *aTmp.GetPoint(), sal_False );
+            m_pImpl->m_pDoc->SplitNode( *aTmp.GetPoint(), false );
             break;
         case text::ControlCharacter::APPEND_PARAGRAPH:
         {
@@ -1897,7 +1897,7 @@ void SwXText::Impl::ConvertCell(
         // align the beginning - if necessary
         if (aStartCellPam.Start()->nContent.GetIndex())
         {
-            m_pDoc->SplitNode(*aStartCellPam.Start(), sal_False);
+            m_pDoc->SplitNode(*aStartCellPam.Start(), false);
         }
     }
     else
@@ -1916,7 +1916,7 @@ void SwXText::Impl::ConvertCell(
             }
             else
             {
-                m_pDoc->SplitNode(*aStartCellPam.Start(), sal_False);
+                m_pDoc->SplitNode(*aStartCellPam.Start(), false);
             }
         }
         else if (nStartCellNodeIndex == (nLastNodeEndIndex + 1))
@@ -1935,7 +1935,7 @@ void SwXText::Impl::ConvertCell(
     if (aEndCellPam.End()->nContent.GetIndex() <
             aEndCellPam.End()->nNode.GetNode().GetTxtNode()->Len())
     {
-        m_pDoc->SplitNode(*aEndCellPam.End(), sal_False);
+        m_pDoc->SplitNode(*aEndCellPam.End(), false);
         // take care that the new start/endcell is moved to the right position
         // aStartCellPam has to point to the start of the new (previous) node
         // aEndCellPam has to point to the end of the new (previous) node

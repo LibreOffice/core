@@ -115,7 +115,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
     {
         if(bApi)
         {
-            rReq.SetReturnValue(SfxBoolItem(nSlot, sal_False));
+            rReq.SetReturnValue(SfxBoolItem(nSlot, false));
             nSlot = 0;
         }
     }
@@ -312,7 +312,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
             case SVX_SEARCHCMD_REPLACE_ALL:
                 {
                     SwSearchOptions aOpts( m_pWrtShell, m_pSrchItem->GetBackward() );
-                    m_bExtra = sal_False;
+                    m_bExtra = false;
                     sal_uLong nFound;
 
                     {   //Scope for SwWait-Object
@@ -380,7 +380,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                     GetViewFrame()->GetBindings().GetRecorder();
             //prevent additional dialogs in recorded macros
             if ( xRecorder.is() )
-                rReq.AppendItem(SfxBoolItem(SID_SEARCH_QUIET, sal_True));
+                rReq.AppendItem(SfxBoolItem(SID_SEARCH_QUIET, true));
 
             rReq.Done();
         }
@@ -857,10 +857,10 @@ void SwView::StateSearch(SfxItemSet &rSet)
                         !( aTxt = m_pWrtShell->SwCrsrShell::GetSelTxt() ).isEmpty() )
                     {
                         m_pSrchItem->SetSearchString( aTxt );
-                        m_pSrchItem->SetSelection( sal_False );
+                        m_pSrchItem->SetSelection( false );
                     }
                     else
-                        m_pSrchItem->SetSelection( sal_True );
+                        m_pSrchItem->SetSelection( true );
                 }
 
                 m_bJustOpened = false;

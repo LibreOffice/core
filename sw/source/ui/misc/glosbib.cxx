@@ -89,7 +89,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
         m_pPathLB->SetEntryData(i, (void*)nCaseReadonly);
     }
     m_pPathLB->SelectEntryPos(0);
-    m_pPathLB->Enable(sal_True);
+    m_pPathLB->Enable(true);
 
     const sal_uInt16 nCount = pHdl->GetGroupCnt();
     for( sal_uInt16 i = 0; i < nCount; ++i)
@@ -178,7 +178,7 @@ void SwGlossaryGroupDlg::Apply()
 
 IMPL_LINK( SwGlossaryGroupDlg, SelectHdl, SvTabListBox*, EMPTYARG  )
 {
-    m_pNewPB->Enable(sal_False);
+    m_pNewPB->Enable(false);
     SvTreeListEntry* pFirstEntry = m_pGroupTLB->FirstSelected();
     if(pFirstEntry)
     {
@@ -229,7 +229,7 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
     SvTreeListEntry* pEntry = m_pGroupTLB->FirstSelected();
     if(!pEntry)
     {
-        pButton->Enable(sal_False);
+        pButton->Enable(false);
         return 0;
     }
     GlosBibUserData* pUserData = (GlosBibUserData*)pEntry->GetUserData();
@@ -271,7 +271,7 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
     delete pUserData;
     m_pGroupTLB->GetModel()->Remove(pEntry);
     if(!m_pGroupTLB->First())
-        pButton->Enable(sal_False);
+        pButton->Enable(false);
     //the content must be deleted - otherwise the new handler would be called in Apply()
     m_pNameED->SetText(aEmptyOUStr);
     return 0;

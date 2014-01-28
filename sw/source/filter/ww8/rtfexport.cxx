@@ -499,7 +499,7 @@ void RtfExport::WritePageDescTable()
         return;
 
     Strm().WriteCharPtr( SAL_NEWLINE_STRING );
-    bOutPageDescs = sal_True;
+    bOutPageDescs = true;
     Strm().WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_IGNORE ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PGDSCTBL );
     for( sal_uInt16 n = 0; n < nSize; ++n )
     {
@@ -521,7 +521,7 @@ void RtfExport::WritePageDescTable()
         Strm().WriteCharPtr( msfilter::rtfutil::OutString( rPageDesc.GetName(), eDefaultEncoding).getStr() ).WriteCharPtr( ";}" );
     }
     Strm().WriteChar( '}' ).WriteCharPtr( SAL_NEWLINE_STRING );
-    bOutPageDescs = sal_False;
+    bOutPageDescs = false;
 
     // reset table infos, otherwise the depth of the cells will be incorrect,
     // in case the page style (header or footer) had tables

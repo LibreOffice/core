@@ -880,7 +880,7 @@ sal_uInt16 SwEditShell::GetLineCount( sal_Bool bActPos )
     }
 
     while( 0 != ( pCNd = GetDoc()->GetNodes().GoNextSection(
-                &aStart, sal_True, sal_False )) && ( !bActPos || aStart <= rPtIdx ) )
+                &aStart, true, false )) && ( !bActPos || aStart <= rPtIdx ) )
     {
         if( 0 != ( pCntFrm = pCNd->getLayoutFrm( GetLayout() ) ) && pCntFrm->IsTxtFrm() )
         {

@@ -329,7 +329,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     if( IsRedlineOn() || (!IsIgnoreRedline() && !mpRedlineTbl->empty() ))
     {
         pRedlPam = new SwPaM( pStart->nNode, pEnd->nNode, -1, 1 );
-        SwCntntNode* pCNd = pRedlPam->GetCntntNode( sal_False );
+        SwCntntNode* pCNd = pRedlPam->GetCntntNode( false );
         if( pCNd )
             pRedlPam->GetMark()->nContent = pCNd->Len();
 
@@ -349,11 +349,11 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
             DeleteRedline( *pRedlPam, true, USHRT_MAX );
 
             pRedlPam->GetMark()->nNode.Assign( pEnd->nNode.GetNode(), 1 );
-            pCNd = pRedlPam->GetCntntNode( sal_False );
+            pCNd = pRedlPam->GetCntntNode( false );
             pRedlPam->GetMark()->nContent.Assign( pCNd, 0 );
 
             pRedlPam->GetPoint()->nNode.Assign( aEndIdx.GetNode() );
-            pCNd = pRedlPam->GetCntntNode( sal_True );
+            pCNd = pRedlPam->GetCntntNode( true );
             sal_Int32 nCLen = 0;
             if( !pCNd &&
                 0 != (pCNd = GetNodes()[ aEndIdx.GetIndex()-1 ]->GetCntntNode()))

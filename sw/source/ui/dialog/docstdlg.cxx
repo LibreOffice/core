@@ -64,9 +64,9 @@ SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet)
     SwFEShell* pFEShell = pDocShell->GetFEShell();
     if(!pFEShell)
     {
-        m_pUpdatePB->Show(sal_False);
-        m_pLineLbl->Show(sal_False);
-        m_pLineNo->Show(sal_False);
+        m_pUpdatePB->Show(false);
+        m_pLineLbl->Show(false);
+        m_pLineNo->Show(false);
     }
 
 }

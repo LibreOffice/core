@@ -951,7 +951,7 @@ void SwHTMLParser::InsertFloatingFrame()
     // Ggf Frames anlegen und auto-geb. Rahmen registrieren
     RegisterFlyFrm( pFlyFmt );
 
-    bInFloatingFrame = sal_True;
+    bInFloatingFrame = true;
 }
 
 

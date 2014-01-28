@@ -155,7 +155,7 @@ void SwNavigationPI::FillBox()
     if(pContentWrtShell)
     {
         aContentTree.SetHiddenShell( pContentWrtShell );
-        aContentTree.Display(  sal_False );
+        aContentTree.Display(  false );
     }
     else
     {
@@ -170,7 +170,7 @@ void SwNavigationPI::FillBox()
             aContentTree.SetActiveShell(pWrtShell);
         }
         else
-            aContentTree.Display( sal_True );
+            aContentTree.Display( true );
         pActContView = pView;
     }
 }

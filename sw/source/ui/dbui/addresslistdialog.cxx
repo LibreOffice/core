@@ -411,7 +411,7 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
             {
                 OUString sHomePath(SvtPathOptions().GetWorkPath());
                 utl::TempFile aTempFile(sFind , &sExt, &sHomePath);
-                aTempFile.EnableKillingFile(sal_True);
+                aTempFile.EnableKillingFile(true);
                 sTmpName = aTempFile.GetURL();
             }
             xStore->storeAsURL(sTmpName, Sequence< PropertyValue >());
@@ -428,7 +428,7 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
             pUserData->sURL = sURL;
             m_pCreatedDataSource->SetUserData(pUserData);
             m_pListLB->Select(m_pCreatedDataSource);
-            m_pCreateListPB->Enable(sal_False);
+            m_pCreateListPB->Enable(false);
 
         }
         catch (const Exception&)
@@ -520,7 +520,7 @@ IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvTreeListEnt
             pThis->m_aDBData.sDataSource = pThis->m_pListLB->GetEntryText(pSelect, ITEMID_NAME - 1);
             pThis->m_aDBData.sCommand = pThis->m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1);
             pThis->m_aDBData.nCommandType = pUserData->nCommandType;
-            pThis->m_pOK->Enable(sal_True);
+            pThis->m_pOK->Enable(true);
         }
         sTable = pThis->m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1);
         if(sTable == pThis->m_sConnecting)
@@ -627,7 +627,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
     catch (const Exception&)
     {
         OSL_FAIL("exception caught in SwAddressListDialog::DetectTablesAndQueries");
-        m_pOK->Enable( sal_False );
+        m_pOK->Enable( false );
     }
 }
 

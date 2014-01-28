@@ -87,7 +87,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     m_sNone( SW_RESSTR(SW_STR_NONE) ),
     rView( rV ),
     pMgr( new SwFldMgr(rView.GetWrtShellPtr()) ),
-    bCopyAttributes( sal_False ),
+    bCopyAttributes( false ),
     bOrderNumberingFirst( SW_MOD()->GetModuleConfig()->IsCaptionOrderNumberingFirst() )
 {
     get(m_pTextEdit, "caption_edit");
@@ -146,7 +146,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     {
         nPoolId = RES_POOLCOLL_LABEL_ABB;
         sString = ::GetOldGrfCat();
-        bCopyAttributes = sal_True;
+        bCopyAttributes = true;
         sObjectName = rSh.GetFlyName();
         //if not OLE
         if(!xNameAccess.is())

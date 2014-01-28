@@ -343,7 +343,7 @@ Ww1Fonts::Ww1Fonts(Ww1Fib& rInFib, sal_uLong nFieldFlgs)
                 long nLeft = rFib.GetFIB().cbSttbfffnGet()
                  - sizeof(nCountBytes); // Zaehle, wieviele Fonts enthalten
                 W1_FFN* p = pA;
-                while (1)
+                while (true)
                 {
                     sal_uInt16 nNextSiz;
                     nNextSiz = p->cbFfnM1Get() + 1;
@@ -815,7 +815,7 @@ Ww1StringList::Ww1StringList( SvStream& rSt, sal_uLong nFc, sal_uInt16 nCb )
                                     // Zaehle, wieviele Fonts enthalten
                 long nLeft = nCb - sizeof(nCountBytes);
                 sal_Char* p = pA;
-                while (1)
+                while (true)
                 {
                     sal_uInt16 nNextSiz;
                     nNextSiz = *p + 1;
@@ -836,7 +836,7 @@ Ww1StringList::Ww1StringList( SvStream& rSt, sal_uLong nFc, sal_uInt16 nCb )
                     sal_uInt16 i = 2;
                     p = pA;
                     sal_uInt8 nL = *p;
-                    while(1)
+                    while(true)
                     {
                         p += nL + 1;                    // Neues Laengen-Byte
                         nL = *p;                        // merke Laenge
@@ -919,7 +919,7 @@ long Ww1Bookmarks::Len() const
 {
     if( nIsEnd )
     {
-        OSL_ENSURE( sal_False, "Falscher Aufruf (1) von Ww1Bookmarks::Len()" );
+        OSL_ENSURE( false, "Falscher Aufruf (1) von Ww1Bookmarks::Len()" );
         return 0;
     }
     sal_uInt16 nEndIdx = SVBT16ToShort(pPos[0]->GetData(nPlcIdx[0]));
@@ -1112,7 +1112,7 @@ sal_Bool Ww1Pap::HasId0(sal_uInt16 nId)
     UpdateIdx();
 
     if( !pPap ){
-        OSL_ENSURE( sal_False, "Ww1Pap::HasId():: kann kein pPap erzeugen" );
+        OSL_ENSURE( false, "Ww1Pap::HasId():: kann kein pPap erzeugen" );
         return sal_False;
     }
 

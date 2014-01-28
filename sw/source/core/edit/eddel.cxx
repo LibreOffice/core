@@ -47,7 +47,7 @@ void SwEditShell::DeleteSel( SwPaM& rPam, sal_Bool* pUndo )
     // 3. Point and Mark are at the document start and end, Point is in a table: delete selection as usual
     if( rPam.GetNode()->FindTableNode() &&
         rPam.GetNode()->StartOfSectionNode() !=
-        rPam.GetNode(sal_False)->StartOfSectionNode() && !bSelectAll )
+        rPam.GetNode(false)->StartOfSectionNode() && !bSelectAll )
     {
         // group the Undo in the table
         if( pUndo && !*pUndo )
@@ -264,7 +264,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
         OSL_ENSURE( pCmp->GetPoint()->nContent.GetIdxReg()
                     == pCmp->GetCntntNode(), "Point in wrong Node" );
         OSL_ENSURE( pCmp->GetMark()->nContent.GetIdxReg()
-                    == pCmp->GetCntntNode(sal_False), "Mark in wrong Node" );
+                    == pCmp->GetCntntNode(false), "Mark in wrong Node" );
         bool bTst = *pCmp->GetPoint() == *pCmp->GetMark();
         (void) bTst;
     } while( pDestShell->GetCrsr() != ( pCmp = (SwPaM*)pCmp->GetNext() ) );

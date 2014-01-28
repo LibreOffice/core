@@ -525,7 +525,7 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
 
     SwDoc* pDoc = pFmt->GetDoc();
     SwNodeIndex aIndex( *pDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
-    SwCntntNode *pNode = pDoc->GetNodes().GoNextSection( &aIndex, sal_True, sal_False );
+    SwCntntNode *pNode = pDoc->GetNodes().GoNextSection( &aIndex, true, false );
     // #123067# pNode = 0 can really happen
     SwTableNode *pTblNd= pNode ? pNode->FindTableNode() : 0;
 

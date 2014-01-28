@@ -241,7 +241,7 @@ void SwMailMergeWizard::UpdateRoadmap()
         switch(nPage)
         {
             case MM_DOCUMENTSELECTPAGE :
-                bEnable = sal_True;
+                bEnable = true;
             break;
             case MM_OUTPUTTYPETPAGE :
                 bEnable = bEnableOutputTypePage;

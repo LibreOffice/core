@@ -128,10 +128,10 @@ void _ValidateBodyFrm( SwFrm *pFrm )
         else
         {
             sal_Bool bOld = ((SwSectionFrm*)pFrm)->IsCntntLocked();
-            ((SwSectionFrm*)pFrm)->SetCntntLock( sal_True );
+            ((SwSectionFrm*)pFrm)->SetCntntLock( true );
             pFrm->Calc();
             if( !bOld )
-                ((SwSectionFrm*)pFrm)->SetCntntLock( sal_False );
+                ((SwSectionFrm*)pFrm)->SetCntntLock( false );
         }
     }
 }
@@ -1521,7 +1521,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
             sal_Bool bOldMidHyph = rLine.GetCurr()->IsMidHyph();
             bFormat = FormatLine( rLine, bPrev );
             // There can only be one bPrev ... (???)
-            bPrev = sal_False;
+            bPrev = false;
             if ( bMaxHyph )
             {
                 if ( rLine.GetCurr()->IsEndHyph() != bOldEndHyph )

@@ -157,7 +157,7 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
             {
                 if( pNd->StartOfSectionNode()->GetSectionNode()->GetSection().IsHiddenFlag())
                 {
-                    if( !GoPrevSection( &aTmp, sal_True, sal_False ) ||
+                    if( !GoPrevSection( &aTmp, true, false ) ||
                         aTmp.GetNode().FindTableNode() !=
                             pNode->FindTableNode() )
                         return pNode;       // schade, das wars
@@ -307,7 +307,7 @@ static void lcl_ChangeFtnRef( SwTxtNode &rNode )
                 SwCntntNode *pNd = aIdx.GetNode().GetCntntNode();
                 if ( !pNd )
                     pNd = pFrm->GetAttrSet()->GetDoc()->
-                            GetNodes().GoNextSection( &aIdx, sal_True, sal_False );
+                            GetNodes().GoNextSection( &aIdx, true, false );
                 if ( !pNd )
                     continue;
 
@@ -837,7 +837,7 @@ void SwTxtNode::Update(
     const bool bNegative,
     const bool bDelete )
 {
-    SetAutoCompleteWordDirty( sal_True );
+    SetAutoCompleteWordDirty( true );
 
     ::std::auto_ptr<SwpHts> pCollector;
     const sal_Int32 nChangePos = rPos.GetIndex();
@@ -2064,12 +2064,12 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
         if( bUpdate )
         {
             // Update aller Indizies
-            Update( rDestStart, nLen, sal_False, sal_True );
+            Update( rDestStart, nLen, false, true );
         }
 
         CHECK_SWPHINTS(this);
 
-        Update( rStart, nLen, sal_True, sal_True );
+        Update( rStart, nLen, true, true );
 
         CHECK_SWPHINTS(this);
 
@@ -2112,7 +2112,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
         if( bUpdate )
         {
             // Update aller Indizies
-            pDest->Update( rDestStart, nLen, sal_False, sal_True);
+            pDest->Update( rDestStart, nLen, false, true);
         }
 
         CHECK_SWPHINTS(pDest);
@@ -2265,7 +2265,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
                     ++nAttrCnt;
                 }
             }
-            Update( rStart, nLen, sal_True, sal_True );
+            Update( rStart, nLen, true, true );
 
             for ( sal_uInt16 n = 0; n < aArr.size(); ++n )
             {
@@ -2276,7 +2276,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
         }
         else
         {
-            Update( rStart, nLen, sal_True, sal_True );
+            Update( rStart, nLen, true, true );
         }
 
         if (bMergePortionsNeeded)
@@ -2376,7 +2376,7 @@ void SwTxtNode::EraseText(const SwIndex &rIdx, const sal_Int32 nCount,
 
     TryDeleteSwpHints();
 
-    Update( rIdx, nCnt, sal_True );
+    Update( rIdx, nCnt, true );
 
     if( 1 == nCnt )
     {
@@ -3155,7 +3155,7 @@ bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                         bool bWithFtn, bool bReplaceTabsWithSpaces ) const
 {
     if( &rDestNd == this )
-        return sal_False;
+        return false;
 
     SwIndex aDestIdx(&rDestNd, rDestNd.GetTxt().getLength());
     if( pDestIdx )
@@ -3860,7 +3860,7 @@ void SwTxtNode::SetListRestart( bool bRestart )
     else
     {
         SfxBoolItem aNewIsRestartItem( RES_PARATR_LIST_ISRESTART,
-                                       sal_True );
+                                       true );
         SetAttr( aNewIsRestartItem );
     }
 }
@@ -3988,7 +3988,7 @@ void SwTxtNode::SetCountedInList( bool bCounted )
     }
     else
     {
-        SfxBoolItem aIsCountedInListItem( RES_PARATR_LIST_ISCOUNTED, sal_False );
+        SfxBoolItem aIsCountedInListItem( RES_PARATR_LIST_ISCOUNTED, false );
         SetAttr( aIsCountedInListItem );
     }
 }

@@ -1835,8 +1835,8 @@ bool SwFEShell::SelTblRowCol( const Point& rPt, const Point* pEnd, bool bRowDrag
 
     SwPosition*  ppPos[2] = { 0, 0 };
     Point        paPt [2] = { rPt, aEndPt };
-    bool         pbRow[2] = { 0, 0 };
-    bool         pbCol[2] = { 0, 0 };
+    bool         pbRow[2] = { false, false };
+    bool         pbCol[2] = { false, false };
 
     // pEnd is set during dragging.
     for ( sal_uInt16 i = 0; i < ( pEnd ? 2 : 1 ); ++i )

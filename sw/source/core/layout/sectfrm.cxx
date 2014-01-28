@@ -575,7 +575,7 @@ static void lcl_InvalidateInfFlags( SwFrm* pFrm, bool bInva )
             pFrm->_InvalidatePrt();
         }
         if( pFrm->IsLayoutFrm() )
-            lcl_InvalidateInfFlags( ((SwLayoutFrm*)pFrm)->GetLower(), sal_False );
+            lcl_InvalidateInfFlags( ((SwLayoutFrm*)pFrm)->GetLower(), false );
         pFrm = pFrm->GetNext();
     }
 }
@@ -2341,7 +2341,7 @@ void SwSectionFrm::CalcFtnAtEndFlag()
         nVal = pFmt->GetFtnAtTxtEnd( sal_False ).GetValue();
         if( FTNEND_ATPGORDOCEND != nVal )
         {
-            bFtnAtEnd = sal_True;
+            bFtnAtEnd = true;
             bOwnFtnNum = bOwnFtnNum ||FTNEND_ATTXTEND_OWNNUMSEQ == nVal ||
                          FTNEND_ATTXTEND_OWNNUMANDFMT == nVal;
         }

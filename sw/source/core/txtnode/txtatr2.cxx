@@ -50,7 +50,7 @@ SwTxtCharFmt::SwTxtCharFmt( SwFmtCharFmt& rAttr,
     , m_nSortNumber( 0 )
 {
     rAttr.pTxtAttr = this;
-    SetCharFmtAttr( sal_True );
+    SetCharFmtAttr( true );
 }
 
 SwTxtCharFmt::~SwTxtCharFmt( )

@@ -216,7 +216,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
                 aReq.Done();
                 SfxRequest aReq1( rWrtSh.GetView().GetViewFrame(), FN_CHAR_LEFT );
                 aReq1.AppendItem( SfxInt32Item(FN_PARAM_MOVE_COUNT, nInsert) );
-                aReq1.AppendItem( SfxBoolItem(FN_PARAM_MOVE_SELECTION, sal_True) );
+                aReq1.AppendItem( SfxBoolItem(FN_PARAM_MOVE_SELECTION, true) );
                 aReq1.Done();
             }
         }
@@ -235,7 +235,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
         {
             SfxRequest aReq1( rWrtSh.GetView().GetViewFrame(), FN_CHAR_RIGHT );
             aReq1.AppendItem( SfxInt32Item(FN_PARAM_MOVE_COUNT, nInsert) );
-            aReq1.AppendItem( SfxBoolItem(FN_PARAM_MOVE_SELECTION, sal_False) );
+            aReq1.AppendItem( SfxBoolItem(FN_PARAM_MOVE_SELECTION, false) );
             aReq1.Done();
             rWrtSh.SwapPam();
             rWrtSh.ClearMark();
@@ -283,7 +283,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             // get the language
             OUString aNewLangTxt;
-            SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_LANGUAGE_STATUS , sal_False );
+            SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_LANGUAGE_STATUS , false );
             if (pItem2)
                 aNewLangTxt = pItem2->GetValue();
 
@@ -396,7 +396,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             // replace word/selection with text from selected sub menu entry
             OUString aReplaceText;
-            SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES , sal_False );
+            SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES , false );
             if (pItem2)
                 aReplaceText = pItem2->GetValue();
             if (!aReplaceText.isEmpty())
@@ -418,8 +418,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_INSERT_ENDNOTE:
         {
             OUString aStr;
-            SFX_REQUEST_ARG( rReq, pFont, SfxStringItem, FN_PARAM_1 , sal_False );
-            SFX_REQUEST_ARG( rReq, pNameItem, SfxStringItem, nSlot , sal_False );
+            SFX_REQUEST_ARG( rReq, pFont, SfxStringItem, FN_PARAM_1 , false );
+            SFX_REQUEST_ARG( rReq, pNameItem, SfxStringItem, nSlot , false );
             if ( pNameItem )
                 aStr = pNameItem->GetValue();
             bool bFont = pFont && !pFont->GetValue().isEmpty();
@@ -522,9 +522,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if ( pItem )
             {
                 nKind = ((SfxInt16Item*)pItem)->GetValue();
-                SFX_REQUEST_ARG( rReq, pTemplate, SfxStringItem, FN_PARAM_1 , sal_False );
-                SFX_REQUEST_ARG( rReq, pNumber, SfxUInt16Item, FN_PARAM_2 , sal_False );
-                SFX_REQUEST_ARG( rReq, pIsNumberFilled, SfxBoolItem, FN_PARAM_3, sal_False );
+                SFX_REQUEST_ARG( rReq, pTemplate, SfxStringItem, FN_PARAM_1 , false );
+                SFX_REQUEST_ARG( rReq, pNumber, SfxUInt16Item, FN_PARAM_2 , false );
+                SFX_REQUEST_ARG( rReq, pIsNumberFilled, SfxBoolItem, FN_PARAM_3, false );
                 if ( pTemplate )
                     aTemplateName = pTemplate->GetValue();
                 if ( pNumber && pIsNumberFilled && pIsNumberFilled->GetValue() )
@@ -615,10 +615,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             SvxSwAutoFmtFlags aFlags(SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags());
             // This must always be sal_False for the postprocessing.
-            aFlags.bAFmtByInput = sal_False;
-            aFlags.bWithRedlining = sal_True;
+            aFlags.bAFmtByInput = false;
+            aFlags.bWithRedlining = true;
             rWrtSh.AutoFormat( &aFlags );
-            aFlags.bWithRedlining = sal_False;
+            aFlags.bWithRedlining = false;
 
             SfxViewFrame* pVFrame = GetView().GetViewFrame();
             if (pVFrame->HasChildWindow(FN_REDLINE_ACCEPT))
@@ -659,7 +659,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             SvxSwAutoFmtFlags aFlags(SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags());
             // This must always be sal_False for the postprocessing.
-            aFlags.bAFmtByInput = sal_False;
+            aFlags.bAFmtByInput = false;
             rWrtSh.AutoFormat( &aFlags );
             rReq.Done();
         }

@@ -692,7 +692,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
                     if( pPor->IsMultiPortion() )
                     {
                         nTmpAscent = AdjustBaseLine( *pCurr, pPor );
-                        GetInfo().SetMulti( sal_True );
+                        GetInfo().SetMulti( true );
                         pOrig->Pos().Y() += nTmpAscent - nPorAscent;
 
                         if( pCMS && pCMS->b2Lines )
@@ -822,18 +822,18 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
                                 // the second line
                                 if ( !pCurr->GetNext() ||
                                      !pCurr->GetNext()->GetLen() )
-                                    GetInfo().SetMulti( sal_False );
+                                    GetInfo().SetMulti( false );
                             }
                         }
                         // ruby portions are treated like single line portions
                         else if( ((SwMultiPortion*)pPor)->IsRuby() ||
                                  ((SwMultiPortion*)pPor)->IsBidi() )
-                            GetInfo().SetMulti( sal_False );
+                            GetInfo().SetMulti( false );
 
                         // calculate cursor values
                         if( ((SwMultiPortion*)pPor)->HasRotation() )
                         {
-                            GetInfo().SetMulti( sal_False );
+                            GetInfo().SetMulti( false );
                             long nTmp = pOrig->Width();
                             pOrig->Width( pOrig->Height() );
                             pOrig->Height( nTmp );

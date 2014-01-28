@@ -172,7 +172,7 @@ void SwUndoRedlineDelete::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 {
     if (rPam.GetPoint() != rPam.GetMark())
     {
-        rDoc.AppendRedline( new SwRangeRedline(*pRedlData, rPam), sal_False );
+        rDoc.AppendRedline( new SwRangeRedline(*pRedlData, rPam), false );
     }
 }
 
@@ -409,8 +409,8 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
         pDoc->SetRedlineMode_intern( eOld );
 
         // per definition Point is end (in SwUndRng!)
-        SwCntntNode* pCSttNd = pPam->GetCntntNode( sal_False );
-        SwCntntNode* pCEndNd = pPam->GetCntntNode( sal_True );
+        SwCntntNode* pCSttNd = pPam->GetCntntNode( false );
+        SwCntntNode* pCEndNd = pPam->GetCntntNode( true );
 
         // if start- and end-content is zero, then the doc-compare moves
         // complete nodes into the current doc. And then the selection
@@ -430,7 +430,7 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
         if( pCSttNd && !pCEndNd)
         {
             // #112139# Do not step behind the end of content.
-            SwNode * pTmp = pPam->GetNode(sal_True);
+            SwNode * pTmp = pPam->GetNode(true);
             if (pTmp)
             {
                 SwNode * pEnd = pDoc->GetNodes().DocumentSectionEndNode(pTmp);
@@ -439,8 +439,8 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
                 {
                     pPam->SetMark();
                     pPam->GetPoint()->nNode++;
-                    pPam->GetBound( sal_True ).nContent.Assign( 0, 0 );
-                    pPam->GetBound( sal_False ).nContent.Assign( 0, 0 );
+                    pPam->GetBound( true ).nContent.Assign( 0, 0 );
+                    pPam->GetBound( false ).nContent.Assign( 0, 0 );
                     pUnDel2 = new SwUndoDelete( *pPam, sal_True );
                 }
             }

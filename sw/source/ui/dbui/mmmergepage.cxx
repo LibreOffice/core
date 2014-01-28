@@ -69,7 +69,7 @@ IMPL_LINK_NOARG(SwMailMergeMergePage, FindHdl_Impl)
 {
     SvxSearchItem aSearchItem( SID_SEARCH_ITEM );
 
-    SfxBoolItem aQuiet( SID_SEARCH_QUIET, sal_False );
+    SfxBoolItem aQuiet( SID_SEARCH_QUIET, false );
     aSearchItem.SetSearchString(m_aFindED.GetText());
 
     aSearchItem.SetWordOnly(m_aWholeWordsCB.IsChecked());

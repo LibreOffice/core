@@ -73,7 +73,7 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
     SwWrtShell &rSh = m_rView.GetWrtShell();
     if( rSh.GetDrawView() )
     {
-        CommandEvent aDragEvent( rPosPixel, COMMAND_STARTDRAG, sal_True );
+        CommandEvent aDragEvent( rPosPixel, COMMAND_STARTDRAG, true );
         if( rSh.GetDrawView()->Command( aDragEvent, this ) )
         {
             m_rView.GetViewFrame()->GetBindings().InvalidateAll(sal_False);

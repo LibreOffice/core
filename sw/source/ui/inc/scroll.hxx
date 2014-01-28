@@ -36,7 +36,7 @@ class SwScrollbar: public ScrollBar
 public:
 
     void    ExtendedShow( sal_Bool bVisible = sal_True );
-    void    Hide() { Show( sal_False ); }
+    void    Hide() { Show( false ); }
     void    SetPosSizePixel( const Point& rNewPos, const Size& rNewSize );
     sal_Bool    IsVisible(sal_Bool bReal) const { return bReal ? ScrollBar::IsVisible() : bVisible; }
 

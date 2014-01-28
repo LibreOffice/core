@@ -1280,7 +1280,7 @@ void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
 
                         // switch snapping off
                         if(!bWasNoSnap)
-                            ((SdrDragStat&)rDragStat).SetNoSnap(sal_True);
+                            ((SdrDragStat&)rDragStat).SetNoSnap(true);
                         if(bWasSnapEnabled)
                             pSdrView->SetSnapEnabled(sal_False);
 
@@ -1785,7 +1785,7 @@ KEYINPUT_CHECKTABLE:
 KEYINPUT_CHECKTABLE_INSDEL:
                     if( rSh.IsTableMode() || !rSh.GetTableFmt() ||
                         !m_bTblInsDelMode ||
-                        sal_False /* table protected */
+                        false /* table protected */
                             )
                     {
                         const int nSelectionType = rSh.GetSelectionType();
@@ -3342,7 +3342,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 {
                                     // if it's a Readonly region, status has to be enabled
                                     sal_uInt16 nSlot = TYP_POSTITFLD == nTypeId ? FN_POSTIT : FN_JAVAEDIT;
-                                    SfxBoolItem aItem(nSlot, sal_True);
+                                    SfxBoolItem aItem(nSlot, true);
                                     pVFrame->GetBindings().SetState(aItem);
                                     pVFrame->GetBindings().Execute(nSlot);
                                     break;
@@ -3923,7 +3923,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                         EnterArea();
                     if ( m_rView.GetDrawFuncPtr() )
                     {
-                        pSdrView->SetOrtho(sal_False);
+                        pSdrView->SetOrtho(false);
                         m_rView.GetDrawFuncPtr()->MouseMove( rMEvt );
                     }
                     m_bIsInMove = sal_True;
@@ -4014,12 +4014,12 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 
                     if ( rMEvt.IsShift() )
                     {
-                        pSdrView->SetOrtho(sal_True);
+                        pSdrView->SetOrtho(true);
                         pSdrView->SetAngleSnapEnabled(sal_True);
                     }
                     else
                     {
-                        pSdrView->SetOrtho(sal_False);
+                        pSdrView->SetOrtho(false);
                         pSdrView->SetAngleSnapEnabled(sal_False);
                     }
 
@@ -4046,9 +4046,9 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 if ( pSdrView )
                 {
                     if ( rMEvt.IsShift() )
-                        pSdrView->SetOrtho(sal_True);
+                        pSdrView->SetOrtho(true);
                     else
-                        pSdrView->SetOrtho(sal_False);
+                        pSdrView->SetOrtho(false);
                 }
                 if ( !bInsWin )
                 {
@@ -4214,7 +4214,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
     SdrView *pSdrView = rSh.GetDrawView();
     if ( pSdrView )
     {
-        pSdrView->SetOrtho(sal_False);
+        pSdrView->SetOrtho(false);
 
         if ( pSdrView->MouseButtonUp( rMEvt,this ) )
         {
@@ -5352,7 +5352,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 rSh.GetCrsr()->GetPoint()->nContent = nPosIdx;
                 rSh.GetCrsr()->GetMark()->nNode = nPosNodeIdx;
                 rSh.GetCrsr()->GetMark()->nContent =
-                    rSh.GetCrsr()->GetCntntNode( sal_True )->Len();
+                    rSh.GetCrsr()->GetCntntNode( true )->Len();
                 }
                 else if( nPosNodeIdx == nMarkNodeIdx )
                 {
@@ -5367,7 +5367,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 rSh.GetCrsr()->GetMark()->nContent = nMarkIdx;
                 rSh.GetCrsr()->GetPoint()->nNode = nMarkNodeIdx;
                 rSh.GetCrsr()->GetPoint()->nContent =
-                    rSh.GetCrsr()->GetCntntNode( sal_False )->Len();
+                    rSh.GetCrsr()->GetCntntNode( false )->Len();
                 }
 
                 rSh.EndCrsrMove( sal_True );
@@ -5650,7 +5650,7 @@ static SfxShell* lcl_GetShellFromDispatcher( SwView& rView, TypeId nType )
     // determine Shell
     SfxShell* pShell;
     SfxDispatcher* pDispatcher = rView.GetViewFrame()->GetDispatcher();
-    for(sal_uInt16  i = 0; sal_True; ++i )
+    for(sal_uInt16  i = 0; true; ++i )
     {
         pShell = pDispatcher->GetShell( i );
         if( !pShell || pShell->IsA( nType ) )

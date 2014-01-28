@@ -884,7 +884,7 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd )
     SwAttrHandler& rAH = aIter.GetAttrHandler();
     SvxCharScaleWidthItem aItem(100, RES_CHRATR_SCALEW);
     SwTxtAttrEnd aAttr( aItem, nStt, nEnd );
-    aAttr.SetPriorityAttr( sal_True );
+    aAttr.SetPriorityAttr( true );
     rAH.PushAndChg( aAttr, *(aIter.GetFnt()) );
 
     sal_Int32 nIdx = nStt;

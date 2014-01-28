@@ -1487,7 +1487,7 @@ SwTxtFormatInfo::SwTxtFormatInfo( const SwTxtFormatInfo& rInf,
     cHookChar = 0;
     nMaxHyph = 0;
     bTestFormat = rInf.bTestFormat;
-    SetMulti( sal_True );
+    SetMulti( true );
     SetFirstMulti( rInf.IsFirstMulti() );
 }
 sal_Bool SwTxtFormatInfo::_CheckFtnPortion( SwLineLayout* pCurr )

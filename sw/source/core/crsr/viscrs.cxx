@@ -690,7 +690,7 @@ void SwShellTableCrsr::FillRects()
         const SwTableNode* pSelTblNd = pSttNd->FindTableNode();
 
         SwNodeIndex aIdx( *pSttNd );
-           SwCntntNode* pCNd = rNds.GoNextSection( &aIdx, sal_True, sal_False );
+           SwCntntNode* pCNd = rNds.GoNextSection( &aIdx, true, false );
 
         // table in table
         // (see also lcl_FindTopLevelTable in unoobj2.cxx for a different
@@ -699,7 +699,7 @@ void SwShellTableCrsr::FillRects()
         while ( pSelTblNd != pCurTblNd && pCurTblNd )
         {
             aIdx = pCurTblNd->EndOfSectionIndex();
-            pCNd = rNds.GoNextSection( &aIdx, sal_True, sal_False );
+            pCNd = rNds.GoNextSection( &aIdx, true, false );
             pCurTblNd = pCNd->FindTableNode();
         }
 
@@ -735,7 +735,7 @@ sal_Bool SwShellTableCrsr::IsInside( const Point& rPt ) const
     for (size_t n = 0; n < m_SelectedBoxes.size(); ++n)
     {
         SwNodeIndex aIdx( *m_SelectedBoxes[n]->GetSttNd() );
-        SwCntntNode* pCNd = rNds.GoNextSection( &aIdx, sal_True, sal_False );
+        SwCntntNode* pCNd = rNds.GoNextSection( &aIdx, true, false );
         if( !pCNd )
             continue;
 

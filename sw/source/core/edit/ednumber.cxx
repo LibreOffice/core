@@ -402,7 +402,7 @@ void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
         // #i42921# - 3rd parameter = false in order to
         // suppress setting of num rule at <aPaM>.
         // do not apply any list
-        GetDoc()->SetNumRule( aPaM, aRule, false, OUString(), sal_False );
+        GetDoc()->SetNumRule( aPaM, aRule, false, OUString(), false );
     }
 
     EndAllAction();
@@ -491,7 +491,7 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
             }
             else             // move down
             {
-                const SwNumRule* pOrig = aCrsr.GetNode(sal_False)->GetTxtNode()->GetNumRule();
+                const SwNumRule* pOrig = aCrsr.GetNode(false)->GetTxtNode()->GetNumRule();
                 if( aCrsr.GetNode()->IsTxtNode() &&
                     pOrig == aCrsr.GetNode()->GetTxtNode()->GetNumRule() )
                 {

@@ -766,10 +766,10 @@ bool SwOLEProperties_Impl::AnyToItemSet(
     const ::uno::Any* pTemp;
     if(!GetProperty(FN_UNO_CLSID, 0, pTemp) && !GetProperty(FN_UNO_STREAM_NAME, 0, pTemp)
          && !GetProperty(FN_EMBEDDED_OBJECT, 0, pTemp) )
-        return sal_False;
+        return false;
     SwFrameProperties_Impl::AnyToItemSet( pDoc, rFrmSet, rSet, rSizeFound);
     //
-    return sal_True;
+    return true;
 }
 
 

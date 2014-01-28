@@ -1245,7 +1245,7 @@ void SwHistory::CopyAttr(
         case RES_TXTATR_ANNOTATION:
         case RES_TXTATR_INPUTFIELD:
             if( !bCopyFields )
-                bNextAttr = sal_True;
+                bNextAttr = true;
             break;
         case RES_TXTATR_FLYCNT:
         case RES_TXTATR_FTN:

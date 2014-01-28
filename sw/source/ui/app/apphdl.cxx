@@ -188,7 +188,7 @@ static SwView* lcl_LoadDoc(SwView* pView, const OUString& rURL)
     {
         SfxStringItem aURL(SID_FILE_NAME, rURL);
         SfxStringItem aTargetFrameName( SID_TARGETNAME, OUString("_blank") );
-        SfxBoolItem aHidden( SID_HIDDEN, sal_True );
+        SfxBoolItem aHidden( SID_HIDDEN, true );
         SfxStringItem aReferer(SID_REFERER, pView->GetDocShell()->GetTitle());
         SfxObjectItem* pItem = (SfxObjectItem*)pView->GetViewFrame()->GetDispatcher()->
                 Execute(SID_OPENDOC, SFX_CALLMODE_SYNCHRON,
@@ -661,7 +661,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 {
                     SFX_ITEMSET_ARG( pDocSh->GetMedium()->GetItemSet(),
                         pTemplateItem, SfxBoolItem,
-                        SID_TEMPLATE, sal_False);
+                        SID_TEMPLATE, false);
                     if (pTemplateItem && pTemplateItem->GetValue())
                     {
                         pDocSh->GetDoc()->SetFixFields(false, 0);
@@ -671,7 +671,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 // Update all FIX-Date/Time fields
                 if( pWrtSh )
                 {
-                    SFX_ITEMSET_ARG( pDocSh->GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
+                    SFX_ITEMSET_ARG( pDocSh->GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, false);
                     bool bUpdateFields = true;
                     if( pUpdateDocItem &&  pUpdateDocItem->GetValue() == document::UpdateDocMode::NO_UPDATE)
                         bUpdateFields = false;

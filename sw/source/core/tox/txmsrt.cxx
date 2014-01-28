@@ -577,7 +577,7 @@ void SwTOXPara::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 ) c
         SwTxtNode* pSrc = (SwTxtNode*)aTOXSources[0].pNd;
         pSrc->GetExpandTxt( rNd, &rInsPos, nStartIndex,
                 nEndIndex == -1 ? -1 : nEndIndex - nStartIndex,
-                sal_False, sal_False, sal_True );
+                false, false, true );
     }
     else
     {

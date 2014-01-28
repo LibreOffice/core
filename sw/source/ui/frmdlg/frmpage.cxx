@@ -884,7 +884,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
     {
         // at formats no anchor editing
         m_pAnchorFrame->Enable(false);
-        m_pFixedRatioCB->Enable(sal_False);
+        m_pFixedRatioCB->Enable(false);
     }
     else
     {
@@ -977,13 +977,13 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
 
     if(bHtmlMode)
     {
-        m_pAutoHeightCB->Enable(sal_False);
-        m_pAutoWidthCB->Enable(sal_False);
-        m_pMirrorPagesCB->Show(sal_False);
+        m_pAutoHeightCB->Enable(false);
+        m_pAutoWidthCB->Enable(false);
+        m_pMirrorPagesCB->Show(false);
         if (sDlgType == "FrameDialog")
-            m_pFixedRatioCB->Enable(sal_False);
+            m_pFixedRatioCB->Enable(false);
         // i#18732 hide checkbox in HTML mode
-        m_pFollowTextFlowCB->Show(sal_False);
+        m_pFollowTextFlowCB->Show(false);
     }
     else
     {
@@ -1005,11 +1005,11 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
 
     bNoModifyHdl = sal_False;
     //lock PercentFields
-    m_aWidthED.LockAutoCalculation(sal_True);
-    m_aHeightED.LockAutoCalculation(sal_True);
+    m_aWidthED.LockAutoCalculation(true);
+    m_aHeightED.LockAutoCalculation(true);
     RangeModifyHdl(&m_aWidthED);  // set all maximum values initially
-    m_aHeightED.LockAutoCalculation(sal_False);
-    m_aWidthED.LockAutoCalculation(sal_False);
+    m_aHeightED.LockAutoCalculation(false);
+    m_aWidthED.LockAutoCalculation(false);
 
     m_pAutoHeightCB->SaveValue();
     m_pAutoWidthCB->SaveValue();
@@ -1677,11 +1677,11 @@ void SwFrmPage::ActivatePage(const SfxItemSet& rSet)
     Init(rSet);
     bNoModifyHdl = sal_False;
     //lock PercentFields
-    m_aWidthED.LockAutoCalculation(sal_True);
-    m_aHeightED.LockAutoCalculation(sal_True);
+    m_aWidthED.LockAutoCalculation(true);
+    m_aHeightED.LockAutoCalculation(true);
     RangeModifyHdl(&m_aWidthED);  // set all maximum values initially
-    m_aHeightED.LockAutoCalculation(sal_False);
-    m_aWidthED.LockAutoCalculation(sal_False);
+    m_aHeightED.LockAutoCalculation(false);
+    m_aWidthED.LockAutoCalculation(false);
     m_pFollowTextFlowCB->SaveValue();
 }
 
@@ -2218,7 +2218,7 @@ void SwFrmPage::Init(const SfxItemSet& rSet, sal_Bool bReset)
             SwWrtShell* pSh = getFrmDlgParentShell();
             const SwFrmFmt* pFmt = pSh->GetFlyFrmFmt();
             if( pFmt && pFmt->GetChain().GetNext() )
-                m_pAutoHeightCB->Enable( sal_False );
+                m_pAutoHeightCB->Enable( false );
         }
     }
     else
@@ -2549,9 +2549,9 @@ IMPL_LINK_NOARG(SwGrfExtPage, BrowseHdl)
         //another type of graphic that cannot be mirrored.
         m_pMirrorVertBox->Check(sal_False);
         m_pMirrorHorzBox->Check(sal_False);
-        m_pAllPagesRB->Enable(sal_False);
-        m_pLeftPagesRB->Enable(sal_False);
-        m_pRightPagesRB->Enable(sal_False);
+        m_pAllPagesRB->Enable(false);
+        m_pLeftPagesRB->Enable(false);
+        m_pRightPagesRB->Enable(false);
         m_pBmpWin->MirrorHorz(sal_False);
         m_pBmpWin->MirrorVert(sal_False);
 
@@ -2740,7 +2740,7 @@ void SwFrmURLPage::Reset( const SfxItemSet &rSet )
         pFrameCB->SaveValue();
     }
     else
-        pClientCB->Enable( sal_False );
+        pClientCB->Enable( false );
 
     pServerCB->SaveValue();
     pClientCB->SaveValue();
@@ -2904,10 +2904,10 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
     }
     else
     {
-        pNameED->Enable( sal_False );
-        pAltNameED->Enable(sal_False);
-        pNameFT->Enable( sal_False );
-        pAltNameFT->Enable(sal_False);
+        pNameED->Enable( false );
+        pAltNameED->Enable(false);
+        pNameFT->Enable( false );
+        pAltNameFT->Enable(false);
     }
     if (sDlgType == "FrameDialog" && pAltNameFT->IsVisible())
     {

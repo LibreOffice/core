@@ -80,7 +80,7 @@ SwFldDokInfPage::SwFldDokInfPage(Window* pParent, const SfxItemSet& rCoreSet)
     //enable 'active' language selection
     m_pFormatLB->SetShowLanguageControl(sal_True);
 
-    SFX_ITEMSET_ARG( &rCoreSet, pItem, SfxUnoAnyItem, SID_DOCINFO, sal_False );
+    SFX_ITEMSET_ARG( &rCoreSet, pItem, SfxUnoAnyItem, SID_DOCINFO, false );
     if ( pItem )
         pItem->GetValue() >>= xCustomPropertySet;
 }
@@ -242,7 +242,7 @@ IMPL_LINK_NOARG(SwFldDokInfPage, SubTypeHdl)
             if (!m_pSelectionLB->GetEntryCount())
             {
                 m_pFormatLB->Clear();
-                m_pFormat->Enable(sal_False);
+                m_pFormat->Enable(false);
                 if( nSubType == DI_CUSTOM )
                 {
                     //find out which type the custom field has - for a start set to DATE format

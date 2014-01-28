@@ -97,7 +97,7 @@ void SwTblFmtCmp::Delete( std::vector<SwTblFmtCmp*> &rArr )
 static void lcl_GetStartEndCell( const SwCursor& rCrsr,
                         SwLayoutFrm *&prStart, SwLayoutFrm *&prEnd )
 {
-    OSL_ENSURE( rCrsr.GetCntntNode() && rCrsr.GetCntntNode( sal_False ),
+    OSL_ENSURE( rCrsr.GetCntntNode() && rCrsr.GetCntntNode( false ),
             "Tab selection not at ContentNode" );
 
     Point aPtPos, aMkPos;
@@ -110,7 +110,7 @@ static void lcl_GetStartEndCell( const SwCursor& rCrsr,
 
     // Robust:
     SwCntntNode* pPointNd = rCrsr.GetCntntNode();
-    SwCntntNode* pMarkNd  = rCrsr.GetCntntNode(sal_False);
+    SwCntntNode* pMarkNd  = rCrsr.GetCntntNode(false);
 
     SwFrm* pPointFrm = pPointNd ? pPointNd->getLayoutFrm( pPointNd->GetDoc()->GetCurrentLayout(), &aPtPos ) : 0;
     SwFrm* pMarkFrm  = pMarkNd  ? pMarkNd->getLayoutFrm( pMarkNd->GetDoc()->GetCurrentLayout(), &aMkPos )  : 0;
@@ -179,7 +179,7 @@ bool _FindBox( _FndBox & rBox, LinesAndTable* pPara )
 {
     if (!rBox.GetLines().empty())
     {
-        pPara->bInsertLines = sal_True;
+        pPara->bInsertLines = true;
         BOOST_FOREACH( _FndLine & rFndLine, rBox.GetLines() )
             _FindLine( rFndLine, pPara );
         if ( pPara->bInsertLines )
@@ -194,7 +194,7 @@ bool _FindBox( _FndBox & rBox, LinesAndTable* pPara )
                                   (SwTableLine*)rLines[i] );
             }
             else
-                pPara->bInsertLines = sal_False;
+                pPara->bInsertLines = false;
         }
     }
     else if (rBox.GetBox())

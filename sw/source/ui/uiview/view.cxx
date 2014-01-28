@@ -269,7 +269,7 @@ void SwView::SelectShell()
                 pBarCfg->SetTopToolbar( m_nSelectionType, nId );
 
             SfxShell *pSfxShell;
-            for ( sal_uInt16 i = 0; sal_True; ++i )
+            for ( sal_uInt16 i = 0; true; ++i )
             {
                 pSfxShell = rDispatcher.GetShell( i );
                 if  (  pSfxShell->ISA( SwBaseShell )
@@ -959,7 +959,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
             m_pWrtShell->GetDoc()->UpdateFlds(NULL, false);
             m_pWrtShell->EndAction();
         }
-        m_pWrtShell->GetDoc()->SetUpdateExpFldStat( sal_False );
+        m_pWrtShell->GetDoc()->SetUpdateExpFldStat( false );
     }
 
     // Update all tables if necessary:
@@ -967,7 +967,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     {
         SfxRequest aSfxRequest( FN_UPDATE_TOX, SFX_CALLMODE_SLOT, GetPool() );
         Execute( aSfxRequest );
-        m_pWrtShell->GetDoc()->SetUpdateTOX( sal_False );     // reset again
+        m_pWrtShell->GetDoc()->SetUpdateTOX( false );     // reset again
         m_pWrtShell->SttEndDoc(sal_True);
     }
 
@@ -993,7 +993,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     if( pDocSh->IsA(SwGlobalDocShell::StaticType()) &&
         !pVFrame->GetChildWindow( SID_NAVIGATOR ))
     {
-        SfxBoolItem aNavi(SID_NAVIGATOR, sal_True);
+        SfxBoolItem aNavi(SID_NAVIGATOR, true);
         GetDispatcher().Execute(SID_NAVIGATOR, SFX_CALLMODE_ASYNCHRON, &aNavi, 0L);
     }
 

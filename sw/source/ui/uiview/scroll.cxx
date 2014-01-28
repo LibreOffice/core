@@ -113,11 +113,11 @@ void SwScrollbar::AutoShow()
         if( nVis >= nLen - 1)
         {
             if(ScrollBar::IsVisible())
-                ScrollBar::Show(sal_False);
+                ScrollBar::Show(false);
         }
         else if ( !ScrollBar::IsVisible() )
         {
-            ScrollBar::Show(sal_True);
+            ScrollBar::Show(true);
         }
 }
 

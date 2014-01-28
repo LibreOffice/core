@@ -750,7 +750,7 @@ void CSS1Parser::ParseRule()
         return;
 
     // Selektor verarbeiten
-    if( SelectorParsed( pSelector, sal_True ) )
+    if( SelectorParsed( pSelector, true ) )
         delete pSelector;
 
     LOOP_CHECK_DECL
@@ -769,7 +769,7 @@ void CSS1Parser::ParseRule()
             return;
 
         // Selektor verarbeiten
-        if( SelectorParsed( pSelector, sal_False ) )
+        if( SelectorParsed( pSelector, false ) )
             delete pSelector;
     }
 

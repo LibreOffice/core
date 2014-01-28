@@ -3155,14 +3155,14 @@ sal_Bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
         // the upper Border of the current one
         case HEADLINE_BORDERCOPY:
             {
-                SwCollectTblLineBoxes aPara( sal_False, eHdlnMode );
+                SwCollectTblLineBoxes aPara( false, eHdlnMode );
                 SwTableLine* pLn = rTbl.GetTabLines()[
                             rTbl.GetTabLines().size() - 1 ];
                 for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
                          it != pLn->GetTabBoxes().end(); ++it)
                     sw_Box_CollectBox(*it, &aPara );
 
-                aPara.SetValues( sal_True );
+                aPara.SetValues( true );
                 pLn = pNew->GetTable().GetTabLines()[ 0 ];
                 for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
                          it != pLn->GetTabBoxes().end(); ++it)
@@ -3181,13 +3181,13 @@ sal_Bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
                 if( HEADLINE_BOXATRCOLLCOPY == eHdlnMode && pUndo )
                     pHst = pUndo->GetHistory();
 
-                SwCollectTblLineBoxes aPara( sal_True, eHdlnMode, pHst );
+                SwCollectTblLineBoxes aPara( true, eHdlnMode, pHst );
                 SwTableLine* pLn = rTbl.GetTabLines()[ 0 ];
                 for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
                          it != pLn->GetTabBoxes().end(); ++it)
                     sw_Box_CollectBox(*it, &aPara );
 
-                aPara.SetValues( sal_True );
+                aPara.SetValues( true );
                 pLn = pNew->GetTable().GetTabLines()[ 0 ];
                 for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
                          it != pLn->GetTabBoxes().end(); ++it)

@@ -114,7 +114,7 @@ struct _SaveRedline
         if( pRedl->HasMark() )
         {
             pRedl->GetMark()->nNode = nInsPos + nEnd;
-            pRedl->GetMark()->nContent.Assign( pRedl->GetCntntNode(sal_False), nEndCnt );
+            pRedl->GetMark()->nContent.Assign( pRedl->GetCntntNode(false), nEndCnt );
         }
     }
 
@@ -125,7 +125,7 @@ struct _SaveRedline
         if( pRedl->HasMark() )
         {
             pRedl->GetMark()->nNode = aPos.nNode.GetIndex() + nEnd;
-            pRedl->GetMark()->nContent.Assign( pRedl->GetCntntNode(sal_False), nEndCnt  + ( nEnd == 0 ? aPos.nContent.GetIndex() : 0 ) );
+            pRedl->GetMark()->nContent.Assign( pRedl->GetCntntNode(false), nEndCnt  + ( nEnd == 0 ? aPos.nContent.GetIndex() : 0 ) );
         }
     }
 };
@@ -337,7 +337,7 @@ static bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
                  SwFtnIdxs& rFtnArr, SwFtnIdxs& rSaveArr,
                  const SwIndex* pSttCnt = 0, const SwIndex* pEndCnt = 0 )
 {
-    bool bUpdateFtn = sal_False;
+    bool bUpdateFtn = false;
     const SwNodes& rNds = rInsPos.GetNodes();
     const bool bDelFtn = rInsPos.GetIndex() < rNds.GetEndOfAutotext().GetIndex() &&
                 rSttNd.GetIndex() >= rNds.GetEndOfAutotext().GetIndex();
@@ -382,7 +382,7 @@ static bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
                     if( bSaveFtn )
                         rSaveArr.insert( pSrch );
                 }
-                bUpdateFtn = sal_True;
+                bUpdateFtn = true;
             }
         }
 
@@ -410,7 +410,7 @@ static bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
                     if( bSaveFtn )
                         rSaveArr.insert( pSrch );
                 }
-                bUpdateFtn = sal_True;
+                bUpdateFtn = true;
             }
         }
     }
@@ -429,7 +429,7 @@ static bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
                     static_cast<SwTxtNode*>(pNode)->GetpSwpHints();
                 if( pHints && pHints->HasFtn() ) //...with footnotes
                 {
-                    bUpdateFtn = sal_True; // Heureka
+                    bUpdateFtn = true; // Heureka
                     sal_uInt16 nCount = pHints->Count();
                     for( sal_uInt16 i = 0; i < nCount; ++i )
                     {
@@ -804,7 +804,7 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const OUString &rStr )
     }
 
     SetModified();
-    return sal_True;
+    return true;
 }
 
 bool SwDoc::MoveAndJoin( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
@@ -1202,7 +1202,7 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
     }
 
     SetModified();
-    return sal_True;
+    return true;
 }
 
 /// Convert list of ranges of whichIds to a corresponding list of whichIds
@@ -1344,10 +1344,10 @@ void sw_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
 
                 // If the passed PaM is not in the Crsr ring,
                 // treat it separately (e.g. when it's being called from AutoFormat)
-                if( pOldTxtNd == rPam.GetBound( sal_True ).nContent.GetIdxReg() )
-                    rPam.GetBound( sal_True ) = aAlphaPos;
-                if( pOldTxtNd == rPam.GetBound( sal_False ).nContent.GetIdxReg() )
-                    rPam.GetBound( sal_False ) = aAlphaPos;
+                if( pOldTxtNd == rPam.GetBound( true ).nContent.GetIdxReg() )
+                    rPam.GetBound( true ) = aAlphaPos;
+                if( pOldTxtNd == rPam.GetBound( false ).nContent.GetIdxReg() )
+                    rPam.GetBound( false ) = aAlphaPos;
             }
             // delete the Node, at last!
             pDoc->GetNodes().Delete( aOldIdx, 1 );
@@ -1386,13 +1386,13 @@ void sw_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
 
             pDoc->CorrRel( aIdx, *rPam.GetPoint(), 0, sal_True );
             // #i100466# adjust given <rPam>, if it does not belong to the cursors
-            if ( pDelNd == rPam.GetBound( sal_True ).nContent.GetIdxReg() )
+            if ( pDelNd == rPam.GetBound( true ).nContent.GetIdxReg() )
             {
-                rPam.GetBound( sal_True ) = SwPosition( SwNodeIndex( *pTxtNd ), SwIndex( pTxtNd ) );
+                rPam.GetBound( true ) = SwPosition( SwNodeIndex( *pTxtNd ), SwIndex( pTxtNd ) );
             }
-            if( pDelNd == rPam.GetBound( sal_False ).nContent.GetIdxReg() )
+            if( pDelNd == rPam.GetBound( false ).nContent.GetIdxReg() )
             {
-                rPam.GetBound( sal_False ) = SwPosition( SwNodeIndex( *pTxtNd ), SwIndex( pTxtNd ) );
+                rPam.GetBound( false ) = SwPosition( SwNodeIndex( *pTxtNd ), SwIndex( pTxtNd ) );
             }
             pTxtNd->JoinNext();
         }
@@ -2475,7 +2475,7 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
          /* #i9185# Prevent getting the node after the end node (see below) */
         rEnd.nNode.GetIndex() + 1 == GetNodes().Count() )
     {
-        return sal_False;
+        return false;
     }
 
     // Move hard page brakes to the following Node.
@@ -2556,7 +2556,7 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
             if( !rPam.Move( fnMoveBackward, fnGoNode ))
             {
                 OSL_FAIL( "no more Nodes" );
-                return sal_False;
+                return false;
             }
         }
         // move bookmarks, redlines etc.
@@ -2588,16 +2588,16 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
             }
         }
 
-        SwCntntNode *pTmpNode = rPam.GetBound( sal_True ).nNode.GetNode().GetCntntNode();
-        rPam.GetBound( sal_True ).nContent.Assign( pTmpNode, 0 );
-        pTmpNode = rPam.GetBound( sal_False ).nNode.GetNode().GetCntntNode();
-        rPam.GetBound( sal_False ).nContent.Assign( pTmpNode, 0 );
+        SwCntntNode *pTmpNode = rPam.GetBound( true ).nNode.GetNode().GetCntntNode();
+        rPam.GetBound( true ).nContent.Assign( pTmpNode, 0 );
+        pTmpNode = rPam.GetBound( false ).nNode.GetNode().GetCntntNode();
+        rPam.GetBound( false ).nContent.Assign( pTmpNode, 0 );
         GetNodes().Delete( aRg.aStart, nNodeDiff+1 );
     }
     rPam.DeleteMark();
     SetModified();
 
-    return sal_True;
+    return true;
 }
 
 void SwDoc::TransliterateText(
@@ -2689,7 +2689,7 @@ void SwDoc::checkRedlining(RedlineMode_t& _rReadlineMode)
     {
         MessageDialog aQuery(pParent, "QueryShowChangesDialog", "modules/swriter/ui/queryshowchangesdialog.ui");
         sal_uInt16 nResult = aQuery.Execute();
-        mbReadlineChecked = sal_True;
+        mbReadlineChecked = true;
         if ( nResult == RET_YES )
         {
             sal_Int32 nMode = (sal_Int32)_rReadlineMode;

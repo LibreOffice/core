@@ -184,14 +184,14 @@ void SwBreakDlg::CheckEnable()
     sal_Bool bEnable = sal_True;
     if ( bHtmlMode )
     {
-        m_pColumnBtn->Enable(sal_False);
-        m_pPageCollBox->Enable(sal_False);
+        m_pColumnBtn->Enable(false);
+        m_pPageCollBox->Enable(false);
         bEnable = sal_False;
     }
     else if(rSh.GetFrmType(0,sal_True)
         & (FRMTYPE_FLY_ANY | FRMTYPE_HEADER | FRMTYPE_FOOTER  | FRMTYPE_FOOTNOTE))
     {
-        m_pPageBtn->Enable(sal_False);
+        m_pPageBtn->Enable(false);
         if(m_pPageBtn->IsChecked())
             m_pLineBtn->Check(sal_True);
         bEnable = sal_False;

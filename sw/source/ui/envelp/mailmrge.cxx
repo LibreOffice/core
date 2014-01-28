@@ -197,18 +197,18 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     m_aDialogSize( GetSizePixel() )
 {
     FreeResource();
-    aSingleJobsCB.Show(sal_False); // not supported in since cws printerpullpages anymore
+    aSingleJobsCB.Show(false); // not supported in since cws printerpullpages anymore
     //task #97066# mailing of form letters is currently not supported
-    aMailingRB.Show(sal_False);
-    aSubjectFT.Show(sal_False);
-    aSubjectED.Show(sal_False);
-    aFormatFT.Show(sal_False);
-    aFormatSwCB.Show(sal_False);
-    aFormatHtmlCB.Show(sal_False);
-    aFormatRtfCB.Show(sal_False);
-    aAttachFT.Show(sal_False);
-    aAttachED.Show(sal_False);
-    aAttachPB.Show(sal_False);
+    aMailingRB.Show(false);
+    aSubjectFT.Show(false);
+    aSubjectED.Show(false);
+    aFormatFT.Show(false);
+    aFormatSwCB.Show(false);
+    aFormatHtmlCB.Show(false);
+    aFormatRtfCB.Show(false);
+    aAttachFT.Show(false);
+    aAttachED.Show(false);
+    aAttachPB.Show(false);
 
     Point aMailPos = aMailingRB.GetPosPixel();
     Point aFilePos = aFileRB.GetPosPixel();
@@ -220,7 +220,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
         m_aSelection = *pSelection;
         //move all controls
         long nDiff = aRecordFL.GetPosPixel().Y() - pBeamerWin->GetPosPixel().Y();
-        pBeamerWin->Show(sal_False);
+        pBeamerWin->Show(false);
         ::Size aSize = GetSizePixel();
         aSize.Height() -= nDiff;
         SetSizePixel(aSize);
@@ -396,7 +396,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     else
     {
         aAllRB.Check();
-        aMarkedRB.Enable(sal_False);
+        aMarkedRB.Enable(false);
     }
     SetMinOutputSizePixel(m_aDialogSize);
     try

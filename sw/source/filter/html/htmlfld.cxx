@@ -534,7 +534,7 @@ void SwHTMLParser::NewField()
             pDoc->InsertPoolItem( *pPam, SwFmtFld(*pFld), 0 );
             delete pFld;
         }
-        bInField = sal_True;
+        bInField = true;
     }
 }
 
@@ -574,7 +574,7 @@ void SwHTMLParser::EndField()
         pField = 0;
     }
 
-    bInField = sal_False;
+    bInField = false;
     aContents = "";
 }
 

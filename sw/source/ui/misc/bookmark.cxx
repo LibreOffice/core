@@ -78,7 +78,7 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, DeleteHdl)
         m_pBookmarkBox->RemoveEntryAt(m_pBookmarkBox->GetSelectEntryPos(i - 1));
 
     m_pBookmarkBox->SetText(OUString());
-    m_pDeleteBtn->Enable(sal_False);   // no further entries there
+    m_pDeleteBtn->Enable(false);   // no further entries there
 
     m_pOkBtn->Enable();            // the OK handler deletes
     return 0;

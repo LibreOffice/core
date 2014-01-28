@@ -159,7 +159,7 @@ sal_uLong SwASCWriter::WriteStream()
                                 Strm().WriteUChar( sal_uInt8(0xEF) ).WriteUChar( sal_uInt8(0xBB) ).                                    WriteUChar( sal_uInt8(0xBF) );
                                 break;
                             case RTL_TEXTENCODING_UCS2:
-                                Strm().SetEndianSwap(sal_False);
+                                Strm().SetEndianSwap(false);
 #ifdef OSL_LITENDIAN
                                 Strm().WriteUChar( sal_uInt8(0xFF) ).WriteUChar( sal_uInt8(0xFE) );
 #else

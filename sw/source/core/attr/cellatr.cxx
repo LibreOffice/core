@@ -114,7 +114,7 @@ void SwTblBoxFormula::ChangeState( const SfxPoolItem* pItem )
     if( !pItem || RES_TABLEFML_UPDATE != pItem->Which() )
     {
         // reset value flag
-        ChgValid( sal_False );
+        ChgValid( false );
         return ;
     }
 
@@ -130,7 +130,7 @@ void SwTblBoxFormula::ChangeState( const SfxPoolItem* pItem )
         {
         case TBL_CALC:
             // reset value flag
-            ChgValid( sal_False );
+            ChgValid( false );
             break;
         case TBL_BOXNAME:
             if( &pTblNd->GetTable() == pUpdtFld->pTbl )

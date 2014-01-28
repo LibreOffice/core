@@ -207,7 +207,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
     boost::scoped_ptr<SfxAbstractTabDialog> pDlg;
     short nMode = ENV_INSERT;
 
-    SFX_REQUEST_ARG( rReq, pItem, SwEnvItem, FN_ENVELOP, sal_False );
+    SFX_REQUEST_ARG( rReq, pItem, SwEnvItem, FN_ENVELOP, false );
     if ( !pItem )
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -219,7 +219,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
     }
     else
     {
-        SFX_REQUEST_ARG( rReq, pBoolItem, SfxBoolItem, FN_PARAM_1, sal_False );
+        SFX_REQUEST_ARG( rReq, pBoolItem, SfxBoolItem, FN_PARAM_1, false );
         if ( pBoolItem && pBoolItem->GetValue() )
             nMode = ENV_NEWDOC;
     }
@@ -488,7 +488,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         {
             rReq.AppendItem( rItem );
             if ( nMode == ENV_NEWDOC )
-                rReq.AppendItem( SfxBoolItem( FN_PARAM_1, sal_True ) );
+                rReq.AppendItem( SfxBoolItem( FN_PARAM_1, true ) );
         }
 
         rReq.Done();

@@ -1145,7 +1145,7 @@ bool SwDoc::AppendRedline( SwRangeRedline* pNewRedl, bool bCallDelete )
                             else
                                 pNewRedl->SetEnd( *pREnd, pEnd );
                             mpRedlineTbl->DeleteAndDestroy( n );
-                            bDec = 0;
+                            bDec = false;
                         }
                         else if( POS_OVERLAP_BEHIND == eCmpPos )
                             pNewRedl->SetStart( *pREnd, pStt );
@@ -1341,7 +1341,7 @@ bool SwDoc::DeleteRedline( const SwPaM& rRange, bool bSaveInUndo,
 {
     if( nsRedlineMode_t::REDLINE_IGNOREDELETE_REDLINES & meRedlineMode ||
         !rRange.HasMark() || *rRange.GetMark() == *rRange.GetPoint() )
-        return sal_False;
+        return false;
 
     bool bChg = false;
 
@@ -1687,8 +1687,8 @@ static sal_Bool lcl_AcceptRedline( SwRedlineTbl& rArr, sal_uInt16& rPos,
 
                     if( pCSttNd && !pCEndNd )
                     {
-                        aPam.GetBound( sal_True ).nContent.Assign( 0, 0 );
-                        aPam.GetBound( sal_False ).nContent.Assign( 0, 0 );
+                        aPam.GetBound( true ).nContent.Assign( 0, 0 );
+                        aPam.GetBound( false ).nContent.Assign( 0, 0 );
                         aPam.DeleteMark();
                         rDoc.DelFullPara( aPam );
                     }
@@ -1797,8 +1797,8 @@ static sal_Bool lcl_RejectRedline( SwRedlineTbl& rArr, sal_uInt16& rPos,
 
                     if( pCSttNd && !pCEndNd )
                     {
-                        aPam.GetBound( sal_True ).nContent.Assign( 0, 0 );
-                        aPam.GetBound( sal_False ).nContent.Assign( 0, 0 );
+                        aPam.GetBound( true ).nContent.Assign( 0, 0 );
+                        aPam.GetBound( false ).nContent.Assign( 0, 0 );
                         aPam.DeleteMark();
                         rDoc.DelFullPara( aPam );
                     }
@@ -3371,10 +3371,10 @@ void SwRangeRedline::MoveToSection()
             for( sal_uInt16 n = 0; n < rTbl.size(); ++n )
             {
                 SwRangeRedline* pRedl = rTbl[ n ];
-                if( pRedl->GetBound(sal_True) == *pStt )
-                    pRedl->GetBound(sal_True) = *pEnd;
-                if( pRedl->GetBound(sal_False) == *pStt )
-                    pRedl->GetBound(sal_False) = *pEnd;
+                if( pRedl->GetBound(true) == *pStt )
+                    pRedl->GetBound(true) = *pEnd;
+                if( pRedl->GetBound(false) == *pStt )
+                    pRedl->GetBound(false) = *pEnd;
             }
         }
 
@@ -3441,7 +3441,7 @@ void SwRangeRedline::CopyToSection()
 
         sal_Bool bSaveCopyFlag = pDoc->IsCopyIsMove(),
              bSaveRdlMoveFlg = pDoc->IsRedlineMove();
-        pDoc->SetCopyIsMove( sal_True );
+        pDoc->SetCopyIsMove( true );
 
         // The IsRedlineMove() flag causes the behaviour of the
         // SwDoc::_CopyFlyInFly method to change, which will eventually be
@@ -3524,10 +3524,10 @@ void SwRangeRedline::DelCopyOfSection()
             for( sal_uInt16 n = 0; n < rTbl.size(); ++n )
             {
                 SwRangeRedline* pRedl = rTbl[ n ];
-                if( pRedl->GetBound(sal_True) == *pStt )
-                    pRedl->GetBound(sal_True) = *pEnd;
-                if( pRedl->GetBound(sal_False) == *pStt )
-                    pRedl->GetBound(sal_False) = *pEnd;
+                if( pRedl->GetBound(true) == *pStt )
+                    pRedl->GetBound(true) = *pEnd;
+                if( pRedl->GetBound(false) == *pStt )
+                    pRedl->GetBound(false) = *pEnd;
             }
         }
 
@@ -3557,14 +3557,14 @@ void SwRangeRedline::DelCopyOfSection()
                 {
                     --n;
                     bBreak = true;
-                    if( rTbl[ n ]->GetBound(sal_True) == *aPam.GetPoint() )
+                    if( rTbl[ n ]->GetBound(true) == *aPam.GetPoint() )
                     {
-                        rTbl[ n ]->GetBound(sal_True) = *pEnd;
+                        rTbl[ n ]->GetBound(true) = *pEnd;
                         bBreak = false;
                     }
-                    if( rTbl[ n ]->GetBound(sal_False) == *aPam.GetPoint() )
+                    if( rTbl[ n ]->GetBound(false) == *aPam.GetPoint() )
                     {
-                        rTbl[ n ]->GetBound(sal_False) = *pEnd;
+                        rTbl[ n ]->GetBound(false) = *pEnd;
                         bBreak = false;
                     }
                 }
@@ -3574,8 +3574,8 @@ void SwRangeRedline::DelCopyOfSection()
                 *GetMark() = *pEnd;
                 DeleteMark();
 
-                aPam.GetBound( sal_True ).nContent.Assign( 0, 0 );
-                aPam.GetBound( sal_False ).nContent.Assign( 0, 0 );
+                aPam.GetBound( true ).nContent.Assign( 0, 0 );
+                aPam.GetBound( false ).nContent.Assign( 0, 0 );
                 aPam.DeleteMark();
                 pDoc->DelFullPara( aPam );
             }
@@ -3607,14 +3607,14 @@ void SwRangeRedline::MoveFromSection()
         for( n = nMyPos+1; !bBreak && n < rTbl.size(); ++n )
         {
             bBreak = true;
-            if( rTbl[ n ]->GetBound(sal_True) == *GetPoint() )
+            if( rTbl[ n ]->GetBound(true) == *GetPoint() )
             {
-                aBehindArr.push_back( &rTbl[ n ]->GetBound(sal_True) );
+                aBehindArr.push_back( &rTbl[ n ]->GetBound(true) );
                 bBreak = false;
             }
-            if( rTbl[ n ]->GetBound(sal_False) == *GetPoint() )
+            if( rTbl[ n ]->GetBound(false) == *GetPoint() )
             {
-                aBehindArr.push_back( &rTbl[ n ]->GetBound(sal_False) );
+                aBehindArr.push_back( &rTbl[ n ]->GetBound(false) );
                 bBreak = false;
             }
         }
@@ -3622,14 +3622,14 @@ void SwRangeRedline::MoveFromSection()
         {
             --n;
             bBreak = true;
-            if( rTbl[ n ]->GetBound(sal_True) == *GetPoint() )
+            if( rTbl[ n ]->GetBound(true) == *GetPoint() )
             {
-                aBeforeArr.push_back( &rTbl[ n ]->GetBound(sal_True) );
+                aBeforeArr.push_back( &rTbl[ n ]->GetBound(true) );
                 bBreak = false;
             }
-            if( rTbl[ n ]->GetBound(sal_False) == *GetPoint() )
+            if( rTbl[ n ]->GetBound(false) == *GetPoint() )
             {
-                aBeforeArr.push_back( &rTbl[ n ]->GetBound(sal_False) );
+                aBeforeArr.push_back( &rTbl[ n ]->GetBound(false) );
                 bBreak = false;
             }
         }

@@ -526,7 +526,7 @@ void SwSection::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
     if( bUpdateFtn )
     {
-        SwSectionNode* pSectNd = GetFmt()->GetSectionNode( sal_False );
+        SwSectionNode* pSectNd = GetFmt()->GetSectionNode( false );
         if( pSectNd )
             pSectNd->GetDoc()->GetFtnIdxs().UpdateFtn(SwNodeIndex( *pSectNd ));
     }
@@ -721,7 +721,7 @@ void SwSectionFmt::DelFrms()
         // Paste of the Framei tself would need to do this. But that leads
         // to subsequent errors, which we'd need to solve at run-time.
         SwNodeIndex aNextNd( *pIdx );
-        SwCntntNode* pCNd = GetDoc()->GetNodes().GoNextSection( &aNextNd, sal_True, sal_False );
+        SwCntntNode* pCNd = GetDoc()->GetNodes().GoNextSection( &aNextNd, true, false );
         if( pCNd )
         {
             const SfxPoolItem& rItem = pCNd->GetSwAttrSet().Get( RES_PAGEDESC );
@@ -1178,7 +1178,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 ::sfx2::SvBaseLink::UpdateResult SwIntrnlSectRefLink::DataChanged(
     const OUString& rMimeType, const uno::Any & rValue )
 {
-    SwSectionNode* pSectNd = rSectFmt.GetSectionNode( sal_False );
+    SwSectionNode* pSectNd = rSectFmt.GetSectionNode( false );
     SwDoc* pDoc = rSectFmt.GetDoc();
 
     sal_uLong nDataFormat = SotExchange::GetFormatIdFromMimeType( rMimeType );
@@ -1195,13 +1195,13 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
     pDoc->SetModified();
     // set additional flag that links have been updated, in order to check this
     // during load.
-    pDoc->SetLinksUpdated( sal_True );
+    pDoc->SetLinksUpdated( true );
 
     // Always switch off Undo
     bool const bWasUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
     pDoc->GetIDocumentUndoRedo().DoUndo(false);
     sal_Bool bWasVisibleLinks = pDoc->IsVisibleLinks();
-    pDoc->SetVisibleLinks( sal_False );
+    pDoc->SetVisibleLinks( false );
 
     SwPaM* pPam;
     SwViewShell* pVSh = 0;
@@ -1476,7 +1476,7 @@ void SwIntrnlSectRefLink::Closed()
                 pDoc->UpdateSection( n, aSectionData );
 
                 // Make all Links within the Section visible again
-                SwSectionNode* pSectNd = rSectFmt.GetSectionNode( sal_False );
+                SwSectionNode* pSectNd = rSectFmt.GetSectionNode( false );
                 if( pSectNd )
                     pSectNd->GetSection().MakeChildLinksVisible( *pSectNd );
 
@@ -1584,13 +1584,13 @@ void SwSection::BreakLink()
 
 const SwNode* SwIntrnlSectRefLink::GetAnchor() const
 {
-    return rSectFmt.GetSectionNode( sal_False );
+    return rSectFmt.GetSectionNode( false );
 }
 
 sal_Bool SwIntrnlSectRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
                                      sal_Int32 , sal_Int32 ) const
 {
-    SwStartNode* pSttNd = rSectFmt.GetSectionNode( sal_False );
+    SwStartNode* pSttNd = rSectFmt.GetSectionNode( false );
     return pSttNd &&
             nSttNd < pSttNd->GetIndex() &&
             pSttNd->EndOfSectionIndex() < nEndNd;

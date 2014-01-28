@@ -1284,7 +1284,7 @@ void SwFtnBossFrm::ResetFtn( const SwFtnFrm *pCheck )
     SwCntntNode *pNd = aIdx.GetNode().GetCntntNode();
     if ( !pNd )
         pNd = pCheck->GetFmt()->GetDoc()->
-              GetNodes().GoNextSection( &aIdx, sal_True, sal_False );
+              GetNodes().GoNextSection( &aIdx, true, false );
     SwIterator<SwFrm,SwCntntNode> aIter( *pNd );
     SwFrm* pFrm = aIter.First();
     while( pFrm )
@@ -1823,7 +1823,7 @@ SwFtnFrm *SwFtnBossFrm::FindFtn( const SwCntntFrm *pRef, const SwTxtFtn *pAttr )
     SwCntntNode *pNd = aIdx.GetNode().GetCntntNode();
     if ( !pNd )
         pNd = pRef->GetAttrSet()->GetDoc()->
-              GetNodes().GoNextSection( &aIdx, sal_True, sal_False );
+              GetNodes().GoNextSection( &aIdx, true, false );
     if ( !pNd )
         return 0;
     SwIterator<SwFrm,SwCntntNode> aIter( *pNd );

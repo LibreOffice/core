@@ -646,7 +646,7 @@ void DocxAttributeOutput::EndRun()
         // Add the fields starts for hyperlinks, TOCs and index marks
         if ( pIt->bOpen && !pIt->pField )
         {
-            StartField_Impl( *pIt, sal_True );
+            StartField_Impl( *pIt, true );
 
             // Remove the field if no end needs to be written
             if ( !pIt->bClose ) {

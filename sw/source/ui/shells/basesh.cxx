@@ -698,7 +698,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         break;
         case SID_GALLERY_FORMATS:
         {
-            SFX_ITEMSET_ARG( pArgs, pGalleryItem, SvxGalleryItem, SID_GALLERY_FORMATS, sal_False );
+            SFX_ITEMSET_ARG( pArgs, pGalleryItem, SvxGalleryItem, SID_GALLERY_FORMATS, false );
             if ( !pGalleryItem )
                 break;
 
@@ -1326,7 +1326,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 break;
             case SID_GALLERY_ENABLE_ADDCOPY:
                 // #108230# allow copy from gallery in Writer AND Writer/Web!
-                rSet.Put( SfxBoolItem( SID_GALLERY_ENABLE_ADDCOPY, sal_True ) );
+                rSet.Put( SfxBoolItem( SID_GALLERY_ENABLE_ADDCOPY, true ) );
                 break;
             case FN_EDIT_REGION:
                 if( !rSh.IsAnySectionInDoc() )
@@ -2091,7 +2091,7 @@ void SwBaseShell::GetTxtFontCtrlState( SfxItemSet& rSet )
                 }
                 SfxItemPool& rPool = *rSet.GetPool();
                 SvxScriptSetItem aSetItem( rPool.GetSlotId( nWhich ), rPool );
-                aSetItem.GetItemSet().Put( *pFntCoreSet, sal_False );
+                aSetItem.GetItemSet().Put( *pFntCoreSet, false );
                 const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScriptType );
                 if( pI )
                     rSet.Put( *pI, nWhich );
@@ -2492,11 +2492,11 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
 
             if( pArgs && pArgs->Count() >= 2 )
             {
-                SFX_REQUEST_ARG( _rRequest, pName, SfxStringItem, FN_INSERT_TABLE, sal_False );
-                SFX_REQUEST_ARG( _rRequest, pCols, SfxUInt16Item, SID_ATTR_TABLE_COLUMN, sal_False );
-                SFX_REQUEST_ARG( _rRequest, pRows, SfxUInt16Item, SID_ATTR_TABLE_ROW, sal_False );
-                SFX_REQUEST_ARG( _rRequest, pFlags, SfxInt32Item, FN_PARAM_1, sal_False );
-                SFX_REQUEST_ARG( _rRequest, pAuto, SfxStringItem, FN_PARAM_2, sal_False );
+                SFX_REQUEST_ARG( _rRequest, pName, SfxStringItem, FN_INSERT_TABLE, false );
+                SFX_REQUEST_ARG( _rRequest, pCols, SfxUInt16Item, SID_ATTR_TABLE_COLUMN, false );
+                SFX_REQUEST_ARG( _rRequest, pRows, SfxUInt16Item, SID_ATTR_TABLE_ROW, false );
+                SFX_REQUEST_ARG( _rRequest, pFlags, SfxInt32Item, FN_PARAM_1, false );
+                SFX_REQUEST_ARG( _rRequest, pAuto, SfxStringItem, FN_PARAM_2, false );
 
                 if ( pName )
                     aTableName = pName->GetValue();
@@ -2689,8 +2689,8 @@ void SwBaseShell::ExecuteGallery(SfxRequest &rReq)
             if ( nSel & nsSelectionType::SEL_DRW_TXT )
                 break;
 
-            SFX_REQUEST_ARG( rReq, pPos, SfxUInt16Item, SID_GALLERY_BG_POS, sal_False );
-            SFX_REQUEST_ARG( rReq, pBrush, SvxBrushItem, SID_GALLERY_BG_BRUSH, sal_False );
+            SFX_REQUEST_ARG( rReq, pPos, SfxUInt16Item, SID_GALLERY_BG_POS, false );
+            SFX_REQUEST_ARG( rReq, pBrush, SvxBrushItem, SID_GALLERY_BG_BRUSH, false );
             if ( !pPos || !pBrush )
                 break;
 

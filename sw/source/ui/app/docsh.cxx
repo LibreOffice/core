@@ -207,7 +207,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
     }
 
     // #i30171# set the UpdateDocMode at the SwDocShell
-    SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
+    SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, false);
     nUpdateDocMode = pUpdateDocItem ? pUpdateDocItem->GetValue() : document::UpdateDocMode::NO_UPDATE;
 
     if (!pFlt->GetDefaultTemplate().isEmpty())
@@ -350,7 +350,7 @@ sal_Bool SwDocShell::Save()
                 {
                     if( SvtFilterOptions::Get().IsLoadWordBasicStorage() )
                         nVBWarning = GetSaveWarningOfMSVBAStorage( (SfxObjectShell&) (*this) );
-                    pDoc->SetContainsMSVBasic( sal_False );
+                    pDoc->SetContainsMSVBasic( false );
                 }
 
                 // End TableBox Edit!
@@ -382,7 +382,7 @@ sal_Bool SwDocShell::Save()
     SfxViewFrame* pFrm = pWrtShell ? pWrtShell->GetView().GetViewFrame() : 0;
     if( pFrm )
     {
-        pFrm->GetBindings().SetState(SfxBoolItem(SID_DOC_MODIFIED, sal_False));
+        pFrm->GetBindings().SetState(SfxBoolItem(SID_DOC_MODIFIED, false));
     }
     return !IsError( nErr );
 }
@@ -462,7 +462,7 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
         {
             if( SvtFilterOptions::Get().IsLoadWordBasicStorage() )
                 nVBWarning = GetSaveWarningOfMSVBAStorage( (SfxObjectShell&) *this );
-            pDoc->SetContainsMSVBasic( sal_False );
+            pDoc->SetContainsMSVBasic( false );
         }
 
         // End TableBox Edit!
@@ -558,13 +558,13 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
 
         if ( bSave )
         {
-            SvStorageRef xStg = new SotStorage( rMedium.GetOutStream(), sal_False );
+            SvStorageRef xStg = new SotStorage( rMedium.GetOutStream(), false );
             OSL_ENSURE( !xStg->GetError(), "No storage available for storing VBA macros!" );
             if ( !xStg->GetError() )
             {
                 nVBWarning = SaveOrDelMSVBAStorage( (SfxObjectShell&) *this, *xStg, bSave, OUString("Macros") );
                 xStg->Commit();
-                pDoc->SetContainsMSVBasic( sal_True );
+                pDoc->SetContainsMSVBasic( true );
             }
         }
     }
@@ -964,9 +964,9 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                 rSet.DisableItem( SID_PRINTPREVIEW );
             else
             {
-                SfxBoolItem aBool( SID_PRINTPREVIEW, sal_False );
+                SfxBoolItem aBool( SID_PRINTPREVIEW, false );
                 if( PTR_CAST( SwPagePreview, SfxViewShell::Current()) )
-                    aBool.SetValue( sal_True );
+                    aBool.SetValue( true );
                 rSet.Put( aBool );
             }
         }
@@ -1239,7 +1239,7 @@ bool SwDocShell::getDocReadOnly() const
         return pDoc->getDocReadOnly();
     }
 
-    return sal_False;
+    return false;
 }
 
 static const char* s_EventNames[] =

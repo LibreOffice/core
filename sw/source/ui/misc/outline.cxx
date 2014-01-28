@@ -499,8 +499,8 @@ void    SwOutlineSettingsTabPage::Update()
         else
             m_pCharFmtLB->SetNoSelection();
 
-        m_pAllLevelFT->Enable(sal_True);
-        m_pAllLevelNF->Enable(sal_True);
+        m_pAllLevelFT->Enable(true);
+        m_pAllLevelNF->Enable(true);
         m_pAllLevelNF->SetMax(MAXLEVEL);
         if(bSameComplete)
         {
@@ -532,16 +532,16 @@ void    SwOutlineSettingsTabPage::Update()
 
         if(nTmpLevel)
         {
-            m_pAllLevelFT->Enable(sal_True);
-            m_pAllLevelNF->Enable(sal_True);
+            m_pAllLevelFT->Enable(true);
+            m_pAllLevelNF->Enable(true);
             m_pAllLevelNF->SetMax(nTmpLevel + 1);
             m_pAllLevelNF->SetValue(rFmt.GetIncludeUpperLevels());
         }
         else
         {
             m_pAllLevelNF->SetText(OUString());
-            m_pAllLevelNF->Enable(sal_False);
-            m_pAllLevelFT->Enable(sal_False);
+            m_pAllLevelNF->Enable(false);
+            m_pAllLevelFT->Enable(false);
         }
         CheckForStartValue_Impl(rFmt.GetNumberingType());
         m_pStartEdit->SetValue( rFmt.GetStart() );

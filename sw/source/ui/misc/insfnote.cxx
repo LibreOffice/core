@@ -105,7 +105,7 @@ IMPL_LINK_NOARG_INLINE_END(SwInsFootNoteDlg, NumberEditHdl)
 
 IMPL_LINK_NOARG_INLINE_START(SwInsFootNoteDlg, NumberAutoBtnHdl)
 {
-    m_pOkBtn->Enable( sal_True );
+    m_pOkBtn->Enable( true );
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(SwInsFootNoteDlg, NumberAutoBtnHdl)
@@ -119,7 +119,7 @@ IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberExtCharHdl)
     const SvxFontItem &rFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
 
     SfxAllItemSet aAllSet( rSh.GetAttrPool() );
-    aAllSet.Put( SfxBoolItem( FN_PARAM_1, sal_False ) );
+    aAllSet.Put( SfxBoolItem( FN_PARAM_1, false ) );
     aAllSet.Put( rFont );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -127,8 +127,8 @@ IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberExtCharHdl)
         rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP ));
     if (RET_OK == pDlg->Execute())
     {
-        SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pItem, SfxStringItem, SID_CHARMAP, sal_False );
-        SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, sal_False );
+        SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pItem, SfxStringItem, SID_CHARMAP, false );
+        SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, false );
         if ( pItem )
         {
             m_pNumberCharEdit->SetText( pItem->GetValue() );

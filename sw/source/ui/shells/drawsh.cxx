@@ -329,7 +329,7 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
                 {
                     // TTTT - needs to be adapted in aw080:
                     // state is not kept for drawing objects --> provide not flipped state
-                    rSet.Put( SfxBoolItem( nWhich, sal_False ) );
+                    rSet.Put( SfxBoolItem( nWhich, false ) );
                 }
                 break;
 
@@ -342,7 +342,7 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
                 {
                     // TTTT - needs to be adapted in aw080:
                     // state is not kept for drawing objects --> provide not flipped state
-                    rSet.Put( SfxBoolItem( nWhich, sal_False ) );
+                    rSet.Put( SfxBoolItem( nWhich, false ) );
                 }
                 break;
 

@@ -265,7 +265,7 @@ short SwRedlineItr::_Seek(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
                             SwTxtAttr* pAttr = MakeRedlineTxtAttr(
                                 const_cast<SwDoc&>(rDoc),
                                 *const_cast<SfxPoolItem*>(pItem) );
-                            pAttr->SetPriorityAttr( sal_True );
+                            pAttr->SetPriorityAttr( true );
                             m_Hints.push_back(pAttr);
                             rAttrHandler.PushAndChg( *pAttr, rFnt );
                             if( RES_CHRATR_COLOR == nWhich )

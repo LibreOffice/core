@@ -34,13 +34,13 @@ protected:
                 const sal_uInt16* pWhichRanges, SwFmtColl* pDerFrom,
                 sal_uInt16 nFmtWhich )
           : SwFmt( rPool, pFmtName, pWhichRanges, pDerFrom, nFmtWhich )
-    { SetAuto( sal_False ); }
+    { SetAuto( false ); }
 
     SwFmtColl( SwAttrPool& rPool, const OUString &rFmtName,
                 const sal_uInt16* pWhichRanges, SwFmtColl* pDerFrom,
                 sal_uInt16 nFmtWhich )
           : SwFmt( rPool, rFmtName, pWhichRanges, pDerFrom, nFmtWhich )
-    { SetAuto( sal_False ); }
+    { SetAuto( false ); }
 
 private:
 

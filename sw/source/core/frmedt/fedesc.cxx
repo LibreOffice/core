@@ -220,7 +220,7 @@ const SwPageDesc* SwFEShell::GetSelectedPageDescs() const
             pPtFrm = 0;
 
         if( PCURCRSR->HasMark() &&
-            0 != (pCNd = PCURCRSR->GetCntntNode( sal_False ) ) &&
+            0 != (pCNd = PCURCRSR->GetCntntNode( false ) ) &&
             0 != ( pMkFrm = pCNd->getLayoutFrm( GetLayout(), &aNulPt, 0, sal_False )) )
             pMkFrm = pMkFrm->FindPageFrm();
         else

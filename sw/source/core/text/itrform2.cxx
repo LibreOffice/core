@@ -699,7 +699,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
                 if ( ! bFull )
                     new SwKernPortion( *pPor, (short)(nKernWidth - nKernWidth_1),
-                                       sal_False, sal_True );
+                                       false, true );
 
                 pGridKernPortion = 0;
             }

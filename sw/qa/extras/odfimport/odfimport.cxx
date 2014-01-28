@@ -309,7 +309,7 @@ DECLARE_ODFIMPORT_TEST(testFdo68839, "fdo68839.odt")
     lcl_CheckShape(getShape(4), "graphicsXXX");
     try {
         uno::Reference<drawing::XShape> xShape = getShape(5);
-        CPPUNIT_ASSERT(!"IndexOutOfBoundsException expected");
+        CPPUNIT_FAIL("IndexOutOfBoundsException expected");
     } catch (lang::IndexOutOfBoundsException const&) { }
     // check prev/next chain
     uno::Reference<beans::XPropertySet> xFrame1(getShape(1), uno::UNO_QUERY);

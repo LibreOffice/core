@@ -644,7 +644,7 @@ void PagePropertyPanel::ChangeSizeImage()
         Swap( aTmpPaperSize ); // Swap(..) defined in editeng/paperinf.hxx
     }
 
-    mePaper = SvxPaperInfo::GetSvxPaper( aTmpPaperSize, static_cast<MapUnit>(meUnit), sal_True );
+    mePaper = SvxPaperInfo::GetSvxPaper( aTmpPaperSize, static_cast<MapUnit>(meUnit), true );
 
     sal_uInt16 nImageIdx = 0;
     switch ( mePaper )

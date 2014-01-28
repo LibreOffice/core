@@ -348,7 +348,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
             SfxApplication* pApp = SFX_APP();
             SfxRequest aAppReq(SID_AUTO_CORRECT_DLG, SFX_CALLMODE_SYNCHRON, pApp->GetPool());
-            SfxBoolItem aSwOptions( SID_AUTO_CORRECT_DLG, sal_True );
+            SfxBoolItem aSwOptions( SID_AUTO_CORRECT_DLG, true );
             aAppReq.AppendItem(aSwOptions);
 
             // SMARTTAGS
@@ -473,11 +473,11 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                 if ( pArgs )
                 {
-                    SFX_REQUEST_ARG( rReq, pTemplateItem, SfxStringItem, SID_TEMPLATE_NAME, sal_False );
+                    SFX_REQUEST_ARG( rReq, pTemplateItem, SfxStringItem, SID_TEMPLATE_NAME, false );
                     if ( pTemplateItem )
                     {
                         aFileName = pTemplateItem->GetValue();
-                        SFX_REQUEST_ARG( rReq, pFlagsItem, SfxInt32Item, SID_TEMPLATE_LOAD, sal_False );
+                        SFX_REQUEST_ARG( rReq, pFlagsItem, SfxInt32Item, SID_TEMPLATE_LOAD, false );
                         if ( pFlagsItem )
                             nFlags = (sal_uInt16) pFlagsItem->GetValue();
                     }
@@ -717,7 +717,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         pStrm->Seek( STREAM_SEEK_TO_BEGIN );
 
                         // Transfer ownership of stream to a lockbytes object
-                        SvLockBytes aLockBytes( pStrm, sal_True );
+                        SvLockBytes aLockBytes( pStrm, true );
                         SvLockBytesStat aStat;
                         if ( aLockBytes.Stat( &aStat, SVSTATFLAG_DEFAULT ) == ERRCODE_NONE )
                         {
@@ -783,7 +783,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         pStrm->Seek( STREAM_SEEK_TO_BEGIN );
 
                         // Transfer ownership of stream to a lockbytes object
-                        SvLockBytes aLockBytes( pStrm, sal_True );
+                        SvLockBytes aLockBytes( pStrm, true );
                         SvLockBytesStat aStat;
                         if ( aLockBytes.Stat( &aStat, SVSTATFLAG_DEFAULT ) == ERRCODE_NONE )
                         {
@@ -857,7 +857,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nWhich, sal_False, &pItem ) )
                 {
                     aFileName = ((const SfxStringItem*)pItem)->GetValue();
-                    SFX_ITEMSET_ARG( pArgs, pTemplItem, SfxStringItem, SID_TEMPLATE_NAME, sal_False );
+                    SFX_ITEMSET_ARG( pArgs, pTemplItem, SfxStringItem, SID_TEMPLATE_NAME, false );
                     if ( pTemplItem )
                         aTemplateName = pTemplItem->GetValue();
                 }

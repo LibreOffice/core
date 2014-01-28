@@ -2082,7 +2082,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                     pFieldmark->GetFieldname( ) == ODF_FORMCHECKBOX );
 
                 if ( isDropdownOrCheckbox )
-                    AppendBookmark( pFieldmark->GetName(), 0 );
+                    AppendBookmark( pFieldmark->GetName(), false );
                 OutputField( NULL, lcl_getFieldId( pFieldmark ),
                         lcl_getFieldCode( pFieldmark ),
                         WRITEFIELD_START | WRITEFIELD_CMD_START );

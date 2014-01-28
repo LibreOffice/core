@@ -240,7 +240,7 @@ IMPL_LINK_NOARG(SwJavaEditDialog, RadioButtonHdl)
         m_pEditED->SetReadOnly( !bEnable);
         m_pTypeED->SetReadOnly( !bEnable);
         if( m_pUrlPB->IsEnabled() && !bEnable )
-            m_pUrlPB->Enable( sal_False );
+            m_pUrlPB->Enable( false );
     }
     return 0;
 }

@@ -104,17 +104,17 @@ void WrapPropertyPanel::Initialize()
     mpRBIdealWrap->SetClickHdl(aLink);
 
     aWrapIL.AddImage( UNO_WRAPOFF,
-                      ::GetImage( mxFrame, UNO_WRAPOFF, sal_False ) );
+                      ::GetImage( mxFrame, UNO_WRAPOFF, false ) );
     aWrapIL.AddImage( UNO_WRAPLEFT,
-                      ::GetImage( mxFrame, UNO_WRAPLEFT, sal_False ) );
+                      ::GetImage( mxFrame, UNO_WRAPLEFT, false ) );
     aWrapIL.AddImage( UNO_WRAPRIGHT,
-                      ::GetImage( mxFrame, UNO_WRAPRIGHT, sal_False ) );
+                      ::GetImage( mxFrame, UNO_WRAPRIGHT, false ) );
     aWrapIL.AddImage( UNO_WRAPON,
-                      ::GetImage( mxFrame, UNO_WRAPON, sal_False ) );
+                      ::GetImage( mxFrame, UNO_WRAPON, false ) );
     aWrapIL.AddImage( UNO_WRAPTHROUGH,
-                      ::GetImage( mxFrame, UNO_WRAPTHROUGH, sal_False ) );
+                      ::GetImage( mxFrame, UNO_WRAPTHROUGH, false ) );
     aWrapIL.AddImage( UNO_WRAPIDEAL,
-                      ::GetImage( mxFrame, UNO_WRAPIDEAL, sal_False ) );
+                      ::GetImage( mxFrame, UNO_WRAPIDEAL, false ) );
 
     mpRBNoWrap->SetModeRadioImage( aWrapIL.GetImage(UNO_WRAPOFF) );
     if ( Application::GetSettings().GetLayoutRTL() )
@@ -174,7 +174,7 @@ IMPL_LINK(WrapPropertyPanel, WrapTypeHdl, void *, EMPTYARG)
     {
         nSlot = FN_FRAME_NOWRAP;
     }
-    SfxBoolItem bStateItem( nSlot, sal_True );
+    SfxBoolItem bStateItem( nSlot, true );
     mpBindings->GetDispatcher()->Execute( nSlot, SFX_CALLMODE_RECORD, &bStateItem, 0L );
 
     return 0;

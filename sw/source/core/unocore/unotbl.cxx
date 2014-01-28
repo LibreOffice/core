@@ -316,8 +316,8 @@ static uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimp
             for(sal_uInt16 nRed = 0; nRed < rRedTbl.size(); nRed++)
             {
                 const SwRangeRedline* pRedline = rRedTbl[nRed];
-                const SwNode* pRedPointNode = pRedline->GetNode(sal_True);
-                const SwNode* pRedMarkNode = pRedline->GetNode(sal_False);
+                const SwNode* pRedPointNode = pRedline->GetNode(true);
+                const SwNode* pRedMarkNode = pRedline->GetNode(false);
                 if(pRedPointNode == pTblNode || pRedMarkNode == pTblNode)
                 {
                     const SwNode* pStartOfRedline = SwNodeIndex(*pRedPointNode) <= SwNodeIndex(*pRedMarkNode) ?
@@ -1862,7 +1862,7 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
                 case FN_UNO_PARA_STYLE:
                 {
                     SwFmtColl *const pFmt =
-                        SwUnoCursorHelper::GetCurTxtFmtColl(*pUnoCrsr, sal_False);
+                        SwUnoCursorHelper::GetCurTxtFmtColl(*pUnoCrsr, false);
                     OUString sRet;
                     if(pFmt)
                         sRet = pFmt->GetName();
@@ -4001,7 +4001,7 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( be
                 case FN_UNO_PARA_STYLE:
                 {
                     SwFmtColl *const pTmpFmt =
-                        SwUnoCursorHelper::GetCurTxtFmtColl(*pTblCrsr, sal_False);
+                        SwUnoCursorHelper::GetCurTxtFmtColl(*pTblCrsr, false);
                     OUString sRet;
                     if(pFmt)
                         sRet = pTmpFmt->GetName();

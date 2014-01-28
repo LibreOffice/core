@@ -930,7 +930,7 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
         {
             rDoc.ResetModified();
             // #i38810# - reset also flag, that indicates updated links
-            rDoc.SetLinksUpdated( sal_False );
+            rDoc.SetLinksUpdated( false );
         }
     }
 

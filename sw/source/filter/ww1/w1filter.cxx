@@ -139,9 +139,9 @@ void Ww1Manager::OutStop(Ww1Shell& rOut, sal_Unicode cUnknown)
         pFld->Stop(rOut, *this, cUnknown);
     if (!Pushed())
         aFtn.Stop(rOut, *this, cUnknown);
-    if (1)
+    if (true)
         aChp.Stop(rOut, *this, cUnknown);
-    if (1)
+    if (true)
         aPap.Stop(rOut, *this, cUnknown);
     if (!Pushed())
         aSep.Stop(rOut, *this, cUnknown);
@@ -152,9 +152,9 @@ void Ww1Manager::OutStart( Ww1Shell& rOut )
 // alle attribute, die's brauchen beginnen
     if (!Pushed())
         aSep.Start(rOut, *this);
-    if (1)
+    if (true)
         aPap.Start(rOut, *this);
-    if (1)
+    if (true)
         aChp.Start(rOut, *this);
     if (!Pushed())
         aFtn.Start(rOut, *this);
@@ -167,10 +167,10 @@ void Ww1Manager::OutStart( Ww1Shell& rOut )
     if (!Pushed())
         if (ulEnd > aSep.Where()) // naechster Sep vorher?
             ulEnd = aSep.Where();
-    if (1)
+    if (true)
         if (ulEnd > aPap.Where()) // naechster Pap vorher?
             ulEnd = aPap.Where();
-    if (1)
+    if (true)
         if (ulEnd > aChp.Where()) // naechster Chp vorher?
             ulEnd = aChp.Where();
     if (!Pushed())
@@ -455,7 +455,7 @@ static WWDateTime GetTimeDatePara( const OUString& rForm,
     }
 
     sal_Int32 nDPos = 0;
-    while (1)
+    while (true)
     {
         nDPos = rForm.indexOf('M', nDPos);     // M    -> Datum
         if (nDPos == 0 || nDPos == -1)

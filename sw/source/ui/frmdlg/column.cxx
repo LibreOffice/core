@@ -209,7 +209,7 @@ SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh)
     pOK->SetClickHdl(LINK(this, SwColumnDlg, OkHdl));
     //#i80458# if no columns can be set then disable OK
     if( !m_pApplyToLB->GetEntryCount() )
-        pOK->Enable( sal_False );
+        pOK->Enable( false );
     //#i97810# set focus to the TabPage
     pTabPage->ActivateColumnControl();
     pTabPage->Show();
@@ -594,7 +594,7 @@ void SwColumnPage::Reset(const SfxItemSet &rSet)
     if(nHtmlMode & HTMLMODE_ON)
     {
         bHtmlMode = sal_True;
-        m_pAutoWidthBox->Enable(sal_False);
+        m_pAutoWidthBox->Enable(false);
     }
     FieldUnit aMetric = ::GetDfltMetric(bHtmlMode);
     aEd1.SetMetric(aMetric);
@@ -880,7 +880,7 @@ void SwColumnPage::UpdateCols()
     const sal_Bool bEdit = !m_pAutoWidthBox->IsChecked();
     if ( nCols > nVisCols )
     {
-        bEnableBtns = sal_True && !bHtmlMode;
+        bEnableBtns = true && !bHtmlMode;
         bEnable12 = bEnable3 = bEdit;
     }
     else if( bEdit )

@@ -1282,7 +1282,7 @@ void SwCntntNode::DelFrms( sal_Bool /*bNeedDel*/, sal_Bool bIsDisposeAccTable )
         pFrm->SetAccTableDispose( bIsDisposeAccTable );
         pFrm->Cut();
         //Set acc table dispose state to default value
-        pFrm->SetAccTableDispose( sal_True );
+        pFrm->SetAccTableDispose( true );
         delete pFrm;
     }
 

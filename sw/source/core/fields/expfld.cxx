@@ -275,7 +275,7 @@ void SwGetExpFieldType::Modify( const SfxPoolItem*, const SfxPoolItem* pNew )
 SwGetExpField::SwGetExpField(SwGetExpFieldType* pTyp, const OUString& rFormel,
                             sal_uInt16 nSub, sal_uLong nFmt)
     : SwFormulaField( pTyp, nFmt, 0.0 ),
-    bIsInBodyTxt( sal_True ),
+    bIsInBodyTxt( true ),
     nSubType(nSub),
     bLateInitialization( false )
 {
@@ -337,7 +337,7 @@ void SwGetExpField::ChangeExpansion( const SwFrm& rFrm, const SwTxtFld& rFld )
     // #i82544#
     if( bLateInitialization )
     {
-        SwFieldType* pSetExpFld = rDoc.GetFldType(RES_SETEXPFLD, GetFormula(), sal_False);
+        SwFieldType* pSetExpFld = rDoc.GetFldType(RES_SETEXPFLD, GetFormula(), false);
         if( pSetExpFld )
         {
             bLateInitialization = false;

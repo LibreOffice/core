@@ -83,7 +83,7 @@ void SwUndoInsNum::UndoImpl(::sw::UndoRedoContext & rContext)
         SwTxtNode* pNd;
         if( ULONG_MAX != nSttSet &&
             0 != ( pNd = rDoc.GetNodes()[ nSttSet ]->GetTxtNode() ))
-                pNd->SetListRestart( sal_True );
+                pNd->SetListRestart( true );
         else
             pNd = 0;
 

@@ -138,7 +138,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         case SID_THES:
         {
             OUString aReplaceText;
-            SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES, sal_False );
+            SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES, false );
             if (pItem2)
                 aReplaceText = pItem2->GetValue();
             if (!aReplaceText.isEmpty())
@@ -501,7 +501,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                         : text::WritingMode_TB_RL, SDRATTR_TEXTDIRECTION ) );
                 pTmpView->SetAttributes( aAttr );
 
-                rSh.GetView().BeginTextEdit( pTmpObj, pTmpPV, &rSh.GetView().GetEditWin(), sal_False);
+                rSh.GetView().BeginTextEdit( pTmpObj, pTmpPV, &rSh.GetView().GetEditWin(), false);
                 rSh.GetView().AttrChangedNotify( &rSh );
             }
             return;
@@ -544,7 +544,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                     aAttr.Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
             }
             pTmpView->SetAttributes( aAttr );
-            rSh.GetView().BeginTextEdit( pTmpObj, pTmpPV, &rSh.GetView().GetEditWin(), sal_False );
+            rSh.GetView().BeginTextEdit( pTmpObj, pTmpPV, &rSh.GetView().GetEditWin(), false );
             rSh.GetView().AttrChangedNotify( &rSh );
         }
         return;
@@ -858,7 +858,7 @@ void SwDrawTextShell::GetDrawTxtCtrlState(SfxItemSet& rSet)
                 if( !pEditPool )
                     pEditPool = aEditAttr.GetPool();
                 SvxScriptSetItem aSetItem( nSlotId, *pEditPool );
-                aSetItem.GetItemSet().Put( aEditAttr, sal_False );
+                aSetItem.GetItemSet().Put( aEditAttr, false );
                 const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScriptType );
                 if( pI )
                     rSet.Put( *pI, nWhich );

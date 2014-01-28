@@ -1975,7 +1975,7 @@ bool SwTransferable::_PasteTargetURL( TransferableDataHelper& rData,
         if( aURL.GetURL() != aINetImg.GetTargetURL() ||
             aURL.GetTargetFrameName() != aINetImg.GetTargetFrame() )
         {
-            aURL.SetURL( aINetImg.GetTargetURL(), sal_False );
+            aURL.SetURL( aINetImg.GetTargetURL(), false );
             aURL.SetTargetFrameName( aINetImg.GetTargetFrame() );
             aSet.Put( aURL );
             rSh.SetFlyFrmAttr( aSet );
@@ -2334,7 +2334,7 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
                     SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
                     rSh.GetFlyFrmAttr( aSet );
                     SwFmtURL aURL( (SwFmtURL&)aSet.Get( RES_URL ) );
-                    aURL.SetURL( aBkmk.GetURL(), sal_False );
+                    aURL.SetURL( aBkmk.GetURL(), false );
                     aSet.Put( aURL );
                     rSh.SetFlyFrmAttr( aSet );
                 }
@@ -2442,7 +2442,7 @@ bool SwTransferable::_PasteAsHyperlink( TransferableDataHelper& rData,
                 SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
                 rSh.GetFlyFrmAttr( aSet );
                 SwFmtURL aURL2( (SwFmtURL&)aSet.Get( RES_URL ) );
-                aURL2.SetURL( sFile, sal_False );
+                aURL2.SetURL( sFile, false );
                 if( aURL2.GetName().isEmpty() )
                     aURL2.SetName( sFile );
                 aSet.Put( aURL2 );
@@ -2531,7 +2531,7 @@ bool SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                             SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
                             rSh.GetFlyFrmAttr( aSet );
                             SwFmtURL aURL2( (SwFmtURL&)aSet.Get( RES_URL ) );
-                            aURL2.SetURL( sFile, sal_False );
+                            aURL2.SetURL( sFile, false );
                             if( aURL2.GetName().isEmpty() )
                                 aURL2.SetName( sFile );
                             aSet.Put( aURL2 );
@@ -3249,7 +3249,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
                 SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
                 rSh.GetFlyFrmAttr( aSet );
                 SwFmtURL aURL( (SwFmtURL&)aSet.Get( RES_URL ) );
-                aURL.SetURL( aTmp.GetURL(), sal_False );
+                aURL.SetURL( aTmp.GetURL(), false );
                 aSet.Put( aURL );
                 rSh.SetFlyFrmAttr( aSet );
                 return true;

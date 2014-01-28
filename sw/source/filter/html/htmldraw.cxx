@@ -492,7 +492,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     if( SVX_CSS1_LTYPE_TWIP== aPropInfo.eHeightType )
         aTwipSz.Height() = aPropInfo.nHeight;
 
-    bFixMarqueeWidth = sal_False;
+    bFixMarqueeWidth = false;
     if( !nWidth || bPrcWidth )
     {
         if( pTable )
@@ -503,7 +503,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
                 // in einer Zelle. Da jetzt keine vernuenftige Zuordung
                 // zu einer Zelle moeglich ist, passen wir hir die
                 // Breite dem Inhalt der Laufschrift an.
-                bFixMarqueeWidth = sal_True;
+                bFixMarqueeWidth = true;
             }
             else if( !nWidth )
             {

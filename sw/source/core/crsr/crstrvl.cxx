@@ -1318,7 +1318,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                             m_pCurCrsr->GetPoint()->nNode = *((SwTxtFtn*)pTxtAttr)->GetStartNode();
                             SwCntntNode* pCNd = GetDoc()->GetNodes().GoNextSection(
                                 &m_pCurCrsr->GetPoint()->nNode,
-                                sal_True, !IsReadOnlyAvailable() );
+                                true, !IsReadOnlyAvailable() );
 
                             if( pCNd )
                             {
@@ -2025,7 +2025,7 @@ const SwRangeRedline* SwCrsrShell::_GotoRedline( sal_uInt16 nArrPos, sal_Bool bS
         SwNodeIndex* pIdx = &m_pCurCrsr->GetPoint()->nNode;
         if( !pIdx->GetNode().IsCntntNode() &&
             0 != ( pCNd = GetDoc()->GetNodes().GoNextSection( pIdx,
-                                    sal_True, IsReadOnlyAvailable() )) )
+                                    true, IsReadOnlyAvailable() )) )
         {
             if( *pIdx <= pFnd->End()->nNode )
                 m_pCurCrsr->GetPoint()->nContent.Assign( pCNd, 0 );
@@ -2048,7 +2048,7 @@ const SwRangeRedline* SwCrsrShell::_GotoRedline( sal_uInt16 nArrPos, sal_Bool bS
             pIdx = &m_pCurCrsr->GetPoint()->nNode;
             if( !pIdx->GetNode().IsCntntNode() &&
                 0 != ( pCNd = GetDoc()->GetNodes().GoPrevSection( pIdx,
-                                            sal_True, IsReadOnlyAvailable() )) )
+                                            true, IsReadOnlyAvailable() )) )
             {
                 if( *pIdx >= m_pCurCrsr->GetMark()->nNode )
                     m_pCurCrsr->GetPoint()->nContent.Assign( pCNd, pCNd->Len() );

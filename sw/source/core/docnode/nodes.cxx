@@ -189,7 +189,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
             "the code to handle text fields here looks broken\n"
             "if the target is in a different document.");
         if( !bRestPersData && !bSavePersData && pDestDoc )
-            bSavePersData = bRestPersData = sal_True;
+            bSavePersData = bRestPersData = true;
 
         OUString sNumRule;
         SwNodeIndex aInsPos( rInsPos );
@@ -365,7 +365,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
         {
             OSL_ENSURE( !this, "here, something wrong happened" );
             aFrmNdIdx = rNds.GetEndOfContent();
-            pFrmNd = rNds.GoPrevSection( &aFrmNdIdx, sal_True, sal_False );
+            pFrmNd = rNds.GoPrevSection( &aFrmNdIdx, true, false );
             if( pFrmNd && !((SwCntntNode*)pFrmNd)->GetDepends() )
                 pFrmNd = 0;
             OSL_ENSURE( pFrmNd, "ChgNode() - no FrameNode found" );
@@ -2090,7 +2090,7 @@ SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
                 rFrmIdx = aIdx;
 
             // search forward or backward for a content node
-            else if( 0 != ( pFrmNd = GoPrevSection( &aIdx, sal_True, sal_False )) &&
+            else if( 0 != ( pFrmNd = GoPrevSection( &aIdx, true, false )) &&
                     ::CheckNodesRange( aIdx, rFrmIdx, true ) &&
                     // nach vorne nie aus der Tabelle hinaus!
                     pFrmNd->FindTableNode() == pTableNd &&
@@ -2112,7 +2112,7 @@ SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
 
                 // NEVER leave the section when doing this!
                 if( ( pEnd && ( pFrmNd = &aIdx.GetNode())->IsCntntNode() ) ||
-                    ( 0 != ( pFrmNd = GoNextSection( &aIdx, sal_True, sal_False )) &&
+                    ( 0 != ( pFrmNd = GoNextSection( &aIdx, true, false )) &&
                     ::CheckNodesRange( aIdx, rFrmIdx, true ) &&
                     ( pFrmNd->FindTableNode() == pTableNd &&
                         // NEVER go out of the table cell at the end

@@ -530,7 +530,7 @@ void SwTxtNode::RstTxtAttr(
                     m_pSwpHints->NoteInHistory( pHt );
                     // UGLY: this may temporarily destroy the sorting!
                     *pHt->GetStart() = nEnd;
-                    m_pSwpHints->NoteInHistory( pHt, sal_True );
+                    m_pSwpHints->NoteInHistory( pHt, true );
 
                     if ( pStyleHandle.get() && nAttrStart < nEnd )
                     {
@@ -564,7 +564,7 @@ void SwTxtNode::RstTxtAttr(
                     m_pSwpHints->NoteInHistory( pHt );
                     // UGLY: this may temporarily destroy the sorting!
                     *pAttrEnd = nStt;
-                    m_pSwpHints->NoteInHistory( pHt, sal_True );
+                    m_pSwpHints->NoteInHistory( pHt, true );
 
                     if ( pStyleHandle.get() )
                     {
@@ -590,7 +590,7 @@ void SwTxtNode::RstTxtAttr(
                     m_pSwpHints->NoteInHistory( pHt );
                     // UGLY: this may temporarily destroy the sorting!
                     *pAttrEnd = nStt;
-                    m_pSwpHints->NoteInHistory( pHt, sal_True );
+                    m_pSwpHints->NoteInHistory( pHt, true );
 
                     if ( pStyleHandle.get() && nStt < nEnd )
                     {
@@ -1570,7 +1570,7 @@ void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, sal_Int32 nActPos )
     }
 
     if( bAnyWrd && !bACWDirty )
-        pNode->SetAutoCompleteWordDirty( sal_False );
+        pNode->SetAutoCompleteWordDirty( false );
 }
 
 /** Findet den TxtFrm und sucht dessen CalcHyph */
@@ -1581,7 +1581,7 @@ sal_Bool SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
          && USHRT_MAX == GetLang(0, m_Text.getLength()))
     {
         if( !rHyphInf.IsCheck() )
-            rHyphInf.SetNoLang( sal_True );
+            rHyphInf.SetNoLang( true );
         return sal_False;
     }
 
@@ -1905,7 +1905,7 @@ void SwTxtNode::ReplaceTextOnly( sal_Int32 nPos, sal_Int32 nLen,
             while( nI + nCnt < nTLen && nOff == pOffsets[ nI + nCnt ] )
                 ++nCnt;
 
-            Update( SwIndex( this, nMyOff ), nCnt, sal_False );
+            Update( SwIndex( this, nMyOff ), nCnt, false );
             nMyOff = nOff;
             //nMyOff -= nCnt;
             nI += nCnt - 1;
@@ -1913,14 +1913,14 @@ void SwTxtNode::ReplaceTextOnly( sal_Int32 nPos, sal_Int32 nLen,
         else if( nOff > nMyOff )
         {
             // something is deleted
-            Update( SwIndex( this, nMyOff+1 ), nOff - nMyOff, sal_True );
+            Update( SwIndex( this, nMyOff+1 ), nOff - nMyOff, true );
             nMyOff = nOff;
         }
         ++nMyOff;
     }
     if( nMyOff < nLen )
         // something is deleted at the end
-        Update( SwIndex( this, nMyOff ), nLen - nMyOff, sal_True );
+        Update( SwIndex( this, nMyOff ), nLen - nMyOff, true );
 
     // notify the layout!
     SwDelTxt aDelHint( nPos, nTLen );

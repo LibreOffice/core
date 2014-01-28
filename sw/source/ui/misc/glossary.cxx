@@ -221,7 +221,7 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     bIsDocReadOnly = pSh->GetView().GetDocShell()->IsReadOnly() ||
                       pSh->HasReadonlySel();
     if( bIsDocReadOnly )
-        m_pInsertBtn->Enable(sal_False);
+        m_pInsertBtn->Enable(false);
     m_pNameED->GrabFocus();
     m_pCategoryBox->SetStyle(m_pCategoryBox->GetStyle()|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL|WB_VSCROLL|WB_CLIPCHILDREN|WB_SORT);
     m_pCategoryBox->GetModel()->SetSortMode(SortAscending);
@@ -344,7 +344,7 @@ IMPL_LINK( SwGlossaryDlg, NameModify, Edit *, pEdit )
     {
         if(bNameED)
             m_pShortNameEdit->SetText(aName);
-        m_pInsertBtn->Enable(sal_False);
+        m_pInsertBtn->Enable(false);
         return 0;
     }
     const bool bNotFound = !DoesBlockExist(aName, bNameED ? OUString() : pEdit->GetText());

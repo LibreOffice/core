@@ -405,7 +405,7 @@ public:
     void                    GotFocus() const;
     virtual SdrView*        GetDrawView() const;
     virtual sal_Bool        HasUIFeature( sal_uInt32 nFeature );
-    virtual void            ShowCursor( bool bOn = sal_True );
+    virtual void            ShowCursor( bool bOn = true );
     virtual ErrCode         DoVerb( long nVerb );
 
     virtual sal_uInt16          SetPrinter( SfxPrinter* pNew,

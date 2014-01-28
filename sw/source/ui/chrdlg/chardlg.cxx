@@ -231,8 +231,8 @@ void SwCharURLPage::Reset(const SfxItemSet& rSet)
     if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_SELECTION, sal_False, &pItem))
     {
         m_pTextED->SetText(((const SfxStringItem*)pItem)->GetValue());
-        m_pTextFT->Enable( sal_False );
-        m_pTextED->Enable( sal_False );
+        m_pTextFT->Enable( false );
+        m_pTextED->Enable( false );
     }
 }
 

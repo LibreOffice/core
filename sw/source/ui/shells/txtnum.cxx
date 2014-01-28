@@ -50,7 +50,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
     case FN_NUM_NUMBERING_ON:
     {
         GetShell().StartAllAction();
-        SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, FN_PARAM_1 , sal_False );
+        SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, FN_PARAM_1 , false );
         sal_Bool bMode = !GetShell().SelectionHasNumber(); // #i29560#
         if ( pItem )
             bMode = pItem->GetValue();
@@ -79,7 +79,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
     case FN_NUM_BULLET_ON:
     {
         GetShell().StartAllAction();
-        SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, FN_PARAM_1 , sal_False );
+        SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, FN_PARAM_1 , false );
         sal_Bool bMode = !GetShell().SelectionHasBullet(); // #i29560#
         if ( pItem )
             bMode = pItem->GetValue();
@@ -176,7 +176,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
             aSet.Put(SvxNumBulletItem(aSvxRule));
         }
 
-        aSet.Put( SfxBoolItem( SID_PARAM_NUM_PRESET,sal_False ));
+        aSet.Put( SfxBoolItem( SID_PARAM_NUM_PRESET,false ));
 
         // Before the dialogue of the HTML mode will be dropped at the Docshell.
         pDocSh->PutItem(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(pDocSh)));
@@ -298,7 +298,7 @@ void SwTextShell::ExecSetNumber(SfxRequest &rReq)
     {
     case FN_SVX_SET_NUMBER:
         {
-            SFX_REQUEST_ARG( rReq, pItem, SfxUInt16Item, FN_SVX_SET_NUMBER , sal_False );
+            SFX_REQUEST_ARG( rReq, pItem, SfxUInt16Item, FN_SVX_SET_NUMBER , false );
             if (pItem)
             {
                 sal_uInt16 nIdx = pItem->GetValue();
@@ -351,7 +351,7 @@ void SwTextShell::ExecSetNumber(SfxRequest &rReq)
         }
     case FN_SVX_SET_BULLET:
         {
-            SFX_REQUEST_ARG( rReq, pItem, SfxUInt16Item, FN_SVX_SET_BULLET , sal_False );
+            SFX_REQUEST_ARG( rReq, pItem, SfxUInt16Item, FN_SVX_SET_BULLET , false );
             if (pItem)
             {
                 sal_uInt16 nIdx = pItem->GetValue();

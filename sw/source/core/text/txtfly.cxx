@@ -679,8 +679,8 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
         // #102344# Ignore connectors which have one or more connections
         if(pNew && pNew->ISA(SdrEdgeObj))
         {
-            if(((SdrEdgeObj*)pNew)->GetConnectedNode(sal_True)
-                || ((SdrEdgeObj*)pNew)->GetConnectedNode(sal_False))
+            if(((SdrEdgeObj*)pNew)->GetConnectedNode(true)
+                || ((SdrEdgeObj*)pNew)->GetConnectedNode(false))
             {
                 return sal_False;
             }

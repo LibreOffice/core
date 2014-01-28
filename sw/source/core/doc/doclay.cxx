@@ -502,7 +502,7 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveWithinDoc,
     SdrPage *pPg = GetOrCreateDrawModel()->GetPage( 0 );
     if( !pPg )
     {
-        pPg = GetDrawModel()->AllocPage( sal_False );
+        pPg = GetDrawModel()->AllocPage( false );
         GetDrawModel()->InsertPage( pPg );
     }
 
@@ -1553,7 +1553,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
          rDoc.GetInvisibleHellId() != nLayerId )
     {
         SvxOpaqueItem aOpaque( RES_OPAQUE );
-        aOpaque.SetValue( sal_True );
+        aOpaque.SetValue( true );
         pNewSet->Put( aOpaque );
     }
 
@@ -1862,7 +1862,7 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
             pStartSh->LockView( sal_True );
 
             GetSysFldType( RES_CHAPTERFLD )->ModifyNotification( 0, 0 );    // ChapterField
-            UpdateExpFlds( 0, sal_False );      // Updates ExpressionFields
+            UpdateExpFlds( 0, false );      // Updates ExpressionFields
             UpdateTblFlds(NULL);                // Tables
             UpdateRefFlds(NULL);                // References
 

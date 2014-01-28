@@ -173,7 +173,7 @@ struct SwCrsrMoveState
         bRealWidth( sal_False ),
         b2Lines( sal_False ),
         bNoScroll( sal_False ),
-        bPosMatchesBounds( sal_False ),
+        bPosMatchesBounds( false ),
         bCntntCheck( sal_False ), // #i43742#
         bInFrontOfLabel( sal_False ), // #i27615#
         bInNumPortion(sal_False), // #i26726#
@@ -194,7 +194,7 @@ struct SwCrsrMoveState
         bRealWidth( sal_False ),
         b2Lines( sal_False ),
         bNoScroll( sal_False ),
-        bPosMatchesBounds( sal_False ),
+        bPosMatchesBounds( false ),
         bCntntCheck( sal_False ), // #i43742#
         bInFrontOfLabel( sal_False ), // #i27615#
         bInNumPortion(sal_False), // #i23726#

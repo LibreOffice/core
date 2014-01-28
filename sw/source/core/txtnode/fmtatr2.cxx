@@ -243,7 +243,7 @@ bool SwFmtINetFmt::operator==( const SfxPoolItem& rAttr ) const
                 && mnVisitedFmtId == ((SwFmtINetFmt&)rAttr).mnVisitedFmtId;
 
     if( !bRet )
-        return sal_False;
+        return false;
 
     const SvxMacroTableDtor* pOther = ((SwFmtINetFmt&)rAttr).mpMacroTbl;
     if( !mpMacroTbl )

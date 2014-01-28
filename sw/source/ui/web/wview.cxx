@@ -131,7 +131,7 @@ void SwWebView::SelectShell()
 
             SfxShell *pSfxShell;
             sal_uInt16 i;
-            for ( i = 0; sal_True; ++i )
+            for ( i = 0; true; ++i )
             {
                 pSfxShell = rDispatcher.GetShell( i );
                 if ( !( pSfxShell->ISA( SwBaseShell ) ||

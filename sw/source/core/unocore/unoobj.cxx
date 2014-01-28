@@ -1060,7 +1060,7 @@ SwXTextCursor::gotoStart(sal_Bool Expand) throw (uno::RuntimeException)
             if (pSectionStartNode->GetSection().IsHiddenFlag())
             {
                 pCNode = GetDoc()->GetNodes().GoNextSection(
-                        &rUnoCursor.GetPoint()->nNode, sal_True, sal_False);
+                        &rUnoCursor.GetPoint()->nNode, true, false);
                 if (pCNode)
                 {
                     rUnoCursor.GetPoint()->nContent.Assign(pCNode, 0);
@@ -2026,7 +2026,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
                         pSetParent.reset( pSet->Clone( sal_False ) );
                         // #i63870#
                         SwUnoCursorHelper::GetCrsrAttr(
-                                rPaM, *pSetParent, sal_True, sal_False );
+                                rPaM, *pSetParent, true, false );
                     }
 
                     pStates[i] = ( (pSetParent)->Count() )

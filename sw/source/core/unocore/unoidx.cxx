@@ -1378,7 +1378,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
     m_pImpl->m_pProps.reset();
     m_pImpl->m_pDoc = pDoc;
-    m_pImpl->m_bIsDescriptor = sal_False;
+    m_pImpl->m_bIsDescriptor = false;
 }
 
 uno::Reference< text::XTextRange > SAL_CALL
@@ -1915,7 +1915,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     m_pImpl->InsertTOXMark(*const_cast<SwTOXType *>(pTOXType), aMark, aPam,
             dynamic_cast<SwXTextCursor const*>(pCursor));
 
-    m_pImpl->m_bIsDescriptor = sal_False;
+    m_pImpl->m_bIsDescriptor = false;
 }
 
 template<typename T> struct NotContainedIn

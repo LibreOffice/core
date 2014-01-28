@@ -31,7 +31,7 @@ PercentField::PercentField()
     , nLastValue(-1)
     , nOldDigits(0)
     , eOldUnit(FUNIT_NONE)
-    , bLockAutoCalculation(sal_False)
+    , bLockAutoCalculation(false)
 {
 }
 

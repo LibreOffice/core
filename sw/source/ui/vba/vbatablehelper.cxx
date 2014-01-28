@@ -116,7 +116,7 @@ OUString SwVbaTableHelper::getColumnStr( sal_Int32 nCol )
             break;
         nCol /= coDiff;
         --nCol;
-    }while(1);
+    }while(true);
     return sRet;
 }
 

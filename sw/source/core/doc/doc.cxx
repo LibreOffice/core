@@ -617,7 +617,7 @@ OutputDevice* SwDoc::getReferenceDevice(/*[in]*/ bool bCreate ) const
 
         if ( bCreate && !mpPrt->IsValid() )
         {
-            pRet = getVirtualDevice( sal_True );
+            pRet = getVirtualDevice( true );
         }
     }
     else
@@ -918,7 +918,7 @@ bool SwDoc::AppendTxtNode( SwPosition& rPos )
     }
 
     SetModified();
-    return sal_True;
+    return true;
 }
 
 bool SwDoc::InsertString( const SwPaM &rRg, const OUString &rStr,
@@ -1914,13 +1914,13 @@ void SwDoc::SetModified()
     //  Bit 0:  -> old state
     //  Bit 1:  -> new state
     sal_IntPtr nCall = mbModified ? 3 : 2;
-    mbModified = sal_True;
+    mbModified = true;
     mpDocStat->bModified = sal_True;
     if( maOle2Link.IsSet() )
     {
-        mbInCallModified = sal_True;
+        mbInCallModified = true;
         maOle2Link.Call( (void*)nCall );
-        mbInCallModified = sal_False;
+        mbInCallModified = false;
     }
 
     if( mpACEWord && !mpACEWord->IsDeleted() )
@@ -1933,13 +1933,13 @@ void SwDoc::ResetModified()
     //  Bit 0:  -> old state
     //  Bit 1:  -> new state
     sal_IntPtr nCall = mbModified ? 1 : 0;
-    mbModified = sal_False;
+    mbModified = false;
     GetIDocumentUndoRedo().SetUndoNoModifiedPosition();
     if( nCall && maOle2Link.IsSet() )
     {
-        mbInCallModified = sal_True;
+        mbInCallModified = true;
         maOle2Link.Call( (void*)nCall );
-        mbInCallModified = sal_False;
+        mbInCallModified = false;
     }
 }
 
@@ -2192,7 +2192,7 @@ bool SwDoc::RemoveInvisibleContent()
             SwPaM aPam(*pTxtNd, 0, *pTxtNd, pTxtNd->GetTxt().getLength());
             if ( pTxtNd->HasHiddenCharAttribute( true ) )
             {
-                bRemoved = sal_True;
+                bRemoved = true;
                 bRet = true;
 
                 // Remove hidden paragraph or delete contents:
@@ -2214,7 +2214,7 @@ bool SwDoc::RemoveInvisibleContent()
             }
             else if ( pTxtNd->HasHiddenCharAttribute( false ) )
             {
-                bRemoved = sal_True;
+                bRemoved = true;
                 bRet = true;
                 SwScriptInfo::DeleteHiddenRanges( *pTxtNd );
             }
@@ -2588,9 +2588,9 @@ void SwDoc::ChgTOX(SwTOXBase & rTOX, const SwTOXBase & rNew)
 
 OUString SwDoc::GetPaMDescr(const SwPaM & rPam) const
 {
-    if (rPam.GetNode(sal_True) == rPam.GetNode(sal_False))
+    if (rPam.GetNode(true) == rPam.GetNode(false))
     {
-        SwTxtNode * pTxtNode = rPam.GetNode(sal_True)->GetTxtNode();
+        SwTxtNode * pTxtNode = rPam.GetNode(true)->GetTxtNode();
 
         if (0 != pTxtNode)
         {
@@ -2604,9 +2604,9 @@ OUString SwDoc::GetPaMDescr(const SwPaM & rPam) const
                 + SW_RESSTR(STR_END_QUOTE);
         }
     }
-    else if (0 != rPam.GetNode(sal_True))
+    else if (0 != rPam.GetNode(true))
     {
-        if (0 != rPam.GetNode(sal_False))
+        if (0 != rPam.GetNode(false))
         {
             return SW_RESSTR(STR_PARAGRAPHS);
         }

@@ -1175,7 +1175,7 @@ bool SwWW8ImplReader::TxbxChainContainsRealText(sal_uInt16 nTxBxS, long& rStartC
     long&  rEndCp)
 {
     bool bErase, bContainsText;
-    InsertTxbxText( 0,0,nTxBxS,USHRT_MAX,0,0,0, bErase, &bContainsText,
+    InsertTxbxText( 0,0,nTxBxS,USHRT_MAX,0,0,false, bErase, &bContainsText,
         &rStartCp, &rEndCp );
     return bContainsText;
 }

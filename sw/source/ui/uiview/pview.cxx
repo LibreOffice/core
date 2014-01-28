@@ -1055,7 +1055,7 @@ void  SwPagePreview::GetState( SfxItemSet& rSet )
             break;
 
         case SID_PRINTPREVIEW:
-            rSet.Put( SfxBoolItem( nWhich, sal_True ) );
+            rSet.Put( SfxBoolItem( nWhich, true ) );
             break;
 
         case SID_PRINTDOC:

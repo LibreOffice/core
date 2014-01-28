@@ -267,7 +267,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                 pTxtFld = lcl_FindInputFld( GetDoc(), rFld);
 
             if (pTxtFld != 0)
-                GetDoc()->UpdateFld(pTxtFld, rFld, pMsgHnt, sal_True);
+                GetDoc()->UpdateFld(pTxtFld, rFld, pMsgHnt, true);
         }
 
         // bOkay (instead of return because of EndAllAction) becomes false,
@@ -297,9 +297,9 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                 // Search for SwTxtFld ...
                 while(  bOkay
                      && pCurStt->nContent != pCurEnd->nContent
-                     && ( aPam.Find( aFldHint, sal_False, fnMoveForward, &aCurPam )
-                          || aPam.Find( aAnnotationFldHint, sal_False, fnMoveForward, &aCurPam )
-                          || aPam.Find( aInputFldHint, sal_False, fnMoveForward, &aCurPam ) ) )
+                     && ( aPam.Find( aFldHint, false, fnMoveForward, &aCurPam )
+                          || aPam.Find( aAnnotationFldHint, false, fnMoveForward, &aCurPam )
+                          || aPam.Find( aInputFldHint, false, fnMoveForward, &aCurPam ) ) )
                 {
                     // if only one PaM has more than one field  ...
                     if( aPam.Start()->nContent != pCurStt->nContent )
@@ -316,7 +316,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                             bOkay = false;
 
                         bTblSelBreak = GetDoc()->UpdateFld(pTxtFld, rFld,
-                                                           pMsgHnt, sal_False);
+                                                           pMsgHnt, false);
                     }
                     // The search area is reduced by the found area:
                     pCurStt->nContent++;

@@ -319,7 +319,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl)
                     m_pLbFormat->InsertEntry( aFormatName, nDfltStylePos + n );
                     m_pLbFormat->SelectEntryPos( nDfltStylePos + n );
                     bFmtInserted = true;
-                    m_pBtnAdd->Enable( sal_False );
+                    m_pBtnAdd->Enable( false );
                     if ( !bCoreDataChanged )
                     {
                         m_pBtnCancel->SetText( aStrClose );
@@ -364,8 +364,8 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RemoveHdl)
 
         if( !nIndex )
         {
-            m_pBtnRemove->Enable(sal_False);
-            m_pBtnRename->Enable(sal_False);
+            m_pBtnRemove->Enable(false);
+            m_pBtnRename->Enable(false);
         }
 
         if( !bCoreDataChanged )

@@ -103,10 +103,10 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
                 SfxBindings& rBind = GetView().GetViewFrame()->GetBindings();
                 if( nWhich == FN_SET_SUB_SCRIPT )
                     rBind.SetState( SfxBoolItem( FN_SET_SUPER_SCRIPT,
-                                                                    sal_False ) );
+                                                                    false ) );
                 else
                     rBind.SetState( SfxBoolItem( FN_SET_SUB_SCRIPT,
-                                                                    sal_False ) );
+                                                                    false ) );
 
             }
             break;
@@ -311,7 +311,7 @@ void SwTextShell::ExecParaAttr(SfxRequest &rReq)
 SET_ADJUST:
         {
             aSet.Put(SvxAdjustItem(eAdjst,RES_PARATR_ADJUST));
-            rReq.AppendItem( SfxBoolItem( GetPool().GetWhich(nSlot), sal_True ) );
+            rReq.AppendItem( SfxBoolItem( GetPool().GetWhich(nSlot), true ) );
         }
         break;
 
@@ -617,7 +617,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             {
                 SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONTHEIGHT,
                                             *rSet.GetPool() );
-                aSetItem.GetItemSet().Put( aCoreSet, sal_False );
+                aSetItem.GetItemSet().Put( aCoreSet, false );
                 if( !aSetItem.GetItemOfScript( rSh.GetScriptType() ))
                     rSet.DisableItem( nSlot );
                 nSlot = 0;
@@ -745,7 +745,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
         nSlot = aIter.NextWhich();
     }
 
-    rSet.Put(aCoreSet,sal_False);
+    rSet.Put(aCoreSet,false);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

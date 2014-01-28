@@ -3109,7 +3109,7 @@ void _SectionSaveStruct::Restore( SwHTMLParser& rParser )
     rParser.nDefListDeep = nDefListDeepSave;
 
     // und ein par Flags zuruecksetzen
-    rParser.bNoParSpace = sal_False;
+    rParser.bNoParSpace = false;
     rParser.nOpenParaToken = 0;
 
     if( !rParser.aParaAttrs.empty() )
@@ -3712,7 +3712,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
                     SetAttr( sal_True, sal_True, pPostIts );
                 }
             }
-            bNoParSpace = sal_False;
+            bNoParSpace = false;
 
             // Aktuelle Numerierung retten und auschalten.
             pTCntxt->SetNumInfo( GetNumInfo() );
@@ -4089,7 +4089,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
                 pSaveStruct->AddContents(
                     InsertTableContents( bHead ) );
             }
-            bCallNextToken = sal_True;
+            bCallNextToken = true;
             NewMarquee( pCurTable );
             break;
 
@@ -5457,7 +5457,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
         if( pTable==pCurTable )
         {
             // oberen Absatz-Abstand einstellen
-            bUpperSpace = sal_True;
+            bUpperSpace = true;
             SetTxtCollAttrs();
 
             nParaCnt = nParaCnt - std::min(nParaCnt,
@@ -5467,7 +5467,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
             if( JUMPTO_TABLE == eJumpTo && pTable->GetSwTable() &&
                 pTable->GetSwTable()->GetFrmFmt()->GetName() == sJmpMark )
             {
-                bChkJumpMark = sal_True;
+                bChkJumpMark = true;
                 eJumpTo = JUMPTO_NONE;
             }
 

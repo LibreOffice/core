@@ -164,7 +164,7 @@ static SwGetPoolIdFromName lcl_GetSwEnumFromSfxEnum ( SfxStyleFamily eFamily )
         case SFX_STYLE_FAMILY_PSEUDO:
             return nsSwGetPoolIdFromName::GET_POOLID_NUMRULE;
         default:
-            OSL_ENSURE(sal_False, "someone asking for all styles in unostyle.cxx!" );
+            OSL_ENSURE(false, "someone asking for all styles in unostyle.cxx!" );
             return nsSwGetPoolIdFromName::GET_POOLID_CHRFMT;
     }
 }
@@ -3138,13 +3138,13 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                                 SID_ATTR_PAGE_SHARED, SID_ATTR_PAGE_SHARED,
                                 SID_ATTR_PAGE_SHARED_FIRST, SID_ATTR_PAGE_SHARED_FIRST,
                                 0 );
-                            aTempSet.Put(SfxBoolItem(nRes, sal_True));
+                            aTempSet.Put(SfxBoolItem(nRes, true));
                             aTempSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(MM50, MM50)));
                             aTempSet.Put(SvxLRSpaceItem(RES_LR_SPACE));
                             aTempSet.Put(SvxULSpaceItem(RES_UL_SPACE));
-                            aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_SHARED, sal_True));
-                            aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_SHARED_FIRST, sal_True));
-                            aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_DYNAMIC, sal_True));
+                            aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_SHARED, true));
+                            aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_SHARED_FIRST, true));
+                            aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_DYNAMIC, true));
 
                             SvxSetItem aNewSetItem( bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
                                     aTempSet);

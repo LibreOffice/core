@@ -631,13 +631,13 @@ bool SvXMLImportItemMapper::PutXMLValue(
             if( IsXMLToken( rValue, XML_ALWAYS ) ||
                  IsXMLToken( rValue, XML_TRUE ) )
             {
-                pFmtKeep->SetValue( sal_True );
+                pFmtKeep->SetValue( true );
                 bOk = true;
             }
             else if( IsXMLToken( rValue, XML_AUTO ) ||
                      IsXMLToken( rValue, XML_FALSE ) )
             {
-                pFmtKeep->SetValue( sal_False );
+                pFmtKeep->SetValue( false );
                 bOk = true;
             }
         }
@@ -811,13 +811,13 @@ bool SvXMLImportItemMapper::PutXMLValue(
             if( IsXMLToken( rValue, XML_AUTO ) ||
                  IsXMLToken( rValue, XML_TRUE ) )
             {
-                pSplit->SetValue( sal_True );
+                pSplit->SetValue( true );
                 bOk = true;
             }
             else if( IsXMLToken( rValue, XML_ALWAYS ) ||
                      IsXMLToken( rValue, XML_FALSE ) )
             {
-                pSplit->SetValue( sal_False );
+                pSplit->SetValue( false );
                 bOk = true;
             }
         }
@@ -965,12 +965,12 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
             if( IsXMLToken( rValue, XML_COLLAPSING ) )
             {
-                pBorders->SetValue( sal_True );
+                pBorders->SetValue( true );
                 bOk = true;
             }
             else if( IsXMLToken( rValue, XML_SEPARATING ) )
             {
-                pBorders->SetValue( sal_False );
+                pBorders->SetValue( false );
                 bOk = true;
             }
             else

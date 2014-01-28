@@ -435,14 +435,14 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet&  )
     }
     if (m_pProspectCB->IsChecked())
     {
-        m_pProspectCB_RTL->Enable(sal_True);
-        m_pNoRB->Enable( sal_False );
-        m_pOnlyRB->Enable( sal_False );
-        m_pEndRB->Enable( sal_False );
-        m_pEndPageRB->Enable( sal_False );
+        m_pProspectCB_RTL->Enable(true);
+        m_pNoRB->Enable( false );
+        m_pOnlyRB->Enable( false );
+        m_pEndRB->Enable( false );
+        m_pEndPageRB->Enable( false );
     }
     else
-        m_pProspectCB_RTL->Enable( sal_False );
+        m_pProspectCB_RTL->Enable( false );
 }
 
 void    SwAddPrinterTabPage::Init()
@@ -484,8 +484,8 @@ IMPL_LINK_NOARG_INLINE_END(SwAddPrinterTabPage, SelectHdl)
 
 void SwAddPrinterTabPage::PageCreated (SfxAllItemSet aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pListItem,SfxBoolItem,SID_FAX_LIST,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pPreviewItem,SfxBoolItem,SID_PREVIEWFLAG_TYPE,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pListItem,SfxBoolItem,SID_FAX_LIST,false);
+    SFX_ITEMSET_ARG (&aSet,pPreviewItem,SfxBoolItem,SID_PREVIEWFLAG_TYPE,false);
     if (pPreviewItem)
     {
         SetPreview(pPreviewItem->GetValue());
@@ -847,7 +847,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
         if( nIndexHeight <= 0)
             nIndexHeight = pFontConfig->GetDefaultHeightFor( FONT_INDEX + nFontGroup * FONT_PER_GROUP, eLanguage);
 
-       pDocOnlyCB->Enable(sal_False);
+       pDocOnlyCB->Enable(false);
     }
     else
     {
@@ -1057,7 +1057,7 @@ IMPL_LINK( SwStdFontTabPage, LoseFocusHdl, ComboBox*, pBox )
 
 void SwStdFontTabPage::PageCreated (SfxAllItemSet aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt16Item, SID_FONTMODE_TYPE, sal_False);
+    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt16Item, SID_FONTMODE_TYPE, false);
     if (pFlagItem)
         SetFontMode(sal::static_int_cast< sal_uInt8, sal_uInt16>( pFlagItem->GetValue()));
 }
@@ -1255,7 +1255,7 @@ IMPL_LINK_NOARG(SwTableOptionsTabPage, CheckBoxHdl)
 
 void SwTableOptionsTabPage::PageCreated (SfxAllItemSet aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pWrtSh,SwWrtShellItem,SID_WRT_SHELL,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pWrtSh,SwWrtShellItem,SID_WRT_SHELL,false);
     if (pWrtSh)
         SetWrtShell(pWrtSh->GetValue());
 }
@@ -1334,7 +1334,7 @@ SfxTabPage* SwShdwCrsrOptionsTabPage::Create( Window* pParent, const SfxItemSet&
 
 void SwShdwCrsrOptionsTabPage::PageCreated( SfxAllItemSet aSet )
 {
-    SFX_ITEMSET_ARG (&aSet,pWrtSh,SwWrtShellItem,SID_WRT_SHELL,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pWrtSh,SwWrtShellItem,SID_WRT_SHELL,false);
     if (pWrtSh)
         SetWrtShell(pWrtSh->GetValue());
 }

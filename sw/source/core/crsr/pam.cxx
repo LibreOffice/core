@@ -761,8 +761,8 @@ SwCntntNode* GetNode( SwPaM & rPam, sal_Bool& rbFirst, SwMoveFn fnMove,
             while( true )
             {
                 pNd = bSrchForward
-                        ? rNodes.GoNextSection( &aPos.nNode, sal_True, !bInReadOnly )
-                        : rNodes.GoPrevSection( &aPos.nNode, sal_True, !bInReadOnly );
+                        ? rNodes.GoNextSection( &aPos.nNode, true, !bInReadOnly )
+                        : rNodes.GoPrevSection( &aPos.nNode, true, !bInReadOnly );
                 if( pNd )
                 {
                     aPos.nContent.Assign( pNd, ::GetSttOrEnd( bSrchForward,*pNd ));

@@ -215,7 +215,7 @@ IMPL_LINK_INLINE_START( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
     if (pEdit == m_pSizeWidthField || pEdit == m_pSizeHeightField)
     {
         Paper ePaper = SvxPaperInfo::GetSvxPaper(
-            Size(lHeight, lWidth), MAP_TWIP, sal_True);
+            Size(lHeight, lWidth), MAP_TWIP, true);
         for (sal_uInt16 i = 0; i < (sal_uInt16)aIDs.size(); i++)
             if (aIDs[i] == (sal_uInt16)ePaper)
                 m_pSizeFormatBox->SelectEntryPos(i);
@@ -506,7 +506,7 @@ void SwEnvFmtPage::Reset(const SfxItemSet& rSet)
 
     Paper ePaper = SvxPaperInfo::GetSvxPaper(
         Size( std::min(rItem.lWidth, rItem.lHeight),
-        std::max(rItem.lWidth, rItem.lHeight)), MAP_TWIP, sal_True);
+        std::max(rItem.lWidth, rItem.lHeight)), MAP_TWIP, true);
     for (sal_uInt16 i = 0; i < (sal_uInt16) aIDs.size(); i++)
         if (aIDs[i] == (sal_uInt16)ePaper)
             m_pSizeFormatBox->SelectEntryPos(i);

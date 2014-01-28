@@ -335,7 +335,7 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         OSL_FAIL("control acces failed");
     }
 
-    SFX_REQUEST_ARG( rReq, pName, SfxStringItem, SID_INSERT_GRAPHIC , sal_False );
+    SFX_REQUEST_ARG( rReq, pName, SfxStringItem, SID_INSERT_GRAPHIC , false );
     sal_Bool bShowError = !pName;
     if( pName || ERRCODE_NONE == pFileDlg->Execute() )
     {
@@ -344,7 +344,7 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         if ( pName )
         {
             aFileName = pName->GetValue();
-            SFX_REQUEST_ARG( rReq, pFilter, SfxStringItem, FN_PARAM_FILTER , sal_False );
+            SFX_REQUEST_ARG( rReq, pFilter, SfxStringItem, FN_PARAM_FILTER , false );
             if ( pFilter )
                 aFilterName = pFilter->GetValue();
         }
@@ -380,8 +380,8 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bAsLink ) );
         }
 
-        SFX_REQUEST_ARG( rReq, pAsLink, SfxBoolItem, FN_PARAM_1 , sal_False );
-        SFX_REQUEST_ARG( rReq, pStyle, SfxStringItem, FN_PARAM_2 , sal_False );
+        SFX_REQUEST_ARG( rReq, pAsLink, SfxBoolItem, FN_PARAM_1 , false );
+        SFX_REQUEST_ARG( rReq, pStyle, SfxStringItem, FN_PARAM_2 , false );
 
         sal_Bool bAsLink = sal_False;
         if( nHtmlMode & HTMLMODE_ON )
@@ -812,7 +812,7 @@ void SwView::Execute(SfxRequest &rReq)
             }
             else
             {
-                SfxBoolItem aItem( SID_WIN_FULLSCREEN, sal_False );
+                SfxBoolItem aItem( SID_WIN_FULLSCREEN, false );
                 GetViewFrame()->GetDispatcher()->Execute( SID_WIN_FULLSCREEN, SFX_CALLMODE_RECORD, &aItem, 0L );
                 bIgnore = sal_True;
             }
@@ -1293,7 +1293,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 if (m_nPageCnt != nCnt)   // notify Basic
                 {
                     m_nPageCnt = nCnt;
-                    SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_PAGE_COUNT, SwDocShell::GetEventName(STR_SW_EVENT_PAGE_COUNT), GetViewFrame()->GetObjectShell()), sal_False);
+                    SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_PAGE_COUNT, SwDocShell::GetEventName(STR_SW_EVENT_PAGE_COUNT), GetViewFrame()->GetObjectShell()), false);
                 }
             }
             break;
@@ -2308,7 +2308,7 @@ void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
             //to prevent creation of the dialog without mail merge active
             EnableMailMerge();
             //then show the "Data base only" field dialog
-            SfxBoolItem aOn(FN_INSERT_FIELD_DATA_ONLY, sal_True);
+            SfxBoolItem aOn(FN_INSERT_FIELD_DATA_ONLY, true);
             pVFrame->GetDispatcher()->Execute(FN_INSERT_FIELD_DATA_ONLY,
                                                 SFX_CALLMODE_SYNCHRON, &aOn, 0L);
             return;

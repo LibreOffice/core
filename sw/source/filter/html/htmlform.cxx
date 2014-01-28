@@ -698,7 +698,7 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
             if ( pDocSh->GetMedium() )
             {
                 // if there is no hidden property in the MediaDescriptor it should be removed after loading
-                SFX_ITEMSET_ARG( pDocSh->GetMedium()->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
+                SFX_ITEMSET_ARG( pDocSh->GetMedium()->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, false );
                 bRemoveHidden = ( pHiddenItem == NULL || !pHiddenItem->GetValue() );
             }
 
@@ -2167,8 +2167,8 @@ void SwHTMLParser::NewTextArea()
     SplitPREListingXMP( pCntxt );
     PushContext( pCntxt );
 
-    bTextArea = sal_True;
-    bTAIgnoreNewPara = sal_True;
+    bTextArea = true;
+    bTAIgnoreNewPara = true;
 }
 
 void SwHTMLParser::EndTextArea()
@@ -2197,7 +2197,7 @@ void SwHTMLParser::EndTextArea()
         delete pCntxt;
     }
 
-    bTextArea = sal_False;
+    bTextArea = false;
 }
 
 void SwHTMLParser::InsertTextAreaText( sal_uInt16 nToken )
@@ -2227,7 +2227,7 @@ void SwHTMLParser::InsertTextAreaText( sal_uInt16 nToken )
         rText += ">";
     }
 
-    bTAIgnoreNewPara = sal_False;
+    bTAIgnoreNewPara = false;
 }
 
 void SwHTMLParser::NewSelect()
@@ -2416,11 +2416,11 @@ void SwHTMLParser::NewSelect()
     }
 
     Size aSz( MINFLY, MINFLY );
-    bFixSelectWidth = bFixSelectHeight = sal_True;
+    bFixSelectWidth = bFixSelectHeight = true;
     if( SVX_CSS1_LTYPE_TWIP== aCSS1PropInfo.eWidthType )
     {
         aSz.Width() = TWIP_TO_MM100( aCSS1PropInfo.nWidth );
-        bFixSelectWidth = sal_False;
+        bFixSelectWidth = false;
         bMinWidth = sal_False;
     }
     if( SVX_CSS1_LTYPE_TWIP== aCSS1PropInfo.eHeightType )
@@ -2451,7 +2451,7 @@ void SwHTMLParser::NewSelect()
     SplitPREListingXMP( pCntxt );
     PushContext( pCntxt );
 
-    bSelect = sal_True;
+    bSelect = true;
 }
 
 void SwHTMLParser::EndSelect()
@@ -2545,7 +2545,7 @@ void SwHTMLParser::EndSelect()
         delete pCntxt;
     }
 
-    bSelect = sal_False;
+    bSelect = false;
 }
 
 void SwHTMLParser::InsertSelectOption()
@@ -2554,7 +2554,7 @@ void SwHTMLParser::InsertSelectOption()
     OSL_ENSURE( pFormImpl && pFormImpl->GetFCompPropSet().is(),
             "kein Select-Control" );
 
-    bLBEntrySelected = sal_False;
+    bLBEntrySelected = false;
     OUString aValue;
 
     const HTMLOptions& rHTMLOptions = GetOptions();
@@ -2567,7 +2567,7 @@ void SwHTMLParser::InsertSelectOption()
             // erstmal weglassen!!!
             break;
         case HTML_O_SELECTED:
-            bLBEntrySelected = sal_True;
+            bLBEntrySelected = true;
             break;
         case HTML_O_VALUE:
             aValue = rOption.GetString();

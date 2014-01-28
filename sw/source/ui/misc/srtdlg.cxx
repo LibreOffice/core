@@ -167,13 +167,13 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell)
         m_pColumnRB->Check(bCol);
         m_pColLbl->SetText(bCol ? aRowTxt : aColTxt);
         m_pRowRB->Check(!bCol);
-        m_pDelimTabRB->Enable(sal_False);
-        m_pDelimFreeRB->Enable(sal_False);
-        m_pDelimEdt->Enable(sal_False);
+        m_pDelimTabRB->Enable(false);
+        m_pDelimFreeRB->Enable(false);
+        m_pDelimEdt->Enable(false);
     }
     else
     {
-        m_pColumnRB->Enable(sal_False);
+        m_pColumnRB->Enable(false);
         m_pRowRB->Check(sal_True);
         m_pColLbl->SetText(aColTxt);
     }
@@ -377,7 +377,7 @@ IMPL_LINK_NOARG(SwSortDlg, DelimCharHdl)
             rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP );
         if( RET_OK == pMap->Execute() )
         {
-            SFX_ITEMSET_ARG( pMap->GetOutputItemSet(), pItem, SfxInt32Item, SID_ATTR_CHAR, sal_False );
+            SFX_ITEMSET_ARG( pMap->GetOutputItemSet(), pItem, SfxInt32Item, SID_ATTR_CHAR, false );
             if ( pItem )
                 m_pDelimEdt->SetText( OUString(pItem->GetValue()) );
         }

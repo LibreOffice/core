@@ -62,7 +62,7 @@ SwVbaRevision::Accept() throw ( css::uno::RuntimeException )
 {
     SwDoc* pDoc = word::getDocShell( mxModel )->GetDoc();
     if( pDoc )
-        pDoc->AcceptRedline( GetPosition(), sal_True );
+        pDoc->AcceptRedline( GetPosition(), true );
 }
 
 void SAL_CALL
@@ -70,7 +70,7 @@ SwVbaRevision::Reject( ) throw ( css::uno::RuntimeException )
 {
     SwDoc* pDoc = word::getDocShell( mxModel )->GetDoc();
     if( pDoc )
-        pDoc->RejectRedline( GetPosition(), sal_True );
+        pDoc->RejectRedline( GetPosition(), true );
 }
 
 OUString

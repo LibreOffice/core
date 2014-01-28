@@ -306,7 +306,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     //das muss jetzt sal_True liefern
     ::sw::XTextRangeToSwPaM(aPam, xTextRange);
     m_pImpl->InsertRefMark(aPam, dynamic_cast<SwXTextCursor*>(pCursor));
-    m_pImpl->m_bIsDescriptor = sal_False;
+    m_pImpl->m_bIsDescriptor = false;
     m_pImpl->m_pDoc = pDocument;
 }
 

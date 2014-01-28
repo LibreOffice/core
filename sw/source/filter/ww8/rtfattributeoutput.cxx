@@ -436,7 +436,7 @@ void RtfAttributeOutput::EndRunProperties( const SwRedlineData* /*pRedlineData*/
 void RtfAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCharSet*/ )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << ", rText: " << rText);
-    RawText( rText, 0, m_rExport.eCurrentEncoding );
+    RawText( rText, false, m_rExport.eCurrentEncoding );
 }
 
 OStringBuffer& RtfAttributeOutput::RunText()

@@ -72,7 +72,7 @@ SwRenameXNamedDlg::SwRenameXNamedDlg( Window* pWin,
 
     m_pOk->SetClickHdl(LINK(this, SwRenameXNamedDlg, OkHdl));
     m_pNewNameED->SetModifyHdl(LINK(this, SwRenameXNamedDlg, ModifyHdl));
-    m_pOk->Enable(sal_False);
+    m_pOk->Enable(false);
 }
 
 IMPL_LINK_NOARG(SwRenameXNamedDlg, OkHdl)

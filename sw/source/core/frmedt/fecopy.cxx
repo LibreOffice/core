@@ -459,7 +459,7 @@ sal_Bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
     sal_Bool bCopyIsMove = mpDoc->IsCopyIsMove();
     if( bIsMove )
         // set a flag in Doc, handled in TextNodes
-        mpDoc->SetCopyIsMove( sal_True );
+        mpDoc->SetCopyIsMove( true );
 
     RedlineMode_t eOldRedlMode = pDestShell->GetDoc()->GetRedlineMode();
     pDestShell->GetDoc()->SetRedlineMode_intern( (RedlineMode_t)(eOldRedlMode | nsRedlineMode_t::REDLINE_DELETE_REDLINES));

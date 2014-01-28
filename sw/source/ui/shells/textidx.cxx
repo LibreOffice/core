@@ -191,12 +191,12 @@ void SwTextShell::GetIdxState(SfxItemSet &rSet)
         if(!pIdxMrk)
             rSet.DisableItem( FN_INSERT_IDX_ENTRY_DLG );
         else
-            rSet.Put(SfxBoolItem(FN_INSERT_IDX_ENTRY_DLG, sal_True));
+            rSet.Put(SfxBoolItem(FN_INSERT_IDX_ENTRY_DLG, true));
 
         if(!pAuthMark)
             rSet.DisableItem( FN_INSERT_AUTH_ENTRY_DLG );
         else
-            rSet.Put(SfxBoolItem(FN_INSERT_AUTH_ENTRY_DLG, sal_True));
+            rSet.Put(SfxBoolItem(FN_INSERT_AUTH_ENTRY_DLG, true));
 
     }
     else if ( rSh.CrsrInsideInputFld() )

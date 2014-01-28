@@ -192,7 +192,7 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
     {
         if (!bDrawParaDlg)
         {
-            aSet.Put(SfxBoolItem(SID_SVXPARAALIGNTABPAGE_ENABLEJUSTIFYEXT,sal_True));
+            aSet.Put(SfxBoolItem(SID_SVXPARAALIGNTABPAGE_ENABLEJUSTIFYEXT,true));
             rPage.PageCreated(aSet);
         }
     }
@@ -203,7 +203,7 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
         if( !(FRMTYPE_BODY & eType) ||
             rSh.GetSelectionType() & nsSelectionType::SEL_TBL )
         {
-            aSet.Put(SfxBoolItem(SID_DISABLE_SVXEXTPARAGRAPHTABPAGE_PAGEBREAK,sal_True));
+            aSet.Put(SfxBoolItem(SID_DISABLE_SVXEXTPARAGRAPHTABPAGE_PAGEBREAK,true));
             rPage.PageCreated(aSet);
         }
     }

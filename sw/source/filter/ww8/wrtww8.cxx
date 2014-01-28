@@ -372,11 +372,11 @@ static void WriteDop( WW8Export& rWrt )
     if ((rWrt.pSepx && rWrt.pSepx->DocumentIsProtected()) ||
         rDop.lKeyProtDoc != 0)
     {
-        rDop.fProtEnabled =  1;
+        rDop.fProtEnabled =  true;
     }
     else
     {
-        rDop.fProtEnabled = 0;
+        rDop.fProtEnabled = false;
     }
 
     if (!xDocProps.is())
@@ -3030,7 +3030,7 @@ bool SwWW8Writer::InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec 
 
     if ( mpMedium )
     {
-        SFX_ITEMSET_ARG( mpMedium->GetItemSet(), pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, sal_False );
+        SFX_ITEMSET_ARG( mpMedium->GetItemSet(), pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, false );
         if ( pEncryptionDataItem && ( pEncryptionDataItem->GetValue() >>= aEncryptionData ) && !rCodec.InitCodec( aEncryptionData ) )
         {
             OSL_ENSURE( false, "Unexpected EncryptionData!" );
@@ -3040,7 +3040,7 @@ bool SwWW8Writer::InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec 
         if ( !aEncryptionData.getLength() )
         {
             // try to generate the encryption data based on password
-            SFX_ITEMSET_ARG( mpMedium->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, sal_False );
+            SFX_ITEMSET_ARG( mpMedium->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, false );
             if ( pPasswordItem && !pPasswordItem->GetValue().isEmpty() && pPasswordItem->GetValue().getLength() <= 15 )
             {
                 // Generate random number with a seed of time as salt.
@@ -3088,7 +3088,7 @@ void WW8Export::ExportDocument_Impl()
 
     if( bWrtWW8 )
     {
-        pFib->fWhichTblStm = 1;
+        pFib->fWhichTblStm = true;
         xTableStrm = GetWriter().GetStorage().OpenSotStream(OUString(SL::a1Table),
             STREAM_STD_WRITE );
         xDataStrm = GetWriter().GetStorage().OpenSotStream(OUString(SL::aData),
@@ -3211,8 +3211,8 @@ void WW8Export::ExportDocument_Impl()
         EncryptRC4(aCtx, GetWriter().Strm(), *pStrmTemp);
 
         // Write Unencrypted Fib 68 bytes to the start of the workdocument stream
-        pFib->fEncrypted = 1; // fEncrypted indicates the document is encrypted.
-        pFib->fObfuscated = 0; // Must be 0 for RC4.
+        pFib->fEncrypted = true; // fEncrypted indicates the document is encrypted.
+        pFib->fObfuscated = false; // Must be 0 for RC4.
         pFib->nHash = 0x34; // encrypt header bytes count of table stream.
         pFib->nKey = 0; // lkey2 must be 0 for RC4.
 

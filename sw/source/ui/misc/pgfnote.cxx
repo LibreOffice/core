@@ -55,7 +55,7 @@ static sal_uInt16 aPageRg[] = {
 ------------------------------------------------------------------------*/
 IMPL_LINK_NOARG_INLINE_START(SwFootNotePage, HeightPage)
 {
-    m_pMaxHeightEdit->Enable(sal_False);
+    m_pMaxHeightEdit->Enable(false);
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(SwFootNotePage, HeightPage)
@@ -172,7 +172,7 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
     else
     {
         m_pMaxHeightPageBtn->Check(sal_True);
-        m_pMaxHeightEdit->Enable(sal_False);
+        m_pMaxHeightEdit->Enable(false);
     }
     m_pMaxHeightPageBtn->SetClickHdl(LINK(this,SwFootNotePage,HeightPage));
     m_pMaxHeightBtn->SetClickHdl(LINK(this,SwFootNotePage,HeightMetric));

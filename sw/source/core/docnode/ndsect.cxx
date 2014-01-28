@@ -78,8 +78,8 @@ static bool lcl_IsInSameTblBox( SwNodes& _rNds,
         do
         {
             if ( _bPrev
-                 ? !_rNds.GoPrevSection( &aChkIdx, sal_False, sal_False )
-                 : !_rNds.GoNextSection( &aChkIdx, sal_False, sal_False ) )
+                 ? !_rNds.GoPrevSection( &aChkIdx, false, false )
+                 : !_rNds.GoNextSection( &aChkIdx, false, false ) )
             {
                 OSL_FAIL( "<lcl_IsInSameTblBox(..)> - no previous/next!" );
                 return false;
@@ -128,13 +128,13 @@ static void lcl_CheckEmptyLayFrm( SwNodes& rNds, SwSectionData& rSectionData,
                         const SwNode& rStt, const SwNode& rEnd )
 {
     SwNodeIndex aIdx( rStt );
-    if( !rNds.GoPrevSection( &aIdx, sal_True, sal_False ) ||
+    if( !rNds.GoPrevSection( &aIdx, true, false ) ||
         !CheckNodesRange( rStt, aIdx, true ) ||
         // #i21457#
         !lcl_IsInSameTblBox( rNds, rStt, true ))
     {
         aIdx = rEnd;
-        if( !rNds.GoNextSection( &aIdx, sal_True, sal_False ) ||
+        if( !rNds.GoNextSection( &aIdx, true, false ) ||
             !CheckNodesRange( rEnd, aIdx, true ) ||
             // #i21457#
             !lcl_IsInSameTblBox( rNds, rEnd, false ))
@@ -223,7 +223,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
                         pSttPos->nNode.GetNode().GetTxtNode();
                     if (pTNd)
                     {
-                        pUndoInsSect->SaveSplitNode( pTNd, sal_True );
+                        pUndoInsSect->SaveSplitNode( pTNd, true );
                     }
                 }
 
@@ -234,7 +234,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
                     if (pTNd && (pTNd->GetTxt().getLength()
                                     != pEndPos->nContent.GetIndex()))
                     {
-                        pUndoInsSect->SaveSplitNode( pTNd, sal_False );
+                        pUndoInsSect->SaveSplitNode( pTNd, false );
                     }
                 }
             }
@@ -302,7 +302,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
         {
             if( pUndoInsSect && pCNd->IsTxtNode() )
             {
-                pUndoInsSect->SaveSplitNode( (SwTxtNode*)pCNd, sal_True );
+                pUndoInsSect->SaveSplitNode( (SwTxtNode*)pCNd, true );
             }
             SplitNode( *pPos, false );
             pNewSectNode = GetNodes().InsertTextSection(
@@ -1057,11 +1057,11 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
         if( GetSection().IsHidden() || IsCntntHidden() )
         {
             SwNodeIndex aIdx( *EndOfSectionNode() );
-            SwCntntNode* pCNd = rNds.GoNextSection( &aIdx, sal_True, sal_False );
+            SwCntntNode* pCNd = rNds.GoNextSection( &aIdx, true, false );
             if( !pCNd )
             {
                 aIdx = *this;
-                if( 0 == ( pCNd = rNds.GoPrevSection( &aIdx, sal_True, sal_False )) )
+                if( 0 == ( pCNd = rNds.GoPrevSection( &aIdx, true, false )) )
                     return ;
             }
             pCNd = aIdx.GetNode().GetCntntNode();
@@ -1196,13 +1196,13 @@ void SwSectionNode::DelFrms()
     // Or else the Fly/TblBox Frame does not have a Lower!
     {
         SwNodeIndex aIdx( *this );
-        if( !rNds.GoPrevSection( &aIdx, sal_True, sal_False ) ||
+        if( !rNds.GoPrevSection( &aIdx, true, false ) ||
             !CheckNodesRange( *this, aIdx, true ) ||
             // #i21457#
             !lcl_IsInSameTblBox( rNds, *this, true ))
         {
             aIdx = *EndOfSectionNode();
-            if( !rNds.GoNextSection( &aIdx, sal_True, sal_False ) ||
+            if( !rNds.GoNextSection( &aIdx, true, false ) ||
                 !CheckNodesRange( *EndOfSectionNode(), aIdx, true ) ||
                 // #i21457#
                 !lcl_IsInSameTblBox( rNds, *EndOfSectionNode(), false ))
@@ -1259,12 +1259,12 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
     pNewSect->SetCondition( GetSection().GetCondition() );
     pNewSect->SetLinkFileName( GetSection().GetLinkFileName() );
     if( !pNewSect->IsHiddenFlag() && GetSection().IsHidden() )
-        pNewSect->SetHidden( sal_True );
+        pNewSect->SetHidden( true );
     if( !pNewSect->IsProtectFlag() && GetSection().IsProtect() )
-        pNewSect->SetProtect( sal_True );
+        pNewSect->SetProtect( true );
     // edit in readonly sections
     if( !pNewSect->IsEditInReadonlyFlag() && GetSection().IsEditInReadonly() )
-        pNewSect->SetEditInReadonly( sal_True );
+        pNewSect->SetEditInReadonly( true );
 
     SwNodeRange aRg( *this, +1, *EndOfSectionNode() ); // Where am I?
     rNds._Copy( aRg, aInsPos, sal_False );
@@ -1385,7 +1385,7 @@ OUString SwDoc::GetUniqueSectionName( const OUString* pChkStr ) const
     sal_uInt16 n;
 
     for( n = 0; n < mpSectionFmtTbl->size(); ++n )
-        if( 0 != ( pSectNd = (*mpSectionFmtTbl)[ n ]->GetSectionNode( sal_False ) ))
+        if( 0 != ( pSectNd = (*mpSectionFmtTbl)[ n ]->GetSectionNode( false ) ))
         {
             const OUString rNm = pSectNd->GetSection().GetSectionName();
             if (rNm.startsWith( aName ))

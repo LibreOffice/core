@@ -509,7 +509,7 @@ void SwDontExpandItem::RestoreDontExpandItems( const SwPosition& rPos )
                         // The attribute was not previously set in this form in the
                         // paragraph, so it can only be created through insert/copy
                         // Because of that it is a candidate for DontExpand
-                        pHt->SetDontExpand( sal_True );
+                        pHt->SetDontExpand( true );
                     }
                 }
             }

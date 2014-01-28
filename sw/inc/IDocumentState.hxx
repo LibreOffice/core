@@ -54,7 +54,7 @@
 
     virtual void SetUpdateExpFldStat(bool b) = 0;
 
-    virtual void SetLoaded(bool b = sal_True) = 0;
+    virtual void SetLoaded(bool b = true) = 0;
 
  protected:
     virtual ~IDocumentState() {};

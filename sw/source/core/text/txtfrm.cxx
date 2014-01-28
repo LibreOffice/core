@@ -859,7 +859,7 @@ static void lcl_SetWrong( SwTxtFrm& rFrm, sal_Int32 nPos, sal_Int32 nCnt, bool b
     SwRootFrm *pRootFrm = rFrm.getRootFrm();
     if (pRootFrm)
     {
-        pRootFrm->SetNeedGrammarCheck( sal_True );
+        pRootFrm->SetNeedGrammarCheck( true );
     }
 
     SwPageFrm *pPage = rFrm.FindPageFrm();

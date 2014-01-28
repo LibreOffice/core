@@ -81,7 +81,7 @@ SwMailMergeDocSelectPage::SwMailMergeDocSelectPage(SwMailMergeWizard* pParent)
     m_pRecentDocLB->SelectEntryPos(0);
     if(!rDocs.getLength())
     {
-        m_pRecentDocRB->Enable(sal_False);
+        m_pRecentDocRB->Enable(false);
     }
 
     //Temp hack until all pages are converted to .ui and wizard

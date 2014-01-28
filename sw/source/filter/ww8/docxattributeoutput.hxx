@@ -668,7 +668,7 @@ private:
     void WritePostponedVMLDrawing();
     void WritePostponedDMLDrawing();
 
-    void StartField_Impl( FieldInfos& rInfos, bool bWriteRun = sal_False );
+    void StartField_Impl( FieldInfos& rInfos, bool bWriteRun = false );
     void DoWriteCmd( const OUString& rCmd );
     void CmdField_Impl( FieldInfos& rInfos );
     void EndField_Impl( FieldInfos& rInfos );

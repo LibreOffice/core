@@ -1167,7 +1167,7 @@ void SwAutoFormat::DelEmptyLine( bool bTstNextPara )
     aDelPam.SetMark();
 
     aDelPam.GetMark()->nNode--;
-    SwTxtNode* pTNd = aDelPam.GetNode( sal_False )->GetTxtNode();
+    SwTxtNode* pTNd = aDelPam.GetNode( false )->GetTxtNode();
     if( pTNd )
         // first use the previous text node
         aDelPam.GetMark()->nContent.Assign(pTNd, pTNd->GetTxt().getLength());
@@ -1175,7 +1175,7 @@ void SwAutoFormat::DelEmptyLine( bool bTstNextPara )
     {
         // then try the next (at the beginning of a Doc, table cells, borders, ...)
         aDelPam.GetMark()->nNode += 2;
-        pTNd = aDelPam.GetNode( sal_False )->GetTxtNode();
+        pTNd = aDelPam.GetNode( false )->GetTxtNode();
         if( pTNd )
         {
             aDelPam.GetMark()->nContent.Assign( pTNd, 0 );
@@ -1591,7 +1591,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
             {
                 aDelPam.SetMark();
                 aDelPam.GetMark()->nNode++;
-                aDelPam.GetNode(sal_False)->GetTxtNode()->SetAttrListLevel( nLvl );
+                aDelPam.GetNode(false)->GetTxtNode()->SetAttrListLevel( nLvl );
             }
 
             pAktTxtNd->SetAttrListLevel(nLvl);
@@ -2106,7 +2106,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
             "Got no area" );
 
     if( aFlags.bSetNumRule && !aFlags.bAFmtByInput )
-        aFlags.bSetNumRule = sal_False;
+        aFlags.bSetNumRule = false;
 
     bool bReplaceStyles = !aFlags.bAFmtByInput || aFlags.bReplaceStyles;
 
@@ -2145,7 +2145,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
     RedlineMode_t eRedlMode = pDoc->GetRedlineMode(), eOldMode = eRedlMode;
     if( aFlags.bWithRedlining )
     {
-        pDoc->SetAutoFmtRedline( sal_True );
+        pDoc->SetAutoFmtRedline( true );
         eRedlMode = (RedlineMode_t)(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_INSERT);
     }
     else
@@ -2526,7 +2526,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
     }
 
     if( aFlags.bWithRedlining )
-        pDoc->SetAutoFmtRedline( sal_False );
+        pDoc->SetAutoFmtRedline( false );
     pDoc->SetRedlineMode( eOldMode );
 
     // restore undo (in case it has been changed)

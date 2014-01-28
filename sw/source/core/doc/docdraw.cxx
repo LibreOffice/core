@@ -578,7 +578,7 @@ void SwDoc::InitDrawModel()
         mnInvisibleControls = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
     }
 
-    SdrPage* pMasterPage = mpDrawModel->AllocPage( sal_False );
+    SdrPage* pMasterPage = mpDrawModel->AllocPage( false );
     mpDrawModel->InsertPage( pMasterPage );
     SAL_INFO( "sw.doc", "after create DrawDocument" );
     SAL_INFO( "sw.doc", "before create Spellchecker/Hyphenator" );
@@ -627,13 +627,13 @@ void SwDoc::NotifyInvisibleLayers( SdrPageView& _rSdrPageView )
 {
     OUString sLayerNm;
     sLayerNm = "InvisibleHell";
-    _rSdrPageView.SetLayerVisible( sLayerNm, sal_False );
+    _rSdrPageView.SetLayerVisible( sLayerNm, false );
 
     sLayerNm = "InvisibleHeaven";
-    _rSdrPageView.SetLayerVisible( sLayerNm, sal_False );
+    _rSdrPageView.SetLayerVisible( sLayerNm, false );
 
     sLayerNm = "InvisibleControls";
-    _rSdrPageView.SetLayerVisible( sLayerNm, sal_False );
+    _rSdrPageView.SetLayerVisible( sLayerNm, false );
 }
 
 /** method to determine, if a layer ID belongs to the visible ones.

@@ -1701,12 +1701,12 @@ DECLARE_OOXMLEXPORT_TEST(testActiveXGrabBag, "activex.docx")
    uno::Sequence<beans::PropertyValue> aGrabBag(0);
    xTextDocumentPropertySet->getPropertyValue(OUString("InteropGrabBag")) >>= aGrabBag;
    CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
-   bool bActiveX = sal_False;
+   bool bActiveX = false;
    for(int i = 0; i < aGrabBag.getLength(); ++i)
    {
        if (aGrabBag[i].Name == "OOXActiveX")
        {
-           bActiveX = sal_True;
+           bActiveX = true;
            uno::Reference<xml::dom::XDocument> aActiveXDom;
            uno::Sequence<uno::Reference<xml::dom::XDocument> > aActiveXDomList;
            CPPUNIT_ASSERT(aGrabBag[i].Value >>= aActiveXDomList); // PropertyValue of proper type
@@ -1729,12 +1729,12 @@ DECLARE_OOXMLEXPORT_TEST(testActiveXBinGrabBag, "activexbin.docx")
    uno::Sequence<beans::PropertyValue> aGrabBag(0);
    xTextDocumentPropertySet->getPropertyValue(OUString("InteropGrabBag")) >>= aGrabBag;
    CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
-   bool bActiveX = sal_False;
+   bool bActiveX = false;
    for(int i = 0; i < aGrabBag.getLength(); ++i)
    {
        if (aGrabBag[i].Name == "OOXActiveXBin")
        {
-           bActiveX = sal_True;
+           bActiveX = true;
            uno::Reference<io::XInputStream> aActiveXBin;
            uno::Sequence<uno::Reference<io::XInputStream> > aActiveXBinList;
            CPPUNIT_ASSERT(aGrabBag[i].Value >>= aActiveXBinList); // PropertyValue of proper type

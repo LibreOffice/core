@@ -2211,7 +2211,7 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
         if( USHRT_MAX != nLnPos && nLnPos )
         {
             // There is a Line before it
-            SwCollectTblLineBoxes aLnPara( sal_False, HEADLINE_BORDERCOPY );
+            SwCollectTblLineBoxes aLnPara( false, HEADLINE_BORDERCOPY );
 
             pLn = GetTabLines()[ nLnPos - 1 ];
             for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
@@ -2221,7 +2221,7 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
             if( aLnPara.Resize( lcl_GetBoxOffset( aFndBox ),
                                 lcl_GetLineWidth( *pFndLn )) )
             {
-                aLnPara.SetValues( sal_True );
+                aLnPara.SetValues( true );
                 pLn = pNewTbl->GetTabLines()[ 0 ];
                 for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
                          it != pLn->GetTabBoxes().end(); ++it)
@@ -2236,7 +2236,7 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
         if( nLnPos < GetTabLines().size() - 1 )
         {
             // There is a Line following it
-            SwCollectTblLineBoxes aLnPara( sal_True, HEADLINE_BORDERCOPY );
+            SwCollectTblLineBoxes aLnPara( true, HEADLINE_BORDERCOPY );
 
             pLn = GetTabLines()[ nLnPos + 1 ];
             for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
@@ -2246,7 +2246,7 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
             if( aLnPara.Resize( lcl_GetBoxOffset( aFndBox ),
                                 lcl_GetLineWidth( *pFndLn )) )
             {
-                aLnPara.SetValues( sal_False );
+                aLnPara.SetValues( false );
                 pLn = pNewTbl->GetTabLines().back();
                 for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
                          it != pLn->GetTabBoxes().end(); ++it)
@@ -4065,7 +4065,7 @@ static bool lcl_SetOtherLineHeight( SwTableLine* pLine, CR_SetLineHeight& rParam
             // Calculate the new relative size by means of the old one
             // If the selected Box get bigger, adjust via the max space else
             // via the max height.
-            if( 1 /*!rParam.bBigger*/ )
+            if( true /*!rParam.bBigger*/ )
             {
                 nDist *= pLineFrm->Frm().Height();
                 nDist /= rParam.nMaxHeight;

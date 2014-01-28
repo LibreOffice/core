@@ -1511,7 +1511,7 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
     if (!checkSeek(*pStr, nClxPos))
         return NULL;
 
-    while( 1 ) // Zaehle Zahl der Grpprls
+    while( true ) // Zaehle Zahl der Grpprls
     {
         sal_uInt8 clxt(2);
         *pStr >> clxt;
@@ -1536,7 +1536,7 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
     memset( pPieceGrpprls, 0, ( nGrpprl + 1 ) * sizeof(sal_uInt8 *) );
     nPieceGrpprls = nGrpprl;
     sal_Int16 nAktGrpprl = 0;                       // read Grpprls
-    while( 1 )
+    while( true )
     {
         sal_uInt8 clxt(2);
         *pStr >> clxt;
@@ -1819,7 +1819,7 @@ static bool WW8GetFieldPara(WW8PLCFspecial& rPLCF, WW8FieldDesc& rF)
     void* pData;
     sal_uLong nOldIdx = rPLCF.GetIdx();
 
-    rF.nLen = rF.nId = rF.nOpt = rF.bCodeNest = rF.bResNest = 0;
+    rF.nLen = rF.nId = rF.nOpt = rF.bCodeNest = rF.bResNest = false;
 
     if( !rPLCF.Get( rF.nSCode, pData ) )             // end of PLCFspecial?
         goto Err;
@@ -2196,7 +2196,7 @@ void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
             pPLCF_PosArray[nIMax] = nFc;        // end of the last Fkp
 
             failure = rSt.GetError();
-        } while(0);
+        } while(false);
     }
 
     if (!failure)
@@ -3049,7 +3049,7 @@ bool WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId, std::vector<const sal_uInt8 *> &rR
        OSL_FAIL( "+Motz: HasSprm: NewFkp needed ( no const possible )" );
        // happens in BugDoc 31722
        if( !NewFkp() )
-           return 0;
+           return false;
     }
 
     pFkp->HasSprm(nId, rResult);
@@ -3469,7 +3469,7 @@ bool WW8PLCFx_SEPX::Find4Sprms(sal_uInt16 nId1,sal_uInt16 nId2,sal_uInt16 nId3,s
     sal_uInt8*& p1, sal_uInt8*& p2, sal_uInt8*& p3, sal_uInt8*& p4) const
 {
     if( !pPLCF )
-        return 0;
+        return false;
 
     bool bFound = false;
     p1 = 0;
@@ -5965,7 +5965,7 @@ WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
         if( 20 < nRead )
             rSt.SeekRel( nRead-20 );
     }
-    while( 0 ); // Trick: obiger Block wird genau einmal durchlaufen
+    while( false ); // Trick: obiger Block wird genau einmal durchlaufen
                 //   und kann vorzeitig per "break" verlassen werden.
 
     nRemaining -= cbStshi;
@@ -6041,7 +6041,7 @@ WW8_STD* WW8Style::Read1STDFixed( short& rSkip, short* pcbStd )
             if( 10 < nRead )
                 rSt.SeekRel( nRead-10 );
         }
-        while( 0 ); // Trick: obiger Block wird genau einmal durchlaufen
+        while( false ); // Trick: obiger Block wird genau einmal durchlaufen
                     //   und kann vorzeitig per "break" verlassen werden.
 
         if( (0 != rSt.GetError()) || !nRead )
@@ -6649,7 +6649,7 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize) 
 
         //#i22436#, for all WW7- documents
         if (nFib <= 104) // Word 95
-            fUsePrinterMetrics = 1;
+            fUsePrinterMetrics = true;
 
         /*
             bei nFib > 105 gehts weiter:
@@ -6740,26 +6740,26 @@ WW8Dop::WW8Dop() : bUseThaiLineBreakingRules(false)
     // first set everything to a default of 0
     memset( &nDataStart, 0, (&nDataEnd - &nDataStart) );
 
-    fWidowControl = 1;
+    fWidowControl = true;
     fpc = 1;
     nFtn = 1;
-    fOutlineDirtySave = 1;
-    fHyphCapitals = 1;
-    fBackup = 1;
-    fPagHidden = 1;
-    fPagResults = 1;
-    fDfltTrueType = 1;
+    fOutlineDirtySave = true;
+    fHyphCapitals = true;
+    fBackup = true;
+    fPagHidden = true;
+    fPagResults = true;
+    fDfltTrueType = true;
 
     /*
     Writer acts like this all the time at the moment, ideally we need an
     option for these two as well to import word docs that are not like
     this by default
     */
-    fNoLeading = 1;
-    fUsePrinterMetrics = 1;
+    fNoLeading = true;
+    fUsePrinterMetrics = true;
 
-    fRMView = 1;
-    fRMPrint = 1;
+    fRMView = true;
+    fRMPrint = true;
     dxaTab = 0x2d0;
     dxaHotZ = 0x168;
     nRevision = 1;
@@ -6767,15 +6767,15 @@ WW8Dop::WW8Dop() : bUseThaiLineBreakingRules(false)
 
     epc = 3;
     nfcEdnRef = 2;
-    fShadeFormData = 1;
+    fShadeFormData = true;
 
     wvkSaved = 2;
     wScaleSaved = 100;
     zkSaved = 0;
 
     lvl = 9;
-    fIncludeHeader = 1;
-    fIncludeFooter = 1;
+    fIncludeHeader = true;
+    fIncludeFooter = true;
 
     cChWS = /**!!**/ 0;
     cChWSFtnEdn = /**!!**/ 0;

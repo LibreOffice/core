@@ -706,8 +706,8 @@ static sal_Bool lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
     //going down.
     sal_Bool bTblSel = false;
     if ( pStart->IsInTab() &&
-        pPam->GetNode( sal_True )->StartOfSectionNode() !=
-        pPam->GetNode( sal_False )->StartOfSectionNode() )
+        pPam->GetNode( true )->StartOfSectionNode() !=
+        pPam->GetNode( false )->StartOfSectionNode() )
     {
         bTblSel = true;
         const SwLayoutFrm  *pCell = pStart->GetUpper();
@@ -1851,7 +1851,7 @@ sal_uInt16 SwFrm::GetVirtPageNum() const
 bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
 {
     //Find Union-Rects and tables (Follows) of the selection.
-    OSL_ENSURE( rTblCrsr.GetCntntNode() && rTblCrsr.GetCntntNode( sal_False ),
+    OSL_ENSURE( rTblCrsr.GetCntntNode() && rTblCrsr.GetCntntNode( false ),
             "Tabselection nicht auf Cnt." );
 
     bool bRet = false;
@@ -1873,7 +1873,7 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
 
     // #151012# Made code robust here
     const SwCntntNode* pTmpStartNode = rTblCrsr.GetCntntNode();
-    const SwCntntNode* pTmpEndNode   = rTblCrsr.GetCntntNode(sal_False);
+    const SwCntntNode* pTmpEndNode   = rTblCrsr.GetCntntNode(false);
 
     const SwFrm* pTmpStartFrm = pTmpStartNode ? pTmpStartNode->getLayoutFrm( this, &aPtPt, 0, sal_False ) : 0;
     const SwFrm* pTmpEndFrm   = pTmpEndNode   ?   pTmpEndNode->getLayoutFrm( this, &aMkPt, 0, sal_False ) : 0;

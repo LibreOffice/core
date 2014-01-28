@@ -485,8 +485,8 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
                     pMyNd->StartOfSectionNode()->IsSectionNode() ) )
                 {
                     pMyNd = bSelTop
-                        ? rNds.GoPrevSection( &GetPoint()->nNode,sal_True,sal_False )
-                        : rNds.GoNextSection( &GetPoint()->nNode,sal_True,sal_False );
+                        ? rNds.GoPrevSection( &GetPoint()->nNode,true,false )
+                        : rNds.GoNextSection( &GetPoint()->nNode,true,false );
 
                     /* #i12312# Handle failure of Go{Prev|Next}Section */
                     if ( 0 == pMyNd)
@@ -1636,7 +1636,7 @@ sal_Bool SwCursor::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
                     SwNodeIndex aNewIdx( *pTableBox->GetSttNd() );
                     rPtIdx = aNewIdx;
 
-                    GetDoc()->GetNodes().GoNextSection( &rPtIdx, sal_False, sal_False );
+                    GetDoc()->GetNodes().GoNextSection( &rPtIdx, false, false );
                     SwCntntNode* pCntntNode = GetCntntNode();
                     if ( pCntntNode )
                     {
@@ -1669,7 +1669,7 @@ sal_Bool SwCursor::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
                 SwNodeIndex aNewIdx( *pTableBox->GetSttNd() );
                 rPtIdx = aNewIdx;
 
-                GetDoc()->GetNodes().GoNextSection( &rPtIdx, sal_False, sal_False );
+                GetDoc()->GetNodes().GoNextSection( &rPtIdx, false, false );
                 SwCntntNode* pCntntNode = GetCntntNode();
                 if ( pCntntNode )
                 {
@@ -1745,8 +1745,8 @@ sal_Bool SwCursor::UpDown( sal_Bool bUp, sal_uInt16 nCnt,
 
     // If the point/mark of the table cursor in the same box then set cursor to
     // beginning of the box
-    if( pTblCrsr && GetNode( sal_True )->StartOfSectionNode() ==
-                    GetNode( sal_False )->StartOfSectionNode() )
+    if( pTblCrsr && GetNode( true )->StartOfSectionNode() ==
+                    GetNode( false )->StartOfSectionNode() )
     {
         if ( End() != GetPoint() )
             Exchange();
@@ -1785,7 +1785,7 @@ sal_Bool SwCursor::UpDown( sal_Bool bUp, sal_uInt16 nCnt,
             // than one paragraph. If we want to go down, we have to set the
             // point to the last frame in the table box. This is only necessary
             // if we do not already have a table selection
-            const SwStartNode* pTblNd = GetNode( sal_True )->FindTableBoxStartNode();
+            const SwStartNode* pTblNd = GetNode( true )->FindTableBoxStartNode();
             OSL_ENSURE( pTblNd, "pTblCrsr without SwTableNode?" );
 
             if ( pTblNd ) // safety first
@@ -1944,7 +1944,7 @@ sal_Bool SwCursor::GoPrevNextCell( sal_Bool bNext, sal_uInt16 nCnt )
 
     ++rPtIdx;
     if( !rPtIdx.GetNode().IsCntntNode() )
-        GetDoc()->GetNodes().GoNextSection( &rPtIdx, sal_True, sal_False );
+        GetDoc()->GetNodes().GoNextSection( &rPtIdx, true, false );
     GetPoint()->nContent.Assign( GetCntntNode(), 0 );
 
     return !IsInProtectTable( sal_True );
@@ -2149,7 +2149,7 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
                 SwNodeIndex aIdx( *pSttNd, 1 );
                 const SwNode* pNd = &aIdx.GetNode();
                 if( !pNd->IsCntntNode() )
-                    pNd = rNds.GoNextSection( &aIdx, sal_True, sal_False );
+                    pNd = rNds.GoNextSection( &aIdx, true, false );
 
                 SwPosition* pPos = pCur->GetMark();
                 if( pNd != &pPos->nNode.GetNode() )
@@ -2158,7 +2158,7 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
 
                 aIdx.Assign( *pSttNd->EndOfSectionNode(), - 1 );
                 if( !( pNd = &aIdx.GetNode())->IsCntntNode() )
-                    pNd = rNds.GoPrevSection( &aIdx, sal_True, sal_False );
+                    pNd = rNds.GoPrevSection( &aIdx, true, false );
 
                 pPos = pCur->GetPoint();
                 if( pNd != &pPos->nNode.GetNode() )
@@ -2191,7 +2191,7 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
                 break;
             const SwNode* pNd = &aIdx.GetNode();
             if( !pNd->IsCntntNode() )
-                pNd = rNds.GoNextSection( &aIdx, sal_True, sal_False );
+                pNd = rNds.GoNextSection( &aIdx, true, false );
 
             SwPaM *const pNew = (pAktCrsr->GetNext() == pAktCrsr && !pAktCrsr->HasMark())
                 ? pAktCrsr
@@ -2203,7 +2203,7 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
             SwPosition* pPos = pNew->GetPoint();
             pPos->nNode.Assign( *pSttNd->EndOfSectionNode(), - 1 );
             if( !( pNd = &pPos->nNode.GetNode())->IsCntntNode() )
-                pNd = rNds.GoPrevSection( &pPos->nNode, sal_True, sal_False );
+                pNd = rNds.GoPrevSection( &pPos->nNode, true, false );
 
             pPos->nContent.Assign( (SwCntntNode*)pNd, ((SwCntntNode*)pNd)->Len() );
         }
@@ -2228,7 +2228,7 @@ bool SwTableCursor::NewTableSelection()
 {
     bool bRet = false;
     const SwNode *pStart = GetCntntNode()->FindTableBoxStartNode();
-    const SwNode *pEnd = GetCntntNode(sal_False)->FindTableBoxStartNode();
+    const SwNode *pEnd = GetCntntNode(false)->FindTableBoxStartNode();
     if( pStart && pEnd )
     {
         const SwTableNode *pTableNode = pStart->FindTableNode();

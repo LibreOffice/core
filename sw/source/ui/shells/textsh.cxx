@@ -271,7 +271,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     case SID_INSERT_OBJECT:
     case SID_INSERT_PLUGIN:
     {
-        SFX_REQUEST_ARG( rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT, sal_False );
+        SFX_REQUEST_ARG( rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT, false );
         SvGlobalName *pName = NULL;
         SvGlobalName aName;
         if ( pNameItem )
@@ -280,8 +280,8 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             pName = &aName;
         }
 
-        SFX_REQUEST_ARG( rReq, pClassLocationItem,  SfxStringItem, FN_PARAM_2, sal_False );
-        SFX_REQUEST_ARG( rReq, pCommandsItem,       SfxStringItem, FN_PARAM_3, sal_False );
+        SFX_REQUEST_ARG( rReq, pClassLocationItem,  SfxStringItem, FN_PARAM_2, false );
+        SFX_REQUEST_ARG( rReq, pCommandsItem,       SfxStringItem, FN_PARAM_3, false );
         //TODO/LATER: recording currently not working, need code for Commandlist
         svt::EmbeddedObjectRef xObj;
         if( nSlot == SID_INSERT_PLUGIN && ( pClassLocationItem || pCommandsItem ) )
@@ -342,11 +342,11 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     case SID_INSERT_FLOATINGFRAME:
     {
         svt::EmbeddedObjectRef xObj;
-        SFX_REQUEST_ARG( rReq, pNameItem,   SfxStringItem, FN_PARAM_1, sal_False );
-        SFX_REQUEST_ARG( rReq, pURLItem,    SfxStringItem, FN_PARAM_2, sal_False );
-        SFX_REQUEST_ARG( rReq, pMarginItem, SvxSizeItem, FN_PARAM_3, sal_False );
-        SFX_REQUEST_ARG( rReq, pScrollingItem, SfxByteItem, FN_PARAM_4, sal_False );
-        SFX_REQUEST_ARG( rReq, pBorderItem, SfxBoolItem, FN_PARAM_5, sal_False );
+        SFX_REQUEST_ARG( rReq, pNameItem,   SfxStringItem, FN_PARAM_1, false );
+        SFX_REQUEST_ARG( rReq, pURLItem,    SfxStringItem, FN_PARAM_2, false );
+        SFX_REQUEST_ARG( rReq, pMarginItem, SvxSizeItem, FN_PARAM_3, false );
+        SFX_REQUEST_ARG( rReq, pScrollingItem, SfxByteItem, FN_PARAM_4, false );
+        SFX_REQUEST_ARG( rReq, pBorderItem, SfxBoolItem, FN_PARAM_5, false );
 
         if(pURLItem) // URL is a _must_
         {
@@ -986,7 +986,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
     SvxFontItem aFont( RES_CHRATR_FONT );
     {
         SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, *aSet.GetPool() );
-        aSetItem.GetItemSet().Put( aSet, sal_False );
+        aSetItem.GetItemSet().Put( aSet, false );
         const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScript );
         if( pI )
             aFont = *(SvxFontItem*)pI;
@@ -1003,7 +1003,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
     {
         // Set selected font as default.
         SfxAllItemSet aAllSet( rSh.GetAttrPool() );
-        aAllSet.Put( SfxBoolItem( FN_PARAM_1, sal_False ) );
+        aAllSet.Put( SfxBoolItem( FN_PARAM_1, false ) );
 
         SwViewOption aOpt(*GetShell().GetViewOptions());
         OUString sSymbolFont = aOpt.GetSymbolFont();
@@ -1017,8 +1017,8 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             GetView().GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP );
         if( RET_OK == pDlg->Execute() )
         {
-            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP, sal_False );
-            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, sal_False );
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP, false );
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, false );
             if ( pFontItem )
             {
                 aNewFont.SetName( pFontItem->GetFamilyName() );
@@ -1054,7 +1054,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             rSh.GetCurAttr( aSet );
 
             SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, *aSet.GetPool() );
-            aSetItem.GetItemSet().Put( aSet, sal_False );
+            aSetItem.GetItemSet().Put( aSet, false );
             const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScript );
             if( pI )
                 aFont = *(SvxFontItem*)pI;

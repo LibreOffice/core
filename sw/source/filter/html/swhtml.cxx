@@ -271,36 +271,36 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCrsr, SvStream& rIn,
     m_nContinue( 0 ),
 #endif
     eParaAdjust( SVX_ADJUST_END ),
-    bDocInitalized( sal_False ),
-    bSetModEnabled( sal_False ),
-    bInFloatingFrame( sal_False ),
-    bInField( sal_False ),
-    bCallNextToken( sal_False ),
-    bIgnoreRawData( sal_False ),
+    bDocInitalized( false ),
+    bSetModEnabled( false ),
+    bInFloatingFrame( false ),
+    bInField( false ),
+    bCallNextToken( false ),
+    bIgnoreRawData( false ),
     bLBEntrySelected ( false ),
     bTAIgnoreNewPara ( false ),
     bFixMarqueeWidth ( false ),
     bFixMarqueeHeight ( false ),
-    bNoParSpace( sal_False ),
-    bInNoEmbed( sal_False ),
-    bInTitle( sal_False ),
-    bUpdateDocStat( sal_False ),
-    bFixSelectWidth( sal_False ),
-    bFixSelectHeight( sal_False ),
-    bTextArea( sal_False ),
-    bSelect( sal_False ),
-    bInFootEndNoteAnchor( sal_False ),
-    bInFootEndNoteSymbol( sal_False ),
+    bNoParSpace( false ),
+    bInNoEmbed( false ),
+    bInTitle( false ),
+    bUpdateDocStat( false ),
+    bFixSelectWidth( false ),
+    bFixSelectHeight( false ),
+    bTextArea( false ),
+    bSelect( false ),
+    bInFootEndNoteAnchor( false ),
+    bInFootEndNoteSymbol( false ),
     bIgnoreHTMLComments( bNoHTMLComments ),
-    bRemoveHidden( sal_False ),
+    bRemoveHidden( false ),
     pTempViewFrame(0)
 {
     nEventId = 0;
     bUpperSpace = bViewCreated = bChkJumpMark =
-    bSetCrsr = sal_False;
+    bSetCrsr = false;
 
     eScriptLang = HTML_SL_UNKNOWN;
-    bAnyStarBasic = sal_True;
+    bAnyStarBasic = true;
 
     rCrsr.DeleteMark();
     pPam = &rCrsr; // re-use existing cursor: avoids spurious ~SwIndexReg assert
@@ -360,7 +360,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCrsr, SvStream& rIn,
     SwDocShell* pDocSh = pDoc->GetDocShell();
     if( pDocSh )
     {
-        bViewCreated = sal_True;            // nicht, synchron laden
+        bViewCreated = true;            // nicht, synchron laden
 
         // es ist ein Sprungziel vorgegeben.
 
@@ -415,7 +415,7 @@ SwHTMLParser::~SwHTMLParser()
     OSL_ENSURE( !m_nContinue, "DTOR im Continue!" );
 #endif
     sal_Bool bAsync = pDoc->IsInLoadAsynchron();
-    pDoc->SetInLoadAsynchron( sal_False );
+    pDoc->SetInLoadAsynchron( false );
     pDoc->set(IDocumentSettingAccess::HTML_MODE, bOldIsHTMLMode);
 
     if( pDoc->GetDocShell() && nEventId )
@@ -537,7 +537,7 @@ SvParserState SwHTMLParser::CallParser()
         }
         else
         {
-            bViewCreated = sal_True;
+            bViewCreated = true;
             nEventId = 0;
         }
     }
@@ -584,8 +584,8 @@ void SwHTMLParser::Continue( int nToken )
         // An dieser Stelle wurde im CallParser gerade mal ein Zeichen
         // gelesen und ein SaveState(0) gerufen.
         eState = SVPAR_PENDING;
-        bViewCreated = sal_True;
-        pDoc->SetInLoadAsynchron( sal_True );
+        bViewCreated = true;
+        pDoc->SetInLoadAsynchron( true );
 
 #ifdef DBG_UTIL
         m_nContinue--;
@@ -594,7 +594,7 @@ void SwHTMLParser::Continue( int nToken )
         return;
     }
 
-    bSetModEnabled = sal_False;
+    bSetModEnabled = false;
     if( pDoc->GetDocShell() &&
         (bSetModEnabled = pDoc->GetDocShell()->IsEnableSetModified()) )
     {
@@ -699,21 +699,21 @@ void SwHTMLParser::Continue( int nToken )
 
 #if OSL_DEBUG_LEVEL > 0
 // !!! sollte nicht moeglich sein, oder ??
-OSL_ENSURE( pSttNdIdx->GetIndex()+1 != pPam->GetBound( sal_True ).nNode.GetIndex(),
+OSL_ENSURE( pSttNdIdx->GetIndex()+1 != pPam->GetBound( true ).nNode.GetIndex(),
             "Pam.Bound1 steht noch im Node" );
-OSL_ENSURE( pSttNdIdx->GetIndex()+1 != pPam->GetBound( sal_False ).nNode.GetIndex(),
+OSL_ENSURE( pSttNdIdx->GetIndex()+1 != pPam->GetBound( false ).nNode.GetIndex(),
             "Pam.Bound2 steht noch im Node" );
 
-if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_True ).nNode.GetIndex() )
+if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( true ).nNode.GetIndex() )
 {
-    const sal_Int32 nCntPos = pPam->GetBound( sal_True ).nContent.GetIndex();
-    pPam->GetBound( sal_True ).nContent.Assign( pTxtNode,
+    const sal_Int32 nCntPos = pPam->GetBound( true ).nContent.GetIndex();
+    pPam->GetBound( true ).nContent.Assign( pTxtNode,
                     pTxtNode->GetTxt().getLength() + nCntPos );
 }
-if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_False ).nNode.GetIndex() )
+if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( false ).nNode.GetIndex() )
 {
-    const sal_Int32 nCntPos = pPam->GetBound( sal_False ).nContent.GetIndex();
-    pPam->GetBound( sal_False ).nContent.Assign( pTxtNode,
+    const sal_Int32 nCntPos = pPam->GetBound( false ).nContent.GetIndex();
+    pPam->GetBound( false ).nContent.Assign( pTxtNode,
                     pTxtNode->GetTxt().getLength() + nCntPos );
 }
 #endif
@@ -771,8 +771,8 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_False ).nNode.GetIndex() )
                             pCrsrSh->SetMark();
                             pCrsrSh->ClearMark();
                         }
-                        pPam->GetBound(sal_True).nContent.Assign( 0, 0 );
-                        pPam->GetBound(sal_False).nContent.Assign( 0, 0 );
+                        pPam->GetBound(true).nContent.Assign( 0, 0 );
+                        pPam->GetBound(false).nContent.Assign( 0, 0 );
                         pDoc->GetNodes().Delete( pPam->GetPoint()->nNode );
                     }
                 }
@@ -820,10 +820,10 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_False ).nNode.GetIndex() )
                 if( pPrev->HasSwAttrSet() )
                     pTxtNode->SetAttr( *pPrev->GetpSwAttrSet() );
 
-                if( &pPam->GetBound(sal_True).nNode.GetNode() == pPrev )
-                    pPam->GetBound(sal_True).nContent.Assign( pTxtNode, 0 );
-                if( &pPam->GetBound(sal_False).nNode.GetNode() == pPrev )
-                    pPam->GetBound(sal_False).nContent.Assign( pTxtNode, 0 );
+                if( &pPam->GetBound(true).nNode.GetNode() == pPrev )
+                    pPam->GetBound(true).nContent.Assign( pTxtNode, 0 );
+                if( &pPam->GetBound(false).nNode.GetNode() == pPrev )
+                    pPam->GetBound(false).nContent.Assign( pTxtNode, 0 );
 
                 pTxtNode->JoinPrev();
             }
@@ -885,7 +885,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_False ).nNode.GetIndex() )
         if( bSetModEnabled && pDoc->GetDocShell() )
         {
             pDoc->GetDocShell()->EnableSetModified( sal_True );
-            bSetModEnabled = sal_False; // this is unnecessary here
+            bSetModEnabled = false; // this is unnecessary here
         }
     }
 
@@ -919,11 +919,11 @@ void SwHTMLParser::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 void SwHTMLParser::DocumentDetected()
 {
     OSL_ENSURE( !bDocInitalized, "DocumentDetected mehrfach aufgerufen" );
-    bDocInitalized = sal_True;
+    bDocInitalized = true;
     if( IsNewDoc() )
     {
         if( IsInHeader() )
-            FinishHeader( sal_True );
+            FinishHeader( true );
 
         CallEndAction( sal_True, sal_True );
 
@@ -1000,7 +1000,7 @@ void SwHTMLParser::NextToken( int nToken )
                         pDoc->GetDocShell()->SetTitle( sTitle );
                     }
                 }
-                bInTitle = sal_False;
+                bInTitle = false;
                 sTitle = "";
                 break;
 
@@ -1042,7 +1042,7 @@ void SwHTMLParser::NextToken( int nToken )
 
     sal_Bool bGetIDOption = sal_False, bInsertUnknown = sal_False;
     sal_Bool bUpperSpaceSave = bUpperSpace;
-    bUpperSpace = sal_False;
+    bUpperSpace = false;
 
     // The following special cases may or have to be treated after the
     // filter detection
@@ -1054,7 +1054,7 @@ void SwHTMLParser::NextToken( int nToken )
             // Applets as well
             if( HTML_IFRAME_OFF == nToken )
             {
-                bCallNextToken = sal_False;
+                bCallNextToken = false;
                 EndFloatingFrame();
             }
 
@@ -1068,8 +1068,8 @@ void SwHTMLParser::NextToken( int nToken )
                 aContents = convertLineEnd(aContents, GetSystemLineEnd());
                 InsertComment( aContents, OOO_STRING_SVTOOLS_HTML_noembed );
                 aContents = "";
-                bCallNextToken = sal_False;
-                bInNoEmbed = sal_False;
+                bCallNextToken = false;
+                bInNoEmbed = false;
                 break;
 
             case HTML_RAWDATA:
@@ -1092,11 +1092,11 @@ void SwHTMLParser::NextToken( int nToken )
             switch( nToken )
             {
             case HTML_APPLET_OFF:
-                bCallNextToken = sal_False;
+                bCallNextToken = false;
                 EndApplet();
                 break;
             case HTML_OBJECT_OFF:
-                bCallNextToken = sal_False;
+                bCallNextToken = false;
                 EndObject();
                 break;
 
@@ -1115,7 +1115,7 @@ void SwHTMLParser::NextToken( int nToken )
             switch( nToken )
             {
             case HTML_TEXTAREA_OFF:
-                bCallNextToken = sal_False;
+                bCallNextToken = false;
                 EndTextArea();
                 break;
 
@@ -1132,7 +1132,7 @@ void SwHTMLParser::NextToken( int nToken )
             switch( nToken )
             {
             case HTML_SELECT_OFF:
-                bCallNextToken = sal_False;
+                bCallNextToken = false;
                 EndSelect();
                 return;
 
@@ -1166,7 +1166,7 @@ void SwHTMLParser::NextToken( int nToken )
             switch( nToken )
             {
             case HTML_MARQUEE_OFF:
-                bCallNextToken = sal_False;
+                bCallNextToken = false;
                 EndMarquee();
                 break;
 
@@ -1182,7 +1182,7 @@ void SwHTMLParser::NextToken( int nToken )
             switch( nToken )
             {
             case HTML_SDFIELD_OFF:
-                bCallNextToken = sal_False;
+                bCallNextToken = false;
                 EndField();
                 break;
 
@@ -1199,7 +1199,7 @@ void SwHTMLParser::NextToken( int nToken )
             {
             case HTML_ANCHOR_OFF:
                 EndAnchor();
-                bCallNextToken = sal_False;
+                bCallNextToken = false;
                 break;
 
             case HTML_TEXTTOKEN:
@@ -1340,7 +1340,7 @@ void SwHTMLParser::NextToken( int nToken )
         break;
 
     case HTML_TITLE_ON:
-        bInTitle = sal_True;
+        bInTitle = true;
         break;
 
     case HTML_SCRIPT_ON:
@@ -1505,7 +1505,7 @@ void SwHTMLParser::NextToken( int nToken )
         break;
 
     case HTML_NOEMBED_ON:
-        bInNoEmbed = sal_True;
+        bInNoEmbed = true;
         bCallNextToken = pTable!=0;
         ReadRawData( OOO_STRING_SVTOOLS_HTML_noembed );
         break;
@@ -1633,7 +1633,7 @@ void SwHTMLParser::NextToken( int nToken )
         break;
 
     case HTML_PREFORMTXT_OFF:
-        bNoParSpace = sal_True; // the last PRE-paragraph gets a spacing
+        bNoParSpace = true; // the last PRE-paragraph gets a spacing
         EndTxtFmtColl( HTML_PREFORMTXT_OFF );
         break;
 
@@ -1996,7 +1996,7 @@ void SwHTMLParser::NextToken( int nToken )
 
     case HTML_NOFRAMES_ON:
         if( IsInHeader() )
-            FinishHeader( sal_True );
+            FinishHeader( true );
         bInsertUnknown = bKeepUnknown;
         break;
 
@@ -2393,7 +2393,7 @@ void SwHTMLParser::AddParSpace()
     if( !bNoParSpace )
         return;
 
-    bNoParSpace = sal_False;
+    bNoParSpace = false;
 
     sal_uLong nNdIdx = pPam->GetPoint()->nNode.GetIndex() - 1;
 
@@ -2587,7 +2587,7 @@ SwViewShell *SwHTMLParser::CallEndAction( sal_Bool bChkAction, sal_Bool bChkPtr 
             pSh = (SwViewShell *)pSh->GetNext();
         } while( pSh != pActionViewShell );
 
-        bSetCrsr = sal_False;
+        bSetCrsr = false;
     }
     if( pActionViewShell->ISA( SwEditShell ) )
     {
@@ -2607,7 +2607,7 @@ SwViewShell *SwHTMLParser::CallEndAction( sal_Bool bChkAction, sal_Bool bChkPtr 
             if( GetMedium() && aVisSttPos == pActionViewShell->VisArea().Pos() )
                 ::JumpToSwMark( pActionViewShell,
                                 GetMedium()->GetURLObject().GetMark() );
-            bChkJumpMark = sal_False;
+            bChkJumpMark = false;
         }
     }
     else
@@ -2836,7 +2836,7 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
                         // jump to bookmark
                         if( JUMPTO_MARK == eJumpTo && pNewMark->GetName() == sJmpMark )
                         {
-                            bChkJumpMark = sal_True;
+                            bChkJumpMark = true;
                             eJumpTo = JUMPTO_NONE;
                         }
                     }
@@ -2883,7 +2883,7 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
                         JUMPTO_MARK == eJumpTo &&
                         sJmpMark == ((SwFmtINetFmt*)pAttr->pItem)->GetName() )
                     {
-                        bChkJumpMark = sal_True;
+                        bChkJumpMark = true;
                         eJumpTo = JUMPTO_NONE;
                     }
 
@@ -5472,9 +5472,9 @@ _HTMLAttr::_HTMLAttr( const SwPosition& rPos, const SfxPoolItem& rItem,
     nEndPara( rPos.nNode ),
     nSttCntnt( rPos.nContent.GetIndex() ),
     nEndCntnt(rPos.nContent.GetIndex() ),
-    bInsAtStart( sal_True ),
-    bLikePara( sal_False ),
-    bValid( sal_True ),
+    bInsAtStart( true ),
+    bLikePara( false ),
+    bValid( true ),
     nCount( 1 ),
     pNext( 0 ),
     pPrev( 0 ),

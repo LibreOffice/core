@@ -1205,7 +1205,7 @@ namespace
                                 ? rPam.GetPoint() == &rPam.GetBound()
                                 : rPam.GetMark() == &rPam.GetBound());
 
-        const SwPosition* pPos = &rPam.GetBound( sal_True );
+        const SwPosition* pPos = &rPam.GetBound( true );
         if( pPos->nNode.GetIndex() == nNode &&
             ( bBound1IsStart ? pPos->nContent.GetIndex() < nCntnt
                                 : pPos->nContent.GetIndex() <= nCntnt ))
@@ -1214,7 +1214,7 @@ namespace
             rSave.Add( rSaveArr );
         }
 
-        pPos = &rPam.GetBound( sal_False );
+        pPos = &rPam.GetBound( false );
         if( pPos->nNode.GetIndex() == nNode &&
             ( (bBound1IsStart && bChkSelDirection)
                         ? pPos->nContent.GetIndex() <= nCntnt
@@ -1311,12 +1311,12 @@ void SaveBookmark::SetInDoc(
             if(pIdx && !m_nNode2)
                 aPam.GetMark()->nContent += m_nCntnt2;
             else
-                aPam.GetMark()->nContent.Assign(aPam.GetCntntNode(sal_False), m_nCntnt2);
+                aPam.GetMark()->nContent.Assign(aPam.GetCntntNode(false), m_nCntnt2);
         }
         else
         {
             aPam.GetMark()->nNode = m_nNode2;
-            aPam.GetMark()->nContent.Assign(aPam.GetCntntNode(sal_False), m_nCntnt2);
+            aPam.GetMark()->nContent.Assign(aPam.GetCntntNode(false), m_nCntnt2);
         }
     }
 
@@ -1384,8 +1384,8 @@ void _DelBookmarks(
         // Is at position?
         SwRangeRedline* pRedl = rTbl[ nCnt ];
 
-        SwPosition *pRStt = &pRedl->GetBound(sal_True),
-                   *pREnd = &pRedl->GetBound(sal_False);
+        SwPosition *pRStt = &pRedl->GetBound(true),
+                   *pREnd = &pRedl->GetBound(false);
         if( *pRStt > *pREnd )
         {
             SwPosition *pTmp = pRStt; pRStt = pREnd, pREnd = pTmp;

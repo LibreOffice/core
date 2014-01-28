@@ -212,7 +212,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                     }
                     rSh.SetFlyName(sName);
                 }
-                aURL.SetURL( rURL, sal_False );
+                aURL.SetURL( rURL, false );
                 aURL.SetTargetFrameName(rTarget);
 
                 aSet.Put( aURL );
@@ -391,7 +391,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             }
             else
             {
-                bUpdateMgr = sal_False;
+                bUpdateMgr = false;
             }
 
         }
@@ -477,8 +477,8 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                                                                         "FrameDialog",
                                                         GetView().GetViewFrame(),
                                                         GetView().GetWindow(),
-                                                        aSet, sal_False,
-                                                        sal_False,
+                                                        aSet, false,
+                                                        false,
                                                         sDefPage);
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
@@ -886,11 +886,11 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                     if ( ( eProtection & FLYPROTECT_CONTENT ) ||
                          ( eProtection & FLYPROTECT_SIZE ) )
                     {
-                        rSet.Put( SfxBoolItem( SID_ATTR_TRANSFORM_PROTECT_SIZE, sal_True ) );
+                        rSet.Put( SfxBoolItem( SID_ATTR_TRANSFORM_PROTECT_SIZE, true ) );
                     }
                     else
                     {
-                        rSet.Put( SfxBoolItem( SID_ATTR_TRANSFORM_PROTECT_SIZE, sal_False ) );
+                        rSet.Put( SfxBoolItem( SID_ATTR_TRANSFORM_PROTECT_SIZE, false ) );
                     }
                 }
                 break;

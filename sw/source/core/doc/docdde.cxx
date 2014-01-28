@@ -173,7 +173,7 @@ bool SwDoc::GetData( const OUString& rItem, const OUString& rMimeType,
         return SwServerObject( *aPara.pTblNd ).GetData( rValue, rMimeType );
     }
 
-    return sal_False;
+    return false;
 }
 
 bool SwDoc::SetData( const OUString& rItem, const OUString& rMimeType,
@@ -217,7 +217,7 @@ bool SwDoc::SetData( const OUString& rItem, const OUString& rMimeType,
         return SwServerObject( *aPara.pTblNd ).SetData( rMimeType, rValue );
     }
 
-    return sal_False;
+    return false;
 }
 
 ::sfx2::SvLinkSource* SwDoc::CreateLinkSource(const OUString& rItem)

@@ -467,13 +467,13 @@ void MSWordStyles::SetStyleDefaults( const SwFmt& rFmt, bool bPap )
     // static defaults, that differs between WinWord and SO
     if( bPap )
     {
-        aFlags[ static_cast< sal_uInt16 >(RES_PARATR_WIDOWS) - RES_CHRATR_BEGIN ] = 1;
-        aFlags[ static_cast< sal_uInt16 >(RES_PARATR_HYPHENZONE) - RES_CHRATR_BEGIN ] = 1;
+        aFlags[ static_cast< sal_uInt16 >(RES_PARATR_WIDOWS) - RES_CHRATR_BEGIN ] = true;
+        aFlags[ static_cast< sal_uInt16 >(RES_PARATR_HYPHENZONE) - RES_CHRATR_BEGIN ] = true;
     }
     else
     {
-        aFlags[ RES_CHRATR_FONTSIZE - RES_CHRATR_BEGIN ] = 1;
-        aFlags[ RES_CHRATR_LANGUAGE - RES_CHRATR_BEGIN ] = 1;
+        aFlags[ RES_CHRATR_FONTSIZE - RES_CHRATR_BEGIN ] = true;
+        aFlags[ RES_CHRATR_LANGUAGE - RES_CHRATR_BEGIN ] = true;
     }
 
     const SfxItemSet* pOldI = m_rExport.GetCurItemSet();

@@ -200,7 +200,7 @@ SwUndoTxtFmtCollCreate::SwUndoTxtFmtCollCreate
 
 SwFmt * SwUndoTxtFmtCollCreate::Create(SwFmt * pDerivedFrom)
 {
-    return pDoc->MakeTxtFmtColl(sNewName, (SwTxtFmtColl *)pDerivedFrom, sal_True);
+    return pDoc->MakeTxtFmtColl(sNewName, (SwTxtFmtColl *)pDerivedFrom, true);
 }
 
 void SwUndoTxtFmtCollCreate::Delete()
@@ -221,7 +221,7 @@ SwUndoTxtFmtCollDelete::SwUndoTxtFmtCollDelete(SwTxtFmtColl * _pOld,
 
 SwFmt * SwUndoTxtFmtCollDelete::Create(SwFmt * pDerivedFrom)
 {
-    return pDoc->MakeTxtFmtColl(sOldName, (SwTxtFmtColl *) pDerivedFrom, sal_True);
+    return pDoc->MakeTxtFmtColl(sOldName, (SwTxtFmtColl *) pDerivedFrom, true);
 }
 
 void SwUndoTxtFmtCollDelete::Delete(SwFmt * pOld)

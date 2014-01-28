@@ -1650,11 +1650,11 @@ void WW8FlyPara::ReadFull(sal_uInt8 nOrigSp29, SwWW8ImplReader* pIo)
                 bGrafApo = true;                // nein -> 1-zeiliger APO
                                                 //      -> Grafik-APO
         }
-        while( 0 );                             // Block zum rausspringen
+        while( false );                             // Block zum rausspringen
 
         pPlcxMan->GetPap()->Restore( aSave );
         pIoStrm->Seek( nPos );
-    }while( 0 );                                    // Block zum rausspringen
+    }while( false );                                    // Block zum rausspringen
 }
 
 

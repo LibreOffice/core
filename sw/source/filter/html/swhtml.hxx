@@ -127,7 +127,7 @@ public:
     // waere sehr aufwendig, da man nicht so genau weiss, wo sie eingekettet
     // sind. Sie werden deshalb einfach invalidiert und erst beim naechsten
     // _SetAttr() geloescht.
-    void Invalidate() { bValid = sal_False; }
+    void Invalidate() { bValid = false; }
     sal_Bool IsValid() const { return bValid; }
 };
 
@@ -240,15 +240,15 @@ public:
         nUpperSpace( 0 ),
         nLowerSpace( 0 ),
         eAppend( AM_NONE ),
-        bLRSpaceChanged( sal_False ),
-        bULSpaceChanged( sal_False ),
+        bLRSpaceChanged( false ),
+        bULSpaceChanged( false ),
         bDfltTxtFmtColl( bDfltColl ),
-        bSpansSection( sal_False ),
-        bPopStack( sal_False ),
-        bFinishPREListingXMP( sal_False ),
-        bRestartPRE( sal_False ),
-        bRestartXMP( sal_False ),
-        bRestartListing( sal_False )
+        bSpansSection( false ),
+        bPopStack( false ),
+        bFinishPREListingXMP( false ),
+        bRestartPRE( false ),
+        bRestartXMP( false ),
+        bRestartListing( false )
     {}
 
     _HTMLAttrContext( sal_uInt16 nTokn ) :
@@ -262,15 +262,15 @@ public:
         nUpperSpace( 0 ),
         nLowerSpace( 0 ),
         eAppend( AM_NONE ),
-        bLRSpaceChanged( sal_False ),
-        bULSpaceChanged( sal_False ),
-        bDfltTxtFmtColl( sal_False ),
-        bSpansSection( sal_False ),
-        bPopStack( sal_False ),
-        bFinishPREListingXMP( sal_False ),
-        bRestartPRE( sal_False ),
-        bRestartXMP( sal_False ),
-        bRestartListing( sal_False )
+        bLRSpaceChanged( false ),
+        bULSpaceChanged( false ),
+        bDfltTxtFmtColl( false ),
+        bSpansSection( false ),
+        bPopStack( false ),
+        bFinishPREListingXMP( false ),
+        bRestartPRE( false ),
+        bRestartXMP( false ),
+        bRestartListing( false )
     {}
 
     ~_HTMLAttrContext() { ClearSaveDocContext(); delete pFrmItemSet; }
@@ -719,7 +719,7 @@ private:
     void InsertParam();     // htmlplug.cxx
 
     void InsertFloatingFrame();
-    void EndFloatingFrame() { bInFloatingFrame = sal_False; }
+    void EndFloatingFrame() { bInFloatingFrame = false; }
 
     // <BODY>-Tag auswerten: Hintergrund-Grafiken und -Farben setzen (htmlgrin.cxx)
     void InsertBodyOptions();
@@ -948,7 +948,7 @@ inline void _HTMLAttrContext::SetMargins( sal_uInt16 nLeft, sal_uInt16 nRight,
     nLeftMargin = nLeft;
     nRightMargin = nRight;
     nFirstLineIndent = nIndent;
-    bLRSpaceChanged = sal_True;
+    bLRSpaceChanged = true;
 }
 
 inline void _HTMLAttrContext::GetMargins( sal_uInt16& nLeft,
@@ -967,7 +967,7 @@ inline void _HTMLAttrContext::SetULSpace( sal_uInt16 nUpper, sal_uInt16 nLower )
 {
     nUpperSpace = nUpper;
     nLowerSpace = nLower;
-    bULSpaceChanged = sal_True;
+    bULSpaceChanged = true;
 }
 
 inline void _HTMLAttrContext::GetULSpace( sal_uInt16& rUpper,

@@ -619,7 +619,7 @@ OUString SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
 
     for( sal_uInt16 n = 0; n < mpSectionFmtTbl->size(); ++n )
     {
-        const SwSectionNode *pSectNd = (*mpSectionFmtTbl)[ n ]->GetSectionNode( sal_False );
+        const SwSectionNode *pSectNd = (*mpSectionFmtTbl)[ n ]->GetSectionNode( false );
         if ( !pSectNd )
             continue;
 

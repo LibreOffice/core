@@ -170,7 +170,7 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
         pRet->Put(SwPtrItem(FN_PARAM_STDFONTS, GetStdFontConfig()));
     if( PTR_CAST( SwPagePreview, SfxViewShell::Current())!=0)
     {
-        SfxBoolItem aBool(SfxBoolItem(SID_PRINTPREVIEW, sal_True));
+        SfxBoolItem aBool(SfxBoolItem(SID_PRINTPREVIEW, true));
         pRet->Put(aBool);
     }
 
@@ -466,7 +466,7 @@ SfxTabPage* SwModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxI
                 if ( fnCreatePage )
                     pRet = (*fnCreatePage)( pParent, rSet );
             }
-            aSet.Put (SfxBoolItem(SID_FAX_LIST, sal_True));
+            aSet.Put (SfxBoolItem(SID_FAX_LIST, true));
             pRet->PageCreated(aSet);
         }
         break;

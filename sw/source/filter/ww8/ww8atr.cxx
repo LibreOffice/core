@@ -5008,7 +5008,7 @@ static void ParaTabStopDelAdd( WW8Export& rWrt,
             nO++;
             nN++;
         }
-    } while( 1 );
+    } while( true );
 
     aTab.PutAll( rWrt );
 }

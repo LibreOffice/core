@@ -218,7 +218,7 @@ SwAutoCompleteWord::SwAutoCompleteWord( sal_uInt16 nWords, sal_uInt16 nMWrdLen )
     pImpl(new SwAutoCompleteWord_Impl(*this)),
     nMaxCount( nWords ),
     nMinWrdLen( nMWrdLen ),
-    bLockWordLst( sal_False )
+    bLockWordLst( false )
 {
 }
 
@@ -242,7 +242,7 @@ bool SwAutoCompleteWord::InsertWord( const OUString& rWord, SwDoc& rDoc )
     {
         const INetURLObject& rURL = pMedium->GetURLObject();
         if ( rURL.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
-            return sal_False;
+            return false;
     }
 
     OUString aNewWord(rWord);

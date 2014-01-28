@@ -707,7 +707,7 @@ IMAGE_SETEVENT:
         // ggfs. eine Grafik anspringen
         if( JUMPTO_GRAPHIC == eJumpTo && sHTMLGrfName == sJmpMark )
         {
-            bChkJumpMark = sal_True;
+            bChkJumpMark = true;
             eJumpTo = JUMPTO_NONE;
         }
     }
@@ -1210,11 +1210,11 @@ ANCHOR_SETEVENT:
     if( bEnAnchor || bFtnAnchor )
     {
         InsertFootEndNote( aFtnName, bEnAnchor, bFixed );
-        bInFootEndNoteAnchor = bCallNextToken = sal_True;
+        bInFootEndNoteAnchor = bCallNextToken = true;
     }
     else if( bFtnEnSymbol )
     {
-        bInFootEndNoteSymbol = bCallNextToken = sal_True;
+        bInFootEndNoteSymbol = bCallNextToken = true;
     }
 
     // den Kontext merken
@@ -1226,11 +1226,11 @@ void SwHTMLParser::EndAnchor()
     if( bInFootEndNoteAnchor )
     {
         FinishFootEndNote();
-        bInFootEndNoteAnchor = sal_False;
+        bInFootEndNoteAnchor = false;
     }
     else if( bInFootEndNoteSymbol )
     {
-        bInFootEndNoteSymbol = sal_False;
+        bInFootEndNoteSymbol = false;
     }
 
     EndTag( HTML_ANCHOR_OFF );

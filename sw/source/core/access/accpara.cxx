@@ -1643,7 +1643,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
             case RES_JUMPEDITFLD:
                 {
                     sal_uInt16 nFormat= pField->GetFormat();
-                    sal_uInt16 nSize = aMgr.GetFormatCount(pField->GetTypeId(), sal_False);
+                    sal_uInt16 nSize = aMgr.GetFormatCount(pField->GetTypeId(), false);
                     if (nFormat < nSize)
                     {
                         sEntry = aMgr.GetFormatStr(pField->GetTypeId(), nFormat);
@@ -1702,7 +1702,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                     if (nWhich == RES_DOCINFOFLD)
                     {
                         strTypeName = sEntry;
-                        sal_uInt32 nSize = aMgr.GetFormatCount(pField->GetTypeId(), sal_False);
+                        sal_uInt32 nSize = aMgr.GetFormatCount(pField->GetTypeId(), false);
                         sal_uInt16 nExSub = pField->GetSubType() & 0xff00;
                         if (nSize > 0 && nExSub > 0)
                         {
@@ -2106,7 +2106,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
             SfxItemSet aAutomaticParaStyleCharAttrs( pPaM->GetDoc()->GetAttrPool(),
                                                      RES_CHRATR_BEGIN, RES_CHRATR_END -1,
                                                      0 );
-            aAutomaticParaStyleCharAttrs.Put( *(pTxtNode->GetpSwAttrSet()), sal_False );
+            aAutomaticParaStyleCharAttrs.Put( *(pTxtNode->GetpSwAttrSet()), false );
             aSet.Put( aAutomaticParaStyleCharAttrs );
         }
     }
@@ -2115,7 +2115,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
         SfxItemSet aCharAttrsAtPaM( pPaM->GetDoc()->GetAttrPool(),
                                     RES_CHRATR_BEGIN, RES_CHRATR_END -1,
                                     0 );
-        SwUnoCursorHelper::GetCrsrAttr(*pPaM, aCharAttrsAtPaM, sal_True, sal_True);
+        SwUnoCursorHelper::GetCrsrAttr(*pPaM, aCharAttrsAtPaM, true, true);
         aSet.Put( aCharAttrsAtPaM );
     }
 
@@ -2630,7 +2630,7 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
     OSL_ENSURE( GetFrm()->IsTxtFrm(), "The text frame has mutated!" );
     const SwTxtFrm* pFrm = static_cast<const SwTxtFrm*>( GetFrm() );
     SwCrsrMoveState aMoveState;
-    aMoveState.bPosMatchesBounds = sal_True;
+    aMoveState.bPosMatchesBounds = true;
     sal_Bool bSuccess = pFrm->GetCrsrOfst( &aPos, aCorePoint, &aMoveState );
 
     SwIndex aCntntIdx = aPos.nContent;

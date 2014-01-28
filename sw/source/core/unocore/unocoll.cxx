@@ -622,10 +622,10 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         break;
 
         case  SW_SERVICE_TYPE_FOOTNOTE :
-            xRet =  (cppu::OWeakObject*)new SwXFootnote(sal_False);
+            xRet =  (cppu::OWeakObject*)new SwXFootnote(false);
         break;
         case  SW_SERVICE_TYPE_ENDNOTE  :
-            xRet =  (cppu::OWeakObject*)new SwXFootnote(sal_True);
+            xRet =  (cppu::OWeakObject*)new SwXFootnote(true);
         break;
         case  SW_SERVICE_CONTENT_INDEX_MARK :
         case  SW_SERVICE_USER_INDEX_MARK    :
@@ -792,7 +792,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         break;
         case SW_SERVICE_FIELDMASTER_BIBLIOGRAPHY:
         {
-            SwFieldType* pType = pDoc->GetFldType(RES_AUTHORITY, aEmptyOUStr, sal_True);
+            SwFieldType* pType = pDoc->GetFldType(RES_AUTHORITY, aEmptyOUStr, true);
             if(!pType)
             {
                 SwAuthorityFieldType aType(pDoc);

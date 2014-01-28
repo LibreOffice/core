@@ -882,7 +882,7 @@ void Compare::ShiftBoundaries( CompareData& rData1, CompareData& rData2 )
         sal_uLong preceding = ULONG_MAX;
         sal_uLong other_preceding = ULONG_MAX;
 
-        while (1)
+        while (true)
         {
             sal_uLong start, other_start;
 
@@ -904,7 +904,7 @@ void Compare::ShiftBoundaries( CompareData& rData1, CompareData& rData2 )
             start = i;
             other_start = j;
 
-            while (1)
+            while (true)
             {
                 /* Now find the end of this run of changes.  */
 
@@ -925,7 +925,7 @@ void Compare::ShiftBoundaries( CompareData& rData1, CompareData& rData2 )
                     !pOtherData->GetChanged( j ) &&
                     !( start == preceding || other_start == other_preceding ))
                 {
-                    pData->SetChanged( start++, 0 );
+                    pData->SetChanged( start++, false );
                     pData->SetChanged(  i );
                     /* Since one line-that-matches is now before this run
                        instead of after, we must advance in the other file
@@ -1368,7 +1368,7 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
             if ( nSrcFrom < nSrcTo )
             {
                 sal_Bool bUndo = pDstDoc->GetIDocumentUndoRedo().DoesUndo();
-                pDstDoc->GetIDocumentUndoRedo().DoUndo( sal_False );
+                pDstDoc->GetIDocumentUndoRedo().DoUndo( false );
                 SwPaM aCpyPam( rSrcNd, nSrcFrom );
                 aCpyPam.SetMark();
                 aCpyPam.GetPoint()->nContent = nSrcTo;
@@ -2097,7 +2097,7 @@ bool LineArrayComparator::Compare( int nIdx1, int nIdx2 ) const
 {
     if( nIdx1 < 0 || nIdx2 < 0 || nIdx1 >= nLen1 || nIdx2 >= nLen2 )
     {
-        OSL_ENSURE( 0, "Index out of range!" );
+        OSL_ENSURE( false, "Index out of range!" );
         return false;
     }
 
@@ -2175,7 +2175,7 @@ bool CharArrayComparator::Compare( int nIdx1, int nIdx2 ) const
 {
     if( nIdx1 < 0 || nIdx2 < 0 || nIdx1 >= GetLen1() || nIdx2 >= GetLen2() )
     {
-        OSL_ENSURE( 0, "Index out of range!" );
+        OSL_ENSURE( false, "Index out of range!" );
         return false;
     }
 

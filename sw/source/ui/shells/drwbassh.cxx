@@ -230,7 +230,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         FieldUnit eMetric = ::GetDfltMetric(0 != dynamic_cast<SwWebView*>(&GetView()));
                         SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
 
-                        aSet.Put( aNewAttr, sal_False );
+                        aSet.Put( aNewAttr, false );
 
                         if (bCaption)
                             pSdrView->GetAttributes( aSet );
