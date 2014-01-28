@@ -337,7 +337,7 @@ void SdrPageWindow::RedrawLayer(const SdrLayerID* pId, sdr::contact::ViewObjectC
         // find out if we are painting the ControlLayer
         const SdrLayerAdmin& rLayerAdmin = rModel.GetLayerAdmin();
         const SdrLayerID nControlLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName(), sal_False);
-        const bool bControlLayerProcessingActive(pId && nControlLayerId == *pId);
+        const bool bControlLayerProcessingActive(nControlLayerId == *pId);
 
         // create PaintInfoRec, use Rectangle only temporarily
         const Region& rRegion = GetPaintWindow().GetRedrawRegion();
