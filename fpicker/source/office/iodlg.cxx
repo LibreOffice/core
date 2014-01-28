@@ -1822,7 +1822,7 @@ OUString SvtFileDialog::implGetInitialURL( const OUString& _rPath, const OUStrin
     INetURLObject aURLParser;
 
     // set the path
-    bool bWasAbsolute = sal_False;
+    bool bWasAbsolute = false;
     aURLParser = aURLParser.smartRel2Abs( _rPath, bWasAbsolute );
 
     // is it a valid folder?
@@ -1913,7 +1913,7 @@ void SvtFileDialog::onAsyncOperationStarted()
 {
     EnableUI( sal_False );
     // the cancel button must be always enabled
-    _pImp->_pBtnCancel->Enable( sal_True );
+    _pImp->_pBtnCancel->Enable( true );
     _pImp->_pBtnCancel->GrabFocus();
 }
 
@@ -1984,7 +1984,7 @@ void SvtFileDialog::EnableUI( sal_Bool _bEnable )
               ++aLoop
             )
         {
-            (*aLoop)->Enable( sal_False );
+            (*aLoop)->Enable( false );
         }
     }
 }
@@ -3367,12 +3367,12 @@ IMPL_LINK_NOARG(QueryFolderNameDialog, NameHdl)
     if ( !aName.isEmpty() )
     {
         if ( !m_pOKBtn->IsEnabled() )
-            m_pOKBtn->Enable( sal_True );
+            m_pOKBtn->Enable( true );
     }
     else
     {
         if ( m_pOKBtn->IsEnabled() )
-            m_pOKBtn->Enable( sal_False );
+            m_pOKBtn->Enable( false );
     }
 
     return 0;
