@@ -240,7 +240,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
 {
     if (!rxStorage.is())
     {
-        DBG_ASSERT(0, "Error, no XStorage provided");
+        DBG_ASSERT(false, "Error, no XStorage provided");
         return Sequence<css::security::DocumentSignatureInformation>();
     }
     // First check for the InputStream, to avoid unnecessary initialization of the security environemnt...
@@ -381,7 +381,7 @@ void DocumentDigitalSignatures::showCertificate(
 
     if ( bInit )
     {
-        CertificateViewer aViewer( NULL, aSignatureHelper.GetSecurityEnvironment(), _Certificate, sal_False );
+        CertificateViewer aViewer( NULL, aSignatureHelper.GetSecurityEnvironment(), _Certificate, false );
         aViewer.Execute();
     }
 

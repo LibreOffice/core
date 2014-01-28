@@ -129,7 +129,7 @@ void SAL_CALL XSecParser::startElement(
                 * a xml stream
                 */
                 {
-                    m_pXSecController->addStreamReference( m_currentReferenceURI, sal_False);
+                    m_pXSecController->addStreamReference( m_currentReferenceURI, false);
                     m_bReferenceUnresolved = false;
                 }
             }
@@ -208,7 +208,7 @@ void SAL_CALL XSecParser::endElement( const OUString& aName )
             * it must be a octet stream
             */
             {
-                m_pXSecController->addStreamReference( m_currentReferenceURI, sal_True);
+                m_pXSecController->addStreamReference( m_currentReferenceURI, true);
                 m_bReferenceUnresolved = false;
             }
 

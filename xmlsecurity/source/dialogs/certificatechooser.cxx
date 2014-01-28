@@ -102,12 +102,12 @@ short CertificateChooser::Execute()
     Window* pMe = this;
     Window* pParent = GetParent();
     if ( pParent )
-        pParent->EnableInput( sal_False );
+        pParent->EnableInput( false );
     pMe->Show();
     pMe->Update();
     ImplInitialize();
     if ( pParent )
-        pParent->EnableInput( sal_True );
+        pParent->EnableInput( true );
     return ModalDialog::Execute();
 }
 
@@ -217,7 +217,7 @@ void CertificateChooser::ImplShowCertificateDetails()
     uno::Reference< css::security::XCertificate > xCert = GetSelectedCertificate();
     if( xCert.is() )
     {
-        CertificateViewer aViewer( this, mxSecurityEnvironment, xCert, sal_True );
+        CertificateViewer aViewer( this, mxSecurityEnvironment, xCert, true );
         aViewer.Execute();
     }
 }

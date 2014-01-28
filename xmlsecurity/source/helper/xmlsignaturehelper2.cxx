@@ -170,7 +170,7 @@ uno::Reference< io::XInputStream > SAL_CALL UriBindingHelper::getUriBinding( con
         pStream->Seek( STREAM_SEEK_TO_END );
         sal_uLong nBytes = pStream->Tell();
         pStream->Seek( STREAM_SEEK_TO_BEGIN );
-        SvLockBytesRef xLockBytes = new SvLockBytes( pStream, sal_True );
+        SvLockBytesRef xLockBytes = new SvLockBytes( pStream, true );
         xInputStream = new utl::OInputStreamHelper( xLockBytes, nBytes );
     }
     return xInputStream;
