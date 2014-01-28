@@ -569,10 +569,7 @@ Reference< XShape > Shape::createAndInsert(
                 PUT_PROP( aProperties, 4, "LineJoint",      aLineProperties.getLineJoint() );
                 PUT_PROP( aProperties, 5, "LineWidth",      aLineProperties.getLineWidth() );
                 PUT_PROP( aProperties, 6, "Transformations", pLineRef->maPhClr.getTransformations() );
-                PropertyValue pStyleFillRef;
-                pStyleFillRef.Name = "StyleLnRef";
-                pStyleFillRef.Value = Any( aProperties );
-                putPropertyToGrabBag( pStyleFillRef );
+                putPropertyToGrabBag( "StyleLnRef", Any( aProperties ) );
             }
             if( const ShapeStyleRef* pFillRef = getShapeStyleRef( XML_fillRef ) )
             {
@@ -584,19 +581,12 @@ Reference< XShape > Shape::createAndInsert(
                 if( !sColorScheme.isEmpty() )
                 {
                     Sequence< PropertyValue > aProperties(4);
-                    aProperties[0].Name = "SchemeClr";
-                    aProperties[0].Value = Any( sColorScheme );
-                    aProperties[1].Name = "Idx";
-                    aProperties[1].Value = Any( pFillRef->mnThemedIdx );
-                    aProperties[2].Name = "Color";
-                    aProperties[2].Value = Any( nFillPhClr );
-                    aProperties[3].Name = "Transformations";
-                    aProperties[3].Value = Any( pFillRef->maPhClr.getTransformations() );
+                    PUT_PROP( aProperties, 0, "SchemeClr",      sColorScheme );
+                    PUT_PROP( aProperties, 1, "Idx",            pFillRef->mnThemedIdx );
+                    PUT_PROP( aProperties, 2, "Color",          nFillPhClr );
+                    PUT_PROP( aProperties, 3, "Transformations", pFillRef->maPhClr.getTransformations() );
 
-                    PropertyValue pStyleFillRef;
-                    pStyleFillRef.Name = "StyleFillRef";
-                    pStyleFillRef.Value = Any( aProperties );
-                    putPropertyToGrabBag( pStyleFillRef );
+                    putPropertyToGrabBag( "StyleFillRef", Any( aProperties ) );
                 }
             }
             if( const ShapeStyleRef* pEffectRef = getShapeStyleRef( XML_effectRef ) )
@@ -611,10 +601,7 @@ Reference< XShape > Shape::createAndInsert(
                 PUT_PROP( aProperties, 0, "SchemeClr",      pEffectRef->maPhClr.getSchemeName() );
                 PUT_PROP( aProperties, 1, "Idx",            pEffectRef->mnThemedIdx );
                 PUT_PROP( aProperties, 2, "Transformations", pEffectRef->maPhClr.getTransformations() );
-                PropertyValue pStyleFillRef;
-                pStyleFillRef.Name = "StyleEffectRef";
-                pStyleFillRef.Value = Any( aProperties );
-                putPropertyToGrabBag( pStyleFillRef );
+                putPropertyToGrabBag( "StyleEffectRef", Any( aProperties ) );
             }
         }
 
@@ -1098,6 +1085,14 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
 
         default:;
     }
+}
+
+void Shape::putPropertyToGrabBag( const OUString& sPropertyName, const Any& aPropertyValue )
+{
+    PropertyValue pNewProperty;
+    pNewProperty.Name = sPropertyName;
+    pNewProperty.Value = aPropertyValue;
+    putPropertyToGrabBag( pNewProperty );
 }
 
 void Shape::putPropertyToGrabBag( const PropertyValue& pProperty )

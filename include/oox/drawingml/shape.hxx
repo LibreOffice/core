@@ -218,6 +218,8 @@ protected:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes );
 
     void                putPropertyToGrabBag(
+                            const OUString& sPropertyName, const ::com::sun::star::uno::Any& aPropertyValue );
+    void                putPropertyToGrabBag(
                             const ::com::sun::star::beans::PropertyValue& pProperty );
     void                putPropertiesToGrabBag(
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProperties );
