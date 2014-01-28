@@ -557,7 +557,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
             {
                 sal_uInt32 nCount = 0;
                 xSet->getPropertyValue("RowCount") >>= nCount;
-                // naechste position festellen
+                // determine next position
                 sal_Bool bSuccess = sal_False;
                 sal_Bool bLeft = sal_False;
                 sal_Bool bRight = sal_False;
@@ -577,7 +577,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                         bSuccess = xConfirm->confirmDelete(aEvent);
                     }
 
-                    // das Ding loeschen
+                    // delete it
                     if (bSuccess)
                         xUpdateCursor->deleteRow();
                 }
@@ -592,18 +592,18 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                     else
                     {
                         sal_Bool bCanInsert = canInsertRecords(xSet);
-                        // kann noch ein Datensatz eingefuegt weden
+                        // can another entry be inserted?
                         try
                         {
                             if (bCanInsert)
                                 xUpdateCursor->moveToInsertRow();
                             else
-                                // Datensatz bewegen um Stati neu zu setzen
+                                // move data entry to reset Stati
                                 xCursor->first();
                         }
                         catch(const Exception&)
                         {
-                            OSL_FAIL("DeleteRecord : exception caught !");
+                            OSL_FAIL("DeleteRecord: exception caught!");
                         }
                     }
                 }
@@ -644,7 +644,6 @@ IMPL_STATIC_LINK( BibFrameController_Impl, DisposeHdl, void*, EMPTYARG )
     return 0;
 };
 
-//-----------------------------------------------------------------------------
 void BibFrameController_Impl::addStatusListener(
     const uno::Reference< frame::XStatusListener > & aListener,
     const util::URL& aURL)
@@ -654,7 +653,7 @@ void BibFrameController_Impl::addStatusListener(
     // create a new Reference and insert into listener array
     aStatusListeners.push_back( new BibStatusDispatch( aURL, aListener ) );
 
-    // den ersten Status synchron zusenden
+    // send first status synchronously
     FeatureStateEvent aEvent;
     aEvent.FeatureURL = aURL;
     aEvent.Requery    = sal_False;
@@ -777,7 +776,7 @@ void BibFrameController_Impl::addStatusListener(
     }
     aListener->statusChanged( aEvent );
 }
-//-----------------------------------------------------------------------------
+
 void BibFrameController_Impl::removeStatusListener(
     const uno::Reference< frame::XStatusListener > & aObject, const util::URL& aURL)
     throw (::com::sun::star::uno::RuntimeException)
@@ -800,7 +799,7 @@ void BibFrameController_Impl::removeStatusListener(
         }
     }
 }
-//-----------------------------------------------------------------------------
+
 void BibFrameController_Impl::RemoveFilter()
 {
     OUString aQuery;
@@ -841,7 +840,7 @@ void BibFrameController_Impl::RemoveFilter()
 
     }
 }
-//-----------------------------------------------------------------------------
+
 void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::PropertyValue >& aArgs)
 {
     const beans::PropertyValue* pPropertyValue = aArgs.getConstArray();

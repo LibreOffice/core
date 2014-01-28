@@ -62,7 +62,6 @@ static ::Point lcl_MovePoint(const FixedText& rFixedText)
     return aRet;
 }
 
-//-----------------------------------------------------------------------------
 static OUString lcl_GetColumnName( const Mapping* pMapping, sal_uInt16 nIndexPos )
 {
     BibConfig* pBibConfig = BibModul::GetConfig();
@@ -394,7 +393,7 @@ BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
     if(!sTableErrorString.isEmpty())
         sTableErrorString = sErrorPrefix + sTableErrorString;
 }
-//-----------------------------------------------------------------------------
+
 BibGeneralPage::~BibGeneralPage()
 {
     if (pDatMan && xPosListener.is())
@@ -430,7 +429,7 @@ void BibGeneralPage::CommitActiveControl()
             xBound->commit();
     }
 }
-//-----------------------------------------------------------------------------
+
 void BibGeneralPage::AddControlWithError( const OUString& rColumnName, const ::Point& rPos, const ::Size& rSize,
                                 OUString& rErrorString, OUString aColumnUIName, const OString& sHelpId, sal_uInt16 nIndexInFTArray )
 {
@@ -453,7 +452,7 @@ void BibGeneralPage::AddControlWithError( const OUString& rColumnName, const ::P
         rErrorString += MnemonicGenerator::EraseAllMnemonicChars( aColumnUIName );
     }
 }
-//-----------------------------------------------------------------------------
+
 uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
         const OUString& rName,
         ::Point rPos, ::Size rSize, const OString& sHelpId, sal_Int16& rIndex )
@@ -528,7 +527,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                 {
                     xControl->setModel( xCtrModel);
 
-                    // Peer als Child zu dem FrameWindow
+                    // Peer as Child to the FrameWindow
                     xCtrlContnr->addControl(rName, xControl);
                     uno::Reference< awt::XWindow >  xCtrWin(xControl, UNO_QUERY );
                     xCtrWin->addFocusListener( this );
@@ -542,7 +541,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                         }
                     xCtrWin->setVisible( sal_True );
                     xControl->setDesignMode( sal_True );
-                        // initially switch on the desing mode - switch it off _after_ loading the form
+                    // initially switch on the design mode - switch it off _after_ loading the form
 
                     xCtrWin->setPosSize(rPos.X(), rPos.Y(), rSize.Width(),
                         rSize.Height(), awt::PosSize::POSSIZE);
@@ -553,7 +552,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
     catch(Exception& rEx)
     {
         (void) rEx; // make compiler happy
-        OSL_FAIL("BibGeneralPage::AddXControl: something went wrong !");
+        OSL_FAIL("BibGeneralPage::AddXControl: something went wrong!");
     }
     return xCtrModel;
 }
