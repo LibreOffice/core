@@ -2863,7 +2863,7 @@ public:
         if( (nFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
             pCell->SetNeedNumberFormat(false);
         else
-            pCell->SetDirty(true);
+            pCell->SetDirtyVar();
 
         pCell->CompileXML(mrProgress);
     }
