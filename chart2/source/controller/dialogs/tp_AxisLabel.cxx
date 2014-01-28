@@ -64,7 +64,7 @@ SchAxisLabelTabPage::SchAxisLabelTabPage( Window* pParent, const SfxItemSet& rIn
     get(m_pFtABCD,"labelABCD");
     m_pCtrlDial->SetText(m_pFtABCD->GetText());
     m_pOrientHlp = new svx::OrientationHelper(*m_pCtrlDial, *m_pNfRotate, *m_pCbStacked);
-    m_pOrientHlp->Enable( sal_True );
+    m_pOrientHlp->Enable( true );
 
 
     m_pCbStacked->EnableTriState( sal_False );

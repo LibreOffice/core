@@ -165,7 +165,7 @@ void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
     }
     else
     {
-        m_pCBAxisSideBySide->Show(sal_False);
+        m_pCBAxisSideBySide->Show(false);
     }
 
     //missing value treatment
@@ -176,19 +176,19 @@ void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
 
         if ( aMissingValueTreatments.getLength()>1 && rInAttrs.GetItemState(SCHATTR_MISSING_VALUE_TREATMENT,sal_True, &pPoolItem) == SFX_ITEM_SET)
         {
-            m_pRB_DontPaint->Enable(sal_False);
-            m_pRB_AssumeZero->Enable(sal_False);
-            m_pRB_ContinueLine->Enable(sal_False);
+            m_pRB_DontPaint->Enable(false);
+            m_pRB_AssumeZero->Enable(false);
+            m_pRB_ContinueLine->Enable(false);
 
             for( sal_Int32 nN =0; nN<aMissingValueTreatments.getLength(); nN++ )
             {
                 sal_Int32 nVal = aMissingValueTreatments[nN];
                 if(nVal==::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP)
-                    m_pRB_DontPaint->Enable(sal_True);
+                    m_pRB_DontPaint->Enable(true);
                 else if(nVal==::com::sun::star::chart::MissingValueTreatment::USE_ZERO)
-                    m_pRB_AssumeZero->Enable(sal_True);
+                    m_pRB_AssumeZero->Enable(true);
                 else if(nVal==::com::sun::star::chart::MissingValueTreatment::CONTINUE)
-                    m_pRB_ContinueLine->Enable(sal_True);
+                    m_pRB_ContinueLine->Enable(true);
             }
 
             long nVal=((const SfxInt32Item*)pPoolItem)->GetValue();
@@ -201,7 +201,7 @@ void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
         }
         else
         {
-            m_pGridPlotOptions->Show(sal_False);
+            m_pGridPlotOptions->Show(false);
         }
     }
 
@@ -213,8 +213,8 @@ void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
     }
     else
     {
-        m_pCBIncludeHiddenCells->Show(sal_False);
-        m_pGridPlotOptions->Show(sal_False);
+        m_pCBIncludeHiddenCells->Show(false);
+        m_pGridPlotOptions->Show(false);
     }
 
     AdaptControlPositionsAndVisibility();
@@ -239,7 +239,7 @@ void SchOptionTabPage::AdaptControlPositionsAndVisibility()
 
      if( !m_pMTGap->IsVisible() && !m_pMTOverlap->IsVisible() )
      {
-         m_pGrpBar->Show(sal_False);
+         m_pGrpBar->Show(false);
      }
 }
 } //namespace chart

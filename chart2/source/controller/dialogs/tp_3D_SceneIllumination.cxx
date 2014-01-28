@@ -106,7 +106,7 @@ LightSourceInfo::LightSourceInfo()
 {
     aLightSource.nDiffuseColor = 0xffffff; // white
     aLightSource.aDirection = drawing::Direction3D(1,1,1);
-    aLightSource.bIsEnabled = sal_False;
+    aLightSource.bIsEnabled = false;
 }
 
 void LightSourceInfo::initButtonFromSource()

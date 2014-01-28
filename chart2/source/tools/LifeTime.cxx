@@ -60,9 +60,9 @@ bool LifeTimeManager::impl_isDisposed( bool bAssert )
             OSL_FAIL( "This component is already disposed " );
             (void)(bAssert);
         }
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
             sal_Bool LifeTimeManager
 ::impl_canStartApiCall()
@@ -178,7 +178,7 @@ CloseableLifeTimeManager::~CloseableLifeTimeManager()
 bool CloseableLifeTimeManager::impl_isDisposedOrClosed( bool bAssert )
 {
     if( impl_isDisposed( bAssert ) )
-        return sal_True;
+        return true;
 
     if( m_bClosed )
     {
@@ -187,9 +187,9 @@ bool CloseableLifeTimeManager::impl_isDisposedOrClosed( bool bAssert )
             OSL_FAIL( "This object is already closed" );
             (void)(bAssert);//avoid warnings
         }
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
         sal_Bool CloseableLifeTimeManager

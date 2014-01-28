@@ -162,7 +162,7 @@ Graphic ViewElementListProvider::GetSymbolGraphic( sal_Int32 nStandardSymbol, co
     aVDev.SetMapMode(MapMode(MAP_100TH_MM));
     SdrModel* pModel = new SdrModel();
     pModel->GetItemPool().FreezeIdRanges();
-    SdrPage* pPage = new SdrPage( *pModel, sal_False );
+    SdrPage* pPage = new SdrPage( *pModel, false );
     pPage->SetSize(Size(1000,1000));
     pModel->InsertPage( pPage, 0 );
     SdrView* pView = new SdrView( pModel, &aVDev );

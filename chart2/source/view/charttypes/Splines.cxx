@@ -122,7 +122,7 @@ lcl_SplineCalculation::lcl_SplineCalculation(
           m_nKHigh( rSortedPoints.size() - 1 ),
           m_fLastInterpolatedValue(0.0)
 {
-    ::rtl::math::setInf( &m_fLastInterpolatedValue, sal_False );
+    ::rtl::math::setInf( &m_fLastInterpolatedValue, false );
     Calculate();
 }
 
@@ -135,7 +135,7 @@ lcl_SplineCalculation::lcl_SplineCalculation(
           m_nKHigh( rSortedPoints.size() - 1 ),
           m_fLastInterpolatedValue(0.0)
 {
-    ::rtl::math::setInf( &m_fLastInterpolatedValue, sal_False );
+    ::rtl::math::setInf( &m_fLastInterpolatedValue, false );
     CalculatePeriodic();
 }
 
@@ -608,7 +608,7 @@ void SplineCalculater::CalculateCubicSplines(
         else // generate the kind "natural spline"
         {
             double fInfty;
-            ::rtl::math::setInf( &fInfty, sal_False );
+            ::rtl::math::setInf( &fInfty, false );
             fXDerivation = fInfty;
             fYDerivation = fInfty;
             aSplineX = new lcl_SplineCalculation( aInputX, fXDerivation, fXDerivation );

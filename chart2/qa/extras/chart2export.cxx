@@ -478,7 +478,7 @@ void Chart2ExportTest::testEmbeddingsGrabBag()
    uno::Sequence<beans::PropertyValue> aGrabBag(0);
    xTextDocumentPropertySet->getPropertyValue(OUString("InteropGrabBag")) >>= aGrabBag;
    CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
-   bool bEmbeddings = sal_False;
+   bool bEmbeddings = false;
    const char* testEmbeddedFileNames[3] = {"word/embeddings/Microsoft_Excel_Worksheet3.xlsx",
                                         "word/embeddings/Microsoft_Excel_Worksheet2.xlsx",
                                         "word/embeddings/Microsoft_Excel_Worksheet1.xlsx"};
@@ -486,7 +486,7 @@ void Chart2ExportTest::testEmbeddingsGrabBag()
    {
        if (aGrabBag[i].Name == "OOXEmbeddings")
        {
-           bEmbeddings = sal_True;
+           bEmbeddings = true;
            uno::Sequence<beans::PropertyValue> aEmbeddingsList(0);
            uno::Reference<io::XInputStream> aEmbeddingXlsxStream;
            OUString aEmbeddedfileName;

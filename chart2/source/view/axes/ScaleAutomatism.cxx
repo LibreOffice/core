@@ -254,7 +254,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForCategory(
         rExplicitScale.Maximum = rExplicitScale.Minimum + 1.0;
 
     // default increment settings
-    rExplicitIncrement.PostEquidistant = sal_True;  // does not matter anyhow
+    rExplicitIncrement.PostEquidistant = true;  // does not matter anyhow
     rExplicitIncrement.Distance = 1.0;              // category axis always have a main increment of 1
     rExplicitIncrement.BaseValue = 0.0;             // category axis always have a base of 0
 
@@ -289,7 +289,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForCategory(
         if(!(rSubIncrement.PostEquidistant>>=aExplicitSubIncrement.PostEquidistant))
         {
             //scaling dependent
-            aExplicitSubIncrement.PostEquidistant = sal_False;
+            aExplicitSubIncrement.PostEquidistant = false;
         }
         rExplicitIncrement.SubIncrements.push_back(aExplicitSubIncrement);
     }
@@ -311,7 +311,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
     // set automatic PostEquidistant to true (maybe scaling dependent?)
     // Note: scaling with PostEquidistant==false is untested and needs review
     if( !(m_aSourceScale.IncrementData.PostEquidistant >>= rExplicitIncrement.PostEquidistant) )
-        rExplicitIncrement.PostEquidistant = sal_True;
+        rExplicitIncrement.PostEquidistant = true;
 
     /*  All following scaling code will operate on the logarithms of the source
         values. In the last step, the original values will be restored. */
@@ -550,7 +550,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
         if(!(rSubIncrement.PostEquidistant>>=aExplicitSubIncrement.PostEquidistant))
         {
             //scaling dependent
-            aExplicitSubIncrement.PostEquidistant = sal_False;
+            aExplicitSubIncrement.PostEquidistant = false;
         }
         rExplicitIncrement.SubIncrements.push_back(aExplicitSubIncrement);
     }
@@ -563,7 +563,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
 {
     Date aMinDate(m_aNullDate); aMinDate += static_cast<long>(::rtl::math::approxFloor(rExplicitScale.Minimum));
     Date aMaxDate(m_aNullDate); aMaxDate += static_cast<long>(::rtl::math::approxFloor(rExplicitScale.Maximum));
-    rExplicitIncrement.PostEquidistant = sal_False;
+    rExplicitIncrement.PostEquidistant = false;
 
     if( aMinDate > aMaxDate )
     {
@@ -760,7 +760,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLinear(
 
     // set automatic PostEquidistant to true (maybe scaling dependent?)
     if( !(m_aSourceScale.IncrementData.PostEquidistant >>= rExplicitIncrement.PostEquidistant) )
-        rExplicitIncrement.PostEquidistant = sal_True;
+        rExplicitIncrement.PostEquidistant = true;
 
     /*  If range is invalid (minimum greater than maximum), change one of the
         variable limits to validate the range. In this step, a zero-sized range
@@ -992,7 +992,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLinear(
         if(!(rSubIncrement.PostEquidistant>>=aExplicitSubIncrement.PostEquidistant))
         {
             //scaling dependent
-            aExplicitSubIncrement.PostEquidistant = sal_False;
+            aExplicitSubIncrement.PostEquidistant = false;
         }
         rExplicitIncrement.SubIncrements.push_back(aExplicitSubIncrement);
     }

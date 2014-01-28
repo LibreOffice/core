@@ -801,7 +801,7 @@ void VLegend::setDefaultWritingMode( sal_Int16 nDefaultWritingMode )
 bool VLegend::isVisible( const Reference< XLegend > & xLegend )
 {
     if( ! xLegend.is())
-        return sal_False;
+        return false;
 
     sal_Bool bShow = sal_False;
     try

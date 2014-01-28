@@ -193,7 +193,7 @@ void DataSourceDialog::setInvalidPage( TabPage * pTabPage )
 
     if( ! (m_bRangeChooserTabIsValid && m_bDataSourceTabIsValid ))
     {
-        m_pBtnOK->Enable( sal_False );
+        m_pBtnOK->Enable( false );
         OSL_ASSERT( m_pTabControl );
         // note: there seems to be no suitable mechanism to address pages by
         // identifier, at least it is unclear what the page identifiers are.
@@ -215,7 +215,7 @@ void DataSourceDialog::setValidPage( TabPage * pTabPage )
 
     if( m_bRangeChooserTabIsValid && m_bDataSourceTabIsValid )
     {
-        m_pBtnOK->Enable( sal_True );
+        m_pBtnOK->Enable( true );
         OSL_ASSERT( m_pTabControl );
         m_pTabControl->EnableTabToggling();
     }

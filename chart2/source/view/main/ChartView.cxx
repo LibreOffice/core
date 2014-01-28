@@ -2381,7 +2381,7 @@ void ChartView::createShapes()
     {
         SolarMutexGuard aSolarGuard;
         // #i12587# support for shapes in chart
-        m_pDrawModelWrapper->getSdrModel().EnableUndo( sal_False );
+        m_pDrawModelWrapper->getSdrModel().EnableUndo( false );
         m_pDrawModelWrapper->clearMainDrawPage();
     }
 
@@ -2621,7 +2621,7 @@ void ChartView::impl_updateView()
 void SAL_CALL ChartView::modified( const lang::EventObject& /* aEvent */ )
     throw (uno::RuntimeException)
 {
-    m_bViewDirty = sal_True;
+    m_bViewDirty = true;
     if( m_bInViewUpdate )
         m_bViewUpdatePending = true;
 

@@ -324,7 +324,7 @@ sal_Bool DataLabelResources::FillItemSet( SfxItemSet& rOutAttrs ) const
 void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
 {
     // default state
-    m_pCBSymbol->Enable( sal_False );
+    m_pCBSymbol->Enable( false );
 
     lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_NUMBER, *m_pCBNumber );
     lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_PERCENTAGE, *m_pCBPercent );

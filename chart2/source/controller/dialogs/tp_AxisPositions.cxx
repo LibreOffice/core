@@ -204,7 +204,7 @@ void AxisPositionsTabPage::Reset(const SfxItemSet& rInAttrs)
     else
     {
         m_pLB_CrossesAt->SetNoSelection();
-        m_pED_CrossesAt->Enable( sal_False );
+        m_pED_CrossesAt->Enable( false );
     }
 
     // Labels

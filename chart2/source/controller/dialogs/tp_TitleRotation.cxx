@@ -47,7 +47,7 @@ SchAlignmentTabPage::SchAlignmentTabPage(Window* pWindow,
     m_pOrientHlp = new svx::OrientationHelper(*m_pCtrlDial, *m_pNfRotate, *m_pCbStacked);
 
     m_pCbStacked->EnableTriState( sal_False );
-    m_pOrientHlp->Enable( sal_True );
+    m_pOrientHlp->Enable( true );
     m_pOrientHlp->AddDependentWindow( *m_pFtRotate, STATE_CHECK );
 
     if( !bWithRotation )

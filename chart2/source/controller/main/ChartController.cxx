@@ -891,7 +891,7 @@ void SAL_CALL ChartController::notifyClosing(
 bool ChartController::impl_releaseThisModel(
     const uno::Reference< uno::XInterface > & xModel )
 {
-    bool bReleaseModel = sal_False;
+    bool bReleaseModel = false;
     {
         ::osl::Guard< ::osl::Mutex > aGuard( m_aModelMutex );
         if( m_aModel.is() && m_aModel->getModel() == xModel )

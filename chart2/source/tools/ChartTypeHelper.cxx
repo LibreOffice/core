@@ -441,9 +441,9 @@ bool ChartTypeHelper::noBordersForSimpleScheme( const uno::Reference< chart2::XC
     {
         OUString aChartTypeName = xChartType->getChartType();
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 sal_Int32 ChartTypeHelper::getDefaultDirectLightColor( bool bSimple, const uno::Reference< chart2::XChartType >& xChartType )

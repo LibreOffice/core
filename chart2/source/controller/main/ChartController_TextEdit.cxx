@@ -163,10 +163,10 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
     OSL_ENSURE( pFact, "No dialog factory" );
 
     SfxAllItemSet aSet( m_pDrawModelWrapper->GetItemPool() );
-    aSet.Put( SfxBoolItem( FN_PARAM_1, sal_False ) );
+    aSet.Put( SfxBoolItem( FN_PARAM_1, false ) );
 
     //set fixed current font
-    aSet.Put( SfxBoolItem( FN_PARAM_2, sal_True ) ); //maybe not necessary in future
+    aSet.Put( SfxBoolItem( FN_PARAM_2, true ) ); //maybe not necessary in future
 
     Font aCurFont = m_pDrawViewWrapper->getOutliner()->GetRefDevice()->GetFont();
     aSet.Put( SvxFontItem( aCurFont.GetFamily(), aCurFont.GetName(), aCurFont.GetStyleName(), aCurFont.GetPitch(), aCurFont.GetCharSet(), SID_ATTR_CHAR_FONT ) );

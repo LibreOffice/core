@@ -32,7 +32,7 @@ if(rProp.Name.equals(#MediaName)) \
 {                                                       \
     if( rProp.Value >>= MediaName )                     \
         ISSET_##MediaName = sal_True;                   \
-    if(nFlags & FLAG_DEPRECATED)                        \
+    if((nFlags & FLAG_DEPRECATED) != 0)                 \
     {                                                   \
         m_aDeprecatedProperties[nDeprecatedCount]=rProp;\
         nDeprecatedCount++;                             \
@@ -41,7 +41,7 @@ if(rProp.Name.equals(#MediaName)) \
     {                                                   \
         m_aRegularProperties[nRegularCount]=rProp;      \
         nRegularCount++;                                \
-        if( nFlags & FLAG_MODEL)                        \
+        if((nFlags & FLAG_MODEL) != 0)                  \
         {                                               \
             m_aModelProperties[nModelCount]=rProp;      \
             nModelCount++;                              \

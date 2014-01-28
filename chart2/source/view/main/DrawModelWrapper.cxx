@@ -116,7 +116,7 @@ DrawModelWrapper::DrawModelWrapper( const uno::Reference<uno::XComponentContext>
 
     SfxItemPool* pMasterPool = &GetItemPool();
     pMasterPool->SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
-    pMasterPool->SetPoolDefaultItem(SfxBoolItem(EE_PARA_HYPHENATE, sal_True) );
+    pMasterPool->SetPoolDefaultItem(SfxBoolItem(EE_PARA_HYPHENATE, true) );
     pMasterPool->SetPoolDefaultItem(Svx3DPercentDiagonalItem (5));
 
     SfxItemPool* pPool = pMasterPool;

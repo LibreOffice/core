@@ -148,7 +148,7 @@ void DiagramHelper::setVertical(
                 bool bChanged = false;
                 if( xProp.is() )
                 {
-                    bool bOldSwap = sal_False;
+                    bool bOldSwap = false;
                     if( !(xProp->getPropertyValue( "SwapXAndYAxis" ) >>= bOldSwap)
                         || bVertical != bOldSwap )
                         bChanged = true;
