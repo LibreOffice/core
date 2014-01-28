@@ -2419,13 +2419,9 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
     WW8_FSPA_SHADOW* pFS = (WW8_FSPA_SHADOW*)pF0;
     WW8_FSPA*        pF;
-#ifdef __WW8_NEEDS_COPY
     WW8_FSPA aFSFA;
     pF = &aFSFA;
     WW8FSPAShadowToReal( pFS, pF );
-#else
-    pF = (WW8_FSPA*)pFS;
-#endif // defined __WW8_NEEDS_COPY
     if( !pF->nSpId )
     {
         OSL_ENSURE( !this, "+Wo ist die Grafik (3) ?" );

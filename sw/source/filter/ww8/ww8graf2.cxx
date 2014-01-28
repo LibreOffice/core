@@ -236,9 +236,7 @@ bool wwZOrderer::InsertObject(SdrObject* pObject, sal_uLong nPos)
     return false;
 }
 
-#ifdef __WW8_NEEDS_COPY
 extern void WW8PicShadowToReal(  WW8_PIC_SHADOW*  pPicS,  WW8_PIC*  pPic );
-#endif // defined __WW8_NEEDS_COPY
 
 bool SwWW8ImplReader::GetPictGrafFromStream(Graphic& rGraphic, SvStream& rSrc)
 {
@@ -447,13 +445,9 @@ void SwWW8ImplReader::PicRead(SvStream *pDataStream, WW8_PIC *pPic,
     bool bVer67)
 {
     //Only the first 0x2e bytes are the same between version 6/7 and 8+
-#ifdef __WW8_NEEDS_COPY
     WW8_PIC_SHADOW aPicS;
     pDataStream->Read( &aPicS, sizeof( aPicS ) );
     WW8PicShadowToReal( &aPicS, pPic );
-#else
-    pDataStream->Read( pPic, 0x2E);
-#endif // defined __WW8_NEEDS_COPY
     for (int i=0;i<4;i++)
         pDataStream->Read( &pPic->rgbrc[i], bVer67 ? 2 : 4);
     *pDataStream >> pPic->dxaOrigin;
@@ -726,8 +720,6 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
     return AddAutoAnchor(pRet);
 }
 
-#ifdef __WW8_NEEDS_COPY
-
 void WW8PicShadowToReal( WW8_PIC_SHADOW * pPicS, WW8_PIC * pPic )
 {
     pPic->lcb = SVBT32ToUInt32( pPicS->lcb );
@@ -774,6 +766,5 @@ void WW8FSPAShadowToReal( WW8_FSPA_SHADOW * pFSPAS, WW8_FSPA * pFSPA )
     pFSPA->bAnchorLock  = 0 !=  ( nBits & 0x8000 );
     pFSPA->nTxbx = SVBT32ToUInt32( pFSPAS->nTxbx );
 }
-#endif // defined __WW8_NEEDS_COPY
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

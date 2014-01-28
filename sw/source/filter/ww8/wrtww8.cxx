@@ -149,13 +149,8 @@ public:
     void SetNewEnd( WW8_FC nEnd )
     {   ((sal_Int32*)pFkp)[nIMax] = nEnd; }
 
-#ifdef __WW8_NEEDS_COPY
     WW8_FC GetStartFc() const;
     WW8_FC GetEndFc() const;
-#else
-    WW8_FC GetStartFc() const { return ((sal_Int32*)pFkp)[0]; };
-    WW8_FC GetEndFc() const { return ((sal_Int32*)pFkp)[nIMax]; };
-#endif // defined __WW8_NEEDS_COPY
 
     sal_uInt8 *CopyLastSprms(sal_uInt8 &rLen, bool bVer8);
 };
@@ -1217,8 +1212,6 @@ void WW8_WrFkp::MergeToNew( short& rVarLen, sal_uInt8 *& rpNewSprms )
     }
 }
 
-#ifdef __WW8_NEEDS_COPY
-
 WW8_FC WW8_WrFkp::GetStartFc() const
 {
 // wenn bCombined, dann ist das Array ab pFkp schon Bytemaessig auf LittleEndian
@@ -1235,9 +1228,6 @@ WW8_FC WW8_WrFkp::GetEndFc() const
         return SVBT32ToUInt32( &(pFkp[nIMax*4]) );    // nIMax-tes SVBT32-Element
     return ((sal_Int32*)pFkp)[nIMax];
 }
-
-#endif // defined __WW8_NEEDS_COPY
-
 
 // Method for managing the piece table
 WW8_WrPct::WW8_WrPct(WW8_FC nfcMin, bool bSaveUniCode)
