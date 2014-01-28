@@ -875,11 +875,11 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
     if ( bHandleVbaEvents )
     {
         Reference< XEventAttacherManager > xMgr ( pElementMetaData->xInterface, UNO_QUERY );
-        if ( xMgr.is() )
+        OInterfaceContainer* pIfcMgr = xMgr.is() ? dynamic_cast<OInterfaceContainer*>(xMgr.get()) : NULL;
+        if (pIfcMgr)
         {
-            OInterfaceContainer* pIfcMgr = dynamic_cast< OInterfaceContainer* >( xMgr.get() );
             sal_Int32 nLen = pIfcMgr->getCount();
-            for ( sal_Int32 i = 0; (i < nLen) && pIfcMgr ; ++i )
+            for (sal_Int32 i = 0; i < nLen; ++i)
             {
                 // add fake events to the control at index i
                 pIfcMgr->impl_addVbEvents_nolck_nothrow( i );
