@@ -207,7 +207,7 @@ static uno::Reference< util::XCloseable > CreateDocument( const uno::Reference< 
         // the default factory from cppuhelper will throw an
         // IllegalArgumentException when we try to create the instance with arguments.
         // Okay, so we fall back to creating the instance without any arguments.
-        OSL_ASSERT("Consider implementing interface XInitialization to avoid duplicate construction");
+        OSL_FAIL("Consider implementing interface XInitialization to avoid duplicate construction");
         xDocument = _rxContext->getServiceManager()->createInstanceWithContext( _rDocumentServiceName, _rxContext );
     }
 
