@@ -3776,7 +3776,7 @@ OUString SAL_CALL FmXEditCell::getText() throw( RuntimeException )
         if ( m_pEditImplementation->GetControl().IsVisible() && m_pColumn->GetParent().getDisplaySynchron())
         {
             // if the display isn't sync with the cursor we can't ask the edit field
-            LineEnd eLineEndFormat = m_pColumn ? getModelLineEndSetting( m_pColumn->getModel() ) : LINEEND_LF;
+            LineEnd eLineEndFormat = getModelLineEndSetting( m_pColumn->getModel() );
             aText = m_pEditImplementation->GetText( eLineEndFormat );
         }
         else
