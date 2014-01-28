@@ -141,6 +141,16 @@ CTTextStyle::CTTextStyle( const ImplFontSelectData& rFSD )
     CFDictionarySetValue( mpStyleDict, kCTFontAttributeName, pNewCTFont );
     CFRelease( pNewCTFont);
 
+    // handle emulation of bold styles if requested and the font that doesn't provide them
+    if( (pReqFont->meWeight > WEIGHT_MEDIUM)
+    &&  (mpFontData->meWeight <= WEIGHT_MEDIUM)
+    &&  (mpFontData->meWeight != WEIGHT_DONTKNOW))
+    {
+        const int nBoldFactor = -lrint( (3.5F * pReqFont->meWeight) / mpFontData->meWeight);
+        CFNumberRef pCFIntBold = CFNumberCreate( NULL, kCFNumberIntType, &nBoldFactor);
+        CFDictionarySetValue( mpStyleDict, kCTStrokeWidthAttributeName, pCFIntBold);
+    }
+
 #if 0 // LastResort is implicit in CoreText's font cascading
     const void* aGFBDescriptors[] = { CTFontDescriptorCreateWithNameAndSize( CFSTR("LastResort"), 0) }; // TODO: use the full GFB list
     const int nGfbCount = sizeof(aGFBDescriptors) / sizeof(*aGFBDescriptors);
