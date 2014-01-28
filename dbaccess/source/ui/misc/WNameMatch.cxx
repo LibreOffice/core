@@ -345,7 +345,7 @@ OColumnTreeBox::OColumnTreeBox( Window* pParent, const ResId& rResId )
     : OMarkableTreeListBox(pParent, rResId)
 {
     SetDragDropMode( 0 );
-    EnableInplaceEditing( sal_False );
+    EnableInplaceEditing( false );
     SetStyle(GetStyle() | WB_BORDER | WB_HASBUTTONS | WB_HSCROLL);
     SetSelectionMode( SINGLE_SELECTION );
 }

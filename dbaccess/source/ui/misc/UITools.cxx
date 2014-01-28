@@ -816,7 +816,7 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
         new SfxRangeItem(SBA_DEF_RANGEFORMAT, SBA_DEF_FMTVALUE, SBA_ATTR_ALIGN_HOR_JUSTIFY),
         new SfxUInt32Item(SBA_DEF_FMTVALUE),
         new SvxHorJustifyItem(SVX_HOR_JUSTIFY_STANDARD, SBA_ATTR_ALIGN_HOR_JUSTIFY),
-        new SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, sal_False),
+        new SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, false),
         new SvxNumberInfoItem(SID_ATTR_NUMBERFORMAT_INFO)
     };
 
@@ -834,7 +834,7 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
         if ((DataType::CHAR == _nDataType) || (DataType::VARCHAR == _nDataType) || (DataType::LONGVARCHAR == _nDataType) || (DataType::CLOB == _nDataType))
         {
             bText = sal_True;
-            pFormatDescriptor->Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, sal_True));
+            pFormatDescriptor->Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, true));
             if (!_pFormatter->IsTextFormat(_nFormatKey))
                 // text fields can only have text formats
                 _nFormatKey = _pFormatter->GetStandardFormat(NUMBERFORMAT_TEXT,_pParent->GetSettings().GetLanguageTag().getLanguageType());

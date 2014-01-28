@@ -206,7 +206,7 @@ ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Refer
     }
     catch(const Exception&)
     {
-        ShowServiceNotAvailableError(_pParent->GetParent(), OUString("com.sun.star.sdb.DatabaseContext"), sal_True);
+        ShowServiceNotAvailableError(_pParent->GetParent(), OUString("com.sun.star.sdb.DatabaseContext"), true);
     }
 }
 

@@ -1690,7 +1690,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
                 const Reference< XModel > xModel( getComponent(), UNO_QUERY_THROW );
                 const Sequence< PropertyValue > aArgs = xModel->getArgs();
                 ::comphelper::NamedValueCollection aExistentMediaDesc( aArgs );
-                aExistentMediaDesc.merge( aNewMediaDesc, sal_False );
+                aExistentMediaDesc.merge( aNewMediaDesc, false );
 
                 lcl_putLoadArgs( aExistentMediaDesc, optional_bool(), optional_bool() );
                     // don't put _bSuppressMacros and _bReadOnly here - if the document was already

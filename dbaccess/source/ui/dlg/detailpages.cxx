@@ -466,9 +466,9 @@ namespace dbaui
         else
         {
             m_bUseClass = false;
-            m_aFTDriverClass.Show(sal_False);
-            m_aEDDriverClass.Show(sal_False);
-            m_aTestJavaDriver.Show(sal_False);
+            m_aFTDriverClass.Show(false);
+            m_aEDDriverClass.Show(false);
+            m_aTestJavaDriver.Show(false);
         }
 
         m_aFTSocket.Show(PAGE_MYSQL_JDBC == _nResId && !m_bUseClass);

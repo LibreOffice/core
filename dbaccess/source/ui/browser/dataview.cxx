@@ -127,7 +127,7 @@ namespace dbaui
                 const KeyCode& aKeyCode = pKeyEvent->GetKeyCode();
                 if ( m_pAccel.get() && m_pAccel->execute( aKeyCode ) )
                     // the accelerator consumed the event
-                    return 1L;
+                    return true;
             }
             // NO break
             case EVENT_KEYUP:

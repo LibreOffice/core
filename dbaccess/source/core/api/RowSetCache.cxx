@@ -573,7 +573,7 @@ void ORowSetCache::updateNull(sal_Int32 columnIndex,ORowSetValueVector::Vector& 
     ORowSetValueVector::Vector& rInsert = ((*m_aInsertRow)->get());
     if ( !rInsert[columnIndex].isNull() )
     {
-        rInsert[columnIndex].setBound(sal_True);
+        rInsert[columnIndex].setBound(true);
         rInsert[columnIndex].setNull();
         rInsert[columnIndex].setModified();
         io_aRow[columnIndex].setNull();
@@ -593,7 +593,7 @@ void ORowSetCache::updateValue(sal_Int32 columnIndex,const ORowSetValue& x
     ORowSetValueVector::Vector& rInsert = ((*m_aInsertRow)->get());
     if ( rInsert[columnIndex] != x )
     {
-        rInsert[columnIndex].setBound(sal_True);
+        rInsert[columnIndex].setBound(true);
         rInsert[columnIndex] = x;
         rInsert[columnIndex].setModified();
         io_aRow[columnIndex] = rInsert[columnIndex];
@@ -615,7 +615,7 @@ void ORowSetCache::updateCharacterStream( sal_Int32 columnIndex, const Reference
         x->readBytes(aSeq,length);
 
     ORowSetValueVector::Vector& rInsert = ((*m_aInsertRow)->get());
-    rInsert[columnIndex].setBound(sal_True);
+    rInsert[columnIndex].setBound(true);
     rInsert[columnIndex] = aSeq;
     rInsert[columnIndex].setModified();
     io_aRow[columnIndex] = makeAny(x);
@@ -636,7 +636,7 @@ void ORowSetCache::updateObject( sal_Int32 columnIndex, const Any& x
     aTemp.fill(x);
     if ( rInsert[columnIndex] != aTemp )
     {
-        rInsert[columnIndex].setBound(sal_True);
+        rInsert[columnIndex].setBound(true);
         rInsert[columnIndex] = aTemp;
         rInsert[columnIndex].setModified();
         io_aRow[columnIndex] = rInsert[columnIndex];
@@ -658,7 +658,7 @@ void ORowSetCache::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal
     aTemp.fill(x);
     if ( rInsert[columnIndex] != aTemp )
     {
-        rInsert[columnIndex].setBound(sal_True);
+        rInsert[columnIndex].setBound(true);
         rInsert[columnIndex] = aTemp;
         rInsert[columnIndex].setModified();
         io_aRow[columnIndex] = rInsert[columnIndex];
@@ -1441,8 +1441,8 @@ void ORowSetCache::moveToInsertRow(  )
     ORowSetValueVector::Vector::iterator aEnd = (*m_aInsertRow)->get().end();
     for(sal_Int32 i = 1;aIter != aEnd;++aIter,++i)
     {
-        aIter->setBound(sal_False);
-        aIter->setModified(sal_False);
+        aIter->setBound(false);
+        aIter->setModified(false);
         aIter->setNull();
         aIter->setTypeKind(m_xMetaData->getColumnType(i));
     }
@@ -1511,7 +1511,7 @@ void ORowSetCache::setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRo
     ORowSetValueVector::Vector::iterator aIter = (*m_aInsertRow)->get().begin();
     ORowSetValueVector::Vector::iterator aEnd = (*m_aInsertRow)->get().end();
     for(;aIter != aEnd;++aIter)
-        aIter->setModified(sal_False);
+        aIter->setModified(false);
 }
 
 void ORowSetCache::checkPositionFlags()
@@ -1616,7 +1616,7 @@ sal_Bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
 
                     OUString sTableRange = OSQLParseNode::getTableRange(pTableRef);
                     if(sTableRange.isEmpty())
-                        pTableRef->getChild(0)->parseNodeToStr( sTableRange, _xConnection, NULL, sal_False, sal_False );
+                        pTableRef->getChild(0)->parseNodeToStr( sTableRange, _xConnection, NULL, false, false );
                     bOk =  sTableRange == _sUpdateTableName;
                 }
             }
@@ -1640,8 +1640,8 @@ void ORowSetCache::clearInsertRow()
         ORowSetValueVector::Vector::iterator aEnd = (*m_aInsertRow)->get().end();
         for(;aIter != aEnd;++aIter)
         {
-            aIter->setBound(sal_False);
-            aIter->setModified(sal_False);
+            aIter->setBound(false);
+            aIter->setModified(false);
             aIter->setNull();
         }
     }

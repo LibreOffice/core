@@ -92,7 +92,7 @@ namespace sdbtools
     {
         EntryGuard aGuard( *this );
         dbtools::StatementComposer aComposer(getConnection(), command, commandType, sal_True );
-        aComposer.setDisposeComposer(sal_False);
+        aComposer.setDisposeComposer(false);
         return aComposer.getComposer();
     }
 

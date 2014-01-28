@@ -232,7 +232,7 @@ void SAL_CALL OViewContainer::elementRemoved( const ContainerEvent& Event ) thro
         }
         catch(Exception&)
         {
-            m_bInElementRemoved = sal_False;
+            m_bInElementRemoved = false;
             throw;
         }
         m_bInElementRemoved = false;

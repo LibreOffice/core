@@ -521,7 +521,7 @@ namespace
             }
 
             if ( xFrame.is() )
-                _rMenu.SetItemImage(nId,framework::GetImageFromURL(xFrame,aCommand,sal_False));
+                _rMenu.SetItemImage(nId,framework::GetImageFromURL(xFrame,aCommand,false));
         }
     }
     // SelectionSupplier

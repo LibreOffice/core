@@ -1643,7 +1643,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                 }
                 else
                 {
-                    aReturn.bChecked = sal_False;
+                    aReturn.bChecked = false;
                     aReturn.bEnabled = sal_False;
                 }
             }

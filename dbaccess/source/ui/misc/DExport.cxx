@@ -90,7 +90,7 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
                                  sal_Bool _bAutoIncrementEnabled,
                                  SvStream& _rInputStream)
     :m_vColumns(_rColumnPositions)
-    ,m_aDestColumns(sal_True)
+    ,m_aDestColumns(true)
     ,m_xFormatter(_rxNumberF)
     ,m_xContext(_rxContext)
     ,m_pFormatter(NULL)

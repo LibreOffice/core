@@ -960,20 +960,20 @@ void OCopyTableWizard::CheckButtons()
     if(GetCurLevel() == 0) // the first page has no back button
     {
         if(m_nPageCount > 1)
-            m_pbNext.Enable(sal_True);
+            m_pbNext.Enable(true);
         else
-            m_pbNext.Enable(sal_False);
+            m_pbNext.Enable(false);
 
-        m_pbPrev.Enable(sal_False);
+        m_pbPrev.Enable(false);
     }
     else if(GetCurLevel() == m_nPageCount-1) // the last page has no next button
     {
-        m_pbNext.Enable(sal_False);
-        m_pbPrev.Enable(sal_True);
+        m_pbNext.Enable(false);
+        m_pbPrev.Enable(true);
     }
     else
     {
-        m_pbPrev.Enable(sal_True);
+        m_pbPrev.Enable(true);
         // next already has its state
     }
 }

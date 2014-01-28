@@ -326,9 +326,9 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
         if ( nCreateNewDBIndex == -1 )
             nCreateNewDBIndex = m_pCollection->getIndexOf( OUString("sdbc:dbase:") );
         OSL_ENSURE( nCreateNewDBIndex != -1, "ODbTypeWizDialogSetup::activateDatabasePath: the GeneralPage should have prevented this!" );
-        activatePath( static_cast< PathId >( nCreateNewDBIndex + 1 ), sal_True );
+        activatePath( static_cast< PathId >( nCreateNewDBIndex + 1 ), true );
 
-        enableState(PAGE_DBSETUPWIZARD_FINAL, sal_True );
+        enableState(PAGE_DBSETUPWIZARD_FINAL, true );
         enableButtons( WZB_FINISH, sal_True);
     }
     break;
@@ -341,13 +341,13 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
         if (eType ==  ::dbaccess::DST_UNKNOWN)
             eType = m_pCollection->determineType(m_sOldURL);
 
-        activatePath( static_cast<PathId>(m_pCollection->getIndexOf(m_sURL) + 1), sal_True);
+        activatePath( static_cast<PathId>(m_pCollection->getIndexOf(m_sURL) + 1), true);
         updateTypeDependentStates();
     }
     break;
     case OGeneralPageWizard::eOpenExisting:
     {
-        activatePath( static_cast<PathId>(m_pCollection->size() + 1), sal_True );
+        activatePath( static_cast<PathId>(m_pCollection->size() + 1), true );
         enableButtons( WZB_FINISH, !m_pGeneralPage->GetSelectedDocument().sURL.isEmpty() );
     }
     break;
@@ -603,7 +603,7 @@ IMPL_LINK(ODbTypeWizDialogSetup, ImplClickHdl, OMySQLIntroPageSetup*, _pMySQLInt
             sURLPrefix = "sdbc:mysql:mysqlc:";
             break;
     }
-    activatePath( static_cast<PathId>(m_pCollection->getIndexOf(sURLPrefix) + 1), sal_True);
+    activatePath( static_cast<PathId>(m_pCollection->getIndexOf(sURLPrefix) + 1), true);
     return sal_True;
 }
 

@@ -119,7 +119,7 @@ namespace
         {
             sTableRange = ::connectivity::OSQLParseNode::getTableRange(_pTableRef);
             if ( sTableRange.isEmpty() )
-                _pTableRef->parseNodeToStr(sTableRange,xConnection,NULL,sal_False,sal_False);
+                _pTableRef->parseNodeToStr(sTableRange,xConnection,NULL,false,false);
         }
         return sTableRange;
     }
@@ -804,7 +804,7 @@ namespace
                                     pParseNode->getChild(node)->parseNodeToStr( sHavingStr,
                                                                 xConnection,
                                                                 &rContext,
-                                                                sal_False,
+                                                                false,
                                                                 !pEntryField->isOtherFunction());
                                 aHavingStr = sHavingStr;
                             }
@@ -834,7 +834,7 @@ namespace
                                 pParseNode->parseNodeToStr( aWhere,
                                                             xConnection,
                                                             &rContext,
-                                                            sal_False,
+                                                            false,
                                                             !pEntryField->isOtherFunction() );
                                 aWhereStr = aWhere;
                             }
@@ -1177,7 +1177,7 @@ namespace
                             pParseNode->getChild(0)->parseNodeToStr(    sGroupBy,
                                                         xConnection,
                                                         &rController.getParser().getContext(),
-                                                        sal_False,
+                                                        false,
                                                         !pEntryField->isOtherFunction());
                             sGroupByPart += sGroupBy;
                         }
@@ -1523,8 +1523,8 @@ namespace
             pFunction->parseNodeToStr(  aColumnName,
                                         xConnection,
                                         &rController.getParser().getContext(),
-                                        sal_True,
-                                        sal_True); // quote is to true because we need quoted elements inside the function
+                                        true,
+                                        true); // quote is to true because we need quoted elements inside the function
             // don't display the column name
             aCondition = aCondition.copy(aColumnName.getLength());
             aCondition = aCondition.trim();
@@ -1722,7 +1722,7 @@ namespace
                 pLhs->parseNodeToStr(aName,
                                      xConnection,
                                      &rController.getParser().getContext(),
-                                     sal_True);
+                                     true);
                 // Criteria
                 aCondition = pCondition->getChild(1)->getTokenValue();
                 pRhs->parseNodeToPredicateStr(aCondition,
@@ -2223,8 +2223,8 @@ namespace
                                     pParamRef->parseNodeToStr(  sFieldName,
                                                         xConnection,
                                                         &rController.getParser().getContext(),
-                                                        sal_True,
-                                                        sal_True); // quote is to true because we need quoted elements inside the function
+                                                        true,
+                                                        true); // quote is to true because we need quoted elements inside the function
                                 }
                                 aInfo->SetDataType(DataType::DOUBLE);
                                 aInfo->SetFieldType(TAB_NORMAL_FIELD);
@@ -2257,8 +2257,8 @@ namespace
                         pColumnRef->parseNodeToStr( aColumns,
                                                     xConnection,
                                                     &rController.getParser().getContext(),
-                                                    sal_True,
-                                                    sal_True); // quote is to true because we need quoted elements inside the function
+                                                    true,
+                                                    true); // quote is to true because we need quoted elements inside the function
 
                         aInfo->SetTabWindow( NULL );
 
@@ -2419,8 +2419,8 @@ namespace
                         pArgument->parseNodeToStr(  sGroupByExpression,
                                                     xConnection,
                                                     &rController.getParser().getContext(),
-                                                    sal_True,
-                                                    sal_True); // quote is to true because we need quoted elements inside the function
+                                                    true,
+                                                    true); // quote is to true because we need quoted elements inside the function
                         _pView->fillFunctionInfo(pArgument,sGroupByExpression,aDragInfo);
                         aDragInfo->SetFunctionType(FKT_OTHER);
                         aDragInfo->SetGroupBy(sal_True);

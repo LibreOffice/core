@@ -89,8 +89,8 @@ OCopyTable::OCopyTable( Window * pParent )
 
         m_aCB_PrimaryColumn.SetClickHdl(LINK( this, OCopyTable, KeyClickHdl         ) );
 
-        m_aFT_KeyName.Enable(sal_False);
-        m_edKeyName.Enable(sal_False);
+        m_aFT_KeyName.Enable(false);
+        m_edKeyName.Enable(false);
         OUString sKeyName("ID");
         sKeyName = m_pParent->createUniqueName(sKeyName);
         m_edKeyName.SetText(sKeyName);
@@ -118,9 +118,9 @@ IMPL_LINK( OCopyTable, AppendDataClickHdl, Button*, /*pButton*/ )
 void OCopyTable::SetAppendDataRadio()
 {
     m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,sal_True);
-    m_aFT_KeyName.Enable(sal_False);
-    m_aCB_PrimaryColumn.Enable(sal_False);
-    m_edKeyName.Enable(sal_False);
+    m_aFT_KeyName.Enable(false);
+    m_aCB_PrimaryColumn.Enable(false);
+    m_edKeyName.Enable(false);
     m_pParent->setOperation(CopyTableOperation::AppendData);
 }
 
@@ -238,7 +238,7 @@ sal_Bool OCopyTable::LeavePage()
 
 void OCopyTable::ActivatePage()
 {
-    m_pParent->GetOKButton().Enable( sal_True );
+    m_pParent->GetOKButton().Enable( true );
     m_nOldOperation = m_pParent->getOperation();
     m_edTableName.GrabFocus();
     m_aCB_UseHeaderLine.Check(m_pParent->UseHeaderLine());

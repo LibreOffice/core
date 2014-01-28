@@ -111,7 +111,7 @@ namespace dbaccess
             }
         }
         OSL_FAIL( "OColumnSettings::isDefaulted: illegal property handle!" );
-        return sal_False;
+        return false;
     }
 
     bool OColumnSettings::hasDefaultSettings( const Reference< XPropertySet >& _rxColumn )

@@ -38,7 +38,7 @@ DBTreeView::DBTreeView( Window* pParent, WinBits nBits)
     m_pTreeListBox = new DBTreeListBox(this, WB_BORDER | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT);
     m_pTreeListBox->EnableCheckButton(NULL);
     m_pTreeListBox->SetDragDropMode( 0 );
-    m_pTreeListBox->EnableInplaceEditing( sal_True );
+    m_pTreeListBox->EnableInplaceEditing( true );
     m_pTreeListBox->SetHelpId(HID_TLB_TREELISTBOX);
     m_pTreeListBox->Show();
 }

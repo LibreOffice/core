@@ -42,7 +42,7 @@ bool OStringListItem::operator==(const SfxPoolItem& _rItem) const
 {
     const OStringListItem* pCompare = PTR_CAST(OStringListItem, &_rItem);
     if ((!pCompare) || (pCompare->m_aList.getLength() != m_aList.getLength()))
-        return 0;
+        return false;
 
     // compare all strings individually
     const OUString* pMyStrings = m_aList.getConstArray();
@@ -50,9 +50,9 @@ bool OStringListItem::operator==(const SfxPoolItem& _rItem) const
 
     for (sal_Int32 i=0; i<m_aList.getLength(); ++i, ++pMyStrings, ++pCompareStrings)
         if (!pMyStrings->equals(*pCompareStrings))
-            return 0;
+            return false;
 
-    return 1;
+    return true;
 }
 
 SfxPoolItem* OStringListItem::Clone(SfxItemPool* /* _pPool */) const

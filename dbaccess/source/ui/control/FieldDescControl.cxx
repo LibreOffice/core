@@ -953,7 +953,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
 
             pFormatSample = new OPropEditCtrl( this, STR_HELP_FORMAT_CODE, -1, WB_BORDER );
             pFormatSample->SetReadOnly(sal_True);
-            pFormatSample->Enable(sal_False);
+            pFormatSample->Enable(false);
             InitializeControl(pFormatSample,HID_TAB_ENT_FORMAT_SAMPLE,false);
 
             pFormat = new PushButton( this, ModuleRes(PB_FORMAT) );

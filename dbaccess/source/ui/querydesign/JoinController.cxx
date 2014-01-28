@@ -276,7 +276,7 @@ void OJoinController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& 
 
             if ( m_pAddTableDialog->IsVisible() )
             {
-                m_pAddTableDialog->Show( sal_False );
+                m_pAddTableDialog->Show( false );
                 getView()->GrabFocus();
             }
             else
@@ -285,7 +285,7 @@ void OJoinController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& 
                     WaitObject aWaitCursor( getView() );
                     m_pAddTableDialog->Update();
                 }
-                m_pAddTableDialog->Show( sal_True );
+                m_pAddTableDialog->Show( true );
                 ::dbaui::notifySystemWindow(getView(),m_pAddTableDialog,::comphelper::mem_fun(&TaskPaneList::AddWindow));
             }
             break;

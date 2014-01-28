@@ -116,7 +116,7 @@ namespace dbaxml
                     }
                     catch (const uno::Exception&)
                     {
-                        OSL_ASSERT(0);
+                        OSL_ASSERT(false);
                     }
                 }
 #endif
@@ -161,7 +161,7 @@ namespace dbaxml
                     }
                     catch (const uno::Exception&)
                     {
-                        OSL_ASSERT(0);
+                        OSL_ASSERT(false);
                     }
                 }
             }

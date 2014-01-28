@@ -248,7 +248,7 @@ sal_Bool OGenericUnoController::Construct(Window* /*pParent*/)
     {
         SAL_WARN("dbaccess.ui","OGenericUnoController::Construct: could not create (or start listening at) the database context!");
         // at least notify the user. Though the whole component does not make any sense without the database context ...
-        ShowServiceNotAvailableError(getView(), OUString("com.sun.star.sdb.DatabaseContext"), sal_True);
+        ShowServiceNotAvailableError(getView(), OUString("com.sun.star.sdb.DatabaseContext"), true);
     }
 
     return sal_True;
@@ -310,7 +310,7 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
             throw RuntimeException("unable to create a view", *this );
 
         if ( m_bReadOnly || m_bPreview )
-            pView->EnableInput( sal_False );
+            pView->EnableInput( false );
 
         impl_initialize();
     }

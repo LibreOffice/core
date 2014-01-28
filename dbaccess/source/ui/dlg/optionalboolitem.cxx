@@ -40,12 +40,12 @@ namespace dbaui
     {
         const OptionalBoolItem* pCompare = PTR_CAST( OptionalBoolItem, &_rItem );
         if ( !pCompare )
-            return 0;
+            return false;
 
         if ( m_aValue == pCompare->m_aValue )
-            return 1;
+            return true;
 
-        return 0;
+        return false;
     }
 
     SfxPoolItem* OptionalBoolItem::Clone( SfxItemPool* /*_pPool*/ ) const

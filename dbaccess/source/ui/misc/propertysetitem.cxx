@@ -48,9 +48,9 @@ namespace dbaui
     {
         const OPropertySetItem* pCompare = PTR_CAST(OPropertySetItem, &_rItem);
         if ((!pCompare) || (pCompare->m_xSet.get() != m_xSet.get()))
-            return 0;
+            return false;
 
-        return 1;
+        return true;
     }
 
     SfxPoolItem* OPropertySetItem::Clone(SfxItemPool* /* _pPool */) const

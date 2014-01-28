@@ -145,7 +145,7 @@ namespace
     }
     IMPL_LINK_NOARG(OTablePreviewWindow, OnDisableInput)
     {
-        EnableInput(sal_False);
+        EnableInput(false);
         return 0L;
     }
     void OTablePreviewWindow::DataChanged( const DataChangedEvent& rDCEvt )
@@ -203,7 +203,7 @@ OAppDetailPageHelper::OAppDetailPageHelper(Window* _pParent,OAppBorderWindow& _r
     m_aTBPreview.SetHelpId(HID_APP_VIEW_PREVIEW_CB);
     m_aTBPreview.SetDropdownClickHdl( LINK( this, OAppDetailPageHelper, OnDropdownClickHdl ) );
     m_aTBPreview.EnableMenuStrings();
-    m_aTBPreview.Enable(sal_True);
+    m_aTBPreview.Enable(true);
 
     m_aBorder.SetUniqueId(UID_APP_VIEW_PREVIEW_1);
 

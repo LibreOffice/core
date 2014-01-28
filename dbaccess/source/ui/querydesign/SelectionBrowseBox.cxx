@@ -142,9 +142,9 @@ OSelectionBrowseBox::OSelectionBrowseBox( Window* pParent )
         m_pOrderCell->InsertEntry(aTxt.getToken(nIdx, ';'));
 
     for(long i=0;i < BROW_ROW_CNT;i++)
-        m_bVisibleRow.push_back(sal_True);
+        m_bVisibleRow.push_back(true);
 
-    m_bVisibleRow[BROW_FUNCTION_ROW] = sal_False;   // first hide
+    m_bVisibleRow[BROW_FUNCTION_ROW] = false;   // first hide
 
     m_timerInvalidate.SetTimeout(200);
     m_timerInvalidate.SetTimeoutHdl(LINK(this, OSelectionBrowseBox, OnInvalidateTimer));
@@ -516,7 +516,7 @@ void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, lon
                 m_pVisibleCell->GetBox().Check(pEntry->IsVisible());
                 m_pVisibleCell->GetBox().SaveValue();
                 m_pVisibleCell->GetBox().Disable();
-                m_pVisibleCell->GetBox().EnableInput(sal_False);
+                m_pVisibleCell->GetBox().EnableInput(false);
                 OUString aMessage(ModuleRes(STR_QRY_ORDERBY_UNRELATED));
                 OQueryDesignView* paDView = getDesignView();
                 InfoBox(paDView, aMessage).Execute();
@@ -813,7 +813,7 @@ sal_Bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRe
                     // now parse the parameters
                     OUString sParameters;
                     for(sal_uInt32 function = 2; function < nFunCount; ++function) // we only want to parse the parameters of the function
-                        pColumnRef->getChild(function)->parseNodeToStr( sParameters, xConnection, &rParser.getContext(), sal_True, bQuote );
+                        pColumnRef->getChild(function)->parseNodeToStr( sParameters, xConnection, &rParser.getContext(), true, bQuote );
 
                     aSelEntry->SetFunctionType(nFunctionType);
                     aSelEntry->SetField(sParameters);
@@ -838,8 +838,8 @@ sal_Bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRe
                 pColumnRef->parseNodeToStr( sFunction,
                                             xConnection,
                                             &rController.getParser().getContext(),
-                                            sal_True,
-                                            sal_True); // quote is to true because we need quoted elements inside the function
+                                            true,
+                                            true); // quote is to true because we need quoted elements inside the function
 
                 getDesignView()->fillFunctionInfo(pColumnRef,sFunction,aSelEntry);
 
@@ -851,7 +851,7 @@ sal_Bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRe
                     sal_uInt32 nFunCount = pColumnRef->count();
                     OUString sParameters;
                     for(sal_uInt32 function = 0; function < nFunCount; ++function)
-                        pColumnRef->getChild(function)->parseNodeToStr( sParameters, xConnection, &rParser.getContext(), sal_True, sal_True );
+                        pColumnRef->getChild(function)->parseNodeToStr( sParameters, xConnection, &rParser.getContext(), true, true );
 
                     sOldAlias = aSelEntry->GetAlias();
                     sal_Int32 nNewFunctionType = aSelEntry->GetFunctionType() | FKT_NUMERIC | FKT_OTHER;
@@ -1175,7 +1175,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
         if ( bAppendRow )
         {
             RowInserted( GetRowCount()-1, 1, sal_True );
-            m_bVisibleRow.push_back(sal_True);
+            m_bVisibleRow.push_back(true);
             ++m_nVisibleCount;
         }
 
@@ -1710,10 +1710,10 @@ void OSelectionBrowseBox::DuplicateConditionLevel( const sal_uInt16 nLevel)
             if ( nNewLevel == (m_nVisibleCount-BROW_CRIT1_ROW-1) )
             {
                 RowInserted( GetRowCount()-1, 1, sal_True );
-                m_bVisibleRow.push_back(sal_True);
+                m_bVisibleRow.push_back(true);
                 ++m_nVisibleCount;
             }
-            m_bVisibleRow[BROW_CRIT1_ROW + nNewLevel] = sal_True;
+            m_bVisibleRow[BROW_CRIT1_ROW + nNewLevel] = true;
         }
     }
 }
@@ -1757,10 +1757,10 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const O
                 if(nLevel == (m_nVisibleCount-BROW_CRIT1_ROW-1))
                 {
                     RowInserted( GetRowCount()-1, 1, sal_True );
-                    m_bVisibleRow.push_back(sal_True);
+                    m_bVisibleRow.push_back(true);
                     ++m_nVisibleCount;
                 }
-                m_bVisibleRow[BROW_CRIT1_ROW + nLevel] = sal_True;
+                m_bVisibleRow[BROW_CRIT1_ROW + nLevel] = true;
                 break;
             }
             if ( _bAddOrOnOneLine )
@@ -1785,10 +1785,10 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const O
         if(nLevel == (m_nVisibleCount-BROW_CRIT1_ROW-1))
         {
             RowInserted( GetRowCount()-1, 1, sal_True );
-            m_bVisibleRow.push_back(sal_True);
+            m_bVisibleRow.push_back(true);
             ++m_nVisibleCount;
         }
-        m_bVisibleRow[BROW_CRIT1_ROW + nLevel] = sal_True;
+        m_bVisibleRow[BROW_CRIT1_ROW + nLevel] = true;
     }
     else if (aIter == rFields.end())
     {
@@ -1801,7 +1801,7 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const O
             if(nLevel == (m_nVisibleCount-BROW_CRIT1_ROW-1))
             {
                 RowInserted( GetRowCount()-1, 1, sal_True );
-                m_bVisibleRow.push_back(sal_True);
+                m_bVisibleRow.push_back(true);
                 ++m_nVisibleCount;
             }
         }

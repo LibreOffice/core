@@ -143,7 +143,7 @@ namespace dbaui
 
             if (m_aAllParams.GetEntryCount() == 1)
             {
-                m_aTravelNext.Enable(sal_False);
+                m_aTravelNext.Enable(false);
             }
 
             if (m_aAllParams.GetEntryCount() > 1)

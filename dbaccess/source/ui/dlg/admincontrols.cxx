@@ -127,7 +127,7 @@ namespace dbaui
 
     // MySQLNativeSettings
     MySQLNativeSettings::MySQLNativeSettings( Window& _rParent, const Link& _rControlModificationLink )
-        :Control( &_rParent, ModuleRes( RID_MYSQL_NATIVE_SETTINGS ).SetAutoRelease( sal_False ) )
+        :Control( &_rParent, ModuleRes( RID_MYSQL_NATIVE_SETTINGS ).SetAutoRelease( false ) )
         ,m_aDatabaseNameLabel   ( this, ModuleRes( FT_MYSQL_DATABASE_NAME ) )
         ,m_aDatabaseName        ( this, ModuleRes( ED_MYSQL_DATABASE_NAME ) )
         ,m_aHostPortRadio       ( this, ModuleRes( RB_MYSQL_HOST_PORT ) )

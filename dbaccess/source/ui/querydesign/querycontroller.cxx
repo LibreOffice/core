@@ -923,7 +923,7 @@ void OQueryController::impl_initialize()
     // more non-legacy
     rArguments.get_ensureType( (OUString)PROPERTY_GRAPHICAL_DESIGN, m_bGraphicalDesign );
 
-    bool bEscapeProcessing( sal_True );
+    bool bEscapeProcessing( true );
     if ( rArguments.get_ensureType( (OUString)PROPERTY_ESCAPE_PROCESSING, bEscapeProcessing ) )
     {
         setEscapeProcessing_fireEvent( bEscapeProcessing );

@@ -818,7 +818,7 @@ void OTableEditorCtrl::InsertRows( long nRow )
             {
                 pRow.reset(new OTableRow());
                 (*aStreamRef) >> *pRow;
-                pRow->SetReadOnly( sal_False );
+                pRow->SetReadOnly( false );
                 sal_Int32 nType = pRow->GetActFieldDescr()->GetType();
                 if ( pRow->GetActFieldDescr() )
                     pRow->GetActFieldDescr()->SetType(GetView()->getController().getTypeInfoByType(nType));

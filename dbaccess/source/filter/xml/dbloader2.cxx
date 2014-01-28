@@ -302,7 +302,7 @@ namespace
 {
     sal_Bool lcl_urlAllowsInteraction( const Reference<XComponentContext> & _rContext, const OUString& _rURL )
     {
-        bool bDoesAllow = sal_False;
+        bool bDoesAllow = false;
         try
         {
             Reference< XURLTransformer > xTransformer( URLTransformer::create(_rContext) );

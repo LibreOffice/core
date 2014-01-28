@@ -127,7 +127,7 @@ void OTableGrantControl::Init()
 
         m_pEdit         = new Edit( &GetDataWindow() );
         m_pEdit->SetReadOnly();
-        m_pEdit->Enable(sal_False);
+        m_pEdit->Enable(false);
     }
 
     UpdateTables();

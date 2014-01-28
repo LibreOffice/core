@@ -343,14 +343,14 @@ OAddTableDlg::OAddTableDlg( Window* pParent, IAddTableDialogContext& _rContext )
     m_aQueryList.SetDoubleClickHdl( LINK( this, OAddTableDlg, TableListDoubleClickHdl ) );
     m_aQueryList.SetSelectHdl( LINK( this, OAddTableDlg, TableListSelectHdl ) );
 
-    m_aTableList.EnableInplaceEditing( sal_False );
+    m_aTableList.EnableInplaceEditing( false );
     m_aTableList.SetStyle(m_aTableList.GetStyle() | WB_BORDER | WB_HASLINES |WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HASLINESATROOT | WB_SORT | WB_HSCROLL );
     m_aTableList.EnableCheckButton( NULL ); // do not show any buttons
     m_aTableList.SetSelectionMode( SINGLE_SELECTION );
     m_aTableList.notifyHiContrastChanged();
     m_aTableList.suppressEmptyFolders();
 
-    m_aQueryList.EnableInplaceEditing( sal_False );
+    m_aQueryList.EnableInplaceEditing( false );
     m_aQueryList.SetSelectionMode( SINGLE_SELECTION );
 
     if ( !m_rContext.allowQueries() )
@@ -384,15 +384,15 @@ void OAddTableDlg::impl_switchTo( ObjectList _eList )
     switch ( _eList )
     {
     case Tables:
-        m_aTableList.Show( sal_True );  m_aCaseTables.Check( sal_True );
-        m_aQueryList.Show( sal_False ); m_aCaseQueries.Check( sal_False );
+        m_aTableList.Show( true );  m_aCaseTables.Check( sal_True );
+        m_aQueryList.Show( false ); m_aCaseQueries.Check( sal_False );
         m_pCurrentList.reset( new TableListFacade( m_aTableList, m_rContext.getConnection() ) );
         m_aTableList.GrabFocus();
         break;
 
     case Queries:
-        m_aTableList.Show( sal_False ); m_aCaseTables.Check( sal_False );
-        m_aQueryList.Show( sal_True );  m_aCaseQueries.Check( sal_True );
+        m_aTableList.Show( false ); m_aCaseTables.Check( sal_False );
+        m_aQueryList.Show( true );  m_aCaseQueries.Check( sal_True );
         m_pCurrentList.reset( new QueryListFacade( m_aQueryList, m_rContext.getConnection() ) );
         m_aQueryList.GrabFocus();
         break;
