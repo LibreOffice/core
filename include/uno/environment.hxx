@@ -133,7 +133,7 @@ public:
 
         @return true, if a environment is set, false otherwise
     */
-    inline sal_Bool SAL_CALL is() const SAL_THROW(())
+    inline bool SAL_CALL is() const SAL_THROW(())
         { return (_pEnv != 0); }
 
     /** Releases a set environment.

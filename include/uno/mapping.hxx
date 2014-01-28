@@ -138,7 +138,7 @@ public:
 
         @return true if a mapping is set
     */
-    inline sal_Bool SAL_CALL is() const SAL_THROW(())
+    inline bool SAL_CALL is() const SAL_THROW(())
         { return (_pMapping != 0); }
 
     /** Releases a set mapping.
@@ -303,7 +303,7 @@ inline void * Mapping::mapInterface(
     @deprecated
 */
 template< class C >
-inline sal_Bool mapToCpp( Reference< C > * ppRet, uno_Interface * pUnoI ) SAL_THROW(())
+inline bool mapToCpp( Reference< C > * ppRet, uno_Interface * pUnoI ) SAL_THROW(())
 {
     Mapping aMapping(
         ::rtl::OUString( UNO_LB_UNO ),
@@ -326,7 +326,7 @@ inline sal_Bool mapToCpp( Reference< C > * ppRet, uno_Interface * pUnoI ) SAL_TH
     @deprecated
 */
 template< class C >
-inline sal_Bool mapToUno( uno_Interface ** ppRet, const Reference< C > & x ) SAL_THROW(())
+inline bool mapToUno( uno_Interface ** ppRet, const Reference< C > & x ) SAL_THROW(())
 {
     Mapping aMapping(
         ::rtl::OUString( CPPU_CURRENT_LANGUAGE_BINDING_NAME ),
