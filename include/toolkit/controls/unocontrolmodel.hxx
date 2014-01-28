@@ -179,7 +179,7 @@ public:
         std::list< sal_uInt16 > aIds; \
         a::ImplGetPropertyIds( aIds ); \
         ImplRegisterProperties( aIds ); \
-    } while (0)
+    } while (false)
 
 #endif // INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLMODEL_HXX
 

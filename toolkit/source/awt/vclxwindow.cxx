@@ -1039,7 +1039,7 @@ void VCLXWindow::setEnable( sal_Bool bEnable ) throw(::com::sun::star::uno::Runt
     Window* pWindow = GetWindow();
     if ( pWindow )
     {
-        pWindow->Enable( bEnable, sal_False ); // #95824# without children!
+        pWindow->Enable( bEnable, false ); // #95824# without children!
         pWindow->EnableInput( bEnable );
     }
 }
@@ -2317,7 +2317,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
 
                 pWindow->SetPosPixel( aOldPos );
                 if ( bWasVisible )
-                    pWindow->Show( sal_True );
+                    pWindow->Show( true );
             }
         }
         else if ( pDev )
