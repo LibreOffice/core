@@ -1005,7 +1005,7 @@ namespace frm
     void SAL_CALL FormOperations::cursorMoved( const EventObject& /*_Event*/ ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
-        m_bActiveControlModified = sal_False;
+        m_bActiveControlModified = false;
 
         impl_invalidateAllSupportedFeatures_nothrow( aGuard );
     }
@@ -1030,7 +1030,7 @@ namespace frm
         OSL_ENSURE( m_xCursor.is(), "FormOperations::modified: already disposed!" );
         if ( !m_bActiveControlModified )
         {
-            m_bActiveControlModified = sal_True;
+            m_bActiveControlModified = true;
             impl_invalidateModifyDependentFeatures_nothrow( aGuard );
         }
     }
@@ -1048,7 +1048,7 @@ namespace frm
                 )
             {
                 if ( ( _rEvent.NewValue >>= bIs ) && !bIs )
-                    m_bActiveControlModified = sal_False;
+                    m_bActiveControlModified = false;
             }
             impl_invalidateAllSupportedFeatures_nothrow( aGuard );
         }

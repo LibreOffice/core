@@ -84,7 +84,7 @@ namespace
         return rtl::math::isFinite( f )
             ? rtl::math::doubleToUString( f, rtl_math_StringFormat_Automatic,
                                         rtl_math_DecimalPlaces_Max, '.',
-                                        sal_True )
+                                        true )
             : OUString();
     }
 

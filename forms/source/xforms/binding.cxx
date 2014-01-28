@@ -176,7 +176,7 @@ Binding::XNodeList_t Binding::getXNodeList()
 {
     // first make sure we are bound
     if( ! maBindingExpression.hasValue() )
-        bind( sal_False );
+        bind( false );
 
     return maBindingExpression.getXNodeList();
 }
@@ -315,7 +315,7 @@ EvaluationContext Binding::getEvaluationContext() const
     OSL_ENSURE( getModelImpl() != NULL, "need model impl" );
 
     // bind (in case we were not bound before)
-    bind( sal_False );
+    bind( false );
     return _getMIPEvaluationContexts();
 }
 

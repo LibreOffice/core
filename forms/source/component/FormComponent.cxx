@@ -2057,7 +2057,7 @@ sal_Bool SAL_CALL OBoundControlModel::commit() throw(RuntimeException)
         try
         {
             if ( m_xColumnUpdate.is() )
-                bSuccess = commitControlValueToDbColumn( sal_False );
+                bSuccess = commitControlValueToDbColumn( false );
         }
         catch(const Exception&)
         {
@@ -2537,7 +2537,7 @@ void OBoundControlModel::reset() throw (RuntimeException)
                 // reset the control to it's default
                 resetNoBroadcast();
                 // and immediately commit the changes to the DB column, to keep consistency
-                commitControlValueToDbColumn( sal_True );
+                commitControlValueToDbColumn( true );
 
                 bNeedValueTransfer = sal_False;
             }

@@ -224,7 +224,7 @@ namespace frm
     //--------------------------------------------------------------------
     void RichTextControlImpl::normalizeScriptDependentAttribute( SvxScriptSetItem& _rScriptSetItem )
     {
-        _rScriptSetItem.GetItemSet().Put( m_pView->GetAttribs(), sal_False );
+        _rScriptSetItem.GetItemSet().Put( m_pView->GetAttribs(), false );
         const SfxPoolItem* pNormalizedItem = _rScriptSetItem.GetItemOfScript( getSelectedScriptType() );
 
         WhichId nNormalizedWhichId = _rScriptSetItem.GetItemSet().GetPool()->GetWhich( _rScriptSetItem.Which() );

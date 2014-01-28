@@ -550,7 +550,7 @@ protected:
 
 inline void ODatabaseForm::submitNBC(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& Control, const ::com::sun::star::awt::MouseEvent& MouseEvt)
 {
-    submit_impl(Control, MouseEvt, sal_False);
+    submit_impl(Control, MouseEvt, false);
 }
 
 //.........................................................................

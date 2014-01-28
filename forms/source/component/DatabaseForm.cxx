@@ -570,7 +570,7 @@ Sequence<sal_Int8> ODatabaseForm::GetDataMultiPartEncoded(const Reference<XContr
     // Create MessageStream for parent
     INetMIMEMessageStream aMessStream;
     aMessStream.SetSourceMessage( &aParent );
-    aMessStream.GenerateHeader( sal_False );
+    aMessStream.GenerateHeader( false );
 
     // Copy MessageStream to SvStream
     SvMemoryStream aMemStream;
@@ -770,7 +770,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                 {
                     sal_Int16 nScale = 0;
                     xComponentSet->getPropertyValue( PROPERTY_DECIMAL_ACCURACY ) >>= nScale;
-                    aText = ::rtl::math::doubleToUString(aDoubleVal, rtl_math_StringFormat_F, nScale, '.', sal_True);
+                    aText = ::rtl::math::doubleToUString(aDoubleVal, rtl_math_StringFormat_F, nScale, '.', true);
                 }
                 rList.push_back( HtmlSuccessfulObj(aName, aText) );
             }
@@ -1032,7 +1032,7 @@ void ODatabaseForm::InsertTextPart( INetMIMEMessage& rParent, const OUString& rN
     pStream->WriteLine( OUStringToOString(rData, rtl_getTextEncodingFromMimeCharset(pBestMatchingEncoding)) );
     pStream->Flush();
     pStream->Seek( 0 );
-    pChild->SetDocumentLB( new SvLockBytes(pStream, sal_True) );
+    pChild->SetDocumentLB( new SvLockBytes(pStream, true) );
     rParent.AttachChild( *pChild );
 }
 
@@ -1090,7 +1090,7 @@ sal_Bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const OUString
 
 
     // Body
-    pChild->SetDocumentLB( new SvLockBytes(pStream, sal_True) );
+    pChild->SetDocumentLB( new SvLockBytes(pStream, true) );
     rParent.AttachChild( *pChild );
 
     return sal_True;

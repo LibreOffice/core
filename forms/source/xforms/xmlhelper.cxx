@@ -105,7 +105,7 @@ bool isValidQName( const OUString& sName,
         }
     }
     if( nColon > 1 )
-        bRet = sal_False;
+        bRet = false;
 
     return bRet;
 }

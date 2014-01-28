@@ -104,7 +104,7 @@ namespace frm
     {
         SvxScriptSetItem aSetItem( (WhichId)getAttributeId(), *_rAttribs.GetPool() );
         aSetItem.PutItemForScriptType( _nForScriptType, _rItem );
-        _rAttribs.Put( aSetItem.GetItemSet(), sal_False );
+        _rAttribs.Put( aSetItem.GetItemSet(), false );
     }
 
     //--------------------------------------------------------------------

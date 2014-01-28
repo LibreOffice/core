@@ -433,7 +433,7 @@ sal_Bool OImageControlModel::impl_updateStreamForURL_lck( const OUString& _rURL,
                 pImageStream->SetBufferSize(8192);
             pImageStream->Seek(STREAM_SEEK_TO_BEGIN);
 
-            xImageStream = new ::utl::OInputStreamHelper( new SvLockBytes( pImageStream.get(), sal_False ), nSize );
+            xImageStream = new ::utl::OInputStreamHelper( new SvLockBytes( pImageStream.get(), false ), nSize );
         }
     }
 
