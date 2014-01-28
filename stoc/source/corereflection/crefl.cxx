@@ -344,7 +344,7 @@ Reference< XIdlClass > IdlReflectionServiceImpl::forType( typelib_TypeDescriptio
     }
     else
     {
-        if (pTypeDescr && (xRet = constructClass( pTypeDescr )).is())
+        if ((xRet = constructClass( pTypeDescr )).is())
             _aElements.setValue( aName, makeAny( xRet ) ); // update
     }
 
