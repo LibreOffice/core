@@ -53,6 +53,7 @@ public:
 
     void                statusChanged_Impl( long nHeight, bool bErase = false );
     void                UpdateFont( const ::com::sun::star::awt::FontDescriptor& rCurrentFont );
+    void                SetOptimalSize();
 
     virtual long        Notify( NotifyEvent& rNEvt );
 
@@ -85,12 +86,11 @@ SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(
     FontSizeBox( _pParent, WinBits( WB_DROPDOWN ) ),
 
     m_pCtrl             ( &_rCtrl ),
-    m_aLogicalSize      ( 20,100 ),
+    m_aLogicalSize      ( 0,100 ),
     m_bRelease          ( true ),
     m_xDispatchProvider ( _rDispatchProvider ),
     m_xFrame            ( _xFrame )
 {
-    SetSizePixel( LogicToPixel( m_aLogicalSize, MAP_APPFONT ));
     SetValue( 0 );
     SetText( "" );
 }
@@ -221,6 +221,16 @@ long SvxFontSizeBox_Impl::Notify( NotifyEvent& rNEvt )
     return nHandled ? nHandled : FontSizeBox::Notify( rNEvt );
 }
 
+void SvxFontSizeBox_Impl::SetOptimalSize()
+{
+    Size aPrefSize(LogicToPixel(m_aLogicalSize, MAP_APPFONT));
+    aPrefSize.Width() = get_preferred_size().Width();
+    SetSizePixel(aPrefSize);
+    Size aDropSize(LogicToPixel(Size(0, LOGICAL_EDIT_HEIGHT), MAP_APPFONT));
+    aDropSize.Width() = aPrefSize.Width();
+    SetDropDownSizePixel(aDropSize);
+}
+
 // ---------------------------------------------------------------------------
 
 void SvxFontSizeBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
@@ -228,9 +238,7 @@ void SvxFontSizeBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        SetSizePixel( LogicToPixel( m_aLogicalSize, MAP_APPFONT ));
-        Size aDropSize( m_aLogicalSize.Width(), LOGICAL_EDIT_HEIGHT );
-        SetDropDownSizePixel( LogicToPixel( aDropSize, MAP_APPFONT ));
+        SetOptimalSize();
     }
 
     FontSizeBox::DataChanged( rDCEvt );
@@ -380,6 +388,10 @@ uno::Reference< awt::XWindow > SAL_CALL FontHeightToolBoxControl::createItemWind
                         uno::Reference< frame::XDispatchProvider >( m_xFrame, uno::UNO_QUERY ),
                         m_xFrame,
                         *this );
+        //Get the box to fill itself with all its sizes
+        m_pBox->UpdateFont(m_aCurrentFont);
+        //Make it size itself to its optimal size re above sizes
+        m_pBox->SetOptimalSize();
         xItemWindow = VCLUnoHelper::GetInterface( m_pBox );
     }
 
