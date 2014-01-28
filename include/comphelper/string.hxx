@@ -96,7 +96,7 @@ inline OUStringBuffer& remove(OUStringBuffer &rIn,
     sal_Unicode c)
 {
     sal_Int32 index = 0;
-    while (1)
+    while (true)
     {
         if (index >= rIn.getLength())
             break;

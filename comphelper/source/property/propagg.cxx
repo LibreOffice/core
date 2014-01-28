@@ -86,7 +86,7 @@ OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
     sal_Int32 nMPLoop = 0;
     for ( ; nMPLoop < nDelegatorProps; ++nMPLoop, ++pDelegateProps )
     {
-        m_aPropertyAccessors[ pDelegateProps->Handle ] = OPropertyAccessor( -1, nMPLoop, sal_False );
+        m_aPropertyAccessors[ pDelegateProps->Handle ] = OPropertyAccessor( -1, nMPLoop, false );
         OSL_ENSURE( aDelegatorProps.find( pDelegateProps->Name ) == aDelegatorProps.end(),
             "OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper: duplicate delegatee property!" );
         aDelegatorProps.insert( pDelegateProps->Name );
@@ -128,7 +128,7 @@ OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
         }
 
         // remember the accessor for this property
-        m_aPropertyAccessors[ nHandle ] = OPropertyAccessor( pMergedProps->Handle, nMPLoop, sal_True );
+        m_aPropertyAccessors[ nHandle ] = OPropertyAccessor( pMergedProps->Handle, nMPLoop, true );
         pMergedProps->Handle = nHandle;
 
         ++nMPLoop;
