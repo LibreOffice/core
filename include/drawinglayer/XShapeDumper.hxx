@@ -46,7 +46,7 @@ class DRAWINGLAYER_DLLPUBLIC XShapeDumper
 
 public:
     XShapeDumper();
-    OUString dump(com::sun::star::uno::Reference<com::sun::star::drawing::XShapes> xPageShapes);
+    OUString dump(com::sun::star::uno::Reference<com::sun::star::drawing::XShapes> xPageShapes, bool bDumpInteropProperties=false);
 
 };
 #endif

@@ -13,7 +13,6 @@
    <Line2 column1="0.000000" column2="2201.000000" column3="1200.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
   <CustomShapeGeometry>
    <PropertyValue name="ViewBox">
     <ViewBox x="0" y="0" width="21600" height="21600"/>
@@ -120,7 +119,6 @@
    <Line2 column1="0.000000" column2="2401.000000" column3="1000.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
   <CustomShapeGeometry>
    <PropertyValue name="ViewBox">
     <ViewBox x="0" y="0" width="21600" height="21600"/>
@@ -305,7 +303,6 @@
    <Line2 column1="0.000000" column2="2201.000000" column3="1400.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
   <CustomShapeGeometry>
    <PropertyValue name="ViewBox">
     <ViewBox x="0" y="0" width="21600" height="21600"/>
@@ -404,7 +401,6 @@
    <Line2 column1="0.000000" column2="3801.000000" column3="1000.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
   <CustomShapeGeometry>
    <PropertyValue name="ViewBox">
     <ViewBox x="0" y="0" width="640" height="861"/>
@@ -497,7 +493,6 @@
    <Line2 column1="0.000000" column2="2601.000000" column3="1400.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
   <CustomShapeGeometry>
    <PropertyValue name="ViewBox">
     <ViewBox x="0" y="0" width="11200" height="11200"/>
@@ -595,7 +590,6 @@
    <Line2 column1="0.000000" column2="2601.000000" column3="1400.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
   <CustomShapeGeometry>
    <PropertyValue name="ViewBox">
     <ViewBox x="0" y="0" width="21600" height="21600"/>
@@ -935,7 +929,6 @@
    <Line2 column1="0.000000" column2="1601.000000" column3="5600.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
   <CustomShapeGeometry>
    <PropertyValue name="ViewBox">
     <ViewBox x="0" y="0" width="21600" height="21600"/>
@@ -1464,7 +1457,6 @@
    <Line2 column1="0.000000" column2="2601.000000" column3="5000.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
   <CustomShapeGeometry>
    <PropertyValue name="ViewBox">
     <ViewBox x="0" y="0" width="21600" height="21600"/>
@@ -1557,7 +1549,6 @@
    <Line2 column1="0.000000" column2="2601.000000" column3="5200.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
   <CustomShapeGeometry>
    <PropertyValue name="ViewBox">
     <ViewBox x="0" y="0" width="20590" height="20590"/>
@@ -2032,7 +2023,6 @@
    <Line2 column1="0.000000" column2="1201.000000" column3="6000.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
   <CustomShapeGeometry>
    <PropertyValue name="ViewBox">
     <ViewBox x="0" y="0" width="21600" height="21600"/>
@@ -2117,7 +2107,6 @@
    <Line2 column1="0.000000" column2="2401.000000" column3="5200.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
   <CustomShapeGeometry>
    <PropertyValue name="ViewBox">
     <ViewBox x="0" y="0" width="21600" height="21600"/>
@@ -2196,7 +2185,6 @@
    <Line2 column1="0.000000" column2="2401.000000" column3="5400.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
   <CustomShapeGeometry>
    <PropertyValue name="ViewBox">
     <ViewBox x="0" y="0" width="21600" height="21600"/>
@@ -2275,7 +2263,6 @@
    <Line2 column1="0.000000" column2="2601.000000" column3="9800.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
   <CustomShapeGeometry>
    <PropertyValue name="ViewBox">
     <ViewBox x="0" y="0" width="21600" height="21600"/>
@@ -2390,7 +2377,6 @@
    <Line2 column1="0.000000" column2="2801.000000" column3="9800.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
   <CustomShapeGeometry>
    <PropertyValue name="ViewBox">
     <ViewBox x="0" y="0" width="21600" height="21600"/>
@@ -2500,7 +2486,6 @@
    <Line2 column1="0.000000" column2="3201.000000" column3="9200.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
   <CustomShapeGeometry>
    <PropertyValue name="ViewBox">
     <ViewBox x="0" y="0" width="21600" height="21600"/>
@@ -2610,7 +2595,6 @@
    <Line2 column1="0.000000" column2="3401.000000" column3="9600.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
   <CustomShapeGeometry>
    <PropertyValue name="ViewBox">
     <ViewBox x="0" y="0" width="21600" height="21600"/>
@@ -2753,7 +2737,6 @@
    <Line2 column1="0.000000" column2="2401.000000" column3="9800.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
   <CustomShapeGeometry>
    <PropertyValue name="ViewBox">
     <ViewBox x="0" y="0" width="21600" height="21600"/>
@@ -2990,7 +2973,6 @@
    <Line2 column1="0.000000" column2="3001.000000" column3="9600.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
   <CustomShapeGeometry>
    <PropertyValue name="ViewBox">
     <ViewBox x="0" y="0" width="21600" height="21600"/>

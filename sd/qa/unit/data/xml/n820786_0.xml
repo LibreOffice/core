@@ -13,9 +13,6 @@
    <Line2 column1="1371.000000" column2="0.000000" column3="6036.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -82,9 +79,6 @@
      <Line2 column1="0.000000" column2="-1058.000000" column3="12758.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag>
-     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -169,9 +163,6 @@
      <Line2 column1="0.000000" column2="-1058.000000" column3="12758.000000"/>
      <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
     </Transformation>
-    <InteropGrabBag>
-     <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-    </InteropGrabBag>
     <CustomShapeGeometry>
      <PropertyValue name="AdjustmentValues">
       <AdjustmentValues/>
@@ -249,7 +240,6 @@
    <Line2 column1="0.000000" column2="1058.000000" column3="11701.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag/>
  </XShape>
  <XShape positionX="6985" positionY="2309" sizeX="1481" sizeY="1481" type="com.sun.star.drawing.CustomShape" name="Rectangle 1" fontHeight="24.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="HATCH" fillColor="729fcf" fillTransparence="0" fillTransparenceGradientName="">
   <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
@@ -264,16 +254,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="2309.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -338,16 +318,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="2309.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -412,16 +382,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="2309.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -486,16 +446,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="2309.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -560,16 +510,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="2309.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -634,16 +574,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="2309.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -708,16 +638,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="4145.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -782,16 +702,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="4145.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -856,16 +766,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="4145.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -930,16 +830,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="4145.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -1004,16 +894,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="4145.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -1078,16 +958,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="4145.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -1152,16 +1022,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="5981.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -1226,16 +1086,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="5981.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -1300,16 +1150,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="5981.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -1374,16 +1214,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="5981.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -1448,16 +1278,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="5981.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -1522,16 +1342,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="5981.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -1596,16 +1406,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="7816.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -1670,16 +1470,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="7816.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -1744,16 +1534,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="7816.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -1818,16 +1598,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="7816.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -1892,16 +1662,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="7816.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -1966,16 +1726,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="7816.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -2040,16 +1790,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="9652.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -2114,16 +1854,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="9652.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -2188,16 +1918,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="9652.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -2262,16 +1982,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="9652.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -2336,16 +2046,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="9652.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -2410,16 +2110,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="9652.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -2484,16 +2174,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="11488.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -2558,16 +2238,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="11488.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -2632,16 +2302,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="11488.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -2706,16 +2366,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="11488.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -2780,16 +2430,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="11488.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -2854,16 +2494,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="11488.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -2928,16 +2558,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="13323.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -3002,16 +2622,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="13323.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -3076,16 +2686,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="13323.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -3150,16 +2750,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="13323.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -3224,16 +2814,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="13323.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -3298,16 +2878,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="13323.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -3372,16 +2942,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="15159.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -3446,16 +3006,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="15159.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -3520,16 +3070,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="15159.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -3594,16 +3134,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="15159.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -3668,16 +3198,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="15159.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -3742,16 +3262,6 @@
    <Line2 column1="0.000000" column2="1482.000000" column3="15159.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OriginalSolidFillClr" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="StyleFillRef">
-    <StyleFillRef>
-     <PropertyValue name="SchemeClr" value="accent1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Idx" value="1" handle="0" propertyState="DIRECT_VALUE"/>
-     <PropertyValue name="Color" value="52377" handle="0" propertyState="DIRECT_VALUE"/>
-    </StyleFillRef>
-   </PropertyValue>
-  </InteropGrabBag>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>

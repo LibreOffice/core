@@ -148,14 +148,14 @@ void dumpSizeAsAttribute(const com::sun::star::awt::Size& rSize, xmlTextWriterPt
 
 // the rest
 void dumpShapeDescriptorAsAttribute( com::sun::star::uno::Reference< com::sun::star::drawing::XShapeDescriptor > xDescr, xmlTextWriterPtr xmlWriter );
-void dumpXShape(com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape, xmlTextWriterPtr xmlWriter);
-void dumpXShapes( com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > xShapes, xmlTextWriterPtr xmlWriter );
+void dumpXShape(com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties);
+void dumpXShapes( com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > xShapes, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties );
 void dumpTextPropertiesService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
 void dumpFillPropertiesService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
 void dumpLinePropertiesService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
 void dumpShadowPropertiesService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
 void dumpPolyPolygonDescriptorService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
-void dumpShapeService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
+void dumpShapeService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties);
 void dumpPolyPolygonBezierDescriptorService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
 void dumpCustomShapeService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
 
@@ -1674,7 +1674,7 @@ void dumpPolyPolygonDescriptorService(uno::Reference< beans::XPropertySet > xPro
     }
 }
 
-void dumpShapeService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter)
+void dumpShapeService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties)
 {
     uno::Reference< beans::XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
     {
@@ -1744,7 +1744,7 @@ void dumpShapeService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWri
         if(anotherAny >>= sHyperlink)
             dumpHyperlinkAsAttribute(sHyperlink, xmlWriter);
     }
-    if(xInfo->hasPropertyByName("InteropGrabBag"))
+    if(xInfo->hasPropertyByName("InteropGrabBag") && bDumpInteropProperties)
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("InteropGrabBag");
         uno::Sequence< beans::PropertyValue> aInteropGrabBag;
@@ -1805,7 +1805,7 @@ void dumpCustomShapeService(uno::Reference< beans::XPropertySet > xPropSet, xmlT
     }
 }
 
-void dumpXShape(uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlWriter)
+void dumpXShape(uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties)
 {
     xmlTextWriterStartElement( xmlWriter, BAD_CAST( "XShape" ) );
     uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY_THROW);
@@ -1851,7 +1851,7 @@ void dumpXShape(uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlWr
     if(xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
     {
         uno::Reference< drawing::XShapes > xShapes(xShape, uno::UNO_QUERY_THROW);
-        dumpXShapes(xShapes, xmlWriter);
+        dumpXShapes(xShapes, xmlWriter, bDumpInteropProperties);
     }
     if(xServiceInfo->supportsService("com.sun.star.drawing.FillProperties"))
         dumpFillPropertiesService(xPropSet, xmlWriter);
@@ -1866,7 +1866,7 @@ void dumpXShape(uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlWr
         dumpShadowPropertiesService(xPropSet, xmlWriter);
 
     if(xServiceInfo->supportsService("com.sun.star.drawing.Shape"))
-        dumpShapeService(xPropSet, xmlWriter);
+        dumpShapeService(xPropSet, xmlWriter, bDumpInteropProperties);
 
     if(xServiceInfo->supportsService("com.sun.star.drawing.PolyPolygonBezierDescriptor"))
         dumpPolyPolygonBezierDescriptorService(xPropSet, xmlWriter);
@@ -1921,7 +1921,7 @@ void dumpXShape(uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlWr
     xmlTextWriterEndElement( xmlWriter );
 }
 
-void dumpXShapes( uno::Reference< drawing::XShapes > xShapes, xmlTextWriterPtr xmlWriter )
+void dumpXShapes( uno::Reference< drawing::XShapes > xShapes, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties )
 {
     xmlTextWriterStartElement( xmlWriter, BAD_CAST( "XShapes" ) );
     uno::Reference< container::XIndexAccess > xIA( xShapes, uno::UNO_QUERY_THROW);
@@ -1929,14 +1929,14 @@ void dumpXShapes( uno::Reference< drawing::XShapes > xShapes, xmlTextWriterPtr x
     for (sal_Int32 i = 0; i < nLength; ++i)
     {
         uno::Reference< drawing::XShape > xShape( xIA->getByIndex( i ), uno::UNO_QUERY_THROW );
-        dumpXShape( xShape, xmlWriter );
+        dumpXShape( xShape, xmlWriter, bDumpInteropProperties );
     }
 
     xmlTextWriterEndElement( xmlWriter );
 }
 } //end of namespace
 
-OUString XShapeDumper::dump(uno::Reference<drawing::XShapes> xPageShapes)
+OUString XShapeDumper::dump(uno::Reference<drawing::XShapes> xPageShapes, bool bDumpInteropProperties)
 {
 
     OStringBuffer aString;
@@ -1948,7 +1948,7 @@ OUString XShapeDumper::dump(uno::Reference<drawing::XShapes> xPageShapes)
 
     try
     {
-        dumpXShapes( xPageShapes, xmlWriter );
+        dumpXShapes( xPageShapes, xmlWriter, bDumpInteropProperties );
     }
     catch (const beans::UnknownPropertyException& e)
     {
