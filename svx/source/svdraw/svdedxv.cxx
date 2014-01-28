@@ -1228,11 +1228,14 @@ sal_Bool SdrObjEditView::MouseButtonDown(const MouseEvent& rMEvt, Window* pWin)
         }
         if (bPostIt) {
             Point aPixPos(rMEvt.GetPosPixel());
-            Rectangle aR(pWin->LogicToPixel(pTextEditOutlinerView->GetOutputArea()));
-            if (aPixPos.X()<aR.Left  ()) aPixPos.X()=aR.Left  ();
-            if (aPixPos.X()>aR.Right ()) aPixPos.X()=aR.Right ();
-            if (aPixPos.Y()<aR.Top   ()) aPixPos.Y()=aR.Top   ();
-            if (aPixPos.Y()>aR.Bottom()) aPixPos.Y()=aR.Bottom();
+            if (pWin)
+            {
+                Rectangle aR(pWin->LogicToPixel(pTextEditOutlinerView->GetOutputArea()));
+                if (aPixPos.X()<aR.Left  ()) aPixPos.X()=aR.Left  ();
+                if (aPixPos.X()>aR.Right ()) aPixPos.X()=aR.Right ();
+                if (aPixPos.Y()<aR.Top   ()) aPixPos.Y()=aR.Top   ();
+                if (aPixPos.Y()>aR.Bottom()) aPixPos.Y()=aR.Bottom();
+            }
             MouseEvent aMEvt(aPixPos,rMEvt.GetClicks(),rMEvt.GetMode(),
                              rMEvt.GetButtons(),rMEvt.GetModifier());
             if (pTextEditOutlinerView->MouseButtonDown(aMEvt)) {
