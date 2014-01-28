@@ -37,7 +37,7 @@ void decode(const OUString& rIn, const OUString &rOut)
     sal_uInt8 in[8192];
     sal_uInt8 out[8192];
     sal_uInt64 nBytesRead, nBytesWritten;
-    while(1)
+    while(true)
     {
         CPPUNIT_ASSERT(osl::FileBase::E_None == aIn.read(in, sizeof(in), nBytesRead));
         if (!nBytesRead)
