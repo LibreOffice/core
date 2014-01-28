@@ -111,13 +111,13 @@ public:
         @param pTypeDescr another type description
         @return true, if both type descriptions are equal, false otherwise
     */
-    inline sal_Bool SAL_CALL equals( const typelib_TypeDescription * pTypeDescr ) const SAL_THROW(());
+    inline bool SAL_CALL equals( const typelib_TypeDescription * pTypeDescr ) const SAL_THROW(());
     /** Tests whether two type descriptions are equal.
 
         @param rTypeDescr another type description
         @return true, if both type descriptions are equal, false otherwise
     */
-    inline sal_Bool SAL_CALL equals( const TypeDescription & rTypeDescr ) const SAL_THROW(())
+    inline bool SAL_CALL equals( const TypeDescription & rTypeDescr ) const SAL_THROW(())
         { return equals( rTypeDescr._pTypeDescr ); }
 
     /** Makes stored type description complete.
@@ -134,7 +134,7 @@ public:
 
         @return true, if a type description is set, false otherwise
     */
-    inline sal_Bool SAL_CALL is() const SAL_THROW(())
+    inline bool SAL_CALL is() const SAL_THROW(())
         { return (_pTypeDescr != 0); }
 };
 //__________________________________________________________________________________________________
@@ -194,7 +194,7 @@ inline TypeDescription & TypeDescription::operator = ( typelib_TypeDescription *
     return *this;
 }
 //__________________________________________________________________________________________________
-inline sal_Bool TypeDescription::equals( const typelib_TypeDescription * pTypeDescr ) const SAL_THROW(())
+inline bool TypeDescription::equals( const typelib_TypeDescription * pTypeDescr ) const SAL_THROW(())
 {
     return (_pTypeDescr && pTypeDescr &&
             typelib_typedescription_equals( _pTypeDescr, pTypeDescr ));
