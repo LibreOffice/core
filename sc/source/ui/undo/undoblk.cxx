@@ -786,6 +786,8 @@ void ScUndoCut::DoChange( const sal_Bool bUndo )
         ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
         if ( pChangeTrack )
             pChangeTrack->Undo( nStartChangeAction, nEndChangeAction );
+
+        BroadcastChanges(aCopyRange);
     }
     else        // only for Redo
     {
