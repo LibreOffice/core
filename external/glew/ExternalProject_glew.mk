@@ -24,7 +24,7 @@ else
 
 $(call gb_ExternalProject_get_state_target,glew,build) :
 	$(call gb_ExternalProject_run,glew,\
-		$(if $(filter TRUE,$(ENABLE_DEBUG)),STRIP=) $(MAKE) $(if $(filter TRUE,$(ENABLE_DEBUG)),debug) \
+		$(if $(filter TRUE,$(ENABLE_DEBUG)),STRIP=) $(MAKE) glew.lib $(if $(filter TRUE,$(ENABLE_DEBUG)),debug) \
 	)
 
 endif
