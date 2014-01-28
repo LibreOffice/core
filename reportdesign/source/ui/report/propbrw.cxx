@@ -140,7 +140,7 @@ PropBrw::PropBrw(const Reference< XComponentContext >& _xORB, Window* pParent, O
             if ( !m_xBrowserController.is() )
             {
                 const OUString sServiceName( "com.sun.star.inspection.ObjectInspector" );
-                ShowServiceNotAvailableError(pParent, sServiceName, sal_True);
+                ShowServiceNotAvailableError(pParent, sServiceName, true);
             }
             else
             {

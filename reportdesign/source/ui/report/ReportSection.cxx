@@ -207,7 +207,7 @@ void OReportSection::fill()
     m_pView->SetSnapGridWidth(aX, aY);
 
     m_pView->SetGridSnap( pDesignView->isGridSnap() );
-    m_pView->SetGridFront( sal_False );
+    m_pView->SetGridFront( false );
     m_pView->SetDragStripes( sal_True );
     m_pView->SetPageVisible();
     sal_Int32 nColor = m_xSection->getBackColor();
@@ -224,7 +224,7 @@ void OReportSection::fill()
 // LLA: TODO
 //  m_pPage->SetUppBorder(-10000);
 
-    m_pView->SetDesignMode( sal_True );
+    m_pView->SetDesignMode( true );
 
     m_pView->StartListening( *m_pModel  );
     m_pPage->SetSize( Size( getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width,5*m_xSection->getHeight()) );
@@ -448,7 +448,7 @@ void lcl_insertMenuItemImages(
             else
             {
                 const OUString sCommand = rContextMenu.GetItemCommand(nId);
-                rContextMenu.SetItemImage(nId,framework::GetImageFromURL(_rFrame,sCommand,sal_False));
+                rContextMenu.SetItemImage(nId,framework::GetImageFromURL(_rFrame,sCommand,false));
                 if ( nId == SID_PAGEHEADERFOOTER )
                 {
                     OUString sText = ModuleRes((_xReportDefinition.is() && _xReportDefinition->getPageHeaderOn()) ? RID_STR_PAGEHEADERFOOTER_DELETE : RID_STR_PAGEHEADERFOOTER_INSERT);

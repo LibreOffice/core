@@ -491,7 +491,7 @@ void lcl_calculate(const ::std::vector<sal_Int32>& _aPosX,const ::std::vector<sa
             for (sal_Int32 i = 0; i < nCountX ; ++i)
             {
                 _rColumns[j].second[i] = ORptExport::TCell(_aPosX[i+1] - _aPosX[i],nHeight,1,1);
-                _rColumns[j].second[i].bSet = sal_True;
+                _rColumns[j].second[i].bSet = true;
             }
     }
 }

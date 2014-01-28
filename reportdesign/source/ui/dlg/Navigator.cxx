@@ -236,7 +236,7 @@ NavigatorTree::NavigatorTree( Window* pParent,OReportController& _rController )
     );
 
     SetDragDropMode(0xFFFF);
-    EnableInplaceEditing( sal_False );
+    EnableInplaceEditing( false );
     SetSelectionMode(MULTIPLE_SELECTION);
     Clear();
 

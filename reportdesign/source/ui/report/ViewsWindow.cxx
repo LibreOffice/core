@@ -1591,7 +1591,7 @@ void OViewsWindow::handleKey(const KeyCode& _rCode)
 
                         // switch snapping off
                         if ( !bWasNoSnap )
-                            ((SdrDragStat&)rDragStat).SetNoSnap( sal_True );
+                            ((SdrDragStat&)rDragStat).SetNoSnap( true );
                         if ( bWasSnapEnabled )
                             rView.SetSnapEnabled( sal_False );
 

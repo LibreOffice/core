@@ -714,7 +714,7 @@ void OReportDefinition::init()
 {
     try
     {
-        static bool s_bFirstTime = sal_True;
+        static bool s_bFirstTime = true;
         if ( s_bFirstTime )
         {
             s_bFirstTime = false;

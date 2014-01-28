@@ -947,7 +947,7 @@ OGroupsSortingDialog::OGroupsSortingDialog( Window* _pParent
     {
         pControlsLst[i]->SetGetFocusHdl(LINK(this, OGroupsSortingDialog, OnControlFocusGot));
         pControlsLst[i]->SetLoseFocusHdl(LINK(this, OGroupsSortingDialog, OnControlFocusLost));
-        pControlsLst[i]->Show(sal_True);
+        pControlsLst[i]->Show(true);
     }
 
     for (size_t i = 0; i < (sizeof (pControlsLst) / sizeof (pControlsLst[0])) - 1; ++i)
@@ -962,7 +962,7 @@ OGroupsSortingDialog::OGroupsSortingDialog( Window* _pParent
 
     for (size_t i = 0; i < sizeof (pControlsLst) / sizeof (pControlsLst[0]); ++i)
     {
-        pControls[i]->Show(sal_True);
+        pControls[i]->Show(true);
         OUString sText = pControls[i]->GetText();
         OUString sNewText = aMnemonicGenerator.CreateMnemonic(sText);
         if ( sText != sNewText )

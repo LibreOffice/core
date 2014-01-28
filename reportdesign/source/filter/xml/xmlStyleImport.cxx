@@ -64,7 +64,7 @@ public:
             const SvXMLNamespaceMap& /*rNamespaceMap*/ ) const
     {
         // nothing to do here
-        return sal_True;
+        return true;
     }
 };
 
