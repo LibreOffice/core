@@ -174,7 +174,7 @@ static sal_Bool equals( const TestData & rData1, const TestData & rData2 )
         {
             if (! equals( pElements1[nLen], pElements2[nLen] ))
             {
-                check( sal_False, "### sequence element did not match!" );
+                check( false, "### sequence element did not match!" );
                 return sal_False;
             }
         }
@@ -983,7 +983,7 @@ static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
                 }
                 else
                 {
-                    check( sal_False, "### unexpected exception content!" );
+                    check( false, "### unexpected exception content!" );
                 }
 
                 /** it is certain, that the RuntimeException testing will fail, if no */
@@ -1003,7 +1003,7 @@ static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
             }
             else
             {
-                check( sal_False, "### unexpected exception content!" );
+                check( false, "### unexpected exception content!" );
             }
 
             /** it is certain, that the RuntimeException testing will fail, if no */
@@ -1023,7 +1023,7 @@ static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
         }
         else
         {
-            check( sal_False, "### unexpected exception content!" );
+            check( false, "### unexpected exception content!" );
         }
         return (nCount == 3);
     }
