@@ -135,7 +135,14 @@ static void getRuntimeImpl( PyRef & globalDict, PyRef &runtimeImpl )
                                 Reference< XInterface > () );
     }
 
-    globalDict = PyRef( PyModule_GetDict(PyImport_AddModule("__main__")));
+    PyObject* pModule = PyImport_AddModule("__main__");
+
+    if (!pModule)
+    {
+        throw RuntimeException("can't import __main__ module", Reference< XInterface > ());
+    }
+
+    globalDict = PyRef( PyModule_GetDict(pModule));
 
     if( ! globalDict.is() ) // FATAL !
     {
