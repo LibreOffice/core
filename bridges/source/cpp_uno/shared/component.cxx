@@ -220,7 +220,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
         {
             // ref count initially 1
             pMapping = bridges::cpp_uno::shared::Bridge::createMapping(
-                pFrom->pExtEnv, pTo->pExtEnv, sal_True );
+                pFrom->pExtEnv, pTo->pExtEnv, true );
             ::uno_registerMapping(
                 &pMapping, bridges::cpp_uno::shared::freeMapping,
                 (uno_Environment *)pFrom->pExtEnv,
@@ -234,7 +234,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
         {
             // ref count initially 1
             pMapping = bridges::cpp_uno::shared::Bridge::createMapping(
-                pTo->pExtEnv, pFrom->pExtEnv, sal_False );
+                pTo->pExtEnv, pFrom->pExtEnv, false );
             ::uno_registerMapping(
                 &pMapping, bridges::cpp_uno::shared::freeMapping,
                 (uno_Environment *)pFrom->pExtEnv,
