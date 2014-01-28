@@ -199,12 +199,9 @@ namespace bib
     {
         createToolBar();
         createGridWin();
-        if ( pDatMan )
-            pDatMan->SetToolbar(pToolBar);
+        pDatMan->SetToolbar(pToolBar);
         pGridWin->Show();
-
-        if ( pDatMan )
-            connectForm( pDatMan );
+        connectForm( pDatMan );
     }
 
     //---------------------------------------------------------------------
@@ -218,8 +215,7 @@ namespace bib
 
         if ( pToolBar )
         {
-            if ( pDatMan )
-                pDatMan->SetToolbar(0);
+            pDatMan->SetToolbar(0);
 
             DELETEZ( pToolBar );
         }
