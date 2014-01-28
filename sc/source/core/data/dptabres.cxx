@@ -1383,7 +1383,7 @@ void ScDPResultMember::FillMemberResults(
         }
 
         ScDPItemData::Type eType = aItemData.GetType();
-        bIsNumeric = eType == ScDPItemData::Value || ScDPItemData::GroupValue;
+        bIsNumeric = eType == ScDPItemData::Value || eType == ScDPItemData::GroupValue;
     }
 
     const ScDPDimension*        pParentDim = GetParentDim();
