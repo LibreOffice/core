@@ -1380,17 +1380,8 @@ OUString LocaleDataWrapper::getTime( const Time& rTime, sal_Bool bSec, sal_Bool 
     sal_Unicode aBuf[128];
     sal_Unicode* pBuf = aBuf;
     sal_uInt16  nHour = rTime.GetHour();
-    sal_Bool bHour12 = sal_False;   //!TODO: AM/PM from default time format code
 
-    if ( bHour12 )
-    {
-        nHour %= 12;
-        // 0:00 -> 12:00
-        if ( !nHour )
-            nHour = 12;
-    }
-    else
-        nHour %= 24;
+    nHour %= 24;
 
     pBuf = ImplAdd2UNum( pBuf, nHour, sal_True /* IsTimeLeadingZero() */ );
     pBuf = ImplAddString( pBuf, getTimeSep() );
@@ -1407,17 +1398,7 @@ OUString LocaleDataWrapper::getTime( const Time& rTime, sal_Bool bSec, sal_Bool 
         }
     }
 
-    OUString aStr(aBuf, pBuf - aBuf);
-
-    if ( bHour12 )
-    {
-        if ( (rTime.GetHour() % 24) >= 12 )
-            aStr += getTimePM();
-        else
-            aStr += getTimeAM();
-    }
-
-    return aStr;
+    return OUString(aBuf, pBuf - aBuf);
 }
 
 
