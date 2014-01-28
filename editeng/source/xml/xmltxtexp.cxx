@@ -440,7 +440,7 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
 */
 
         }
-        while( 0 );
+        while( false );
     }
     catch( const uno::Exception& )
     {

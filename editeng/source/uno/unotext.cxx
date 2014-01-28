@@ -1256,7 +1256,7 @@ void SvxUnoTextRangeBase::_setPropertyToDefault(SvxTextForwarder* pForwarder, co
 
         return;
     }
-    while(0);
+    while(false);
 }
 
 uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyDefault( const OUString& aPropertyName )

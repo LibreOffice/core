@@ -1343,7 +1343,7 @@ void ContentNode::ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNew, SfxItemPool
 //              if ( pAttrib->GetStart() == nIndex )
                 pAttrib->Expand( nNew );
                 if ( pAttrib->GetStart() == 0 )
-                    bExpandedEmptyAtIndexNull = sal_True;
+                    bExpandedEmptyAtIndexNull = true;
             }
             // 1: Attribute starts before, goes to index ...
             else if ( pAttrib->GetEnd() == nIndex ) // Start must be before
@@ -1358,7 +1358,7 @@ void ContentNode::ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNew, SfxItemPool
                         pAttrib->Expand( nNew );
                 }
                 else
-                    bResort = sal_True;
+                    bResort = true;
             }
             // 2: Attribute starts before, goes past the Index...
             else if ( ( pAttrib->GetStart() < nIndex ) && ( pAttrib->GetEnd() > nIndex ) )
@@ -1372,14 +1372,14 @@ void ContentNode::ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNew, SfxItemPool
                 if ( pAttrib->IsFeature() )
                 {
                     pAttrib->MoveForward( nNew );
-                    bResort = sal_True;
+                    bResort = true;
                 }
                 else
                 {
                     bool bExpand = false;
                     if ( nIndex == 0 )
                     {
-                        bExpand = sal_True;
+                        bExpand = true;
                         if( bExpandedEmptyAtIndexNull )
                         {
                             // Check if this kind of attribut was empty and expanded here...
@@ -1474,7 +1474,7 @@ void ContentNode::CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDeleted, SfxIte
                 if ( !pAttrib->IsFeature() && ( pAttrib->GetStart() == nIndex ) && ( pAttrib->GetEnd() == nEndChanges ) )
                     pAttrib->GetEnd() = nIndex; // empty
                 else
-                    bDelAttr = sal_True;
+                    bDelAttr = true;
             }
             // 2. Attribute starts earlier, ends inside or behind it ...
             else if ( ( pAttrib->GetStart() <= nIndex ) && ( pAttrib->GetEnd() > nIndex ) )
@@ -1492,7 +1492,7 @@ void ContentNode::CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDeleted, SfxIte
                 if ( pAttrib->IsFeature() )
                 {
                     pAttrib->MoveBackward( nDeleted );
-                    bResort = sal_True;
+                    bResort = true;
                 }
                 else
                 {
@@ -2265,7 +2265,7 @@ EditPaM EditDoc::InsertText( EditPaM aPaM, const OUString& rStr )
     aPaM.GetNode()->ExpandAttribs( aPaM.GetIndex(), rStr.getLength(), GetItemPool() );
     aPaM.SetIndex( aPaM.GetIndex() + rStr.getLength() );
 
-    SetModified( sal_True );
+    SetModified( true );
 
     return aPaM;
 }
@@ -2282,7 +2282,7 @@ EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, sal_Bool bKeepEndingAttribs )
     ContentAttribs aContentAttribs( aPaM.GetNode()->GetContentAttribs() );
 
     // for a new paragraph we like to have the bullet/numbering visible by default
-    aContentAttribs.GetItems().Put( SfxBoolItem( EE_PARA_BULLETSTATE, sal_True), EE_PARA_BULLETSTATE );
+    aContentAttribs.GetItems().Put( SfxBoolItem( EE_PARA_BULLETSTATE, true), EE_PARA_BULLETSTATE );
 
     // ContenNode constructor copies also the paragraph attributes
     ContentNode* pNode = new ContentNode( aStr, aContentAttribs );
@@ -2324,7 +2324,7 @@ EditPaM EditDoc::InsertFeature( EditPaM aPaM, const SfxPoolItem& rItem  )
     DBG_ASSERT( pAttrib, "Why can not the feature be created?" );
     aPaM.GetNode()->GetCharAttribs().InsertAttrib( pAttrib );
 
-    SetModified( sal_True );
+    SetModified( true );
 
     aPaM.SetIndex( aPaM.GetIndex() + 1 );
     return aPaM;
@@ -2355,7 +2355,7 @@ EditPaM EditDoc::RemoveChars( EditPaM aPaM, sal_uInt16 nChars )
     aPaM.GetNode()->Erase( aPaM.GetIndex(), nChars );
     aPaM.GetNode()->CollapsAttribs( aPaM.GetIndex(), nChars, GetItemPool() );
 
-    SetModified( sal_True );
+    SetModified( true );
 
     return aPaM;
 }
@@ -2432,7 +2432,7 @@ sal_Bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_uInt16 nStart, sal_uInt
             // Attribute starts in Selection
             if ( ( pAttr->GetStart() >= nStart ) && ( pAttr->GetStart() <= nEnd ) )
             {
-                bChanged = sal_True;
+                bChanged = true;
                 if ( pAttr->GetEnd() > nEnd )
                 {
                     pAttr->GetStart() = nEnd;   // then it starts after this
@@ -2443,14 +2443,14 @@ sal_Bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_uInt16 nStart, sal_uInt
                 else if ( !pAttr->IsFeature() || ( pAttr->GetStart() == nStart ) )
                 {
                     // Delete feature only if on the exact spot
-                    bRemoveAttrib = sal_True;
+                    bRemoveAttrib = true;
                 }
             }
 
             // Attribute ends in Selection
             else if ( ( pAttr->GetEnd() >= nStart ) && ( pAttr->GetEnd() <= nEnd ) )
             {
-                bChanged = sal_True;
+                bChanged = true;
                 if ( ( pAttr->GetStart() < nStart ) && !pAttr->IsFeature() )
                 {
                     pAttr->GetEnd() = nStart;   // then it ends here
@@ -2459,13 +2459,13 @@ sal_Bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_uInt16 nStart, sal_uInt
                 else if ( !pAttr->IsFeature() || ( pAttr->GetStart() == nStart ) )
                 {
                     // Delete feature only if on the exact spot
-                    bRemoveAttrib = sal_True;
+                    bRemoveAttrib = true;
                 }
             }
             // Attribute overlaps the selection
             else if ( ( pAttr->GetStart() <= nStart ) && ( pAttr->GetEnd() >= nEnd ) )
             {
-                bChanged = sal_True;
+                bChanged = true;
                 if ( pAttr->GetStart() == nStart )
                 {
                     pAttr->GetStart() = nEnd;
@@ -2521,7 +2521,7 @@ void EditDoc::InsertAttrib( const SfxPoolItem& rPoolItem, ContentNode* pNode, sa
     DBG_ASSERT( pAttrib, "MakeCharAttrib failed!" );
     pNode->GetCharAttribs().InsertAttrib( pAttrib );
 
-    SetModified( sal_True );
+    SetModified( true );
 }
 
 void EditDoc::InsertAttrib( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, const SfxPoolItem& rPoolItem )
@@ -2564,7 +2564,7 @@ void EditDoc::InsertAttrib( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nE
         InsertAttrib( rPoolItem, pNode, nStart, nStart );
     }
 
-    SetModified( sal_True );
+    SetModified( true );
 }
 
 void EditDoc::FindAttribs( ContentNode* pNode, sal_uInt16 nStartPos, sal_uInt16 nEndPos, SfxItemSet& rCurSet )

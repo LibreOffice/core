@@ -404,7 +404,7 @@ bool SvxAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
                     eVal != SVX_ADJUST_LEFT &&
                     eVal != SVX_ADJUST_BLOCK &&
                     eVal != SVX_ADJUST_CENTER)
-                        return sal_False;
+                        return false;
                 if(eVal < (sal_uInt16)SVX_ADJUST_END)
                     nMemberId == MID_PARA_ADJUST ?
                         SetAdjust((SvxAdjust)eVal) :
@@ -978,7 +978,7 @@ bool SvxTabStopItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             break;
         }
     }
-    return sal_True;
+    return true;
 }
 
 bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
@@ -994,7 +994,7 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             {
                 uno::Sequence < uno::Sequence < uno::Any >  > aAnySeq;
                 if (!(rVal >>= aAnySeq))
-                    return sal_False;
+                    return false;
                 sal_Int32 nLength = aAnySeq.getLength();
                 aSeq.realloc( nLength );
                 for ( sal_Int32 n=0; n<nLength; n++ )
@@ -1002,14 +1002,14 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     uno::Sequence < uno::Any >& rAnySeq = aAnySeq[n];
                     if ( rAnySeq.getLength() == 4 )
                     {
-                        if (!(rAnySeq[0] >>= aSeq[n].Position)) return sal_False;
+                        if (!(rAnySeq[0] >>= aSeq[n].Position)) return false;
                         if (!(rAnySeq[1] >>= aSeq[n].Alignment))
                         {
                             sal_Int32 nVal = 0;
                             if (rAnySeq[1] >>= nVal)
                                 aSeq[n].Alignment = (com::sun::star::style::TabAlign) nVal;
                             else
-                                return sal_False;
+                                return false;
                         }
                         if (!(rAnySeq[2] >>= aSeq[n].DecimalChar))
                         {
@@ -1017,7 +1017,7 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                             if ( (rAnySeq[2] >>= aVal) && aVal.getLength() == 1 )
                                 aSeq[n].DecimalChar = aVal.toChar();
                             else
-                                return sal_False;
+                                return false;
                         }
                         if (!(rAnySeq[3] >>= aSeq[n].FillChar))
                         {
@@ -1025,11 +1025,11 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                             if ( (rAnySeq[3] >>= aVal) && aVal.getLength() == 1 )
                                 aSeq[n].FillChar = aVal.toChar();
                             else
-                                return sal_False;
+                                return false;
                         }
                     }
                     else
-                        return sal_False;
+                        return false;
                 }
             }
 
@@ -1061,11 +1061,11 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             sal_Int32 nNewPos = 0;
             if (!(rVal >>= nNewPos) )
-                return sal_False;
+                return false;
             if (bConvert)
                 nNewPos = MM100_TO_TWIP ( nNewPos );
             if (nNewPos <= 0)
-                return sal_False;
+                return false;
             const SvxTabStop& rTab = maTabStops.front();
             SvxTabStop aNewTab ( nNewPos, rTab.GetAdjustment(), rTab.GetDecimal(), rTab.GetFill() );
             Remove( 0 );
@@ -1073,7 +1073,7 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             break;
         }
     }
-    return sal_True;
+    return true;
 }
 // -----------------------------------------------------------------------
 
@@ -1084,12 +1084,12 @@ bool SvxTabStopItem::operator==( const SfxPoolItem& rAttr ) const
     const SvxTabStopItem& rTSI = (SvxTabStopItem&)rAttr;
 
     if ( Count() != rTSI.Count() )
-        return 0;
+        return false;
 
     for ( sal_uInt16 i = 0; i < Count(); ++i )
         if( !(*this)[i].IsEqual( rTSI[i] ) )
-            return 0;
-    return 1;
+            return false;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -1314,10 +1314,10 @@ bool SvxPageModelItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMe
     {
         case MID_AUTO: rVal <<= (sal_Bool) bAuto; break;
         case MID_NAME: rVal <<= OUString( GetValue() ); break;
-        default: OSL_FAIL("Wrong MemberId!"); return sal_False;
+        default: OSL_FAIL("Wrong MemberId!"); return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 bool SvxPageModelItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
@@ -1329,7 +1329,7 @@ bool SvxPageModelItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8
     {
         case MID_AUTO: bRet = ( rVal >>= bAuto ); break;
         case MID_NAME: bRet = ( rVal >>= aStr ); if ( bRet ) SetValue(aStr); break;
-        default: OSL_FAIL("Wrong MemberId!"); return sal_False;
+        default: OSL_FAIL("Wrong MemberId!"); return false;
     }
 
     return bRet;
@@ -1594,7 +1594,7 @@ bool SvxParaVertAlignItem::QueryValue( com::sun::star::uno::Any& rVal,
                                            sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= (sal_Int16)GetValue();
-    return sal_True;
+    return true;
 }
 
 bool SvxParaVertAlignItem::PutValue( const com::sun::star::uno::Any& rVal,
@@ -1604,10 +1604,10 @@ bool SvxParaVertAlignItem::PutValue( const com::sun::star::uno::Any& rVal,
     if((rVal >>= nVal) && nVal >=0 && nVal <= BOTTOM )
     {
         SetValue( (sal_uInt16)nVal );
-        return sal_True;
+        return true;
     }
     else
-        return sal_False;
+        return false;
 }
 
 bool SvxParaVertAlignItem::operator==( const SfxPoolItem& rItem ) const

@@ -2813,7 +2813,7 @@ namespace accessibility
                     catch (const lang::IndexOutOfBoundsException&)
                     {
                         // this is not the exception that should be raised in this function ...
-                        DBG_ASSERT( 0, "unexpected exception" );
+                        DBG_ASSERT( false, "unexpected exception" );
                     }
                 }
             }

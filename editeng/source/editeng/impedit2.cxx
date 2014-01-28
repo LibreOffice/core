@@ -154,7 +154,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
 
     // Access data already from here on!
     SetRefDevice( NULL );
-    InitDoc( sal_False );
+    InitDoc( false );
 
     bCallParaInsertedOrDeleted = true;
 
@@ -171,7 +171,7 @@ ImpEditEngine::~ImpEditEngine()
     // when a parent template is destroyed.
     // And this after the destruction of the data!
     bDowning = true;
-    SetUpdateMode( sal_False );
+    SetUpdateMode( false );
 
     delete pVirtDev;
     delete pEmptyItemSet;
@@ -308,7 +308,7 @@ sal_Bool ImpEditEngine::MouseButtonDown( const MouseEvent& rMEvt, EditView* pVie
     SetActiveView( pView );
 
     if (!GetAutoCompleteText().isEmpty())
-        SetAutoCompleteText( OUString(), sal_True );
+        SetAutoCompleteText( OUString(), true );
 
     GetSelEngine().SelMouseButtonDown( rMEvt );
     // Special treatment
@@ -485,7 +485,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                 FormatDoc();
 
             ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( GetEditDoc().GetPos( aPaM.GetNode() ) );
-            sal_uInt16 nLine = pParaPortion->GetLines().FindLine( aPaM.GetIndex(), sal_True );
+            sal_uInt16 nLine = pParaPortion->GetLines().FindLine( aPaM.GetIndex(), true );
             const EditLine* pLine = pParaPortion->GetLines()[nLine];
             if ( pLine && ( nInputEnd > pLine->GetEnd() ) )
                 nInputEnd = pLine->GetEnd();
@@ -543,7 +543,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                 FormatDoc();
 
             ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( GetEditDoc().GetPos( aPaM.GetNode() ) );
-            sal_uInt16 nLine = pParaPortion->GetLines().FindLine( aPaM.GetIndex(), sal_True );
+            sal_uInt16 nLine = pParaPortion->GetLines().FindLine( aPaM.GetIndex(), true );
             const EditLine* pLine = pParaPortion->GetLines()[nLine];
             if ( pLine )
             {
@@ -604,7 +604,7 @@ EditPaM ImpEditEngine::InsertText(const EditSelection& aSel, const OUString& rSt
 
 EditPaM ImpEditEngine::Clear()
 {
-    InitDoc( sal_False );
+    InitDoc( false );
 
     EditPaM aPaM = aEditDoc.GetStartPaM();
     EditSelection aSel( aPaM );
@@ -625,7 +625,7 @@ EditPaM ImpEditEngine::Clear()
 
 EditPaM ImpEditEngine::RemoveText()
 {
-    InitDoc( sal_True );
+    InitDoc( true );
 
     EditPaM aStartPaM = aEditDoc.GetStartPaM();
     EditSelection aEmptySel( aStartPaM, aStartPaM );
@@ -645,7 +645,7 @@ void ImpEditEngine::SetText(const OUString& rText)
     EditPaM aStartPaM = RemoveText();
     sal_Bool bUndoCurrentlyEnabled = IsUndoEnabled();
     // The text inserted manually can not be made reversable by the user
-    EnableUndo( sal_False );
+    EnableUndo( false );
 
     EditSelection aEmptySel( aStartPaM, aStartPaM );
     EditPaM aPaM = aStartPaM;
@@ -715,7 +715,7 @@ void ImpEditEngine::ParaAttribsChanged( ContentNode* pNode )
 {
     OSL_ENSURE( pNode, "ParaAttribsChanged: Which one?" );
 
-    aEditDoc.SetModified( sal_True );
+    aEditDoc.SetModified( true );
     bFormatted = false;
 
     ParaPortion* pPortion = FindParaPortion( pNode );
@@ -914,7 +914,7 @@ EditPaM ImpEditEngine::CursorVisualStartEnd( EditView* pEditView, const EditPaM&
     sal_Int32 nPara = GetEditDoc().GetPos( aPaM.GetNode() );
     ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( nPara );
 
-    sal_uInt16 nLine = pParaPortion->GetLines().FindLine( aPaM.GetIndex(), sal_False );
+    sal_uInt16 nLine = pParaPortion->GetLines().FindLine( aPaM.GetIndex(), false );
     const EditLine* pLine = pParaPortion->GetLines()[nLine];
     bool bEmptyLine = pLine->GetStart() == pLine->GetEnd();
 
@@ -940,7 +940,7 @@ EditPaM ImpEditEngine::CursorVisualStartEnd( EditView* pEditView, const EditPaM&
         aPaM.SetIndex( nLogPos + pLine->GetStart() );
 
         sal_uInt16 nTmp;
-        sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTmp, sal_True );
+        sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTmp, true );
         const TextPortion* pTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
         sal_uInt16 nRTLLevel = pTextPortion->GetRightToLeft();
         sal_Bool bPortionRTL = (nRTLLevel%2) ? sal_True : sal_False;
@@ -970,7 +970,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
     sal_Int32 nPara = GetEditDoc().GetPos( aPaM.GetNode() );
     ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( nPara );
 
-    sal_uInt16 nLine = pParaPortion->GetLines().FindLine( aPaM.GetIndex(), sal_False );
+    sal_uInt16 nLine = pParaPortion->GetLines().FindLine( aPaM.GetIndex(), false );
     const EditLine* pLine = pParaPortion->GetLines()[nLine];
     bool bEmptyLine = pLine->GetStart() == pLine->GetEnd();
 
@@ -1004,7 +1004,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
     {
         // Check if we are within a portion and don't have overwrite mode, then it's easy...
         sal_uInt16 nPortionStart;
-        sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nPortionStart, sal_False );
+        sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nPortionStart, false );
         const TextPortion* pTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
 
         sal_Bool bPortionBoundary = ( aPaM.GetIndex() == nPortionStart ) || ( aPaM.GetIndex() == (nPortionStart+pTextPortion->GetLen()) );
@@ -1110,7 +1110,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
                 // RTL portion, stay visually on the left side.
                 sal_uInt16 _nPortionStart;
                 // sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nPortionStart, !bRTLPortion );
-                sal_uInt16 _nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), _nPortionStart, sal_True );
+                sal_uInt16 _nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), _nPortionStart, true );
                 const TextPortion* _pTextPortion = pParaPortion->GetTextPortions()[_nTextPortion];
                 if ( bVisualToLeft && !bRTLPortion && ( _pTextPortion->GetRightToLeft() % 2 ) )
                     aPaM.SetIndex( aPaM.GetIndex()+1 );
@@ -2163,7 +2163,7 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_Int32 n
         CallNotify( aNotify );
     }
 
-    aEditDoc.SetModified( sal_True );
+    aEditDoc.SetModified( true );
 
     if ( pRecalc1 )
         CalcHeight( pRecalc1 );
@@ -3330,7 +3330,7 @@ void ImpEditEngine::UpdateSelections()
                 ParaPortion* pParaPortion = GetParaPortions()[nPara];
                 EditSelection aTmpSelection( EditPaM( pParaPortion->GetNode(), 0 ) );
                 pView->pImpEditView->SetEditSelection( aTmpSelection );
-                bChanged=sal_True;
+                bChanged=true;
                 break;  // for loop
             }
         }
@@ -3433,7 +3433,7 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
     pDataObj->GetString() = aText;
 
     SvxFontItem::EnableStoreUnicodeNames( sal_True );
-    WriteBin( pDataObj->GetStream(), aSelection, sal_True );
+    WriteBin( pDataObj->GetStream(), aSelection, true );
     pDataObj->GetStream().Seek( 0 );
     SvxFontItem::EnableStoreUnicodeNames( sal_False );
 
@@ -3933,7 +3933,7 @@ long ImpEditEngine::GetXPos(
                     if ( pNextPortion->GetKind() != PORTIONKIND_TAB )
                     {
                         if ( !bPreferPortionStart )
-                            nX = GetXPos( pParaPortion, pLine, nIndex, sal_True );
+                            nX = GetXPos( pParaPortion, pLine, nIndex, true );
                         else if ( !IsRightToLeft( GetEditDoc().GetPos( pParaPortion->GetNode() ) ) )
                             nX += nPortionTextWidth;
                     }

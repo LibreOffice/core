@@ -94,7 +94,7 @@ void Swapsal_uIt16s( sal_uInt16& rX, sal_uInt16& rY )
 EditPaM ImpEditEngine::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
     sal_Bool _bUpdate = GetUpdateMode();
-    SetUpdateMode( sal_False );
+    SetUpdateMode( false );
     EditPaM aPaM;
     if ( eFormat == EE_FORMAT_TEXT )
         aPaM = ReadText( rInput, aSel );
@@ -1167,8 +1167,8 @@ void ImpEditEngine::SetText( const EditTextObject& rTextObject )
     SetText( OUString() );
     EditPaM aPaM = aEditDoc.GetStartPaM();
 
-    SetUpdateMode( sal_False );
-    EnableUndo( sal_False );
+    SetUpdateMode( false );
+    EnableUndo( false );
 
     InsertText( rTextObject, EditSelection( aPaM, aPaM ) );
     SetVertical( rTextObject.IsVertical() );
@@ -1287,7 +1287,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
             pPortion->MarkSelectionInvalid( nStartPos, pC->GetText().getLength() );
         }
 
-        DBG_ASSERT( CheckOrderedList( aPaM.GetNode()->GetCharAttribs().GetAttribs(), sal_True ), "InsertBinTextObject: Start-Liste distorted" );
+        DBG_ASSERT( CheckOrderedList( aPaM.GetNode()->GetCharAttribs().GetAttribs(), true ), "InsertBinTextObject: Start-Liste distorted" );
 
         sal_Bool bParaAttribs = sal_False;
         if ( bNewContent || ( ( n > 0 ) && ( n < (nContents-1) ) ) )
@@ -1371,7 +1371,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
             if ( bNewContent )
                 aPaM = ImpFastInsertParagraph( nPara+1 );
             else
-                aPaM = ImpInsertParaBreak( aPaM, sal_False );
+                aPaM = ImpInsertParaBreak( aPaM, false );
         }
     }
 
@@ -1484,7 +1484,7 @@ EESpellState ImpEditEngine::Spell( EditView* pEditView, sal_Bool bMultipleDoc )
         bIsStart = sal_True;
 
     EditSpellWrapper* pWrp = new EditSpellWrapper( Application::GetDefDialogParent(),
-            xSpeller, bIsStart, sal_False, pEditView );
+            xSpeller, bIsStart, false, pEditView );
     pWrp->SpellDocument();
     delete pWrp;
 
@@ -2225,7 +2225,7 @@ void ImpEditEngine::ApplyChangedSentence(EditView& rEditView,
         rEditView.pImpEditView->SetEditSelection( aNext );
 
         FormatAndUpdate();
-        aEditDoc.SetModified(sal_True);
+        aEditDoc.SetModified(true);
     }
 }
 
@@ -2533,7 +2533,7 @@ sal_uInt16 ImpEditEngine::StartSearchAndReplace( EditView* pEditView, const SvxS
     {
         // The Writer replaces all front beginning to end ...
         SvxSearchItem aTmpItem( rSearchItem );
-        aTmpItem.SetBackward( sal_False );
+        aTmpItem.SetBackward( false );
 
         pEditView->pImpEditView->DrawSelection();
 
@@ -2679,8 +2679,8 @@ sal_Bool ImpEditEngine::ImpSearch( const SvxSearchItem& rSearchItem,
 sal_Bool ImpEditEngine::HasText( const SvxSearchItem& rSearchItem )
 {
     SvxSearchItem aTmpItem( rSearchItem );
-    aTmpItem.SetBackward( sal_False );
-    aTmpItem.SetSelection( sal_False );
+    aTmpItem.SetBackward( false );
+    aTmpItem.SetSelection( false );
 
     EditPaM aStartPaM( aEditDoc.GetStartPaM() );
     EditSelection aDummySel( aStartPaM );

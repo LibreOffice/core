@@ -242,7 +242,7 @@ void SvxBoundArgs::NoteRange( bool bToggle )
     if( nMax < nMin )
         return;
     if( !bClosed )
-        bToggle = sal_False;
+        bToggle = false;
     sal_uInt16 nIdx = 0;
     sal_uInt16 nCount = pLongArr->size();
     DBG_ASSERT( nCount == 2 * aBoolArr.size(), "NoteRange: Incompatible Sizes" );
@@ -448,7 +448,7 @@ void SvxBoundArgs::Add()
                 nCount = nCount - next;
                 aBoolArr.erase( aBoolArr.begin() + nBoolIdx, aBoolArr.begin() + (nBoolIdx + next) );
                 if( nBoolIdx )
-                    aBoolArr[ nBoolIdx - 1 ] = sal_False;
+                    aBoolArr[ nBoolIdx - 1 ] = false;
 #if OSL_DEBUG_LEVEL > 1
                 else
                     ++next;

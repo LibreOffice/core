@@ -497,7 +497,7 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     if( nMemberId != MID_FIRST_AUTO &&
             nMemberId != MID_L_REL_MARGIN && nMemberId != MID_R_REL_MARGIN)
         if(!(rVal >>= nVal))
-            return sal_False;
+            return false;
 
     switch( nMemberId )
     {
@@ -1399,7 +1399,7 @@ bool SvxShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             }
             break;
         }
-        default: OSL_FAIL("Wrong MemberId!"); return sal_False;
+        default: OSL_FAIL("Wrong MemberId!"); return false;
     }
 
     if ( bRet )
@@ -1737,7 +1737,7 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId  ) const
             aSeq[7] <<= uno::makeAny( (sal_Int32)(bConvert ? TWIP_TO_MM100_UNSIGNED( nLeftDist ) : nLeftDist ));
             aSeq[8] <<= uno::makeAny( (sal_Int32)(bConvert ? TWIP_TO_MM100_UNSIGNED( nRightDist ) : nRightDist ));
             rVal = uno::makeAny( aSeq );
-            return sal_True;
+            return true;
         }
         case MID_LEFT_BORDER:
         case LEFT_BORDER:
@@ -1896,7 +1896,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 for (int n(0); n != SAL_N_ELEMENTS(aBorders); ++n)
                 {
                     if (!lcl_setLine(aSeq[n], *this, aBorders[n], bConvert))
-                        return sal_False;
+                        return false;
                 }
 
                 // WTH are the borders and the distances saved in different order?
@@ -1914,13 +1914,13 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                             SetDistance( sal_uInt16( nDist ), nLines[n-5] );
                     }
                     else
-                        return sal_False;
+                        return false;
                 }
 
-                return sal_True;
+                return true;
             }
             else
-                return sal_False;
+                return false;
         }
         case LEFT_BORDER_DISTANCE:
             bDistMember = sal_True;
@@ -1972,7 +1972,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     if( pLine )
                         pLine->SetBorderLineStyle( eBorderStyle );
                 }
-                return sal_True;
+                return true;
             }
             break;
         case LINE_WIDTH:
@@ -1992,14 +1992,14 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                         pLine->SetWidth( nWidth );
                 }
             }
-            return sal_True;
+            return true;
     }
 
     if( bDistMember || nMemberId == BORDER_DISTANCE )
     {
         sal_Int32 nDist = 0;
         if(!(rVal >>= nDist))
-            return sal_False;
+            return false;
 
         if(nDist >= 0)
         {
@@ -2015,7 +2015,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     {
         SvxBorderLine aLine;
         if( !rVal.hasValue() )
-            return sal_False;
+            return false;
 
         table::BorderLine2 aBorderLine;
         if( lcl_extractBorderLine(rVal, aBorderLine) )
@@ -2060,16 +2060,16 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 }
             }
             else
-                return sal_False;
+                return false;
         }
         else
-            return sal_False;
+            return false;
 
         sal_Bool bSet = SvxBoxItem::LineToSvxLine(aBorderLine, aLine, bConvert);
         SetLine(bSet ? &aLine : 0, nLine);
     }
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -2736,7 +2736,7 @@ bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId  ) const
             aSeq[3] = ::com::sun::star::uno::makeAny( nVal );
             aSeq[4] = ::com::sun::star::uno::makeAny( (sal_Int32)(bConvert ? TWIP_TO_MM100_UNSIGNED(GetDefDist()) : GetDefDist()) );
             rVal = ::com::sun::star::uno::makeAny( aSeq );
-            return sal_True;
+            return true;
         }
 
         case MID_HORIZONTAL:
@@ -2789,9 +2789,9 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             {
                 // 2 BorderLines, flags, valid flags and distance
                 if (!lcl_setLine(aSeq[0], *this, BOXINFO_LINE_HORI, bConvert))
-                    return sal_False;
+                    return false;
                 if (!lcl_setLine(aSeq[1], *this, BOXINFO_LINE_VERT, bConvert))
-                    return sal_False;
+                    return false;
 
                 sal_Int16 nFlags( 0 );
                 sal_Int32 nVal( 0 );
@@ -2802,11 +2802,11 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     SetMinDist( ( nFlags & 0x04 ) != 0 );
                 }
                 else
-                    return sal_False;
+                    return false;
                 if ( aSeq[3] >>= nFlags )
                     nValidFlags = (sal_uInt8)nFlags;
                 else
-                    return sal_False;
+                    return false;
                 if (( aSeq[4] >>= nVal ) && ( nVal >= 0 ))
                 {
                     if( bConvert )
@@ -2814,14 +2814,14 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     SetDefDist( (sal_uInt16)nVal );
                 }
             }
-            return sal_True;
+            return true;
         }
 
         case MID_HORIZONTAL:
         case MID_VERTICAL:
         {
             if( !rVal.hasValue() )
-                return sal_False;
+                return false;
 
             table::BorderLine2 aBorderLine;
             if( lcl_extractBorderLine(rVal, aBorderLine) )
@@ -2865,7 +2865,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     }
                 }
                 else
-                    return sal_False;
+                    return false;
             }
             else if (rVal.getValueType() == ::getCppuType((const ::com::sun::star::uno::Sequence < sal_Int16 >*)0) )
             {
@@ -2888,10 +2888,10 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     }
                 }
                 else
-                    return sal_False;
+                    return false;
             }
             else
-                return sal_False;
+                return false;
 
             SvxBorderLine aLine;
             sal_Bool bSet = SvxBoxItem::LineToSvxLine(aBorderLine, aLine, bConvert);
@@ -2932,10 +2932,10 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             }
             break;
         }
-        default: OSL_FAIL("Wrong MemberId!"); return sal_False;
+        default: OSL_FAIL("Wrong MemberId!"); return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 // class SvxFmtBreakItem -------------------------------------------------
@@ -3006,7 +3006,7 @@ bool SvxFmtBreakItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
     {
         sal_Int32 nValue = 0;
         if(!(rVal >>= nValue))
-            return sal_False;
+            return false;
 
         nBreak = (style::BreakType) nValue;
     }
@@ -3239,7 +3239,7 @@ bool SvxLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemId )
             break;
             default:
                 OSL_FAIL( "Wrong MemberId" );
-                return sal_False;
+                return false;
         }
 
         return true;
@@ -3691,7 +3691,7 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             sal_Int32 nCol = 0;
             if ( !( rVal >>= nCol ) )
-                return sal_False;
+                return false;
             if(MID_BACK_COLOR_R_G_B == nMemberId)
             {
                 nCol = COLORDATA_RGB( nCol );
@@ -3704,7 +3704,7 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             sal_Int32 nTrans = 0;
             if ( !( rVal >>= nTrans ) || nTrans < 0 || nTrans > 100 )
-                return sal_False;
+                return false;
             aColor.SetTransparency(lcl_PercentToTransparency(nTrans));
         }
         break;
@@ -3716,7 +3716,7 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             {
                 sal_Int32 nValue = 0;
                 if ( !( rVal >>= nValue ) )
-                    return sal_False;
+                    return false;
                 eLocation = (style::GraphicLocation)nValue;
             }
             SetGraphicPos( (SvxGraphicPosition)(sal_uInt16)eLocation );

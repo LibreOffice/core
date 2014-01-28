@@ -67,9 +67,9 @@ bool EditUndoManager::Undo()
 
     mpEditEngine->GetActiveView()->GetImpEditView()->DrawSelection(); // Remove the old selection
 
-    mpEditEngine->SetUndoMode( sal_True );
+    mpEditEngine->SetUndoMode( true );
     bool bDone = SfxUndoManager::Undo();
-    mpEditEngine->SetUndoMode( sal_False );
+    mpEditEngine->SetUndoMode( false );
 
     EditSelection aNewSel( mpEditEngine->GetActiveView()->GetImpEditView()->GetEditSelection() );
     DBG_ASSERT( !aNewSel.IsInvalid(), "Invalid selection after Undo () ");
@@ -102,9 +102,9 @@ bool EditUndoManager::Redo()
 
     mpEditEngine->GetActiveView()->GetImpEditView()->DrawSelection(); // Remove the old selection
 
-    mpEditEngine->SetUndoMode( sal_True );
+    mpEditEngine->SetUndoMode( true );
     bool bDone = SfxUndoManager::Redo();
-    mpEditEngine->SetUndoMode( sal_False );
+    mpEditEngine->SetUndoMode( false );
 
     EditSelection aNewSel( mpEditEngine->GetActiveView()->GetImpEditView()->GetEditSelection() );
     DBG_ASSERT( !aNewSel.IsInvalid(), "Invalid selection after Undo () ");

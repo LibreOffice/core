@@ -3263,7 +3263,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                                 }
                                                 else
                                                 {
-                                                    bWrong = sal_False;
+                                                    bWrong = false;
                                                 }
                                             }
                                         }

@@ -209,7 +209,7 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
 //          aParserInput.sSystemId = aMedium.GetName();
             xParser->parseStream( aParserInput );
         }
-        while(0);
+        while(false);
     }
     catch( const uno::Exception& )
     {

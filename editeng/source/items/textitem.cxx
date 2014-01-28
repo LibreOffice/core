@@ -286,7 +286,7 @@ bool SvxFontItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
         {
             com::sun::star::awt::FontDescriptor aFontDescriptor;
             if ( !( rVal >>= aFontDescriptor ))
-                return sal_False;
+                return false;
 
             aFamilyName = aFontDescriptor.Name;
             aStyleName = aFontDescriptor.StyleName;
@@ -299,7 +299,7 @@ bool SvxFontItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
         {
             OUString aStr;
             if(!(rVal >>= aStr))
-                return sal_False;
+                return false;
             aFamilyName = aStr;
         }
         break;
@@ -307,7 +307,7 @@ bool SvxFontItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
         {
             OUString aStr;
             if(!(rVal >>= aStr))
-                return sal_False;
+                return false;
             aStyleName = aStr;
         }
         break;
@@ -315,7 +315,7 @@ bool SvxFontItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
         {
             sal_Int16 nFamily = sal_Int16();
             if(!(rVal >>= nFamily))
-                return sal_False;
+                return false;
             eFamily = (FontFamily)nFamily;
         }
         break;
@@ -323,7 +323,7 @@ bool SvxFontItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
         {
             sal_Int16 nSet = sal_Int16();
             if(!(rVal >>= nSet))
-                return sal_False;
+                return false;
             eTextEncoding = (rtl_TextEncoding)nSet;
         }
         break;
@@ -331,7 +331,7 @@ bool SvxFontItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
         {
             sal_Int16 nPitch = sal_Int16();
             if(!(rVal >>= nPitch))
-                return sal_False;
+                return false;
             ePitch =  (FontPitch)nPitch;
         }
         break;
@@ -355,7 +355,7 @@ bool SvxFontItem::operator==( const SfxPoolItem& rAttr ) const
     {
         if ( ePitch != rItem.ePitch || eTextEncoding != rItem.eTextEncoding )
         {
-            bRet = sal_False;
+            bRet = false;
             DBG_WARNING( "FontItem::operator==(): only pitch or rtl_TextEncoding different ");
         }
     }
@@ -582,7 +582,7 @@ bool SvxPostureItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             {
                 sal_Int32 nValue = 0;
                 if(!(rVal >>= nValue))
-                    return sal_False;
+                    return false;
 
                 eSlant = (awt::FontSlant)nValue;
             }
@@ -595,7 +595,7 @@ bool SvxPostureItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 bool SvxPostureItem::HasBoolValue() const
 {
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -625,7 +625,7 @@ SvxWeightItem::SvxWeightItem( const FontWeight eWght, const sal_uInt16 nId ) :
 
 bool SvxWeightItem::HasBoolValue() const
 {
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -737,7 +737,7 @@ bool SvxWeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             {
                 sal_Int32 nValue = 0;
                 if(!(rVal >>= nValue))
-                    return sal_False;
+                    return false;
                 fValue = (float)nValue;
             }
             SetValue( (sal_uInt16)VCLUnoHelper::ConvertFontWeight((float)fValue) );
@@ -917,7 +917,7 @@ bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
         break;
     }
-    return sal_True;
+    return true;
 }
 
 // Calculate the relative deviation from the expected height.
@@ -970,7 +970,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 nProp = 100;
                 double fPoint = aFontHeight.Height;
                 if( fPoint < 0. || fPoint > 10000. )
-                    return sal_False;
+                    return false;
 
                 nHeight = (long)( fPoint * 20.0 + 0.5 );        // Twips
                 if (!bConvert)
@@ -979,7 +979,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 nProp = aFontHeight.Prop;
             }
             else
-                return sal_False;
+                return false;
         }
         break;
         case MID_FONTHEIGHT:
@@ -991,11 +991,11 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             {
                 sal_Int32 nValue = 0;
                 if(!(rVal >>= nValue))
-                    return sal_False;
+                    return false;
                 fPoint = (float)nValue;
             }
             if(fPoint < 0. || fPoint > 10000.)
-                    return sal_False;
+                    return false;
 
             nHeight = (long)( fPoint * 20.0 + 0.5 );        // Twips
             if (!bConvert)
@@ -1006,7 +1006,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             sal_Int16 nNew = sal_Int16();
             if(!(rVal >>= nNew))
-                return sal_True;
+                return true;
 
             nHeight = lcl_GetRealHeight_Impl(nHeight, nProp, ePropUnit, bConvert);
 
@@ -1024,7 +1024,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             {
                 sal_Int32 nValue = 0;
                 if(!(rVal >>= nValue))
-                    return sal_False;
+                    return false;
                 fValue = (float)nValue;
             }
             sal_Int16 nCoreDiffValue = (sal_Int16)(fValue * 20.);
@@ -1034,7 +1034,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
         break;
     }
-    return sal_True;
+    return true;
 }
 
 //------------------------------------------------------------------------
@@ -1222,7 +1222,7 @@ bool SvxFontWidthItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     nMemberId &= ~CONVERT_TWIPS;
     sal_Int16 nVal = sal_Int16();
     if(!(rVal >>= nVal))
-        return sal_False;
+        return false;
 
     switch(nMemberId)
     {
@@ -1280,7 +1280,7 @@ SvxTextLineItem::SvxTextLineItem( const FontUnderline eSt, const sal_uInt16 nId 
 
 bool SvxTextLineItem::HasBoolValue() const
 {
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -1510,7 +1510,7 @@ SvxCrossedOutItem::SvxCrossedOutItem( const FontStrikeout eSt, const sal_uInt16 
 
 bool SvxCrossedOutItem::HasBoolValue() const
 {
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -1617,12 +1617,12 @@ bool SvxCrossedOutItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             sal_Int32 nValue = 0;
             if(!(rVal >>= nValue))
-                return sal_False;
+                return false;
             SetValue((sal_Int16)nValue);
         }
         break;
     }
-    return sal_True;
+    return true;
 }
 // class SvxShadowedItem -------------------------------------------------
 
@@ -1987,7 +1987,7 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     sal_Int32 nColor = 0;
     if(!(rVal >>= nColor))
-        return sal_False;
+        return false;
 
     mColor.SetColor( nColor );
     return true;
@@ -2306,7 +2306,7 @@ bool SvxCaseMapItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     sal_uInt16 nVal = sal_uInt16();
     if(!(rVal >>= nVal))
-        return sal_False;
+        return false;
 
     switch( nVal )
     {
@@ -2493,7 +2493,7 @@ bool SvxEscapementItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if( (rVal >>= nVal) && (std::abs(nVal) <= 101))
                 nEsc = nVal;
             else
-                return sal_False;
+                return false;
         }
         break;
         case MID_ESC_HEIGHT:
@@ -2502,7 +2502,7 @@ bool SvxEscapementItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if( (rVal >>= nVal) && (nVal <= 100))
                 nProp = nVal;
             else
-                return sal_False;
+                return false;
         }
         break;
         case MID_AUTO_ESC:
@@ -2630,7 +2630,7 @@ bool SvxLanguageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             lang::Locale aLocale;
             if(!(rVal >>= aLocale))
-                return sal_False;
+                return false;
 
             SetValue( LanguageTag::convertToLanguageType( aLocale, false));
         }
@@ -3223,7 +3223,7 @@ bool SvxCharRotateItem::PutValue( const com::sun::star::uno::Any& rVal,
             if((rVal >>= nVal) && (0 == nVal || 900 == nVal || 2700 == nVal))
                 SetValue( (sal_uInt16)nVal );
             else
-                bRet = sal_False;
+                bRet = false;
             break;
         }
 
@@ -3499,7 +3499,7 @@ SvxScriptSetItem::SvxScriptSetItem( sal_uInt16 nSlotId, SfxItemPool& rPool )
 SfxPoolItem* SvxScriptSetItem::Clone( SfxItemPool * ) const
 {
     SvxScriptSetItem* p = new SvxScriptSetItem( Which(), *GetItemSet().GetPool() );
-    p->GetItemSet().Put( GetItemSet(), sal_False );
+    p->GetItemSet().Put( GetItemSet(), false );
     return p;
 }
 
@@ -3620,7 +3620,7 @@ void SvxScriptSetItem::GetSlotIds( sal_uInt16 nSlotId, sal_uInt16& rLatin,
     switch( nSlotId )
     {
     default:
-        DBG_ASSERT( sal_False, "wrong SlotId for class SvxScriptSetItem" );
+        DBG_ASSERT( false, "wrong SlotId for class SvxScriptSetItem" );
         // no break - default to font - Id Range !!
 
     case SID_ATTR_CHAR_FONT:

@@ -283,25 +283,25 @@ bool SvxBulletItem::operator==( const SfxPoolItem& rItem ) const
         cSymbol != rBullet.cSymbol          ||
         aPrevText != rBullet.aPrevText      ||
         aFollowText != rBullet.aFollowText )
-            return 0;
+            return false;
 
     if( ( nStyle != BS_BMP ) && ( aFont != rBullet.aFont ) )
-        return 0;
+        return false;
 
     if( nStyle == BS_BMP )
     {
         if( ( pGraphicObject && !rBullet.pGraphicObject ) || ( !pGraphicObject && rBullet.pGraphicObject ) )
-            return 0;
+            return false;
 
         if( ( pGraphicObject && rBullet.pGraphicObject ) &&
             ( ( *pGraphicObject != *rBullet.pGraphicObject ) ||
               ( pGraphicObject->GetPrefSize() != rBullet.pGraphicObject->GetPrefSize() ) ) )
         {
-            return 0;
+            return false;
         }
     }
 
-    return 1;
+    return true;
 }
 
 // -----------------------------------------------------------------------

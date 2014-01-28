@@ -114,7 +114,7 @@ bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, sal
         {
             Reference<XNameContainer> xContainer( xRef, UNO_QUERY );
             if( !xContainer.is() )
-                return sal_False;
+                return false;
 
             const Sequence< OUString > aNameSequence( xContainer->getElementNames() );
             const OUString* pNames = aNameSequence.getConstArray();
@@ -129,7 +129,7 @@ bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, sal
 
                 aAny = xContainer->getByName( aName );
                 if( aAny.getValue() == NULL || aAny.getValueType() != ::getCppuType((AttributeData*)0) )
-                    return sal_False;
+                    return false;
 
                 pData = (AttributeData*)aAny.getValue();
                 sal_Int32 pos = aName.indexOf( ':' );

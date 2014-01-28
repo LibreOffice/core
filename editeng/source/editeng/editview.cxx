@@ -620,7 +620,7 @@ void EditView::SetEditEngineUpdateMode( sal_Bool bUpdate )
 
 void EditView::ForceUpdate()
 {
-    PIMPEE->SetUpdateMode( sal_True, this, sal_True );
+    PIMPEE->SetUpdateMode( true, this, sal_True );
 }
 
 SfxStyleSheet* EditView::GetStyleSheet()

@@ -205,9 +205,9 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion, OutputD
         sal_uInt16 nStartLine = 0;
         sal_uInt16 nEndLine = pTmpPortion->GetLines().Count() -1;
         if ( nPara == nStartPara )
-            nStartLine = pTmpPortion->GetLines().FindLine( aTmpSel.Min().GetIndex(), sal_False );
+            nStartLine = pTmpPortion->GetLines().FindLine( aTmpSel.Min().GetIndex(), false );
         if ( nPara == nEndPara )
-            nEndLine = pTmpPortion->GetLines().FindLine( aTmpSel.Max().GetIndex(), sal_True );
+            nEndLine = pTmpPortion->GetLines().FindLine( aTmpSel.Max().GetIndex(), true );
 
         for ( sal_uInt16 nLine = nStartLine; nLine <= nEndLine; nLine++ )
         {
@@ -680,7 +680,7 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
             // If we are behind a portion, and the next portion has other direction, we must change position...
             aEditCursor.Left() = aEditCursor.Right() = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GETCRSR_TXTONLY|GETCRSR_PREFERPORTIONSTART ).Left();
 
-            sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, sal_True );
+            sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, true );
             const TextPortion* pTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
             if ( pTextPortion->GetKind() == PORTIONKIND_TAB )
             {

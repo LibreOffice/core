@@ -311,7 +311,7 @@ void Outliner::UndoActionEnd( sal_uInt16 nId )
 
 void Outliner::InsertUndo( EditUndo* pUndo )
 {
-    pEditEngine->GetUndoManager().AddUndoAction( pUndo, sal_False );
+    pEditEngine->GetUndoManager().AddUndoAction( pUndo, false );
 }
 
 sal_Bool Outliner::IsInUndo()

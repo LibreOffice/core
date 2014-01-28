@@ -104,12 +104,12 @@ SfxPoolItem** GlobalEditData::GetDefItems()
 
         ppDefItems[0]  = new SvxFrameDirectionItem( FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR );
         ppDefItems[1]  = new SvXMLAttrContainerItem( EE_PARA_XMLATTRIBS );
-        ppDefItems[2]  = new SfxBoolItem( EE_PARA_HANGINGPUNCTUATION, sal_False );
-        ppDefItems[3]  = new SfxBoolItem( EE_PARA_FORBIDDENRULES, sal_True );
+        ppDefItems[2]  = new SfxBoolItem( EE_PARA_HANGINGPUNCTUATION, false );
+        ppDefItems[3]  = new SfxBoolItem( EE_PARA_FORBIDDENRULES, true );
         ppDefItems[4]  = new SvxScriptSpaceItem( sal_True, EE_PARA_ASIANCJKSPACING );
         ppDefItems[5]  = new SvxNumBulletItem( aDefaultNumRule, EE_PARA_NUMBULLET );
-        ppDefItems[6]  = new SfxBoolItem( EE_PARA_HYPHENATE, sal_False );
-        ppDefItems[7]  = new SfxBoolItem( EE_PARA_BULLETSTATE, sal_True );
+        ppDefItems[6]  = new SfxBoolItem( EE_PARA_HYPHENATE, false );
+        ppDefItems[7]  = new SfxBoolItem( EE_PARA_BULLETSTATE, true );
         ppDefItems[8]  = new SvxLRSpaceItem( EE_PARA_OUTLLRSPACE );
         ppDefItems[9]  = new SfxInt16Item( EE_PARA_OUTLLEVEL, -1 );
         ppDefItems[10] = new SvxBulletItem( EE_PARA_BULLET );

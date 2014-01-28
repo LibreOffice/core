@@ -40,13 +40,13 @@ SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
     bAFmtDelSpacesBetweenLines =
     bAFmtByInpDelSpacesAtSttEnd =
     bAFmtByInpDelSpacesBetweenLines =
-    bDummy = sal_True;
+    bDummy = true;
 
     bReplaceStyles =
     bDelEmptyNode =
     bWithRedlining =
     bAutoCmpltEndless =
-    bAutoCmpltAppendBlanc = sal_False;
+    bAutoCmpltAppendBlanc = false;
 
     bAutoCmpltShowAsTip =
     bSetBorder =
@@ -56,10 +56,10 @@ SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
     bRightMargin =
     bAutoCompleteWords =
     bAutoCmpltCollectWords =
-    bAutoCmpltKeepList = sal_True;
+    bAutoCmpltKeepList = true;
 
     bDummy6 = bDummy7 = bDummy8 =
-         sal_False;
+         false;
 
     nRightMargin = 50;      // dflt. 50 %
     nAutoCmpltExpandKey = KEY_RETURN;

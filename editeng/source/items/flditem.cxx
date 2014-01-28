@@ -248,7 +248,7 @@ bool SvxFieldData::operator==( const SvxFieldData& rFld ) const
 {
     DBG_ASSERT( Type() == rFld.Type(), "==: Different Types" );
     (void)rFld;
-    return sal_True;    // Basic class is always the same.
+    return true;    // Basic class is always the same.
 }
 
 // -----------------------------------------------------------------------
@@ -358,10 +358,10 @@ bool SvxFieldItem::operator==( const SfxPoolItem& rItem ) const
 
     const SvxFieldData* pOtherFld = ((const SvxFieldItem&)rItem).GetField();
     if ( !pField && !pOtherFld )
-        return sal_True;
+        return true;
 
     if ( ( !pField && pOtherFld ) || ( pField && !pOtherFld ) )
-        return sal_False;
+        return false;
 
     return ( ( pField->Type() == pOtherFld->Type() )
                 && ( *pField == *pOtherFld ) );
@@ -403,7 +403,7 @@ SvxFieldData* SvxDateField::Clone() const
 bool SvxDateField::operator==( const SvxFieldData& rOther ) const
 {
     if ( rOther.Type() != Type() )
-        return sal_False;
+        return false;
 
     const SvxDateField& rOtherFld = (const SvxDateField&) rOther;
     return ( ( nFixDate == rOtherFld.nFixDate ) &&
@@ -541,7 +541,7 @@ SvxFieldData* SvxURLField::Clone() const
 bool SvxURLField::operator==( const SvxFieldData& rOther ) const
 {
     if ( rOther.Type() != Type() )
-        return sal_False;
+        return false;
 
     const SvxURLField& rOtherFld = (const SvxURLField&) rOther;
     return ( ( eFormat == rOtherFld.eFormat ) &&
@@ -783,7 +783,7 @@ SvxFieldData* SvxExtTimeField::Clone() const
 bool SvxExtTimeField::operator==( const SvxFieldData& rOther ) const
 {
     if ( rOther.Type() != Type() )
-        return sal_False;
+        return false;
 
     const SvxExtTimeField& rOtherFld = (const SvxExtTimeField&) rOther;
     return ((m_nFixTime == rOtherFld.m_nFixTime) &&
@@ -927,7 +927,7 @@ SvxFieldData* SvxExtFileField::Clone() const
 bool SvxExtFileField::operator==( const SvxFieldData& rOther ) const
 {
     if ( rOther.Type() != Type() )
-        return sal_False;
+        return false;
 
     const SvxExtFileField& rOtherFld = (const SvxExtFileField&) rOther;
     return ( ( aFile == rOtherFld.aFile ) &&
@@ -1079,7 +1079,7 @@ SvxFieldData* SvxAuthorField::Clone() const
 bool SvxAuthorField::operator==( const SvxFieldData& rOther ) const
 {
     if ( rOther.Type() != Type() )
-        return sal_False;
+        return false;
 
     const SvxAuthorField& rOtherFld = (const SvxAuthorField&) rOther;
     return ( ( aName == rOtherFld.aName ) &&

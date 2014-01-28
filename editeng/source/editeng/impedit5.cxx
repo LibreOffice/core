@@ -55,7 +55,7 @@ void ImpEditEngine::SetStyleSheet( EditSelection aSel, SfxStyleSheet* pStyle )
     sal_Int32 nEndPara = aEditDoc.GetPos( aSel.Max().GetNode() );
 
     sal_Bool _bUpdate = GetUpdateMode();
-    SetUpdateMode( sal_False );
+    SetUpdateMode( false );
 
     for ( sal_Int32 n = nStartPara; n <= nEndPara; n++ )
         SetStyleSheet( n, pStyle );

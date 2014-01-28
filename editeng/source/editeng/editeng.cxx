@@ -1240,7 +1240,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                                 EditPaM aStart( pImpEditEngine->WordLeft( aCurSel.Max() ) );
                                 aCurSel = pImpEditEngine->InsertText(
                                                 EditSelection( aStart, aCurSel.Max() ), aAutoText );
-                                pImpEditEngine->SetAutoCompleteText( OUString(), sal_True );
+                                pImpEditEngine->SetAutoCompleteText( OUString(), true );
                             }
                         }
                         pImpEditEngine->UndoActionEnd( EDITUNDO_INSERT );
@@ -1345,7 +1345,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
 
                                 if( !aComplete.isEmpty() && ( ( aWord.getLength() + 1 ) < aComplete.getLength() ) )
                                 {
-                                    pImpEditEngine->SetAutoCompleteText( aComplete, sal_False );
+                                    pImpEditEngine->SetAutoCompleteText( aComplete, false );
                                     Point aPos = pImpEditEngine->PaMtoEditCursor( aCurSel.Max() ).TopLeft();
                                     aPos = pEditView->pImpEditView->GetWindowPos( aPos );
                                     aPos = pEditView->pImpEditView->GetWindow()->LogicToPixel( aPos );
@@ -1471,7 +1471,7 @@ void EditEngine::SetText( const OUString& rText )
 sal_uLong EditEngine::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs /* = NULL */ )
 {
     sal_Bool bUndoEnabled = pImpEditEngine->IsUndoEnabled();
-    pImpEditEngine->EnableUndo( sal_False );
+    pImpEditEngine->EnableUndo( false );
     pImpEditEngine->SetText( OUString() );
     EditPaM aPaM( pImpEditEngine->GetEditDoc().GetStartPaM() );
     pImpEditEngine->Read( rInput, rBaseURL, eFormat, EditSelection( aPaM, aPaM ), pHTTPHeaderAttrs );
@@ -2351,7 +2351,7 @@ void EditEngine::CompleteOnlineSpelling()
             pImpEditEngine->FormatAndUpdate();
 
         pImpEditEngine->StopOnlineSpellTimer();
-        pImpEditEngine->DoOnlineSpelling( 0, sal_True, sal_False );
+        pImpEditEngine->DoOnlineSpelling( 0, true, false );
     }
 }
 

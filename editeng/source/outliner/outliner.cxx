@@ -540,7 +540,7 @@ bool Outliner::ImpConvertEdtToOut( sal_Int32 nPara,EditView* pView)
         nTabs = sal::static_int_cast< sal_uInt16 >(aLevel.toInt32());
         if( nTabs )
             nTabs--; // Level 0 = "heading 1"
-        bConverted = sal_True;
+        bConverted = true;
     }
     else
     {
