@@ -119,7 +119,7 @@ static void SAL_CALL ExceptionThrower_dispatch(
     }
     default:
     {
-        OSL_ASSERT( 0 );
+        OSL_ASSERT( false );
         RuntimeException exc(
             "not implemented!", Reference< XInterface >() );
         uno_type_any_construct(

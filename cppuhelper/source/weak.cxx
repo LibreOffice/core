@@ -353,7 +353,7 @@ OWeakRefListener::OWeakRefListener(const OWeakRefListener& rRef) SAL_THROW(())
         m_XWeakConnectionPoint->addReference((XReference*)this);
     }
     }
-    catch (RuntimeException &) { OSL_ASSERT( 0 ); } // assert here, but no unexpected()
+    catch (RuntimeException &) { OSL_ASSERT( false ); } // assert here, but no unexpected()
     osl_atomic_decrement( &m_aRefCount );
 }
 
@@ -374,7 +374,7 @@ OWeakRefListener::OWeakRefListener(const Reference< XInterface >& xInt) SAL_THRO
         }
     }
     }
-    catch (RuntimeException &) { OSL_ASSERT( 0 ); } // assert here, but no unexpected()
+    catch (RuntimeException &) { OSL_ASSERT( false ); } // assert here, but no unexpected()
     osl_atomic_decrement( &m_aRefCount );
 }
 
@@ -388,7 +388,7 @@ OWeakRefListener::~OWeakRefListener() SAL_THROW(())
         m_XWeakConnectionPoint->removeReference((XReference*)this);
     }
     }
-    catch (RuntimeException &) { OSL_ASSERT( 0 ); } // assert here, but no unexpected()
+    catch (RuntimeException &) { OSL_ASSERT( false ); } // assert here, but no unexpected()
 }
 
 // XInterface
@@ -468,7 +468,7 @@ void WeakReferenceHelper::clear() SAL_THROW(())
             m_pImpl = 0;
         }
     }
-    catch (RuntimeException &) { OSL_ASSERT( 0 ); } // assert here, but no unexpected()
+    catch (RuntimeException &) { OSL_ASSERT( false ); } // assert here, but no unexpected()
 }
 
 WeakReferenceHelper& WeakReferenceHelper::operator=(const WeakReferenceHelper& rWeakRef) SAL_THROW(())
@@ -494,7 +494,7 @@ SAL_THROW(())
             m_pImpl->acquire();
         }
     }
-    catch (RuntimeException &) { OSL_ASSERT( 0 ); } // assert here, but no unexpected()
+    catch (RuntimeException &) { OSL_ASSERT( false ); } // assert here, but no unexpected()
     return *this;
 }
 
@@ -517,7 +517,7 @@ Reference< XInterface > WeakReferenceHelper::get() const SAL_THROW(())
     if (xAdp.is())
         return xAdp->queryAdapted();
     }
-    catch (RuntimeException &) { OSL_ASSERT( 0 ); } // assert here, but no unexpected()
+    catch (RuntimeException &) { OSL_ASSERT( false ); } // assert here, but no unexpected()
 
     return Reference< XInterface >();
 }
