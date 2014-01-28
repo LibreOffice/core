@@ -98,6 +98,10 @@ OutlinerParaObject::OutlinerParaObject(const EditTextObject& rEditTextObject, co
 {
 }
 
+OutlinerParaObject::OutlinerParaObject( const EditTextObject& rEditTextObject)
+:   mpImplOutlinerParaObject( new ImplOutlinerParaObject( rEditTextObject.Clone(), ParagraphDataVector(), true))
+{}
+
 OutlinerParaObject::OutlinerParaObject(const OutlinerParaObject& rCandidate)
 :   mpImplOutlinerParaObject(rCandidate.mpImplOutlinerParaObject)
 {

@@ -46,11 +46,9 @@ private:
 
 public:
     // constructors/destructor
-    OutlinerParaObject(
-        const EditTextObject& rEditTextObject,
-        const ParagraphDataVector& rParagraphDataVector = ParagraphDataVector(),
-        bool bIsEditDoc = true);
-    OutlinerParaObject(const OutlinerParaObject& rCandidate);
+    OutlinerParaObject( const EditTextObject&, const ParagraphDataVector&, bool bIsEditDoc = true);
+    OutlinerParaObject( const EditTextObject&);
+    OutlinerParaObject( const OutlinerParaObject&);
     ~OutlinerParaObject();
 
     // assignment operator
