@@ -108,7 +108,7 @@ sal_Bool SAL_CALL PlaceWareExportFilter::filter( const ::com::sun::star::uno::Se
     }
     if ( !xOutputStream.is() )
     {
-        OSL_ASSERT ( 0 );
+        OSL_ASSERT ( false );
         return sal_False;
     }
 

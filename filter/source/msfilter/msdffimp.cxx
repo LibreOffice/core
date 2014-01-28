@@ -547,7 +547,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                                             fYRel /= (double)nHeight;
                                                             fYRel *= 10000;
                                                             aGluePoint.SetPos( Point( (sal_Int32)fXRel, (sal_Int32)fYRel ) );
-                                                            aGluePoint.SetPercent( sal_True );
+                                                            aGluePoint.SetPercent( true );
                                                             aGluePoint.SetAlign( SDRVERTALIGN_TOP | SDRHORZALIGN_LEFT );
                                                             aGluePoint.SetEscDir( SDRESC_SMART );
                                                             nId = (sal_Int32)((*pList)[ pList->Insert( aGluePoint ) ].GetId() + 3 );
@@ -3135,7 +3135,7 @@ void SvxMSDffManager::SetModel(SdrModel* pModel, long nApplicationScale)
     {
         pModel = 0;
         nMapMul = nMapDiv = nMapXOfs = nMapYOfs = nEmuMul = nEmuDiv = nPntMul = nPntDiv = 0;
-        bNeedMap = sal_False;
+        bNeedMap = false;
     }
 }
 
@@ -3188,7 +3188,7 @@ sal_Bool SvxMSDffManager::SeekToShape( SvStream& rSt, void* /* pClientData */, s
 
 bool SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd, sal_uLong nSkipCount ) const
 {
-    bool bRet = sal_False;
+    bool bRet = false;
     sal_uLong nFPosMerk = rSt.Tell(); // store FilePos to restore it later if necessary
     DffRecordHeader aHd;
     do
@@ -3204,7 +3204,7 @@ bool SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMa
                 nSkipCount--;
             else
             {
-                bRet = sal_True;
+                bRet = true;
                 if ( pRecHd != NULL )
                     *pRecHd = aHd;
                 else
@@ -3226,7 +3226,7 @@ bool SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMa
 
 bool SvxMSDffManager::SeekToRec2( sal_uInt16 nRecId1, sal_uInt16 nRecId2, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd, sal_uLong nSkipCount ) const
 {
-    bool bRet = sal_False;
+    bool bRet = false;
     sal_uLong nFPosMerk = rStCtrl.Tell();   // remember FilePos for conditionally later restauration
     DffRecordHeader aHd;
     do
@@ -3238,7 +3238,7 @@ bool SvxMSDffManager::SeekToRec2( sal_uInt16 nRecId1, sal_uInt16 nRecId2, sal_uL
                 nSkipCount--;
             else
             {
-                bRet = sal_True;
+                bRet = true;
                 if ( pRecHd )
                     *pRecHd = aHd;
                 else
@@ -3260,7 +3260,7 @@ bool SvxMSDffManager::GetColorFromPalette( sal_uInt16 /* nNum */, Color& rColor 
     // This method has to be overwritten in the class
     // derived for the excel export
     rColor.SetColor( COL_WHITE );
-    return sal_True;
+    return true;
 }
 
 // sj: the documentation is not complete, especially in ppt the normal rgb for text
@@ -3592,7 +3592,7 @@ void SvxMSDffManager::ReadObjText( const OUString& rText, SdrObject* pObj )
 
             SfxItemSet aParagraphAttribs( rOutliner.GetEmptyItemSet() );
             if ( !aSelection.nStartPos )
-                aParagraphAttribs.Put( SfxBoolItem( EE_PARA_BULLETSTATE, sal_False ) );
+                aParagraphAttribs.Put( SfxBoolItem( EE_PARA_BULLETSTATE, false ) );
             aSelection.nStartPos = 0;
             rOutliner.QuickSetAttribs( aParagraphAttribs, aSelection );
             nParaIndex++;
@@ -3710,7 +3710,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
     {
         Graphic aGraf;  // be sure this graphic is deleted before swapping out
         if( SeekToContent( DFF_Prop_pibName, rSt ) )
-            aFileName = MSDFFReadZString( rSt, GetPropertyValue( DFF_Prop_pibName ), sal_True );
+            aFileName = MSDFFReadZString( rSt, GetPropertyValue( DFF_Prop_pibName ), true );
 
         //   AND, OR the following:
         if( !( eFlags & mso_blipflagDoNotSave ) ) // Graphic embedded
@@ -4266,7 +4266,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             SvxFontItem aLatin(EE_CHAR_FONTINFO), aAsian(EE_CHAR_FONTINFO_CJK), aComplex(EE_CHAR_FONTINFO_CTL);
                             GetDefaultFonts( aLatin, aAsian, aComplex );
 
-                            aFontName = MSDFFReadZString( rSt, GetPropertyValue( DFF_Prop_gtextFont ), sal_True );
+                            aFontName = MSDFFReadZString( rSt, GetPropertyValue( DFF_Prop_gtextFont ), true );
                             aSet.Put( SvxFontItem( aLatin.GetFamily(), aFontName, aLatin.GetStyleName(),
                                         PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, EE_CHAR_FONTINFO ));
                             aSet.Put( SvxFontItem( aLatin.GetFamily(), aFontName, aLatin.GetStyleName(),
@@ -4289,7 +4289,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
                         if ( SeekToContent( DFF_Prop_gtextUNICODE, rSt ) )
                         {
-                            aObjectText = MSDFFReadZString( rSt, GetPropertyValue( DFF_Prop_gtextUNICODE ), sal_True );
+                            aObjectText = MSDFFReadZString( rSt, GetPropertyValue( DFF_Prop_gtextUNICODE ), true );
                             ReadObjText( aObjectText, pRet );
                         }
 
@@ -4586,8 +4586,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         // connectors
                         MSO_ConnectorStyle eConnectorStyle = (MSO_ConnectorStyle)GetPropertyValue( DFF_Prop_cxstyle, mso_cxstyleStraight );
 
-                        ((SdrEdgeObj*)pRet)->ConnectToNode(sal_True, NULL);
-                        ((SdrEdgeObj*)pRet)->ConnectToNode(sal_False, NULL);
+                        ((SdrEdgeObj*)pRet)->ConnectToNode(true, NULL);
+                        ((SdrEdgeObj*)pRet)->ConnectToNode(false, NULL);
 
                         Point aPoint1( aObjData.aBoundRect.TopLeft() );
                         Point aPoint2( aObjData.aBoundRect.BottomRight() );
@@ -6855,7 +6855,7 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
         else
         {
             SfxFilterMatcher aMatch( sStarName );
-            SotStorageRef xStorage = new SotStorage( sal_False, *xMemStream );
+            SotStorageRef xStorage = new SotStorage( false, *xMemStream );
             rSrcStg.CopyTo( xStorage );
             xStorage->Commit();
             xStorage.Clear();

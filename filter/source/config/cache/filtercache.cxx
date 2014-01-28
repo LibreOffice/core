@@ -684,7 +684,7 @@ void FilterCache::detectFlatForURL(const css::util::URL& aURL      ,
     // (which maps extensions to types) work with lower case key strings!
     INetURLObject   aParser    (aURL.Main);
     OUString sExtension = aParser.getExtension(INetURLObject::LAST_SEGMENT       ,
-                                                      sal_True                          ,
+                                                      true                          ,
                                                       INetURLObject::DECODE_WITH_CHARSET);
     sExtension = sExtension.toAsciiLowerCase();
 
@@ -708,7 +708,7 @@ void FilterCache::detectFlatForURL(const css::util::URL& aURL      ,
 
             FlatDetectionInfo aInfo;
             aInfo.sType = *(rTypesForPattern.begin());
-            aInfo.bMatchByPattern = sal_True;
+            aInfo.bMatchByPattern = true;
 
             rFlatTypes.push_back(aInfo);
 //          return;
@@ -730,7 +730,7 @@ void FilterCache::detectFlatForURL(const css::util::URL& aURL      ,
         {
             FlatDetectionInfo aInfo;
             aInfo.sType             = *pIt;
-            aInfo.bMatchByExtension = sal_True;
+            aInfo.bMatchByExtension = true;
 
             rFlatTypes.push_back(aInfo);
         }

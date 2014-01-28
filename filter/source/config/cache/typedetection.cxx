@@ -673,7 +673,7 @@ bool TypeDetection::impl_getPreselectionForType(
         // extract extension from URL .. to check it case-insensitive !
         INetURLObject   aParser    (aParsedURL.Main);
         OUString sExtension = aParser.getExtension(INetURLObject::LAST_SEGMENT       ,
-                                                          sal_True                          ,
+                                                          true                          ,
                                                           INetURLObject::DECODE_WITH_CHARSET);
         sExtension = sExtension.toAsciiLowerCase();
 

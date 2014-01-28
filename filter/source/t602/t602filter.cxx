@@ -249,7 +249,7 @@ sal_Bool SAL_CALL T602ImportFilter::importImpl( const Sequence< ::com::sun::star
 
     if ( !mxInputStream.is() )
     {
-        OSL_ASSERT( 0 );
+        OSL_ASSERT( false );
         return sal_False;
     }
 

@@ -268,7 +268,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             SAL_WNODEPRECATED_DECLARATIONS_POP
             if ( pMemStrm.get() )
             {
-                pMemStrm->ObjectOwnsMemory( sal_False );
+                pMemStrm->ObjectOwnsMemory( false );
                 sal_uInt8* pBuf = (sal_uInt8*) pMemStrm->GetData();
                 sal_uInt32 nSize = pMemStrm->Seek( STREAM_SEEK_TO_END );
                 aPropOpt.AddOpt( ESCHER_Prop_pihlShape, sal_False, nSize, pBuf, nSize );
@@ -585,7 +585,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         }
         else if ( rObj.GetType() == "drawing.Text" )
         {
-            SHAPE_TEXT( sal_True );
+            SHAPE_TEXT( true );
         }
         else if ( rObj.GetType() == "drawing.Page" )
         {
@@ -710,7 +710,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             ImplWriteAdditionalText( rObj, aTextRefPoint );
         }
 
-    } while ( 0 );
+    } while ( false );
 
     if ( bAdditionalText )
         mpEscherEx->EndShape( ESCHER_ShpInst_Min, nGrpShapeID );
@@ -814,7 +814,7 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
         }
 #endif // EES_WRITE_EPP
         mpEscherEx->CloseContainer();   // ESCHER_SpContainer
-    } while ( 0 );
+    } while ( false );
     mpEscherEx->LeaveGroup();
     mpEscherEx->EndShape( nShapeType, nShapeID );
 }
@@ -911,7 +911,7 @@ bool ImplEscherExSdr::ImplInitPage( const SdrPage& rPage )
             pSvxDrawPage = SvxDrawPage::getImplementation(mXDrawPage);
 
         return pSvxDrawPage != 0;
-    } while ( 0 );
+    } while ( false );
 
     return false;
 }

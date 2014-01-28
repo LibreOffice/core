@@ -648,7 +648,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 // true is 128 bit, false 40
 //note that in 40 bit mode the UI needs reworking, since the current UI is meaningfull only for
 //128bit security mode
-                aContext.Encryption.Security128bit = sal_True;
+                aContext.Encryption.Security128bit = true;
 
 //set check for permission change password
 // if not enabled and no permission password, force permissions to default as if PDF where without encryption
@@ -672,9 +672,9 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     break;
                 default:
                 case 2:
-                    aContext.Encryption.CanPrintFull            = sal_True;
+                    aContext.Encryption.CanPrintFull            = true;
                 case 1:
-                    aContext.Encryption.CanPrintTheDocument     = sal_True;
+                    aContext.Encryption.CanPrintTheDocument     = true;
                     break;
                 }
 
@@ -683,20 +683,20 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 case 0: //already in struct PDFSecPermissions CTOR
                     break;
                 case 1:
-                    aContext.Encryption.CanAssemble             = sal_True;
+                    aContext.Encryption.CanAssemble             = true;
                     break;
                 case 2:
-                    aContext.Encryption.CanFillInteractive      = sal_True;
+                    aContext.Encryption.CanFillInteractive      = true;
                     break;
                 case 3:
-                    aContext.Encryption.CanAddOrModify          = sal_True;
+                    aContext.Encryption.CanAddOrModify          = true;
                     break;
                 default:
                 case 4:
                     aContext.Encryption.CanModifyTheContent     =
                         aContext.Encryption.CanCopyOrExtract    =
                         aContext.Encryption.CanAddOrModify      =
-                        aContext.Encryption.CanFillInteractive  = sal_True;
+                        aContext.Encryption.CanFillInteractive  = true;
                     break;
                 }
 
@@ -754,7 +754,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     break;
 //view PDF through the reader application
                 case 1:
-                    aContext.ForcePDFAction = sal_True;
+                    aContext.ForcePDFAction = true;
                     aContext.DefaultLinkAction = PDFWriter::LaunchAction;
                     break;
 //view PDF through an Internet browser
@@ -770,7 +770,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 {   //force the similar allowed URI action
                     aContext.DefaultLinkAction = PDFWriter::URIActionDestination;
                     //and remove the remote goto action forced on PDF file
-                    aContext.ForcePDFAction = sal_False;
+                    aContext.ForcePDFAction = false;
                 }
             }
 

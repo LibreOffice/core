@@ -551,7 +551,7 @@ public:
 
     static OUString MSDFFReadZString( SvStream& rIn,
                                            sal_uInt32 nMaxLen,
-                                           bool bUniCode = sal_False);
+                                           bool bUniCode = false);
 
     static bool ReadCommonRecordHeader( SvStream& rSt,
                                         sal_uInt8& rVer,

@@ -760,16 +760,16 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleAddStreamHdl)
         if( mpCbAddStream->IsChecked() )
         {
             mpRbAll->Check();
-            mpRbRange->Enable( sal_False );
-            mpRbSelection->Enable( sal_False );
-            mpEdPages->Enable( sal_False );
-            mpRbAll->Enable( sal_False );
+            mpRbRange->Enable( false );
+            mpRbSelection->Enable( false );
+            mpEdPages->Enable( false );
+            mpRbAll->Enable( false );
         }
         else
         {
-            mpRbAll->Enable( sal_True );
-            mpRbRange->Enable( sal_True );
-            mpRbSelection->Enable( sal_True );
+            mpRbAll->Enable( true );
+            mpRbRange->Enable( true );
+            mpRbSelection->Enable( true );
         }
     }
     return 0;
@@ -937,23 +937,23 @@ void ImpPDFTabOpnFtrPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
     default:
     case 0:
         mpRbMagnDefault->Check();
-        mpNumZoom->Enable( sal_False );
+        mpNumZoom->Enable( false );
         break;
     case 1:
         mpRbMagnFitWin->Check();
-        mpNumZoom->Enable( sal_False );
+        mpNumZoom->Enable( false );
         break;
     case 2:
         mpRbMagnFitWidth->Check();
-        mpNumZoom->Enable( sal_False );
+        mpNumZoom->Enable( false );
         break;
     case 3:
         mpRbMagnFitVisible->Check();
-        mpNumZoom->Enable( sal_False );
+        mpNumZoom->Enable( false );
         break;
     case 4:
         mpRbMagnZoom->Check();
-        mpNumZoom->Enable( sal_True );
+        mpNumZoom->Enable( true );
         break;
     };
 
@@ -1056,12 +1056,12 @@ void ImpPDFTabViewerPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
     if( paParent->mnOpenBookmarkLevels < 0 )
     {
         m_pRbAllBookmarkLevels->Check( sal_True );
-        m_pNumBookmarkLevels->Enable( sal_False );
+        m_pNumBookmarkLevels->Enable( false );
     }
     else
     {
         m_pRbVisibleBookmarkLevels->Check( sal_True );
-        m_pNumBookmarkLevels->Enable( sal_True );
+        m_pNumBookmarkLevels->Enable( true );
         m_pNumBookmarkLevels->SetValue( paParent->mnOpenBookmarkLevels );
     }
 }
@@ -1301,7 +1301,7 @@ void    ImpPDFTabSecurityPage::ImplPDFASecurityControl( sal_Bool bEnableSecurity
 //after enable, check the status of control as if the dialog was initialized
     }
     else
-        Enable( sal_False );
+        Enable( false );
 
     enablePermissionControls();
 }
@@ -1421,7 +1421,7 @@ void ImpPDFTabLinksPage::ImplPDFALinkControl( sal_Bool bEnableLaunch )
         mbOpnLnksDefaultUserState = m_pRbOpnLnksDefault->IsChecked();
         mbOpnLnksLaunchUserState = m_pRbOpnLnksLaunch->IsChecked();
         mbOpnLnksBrowserUserState = m_pRbOpnLnksBrowser->IsChecked();
-        m_pRbOpnLnksLaunch->Enable( sal_False );
+        m_pRbOpnLnksLaunch->Enable( false );
         if( mbOpnLnksLaunchUserState )
             m_pRbOpnLnksBrowser->Check();
     }

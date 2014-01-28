@@ -38,7 +38,7 @@ using namespace css::lang;
 
 GraphicExportDialog::GraphicExportDialog( const Reference< XComponentContext >& rxContext ) :
     mxContext           ( rxContext ),
-    mbExportSelection   ( sal_False )
+    mbExportSelection   ( false )
 {
 }
 

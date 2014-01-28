@@ -415,7 +415,7 @@ sal_Bool FlashExportFilter::ExportAsSingleFile(const Sequence< PropertyValue >& 
 
     if (!xOutputStream.is() )
     {
-        OSL_ASSERT ( 0 );
+        OSL_ASSERT ( false );
         return sal_False;
     }
 

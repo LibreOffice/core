@@ -1668,7 +1668,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                     // skip all meta actions until "XPATHFILL_SEQ_END"
                     if( Impl_writeFilling( aFilling ) )
                     {
-                        bool bDone = sal_False;
+                        bool bDone = false;
 
                         while( !bDone && ( ++i < nCount ) )
                         {
@@ -1677,7 +1677,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                             if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
                                      ( ( (const MetaCommentAction*) pAction )->GetComment().equalsIgnoreAsciiCase("XPATHFILL_SEQ_END") ) )
                             {
-                                bDone = sal_True;
+                                bDone = true;
                             }
                         }
                     }
@@ -1698,7 +1698,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                     // skip all meta actions until "XPATHSTROKE_SEQ_END"
                     if( Impl_writeStroke( aStroke ) )
                     {
-                        bool bDone = sal_False;
+                        bool bDone = false;
 
                         while( !bDone && ( ++i < nCount ) )
                         {
@@ -1707,7 +1707,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                             if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
                                      ( ( (const MetaCommentAction*) pAction )->GetComment().equalsIgnoreAsciiCase("XPATHSTROKE_SEQ_END") ) )
                             {
-                                bDone = sal_True;
+                                bDone = true;
                             }
                         }
                     }

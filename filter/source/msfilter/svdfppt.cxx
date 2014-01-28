@@ -170,7 +170,7 @@ SvStream& operator>>( SvStream& rIn, PptCurrentUserAtom& rAtom )
             >> rAtom.nMajorVersion
             >> rAtom.nMinorVersion
             >> nPad;
-        rAtom.aCurrentUser = SvxMSDffManager::MSDFFReadZString( rIn, nUserNameLen, sal_True );
+        rAtom.aCurrentUser = SvxMSDffManager::MSDFFReadZString( rIn, nUserNameLen, true );
     }
     aHd.SeekToEndOfRecord( rIn );
     return rIn;
@@ -551,7 +551,7 @@ sal_Bool SdrEscherImport::ReadString( OUString& rStr ) const
 
 bool SdrEscherImport::GetColorFromPalette(sal_uInt16 /*nNum*/, Color& /*rColor*/) const
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SdrEscherImport::SeekToShape( SvStream& /*rSt*/, void* /*pClientData*/, sal_uInt32 /*nId*/) const
@@ -1801,7 +1801,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
             rStCtrl.SeekRel( 4 );
 
             ::utl::TempFile aTmpFile;
-            aTmpFile.EnableKillingFile( sal_True );
+            aTmpFile.EnableKillingFile( true );
 
             if ( aTmpFile.IsValid() )
             {
@@ -1813,7 +1813,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
             if ( bSuccess )
             {
                 SvStream* pDest = ::utl::UcbStreamHelper::CreateStream( aTmpFile.GetURL(), STREAM_READ );
-                Storage* pObjStor = pDest ? new Storage( *pDest, sal_True ) : NULL;
+                Storage* pObjStor = pDest ? new Storage( *pDest, true ) : NULL;
                 if ( pObjStor )
                 {
                     SotStorageRef xObjStor( new SotStorage( pObjStor ) );
@@ -1851,7 +1851,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
 
                                         // TODO/LATER: need MediaType for Graphic
                                         aObj.SetGraphic( rGraf, OUString() );
-                                        pRet = new SdrOle2Obj( aObj, aNm, rBoundRect, sal_False );
+                                        pRet = new SdrOle2Obj( aObj, aNm, rBoundRect, false );
                                     }
                                 }
                                 if ( !pRet && ( pOe->nType == PPT_PST_ExControl ) )
@@ -1911,7 +1911,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                         // TODO/LATER: need MediaType for Graphic
                                         aObj.SetGraphic( aGraphic, OUString() );
 
-                                        pRet = new SdrOle2Obj( aObj, aNm, rBoundRect, sal_False );
+                                        pRet = new SdrOle2Obj( aObj, aNm, rBoundRect, false );
                                     }
                                 }
                             }
@@ -1983,8 +1983,8 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                         SvMemoryStream* pBas = ImportExOleObjStg( nPersistPtr, nOleId );
                         if ( pBas )
                         {
-                            SotStorageRef xSource( new SotStorage( pBas, sal_True ) );
-                            SotStorageRef xDest( new SotStorage( new SvMemoryStream(), sal_True ) );
+                            SotStorageRef xSource( new SotStorage( pBas, true ) );
+                            SotStorageRef xDest( new SotStorage( new SvMemoryStream(), true ) );
                             if ( xSource.Is() && xDest.Is() )
                             {
                                 // is this a visual basic storage ?
@@ -2300,12 +2300,12 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                 sal_uInt32  nIsBullet2 = 0; //, nInstance = nDestinationInstance != 0xffffffff ? nDestinationInstance : pTextObj->GetInstance();
                 pPara->GetAttrib( PPT_ParaAttr_BulletOn, nIsBullet2, nDestinationInstance );
                 if ( !nIsBullet2 )
-                    aParagraphAttribs.Put( SfxBoolItem( EE_PARA_BULLETSTATE, sal_False ) );
+                    aParagraphAttribs.Put( SfxBoolItem( EE_PARA_BULLETSTATE, false ) );
 
                 pPreviousParagraph = pPara;
                 if ( !aSelection.nStartPos )    // in PPT empty paragraphs never gets a bullet
                 {
-                    aParagraphAttribs.Put( SfxBoolItem( EE_PARA_BULLETSTATE, sal_False ) );
+                    aParagraphAttribs.Put( SfxBoolItem( EE_PARA_BULLETSTATE, false ) );
                 }
                 aSelection.nStartPos = 0;
                 rOutliner.QuickSetAttribs( aParagraphAttribs, aSelection );
@@ -2544,7 +2544,7 @@ bool SdrPowerPointImport::GetColorFromPalette( sal_uInt16 nNum, Color& rColor ) 
         ((SdrPowerPointImport*)this)->ePageColorsKind = eAktPageKind;
     }
     rColor = aPageColors.GetColor( nNum );
-    return sal_True;
+    return true;
 }
 
 sal_Bool SdrPowerPointImport::SeekToShape( SvStream& rSt, void* pClientData, sal_uInt32 nId ) const
@@ -2639,7 +2639,7 @@ void ImportComment10( SvxMSDffManager& rMan, SvStream& rStCtrl, SdrPage* pPage, 
             case PPT_PST_CString :
             {
                 OUString aString = SvxMSDffManager::MSDFFReadZString( rStCtrl,
-                    aCommentHd.nRecLen, sal_True );
+                    aCommentHd.nRecLen, true );
                 switch ( aCommentHd.nRecInstance )
                 {
                     case 0 : sAuthor = aString;     break;
@@ -3010,9 +3010,9 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
 
         pRet->SetMergedItemSet(*pSet);
 
-        pRet->SetMarkProtect( sal_True );
-        pRet->SetMoveProtect( sal_True );
-        pRet->SetResizeProtect( sal_True );
+        pRet->SetMarkProtect( true );
+        pRet->SetMoveProtect( true );
+        pRet->SetResizeProtect( true );
     }
     delete pSet;
     return pRet;
@@ -3104,7 +3104,7 @@ void SdrEscherImport::ImportHeaderFooterContainer( DffRecordHeader& rHd, HeaderF
                 if ( aHd.nRecInstance < 4 )
                 {
                     rE.pPlaceholder[ aHd.nRecInstance ] = MSDFFReadZString( rStCtrl,
-                        aHd.nRecLen, sal_True );
+                        aHd.nRecLen, true );
                 }
             }
             break;
@@ -4195,7 +4195,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                     }
                 }
                 if ( rIn.Tell() != aTxMasterStyleHd.GetRecEndFilePos() )
-                    DBG_ASSERT(0, "SJ: Falsche Anzahl von Bytes gelesen beim Import der PPT-Formatvorlagen");
+                    DBG_ASSERT(false, "SJ: Falsche Anzahl von Bytes gelesen beim Import der PPT-Formatvorlagen");
             }
 #endif
         }
@@ -6697,7 +6697,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                     if (nVal == 0)
                                                     {
                                                         OUString aStr;
-                                                        bool inquote = sal_False;
+                                                        bool inquote = false;
                                                         for (int nLen = 0; nLen < 64; ++nLen)
                                                         {
                                                             sal_Unicode n(0);
@@ -7456,7 +7456,7 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
             std::set< sal_Int32 > aRows;
             std::set< sal_Int32 > aColumns;
 
-            SdrObjListIter aGroupIter( *pSubList, IM_DEEPNOGROUPS, sal_False );
+            SdrObjListIter aGroupIter( *pSubList, IM_DEEPNOGROUPS, false );
             while( aGroupIter.IsMore() )
             {
                 const SdrObject* pObj( aGroupIter.Next() );

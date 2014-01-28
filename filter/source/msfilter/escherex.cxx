@@ -1347,7 +1347,7 @@ sal_Bool EscherPropertyContainer::ImplCreateEmbeddedBmp( const OString& rUniqueI
         {
             // grab BLIP from stream and insert directly as complex property
             // ownership of stream memory goes to complex property
-            aMemStrm.ObjectOwnsMemory( sal_False );
+            aMemStrm.ObjectOwnsMemory( false );
             sal_uInt8* pBuf = (sal_uInt8*) aMemStrm.GetData();
             sal_uInt32 nSize = aMemStrm.Seek( STREAM_SEEK_TO_END );
             AddOpt( ESCHER_Prop_fillBlip, sal_True, nSize, pBuf, nSize );
@@ -1747,7 +1747,7 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
                     {
                         // grab BLIP from stream and insert directly as complex property
                         // ownership of stream memory goes to complex property
-                        aMemStrm.ObjectOwnsMemory( sal_False );
+                        aMemStrm.ObjectOwnsMemory( false );
                         sal_uInt8* pBuf = (sal_uInt8*) aMemStrm.GetData();
                         sal_uInt32 nSize = aMemStrm.Seek( STREAM_SEEK_TO_END );
                         AddOpt( ESCHER_Prop_fillBlip, sal_True, nSize, pBuf, nSize );
