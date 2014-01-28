@@ -48,6 +48,7 @@ $(eval $(call gb_Library_add_defs,writerfilter,\
 		-DDEBUG_TABLE \
 		-DDEBUG_DMAPPER_SETTINGS_TABLE \
 		-DDEBUG_FACTORY \
+		-DDEBUG_DMAPPER_GRAPHIC_IMPORT \
 	) \
 ))
 
