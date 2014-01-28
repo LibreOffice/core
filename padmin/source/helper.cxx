@@ -198,13 +198,13 @@ QueryString::QueryString( Window* pParent, OUString& rQuery, OUString& rRet, con
         m_aComboBox.InsertEntry( m_rReturnValue );
         for( ::std::list<OUString>::const_iterator it = rChoices.begin(); it != rChoices.end(); ++it )
             m_aComboBox.InsertEntry( *it );
-        m_aEdit.Show( sal_False );
+        m_aEdit.Show( false );
         m_bUseEdit = false;
     }
     else
     {
         m_aEdit.SetText( m_rReturnValue );
-        m_aComboBox.Show( sal_False );
+        m_aComboBox.Show( false );
         m_bUseEdit = true;
     }
     SetText( Application::GetDisplayName() );

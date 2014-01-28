@@ -249,8 +249,8 @@ void RTSPaperPage::update()
     }
     else
     {
-        m_pDuplexText->Enable( sal_False );
-        m_pDuplexBox->Enable( sal_False );
+        m_pDuplexText->Enable( false );
+        m_pDuplexBox->Enable( false );
     }
 
     // paper
@@ -261,8 +261,8 @@ void RTSPaperPage::update()
     }
     else
     {
-        m_pPaperText->Enable( sal_False );
-        m_pPaperBox->Enable( sal_False );
+        m_pPaperText->Enable( false );
+        m_pPaperBox->Enable( false );
     }
 
     // input slots
@@ -273,8 +273,8 @@ void RTSPaperPage::update()
     }
     else
     {
-        m_pSlotText->Enable( sal_False );
-        m_pSlotBox->Enable( sal_False );
+        m_pSlotText->Enable( false );
+        m_pSlotBox->Enable( false );
     }
 }
 

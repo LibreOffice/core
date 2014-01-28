@@ -66,7 +66,7 @@ void ProgressDialog::startOperation( const OUString& rOperation )
     maProgressBar.SetValue( 0 );
     mbCanceled = false;
     if( ! IsVisible() )
-        Show( sal_True );
+        Show( true );
 }
 
 void ProgressDialog::setValue( int nValue )

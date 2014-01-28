@@ -113,7 +113,7 @@ void PADialog::Init()
     UpdateDevice();
     UpdateText();
 
-    m_aRemPB.Enable( sal_False );
+    m_aRemPB.Enable( false );
 
     m_aDevicesLB.SetDoubleClickHdl( LINK( this, PADialog, DoubleClickHdl ) );
     m_aDevicesLB.SetSelectHdl( LINK( this, PADialog, SelectHdl ) );
@@ -130,12 +130,12 @@ void PADialog::Init()
     // but the write will have checked whether any writeable config exists
     if( ! m_rPIManager.writePrinterConfig() )
     {
-        m_aAddPB.Enable( sal_False );
-        m_aRemPB.Enable( sal_False );
-        m_aConfPB.Enable( sal_False );
-        m_aRenamePB.Enable( sal_False );
-        m_aStdPB.Enable( sal_False );
-        m_aCUPSCB.Enable( sal_False );
+        m_aAddPB.Enable( false );
+        m_aRemPB.Enable( false );
+        m_aConfPB.Enable( false );
+        m_aRenamePB.Enable( false );
+        m_aStdPB.Enable( false );
+        m_aCUPSCB.Enable( false );
         ErrorBox aBox( GetParent(), WB_OK | WB_DEF_OK, OUString( PaResId( RID_ERR_NOWRITE ) ) );
         aBox.Execute();
     }
@@ -228,9 +228,9 @@ IMPL_LINK( PADialog, SelectHdl, ListBox*, pListBox )
         OUString sSelect = getSelectedDevice();
         OUString sDefPrt = m_rPIManager.getDefaultPrinter();
         if( sDefPrt == sSelect || ! m_rPIManager.removePrinter( sSelect, true ) )
-            m_aRemPB.Enable( sal_False );
+            m_aRemPB.Enable( false );
         else
-            m_aRemPB.Enable( sal_True );
+            m_aRemPB.Enable( true );
         UpdateText();
     }
     return 0;
@@ -245,7 +245,7 @@ void PADialog::UpdateDefPrt()
 
     if( m_aRemPB.HasFocus() )
         m_aDevicesLB.GetFocus();
-    m_aRemPB.Enable( sal_False );
+    m_aRemPB.Enable( false );
 }
 
 void PADialog::UpdateText()
@@ -622,7 +622,7 @@ void PADialog::RemDevice()
     m_aDevicesLB.GetFocus();
 
     if( m_aDevicesLB.GetEntryCount() < 2 )
-        m_aRemPB.Enable( sal_False );
+        m_aRemPB.Enable( false );
 }
 
 void PADialog::ConfigureDevice()

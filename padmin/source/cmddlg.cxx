@@ -260,10 +260,10 @@ RTSCommandPage::RTSCommandPage( RTSDialog* pParent ) :
     m_aPdfDirectoryButton.SetClickHdl( LINK( this, RTSCommandPage, ClickBtnHdl ) );
     m_aExternalCB.SetToggleHdl( LINK( this, RTSCommandPage, ClickBtnHdl ) );
 
-    m_aPdfDirectoryButton.Show( sal_False );
-    m_aPdfDirectoryEdit.Show( sal_False );
-    m_aPdfDirectoryText.Show( sal_False );
-    m_aFaxSwallowBox.Show( sal_False );
+    m_aPdfDirectoryButton.Show( false );
+    m_aPdfDirectoryEdit.Show( false );
+    m_aPdfDirectoryText.Show( false );
+    m_aFaxSwallowBox.Show( false );
     m_aCommandsCB.SetText( m_pParent->m_aJobData.m_aCommand );
     m_aQuickCB.SetText( m_pParent->m_aJobData.m_aQuickCommand );
 
@@ -277,7 +277,7 @@ RTSCommandPage::RTSCommandPage( RTSDialog* pParent ) :
         if( aToken.startsWith( "fax" ) )
         {
             m_bWasFax = true;
-            m_aFaxSwallowBox.Show( sal_True );
+            m_aFaxSwallowBox.Show( true );
             sal_Int32 nPos = 0;
             m_aFaxSwallowBox.Check( aToken.getToken( 1, '=', nPos ).startsWith( "swallow" ) ? sal_True : sal_False );
             m_aConfigureBox.SelectEntryPos( m_nFaxEntry );
@@ -287,9 +287,9 @@ RTSCommandPage::RTSCommandPage( RTSDialog* pParent ) :
             m_bWasPdf = true;
             sal_Int32 nPos = 0;
             m_aPdfDirectoryEdit.SetText( aToken.getToken( 1, '=', nPos ) );
-            m_aPdfDirectoryEdit.Show( sal_True );
-            m_aPdfDirectoryButton.Show( sal_True );
-            m_aPdfDirectoryText.Show( sal_True );
+            m_aPdfDirectoryEdit.Show( true );
+            m_aPdfDirectoryButton.Show( true );
+            m_aPdfDirectoryText.Show( true );
             m_aConfigureBox.SelectEntryPos( m_nPdfEntry );
         }
         else if( aToken.equalsAscii( "external_dialog" ) )
@@ -421,7 +421,7 @@ IMPL_LINK( RTSCommandPage, SelectHdl, Control*, pBox )
     }
     else if( pBox == &m_aCommandsCB )
     {
-        m_aRemovePB.Enable( sal_True );
+        m_aRemovePB.Enable( true );
     }
 
     return 0;

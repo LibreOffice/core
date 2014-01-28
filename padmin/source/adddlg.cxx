@@ -59,13 +59,13 @@ APChooseDevicePage::APChooseDevicePage( AddPrinterDialog* pParent ) :
     m_aPDFBtn.Check( sal_False );
     m_aOldBtn.Check( sal_False );
     if( AddPrinterDialog::getOldPrinterLocation().isEmpty() )
-        m_aOldBtn.Enable( sal_False );
+        m_aOldBtn.Enable( false );
     if( ! PrinterInfoManager::get().addOrRemovePossible() )
     {
         m_aPrinterBtn.Check( sal_False );
         m_aFaxBtn.Check( sal_True );
-        m_aPrinterBtn.Enable( sal_False );
-        m_aOldBtn.Enable( sal_False );
+        m_aPrinterBtn.Enable( false );
+        m_aOldBtn.Enable( false );
     }
 }
 
@@ -326,11 +326,11 @@ APNamePage::APNamePage( AddPrinterDialog* pParent, const OUString& rInitName, De
 {
     FreeResource();
     if( eKind != DeviceKind::Printer )
-        m_aDefaultBox.Show( sal_False );
+        m_aDefaultBox.Show( false );
     else
         m_aNameEdt.SetText( rInitName );
     if( eKind != DeviceKind::Fax )
-        m_aFaxSwallowBox.Show( sal_False );
+        m_aFaxSwallowBox.Show( false );
 
     m_aNameEdt.SetText( AddPrinterDialog::uniquePrinterName( m_aNameEdt.GetText() ) );
     m_aDefaultBox.Check( sal_False );
@@ -368,16 +368,16 @@ APCommandPage::APCommandPage( AddPrinterDialog* pParent, DeviceKind::type eKind 
     ::std::list< OUString > aCommands;
     if( m_eKind == DeviceKind::Printer )
     {
-        m_aHelpBtn.Show( sal_False );
+        m_aHelpBtn.Show( false );
         Size aSize = m_aCommandTxt.GetSizePixel();
         aSize.Width() = m_aCommandBox.GetSizePixel().Width();
         m_aCommandTxt.SetSizePixel( aSize );
     }
     if( m_eKind != DeviceKind::Pdf )
     {
-        m_aPdfDirBtn.Show( sal_False );
-        m_aPdfDirEdt.Show( sal_False );
-        m_aPdfDirTxt.Show( sal_False );
+        m_aPdfDirBtn.Show( false );
+        m_aPdfDirEdt.Show( false );
+        m_aPdfDirTxt.Show( false );
     }
     switch( m_eKind )
     {
@@ -748,9 +748,9 @@ AddPrinterDialog::AddPrinterDialog( Window* pParent )
 {
     FreeResource();
     m_pCurrentPage = m_pChooseDevicePage = new APChooseDevicePage( this );
-    m_pCurrentPage->Show( sal_True );
-    m_aFinishPB.Enable( sal_False );
-    m_aPrevPB.Enable( sal_False );
+    m_pCurrentPage->Show( true );
+    m_aFinishPB.Enable( false );
+    m_aPrevPB.Enable( false );
 
     m_aNextPB.SetClickHdl( LINK( this, AddPrinterDialog, ClickBtnHdl ) );
     m_aPrevPB.SetClickHdl( LINK( this, AddPrinterDialog, ClickBtnHdl ) );
@@ -809,7 +809,7 @@ void AddPrinterDialog::DataChanged( const DataChangedEvent& rEv )
 
 void AddPrinterDialog::advance()
 {
-    m_pCurrentPage->Show( sal_False );
+    m_pCurrentPage->Show( false );
     if( m_pCurrentPage == m_pChooseDevicePage )
     {
         if( m_pChooseDevicePage->isPrinter() )
@@ -817,30 +817,30 @@ void AddPrinterDialog::advance()
             if( ! m_pChooseDriverPage )
                 m_pChooseDriverPage = new APChooseDriverPage( this );
             m_pCurrentPage = m_pChooseDriverPage;
-            m_aPrevPB.Enable( sal_True );
+            m_aPrevPB.Enable( true );
         }
         else if( m_pChooseDevicePage->isOld() )
         {
             if( ! m_pOldPrinterPage )
                 m_pOldPrinterPage = new APOldPrinterPage( this );
             m_pCurrentPage = m_pOldPrinterPage;
-            m_aPrevPB.Enable( sal_True );
-            m_aFinishPB.Enable( sal_True );
-            m_aNextPB.Enable( sal_False );
+            m_aPrevPB.Enable( true );
+            m_aFinishPB.Enable( true );
+            m_aNextPB.Enable( false );
         }
         else if( m_pChooseDevicePage->isFax() )
         {
             if( ! m_pFaxDriverPage )
                 m_pFaxDriverPage = new APFaxDriverPage( this );
             m_pCurrentPage = m_pFaxDriverPage;
-            m_aPrevPB.Enable( sal_True );
+            m_aPrevPB.Enable( true );
         }
         else if( m_pChooseDevicePage->isPDF() )
         {
             if( ! m_pPdfDriverPage )
                 m_pPdfDriverPage = new APPdfDriverPage( this );
             m_pCurrentPage = m_pPdfDriverPage;
-            m_aPrevPB.Enable( sal_True );
+            m_aPrevPB.Enable( true );
         }
     }
     else if( m_pCurrentPage == m_pChooseDriverPage )
@@ -856,8 +856,8 @@ void AddPrinterDialog::advance()
         else
             m_pNamePage->setText( m_aPrinter.m_aPrinterName );
         m_pCurrentPage = m_pNamePage;
-        m_aFinishPB.Enable( sal_True );
-        m_aNextPB.Enable( sal_False );
+        m_aFinishPB.Enable( true );
+        m_aNextPB.Enable( false );
     }
     else if( m_pCurrentPage == m_pFaxDriverPage )
     {
@@ -885,8 +885,8 @@ void AddPrinterDialog::advance()
         if( ! m_pFaxNamePage )
             m_pFaxNamePage = new APNamePage( this, OUString(), DeviceKind::Fax );
         m_pCurrentPage = m_pFaxNamePage;
-        m_aNextPB.Enable( sal_False );
-        m_aFinishPB.Enable( sal_True );
+        m_aNextPB.Enable( false );
+        m_aFinishPB.Enable( true );
     }
     else if( m_pCurrentPage == m_pPdfDriverPage )
     {
@@ -914,26 +914,26 @@ void AddPrinterDialog::advance()
         if( ! m_pPdfNamePage )
             m_pPdfNamePage = new APNamePage( this, OUString(), DeviceKind::Pdf );
         m_pCurrentPage = m_pPdfNamePage;
-        m_aNextPB.Enable( sal_False );
-        m_aFinishPB.Enable( sal_True );
+        m_aNextPB.Enable( false );
+        m_aFinishPB.Enable( true );
     }
 
-    m_pCurrentPage->Show( sal_True );
+    m_pCurrentPage->Show( true );
     m_aTitleImage.SetText( m_pCurrentPage->getTitle() );
 }
 
 void AddPrinterDialog::back()
 {
-    m_pCurrentPage->Show( sal_False );
+    m_pCurrentPage->Show( false );
     if( m_pCurrentPage == m_pChooseDriverPage )
     {
         m_pCurrentPage = m_pChooseDevicePage;
-        m_aPrevPB.Enable( sal_False );
+        m_aPrevPB.Enable( false );
     }
     else if( m_pCurrentPage == m_pNamePage )
     {
         m_pCurrentPage = m_pCommandPage;
-        m_aNextPB.Enable( sal_True );
+        m_aNextPB.Enable( true );
     }
     else if( m_pCurrentPage == m_pCommandPage )
     {
@@ -942,13 +942,13 @@ void AddPrinterDialog::back()
     else if( m_pCurrentPage == m_pOldPrinterPage )
     {
         m_pCurrentPage = m_pChooseDevicePage;
-        m_aPrevPB.Enable( sal_False );
-        m_aNextPB.Enable( sal_True );
+        m_aPrevPB.Enable( false );
+        m_aNextPB.Enable( true );
     }
     else if( m_pCurrentPage == m_pFaxDriverPage )
     {
         m_pCurrentPage = m_pChooseDevicePage;
-        m_aPrevPB.Enable( sal_False );
+        m_aPrevPB.Enable( false );
     }
     else if( m_pCurrentPage == m_pFaxSelectDriverPage )
     {
@@ -957,17 +957,17 @@ void AddPrinterDialog::back()
     else if( m_pCurrentPage == m_pFaxNamePage )
     {
         m_pCurrentPage = m_pFaxCommandPage;
-        m_aNextPB.Enable( sal_True );
+        m_aNextPB.Enable( true );
     }
     else if( m_pCurrentPage == m_pFaxCommandPage )
     {
         m_pCurrentPage = m_pFaxDriverPage->isDefault() ? (APTabPage*)m_pFaxDriverPage : (APTabPage*)m_pFaxSelectDriverPage;
-        m_aNextPB.Enable( sal_True );
+        m_aNextPB.Enable( true );
     }
     else if( m_pCurrentPage == m_pPdfDriverPage )
     {
         m_pCurrentPage = m_pChooseDevicePage;
-        m_aPrevPB.Enable( sal_False );
+        m_aPrevPB.Enable( false );
     }
     else if( m_pCurrentPage == m_pPdfSelectDriverPage )
     {
@@ -976,14 +976,14 @@ void AddPrinterDialog::back()
     else if( m_pCurrentPage == m_pPdfNamePage )
     {
         m_pCurrentPage = m_pPdfCommandPage;
-        m_aNextPB.Enable( sal_True );
+        m_aNextPB.Enable( true );
     }
     else if( m_pCurrentPage == m_pPdfCommandPage )
     {
         m_pCurrentPage = m_pPdfDriverPage->isDefault() || m_pPdfDriverPage->isDist() ? (APTabPage*)m_pPdfDriverPage : (APTabPage*)m_pPdfSelectDriverPage;
-        m_aNextPB.Enable( sal_True );
+        m_aNextPB.Enable( true );
     }
-    m_pCurrentPage->Show( sal_True );
+    m_pCurrentPage->Show( true );
     m_aTitleImage.SetText( m_pCurrentPage->getTitle() );
 }
 
