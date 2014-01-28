@@ -460,7 +460,7 @@ sal_Bool GraphicObject::IsCached( OutputDevice* pOut, const Point& rPt, const Si
     {
         Point aPt( rPt );
         Size aSz( rSz );
-        if ( pAttr->IsCropped() )
+        if ( pAttr && pAttr->IsCropped() )
         {
             PolyPolygon aClipPolyPoly;
             sal_Bool        bRectClip;
