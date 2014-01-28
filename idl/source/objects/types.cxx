@@ -1547,7 +1547,7 @@ void SvMetaType::WriteMethodArgs
 
                     default:
                     {
-                        DBG_ASSERT( sal_False, "WriteType not implemented" );
+                        DBG_ASSERT( false, "WriteType not implemented" );
                     }
                 }
                 ++it;
@@ -1672,7 +1672,7 @@ void SvMetaType::WriteTypePrefix( SvIdlDataBase & rBase, SvStream & rOutStm,
 
         default:
         {
-            DBG_ASSERT( sal_False, "WriteType not implemented" );
+            DBG_ASSERT( false, "WriteType not implemented" );
         }
     }
 }
