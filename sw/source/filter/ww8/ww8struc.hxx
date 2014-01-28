@@ -20,9 +20,11 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_WW8_WW8STRUC_HXX
 #define INCLUDED_SW_SOURCE_FILTER_WW8_WW8STRUC_HXX
 
+#include <sal/config.h>
+
+#include <boost/static_assert.hpp>
 #include <osl/endian.h>
 #include "rtl/ustring.hxx"
-#include <sal/config.h>
 
 #include <editeng/borderline.hxx>
 #include <filter/msfilter/util.hxx>
@@ -164,11 +166,11 @@ struct WW8_STD
 {
     // Base part of STD:
     sal_uInt16  sti : 12;          // invariant style identifier
-    bool        fScratch : 1;      // spare field for any temporary use,
+    sal_uInt16  fScratch : 1;      // spare field for any temporary use,
                                                          // always reset back to zero!
-    bool        fInvalHeight : 1;  // PHEs of all text with this style are wrong
-    bool        fHasUpe : 1;       // UPEs have been generated
-    bool        fMassCopy : 1;     // std has been mass-copied; if unused at
+    sal_uInt16  fInvalHeight : 1;  // PHEs of all text with this style are wrong
+    sal_uInt16  fHasUpe : 1;       // UPEs have been generated
+    sal_uInt16  fMassCopy : 1;     // std has been mass-copied; if unused at
                                                          // save time, style should be deleted
     sal_uInt16  sgc : 4;           // style type code
     sal_uInt16  istdBase : 12;     // base style
@@ -177,8 +179,8 @@ struct WW8_STD
     sal_uInt16  bchUpe;            // offset to end of upx's, start of upe's
     //-------- jetzt neu:
     // ab Ver8 gibts zwei Felder mehr:
-  bool          fAutoRedef : 1;    /* auto redefine style when appropriate */
-  bool          fHidden : 1;       /* hidden from UI? */
+  sal_uInt16    fAutoRedef : 1;    /* auto redefine style when appropriate */
+  sal_uInt16    fHidden : 1;       /* hidden from UI? */
   sal_uInt16    : 14;              /* unused bits */
 
     // Variable length part of STD:
@@ -188,6 +190,8 @@ struct WW8_STD
         // chain
     // char grupe[];
 };
+
+BOOST_STATIC_ASSERT(sizeof (WW8_STD) == 10);
 
 /** Basis zum Einlesen UND zum Arbeiten (wird jeweils unter schiedlich beerbt)
 */
@@ -206,6 +210,8 @@ struct WW8_FFN_BASE     // Font Descriptor
     sal_uInt8    chs;            //  0x4     character set identifier
     sal_uInt8    ibszAlt;        //  0x5     index into ffn.szFfn to the name of the alternate font
 };
+
+BOOST_STATIC_ASSERT(sizeof (WW8_FFN_BASE) == 6);
 
 /** Hiermit arbeiten wir im Parser (und Dumper)
 */
@@ -283,7 +289,7 @@ public:
     //Maps what I think is the language this is to affect to the OOo language
     sal_uInt16 GetConvertedLang() const;
 
-    bool       fKerningPunct  : 1;  // true if we're kerning punctuation
+    sal_uInt16 fKerningPunct  : 1;  // true if we're kerning punctuation
     sal_uInt16 iJustification : 2;  // Kinsoku method of justification:
                                 //  0 = always expand
                                 //  1 = compress punctuation
@@ -292,7 +298,7 @@ public:
                                 //  0 = Level 1
                                 //  1 = Level 2
                                 //  2 = Custom
-    bool       f2on1          : 1;  // 2-page-on-1 feature is turned on.
+    sal_uInt16 f2on1          : 1;  // 2-page-on-1 feature is turned on.
     sal_uInt16 reserved1      : 4;  // in 97 its marked as reserved BUT
     sal_uInt16 reserved2      : 6;  // reserved ?
     //we find that the following applies,
@@ -345,6 +351,8 @@ struct WW8_DOGRID
     short fFollowMargins:1; // if true, the grid will start at the left and top
                                                     // margins and ignore xaGrid and yaGrid.
 };
+
+BOOST_STATIC_ASSERT(sizeof (WW8_DOGRID) == 10);
 
 struct WW8_PIC
 {
@@ -416,6 +424,8 @@ struct WW8_PIC_SHADOW
 //  SVBT8 rgb[];            // 0x3a variable array of bytes containing Window's metafile, bitmap or TIFF file filename.
 };
 
+BOOST_STATIC_ASSERT(sizeof (WW8_PIC_SHADOW) == 0x2E);
+    // "0x2E": cf. SwWW8ImplReader::PicRead pDataStream->Read call
 
 struct WW8_TBD
 {
@@ -801,7 +811,7 @@ public:
     sal_Int32 nYaTop;        //top of rectangle enclosing shape relative to the origin of the shape
     sal_Int32 nXaRight;  //right of rectangle enclosing shape relative to the origin of the shape
     sal_Int32 nYaBottom;//bottom of the rectangle enclosing shape relative to the origin of the shape
-    bool      bHdr:1;
+    sal_uInt16 bHdr:1;
     //0001 1 in the undo doc when shape is from the header doc, 0 otherwise (undefined when not in the undo doc)
     sal_uInt16 nbx:2;
     //0006 x position of shape relative to anchor CP
@@ -829,13 +839,13 @@ public:
     //1 wrap only on left
     //2 wrap only on right
     //3 wrap only on largest side
-    bool       bRcaSimple:1;
+    sal_uInt16 bRcaSimple:1;
     //2000 when set, temporarily overrides bx, by, forcing the xaLeft, xaRight, yaTop, and yaBottom fields to all be page relative.
-    bool       bBelowText:1;
+    sal_uInt16 bBelowText:1;
     //4000
     //1 shape is below text
     //0 shape is above text
-    bool       bAnchorLock:1;
+    sal_uInt16 bAnchorLock:1;
     //8000  1 anchor is locked
     //      0 anchor is not locked
     sal_Int32 nTxbx; //count of textboxes in shape (undo doc only)
@@ -854,6 +864,9 @@ struct WW8_FSPA_SHADOW  // alle Member an gleicher Position und Groesse,
     SVBT16 aBits1;
     SVBT32 nTxbx;
 };
+
+BOOST_STATIC_ASSERT(sizeof (WW8_FSPA_SHADOW) == 26);
+    // "26": cf. WW8ScannerBase ctor case 8 creation of pMainFdoa and pHdFtFdoa
 
 struct WW8_TXBXS
 {

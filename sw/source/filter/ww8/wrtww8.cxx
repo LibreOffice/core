@@ -633,7 +633,7 @@ void WW8Export::ExportDopTypography(WW8DopTypography &rTypo)
 
     const IDocumentSettingAccess* pIDocumentSettingAccess = GetWriter().getIDocumentSettingAccess();
 
-    rTypo.fKerningPunct = pIDocumentSettingAccess->get(IDocumentSettingAccess::KERN_ASIAN_PUNCTUATION);
+    rTypo.fKerningPunct = sal_uInt16(pIDocumentSettingAccess->get(IDocumentSettingAccess::KERN_ASIAN_PUNCTUATION));
     rTypo.iJustification = pDoc->getCharacterCompressionType();
 }
 

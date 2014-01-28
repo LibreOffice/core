@@ -6008,10 +6008,10 @@ WW8_STD* WW8Style::Read1STDFixed( short& rSkip, short* pcbStd )
             a16Bit = 0;
             rSt >> a16Bit;
             pStd->sti          =        a16Bit & 0x0fff  ;
-            pStd->fScratch     = 0 != ( a16Bit & 0x1000 );
-            pStd->fInvalHeight = 0 != ( a16Bit & 0x2000 );
-            pStd->fHasUpe      = 0 != ( a16Bit & 0x4000 );
-            pStd->fMassCopy    = 0 != ( a16Bit & 0x8000 );
+            pStd->fScratch     = sal_uInt16(0 != ( a16Bit & 0x1000 ));
+            pStd->fInvalHeight = sal_uInt16(0 != ( a16Bit & 0x2000 ));
+            pStd->fHasUpe      = sal_uInt16(0 != ( a16Bit & 0x4000 ));
+            pStd->fMassCopy    = sal_uInt16(0 != ( a16Bit & 0x8000 ));
 
             if( 4 > nRead ) break;
             a16Bit = 0;
