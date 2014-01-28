@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9df570_e019ac23",
+        "filename": "writerfilter/source/dmapper/GraphicImport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-28T08:43:27Z",
+      "side": 1,
+      "message": "This is a verbose way to say \"if (1)\" :)",
+      "revId": "2fac7f4118b4bad5482ec28b6233959b8359a6cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
