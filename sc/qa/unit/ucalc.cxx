@@ -3537,7 +3537,6 @@ void Test::testCopyPasteAsLink()
 
 void Test::testCopyPasteTranspose()
 {
-
     m_pDoc->InsertTab(0, OUString("Sheet1"));
     m_pDoc->InsertTab(1, OUString("Sheet2"));
 
@@ -3600,6 +3599,58 @@ void Test::testCopyPasteTranspose()
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 
+}
+
+void Test::testUndoCut()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+
+    // Insert values into A1:A3.
+    m_pDoc->SetValue(ScAddress(0,0,0), 1.0);
+    m_pDoc->SetValue(ScAddress(0,1,0), 10.0);
+    m_pDoc->SetValue(ScAddress(0,2,0), 100.0);
+
+    // SUM in A4.
+    m_pDoc->SetString(ScAddress(0,3,0), "=SUM(A1:A3)");
+    CPPUNIT_ASSERT_EQUAL(111.0, m_pDoc->GetValue(0,3,0));
+
+    // Select A1:A3.
+    ScMarkData aMark;
+    ScRange aRange(0,0,0,0,2,0);
+    aMark.SetMarkArea(aRange);
+    aMark.MarkToMulti();
+
+    // Set up an undo object for cutting A1:A3.
+    ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
+    pUndoDoc->InitUndo(m_pDoc, 0 ,0);
+    m_pDoc->CopyToDocument(aRange, IDF_ALL, false, pUndoDoc);
+    CPPUNIT_ASSERT_EQUAL(  1.0, pUndoDoc->GetValue(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL( 10.0, pUndoDoc->GetValue(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(100.0, pUndoDoc->GetValue(ScAddress(0,2,0)));
+    ScUndoCut aUndo(&getDocShell(), aRange, aRange.aEnd, aMark, pUndoDoc);
+
+    // "Cut" the selection.
+    m_pDoc->DeleteSelection(IDF_ALL, aMark);
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(0,3,0)); // The SUM should be zero after the "cut".
+
+    // Undo it, and check the result.
+    aUndo.Undo();
+    CPPUNIT_ASSERT_EQUAL(  1.0, m_pDoc->GetValue(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL( 10.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(100.0, m_pDoc->GetValue(ScAddress(0,2,0)));
+    CPPUNIT_ASSERT_EQUAL(111.0, m_pDoc->GetValue(0,3,0)); // The SUM value should be back to the original.
+
+    // Redo it and check.
+    aUndo.Redo();
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(0,3,0));
+
+    // Undo again.
+    aUndo.Undo();
+    CPPUNIT_ASSERT_EQUAL(111.0, m_pDoc->GetValue(0,3,0));
+
+    m_pDoc->DeleteTab(0);
 }
 
 void Test::testMoveBlock()

@@ -238,6 +238,7 @@ public:
     void testCopyPaste();
     void testCopyPasteAsLink();
     void testCopyPasteTranspose();
+    void testUndoCut();
     void testMoveBlock();
     void testCopyPasteRelativeFormula();
     void testMergedCells();
@@ -390,6 +391,7 @@ public:
     CPPUNIT_TEST(testCopyPaste);
     CPPUNIT_TEST(testCopyPasteAsLink);
     CPPUNIT_TEST(testCopyPasteTranspose);
+    CPPUNIT_TEST(testUndoCut);
     CPPUNIT_TEST(testMoveBlock);
     CPPUNIT_TEST(testCopyPasteRelativeFormula);
     CPPUNIT_TEST(testMergedCells);
