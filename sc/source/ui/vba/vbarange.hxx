@@ -87,8 +87,10 @@ class ScVbaRange : public ScVbaRange_BASE
     sal_Bool mbIsRows;
     sal_Bool mbIsColumns;
     css::uno::Reference< ov::excel::XValidation > m_xValidation;
-    double getCalcColWidth( const css::table::CellRangeAddress& ) throw (css::uno::RuntimeException);
-    double getCalcRowHeight( const css::table::CellRangeAddress& ) throw (css::uno::RuntimeException);
+    double getCalcColWidth(const css::table::CellRangeAddress&)
+        throw (css::uno::RuntimeException, std::exception);
+    double getCalcRowHeight(const css::table::CellRangeAddress&)
+        throw (css::uno::RuntimeException, std::exception);
     void visitArray( ArrayVisitor& vistor );
 
     css::uno::Reference< ov::excel::XRange > getEntireColumnOrRow( bool bColumn = true ) throw( css::uno::RuntimeException );

@@ -3763,7 +3763,8 @@ ScVbaRange::getDefaultMethodName(  ) throw (uno::RuntimeException)
 
 // returns calc internal col. width ( in points )
 double
-ScVbaRange::getCalcColWidth( const table::CellRangeAddress& rAddress) throw (uno::RuntimeException)
+ScVbaRange::getCalcColWidth(const table::CellRangeAddress& rAddress)
+    throw (uno::RuntimeException, std::exception)
 {
     ScDocument* pDoc = getScDocument();
     sal_uInt16 nWidth = pDoc->GetOriginalWidth( static_cast< SCCOL >( rAddress.StartColumn ), static_cast< SCTAB >( rAddress.Sheet ) );
@@ -3773,7 +3774,8 @@ ScVbaRange::getCalcColWidth( const table::CellRangeAddress& rAddress) throw (uno
 }
 
 double
-ScVbaRange::getCalcRowHeight( const table::CellRangeAddress& rAddress ) throw (uno::RuntimeException)
+ScVbaRange::getCalcRowHeight(const table::CellRangeAddress& rAddress)
+    throw (uno::RuntimeException, std::exception)
 {
     ScDocument* pDoc = getDocumentFromRange( mxRange );
     sal_uInt16 nWidth = pDoc->GetOriginalHeight( rAddress.StartRow, rAddress.Sheet );
