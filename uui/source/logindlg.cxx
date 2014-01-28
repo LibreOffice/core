@@ -46,8 +46,8 @@ void LoginDialog::HideControls_Impl( sal_uInt16 nFlags )
     }
     else if ( ( nFlags & LF_PATH_READONLY ) == LF_PATH_READONLY )
     {
-        m_pPathED->Enable( sal_False );
-        m_pPathBtn->Enable( sal_False );
+        m_pPathED->Enable( false );
+        m_pPathBtn->Enable( false );
     }
 
     if ( ( nFlags & LF_NO_USERNAME ) == LF_NO_USERNAME )
@@ -57,7 +57,7 @@ void LoginDialog::HideControls_Impl( sal_uInt16 nFlags )
     }
     else if ( ( nFlags & LF_USERNAME_READONLY ) == LF_USERNAME_READONLY )
     {
-        m_pNameED->Enable( sal_False );
+        m_pNameED->Enable( false );
     }
 
     if ( ( nFlags & LF_NO_PASSWORD ) == LF_NO_PASSWORD )

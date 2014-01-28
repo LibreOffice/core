@@ -62,7 +62,7 @@ MasterPasswordCreateDialog::MasterPasswordCreateDialog(Window* pParent, ResMgr* 
     get(m_pEDMasterPasswordCrt, "password1");
     get(m_pEDMasterPasswordRepeat, "password2");
     get(m_pOKBtn, "ok");
-    m_pOKBtn->Enable( sal_False );
+    m_pOKBtn->Enable( false );
     m_pOKBtn->SetClickHdl( LINK( this, MasterPasswordCreateDialog, OKHdl_Impl ) );
     m_pEDMasterPasswordCrt->SetModifyHdl( LINK( this, MasterPasswordCreateDialog, EditHdl_Impl ) );
 }

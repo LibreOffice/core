@@ -73,8 +73,8 @@ PasswordDialog::PasswordDialog(
     OUString aTitle(ResId(STR_TITLE_ENTER_PASSWORD, *pResourceMgr).toString());
     aFTConfirmPassword.Hide();
     aEDConfirmPassword.Hide();
-    aFTConfirmPassword.Enable( sal_False );
-    aEDConfirmPassword.Enable( sal_False );
+    aFTConfirmPassword.Enable( false );
+    aEDConfirmPassword.Enable( false );
 
     // settings for create password
     if (nDialogMode == task::PasswordRequestMode_PASSWORD_CREATE)
@@ -85,8 +85,8 @@ PasswordDialog::PasswordDialog(
 
         aFTConfirmPassword.Show();
         aEDConfirmPassword.Show();
-        aFTConfirmPassword.Enable( sal_True );
-        aEDConfirmPassword.Enable( sal_True );
+        aFTConfirmPassword.Enable( true );
+        aEDConfirmPassword.Enable( true );
     }
     else
     {

@@ -136,7 +136,7 @@ void FilterDialog::ChangeFilters( const FilterNameList* pFilterNames )
 *//*-*************************************************************************************************************/
 bool FilterDialog::AskForFilter( FilterNameListPtr& pSelectedItem )
 {
-    bool bSelected = sal_False;
+    bool bSelected = false;
 
     if( m_pFilterNames != NULL )
     {
