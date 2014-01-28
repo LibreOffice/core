@@ -424,6 +424,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/ui,\
 	WindowContentFactory \
     WindowContentFactoryManager \
 	WindowStateConfiguration \
+	theUICategoryDescription \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/ui/dialogs,\
 	AddressBookSourcePilot \

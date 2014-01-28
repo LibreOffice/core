@@ -127,6 +127,7 @@
   </implementation>
   <implementation name="com.sun.star.comp.framework.UICategoryDescription">
     <service name="com.sun.star.ui.UICategoryDescription"/>
+    <singleton name="com.sun.star.ui.theUICategoryDescription"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.UICommandDescription">
     <service name="com.sun.star.frame.UICommandDescription"/>

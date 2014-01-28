@@ -54,7 +54,7 @@
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #include <com/sun/star/script/browse/XBrowseNodeFactory.hpp>
 #include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
-#include <com/sun/star/ui/UICategoryDescription.hpp>
+#include <com/sun/star/ui/theUICategoryDescription.hpp>
 
 
 using namespace ::com::sun::star;
@@ -429,7 +429,7 @@ void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame
         xNameAccess->getByName( aModuleId ) >>= m_xModuleCommands;
 
         Reference< container::XNameAccess > xAllCategories =
-            ui::UICategoryDescription::create( xContext );
+            ui::theUICategoryDescription::get( xContext );
 
         Reference< container::XNameAccess > xModuleCategories;
         if ( !aModuleId.isEmpty() )

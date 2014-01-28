@@ -211,7 +211,7 @@
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/ui/UICategoryDescription.hpp>
+#include <com/sun/star/ui/theUICategoryDescription.hpp>
 #include <com/sun/star/ui/UIConfigurationManager.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/WindowStateConfiguration.hpp>
