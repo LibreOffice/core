@@ -82,7 +82,7 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
             if ( pStream && SotStorage::IsStorageFile(pStream) )
 
             {
-                SotStorageRef xStg = new SotStorage( pStream, sal_False );
+                SotStorageRef xStg = new SotStorage( pStream, false );
 
                 bool bTable2 = xStg->IsContained(OUString("1Table"));
                 SotStorageStreamRef xRef = xStg->OpenSotStream(OUString("WordDocument"), STREAM_STD_READ | STREAM_NOCREATE );
