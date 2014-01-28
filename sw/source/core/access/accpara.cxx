@@ -1729,7 +1729,9 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
 uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
     sal_Int32 nIndex,
     const uno::Sequence< OUString >& aRequestedAttributes )
-    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    throw (lang::IndexOutOfBoundsException,
+           uno::RuntimeException,
+           std::exception)
 {
 
     SolarMutexGuard aGuard;
