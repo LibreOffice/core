@@ -391,6 +391,7 @@ sal_Bool SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
         {
             default: ; //prevent warning
                 OSL_FAIL( "svx::SvxTextAttrPage::FillItemSet(), unhandled state!" );
+                /* Fall through */
             case STATE_NOCHECK: eFTS = SDRTEXTFIT_NONE; break;
             case STATE_CHECK: eFTS = SDRTEXTFIT_AUTOFIT; break;
         }
