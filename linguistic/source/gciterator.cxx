@@ -161,7 +161,7 @@ static sal_Int32 lcl_SkipWhiteSpaces( const OUString &rText, sal_Int32 nStartPos
     }
     if (bIllegalArgument)
     {
-        DBG_ASSERT( 0, "lcl_SkipWhiteSpaces: illegal arguments" );
+        DBG_ASSERT( false, "lcl_SkipWhiteSpaces: illegal arguments" );
     }
 
     sal_Int32 nRes = nStartPos;
@@ -196,7 +196,7 @@ static sal_Int32 lcl_BacktraceWhiteSpaces( const OUString &rText, sal_Int32 nSta
     }
     if (bIllegalArgument)
     {
-        DBG_ASSERT( 0, "lcl_BacktraceWhiteSpaces: illegal arguments" );
+        DBG_ASSERT( false, "lcl_BacktraceWhiteSpaces: illegal arguments" );
     }
 
     sal_Int32 nRes = nStartPos;
@@ -475,12 +475,12 @@ uno::Reference< linguistic2::XProofreader > GrammarCheckingIterator::GetGrammarC
                 }
                 else
                 {
-                    DBG_ASSERT( 0, "grammar checker does not support required locale" );
+                    DBG_ASSERT( false, "grammar checker does not support required locale" );
                 }
             }
             catch (uno::Exception &)
             {
-                DBG_ASSERT( 0, "instantiating grammar checker failed" );
+                DBG_ASSERT( false, "instantiating grammar checker failed" );
             }
         }
     }
@@ -558,7 +558,7 @@ void GrammarCheckingIterator::DequeueAndCheck()
                             aRes.nBehindEndOfSentencePosition != nSuggestedEnd
                            )
                         {
-                            DBG_ASSERT( 0, "!! Grammarchecker failed to provide end of sentence !!" );
+                            DBG_ASSERT( false, "!! Grammarchecker failed to provide end of sentence !!" );
                             aRes.nBehindEndOfSentencePosition = nSuggestedEnd;
                         }
 
@@ -703,7 +703,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
                 //!! failed to properly identify the sentence end
                 if (aTmpRes.nBehindEndOfSentencePosition <= nStartPos)
                 {
-                    DBG_ASSERT( 0, "!! Grammarchecker failed to provide end of sentence !!" );
+                    DBG_ASSERT( false, "!! Grammarchecker failed to provide end of sentence !!" );
                     aTmpRes.nBehindEndOfSentencePosition = nSuggestedEndOfSentencePos;
                 }
 
@@ -724,7 +724,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             // prevent endless loop by forcefully advancing if needs be...
             if (nStartPos <= nOldStartOfSentencePos)
             {
-                DBG_ASSERT( 0, "end-of-sentence detection failed?" );
+                DBG_ASSERT( false, "end-of-sentence detection failed?" );
                 nStartPos = nOldStartOfSentencePos + 1;
             }
         }
@@ -1025,13 +1025,13 @@ void GrammarCheckingIterator::GetConfiguredGCSvcs_Impl()
             }
             else
             {
-                DBG_ASSERT( 0, "failed to get aImplNames. Wrong type?" );
+                DBG_ASSERT( false, "failed to get aImplNames. Wrong type?" );
             }
         }
     }
     catch (uno::Exception &)
     {
-        DBG_ASSERT( 0, "exception caught. Failed to get configured services" );
+        DBG_ASSERT( false, "exception caught. Failed to get configured services" );
     }
 
     {

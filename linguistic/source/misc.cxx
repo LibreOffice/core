@@ -569,7 +569,7 @@ uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
 
         if (nOrigHyphenPos == -1  ||  nOrigHyphenationPos == -1)
         {
-            DBG_ASSERT( 0, "failed to get nOrigHyphenPos or nOrigHyphenationPos" );
+            DBG_ASSERT( false, "failed to get nOrigHyphenPos or nOrigHyphenationPos" );
         }
         else
         {
@@ -736,7 +736,7 @@ uno::Reference< XSearchableDictionaryList > GetDictionaryList()
     }
     catch (const uno::Exception &)
     {
-        DBG_ASSERT( 0, "createInstance failed" );
+        DBG_ASSERT( false, "createInstance failed" );
     }
 
     return xRef;
@@ -763,7 +763,7 @@ AppExitListener::AppExitListener()
     }
     catch (const uno::Exception &)
     {
-        DBG_ASSERT( 0, "createInstance failed" );
+        DBG_ASSERT( false, "createInstance failed" );
     }
 }
 

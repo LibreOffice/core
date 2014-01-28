@@ -380,7 +380,7 @@ sal_Bool SpellCheckerDispatcher::isValid_Impl(
                 }
                 catch (uno::Exception &)
                 {
-                    DBG_ASSERT( 0, "createInstanceWithArguments failed" );
+                    DBG_ASSERT( false, "createInstanceWithArguments failed" );
                 }
                 pRef [i] = xSpell;
 
@@ -566,7 +566,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                 }
                 catch (uno::Exception &)
                 {
-                    DBG_ASSERT( 0, "createInstanceWithArguments failed" );
+                    DBG_ASSERT( false, "createInstanceWithArguments failed" );
                 }
                 pRef [i] = xSpell;
 
@@ -697,7 +697,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
             {
                 if (xRes.is())
                 {
-                    DBG_ASSERT( 0, "XSetSpellAlternatives not implemented!" );
+                    DBG_ASSERT( false, "XSetSpellAlternatives not implemented!" );
                 }
                 else if (aProposals.getLength() > 0)
                 {

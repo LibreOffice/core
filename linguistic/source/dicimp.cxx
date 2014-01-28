@@ -265,7 +265,7 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
     }
     catch (const uno::Exception &)
     {
-        DBG_ASSERT( 0, "failed to get input stream" );
+        DBG_ASSERT( false, "failed to get input stream" );
     }
     if (!xStream.is())
         return static_cast< sal_uLong >(-1);
@@ -431,7 +431,7 @@ struct TmpDictionary
         }
         catch (const uno::Exception &)
         {
-            DBG_ASSERT( 0, "failed to overwrite dict" );
+            DBG_ASSERT( false, "failed to overwrite dict" );
             return static_cast< sal_uLong >(-1);
         }
         return 0;

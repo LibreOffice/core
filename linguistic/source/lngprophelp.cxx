@@ -469,7 +469,7 @@ sal_Bool PropertyHelper_Spell::propertyChange_Impl( const PropertyChangeEvent& r
                 break;
             }
             default:
-                DBG_ASSERT( 0, "unknown property" );
+                DBG_ASSERT( false, "unknown property" );
         }
         if (pbVal)
             rEvt.NewValue >>= *pbVal;
@@ -533,7 +533,7 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
                     case UPH_IS_SPELL_WITH_DIGITS    : pbResVal = &bResIsSpellWithDigits; break;
                     case UPH_IS_SPELL_CAPITALIZATION : pbResVal = &bResIsSpellCapitalization; break;
                     default:
-                        DBG_ASSERT( 0, "unknown property" );
+                        DBG_ASSERT( false, "unknown property" );
                 }
                 if (pbResVal)
                     pVal[i].Value >>= *pbResVal;
@@ -636,7 +636,7 @@ sal_Bool PropertyHelper_Hyphen::propertyChange_Impl( const PropertyChangeEvent& 
             case UPH_HYPH_MIN_TRAILING    : pnVal = &nHyphMinTrailing; break;
             case UPH_HYPH_MIN_WORD_LENGTH : pnVal = &nHyphMinWordLength; break;
             default:
-                DBG_ASSERT( 0, "unknown property" );
+                DBG_ASSERT( false, "unknown property" );
         }
         if (pnVal)
             rEvt.NewValue >>= *pnVal;
