@@ -979,7 +979,6 @@ PlfAcd::PlfAcd( bool bReadId ) : Tcg255SubStruct( bReadId )
 
 PlfAcd::~PlfAcd()
 {
-    if ( rgacd )
         delete[] rgacd;
 }
 
@@ -1023,7 +1022,6 @@ PlfKme::PlfKme( bool bReadId ) : Tcg255SubStruct( bReadId )
 
 PlfKme::~PlfKme()
 {
-    if ( rgkme )
         delete[] rgkme;
 }
 
@@ -1087,7 +1085,6 @@ TcgSttbfCore::TcgSttbfCore() : fExtend( 0 )
 
 TcgSttbfCore::~TcgSttbfCore()
 {
-    if ( dataItems )
         delete[] dataItems;
 }
 
@@ -1133,7 +1130,6 @@ MacroNames::MacroNames( bool bReadId ) : Tcg255SubStruct( bReadId )
 
 MacroNames::~MacroNames()
 {
-    if ( rgNames )
         delete[] rgNames;
 }
 
