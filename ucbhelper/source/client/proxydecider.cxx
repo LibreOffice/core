@@ -185,7 +185,7 @@ bool WildCard::Matches( const OUString& rString ) const
         {
             case '?':
                 if ( *pStr == '\0' )
-                    return 0;
+                    return false;
                 break;
 
             default:
@@ -194,7 +194,7 @@ bool WildCard::Matches( const OUString& rString ) const
                     pWild++;
                 if ( *pWild != *pStr )
                     if ( !pos )
-                        return 0;
+                        return false;
                     else
                         pWild += pos;
                 else
@@ -206,7 +206,7 @@ bool WildCard::Matches( const OUString& rString ) const
                 while ( *pWild == '*' )
                     pWild++;
                 if ( *pWild == '\0' )
-                    return 1;
+                    return true;
                 flag = 1;
                 pos  = 0;
                 if ( *pStr == '\0' )
