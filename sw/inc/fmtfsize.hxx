@@ -44,6 +44,7 @@ class SW_DLLPUBLIC SwFmtFrmSize: public SfxPoolItem
     SwFrmSize eFrmHeightType;
     SwFrmSize eFrmWidthType;
     sal_uInt8     nWidthPercent;
+    sal_Int16     eWidthPercentRelation;
     sal_uInt8     nHeightPercent;
 
     // For tables: width can be given in percent.
@@ -91,8 +92,10 @@ public:
 
     sal_uInt8    GetHeightPercent() const{ return nHeightPercent; }
     sal_uInt8   GetWidthPercent() const { return nWidthPercent;  }
+    sal_Int16   GetWidthPercentRelation() const { return eWidthPercentRelation;  }
     void    SetHeightPercent( sal_uInt8 n ) { nHeightPercent = n; }
     void    SetWidthPercent ( sal_uInt8 n ) { nWidthPercent  = n; }
+    void    SetWidthPercentRelation ( sal_Int16 n ) { eWidthPercentRelation  = n; }
 };
 
 inline const SwFmtFrmSize &SwAttrSet::GetFrmSize(sal_Bool bInP) const

@@ -176,7 +176,7 @@ SwFmtFrmSize::SwFmtFrmSize( SwFrmSize eSize, SwTwips nWidth, SwTwips nHeight )
     eFrmHeightType( eSize ),
     eFrmWidthType( ATT_FIX_SIZE )
 {
-    nWidthPercent = nHeightPercent = 0;
+    nWidthPercent = eWidthPercentRelation = nHeightPercent = 0;
 }
 
 SwFmtFrmSize& SwFmtFrmSize::operator=( const SwFmtFrmSize& rCpy )
@@ -186,6 +186,7 @@ SwFmtFrmSize& SwFmtFrmSize::operator=( const SwFmtFrmSize& rCpy )
     eFrmWidthType = rCpy.GetWidthSizeType();
     nHeightPercent = rCpy.GetHeightPercent();
     nWidthPercent  = rCpy.GetWidthPercent();
+    eWidthPercentRelation  = rCpy.GetWidthPercentRelation();
     return *this;
 }
 
@@ -196,6 +197,7 @@ bool SwFmtFrmSize::operator==( const SfxPoolItem& rAttr ) const
             eFrmWidthType  == ((SwFmtFrmSize&)rAttr).eFrmWidthType &&
             aSize           == ((SwFmtFrmSize&)rAttr).GetSize()&&
             nWidthPercent   == ((SwFmtFrmSize&)rAttr).GetWidthPercent() &&
+            eWidthPercentRelation == ((SwFmtFrmSize&)rAttr).GetWidthPercentRelation() &&
             nHeightPercent  == ((SwFmtFrmSize&)rAttr).GetHeightPercent() );
 }
 
@@ -223,6 +225,9 @@ bool SwFmtFrmSize::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_FRMSIZE_REL_WIDTH:
             rVal <<= (sal_Int16)(GetWidthPercent() != 0xFF ? GetWidthPercent() : 0);
+        break;
+        case MID_FRMSIZE_REL_WIDTH_RELATION:
+            rVal <<= GetWidthPercentRelation();
         break;
         case MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH:
         {
@@ -307,6 +312,13 @@ bool SwFmtFrmSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 SetWidthPercent((sal_uInt8)nSet);
             else
                 bRet = false;
+        }
+        break;
+        case MID_FRMSIZE_REL_WIDTH_RELATION:
+        {
+            sal_Int16 eSet = 0;
+            rVal >>= eSet;
+            SetWidthPercentRelation(eSet);
         }
         break;
         case MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH:

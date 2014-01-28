@@ -84,6 +84,7 @@
 #define MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT     12
 #define MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH     13
 #define MID_FRMSIZE_WIDTH_TYPE                  14
+#define MID_FRMSIZE_REL_WIDTH_RELATION          15
 
 #define MID_COLUMNS                             0
 #define MID_COLUMN_SEPARATOR_LINE               1
