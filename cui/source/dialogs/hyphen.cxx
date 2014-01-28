@@ -376,7 +376,7 @@ IMPL_LINK( SvxHyphenWordDialog, HyphenateAllHdl_Impl, Button *, EMPTYARG /*pButt
         catch (uno::Exception &e)
         {
             (void) e;
-            DBG_ASSERT( 0, "Hyphenate All failed" );
+            DBG_ASSERT( false, "Hyphenate All failed" );
         }
     }
     return 0;
@@ -510,7 +510,7 @@ SvxHyphenWordDialog::SvxHyphenWordDialog(
 
     // disable controls if service is not available
     if (!xHyphenator.is())
-        Enable( sal_False );
+        Enable( false );
 }
 
 

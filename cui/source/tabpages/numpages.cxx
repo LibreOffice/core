@@ -513,7 +513,7 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, DoubleClickHdl_Impl)
 void SvxBulletPickTabPage::PageCreated(SfxAllItemSet aSet)
 {
 
-    SFX_ITEMSET_ARG (&aSet,pBulletCharFmt,SfxStringItem,SID_BULLET_CHAR_FMT,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pBulletCharFmt,SfxStringItem,SID_BULLET_CHAR_FMT,false);
 
     if (pBulletCharFmt)
         SetCharFmtName( pBulletCharFmt->GetValue());
@@ -762,8 +762,8 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, DoubleClickHdl_Impl)
 
 void SvxNumPickTabPage::PageCreated(SfxAllItemSet aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pNumCharFmt,SfxStringItem,SID_NUM_CHAR_FMT,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pBulletCharFmt,SfxStringItem,SID_BULLET_CHAR_FMT,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pNumCharFmt,SfxStringItem,SID_NUM_CHAR_FMT,false);
+    SFX_ITEMSET_ARG (&aSet,pBulletCharFmt,SfxStringItem,SID_BULLET_CHAR_FMT,false);
 
 
     if (pNumCharFmt &&pBulletCharFmt)
@@ -1200,7 +1200,7 @@ sal_Bool    SvxNumOptionsTabPage::FillItemSet( SfxItemSet& rSet )
     {
         *pSaveNum = *pActNum;
         rSet.Put(SvxNumBulletItem( *pSaveNum ), nNumItemId);
-        rSet.Put(SfxBoolItem(SID_PARAM_NUM_PRESET, sal_False));
+        rSet.Put(SfxBoolItem(SID_PARAM_NUM_PRESET, false));
     }
     return bModified;
 };
@@ -2968,7 +2968,7 @@ sal_Bool SvxNumPositionTabPage::FillItemSet( SfxItemSet& rSet )
     {
         *pSaveNum = *pActNum;
         rSet.Put(SvxNumBulletItem( *pSaveNum ), nNumItemId);
-        rSet.Put(SfxBoolItem(SID_PARAM_NUM_PRESET, sal_False));
+        rSet.Put(SfxBoolItem(SID_PARAM_NUM_PRESET, false));
     }
     return bModified;
 }
@@ -3496,10 +3496,10 @@ void SvxNumOptionsTabPage::SetModified(sal_Bool bRepaint)
 
 void SvxNumOptionsTabPage::PageCreated(SfxAllItemSet aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pListItem,SfxStringListItem,SID_CHAR_FMT_LIST_BOX,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pNumCharFmt,SfxStringItem,SID_NUM_CHAR_FMT,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pBulletCharFmt,SfxStringItem,SID_BULLET_CHAR_FMT,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pMetricItem,SfxAllEnumItem,SID_METRIC_ITEM,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pListItem,SfxStringListItem,SID_CHAR_FMT_LIST_BOX,false);
+    SFX_ITEMSET_ARG (&aSet,pNumCharFmt,SfxStringItem,SID_NUM_CHAR_FMT,false);
+    SFX_ITEMSET_ARG (&aSet,pBulletCharFmt,SfxStringItem,SID_BULLET_CHAR_FMT,false);
+    SFX_ITEMSET_ARG (&aSet,pMetricItem,SfxAllEnumItem,SID_METRIC_ITEM,false);
 
     if (pNumCharFmt &&pBulletCharFmt)
         SetCharFmts( pNumCharFmt->GetValue(),pBulletCharFmt->GetValue());
@@ -3518,7 +3518,7 @@ void SvxNumOptionsTabPage::PageCreated(SfxAllItemSet aSet)
 
 void SvxNumPositionTabPage::PageCreated(SfxAllItemSet aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pMetricItem,SfxAllEnumItem,SID_METRIC_ITEM,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pMetricItem,SfxAllEnumItem,SID_METRIC_ITEM,false);
 
     if (pMetricItem)
         SetMetric(static_cast<FieldUnit>(pMetricItem->GetValue()));

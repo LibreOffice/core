@@ -286,7 +286,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
         m_pCtlPosition->DoCompletelyDisable(sal_True);
 
         m_pTsbFullWidth->SetState(STATE_DONTKNOW);
-        m_pFlPosition->Enable( sal_False );
+        m_pFlPosition->Enable( false );
     }
 
     // adjust to border
@@ -699,7 +699,7 @@ bool SvxTextAttrPage::IsTextDirectionLeftToRight (void) const
 
 void SvxTextAttrPage::PageCreated(SfxAllItemSet aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pViewItem,OfaPtrItem,SID_SVXTEXTATTRPAGE_VIEW,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pViewItem,OfaPtrItem,SID_SVXTEXTATTRPAGE_VIEW,false);
 
     if (pViewItem)
         SetView( static_cast<SdrView *>(pViewItem->GetValue()));

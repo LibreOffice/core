@@ -116,7 +116,7 @@ void SvxNoSpaceEdit::KeyInput( const KeyEvent& rKEvent )
         if ( !bValid && ( rKeyCode.IsMod1() && (
              KEY_A == nKey || KEY_C == nKey || KEY_V == nKey || KEY_X == nKey || KEY_Z == nKey ) ) )
             // Erase, Copy, Paste, Select All und Undo soll funktionieren
-            bValid = sal_True;
+            bValid = true;
     }
     if (bValid)
         Edit::KeyInput(rKEvent);
@@ -647,11 +647,11 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl)
             xMasterPasswd->removeMasterPassword();
             if ( xMasterPasswd->changeMasterPassword( Reference< task::XInteractionHandler >() ) )
             {
-                m_pMasterPasswordPB->Enable( sal_True );
+                m_pMasterPasswordPB->Enable( true );
                 m_pMasterPasswordCB->Check( sal_True );
-                m_pMasterPasswordCB->Enable( sal_True );
-                m_pMasterPasswordFT->Enable( sal_True );
-                m_pShowConnectionsPB->Enable( sal_True );
+                m_pMasterPasswordCB->Enable( true );
+                m_pMasterPasswordFT->Enable( true );
+                m_pShowConnectionsPB->Enable( true );
             }
             else
             {
@@ -668,16 +668,16 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl)
             {
                 xMasterPasswd->allowPersistentStoring( sal_False );
                 m_pMasterPasswordCB->Check( sal_True );
-                m_pMasterPasswordPB->Enable( sal_False );
-                m_pMasterPasswordCB->Enable( sal_False );
-                m_pMasterPasswordFT->Enable( sal_False );
-                m_pShowConnectionsPB->Enable( sal_False );
+                m_pMasterPasswordPB->Enable( false );
+                m_pMasterPasswordCB->Enable( false );
+                m_pMasterPasswordFT->Enable( false );
+                m_pShowConnectionsPB->Enable( false );
             }
             else
             {
                 m_pSavePasswordsCB->Check( sal_True );
-                m_pMasterPasswordPB->Enable( sal_True );
-                m_pShowConnectionsPB->Enable( sal_True );
+                m_pMasterPasswordPB->Enable( true );
+                m_pShowConnectionsPB->Enable( true );
             }
         }
     }
@@ -716,28 +716,28 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordCBHdl)
         {
             if ( xMasterPasswd->isPersistentStoringAllowed() && xMasterPasswd->changeMasterPassword( Reference< task::XInteractionHandler >() ) )
             {
-                m_pMasterPasswordPB->Enable( sal_True );
-                m_pMasterPasswordFT->Enable( sal_True );
+                m_pMasterPasswordPB->Enable( true );
+                m_pMasterPasswordFT->Enable( true );
             }
             else
             {
                 m_pMasterPasswordCB->Check( sal_False );
-                m_pMasterPasswordPB->Enable( sal_True );
-                m_pMasterPasswordFT->Enable( sal_True );
+                m_pMasterPasswordPB->Enable( true );
+                m_pMasterPasswordFT->Enable( true );
             }
         }
         else
         {
             if ( xMasterPasswd->isPersistentStoringAllowed() && xMasterPasswd->useDefaultMasterPassword( Reference< task::XInteractionHandler >() ) )
             {
-                m_pMasterPasswordPB->Enable( sal_False );
-                m_pMasterPasswordFT->Enable( sal_False );
+                m_pMasterPasswordPB->Enable( false );
+                m_pMasterPasswordFT->Enable( false );
             }
             else
             {
                 m_pMasterPasswordCB->Check( sal_True );
-                m_pMasterPasswordPB->Enable( sal_True );
-                m_pShowConnectionsPB->Enable( sal_True );
+                m_pMasterPasswordPB->Enable( true );
+                m_pShowConnectionsPB->Enable( true );
             }
         }
     }
@@ -821,11 +821,11 @@ void SvxSecurityTabPage::InitControls()
     m_pCertFrame->Hide();
 #endif
 
-    m_pMasterPasswordPB->Enable( sal_False );
-    m_pMasterPasswordCB->Enable( sal_False );
+    m_pMasterPasswordPB->Enable( false );
+    m_pMasterPasswordCB->Enable( false );
     m_pMasterPasswordCB->Check( sal_True );
-    m_pMasterPasswordFT->Enable( sal_False );
-    m_pShowConnectionsPB->Enable( sal_False );
+    m_pMasterPasswordFT->Enable( false );
+    m_pShowConnectionsPB->Enable( false );
 
     // initialize the password saving checkbox
     try
@@ -835,23 +835,23 @@ void SvxSecurityTabPage::InitControls()
 
         if ( xMasterPasswd->isPersistentStoringAllowed() )
         {
-            m_pMasterPasswordCB->Enable( sal_True );
-            m_pShowConnectionsPB->Enable( sal_True );
+            m_pMasterPasswordCB->Enable( true );
+            m_pShowConnectionsPB->Enable( true );
             m_pSavePasswordsCB->Check( sal_True );
 
             if ( xMasterPasswd->isDefaultMasterPasswordUsed() )
                 m_pMasterPasswordCB->Check( sal_False );
             else
             {
-                m_pMasterPasswordPB->Enable( sal_True );
+                m_pMasterPasswordPB->Enable( true );
                 m_pMasterPasswordCB->Check( sal_True );
-                m_pMasterPasswordFT->Enable( sal_True );
+                m_pMasterPasswordFT->Enable( true );
             }
         }
     }
     catch (const Exception&)
     {
-        m_pSavePasswordsCB->Enable( sal_False );
+        m_pSavePasswordsCB->Enable( false );
     }
 }
 
@@ -1256,8 +1256,8 @@ sal_Bool SvxEMailTabPage::FillItemSet( SfxItemSet& )
 
 void SvxEMailTabPage::Reset( const SfxItemSet& )
 {
-    m_pMailerURLED->Enable(sal_True );
-    m_pMailerURLPB->Enable(sal_True );
+    m_pMailerURLED->Enable(true );
+    m_pMailerURLPB->Enable(true );
 
     if (pImpl->aMailConfig.bROProgram)
         m_pMailerURLFI->Show();

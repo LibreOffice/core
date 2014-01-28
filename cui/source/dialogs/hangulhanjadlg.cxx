@@ -841,9 +841,9 @@ namespace svx
     {
         // default state: try both direction
         m_aHangulOnly.Check( sal_False );
-        m_aHangulOnly.Enable( sal_True );
+        m_aHangulOnly.Enable( true );
         m_aHanjaOnly.Check( sal_False );
-        m_aHanjaOnly.Enable( sal_True );
+        m_aHanjaOnly.Enable( true );
 
         if (!_bTryBothDirections)
         {

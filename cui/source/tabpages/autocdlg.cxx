@@ -71,11 +71,11 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet )
 
     if ( _pSet )
     {
-        SFX_ITEMSET_ARG( _pSet, pItem, SfxBoolItem, SID_AUTO_CORRECT_DLG, sal_False );
+        SFX_ITEMSET_ARG( _pSet, pItem, SfxBoolItem, SID_AUTO_CORRECT_DLG, false );
         if ( pItem && pItem->GetValue() )
             bShowSWOptions = sal_True;
 
-        SFX_ITEMSET_ARG( _pSet, pItem2, SfxBoolItem, SID_OPEN_SMARTTAGOPTIONS, sal_False );
+        SFX_ITEMSET_ARG( _pSet, pItem2, SfxBoolItem, SID_OPEN_SMARTTAGOPTIONS, false );
         if ( pItem2 && pItem2->GetValue() )
             bOpenSmartTagOptions = sal_True;
     }
@@ -223,7 +223,7 @@ sal_Bool OfaAutocorrOptionsPage::FillItemSet( SfxItemSet& )
 
 void    OfaAutocorrOptionsPage::ActivatePage( const SfxItemSet& )
 {
-    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(sal_False);
+    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(false);
 }
 
 void OfaAutocorrOptionsPage::Reset( const SfxItemSet& )
@@ -448,7 +448,7 @@ SvTreeListEntry* OfaSwAutoFmtOptionsPage::CreateEntry(OUString& rTxt, sal_uInt16
         m_pCheckLB->SetCheckButtonData( pCheckButtonData );
     }
 
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false));
 
     OUString sEmpty;
     if (nCol == CBCOL_SECOND)
@@ -598,7 +598,7 @@ sal_Bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet&  )
 
 void    OfaSwAutoFmtOptionsPage::ActivatePage( const SfxItemSet& )
 {
-    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(sal_False);
+    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(false);
 }
 
 void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
@@ -912,7 +912,7 @@ void OfaAutocorrReplacePage::ActivatePage( const SfxItemSet& )
 {
     if(eLang != eLastDialogLanguage)
         SetLanguage(eLastDialogLanguage);
-    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(sal_True);
+    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(true);
 }
 
 int OfaAutocorrReplacePage::DeactivatePage( SfxItemSet*  )
@@ -1052,8 +1052,8 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
                 aFormatText.insert(pWordPtr->GetShort());
             }
         }
-        m_pNewReplacePB->Enable(sal_False);
-        m_pDeleteReplacePB->Enable(sal_False);
+        m_pNewReplacePB->Enable(false);
+        m_pDeleteReplacePB->Enable(false);
         m_pReplaceTLB->SetUpdateMode(sal_True);
     }
 
@@ -1068,7 +1068,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
     }
     else
     {
-        m_pTextOnlyCB->Enable( sal_False );
+        m_pTextOnlyCB->Enable( false );
     }
 }
 
@@ -1124,7 +1124,7 @@ IMPL_LINK(OfaAutocorrReplacePage, SelectHdl, SvTabListBox*, pBox)
         bFirstSelect = sal_False;
     }
 
-    m_pNewReplacePB->Enable(sal_False);
+    m_pNewReplacePB->Enable(false);
     m_pDeleteReplacePB->Enable();
     return 0;
 };
@@ -1305,7 +1305,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
                 pFirstSel = 0;
                 m_pNewReplacePB->SetText( sNew );
                 if( bReplaceEditChanged )
-                    m_pTextOnlyCB->Enable(sal_False);
+                    m_pTextOnlyCB->Enable(false);
             }
             m_pDeleteReplacePB->Enable( bFound );
         }
@@ -1413,7 +1413,7 @@ void    OfaAutocorrExceptPage::ActivatePage( const SfxItemSet& )
 {
     if(eLang != eLastDialogLanguage)
         SetLanguage(eLastDialogLanguage);
-    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(sal_True);
+    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(true);
 }
 
 int     OfaAutocorrExceptPage::DeactivatePage( SfxItemSet* )
@@ -1648,13 +1648,13 @@ IMPL_LINK(OfaAutocorrExceptPage, SelectHdl, ListBox*, pBox)
     if (pBox == m_pAbbrevLB)
     {
         m_pAbbrevED->SetText(pBox->GetSelectEntry());
-        m_pNewAbbrevPB->Enable(sal_False);
+        m_pNewAbbrevPB->Enable(false);
         m_pDelAbbrevPB->Enable();
     }
     else
     {
         m_pDoubleCapsED->SetText(pBox->GetSelectEntry());
-        m_pNewDoublePB->Enable(sal_False);
+        m_pNewDoublePB->Enable(false);
         m_pDelDoublePB->Enable();
     }
     return 0;
@@ -1721,7 +1721,7 @@ SvTreeListEntry* OfaQuoteTabPage::CreateEntry(OUString& rTxt, sal_uInt16 nCol)
         m_pSwCheckLB->SetCheckButtonData(pCheckButtonData);
     }
 
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false));
 
     OUString sEmpty;
     if (nCol == CBCOL_SECOND)
@@ -1776,7 +1776,7 @@ OfaQuoteTabPage::OfaQuoteTabPage(Window* pParent, const SfxItemSet& rSet)
 
     sal_Bool bShowSWOptions = sal_False;
 
-    SFX_ITEMSET_ARG( &rSet, pItem, SfxBoolItem, SID_AUTO_CORRECT_DLG, sal_False );
+    SFX_ITEMSET_ARG( &rSet, pItem, SfxBoolItem, SID_AUTO_CORRECT_DLG, false );
     if ( pItem && pItem->GetValue() )
         bShowSWOptions = sal_True;
 
@@ -1893,7 +1893,7 @@ sal_Bool OfaQuoteTabPage::FillItemSet( SfxItemSet&  )
 
 void OfaQuoteTabPage::ActivatePage( const SfxItemSet& )
 {
-    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(sal_False);
+    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(false);
 }
 
 void OfaQuoteTabPage::Reset( const SfxItemSet& )
@@ -2241,7 +2241,7 @@ void OfaAutoCompleteTabPage::Reset( const SfxItemSet&  )
 
 void OfaAutoCompleteTabPage::ActivatePage( const SfxItemSet& )
 {
-    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage( sal_False );
+    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage( false );
 }
 
 IMPL_LINK_NOARG(OfaAutoCompleteTabPage, DeleteHdl)
@@ -2487,9 +2487,9 @@ IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, SelectHdl)
 
     const lang::Locale aLocale( LanguageTag::convertToLocale( eLastDialogLanguage ) );
     if ( xRec->hasPropertyPage( nSmartTagIdx, aLocale ) )
-        m_aPropertiesPB.Enable( sal_True );
+        m_aPropertiesPB.Enable( true );
     else
-        m_aPropertiesPB.Enable( sal_False );
+        m_aPropertiesPB.Enable( false );
 
     return 0;
 }
@@ -2557,7 +2557,7 @@ void OfaSmartTagOptionsTabPage::Reset( const SfxItemSet&  )
 
 void OfaSmartTagOptionsTabPage::ActivatePage( const SfxItemSet& )
 {
-    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage( sal_False );
+    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage( false );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

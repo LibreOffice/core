@@ -176,7 +176,7 @@ IMPL_LINK_NOARG(SvxDefaultColorOptPage, ResetToDefaults)
 
         m_pLbChartColors->GetFocus();
         m_pLbChartColors->SelectEntryPos( 0 );
-        m_pPBRemove->Enable( sal_True );
+        m_pPBRemove->Enable( true );
     }
 
     return 0L;
@@ -197,7 +197,7 @@ IMPL_LINK_NOARG(SvxDefaultColorOptPage, AddChartColor)
 
         m_pLbChartColors->GetFocus();
         m_pLbChartColors->SelectEntryPos( pColorConfig->GetColorList().size() - 1 );
-        m_pPBRemove->Enable( sal_True );
+        m_pPBRemove->Enable( true );
     }
 
     return 0L;

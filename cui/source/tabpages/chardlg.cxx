@@ -921,7 +921,7 @@ sal_Bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLan
         rSet.ClearItem( nWhich );
 
 
-    bChanged = sal_True;
+    bChanged = true;
     switch ( eLangGrp )
     {
         case Western : nSlot = SID_ATTR_CHAR_WEIGHT; break;
@@ -1267,9 +1267,9 @@ void SvxCharNamePage::SetPreviewBackgroundToCharacter()
 // -----------------------------------------------------------------------
 void SvxCharNamePage::PageCreated (SfxAllItemSet aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pFontListItem,SvxFontListItem,SID_ATTR_CHAR_FONTLIST,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pDisalbeItem,SfxUInt16Item,SID_DISABLE_CTL,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pFontListItem,SvxFontListItem,SID_ATTR_CHAR_FONTLIST,false);
+    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,false);
+    SFX_ITEMSET_ARG (&aSet,pDisalbeItem,SfxUInt16Item,SID_DISABLE_CTL,false);
     if (pFontListItem)
         SetFontList(*pFontListItem);
 
@@ -2520,8 +2520,8 @@ void SvxCharEffectsPage::SetPreviewBackgroundToCharacter()
 // -----------------------------------------------------------------------
 void SvxCharEffectsPage::PageCreated (SfxAllItemSet aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pDisableCtlItem,SfxUInt16Item,SID_DISABLE_CTL,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pDisableCtlItem,SfxUInt16Item,SID_DISABLE_CTL,false);
+    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,false);
     if (pDisableCtlItem)
         DisableControls(pDisableCtlItem->GetValue());
 
@@ -3271,7 +3271,7 @@ void SvxCharPositionPage::SetPreviewBackgroundToCharacter()
 // -----------------------------------------------------------------------
 void SvxCharPositionPage::PageCreated (SfxAllItemSet aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,false);
     if (pFlagItem)
     {
         sal_uInt32 nFlags=pFlagItem->GetValue();
@@ -3515,7 +3515,7 @@ void SvxCharTwoLinesPage::SetPreviewBackgroundToCharacter()
 // -----------------------------------------------------------------------
 void SvxCharTwoLinesPage::PageCreated (SfxAllItemSet aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,false);
     if (pFlagItem)
     {
         sal_uInt32 nFlags=pFlagItem->GetValue();

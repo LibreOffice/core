@@ -510,7 +510,7 @@ sal_Bool SvxSlantTabPage::FillItemSet(SfxItemSet& rAttrs)
 
         rAttrs.Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_X, aPt.X()));
         rAttrs.Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_Y, aPt.Y()));
-        rAttrs.Put( SfxBoolItem( SID_ATTR_TRANSFORM_SHEAR_VERTICAL, sal_False ) );
+        rAttrs.Put( SfxBoolItem( SID_ATTR_TRANSFORM_SHEAR_VERTICAL, false ) );
     }
 
     return( bModified );
@@ -629,7 +629,7 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage( Window* pParent, const SfxItemSe
 
     mrOutAttrs       ( rInAttrs ),
     mnProtectSizeState( STATE_NOCHECK ),
-    mbPageDisabled   ( sal_False ),
+    mbPageDisabled   ( false ),
     mbProtectDisabled( false ),
     mbSizeDisabled( false ),
     mbAdjustDisabled( true )
@@ -733,7 +733,7 @@ void SvxPositionSizeTabPage::Construct()
                     // diferent anchor positions
                     m_pMtrPosX->SetText( "" );
                     m_pMtrPosY->SetText( "" );
-                    mbPageDisabled = sal_True;
+                    mbPageDisabled = true;
                     return;
                 }
             }

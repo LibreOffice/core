@@ -767,7 +767,7 @@ void _SvxMacroTabPage::InitAndSetHandler( Reference< container::XNameReplace> xA
         mpImpl->pEventLB->GetListBox().SetEntryHeight(
             sal::static_int_cast< short >(nMinLineHeight) );
 
-    mpImpl->pEventLB->Enable( sal_True );
+    mpImpl->pEventLB->Enable( true );
 
     if(!m_xAppEvents.is())
     {

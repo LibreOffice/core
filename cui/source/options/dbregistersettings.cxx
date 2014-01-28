@@ -42,10 +42,10 @@ namespace svx
     {
         const DatabaseMapItem* pItem = PTR_CAST(DatabaseMapItem, &_rCompare);
         if ( !pItem )
-            return sal_False;
+            return false;
 
         if ( m_aRegistrations.size() != pItem->m_aRegistrations.size() )
-            return sal_False;
+            return false;
 
         return m_aRegistrations == pItem->m_aRegistrations;
     }

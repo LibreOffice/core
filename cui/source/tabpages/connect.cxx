@@ -270,20 +270,20 @@ void SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
         sal_uInt16 nValue = ( ( const SdrEdgeLineDeltaAnzItem* )pItem )->GetValue();
         if( nValue <= 2 )
         {
-            m_pFtLine3->Enable( sal_False );
-            m_pMtrFldLine3->Enable( sal_False );
+            m_pFtLine3->Enable( false );
+            m_pMtrFldLine3->Enable( false );
             m_pMtrFldLine3->SetEmptyFieldValue();
         }
         if( nValue <= 1 )
         {
-            m_pFtLine2->Enable( sal_False );
-            m_pMtrFldLine2->Enable( sal_False );
+            m_pFtLine2->Enable( false );
+            m_pMtrFldLine2->Enable( false );
             m_pMtrFldLine2->SetEmptyFieldValue();
         }
         if( nValue == 0 )
         {
-            m_pFtLine1->Enable( sal_False );
-            m_pMtrFldLine1->Enable( sal_False );
+            m_pFtLine1->Enable( false );
+            m_pMtrFldLine1->Enable( false );
             m_pMtrFldLine1->SetEmptyFieldValue();
         }
     }
@@ -511,7 +511,7 @@ void SvxConnectionPage::FillTypeLB()
 }
 void SvxConnectionPage::PageCreated (SfxAllItemSet aSet)
 {
-    SFX_ITEMSET_ARG(&aSet,pOfaPtrItem,OfaPtrItem,SID_OBJECT_LIST,sal_False);
+    SFX_ITEMSET_ARG(&aSet,pOfaPtrItem,OfaPtrItem,SID_OBJECT_LIST,false);
     if (pOfaPtrItem)
         SetView( static_cast<SdrView *>(pOfaPtrItem->GetValue()) );
 

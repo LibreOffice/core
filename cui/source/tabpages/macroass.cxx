@@ -132,7 +132,7 @@ void _SfxMacroTabPage::EnableButtons()
         mpImpl->pAssignPB->Enable( !mpImpl->bReadOnly && !sScriptURI.equalsIgnoreAsciiCase( sEventMacro ) );
     }
     else
-        mpImpl->pAssignPB->Enable( sal_False );
+        mpImpl->pAssignPB->Enable( false );
 }
 
 _SfxMacroTabPage::_SfxMacroTabPage(Window* pParent, const SfxItemSet& rAttrSet)
@@ -350,12 +350,12 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, TimeOut_Impl, Timer*, EMPTYARG )
     if ( pTabDlg )
     {
         pTabDlg->EnterWait();
-        pTabDlg->EnableInput( sal_False );
+        pTabDlg->EnableInput( false );
     }
     pThis->FillMacroList();
     if ( pTabDlg )
     {
-        pTabDlg->EnableInput( sal_True );
+        pTabDlg->EnableInput( true );
         pTabDlg->LeaveWait();
     }
     return 0;
@@ -386,9 +386,9 @@ void _SfxMacroTabPage::InitAndSetHandler()
     mpImpl->pEventLB->Show();
     mpImpl->pEventLB->ConnectElements();
 
-    mpImpl->pEventLB->Enable( sal_True );
-    mpImpl->pGroupLB->Enable( sal_True );
-    mpImpl->pMacroLB->Enable( sal_True );
+    mpImpl->pEventLB->Enable( true );
+    mpImpl->pGroupLB->Enable( true );
+    mpImpl->pMacroLB->Enable( true );
 
     mpImpl->pGroupLB->SetFunctionListBox( mpImpl->pMacroLB );
 

@@ -353,7 +353,7 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl)
          */
         sal_Bool bIsInputEnabled = GetParent()->IsInputEnabled();
         if ( bIsInputEnabled )
-            GetParent()->EnableInput( sal_False );
+            GetParent()->EnableInput( false );
         SfxMacroAssignDlg aDlg( this, mxDocumentFrame, *pItemSet );
 
         // add events
@@ -370,7 +370,7 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl)
                                   SFX_EVENT_MOUSEOUT_OBJECT);
 
         if ( bIsInputEnabled )
-            GetParent()->EnableInput( sal_True );
+            GetParent()->EnableInput( true );
         // execute dlg
         DisableClose( sal_True );
         short nRet = aDlg.Execute();

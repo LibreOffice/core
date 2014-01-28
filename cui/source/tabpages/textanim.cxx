@@ -226,7 +226,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
             if( eAniKind == SDRTEXTANI_SLIDE )
             {
                 m_pTsbEndless->SetState( STATE_NOCHECK );
-                m_pTsbEndless->Enable( sal_False );
+                m_pTsbEndless->Enable( false );
             }
             else
             {

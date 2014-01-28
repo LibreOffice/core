@@ -70,22 +70,22 @@ SvxCharacterMap::SvxCharacterMap( Window* pParent, sal_Bool bOne_, const SfxItem
     //lock the size request of this widget to double the height of the label
     m_pShowText->set_height_request(m_pSymbolText->get_preferred_size().Height() * 3);
 
-    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, FN_PARAM_1, sal_False );
+    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, FN_PARAM_1, false );
     if ( pItem )
         bOne = pItem->GetValue();
 
     init();
 
-    SFX_ITEMSET_ARG( pSet, pCharItem, SfxInt32Item, SID_ATTR_CHAR, sal_False );
+    SFX_ITEMSET_ARG( pSet, pCharItem, SfxInt32Item, SID_ATTR_CHAR, false );
     if ( pCharItem )
         SetChar( pCharItem->GetValue() );
 
-    SFX_ITEMSET_ARG( pSet, pDisableItem, SfxBoolItem, FN_PARAM_2, sal_False );
+    SFX_ITEMSET_ARG( pSet, pDisableItem, SfxBoolItem, FN_PARAM_2, false );
     if ( pDisableItem && pDisableItem->GetValue() )
         DisableFontSelection();
 
-    SFX_ITEMSET_ARG( pSet, pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, sal_False );
-    SFX_ITEMSET_ARG( pSet, pFontNameItem, SfxStringItem, SID_FONT_NAME, sal_False );
+    SFX_ITEMSET_ARG( pSet, pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, false );
+    SFX_ITEMSET_ARG( pSet, pFontNameItem, SfxStringItem, SID_FONT_NAME, false );
     if ( pFontItem )
     {
         Font aTmpFont( pFontItem->GetFamilyName(), pFontItem->GetStyleName(), GetCharFont().GetSize() );
@@ -351,7 +351,7 @@ void SvxCharacterMap::init()
             if ( m_pFontLB->GetEntryPos( aToken ) != LISTBOX_ENTRY_NOTFOUND )
             {
                 aDefStr = aToken;
-                bFound = sal_True;
+                bFound = true;
                 break;
             }
         }

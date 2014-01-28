@@ -126,7 +126,7 @@ IMPL_LINK_NOARG(SvInsertOleDlg, BrowseHdl)
     }
     catch( const IllegalArgumentException& )
     {
-        DBG_ASSERT( 0, "caught IllegalArgumentException when registering filter\n" );
+        DBG_ASSERT( false, "caught IllegalArgumentException when registering filter\n" );
     }
 
     if( xFilePicker->execute() == ExecutableDialogResults::OK )
@@ -368,7 +368,7 @@ IMPL_LINK_NOARG(SvInsertPlugInDialog, BrowseHdl)
     }
     catch( IllegalArgumentException& )
     {
-        DBG_ASSERT( 0, "caught IllegalArgumentException when registering filter\n" );
+        DBG_ASSERT( false, "caught IllegalArgumentException when registering filter\n" );
     }
 
     if( xFilePicker->execute() == ExecutableDialogResults::OK )
@@ -547,8 +547,8 @@ short SfxInsertFloatingFrameDialog::Execute()
             {
                 m_pCBMarginWidthDefault->Check( sal_True );
                 m_pNMMarginWidth->SetText( OUString::number(DEFAULT_MARGIN_WIDTH) );
-                m_pFTMarginWidth->Enable( sal_False );
-                m_pNMMarginWidth->Enable( sal_False );
+                m_pFTMarginWidth->Enable( false );
+                m_pNMMarginWidth->Enable( false );
             }
             else
                 m_pNMMarginWidth->SetText( OUString::number( nSize ) );
@@ -560,8 +560,8 @@ short SfxInsertFloatingFrameDialog::Execute()
             {
                 m_pCBMarginHeightDefault->Check( sal_True );
                 m_pNMMarginHeight->SetText( OUString::number(DEFAULT_MARGIN_HEIGHT) );
-                m_pFTMarginHeight->Enable( sal_False );
-                m_pNMMarginHeight->Enable( sal_False );
+                m_pFTMarginHeight->Enable( false );
+                m_pNMMarginHeight->Enable( false );
             }
             else
                 m_pNMMarginHeight->SetText( OUString::number( nSize ) );

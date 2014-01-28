@@ -254,14 +254,14 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet& )
     }
     else
     {
-        m_pLanguageFT->Enable(sal_False);
-        m_pLanguageLB->Enable(sal_False);
-        m_pStandardCB->Enable(sal_False);
-        m_pStartFT->Enable(sal_False);
-        m_pStartED->Enable(sal_False);
-        m_pEndFT->Enable(sal_False);
-        m_pEndED->Enable(sal_False);
-        m_pHintFT->Enable(sal_False);
+        m_pLanguageFT->Enable(false);
+        m_pLanguageLB->Enable(false);
+        m_pStandardCB->Enable(false);
+        m_pStartFT->Enable(false);
+        m_pStartED->Enable(false);
+        m_pEndFT->Enable(false);
+        m_pEndED->Enable(false);
+        m_pHintFT->Enable(false);
     }
     if(bKernWesternText)
         m_pCharKerningRB->Check(sal_True);

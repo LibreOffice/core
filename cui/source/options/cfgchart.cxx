@@ -300,7 +300,7 @@ bool SvxChartColorTableItem::operator==( const SfxPoolItem& rAttr ) const
         return (this->m_aColorTable == rCTItem->GetColorList());
     }
 
-    return 0;
+    return false;
 }
 
 void SvxChartColorTableItem::SetOptions( SvxChartOptions* pOpts ) const

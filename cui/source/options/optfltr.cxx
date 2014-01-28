@@ -295,7 +295,7 @@ void OfaMSFilterTabPage2::InsertEntry( const OUString& _rTxt, sal_IntPtr _nType,
     if( !pCheckButtonData )
         pCheckButtonData = new SvLBoxButtonData( m_pCheckLB );
 
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false));
     pEntry->AddItem( new SvLBoxButton( pEntry, loadEnabled? SvLBoxButtonKind_enabledCheckbox :
                                                             SvLBoxButtonKind_disabledCheckbox,
                                        0, pCheckButtonData ) );

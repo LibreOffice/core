@@ -907,11 +907,11 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet& rSet)
     }
     if(bInvalidateAnchor)
     {
-        m_pToPageRB->Enable( sal_False );
-        m_pToParaRB->Enable( sal_False );
-        m_pToCharRB->Enable( sal_False );
-        m_pAsCharRB->Enable( sal_False );
-        m_pToFrameRB->Enable( sal_False );
+        m_pToPageRB->Enable( false );
+        m_pToParaRB->Enable( false );
+        m_pToCharRB->Enable( false );
+        m_pAsCharRB->Enable( false );
+        m_pToFrameRB->Enable( false );
     }
 
     pItem = GetItem( rSet, SID_ATTR_TRANSFORM_PROTECT_POS );
@@ -972,10 +972,10 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet& rSet)
 
     if(m_bHtmlMode)
     {
-        m_pHoriMirrorCB->Show(sal_False);
-        m_pKeepRatioCB->Enable(sal_False);
+        m_pHoriMirrorCB->Show(false);
+        m_pKeepRatioCB->Enable(false);
         // #i18732# - hide checkbox in HTML mode
-        m_pFollowCB->Show(sal_False);
+        m_pFollowCB->Show(false);
     }
     else
     {
@@ -1059,7 +1059,7 @@ void SvxSwPosSizeTabPage::EnableAnchorTypes(sal_uInt16 nAnchorEnable)
     if((nAnchorEnable & SVX_OBJ_AT_FLY))
         m_pToFrameRB->Show();
     if(!(nAnchorEnable & SVX_OBJ_PAGE))
-        m_pToPageRB->Enable(sal_False);
+        m_pToPageRB->Enable(false);
 }
 
 short SvxSwPosSizeTabPage::GetAnchorType(bool* pbHasChanged)
@@ -1224,9 +1224,9 @@ IMPL_LINK( SvxSwPosSizeTabPage, RelHdl, ListBox *, pLB )
     UpdateExample();
 
     if (bHori)
-        m_bAtHoriPosModified = sal_True;
+        m_bAtHoriPosModified = true;
     else
-        m_bAtVertPosModified = sal_True;
+        m_bAtVertPosModified = true;
 
     if(m_bHtmlMode  && TextContentAnchorType_AT_CHARACTER == GetAnchorType()) // again special treatment
     {
@@ -1292,9 +1292,9 @@ IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox *, pLB )
     UpdateExample();
 
     if (bHori)
-        m_bAtHoriPosModified = sal_True;
+        m_bAtHoriPosModified = true;
     else
-        m_bAtVertPosModified = sal_True;
+        m_bAtVertPosModified = true;
 
     // special treatment for HTML-Mode with horz-vert-dependencies
     if(m_bHtmlMode && TextContentAnchorType_AT_CHARACTER == GetAnchorType())

@@ -199,9 +199,9 @@ IMPL_LINK(OfaHtmlTabPage, ExportHdl_Impl, ListBox*, pBox)
         case HTML_CFG_MSIE:
         case HTML_CFG_NS40  :
         case HTML_CFG_WRITER :
-            aPrintExtensionCB->Enable(sal_True);
+            aPrintExtensionCB->Enable(true);
         break;
-        default: aPrintExtensionCB->Enable(sal_False);
+        default: aPrintExtensionCB->Enable(false);
     }
 
     return 0;

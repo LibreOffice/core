@@ -403,7 +403,7 @@ void SpellDialog::SpellContinue_Impl(bool bUseSavedSentence, bool bIgnoreCurrent
             sal_Int32 nIdx = 0;
             do
             {
-                aControls[nIdx]->Enable(sal_True);
+                aControls[nIdx]->Enable(true);
             }
             while(aControls[++nIdx]);
 
@@ -412,7 +412,7 @@ void SpellDialog::SpellContinue_Impl(bool bUseSavedSentence, bool bIgnoreCurrent
         {
             //remove undo if a new sentence is active
             m_pSentenceED->ResetUndo();
-            m_pUndoPB->Enable(sal_False);
+            m_pUndoPB->Enable(false);
         }
     }
 }
@@ -426,7 +426,7 @@ IMPL_STATIC_LINK( SpellDialog, InitHdl, SpellDialog *, EMPTYARG )
     pThis->m_pAutoCorrPB->Show(pThis->rParent.HasAutoCorrection());
     pThis->SpellContinue_Impl();
     pThis->m_pSentenceED->ResetUndo();
-    pThis->m_pUndoPB->Enable(sal_False);
+    pThis->m_pUndoPB->Enable(false);
 
     // get current language
     pThis->UpdateBoxes_Impl();
@@ -657,7 +657,7 @@ IMPL_LINK_NOARG(SpellDialog, UndoHdl)
 {
     m_pSentenceED->Undo();
     if(!m_pSentenceED->GetUndoActionCount())
-        m_pUndoPB->Enable(sal_False);
+        m_pUndoPB->Enable(false);
     return 0;
 }
 
@@ -669,9 +669,9 @@ IMPL_LINK( SpellDialog, DialogUndoHdl, SpellUndoAction_Impl*, pAction )
         case SPELLUNDO_CHANGE_TEXTENGINE:
         {
             if(pAction->IsEnableChangePB())
-                m_pChangePB->Enable(sal_False);
+                m_pChangePB->Enable(false);
             if(pAction->IsEnableChangeAllPB())
-                m_pChangeAllPB->Enable(sal_False);
+                m_pChangeAllPB->Enable(false);
         }
         break;
         case SPELLUNDO_CHANGE_NEXTERROR:
@@ -857,7 +857,7 @@ int SpellDialog::InitUserDicts()
             && (!xStor.is() || !xStor->isReadonly()) )
         {
             pMenu->InsertItem( nItemId, xDicTmp->getName() );
-            bEnable = sal_True;
+            bEnable = true;
 
             uno::Reference< lang::XServiceInfo > xSvcInfo( xDicTmp, uno::UNO_QUERY );
             if (xSvcInfo.is())
@@ -1036,7 +1036,7 @@ void SpellDialog::InvalidateDialog()
     sal_Int16 i = 0;
     while(aDisableArr[i])
     {
-        aDisableArr[i]->Enable(sal_False);
+        aDisableArr[i]->Enable(false);
         i++;
     }
     SfxModelessDialog::Deactivate();
@@ -1142,7 +1142,7 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
         if(!bHasReplaced)
             m_pSentenceED->ClearModifyFlag();
         m_pSentenceED->ResetUndo();
-        m_pUndoPB->Enable(sal_False);
+        m_pUndoPB->Enable(false);
         bRet = nStartPosition > 0;
     }
     return bRet;
@@ -2005,7 +2005,7 @@ void  SentenceEditWindow_Impl::SetUndoEditMode(bool bSet)
     sal_Int32 nIdx = 0;
     do
     {
-        aControls[nIdx]->Enable(sal_False);
+        aControls[nIdx]->Enable(false);
     }
     while(aControls[++nIdx]);
 

@@ -220,7 +220,7 @@ SvTreeListEntry * ThesaurusAlternativesCtrl::AddEntry( sal_Int32 nVal, const OUS
     }
     pEntry->AddItem( new SvLBoxString( pEntry, 0, OUString() ) ); // add empty column
     aText += rText;
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0 ) );  // otherwise crash
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false ) );  // otherwise crash
     pEntry->AddItem( new AlternativesString( *this, pEntry, 0, aText ) );
 
     SetExtraData( pEntry, AlternativesExtraData( rText, bIsHeader ) );
@@ -482,7 +482,7 @@ SvxThesaurusDialog::SvxThesaurusDialog(
 
     LookUp( aTmp2 );
     m_pAlternativesCT->GrabFocus();
-    m_pLeftBtn->Enable( sal_False );
+    m_pLeftBtn->Enable( false );
 
     // fill language menu button list
     SvtLanguageTable aLangTab;
@@ -513,7 +513,7 @@ SvxThesaurusDialog::SvxThesaurusDialog(
 
     // disable controls if service is missing
     if (!xThesaurus.is())
-        Enable( sal_False );
+        Enable( false );
 }
 
 IMPL_LINK( SvxThesaurusDialog, ReplaceBtnHdl_Impl, Button *, EMPTYARG /*pBtn*/ )

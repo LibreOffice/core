@@ -69,12 +69,12 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     ///////////////////////////////////////
     // set defaults
     maRbtLinktypInternet.Check ();
-    maFtLogin.Show( sal_False );
-    maFtPassword.Show( sal_False );
-    maEdLogin.Show( sal_False );
-    maEdPassword.Show( sal_False );
-    maCbAnonymous.Show( sal_False );
-    maBtBrowse.Enable( sal_True );
+    maFtLogin.Show( false );
+    maFtPassword.Show( false );
+    maEdLogin.Show( false );
+    maEdPassword.Show( false );
+    maCbAnonymous.Show( false );
+    maBtBrowse.Enable( true );
 
     ///////////////////////////////////////
     // overload handlers
@@ -407,11 +407,11 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickBrowseHdl_Impl)
 
     SfxStringItem aName( SID_FILE_NAME, OUString("http://") );
     SfxStringItem aRefererItem( SID_REFERER, OUString("private:user") );
-    SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, sal_True );
-    SfxBoolItem aSilent( SID_SILENT, sal_True );
-    SfxBoolItem aReadOnly( SID_DOC_READONLY, sal_True );
+    SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, true );
+    SfxBoolItem aSilent( SID_SILENT, true );
+    SfxBoolItem aReadOnly( SID_DOC_READONLY, true );
 
-    SfxBoolItem aBrowse( SID_BROWSE, sal_True );
+    SfxBoolItem aBrowse( SID_BROWSE, true );
 
     const SfxPoolItem *ppItems[] = { &aName, &aNewView, &aSilent, &aReadOnly, &aRefererItem, &aBrowse, NULL };
     (((SvxHpLinkDlg*)mpDialog)->GetBindings())->Execute( SID_OPENDOC, ppItems, 0, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );

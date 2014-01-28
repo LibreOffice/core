@@ -111,10 +111,10 @@ void CuiCustomMultilineEdit::KeyInput( const KeyEvent& rKeyEvent )
         //Select all, Copy, Paste, Cut, Undo Keys
         if ( !bValid && ( rKeyCode.IsMod1() && (
              KEY_A == nKey || KEY_C == nKey || KEY_V == nKey || KEY_X == nKey || KEY_Z == nKey ) ) )
-            bValid = sal_True;
+            bValid = true;
     }
     else
-        bValid = sal_True;
+        bValid = true;
     if( bValid )
         Edit::KeyInput( rKeyEvent );
 }
@@ -165,7 +165,7 @@ void CuiAboutConfigTabPage::InsertEntry(const OUString& rProp, const OUString& r
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
 
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0)); //It is needed, otherwise causes crash
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false)); //It is needed, otherwise causes crash
     pEntry->AddItem( new SvLBoxString( pEntry, 0, rProp));
     pEntry->AddItem( new SvLBoxString( pEntry, 0, rStatus));
     pEntry->AddItem( new SvLBoxString( pEntry, 0, rType));

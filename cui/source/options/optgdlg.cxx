@@ -323,7 +323,7 @@ void OfaMiscTabPage::Reset( const SfxItemSet& rSet )
     }
     else
     {
-        m_pYearFrame->Enable(sal_False);
+        m_pYearFrame->Enable(false);
     }
 }
 
@@ -1191,9 +1191,9 @@ static void lcl_UpdateAndDelete(SfxVoidItem* pInvalidItems[], SfxBoolItem* pBool
 sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
 {
     // lock configuration broadcasters so that we can coordinate the notifications
-    pLangConfig->aSysLocaleOptions.BlockBroadcasts( sal_True );
-    pLangConfig->aLanguageOptions.BlockBroadcasts( sal_True );
-    pLangConfig->aLinguConfig.BlockBroadcasts( sal_True );
+    pLangConfig->aSysLocaleOptions.BlockBroadcasts( true );
+    pLangConfig->aLanguageOptions.BlockBroadcasts( true );
+    pLangConfig->aLinguConfig.BlockBroadcasts( true );
 
     /*
      * Sequence checking only matters when CTL support is enabled.
@@ -1281,7 +1281,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         // this will happen after releasing the lock on the ConfigurationBroadcaster at
         // the end of this method
         pLangConfig->aSysLocaleOptions.SetLocaleConfigString( sNewLang );
-        rSet.Put( SfxBoolItem( SID_OPT_LOCALE_CHANGED, sal_True ) );
+        rSet.Put( SfxBoolItem( SID_OPT_LOCALE_CHANGED, true ) );
 
         sal_uInt16 nNewType = SvtLanguageOptions::GetScriptTypeOfLanguage( eNewLocale );
         bool bNewCJK = ( nNewType & SCRIPTTYPE_ASIAN ) != 0;
@@ -1389,8 +1389,8 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         const sal_uInt16 STATE_COUNT = 2;
 
         SfxBoolItem* pBoolItems[STATE_COUNT];
-        pBoolItems[0] = new SfxBoolItem(SID_VERTICALTEXT_STATE, sal_False);
-        pBoolItems[1] = new SfxBoolItem(SID_TEXT_FITTOSIZE_VERTICAL, sal_False);
+        pBoolItems[0] = new SfxBoolItem(SID_VERTICALTEXT_STATE, false);
+        pBoolItems[1] = new SfxBoolItem(SID_TEXT_FITTOSIZE_VERTICAL, false);
 
         SfxVoidItem* pInvalidItems[STATE_COUNT];
         pInvalidItems[0] = new SfxVoidItem(SID_VERTICALTEXT_STATE);
@@ -1407,7 +1407,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
 
         const sal_uInt16 STATE_COUNT = 1;
         SfxBoolItem* pBoolItems[STATE_COUNT];
-        pBoolItems[0] = new SfxBoolItem(SID_CTLFONT_STATE, sal_False);
+        pBoolItems[0] = new SfxBoolItem(SID_CTLFONT_STATE, false);
         SfxVoidItem* pInvalidItems[STATE_COUNT];
         pInvalidItems[0] = new SfxVoidItem(SID_CTLFONT_STATE);
         lcl_UpdateAndDelete(pInvalidItems, pBoolItems, STATE_COUNT);
@@ -1419,9 +1419,9 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
     // first release the lock on the ConfigurationBroadcaster for Locale changes
     // it seems that our code relies on the fact that before other changes like e.g. currency
     // are broadcasted locale changes have been done
-    pLangConfig->aSysLocaleOptions.BlockBroadcasts( sal_False );
-    pLangConfig->aLanguageOptions.BlockBroadcasts( sal_False );
-    pLangConfig->aLinguConfig.BlockBroadcasts( sal_False );
+    pLangConfig->aSysLocaleOptions.BlockBroadcasts( false );
+    pLangConfig->aLanguageOptions.BlockBroadcasts( false );
+    pLangConfig->aLinguConfig.BlockBroadcasts( false );
 
     return sal_False;
 }
@@ -1485,7 +1485,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     LanguageType eCurLangCTL = LANGUAGE_NONE;
     SfxObjectShell* pCurrentDocShell = SfxObjectShell::Current();
     //collect the configuration values first
-    m_pCurrentDocCB->Enable(sal_False);
+    m_pCurrentDocCB->Enable(false);
     //
     Any aWestLang;
     Any aCJKLang;
@@ -1514,7 +1514,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     //overwrite them by the values provided by the DocShell
     if(pCurrentDocShell)
     {
-        m_pCurrentDocCB->Enable(sal_True);
+        m_pCurrentDocCB->Enable(true);
         m_pCurrentDocCB->Check(bLanguageCurrentDoc_Impl);
         const SfxPoolItem* pLang;
         if( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_LANGUAGE, sal_False, &pLang))
@@ -1579,7 +1579,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     if ( SFX_ITEM_SET == rSet.GetItemState(SID_SET_DOCUMENT_LANGUAGE, sal_False, &pLang ) && ((const SfxBoolItem*)pLang)->GetValue() )
     {
         m_pWesternLanguageLB->GrabFocus();
-        m_pCurrentDocCB->Enable(sal_True);
+        m_pCurrentDocCB->Enable(true);
         m_pCurrentDocCB->Check(sal_True);
     }
 }

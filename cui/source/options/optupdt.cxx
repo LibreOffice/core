@@ -246,9 +246,9 @@ void SvxOnlineUpdateTabPage::Reset( const SfxItemSet& )
 
     m_xUpdateAccess->getByName( "AutoDownloadEnabled" ) >>= bValue;
     m_pAutoDownloadCheckBox->Check(bValue);
-    m_pDestPathLabel->Enable(sal_True);
-    m_pDestPath->Enable(sal_True);
-    m_pChangePathButton->Enable(sal_True);
+    m_pDestPathLabel->Enable(true);
+    m_pDestPath->Enable(true);
+    m_pChangePathButton->Enable(true);
 
     OUString sValue, aPath;
     m_xUpdateAccess->getByName( "DownloadDestination" ) >>= sValue;

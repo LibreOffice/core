@@ -78,7 +78,7 @@ sal_Bool SvxHyperlinkNewDocTp::ImplGetURLObject( const OUString& rPath, const OU
         bIsValidURL = aURLObject.GetProtocol() != INET_PROT_NOT_VALID;
         if ( bIsValidURL )
         {
-            OUString aBase( aURLObject.getName( INetURLObject::LAST_SEGMENT, sal_False ) );
+            OUString aBase( aURLObject.getName( INetURLObject::LAST_SEGMENT, false ) );
             if ( aBase.isEmpty() || ( aBase[0] == '.' ) )
                 bIsValidURL = sal_False;
         }

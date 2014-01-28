@@ -180,7 +180,7 @@ IMPL_LINK( SvxEventConfigPage, SelectHdl_Impl, ListBox *, pBox )
     }
     else
     {
-        bool isReadonly = sal_False;
+        bool isReadonly = false;
 
         uno::Reference< frame::XDesktop2 > xFramesSupplier = frame::Desktop::create(
             ::comphelper::getProcessComponentContext() );

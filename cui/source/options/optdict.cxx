@@ -300,8 +300,8 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
         // check if dictionary is read-only
         SetDicReadonly_Impl(xDic);
         sal_Bool bEnable = !IsDicReadonly_Impl();
-        pNewReplacePB->Enable( sal_False );
-        pDeletePB->Enable( sal_False );
+        pNewReplacePB->Enable( false );
+        pDeletePB->Enable( false );
         pLangFT->Enable( bEnable );
         pLangLB->Enable( bEnable );
         ShowWords_Impl( nPos );
@@ -406,8 +406,8 @@ IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectBookHdl_Impl)
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        pNewReplacePB->Enable( sal_False );
-        pDeletePB->Enable( sal_False );
+        pNewReplacePB->Enable( false );
+        pDeletePB->Enable( false );
         // display dictionary
         ShowWords_Impl( nPos );
         // enable or disable new and delete button according to file attributes
@@ -551,8 +551,8 @@ IMPL_LINK(SvxEditDictionaryDialog, SelectHdl, SvTabListBox*, pBox)
 
         // entries in the list box should exactly correspond to those from the
         // dictionary. Thus:
-        pNewReplacePB->Enable(sal_False);
-        pDeletePB->Enable( sal_True && !IsDicReadonly_Impl() );
+        pNewReplacePB->Enable(false);
+        pDeletePB->Enable( true && !IsDicReadonly_Impl() );
     }
     return 0;
 };

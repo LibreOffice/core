@@ -316,7 +316,7 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
         SdrModel* pModel = new SdrModel(NULL, NULL, LOADREFCOUNTS);
         pModel->GetItemPool().FreezeIdRanges();
         // Page
-        SdrPage* pPage = new SdrPage( *pModel, sal_False );
+        SdrPage* pPage = new SdrPage( *pModel, false );
         pPage->SetSize(Size(1000,1000));
         pModel->InsertPage( pPage, 0 );
         // 3D View
@@ -508,7 +508,7 @@ void SvxLineTabPage::FillListboxes()
     nOldSelect = m_pLbEndStyle->GetSelectEntryPos();
     m_pLbEndStyle->Clear();
     m_pLbEndStyle->InsertEntry( sNone );
-    m_pLbEndStyle->Fill( pLineEndList, sal_False );
+    m_pLbEndStyle->Fill( pLineEndList, false );
     m_pLbEndStyle->SelectEntryPos( nOldSelect );
 }
 
@@ -516,7 +516,7 @@ void SvxLineTabPage::FillListboxes()
 
 void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    SFX_ITEMSET_ARG (&rSet,pPageTypeItem,CntUInt16Item,SID_PAGE_TYPE,sal_False);
+    SFX_ITEMSET_ARG (&rSet,pPageTypeItem,CntUInt16Item,SID_PAGE_TYPE,false);
     if (pPageTypeItem)
         SetPageType(pPageTypeItem->GetValue());
     if( nDlgType == 0 && pDashList.is() )
@@ -580,7 +580,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             m_pLbEndStyle->Clear();
             m_pLbEndStyle->InsertEntry( sNone );
 
-            m_pLbEndStyle->Fill( pLineEndList, sal_False );
+            m_pLbEndStyle->Fill( pLineEndList, false );
             nCount = m_pLbEndStyle->GetEntryCount();
 
             if( nCount == 0 )
@@ -1118,7 +1118,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
 
         SdrModel* pModel = new SdrModel(NULL, NULL, LOADREFCOUNTS);
         pModel->GetItemPool().FreezeIdRanges();
-        SdrPage* pPage = new SdrPage( *pModel, sal_False );
+        SdrPage* pPage = new SdrPage( *pModel, false );
         pPage->SetSize(Size(1000,1000));
         pModel->InsertPage( pPage, 0 );
         SdrView* pView = new SdrView( pModel, &aVDev );
@@ -1820,14 +1820,14 @@ void SvxLineTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SvxLineTabPage::PageCreated (SfxAllItemSet aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pColorListItem,SvxColorListItem,SID_COLOR_TABLE,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pDashListItem,SvxDashListItem,SID_DASH_LIST,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pLineEndListItem,SvxLineEndListItem,SID_LINEEND_LIST,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pDlgTypeItem,SfxUInt16Item,SID_DLG_TYPE,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pSdrObjListItem,OfaPtrItem,SID_OBJECT_LIST,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pSymbolAttrItem,SfxTabDialogItem,SID_ATTR_SET,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pGraphicItem,SvxGraphicItem,SID_GRAPHIC,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pColorListItem,SvxColorListItem,SID_COLOR_TABLE,false);
+    SFX_ITEMSET_ARG (&aSet,pDashListItem,SvxDashListItem,SID_DASH_LIST,false);
+    SFX_ITEMSET_ARG (&aSet,pLineEndListItem,SvxLineEndListItem,SID_LINEEND_LIST,false);
+    SFX_ITEMSET_ARG (&aSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,false);
+    SFX_ITEMSET_ARG (&aSet,pDlgTypeItem,SfxUInt16Item,SID_DLG_TYPE,false);
+    SFX_ITEMSET_ARG (&aSet,pSdrObjListItem,OfaPtrItem,SID_OBJECT_LIST,false);
+    SFX_ITEMSET_ARG (&aSet,pSymbolAttrItem,SfxTabDialogItem,SID_ATTR_SET,false);
+    SFX_ITEMSET_ARG (&aSet,pGraphicItem,SvxGraphicItem,SID_GRAPHIC,false);
 
     if (pColorListItem)
         SetColorList(pColorListItem->GetColorList());

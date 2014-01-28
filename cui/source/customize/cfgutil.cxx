@@ -637,7 +637,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
             OUString aTitle(pImp->m_sDlgMacros);
             SvTreeListEntry *pNewEntry = InsertEntry( aTitle, NULL );
             pNewEntry->SetUserData( pInfo );
-            pNewEntry->EnableChildrenOnDemand( sal_True );
+            pNewEntry->EnableChildrenOnDemand( true );
             aArr.push_back( pInfo );
         }
         else
@@ -723,7 +723,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
                                 {
                                     if ( grandchildren[m]->getType() == browse::BrowseNodeTypes::CONTAINER )
                                     {
-                                        pNewEntry->EnableChildrenOnDemand( sal_True );
+                                        pNewEntry->EnableChildrenOnDemand( true );
                                         m = grandchildren.getLength();
                                     }
                                 }
@@ -746,7 +746,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
         SfxGroupInfo_Impl *pInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_STYLES, 0, 0 ); // TODO last parameter should contain user data
         aArr.push_back( pInfo );
         pEntry->SetUserData( pInfo );
-        pEntry->EnableChildrenOnDemand( sal_True );
+        pEntry->EnableChildrenOnDemand( true );
     }
 
     MakeVisible( GetEntry( 0,0 ) );
@@ -948,7 +948,7 @@ void SfxConfigGroupListBox::GroupSelected()
                                 OUString* pScriptURI = new OUString( uri );
                                 SfxGroupInfo_Impl* pGrpInfo = new SfxGroupInfo_Impl( SFX_CFGFUNCTION_SCRIPT, 0, pScriptURI );
 
-                                Image aImage = GetImage( children[n], Reference< XComponentContext >(), sal_False );
+                                Image aImage = GetImage( children[n], Reference< XComponentContext >(), false );
                                 SvTreeListEntry* pNewEntry =
                                     pFunctionListBox->InsertEntry( children[n]->getName(), NULL );
                                 pFunctionListBox->SetExpandedEntryBmp( pNewEntry, aImage );
@@ -1102,7 +1102,7 @@ void SfxConfigGroupListBox::RequestingChildren( SvTreeListEntry *pEntry )
                                     new SfxGroupInfo_Impl(SFX_CFGGROUP_SCRIPTCONTAINER,
                                         0, static_cast<void *>( theChild.get()));
 
-                                Image aImage = GetImage( theChild, Reference< XComponentContext >(), sal_False );
+                                Image aImage = GetImage( theChild, Reference< XComponentContext >(), false );
                                 SvTreeListEntry* pNewEntry =
                                     InsertEntry( theChild->getName(), pEntry );
                                 SetExpandedEntryBmp( pNewEntry, aImage );
@@ -1120,7 +1120,7 @@ void SfxConfigGroupListBox::RequestingChildren( SvTreeListEntry *pEntry )
                                     {
                                         if ( grandchildren[m]->getType() == browse::BrowseNodeTypes::CONTAINER )
                                         {
-                                            pNewEntry->EnableChildrenOnDemand( sal_True );
+                                            pNewEntry->EnableChildrenOnDemand( true );
                                             m = grandchildren.getLength();
                                         }
                                     }
@@ -1151,7 +1151,7 @@ void SfxConfigGroupListBox::RequestingChildren( SvTreeListEntry *pEntry )
                     SfxGroupInfo_Impl *pGrpInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_STYLES, 0, pFamily );
                     aArr.push_back( pGrpInfo );
                     pStyleEntry->SetUserData( pGrpInfo );
-                    pStyleEntry->EnableChildrenOnDemand( sal_False );
+                    pStyleEntry->EnableChildrenOnDemand( false );
                 }
             }
             break;

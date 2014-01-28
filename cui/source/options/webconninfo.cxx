@@ -134,8 +134,8 @@ WebConnectionInfoDialog::WebConnectionInfoDialog(Window* pParent)
     m_pChangeBtn->SetClickHdl( LINK( this, WebConnectionInfoDialog, ChangePasswordHdl ) );
     m_pPasswordsLB->SetSelectHdl( LINK( this, WebConnectionInfoDialog, EntrySelectedHdl ) );
 
-    m_pRemoveBtn->Enable( sal_False );
-    m_pChangeBtn->Enable( sal_False );
+    m_pRemoveBtn->Enable( false );
+    m_pChangeBtn->Enable( false );
 
     HeaderBarClickedHdl( NULL );
 }
@@ -301,12 +301,12 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, EntrySelectedHdl)
     SvTreeListEntry* pEntry = m_pPasswordsLB->GetCurEntry();
     if ( !pEntry )
     {
-        m_pRemoveBtn->Enable( sal_False );
-        m_pChangeBtn->Enable( sal_False );
+        m_pRemoveBtn->Enable( false );
+        m_pChangeBtn->Enable( false );
     }
     else
     {
-        m_pRemoveBtn->Enable( sal_True );
+        m_pRemoveBtn->Enable( true );
 
         // url container entries (-> use system credentials) have
         // no password

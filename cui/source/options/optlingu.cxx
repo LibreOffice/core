@@ -1852,7 +1852,7 @@ SvTreeListEntry* SvxLinguTabPage::CreateEntry( OUString& rTxt, sal_uInt16 nCol )
         pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData ) );
     if (CBCOL_SECOND == nCol)
         pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );    // empty column
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false));
     pEntry->AddItem( new BrwString_Impl( pEntry, 0, rTxt ) );
 
     return pEntry;
@@ -1911,8 +1911,8 @@ SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData) 
     aPrioDownPB.SetClickHdl( LINK( this, SvxEditModulesDlg, UpDownHdl_Impl ));
     aBackPB    .SetClickHdl( LINK( this, SvxEditModulesDlg, BackHdl_Impl ));
     // in case of not installed language modules
-    aPrioUpPB  .Enable( sal_False );
-    aPrioDownPB.Enable( sal_False );
+    aPrioUpPB  .Enable( false );
+    aPrioDownPB.Enable( false );
 
     if ( SvtExtendedSecurityOptions().GetOpenHyperlinkMode()
             != SvtExtendedSecurityOptions::OPEN_NEVER )
@@ -1978,7 +1978,7 @@ SvTreeListEntry* SvxEditModulesDlg::CreateEntry( OUString& rTxt, sal_uInt16 nCol
         pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData ) );
     if (CBCOL_SECOND == nCol)
         pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );    // empty column
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false));
     pEntry->AddItem( new BrwStringDic_Impl( pEntry, 0, rTxt ) );
 
     return pEntry;

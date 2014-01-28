@@ -225,7 +225,7 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     get(m_pOutsideLbl,"labelOuter");
     get(m_pPrintRangeQueryText,"labelMsg");
 
-    bBorderModified = sal_False;
+    bBorderModified = false;
     m_pBspWin->EnableRTL( sal_False );
 
     // this page needs ExchangeSupport
@@ -508,7 +508,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
         Swap( aPaperSize );
 
     // Actual Paper Format
-    Paper ePaper = SvxPaperInfo::GetSvxPaper( aPaperSize, MAP_100TH_MM, sal_True );
+    Paper ePaper = SvxPaperInfo::GetSvxPaper( aPaperSize, MAP_100TH_MM, true );
 
     if ( PAPER_USER != ePaper )
         aPaperSize = SvxPaperInfo::GetPaperSize( ePaper, MAP_100TH_MM );
@@ -599,8 +599,8 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
 
     InitHeadFoot_Impl( rSet );
 
-    bBorderModified = sal_False;
-    SwapFirstValues_Impl( sal_False );
+    bBorderModified = false;
+    SwapFirstValues_Impl( false );
     UpdateExample_Impl();
 
     m_pLeftMarginEdit->SaveValue();
@@ -1026,7 +1026,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperSizeModify_Impl)
     SfxMapUnit eUnit = GetItemSet().GetPool()->GetMetric( nWhich );
     Size aSize( GetCoreValue( *m_pPaperWidthEdit, eUnit ),
                 GetCoreValue( *m_pPaperHeightEdit, eUnit ) );
-    Paper ePaper = SvxPaperInfo::GetSvxPaper( aSize, (MapUnit)eUnit, sal_True );
+    Paper ePaper = SvxPaperInfo::GetSvxPaper( aSize, (MapUnit)eUnit, true );
     sal_uInt16 nEntryCount = m_pPaperSizeBox->GetEntryCount();
 
     for ( sal_uInt16 i = 0; i < nEntryCount; ++i )
@@ -1146,7 +1146,7 @@ void SvxPageDescPage::SwapFirstValues_Impl( bool bSet )
 IMPL_LINK_NOARG_INLINE_START(SvxPageDescPage, BorderModify_Impl)
 {
     if ( !bBorderModified )
-        bBorderModified = sal_True;
+        bBorderModified = true;
     UpdateExample_Impl();
     return 0;
 }
@@ -1675,10 +1675,10 @@ bool SvxPageDescPage::IsMarginOutOfRange()
 
 void SvxPageDescPage::PageCreated (SfxAllItemSet aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pModeItem,SfxAllEnumItem,SID_ENUM_PAGE_MODE,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pPaperStartItem,SfxAllEnumItem,SID_PAPER_START,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pPaperEndItem,SfxAllEnumItem,SID_PAPER_END,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pCollectListItem,SfxStringListItem,SID_COLLECT_LIST,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pModeItem,SfxAllEnumItem,SID_ENUM_PAGE_MODE,false);
+    SFX_ITEMSET_ARG (&aSet,pPaperStartItem,SfxAllEnumItem,SID_PAPER_START,false);
+    SFX_ITEMSET_ARG (&aSet,pPaperEndItem,SfxAllEnumItem,SID_PAPER_END,false);
+    SFX_ITEMSET_ARG (&aSet,pCollectListItem,SfxStringListItem,SID_COLLECT_LIST,false);
     if (pModeItem)
         SetMode((SvxModeType)pModeItem->GetEnumValue());
     if (pPaperStartItem && pPaperEndItem)

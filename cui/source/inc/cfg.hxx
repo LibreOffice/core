@@ -110,7 +110,7 @@ public:
         const com::sun::star::uno::Reference
             < com::sun::star::uno::XInterface >& xManager );
 
-    void SetModified( bool bValue = sal_True ) { bModified = bValue; }
+    void SetModified( bool bValue = true ) { bModified = bValue; }
     bool IsModified( ) { return bModified; }
 
     bool IsReadOnly( ) { return bReadOnly; }
@@ -203,7 +203,7 @@ public:
     /// methods inherited from SaveInData
     SvxEntries*         GetEntries();
     void                SetEntries( SvxEntries* );
-    bool                HasURL( const OUString& URL ) { (void)URL; return sal_False; }
+    bool                HasURL( const OUString& URL ) { (void)URL; return false; }
     bool                HasSettings() { return m_xMenuSettings.is(); }
     void                Reset();
     bool                Apply();
@@ -239,18 +239,18 @@ public:
 
     SvxConfigEntry( const OUString& rDisplayName,
                     const OUString& rCommandURL,
-                    bool bPopup = sal_False,
-                    bool bParentData = sal_False );
+                    bool bPopup = false,
+                    bool bParentData = false );
 
     SvxConfigEntry()
         :
             nId( 0 ),
-            bPopUp( sal_False ),
-            bStrEdited( sal_False ),
-            bIsUserDefined( sal_False ),
-            bIsMain( sal_False ),
-            bIsParentData( sal_False ),
-            bIsVisible( sal_True ),
+            bPopUp( false ),
+            bStrEdited( false ),
+            bIsUserDefined( false ),
+            bIsMain( false ),
+            bIsParentData( false ),
+            bIsVisible( true ),
             nStyle( 0 ),
             pEntries( 0 )
     {}
@@ -261,7 +261,7 @@ public:
     void    SetCommand( const OUString& rCmd ) { aCommand = rCmd; }
 
     const OUString&      GetName() const { return aLabel; }
-    void    SetName( const OUString& rStr ) { aLabel = rStr; bStrEdited = sal_True; }
+    void    SetName( const OUString& rStr ) { aLabel = rStr; bStrEdited = true; }
     bool    HasChangedName() const { return bStrEdited; }
 
     const OUString&      GetHelpText() ;
@@ -270,10 +270,10 @@ public:
     const OUString&      GetHelpURL() const { return aHelpURL; }
     void    SetHelpURL( const OUString& rStr ) { aHelpURL = rStr; }
 
-    void    SetPopup( bool bOn = sal_True ) { bPopUp = bOn; }
+    void    SetPopup( bool bOn = true ) { bPopUp = bOn; }
     bool    IsPopup() const { return bPopUp; }
 
-    void    SetUserDefined( bool bOn = sal_True ) { bIsUserDefined = bOn; }
+    void    SetUserDefined( bool bOn = true ) { bIsUserDefined = bOn; }
     bool    IsUserDefined() const { return bIsUserDefined; }
 
     bool    IsBinding() const { return !bPopUp; }
@@ -283,10 +283,10 @@ public:
     void    SetEntries( SvxEntries* entries ) { pEntries = entries; }
     bool    HasEntries() const { return pEntries != NULL; }
 
-    void    SetMain( bool bValue = sal_True ) { bIsMain = bValue; }
+    void    SetMain( bool bValue = true ) { bIsMain = bValue; }
     bool    IsMain() { return bIsMain; }
 
-    void    SetParentData( bool bValue = sal_True ) { bIsParentData = bValue; }
+    void    SetParentData( bool bValue = true ) { bIsParentData = bValue; }
     bool    IsParentData() { return bIsParentData; }
 
     bool    IsMovable();
@@ -425,7 +425,7 @@ protected:
 
     SvTreeListEntry*    InsertEntry(        SvxConfigEntry* pNewEntryData,
                                         SvTreeListEntry* pTarget = NULL,
-                                        bool bFront = sal_False );
+                                        bool bFront = false );
 
     void            AddSubMenusToUI(    const OUString& rBaseTitle,
                                         SvxConfigEntry* pParentData );
@@ -445,8 +445,8 @@ public:
     SaveInData*     GetSaveInData() { return pCurrentSaveInData; }
 
     SvTreeListEntry*    AddFunction( SvTreeListEntry* pTarget = NULL,
-                                 bool bFront = sal_False,
-                                 bool bAllowDuplicates = sal_False );
+                                 bool bFront = false,
+                                 bool bAllowDuplicates = false );
 
     virtual void    MoveEntry( bool bMoveUp );
 
@@ -531,7 +531,7 @@ class SvxMainMenuOrganizerDialog : public ModalDialog
 public:
     SvxMainMenuOrganizerDialog (
         Window*, SvxEntries*,
-        SvxConfigEntry*, bool bCreateMenu = sal_False );
+        SvxConfigEntry*, bool bCreateMenu = false );
 
     ~SvxMainMenuOrganizerDialog ();
 
@@ -605,8 +605,8 @@ public:
     ~SvxToolbarConfigPage();
 
     SvTreeListEntry*    AddFunction( SvTreeListEntry* pTarget = NULL,
-                                             bool bFront = sal_False,
-                                             bool bAllowDuplicates = sal_True );
+                                             bool bFront = false,
+                                             bool bAllowDuplicates = true );
 
     void            MoveEntry( bool bMoveUp );
 

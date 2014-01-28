@@ -723,7 +723,7 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, ModifyHdl_Impl)
 
 void SvxTabulatorTabPage::PageCreated(SfxAllItemSet aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pControlItem,SfxUInt16Item,SID_SVXTABULATORTABPAGE_CONTROLFLAGS,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pControlItem,SfxUInt16Item,SID_SVXTABULATORTABPAGE_CONTROLFLAGS,false);
     if (pControlItem)
         DisableControls(pControlItem->GetValue());
 }

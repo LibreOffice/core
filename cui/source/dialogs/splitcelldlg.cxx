@@ -39,7 +39,7 @@ SvxSplitTableDlg::SvxSplitTableDlg( Window *pParent, bool bIsTableVertical,
     m_pVertBox->SetClickHdl( LINK( this, SvxSplitTableDlg, ClickHdl ));
 
     if( mnMaxVertical < 2 )
-        m_pVertBox->Enable(sal_False);
+        m_pVertBox->Enable(false);
 
     //exchange the meaning of horizontal and vertical for vertical text
     if(bIsTableVertical)

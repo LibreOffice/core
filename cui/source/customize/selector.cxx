@@ -372,7 +372,7 @@ void SvxConfigGroupListBox::fillScriptList( const Reference< browse::XBrowseNode
                     * way to determine if a basic lib had children
                     * without having to ask for them (which forces
                     * the library to be loaded */
-                    pNewEntry->EnableChildrenOnDemand( sal_True );
+                    pNewEntry->EnableChildrenOnDemand( true );
                 }
                 else
                 {
@@ -385,7 +385,7 @@ void SvxConfigGroupListBox::fillScriptList( const Reference< browse::XBrowseNode
                     {
                         if ( grandchildren[m]->getType() == browse::BrowseNodeTypes::CONTAINER )
                         {
-                            pNewEntry->EnableChildrenOnDemand( sal_True );
+                            pNewEntry->EnableChildrenOnDemand( true );
                             break;
                         }
                     }
@@ -518,7 +518,7 @@ void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame
 
             SvTreeListEntry *pNewEntry = InsertEntry( aTitle, NULL );
             pNewEntry->SetUserData( pInfo );
-            pNewEntry->EnableChildrenOnDemand( sal_True );
+            pNewEntry->EnableChildrenOnDemand( true );
             aArr.push_back( pInfo );
         }
         else
@@ -764,7 +764,7 @@ void SvxConfigGroupListBox::GroupSelected()
                                 new SvxGroupInfo_Impl(
                                     SVX_CFGFUNCTION_SCRIPT, 123, uri, description );
 
-                            Image aImage = GetImage( children[n], Reference< XComponentContext >(), sal_False );
+                            Image aImage = GetImage( children[n], Reference< XComponentContext >(), false );
                             SvTreeListEntry* pNewEntry =
                                 pFunctionListBox->InsertEntry( children[n]->getName(), NULL );
                             pFunctionListBox->SetExpandedEntryBmp( pNewEntry, aImage );
@@ -944,12 +944,12 @@ SvxScriptSelectorDialog::UpdateUI()
             m_pCommands->GetHelpText(m_pCommands->FirstSelected());
         m_pDescriptionText->SetText(sMessage.isEmpty() ? m_sDefaultDesc : sMessage);
 
-        m_pOKButton->Enable( sal_True );
+        m_pOKButton->Enable( true );
     }
     else
     {
         m_pDescriptionText->SetText(m_sDefaultDesc);
-        m_pOKButton->Enable( sal_False );
+        m_pOKButton->Enable( false );
     }
 }
 

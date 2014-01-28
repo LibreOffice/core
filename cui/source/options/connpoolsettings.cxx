@@ -67,10 +67,10 @@ namespace offapp
     {
         const DriverPoolingSettingsItem* pItem = PTR_CAST(DriverPoolingSettingsItem, &_rCompare);
         if (!pItem)
-            return sal_False;
+            return false;
 
         if (m_aSettings.size() != pItem->m_aSettings.size())
-            return sal_False;
+            return false;
 
         DriverPoolingSettings::const_iterator aOwn = m_aSettings.begin();
         DriverPoolingSettings::const_iterator aOwnEnd = m_aSettings.end();
@@ -78,13 +78,13 @@ namespace offapp
         while (aOwn < aOwnEnd)
         {
             if (*aOwn != *aForeign)
-                return sal_False;
+                return false;
 
             ++aForeign;
             ++aOwn;
         }
 
-        return sal_True;
+        return true;
     }
 
     //--------------------------------------------------------------------

@@ -698,7 +698,7 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
     // We now have always a link to the background
     bLinkOnly = sal_True;
     m_pBtnLink->Check( sal_True );
-    m_pBtnLink->Show( sal_False );
+    m_pBtnLink->Show( false );
 
     delete pTemp;
 }
@@ -1132,7 +1132,7 @@ void SvxBackgroundTabPage::ShowSelector()
 
         if(nHtmlMode & HTMLMODE_ON)
         {
-            m_pBtnArea->Enable(sal_False);
+            m_pBtnArea->Enable(false);
         }
     }
 }
@@ -1254,8 +1254,8 @@ void SvxBackgroundTabPage::ShowBitmapUI_Impl()
         m_pBtnPreview->Show();
 
         m_pGraphTransFrame->Show(bGraphTransparency);
-        m_pColTransFT->Show(sal_False);
-        m_pColTransMF->Show(sal_False);
+        m_pColTransFT->Show(false);
+        m_pColTransMF->Show(false);
     }
 }
 
@@ -1400,7 +1400,7 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, SelectHdl_Impl)
     else if ( XFILL_BITMAP == lcl_getFillStyle(m_pLbSelect) )
     {
         ShowBitmapUI_Impl();
-        m_pParaLBox->Enable(sal_False); // drawing background can't be a bitmap
+        m_pParaLBox->Enable(false); // drawing background can't be a bitmap
     }
     else
     {
@@ -1767,7 +1767,7 @@ IMPL_LINK( SvxBackgroundTabPage, ParaDestinationHdl_Impl, ListBox*, pBox )
             case PARA_DEST_CHAR:
             {
                 pActItem = pParaBck_Impl->pCharBrush;
-                m_pLbSelect->Enable(sal_False);
+                m_pLbSelect->Enable(false);
             }
             break;
         }
@@ -1929,8 +1929,8 @@ void SvxBackgroundTabPage::EnableTransparency(sal_Bool bColor, sal_Bool bGraphic
 
 void SvxBackgroundTabPage::PageCreated (SfxAllItemSet aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pGradientListItem,SvxGradientListItem,SID_GRADIENT_LIST,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,false);
+    SFX_ITEMSET_ARG (&aSet,pGradientListItem,SvxGradientListItem,SID_GRADIENT_LIST,false);
 
     if (pFlagItem)
     {

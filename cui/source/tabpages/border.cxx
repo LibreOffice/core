@@ -695,7 +695,7 @@ sal_Bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     //
     // Put or Clear of the border?
     //
-    bPut = sal_True;
+    bPut = true;
 
     if (   SFX_ITEM_DEFAULT == rOldSet.GetItemState( nBoxWhich,     sal_False ))
     {
@@ -1183,8 +1183,8 @@ void SvxBorderTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SvxBorderTabPage::PageCreated (SfxAllItemSet aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pSWModeItem,SfxUInt16Item,SID_SWMODE_TYPE,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pSWModeItem,SfxUInt16Item,SID_SWMODE_TYPE,false);
+    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,false);
     if (pSWModeItem)
     {
         nSWMode = pSWModeItem->GetValue();

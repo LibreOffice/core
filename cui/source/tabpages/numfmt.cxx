@@ -276,9 +276,9 @@ void SvxNumberFormatTabPage::Init_Impl()
     bNumItemFlag=sal_True;
     bOneAreaFlag=sal_False;
 
-    m_pIbAdd->Enable(sal_False );
-    m_pIbRemove->Enable(sal_False );
-    m_pIbInfo->Enable(sal_False );
+    m_pIbAdd->Enable(false );
+    m_pIbRemove->Enable(false );
+    m_pIbInfo->Enable(false );
 
     m_pEdComment->SetText(m_pLbCategory->GetEntry(1));    // string for user defined
 
@@ -600,9 +600,9 @@ void SvxNumberFormatTabPage::Obstructing()
     m_pFtLanguage->Disable();
     m_pLbLanguage->Disable();
 
-    m_pIbAdd->Enable(sal_False );
-    m_pIbRemove->Enable(sal_False );
-    m_pIbInfo->Enable(sal_False );
+    m_pIbAdd->Enable(false );
+    m_pIbRemove->Enable(false );
+    m_pIbInfo->Enable(false );
 
     m_pBtnNegRed->Disable();
     m_pBtnThousand->Disable();
@@ -1200,7 +1200,7 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
 
         if ( pNumFmtShell->FindEntry( aFormat) )
         {
-            m_pIbAdd->Enable(sal_False );
+            m_pIbAdd->Enable(false );
             sal_Bool bIsUserDef=pNumFmtShell->IsUserDefined( aFormat );
             m_pIbRemove->Enable(bIsUserDef);
             m_pIbInfo->Enable(bIsUserDef);
@@ -1208,9 +1208,9 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
         }
         else
         {
-            m_pIbAdd->Enable(sal_True );
-            m_pIbInfo->Enable(sal_True );
-            m_pIbRemove->Enable(sal_False );
+            m_pIbAdd->Enable(true );
+            m_pIbInfo->Enable(true );
+            m_pIbRemove->Enable(false );
             m_pFtComment->SetText(m_pEdComment->GetText());
 
         }
@@ -1436,9 +1436,9 @@ IMPL_LINK( SvxNumberFormatTabPage, EditHdl_Impl, Edit*, pEdFormat )
 
     if ( m_pEdFormat->GetText().isEmpty() )
     {
-        m_pIbAdd->Enable(sal_False );
-        m_pIbRemove->Enable(sal_False );
-        m_pIbInfo->Enable(sal_False );
+        m_pIbAdd->Enable(false );
+        m_pIbRemove->Enable(false );
+        m_pIbInfo->Enable(false );
         m_pFtComment->SetText(OUString());
     }
     else
@@ -1448,7 +1448,7 @@ IMPL_LINK( SvxNumberFormatTabPage, EditHdl_Impl, Edit*, pEdFormat )
 
         if ( pNumFmtShell->FindEntry( aFormat, &nCurKey ) )
         {
-            m_pIbAdd->Enable(sal_False );
+            m_pIbAdd->Enable(false );
             sal_Bool bUserDef=pNumFmtShell->IsUserDefined( aFormat );
 
             m_pIbRemove->Enable(bUserDef);
@@ -1469,9 +1469,9 @@ IMPL_LINK( SvxNumberFormatTabPage, EditHdl_Impl, Edit*, pEdFormat )
         else
         {
 
-            m_pIbAdd->Enable(sal_True );
-            m_pIbInfo->Enable(sal_True);
-            m_pIbRemove->Enable(sal_False );
+            m_pIbAdd->Enable(true );
+            m_pIbInfo->Enable(true);
+            m_pIbRemove->Enable(false );
 
             m_pFtComment->SetText(m_pEdComment->GetText());
 
@@ -1528,7 +1528,7 @@ IMPL_LINK( SvxNumberFormatTabPage, OptHdl_Impl, void *, pOptCtrl )
 
         if ( pNumFmtShell->FindEntry( aFormat ) )
         {
-            m_pIbAdd->Enable(sal_False );
+            m_pIbAdd->Enable(false );
             sal_Bool bUserDef=pNumFmtShell->IsUserDefined( aFormat );
             m_pIbRemove->Enable(bUserDef);
             m_pIbInfo->Enable(bUserDef);
@@ -1723,8 +1723,8 @@ void SvxNumberFormatTabPage::AddAutomaticLanguage_Impl(LanguageType eAutoLang, s
 
 void SvxNumberFormatTabPage::PageCreated (SfxAllItemSet aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pNumberInfoItem,SvxNumberInfoItem,SID_ATTR_NUMBERFORMAT_INFO,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pLinkItem,SfxLinkItem,SID_LINK_TYPE,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pNumberInfoItem,SvxNumberInfoItem,SID_ATTR_NUMBERFORMAT_INFO,false);
+    SFX_ITEMSET_ARG (&aSet,pLinkItem,SfxLinkItem,SID_LINK_TYPE,false);
     if (pNumberInfoItem)
         SetNumberFormatList(*pNumberInfoItem);
     if (pLinkItem)

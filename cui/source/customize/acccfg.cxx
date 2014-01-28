@@ -1086,13 +1086,13 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
         TAccInfo*       pEntry              = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
         OUString sPossibleNewCommand = pFunctionBox->GetCurCommand();
 
-        aRemoveButton.Enable( sal_False );
-        aChangeButton.Enable( sal_False );
+        aRemoveButton.Enable( false );
+        aChangeButton.Enable( false );
 
         if (pEntry->m_bIsConfigurable)
         {
             if (pEntry->isConfigured())
-                aRemoveButton.Enable( sal_True );
+                aRemoveButton.Enable( true );
             aChangeButton.Enable( pEntry->m_sCommand != sPossibleNewCommand );
         }
     }
@@ -1100,12 +1100,12 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
     {
         pGroupLBox->GroupSelected();
         if ( !pFunctionBox->FirstSelected() )
-            aChangeButton.Enable( sal_False );
+            aChangeButton.Enable( false );
     }
     else if ( pListBox == pFunctionBox )
     {
-        aRemoveButton.Enable( sal_False );
-        aChangeButton.Enable( sal_False );
+        aRemoveButton.Enable( false );
+        aChangeButton.Enable( false );
 
         // #i36994 First selected can return zero!
         SvTreeListEntry*    pLBEntry = aEntriesBox.FirstSelected();
@@ -1118,7 +1118,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
             if (pEntry->m_bIsConfigurable)
             {
                 if (pEntry->isConfigured())
-                    aRemoveButton.Enable( sal_True );
+                    aRemoveButton.Enable( true );
                 aChangeButton.Enable( pEntry->m_sCommand != sPossibleNewCommand );
             }
 
@@ -1133,7 +1133,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
                     TAccInfo*    pU1 = new TAccInfo(-1, -1, pUserData->m_aKey);
                     SvTreeListEntry* pE1 = aKeyBox.InsertEntry( pUserData->m_aKey.GetName(), 0L, sal_True, LIST_APPEND );
                     pE1->SetUserData(pU1);
-                    pE1->EnableChildrenOnDemand( sal_False );
+                    pE1->EnableChildrenOnDemand( false );
                 }
                 pIt = aEntriesBox.Next(pIt);
             }

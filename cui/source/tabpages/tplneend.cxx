@@ -130,7 +130,7 @@ void SvxLineEndDefTabPage::Construct()
         pPolyObj->TakeObjInfo( aInfoRec );
         SdrObject* pNewObj = 0;
         if( aInfoRec.bCanConvToPath )
-            pNewObj = pPolyObj->ConvertToPolyObj( sal_True, sal_False );
+            pNewObj = pPolyObj->ConvertToPolyObj( true, false );
 
         bCreateArrowPossible = pNewObj && pNewObj->ISA( SdrPathObj );
         SdrObject::Free( pNewObj );
@@ -405,7 +405,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
 
             if( aInfoRec.bCanConvToPath )
             {
-                pNewObj = pConvPolyObj = pPolyObj->ConvertToPolyObj( sal_True, sal_False );
+                pNewObj = pConvPolyObj = pPolyObj->ConvertToPolyObj( true, false );
 
                 if( !pNewObj || !pNewObj->ISA( SdrPathObj ) )
                     return( 0L ); // cancel, additional safety, which
