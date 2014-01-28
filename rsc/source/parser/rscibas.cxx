@@ -122,7 +122,7 @@ void RscLangEnum::Init( RscNameTable& rNames )
     {
         OString aIsoToken;
         sal_uInt16 nTokenCounter = 0;
-        bool bOneMore = 1;
+        bool bOneMore = true;
         while ( bOneMore )
         {
             aIsoToken = comphelper::string::getToken(aEnvIsoTokens, nTokenCounter, ' ');
@@ -139,7 +139,7 @@ void RscLangEnum::Init( RscNameTable& rNames )
                 mnLangId++;
             }
             else
-                bOneMore = 0;
+                bOneMore = false;
 
             nTokenCounter++;
         }
