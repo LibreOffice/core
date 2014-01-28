@@ -111,8 +111,7 @@ CTTextStyle::CTTextStyle( const ImplFontSelectData& rFSD )
 
     // handle emulation of italic/oblique styles if requested and the font doesn't provide them
     if( ((pReqFont->meItalic == ITALIC_NORMAL) || (pReqFont->meItalic == ITALIC_OBLIQUE))
-    && (mpFontData->meItalic != ITALIC_NORMAL)
-    && (mpFontData->meItalic != ITALIC_OBLIQUE))
+    && (mpFontData->meItalic == ITALIC_NONE))
     {
         if( !pMatrix)
             pMatrix = &(aMatrix = CGAffineTransformIdentity);
