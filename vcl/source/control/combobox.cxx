@@ -475,7 +475,7 @@ IMPL_LINK( ComboBox, ImplSelectHdl, void*, EMPTYARG )
 }
 IMPL_LINK( ComboBox, ImplListItemSelectHdl,  void*, EMPTYARG )
 {
-    ImplCallEventListeners( VCLEVENT_LISTBOX_SELECT );
+    ImplCallEventListeners( VCLEVENT_DROPDOWN_SELECT );
     return 1;
 }
 // -----------------------------------------------------------------------
