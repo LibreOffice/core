@@ -460,7 +460,7 @@ bool getJavaProps(const OUString & exePath,
 
     //Use this thread to read output stream
     FileHandleReader::Result rs = FileHandleReader::RESULT_OK;
-    while (1)
+    while (true)
     {
         OString aLine;
         rs = stdoutReader.readLine( & aLine);

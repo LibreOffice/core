@@ -371,7 +371,7 @@ javaFrameworkError SAL_CALL jfw_startVM(
                     "-Djava.class.path=" + jfw::BootParams::getClasspath();
             }
             else
-                OSL_ASSERT(0);
+                OSL_ASSERT(false);
             pInfo = aInfo.pInfo;
         }
         assert(pInfo != NULL);
@@ -884,7 +884,7 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
             {// plugin does not recognize this path as belonging to JRE
                 continue;
             }
-            OSL_ASSERT(0);
+            OSL_ASSERT(false);
         }
         if (*ppInfo == NULL && errcode != JFW_E_FAILED_VERSION)
             errcode = JFW_E_NOT_RECOGNIZED;

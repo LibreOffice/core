@@ -254,7 +254,8 @@ javaPluginError jfw_plugin_getAllJavaInfos(
             {
                 //The minVersion was not recognized as valid for this vendor.
                 JFW_ENSURE(
-                    0,"[Java framework]sunjavaplugin does not know version: "
+                    false,
+                    "[Java framework]sunjavaplugin does not know version: "
                     + ouMinVer + " for vendor: " + cur->getVendor()
                     + " .Check minimum Version." );
                 return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
@@ -272,7 +273,8 @@ javaPluginError jfw_plugin_getAllJavaInfos(
             {
                 //The maxVersion was not recognized as valid for this vendor.
                 JFW_ENSURE(
-                    0,"[Java framework]sunjavaplugin does not know version: "
+                    false,
+                    "[Java framework]sunjavaplugin does not know version: "
                     + ouMaxVer + " for vendor: " + cur->getVendor()
                     + " .Check maximum Version." );
                 return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
@@ -295,7 +297,8 @@ javaPluginError jfw_plugin_getAllJavaInfos(
             {
                 //The excluded version was not recognized as valid for this vendor.
                 JFW_ENSURE(
-                    0,"[Java framework]sunjavaplugin does not know version: "
+                    false,
+                    "[Java framework]sunjavaplugin does not know version: "
                     + sExVer + " for vendor: " + cur->getVendor()
                     + " .Check excluded versions." );
                 return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
@@ -378,7 +381,8 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
         {
             //The minVersion was not recognized as valid for this vendor.
             JFW_ENSURE(
-                0,"[Java framework]sunjavaplugin does not know version: "
+                false,
+                "[Java framework]sunjavaplugin does not know version: "
                 + ouMinVer + " for vendor: " + aVendorInfo->getVendor()
                 + " .Check minimum Version." );
             return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
@@ -398,7 +402,8 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
         {
             //The maxVersion was not recognized as valid for this vendor.
             JFW_ENSURE(
-                0,"[Java framework]sunjavaplugin does not know version: "
+                false,
+                "[Java framework]sunjavaplugin does not know version: "
                 + ouMaxVer + " for vendor: " + aVendorInfo->getVendor()
                 + " .Check maximum Version." );
             return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
@@ -419,7 +424,8 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
         {
             //The excluded version was not recognized as valid for this vendor.
             JFW_ENSURE(
-                0,"[Java framework]sunjavaplugin does not know version: "
+                false,
+                "[Java framework]sunjavaplugin does not know version: "
                 + sExVer + " for vendor: " + aVendorInfo->getVendor()
                 + " .Check excluded versions." );
             return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
@@ -579,7 +585,8 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     if ((moduleRt = osl_loadModule(sRuntimeLib.pData, SAL_LOADMODULE_DEFAULT)) == 0)
 #endif
      {
-         JFW_ENSURE(0, "[Java framework]sunjavaplugin" SAL_DLLEXTENSION
+         JFW_ENSURE(false,
+                    "[Java framework]sunjavaplugin" SAL_DLLEXTENSION
                        " could not load Java runtime library: \n"
                     + sRuntimeLib + "\n");
          JFW_TRACE0("[Java framework]sunjavaplugin" SAL_DLLEXTENSION
@@ -606,7 +613,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         moduleRt, sSymbolCreateJava.pData);
     if (!pCreateJavaVM)
     {
-        OSL_ASSERT(0);
+        OSL_ASSERT(false);
         OString sLib = OUStringToOString(
             sRuntimeLib, osl_getThreadTextEncoding());
         OString sSymbol = OUStringToOString(

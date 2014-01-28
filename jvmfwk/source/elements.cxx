@@ -1074,7 +1074,7 @@ void MergedSettings::merge(const NodeJava & share, const NodeJava & user)
     else if (share.getEnabled())
         m_bEnabled = * share.getEnabled();
     else
-        m_bEnabled = sal_True;
+        m_bEnabled = true;
 
     if (user.getUserClassPath())
         m_sClassPath = * user.getUserClassPath();

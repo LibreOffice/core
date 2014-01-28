@@ -74,7 +74,7 @@ bool SunVersion::init(const char *szVersion)
     char buf[128];
 
     //char must me a number 0 - 999 and no leading
-    while (1)
+    while (true)
     {
         if (pCur < pEnd && isdigit(*pCur))
         {
@@ -128,7 +128,7 @@ bool SunVersion::init(const char *szVersion)
     if (* (pCur - 1) == '_')
     {// _01, _02
         // update is the last part _01, _01a, part 0 is the digits parts and 1 the trailing alpha
-        while (1)
+        while (true)
         {
             if (pCur <= pEnd)
             {
