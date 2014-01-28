@@ -480,7 +480,7 @@ void SdXMLEventContext::EndElement()
             }
         xEvents->replaceByName( sAPIEventName, uno::Any( aProperties ) );
 
-    } while(0);
+    } while(false);
 }
 
 TYPEINIT1( SdXMLEventsContext, SvXMLImportContext );

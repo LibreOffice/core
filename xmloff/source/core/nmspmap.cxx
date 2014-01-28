@@ -197,7 +197,7 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
     {
         case XML_NAMESPACE_UNKNOWN:
             // ...if it's a completely unknown namespace, assert and return the local name
-            DBG_ASSERT( sal_False, "SvXMLNamespaceMap::GetQNameByKey: invalid namespace key" );
+            DBG_ASSERT( false, "SvXMLNamespaceMap::GetQNameByKey: invalid namespace key" );
         case XML_NAMESPACE_NONE:
             // ...if there isn't one, return the local name
             return rLocalName;
@@ -260,7 +260,7 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
                 else
                 {
                     // ... if it isn't, this is a Bad Thing, assert and return the local name
-                    DBG_ASSERT( sal_False, "SvXMLNamespaceMap::GetQNameByKey: invalid namespace key" );
+                    DBG_ASSERT( false, "SvXMLNamespaceMap::GetQNameByKey: invalid namespace key" );
                     return rLocalName;
                 }
             }

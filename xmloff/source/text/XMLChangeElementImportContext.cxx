@@ -87,7 +87,7 @@ void XMLChangeElementImportContext::StartElement( const Reference< XAttributeLis
 {
     if(bAcceptContent)
     {
-        GetImport().GetTextImport()->SetInsideDeleteContext(sal_True);
+        GetImport().GetTextImport()->SetInsideDeleteContext(true);
     }
 }
 
@@ -96,7 +96,7 @@ void XMLChangeElementImportContext::EndElement()
 {
     if(bAcceptContent)
     {
-        GetImport().GetTextImport()->SetInsideDeleteContext(sal_False);
+        GetImport().GetTextImport()->SetInsideDeleteContext(false);
     }
 }
 

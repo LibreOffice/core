@@ -136,7 +136,7 @@ bool ParseURLAsString(
     sal_Int32 params = rAttrValue.indexOf( '?' );
     if ( rAttrValue.indexOf( SCHEME ) != 0 || params < 0 )
     {
-        return sal_False;
+        return false;
     }
 
     sal_Int32 start = SCHEME.getLength();
@@ -170,9 +170,9 @@ bool ParseURLAsString(
 
     if ( aLanguage.equalsIgnoreAsciiCase("basic") )
     {
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 bool ParseURL(
@@ -212,11 +212,11 @@ bool ParseURL(
                 {
                     *pLocation = GetXMLToken( XML_APPLICATION );
                 }
-                return sal_True;
+                return true;
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
 void XMLEventOASISTransformerContext::StartElement(

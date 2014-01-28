@@ -141,7 +141,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(SvXMLExport& rXMLExp
             {
                 OUString sValue( ::rtl::math::doubleToUString( rValue,
                             rtl_math_StringFormat_Automatic,
-                            rtl_math_DecimalPlaces_Max, '.', sal_True));
+                            rtl_math_DecimalPlaces_Max, '.', true));
                 rXMLExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE, sValue);
             }
         }
@@ -206,7 +206,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(SvXMLExport& rXMLExp
                                     fTempValue,
                                     rtl_math_StringFormat_Automatic,
                                     rtl_math_DecimalPlaces_Max, '.',
-                                    sal_True));
+                                    true));
                         rXMLExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_BOOLEAN_VALUE, sValue);
                     }
                 }
@@ -223,7 +223,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(SvXMLExport& rXMLExp
                 {
                     OUString sValue( ::rtl::math::doubleToUString( rValue,
                                 rtl_math_StringFormat_Automatic,
-                                rtl_math_DecimalPlaces_Max, '.', sal_True));
+                                rtl_math_DecimalPlaces_Max, '.', true));
                     rXMLExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE, sValue);
                 }
             }
@@ -425,7 +425,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
             {
                 OUString sValue( ::rtl::math::doubleToUString( rValue,
                             rtl_math_StringFormat_Automatic,
-                            rtl_math_DecimalPlaces_Max, '.', sal_True));
+                            rtl_math_DecimalPlaces_Max, '.', true));
                 pExport->AddAttribute(sAttrValue, sValue);
             }
         }
@@ -490,7 +490,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
                                     fTempValue,
                                     rtl_math_StringFormat_Automatic,
                                     rtl_math_DecimalPlaces_Max, '.',
-                                    sal_True));
+                                    true));
                         pExport->AddAttribute(sAttrBooleanValue, sValue);
                     }
                 }
@@ -507,7 +507,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
                 {
                     OUString sValue( ::rtl::math::doubleToUString( rValue,
                                 rtl_math_StringFormat_Automatic,
-                                rtl_math_DecimalPlaces_Max, '.', sal_True));
+                                rtl_math_DecimalPlaces_Max, '.', true));
                     pExport->AddAttribute(sAttrValue, sValue);
                 }
             }

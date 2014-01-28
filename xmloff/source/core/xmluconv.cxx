@@ -411,7 +411,7 @@ void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
         {
             OUString a100th( ::rtl::math::doubleToUString( fValue,
                         rtl_math_StringFormat_F,
-                        XML_MAXDIGITSCOUNT_TIME - nCount, '.', sal_True));
+                        XML_MAXDIGITSCOUNT_TIME - nCount, '.', true));
             if ( a100th.getLength() > 2 )
             {
                 rBuffer.append( '.');

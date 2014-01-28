@@ -322,7 +322,7 @@ bool XMLOpaquePropHdl_Impl::importXML(
     if( IsXMLToken( rStrImpValue, XML_FOREGROUND ) )
         bVal = sal_True;
     else if( !IsXMLToken( rStrImpValue, XML_BACKGROUND ) )
-        bRet = sal_False;
+        bRet = false;
 
     if( bRet )
         rValue.setValue( &bVal, ::getBooleanCppuType() );
@@ -372,7 +372,7 @@ bool XMLContourModePropHdl_Impl::importXML(
     if( IsXMLToken( rStrImpValue, XML_OUTSIDE ) )
         bVal = sal_True;
     else if( ! IsXMLToken( rStrImpValue, XML_FULL ) )
-        bRet = sal_False;
+        bRet = false;
 
     if( bRet )
         rValue.setValue( &bVal, ::getBooleanCppuType() );

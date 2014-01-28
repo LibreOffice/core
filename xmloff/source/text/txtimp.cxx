@@ -2330,7 +2330,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
 
     if( XML_TEXT_TYPE_BODY == eType && bContent )
     {
-        m_pImpl->m_bBodyContentStarted = sal_False;
+        m_pImpl->m_bBodyContentStarted = false;
     }
 
     return pContext;

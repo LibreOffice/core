@@ -307,7 +307,7 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::CreatePropertyHandler( sal_
             break;
         case XML_TYPE_TEXT_UNDERLINE_HASCOLOR:
             pPropHdl = new XMLIsTransparentPropHdl( XML_FONT_COLOR,
-                                                     sal_False );
+                                                     false );
             break;
         case XML_TYPE_TEXT_OVERLINE_TYPE:
             pPropHdl = new XMLUnderlineTypePropHdl;
@@ -323,7 +323,7 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::CreatePropertyHandler( sal_
             break;
         case XML_TYPE_TEXT_OVERLINE_HASCOLOR:
             pPropHdl = new XMLIsTransparentPropHdl( XML_FONT_COLOR,
-                                                     sal_False );
+                                                     false );
             break;
         case XML_TYPE_TEXT_WEIGHT:
             pPropHdl = new XMLFontWeightPropHdl;

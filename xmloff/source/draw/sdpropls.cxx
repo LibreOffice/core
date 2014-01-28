@@ -1074,10 +1074,10 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 }
                 break;
             case XML_TYPE_TEXT_CLIP11:
-                pHdl = new XMLClipPropertyHandler( sal_True );
+                pHdl = new XMLClipPropertyHandler( true );
                 break;
             case XML_TYPE_TEXT_CLIP:
-                pHdl = new XMLClipPropertyHandler( sal_False );
+                pHdl = new XMLClipPropertyHandler( false );
                 break;
 
             // #FontWork#
@@ -1119,7 +1119,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 pHdl = new XMLCaptionEscapeRelative();
                 break;
             case XML_SD_TYPE_CAPTION_ESC_ABS:
-                pHdl = new XMLPercentOrMeasurePropertyHandler( sal_False );
+                pHdl = new XMLPercentOrMeasurePropertyHandler( false );
                 break;
             case XML_SD_TYPE_CAPTION_ESC_DIR:
                 pHdl = new XMLEnumPropertyHdl( pXML_Caption_Esc_Dir_Enum , ::getCppuType((const sal_Int32*)0));

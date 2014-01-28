@@ -869,7 +869,7 @@ static sal_Bool lcl_IsDefaultDateFormat( const SvNumberformat& rFormat, sal_Bool
     short nLastType = 0;
     while (!bEnd)
     {
-        short nElemType = rFormat.GetNumForType( 0, nPos, sal_False );
+        short nElemType = rFormat.GetNumForType( 0, nPos, false );
         switch ( nElemType )
         {
             case 0:
@@ -951,7 +951,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     // #101606# An empty subformat is a valid number-style resulting in an
     // empty display string for the condition of the subformat.
     if ( nFmtType == NUMBERFORMAT_UNDEFINED && rFormat.GetNumForType( nPart,
-                0, sal_False ) == 0 )
+                0, false ) == 0 )
         nFmtType = 0;
 
     XMLTokenEnum eType = XML_TOKEN_INVALID;
@@ -1135,8 +1135,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         sal_Bool bEnd = sal_False;
         while (!bEnd)
         {
-            short nElemType = rFormat.GetNumForType( nPart, nPos, sal_False );
-            const OUString* pElemStr = rFormat.GetNumForString( nPart, nPos, sal_False );
+            short nElemType = rFormat.GetNumForType( nPart, nPos, false );
+            const OUString* pElemStr = rFormat.GetNumForString( nPart, nPos, false );
 
             switch ( nElemType )
             {
@@ -1202,8 +1202,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
             bEnd = sal_False;
             while (!bEnd)
             {
-                short nElemType = rFormat.GetNumForType( nPart, nPos, sal_False );
-                const OUString* pElemStr = rFormat.GetNumForString( nPart, nPos, sal_False );
+                short nElemType = rFormat.GetNumForType( nPart, nPos, false );
+                const OUString* pElemStr = rFormat.GetNumForString( nPart, nPos, false );
 
                 switch ( nElemType )
                 {
@@ -1250,8 +1250,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         bEnd = sal_False;
         while (!bEnd)
         {
-            short nElemType = rFormat.GetNumForType( nPart, nPos, sal_False );
-            const OUString* pElemStr = rFormat.GetNumForString( nPart, nPos, sal_False );
+            short nElemType = rFormat.GetNumForType( nPart, nPos, false );
+            const OUString* pElemStr = rFormat.GetNumForString( nPart, nPos, false );
 
             switch ( nElemType )
             {
@@ -1620,7 +1620,7 @@ void SvXMLNumFmtExport::ExportFormat_Impl( const SvNumberformat& rFormat, sal_uI
     sal_uInt16 nUsedParts = 0;
     sal_uInt16 nPart;
     for (nPart=0; nPart<XMLNUM_MAX_PARTS; nPart++)
-        if (rFormat.GetNumForType( nPart, 0, sal_False ) != 0)
+        if (rFormat.GetNumForType( nPart, 0, false ) != 0)
             nUsedParts = nPart+1;
 
     SvNumberformatLimitOps eOp1, eOp2;

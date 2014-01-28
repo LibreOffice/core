@@ -703,7 +703,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                 pDocStyle->FillPropertySet(xPropSet);
             }
 
-        } while(0);
+        } while(false);
 
         // try to set text auto style
         do
@@ -723,7 +723,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
             // set PropertySet on object
             pStyle->FillPropertySet(xPropSet);
 
-        } while(0);
+        } while(false);
     }
     catch(const uno::Exception&)
     {
@@ -2098,7 +2098,7 @@ void SdXMLMeasureShapeContext::EndElement()
         xCursor->goRight( 1, sal_True );
         xCursor->setString( aEmpty );
     }
-    while(0);
+    while(false);
 
     SdXMLShapeContext::EndElement();
 }

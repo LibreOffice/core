@@ -171,7 +171,7 @@ namespace xmloff
         else if (sServiceName.equals(SERVICE_PERSISTENT_COMPONENT_##name)) \
             sToWriteServiceName = SERVICE_##name
 
-        if (sal_False)
+        if (false)
             ;
         CHECK_N_TRANSLATE( FORM );
         CHECK_N_TRANSLATE( FORM );

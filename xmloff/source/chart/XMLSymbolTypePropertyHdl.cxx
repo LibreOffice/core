@@ -93,11 +93,11 @@ bool lcl_convertEnum(
         if( IsXMLToken( rValue, pMap->eToken ) )
         {
             rEnum = pMap->nValue;
-            return sal_True;
+            return true;
         }
         pMap++;
     }
-    return sal_False;
+    return false;
 }
 
 } // anonymous namespace

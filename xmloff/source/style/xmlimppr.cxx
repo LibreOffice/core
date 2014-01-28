@@ -331,7 +331,7 @@ bool SvXMLImportPropertyMapper::handleSpecialItem(
         return mxNextMapper->handleSpecialItem( rProperty, rProperties, rValue,
                                                rUnitConverter, rNamespaceMap );
     else
-        return sal_False;
+        return false;
 }
 
 void SvXMLImportPropertyMapper::FillPropertySequence(

@@ -3989,7 +3989,7 @@ SvXMLImportContext* XMLDropDownFieldImportContext::CreateChildContext(
         IsXMLToken( rLocalName, XML_LABEL ) )
     {
         OUString sLabel;
-        bool bIsSelected = sal_False;
+        bool bIsSelected = false;
         if( lcl_ProcessLabel( GetImport(), xAttrList, sLabel, bIsSelected ) )
         {
             if( bIsSelected )

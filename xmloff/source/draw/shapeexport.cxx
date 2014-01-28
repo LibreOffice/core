@@ -3646,7 +3646,7 @@ void ExportParameter( OUStringBuffer& rStrBuffer, const com::sun::star::drawing:
     {
         double fNumber = 0.0;
         rParameter.Value >>= fNumber;
-        ::rtl::math::doubleToUStringBuffer( rStrBuffer, fNumber, rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max, '.', sal_True );
+        ::rtl::math::doubleToUStringBuffer( rStrBuffer, fNumber, rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max, '.', true );
     }
     else
     {

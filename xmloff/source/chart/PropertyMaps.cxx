@@ -115,10 +115,10 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
                 break;
 
             case XML_SCH_TYPE_ERROR_INDICATOR_LOWER:
-                pHdl = new XMLErrorIndicatorPropertyHdl( sal_False );
+                pHdl = new XMLErrorIndicatorPropertyHdl( false );
                 break;
             case XML_SCH_TYPE_ERROR_INDICATOR_UPPER:
-                pHdl = new XMLErrorIndicatorPropertyHdl( sal_True );
+                pHdl = new XMLErrorIndicatorPropertyHdl( true );
                 break;
 
             case XML_SCH_TYPE_SOLID_TYPE:

@@ -1781,7 +1781,7 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
 
     sal_uInt32 nStdIndex = pFormatter->GetStandardIndex( nFormatLang );
     OUStringBuffer aNumStr = pFormatter->GenerateFormat( nStdIndex, nFormatLang,
-                                                         bGrouping, sal_False, nGenPrec, nLeading );
+                                                         bGrouping, false, nGenPrec, nLeading );
 
     if ( rInfo.nExpDigits >= 0 && nLeading == 0 && !bGrouping && nEmbeddedCount == 0 )
     {

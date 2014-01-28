@@ -286,7 +286,7 @@ void SvXMLMetaExport::_MExport()
                         XML_NAMESPACE_META, XML_CELL_COUNT, aValue );
                 else
                 {
-                    DBG_ASSERT( sal_False, "Unknown statistic value!\n" );
+                    DBG_ASSERT( false, "Unknown statistic value!\n" );
                 }
             }
         }

@@ -638,16 +638,16 @@ void SdXMLNumberFormatImportContext::add( OUString& rNumberStyle, sal_Bool bLong
 bool SdXMLNumberFormatImportContext::compareStyle( const SdXMLFixedDataStyle* pStyle, sal_Int16& nIndex ) const
 {
     if( (pStyle->mbAutomatic != mbAutomatic) && (nIndex == 0))
-        return sal_False;
+        return false;
 
     sal_Int16 nCompareIndex;
     for( nCompareIndex = 0; nCompareIndex < 8; nIndex++, nCompareIndex++ )
     {
         if( pStyle->mpFormat[nCompareIndex] != mnElements[nIndex] )
-            return sal_False;
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 void SdXMLNumberFormatImportContext::EndElement()

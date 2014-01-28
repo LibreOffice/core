@@ -48,7 +48,7 @@ inline bool PropertySetInfoHash::operator()(
         const PropertySetInfoKey& r2 ) const
 {
     if( r1.xPropInfo != r2.xPropInfo )
-        return sal_False;
+        return false;
 
     const sal_Int8* pId1 = r1.aImplementationId.getConstArray();
     const sal_Int8* pId2 = r2.aImplementationId.getConstArray();
