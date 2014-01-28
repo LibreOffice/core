@@ -3778,7 +3778,7 @@ void SingletonType::dumpHxxFile(
       << name_.replaceAll(".", "_dot_")
       << ") && defined LO_URE_CTOR_FUN_"
       << name_.replaceAll(".", "_dot_") << "\n" << indent()
-      << "the_instance = ::css::uno::Reference< " << scopedBaseName
+      << "instance = ::css::uno::Reference< " << scopedBaseName
       << (" >(::css::uno::Reference< ::css::uno::XInterface >("
           "static_cast< ::css::uno::XInterface * >((*"
           "LO_URE_CTOR_FUN_")
