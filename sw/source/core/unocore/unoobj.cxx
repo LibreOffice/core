@@ -2342,7 +2342,7 @@ void SAL_CALL SwXTextCursor::setPropertyValues(
              aPropertyNames[ i ] == UNO_NAME_IS_SKIP_PROTECTED_TEXT )
         {
             // the behaviour of these is hard to model in a group
-            OSL_ASSERT("invalid property name for batch setting");
+            OSL_FAIL("invalid property name for batch setting");
             throw lang::IllegalArgumentException();
         }
         aPropertyValues[ i ].Name = aPropertyNames[ i ];
