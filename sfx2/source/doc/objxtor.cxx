@@ -644,7 +644,7 @@ bool SfxObjectShell::PrepareClose
             }
 
             if ( !pPoolItem || pPoolItem->ISA(SfxVoidItem) || ( pPoolItem->ISA(SfxBoolItem) && !( (const SfxBoolItem*) pPoolItem )->GetValue() ) )
-                return sal_False;
+                return false;
         }
         else if ( RET_CANCEL == nRet )
             // Cancelled
@@ -1076,8 +1076,8 @@ Reference<lang::XComponent> SfxObjectShell::CreateAndLoadComponent( const SfxIte
 {
     uno::Sequence < beans::PropertyValue > aProps;
     TransformItems( SID_OPENDOC, rSet, aProps );
-    SFX_ITEMSET_ARG(&rSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, sal_False);
-    SFX_ITEMSET_ARG(&rSet, pTargetItem, SfxStringItem, SID_TARGETNAME, sal_False);
+    SFX_ITEMSET_ARG(&rSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, false);
+    SFX_ITEMSET_ARG(&rSet, pTargetItem, SfxStringItem, SID_TARGETNAME, false);
     OUString aURL;
     OUString aTarget("_blank");
     if ( pFileNameItem )
@@ -1142,7 +1142,7 @@ void SfxObjectShell::SetInitialized_Impl( const bool i_fromInitNew )
 bool SfxObjectShell::IsChangeRecording() const
 {
     // currently this function needs to be overwritten by Writer and Calc only
-    DBG_ASSERT( 0, "function not implemented" );
+    DBG_ASSERT( false, "function not implemented" );
     return false;
 }
 
@@ -1150,7 +1150,7 @@ bool SfxObjectShell::IsChangeRecording() const
 bool SfxObjectShell::HasChangeRecordProtection() const
 {
     // currently this function needs to be overwritten by Writer and Calc only
-    DBG_ASSERT( 0, "function not implemented" );
+    DBG_ASSERT( false, "function not implemented" );
     return false;
 }
 
@@ -1158,14 +1158,14 @@ bool SfxObjectShell::HasChangeRecordProtection() const
 void SfxObjectShell::SetChangeRecording( bool /*bActivate*/ )
 {
     // currently this function needs to be overwritten by Writer and Calc only
-    DBG_ASSERT( 0, "function not implemented" );
+    DBG_ASSERT( false, "function not implemented" );
 }
 
 
 bool SfxObjectShell::SetProtectionPassword( const OUString & /*rPassword*/ )
 {
     // currently this function needs to be overwritten by Writer and Calc only
-    DBG_ASSERT( 0, "function not implemented" );
+    DBG_ASSERT( false, "function not implemented" );
     return false;
 }
 
@@ -1173,7 +1173,7 @@ bool SfxObjectShell::SetProtectionPassword( const OUString & /*rPassword*/ )
 bool SfxObjectShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > & /*rPasswordHash*/ )
 {
     // currently this function needs to be overwritten by Writer and Calc only
-    DBG_ASSERT( 0, "function not implemented" );
+    DBG_ASSERT( false, "function not implemented" );
     return false;
 }
 

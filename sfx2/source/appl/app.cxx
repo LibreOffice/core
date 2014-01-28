@@ -200,7 +200,7 @@ SfxApplication::SfxApplication()
             aStr.append(static_cast<sal_Int32>(GetDdeService()->GetError()));
         else
             aStr.append('?');
-        DBG_ASSERT( sal_False, aStr.getStr() );
+        DBG_ASSERT( false, aStr.getStr() );
     }
 #else
     (void)bOk;

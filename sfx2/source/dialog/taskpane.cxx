@@ -176,7 +176,7 @@ namespace sfx2
                         aCommandName.append( sImageURL.copy( nCommandImagePrefixLen ) );
                         const OUString sCommandName( aCommandName.makeStringAndClear() );
 
-                        const Image aPanelImage( GetImage( i_rDocFrame, sCommandName, sal_False ) );
+                        const Image aPanelImage( GetImage( i_rDocFrame, sCommandName, false ) );
                         return aPanelImage;
                     }
 

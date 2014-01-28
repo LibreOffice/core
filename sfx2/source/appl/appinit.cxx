@@ -269,7 +269,7 @@ bool SfxApplication::Initialize_Impl()
     SetPool( pAppData_Impl->pPool );
 
     if ( pAppData_Impl->bDowning )
-        return sal_False;
+        return false;
 
     // App-Dispatcher aufbauen
     pAppData_Impl->pAppDispat->Push(*this);
@@ -282,7 +282,7 @@ bool SfxApplication::Initialize_Impl()
         Edit::SetGetSpecialCharsFunction(&GetSpecialCharsForEdit);
     }
 
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

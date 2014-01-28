@@ -228,7 +228,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl)
 
         // set the read-only flag. When inserting a file, this flag is always set
         if ( SFXWB_INSERT == ( m_nDlgFlags & SFXWB_INSERT ) )
-            m_pItemSet->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
+            m_pItemSet->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
         else
         {
             if ( ( TemplateDescription::FILEOPEN_READONLY_VERSION == nDlgType ) )

@@ -577,7 +577,7 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
         if( pShell && pShell->GetMedium() )
         {
             sReferer = pShell->GetMedium()->GetBaseURL();
-            SFX_ITEMSET_ARG( pShell->GetMedium()->GetItemSet(), pItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False );
+            SFX_ITEMSET_ARG( pShell->GetMedium()->GetItemSet(), pItem, SfxUInt16Item, SID_UPDATEDOCMODE, false );
             if ( pItem )
                 nUpdateMode = pItem->GetValue();
         }
@@ -649,8 +649,8 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
             INET_PROT_HTTP != aURL.GetProtocol() )
         {
             SfxStringItem aName( SID_FILE_NAME, sTopic );
-            SfxBoolItem aMinimized(SID_MINIMIZED, sal_True);
-            SfxBoolItem aHidden(SID_HIDDEN, sal_True);
+            SfxBoolItem aMinimized(SID_MINIMIZED, true);
+            SfxBoolItem aHidden(SID_HIDDEN, true);
             SfxStringItem aTarget( SID_TARGETNAME, OUString("_blank") );
             SfxStringItem aReferer( SID_REFERER, sReferer );
             SfxUInt16Item aUpdate( SID_UPDATEDOCMODE, nUpdateMode );

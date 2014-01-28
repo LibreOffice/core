@@ -252,8 +252,8 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, com::sun::star::uno::An
             else if ( pDoc && pDoc->GetMedium() )
             {
                 pDoc->AdjustMacroMode( OUString() );
-                SFX_ITEMSET_ARG( pDoc->GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
-                SFX_ITEMSET_ARG( pDoc->GetMedium()->GetItemSet(), pMacroExecModeItem, SfxUInt16Item, SID_MACROEXECMODE, sal_False);
+                SFX_ITEMSET_ARG( pDoc->GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, false);
+                SFX_ITEMSET_ARG( pDoc->GetMedium()->GetItemSet(), pMacroExecModeItem, SfxUInt16Item, SID_MACROEXECMODE, false);
                 if ( pUpdateDocItem && pMacroExecModeItem
                   && pUpdateDocItem->GetValue() == document::UpdateDocMode::NO_UPDATE
                   && pMacroExecModeItem->GetValue() == document::MacroExecMode::NEVER_EXECUTE )

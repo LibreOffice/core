@@ -255,8 +255,8 @@ IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update)
             SfxApplication *pSfxApp = SFX_APP();
             sal_uIntPtr lErr;
             SfxItemSet* pSet = new SfxAllItemSet( pSfxApp->GetPool() );
-            pSet->Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
-            pSet->Put( SfxBoolItem( SID_PREVIEW, sal_True ) );
+            pSet->Put( SfxBoolItem( SID_TEMPLATE, true ) );
+            pSet->Put( SfxBoolItem( SID_PREVIEW, true ) );
             lErr = pSfxApp->LoadTemplate( xDocShell, aFileName, sal_True, pSet );
             if( lErr )
                 ErrorHandler::HandleError(lErr);

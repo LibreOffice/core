@@ -297,14 +297,14 @@ sal_Bool SfxObjectShell::APISaveAs_Impl
     if ( GetMedium() )
     {
         OUString aFilterName;
-        SFX_ITEMSET_ARG( aParams, pFilterNameItem, SfxStringItem, SID_FILTER_NAME, sal_False );
+        SFX_ITEMSET_ARG( aParams, pFilterNameItem, SfxStringItem, SID_FILTER_NAME, false );
         if( pFilterNameItem )
         {
             aFilterName = pFilterNameItem->GetValue();
         }
         else
         {
-            SFX_ITEMSET_ARG( aParams, pContentTypeItem, SfxStringItem, SID_CONTENTTYPE, sal_False );
+            SFX_ITEMSET_ARG( aParams, pContentTypeItem, SfxStringItem, SID_CONTENTTYPE, false );
             if ( pContentTypeItem )
             {
                 const SfxFilter* pFilter = SfxFilterMatcher( OUString::createFromAscii(GetFactory().GetShortName()) ).GetFilter4Mime( pContentTypeItem->GetValue(), SFX_FILTER_EXPORT );
@@ -330,7 +330,7 @@ sal_Bool SfxObjectShell::APISaveAs_Impl
             SfxObjectShellRef xLock( this ); // ???
 
             // use the title that is provided in the media descriptor
-            SFX_ITEMSET_ARG( aParams, pDocTitleItem, SfxStringItem, SID_DOCINFO_TITLE, sal_False );
+            SFX_ITEMSET_ARG( aParams, pDocTitleItem, SfxStringItem, SID_DOCINFO_TITLE, false );
             if ( pDocTitleItem )
                 getDocProperties()->setTitle( pDocTitleItem->GetValue() );
 
@@ -476,7 +476,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_DOCINFO:
         {
-            SFX_REQUEST_ARG(rReq, pDocInfItem, SfxDocumentInfoItem, SID_DOCINFO, sal_False);
+            SFX_REQUEST_ARG(rReq, pDocInfItem, SfxDocumentInfoItem, SID_DOCINFO, false);
             if ( pDocInfItem )
             {
                 // parameter, e.g. from replayed macro
@@ -487,7 +487,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             {
                 // no argument containing DocInfo; check optional arguments
                 sal_Bool bReadOnly = IsReadOnly();
-                SFX_REQUEST_ARG(rReq, pROItem, SfxBoolItem, SID_DOC_READONLY, sal_False);
+                SFX_REQUEST_ARG(rReq, pROItem, SfxBoolItem, SID_DOC_READONLY, false);
                 if ( pROItem )
                     // override readonly attribute of document
                     // e.g. if a readonly document is saved elsewhere and user asks for editing DocInfo before
@@ -529,7 +529,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 SfxDocumentInfoDialog *pDlg = CreateDocumentInfoDialog(0, aSet);
                 if ( RET_OK == pDlg->Execute() )
                 {
-                    SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pDocInfoItem, SfxDocumentInfoItem, SID_DOCINFO, sal_False);
+                    SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pDocInfoItem, SfxDocumentInfoItem, SID_DOCINFO, false);
                     if ( pDocInfoItem )
                     {
                         // user has done some changes to DocumentInfo
@@ -568,7 +568,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             // derived class may decide to abort this
             if( !QuerySlotExecutable( nId ) )
             {
-                rReq.SetReturnValue( SfxBoolItem( 0, sal_False ) );
+                rReq.SetReturnValue( SfxBoolItem( 0, false ) );
                 return;
             }
 
@@ -592,15 +592,15 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 if ( nId == SID_SAVEASDOC )
                 {
                     // in case of plugin mode the SaveAs operation means SaveTo
-                    SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pViewOnlyItem, SfxBoolItem, SID_VIEWONLY, sal_False );
+                    SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pViewOnlyItem, SfxBoolItem, SID_VIEWONLY, false );
                     if ( pViewOnlyItem && pViewOnlyItem->GetValue() )
-                        rReq.AppendItem( SfxBoolItem( SID_SAVETO, sal_True ) );
+                        rReq.AppendItem( SfxBoolItem( SID_SAVETO, true ) );
                 }
 
                 // TODO/LATER: do the following GUI related actions in standalown method
                 // ========================================================================================================
                 // Introduce a status indicator for GUI operation
-                SFX_REQUEST_ARG( rReq, pStatusIndicatorItem, SfxUnoAnyItem, SID_PROGRESS_STATUSBAR_CONTROL, sal_False );
+                SFX_REQUEST_ARG( rReq, pStatusIndicatorItem, SfxUnoAnyItem, SID_PROGRESS_STATUSBAR_CONTROL, false );
                 if ( !pStatusIndicatorItem )
                 {
                     // get statusindicator
@@ -637,7 +637,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 }
 
                 // Introduce an interaction handler for GUI operation
-                SFX_REQUEST_ARG( rReq, pInteractionHandlerItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER, sal_False );
+                SFX_REQUEST_ARG( rReq, pInteractionHandlerItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER, false );
                 if ( !pInteractionHandlerItem )
                 {
                     uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
@@ -663,8 +663,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 // ========================================================================================================
 
                 sal_Bool bPreselectPassword = sal_False;
-                SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pOldEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, sal_False );
-                SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pOldPasswordItem, SfxStringItem, SID_PASSWORD, sal_False );
+                SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pOldEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, false );
+                SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pOldPasswordItem, SfxStringItem, SID_PASSWORD, false );
                 if ( pOldEncryptionDataItem || pOldPasswordItem )
                     bPreselectPassword = sal_True;
 
@@ -734,7 +734,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             if ( lErr && nErrorCode == ERRCODE_NONE )
             {
-                SFX_REQUEST_ARG( rReq, pWarnItem, SfxBoolItem, SID_FAIL_ON_WARNING, sal_False );
+                SFX_REQUEST_ARG( rReq, pWarnItem, SfxBoolItem, SID_FAIL_ON_WARNING, false );
                 if ( pWarnItem && pWarnItem->GetValue() )
                     nErrorCode = lErr;
             }
@@ -770,7 +770,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         case SID_SAVEACOPY:
         {
             SfxAllItemSet aArgs( GetPool() );
-            aArgs.Put( SfxBoolItem( SID_SAVEACOPYITEM, sal_True ) );
+            aArgs.Put( SfxBoolItem( SID_SAVEACOPYITEM, true ) );
             SfxRequest aSaveACopyReq( SID_EXPORTDOC, SFX_CALLMODE_API, aArgs );
             ExecFile_Impl( aSaveACopyReq );
             if ( !aSaveACopyReq.IsDone() )
@@ -827,8 +827,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             }
 
             // Evaluate Parameter
-            SFX_REQUEST_ARG(rReq, pSaveItem, SfxBoolItem, SID_CLOSEDOC_SAVE, sal_False);
-            SFX_REQUEST_ARG(rReq, pNameItem, SfxStringItem, SID_CLOSEDOC_FILENAME, sal_False);
+            SFX_REQUEST_ARG(rReq, pSaveItem, SfxBoolItem, SID_CLOSEDOC_SAVE, false);
+            SFX_REQUEST_ARG(rReq, pNameItem, SfxStringItem, SID_CLOSEDOC_FILENAME, false);
             if ( pSaveItem )
             {
                 if ( pSaveItem->GetValue() )
@@ -859,7 +859,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             // Cancelled by the user?
             if ( !PrepareClose( 2 ) )
             {
-                rReq.SetReturnValue( SfxBoolItem(0, sal_False) );
+                rReq.SetReturnValue( SfxBoolItem(0, false) );
                 rReq.Done();
                 return;
             }
@@ -868,7 +868,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             sal_uIntPtr lErr = GetErrorCode();
             ErrorHandler::HandleError(lErr);
 
-            rReq.SetReturnValue( SfxBoolItem(0, sal_True) );
+            rReq.SetReturnValue( SfxBoolItem(0, true) );
             rReq.Done();
             rReq.ReleaseArgs(); // because the pool is destroyed in Close
             DoClose();
@@ -1296,7 +1296,7 @@ void SfxObjectShell::ExecView_Impl(SfxRequest &rReq)
                 if ( !aFileName.isEmpty() )
                 {
                     SfxStringItem aName( SID_FILE_NAME, aFileName );
-                    SfxBoolItem aCreateView( SID_OPEN_NEW_VIEW, sal_True );
+                    SfxBoolItem aCreateView( SID_OPEN_NEW_VIEW, true );
                     SFX_APP()->GetAppDispatcher_Impl()->Execute(
                         SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, &aName,
                         &aCreateView, 0L);

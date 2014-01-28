@@ -777,7 +777,7 @@ void SfxDispatcher::DoActivate_Impl( sal_Bool bMDI, SfxViewFrame* /* pOld */ )
         SfxBindings *pBind = GetBindings();
         while ( pBind )
         {
-            pBind->HidePopupCtrls_Impl( sal_False );
+            pBind->HidePopupCtrls_Impl( false );
             pBind = pBind->GetSubBindings_Impl();
         }
 
@@ -871,7 +871,7 @@ void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew )
         SfxBindings *pBind = GetBindings();
         while ( pBind )
         {
-            pBind->HidePopupCtrls_Impl( sal_True );
+            pBind->HidePopupCtrls_Impl( true );
             pBind = pBind->GetSubBindings_Impl();
         }
 
@@ -1492,7 +1492,7 @@ void SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, sal_Bo
             {
                 sal_Bool bViewerTbx = SFX_VISIBILITY_VIEWER == ( nPos & SFX_VISIBILITY_VIEWER );
                 SfxObjectShell* pSh = pImp->pFrame->GetObjectShell();
-                SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_VIEWONLY, sal_False );
+                SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_VIEWONLY, false );
                 sal_Bool bIsViewer = pItem && pItem->GetValue();
                 if ( bIsViewer != bViewerTbx )
                     continue;
@@ -1665,7 +1665,7 @@ void SfxDispatcher::FlushImpl()
                 bFound = (pPopped == i->pCluster);
 
                 // Mark the moved Shell
-                aToDoCopy.push_front(SfxToDo_Impl(sal_False, i->bDelete, sal_False, *pPopped));
+                aToDoCopy.push_front(SfxToDo_Impl(false, i->bDelete, false, *pPopped));
             }
             while(i->bUntil && !bFound);
             DBG_ASSERT( bFound, "wrong SfxShell popped" );

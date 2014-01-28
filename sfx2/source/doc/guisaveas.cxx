@@ -137,7 +137,7 @@ static sal_uInt16 getSlotIDFromMode( sal_Int8 nStoreMode )
     else if ( nStoreMode == SAVEAS_REQUESTED || nStoreMode == ( EXPORT_REQUESTED | WIDEEXPORT_REQUESTED ) )
         nResult = SID_SAVEASDOC;
     else {
-        DBG_ASSERT( sal_False, "Unacceptable slot name is provided!\n" );
+        DBG_ASSERT( false, "Unacceptable slot name is provided!\n" );
     }
 
     return nResult;
@@ -1057,7 +1057,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     {
         // the file dialog preselects the password checkbox if the provided mediadescriptor has encryption data entry
         // after dialog execution the password interaction flag will be either removed or not
-        aDialogParams.Put( SfxBoolItem( SID_PASSWORDINTERACTION, sal_True ) );
+        aDialogParams.Put( SfxBoolItem( SID_PASSWORDINTERACTION, true ) );
     }
 
     // aStringTypeFN is a pure output parameter, pDialogParams is an in/out parameter
@@ -1073,7 +1073,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
 
     // the following two arguments can not be converted in MediaDescriptor,
     // so they should be removed from the ItemSet after retrieving
-    SFX_ITEMSET_ARG( pDialogParams, pRecommendReadOnly, SfxBoolItem, SID_RECOMMENDREADONLY, sal_False );
+    SFX_ITEMSET_ARG( pDialogParams, pRecommendReadOnly, SfxBoolItem, SID_RECOMMENDREADONLY, false );
     m_bRecommendReadOnly = ( pRecommendReadOnly && pRecommendReadOnly->GetValue() );
     pDialogParams->ClearItem( SID_RECOMMENDREADONLY );
 
@@ -1625,7 +1625,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel
     }
     else
     {
-        DBG_ASSERT( sal_False, "This code must be unreachable!\n" );
+        DBG_ASSERT( false, "This code must be unreachable!\n" );
         throw task::ErrorCodeIOException(
             "SfxStoringHelper::GUIStoreModel: ERRCODE_IO_INVALIDPARAMETER",
             uno::Reference< uno::XInterface >(), ERRCODE_IO_INVALIDPARAMETER);

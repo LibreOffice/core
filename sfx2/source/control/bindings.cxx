@@ -456,7 +456,7 @@ void SfxBindings::InvalidateSlotsInMap_Impl()
 
 void SfxBindings::AddSlotToInvalidateSlotsMap_Impl( sal_uInt16 nId )
 {
-    pImp->m_aInvalidateSlots[nId] = sal_True;
+    pImp->m_aInvalidateSlots[nId] = true;
 }
 
 //--------------------------------------------------------------------
@@ -1267,7 +1267,7 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
                 if ( pNewItem->ISA(SfxBoolItem) )
                 {
                   // we can toggle Bools
-                    ((SfxBoolItem*)pNewItem)->SetValue( sal_True );
+                    ((SfxBoolItem*)pNewItem)->SetValue( true );
                     aReq.AppendItem( *pNewItem );
                 }
                 else if ( pNewItem->ISA(SfxEnumItemInterface) &&

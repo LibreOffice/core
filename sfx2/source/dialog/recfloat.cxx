@@ -139,7 +139,7 @@ SfxRecordingFloatWrapper_Impl::SfxRecordingFloatWrapper_Impl( Window* pParentWnd
 
 SfxRecordingFloatWrapper_Impl::~SfxRecordingFloatWrapper_Impl()
 {
-    SfxBoolItem aItem( FN_PARAM_1, sal_True );
+    SfxBoolItem aItem( FN_PARAM_1, true );
     com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder = pBindings->GetRecorder();
     if ( xRecorder.is() )
         pBindings->GetDispatcher()->Execute( SID_STOP_RECORDING, SFX_CALLMODE_SYNCHRON, &aItem, 0L );
@@ -197,7 +197,7 @@ SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(
     aTbx.SetSelectHdl( LINK( this, SfxRecordingFloat_Impl, Select ) );
 
     // start recording
-    SfxBoolItem aItem( SID_RECORDMACRO, sal_True );
+    SfxBoolItem aItem( SID_RECORDMACRO, true );
     GetBindings().GetDispatcher()->Execute( SID_RECORDMACRO, SFX_CALLMODE_SYNCHRON, &aItem, 0L );
 }
 

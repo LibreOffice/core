@@ -377,7 +377,7 @@ throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     ::Point aPos( rPos.X, rPos.Y );
-    CommandEvent aCmdEvent( aPos, (sal_uInt16)nCommand, sal_True, NULL );
+    CommandEvent aCmdEvent( aPos, (sal_uInt16)nCommand, true, NULL );
 
     Command( aCmdEvent );
 }

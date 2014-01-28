@@ -669,13 +669,13 @@ void SfxChildWindow::Show( sal_uInt16 nFlags )
     switch ( pWindow->GetType() )
     {
         case RSC_DOCKINGWINDOW :
-            ((DockingWindow*)pWindow)->Show( sal_True, nFlags );
+            ((DockingWindow*)pWindow)->Show( true, nFlags );
             break;
         case RSC_TOOLBOX :
-            ((ToolBox*)pWindow)->Show( sal_True, nFlags );
+            ((ToolBox*)pWindow)->Show( true, nFlags );
             break;
         default:
-            pWindow->Show( sal_True, nFlags );
+            pWindow->Show( true, nFlags );
             break;
     }
 }

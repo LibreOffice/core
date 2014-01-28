@@ -65,7 +65,7 @@ Image Tools::GetImage (
 
         if (rsURL.startsWith(sUnoCommandPrefix))
         {
-            const Image aPanelImage (::GetImage(rxFrame, rsURL, sal_False));
+            const Image aPanelImage (::GetImage(rxFrame, rsURL, false));
             return aPanelImage;
         }
         else if (rsURL.startsWith(sCommandImagePrefix))
@@ -75,7 +75,7 @@ Image Tools::GetImage (
             aCommandName.append(rsURL.copy(nCommandImagePrefixLength));
             const ::rtl::OUString sCommandName (aCommandName.makeStringAndClear());
 
-            const Image aPanelImage (::GetImage(rxFrame, sCommandName, sal_False));
+            const Image aPanelImage (::GetImage(rxFrame, sCommandName, false));
             return aPanelImage;
         }
         else

@@ -103,7 +103,7 @@ bool operator> (const util::DateTime& i_rLeft, const util::DateTime& i_rRight)
     if ( i_rLeft.NanoSeconds != i_rRight.NanoSeconds )
         return i_rLeft.NanoSeconds > i_rRight.NanoSeconds;
 
-    return sal_False;
+    return false;
 }
 
 ::boost::shared_ptr<GDIMetaFile>
@@ -389,7 +389,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
     if ( !pFile->GetFilter() || !pFile->GetFilter()->IsOwnFormat() )
         return;
 
-    SFX_ITEMSET_ARG( pFile->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
+    SFX_ITEMSET_ARG( pFile->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, false);
     sal_Int16 bCanUpdateFromTemplate = pUpdateDocItem ? pUpdateDocItem->GetValue() : document::UpdateDocMode::NO_UPDATE;
 
     // created from template?

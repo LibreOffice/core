@@ -188,7 +188,7 @@ void SfxFrameWindow_Impl::StateChanged( StateChangedType nStateChange )
 {
     if ( nStateChange == STATE_CHANGE_INITSHOW )
     {
-        pFrame->pImp->bHidden = sal_False;
+        pFrame->pImp->bHidden = false;
         if ( pFrame->IsInPlace() )
             // TODO/MBA: workaround for bug in LayoutManager: the final resize does not get through because the
             // LayoutManager works asynchronously and between resize and time execution the DockingAcceptor was exchanged so that

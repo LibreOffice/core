@@ -743,9 +743,9 @@ void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< :
             sal_Bool bAutostart = sal_False;
             bAutostart = ::cppu::any2bool( aArguments[1] );
             if (bAutostart && !GetAutostart())
-                SetAutostart( sal_True );
+                SetAutostart( true );
             if (!bAutostart && GetAutostart())
-                SetAutostart( sal_False );
+                SetAutostart( false );
     }
 
 }
@@ -754,14 +754,14 @@ void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< :
 
 void ShutdownIcon::EnterModalMode()
 {
-    bModalMode = sal_True;
+    bModalMode = true;
 }
 
 // -------------------------------
 
 void ShutdownIcon::LeaveModalMode()
 {
-    bModalMode = sal_False;
+    bModalMode = false;
 }
 
 #ifdef WNT

@@ -359,7 +359,7 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
                         if ( aImageId.getLength() > 0 )
                         {
                             Reference< ::com::sun::star::frame::XFrame > xFrame;
-                            Image aImage = GetImage( xFrame, aImageId, sal_False );
+                            Image aImage = GetImage( xFrame, aImageId, false );
                             if ( !!aImage )
                             {
                                 bImageSet = sal_True;

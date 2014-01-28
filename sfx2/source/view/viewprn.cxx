@@ -645,7 +645,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 
         // Should it be visible on the user interface,
         // should it launch popup dialogue ?
-        SFX_REQUEST_ARG(rReq, pSilentItem, SfxBoolItem, SID_SILENT, sal_False);
+        SFX_REQUEST_ARG(rReq, pSilentItem, SfxBoolItem, SID_SILENT, false);
         bSilent = pSilentItem && pSilentItem->GetValue();
     }
 
@@ -668,7 +668,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             // derived class may decide to abort this
             if( pDoc == NULL || !pDoc->QuerySlotExecutable( nId ) )
             {
-                rReq.SetReturnValue( SfxBoolItem( 0, sal_False ) );
+                rReq.SetReturnValue( SfxBoolItem( 0, false ) );
                 return;
             }
 
@@ -676,7 +676,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 return;
 
             // should we print only the selection or the whole document
-            SFX_REQUEST_ARG(rReq, pSelectItem, SfxBoolItem, SID_SELECTION, sal_False);
+            SFX_REQUEST_ARG(rReq, pSelectItem, SfxBoolItem, SID_SELECTION, false);
             sal_Bool bSelection = ( pSelectItem != NULL && pSelectItem->GetValue() );
             // detect non api call from writer ( that adds SID_SELECTION ) and reset bIsAPI
             if ( pSelectItem && rReq.GetArgs()->Count() == 1 )
@@ -763,7 +763,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             SfxPrinter *pDocPrinter = GetPrinter(sal_True);
 
             // look for printer in parameters
-            SFX_REQUEST_ARG( rReq, pPrinterItem, SfxStringItem, SID_PRINTER_NAME, sal_False );
+            SFX_REQUEST_ARG( rReq, pPrinterItem, SfxStringItem, SID_PRINTER_NAME, false );
             if ( pPrinterItem )
             {
                 // use PrinterName parameter to create a printer
@@ -793,7 +793,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 if ( !bSilent )
                     ErrorBox( NULL, WB_OK | WB_DEF_OK, SfxResId(STR_NODEFPRINTER).toString() ).Execute();
 
-                rReq.SetReturnValue(SfxBoolItem(0,sal_False));
+                rReq.SetReturnValue(SfxBoolItem(0,false));
 
                 break;
             }
@@ -804,7 +804,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 // if printer is busy, abort configuration
                 if ( !bSilent )
                     InfoBox( NULL, SfxResId(STR_ERROR_PRINTER_BUSY).toString() ).Execute();
-                rReq.SetReturnValue(SfxBoolItem(0,sal_False));
+                rReq.SetReturnValue(SfxBoolItem(0,false));
 
                 return;
             }
@@ -872,7 +872,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                     DELETEZ( pDlgPrinter );
                     rReq.Ignore();
                     if ( SID_PRINTDOC == nId )
-                        rReq.SetReturnValue(SfxBoolItem(0,sal_False));
+                        rReq.SetReturnValue(SfxBoolItem(0,false));
                 }
             }
         }

@@ -119,7 +119,7 @@ void PrepareListener_Impl::statusChanged(const css::frame::FeatureStateEvent& rE
     if( rEvent.IsEnabled )
         rEvent.State >>= m_bState;
     else
-        m_bState = sal_False;
+        m_bState = false;
 }
 
 void PrepareListener_Impl::disposing(const css::lang::EventObject& /*rEvent*/) throw(css::uno::RuntimeException)
@@ -507,7 +507,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             // This makes it possible to store the file for "send document as e-mail"
             // with the original file name. We cannot use the original file as
             // some mail programs need exclusive access.
-            ::utl::TempFile aTempDir( NULL, sal_True );
+            ::utl::TempFile aTempDir( NULL, true );
 
             INetURLObject aFilePathObj( aTempDir.GetURL() );
             aFilePathObj.insertName( aFileName );

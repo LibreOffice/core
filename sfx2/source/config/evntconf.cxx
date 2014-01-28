@@ -82,7 +82,7 @@ bool SfxEventNamesItem::operator==( const SfxPoolItem& rAttr ) const
     const SfxEventNamesList& rOther = ( (SfxEventNamesItem&) rAttr ).aEventsList;
 
     if ( rOwn.size() != rOther.size() )
-        return sal_False;
+        return false;
 
     for ( size_t nNo = 0, nCnt = rOwn.size(); nNo < nCnt; ++nNo )
     {
@@ -91,10 +91,10 @@ bool SfxEventNamesItem::operator==( const SfxPoolItem& rAttr ) const
         if (    pOwn->mnId != pOther->mnId ||
                 pOwn->maEventName != pOther->maEventName ||
                 pOwn->maUIName != pOther->maUIName )
-            return sal_False;
+            return false;
     }
 
-    return sal_True;
+    return true;
 
 }
 

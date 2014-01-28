@@ -349,7 +349,7 @@ sal_Bool SfxFrameLoader_Impl::impl_createNewDocWithSlotParam( const sal_uInt16 _
     SfxRequest aRequest( _nSlotID, SFX_CALLMODE_SYNCHRON, SFX_APP()->GetPool() );
     aRequest.AppendItem( SfxUnoFrameItem( SID_FILLFRAME, i_rxFrame ) );
     if ( i_bHidden )
-        aRequest.AppendItem( SfxBoolItem( SID_HIDDEN, sal_True ) );
+        aRequest.AppendItem( SfxBoolItem( SID_HIDDEN, true ) );
     return lcl_getDispatchResult( SFX_APP()->ExecuteSlot( aRequest ) );
 }
 

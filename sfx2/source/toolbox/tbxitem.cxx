@@ -1396,7 +1396,7 @@ void SfxPopupWindow::StateChanged(
     }
     else if ( m_bFloating )
     {
-        Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+        Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
     }
 }
 

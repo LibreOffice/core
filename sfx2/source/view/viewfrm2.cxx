@@ -164,9 +164,9 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
     {
         case SID_SHOWPOPUPS :
         {
-            SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, SID_SHOWPOPUPS, sal_False);
+            SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, SID_SHOWPOPUPS, false);
             sal_Bool bShow = pShowItem ? pShowItem->GetValue() : sal_True;
-            SFX_REQUEST_ARG(rReq, pIdItem, SfxUInt16Item, SID_CONFIGITEMID, sal_False);
+            SFX_REQUEST_ARG(rReq, pIdItem, SfxUInt16Item, SID_CONFIGITEMID, false);
             sal_uInt16 nId = pIdItem ? pIdItem->GetValue() : 0;
 
             SfxWorkWindow *pWorkWin = GetFrame().GetWorkWindow_Impl();
@@ -207,7 +207,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
 
         case SID_NEWDOCDIRECT :
         {
-            SFX_REQUEST_ARG( rReq, pFactoryItem, SfxStringItem, SID_NEWDOCDIRECT, sal_False);
+            SFX_REQUEST_ARG( rReq, pFactoryItem, SfxStringItem, SID_NEWDOCDIRECT, false);
             OUString aFactName;
             if ( pFactoryItem )
                 aFactName = pFactoryItem->GetValue();

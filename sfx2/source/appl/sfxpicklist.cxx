@@ -174,7 +174,7 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
         return;
 
     // add no document that forbids this (for example Message-Body)
-    SFX_ITEMSET_ARG( pMed->GetItemSet(), pPicklistItem, SfxBoolItem, SID_PICKLIST, sal_False );
+    SFX_ITEMSET_ARG( pMed->GetItemSet(), pPicklistItem, SfxBoolItem, SID_PICKLIST, false );
     if ( pPicklistItem && !pPicklistItem->GetValue() )
         return;
 
@@ -323,7 +323,7 @@ void SfxPickList::ExecuteEntry( sal_uInt32 nIndex )
         }
 
         aReq.AppendItem(SfxStringItem( SID_FILTER_NAME, aFilter ));
-        aReq.AppendItem( SfxBoolItem( SID_TEMPLATE, sal_False ) );
+        aReq.AppendItem( SfxBoolItem( SID_TEMPLATE, false ) );
         SFX_APP()->ExecuteSlot( aReq );
     }
 }

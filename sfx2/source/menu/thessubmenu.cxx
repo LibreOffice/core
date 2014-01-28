@@ -116,7 +116,7 @@ bool SfxThesSubMenuHelper::GetMeanings(
         }
         catch (const uno::Exception &)
         {
-            DBG_ASSERT( 0, "failed to get synonyms" );
+            DBG_ASSERT( false, "failed to get synonyms" );
         }
     }
     return bHasMoreSynonyms;

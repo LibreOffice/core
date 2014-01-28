@@ -414,7 +414,7 @@ sal_Bool SfxModelessDialog::Close()
 
 {
     // Execute with Parameters, since Toggle is ignored by some ChildWindows.
-    SfxBoolItem aValue( pImp->pMgr->GetType(), sal_False);
+    SfxBoolItem aValue( pImp->pMgr->GetType(), false);
     pBindings->GetDispatcher_Impl()->Execute(
         pImp->pMgr->GetType(),
         SFX_CALLMODE_RECORD|SFX_CALLMODE_SYNCHRON, &aValue, 0L );
@@ -529,7 +529,7 @@ sal_Bool SfxFloatingWindow::Close()
 
 {
     // Execute with Parameters, since Toggle is ignored by some ChildWindows.
-    SfxBoolItem aValue( pImp->pMgr->GetType(), sal_False);
+    SfxBoolItem aValue( pImp->pMgr->GetType(), false);
     pBindings->GetDispatcher_Impl()->Execute(
             pImp->pMgr->GetType(),
             SFX_CALLMODE_RECORD|SFX_CALLMODE_SYNCHRON, &aValue, 0L );

@@ -880,24 +880,24 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     mpPreferredParentWindow = _pPreferredParentWindow;
     mpAntiImpl              = _pAntiImpl;
     mnError                 = ERRCODE_NONE;
-    mbHasAutoExt            = sal_False;
-    mbHasPassword           = sal_False;
-    m_bHaveFilterOptions    = sal_False;
-    mbIsPwdEnabled          = sal_True;
-    mbHasVersions           = sal_False;
-    mbHasPreview            = sal_False;
-    mbShowPreview           = sal_False;
+    mbHasAutoExt            = false;
+    mbHasPassword           = false;
+    m_bHaveFilterOptions    = false;
+    mbIsPwdEnabled          = true;
+    mbHasVersions           = false;
+    mbHasPreview            = false;
+    mbShowPreview           = false;
     mbAddGraphicFilter      = SFXWB_GRAPHIC == (nFlags & SFXWB_GRAPHIC);
-    mbDeleteMatcher         = sal_False;
+    mbDeleteMatcher         = false;
     mbInsert                = SFXWB_INSERT == ( nFlags & SFXWB_INSERT );
     mbExport                = SFXWB_EXPORT == ( nFlags & SFXWB_EXPORT );
-    mbIsSaveDlg             = sal_False;
+    mbIsSaveDlg             = false;
     mbIsSaveACopyDlg        = SFXWB_SAVEACOPY == ( nFlags & SFXWB_SAVEACOPY );
-    mbPwdCheckBoxState      = sal_False;
-    mbSelection             = sal_False;
-    mbSelectionEnabled      = sal_True;
-    mbHasSelectionBox       = sal_False;
-    mbSelectionFltrEnabled  = sal_False;
+    mbPwdCheckBoxState      = false;
+    mbSelection             = false;
+    mbSelectionEnabled      = true;
+    mbHasSelectionBox       = false;
+    mbSelectionFltrEnabled  = false;
 
     // default settings
     m_nDontFlags = SFX_FILTER_INTERNAL | SFX_FILTER_NOTINFILEDLG | SFX_FILTER_NOTINSTALLED;
@@ -937,21 +937,21 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
 
             case FILESAVE_SIMPLE:
                 nTemplateDescription = TemplateDescription::FILESAVE_SIMPLE;
-                mbIsSaveDlg = sal_True;
+                mbIsSaveDlg = true;
                 break;
 
             case FILESAVE_AUTOEXTENSION_PASSWORD:
                 nTemplateDescription = TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD;
-                mbHasPassword = sal_True;
-                mbHasAutoExt = sal_True;
-                mbIsSaveDlg = sal_True;
+                mbHasPassword = true;
+                mbHasAutoExt = true;
+                mbIsSaveDlg = true;
                 break;
 
             case FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS:
                 nTemplateDescription = TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS;
-                mbHasPassword = sal_True;
+                mbHasPassword = true;
 
-                m_bHaveFilterOptions = sal_True;
+                m_bHaveFilterOptions = true;
                 if( xFactory.is() )
                 {
                     mxFilterCFG = uno::Reference< XNameAccess >(
@@ -959,15 +959,15 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                         UNO_QUERY );
                 }
 
-                mbHasAutoExt = sal_True;
-                mbIsSaveDlg = sal_True;
+                mbHasAutoExt = true;
+                mbIsSaveDlg = true;
                 break;
 
             case FILESAVE_AUTOEXTENSION_SELECTION:
                 nTemplateDescription = TemplateDescription::FILESAVE_AUTOEXTENSION_SELECTION;
-                mbHasAutoExt = sal_True;
-                mbIsSaveDlg = sal_True;
-                mbHasSelectionBox = sal_True;
+                mbHasAutoExt = true;
+                mbIsSaveDlg = true;
+                mbHasSelectionBox = true;
                 if ( mbExport && !mxFilterCFG.is() && xFactory.is() )
                 {
                     mxFilterCFG = uno::Reference< XNameAccess >(
@@ -978,13 +978,13 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
 
             case FILESAVE_AUTOEXTENSION_TEMPLATE:
                 nTemplateDescription = TemplateDescription::FILESAVE_AUTOEXTENSION_TEMPLATE;
-                mbHasAutoExt = sal_True;
-                mbIsSaveDlg = sal_True;
+                mbHasAutoExt = true;
+                mbIsSaveDlg = true;
                 break;
 
             case FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE:
                 nTemplateDescription = TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE;
-                mbHasPreview = sal_True;
+                mbHasPreview = true;
 
                 // aPreviewTimer
                 maPreviewTimer.SetTimeout( 500 );
@@ -997,12 +997,12 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
 
             case FILEOPEN_READONLY_VERSION:
                 nTemplateDescription = TemplateDescription::FILEOPEN_READONLY_VERSION;
-                mbHasVersions = sal_True;
+                mbHasVersions = true;
                 break;
 
             case FILEOPEN_LINK_PREVIEW:
                 nTemplateDescription = TemplateDescription::FILEOPEN_LINK_PREVIEW;
-                mbHasPreview = sal_True;
+                mbHasPreview = true;
                 // aPreviewTimer
                 maPreviewTimer.SetTimeout( 500 );
                 maPreviewTimer.SetTimeoutHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
@@ -1010,8 +1010,8 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
 
             case FILESAVE_AUTOEXTENSION:
                 nTemplateDescription = TemplateDescription::FILESAVE_AUTOEXTENSION;
-                mbHasAutoExt = sal_True;
-                mbIsSaveDlg = sal_True;
+                mbHasAutoExt = true;
+                mbIsSaveDlg = true;
                 break;
 
             default:
@@ -1408,19 +1408,19 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
         // check password checkbox if the document had password before
         if( mbHasPassword )
         {
-            SFX_ITEMSET_ARG( rpSet, pPassItem, SfxBoolItem, SID_PASSWORDINTERACTION, sal_False );
+            SFX_ITEMSET_ARG( rpSet, pPassItem, SfxBoolItem, SID_PASSWORDINTERACTION, false );
             mbPwdCheckBoxState = ( pPassItem != NULL && pPassItem->GetValue() );
 
             // in case the document has password to modify, the dialog should be shown
-            SFX_ITEMSET_ARG( rpSet, pPassToModifyItem, SfxUnoAnyItem, SID_MODIFYPASSWORDINFO, sal_False );
+            SFX_ITEMSET_ARG( rpSet, pPassToModifyItem, SfxUnoAnyItem, SID_MODIFYPASSWORDINFO, false );
             mbPwdCheckBoxState |= ( pPassToModifyItem && pPassToModifyItem->GetValue().hasValue() );
         }
 
-        SFX_ITEMSET_ARG( rpSet, pSelectItem, SfxBoolItem, SID_SELECTION, sal_False );
+        SFX_ITEMSET_ARG( rpSet, pSelectItem, SfxBoolItem, SID_SELECTION, false );
         if ( pSelectItem )
             mbSelection = pSelectItem->GetValue();
         else
-            mbSelectionEnabled = sal_False;
+            mbSelectionEnabled = false;
 
         // the password will be set in case user decide so
         rpSet->ClearItem( SID_PASSWORDINTERACTION );
@@ -1470,7 +1470,7 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
 
         // set the read-only flag. When inserting a file, this flag is always set
         if ( mbInsert )
-            rpSet->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
+            rpSet->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
         else
         {
             if ( ( FILEOPEN_READONLY_VERSION == m_nDialogType ) && xCtrlAccess.is() )
@@ -1722,7 +1722,7 @@ void FileDialogHelper_Impl::createMatcher( const OUString& rFactory )
         delete mpMatcher;
 
     mpMatcher = new SfxFilterMatcher( SfxObjectShell::GetServiceNameFromFactory(rFactory) );
-    mbDeleteMatcher = sal_True;
+    mbDeleteMatcher = true;
 }
 
 void FileDialogHelper_Impl::addFilters( const OUString& rFactory,
@@ -1742,12 +1742,12 @@ void FileDialogHelper_Impl::addFilters( const OUString& rFactory,
     {
         SfxApplication *pSfxApp = SFX_APP();
         mpMatcher = &pSfxApp->GetFilterMatcher();
-        mbDeleteMatcher = sal_False;
+        mbDeleteMatcher = false;
     }
     else
     {
         mpMatcher = new SfxFilterMatcher( rFactory );
-        mbDeleteMatcher = sal_True;
+        mbDeleteMatcher = true;
     }
 
     uno::Reference< XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
@@ -2693,7 +2693,7 @@ ErrCode RequestPassword(const SfxFilter* pCurrentFilter, OUString& aURL, SfxItem
         }
 
         if ( pPasswordRequest->getRecommendReadOnly() )
-            pSet->Put( SfxBoolItem( SID_RECOMMENDREADONLY, sal_True ) );
+            pSet->Put( SfxBoolItem( SID_RECOMMENDREADONLY, true ) );
 
         if ( bMSType )
         {

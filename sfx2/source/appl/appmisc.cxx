@@ -227,7 +227,7 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
     }
     catch(const uno::Exception&)
     {
-        OSL_ENSURE(sal_False, "Got no graphic::XPrimitive2DRenderer (!)" );
+        OSL_ENSURE(false, "Got no graphic::XPrimitive2DRenderer (!)" );
     }
     return false;
 }

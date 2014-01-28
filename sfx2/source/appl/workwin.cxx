@@ -1080,13 +1080,13 @@ void SfxWorkWindow::ShowChildren_Impl()
                 switch ( pCli->pWin->GetType() )
                 {
                     case RSC_DOCKINGWINDOW :
-                        ((DockingWindow*)pCli->pWin)->Show( sal_True, nFlags );
+                        ((DockingWindow*)pCli->pWin)->Show( true, nFlags );
                         break;
                     case RSC_SPLITWINDOW :
-                        ((SplitWindow*)pCli->pWin)->Show( sal_True, nFlags );
+                        ((SplitWindow*)pCli->pWin)->Show( true, nFlags );
                         break;
                     default:
-                        pCli->pWin->Show( sal_True, nFlags );
+                        pCli->pWin->Show( true, nFlags );
                         break;
                 }
 
@@ -1293,7 +1293,7 @@ sal_Bool SfxWorkWindow::IsPluginMode( SfxObjectShell* pObjShell )
 {
     if ( pObjShell && pObjShell->GetMedium() )
     {
-        SFX_ITEMSET_ARG( pObjShell->GetMedium()->GetItemSet(), pViewOnlyItem, SfxBoolItem, SID_VIEWONLY, sal_False );
+        SFX_ITEMSET_ARG( pObjShell->GetMedium()->GetItemSet(), pViewOnlyItem, SfxBoolItem, SID_VIEWONLY, false );
         if ( pViewOnlyItem && pViewOnlyItem->GetValue() )
             return sal_True;
     }
@@ -1764,7 +1764,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
 
                 pWin = pSplitWin->GetSplitWindow();
                 if ( pSplitWin->GetWindowCount() == 1 )
-                    ((SplitWindow*)pWin)->Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                    ((SplitWindow*)pWin)->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
             }
         }
 

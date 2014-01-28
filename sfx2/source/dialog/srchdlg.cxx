@@ -152,7 +152,7 @@ void SearchDialog::StateChanged( StateChangedType nStateChange )
     {
         if (!m_sWinState.isEmpty())
             SetWindowState( m_sWinState );
-        m_bIsConstructed = sal_True;
+        m_bIsConstructed = true;
     }
 
     ModelessDialog::StateChanged( nStateChange );

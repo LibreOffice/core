@@ -189,7 +189,7 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, uno::Sequence< beans::Named
     bool bResult = false;
     if ( pSet )
     {
-        SFX_ITEMSET_ARG( pSet, pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, sal_False);
+        SFX_ITEMSET_ARG( pSet, pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, false);
         if ( pEncryptionDataItem )
         {
             pEncryptionDataItem->GetValue() >>= o_rEncryptionData;
@@ -197,7 +197,7 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, uno::Sequence< beans::Named
         }
         else
         {
-            SFX_ITEMSET_ARG( pSet, pPasswordItem, SfxStringItem, SID_PASSWORD, sal_False);
+            SFX_ITEMSET_ARG( pSet, pPasswordItem, SfxStringItem, SID_PASSWORD, false);
             if ( pPasswordItem )
             {
                 OUString aPassword = pPasswordItem->GetValue();
@@ -634,7 +634,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     {
         SFX_ITEMSET_ARG(
             pSet, pTemplateItem, SfxBoolItem,
-            SID_TEMPLATE, sal_False);
+            SID_TEMPLATE, false);
         SetActivateEvent_Impl(
             ( pTemplateItem && pTemplateItem->GetValue() )
             ? SFX_EVENT_CREATEDOC : SFX_EVENT_OPENDOC );
@@ -642,9 +642,9 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
 
     SFX_ITEMSET_ARG( pSet, pBaseItem, SfxStringItem,
-                     SID_BASEURL, sal_False);
+                     SID_BASEURL, false);
     OUString aBaseURL;
-    SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False);
+    SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, false);
     if( pBaseItem )
         aBaseURL = pBaseItem->GetValue();
     else
@@ -672,7 +672,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             SetError( nError, OUString( OSL_LOG_PREFIX  ) );
 
         if (pMedium->GetFilter()->GetFilterFlags() & SFX_FILTER_STARTPRESENTATION)
-            pSet->Put( SfxBoolItem( SID_DOC_STARTPRESENTATION, sal_True) );
+            pSet->Put( SfxBoolItem( SID_DOC_STARTPRESENTATION, true) );
     }
 
     EnableSetModified( sal_False );
@@ -691,7 +691,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             try
             {
                 sal_Bool bWarnMediaTypeFallback = sal_False;
-                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pRepairPackageItem, SfxBoolItem, SID_REPAIRPACKAGE, sal_False);
+                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pRepairPackageItem, SfxBoolItem, SID_REPAIRPACKAGE, false);
 
                 // treat the package as broken if the mediatype was retrieved as a fallback
                 uno::Reference< beans::XPropertySet > xStorProps( xStorage, uno::UNO_QUERY_THROW );
@@ -726,7 +726,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 if ( bOk )
                 {
                     // the document loaded from template has no name
-                    SFX_ITEMSET_ARG( pMedium->GetItemSet(), pTemplateItem, SfxBoolItem, SID_TEMPLATE, sal_False);
+                    SFX_ITEMSET_ARG( pMedium->GetItemSet(), pTemplateItem, SfxBoolItem, SID_TEMPLATE, false);
                     if ( !pTemplateItem || !pTemplateItem->GetValue() )
                         bHasName = sal_True;
                 }
@@ -846,9 +846,9 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
         if ( SFX_CREATE_MODE_EMBEDDED != eCreateMode )
         {
-            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pAsTempItem, SfxBoolItem, SID_TEMPLATE, sal_False);
-            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pPreviewItem, SfxBoolItem, SID_PREVIEW, sal_False);
-            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False);
+            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pAsTempItem, SfxBoolItem, SID_TEMPLATE, false);
+            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pPreviewItem, SfxBoolItem, SID_PREVIEW, false);
+            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, false);
             if( bOk && !pMedium->GetOrigURL().isEmpty()
             && !( pAsTempItem && pAsTempItem->GetValue() )
             && !( pPreviewItem && pPreviewItem->GetValue() )
@@ -882,8 +882,8 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
 {
     sal_uInt32 nError = ERRCODE_NONE;
     SfxItemSet* pSet = pMedium->GetItemSet();
-    SFX_ITEMSET_ARG( pSet, pOptions, SfxStringItem, SID_FILE_FILTEROPTIONS, sal_False );
-    SFX_ITEMSET_ARG( pSet, pData, SfxUnoAnyItem, SID_FILTER_DATA, sal_False );
+    SFX_ITEMSET_ARG( pSet, pOptions, SfxStringItem, SID_FILE_FILTEROPTIONS, false );
+    SFX_ITEMSET_ARG( pSet, pData, SfxUnoAnyItem, SID_FILTER_DATA, false );
     if ( !pData && !pOptions )
     {
         com::sun::star::uno::Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
@@ -944,7 +944,7 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
                                                         pFilterOptions,
                                                         SfxStringItem,
                                                         SID_FILE_FILTEROPTIONS,
-                                                        sal_False );
+                                                        false );
                                             if ( pFilterOptions )
                                                 pSet->Put( *pFilterOptions );
 
@@ -952,7 +952,7 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
                                                         pFilterData,
                                                         SfxUnoAnyItem,
                                                         SID_FILTER_DATA,
-                                                        sal_False );
+                                                        false );
                                             if ( pFilterData )
                                                 pSet->Put( *pFilterData );
                                     }
@@ -1195,7 +1195,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     SfxItemSet *pMedSet = rMedium.GetItemSet();
     if( pMedSet )
     {
-        SFX_ITEMSET_ARG( pMedSet, pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
+        SFX_ITEMSET_ARG( pMedSet, pSaveToItem, SfxBoolItem, SID_SAVETO, false );
         bCopyTo =   GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ||
                     (pSaveToItem && pSaveToItem->GetValue());
     }
@@ -1422,7 +1422,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         pFilter = rMedium.GetFilter();
 
         const SfxStringItem *pVersionItem = ( !rMedium.IsInCheckIn( ) && pSet ) ? (const SfxStringItem*)
-                SfxRequest::GetItem( pSet, SID_DOCINFO_COMMENTS, sal_False, TYPE(SfxStringItem) ) : NULL;
+                SfxRequest::GetItem( pSet, SID_DOCINFO_COMMENTS, false, TYPE(SfxStringItem) ) : NULL;
         OUString aTmpVersionURL;
 
         if ( bOk )
@@ -1511,7 +1511,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             {
                 // store a version also
                 const SfxStringItem *pAuthorItem = pSet ? (const SfxStringItem*)
-                    SfxRequest::GetItem( pSet, SID_DOCINFO_AUTHOR, sal_False, TYPE(SfxStringItem) ) : NULL;
+                    SfxRequest::GetItem( pSet, SID_DOCINFO_AUTHOR, false, TYPE(SfxStringItem) ) : NULL;
 
                 // version comment
                 util::RevisionTag aInfo;
@@ -2308,7 +2308,7 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
         {}
     }
 
-    return sal_False;
+    return false;
 }
 
 sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
@@ -2404,7 +2404,7 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         {
             aArgs.realloc ( ++nEnd );
             aArgs[nEnd-1].Name = "DocumentBaseURL";
-            aArgs[nEnd-1].Value <<= rMedium.GetBaseURL( sal_True );
+            aArgs[nEnd-1].Value <<= rMedium.GetBaseURL( true );
         }
 
         return xFilter->filter( aArgs );
@@ -2516,7 +2516,7 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     // an interaction handler here can aquire only in case of GUI Saving
     // and should be removed after the saving is done
     com::sun::star::uno::Reference< XInteractionHandler > xInteract;
-    SFX_ITEMSET_ARG( pArgs, pxInteractionItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER, sal_False );
+    SFX_ITEMSET_ARG( pArgs, pxInteractionItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER, false );
     if ( pxInteractionItem && ( pxInteractionItem->GetValue() >>= xInteract ) && xInteract.is() )
         pMediumTmp->GetItemSet()->Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, makeAny( xInteract ) ) );
 
@@ -2574,10 +2574,10 @@ sal_Bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
 
     pImp->bIsSaving = sal_True;
     sal_Bool bSaved = sal_False;
-    SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False);
+    SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, false);
     if ( pSalvageItem )
     {
-        SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pFilterItem, SfxStringItem, SID_FILTER_NAME, sal_False);
+        SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pFilterItem, SfxStringItem, SID_FILTER_NAME, false);
         OUString aFilterName;
         const SfxFilter *pFilter = NULL;
         if ( pFilterItem )
@@ -2586,7 +2586,7 @@ sal_Bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
         SfxMedium *pMed = new SfxMedium(
             pSalvageItem->GetValue(), STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC, pFilter );
 
-        SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, sal_False );
+        SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, false );
         if ( pPasswordItem )
             pMed->GetItemSet()->Put( *pPasswordItem );
 
@@ -2642,7 +2642,7 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL!" );
     DBG_ASSERT( aParams->Count() != 0, "Incorrect Parameter");
 
-    SFX_ITEMSET_ARG( aParams, pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
+    SFX_ITEMSET_ARG( aParams, pSaveToItem, SfxBoolItem, SID_SAVETO, false );
     sal_Bool bSaveTo = pSaveToItem ? pSaveToItem->GetValue() : sal_False;
 
     const SfxFilter* pFilter = GetFactory().GetFilterContainer()->GetFilter4FilterName( aFilterName );
@@ -2654,7 +2654,7 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
         return sal_False;
     }
 
-    SFX_ITEMSET_ARG( aParams, pCopyStreamItem, SfxBoolItem, SID_COPY_STREAM_IF_POSSIBLE, sal_False );
+    SFX_ITEMSET_ARG( aParams, pCopyStreamItem, SfxBoolItem, SID_COPY_STREAM_IF_POSSIBLE, false );
     if ( bSaveTo && pCopyStreamItem && pCopyStreamItem->GetValue() && !IsModified() )
     {
         if ( pMedium->TryDirectTransfer( aURL.GetMainURL( INetURLObject::NO_DECODE ), *aParams ) )
@@ -2677,7 +2677,7 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
     }
 
     if( SFX_ITEM_SET != aParams->GetItemState(SID_UNPACK) && SvtSaveOptions().IsSaveUnpacked() )
-        aParams->Put( SfxBoolItem( SID_UNPACK, sal_False ) );
+        aParams->Put( SfxBoolItem( SID_UNPACK, false ) );
 
     OUString aTempFileURL;
     if ( IsDocShared() )
@@ -2812,7 +2812,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
     }
 
     // check if a "SaveTo" is wanted, no "SaveAs"
-    SFX_ITEMSET_ARG( pParams, pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
+    SFX_ITEMSET_ARG( pParams, pSaveToItem, SfxBoolItem, SID_SAVETO, false );
     sal_Bool bCopyTo = GetCreateMode() == SFX_CREATE_MODE_EMBEDDED || (pSaveToItem && pSaveToItem->GetValue());
 
     // distinguish between "Save" and "SaveAs"
@@ -3046,7 +3046,7 @@ sal_Bool SfxObjectShell::LoadOwnFormat( SfxMedium& rMedium )
     if ( xStorage.is() )
     {
         // Password
-        SFX_ITEMSET_ARG( rMedium.GetItemSet(), pPasswdItem, SfxStringItem, SID_PASSWORD, sal_False );
+        SFX_ITEMSET_ARG( rMedium.GetItemSet(), pPasswdItem, SfxStringItem, SID_PASSWORD, false );
         if ( pPasswdItem || ERRCODE_IO_ABORT != CheckPasswd_Impl( this, SFX_APP()->GetPool(), pMedium ) )
         {
             uno::Sequence< beans::NamedValue > aEncryptionData;

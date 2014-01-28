@@ -908,12 +908,12 @@ sal_Bool SfxDocumentTemplates::CopyFrom
             }
             else
             {
-                DBG_ASSERT( sal_False, "CopyFrom(): The content should contain target URL!" );
+                DBG_ASSERT( false, "CopyFrom(): The content should contain target URL!" );
             }
         }
         else
         {
-            DBG_ASSERT( sal_False, "CopyFrom(): The content just was created!" );
+            DBG_ASSERT( false, "CopyFrom(): The content just was created!" );
         }
     }
 

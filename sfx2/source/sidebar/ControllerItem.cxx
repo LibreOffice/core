@@ -221,7 +221,7 @@ void ControllerItem::ResetFrame (void)
 
 Image ControllerItem::GetIcon (void) const
 {
-    return GetImage(mxFrame, ".uno:" + msCommandName, sal_False);
+    return GetImage(mxFrame, ".uno:" + msCommandName, false);
 }
 
 

@@ -437,7 +437,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
     {
         case SID_STYLE_FAMILY :
         {
-            SFX_REQUEST_ARG(rReq, pItem, SfxUInt16Item, nId, sal_False);
+            SFX_REQUEST_ARG(rReq, pItem, SfxUInt16Item, nId, false);
             if (pItem)
             {
                 pImp->m_nFamily = pItem->GetValue();
@@ -520,11 +520,11 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             SfxMailModel  aModel;
             OUString aDocType;
 
-            SFX_REQUEST_ARG(rReq, pMailSubject, SfxStringItem, SID_MAIL_SUBJECT, sal_False );
+            SFX_REQUEST_ARG(rReq, pMailSubject, SfxStringItem, SID_MAIL_SUBJECT, false );
             if ( pMailSubject )
                 aModel.SetSubject( pMailSubject->GetValue() );
 
-            SFX_REQUEST_ARG(rReq, pMailRecipient, SfxStringItem, SID_MAIL_RECIPIENT, sal_False );
+            SFX_REQUEST_ARG(rReq, pMailRecipient, SfxStringItem, SID_MAIL_RECIPIENT, false );
             if ( pMailRecipient )
             {
                 OUString aRecipient( pMailRecipient->GetValue() );
@@ -534,7 +534,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                     aRecipient = aRecipient.copy( aMailToStr.getLength() );
                 aModel.AddAddress( aRecipient, SfxMailModel::ROLE_TO );
             }
-            SFX_REQUEST_ARG(rReq, pMailDocType, SfxStringItem, SID_TYPE_NAME, sal_False );
+            SFX_REQUEST_ARG(rReq, pMailDocType, SfxStringItem, SID_TYPE_NAME, false );
             if ( pMailDocType )
                 aDocType = pMailDocType->GetValue();
 
@@ -679,7 +679,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 OSL_ASSERT( !aFileName.isEmpty() );
 
                 // Creates a temporary directory to store our predefined file into it.
-                ::utl::TempFile aTempDir( NULL, sal_True );
+                ::utl::TempFile aTempDir( NULL, true );
 
                 INetURLObject aFilePathObj( aTempDir.GetURL() );
                 aFilePathObj.insertName( aFileName );
@@ -715,7 +715,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_PLUGINS_ACTIVE:
         {
-            SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nId, sal_False);
+            SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nId, false);
             bool const bActive = (pShowItem)
                 ? pShowItem->GetValue()
                 : !pImp->m_bPlugInsActive;
@@ -901,7 +901,7 @@ void SfxViewShell::UIActivating( SfxInPlaceClient* /*pClient*/ )
     if ( xParentFrame.is() )
         xParentFrame->setActiveFrame( xOwnFrame );
 
-    pFrame->GetBindings().HidePopups(sal_True);
+    pFrame->GetBindings().HidePopups(true);
     pFrame->GetDispatcher()->Update_Impl( sal_True );
 }
 
@@ -911,7 +911,7 @@ void SfxViewShell::UIDeactivated( SfxInPlaceClient* /*pClient*/ )
 {
     if ( !pFrame->GetFrame().IsClosing_Impl() || SfxViewFrame::Current() != pFrame )
         pFrame->GetDispatcher()->Update_Impl( sal_True );
-    pFrame->GetBindings().HidePopups(sal_False);
+    pFrame->GetBindings().HidePopups(false);
 
     pFrame->GetBindings().InvalidateAll(sal_True);
 }
@@ -1586,7 +1586,7 @@ void SfxViewShell::Notify( SfxBroadcaster& rBC,
                         if ( frame == GetViewFrame() && &rBC == GetObjectShell() )
                         {
                             SfxItemSet* pSet = GetObjectShell()->GetMedium()->GetItemSet();
-                            SFX_ITEMSET_ARG( pSet, pItem, SfxUnoAnyItem, SID_VIEW_DATA, sal_False );
+                            SFX_ITEMSET_ARG( pSet, pItem, SfxUnoAnyItem, SID_VIEW_DATA, false );
                             if ( pItem )
                             {
                                 pImp->m_pController->restoreViewData( pItem->GetValue() );

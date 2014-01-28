@@ -174,7 +174,7 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
     {
         case SID_CREATE_BASICOBJECT:
         {
-            SFX_REQUEST_ARG(rReq, pItem, SfxStringItem, nSID, sal_False);
+            SFX_REQUEST_ARG(rReq, pItem, SfxStringItem, nSID, false);
             if ( pItem )
             {
                 SbxObject* pObject = SbxBase::CreateObject( pItem->GetValue() );
@@ -191,7 +191,7 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
 
         case SID_ATTR_UNDO_COUNT:
         {
-            SFX_REQUEST_ARG(rReq, pCountItem, SfxUInt16Item, nSID, sal_False);
+            SFX_REQUEST_ARG(rReq, pCountItem, SfxUInt16Item, nSID, false);
             boost::shared_ptr< comphelper::ConfigurationChanges > batch(
                 comphelper::ConfigurationChanges::create());
             officecfg::Office::Common::Undo::Steps::set(
@@ -207,7 +207,7 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
 
         case SID_OFFICE_CUSTOMERNUMBER:
         {
-            SFX_REQUEST_ARG(rReq, pStringItem, SfxStringItem, nSID, sal_False);
+            SFX_REQUEST_ARG(rReq, pStringItem, SfxStringItem, nSID, false);
 
             if ( pStringItem )
                 SvtUserOptions().SetCustomerNumber( pStringItem->GetValue() );

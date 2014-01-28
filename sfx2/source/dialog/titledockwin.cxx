@@ -265,7 +265,7 @@ namespace sfx2
             // the closer
             EndTracking();
             const sal_uInt16 nChildWindowId( GetChildWindow_Impl()->GetType() );
-            const SfxBoolItem aVisibility( nChildWindowId, sal_False );
+            const SfxBoolItem aVisibility( nChildWindowId, false );
             GetBindings().GetDispatcher()->Execute(
                 nChildWindowId,
                 SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
