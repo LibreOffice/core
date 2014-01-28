@@ -110,7 +110,7 @@ namespace abp
                     return sal_True;
             }
             else
-                ShowServiceNotAvailableError(m_pMessageParent, s_sAdministrationServiceName, sal_True);
+                ShowServiceNotAvailableError(m_pMessageParent, s_sAdministrationServiceName, true);
         }
         catch(const Exception&)
         {

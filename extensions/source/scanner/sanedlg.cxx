@@ -194,7 +194,7 @@ void SaneDlg::InitFields()
         bSuccess = mrSane.GetOptionValue( nOption, fRes );
         if( bSuccess )
         {
-            maReslBox.Enable( sal_True );
+            maReslBox.Enable( true );
 
             maReslBox.SetValue( (long)fRes );
             double *pDouble = NULL;
@@ -233,12 +233,12 @@ void SaneDlg::InitFields()
                 }
             }
             else
-                maReslBox.Enable( sal_False );
+                maReslBox.Enable( false );
             delete [] pDouble;
         }
     }
     else
-        maReslBox.Enable( sal_False );
+        maReslBox.Enable( false );
 
     // set scan area
     for( i = 0; i < 4; i++ )
@@ -316,7 +316,7 @@ void SaneDlg::InitFields()
                     case 3: maMaxBottomRight.Y() = (int)fValue;break;
                 }
             }
-            pField->Enable( sal_True );
+            pField->Enable( true );
         }
         else
         {
@@ -348,7 +348,7 @@ void SaneDlg::InitFields()
                     pField->SetValue( PREVIEW_HEIGHT );
                     break;
             }
-            pField->Enable( sal_False );
+            pField->Enable( false );
         }
     }
     maTopLeft = GetPixelPos( maTopLeft );
@@ -560,8 +560,8 @@ IMPL_LINK( SaneDlg, OptionsBoxSelectHdl, SvTreeListBox*, pBox )
                             maVectorBox.SetMin( 1 );
                             maVectorBox.SetMax(
                                 mrSane.GetOptionElements( mnCurrentOption ) );
-                            maVectorBox.Show( sal_True );
-                            maVectorTxt.Show( sal_True );
+                            maVectorBox.Show( true );
+                            maVectorTxt.Show( true );
                         }
                         else
                         {
@@ -786,15 +786,15 @@ void SaneDlg::Paint( const Rectangle& rRect )
 
 void SaneDlg::DisableOption()
 {
-    maBoolCheckBox.Show( sal_False );
-    maStringEdit.Show( sal_False );
-    maNumericEdit.Show( sal_False );
-    maQuantumRangeBox.Show( sal_False );
-    maStringRangeBox.Show( sal_False );
-    maButtonOption.Show( sal_False );
-    maVectorBox.Show( sal_False );
-    maVectorTxt.Show( sal_False );
-    maOptionDescTxt.Show( sal_False );
+    maBoolCheckBox.Show( false );
+    maStringEdit.Show( false );
+    maNumericEdit.Show( false );
+    maQuantumRangeBox.Show( false );
+    maStringRangeBox.Show( false );
+    maButtonOption.Show( false );
+    maVectorBox.Show( false );
+    maVectorTxt.Show( false );
+    maOptionDescTxt.Show( false );
 }
 
 void SaneDlg::EstablishBoolOption()
@@ -805,9 +805,9 @@ void SaneDlg::EstablishBoolOption()
     if( bSuccess )
     {
         maOptionDescTxt.SetText( mrSane.GetOptionName( mnCurrentOption ) );
-        maOptionDescTxt.Show( sal_True );
+        maOptionDescTxt.Show( true );
         maBoolCheckBox.Check( bValue );
-        maBoolCheckBox.Show( sal_True );
+        maBoolCheckBox.Show( true );
     }
 }
 
@@ -820,9 +820,9 @@ void SaneDlg::EstablishStringOption()
     if( bSuccess )
     {
         maOptionDescTxt.SetText( mrSane.GetOptionName( mnCurrentOption ) );
-        maOptionDescTxt.Show( sal_True );
+        maOptionDescTxt.Show( true );
         maStringEdit.SetText(OStringToOUString(aValue, osl_getThreadTextEncoding()));
-        maStringEdit.Show( sal_True );
+        maStringEdit.Show( true );
     }
 }
 
@@ -835,9 +835,9 @@ void SaneDlg::EstablishStringRange()
     OString aValue;
     mrSane.GetOptionValue( mnCurrentOption, aValue );
     maStringRangeBox.SelectEntry(OStringToOUString(aValue, osl_getThreadTextEncoding()));
-    maStringRangeBox.Show( sal_True );
+    maStringRangeBox.Show( true );
     maOptionDescTxt.SetText( mrSane.GetOptionName( mnCurrentOption ) );
-    maOptionDescTxt.Show( sal_True );
+    maOptionDescTxt.Show( true );
 }
 
 void SaneDlg::EstablishQuantumRange()
@@ -873,12 +873,12 @@ void SaneDlg::EstablishQuantumRange()
             sprintf( pBuf, "%g", fValue );
             maQuantumRangeBox.SelectEntry( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
         }
-        maQuantumRangeBox.Show( sal_True );
+        maQuantumRangeBox.Show( true );
         OUString aText( mrSane.GetOptionName( mnCurrentOption ) );
         aText += " ";
         aText += mrSane.GetOptionUnitName( mnCurrentOption );
         maOptionDescTxt.SetText( aText );
-        maOptionDescTxt.Show( sal_True );
+        maOptionDescTxt.Show( true );
     }
 }
 
@@ -901,17 +901,17 @@ void SaneDlg::EstablishNumericOption()
         aText += OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() );
     }
     maOptionDescTxt.SetText( aText );
-    maOptionDescTxt.Show( sal_True );
+    maOptionDescTxt.Show( true );
     sprintf( pBuf, "%g", fValue );
     maNumericEdit.SetText( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
-    maNumericEdit.Show( sal_True );
+    maNumericEdit.Show( true );
 }
 
 void SaneDlg::EstablishButtonOption()
 {
     maOptionDescTxt.SetText( mrSane.GetOptionName( mnCurrentOption ) );
-    maOptionDescTxt.Show( sal_True );
-    maButtonOption.Show( sal_True );
+    maOptionDescTxt.Show( true );
+    maButtonOption.Show( true );
 }
 
 #define RECT_SIZE_PIX 7

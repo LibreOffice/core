@@ -513,7 +513,7 @@ namespace dbp
         if (!xHandler.is())
         {
             const OUString sInteractionHandlerServiceName("com.sun.star.task.InteractionHandler");
-            ShowServiceNotAvailableError(_pWindow, sInteractionHandlerServiceName, sal_True);
+            ShowServiceNotAvailableError(_pWindow, sInteractionHandlerServiceName, true);
         }
         return xHandler;
     }

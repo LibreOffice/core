@@ -531,7 +531,7 @@ namespace abp
         {
             OUString s_sInteractionHandlerServiceName("com.sun.star.task.InteractionHandler");
             if ( _pMessageParent )
-                ShowServiceNotAvailableError( _pMessageParent, s_sInteractionHandlerServiceName, sal_True );
+                ShowServiceNotAvailableError( _pMessageParent, s_sInteractionHandlerServiceName, true );
             return sal_False;
         }
 

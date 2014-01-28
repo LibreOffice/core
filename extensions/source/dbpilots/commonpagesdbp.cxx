@@ -99,7 +99,7 @@ namespace dbp
         if (0 == m_aTable.GetSelectEntryCount())
             return false;
 
-        return sal_True;
+        return true;
     }
 
     //---------------------------------------------------------------------

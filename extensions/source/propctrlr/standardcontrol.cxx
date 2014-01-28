@@ -696,7 +696,7 @@ namespace pcr
         if ( ( nWinStyle & WB_READONLY ) != 0 )
         {
             getTypedControlWindow()->SetReadOnly( sal_True );
-            getTypedControlWindow()->Enable( sal_True );
+            getTypedControlWindow()->Enable( true );
         }
     }
 
@@ -805,7 +805,7 @@ namespace pcr
         if ( ( nWinStyle & WB_READONLY ) != 0 )
         {
             getTypedControlWindow()->SetReadOnly( sal_True );
-            getTypedControlWindow()->Enable( sal_True );
+            getTypedControlWindow()->Enable( true );
         }
     }
 

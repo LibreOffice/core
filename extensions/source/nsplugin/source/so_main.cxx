@@ -471,7 +471,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     }
     PLUGIN_MSG nMsg;
     int len;
-    while(1)
+    while(true)
     {
         memset(&nMsg, 0, sizeof(PLUGIN_MSG));
         len = NSP_ReadFromPipe(la_read_fd, (char*)&nMsg, sizeof(PLUGIN_MSG));

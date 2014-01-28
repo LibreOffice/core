@@ -1200,7 +1200,7 @@ namespace pcr
                     if ( pControlWindowAsEdit )
                         pControlWindowAsEdit->SetReadOnly( sal_True );
                     else
-                        pControlWindowAsEdit->Enable( sal_False );
+                        pControlWindowAsEdit->Enable( false );
                 }
             }
         }

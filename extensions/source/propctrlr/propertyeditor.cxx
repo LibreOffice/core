@@ -78,7 +78,7 @@ namespace pcr
             OBrowserPage* pPage = static_cast<OBrowserPage*>(m_aTabControl.GetTabPage(nID));
             if (pPage)
             {
-                pPage->EnableInput(sal_False);
+                pPage->EnableInput(false);
                 m_aTabControl.RemovePage(nID);
                 delete pPage;
             }
@@ -244,7 +244,7 @@ namespace pcr
         OBrowserPage* pPage = static_cast<OBrowserPage*>(m_aTabControl.GetTabPage(nID));
 
         if (pPage)
-            pPage->EnableInput(sal_False);
+            pPage->EnableInput(false);
         m_aTabControl.RemovePage(nID);
         if (pPage)
             delete pPage;

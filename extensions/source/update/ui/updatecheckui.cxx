@@ -437,7 +437,7 @@ void UpdateCheckUI::setPropertyValue(const OUString& rPropertyName,
             throw lang::IllegalArgumentException();
     }
     else if (rPropertyName == PROPERTY_SHOW_MENUICON ) {
-        bool bShowMenuIcon = sal_False;
+        bool bShowMenuIcon = false;
         rValue >>= bShowMenuIcon;
         if ( bShowMenuIcon != mbShowMenuIcon )
         {

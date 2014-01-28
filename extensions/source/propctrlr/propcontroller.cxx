@@ -132,7 +132,7 @@ namespace pcr
             if (xContainerWindow.is())
             {
                 xContainerWindow->addFocusListener(this);
-                m_bContainerFocusListening = sal_True;
+                m_bContainerFocusListening = true;
             }
         }
 
@@ -151,7 +151,7 @@ namespace pcr
             if (xContainerWindow.is())
             {
                 xContainerWindow->removeFocusListener(this);
-                m_bContainerFocusListening = sal_False;
+                m_bContainerFocusListening = false;
             }
         }
 
