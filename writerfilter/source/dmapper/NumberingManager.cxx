@@ -829,6 +829,7 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
 
 void ListsManager::lcl_sprm( Sprm& rSprm )
 {
+    static bool bIsStartVisited = false;
     //fill the attributes of the style sheet
     sal_uInt32 nSprmId = rSprm.getId();
     if( m_pCurrentDefinition.get() ||
@@ -952,11 +953,22 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
             }
             break;
             case NS_ooxml::LN_CT_Lvl_start:
+                if (m_pCurrentDefinition->GetCurrentLevel().get())
+                    m_pCurrentDefinition->GetCurrentLevel( )->SetValue( nSprmId, nIntValue );
+                bIsStartVisited = true;
+            break;
             case NS_ooxml::LN_CT_Lvl_numFmt:
             case NS_ooxml::LN_CT_Lvl_isLgl:
             case NS_ooxml::LN_CT_Lvl_legacy:
                 if (m_pCurrentDefinition->GetCurrentLevel().get())
+                {
                     m_pCurrentDefinition->GetCurrentLevel( )->SetValue( nSprmId, nIntValue );
+                    if( false == bIsStartVisited )
+                    {
+                        m_pCurrentDefinition->GetCurrentLevel( )->SetValue( NS_ooxml::LN_CT_Lvl_start, 0 );
+                        bIsStartVisited = true;
+                    }
+                }
             break;
             case NS_ooxml::LN_CT_Lvl_suff:
             {
