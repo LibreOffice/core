@@ -323,8 +323,7 @@ oslFileError SAL_CALL osl_createTempFile(
         rtl_uString_release(temp_file_name);
     }
 
-    if (base_directory)
-        rtl_uString_release(base_directory);
+    rtl_uString_release(base_directory);
 
     return osl_error;
 }
