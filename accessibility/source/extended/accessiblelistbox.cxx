@@ -105,7 +105,7 @@ namespace accessibility
 
             case VCLEVENT_LISTBOX_SELECT :
                 {
-                    OSL_ASSERT(0 && "Debug: Treelist shouldn't use VCLEVENT_LISTBOX_SELECT");
+                    OSL_FAIL("Debug: Treelist shouldn't use VCLEVENT_LISTBOX_SELECT");
                     break;
                 }
 

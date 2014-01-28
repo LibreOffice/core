@@ -53,7 +53,7 @@ namespace accessibility
         virtual bool            IsEntryPosSelected( sal_uInt16 nPos ) const = 0;
         virtual sal_uInt16      GetEntryCount() const = 0;
         virtual void            Select() = 0;
-        virtual void            SelectEntryPos( sal_uInt16 nPos, bool bSelect = sal_True ) = 0;
+        virtual void            SelectEntryPos( sal_uInt16 nPos, bool bSelect = true ) = 0;
         virtual sal_uInt16      GetSelectEntryCount() const = 0;
         virtual void            SetNoSelection() = 0;
         virtual sal_uInt16      GetSelectEntryPos( sal_uInt16 nSelIndex = 0 ) const = 0;

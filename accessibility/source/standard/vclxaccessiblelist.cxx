@@ -873,7 +873,7 @@ void SAL_CALL VCLXAccessibleList::selectAccessibleChild( sal_Int32 nChildIndex )
         {
             checkSelection_Impl(nChildIndex,*m_pListBoxHelper,sal_False);
 
-            m_pListBoxHelper->SelectEntryPos( (sal_uInt16)nChildIndex, sal_True );
+            m_pListBoxHelper->SelectEntryPos( (sal_uInt16)nChildIndex, true );
             // call the select handler, don't handle events in this time
             m_bDisableProcessEvent = true;
             m_pListBoxHelper->Select();
@@ -932,7 +932,7 @@ void SAL_CALL VCLXAccessibleList::selectAllAccessibleChildren(  ) throw (Runtime
         {
             sal_uInt16 nCount = m_pListBoxHelper->GetEntryCount();
             for ( sal_uInt16 i = 0; i < nCount; ++i )
-                m_pListBoxHelper->SelectEntryPos( i, sal_True );
+                m_pListBoxHelper->SelectEntryPos( i, true );
             // call the select handler, don't handle events in this time
             m_bDisableProcessEvent = true;
             m_pListBoxHelper->Select();
@@ -982,7 +982,7 @@ void SAL_CALL VCLXAccessibleList::deselectAccessibleChild( sal_Int32 nSelectedCh
         {
             checkSelection_Impl(nSelectedChildIndex,*m_pListBoxHelper,sal_False);
 
-            m_pListBoxHelper->SelectEntryPos( (sal_uInt16)nSelectedChildIndex, sal_False );
+            m_pListBoxHelper->SelectEntryPos( (sal_uInt16)nSelectedChildIndex, false );
             // call the select handler, don't handle events in this time
             m_bDisableProcessEvent = true;
             m_pListBoxHelper->Select();

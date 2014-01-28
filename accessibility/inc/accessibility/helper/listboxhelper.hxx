@@ -138,7 +138,7 @@ public:
         m_aComboListBox.Select();
     }
     // -----------------------------------------------------------------------------
-    virtual void            SelectEntryPos( sal_uInt16 nPos, bool bSelect = sal_True )
+    virtual void            SelectEntryPos( sal_uInt16 nPos, bool bSelect = true )
     {
         m_aComboListBox.SelectEntryPos(nPos,bSelect);
     }
