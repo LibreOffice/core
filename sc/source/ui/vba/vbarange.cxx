@@ -3963,7 +3963,8 @@ ScVbaRange::BorderAround( const css::uno::Any& LineStyle, const css::uno::Any& W
 }
 
 uno::Any SAL_CALL
-ScVbaRange::getRowHeight() throw (uno::RuntimeException)
+ScVbaRange::getRowHeight()
+    throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nLen = m_Areas->getCount();
     if ( nLen > 1 )

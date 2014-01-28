@@ -178,7 +178,8 @@ public:
     virtual void SAL_CALL setHidden( const css::uno::Any& _hidden ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getColumnWidth() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setColumnWidth( const css::uno::Any& _columnwidth ) throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL getRowHeight() throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getRowHeight()
+        throw(css::uno::RuntimeException, std::exception);
     virtual void SAL_CALL setRowHeight( const css::uno::Any& _rowheight ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getWidth() throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getHeight() throw (css::uno::RuntimeException);
